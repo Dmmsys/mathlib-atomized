@@ -94,7 +94,7 @@ theorem equivalence_isometryRel
 
 中文:
 定理 equivalence_isometryRel
-  结论: Equivalence IsometryRel
+  结论: 等价 IsometryRel
   证明: ⟨fun _ => Nonempty.intro (IsometryEquiv.refl _), fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e⟩ ⟨f⟩ => ⟨e.trans f⟩⟩
 -/
 private theorem equivalence_isometryRel : Equivalence IsometryRel :=
@@ -112,7 +112,7 @@ instance IsometryRel.setoid
 
 中文:
 实例 IsometryRel.setoid
-  签名: : Setoid (NonemptyCompacts ℓ_infty_实数)
+  签名: : 集合等价关系 (NonemptyCompacts ℓ_infty_实数)
   定义体: Setoid.mk IsometryRel equivalence_isometryRel
 
 Depends on / 依赖: IsometryRel, Setoid, Setoid.mk, equivalence_isometryRel
@@ -130,7 +130,7 @@ definition GHSpace
 
 中文:
 定义 GHSpace
-  签名: : Type
+  签名: : 类型
   定义体: Quotient IsometryRel.setoid
 
 Depends on / 依赖: IsometryRel, IsometryRel.setoid, Quotient, setoid
@@ -148,7 +148,7 @@ definition toGHSpace
 
 中文:
 定义 toGHSpace
-  签名: (X : 类型u) [MetricSpace X] [CompactSpace X] [Nonempty X]
+  签名: (X : 类型u) [度量空间 X] [紧空间 X] [非空 X]
   定义体: ⟦NonemptyCompacts.kuratowskiEmbedding X⟧
 
 Depends on / 依赖: NonemptyCompacts, NonemptyCompacts.kuratowskiEmbedding, kuratowskiEmbedding
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited GHSpace
+  签名: 可居 GHSpace
   定义体: ⟨Quot.mk _ ⟨⟨{0}, isCompact_singleton⟩, singleton_nonempty _⟩⟩
 
 Depends on / 依赖: Quot.mk, isCompact_singleton, singleton_nonempty
@@ -208,7 +208,7 @@ theorem eq_toGHSpace_iff
 
 中文:
 定理 eq_toGHSpace_iff
-  结论: {X : 类型u} [MetricSpace X] [CompactSpace X] [Nonempty X]
+  结论: {X : 类型u} [度量空间 X] [紧空间 X] [非空 X]
   证明: by
   simp only [toGHSpace, Quotient.eq]
   refine ⟨fun h => ?_, ?_⟩
@@ -361,7 +361,7 @@ theorem toGHSpace_eq_toGHSpace_iff_isometryEquiv
 
 中文:
 定理 toGHSpace_eq_toGHSpace_iff_isometryEquiv
-  结论: {X : 类型u} [MetricSpace X] [CompactSpace X]
+  结论: {X : 类型u} [度量空间 X] [紧空间 X]
   证明: ⟨by
     simp only [toGHSpace]
     rw [Quotient.eq]
@@ -429,7 +429,7 @@ definition ghDist
 
 中文:
 定义 ghDist
-  签名: (X : 类型u) (Y : 类型v) [MetricSpace X] [Nonempty X] [CompactSpace X] [MetricSpace Y]
+  签名: (X : 类型u) (Y : 类型v) [度量空间 X] [非空 X] [紧空间 X] [度量空间 Y]
   定义体: dist (toGHSpace X) (toGHSpace Y)
 
 Depends on / 依赖: toGHSpace
@@ -474,7 +474,7 @@ theorem ghDist_le_hausdorffDist
 
 中文:
 定理 ghDist_le_hausdorffDist
-  结论: {X : 类型u} [MetricSpace X] [CompactSpace X] [Nonempty X]
+  结论: {X : 类型u} [度量空间 X] [紧空间 X] [非空 X]
   证明: by
   /- For the proof, we want to embed `γ` in `ℓ^∞(ℝ)`, to say that the Hausdorff distance is realized
     in `ℓ^∞(ℝ)` and therefore bounded below by the Gromov-Hausdorff-distance. However, `γ` is not
@@ -547,7 +547,7 @@ theorem hausdorffDist_optimal
 
 中文:
 定理 hausdorffDist_optimal
-  结论: {X : 类型u} [MetricSpace X] [CompactSpace X] [Nonempty X]
+  结论: {X : 类型u} [度量空间 X] [紧空间 X] [非空 X]
   证明: by
   inhabit X; inhabit Y
   /- we only need to check the inequality `≤`, as the other one follows from the previous lemma.
@@ -709,7 +709,7 @@ theorem ghDist_eq_hausdorffDist
 
 中文:
 定理 ghDist_eq_hausdorffDist
-  结论: (X : 类型u) [MetricSpace X] [CompactSpace X] [Nonempty X]
+  结论: (X : 类型u) [度量空间 X] [紧空间 X] [非空 X]
   证明: by
   let F := kuratowskiEmbedding (OptimalGHCoupling X Y)
   let Φ := F ∘ optimalGHInjl X Y
@@ -753,7 +753,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace GHSpace
+  签名: 度量空间 GHSpace
   定义体: dist
   dist_self x := by
     rcases exists_rep x with ⟨y, hy⟩
@@ -871,8 +871,8 @@ definition TopologicalSpace.NonemptyCompacts.toGHSpace
   body: GromovHausdorff.toGHSpace p
 
 中文:
-定义 TopologicalSpace.NonemptyCompacts.toGHSpace
-  签名: {X : 类型u} [MetricSpace X]
+定义 拓扑空间.NonemptyCompacts.toGHSpace
+  签名: {X : 类型u} [度量空间 X]
   定义体: GromovHausdorff.toGHSpace p
 
 Depends on / 依赖: GromovHausdorff, GromovHausdorff.toGHSpace, toGHSpace
@@ -985,7 +985,7 @@ theorem ghDist_le_of_approx_subsets
 
 中文:
 定理 ghDist_le_of_approx_subsets
-  结论: {s : Set X} (Φ : s -> Y) {ε₁ ε₂ ε₃ : 实数}
+  结论: {s : 集合 X} (Φ : s -> Y) {ε₁ ε₂ ε₃ : 实数}
   证明: by
   refine le_of_forall_pos_le_add fun δ δ0 => ?_
   rcases exists_mem_of_nonempty X with ⟨xX, _⟩
@@ -1090,7 +1090,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology GHSpace
+  签名: 第二可数拓扑 GHSpace
   定义体: by
   refine secondCountable_of_countable_discretization fun δ δpos => ?_
   let ε := 2 / 5 * δ
@@ -1230,7 +1230,7 @@ theorem totallyBounded
 
 中文:
 定理 totallyBounded
-  结论: {t : Set GHSpace} {C : 实数} {u : 自然数 -> 实数} {K : 自然数 -> 自然数}
+  结论: {t : 集合 GHSpace} {C : 实数} {u : 自然数 -> 实数} {K : 自然数 -> 自然数}
   证明: by
   /- Let `δ>0`, and `ε = δ/5`. For each `p`, we construct a finite subset `s p` of `p`, which
     is `ε`-dense and has cardinality at most `K n`. Encoding the mutual distances of points
@@ -1424,12 +1424,12 @@ structure AuxGluingStruct
 
 中文:
 结构 AuxGluingStruct
-  参数: (A : Type) [MetricSpace A]
+  参数: (A : 类型) [度量空间 A]
   公理与运算 (4 个):
-    - Space : Type
-    - metric : MetricSpace Space
-    - embed : A -> Space
-    - isom : Isometry embed
+    - Space : 类型
+    - metric : 度量空间 空间
+    - embed : A -> 空间
+    - isom : 等距 embed
 -/
 structure AuxGluingStruct (A : Type) [MetricSpace A] : Type 1 where
   Space : Type
@@ -1494,7 +1494,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace GHSpace
+  签名: 完备空间 GHSpace
   定义体: by
   set d := fun n : Nat => ((1 : Real) / 2) ^ n
   have : forall n : Nat, 0 < d n := fun _ => by positivity

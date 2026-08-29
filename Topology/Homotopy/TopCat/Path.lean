@@ -41,7 +41,7 @@ structure Path
     - hom₁ : hom 1 = y  [default: by cat_disch]
 
 中文:
-结构 Path
+结构 道路
   参数: (x y : X)
   公理与运算 (3 个):
     - hom : I ⟶ X

@@ -64,7 +64,7 @@ theorem rank_le_range
 中文:
 定理 rank_le_range
   条件: (f : V ->ₗ[K] V')
-  结论: rank f <= Module.rank K V'
+  结论: rank f <= 模.rank K V'
   证明: Submodule.rank_le _
 
 Depends on / 依赖: Submodule, Submodule.rank_le, rank_le
@@ -86,7 +86,7 @@ theorem rank_le_domain
 中文:
 定理 rank_le_domain
   条件: (f : V ->ₗ[K] V₁)
-  结论: rank f <= Module.rank K V
+  结论: rank f <= 模.rank K V
   证明: rank_range_le _
 
 @[simp]
@@ -109,7 +109,7 @@ theorem rank_zero
 
 中文:
 定理 rank_zero
-  条件: [Nontrivial K]
+  条件: [非平凡 K]
   结论: rank (0 : V ->ₗ[K] V') = 0
   证明: by
   rw [rank]; rw [LinearMap.range_zero]; rw [rank_bot]
@@ -291,7 +291,7 @@ theorem rank_finsetSum_le
 
 中文:
 定理 rank_finsetSum_le
-  条件: {η} (s : Finset η) (f : η -> V ->ₗ[K] V')
+  条件: {η} (s : 有限集 η) (f : η -> V ->ₗ[K] V')
   证明: @Finset.sum_hom_rel _ _ _ _ _ (fun a b => rank a <= b) f (fun d => rank (f d)) s
     (le_of_eq rank_zero) fun _ _ _ h => le_trans (rank_add_le _ _) (by gcongr)
 
@@ -320,8 +320,8 @@ theorem le_rank_iff_exists_linearIndependent
     refine ⟨g '' s, Cardinal.mk
 
 中文:
-定理 le_rank_iff_exists_linearIndependent
-  条件: {c : Cardinal} {f : V ->ₗ[K] V'}
+定理 le_rank_iff_存在_linearIndependent
+  条件: {c : 基数} {f : V ->ₗ[K] V'}
   证明: by
   rcases f.rangeRestrict.exists_rightInverse_of_surjective f.range_rangeRestrict with ⟨g, hg⟩
   have fg : LeftInverse f.rangeRestrict g := LinearMap.congr_fun hg
@@ -368,7 +368,7 @@ theorem le_rank_iff_exists_linearIndependent_finset
     exact ⟨s, ⟨s, rfl, rfl⟩, si⟩
 
 中文:
-定理 le_rank_iff_exists_linearIndependent_finset
+定理 le_rank_iff_存在_linearIndependent_finset
   条件: {n : 自然数} {f : V ->ₗ[K] V'}
   证明: by
   simp only [le_rank_iff_exists_linearIndependent, Cardinal.lift_natCast, Cardinal.lift_eq_nat_iff,

@@ -75,7 +75,7 @@ definition BoxIntegral.hasIntegralVertices
   body: exists l u : ι -> Int, (forall i, B.lower i = l i) ∧ (forall i, B.upper i = u i)
 
 中文:
-定义 BoxIntegral.hasIntegralVertices
+定义 Box整数egral.has整数egralVertices
   签名: (B : Box ι)
   定义体: exists l u : ι -> Int, (forall i, B.lower i = l i) ∧ (forall i, B.upper i = u i)
 
@@ -100,8 +100,8 @@ theorem BoxIntegral.le_hasIntegralVertices_of_isBounded
   refine ⟨I, ⟨fun _ => - C, fun _ => C, 
 
 中文:
-定理 BoxIntegral.le_hasIntegralVertices_of_isBounded
-  结论: [Finite ι] {s : Set (ι -> 实数)}
+定理 Box整数egral.le_has整数egralVertices_of_isBounded
+  结论: [有限 ι] {s : 集合 (ι -> 实数)}
   证明: by
   have := Fintype.ofFinite ι
   obtain ⟨R, hR₁, hR₂⟩ := IsBounded.subset_ball_lt h 0 0
@@ -305,7 +305,7 @@ theorem tag_injective
 
 中文:
 定理 tag_injective
-  结论: Function.Injective (fun ν : ι -> 整数 => tag n ν)
+  结论: 函数.单射 (fun ν : ι -> 整数 => tag n ν)
   证明: by
   refine fun _ _ h => funext_iff.mpr fun i => ?_
   have := congr_arg (fun x => x i) h
@@ -477,7 +477,7 @@ theorem box_injective
 
 中文:
 定理 box_injective
-  结论: Function.Injective (fun ν : ι -> 整数 => box n ν)
+  结论: 函数.单射 (fun ν : ι -> 整数 => box n ν)
   证明: by
   intro _ _ h
   contrapose! h
@@ -592,7 +592,7 @@ theorem setFinite_index
 
 中文:
 定理 setFinite_index
-  条件: {s : Set (ι -> 实数)} (hs₁ : NullMeasurableSet s) (hs₂ : volume s != ⊤)
+  条件: {s : 集合 (ι -> 实数)} (hs₁ : NullMeasurableSet s) (hs₂ : volume s != ⊤)
   证明: by
   refine (Measure.finite_const_le_meas_of_disjoint_iUnion₀ volume (ε := 1 / n ^ card ι)
     (by simp) (As := fun ν : ι -> Int => (box n ν) inter s) (fun ν => ?_) (fun _ _ h => ?_) ?_).subset
@@ -1242,7 +1242,7 @@ theorem _root_.tendsto_tsum_div_pow_atTop_integral
 
 中文:
 定理 _root_.tendsto_tsum_div_pow_atTop_integral
-  结论: (hF : Continuous F) (hs₁ : IsBounded s)
+  结论: (hF : 连续 F) (hs₁ : IsBounded s)
   证明: by
   obtain ⟨B, hB, hs₀⟩ := le_hasIntegralVertices_of_isBounded hs₁
   refine Metric.tendsto_atTop.mpr fun ε hε => ?_

@@ -37,7 +37,7 @@ lemma LinearEquiv.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
   simp only 
 
 中文:
-引理 LinearEquiv.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
+引理 线性等价.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
   证明: by
   replace he : BijOn e Φ Φ := (hΦ₁.injOn_iff_bijOn_of_mapsTo he).mp e.injective.injOn
   let e' := he.equiv

@@ -46,7 +46,7 @@ theorem isPrimitiveRoot_I
 
 中文:
 定理 isPrimitiveRoot_I
-  结论: IsPrimitiveRoot I 4
+  结论: 是PrimitiveRoot I 4
   证明: .mk_of_lt I zero_lt_four I_pow_four fun l hl0 hl4 => by
     interval_cases l <;> norm_num [Complex.ext_iff]
 
@@ -67,7 +67,7 @@ theorem isPrimitiveRoot_neg_I
 
 中文:
 定理 isPrimitiveRoot_neg_I
-  结论: IsPrimitiveRoot (-I) 4
+  结论: 是PrimitiveRoot (-I) 4
   证明: by
   simpa only [inv_I] using isPrimitiveRoot_I.inv
 
@@ -161,8 +161,8 @@ isPrimitiveRoot_exp_of_isCoprime _ _ q.den_nz Int.isCoprime_iff_nat_coprime.mpr 
 
 中文:
 定理 isPrimitiveRoot_exp_rat
-  条件: (q : Rat)
-  结论: IsPrimitiveRoot (exp (2 * π * I * q)) q.den
+  条件: (q : 有理数)
+  结论: 是PrimitiveRoot (exp (2 * π * I * q)) q.den
   证明: by
   convert!
 isPrimitiveRoot_exp_of_isCoprime _ _ q.den_nz Int.isCoprime_iff_nat_coprime.mpr q.reduced
@@ -194,7 +194,7 @@ theorem isPrimitiveRoot_exp_rat_of_even_num
 
 中文:
 定理 isPrimitiveRoot_exp_rat_of_even_num
-  条件: (q : Rat) (h : Even q.num)
+  条件: (q : 有理数) (h : Even q.num)
   证明: by
 .mp h have ⟨n, hn⟩ := even_iff_exists_two_nsmul _
   convert! isPrimitiveRoot_exp_rat (n / q.den) using 1
@@ -233,7 +233,7 @@ theorem isPrimitiveRoot_exp_rat_of_odd_num
 
 中文:
 定理 isPrimitiveRoot_exp_rat_of_odd_num
-  条件: (q : Rat) (h : Odd q.num)
+  条件: (q : 有理数) (h : Odd q.num)
   证明: by
   convert! isPrimitiveRoot_exp_rat (q / 2) using 1
   · push_cast
@@ -266,7 +266,7 @@ theorem isPrimitiveRoot_exp
 中文:
 定理 isPrimitiveRoot_exp
   条件: (n : 自然数) (h0 : n != 0)
-  结论: IsPrimitiveRoot (exp (2 * π * I / n)) n
+  结论: 是PrimitiveRoot (exp (2 * π * I / n)) n
   证明: by
   simpa only [Nat.cast_one, one_div] using!
     isPrimitiveRoot_exp_of_coprime 1 n h0 n.coprime_one_left
@@ -295,7 +295,7 @@ theorem isPrimitiveRoot_iff
 
 中文:
 定理 isPrimitiveRoot_iff
-  条件: (ζ : Complex) (n : 自然数) (hn : n != 0)
+  条件: (ζ : 复形) (n : 自然数) (hn : n != 0)
   证明: by
   have hn0 : (n : Complex) != 0 := mod_cast hn
   constructor; swap
@@ -353,7 +353,7 @@ theorem card_rootsOfUnity
 中文:
 定理 card_rootsOfUnity
   条件: (n : 自然数) [NeZero n]
-  结论: 自然数.card (rootsOfUnity n Complex) = n
+  结论: 自然数.card (rootsOfUnity n 复形) = n
   证明: (isPrimitiveRoot_exp n NeZero.out).card_rootsOfUnity
 
 Depends on / 依赖: NeZero, NeZero.out, card_rootsOfUnity, isPrimitiveRoot_exp
@@ -376,7 +376,7 @@ theorem card_primitiveRoots
 中文:
 定理 card_primitiveRoots
   条件: (k : 自然数)
-  结论: (primitiveRoots k Complex).card = φ k
+  结论: (primitiveRoots k 复形).card = φ k
   证明: by
   by_cases h : k = 0
   · simp [h]
@@ -400,8 +400,8 @@ theorem IsPrimitiveRoot.norm'_eq_one
   proof: Complex.norm_eq_one_of_pow_eq_one h.pow_eq_one hn
 
 中文:
-定理 IsPrimitiveRoot.norm'_eq_one
-  条件: {ζ : Complex} {n : 自然数} (h : IsPrimitiveRoot ζ n) (hn : n != 0)
+定理 是PrimitiveRoot.norm'_eq_one
+  条件: {ζ : 复形} {n : 自然数} (h : 是PrimitiveRoot ζ n) (hn : n != 0)
   证明: Complex.norm_eq_one_of_pow_eq_one h.pow_eq_one hn
 
 Depends on / 依赖: Complex.norm_eq_one_of_pow_eq_one, h.pow_eq_one, norm_eq_one_of_pow_eq_one, pow_eq_one
@@ -419,8 +419,8 @@ theorem IsPrimitiveRoot.nnnorm_eq_one
   proof: Subtype.ext h.norm'_eq_one hn
 
 中文:
-定理 IsPrimitiveRoot.nnnorm_eq_one
-  条件: {ζ : Complex} {n : 自然数} (h : IsPrimitiveRoot ζ n) (hn : n != 0)
+定理 是PrimitiveRoot.nnnorm_eq_one
+  条件: {ζ : 复形} {n : 自然数} (h : 是PrimitiveRoot ζ n) (hn : n != 0)
   证明: Subtype.ext h.norm'_eq_one hn
 
 Depends on / 依赖: Subtype, Subtype.ext, _eq_one, h.norm
@@ -438,8 +438,8 @@ theorem IsPrimitiveRoot.arg_ext
   proof: Complex.ext_norm_arg ((hζ.norm'_eq_one hn).trans (hμ.norm'_eq_one hm).symm) h
 
 中文:
-定理 IsPrimitiveRoot.arg_ext
-  结论: {n m : 自然数} {ζ μ : Complex} (hζ : IsPrimitiveRoot ζ n)
+定理 是PrimitiveRoot.arg_ext
+  结论: {n m : 自然数} {ζ μ : 复形} (hζ : 是PrimitiveRoot ζ n)
   证明: Complex.ext_norm_arg ((hζ.norm'_eq_one hn).trans (hμ.norm'_eq_one hm).symm) h
 
 Depends on / 依赖: Complex.ext_norm_arg, _eq_one, ext_norm_arg
@@ -458,8 +458,8 @@ theorem IsPrimitiveRoot.arg_eq_zero_iff
     h.symm ▸ Complex.arg_one⟩
 
 中文:
-定理 IsPrimitiveRoot.arg_eq_zero_iff
-  条件: {n : 自然数} {ζ : Complex} (hζ : IsPrimitiveRoot ζ n) (hn : n != 0)
+定理 是PrimitiveRoot.arg_eq_zero_iff
+  条件: {n : 自然数} {ζ : 复形} (hζ : 是PrimitiveRoot ζ n) (hn : n != 0)
   证明: ⟨fun h => hζ.arg_ext IsPrimitiveRoot.one hn one_ne_zero (h.trans Complex.arg_one.symm), fun h =>
     h.symm ▸ Complex.arg_one⟩
 
@@ -482,8 +482,8 @@ theorem IsPrimitiveRoot.arg_eq_pi_iff
     fun h => h.symm ▸ Complex.arg_neg_one⟩
 
 中文:
-定理 IsPrimitiveRoot.arg_eq_pi_iff
-  条件: {n : 自然数} {ζ : Complex} (hζ : IsPrimitiveRoot ζ n) (hn : n != 0)
+定理 是PrimitiveRoot.arg_eq_pi_iff
+  条件: {n : 自然数} {ζ : 复形} (hζ : 是PrimitiveRoot ζ n) (hn : n != 0)
   证明: ⟨fun h =>
     hζ.arg_ext (IsPrimitiveRoot.neg_one 0 two_ne_zero.symm) hn two_ne_zero
       (h.trans Complex.arg_neg_one.symm),
@@ -515,8 +515,8 @@ theorem IsPrimitiveRoot.arg
     · e
 
 中文:
-定理 IsPrimitiveRoot.arg
-  条件: {n : 自然数} {ζ : Complex} (h : IsPrimitiveRoot ζ n) (hn : n != 0)
+定理 是PrimitiveRoot.arg
+  条件: {n : 自然数} {ζ : 复形} (h : 是PrimitiveRoot ζ n) (hn : n != 0)
   证明: by
   rw [Complex.isPrimitiveRoot_iff _ _ hn] at h
   obtain ⟨i, h, hin, rfl⟩ := h
@@ -583,7 +583,7 @@ refine norm_eq_one_of_pow_eq_one ?_ NeZero.ne n
   rw [hζ]; rw [Units.val_one]
 
 中文:
-引理 Complex.norm_eq_one_of_mem_rootsOfUnity
+引理 复形.norm_eq_one_of_mem_rootsOfUnity
   结论: {ζ : Complexˣ} {n : 自然数} [NeZero n]
   证明: by
 refine norm_eq_one_of_pow_eq_one ?_ NeZero.ne n
@@ -611,8 +611,8 @@ theorem Complex.conj_rootsOfUnity
   rw [← Units.mul_eq_one_iff_eq_inv]; rw [conj_mul']; rw [norm_eq_one_of_mem_rootsOfUnity hζ]; rw [ofReal_one]; rw [one_pow]
 
 中文:
-定理 Complex.conj_rootsOfUnity
-  条件: {ζ : Complexˣ} {n : 自然数} [NeZero n] (hζ : ζ in rootsOfUnity n Complex)
+定理 复形.conj_rootsOfUnity
+  条件: {ζ : Complexˣ} {n : 自然数} [NeZero n] (hζ : ζ in rootsOfUnity n 复形)
   证明: by
   rw [← Units.mul_eq_one_iff_eq_inv]; rw [conj_mul']; rw [norm_eq_one_of_mem_rootsOfUnity hζ]; rw [ofReal_one]; rw [one_pow]
 

@@ -46,12 +46,12 @@ structure CommComon
     - [comm : IsCommComonObj X]
 
 中文:
-结构 CommComon
+结构 交换余mon
   参数: where
   公理与运算 (3 个):
     - X : C
-    - [comon : ComonObj X]
-    - [comm : IsCommComonObj X]
+    - [comon : 余monObj X]
+    - [comm : 是交换余monObj X]
 -/
 structure CommComon where
   /-- The underlying object in the ambient monoidal category -/
@@ -75,7 +75,7 @@ definition toComon
 
 中文:
 定义 toComon
-  签名: (A : CommComon C)
+  签名: (A : 交换余mon C)
   定义体: ⟨A.X⟩
 -/
 def toComon (A : CommComon C) : Comon C := ⟨A.X⟩
@@ -93,7 +93,7 @@ instance instCommComonObjUnit
 
 中文:
 实例 instCommComonObjUnit
-  签名: : IsCommComonObj (𝟙_ C) where
+  签名: : 是交换余monObj (𝟙_ C) where
   定义体: by simp [← unitors_equal]
 
 Depends on / 依赖: unitors_equal
@@ -117,7 +117,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : CommComon C
+  签名: : 交换余mon C
   定义体: mk (𝟙_ C)
 -/
 def trivial : CommComon C := mk (𝟙_ C)
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommComon C)
+  签名: 可居 (交换余mon C)
   定义体: ⟨trivial C⟩
 -/
 instance : Inhabited (CommComon C) :=
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommComon C)
+  签名: 范畴 (交换余mon C)
   定义体: inferInstanceAs (Category (InducedCategory _ CommComon.toComon))
 
 @[simp]
@@ -176,8 +176,8 @@ theorem id_hom
 
 中文:
 定理 id_hom
-  条件: (A : CommComon C)
-  结论: Comon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
+  条件: (A : 交换余mon C)
+  结论: 余mon.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
   证明: rfl
 
 @[simp]
@@ -198,7 +198,7 @@ theorem comp_hom
 
 中文:
 定理 comp_hom
-  条件: {R S T : CommComon C} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换余mon C} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 
 @[ext]
@@ -219,7 +219,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {A B : CommComon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
+  条件: {A B : 交换余mon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
   结论: f = g
   证明: InducedCategory.hom_ext (Comon.Hom.ext h)
 
@@ -244,7 +244,7 @@ definition forget₂Comon
 
 中文:
 定义 forget₂Comon
-  签名: : CommComon C ⥤ Comon C
+  签名: : 交换余mon C ⥤ 余mon C
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor

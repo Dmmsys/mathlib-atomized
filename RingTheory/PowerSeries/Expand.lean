@@ -37,7 +37,7 @@ definition expand
 
 中文:
 定义 expand
-  签名: : PowerSeries R ->ₐ[R] PowerSeries R
+  签名: : 幂级数 R ->ₐ[R] 幂级数 R
   定义体: MvPowerSeries.expand p hp
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.expand, expand
@@ -57,7 +57,7 @@ theorem expand_apply
 
 中文:
 定理 expand_apply
-  条件: (f : PowerSeries R)
+  条件: (f : 幂级数 R)
   结论: expand p hp f = subst (X ^ p) f
   证明: by
   simp [expand, MvPowerSeries.expand, subst, X]
@@ -81,7 +81,7 @@ theorem expand_C
 中文:
 定理 expand_C
   条件: (r : R)
-  结论: expand p hp (C r : PowerSeries R) = C r
+  结论: expand p hp (C r : 幂级数 R) = C r
   证明: by
   conv_lhs => rw [← mul_one (C r), ← smul_eq_C_mul, expand, AlgHom.map_smul_of_tower,
     map_one, smul_eq_C_mul, mul_one]
@@ -126,7 +126,7 @@ theorem expand_mul
 
 中文:
 定理 expand_mul
-  条件: (q : 自然数) (hq : q != 0) (φ : PowerSeries R)
+  条件: (q : 自然数) (hq : q != 0) (φ : 幂级数 R)
   证明: DFunLike.congr_fun (expand_mul_eq_comp p hp q hq) φ
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, expand_mul_eq_comp
@@ -147,7 +147,7 @@ theorem expand_smul
 
 中文:
 定理 expand_smul
-  条件: (a : R) (φ : PowerSeries R)
+  条件: (a : R) (φ : 幂级数 R)
   证明: AlgHom.map_smul_of_tower _ _ _
 
 @[simp]
@@ -216,7 +216,7 @@ theorem expand_one
 
 中文:
 定理 expand_one
-  结论: expand 1 one_ne_zero = AlgHom.id R (PowerSeries R)
+  结论: expand 1 one_ne_zero = 代数态射.id R (幂级数 R)
   证明: by
   simp [expand]
 
@@ -238,7 +238,7 @@ theorem expand_one_apply
 
 中文:
 定理 expand_one_apply
-  条件: (f : PowerSeries R)
+  条件: (f : 幂级数 R)
   结论: expand 1 one_ne_zero f = f
   证明: by simp
 
@@ -258,7 +258,7 @@ theorem map_expand
 
 中文:
 定理 map_expand
-  条件: (f : R ->+* S) (φ : PowerSeries R)
+  条件: (f : R ->+* S) (φ : 幂级数 R)
   证明: by
   simp [map, expand, MvPowerSeries.map_expand]
 
@@ -279,7 +279,7 @@ theorem expand_subst
 
 中文:
 定理 expand_subst
-  条件: {f : MvPowerSeries τ S} (hf : HasSubst f) (φ : PowerSeries S)
+  条件: {f : MvPowerSeries τ S} (hf : 有Subst f) (φ : 幂级数 S)
   证明: by
   rw [PowerSeries.subst]; rw [MvPowerSeries.expand_subst _ hp (HasSubst.const hf) (φ := φ)]; rw [PowerSeries.subst]
 
@@ -334,7 +334,7 @@ theorem constantCoeff_expand
 
 中文:
 定理 constantCoeff_expand
-  条件: (φ : PowerSeries R)
+  条件: (φ : 幂级数 R)
   证明: by
   conv_lhs => rw [← coeff_zero_eq_constantCoeff, ← mul_zero p, coeff_expand_mul]
   simp

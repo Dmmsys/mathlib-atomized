@@ -51,10 +51,10 @@ class IsFiltration
     - is_sup((B : σ) (j : ι)) : (forall i < j, F i <= B) -> F_lt j <= B
 
 中文:
-类 IsFiltration
+类 是滤子
   参数: (F : ι -> σ) (F_lt : outParam <| ι -> σ)
   公理与运算 (3 个):
-    - mono : Monotone F
+    - mono : 递增 F
     - is_le({i j}) : i < j -> F i <= F_lt j
     - is_sup((B : σ) (j : ι)) : (对任意 i < j, F i <= B) -> F_lt j <= B
 -/
@@ -72,8 +72,8 @@ lemma IsFiltration.F_lt_le_F
   proof: is_sup (F i) i (fun _ hi => IsFiltration.mono (le_of_lt hi))
 
 中文:
-引理 IsFiltration.F_lt_le_F
-  条件: (F : ι -> σ) (F_lt : outParam <| ι -> σ) (i : ι) [IsFiltration F F_lt]
+引理 是滤子.F_lt_le_F
+  条件: (F : ι -> σ) (F_lt : outParam <| ι -> σ) (i : ι) [是滤子 F F_lt]
   证明: is_sup (F i) i (fun _ hi => IsFiltration.mono (le_of_lt hi))
 
 Depends on / 依赖: IsFiltration, IsFiltration.mono, is_sup, le_of_lt
@@ -93,8 +93,8 @@ lemma IsFiltration.mk_int
   is_sup _ j hi := hi (j - 1) (sub_one_lt j)
 
 中文:
-引理 IsFiltration.mk_int
-  条件: (F : 整数 -> σ) (mono : Monotone F)
+引理 是滤子.mk_int
+  条件: (F : 整数 -> σ) (mono : 递增 F)
   证明: mono
   is_le lt := mono (Int.le_sub_one_of_lt lt)
   is_sup _ j hi := hi (j - 1) (sub_one_lt j)
@@ -122,9 +122,9 @@ class IsRingFiltration
   (no additional axioms)
 
 中文:
-类 IsRingFiltration
+类 是RingFiltration
   参数: (F : ι -> σ) (F_lt : outParam <| ι -> σ)
-  继承: IsFiltration F F_lt, SetLike.GradedMonoid F
+  继承: 是滤子 F F_lt, 集合状.分次幺半群 F
   (无附加公理)
 -/
 class IsRingFiltration (F : ι -> σ) (F_lt : outParam <| ι -> σ) : Prop
@@ -139,8 +139,8 @@ lemma IsRingFiltration.mk_int
   proof: IsFiltration.mk_int F mono
 
 中文:
-引理 IsRingFiltration.mk_int
-  条件: (F : 整数 -> σ) (mono : Monotone F) [SetLike.GradedMonoid F]
+引理 是RingFiltration.mk_int
+  条件: (F : 整数 -> σ) (mono : 递增 F) [集合状.分次幺半群 F]
   证明: IsFiltration.mk_int F mono
 
 Depends on / 依赖: IsFiltration, IsFiltration.mk_int, mk_int
@@ -167,9 +167,9 @@ class IsModuleFiltration
   (no additional axioms)
 
 中文:
-类 IsModuleFiltration
-  参数: (F : ι -> σ) (F_lt : outParam <| ι -> σ) [IsRingFiltration F F_lt]
-  继承: IsFiltration F' F'_lt, SetLike.GradedSMul F F'
+类 是ModuleFiltration
+  参数: (F : ι -> σ) (F_lt : outParam <| ι -> σ) [是RingFiltration F F_lt]
+  继承: 是滤子 F' F'_lt, 集合状.分次标量乘法 F F'
   (无附加公理)
 -/
 class IsModuleFiltration (F : ι -> σ) (F_lt : outParam <| ι -> σ) [IsRingFiltration F F_lt]
@@ -188,8 +188,8 @@ lemma IsModuleFiltration.mk_int
   { IsFiltration.mk_int F' mono' with }
 
 中文:
-引理 IsModuleFiltration.mk_int
-  结论: (F : 整数 -> σ) (mono : Monotone F) [SetLike.GradedMonoid F]
+引理 是ModuleFiltration.mk_int
+  结论: (F : 整数 -> σ) (mono : 递增 F) [集合状.分次幺半群 F]
   证明: IsRingFiltration.mk_int F mono
     IsModuleFiltration F (fun n => F (n - 1)) F' (fun n => F' (n - 1)) :=
   letI := IsRingFiltration.mk_int F mono

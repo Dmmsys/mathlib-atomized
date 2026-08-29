@@ -83,7 +83,7 @@ definition boxPoly
 
 中文:
 定义 boxPoly
-  签名: : Set 整数[X]
+  签名: : 集合 整数[X]
   定义体: {p : Int[X] | p.natDegree <= n ∧ forall i, B₁ i <= p.coeff i ∧ p.coeff i <= B₂ i}
 
 Depends on / 依赖: natDegree, p.coeff, p.natDegree
@@ -250,7 +250,7 @@ theorem cyclotomic_mahlerMeasure_eq_one
 
 中文:
 定理 cyclotomic_mahlerMeasure_eq_one
-  条件: {R : 类型} [CommRing R] [Algebra R Complex] (n : 自然数)
+  条件: {R : 类型} [交换环 R] [代数 R 复形] (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with hn | hn
   · simp [hn]
@@ -358,8 +358,8 @@ have : p.leadingCoeff = 1 ∨ p.leadingCoeff = -1 := abs_eq_abs.mp
   grind [IsIntegral, RingHom.IsIntegralElem, mem_roots', IsRoot.def, eval₂_mul, eval_map]
 
 中文:
-定理 isIntegral_of_mahlerMeasure_eq_one
-  结论: Is整数egral 整数 z
+定理 is整数egral_of_mahlerMeasure_eq_one
+  结论: 是整 整数 z
   证明: by
 have : p.leadingCoeff = 1 ∨ p.leadingCoeff = -1 := abs_eq_abs.mp
     abs_leadingCoeff_eq_one_of_mahlerMeasure_eq_one h
@@ -468,7 +468,7 @@ include h in
 
 中文:
 定理 isPrimitiveRoot_of_mahlerMeasure_eq_one
-  结论: 存在 n, 0 < n ∧ IsPrimitiveRoot z n
+  结论: 存在 n, 0 < n ∧ 是PrimitiveRoot z n
   证明: by
   obtain ⟨_, _, hz_pow⟩ := pow_eq_one_of_mahlerMeasure_eq_one h hz₀ hz
   exact IsPrimitiveRoot.exists_pos hz_pow (by omega)

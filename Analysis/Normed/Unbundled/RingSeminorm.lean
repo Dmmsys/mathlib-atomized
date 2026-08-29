@@ -59,9 +59,9 @@ structure RingSeminorm
     - mul_le' : forall x y : R, toFun (x * y) <= toFun x * toFun y
 
 中文:
-结构 RingSeminorm
-  参数: (R : 类型) [NonUnitalNonAssocRing R]
-  继承: AddGroupSeminorm R
+结构 环半范数
+  参数: (R : 类型) [非幺非结合环 R]
+  继承: 加法群半范数 R
   公理与运算 (1 个):
     - mul_le' : 对任意 x y : R, toFun (x * y) <= toFun x * toFun y
 -/
@@ -80,9 +80,9 @@ structure RingNorm
   (no additional axioms)
 
 中文:
-结构 RingNorm
-  参数: (R : 类型) [NonUnitalNonAssocRing R]
-  继承: RingSeminorm R, AddGroupNorm R
+结构 环范数
+  参数: (R : 类型) [非幺非结合环 R]
+  继承: 环半范数 R, 加法群范数 R
   (无附加公理)
 -/
 structure RingNorm (R : Type*) [NonUnitalNonAssocRing R] extends RingSeminorm R, AddGroupNorm R
@@ -97,9 +97,9 @@ structure MulRingSeminorm
   (no additional axioms)
 
 中文:
-结构 MulRingSeminorm
-  参数: (R : 类型) [NonAssocRing R]
-  继承: AddGroupSeminorm R, 
+结构 乘法环半范数
+  参数: (R : 类型) [非结合环 R]
+  继承: 加法群半范数 R, 
   (无附加公理)
 -/
 structure MulRingSeminorm (R : Type*) [NonAssocRing R] extends AddGroupSeminorm R,
@@ -115,9 +115,9 @@ structure MulRingNorm
   (no additional axioms)
 
 中文:
-结构 MulRingNorm
-  参数: (R : 类型) [NonAssocRing R]
-  继承: MulRingSeminorm R, AddGroupNorm R
+结构 乘法环范数
+  参数: (R : 类型) [非结合环 R]
+  继承: 乘法环半范数 R, 加法群范数 R
   (无附加公理)
 -/
 structure MulRingNorm (R : Type*) [NonAssocRing R] extends MulRingSeminorm R, AddGroupNorm R
@@ -149,7 +149,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (RingSeminorm R) R 实数 where
+  签名: : 函数状 (环半范数 R) R 实数 where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -184,7 +184,7 @@ instance ringSeminormClass
 
 中文:
 实例 ringSeminormClass
-  签名: : RingSeminormClass (RingSeminorm R) R 实数 where
+  签名: : 环半范数类 (环半范数 R) R 实数 where
   定义体: f.map_zero'
   map_add_le_add f := f.add_le'
   map_mul_le_mul f := f.mul_le'
@@ -214,7 +214,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : RingSeminorm R)
+  条件: (p : 环半范数 R)
   结论: (p.toAddGroupSeminorm : R -> 实数) = p
   证明: rfl
 
@@ -235,7 +235,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : RingSeminorm R}
+  条件: {p q : 环半范数 R}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (RingSeminorm R)
+  签名: 零 (环半范数 R)
   定义体: ⟨{ AddGroupSeminorm.instZeroAddGroupSeminorm.zero with mul_le' :=
     fun _ _ => (zero_mul _).ge }⟩
 
@@ -276,7 +276,7 @@ theorem eq_zero_iff
 
 中文:
 定理 eq_zero_iff
-  条件: {p : RingSeminorm R}
+  条件: {p : 环半范数 R}
   结论: p = 0 ↔ 对任意 x, p x = 0
   证明: DFunLike.ext_iff
 
@@ -296,7 +296,7 @@ theorem ne_zero_iff
 
 中文:
 定理 ne_zero_iff
-  条件: {p : RingSeminorm R}
+  条件: {p : 环半范数 R}
   结论: p != 0 ↔ 存在 x, p x != 0
   证明: by simp [eq_zero_iff]
 
@@ -314,7 +314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RingSeminorm R)
+  签名: 可居 (环半范数 R)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (RingSeminorm R) :=
@@ -337,7 +337,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: R] : One (RingSeminorm R)
+  签名: R] : 幺 (环半范数 R)
   定义体: ⟨{ (1 : AddGroupSeminorm R) with
       mul_le' := fun x y => by
         by_cases h : x * y = 0
@@ -374,7 +374,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: [DecidableEq R] (x : R)
-  结论: (1 : RingSeminorm R) x = if x = 0 then 0 else 1
+  结论: (1 : 环半范数 R) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one [DecidableEq R] (x : R) : (1 : RingSeminorm R) x = if x = 0 then 0 else 1 :=
@@ -442,7 +442,7 @@ abbreviation toSeminormedRing
 
 中文:
 缩写 toSeminormedRing
-  签名: : SeminormedRing R where
+  签名: : Seminormed环 R where
   定义体: ‹Ring R›
   __ := p.toAddGroupSeminorm.toSeminormedAddCommGroup
   norm_mul_le := map_mul_le_mul p
@@ -469,7 +469,7 @@ theorem exists_index_pow_le
   exact ⟨m, hm_lt, by gcongr⟩
 
 中文:
-定理 exists_index_pow_le
+定理 存在_index_pow_le
   条件: (hna : IsNonarchimedean p) (x y : R) (n : 自然数)
   证明: by
   obtain ⟨m, hm_lt, hm⟩ := IsNonarchimedean.add_pow_le hna n x y
@@ -496,7 +496,7 @@ theorem map_pow_le_pow
 
 中文:
 定理 map_pow_le_pow
-  结论: {F α : 类型} [Ring α] [FunLike F α 实数] [RingSeminormClass F α 实数] (f : F)
+  结论: {F α : 类型} [环 α] [函数状 F α 实数] [环半范数类 F α 实数] (f : F)
 -/
 theorem map_pow_le_pow {F α : Type*} [Ring α] [FunLike F α Real] [RingSeminormClass F α Real] (f : F)
     (a : α) : forall {n : Nat}, n != 0 -> f (a ^ n) <= f a ^ n
@@ -515,7 +515,7 @@ theorem map_pow_le_pow'
 
 中文:
 定理 map_pow_le_pow'
-  结论: {F α : 类型} [Ring α] [FunLike F α 实数] [RingSeminormClass F α 实数] {f : F}
+  结论: {F α : 类型} [环 α] [函数状 F α 实数] [环半范数类 F α 实数] {f : F}
 -/
 theorem map_pow_le_pow' {F α : Type*} [Ring α] [FunLike F α Real] [RingSeminormClass F α Real] {f : F}
     (hf1 : f 1 <= 1) (a : α) : forall n : Nat, f (a ^ n) <= f a ^ n
@@ -534,7 +534,7 @@ definition normRingSeminorm
 
 中文:
 定义 normRingSeminorm
-  签名: (R : 类型) [NonUnitalSeminormedRing R]
+  签名: (R : 类型) [非幺Seminormed环 R]
   定义体: { normAddGroupSeminorm R with
     toFun := norm
     mul_le' := norm_mul_le }
@@ -618,7 +618,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (RingNorm R) R 实数 where
+  签名: : 函数状 (环范数 R) R 实数 where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -652,7 +652,7 @@ instance ringNormClass
 
 中文:
 实例 ringNormClass
-  签名: : RingNormClass (RingNorm R) R 实数 where
+  签名: : 环范数类 (环范数 R) R 实数 where
   定义体: f.map_zero'
   map_add_le_add f := f.add_le'
   map_mul_le_mul f := f.mul_le'
@@ -681,7 +681,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : RingNorm R)
+  条件: (p : 环范数 R)
   结论: p.toFun = p
   证明: rfl
 
@@ -701,7 +701,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : RingNorm R}
+  条件: {p q : 环范数 R}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -724,7 +724,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: R] : One (RingNorm R)
+  签名: R] : 幺 (环范数 R)
   定义体: ⟨{ (1 : RingSeminorm R), (1 : AddGroupNorm R) with }⟩
 
 @[simp]
@@ -747,7 +747,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: [DecidableEq R] (x : R)
-  结论: (1 : RingNorm R) x = if x = 0 then 0 else 1
+  结论: (1 : 环范数 R) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one [DecidableEq R] (x : R) : (1 : RingNorm R) x = if x = 0 then 0 else 1 :=
@@ -763,7 +763,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: R] : Inhabited (RingNorm R)
+  签名: R] : 可居 (环范数 R)
   定义体: ⟨1⟩
 -/
 instance [DecidableEq R] : Inhabited (RingNorm R) :=
@@ -784,7 +784,7 @@ abbreviation toNormedRing
 
 中文:
 缩写 toNormedRing
-  签名: [Ring R] (f : RingNorm R)
+  签名: [环 R] (f : 环范数 R)
   定义体: ‹Ring R›
   __ := f.toAddGroupNorm.toNormedAddCommGroup
   norm_mul_le := map_mul_le_mul f
@@ -816,7 +816,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (MulRingSeminorm R) R 实数 where
+  签名: : 函数状 (乘法环半范数 R) R 实数 where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -852,7 +852,7 @@ instance mulRingSeminormClass
 
 中文:
 实例 mulRingSeminormClass
-  签名: : MulRingSeminormClass (MulRingSeminorm R) R 实数 where
+  签名: : 乘法环半范数类 (乘法环半范数 R) R 实数 where
   定义体: f.map_zero'
   map_one f := f.map_one'
   map_add_le_add f := f.add_le'
@@ -884,7 +884,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : MulRingSeminorm R)
+  条件: (p : 乘法环半范数 R)
   结论: (p.toAddGroupSeminorm : R -> 实数) = p
   证明: rfl
 
@@ -905,7 +905,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : MulRingSeminorm R}
+  条件: {p q : 乘法环半范数 R}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -935,7 +935,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (MulRingSeminorm R)
+  签名: 幺 (乘法环半范数 R)
   定义体: ⟨{ (1 : AddGroupSeminorm R) with
       map_one' := if_neg one_ne_zero
       map_mul' := fun x y => by
@@ -972,7 +972,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: (x : R)
-  结论: (1 : MulRingSeminorm R) x = if x = 0 then 0 else 1
+  结论: (1 : 乘法环半范数 R) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one (x : R) : (1 : MulRingSeminorm R) x = if x = 0 then 0 else 1 :=
@@ -988,7 +988,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MulRingSeminorm R)
+  签名: 可居 (乘法环半范数 R)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (MulRingSeminorm R) :=
@@ -1016,7 +1016,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (MulRingNorm R) R 实数 where
+  签名: : 函数状 (乘法环范数 R) R 实数 where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -1051,7 +1051,7 @@ instance mulRingNormClass
 
 中文:
 实例 mulRingNormClass
-  签名: : MulRingNormClass (MulRingNorm R) R 实数 where
+  签名: : 乘法环范数类 (乘法环范数 R) R 实数 where
   定义体: f.map_zero'
   map_one f := f.map_one'
   map_add_le_add f := f.add_le'
@@ -1082,7 +1082,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : MulRingNorm R)
+  条件: (p : 乘法环范数 R)
   结论: p.toFun = p
   证明: rfl
 
@@ -1102,7 +1102,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : MulRingNorm R}
+  条件: {p q : 乘法环范数 R}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -1126,7 +1126,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (MulRingNorm R)
+  签名: 幺 (乘法环范数 R)
   定义体: ⟨{ (1 : MulRingSeminorm R), (1 : AddGroupNorm R) with }⟩
 
 @[simp]
@@ -1149,7 +1149,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: (x : R)
-  结论: (1 : MulRingNorm R) x = if x = 0 then 0 else 1
+  结论: (1 : 乘法环范数 R) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one (x : R) : (1 : MulRingNorm R) x = if x = 0 then 0 else 1 :=
@@ -1165,7 +1165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MulRingNorm R)
+  签名: 可居 (乘法环范数 R)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (MulRingNorm R) :=
@@ -1196,7 +1196,7 @@ definition mulRingNormEquivAbsoluteValue
 
 中文:
 定义 mulRingNormEquivAbsoluteValue
-  签名: : MulRingNorm R ≃ AbsoluteValue R 实数 where
+  签名: : 乘法环范数 R ≃ 绝对值 R 实数 where
   定义体: {
     toFun := N.toFun
     map_mul' := N.map_mul'
@@ -1240,7 +1240,7 @@ lemma mulRingNormEquivAbsoluteValue_apply
 
 中文:
 引理 mulRingNormEquivAbsoluteValue_apply
-  条件: (N : MulRingNorm R) (x : R)
+  条件: (N : 乘法环范数 R) (x : R)
   证明: rfl
 -/
 lemma mulRingNormEquivAbsoluteValue_apply (N : MulRingNorm R) (x : R) :
@@ -1256,7 +1256,7 @@ lemma mulRingNormEquivAbsoluteValue_symm_apply
 
 中文:
 引理 mulRingNormEquivAbsoluteValue_symm_apply
-  条件: (v : AbsoluteValue R 实数) (x : R)
+  条件: (v : 绝对值 R 实数) (x : R)
   证明: rfl
 -/
 lemma mulRingNormEquivAbsoluteValue_symm_apply (v : AbsoluteValue R Real) (x : R) :
@@ -1282,8 +1282,8 @@ definition RingSeminorm.toRingNorm
           le_antisym
 
 中文:
-定义 RingSeminorm.toRingNorm
-  签名: {K : 类型} [Field K] (f : RingSeminorm K) (hnt : f != 0)
+定义 环半范数.toRingNorm
+  签名: {K : 类型} [域 K] (f : 环半范数 K) (hnt : f != 0)
   定义体: { f with
     eq_zero_of_map_eq_zero' := fun x hx => by
       obtain ⟨c, hc⟩ := RingSeminorm.ne_zero_iff.mp hnt
@@ -1323,7 +1323,7 @@ definition normRingNorm
 
 中文:
 定义 normRingNorm
-  签名: (R : 类型) [NonUnitalNormedRing R]
+  签名: (R : 类型) [非幺赋范环 R]
   定义体: { normAddGroupNorm R, normRingSeminorm R with }
 
 Depends on / 依赖: normAddGroupNorm, normRingSeminorm
@@ -1349,8 +1349,8 @@ definition SeminormedRing.toRingSeminorm
 @[simp]
 
 中文:
-定义 SeminormedRing.toRingSeminorm
-  签名: (R : 类型) [SeminormedRing R]
+定义 Seminormed环.toRingSeminorm
+  签名: (R : 类型) [Seminormed环 R]
   定义体: norm
   map_zero' := norm_zero
   add_le' := norm_add_le
@@ -1376,8 +1376,8 @@ theorem SeminormedRing.toRingSeminorm_apply
   proof: rfl
 
 中文:
-定理 SeminormedRing.toRingSeminorm_apply
-  条件: (R : 类型) [SeminormedRing R] (x : R)
+定理 Seminormed环.toRingSeminorm_apply
+  条件: (R : 类型) [Seminormed环 R] (x : R)
   证明: rfl
 -/
 theorem SeminormedRing.toRingSeminorm_apply (R : Type*) [SeminormedRing R] (x : R) :
@@ -1403,8 +1403,8 @@ definition NormedRing.toRingNorm
 @[simp]
 
 中文:
-定义 NormedRing.toRingNorm
-  签名: (R : 类型) [NormedRing R]
+定义 赋范环.toRingNorm
+  签名: (R : 类型) [赋范环 R]
   定义体: norm
   map_zero' := norm_zero
   add_le' := norm_add_le
@@ -1432,8 +1432,8 @@ theorem NormedRing.toRingNorm_apply
   proof: rfl
 
 中文:
-定理 NormedRing.toRingNorm_apply
-  条件: (R : 类型) [NormedRing R] (x : R)
+定理 赋范环.toRingNorm_apply
+  条件: (R : 类型) [赋范环 R] (x : R)
   证明: rfl
 -/
 theorem NormedRing.toRingNorm_apply (R : Type*) [NormedRing R] (x : R) :
@@ -1456,8 +1456,8 @@ definition NormedField.toMulRingNorm
   eq_zero_of_map_eq_zero' x hx := by rw [← norm_eq_zero]; exact hx
 
 中文:
-定义 NormedField.toMulRingNorm
-  签名: (R : 类型) [NormedField R]
+定义 赋范域.toMulRingNorm
+  签名: (R : 类型) [赋范域 R]
   定义体: norm
   map_zero' := norm_zero
   map_one' := norm_one
@@ -1489,8 +1489,8 @@ definition NormedField.toAbsoluteValue
   add_le' := norm_add_le
 
 中文:
-定义 NormedField.toAbsoluteValue
-  签名: (R : 类型) [NormedField R]
+定义 赋范域.toAbsoluteValue
+  签名: (R : 类型) [赋范域 R]
   定义体: norm
   map_mul' := norm_mul
   nonneg' := norm_nonneg

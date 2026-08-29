@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (P.RankFunction 自然数)
+  签名: 非空 (P.RankFunction 自然数)
   定义体: ⟨P.rankFunction⟩
 
 Depends on / 依赖: P.rankFunction, rankFunction
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (P.WeakRankFunction 自然数)
+  签名: 非空 (P.WeakRankFunction 自然数)
   定义体: ⟨P.rankFunction.toWeakRankFunction⟩
 
 Depends on / 依赖: P.rankFunction.toWeakRankFunction, rankFunction, toWeakRankFunction
@@ -220,7 +220,7 @@ lemma isRegular_iff_nonempty_rankFunction
 
 中文:
 引理 isRegular_iff_nonempty_rankFunction
-  条件: [P.Is命题er]
+  条件: [P.是真]
   证明: ⟨fun _ => inferInstance, fun ⟨h⟩ => h.isRegular⟩
 
 Depends on / 依赖: h.isRegular, isRegular
@@ -239,7 +239,7 @@ lemma isRegular_iff_nonempty_weakRankFunction
 
 中文:
 引理 isRegular_iff_nonempty_weakRankFunction
-  条件: [P.Is命题er]
+  条件: [P.是真]
   证明: ⟨fun _ => inferInstance, fun ⟨h⟩ => h.isRegular⟩
 
 Depends on / 依赖: h.isRegular, isRegular
@@ -266,7 +266,7 @@ lemma isRegular_iff_nonempty_rankFunction
 
 中文:
 引理 isRegular_iff_nonempty_rankFunction
-  条件: [P.Is命题er]
+  条件: [P.是真]
   证明: by
   rw [← isRegular_pairing_iff]; rw [Pairing.isRegular_iff_nonempty_rankFunction]
   exact (P.rankFunctionEquiv Nat).symm.nonempty_congr
@@ -290,7 +290,7 @@ lemma isRegular_iff_nonempty_weakRankFunction
 
 中文:
 引理 isRegular_iff_nonempty_weakRankFunction
-  条件: [P.Is命题er]
+  条件: [P.是真]
   证明: by
   rw [← isRegular_pairing_iff]; rw [Pairing.isRegular_iff_nonempty_weakRankFunction]
   exact (P.weakRankFunctionEquiv Nat).symm.nonempty_congr

@@ -46,7 +46,7 @@ theorem rice
 
 中文:
 定理 rice
-  结论: (C : Set (自然数 ->. 自然数)) (h : ComputablePred fun c => eval c in C) {f g} (hf : 自然数.Partrec f)
+  结论: (C : 集合 (自然数 ->. 自然数)) (h : ComputablePred fun c => eval c in C) {f g} (hf : 自然数.Partrec f)
   证明: by
   obtain ⟨_, h⟩ := h
   obtain ⟨c, e⟩ :=
@@ -85,7 +85,7 @@ theorem rice₂
 
 中文:
 定理 rice₂
-  条件: (C : Set Code) (H : 对任意 cf cg, eval cf = eval cg -> (cf in C ↔ cg in C))
+  条件: (C : 集合 余de) (H : 对任意 cf cg, eval cf = eval cg -> (cf in C ↔ cg in C))
   证明: by
   exact
       have hC : forall f, f in C ↔ eval f in eval '' C := fun f =>

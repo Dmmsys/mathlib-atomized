@@ -38,11 +38,11 @@ structure BddLat
     - [isBoundedOrder : BoundedOrder toLat]
 
 中文:
-结构 BddLat
-  参数: extends Lat
-  继承: Lat
+结构 有界格
+  参数: extends 格
+  继承: 格
   公理与运算 (1 个):
-    - [isBoundedOrder : BoundedOrder toLat]
+    - [isBoundedOrder : 有界序 toLat]
 -/
 structure BddLat extends Lat where
   [isBoundedOrder : BoundedOrder toLat]
@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort BddLat 类型
+  签名: CoeSort 有界格 类型
   定义体: ⟨fun X => X.toLat⟩
 
 Depends on / 依赖: X.toLat
@@ -82,7 +82,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (α : 类型) [Lattice α] [BoundedOrder α]
+  签名: (α : 类型) [格 α] [有界序 α]
   定义体: α
 -/
 abbrev of (α : Type*) [Lattice α] [BoundedOrder α] : BddLat where
@@ -99,7 +99,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [Lattice α] [BoundedOrder α]
+  条件: (α : 类型) [格 α] [有界序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -119,11 +119,11 @@ structure Hom
     - hom' : BoundedLatticeHom X Y
 
 中文:
-结构 Hom
-  参数: (X Y : BddLat.{u})
+结构 态射
+  参数: (X Y : 有界格.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : BoundedLatticeHom X Y
+    - hom' : 有界格态射 X Y
 -/
 structure Hom (X Y : BddLat.{u}) where
   private mk ::
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited BddLat
+  签名: 可居 有界格
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited BddLat :=
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} BddLat
+  签名: 大范畴.{u} 有界格
   定义体: Hom
   id X := ⟨BoundedLatticeHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory BddLat (BoundedLatticeHom · ·)
+  签名: 余ncrete范畴 有界格 (有界格态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -202,8 +202,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := BddLat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : BddLat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 有界格.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BddLat) f
 -/
 abbrev Hom.hom {X Y : BddLat.{u}} (f : Hom X Y) :=
@@ -219,7 +219,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Lattice X] [BoundedOrder X] [Lattice Y] [BoundedOrder Y]
+  签名: {X Y : 类型u} [格 X] [有界序 X] [格 Y] [有界序 Y]
   定义体: ConcreteCategory.ofHom (C := BddLat) f
 
 Depends on / 依赖: BddLat, ConcreteCategory, ConcreteCategory.ofHom
@@ -242,8 +242,8 @@ initialize_simps_projections Hom (hom' -> hom)
 @[simp]
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : BddLat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 有界格.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -267,8 +267,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : Lat}
-  结论: (𝟙 X : X ⟶ X).hom = LatticeHom.id _
+  条件: {X : 格}
+  结论: (𝟙 X : X ⟶ X).hom = 格态射.id _
   证明: rfl
 -/
 lemma hom_id {X : Lat} : (𝟙 X : X ⟶ X).hom = LatticeHom.id _ := rfl
@@ -285,7 +285,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : Lat) (x : X)
+  条件: (X : 格) (x : X)
   证明: by simp
 
 @[simp]
@@ -304,7 +304,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 格} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -322,7 +322,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 格} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -344,7 +344,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : BddLat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 有界格} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -367,7 +367,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : BddLat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 有界格} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -387,7 +387,7 @@ instance hasForgetToBddOrd
 
 中文:
 实例 hasForgetToBddOrd
-  签名: : HasForget₂ BddLat BddOrd where
+  签名: : 有Forget₂ 有界格 有界序 where
   定义体: .of X
   forget₂.map f := BddOrd.ofHom f.hom.toBoundedOrderHom
 -/
@@ -406,7 +406,7 @@ instance hasForgetToLat
 
 中文:
 实例 hasForgetToLat
-  签名: : HasForget₂ BddLat Lat where
+  签名: : 有Forget₂ 有界格 格 where
   定义体: .of X
   forget₂.map f := Lat.ofHom f.hom.toLatticeHom
 -/
@@ -425,7 +425,7 @@ instance hasForgetToSemilatSup
 
 中文:
 实例 hasForgetToSemilatSup
-  签名: : HasForget₂ BddLat SemilatSupCat where
+  签名: : 有Forget₂ 有界格 SemilatSup范畴 where
   定义体: .of X
   forget₂.map f := f.hom.toSupBotHom
 -/
@@ -446,7 +446,7 @@ instance hasForgetToSemilatInf
 
 中文:
 实例 hasForgetToSemilatInf
-  签名: : HasForget₂ BddLat SemilatInfCat where
+  签名: : 有Forget₂ 有界格 SemilatInf范畴 where
   定义体: .of X
   forget₂.map f := f.hom.toInfTopHom
 
@@ -470,8 +470,8 @@ theorem coe_forget_to_bddOrd
 
 中文:
 定理 coe_forget_to_bddOrd
-  条件: (X : BddLat)
-  结论: ↥((forget₂ BddLat BddOrd).obj X) = ↥X
+  条件: (X : 有界格)
+  结论: ↥((forget₂ 有界格 有界序).obj X) = ↥X
   证明: rfl
 
 @[simp]
@@ -493,8 +493,8 @@ theorem coe_forget_to_lat
 
 中文:
 定理 coe_forget_to_lat
-  条件: (X : BddLat)
-  结论: ↥((forget₂ BddLat Lat).obj X) = ↥X
+  条件: (X : 有界格)
+  结论: ↥((forget₂ 有界格 格).obj X) = ↥X
   证明: rfl
 
 @[simp]
@@ -515,7 +515,7 @@ theorem coe_forget_to_semilatSup
 
 中文:
 定理 coe_forget_to_semilatSup
-  条件: (X : BddLat)
+  条件: (X : 有界格)
   证明: rfl
 
 @[simp]
@@ -535,7 +535,7 @@ theorem coe_forget_to_semilatInf
 
 中文:
 定理 coe_forget_to_semilatInf
-  条件: (X : BddLat)
+  条件: (X : 有界格)
   证明: rfl
 -/
 theorem coe_forget_to_semilatInf (X : BddLat) :
@@ -605,8 +605,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : BddLat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 有界格.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -631,7 +631,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : BddLat ⥤ BddLat where
+  签名: : 有界格 ⥤ 有界格 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.dual
 -/
@@ -654,7 +654,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : BddLat ≌ BddLat where
+  签名: : 有界格 ≌ 有界格 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
@@ -742,7 +742,7 @@ map f := BddLat.ofHom LatticeHom.withTopWithBot f.hom
 
 中文:
 定义 latToBddLat
-  签名: : Lat.{u} ⥤ BddLat where
+  签名: : 格.{u} ⥤ 有界格 where
   定义体: .of WithTop WithBot X
 map f := BddLat.ofHom LatticeHom.withTopWithBot f.hom
 
@@ -768,7 +768,7 @@ invFun
 
 中文:
 定义 latToBddLatForgetAdjunction
-  签名: : latToBddLat.{u} ⊣ forget₂ BddLat Lat
+  签名: : latToBddLat.{u} ⊣ forget₂ 有界格 格
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv X _ :=
         { toFun f := Lat.ofHom

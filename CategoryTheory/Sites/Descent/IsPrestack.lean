@@ -300,10 +300,10 @@ class IsPrestack
     - isSheaf((J) {S : C} (M N : F.obj (.mk (op S)))) : Presheaf.IsSheaf (J.over S) (F.presheafHom M N)
 
 中文:
-类 IsPrestack
-  参数: (J : GrothendieckTopology C)
+类 是Prestack
+  参数: (J : Grothendieck拓扑 C)
   公理与运算 (1 个):
-    - isSheaf((J) {S : C} (M N : F.obj (.mk (op S)))) : Presheaf.IsSheaf (J.over S) (F.presheafHom M N)
+    - isSheaf((J) {S : C} (M N : F.obj (.mk (op S)))) : 预层.是层 (J.over S) (F.presheafHom M N)
 -/
 class IsPrestack (J : GrothendieckTopology C) : Prop where
   isSheaf (J) {S : C} (M N : F.obj (.mk (op S))) :
@@ -325,7 +325,7 @@ definition sheafHom
 
 中文:
 定义 sheafHom
-  签名: (J : GrothendieckTopology C) [F.IsPrestack J]
+  签名: (J : Grothendieck拓扑 C) [F.是Prestack J]
   定义体: F.presheafHom M N
   property := IsPrestack.isSheaf _ _ _
 

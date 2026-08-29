@@ -135,7 +135,7 @@ theorem monic_ascPochhammer
 
 中文:
 定理 monic_ascPochhammer
-  条件: (n : 自然数) [Nontrivial S] [NoZeroDivisors S]
+  条件: (n : 自然数) [非平凡 S] [无零因子 S]
   证明: by
   induction n with
   | zero => simp
@@ -220,7 +220,7 @@ theorem ascPochhammer_eval_comp
 
 中文:
 定理 ascPochhammer_eval_comp
-  结论: {R : 类型} [CommSemiring R] (n : 自然数) (p : R[X]) [Algebra R S]
+  结论: {R : 类型} [交换半环 R] (n : 自然数) (p : R[X]) [代数 R S]
   证明: by
   rw [ascPochhammer_eval₂ (algebraMap R S)]; rw [← eval₂_comp']; rw [← ascPochhammer_map (algebraMap R S)]; rw [← map_comp]; rw [eval_map]
 
@@ -377,7 +377,7 @@ theorem ascPochhammer_succ_eval
 
 中文:
 定理 ascPochhammer_succ_eval
-  条件: {S : 类型} [Semiring S] (n : 自然数) (k : S)
+  条件: {S : 类型} [半环 S] (n : 自然数) (k : S)
   证明: by
   rw [ascPochhammer_succ_right]; rw [mul_add]; rw [eval_add]; rw [eval_mul_X]; rw [← Nat.cast_comm]; rw [← C_eq_natCast]; rw [eval_C_mul]; rw [Nat.cast_comm]; rw [← mul_add]
 
@@ -481,7 +481,7 @@ theorem ascPochhammer_nat_eq_natCast_ascFactorial
 
 中文:
 定理 ascPochhammer_nat_eq_natCast_ascFactorial
-  条件: (S : 类型) [Semiring S] (n k : 自然数)
+  条件: (S : 类型) [半环 S] (n k : 自然数)
   证明: by
   norm_cast
   rw [ascPochhammer_nat_eq_ascFactorial]
@@ -528,7 +528,7 @@ theorem ascPochhammer_nat_eq_natCast_descFactorial
 
 中文:
 定理 ascPochhammer_nat_eq_natCast_descFactorial
-  条件: (S : 类型) [Semiring S] (a b : 自然数)
+  条件: (S : 类型) [半环 S] (a b : 自然数)
   证明: by
   norm_cast
   rw [ascPochhammer_nat_eq_descFactorial]
@@ -561,7 +561,7 @@ theorem ascPochhammer_natDegree
 
 中文:
 定理 ascPochhammer_natDegree
-  条件: (n : 自然数) [NoZeroDivisors S] [Nontrivial S]
+  条件: (n : 自然数) [无零因子 S] [非平凡 S]
   证明: by
   induction n with
   | zero => simp
@@ -651,7 +651,7 @@ theorem ascPochhammer_eval_one
 
 中文:
 定理 ascPochhammer_eval_one
-  条件: (S : 类型) [Semiring S] (n : 自然数)
+  条件: (S : 类型) [半环 S] (n : 自然数)
   证明: by
   rw_mod_cast [ascPochhammer_nat_eq_ascFactorial, Nat.one_ascFactorial]
 
@@ -672,7 +672,7 @@ theorem factorial_mul_ascPochhammer
 
 中文:
 定理 factorial_mul_ascPochhammer
-  条件: (S : 类型) [Semiring S] (r n : 自然数)
+  条件: (S : 类型) [半环 S] (r n : 自然数)
   证明: by
   rw_mod_cast [ascPochhammer_nat_eq_ascFactorial, Nat.factorial_mul_ascFactorial]
 
@@ -904,7 +904,7 @@ have : natDegree (X - (1 : R[X])) != 0 := ne_zero_of_eq_one natDegree_X_sub_C (1
 
 中文:
 定理 monic_descPochhammer
-  条件: (n : 自然数) [Nontrivial R] [NoZeroDivisors R]
+  条件: (n : 自然数) [非平凡 R] [无零因子 R]
   证明: by
   induction n with
   | zero => simp
@@ -1110,7 +1110,7 @@ theorem descPochhammer_natDegree
 
 中文:
 定理 descPochhammer_natDegree
-  条件: (n : 自然数) [NoZeroDivisors R] [Nontrivial R]
+  条件: (n : 自然数) [无零因子 R] [非平凡 R]
   证明: by
   induction n with
   | zero => simp
@@ -1145,7 +1145,7 @@ theorem descPochhammer_succ_eval
 
 中文:
 定理 descPochhammer_succ_eval
-  条件: {S : 类型} [Ring S] (n : 自然数) (k : S)
+  条件: {S : 类型} [环 S] (n : 自然数) (k : S)
   证明: by
   rw [descPochhammer_succ_right]; rw [mul_sub]; rw [eval_sub]; rw [eval_mul_X]; rw [← Nat.cast_comm]; rw [← C_eq_natCast]; rw [eval_C_mul]; rw [Nat.cast_comm]; rw [← mul_sub]
 
@@ -1422,7 +1422,7 @@ theorem ascPochhammer_eval_eq_zero_iff
 
 中文:
 定理 ascPochhammer_eval_eq_zero_iff
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   refine ⟨fun zero' => ?_, fun hrn => ?_⟩
   · induction n with
@@ -1489,7 +1489,7 @@ lemma descPochhammer_eval_eq_prod_range
 
 中文:
 引理 descPochhammer_eval_eq_prod_range
-  条件: {R : 类型} [CommRing R] (n : 自然数) (r : R)
+  条件: {R : 类型} [交换环 R] (n : 自然数) (r : R)
   证明: by
   induction n with
   | zero => simp

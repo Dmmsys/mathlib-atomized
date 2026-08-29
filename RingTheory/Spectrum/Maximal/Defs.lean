@@ -35,11 +35,11 @@ structure MaximalSpectrum
     - isMaximal : asIdeal.IsMaximal
 
 中文:
-结构 MaximalSpectrum
-  参数: (R : 类型) [CommSemiring R]
+结构 极大谱
+  参数: (R : 类型) [交换半环 R]
   公理与运算 (2 个):
-    - asIdeal : Ideal R
-    - isMaximal : asIdeal.IsMaximal
+    - asIdeal : 理想 R
+    - isMaximal : asIdeal.是极大
 -/
 structure MaximalSpectrum (R : Type*) [CommSemiring R] where
   asIdeal : Ideal R

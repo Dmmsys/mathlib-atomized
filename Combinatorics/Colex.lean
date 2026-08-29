@@ -84,7 +84,7 @@ instance instLE
 
 中文:
 实例 instLE
-  签名: : LE (Colex (Finset α)) where
+  签名: : LE (Colex (有限集 α)) where
   定义体: forall ⦃a⦄, a in ofColex s -> a ∉ ofColex t -> exists b, b in ofColex t ∧ b ∉ ofColex s ∧ a <= b
 
 Depends on / 依赖: ofColex
@@ -185,7 +185,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Colex (Finset α)) where
+  签名: : 偏序 (Colex (有限集 α)) where
   定义体: (ha' ha).elim
   le_antisymm _ _ hst hts := (antisymm_aux hst hts).antisymm (antisymm_aux hts hst)
   le_trans s t u hst htu a has hau := by
@@ -216,7 +216,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: {s t : Colex (Finset α)}
+  条件: {s t : Colex (有限集 α)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -270,7 +270,7 @@ lemma toColex_mono
 
 中文:
 引理 toColex_mono
-  结论: Monotone (@toColex (Finset α))
+  结论: 递增 (@toColex (有限集 α))
   证明: fun _s _t hst _a has hat => (hat <| hst has).elim
 -/
 lemma toColex_mono : Monotone (@toColex (Finset α)) :=
@@ -286,7 +286,7 @@ lemma toColex_strictMono
 
 中文:
 引理 toColex_strictMono
-  结论: StrictMono (@toColex (Finset α))
+  结论: 严格递增 (@toColex (有限集 α))
   证明: toColex_mono.strictMono_of_injective toColex.injective
 
 Depends on / 依赖: injective, strictMono_of_injective, toColex, toColex.injective, toColex_mono, toColex_mono.strictMono_of_injective
@@ -343,7 +343,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (Colex (Finset α)) where
+  签名: : 有底序 (Colex (有限集 α)) where
   定义体: toColex ∅
   bot_le s a ha := by cases ha
 
@@ -363,7 +363,7 @@ lemma toColex_empty
 
 中文:
 引理 toColex_empty
-  结论: toColex (∅ : Finset α) = ⊥
+  结论: toColex (∅ : 有限集 α) = ⊥
   证明: rfl
 -/
 @[simp] lemma toColex_empty : toColex (∅ : Finset α) = ⊥ := rfl
@@ -377,7 +377,7 @@ lemma ofColex_bot
 
 中文:
 引理 ofColex_bot
-  结论: ofColex (⊥ : Colex (Finset α)) = ∅
+  结论: ofColex (⊥ : Colex (有限集 α)) = ∅
   证明: rfl
 -/
 @[simp] lemma ofColex_bot : ofColex (⊥ : Colex (Finset α)) = ∅ := rfl
@@ -397,7 +397,7 @@ lemma forall_le_mono
 exact hbc.trans ht _ hct
 
 中文:
-引理 forall_le_mono
+引理 对任意_le_mono
   条件: (hst : toColex s <= toColex t) (ht : 对任意 b in t, b <= a)
   结论: 对任意 b in s, b <= a
   证明: by
@@ -431,7 +431,7 @@ lemma forall_lt_mono
 exact hbc.trans_lt ht _ hct
 
 中文:
-引理 forall_lt_mono
+引理 对任意_lt_mono
   条件: (hst : toColex s <= toColex t) (ht : 对任意 b in t, b < a)
   结论: 对任意 b in s, b < a
   证明: by
@@ -514,7 +514,7 @@ lemma singleton_le_toColex
 
 中文:
 引理 singleton_le_toColex
-  结论: (toColex {a} : Colex (Finset α)) <= toColex s ↔ 存在 x in s, a <= x
+  结论: (toColex {a} : Colex (有限集 α)) <= toColex s ↔ 存在 x in s, a <= x
   证明: by
   simp [toColex_le_toColex]; by_cases a in s <;> aesop
 
@@ -534,7 +534,7 @@ lemma singleton_le_singleton
 
 中文:
 引理 singleton_le_singleton
-  结论: (toColex ({a} : Finset α)) <= toColex {b} ↔ a <= b
+  结论: (toColex ({a} : 有限集 α)) <= toColex {b} ↔ a <= b
   证明: by
   simp [toColex_le_singleton, eq_comm]
 
@@ -554,7 +554,7 @@ lemma singleton_lt_singleton
 
 中文:
 引理 singleton_lt_singleton
-  结论: (toColex ({a} : Finset α)) < toColex {b} ↔ a < b
+  结论: (toColex ({a} : 有限集 α)) < toColex {b} ↔ a < b
   证明: by
   simp [toColex_lt_singleton]
 
@@ -574,7 +574,7 @@ lemma le_iff_sdiff_subset_lowerClosure
 
 中文:
 引理 le_iff_sdiff_subset_lowerClosure
-  条件: {s t : Colex (Finset α)}
+  条件: {s t : Colex (有限集 α)}
   证明: by
   simp [le_def, Set.subset_def, and_assoc]
 
@@ -871,7 +871,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder (Colex (Finset α)) where
+  签名: : 线性序 (Colex (有限集 α)) where
   定义体: by
     obtain rfl | hts := eq_or_ne t s
     · simp
@@ -909,7 +909,7 @@ lemma max_mem_aux
 
 中文:
 引理 max_mem_aux
-  条件: {s t : Colex (Finset α)} (hst : s != t)
+  条件: {s t : Colex (有限集 α)} (hst : s != t)
   证明: by
   simpa
 -/
@@ -927,7 +927,7 @@ lemma toColex_lt_toColex_iff_exists_forall_lt
   simp only [not_forall, not_exists, not_and, not_le, exists_prop]
 
 中文:
-引理 toColex_lt_toColex_iff_exists_forall_lt
+引理 toColex_lt_toColex_iff_存在_对任意_lt
   证明: by
   rw [← not_le]; rw [toColex_le_toColex]; rw [not_forall]
   simp only [not_forall, not_exists, not_and, not_le, exists_prop]
@@ -948,8 +948,8 @@ lemma lt_iff_exists_forall_lt
   proof: toColex_lt_toColex_iff_exists_forall_lt
 
 中文:
-引理 lt_iff_exists_forall_lt
-  条件: {s t : Colex (Finset α)}
+引理 lt_iff_存在_对任意_lt
+  条件: {s t : Colex (有限集 α)}
   证明: toColex_lt_toColex_iff_exists_forall_lt
 
 Depends on / 依赖: toColex_lt_toColex_iff_exists_forall_lt
@@ -1011,7 +1011,7 @@ lemma le_iff_max'_mem
 
 中文:
 引理 le_iff_max'_mem
-  条件: {s t : Colex (Finset α)}
+  条件: {s t : Colex (有限集 α)}
   证明: toColex_le_toColex_iff_max'_mem
 
 Depends on / 依赖: _mem, toColex_le_toColex_iff_max
@@ -1052,7 +1052,7 @@ lemma lt_iff_max'_mem
 
 中文:
 引理 lt_iff_max'_mem
-  条件: {s t : Colex (Finset α)}
+  条件: {s t : Colex (有限集 α)}
   证明: by
   rw [lt_iff_le_and_ne]; rw [le_iff_max'_mem]; aesop
 
@@ -1075,7 +1075,7 @@ lemma lt_iff_exists_filter_lt
     have hu : u.Nonempty := h.imp
 
 中文:
-引理 lt_iff_exists_filter_lt
+引理 lt_iff_存在_filter_lt
   证明: by
   simp only [lt_iff_exists_forall_lt, mem_sdiff, filter_inj, and_assoc]
   refine ⟨fun h => ?_, ?_⟩
@@ -1188,7 +1188,7 @@ lemma toColex_image_le_toColex_image
 
 中文:
 引理 toColex_image_le_toColex_image
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: by
   simp [toColex_le_toColex, hf.le_iff_le, hf.injective.eq_iff]
 
@@ -1208,7 +1208,7 @@ lemma toColex_image_lt_toColex_image
 
 中文:
 引理 toColex_image_lt_toColex_image
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: lt_iff_lt_of_le_iff_le toColex_image_le_toColex_image hf
 
 Depends on / 依赖: lt_iff_lt_of_le_iff_le, toColex_image_le_toColex_image
@@ -1227,7 +1227,7 @@ lemma toColex_image_ofColex_strictMono
 
 中文:
 引理 toColex_image_ofColex_strictMono
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: fun _s _t => (toColex_image_lt_toColex_image hf).2
 
 Depends on / 依赖: toColex_image_lt_toColex_image
@@ -1250,7 +1250,7 @@ le_top _x := toColex_le_toColex_of_subset subset_univ _
 
 中文:
 实例 instBoundedOrder
-  签名: : BoundedOrder (Colex (Finset α)) where
+  签名: : 有界序 (Colex (有限集 α)) where
   定义体: toColex univ
 le_top _x := toColex_le_toColex_of_subset subset_univ _
 
@@ -1270,7 +1270,7 @@ lemma toColex_univ
 
 中文:
 引理 toColex_univ
-  结论: toColex (univ : Finset α) = ⊤
+  结论: toColex (univ : 有限集 α) = ⊤
   证明: rfl
 -/
 @[simp] lemma toColex_univ : toColex (univ : Finset α) = ⊤ := rfl
@@ -1284,7 +1284,7 @@ lemma ofColex_top
 
 中文:
 引理 ofColex_top
-  结论: ofColex (⊤ : Colex (Finset α)) = univ
+  结论: ofColex (⊤ : Colex (有限集 α)) = univ
   证明: rfl
 -/
 @[simp] lemma ofColex_top : ofColex (⊤ : Colex (Finset α)) = univ := rfl
@@ -1304,7 +1304,7 @@ definition IsInitSeg
 
 中文:
 定义 IsInitSeg
-  签名: (𝒜 : Finset (Finset α)) (r : 自然数)
+  签名: (𝒜 : 有限集 (有限集 α)) (r : 自然数)
   定义体: (𝒜 : Set (Finset α)).Sized r ∧
     forall ⦃s t : Finset α⦄, s in 𝒜 -> toColex t < toColex s ∧ #t = r -> t in 𝒜
 
@@ -1324,7 +1324,7 @@ lemma isInitSeg_empty
 
 中文:
 引理 isInitSeg_empty
-  结论: IsInitSeg (∅ : Finset (Finset α)) r
+  结论: IsInitSeg (∅ : 有限集 (有限集 α)) r
   证明: by simp [IsInitSeg]
 -/
 @[simp] lemma isInitSeg_empty : IsInitSeg (∅ : Finset (Finset α)) r := by simp [IsInitSeg]
@@ -1387,7 +1387,7 @@ definition initSeg
 
 中文:
 定义 initSeg
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: {t | #s = #t ∧ toColex t <= toColex s}
 
 @[simp]
@@ -1440,7 +1440,7 @@ lemma initSeg_nonempty
 
 中文:
 引理 initSeg_nonempty
-  结论: (initSeg s).Nonempty
+  结论: (initSeg s).非空
   证明: ⟨s, mem_initSeg_self⟩
 -/
 @[simp] lemma initSeg_nonempty : (initSeg s).Nonempty := ⟨s, mem_initSeg_self⟩
@@ -1491,8 +1491,8 @@ lemma IsInitSeg.exists_initSeg
   obtain p | p := le.eq_or_l
 
 中文:
-引理 IsInitSeg.exists_initSeg
-  条件: (h𝒜 : IsInitSeg 𝒜 r) (h𝒜₀ : 𝒜.Nonempty)
+引理 IsInitSeg.存在_initSeg
+  条件: (h𝒜 : IsInitSeg 𝒜 r) (h𝒜₀ : 𝒜.非空)
   证明: by
   have hs := sup'_mem (ofColex ⁻¹' 𝒜) (LinearOrder.supClosed _) 𝒜 h𝒜₀ toColex
     (fun a ha => by simpa using ha)
@@ -1533,7 +1533,7 @@ lemma isInitSeg_iff_exists_initSeg
   exact ⟨isInitSeg_initSeg, initSeg_nonempty⟩
 
 中文:
-引理 isInitSeg_iff_exists_initSeg
+引理 isInitSeg_iff_存在_initSeg
   证明: by
   refine ⟨fun h𝒜 => h𝒜.1.exists_initSeg h𝒜.2, ?_⟩
   rintro ⟨s, rfl, rfl⟩
@@ -1577,7 +1577,7 @@ exact (Nat.geomSum_lt hn <| by simpa).trans_le single_le_sum (fun _ _ => by lia)
 中文:
 引理 geomSum_ofColex_strictMono
   条件: (hn : 2 <= n)
-  结论: StrictMono fun s => ∑ k in ofColex s, n ^ k
+  结论: 严格递增 fun s => ∑ k in ofColex s, n ^ k
   证明: by
   intro s t hst
   rw [Colex.lt_iff_exists_forall_lt] at hst
@@ -1692,7 +1692,7 @@ theorem toFinset_bitIndices_sum_two_pow
 
 中文:
 定理 toFinset_bitIndices_sum_two_pow
-  条件: (s : Finset 自然数)
+  条件: (s : 有限集 自然数)
   证明: by
   simp [← (geomSum_injective rfl.le).eq_iff, List.sum_toFinset _ Nat.bitIndices_sorted.nodup]
 -/
@@ -1750,7 +1750,7 @@ definition equivBitIndices
 
 中文:
 定义 equivBitIndices
-  签名: : 自然数 ≃ Finset 自然数 where
+  签名: : 自然数 ≃ 有限集 自然数 where
   定义体: n.bitIndices.toFinset
   invFun s := ∑ i in s, 2 ^ i
   left_inv := sum_toFinset_bitIndices_two_pow
@@ -1776,7 +1776,7 @@ definition orderIsoColex
 
 中文:
 定义 orderIsoColex
-  签名: : 自然数 ≃o Colex (Finset 自然数) where
+  签名: : 自然数 ≃o Colex (有限集 自然数) where
   定义体: toColex (equivBitIndices n)
   invFun s := equivBitIndices.symm (ofColex s)
   left_inv n := equivBitIndices.symm_apply_apply n

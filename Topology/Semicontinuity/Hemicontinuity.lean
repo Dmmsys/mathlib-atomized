@@ -47,7 +47,7 @@ case mono => exact fun t₁ t₂ ht h => h.mp .of_forall fun x' => by gcongr
 alias ⟨UpperHemicont
 
 中文:
-引理 upperHemicontinuousWithinAt_iff_forall_isOpen
+引理 upperHemicontinuousWithinAt_iff_对任意_isOpen
   证明: by
   rw [upperHemicontinuousWithinAt_iff]; rw [hasBasis_nhdsSet _ |>.forall_iff ?mono]
 case mono => exact fun t₁ t₂ ht h => h.mp .of_forall fun x' => by gcongr
@@ -82,7 +82,7 @@ alias ⟨UpperHemicontinuousOn.forall_isOpen, UpperHemicontinuousOn.of_forall_is
   upperHemicontinuousOn_iff_forall_isOpen
 
 中文:
-引理 upperHemicontinuousOn_iff_forall_isOpen
+引理 upperHemicontinuousOn_iff_对任意_isOpen
   证明: by
   simp [upperHemicontinuousOn_iff, upperHemicontinuousWithinAt_iff_forall_isOpen]
 
@@ -111,7 +111,7 @@ alias ⟨UpperHemicontinuousAt.forall_isOpen, UpperHemicontinuousAt.of_forall_is
   upperHemicontinuousAt_iff_forall_isOpen
 
 中文:
-引理 upperHemicontinuousAt_iff_forall_isOpen
+引理 upperHemicontinuousAt_iff_对任意_isOpen
   证明: by
   simpa [upperHemicontinuousWithinAt_univ_iff] using
     upperHemicontinuousWithinAt_iff_forall_isOpen (s := Set.univ)
@@ -141,7 +141,7 @@ alias ⟨UpperHemicontinuous.forall_isOpen, UpperHemicontinuous.of_forall_isOpen
   upperHemicontinuous_iff_forall_isOpen
 
 中文:
-引理 upperHemicontinuous_iff_forall_isOpen
+引理 upperHemicontinuous_iff_对任意_isOpen
   证明: by
   simp [upperHemicontinuous_iff, upperHemicontinuousAt_iff_forall_isOpen]
 
@@ -472,7 +472,7 @@ lemma upperHemicontinuous_singleton_id
 
 中文:
 引理 upperHemicontinuous_singleton_id
-  结论: UpperHemicontinuous ({·} : α -> Set α)
+  结论: UpperHemicontinuous ({·} : α -> 集合 α)
   证明: by
   simp [upperHemicontinuous_iff, upperHemicontinuousAt_iff]
 
@@ -623,7 +623,7 @@ lemma lowerHemicontinuous_singleton_id
 
 中文:
 引理 lowerHemicontinuous_singleton_id
-  结论: LowerHemicontinuous ({·} : α -> Set α)
+  结论: LowerHemicontinuous ({·} : α -> 集合 α)
   证明: by
   intro x t ⟨ht, hne⟩
   filter_upwards [ht.mem_nhds (Set.singleton_inter_nonempty.mp hne)] with x' hx'
@@ -751,7 +751,7 @@ alias ⟨_, Continuous.lowerHemicontinuous⟩ := lowerHemicontinuous_singleton_i
 
 中文:
 引理 lowerHemicontinuous_singleton_iff
-  结论: LowerHemicontinuous ({f ·}) ↔ Continuous f
+  结论: LowerHemicontinuous ({f ·}) ↔ 连续 f
   证明: by
   simp [← lowerHemicontinuousOn_univ_iff]
 
@@ -912,7 +912,7 @@ lemma UpperHemicontinuousOn.inter
 
 中文:
 引理 UpperHemicontinuousOn.inter
-  条件: (hf : UpperHemicontinuousOn f s) {u : Set β} (hu : IsClosed u)
+  条件: (hf : UpperHemicontinuousOn f s) {u : 集合 β} (hu : 是闭集 u)
   证明: by
   rw [upperHemicontinuousOn_iff] at hf ⊢
   exact (hf · · |>.inter hu)
@@ -936,7 +936,7 @@ lemma UpperHemicontinuousAt.inter
 
 中文:
 引理 UpperHemicontinuousAt.inter
-  条件: (hf : UpperHemicontinuousAt f x) {u : Set β} (hu : IsClosed u)
+  条件: (hf : UpperHemicontinuousAt f x) {u : 集合 β} (hu : 是闭集 u)
   证明: by
   rw [← upperHemicontinuousWithinAt_univ_iff] at hf ⊢
   exact hf.inter hu
@@ -960,7 +960,7 @@ lemma UpperHemicontinuous.inter
 
 中文:
 引理 UpperHemicontinuous.inter
-  条件: (hf : UpperHemicontinuous f) {u : Set β} (hu : IsClosed u)
+  条件: (hf : UpperHemicontinuous f) {u : 集合 β} (hu : 是闭集 u)
   证明: by
   rw [upperHemicontinuous_iff] at hf ⊢
   exact fun x => (hf x).inter hu
@@ -1137,7 +1137,7 @@ obtain ⟨y₀, hy₀, φ, hφ, hyφ⟩ := hK.subseq_of_frequently_in (x := y) b
 
 中文:
 引理 UpperHemicontinuousAt.of_sequences
-  结论: {x₀ : α} [(𝓝 x₀).IsCountablyGenerated]
+  结论: {x₀ : α} [(𝓝 x₀).是余untablyGenerated]
   证明: by
   refine .of_frequently fun t ht hft => ?_
   obtain ⟨x, hx, hfx⟩ := exists_seq_forall_of_frequently hft
@@ -1184,7 +1184,7 @@ obtain ⟨s, hs, t, ht, hst⟩ := Filter.disjoint_iff.mp RegularSpace.regular hf
 
 中文:
 引理 UpperHemicontinuousAt.mem_of_tendsto
-  结论: {ι : 类型} [RegularSpace β] {x₀ : α}
+  结论: {ι : 类型} [正则空间 β] {x₀ : α}
   证明: by
   by_contra
 obtain ⟨s, hs, t, ht, hst⟩ := Filter.disjoint_iff.mp RegularSpace.regular hf_closed this
@@ -1232,7 +1232,7 @@ lemma LowerHemicontinuousAt.of_sequences
 
 中文:
 引理 LowerHemicontinuousAt.of_sequences
-  结论: {x₀ : α} [(𝓝 x₀).IsCountablyGenerated]
+  结论: {x₀ : α} [(𝓝 x₀).是余untablyGenerated]
   证明: by
   rw [lowerHemicontinuousAt_iff]
   intro U hU ⟨y₀, hy₀f, hy₀U⟩
@@ -1272,7 +1272,7 @@ hx.eventually (lowerHemicontinuousAt_iff.mp hf) (U k) (hU k).2 ⟨y₀, hy₀, (
   -- For each `n`, find the largest `k ≤ n` where `U k` i
 
 中文:
-引理 LowerHemicontinuousAt.exists_seq_tendsto
+引理 LowerHemicontinuousAt.存在_seq_tendsto
   结论: {x₀ : α} (hf : LowerHemicontinuousAt f x₀)
   证明: by
   classical
@@ -1318,8 +1318,8 @@ lemma LowerHemicontinuousAt.exists_subseq_tendsto
   exact ⟨u, y, hu, hy_mem, hy_lim⟩
 
 中文:
-引理 LowerHemicontinuousAt.exists_subseq_tendsto
-  结论: {ι : 类型} {l : Filter ι} [l.NeBot]
+引理 LowerHemicontinuousAt.存在_subseq_tendsto
+  结论: {ι : 类型} {l : 滤子 ι} [l.NeBot]
   证明: by
   obtain ⟨u, hu⟩ := Filter.exists_seq_tendsto l
   obtain ⟨y, hy_mem, hy_lim⟩ := hf.exists_seq_tendsto (hx.comp hu) hy₀
@@ -1407,7 +1407,7 @@ lemma LowerHemicontinuous.inter_hasOpenCGraph
 
 中文:
 引理 LowerHemicontinuous.inter_hasOpenCGraph
-  结论: [TopologicalSpace β] {f g : α -> Set β}
+  结论: [拓扑空间 β] {f g : α -> 集合 β}
   证明: by
   simp_rw [lowerHemicontinuous_iff_isOpen_inter_nonempty] at ⊢ hf
   intro t ht

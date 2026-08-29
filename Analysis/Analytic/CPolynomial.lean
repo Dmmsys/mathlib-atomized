@@ -100,7 +100,7 @@ theorem CPolynomialOn_const
 
 中文:
 定理 CPolynomialOn_const
-  条件: {v : F} {s : Set E}
+  条件: {v : F} {s : 集合 E}
   结论: CPolynomialOn 𝕜 (fun _ => v) s
   证明: fun _ _ => CPolynomialAt_const
 
@@ -120,8 +120,8 @@ theorem HasFiniteFPowerSeriesOnBall.add
     rw [Pi.add_apply]; rw [hf.finite _ ((le_max_left n m).trans hN)]; rw [hg.finite _ ((le_max_right n m).trans hN)]; rw [zero_add]⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.add
-  结论: (hf : HasFiniteFPowerSeriesOnBall f pf x n r)
+定理 有FiniteFPowerSeriesOnBall.add
+  结论: (hf : 有FiniteFPowerSeriesOnBall f pf x n r)
   证明: ⟨hf.1.add hg.1, fun N hN => by
     rw [Pi.add_apply]; rw [hf.finite _ ((le_max_left n m).trans hN)]; rw [hg.finite _ ((le_max_right n m).trans hN)]; rw [zero_add]⟩
 
@@ -193,8 +193,8 @@ theorem HasFiniteFPowerSeriesOnBall.neg
   proof: ⟨hf.1.neg, fun m hm => by rw [Pi.neg_apply, hf.finite m hm, neg_zero]⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.neg
-  条件: (hf : HasFiniteFPowerSeriesOnBall f pf x n r)
+定理 有FiniteFPowerSeriesOnBall.neg
+  条件: (hf : 有FiniteFPowerSeriesOnBall f pf x n r)
   证明: ⟨hf.1.neg, fun m hm => by rw [Pi.neg_apply, hf.finite m hm, neg_zero]⟩
 
 Depends on / 依赖: Pi.neg_apply, finite, hf.finite, neg_apply, neg_zero
@@ -258,8 +258,8 @@ theorem HasFiniteFPowerSeriesOnBall.sub
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.sub
-  结论: (hf : HasFiniteFPowerSeriesOnBall f pf x n r)
+定理 有FiniteFPowerSeriesOnBall.sub
+  结论: (hf : 有FiniteFPowerSeriesOnBall f pf x n r)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -323,7 +323,7 @@ theorem CPolynomialOn.add
 
 中文:
 定理 CPolynomialOn.add
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s)
   证明: fun z hz => (hf z hz).add (hg z hz)
 -/
 theorem CPolynomialOn.add {s : Set E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s) :
@@ -340,7 +340,7 @@ theorem CPolynomialOn.sub
 
 中文:
 定理 CPolynomialOn.sub
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s)
   证明: fun z hz => (hf z hz).sub (hg z hz)
 -/
 theorem CPolynomialOn.sub {s : Set E} (hf : CPolynomialOn 𝕜 f s) (hg : CPolynomialOn 𝕜 g s) :

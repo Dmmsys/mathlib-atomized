@@ -41,7 +41,7 @@ theorem dedup_nil
 
 中文:
 定理 dedup_nil
-  结论: dedup [] = ([] : List α)
+  结论: dedup [] = ([] : 列表 α)
   证明: rfl
 -/
 theorem dedup_nil : dedup [] = ([] : List α) :=
@@ -58,7 +58,7 @@ theorem dedup_cons_of_mem'
 
 中文:
 定理 dedup_cons_of_mem'
-  条件: {a : α} {l : List α} (h : a in dedup l)
+  条件: {a : α} {l : 列表 α} (h : a in dedup l)
   结论: dedup (a :: l) = dedup l
   证明: pwFilter_cons_of_neg by simpa only [forall_mem_ne, not_not] using! h
 
@@ -77,7 +77,7 @@ theorem dedup_cons_of_notMem'
 
 中文:
 定理 dedup_cons_of_notMem'
-  条件: {a : α} {l : List α} (h : a ∉ dedup l)
+  条件: {a : α} {l : 列表 α} (h : a ∉ dedup l)
   证明: pwFilter_cons_of_pos by simpa only [forall_mem_ne] using! h
 
 Depends on / 依赖: forall_mem_ne, pwFilter_cons_of_pos
@@ -99,7 +99,7 @@ theorem dedup_cons'
 
 中文:
 定理 dedup_cons'
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   split <;> simp [dedup_cons_of_mem', dedup_cons_of_notMem', *]
 
@@ -129,7 +129,7 @@ exact not_and_or.1 mt (fun h => h.1.trans h.2) xz
 
 中文:
 定理 mem_dedup
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   结论: a in dedup l ↔ a in l
   证明: by
   have := not_congr (@forall_mem_pwFilter α (· != ·) _ ?_ a l)
@@ -161,7 +161,7 @@ theorem dedup_cons_of_mem
 
 中文:
 定理 dedup_cons_of_mem
-  条件: {a : α} {l : List α} (h : a in l)
+  条件: {a : α} {l : 列表 α} (h : a in l)
   结论: dedup (a :: l) = dedup l
   证明: dedup_cons_of_mem' mem_dedup.2 h
 
@@ -184,7 +184,7 @@ theorem dedup_cons_of_notMem
 
 中文:
 定理 dedup_cons_of_notMem
-  条件: {a : α} {l : List α} (h : a ∉ l)
+  条件: {a : α} {l : 列表 α} (h : a ∉ l)
   结论: dedup (a :: l) = a :: dedup l
   证明: dedup_cons_of_notMem' mt mem_dedup.1 h
 
@@ -204,7 +204,7 @@ theorem dedup_cons
 
 中文:
 定理 dedup_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   simpa using dedup_cons' a l
 
@@ -224,7 +224,7 @@ theorem dedup_sublist
 
 中文:
 定理 dedup_sublist
-  结论: 对任意 l : List α, dedup l <+ l
+  结论: 对任意 l : 列表 α, dedup l <+ l
   证明: pwFilter_sublist
 
 Depends on / 依赖: pwFilter_sublist
@@ -242,7 +242,7 @@ theorem dedup_subset
 
 中文:
 定理 dedup_subset
-  结论: 对任意 l : List α, dedup l subseteq l
+  结论: 对任意 l : 列表 α, dedup l subseteq l
   证明: pwFilter_subset
 
 Depends on / 依赖: pwFilter_subset
@@ -261,7 +261,7 @@ theorem subset_dedup
 
 中文:
 定理 subset_dedup
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l subseteq dedup l
   证明: fun _ => mem_dedup.2
 
@@ -279,7 +279,7 @@ theorem nodup_dedup
 
 中文:
 定理 nodup_dedup
-  结论: 对任意 l : List α, Nodup (dedup l)
+  结论: 对任意 l : 列表 α, Nodup (dedup l)
   证明: pairwise_pwFilter
 
 Depends on / 依赖: pairwise_pwFilter
@@ -299,7 +299,7 @@ theorem headI_dedup
 
 中文:
 定理 headI_dedup
-  条件: [Inhabited α] (l : List α)
+  条件: [可居 α] (l : 列表 α)
   证明: match l with
   | [] => rfl
   | a :: l => by by_cases ha : a in l <;> simp [ha, List.dedup_cons_of_mem]
@@ -324,7 +324,7 @@ theorem tail_dedup
 
 中文:
 定理 tail_dedup
-  条件: [Inhabited α] (l : List α)
+  条件: [可居 α] (l : 列表 α)
   证明: match l with
   | [] => rfl
   | a :: l => by by_cases ha : a in l <;> simp [ha, List.dedup_cons_of_mem]
@@ -348,7 +348,7 @@ theorem dedup_eq_self
 
 中文:
 定理 dedup_eq_self
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: dedup l = l ↔ Nodup l
   证明: pwFilter_eq_self
 
@@ -374,7 +374,7 @@ theorem dedup_eq_cons
 
 中文:
 定理 dedup_eq_cons
-  条件: (l : List α) (a : α) (l' : List α)
+  条件: (l : 列表 α) (a : α) (l' : 列表 α)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · refine ⟨mem_dedup.1 (h.symm ▸ mem_cons_self), fun ha => ?_, by rw [h, tail_cons]⟩
@@ -417,7 +417,7 @@ theorem dedup_eq_nil
 
 中文:
 定理 dedup_eq_nil
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l.dedup = [] ↔ l = []
   证明: by
   induction l with
@@ -450,7 +450,7 @@ theorem Nodup.dedup
 
 中文:
 定理 Nodup.dedup
-  条件: {l : List α} (h : l.Nodup)
+  条件: {l : 列表 α} (h : l.Nodup)
   结论: l.dedup = l
   证明: List.dedup_eq_self.2 h
 
@@ -471,7 +471,7 @@ theorem dedup_idem
 
 中文:
 定理 dedup_idem
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: dedup (dedup l) = dedup l
   证明: pwFilter_idem
 
@@ -497,7 +497,7 @@ theorem dedup_append
 
 中文:
 定理 dedup_append
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   结论: dedup (l₁ ++ l₂) = l₁ union dedup l₂
   证明: by
   induction l₁ with | nil => rfl | cons a l₁ IH => ?_
@@ -535,7 +535,7 @@ theorem dedup_map_of_injective
 
 中文:
 定理 dedup_map_of_injective
-  结论: [DecidableEq β] {f : α -> β} (hf : Function.Injective f)
+  结论: [DecidableEq β] {f : α -> β} (hf : 函数.单射 f)
   证明: by
   induction xs with
   | nil => simp
@@ -570,8 +570,8 @@ theorem Subset.dedup_append_right
   rw [List.dedup_append]; rw [Subset.union_eq_right (List.Subset.trans h <| subset_dedup _)]
 
 中文:
-定理 Subset.dedup_append_right
-  条件: {xs ys : List α} (h : xs subseteq ys)
+定理 子集.dedup_append_right
+  条件: {xs ys : 列表 α} (h : xs subseteq ys)
   证明: by
   rw [List.dedup_append]; rw [Subset.union_eq_right (List.Subset.trans h <| subset_dedup _)]
 
@@ -600,7 +600,7 @@ theorem Disjoint.union_eq
 
 中文:
 定理 Disjoint.union_eq
-  条件: {xs ys : List α} (h : Disjoint xs ys)
+  条件: {xs ys : 列表 α} (h : Disjoint xs ys)
   证明: by
   induction xs with
   | nil => simp
@@ -640,7 +640,7 @@ theorem Disjoint.dedup_append
 
 中文:
 定理 Disjoint.dedup_append
-  条件: {xs ys : List α} (h : Disjoint xs ys)
+  条件: {xs ys : 列表 α} (h : Disjoint xs ys)
   证明: by
   rw [List.dedup_append]; rw [Disjoint.union_eq]
   intro a hx hy
@@ -685,7 +685,7 @@ theorem count_dedup
 
 中文:
 定理 count_dedup
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   结论: l.dedup.count a = if a in l then 1 else 0
   证明: by
   simp_rw [List.Nodup.count <| nodup_dedup l, mem_dedup]
@@ -709,8 +709,8 @@ theorem Perm.dedup
       simp [h, count_eq_zero_of_not_mem, mt p.mem_iff.2]
 
 中文:
-定理 Perm.dedup
-  条件: {l₁ l₂ : List α} (p : l₁ ~ l₂)
+定理 置换.dedup
+  条件: {l₁ l₂ : 列表 α} (p : l₁ ~ l₂)
   结论: dedup l₁ ~ dedup l₂
   证明: perm_iff_count.2 fun a =>
     if h : a in l₁ then by

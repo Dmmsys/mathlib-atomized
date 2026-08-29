@@ -39,7 +39,7 @@ theorem Int.natAbs_eq_iff_associated
     · exact Or.inr (by simp)
 
 中文:
-定理 Int.natAbs_eq_iff_associated
+定理 整数.natAbs_eq_iff_associated
   条件: {a b : 整数}
   结论: a.natAbs = b.natAbs ↔ Associated a b
   证明: by

@@ -380,7 +380,7 @@ notation:100 f " =Θ[" l "] " g:100 => IsTheta l f g
 
 中文:
 定义 IsTheta
-  签名: (l : Filter α) (f : α -> E) (g : α -> F)
+  签名: (l : 滤子 α) (f : α -> E) (g : α -> F)
   定义体: IsBigO l f g ∧ IsBigO l g f
 
 @[inherit_doc]
@@ -468,7 +468,7 @@ theorem isLittleO_iff_forall_isBigOWith
 alias ⟨IsLittleO.forall_isBigOWith, IsLittleO.of_isBigOWith⟩ := isLittleO_iff_forall_isBigOWith
 
 中文:
-定理 isLittleO_iff_forall_isBigOWith
+定理 isLittleO_iff_对任意_isBigOWith
   结论: f =o[l] g ↔ 对任意 ⦃c : 实数⦄, 0 < c -> IsBigOWith c l f g
   证明: by
   rw [IsLittleO_def]
@@ -609,7 +609,7 @@ definition IsEquivalent
 
 中文:
 定义 IsEquivalent
-  签名: (l : Filter α) (u v : α -> E')
+  签名: (l : 滤子 α) (u v : α -> E')
   定义体: (u - v) =o[l] v
 
 @[inherit_doc] scoped notation:50 u " ~[" l:50 "] " v:50 => Asymptotics.IsEquivalent l u v
@@ -741,7 +741,7 @@ theorem IsBigOWith.exists_pos
   proof: ⟨max c 1, lt_of_lt_of_le zero_lt_one (le_max_right c 1), h.weaken le_max_left c 1⟩
 
 中文:
-定理 IsBigOWith.exists_pos
+定理 IsBigOWith.存在_pos
   条件: (h : IsBigOWith c l f g')
   证明: ⟨max c 1, lt_of_lt_of_le zero_lt_one (le_max_right c 1), h.weaken le_max_left c 1⟩
 
@@ -762,7 +762,7 @@ theorem IsBigO.exists_pos
   hc.exists_pos
 
 中文:
-定理 IsBigO.exists_pos
+定理 IsBigO.存在_pos
   条件: (h : f =O[l] g')
   结论: 存在 c > 0, IsBigOWith c l f g'
   证明: let ⟨_c, hc⟩ := h.isBigOWith
@@ -784,7 +784,7 @@ theorem IsBigOWith.exists_nonneg
   ⟨c, le_of_lt cpos, hc⟩
 
 中文:
-定理 IsBigOWith.exists_nonneg
+定理 IsBigOWith.存在_nonneg
   条件: (h : IsBigOWith c l f g')
   证明: let ⟨c, cpos, hc⟩ := h.exists_pos
   ⟨c, le_of_lt cpos, hc⟩
@@ -807,7 +807,7 @@ theorem IsBigO.exists_nonneg
   hc.exists_nonneg
 
 中文:
-定理 IsBigO.exists_nonneg
+定理 IsBigO.存在_nonneg
   条件: (h : f =O[l] g')
   结论: 存在 c >= 0, IsBigOWith c l f g'
   证明: let ⟨_c, hc⟩ := h.isBigOWith
@@ -868,8 +868,8 @@ theorem IsBigO.exists_mem_basis
     simpa only [isBigOWith_iff, hb.eventually_iff, exists_prop] using h
 
 中文:
-定理 IsBigO.exists_mem_basis
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set α} (h : f =O[l] g')
+定理 IsBigO.存在_mem_basis
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 α} (h : f =O[l] g')
   证明: flip Exists.imp h.exists_pos fun c h => by
     simpa only [isBigOWith_iff, hb.eventually_iff, exists_prop] using h
 
@@ -1006,7 +1006,7 @@ theorem isLittleO_of_subsingleton
 
 中文:
 定理 isLittleO_of_subsingleton
-  条件: [Subsingleton E']
+  条件: [子单例 E']
   结论: f' =o[l] g'
   证明: IsLittleO.of_bound fun c hc => by simp [Subsingleton.elim (f' _) 0, mul_nonneg hc.le]
 
@@ -1029,7 +1029,7 @@ theorem isBigO_of_subsingleton
 
 中文:
 定理 isBigO_of_subsingleton
-  条件: [Subsingleton E']
+  条件: [子单例 E']
   结论: f' =O[l] g'
   证明: isLittleO_of_subsingleton.isBigO
 
@@ -1395,7 +1395,7 @@ theorem _root_.Filter.EventuallyEq.trans_isBigO
   proof: h.congr' hf.symm EventuallyEq.rfl
 
 中文:
-定理 _root_.Filter.EventuallyEq.trans_isBigO
+定理 _root_.滤子.EventuallyEq.trans_isBigO
   结论: {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
   证明: h.congr' hf.symm EventuallyEq.rfl
 
@@ -1438,7 +1438,7 @@ theorem _root_.Filter.EventuallyEq.trans_isLittleO
   proof: h.congr' hf.symm EventuallyEq.rfl
 
 中文:
-定理 _root_.Filter.EventuallyEq.trans_isLittleO
+定理 _root_.滤子.EventuallyEq.trans_isLittleO
   结论: {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
   证明: h.congr' hf.symm EventuallyEq.rfl
 
@@ -1567,7 +1567,7 @@ theorem IsBigOWith.comp_tendsto
 
 中文:
 定理 IsBigOWith.comp_tendsto
-  结论: (hcfg : IsBigOWith c l f g) {k : β -> α} {l' : Filter β}
+  结论: (hcfg : IsBigOWith c l f g) {k : β -> α} {l' : 滤子 β}
   证明: IsBigOWith.of_bound hk hcfg.bound
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, hcfg.bound, of_bound
@@ -1586,7 +1586,7 @@ theorem IsBigO.comp_tendsto
 
 中文:
 定理 IsBigO.comp_tendsto
-  条件: (hfg : f =O[l] g) {k : β -> α} {l' : Filter β} (hk : Tendsto k l' l)
+  条件: (hfg : f =O[l] g) {k : β -> α} {l' : 滤子 β} (hk : 收敛 k l' l)
   证明: isBigO_iff_isBigOWith.2 hfg.isBigOWith.imp fun _c h => h.comp_tendsto hk
 
 Depends on / 依赖: comp_tendsto, h.comp_tendsto, hfg.isBigOWith.imp, isBigOWith, isBigO_iff_isBigOWith
@@ -1631,7 +1631,7 @@ theorem IsLittleO.comp_tendsto
 
 中文:
 定理 IsLittleO.comp_tendsto
-  条件: (hfg : f =o[l] g) {k : β -> α} {l' : Filter β} (hk : Tendsto k l' l)
+  条件: (hfg : f =o[l] g) {k : β -> α} {l' : 滤子 β} (hk : 收敛 k l' l)
   证明: IsLittleO.of_isBigOWith fun _c cpos => (hfg.forall_isBigOWith cpos).comp_tendsto hk
 
 @[simp]
@@ -1657,7 +1657,7 @@ theorem isBigOWith_map
 
 中文:
 定理 isBigOWith_map
-  条件: {k : β -> α} {l : Filter β}
+  条件: {k : β -> α} {l : 滤子 β}
   证明: by
   simp only [IsBigOWith_def]
   exact eventually_map
@@ -1686,7 +1686,7 @@ theorem isBigO_map
 
 中文:
 定理 isBigO_map
-  条件: {k : β -> α} {l : Filter β}
+  条件: {k : β -> α} {l : 滤子 β}
   结论: f =O[map k l] g ↔ (f ∘ k) =O[l] (g ∘ k)
   证明: by
   simp only [IsBigO_def, isBigOWith_map]
@@ -1711,7 +1711,7 @@ theorem isLittleO_map
 
 中文:
 定理 isLittleO_map
-  条件: {k : β -> α} {l : Filter β}
+  条件: {k : β -> α} {l : 滤子 β}
   结论: f =o[map k l] g ↔ (f ∘ k) =o[l] (g ∘ k)
   证明: by
   simp only [IsLittleO_def, isBigOWith_map]
@@ -2070,7 +2070,7 @@ theorem _root_.Filter.Eventually.trans_isBigO
   proof: (IsBigO.of_bound' hfg).trans hgk
 
 中文:
-定理 _root_.Filter.Eventually.trans_isBigO
+定理 _root_.滤子.Eventually.trans_isBigO
   结论: {f : α -> E} {g : α -> F'} {k : α -> G}
   证明: (IsBigO.of_bound' hfg).trans hgk
 
@@ -2089,8 +2089,8 @@ theorem _root_.Filter.Eventually.isBigO
   proof: .of_norm_eventuallyLE hfg
 
 中文:
-定理 _root_.Filter.Eventually.isBigO
-  结论: {f : α -> E} {g : α -> 实数} {l : Filter α}
+定理 _root_.滤子.Eventually.isBigO
+  结论: {f : α -> E} {g : α -> 实数} {l : 滤子 α}
   证明: .of_norm_eventuallyLE hfg
 
 Depends on / 依赖: of_norm_eventuallyLE
@@ -2205,7 +2205,7 @@ theorem isBigOWith_refl
 
 中文:
 定理 isBigOWith_refl
-  条件: (f : α -> E) (l : Filter α)
+  条件: (f : α -> E) (l : 滤子 α)
   结论: IsBigOWith 1 l f f
   证明: isBigOWith_of_le l fun _ => le_rfl
 
@@ -2228,7 +2228,7 @@ theorem isBigO_refl
 
 中文:
 定理 isBigO_refl
-  条件: (f : α -> E) (l : Filter α)
+  条件: (f : α -> E) (l : 滤子 α)
   结论: f =O[l] f
   证明: (isBigOWith_refl f l).isBigO
 
@@ -2247,7 +2247,7 @@ theorem _root_.Filter.EventuallyEq.isBigO
   proof: hf.trans_isBigO (isBigO_refl _ _)
 
 中文:
-定理 _root_.Filter.EventuallyEq.isBigO
+定理 _root_.滤子.EventuallyEq.isBigO
   条件: {f₁ f₂ : α -> E} (hf : f₁ =ᶠ[l] f₂)
   结论: f₁ =O[l] f₂
   证明: hf.trans_isBigO (isBigO_refl _ _)
@@ -2506,7 +2506,7 @@ theorem IsBigOWith.sup
   proof: IsBigOWith.of_bound mem_sup.2 ⟨h.bound, h'.bound⟩
 
 中文:
-定理 IsBigOWith.sup
+定理 IsBigOWith.上确界
   条件: (h : IsBigOWith c l f g) (h' : IsBigOWith c l' f g)
   证明: IsBigOWith.of_bound mem_sup.2 ⟨h.bound, h'.bound⟩
 
@@ -2526,7 +2526,7 @@ theorem IsBigOWith.sup'
     mem_sup.2 ⟨(h.weaken <| le_max_left c c').bound, (h'.weaken <| le_max_right c c').bound⟩
 
 中文:
-定理 IsBigOWith.sup'
+定理 IsBigOWith.上确界'
   条件: (h : IsBigOWith c l f g') (h' : IsBigOWith c' l' f g')
   证明: IsBigOWith.of_bound
     mem_sup.2 ⟨(h.weaken <| le_max_left c c').bound, (h'.weaken <| le_max_right c c').bound⟩
@@ -2550,7 +2550,7 @@ theorem IsBigO.sup
   (hc.sup' hc').isBigO
 
 中文:
-定理 IsBigO.sup
+定理 IsBigO.上确界
   条件: (h : f =O[l] g') (h' : f =O[l'] g')
   结论: f =O[l ⊔ l'] g'
   证明: let ⟨_c, hc⟩ := h.isBigOWith
@@ -2576,7 +2576,7 @@ theorem IsLittleO.sup
 @[simp]
 
 中文:
-定理 IsLittleO.sup
+定理 IsLittleO.上确界
   条件: (h : f =o[l] g) (h' : f =o[l'] g)
   结论: f =o[l ⊔ l'] g
   证明: IsLittleO.of_isBigOWith fun _c cpos => (h.forall_isBigOWith cpos).sup (h'.forall_isBigOWith cpos)
@@ -2641,7 +2641,7 @@ theorem isBigOWith_insert
 
 中文:
 定理 isBigOWith_insert
-  结论: [TopologicalSpace α] {x : α} {s : Set α} {C : 实数} {g : α -> E} {g' : α -> F}
+  结论: [拓扑空间 α] {x : α} {s : 集合 α} {C : 实数} {g : α -> E} {g' : α -> F}
   证明: by
   simp_rw [IsBigOWith_def, nhdsWithin_insert, eventually_sup, eventually_pure, h, true_and]
 
@@ -2662,7 +2662,7 @@ theorem IsBigOWith.insert
 
 中文:
 定理 IsBigOWith.insert
-  结论: [TopologicalSpace α] {x : α} {s : Set α} {C : 实数} {g : α -> E}
+  结论: [拓扑空间 α] {x : α} {s : 集合 α} {C : 实数} {g : α -> E}
   证明: (isBigOWith_insert h2).mpr h1
 -/
 protected theorem IsBigOWith.insert [TopologicalSpace α] {x : α} {s : Set α} {C : Real} {g : α -> E}
@@ -2685,7 +2685,7 @@ theorem isLittleO_insert
 
 中文:
 定理 isLittleO_insert
-  结论: [TopologicalSpace α] {x : α} {s : Set α} {g : α -> E'} {g' : α -> F'}
+  结论: [拓扑空间 α] {x : α} {s : 集合 α} {g : α -> E'} {g' : α -> F'}
   证明: by
   simp_rw [IsLittleO_def]
   refine forall_congr' fun c => forall_congr' fun hc => ?_
@@ -2713,7 +2713,7 @@ theorem IsLittleO.insert
 
 中文:
 定理 IsLittleO.insert
-  结论: [TopologicalSpace α] {x : α} {s : Set α} {g : α -> E'}
+  结论: [拓扑空间 α] {x : α} {s : 集合 α} {g : α -> E'}
   证明: (isLittleO_insert h2).mpr h1
 -/
 protected theorem IsLittleO.insert [TopologicalSpace α] {x : α} {s : Set α} {g : α -> E'}
@@ -3752,7 +3752,7 @@ theorem IsBigO.comp_fst
 
 中文:
 定理 IsBigO.comp_fst
-  结论: f =O[l] g -> (f ∘ Prod.fst) =O[l ×ˢ l'] (g ∘ Prod.fst)
+  结论: f =O[l] g -> (f ∘ 积类型.fst) =O[l ×ˢ l'] (g ∘ 积类型.fst)
   证明: by
   simp only [isBigO_iff, eventually_prod_iff]
   exact fun ⟨c, hc⟩ => ⟨c, _, hc, fun _ => True, eventually_true l', fun {_} h {_} _ => h⟩
@@ -3773,7 +3773,7 @@ theorem IsBigO.comp_snd
 
 中文:
 定理 IsBigO.comp_snd
-  结论: f =O[l] g -> (f ∘ Prod.snd) =O[l' ×ˢ l] (g ∘ Prod.snd)
+  结论: f =O[l] g -> (f ∘ 积类型.snd) =O[l' ×ˢ l] (g ∘ 积类型.snd)
   证明: by
   simp only [isBigO_iff, eventually_prod_iff]
   exact fun ⟨c, hc⟩ => ⟨c, fun _ => True, eventually_true l', _, hc, fun _ => id⟩
@@ -3794,7 +3794,7 @@ theorem IsLittleO.comp_fst
 
 中文:
 定理 IsLittleO.comp_fst
-  结论: f =o[l] g -> (f ∘ Prod.fst) =o[l ×ˢ l'] (g ∘ Prod.fst)
+  结论: f =o[l] g -> (f ∘ 积类型.fst) =o[l ×ˢ l'] (g ∘ 积类型.fst)
   证明: by
   simp only [isLittleO_iff, eventually_prod_iff]
   exact fun h _ hc => ⟨_, h hc, fun _ => True, eventually_true l', fun {_} h {_} _ => h⟩
@@ -3815,7 +3815,7 @@ theorem IsLittleO.comp_snd
 
 中文:
 定理 IsLittleO.comp_snd
-  结论: f =o[l] g -> (f ∘ Prod.snd) =o[l' ×ˢ l] (g ∘ Prod.snd)
+  结论: f =o[l] g -> (f ∘ 积类型.snd) =o[l' ×ˢ l] (g ∘ 积类型.snd)
   证明: by
   simp only [isLittleO_iff, eventually_prod_iff]
   exact fun h _ hc => ⟨fun _ => True, eventually_true l', _, h hc, fun _ => id⟩
@@ -5081,7 +5081,7 @@ theorem isBigOWith_const_const
 
 中文:
 定理 isBigOWith_const_const
-  条件: (c : E) {c' : F''} (hc' : c' != 0) (l : Filter α)
+  条件: (c : E) {c' : F''} (hc' : c' != 0) (l : 滤子 α)
   证明: by
   simp only [IsBigOWith_def]
   apply univ_mem'
@@ -5109,7 +5109,7 @@ theorem isBigO_const_const
 
 中文:
 定理 isBigO_const_const
-  条件: (c : E) {c' : F''} (hc' : c' != 0) (l : Filter α)
+  条件: (c : E) {c' : F''} (hc' : c' != 0) (l : 滤子 α)
   证明: (isBigOWith_const_const c hc' l).isBigO
 
 @[simp]
@@ -5136,7 +5136,7 @@ theorem isBigO_const_const_iff
 
 中文:
 定理 isBigO_const_const_iff
-  条件: {c : E''} {c' : F''} (l : Filter α) [l.NeBot]
+  条件: {c : E''} {c' : F''} (l : 滤子 α) [l.NeBot]
   证明: by
   rcases eq_or_ne c' 0 with (rfl | hc')
   · simp [EventuallyEq]
@@ -5192,7 +5192,7 @@ theorem isBigOWith_const_mul_self
 
 中文:
 定理 isBigOWith_const_mul_self
-  条件: (c : R) (f : α -> R) (l : Filter α)
+  条件: (c : R) (f : α -> R) (l : 滤子 α)
   证明: isBigOWith_of_le' _ fun _x => norm_mul_le _ _
 
 Depends on / 依赖: isBigOWith_of_le, norm_mul_le
@@ -5212,7 +5212,7 @@ theorem isBigO_const_mul_self
 
 中文:
 定理 isBigO_const_mul_self
-  条件: (c : R) (f : α -> R) (l : Filter α)
+  条件: (c : R) (f : α -> R) (l : 滤子 α)
   结论: (fun x => c * f x) =O[l] f
   证明: (isBigOWith_const_mul_self c f l).isBigO
 
@@ -5274,7 +5274,7 @@ theorem isBigOWith_self_const_mul'
 
 中文:
 定理 isBigOWith_self_const_mul'
-  条件: (u : Rˣ) (f : α -> R) (l : Filter α)
+  条件: (u : Rˣ) (f : α -> R) (l : 滤子 α)
   证明: (isBigOWith_const_mul_self ↑u⁻¹ (fun x => ↑u * f x) l).congr_left
     fun x => u.inv_mul_cancel_left (f x)
 
@@ -5296,7 +5296,7 @@ theorem isBigOWith_self_const_mul
 
 中文:
 定理 isBigOWith_self_const_mul
-  条件: {c : S} (hc : c != 0) (f : α -> S) (l : Filter α)
+  条件: {c : S} (hc : c != 0) (f : α -> S) (l : 滤子 α)
   证明: by
   simp [IsBigOWith, inv_mul_cancel_left₀ (norm_ne_zero_iff.mpr hc)]
 
@@ -5317,7 +5317,7 @@ theorem isBigO_self_const_mul'
 
 中文:
 定理 isBigO_self_const_mul'
-  条件: {c : R} (hc : IsUnit c) (f : α -> R) (l : Filter α)
+  条件: {c : R} (hc : 是单位 c) (f : α -> R) (l : 滤子 α)
   证明: let ⟨u, hu⟩ := hc
   hu ▸ (isBigOWith_self_const_mul' u f l).isBigO
 
@@ -5338,7 +5338,7 @@ theorem isBigO_self_const_mul
 
 中文:
 定理 isBigO_self_const_mul
-  条件: {c : S} (hc : c != 0) (f : α -> S) (l : Filter α)
+  条件: {c : S} (hc : c != 0) (f : α -> S) (l : 滤子 α)
   证明: (isBigOWith_self_const_mul hc f l).isBigO
 
 Depends on / 依赖: isBigO, isBigOWith_self_const_mul
@@ -5357,7 +5357,7 @@ theorem isBigO_const_mul_left_iff'
 
 中文:
 定理 isBigO_const_mul_left_iff'
-  条件: {f : α -> R} {c : R} (hc : IsUnit c)
+  条件: {f : α -> R} {c : R} (hc : 是单位 c)
   证明: ⟨(isBigO_self_const_mul' hc f l).trans, fun h => h.const_mul_left c⟩
 
 Depends on / 依赖: const_mul_left, h.const_mul_left, isBigO_self_const_mul
@@ -5415,7 +5415,7 @@ theorem isLittleO_const_mul_left_iff'
 
 中文:
 定理 isLittleO_const_mul_left_iff'
-  条件: {f : α -> R} {c : R} (hc : IsUnit c)
+  条件: {f : α -> R} {c : R} (hc : 是单位 c)
   证明: ⟨(isBigO_self_const_mul' hc f l).trans_isLittleO, fun h => h.const_mul_left c⟩
 
 Depends on / 依赖: const_mul_left, h.const_mul_left, isBigO_self_const_mul, trans_isLittleO
@@ -5533,7 +5533,7 @@ theorem IsBigO.const_mul_right'
 
 中文:
 定理 IsBigO.const_mul_right'
-  条件: {g : α -> R} {c : R} (hc : IsUnit c) (h : f =O[l] g)
+  条件: {g : α -> R} {c : R} (hc : 是单位 c) (h : f =O[l] g)
   证明: h.trans (isBigO_self_const_mul' hc g l)
 
 Depends on / 依赖: h.trans, isBigO_self_const_mul
@@ -5574,7 +5574,7 @@ theorem isBigO_const_mul_right_iff'
 
 中文:
 定理 isBigO_const_mul_right_iff'
-  条件: {g : α -> R} {c : R} (hc : IsUnit c)
+  条件: {g : α -> R} {c : R} (hc : 是单位 c)
   证明: ⟨fun h => h.of_const_mul_right, fun h => h.const_mul_right' hc⟩
 
 Depends on / 依赖: const_mul_right, h.const_mul_right, h.of_const_mul_right, of_const_mul_right
@@ -5631,7 +5631,7 @@ theorem IsLittleO.const_mul_right'
 
 中文:
 定理 IsLittleO.const_mul_right'
-  条件: {g : α -> R} {c : R} (hc : IsUnit c) (h : f =o[l] g)
+  条件: {g : α -> R} {c : R} (hc : 是单位 c) (h : f =o[l] g)
   证明: h.trans_isBigO (isBigO_self_const_mul' hc g l)
 
 Depends on / 依赖: h.trans_isBigO, isBigO_self_const_mul, trans_isBigO
@@ -5669,7 +5669,7 @@ theorem isLittleO_const_mul_right_iff'
 
 中文:
 定理 isLittleO_const_mul_right_iff'
-  条件: {g : α -> R} {c : R} (hc : IsUnit c)
+  条件: {g : α -> R} {c : R} (hc : 是单位 c)
   证明: ⟨fun h => h.of_const_mul_right, fun h => h.const_mul_right' hc⟩
 
 Depends on / 依赖: const_mul_right, h.const_mul_right, h.of_const_mul_right, of_const_mul_right
@@ -5849,7 +5849,7 @@ theorem IsBigOWith.pow'
 
 中文:
 定理 IsBigOWith.pow'
-  条件: [NormOneClass S] {f : α -> R} {g : α -> S} (h : IsBigOWith c l f g)
+  条件: [NormOne类 S] {f : α -> R} {g : α -> S} (h : IsBigOWith c l f g)
   证明: NormOneClass.nontrivial
     simpa using isBigOWith_const_const (1 : R) (one_ne_zero' S) l
   | 1 => by simpa
@@ -5875,7 +5875,7 @@ theorem IsBigOWith.pow
 
 中文:
 定理 IsBigOWith.pow
-  结论: [NormOneClass R] [NormOneClass S]
+  结论: [NormOne类 R] [NormOne类 S]
 -/
 theorem IsBigOWith.pow [NormOneClass R] [NormOneClass S]
     {f : α -> R} {g : α -> S} (h : IsBigOWith c l f g) :
@@ -5899,7 +5899,7 @@ le_of_pow_le_pow_left₀ hn (by positivity)
 
 中文:
 定理 IsBigOWith.of_pow
-  结论: [NormOneClass S] {n : 自然数} {f : α -> S} {g : α -> R}
+  结论: [NormOne类 S] {n : 自然数} {f : α -> S} {g : α -> R}
   证明: IsBigOWith.of_bound (h.weaken hc).bound.mono fun x hx =>
 le_of_pow_le_pow_left₀ hn (by positivity)
       calc
@@ -5932,7 +5932,7 @@ theorem IsBigO.pow
 
 中文:
 定理 IsBigO.pow
-  条件: [NormOneClass S] {f : α -> R} {g : α -> S} (h : f =O[l] g) (n : 自然数)
+  条件: [NormOne类 S] {f : α -> R} {g : α -> S} (h : f =O[l] g) (n : 自然数)
   证明: let ⟨_C, hC⟩ := h.isBigOWith
   isBigO_iff_isBigOWith.2 ⟨_, hC.pow' n⟩
 
@@ -5983,7 +5983,7 @@ theorem IsLittleO.of_pow
 
 中文:
 定理 IsLittleO.of_pow
-  结论: [NormOneClass S] {f : α -> S} {g : α -> R} {n : 自然数}
+  结论: [NormOne类 S] {f : α -> S} {g : α -> R} {n : 自然数}
   证明: IsLittleO.of_isBigOWith fun _c hc => (h.def' <| pow_pos hc _).of_pow hn le_rfl hc.le
 
 Depends on / 依赖: IsLittleO, IsLittleO.of_isBigOWith, h.def, hc.le, le_rfl, of_isBigOWith, of_pow, pow_pos
@@ -6090,7 +6090,7 @@ theorem IsBigOWith.sum
     exact h.1.add (IH h.2)
 
 中文:
-定理 IsBigOWith.sum
+定理 IsBigOWith.求和
   条件: (h : 对任意 i in s, IsBigOWith (C i) l (A i) g)
   证明: by
   induction s using Finset.cons_induction with
@@ -6124,7 +6124,7 @@ theorem IsBigO.sum
   exact ⟨_, IsBigOWith.sum hC⟩
 
 中文:
-定理 IsBigO.sum
+定理 IsBigO.求和
   条件: (h : 对任意 i in s, A i =O[l] g)
   结论: (∑ i in s, A i) =O[l] g
   证明: by
@@ -6148,7 +6148,7 @@ theorem IsLittleO.sum
   exact Finset.sum_induction A (· =o[l] g') (fun _ _ => .add) (isLittleO_zero ..) h
 
 中文:
-定理 IsLittleO.sum
+定理 IsLittleO.求和
   条件: (h : 对任意 i in s, A i =o[l] g')
   结论: (∑ i in s, A i) =o[l] g'
   证明: by
@@ -6293,7 +6293,7 @@ theorem IsBigOWith.sum_congr'
 
 中文:
 定理 IsBigOWith.sum_congr'
-  结论: {C : 实数} {i : α -> Finset ι}
+  结论: {C : 实数} {i : α -> 有限集 ι}
   证明: by
   simp only [IsBigOWith_def] at *
   obtain ⟨s₁, hs₁, s₂, hs₂, hbound⟩ := Filter.eventually_prod_iff.mp hAB
@@ -6332,7 +6332,7 @@ theorem IsBigO.sum_congr'
 
 中文:
 定理 IsBigO.sum_congr'
-  条件: {i : α -> Finset ι} (hAB : A.uncurry =O[⊤ ×ˢ l] B.uncurry)
+  条件: {i : α -> 有限集 ι} (hAB : A.uncurry =O[⊤ ×ˢ l] B.uncurry)
   证明: by
   simp only [IsBigO_def]
   obtain ⟨C, hC⟩ := hAB.isBigOWith
@@ -6359,7 +6359,7 @@ theorem IsLittleO.sum_congr'
 
 中文:
 定理 IsLittleO.sum_congr'
-  条件: {i : α -> Finset ι} (hAB : A.uncurry =o[⊤ ×ˢ l] B.uncurry)
+  条件: {i : α -> 有限集 ι} (hAB : A.uncurry =o[⊤ ×ˢ l] B.uncurry)
   证明: by
   rw [isLittleO_iff_forall_isBigOWith] at *
   intro c hc

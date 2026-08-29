@@ -68,7 +68,7 @@ include hF in
 
 中文:
 定义 isTerminal_of_isSheafFor_empty_presieve
-  签名: : IsTerminal (F.obj (op I))
+  签名: : 是终止 (F.obj (op I))
   定义体: by
   refine @IsTerminal.ofUnique _ _ _ fun Y => ?_
   choose t h using hF (by tauto) (by tauto)
@@ -180,7 +180,7 @@ theorem isSheafFor_of_preservesProduct
 
 中文:
 定理 isSheafFor_of_preservesProduct
-  条件: [PreservesLimit (Discrete.functor (fun x => op (X x))) F]
+  条件: [保持极限 (离散.functor (fun x => op (X x))) F]
   证明: by
   rw [Equalizer.Presieve.Arrows.sheaf_condition]; rw [Limits.Types.type_equalizer_iff_unique]
   have : HasCoproduct X := ⟨⟨c, hc⟩⟩

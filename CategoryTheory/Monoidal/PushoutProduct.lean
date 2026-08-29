@@ -79,7 +79,7 @@ abbreviation pushoutProduct
 
 中文:
 缩写 pushoutProduct
-  签名: [HasPushouts C] [MonoidalCategory C]
+  签名: [有Pushouts C] [幺半群范畴 C]
   定义体: (curriedTensor C).leibnizPushout
 
 Depends on / 依赖: curriedTensor, infer_instance, leibnizPushout, ofMkLEMk
@@ -112,7 +112,7 @@ abbreviation pullbackHom
 
 中文:
 缩写 pullbackHom
-  签名: [HasPullbacks C] [MonoidalCategory C] [MonoidalClosed C]
+  签名: [有Pullbacks C] [幺半群范畴 C] [幺半群闭 C]
   定义体: MonoidalClosed.internalHom.leibnizPullback
 
 Depends on / 依赖: MonoidalClosed, MonoidalClosed.internalHom.leibnizPullback, internalHom, leibnizPullback
@@ -305,7 +305,7 @@ definition braiding
 
 中文:
 定义 braiding
-  签名: [BraidedCategory C] (X₁ X₂ : Arrow C)
+  签名: [辫范畴 C] (X₁ X₂ : 箭头 C)
   定义体: Arrow.isoMk (pushoutSymmetry _ _ ≪≫
     HasColimit.isoOfNatIso (spanExt (β_ _ _) (β_ _ _) (β_ _ _)
     (BraidedCategory.braiding_naturality_right _ _).symm
@@ -345,7 +345,7 @@ definition isInitialIso
 
 中文:
 定义 isInitialIso
-  签名: (X : Arrow C) {I : C} (i : IsInitial I) {W : C}
+  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {W : C}
   定义体: haveI : IsIso (X.hom ▷ I) :=
     isIso_of_isInitial (i.ofIso (zeroMul i).symm) (i.ofIso (zeroMul i).symm) _
   haveI : IsPushout (X.hom ▷ I) (_ ◁ i.to W) ((i.ofIso (zeroMul i).symm).to _) (𝟙 _) :=
@@ -381,7 +381,7 @@ definition isInitialIso'
 
 中文:
 定义 isInitialIso'
-  签名: [BraidedCategory C] (X : Arrow C) {I : C} (i : IsInitial I) {W : C}
+  签名: [辫范畴 C] (X : 箭头 C) {I : C} (i : IsInitial I) {W : C}
   定义体: haveI : IsIso (I ◁ X.hom) :=
     isIso_of_isInitial (i.ofIso (mulZero i).symm) (i.ofIso (mulZero i).symm) _
   haveI : IsPushout (i.to W ▷ _) (I ◁ X.hom) (𝟙 _) ((i.ofIso (mulZero i).symm).to _) :=
@@ -417,7 +417,7 @@ definition isInitialIsTerminalIso
 
 中文:
 定义 isInitialIsTerminalIso
-  签名: (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T)
+  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {T : C} (t : 是终止 T)
   定义体: (isInitialIso X i) ≪≫ Arrow.isoMk' _ _
     (MonoidalCategory.whiskerLeftIso X.left
       (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.left)
@@ -450,7 +450,7 @@ definition isInitialIsTerminalIso'
 
 中文:
 定义 isInitialIsTerminalIso'
-  签名: (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T)
+  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {T : C} (t : 是终止 T)
   定义体: (mapIso _ (Arrow.isoMk' _ _ (Iso.refl _) (Iso.refl _) (i.hom_ext _ _))) ≪≫
     (isInitialIsTerminalIso X i t)
 
@@ -485,7 +485,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: (X : Arrow C)
+  签名: (X : 箭头 C)
   定义体: by
   refine Arrow.isoMk ?_ (ρ_ X.right) ?_
   · refine Iso.mk ?_ ((ρ_ X.left).inv ≫ pushout.inr _ _) ?_ ?_
@@ -521,7 +521,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: braiding _ _ ≪≫ rightUnitor _
 
 Depends on / 依赖: braiding, rightUnitor
@@ -561,7 +561,7 @@ definition isTerminalIso
 
 中文:
 定义 isTerminalIso
-  签名: [MonoidalCategory C] [MonoidalClosed C]
+  签名: [幺半群范畴 C] [幺半群闭 C]
   定义体: haveI : IsIso ((MonoidalClosed.pre X.hom).app T) :=
     isIso_of_isTerminal (IsTerminal.isTerminalObj (ihom _) _ t)
       (IsTerminal.isTerminalObj (ihom _) _ t) _
@@ -602,7 +602,7 @@ definition isInitialIso
 
 中文:
 定义 isInitialIso
-  签名: [CartesianMonoidalCategory C] [MonoidalClosed C] [BraidedCategory C]
+  签名: [CartesianMonoidal范畴 C] [幺半群闭 C] [辫范畴 C]
   定义体: haveI : IsIso ((ihom I).map X.hom) :=
     isIso_of_isTerminal (isTerminalTensorUnit.ofIso (powZero i).symm)
       (isTerminalTensorUnit.ofIso (powZero i).symm) _

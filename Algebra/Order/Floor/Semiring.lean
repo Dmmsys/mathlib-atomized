@@ -291,7 +291,7 @@ theorem floor_ofNat
   proof: Nat.floor_natCast _
 
 中文:
-定理 floor_ofNat
+定理 floor_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌊(of自然数(n) : R)⌋₊ = of自然数(n)
   证明: Nat.floor_natCast _
@@ -346,7 +346,7 @@ theorem floor_mono
 
 中文:
 定理 floor_mono
-  结论: Monotone (floor : R -> 自然数)
+  结论: 递增 (floor : R -> 自然数)
   证明: fun a b h => by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha]
@@ -623,7 +623,7 @@ theorem floor_eq_on_Ico
 中文:
 定理 floor_eq_on_Ico
   条件: (n : 自然数)
-  结论: 对任意 a in (Set.Ico n (n + 1) : Set R), ⌊a⌋₊ = n
+  结论: 对任意 a in (集合.左闭右开区间 n (n + 1) : 集合 R), ⌊a⌋₊ = n
   证明: fun _ ⟨h₀, h₁⟩ =>
   (floor_eq_iff <| n.cast_nonneg.trans h₀).mpr ⟨h₀, h₁⟩
 -/
@@ -664,7 +664,7 @@ theorem preimage_floor_zero
 
 中文:
 定理 preimage_floor_zero
-  结论: (floor : R -> 自然数) ⁻¹' {0} = Iio 1
+  结论: (floor : R -> 自然数) ⁻¹' {0} = 左无界右开区间 1
   证明: ext fun _ => floor_eq_zero
 
 Depends on / 依赖: floor_eq_zero
@@ -835,7 +835,7 @@ theorem ceil_mono
 
 中文:
 定理 ceil_mono
-  结论: Monotone (ceil : R -> 自然数)
+  结论: 递增 (ceil : R -> 自然数)
   证明: gc_ceil_coe.monotone_l
 
 Depends on / 依赖: gc_ceil_coe, gc_ceil_coe.monotone_l, monotone_l
@@ -919,7 +919,7 @@ theorem preimage_ceil_zero
 
 中文:
 定理 preimage_ceil_zero
-  结论: (自然数.ceil : R -> 自然数) ⁻¹' {0} = Iic 0
+  结论: (自然数.ceil : R -> 自然数) ⁻¹' {0} = 左无界右闭区间 0
   证明: ext fun _ => ceil_eq_zero
 
 Depends on / 依赖: ceil_eq_zero
@@ -941,7 +941,7 @@ theorem preimage_ceil_of_ne_zero
 中文:
 定理 preimage_ceil_of_ne_zero
   条件: (hn : n != 0)
-  结论: (自然数.ceil : R -> 自然数) ⁻¹' {n} = Ioc (↑(n - 1) : R) n
+  结论: (自然数.ceil : R -> 自然数) ⁻¹' {n} = 左开右闭区间 (↑(n - 1) : R) n
   证明: ext fun _ => ceil_eq_iff hn
 
 @[bound]
@@ -994,7 +994,7 @@ theorem ceil_intCast
 
 中文:
 定理 ceil_intCast
-  结论: {R : 类型} [Ring R] [LinearOrder R] [IsOrderedRing R]
+  结论: {R : 类型} [环 R] [线性序 R] [是Ordered环 R]
   证明: eq_of_forall_ge_iff fun a => by
     simp only [ceil_le, Int.toNat_le]
     norm_cast
@@ -1090,7 +1090,7 @@ theorem ceil_ofNat
   proof: ceil_natCast n
 
 中文:
-定理 ceil_ofNat
+定理 ceil_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌈(of自然数(n) : R)⌉₊ = of自然数(n)
   证明: ceil_natCast n
@@ -1256,7 +1256,7 @@ theorem preimage_Ico
 中文:
 定理 preimage_Ico
   条件: {a b : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' Set.Ico a b = Set.Ico ⌈a⌉₊ ⌈b⌉₊
+  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左闭右开区间 a b = 集合.左闭右开区间 ⌈a⌉₊ ⌈b⌉₊
   证明: by
   ext
   simp [ceil_le, lt_ceil]
@@ -1344,7 +1344,7 @@ theorem preimage_Ioi
 中文:
 定理 preimage_Ioi
   条件: {a : R} (ha : 0 <= a)
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' Set.Ioi a = Set.Ioi ⌊a⌋₊
+  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左开右无界区间 a = 集合.左开右无界区间 ⌊a⌋₊
   证明: by
   ext
   simp [floor_lt, ha]
@@ -1374,7 +1374,7 @@ theorem preimage_Ici
 中文:
 定理 preimage_Ici
   条件: {a : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉₊
+  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左闭右无界区间 a = 集合.左闭右无界区间 ⌈a⌉₊
   证明: by
   ext
   simp [ceil_le]
@@ -1404,7 +1404,7 @@ theorem preimage_Iio
 中文:
 定理 preimage_Iio
   条件: {a : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉₊
+  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左无界右开区间 a = 集合.左无界右开区间 ⌈a⌉₊
   证明: by
   ext
   simp [lt_ceil]
@@ -1434,7 +1434,7 @@ theorem preimage_Iic
 中文:
 定理 preimage_Iic
   条件: {a : R} (ha : 0 <= a)
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' Set.Iic a = Set.Iic ⌊a⌋₊
+  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左无界右闭区间 a = 集合.左无界右闭区间 ⌊a⌋₊
   证明: by
   ext
   simp [le_floor_iff, ha]
@@ -1463,7 +1463,7 @@ theorem floor_add_natCast
 
 中文:
 定理 floor_add_natCast
-  条件: [IsStrictOrderedRing R] (ha : 0 <= a) (n : 自然数)
+  条件: [是StrictOrdered环 R] (ha : 0 <= a) (n : 自然数)
   结论: ⌊a + n⌋₊ = ⌊a⌋₊ + n
   证明: eq_of_forall_le_iff fun b => by
     rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
@@ -1525,7 +1525,7 @@ theorem floor_add_ofNat
 @[simp]
 
 中文:
-定理 floor_add_ofNat
+定理 floor_add_of自然数
   条件: (ha : 0 <= a) (n : 自然数) [n.AtLeastTwo]
   证明: floor_add_natCast ha n
 
@@ -1554,7 +1554,7 @@ theorem floor_sub_natCast
 
 中文:
 定理 floor_sub_natCast
-  条件: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数)
+  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数)
   证明: by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha, floor_of_nonpos (tsub_nonpos_of_le (ha.trans n.cast_nonneg)), zero_tsub]
@@ -1589,7 +1589,7 @@ theorem floor_sub_one
 
 中文:
 定理 floor_sub_one
-  条件: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R)
+  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R)
   结论: ⌊a - 1⌋₊ = ⌊a⌋₊ - 1
   证明: mod_cast floor_sub_natCast a 1
 
@@ -1610,8 +1610,8 @@ theorem floor_sub_ofNat
   proof: floor_sub_natCast a n
 
 中文:
-定理 floor_sub_ofNat
-  条件: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数) [n.AtLeastTwo]
+定理 floor_sub_of自然数
+  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: floor_sub_natCast a n
 
 Depends on / 依赖: floor_sub_natCast
@@ -1691,7 +1691,7 @@ theorem ceil_add_ofNat
 @[bound]
 
 中文:
-定理 ceil_add_ofNat
+定理 ceil_add_of自然数
   条件: (ha : 0 <= a) (n : 自然数) [n.AtLeastTwo]
   证明: ceil_add_natCast ha n
 
@@ -1815,7 +1815,7 @@ lemma ceil_sub_ofNat
   proof: ceil_sub_natCast a n
 
 中文:
-引理 ceil_sub_ofNat
+引理 ceil_sub_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   结论: ⌈a - of自然数(n)⌉₊ = ⌈a⌉₊ - of自然数(n)
   证明: ceil_sub_natCast a n
@@ -2005,7 +2005,7 @@ theorem floor_congr
 
 中文:
 定理 floor_congr
-  结论: [IsStrictOrderedRing R] [IsStrictOrderedRing S]
+  结论: [是StrictOrdered环 R] [是StrictOrdered环 S]
   证明: by
   have h₀ : 0 <= a ↔ 0 <= b := by simpa only [cast_zero] using h 0
   obtain ha | ha := lt_or_ge a 0
@@ -2053,7 +2053,7 @@ theorem map_floor
 
 中文:
 定理 map_floor
-  结论: [IsStrictOrderedRing R] [IsStrictOrderedRing S]
+  结论: [是StrictOrdered环 R] [是StrictOrdered环 S]
   证明: floor_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
 
 Depends on / 依赖: floor_congr, hf.le_iff_le, le_iff_le, map_natCast
@@ -2073,7 +2073,7 @@ theorem map_ceil
 
 中文:
 定理 map_ceil
-  条件: (f : F) (hf : StrictMono f) (a : R)
+  条件: (f : F) (hf : 严格递增 f) (a : R)
   结论: ⌈f a⌉₊ = ⌈a⌉₊
   证明: ceil_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
 
@@ -2101,7 +2101,7 @@ theorem subsingleton_floorSemiring
 
 中文:
 定理 subsingleton_floorSemiring
-  条件: {R} [Semiring R] [LinearOrder R]
+  条件: {R} [半环 R] [线性序 R]
   证明: by
   refine ⟨fun H₁ H₂ => ?_⟩
   have : H₁.ceil = H₂.ceil := funext fun a => (H₁.gc_ceil.l_unique H₂.gc_ceil) fun n => rfl

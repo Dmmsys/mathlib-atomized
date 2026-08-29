@@ -84,7 +84,7 @@ theorem mem_tangentConeAt_of_frequently
 
 中文:
 定理 mem_tangentConeAt_of_frequently
-  结论: {α : 类型} (l : Filter α) (c : α -> R) (d : α -> E)
+  结论: {α : 类型} (l : 滤子 α) (c : α -> R) (d : α -> E)
   证明: by
   suffices Tendsto (fun n => c n • d n) (l ⊓ 𝓟 {y | x + d y in s}) (⊤ • 𝓝[(x + ·) ⁻¹' s] 0) by
     rw [frequently_iff_neBot] at hds
@@ -117,7 +117,7 @@ theorem mem_tangentConeAt_of_seq
 
 中文:
 定理 mem_tangentConeAt_of_seq
-  结论: {α : 类型} (l : Filter α) [l.NeBot] (c : α -> R) (d : α -> E)
+  结论: {α : 类型} (l : 滤子 α) [l.NeBot] (c : α -> R) (d : α -> E)
   证明: mem_tangentConeAt_of_frequently l c d hd₀ hds.frequently hcd
 
 Depends on / 依赖: frequently, hds.frequently, mem_tangentConeAt_of_frequently
@@ -142,7 +142,7 @@ theorem exists_fun_of_mem_tangentConeAt
   ·
 
 中文:
-定理 exists_fun_of_mem_tangentConeAt
+定理 存在_fun_of_mem_tangentConeAt
   条件: (h : y in tangentConeAt R s x)
   证明: by
   rw [tangentConeAt]; rw [mem_ofPred]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [ClusterPt]; rw [← neBot_inf_comap_iff_map'] at h
@@ -180,7 +180,7 @@ abbreviation posTangentConeAt
 
 中文:
 缩写 posTangentConeAt
-  签名: [AddCommGroup E] [Module 实数 E] [TopologicalSpace E] (s : Set E) (x : E)
+  签名: [加法交换群 E] [模 实数 E] [拓扑空间 E] (s : 集合 E) (x : E)
   定义体: tangentConeAt NNReal s x
 
 Depends on / 依赖: NNReal, tangentConeAt
@@ -210,9 +210,9 @@ structure UniqueDiffWithinAt
 
 中文:
 结构 UniqueDiffWithinAt
-  参数: (s : Set E) (x : E)
+  参数: (s : 集合 E) (x : E)
   公理与运算 (2 个):
-    - dense_tangentConeAt : Dense (Submodule.span R (tangentConeAt R s x) : Set E)
+    - dense_tangentConeAt : 稠密 (子模.span R (tangentConeAt R s x) : 集合 E)
     - mem_closure : x in closure s
 -/
 structure UniqueDiffWithinAt (s : Set E) (x : E) : Prop where
@@ -229,7 +229,7 @@ definition UniqueDiffOn
 
 中文:
 定义 UniqueDiffOn
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: forall x in s, UniqueDiffWithinAt R s x
 
 Depends on / 依赖: UniqueDiffWithinAt
@@ -248,7 +248,7 @@ theorem UniqueDiffOn.uniqueDiffWithinAt
 
 中文:
 定理 UniqueDiffOn.uniqueDiffWithinAt
-  条件: {s : Set E} {x} (hs : UniqueDiffOn R s) (h : x in s)
+  条件: {s : 集合 E} {x} (hs : UniqueDiffOn R s) (h : x in s)
   证明: hs x h
 -/
 theorem UniqueDiffOn.uniqueDiffWithinAt {s : Set E} {x} (hs : UniqueDiffOn R s) (h : x in s) :

@@ -42,7 +42,7 @@ abbreviation algebra
 
 中文:
 缩写 algebra
-  签名: (e : α ≃ β) [Semiring β]
+  签名: (e : α ≃ β) [半环 β]
   定义体: Equiv.semiring e
     forall [Algebra R β], Algebra R α := fast_instance%
   letI := Equiv.semiring e
@@ -81,7 +81,7 @@ lemma algebraMap_def
 
 中文:
 引理 algebraMap_def
-  条件: (e : α ≃ β) [Semiring β] [Algebra R β] (r : R)
+  条件: (e : α ≃ β) [半环 β] [代数 R β] (r : R)
   证明: Equiv.semiring e
     letI := Equiv.algebra R e
     algebraMap R α r = e.symm (algebraMap R β r) := rfl
@@ -113,7 +113,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: (e : α ≃ β) [Semiring β] [Algebra R β]
+  签名: (e : α ≃ β) [半环 β] [代数 R β]
   定义体: Equiv.semiring e
     let algebra := Equiv.algebra R e
     exact α ≃ₐ[R] β := by
@@ -151,7 +151,7 @@ theorem algEquiv_apply
 
 中文:
 定理 algEquiv_apply
-  条件: (e : α ≃ β) [Semiring β] [Algebra R β] (a : α)
+  条件: (e : α ≃ β) [半环 β] [代数 R β] (a : α)
   结论: (algEquiv R e) a = e a
   证明: rfl
 -/
@@ -171,7 +171,7 @@ theorem algEquiv_symm_apply
 
 中文:
 定理 algEquiv_symm_apply
-  条件: (e : α ≃ β) [Semiring β] [Algebra R β] (b : β)
+  条件: (e : α ≃ β) [半环 β] [代数 R β] (b : β)
   结论: by
   证明: Equiv.semiring e
     letI := Equiv.algebra R e

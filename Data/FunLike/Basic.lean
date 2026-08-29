@@ -48,7 +48,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : MyHom A B) (f' : A -> B) (h : f' = ⇑f)
+  签名: (f : My态射 A B) (f' : A -> B) (h : f' = ⇑f)
   定义体: f'
   map_op' := h.symm ▸ f.map_op'
 -/
@@ -79,7 +79,7 @@ class MyHomClass
   (no additional axioms)
 
 中文:
-类 MyHomClass
+类 My态射类
   参数: (F : 类型) (A B : outParam 类型) [MyClass A] [MyClass B]
   (无附加公理)
 
@@ -100,7 +100,7 @@ lemma map_op
 
 中文:
 引理 map_op
-  结论: {F A B : 类型} [MyClass A] [MyClass B] [FunLike F A B] [MyHomClass F A B]
+  结论: {F A B : 类型} [MyClass A] [MyClass B] [函数状 F A B] [My态射类 F A B]
   证明: MyHomClass.map_op _ _ _
 
 Depends on / 依赖: MyHomClass, MyHomClass.map_op, map_op
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: MyHomClass (MyHom A B) A B
+  签名: My态射类 (My态射 A B) A B
   定义体: MyHom.map_op'
 
 Depends on / 依赖: MyHom.map_op, map_op
@@ -152,9 +152,9 @@ structure CoolerHom
     - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 
 中文:
-结构 CoolerHom
+结构 余oler态射
   参数: (A B : 类型) [CoolClass A] [CoolClass B]
-  继承: MyHom A B
+  继承: My态射 A B
   公理与运算 (1 个):
     - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 -/
@@ -171,9 +171,9 @@ class CoolerHomClass
   (no additional axioms)
 
 中文:
-类 CoolerHomClass
+类 余oler态射类
   参数: (F : 类型) (A B : outParam 类型) [CoolClass A] [CoolClass B]
-  继承: MyHomClass F A B
+  继承: My态射类 F A B
   (无附加公理)
 
 Depends on / 依赖: CoolClass, CoolClass.cool, map_cool
@@ -192,7 +192,7 @@ lemma map_cool
 
 中文:
 引理 map_cool
-  结论: {F A B : 类型} [CoolClass A] [CoolClass B] [FunLike F A B]
+  结论: {F A B : 类型} [CoolClass A] [CoolClass B] [函数状 F A B]
   证明: CoolerHomClass.map_cool _
 -/
 @[simp] lemma map_cool {F A B : Type*} [CoolClass A] [CoolClass B] [FunLike F A B]
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CoolerHom A B) A B
+  签名: 函数状 (余oler态射 A B) A B
   定义体: f.toFun
   coe_injective := fun f g h => by cases f; cases g; congr; apply DFunLike.coe_injective; congr
 
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoolerHomClass (CoolerHom A B) A B
+  签名: 余oler态射类 (余oler态射 A B) A B
   定义体: f.map_op'
   map_cool f := f.map_cool'
 
@@ -283,7 +283,7 @@ The current form of FunLike was set
 
 中文:
 引理 do_something
-  条件: {F : 类型} [FunLike F A B] [MyHomClass F A B] (f : F)
+  条件: {F : 类型} [函数状 F A B] [My态射类 F A B] (f : F)
   结论: sorry
   证明: sorry
 ```
@@ -336,11 +336,11 @@ class DFunLike
     - coe_injective : Function.Injective coe
 
 中文:
-类 DFunLike
-  参数: (F : Sort*) (α : outParam (Sort*)) (β : outParam <| α -> Sort*)
+类 依赖函数状
+  参数: (F : 类型层*) (α : outParam (类型层*)) (β : outParam <| α -> 类型层*)
   公理与运算 (2 个):
     - coe : F -> 对任意 a : α, β a
-    - coe_injective : Function.Injective coe
+    - coe_injective : 函数.单射 coe
 -/
 class DFunLike (F : Sort*) (α : outParam (Sort*)) (β : outParam <| α -> Sort*) where
   /-- The coercion from `F` to a function. -/
@@ -357,7 +357,7 @@ abbreviation FunLike
   body: DFunLike F α fun _ => β
 
 中文:
-缩写 FunLike
+缩写 函数状
   签名: F α β
   定义体: DFunLike F α fun _ => β
 
@@ -397,7 +397,7 @@ theorem coe_eq_coe_fn
 
 中文:
 定理 coe_eq_coe_fn
-  结论: (DFunLike.coe (F := F)) = (fun f => ↑f)
+  结论: (依赖函数状.coe (F := F)) = (fun f => ↑f)
   证明: rfl
 
 @[simp]
@@ -551,7 +551,7 @@ theorem exists_ne
   proof: ne_iff.mp h
 
 中文:
-定理 exists_ne
+定理 存在_ne
   条件: {f g : F} (h : f != g)
   结论: 存在 x, f x != g x
   证明: ne_iff.mp h
@@ -574,8 +574,8 @@ include β in
 
 中文:
 引理 subsingleton_cod
-  条件: [对任意 a, Subsingleton (β a)]
-  结论: Subsingleton F
+  条件: [对任意 a, 子单例 (β a)]
+  结论: 子单例 F
   证明: coe_injective.subsingleton
 
 include β in
@@ -597,8 +597,8 @@ lemma subsingleton_dom
 
 中文:
 引理 subsingleton_dom
-  条件: [IsEmpty α]
-  结论: Subsingleton F
+  条件: [是空 α]
+  结论: 子单例 F
   证明: coe_injective.subsingleton
 
 Depends on / 依赖: coe_injective, coe_injective.subsingleton, subsingleton
@@ -667,7 +667,7 @@ theorem dite_apply
 
 中文:
 定理 dite_apply
-  条件: {P : 命题} [Decidable P] (f : P -> F) (g : ¬P -> F) (x : α)
+  条件: {P : 命题} [可判定 P] (f : P -> F) (g : ¬P -> F) (x : α)
   证明: by
   split_ifs <;> rfl
 
@@ -687,7 +687,7 @@ theorem ite_apply
 
 中文:
 定理 ite_apply
-  条件: {P : 命题} [Decidable P] (f g : F) (x : α)
+  条件: {P : 命题} [可判定 P] (f g : F) (x : α)
   证明: dite_apply _ _ _
 
 Depends on / 依赖: dite_apply

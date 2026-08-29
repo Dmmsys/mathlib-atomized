@@ -45,8 +45,8 @@ theorem Path.Homotopic.map_trans_evalAt
   set G : C(I × I, Y) := F.toContinuousMap.comp (.prodMap (.id _) p)
 
 中文:
-定理 Path.Homotopic.map_trans_evalAt
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+定理 道路.同伦.map_trans_evalAt
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
   /- Let `G` be the continuous map on the unit square sending `(t, s)` to `F(t, p(s))`.
   Then our homotopy is the image under `G` of a homotopy
@@ -94,8 +94,8 @@ definition homotopicMapsNatIso
     rw [Path.Homotopic.Quotient.eq
 
 中文:
-定义 homotopicMapsNatIso
-  签名: (H : ContinuousMap.Homotopy f g)
+定义 homotopicMaps自然数Iso
+  签名: (H : 连续映射.同伦 f g)
   定义体: ⟦H.evalAt x.as⟧
   naturality := by
     rintro ⟨x⟩ ⟨y⟩ p
@@ -136,7 +136,7 @@ definition equivOfHomotopyEquiv
 
 中文:
 定义 equivOfHomotopyEquiv
-  签名: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y] (hequiv : X ≃ₕ Y)
+  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y] (hequiv : X ≃ₕ Y)
   定义体: by
   apply CategoryTheory.Equivalence.mk (map hequiv.toFun) (map hequiv.invFun)
   · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
@@ -185,7 +185,7 @@ definition path01
 
 中文:
 定义 path01
-  签名: : Path (0 : I) 1 where
+  签名: : 道路 (0 : I) 1 where
   定义体: id
   source' := rfl
   target' := rfl
@@ -207,7 +207,7 @@ definition upath01
 
 中文:
 定义 upath01
-  签名: : Path (ULift.up 0 : ULift.{u} I) (ULift.up 1) where
+  签名: : 道路 (类型层提升.up 0 : 类型层提升.{u} I) (类型层提升.up 1) where
   定义体: ULift.up
   source' := rfl
   target' := rfl
@@ -229,7 +229,7 @@ definition uhpath01
 
 中文:
 定义 uhpath01
-  签名: : @fromTop (TopCat.of <| ULift.{u} I) (ULift.up (0 : I)) ⟶ fromTop (ULift.up 1)
+  签名: : @fromTop (顶元素范畴.of <| 类型层提升.{u} I) (类型层提升.up (0 : I)) ⟶ fromTop (类型层提升.up 1)
   定义体: ⟦upath01⟧
 
 Depends on / 依赖: upath01
@@ -257,7 +257,7 @@ abbreviation hcast
 
 中文:
 缩写 hcast
-  签名: {X : TopCat.{u}} {x₀ x₁ : X} (hx : x₀ = x₁)
+  签名: {X : 顶元素范畴.{u}} {x₀ x₁ : X} (hx : x₀ = x₁)
   定义体: eqToHom FundamentalGroupoid.ext hx
 
 @[simp]
@@ -278,7 +278,7 @@ theorem hcast_def
 
 中文:
 定理 hcast_def
-  条件: {X : TopCat.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁)
+  条件: {X : 顶元素范畴.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁)
   证明: rfl
 -/
 theorem hcast_def {X : TopCat.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁) :
@@ -420,7 +420,7 @@ definition uliftMap
 
 中文:
 定义 uliftMap
-  签名: : C(TopCat.of (ULift.{u} I × X), Y)
+  签名: : C(顶元素范畴.of (类型层提升.{u} I × X), Y)
   定义体: ⟨fun x => H (x.1.down, x.2),
     H.continuous.comp ((continuous_uliftDown.comp continuous_fst).prodMk continuous_snd)⟩
 
@@ -441,7 +441,7 @@ theorem ulift_apply
 
 中文:
 定理 ulift_apply
-  条件: (i : ULift.{u} I) (x : X)
+  条件: (i : 类型层提升.{u} I) (x : X)
   结论: H.uliftMap (i, x) = H (i.down, x)
   证明: rfl
 -/
@@ -458,7 +458,7 @@ abbreviation prodToProdTopI
 
 中文:
 缩写 prodToProdTopI
-  签名: {a₁ a₂ : TopCat.of (ULift I)} {b₁ b₂ : X} (p₁ : fromTop a₁ ⟶ fromTop a₂)
+  签名: {a₁ a₂ : 顶元素范畴.of (类型层提升 I)} {b₁ b₂ : X} (p₁ : fromTop a₁ ⟶ fromTop a₂)
   定义体: (prodToProdTop (TopCat.of <| ULift I) X).map (X := (⟨a₁⟩, ⟨b₁⟩)) (Y := (⟨a₂⟩, ⟨b₂⟩)) (p₁, p₂)
 
 Depends on / 依赖: TopCat, TopCat.of, prodToProdTop
@@ -517,7 +517,7 @@ theorem apply_zero_path
 
 中文:
 定理 apply_zero_path
-  结论: (πₘ (TopCat.ofHom f)).map p = hcast (H.apply_zero x₀).symm ≫
+  结论: (πₘ (顶元素范畴.ofHom f)).map p = hcast (H.apply_zero x₀).symm ≫
   证明: Quotient.inductionOn p fun p' => by
     apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
     intros
@@ -550,7 +550,7 @@ theorem apply_one_path
 
 中文:
 定理 apply_one_path
-  结论: (πₘ (TopCat.ofHom g)).map p = hcast (H.apply_one x₀).symm ≫
+  结论: (πₘ (顶元素范畴.ofHom g)).map p = hcast (H.apply_one x₀).symm ≫
   证明: Quotient.inductionOn p fun p' => by
     apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
     intros
@@ -625,7 +625,7 @@ theorem eq_diag_path
 
 中文:
 定理 eq_diag_path
-  结论: (πₘ (TopCat.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPath' p ∧
+  结论: (πₘ (顶元素范畴.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPath' p ∧
   证明: by
   rw [H.apply_zero_path]; rw [H.apply_one_path]; rw [H.evalAt_eq]
   erw [H.evalAt_eq]

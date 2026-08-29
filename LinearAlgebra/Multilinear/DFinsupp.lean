@@ -371,7 +371,7 @@ theorem dfinsuppFamily_add
 
 中文:
 定理 dfinsuppFamily_add
-  条件: (f g : Π (p : Π i, κ i), MultilinearMap R (fun i => M i (p i)) (N p))
+  条件: (f g : Π (p : Π i, κ i), 多重线性映射 R (fun i => M i (p i)) (N p))
   证明: by
   ext; simp
 
@@ -545,7 +545,7 @@ theorem fromDFinsuppEquiv_symm_apply
 
 中文:
 定理 fromDFinsuppEquiv_symm_apply
-  结论: (f : MultilinearMap R (fun i => Π₀ j : κ i, M i j) N)
+  结论: (f : 多重线性映射 R (fun i => Π₀ j : κ i, M i j) N)
   证明: rfl
 -/
 theorem fromDFinsuppEquiv_symm_apply (f : MultilinearMap R (fun i => Π₀ j : κ i, M i j) N)
@@ -683,7 +683,7 @@ theorem freeDFinsuppEquiv_apply
 
 中文:
 定理 freeDFinsuppEquiv_apply
-  结论: [DecidableEq ι'] [Fintype ι']
+  结论: [DecidableEq ι'] [有限类型 ι']
   证明: by
   apply DFinsupp.induction f
   · simp

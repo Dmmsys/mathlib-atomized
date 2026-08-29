@@ -325,7 +325,7 @@ theorem TensorProduct.piScalarRight_symm_algebraMap
     piScalarRight_apply, piScalarRightHom_tmul]
 
 中文:
-定理 TensorProduct.piScalarRight_symm_algebraMap
+定理 张量积.piScalarRight_symm_algebraMap
   证明: by
   simp [Algebra.algebraMap_eq_smul_one, Pi.smul_def', LinearEquiv.symm_apply_eq,
     piScalarRight_apply, piScalarRightHom_tmul]

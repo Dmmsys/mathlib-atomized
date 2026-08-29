@@ -49,7 +49,7 @@ lemma unitsMap_def
 中文:
 引理 unitsMap_def
   条件: (hm : n ∣ m)
-  结论: unitsMap hm = Units.map (castHom hm (ZMod n))
+  结论: unitsMap hm = 单位群.map (castHom hm (ZMod n))
   证明: rfl
 -/
 lemma unitsMap_def (hm : n ∣ m) : unitsMap hm = Units.map (castHom hm (ZMod n)) := rfl
@@ -99,7 +99,7 @@ lemma unitsMap_self
 中文:
 引理 unitsMap_self
   条件: (n : 自然数)
-  结论: unitsMap (dvd_refl n) = MonoidHom.id _
+  结论: unitsMap (dvd_refl n) = 幺半群态射.id _
   证明: by
   simp [unitsMap, castHom_self]
 
@@ -135,8 +135,8 @@ lemma isUnit_cast_of_dvd
 
 中文:
 引理 isUnit_cast_of_dvd
-  条件: (hm : n ∣ m) (a : Units (ZMod m))
-  结论: IsUnit (cast (a : ZMod m) : ZMod n)
+  条件: (hm : n ∣ m) (a : 单位群 (ZMod m))
+  结论: 是单位 (cast (a : ZMod m) : ZMod n)
   证明: Units.isUnit (unitsMap hm a)
 
 Depends on / 依赖: Units.isUnit, isUnit, unitsMap
@@ -444,7 +444,7 @@ theorem isUnit_inv
 
 中文:
 定理 isUnit_inv
-  条件: {m : 自然数} {n : 整数} (h : IsUnit (n : ZMod m))
+  条件: {m : 自然数} {n : 整数} (h : 是单位 (n : ZMod m))
   证明: by
   rw [isUnit_iff_exists]
   exact ⟨n, inv_mul_of_unit _ h, mul_inv_of_unit _ h⟩
@@ -508,7 +508,7 @@ instance instFiniteZModUnits
 
 中文:
 实例 instFiniteZModUnits
-  签名: : (n : 自然数) -> Finite (ZMod n)ˣ
+  签名: : (n : 自然数) -> 有限 (ZMod n)ˣ
 -/
 instance instFiniteZModUnits : (n : Nat) -> Finite (ZMod n)ˣ
   | 0 => Finite.of_fintype Intˣ

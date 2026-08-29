@@ -77,11 +77,11 @@ inductive Hom
     - σ: {n : Nat} (i : Fin (n + 1)) : Hom (.mk (n + 1)) (.mk n)
 
 中文:
-归纳类型 Hom
-  参数: : FreeSimplexQuiver -> FreeSimplexQuiver -> Type
+归纳类型 态射
+  参数: : FreeSimplexQuiver -> FreeSimplexQuiver -> 类型
   构造子 (2 个):
-    - δ: {n : 自然数} (i : Fin (n + 2)) : Hom (.mk n) (.mk (n + 1))
-    - σ: {n : 自然数} (i : Fin (n + 1)) : Hom (.mk (n + 1)) (.mk n)
+    - δ: {n : 自然数} (i : 有限集 (n + 2)) : 态射 (.mk n) (.mk (n + 1))
+    - σ: {n : 自然数} (i : 有限集 (n + 1)) : 态射 (.mk (n + 1)) (.mk n)
 -/
 inductive Hom : FreeSimplexQuiver -> FreeSimplexQuiver -> Type
   | δ {n : Nat} (i : Fin (n + 2)) : Hom (.mk n) (.mk (n + 1))
@@ -97,7 +97,7 @@ instance quiv
 
 中文:
 实例 quiv
-  签名: : Quiver FreeSimplexQuiver where
+  签名: : 箭图 FreeSimplexQuiver where
   定义体: FreeSimplexQuiver.Hom
 
 Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
@@ -115,7 +115,7 @@ abbreviation δ
 
 中文:
 缩写 δ
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: FreeSimplexQuiver.Hom.δ i
 
 Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
@@ -133,7 +133,7 @@ abbreviation σ
 
 中文:
 缩写 σ
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: FreeSimplexQuiver.Hom.σ i
 
 Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
@@ -159,12 +159,12 @@ inductive homRel
 归纳类型 homRel
   参数: : HomRel (Paths FreeSimplexQuiver)
   构造子 (6 个):
-    - δ_comp_δ: {n : 自然数} {i j : Fin (n + 2)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (δ i) ≫ (Paths.of FreeSimplexQuiver).map (δ j.succ)) ((Paths.of FreeSimplexQuiver).map (δ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i.castSucc))
-    - δ_comp_σ_of_le: {n : 自然数} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j.succ)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - δ_comp_σ_self: {n : 自然数} {i : Fin (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_succ: {n : 自然数} {i : Fin (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_of_gt: {n : 自然数} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ j.castSucc)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - σ_comp_σ: {n : 自然数} {i j : Fin (n + 1)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (σ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j)) ((Paths.of FreeSimplexQuiver).map (σ j.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i))
+    - δ_comp_δ: {n : 自然数} {i j : 有限集 (n + 2)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (δ i) ≫ (Paths.of FreeSimplexQuiver).map (δ j.succ)) ((Paths.of FreeSimplexQuiver).map (δ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i.castSucc))
+    - δ_comp_σ_of_le: {n : 自然数} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j.succ)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
+    - δ_comp_σ_self: {n : 自然数} {i : 有限集 (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
+    - δ_comp_σ_succ: {n : 自然数} {i : 有限集 (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
+    - δ_comp_σ_of_gt: {n : 自然数} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ j.castSucc)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
+    - σ_comp_σ: {n : 自然数} {i j : 有限集 (n + 1)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (σ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j)) ((Paths.of FreeSimplexQuiver).map (σ j.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i))
 -/
 inductive homRel : HomRel (Paths FreeSimplexQuiver)
   | δ_comp_δ {n : Nat} {i j : Fin (n + 2)} (H : i <= j) : homRel
@@ -234,7 +234,7 @@ abbreviation δ
 
 中文:
 缩写 δ
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.δ i)
 
 Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.homRel, Paths.of, Quotient, Quotient.functor, functor, homRel
@@ -252,7 +252,7 @@ abbreviation σ
 
 中文:
 缩写 σ
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.σ i)
 
 Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.homRel, Paths.of, Quotient, Quotient.functor, functor, homRel
@@ -310,9 +310,9 @@ inductive faces
 
 中文:
 归纳类型 faces
-  参数: : Morphism命题erty SimplexCategoryGenRel
+  参数: : MorphismProperty SimplexCategoryGenRel
   构造子 (1 个):
-    - δ: {n : 自然数} (i : Fin (n + 2)) : faces (δ i)
+    - δ: {n : 自然数} (i : 有限集 (n + 2)) : faces (δ i)
 -/
 inductive faces : MorphismProperty SimplexCategoryGenRel
   | δ {n : Nat} (i : Fin (n + 2)) : faces (δ i)
@@ -328,9 +328,9 @@ inductive degeneracies
 
 中文:
 归纳类型 degeneracies
-  参数: : Morphism命题erty SimplexCategoryGenRel
+  参数: : MorphismProperty SimplexCategoryGenRel
   构造子 (1 个):
-    - σ: {n : 自然数} (i : Fin (n + 1)) : degeneracies (σ i)
+    - σ: {n : 自然数} (i : 有限集 (n + 1)) : degeneracies (σ i)
 -/
 inductive degeneracies : MorphismProperty SimplexCategoryGenRel
   | σ {n : Nat} (i : Fin (n + 1)) : degeneracies (σ i)
@@ -363,7 +363,7 @@ lemma δ
 
 中文:
 引理 δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   结论: generators (δ i)
   证明: le_sup_left (a := faces) _ (.δ i)
 
@@ -382,7 +382,7 @@ lemma σ
 
 中文:
 引理 σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   结论: generators (σ i)
   证明: le_sup_right (a := faces) _ (.σ i)
 
@@ -455,7 +455,7 @@ lemma hom_induction
 
 中文:
 引理 hom_induction
-  结论: (P : Morphism命题erty SimplexCategoryGenRel)
+  结论: (P : MorphismProperty SimplexCategoryGenRel)
   证明: by
   suffices generators.multiplicativeClosure <= P by
     rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
@@ -507,7 +507,7 @@ lemma hom_induction'
 
 中文:
 引理 hom_induction'
-  结论: (P : Morphism命题erty SimplexCategoryGenRel)
+  结论: (P : MorphismProperty SimplexCategoryGenRel)
   证明: by
   suffices generators.multiplicativeClosure' <= P by
     rw [← MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure']; rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
@@ -557,7 +557,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {P : SimplexCategoryGenRel -> Sort*}
+  签名: {P : SimplexCategoryGenRel -> 类型层*}
   定义体: by
   intro x
   exact H x.len
@@ -620,7 +620,7 @@ theorem δ_comp_δ
 
 中文:
 定理 δ_comp_δ
-  条件: {n} {i j : Fin (n + 2)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
   证明: by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_δ H
@@ -649,7 +649,7 @@ theorem δ_comp_σ_of_le
 
 中文:
 定理 δ_comp_σ_of_le
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc)
   证明: by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_σ_of_le H
@@ -678,7 +678,7 @@ theorem δ_comp_σ_self
 
 中文:
 定理 δ_comp_σ_self
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   证明: by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_σ_self
@@ -708,7 +708,7 @@ theorem δ_comp_σ_succ
 
 中文:
 定理 δ_comp_σ_succ
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   结论: δ i.succ ≫ σ i = 𝟙 (mk n)
   证明: by
   apply CategoryTheory.Quotient.sound
@@ -737,7 +737,7 @@ theorem δ_comp_σ_of_gt
 
 中文:
 定理 δ_comp_σ_of_gt
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i)
   证明: by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_σ_of_gt H
@@ -764,7 +764,7 @@ theorem σ_comp_σ
 
 中文:
 定理 σ_comp_σ
-  条件: {n} {i j : Fin (n + 1)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
   证明: by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.σ_comp_σ H
@@ -829,7 +829,7 @@ definition toSimplexCategory
 
 中文:
 定义 toSimplexCategory
-  签名: : SimplexCategoryGenRel ⥤ SimplexCategory
+  签名: : SimplexCategoryGenRel ⥤ 单纯形范畴
   定义体: CategoryTheory.Quotient.lift _
     (Paths.lift
       { obj := .mk
@@ -891,7 +891,7 @@ lemma toSimplexCategory_map_δ
 
 中文:
 引理 toSimplexCategory_map_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: rfl
 
 @[simp]
@@ -912,7 +912,7 @@ lemma toSimplexCategory_map_σ
 
 中文:
 引理 toSimplexCategory_map_σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]

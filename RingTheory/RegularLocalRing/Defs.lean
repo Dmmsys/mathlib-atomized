@@ -58,8 +58,8 @@ class IsRegularLocalRing
     - spanFinrank_maximalIdeal : (maximalIdeal R).spanFinrank = ringKrullDim R
 
 中文:
-类 IsRegularLocalRing
-  参数: (R : 类型) [CommRing R]
+类 是RegularLocal环
+  参数: (R : 类型) [交换环 R]
   公理与运算 (1 个):
     - spanFinrank_maximalIdeal : (maximalIdeal R).spanFinrank = ringKrullDim R
 
@@ -81,7 +81,7 @@ lemma isRegularLocalRing_iff
 
 中文:
 引理 isRegularLocalRing_iff
-  条件: [IsLocalRing R] [IsNoetherianRing R]
+  条件: [是局部环 R] [是Noether环 R]
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma isRegularLocalRing_iff [IsLocalRing R] [IsNoetherianRing R] :
@@ -100,7 +100,7 @@ lemma of_spanFinrank_maximalIdeal_le
 
 中文:
 引理 of_spanFinrank_maximalIdeal_le
-  结论: [IsLocalRing R] [IsNoetherianRing R]
+  结论: [是局部环 R] [是Noether环 R]
   证明: (isRegularLocalRing_iff _).mpr (le_antisymm le (ringKrullDim_le_spanFinrank_maximalIdeal R))
 
 Depends on / 依赖: isRegularLocalRing_iff, le_antisymm, ringKrullDim_le_spanFinrank_maximalIdeal
@@ -124,7 +124,7 @@ lemma of_ringEquiv
 
 中文:
 引理 of_ringEquiv
-  结论: [IsRegularLocalRing R] {R' : 类型} [CommRing R']
+  结论: [是RegularLocal环 R] {R' : 类型} [交换环 R']
   证明: by
   have := e.isLocalRing
   have := isNoetherianRing_of_ringEquiv R e
@@ -151,7 +151,7 @@ lemma iff_finrank_cotangentSpace
 
 中文:
 引理 iff_finrank_cotangentSpace
-  条件: [IsLocalRing R] [IsNoetherianRing R]
+  条件: [是局部环 R] [是Noether环 R]
   证明: by
   rw [isRegularLocalRing_iff]; rw [spanFinrank_maximalIdeal_eq_finrank_cotangentSpace]
 
@@ -177,8 +177,8 @@ instance [IsLocalRing
       Nat.cas
 
 中文:
-实例 [IsLocalRing
-  签名: R] [IsDomain R] [IsPrincipalIdealRing R] : IsRegularLocalRing R
+实例 [是局部环
+  签名: R] [是整环 R] [是主理想环 R] : 是RegularLocal环 R
   定义体: by
   by_cases isf : IsField R
   · let := isf.toField
@@ -213,11 +213,11 @@ class IsRegularRing
     - isRegularLocalRing_localization((p : Ideal R) [p.IsPrime]) : IsRegularLocalRing (Localization.AtPrime p)
 
 中文:
-类 IsRegularRing
-  参数: (R : 类型) [CommRing R]
-  继承: IsNoetherianRing R
+类 是正则环
+  参数: (R : 类型) [交换环 R]
+  继承: 是Noether环 R
   公理与运算 (1 个):
-    - isRegularLocalRing_localization((p : Ideal R) [p.IsPrime]) : IsRegularLocalRing (Localization.AtPrime p)
+    - isRegularLocalRing_localization((p : 理想 R) [p.是素]) : 是RegularLocal环 (Localization.AtPrime p)
 -/
 class IsRegularRing (R : Type*) [CommRing R] : Prop extends IsNoetherianRing R where
   isRegularLocalRing_localization (p : Ideal R) [p.IsPrime] :
@@ -239,8 +239,8 @@ lemma isRegularRing_iff
 
 中文:
 引理 isRegularRing_iff
-  条件: [IsNoetherianRing R]
-  结论: IsRegularRing R ↔
+  条件: [是Noether环 R]
+  结论: 是正则环 R ↔
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma isRegularRing_iff [IsNoetherianRing R] : IsRegularRing R ↔
@@ -262,8 +262,8 @@ exact IsRegularLocalRing.of_ringEquiv IsLocalization.ringEquivOfRingEquiv
     (Localization.AtPrime (p.comap e)) (Localization.AtPrime p) e (e.map_primeCompl_comap_eq p)
 
 中文:
-引理 IsRegularRing.of_ringEquiv
-  条件: {R' : 类型} [CommRing R'] (e : R ≃+* R') [IsRegularRing R]
+引理 是正则环.of_ringEquiv
+  条件: {R' : 类型} [交换环 R'] (e : R ≃+* R') [是正则环 R]
   证明: by
   have := isNoetherianRing_of_ringEquiv R e
   rw [isRegularRing_iff]
@@ -293,8 +293,8 @@ lemma IsRegularLocalRing.of_isRegularRing_of_isLocalRing
   exact IsRegularLocalRing.of_ringEquiv e.toRingEquiv.symm
 
 中文:
-引理 IsRegularLocalRing.of_isRegularRing_of_isLocalRing
-  条件: [IsLocalRing R] [IsRegularRing R]
+引理 是RegularLocal环.of_isRegularRing_of_isLocalRing
+  条件: [是局部环 R] [是正则环 R]
   证明: by
   let e : R ≃ₐ[R] (Localization.AtPrime (maximalIdeal R)) :=
     IsLocalization.atUnits R (maximalIdeal R).primeCompl (fun x => by simpa using! fun a => a)

@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Conv M N)
+  签名: 幺 (Conv M N)
   定义体: ε[M] ≫ η[N]
 -/
 instance : One (Conv M N) where
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Conv M N)
+  签名: 乘法 (Conv M N)
   定义体: fun f g => Δ[M] ≫ f ▷ M ≫ N ◁ g ≫ μ[N]
 -/
 instance : Mul (Conv M N) where
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (Conv M N)
+  签名: 幺半群 (Conv M N)
   定义体: by simp [one_eq, mul_eq, ← whisker_exchange_assoc]
   mul_one f := by simp [one_eq, mul_eq, ← whisker_exchange_assoc]
   mul_assoc f g h := by

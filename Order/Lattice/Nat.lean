@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet 自然数
+  签名: 下确界集 自然数
   定义体: ⟨fun s => if h : exists n, n in s then @Nat.find (fun n => n in s) _ h else 0⟩
 
 Depends on / 依赖: IsTwoSided, Nat.find
@@ -55,7 +55,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet 自然数
+  签名: 上确界集 自然数
   定义体: ⟨fun s => if h : exists n, forall a in s, a <= n then @Nat.find (fun n => forall a in s, a <= n) _ h else 0⟩
 
 Depends on / 依赖: Nat.find
@@ -75,7 +75,7 @@ theorem sInf_def
 
 中文:
 定理 sInf_def
-  条件: {s : Set 自然数} (h : s.Nonempty)
+  条件: {s : 集合 自然数} (h : s.非空)
   结论: sInf s = @自然数.find (fun n => n in s) _ h
   证明: dif_pos _
 
@@ -95,7 +95,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: {s : Set 自然数} (h : 存在 n, 对任意 a in s, a <= n)
+  条件: {s : 集合 自然数} (h : 存在 n, 对任意 a in s, a <= n)
   证明: dif_pos _
 
 Depends on / 依赖: I.restrictScalars, dif_pos, instIsTorsionFree, restrictScalars
@@ -116,8 +116,8 @@ theorem _root_.Set.Infinite.Nat.sSup_eq_zero
     (hn k hks).not_gt hk
 
 中文:
-定理 _root_.Set.Infinite.Nat.sSup_eq_zero
-  条件: {s : Set 自然数} (h : s.Infinite)
+定理 _root_.集合.无限.自然数.sSup_eq_zero
+  条件: {s : 集合 自然数} (h : s.无限)
   结论: sSup s = 0
   证明: dif_neg fun ⟨n, hn⟩ =>
     let ⟨k, hks, hk⟩ := h.exists_gt n
@@ -141,7 +141,7 @@ theorem sSup_of_not_bddAbove
 
 中文:
 定理 sSup_of_not_bddAbove
-  条件: {s : Set 自然数} (h : ¬BddAbove s)
+  条件: {s : 集合 自然数} (h : ¬BddAbove s)
   结论: sSup s = 0
   证明: Set.Infinite.Nat.sSup_eq_zero Set.infinite_of_not_bddAbove h
 
@@ -160,7 +160,7 @@ lemma iSup_of_not_bddAbove
 
 中文:
 引理 iSup_of_not_bddAbove
-  条件: {ι : Sort*} {f : ι -> 自然数} (h : ¬ BddAbove (Set.range f))
+  条件: {ι : 类型层*} {f : ι -> 自然数} (h : ¬ BddAbove (集合.range f))
   证明: Nat.sSup_of_not_bddAbove h
 
 Depends on / 依赖: Nat.sSup_of_not_bddAbove, sSup_of_not_bddAbove
@@ -188,7 +188,7 @@ theorem sInf_eq_zero
 
 中文:
 定理 sInf_eq_zero
-  条件: {s : Set 自然数}
+  条件: {s : 集合 自然数}
   结论: sInf s = 0 ↔ 0 in s ∨ s = ∅
   证明: by
   cases eq_empty_or_nonempty s with
@@ -252,7 +252,7 @@ theorem iInf_of_empty
 
 中文:
 定理 iInf_of_empty
-  条件: {ι : Sort*} [IsEmpty ι] (f : ι -> 自然数)
+  条件: {ι : 类型层*} [是空 ι] (f : ι -> 自然数)
   结论: iInf f = 0
   证明: by
   rw [iInf_of_isEmpty]; rw [sInf_empty]
@@ -275,7 +275,7 @@ lemma iInf_const_zero
 
 中文:
 引理 iInf_const_zero
-  条件: {ι : Sort*}
+  条件: {ι : 类型层*}
   结论: ⨅ _ : ι, 0 = 0
   证明: (isEmpty_or_nonempty ι).elim (fun h => by simp) fun h => sInf_eq_zero.2 by simp
 
@@ -298,7 +298,7 @@ theorem sInf_mem
 
 中文:
 定理 sInf_mem
-  条件: {s : Set 自然数} (h : s.Nonempty)
+  条件: {s : 集合 自然数} (h : s.非空)
   结论: sInf s in s
   证明: by
   classical
@@ -327,7 +327,7 @@ theorem notMem_of_lt_sInf
 
 中文:
 定理 notMem_of_lt_sInf
-  条件: {s : Set 自然数} {m : 自然数} (hm : m < sInf s)
+  条件: {s : 集合 自然数} {m : 自然数} (hm : m < sInf s)
   结论: m ∉ s
   证明: by
   classical
@@ -357,7 +357,7 @@ theorem sInf_le
 
 中文:
 定理 sInf_le
-  条件: {s : Set 自然数} {m : 自然数} (hm : m in s)
+  条件: {s : 集合 自然数} {m : 自然数} (hm : m in s)
   结论: sInf s <= m
   证明: by
   classical
@@ -387,8 +387,8 @@ theorem nonempty_of_pos_sInf
 
 中文:
 定理 nonempty_of_pos_sInf
-  条件: {s : Set 自然数} (h : 0 < sInf s)
-  结论: s.Nonempty
+  条件: {s : 集合 自然数} (h : 0 < sInf s)
+  结论: s.非空
   证明: by
   by_contra contra
   rw [Set.not_nonempty_iff_eq_empty] at contra
@@ -420,8 +420,8 @@ theorem nonempty_of_sInf_eq_succ
 
 中文:
 定理 nonempty_of_sInf_eq_succ
-  条件: {s : Set 自然数} {k : 自然数} (h : sInf s = k + 1)
-  结论: s.Nonempty
+  条件: {s : 集合 自然数} {k : 自然数} (h : sInf s = k + 1)
+  结论: s.非空
   证明: nonempty_of_pos_sInf (h.symm ▸ succ_pos k : sInf s > 0)
 
 Depends on / 依赖: h.symm, nonempty_of_pos_sInf, succ_pos
@@ -439,7 +439,7 @@ theorem eq_Ici_of_nonempty_of_upward_closed
 
 中文:
 定理 eq_Ici_of_nonempty_of_upward_closed
-  结论: {s : Set 自然数} (hs : s.Nonempty)
+  结论: {s : 集合 自然数} (hs : s.非空)
   证明: ext fun n => ⟨fun H => Nat.sInf_le H, fun H => hs' (sInf s) n H (sInf_mem hs)⟩
 
 Depends on / 依赖: Nat.sInf_le, sInf_le, sInf_mem
@@ -467,7 +467,7 @@ theorem sInf_upward_closed_eq_succ_iff
 
 中文:
 定理 sInf_upward_closed_eq_succ_iff
-  结论: {s : Set 自然数} (hs : 对任意 k₁ k₂ : 自然数, k₁ <= k₂ -> k₁ in s -> k₂ in s)
+  结论: {s : 集合 自然数} (hs : 对任意 k₁ k₂ : 自然数, k₁ <= k₂ -> k₁ in s -> k₂ in s)
   证明: by
   classical
   constructor
@@ -504,7 +504,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice 自然数
+  签名: 格 自然数
   定义体: LinearOrder.toLattice
 
 Depends on / 依赖: LinearOrder, LinearOrder.toLattice, toLattice
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrderBot 自然数
+  签名: 余nditionallyCompleteLinearOrderBot 自然数
   定义体: { (inferInstance : OrderBot Nat), (LinearOrder.toLattice : Lattice Nat),
     (inferInstance : LinearOrder Nat) with
     isLUB_csSup _ hn hb := sSup_def hb ▸ Nat.isLeast_find hb
@@ -569,7 +569,7 @@ theorem sSup_mem
 
 中文:
 定理 sSup_mem
-  条件: {s : Set 自然数} (h₁ : s.Nonempty) (h₂ : BddAbove s)
+  条件: {s : 集合 自然数} (h₁ : s.非空) (h₂ : BddAbove s)
   结论: sSup s in s
   证明: let ⟨k, hk⟩ := h₂
   h₁.csSup_mem ((finite_le_nat k).subset hk)
@@ -865,7 +865,7 @@ theorem biUnion_lt_succ
 
 中文:
 定理 biUnion_lt_succ
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃ k < n + 1, u k = (⋃ k < n, u k) union u n
   证明: Nat.iSup_lt_succ u n
 
@@ -885,7 +885,7 @@ theorem biUnion_lt_succ'
 
 中文:
 定理 biUnion_lt_succ'
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃ k < n + 1, u k = u 0 union ⋃ k < n, u (k + 1)
   证明: Nat.iSup_lt_succ' u n
 
@@ -904,8 +904,8 @@ theorem biInter_lt_succ
   proof: Nat.iInf_lt_succ u n
 
 中文:
-定理 biInter_lt_succ
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+定理 bi整数er_lt_succ
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋂ k < n + 1, u k = (⋂ k < n, u k) inter u n
   证明: Nat.iInf_lt_succ u n
 
@@ -924,8 +924,8 @@ theorem biInter_lt_succ'
   proof: Nat.iInf_lt_succ' u n
 
 中文:
-定理 biInter_lt_succ'
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+定理 bi整数er_lt_succ'
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋂ k < n + 1, u k = u 0 inter ⋂ k < n, u (k + 1)
   证明: Nat.iInf_lt_succ' u n
 
@@ -945,7 +945,7 @@ theorem biUnion_le_succ
 
 中文:
 定理 biUnion_le_succ
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃ k <= n + 1, u k = (⋃ k <= n, u k) union u (n + 1)
   证明: Nat.iSup_le_succ u n
 
@@ -965,7 +965,7 @@ theorem biUnion_le_succ'
 
 中文:
 定理 biUnion_le_succ'
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃ k <= n + 1, u k = u 0 union ⋃ k <= n, u (k + 1)
   证明: Nat.iSup_le_succ' u n
 
@@ -984,8 +984,8 @@ theorem biInter_le_succ
   proof: Nat.iInf_le_succ u n
 
 中文:
-定理 biInter_le_succ
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+定理 bi整数er_le_succ
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋂ k <= n + 1, u k = (⋂ k <= n, u k) inter u (n + 1)
   证明: Nat.iInf_le_succ u n
 
@@ -1004,8 +1004,8 @@ theorem biInter_le_succ'
   proof: Nat.iInf_le_succ' u n
 
 中文:
-定理 biInter_le_succ'
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+定理 bi整数er_le_succ'
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋂ k <= n + 1, u k = u 0 inter ⋂ k <= n, u (k + 1)
   证明: Nat.iInf_le_succ' u n
 

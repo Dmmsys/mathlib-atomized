@@ -37,8 +37,8 @@ instance List.Vector.encodable
   body: inferInstanceAs Encodable (Subtype _)
 
 中文:
-实例 List.Vector.encodable
-  签名: [Encodable α] {n}
+实例 列表.Vector.encodable
+  签名: [可编码 α] {n}
   定义体: inferInstanceAs Encodable (Subtype _)
 
 Depends on / 依赖: Encodable, Subtype
@@ -55,8 +55,8 @@ instance List.Vector.countable
   body: inferInstanceAs Countable (Subtype _)
 
 中文:
-实例 List.Vector.countable
-  签名: [Countable α] {n}
+实例 列表.Vector.countable
+  签名: [可数 α] {n}
   定义体: inferInstanceAs Countable (Subtype _)
 
 Depends on / 依赖: Countable, Subtype
@@ -74,7 +74,7 @@ instance finArrow
 
 中文:
 实例 finArrow
-  签名: [Encodable α] {n}
+  签名: [可编码 α] {n}
   定义体: ofEquiv _ (Equiv.vectorEquivFin _ _).symm
 
 Depends on / 依赖: Equiv.vectorEquivFin, ofEquiv, vectorEquivFin
@@ -92,7 +92,7 @@ instance finPi
 
 中文:
 实例 finPi
-  签名: (n) (π : Fin n -> 类型) [对任意 i, Encodable (π i)]
+  签名: (n) (π : 有限集 n -> 类型) [对任意 i, 可编码 (π i)]
   定义体: ofEquiv _ (Equiv.piEquivSubtypeSigma (Fin n) π)
 
 Depends on / 依赖: Equiv.piEquivSubtypeSigma, ofEquiv, piEquivSubtypeSigma
@@ -112,7 +112,7 @@ Encodable.ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr f (Equiv.refl _
 
 中文:
 定义 fintypeArrow
-  签名: (α : 类型) (β : 类型) [DecidableEq α] [Fintype α] [Encodable β]
+  签名: (α : 类型) (β : 类型) [DecidableEq α] [有限类型 α] [可编码 β]
   定义体: (Fintype.truncEquivFin α).map fun f =>
 Encodable.ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr f (Equiv.refl _)
 
@@ -137,7 +137,7 @@ Trunc.mk
 
 中文:
 定义 fintypePi
-  签名: (α : 类型) (π : α -> 类型) [DecidableEq α] [Fintype α] [对任意 a, Encodable (π a)]
+  签名: (α : 类型) (π : α -> 类型) [DecidableEq α] [有限类型 α] [对任意 a, 可编码 (π a)]
   定义体: (Fintype.truncEncodable α).bind fun a =>
     (@fintypeArrow α (Σ a, π a) _ _ (@Sigma.encodable _ _ a _)).bind fun f =>
 Trunc.mk
@@ -164,7 +164,7 @@ instance fintypeArrowOfEncodable
 
 中文:
 实例 fintypeArrowOfEncodable
-  签名: {α β : 类型} [Encodable α] [Fintype α] [Encodable β]
+  签名: {α β : 类型} [可编码 α] [有限类型 α] [可编码 β]
   定义体: ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr fintypeEquivFin (Equiv.refl _)
 
 Depends on / 依赖: Equiv.arrowCongr, Equiv.refl, Fintype, Fintype.card, arrowCongr, fintypeEquivFin, ofEquiv

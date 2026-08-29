@@ -80,7 +80,7 @@ theorem nnnorm_approxOn_le
 
 中文:
 定理 nnnorm_approxOn_le
-  结论: [OpensMeasurableSpace E] {f : β -> E} (hf : Measurable f) {s : Set E}
+  结论: [OpensMeasurable空间 E] {f : β -> E} (hf : 可测 f) {s : 集合 E}
   证明: by
   have := edist_approxOn_le hf h₀ x n
   rw [edist_comm y₀] at this
@@ -109,7 +109,7 @@ theorem norm_approxOn_y₀_le
 
 中文:
 定理 norm_approxOn_y₀_le
-  结论: [OpensMeasurableSpace E] {f : β -> E} (hf : Measurable f) {s : Set E}
+  结论: [OpensMeasurable空间 E] {f : β -> E} (hf : 可测 f) {s : 集合 E}
   证明: by
   simpa [enorm, edist_eq_enorm_sub, ← ENNReal.coe_add, norm_sub_rev]
     using! edist_approxOn_y0_le hf h₀ x n
@@ -134,7 +134,7 @@ theorem norm_approxOn_zero_le
 
 中文:
 定理 norm_approxOn_zero_le
-  结论: [OpensMeasurableSpace E] {f : β -> E} (hf : Measurable f) {s : Set E}
+  结论: [OpensMeasurable空间 E] {f : β -> E} (hf : 可测 f) {s : 集合 E}
   证明: by
   simpa [enorm, edist_eq_enorm_sub, ← ENNReal.coe_add, norm_sub_rev]
     using! edist_approxOn_y0_le hf h₀ x n
@@ -162,7 +162,7 @@ theorem tendsto_approxOn_Lp_eLpNorm
 
 中文:
 定理 tendsto_approxOn_Lp_eLpNorm
-  结论: [OpensMeasurableSpace E] {f : β -> E} (hf : Measurable f)
+  结论: [OpensMeasurable空间 E] {f : β -> E} (hf : 可测 f)
   证明: by
   by_cases hp_zero : p = 0
   · simpa only [hp_zero, eLpNorm_exponent_zero] using tendsto_const_nhds
@@ -224,7 +224,7 @@ theorem memLp_approxOn
 
 中文:
 定理 memLp_approxOn
-  结论: [BorelSpace E] {f : β -> E} {μ : Measure β} (fmeas : Measurable f)
+  结论: [Borel空间 E] {f : β -> E} {μ : 测度 β} (fmeas : 可测 f)
   证明: by
   refine ⟨(approxOn f fmeas s y₀ h₀ n).aestronglyMeasurable, ?_⟩
   suffices eLpNorm (fun x => approxOn f fmeas s y₀ h₀ n x - y₀) p μ < ⊤ by
@@ -276,7 +276,7 @@ theorem tendsto_approxOn_range_Lp_eLpNorm
 
 中文:
 定理 tendsto_approxOn_range_Lp_eLpNorm
-  结论: [BorelSpace E] {f : β -> E} (hp_ne_top : p != ∞)
+  结论: [Borel空间 E] {f : β -> E} (hp_ne_top : p != ∞)
   证明: by
   refine tendsto_approxOn_Lp_eLpNorm fmeas _ hp_ne_top ?_ ?_
   · filter_upwards with x using subset_closure (by simp)
@@ -303,7 +303,7 @@ theorem memLp_approxOn_range
 
 中文:
 定理 memLp_approxOn_range
-  结论: [BorelSpace E] {f : β -> E} {μ : Measure β} (fmeas : Measurable f)
+  结论: [Borel空间 E] {f : β -> E} {μ : 测度 β} (fmeas : 可测 f)
   证明: memLp_approxOn fmeas hf (y₀ := 0) (by simp) MemLp.zero n
 
 Depends on / 依赖: MemLp.zero, memLp_approxOn
@@ -325,7 +325,7 @@ theorem tendsto_approxOn_range_Lp
 
 中文:
 定理 tendsto_approxOn_range_Lp
-  结论: [BorelSpace E] {f : β -> E} [hp : Fact (1 <= p)] (hp_ne_top : p != ∞)
+  结论: [Borel空间 E] {f : β -> E} [hp : Fact (1 <= p)] (hp_ne_top : p != ∞)
   证明: by
   simpa only [Lp.tendsto_Lp_iff_tendsto_eLpNorm''] using
     tendsto_approxOn_range_Lp_eLpNorm hp_ne_top fmeas hf.2
@@ -359,7 +359,7 @@ theorem _root_.MeasureTheory.MemLp.exists_simpleFunc_eLpNorm_sub_lt
    
 
 中文:
-定理 _root_.MeasureTheory.MemLp.exists_simpleFunc_eLpNorm_sub_lt
+定理 _root_.测度论.MemLp.存在_simpleFunc_eLpNorm_sub_lt
   结论: {E : 类型}
   证明: by
   borelize E
@@ -416,7 +416,7 @@ theorem tendsto_approxOn_L1_enorm
 
 中文:
 定理 tendsto_approxOn_L1_enorm
-  结论: [OpensMeasurableSpace E] {f : β -> E} (hf : Measurable f)
+  结论: [OpensMeasurable空间 E] {f : β -> E} (hf : 可测 f)
   证明: by
   simpa [eLpNorm_one_eq_lintegral_enorm] using!
     tendsto_approxOn_Lp_eLpNorm hf h₀ one_ne_top hμ
@@ -444,7 +444,7 @@ theorem integrable_approxOn
 
 中文:
 定理 integrable_approxOn
-  结论: [BorelSpace E] {f : β -> E} {μ : Measure β} (fmeas : Measurable f)
+  结论: [Borel空间 E] {f : β -> E} {μ : 测度 β} (fmeas : 可测 f)
   证明: by
   rw [← memLp_one_iff_integrable] at hf hi₀ ⊢
   exact memLp_approxOn fmeas hf h₀ hi₀ n
@@ -470,7 +470,7 @@ theorem tendsto_approxOn_range_L1_enorm
 
 中文:
 定理 tendsto_approxOn_range_L1_enorm
-  结论: [OpensMeasurableSpace E] {f : β -> E} {μ : Measure β}
+  结论: [OpensMeasurable空间 E] {f : β -> E} {μ : 测度 β}
   证明: by
   apply tendsto_approxOn_L1_enorm fmeas
   · filter_upwards with x using subset_closure (by simp)
@@ -496,7 +496,7 @@ theorem integrable_approxOn_range
 
 中文:
 定理 integrable_approxOn_range
-  结论: [BorelSpace E] {f : β -> E} {μ : Measure β} (fmeas : Measurable f)
+  结论: [Borel空间 E] {f : β -> E} {μ : 测度 β} (fmeas : 可测 f)
   证明: integrable_approxOn fmeas hf _ (integrable_zero _ _ _) n
 
 Depends on / 依赖: integrable_approxOn, integrable_zero
@@ -526,7 +526,7 @@ theorem exists_forall_norm_le
   proof: exists_forall_le (f.map fun x => ‖x‖)
 
 中文:
-定理 exists_forall_norm_le
+定理 存在_对任意_norm_le
   条件: (f : α ->ₛ F)
   结论: 存在 C, 对任意 x, ‖f x‖ <= C
   证明: exists_forall_le (f.map fun x => ‖x‖)
@@ -547,7 +547,7 @@ theorem memLp_zero
 
 中文:
 定理 memLp_zero
-  条件: (f : α ->ₛ E) (μ : Measure α)
+  条件: (f : α ->ₛ E) (μ : 测度 α)
   结论: MemLp f 0 μ
   证明: memLp_zero_iff_aestronglyMeasurable.mpr f.aestronglyMeasurable
 
@@ -568,7 +568,7 @@ memLp_top_of_bound f.aestronglyMeasurable C Eventually.of_forall hfC
 
 中文:
 定理 memLp_top
-  条件: (f : α ->ₛ E) (μ : Measure α)
+  条件: (f : α ->ₛ E) (μ : 测度 α)
   结论: MemLp f ∞ μ
   证明: let ⟨C, hfC⟩ := f.exists_forall_norm_le
 memLp_top_of_bound f.aestronglyMeasurable C Eventually.of_forall hfC
@@ -591,7 +591,7 @@ theorem eLpNorm'_eq
 
 中文:
 定理 eLpNorm'_eq
-  条件: {p : 实数} (f : α ->ₛ F) (μ : Measure α)
+  条件: {p : 实数} (f : α ->ₛ F) (μ : 测度 α)
   证明: by
   have h_map : (‖f ·‖ₑ ^ p) = f.map (‖·‖ₑ ^ p) := by simp; rfl
   rw [eLpNorm'_eq_lintegral_enorm]; rw [h_map]; rw [lintegral_eq_lintegral]; rw [map_lintegral]
@@ -715,7 +715,7 @@ theorem integrable_iff
 中文:
 定理 integrable_iff
   条件: {f : α ->ₛ E}
-  结论: 整数egrable f μ ↔ 对任意 y, y != 0 -> μ (f ⁻¹' {y}) < ∞
+  结论: 可积 f μ ↔ 对任意 y, y != 0 -> μ (f ⁻¹' {y}) < ∞
   证明: memLp_one_iff_integrable.symm.trans memLp_iff one_ne_zero ENNReal.coe_ne_top
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, coe_ne_top, memLp_iff, memLp_one_iff_integrable, memLp_one_iff_integrable.symm.trans, one_ne_zero
@@ -773,7 +773,7 @@ theorem integrable_iff_finMeasSupp
 中文:
 定理 integrable_iff_finMeasSupp
   条件: {f : α ->ₛ E}
-  结论: 整数egrable f μ ↔ f.FinMeasSupp μ
+  结论: 可积 f μ ↔ f.FinMeasSupp μ
   证明: integrable_iff.trans finMeasSupp_iff.symm
 
 Depends on / 依赖: finMeasSupp_iff, finMeasSupp_iff.symm, integrable_iff, integrable_iff.trans
@@ -793,7 +793,7 @@ theorem FinMeasSupp.integrable
 中文:
 定理 FinMeasSupp.integrable
   条件: {f : α ->ₛ E} (h : f.FinMeasSupp μ)
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: integrable_iff_finMeasSupp.2 h
 
 Depends on / 依赖: integrable_iff_finMeasSupp
@@ -835,7 +835,7 @@ MemLp.of_bound f.aestronglyMeasurable C Eventually.of_forall hfC
 
 中文:
 定理 memLp_of_isFiniteMeasure
-  条件: (f : α ->ₛ E) (p : 实数>=0∞) (μ : Measure α) [IsFiniteMeasure μ]
+  条件: (f : α ->ₛ E) (p : 实数>=0∞) (μ : 测度 α) [是有限测度 μ]
   证明: let ⟨C, hfC⟩ := f.exists_forall_norm_le
 MemLp.of_bound f.aestronglyMeasurable C Eventually.of_forall hfC
 
@@ -860,8 +860,8 @@ theorem integrable_of_isFiniteMeasure
 
 中文:
 定理 integrable_of_isFiniteMeasure
-  条件: [IsFiniteMeasure μ] (f : α ->ₛ E)
-  结论: 整数egrable f μ
+  条件: [是有限测度 μ] (f : α ->ₛ E)
+  结论: 可积 f μ
   证明: memLp_one_iff_integrable.mp (f.memLp_of_isFiniteMeasure 1 μ)
 
 Depends on / 依赖: f.memLp_of_isFiniteMeasure, memLp_of_isFiniteMeasure, memLp_one_iff_integrable, memLp_one_iff_integrable.mp
@@ -879,7 +879,7 @@ theorem measure_preimage_lt_top_of_integrable
 
 中文:
 定理 measure_preimage_lt_top_of_integrable
-  结论: (f : α ->ₛ E) (hf : 整数egrable f μ) {x : E}
+  结论: (f : α ->ₛ E) (hf : 可积 f μ) {x : E}
   证明: integrable_iff.mp hf x hx
 
 Depends on / 依赖: integrable_iff, integrable_iff.mp
@@ -917,7 +917,7 @@ theorem measure_support_lt_top_of_integrable
 
 中文:
 定理 measure_support_lt_top_of_integrable
-  条件: (f : α ->ₛ E) (hf : 整数egrable f μ)
+  条件: (f : α ->ₛ E) (hf : 可积 f μ)
   证明: f.measure_support_lt_top (integrable_iff.mp hf)
 
 Depends on / 依赖: f.measure_support_lt_top, integrable_iff, integrable_iff.mp, measure_support_lt_top
@@ -990,7 +990,7 @@ definition simpleFunc
 
 中文:
 定义 simpleFunc
-  签名: : AddSubgroup (Lp E p μ) where
+  签名: : 加法子群 (Lp E p μ) where
   定义体: { f : Lp E p μ | exists s : α ->ₛ E, (AEEqFun.mk s s.aestronglyMeasurable : α ->ₘ[μ] E) = f }
   zero_mem' := ⟨0, rfl⟩
   add_mem' := by
@@ -1071,7 +1071,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: : SMul 𝕜 (Lp.simpleFunc E p μ)
+  签名: : 标量乘法 𝕜 (Lp.simpleFunc E p μ)
   定义体: ⟨fun k f =>
     ⟨k • (f : Lp E p μ), by
       rcases f with ⟨f, ⟨s, hs⟩⟩
@@ -1127,7 +1127,7 @@ definition module
 
 中文:
 定义 module
-  签名: : Module 𝕜 (Lp.simpleFunc E p μ) where
+  签名: : 模 𝕜 (Lp.simpleFunc E p μ) where
   定义体: by ext1; exact one_smul _ _
   mul_smul x y f := by ext1; exact mul_smul _ _ _
   smul_add x f g := by ext1; exact smul_add _ _ _
@@ -1157,7 +1157,7 @@ theorem isBoundedSMul
 中文:
 定理 isBoundedSMul
   条件: [Fact (1 <= p)]
-  结论: IsBoundedSMul 𝕜 (Lp.simpleFunc E p μ)
+  结论: 是BoundedSMul 𝕜 (Lp.simpleFunc E p μ)
   证明: IsBoundedSMul.of_norm_smul_le fun r f => (norm_smul_le r (f : Lp E p μ) :)
 -/
 protected theorem isBoundedSMul [Fact (1 <= p)] : IsBoundedSMul 𝕜 (Lp.simpleFunc E p μ) :=
@@ -1178,7 +1178,7 @@ definition normedSpace
 
 中文:
 定义 normedSpace
-  签名: {𝕜} [NormedField 𝕜] [NormedSpace 𝕜 E] [Fact (1 <= p)]
+  签名: {𝕜} [赋范域 𝕜] [赋范空间 𝕜 E] [Fact (1 <= p)]
   定义体: ⟨norm_smul_le (α := 𝕜) (β := Lp.simpleFunc E p μ)⟩
 -/
 protected def normedSpace {𝕜} [NormedField 𝕜] [NormedSpace 𝕜 E] [Fact (1 <= p)] :
@@ -1200,7 +1200,7 @@ abbreviation _root_.MeasureTheory.SimpleFunc.toLp
   body: ⟨hf.toLp f, ⟨f, rfl⟩⟩
 
 中文:
-缩写 _root_.MeasureTheory.SimpleFunc.toLp
+缩写 _root_.测度论.SimpleFunc.toLp
   签名: (f : α ->ₛ E) (hf : MemLp f p μ)
   定义体: ⟨hf.toLp f, ⟨f, rfl⟩⟩
 
@@ -1382,7 +1382,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  条件: [MeasurableSpace E] (f : Lp.simpleFunc E p μ)
+  条件: [可测空间 E] (f : Lp.simpleFunc E p μ)
   证明: (toSimpleFunc f).measurable
 -/
 protected theorem measurable [MeasurableSpace E] (f : Lp.simpleFunc E p μ) :
@@ -1421,7 +1421,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  条件: [MeasurableSpace E] (f : Lp.simpleFunc E p μ)
+  条件: [可测空间 E] (f : Lp.simpleFunc E p μ)
   证明: (simpleFunc.measurable f).aemeasurable
 -/
 protected theorem aemeasurable [MeasurableSpace E] (f : Lp.simpleFunc E p μ) :
@@ -1722,7 +1722,7 @@ definition indicatorConst
 
 中文:
 定义 indicatorConst
-  签名: {s : Set α} (hs : MeasurableSet s) (hμs : μ s != ∞) (c : E)
+  签名: {s : 集合 α} (hs : 可测集 s) (hμs : μ s != ∞) (c : E)
   定义体: toLp ((SimpleFunc.const _ c).piecewise s hs (SimpleFunc.const _ 0))
     (memLp_indicator_const p hs c (Or.inr hμs))
 
@@ -1746,7 +1746,7 @@ theorem coe_indicatorConst
 
 中文:
 定理 coe_indicatorConst
-  条件: {s : Set α} (hs : MeasurableSet s) (hμs : μ s != ∞) (c : E)
+  条件: {s : 集合 α} (hs : 可测集 s) (hμs : μ s != ∞) (c : E)
   证明: rfl
 -/
 theorem coe_indicatorConst {s : Set α} (hs : MeasurableSet s) (hμs : μ s != ∞) (c : E) :
@@ -1763,7 +1763,7 @@ theorem toSimpleFunc_indicatorConst
 
 中文:
 定理 toSimpleFunc_indicatorConst
-  条件: {s : Set α} (hs : MeasurableSet s) (hμs : μ s != ∞) (c : E)
+  条件: {s : 集合 α} (hs : 可测集 s) (hμs : μ s != ∞) (c : E)
   证明: Lp.simpleFunc.toSimpleFunc_toLp _ _
 
 Depends on / 依赖: Lp.simpleFunc.toSimpleFunc_toLp, simpleFunc, toSimpleFunc_toLp
@@ -1856,7 +1856,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  结论: UniformContinuous ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
+  结论: 一致连续 ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
   证明: uniformContinuous_comap
 -/
 protected theorem uniformContinuous : UniformContinuous ((↑) : Lp.simpleFunc E p μ -> Lp E p μ) :=
@@ -1872,7 +1872,7 @@ lemma isUniformEmbedding
 
 中文:
 引理 isUniformEmbedding
-  结论: IsUniformEmbedding ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
+  结论: 是一致嵌入 ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
   证明: isUniformEmbedding_comap Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, isUniformEmbedding_comap, val_injective
@@ -1890,7 +1890,7 @@ theorem isUniformInducing
 
 中文:
 定理 isUniformInducing
-  结论: IsUniformInducing ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
+  结论: 是UniformInducing ((↑) : Lp.simpleFunc E p μ -> Lp E p μ)
   证明: simpleFunc.isUniformEmbedding.isUniformInducing
 
 Depends on / 依赖: isUniformEmbedding, isUniformInducing, simpleFunc, simpleFunc.isUniformEmbedding.isUniformInducing
@@ -1998,7 +1998,7 @@ theorem dense
 中文:
 定理 dense
   条件: (hp_ne_top : p != ∞)
-  结论: Dense (Lp.simpleFunc E p μ : Set (Lp E p μ))
+  结论: 稠密 (Lp.simpleFunc E p μ : 集合 (Lp E p μ))
   证明: by
   simpa only [denseRange_subtype_val] using! simpleFunc.denseRange (E := E) (μ := μ) hp_ne_top
 -/
@@ -2047,7 +2047,7 @@ theorem coeFn_le
 
 中文:
 定理 coeFn_le
-  条件: [PartialOrder G] (f g : Lp.simpleFunc G p μ)
+  条件: [偏序 G] (f g : Lp.simpleFunc G p μ)
   结论: (f : α -> G) <=ᵐ[μ] g ↔ f <= g
   证明: by
   rw [← Subtype.coe_le_coe]; rw [← Lp.coeFn_le]
@@ -2119,7 +2119,7 @@ theorem exists_simpleFunc_nonneg_ae_eq
 .symm simpa using! Set.i
 
 中文:
-定理 exists_simpleFunc_nonneg_ae_eq
+定理 存在_simpleFunc_nonneg_ae_eq
   条件: {f : Lp.simpleFunc G p μ} (hf : 0 <= f)
   证明: by
   rcases f with ⟨⟨f, hp⟩, g, (rfl : _ = f)⟩
@@ -2452,7 +2452,7 @@ theorem L1.SimpleFunc.toLp_one_eq_toL1
 
 中文:
 定理 L1.SimpleFunc.toLp_one_eq_toL1
-  条件: (f : α ->ₛ E) (hf : 整数egrable f μ)
+  条件: (f : α ->ₛ E) (hf : 可积 f μ)
   证明: rfl
 
 @[fun_prop]
@@ -2505,7 +2505,7 @@ theorem Integrable.induction
   exact MemLp.induction one_ne_top (motive := P) h_ind h_add h_closed h_ae
 
 中文:
-定理 Integrable.induction
+定理 可积.induction
   结论: (P : (α -> E) -> 命题)
   证明: by
   simp only [← memLp_one_iff_integrable] at *

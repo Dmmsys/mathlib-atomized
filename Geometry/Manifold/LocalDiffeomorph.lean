@@ -89,11 +89,11 @@ structure PartialDiffeomorph
 
 中文:
 结构 PartialDiffeomorph
-  参数: extends PartialEquiv M N
-  继承: PartialEquiv M N
+  参数: extends 部分等价 M N
+  继承: 部分等价 M N
   公理与运算 (4 个):
-    - open_source : IsOpen source
-    - open_target : IsOpen target
+    - open_source : 是开集 source
+    - open_target : 是开集 target
     - contMDiffOn_toFun : CMDiff[source] n toFun
     - contMDiffOn_invFun : CMDiff[target] n invFun
 -/
@@ -134,8 +134,8 @@ definition Diffeomorph.toPartialDiffeomorph
   contMDiffOn_invFun _ _ := h.symm.contMDiffWithinAt
 
 中文:
-定义 Diffeomorph.toPartialDiffeomorph
-  签名: (h : Diffeomorph I J M N n)
+定义 微分同胚.toPartialDiffeomorph
+  签名: (h : 微分同胚 I J M N n)
   定义体: h.toHomeomorph.toPartialEquiv
   open_source := isOpen_univ
   open_target := isOpen_univ
@@ -721,7 +721,7 @@ definition IsLocalDiffeomorphOn
 
 中文:
 定义 IsLocalDiffeomorphOn
-  签名: (f : M -> N) (s : Set M)
+  签名: (f : M -> N) (s : 集合 M)
   定义体: forall x : s, IsLocalDiffeomorphAt I J n f x
 -/
 @[expose] def IsLocalDiffeomorphOn (f : M -> N) (s : Set M) : Prop :=
@@ -754,7 +754,7 @@ lemma isLocalDiffeomorphOn_iff
 
 中文:
 引理 isLocalDiffeomorphOn_iff
-  条件: {f : M -> N} (s : Set M)
+  条件: {f : M -> N} (s : 集合 M)
   证明: by rfl
 -/
 lemma isLocalDiffeomorphOn_iff {f : M -> N} (s : Set M) :
@@ -947,7 +947,7 @@ lemma Diffeomorph.isLocalDiffeomorph
   proof: fun _x => ⟨Φ.toPartialDiffeomorph, by trivial, eqOn_refl Φ _⟩
 
 中文:
-引理 Diffeomorph.isLocalDiffeomorph
+引理 微分同胚.isLocalDiffeomorph
   条件: (Φ : M ≃ₘ^n⟮I, J⟯ N)
   结论: IsLocalDiffeomorph I J n Φ
   证明: fun _x => ⟨Φ.toPartialDiffeomorph, by trivial, eqOn_refl Φ _⟩
@@ -973,7 +973,7 @@ theorem IsLocalDiffeomorphOn.isLocalHomeomorphOn
 
 中文:
 定理 IsLocalDiffeomorphOn.isLocalHomeomorphOn
-  条件: {s : Set M} (hf : IsLocalDiffeomorphOn I J n f s)
+  条件: {s : 集合 M} (hf : IsLocalDiffeomorphOn I J n f s)
   证明: by
   apply IsLocalHomeomorphOn.mk
   intro x hx
@@ -1028,7 +1028,7 @@ lemma IsLocalDiffeomorph.isOpenMap
 中文:
 引理 IsLocalDiffeomorph.isOpenMap
   条件: (hf : IsLocalDiffeomorph I J n f)
-  结论: IsOpenMap f
+  结论: 是开映射 f
   证明: (hf.isLocalHomeomorph).isOpenMap
 
 Depends on / 依赖: hf.isLocalHomeomorph, isLocalHomeomorph, isOpenMap
@@ -1048,7 +1048,7 @@ lemma IsLocalDiffeomorph.isOpen_range
 中文:
 引理 IsLocalDiffeomorph.isOpen_range
   条件: (hf : IsLocalDiffeomorph I J n f)
-  结论: IsOpen (range f)
+  结论: 是开集 (range f)
   证明: (hf.isOpenMap).isOpen_range
 
 Depends on / 依赖: hf.isOpenMap, isOpenMap, isOpen_range
@@ -1065,7 +1065,7 @@ definition IsLocalDiffeomorph.image
   body: ⟨range f, hf.isOpen_range⟩
 
 中文:
-定义 IsLocalDiffeomorph.image
+定义 IsLocalDiffeomorph.像
   签名: (hf : IsLocalDiffeomorph I J n f)
   定义体: ⟨range f, hf.isOpen_range⟩
 -/
@@ -1084,7 +1084,7 @@ lemma IsLocalDiffeomorph.image_coe
 中文:
 引理 IsLocalDiffeomorph.image_coe
   条件: (hf : IsLocalDiffeomorph I J n f)
-  结论: hf.image.1 = range f
+  结论: hf.像.1 = range f
   证明: rfl
 -/
 lemma IsLocalDiffeomorph.image_coe (hf : IsLocalDiffeomorph I J n f) : hf.image.1 = range f :=
@@ -1223,7 +1223,7 @@ definition Diffeomorph.mfderivToContinuousLinearEquiv
   body: (Φ.isLocalDiffeomorph x).mfderivToContinuousLinearEquiv hn
 
 中文:
-定义 Diffeomorph.mfderivToContinuousLinearEquiv
+定义 微分同胚.mfderivToContinuousLinearEquiv
   定义体: (Φ.isLocalDiffeomorph x).mfderivToContinuousLinearEquiv hn
 
 Depends on / 依赖: isLocalDiffeomorph, mfderivToContinuousLinearEquiv
@@ -1242,7 +1242,7 @@ lemma Diffeomorph.mfderivToContinuousLinearEquiv_coe
   proof: by rfl
 
 中文:
-引理 Diffeomorph.mfderivToContinuousLinearEquiv_coe
+引理 微分同胚.mfderivToContinuousLinearEquiv_coe
   条件: (Φ : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0)
   证明: by rfl
 -/

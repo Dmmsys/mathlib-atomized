@@ -37,8 +37,8 @@ class IsStableUnderComonoid
     - comul_mem((P)) : P Δ[c]
 
 中文:
-类 IsStableUnderComonoid
-  参数: (P : Morphism命题erty C) (c : C) [ComonObj c]
+类 是StableUnderComonoid
+  参数: (P : MorphismProperty C) (c : C) [余monObj c]
   公理与运算 (2 个):
     - counit_mem((P)) : P ε[c]
     - comul_mem((P)) : P Δ[c]
@@ -60,8 +60,8 @@ instance [P.IsMonoidalStable]
   comul := ⟨Δ[c.obj], P.comul_mem⟩
 
 中文:
-实例 [P.IsMonoidalStable]
-  签名: (c : WideSubcategory P) [ComonObj c.obj]
+实例 [P.是MonoidalStable]
+  签名: (c : 宽子范畴 P) [余monObj c.obj]
   定义体: ⟨ε[c.obj], P.counit_mem⟩
   comul := ⟨Δ[c.obj], P.comul_mem⟩
 
@@ -83,8 +83,8 @@ instance [BraidedCategory
     exact IsCommComonObj.comul_comm _
 
 中文:
-实例 [BraidedCategory
-  签名: C] [P.IsStableUnderBraiding] (c
+实例 [辫范畴
+  签名: C] [P.是StableUnderBraiding] (c
   定义体: by
     ext
     exact IsCommComonObj.comul_comm _
@@ -107,8 +107,8 @@ instance [CopyDiscardCategory
   signature: C] [P.IsStableUnderBraiding] [forall c, P.IsStableUnderComonoid c] :
 
 中文:
-实例 [CopyDiscardCategory
-  签名: C] [P.IsStableUnderBraiding] [对任意 c, P.IsStableUnderComonoid c] :
+实例 [余pyDiscard范畴
+  签名: C] [P.是StableUnderBraiding] [对任意 c, P.是StableUnderComonoid c] :
 -/
 instance [CopyDiscardCategory C] [P.IsStableUnderBraiding] [forall c, P.IsStableUnderComonoid c] :
     CopyDiscardCategory (WideSubcategory P) where

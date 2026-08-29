@@ -54,7 +54,7 @@ theorem convexOn_norm
 
 中文:
 定理 convexOn_norm
-  条件: (hs : Convex 实数 s)
+  条件: (hs : 凸 实数 s)
   结论: ConvexOn 实数 s norm
   证明: ⟨hs, fun x _ y _ a b ha hb _ =>
     calc
@@ -102,7 +102,7 @@ theorem convexOn_dist
 
 中文:
 定理 convexOn_dist
-  条件: (z : E) (hs : Convex 实数 s)
+  条件: (z : E) (hs : 凸 实数 s)
   结论: ConvexOn 实数 s fun z' => dist z' z
   证明: by
   simpa [dist_eq_norm, preimage_preimage] using!
@@ -147,7 +147,7 @@ theorem convex_ball
 中文:
 定理 convex_ball
   条件: (a : E) (r : 实数)
-  结论: Convex 实数 (ball a r)
+  结论: 凸 实数 (ball a r)
   证明: by
   simpa only [ball, sep_univ] using (convexOn_univ_dist a).convex_lt r
 
@@ -170,8 +170,8 @@ theorem convex_eball
 
 中文:
 定理 convex_eball
-  条件: (a : E) (r : ENN实数)
-  结论: Convex 实数 (eball a r)
+  条件: (a : E) (r : 广义非负实数)
+  结论: 凸 实数 (eball a r)
   证明: by
   cases r with
   | top => simp [convex_univ]
@@ -197,7 +197,7 @@ theorem convex_closedBall
 中文:
 定理 convex_closedBall
   条件: (a : E) (r : 实数)
-  结论: Convex 实数 (closedBall a r)
+  结论: 凸 实数 (closedBall a r)
   证明: by
   simpa only [closedBall, sep_univ] using (convexOn_univ_dist a).convex_le r
 
@@ -267,8 +267,8 @@ theorem convex_closedEBall
 
 中文:
 定理 convex_closedEBall
-  条件: (a : E) (r : ENN实数)
-  结论: Convex 实数 (closedEBall a r)
+  条件: (a : E) (r : 广义非负实数)
+  结论: 凸 实数 (closedEBall a r)
   证明: by
   cases r with
   | top => simp [convex_univ]
@@ -295,7 +295,7 @@ theorem convexHull_sphere_eq_closedBall
 
 中文:
 定理 convexHull_sphere_eq_closedBall
-  结论: {F : 类型} [NormedAddCommGroup F] [NormedSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [赋范空间 实数 F]
   证明: by
   suffices convexHull Real (sphere (0 : F) r) = closedBall 0 r by
     rw [← add_zero x]; rw [← vadd_eq_add]; rw [← vadd_sphere]; rw [convexHull_vadd]; rw [this]; rw [vadd_closedBall_zero]; rw [vadd_eq_add]; rw [add_zero]
@@ -339,8 +339,8 @@ theorem convexHull_exists_dist_ge
   proof: (convexOn_dist y (convex_convexHull Real _)).exists_ge_of_mem_convexHull (subset_convexHull ..) hx
 
 中文:
-定理 convexHull_exists_dist_ge
-  条件: {s : Set E} {x : E} (hx : x in convexHull 实数 s) (y : E)
+定理 convexHull_存在_dist_ge
+  条件: {s : 集合 E} {x : E} (hx : x in convexHull 实数 s) (y : E)
   证明: (convexOn_dist y (convex_convexHull Real _)).exists_ge_of_mem_convexHull (subset_convexHull ..) hx
 
 Depends on / 依赖: convexOn_dist, convex_convexHull, exists_ge_of_mem_convexHull, subset_convexHull
@@ -361,9 +361,9 @@ theorem Convex.thickening
   exact hs.add (convex_ball 0 _)
 
 中文:
-定理 Convex.thickening
-  条件: (hs : Convex 实数 s) (δ : 实数)
-  结论: Convex 实数 (thickening δ s)
+定理 凸.thickening
+  条件: (hs : 凸 实数 s) (δ : 实数)
+  结论: 凸 实数 (thickening δ s)
   证明: by
   rw [← add_ball_zero]
   exact hs.add (convex_ball 0 _)
@@ -389,9 +389,9 @@ theorem Convex.cthickening
     exact hs.closure
 
 中文:
-定理 Convex.cthickening
-  条件: (hs : Convex 实数 s) (δ : 实数)
-  结论: Convex 实数 (cthickening δ s)
+定理 凸.cthickening
+  条件: (hs : 凸 实数 s) (δ : 实数)
+  结论: 凸 实数 (cthickening δ s)
   证明: by
   obtain hδ | hδ := le_total 0 δ
   · rw [cthickening_eq_iInter_thickening hδ]
@@ -421,8 +421,8 @@ theorem convexHull_exists_dist_ge2
   exact le_trans Hx' (dist_comm y x' ▸ dist_comm y' x' ▸ Hy')
 
 中文:
-定理 convexHull_exists_dist_ge2
-  结论: {s t : Set E} {x y : E} (hx : x in convexHull 实数 s)
+定理 convexHull_存在_dist_ge2
+  结论: {s t : 集合 E} {x y : E} (hx : x in convexHull 实数 s)
   证明: by
   rcases convexHull_exists_dist_ge hx y with ⟨x', hx', Hx'⟩
   rcases convexHull_exists_dist_ge hy x' with ⟨y', hy', Hy'⟩
@@ -457,7 +457,7 @@ theorem convexHull_ediam
 
 中文:
 定理 convexHull_ediam
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: ediam (convexHull 实数 s) = ediam s
   证明: by
   refine (ediam_le fun x hx y hy => ?_).antisymm (ediam_mono <| subset_convexHull Real s)
@@ -491,7 +491,7 @@ theorem convexHull_diam
 
 中文:
 定理 convexHull_diam
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: diam (convexHull 实数 s) = diam s
   证明: by
   simp only [diam, convexHull_ediam]
@@ -514,7 +514,7 @@ theorem isBounded_convexHull
 
 中文:
 定理 isBounded_convexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   simp only [isBounded_iff_ediam_ne_top, convexHull_ediam]
 
@@ -545,7 +545,7 @@ alias isConnected_setOf_sameRay := isConnected_setOfPred_sameRay
 中文:
 定理 isConnected_setOfPred_sameRay
   条件: (x : E)
-  结论: IsConnected { y | SameRay 实数 x y }
+  结论: 是连通 { y | SameRay 实数 x y }
   证明: by
   by_cases hx : x = 0; · simpa [hx] using isConnected_univ (α := E)
   simp_rw [← exists_nonneg_left_iff_sameRay hx]
@@ -655,7 +655,7 @@ exact fun v hv => hr hp convex_iff_segment_subset.mp (convex_ball x δ) hy hz hv
 
 中文:
 定理 Eventually.segment_of_prod_nhds
-  结论: (hy : Tendsto y f (𝓝 x)) (hz : Tendsto z f (𝓝 x))
+  结论: (hy : 收敛 y f (𝓝 x)) (hz : 收敛 z f (𝓝 x))
   证明: by
   obtain ⟨p, hp, δ, hδ, hr⟩ := eventually_prod_nhds_iff.mp hr
   rw [Metric.tendsto_nhds] at hy hz
@@ -684,7 +684,7 @@ refine seg.mp .mono ?_ (fun _ => forall₂_imp)
 
 中文:
 定理 Eventually.segment_of_prod_nhdsWithin
-  结论: (hy : Tendsto y f (𝓝 x)) (hz : Tendsto z f (𝓝 x))
+  结论: (hy : 收敛 y f (𝓝 x)) (hz : 收敛 z f (𝓝 x))
   证明: by
 refine seg.mp .mono ?_ (fun _ => forall₂_imp)
   apply Eventually.segment_of_prod_nhds hy hz

@@ -22,9 +22,9 @@ theorem ULift.down_injective
   statement: Function.Injective (@ULift.down α)
 
 中文:
-定理 ULift.down_injective
+定理 类型层提升.down_injective
   条件: {α : 类型}
-  结论: Function.Injective (@ULift.down α)
+  结论: 函数.单射 (@类型层提升.down α)
 -/
 theorem ULift.down_injective {α : Type*} : Function.Injective (@ULift.down α)
   | ⟨a⟩, ⟨b⟩, _ => by congr
@@ -39,8 +39,8 @@ theorem ULift.down_inj
   proof: ⟨fun h => ULift.down_injective h, fun h => by rw [h]⟩
 
 中文:
-定理 ULift.down_inj
-  条件: {α : 类型} {a b : ULift α}
+定理 类型层提升.down_inj
+  条件: {α : 类型} {a b : 类型层提升 α}
   结论: a.down = b.down ↔ a = b
   证明: ⟨fun h => ULift.down_injective h, fun h => by rw [h]⟩
 -/
@@ -57,8 +57,8 @@ theorem PLift.down_injective
   statement: Function.Injective (@PLift.down α)
 
 中文:
-定理 PLift.down_injective
-  结论: Function.Injective (@PLift.down α)
+定理 命题层提升.down_injective
+  结论: 函数.单射 (@命题层提升.down α)
 -/
 theorem PLift.down_injective : Function.Injective (@PLift.down α)
   | ⟨a⟩, ⟨b⟩, _ => by congr
@@ -73,8 +73,8 @@ theorem PLift.down_inj
   proof: ⟨fun h => PLift.down_injective h, fun h => by rw [h]⟩
 
 中文:
-定理 PLift.down_inj
-  条件: {a b : PLift α}
+定理 命题层提升.down_inj
+  条件: {a b : 命题层提升 α}
   结论: a.down = b.down ↔ a = b
   证明: ⟨fun h => PLift.down_injective h, fun h => by rw [h]⟩
 -/

@@ -39,7 +39,7 @@ lemma IsAdic.isHausdorff_iff
 
 中文:
 引理 IsAdic.isHausdorff_iff
-  结论: IsHausdorff I R ↔ T2Space R
+  结论: 是豪斯多夫 I R ↔ T2空间 R
   证明: by
   rw [I.ringFilterBasis.t2Space_iff_sInter_subset hI.symm]; rw [isHausdorff_iff]
   simp +instances [SModEq.zero, Ideal.ringFilterBasis, RingSubgroupsBasis.toRingFilterBasis]
@@ -74,7 +74,7 @@ lemma IsAdic.isPrecomplete_iff
 
 中文:
 引理 IsAdic.isPrecomplete_iff
-  结论: IsPrecomplete I R ↔ CompleteSpace R
+  结论: 是Precomplete I R ↔ 完备空间 R
   证明: by
   have := hI.hasBasis_nhds_zero.isCountablyGenerated
   have : (𝓤 R).IsCountablyGenerated := IsUniformAddGroup.uniformity_countably_generated
@@ -123,7 +123,7 @@ lemma IsAdic.isAdicComplete_iff
 
 中文:
 引理 IsAdic.isAdicComplete_iff
-  结论: IsAdicComplete I R ↔ CompleteSpace R ∧ T2Space R
+  结论: 是AdicComplete I R ↔ 完备空间 R ∧ T2空间 R
   证明: by
   rw [isAdicComplete_iff]; rw [hI.isHausdorff_iff]; rw [hI.isPrecomplete_iff]; rw [and_comm]
 -/
@@ -150,8 +150,8 @@ theorem IsPrecomplete.congr_ringEquiv
     simpa using UniformEquiv.isUniformEmbedding ..)
 
 中文:
-定理 IsPrecomplete.congr_ringEquiv
-  结论: IsPrecomplete (I.map e) S ↔ IsPrecomplete I R
+定理 是Precomplete.congr_ringEquiv
+  结论: 是Precomplete (I.map e) S ↔ 是Precomplete I R
   证明: by
   let : WithIdeal R := ⟨I⟩
   let : WithIdeal S := ⟨I.map e⟩
@@ -182,8 +182,8 @@ theorem IsHausdorff.congr_ringEquiv
     (WithIdeal.uniformEquiv e rfl).toHomeomorph.symm.t2Space⟩
 
 中文:
-定理 IsHausdorff.congr_ringEquiv
-  结论: IsHausdorff (I.map e) S ↔ IsHausdorff I R
+定理 是豪斯多夫.congr_ringEquiv
+  结论: 是豪斯多夫 (I.map e) S ↔ 是豪斯多夫 I R
   证明: by
   let : WithIdeal R := ⟨I⟩
   let : WithIdeal S := ⟨I.map e⟩
@@ -210,8 +210,8 @@ theorem IsAdicComplete.congr_ringEquiv
   simp [isAdicComplete_iff, IsHausdorff.congr_ringEquiv, IsPrecomplete.congr_ringEquiv]
 
 中文:
-定理 IsAdicComplete.congr_ringEquiv
-  结论: IsAdicComplete (I.map e) S ↔ IsAdicComplete I R
+定理 是AdicComplete.congr_ringEquiv
+  结论: 是AdicComplete (I.map e) S ↔ 是AdicComplete I R
   证明: by
   simp [isAdicComplete_iff, IsHausdorff.congr_ringEquiv, IsPrecomplete.congr_ringEquiv]
 

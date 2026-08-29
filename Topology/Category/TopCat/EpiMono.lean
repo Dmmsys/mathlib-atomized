@@ -44,8 +44,8 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
-  结论: Epi f ↔ Function.Surjective f
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   suffices Epi f ↔ Epi ((forget TopCat).map f) by
     rw [this]; rw [CategoryTheory.ofHom_epi_iff_surjective]
@@ -82,8 +82,8 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
-  结论: Mono f ↔ Function.Injective f
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
+  结论: 单态射 f ↔ 函数.单射 f
   证明: by
   suffices Mono f ↔ Mono ((forget TopCat).map f) by
     rw [this]; rw [CategoryTheory.mono_iff_injective]

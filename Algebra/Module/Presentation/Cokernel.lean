@@ -54,7 +54,7 @@ structure CokernelData
     - π_lift((i : ι)) : pres₂.π (lift i) = f (g₁ i)
 
 中文:
-结构 CokernelData
+结构 余kernelData
   参数: where
   公理与运算 (2 个):
     - lift((i : ι)) : pres₂.G ->₀ A
@@ -78,7 +78,7 @@ definition CokernelData.ofSection
   π_lift i := by simp [hs]
 
 中文:
-定义 CokernelData.ofSection
+定义 余kernelData.ofSection
   签名: (s : M₂ -> (pres₂.G ->₀ A))
   定义体: s (f (g₁ i))
   π_lift i := by simp [hs]
@@ -134,7 +134,7 @@ definition cokernelRelations
 
 中文:
 定义 cokernelRelations
-  签名: : Relations A where
+  签名: : 关系 A where
   定义体: pres₂.G
   R := Sum pres₂.R ι
   relation
@@ -253,7 +253,7 @@ lemma isPresentation
 
 中文:
 引理 isPresentation
-  结论: (pres₂.cokernelSolution data).IsPresentation
+  结论: (pres₂.cokernelSolution data).是呈现
   证明: (isPresentationCore pres₂ data hg₁).isPresentation
 
 Depends on / 依赖: isPresentation, isPresentationCore
@@ -277,7 +277,7 @@ definition cokernel
 
 中文:
 定义 cokernel
-  签名: : Presentation A (M₂ ⧸ LinearMap.range f)
+  签名: : 呈现 A (M₂ ⧸ 线性映射.range f)
   定义体: ofIsPresentation (cokernelSolution.isPresentation pres₂ data hg₁)
 
 Depends on / 依赖: cokernelSolution, cokernelSolution.isPresentation, isPresentation, ofIsPresentation

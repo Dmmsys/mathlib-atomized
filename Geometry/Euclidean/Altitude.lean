@@ -55,7 +55,7 @@ definition altitude
 
 中文:
 定义 altitude
-  签名: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  签名: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   定义体: mk' (s.points i) (affineSpan Real (s.points '' {i}ᶜ)).directionᗮ ⊓
     affineSpan Real (Set.range s.points)
 
@@ -75,7 +75,7 @@ theorem altitude_def
 
 中文:
 定理 altitude_def
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: rfl
 -/
 theorem altitude_def {n : Nat} (s : Simplex Real P n) (i : Fin (n + 1)) :
@@ -98,7 +98,7 @@ lemma altitude_reindex
 
 中文:
 引理 altitude_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   ext i
   simp_rw [altitude, reindex_points, Set.image_comp, Equiv.image_compl]
@@ -120,7 +120,7 @@ theorem mem_altitude
 
 中文:
 定理 mem_altitude
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: (mem_inf_iff _ _ _).2 ⟨self_mem_mk' _ _, mem_affineSpan Real (Set.mem_range_self _)⟩
 
 Depends on / 依赖: Set.mem_range_self, mem_affineSpan, mem_inf_iff, mem_range_self, self_mem_mk
@@ -140,7 +140,7 @@ theorem direction_altitude
 
 中文:
 定理 direction_altitude
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [altitude_def]; rw [direction_inf_of_mem (self_mem_mk' (s.points i) _) (mem_affineSpan Real (Set.mem_range_self _))]; rw [direction_mk']; rw [direction_affineSpan]; rw [direction_affineSpan]
 
@@ -163,7 +163,7 @@ theorem vectorSpan_isOrtho_altitude_direction
 
 中文:
 定理 vectorSpan_isOrtho_altitude_direction
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [direction_altitude]
   exact (Submodule.isOrtho_orthogonal_right _).mono_right inf_le_left
@@ -190,7 +190,7 @@ lemma altitude_map
 
 中文:
 引理 altitude_map
-  条件: {n : 自然数} (s : Simplex 实数 P n) (f : P ->ᵃⁱ[实数] P₂) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (f : P ->ᵃⁱ[实数] P₂) (i : 有限集 (n + 1))
   证明: by
   refine (eq_iff_direction_eq_of_mem (p := f (s.points i)) ?_ ?_).mpr ?_
   · exact (s.map f.toAffineMap f.injective).mem_altitude i
@@ -221,7 +221,7 @@ lemma map_altitude_restrict
 
 中文:
 引理 map_altitude_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     ((s.restrict S hS).altitude i).map S.subtype = s.altitude i := by
   rw [eq_comm]
@@ -247,7 +247,7 @@ lemma altitude_restrict_eq_comap_subtype
 
 中文:
 引理 altitude_restrict_eq_comap_subtype
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).altitude i = (s.altitude i).comap S.subtype := by
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
@@ -276,7 +276,7 @@ instance finiteDimensional_direction_altitude
 
 中文:
 实例 finiteDimensional_direction_altitude
-  签名: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  签名: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   定义体: by
   rw [direction_altitude]
   infer_instance
@@ -308,7 +308,7 @@ theorem finrank_direction_altitude
 
 中文:
 定理 finrank_direction_altitude
-  条件: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [direction_altitude]
   have h := Submodule.finrank_add_inf_finrank_orthogonal
@@ -347,7 +347,7 @@ theorem affineSpan_pair_eq_altitude_iff
 
 中文:
 定理 affineSpan_pair_eq_altitude_iff
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [eq_iff_direction_eq_of_mem (mem_affineSpan Real (Set.mem_insert_of_mem _ (Set.mem_singleton _)))
       (s.mem_altitude _)]; rw [← vsub_right_mem_direction_iff_mem (mem_affineSpan Real (Set.mem_range_self i)) p]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [direction_affineSpan]
@@ -392,7 +392,7 @@ definition altitudeFoot
 
 中文:
 定义 altitudeFoot
-  签名: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  签名: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   定义体: (s.faceOpposite i).orthogonalProjectionSpan (s.points i)
 
 Depends on / 依赖: faceOpposite, orthogonalProjectionSpan, points, s.faceOpposite, s.points
@@ -413,7 +413,7 @@ lemma altitudeFoot_reindex
 
 中文:
 引理 altitudeFoot_reindex
-  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : Simplex 实数 P n)
+  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   ext i
   simp only [altitudeFoot, reindex_points, Function.comp_apply]
@@ -437,7 +437,7 @@ lemma altitudeFoot_map
 
 中文:
 引理 altitudeFoot_map
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (f : P ->ᵃⁱ[实数] P₂)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (f : P ->ᵃⁱ[实数] P₂)
   证明: by
   simp [altitudeFoot, ← orthogonalProjectionSpan_map]
 -/
@@ -459,7 +459,7 @@ lemma altitudeFoot_restrict
 
 中文:
 引理 altitudeFoot_restrict
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).altitudeFoot i = s.altitudeFoot i := by
   rw [eq_comm]
@@ -485,7 +485,7 @@ lemma ne_altitudeFoot
 
 中文:
 引理 ne_altitudeFoot
-  条件: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   intro h
   rw [eq_comm]; rw [altitudeFoot]; rw [orthogonalProjectionSpan]; rw [orthogonalProjection_eq_self_iff] at h
@@ -509,7 +509,7 @@ lemma altitudeFoot_mem_affineSpan_image_compl
 
 中文:
 引理 altitudeFoot_mem_affineSpan_image_compl
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   rw [← range_faceOpposite_points]
   exact orthogonalProjection_mem _
@@ -529,7 +529,7 @@ lemma altitudeFoot_mem_affineSpan_faceOpposite
 
 中文:
 引理 altitudeFoot_mem_affineSpan_faceOpposite
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: orthogonalProjection_mem _
 
 Depends on / 依赖: orthogonalProjection_mem
@@ -550,7 +550,7 @@ lemma altitudeFoot_mem_affineSpan
 
 中文:
 引理 altitudeFoot_mem_affineSpan
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   refine SetLike.le_def.1 (affineSpan_mono _ ?_) (s.altitudeFoot_mem_affineSpan_faceOpposite _)
   simp
@@ -606,7 +606,7 @@ lemma altitudeFoot_mem_altitude
 
 中文:
 引理 altitudeFoot_mem_altitude
-  条件: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [← affineSpan_pair_altitudeFoot_eq_altitude]
   exact left_mem_affineSpan_pair _ _ _
@@ -629,7 +629,7 @@ lemma altitudeFoot_eq_point_rev
 
 中文:
 引理 altitudeFoot_eq_point_rev
-  条件: (s : Simplex 实数 P 1) (i : Fin 2)
+  条件: (s : 单纯形 实数 P 1) (i : 有限集 2)
   证明: by
   simp [altitudeFoot, faceOpposite_point_eq_point_rev]
 -/
@@ -647,7 +647,7 @@ definition height
 
 中文:
 定义 height
-  签名: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  签名: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   定义体: dist (s.points i) (s.altitudeFoot i)
 
 Depends on / 依赖: altitudeFoot, points, s.altitudeFoot, s.points
@@ -667,7 +667,7 @@ lemma height_reindex
 
 中文:
 引理 height_reindex
-  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : Simplex 实数 P n)
+  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   ext i
   simp [height]
@@ -688,7 +688,7 @@ lemma height_map
 
 中文:
 引理 height_map
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (f : P ->ᵃⁱ[实数] P₂)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (f : P ->ᵃⁱ[实数] P₂)
   证明: by
   simp [height]
 -/
@@ -712,7 +712,7 @@ lemma height_restrict
 
 中文:
 引理 height_restrict
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).height i = s.height i := by
   rw [eq_comm]
@@ -740,7 +740,7 @@ lemma height_pos
 
 中文:
 引理 height_pos
-  条件: {n : 自然数} [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   结论: 0 < s.height i
   证明: by
   simp [height]
@@ -778,7 +778,7 @@ lemma height_eq_dist
 
 中文:
 引理 height_eq_dist
-  条件: (s : Simplex 实数 P 1) (i : Fin 2)
+  条件: (s : 单纯形 实数 P 1) (i : 有限集 2)
   证明: by
   fin_cases i
   · simp [height]
@@ -812,7 +812,7 @@ lemma inner_vsub_altitudeFoot_vsub_altitudeFoot_eq_zero
 
 中文:
 引理 inner_vsub_altitudeFoot_vsub_altitudeFoot_eq_zero
-  条件: {i j : Fin (n + 1)} (h : i != j)
+  条件: {i j : 有限集 (n + 1)} (h : i != j)
   证明: by grind [neZero_iff]
     ⟪s.points j -ᵥ s.altitudeFoot i, s.points i -ᵥ s.altitudeFoot i⟫ = 0 := by
   have : NeZero n := by grind [neZero_iff]
@@ -849,7 +849,7 @@ lemma inner_vsub_vsub_altitudeFoot_eq_height_sq
 
 中文:
 引理 inner_vsub_vsub_altitudeFoot_eq_height_sq
-  条件: [NeZero n] {i j : Fin (n + 1)} (h : i != j)
+  条件: [NeZero n] {i j : 有限集 (n + 1)} (h : i != j)
   证明: by
   suffices ⟪s.points j -ᵥ s.altitudeFoot i, s.points i -ᵥ s.altitudeFoot i⟫ = 0 by
     rwa [height, inner_vsub_vsub_left_eq_dist_sq_right_iff, inner_vsub_left_eq_zero_symm]
@@ -882,7 +882,7 @@ lemma abs_inner_vsub_altitudeFoot_lt_mul
 
 中文:
 引理 abs_inner_vsub_altitudeFoot_lt_mul
-  条件: {i j : Fin (n + 1)} (hij : i != j)
+  条件: {i j : 有限集 (n + 1)} (hij : i != j)
   证明: by
   apply lt_of_le_of_ne
   · convert! abs_real_inner_le_norm _ _ using 1
@@ -958,7 +958,7 @@ lemma neg_mul_lt_inner_vsub_altitudeFoot
 
 中文:
 引理 neg_mul_lt_inner_vsub_altitudeFoot
-  条件: (i j : Fin (n + 1))
+  条件: (i j : 有限集 (n + 1))
   证明: by
   obtain rfl | hij := eq_or_ne i j
   · rw [real_inner_self_eq_norm_sq]
@@ -1002,7 +1002,7 @@ lemma abs_inner_vsub_altitudeFoot_div_lt_one
 
 中文:
 引理 abs_inner_vsub_altitudeFoot_div_lt_one
-  条件: {i j : Fin (n + 1)} (hij : i != j)
+  条件: {i j : 有限集 (n + 1)} (hij : i != j)
   证明: by
   rw [abs_div]; rw [div_lt_one (by simp [height])]
   nth_rw 2 [abs_eq_self.2]
@@ -1033,7 +1033,7 @@ lemma neg_one_lt_inner_vsub_altitudeFoot_div
 
 中文:
 引理 neg_one_lt_inner_vsub_altitudeFoot_div
-  条件: (s : Simplex 实数 P n) (i j : Fin (n + 1))
+  条件: (s : 单纯形 实数 P n) (i j : 有限集 (n + 1))
   证明: by
   rw [neg_lt]; rw [neg_div']; rw [div_lt_one (by simp [height]), neg_lt]
   exact neg_mul_lt_inner_vsub_altitudeFoot _ _ _

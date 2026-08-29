@@ -38,8 +38,8 @@ lemma IsFiniteKernel.integrable
   exact ENNReal.toReal_mono (Kernel.bound_ne_top _) (Kernel.measure_le_bound _ _
 
 中文:
-引理 IsFiniteKernel.integrable
-  结论: (μ : Measure α) [IsFiniteMeasure μ]
+引理 是FiniteKernel.integrable
+  结论: (μ : 测度 α) [是有限测度 μ]
   证明: by
   refine Integrable.mono' (integrable_const κ.bound.toReal)
     ((κ.measurable_coe hs).ennreal_toReal.aestronglyMeasurable)
@@ -67,8 +67,8 @@ lemma IsMarkovKernel.integrable
   proof: IsFiniteKernel.integrable μ κ hs
 
 中文:
-引理 IsMarkovKernel.integrable
-  结论: (μ : Measure α) [IsFiniteMeasure μ]
+引理 是MarkovKernel.integrable
+  结论: (μ : 测度 α) [是有限测度 μ]
   证明: IsFiniteKernel.integrable μ κ hs
 
 Depends on / 依赖: IsFiniteKernel, IsFiniteKernel.integrable, integrable
@@ -92,7 +92,7 @@ lemma integral_congr_ae₂
 
 中文:
 引理 integral_congr_ae₂
-  条件: {f g : α -> β -> E} {μ : Measure α} (h : 对任意ᵐ a ∂μ, f a =ᵐ[κ a] g a)
+  条件: {f g : α -> β -> E} {μ : 测度 α} (h : 对任意ᵐ a ∂μ, f a =ᵐ[κ a] g a)
   证明: by
   apply integral_congr_ae
   filter_upwards [h] with _ ha
@@ -119,7 +119,7 @@ lemma integral_indicator₂
 
 中文:
 引理 integral_indicator₂
-  条件: (f : α -> β -> E) (s : Set α) (a : α)
+  条件: (f : α -> β -> E) (s : 集合 α) (a : α)
   证明: by
   by_cases ha : a in s <;> simp [ha]
 -/
@@ -144,7 +144,7 @@ theorem integral_deterministic'
 
 中文:
 定理 integral_deterministic'
-  条件: (hg : Measurable g) (hf : StronglyMeasurable f)
+  条件: (hg : 可测 g) (hf : StronglyMeasurable f)
   证明: by
   rw [deterministic_apply]; rw [integral_dirac' _ _ hf]
 
@@ -168,7 +168,7 @@ theorem integral_deterministic
 
 中文:
 定理 integral_deterministic
-  条件: [MeasurableSingletonClass β] (hg : Measurable g)
+  条件: [MeasurableSingleton类 β] (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [integral_dirac _ (g a)]
 
@@ -190,8 +190,8 @@ theorem setIntegral_deterministic'
 @[simp]
 
 中文:
-定理 setIntegral_deterministic'
-  结论: (hg : Measurable g)
+定理 set整数egral_deterministic'
+  结论: (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [setIntegral_dirac' hf _ hs]
 
@@ -215,8 +215,8 @@ theorem setIntegral_deterministic
   rw [deterministic_apply]; rw [setIntegral_dirac f _ s]
 
 中文:
-定理 setIntegral_deterministic
-  结论: [MeasurableSingletonClass β] (hg : Measurable g)
+定理 set整数egral_deterministic
+  结论: [MeasurableSingleton类 β] (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [setIntegral_dirac f _ s]
 
@@ -246,7 +246,7 @@ theorem integral_const
 
 中文:
 定理 integral_const
-  条件: {μ : Measure β}
+  条件: {μ : 测度 β}
   结论: ∫ x, f x ∂const α μ a = ∫ x, f x ∂μ
   证明: by
   rw [const_apply]
@@ -268,8 +268,8 @@ theorem setIntegral_const
   proof: by rw [const_apply]
 
 中文:
-定理 setIntegral_const
-  条件: {μ : Measure β} {s : Set β}
+定理 set整数egral_const
+  条件: {μ : 测度 β} {s : 集合 β}
   证明: by rw [const_apply]
 
 Depends on / 依赖: const_apply
@@ -297,7 +297,7 @@ theorem integral_restrict
 
 中文:
 定理 integral_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [restrict_apply]
 
@@ -320,8 +320,8 @@ theorem setIntegral_restrict
   rw [restrict_apply]; rw [Measure.restrict_restrict' hs]
 
 中文:
-定理 setIntegral_restrict
-  条件: (hs : MeasurableSet s) (t : Set β)
+定理 set整数egral_restrict
+  条件: (hs : 可测集 s) (t : 集合 β)
   证明: by
   rw [restrict_apply]; rw [Measure.restrict_restrict' hs]
 
@@ -368,8 +368,8 @@ theorem setIntegral_piecewise
   simp_rw [piecewise_apply]; split_ifs <;> rfl
 
 中文:
-定理 setIntegral_piecewise
-  条件: (a : α) (g : β -> E) (t : Set β)
+定理 set整数egral_piecewise
+  条件: (a : α) (g : β -> E) (t : 集合 β)
   证明: by
   simp_rw [piecewise_apply]; split_ifs <;> rfl
 

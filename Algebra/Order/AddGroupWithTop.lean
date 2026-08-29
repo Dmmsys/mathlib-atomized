@@ -42,7 +42,7 @@ class LinearOrderedAddCommMonoidWithTop
     - isAddLeftRegular_of_ne_top(⦃x) : α⦄ : x != ⊤ -> IsAddLeftRegular x
 
 中文:
-类 LinearOrderedAddCommMonoidWithTop
+类 LinearOrderedAddComm幺半群带顶
   参数: (α : 类型)
   公理与运算 (2 个):
     - top_add' : 对任意 x : α, ⊤ + x = ⊤
@@ -69,9 +69,9 @@ class LinearOrderedAddCommGroupWithTop
     - add_neg_cancel_of_ne_top(⦃x) : α⦄ : x != ⊤ -> x + -x = 0
 
 中文:
-类 LinearOrderedAddCommGroupWithTop
+类 LinearOrderedAddComm群带顶
   参数: (α : 类型)
-  继承: AddCommMonoid α, LinearOrder α, IsOrderedAddMonoid α, OrderTop α, SubNegMonoid α, 
+  继承: 加法交换幺半群 α, 线性序 α, 是OrderedAdd幺半群 α, 有顶序 α, SubNeg幺半群 α, 
   公理与运算 (3 个):
     - top_add'((x : α)) : ⊤ + x = ⊤
     - neg_top : -(⊤ : α) = ⊤
@@ -145,9 +145,9 @@ lemma IsAddRegular.of_ne_top
   simpa using LinearOrderedAddCommMonoidWithTop.isAddLeftRegular_of_ne_top ha
 
 中文:
-引理 IsAddRegular.of_ne_top
+引理 是加法正则.of_ne_top
   条件: (ha : a != ⊤)
-  结论: IsAddRegular a
+  结论: 是加法正则 a
   证明: by
   simpa using LinearOrderedAddCommMonoidWithTop.isAddLeftRegular_of_ne_top ha
 -/
@@ -166,7 +166,7 @@ lemma add_left_injective_of_ne_top
 中文:
 引理 add_left_injective_of_ne_top
   条件: (b : α) (h : b != ⊤)
-  结论: Function.Injective (fun x => x + b)
+  结论: 函数.单射 (fun x => x + b)
   证明: (IsAddRegular.of_ne_top h).2
 
 Depends on / 依赖: IsAddRegular, IsAddRegular.of_ne_top, of_ne_top
@@ -188,7 +188,7 @@ lemma add_right_injective_of_ne_top
 中文:
 引理 add_right_injective_of_ne_top
   条件: (b : α) (h : b != ⊤)
-  结论: Function.Injective (fun x => b + x)
+  结论: 函数.单射 (fun x => b + x)
   证明: (IsAddRegular.of_ne_top h).1
 
 @[simp]
@@ -256,7 +256,7 @@ lemma add_left_strictMono_of_ne_top
 中文:
 引理 add_left_strictMono_of_ne_top
   条件: (h : b != ⊤)
-  结论: StrictMono (fun x => x + b)
+  结论: 严格递增 (fun x => x + b)
   证明: add_left_mono.strictMono_of_injective add_left_injective_of_ne_top _ h
 
 Depends on / 依赖: add_left_injective_of_ne_top, add_left_mono, add_left_mono.strictMono_of_injective, strictMono_of_injective
@@ -278,7 +278,7 @@ lemma add_right_strictMono_of_ne_top
 中文:
 引理 add_right_strictMono_of_ne_top
   条件: (h : b != ⊤)
-  结论: StrictMono (fun x => b + x)
+  结论: 严格递增 (fun x => b + x)
   证明: add_right_mono.strictMono_of_injective add_right_injective_of_ne_top _ h
 
 @[simp]
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommMonoidWithTop α
+  签名: LinearOrderedAddComm幺半群带顶 α
   定义体: LinearOrderedAddCommGroupWithTop.top_add'
   isAddLeftRegular_of_ne_top _a ha := (isAddUnit_iff.2 ha).isAddRegular.1
 
@@ -713,7 +713,7 @@ lemma sub_left_injective_of_ne_top
 中文:
 引理 sub_left_injective_of_ne_top
   条件: (h : b != ⊤)
-  结论: Function.Injective fun x => x - b
+  结论: 函数.单射 fun x => x - b
   证明: by
   simpa [sub_eq_add_neg] using add_left_injective_of_ne_top (-b) (by simpa)
 
@@ -737,7 +737,7 @@ lemma sub_right_injective_of_ne_top
 中文:
 引理 sub_right_injective_of_ne_top
   条件: (h : b != ⊤)
-  结论: Function.Injective fun x => b - x
+  结论: 函数.单射 fun x => b - x
   证明: by
   simpa [sub_eq_add_neg] using! (add_right_injective_of_ne_top b h).comp neg_injective
 
@@ -809,7 +809,7 @@ lemma sub_left_strictMono_of_ne_top
 中文:
 引理 sub_left_strictMono_of_ne_top
   条件: (h : b != ⊤)
-  结论: StrictMono fun x => x - b
+  结论: 严格递增 fun x => x - b
   证明: by
   simpa [sub_eq_add_neg] using add_left_strictMono_of_ne_top (b := -b) (by simpa)
 
@@ -1047,7 +1047,7 @@ instance linearOrderedAddCommMonoidWithTop
 
 中文:
 实例 linearOrderedAddCommMonoidWithTop
-  签名: [AddCancelCommMonoid α] [LinearOrder α]
+  签名: [加法消去交换幺半群 α] [线性序 α]
   定义体: WithTop.top_add
   isAddLeftRegular_of_ne_top _a ha _b _c := WithTop.add_left_cancel ha
 
@@ -1071,7 +1071,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (WithTop G) where
+  签名: : 取负 (WithTop G) where
   定义体: .map fun a => -a
 -/
 instance instNeg : Neg (WithTop G) where
@@ -1086,7 +1086,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (WithTop G) where
+  签名: : 减法 (WithTop G) where
 -/
 instance instSub : Sub (WithTop G) where
   sub
@@ -1206,8 +1206,8 @@ instance [LinearOrder
   add_neg_cancel_of_ne_top | (a : G), _ => mod_cast add_neg_cancel a
 
 中文:
-实例 [LinearOrder
-  签名: G] [IsOrderedAddMonoid G] : LinearOrderedAddCommGroupWithTop (WithTop G) where
+实例 [线性序
+  签名: G] [是OrderedAdd幺半群 G] : LinearOrderedAddComm群带顶 (WithTop G) where
   定义体: WithTop.linearOrderedAddCommMonoidWithTop
   sub_eq_add_neg a b := by cases a <;> cases b <;> simp [← coe_sub, ← coe_neg, sub_eq_add_neg]
   neg_top := WithTop.map_top _

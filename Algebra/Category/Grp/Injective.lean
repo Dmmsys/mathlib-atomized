@@ -50,9 +50,9 @@ theorem Module.Baer.of_divisible
   refine ⟨Linear
 
 中文:
-定理 Module.Baer.of_divisible
+定理 模.Baer.of_divisible
   条件: [DivisibleBy A 整数]
-  结论: Module.Baer 整数 A
+  结论: 模.Baer 整数 A
   证明: fun I g => by
   rcases IsPrincipalIdealRing.principal I with ⟨m, rfl⟩
   obtain rfl | h0 := eq_or_ne m 0
@@ -89,7 +89,7 @@ theorem injective_as_module_iff
 
 中文:
 定理 injective_as_module_iff
-  结论: Injective (ModuleCat.of 整数 A) ↔
+  结论: 单射 (模范畴.of 整数 A) ↔
   证明: ((forget₂ (ModuleCat Int) AddCommGrpCat).asEquivalence.map_injective_iff (ModuleCat.of Int A)).symm
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of

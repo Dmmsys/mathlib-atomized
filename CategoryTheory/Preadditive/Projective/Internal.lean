@@ -43,8 +43,8 @@ definition isInternallyProjective
   body: fun P => (ihom P).PreservesEpimorphisms
 
 中文:
-定义 isInternallyProjective
-  签名: : Object命题erty C
+定义 is整数ernallyProjective
+  签名: : ObjectProperty C
   定义体: fun P => (ihom P).PreservesEpimorphisms
 
 Depends on / 依赖: PreservesEpimorphisms
@@ -60,7 +60,7 @@ abbreviation InternallyProjective
   body: isInternallyProjective.Is P
 
 中文:
-缩写 InternallyProjective
+缩写 整数ernallyProjective
   签名: (P : C)
   定义体: isInternallyProjective.Is P
 
@@ -77,7 +77,7 @@ instance InternallyProjective.preserves_epi
   body: isInternallyProjective.prop_of_is P
 
 中文:
-实例 InternallyProjective.preserves_epi
+实例 整数ernallyProjective.preserves_epi
   签名: (P : C) [整数ernallyProjective P]
   定义体: isInternallyProjective.prop_of_is P
 
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: (is整数ernallyProjective (C := C)).IsStableUnderRetracts
+  签名: (is整数ernallyProjective (C := C)).是StableUnderRetracts
   定义体: have : InternallyProjective X := ⟨h⟩
     have : Retract (ihom Y) (ihom X) := r.op.map internalHom
     PreservesEpimorphisms.ofRetract this
@@ -125,7 +125,7 @@ lemma ofRetract
 
 中文:
 引理 ofRetract
-  条件: {X Y : C} (r : Retract Y X) [整数ernallyProjective X]
+  条件: {X Y : C} (r : 收缩 Y X) [整数ernallyProjective X]
   结论: 整数ernallyProjective Y
   证明: ⟨isInternallyProjective.prop_of_retract r (isInternallyProjective.prop_of_is _)⟩
 

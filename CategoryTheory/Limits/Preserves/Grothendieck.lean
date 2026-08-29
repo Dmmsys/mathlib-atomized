@@ -112,7 +112,7 @@ instance preservesLimitsOfShape_colim_grothendieck
 
 中文:
 实例 preservesLimitsOfShape_colim_grothendieck
-  签名: [HasColimitsOfShape C H] [HasLimitsOfShape J H]
+  签名: [有形状余极限 C H] [有形状极限 J H]
   定义体: by
   constructor
   intro K

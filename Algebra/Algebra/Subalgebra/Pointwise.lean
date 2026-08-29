@@ -38,7 +38,7 @@ theorem mul_toSubmodule_le
 
 中文:
 定理 mul_toSubmodule_le
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   证明: by
   rw [Submodule.mul_le]
   intro y hy z hz
@@ -72,7 +72,7 @@ theorem isIdempotentElem_toSubmodule
 
 中文:
 定理 isIdempotentElem_toSubmodule
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   证明: by
   apply le_antisymm
   · refine (mul_toSubmodule_le _ _).trans_eq ?_
@@ -109,7 +109,7 @@ theorem mul_toSubmodule
 
 中文:
 定理 mul_toSubmodule
-  结论: {R : 类型} {A : 类型} [CommSemiring R] [CommSemiring A] [Algebra R A]
+  结论: {R : 类型} {A : 类型} [交换半环 R] [交换半环 A] [代数 R A]
   证明: by
   refine le_antisymm (mul_toSubmodule_le _ _) ?_
   rintro x (hx : x in Algebra.adjoin R (S union T : Set A))
@@ -162,7 +162,7 @@ scoped[Pointwise] attribute [instance] Subalgebra.poi
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction R' (Subalgebra R A) where
+  签名: : 乘法作用 R' (子代数 R A) where
   定义体: S.map (MulSemiringAction.toAlgHom _ _ a)
   one_smul S := (congr_arg (fun f => S.map f) (AlgHom.ext <| one_smul R')).trans S.map_id
   mul_smul _a₁ _a₂ S :=
@@ -194,8 +194,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (m : R') (S : Subalgebra R A)
-  结论: ↑(m • S) = m • (S : Set A)
+  条件: (m : R') (S : 子代数 R A)
+  结论: ↑(m • S) = m • (S : 集合 A)
   证明: rfl
 
 @[simp]
@@ -216,7 +216,7 @@ theorem pointwise_smul_toSubsemiring
 
 中文:
 定理 pointwise_smul_toSubsemiring
-  条件: (m : R') (S : Subalgebra R A)
+  条件: (m : R') (S : 子代数 R A)
   证明: rfl
 
 @[simp]
@@ -238,7 +238,7 @@ theorem pointwise_smul_toSubmodule
 
 中文:
 定理 pointwise_smul_toSubmodule
-  条件: (m : R') (S : Subalgebra R A)
+  条件: (m : R') (S : 子代数 R A)
   证明: rfl
 
 @[simp]
@@ -258,7 +258,7 @@ theorem pointwise_smul_toSubring
 
 中文:
 定理 pointwise_smul_toSubring
-  结论: {R' R A : 类型} [Semiring R'] [CommRing R] [Ring A]
+  结论: {R' R A : 类型} [半环 R'] [交换环 R] [环 A]
   证明: rfl
 -/
 theorem pointwise_smul_toSubring {R' R A : Type*} [Semiring R'] [CommRing R] [Ring A]
@@ -277,7 +277,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : R') (r : A) (S : Subalgebra R A)
+  条件: (m : R') (r : A) (S : 子代数 R A)
   结论: r in S -> m • r in m • S
   证明: (Set.smul_mem_smul_set : _ -> _ in m • (S : Set A))
 
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass R' (Subalgebra R A) HSMul.hSMul LE.le
+  签名: 协变类 R' (子代数 R A) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => map_mono⟩
 
 Depends on / 依赖: map_mono

@@ -56,7 +56,7 @@ definition proetalePrecoverage
 
 中文:
 定义 proetalePrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: propQCPrecoverage @WeaklyEtale
   deriving Precoverage.IsStableUnderBaseChange, Precoverage.IsStableUnderComposition,
     Precoverage.HasIsos
@@ -113,7 +113,7 @@ abbreviation proetaleTopology
 
 中文:
 缩写 proetaleTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: proetalePrecoverage.toGrothendieck
 
 Depends on / 依赖: proetalePrecoverage, proetalePrecoverage.toGrothendieck, toGrothendieck
@@ -131,7 +131,7 @@ lemma proetaleTopology_eq_propQCTopology
 
 中文:
 引理 proetaleTopology_eq_propQCTopology
-  结论: proetaleTopology = propQCTopology @WeaklyEtale
+  结论: proetaleTopology = propQCTopology @弱平展
   证明: rfl
 -/
 lemma proetaleTopology_eq_propQCTopology : proetaleTopology = propQCTopology @WeaklyEtale := rfl
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: proetaleTopology.Subcanonical
+  签名: proetaleTopology.子典范
   定义体: .of_le proetaleTopology_le_fpqcTopology
 
 Depends on / 依赖: of_le, proetaleTopology_le_fpqcTopology
@@ -246,7 +246,7 @@ definition ProEt
 
 中文:
 定义 ProEt
-  签名: (S : Scheme.{u})
+  签名: (S : 概形.{u})
   定义体: MorphismProperty.Over @WeaklyEtale ⊤ S
   deriving Category, HasFiniteLimits
 -/
@@ -274,7 +274,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {X : Scheme.{u}} (f : X ⟶ S) [WeaklyEtale f]
+  签名: {X : 概形.{u}} (f : X ⟶ S) [弱平展 f]
   定义体: MorphismProperty.Over.mk _ f ‹_›
 -/
 protected def mk {X : Scheme.{u}} (f : X ⟶ S) [WeaklyEtale f] : S.ProEt :=
@@ -310,7 +310,7 @@ definition forgetFullyFaithful
 
 中文:
 定义 forgetFullyFaithful
-  签名: : (ProEt.forget S).FullyFaithful
+  签名: : (ProEt.forget S).满忠实
   定义体: MorphismProperty.Comma.forgetFullyFaithful _ _ _
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Comma.forgetFullyFaithful, forgetFullyFaithful
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ProEt.forget S).Full
+  签名: (ProEt.forget S).满
   定义体: inferInstanceAs (MorphismProperty.Over.forget _ _ _).Full
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, forget
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ProEt.forget S).Faithful
+  签名: (ProEt.forget S).忠实
   定义体: inferInstanceAs (MorphismProperty.Over.forget _ _ _).Faithful
 
 Depends on / 依赖: Faithful, MorphismProperty, MorphismProperty.Over.forget, forget
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (ProEt.forget S)
+  签名: 保持FiniteLimits (ProEt.forget S)
   定义体: inferInstanceAs PreservesFiniteLimits (MorphismProperty.Over.forget _ _ _)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, PreservesFiniteLimits, forget
@@ -448,7 +448,7 @@ abbreviation topology
 
 中文:
 缩写 topology
-  签名: : GrothendieckTopology S.ProEt
+  签名: : Grothendieck拓扑 S.ProEt
   定义体: (precoverage S).toGrothendieck
 
 Depends on / 依赖: precoverage, toGrothendieck
@@ -469,7 +469,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ProEt.forget S).IsContinuous (topology S) (proetaleTopology.over S)
+  签名: (ProEt.forget S).是连续 (topology S) (proetaleTopology.over S)
   定义体: by
   rw [Functor.isContinuous_iff_coverPreserving]
   exact coverPreserving_comap_forget _ proetalePrecoverage_le_precoverage_weaklyEtale
@@ -512,7 +512,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ProEt.forget S ⋙ Over.forget S).IsContinuous (ProEt.topology S) proetaleTopology
+  签名: (ProEt.forget S ⋙ Over.forget S).是连续 (ProEt.topology S) proetaleTopology
   定义体: Functor.isContinuous_comp _ _ _ (proetaleTopology.over S) _
 
 Depends on / 依赖: Functor, Functor.isContinuous_comp, isContinuous_comp, proetaleTopology, proetaleTopology.over
@@ -531,7 +531,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topology S).Subcanonical
+  签名: (topology S).子典范
   定义体: GrothendieckTopology.subcanonical_of_full_of_faithful (ProEt.forget S) _ (proetaleTopology.over S)
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.subcanonical_of_full_of_faithful, ProEt.forget, forget, proetaleTopology, proetaleTopology.over, subcanonical_of_full_of_faithful
@@ -550,7 +550,7 @@ definition equivOfIsEmpty
 
 中文:
 定义 equivOfIsEmpty
-  签名: [IsEmpty S]
+  签名: [是空 S]
   定义体: MorphismProperty.overEquivOfIsInitial _ _ _ isInitialOfIsEmpty
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.overEquivOfIsInitial, isInitialOfIsEmpty, overEquivOfIsInitial
@@ -575,7 +575,7 @@ lemma bot_mem_topology
 
 中文:
 引理 bot_mem_topology
-  条件: (X : S.ProEt) [IsEmpty X.left]
+  条件: (X : S.ProEt) [是空 X.left]
   结论: ⊥ in topology S X
   证明: by
   rw [topology]; rw [← Sieve.generate_bot]
@@ -605,7 +605,7 @@ lemma topology_eq_top_of_isEmpty
 
 中文:
 引理 topology_eq_top_of_isEmpty
-  条件: [IsEmpty S]
+  条件: [是空 S]
   结论: topology S = ⊤
   证明: by
   rw [GrothendieckTopology.eq_top_iff]

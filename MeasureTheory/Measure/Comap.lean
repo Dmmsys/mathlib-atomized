@@ -48,7 +48,7 @@ definition comapₗ
 
 中文:
 定义 comapₗ
-  签名: [MeasurableSpace α] [MeasurableSpace β] (f : α -> β)
+  签名: [可测空间 α] [可测空间 β] (f : α -> β)
   定义体: if hf : Injective f ∧ forall s, MeasurableSet s -> MeasurableSet (f '' s) then
     liftLinear (OuterMeasure.comap f) fun μ s hs t => by
       simp only [OuterMeasure.comap_apply, image_inter hf.1, image_sdiff hf.1]
@@ -79,7 +79,7 @@ theorem comapₗ_apply
 
 中文:
 定理 comapₗ_apply
-  结论: {_ : MeasurableSpace α} {_ : MeasurableSpace β} (f : α -> β)
+  结论: {_ : 可测空间 α} {_ : 可测空间 β} (f : α -> β)
   证明: by
   rw [comapₗ]; rw [dif_pos]; rw [liftLinear_apply _ hs]; rw [OuterMeasure.comap_apply]; rw [coe_toOuterMeasure]
   exact ⟨hfi, hf⟩
@@ -107,7 +107,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: [MeasurableSpace α] [MeasurableSpace β] (f : α -> β) (μ : Measure β)
+  签名: [可测空间 α] [可测空间 β] (f : α -> β) (μ : 测度 β)
   定义体: if hf : Injective f ∧ forall s, MeasurableSet s -> NullMeasurableSet (f '' s) μ then
     (OuterMeasure.comap f μ.toOuterMeasure).toMeasure fun s hs t => by
       simp only [OuterMeasure.comap_apply, image_inter hf.1, image_sdiff hf.1]
@@ -138,7 +138,7 @@ theorem comap_apply₀
 
 中文:
 定理 comap_apply₀
-  结论: (f : α -> β) (μ : Measure β) (hfi : Injective f)
+  结论: (f : α -> β) (μ : 测度 β) (hfi : 单射 f)
   证明: by
   rw [comap]; rw [dif_pos (And.intro hfi hf)] at hs ⊢
   rw [toMeasure_apply₀ _ _ hs]; rw [OuterMeasure.comap_apply]; rw [coe_toOuterMeasure]
@@ -161,7 +161,7 @@ lemma comap_undef
 
 中文:
 引理 comap_undef
-  结论: {μ : Measure β}
+  结论: {μ : 测度 β}
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -182,7 +182,7 @@ theorem le_comap_apply
 
 中文:
 定理 le_comap_apply
-  结论: (f : α -> β) (μ : Measure β) (hfi : Injective f)
+  结论: (f : α -> β) (μ : 测度 β) (hfi : 单射 f)
   证明: by
   rw [comap]; rw [dif_pos (And.intro hfi hf)]
   exact le_toMeasure_apply _ _ _
@@ -205,7 +205,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  结论: (f : α -> β) (hfi : Injective f)
+  结论: (f : α -> β) (hfi : 单射 f)
   证明: comap_apply₀ f μ hfi (fun s hs => (hf s hs).nullMeasurableSet) hs.nullMeasurableSet
 
 Depends on / 依赖: hs.nullMeasurableSet, nullMeasurableSet
@@ -228,7 +228,7 @@ theorem comap_apply_le
 
 中文:
 定理 comap_apply_le
-  条件: (f : α -> β) (μ : Measure β) (hs : NullMeasurableSet s (μ.comap f))
+  条件: (f : α -> β) (μ : 测度 β) (hs : NullMeasurableSet s (μ.comap f))
   证明: by
   by_cases hf : Injective f ∧ forall t, MeasurableSet t -> NullMeasurableSet (f '' t) μ
   · rw [comap_apply₀ _ _ hf.1 hf.2 hs]
@@ -252,7 +252,7 @@ theorem comapₗ_eq_comap
 
 中文:
 定理 comapₗ_eq_comap
-  结论: (f : α -> β) (hfi : Injective f)
+  结论: (f : α -> β) (hfi : 单射 f)
   证明: (comapₗ_apply f hfi hf μ hs).trans (comap_apply f hfi hf μ hs).symm
 
 Depends on / 依赖: comap_apply
@@ -274,7 +274,7 @@ theorem measure_image_eq_zero_of_comap_eq_zero
 
 中文:
 定理 measure_image_eq_zero_of_comap_eq_zero
-  结论: (f : α -> β) (μ : Measure β) (hfi : Injective f)
+  结论: (f : α -> β) (μ : 测度 β) (hfi : 单射 f)
   证明: by
   rw [← nonpos_iff_eq_zero]
   exact (le_comap_apply f μ hfi hf s).trans hs.le
@@ -305,7 +305,7 @@ theorem ae_eq_image_of_ae_eq_comap
 
 中文:
 定理 ae_eq_image_of_ae_eq_comap
-  结论: (f : α -> β) (μ : Measure β) (hfi : Injective f)
+  结论: (f : α -> β) (μ : 测度 β) (hfi : 单射 f)
   证明: by
   rw [EventuallyEq]; rw [ae_iff] at hst ⊢
   have h_eq_α : { a : α | ¬s a = t a } = s \ t union t \ s := by
@@ -349,8 +349,8 @@ theorem NullMeasurableSet.image
     NullMea
 
 中文:
-定理 NullMeasurableSet.image
-  结论: (f : α -> β) (μ : Measure β) (hfi : Injective f)
+定理 NullMeasurableSet.像
+  结论: (f : α -> β) (μ : 测度 β) (hfi : 单射 f)
   证明: by
   refine ⟨toMeasurable μ (f '' toMeasurable (μ.comap f) s), measurableSet_toMeasurable _ _, ?_⟩
   refine EventuallyEq.trans ?_ (NullMeasurableSet.toMeasurable_ae_eq ?_).symm
@@ -383,7 +383,7 @@ theorem comap_preimage
 
 中文:
 定理 comap_preimage
-  结论: (f : α -> β) (μ : Measure β) (hf : Injective f) (hf' : Measurable f)
+  结论: (f : α -> β) (μ : 测度 β) (hf : 单射 f) (hf' : 可测 f)
   证明: by
   rw [comap_apply₀ _ _ hf h (hf' hs).nullMeasurableSet]; rw [image_preimage_eq_inter_range]
 
@@ -411,7 +411,7 @@ lemma comap_zero
 中文:
 引理 comap_zero
   条件: (f : α -> β)
-  结论: (0 : Measure β).comap f = 0
+  结论: (0 : 测度 β).comap f = 0
   证明: by
   by_cases hf : Injective f ∧ forall s, MeasurableSet s -> NullMeasurableSet (f '' s) (0 : Measure β)
   · simp [comap, hf]
@@ -440,7 +440,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (μ : Measure β)
+  条件: (μ : 测度 β)
   结论: comap (fun x => x) μ = μ
   证明: by
   ext s hs
@@ -470,7 +470,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  结论: (hf' : 对任意 s, MeasurableSet s -> MeasurableSet (f '' s)) (hg : Injective g)
+  结论: (hf' : 对任意 s, 可测集 s -> 可测集 (f '' s)) (hg : 单射 g)
   证明: by
   by_cases hf : Injective f
   · ext s hs
@@ -503,7 +503,7 @@ lemma comap_smul
 
 中文:
 引理 comap_smul
-  条件: {μ : Measure β} (c : 实数>=0∞)
+  条件: {μ : 测度 β} (c : 实数>=0∞)
   结论: comap f (c • μ) = c • comap f μ
   证明: by
   obtain rfl | hc := eq_or_ne c 0
@@ -546,8 +546,8 @@ lemma MeasurableEmbedding.comap_add
     map_add, add_apply]
 
 中文:
-引理 MeasurableEmbedding.comap_add
-  条件: {f : α -> β} (hf : MeasurableEmbedding f) (μ ν : Measure β)
+引理 可测嵌入.comap_add
+  条件: {f : α -> β} (hf : 可测嵌入 f) (μ ν : 测度 β)
   证明: by
   ext s hs
   simp only [← comapₗ_eq_comap _ hf.injective (fun _ => hf.measurableSet_image.mpr) _ hs,
@@ -577,7 +577,7 @@ lemma comap_symm
 
 中文:
 引理 comap_symm
-  条件: {μ : Measure α} (e : α ≃ᵐ β)
+  条件: {μ : 测度 α} (e : α ≃ᵐ β)
   结论: μ.comap e.symm = μ.map e
   证明: by
   ext s hs
@@ -603,7 +603,7 @@ lemma map_symm
 
 中文:
 引理 map_symm
-  条件: {μ : Measure α} (e : β ≃ᵐ α)
+  条件: {μ : 测度 α} (e : β ≃ᵐ α)
   结论: μ.map e.symm = μ.comap e
   证明: by
   rw [← comap_symm]; rw [symm_symm]
@@ -625,8 +625,8 @@ lemma MeasureTheory.Measure.comap_swap
   proof: (MeasurableEquiv.prodComm ..).comap_symm
 
 中文:
-引理 MeasureTheory.Measure.comap_swap
-  条件: (μ : Measure (α × β))
+引理 测度论.测度.comap_swap
+  条件: (μ : 测度 (α × β))
   结论: μ.comap .swap = μ.map .swap
   证明: (MeasurableEquiv.prodComm ..).comap_symm
 

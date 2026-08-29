@@ -51,7 +51,7 @@ theorem _root_.Pi.lex_eq_finsupp_lex
   proof: rfl
 
 中文:
-定理 _root_.Pi.lex_eq_finsupp_lex
+定理 _root_.依赖函数类型.lex_eq_finsupp_lex
   条件: {r : α -> α -> 命题} {s : N -> N -> 命题} (a b : α ->₀ N)
   证明: rfl
 -/
@@ -175,7 +175,7 @@ theorem lex_lt_of_lt_of_preorder
 
 中文:
 定理 lex_lt_of_lt_of_preorder
-  条件: [Preorder N] (r) [IsStrictOrder α r] {x y : α ->₀ N} (hlt : x < y)
+  条件: [预序 N] (r) [是Strict序 α r] {x y : α ->₀ N} (hlt : x < y)
   证明: DFinsupp.lex_lt_of_lt_of_preorder r (id hlt : x.toDFinsupp < y.toDFinsupp)
 
 Depends on / 依赖: DFinsupp, DFinsupp.lex_lt_of_lt_of_preorder, lex_lt_of_lt_of_preorder, toDFinsupp, x.toDFinsupp, y.toDFinsupp
@@ -194,7 +194,7 @@ theorem lex_lt_of_lt
 
 中文:
 定理 lex_lt_of_lt
-  条件: [PartialOrder N] (r) [IsStrictOrder α r] {x y : α ->₀ N} (hlt : x < y)
+  条件: [偏序 N] (r) [是Strict序 α r] {x y : α ->₀ N} (hlt : x < y)
   证明: DFinsupp.lex_lt_of_lt r (id hlt : x.toDFinsupp < y.toDFinsupp)
 
 Depends on / 依赖: DFinsupp, DFinsupp.lex_lt_of_lt, lex_lt_of_lt, toDFinsupp, x.toDFinsupp, y.toDFinsupp
@@ -213,7 +213,7 @@ theorem lex_iff_of_unique
 
 中文:
 定理 lex_iff_of_unique
-  条件: [Unique α] [LT N] {r} [Std.Irrefl r] {x y : α ->₀ N}
+  条件: [唯一 α] [LT N] {r} [Std.Irrefl r] {x y : α ->₀ N}
   证明: Pi.lex_iff_of_unique
 
 Depends on / 依赖: Pi.lex_iff_of_unique, lex_iff_of_unique
@@ -233,7 +233,7 @@ theorem Lex.lt_iff_of_unique
 
 中文:
 定理 Lex.lt_iff_of_unique
-  条件: [Unique α] [LT N] [Preorder α] {x y : Lex (α ->₀ N)}
+  条件: [唯一 α] [LT N] [预序 α] {x y : Lex (α ->₀ N)}
   证明: lex_iff_of_unique
 -/
 theorem Lex.lt_iff_of_unique [Unique α] [LT N] [Preorder α] {x y : Lex (α ->₀ N)} :
@@ -251,7 +251,7 @@ theorem Colex.lt_iff_of_unique
 
 中文:
 定理 Colex.lt_iff_of_unique
-  条件: [Unique α] [LT N] [Preorder α] {x y : Colex (α ->₀ N)}
+  条件: [唯一 α] [LT N] [预序 α] {x y : Colex (α ->₀ N)}
   证明: Lex.lt_iff_of_unique (α := αᵒᵈ)
 
 Depends on / 依赖: Lex.lt_iff_of_unique, lt_iff_of_unique
@@ -273,7 +273,7 @@ instance Lex.isStrictOrder
 
 中文:
 实例 Lex.isStrictOrder
-  签名: [PartialOrder N]
+  签名: [偏序 N]
   定义体: lt_irrefl (α := Lex (α -> N)) _
   trans _ _ _ := lt_trans (α := Lex (α -> N))
 -/
@@ -291,7 +291,7 @@ instance Colex.isStrictOrder
 
 中文:
 实例 Colex.isStrictOrder
-  签名: [PartialOrder N]
+  签名: [偏序 N]
   定义体: Lex.isStrictOrder (α := αᵒᵈ)
 -/
 instance Colex.isStrictOrder [PartialOrder N] : IsStrictOrder (Colex (α ->₀ N)) (· < ·) :=
@@ -310,7 +310,7 @@ instance Lex.partialOrder
 
 中文:
 实例 Lex.partialOrder
-  签名: [PartialOrder N]
+  签名: [偏序 N]
   定义体: (· < ·)
   le x y := ⇑(ofLex x) = ⇑(ofLex y) ∨ x < y
   __ := PartialOrder.lift (fun x : Lex (α ->₀ N) => toLex (⇑(ofLex x)))
@@ -335,7 +335,7 @@ instance Colex.partialOrder
 
 中文:
 实例 Colex.partialOrder
-  签名: [PartialOrder N]
+  签名: [偏序 N]
   定义体: (· < ·)
   le x y := ⇑(ofColex x) = ⇑(ofColex y) ∨ x < y
   __ := PartialOrder.lift (fun x : Colex (α ->₀ N) => toColex (⇑(ofColex x)))
@@ -358,7 +358,7 @@ instance Lex.linearOrder
 
 中文:
 实例 Lex.linearOrder
-  签名: [LinearOrder N]
+  签名: [线性序 N]
   定义体: Lex.partialOrder
   __ := LinearOrder.lift' (toLex ∘ toDFinsupp ∘ ofLex) finsuppEquivDFinsupp.injective
 -/
@@ -378,7 +378,7 @@ instance Colex.linearOrder
 
 中文:
 实例 Colex.linearOrder
-  签名: [LinearOrder N]
+  签名: [线性序 N]
   定义体: (· < ·)
   le := (· <= ·)
   __ := LinearOrder.lift' (toColex ∘ toDFinsupp ∘ ofColex) finsuppEquivDFinsupp.injective
@@ -399,7 +399,7 @@ theorem Lex.le_iff_of_unique
 
 中文:
 定理 Lex.le_iff_of_unique
-  条件: [Unique α] [PartialOrder N] {x y : Lex (α ->₀ N)}
+  条件: [唯一 α] [偏序 N] {x y : Lex (α ->₀ N)}
   证明: Pi.lex_le_iff_of_unique
 -/
 theorem Lex.le_iff_of_unique [Unique α] [PartialOrder N] {x y : Lex (α ->₀ N)} :
@@ -417,7 +417,7 @@ theorem Colex.le_iff_of_unique
 
 中文:
 定理 Colex.le_iff_of_unique
-  条件: [Unique α] [PartialOrder N] {x y : Colex (α ->₀ N)}
+  条件: [唯一 α] [偏序 N] {x y : Colex (α ->₀ N)}
   证明: Lex.le_iff_of_unique (α := αᵒᵈ)
 -/
 theorem Colex.le_iff_of_unique [Unique α] [PartialOrder N] {x y : Colex (α ->₀ N)} :
@@ -442,7 +442,7 @@ theorem Lex.single_strictAnti
 
 中文:
 定理 Lex.single_strictAnti
-  结论: StrictAnti fun (a : α) => toLex (single a 1)
+  结论: 严格递减 fun (a : α) => toLex (single a 1)
   证明: by
   intro a b h
   simp only [LT.lt, Finsupp.lex_def]
@@ -475,7 +475,7 @@ theorem Colex.single_strictMono
 
 中文:
 定理 Colex.single_strictMono
-  结论: StrictMono fun (a : α) => toColex (single a 1)
+  结论: 严格递增 fun (a : α) => toColex (single a 1)
   证明: fun _ _ h => Lex.single_strictAnti (α := αᵒᵈ) h
 
 Depends on / 依赖: Lex.refl_left, Lex.single_strictAnti, refl_left, single_strictAnti
@@ -575,7 +575,7 @@ theorem toLex_monotone
 
 中文:
 定理 toLex_monotone
-  结论: Monotone (@toLex (α ->₀ N))
+  结论: 递增 (@toLex (α ->₀ N))
   证明: fun a b h => DFinsupp.toLex_monotone (id h : forall i, (toDFinsupp a) i <= (toDFinsupp b) i)
 
 Depends on / 依赖: DFinsupp, DFinsupp.toLex_monotone, toDFinsupp, toLex_monotone
@@ -593,7 +593,7 @@ theorem toColex_monotone
 
 中文:
 定理 toColex_monotone
-  结论: Monotone (@toColex (α ->₀ N))
+  结论: 递增 (@toColex (α ->₀ N))
   证明: toLex_monotone (α := αᵒᵈ)
 
 Depends on / 依赖: toLex_monotone
@@ -773,7 +773,7 @@ instance Lex.orderBot
 
 中文:
 实例 Lex.orderBot
-  签名: [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N]
+  签名: [加法交换幺半群 N] [偏序 N] [是BotZero类 N]
   定义体: 0
   bot_le _ := Finsupp.toLex_monotone bot_le
 -/
@@ -792,7 +792,7 @@ instance Lex.isBotZeroClass
 
 中文:
 实例 Lex.isBotZeroClass
-  签名: [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N]
+  签名: [加法交换幺半群 N] [偏序 N] [是BotZero类 N]
   定义体: isBot_bot
 -/
 instance Lex.isBotZeroClass [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N] :
@@ -810,7 +810,7 @@ instance Colex.orderBot
 
 中文:
 实例 Colex.orderBot
-  签名: [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N]
+  签名: [加法交换幺半群 N] [偏序 N] [是BotZero类 N]
   定义体: 0
   bot_le _ := Finsupp.toColex_monotone bot_le
 -/
@@ -829,7 +829,7 @@ instance Colex.isBotZeroClass
 
 中文:
 实例 Colex.isBotZeroClass
-  签名: [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N]
+  签名: [加法交换幺半群 N] [偏序 N] [是BotZero类 N]
   定义体: isBot_bot
 -/
 instance Colex.isBotZeroClass [AddCommMonoid N] [PartialOrder N] [IsBotZeroClass N] :

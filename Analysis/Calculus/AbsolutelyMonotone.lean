@@ -60,7 +60,7 @@ definition AbsolutelyMonotoneOn
 
 中文:
 定义 AbsolutelyMonotoneOn
-  签名: (f : 实数 -> 实数) (s : Set 实数)
+  签名: (f : 实数 -> 实数) (s : 集合 实数)
   定义体: exists p : Real -> FormalMultilinearSeries Real Real Real,
     HasFTaylorSeriesUpToOn ∞ f p s ∧
     forall (n : Nat) ⦃x : Real⦄, x in s -> 0 <= p x n fun _ => (1 : Real)
@@ -113,7 +113,7 @@ theorem of_contDiff
 
 中文:
 定理 of_contDiff
-  条件: (hf : ContDiff 实数 ∞ f) (h : 对任意 n : 自然数, 对任意 x in s, 0 <= iteratedDeriv n f x)
+  条件: (hf : 连续可微 实数 ∞ f) (h : 对任意 n : 自然数, 对任意 x in s, 0 <= iteratedDeriv n f x)
   证明: by
   refine ⟨ftaylorSeries Real f, (hf.ftaylorSeries).hasFTaylorSeriesUpToOn s, fun n x hx => ?_⟩
   exact iteratedDeriv_eq_iteratedFDeriv (𝕜 := Real) (f := f) ▸ h n x hx

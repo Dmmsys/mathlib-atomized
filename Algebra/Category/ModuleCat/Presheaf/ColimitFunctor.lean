@@ -57,7 +57,7 @@ definition constFunctor
 
 中文:
 定义 constFunctor
-  签名: : ModuleCat cR.pt ⥤ PresheafOfModules.{w} R where
+  签名: : 模范畴 cR.pt ⥤ 预模层.{w} R where
   定义体: { obj X := (ModuleCat.restrictScalars (cR.ι.app X).hom).obj M
       map {X Y} f :=
         (ModuleCat.restrictScalarsComp' _ _ _
@@ -95,7 +95,7 @@ definition ModuleColimit
 
 中文:
 定义 ModuleColimit
-  签名: (_ : IsColimit cR) (_ : IsColimit cM)
+  签名: (_ : 是余极限 cR) (_ : 是余极限 cM)
   定义体: cM.pt
 
 Depends on / 依赖: cM.pt
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (ModuleColimit hcR hcM)
+  签名: 加法交换群 (ModuleColimit hcR hcM)
   定义体: inferInstanceAs (AddCommGroup cM.pt)
 
 Depends on / 依赖: AddCommGroup, cM.pt
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul cR.pt (ModuleColimit hcR hcM)
+  签名: 标量乘法 cR.pt (ModuleColimit hcR hcM)
   定义体: (((isColimitOfPreserves (forget _) hcR).tensor
       (isColimitOfPreserves (forget _) hcM)).desc (coconeSMul hcR hcM) : _ -> _).curry
 
@@ -498,7 +498,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module cR.pt (ModuleColimit hcR hcM)
+  签名: 模 cR.pt (ModuleColimit hcR hcM)
   定义体: by
     obtain ⟨U, r₁, r₂, m, rfl, rfl, rfl⟩ := jointly_surjective₃ r₁ r₂ m
     simp only [smul_eq, ← mul_smul, ← map_mul]
@@ -545,7 +545,7 @@ omit [LocallySmall.{w, v, u} C] [IsCofiltered C] [InitiallySmall C] in
 
 中文:
 定义 homEquiv'
-  签名: {N : Type w} [AddCommGroup N]
+  签名: {N : 类型 w} [加法交换群 N]
   定义体: (ConcreteCategory.homEquiv (X := AddCommGrpCat.of (ModuleColimit hcR hcM))
     (Y := AddCommGrpCat.of N)).symm.trans hcM.homEquiv
   map_add' _ _ := rfl
@@ -573,7 +573,7 @@ omit [LocallySmall.{w, v, u} C] [IsCofiltered C] [InitiallySmall C] in
 
 中文:
 引理 homEquiv'_app_apply
-  结论: {N : ModuleCat.{w} cR.pt}
+  结论: {N : 模范畴.{w} cR.pt}
   证明: rfl
 
 omit [LocallySmall.{w, v, u} C] [IsCofiltered C] [InitiallySmall C] in
@@ -596,7 +596,7 @@ lemma homEquiv'_symm_apply
 
 中文:
 引理 homEquiv'_symm_apply
-  结论: {N : ModuleCat.{w} cR.pt}
+  结论: {N : 模范畴.{w} cR.pt}
   证明: ConcreteCategory.congr_hom (hcM.ι_app_homEquiv_symm β X) x
 -/
 lemma homEquiv'_symm_apply {N : ModuleCat.{w} cR.pt}
@@ -623,7 +623,7 @@ lemma map_smul_homEquiv'_iff
 
 中文:
 引理 map_smul_homEquiv'_iff
-  结论: {N : ModuleCat.{w} cR.pt}
+  结论: {N : 模范畴.{w} cR.pt}
   证明: by
   refine ⟨fun h r m => ?_, fun h U r m => ?_⟩
   · obtain ⟨U, r, m, rfl, rfl⟩ := jointly_surjective₂ r m
@@ -668,7 +668,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: {N : ModuleCat.{w} cR.pt}
+  签名: {N : 模范畴.{w} cR.pt}
   定义体: PresheafOfModules.homMk
     (homEquiv' hcR hcM ((forget₂ _ AddCommGrpCat).map φ).hom)
       ((map_smul_homEquiv'_iff hcR hcM ((forget₂ _ AddCommGrpCat).map φ).hom).2 (by simp))
@@ -715,7 +715,7 @@ lemma homEquiv_app_apply
 
 中文:
 引理 homEquiv_app_apply
-  结论: {N : ModuleCat.{w} cR.pt}
+  结论: {N : 模范畴.{w} cR.pt}
   证明: rfl
 -/
 lemma homEquiv_app_apply {N : ModuleCat.{w} cR.pt}
@@ -734,7 +734,7 @@ lemma homEquiv_naturality_right
 
 中文:
 引理 homEquiv_naturality_right
-  结论: {N N' : ModuleCat.{w} cR.pt}
+  结论: {N N' : 模范畴.{w} cR.pt}
   证明: rfl
 -/
 lemma homEquiv_naturality_right {N N' : ModuleCat.{w} cR.pt}
@@ -754,7 +754,7 @@ lemma homEquiv_symm_apply
 
 中文:
 引理 homEquiv_symm_apply
-  结论: {N : ModuleCat.{w} cR.pt} (β : M ⟶ (constFunctor cR).obj N)
+  结论: {N : 模范畴.{w} cR.pt} (β : M ⟶ (constFunctor cR).obj N)
   证明: by
   exact homEquiv'_symm_apply ..
 
@@ -903,7 +903,7 @@ lemma homEquiv_naturality_left
 
 中文:
 引理 homEquiv_naturality_left
-  结论: {M' : PresheafOfModules.{w} R} {cM' : Cocone M'.presheaf}
+  结论: {M' : 预模层.{w} R} {cM' : 余锥 M'.presheaf}
   证明: by
   ext U m
   simp only [homEquiv_app_apply, ModuleCat.hom_comp, ModuleCat.hom_ofHom, LinearMap.coe_comp,
@@ -938,7 +938,7 @@ lemma homEquiv_naturality_left_symm
 
 中文:
 引理 homEquiv_naturality_left_symm
-  结论: {M' : PresheafOfModules.{w} R} {cM' : Cocone M'.presheaf}
+  结论: {M' : 预模层.{w} R} {cM' : 余锥 M'.presheaf}
   证明: (homEquiv hcR hcM).injective (by
     obtain ⟨g, rfl⟩ := (homEquiv hcR hcM').surjective g
     simp [homEquiv_naturality_left])
@@ -971,7 +971,7 @@ definition colimitFunctor
 
 中文:
 定义 colimitFunctor
-  签名: : PresheafOfModules.{w} R ⥤ ModuleCat.{w} cR.pt where
+  签名: : 预模层.{w} R ⥤ 模范畴.{w} cR.pt where
   定义体: ModuleCat.of _ (ModuleColimit hcR (colimit.isColimit M.presheaf))
   map f := ModuleCat.ofHom (ModuleColimit.map _ _ _ f)
   map_comp f g := by ext : 1; exact (ModuleColimit.comp_map ..).symm

@@ -49,9 +49,9 @@ class IsTopologicalSemiring
   (no additional axioms)
 
 中文:
-类 IsTopologicalSemiring
-  参数: [TopologicalSpace R] [NonUnitalNonAssocSemiring R]
-  继承: ContinuousAdd R, ContinuousMul R
+类 是TopologicalSemiring
+  参数: [拓扑空间 R] [非幺非结合半环 R]
+  继承: 连续加法 R, 连续乘法 R
   (无附加公理)
 -/
 class IsTopologicalSemiring [TopologicalSpace R] [NonUnitalNonAssocSemiring R] : Prop
@@ -67,9 +67,9 @@ class IsTopologicalRing
   (no additional axioms)
 
 中文:
-类 IsTopologicalRing
-  参数: [TopologicalSpace R] [NonUnitalNonAssocRing R]
-  继承: IsTopologicalSemiring R, ContinuousNeg R
+类 是拓扑环
+  参数: [拓扑空间 R] [非幺非结合环 R]
+  继承: 是TopologicalSemiring R, 连续取负 R
   (无附加公理)
 -/
 class IsTopologicalRing [TopologicalSpace R] [NonUnitalNonAssocRing R] : Prop
@@ -85,9 +85,9 @@ class IsSemitopologicalSemiring
   (no additional axioms)
 
 中文:
-类 IsSemitopologicalSemiring
-  参数: (R : 类型) [TopologicalSpace R] [NonUnitalNonAssocSemiring R]
-  继承: ContinuousAdd R, SeparatelyContinuousMul R
+类 是SemitopologicalSemiring
+  参数: (R : 类型) [拓扑空间 R] [非幺非结合半环 R]
+  继承: 连续加法 R, SeparatelyContinuousMul R
   (无附加公理)
 -/
 class IsSemitopologicalSemiring (R : Type*) [TopologicalSpace R] [NonUnitalNonAssocSemiring R]
@@ -103,9 +103,9 @@ class IsSemitopologicalRing
   (no additional axioms)
 
 中文:
-类 IsSemitopologicalRing
-  参数: (R : 类型) [TopologicalSpace R] [NonUnitalNonAssocRing R]
-  继承: IsSemitopologicalSemiring R, ContinuousNeg R
+类 是Semitopological环
+  参数: (R : 类型) [拓扑空间 R] [非幺非结合环 R]
+  继承: 是SemitopologicalSemiring R, 连续取负 R
   (无附加公理)
 -/
 class IsSemitopologicalRing (R : Type*) [TopologicalSpace R] [NonUnitalNonAssocRing R]
@@ -125,8 +125,8 @@ theorem IsSemitopologicalSemiring.continuousNeg_of_mul
   IsSemitopologicalSemiring.continuousNeg_of_mul
 
 中文:
-定理 IsSemitopologicalSemiring.continuousNeg_of_mul
-  结论: [TopologicalSpace R] [NonAssocRing R]
+定理 是SemitopologicalSemiring.continuousNeg_of_mul
+  结论: [拓扑空间 R] [非结合环 R]
   证明: by simpa using continuous_id.const_mul (-1 : R)
 
 @[deprecated (since := "2026-03-13")] alias IsTopologicalSemiring.continuousNeg_of_mul :=
@@ -150,8 +150,8 @@ theorem IsSemitopologicalSemiring.toIsSemitopologicalRing
   proof: IsSemitopologicalSemiring.continuousNeg_of_mul
 
 中文:
-定理 IsSemitopologicalSemiring.toIsSemitopologicalRing
-  结论: [TopologicalSpace R] [NonAssocRing R]
+定理 是SemitopologicalSemiring.toIsSemitopologicalRing
+  结论: [拓扑空间 R] [非结合环 R]
   证明: IsSemitopologicalSemiring.continuousNeg_of_mul
 
 Depends on / 依赖: IsSemitopologicalSemiring, IsSemitopologicalSemiring.continuousNeg_of_mul, continuousNeg_of_mul
@@ -169,8 +169,8 @@ theorem IsTopologicalSemiring.toIsTopologicalRing
   proof: IsSemitopologicalSemiring.continuousNeg_of_mul
 
 中文:
-定理 IsTopologicalSemiring.toIsTopologicalRing
-  结论: [TopologicalSpace R] [NonAssocRing R]
+定理 是TopologicalSemiring.toIsTopologicalRing
+  结论: [拓扑空间 R] [非结合环 R]
   证明: IsSemitopologicalSemiring.continuousNeg_of_mul
 
 Depends on / 依赖: IsSemitopologicalSemiring, IsSemitopologicalSemiring.continuousNeg_of_mul, continuousNeg_of_mul
@@ -201,8 +201,8 @@ theorem IsTopologicalRing.to_topologicalAddGroup
   proof: ⟨⟩
 
 中文:
-定理 IsTopologicalRing.to_topologicalAddGroup
-  结论: [NonUnitalNonAssocRing R]
+定理 是拓扑环.to_topologicalAddGroup
+  结论: [非幺非结合环 R]
   证明: ⟨⟩
 -/
 theorem IsTopologicalRing.to_topologicalAddGroup [NonUnitalNonAssocRing R]
@@ -230,7 +230,7 @@ instance instIsSemitopologicalSemiring
 
 中文:
 实例 instIsSemitopologicalSemiring
-  签名: [IsSemitopologicalSemiring R] (S : NonUnitalSubsemiring R)
+  签名: [是SemitopologicalSemiring R] (S : NonUnital子半环 R)
   定义体: { S.toSubsemigroup.separatelyContinuousMul, S.toAddSubmonoid.continuousAdd with }
 
 Depends on / 依赖: S.toAddSubmonoid.continuousAdd, S.toSubsemigroup.separatelyContinuousMul, continuousAdd, separatelyContinuousMul, toAddSubmonoid, toSubsemigroup
@@ -249,7 +249,7 @@ instance instIsTopologicalSemiring
 
 中文:
 实例 instIsTopologicalSemiring
-  签名: [IsTopologicalSemiring R] (S : NonUnitalSubsemiring R)
+  签名: [是TopologicalSemiring R] (S : NonUnital子半环 R)
   定义体: { S.toSubsemigroup.continuousMul, S.toAddSubmonoid.continuousAdd with }
 
 Depends on / 依赖: S.toAddSubmonoid.continuousAdd, S.toSubsemigroup.continuousMul, continuousAdd, continuousMul, toAddSubmonoid, toSubsemigroup
@@ -273,7 +273,7 @@ definition topologicalClosure
 
 中文:
 定义 topologicalClosure
-  签名: (s : NonUnitalSubsemiring R)
+  签名: (s : NonUnital子半环 R)
   定义体: { s.toSubsemigroup.topologicalClosure, s.toAddSubmonoid.topologicalClosure with
     carrier := _root_.closure (s : Set R) }
 
@@ -296,7 +296,7 @@ theorem topologicalClosure_coe
 
 中文:
 定理 topologicalClosure_coe
-  条件: (s : NonUnitalSubsemiring R)
+  条件: (s : NonUnital子半环 R)
   证明: rfl
 -/
 theorem topologicalClosure_coe (s : NonUnitalSubsemiring R) :
@@ -314,7 +314,7 @@ theorem le_topologicalClosure
 
 中文:
 定理 le_topologicalClosure
-  条件: (s : NonUnitalSubsemiring R)
+  条件: (s : NonUnital子半环 R)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -333,7 +333,7 @@ theorem isClosed_topologicalClosure
 
 中文:
 定理 isClosed_topologicalClosure
-  条件: (s : NonUnitalSubsemiring R)
+  条件: (s : NonUnital子半环 R)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -353,7 +353,7 @@ theorem topologicalClosure_minimal
 
 中文:
 定理 topologicalClosure_minimal
-  结论: (s : NonUnitalSubsemiring R) {t : NonUnitalSubsemiring R}
+  结论: (s : NonUnital子半环 R) {t : NonUnital子半环 R}
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -375,7 +375,7 @@ theorem topologicalClosure_mono
 
 中文:
 定理 topologicalClosure_mono
-  条件: {s t : NonUnitalSubsemiring R} (h : s <= t)
+  条件: {s t : NonUnital子半环 R} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -395,7 +395,7 @@ abbreviation nonUnitalCommSemiringTopologicalClosure
 
 中文:
 缩写 nonUnitalCommSemiringTopologicalClosure
-  签名: [T2Space R] (s : NonUnitalSubsemiring R)
+  签名: [T2空间 R] (s : NonUnital子半环 R)
   定义体: { NonUnitalSubsemiringClass.toNonUnitalSemiring s.topologicalClosure,
     s.toSubsemigroup.commSemigroupTopologicalClosure hs with }
 
@@ -418,8 +418,8 @@ instance [IsTopologicalSemiring
   signature: R] : IsTopologicalSemiring (ULift R) where
 
 中文:
-实例 [IsTopologicalSemiring
-  签名: R] : IsTopologicalSemiring (ULift R) where
+实例 [是TopologicalSemiring
+  签名: R] : 是TopologicalSemiring (类型层提升 R) where
 -/
 instance [IsTopologicalSemiring R] : IsTopologicalSemiring (ULift R) where
 
@@ -435,7 +435,7 @@ instance semitopologicalSemiring
 
 中文:
 实例 semitopologicalSemiring
-  签名: [IsSemitopologicalSemiring R] (S : Subsemiring R)
+  签名: [是SemitopologicalSemiring R] (S : 子半环 R)
   定义体: { S.toSubmonoid.separatelyContinuousMul, S.toAddSubmonoid.continuousAdd with }
 
 Depends on / 依赖: S.toAddSubmonoid.continuousAdd, S.toSubmonoid.separatelyContinuousMul, continuousAdd, separatelyContinuousMul, toAddSubmonoid, toSubmonoid
@@ -454,7 +454,7 @@ instance topologicalSemiring
 
 中文:
 实例 topologicalSemiring
-  签名: [IsTopologicalSemiring R] (S : Subsemiring R)
+  签名: [是TopologicalSemiring R] (S : 子半环 R)
   定义体: { S.toSubmonoid.continuousMul, S.toAddSubmonoid.continuousAdd with }
 
 Depends on / 依赖: S.toAddSubmonoid.continuousAdd, S.toSubmonoid.continuousMul, continuousAdd, continuousMul, toAddSubmonoid, toSubmonoid
@@ -473,7 +473,7 @@ instance continuousSMul
 
 中文:
 实例 continuousSMul
-  签名: (s : Subsemiring R) (X) [TopologicalSpace X] [MulAction R X]
+  签名: (s : 子半环 R) (X) [拓扑空间 X] [乘法作用 R X]
   定义体: Submonoid.continuousSMul
 
 Depends on / 依赖: Submonoid, Submonoid.continuousSMul, continuousSMul
@@ -498,8 +498,8 @@ definition Subsemiring.topologicalClosure
 @[simp]
 
 中文:
-定义 Subsemiring.topologicalClosure
-  签名: (s : Subsemiring R)
+定义 子半环.topologicalClosure
+  签名: (s : 子半环 R)
   定义体: { s.toSubmonoid.topologicalClosure, s.toAddSubmonoid.topologicalClosure with
     carrier := _root_.closure (s : Set R) }
 
@@ -521,8 +521,8 @@ theorem Subsemiring.topologicalClosure_coe
   proof: rfl
 
 中文:
-定理 Subsemiring.topologicalClosure_coe
-  条件: (s : Subsemiring R)
+定理 子半环.topologicalClosure_coe
+  条件: (s : 子半环 R)
   证明: rfl
 -/
 theorem Subsemiring.topologicalClosure_coe (s : Subsemiring R) :
@@ -539,8 +539,8 @@ theorem Subsemiring.le_topologicalClosure
   proof: _root_.subset_closure
 
 中文:
-定理 Subsemiring.le_topologicalClosure
-  条件: (s : Subsemiring R)
+定理 子半环.le_topologicalClosure
+  条件: (s : 子半环 R)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -558,8 +558,8 @@ theorem Subsemiring.isClosed_topologicalClosure
   proof: isClosed_closure
 
 中文:
-定理 Subsemiring.isClosed_topologicalClosure
-  条件: (s : Subsemiring R)
+定理 子半环.isClosed_topologicalClosure
+  条件: (s : 子半环 R)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -578,8 +578,8 @@ theorem Subsemiring.topologicalClosure_minimal
 @[gcongr]
 
 中文:
-定理 Subsemiring.topologicalClosure_minimal
-  结论: (s : Subsemiring R) {t : Subsemiring R} (h : s <= t)
+定理 子半环.topologicalClosure_minimal
+  结论: (s : 子半环 R) {t : 子半环 R} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -600,8 +600,8 @@ theorem Subsemiring.topologicalClosure_mono
   proof: _root_.closure_mono h
 
 中文:
-定理 Subsemiring.topologicalClosure_mono
-  条件: {s t : Subsemiring R} (h : s <= t)
+定理 子半环.topologicalClosure_mono
+  条件: {s t : 子半环 R} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -619,8 +619,8 @@ abbreviation Subsemiring.commSemiringTopologicalClosure
   body: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 中文:
-缩写 Subsemiring.commSemiringTopologicalClosure
-  签名: [T2Space R] (s : Subsemiring R)
+缩写 子半环.commSemiringTopologicalClosure
+  签名: [T2空间 R] (s : 子半环 R)
   定义体: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toSemiring, toSemiring, toSubmonoid, topologicalClosure
@@ -643,8 +643,8 @@ instance [NonUnitalNonAssocSemiring
   signature: R] [NonUnitalNonAssocSemiring S] [IsTopologicalSemiring R]
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [NonUnitalNonAssocSemiring S] [IsTopologicalSemiring R]
+实例 [非幺非结合半环
+  签名: R] [非幺非结合半环 S] [是TopologicalSemiring R]
 -/
 instance [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] [IsTopologicalSemiring R]
     [IsTopologicalSemiring S] : IsTopologicalSemiring (R × S) where
@@ -657,8 +657,8 @@ instance [NonUnitalNonAssocRing
   signature: R] [NonUnitalNonAssocRing S] [IsTopologicalRing R]
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [NonUnitalNonAssocRing S] [IsTopologicalRing R]
+实例 [非幺非结合环
+  签名: R] [非幺非结合环 S] [是拓扑环 R]
 -/
 instance [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S] [IsTopologicalRing R]
     [IsTopologicalRing S] : IsTopologicalRing (R × S) where
@@ -671,8 +671,8 @@ instance [NonUnitalNonAssocSemiring
   signature: R] [NonUnitalNonAssocSemiring S] [IsSemitopologicalSemiring R]
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [NonUnitalNonAssocSemiring S] [IsSemitopologicalSemiring R]
+实例 [非幺非结合半环
+  签名: R] [非幺非结合半环 S] [是SemitopologicalSemiring R]
 -/
 instance [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] [IsSemitopologicalSemiring R]
     [IsSemitopologicalSemiring S] : IsSemitopologicalSemiring (R × S) where
@@ -685,8 +685,8 @@ instance [NonUnitalNonAssocRing
   signature: R] [NonUnitalNonAssocRing S] [IsSemitopologicalRing R]
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [NonUnitalNonAssocRing S] [IsSemitopologicalRing R]
+实例 [非幺非结合环
+  签名: R] [非幺非结合环 S] [是Semitopological环 R]
 -/
 instance [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S] [IsSemitopologicalRing R]
     [IsSemitopologicalRing S] : IsSemitopologicalRing (R × S) where
@@ -701,8 +701,8 @@ instance Pi.instIsTopologicalSemiring
   signature: {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
 
 中文:
-实例 Pi.instIsTopologicalSemiring
-  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, TopologicalSpace (R i)]
+实例 依赖函数类型.instIsTopologicalSemiring
+  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, 拓扑空间 (R i)]
 -/
 instance Pi.instIsTopologicalSemiring {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
     [forall i, NonUnitalNonAssocSemiring (R i)] [forall i, IsTopologicalSemiring (R i)] :
@@ -717,8 +717,8 @@ instance Pi.instIsTopologicalRing
   body: ⟨⟩
 
 中文:
-实例 Pi.instIsTopologicalRing
-  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, TopologicalSpace (R i)]
+实例 依赖函数类型.instIsTopologicalRing
+  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, 拓扑空间 (R i)]
   定义体: ⟨⟩
 -/
 instance Pi.instIsTopologicalRing {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
@@ -733,8 +733,8 @@ instance Pi.instIsSemitopologicalSemiring
   signature: {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
 
 中文:
-实例 Pi.instIsSemitopologicalSemiring
-  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, TopologicalSpace (R i)]
+实例 依赖函数类型.instIsSemitopologicalSemiring
+  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, 拓扑空间 (R i)]
 -/
 instance Pi.instIsSemitopologicalSemiring {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
     [forall i, NonUnitalNonAssocSemiring (R i)] [forall i, IsSemitopologicalSemiring (R i)] :
@@ -749,8 +749,8 @@ instance Pi.instIsSemitopologicalRing
   body: ⟨⟩
 
 中文:
-实例 Pi.instIsSemitopologicalRing
-  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, TopologicalSpace (R i)]
+实例 依赖函数类型.instIsSemitopologicalRing
+  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, 拓扑空间 (R i)]
   定义体: ⟨⟩
 -/
 instance Pi.instIsSemitopologicalRing {ι : Type*} {R : ι -> Type*} [forall i, TopologicalSpace (R i)]
@@ -770,8 +770,8 @@ instance [NonUnitalNonAssocSemiring
   body: continuousAdd_induced opAddEquiv.symm
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [ContinuousAdd R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [连续加法 R] :
   定义体: continuousAdd_induced opAddEquiv.symm
 
 Depends on / 依赖: continuousAdd_induced, opAddEquiv, opAddEquiv.symm
@@ -789,8 +789,8 @@ instance [NonUnitalNonAssocSemiring
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [IsSemitopologicalSemiring R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [是SemitopologicalSemiring R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocSemiring R] [TopologicalSpace R] [IsSemitopologicalSemiring R] :
@@ -805,8 +805,8 @@ instance [NonUnitalNonAssocSemiring
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [IsTopologicalSemiring R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [是TopologicalSemiring R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocSemiring R] [TopologicalSpace R] [IsTopologicalSemiring R] :
@@ -821,8 +821,8 @@ instance [NonUnitalNonAssocRing
   body: opHomeomorph.symm.isInducing.continuousNeg fun _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [TopologicalSpace R] [ContinuousNeg R] : ContinuousNeg Rᵐᵒᵖ
+实例 [非幺非结合环
+  签名: R] [拓扑空间 R] [连续取负 R] : 连续取负 Rᵐᵒᵖ
   定义体: opHomeomorph.symm.isInducing.continuousNeg fun _ => rfl
 -/
 instance [NonUnitalNonAssocRing R] [TopologicalSpace R] [ContinuousNeg R] : ContinuousNeg Rᵐᵒᵖ :=
@@ -837,8 +837,8 @@ instance [NonUnitalNonAssocRing
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [TopologicalSpace R] [IsTopologicalRing R] :
+实例 [非幺非结合环
+  签名: R] [拓扑空间 R] [是拓扑环 R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocRing R] [TopologicalSpace R] [IsTopologicalRing R] :
@@ -853,8 +853,8 @@ instance [NonUnitalNonAssocRing
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [TopologicalSpace R] [IsSemitopologicalRing R] :
+实例 [非幺非结合环
+  签名: R] [拓扑空间 R] [是Semitopological环 R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocRing R] [TopologicalSpace R] [IsSemitopologicalRing R] :
@@ -875,8 +875,8 @@ instance [NonUnitalNonAssocSemiring
   body: separatelyContinuousMul_induced opMulEquiv.symm
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [SeparatelyContinuousMul R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [SeparatelyContinuousMul R] :
   定义体: separatelyContinuousMul_induced opMulEquiv.symm
 
 Depends on / 依赖: opMulEquiv, opMulEquiv.symm, separatelyContinuousMul_induced
@@ -894,8 +894,8 @@ instance [NonUnitalNonAssocSemiring
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [IsSemitopologicalSemiring R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [是SemitopologicalSemiring R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocSemiring R] [TopologicalSpace R] [IsSemitopologicalSemiring R] :
@@ -910,8 +910,8 @@ instance [NonUnitalNonAssocRing
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [TopologicalSpace R] [IsSemitopologicalRing R] :
+实例 [非幺非结合环
+  签名: R] [拓扑空间 R] [是Semitopological环 R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocRing R] [TopologicalSpace R] [IsSemitopologicalRing R] :
@@ -926,8 +926,8 @@ instance [NonUnitalNonAssocSemiring
   body: continuousMul_induced opMulEquiv.symm
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [ContinuousMul R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [连续乘法 R] :
   定义体: continuousMul_induced opMulEquiv.symm
 -/
 instance [NonUnitalNonAssocSemiring R] [TopologicalSpace R] [ContinuousMul R] :
@@ -943,8 +943,8 @@ instance [NonUnitalNonAssocSemiring
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [TopologicalSpace R] [IsTopologicalSemiring R] :
+实例 [非幺非结合半环
+  签名: R] [拓扑空间 R] [是TopologicalSemiring R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocSemiring R] [TopologicalSpace R] [IsTopologicalSemiring R] :
@@ -959,8 +959,8 @@ instance [NonUnitalNonAssocRing
   body: ⟨⟩
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] [TopologicalSpace R] [IsTopologicalRing R] :
+实例 [非幺非结合环
+  签名: R] [拓扑空间 R] [是拓扑环 R] :
   定义体: ⟨⟩
 -/
 instance [NonUnitalNonAssocRing R] [TopologicalSpace R] [IsTopologicalRing R] :
@@ -983,8 +983,8 @@ theorem IsTopologicalRing.of_addGroup_of_nhds_zero
       simpa only [ContinuousAt, mul_zero, zero_mul, nhds_prod_eq, AddMonoidHom.mul_apply]
 
 中文:
-定理 IsTopologicalRing.of_addGroup_of_nhds_zero
-  结论: [IsTopologicalAddGroup R]
+定理 是拓扑环.of_addGroup_of_nhds_zero
+  结论: [是拓扑加群 R]
   证明: by
     refine continuous_of_continuousAt_zero₂ (AddMonoidHom.mul (R := R)) ?_ ?_ ?_ <;>
       simpa only [ContinuousAt, mul_zero, zero_mul, nhds_prod_eq, AddMonoidHom.mul_apply]
@@ -1008,7 +1008,7 @@ theorem IsTopologicalRing.of_nhds_zero
   IsTopologicalRing.of_addGroup_of_nhds_zero hmul hmul_left hmul_right
 
 中文:
-定理 IsTopologicalRing.of_nhds_zero
+定理 是拓扑环.of_nhds_zero
   证明: have := IsTopologicalAddGroup.of_comm_of_nhds_zero hadd hneg hleft
   IsTopologicalRing.of_addGroup_of_nhds_zero hmul hmul_left hmul_right
 
@@ -1040,8 +1040,8 @@ instance [IsTopologicalRing
   signature: R] : IsTopologicalRing (ULift R) where
 
 中文:
-实例 [IsTopologicalRing
-  签名: R] : IsTopologicalRing (ULift R) where
+实例 [是拓扑环
+  签名: R] : 是拓扑环 (类型层提升 R) where
 -/
 instance [IsTopologicalRing R] : IsTopologicalRing (ULift R) where
 
@@ -1059,7 +1059,7 @@ theorem mulLeft_continuous
 中文:
 定理 mulLeft_continuous
   条件: (x : R)
-  结论: Continuous (AddMonoidHom.mulLeft x)
+  结论: 连续 (加法幺半群态射.mulLeft x)
   证明: continuous_id.const_mul _
 
 Depends on / 依赖: const_mul, continuous_id, continuous_id.const_mul
@@ -1079,7 +1079,7 @@ theorem mulRight_continuous
 中文:
 定理 mulRight_continuous
   条件: (x : R)
-  结论: Continuous (AddMonoidHom.mulRight x)
+  结论: 连续 (加法幺半群态射.mulRight x)
   证明: continuous_id.mul_const _
 
 Depends on / 依赖: continuous_id, continuous_id.mul_const, mul_const
@@ -1169,7 +1169,7 @@ instance instIsTopologicalRing
 
 中文:
 实例 instIsTopologicalRing
-  签名: [IsTopologicalRing R] (S : NonUnitalSubring R)
+  签名: [是拓扑环 R] (S : NonUnital子环 R)
   定义体: { S.toSubsemigroup.continuousMul, (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
 Depends on / 依赖: IsTopologicalAddGroup, S.toAddSubgroup, S.toSubsemigroup.continuousMul, continuousMul, toAddSubgroup, toSubsemigroup
@@ -1189,7 +1189,7 @@ instance instIsSemitopologicalRing
 
 中文:
 实例 instIsSemitopologicalRing
-  签名: [IsSemitopologicalRing R] (S : NonUnitalSubring R)
+  签名: [是Semitopological环 R] (S : NonUnital子环 R)
   定义体: { S.toSubsemigroup.separatelyContinuousMul,
     (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
@@ -1213,7 +1213,7 @@ definition topologicalClosure
 
 中文:
 定义 topologicalClosure
-  签名: (S : NonUnitalSubring R)
+  签名: (S : NonUnital子环 R)
   定义体: { S.toSubsemigroup.topologicalClosure, S.toAddSubgroup.topologicalClosure with
     carrier := _root_.closure (S : Set R) }
 
@@ -1234,7 +1234,7 @@ theorem le_topologicalClosure
 
 中文:
 定理 le_topologicalClosure
-  条件: (s : NonUnitalSubring R)
+  条件: (s : NonUnital子环 R)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -1253,7 +1253,7 @@ theorem isClosed_topologicalClosure
 
 中文:
 定理 isClosed_topologicalClosure
-  条件: (s : NonUnitalSubring R)
+  条件: (s : NonUnital子环 R)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -1273,7 +1273,7 @@ theorem topologicalClosure_minimal
 
 中文:
 定理 topologicalClosure_minimal
-  结论: (s : NonUnitalSubring R) {t : NonUnitalSubring R} (h : s <= t)
+  结论: (s : NonUnital子环 R) {t : NonUnital子环 R} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -1295,7 +1295,7 @@ theorem topologicalClosure_mono
 
 中文:
 定理 topologicalClosure_mono
-  条件: {s t : NonUnitalSubring R} (h : s <= t)
+  条件: {s t : NonUnital子环 R} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -1314,7 +1314,7 @@ abbreviation nonUnitalCommRingTopologicalClosure
 
 中文:
 缩写 nonUnitalCommRingTopologicalClosure
-  签名: [T2Space R] (s : NonUnitalSubring R)
+  签名: [T2空间 R] (s : NonUnital子环 R)
   定义体: { s.topologicalClosure.toNonUnitalRing, s.toSubsemigroup.commSemigroupTopologicalClosure hs with }
 
 Depends on / 依赖: commSemigroupTopologicalClosure, s.toSubsemigroup.commSemigroupTopologicalClosure, s.topologicalClosure.toNonUnitalRing, toNonUnitalRing, toSubsemigroup, topologicalClosure
@@ -1336,8 +1336,8 @@ instance Subring.instIsTopologicalRing
   body: { S.toSubmonoid.continuousMul, (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
 中文:
-实例 Subring.instIsTopologicalRing
-  签名: [IsTopologicalRing R] (S : Subring R)
+实例 子环.instIsTopologicalRing
+  签名: [是拓扑环 R] (S : 子环 R)
   定义体: { S.toSubmonoid.continuousMul, (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
 Depends on / 依赖: IsTopologicalAddGroup, S.toAddSubgroup, S.toSubmonoid.continuousMul, continuousMul, toAddSubgroup, toSubmonoid
@@ -1356,8 +1356,8 @@ instance Subring.instIsSemitopologicalRing
     (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
 中文:
-实例 Subring.instIsSemitopologicalRing
-  签名: [IsSemitopologicalRing R] (S : Subring R)
+实例 子环.instIsSemitopologicalRing
+  签名: [是Semitopological环 R] (S : 子环 R)
   定义体: { S.toSubmonoid.separatelyContinuousMul,
     (inferInstance : IsTopologicalAddGroup S.toAddSubgroup) with }
 
@@ -1379,8 +1379,8 @@ instance Subring.continuousSMul
   body: Subsemiring.continuousSMul s.toSubsemiring X
 
 中文:
-实例 Subring.continuousSMul
-  签名: (s : Subring R) (X) [TopologicalSpace X] [MulAction R X]
+实例 子环.continuousSMul
+  签名: (s : 子环 R) (X) [拓扑空间 X] [乘法作用 R X]
   定义体: Subsemiring.continuousSMul s.toSubsemiring X
 
 Depends on / 依赖: Subsemiring, Subsemiring.continuousSMul, continuousSMul, s.toSubsemiring, toSubsemiring
@@ -1399,8 +1399,8 @@ definition Subring.topologicalClosure
     carrier := _root_.closure (S : Set R) }
 
 中文:
-定义 Subring.topologicalClosure
-  签名: (S : Subring R)
+定义 子环.topologicalClosure
+  签名: (S : 子环 R)
   定义体: { S.toSubmonoid.topologicalClosure, S.toAddSubgroup.topologicalClosure with
     carrier := _root_.closure (S : Set R) }
 
@@ -1420,8 +1420,8 @@ theorem Subring.le_topologicalClosure
   proof: _root_.subset_closure
 
 中文:
-定理 Subring.le_topologicalClosure
-  条件: (s : Subring R)
+定理 子环.le_topologicalClosure
+  条件: (s : 子环 R)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -1439,8 +1439,8 @@ theorem Subring.isClosed_topologicalClosure
   proof: isClosed_closure
 
 中文:
-定理 Subring.isClosed_topologicalClosure
-  条件: (s : Subring R)
+定理 子环.isClosed_topologicalClosure
+  条件: (s : 子环 R)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -1459,8 +1459,8 @@ theorem Subring.topologicalClosure_minimal
 @[gcongr]
 
 中文:
-定理 Subring.topologicalClosure_minimal
-  结论: (s : Subring R) {t : Subring R} (h : s <= t)
+定理 子环.topologicalClosure_minimal
+  结论: (s : 子环 R) {t : 子环 R} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -1481,8 +1481,8 @@ theorem Subring.topologicalClosure_mono
   proof: _root_.closure_mono h
 
 中文:
-定理 Subring.topologicalClosure_mono
-  条件: {s t : Subring R} (h : s <= t)
+定理 子环.topologicalClosure_mono
+  条件: {s t : 子环 R} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -1500,8 +1500,8 @@ abbreviation Subring.commRingTopologicalClosure
   body: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 中文:
-缩写 Subring.commRingTopologicalClosure
-  签名: [T2Space R] (s : Subring R)
+缩写 子环.commRingTopologicalClosure
+  签名: [T2空间 R] (s : 子环 R)
   定义体: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toRing, toRing, toSubmonoid, topologicalClosure
@@ -1535,9 +1535,9 @@ structure RingTopology
   (no additional axioms)
 
 中文:
-结构 RingTopology
-  参数: (R : 类型u) [Ring R]
-  继承: TopologicalSpace R, IsTopologicalRing R
+结构 环拓扑
+  参数: (R : 类型u) [环 R]
+  继承: 拓扑空间 R, 是拓扑环 R
   (无附加公理)
 -/
 structure RingTopology (R : Type u) [Ring R] : Type u
@@ -1560,7 +1560,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: {R : 类型u} [Ring R]
+  签名: {R : 类型u} [环 R]
   定义体: ⟨let _ : TopologicalSpace R := ⊤;
     { continuous_add := continuous_top
       continuous_mul := continuous_top
@@ -1607,7 +1607,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : RingTopology R} (h : f.IsOpen = g.IsOpen)
+  条件: {f g : 环拓扑 R} (h : f.是开集 = g.是开集)
   结论: f = g
   证明: toTopologicalSpace_injective TopologicalSpace.ext h
 
@@ -1626,7 +1626,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (RingTopology R)
+  签名: 偏序 (环拓扑 R)
   定义体: PartialOrder.lift RingTopology.toTopologicalSpace toTopologicalSpace_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, RingTopology, RingTopology.toTopologicalSpace, toTopologicalSpace, toTopologicalSpace_injective
@@ -1650,7 +1650,7 @@ toContinuousNeg := continuousNeg_sInf for
 
 中文:
 定义 def_sInf
-  签名: (S : Set (RingTopology R))
+  签名: (S : 集合 (环拓扑 R))
   定义体: let _ := sInf (toTopologicalSpace '' S)
   { toContinuousAdd := continuousAdd_sInf <| forall_mem_image.2 fun t _ =>
       let _ := t.1; t.toContinuousAdd
@@ -1680,7 +1680,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (RingTopology R)
+  签名: 余mpleteSemilatticeInf (环拓扑 R)
   定义体: def_sInf
   isGLB_sInf _ := .of_image (f := toTopologicalSpace) .rfl (isGLB_sInf _)
 
@@ -1700,7 +1700,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (RingTopology R)
+  签名: 完备格 (环拓扑 R)
   定义体: completeLatticeOfCompleteSemilatticeInf _
 
 Depends on / 依赖: completeLatticeOfCompleteSemilatticeInf
@@ -1718,7 +1718,7 @@ definition coinduced
 
 中文:
 定义 coinduced
-  签名: {R S : 类型} [t : TopologicalSpace R] [Ring S] (f : R -> S)
+  签名: {R S : 类型} [t : 拓扑空间 R] [环 S] (f : R -> S)
   定义体: sInf { b : RingTopology S | t.coinduced f <= b.toTopologicalSpace }
 
 Depends on / 依赖: RingTopology, b.toTopologicalSpace, coinduced, t.coinduced, toTopologicalSpace
@@ -1736,7 +1736,7 @@ theorem coinduced_continuous
 
 中文:
 定理 coinduced_continuous
-  条件: {R S : 类型} [t : TopologicalSpace R] [Ring S] (f : R -> S)
+  条件: {R S : 类型} [t : 拓扑空间 R] [环 S] (f : R -> S)
   证明: continuous_sInf_rng.2 forall_mem_image.2 fun _ => continuous_iff_coinduced_le.2
 
 Depends on / 依赖: continuous_iff_coinduced_le, continuous_sInf_rng, forall_mem_image
@@ -1757,7 +1757,7 @@ definition toAddGroupTopology
 
 中文:
 定义 toAddGroupTopology
-  签名: (t : RingTopology R)
+  签名: (t : 环拓扑 R)
   定义体: t.toTopologicalSpace
   toIsTopologicalAddGroup :=
     @IsTopologicalRing.to_topologicalAddGroup _ _ t.toTopologicalSpace t.toIsTopologicalRing
@@ -1779,7 +1779,7 @@ definition toAddGroupTopology.orderEmbedding
 
 中文:
 定义 toAddGroupTopology.orderEmbedding
-  签名: : OrderEmbedding (RingTopology R) (AddGroupTopology R)
+  签名: : OrderEmbedding (环拓扑 R) (加法群拓扑 R)
   定义体: OrderEmbedding.ofMapLEIff toAddGroupTopology fun _ _ => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, OrderEmbedding, OrderEmbedding.ofMapLEIff, ofMapLEIff, toAddGroupTopology
@@ -1803,8 +1803,8 @@ definition AbsoluteValue.comp
   add_le' _ _ := (congr_arg v (map_add f _ _)).trans_le (v.add_le _ _)
 
 中文:
-定义 AbsoluteValue.comp
-  签名: {R S T : 类型} [Semiring T] [Semiring R] [Semiring S] [PartialOrder S]
+定义 绝对值.comp
+  签名: {R S T : 类型} [半环 T] [半环 R] [半环 S] [偏序 S]
   定义体: v.1.comp f
   nonneg' _ := v.nonneg _
   eq_zero' _ := v.eq_zero.trans (map_eq_zero_iff f hf)

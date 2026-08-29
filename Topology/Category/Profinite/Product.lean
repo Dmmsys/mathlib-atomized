@@ -52,7 +52,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: : Set ((i : {i : ι // J i}) -> X i)
+  签名: : 集合 ((i : {i : ι // J i}) -> X i)
   定义体: ContinuousMap.precomp (Subtype.val (p := J)) '' C
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.precomp, Subtype, Subtype.val, precomp
@@ -167,7 +167,7 @@ theorem eq_of_forall_π_app_eq
   exact congr_fun h ⟨i, Finset.mem_singleton.mpr rfl⟩
 
 中文:
-定理 eq_of_forall_π_app_eq
+定理 eq_of_对任意_π_app_eq
   结论: (a b : C)
   证明: by
   ext i
@@ -207,7 +207,7 @@ definition indexFunctor
 
 中文:
 定义 indexFunctor
-  签名: (hC : IsCompact C)
+  签名: (hC : 是紧集 C)
   定义体: @Profinite.of (obj C (· in (unop J))) _
     (by rw [← isCompact_iff_compactSpace]; exact hC.image (Pi.continuous_precomp' _)) _ _
   map h := ConcreteCategory.ofHom (map C (leOfHom h.unop))
@@ -232,7 +232,7 @@ definition indexCone
 
 中文:
 定义 indexCone
-  签名: (hC : IsCompact C)
+  签名: (hC : 是紧集 C)
   定义体: @Profinite.of C _ (by rwa [← isCompact_iff_compactSpace]) _ _
   π := { app := fun J => ConcreteCategory.ofHom (π_app C (· in unop J)) }
 
@@ -361,7 +361,7 @@ definition indexCone_isLimit
 
 中文:
 定义 indexCone_isLimit
-  签名: : CategoryTheory.Limits.IsLimit (indexCone hC)
+  签名: : 范畴论.Limits.是极限 (indexCone hC)
   定义体: Limits.IsLimit.ofIsoLimit (Profinite.limitConeIsLimit _) (asLimitindexConeIso hC).symm
 
 Depends on / 依赖: IsLimit, Limits, Limits.IsLimit.ofIsoLimit, Profinite, Profinite.limitConeIsLimit, asLimitindexConeIso, limitConeIsLimit, ofIsoLimit

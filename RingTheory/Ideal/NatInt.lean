@@ -38,7 +38,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalRing 自然数
+  签名: 是局部环 自然数
   定义体: by
     have h : a = 1 ∨ b = 1 := by lia
     apply h.imp <;> simp +contextual
@@ -62,7 +62,7 @@ theorem Nat.mem_maximalIdeal_iff
   proof: by simp
 
 中文:
-定理 Nat.mem_maximalIdeal_iff
+定理 自然数.mem_maximalIdeal_iff
   条件: {n : 自然数}
   结论: n in maximalIdeal 自然数 ↔ n != 1
   证明: by simp
@@ -78,8 +78,8 @@ theorem Nat.coe_maximalIdeal
   proof: by ext; simp
 
 中文:
-定理 Nat.coe_maximalIdeal
-  结论: (maximalIdeal 自然数 : Set 自然数) = {1}ᶜ
+定理 自然数.coe_maximalIdeal
+  结论: (maximalIdeal 自然数 : 集合 自然数) = {1}ᶜ
   证明: by ext; simp
 
 Depends on / 依赖: continuous_pi_iff
@@ -100,7 +100,7 @@ exact mem_span_pair.mpr
     exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le 2 3 n (by simp) (show 2 <
 
 中文:
-定理 Nat.maximalIdeal_eq_span_two_three
+定理 自然数.maximalIdeal_eq_span_two_three
   结论: maximalIdeal 自然数 = span {2, 3}
   证明: by
   refine le_antisymm (fun n h => ?_) (span_le.mpr <| Set.pair_subset (by simp) (by simp))
@@ -131,8 +131,8 @@ theorem Nat.one_mem_span_iff
   rw [Set.subset_compl_comm]; rw [← coe_maximalIdeal]; rw [SetLike.coe_subset_coe]; rw [span_le]
 
 中文:
-定理 Nat.one_mem_span_iff
-  条件: {s : Set 自然数}
+定理 自然数.one_mem_span_iff
+  条件: {s : 集合 自然数}
   结论: 1 in span s ↔ 1 in s
   证明: by
   rw [← SetLike.mem_coe]; rw [← not_iff_not]
@@ -158,9 +158,9 @@ theorem Nat.one_mem_closure_iff
   exact one_mem_span_iff
 
 中文:
-定理 Nat.one_mem_closure_iff
-  条件: {s : Set 自然数}
-  结论: 1 in AddSubmonoid.closure s ↔ 1 in s
+定理 自然数.one_mem_closure_iff
+  条件: {s : 集合 自然数}
+  结论: 1 in 加法子幺半群.closure s ↔ 1 in s
   证明: by
   rw [← Submodule.span_nat_eq_addSubmonoidClosure]
   exact one_mem_span_iff
@@ -186,8 +186,8 @@ theorem Ideal.isPrime_nat_iff
     · rwa [span_singleton_prime
 
 中文:
-定理 Ideal.isPrime_nat_iff
-  条件: {P : Ideal 自然数}
+定理 理想.isPrime_nat_iff
+  条件: {P : 理想 自然数}
   证明: by
   refine .symm ⟨?_, fun h => or_iff_not_imp_left.mpr fun h0 => or_iff_not_imp_right.mpr fun hsp =>
     (le_maximalIdeal h.ne_top).antisymm fun n hn => ?_⟩
@@ -235,8 +235,8 @@ theorem Ideal.map_comap_natCastRingHom_int
     (mem_comap.mpr <| show (n.natAbs : Int) in I from n.sign_mul_self ▸ mul_mem_left _ _ hn)
 
 中文:
-定理 Ideal.map_comap_natCastRingHom_int
-  条件: {I : Ideal 整数}
+定理 理想.map_comap_natCastRingHom_int
+  条件: {I : 理想 整数}
   证明: map_comap_le.antisymm fun n hn => n.sign_mul_natAbs ▸ mul_mem_left _ _ mem_map_of_mem _
     (mem_comap.mpr <| show (n.natAbs : Int) in I from n.sign_mul_self ▸ mul_mem_left _ _ hn)
 
@@ -258,8 +258,8 @@ theorem Ideal.isPrime_int_iff
     p.span_natAbs.symm⟩, fun ⟨_p, hp, eq⟩ => ⟨_, Nat.prime_iff_prime_int.mp hp, eq⟩⟩
 
 中文:
-定理 Ideal.isPrime_int_iff
-  条件: {P : Ideal 整数}
+定理 理想.isPrime_int_iff
+  条件: {P : 理想 整数}
   证明: isPrime_iff_of_isPrincipalIdealRing_of_noZeroDivisors.trans or_congr_right
   ⟨fun ⟨p, hp, eq⟩ => ⟨_, Int.prime_iff_natAbs_prime.mp hp, eq.trans
     p.span_natAbs.symm⟩, fun ⟨_p, hp, eq⟩ => ⟨_, Nat.prime_iff_prime_int.mp hp, eq⟩⟩

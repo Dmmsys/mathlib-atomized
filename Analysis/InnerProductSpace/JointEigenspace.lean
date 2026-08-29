@@ -206,7 +206,7 @@ theorem directSum_isInternal_of_commute
   exact iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute hA hB hAB
 
 中文:
-定理 directSum_isInternal_of_commute
+定理 directSum_is整数ernal_of_commute
   结论: (hA : A.IsSymmetric) (hB : B.IsSymmetric)
   证明: by
   apply (orthogonalFamily_eigenspace_inf_eigenspace hA hB).isInternal_iff.mpr
@@ -274,7 +274,7 @@ theorem directSum_isInternal_of_pairwise_commute
   · exact orthogonalFamily_iInf_eigenspaces hT
 
 中文:
-定理 directSum_isInternal_of_pairwise_commute
+定理 directSum_is整数ernal_of_pairwise_commute
   结论: [DecidableEq (n -> 𝕜)]
   证明: by
   rw [OrthogonalFamily.isInternal_iff]

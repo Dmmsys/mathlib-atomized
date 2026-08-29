@@ -47,7 +47,7 @@ definition Ici
   body: ⟨Set.Ici a, isUpperSet_Ici a⟩
 
 中文:
-定义 Ici
+定义 左闭右无界区间
   签名: (a : α)
   定义体: ⟨Set.Ici a, isUpperSet_Ici a⟩
 
@@ -70,7 +70,7 @@ definition Ioi
 @[to_dual (attr := simp)]
 
 中文:
-定义 Ioi
+定义 左开右无界区间
   签名: (a : α)
   定义体: ⟨Set.Ioi a, isUpperSet_Ioi a⟩
 
@@ -96,7 +96,7 @@ theorem coe_Ici
 中文:
 定理 coe_Ici
   条件: (a : α)
-  结论: ↑(Ici a) = Set.Ici a
+  结论: ↑(左闭右无界区间 a) = 集合.左闭右无界区间 a
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -119,7 +119,7 @@ theorem coe_Ioi
 中文:
 定理 coe_Ioi
   条件: (a : α)
-  结论: ↑(Ioi a) = Set.Ioi a
+  结论: ↑(左开右无界区间 a) = 集合.左开右无界区间 a
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -140,7 +140,7 @@ theorem mem_Ici_iff
 
 中文:
 定理 mem_Ici_iff
-  结论: b in Ici a ↔ a <= b
+  结论: b in 左闭右无界区间 a ↔ a <= b
   证明: Iff.rfl
 
 @[to_dual (attr := simp)]
@@ -163,7 +163,7 @@ theorem mem_Ioi_iff
 
 中文:
 定理 mem_Ioi_iff
-  结论: b in Ioi a ↔ a < b
+  结论: b in 左开右无界区间 a ↔ a < b
   证明: Iff.rfl
 
 @[to_dual (attr := simp)]
@@ -190,7 +190,7 @@ theorem map_Ici
 中文:
 定理 map_Ici
   条件: (f : α ≃o β) (a : α)
-  结论: map f (Ici a) = Ici (f a)
+  结论: map f (左闭右无界区间 a) = 左闭右无界区间 (f a)
   证明: by
   ext
   simp
@@ -218,7 +218,7 @@ theorem map_Ioi
 中文:
 定理 map_Ioi
   条件: (f : α ≃o β) (a : α)
-  结论: map f (Ioi a) = Ioi (f a)
+  结论: map f (左开右无界区间 a) = 左开右无界区间 (f a)
   证明: by
   ext
   simp
@@ -252,7 +252,7 @@ nonrec theorem Ioi_top [OrderTop α] : Ioi (⊤ : α) = ⊤ :=
 中文:
 定理 Ici_le_Ioi
   条件: (a : α)
-  结论: Ici a <= Ioi a
+  结论: 左闭右无界区间 a <= 左开右无界区间 a
   证明: Ioi_subset_Ici_self
 
 @[to_dual (attr := simp)]
@@ -291,7 +291,7 @@ lemma Ici_ne_top
 
 中文:
 引理 Ici_ne_top
-  结论: Ici a != ⊤
+  结论: 左闭右无界区间 a != ⊤
   证明: SetLike.coe_ne_coe.1 nonempty_Ici.ne_empty
 
 @[to_dual (attr := simp) bot_lt_Iic]
@@ -313,7 +313,7 @@ lemma Ici_lt_top
 
 中文:
 引理 Ici_lt_top
-  结论: Ici a < ⊤
+  结论: 左闭右无界区间 a < ⊤
   证明: lt_top_iff_ne_top.2 Ici_ne_top
 
 @[to_dual (attr := simp) Iic_le]
@@ -333,7 +333,7 @@ lemma le_Ici
 
 中文:
 引理 le_Ici
-  结论: s <= Ici a ↔ a in s
+  结论: s <= 左闭右无界区间 a ↔ a in s
   证明: ⟨fun h => h le_rfl, fun ha => s.upper.Ici_subset ha⟩
 
 Depends on / 依赖: Ici_subset, le_rfl, s.upper.Ici_subset
@@ -352,7 +352,7 @@ theorem Ici_strictMono
 
 中文:
 定理 Ici_strictMono
-  结论: StrictMono (Ici (α := α))
+  结论: 严格递增 (左闭右无界区间 (α := α))
   证明: fun _ _ h => (Set.Ici_ssubset_Ici).mpr h
 
 Depends on / 依赖: Ici_ssubset_Ici, Set.Ici_ssubset_Ici
@@ -371,7 +371,7 @@ theorem Ioi_strictMono
 
 中文:
 定理 Ioi_strictMono
-  结论: StrictMono (Ioi (α := α))
+  结论: 严格递增 (左开右无界区间 (α := α))
   证明: fun _ _ h => Set.Ioi_ssubset_Ioi h
 
 Depends on / 依赖: Ioi_ssubset_Ioi, Set.Ioi_ssubset_Ioi
@@ -398,7 +398,7 @@ Set.Ici_injective congr_arg ((↑) : _ -> Set α) hab
 
 中文:
 引理 Ici_injective
-  结论: Injective (Ici : α -> UpperSet α)
+  结论: 单射 (左闭右无界区间 : α -> 上集 α)
   证明: fun _a _b hab =>
 Set.Ici_injective congr_arg ((↑) : _ -> Set α) hab
 
@@ -420,7 +420,7 @@ lemma Ici_inj
 
 中文:
 引理 Ici_inj
-  结论: Ici a = Ici b ↔ a = b
+  结论: 左闭右无界区间 a = 左闭右无界区间 b ↔ a = b
   证明: Ici_injective.eq_iff
 
 @[to_dual]
@@ -442,7 +442,7 @@ lemma Ici_ne_Ici
 
 中文:
 引理 Ici_ne_Ici
-  结论: Ici a != Ici b ↔ a != b
+  结论: 左闭右无界区间 a != 左闭右无界区间 b ↔ a != b
   证明: Ici_inj.not
 
 @[to_dual (attr := simp)]
@@ -464,8 +464,8 @@ theorem Ioi_eq_top
 
 中文:
 定理 Ioi_eq_top
-  条件: [OrderTop α] {a : α}
-  结论: Ioi a = ⊤ ↔ a = ⊤
+  条件: [有顶序 α] {a : α}
+  结论: 左开右无界区间 a = ⊤ ↔ a = ⊤
   证明: by
   simp [UpperSet.ext_iff]
 
@@ -489,7 +489,7 @@ theorem Ici_sup
 中文:
 定理 Ici_sup
   条件: [SemilatticeSup α] (a b : α)
-  结论: Ici (a ⊔ b) = Ici a ⊔ Ici b
+  结论: 左闭右无界区间 (a ⊔ b) = 左闭右无界区间 a ⊔ 左闭右无界区间 b
   证明: ext Ici_inter_Ici.symm
 
 Depends on / 依赖: Ici_inter_Ici, Ici_inter_Ici.symm
@@ -515,8 +515,8 @@ theorem Ici_sSup
 
 中文:
 定理 Ici_sSup
-  条件: (S : Set α)
-  结论: Ici (sSup S) = ⨆ a in S, Ici a
+  条件: (S : 集合 α)
+  结论: 左闭右无界区间 (sSup S) = ⨆ a in S, 左闭右无界区间 a
   证明: SetLike.ext fun c => by simp only [mem_Ici_iff, mem_iSup_iff, sSup_le_iff]
 
 @[to_dual (attr := simp)]
@@ -541,7 +541,7 @@ theorem Ici_iSup
 中文:
 定理 Ici_iSup
   条件: (f : ι -> α)
-  结论: Ici (⨆ i, f i) = ⨆ i, Ici (f i)
+  结论: 左闭右无界区间 (⨆ i, f i) = ⨆ i, 左闭右无界区间 (f i)
   证明: SetLike.ext fun c => by simp only [mem_Ici_iff, mem_iSup_iff, iSup_le_iff]
 
 @[to_dual]
@@ -565,7 +565,7 @@ theorem Ici_iSup₂
 中文:
 定理 Ici_iSup₂
   条件: (f : 对任意 i, κ i -> α)
-  结论: Ici (⨆ (i) (j), f i j) = ⨆ (i) (j), Ici (f i j)
+  结论: 左闭右无界区间 (⨆ (i) (j), f i j) = ⨆ (i) (j), 左闭右无界区间 (f i j)
   证明: by
   simp
 -/

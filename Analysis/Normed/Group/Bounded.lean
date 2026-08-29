@@ -66,8 +66,8 @@ lemma Filter.HasBasis.cobounded_of_norm'
 @[to_additive Filter.hasBasis_cobounded_norm]
 
 中文:
-引理 Filter.HasBasis.cobounded_of_norm'
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set 实数}
+引理 滤子.有基.cobounded_of_norm'
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 实数}
   证明: comap_norm_atTop' (E := E) ▸ h.comap _
 
 @[to_additive Filter.hasBasis_cobounded_norm]
@@ -90,8 +90,8 @@ lemma Filter.hasBasis_cobounded_norm'
 @[to_additive (attr := simp) tendsto_norm_atTop_iff_cobounded]
 
 中文:
-引理 Filter.hasBasis_cobounded_norm'
-  结论: HasBasis (cobounded E) (fun _ => True) ({x | · <= ‖x‖})
+引理 滤子.hasBasis_cobounded_norm'
+  结论: 有基 (cobounded E) (fun _ => 真) ({x | · <= ‖x‖})
   证明: atTop_basis.cobounded_of_norm'
 
 @[to_additive (attr := simp) tendsto_norm_atTop_iff_cobounded]
@@ -115,7 +115,7 @@ lemma tendsto_norm_atTop_iff_cobounded'
 
 中文:
 引理 tendsto_norm_atTop_iff_cobounded'
-  条件: {f : α -> E} {l : Filter α}
+  条件: {f : α -> E} {l : 滤子 α}
   证明: by
   rw [← comap_norm_atTop']; rw [tendsto_comap_iff]; rfl
 
@@ -140,7 +140,7 @@ lemma tendsto_norm_cobounded_atTop'
 
 中文:
 引理 tendsto_norm_cobounded_atTop'
-  结论: Tendsto norm (cobounded E) atTop
+  结论: 收敛 norm (cobounded E) atTop
   证明: tendsto_norm_atTop_iff_cobounded'.2 tendsto_id
 
 @[to_additive eventually_cobounded_le_norm]
@@ -189,8 +189,8 @@ lemma tendsto_norm_cocompact_atTop'
 
 中文:
 引理 tendsto_norm_cocompact_atTop'
-  条件: [命题erSpace E]
-  结论: Tendsto norm (cocompact E) atTop
+  条件: [真空间 E]
+  结论: 收敛 norm (cocompact E) atTop
   证明: cobounded_eq_cocompact (α := E) ▸ tendsto_norm_cobounded_atTop'
 
 @[to_additive (attr := simp)]
@@ -211,7 +211,7 @@ lemma Filter.inv_cobounded
   simp only [← comap_norm_atTop', ← Filter.comap_inv, comap_comap, Function.comp_def, norm_inv']
 
 中文:
-引理 Filter.inv_cobounded
+引理 滤子.inv_cobounded
   结论: (cobounded E)⁻¹ = cobounded E
   证明: by
   simp only [← comap_norm_atTop', ← Filter.comap_inv, comap_comap, Function.comp_def, norm_inv']
@@ -234,8 +234,8 @@ theorem Filter.tendsto_inv_cobounded
 @[to_additive isBounded_iff_forall_norm_le]
 
 中文:
-定理 Filter.tendsto_inv_cobounded
-  结论: Tendsto Inv.inv (cobounded E) (cobounded E)
+定理 滤子.tendsto_inv_cobounded
+  结论: 收敛 取逆.inv (cobounded E) (cobounded E)
   证明: inv_cobounded.le
 
 @[to_additive isBounded_iff_forall_norm_le]
@@ -260,8 +260,8 @@ alias ⟨Bornology.IsBounded.exists_norm_le', _⟩ := isBounded_iff_forall_norm_
 alias ⟨Bornology.IsBounded.exists_norm_le, _⟩ := isBounded_iff_forall_norm_le
 
 中文:
-引理 isBounded_iff_forall_norm_le'
-  结论: Bornology.IsBounded s ↔ 存在 C, 对任意 x in s, ‖x‖ <= C
+引理 isBounded_iff_对任意_norm_le'
+  结论: 有界结构.IsBounded s ↔ 存在 C, 对任意 x in s, ‖x‖ <= C
   证明: by
   simpa only [Set.subset_def, mem_closedBall_one_iff] using isBounded_iff_subset_closedBall (1 : E)
 
@@ -294,7 +294,7 @@ lemma Bornology.IsBounded.exists_pos_norm_le'
 @[to_additive Bornology.IsBounded.exists_pos_norm_lt]
 
 中文:
-引理 Bornology.IsBounded.exists_pos_norm_le'
+引理 有界结构.IsBounded.存在_pos_norm_le'
   条件: (hs : IsBounded s)
   结论: 存在 R > 0, 对任意 x in s, ‖x‖ <= R
   证明: let ⟨R₀, hR₀⟩ := hs.exists_norm_le'
@@ -322,7 +322,7 @@ lemma Bornology.IsBounded.exists_pos_norm_lt'
 @[to_additive]
 
 中文:
-引理 Bornology.IsBounded.exists_pos_norm_lt'
+引理 有界结构.IsBounded.存在_pos_norm_lt'
   条件: (hs : IsBounded s)
   结论: 存在 R > 0, 对任意 x in s, ‖x‖ < R
   证明: let ⟨R, hR₀, hR⟩ := hs.exists_pos_norm_le'
@@ -349,8 +349,8 @@ lemma NormedCommGroup.cauchySeq_iff
 @[to_additive IsCompact.exists_bound_of_continuousOn]
 
 中文:
-引理 NormedCommGroup.cauchySeq_iff
-  条件: [Nonempty α] [SemilatticeSup α] {u : α -> E}
+引理 NormedComm群.cauchySeq_iff
+  条件: [非空 α] [SemilatticeSup α] {u : α -> E}
   证明: by
   simp [Metric.cauchySeq_iff, dist_eq_norm_inv_mul]
 
@@ -375,8 +375,8 @@ hC _ Set.mem_image_of_mem _ hx
 @[to_additive]
 
 中文:
-引理 IsCompact.exists_bound_of_continuousOn'
-  结论: [TopologicalSpace α] {s : Set α} (hs : IsCompact s)
+引理 是紧集.存在_bound_of_continuousOn'
+  结论: [拓扑空间 α] {s : 集合 α} (hs : 是紧集 s)
   证明: (isBounded_iff_forall_norm_le'.1 (hs.image_of_continuousOn hf).isBounded).imp fun _C hC _x hx =>
 hC _ Set.mem_image_of_mem _ hx
 
@@ -400,8 +400,8 @@ lemma HasCompactMulSupport.exists_bound_of_continuous
   simpa using (hf.isCompact_range h'f).isBounded.exists_norm_le'
 
 中文:
-引理 HasCompactMulSupport.exists_bound_of_continuous
-  结论: [TopologicalSpace α]
+引理 HasCompactMulSupport.存在_bound_of_continuous
+  结论: [拓扑空间 α]
   证明: by
   simpa using (hf.isCompact_range h'f).isBounded.exists_norm_le'
 
@@ -436,8 +436,8 @@ lemma Filter.Tendsto.op_one_isBoundedUnder_le'
   rcases le_total A 0 with hA 
 
 中文:
-引理 Filter.Tendsto.op_one_isBoundedUnder_le'
-  结论: {f : α -> E} {g : α -> F} {l : Filter α}
+引理 滤子.收敛.op_one_isBoundedUnder_le'
+  结论: {f : α -> E} {g : α -> F} {l : 滤子 α}
   证明: by
   obtain ⟨A, h_op⟩ := h_op
   rcases hg with ⟨C, hC⟩; rw [eventually_map] at hC
@@ -487,8 +487,8 @@ theorem Filter.Tendsto.op_one_isBoundedUnder_le
 @[to_additive tendsto_norm_comp_cofinite_atTop_of_isClosedEmbedding]
 
 中文:
-定理 Filter.Tendsto.op_one_isBoundedUnder_le
-  结论: {f : α -> E} {g : α -> F} {l : Filter α}
+定理 滤子.收敛.op_one_isBoundedUnder_le
+  结论: {f : α -> E} {g : α -> F} {l : 滤子 α}
   证明: hf.op_one_isBoundedUnder_le' hg op ⟨1, fun x y => (one_mul ‖x‖).symm ▸ h_op x y⟩
 
 @[to_additive tendsto_norm_comp_cofinite_atTop_of_isClosedEmbedding]
@@ -513,7 +513,7 @@ lemma tendsto_norm_comp_cofinite_atTop_of_isClosedEmbedding'
 
 中文:
 引理 tendsto_norm_comp_cofinite_atTop_of_isClosedEmbedding'
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: by
   rw [← Filter.cocompact_eq_cofinite X]
   apply tendsto_norm_cocompact_atTop'.comp (Topology.IsClosedEmbedding.tendsto_cocompact he)
@@ -541,8 +541,8 @@ lemma Continuous.bounded_above_of_compact_support
   simpa [bddAbove_def] using hf.norm.bddAbove_range_of_hasCompactSupport h.norm
 
 中文:
-引理 Continuous.bounded_above_of_compact_support
-  条件: (hf : Continuous f) (h : HasCompactSupport f)
+引理 连续.bounded_above_of_compact_support
+  条件: (hf : 连续 f) (h : HasCompactSupport f)
   证明: by
   simpa [bddAbove_def] using hf.norm.bddAbove_range_of_hasCompactSupport h.norm
 
@@ -572,8 +572,8 @@ lemma HasCompactMulSupport.exists_pos_le_norm
   exact lt_add_of_le_of_pos hx zero_lt_one
 
 中文:
-引理 HasCompactMulSupport.exists_pos_le_norm
-  条件: [One E] (hf : HasCompactMulSupport f)
+引理 HasCompactMulSupport.存在_pos_le_norm
+  条件: [幺 E] (hf : HasCompactMulSupport f)
   证明: by
   obtain ⟨K, ⟨hK1, hK2⟩⟩ := exists_compact_iff_hasCompactMulSupport.mpr hf
   obtain ⟨S, hS, hS'⟩ := hK1.isBounded.exists_pos_norm_le

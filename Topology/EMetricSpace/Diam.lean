@@ -38,7 +38,7 @@ definition ediam
 
 中文:
 定义 ediam
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: ⨆ (x in s) (y in s), edist x y
 -/
 noncomputable def ediam (s : Set X) :=
@@ -55,7 +55,7 @@ theorem ediam_eq_sSup
 
 中文:
 定理 ediam_eq_sSup
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: ediam s = sSup (image2 edist s s)
   证明: sSup_image2.symm
 
@@ -96,7 +96,7 @@ theorem ediam_image_le_iff
 
 中文:
 定理 ediam_image_le_iff
-  条件: {d : 实数>=0∞} {f : α -> X} {s : Set α}
+  条件: {d : 实数>=0∞} {f : α -> X} {s : 集合 α}
   证明: by
   simp only [ediam_le_iff, forall_mem_image]
 
@@ -179,7 +179,7 @@ alias _root_.Set.Subsingleton.ediam_eq := ediam_subsingleton
 
 中文:
 定理 ediam_subsingleton
-  条件: (hs : s.Subsingleton)
+  条件: (hs : s.子单例)
   结论: ediam s = 0
   证明: nonpos_iff_eq_zero.1 ediam_le fun _x hx y hy => (hs hx hy).symm ▸ edist_self y ▸ le_rfl
 
@@ -204,7 +204,7 @@ theorem ediam_empty
 
 中文:
 定理 ediam_empty
-  结论: ediam (∅ : Set X) = 0
+  结论: ediam (∅ : 集合 X) = 0
   证明: ediam_subsingleton subsingleton_empty
 
 Depends on / 依赖: ediam_subsingleton, subsingleton_empty
@@ -226,7 +226,7 @@ theorem ediam_singleton
 
 中文:
 定理 ediam_singleton
-  结论: ediam ({x} : Set X) = 0
+  结论: ediam ({x} : 集合 X) = 0
   证明: ediam_subsingleton subsingleton_singleton
 
 @[to_additive (attr := simp)]
@@ -248,8 +248,8 @@ theorem ediam_one
 
 中文:
 定理 ediam_one
-  条件: [One X]
-  结论: ediam (1 : Set X) = 0
+  条件: [幺 X]
+  结论: ediam (1 : 集合 X) = 0
   证明: ediam_singleton
 
 Depends on / 依赖: ediam_singleton
@@ -267,7 +267,7 @@ theorem ediam_iUnion_mem_option
 
 中文:
 定理 ediam_iUnion_mem_option
-  条件: {ι : 类型} (o : Option ι) (s : ι -> Set X)
+  条件: {ι : 类型} (o : 选项类型 ι) (s : ι -> 集合 X)
   证明: by cases o <;> simp
 -/
 theorem ediam_iUnion_mem_option {ι : Type*} (o : Option ι) (s : ι -> Set X) :
@@ -283,7 +283,7 @@ theorem ediam_insert
 
 中文:
 定理 ediam_insert
-  结论: ediam (insert x s) = max (⨆ y in s, edist x y) (ediam s)
+  结论: ediam (insert x s) = 最大值 (⨆ y in s, edist x y) (ediam s)
   证明: eq_of_forall_ge_iff fun d => by simp +contextual [ediam_le_iff, edist_comm]
 
 Depends on / 依赖: contextual, ediam_le_iff, edist_comm, eq_of_forall_ge_iff
@@ -319,7 +319,7 @@ theorem ediam_triple
 
 中文:
 定理 ediam_triple
-  结论: ediam {x, y, z} = max (max (edist x y) (edist x z)) (edist y z)
+  结论: ediam {x, y, z} = 最大值 (最大值 (edist x y) (edist x z)) (edist y z)
   证明: by
   simp only [ediam_insert, iSup_insert, iSup_singleton, ediam_singleton, max_zero]
 
@@ -412,7 +412,7 @@ theorem ediam_union_le
 
 中文:
 定理 ediam_union_le
-  条件: (h : (s inter t).Nonempty)
+  条件: (h : (s inter t).非空)
   结论: ediam (s union t) <= ediam s + ediam t
   证明: by
   let ⟨x, ⟨xs, xt⟩⟩ := h
@@ -489,7 +489,7 @@ theorem ediam_pi_le_of_le
 
 中文:
 定理 ediam_pi_le_of_le
-  结论: {ι : 类型} {X : ι -> 类型} [Fintype ι] [对任意 i, PseudoEMetricSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [有限类型 ι] [对任意 i, PseudoEMetric空间 (X i)]
   证明: by
   refine ediam_le fun x hx y hy => edist_pi_le_iff.mpr ?_
   rw [mem_univ_pi] at hx hy
@@ -519,7 +519,7 @@ theorem ediam_eq_zero_iff
 
 中文:
 定理 ediam_eq_zero_iff
-  结论: ediam s = 0 ↔ s.Subsingleton
+  结论: ediam s = 0 ↔ s.子单例
   证明: ⟨fun h _x hx _y hy => edist_le_zero.1 h ▸ edist_le_ediam_of_mem hx hy, ediam_subsingleton⟩
 
 Depends on / 依赖: ediam_subsingleton, edist_le_ediam_of_mem, edist_le_zero
@@ -538,7 +538,7 @@ theorem ediam_pos_iff
 
 中文:
 定理 ediam_pos_iff
-  结论: 0 < ediam s ↔ s.Nontrivial
+  结论: 0 < ediam s ↔ s.非平凡
   证明: by
   simp only [pos_iff_ne_zero, Ne, ediam_eq_zero_iff, Set.not_subsingleton_iff]
 

@@ -47,11 +47,11 @@ structure AddMagmaCat
     - [str : Add carrier]
 
 中文:
-结构 AddMagmaCat
-  参数: : Type (u + 1) where
+结构 加法原群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : Add carrier]
+    - [str : 加法 carrier]
 -/
 structure AddMagmaCat : Type (u + 1) where
   /-- The underlying additive magma. -/
@@ -71,11 +71,11 @@ structure MagmaCat
     - [str : Mul carrier]
 
 中文:
-结构 MagmaCat
-  参数: : Type (u + 1) where
+结构 原群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : Mul carrier]
+    - [str : 乘法 carrier]
 -/
 structure MagmaCat : Type (u + 1) where
   /-- The underlying magma. -/
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort MagmaCat (类型u)
+  签名: CoeSort 原群范畴 (类型u)
   定义体: ⟨MagmaCat.carrier⟩
 
 Depends on / 依赖: MagmaCat, MagmaCat.carrier, carrier
@@ -122,7 +122,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [Mul M]
+  签名: (M : 类型u) [乘法 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [Mul M] : MagmaCat := ⟨M⟩
@@ -142,8 +142,8 @@ structure AddMagmaCat.Hom
     - hom' : A ->ₙ+ B
 
 中文:
-结构 AddMagmaCat.Hom
-  参数: (A B : AddMagmaCat.{u})
+结构 加法原群范畴.态射
+  参数: (A B : 加法原群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₙ+ B
@@ -166,8 +166,8 @@ structure MagmaCat.Hom
     - hom' : A ->ₙ* B
 
 中文:
-结构 MagmaCat.Hom
-  参数: (A B : MagmaCat.{u})
+结构 原群范畴.态射
+  参数: (A B : 原群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₙ* B
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category MagmaCat.{u}
+  签名: 范畴 原群范畴.{u}
   定义体: Hom X Y
   id X := ⟨MulHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory MagmaCat (· ->ₙ* ·)
+  签名: 余ncrete范畴 原群范畴 (· ->ₙ* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -239,8 +239,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := MagmaCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : MagmaCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 原群范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := MagmaCat) f
 -/
 abbrev Hom.hom {X Y : MagmaCat.{u}} (f : Hom X Y) :=
@@ -258,7 +258,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Mul X] [Mul Y] (f : X ->ₙ* Y)
+  签名: {X Y : 类型u} [乘法 X] [乘法 Y] (f : X ->ₙ* Y)
   定义体: ConcreteCategory.ofHom (C := MagmaCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, MagmaCat
@@ -279,8 +279,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddMagmaCat.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : MagmaCat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 原群范畴.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -310,7 +310,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : MagmaCat}
+  条件: {X : 原群范畴}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -334,7 +334,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : MagmaCat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 原群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -360,7 +360,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : MagmaCat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 原群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -386,8 +386,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (M : 类型u) [Mul M]
-  结论: (MagmaCat.of M : 类型u) = M
+  条件: (M : 类型u) [乘法 M]
+  结论: (原群范畴.of M : 类型u) = M
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -406,8 +406,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {M : MagmaCat}
-  结论: (𝟙 M : M ⟶ M).hom = MulHom.id M
+  条件: {M : 原群范畴}
+  结论: (𝟙 M : M ⟶ M).hom = 乘法半群态射.id M
   证明: rfl
 -/
 lemma hom_id {M : MagmaCat} : (𝟙 M : M ⟶ M).hom = MulHom.id M := rfl
@@ -426,7 +426,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (M : MagmaCat) (x : M)
+  条件: (M : 原群范畴) (x : M)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -445,7 +445,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T)
+  条件: {M N T : 原群范畴} (f : M ⟶ N) (g : N ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) :
@@ -465,7 +465,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
+  条件: {M N T : 原群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -487,7 +487,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : MagmaCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
+  条件: {M N : 原群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -512,7 +512,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {M N : 类型u} [Mul M] [Mul N] (f : M ->ₙ* N)
+  条件: {M N : 类型u} [乘法 M] [乘法 N] (f : M ->ₙ* N)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -533,7 +533,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {M N : MagmaCat} (f : M ⟶ N)
+  条件: {M N : 原群范畴} (f : M ⟶ N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -555,8 +555,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型u} [Mul M]
-  结论: ofHom (MulHom.id M) = 𝟙 (of M)
+  条件: {M : 类型u} [乘法 M]
+  结论: ofHom (乘法半群态射.id M) = 𝟙 (of M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -576,7 +576,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N P : 类型u} [Mul M] [Mul N] [Mul P]
+  结论: {M N P : 类型u} [乘法 M] [乘法 N] [乘法 P]
   证明: rfl
 
 @[to_additive]
@@ -599,7 +599,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Mul X] [Mul Y] (f : X ->ₙ* Y) (x : X)
+  条件: {X Y : 类型u} [乘法 X] [乘法 Y] (f : X ->ₙ* Y) (x : X)
   证明: rfl
 
 @[to_additive]
@@ -622,7 +622,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {M N : MagmaCat} (e : M ≅ N) (x : M)
+  条件: {M N : 原群范畴} (e : M ≅ N) (x : M)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -647,7 +647,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {M N : MagmaCat} (e : M ≅ N) (s : N)
+  条件: {M N : 原群范畴} (e : M ≅ N) (s : N)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -670,7 +670,7 @@ lemma mulEquiv_coe_eq
 
 中文:
 引理 mulEquiv_coe_eq
-  条件: {X Y : Type _} [Mul X] [Mul Y] (e : X ≃* Y)
+  条件: {X Y : 类型 _} [乘法 X] [乘法 Y] (e : X ≃* Y)
   证明: rfl
 
 @[to_additive]
@@ -690,7 +690,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited MagmaCat
+  签名: 可居 原群范畴
   定义体: ⟨MagmaCat.of PEmpty⟩
 
 Depends on / 依赖: MagmaCat, MagmaCat.of, PEmpty
@@ -711,11 +711,11 @@ structure AddSemigrp
     - [str : AddSemigroup carrier]
 
 中文:
-结构 AddSemigrp
-  参数: : Type (u + 1) where
+结构 加法半群
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : AddSemigroup carrier]
+    - [str : 加法半群 carrier]
 -/
 structure AddSemigrp : Type (u + 1) where
   /-- The underlying type. -/
@@ -735,11 +735,11 @@ structure Semigrp
     - [str : Semigroup carrier]
 
 中文:
-结构 Semigrp
-  参数: : Type (u + 1) where
+结构 半群
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : Semigroup carrier]
+    - [str : 半群 carrier]
 -/
 structure Semigrp : Type (u + 1) where
   /-- The underlying type. -/
@@ -764,7 +764,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Semigrp (类型u)
+  签名: CoeSort 半群 (类型u)
   定义体: ⟨Semigrp.carrier⟩
 
 Depends on / 依赖: Semigrp, Semigrp.carrier, carrier
@@ -786,7 +786,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [Semigroup M]
+  签名: (M : 类型u) [半群 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [Semigroup M] : Semigrp := ⟨M⟩
@@ -806,8 +806,8 @@ structure AddSemigrp.Hom
     - hom' : A ->ₙ+ B
 
 中文:
-结构 AddSemigrp.Hom
-  参数: (A B : AddSemigrp.{u})
+结构 加法半群.态射
+  参数: (A B : 加法半群.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₙ+ B
@@ -830,8 +830,8 @@ structure Semigrp.Hom
     - hom' : A ->ₙ* B
 
 中文:
-结构 Semigrp.Hom
-  参数: (A B : Semigrp.{u})
+结构 半群.态射
+  参数: (A B : 半群.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₙ* B
@@ -858,7 +858,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category Semigrp.{u}
+  签名: 范畴 半群.{u}
   定义体: Hom X Y
   id X := ⟨MulHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -882,7 +882,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory Semigrp (· ->ₙ* ·)
+  签名: 余ncrete范畴 半群 (· ->ₙ* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -903,8 +903,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := Semigrp) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : Semigrp.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 半群.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := Semigrp) f
 -/
 abbrev Hom.hom {X Y : Semigrp.{u}} (f : Hom X Y) :=
@@ -922,7 +922,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y)
+  签名: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y)
   定义体: ConcreteCategory.ofHom (C := Semigrp) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Semigrp
@@ -943,8 +943,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddSemigrp.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : Semigrp.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 半群.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -974,7 +974,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : Semigrp}
+  条件: {X : 半群}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -998,7 +998,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : Semigrp} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 半群} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -1024,7 +1024,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : Semigrp} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 半群} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -1050,8 +1050,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (R : 类型u) [Semigroup R]
-  结论: ↑(Semigrp.of R) = R
+  条件: (R : 类型u) [半群 R]
+  结论: ↑(半群.of R) = R
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1071,8 +1071,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : Semigrp}
-  结论: (𝟙 X : X ⟶ X).hom = MulHom.id X
+  条件: {X : 半群}
+  结论: (𝟙 X : X ⟶ X).hom = 乘法半群态射.id X
   证明: rfl
 -/
 lemma hom_id {X : Semigrp} : (𝟙 X : X ⟶ X).hom = MulHom.id X := rfl
@@ -1091,7 +1091,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : Semigrp) (x : X)
+  条件: (X : 半群) (x : X)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -1110,7 +1110,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T)
+  条件: {X Y T : 半群} (f : X ⟶ Y) (g : Y ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) :
@@ -1130,7 +1130,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
+  条件: {X Y T : 半群} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -1152,7 +1152,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : Semigrp} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 半群} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -1177,7 +1177,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y)
+  条件: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -1198,7 +1198,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : Semigrp} (f : X ⟶ Y)
+  条件: {X Y : 半群} (f : X ⟶ Y)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1220,8 +1220,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [Semigroup X]
-  结论: ofHom (MulHom.id X) = 𝟙 (of X)
+  条件: {X : 类型u} [半群 X]
+  结论: ofHom (乘法半群态射.id X) = 𝟙 (of X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1241,7 +1241,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Semigroup X] [Semigroup Y] [Semigroup Z]
+  结论: {X Y Z : 类型u} [半群 X] [半群 Y] [半群 Z]
   证明: rfl
 
 @[to_additive]
@@ -1266,7 +1266,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) (x : X)
+  条件: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y) (x : X)
   证明: rfl
 
 @[to_additive]
@@ -1289,7 +1289,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : Semigrp} (e : X ≅ Y) (x : X)
+  条件: {X Y : 半群} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -1314,7 +1314,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : Semigrp} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 半群} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -1337,7 +1337,7 @@ lemma mulEquiv_coe_eq
 
 中文:
 引理 mulEquiv_coe_eq
-  条件: {X Y : Type _} [Semigroup X] [Semigroup Y] (e : X ≃* Y)
+  条件: {X Y : 类型 _} [半群 X] [半群 Y] (e : X ≃* Y)
   证明: rfl
 
 @[to_additive]
@@ -1359,7 +1359,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Semigrp
+  签名: 可居 半群
   定义体: ⟨Semigrp.of PEmpty⟩
 
 @[to_additive]
@@ -1381,7 +1381,7 @@ instance hasForgetToMagmaCat
 
 中文:
 实例 hasForgetToMagmaCat
-  签名: : HasForget₂ Semigrp MagmaCat where
+  签名: : 有Forget₂ 半群 原群范畴 where
   定义体: { obj R := MagmaCat.of R
       map f := MagmaCat.ofHom f.hom }
 
@@ -1413,7 +1413,7 @@ definition MulEquiv.toMagmaCatIso
   inv := MagmaCat.ofHom e.symm.toMulHom
 
 中文:
-定义 MulEquiv.toMagmaCatIso
+定义 乘法等价.toMagmaCatIso
   签名: (e : X ≃* Y)
   定义体: MagmaCat.ofHom e.toMulHom
   inv := MagmaCat.ofHom e.symm.toMulHom
@@ -1444,7 +1444,7 @@ definition MulEquiv.toSemigrpIso
   inv := Semigrp.ofHom e.symm.toMulHom
 
 中文:
-定义 MulEquiv.toSemigrpIso
+定义 乘法等价.toSemigrpIso
   签名: (e : X ≃* Y)
   定义体: Semigrp.ofHom e.toMulHom
   inv := Semigrp.ofHom e.symm.toMulHom
@@ -1472,7 +1472,7 @@ definition magmaCatIsoToMulEquiv
 
 中文:
 定义 magmaCatIsoToMulEquiv
-  签名: {X Y : MagmaCat} (i : X ≅ Y)
+  签名: {X Y : 原群范畴} (i : X ≅ Y)
   定义体: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MulHom, MulHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -1493,7 +1493,7 @@ definition semigrpIsoToMulEquiv
 
 中文:
 定义 semigrpIsoToMulEquiv
-  签名: {X Y : Semigrp} (i : X ≅ Y)
+  签名: {X Y : 半群} (i : X ≅ Y)
   定义体: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MulHom, MulHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -1519,7 +1519,7 @@ definition mulEquivIsoMagmaIso
 
 中文:
 定义 mulEquivIsoMagmaIso
-  签名: {X Y : 类型u} [Mul X] [Mul Y]
+  签名: {X Y : 类型u} [乘法 X] [乘法 Y]
   定义体: ↾fun e => e.toMagmaCatIso
   inv := ↾fun i => i.magmaCatIsoToMulEquiv
 
@@ -1548,7 +1548,7 @@ definition mulEquivIsoSemigrpIso
 
 中文:
 定义 mulEquivIsoSemigrpIso
-  签名: {X Y : 类型u} [Semigroup X] [Semigroup Y]
+  签名: {X Y : 类型u} [半群 X] [半群 Y]
   定义体: ↾fun e => e.toSemigrpIso
   inv := ↾fun i => i.semigrpIsoToMulEquiv
 
@@ -1576,8 +1576,8 @@ instance MagmaCat.forgetReflectsIsos
 @[to_additive]
 
 中文:
-实例 MagmaCat.forgetReflectsIsos
-  签名: : (forget MagmaCat.{u}).ReflectsIsomorphisms where
+实例 原群范畴.forgetReflectsIsos
+  签名: : (forget 原群范畴.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget MagmaCat).map f)
     let e : X ≃* Y := { f.hom, i.toEquiv with }
@@ -1606,8 +1606,8 @@ instance Semigrp.forgetReflectsIsos
     exact e.toSemigrpIso.isIso_hom
 
 中文:
-实例 Semigrp.forgetReflectsIsos
-  签名: : (forget Semigrp.{u}).ReflectsIsomorphisms where
+实例 半群.forgetReflectsIsos
+  签名: : (forget 半群.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget Semigrp).map f)
     let e : X ≃* Y := { f.hom, i.toEquiv with }
@@ -1633,8 +1633,8 @@ instance Semigrp.forget₂_full
   body: ⟨ofHom f.hom, rfl⟩
 
 中文:
-实例 Semigrp.forget₂_full
-  签名: : (forget₂ Semigrp MagmaCat).Full where
+实例 半群.forget₂_full
+  签名: : (forget₂ 半群 原群范畴).满 where
   定义体: ⟨ofHom f.hom, rfl⟩
 
 Depends on / 依赖: f.hom

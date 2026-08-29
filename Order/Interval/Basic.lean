@@ -44,9 +44,9 @@ structure NonemptyInterval
     - fst_le_snd : fst <= snd
 
 中文:
-结构 NonemptyInterval
+结构 Nonempty整数erval
   参数: (α : 类型) [LE α]
-  继承: Prod α α
+  继承: 积类型 α α
   公理与运算 (1 个):
     - fst_le_snd : fst <= snd
 -/
@@ -70,7 +70,7 @@ theorem toProd_injective
 
 中文:
 定理 toProd_injective
-  结论: Injective (toProd : Nonempty整数erval α -> α × α)
+  结论: 单射 (toProd : Nonempty整数erval α -> α × α)
   证明: fun s t h => by cases s; cases t; congr
 -/
 theorem toProd_injective : Injective (toProd : NonemptyInterval α -> α × α) :=
@@ -144,7 +144,7 @@ theorem toDualProd_injective
 
 中文:
 定理 toDualProd_injective
-  结论: Injective (toDualProd : Nonempty整数erval α -> αᵒᵈ × α)
+  结论: 单射 (toDualProd : Nonempty整数erval α -> αᵒᵈ × α)
   证明: toProd_injective
 
 Depends on / 依赖: toProd_injective
@@ -161,8 +161,8 @@ instance [IsEmpty
   body: ⟨fun s => isEmptyElim s.fst⟩
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (Nonempty整数erval α)
+实例 [是空
+  签名: α] : 是空 (Nonempty整数erval α)
   定义体: ⟨fun s => isEmptyElim s.fst⟩
 
 Depends on / 依赖: isEmptyElim, s.fst
@@ -179,8 +179,8 @@ instance [Subsingleton
   body: toDualProd_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Nonempty整数erval α)
+实例 [子单例
+  签名: α] : 子单例 (Nonempty整数erval α)
   定义体: toDualProd_injective.subsingleton
 
 Depends on / 依赖: subsingleton, toDualProd_injective, toDualProd_injective.subsingleton
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (Nonempty整数erval α)
+  签名: 预序 (Nonempty整数erval α)
   定义体: fast_instance% Preorder.lift toDualProd
 
 Depends on / 依赖: Preorder, Preorder.lift, fast_instance, toDualProd
@@ -387,7 +387,7 @@ theorem toDualProd_mono
 
 中文:
 定理 toDualProd_mono
-  结论: Monotone (toDualProd : _ -> αᵒᵈ × α)
+  结论: 递增 (toDualProd : _ -> αᵒᵈ × α)
   证明: fun _ _ => id
 -/
 theorem toDualProd_mono : Monotone (toDualProd : _ -> αᵒᵈ × α) := fun _ _ => id
@@ -402,7 +402,7 @@ theorem toDualProd_strictMono
 
 中文:
 定理 toDualProd_strictMono
-  结论: StrictMono (toDualProd : _ -> αᵒᵈ × α)
+  结论: 严格递增 (toDualProd : _ -> αᵒᵈ × α)
   证明: fun _ _ => id
 -/
 theorem toDualProd_strictMono : StrictMono (toDualProd : _ -> αᵒᵈ × α) := fun _ _ => id
@@ -417,7 +417,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Nonempty整数erval α) (Set α)
+  签名: Coe (Nonempty整数erval α) (集合 α)
   定义体: ⟨fun s => Icc s.fst s.snd⟩
 
 Depends on / 依赖: s.fst, s.snd
@@ -479,7 +479,7 @@ theorem coe_nonempty
 中文:
 定理 coe_nonempty
   条件: (s : Nonempty整数erval α)
-  结论: (s : Set α).Nonempty
+  结论: (s : 集合 α).非空
   证明: nonempty_Icc.2 s.fst_le_snd
 
 Depends on / 依赖: fst_le_snd, nonempty_Icc, s.fst_le_snd
@@ -540,7 +540,7 @@ congr_arg Prod.fst ∘ toProd
 
 中文:
 定理 pure_injective
-  结论: Injective (pure : α -> Nonempty整数erval α)
+  结论: 单射 (pure : α -> Nonempty整数erval α)
   证明: fun _ _ =>
 congr_arg Prod.fst ∘ toProd
 
@@ -577,8 +577,8 @@ instance [Inhabited
   body: ⟨pure default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Nonempty整数erval α)
+实例 [可居
+  签名: α] : 可居 (Nonempty整数erval α)
   定义体: ⟨pure default⟩
 -/
 instance [Inhabited α] : Inhabited (NonemptyInterval α) :=
@@ -593,8 +593,8 @@ instance [Nonempty
   body: Nonempty.map pure (by infer_instance)
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (Nonempty整数erval α)
+实例 [非空
+  签名: α] : 非空 (Nonempty整数erval α)
   定义体: Nonempty.map pure (by infer_instance)
 
 Depends on / 依赖: Nonempty, Nonempty.map, infer_instance
@@ -611,8 +611,8 @@ instance [Nontrivial
   body: pure_injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial (Nonempty整数erval α)
+实例 [非平凡
+  签名: α] : 非平凡 (Nonempty整数erval α)
   定义体: pure_injective.nontrivial
 
 Depends on / 依赖: nontrivial, pure_injective, pure_injective.nontrivial
@@ -722,7 +722,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: (f : α -> β -> γ) (h₀ : 对任意 b, Monotone fun a => f a b) (h₁ : 对任意 a, Monotone (f a))
+  签名: (f : α -> β -> γ) (h₀ : 对任意 b, 递增 fun a => f a b) (h₁ : 对任意 a, 递增 (f a))
   定义体: fun s t =>
 ⟨(f s.fst t.fst, f s.snd t.snd), (h₀ _ s.fst_le_snd).trans h₁ _ t.fst_le_snd⟩
 
@@ -789,7 +789,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (Nonempty整数erval α)
+  签名: 有顶序 (Nonempty整数erval α)
   定义体: ⟨⟨⊥, ⊤⟩, bot_le⟩
   le_top _ := ⟨bot_le, le_top⟩
 
@@ -834,7 +834,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Nonempty整数erval α)
+  签名: 偏序 (Nonempty整数erval α)
   定义体: fast_instance% PartialOrder.lift _ toDualProd_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, fast_instance, toDualProd_injective
@@ -870,7 +870,7 @@ definition coeHom
 
 中文:
 定义 coeHom
-  签名: : Nonempty整数erval α ↪o Set α
+  签名: : Nonempty整数erval α ↪o 集合 α
   定义体: OrderEmbedding.ofMapLEIff (fun s => Icc s.fst s.snd) fun s _ => Icc_subset_Icc_iff s.fst_le_snd
 
 Depends on / 依赖: Icc_subset_Icc_iff, OrderEmbedding, OrderEmbedding.ofMapLEIff, fst_le_snd, ofMapLEIff, s.fst, s.fst_le_snd, s.snd
@@ -891,7 +891,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: : SetLike (Nonempty整数erval α) α where
+  签名: : 集合状 (Nonempty整数erval α) α where
   定义体: Icc s.fst s.snd
   coe_injective := coeHom.injective
 
@@ -916,7 +916,7 @@ theorem coe_subset_coe
 
 中文:
 定理 coe_subset_coe
-  结论: (s : Set α) subseteq t ↔ (s : Nonempty整数erval α) <= t
+  结论: (s : 集合 α) subseteq t ↔ (s : Nonempty整数erval α) <= t
   证明: (@coeHom α _).le_iff_le
 
 @[norm_cast]
@@ -939,7 +939,7 @@ theorem coe_ssubset_coe
 
 中文:
 定理 coe_ssubset_coe
-  结论: (s : Set α) ⊂ t ↔ s < t
+  结论: (s : 集合 α) ⊂ t ↔ s < t
   证明: (@coeHom α _).lt_iff_lt
 
 @[simp]
@@ -960,7 +960,7 @@ theorem coe_coeHom
 
 中文:
 定理 coe_coeHom
-  结论: (coeHom : Nonempty整数erval α -> Set α) = ((↑) : Nonempty整数erval α -> Set α)
+  结论: (coeHom : Nonempty整数erval α -> 集合 α) = ((↑) : Nonempty整数erval α -> 集合 α)
   证明: rfl
 -/
 theorem coe_coeHom : (coeHom : NonemptyInterval α -> Set α) = ((↑) : NonemptyInterval α -> Set α) :=
@@ -980,7 +980,7 @@ theorem coe_def
 中文:
 定理 coe_def
   条件: (s : Nonempty整数erval α)
-  结论: (s : Set α) = Set.Icc s.toProd.1 s.toProd.2
+  结论: (s : 集合 α) = 集合.闭区间 s.toProd.1 s.toProd.2
   证明: rfl
 
 @[simp, norm_cast]
@@ -1002,7 +1002,7 @@ theorem coe_pure
 中文:
 定理 coe_pure
   条件: (a : α)
-  结论: (pure a : Set α) = {a}
+  结论: (pure a : 集合 α) = {a}
   证明: Icc_self _
 
 @[simp]
@@ -1051,8 +1051,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [BoundedOrder α]
-  结论: ((⊤ : Nonempty整数erval α) : Set α) = univ
+  条件: [有界序 α]
+  结论: ((⊤ : Nonempty整数erval α) : 集合 α) = univ
   证明: Icc_bot_top
 
 @[simp, norm_cast]
@@ -1075,7 +1075,7 @@ theorem coe_dual
 中文:
 定理 coe_dual
   条件: (s : Nonempty整数erval α)
-  结论: (dual s : Set αᵒᵈ) = ofDual ⁻¹' s
+  结论: (dual s : 集合 αᵒᵈ) = ofDual ⁻¹' s
   证明: Icc_toDual
 
 Depends on / 依赖: Icc_toDual
@@ -1119,7 +1119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Nonempty整数erval α)
+  签名: 最大值 (Nonempty整数erval α)
   定义体: ⟨fun s t => ⟨⟨s.fst ⊓ t.fst, s.snd ⊔ t.snd⟩, inf_le_left.trans s.fst_le_snd.trans le_sup_left⟩⟩
 
 Depends on / 依赖: fst_le_snd, inf_le_left, inf_le_left.trans, le_sup_left, s.fst, s.fst_le_snd.trans, s.snd, t.fst, t.snd
@@ -1205,7 +1205,7 @@ definition Interval
 deriving Inhabited, LE, OrderBot
 
 中文:
-定义 Interval
+定义 区间
   签名: (α : 类型) [LE α]
   定义体: WithBot (NonemptyInterval α)
 deriving Inhabited, LE, OrderBot
@@ -1247,7 +1247,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Nonempty整数erval α) (整数erval α)
+  签名: Coe (Nonempty整数erval α) (区间 α)
   定义体: ⟨coe⟩
 -/
 instance : Coe (NonemptyInterval α) (Interval α) :=
@@ -1263,7 +1263,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift (整数erval α) (Nonempty整数erval α) (↑) fun r => r != ⊥
+  签名: : CanLift (区间 α) (Nonempty整数erval α) (↑) fun r => r != ⊥
   定义体: WithBot.canLift
 
 Depends on / 依赖: WithBot, WithBot.canLift, canLift, fg_def, fg_def.mp, fg_def.mpr, span_union
@@ -1283,7 +1283,7 @@ definition recBotCoe
 
 中文:
 定义 recBotCoe
-  签名: {C : 整数erval α -> Sort*} (bot : C ⊥) (coe : 对任意 a : Nonempty整数erval α, C a)
+  签名: {C : 区间 α -> 类型层*} (bot : C ⊥) (coe : 对任意 a : Nonempty整数erval α, C a)
   定义体: WithBot.recBotCoe bot coe
 
 Depends on / 依赖: WithBot, WithBot.recBotCoe, recBotCoe
@@ -1304,7 +1304,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Nonempty整数erval α -> 整数erval α)
+  结论: 单射 ((↑) : Nonempty整数erval α -> 区间 α)
   证明: WithBot.coe_injective
 
 @[norm_cast]
@@ -1329,7 +1329,7 @@ protected
 中文:
 定理 coe_inj
   条件: {s t : Nonempty整数erval α}
-  结论: (s : 整数erval α) = t ↔ s = t
+  结论: (s : 区间 α) = t ↔ s = t
   证明: WithBot.coe_inj
 
 protected
@@ -1352,8 +1352,8 @@ theorem «forall»
 protected
 
 中文:
-定理 «forall»
-  条件: {p : 整数erval α -> 命题}
+定理 «对任意»
+  条件: {p : 区间 α -> 命题}
   结论: (对任意 s, p s) ↔ p ⊥ ∧ 对任意 s : Nonempty整数erval α, p s
   证明: Option.forall
 
@@ -1373,8 +1373,8 @@ theorem «exists»
   proof: Option.exists
 
 中文:
-定理 «exists»
-  条件: {p : 整数erval α -> 命题}
+定理 «存在»
+  条件: {p : 区间 α -> 命题}
   结论: (存在 s, p s) ↔ p ⊥ ∨ 存在 s : Nonempty整数erval α, p s
   证明: Option.exists
 -/
@@ -1390,8 +1390,8 @@ instance [IsEmpty
   body: inferInstanceAs Unique (Option _)
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (整数erval α)
+实例 [是空
+  签名: α] : 唯一 (区间 α)
   定义体: inferInstanceAs Unique (Option _)
 
 Depends on / 依赖: Unique
@@ -1409,7 +1409,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : 整数erval α ≃ 整数erval αᵒᵈ
+  签名: : 区间 α ≃ 区间 αᵒᵈ
   定义体: NonemptyInterval.dual.withBotCongr
 
 Depends on / 依赖: NonemptyInterval, NonemptyInterval.dual.withBotCongr, fg_def, fg_def.mp, fg_def.mpr, ht.image, span_image, span_t, withBotCongr
@@ -1433,7 +1433,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (整数erval α)
+  签名: 预序 (区间 α)
   定义体: inferInstanceAs Preorder (WithBot _)
 
 Depends on / 依赖: Preorder, WithBot
@@ -1471,7 +1471,7 @@ theorem pure_injective
 
 中文:
 定理 pure_injective
-  结论: Injective (pure : α -> 整数erval α)
+  结论: 单射 (pure : α -> 区间 α)
   证明: coe_injective.comp NonemptyInterval.pure_injective
 
 @[simp]
@@ -1517,7 +1517,7 @@ theorem dual_bot
 
 中文:
 定理 dual_bot
-  结论: dual (⊥ : 整数erval α) = ⊥
+  结论: dual (⊥ : 区间 α) = ⊥
   证明: rfl
 
 @[simp]
@@ -1580,8 +1580,8 @@ instance [Nonempty
   body: Option.nontrivial
 
 中文:
-实例 [Nonempty
-  签名: α] : Nontrivial (整数erval α)
+实例 [非空
+  签名: α] : 非平凡 (区间 α)
   定义体: Option.nontrivial
 
 Depends on / 依赖: Option.nontrivial, e.le, le_antisymm, nontrivial, restrictScalars_injective, restrictScalars_le, span_le, span_le.mp, span_le_restrictScalars
@@ -1648,7 +1648,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (g : β ->o γ) (f : α ->o β) (s : 整数erval α)
+  条件: (g : β ->o γ) (f : α ->o β) (s : 区间 α)
   结论: (s.map f).map g = s.map (g.comp f)
   证明: Option.map_map _ _ _
 
@@ -1676,7 +1676,7 @@ theorem dual_map
 
 中文:
 定理 dual_map
-  条件: (f : α ->o β) (s : 整数erval α)
+  条件: (f : α ->o β) (s : 区间 α)
   结论: dual (s.map f) = s.dual.map f.dual
   证明: by
   cases s
@@ -1705,7 +1705,7 @@ lemma coe_le_coe
 中文:
 引理 coe_le_coe
   条件: {s t : Nonempty整数erval α}
-  结论: (s : 整数erval α) <= t ↔ s <= t
+  结论: (s : 区间 α) <= t ↔ s <= t
   证明: WithBot.coe_le_coe
 
 Depends on / 依赖: WithBot, WithBot.coe_le_coe, coe_le_coe
@@ -1727,7 +1727,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: : BoundedOrder (整数erval α)
+  签名: : 有界序 (区间 α)
   定义体: inferInstanceAs BoundedOrder (WithBot _)
 
 @[simp]
@@ -1748,7 +1748,7 @@ theorem dual_top
 
 中文:
 定理 dual_top
-  结论: dual (⊤ : 整数erval α) = ⊤
+  结论: dual (⊤ : 区间 α) = ⊤
   证明: rfl
 -/
 theorem dual_top : dual (⊤ : Interval α) = ⊤ :=
@@ -1770,7 +1770,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder (整数erval α)
+  签名: : 偏序 (区间 α)
   定义体: inferInstanceAs PartialOrder (WithBot _)
 
 Depends on / 依赖: PartialOrder, WithBot
@@ -1798,7 +1798,7 @@ definition coeHom
 
 中文:
 定义 coeHom
-  签名: : 整数erval α ↪o Set α
+  签名: : 区间 α ↪o 集合 α
   定义体: OrderEmbedding.ofMapLEIff
     (fun s =>
       match s with
@@ -1839,7 +1839,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: : SetLike (整数erval α) α where
+  签名: : 集合状 (区间 α) α where
   定义体: coeHom
   coe_injective := coeHom.injective
 
@@ -1864,7 +1864,7 @@ theorem coe_subset_coe
 
 中文:
 定理 coe_subset_coe
-  结论: (s : Set α) subseteq t ↔ s <= t
+  结论: (s : 集合 α) subseteq t ↔ s <= t
   证明: (@coeHom α _).le_iff_le
 
 @[norm_cast]
@@ -1887,7 +1887,7 @@ theorem coe_sSubset_coe
 
 中文:
 定理 coe_sSubset_coe
-  结论: (s : Set α) ⊂ t ↔ s < t
+  结论: (s : 集合 α) ⊂ t ↔ s < t
   证明: (@coeHom α _).lt_iff_lt
 
 @[simp, norm_cast]
@@ -1912,7 +1912,7 @@ theorem coe_pure
 中文:
 定理 coe_pure
   条件: (a : α)
-  结论: (pure a : Set α) = {a}
+  结论: (pure a : 集合 α) = {a}
   证明: Icc_self _
 
 @[simp, norm_cast]
@@ -1937,7 +1937,7 @@ theorem coe_coe
 中文:
 定理 coe_coe
   条件: (s : Nonempty整数erval α)
-  结论: ((s : 整数erval α) : Set α) = s
+  结论: ((s : 区间 α) : 集合 α) = s
   证明: rfl
 
 @[simp, norm_cast]
@@ -1958,7 +1958,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : 整数erval α) : Set α) = ∅
+  结论: ((⊥ : 区间 α) : 集合 α) = ∅
   证明: rfl
 
 @[simp, norm_cast]
@@ -1980,8 +1980,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [BoundedOrder α]
-  结论: ((⊤ : 整数erval α) : Set α) = univ
+  条件: [有界序 α]
+  结论: ((⊤ : 区间 α) : 集合 α) = univ
   证明: Icc_bot_top
 
 @[simp, norm_cast]
@@ -2006,8 +2006,8 @@ theorem coe_dual
 
 中文:
 定理 coe_dual
-  条件: (s : 整数erval α)
-  结论: (dual s : Set αᵒᵈ) = ofDual ⁻¹' s
+  条件: (s : 区间 α)
+  结论: (dual s : 集合 αᵒᵈ) = ofDual ⁻¹' s
   证明: by
   cases s with
   | bot => rfl
@@ -2031,7 +2031,7 @@ theorem subset_coe_map
 中文:
 定理 subset_coe_map
   条件: (f : α ->o β)
-  结论: 对任意 s : 整数erval α, f '' s subseteq s.map f
+  结论: 对任意 s : 区间 α, f '' s subseteq s.map f
 -/
 theorem subset_coe_map (f : α ->o β) : forall s : Interval α, f '' s subseteq s.map f
   | ⊥ => by simp
@@ -2091,7 +2091,7 @@ instance semilatticeSup
 
 中文:
 实例 semilatticeSup
-  签名: : SemilatticeSup (整数erval α)
+  签名: : SemilatticeSup (区间 α)
   定义体: inferInstanceAs SemilatticeSup (WithBot _)
 
 Depends on / 依赖: SemilatticeSup, WithBot
@@ -2122,7 +2122,7 @@ sup_le (le_inf s.fst_le_snd h.1) le_inf h.2 t.fst_le_snd⟩
 
 中文:
 实例 lattice
-  签名: : Lattice (整数erval α)
+  签名: : 格 (区间 α)
   定义体: { Interval.semilatticeSup with
     inf := fun s t =>
       match s, t with
@@ -2222,7 +2222,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  结论: 对任意 s t : 整数erval α, (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+  结论: 对任意 s t : 区间 α, (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
 -/
 theorem coe_inf : forall s t : Interval α, (↑(s ⊓ t) : Set α) = ↑s inter ↑t
   | ⊥, _ => by
@@ -2256,8 +2256,8 @@ theorem disjoint_coe
 
 中文:
 定理 disjoint_coe
-  条件: (s t : 整数erval α)
-  结论: Disjoint (s : Set α) t ↔ Disjoint s t
+  条件: (s t : 区间 α)
+  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
   证明: by
   classical
     rw [disjoint_iff_inf_le]; rw [disjoint_iff_inf_le]; rw [← coe_subset_coe]; rw [coe_inf]
@@ -2295,7 +2295,7 @@ theorem coe_pure_interval
 中文:
 定理 coe_pure_interval
   条件: (a : α)
-  结论: (pure a : 整数erval α) = 整数erval.pure a
+  结论: (pure a : 区间 α) = 区间.pure a
   证明: rfl
 
 @[simp, norm_cast]
@@ -2317,7 +2317,7 @@ theorem coe_eq_pure
 
 中文:
 定理 coe_eq_pure
-  结论: (s : 整数erval α) = 整数erval.pure a ↔ s = pure a
+  结论: (s : 区间 α) = 区间.pure a ↔ s = pure a
   证明: by
   rw [← Interval.coe_inj]; rw [coe_pure_interval]
 
@@ -2340,8 +2340,8 @@ theorem coe_top_interval
 
 中文:
 定理 coe_top_interval
-  条件: [BoundedOrder α]
-  结论: ((⊤ : Nonempty整数erval α) : 整数erval α) = ⊤
+  条件: [有界序 α]
+  结论: ((⊤ : Nonempty整数erval α) : 区间 α) = ⊤
   证明: rfl
 -/
 theorem coe_top_interval [BoundedOrder α] : ((⊤ : NonemptyInterval α) : Interval α) = ⊤ :=
@@ -2362,7 +2362,7 @@ theorem mem_coe_interval
 
 中文:
 定理 mem_coe_interval
-  条件: [PartialOrder α] {s : Nonempty整数erval α} {x : α}
+  条件: [偏序 α] {s : Nonempty整数erval α} {x : α}
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -2384,7 +2384,7 @@ theorem coe_sup_interval
 
 中文:
 定理 coe_sup_interval
-  条件: [Lattice α] (s t : Nonempty整数erval α)
+  条件: [格 α] (s t : Nonempty整数erval α)
   证明: rfl
 -/
 theorem coe_sup_interval [Lattice α] (s t : NonemptyInterval α) :
@@ -2517,8 +2517,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: [DecidableLE α] (S : Set (整数erval α))
-  结论: ↑(sInf S) = ⋂ s in S, (s : Set α)
+  条件: [DecidableLE α] (S : 集合 (区间 α))
+  结论: ↑(sInf S) = ⋂ s in S, (s : 集合 α)
   证明: by
   classical
   change ((dite _ _ _ : Interval α) : Set α) = ⋂ (s : Interval α) (_ : s in S), (s : Set α)
@@ -2559,7 +2559,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: [DecidableLE α] (f : ι -> 整数erval α)
+  条件: [DecidableLE α] (f : ι -> 区间 α)
   证明: by simp [iInf]
 
 @[norm_cast]
@@ -2578,7 +2578,7 @@ theorem coe_iInf₂
 
 中文:
 定理 coe_iInf₂
-  条件: [DecidableLE α] (f : 对任意 i, κ i -> 整数erval α)
+  条件: [DecidableLE α] (f : 对任意 i, κ i -> 区间 α)
   证明: by simp_rw [coe_iInf]
 
 Depends on / 依赖: coe_iInf, simp_rw

@@ -53,7 +53,7 @@ definition IsRowEchelon
 
 中文:
 定义 IsRowEchelon
-  签名: [LT m] [LT n] (A : Matrix m n R)
+  签名: [LT m] [LT n] (A : 矩阵 m n R)
   定义体: forall ⦃i₁ i₂⦄, i₁ < i₂ -> forall ⦃j₂⦄, (forall j₁ < j₂, A i₁ j₁ = 0) -> A i₂ j₂ = 0
 -/
 def IsRowEchelon [LT m] [LT n] (A : Matrix m n R) : Prop :=
@@ -93,7 +93,7 @@ definition IsLeadingEntry
 
 中文:
 定义 IsLeadingEntry
-  签名: [LT n] (A : Matrix m n R) (i : m) (c : n)
+  签名: [LT n] (A : 矩阵 m n R) (i : m) (c : n)
   定义体: (forall j < c, A i j = 0) ∧ A i c != 0
 -/
 def IsLeadingEntry [LT n] (A : Matrix m n R) (i : m) (c : n) : Prop :=
@@ -132,7 +132,7 @@ obtain ⟨c, hc, hmin⟩ := wellFounded_lt.has_min {j | A i j != 0} Function.ne_
   aesop
 
 中文:
-定理 row_ne_zero_iff_exists_isLeadingEntry
+定理 row_ne_zero_iff_存在_isLeadingEntry
   条件: [LT n] [WellFoundedLT n] {i : m}
   证明: by
   refine ⟨fun h => ?_, fun ⟨c, hc⟩ => hc.row_ne_zero⟩
@@ -161,7 +161,7 @@ theorem IsLeadingEntry.unique
 
 中文:
 定理 IsLeadingEntry.unique
-  结论: [LinearOrder n] {i : m} {c₁ c₂ : n}
+  结论: [线性序 n] {i : m} {c₁ c₂ : n}
   证明: le_antisymm (not_lt.mp fun hlt => h₂.2 (h₁.1 c₂ hlt)) (not_lt.mp fun hlt => h₁.2 (h₂.1 c₁ hlt))
 
 Depends on / 依赖: le_antisymm, not_lt, not_lt.mp
@@ -180,7 +180,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: R] [Fintype n] [LT n] [DecidableLT n]
+  签名: R] [有限类型 n] [LT n] [DecidableLT n]
   定义体: decidable_of_iff ((forall j < c, A i j = 0) ∧ A i c != 0) Iff.rfl
 
 Depends on / 依赖: Iff.rfl, decidable_of_iff
@@ -203,8 +203,8 @@ structure IsReducedRowEchelon
     - eq_zero(⦃i₁ i₂) : m⦄ ⦃c : n⦄ (hlt : i₁ < i₂) (hA : A.IsLeadingEntry i₂ c) : A i₁ c = 0
 
 中文:
-结构 IsReducedRowEchelon
-  参数: [LT m] [LT n] [One R] (A : Matrix m n R)
+结构 是ReducedRowEchelon
+  参数: [LT m] [LT n] [幺 R] (A : 矩阵 m n R)
   公理与运算 (3 个):
     - isRowEchelon : A.IsRowEchelon
     - eq_one(⦃i) : m⦄ ⦃c : n⦄ (hA : A.IsLeadingEntry i c) : A i c = 1
@@ -227,8 +227,8 @@ theorem IsReducedRowEchelon.eq_zero_of_ne_of_isLeadingEntry
   · exact hA.isRowEchelon hlt hlead.1
 
 中文:
-定理 IsReducedRowEchelon.eq_zero_of_ne_of_isLeadingEntry
-  结论: [LinearOrder m] [LT n] [One R]
+定理 是ReducedRowEchelon.eq_zero_of_ne_of_isLeadingEntry
+  结论: [线性序 m] [LT n] [幺 R]
   证明: by
   rcases hne.lt_or_gt with hlt | hlt
   · exact hA.eq_zero hlt hlead

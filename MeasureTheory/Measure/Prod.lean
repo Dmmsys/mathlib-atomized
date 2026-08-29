@@ -86,7 +86,7 @@ theorem measurable_measure_prodMk_left_finite
 
 中文:
 定理 measurable_measure_prodMk_left_finite
-  结论: [IsFiniteMeasure ν] {s : Set (α × β)}
+  结论: [是有限测度 ν] {s : 集合 (α × β)}
   证明: by
   induction s, hs using induction_on_inter generateFrom_prod.symm isPiSystem_prod with
   | empty => simp
@@ -129,7 +129,7 @@ theorem measurable_measure_prodMk_left
 
 中文:
 定理 measurable_measure_prodMk_left
-  条件: [SFinite ν] {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: [SFinite ν] {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   rw [← sum_sfiniteSeq ν]
   simp_rw [Measure.sum_apply_of_countable]
@@ -153,7 +153,7 @@ theorem measurable_measure_prodMk_right
 
 中文:
 定理 measurable_measure_prodMk_right
-  结论: {μ : Measure α} [SFinite μ] {s : Set (α × β)}
+  结论: {μ : 测度 α} [SFinite μ] {s : 集合 (α × β)}
   证明: measurable_measure_prodMk_left (measurableSet_swap_iff.mpr hs)
 
 Depends on / 依赖: measurableSet_swap_iff, measurableSet_swap_iff.mpr, measurable_measure_prodMk_left
@@ -174,7 +174,7 @@ theorem Measurable.map_prodMk_left
   exact measurable_measure_prodMk_left hs
 
 中文:
-定理 Measurable.map_prodMk_left
+定理 可测.map_prodMk_left
   条件: [SFinite ν]
   证明: by
   apply measurable_of_measurable_coe; intro s hs
@@ -201,8 +201,8 @@ theorem Measurable.map_prodMk_right
   exact measurable_measure_prodMk_right hs
 
 中文:
-定理 Measurable.map_prodMk_right
-  条件: {μ : Measure α} [SFinite μ]
+定理 可测.map_prodMk_right
+  条件: {μ : 测度 α} [SFinite μ]
   证明: by
   apply measurable_of_measurable_coe; intro s hs
   simp_rw [map_apply measurable_prodMk_right hs]
@@ -231,7 +231,7 @@ theorem Measurable.lintegral_prod_right'
     suffices Measurable fun x => c * ν (Prod.mk x ⁻¹' s) by simpa [lintegral_indicator (m
 
 中文:
-定理 Measurable.lintegral_prod_right'
+定理 可测.lintegral_prod_right'
   条件: [SFinite ν]
   证明: by
   have m := @measurable_prodMk_left
@@ -274,7 +274,7 @@ theorem Measurable.lintegral_prod_right
   proof: hf.lintegral_prod_right'
 
 中文:
-定理 Measurable.lintegral_prod_right
+定理 可测.lintegral_prod_right
   结论: [SFinite ν] {f : α -> β -> 实数>=0∞}
   证明: hf.lintegral_prod_right'
 
@@ -293,8 +293,8 @@ theorem Measurable.lintegral_prod_left'
   proof: (measurable_swap_iff.mpr hf).lintegral_prod_right'
 
 中文:
-定理 Measurable.lintegral_prod_left'
-  条件: [SFinite μ] {f : α × β -> 实数>=0∞} (hf : Measurable f)
+定理 可测.lintegral_prod_left'
+  条件: [SFinite μ] {f : α × β -> 实数>=0∞} (hf : 可测 f)
   证明: (measurable_swap_iff.mpr hf).lintegral_prod_right'
 
 Depends on / 依赖: lintegral_prod_right, measurable_swap_iff, measurable_swap_iff.mpr
@@ -312,7 +312,7 @@ theorem Measurable.lintegral_prod_left
   proof: hf.lintegral_prod_left'
 
 中文:
-定理 Measurable.lintegral_prod_left
+定理 可测.lintegral_prod_left
   结论: [SFinite μ] {f : α -> β -> 实数>=0∞}
   证明: hf.lintegral_prod_left'
 
@@ -343,8 +343,8 @@ instance prod.measureSpace
   body: volume.prod volume
 
 中文:
-实例 prod.measureSpace
-  签名: {α β} [MeasureSpace α] [MeasureSpace β]
+实例 乘积.measureSpace
+  签名: {α β} [测度空间 α] [测度空间 β]
   定义体: volume.prod volume
 
 Depends on / 依赖: volume, volume.prod
@@ -362,7 +362,7 @@ theorem volume_eq_prod
 
 中文:
 定理 volume_eq_prod
-  条件: (α β) [MeasureSpace α] [MeasureSpace β]
+  条件: (α β) [测度空间 α] [测度空间 β]
   证明: rfl
 -/
 theorem volume_eq_prod (α β) [MeasureSpace α] [MeasureSpace β] :
@@ -381,7 +381,7 @@ theorem prod_apply_le
 
 中文:
 定理 prod_apply_le
-  条件: {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   simp only [Measure.prod, ← map_apply measurable_prodMk_left hs]
   exact bind_apply_le _ hs
@@ -412,8 +412,8 @@ theorem prod_prod_le
 
 中文:
 定理 prod_prod_le
-  条件: (s : Set α) (t : Set β)
-  结论: μ.prod ν (s ×ˢ t) <= μ s * ν t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: μ.乘积 ν (s ×ˢ t) <= μ s * ν t
   证明: by
   set S := toMeasurable μ s
   set T := toMeasurable ν t
@@ -450,8 +450,8 @@ instance prod.instNullSingletonClass_fst
     _ = 0 := by simp
 
 中文:
-实例 prod.instNullSingletonClass_fst
-  签名: [NullSingletonClass μ]
+实例 乘积.instNullSingletonClass_fst
+  签名: [NullSingleton类 μ]
   定义体: by rw [singleton_prod_singleton]
     _ <= μ {x} * ν {y} := prod_prod_le _ _
     _ = 0 := by simp
@@ -477,8 +477,8 @@ instance prod.instNullSingletonClass_snd
     _ = 0 := by simp
 
 中文:
-实例 prod.instNullSingletonClass_snd
-  签名: [NullSingletonClass ν]
+实例 乘积.instNullSingletonClass_snd
+  签名: [NullSingleton类 ν]
   定义体: by rw [singleton_prod_singleton]
     _ <= μ {x} * ν {y} := prod_prod_le _ _
     _ = 0 := by simp
@@ -507,7 +507,7 @@ theorem prod_apply
 
 中文:
 定理 prod_apply
-  条件: {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   simp_rw [Measure.prod, bind_apply hs (Measurable.map_prodMk_left (ν := ν)).aemeasurable,
     map_apply measurable_prodMk_left hs]
@@ -539,8 +539,8 @@ theorem prod_prod
 
 中文:
 定理 prod_prod
-  条件: (s : Set α) (t : Set β)
-  结论: μ.prod ν (s ×ˢ t) = μ s * ν t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: μ.乘积 ν (s ×ˢ t) = μ s * ν t
   证明: by
   apply (prod_prod_le s t).antisymm
   -- Formalization is based on https://mathoverflow.net/a/254134/136589
@@ -580,8 +580,8 @@ theorem _root_.MeasureTheory.measureReal_prod_prod
   simp only [measureReal_def, prod_prod, ENNReal.toReal_mul]
 
 中文:
-定理 _root_.MeasureTheory.measureReal_prod_prod
-  条件: (s : Set α) (t : Set β)
+定理 _root_.测度论.measure实数_prod_prod
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   simp only [measureReal_def, prod_prod, ENNReal.toReal_mul]
 
@@ -603,7 +603,7 @@ lemma map_fst_prod
 
 中文:
 引理 map_fst_prod
-  结论: Measure.map Prod.fst (μ.prod ν) = (ν univ) • μ
+  结论: 测度.map 积类型.fst (μ.乘积 ν) = (ν univ) • μ
   证明: by
   ext s hs
   simp [Measure.map_apply measurable_fst hs, ← prod_univ, mul_comm]
@@ -621,8 +621,8 @@ lemma _root_.MeasureTheory.measurePreserving_fst
   proof: ⟨measurable_fst, by rw [map_fst_prod, measure_univ, one_smul]⟩
 
 中文:
-引理 _root_.MeasureTheory.measurePreserving_fst
-  条件: [IsProbabilityMeasure ν]
+引理 _root_.测度论.measurePreserving_fst
+  条件: [是概率测度 ν]
   证明: ⟨measurable_fst, by rw [map_fst_prod, measure_univ, one_smul]⟩
 
 Depends on / 依赖: map_fst_prod, measurable_fst, measure_univ, one_smul
@@ -643,7 +643,7 @@ lemma map_snd_prod
 
 中文:
 引理 map_snd_prod
-  结论: Measure.map Prod.snd (μ.prod ν) = (μ univ) • ν
+  结论: 测度.map 积类型.snd (μ.乘积 ν) = (μ univ) • ν
   证明: by
   ext s hs
   simp [Measure.map_apply measurable_snd hs, ← univ_prod]
@@ -661,8 +661,8 @@ lemma _root_.MeasureTheory.measurePreserving_snd
   proof: ⟨measurable_snd, by rw [map_snd_prod, measure_univ, one_smul]⟩
 
 中文:
-引理 _root_.MeasureTheory.measurePreserving_snd
-  条件: [IsProbabilityMeasure μ]
+引理 _root_.测度论.measurePreserving_snd
+  条件: [是概率测度 μ]
   证明: ⟨measurable_snd, by rw [map_snd_prod, measure_univ, one_smul]⟩
 
 Depends on / 依赖: map_snd_prod, measurable_snd, measure_univ, one_smul
@@ -688,8 +688,8 @@ instance prod.instIsOpenPosMeasure
   ·
 
 中文:
-实例 prod.instIsOpenPosMeasure
-  签名: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+实例 乘积.instIsOpenPosMeasure
+  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   定义体: by
   constructor
   rintro U U_open ⟨⟨x, y⟩, hxy⟩
@@ -734,8 +734,8 @@ theorem FiniteAtFilter.prod
   exact ENNReal.mul_lt_top hμs hνt
 
 中文:
-定理 FiniteAtFilter.prod
-  结论: {X Y : 类型} {m : MeasurableSpace X} {μ : Measure X}
+定理 FiniteAtFilter.乘积
+  结论: {X Y : 类型} {m : 可测空间 X} {μ : 测度 X}
   证明: by
   rcases hμ with ⟨s, hs, hμs⟩
   rcases hν with ⟨t, ht, hνt⟩
@@ -764,8 +764,8 @@ instance prod.instIsLocallyFiniteMeasure
 .prod ν.finiteAt_nhds _ exact μ.finiteAt_nhds _
 
 中文:
-实例 prod.instIsLocallyFiniteMeasure
-  签名: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+实例 乘积.instIsLocallyFiniteMeasure
+  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   定义体: by
     rw [nhds_prod_eq]
 .prod ν.finiteAt_nhds _ exact μ.finiteAt_nhds _
@@ -797,8 +797,8 @@ instance prod.instIsFiniteMeasure
   finiteness
 
 中文:
-实例 prod.instIsFiniteMeasure
-  签名: {α β : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+实例 乘积.instIsFiniteMeasure
+  签名: {α β : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   定义体: by
   constructor
   rw [← univ_prod_univ]; rw [prod_prod]
@@ -826,8 +826,8 @@ instance prod.instIsProbabilityMeasure
   body: ⟨by rw [← univ_prod_univ, prod_prod, measure_univ, measure_univ, mul_one]⟩
 
 中文:
-实例 prod.instIsProbabilityMeasure
-  签名: {α β : 类型} {mα : MeasurableSpace α}
+实例 乘积.instIsProbabilityMeasure
+  签名: {α β : 类型} {mα : 可测空间 α}
   定义体: ⟨by rw [← univ_prod_univ, prod_prod, measure_univ, measure_univ, mul_one]⟩
 
 Depends on / 依赖: measure_univ, mul_one, prod_prod, univ_prod_univ
@@ -855,8 +855,8 @@ instance prod.instIsFiniteMeasureOnCompacts
       mul_lt_top (hK.image continuous_fst).measure_lt_top (hK.image continuous_snd).measure_lt_top
 
 中文:
-实例 prod.instIsFiniteMeasureOnCompacts
-  签名: {α β : 类型} [TopologicalSpace α] [TopologicalSpace β]
+实例 乘积.instIsFiniteMeasureOnCompacts
+  签名: {α β : 类型} [拓扑空间 α] [拓扑空间 β]
   定义体: calc
     μ.prod ν K <= μ.prod ν ((Prod.fst '' K) ×ˢ (Prod.snd '' K)) := measure_mono subset_prod
     _ <= μ (Prod.fst '' K) * ν (Prod.snd '' K) := prod_prod_le _ _
@@ -896,7 +896,7 @@ instance _root_.IsUnifLocDoublingMeasure.prod
   grw [hμr, hνr
 
 中文:
-实例 _root_.IsUnifLocDoublingMeasure.prod
+实例 _root_.是UnifLocDoublingMeasure.乘积
   签名: {X Y : 类型}
   定义体: by
   constructor
@@ -929,8 +929,8 @@ instance IsUnifLocDoublingMeasure.volume_prod
   body: .prod _ _
 
 中文:
-实例 IsUnifLocDoublingMeasure.volume_prod
-  签名: {X Y : 类型} [PseudoMetricSpace X] [MeasureSpace X]
+实例 是UnifLocDoublingMeasure.volume_prod
+  签名: {X Y : 类型} [伪度量空间 X] [测度空间 X]
   定义体: .prod _ _
 -/
 instance IsUnifLocDoublingMeasure.volume_prod {X Y : Type*} [PseudoMetricSpace X] [MeasureSpace X]
@@ -954,7 +954,7 @@ omit [SFinite ν] in
 
 中文:
 定理 ae_measure_lt_top
-  条件: {s : Set (α × β)} (hs : MeasurableSet s) (h2s : (μ.prod ν) s != ∞)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s) (h2s : (μ.乘积 ν) s != ∞)
   证明: by
   rw [prod_apply hs] at h2s
   exact ae_lt_top (measurable_measure_prodMk_left hs) h2s
@@ -983,7 +983,7 @@ theorem measure_prod_null_of_ae_null
 
 中文:
 定理 measure_prod_null_of_ae_null
-  结论: {s : Set (α × β)} (hsm : MeasurableSet s)
+  结论: {s : 集合 (α × β)} (hsm : 可测集 s)
   证明: by
   rw [← nonpos_iff_eq_zero]
   calc
@@ -1010,7 +1010,7 @@ theorem measure_prod_null
 
 中文:
 定理 measure_prod_null
-  条件: {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   rw [prod_apply hs]; rw [lintegral_eq_zero_iff (measurable_measure_prodMk_left hs)]
 
@@ -1038,7 +1038,7 @@ omit [SFinite
 
 中文:
 定理 measure_ae_null_of_prod_null
-  条件: {s : Set (α × β)} (h : μ.prod ν s = 0)
+  条件: {s : 集合 (α × β)} (h : μ.乘积 ν s = 0)
   证明: by
   obtain ⟨t, hst, mt, ht⟩ := exists_measurable_superset_of_null h
   rw [measure_prod_null mt] at ht
@@ -1076,7 +1076,7 @@ theorem AbsolutelyContinuous.prod
 omit [SFinite ν] in
 
 中文:
-定理 AbsolutelyContinuous.prod
+定理 AbsolutelyContinuous.乘积
   条件: [SFinite ν'] (h1 : μ ≪ μ') (h2 : ν ≪ ν')
   证明: by
   refine AbsolutelyContinuous.mk fun s hs h2s => ?_
@@ -1113,7 +1113,7 @@ theorem prod_mono
 中文:
 定理 prod_mono
   条件: [SFinite ν'] (h1 : μ <= μ') (h2 : ν <= ν')
-  结论: μ.prod ν <= μ'.prod ν'
+  结论: μ.乘积 ν <= μ'.乘积 ν'
   证明: by
   apply Measure.le_iff.2 (fun s hs => ?_)
   calc μ.prod ν s
@@ -1138,7 +1138,7 @@ theorem ae_ae_of_ae_prod
 
 中文:
 定理 ae_ae_of_ae_prod
-  条件: {p : α × β -> 命题} (h : 对任意ᵐ z ∂μ.prod ν, p z)
+  条件: {p : α × β -> 命题} (h : 对任意ᵐ z ∂μ.乘积 ν, p z)
   证明: measure_ae_null_of_prod_null h
 
 Depends on / 依赖: measure_ae_null_of_prod_null
@@ -1157,7 +1157,7 @@ theorem ae_ae_eq_curry_of_prod
 
 中文:
 定理 ae_ae_eq_curry_of_prod
-  条件: {γ : 类型} {f g : α × β -> γ} (h : f =ᵐ[μ.prod ν] g)
+  条件: {γ : 类型} {f g : α × β -> γ} (h : f =ᵐ[μ.乘积 ν] g)
   证明: ae_ae_of_ae_prod h
 
 Depends on / 依赖: ae_ae_of_ae_prod
@@ -1195,7 +1195,7 @@ theorem ae_prod_iff_ae_ae
 
 中文:
 定理 ae_prod_iff_ae_ae
-  条件: {p : α × β -> 命题} (hp : MeasurableSet {x | p x})
+  条件: {p : α × β -> 命题} (hp : 可测集 {x | p x})
   证明: measure_prod_null hp.compl
 
 Depends on / 依赖: hp.compl, measure_prod_null
@@ -1217,7 +1217,7 @@ omit [SFinite ν] in
 
 中文:
 定理 ae_prod_mem_iff_ae_ae_mem
-  条件: {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: measure_prod_null hs.compl
 
 omit [SFinite ν] in
@@ -1248,7 +1248,7 @@ omit [SFinite ν] in
 
 中文:
 定理 quasiMeasurePreserving_fst
-  结论: QuasiMeasurePreserving Prod.fst (μ.prod ν) μ
+  结论: 拟保测 积类型.fst (μ.乘积 ν) μ
   证明: by
   refine ⟨measurable_fst, AbsolutelyContinuous.mk fun s hs h2s => ?_⟩
   rw [map_apply measurable_fst hs]; rw [← prod_univ]; rw [← nonpos_iff_eq_zero]
@@ -1284,7 +1284,7 @@ omit [SFinite ν] in
 
 中文:
 定理 quasiMeasurePreserving_snd
-  结论: QuasiMeasurePreserving Prod.snd (μ.prod ν) ν
+  结论: 拟保测 积类型.snd (μ.乘积 ν) ν
   证明: by
   refine ⟨measurable_snd, AbsolutelyContinuous.mk fun s hs h2s => ?_⟩
   rw [map_apply measurable_snd hs]; rw [← univ_prod]; rw [← nonpos_iff_eq_zero]
@@ -1313,7 +1313,7 @@ lemma set_prod_ae_eq
 
 中文:
 引理 set_prod_ae_eq
-  条件: {s s' : Set α} {t t' : Set β} (hs : s =ᵐ[μ] s') (ht : t =ᵐ[ν] t')
+  条件: {s s' : 集合 α} {t t' : 集合 β} (hs : s =ᵐ[μ] s') (ht : t =ᵐ[ν] t')
   证明: (quasiMeasurePreserving_fst.preimage_ae_eq hs).inter
     (quasiMeasurePreserving_snd.preimage_ae_eq ht)
 
@@ -1338,7 +1338,7 @@ omit [SFinite ν] in
 
 中文:
 引理 measure_prod_compl_eq_zero
-  结论: {s : Set α} {t : Set β}
+  结论: {s : 集合 α} {t : 集合 β}
   证明: by
   rw [Set.compl_prod_eq_union]; rw [measure_union_null_iff]
   simp [s_ae_univ, t_ae_univ]
@@ -1365,8 +1365,8 @@ lemma _root_.MeasureTheory.NullMeasurableSet.prod
   ⟨s₀ ×ˢ t₀, ⟨mble_s₀.prod mble_t₀, set_prod_ae_eq s_aeeq_s₀ t_aeeq_t₀⟩⟩
 
 中文:
-引理 _root_.MeasureTheory.NullMeasurableSet.prod
-  结论: {s : Set α} {t : Set β}
+引理 _root_.测度论.NullMeasurableSet.乘积
+  结论: {s : 集合 α} {t : 集合 β}
   证明: let ⟨s₀, mble_s₀, s_aeeq_s₀⟩ := s_mble
   let ⟨t₀, mble_t₀, t_aeeq_t₀⟩ := t_mble
   ⟨s₀ ×ˢ t₀, ⟨mble_s₀.prod mble_t₀, set_prod_ae_eq s_aeeq_s₀ t_aeeq_t₀⟩⟩
@@ -1394,8 +1394,8 @@ lemma _root_.MeasureTheory.NullMeasurableSet.right_of_prod
   rwa [mk_preimage_prod_right hxs] at
 
 中文:
-引理 _root_.MeasureTheory.NullMeasurableSet.right_of_prod
-  结论: {s : Set α} {t : Set β}
+引理 _root_.测度论.NullMeasurableSet.right_of_prod
+  结论: {s : 集合 α} {t : 集合 β}
   证明: by
   rcases h with ⟨u, hum, hu⟩
   obtain ⟨x, hxs, hx⟩ : exists x in s, (Prod.mk x ⁻¹' (s ×ˢ t)) =ᵐ[ν] (Prod.mk x ⁻¹' u) :=
@@ -1422,8 +1422,8 @@ lemma _root_.MeasureTheory.NullMeasurableSet.of_preimage_snd
   proof: .right_of_prod (by rwa [univ_prod]) (NeZero.ne (μ univ))
 
 中文:
-引理 _root_.MeasureTheory.NullMeasurableSet.of_preimage_snd
-  结论: [NeZero μ] {t : Set β}
+引理 _root_.测度论.NullMeasurableSet.of_preimage_snd
+  结论: [NeZero μ] {t : 集合 β}
   证明: .right_of_prod (by rwa [univ_prod]) (NeZero.ne (μ univ))
 
 Depends on / 依赖: NeZero, NeZero.ne, right_of_prod, univ_prod
@@ -1442,7 +1442,7 @@ lemma nullMeasurableSet_preimage_snd
 
 中文:
 引理 nullMeasurableSet_preimage_snd
-  条件: [NeZero μ] {t : Set β}
+  条件: [NeZero μ] {t : 集合 β}
   证明: ⟨.of_preimage_snd, (.preimage · quasiMeasurePreserving_snd)⟩
 
 Depends on / 依赖: of_preimage_snd, preimage, quasiMeasurePreserving_snd
@@ -1486,8 +1486,8 @@ definition FiniteSpanningSetsIn.prod
   · simp_rw [iUnion_unpair_prod, hμ.spanning, hν.spanning, 
 
 中文:
-定义 FiniteSpanningSetsIn.prod
-  签名: {ν : Measure β} {C : Set (Set α)} {D : Set (Set β)}
+定义 FiniteSpanningSetsIn.乘积
+  签名: {ν : 测度 β} {C : 集合 (集合 α)} {D : 集合 (集合 β)}
   定义体: by
   haveI := hν.sigmaFinite
   refine
@@ -1522,7 +1522,7 @@ lemma prod_sum_left
 
 中文:
 引理 prod_sum_left
-  条件: {ι : 类型} (m : ι -> Measure α) (μ : Measure β) [SFinite μ]
+  条件: {ι : 类型} (m : ι -> 测度 α) (μ : 测度 β) [SFinite μ]
   证明: by
   ext s hs
   simp only [prod_apply hs, lintegral_sum_measure, hs, sum_apply]
@@ -1549,7 +1549,7 @@ lemma prod_sum_right
 
 中文:
 引理 prod_sum_right
-  结论: {ι' : 类型} [Countable ι'] (m : Measure α) (m' : ι' -> Measure β)
+  结论: {ι' : 类型} [可数 ι'] (m : 测度 α) (m' : ι' -> 测度 β)
   证明: by
   ext s hs
   simp only [prod_apply hs, hs, sum_apply]
@@ -1579,7 +1579,7 @@ lemma prod_sum
 
 中文:
 引理 prod_sum
-  结论: {ι ι' : 类型} [Countable ι'] (m : ι -> Measure α) (m' : ι' -> Measure β)
+  结论: {ι ι' : 类型} [可数 ι'] (m : ι -> 测度 α) (m' : ι' -> 测度 β)
   证明: by
   simp_rw [prod_sum_left, prod_sum_right, sum_sum]
 
@@ -1600,8 +1600,8 @@ instance prod.instSigmaFinite
   body: (μ.toFiniteSpanningSetsIn.prod ν.toFiniteSpanningSetsIn).sigmaFinite
 
 中文:
-实例 prod.instSigmaFinite
-  签名: {α β : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+实例 乘积.instSigmaFinite
+  签名: {α β : 类型} {_ : 可测空间 α} {μ : 测度 α}
   定义体: (μ.toFiniteSpanningSetsIn.prod ν.toFiniteSpanningSetsIn).sigmaFinite
 
 Depends on / 依赖: sigmaFinite, toFiniteSpanningSetsIn, toFiniteSpanningSetsIn.prod
@@ -1626,8 +1626,8 @@ instance prod.instSFinite
   infer_instance
 
 中文:
-实例 prod.instSFinite
-  签名: {α β : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+实例 乘积.instSFinite
+  签名: {α β : 类型} {_ : 可测空间 α} {μ : 测度 α}
   定义体: by
   have : μ.prod ν =
       Measure.sum (fun (p : Nat × Nat) => (sfiniteSeq μ p.1).prod (sfiniteSeq ν p.2)) := by
@@ -1673,7 +1673,7 @@ theorem prod_eq_generateFrom
 
 中文:
 定理 prod_eq_generateFrom
-  结论: {μ : Measure α} {ν : Measure β} {C : Set (Set α)} {D : Set (Set β)}
+  结论: {μ : 测度 α} {ν : 测度 β} {C : 集合 (集合 α)} {D : 集合 (集合 β)}
   证明: by
   refine
     (h3C.prod h3D).ext
@@ -1716,7 +1716,7 @@ theorem prod_eq
 
 中文:
 定理 prod_eq
-  结论: {μ : Measure α} [SigmaFinite μ] {ν : Measure β} [SigmaFinite ν]
+  结论: {μ : 测度 α} [σ有限 μ] {ν : 测度 β} [σ有限 ν]
   证明: prod_eq_generateFrom generateFrom_measurableSet generateFrom_measurableSet
     isPiSystem_measurableSet isPiSystem_measurableSet μ.toFiniteSpanningSetsIn
     ν.toFiniteSpanningSetsIn fun s hs t ht => h s t hs ht
@@ -1751,7 +1751,7 @@ lemma ext_prod
 
 中文:
 引理 ext_prod
-  结论: {α β : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  结论: {α β : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   证明: by
   ext s hs
   have h_univ : μ univ = ν univ := by
@@ -1793,7 +1793,7 @@ lemma ext_prod_iff
 
 中文:
 引理 ext_prod_iff
-  结论: {α β : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  结论: {α β : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   证明: ⟨fun h s t hs ht => by rw [h], Measure.ext_prod⟩
 
 Depends on / 依赖: Measure, Measure.ext_prod, ext_prod
@@ -1821,7 +1821,7 @@ lemma ext_prod₃
 
 中文:
 引理 ext_prod₃
-  结论: {α β γ : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  结论: {α β γ : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   证明: by
   ext s hs
   have h_univ : μ univ = ν univ := by
@@ -1867,7 +1867,7 @@ lemma ext_prod₃_iff
 
 中文:
 引理 ext_prod₃_iff
-  结论: {α β γ : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  结论: {α β γ : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   证明: ⟨fun h s t u hs ht hu => by rw [h], Measure.ext_prod₃⟩
 
 Depends on / 依赖: Measure, Measure.ext_prod
@@ -1892,7 +1892,7 @@ lemma ext_prod₃_iff'
 
 中文:
 引理 ext_prod₃_iff'
-  结论: {α β γ : 类型} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  结论: {α β γ : 类型} {mα : 可测空间 α} {mβ : 可测空间 β}
   证明: by
   rw [← MeasurableEquiv.prodAssoc.map_measurableEquiv_injective.eq_iff]; rw [ext_prod₃_iff]
   have h_eq (ν : Measure ((α × β) × γ)) {s : Set α} {t : Set β} {u : Set γ}
@@ -1938,7 +1938,7 @@ theorem prod_swap
 
 中文:
 定理 prod_swap
-  结论: map Prod.swap (μ.prod ν) = ν.prod μ
+  结论: map 积类型.swap (μ.乘积 ν) = ν.乘积 μ
   证明: by
   have : sum (fun (i : Nat × Nat) => map Prod.swap ((sfiniteSeq μ i.1).prod (sfiniteSeq ν i.2)))
        = sum (fun (i : Nat × Nat) => map Prod.swap ((sfiniteSeq μ i.2).prod (sfiniteSeq ν i.1))) := by
@@ -1971,7 +1971,7 @@ theorem measurePreserving_swap
 
 中文:
 定理 measurePreserving_swap
-  结论: MeasurePreserving Prod.swap (μ.prod ν) (ν.prod μ)
+  结论: 保测 积类型.swap (μ.乘积 ν) (ν.乘积 μ)
   证明: ⟨measurable_swap, prod_swap⟩
 
 Depends on / 依赖: measurable_swap, prod_swap
@@ -1991,7 +1991,7 @@ theorem prod_apply_symm
 
 中文:
 定理 prod_apply_symm
-  条件: {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   rw [← prod_swap]; rw [map_apply measurable_swap hs]; rw [prod_apply (measurable_swap hs)]
   rfl
@@ -2016,7 +2016,7 @@ _ ↔ forallᵐ y ∂ν, forallᵐ x ∂μ, p x y := ae_prod_iff_ae_ae measurabl
 
 中文:
 定理 ae_ae_comm
-  条件: {p : α -> β -> 命题} (h : MeasurableSet {x : α × β | p x.1 x.2})
+  条件: {p : α -> β -> 命题} (h : 可测集 {x : α × β | p x.1 x.2})
   证明: calc
 _ ↔ forallᵐ x ∂μ.prod ν, p x.1 x.2 := .symm ae_prod_iff_ae_ae h
   _ ↔ forallᵐ x ∂ν.prod μ, p x.2 x.1 := by rw [← prod_swap, ae_map_iff (by fun_prop) h]; simp
@@ -2040,8 +2040,8 @@ lemma _root_.MeasureTheory.NullMeasurableSet.left_of_prod
   exact h.preimage measurePreserving_swap.quasiMeasurePreserving
 
 中文:
-引理 _root_.MeasureTheory.NullMeasurableSet.left_of_prod
-  结论: {s : Set α} {t : Set β}
+引理 _root_.测度论.NullMeasurableSet.left_of_prod
+  结论: {s : 集合 α} {t : 集合 β}
   证明: by
   refine .right_of_prod ?_ ht
   rw [← preimage_swap_prod]
@@ -2064,8 +2064,8 @@ lemma _root_.MeasureTheory.NullMeasurableSet.of_preimage_fst
   proof: .left_of_prod (by rwa [prod_univ]) (NeZero.ne (ν univ))
 
 中文:
-引理 _root_.MeasureTheory.NullMeasurableSet.of_preimage_fst
-  结论: [NeZero ν] {s : Set α}
+引理 _root_.测度论.NullMeasurableSet.of_preimage_fst
+  结论: [NeZero ν] {s : 集合 α}
   证明: .left_of_prod (by rwa [prod_univ]) (NeZero.ne (ν univ))
 
 Depends on / 依赖: NeZero, NeZero.ne, left_of_prod, prod_univ
@@ -2084,7 +2084,7 @@ lemma nullMeasurableSet_preimage_fst
 
 中文:
 引理 nullMeasurableSet_preimage_fst
-  条件: [NeZero ν] {s : Set α}
+  条件: [NeZero ν] {s : 集合 α}
   证明: ⟨.of_preimage_fst, (.preimage · quasiMeasurePreserving_fst)⟩
 
 Depends on / 依赖: of_preimage_fst, preimage, quasiMeasurePreserving_fst
@@ -2122,7 +2122,7 @@ lemma nullMeasurableSet_prod_of_ne_zero
 
 中文:
 引理 nullMeasurableSet_prod_of_ne_zero
-  条件: {s : Set α} {t : Set β} (hs : μ s != 0) (ht : ν t != 0)
+  条件: {s : 集合 α} {t : 集合 β} (hs : μ s != 0) (ht : ν t != 0)
   证明: ⟨fun h => ⟨h.left_of_prod ht, h.right_of_prod hs⟩, fun ⟨hs, ht⟩ => hs.prod ht⟩
 
 Depends on / 依赖: h.left_of_prod, h.right_of_prod, hs.prod, left_of_prod, right_of_prod
@@ -2144,7 +2144,7 @@ lemma nullMeasurableSet_prod
 
 中文:
 引理 nullMeasurableSet_prod
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   证明: by
   rcases eq_or_ne (μ s) 0 with hs | hs; · simp [NullMeasurableSet.of_null, *]
   rcases eq_or_ne (ν t) 0 with ht | ht; · simp [NullMeasurableSet.of_null, *]
@@ -2223,7 +2223,7 @@ theorem prod_restrict
 
 中文:
 定理 prod_restrict
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   rw [← sum_sfiniteSeq μ]; rw [← sum_sfiniteSeq ν]; rw [restrict_sum_of_countable]; rw [restrict_sum_of_countable]; rw [prod_sum]; rw [prod_sum]; rw [restrict_sum_of_countable]
   congr 1
@@ -2253,7 +2253,7 @@ theorem restrict_prod_eq_prod_univ
 
 中文:
 定理 restrict_prod_eq_prod_univ
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   have : ν = ν.restrict Set.univ := Measure.restrict_univ.symm
   rw [this]; rw [Measure.prod_restrict]; rw [← this]
@@ -2284,7 +2284,7 @@ theorem prod_dirac
 中文:
 定理 prod_dirac
   条件: (y : β)
-  结论: μ.prod (dirac y) = map (fun x => (x, y)) μ
+  结论: μ.乘积 (dirac y) = map (fun x => (x, y)) μ
   证明: by
   classical
   rw [← sum_sfiniteSeq μ]; rw [prod_sum_left]; rw [map_sum measurable_prodMk_right.aemeasurable]
@@ -2324,7 +2324,7 @@ theorem dirac_prod
 中文:
 定理 dirac_prod
   条件: (x : α)
-  结论: (dirac x).prod ν = map (Prod.mk x) ν
+  结论: (dirac x).乘积 ν = map (积类型.mk x) ν
   证明: by
   classical
   rw [← sum_sfiniteSeq ν]; rw [prod_sum_right]; rw [map_sum measurable_prodMk_left.aemeasurable]
@@ -2358,7 +2358,7 @@ theorem dirac_prod_dirac
 中文:
 定理 dirac_prod_dirac
   条件: {x : α} {y : β}
-  结论: (dirac x).prod (dirac y) = dirac (x, y)
+  结论: (dirac x).乘积 (dirac y) = dirac (x, y)
   证明: by
   rw [prod_dirac]; rw [map_dirac' measurable_prodMk_right]
 
@@ -2384,8 +2384,8 @@ theorem prod_add
 
 中文:
 定理 prod_add
-  条件: (ν' : Measure β) [SFinite ν']
-  结论: μ.prod (ν + ν') = μ.prod ν + μ.prod ν'
+  条件: (ν' : 测度 β) [SFinite ν']
+  结论: μ.乘积 (ν + ν') = μ.乘积 ν + μ.乘积 ν'
   证明: by
   simp_rw [← sum_sfiniteSeq ν, ← sum_sfiniteSeq ν', sum_add_sum, ← sum_sfiniteSeq μ, prod_sum,
     sum_add_sum]
@@ -2423,8 +2423,8 @@ theorem add_prod
 
 中文:
 定理 add_prod
-  条件: (μ' : Measure α) [SFinite μ']
-  结论: (μ + μ').prod ν = μ.prod ν + μ'.prod ν
+  条件: (μ' : 测度 α) [SFinite μ']
+  结论: (μ + μ').乘积 ν = μ.乘积 ν + μ'.乘积 ν
   证明: by
   simp_rw [← sum_sfiniteSeq μ, ← sum_sfiniteSeq μ', sum_add_sum, ← sum_sfiniteSeq ν, prod_sum,
     sum_add_sum]
@@ -2461,8 +2461,8 @@ theorem zero_prod
 
 中文:
 定理 zero_prod
-  条件: (ν : Measure β)
-  结论: (0 : Measure α).prod ν = 0
+  条件: (ν : 测度 β)
+  结论: (0 : 测度 α).乘积 ν = 0
   证明: by
   rw [Measure.prod]
   exact bind_zero_left _
@@ -2487,8 +2487,8 @@ theorem prod_zero
 
 中文:
 定理 prod_zero
-  条件: (μ : Measure α)
-  结论: μ.prod (0 : Measure β) = 0
+  条件: (μ : 测度 α)
+  结论: μ.乘积 (0 : 测度 β) = 0
   证明: by simp [Measure.prod]
 
 Depends on / 依赖: Measure, Measure.prod
@@ -2511,7 +2511,7 @@ theorem map_prod_map
 
 中文:
 定理 map_prod_map
-  结论: {δ} [MeasurableSpace δ] {f : α -> β} {g : γ -> δ} (μa : Measure α)
+  结论: {δ} [可测空间 δ] {f : α -> β} {g : γ -> δ} (μa : 测度 α)
   证明: by
   simp_rw [← sum_sfiniteSeq μa, ← sum_sfiniteSeq μc, map_sum hf.aemeasurable,
     map_sum hg.aemeasurable, prod_sum, map_sum (hf.prodMap hg).aemeasurable]
@@ -2548,7 +2548,7 @@ lemma prod_smul_left
 
 中文:
 引理 prod_smul_left
-  结论: {μ : Measure α} {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {μ : 测度 α} {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: by
   ext s hs
   rw [prod_apply hs]; rw [Measure.smul_apply]; rw [prod_apply hs]
@@ -2588,7 +2588,7 @@ theorem skew_product
 
 中文:
 定理 skew_product
-  结论: [SFinite μa] [SFinite μc] {f : α -> β} (hf : MeasurePreserving f μa μb)
+  结论: [SFinite μa] [SFinite μc] {f : α -> β} (hf : 保测 f μa μb)
   证明: by
   have : Measurable fun p : α × γ => (f p.1, g p.1 p.2) := (hf.1.comp measurable_fst).prodMk hgm
   use this
@@ -2630,7 +2630,7 @@ theorem prod
 hf.skew_product this ae_of_all _ fun _ => hg.map_eq
 
 中文:
-定理 prod
+定理 乘积
   结论: [SFinite μa] [SFinite μc] {f : α -> β} {g : γ -> δ}
   证明: have : Measurable (uncurry fun _ : α => g) := hg.1.comp measurable_snd
 hf.skew_product this ae_of_all _ fun _ => hg.map_eq
@@ -2659,7 +2659,7 @@ theorem prod_of_right
 
 中文:
 定理 prod_of_right
-  结论: {f : α × β -> γ} {μ : Measure α} {ν : Measure β} {τ : Measure γ}
+  结论: {f : α × β -> γ} {μ : 测度 α} {ν : 测度 β} {τ : 测度 γ}
   证明: by
   refine ⟨hf, ?_⟩
   refine AbsolutelyContinuous.mk fun s hs h2s => ?_
@@ -2694,7 +2694,7 @@ theorem prod_of_left
 
 中文:
 定理 prod_of_left
-  结论: {α β γ} [MeasurableSpace α] [MeasurableSpace β] [MeasurableSpace γ]
+  结论: {α β γ} [可测空间 α] [可测空间 β] [可测空间 γ]
   证明: by
   rw [← prod_swap]
   convert!
@@ -2730,7 +2730,7 @@ theorem fst
 
 中文:
 定理 fst
-  条件: {f : α -> β × γ} (hf : QuasiMeasurePreserving f μ (ν.prod τ))
+  条件: {f : α -> β × γ} (hf : 拟保测 f μ (ν.乘积 τ))
   证明: (quasiMeasurePreserving_fst (μ := ν) (ν := τ)).comp hf
 
 @[fun_prop]
@@ -2752,7 +2752,7 @@ theorem snd
 
 中文:
 定理 snd
-  条件: {f : α -> β × γ} (hf : QuasiMeasurePreserving f μ (ν.prod τ))
+  条件: {f : α -> β × γ} (hf : 拟保测 f μ (ν.乘积 τ))
   证明: (quasiMeasurePreserving_snd (μ := ν) (ν := τ)).comp hf
 
 @[fun_prop]
@@ -2775,7 +2775,7 @@ theorem prodMap
 
 中文:
 定理 prodMap
-  结论: {ω : 类型} {mω : MeasurableSpace ω} {υ : Measure ω}
+  结论: {ω : 类型} {mω : 可测空间 ω} {υ : 测度 ω}
   证明: by
   refine ⟨by fun_prop, ?_⟩
   rw [← map_prod_map _ _ (by fun_prop) (by fun_prop)]
@@ -2808,7 +2808,7 @@ theorem AEMeasurable.prod_swap
   exact hf.comp_measurable measurable_swap
 
 中文:
-定理 AEMeasurable.prod_swap
+定理 几乎处处可测.prod_swap
   结论: [SFinite μ] [SFinite ν] {f : β × α -> γ}
   证明: by
   rw [← Measure.prod_swap] at hf
@@ -2830,7 +2830,7 @@ theorem MeasureTheory.NullMeasurable.comp_fst
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
 中文:
-定理 MeasureTheory.NullMeasurable.comp_fst
+定理 测度论.NullMeasurable.comp_fst
   条件: {f : α -> γ} (hf : NullMeasurable f μ)
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
@@ -2849,8 +2849,8 @@ theorem AEMeasurable.comp_fst
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
 中文:
-定理 AEMeasurable.comp_fst
-  条件: {f : α -> γ} (hf : AEMeasurable f μ)
+定理 几乎处处可测.comp_fst
+  条件: {f : α -> γ} (hf : 几乎处处可测 f μ)
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
 Depends on / 依赖: comp_quasiMeasurePreserving, hf.comp_quasiMeasurePreserving, quasiMeasurePreserving_fst
@@ -2868,7 +2868,7 @@ theorem MeasureTheory.NullMeasurable.comp_snd
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
 中文:
-定理 MeasureTheory.NullMeasurable.comp_snd
+定理 测度论.NullMeasurable.comp_snd
   条件: {f : β -> γ} (hf : NullMeasurable f ν)
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
@@ -2887,8 +2887,8 @@ theorem AEMeasurable.comp_snd
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
 中文:
-定理 AEMeasurable.comp_snd
-  条件: {f : β -> γ} (hf : AEMeasurable f ν)
+定理 几乎处处可测.comp_snd
+  条件: {f : β -> γ} (hf : 几乎处处可测 f ν)
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
 Depends on / 依赖: comp_quasiMeasurePreserving, hf.comp_quasiMeasurePreserving, quasiMeasurePreserving_snd
@@ -2911,7 +2911,7 @@ theorem AEMeasurable.lintegral_prod_right'
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.lintegral_prod_right'
+定理 几乎处处可测.lintegral_prod_right'
   结论: [SFinite ν] {f : α × β -> 实数>=0∞}
   证明: by
   obtain ⟨g, hg, hfg⟩ := hf
@@ -2938,7 +2938,7 @@ theorem AEMeasurable.lintegral_prod_right
   proof: hf.lintegral_prod_right'
 
 中文:
-定理 AEMeasurable.lintegral_prod_right
+定理 几乎处处可测.lintegral_prod_right
   结论: [SFinite ν] {f : α -> β -> 实数>=0∞}
   证明: hf.lintegral_prod_right'
 
@@ -2959,7 +2959,7 @@ theorem AEMeasurable.lintegral_prod_left'
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.lintegral_prod_left'
+定理 几乎处处可测.lintegral_prod_left'
   结论: [SFinite ν] [SFinite μ] {f : α × β -> 实数>=0∞}
   证明: hf.prod_swap.lintegral_prod_right'
 
@@ -2981,7 +2981,7 @@ theorem AEMeasurable.lintegral_prod_left
   proof: hf.lintegral_prod_left'
 
 中文:
-定理 AEMeasurable.lintegral_prod_left
+定理 几乎处处可测.lintegral_prod_left
   结论: [SFinite ν] [SFinite μ] {f : α -> β -> 实数>=0∞}
   证明: hf.lintegral_prod_left'
 
@@ -3035,7 +3035,7 @@ omit [SFinite ν] in
 
 中文:
 定理 lintegral_prod
-  条件: (f : α × β -> 实数>=0∞) (hf : AEMeasurable f (μ.prod ν))
+  条件: (f : α × β -> 实数>=0∞) (hf : 几乎处处可测 f (μ.乘积 ν))
   证明: by
   rw [Measure.prod] at *
   rw [lintegral_bind Measurable.map_prodMk_left.aemeasurable hf]
@@ -3090,8 +3090,8 @@ theorem setLIntegral_prod
   rw [← Measure.prod_restrict]; rw [lintegral_prod _ (by rwa [Measure.prod_restrict])]
 
 中文:
-定理 setLIntegral_prod
-  结论: [SFinite μ] {s : Set α} {t : Set β} (f : α × β -> 实数>=0∞)
+定理 setL整数egral_prod
+  结论: [SFinite μ] {s : 集合 α} {t : 集合 β} (f : α × β -> 实数>=0∞)
   证明: by
   rw [← Measure.prod_restrict]; rw [lintegral_prod _ (by rwa [Measure.prod_restrict])]
 
@@ -3114,7 +3114,7 @@ theorem lintegral_prod_symm
 
 中文:
 定理 lintegral_prod_symm
-  条件: [SFinite μ] (f : α × β -> 实数>=0∞) (hf : AEMeasurable f (μ.prod ν))
+  条件: [SFinite μ] (f : α × β -> 实数>=0∞) (hf : 几乎处处可测 f (μ.乘积 ν))
   证明: by
   simp_rw [← lintegral_prod_swap f]
   exact lintegral_prod _ hf.prod_swap
@@ -3136,7 +3136,7 @@ theorem lintegral_prod_symm'
 
 中文:
 定理 lintegral_prod_symm'
-  条件: [SFinite μ] (f : α × β -> 实数>=0∞) (hf : Measurable f)
+  条件: [SFinite μ] (f : α × β -> 实数>=0∞) (hf : 可测 f)
   证明: lintegral_prod_symm f hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, lintegral_prod_symm
@@ -3159,8 +3159,8 @@ theorem setLIntegral_prod_symm
     rw [← Measure.prod_restrict]; rw [Measure.prod_swap]; rw [Measure.prod_restrict]
 
 中文:
-定理 setLIntegral_prod_symm
-  结论: [SFinite μ] {s : Set α} {t : Set β} (f : α × β -> 实数>=0∞)
+定理 setL整数egral_prod_symm
+  结论: [SFinite μ] {s : 集合 α} {t : 集合 β} (f : α × β -> 实数>=0∞)
   证明: by
   rw [← Measure.prod_restrict]; rw [← lintegral_prod_swap]; rw [Measure.prod_restrict]; rw [setLIntegral_prod]
   · rfl
@@ -3191,7 +3191,7 @@ theorem lintegral_lintegral
 中文:
 定理 lintegral_lintegral
   条件: ⦃f
-  结论: α -> β -> 实数>=0∞⦄ (hf : AEMeasurable (uncurry f) (μ.prod ν)) :
+  结论: α -> β -> 实数>=0∞⦄ (hf : 几乎处处可测 (uncurry f) (μ.乘积 ν)) :
   证明: (lintegral_prod _ hf).symm
 
 Depends on / 依赖: lintegral_prod
@@ -3256,7 +3256,7 @@ theorem lintegral_prod_mul
 
 中文:
 定理 lintegral_prod_mul
-  结论: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   rw [lintegral_prod _ (by fun_prop)]
   simp [lintegral_lintegral_mul hf hg]
@@ -3285,7 +3285,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: (ρ : Measure (α × β))
+  签名: (ρ : 测度 (α × β))
   定义体: ρ.map Prod.fst
 
 Depends on / 依赖: Prod.fst
@@ -3305,8 +3305,8 @@ theorem fst_apply
 
 中文:
 定理 fst_apply
-  条件: {s : Set α} (hs : MeasurableSet s)
-  结论: ρ.fst s = ρ (Prod.fst ⁻¹' s)
+  条件: {s : 集合 α} (hs : 可测集 s)
+  结论: ρ.fst s = ρ (积类型.fst ⁻¹' s)
   证明: by
   rw [fst]; rw [Measure.map_apply measurable_fst hs]
 
@@ -3342,7 +3342,7 @@ theorem fst_zero
 
 中文:
 定理 fst_zero
-  结论: fst (0 : Measure (α × β)) = 0
+  结论: fst (0 : 测度 (α × β)) = 0
   证明: by simp [fst]
 -/
 @[simp] theorem fst_zero : fst (0 : Measure (α × β)) = 0 := by simp [fst]
@@ -3382,7 +3382,7 @@ instance fst.instIsFiniteMeasure
 
 中文:
 实例 fst.instIsFiniteMeasure
-  签名: [IsFiniteMeasure ρ]
+  签名: [是有限测度 ρ]
   定义体: by
   rw [fst]
   infer_instance
@@ -3405,7 +3405,7 @@ instance fst.instIsProbabilityMeasure
 
 中文:
 实例 fst.instIsProbabilityMeasure
-  签名: [IsProbabilityMeasure ρ]
+  签名: [是概率测度 ρ]
   定义体: by
     rw [fst_univ]
     exact measure_univ
@@ -3433,7 +3433,7 @@ instance fst.instIsZeroOrProbabilityMeasure
 
 中文:
 实例 fst.instIsZeroOrProbabilityMeasure
-  签名: [IsZeroOrProbabilityMeasure ρ]
+  签名: [是ZeroOrProbabilityMeasure ρ]
   定义体: by
   rcases eq_zero_or_isProbabilityMeasure ρ with h | h
   · simp only [h, fst_zero]
@@ -3465,8 +3465,8 @@ lemma fst_prod
 
 中文:
 引理 fst_prod
-  条件: [IsProbabilityMeasure ν]
-  结论: (μ.prod ν).fst = μ
+  条件: [是概率测度 ν]
+  结论: (μ.乘积 ν).fst = μ
   证明: by
   ext1 s hs
   rw [fst_apply hs]; rw [← prod_univ]; rw [prod_prod]; rw [measure_univ]; rw [mul_one]
@@ -3491,7 +3491,7 @@ theorem fst_map_prodMk₀
 
 中文:
 定理 fst_map_prodMk₀
-  结论: {X : α -> β} {Y : α -> γ} {μ : Measure α}
+  结论: {X : α -> β} {Y : α -> γ} {μ : 测度 α}
   证明: by
   by_cases hX : AEMeasurable X μ
   · ext1 s hs
@@ -3522,7 +3522,7 @@ theorem fst_map_prodMk
 
 中文:
 定理 fst_map_prodMk
-  结论: {X : α -> β} {Y : α -> γ} {μ : Measure α}
+  结论: {X : α -> β} {Y : α -> γ} {μ : 测度 α}
   证明: fst_map_prodMk₀ hY.aemeasurable
 
 @[simp]
@@ -3545,7 +3545,7 @@ lemma fst_add
 
 中文:
 引理 fst_add
-  条件: {μ ν : Measure (α × β)}
+  条件: {μ ν : 测度 (α × β)}
   结论: (μ + ν).fst = μ.fst + ν.fst
   证明: Measure.map_add _ _ measurable_fst
 
@@ -3567,8 +3567,8 @@ lemma fst_sum
 
 中文:
 引理 fst_sum
-  条件: {ι : 类型} (μ : ι -> Measure (α × β))
-  结论: (sum μ).fst = sum (fun n => (μ n).fst)
+  条件: {ι : 类型} (μ : ι -> 测度 (α × β))
+  结论: (求和 μ).fst = 求和 (fun n => (μ n).fst)
   证明: Measure.map_sum measurable_fst.aemeasurable
 
 @[gcongr]
@@ -3590,7 +3590,7 @@ theorem fst_mono
 
 中文:
 定理 fst_mono
-  条件: {μ : Measure (α × β)} (h : ρ <= μ)
+  条件: {μ : 测度 (α × β)} (h : ρ <= μ)
   结论: ρ.fst <= μ.fst
   证明: map_mono h measurable_fst
 
@@ -3608,7 +3608,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: (ρ : Measure (α × β))
+  签名: (ρ : 测度 (α × β))
   定义体: ρ.map Prod.snd
 
 Depends on / 依赖: Prod.snd
@@ -3628,8 +3628,8 @@ theorem snd_apply
 
 中文:
 定理 snd_apply
-  条件: {s : Set β} (hs : MeasurableSet s)
-  结论: ρ.snd s = ρ (Prod.snd ⁻¹' s)
+  条件: {s : 集合 β} (hs : 可测集 s)
+  结论: ρ.snd s = ρ (积类型.snd ⁻¹' s)
   证明: by
   rw [snd]; rw [Measure.map_apply measurable_snd hs]
 
@@ -3665,7 +3665,7 @@ theorem snd_zero
 
 中文:
 定理 snd_zero
-  结论: snd (0 : Measure (α × β)) = 0
+  结论: snd (0 : 测度 (α × β)) = 0
   证明: by simp [snd]
 -/
 @[simp] theorem snd_zero : snd (0 : Measure (α × β)) = 0 := by simp [snd]
@@ -3705,7 +3705,7 @@ instance snd.instIsFiniteMeasure
 
 中文:
 实例 snd.instIsFiniteMeasure
-  签名: [IsFiniteMeasure ρ]
+  签名: [是有限测度 ρ]
   定义体: by
   rw [snd]
   infer_instance
@@ -3728,7 +3728,7 @@ instance snd.instIsProbabilityMeasure
 
 中文:
 实例 snd.instIsProbabilityMeasure
-  签名: [IsProbabilityMeasure ρ]
+  签名: [是概率测度 ρ]
   定义体: by
     rw [snd_univ]
     exact measure_univ
@@ -3756,7 +3756,7 @@ instance snd.instIsZeroOrProbabilityMeasure
 
 中文:
 实例 snd.instIsZeroOrProbabilityMeasure
-  签名: [IsZeroOrProbabilityMeasure ρ]
+  签名: [是ZeroOrProbabilityMeasure ρ]
   定义体: by
   rcases eq_zero_or_isProbabilityMeasure ρ with h | h
   · simp only [h, snd_zero]
@@ -3788,8 +3788,8 @@ lemma snd_prod
 
 中文:
 引理 snd_prod
-  条件: [IsProbabilityMeasure μ]
-  结论: (μ.prod ν).snd = ν
+  条件: [是概率测度 μ]
+  结论: (μ.乘积 ν).snd = ν
   证明: by
   ext1 s hs
   rw [snd_apply hs]; rw [← univ_prod]; rw [prod_prod]; rw [measure_univ]; rw [one_mul]
@@ -3814,7 +3814,7 @@ theorem snd_map_prodMk₀
 
 中文:
 定理 snd_map_prodMk₀
-  条件: {X : α -> β} {Y : α -> γ} {μ : Measure α} (hX : AEMeasurable X μ)
+  条件: {X : α -> β} {Y : α -> γ} {μ : 测度 α} (hX : 几乎处处可测 X μ)
   证明: by
   by_cases hY : AEMeasurable Y μ
   · ext1 s hs
@@ -3845,7 +3845,7 @@ theorem snd_map_prodMk
 
 中文:
 定理 snd_map_prodMk
-  条件: {X : α -> β} {Y : α -> γ} {μ : Measure α} (hX : Measurable X)
+  条件: {X : α -> β} {Y : α -> γ} {μ : 测度 α} (hX : 可测 X)
   证明: snd_map_prodMk₀ hX.aemeasurable
 
 @[simp]
@@ -3868,7 +3868,7 @@ lemma snd_add
 
 中文:
 引理 snd_add
-  条件: {μ ν : Measure (α × β)}
+  条件: {μ ν : 测度 (α × β)}
   结论: (μ + ν).snd = μ.snd + ν.snd
   证明: Measure.map_add _ _ measurable_snd
 
@@ -3890,8 +3890,8 @@ lemma snd_sum
 
 中文:
 引理 snd_sum
-  条件: {ι : 类型} (μ : ι -> Measure (α × β))
-  结论: (sum μ).snd = sum (fun n => (μ n).snd)
+  条件: {ι : 类型} (μ : ι -> 测度 (α × β))
+  结论: (求和 μ).snd = 求和 (fun n => (μ n).snd)
   证明: map_sum measurable_snd.aemeasurable
 
 @[gcongr]
@@ -3913,7 +3913,7 @@ theorem snd_mono
 
 中文:
 定理 snd_mono
-  条件: {μ : Measure (α × β)} (h : ρ <= μ)
+  条件: {μ : 测度 (α × β)} (h : ρ <= μ)
   结论: ρ.snd <= μ.snd
   证明: map_mono h measurable_snd
 
@@ -3933,7 +3933,7 @@ lemma fst_map_swap
 
 中文:
 引理 fst_map_swap
-  结论: (ρ.map Prod.swap).fst = ρ.snd
+  结论: (ρ.map 积类型.swap).fst = ρ.snd
   证明: by
   rw [Measure.fst]; rw [Measure.map_map measurable_fst measurable_swap]
   rfl
@@ -3954,7 +3954,7 @@ lemma snd_map_swap
 
 中文:
 引理 snd_map_swap
-  结论: (ρ.map Prod.swap).snd = ρ.fst
+  结论: (ρ.map 积类型.swap).snd = ρ.fst
   证明: by
   rw [Measure.snd]; rw [Measure.map_map measurable_snd measurable_swap]
   rfl
@@ -3985,8 +3985,8 @@ theorem _root_.MeasureTheory.measurePreserving_prodAssoc
     simp_rw [map_apply MeasurableEquiv.prod
 
 中文:
-定理 _root_.MeasureTheory.measurePreserving_prodAssoc
-  结论: (μa : Measure α) (μb : Measure β)
+定理 _root_.测度论.measurePreserving_prodAssoc
+  结论: (μa : 测度 α) (μb : 测度 β)
   证明: MeasurableEquiv.prodAssoc.measurable
   map_eq := by
     ext s hs
@@ -4021,8 +4021,8 @@ theorem _root_.MeasureTheory.volume_preserving_prodAssoc
   proof: MeasureTheory.measurePreserving_prodAssoc volume volume volume
 
 中文:
-定理 _root_.MeasureTheory.volume_preserving_prodAssoc
-  结论: {α₁ β₁ γ₁ : 类型} [MeasureSpace α₁]
+定理 _root_.测度论.volume_preserving_prodAssoc
+  结论: {α₁ β₁ γ₁ : 类型} [测度空间 α₁]
   证明: MeasureTheory.measurePreserving_prodAssoc volume volume volume
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.measurePreserving_prodAssoc, measurePreserving_prodAssoc, volume

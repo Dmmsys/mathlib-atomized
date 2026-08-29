@@ -58,7 +58,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: {y | forall ⦃x⦄, x in s -> 0 <= p x y}
   zero_mem' := by simp
   add_mem' {u v} hu hv x hx := by rw [map_add]; exact add_nonneg (hu hx) (hv hx)
@@ -175,7 +175,7 @@ lemma dual_antitone
 
 中文:
 引理 dual_antitone
-  结论: Antitone (dual p)
+  结论: 递减 (dual p)
   证明: fun _ _ h => dual_anti h
 
 Depends on / 依赖: dual_anti
@@ -210,7 +210,7 @@ lemma dual_union
 
 中文:
 引理 dual_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: dual p (s union t) = dual p s ⊓ dual p t
   证明: by aesop
 -/
@@ -228,7 +228,7 @@ lemma dual_insert
 
 中文:
 引理 dual_insert
-  条件: (x : M) (s : Set M)
+  条件: (x : M) (s : 集合 M)
   结论: dual p (insert x s) = dual p {x} ⊓ dual p s
   证明: by
   rw [insert_eq]; rw [dual_union]
@@ -250,7 +250,7 @@ lemma dual_iUnion
 
 中文:
 引理 dual_iUnion
-  条件: {ι : Sort*} (f : ι -> Set M)
+  条件: {ι : 类型层*} (f : ι -> 集合 M)
   结论: dual p (⋃ i, f i) = ⨅ i, dual p (f i)
   证明: by
   ext; simp [forall_comm (α := M)]
@@ -272,7 +272,7 @@ lemma dual_sUnion
 
 中文:
 引理 dual_sUnion
-  条件: (S : Set (Set M))
+  条件: (S : 集合 (集合 M))
   结论: dual p (⋃₀ S) = sInf (dual p '' S)
   证明: by
   ext; simp [forall_comm (α := M)]
@@ -291,8 +291,8 @@ lemma dual_eq_iInter_dual_singleton
   proof: by ext; simp
 
 中文:
-引理 dual_eq_iInter_dual_singleton
-  条件: (s : Set M)
+引理 dual_eq_i整数er_dual_singleton
+  条件: (s : 集合 M)
   证明: by ext; simp
 -/
 lemma dual_eq_iInter_dual_singleton (s : Set M) :
@@ -324,7 +324,7 @@ lemma subset_dual_flip_iff_subset_dual
 
 中文:
 引理 subset_dual_flip_iff_subset_dual
-  条件: {s : Set M} {t : Set N}
+  条件: {s : 集合 M} {t : 集合 N}
   证明: by
   constructor <;> exact (le_trans subset_dual_dual <| dual_antitone ·)
 -/
@@ -361,7 +361,7 @@ lemma dual_flip_dual_dual_flip
 
 中文:
 引理 dual_flip_dual_dual_flip
-  条件: (s : Set N)
+  条件: (s : 集合 N)
   证明: dual_dual_flip_dual _
 
 @[simp]
@@ -387,7 +387,7 @@ lemma dual_hull
 
 中文:
 引理 dual_hull
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: dual p (hull R s) = dual p s
   证明: by
   refine le_antisymm (dual_anti Submodule.subset_span) (fun x hx y hy => ?_)
@@ -442,7 +442,7 @@ lemma dual_image
 
 中文:
 引理 dual_image
-  条件: (s : Set M') (q : M' ->ₗ[R] M)
+  条件: (s : 集合 M') (q : M' ->ₗ[R] M)
   结论: dual p (q '' s) = dual (p.comp q) s
   证明: by
   ext; simp
@@ -461,7 +461,7 @@ lemma dual_eq_dual_id_image
 
 中文:
 引理 dual_eq_dual_id_image
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: dual p s = dual .id (p '' s)
   证明: by simp
 -/
@@ -495,7 +495,7 @@ lemma dual_eq_comap_dual_eval
 
 中文:
 引理 dual_eq_comap_dual_eval
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   ext; simp
 -/
@@ -526,7 +526,7 @@ exact (hy <| mem_univ x).antisymm' by simpa using hy mem_univ (-x)
 
 中文:
 引理 dual_univ
-  条件: (hp : Injective p.flip)
+  条件: (hp : 单射 p.flip)
   结论: dual p univ = 0
   证明: by
   refine le_antisymm (fun y hy => (map_eq_zero_iff p.flip hp).1 ?_) (by simp)
@@ -554,7 +554,7 @@ lemma dual_neg
 
 中文:
 引理 dual_neg
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   结论: dual p (-s) = -dual p s
   证明: by ext; simp
 -/

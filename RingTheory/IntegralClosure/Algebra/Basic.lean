@@ -42,8 +42,8 @@ theorem Subalgebra.isIntegral_iff
     (forall_congr' fun _ => (isIntegral_algHom_iff S.val Subtype.val_injective).symm) Subtype.forall
 
 中文:
-定理 Subalgebra.isIntegral_iff
-  条件: (S : Subalgebra R B)
+定理 子代数.is整数egral_iff
+  条件: (S : 子代数 R B)
   证明: Algebra.isIntegral_def.trans .trans
     (forall_congr' fun _ => (isIntegral_algHom_iff S.val Subtype.val_injective).symm) Subtype.forall
 
@@ -67,8 +67,8 @@ theorem Algebra.IsIntegral.of_injective
   proof: ⟨fun _ => (isIntegral_algHom_iff f hf).mp (isIntegral _)⟩
 
 中文:
-定理 Algebra.IsIntegral.of_injective
-  结论: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+定理 代数.是整.of_injective
+  结论: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: ⟨fun _ => (isIntegral_algHom_iff f hf).mp (isIntegral _)⟩
 
 Depends on / 依赖: isIntegral, isIntegral_algHom_iff
@@ -86,8 +86,8 @@ theorem Algebra.IsIntegral.of_surjective
   proof: isIntegral_def.mpr fun b => let ⟨a, ha⟩ := hf b; ha ▸ (isIntegral_def.mp ‹_› a).map f
 
 中文:
-定理 Algebra.IsIntegral.of_surjective
-  结论: [Algebra.Is整数egral R A]
+定理 代数.是整.of_surjective
+  结论: [代数.是整 R A]
   证明: isIntegral_def.mpr fun b => let ⟨a, ha⟩ := hf b; ha ▸ (isIntegral_def.mp ‹_› a).map f
 
 Depends on / 依赖: isIntegral_def, isIntegral_def.mp, isIntegral_def.mpr
@@ -106,9 +106,9 @@ theorem AlgEquiv.isIntegral_iff
   proof: ⟨fun h => h.of_injective e.symm e.symm.injective, fun h => h.of_injective e e.injective⟩
 
 中文:
-定理 AlgEquiv.isIntegral_iff
+定理 代数等价.is整数egral_iff
   条件: (e : A ≃ₐ[R] B)
-  结论: Algebra.Is整数egral R A ↔ Algebra.Is整数egral R B
+  结论: 代数.是整 R A ↔ 代数.是整 R B
   证明: ⟨fun h => h.of_injective e.symm e.symm.injective, fun h => h.of_injective e e.injective⟩
 
 Depends on / 依赖: e.injective, e.symm, e.symm.injective, h.of_injective, injective, of_injective
@@ -127,8 +127,8 @@ instance Module.End.isIntegral
   body: ⟨LinearMap.exists_monic_and_aeval_eq_zero R⟩
 
 中文:
-实例 Module.End.isIntegral
-  签名: {M : 类型} [AddCommGroup M] [Module R M] [Module.Finite R M]
+实例 模.End.is整数egral
+  签名: {M : 类型} [加法交换群 M] [模 R M] [模.有限 R M]
   定义体: ⟨LinearMap.exists_monic_and_aeval_eq_zero R⟩
 
 Depends on / 依赖: LinearMap, LinearMap.exists_monic_and_aeval_eq_zero, exists_monic_and_aeval_eq_zero
@@ -150,9 +150,9 @@ theorem IsIntegral.of_finite
     (Algebra.IsIntegral.isIntegral _)
 
 中文:
-定理 IsIntegral.of_finite
-  条件: [Module.Finite R B] (x : B)
-  结论: Is整数egral R x
+定理 是整.of_finite
+  条件: [模.有限 R B] (x : B)
+  结论: 是整 R x
   证明: (isIntegral_algHom_iff (Algebra.lmul R B) Algebra.lmul_injective).mp
     (Algebra.IsIntegral.isIntegral _)
 
@@ -172,9 +172,9 @@ theorem isIntegral_of_noetherian
   proof: .of_finite R x
 
 中文:
-定理 isIntegral_of_noetherian
-  条件: (_ : IsNoetherian R B) (x : B)
-  结论: Is整数egral R x
+定理 is整数egral_of_noetherian
+  条件: (_ : 是Noether R B) (x : B)
+  结论: 是整 R x
   证明: .of_finite R x
 
 Depends on / 依赖: of_finite
@@ -192,8 +192,8 @@ instance Algebra.IsIntegral.of_finite
   body: ⟨.of_finite R⟩
 
 中文:
-实例 Algebra.IsIntegral.of_finite
-  签名: [Module.Finite R B]
+实例 代数.是整.of_finite
+  签名: [模.有限 R B]
   定义体: ⟨.of_finite R⟩
 
 Depends on / 依赖: of_finite
@@ -210,8 +210,8 @@ lemma Algebra.isIntegral_of_surjective
   proof: .of_surjective (Algebra.ofId R B) H
 
 中文:
-引理 Algebra.isIntegral_of_surjective
-  条件: (H : Function.Surjective (algebraMap R B))
+引理 代数.is整数egral_of_surjective
+  条件: (H : 函数.满射 (algebraMap R B))
   证明: .of_surjective (Algebra.ofId R B) H
 
 Depends on / 依赖: Algebra, Algebra.ofId, of_surjective
@@ -230,8 +230,8 @@ theorem IsIntegral.of_mem_of_fg
   (isIntegral_algHom_iff S.val Subtype.val_injective).mpr (.of_finite R (⟨x, hx⟩ : S))
 
 中文:
-定理 IsIntegral.of_mem_of_fg
-  结论: (S : Subalgebra R B)
+定理 是整.of_mem_of_fg
+  结论: (S : 子代数 R B)
   证明: have : Module.Finite R S := .of_fg HS
   (isIntegral_algHom_iff S.val Subtype.val_injective).mpr (.of_finite R (⟨x, hx⟩ : S))
 
@@ -251,8 +251,8 @@ theorem isIntegral_of_submodule_noetherian
   proof: .of_mem_of_fg _ ((Submodule.fg_top _).mp <| H.noetherian _) _ hx
 
 中文:
-定理 isIntegral_of_submodule_noetherian
-  结论: (S : Subalgebra R B)
+定理 is整数egral_of_submodule_noetherian
+  结论: (S : 子代数 R B)
   证明: .of_mem_of_fg _ ((Submodule.fg_top _).mp <| H.noetherian _) _ hx
 
 Depends on / 依赖: H.noetherian, Submodule, Submodule.fg_top, fg_top, noetherian, of_mem_of_fg
@@ -275,8 +275,8 @@ theorem isIntegral_of_smul_mem_submodule
       add_mem' := fun {a b} ha hb n hn => (add_smul a b n).symm ▸ N.add_mem (ha _ hn) (
 
 中文:
-定理 isIntegral_of_smul_mem_submodule
-  结论: [IsDomain A] {M : 类型} [AddCommGroup M] [Module R M]
+定理 is整数egral_of_smul_mem_submodule
+  结论: [是整环 A] {M : 类型} [加法交换群 M] [模 R M]
   证明: by
   let A' : Subalgebra R A :=
     { carrier := { x | forall n in N, x • n in N }
@@ -334,9 +334,9 @@ theorem RingHom.Finite.to_isIntegral
 alias RingHom.IsIntegral.of_finite := RingHom.Finite.to_isIntegral
 
 中文:
-定理 RingHom.Finite.to_isIntegral
-  条件: (h : f.Finite)
-  结论: f.Is整数egral
+定理 环态射.有限.to_is整数egral
+  条件: (h : f.有限)
+  结论: f.是整
   证明: letI := f.toAlgebra
   fun _ => IsIntegral.of_mem_of_fg ⊤ h.1 _ trivial
 
@@ -367,7 +367,7 @@ theorem RingHom.IsIntegralElem.of_mem_closure
       (Algebra.mem_adjoin_iff
 
 中文:
-定理 RingHom.IsIntegralElem.of_mem_closure
+定理 环态射.Is整数egralElem.of_mem_closure
   结论: {x y z : S} (hx : f.Is整数egralElem x)
   证明: by
   let : Algebra R S := f.toAlgebra
@@ -408,7 +408,7 @@ nonrec theorem IsIntegral.add {x y : A} (hx : IsIntegral R x) (hy : IsIntegral R
   hx.add (algebraMap R A) hy
 
 中文:
-定理 RingHom.IsIntegralElem.add
+定理 环态射.Is整数egralElem.add
   结论: (f : R ->+* S) {x y : S}
   证明: hx.of_mem_closure f hy
     Subring.add_mem _ (Subring.subset_closure (Or.inl rfl)) (Subring.subset_closure (Or.inr rfl))
@@ -442,7 +442,7 @@ theorem RingHom.IsIntegralElem.neg
   proof: hx.of_mem_closure f hx (Subring.neg_mem _ (Subring.subset_closure (Or.inl rfl)))
 
 中文:
-定理 RingHom.IsIntegralElem.neg
+定理 环态射.Is整数egralElem.neg
   条件: {x : S} (hx : f.Is整数egralElem x)
   结论: f.Is整数egralElem (-x)
   证明: hx.of_mem_closure f hx (Subring.neg_mem _ (Subring.subset_closure (Or.inl rfl)))
@@ -464,7 +464,7 @@ theorem RingHom.IsIntegralElem.of_neg
 @[simp]
 
 中文:
-定理 RingHom.IsIntegralElem.of_neg
+定理 环态射.Is整数egralElem.of_neg
   条件: {x : S} (h : f.Is整数egralElem (-x))
   结论: f.Is整数egralElem x
   证明: neg_neg x ▸ h.neg
@@ -487,7 +487,7 @@ theorem RingHom.IsIntegralElem.neg_iff
   proof: ⟨fun h => h.of_neg, fun h => h.neg⟩
 
 中文:
-定理 RingHom.IsIntegralElem.neg_iff
+定理 环态射.Is整数egralElem.neg_iff
   条件: {x : S}
   结论: f.Is整数egralElem (-x) ↔ f.Is整数egralElem x
   证明: ⟨fun h => h.of_neg, fun h => h.neg⟩
@@ -507,9 +507,9 @@ theorem IsIntegral.neg
   proof: .of_mem_of_fg _ hx.fg_adjoin_singleton _ (Subalgebra.neg_mem _ <| Algebra.subset_adjoin rfl)
 
 中文:
-定理 IsIntegral.neg
-  条件: {x : B} (hx : Is整数egral R x)
-  结论: Is整数egral R (-x)
+定理 是整.neg
+  条件: {x : B} (hx : 是整 R x)
+  结论: 是整 R (-x)
   证明: .of_mem_of_fg _ hx.fg_adjoin_singleton _ (Subalgebra.neg_mem _ <| Algebra.subset_adjoin rfl)
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, Subalgebra, Subalgebra.neg_mem, fg_adjoin_singleton, hx.fg_adjoin_singleton, neg_mem, of_mem_of_fg, subset_adjoin
@@ -529,9 +529,9 @@ theorem IsIntegral.of_neg
 @[simp]
 
 中文:
-定理 IsIntegral.of_neg
-  条件: {x : B} (hx : Is整数egral R (-x))
-  结论: Is整数egral R x
+定理 是整.of_neg
+  条件: {x : B} (hx : 是整 R (-x))
+  结论: 是整 R x
   证明: neg_neg x ▸ hx.neg
 
 @[simp]
@@ -552,9 +552,9 @@ theorem IsIntegral.neg_iff
   proof: ⟨IsIntegral.of_neg, IsIntegral.neg⟩
 
 中文:
-定理 IsIntegral.neg_iff
+定理 是整.neg_iff
   条件: {x : B}
-  结论: Is整数egral R (-x) ↔ Is整数egral R x
+  结论: 是整 R (-x) ↔ 是整 R x
   证明: ⟨IsIntegral.of_neg, IsIntegral.neg⟩
 
 Depends on / 依赖: IsIntegral, IsIntegral.neg, IsIntegral.of_neg, of_neg
@@ -576,7 +576,7 @@ nonrec theorem IsIntegral.sub {x y : A} (hx : IsIntegral R x) (hy : IsIntegral R
   hx.sub (algebraMap R A) hy
 
 中文:
-定理 RingHom.IsIntegralElem.sub
+定理 环态射.Is整数egralElem.sub
   条件: {x y : S} (hx : f.Is整数egralElem x) (hy : f.Is整数egralElem y)
   证明: by
   simpa only [sub_eq_add_neg] using hx.add f (hy.neg f)
@@ -609,7 +609,7 @@ nonrec theorem IsIntegral.mul {x y : A} (hx : IsIntegral R x) (hy : IsIntegral R
   hx.mul (algebraMap R A) hy
 
 中文:
-定理 RingHom.IsIntegralElem.mul
+定理 环态射.Is整数egralElem.mul
   条件: {x y : S} (hx : f.Is整数egralElem x) (hy : f.Is整数egralElem y)
   证明: hx.of_mem_closure f hy
     (Subring.mul_mem _ (Subring.subset_closure (Or.inl rfl)) (Subring.subset_closure (Or.inr rfl)))
@@ -639,8 +639,8 @@ theorem IsIntegral.smul
     rw [← algebraMap_smul S]; apply Subalgebra.smul_mem; exact Algebra.subset_adjoin rfl
 
 中文:
-定理 IsIntegral.smul
-  结论: {R} [CommSemiring R] [Algebra R B] [Algebra S B] [Algebra R S]
+定理 是整.smul
+  结论: {R} [交换半环 R] [代数 R B] [代数 S B] [代数 R S]
   证明: .of_mem_of_fg _ hx.fg_adjoin_singleton _ by
     rw [← algebraMap_smul S]; apply Subalgebra.smul_mem; exact Algebra.subset_adjoin rfl
 
@@ -663,9 +663,9 @@ theorem isIntegral_intCast
   exact isIntegral_algebraMap
 
 中文:
-定理 isIntegral_intCast
+定理 is整数egral_intCast
   条件: (n : 整数)
-  结论: Is整数egral R (n : B)
+  结论: 是整 R (n : B)
   证明: by
   rw [← map_intCast (_ : R ->+* B) n]
   exact isIntegral_algebraMap
@@ -688,9 +688,9 @@ theorem isIntegral_natCast
   exact isIntegral_intCast a
 
 中文:
-定理 isIntegral_natCast
+定理 is整数egral_natCast
   条件: (a : 自然数)
-  结论: Is整数egral R (a : B)
+  结论: 是整 R (a : B)
   证明: by
   rw [← Int.cast_natCast]
   exact isIntegral_intCast a
@@ -718,7 +718,7 @@ definition integralClosure
 
 中文:
 定义 integralClosure
-  签名: : Subalgebra R A where
+  签名: : 子代数 R A where
   定义体: { r | IsIntegral R r }
   zero_mem' := isIntegral_zero
   one_mem' := isIntegral_one
@@ -748,7 +748,7 @@ theorem mem_integralClosure_iff
 中文:
 定理 mem_integralClosure_iff
   条件: {a : A}
-  结论: a in integralClosure R A ↔ Is整数egral R a
+  结论: a in integralClosure R A ↔ 是整 R a
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -768,8 +768,8 @@ instance Algebra.IsIntegral.prod
     (Algebra.isIntegral_def.mp ‹_› x.1).pair (Algebra.isIntegral_def.mp ‹_› x.2)
 
 中文:
-实例 Algebra.IsIntegral.prod
-  签名: [Algebra.Is整数egral R A] [Algebra.Is整数egral R B]
+实例 代数.是整.乘积
+  签名: [代数.是整 R A] [代数.是整 R B]
   定义体: Algebra.isIntegral_def.mpr fun x =>
     (Algebra.isIntegral_def.mp ‹_› x.1).pair (Algebra.isIntegral_def.mp ‹_› x.2)
 
@@ -801,8 +801,8 @@ theorem IsIntegral.tmul
     Algebra.TensorProduct.includeLeftRingHom_comp_algebraMap)
 
 中文:
-定理 IsIntegral.tmul
-  结论: [Ring B] [Algebra R A] [Algebra R B]
+定理 是整.tmul
+  结论: [环 B] [代数 R A] [代数 R B]
   证明: by
   rw [← mul_one x]; rw [← smul_eq_mul]; rw [← smul_tmul']
   exact smul _ (h.map_of_comp_eq (algebraMap R A)
@@ -829,8 +829,8 @@ instance Algebra.IsIntegral.tensorProduct
   body: p.induction_on isIntegral_zero (fun _ s => .tmul _ <| int.1 s) (fun _ _ => .add)
 
 中文:
-实例 Algebra.IsIntegral.tensorProduct
-  签名: [CommRing B]
+实例 代数.是整.tensorProduct
+  签名: [交换环 B]
   定义体: p.induction_on isIntegral_zero (fun _ s => .tmul _ <| int.1 s) (fun _ _ => .add)
 
 Depends on / 依赖: induction_on, isIntegral_zero, p.induction_on
@@ -862,7 +862,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulSemiringAction G (integralClosure R K)
+  签名: MulSemiring作用 G (integralClosure R K)
   定义体: fun g x => ⟨g • (x : K), x.2.map (MulSemiringAction.toAlgHom R K g)⟩
   one_smul x := by ext; exact one_smul G (x : K)
   mul_smul g h x := by ext; exact mul_smul g h (x : K)
@@ -908,7 +908,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass G R (integralClosure R K)
+  签名: 标量交换类 G R (integralClosure R K)
   定义体: Subtype.ext (smul_comm g r (k : K))
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -926,7 +926,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulDistribClass G (integralClosure R K) K
+  签名: SMulDistrib类 G (integralClosure R K) K
   定义体: smul_mul' g (r : K) k
 
 Depends on / 依赖: smul_mul

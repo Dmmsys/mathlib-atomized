@@ -52,7 +52,7 @@ definition listChoice
 
 中文:
 定义 listChoice
-  签名: {l : List ι} (q : 对任意 i in l, Quotient (S i))
+  签名: {l : 列表 ι} (q : 对任意 i in l, 商 (S i))
   定义体: match l with
   | [] => ⟦nofun⟧
   | i :: _ => Quotient.liftOn₂ (List.Pi.head (i := i) q)
@@ -86,7 +86,7 @@ theorem listChoice_mk
 
 中文:
 定理 listChoice_mk
-  条件: {l : List ι} (a : 对任意 i in l, α i)
+  条件: {l : 列表 ι} (a : 对任意 i in l, α i)
   结论: listChoice (S := S) (⟦a · ·⟧) = ⟦a⟧
   证明: match l with
   | [] => Quotient.sound nofun
@@ -122,7 +122,7 @@ lemma list_ind
 
 中文:
 引理 list_ind
-  结论: {l : List ι} {C : (对任意 i in l, Quotient (S i)) -> 命题}
+  结论: {l : 列表 ι} {C : (对任意 i in l, 商 (S i)) -> 命题}
   证明: match l with
   | [] => cast (congr_arg _ (funext₂ nofun)) (f nofun)
   | i :: l => by
@@ -174,7 +174,7 @@ lemma ind_fintype_pi
 
 中文:
 引理 ind_fintype_pi
-  结论: {C : (对任意 i, Quotient (S i)) -> 命题}
+  结论: {C : (对任意 i, 商 (S i)) -> 命题}
   证明: by
   have {m : Multiset ι} (C : (forall i in m, Quotient (S i)) -> Prop) :
       forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
@@ -205,7 +205,7 @@ lemma induction_on_fintype_pi
 
 中文:
 引理 induction_on_fintype_pi
-  结论: {C : (对任意 i, Quotient (S i)) -> 命题}
+  结论: {C : (对任意 i, 商 (S i)) -> 命题}
   证明: ind_fintype_pi f q
 
 Depends on / 依赖: ind_fintype_pi
@@ -229,7 +229,7 @@ definition finChoice
 
 中文:
 定义 finChoice
-  签名: (q : 对任意 i, Quotient (S i))
+  签名: (q : 对任意 i, 商 (S i))
   定义体: by
   let e := Equiv.subtypeQuotientEquivQuotientSubtype (fun l : List ι => forall i, i in l)
     (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
@@ -290,7 +290,7 @@ lemma eval_finChoice
 
 中文:
 引理 eval_finChoice
-  条件: (f : 对任意 i, Quotient (S i))
+  条件: (f : 对任意 i, 商 (S i))
   证明: induction_on_fintype_pi f (fun a => by rw [finChoice_eq]; rfl)
 
 Depends on / 依赖: finChoice_eq, induction_on_fintype_pi
@@ -311,7 +311,7 @@ definition finLiftOn
 
 中文:
 定义 finLiftOn
-  签名: (q : 对任意 i, Quotient (S i)) (f : (对任意 i, α i) -> β)
+  签名: (q : 对任意 i, 商 (S i)) (f : (对任意 i, α i) -> β)
   定义体: (finChoice q).liftOn f h
 
 @[simp]
@@ -339,7 +339,7 @@ lemma finLiftOn_empty
 
 中文:
 引理 finLiftOn_empty
-  条件: [e : IsEmpty ι] (q : 对任意 i, Quotient (S i))
+  条件: [e : 是空 ι] (q : 对任意 i, 商 (S i))
   证明: by
   ext f h
   dsimp [finLiftOn]
@@ -445,7 +445,7 @@ definition finHRecOn
 
 中文:
 定义 finHRecOn
-  签名: {C : (对任意 i, Quotient (S i)) -> Sort*}
+  签名: {C : (对任意 i, 商 (S i)) -> 类型层*}
   定义体: eval_finChoice q ▸ (finChoice q).hrecOn f h
 
 Depends on / 依赖: eval_finChoice, finChoice, hrecOn
@@ -471,7 +471,7 @@ definition finRecOn
 
 中文:
 定义 finRecOn
-  签名: {C : (对任意 i, Quotient (S i)) -> Sort*}
+  签名: {C : (对任意 i, 商 (S i)) -> 类型层*}
   定义体: finHRecOn q f (eqRec_heq_iff.mp <| heq_of_eq <| h · · ·)
 
 @[simp]
@@ -503,7 +503,7 @@ lemma finHRecOn_mk
 
 中文:
 引理 finHRecOn_mk
-  结论: {C : (对任意 i, Quotient (S i)) -> Sort*}
+  结论: {C : (对任意 i, 商 (S i)) -> 类型层*}
   证明: by
   ext f h
   refine eq_of_heq ((eqRec_heq _ _).trans ?_)
@@ -535,7 +535,7 @@ lemma finRecOn_mk
 
 中文:
 引理 finRecOn_mk
-  结论: {C : (对任意 i, Quotient (S i)) -> Sort*}
+  结论: {C : (对任意 i, 商 (S i)) -> 类型层*}
   证明: by
   unfold finRecOn
   simp
@@ -628,7 +628,7 @@ lemma finLiftOn_empty
 
 中文:
 引理 finLiftOn_empty
-  条件: [e : IsEmpty ι] (q : 对任意 i, Trunc (α i))
+  条件: [e : 是空 ι] (q : 对任意 i, Trunc (α i))
   证明: funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_empty q) _ _
 
 @[simp]
@@ -698,7 +698,7 @@ definition finRecOn
 
 中文:
 定义 finRecOn
-  签名: {C : (对任意 i, Trunc (α i)) -> Sort*}
+  签名: {C : (对任意 i, Trunc (α i)) -> 类型层*}
   定义体: Quotient.finRecOn q (f ·) (fun _ _ _ => h _ _)
 
 Depends on / 依赖: Quotient, Quotient.finRecOn, finRecOn
@@ -724,7 +724,7 @@ lemma finRecOn_mk
 
 中文:
 引理 finRecOn_mk
-  结论: {C : (对任意 i, Trunc (α i)) -> Sort*}
+  结论: {C : (对任意 i, Trunc (α i)) -> 类型层*}
   证明: by
   unfold finRecOn
   simp

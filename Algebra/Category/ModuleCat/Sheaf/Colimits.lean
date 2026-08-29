@@ -42,8 +42,8 @@ instance [HasColimitsOfShape
     exact hasColimit_of_iso e
 
 中文:
-实例 [HasColimitsOfShape
-  签名: K (PresheafOfModules.{v} R.obj)] :
+实例 [有形状余极限
+  签名: K (预模层.{v} R.obj)] :
   定义体: by
     let e : F ≅ (F ⋙ forget R) ⋙ PresheafOfModules.sheafification (𝟙 R.obj) :=
       Functor.isoWhiskerLeft F
@@ -68,8 +68,8 @@ instance [HasColimitsOfSize.{w',
   signature: w} (PresheafOfModules.{v} R.obj)] :
 
 中文:
-实例 [HasColimitsOfSize.{w',
-  签名: w} (PresheafOfModules.{v} R.obj)] :
+实例 [有余limitsOfSize.{w',
+  签名: w} (预模层.{v} R.obj)] :
 -/
 instance [HasColimitsOfSize.{w', w} (PresheafOfModules.{v} R.obj)] :
     HasColimitsOfSize.{w', w} (SheafOfModules.{v} R) where

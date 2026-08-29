@@ -35,8 +35,8 @@ theorem IsCoatomic.of_isChain_bounded
 exact hyz.ne hmax.eq_of
 
 中文:
-定理 IsCoatomic.of_isChain_bounded
-  结论: {α : 类型} [PartialOrder α] [OrderTop α]
+定理 是余原子的.of_isChain_bounded
+  结论: {α : 类型} [偏序 α] [有顶序 α]
   证明: by
   refine ⟨fun x => le_top.eq_or_lt.imp_right fun hx => ?_⟩
   have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
@@ -66,8 +66,8 @@ theorem IsAtomic.of_isChain_bounded
   proof: isCoatomic_dual_iff_isAtomic.mp IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm
 
 中文:
-定理 IsAtomic.of_isChain_bounded
-  结论: {α : 类型} [PartialOrder α] [OrderBot α]
+定理 是原子的.of_isChain_bounded
+  结论: {α : 类型} [偏序 α] [有底序 α]
   证明: isCoatomic_dual_iff_isAtomic.mp IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm
 
 Depends on / 依赖: IsCoatomic, IsCoatomic.of_isChain_bounded, hc.symm, isCoatomic_dual_iff_isAtomic, isCoatomic_dual_iff_isAtomic.mp, of_isChain_bounded

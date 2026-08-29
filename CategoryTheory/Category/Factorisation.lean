@@ -42,7 +42,7 @@ structure Factorisation
     - ι_π : ι ≫ π = f  [default: by cat_disch]
 
 中文:
-结构 Factorisation
+结构 分解
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (4 个):
     - mid : C
@@ -83,8 +83,8 @@ structure Hom
     - h_π : h ≫ e.π = d.π  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (d e : Factorisation f)
+结构 态射
+  参数: (d e : 分解 f)
   公理与运算 (3 个):
     - h : d.mid ⟶ e.mid
     - ι_h : d.ι ≫ h = e.ι  [默认: by cat_disch]
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Factorisation f)
+  签名: 箭图 (分解 f)
   定义体: Factorisation.Hom d e
 
 @[simps]
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{max u v} (Factorisation f)
+  签名: 范畴.{最大值 u v} (分解 f)
   定义体: { h := 𝟙 _ }
   comp f g := { h := f.h ≫ g.h }
 -/
@@ -162,7 +162,7 @@ definition initial
 
 中文:
 定义 initial
-  签名: : Factorisation f where
+  签名: : 分解 f where
   定义体: X
   ι := 𝟙 _
   π := f
@@ -185,7 +185,7 @@ definition initialHom
 
 中文:
 定义 initialHom
-  签名: (d : Factorisation f)
+  签名: (d : 分解 f)
   定义体: d.ι
 -/
 protected def initialHom (d : Factorisation f) :
@@ -205,7 +205,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique ((Factorisation.initial : Factorisation f) ⟶ d)
+  签名: 唯一 ((分解.initial : 分解 f) ⟶ d)
   定义体: Factorisation.initialHom d
   uniq f := by apply Factorisation.Hom.ext; simp [← f.ι_h]
 
@@ -229,7 +229,7 @@ definition terminal
 
 中文:
 定义 terminal
-  签名: : Factorisation f where
+  签名: : 分解 f where
   定义体: Y
   ι := f
   π := 𝟙 _
@@ -252,7 +252,7 @@ definition terminalHom
 
 中文:
 定义 terminalHom
-  签名: (d : Factorisation f)
+  签名: (d : 分解 f)
   定义体: d.π
 -/
 protected def terminalHom (d : Factorisation f) :
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (d ⟶ (Factorisation.terminal : Factorisation f))
+  签名: 唯一 (d ⟶ (分解.terminal : 分解 f))
   定义体: Factorisation.terminalHom d
   uniq f := by apply Factorisation.Hom.ext; simp [← f.h_π]
 
@@ -294,7 +294,7 @@ definition IsInitial_initial
 
 中文:
 定义 IsInitial_initial
-  签名: : IsInitial (Factorisation.initial : Factorisation f)
+  签名: : IsInitial (分解.initial : 分解 f)
   定义体: IsInitial.ofUnique _
 
 Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
@@ -311,7 +311,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInitial (Factorisation f)
+  签名: HasInitial (分解 f)
   定义体: Limits.hasInitial_of_unique Factorisation.initial
 
 Depends on / 依赖: Factorisation, Factorisation.initial, Limits, Limits.hasInitial_of_unique, hasInitial_of_unique, initial
@@ -328,7 +328,7 @@ definition IsTerminal_terminal
 
 中文:
 定义 IsTerminal_terminal
-  签名: : IsTerminal (Factorisation.terminal : Factorisation f)
+  签名: : 是终止 (分解.terminal : 分解 f)
   定义体: IsTerminal.ofUnique _
 
 Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.isoOfNatIso_hom_, IsTerminal, IsTerminal.ofUnique, Iso.trans_hom, colimitCoyonedaHomIsoLimit, colimitHomIsoLimitYoneda, coyonedaLemma, ofUnique, trans_hom, uliftFunctor
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTerminal (Factorisation f)
+  签名: 有终止 (分解 f)
   定义体: Limits.hasTerminal_of_unique Factorisation.terminal
 
 Depends on / 依赖: Factorisation, Factorisation.terminal, Limits, Limits.hasTerminal_of_unique, hasTerminal_of_unique, terminal
@@ -366,7 +366,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Factorisation f ⥤ C where
+  签名: : 分解 f ⥤ C where
   定义体: Factorisation.mid
   map f := f.h
 

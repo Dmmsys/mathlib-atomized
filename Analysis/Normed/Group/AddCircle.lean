@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAddCommGroup (AddCircle p)
+  签名: 赋范交换加群 (AddCircle p)
   定义体: QuotientAddGroup.instNormedAddCommGroup _
 
 @[simp]
@@ -464,7 +464,7 @@ theorem coe_real_preimage_closedBall_inter_eq
 
 中文:
 定理 coe_real_preimage_closedBall_inter_eq
-  结论: {x ε : 实数} (s : Set 实数)
+  结论: {x ε : 实数} (s : 集合 实数)
   证明: by
   rcases le_or_gt (|p| / 2) ε with hε | hε
   · rcases eq_or_ne p 0 with (rfl | hp)
@@ -551,7 +551,7 @@ theorem exists_norm_eq_of_isOfFinAddOrder
   rw [← hm]; rw [norm_div_natCast]
 
 中文:
-定理 exists_norm_eq_of_isOfFinAddOrder
+定理 存在_norm_eq_of_isOfFinAddOrder
   条件: {u : AddCircle p} (hu : IsOfFinAddOrder u)
   证明: by
   let n := addOrderOf u

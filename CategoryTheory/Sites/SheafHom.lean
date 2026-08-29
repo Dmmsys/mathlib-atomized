@@ -63,7 +63,7 @@ definition presheafHom
 
 中文:
 定义 presheafHom
-  签名: : Cᵒᵖ ⥤ Type _ where
+  签名: : Cᵒᵖ ⥤ 类型 _ where
   定义体: (Over.forget X.unop).op ⋙ F ⟶ (Over.forget X.unop).op ⋙ G
   map f := ↾(Functor.whiskerLeft (Over.map f.unop).op)
   map_id := by
@@ -217,7 +217,7 @@ lemma PresheafHom.isAmalgamation_iff
 
 中文:
 引理 PresheafHom.isAmalgamation_iff
-  结论: {X : C} (S : Sieve X)
+  结论: {X : C} (S : 筛 X)
   证明: by
   constructor
   · intro h Y g hg
@@ -281,8 +281,8 @@ lemma exists_app
     
 
 中文:
-引理 exists_app
-  条件: (hx : x.Compatible) (g : Y ⟶ X)
+引理 存在_app
+  条件: (hx : x.余mpatible) (g : Y ⟶ X)
   证明: by
   let c : Cone ((Presieve.diagram (Sieve.pullback g S).arrows).op ⋙ G) :=
     { pt := F.obj (op Y)
@@ -328,7 +328,7 @@ definition app
 
 中文:
 定义 app
-  签名: (hx : x.Compatible) (g : Y ⟶ X)
+  签名: (hx : x.余mpatible) (g : Y ⟶ X)
   定义体: (exists_app hG x hx g).choose
 
 Depends on / 依赖: exists_app
@@ -346,7 +346,7 @@ lemma app_cond
 
 中文:
 引理 app_cond
-  条件: (hx : x.Compatible) (g : Y ⟶ X) {Z : C} (p : Z ⟶ Y) (hp : S (p ≫ g))
+  条件: (hx : x.余mpatible) (g : Y ⟶ X) {Z : C} (p : Z ⟶ Y) (hp : S (p ≫ g))
   证明: (exists_app hG x hx g).choose_spec p hp
 
 Depends on / 依赖: choose_spec, exists_app
@@ -445,8 +445,8 @@ lemma Presheaf.IsSheaf.hom
     (fun _ _ => ((Presheaf.isSheaf_iff_isLimit J G).1 hG _ (J.pullback_stable _ hS)).some)
 
 中文:
-引理 Presheaf.IsSheaf.hom
-  条件: (hG : Presheaf.IsSheaf J G)
+引理 预层.是层.hom
+  条件: (hG : 预层.是层 J G)
   证明: by
   rw [isSheaf_iff_isSheaf_of_type]
   intro X S hS
@@ -480,7 +480,7 @@ definition sheafHom'
 
 中文:
 定义 sheafHom'
-  签名: (F G : Sheaf J A)
+  签名: (F G : 层 J A)
   定义体: ((J.overPullback A X.unop).obj F ⟶ (J.overPullback A X.unop).obj G)
   map f := ↾((J.overMapPullback A f.unop).map)
   map_id X := by
@@ -512,8 +512,8 @@ definition sheafHom'Iso
     (fun _ => Sheaf.homEquiv.toIso) (fun _ => rfl)
 
 中文:
-定义 sheafHom'Iso
-  签名: (F G : Sheaf J A)
+定义 sheafHom'同构
+  签名: (F G : 层 J A)
   定义体: NatIso.ofComponents
     (fun _ => Sheaf.homEquiv.toIso) (fun _ => rfl)
 -/
@@ -533,7 +533,7 @@ definition sheafHom
 
 中文:
 定义 sheafHom
-  签名: (F G : Sheaf J A)
+  签名: (F G : 层 J A)
   定义体: sheafHom' F G
   property := (Presheaf.isSheaf_of_iso_iff (sheafHom'Iso F G)).2 (G.2.hom F.1)
 
@@ -555,7 +555,7 @@ definition sheafHomSectionsEquiv
 
 中文:
 定义 sheafHomSectionsEquiv
-  签名: (F G : Sheaf J A)
+  签名: (F G : 层 J A)
   定义体: ((Functor.sectionsFunctor Cᵒᵖ).mapIso (sheafHom'Iso F G)).toEquiv.trans
     ((presheafHomSectionsEquiv F.1 G.1).trans Sheaf.homEquiv.symm)
 
@@ -578,7 +578,7 @@ lemma sheafHomSectionsEquiv_symm_apply_coe_apply
 
 中文:
 引理 sheafHomSectionsEquiv_symm_apply_coe_apply
-  条件: {F G : Sheaf J A} (φ : F ⟶ G) (X : Cᵒᵖ)
+  条件: {F G : 层 J A} (φ : F ⟶ G) (X : Cᵒᵖ)
   证明: (rfl)
 
 Depends on / 依赖: intros, sub_eq_zero, sum_eq_zero_iff_of_nonneg

@@ -52,7 +52,7 @@ structure GradedRingHom
     - map_mem({i : ι} {x : A}) : x in 𝒜 i -> toRingHom x in ℬ i
 
 中文:
-结构 GradedRingHom
+结构 分次环态射
   参数: (𝒜 : ι -> σ) (ℬ : ι -> τ)
   继承: A ->+* B
   公理与运算 (1 个):
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (𝒜 ->+*ᵍ ℬ) A B
+  签名: 函数状 (𝒜 ->+*ᵍ ℬ) A B
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -169,7 +169,7 @@ initialize_simps_projections GradedRingHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: RingHomClass (𝒜 ->+*ᵍ ℬ) A B
+  签名: 环态射类 (𝒜 ->+*ᵍ ℬ) A B
   定义体: f.map_add'
   map_zero f := f.map_zero'
   map_mul f := f.map_mul'
@@ -204,7 +204,7 @@ theorem toRingHom_eq_toRingHom
 中文:
 定理 toRingHom_eq_toRingHom
   条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: RingHomClass.toRingHom f = f.toRingHom
+  结论: 环态射类.toRingHom f = f.toRingHom
   证明: rfl
 
 @[simp]
@@ -266,7 +266,7 @@ theorem coe_ofClass
 
 中文:
 定理 coe_ofClass
-  结论: {F : 类型} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]
+  结论: {F : 类型} [函数状 F A B] [GradedFunLike F 𝒜 ℬ] [环态射类 F A B]
   证明: rfl
 -/
 theorem coe_ofClass {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]
@@ -475,7 +475,7 @@ ext DFunLike.congr_fun (F := A ->+* B) h
 
 中文:
 定理 coe_ringHom_injective
-  结论: (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).Injective
+  结论: (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).单射
   证明: fun _ _ h =>
 ext DFunLike.congr_fun (F := A ->+* B) h
 -/
@@ -637,7 +637,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(GradedRingHom.id 𝒜) = _root_.id
+  结论: ⇑(分次环态射.id 𝒜) = _root_.id
   证明: rfl
 
 @[simp]
@@ -661,7 +661,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : A)
-  结论: GradedRingHom.id 𝒜 x = x
+  结论: 分次环态射.id 𝒜 x = x
   证明: rfl
 
 @[simp]
@@ -680,7 +680,7 @@ theorem toRingHom_id
 
 中文:
 定理 toRingHom_id
-  结论: (id 𝒜).toRingHom = RingHom.id A
+  结论: (id 𝒜).toRingHom = 环态射.id A
   证明: rfl
 -/
 theorem toRingHom_id : (id 𝒜).toRingHom = RingHom.id A :=
@@ -820,7 +820,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (𝒜 ->+*ᵍ 𝒜) where one
+  签名: : 幺 (𝒜 ->+*ᵍ 𝒜) where one
   定义体: id _
 -/
 instance instOne : One (𝒜 ->+*ᵍ 𝒜) where one := id _
@@ -834,7 +834,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (𝒜 ->+*ᵍ 𝒜) where mul
+  签名: : 乘法 (𝒜 ->+*ᵍ 𝒜) where mul
   定义体: comp
 -/
 instance instMul : Mul (𝒜 ->+*ᵍ 𝒜) where mul := comp
@@ -917,7 +917,7 @@ npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 
 中文:
 实例 instMonoid
-  签名: : Monoid (𝒜 ->+*ᵍ 𝒜) where
+  签名: : 幺半群 (𝒜 ->+*ᵍ 𝒜) where
   定义体: comp_id
   one_mul := id_comp
   mul_assoc _ _ _ := comp_assoc _ _ _
@@ -967,7 +967,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : Function.Surjective f)
+  条件: {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : 函数.满射 f)
   证明: ⟨fun h => ext hf.forall.2 (GradedRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[simp]
@@ -989,7 +989,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : Function.Injective g)
+  条件: {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : 函数.单射 g)
   证明: ⟨fun h => ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: comp_apply
@@ -1011,7 +1011,7 @@ definition gradedAddHom
 
 中文:
 定义 gradedAddHom
-  签名: [AddSubmonoidClass σ A] [AddSubmonoidClass τ B]
+  签名: [加法子幺半群类 σ A] [加法子幺半群类 τ B]
   定义体: ⟨f x, map_mem f x.2⟩
   map_zero' := by ext; simp
   map_add' x y := by ext; simp
@@ -1034,7 +1034,7 @@ map_mul' _ _ := Subtype.ext map_mul ..
 
 中文:
 定义 gradedZeroRingHom
-  签名: [AddSubmonoidClass σ A] [AddSubmonoidClass τ B] [AddMonoid ι]
+  签名: [加法子幺半群类 σ A] [加法子幺半群类 τ B] [加法幺半群 ι]
   定义体: f.gradedAddHom 0
 map_one' := Subtype.ext map_one _
 map_mul' _ _ := Subtype.ext map_mul ..
@@ -1069,7 +1069,7 @@ lemma DirectSum.decompose_map
     DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, Graded
 
 中文:
-引理 DirectSum.decompose_map
+引理 直和.decompose_map
   条件: (f : F) {x : A}
   证明: by
   classical
@@ -1121,7 +1121,7 @@ lemma GradedRingHom.map_directSumDecompose
   proof: _root_.map_directSumDecompose ..
 
 中文:
-引理 GradedRingHom.map_directSumDecompose
+引理 分次环态射.map_directSumDecompose
   条件: (f : 𝒜 ->+*ᵍ ℬ) {x : A} {i : ι}
   证明: _root_.map_directSumDecompose ..
 -/

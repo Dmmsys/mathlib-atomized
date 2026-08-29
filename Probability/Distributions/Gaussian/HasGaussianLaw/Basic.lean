@@ -76,8 +76,8 @@ lemma IsGaussian.hasGaussianLaw
   proof: inferInstance
 
 中文:
-引理 IsGaussian.hasGaussianLaw
-  条件: [IsGaussian (P.map X)]
+引理 是Gaussian.hasGaussianLaw
+  条件: [是Gaussian (P.map X)]
   结论: HasGaussianLaw X P where
   证明: inferInstance
 -/
@@ -97,8 +97,8 @@ lemma IsGaussian.hasGaussianLaw_id
 @[fun_prop]
 
 中文:
-引理 IsGaussian.hasGaussianLaw_id
-  条件: {μ : Measure E} [IsGaussian μ]
+引理 是Gaussian.hasGaussianLaw_id
+  条件: {μ : 测度 E} [是Gaussian μ]
   结论: HasGaussianLaw id μ where
   证明: by rwa [Measure.map_id]
 
@@ -122,7 +122,7 @@ lemma HasGaussianLaw.aemeasurable
 中文:
 引理 HasGaussianLaw.aemeasurable
   条件: (hX : HasGaussianLaw X P)
-  结论: AEMeasurable X P
+  结论: 几乎处处可测 X P
   证明: AEMeasurable.of_map_ne_zero hX.isGaussian_map.toIsProbabilityMeasure.ne_zero
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.of_map_ne_zero, hX.isGaussian_map.toIsProbabilityMeasure.ne_zero, isGaussian_map, ne_zero, of_map_ne_zero, toIsProbabilityMeasure
@@ -143,7 +143,7 @@ lemma HasGaussianLaw.isProbabilityMeasure
 中文:
 引理 HasGaussianLaw.isProbabilityMeasure
   条件: (hX : HasGaussianLaw X P)
-  结论: IsProbabilityMeasure P
+  结论: 是概率测度 P
   证明: haveI := hX.isGaussian_map
     P.isProbabilityMeasure_of_map X
 
@@ -163,8 +163,8 @@ lemma HasLaw.hasGaussianLaw
   proof: by rwa [hX.map_eq]
 
 中文:
-引理 HasLaw.hasGaussianLaw
-  条件: {μ : Measure E} (hX : HasLaw X μ P) [IsGaussian μ]
+引理 有Law.hasGaussianLaw
+  条件: {μ : 测度 E} (hX : 有Law X μ P) [是Gaussian μ]
   证明: by rwa [hX.map_eq]
 
 Depends on / 依赖: hX.map_eq, map_eq
@@ -187,7 +187,7 @@ lemma HasGaussianLaw.map_of_measurable
 
 中文:
 引理 HasGaussianLaw.map_of_measurable
-  结论: {F : 类型} [TopologicalSpace F] [AddCommMonoid F]
+  结论: {F : 类型} [拓扑空间 F] [加法交换幺半群 F]
   证明: by
     have := hX.isGaussian_map
     rw [← AEMeasurable.map_map_of_aemeasurable]
@@ -218,7 +218,7 @@ lemma HasGaussianLaw.map_eq_gaussianReal
   all_goals fun_prop
 
 中文:
-引理 HasGaussianLaw.map_eq_gaussianReal
+引理 HasGaussianLaw.map_eq_gaussian实数
   条件: {X : Ω -> 实数} (h : HasGaussianLaw X P)
   证明: by
   rw [h.isGaussian_map.eq_gaussianReal (.map _ _)]; rw [integral_map]; rw [variance_map]
@@ -251,7 +251,7 @@ lemma of_subsingleton
 
 中文:
 引理 of_subsingleton
-  条件: [NormedSpace 实数 E] [Subsingleton E] [IsProbabilityMeasure P]
+  条件: [赋范空间 实数 E] [子单例 E] [是概率测度 P]
   证明: by
     have : IsProbabilityMeasure (P.map X) := P.isProbabilityMeasure_map (by fun_prop)
     exact .of_subsingleton
@@ -275,7 +275,7 @@ lemma charFun_map_eq
 
 中文:
 引理 charFun_map_eq
-  条件: [InnerProductSpace 实数 E] (t : E) (hX : HasGaussianLaw X P)
+  条件: [内积空间 实数 E] (t : E) (hX : HasGaussianLaw X P)
   证明: by
   rw [hX.isGaussian_map.charFun_eq]; rw [integral_map hX.aemeasurable (by fun_prop)]; rw [variance_map (by fun_prop) hX.aemeasurable]; rw [integral_complex_ofReal]; rw [Function.comp_def]
 
@@ -299,7 +299,7 @@ lemma _root_.ProbabilityTheory.hasGaussianLaw_iff_charFun_map_eq
 
 中文:
 引理 _root_.ProbabilityTheory.hasGaussianLaw_iff_charFun_map_eq
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: h.charFun_map_eq
   mpr h := by
     refine ⟨isGaussian_iff_charFun_eq.2 fun t => ?_⟩
@@ -406,7 +406,7 @@ lemma memLp
 
 中文:
 引理 memLp
-  结论: [CompleteSpace E] [SecondCountableTopology E] (hX : HasGaussianLaw X P)
+  结论: [完备空间 E] [第二可数拓扑 E] (hX : HasGaussianLaw X P)
   证明: by
   rw [← Function.id_comp X]; rw [← memLp_map_measure_iff]
   · exact hX.isGaussian_map.memLp_id _ p hp
@@ -431,7 +431,7 @@ lemma memLp_two
 
 中文:
 引理 memLp_two
-  条件: [CompleteSpace E] [SecondCountableTopology E] (hX : HasGaussianLaw X P)
+  条件: [完备空间 E] [第二可数拓扑 E] (hX : HasGaussianLaw X P)
   证明: hX.memLp (by norm_num)
 
 Depends on / 依赖: hX.memLp
@@ -449,7 +449,7 @@ lemma integrable
 
 中文:
 引理 integrable
-  条件: [CompleteSpace E] [SecondCountableTopology E] (hX : HasGaussianLaw X P)
+  条件: [完备空间 E] [第二可数拓扑 E] (hX : HasGaussianLaw X P)
   证明: memLp_one_iff_integrable.1 hX.memLp (by norm_num)
 
 Depends on / 依赖: hX.memLp, memLp_one_iff_integrable
@@ -812,7 +812,7 @@ lemma prodMk
 
 中文:
 引理 prodMk
-  条件: [Finite ι] (hX : HasGaussianLaw (fun ω => (X · ω)) P) (i j : ι)
+  条件: [有限 ι] (hX : HasGaussianLaw (fun ω => (X · ω)) P) (i j : ι)
   证明: letI := Fintype.ofFinite ι
   hX.map (.prod (.proj i) (.proj j))
 
@@ -834,7 +834,7 @@ lemma toLp_pi
 
 中文:
 引理 toLp_pi
-  条件: [Finite ι] (p : 实数>=0∞) [Fact (1 <= p)] (hX : HasGaussianLaw (fun ω => (X · ω)) P)
+  条件: [有限 ι] (p : 实数>=0∞) [Fact (1 <= p)] (hX : HasGaussianLaw (fun ω => (X · ω)) P)
   证明: have := Fintype.ofFinite ι
   hX.map_equiv (PiLp.continuousLinearEquiv p Real E).symm
 
@@ -858,8 +858,8 @@ lemma sum
   ext; simp
 
 中文:
-引理 sum
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] [MeasurableSpace E]
+引理 求和
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] [可测空间 E]
   证明: by
   convert! hX.map (∑ i, .proj i)
   ext; simp
@@ -885,7 +885,7 @@ lemma fun_sum
 
 中文:
 引理 fun_sum
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] [MeasurableSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] [可测空间 E]
   证明: by
   convert! hX.sum
   simp

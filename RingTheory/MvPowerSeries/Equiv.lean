@@ -65,7 +65,7 @@ definition isEmptyEquiv
 
 中文:
 定义 isEmptyEquiv
-  签名: [IsEmpty σ]
+  签名: [是空 σ]
   定义体: constantCoeff
   invFun := C
   left_inv _ := by ext x; simp [Subsingleton.eq_zero x]
@@ -94,7 +94,7 @@ definition optionFunLeft
 
 中文:
 定义 optionFunLeft
-  签名: (p : MvPowerSeries (Option σ) R)
+  签名: (p : MvPowerSeries (选项类型 σ) R)
   定义体: .mk fun n x => p.coeff (x.optionElim n)
 -/
 private def optionFunLeft (p : MvPowerSeries (Option σ) R) : PowerSeries (MvPowerSeries σ R) :=
@@ -113,7 +113,7 @@ lemma coeff_coeff_optionFunLeft
 
 中文:
 引理 coeff_coeff_optionFunLeft
-  条件: (p : MvPowerSeries (Option σ) R) (n : 自然数) (x : σ ->₀ 自然数)
+  条件: (p : MvPowerSeries (选项类型 σ) R) (n : 自然数) (x : σ ->₀ 自然数)
   证明: by
   rw [optionFunLeft]; rw [PowerSeries.coeff_mk]
   exact LinearMap.proj_apply ..
@@ -143,7 +143,7 @@ theorem optionFunLeft_monomial
 
 中文:
 定理 optionFunLeft_monomial
-  条件: (x : Option σ ->₀ 自然数) (r : R)
+  条件: (x : 选项类型 σ ->₀ 自然数) (r : R)
   证明: by
   classical
   ext n y
@@ -188,7 +188,7 @@ lemma optionFunLeft_mul
 
 中文:
 引理 optionFunLeft_mul
-  条件: (p q : MvPowerSeries (Option σ) R)
+  条件: (p q : MvPowerSeries (选项类型 σ) R)
   证明: by
   classical
   ext k x
@@ -226,7 +226,7 @@ definition optionInvFunLeft
 
 中文:
 定义 optionInvFunLeft
-  签名: (p : PowerSeries (MvPowerSeries σ R))
+  签名: (p : 幂级数 (MvPowerSeries σ R))
   定义体: fun x => (p.coeff (x none)).coeff x.some
 -/
 private def optionInvFunLeft (p : PowerSeries (MvPowerSeries σ R)) :
@@ -242,7 +242,7 @@ lemma coeff_optionInvFunLeft
 
 中文:
 引理 coeff_optionInvFunLeft
-  条件: (p : PowerSeries (MvPowerSeries σ R)) (x : Option σ ->₀ 自然数)
+  条件: (p : 幂级数 (MvPowerSeries σ R)) (x : 选项类型 σ ->₀ 自然数)
   证明: rfl
 -/
 private lemma coeff_optionInvFunLeft (p : PowerSeries (MvPowerSeries σ R)) (x : Option σ ->₀ Nat) :
@@ -267,7 +267,7 @@ definition optionEquivLeft
 
 中文:
 定义 optionEquivLeft
-  签名: : MvPowerSeries (Option σ) R ≃ₐ[R] PowerSeries (MvPowerSeries σ R) where
+  签名: : MvPowerSeries (选项类型 σ) R ≃ₐ[R] 幂级数 (MvPowerSeries σ R) where
   定义体: optionFunLeft σ R
   invFun := optionInvFunLeft σ R
   left_inv _ := by ext; simp [coeff_optionInvFunLeft, coeff_coeff_optionFunLeft]
@@ -298,7 +298,7 @@ lemma coeff_coeff_optionEquivLeft
 
 中文:
 引理 coeff_coeff_optionEquivLeft
-  条件: (p : MvPowerSeries (Option σ) R) (n : 自然数) (x : σ ->₀ 自然数)
+  条件: (p : MvPowerSeries (选项类型 σ) R) (n : 自然数) (x : σ ->₀ 自然数)
   证明: coeff_coeff_optionFunLeft ..
 
 Depends on / 依赖: coeff_coeff_optionFunLeft
@@ -319,7 +319,7 @@ theorem optionEquivLeft_monomial
 
 中文:
 定理 optionEquivLeft_monomial
-  条件: (x : Option σ ->₀ 自然数) (r : R)
+  条件: (x : 选项类型 σ ->₀ 自然数) (r : R)
   证明: optionFunLeft_monomial ..
 
 @[simp]
@@ -383,7 +383,7 @@ lemma optionEquivLeft_X_none
 
 中文:
 引理 optionEquivLeft_X_none
-  结论: optionEquivLeft σ R (X none) = PowerSeries.X
+  结论: optionEquivLeft σ R (X none) = 幂级数.X
   证明: by
   simpa [PowerSeries.monomial_eq_C_mul_X_pow, ← X_def] using
     optionEquivLeft_monomial (single none 1 : Option σ ->₀ Nat) (1 : R)
@@ -410,7 +410,7 @@ lemma optionEquivLeft_C
 中文:
 引理 optionEquivLeft_C
   条件: (r : R)
-  结论: (optionEquivLeft σ R) (C r) = PowerSeries.C (C r)
+  结论: (optionEquivLeft σ R) (C r) = 幂级数.C (C r)
   证明: by
   simpa using optionEquivLeft_monomial (0 : Option σ ->₀ Nat) (r : R)
 
@@ -436,7 +436,7 @@ lemma embDomain_finSuccEquiv_cons
 
 中文:
 引理 embDomain_finSuccEquiv_cons
-  结论: {M : 类型} [AddCommMonoid M] {n : 自然数} (i : M)
+  结论: {M : 类型} [加法交换幺半群 M] {n : 自然数} (i : M)
   证明: by
   ext a; cases a <;> simp [embDomain_eq_mapDomain]
 -/
@@ -455,7 +455,7 @@ definition finSuccEquiv
 
 中文:
 定义 finSuccEquiv
-  签名: : MvPowerSeries (Fin (n + 1)) R ≃ₐ[R] PowerSeries (MvPowerSeries (Fin n) R)
+  签名: : MvPowerSeries (有限集 (n + 1)) R ≃ₐ[R] 幂级数 (MvPowerSeries (有限集 n) R)
   定义体: (renameEquiv R (_root_.finSuccEquiv n)).trans (optionEquivLeft (Fin n) R)
 
 Depends on / 依赖: _root_, _root_.finSuccEquiv, finSuccEquiv, optionEquivLeft, renameEquiv
@@ -479,7 +479,7 @@ theorem coeff_coeff_finSuccEquiv
 
 中文:
 定理 coeff_coeff_finSuccEquiv
-  条件: (p : MvPowerSeries (Fin (n + 1)) R) {k : 自然数} {x : Fin n ->₀ 自然数}
+  条件: (p : MvPowerSeries (有限集 (n + 1)) R) {k : 自然数} {x : 有限集 n ->₀ 自然数}
   证明: by
   suffices coeff x (PowerSeries.coeff k (optionEquivLeft (Fin n) R
     (rename (_root_.finSuccEquiv n) p))) = coeff (Finsupp.cons k x) p by simpa [finSuccEquiv]
@@ -561,7 +561,7 @@ theorem finSuccEquiv_X_succ
 
 中文:
 定理 finSuccEquiv_X_succ
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: finSuccEquiv R n (X j.succ) = .C (X j)
   证明: by
   ext k x
@@ -606,7 +606,7 @@ theorem finSuccEquiv_C
 中文:
 定理 finSuccEquiv_C
   条件: (r : R)
-  结论: (finSuccEquiv R n) (C r) = PowerSeries.C (C r)
+  结论: (finSuccEquiv R n) (C r) = 幂级数.C (C r)
   证明: by
   ext k x
   simp_rw [coeff_coeff_finSuccEquiv, PowerSeries.coeff_C, coeff_C, ← cons_zero_zero,
@@ -670,7 +670,7 @@ lemma isNoetherianRing_fin
 中文:
 引理 isNoetherianRing_fin
   条件: (n : 自然数)
-  结论: IsNoetherianRing (MvPowerSeries (Fin n) S)
+  结论: 是Noether环 (MvPowerSeries (有限集 n) S)
   证明: by
   induction n with
   | zero =>
@@ -703,7 +703,7 @@ instance isNoetherianRing
 
 中文:
 实例 isNoetherianRing
-  签名: [Finite σ]
+  签名: [有限 σ]
   定义体: by
   cases nonempty_fintype σ
   have := isNoetherianRing_fin S (Fintype.card σ)
@@ -800,7 +800,7 @@ definition truncTotalAlgHom
 
 中文:
 定义 truncTotalAlgHom
-  签名: (σ R : 类型) [Finite σ] [CommRing R] (n : 自然数)
+  签名: (σ R : 类型) [有限 σ] [交换环 R] (n : 自然数)
   定义体: truncTotal n p
   map_one' := by
     by_cases! h : n = 0
@@ -848,7 +848,7 @@ definition toAdicCompletion
 
 中文:
 定义 toAdicCompletion
-  签名: (σ R : 类型) [Finite σ] [CommRing R]
+  签名: (σ R : 类型) [有限 σ] [交换环 R]
   定义体: AdicCompletion.liftAlgHom (MvPolynomial.idealOfVars σ R) (truncTotalAlgHom σ R)
     (fun h => AlgHom.ext fun _ => by
       simpa [Ideal.Quotient.mk_eq_mk_iff_sub_mem] using
@@ -931,7 +931,7 @@ theorem toAdicCompletion_coe
 
 中文:
 定理 toAdicCompletion_coe
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   symm; ext n
   suffices p - (truncTotal n) p in MvPolynomial.idealOfVars σ R ^ n by
@@ -961,7 +961,7 @@ omit [Finite σ] in
 
 中文:
 定义 toAdicCompletionInv
-  签名: (σ R : 类型) [CommRing R]
+  签名: (σ R : 类型) [交换环 R]
   定义体: fun x => (f.val (degree x + 1)).out.coeff x
 
 omit [Finite σ] in
@@ -1050,7 +1050,7 @@ definition toAdicCompletionAlgEquiv
 
 中文:
 定义 toAdicCompletionAlgEquiv
-  签名: (σ R : 类型) [Finite σ] [CommRing R]
+  签名: (σ R : 类型) [有限 σ] [交换环 R]
   定义体: toAdicCompletion σ R
   invFun := toAdicCompletionInv σ R
   left_inv _ := by
@@ -1134,7 +1134,7 @@ definition toMvPowerSeries
 
 中文:
 定义 toMvPowerSeries
-  签名: : PowerSeries R ->ₐ[R] MvPowerSeries σ R
+  签名: : 幂级数 R ->ₐ[R] MvPowerSeries σ R
   定义体: MvPowerSeries.rename (fun _ => i)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.rename
@@ -1219,7 +1219,7 @@ theorem toMvPowerSeries_injective
 中文:
 定理 toMvPowerSeries_injective
   条件: (i : σ)
-  结论: Function.Injective (toMvPowerSeries (R := R) i)
+  结论: 函数.单射 (toMvPowerSeries (R := R) i)
   证明: MvPowerSeries.rename_injective (Embedding.punit i)
 -/
 theorem toMvPowerSeries_injective (i : σ) : Function.Injective (toMvPowerSeries (R := R) i) :=
@@ -1280,7 +1280,7 @@ theorem subst_toMvPowerSeries
 
 中文:
 定理 subst_toMvPowerSeries
-  条件: {a : σ -> MvPowerSeries τ R} (ha : MvPowerSeries.HasSubst a)
+  条件: {a : σ -> MvPowerSeries τ R} (ha : MvPowerSeries.有Subst a)
   证明: by
   rw [toMvPowerSeries_eq_subst]; rw [subst]; rw [MvPowerSeries.subst_comp_subst_apply
     (HasSubst.const (HasSubst.X _)) ha]; rw [MvPowerSeries.subst_X ha]; rw [subst]
@@ -1334,7 +1334,7 @@ theorem _root_.MvPowerSeries.HasSubst.toMvPowerSeries
     simpa using fun hd => toMvPowerSeries_coeff_eq_zero hd hf
 
 中文:
-定理 _root_.MvPowerSeries.HasSubst.toMvPowerSeries
+定理 _root_.MvPowerSeries.有Subst.toMvPowerSeries
   条件: (hf : f.constantCoeff = 0)
   证明: by simp_all [constantCoeff, toMvPowerSeries_apply]
   coeff_zero d := Set.Finite.subset (Finite.of_fintype d.support) fun s => by

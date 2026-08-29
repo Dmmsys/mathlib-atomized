@@ -107,7 +107,7 @@ theorem hasFDerivWithinAt_congr_set'
 
 中文:
 定理 hasFDerivWithinAt_congr_set'
-  结论: [T1Space E] (y : E)
+  结论: [T1空间 E] (y : E)
   证明: by
   rcases eq_or_ne x y with rfl | hne
   · exact hasFDerivWithinAt_congr_set_nhdsNE h
@@ -153,7 +153,7 @@ theorem differentiableWithinAt_congr_set'
 
 中文:
 定理 differentiableWithinAt_congr_set'
-  条件: [T1Space E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: [T1空间 E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: exists_congr fun _ => hasFDerivWithinAt_congr_set' _ h
 
 Depends on / 依赖: exists_congr, hasFDerivWithinAt_congr_set
@@ -220,7 +220,7 @@ theorem fderivWithin_congr_set'
 
 中文:
 定理 fderivWithin_congr_set'
-  条件: [T1Space E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: [T1空间 E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: by
   classical
   simp only [fderivWithin, differentiableWithinAt_congr_set' _ h, hasFDerivWithinAt_congr_set' _ h]
@@ -262,7 +262,7 @@ theorem fderivWithin_eventually_congr_set'
 
 中文:
 定理 fderivWithin_eventually_congr_set'
-  条件: [T1Space E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: [T1空间 E] (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: (eventually_nhds_nhdsWithin.2 h).mono fun _ => fderivWithin_congr_set' y
 
 Depends on / 依赖: eventually_nhds_nhdsWithin, fderivWithin_congr_set
@@ -301,8 +301,8 @@ theorem Filter.EventuallyEq.hasFDerivAtFilter_iff
   exact isLittleOTVS_congr (h₀.mono fun y hy => by simp_all [Prod.map]) .rfl
 
 中文:
-定理 Filter.EventuallyEq.hasFDerivAtFilter_iff
-  结论: (h₀ : Prod.map f₀ f₀ =ᶠ[L] Prod.map f₁ f₁)
+定理 滤子.EventuallyEq.hasFDerivAtFilter_iff
+  结论: (h₀ : 积类型.map f₀ f₀ =ᶠ[L] 积类型.map f₁ f₁)
   证明: by
   simp only [hasFDerivAtFilter_iff_isLittleOTVS]
   exact isLittleOTVS_congr (h₀.mono fun y hy => by simp_all [Prod.map]) .rfl
@@ -323,7 +323,7 @@ theorem Filter.EventuallyEq.hasStrictFDerivAt_iff
   proof: .hasFDerivAtFilter_iff h' h.prodMap_nhds h
 
 中文:
-定理 Filter.EventuallyEq.hasStrictFDerivAt_iff
+定理 滤子.EventuallyEq.hasStrictFDerivAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁) (h' : 对任意 y, f₀' y = f₁' y)
   证明: .hasFDerivAtFilter_iff h' h.prodMap_nhds h
 
@@ -360,9 +360,9 @@ theorem HasFDerivAt.congr_fderiv
   proof: h' ▸ h
 
 中文:
-定理 HasFDerivAt.congr_fderiv
-  条件: (h : HasFDerivAt f f' x) (h' : f' = g')
-  结论: HasFDerivAt f g' x
+定理 在点处Fréchet可导.congr_fderiv
+  条件: (h : 在点处Fréchet可导 f f' x) (h' : f' = g')
+  结论: 在点处Fréchet可导 f g' x
   证明: h' ▸ h
 -/
 theorem HasFDerivAt.congr_fderiv (h : HasFDerivAt f f' x) (h' : f' = g') : HasFDerivAt f g' x :=
@@ -413,8 +413,8 @@ theorem HasFDerivAtFilter.congr_of_eventuallyEq
   proof: (hL.hasFDerivAtFilter_iff fun _ => rfl).2 h
 
 中文:
-定理 HasFDerivAtFilter.congr_of_eventuallyEq
-  结论: (h : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.congr_of_eventuallyEq
+  结论: (h : 有FDerivAtFilter f f' L)
   证明: (hL.hasFDerivAtFilter_iff fun _ => rfl).2 h
 
 Depends on / 依赖: hL.hasFDerivAtFilter_iff, hasFDerivAtFilter_iff
@@ -433,7 +433,7 @@ theorem Filter.EventuallyEq.hasFDerivAt_iff
   proof: .hasFDerivAtFilter_iff fun _ => rfl h.prodMap (h.filter_mono <| pure_le_nhds _)
 
 中文:
-定理 Filter.EventuallyEq.hasFDerivAt_iff
+定理 滤子.EventuallyEq.hasFDerivAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁)
   证明: .hasFDerivAtFilter_iff fun _ => rfl h.prodMap (h.filter_mono <| pure_le_nhds _)
 
@@ -452,7 +452,7 @@ theorem Filter.EventuallyEq.differentiableAt_iff
   proof: exists_congr fun _ => h.hasFDerivAt_iff
 
 中文:
-定理 Filter.EventuallyEq.differentiableAt_iff
+定理 滤子.EventuallyEq.differentiableAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁)
   证明: exists_congr fun _ => h.hasFDerivAt_iff
 
@@ -471,7 +471,7 @@ theorem Filter.EventuallyEq.hasFDerivWithinAt_iff
   proof: .hasFDerivAtFilter_iff fun _ => _root_.rfl h.prodMap (by assumption)
 
 中文:
-定理 Filter.EventuallyEq.hasFDerivWithinAt_iff
+定理 滤子.EventuallyEq.hasFDerivWithinAt_iff
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : f₀ x = f₁ x)
   证明: .hasFDerivAtFilter_iff fun _ => _root_.rfl h.prodMap (by assumption)
 
@@ -490,7 +490,7 @@ theorem Filter.EventuallyEq.hasFDerivWithinAt_iff_of_mem
   proof: h.hasFDerivWithinAt_iff (h.eq_of_nhdsWithin hx)
 
 中文:
-定理 Filter.EventuallyEq.hasFDerivWithinAt_iff_of_mem
+定理 滤子.EventuallyEq.hasFDerivWithinAt_iff_of_mem
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : x in s)
   证明: h.hasFDerivWithinAt_iff (h.eq_of_nhdsWithin hx)
 
@@ -509,7 +509,7 @@ theorem Filter.EventuallyEq.differentiableWithinAt_iff
   proof: exists_congr fun _ => h.hasFDerivWithinAt_iff hx
 
 中文:
-定理 Filter.EventuallyEq.differentiableWithinAt_iff
+定理 滤子.EventuallyEq.differentiableWithinAt_iff
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : f₀ x = f₁ x)
   证明: exists_congr fun _ => h.hasFDerivWithinAt_iff hx
 
@@ -528,7 +528,7 @@ theorem Filter.EventuallyEq.differentiableWithinAt_iff_of_mem
   proof: h.differentiableWithinAt_iff (h.eq_of_nhdsWithin hx)
 
 中文:
-定理 Filter.EventuallyEq.differentiableWithinAt_iff_of_mem
+定理 滤子.EventuallyEq.differentiableWithinAt_iff_of_mem
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : x in s)
   证明: h.differentiableWithinAt_iff (h.eq_of_nhdsWithin hx)
 
@@ -623,8 +623,8 @@ theorem HasFDerivAt.congr_of_eventuallyEq
   proof: h₁.hasFDerivAt_iff.mpr h
 
 中文:
-定理 HasFDerivAt.congr_of_eventuallyEq
-  条件: (h : HasFDerivAt f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f)
+定理 在点处Fréchet可导.congr_of_eventuallyEq
+  条件: (h : 在点处Fréchet可导 f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f)
   证明: h₁.hasFDerivAt_iff.mpr h
 
 Depends on / 依赖: hasFDerivAt_iff, hasFDerivAt_iff.mpr
@@ -835,7 +835,7 @@ theorem Filter.EventuallyEq.fderivWithin_eq
   simp only [fderivWithin, DifferentiableWithinAt, hs.hasFDerivWithinAt_iff hx]
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin_eq
+定理 滤子.EventuallyEq.fderivWithin_eq
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: by
   classical
@@ -857,7 +857,7 @@ theorem Filter.EventuallyEq.fderivWithin_eq_of_mem
   proof: hs.fderivWithin_eq (mem_of_mem_nhdsWithin hx hs :)
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin_eq_of_mem
+定理 滤子.EventuallyEq.fderivWithin_eq_of_mem
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (hx : x in s)
   证明: hs.fderivWithin_eq (mem_of_mem_nhdsWithin hx hs :)
 
@@ -878,7 +878,7 @@ theorem Filter.EventuallyEq.fderivWithin_eq_of_insert
   exact (mem_of_mem_nhdsWithin (mem_insert x s) hs :)
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin_eq_of_insert
+定理 滤子.EventuallyEq.fderivWithin_eq_of_insert
   条件: (hs : f₁ =ᶠ[𝓝[insert x s] x] f)
   证明: by
   apply Filter.EventuallyEq.fderivWithin_eq (nhdsWithin_mono _ (subset_insert x s) hs)
@@ -903,7 +903,7 @@ theorem Filter.EventuallyEq.fderivWithin'
         (hs.self_of_nhdsWithin hys)
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin'
+定理 滤子.EventuallyEq.fderivWithin'
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s)
   证明: (eventually_eventually_nhdsWithin.2 hs).mp
     eventually_mem_nhdsWithin.mono fun _y hys hs =>
@@ -928,7 +928,7 @@ theorem Filter.EventuallyEq.fderivWithin
   proof: hs.fderivWithin' Subset.rfl
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin
+定理 滤子.EventuallyEq.fderivWithin
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f)
   证明: hs.fderivWithin' Subset.rfl
 -/
@@ -945,7 +945,7 @@ theorem Filter.EventuallyEq.fderivWithin_eq_of_nhds
   proof: (h.filter_mono nhdsWithin_le_nhds).fderivWithin_eq h.self_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.fderivWithin_eq_of_nhds
+定理 滤子.EventuallyEq.fderivWithin_eq_of_nhds
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   证明: (h.filter_mono nhdsWithin_le_nhds).fderivWithin_eq h.self_of_nhds
 
@@ -1004,7 +1004,7 @@ theorem Filter.EventuallyEq.fderiv_eq
   rw [← fderivWithin_univ]; rw [← fderivWithin_univ]; rw [h.fderivWithin_eq_of_nhds]
 
 中文:
-定理 Filter.EventuallyEq.fderiv_eq
+定理 滤子.EventuallyEq.fderiv_eq
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   结论: fderiv 𝕜 f₁ x = fderiv 𝕜 f x
   证明: by
@@ -1025,7 +1025,7 @@ theorem Filter.EventuallyEq.fderiv
   proof: h.eventuallyEq_nhds.mono fun _ h => h.fderiv_eq
 
 中文:
-定理 Filter.EventuallyEq.fderiv
+定理 滤子.EventuallyEq.fderiv
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   结论: fderiv 𝕜 f₁ =ᶠ[𝓝 x] fderiv 𝕜 f
   证明: h.eventuallyEq_nhds.mono fun _ h => h.fderiv_eq

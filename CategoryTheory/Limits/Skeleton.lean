@@ -44,7 +44,7 @@ instance hasLimitsOfShape_skeleton
 
 中文:
 实例 hasLimitsOfShape_skeleton
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (fromSkeleton C)
 
 Depends on / 依赖: fromSkeleton, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -64,7 +64,7 @@ example [HasLimits C] : HasLimits (Skeleton C) := by infer_instance
 
 中文:
 实例 hasLimitsOfSize_skeleton
-  签名: [HasLimitsOfSize.{w, w'} C]
+  签名: [有LimitsOfSize.{w, w'} C]
   定义体: hasLimits_of_hasLimits_createsLimits (fromSkeleton C)
 
 example [HasLimits C] : HasLimits (Skeleton C) := by infer_instance
@@ -87,7 +87,7 @@ instance hasColimitsOfShape_skeleton
 
 中文:
 实例 hasColimitsOfShape_skeleton
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape (fromSkeleton C)
 
 Depends on / 依赖: fromSkeleton, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -107,7 +107,7 @@ example [HasColimits C] : HasColimits (Skeleton C) := by infer_instance
 
 中文:
 实例 hasColimitsOfSize_skeleton
-  签名: [HasColimitsOfSize.{w, w'} C]
+  签名: [有余limitsOfSize.{w, w'} C]
   定义体: hasColimits_of_hasColimits_createsColimits (fromSkeleton C)
 
 example [HasColimits C] : HasColimits (Skeleton C) := by infer_instance
@@ -132,7 +132,7 @@ instance hasLimitsOfShape_thinSkeleton
 
 中文:
 实例 hasLimitsOfShape_thinSkeleton
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (fromThinSkeleton C)
 
 Depends on / 依赖: fromThinSkeleton, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -151,7 +151,7 @@ instance hasLimitsOfSize_thinSkeleton
 
 中文:
 实例 hasLimitsOfSize_thinSkeleton
-  签名: [HasLimitsOfSize.{w, w'} C]
+  签名: [有LimitsOfSize.{w, w'} C]
   定义体: hasLimits_of_hasLimits_createsLimits (fromThinSkeleton C)
 
 Depends on / 依赖: fromThinSkeleton, hasLimits_of_hasLimits_createsLimits
@@ -170,7 +170,7 @@ instance hasColimitsOfShape_thinSkeleton
 
 中文:
 实例 hasColimitsOfShape_thinSkeleton
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape (fromThinSkeleton C)
 
 Depends on / 依赖: fromThinSkeleton, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -189,7 +189,7 @@ instance hasColimitsOfSize_thinSkeleton
 
 中文:
 实例 hasColimitsOfSize_thinSkeleton
-  签名: [HasColimitsOfSize.{w, w'} C]
+  签名: [有余limitsOfSize.{w, w'} C]
   定义体: hasColimits_of_hasColimits_createsColimits (fromThinSkeleton C)
 
 Depends on / 依赖: fromThinSkeleton, hasColimits_of_hasColimits_createsColimits

@@ -75,7 +75,7 @@ definition dcomp
 
 中文:
 定义 dcomp
-  签名: {β : α -> Sort u₂} {φ : 对任意 {x : α}, β x -> Sort u₃} (f : 对任意 {x : α} (y : β x), φ y)
+  签名: {β : α -> 类型层 u₂} {φ : 对任意 {x : α}, β x -> 类型层 u₃} (f : 对任意 {x : α} (y : β x), φ y)
   定义体: fun x => f (g x)
 
 @[inherit_doc] infixr:80 " ∘' " => Function.dcomp
@@ -150,7 +150,7 @@ definition prod
   body: (f i, g i)
 
 中文:
-定义 prod
+定义 乘积
   签名: {ι} {α β : ι -> 类型} (f : 对任意 i, α i) (g : 对任意 i, β i) (i : ι)
   定义体: (f i, g i)
 -/
@@ -171,7 +171,7 @@ theorem prod_def
 
 中文:
 定理 prod_def
-  结论: Function.prod f g = fun i : ι => (f i, g i)
+  结论: 函数.乘积 f g = fun i : ι => (f i, g i)
   证明: rfl
 -/
 theorem prod_def : Function.prod f g = fun i : ι => (f i, g i) := rfl
@@ -188,7 +188,7 @@ lemma prod_apply
 中文:
 引理 prod_apply
   条件: (i : ι)
-  结论: Function.prod f g i = (f i, g i)
+  结论: 函数.乘积 f g i = (f i, g i)
   证明: rfl
 -/
 @[simp, grind =] lemma prod_apply (i : ι) : Function.prod f g i = (f i, g i) := rfl
@@ -205,7 +205,7 @@ theorem prod_inj
 
 中文:
 定理 prod_inj
-  结论: Function.prod f g = Function.prod f' g' ↔ f = f' ∧ g = g'
+  结论: 函数.乘积 f g = 函数.乘积 f' g' ↔ f = f' ∧ g = g'
   证明: by
   simp [funext_iff, Prod.ext_iff, forall_and]
 -/
@@ -247,7 +247,7 @@ lemma prod_fst_snd
 
 中文:
 引理 prod_fst_snd
-  结论: Function.prod (Prod.fst : _ -> α) (Prod.snd : _ -> β) = id
+  结论: 函数.乘积 (积类型.fst : _ -> α) (积类型.snd : _ -> β) = id
   证明: rfl
 -/
 @[simp] lemma prod_fst_snd : Function.prod (Prod.fst : _ -> α) (Prod.snd : _ -> β) = id := rfl
@@ -261,7 +261,7 @@ lemma prod_snd_fst
 
 中文:
 引理 prod_snd_fst
-  结论: Function.prod (Prod.snd : _ -> β) (Prod.fst : _ -> α) = .swap
+  结论: 函数.乘积 (积类型.snd : _ -> β) (积类型.fst : _ -> α) = .swap
   证明: rfl
 -/
 @[simp] lemma prod_snd_fst : Function.prod (Prod.snd : _ -> β) (Prod.fst : _ -> α) = .swap := rfl
@@ -276,7 +276,7 @@ theorem fst_comp_prod
 
 中文:
 定理 fst_comp_prod
-  结论: Prod.fst ∘ Function.prod f g = f
+  结论: 积类型.fst ∘ 函数.乘积 f g = f
   证明: rfl
 -/
 @[simp] theorem fst_comp_prod : Prod.fst ∘ Function.prod f g = f := rfl
@@ -290,7 +290,7 @@ theorem snd_comp_prod
 
 中文:
 定理 snd_comp_prod
-  结论: Prod.snd ∘ Function.prod f g = g
+  结论: 积类型.snd ∘ 函数.乘积 f g = g
   证明: rfl
 -/
 @[simp] theorem snd_comp_prod : Prod.snd ∘ Function.prod f g = g := rfl
@@ -323,7 +323,7 @@ theorem const_prod
 中文:
 定理 const_prod
   条件: (p : α × β)
-  结论: const ι p = Function.prod (const ι p.1) (const ι p.2)
+  结论: const ι p = 函数.乘积 (const ι p.1) (const ι p.2)
   证明: rfl
 -/
 theorem const_prod (p : α × β) : const ι p = Function.prod (const ι p.1) (const ι p.2) := rfl
@@ -356,7 +356,7 @@ theorem prod_comp
 中文:
 定理 prod_comp
   条件: {κ} (h : κ -> ι)
-  结论: Function.prod f g ∘ h = Function.prod (f ∘ h) (g ∘ h)
+  结论: 函数.乘积 f g ∘ h = 函数.乘积 (f ∘ h) (g ∘ h)
   证明: rfl
 -/
 theorem prod_comp {κ} (h : κ -> ι) : Function.prod f g ∘ h = Function.prod (f ∘ h) (g ∘ h) := rfl
@@ -420,7 +420,7 @@ theorem swap_comp_prod
 
 中文:
 定理 swap_comp_prod
-  结论: Prod.swap ∘ Function.prod f g = Function.prod g f
+  结论: 积类型.swap ∘ 函数.乘积 f g = 函数.乘积 g f
   证明: rfl
 -/
 @[simp] theorem swap_comp_prod : Prod.swap ∘ Function.prod f g = Function.prod g f := rfl
@@ -458,7 +458,7 @@ theorem diag_def
 
 中文:
 定理 diag_def
-  结论: Function.diag = fun a : α => (a, a)
+  结论: 函数.diag = fun a : α => (a, a)
   证明: rfl
 -/
 theorem diag_def : Function.diag = fun a : α => (a, a) := rfl
@@ -473,7 +473,7 @@ theorem diag_apply
 
 中文:
 定理 diag_apply
-  结论: Function.diag a = (a, a)
+  结论: 函数.diag a = (a, a)
   证明: rfl
 -/
 @[simp, grind =] theorem diag_apply : Function.diag a = (a, a) := rfl
@@ -488,7 +488,7 @@ theorem diag_injective
 
 中文:
 定理 diag_injective
-  结论: Injective (α := α) Function.diag
+  结论: 单射 (α := α) 函数.diag
   证明: fun _ _ => congrArg Prod.fst
 
 Depends on / 依赖: Function, Function.diag, Prod.fst
@@ -505,7 +505,7 @@ theorem prod_id_id
 
 中文:
 定理 prod_id_id
-  结论: Function.prod (@id α) id = Function.diag
+  结论: 函数.乘积 (@id α) id = 函数.diag
   证明: rfl
 -/
 @[simp] theorem prod_id_id : Function.prod (@id α) id = Function.diag := rfl
@@ -519,7 +519,7 @@ theorem fst_comp_diag
 
 中文:
 定理 fst_comp_diag
-  结论: Prod.fst ∘ Function.diag = @id α
+  结论: 积类型.fst ∘ 函数.diag = @id α
   证明: rfl
 
 Depends on / 依赖: Finset, Finset.smul_sum, ofModule, smul_sum
@@ -535,7 +535,7 @@ theorem snd_comp_diag
 
 中文:
 定理 snd_comp_diag
-  结论: Prod.snd ∘ Function.diag = @id α
+  结论: 积类型.snd ∘ 函数.diag = @id α
   证明: rfl
 -/
 @[simp] theorem snd_comp_diag : Prod.snd ∘ Function.diag = @id α := rfl
@@ -550,7 +550,7 @@ theorem diag_comp
 
 中文:
 定理 diag_comp
-  结论: Function.diag ∘ f = Function.prod f f
+  结论: 函数.diag ∘ f = 函数.乘积 f f
   证明: rfl
 
 Depends on / 依赖: one_smul
@@ -567,7 +567,7 @@ theorem map_comp_diag
 
 中文:
 定理 map_comp_diag
-  结论: Prod.map f g ∘ Function.diag = Function.prod f g
+  结论: 积类型.map f g ∘ 函数.diag = 函数.乘积 f g
   证明: rfl
 -/
 @[simp] theorem map_comp_diag : Prod.map f g ∘ Function.diag = Function.prod f g := rfl
@@ -582,7 +582,7 @@ theorem swap_comp_diag
 
 中文:
 定理 swap_comp_diag
-  结论: Prod.swap ∘ Function.diag = Function.diag (α := α)
+  结论: 积类型.swap ∘ 函数.diag = 函数.diag (α := α)
   证明: rfl
 -/
 @[simp] theorem swap_comp_diag : Prod.swap ∘ Function.diag = Function.diag (α := α) := rfl
@@ -627,7 +627,7 @@ abbreviation swap
 
 中文:
 缩写 swap
-  签名: {φ : α -> β -> Sort u₃} (f : 对任意 x y, φ x y)
+  签名: {φ : α -> β -> 类型层 u₃} (f : 对任意 x y, φ x y)
   定义体: fun y x => f x y
 -/
 abbrev swap {φ : α -> β -> Sort u₃} (f : forall x y, φ x y) : forall y x, φ x y := fun y x => f x y
@@ -643,7 +643,7 @@ theorem swap_def
 
 中文:
 定理 swap_def
-  条件: {φ : α -> β -> Sort u₃} (f : 对任意 x y, φ x y)
+  条件: {φ : α -> β -> 类型层 u₃} (f : 对任意 x y, φ x y)
   结论: swap f = fun y x => f x y
   证明: rfl
 -/
@@ -677,7 +677,7 @@ definition Bijective
   body: Injective f ∧ Surjective f
 
 中文:
-定义 Bijective
+定义 双射
   签名: (f : α -> β)
   定义体: Injective f ∧ Surjective f
 
@@ -695,9 +695,9 @@ theorem Bijective.comp
   statement: Bijective g -> Bijective f -> Bijective (g ∘ f)
 
 中文:
-定理 Bijective.comp
+定理 双射.comp
   条件: {g : β -> φ} {f : α -> β}
-  结论: Bijective g -> Bijective f -> Bijective (g ∘ f)
+  结论: 双射 g -> 双射 f -> 双射 (g ∘ f)
 -/
 theorem Bijective.comp {g : β -> φ} {f : α -> β} : Bijective g -> Bijective f -> Bijective (g ∘ f)
   | ⟨h_ginj, h_gsurj⟩, ⟨h_finj, h_fsurj⟩ => ⟨h_ginj.comp h_finj, h_gsurj.comp h_fsurj⟩
@@ -712,7 +712,7 @@ theorem bijective_id
 
 中文:
 定理 bijective_id
-  结论: Bijective (@id α)
+  结论: 双射 (@id α)
   证明: ⟨injective_id, surjective_id⟩
 
 Depends on / 依赖: injective_id, surjective_id
@@ -732,7 +732,7 @@ theorem Injective.beq_eq
   by_cases h : a == b <;> simp [h] <;> simpa [I.eq_iff] using h
 
 中文:
-定理 Injective.beq_eq
+定理 单射.beq_eq
   结论: {α β : 类型} [BEq α] [LawfulBEq α] [BEq β] [LawfulBEq β] {f : α -> β}
   证明: by
   by_cases h : a == b <;> simp [h] <;> simpa [I.eq_iff] using h
@@ -894,7 +894,7 @@ theorem IsFixedPt.of_subsingleton
 
 中文:
 定理 IsFixedPt.of_subsingleton
-  条件: [Subsingleton α] (f : α -> α) (x : α)
+  条件: [子单例 α] (f : α -> α) (x : α)
   结论: IsFixedPt f x
   证明: Subsingleton.elim _ _
 
@@ -931,7 +931,7 @@ theorem forall_isFixedPt_iff
   proof: ⟨funext, fun h => h ▸ isFixedPt_id⟩
 
 中文:
-定理 forall_isFixedPt_iff
+定理 对任意_isFixedPt_iff
   条件: {f : α -> α}
   结论: (对任意 x, IsFixedPt f x) ↔ f = id
   证明: ⟨funext, fun h => h ▸ isFixedPt_id⟩
@@ -979,7 +979,7 @@ lemma map_apply
 中文:
 引理 map_apply
   条件: (f : 对任意 i, α i -> β i) (a : 对任意 i, α i) (i : ι)
-  结论: Pi.map f a i = f i (a i)
+  结论: 依赖函数类型.map f a i = f i (a i)
   证明: rfl
 -/
 lemma map_apply (f : forall i, α i -> β i) (a : forall i, α i) (i : ι) : Pi.map f a i = f i (a i) := rfl

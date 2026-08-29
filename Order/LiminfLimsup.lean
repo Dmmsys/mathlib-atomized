@@ -59,7 +59,7 @@ definition limsSup
 
 中文:
 定义 limsSup
-  签名: (f : Filter α)
+  签名: (f : 滤子 α)
   定义体: sInf { a | forallᶠ n in f, n <= a }
 -/
 def limsSup (f : Filter α) : α :=
@@ -75,7 +75,7 @@ definition limsInf
 
 中文:
 定义 limsInf
-  签名: (f : Filter α)
+  签名: (f : 滤子 α)
   定义体: sSup { a | forallᶠ n in f, a <= n }
 -/
 def limsInf (f : Filter α) : α :=
@@ -91,7 +91,7 @@ definition limsup
 
 中文:
 定义 limsup
-  签名: (u : β -> α) (f : Filter β)
+  签名: (u : β -> α) (f : 滤子 β)
   定义体: limsSup (map u f)
 
 Depends on / 依赖: limsSup
@@ -109,7 +109,7 @@ definition liminf
 
 中文:
 定义 liminf
-  签名: (u : β -> α) (f : Filter β)
+  签名: (u : β -> α) (f : 滤子 β)
   定义体: limsInf (map u f)
 
 Depends on / 依赖: limsInf
@@ -127,7 +127,7 @@ definition blimsup
 
 中文:
 定义 blimsup
-  签名: (u : β -> α) (f : Filter β) (p : β -> 命题)
+  签名: (u : β -> α) (f : 滤子 β) (p : β -> 命题)
   定义体: sInf { a | forallᶠ x in f, p x -> u x <= a }
 -/
 def blimsup (u : β -> α) (f : Filter β) (p : β -> Prop) :=
@@ -143,7 +143,7 @@ definition bliminf
 
 中文:
 定义 bliminf
-  签名: (u : β -> α) (f : Filter β) (p : β -> 命题)
+  签名: (u : β -> α) (f : 滤子 β) (p : β -> 命题)
   定义体: sSup { a | forallᶠ x in f, p x -> a <= u x }
 -/
 def bliminf (u : β -> α) (f : Filter β) (p : β -> Prop) :=
@@ -227,7 +227,7 @@ lemma liminf_comp
 
 中文:
 引理 liminf_comp
-  条件: (u : β -> α) (v : γ -> β) (f : Filter γ)
+  条件: (u : β -> α) (v : γ -> β) (f : 滤子 γ)
   证明: rfl
 -/
 lemma liminf_comp (u : β -> α) (v : γ -> β) (f : Filter γ) :
@@ -243,7 +243,7 @@ lemma limsup_comp
 
 中文:
 引理 limsup_comp
-  条件: (u : β -> α) (v : γ -> β) (f : Filter γ)
+  条件: (u : β -> α) (v : γ -> β) (f : 滤子 γ)
   证明: rfl
 -/
 lemma limsup_comp (u : β -> α) (v : γ -> β) (f : Filter γ) :
@@ -266,8 +266,8 @@ theorem blimsup_true
 
 中文:
 定理 blimsup_true
-  条件: (f : Filter β) (u : β -> α)
-  结论: (blimsup u f fun _ => True) = limsup u f
+  条件: (f : 滤子 β) (u : β -> α)
+  结论: (blimsup u f fun _ => 真) = limsup u f
   证明: by
   simp [blimsup_eq, limsup_eq]
 
@@ -291,8 +291,8 @@ theorem bliminf_true
 
 中文:
 定理 bliminf_true
-  条件: (f : Filter β) (u : β -> α)
-  结论: (bliminf u f fun _ => True) = liminf u f
+  条件: (f : 滤子 β) (u : β -> α)
+  结论: (bliminf u f fun _ => 真) = liminf u f
   证明: by
   simp [bliminf_eq, liminf_eq]
 
@@ -312,7 +312,7 @@ lemma blimsup_eq_limsup
 
 中文:
 引理 blimsup_eq_limsup
-  条件: {f : Filter β} {u : β -> α} {p : β -> 命题}
+  条件: {f : 滤子 β} {u : β -> α} {p : β -> 命题}
   证明: by
   simp only [blimsup_eq, limsup_eq, eventually_inf_principal, mem_ofPred_eq]
 
@@ -332,7 +332,7 @@ lemma bliminf_eq_liminf
 
 中文:
 引理 bliminf_eq_liminf
-  条件: {f : Filter β} {u : β -> α} {p : β -> 命题}
+  条件: {f : 滤子 β} {u : β -> α} {p : β -> 命题}
   证明: blimsup_eq_limsup (α := αᵒᵈ)
 
 Depends on / 依赖: blimsup_eq_limsup
@@ -352,7 +352,7 @@ theorem blimsup_eq_limsup_subtype
 
 中文:
 定理 blimsup_eq_limsup_subtype
-  条件: {f : Filter β} {u : β -> α} {p : β -> 命题}
+  条件: {f : 滤子 β} {u : β -> α} {p : β -> 命题}
   证明: by
   rw [blimsup_eq_limsup]; rw [limsup]; rw [limsup]; rw [← map_map]; rw [map_comap_setCoe_val]
 
@@ -372,7 +372,7 @@ theorem bliminf_eq_liminf_subtype
 
 中文:
 定理 bliminf_eq_liminf_subtype
-  条件: {f : Filter β} {u : β -> α} {p : β -> 命题}
+  条件: {f : 滤子 β} {u : β -> α} {p : β -> 命题}
   证明: blimsup_eq_limsup_subtype (α := αᵒᵈ)
 
 Depends on / 依赖: blimsup_eq_limsup_subtype
@@ -391,7 +391,7 @@ theorem limsSup_le_of_le
 
 中文:
 定理 limsSup_le_of_le
-  结论: {f : Filter α} {a}
+  结论: {f : 滤子 α} {a}
   证明: csInf_le hf h
 
 Depends on / 依赖: csInf_le, isBoundedDefault, limsSup
@@ -411,7 +411,7 @@ theorem le_limsInf_of_le
 
 中文:
 定理 le_limsInf_of_le
-  结论: {f : Filter α} {a}
+  结论: {f : 滤子 α} {a}
   证明: le_csSup hf h
 
 Depends on / 依赖: isBoundedDefault, le_csSup, limsInf
@@ -431,7 +431,7 @@ theorem limsup_le_of_le
 
 中文:
 定理 limsup_le_of_le
-  结论: {f : Filter β} {u : β -> α} {a}
+  结论: {f : 滤子 β} {u : β -> α} {a}
   证明: csInf_le hf h
 
 Depends on / 依赖: csInf_le, isBoundedDefault, limsup
@@ -451,7 +451,7 @@ theorem le_liminf_of_le
 
 中文:
 定理 le_liminf_of_le
-  结论: {f : Filter β} {u : β -> α} {a}
+  结论: {f : 滤子 β} {u : β -> α} {a}
   证明: le_csSup hf h
 
 Depends on / 依赖: isBoundedDefault, le_csSup, liminf
@@ -471,7 +471,7 @@ theorem le_limsSup_of_le
 
 中文:
 定理 le_limsSup_of_le
-  结论: {f : Filter α} {a}
+  结论: {f : 滤子 α} {a}
   证明: le_csInf hf h
 
 Depends on / 依赖: isBoundedDefault, le_csInf, limsSup
@@ -491,7 +491,7 @@ theorem limsInf_le_of_le
 
 中文:
 定理 limsInf_le_of_le
-  结论: {f : Filter α} {a}
+  结论: {f : 滤子 α} {a}
   证明: csSup_le hf h
 
 Depends on / 依赖: csSup_le, isBoundedDefault, limsInf
@@ -511,7 +511,7 @@ theorem le_limsup_of_le
 
 中文:
 定理 le_limsup_of_le
-  结论: {f : Filter β} {u : β -> α} {a}
+  结论: {f : 滤子 β} {u : β -> α} {a}
   证明: le_csInf hf h
 
 Depends on / 依赖: isBoundedDefault, le_csInf, limsup
@@ -531,7 +531,7 @@ theorem liminf_le_of_le
 
 中文:
 定理 liminf_le_of_le
-  结论: {f : Filter β} {u : β -> α} {a}
+  结论: {f : 滤子 β} {u : β -> α} {a}
   证明: csSup_le hf h
 
 Depends on / 依赖: csSup_le, isBoundedDefault, liminf
@@ -555,7 +555,7 @@ theorem limsInf_le_limsSup
 
 中文:
 定理 limsInf_le_limsSup
-  结论: {f : Filter α} [NeBot f]
+  结论: {f : 滤子 α} [NeBot f]
   证明: liminf_le_of_le h₂ fun a₀ ha₀ =>
     le_limsup_of_le h₁ fun a₁ ha₁ =>
       show a₀ <= a₁ from
@@ -584,7 +584,7 @@ theorem liminf_le_limsup
 
 中文:
 定理 liminf_le_limsup
-  结论: {f : Filter β} [NeBot f] {u : β -> α}
+  结论: {f : 滤子 β} [NeBot f] {u : β -> α}
   证明: limsInf_le_limsSup h h'
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, isBoundedDefault, liminf, limsInf_le_limsSup, limsup
@@ -605,7 +605,7 @@ theorem limsSup_le_limsSup
 
 中文:
 定理 limsSup_le_limsSup
-  结论: {f g : Filter α}
+  结论: {f g : 滤子 α}
   证明: csInf_le_csInf hf hg h
 
 Depends on / 依赖: IsBounded, csInf_le_csInf, g.IsBounded, isBoundedDefault, limsSup
@@ -626,7 +626,7 @@ theorem limsInf_le_limsInf
 
 中文:
 定理 limsInf_le_limsInf
-  结论: {f g : Filter α}
+  结论: {f g : 滤子 α}
   证明: csSup_le_csSup hg hf h
 
 Depends on / 依赖: IsCobounded, csSup_le_csSup, g.IsCobounded, isBoundedDefault, limsInf
@@ -647,7 +647,7 @@ theorem limsup_le_limsup
 
 中文:
 定理 limsup_le_limsup
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} {u v : α -> β}
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} {u v : α -> β}
   证明: limsSup_le_limsSup hu hv fun _ => h.trans
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, h.trans, isBoundedDefault, limsSup_le_limsSup, limsup
@@ -669,7 +669,7 @@ theorem liminf_le_liminf
 
 中文:
 定理 liminf_le_liminf
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} {u v : α -> β}
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} {u v : α -> β}
   证明: limsup_le_limsup (β := βᵒᵈ) h hv hu
 
 Depends on / 依赖: IsCoboundedUnder, f.IsCoboundedUnder, isBoundedDefault, liminf, limsup_le_limsup
@@ -691,7 +691,7 @@ theorem limsSup_le_limsSup_of_le
 
 中文:
 定理 limsSup_le_limsSup_of_le
-  结论: {f g : Filter α} (h : f <= g)
+  结论: {f g : 滤子 α} (h : f <= g)
   证明: limsSup_le_limsSup hf hg fun _ ha => h ha
 
 Depends on / 依赖: IsBounded, g.IsBounded, isBoundedDefault, limsSup, limsSup_le_limsSup
@@ -712,7 +712,7 @@ theorem limsInf_le_limsInf_of_le
 
 中文:
 定理 limsInf_le_limsInf_of_le
-  结论: {f g : Filter α} (h : g <= f)
+  结论: {f g : 滤子 α} (h : g <= f)
   证明: limsInf_le_limsInf hf hg fun _ ha => h ha
 
 Depends on / 依赖: IsCobounded, g.IsCobounded, isBoundedDefault, limsInf, limsInf_le_limsInf
@@ -733,7 +733,7 @@ theorem limsup_le_limsup_of_le
 
 中文:
 定理 limsup_le_limsup_of_le
-  结论: {α β} [ConditionallyCompleteLattice β] {f g : Filter α} (h : f <= g)
+  结论: {α β} [条件完备格 β] {f g : 滤子 α} (h : f <= g)
   证明: limsSup_le_limsSup_of_le (map_mono h) hf hg
 
 Depends on / 依赖: IsBoundedUnder, g.IsBoundedUnder, isBoundedDefault, limsSup_le_limsSup_of_le, limsup, map_mono
@@ -756,8 +756,8 @@ theorem Tendsto.limsup_comp_le_limsup
   exact limsup_le_limsup_of_le hv
 
 中文:
-定理 Tendsto.limsup_comp_le_limsup
-  结论: {ι α β} [ConditionallyCompleteLattice β] {v : ι -> α}
+定理 收敛.limsup_comp_le_limsup
+  结论: {ι α β} [条件完备格 β] {v : ι -> α}
   证明: by
   rw [limsup_comp]
   exact limsup_le_limsup_of_le hv
@@ -782,7 +782,7 @@ theorem liminf_le_liminf_of_le
 
 中文:
 定理 liminf_le_liminf_of_le
-  结论: {α β} [ConditionallyCompleteLattice β] {f g : Filter α} (h : g <= f)
+  结论: {α β} [条件完备格 β] {f g : 滤子 α} (h : g <= f)
   证明: limsInf_le_limsInf_of_le (map_mono h) hf hg
 
 Depends on / 依赖: IsCoboundedUnder, g.IsCoboundedUnder, isBoundedDefault, liminf, limsInf_le_limsInf_of_le, map_mono
@@ -803,8 +803,8 @@ theorem Tendsto.liminf_le_liminf_comp
   proof: hv.limsup_comp_le_limsup (β := βᵒᵈ)
 
 中文:
-定理 Tendsto.liminf_le_liminf_comp
-  结论: {ι α β} [ConditionallyCompleteLattice β] {v : ι -> α}
+定理 收敛.liminf_le_liminf_comp
+  结论: {ι α β} [条件完备格 β] {v : ι -> α}
   证明: hv.limsup_comp_le_limsup (β := βᵒᵈ)
 
 Depends on / 依赖: IsBoundedUnder, g.IsBoundedUnder, hv.limsup_comp_le_limsup, isBoundedDefault, liminf, limsup_comp_le_limsup
@@ -828,7 +828,7 @@ lemma limsSup_principal_eq_csSup
 
 中文:
 引理 limsSup_principal_eq_csSup
-  条件: (h : BddAbove s) (hs : s.Nonempty)
+  条件: (h : BddAbove s) (hs : s.非空)
   结论: limsSup (𝓟 s) = sSup s
   证明: by
   simp only [limsSup, eventually_principal]; exact csInf_upperBounds_eq_csSup h hs
@@ -849,7 +849,7 @@ lemma limsInf_principal_eq_csSup
 
 中文:
 引理 limsInf_principal_eq_csSup
-  条件: (h : BddBelow s) (hs : s.Nonempty)
+  条件: (h : BddBelow s) (hs : s.非空)
   结论: limsInf (𝓟 s) = sInf s
   证明: limsSup_principal_eq_csSup (α := αᵒᵈ) h hs
 
@@ -870,7 +870,7 @@ lemma limsup_top_eq_ciSup
 
 中文:
 引理 limsup_top_eq_ciSup
-  条件: [Nonempty β] (hu : BddAbove (range u))
+  条件: [非空 β] (hu : BddAbove (range u))
   结论: limsup u ⊤ = ⨆ i, u i
   证明: by
   rw [limsup]; rw [map_top]; rw [limsSup_principal_eq_csSup hu (range_nonempty _)]; rw [sSup_range]
@@ -892,7 +892,7 @@ lemma liminf_top_eq_ciInf
 
 中文:
 引理 liminf_top_eq_ciInf
-  条件: [Nonempty β] (hu : BddBelow (range u))
+  条件: [非空 β] (hu : BddBelow (range u))
   结论: liminf u ⊤ = ⨅ i, u i
   证明: by
   rw [liminf]; rw [map_top]; rw [limsInf_principal_eq_csSup hu (range_nonempty _)]; rw [sInf_range]
@@ -915,7 +915,7 @@ theorem limsup_congr
 
 中文:
 定理 limsup_congr
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} {u v : α -> β}
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} {u v : α -> β}
   证明: by
   rw [limsup_eq]
   congr with b
@@ -940,7 +940,7 @@ simpa only [blimsup_eq_limsup] using! limsup_congr eventually_inf_principal.2 h
 
 中文:
 定理 blimsup_congr
-  条件: {f : Filter β} {u v : β -> α} {p : β -> 命题} (h : 对任意ᶠ a in f, p a -> u a = v a)
+  条件: {f : 滤子 β} {u v : β -> α} {p : β -> 命题} (h : 对任意ᶠ a in f, p a -> u a = v a)
   证明: by
 simpa only [blimsup_eq_limsup] using! limsup_congr eventually_inf_principal.2 h
 
@@ -960,7 +960,7 @@ theorem bliminf_congr
 
 中文:
 定理 bliminf_congr
-  条件: {f : Filter β} {u v : β -> α} {p : β -> 命题} (h : 对任意ᶠ a in f, p a -> u a = v a)
+  条件: {f : 滤子 β} {u v : β -> α} {p : β -> 命题} (h : 对任意ᶠ a in f, p a -> u a = v a)
   证明: blimsup_congr (α := αᵒᵈ) h
 
 Depends on / 依赖: blimsup_congr
@@ -981,7 +981,7 @@ theorem liminf_congr
 
 中文:
 定理 liminf_congr
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} {u v : α -> β}
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} {u v : α -> β}
   证明: limsup_congr (β := βᵒᵈ) h
 
 @[simp]
@@ -1006,7 +1006,7 @@ theorem limsup_const
 
 中文:
 定理 limsup_const
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} [NeBot f]
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} [NeBot f]
   证明: by
   simpa only [limsup_eq, eventually_const] using! csInf_Ici
 
@@ -1029,7 +1029,7 @@ theorem liminf_const
 
 中文:
 定理 liminf_const
-  结论: {α : 类型} [ConditionallyCompleteLattice β] {f : Filter α} [NeBot f]
+  结论: {α : 类型} [条件完备格 β] {f : 滤子 α} [NeBot f]
   证明: limsup_const (β := βᵒᵈ) b
 
 Depends on / 依赖: limsup_const
@@ -1052,8 +1052,8 @@ theorem HasBasis.liminf_eq_sSup_iUnion_iInter
     exists_prop]
 
 中文:
-定理 HasBasis.liminf_eq_sSup_iUnion_iInter
-  结论: {ι ι' : 类型} {f : ι -> α} {v : Filter ι}
+定理 有基.liminf_eq_sSup_iUnion_i整数er
+  结论: {ι ι' : 类型} {f : ι -> α} {v : 滤子 ι}
   证明: by
   simp_rw [liminf_eq, hv.eventually_iff]
   congr 1
@@ -1082,8 +1082,8 @@ theorem HasBasis.liminf_eq_sSup_univ_of_empty
   simp [hv.eq_bot_iff.2 ⟨i, hi, h'i⟩, liminf_eq]
 
 中文:
-定理 HasBasis.liminf_eq_sSup_univ_of_empty
-  结论: {f : ι -> α} {v : Filter ι}
+定理 有基.liminf_eq_sSup_univ_of_empty
+  结论: {f : ι -> α} {v : 滤子 ι}
   证明: by
   simp [hv.eq_bot_iff.2 ⟨i, hi, h'i⟩, liminf_eq]
 
@@ -1103,8 +1103,8 @@ theorem HasBasis.limsup_eq_sInf_iUnion_iInter
   proof: HasBasis.liminf_eq_sSup_iUnion_iInter (α := αᵒᵈ) hv
 
 中文:
-定理 HasBasis.limsup_eq_sInf_iUnion_iInter
-  结论: {ι ι' : 类型} {f : ι -> α} {v : Filter ι}
+定理 有基.limsup_eq_sInf_iUnion_i整数er
+  结论: {ι ι' : 类型} {f : ι -> α} {v : 滤子 ι}
   证明: HasBasis.liminf_eq_sSup_iUnion_iInter (α := αᵒᵈ) hv
 
 Depends on / 依赖: HasBasis, HasBasis.liminf_eq_sSup_iUnion_iInter, liminf_eq_sSup_iUnion_iInter
@@ -1125,8 +1125,8 @@ theorem HasBasis.limsup_eq_sInf_univ_of_empty
 @[simp]
 
 中文:
-定理 HasBasis.limsup_eq_sInf_univ_of_empty
-  结论: {f : ι -> α} {v : Filter ι}
+定理 有基.limsup_eq_sInf_univ_of_empty
+  结论: {f : ι -> α} {v : 滤子 ι}
   证明: HasBasis.liminf_eq_sSup_univ_of_empty (α := αᵒᵈ) hv i hi h'i
 
 @[simp]
@@ -1258,7 +1258,7 @@ theorem limsSup_bot
 
 中文:
 定理 limsSup_bot
-  结论: limsSup (⊥ : Filter α) = ⊥
+  结论: limsSup (⊥ : 滤子 α) = ⊥
   证明: bot_unique sInf_le by simp
 
 Depends on / 依赖: bot_unique, sInf_le
@@ -1298,7 +1298,7 @@ theorem limsInf_bot
 
 中文:
 定理 limsInf_bot
-  结论: limsInf (⊥ : Filter α) = ⊤
+  结论: limsInf (⊥ : 滤子 α) = ⊤
   证明: top_unique le_sSup by simp
 
 Depends on / 依赖: le_sSup, top_unique
@@ -1340,7 +1340,7 @@ theorem limsSup_top
 
 中文:
 定理 limsSup_top
-  结论: limsSup (⊤ : Filter α) = ⊤
+  结论: limsSup (⊤ : 滤子 α) = ⊤
   证明: top_unique le_sInf by simpa [eq_univ_iff_forall] using fun b hb => top_unique hb _
 
 @[simp]
@@ -1363,7 +1363,7 @@ theorem limsInf_top
 
 中文:
 定理 limsInf_top
-  结论: limsInf (⊤ : Filter α) = ⊥
+  结论: limsInf (⊤ : 滤子 α) = ⊥
   证明: bot_unique sSup_le by simpa [eq_univ_iff_forall] using fun b hb => bot_unique hb _
 
 @[simp]
@@ -1388,8 +1388,8 @@ theorem blimsup_false
 
 中文:
 定理 blimsup_false
-  条件: {f : Filter β} {u : β -> α}
-  结论: (blimsup u f fun _ => False) = ⊥
+  条件: {f : 滤子 β} {u : β -> α}
+  结论: (blimsup u f fun _ => 假) = ⊥
   证明: by
   simp [blimsup_eq]
 
@@ -1413,8 +1413,8 @@ theorem bliminf_false
 
 中文:
 定理 bliminf_false
-  条件: {f : Filter β} {u : β -> α}
-  结论: (bliminf u f fun _ => False) = ⊤
+  条件: {f : 滤子 β} {u : β -> α}
+  结论: (bliminf u f fun _ => 假) = ⊤
   证明: by
   simp [bliminf_eq]
 
@@ -1438,7 +1438,7 @@ theorem limsup_const_bot
 
 中文:
 定理 limsup_const_bot
-  条件: {f : Filter β}
+  条件: {f : 滤子 β}
   结论: limsup (fun _ : β => (⊥ : α)) f = (⊥ : α)
   证明: by
   rw [limsup_eq]; rw [eq_bot_iff]
@@ -1463,7 +1463,7 @@ theorem liminf_const_top
 
 中文:
 定理 liminf_const_top
-  条件: {f : Filter β}
+  条件: {f : 滤子 β}
   结论: liminf (fun _ : β => (⊤ : α)) f = (⊤ : α)
   证明: limsup_const_bot (α := αᵒᵈ)
 
@@ -1484,8 +1484,8 @@ theorem HasBasis.limsSup_eq_iInf_sSup
 iInf₂_le_of_le _ hi sSup_le ha)
 
 中文:
-定理 HasBasis.limsSup_eq_iInf_sSup
-  条件: {ι} {p : ι -> 命题} {s} {f : Filter α} (h : f.HasBasis p s)
+定理 有基.limsSup_eq_iInf_sSup
+  条件: {ι} {p : ι -> 命题} {s} {f : 滤子 α} (h : f.有基 p s)
   证明: le_antisymm (le_iInf₂ fun i hi => sInf_le <| h.eventually_iff.2 ⟨i, hi, fun _ => le_sSup⟩)
     (le_sInf fun _ ha =>
       let ⟨_, hi, ha⟩ := h.eventually_iff.1 ha
@@ -1509,8 +1509,8 @@ theorem HasBasis.limsInf_eq_iSup_sInf
   proof: HasBasis.limsSup_eq_iInf_sSup (α := αᵒᵈ) h
 
 中文:
-定理 HasBasis.limsInf_eq_iSup_sInf
-  结论: {p : ι -> 命题} {s : ι -> Set α} {f : Filter α}
+定理 有基.limsInf_eq_iSup_sInf
+  结论: {p : ι -> 命题} {s : ι -> 集合 α} {f : 滤子 α}
   证明: HasBasis.limsSup_eq_iInf_sSup (α := αᵒᵈ) h
 
 Depends on / 依赖: HasBasis, HasBasis.limsSup_eq_iInf_sSup, limsSup_eq_iInf_sSup
@@ -1530,7 +1530,7 @@ theorem limsSup_eq_iInf_sSup
 
 中文:
 定理 limsSup_eq_iInf_sSup
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: limsSup f = ⨅ s in f, sSup s
   证明: f.basis_sets.limsSup_eq_iInf_sSup
 
@@ -1550,7 +1550,7 @@ theorem limsInf_eq_iSup_sInf
 
 中文:
 定理 limsInf_eq_iSup_sInf
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: limsInf f = ⨆ s in f, sInf s
   证明: limsSup_eq_iInf_sSup (α := αᵒᵈ)
 
@@ -1570,7 +1570,7 @@ theorem limsup_le_iSup
 
 中文:
 定理 limsup_le_iSup
-  条件: {f : Filter β} {u : β -> α}
+  条件: {f : 滤子 β} {u : β -> α}
   结论: limsup u f <= ⨆ n, u n
   证明: limsup_le_of_le (by isBoundedDefault) (Eventually.of_forall (le_iSup u))
 
@@ -1590,7 +1590,7 @@ theorem iInf_le_liminf
 
 中文:
 定理 iInf_le_liminf
-  条件: {f : Filter β} {u : β -> α}
+  条件: {f : 滤子 β} {u : β -> α}
   结论: ⨅ n, u n <= liminf u f
   证明: le_liminf_of_le (by isBoundedDefault) (Eventually.of_forall (iInf_le u))
 
@@ -1610,7 +1610,7 @@ theorem limsup_eq_iInf_iSup
 
 中文:
 定理 limsup_eq_iInf_iSup
-  条件: {f : Filter β} {u : β -> α}
+  条件: {f : 滤子 β} {u : β -> α}
   结论: limsup u f = ⨅ s in f, ⨆ a in s, u a
   证明: (f.basis_sets.map u).limsSup_eq_iInf_sSup.trans by simp only [sSup_image, id]
 
@@ -1670,8 +1670,8 @@ theorem HasBasis.limsup_eq_iInf_iSup
   proof: (h.map u).limsSup_eq_iInf_sSup.trans by simp only [sSup_image]
 
 中文:
-定理 HasBasis.limsup_eq_iInf_iSup
-  结论: {p : ι -> 命题} {s : ι -> Set β} {f : Filter β} {u : β -> α}
+定理 有基.limsup_eq_iInf_iSup
+  结论: {p : ι -> 命题} {s : ι -> 集合 β} {f : 滤子 β} {u : β -> α}
   证明: (h.map u).limsSup_eq_iInf_sSup.trans by simp only [sSup_image]
 
 Depends on / 依赖: h.map, limsSup_eq_iInf_sSup, limsSup_eq_iInf_sSup.trans, sSup_image
@@ -1692,7 +1692,7 @@ lemma limsSup_principal_eq_sSup
 
 中文:
 引理 limsSup_principal_eq_sSup
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: limsSup (𝓟 s) = sSup s
   证明: by
   simpa only [limsSup, eventually_principal] using! sInf_upperBounds_eq_sSup s
@@ -1714,7 +1714,7 @@ lemma limsInf_principal_eq_sInf
 
 中文:
 引理 limsInf_principal_eq_sInf
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: limsInf (𝓟 s) = sInf s
   证明: by
   simpa only [limsInf, eventually_principal] using! sSup_lowerBounds_eq_sInf s
@@ -1779,7 +1779,7 @@ theorem blimsup_congr'
 
 中文:
 定理 blimsup_congr'
-  结论: {f : Filter β} {p q : β -> 命题} {u : β -> α}
+  结论: {f : 滤子 β} {p q : β -> 命题} {u : β -> α}
   证明: by
   simp only [blimsup_eq]
   congr with a
@@ -1807,7 +1807,7 @@ theorem bliminf_congr'
 
 中文:
 定理 bliminf_congr'
-  结论: {f : Filter β} {p q : β -> 命题} {u : β -> α}
+  结论: {f : 滤子 β} {p q : β -> 命题} {u : β -> α}
   证明: blimsup_congr' (α := αᵒᵈ) h
 
 Depends on / 依赖: blimsup_congr
@@ -1828,8 +1828,8 @@ lemma HasBasis.blimsup_eq_iInf_iSup
     mem_ofPred_eq]
 
 中文:
-引理 HasBasis.blimsup_eq_iInf_iSup
-  结论: {p : ι -> 命题} {s : ι -> Set β} {f : Filter β} {u : β -> α}
+引理 有基.blimsup_eq_iInf_iSup
+  结论: {p : ι -> 命题} {s : ι -> 集合 β} {f : 滤子 β} {u : β -> α}
   证明: by
   simp only [blimsup_eq_limsup, (hf.inf_principal _).limsup_eq_iInf_iSup, mem_inter_iff, iSup_and,
     mem_ofPred_eq]
@@ -1853,7 +1853,7 @@ theorem blimsup_eq_iInf_biSup
 
 中文:
 定理 blimsup_eq_iInf_biSup
-  条件: {f : Filter β} {p : β -> 命题} {u : β -> α}
+  条件: {f : 滤子 β} {p : β -> 命题} {u : β -> α}
   证明: by
   simp only [f.basis_sets.blimsup_eq_iInf_iSup, iSup_and', id, and_comm]
 
@@ -1895,7 +1895,7 @@ theorem liminf_eq_iSup_iInf
 
 中文:
 定理 liminf_eq_iSup_iInf
-  条件: {f : Filter β} {u : β -> α}
+  条件: {f : 滤子 β} {u : β -> α}
   结论: liminf u f = ⨆ s in f, ⨅ a in s, u a
   证明: limsup_eq_iInf_iSup (α := αᵒᵈ)
 
@@ -1953,8 +1953,8 @@ theorem HasBasis.liminf_eq_iSup_iInf
   proof: HasBasis.limsup_eq_iInf_iSup (α := αᵒᵈ) h
 
 中文:
-定理 HasBasis.liminf_eq_iSup_iInf
-  结论: {p : ι -> 命题} {s : ι -> Set β} {f : Filter β} {u : β -> α}
+定理 有基.liminf_eq_iSup_iInf
+  结论: {p : ι -> 命题} {s : ι -> 集合 β} {f : 滤子 β} {u : β -> α}
   证明: HasBasis.limsup_eq_iInf_iSup (α := αᵒᵈ) h
 
 Depends on / 依赖: HasBasis, HasBasis.limsup_eq_iInf_iSup, limsup_eq_iInf_iSup
@@ -1973,7 +1973,7 @@ theorem bliminf_eq_iSup_biInf
 
 中文:
 定理 bliminf_eq_iSup_biInf
-  条件: {f : Filter β} {p : β -> 命题} {u : β -> α}
+  条件: {f : 滤子 β} {p : β -> 命题} {u : β -> α}
   证明: @blimsup_eq_iInf_biSup αᵒᵈ β _ f p u
 
 Depends on / 依赖: blimsup_eq_iInf_biSup
@@ -2011,7 +2011,7 @@ theorem iSup_liminf_le_liminf_iSup
 
 中文:
 定理 iSup_liminf_le_liminf_iSup
-  条件: {f : Filter β} {u : ι -> β -> α}
+  条件: {f : 滤子 β} {u : ι -> β -> α}
   证明: iSup_le fun i => liminf_le_liminf .of_forall fun b => le_iSup (u · b) i
 
 Depends on / 依赖: iSup_le, le_iSup, liminf_le_liminf, of_forall
@@ -2030,7 +2030,7 @@ theorem limsup_iInf_le_iInf_limsup
 
 中文:
 定理 limsup_iInf_le_iInf_limsup
-  条件: {f : Filter β} {u : ι -> β -> α}
+  条件: {f : 滤子 β} {u : ι -> β -> α}
   证明: iSup_liminf_le_liminf_iSup (α := αᵒᵈ)
 
 Depends on / 依赖: iSup_liminf_le_liminf_iSup
@@ -2056,7 +2056,7 @@ theorem limsup_eq_sInf_sSup
 
 中文:
 定理 limsup_eq_sInf_sSup
-  条件: {ι R : 类型} (F : Filter ι) [CompleteLattice R] (a : ι -> R)
+  条件: {ι R : 类型} (F : 滤子 ι) [完备格 R] (a : ι -> R)
   证明: by
   apply le_antisymm
   · rw [limsup_eq]
@@ -2090,7 +2090,7 @@ theorem liminf_eq_sSup_sInf
 
 中文:
 定理 liminf_eq_sSup_sInf
-  条件: {ι R : 类型} (F : Filter ι) [CompleteLattice R] (a : ι -> R)
+  条件: {ι R : 类型} (F : 滤子 ι) [完备格 R] (a : ι -> R)
   证明: @Filter.limsup_eq_sInf_sSup ι (OrderDual R) _ _ a
 
 Depends on / 依赖: Filter, Filter.limsup_eq_sInf_sSup, OrderDual, limsup_eq_sInf_sSup
@@ -2115,7 +2115,7 @@ theorem liminf_le_of_frequently_le'
 
 中文:
 定理 liminf_le_of_frequently_le'
-  结论: {α β} [CompleteLattice β] {f : Filter α} {u : α -> β} {x : β}
+  结论: {α β} [完备格 β] {f : 滤子 α} {u : α -> β} {x : β}
   证明: by
   rw [liminf_eq]
   refine sSup_le fun b hb => ?_
@@ -2145,7 +2145,7 @@ theorem le_limsup_of_frequently_le'
 
 中文:
 定理 le_limsup_of_frequently_le'
-  结论: {α β} [CompleteLattice β] {f : Filter α} {u : α -> β} {x : β}
+  结论: {α β} [完备格 β] {f : 滤子 α} {u : α -> β} {x : β}
   证明: liminf_le_of_frequently_le' (β := βᵒᵈ) h
 
 Depends on / 依赖: liminf_le_of_frequently_le
@@ -2172,8 +2172,8 @@ theorem _root_.CompleteLatticeHom.apply_limsup_iterate
   
 
 中文:
-定理 _root_.CompleteLatticeHom.apply_limsup_iterate
-  条件: (f : CompleteLatticeHom α α) (a : α)
+定理 _root_.完备格态射.apply_limsup_iterate
+  条件: (f : 完备格态射 α α) (a : α)
   证明: by
   rw [limsup_eq_iInf_iSup_of_nat']; rw [map_iInf]
   simp_rw [_root_.map_iSup, ← Function.comp_apply (f := f), ← Function.iterate_succ' f,
@@ -2204,8 +2204,8 @@ theorem _root_.CompleteLatticeHom.apply_liminf_iterate
   proof: (CompleteLatticeHom.dual f).apply_limsup_iterate _
 
 中文:
-定理 _root_.CompleteLatticeHom.apply_liminf_iterate
-  条件: (f : CompleteLatticeHom α α) (a : α)
+定理 _root_.完备格态射.apply_liminf_iterate
+  条件: (f : 完备格态射 α α) (a : α)
   证明: (CompleteLatticeHom.dual f).apply_limsup_iterate _
 
 Depends on / 依赖: CompleteLatticeHom, CompleteLatticeHom.dual, apply_limsup_iterate
@@ -2642,7 +2642,7 @@ theorem _root_.OrderIso.apply_blimsup
 
 中文:
 定理 _root_.OrderIso.apply_blimsup
-  条件: [CompleteLattice γ] (e : α ≃o γ)
+  条件: [完备格 γ] (e : α ≃o γ)
   证明: by
   simp only [blimsup_eq, map_sInf, Function.comp_apply, e.image_eq_preimage_symm,
     Set.preimage_ofPred_eq, e.le_symm_apply]
@@ -2664,7 +2664,7 @@ theorem _root_.OrderIso.apply_bliminf
 
 中文:
 定理 _root_.OrderIso.apply_bliminf
-  条件: [CompleteLattice γ] (e : α ≃o γ)
+  条件: [完备格 γ] (e : α ≃o γ)
   证明: e.dual.apply_blimsup
 
 Depends on / 依赖: apply_blimsup, e.dual.apply_blimsup
@@ -2685,8 +2685,8 @@ theorem _root_.sSupHom.apply_blimsup_le
   simp only [_root_.map_iSup, le_refl]
 
 中文:
-定理 _root_.sSupHom.apply_blimsup_le
-  条件: [CompleteLattice γ] (g : sSupHom α γ)
+定理 _root_.sSup态射.apply_blimsup_le
+  条件: [完备格 γ] (g : sSup态射 α γ)
   证明: by
   simp only [blimsup_eq_iInf_biSup, Function.comp]
   refine ((OrderHomClass.mono g).map_iInf₂_le _).trans ?_
@@ -2709,8 +2709,8 @@ theorem _root_.sInfHom.le_apply_bliminf
   proof: (sInfHom.dual g).apply_blimsup_le
 
 中文:
-定理 _root_.sInfHom.le_apply_bliminf
-  条件: [CompleteLattice γ] (g : sInfHom α γ)
+定理 _root_.sInf态射.le_apply_bliminf
+  条件: [完备格 γ] (g : sInf态射 α γ)
   证明: (sInfHom.dual g).apply_blimsup_le
 
 Depends on / 依赖: apply_blimsup_le, sInfHom, sInfHom.dual
@@ -2936,7 +2936,7 @@ lemma limsup_piecewise
 
 中文:
 引理 limsup_piecewise
-  条件: {s : Set β} [DecidablePred (· in s)] {v}
+  条件: {s : 集合 β} [DecidablePred (· in s)] {v}
   证明: by
   rw [← blimsup_sup_not (p := (· in s))]
   refine congr_arg₂ _ (blimsup_congr ?_) (blimsup_congr ?_) <;>
@@ -2960,7 +2960,7 @@ lemma liminf_piecewise
 
 中文:
 引理 liminf_piecewise
-  条件: {s : Set β} [DecidablePred (· in s)] {v}
+  条件: {s : 集合 β} [DecidablePred (· in s)] {v}
   证明: limsup_piecewise (α := αᵒᵈ)
 
 Depends on / 依赖: limsup_piecewise
@@ -3311,7 +3311,7 @@ theorem cofinite.bliminf_set_eq
 
 中文:
 定理 cofinite.bliminf_set_eq
-  结论: bliminf s cofinite p = { x | { n | p n ∧ x ∉ s n }.Finite }
+  结论: bliminf s cofinite p = { x | { n | p n ∧ x ∉ s n }.有限 }
   证明: by
   rw [← compl_inj_iff]
   simp only [bliminf_eq_iSup_biInf, compl_iInf, compl_iSup, ← blimsup_eq_iInf_biSup,
@@ -3337,7 +3337,7 @@ theorem cofinite.limsup_set_eq
 
 中文:
 定理 cofinite.limsup_set_eq
-  结论: limsup s cofinite = { x | { n | x in s n }.Infinite }
+  结论: limsup s cofinite = { x | { n | x in s n }.无限 }
   证明: by
   simp only [← cofinite.blimsup_true s, cofinite.blimsup_set_eq, true_and]
 
@@ -3357,7 +3357,7 @@ theorem cofinite.liminf_set_eq
 
 中文:
 定理 cofinite.liminf_set_eq
-  结论: liminf s cofinite = { x | { n | x ∉ s n }.Finite }
+  结论: liminf s cofinite = { x | { n | x ∉ s n }.有限 }
   证明: by
   simp only [← cofinite.bliminf_true s, cofinite.bliminf_set_eq, true_and]
 
@@ -3381,8 +3381,8 @@ theorem exists_forall_mem_of_hasBasis_mem_blimsup
   · exact hg (b i) (hl.mem
 
 中文:
-定理 exists_forall_mem_of_hasBasis_mem_blimsup
-  结论: {l : Filter β} {b : ι -> Set β} {q : ι -> 命题}
+定理 存在_对任意_mem_of_hasBasis_mem_blimsup
+  结论: {l : 滤子 β} {b : ι -> 集合 β} {q : ι -> 命题}
   证明: by
   rw [blimsup_eq_iInf_biSup] at hx
   simp only [iSup_eq_iUnion, iInf_eq_iInter, mem_iInter, mem_iUnion, exists_prop] at hx
@@ -3414,8 +3414,8 @@ theorem exists_forall_mem_of_hasBasis_mem_blimsup'
   exact ⟨fun i => f ⟨i, trivial⟩, fun i => hf ⟨i, trivial⟩⟩
 
 中文:
-定理 exists_forall_mem_of_hasBasis_mem_blimsup'
-  结论: {l : Filter β} {b : ι -> Set β}
+定理 存在_对任意_mem_of_hasBasis_mem_blimsup'
+  结论: {l : 滤子 β} {b : ι -> 集合 β}
   证明: by
   obtain ⟨f, hf⟩ := exists_forall_mem_of_hasBasis_mem_blimsup hl hx
   exact ⟨fun i => f ⟨i, trivial⟩, fun i => hf ⟨i, trivial⟩⟩
@@ -3444,7 +3444,7 @@ theorem frequently_lt_of_lt_limsSup
 
 中文:
 定理 frequently_lt_of_lt_limsSup
-  结论: {f : Filter α} [ConditionallyCompleteLinearOrder α] {a : α}
+  结论: {f : 滤子 α} [条件完备线性序 α] {a : α}
   证明: by
   contrapose! h
   exact limsSup_le_of_le hf h
@@ -3467,7 +3467,7 @@ theorem frequently_lt_of_limsInf_lt
 
 中文:
 定理 frequently_lt_of_limsInf_lt
-  结论: {f : Filter α} [ConditionallyCompleteLinearOrder α] {a : α}
+  结论: {f : 滤子 α} [条件完备线性序 α] {a : α}
   证明: frequently_lt_of_lt_limsSup (α := OrderDual α) hf h
 
 Depends on / 依赖: OrderDual, frequently_lt_of_lt_limsSup, isBoundedDefault, limsInf
@@ -3491,7 +3491,7 @@ theorem eventually_lt_of_lt_liminf
 
 中文:
 定理 eventually_lt_of_lt_liminf
-  结论: {f : Filter α} [ConditionallyCompleteLinearOrder β] {u : α -> β}
+  结论: {f : 滤子 α} [条件完备线性序 β] {u : α -> β}
   证明: by
   obtain ⟨c, hc, hbc⟩ : exists (c : β) (_ : c in { c : β | forallᶠ n : α in f, c <= u n }), b < c := by
     simp_rw [exists_prop]
@@ -3519,7 +3519,7 @@ theorem eventually_lt_of_limsup_lt
 
 中文:
 定理 eventually_lt_of_limsup_lt
-  结论: {f : Filter α} [ConditionallyCompleteLinearOrder β] {u : α -> β}
+  结论: {f : 滤子 α} [条件完备线性序 β] {u : α -> β}
   证明: eventually_lt_of_lt_liminf (β := βᵒᵈ) h hu
 
 Depends on / 依赖: eventually_lt_of_lt_liminf, isBoundedDefault
@@ -3544,7 +3544,7 @@ theorem eventually_lt_add_pos_of_limsup_le
 
 中文:
 定理 eventually_lt_add_pos_of_limsup_le
-  结论: [Preorder β] [AddZeroClass α] [AddLeftStrictMono α]
+  结论: [预序 β] [加法零类 α] [AddLeftStrictMono α]
   证明: eventually_lt_of_limsup_lt (lt_of_le_of_lt hu (lt_add_of_pos_right x hε)) hu_bdd
 
 Depends on / 依赖: eventually_lt_of_limsup_lt, hu_bdd, lt_add_of_pos_right, lt_of_le_of_lt
@@ -3565,7 +3565,7 @@ theorem eventually_add_neg_lt_of_le_liminf
 
 中文:
 定理 eventually_add_neg_lt_of_le_liminf
-  结论: [Preorder β] [AddZeroClass α] [AddLeftStrictMono α]
+  结论: [预序 β] [加法零类 α] [AddLeftStrictMono α]
   证明: eventually_lt_of_lt_liminf (lt_of_lt_of_le (add_lt_of_neg_right x hε) hu) hu_bdd
 
 Depends on / 依赖: add_lt_of_neg_right, eventually_lt_of_lt_liminf, hu_bdd, lt_of_lt_of_le
@@ -3589,8 +3589,8 @@ theorem exists_lt_of_limsup_le
   exact ⟨⟨n + 1, Nat.succ_pos _⟩, hn (n + 1) (Nat.le_succ _)⟩
 
 中文:
-定理 exists_lt_of_limsup_le
-  结论: [AddZeroClass α] [AddLeftStrictMono α] {x ε : α} {u : 自然数 -> α}
+定理 存在_lt_of_limsup_le
+  结论: [加法零类 α] [AddLeftStrictMono α] {x ε : α} {u : 自然数 -> α}
   证明: by
   have h : forallᶠ n : Nat in atTop, u n < x + ε := eventually_lt_add_pos_of_limsup_le hu_bdd hu hε
   simp only [eventually_atTop] at h
@@ -3620,8 +3620,8 @@ theorem exists_lt_of_le_liminf
   exact ⟨⟨n + 1, Nat.succ_pos _⟩, hn (n + 1) (Nat.le_succ _)⟩
 
 中文:
-定理 exists_lt_of_le_liminf
-  结论: [AddZeroClass α] [AddLeftStrictMono α] {x ε : α} {u : 自然数 -> α}
+定理 存在_lt_of_le_liminf
+  结论: [加法零类 α] [AddLeftStrictMono α] {x ε : α} {u : 自然数 -> α}
   证明: by
   have h : forallᶠ n : Nat in atTop, x + ε < u n := eventually_add_neg_lt_of_le_liminf hu_bdd hu hε
   simp only [eventually_atTop] at h
@@ -3744,7 +3744,7 @@ lemma limsup_le_iff'
 
 中文:
 引理 limsup_le_iff'
-  结论: [DenselyOrdered β] {x : β}
+  结论: [稠密序 β] {x : β}
   证明: by
   refine ⟨fun h _ h' => (eventually_lt_of_limsup_lt (h.trans_lt h') h₂).mono fun _ => le_of_lt, ?_⟩
   rw [← forall_gt_iff_le]
@@ -3819,7 +3819,7 @@ lemma le_limsup_iff'
 
 中文:
 引理 le_limsup_iff'
-  结论: [DenselyOrdered β] {x : β}
+  结论: [稠密序 β] {x : β}
   证明: by
   refine ⟨fun h _ h' => (frequently_lt_of_lt_limsup h₁ (h'.trans_le h)).mono fun _ => le_of_lt, ?_⟩
   rw [← forall_lt_iff_le]
@@ -3868,7 +3868,7 @@ theorem le_liminf_iff'
 
 中文:
 定理 le_liminf_iff'
-  结论: [DenselyOrdered β] {x : β}
+  结论: [稠密序 β] {x : β}
   证明: limsup_le_iff' (β := βᵒᵈ) h₁ h₂
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, isBoundedDefault, liminf, limsup_le_iff
@@ -3907,7 +3907,7 @@ theorem liminf_le_iff'
 
 中文:
 定理 liminf_le_iff'
-  结论: [DenselyOrdered β] {x : β}
+  结论: [稠密序 β] {x : β}
   证明: le_limsup_iff' (β := βᵒᵈ) h₁ h₂
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, isBoundedDefault, le_limsup_iff, liminf
@@ -4065,8 +4065,8 @@ theorem HasBasis.liminf_eq_ciSup_ciInf
          ⋃ (j : Subtype p), ⋂ (i : s (liminf
 
 中文:
-定理 HasBasis.liminf_eq_ciSup_ciInf
-  结论: {v : Filter ι}
+定理 有基.liminf_eq_ciSup_ciInf
+  结论: {v : 滤子 ι}
   证明: by
   classical
   rcases H with ⟨j0, hj0⟩
@@ -4131,8 +4131,8 @@ theorem HasBasis.liminf_eq_ite
   · have A : forall (j : Subtype p), ⋂ (i : s j), Iic (f 
 
 中文:
-定理 HasBasis.liminf_eq_ite
-  结论: {v : Filter ι} {p : ι' -> 命题} {s : ι' -> Set ι}
+定理 有基.liminf_eq_ite
+  结论: {v : 滤子 ι} {p : ι' -> 命题} {s : ι' -> 集合 ι}
   证明: by
   by_cases H : exists (j : Subtype p), s j = ∅
   · rw [if_pos H]
@@ -4202,8 +4202,8 @@ theorem HasBasis.limsup_eq_ciInf_ciSup
   proof: HasBasis.liminf_eq_ciSup_ciInf (α := αᵒᵈ) hv hs H
 
 中文:
-定理 HasBasis.limsup_eq_ciInf_ciSup
-  结论: {v : Filter ι}
+定理 有基.limsup_eq_ciInf_ciSup
+  结论: {v : 滤子 ι}
   证明: HasBasis.liminf_eq_ciSup_ciInf (α := αᵒᵈ) hv hs H
 
 Depends on / 依赖: HasBasis, HasBasis.liminf_eq_ciSup_ciInf, liminf_eq_ciSup_ciInf
@@ -4225,8 +4225,8 @@ theorem HasBasis.limsup_eq_ite
   proof: HasBasis.liminf_eq_ite (α := αᵒᵈ) hv f
 
 中文:
-定理 HasBasis.limsup_eq_ite
-  结论: {v : Filter ι} {p : ι' -> 命题} {s : ι' -> Set ι}
+定理 有基.limsup_eq_ite
+  结论: {v : 滤子 ι} {p : ι' -> 命题} {s : ι' -> 集合 ι}
   证明: HasBasis.liminf_eq_ite (α := αᵒᵈ) hv f
 
 Depends on / 依赖: HasBasis, HasBasis.liminf_eq_ite, liminf_eq_ite
@@ -4260,7 +4260,7 @@ theorem GaloisConnection.l_limsup_le
 
 中文:
 定理 GaloisConnection.l_limsup_le
-  结论: [ConditionallyCompleteLattice β]
+  结论: [条件完备格 β]
   证明: by
   refine le_limsSup_of_le hlv fun c hc => ?_
   rw [Filter.eventually_map] at hc
@@ -4296,7 +4296,7 @@ theorem OrderIso.limsup_apply
 
 中文:
 定理 OrderIso.limsup_apply
-  结论: {γ} [ConditionallyCompleteLattice β] [ConditionallyCompleteLattice γ]
+  结论: {γ} [条件完备格 β] [条件完备格 γ]
   证明: by
   refine le_antisymm ((OrderIso.to_galoisConnection g).l_limsup_le hgu hu_co) ?_
   rw [← g.symm.symm_apply_apply <| limsup (fun x => g (u x)) f]; rw [g.symm_symm]
@@ -4333,7 +4333,7 @@ theorem OrderIso.liminf_apply
 
 中文:
 定理 OrderIso.liminf_apply
-  结论: {γ} [ConditionallyCompleteLattice β] [ConditionallyCompleteLattice γ]
+  结论: {γ} [条件完备格 β] [条件完备格 γ]
   证明: OrderIso.limsup_apply (β := βᵒᵈ) (γ := γᵒᵈ) g.dual hu hu_co hgu hgu_co
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, OrderIso, OrderIso.limsup_apply, f.IsBoundedUnder, f.IsCoboundedUnder, g.dual, hgu_co, hu_co, isBoundedDefault, liminf, limsup_apply
@@ -4369,7 +4369,7 @@ theorem limsup_max
 
 中文:
 定理 limsup_max
-  结论: [ConditionallyCompleteLinearOrder β] {f : Filter α} {u v : α -> β}
+  结论: [条件完备线性序 β] {f : 滤子 α} {u v : α -> β}
   证明: by
   have bddmax := IsBoundedUnder.sup h₃ h₄
   have cobddmax := isCoboundedUnder_le_max (v := v) (Or.inl h₁)
@@ -4407,7 +4407,7 @@ theorem liminf_min
 
 中文:
 定理 liminf_min
-  结论: [ConditionallyCompleteLinearOrder β] {f : Filter α} {u v : α -> β}
+  结论: [条件完备线性序 β] {f : 滤子 α} {u v : α -> β}
   证明: limsup_max (β := βᵒᵈ) h₁ h₂ h₃ h₄
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, f.IsBoundedUnder, f.IsCoboundedUnder, isBoundedDefault, liminf, limsup_max
@@ -4440,7 +4440,7 @@ theorem limsup_finset_sup'
 
 中文:
 定理 limsup_finset_sup'
-  结论: [ConditionallyCompleteLinearOrder β] {f : Filter α}
+  结论: [条件完备线性序 β] {f : 滤子 α}
   证明: by
   have bddsup := isBoundedUnder_le_finset_sup' hs h₂
   apply le_antisymm
@@ -4491,7 +4491,7 @@ theorem limsup_finset_sup
 
 中文:
 定理 limsup_finset_sup
-  结论: [ConditionallyCompleteLinearOrder β] [OrderBot β] {f : Filter α}
+  结论: [条件完备线性序 β] [有底序 β] {f : 滤子 α}
   证明: by
   rcases eq_or_neBot f with (rfl | _)
   · simp [limsup_eq, csInf_univ]
@@ -4528,7 +4528,7 @@ theorem liminf_finset_inf'
 
 中文:
 定理 liminf_finset_inf'
-  结论: [ConditionallyCompleteLinearOrder β] {f : Filter α}
+  结论: [条件完备线性序 β] {f : 滤子 α}
   证明: limsup_finset_sup' (β := βᵒᵈ) hs h₁ h₂
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, isBoundedDefault, liminf, limsup_finset_sup
@@ -4550,7 +4550,7 @@ theorem liminf_finset_inf
 
 中文:
 定理 liminf_finset_inf
-  结论: [ConditionallyCompleteLinearOrder β] [OrderTop β] {f : Filter α}
+  结论: [条件完备线性序 β] [有顶序 β] {f : 滤子 α}
   证明: limsup_finset_sup (β := βᵒᵈ) h₁ h₂
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, isBoundedDefault, liminf, limsup_finset_sup

@@ -30,7 +30,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (TwoSidedIdeal R)
+  签名: SemilatticeSup (TwoSided理想 R)
   定义体: { ringCon := I.ringCon ⊔ J.ringCon }
   le_sup_left I J := by rw [ringCon_le_iff]; exact le_sup_left
   le_sup_right I J := by rw [ringCon_le_iff]; exact le_sup_right
@@ -55,7 +55,7 @@ lemma sup_ringCon
 
 中文:
 引理 sup_ringCon
-  条件: (I J : TwoSidedIdeal R)
+  条件: (I J : TwoSided理想 R)
   结论: (I ⊔ J).ringCon = I.ringCon ⊔ J.ringCon
   证明: rfl
 -/
@@ -75,7 +75,7 @@ lemma mem_sup_left
 
 中文:
 引理 mem_sup_left
-  条件: {I J : TwoSidedIdeal R} {x : R} (h : x in I)
+  条件: {I J : TwoSided理想 R} {x : R} (h : x in I)
   证明: (show I <= I ⊔ J from le_sup_left) h
 
 Depends on / 依赖: le_sup_left
@@ -94,7 +94,7 @@ lemma mem_sup_right
 
 中文:
 引理 mem_sup_right
-  条件: {I J : TwoSidedIdeal R} {x : R} (h : x in J)
+  条件: {I J : TwoSided理想 R} {x : R} (h : x in J)
   证明: (show J <= I ⊔ J from le_sup_right) h
 
 Depends on / 依赖: le_sup_right
@@ -120,7 +120,7 @@ lemma mem_sup
 
 中文:
 引理 mem_sup
-  条件: {I J : TwoSidedIdeal R} {x : R}
+  条件: {I J : TwoSided理想 R} {x : R}
   证明: by
   constructor
   · let s : TwoSidedIdeal R := .mk'
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (TwoSidedIdeal R)
+  签名: SemilatticeInf (TwoSided理想 R)
   定义体: { ringCon := I.ringCon ⊓ J.ringCon }
   inf_le_left I J := by rw [ringCon_le_iff]; exact inf_le_left
   inf_le_right I J := by rw [ringCon_le_iff]; exact inf_le_right
@@ -191,7 +191,7 @@ lemma inf_ringCon
 
 中文:
 引理 inf_ringCon
-  条件: (I J : TwoSidedIdeal R)
+  条件: (I J : TwoSided理想 R)
   结论: (I ⊓ J).ringCon = I.ringCon ⊓ J.ringCon
   证明: rfl
 -/
@@ -207,7 +207,7 @@ lemma mem_inf
 
 中文:
 引理 mem_inf
-  条件: {I J : TwoSidedIdeal R} {x : R}
+  条件: {I J : TwoSided理想 R} {x : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (TwoSidedIdeal R)
+  签名: 上确界集 (TwoSided理想 R)
   定义体: { ringCon := sSup <| TwoSidedIdeal.ringCon '' s }
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.ringCon, ringCon
@@ -244,7 +244,7 @@ lemma sSup_ringCon
 
 中文:
 引理 sSup_ringCon
-  条件: (S : Set (TwoSidedIdeal R))
+  条件: (S : 集合 (TwoSided理想 R))
   证明: rfl
 -/
 lemma sSup_ringCon (S : Set (TwoSidedIdeal R)) :
@@ -261,7 +261,7 @@ lemma iSup_ringCon
 
 中文:
 引理 iSup_ringCon
-  条件: {ι : 类型} (I : ι -> TwoSidedIdeal R)
+  条件: {ι : 类型} (I : ι -> TwoSided理想 R)
   证明: by
   simp only [iSup, sSup_ringCon]; congr; ext; simp
 
@@ -281,7 +281,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeSup (TwoSidedIdeal R)
+  签名: 余mpleteSemilatticeSup (TwoSided理想 R)
   定义体: .of_image ringCon_le_iff.symm (isLUB_sSup _)
 
 Depends on / 依赖: isLUB_sSup, of_image, ringCon_le_iff, ringCon_le_iff.symm
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (TwoSidedIdeal R)
+  签名: 下确界集 (TwoSided理想 R)
   定义体: { ringCon := sInf <| TwoSidedIdeal.ringCon '' s }
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.ringCon, ringCon
@@ -317,7 +317,7 @@ lemma sInf_ringCon
 
 中文:
 引理 sInf_ringCon
-  条件: (S : Set (TwoSidedIdeal R))
+  条件: (S : 集合 (TwoSided理想 R))
   证明: rfl
 -/
 lemma sInf_ringCon (S : Set (TwoSidedIdeal R)) :
@@ -334,7 +334,7 @@ lemma iInf_ringCon
 
 中文:
 引理 iInf_ringCon
-  条件: {ι : 类型} (I : ι -> TwoSidedIdeal R)
+  条件: {ι : 类型} (I : ι -> TwoSided理想 R)
   证明: by
   simp only [iInf, sInf_ringCon]; congr!; ext; simp
 
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (TwoSidedIdeal R)
+  签名: 余mpleteSemilatticeInf (TwoSided理想 R)
   定义体: .of_image ringCon_le_iff.symm (isGLB_sInf _)
 
 Depends on / 依赖: isGLB_sInf, of_image, ringCon_le_iff, ringCon_le_iff.symm
@@ -372,7 +372,7 @@ lemma mem_iInf
 
 中文:
 引理 mem_iInf
-  条件: {ι : 类型} {I : ι -> TwoSidedIdeal R} {x : R}
+  条件: {ι : 类型} {I : ι -> TwoSided理想 R} {x : R}
   证明: show (forall _, _) ↔ _ by simp [mem_iff]
 
 Depends on / 依赖: mem_iff
@@ -391,7 +391,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: {S : Set (TwoSidedIdeal R)} {x : R}
+  条件: {S : 集合 (TwoSided理想 R)} {x : R}
   证明: show (forall _, _) ↔ _ by simp [mem_iff]
 
 Depends on / 依赖: mem_iff
@@ -410,7 +410,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (TwoSidedIdeal R)
+  签名: 顶元素 (TwoSided理想 R)
   定义体: { ringCon := ⊤ }
 
 Depends on / 依赖: ringCon
@@ -430,7 +430,7 @@ lemma top_ringCon
 
 中文:
 引理 top_ringCon
-  结论: (⊤ : TwoSidedIdeal R).ringCon = ⊤
+  结论: (⊤ : TwoSided理想 R).ringCon = ⊤
   证明: rfl
 
 @[simp]
@@ -450,7 +450,7 @@ lemma mem_top
 中文:
 引理 mem_top
   条件: {x : R}
-  结论: x in (⊤ : TwoSidedIdeal R)
+  结论: x in (⊤ : TwoSided理想 R)
   证明: trivial
 -/
 lemma mem_top {x : R} : x in (⊤ : TwoSidedIdeal R) := trivial
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (TwoSidedIdeal R)
+  签名: 底元素 (TwoSided理想 R)
   定义体: { ringCon := ⊥ }
 
 Depends on / 依赖: ringCon
@@ -485,7 +485,7 @@ lemma bot_ringCon
 
 中文:
 引理 bot_ringCon
-  结论: (⊥ : TwoSidedIdeal R).ringCon = ⊥
+  结论: (⊥ : TwoSided理想 R).ringCon = ⊥
   证明: rfl
 
 @[simp]
@@ -505,7 +505,7 @@ lemma mem_bot
 中文:
 引理 mem_bot
   条件: {x : R}
-  结论: x in (⊥ : TwoSidedIdeal R) ↔ x = 0
+  结论: x in (⊥ : TwoSided理想 R) ↔ x = 0
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (TwoSidedIdeal R)
+  签名: 完备格 (TwoSided理想 R)
   定义体: (inferInstance : SemilatticeSup (TwoSidedIdeal R))
   __ := (inferInstance : SemilatticeInf (TwoSidedIdeal R))
   __ := (inferInstance : CompleteSemilatticeSup (TwoSidedIdeal R))
@@ -559,7 +559,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ((⊥ : TwoSidedIdeal R) : Set R) = {0}
+  结论: ((⊥ : TwoSided理想 R) : 集合 R) = {0}
   证明: rfl
 
 @[simp]
@@ -577,7 +577,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ((⊤ : TwoSidedIdeal R) : Set R) = Set.univ
+  结论: ((⊤ : TwoSided理想 R) : 集合 R) = 集合.univ
   证明: rfl
 -/
 lemma coe_top : ((⊤ : TwoSidedIdeal R) : Set R) = Set.univ := rfl
@@ -594,7 +594,7 @@ alias ⟨eq_top, one_mem⟩ := one_mem_iff
 
 中文:
 引理 one_mem_iff
-  条件: {R : 类型} [NonAssocRing R] (I : TwoSidedIdeal R)
+  条件: {R : 类型} [非结合环 R] (I : TwoSided理想 R)
   证明: ⟨fun h => eq_top_iff.2 fun x _ => by simpa using I.mul_mem_left x _ h, fun h => h.symm ▸ trivial⟩
 
 alias ⟨eq_top, one_mem⟩ := one_mem_iff

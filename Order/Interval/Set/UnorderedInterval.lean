@@ -139,7 +139,7 @@ lemma uIcc_of_le
 中文:
 引理 uIcc_of_le
   条件: (h : a <= b)
-  结论: [[a, b]] = Icc a b
+  结论: [[a, b]] = 闭区间 a b
   证明: by rw [uIcc, inf_eq_left.2 h, sup_eq_right.2 h]
 
 @[simp]
@@ -161,7 +161,7 @@ lemma uIcc_of_ge
 中文:
 引理 uIcc_of_ge
   条件: (h : b <= a)
-  结论: [[a, b]] = Icc b a
+  结论: [[a, b]] = 闭区间 b a
   证明: by rw [uIcc, inf_eq_right.2 h, sup_eq_left.2 h]
 
 Depends on / 依赖: inf_eq_right, sup_eq_left
@@ -199,7 +199,7 @@ lemma uIcc_of_lt
 中文:
 引理 uIcc_of_lt
   条件: (h : a < b)
-  结论: [[a, b]] = Icc a b
+  结论: [[a, b]] = 闭区间 a b
   证明: uIcc_of_le h.le
 
 Depends on / 依赖: h.le, uIcc_of_le
@@ -217,7 +217,7 @@ lemma uIcc_of_gt
 中文:
 引理 uIcc_of_gt
   条件: (h : b < a)
-  结论: [[a, b]] = Icc b a
+  结论: [[a, b]] = 闭区间 b a
   证明: uIcc_of_ge h.le
 
 Depends on / 依赖: h.le, uIcc_of_ge
@@ -249,7 +249,7 @@ lemma nonempty_uIcc
 
 中文:
 引理 nonempty_uIcc
-  结论: [[a, b]].Nonempty
+  结论: [[a, b]].非空
   证明: nonempty_Icc.2 inf_le_sup
 -/
 @[simp] lemma nonempty_uIcc : [[a, b]].Nonempty := nonempty_Icc.2 inf_le_sup
@@ -264,7 +264,7 @@ lemma Icc_subset_uIcc
 
 中文:
 引理 Icc_subset_uIcc
-  结论: Icc a b subseteq [[a, b]]
+  结论: 闭区间 a b subseteq [[a, b]]
   证明: Icc_subset_Icc inf_le_left le_sup_right
 
 Depends on / 依赖: Icc_subset_Icc, inf_le_left, le_sup_right
@@ -280,7 +280,7 @@ lemma Icc_subset_uIcc'
 
 中文:
 引理 Icc_subset_uIcc'
-  结论: Icc b a subseteq [[a, b]]
+  结论: 闭区间 b a subseteq [[a, b]]
   证明: Icc_subset_Icc inf_le_right le_sup_left
 
 Depends on / 依赖: Icc_subset_Icc, inf_le_right, le_sup_left
@@ -382,7 +382,7 @@ lemma uIcc_subset_Icc
 
 中文:
 引理 uIcc_subset_Icc
-  条件: (ha : a₁ in Icc a₂ b₂) (hb : b₁ in Icc a₂ b₂)
+  条件: (ha : a₁ in 闭区间 a₂ b₂) (hb : b₁ in 闭区间 a₂ b₂)
   证明: Icc_subset_Icc (le_inf ha.1 hb.1) (sup_le ha.2 hb.2)
 
 Depends on / 依赖: Icc_subset_Icc, le_inf, sup_le
@@ -479,7 +479,7 @@ lemma bdd_below_bdd_above_iff_subset_uIcc
 
 中文:
 引理 bdd_below_bdd_above_iff_subset_uIcc
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: bddBelow_bddAbove_iff_subset_Icc.trans
     ⟨fun ⟨a, b, h⟩ => ⟨a, b, fun _ hx => Icc_subset_uIcc (h hx)⟩, fun ⟨_, _, h⟩ => ⟨_, _, h⟩⟩
 
@@ -593,7 +593,7 @@ lemma uIcc_injective_right
 中文:
 引理 uIcc_injective_right
   条件: (a : α)
-  结论: Injective fun b => uIcc b a
+  结论: 单射 fun b => uIcc b a
   证明: fun b c h => by
   rw [Set.ext_iff] at h
   exact eq_of_mem_uIcc_of_mem_uIcc ((h _).1 left_mem_uIcc) ((h _).2 left_mem_uIcc)
@@ -617,7 +617,7 @@ lemma uIcc_injective_left
 中文:
 引理 uIcc_injective_left
   条件: (a : α)
-  结论: Injective (uIcc a)
+  结论: 单射 (uIcc a)
   证明: by
   simpa only [uIcc_comm] using uIcc_injective_right a
 
@@ -692,9 +692,9 @@ lemma _root_.Monotone.mapsTo_uIcc
   proof: (hf.monotoneOn _).mapsTo_uIcc
 
 中文:
-引理 _root_.Monotone.mapsTo_uIcc
-  条件: (hf : Monotone f)
-  结论: MapsTo f (uIcc a b) (uIcc (f a) (f b))
+引理 _root_.递增.mapsTo_uIcc
+  条件: (hf : 递增 f)
+  结论: 映射到 f (uIcc a b) (uIcc (f a) (f b))
   证明: (hf.monotoneOn _).mapsTo_uIcc
 
 Depends on / 依赖: hf.monotoneOn, mapsTo_uIcc, monotoneOn
@@ -712,9 +712,9 @@ lemma _root_.Antitone.mapsTo_uIcc
   proof: (hf.antitoneOn _).mapsTo_uIcc
 
 中文:
-引理 _root_.Antitone.mapsTo_uIcc
-  条件: (hf : Antitone f)
-  结论: MapsTo f (uIcc a b) (uIcc (f a) (f b))
+引理 _root_.递减.mapsTo_uIcc
+  条件: (hf : 递减 f)
+  结论: 映射到 f (uIcc a b) (uIcc (f a) (f b))
   证明: (hf.antitoneOn _).mapsTo_uIcc
 
 Depends on / 依赖: antitoneOn, hf.antitoneOn, mapsTo_uIcc
@@ -768,8 +768,8 @@ lemma _root_.Monotone.image_uIcc_subset
   proof: (hf.monotoneOn _).image_uIcc_subset
 
 中文:
-引理 _root_.Monotone.image_uIcc_subset
-  条件: (hf : Monotone f)
+引理 _root_.递增.image_uIcc_subset
+  条件: (hf : 递增 f)
   结论: f '' uIcc a b subseteq uIcc (f a) (f b)
   证明: (hf.monotoneOn _).image_uIcc_subset
 
@@ -788,8 +788,8 @@ lemma _root_.Antitone.image_uIcc_subset
   proof: (hf.antitoneOn _).image_uIcc_subset
 
 中文:
-引理 _root_.Antitone.image_uIcc_subset
-  条件: (hf : Antitone f)
+引理 _root_.递减.image_uIcc_subset
+  条件: (hf : 递减 f)
   结论: f '' uIcc a b subseteq uIcc (f a) (f b)
   证明: (hf.antitoneOn _).image_uIcc_subset
 
@@ -812,7 +812,7 @@ theorem Icc_min_max
 
 中文:
 定理 Icc_min_max
-  结论: Icc (min a b) (max a b) = [[a, b]]
+  结论: 闭区间 (最小值 a b) (最大值 a b) = [[a, b]]
   证明: rfl
 -/
 theorem Icc_min_max : Icc (min a b) (max a b) = [[a, b]] :=
@@ -830,7 +830,7 @@ lemma uIcc_of_not_le
 中文:
 引理 uIcc_of_not_le
   条件: (h : ¬a <= b)
-  结论: [[a, b]] = Icc b a
+  结论: [[a, b]] = 闭区间 b a
   证明: uIcc_of_gt lt_of_not_ge h
 
 Depends on / 依赖: lt_of_not_ge, uIcc_of_gt
@@ -848,7 +848,7 @@ lemma uIcc_of_not_ge
 中文:
 引理 uIcc_of_not_ge
   条件: (h : ¬b <= a)
-  结论: [[a, b]] = Icc a b
+  结论: [[a, b]] = 闭区间 a b
   证明: uIcc_of_lt lt_of_not_ge h
 
 Depends on / 依赖: lt_of_not_ge, uIcc_of_lt
@@ -865,7 +865,7 @@ lemma uIcc_eq_union
 
 中文:
 引理 uIcc_eq_union
-  结论: [[a, b]] = Icc a b union Icc b a
+  结论: [[a, b]] = 闭区间 a b union 闭区间 b a
   证明: by rw [Icc_union_Icc', max_comm] <;> rfl
 
 Depends on / 依赖: Icc_union_Icc, max_comm
@@ -1040,7 +1040,7 @@ definition uIoc
 
 中文:
 定义 uIoc
-  签名: : α -> α -> Set α
+  签名: : α -> α -> 集合 α
   定义体: fun a b => Ioc (min a b) (max a b)
 -/
 def uIoc : α -> α -> Set α := fun a b => Ioc (min a b) (max a b)
@@ -1064,7 +1064,7 @@ lemma uIoc_of_le
 中文:
 引理 uIoc_of_le
   条件: (h : a <= b)
-  结论: Ι a b = Ioc a b
+  结论: Ι a b = 左开右闭区间 a b
   证明: by simp [uIoc, h]
 -/
 @[simp, grind =] lemma uIoc_of_le (h : a <= b) : Ι a b = Ioc a b := by simp [uIoc, h]
@@ -1080,7 +1080,7 @@ lemma uIoc_of_ge
 中文:
 引理 uIoc_of_ge
   条件: (h : b <= a)
-  结论: Ι a b = Ioc b a
+  结论: Ι a b = 左开右闭区间 b a
   证明: by simp [uIoc, h]
 -/
 @[simp, grind =] lemma uIoc_of_ge (h : b <= a) : Ι a b = Ioc b a := by simp [uIoc, h]
@@ -1096,7 +1096,7 @@ lemma uIoc_eq_union
 
 中文:
 引理 uIoc_eq_union
-  结论: Ι a b = Ioc a b union Ioc b a
+  结论: Ι a b = 左开右闭区间 a b union 左开右闭区间 b a
   证明: by
   cases le_total a b <;> simp [uIoc, *]
 
@@ -1187,7 +1187,7 @@ lemma forall_uIoc_iff
   simp only [uIoc_eq_union, mem_union, or_imp, forall_and]
 
 中文:
-引理 forall_uIoc_iff
+引理 对任意_uIoc_iff
   条件: {P : α -> 命题}
   证明: by
   simp only [uIoc_eq_union, mem_union, or_imp, forall_and]
@@ -1246,7 +1246,7 @@ lemma Ioc_subset_uIoc
 
 中文:
 引理 Ioc_subset_uIoc
-  结论: Ioc a b subseteq Ι a b
+  结论: 左开右闭区间 a b subseteq Ι a b
   证明: Ioc_subset_Ioc (min_le_left _ _) (le_max_right _ _)
 
 Depends on / 依赖: Ioc_subset_Ioc, le_max_right, min_le_left
@@ -1262,7 +1262,7 @@ lemma Ioc_subset_uIoc'
 
 中文:
 引理 Ioc_subset_uIoc'
-  结论: Ioc a b subseteq Ι b a
+  结论: 左开右闭区间 a b subseteq Ι b a
   证明: Ioc_subset_Ioc (min_le_right _ _) (le_max_left _ _)
 
 Depends on / 依赖: Ioc_subset_Ioc, le_max_left, min_le_right
@@ -1368,7 +1368,7 @@ lemma uIoc_injective_right
 中文:
 引理 uIoc_injective_right
   条件: (a : α)
-  结论: Injective fun b => Ι b a
+  结论: 单射 fun b => Ι b a
   证明: by
   rintro b c h
   rw [Set.ext_iff] at h
@@ -1408,7 +1408,7 @@ lemma uIoc_injective_left
 中文:
 引理 uIoc_injective_left
   条件: (a : α)
-  结论: Injective (Ι a)
+  结论: 单射 (Ι a)
   证明: by
   simpa only [uIoc_comm] using uIoc_injective_right a
 
@@ -1531,7 +1531,7 @@ lemma uIoo_of_le
 中文:
 引理 uIoo_of_le
   条件: (h : a <= b)
-  结论: uIoo a b = Ioo a b
+  结论: uIoo a b = 开区间 a b
   证明: by
   rw [uIoo]; rw [inf_eq_left.2 h]; rw [sup_eq_right.2 h]
 -/
@@ -1551,7 +1551,7 @@ lemma uIoo_of_ge
 中文:
 引理 uIoo_of_ge
   条件: (h : b <= a)
-  结论: uIoo a b = Ioo b a
+  结论: uIoo a b = 开区间 b a
   证明: by
   rw [uIoo]; rw [inf_eq_right.2 h]; rw [sup_eq_left.2 h]
 -/
@@ -1589,7 +1589,7 @@ lemma uIoo_of_lt
 中文:
 引理 uIoo_of_lt
   条件: (h : a < b)
-  结论: uIoo a b = Ioo a b
+  结论: uIoo a b = 开区间 a b
   证明: uIoo_of_le h.le
 
 Depends on / 依赖: h.le, uIoo_of_le
@@ -1608,7 +1608,7 @@ lemma uIoo_of_gt
 中文:
 引理 uIoo_of_gt
   条件: (h : b < a)
-  结论: uIoo a b = Ioo b a
+  结论: uIoo a b = 开区间 b a
   证明: uIoo_of_ge h.le
 
 Depends on / 依赖: h.le, uIoo_of_ge
@@ -1669,7 +1669,7 @@ lemma Ioo_subset_uIoo
 
 中文:
 引理 Ioo_subset_uIoo
-  结论: Ioo a b subseteq uIoo a b
+  结论: 开区间 a b subseteq uIoo a b
   证明: Ioo_subset_Ioo inf_le_left le_sup_right
 
 Depends on / 依赖: Ioo_subset_Ioo, inf_le_left, le_sup_right
@@ -1686,7 +1686,7 @@ lemma Ioo_subset_uIoo'
 
 中文:
 引理 Ioo_subset_uIoo'
-  结论: Ioo b a subseteq uIoo a b
+  结论: 开区间 b a subseteq uIoo a b
   证明: Ioo_subset_Ioo inf_le_right le_sup_left
 
 Depends on / 依赖: Ioo_subset_Ioo, inf_le_right, le_sup_left
@@ -1745,7 +1745,7 @@ theorem Ioo_min_max
 
 中文:
 定理 Ioo_min_max
-  结论: Ioo (min a b) (max a b) = uIoo a b
+  结论: 开区间 (最小值 a b) (最大值 a b) = uIoo a b
   证明: rfl
 -/
 theorem Ioo_min_max : Ioo (min a b) (max a b) = uIoo a b := rfl
@@ -1762,7 +1762,7 @@ lemma uIoo_of_not_le
 中文:
 引理 uIoo_of_not_le
   条件: (h : ¬a <= b)
-  结论: uIoo a b = Ioo b a
+  结论: uIoo a b = 开区间 b a
   证明: uIoo_of_gt lt_of_not_ge h
 
 Depends on / 依赖: lt_of_not_ge, uIoo_of_gt
@@ -1781,7 +1781,7 @@ lemma uIoo_of_not_ge
 中文:
 引理 uIoo_of_not_ge
   条件: (h : ¬b <= a)
-  结论: uIoo a b = Ioo a b
+  结论: uIoo a b = 开区间 a b
   证明: uIoo_of_lt lt_of_not_ge h
 
 Depends on / 依赖: lt_of_not_ge, uIoo_of_lt
@@ -1819,8 +1819,8 @@ lemma uIoo_subset_Ioo
 
 中文:
 引理 uIoo_subset_Ioo
-  条件: (ha : a₁ in Icc a₂ b₂) (hb : b₁ in Icc a₂ b₂)
-  结论: uIoo a₁ b₁ subseteq Ioo a₂ b₂
+  条件: (ha : a₁ in 闭区间 a₂ b₂) (hb : b₁ in 闭区间 a₂ b₂)
+  结论: uIoo a₁ b₁ subseteq 开区间 a₂ b₂
   证明: Ioo_subset_Ioo (le_inf ha.1 hb.1) (sup_le ha.2 hb.2)
 
 Depends on / 依赖: Ioo_subset_Ioo, le_inf, sup_le
@@ -1840,8 +1840,8 @@ lemma nonempty_uIoo
 
 中文:
 引理 nonempty_uIoo
-  条件: [DenselyOrdered α]
-  结论: (uIoo a b).Nonempty ↔ a != b
+  条件: [稠密序 α]
+  结论: (uIoo a b).非空 ↔ a != b
   证明: by
   simp [uIoo, eq_comm]
 -/
@@ -1859,7 +1859,7 @@ lemma nonempty_uIoc
 
 中文:
 引理 nonempty_uIoc
-  结论: (uIoc a b).Nonempty ↔ a != b
+  结论: (uIoc a b).非空 ↔ a != b
   证明: by
   simp [uIoc, eq_comm]
 -/
@@ -1879,7 +1879,7 @@ lemma uIoo_eq_union
 
 中文:
 引理 uIoo_eq_union
-  结论: uIoo a b = Ioo a b union Ioo b a
+  结论: uIoo a b = 开区间 a b union 开区间 b a
   证明: by
   rcases lt_or_ge a b with h | h
   · simp [uIoo_of_lt, h, Ioo_eq_empty_of_le h.le]

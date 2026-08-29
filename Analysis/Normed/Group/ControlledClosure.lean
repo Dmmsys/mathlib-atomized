@@ -44,7 +44,7 @@ theorem controlled_closure_of_complete
 
 中文:
 定理 controlled_closure_of_complete
-  结论: {f : NormedAddGroupHom G H} {K : AddSubgroup H} {C ε : 实数}
+  结论: {f : 赋范加群态射 G H} {K : 加法子群 H} {C ε : 实数}
   证明: by
   rintro (h : H) (h_in : h in K.topologicalClosure)
   -- We first get rid of the easy case where `h = 0`.
@@ -149,7 +149,7 @@ theorem controlled_closure_range_of_complete
 
 中文:
 定理 controlled_closure_range_of_complete
-  结论: {f : NormedAddGroupHom G H} {K : 类型}
+  结论: {f : 赋范加群态射 G H} {K : 类型}
   证明: by
   replace hyp : forall h in j.range, exists g, f g = h ∧ ‖g‖ <= C * ‖h‖ := by
     intro h h_in

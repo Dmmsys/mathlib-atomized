@@ -122,7 +122,7 @@ definition getSetOptionMaxHeartbeatsComment
 
 中文:
 定义 getSetOptionMaxHeartbeatsComment
-  签名: : Syntax -> Option (Name × 自然数 × Substring.Raw)
+  签名: : Syntax -> 选项类型 (Name × 自然数 × Substring.Raw)
   定义体: mh.getId
     if !opt.components.contains `maxHeartbeats then
       none
@@ -164,7 +164,7 @@ definition isDecideNative
     if let (.node _ _ config_args) :=
 
 中文:
-定义 isDecideNative
+定义 isDecide自然数ive
   签名: (stx : Syntax )
   定义体: match stx with
   | .node _ ``Lean.Parser.Tactic.decide args =>
@@ -215,7 +215,7 @@ definition getDeprecatedSyntax
 
 中文:
 定义 getDeprecatedSyntax
-  签名: : Syntax -> Array (SyntaxNodeKind × Syntax × MessageData)
+  签名: : Syntax -> 数组 (SyntaxNodeKind × Syntax × MessageData)
   定义体: args.flatMap getDeprecatedSyntax
     match kind with
     | ``Lean.Parser.Tactic.refine' =>

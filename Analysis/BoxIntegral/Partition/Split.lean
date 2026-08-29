@@ -90,7 +90,7 @@ theorem coe_splitLower
 
 中文:
 定理 coe_splitLower
-  结论: (splitLower I i x : Set (ι -> 实数)) = ↑I inter { y | y i <= x }
+  结论: (splitLower I i x : 集合 (ι -> 实数)) = ↑I inter { y | y i <= x }
   证明: by
   rw [splitLower]; rw [coe_mk']
   ext y
@@ -195,7 +195,7 @@ theorem splitLower_def
 
 中文:
 定理 splitLower_def
-  结论: [DecidableEq ι] {i x} (h : x in Ioo (I.lower i) (I.upper i))
+  结论: [DecidableEq ι] {i x} (h : x in 开区间 (I.lower i) (I.upper i))
   证明: by
   simp +unfoldPartialApp only [splitLower, mk'_eq_coe, min_eq_left h.2.le,
     update, and_self]
@@ -251,7 +251,7 @@ theorem coe_splitUpper
 
 中文:
 定理 coe_splitUpper
-  结论: (splitUpper I i x : Set (ι -> 实数)) = ↑I inter { y | x < y i }
+  结论: (splitUpper I i x : 集合 (ι -> 实数)) = ↑I inter { y | x < y i }
   证明: by
   classical
   rw [splitUpper]; rw [coe_mk']
@@ -360,7 +360,7 @@ theorem splitUpper_def
 
 中文:
 定理 splitUpper_def
-  结论: [DecidableEq ι] {i x} (h : x in Ioo (I.lower i) (I.upper i))
+  结论: [DecidableEq ι] {i x} (h : x in 开区间 (I.lower i) (I.upper i))
   证明: by
   simp +unfoldPartialApp only [splitUpper, mk'_eq_coe, max_eq_left h.1.le,
     update, and_self]
@@ -586,7 +586,7 @@ theorem sum_split_boxes
 
 中文:
 定理 sum_split_boxes
-  条件: {M : 类型} [AddCommMonoid M] (I : Box ι) (i : ι) (x : 实数) (f : Box ι -> M)
+  条件: {M : 类型} [加法交换幺半群 M] (I : Box ι) (i : ι) (x : 实数) (f : Box ι -> M)
   证明: by
   classical
   rw [split]; rw [sum_ofWithBot]; rw [Finset.sum_pair (I.splitLower_ne_splitUpper i x)]
@@ -617,7 +617,7 @@ theorem split_of_notMem_Ioo
 
 中文:
 定理 split_of_notMem_Ioo
-  条件: (h : x ∉ Ioo (I.lower i) (I.upper i))
+  条件: (h : x ∉ 开区间 (I.lower i) (I.upper i))
   结论: split I i x = ⊤
   证明: by
   refine ((isPartitionTop I).eq_of_boxes_subset fun J hJ => ?_).symm
@@ -742,7 +742,7 @@ theorem inf_split
 
 中文:
 定理 inf_split
-  条件: (π : Prepartition I) (i : ι) (x : 实数)
+  条件: (π : 预分拆 I) (i : ι) (x : 实数)
   证明: biUnion_congr_of_le rfl fun _ hJ => restrict_split hJ i x
 
 Depends on / 依赖: biUnion_congr_of_le, restrict_split
@@ -763,7 +763,7 @@ definition splitMany
 
 中文:
 定义 splitMany
-  签名: (I : Box ι) (s : Finset (ι × 实数))
+  签名: (I : Box ι) (s : 有限集 (ι × 实数))
   定义体: s.inf fun p => split I p.1 p.2
 
 @[simp]
@@ -805,7 +805,7 @@ theorem splitMany_insert
 
 中文:
 定理 splitMany_insert
-  条件: (I : Box ι) (s : Finset (ι × 实数)) (p : ι × 实数)
+  条件: (I : Box ι) (s : 有限集 (ι × 实数)) (p : ι × 实数)
   证明: by
   rw [splitMany]; rw [Finset.inf_insert]; rw [inf_comm]; rw [splitMany]
 
@@ -825,7 +825,7 @@ theorem splitMany_le_split
 
 中文:
 定理 splitMany_le_split
-  条件: (I : Box ι) {s : Finset (ι × 实数)} {p : ι × 实数} (hp : p in s)
+  条件: (I : Box ι) {s : 有限集 (ι × 实数)} {p : ι × 实数} (hp : p in s)
   证明: Finset.inf_le hp
 
 Depends on / 依赖: Finset, Finset.inf_le, inf_le
@@ -850,7 +850,7 @@ theorem isPartition_splitMany
 
 中文:
 定理 isPartition_splitMany
-  条件: (I : Box ι) (s : Finset (ι × 实数))
+  条件: (I : Box ι) (s : 有限集 (ι × 实数))
   结论: IsPartition (splitMany I s)
   证明: by
   classical
@@ -878,7 +878,7 @@ theorem iUnion_splitMany
 
 中文:
 定理 iUnion_splitMany
-  条件: (I : Box ι) (s : Finset (ι × 实数))
+  条件: (I : Box ι) (s : 有限集 (ι × 实数))
   结论: (splitMany I s).iUnion = I
   证明: (isPartition_splitMany I s).iUnion_eq
 
@@ -901,7 +901,7 @@ theorem inf_splitMany
 
 中文:
 定理 inf_splitMany
-  条件: {I : Box ι} (π : Prepartition I) (s : Finset (ι × 实数))
+  条件: {I : Box ι} (π : 预分拆 I) (s : 有限集 (ι × 实数))
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -934,7 +934,7 @@ theorem not_disjoint_imp_le_of_subset_of_mem_splitMany
 
 中文:
 定理 not_disjoint_imp_le_of_subset_of_mem_splitMany
-  结论: {I J Js : Box ι} {s : Finset (ι × 实数)}
+  结论: {I J Js : Box ι} {s : 有限集 (ι × 实数)}
   证明: by
   simp only [Finset.insert_subset_iff, Finset.singleton_subset_iff] at H
   rcases Box.not_disjoint_coe_iff_nonempty_inter.mp Hn with ⟨x, hx, hxs⟩
@@ -981,7 +981,7 @@ theorem eventually_not_disjoint_imp_le_of_mem_splitMany
 
 中文:
 定理 eventually_not_disjoint_imp_le_of_mem_splitMany
-  条件: (s : Finset (Box ι))
+  条件: (s : 有限集 (Box ι))
   证明: by
   classical
   cases nonempty_fintype ι
@@ -1019,7 +1019,7 @@ theorem eventually_splitMany_inf_eq_filter
 
 中文:
 定理 eventually_splitMany_inf_eq_filter
-  条件: (π : Prepartition I)
+  条件: (π : 预分拆 I)
   证明: by
   refine (eventually_not_disjoint_imp_le_of_mem_splitMany π.boxes).mono fun t ht => ?_
   refine le_antisymm ((biUnion_le_iff _).2 fun J hJ => ?_) (le_inf (fun J hJ => ?_) (filter_le _ _))
@@ -1054,8 +1054,8 @@ theorem exists_splitMany_inf_eq_filter_of_finite
   (hs.eventually_all.2 this).exists
 
 中文:
-定理 exists_splitMany_inf_eq_filter_of_finite
-  条件: (s : Set (Prepartition I)) (hs : s.Finite)
+定理 存在_splitMany_inf_eq_filter_of_finite
+  条件: (s : 集合 (预分拆 I)) (hs : s.有限)
   证明: haveI := fun π (_ : π in s) => eventually_splitMany_inf_eq_filter π
   (hs.eventually_all.2 this).exists
 
@@ -1079,8 +1079,8 @@ theorem IsPartition.exists_splitMany_le
   exact fun J hJ => le_of_mem _ hJ
 
 中文:
-定理 IsPartition.exists_splitMany_le
-  条件: {I : Box ι} {π : Prepartition I} (h : IsPartition π)
+定理 IsPartition.存在_splitMany_le
+  条件: {I : Box ι} {π : 预分拆 I} (h : IsPartition π)
   证明: by
   refine (eventually_splitMany_inf_eq_filter π).exists.imp fun s hs => ?_
   rwa [h.iUnion_eq, filter_of_true, inf_eq_right] at hs
@@ -1108,8 +1108,8 @@ theorem exists_iUnion_eq_sdiff
 @[deprecated (since := "2026-06-03")] alias exists_iUnion_eq_diff := exists_iUnion_eq_sdiff
 
 中文:
-定理 exists_iUnion_eq_sdiff
-  条件: (π : Prepartition I)
+定理 存在_iUnion_eq_sdiff
+  条件: (π : 预分拆 I)
   证明: by
   rcases π.eventually_splitMany_inf_eq_filter.exists with ⟨s, hs⟩
   use (splitMany I s).filter fun J => ¬(J : Set (ι -> Real)) subseteq π.iUnion
@@ -1139,7 +1139,7 @@ definition compl
 
 中文:
 定义 compl
-  签名: (π : Prepartition I)
+  签名: (π : 预分拆 I)
   定义体: π.exists_iUnion_eq_sdiff.choose
 
 @[simp]
@@ -1161,7 +1161,7 @@ theorem iUnion_compl
 
 中文:
 定理 iUnion_compl
-  条件: (π : Prepartition I)
+  条件: (π : 预分拆 I)
   结论: π.compl.iUnion = ↑I \ π.iUnion
   证明: π.exists_iUnion_eq_sdiff.choose_spec
 
@@ -1184,7 +1184,7 @@ theorem compl_congr
 
 中文:
 定理 compl_congr
-  条件: {π₁ π₂ : Prepartition I} (h : π₁.iUnion = π₂.iUnion)
+  条件: {π₁ π₂ : 预分拆 I} (h : π₁.iUnion = π₂.iUnion)
   结论: π₁.compl = π₂.compl
   证明: by
   dsimp only [compl]
@@ -1210,7 +1210,7 @@ theorem IsPartition.compl_eq_bot
 
 中文:
 定理 IsPartition.compl_eq_bot
-  条件: {π : Prepartition I} (h : IsPartition π)
+  条件: {π : 预分拆 I} (h : IsPartition π)
   结论: π.compl = ⊥
   证明: by
   rw [← iUnion_eq_empty]; rw [iUnion_compl]; rw [h.iUnion_eq]; rw [sdiff_self]
@@ -1233,7 +1233,7 @@ theorem compl_top
 
 中文:
 定理 compl_top
-  结论: (⊤ : Prepartition I).compl = ⊥
+  结论: (⊤ : 预分拆 I).compl = ⊥
   证明: (isPartitionTop I).compl_eq_bot
 
 Depends on / 依赖: compl_eq_bot, isPartitionTop

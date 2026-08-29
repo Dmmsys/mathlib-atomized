@@ -30,9 +30,9 @@ theorem Equiv.optionCongr_one
 @[simp]
 
 中文:
-定理 Equiv.optionCongr_one
+定理 等价.optionCongr_one
   条件: {α : 类型}
-  结论: (1 : Perm α).optionCongr = 1
+  结论: (1 : 置换 α).optionCongr = 1
   证明: Equiv.optionCongr_refl
 
 @[simp]
@@ -60,7 +60,7 @@ theorem Equiv.optionCongr_swap
 @[simp]
 
 中文:
-定理 Equiv.optionCongr_swap
+定理 等价.optionCongr_swap
   条件: {α : 类型} [DecidableEq α] (x y : α)
   证明: by
   ext (_ | i)
@@ -99,8 +99,8 @@ theorem Equiv.optionCongr_sign
 @[simp]
 
 中文:
-定理 Equiv.optionCongr_sign
-  条件: {α : 类型} [DecidableEq α] [Fintype α] (e : Perm α)
+定理 等价.optionCongr_sign
+  条件: {α : 类型} [DecidableEq α] [有限类型 α] (e : 置换 α)
   证明: by
   induction e using Perm.swap_induction_on with
   | one => simp [Perm.one_def]
@@ -137,7 +137,7 @@ theorem map_equiv_removeNone
 
 中文:
 定理 map_equiv_removeNone
-  条件: {α : 类型} [DecidableEq α] (σ : Perm (Option α))
+  条件: {α : 类型} [DecidableEq α] (σ : 置换 (选项类型 α))
   证明: by
   ext1 x
   have : Option.map (⇑(removeNone σ)) x = (swap none (σ none)) (σ x) := by
@@ -182,7 +182,7 @@ definition Equiv.Perm.decomposeOption
     simp [this]
 
 中文:
-定义 Equiv.Perm.decomposeOption
+定义 等价.置换.decomposeOption
   签名: {α : 类型} [DecidableEq α]
   定义体: (σ none, removeNone σ)
   invFun i := swap none i.1 * i.2.optionCongr
@@ -213,8 +213,8 @@ theorem Equiv.Perm.decomposeOption_symm_of_none_apply
   proof: by simp
 
 中文:
-定理 Equiv.Perm.decomposeOption_symm_of_none_apply
-  结论: {α : 类型} [DecidableEq α] (e : Perm α)
+定理 等价.置换.decomposeOption_symm_of_none_apply
+  结论: {α : 类型} [DecidableEq α] (e : 置换 α)
   证明: by simp
 -/
 theorem Equiv.Perm.decomposeOption_symm_of_none_apply {α : Type*} [DecidableEq α] (e : Perm α)
@@ -229,8 +229,8 @@ theorem Equiv.Perm.decomposeOption_symm_sign
   proof: by simp
 
 中文:
-定理 Equiv.Perm.decomposeOption_symm_sign
-  条件: {α : 类型} [DecidableEq α] [Fintype α] (e : Perm α)
+定理 等价.置换.decomposeOption_symm_sign
+  条件: {α : 类型} [DecidableEq α] [有限类型 α] (e : 置换 α)
   证明: by simp
 -/
 theorem Equiv.Perm.decomposeOption_symm_sign {α : Type*} [DecidableEq α] [Fintype α] (e : Perm α) :
@@ -245,8 +245,8 @@ theorem Finset.univ_perm_option
   proof: (Finset.univ_map_equiv_to_embedding _).symm
 
 中文:
-定理 Finset.univ_perm_option
-  条件: {α : 类型} [DecidableEq α] [Fintype α]
+定理 有限集.univ_perm_option
+  条件: {α : 类型} [DecidableEq α] [有限类型 α]
   证明: (Finset.univ_map_equiv_to_embedding _).symm
 
 Depends on / 依赖: Finset, Finset.univ_map_equiv_to_embedding, univ_map_equiv_to_embedding

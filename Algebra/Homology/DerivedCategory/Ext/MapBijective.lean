@@ -55,8 +55,8 @@ lemma Functor.mapExt_bijective_of_preservesProjectiveObjects
     have : Projective (S.map F).X₂ 
 
 中文:
-引理 Functor.mapExt_bijective_of_preservesProjectiveObjects
-  结论: [F.Full] [F.Faithful] [HasExt.{w} C]
+引理 函子.mapExt_bijective_of_preservesProjectiveObjects
+  结论: [F.满] [F.忠实] [HasExt.{w} C]
   证明: by
   induction n generalizing X with
   | zero => simpa [Ext.mapExactFunctor₀] using ⟨Faithful.map_injective, Full.map_surjective⟩
@@ -104,8 +104,8 @@ lemma Functor.mapExt_bijective_of_preservesInjectiveObjects
     have : Injective (S.map F).X₂ 
 
 中文:
-引理 Functor.mapExt_bijective_of_preservesInjectiveObjects
-  结论: [F.Full] [F.Faithful] [HasExt.{w} C]
+引理 函子.mapExt_bijective_of_preservesInjectiveObjects
+  结论: [F.满] [F.忠实] [HasExt.{w} C]
   证明: by
   induction n generalizing Y with
   | zero => simpa [Ext.mapExactFunctor₀] using ⟨Faithful.map_injective, Full.map_surjective⟩

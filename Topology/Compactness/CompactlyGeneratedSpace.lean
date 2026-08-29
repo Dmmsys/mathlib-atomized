@@ -72,8 +72,8 @@ definition TopologicalSpace.compactlyGenerated
   coinduced f inferInstance
 
 中文:
-定义 TopologicalSpace.compactlyGenerated
-  签名: (X : Type w) [TopologicalSpace X]
+定义 拓扑空间.compactlyGenerated
+  签名: (X : 类型 w) [拓扑空间 X]
   定义体: let f : (Σ (i : (S : CompHaus.{u}) × C(S, X)), i.fst) -> X := fun ⟨⟨_, i⟩, s⟩ => i s
   coinduced f inferInstance
 
@@ -95,7 +95,7 @@ lemma continuous_from_compactlyGenerated
 
 中文:
 引理 continuous_from_compactlyGenerated
-  结论: [TopologicalSpace X] [t : TopologicalSpace Y] (f : X -> Y)
+  结论: [拓扑空间 X] [t : 拓扑空间 Y] (f : X -> Y)
   证明: by
   rw [continuous_coinduced_dom]
   continuity
@@ -131,8 +131,8 @@ class UCompactlyGeneratedSpace
     - le_compactlyGenerated : t <= compactlyGenerated.{u} X
 
 中文:
-类 UCompactlyGeneratedSpace
-  参数: (X : 类型v) [t : TopologicalSpace X]
+类 UCompactlyGenerated空间
+  参数: (X : 类型v) [t : 拓扑空间 X]
   公理与运算 (1 个):
     - le_compactlyGenerated : t <= compactlyGenerated.{u} X
 -/
@@ -155,7 +155,7 @@ lemma eq_compactlyGenerated
 
 中文:
 引理 eq_compactlyGenerated
-  条件: [t : TopologicalSpace X] [UCompactlyGeneratedSpace.{u} X]
+  条件: [t : 拓扑空间 X] [UCompactlyGenerated空间.{u} X]
   证明: by
   apply le_antisymm
   · exact UCompactlyGeneratedSpace.le_compactlyGenerated
@@ -198,7 +198,7 @@ lemma uCompactlyGeneratedSpace_of_continuous_maps
 
 中文:
 引理 uCompactlyGeneratedSpace_of_continuous_maps
-  结论: [t : TopologicalSpace X]
+  结论: [t : 拓扑空间 X]
   证明: by
     suffices Continuous[t, compactlyGenerated.{u} X] (id : X -> X) by
       rwa [← continuous_id_iff_le]
@@ -238,7 +238,7 @@ lemma continuous_from_uCompactlyGeneratedSpace
 
 中文:
 引理 continuous_from_uCompactlyGeneratedSpace
-  结论: [UCompactlyGeneratedSpace.{u} X] (f : X -> Y)
+  结论: [UCompactlyGenerated空间.{u} X] (f : X -> Y)
   证明: by
   apply continuous_le_dom UCompactlyGeneratedSpace.le_compactlyGenerated
   exact continuous_from_compactlyGenerated f h
@@ -303,8 +303,8 @@ theorem UCompactlyGeneratedSpace.isClosed
   exact fun ⟨S, f⟩ => hs S f
 
 中文:
-定理 UCompactlyGeneratedSpace.isClosed
-  结论: [UCompactlyGeneratedSpace.{u} X] {s : Set X}
+定理 UCompactlyGenerated空间.isClosed
+  结论: [UCompactlyGenerated空间.{u} X] {s : 集合 X}
   证明: by
   rw [eq_compactlyGenerated (X := X)]; rw [TopologicalSpace.compactlyGenerated]; rw [isClosed_coinduced]; rw [isClosed_sigma_iff]
   exact fun ⟨S, f⟩ => hs S f
@@ -327,8 +327,8 @@ theorem UCompactlyGeneratedSpace.isOpen
   exact fun ⟨S, f⟩ => hs S f
 
 中文:
-定理 UCompactlyGeneratedSpace.isOpen
-  结论: [UCompactlyGeneratedSpace.{u} X] {s : Set X}
+定理 UCompactlyGenerated空间.isOpen
+  结论: [UCompactlyGenerated空间.{u} X] {s : 集合 X}
   证明: by
   rw [eq_compactlyGenerated (X := X)]; rw [TopologicalSpace.compactlyGenerated]; rw [isOpen_coinduced]; rw [isOpen_sigma_iff]
   exact fun ⟨S, f⟩ => hs S f
@@ -385,8 +385,8 @@ instance [UCompactlyGeneratedSpace.{u}
 have hg : Continuous g := continuous_inl.comp hf.comp continuous_ulift
 
 中文:
-实例 [UCompactlyGeneratedSpace.{u}
-  签名: X] [UCompactlyGeneratedSpace.{v} Y] :
+实例 [UCompactlyGenerated空间.{u}
+  签名: X] [UCompactlyGenerated空间.{v} Y] :
   定义体: by
   refine uCompactlyGeneratedSpace_of_isClosed fun s h => isClosed_sum_iff.2 ⟨?_, ?_⟩
   all_goals
@@ -449,7 +449,7 @@ abbreviation CompactlyGeneratedSpace
 
 中文:
 缩写 CompactlyGeneratedSpace
-  签名: (X : 类型u) [TopologicalSpace X]
+  签名: (X : 类型u) [拓扑空间 X]
   定义体: UCompactlyGeneratedSpace.{u} X
 
 Depends on / 依赖: UCompactlyGeneratedSpace
@@ -529,7 +529,7 @@ theorem CompactlyGeneratedSpace.isClosed'
 
 中文:
 定理 CompactlyGeneratedSpace.isClosed'
-  结论: [CompactlyGeneratedSpace X] {s : Set X}
+  结论: [CompactlyGeneratedSpace X] {s : 集合 X}
   证明: UCompactlyGeneratedSpace.isClosed fun S ⟨f, hf⟩ => hs S f hf
 
 Depends on / 依赖: UCompactlyGeneratedSpace, UCompactlyGeneratedSpace.isClosed, isClosed
@@ -552,7 +552,7 @@ theorem CompactlyGeneratedSpace.isClosed
 
 中文:
 定理 CompactlyGeneratedSpace.isClosed
-  结论: [CompactlyGeneratedSpace X] {s : Set X}
+  结论: [CompactlyGeneratedSpace X] {s : 集合 X}
   证明: by
   refine isClosed' fun K _ _ _ f hf => ?_
   rw [← Set.preimage_inter_range]
@@ -595,7 +595,7 @@ theorem CompactlyGeneratedSpace.isOpen'
 
 中文:
 定理 CompactlyGeneratedSpace.isOpen'
-  结论: [CompactlyGeneratedSpace X] {s : Set X}
+  结论: [CompactlyGeneratedSpace X] {s : 集合 X}
   证明: UCompactlyGeneratedSpace.isOpen fun S ⟨f, hf⟩ => hs S f hf
 
 Depends on / 依赖: UCompactlyGeneratedSpace, UCompactlyGeneratedSpace.isOpen, isOpen
@@ -618,7 +618,7 @@ theorem CompactlyGeneratedSpace.isOpen
 
 中文:
 定理 CompactlyGeneratedSpace.isOpen
-  结论: [CompactlyGeneratedSpace X] {s : Set X}
+  结论: [CompactlyGeneratedSpace X] {s : 集合 X}
   证明: by
   refine isOpen' fun K _ _ _ f hf => ?_
   rw [← Set.preimage_inter_range]
@@ -673,7 +673,7 @@ theorem CompactlyGeneratedSpace.isClosed_iff_of_t2
 
 中文:
 定理 CompactlyGeneratedSpace.isClosed_iff_of_t2
-  条件: [CompactlyGeneratedSpace X] (s : Set X)
+  条件: [CompactlyGeneratedSpace X] (s : 集合 X)
   证明: hs.inter hK.isClosed
   mpr := CompactlyGeneratedSpace.isClosed
 
@@ -790,7 +790,7 @@ instance of_compactlyCoherentSpace_of_t2
 
 中文:
 实例 of_compactlyCoherentSpace_of_t2
-  签名: [CompactlyCoherentSpace X]
+  签名: [余mpactlyCoherent空间 X]
   定义体: by
   apply compactlyGeneratedSpace_of_isClosed_of_t2
   intro s hs

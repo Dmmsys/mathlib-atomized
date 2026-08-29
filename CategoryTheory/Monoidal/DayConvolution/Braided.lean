@@ -429,7 +429,7 @@ lemma symmetry
 
 中文:
 引理 symmetry
-  条件: [DayConvolution F G] [DayConvolution G F]
+  条件: [Day卷积 F G] [Day卷积 G F]
   证明: by
   apply Functor.hom_ext_of_isLeftKanExtension (F ⊛ G) (unit F G)
   ext ⟨x, y⟩

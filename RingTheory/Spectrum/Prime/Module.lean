@@ -39,8 +39,8 @@ lemma IsLocalRing.closedPoint_mem_support
   exact Module.mem_support_mono le_top hp
 
 中文:
-引理 IsLocalRing.closedPoint_mem_support
-  条件: [IsLocalRing R] [Nontrivial M]
+引理 是局部环.closedPoint_mem_support
+  条件: [是局部环 R] [非平凡 M]
   证明: by
   obtain ⟨p, hp⟩ := (Module.nonempty_support_iff (R := R)).mpr ‹_›
   exact Module.mem_support_mono le_top hp
@@ -83,8 +83,8 @@ lemma Module.stableUnderSpecialization_support
   proof: fun x y e => mem_support_mono (PrimeSpectrum.le_iff_specializes x y).mpr e
 
 中文:
-引理 Module.stableUnderSpecialization_support
-  结论: StableUnderSpecialization (Module.support R M)
+引理 模.stableUnderSpecialization_support
+  结论: StableUnderSpecialization (模.support R M)
   证明: fun x y e => mem_support_mono (PrimeSpectrum.le_iff_specializes x y).mpr e
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.le_iff_specializes, le_iff_specializes, mem_support_mono
@@ -103,8 +103,8 @@ lemma Module.isClosed_support
   apply PrimeSpectrum.isClosed_zeroLocus
 
 中文:
-引理 Module.isClosed_support
-  条件: [Module.Finite R M]
+引理 模.isClosed_support
+  条件: [模.有限 R M]
   证明: by
   rw [support_eq_zeroLocus]
   apply PrimeSpectrum.isClosed_zeroLocus
@@ -130,8 +130,8 @@ lemma Module.support_subset_preimage_comap
   exact ⟨m, fun r e => hm _ (by simpa)⟩
 
 中文:
-引理 Module.support_subset_preimage_comap
-  条件: [IsScalarTower R A M]
+引理 模.support_subset_preimage_comap
+  条件: [标量塔 R A M]
   证明: by
   intro x hx
   simp only [Set.mem_preimage, mem_support_iff', PrimeSpectrum.comap_asIdeal, Ideal.mem_comap,

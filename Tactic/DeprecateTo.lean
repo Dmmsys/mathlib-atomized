@@ -60,7 +60,7 @@ definition mkDeprecationStx
 
 中文:
 定义 mkDeprecationStx
-  签名: (id : TSyntax `ident) (n : Name) (dat : Option String := none)
+  签名: (id : TSyntax `ident) (n : Name) (dat : 选项类型 String := none)
   定义体: do
   let dat ← match dat with
     | none => do

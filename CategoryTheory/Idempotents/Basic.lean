@@ -59,7 +59,7 @@ class IsIdempotentComplete
     - idempotents_split : forall (X : C) (p : X ⟶ X), p ≫ p = p -> exists (Y : C) (i : Y ⟶ X) (e : X ⟶ Y), i ≫ e = 𝟙 Y ∧ e ≫ i = p
 
 中文:
-类 IsIdempotentComplete
+类 是IdempotentComplete
   参数: : 命题 where
   公理与运算 (1 个):
     - idempotents_split : 对任意 (X : C) (p : X ⟶ X), p ≫ p = p -> 存在 (Y : C) (i : Y ⟶ X) (e : X ⟶ Y), i ≫ e = 𝟙 Y ∧ e ≫ i = p
@@ -144,7 +144,7 @@ theorem idem_of_id_sub_idem
 
 中文:
 定理 idem_of_id_sub_idem
-  条件: [Preadditive C] {X : C} (p : X ⟶ X) (hp : p ≫ p = p)
+  条件: [预加性 C] {X : C} (p : X ⟶ X) (hp : p ≫ p = p)
   证明: by
   simp only [comp_sub, sub_comp, id_comp, comp_id, hp, sub_self, sub_zero]
 
@@ -172,7 +172,7 @@ theorem isIdempotentComplete_iff_idempotents_have_kernels
 
 中文:
 定理 isIdempotentComplete_iff_idempotents_have_kernels
-  条件: [Preadditive C]
+  条件: [预加性 C]
   证明: by
   rw [isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent]
   constructor
@@ -289,8 +289,8 @@ theorem Equivalence.isIdempotentComplete
   rcases IsIdempotentComplete.idempotents_split (ε.inverse.obj X') (ε.inver
 
 中文:
-定理 Equivalence.isIdempotentComplete
-  结论: {D : 类型} [Category* D] (ε : C ≌ D)
+定理 等价.isIdempotentComplete
+  结论: {D : 类型} [范畴* D] (ε : C ≌ D)
   证明: by
   refine ⟨?_⟩
   intro X' p hp
@@ -336,7 +336,7 @@ theorem isIdempotentComplete_iff_of_equivalence
 
 中文:
 定理 isIdempotentComplete_iff_of_equivalence
-  条件: {D : 类型} [Category* D] (ε : C ≌ D)
+  条件: {D : 类型} [范畴* D] (ε : C ≌ D)
   证明: by
   constructor
   · exact Equivalence.isIdempotentComplete ε
@@ -370,7 +370,7 @@ theorem isIdempotentComplete_of_isIdempotentComplete_opposite
 
 中文:
 定理 isIdempotentComplete_of_isIdempotentComplete_opposite
-  条件: (h : IsIdempotentComplete Cᵒᵖ)
+  条件: (h : 是IdempotentComplete Cᵒᵖ)
   证明: by
   refine ⟨?_⟩
   intro X p hp
@@ -414,7 +414,7 @@ theorem isIdempotentComplete_iff_opposite
 
 中文:
 定理 isIdempotentComplete_iff_opposite
-  结论: IsIdempotentComplete Cᵒᵖ ↔ IsIdempotentComplete C
+  结论: 是IdempotentComplete Cᵒᵖ ↔ 是IdempotentComplete C
   证明: by
   constructor
   · exact isIdempotentComplete_of_isIdempotentComplete_opposite
@@ -443,8 +443,8 @@ instance [IsIdempotentComplete
   rwa [isIdempotentComplete_iff_opposite]
 
 中文:
-实例 [IsIdempotentComplete
-  签名: C] : IsIdempotentComplete Cᵒᵖ
+实例 [是IdempotentComplete
+  签名: C] : 是IdempotentComplete Cᵒᵖ
   定义体: by
   rwa [isIdempotentComplete_iff_opposite]
 

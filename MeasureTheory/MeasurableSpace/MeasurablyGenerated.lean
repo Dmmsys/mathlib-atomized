@@ -43,7 +43,7 @@ theorem generateFrom_singleton
 
 中文:
 定理 generateFrom_singleton
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   let : MeasurableSpace α := generateFrom {s}
   refine le_antisymm (generateFrom_le fun t ht => ⟨{True}, trivial, by simp [ht.symm]⟩) ?_
@@ -67,7 +67,7 @@ lemma generateFrom_singleton_le
 
 中文:
 引理 generateFrom_singleton_le
-  条件: {m : MeasurableSpace α} {s : Set α} (hs : MeasurableSet s)
+  条件: {m : 可测空间 α} {s : 集合 α} (hs : 可测集 s)
   证明: generateFrom_le (fun _ ht => mem_singleton_iff.1 ht ▸ hs)
 
 Depends on / 依赖: generateFrom_le, mem_singleton_iff
@@ -86,7 +86,7 @@ lemma comap_indicator_const_le_generateFrom_singleton
 
 中文:
 引理 comap_indicator_const_le_generateFrom_singleton
-  结论: {M : 类型} [Zero M] [MeasurableSpace M]
+  结论: {M : 类型} [零 M] [可测空间 M]
   证明: (measurable_const.indicator (measurableSet_generateFrom (by simp))).comap_le
 
 Depends on / 依赖: comap_le, indicator, measurableSet_generateFrom, measurable_const, measurable_const.indicator
@@ -119,7 +119,7 @@ theorem measurableSet_generateFrom_singleton_iff
 
 中文:
 定理 measurableSet_generateFrom_singleton_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: by
   simp_rw +instances [MeasurableSpace.generateFrom_singleton]
   unfold MeasurableSet MeasurableSpace.MeasurableSet' MeasurableSpace.comap
@@ -173,10 +173,10 @@ class IsMeasurablyGenerated
     - exists_measurable_subset : forall ⦃s⦄, s in f -> exists t in f, MeasurableSet t ∧ t subseteq s
 
 中文:
-类 IsMeasurablyGenerated
-  参数: (f : Filter α)
+类 是MeasurablyGenerated
+  参数: (f : 滤子 α)
   公理与运算 (1 个):
-    - exists_measurable_subset : 对任意 ⦃s⦄, s in f -> 存在 t in f, MeasurableSet t ∧ t subseteq s
+    - exists_measurable_subset : 对任意 ⦃s⦄, s in f -> 存在 t in f, 可测集 t ∧ t subseteq s
 -/
 class IsMeasurablyGenerated (f : Filter α) : Prop where
   exists_measurable_subset : forall ⦃s⦄, s in f -> exists t in f, MeasurableSet t ∧ t subseteq s
@@ -191,7 +191,7 @@ instance isMeasurablyGenerated_bot
 
 中文:
 实例 isMeasurablyGenerated_bot
-  签名: : IsMeasurablyGenerated (⊥ : Filter α)
+  签名: : 是MeasurablyGenerated (⊥ : 滤子 α)
   定义体: ⟨fun _ _ => ⟨∅, mem_bot, MeasurableSet.empty, empty_subset _⟩⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.empty, empty_subset, mem_bot
@@ -209,7 +209,7 @@ instance isMeasurablyGenerated_top
 
 中文:
 实例 isMeasurablyGenerated_top
-  签名: : IsMeasurablyGenerated (⊤ : Filter α)
+  签名: : 是MeasurablyGenerated (⊤ : 滤子 α)
   定义体: ⟨fun _s hs => ⟨univ, univ_mem, MeasurableSet.univ, fun x _ => hs x⟩⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, univ_mem
@@ -226,8 +226,8 @@ theorem Eventually.exists_measurable_mem
   proof: IsMeasurablyGenerated.exists_measurable_subset h
 
 中文:
-定理 Eventually.exists_measurable_mem
-  结论: {f : Filter α} [IsMeasurablyGenerated f] {p : α -> 命题}
+定理 Eventually.存在_measurable_mem
+  结论: {f : 滤子 α} [是MeasurablyGenerated f] {p : α -> 命题}
   证明: IsMeasurablyGenerated.exists_measurable_subset h
 
 Depends on / 依赖: IsMeasurablyGenerated, IsMeasurablyGenerated.exists_measurable_subset, exists_measurable_subset
@@ -247,8 +247,8 @@ theorem Eventually.exists_measurable_mem_of_smallSets
   ⟨t, htf, htm, hs t hts⟩
 
 中文:
-定理 Eventually.exists_measurable_mem_of_smallSets
-  结论: {f : Filter α} [IsMeasurablyGenerated f]
+定理 Eventually.存在_measurable_mem_of_smallSets
+  结论: {f : 滤子 α} [是MeasurablyGenerated f]
   证明: let ⟨_s, hsf, hs⟩ := eventually_smallSets.1 h
   let ⟨t, htf, htm, hts⟩ := IsMeasurablyGenerated.exists_measurable_subset hsf
   ⟨t, htf, htm, hs t hts⟩
@@ -277,7 +277,7 @@ instance inf_isMeasurablyGenerated
 
 中文:
 实例 inf_isMeasurablyGenerated
-  签名: (f g : Filter α) [IsMeasurablyGenerated f]
+  签名: (f g : 滤子 α) [是MeasurablyGenerated f]
   定义体: by
   constructor
   rintro t ⟨sf, hsf, sg, hsg, rfl⟩
@@ -315,7 +315,7 @@ alias ⟨_, _root_.MeasurableSet.principal_isMeasurablyGenerated⟩ :=
 
 中文:
 定理 principal_isMeasurablyGenerated_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   refine ⟨?_, fun hs => ⟨fun t ht => ⟨s, mem_principal_self s, hs, ht⟩⟩⟩
   rintro ⟨hs⟩
@@ -355,7 +355,7 @@ instance iInf_isMeasurablyGenerated
 
 中文:
 实例 iInf_isMeasurablyGenerated
-  签名: {f : ι -> Filter α} [对任意 i, IsMeasurablyGenerated (f i)]
+  签名: {f : ι -> 滤子 α} [对任意 i, 是MeasurablyGenerated (f i)]
   定义体: by
   refine ⟨fun s hs => ?_⟩
   rw [← Equiv.plift.surjective.iInf_comp]; rw [mem_iInf] at hs
@@ -399,7 +399,7 @@ lemma measurableSet_tendsto
 
 中文:
 引理 measurableSet_tendsto
-  结论: {_ : MeasurableSpace β} [MeasurableSpace γ]
+  结论: {_ : 可测空间 β} [可测空间 γ]
   证明: by
   rcases l.exists_antitone_basis with ⟨u, hu⟩
   rcases (Filter.hasBasis_self.mpr hl'.exists_measurable_subset).exists_antitone_subbasis with
@@ -459,7 +459,7 @@ theorem iInter_of_antitone_of_frequently
 exact .iUnion_of_monotone_of_frequently (compl_anti.comp hsm) hs.mono fun _ => .compl
 
 中文:
-定理 iInter_of_antitone_of_frequently
+定理 i整数er_of_antitone_of_frequently
   证明: by
   rw [← compl_iff]; rw [compl_iInter]
 exact .iUnion_of_monotone_of_frequently (compl_anti.comp hsm) hs.mono fun _ => .compl
@@ -483,7 +483,7 @@ theorem iUnion_of_monotone
 
 中文:
 定理 iUnion_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι]
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
   证明: by
   cases isEmpty_or_nonempty ι with
   | inl _ => simp
@@ -507,8 +507,8 @@ theorem iInter_of_antitone
   exact .iUnion_of_monotone (compl_anti.comp hsm) fun i => (hs i).compl
 
 中文:
-定理 iInter_of_antitone
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι]
+定理 i整数er_of_antitone
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
   证明: by
   rw [← compl_iff]; rw [compl_iInter]
   exact .iUnion_of_monotone (compl_anti.comp hsm) fun i => (hs i).compl
@@ -531,8 +531,8 @@ instance Subtype.instMembership
 @[simp]
 
 中文:
-实例 Subtype.instMembership
-  签名: : Membership α (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instMembership
+  签名: : Membership α (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun s a => a in (s : Set α)⟩
 
 @[simp]
@@ -552,8 +552,8 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  条件: (a : α) (s : Subtype (MeasurableSet : Set α -> 命题))
-  结论: a in (s : Set α) ↔ a in s
+  条件: (a : α) (s : 子类型 (可测集 : 集合 α -> 命题))
+  结论: a in (s : 集合 α) ↔ a in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -572,8 +572,8 @@ instance Subtype.instEmptyCollection
 @[simp]
 
 中文:
-实例 Subtype.instEmptyCollection
-  签名: : EmptyCollection (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instEmptyCollection
+  签名: : EmptyCollection (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨⟨∅, MeasurableSet.empty⟩⟩
 
 @[simp]
@@ -594,7 +594,7 @@ theorem coe_empty
 
 中文:
 定理 coe_empty
-  结论: ↑(∅ : Subtype (MeasurableSet : Set α -> 命题)) = (∅ : Set α)
+  结论: ↑(∅ : 子类型 (可测集 : 集合 α -> 命题)) = (∅ : 集合 α)
   证明: rfl
 
 Depends on / 依赖: DecidableEq
@@ -613,8 +613,8 @@ instance Subtype.instInsert
 @[simp]
 
 中文:
-实例 Subtype.instInsert
-  签名: [MeasurableSingletonClass α]
+实例 子类型.instInsert
+  签名: [MeasurableSingleton类 α]
   定义体: ⟨fun a s => ⟨insert a (s : Set α), s.prop.insert a⟩⟩
 
 @[simp]
@@ -636,7 +636,7 @@ theorem coe_insert
 
 中文:
 定理 coe_insert
-  结论: [MeasurableSingletonClass α] (a : α)
+  结论: [MeasurableSingleton类 α] (a : α)
   证明: rfl
 
 Depends on / 依赖: Nonempty
@@ -655,8 +655,8 @@ instance Subtype.instSingleton
   body: ⟨fun a => ⟨{a}, .singleton _⟩⟩
 
 中文:
-实例 Subtype.instSingleton
-  签名: [MeasurableSingletonClass α]
+实例 子类型.instSingleton
+  签名: [MeasurableSingleton类 α]
   定义体: ⟨fun a => ⟨{a}, .singleton _⟩⟩
 
 Depends on / 依赖: Nontrivial, singleton
@@ -675,7 +675,7 @@ theorem coe_singleton
 
 中文:
 定理 coe_singleton
-  条件: [MeasurableSingletonClass α] (a : α)
+  条件: [MeasurableSingleton类 α] (a : α)
   证明: rfl
 
 Depends on / 依赖: Unique
@@ -693,8 +693,8 @@ instance Subtype.instLawfulSingleton
   body: ⟨fun _ => Subtype.ext insert_empty_eq _⟩
 
 中文:
-实例 Subtype.instLawfulSingleton
-  签名: [MeasurableSingletonClass α]
+实例 子类型.instLawfulSingleton
+  签名: [MeasurableSingleton类 α]
   定义体: ⟨fun _ => Subtype.ext insert_empty_eq _⟩
 
 Depends on / 依赖: H.coe, Subtype, Subtype.ext, insert_empty_eq
@@ -714,8 +714,8 @@ instance Subtype.instCompl
 @[simp]
 
 中文:
-实例 Subtype.instCompl
-  签名: : Compl (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instCompl
+  签名: : 补集 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x => ⟨xᶜ, x.prop.compl⟩⟩
 
 @[simp]
@@ -735,8 +735,8 @@ theorem coe_compl
 
 中文:
 定理 coe_compl
-  条件: (s : Subtype (MeasurableSet : Set α -> 命题))
-  结论: ↑sᶜ = (sᶜ : Set α)
+  条件: (s : 子类型 (可测集 : 集合 α -> 命题))
+  结论: ↑sᶜ = (sᶜ : 集合 α)
   证明: rfl
 -/
 theorem coe_compl (s : Subtype (MeasurableSet : Set α -> Prop)) : ↑sᶜ = (sᶜ : Set α) :=
@@ -753,8 +753,8 @@ instance Subtype.instUnion
 @[simp]
 
 中文:
-实例 Subtype.instUnion
-  签名: : Union (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instUnion
+  签名: : 并集 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x y => ⟨(x : Set α) union y, x.prop.union y.prop⟩⟩
 
 @[simp]
@@ -776,8 +776,8 @@ theorem coe_union
 
 中文:
 定理 coe_union
-  条件: (s t : Subtype (MeasurableSet : Set α -> 命题))
-  结论: ↑(s union t) = (s union t : Set α)
+  条件: (s t : 子类型 (可测集 : 集合 α -> 命题))
+  结论: ↑(s union t) = (s union t : 集合 α)
   证明: rfl
 -/
 theorem coe_union (s t : Subtype (MeasurableSet : Set α -> Prop)) : ↑(s union t) = (s union t : Set α) :=
@@ -794,8 +794,8 @@ instance Subtype.instSup
 @[simp]
 
 中文:
-实例 Subtype.instSup
-  签名: : Max (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instSup
+  签名: : 最大值 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x y => x union y⟩
 
 @[simp]
@@ -815,7 +815,7 @@ theorem sup_eq_union
 
 中文:
 定理 sup_eq_union
-  条件: (s t : {s : Set α // MeasurableSet s})
+  条件: (s t : {s : 集合 α // 可测集 s})
   结论: s ⊔ t = s union t
   证明: rfl
 -/
@@ -832,8 +832,8 @@ instance Subtype.instInter
 @[simp]
 
 中文:
-实例 Subtype.instInter
-  签名: : 整数er (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.inst整数er
+  签名: : 交集 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x y => ⟨x inter y, x.prop.inter y.prop⟩⟩
 
 @[simp]
@@ -855,8 +855,8 @@ theorem coe_inter
 
 中文:
 定理 coe_inter
-  条件: (s t : Subtype (MeasurableSet : Set α -> 命题))
-  结论: ↑(s inter t) = (s inter t : Set α)
+  条件: (s t : 子类型 (可测集 : 集合 α -> 命题))
+  结论: ↑(s inter t) = (s inter t : 集合 α)
   证明: rfl
 -/
 theorem coe_inter (s t : Subtype (MeasurableSet : Set α -> Prop)) : ↑(s inter t) = (s inter t : Set α) :=
@@ -873,8 +873,8 @@ instance Subtype.instInf
 @[simp]
 
 中文:
-实例 Subtype.instInf
-  签名: : Min (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instInf
+  签名: : 最小值 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x y => x inter y⟩
 
 @[simp]
@@ -894,7 +894,7 @@ theorem inf_eq_inter
 
 中文:
 定理 inf_eq_inter
-  条件: (s t : {s : Set α // MeasurableSet s})
+  条件: (s t : {s : 集合 α // 可测集 s})
   结论: s ⊓ t = s inter t
   证明: rfl
 
@@ -911,8 +911,8 @@ instance Subtype.instSDiff
   body: ⟨fun x y => ⟨x \ y, x.prop.diff y.prop⟩⟩
 
 中文:
-实例 Subtype.instSDiff
-  签名: : SDiff (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instSDiff
+  签名: : 对称差 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨fun x y => ⟨x \ y, x.prop.diff y.prop⟩⟩
 
 Depends on / 依赖: LawfulBEq, x.prop.diff, y.prop
@@ -932,8 +932,8 @@ instance Subtype.instHImp
 @[simp]
 
 中文:
-实例 Subtype.instHImp
-  签名: : HImp (Subtype (MeasurableSet : Set α -> 命题)) where
+实例 子类型.instHImp
+  签名: : HImp (子类型 (可测集 : 集合 α -> 命题)) where
   定义体: ⟨x ⇨ y, x.prop.himp y.prop⟩
 
 @[simp]
@@ -957,8 +957,8 @@ theorem coe_sdiff
 
 中文:
 定理 coe_sdiff
-  条件: (s t : Subtype (MeasurableSet : Set α -> 命题))
-  结论: ↑(s \ t) = (s : Set α) \ t
+  条件: (s t : 子类型 (可测集 : 集合 α -> 命题))
+  结论: ↑(s \ t) = (s : 集合 α) \ t
   证明: rfl
 
 @[simp]
@@ -980,8 +980,8 @@ lemma coe_himp
 
 中文:
 引理 coe_himp
-  条件: (s t : Subtype (MeasurableSet : Set α -> 命题))
-  结论: ↑(s ⇨ t) = (s ⇨ t : Set α)
+  条件: (s t : 子类型 (可测集 : 集合 α -> 命题))
+  结论: ↑(s ⇨ t) = (s ⇨ t : 集合 α)
   证明: rfl
 
 Depends on / 依赖: Nonempty
@@ -999,8 +999,8 @@ instance Subtype.instBot
 @[simp]
 
 中文:
-实例 Subtype.instBot
-  签名: : Bot (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instBot
+  签名: : 底元素 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨∅⟩
 
 @[simp]
@@ -1022,7 +1022,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ↑(⊥ : Subtype (MeasurableSet : Set α -> 命题)) = (⊥ : Set α)
+  结论: ↑(⊥ : 子类型 (可测集 : 集合 α -> 命题)) = (⊥ : 集合 α)
   证明: rfl
 
 @[simp]
@@ -1043,7 +1043,7 @@ theorem subtype_bot_eq
 
 中文:
 定理 subtype_bot_eq
-  结论: (⟨∅, .empty⟩ : Subtype (MeasurableSet : Set α -> 命题)) = ⊥
+  结论: (⟨∅, .empty⟩ : 子类型 (可测集 : 集合 α -> 命题)) = ⊥
   证明: rfl
 
 Depends on / 依赖: H.coe, ofColex
@@ -1062,8 +1062,8 @@ instance Subtype.instTop
 @[simp]
 
 中文:
-实例 Subtype.instTop
-  签名: : Top (Subtype (MeasurableSet : Set α -> 命题))
+实例 子类型.instTop
+  签名: : 顶元素 (子类型 (可测集 : 集合 α -> 命题))
   定义体: ⟨⟨Set.univ, MeasurableSet.univ⟩⟩
 
 @[simp]
@@ -1084,7 +1084,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ↑(⊤ : Subtype (MeasurableSet : Set α -> 命题)) = (⊤ : Set α)
+  结论: ↑(⊤ : 子类型 (可测集 : 集合 α -> 命题)) = (⊤ : 集合 α)
   证明: rfl
 -/
 theorem coe_top : ↑(⊤ : Subtype (MeasurableSet : Set α -> Prop)) = (⊤ : Set α) :=
@@ -1102,7 +1102,7 @@ instance Subtype.instBooleanAlgebra
 @[measurability]
 
 中文:
-实例 Subtype.instBooleanAlgebra
+实例 子类型.inst布尔eanAlgebra
   签名: :
   定义体: Subtype.coe_injective.booleanAlgebra _ .rfl .rfl coe_union coe_inter coe_top coe_bot coe_compl
     coe_sdiff coe_himp
@@ -1131,7 +1131,7 @@ theorem measurableSet_blimsup
 
 中文:
 定理 measurableSet_blimsup
-  条件: {s : 自然数 -> Set α} {p : 自然数 -> 命题} (h : 对任意 n, p n -> MeasurableSet (s n))
+  条件: {s : 自然数 -> 集合 α} {p : 自然数 -> 命题} (h : 对任意 n, p n -> 可测集 (s n))
   证明: by
   simp only [blimsup_eq_iInf_biSup_of_nat, iSup_eq_iUnion, iInf_eq_iInter]
   exact .iInter fun _ => .iUnion fun m => .iUnion fun hm => h m hm.1
@@ -1160,7 +1160,7 @@ theorem measurableSet_bliminf
 
 中文:
 定理 measurableSet_bliminf
-  条件: {s : 自然数 -> Set α} {p : 自然数 -> 命题} (h : 对任意 n, p n -> MeasurableSet (s n))
+  条件: {s : 自然数 -> 集合 α} {p : 自然数 -> 命题} (h : 对任意 n, p n -> 可测集 (s n))
   证明: by
   simp only [Filter.bliminf_eq_iSup_biInf_of_nat, iInf_eq_iInter, iSup_eq_iUnion]
   exact .iUnion fun n => .iInter fun m => .iInter fun hm => h m hm.1
@@ -1188,7 +1188,7 @@ theorem measurableSet_limsup
 
 中文:
 定理 measurableSet_limsup
-  条件: {s : 自然数 -> Set α} (hs : 对任意 n, MeasurableSet <| s n)
+  条件: {s : 自然数 -> 集合 α} (hs : 对任意 n, 可测集 <| s n)
   证明: by
   simpa only [← blimsup_true] using measurableSet_blimsup fun n _ => hs n
 
@@ -1212,7 +1212,7 @@ theorem measurableSet_liminf
 
 中文:
 定理 measurableSet_liminf
-  条件: {s : 自然数 -> Set α} (hs : 对任意 n, MeasurableSet <| s n)
+  条件: {s : 自然数 -> 集合 α} (hs : 对任意 n, 可测集 <| s n)
   证明: by
   simpa only [← bliminf_true] using measurableSet_bliminf fun n _ => hs n
 

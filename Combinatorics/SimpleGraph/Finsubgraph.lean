@@ -53,7 +53,7 @@ abbreviation Finsubgraph
 
 中文:
 缩写 Finsubgraph
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: { G' : G.Subgraph // G'.verts.Finite }
 
 Depends on / 依赖: Finite, G.Subgraph, Subgraph, verts.Finite
@@ -73,7 +73,7 @@ local infixl:50 " ->fg " => FinsubgraphHom
 
 中文:
 缩写 FinsubgraphHom
-  签名: (G' : G.Finsubgraph) (F : SimpleGraph W)
+  签名: (G' : G.Finsubgraph) (F : 简单图 W)
   定义体: G'.val.coe ->g F
 
 local infixl:50 " ->fg " => FinsubgraphHom
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot G.Finsubgraph
+  签名: 有底序 G.Finsubgraph
   定义体: ⟨⊥, finite_empty⟩
   bot_le _ := bot_le (α := G.Subgraph)
 
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max G.Finsubgraph
+  签名: 最大值 G.Finsubgraph
   定义体: ⟨fun G₁ G₂ => ⟨G₁ ⊔ G₂, G₁.2.union G₂.2⟩⟩
 -/
 instance : Max G.Finsubgraph :=
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min G.Finsubgraph
+  签名: 最小值 G.Finsubgraph
   定义体: ⟨fun G₁ G₂ => ⟨G₁ ⊓ G₂, G₁.2.subset inter_subset_left⟩⟩
 
 Depends on / 依赖: inter_subset_left, subset
@@ -152,7 +152,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff G.Finsubgraph where
+  签名: : 对称差 G.Finsubgraph where
   定义体: ⟨G₁ \ G₂, G₁.2.subset (Subgraph.verts_mono sdiff_le)⟩
 
 Depends on / 依赖: Subgraph, Subgraph.verts_mono, sdiff_le, subset, verts_mono
@@ -172,7 +172,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (⊥ : G.Finsubgraph) = (⊥ : G.Subgraph)
+  结论: (⊥ : G.Finsubgraph) = (⊥ : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -194,7 +194,7 @@ lemma coe_sup
 中文:
 引理 coe_sup
   条件: (G₁ G₂ : G.Finsubgraph)
-  结论: ↑(G₁ ⊔ G₂) = (G₁ ⊔ G₂ : G.Subgraph)
+  结论: ↑(G₁ ⊔ G₂) = (G₁ ⊔ G₂ : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -216,7 +216,7 @@ lemma coe_inf
 中文:
 引理 coe_inf
   条件: (G₁ G₂ : G.Finsubgraph)
-  结论: ↑(G₁ ⊓ G₂) = (G₁ ⊓ G₂ : G.Subgraph)
+  结论: ↑(G₁ ⊓ G₂) = (G₁ ⊓ G₂ : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -236,7 +236,7 @@ lemma coe_sdiff
 中文:
 引理 coe_sdiff
   条件: (G₁ G₂ : G.Finsubgraph)
-  结论: ↑(G₁ \ G₂) = (G₁ \ G₂ : G.Subgraph)
+  结论: ↑(G₁ \ G₂) = (G₁ \ G₂ : G.子图)
   证明: rfl
 -/
 lemma coe_sdiff (G₁ G₂ : G.Finsubgraph) : ↑(G₁ \ G₂) = (G₁ \ G₂ : G.Subgraph) := rfl
@@ -251,7 +251,7 @@ instance instGeneralizedCoheytingAlgebra
 
 中文:
 实例 instGeneralizedCoheytingAlgebra
-  签名: : GeneralizedCoheytingAlgebra G.Finsubgraph
+  签名: : GeneralizedCoheyting代数 G.Finsubgraph
   定义体: Subtype.coe_injective.generalizedCoheytingAlgebra _ .rfl .rfl coe_sup coe_inf coe_bot coe_sdiff
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.generalizedCoheytingAlgebra, coe_bot, coe_inf, coe_injective, coe_sdiff, coe_sup, generalizedCoheytingAlgebra
@@ -272,7 +272,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top G.Finsubgraph where top
+  签名: : 顶元素 G.Finsubgraph where top
   定义体: ⟨⊤, finite_univ⟩
 
 Depends on / 依赖: finite_univ
@@ -288,7 +288,7 @@ instance instCompl
 
 中文:
 实例 instCompl
-  签名: : Compl G.Finsubgraph where compl G'
+  签名: : 补集 G.Finsubgraph where compl G'
   定义体: ⟨G'ᶜ, Set.toFinite _⟩
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -336,7 +336,7 @@ instance instSupSet
 
 中文:
 实例 instSupSet
-  签名: : SupSet G.Finsubgraph where sSup s
+  签名: : 上确界集 G.Finsubgraph where sSup s
   定义体: ⟨⨆ G in s, ↑G, Set.toFinite _⟩
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -352,7 +352,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet G.Finsubgraph where sInf s
+  签名: : 下确界集 G.Finsubgraph where sInf s
   定义体: ⟨⨅ G in s, ↑G, Set.toFinite _⟩
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -369,7 +369,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: (⊤ : G.Finsubgraph) = (⊤ : G.Subgraph)
+  结论: (⊤ : G.Finsubgraph) = (⊤ : G.子图)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : (⊤ : G.Finsubgraph) = (⊤ : G.Subgraph) := rfl
@@ -385,7 +385,7 @@ lemma coe_compl
 中文:
 引理 coe_compl
   条件: (G' : G.Finsubgraph)
-  结论: ↑(G'ᶜ) = (G'ᶜ : G.Subgraph)
+  结论: ↑(G'ᶜ) = (G'ᶜ : G.子图)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_compl (G' : G.Finsubgraph) : ↑(G'ᶜ) = (G'ᶜ : G.Subgraph) := rfl
@@ -403,7 +403,7 @@ lemma coe_hnot
 中文:
 引理 coe_hnot
   条件: (G' : G.Finsubgraph)
-  结论: ↑(￢G') = (￢G' : G.Subgraph)
+  结论: ↑(￢G') = (￢G' : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -425,7 +425,7 @@ lemma coe_himp
 中文:
 引理 coe_himp
   条件: (G₁ G₂ : G.Finsubgraph)
-  结论: ↑(G₁ ⇨ G₂) = (G₁ ⇨ G₂ : G.Subgraph)
+  结论: ↑(G₁ ⇨ G₂) = (G₁ ⇨ G₂ : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -446,8 +446,8 @@ lemma coe_sSup
 
 中文:
 引理 coe_sSup
-  条件: (s : Set G.Finsubgraph)
-  结论: sSup s = (⨆ G in s, G : G.Subgraph)
+  条件: (s : 集合 G.Finsubgraph)
+  结论: sSup s = (⨆ G in s, G : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -468,8 +468,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (s : Set G.Finsubgraph)
-  结论: sInf s = (⨅ G in s, G : G.Subgraph)
+  条件: (s : 集合 G.Finsubgraph)
+  结论: sInf s = (⨅ G in s, G : G.子图)
   证明: rfl
 
 @[simp, norm_cast]
@@ -491,8 +491,8 @@ lemma coe_iSup
 
 中文:
 引理 coe_iSup
-  条件: {ι : Sort*} (f : ι -> G.Finsubgraph)
-  结论: ⨆ i, f i = (⨆ i, f i : G.Subgraph)
+  条件: {ι : 类型层*} (f : ι -> G.Finsubgraph)
+  结论: ⨆ i, f i = (⨆ i, f i : G.子图)
   证明: by
   rw [iSup]; rw [coe_sSup]; rw [iSup_range]
 
@@ -516,8 +516,8 @@ lemma coe_iInf
 
 中文:
 引理 coe_iInf
-  条件: {ι : Sort*} (f : ι -> G.Finsubgraph)
-  结论: ⨅ i, f i = (⨅ i, f i : G.Subgraph)
+  条件: {ι : 类型层*} (f : ι -> G.Finsubgraph)
+  结论: ⨅ i, f i = (⨅ i, f i : G.子图)
   证明: by
   rw [iInf]; rw [coe_sInf]; rw [iInf_range]
 
@@ -537,7 +537,7 @@ instance instCompletelyDistribLattice
 
 中文:
 实例 instCompletelyDistribLattice
-  签名: : CompletelyDistribLattice G.Finsubgraph
+  签名: : 余mpletelyDistrib格 G.Finsubgraph
   定义体: Subtype.coe_injective.completelyDistribLattice _ .rfl .rfl coe_sup coe_inf coe_sSup coe_sInf
     coe_top coe_bot coe_compl coe_himp coe_hnot coe_sdiff
 
@@ -578,7 +578,7 @@ definition finsubgraphOfAdj
 
 中文:
 定义 finsubgraphOfAdj
-  签名: {u v : V} (e : G.Adj u v)
+  签名: {u v : V} (e : G.伴随 u v)
   定义体: ⟨SimpleGraph.subgraphOfAdj _ e, by simp⟩
 
 Depends on / 依赖: SimpleGraph, SimpleGraph.subgraphOfAdj, subgraphOfAdj
@@ -598,7 +598,7 @@ theorem singletonFinsubgraph_le_adj_left
 
 中文:
 定理 singletonFinsubgraph_le_adj_left
-  条件: {u v : V} {e : G.Adj u v}
+  条件: {u v : V} {e : G.伴随 u v}
   证明: by
   simp [singletonFinsubgraph, finsubgraphOfAdj]
 
@@ -619,7 +619,7 @@ theorem singletonFinsubgraph_le_adj_right
 
 中文:
 定理 singletonFinsubgraph_le_adj_right
-  条件: {u v : V} {e : G.Adj u v}
+  条件: {u v : V} {e : G.伴随 u v}
   证明: by
   simp [singletonFinsubgraph, finsubgraphOfAdj]
 
@@ -666,7 +666,7 @@ definition finsubgraphHomFunctor
 
 中文:
 定义 finsubgraphHomFunctor
-  签名: (G : SimpleGraph V) (F : SimpleGraph W)
+  签名: (G : 简单图 V) (F : 简单图 W)
   定义体: G'.unop ->fg F
   map g := ↾(fun f => f.restrict (CategoryTheory.leOfHom g.unop))
 -/
@@ -690,8 +690,8 @@ theorem nonempty_hom_of_forall_finite_subgraph_hom
   have : forall G' : G.Finsubgraphᵒᵖ, Fintype ((f
 
 中文:
-定理 nonempty_hom_of_forall_finite_subgraph_hom
-  结论: [Finite W]
+定理 nonempty_hom_of_对任意_finite_subgraph_hom
+  结论: [有限 W]
   证明: by
   -- Obtain a `Fintype` instance for `W`.
   cases nonempty_fintype W

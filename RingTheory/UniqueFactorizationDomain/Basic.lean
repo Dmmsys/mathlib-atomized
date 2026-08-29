@@ -112,7 +112,7 @@ theorem WfDvdMonoid.of_wellFoundedLT_associates
 
 中文:
 定理 WfDvdMonoid.of_wellFoundedLT_associates
-  结论: [CommMonoidWithZero α] [IsCancelMulZero α]
+  结论: [带零交换幺半群 α] [是乘零消去 α]
   证明: WfDvdMonoid.of_wfDvdMonoid_associates
     ⟨by convert h.wf; exact Associates.dvdNotUnit_iff_lt⟩
 
@@ -133,7 +133,7 @@ theorem WfDvdMonoid.iff_wellFounded_associates
 
 中文:
 定理 WfDvdMonoid.iff_wellFounded_associates
-  条件: [CommMonoidWithZero α] [IsCancelMulZero α]
+  条件: [带零交换幺半群 α] [是乘零消去 α]
   证明: ⟨by apply WfDvdMonoid.wellFoundedLT_associates, WfDvdMonoid.of_wellFoundedLT_associates⟩
 
 Depends on / 依赖: WfDvdMonoid, WfDvdMonoid.of_wellFoundedLT_associates, WfDvdMonoid.wellFoundedLT_associates, of_wellFoundedLT_associates, wellFoundedLT_associates
@@ -155,7 +155,7 @@ instance Associates.ufm
 
 中文:
 实例 Associates.ufm
-  签名: [CommMonoidWithZero α] [UniqueFactorizationMonoid α]
+  签名: [带零交换幺半群 α] [唯一分解幺半群 α]
   定义体: { (WfDvdMonoid.wfDvdMonoid_associates : WfDvdMonoid (Associates α)) with
     irreducible_iff_prime := by
       rw [← Associates.irreducible_iff_prime_iff]
@@ -189,7 +189,7 @@ isUnit_iff_dvd_one.2 (
 
 中文:
 定理 prime_factors_unique
-  条件: [CommMonoidWithZero α] [IsCancelMulZero α]
+  条件: [带零交换幺半群 α] [是乘零消去 α]
   证明: by
   intro f
   induction f using Multiset.induction_on with
@@ -245,7 +245,7 @@ theorem factors_unique
 
 中文:
 定理 factors_unique
-  结论: {f g : Multiset α} (hf : 对任意 x in f, Irreducible x)
+  结论: {f g : Multiset α} (hf : 对任意 x in f, 不可约 x)
   证明: prime_factors_unique (fun x hx => UniqueFactorizationMonoid.irreducible_iff_prime.mp (hf x hx))
     (fun x hx => UniqueFactorizationMonoid.irreducible_iff_prime.mp (hg x hx)) h
 
@@ -311,7 +311,7 @@ theorem prime_factors_irreducible
 
 中文:
 定理 prime_factors_irreducible
-  结论: [CommMonoidWithZero α] {a : α} {f : Multiset α}
+  结论: [带零交换幺半群 α] {a : α} {f : Multiset α}
   证明: by
   have := Classical.decEq α
   refine @Multiset.induction_on _
@@ -361,8 +361,8 @@ theorem irreducible_iff_prime_of_existsUnique_irreducible_factors
   
 
 中文:
-定理 irreducible_iff_prime_of_existsUnique_irreducible_factors
-  结论: [CommMonoidWithZero α]
+定理 irreducible_iff_prime_of_存在Unique_irreducible_factors
+  结论: [带零交换幺半群 α]
   证明: letI := Classical.decEq α
   ⟨ fun hpi =>
     ⟨hpi.ne_zero, hpi.1, fun a b ⟨x, hx⟩ =>
@@ -471,8 +471,8 @@ theorem exists_mem_factors_of_dvd
       
 
 中文:
-定理 exists_mem_factors_of_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p)
+定理 存在_mem_factors_of_dvd
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p)
   证明: fun ⟨b, hb⟩ =>
   have hb0 : b != 0 := fun hb0 => by simp_all
   have : Rel Associated (p ::ₘ factors b) (factors a) :=
@@ -511,8 +511,8 @@ theorem exists_mem_factors
   exact ⟨p, hp⟩
 
 中文:
-定理 exists_mem_factors
-  条件: {x : α} (hx : x != 0) (h : ¬IsUnit x)
+定理 存在_mem_factors
+  条件: {x : α} (hx : x != 0) (h : ¬是单位 x)
   结论: 存在 p, p in factors x
   证明: by
   obtain ⟨p', hp', hp'x⟩ := WfDvdMonoid.exists_irreducible_factor h hx
@@ -539,7 +539,7 @@ exact ⟨b, hab, .symm Multiset.eq_of_le_of_card_le (Multiset.singleton_le.mpr h
 
 中文:
 定理 factors_eq_singleton_of_irreducible
-  条件: {a : α} (ha : Irreducible a)
+  条件: {a : α} (ha : 不可约 a)
   证明: by
   obtain ⟨b, hbmem, hab⟩ := exists_mem_factors_of_dvd ha.ne_zero ha dvd_rfl
 exact ⟨b, hab, .symm Multiset.eq_of_le_of_card_le (Multiset.singleton_le.mpr hbmem)
@@ -713,7 +713,7 @@ theorem factors_of_isUnit
 
 中文:
 定理 factors_of_isUnit
-  条件: {x : α} (hx : IsUnit x)
+  条件: {x : α} (hx : 是单位 x)
   结论: factors x = 0
   证明: by
   simpa using factors_rel_of_associated (associated_one_iff_isUnit.mpr hx)
@@ -741,7 +741,7 @@ theorem factors_eq_zero
 中文:
 定理 factors_eq_zero
   条件: {x : α} (hx : x != 0)
-  结论: factors x = 0 ↔ IsUnit x
+  结论: factors x = 0 ↔ 是单位 x
   证明: ⟨fun h => by contrapose! h; simpa [eq_zero_iff_forall_notMem] using exists_mem_factors hx h,
     factors_of_isUnit⟩
 
@@ -766,7 +766,7 @@ theorem factors_pos
 中文:
 定理 factors_pos
   条件: {x : α} (hx : x != 0)
-  结论: 0 < factors x ↔ ¬IsUnit x
+  结论: 0 < factors x ↔ ¬是单位 x
   证明: bot_lt_iff_ne_bot.trans (not_iff_not.mpr (factors_eq_zero hx))
 
 Depends on / 依赖: bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.trans, factors_eq_zero, not_iff_not, not_iff_not.mpr
@@ -842,7 +842,7 @@ theorem prod_le_prod_iff_le
 
 中文:
 定理 prod_le_prod_iff_le
-  结论: [Nontrivial α] {p q : Multiset (Associates α)}
+  结论: [非平凡 α] {p q : Multiset (Associates α)}
   证明: by
   refine ⟨?_, prod_le_prod⟩
   rintro ⟨c, eqc⟩
@@ -895,7 +895,7 @@ theorem WfDvdMonoid.of_exists_prime_factors
     
 
 中文:
-定理 WfDvdMonoid.of_exists_prime_factors
+定理 WfDvdMonoid.of_存在_prime_factors
   结论: WfDvdMonoid α
   证明: ⟨by
     refine RelHomClass.wellFounded
@@ -963,9 +963,9 @@ theorem irreducible_iff_prime_of_exists_prime_factors
   exact hf.1 q (Multiset.mem_singleton_self _)
 
 中文:
-定理 irreducible_iff_prime_of_exists_prime_factors
+定理 irreducible_iff_prime_of_存在_prime_factors
   条件: {p : α}
-  结论: Irreducible p ↔ Prime p
+  结论: 不可约 p ↔ 素 p
   证明: by
   by_cases hp0 : p = 0
   · simp [hp0]
@@ -996,8 +996,8 @@ theorem UniqueFactorizationMonoid.of_exists_prime_factors
     irreducible_iff_prime := irreducible_iff_prime_of_exists_prime_factors pf }
 
 中文:
-定理 UniqueFactorizationMonoid.of_exists_prime_factors
-  结论: UniqueFactorizationMonoid α
+定理 唯一分解幺半群.of_存在_prime_factors
+  结论: 唯一分解幺半群 α
   证明: { WfDvdMonoid.of_exists_prime_factors pf with
     irreducible_iff_prime := irreducible_iff_prime_of_exists_prime_factors pf }
 
@@ -1019,8 +1019,8 @@ theorem UniqueFactorizationMonoid.iff_exists_prime_factors
     UniqueFactorizationMonoid.of_exists_prime_factors⟩
 
 中文:
-定理 UniqueFactorizationMonoid.iff_exists_prime_factors
-  结论: [CommMonoidWithZero α]
+定理 唯一分解幺半群.iff_存在_prime_factors
+  结论: [带零交换幺半群 α]
   证明: ⟨fun h => @UniqueFactorizationMonoid.exists_prime_factors _ _ h,
     UniqueFactorizationMonoid.of_exists_prime_factors⟩
 
@@ -1057,8 +1057,8 @@ ha by
         let ⟨c, hc, he⟩ := 
 
 中文:
-定理 MulEquiv.uniqueFactorizationMonoid
-  条件: (e : α ≃* β) (hα : UniqueFactorizationMonoid α)
+定理 乘法等价.uniqueFactorizationMonoid
+  条件: (e : α ≃* β) (hα : 唯一分解幺半群 α)
   证明: by
   have := e.isCancelMulZero_iff.mp inferInstance
   rw [UniqueFactorizationMonoid.iff_exists_prime_factors] at hα ⊢
@@ -1101,7 +1101,7 @@ theorem MulEquiv.uniqueFactorizationMonoid_iff
   proof: ⟨e.uniqueFactorizationMonoid, e.symm.uniqueFactorizationMonoid⟩
 
 中文:
-定理 MulEquiv.uniqueFactorizationMonoid_iff
+定理 乘法等价.uniqueFactorizationMonoid_iff
   条件: (e : α ≃* β)
   证明: ⟨e.uniqueFactorizationMonoid, e.symm.uniqueFactorizationMonoid⟩
 
@@ -1127,8 +1127,8 @@ theorem of_existsUnique_irreducible_factors
       simp_rw [irreducible_iff_prime_of_existsUnique_irreducible_factors eif uif])
 
 中文:
-定理 of_existsUnique_irreducible_factors
-  结论: [CommMonoidWithZero α] [IsCancelMulZero α]
+定理 of_存在Unique_irreducible_factors
+  结论: [带零交换幺半群 α] [是乘零消去 α]
   证明: UniqueFactorizationMonoid.of_exists_prime_factors
     (by
       convert! eif using 7
@@ -1236,7 +1236,7 @@ theorem exists_reduced_factors
     · rcas
 
 中文:
-定理 exists_reduced_factors
+定理 存在_reduced_factors
   证明: by
   intro a
   refine induction_on_prime a ?_ ?_ ?_
@@ -1292,7 +1292,7 @@ theorem exists_reduced_factors'
   ⟨a', b', c', fun _ hpb hpa => no_factor hpa hpb, ha, hb⟩
 
 中文:
-定理 exists_reduced_factors'
+定理 存在_reduced_factors'
   条件: (a b : R) (hb : b != 0)
   证明: let ⟨b', a', c', no_factor, hb, ha⟩ := exists_reduced_factors b hb a
   ⟨a', b', c', fun _ hpb hpa => no_factor hpa hpb, ha, hb⟩

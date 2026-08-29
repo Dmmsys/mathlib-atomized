@@ -45,7 +45,7 @@ theorem even_succAbove_add_predAbove
 
 中文:
 定理 even_succAbove_add_predAbove
-  条件: (i : Fin (n + 1)) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: by
   rcases lt_or_ge j.castSucc i with hji | hij
   · have : 1 <= (i : Nat) := (Nat.zero_le j).trans_lt hji
@@ -77,7 +77,7 @@ lemma neg_one_pow_succAbove_add_predAbove
 
 中文:
 引理 neg_one_pow_succAbove_add_predAbove
-  结论: {R : 类型} [Monoid R] [HasDistribNeg R]
+  结论: {R : 类型} [幺半群 R] [有DistribNeg R]
   证明: by
   rw [← neg_one_mul (_ ^ _)]; rw [← pow_succ']; rw [neg_one_pow_congr]
   rw [even_succAbove_add_predAbove]; rw [Nat.even_add_one]; rw [Nat.not_even_iff_odd]
@@ -158,7 +158,7 @@ lemma even_of_odd
 
 中文:
 引理 even_of_odd
-  条件: (hn : Odd n) (k : Fin n)
+  条件: (hn : Odd n) (k : 有限集 n)
   结论: Even k
   证明: by
   have : NeZero n := ⟨k.pos.ne'⟩
@@ -188,7 +188,7 @@ lemma odd_of_odd
 
 中文:
 引理 odd_of_odd
-  条件: [NeZero n] (hn : Odd n) (k : Fin n)
+  条件: [NeZero n] (hn : Odd n) (k : 有限集 n)
   结论: Odd k
   证明: by
   rcases k.val.even_or_odd with hk | hk

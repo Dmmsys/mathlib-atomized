@@ -57,9 +57,9 @@ class Bitraversable
 中文:
 类 Bitraversable
   参数: (t : 类型u -> 类型u -> 类型u)
-  继承: Bifunctor t
+  继承: 双函子 t
   公理与运算 (1 个):
-    - bitraverse : 对任意 {m : 类型u -> 类型u} [Applicative m] {α α' β β'}, (α -> m α') -> (β -> m β') -> t α β -> m (t α' β')
+    - bitraverse : 对任意 {m : 类型u -> 类型u} [适用 m] {α α' β β'}, (α -> m α') -> (β -> m β') -> t α β -> m (t α' β')
 -/
 class Bitraversable (t : Type u -> Type u -> Type u) extends Bifunctor t where
   bitraverse :
@@ -78,7 +78,7 @@ definition bisequence
 
 中文:
 定义 bisequence
-  签名: {t m} [Bitraversable t] [Applicative m] {α β}
+  签名: {t m} [Bitraversable t] [适用 m] {α β}
   定义体: bitraverse id id
 
 Depends on / 依赖: bitraverse
@@ -107,9 +107,9 @@ class LawfulBitraversable
   继承: LawfulBifunctor t
   公理与运算 (4 个):
     - id_bitraverse : 对任意 {α β} (x : t α β), (bitraverse pure pure x : Id _) = pure x
-    - comp_bitraverse : 对任意 {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α α' β β' γ γ'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'), bitraverse (Comp.mk ∘ map f ∘ g) (Comp.mk ∘ map f' ∘ g') x = Comp.mk (bitraverse f f' <$> bitraverse g g' x)
+    - comp_bitraverse : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] {α α' β β' γ γ'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'), bitraverse (复合.mk ∘ map f ∘ g) (复合.mk ∘ map f' ∘ g') x = 复合.mk (bitraverse f f' <$> bitraverse g g' x)
     - bitraverse_eq_bimap_id : 对任意 {α α' β β'} (f : α -> β) (f' : α' -> β') (x : t α α'), bitraverse (m := Id) (pure ∘ f) (pure ∘ f') x = pure (bimap f f' x)
-    - binaturality : 对任意 {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) {α α' β β'} (f : α -> F β) (f' : α' -> F β') (x : t α α'), η (bitraverse f f' x) = bitraverse (@η _ ∘ f) (@η _ ∘ f') x
+    - binaturality : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] (η : ApplicativeTransformation F G) {α α' β β'} (f : α -> F β) (f' : α' -> F β') (x : t α α'), η (bitraverse f f' x) = bitraverse (@η _ ∘ f) (@η _ ∘ f') x
 -/
 class LawfulBitraversable (t : Type u -> Type u -> Type u) [Bitraversable t] : Prop
   extends LawfulBifunctor t where

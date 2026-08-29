@@ -183,7 +183,7 @@ lemma exists_fac
   exact ⟨j, q, fac⟩
 
 中文:
-引理 exists_fac
+引理 存在_fac
   结论: 存在 (j : ι') (a : Z ⟶ X' j), a ≫ f' j = q ≫ f i
   证明: by
   obtain ⟨_, q, _, ⟨j⟩, fac⟩ := hq
@@ -736,7 +736,7 @@ lemma IsStackFor.of_le
   exact DescentData.isEquivalence_toDescentData_of_sieve_le _ hR₂ (Sieve.generate_mono h)
 
 中文:
-引理 IsStackFor.of_le
+引理 是StackFor.of_le
   结论: {S : C} {R : Presieve S}
   证明: by
   obtain ⟨ι, _, f, rfl⟩ := R.exists_eq_ofArrows
@@ -764,8 +764,8 @@ lemma IsStackFor.of_le'
   proof: hR₁.of_le _ (by simpa) h
 
 中文:
-引理 IsStackFor.of_le'
-  结论: {S : C} {R : Sieve S}
+引理 是StackFor.of_le'
+  结论: {S : C} {R : 筛 S}
   证明: hR₁.of_le _ (by simpa) h
 
 Depends on / 依赖: of_le
@@ -794,7 +794,7 @@ lemma IsPrestack.of_precoverage
  
 
 中文:
-引理 IsPrestack.of_precoverage
+引理 是Prestack.of_precoverage
   证明: by
     rw [isSheaf_iff_isSheaf_of_type]; rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]; rw [← Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck]; rw [Presieve.isSheaf_pretopology]
     intro X R hR
@@ -831,7 +831,7 @@ lemma IsStack.of_precoverage
   exact (hF _ _ hR').of_le _ (Precoverage.generate_mem_toGrothe
 
 中文:
-引理 IsStack.of_precoverage
+引理 是Stack.of_precoverage
   证明: by
   have := IsPrestack.of_precoverage (fun S R hR => (hF _ _ hR).isPrestackFor)
   refine ⟨fun {S} R hR => IsStackFor.essSurj ?_⟩

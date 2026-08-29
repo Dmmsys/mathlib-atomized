@@ -280,7 +280,7 @@ lemma coe_sub_one
 
 中文:
 引理 coe_sub_one
-  条件: (a : Fin (n + 1))
+  条件: (a : 有限集 (n + 1))
   结论: ↑(a - 1) = if a = 0 then n else a - 1
   证明: by
   cases n
@@ -315,7 +315,7 @@ lemma lt_sub_iff
 
 中文:
 引理 lt_sub_iff
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: a < a - b ↔ a < b
   证明: by
   fin_omega
@@ -342,7 +342,7 @@ lemma sub_le_iff
 
 中文:
 引理 sub_le_iff
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: a - b <= a ↔ b <= a
   证明: by
   rw [← not_iff_not]; rw [Fin.not_le]; rw [Fin.not_le]; rw [lt_sub_iff]
@@ -367,7 +367,7 @@ lemma lt_one_iff
 
 中文:
 引理 lt_one_iff
-  条件: {n : 自然数} (x : Fin (n + 2))
+  条件: {n : 自然数} (x : 有限集 (n + 2))
   结论: x < 1 ↔ x = 0
   证明: by
   simp [lt_def]
@@ -389,7 +389,7 @@ lemma lt_sub_one_iff
 
 中文:
 引理 lt_sub_one_iff
-  条件: {k : Fin (n + 2)}
+  条件: {k : 有限集 (n + 2)}
   结论: k < k - 1 ↔ k = 0
   证明: by
   simp
@@ -413,7 +413,7 @@ lemma le_sub_one_iff
 
 中文:
 引理 le_sub_one_iff
-  条件: {k : Fin (n + 1)}
+  条件: {k : 有限集 (n + 1)}
   结论: k <= k - 1 ↔ k = 0
   证明: by
   cases n
@@ -440,7 +440,7 @@ lemma sub_one_lt_iff
 
 中文:
 引理 sub_one_lt_iff
-  条件: {k : Fin (n + 1)}
+  条件: {k : 有限集 (n + 1)}
   结论: k - 1 < k ↔ 0 < k
   证明: not_iff_not.1 by simp only [lt_def, not_lt, val_fin_le, le_sub_one_iff, le_zero_iff]
 
@@ -461,7 +461,7 @@ lemma neg_last
 中文:
 引理 neg_last
   条件: (n : 自然数)
-  结论: -Fin.last n = 1
+  结论: -有限集.last n = 1
   证明: by simp [neg_eq_iff_add_eq_zero]
 -/
 @[simp] lemma neg_last (n : Nat) : -Fin.last n = 1 := by simp [neg_eq_iff_add_eq_zero]
@@ -480,7 +480,7 @@ lemma neg_natCast_eq_one
 中文:
 引理 neg_natCast_eq_one
   条件: (n : 自然数)
-  结论: -(n : Fin (n + 1)) = 1
+  结论: -(n : 有限集 (n + 1)) = 1
   证明: by
   simp only [natCast_eq_last, neg_last]
 
@@ -503,7 +503,7 @@ lemma rev_add
 
 中文:
 引理 rev_add
-  条件: (a b : Fin n)
+  条件: (a b : 有限集 n)
   结论: rev (a + b) = rev a - b
   证明: by
   cases n
@@ -529,7 +529,7 @@ lemma rev_sub
 
 中文:
 引理 rev_sub
-  条件: (a b : Fin n)
+  条件: (a b : 有限集 n)
   结论: rev (a - b) = rev a + b
   证明: by
   rw [rev_eq_iff]; rw [rev_add]; rw [rev_rev]
@@ -552,7 +552,7 @@ lemma lt_add_one_of_succ_lt
 
 中文:
 引理 lt_add_one_of_succ_lt
-  条件: {n : 自然数} [NeZero n] {a : Fin n} (ha : a + 1 < n)
+  条件: {n : 自然数} [NeZero n] {a : 有限集 n} (ha : a + 1 < n)
   结论: a < a + 1
   证明: by
   rw [lt_def]; rw [val_add]; rw [coe_ofNat_eq_mod]; rw [Nat.add_mod_mod]; rw [Nat.mod_eq_of_lt ha]
@@ -576,7 +576,7 @@ lemma add_lt_left_iff
 
 中文:
 引理 add_lt_left_iff
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: a + b < a ↔ rev b < a
   证明: by
   rw [← rev_lt_rev]; rw [Iff.comm]; rw [← rev_lt_rev]; rw [rev_add]; rw [lt_sub_iff]; rw [rev_rev]

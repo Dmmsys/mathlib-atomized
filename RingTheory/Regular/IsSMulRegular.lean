@@ -42,8 +42,8 @@ lemma LinearEquiv.isSMulRegular_congr'
   proof: e.toEquiv.isSMulRegular_congr (e.map_smul' r)
 
 中文:
-引理 LinearEquiv.isSMulRegular_congr'
-  结论: [AddCommMonoid N] [Module S N]
+引理 线性等价.isSMulRegular_congr'
+  结论: [加法交换幺半群 N] [模 S N]
   证明: e.toEquiv.isSMulRegular_congr (e.map_smul' r)
 
 Depends on / 依赖: e.map_smul, e.toEquiv.isSMulRegular_congr, isSMulRegular_congr, map_smul, toEquiv
@@ -61,8 +61,8 @@ lemma LinearEquiv.isSMulRegular_congr
   proof: e.isSMulRegular_congr' r
 
 中文:
-引理 LinearEquiv.isSMulRegular_congr
-  结论: [AddCommMonoid N] [Module R N]
+引理 线性等价.isSMulRegular_congr
+  结论: [加法交换幺半群 N] [模 R N]
   证明: e.isSMulRegular_congr' r
 
 Depends on / 依赖: e.isSMulRegular_congr, isSMulRegular_congr
@@ -85,7 +85,7 @@ lemma IsSMulRegular.submodule
 
 中文:
 引理 IsSMulRegular.submodule
-  结论: [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: [半环 R] [加法交换幺半群 M] [模 R M]
   证明: h.of_injective N.subtype N.injective_subtype
 
 Depends on / 依赖: N.injective_subtype, N.subtype, h.of_injective, injective_subtype, of_injective, subtype
@@ -301,7 +301,7 @@ lemma biUnion_associatedPrimes_eq_compl_regular
 
 中文:
 引理 biUnion_associatedPrimes_eq_compl_regular
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: Eq.trans (biUnion_associatedPrimes_eq_zero_divisors R M) by
     simp_rw [Set.compl_ofPred, isSMulRegular_iff_right_eq_zero_of_smul,
       not_forall, exists_prop, and_comm]

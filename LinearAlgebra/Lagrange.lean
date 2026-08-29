@@ -195,7 +195,7 @@ theorem eq_zero_of_degree_lt_of_eval_index_eq_zero
 
 中文:
 定理 eq_zero_of_degree_lt_of_eval_index_eq_zero
-  结论: (hvs : Set.InjOn v s)
+  结论: (hvs : 集合.单射限制 v s)
   证明: by
   classical
     rw [← card_image_of_injOn hvs] at degree_f_lt
@@ -229,7 +229,7 @@ theorem eq_of_degree_sub_lt_of_eval_index_eq
 
 中文:
 定理 eq_of_degree_sub_lt_of_eval_index_eq
-  结论: (hvs : Set.InjOn v s)
+  结论: (hvs : 集合.单射限制 v s)
   证明: by
   rw [← sub_eq_zero]
   refine eq_zero_of_degree_lt_of_eval_index_eq_zero _ hvs degree_fg_lt ?_
@@ -259,7 +259,7 @@ theorem eq_of_degrees_lt_of_eval_index_eq
 
 中文:
 定理 eq_of_degrees_lt_of_eval_index_eq
-  结论: (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
+  结论: (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
   证明: by
   refine eq_of_degree_sub_lt_of_eval_index_eq _ hvs ?_ eval_fg
   rw [← mem_degreeLT] at degree_f_lt degree_g_lt ⊢
@@ -288,7 +288,7 @@ theorem eq_of_degree_le_of_eval_index_eq
 
 中文:
 定理 eq_of_degree_le_of_eval_index_eq
-  结论: (hvs : Set.InjOn v s)
+  结论: (hvs : 集合.单射限制 v s)
   证明: by
   rcases eq_or_ne f 0 with rfl | hf
   · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
@@ -593,7 +593,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: (s : Finset ι) (v : ι -> F) (i : ι)
+  签名: (s : 有限集 ι) (v : ι -> F) (i : ι)
   定义体: ∏ j in s.erase i, basisDivisor (v i) (v j)
 
 @[simp]
@@ -722,7 +722,7 @@ theorem basis_ne_zero
 
 中文:
 定理 basis_ne_zero
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   结论: Lagrange.basis s v i != 0
   证明: by
   simp_rw [Lagrange.basis, prod_ne_zero_iff, Ne, mem_erase]
@@ -758,7 +758,7 @@ theorem eval_basis_self
 
 中文:
 定理 eval_basis_self
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   rw [Lagrange.basis]; rw [eval_prod]
   refine prod_eq_one fun j H => ?_
@@ -825,7 +825,7 @@ theorem natDegree_basis
 
 中文:
 定理 natDegree_basis
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   have H : forall j, j in s.erase i -> basisDivisor (v i) (v j) != 0 := by
     simp_rw [Ne, mem_erase, basisDivisor_eq_zero_iff]
@@ -858,7 +858,7 @@ theorem degree_basis
 
 中文:
 定理 degree_basis
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   rw [degree_eq_natDegree (basis_ne_zero hvs hi)]; rw [natDegree_basis hvs hi]
 
@@ -883,7 +883,7 @@ theorem sum_basis
 
 中文:
 定理 sum_basis
-  条件: (hvs : Set.InjOn v s) (hs : s.Nonempty)
+  条件: (hvs : 集合.单射限制 v s) (hs : s.非空)
   证明: by
   refine eq_of_degrees_lt_of_eval_index_eq s hvs (lt_of_le_of_lt (degree_sum_le _ _) ?_) ?_ ?_
   · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
@@ -946,7 +946,7 @@ theorem leadingCoeff_basis
 
 中文:
 定理 leadingCoeff_basis
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   have : (∏ j in s.erase i, (X - C (v j))).coeff (#s - 1) = 1 := by
     simpa [hi] using (monic_prod_X_sub_C v (s.erase i)).coeff_natDegree
@@ -991,7 +991,7 @@ definition interpolate
 
 中文:
 定义 interpolate
-  签名: (s : Finset ι) (v : ι -> F)
+  签名: (s : 有限集 ι) (v : ι -> F)
   定义体: ∑ i in s, C (r i) * Lagrange.basis s v i
   map_add' f g := by
     simp_rw [← Finset.sum_add_distrib]
@@ -1063,7 +1063,7 @@ theorem interpolate_one
 
 中文:
 定理 interpolate_one
-  条件: (hvs : Set.InjOn v s) (hs : s.Nonempty)
+  条件: (hvs : 集合.单射限制 v s) (hs : s.非空)
   结论: interpolate s v 1 = 1
   证明: by
   simp_rw [interpolate_apply, Pi.one_apply, map_one, one_mul]
@@ -1089,7 +1089,7 @@ theorem eval_interpolate_at_node
 
 中文:
 定理 eval_interpolate_at_node
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   rw [interpolate_apply]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]
   simp_rw [eval_mul, eval_C, eval_basis_self hvs hi, mul_one, add_eq_left]
@@ -1122,7 +1122,7 @@ theorem degree_interpolate_le
 
 中文:
 定理 degree_interpolate_le
-  条件: (hvs : Set.InjOn v s)
+  条件: (hvs : 集合.单射限制 v s)
   证明: by
   refine (degree_sum_le _ _).trans ?_
   rw [Finset.sup_le_iff]
@@ -1162,7 +1162,7 @@ theorem degree_interpolate_lt
 
 中文:
 定理 degree_interpolate_lt
-  条件: (hvs : Set.InjOn v s)
+  条件: (hvs : 集合.单射限制 v s)
   结论: (interpolate s v r).degree < #s
   证明: by
   rw [Nat.cast_withBot]
@@ -1196,7 +1196,7 @@ theorem degree_interpolate_erase_lt
 
 中文:
 定理 degree_interpolate_erase_lt
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   证明: by
   rw [← Finset.card_erase_of_mem hi]
   exact degree_interpolate_lt _ (Set.InjOn.mono (coe_subset.mpr (erase_subset _ _)) hvs)
@@ -1219,7 +1219,7 @@ theorem values_eq_on_of_interpolate_eq
 
 中文:
 定理 values_eq_on_of_interpolate_eq
-  结论: (hvs : Set.InjOn v s)
+  结论: (hvs : 集合.单射限制 v s)
   证明: fun _ hi => by
   rw [← eval_interpolate_at_node r hvs hi]; rw [hrr']; rw [eval_interpolate_at_node r' hvs hi]
 
@@ -1258,7 +1258,7 @@ theorem interpolate_eq_iff_values_eq_on
 
 中文:
 定理 interpolate_eq_iff_values_eq_on
-  条件: (hvs : Set.InjOn v s)
+  条件: (hvs : 集合.单射限制 v s)
   证明: ⟨values_eq_on_of_interpolate_eq _ _ hvs, interpolate_eq_of_values_eq_on _ _⟩
 
 Depends on / 依赖: interpolate_eq_of_values_eq_on, values_eq_on_of_interpolate_eq
@@ -1278,7 +1278,7 @@ theorem eq_interpolate
 
 中文:
 定理 eq_interpolate
-  条件: {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
+  条件: {f : F[X]} (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
   证明: eq_of_degrees_lt_of_eval_index_eq _ hvs degree_f_lt (degree_interpolate_lt _ hvs) fun _ hi =>
     (eval_interpolate_at_node (fun x => eval (v x) f) hvs hi).symm
 
@@ -1301,7 +1301,7 @@ theorem eq_interpolate_of_eval_eq
 
 中文:
 定理 eq_interpolate_of_eval_eq
-  结论: {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
+  结论: {f : F[X]} (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
   证明: by
   rw [eq_interpolate hvs degree_f_lt]
   exact interpolate_eq_of_values_eq_on _ _ eval_f
@@ -1327,7 +1327,7 @@ theorem eq_interpolate_iff
 
 中文:
 定理 eq_interpolate_iff
-  条件: {f : F[X]} (hvs : Set.InjOn v s)
+  条件: {f : F[X]} (hvs : 集合.单射限制 v s)
   证明: by
   constructor <;> intro h
   · exact eq_interpolate_of_eval_eq _ hvs h.1 h.2
@@ -1362,7 +1362,7 @@ mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
 
 中文:
 定义 funEquivDegreeLT
-  签名: (hvs : Set.InjOn v s)
+  签名: (hvs : 集合.单射限制 v s)
   定义体: f.1.eval (v i)
   map_add' _ _ := funext fun _ => eval_add
 map_smul' c f := funext by simp
@@ -1409,7 +1409,7 @@ theorem interpolate_eq_sum_interpolate_insert_sdiff
 
 中文:
 定理 interpolate_eq_sum_interpolate_insert_sdiff
-  结论: (hvt : Set.InjOn v t) (hs : s.Nonempty)
+  结论: (hvt : 集合.单射限制 v t) (hs : s.非空)
   证明: by
   symm
   refine eq_interpolate_of_eval_eq _ hvt (lt_of_le_of_lt (degree_sum_le _ _) ?_) fun i hi => ?_
@@ -1466,7 +1466,7 @@ theorem interpolate_eq_add_interpolate_erase
 
 中文:
 定理 interpolate_eq_add_interpolate_erase
-  结论: (hvs : Set.InjOn v s) (hi : i in s) (hj : j in s)
+  结论: (hvs : 集合.单射限制 v s) (hi : i in s) (hj : j in s)
   证明: by
   rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singl
 
@@ -1521,7 +1521,7 @@ theorem iterate_derivative_interpolate
 
 中文:
 定理 iterate_derivative_interpolate
-  条件: (hvs : Set.InjOn v s) {k : 自然数} (hk : k < #s)
+  条件: (hvs : 集合.单射限制 v s) {k : 自然数} (hk : k < #s)
   证明: by
   classical
   simp_rw [interpolate_eq_sum, iterate_derivative_sum, iterate_derivative_C_mul, mul_sum s,
@@ -1571,7 +1571,7 @@ theorem eval_iterate_derivative_eq_sum
 
 中文:
 定理 eval_iterate_derivative_eq_sum
-  结论: (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < #s)
+  结论: (hvs : 集合.单射限制 v s) {P : 多项式 F} (hP : P.degree < #s)
   证明: by
   nth_rewrite 1 [eq_interpolate hvs hP, iterate_derivative_interpolate _ hvs hk]
   simp [eval_finsetSum, eval_prod]
@@ -1682,8 +1682,8 @@ lemma _root_.Polynomial.exists_eval_eq_iff
   set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 
 
 中文:
-引理 _root_.Polynomial.exists_eval_eq_iff
-  条件: {ι : 类型} [Finite ι] (x y : ι -> F)
+引理 _root_.多项式.存在_eval_eq_iff
+  条件: {ι : 类型} [有限 ι] (x y : ι -> F)
   证明: by
   refine ⟨fun ⟨q, hq⟩ i j hij => by rw [← hq, ← hq, hij], fun hwd => ?_⟩
   classical
@@ -1726,7 +1726,7 @@ definition nodal
 
 中文:
 定义 nodal
-  签名: (s : Finset ι) (v : ι -> R)
+  签名: (s : 有限集 ι) (v : ι -> R)
   定义体: ∏ i in s, (X - C (v i))
 -/
 def nodal (s : Finset ι) (v : ι -> R) : R[X] :=
@@ -1745,7 +1745,7 @@ theorem nodal_eq
 
 中文:
 定理 nodal_eq
-  条件: (s : Finset ι) (v : ι -> R)
+  条件: (s : 有限集 ι) (v : ι -> R)
   结论: nodal s v = ∏ i in s, (X - C (v i))
   证明: rfl
 
@@ -1791,7 +1791,7 @@ theorem natDegree_nodal
 
 中文:
 定理 natDegree_nodal
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (nodal s v).natDegree = #s
   证明: by
   simp_rw [nodal, natDegree_prod_of_monic (h := fun i _ => monic_X_sub_C (v i)),
@@ -1820,7 +1820,7 @@ theorem nodal_ne_zero
 
 中文:
 定理 nodal_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: nodal s v != 0
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | h)
@@ -1851,7 +1851,7 @@ theorem degree_nodal
 
 中文:
 定理 degree_nodal
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (nodal s v).degree = #s
   证明: by
   simp_rw [degree_eq_natDegree nodal_ne_zero, natDegree_nodal]
@@ -1938,7 +1938,7 @@ theorem eval_nodal_not_at_node
 
 中文:
 定理 eval_nodal_not_at_node
-  结论: [Nontrivial R] [NoZeroDivisors R] {x : R}
+  结论: [非平凡 R] [无零因子 R] {x : R}
   证明: by
   simp_rw [nodal, eval_prod, prod_ne_zero_iff, eval_sub, eval_X, eval_C, sub_ne_zero]
   exact hx
@@ -2090,7 +2090,7 @@ theorem nodal_subgroup_eq_X_pow_card_sub_one
 
 中文:
 定理 nodal_subgroup_eq_X_pow_card_sub_one
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   have h : degree (1 : R[X]) < degree ((X : R[X]) ^ Fintype.card G) := by simp [Fintype.card_pos]
   apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
@@ -2134,7 +2134,7 @@ definition nodalWeight
 
 中文:
 定义 nodalWeight
-  签名: (s : Finset ι) (v : ι -> F) (i : ι)
+  签名: (s : 有限集 ι) (v : ι -> F) (i : ι)
   定义体: ∏ j in s.erase i, (v i - v j)⁻¹
 
 Depends on / 依赖: s.erase
@@ -2221,7 +2221,7 @@ theorem nodalWeight_ne_zero
 
 中文:
 定理 nodalWeight_ne_zero
-  条件: (hvs : Set.InjOn v s) (hi : i in s)
+  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
   结论: nodalWeight s v i != 0
   证明: by
   rw [nodalWeight]; rw [prod_ne_zero_iff]
@@ -2354,7 +2354,7 @@ theorem sum_nodalWeight_mul_inv_sub_ne_zero
 
 中文:
 定理 sum_nodalWeight_mul_inv_sub_ne_zero
-  结论: (hvs : Set.InjOn v s) (hx : 对任意 i in s, x != v i)
+  结论: (hvs : 集合.单射限制 v s) (hx : 对任意 i in s, x != v i)
   证明: @right_ne_zero_of_mul_eq_one _ _ _ (eval x (nodal s v)) _ by
     simpa only [Pi.one_apply, interpolate_one hvs hs, eval_one, mul_one] using
       (eval_interpolate_not_at_node 1 hx).symm
@@ -2379,7 +2379,7 @@ theorem eval_interpolate_not_at_node'
 
 中文:
 定理 eval_interpolate_not_at_node'
-  结论: (hvs : Set.InjOn v s) (hs : s.Nonempty)
+  结论: (hvs : 集合.单射限制 v s) (hs : s.非空)
   证明: by
   rw [← div_one (eval x (interpolate s v r))]; rw [← @eval_one _ _ x]; rw [← interpolate_one hvs hs]; rw [eval_interpolate_not_at_node r hx]; rw [eval_interpolate_not_at_node 1 hx]
   simp only [mul_div_mul_left _ _ (eval_nodal_not_at_node hx), Pi.one_apply, mul_one]

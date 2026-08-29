@@ -97,7 +97,7 @@ theorem besselPotential_zero
 
 中文:
 定理 besselPotential_zero
-  结论: besselPotential E F 0 = ContinuousLinearMap.id Complex _
+  结论: besselPotential E F 0 = 连续线性映射.id 复形 _
   证明: by
   ext f
   simp [besselPotential]
@@ -461,7 +461,7 @@ theorem MemSobolev.smul
 
 中文:
 定理 MemSobolev.smul
-  结论: {s : 实数} {p : 实数>=0∞} [hp : Fact (1 <= p)] (c : Complex) {f : 𝓢'(E, F)}
+  结论: {s : 实数} {p : 实数>=0∞} [hp : Fact (1 <= p)] (c : 复形) {f : 𝓢'(E, F)}
   证明: by
   obtain ⟨f', hf⟩ := hf
   use c • f'
@@ -546,7 +546,7 @@ theorem _root_.SchwartzMap.memSobolev
   
 
 中文:
-定理 _root_.SchwartzMap.memSobolev
+定理 _root_.Schwartz映射.memSobolev
   条件: {s : 实数} {p : 实数>=0∞} [hp : Fact (1 <= p)] (f : 𝓢(E, F))
   证明: by
   use (SchwartzMap.fourierMultiplierCLM F (fun x => ((1 + ‖x‖ ^ 2) ^ (s / 2) : Real)) f).toLp p
@@ -589,7 +589,7 @@ theorem memSobolev_iff_exists_smulLeftCLM_fourier
     rw [besselPotential]; rw [TemperedDistribution.fourierMultipl
 
 中文:
-定理 memSobolev_iff_exists_smulLeftCLM_fourier
+定理 memSobolev_iff_存在_smulLeftCLM_fourier
   条件: {s : 实数} {f : 𝓢'(E, F)}
   证明: by
   constructor
@@ -629,7 +629,7 @@ theorem memSobolev_zero_iff_exists_fourier
   simp [memSobolev_iff_exists_smulLeftCLM_fourier]
 
 中文:
-定理 memSobolev_zero_iff_exists_fourier
+定理 memSobolev_zero_iff_存在_fourier
   条件: {f : 𝓢'(E, F)}
   证明: by
   simp [memSobolev_iff_exists_smulLeftCLM_fourier]
@@ -657,7 +657,7 @@ theorem MemSobolev.fourier_memL1
 
 中文:
 定理 MemSobolev.fourier_memL1
-  结论: {s : 实数} (hs : Module.finrank 实数 E < 2 * s) {f : 𝓢'(E, F)}
+  结论: {s : 实数} (hs : 模.finrank 实数 E < 2 * s) {f : 𝓢'(E, F)}
   证明: by
   obtain ⟨u, hu⟩ := memSobolev_iff_exists_smulLeftCLM_fourier.mp hf
   have : MemLp (fun x : E => (1 + ‖x‖ ^ 2) ^ (-s / 2)) 2 := by

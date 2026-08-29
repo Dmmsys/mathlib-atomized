@@ -36,8 +36,8 @@ instance [Finite
   infer_instance
 
 中文:
-实例 [Finite
-  签名: α] [Finite β] : Finite (α × β)
+实例 [有限
+  签名: α] [有限 β] : 有限 (α × β)
   定义体: by
   have := Fintype.ofFinite α
   have := Fintype.ofFinite β
@@ -64,8 +64,8 @@ theorem prod_left
 
 中文:
 定理 prod_left
-  条件: (β) [Finite (α × β)] [Nonempty β]
-  结论: Finite α
+  条件: (β) [有限 (α × β)] [非空 β]
+  结论: 有限 α
   证明: of_surjective (Prod.fst : α × β -> α) Prod.fst_surjective
 
 Depends on / 依赖: Prod.fst, Prod.fst_surjective, fst_surjective, of_surjective
@@ -84,8 +84,8 @@ theorem prod_right
 
 中文:
 定理 prod_right
-  条件: (α) [Finite (α × β)] [Nonempty α]
-  结论: Finite β
+  条件: (α) [有限 (α × β)] [非空 α]
+  结论: 有限 β
   证明: of_surjective (Prod.snd : α × β -> β) Prod.snd_surjective
 
 Depends on / 依赖: Prod.snd, Prod.snd_surjective, of_surjective, snd_surjective
@@ -106,9 +106,9 @@ lemma Prod.finite_iff
   mpr | ⟨_, _⟩ => inferInstance
 
 中文:
-引理 Prod.finite_iff
-  条件: [Nonempty α] [Nonempty β]
-  结论: Finite (α × β) ↔ Finite α ∧ Finite β where
+引理 积类型.finite_iff
+  条件: [非空 α] [非空 β]
+  结论: 有限 (α × β) ↔ 有限 α ∧ 有限 β where
   证明: ⟨.prod_left β, .prod_right α⟩
   mpr | ⟨_, _⟩ => inferInstance
 
@@ -133,8 +133,8 @@ instance Pi.finite
       (Equiv.piCongr Equiv.plift fun _ => Equiv.plift)
 
 中文:
-实例 Pi.finite
-  签名: {α : Sort*} {β : α -> Sort*} [Finite α] [对任意 a, Finite (β a)]
+实例 依赖函数类型.finite
+  签名: {α : 类型层*} {β : α -> 类型层*} [有限 α] [对任意 a, 有限 (β a)]
   定义体: by
   classical
   have := Fintype.ofFinite (PLift α)
@@ -168,8 +168,8 @@ instance Function.Embedding.finite
     exact Finite.of_injective _ DFunLike.coe_injective
 
 中文:
-实例 Function.Embedding.finite
-  签名: {α β : Sort*} [Finite β]
+实例 函数.嵌入.finite
+  签名: {α β : 类型层*} [有限 β]
   定义体: by
   rcases isEmpty_or_nonempty (α ↪ β) with _ | h
   · infer_instance
@@ -196,8 +196,8 @@ instance Equiv.finite_right
     convert! DFunLike.congr_fun h using 0
 
 中文:
-实例 Equiv.finite_right
-  签名: {α β : Sort*} [Finite β]
+实例 等价.finite_right
+  签名: {α β : 类型层*} [有限 β]
   定义体: Finite.of_injective Equiv.toEmbedding fun e₁ e₂ h => Equiv.ext by
     convert! DFunLike.congr_fun h using 0
 
@@ -218,8 +218,8 @@ instance Equiv.finite_left
 @[to_additive]
 
 中文:
-实例 Equiv.finite_left
-  签名: {α β : Sort*} [Finite α]
+实例 等价.finite_left
+  签名: {α β : 类型层*} [有限 α]
   定义体: Finite.of_equiv _ ⟨Equiv.symm, Equiv.symm, Equiv.symm_symm, Equiv.symm_symm⟩
 
 @[to_additive]
@@ -241,8 +241,8 @@ instance MulEquiv.finite_left
 @[to_additive]
 
 中文:
-实例 MulEquiv.finite_left
-  签名: {α β : 类型} [Mul α] [Mul β] [Finite α]
+实例 乘法等价.finite_left
+  签名: {α β : 类型} [乘法 α] [乘法 β] [有限 α]
   定义体: Finite.of_injective toEquiv toEquiv_injective
 
 @[to_additive]
@@ -262,8 +262,8 @@ instance MulEquiv.finite_right
   body: Finite.of_injective toEquiv toEquiv_injective
 
 中文:
-实例 MulEquiv.finite_right
-  签名: {α β : 类型} [Mul α] [Mul β] [Finite β]
+实例 乘法等价.finite_right
+  签名: {α β : 类型} [乘法 α] [乘法 β] [有限 β]
   定义体: Finite.of_injective toEquiv toEquiv_injective
 
 Depends on / 依赖: Finite, Finite.of_injective, of_injective, toEquiv, toEquiv_injective
@@ -294,7 +294,7 @@ instance fintypeProd
 
 中文:
 实例 fintypeProd
-  签名: (s : Set α) (t : Set β) [Fintype s] [Fintype t]
+  签名: (s : 集合 α) (t : 集合 β) [有限类型 s] [有限类型 t]
   定义体: Fintype.ofFinset (s.toFinset ×ˢ t.toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, t.toFinset, toFinset
@@ -313,7 +313,7 @@ instance fintypeOffDiag
 
 中文:
 实例 fintypeOffDiag
-  签名: (s : Set α) [Fintype s]
+  签名: (s : 集合 α) [有限类型 s]
   定义体: Fintype.ofFinset s.toFinset.offDiag by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, offDiag, s.toFinset.offDiag, toFinset
@@ -333,7 +333,7 @@ instance fintypeImage2
 
 中文:
 实例 fintypeImage2
-  签名: [DecidableEq γ] (f : α -> β -> γ) (s : Set α) (t : Set β) [hs : Fintype s]
+  签名: [DecidableEq γ] (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [hs : 有限类型 s]
   定义体: by
   rw [← image_prod]
   apply Set.fintypeImage
@@ -373,7 +373,7 @@ instance finite_prod
 
 中文:
 实例 finite_prod
-  签名: (s : Set α) (t : Set β) [Finite s] [Finite t]
+  签名: (s : 集合 α) (t : 集合 β) [有限 s] [有限 t]
   定义体: Finite.of_equiv _ (Equiv.Set.prod s t).symm
 
 Depends on / 依赖: Equiv.Set.prod, Finite, Finite.of_equiv, of_equiv
@@ -394,7 +394,7 @@ instance finite_image2
 
 中文:
 实例 finite_image2
-  签名: (f : α -> β -> γ) (s : Set α) (t : Set β) [Finite s] [Finite t]
+  签名: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [有限 s] [有限 t]
   定义体: by
   rw [← image_prod]
   infer_instance
@@ -439,9 +439,9 @@ theorem Finite.prod
   apply toFinite
 
 中文:
-定理 Finite.prod
-  条件: (hs : s.Finite) (ht : t.Finite)
-  结论: (s ×ˢ t : Set (α × β)).Finite
+定理 有限.乘积
+  条件: (hs : s.有限) (ht : t.有限)
+  结论: (s ×ˢ t : 集合 (α × β)).有限
   证明: by
   have := hs.to_subtype
   have := ht.to_subtype
@@ -462,9 +462,9 @@ theorem Finite.of_prod_left
   proof: fun ⟨b, hb⟩ => (h.image Prod.fst).subset fun a ha => ⟨(a, b), ⟨ha, hb⟩, rfl⟩
 
 中文:
-定理 Finite.of_prod_left
-  条件: (h : (s ×ˢ t : Set (α × β)).Finite)
-  结论: t.Nonempty -> s.Finite
+定理 有限.of_prod_left
+  条件: (h : (s ×ˢ t : 集合 (α × β)).有限)
+  结论: t.非空 -> s.有限
   证明: fun ⟨b, hb⟩ => (h.image Prod.fst).subset fun a ha => ⟨(a, b), ⟨ha, hb⟩, rfl⟩
 
 Depends on / 依赖: Prod.fst, h.image, subset
@@ -482,9 +482,9 @@ theorem Finite.of_prod_right
   proof: fun ⟨a, ha⟩ => (h.image Prod.snd).subset fun b hb => ⟨(a, b), ⟨ha, hb⟩, rfl⟩
 
 中文:
-定理 Finite.of_prod_right
-  条件: (h : (s ×ˢ t : Set (α × β)).Finite)
-  结论: s.Nonempty -> t.Finite
+定理 有限.of_prod_right
+  条件: (h : (s ×ˢ t : 集合 (α × β)).有限)
+  结论: s.非空 -> t.有限
   证明: fun ⟨a, ha⟩ => (h.image Prod.snd).subset fun b hb => ⟨(a, b), ⟨ha, hb⟩, rfl⟩
 
 Depends on / 依赖: Prod.snd, h.image, subset
@@ -502,9 +502,9 @@ theorem Infinite.prod_left
   proof: fun h => hs h.of_prod_left ht
 
 中文:
-定理 Infinite.prod_left
-  条件: (hs : s.Infinite) (ht : t.Nonempty)
-  结论: (s ×ˢ t).Infinite
+定理 无限.prod_left
+  条件: (hs : s.无限) (ht : t.非空)
+  结论: (s ×ˢ t).无限
   证明: fun h => hs h.of_prod_left ht
 -/
 protected theorem Infinite.prod_left (hs : s.Infinite) (ht : t.Nonempty) : (s ×ˢ t).Infinite :=
@@ -520,9 +520,9 @@ theorem Infinite.prod_right
   proof: fun h => ht h.of_prod_right hs
 
 中文:
-定理 Infinite.prod_right
-  条件: (ht : t.Infinite) (hs : s.Nonempty)
-  结论: (s ×ˢ t).Infinite
+定理 无限.prod_right
+  条件: (ht : t.无限) (hs : s.非空)
+  结论: (s ×ˢ t).无限
   证明: fun h => ht h.of_prod_right hs
 -/
 protected theorem Infinite.prod_right (ht : t.Infinite) (hs : s.Nonempty) : (s ×ˢ t).Infinite :=
@@ -574,7 +574,7 @@ theorem finite_prod
 
 中文:
 定理 finite_prod
-  结论: (s ×ˢ t).Finite ↔ (s.Finite ∨ t = ∅) ∧ (t.Finite ∨ s = ∅)
+  结论: (s ×ˢ t).有限 ↔ (s.有限 ∨ t = ∅) ∧ (t.有限 ∨ s = ∅)
   证明: by
   contrapose! +distrib; exact Set.infinite_prod
 
@@ -593,9 +593,9 @@ theorem Finite.offDiag
   proof: (hs.prod hs).subset s.offDiag_subset_prod
 
 中文:
-定理 Finite.offDiag
-  条件: {s : Set α} (hs : s.Finite)
-  结论: s.offDiag.Finite
+定理 有限.offDiag
+  条件: {s : 集合 α} (hs : s.有限)
+  结论: s.offDiag.有限
   证明: (hs.prod hs).subset s.offDiag_subset_prod
 -/
 protected theorem Finite.offDiag {s : Set α} (hs : s.Finite) : s.offDiag.Finite :=
@@ -613,8 +613,8 @@ theorem Finite.image2
   apply toFinite
 
 中文:
-定理 Finite.image2
-  条件: (f : α -> β -> γ) (hs : s.Finite) (ht : t.Finite)
+定理 有限.image2
+  条件: (f : α -> β -> γ) (hs : s.有限) (ht : t.有限)
   证明: by
   have := hs.to_subtype
   have := ht.to_subtype
@@ -640,8 +640,8 @@ theorem Finite.toFinset_prod
   proof: Finset.ext by simp
 
 中文:
-定理 Finite.toFinset_prod
-  条件: {s : Set α} {t : Set β} (hs : s.Finite) (ht : t.Finite)
+定理 有限.toFinset_prod
+  条件: {s : 集合 α} {t : 集合 β} (hs : s.有限) (ht : t.有限)
   证明: Finset.ext by simp
 
 Depends on / 依赖: Finset, Finset.ext
@@ -659,8 +659,8 @@ theorem Finite.toFinset_offDiag
   proof: Finset.ext by simp
 
 中文:
-定理 Finite.toFinset_offDiag
-  条件: {s : Set α} (hs : s.Finite)
+定理 有限.toFinset_offDiag
+  条件: {s : 集合 α} (hs : s.有限)
   证明: Finset.ext by simp
 
 Depends on / 依赖: Finset, Finset.ext
@@ -680,7 +680,7 @@ theorem finite_image_fst_and_snd_iff
 
 中文:
 定理 finite_image_fst_and_snd_iff
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: ⟨fun h => (h.1.prod h.2).subset fun _ h => ⟨mem_image_of_mem _ h, mem_image_of_mem _ h⟩,
     fun h => ⟨h.image _, h.image _⟩⟩
 
@@ -708,8 +708,8 @@ theorem Infinite.image2_left
   proof: (hs.image hf).mono image_subset_image2_left hb
 
 中文:
-定理 Infinite.image2_left
-  结论: (hs : s.Infinite) (hb : b in t)
+定理 无限.image2_left
+  结论: (hs : s.无限) (hb : b in t)
   证明: (hs.image hf).mono image_subset_image2_left hb
 -/
 protected theorem Infinite.image2_left (hs : s.Infinite) (hb : b in t)
@@ -725,8 +725,8 @@ theorem Infinite.image2_right
   proof: (ht.image hf).mono image_subset_image2_right ha
 
 中文:
-定理 Infinite.image2_right
-  条件: (ht : t.Infinite) (ha : a in s) (hf : InjOn (f a) t)
+定理 无限.image2_right
+  条件: (ht : t.无限) (ha : a in s) (hf : 单射限制 (f a) t)
   证明: (ht.image hf).mono image_subset_image2_right ha
 -/
 protected theorem Infinite.image2_right (ht : t.Infinite) (ha : a in s) (hf : InjOn (f a) t) :
@@ -749,7 +749,7 @@ theorem infinite_image2
 
 中文:
 定理 infinite_image2
-  条件: (hfs : 对任意 b in t, InjOn (fun a => f a b) s) (hft : 对任意 a in s, InjOn (f a) t)
+  条件: (hfs : 对任意 b in t, 单射限制 (fun a => f a b) s) (hft : 对任意 a in s, 单射限制 (f a) t)
   证明: by
   refine ⟨fun h => Set.infinite_prod.1 ?_, ?_⟩
   · rw [← image_uncurry_prod] at h
@@ -782,7 +782,7 @@ lemma finite_image2
 
 中文:
 引理 finite_image2
-  条件: (hfs : 对任意 b in t, InjOn (f · b) s) (hft : 对任意 a in s, InjOn (f a) t)
+  条件: (hfs : 对任意 b in t, 单射限制 (f · b) s) (hft : 对任意 a in s, 单射限制 (f a) t)
   证明: by
   contrapose! +distrib
   rw [Set.infinite_image2 hfs hft]

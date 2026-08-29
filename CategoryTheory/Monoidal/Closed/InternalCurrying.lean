@@ -39,7 +39,7 @@ definition ihomCurry
 
 中文:
 定义 ihomCurry
-  签名: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  签名: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   定义体: curry (curry ((α_ x y _).inv ≫ (ihom.ev _).app z))
 
 Depends on / 依赖: ihom.ev
@@ -58,7 +58,7 @@ lemma uncurry_ihomCurry
 
 中文:
 引理 uncurry_ihomCurry
-  条件: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  条件: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   证明: uncurry_curry _
 
 Depends on / 依赖: uncurry_curry
@@ -78,7 +78,7 @@ lemma uncurry_uncurry_ihomCurry
 
 中文:
 引理 uncurry_uncurry_ihomCurry
-  条件: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  条件: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   证明: by
   simp [uncurry_ihomCurry]
 
@@ -100,7 +100,7 @@ definition ihomUncurry
 
 中文:
 定义 ihomUncurry
-  签名: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  签名: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   定义体: curry ((α_ x y _).hom ≫ x ◁ (ihom.ev y).app ((ihom x).obj z) ≫ (ihom.ev x).app z)
 
 Depends on / 依赖: ihom.ev
@@ -121,7 +121,7 @@ lemma uncurry_ihomUncurry
 
 中文:
 引理 uncurry_ihomUncurry
-  条件: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  条件: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   证明: uncurry_curry _
 
 @[reassoc (attr := simp)]
@@ -152,7 +152,7 @@ theorem ihomUncurry_ihomCurry
 
 中文:
 定理 ihomUncurry_ihomCurry
-  条件: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  条件: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   证明: by
   apply uncurry_injective
   apply uncurry_injective
@@ -190,7 +190,7 @@ theorem ihomCurry_ihomUncurry
 
 中文:
 定理 ihomCurry_ihomUncurry
-  条件: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  条件: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   证明: by
   apply uncurry_injective
   rw [uncurry_natural_left]; rw [uncurry_id_eq_ev]; rw [uncurry_ihomUncurry]
@@ -223,7 +223,7 @@ definition ihomCurryIso
 
 中文:
 定义 ihomCurryIso
-  签名: (x y z : C) [Closed x] [Closed y] [Closed (x otimes y)]
+  签名: (x y z : C) [闭 x] [闭 y] [闭 (x otimes y)]
   定义体: ihomCurry x y z
   inv := ihomUncurry x y z
   hom_inv_id := ihomCurry_ihomUncurry x y z

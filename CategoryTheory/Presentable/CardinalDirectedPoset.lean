@@ -53,7 +53,7 @@ abbreviation isCardinalFiltered
 
 中文:
 缩写 isCardinalFiltered
-  签名: : Object命题erty PartOrdEmb.{u}
+  签名: : ObjectProperty PartOrdEmb.{u}
   定义体: fun X => IsCardinalFiltered X κ
 
 @[simp]
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isCardinalFiltered κ).IsClosedUnderIsomorphisms
+  签名: (isCardinalFiltered κ).在同构下封闭
   定义体: .of_equivalence κ (orderIsoOfIso e).equivalence
 
 Depends on / 依赖: equivalence, of_equivalence, orderIsoOfIso
@@ -120,7 +120,7 @@ lemma isCardinalFiltered_pt
 
 中文:
 引理 isCardinalFiltered_pt
-  条件: (hF : 对任意 j, IsCardinalFiltered (F.obj j) κ)
+  条件: (hF : 对任意 j, 是CardinalFiltered (F.obj j) κ)
   证明: isFiltered_of_isCardinalFiltered J κ
     IsCardinalFiltered (CoconePt hc) κ := by
   have := isFiltered_of_isCardinalFiltered J κ
@@ -215,7 +215,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (J : PartOrdEmb.{u}) [IsCardinalFiltered J κ]
+  签名: (J : PartOrdEmb.{u}) [是CardinalFiltered J κ]
   定义体: J
   property := inferInstance
 -/
@@ -232,7 +232,7 @@ lemma Hom.injective
   proof: f.hom.injective
 
 中文:
-引理 Hom.injective
+引理 态射.injective
   条件: {J₁ J₂ : CardinalDirectedPoset κ} (f : J₁ ⟶ J₂)
   证明: f.hom.injective
 
@@ -250,7 +250,7 @@ lemma Hom.le_iff_le
   proof: f.hom.hom.le_iff_le
 
 中文:
-引理 Hom.le_iff_le
+引理 态射.le_iff_le
   条件: {J₁ J₂ : CardinalDirectedPoset κ} (f : J₁ ⟶ J₂) (x₁ x₂ : J₁.obj)
   证明: f.hom.hom.le_iff_le
 
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCardinalFilteredColimits (CardinalDirectedPoset κ) κ
+  签名: 有CardinalFilteredColimits (CardinalDirectedPoset κ) κ
   定义体: by
     have := isFiltered_of_isCardinalFiltered J κ
     infer_instance
@@ -343,7 +343,7 @@ definition functorOfPredicateSet
 
 中文:
 定义 functorOfPredicateSet
-  签名: : Subtype P ⥤ CardinalDirectedPoset κ
+  签名: : 子类型 P ⥤ CardinalDirectedPoset κ
   定义体: ObjectProperty.lift _ (PartOrdEmb.functorOfPredicateSet P)
     (fun S => by dsimp; infer_instance)
 
@@ -369,7 +369,7 @@ definition coconeOfPredicateSet
 
 中文:
 定义 coconeOfPredicateSet
-  签名: : Cocone (functorOfPredicateSet P) where
+  签名: : 余锥 (functorOfPredicateSet P) where
   定义体: J
   ι.app j := ObjectProperty.homMk ((PartOrdEmb.coconeOfPredicateSet P).ι.app j)
 -/
@@ -411,7 +411,7 @@ definition hasCardinalLTWithTerminal
 
 中文:
 定义 hasCardinalLTWithTerminal
-  签名: : Object命题erty (CardinalDirectedPoset κ)
+  签名: : ObjectProperty (CardinalDirectedPoset κ)
   定义体: fun J => HasCardinalLT J.obj κ ∧ HasTerminal J.obj
 
 Depends on / 依赖: HasCardinalLT, HasTerminal, J.obj
@@ -435,7 +435,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.EssentiallySmall.{u} (hasCardinalLTWithTerminal κ)
+  签名: ObjectProperty.EssentiallySmall.{u} (hasCardinalLTWithTerminal κ)
   定义体: by
     obtain ⟨X, hX⟩ : exists (X : Type u), Cardinal.mk X = κ := ⟨κ.ord.ToType, by simp⟩
     let α : Type u := Σ (S : Set X) (_ : PartialOrder S),
@@ -558,7 +558,7 @@ definition PropSetWithTop
 
 中文:
 定义 PropSetWithTop
-  签名: (κ' : Cardinal.{u}) [Fact κ'.IsRegular]
+  签名: (κ' : 基数.{u}) [Fact κ'.是正则]
   定义体: HasCardinalLT S κ' ∧ ⊤ in S
 
 Depends on / 依赖: HasCardinalLT
@@ -592,7 +592,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalFiltered (Subtype (J.命题SetWithTop κ')) κ'
+  签名: 是CardinalFiltered (子类型 (J.PropSetWithTop κ')) κ'
   定义体: isCardinalFiltered_preorder _ _ (fun K α hK => by
     rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
     have hκ' : Cardinal.aleph0 <= κ' := Cardinal.IsRegular.aleph0_le Fact.out
@@ -621,7 +621,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiltered (Subtype (J.命题SetWithTop κ'))
+  签名: 是Filtered (子类型 (J.PropSetWithTop κ'))
   定义体: isFiltered_of_isCardinalFiltered _ κ'
 
 Depends on / 依赖: isFiltered_of_isCardinalFiltered
@@ -639,7 +639,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDirectedOrder (Subtype (J.命题SetWithTop κ'))
+  签名: IsDirectedOrder (子类型 (J.PropSetWithTop κ'))
   定义体: IsFiltered.isDirectedOrder _
 
 Depends on / 依赖: IsFiltered, IsFiltered.isDirectedOrder, isDirectedOrder
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Subtype (J.命题SetWithTop κ'))
+  签名: 非空 (子类型 (J.PropSetWithTop κ'))
   定义体: IsFiltered.nonempty
 
 Depends on / 依赖: IsFiltered, IsFiltered.nonempty, nonempty
@@ -679,7 +679,7 @@ lemma propSetWithTop_pair
 中文:
 引理 propSetWithTop_pair
   条件: (j : J.obj)
-  结论: J.命题SetWithTop κ' {WithTop.some j, ⊤}
+  结论: J.PropSetWithTop κ' {WithTop.some j, ⊤}
   证明: ⟨hasCardinalLT_of_finite _ _ (Cardinal.IsRegular.aleph0_le Fact.out),
     Set.mem_insert_of_mem _ (by simp)⟩
 
@@ -702,7 +702,7 @@ lemma exists_mem_propSetWithTop
   | none => exact ⟨_, propSetWithTop_pair _ (Classical.arbitrary _), by aesop⟩
 
 中文:
-引理 exists_mem_propSetWithTop
+引理 存在_mem_propSetWithTop
   条件: (a : J.withTop.obj)
   证明: by
   induction a with
@@ -727,7 +727,7 @@ abbreviation coconeWithTop
 
 中文:
 缩写 coconeWithTop
-  签名: : Cocone (functorOfPredicateSet (J.命题SetWithTop κ'))
+  签名: : 余锥 (functorOfPredicateSet (J.PropSetWithTop κ'))
   定义体: coconeOfPredicateSet (PropSetWithTop J κ')
 
 Depends on / 依赖: PropSetWithTop, coconeOfPredicateSet
@@ -749,7 +749,7 @@ definition isColimitCoconeWithTop
 
 中文:
 定义 isColimitCoconeWithTop
-  签名: : IsColimit (coconeWithTop J κ')
+  签名: : 是余极限 (coconeWithTop J κ')
   定义体: isColimitCoconeOfPredicateSet _ (fun a => by
     induction a with
     | some a => exact ⟨_, propSetWithTop_pair _ a, by aesop⟩
@@ -835,7 +835,7 @@ definition PropSet
 
 中文:
 定义 PropSet
-  签名: (S : Set J.obj)
+  签名: (S : 集合 J.obj)
   定义体: HasCardinalLT S κ ∧ HasTerminal S
 
 Depends on / 依赖: HasCardinalLT, HasTerminal
@@ -863,7 +863,7 @@ lemma propSet_singleton
 中文:
 引理 propSet_singleton
   条件: (j : J.obj)
-  结论: J.命题Set {j}
+  结论: J.PropSet {j}
   证明: ⟨hasCardinalLT_of_finite _ _ (Cardinal.IsRegular.aleph0_le Fact.out), by
     let : OrderTop ({j} : Set J.obj) := { top := ⟨j, rfl⟩, le_top := by simp }
     exact isTerminalTop.hasTerminal⟩
@@ -891,7 +891,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalFiltered (Subtype J.命题Set) κ
+  签名: 是CardinalFiltered (子类型 J.PropSet) κ
   定义体: isCardinalFiltered_preorder _ _ (fun K α hK => by
     rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
     let t (k : K) : (α k).val := ⊤_ _
@@ -935,7 +935,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiltered (Subtype J.命题Set)
+  签名: 是Filtered (子类型 J.PropSet)
   定义体: isFiltered_of_isCardinalFiltered _ κ
 
 Depends on / 依赖: isFiltered_of_isCardinalFiltered
@@ -952,7 +952,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDirectedOrder (Subtype J.命题Set)
+  签名: IsDirectedOrder (子类型 J.PropSet)
   定义体: IsFiltered.isDirectedOrder _
 
 Depends on / 依赖: IsFiltered, IsFiltered.isDirectedOrder, isDirectedOrder
@@ -970,7 +970,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Subtype J.命题Set)
+  签名: 非空 (子类型 J.PropSet)
   定义体: IsFiltered.nonempty
 
 Depends on / 依赖: IsFiltered, IsFiltered.nonempty, nonempty
@@ -988,7 +988,7 @@ abbreviation cocone
 
 中文:
 缩写 cocone
-  签名: : Cocone (functorOfPredicateSet J.命题Set)
+  签名: : 余锥 (functorOfPredicateSet J.PropSet)
   定义体: coconeOfPredicateSet J.PropSet
 
 Depends on / 依赖: J.PropSet, PropSet, coconeOfPredicateSet
@@ -1070,7 +1070,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalAccessibleCategory (CardinalDirectedPoset κ) κ
+  签名: 是CardinalAccessible范畴 (CardinalDirectedPoset κ) κ
   定义体: ⟨hasCardinalLTWithTerminal κ, inferInstance,
       isCardinalFilteredGenerator_hasCardinalLTWithTerminal κ⟩
 
@@ -1131,7 +1131,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalFiltered (SetCardinalLT κ X) κ
+  签名: 是CardinalFiltered (SetCardinalLT κ X) κ
   定义体: isCardinalFiltered_preorder _ _
     (fun K f hK =>
       ⟨⟨⋃ (k : K), (f k).val, hasCardinalLT_iUnion _

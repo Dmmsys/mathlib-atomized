@@ -52,7 +52,7 @@ theorem nonempty_algHom_of_exists_root
     apply (Splitti
 
 中文:
-定理 nonempty_algHom_of_exists_root
+定理 nonempty_algHom_of_存在_root
   条件: (h : 对任意 x : E, 存在 y : K, aeval y (minpoly F x) = 0)
   证明: by
   refine Lifts.nonempty_algHom_of_exist_lifts_finset fun S => ⟨⟨adjoin F S, ?_⟩, subset_adjoin _ _⟩
@@ -210,7 +210,7 @@ theorem nonempty_algEquiv_of_aeval_eq_zero_eq
 
 中文:
 定理 nonempty_algEquiv_of_aeval_eq_zero_eq
-  结论: [Algebra.IsAlgebraic F K]
+  结论: [代数.是代数 F K]
   证明: have ⟨σ⟩ := nonempty_algHom_of_aeval_eq_zero_subset h.le
   have ⟨τ⟩ := nonempty_algHom_of_aeval_eq_zero_subset h.ge
   ⟨.ofBijective _ (Algebra.IsAlgebraic.algHom_bijective₂ σ τ).1⟩
@@ -238,7 +238,7 @@ theorem _root_.IsAlgClosure.of_exists_root
 @[deprecated (since := "2026-01-31"
 
 中文:
-定理 _root_.IsAlgClosure.of_exists_root
+定理 _root_.是AlgClosure.of_存在_root
   证明: .of_splits fun p _ _ =>
     have ⟨σ⟩ := nonempty_algHom_of_exists_root fun x : p.SplittingField =>
       have := Algebra.IsAlgebraic.isIntegral (K := F).1 x

@@ -48,7 +48,7 @@ instance [(forget
 
 中文:
 实例 [(forget
-  签名: C).PreservesMonomorphisms] {X Y : C} (f : X ⟶ Y) [Mono f] :
+  签名: C).保持Monomorphisms] {X Y : C} (f : X ⟶ Y) [单态射 f] :
   定义体: Functor.map_mono (forget C) f
 
 Depends on / 依赖: Functor, Functor.map_mono, forget, map_mono
@@ -66,7 +66,7 @@ instance [(forget
 
 中文:
 实例 [(forget
-  签名: C).PreservesEpimorphisms] {X Y : C} (f : X ⟶ Y) [Epi f] :
+  签名: C).保持Epimorphisms] {X Y : C} (f : X ⟶ Y) [满态射 f] :
   定义体: Functor.map_epi (forget C) f
 
 Depends on / 依赖: Functor, Functor.map_epi, forget, map_epi
@@ -84,7 +84,7 @@ theorem mono_of_injective
 
 中文:
 定理 mono_of_injective
-  条件: {X Y : C} (f : X ⟶ Y) (i : Function.Injective f)
+  条件: {X Y : C} (f : X ⟶ Y) (i : 函数.单射 f)
   证明: (forget C).mono_of_mono_map ((mono_iff_injective ((forget C).map f)).2 i)
 
 Depends on / 依赖: forget, mono_iff_injective, mono_of_mono_map
@@ -321,7 +321,7 @@ lemma injective_eq_monomorphisms
 
 中文:
 引理 injective_eq_monomorphisms
-  条件: [(forget C).PreservesMonomorphisms]
+  条件: [(forget C).保持Monomorphisms]
   证明: by
   rw [injective_eq_monomorphisms_iff]
   infer_instance
@@ -345,7 +345,7 @@ lemma surjective_eq_epimorphisms
 
 中文:
 引理 surjective_eq_epimorphisms
-  条件: [(forget C).PreservesEpimorphisms]
+  条件: [(forget C).保持Epimorphisms]
   证明: by
   rw [surjective_eq_epimorphisms_iff]
   infer_instance
@@ -405,7 +405,7 @@ theorem injective_of_mono_of_preservesPullback
 
 中文:
 定理 injective_of_mono_of_preservesPullback
-  结论: {X Y : C} (f : X ⟶ Y) [Mono f]
+  结论: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: (mono_iff_injective ((forget C).map f)).mp inferInstance
 
 Depends on / 依赖: forget, mono_iff_injective
@@ -443,7 +443,7 @@ theorem epi_of_surjective
 
 中文:
 定理 epi_of_surjective
-  条件: {X Y : C} (f : X ⟶ Y) (s : Function.Surjective f)
+  条件: {X Y : C} (f : X ⟶ Y) (s : 函数.满射 f)
   证明: (forget C).epi_of_epi_map ((epi_iff_surjective ((forget C).map f)).2 s)
 
 Depends on / 依赖: epi_iff_surjective, epi_of_epi_map, forget
@@ -462,7 +462,7 @@ theorem surjective_of_epi_of_preservesPushout
 
 中文:
 定理 surjective_of_epi_of_preservesPushout
-  结论: {X Y : C} (f : X ⟶ Y) [Epi f]
+  结论: {X Y : C} (f : X ⟶ Y) [满态射 f]
   证明: (epi_iff_surjective ((forget C).map f)).mp inferInstance
 
 Depends on / 依赖: epi_iff_surjective, forget
@@ -502,7 +502,7 @@ theorem bijective_of_isIso
 
 中文:
 定理 bijective_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   证明: by
   rw [bijective_iff_isIso_ofHom]
   infer_instance
@@ -528,7 +528,7 @@ theorem isIso_iff_bijective
 
 中文:
 定理 isIso_iff_bijective
-  结论: [(forget C).ReflectsIsomorphisms]
+  结论: [(forget C).反映同构]
   证明: by
   rw [bijective_iff_isIso_ofHom]
   refine ⟨fun _ => inferInstance, fun h => ?_⟩

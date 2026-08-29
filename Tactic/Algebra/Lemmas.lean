@@ -32,8 +32,8 @@ theorem isInt_negOfNat_eq
   simp [h.out]
 
 中文:
-定理 isInt_negOfNat_eq
-  条件: {a : A} {lit : 自然数} (h : Is整数 a (整数.negOf自然数 lit))
+定理 is整数_negOf自然数_eq
+  条件: {a : A} {lit : 自然数} (h : 是整数 a (整数.negOf自然数 lit))
   证明: by
   simp [h.out]
 
@@ -60,7 +60,7 @@ theorem isNNRat_eq_rawCast
 
 中文:
 定理 isNNRat_eq_rawCast
-  条件: {a : A} {n d : 自然数} (h : IsNNRat a n d)
+  条件: {a : A} {n d : 自然数} (h : 是NNRat a n d)
   证明: by
   simp [Mathlib.Tactic.Ring.cast_nnrat h]
 
@@ -87,7 +87,7 @@ theorem isRat_eq_rawCast
 
 中文:
 定理 isRat_eq_rawCast
-  条件: {a : A} {n d : 自然数} (h : IsRat a (.negOf自然数 n) d)
+  条件: {a : A} {n d : 自然数} (h : 是有理数 a (.negOf自然数 n) d)
   证明: by
   simp [Mathlib.Tactic.Ring.cast_rat h]
 
@@ -113,8 +113,8 @@ theorem isNat_zero_eq
   simp [this]
 
 中文:
-定理 isNat_zero_eq
-  条件: {a : A} (h : Is自然数 a 0)
+定理 is自然数_zero_eq
+  条件: {a : A} (h : 是自然数 a 0)
   结论: a = 0
   证明: by
   have := h.out
@@ -136,8 +136,8 @@ theorem isNat_eq_rawCast
   simp [h.out]
 
 中文:
-定理 isNat_eq_rawCast
-  条件: {a : A} {lit : 自然数} (h : Is自然数 a lit)
+定理 is自然数_eq_rawCast
+  条件: {a : A} {lit : 自然数} (h : 是自然数 a lit)
   证明: by
   simp [h.out]
 
@@ -200,7 +200,7 @@ theorem mul_neg
 
 中文:
 定理 mul_neg
-  条件: {R} [Ring R] (a b : R)
+  条件: {R} [环 R] (a b : R)
   结论: a * -b = -(a * b)
   证明: by simp
 -/
@@ -216,7 +216,7 @@ theorem add_neg
 
 中文:
 定理 add_neg
-  条件: {R} [Ring R] (a b : R)
+  条件: {R} [环 R] (a b : R)
   结论: a + -b = a - b
   证明: (sub_eq_add_neg ..).symm
 
@@ -278,7 +278,7 @@ theorem int_rawCast_neg
 
 中文:
 定理 int_rawCast_neg
-  条件: {R} [Ring R]
+  条件: {R} [环 R]
   结论: (整数.rawCast (.negOf自然数 n) : R) = -自然数.rawCast n
   证明: by simp
 -/
@@ -293,7 +293,7 @@ theorem nnrat_rawCast
 
 中文:
 定理 nnrat_rawCast
-  条件: {R} [DivisionSemiring R]
+  条件: {R} [除半环 R]
   证明: by simp
 -/
 theorem nnrat_rawCast {R} [DivisionSemiring R] :
@@ -308,7 +308,7 @@ theorem rat_rawCast_neg
 
 中文:
 定理 rat_rawCast_neg
-  条件: {R} [DivisionRing R]
+  条件: {R} [除环 R]
   证明: by simp
 -/
 theorem rat_rawCast_neg {R} [DivisionRing R] :
@@ -328,8 +328,8 @@ theorem ofNat_smul
   simp [Nat.cast_smul_eq_nsmul]
 
 中文:
-定理 ofNat_smul
-  结论: {R A} [CommSemiring R] [CommSemiring A] [Algebra R A]
+定理 of自然数_smul
+  结论: {R A} [交换半环 R] [交换半环 A] [代数 R A]
   证明: by
   simp_rw [← nat_rawCast_2]
   simp [Nat.cast_smul_eq_nsmul]
@@ -352,8 +352,8 @@ theorem neg_ofNat_smul
   simpa [← nat_rawCast_2] using! ofNat_smul
 
 中文:
-定理 neg_ofNat_smul
-  条件: {R A} [CommRing R] [CommRing A] [Algebra R A] {a : A} [n.AtLeastTwo]
+定理 neg_of自然数_smul
+  条件: {R A} [交换环 R] [交换环 A] [代数 R A] {a : A} [n.AtLeastTwo]
   证明: by
   simpa [← nat_rawCast_2] using! ofNat_smul
 
@@ -374,7 +374,7 @@ theorem neg_1_smul
 
 中文:
 定理 neg_1_smul
-  条件: {R A} [CommRing R] [CommRing A] [Algebra R A] {a : A}
+  条件: {R A} [交换环 R] [交换环 A] [代数 R A] {a : A}
   证明: by
   simp
 -/
@@ -392,8 +392,8 @@ theorem nnRat_ofNat_smul_1
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
 中文:
-定理 nnRat_ofNat_smul_1
-  结论: {R A} [Semifield R] [Semifield A] [Algebra R A] {a : A}
+定理 nnRat_of自然数_smul_1
+  结论: {R A} [半域 R] [半域 A] [代数 R A] {a : A}
   证明: by
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
@@ -414,8 +414,8 @@ theorem nnRat_ofNat_smul_2
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
 中文:
-定理 nnRat_ofNat_smul_2
-  结论: {R A} [Semifield R] [Semifield A] [Algebra R A] {a : A}
+定理 nnRat_of自然数_smul_2
+  结论: {R A} [半域 R] [半域 A] [代数 R A] {a : A}
   证明: by
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
@@ -436,8 +436,8 @@ theorem rat_ofNat_smul_1
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
 中文:
-定理 rat_ofNat_smul_1
-  结论: {R A} [Field R] [Field A] [Algebra R A] {a : A}
+定理 rat_of自然数_smul_1
+  结论: {R A} [域 R] [域 A] [代数 R A] {a : A}
   证明: by
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
@@ -458,8 +458,8 @@ theorem rat_ofNat_smul_2
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
 中文:
-定理 rat_ofNat_smul_2
-  结论: {R A} [Field R] [Field A] [Algebra R A] {a : A}
+定理 rat_of自然数_smul_2
+  结论: {R A} [域 R] [域 A] [代数 R A] {a : A}
   证明: by
   simp [Algebra.smul_def, ← nat_rawCast_2]
 
@@ -683,7 +683,7 @@ theorem add_algebraMap_isNat_zero
   exact ⟨by simp⟩
 
 中文:
-定理 add_algebraMap_isNat_zero
+定理 add_algebraMap_is自然数_zero
   条件: {r s : R} (h : r + s = 0)
   证明: by
   rw [← map_add]; rw [h]; rw [map_zero]
@@ -707,7 +707,7 @@ theorem cast_zero_smul_eq_zero_mul
 
 中文:
 定理 cast_zero_smul_eq_zero_mul
-  结论: {R' : 类型} [HSMul R' A A] {r' : R'} {r : R}
+  结论: {R' : 类型} [异质标量乘法 R' A A] {r' : R'} {r : R}
   证明: by
   simp [← h_smul, hr]
 
@@ -729,7 +729,7 @@ theorem cast_smul_eq_mul
 
 中文:
 定理 cast_smul_eq_mul
-  结论: {R' : 类型} [HSMul R' A A] {r' : R'} {r r'' : R}
+  结论: {R' : 类型} [异质标量乘法 R' A A] {r' : R'} {r r'' : R}
   证明: by
   simp [← h_smul, ← hr, Algebra.smul_def r a]
 
@@ -751,7 +751,7 @@ theorem neg_algebraMap
 
 中文:
 定理 neg_algebraMap
-  结论: {R A : 类型} [CommRing R] [CommRing A] [Algebra R A]
+  结论: {R A : 类型} [交换环 R] [交换环 A] [代数 R A]
   证明: by
   rw [← map_neg]; rw [h]
 
@@ -794,7 +794,7 @@ theorem inv_algebraMap
 
 中文:
 定理 inv_algebraMap
-  结论: {R A : 类型} [Semifield R] [Semifield A] [Algebra R A]
+  结论: {R A : 类型} [半域 R] [半域 A] [代数 R A]
   证明: by
   rw [← map_inv₀]; rw [h]
 -/
@@ -815,7 +815,7 @@ theorem isOne_algebraMap
 
 中文:
 定理 isOne_algebraMap
-  条件: {r : R} (h : Is自然数 r 1)
+  条件: {r : R} (h : 是自然数 r 1)
   证明: by
   simp only [h.out, Nat.cast_one, add_zero, map_one]
   exact ⟨by simp⟩

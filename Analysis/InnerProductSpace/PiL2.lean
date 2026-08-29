@@ -96,7 +96,7 @@ instance PiLp.innerProductSpace
 
 中文:
 实例 PiLp.innerProductSpace
-  签名: {ι : 类型} [Fintype ι] (f : ι -> 类型)
+  签名: {ι : 类型} [有限类型 ι] (f : ι -> 类型)
   定义体: ∑ i, ⟪x i, y i⟫
   norm_sq_eq_re_inner x := by
     simp only [PiLp.norm_sq_eq_of_L2, map_sum, ← norm_sq_eq_re_inner]
@@ -140,7 +140,7 @@ theorem PiLp.inner_apply
 
 中文:
 定理 PiLp.inner_apply
-  结论: {ι : 类型} [Fintype ι] {f : ι -> 类型} [对任意 i, NormedAddCommGroup (f i)]
+  结论: {ι : 类型} [有限类型 ι] {f : ι -> 类型} [对任意 i, 赋范交换加群 (f i)]
   证明: rfl
 -/
 theorem PiLp.inner_apply {ι : Type*} [Fintype ι] {f : ι -> Type*} [forall i, NormedAddCommGroup (f i)]
@@ -206,7 +206,7 @@ theorem EuclideanSpace.nnnorm_eq
 
 中文:
 定理 EuclideanSpace.nnnorm_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.nnnorm_eq_of_L2 x
 
 Depends on / 依赖: PiLp.nnnorm_eq_of_L2, nnnorm_eq_of_L2
@@ -226,7 +226,7 @@ theorem EuclideanSpace.norm_eq
 
 中文:
 定理 EuclideanSpace.norm_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: by
   simpa only [Real.coe_sqrt, NNReal.coe_sum] using! congr_arg ((↑) : Real>=0 -> Real) x.nnnorm_eq
 
@@ -246,7 +246,7 @@ theorem EuclideanSpace.norm_sq_eq
 
 中文:
 定理 EuclideanSpace.norm_sq_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.norm_sq_eq_of_L2 _ x
 
 Depends on / 依赖: PiLp.norm_sq_eq_of_L2, norm_sq_eq_of_L2
@@ -268,7 +268,7 @@ theorem EuclideanSpace.real_norm_sq_eq
 
 中文:
 定理 EuclideanSpace.real_norm_sq_eq
-  条件: {n : 类型} [Fintype n] (x : EuclideanSpace 实数 n)
+  条件: {n : 类型} [有限类型 n] (x : EuclideanSpace 实数 n)
   证明: by
   simp [EuclideanSpace.norm_sq_eq]
 
@@ -291,7 +291,7 @@ theorem EuclideanSpace.dist_eq
 
 中文:
 定理 EuclideanSpace.dist_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.dist_eq_of_L2 x y
 
 Depends on / 依赖: PiLp.dist_eq_of_L2, dist_eq_of_L2
@@ -310,7 +310,7 @@ theorem EuclideanSpace.dist_sq_eq
 
 中文:
 定理 EuclideanSpace.dist_sq_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.dist_sq_eq_of_L2 x y
 
 Depends on / 依赖: PiLp.dist_sq_eq_of_L2, dist_sq_eq_of_L2
@@ -329,7 +329,7 @@ theorem EuclideanSpace.nndist_eq
 
 中文:
 定理 EuclideanSpace.nndist_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.nndist_eq_of_L2 x y
 
 Depends on / 依赖: PiLp.nndist_eq_of_L2, nndist_eq_of_L2
@@ -348,7 +348,7 @@ theorem EuclideanSpace.edist_eq
 
 中文:
 定理 EuclideanSpace.edist_eq
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: PiLp.edist_eq_of_L2 x y
 
 Depends on / 依赖: PiLp.edist_eq_of_L2, edist_eq_of_L2
@@ -370,7 +370,7 @@ theorem EuclideanSpace.ball_zero_eq
 
 中文:
 定理 EuclideanSpace.ball_zero_eq
-  条件: {n : 类型} [Fintype n] (r : 实数) (hr : 0 <= r)
+  条件: {n : 类型} [有限类型 n] (r : 实数) (hr : 0 <= r)
   证明: by
   ext x
   have : (0 : Real) <= ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
@@ -396,7 +396,7 @@ theorem EuclideanSpace.closedBall_zero_eq
 
 中文:
 定理 EuclideanSpace.closedBall_zero_eq
-  条件: {n : 类型} [Fintype n] (r : 实数) (hr : 0 <= r)
+  条件: {n : 类型} [有限类型 n] (r : 实数) (hr : 0 <= r)
   证明: by
   ext
   simp_rw [mem_ofPred, mem_closedBall_zero_iff, norm_eq, norm_eq_abs, sq_abs, sqrt_le_left hr]
@@ -422,7 +422,7 @@ theorem EuclideanSpace.sphere_zero_eq
 
 中文:
 定理 EuclideanSpace.sphere_zero_eq
-  条件: {n : 类型} [Fintype n] (r : 实数) (hr : 0 <= r)
+  条件: {n : 类型} [有限类型 n] (r : 实数) (hr : 0 <= r)
   证明: by
   ext x
   have : (0 : Real) <= ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
@@ -450,7 +450,7 @@ instance EuclideanSpace.infinite
 
 中文:
 实例 EuclideanSpace.infinite
-  签名: [Nonempty ι]
+  签名: [非空 ι]
   定义体: Module.Free.infinite 𝕜 _
 
 Depends on / 依赖: Module, Module.Free.infinite, infinite
@@ -606,8 +606,8 @@ definition DirectSum.IsInternal.isometryL2OfOrthogonalFamily
   suffices forall (v w : PiLp 2 fun i => V i), ⟪v, w⟫ = 
 
 中文:
-定义 DirectSum.IsInternal.isometryL2OfOrthogonalFamily
-  签名: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+定义 直和.Is整数ernal.isometryL2OfOrthogonalFamily
+  签名: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
   定义体: by
   let e₁ := DirectSum.linearEquivFunOnFintype 𝕜 ι fun i => V i
   let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV
@@ -650,7 +650,7 @@ theorem DirectSum.IsInternal.isometryL2OfOrthogonalFamily_symm_apply
     simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.ls
 
 中文:
-定理 DirectSum.IsInternal.isometryL2OfOrthogonalFamily_symm_apply
+定理 直和.Is整数ernal.isometryL2OfOrthogonalFamily_symm_apply
   结论: [DecidableEq ι]
   证明: by
   classical
@@ -792,7 +792,7 @@ lemma EuclideanSpace.ofLp_single
 中文:
 引理 EuclideanSpace.ofLp_single
   条件: (i : ι) (a : 𝕜)
-  结论: ofLp (single i a) = Pi.single i a
+  结论: ofLp (single i a) = 依赖函数类型.single i a
   证明: by
   simp
 
@@ -817,7 +817,7 @@ lemma EuclideanSpace.toLp_single
 中文:
 引理 EuclideanSpace.toLp_single
   条件: (i : ι) (a : 𝕜)
-  结论: toLp _ (Pi.single i a) = single i a
+  结论: toLp _ (依赖函数类型.single i a) = single i a
   证明: by
   simp
 
@@ -1084,7 +1084,7 @@ abbreviation EuclideanSpace.sumEquivProd
 
 中文:
 缩写 EuclideanSpace.sumEquivProd
-  签名: {𝕜 : 类型} [RCLike 𝕜] {ι κ : 类型} [Fintype ι] [Fintype κ]
+  签名: {𝕜 : 类型} [RCLike 𝕜] {ι κ : 类型} [有限类型 ι] [有限类型 κ]
   定义体: (PiLp.sumPiLpEquivProdLpPiLp 2 _).toContinuousLinearEquiv.trans
     WithLp.prodContinuousLinearEquiv _ _ _ _
 
@@ -1131,7 +1131,7 @@ structure OrthonormalBasis
   (no additional axioms)
 
 中文:
-结构 OrthonormalBasis
+结构 正交标准基
   参数: where ofRepr
   (无附加公理)
 -/
@@ -1181,7 +1181,7 @@ LinearEquiv.symm_bijective.injective LinearEquiv.toLinearMap_injective by
 
 中文:
 实例 instFunLike
-  签名: : FunLike (OrthonormalBasis ι 𝕜 E) ι E where
+  签名: : 函数状 (正交标准基 ι 𝕜 E) ι E where
   定义体: by classical exact b.repr.symm (EuclideanSpace.single i (1 : 𝕜))
 coe_injective b b' h := repr_injective LinearIsometryEquiv.toLinearEquiv_injective
 LinearEquiv.symm_bijective.injective LinearEquiv.toLinearMap_injective by
@@ -1253,7 +1253,7 @@ theorem repr_symm_single
 
 中文:
 定理 repr_symm_single
-  条件: [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: [DecidableEq ι] (b : 正交标准基 ι 𝕜 E) (i : ι)
   证明: by
   dsimp only [DFunLike.coe]
   congr!
@@ -1277,7 +1277,7 @@ theorem repr_self
 
 中文:
 定理 repr_self
-  条件: [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: [DecidableEq ι] (b : 正交标准基 ι 𝕜 E) (i : ι)
   证明: by
   rw [← b.repr_symm_single i]; rw [LinearIsometryEquiv.apply_symm_apply]
 -/
@@ -1300,7 +1300,7 @@ theorem repr_apply_apply
 
 中文:
 定理 repr_apply_apply
-  条件: (b : OrthonormalBasis ι 𝕜 E) (v : E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (v : E) (i : ι)
   证明: by
   classical
     rw [← b.repr.inner_map_map (b i) v]; rw [b.repr_self i]; rw [EuclideanSpace.inner_single_left]
@@ -1332,7 +1332,7 @@ theorem orthonormal
 
 中文:
 定理 orthonormal
-  条件: (b : OrthonormalBasis ι 𝕜 E)
+  条件: (b : 正交标准基 ι 𝕜 E)
   结论: Orthonormal 𝕜 b
   证明: by
   classical
@@ -1361,7 +1361,7 @@ lemma norm_eq_one
 
 中文:
 引理 norm_eq_one
-  条件: (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (i : ι)
   证明: b.orthonormal.norm_eq_one i
 
 @[simp]
@@ -1384,7 +1384,7 @@ lemma nnnorm_eq_one
 
 中文:
 引理 nnnorm_eq_one
-  条件: (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (i : ι)
   证明: b.orthonormal.nnnorm_eq_one i
 
 @[simp]
@@ -1407,7 +1407,7 @@ lemma enorm_eq_one
 
 中文:
 引理 enorm_eq_one
-  条件: (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (i : ι)
   证明: b.orthonormal.enorm_eq_one i
 
 @[simp]
@@ -1428,7 +1428,7 @@ lemma inner_eq_zero
 
 中文:
 引理 inner_eq_zero
-  条件: (b : OrthonormalBasis ι 𝕜 E) {i j : ι} (hij : i != j)
+  条件: (b : 正交标准基 ι 𝕜 E) {i j : ι} (hij : i != j)
   证明: b.orthonormal.inner_eq_zero hij
 
 Depends on / 依赖: b.orthonormal.inner_eq_zero, inner_eq_zero, orthonormal
@@ -1448,7 +1448,7 @@ lemma inner_eq_one
 
 中文:
 引理 inner_eq_one
-  条件: (b : OrthonormalBasis ι 𝕜 E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (i : ι)
   结论: ⟪b i, b i⟫ = 1
   证明: by
   simp
@@ -1467,7 +1467,7 @@ lemma inner_eq_ite
 
 中文:
 引理 inner_eq_ite
-  条件: [DecidableEq ι] (b : OrthonormalBasis ι 𝕜 E) (i j : ι)
+  条件: [DecidableEq ι] (b : 正交标准基 ι 𝕜 E) (i j : ι)
   证明: by
   by_cases h : i = j <;> simp [h]
 -/
@@ -1487,7 +1487,7 @@ definition toBasis
 
 中文:
 定义 toBasis
-  签名: (b : OrthonormalBasis ι 𝕜 E)
+  签名: (b : 正交标准基 ι 𝕜 E)
   定义体: Basis.ofEquivFun (b.repr.toLinearEquiv.trans (WithLp.linearEquiv 2 𝕜 (ι -> 𝕜)))
 
 @[simp]
@@ -1509,7 +1509,7 @@ theorem coe_toBasis
 
 中文:
 定理 coe_toBasis
-  条件: (b : OrthonormalBasis ι 𝕜 E)
+  条件: (b : 正交标准基 ι 𝕜 E)
   结论: (⇑b.toBasis : ι -> E) = ⇑b
   证明: rfl
 
@@ -1530,7 +1530,7 @@ theorem coe_toBasis_repr
 
 中文:
 定理 coe_toBasis_repr
-  条件: (b : OrthonormalBasis ι 𝕜 E)
+  条件: (b : 正交标准基 ι 𝕜 E)
   证明: Basis.equivFun_ofEquivFun _
 
 @[simp]
@@ -1551,7 +1551,7 @@ theorem coe_toBasis_repr_apply
 
 中文:
 定理 coe_toBasis_repr_apply
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E) (i : ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E) (i : ι)
   证明: by
   simp [← Basis.equivFun_apply]
 -/
@@ -1572,7 +1572,7 @@ theorem sum_repr
 
 中文:
 定理 sum_repr
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E)
   结论: ∑ i, b.repr x i • b i = x
   证明: by
   simp_rw [← b.coe_toBasis_repr_apply, ← b.coe_toBasis]
@@ -1596,7 +1596,7 @@ theorem sum_repr'
 
 中文:
 定理 sum_repr'
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E)
   结论: ∑ i, ⟪b i, x⟫_𝕜 • b i = x
   证明: by
   nth_rw 2 [← (b.sum_repr x)]
@@ -1616,7 +1616,7 @@ theorem sum_repr_symm
 
 中文:
 定理 sum_repr_symm
-  条件: (b : OrthonormalBasis ι 𝕜 E) (v : EuclideanSpace 𝕜 ι)
+  条件: (b : 正交标准基 ι 𝕜 E) (v : EuclideanSpace 𝕜 ι)
   证明: by simpa using (b.toBasis.equivFun_symm_apply v).symm
 -/
 protected theorem sum_repr_symm (b : OrthonormalBasis ι 𝕜 E) (v : EuclideanSpace 𝕜 ι) :
@@ -1637,7 +1637,7 @@ theorem sum_inner_mul_inner
 
 中文:
 定理 sum_inner_mul_inner
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x y : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x y : E)
   证明: by
   have := congr_arg (innerSL 𝕜 x) (b.sum_repr y)
   rw [map_sum] at this
@@ -1668,7 +1668,7 @@ lemma sum_sq_norm_inner_right
 
 中文:
 引理 sum_sq_norm_inner_right
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E)
   证明: by
   rw [@norm_eq_sqrt_re_inner 𝕜]; rw [← OrthonormalBasis.sum_inner_mul_inner b x x]; rw [map_sum]
   simp_rw [inner_mul_symm_re_eq_norm, norm_mul, ← inner_conj_symm x, starRingEnd_apply,
@@ -1698,7 +1698,7 @@ lemma sum_sq_norm_inner_left
 
 中文:
 引理 sum_sq_norm_inner_left
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E)
   证明: by
   convert! sum_sq_norm_inner_right b x using 2 with i -
   rw [← inner_conj_symm]; rw [RCLike.norm_conj]
@@ -1723,7 +1723,7 @@ theorem sum_sq_inner_right
 
 中文:
 定理 sum_sq_inner_right
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   rw [← b.sum_sq_norm_inner_right]
   simp
@@ -1748,7 +1748,7 @@ theorem sum_sq_inner_left
 
 中文:
 定理 sum_sq_inner_left
-  结论: {ι E : 类型} [NormedAddCommGroup E]
+  结论: {ι E : 类型} [赋范交换加群 E]
   证明: by
   simp_rw [← b.sum_sq_inner_right, real_inner_comm]
 
@@ -1776,7 +1776,7 @@ lemma norm_le_card_mul_iSup_norm_inner
 
 中文:
 引理 norm_le_card_mul_iSup_norm_inner
-  条件: (b : OrthonormalBasis ι 𝕜 E) (x : E)
+  条件: (b : 正交标准基 ι 𝕜 E) (x : E)
   证明: by
   calc ‖x‖
   _ = √(∑ i, ‖⟪b i, x⟫‖ ^ 2) := by rw [sum_sq_norm_inner_right, Real.sqrt_sq (by positivity)]
@@ -1818,7 +1818,7 @@ theorem orthogonalProjectionOnto_apply_eq_sum
 
 中文:
 定理 orthogonalProjectionOnto_apply_eq_sum
-  结论: {U : Submodule 𝕜 E}
+  结论: {U : 子模 𝕜 E}
   证明: by
   simpa only [b.repr_apply_apply, inner_orthogonalProjectionOnto_eq_of_mem_left] using
     (b.sum_repr (U.orthogonalProjectionOnto x)).symm
@@ -1849,7 +1849,7 @@ theorem orthogonalProjectionOnto_eq_sum_rankOne
 
 中文:
 定理 orthogonalProjectionOnto_eq_sum_rankOne
-  结论: {U : Submodule 𝕜 E}
+  结论: {U : 子模 𝕜 E}
   证明: by
   ext; simp [b.orthogonalProjectionOnto_apply_eq_sum]
 
@@ -1875,7 +1875,7 @@ theorem starProjection_eq_sum_rankOne
 
 中文:
 定理 starProjection_eq_sum_rankOne
-  结论: {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+  结论: {U : 子模 𝕜 E} [U.有OrthogonalProjection]
   证明: by
   ext; simp [starProjection, b.orthogonalProjectionOnto_eq_sum_rankOne]
 -/
@@ -1894,7 +1894,7 @@ lemma sum_rankOne_eq_id
 
 中文:
 引理 sum_rankOne_eq_id
-  条件: (b : OrthonormalBasis ι 𝕜 E)
+  条件: (b : 正交标准基 ι 𝕜 E)
   证明: by ext; simp [b.sum_repr']
 
 Depends on / 依赖: b.sum_repr, sum_repr
@@ -1914,7 +1914,7 @@ definition map
 
 中文:
 定义 map
-  签名: {G : 类型} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  签名: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
   定义体: L.symm.trans b.repr
 
 @[simp]
@@ -1934,7 +1934,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  结论: {G : 类型} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  结论: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
   证明: rfl
 -/
 protected theorem map_apply {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
@@ -1953,7 +1953,7 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  结论: {G : 类型} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  结论: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
   证明: rfl
 
 @[simp]
@@ -1972,7 +1972,7 @@ theorem toBasis_map
 
 中文:
 定理 toBasis_map
-  结论: {G : 类型} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  结论: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
   证明: rfl
 -/
 protected theorem toBasis_map {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
@@ -1995,8 +1995,8 @@ definition _root_.Module.Basis.toOrthonormalBasis
         have key : ⟪p, q⟫ = ⟪∑ i, p i 
 
 中文:
-定义 _root_.Module.Basis.toOrthonormalBasis
-  签名: (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v)
+定义 _root_.模.基.toOrthonormalBasis
+  签名: (v : 基 ι 𝕜 E) (hv : Orthonormal 𝕜 v)
   定义体: OrthonormalBasis.ofRepr
     LinearEquiv.isometryOfInner (v.equivFun.trans (WithLp.linearEquiv 2 𝕜 (ι -> 𝕜)).symm)
       (by
@@ -2033,8 +2033,8 @@ theorem _root_.Module.Basis.coe_toOrthonormalBasis_repr
 @[simp]
 
 中文:
-定理 _root_.Module.Basis.coe_toOrthonormalBasis_repr
-  条件: (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v)
+定理 _root_.模.基.coe_toOrthonormalBasis_repr
+  条件: (v : 基 ι 𝕜 E) (hv : Orthonormal 𝕜 v)
   证明: rfl
 
 @[simp]
@@ -2055,7 +2055,7 @@ theorem _root_.Module.Basis.coe_toOrthonormalBasis_repr_symm
 @[simp]
 
 中文:
-定理 _root_.Module.Basis.coe_toOrthonormalBasis_repr_symm
+定理 _root_.模.基.coe_toOrthonormalBasis_repr_symm
   证明: rfl
 
 @[simp]
@@ -2081,8 +2081,8 @@ theorem _root_.Module.Basis.toBasis_toOrthonormalBasis
 @[simp]
 
 中文:
-定理 _root_.Module.Basis.toBasis_toOrthonormalBasis
-  条件: (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v)
+定理 _root_.模.基.toBasis_toOrthonormalBasis
+  条件: (v : 基 ι 𝕜 E) (hv : Orthonormal 𝕜 v)
   证明: by
   simp only [OrthonormalBasis.toBasis, Basis.toOrthonormalBasis,
     LinearEquiv.isometryOfInner_toLinearEquiv]
@@ -2111,8 +2111,8 @@ theorem _root_.Module.Basis.coe_toOrthonormalBasis
     _ = (v : ι -> E) := by simp
 
 中文:
-定理 _root_.Module.Basis.coe_toOrthonormalBasis
-  条件: (v : Basis ι 𝕜 E) (hv : Orthonormal 𝕜 v)
+定理 _root_.模.基.coe_toOrthonormalBasis
+  条件: (v : 基 ι 𝕜 E) (hv : Orthonormal 𝕜 v)
   证明: calc
     (v.toOrthonormalBasis hv : ι -> E) = ((v.toOrthonormalBasis hv).toBasis : ι -> E) := by
       rw [OrthonormalBasis.coe_toBasis]
@@ -2166,7 +2166,7 @@ theorem singleton_apply
 中文:
 定理 singleton_apply
   条件: (i)
-  结论: OrthonormalBasis.singleton ι 𝕜 i = 1
+  结论: 正交标准基.singleton ι 𝕜 i = 1
   证明: Basis.singleton_apply _ _ _
 
 @[simp]
@@ -2190,7 +2190,7 @@ theorem singleton_repr
 中文:
 定理 singleton_repr
   条件: (x i)
-  结论: (OrthonormalBasis.singleton ι 𝕜).repr x i = x
+  结论: (正交标准基.singleton ι 𝕜).repr x i = x
   证明: Basis.singleton_repr _ _ _ _
 
 @[simp]
@@ -2214,7 +2214,7 @@ theorem coe_singleton
 
 中文:
 定理 coe_singleton
-  结论: ⇑(OrthonormalBasis.singleton ι 𝕜) = 1
+  结论: ⇑(正交标准基.singleton ι 𝕜) = 1
   证明: by
   ext; simp
 
@@ -2234,7 +2234,7 @@ theorem toBasis_singleton
 
 中文:
 定理 toBasis_singleton
-  结论: (OrthonormalBasis.singleton ι 𝕜).toBasis = Basis.singleton ι 𝕜
+  结论: (正交标准基.singleton ι 𝕜).toBasis = 基.singleton ι 𝕜
   证明: Basis.toBasis_toOrthonormalBasis _ _
 
 Depends on / 依赖: Basis.toBasis_toOrthonormalBasis, toBasis_toOrthonormalBasis
@@ -2255,8 +2255,8 @@ definition _root_.Pi.orthonormalBasis
       (.symm <| .piLpCurry 𝕜 2 fun _ _ => 𝕜)
 
 中文:
-定义 _root_.Pi.orthonormalBasis
-  签名: {η : 类型} [Fintype η] {ι : η -> 类型}
+定义 _root_.依赖函数类型.orthonormalBasis
+  签名: {η : 类型} [有限类型 η] {ι : η -> 类型}
   定义体: .trans
       (.piLpCongrRight 2 fun i => (B i).repr)
       (.symm <| .piLpCurry 𝕜 2 fun _ _ => 𝕜)
@@ -2280,8 +2280,8 @@ theorem _root_.Pi.orthonormalBasis.toBasis
 @[simp]
 
 中文:
-定理 _root_.Pi.orthonormalBasis.toBasis
-  结论: {η : 类型} [Fintype η] {ι : η -> 类型}
+定理 _root_.依赖函数类型.orthonormalBasis.toBasis
+  结论: {η : 类型} [有限类型 η] {ι : η -> 类型}
   证明: by ext; rfl
 
 @[simp]
@@ -2309,8 +2309,8 @@ theorem _root_.Pi.orthonormalBasis_apply
     LinearIsometryEquiv
 
 中文:
-定理 _root_.Pi.orthonormalBasis_apply
-  结论: {η : 类型} [Fintype η] [DecidableEq η] {ι : η -> 类型}
+定理 _root_.依赖函数类型.orthonormalBasis_apply
+  结论: {η : 类型} [有限类型 η] [DecidableEq η] {ι : η -> 类型}
   证明: by
   classical
   ext k
@@ -2349,8 +2349,8 @@ theorem _root_.Pi.orthonormalBasis_repr
   proof: rfl
 
 中文:
-定理 _root_.Pi.orthonormalBasis_repr
-  结论: {η : 类型} [Fintype η] {ι : η -> 类型}
+定理 _root_.依赖函数类型.orthonormalBasis_repr
+  结论: {η : 类型} [有限类型 η] {ι : η -> 类型}
   证明: rfl
 -/
 theorem _root_.Pi.orthonormalBasis_repr {η : Type*} [Fintype η] {ι : η -> Type*}
@@ -2373,7 +2373,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (hon : Orthonormal 𝕜 v) (hsp : ⊤ <= Submodule.span 𝕜 (Set.range v))
+  签名: (hon : Orthonormal 𝕜 v) (hsp : ⊤ <= 子模.span 𝕜 (集合.range v))
   定义体: (Basis.mk (Orthonormal.linearIndependent hon) hsp).toOrthonormalBasis (by rwa [Basis.coe_mk])
 
 @[simp]
@@ -2394,7 +2394,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (hon : Orthonormal 𝕜 v) (hsp : ⊤ <= Submodule.span 𝕜 (Set.range v))
+  条件: (hon : Orthonormal 𝕜 v) (hsp : ⊤ <= 子模.span 𝕜 (集合.range v))
   证明: by
   rw [OrthonormalBasis.mk]; rw [_root_.Module.Basis.coe_toOrthonormalBasis]; rw [Basis.coe_mk]
 -/
@@ -2419,7 +2419,7 @@ definition span
 
 中文:
 定义 span
-  签名: [DecidableEq E] {v' : ι' -> E} (h : Orthonormal 𝕜 v') (s : Finset ι')
+  签名: [DecidableEq E] {v' : ι' -> E} (h : Orthonormal 𝕜 v') (s : 有限集 ι')
   定义体: let e₀' : Basis s 𝕜 _ :=
     Basis.span (h.linearIndependent.comp ((↑) : s -> ι') Subtype.val_injective)
   let e₀ : OrthonormalBasis s 𝕜 _ :=
@@ -2460,7 +2460,7 @@ theorem span_apply
 
 中文:
 定理 span_apply
-  结论: [DecidableEq E] {v' : ι' -> E} (h : Orthonormal 𝕜 v') (s : Finset ι')
+  结论: [DecidableEq E] {v' : ι' -> E} (h : Orthonormal 𝕜 v') (s : 有限集 ι')
   证明: by
   simp only [OrthonormalBasis.span, Basis.span_apply, LinearIsometryEquiv.ofEq_symm,
     OrthonormalBasis.map_apply, OrthonormalBasis.coe_mk, LinearIsometryEquiv.coe_ofEq_apply,
@@ -2492,7 +2492,7 @@ definition mkOfOrthogonalEqBot
 
 中文:
 定义 mkOfOrthogonalEqBot
-  签名: (hon : Orthonormal 𝕜 v) (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥)
+  签名: (hon : Orthonormal 𝕜 v) (hsp : (span 𝕜 (集合.range v))ᗮ = ⊥)
   定义体: OrthonormalBasis.mk hon
     (by
       refine Eq.ge ?_
@@ -2543,7 +2543,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι')
+  签名: (b : 正交标准基 ι 𝕜 E) (e : ι ≃ ι')
   定义体: OrthonormalBasis.ofRepr (b.repr.trans (LinearIsometryEquiv.piLpCongrLeft 2 𝕜 𝕜 e))
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.piLpCongrLeft, OrthonormalBasis, OrthonormalBasis.ofRepr, b.repr.trans, ofRepr, piLpCongrLeft
@@ -2568,7 +2568,7 @@ theorem reindex_apply
 
 中文:
 定理 reindex_apply
-  条件: (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι') (i' : ι')
+  条件: (b : 正交标准基 ι 𝕜 E) (e : ι ≃ ι') (i' : ι')
   证明: by
   classical
     dsimp [reindex]
@@ -2599,7 +2599,7 @@ theorem reindex_toBasis
 
 中文:
 定理 reindex_toBasis
-  条件: (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι')
+  条件: (b : 正交标准基 ι 𝕜 E) (e : ι ≃ ι')
   证明: Basis.eq_ofRepr_eq_repr fun _ => congr_fun rfl
 
 @[simp]
@@ -2622,7 +2622,7 @@ theorem coe_reindex
 
 中文:
 定理 coe_reindex
-  条件: (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι')
+  条件: (b : 正交标准基 ι 𝕜 E) (e : ι ≃ ι')
   证明: funext (b.reindex_apply e)
 
 @[simp]
@@ -2643,7 +2643,7 @@ theorem repr_reindex
 
 中文:
 定理 repr_reindex
-  条件: (b : OrthonormalBasis ι 𝕜 E) (e : ι ≃ ι') (x : E) (i' : ι')
+  条件: (b : 正交标准基 ι 𝕜 E) (e : ι ≃ ι') (x : E) (i' : ι')
   证明: by
   rw [OrthonormalBasis.repr_apply_apply]; rw [b.repr_apply_apply]; rw [OrthonormalBasis.coe_reindex]; rw [comp_apply]
 -/
@@ -2669,7 +2669,7 @@ definition basisFun
 
 中文:
 定义 basisFun
-  签名: : OrthonormalBasis ι 𝕜 (EuclideanSpace 𝕜 ι)
+  签名: : 正交标准基 ι 𝕜 (EuclideanSpace 𝕜 ι)
   定义体: ⟨LinearIsometryEquiv.refl _ _⟩
 
 @[simp]
@@ -2801,8 +2801,8 @@ instance OrthonormalBasis.instInhabited
   body: ⟨EuclideanSpace.basisFun ι 𝕜⟩
 
 中文:
-实例 OrthonormalBasis.instInhabited
-  签名: : Inhabited (OrthonormalBasis ι 𝕜 (EuclideanSpace 𝕜 ι))
+实例 正交标准基.instInhabited
+  签名: : 可居 (正交标准基 ι 𝕜 (EuclideanSpace 𝕜 ι))
   定义体: ⟨EuclideanSpace.basisFun ι 𝕜⟩
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.basisFun, basisFun
@@ -3010,8 +3010,8 @@ definition Complex.orthonormalBasisOneI
 @[simp]
 
 中文:
-定义 Complex.orthonormalBasisOneI
-  签名: : OrthonormalBasis (Fin 2) 实数 Complex
+定义 复形.orthonormalBasisOneI
+  签名: : 正交标准基 (有限集 2) 实数 复形
   定义体: Complex.basisOneI.toOrthonormalBasis
     (by
       rw [orthonormal_iff_ite]
@@ -3039,8 +3039,8 @@ theorem Complex.orthonormalBasisOneI_repr_apply
 @[simp]
 
 中文:
-定理 Complex.orthonormalBasisOneI_repr_apply
-  条件: (z : Complex)
+定理 复形.orthonormalBasisOneI_repr_apply
+  条件: (z : 复形)
   证明: rfl
 
 @[simp]
@@ -3061,8 +3061,8 @@ theorem Complex.orthonormalBasisOneI_repr_symm_apply
 @[simp]
 
 中文:
-定理 Complex.orthonormalBasisOneI_repr_symm_apply
-  条件: (x : EuclideanSpace 实数 (Fin 2))
+定理 复形.orthonormalBasisOneI_repr_symm_apply
+  条件: (x : EuclideanSpace 实数 (有限集 2))
   证明: rfl
 
 @[simp]
@@ -3082,7 +3082,7 @@ theorem Complex.toBasis_orthonormalBasisOneI
 @[simp]
 
 中文:
-定理 Complex.toBasis_orthonormalBasisOneI
+定理 复形.toBasis_orthonormalBasisOneI
   证明: Basis.toBasis_toOrthonormalBasis _ _
 
 @[simp]
@@ -3103,7 +3103,7 @@ theorem Complex.coe_orthonormalBasisOneI
   simp [Complex.orthonormalBasisOneI]
 
 中文:
-定理 Complex.coe_orthonormalBasisOneI
+定理 复形.coe_orthonormalBasisOneI
   证明: by
   simp [Complex.orthonormalBasisOneI]
 
@@ -3124,8 +3124,8 @@ definition Complex.isometryOfOrthonormal
 @[simp]
 
 中文:
-定义 Complex.isometryOfOrthonormal
-  签名: (v : OrthonormalBasis (Fin 2) 实数 F)
+定义 复形.isometryOfOrthonormal
+  签名: (v : 正交标准基 (有限集 2) 实数 F)
   定义体: Complex.orthonormalBasisOneI.repr.trans v.repr.symm
 
 @[simp]
@@ -3149,8 +3149,8 @@ theorem Complex.map_isometryOfOrthonormal
   rw [LinearIsometryEquiv.trans_assoc]
 
 中文:
-定理 Complex.map_isometryOfOrthonormal
-  条件: (v : OrthonormalBasis (Fin 2) 实数 F) (f : F ≃ₗᵢ[实数] F')
+定理 复形.map_isometryOfOrthonormal
+  条件: (v : 正交标准基 (有限集 2) 实数 F) (f : F ≃ₗᵢ[实数] F')
   证明: by
   simp only [isometryOfOrthonormal, OrthonormalBasis.map, LinearIsometryEquiv.symm_trans,
     LinearIsometryEquiv.symm_symm]
@@ -3176,8 +3176,8 @@ theorem Complex.isometryOfOrthonormal_symm_apply
   simp [Complex.isometryOfOrthonormal]
 
 中文:
-定理 Complex.isometryOfOrthonormal_symm_apply
-  条件: (v : OrthonormalBasis (Fin 2) 实数 F) (f : F)
+定理 复形.isometryOfOrthonormal_symm_apply
+  条件: (v : 正交标准基 (有限集 2) 实数 F) (f : F)
   证明: by
   simp [Complex.isometryOfOrthonormal]
 
@@ -3198,8 +3198,8 @@ theorem Complex.isometryOfOrthonormal_apply
   simp [Complex.isometryOfOrthonormal, ← v.sum_repr_symm]
 
 中文:
-定理 Complex.isometryOfOrthonormal_apply
-  条件: (v : OrthonormalBasis (Fin 2) 实数 F) (z : Complex)
+定理 复形.isometryOfOrthonormal_apply
+  条件: (v : 正交标准基 (有限集 2) 实数 F) (z : 复形)
   证明: by
   simp [Complex.isometryOfOrthonormal, ← v.sum_repr_symm]
 
@@ -3241,8 +3241,8 @@ theorem OrthonormalBasis.toMatrix_orthonormalBasis_conjTranspose_mul_self
   · rw [orthonormal_iff_ite.mp b.orthonormal i j, Matrix.one_apply]
 
 中文:
-定理 OrthonormalBasis.toMatrix_orthonormalBasis_conjTranspose_mul_self
-  结论: [Fintype ι']
+定理 正交标准基.toMatrix_orthonormalBasis_conjTranspose_mul_self
+  结论: [有限类型 ι']
   证明: by
   ext i j
   convert! a.repr.inner_map_map (b i) (b j)
@@ -3277,8 +3277,8 @@ theorem OrthonormalBasis.toMatrix_orthonormalBasis_self_mul_conjTranspose
   rw [Matrix.mul_eq_one_comm_of_equiv (a.toBasis.indexEquiv b.toBasis)]; rw [a.toMatrix_orthonormalBasis_conjTranspose_mul_self b]
 
 中文:
-定理 OrthonormalBasis.toMatrix_orthonormalBasis_self_mul_conjTranspose
-  结论: [Fintype ι']
+定理 正交标准基.toMatrix_orthonormalBasis_self_mul_conjTranspose
+  结论: [有限类型 ι']
   证明: by
   classical
   rw [Matrix.mul_eq_one_comm_of_equiv (a.toBasis.indexEquiv b.toBasis)]; rw [a.toMatrix_orthonormalBasis_conjTranspose_mul_self b]
@@ -3303,7 +3303,7 @@ theorem OrthonormalBasis.toMatrix_orthonormalBasis_mem_unitary
   exact a.toMatrix_orthonormalBasis_conjTranspose_mul_self b
 
 中文:
-定理 OrthonormalBasis.toMatrix_orthonormalBasis_mem_unitary
+定理 正交标准基.toMatrix_orthonormalBasis_mem_unitary
   证明: by
   rw [Matrix.mem_unitaryGroup_iff']
   exact a.toMatrix_orthonormalBasis_conjTranspose_mul_self b
@@ -3331,7 +3331,7 @@ theorem OrthonormalBasis.det_to_matrix_orthonormalBasis
   rwa [pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero] at this
 
 中文:
-定理 OrthonormalBasis.det_to_matrix_orthonormalBasis
+定理 正交标准基.det_to_matrix_orthonormalBasis
   结论: ‖a.toBasis.det b‖ = 1
   证明: by
   have := (Matrix.det_of_mem_unitary (a.toMatrix_orthonormalBasis_mem_unitary b)).2
@@ -3358,8 +3358,8 @@ theorem LinearIsometryEquiv.toMatrix_mem_unitaryGroup
   simp [LinearMap.toMatrix_eq_basisToMatrix, ← coe_map, toMatrix_orthonormalBasis_mem_unitary]
 
 中文:
-定理 LinearIsometryEquiv.toMatrix_mem_unitaryGroup
-  结论: {G : 类型} [NormedAddCommGroup G]
+定理 线性等距等价.toMatrix_mem_unitaryGroup
+  结论: {G : 类型} [赋范交换加群 G]
   证明: by
   simp [LinearMap.toMatrix_eq_basisToMatrix, ← coe_map, toMatrix_orthonormalBasis_mem_unitary]
 
@@ -3384,7 +3384,7 @@ theorem OrthonormalBasis.toMatrix_orthonormalBasis_mem_orthogonal
   proof: a.toMatrix_orthonormalBasis_mem_unitary b
 
 中文:
-定理 OrthonormalBasis.toMatrix_orthonormalBasis_mem_orthogonal
+定理 正交标准基.toMatrix_orthonormalBasis_mem_orthogonal
   证明: a.toMatrix_orthonormalBasis_mem_unitary b
 
 Depends on / 依赖: a.toMatrix_orthonormalBasis_mem_unitary, toMatrix_orthonormalBasis_mem_unitary
@@ -3403,7 +3403,7 @@ theorem OrthonormalBasis.det_to_matrix_orthonormalBasis_real
   simpa [unitary, sq] using! Matrix.det_of_mem_unitary (a.toMatrix_orthonormalBasis_mem_unitary b)
 
 中文:
-定理 OrthonormalBasis.det_to_matrix_orthonormalBasis_real
+定理 正交标准基.det_to_matrix_orthonormalBasis_real
   证明: by
   rw [← sq_eq_one_iff]
   simpa [unitary, sq] using! Matrix.det_of_mem_unitary (a.toMatrix_orthonormalBasis_mem_unitary b)
@@ -3437,7 +3437,7 @@ definition DirectSum.IsInternal.collectedOrthonormalBasis
       hV.orthonormal_sigma_orthonormal (show forall i, Orthonormal 𝕜 (v_family i).toBasis by simp)
 
 中文:
-定义 DirectSum.IsInternal.collectedOrthonormalBasis
+定义 直和.Is整数ernal.collectedOrthonormalBasis
   定义体: (hV_sum.collectedBasis fun i => (v_family i).toBasis).toOrthonormalBasis by
     simpa using
       hV.orthonormal_sigma_orthonormal (show forall i, Orthonormal 𝕜 (v_family i).toBasis by simp)
@@ -3462,7 +3462,7 @@ theorem DirectSum.IsInternal.collectedOrthonormalBasis_mem
   simp [DirectSum.IsInternal.collectedOrthonormalBasis]
 
 中文:
-定理 DirectSum.IsInternal.collectedOrthonormalBasis_mem
+定理 直和.Is整数ernal.collectedOrthonormalBasis_mem
   结论: [DecidableEq ι]
   证明: by
   simp [DirectSum.IsInternal.collectedOrthonormalBasis]
@@ -3492,7 +3492,7 @@ theorem Orthonormal.exists_orthonormalBasis_extension
   let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToF
 
 中文:
-定理 Orthonormal.exists_orthonormalBasis_extension
+定理 Orthonormal.存在_orthonormalBasis_extension
   条件: (hv : Orthonormal 𝕜 ((↑) : v -> E))
   证明: by
   obtain ⟨u₀, hu₀s, hu₀, hu₀_max⟩ := exists_maximal_orthonormal hv
@@ -3531,8 +3531,8 @@ theorem Orthonormal.exists_orthonormalBasis_extension_of_card_eq
 
 
 中文:
-定理 Orthonormal.exists_orthonormalBasis_extension_of_card_eq
-  结论: {ι : 类型} [Fintype ι]
+定理 Orthonormal.存在_orthonormalBasis_extension_of_card_eq
+  结论: {ι : 类型} [有限类型 ι]
   证明: by
   have hsv : Injective (s.domRestrict v) := hv.linearIndependent.injective
   have hX : Orthonormal 𝕜 ((↑) : Set.range (s.domRestrict v) -> E) := by
@@ -3574,7 +3574,7 @@ theorem _root_.exists_orthonormalBasis
   ⟨w, hw, hw''⟩
 
 中文:
-定理 _root_.exists_orthonormalBasis
+定理 _root_.存在_orthonormalBasis
   证明: let ⟨w, hw, _, hw''⟩ := (orthonormal_empty 𝕜 E).exists_orthonormalBasis_extension
   ⟨w, hw, hw''⟩
 
@@ -3607,7 +3607,7 @@ theorem orthonormalBasis_one_dim
 
 中文:
 定理 orthonormalBasis_one_dim
-  条件: (b : OrthonormalBasis ι 实数 实数)
+  条件: (b : 正交标准基 ι 实数 实数)
   证明: by
   have : Unique ι := b.toBasis.unique
   have : b default = 1 ∨ b default = -1 := by
@@ -3671,8 +3671,8 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate
       ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a
 
 中文:
-定理 DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate
-  结论: (a : Fin n)
+定理 直和.Is整数ernal.subordinateOrthonormalBasis_subordinate
+  结论: (a : 有限集 n)
   证明: by
   simpa only [DirectSum.IsInternal.subordinateOrthonormalBasis, OrthonormalBasis.coe_reindex,
     DirectSum.IsInternal.subordinateOrthonormalBasisIndex] using!
@@ -3699,7 +3699,7 @@ theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq
   simp [subordinateOrthonormalBasisIndex_def]
 
 中文:
-定理 DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq
+定理 直和.Is整数ernal.存在_subordinateOrthonormalBasisIndex_eq
   证明: by
   use hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, ⟨0, by grind [finrank_eq_zero (S := V i)]⟩⟩
   simp [subordinateOrthonormalBasisIndex_def]
@@ -3724,7 +3724,7 @@ definition DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
   left_inv := by grind [subordinateOrthonormalBasisI
 
 中文:
-定义 DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
+定义 直和.Is整数ernal.subordinateOrthonormalBasisIndexFiberEquiv
   定义体: Fin.cast (by rw [← subordinateOrthonormalBasisIndex_def, a.property])
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
@@ -3751,7 +3751,7 @@ theorem DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq
   simpa using hV.subordinateOrthonormalBasisIndexFiberEquiv hn hV' i
 
 中文:
-定理 DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq
+定理 直和.Is整数ernal.card_filter_subordinateOrthonormalBasisIndex_eq
   证明: by
   apply Finset.card_eq_of_equiv_fin
   simpa using hV.subordinateOrthonormalBasisIndexFiberEquiv hn hV' i
@@ -3778,7 +3778,7 @@ definition OrthonormalBasis.fromOrthogonalSpanSingleton
 (stdOrthonormalBasis _ _).reindex finCongr finrank_orthogonal_span_singleton hv
 
 中文:
-定义 OrthonormalBasis.fromOrthogonalSpanSingleton
+定义 正交标准基.fromOrthogonalSpanSingleton
   签名: (n : 自然数) [Fact (finrank 𝕜 E = n + 1)] {v : E}
   定义体: have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ (K := 𝕜) (V := E) n
 (stdOrthonormalBasis _ _).reindex finCongr finrank_orthogonal_span_singleton hv
@@ -3814,7 +3814,7 @@ definition LinearIsometry.extend
           simp only [← 
 
 中文:
-定义 LinearIsometry.extend
+定义 线性等距.extend
   签名: (L : S ->ₗᵢ[𝕜] V)
   定义体: by
   -- Build an isometry from Sᗮ to L(S)ᗮ through `EuclideanSpace`
@@ -3887,7 +3887,7 @@ theorem LinearIsometry.extend_apply
   simp
 
 中文:
-定理 LinearIsometry.extend_apply
+定理 线性等距.extend_apply
   条件: (L : S ->ₗᵢ[𝕜] V) (s : S)
   结论: L.extend s = L s
   证明: by
@@ -3924,7 +3924,7 @@ abbreviation toEuclideanLin
 
 中文:
 缩写 toEuclideanLin
-  签名: : Matrix m n 𝕜 ≃ₗ[𝕜] EuclideanSpace 𝕜 n ->ₗ[𝕜] EuclideanSpace 𝕜 m
+  签名: : 矩阵 m n 𝕜 ≃ₗ[𝕜] EuclideanSpace 𝕜 n ->ₗ[𝕜] EuclideanSpace 𝕜 m
   定义体: toLpLin 2 2
 
 @[deprecated toLpLin_toLp (since := "2026-01-22")]
@@ -3947,7 +3947,7 @@ lemma toEuclideanLin_toLp
 
 中文:
 引理 toEuclideanLin_toLp
-  条件: (A : Matrix m n 𝕜) (x : n -> 𝕜)
+  条件: (A : 矩阵 m n 𝕜) (x : n -> 𝕜)
   证明: rfl
 
 @[deprecated ofLp_toLpLin (since := "2026-01-22")]
@@ -3968,7 +3968,7 @@ theorem piLp_ofLp_toEuclideanLin
 
 中文:
 定理 piLp_ofLp_toEuclideanLin
-  条件: (A : Matrix m n 𝕜) (x : EuclideanSpace 𝕜 n)
+  条件: (A : 矩阵 m n 𝕜) (x : EuclideanSpace 𝕜 n)
   证明: rfl
 
 @[deprecated toLpLin_apply (since := "2026-01-22")]
@@ -3990,7 +3990,7 @@ theorem toEuclideanLin_apply
 
 中文:
 定理 toEuclideanLin_apply
-  条件: (M : Matrix m n 𝕜) (v : EuclideanSpace 𝕜 n)
+  条件: (M : 矩阵 m n 𝕜) (v : EuclideanSpace 𝕜 n)
   证明: rfl
 
 @[deprecated ofLp_toLpLin (since := "2026-01-22")]
@@ -4011,7 +4011,7 @@ theorem ofLp_toEuclideanLin_apply
 
 中文:
 定理 ofLp_toEuclideanLin_apply
-  条件: (M : Matrix m n 𝕜) (v : EuclideanSpace 𝕜 n)
+  条件: (M : 矩阵 m n 𝕜) (v : EuclideanSpace 𝕜 n)
   证明: rfl
 
 @[deprecated toLpLin_toLp (since := "2026-01-22")]
@@ -4031,7 +4031,7 @@ theorem toEuclideanLin_apply_piLp_toLp
 
 中文:
 定理 toEuclideanLin_apply_piLp_toLp
-  条件: (M : Matrix m n 𝕜) (v : n -> 𝕜)
+  条件: (M : 矩阵 m n 𝕜) (v : n -> 𝕜)
   证明: rfl
 -/
 theorem toEuclideanLin_apply_piLp_toLp (M : Matrix m n 𝕜) (v : n -> 𝕜) :
@@ -4050,7 +4050,7 @@ theorem toEuclideanLin_eq_toLin
 
 中文:
 定理 toEuclideanLin_eq_toLin
-  条件: [Finite m]
+  条件: [有限 m]
   证明: rfl
 -/
 theorem toEuclideanLin_eq_toLin [Finite m] :
@@ -4069,7 +4069,7 @@ lemma toEuclideanLin_eq_toLin_orthonormal
 
 中文:
 引理 toEuclideanLin_eq_toLin_orthonormal
-  条件: [Fintype m]
+  条件: [有限类型 m]
   证明: rfl
 -/
 lemma toEuclideanLin_eq_toLin_orthonormal [Fintype m] :
@@ -4091,7 +4091,7 @@ theorem inner_matrix_row_row
 
 中文:
 定理 inner_matrix_row_row
-  条件: [Fintype n] (A B : Matrix m n 𝕜) (i j : m)
+  条件: [有限类型 n] (A B : 矩阵 m n 𝕜) (i j : m)
   证明: by
   simp [PiLp.inner_apply, dotProduct, mul_apply']
 
@@ -4112,7 +4112,7 @@ theorem inner_matrix_col_col
 
 中文:
 定理 inner_matrix_col_col
-  条件: [Fintype m] (A B : Matrix m n 𝕜) (i j : n)
+  条件: [有限类型 m] (A B : 矩阵 m n 𝕜) (i j : n)
   证明: by
   simp [PiLp.inner_apply, dotProduct, mul_apply', mul_comm]
 
@@ -4135,8 +4135,8 @@ theorem LinearMap.toMatrix_innerₛₗ_apply
   LinearMap.toMatrix_innerₛₗ_apply
 
 中文:
-定理 LinearMap.toMatrix_innerₛₗ_apply
-  结论: [Fintype n] [DecidableEq n] [Fintype m]
+定理 线性映射.toMatrix_innerₛₗ_apply
+  结论: [有限类型 n] [DecidableEq n] [有限类型 m]
   证明: by
   ext; simp [LinearMap.toMatrix_apply, vecMulVec_apply, OrthonormalBasis.repr_apply_apply, mul_comm]
 
@@ -4167,7 +4167,7 @@ theorem InnerProductSpace.toMatrix_rankOne
   rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [toLinearMap_toSpanSingleton]; rw [toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis]; rw [toMatrix_toSpanSingleton]; rw [toLinearMap_innerSL_apply]; rw [toMatrix_innerₛₗ_apply]; rw [Orthonor
 
 中文:
-定理 InnerProductSpace.toMatrix_rankOne
+定理 内积空间.toMatrix_rankOne
   结论: {𝕜 E F ι ι' : 类型} [RCLike 𝕜]
   证明: by
   have := Fintype.ofFinite ι
@@ -4195,8 +4195,8 @@ theorem InnerProductSpace.symm_toEuclideanLin_rankOne
   simp [toLpLin, toMatrix', ← Matrix.ext_iff, vecMulVec_apply, inner_single_right, mul_comm]
 
 中文:
-定理 InnerProductSpace.symm_toEuclideanLin_rankOne
-  结论: {𝕜 m n : 类型} [RCLike 𝕜] [Fintype m]
+定理 内积空间.symm_toEuclideanLin_rankOne
+  结论: {𝕜 m n : 类型} [RCLike 𝕜] [有限类型 m]
   证明: by
   simp [toLpLin, toMatrix', ← Matrix.ext_iff, vecMulVec_apply, inner_single_right, mul_comm]
 
@@ -4223,7 +4223,7 @@ definition orthonormalBasisSingleton
 
 中文:
 定义 orthonormalBasisSingleton
-  签名: : OrthonormalBasis ι 𝕜 E
+  签名: : 正交标准基 ι 𝕜 E
   定义体: (basisSingleton ι h v (by aesop)).toOrthonormalBasis (by simpa)
 
 @[simp]

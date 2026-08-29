@@ -36,7 +36,7 @@ definition circulantGraph
 
 中文:
 定义 circulantGraph
-  签名: {G : 类型} [AddGroup G] (s : Set G)
+  签名: {G : 类型} [加法群 G] (s : 集合 G)
   定义体: fromRel (· - · in s)
 
 Depends on / 依赖: fromRel
@@ -131,7 +131,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: G] [DecidablePred (· in s)] : DecidableRel (circulantGraph s).Adj
+  签名: G] [DecidablePred (· in s)] : DecidableRel (circulantGraph s).伴随
   定义体: fun _ _ => inferInstanceAs (Decidable (_ ∧ _))
 
 Depends on / 依赖: Decidable
@@ -149,7 +149,7 @@ theorem circulantGraph_adj_translate
 
 中文:
 定理 circulantGraph_adj_translate
-  条件: {s : Set G} {u v d : G}
+  条件: {s : 集合 G} {u v d : G}
   证明: by simp
 -/
 theorem circulantGraph_adj_translate {s : Set G} {u v d : G} :

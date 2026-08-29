@@ -58,9 +58,9 @@ class LeftPreLieRing
     - assoc_symm'((x y z : L)) : associator x y z = associator y x z
 
 中文:
-类 LeftPreLieRing
+类 LeftPreLie环
   参数: (L : 类型)
-  继承: NonUnitalNonAssocRing L
+  继承: 非幺非结合环 L
   公理与运算 (1 个):
     - assoc_symm'((x y z : L)) : associator x y z = associator y x z
 -/
@@ -81,9 +81,9 @@ class RightPreLieRing
     - assoc_symm'((x y z : L)) : associator x y z = associator x z y
 
 中文:
-类 RightPreLieRing
+类 RightPreLie环
   参数: (L : 类型)
-  继承: NonUnitalNonAssocRing L
+  继承: 非幺非结合环 L
   公理与运算 (1 个):
     - assoc_symm'((x y z : L)) : associator x y z = associator x z y
 -/
@@ -106,8 +106,8 @@ class LeftPreLieAlgebra
   (no additional axioms)
 
 中文:
-类 LeftPreLieAlgebra
-  参数: (L : 类型) [LeftPreLieRing L]
+类 LeftPreLie代数
+  参数: (L : 类型) [LeftPreLie环 L]
   (无附加公理)
 -/
 class LeftPreLieAlgebra (L : Type*) [LeftPreLieRing L] : Type _ extends
@@ -125,8 +125,8 @@ class RightPreLieAlgebra
   (no additional axioms)
 
 中文:
-类 RightPreLieAlgebra
-  参数: (L : 类型) [RightPreLieRing L]
+类 RightPreLie代数
+  参数: (L : 类型) [RightPreLie环 L]
   (无附加公理)
 -/
 class RightPreLieAlgebra (L : Type*) [RightPreLieRing L] : Type _ extends
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: RightPreLieRing Lᵐᵒᵖ
+  签名: RightPreLie环 Lᵐᵒᵖ
   定义体: by
     simp [assoc_symm]
 
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: RightPreLieAlgebra R Lᵐᵒᵖ
+  签名: RightPreLie代数 R Lᵐᵒᵖ
 -/
 instance : RightPreLieAlgebra R Lᵐᵒᵖ where
 
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: LeftPreLieRing Lᵐᵒᵖ
+  签名: LeftPreLie环 Lᵐᵒᵖ
   定义体: by
     simp [assoc_symm]
 
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: LeftPreLieAlgebra R Lᵐᵒᵖ
+  签名: LeftPreLie代数 R Lᵐᵒᵖ
 -/
 instance : LeftPreLieAlgebra R Lᵐᵒᵖ where
 

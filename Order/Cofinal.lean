@@ -44,7 +44,7 @@ theorem IsCofinal.of_isEmpty
 
 中文:
 定理 IsCofinal.of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
+  条件: [是空 α] {s : 集合 α}
   结论: IsCofinal s
   证明: fun a => isEmptyElim a
 
@@ -65,7 +65,7 @@ theorem isCofinal_empty_iff
 
 中文:
 定理 isCofinal_empty_iff
-  结论: IsCofinal (∅ : Set α) ↔ IsEmpty α
+  结论: IsCofinal (∅ : 集合 α) ↔ 是空 α
   证明: by
   refine ⟨fun h => ⟨fun a => ?_⟩, fun h => .of_isEmpty⟩
   simpa using h a
@@ -91,8 +91,8 @@ theorem IsCofinal.nonempty
 
 中文:
 定理 IsCofinal.nonempty
-  条件: [Nonempty α] {s : Set α} (hs : IsCofinal s)
-  结论: s.Nonempty
+  条件: [非空 α] {s : 集合 α} (hs : IsCofinal s)
+  结论: s.非空
   证明: by
   inhabit α
   exact (hs default).imp fun _ => And.left
@@ -140,7 +140,7 @@ theorem IsCofinal.singleton_top
 
 中文:
 定理 IsCofinal.singleton_top
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   结论: IsCofinal {(⊤ : α)}
   证明: by
   simp
@@ -162,7 +162,7 @@ theorem IsCofinal.mono
 
 中文:
 定理 IsCofinal.mono
-  条件: {s t : Set α} (h : s subseteq t) (hs : IsCofinal s)
+  条件: {s t : 集合 α} (h : s subseteq t) (hs : IsCofinal s)
   结论: IsCofinal t
   证明: by
   intro a
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited {s : Set α // IsCofinal s}
+  签名: 可居 {s : 集合 α // IsCofinal s}
   定义体: ⟨_, .univ⟩
 -/
 instance : Inhabited {s : Set α // IsCofinal s} :=
@@ -227,8 +227,8 @@ theorem IsCofinal.image
   exact ⟨_, mem_image_of_mem f hc, hb.trans (hf hc')⟩
 
 中文:
-定理 IsCofinal.image
-  结论: {f : α -> β} {s : Set α} (hs : IsCofinal s)
+定理 IsCofinal.像
+  结论: {f : α -> β} {s : 集合 α} (hs : IsCofinal s)
   证明: by
   intro a
   obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' a
@@ -254,7 +254,7 @@ theorem IsCofinal.trans
 
 中文:
 定理 IsCofinal.trans
-  条件: {s : Set α} {t : Set s} (hs : IsCofinal s) (ht : IsCofinal t)
+  条件: {s : 集合 α} {t : 集合 s} (hs : IsCofinal s) (ht : IsCofinal t)
   证明: ht.image (Subtype.mono_coe _) (by simpa)
 
 Depends on / 依赖: Subtype, Subtype.mono_coe, ht.image, mono_coe
@@ -323,7 +323,7 @@ theorem OrderIso.map_isCofinal
 
 中文:
 定理 OrderIso.map_isCofinal
-  条件: (e : α ≃o β) {s : Set α} (hs : IsCofinal s)
+  条件: (e : α ≃o β) {s : 集合 α} (hs : IsCofinal s)
   结论: IsCofinal (e '' s)
   证明: e.symm.to_galoisConnection.map_isCofinal hs
 
@@ -349,7 +349,7 @@ alias OrderIso.map_cofinal := OrderIso.map_isCofinal
 
 中文:
 定理 OrderIso.map_isCofinal_iff
-  条件: (e : α ≃o β) {s : Set α}
+  条件: (e : α ≃o β) {s : 集合 α}
   结论: IsCofinal (e '' s) ↔ IsCofinal s
   证明: ⟨fun hs => by simpa using e.symm.map_isCofinal hs, e.map_isCofinal⟩
 
@@ -375,7 +375,7 @@ theorem isCofinal_iff_iUnion_Iic_eq_univ
 
 中文:
 定理 isCofinal_iff_iUnion_Iic_eq_univ
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   simp [IsCofinal, eq_univ_iff_forall]
 
@@ -404,7 +404,7 @@ theorem isCofinal_iff_iUnion_Iio_eq_univ
 
 中文:
 定理 isCofinal_iff_iUnion_Iio_eq_univ
-  条件: [NoMaxOrder α] {s : Set α}
+  条件: [NoMax序 α] {s : 集合 α}
   证明: by
     rw [isCofinal_iff_iUnion_Iic_eq_univ]; rw [← univ_subset_iff]; rw [← hs]
     gcongr
@@ -449,7 +449,7 @@ theorem IsCofinal.mem_of_isMax
 
 中文:
 定理 IsCofinal.mem_of_isMax
-  条件: {s : Set α} {a : α} (ha : IsMax a) (hs : IsCofinal s)
+  条件: {s : 集合 α} {a : α} (ha : IsMax a) (hs : IsCofinal s)
   结论: a in s
   证明: by
   obtain ⟨b, hb, hb'⟩ := hs a
@@ -474,7 +474,7 @@ theorem IsCofinal.top_mem
 
 中文:
 定理 IsCofinal.top_mem
-  条件: [OrderTop α] {s : Set α} (hs : IsCofinal s)
+  条件: [有顶序 α] {s : 集合 α} (hs : IsCofinal s)
   结论: ⊤ in s
   证明: hs.mem_of_isMax isMax_top
 
@@ -497,7 +497,7 @@ theorem isCofinal_iff_top_mem
 
 中文:
 定理 isCofinal_iff_top_mem
-  条件: [OrderTop α] {s : Set α}
+  条件: [有顶序 α] {s : 集合 α}
   结论: IsCofinal s ↔ ⊤ in s
   证明: ⟨IsCofinal.top_mem, fun hs _ => ⟨⊤, hs, le_top⟩⟩
 
@@ -523,7 +523,7 @@ theorem not_isCofinal_iff
 
 中文:
 定理 not_isCofinal_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: ¬ IsCofinal s ↔ 存在 x, 对任意 y in s, y < x
   证明: by
   simp [IsCofinal]
@@ -547,7 +547,7 @@ theorem BddAbove.of_not_isCofinal
 
 中文:
 定理 BddAbove.of_not_isCofinal
-  条件: {s : Set α} (h : ¬ IsCofinal s)
+  条件: {s : 集合 α} (h : ¬ IsCofinal s)
   结论: BddAbove s
   证明: by
   rw [not_isCofinal_iff] at h
@@ -574,7 +574,7 @@ theorem IsCofinal.of_not_bddAbove
 
 中文:
 定理 IsCofinal.of_not_bddAbove
-  条件: {s : Set α} (h : ¬ BddAbove s)
+  条件: {s : 集合 α} (h : ¬ BddAbove s)
   结论: IsCofinal s
   证明: by
   contrapose h
@@ -602,7 +602,7 @@ theorem not_isCofinal_iff_bddAbove
 
 中文:
 定理 not_isCofinal_iff_bddAbove
-  条件: [NoMaxOrder α] {s : Set α}
+  条件: [NoMax序 α] {s : 集合 α}
   结论: ¬ IsCofinal s ↔ BddAbove s
   证明: by
   use .of_not_isCofinal
@@ -631,7 +631,7 @@ theorem not_bddAbove_iff_isCofinal
 
 中文:
 定理 not_bddAbove_iff_isCofinal
-  条件: [NoMaxOrder α] {s : Set α}
+  条件: [NoMax序 α] {s : 集合 α}
   结论: ¬ BddAbove s ↔ IsCofinal s
   证明: not_iff_comm.1 not_isCofinal_iff_bddAbove
 
@@ -657,7 +657,7 @@ theorem isCofinal_setOfPred_imp_lt
 
 中文:
 定理 isCofinal_setOfPred_imp_lt
-  条件: (r : α -> α -> 命题) [h : IsWellFounded α r]
+  条件: (r : α -> α -> 命题) [h : 是良基 α r]
   证明: by
   intro a
   obtain ⟨b, hb, hb'⟩ := h.wf.has_min (Set.Ici a) Set.nonempty_Ici
@@ -689,7 +689,7 @@ theorem isCofinal_range_of_strictMono
 
 中文:
 定理 isCofinal_range_of_strictMono
-  条件: [WellFoundedLT α] {f : α -> α} (hf : StrictMono f)
+  条件: [WellFoundedLT α] {f : α -> α} (hf : 严格递增 f)
   证明: fun x => ⟨_, ⟨x, rfl⟩, hf.le_apply⟩
 
 Depends on / 依赖: hf.le_apply, le_apply

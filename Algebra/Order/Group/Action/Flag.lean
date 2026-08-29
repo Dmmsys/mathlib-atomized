@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (α ≃o α) (Flag α)
+  签名: 标量乘法 (α ≃o α) (旗 α)
   定义体: map e
 
 @[simp, norm_cast]
@@ -55,8 +55,8 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (e : α ≃o α) (s : Flag α)
-  结论: (↑(e • s) : Set α) = e • s
+  条件: (e : α ≃o α) (s : 旗 α)
+  结论: (↑(e • s) : 集合 α) = e • s
   证明: rfl
 -/
 lemma coe_smul (e : α ≃o α) (s : Flag α) : (↑(e • s) : Set α) = e • s := rfl
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (α ≃o α) (Flag α)
+  签名: 乘法作用 (α ≃o α) (旗 α)
   定义体: SetLike.coe_injective.mulAction _ coe_smul
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.mulAction, coe_injective, coe_smul, mulAction

@@ -32,8 +32,8 @@ theorem Measurable.inner
 @[fun_prop]
 
 中文:
-定理 Measurable.inner
-  结论: {_ : MeasurableSpace α} [MeasurableSpace E] [OpensMeasurableSpace E]
+定理 可测.inner
+  结论: {_ : 可测空间 α} [可测空间 E] [OpensMeasurable空间 E]
   证明: Continuous.measurable2 continuous_inner hf hg
 
 @[fun_prop]
@@ -57,8 +57,8 @@ theorem Measurable.const_inner
 @[fun_prop]
 
 中文:
-定理 Measurable.const_inner
-  结论: {_ : MeasurableSpace α} [MeasurableSpace E] [OpensMeasurableSpace E]
+定理 可测.const_inner
+  结论: {_ : 可测空间 α} [可测空间 E] [OpensMeasurable空间 E]
   证明: Measurable.inner measurable_const hf
 
 @[fun_prop]
@@ -82,8 +82,8 @@ theorem Measurable.inner_const
 @[fun_prop]
 
 中文:
-定理 Measurable.inner_const
-  结论: {_ : MeasurableSpace α} [MeasurableSpace E] [OpensMeasurableSpace E]
+定理 可测.inner_const
+  结论: {_ : 可测空间 α} [可测空间 E] [OpensMeasurable空间 E]
   证明: Measurable.inner hf measurable_const
 
 @[fun_prop]
@@ -108,8 +108,8 @@ theorem AEMeasurable.inner
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.inner
-  结论: {m : MeasurableSpace α} [MeasurableSpace E] [OpensMeasurableSpace E]
+定理 几乎处处可测.inner
+  结论: {m : 可测空间 α} [可测空间 E] [OpensMeasurable空间 E]
   证明: by
   fun_prop
 
@@ -134,8 +134,8 @@ theorem AEMeasurable.const_inner
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.const_inner
-  结论: {m : MeasurableSpace α} [MeasurableSpace E]
+定理 几乎处处可测.const_inner
+  结论: {m : 可测空间 α} [可测空间 E]
   证明: AEMeasurable.inner aemeasurable_const hf
 
 @[fun_prop]
@@ -158,8 +158,8 @@ theorem AEMeasurable.inner_const
   proof: AEMeasurable.inner hf aemeasurable_const
 
 中文:
-定理 AEMeasurable.inner_const
-  结论: {m : MeasurableSpace α} [MeasurableSpace E]
+定理 几乎处处可测.inner_const
+  结论: {m : 可测空间 α} [可测空间 E]
   证明: AEMeasurable.inner hf aemeasurable_const
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.inner, aemeasurable_const

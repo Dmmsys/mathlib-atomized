@@ -60,7 +60,7 @@ theorem odd_of_centralizer_le_alternatingGroup
 
 中文:
 定理 odd_of_centralizer_le_alternatingGroup
-  结论: (h : Subgroup.centralizer {g} <= alternatingGroup α)
+  结论: (h : 子群.centralizer {g} <= alternatingGroup α)
   证明: by
   rw [cycleType_def g]; rw [Multiset.mem_map] at hi
   obtain ⟨c, hc, rfl⟩ := hi
@@ -273,7 +273,7 @@ theorem card_le_of_centralizer_le_alternating
 
 中文:
 定理 card_le_of_centralizer_le_alternating
-  条件: (h : Subgroup.centralizer {g} <= alternatingGroup α)
+  条件: (h : 子群.centralizer {g} <= alternatingGroup α)
   证明: by
   by_contra! hm
   replace hm : 2 + g.cycleType.sum <= Fintype.card α := by lia

@@ -63,7 +63,7 @@ theorem Icc_mul_Icc_subset'
 中文:
 定理 Icc_mul_Icc_subset'
   条件: (a b c d : α)
-  结论: Icc a b * Icc c d subseteq Icc (a * c) (b * d)
+  结论: 闭区间 a b * 闭区间 c d subseteq 闭区间 (a * c) (b * d)
   证明: by
   rintro x ⟨y, ⟨hya, hyb⟩, z, ⟨hzc, hzd⟩, rfl⟩
   exact ⟨mul_le_mul' hya hzc, mul_le_mul' hyb hzd⟩
@@ -93,7 +93,7 @@ theorem Iic_mul_Iic_subset'
 中文:
 定理 Iic_mul_Iic_subset'
   条件: (a b : α)
-  结论: Iic a * Iic b subseteq Iic (a * b)
+  结论: 左无界右闭区间 a * 左无界右闭区间 b subseteq 左无界右闭区间 (a * b)
   证明: by
   rintro x ⟨y, hya, z, hzb, rfl⟩
   exact mul_le_mul' hya hzb
@@ -121,7 +121,7 @@ theorem Ici_mul_Ici_subset'
 中文:
 定理 Ici_mul_Ici_subset'
   条件: (a b : α)
-  结论: Ici a * Ici b subseteq Ici (a * b)
+  结论: 左闭右无界区间 a * 左闭右无界区间 b subseteq 左闭右无界区间 (a * b)
   证明: by
   rintro x ⟨y, hya, z, hzb, rfl⟩
   exact mul_le_mul' hya hzb
@@ -157,7 +157,7 @@ theorem Icc_mul_Ico_subset'
 中文:
 定理 Icc_mul_Ico_subset'
   条件: (a b c d : α)
-  结论: Icc a b * Ico c d subseteq Ico (a * c) (b * d)
+  结论: 闭区间 a b * 左闭右开区间 c d subseteq 左闭右开区间 (a * c) (b * d)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   have := mulRightMono_of_mulRightStrictMono α
@@ -193,7 +193,7 @@ theorem Ico_mul_Icc_subset'
 中文:
 定理 Ico_mul_Icc_subset'
   条件: (a b c d : α)
-  结论: Ico a b * Icc c d subseteq Ico (a * c) (b * d)
+  结论: 左闭右开区间 a b * 闭区间 c d subseteq 左闭右开区间 (a * c) (b * d)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   have := mulRightMono_of_mulRightStrictMono α
@@ -229,7 +229,7 @@ theorem Ioc_mul_Ico_subset'
 中文:
 定理 Ioc_mul_Ico_subset'
   条件: (a b c d : α)
-  结论: Ioc a b * Ico c d subseteq Ioo (a * c) (b * d)
+  结论: 左开右闭区间 a b * 左闭右开区间 c d subseteq 开区间 (a * c) (b * d)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   have := mulRightMono_of_mulRightStrictMono α
@@ -265,7 +265,7 @@ theorem Ico_mul_Ioc_subset'
 中文:
 定理 Ico_mul_Ioc_subset'
   条件: (a b c d : α)
-  结论: Ico a b * Ioc c d subseteq Ioo (a * c) (b * d)
+  结论: 左闭右开区间 a b * 左开右闭区间 c d subseteq 开区间 (a * c) (b * d)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   have := mulRightMono_of_mulRightStrictMono α
@@ -300,7 +300,7 @@ theorem Iic_mul_Iio_subset'
 中文:
 定理 Iic_mul_Iio_subset'
   条件: (a b : α)
-  结论: Iic a * Iio b subseteq Iio (a * b)
+  结论: 左无界右闭区间 a * 左无界右开区间 b subseteq 左无界右开区间 (a * b)
   证明: by
   have := mulRightMono_of_mulRightStrictMono α
   rintro x ⟨y, hya, z, hzb, rfl⟩
@@ -333,7 +333,7 @@ theorem Iio_mul_Iic_subset'
 中文:
 定理 Iio_mul_Iic_subset'
   条件: (a b : α)
-  结论: Iio a * Iic b subseteq Iio (a * b)
+  结论: 左无界右开区间 a * 左无界右闭区间 b subseteq 左无界右开区间 (a * b)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   rintro x ⟨y, hya, z, hzb, rfl⟩
@@ -366,7 +366,7 @@ theorem Ioi_mul_Ici_subset'
 中文:
 定理 Ioi_mul_Ici_subset'
   条件: (a b : α)
-  结论: Ioi a * Ici b subseteq Ioi (a * b)
+  结论: 左开右无界区间 a * 左闭右无界区间 b subseteq 左开右无界区间 (a * b)
   证明: by
   have := mulLeftMono_of_mulLeftStrictMono α
   rintro x ⟨y, hya, z, hzb, rfl⟩
@@ -397,7 +397,7 @@ theorem Ici_mul_Ioi_subset'
 中文:
 定理 Ici_mul_Ioi_subset'
   条件: (a b : α)
-  结论: Ici a * Ioi b subseteq Ioi (a * b)
+  结论: 左闭右无界区间 a * 左开右无界区间 b subseteq 左开右无界区间 (a * b)
   证明: by
   have := mulRightMono_of_mulRightStrictMono α
   rintro x ⟨y, hya, z, hzb, rfl⟩
@@ -441,7 +441,7 @@ lemma smul_Icc
 中文:
 引理 smul_Icc
   条件: (a b c : α)
-  结论: a • Icc b c = Icc (a * b) (a * c)
+  结论: a • 闭区间 b c = 闭区间 (a * b) (a * c)
   证明: by
   ext x
   constructor
@@ -486,7 +486,7 @@ lemma Icc_mul_Icc
 中文:
 引理 Icc_mul_Icc
   条件: (hab : a <= b) (hcd : c <= d)
-  结论: Icc a b * Icc c d = Icc (a * c) (b * d)
+  结论: 闭区间 a b * 闭区间 c d = 闭区间 (a * c) (b * d)
   证明: by
   refine (Icc_mul_Icc_subset' _ _ _ _).antisymm fun x ⟨hacx, hxbd⟩ => ?_
   obtain hxbc | hbcx := le_total x (b * c)
@@ -523,7 +523,7 @@ lemma inv_Ici
 中文:
 引理 inv_Ici
   条件: (a : α)
-  结论: (Ici a)⁻¹ = Iic a⁻¹
+  结论: (左闭右无界区间 a)⁻¹ = 左无界右闭区间 a⁻¹
   证明: ext fun _x => le_inv'
 -/
 @[to_additive (attr := simp)] lemma inv_Ici (a : α) : (Ici a)⁻¹ = Iic a⁻¹ := ext fun _x => le_inv'
@@ -539,7 +539,7 @@ lemma inv_Iic
 中文:
 引理 inv_Iic
   条件: (a : α)
-  结论: (Iic a)⁻¹ = Ici a⁻¹
+  结论: (左无界右闭区间 a)⁻¹ = 左闭右无界区间 a⁻¹
   证明: ext fun _x => inv_le'
 -/
 @[to_additive (attr := simp)] lemma inv_Iic (a : α) : (Iic a)⁻¹ = Ici a⁻¹ := ext fun _x => inv_le'
@@ -555,7 +555,7 @@ lemma inv_Ioi
 中文:
 引理 inv_Ioi
   条件: (a : α)
-  结论: (Ioi a)⁻¹ = Iio a⁻¹
+  结论: (左开右无界区间 a)⁻¹ = 左无界右开区间 a⁻¹
   证明: ext fun _x => lt_inv'
 -/
 @[to_additive (attr := simp)] lemma inv_Ioi (a : α) : (Ioi a)⁻¹ = Iio a⁻¹ := ext fun _x => lt_inv'
@@ -573,7 +573,7 @@ lemma inv_Iio
 中文:
 引理 inv_Iio
   条件: (a : α)
-  结论: (Iio a)⁻¹ = Ioi a⁻¹
+  结论: (左无界右开区间 a)⁻¹ = 左开右无界区间 a⁻¹
   证明: ext fun _x => inv_lt'
 
 @[to_additive (attr := simp)]
@@ -595,7 +595,7 @@ lemma inv_Icc
 中文:
 引理 inv_Icc
   条件: (a b : α)
-  结论: (Icc a b)⁻¹ = Icc b⁻¹ a⁻¹
+  结论: (闭区间 a b)⁻¹ = 闭区间 b⁻¹ a⁻¹
   证明: by simp [← Ici_inter_Iic, inter_comm]
 
 @[to_additive (attr := simp)]
@@ -620,7 +620,7 @@ lemma inv_Ico
 中文:
 引理 inv_Ico
   条件: (a b : α)
-  结论: (Ico a b)⁻¹ = Ioc b⁻¹ a⁻¹
+  结论: (左闭右开区间 a b)⁻¹ = 左开右闭区间 b⁻¹ a⁻¹
   证明: by
   simp [← Ici_inter_Iio, ← Ioi_inter_Iic, inter_comm]
 
@@ -647,7 +647,7 @@ lemma inv_Ioc
 中文:
 引理 inv_Ioc
   条件: (a b : α)
-  结论: (Ioc a b)⁻¹ = Ico b⁻¹ a⁻¹
+  结论: (左开右闭区间 a b)⁻¹ = 左闭右开区间 b⁻¹ a⁻¹
   证明: by
   simp [← Ioi_inter_Iic, ← Ici_inter_Iio, inter_comm]
 
@@ -671,7 +671,7 @@ lemma inv_Ioo
 中文:
 引理 inv_Ioo
   条件: (a b : α)
-  结论: (Ioo a b)⁻¹ = Ioo b⁻¹ a⁻¹
+  结论: (开区间 a b)⁻¹ = 开区间 b⁻¹ a⁻¹
   证明: by simp [← Ioi_inter_Iio, inter_comm]
 
 Depends on / 依赖: Ioi_inter_Iio, inter_comm
@@ -695,7 +695,7 @@ theorem preimage_const_mul_Ici
 
 中文:
 定理 preimage_const_mul_Ici
-  结论: (fun x => a * x) ⁻¹' Ici b = Ici (b / a)
+  结论: (fun x => a * x) ⁻¹' 左闭右无界区间 b = 左闭右无界区间 (b / a)
   证明: ext fun _x => div_le_iff_le_mul'.symm
 
 @[to_additive (attr := simp)]
@@ -718,7 +718,7 @@ theorem preimage_const_mul_Ioi
 
 中文:
 定理 preimage_const_mul_Ioi
-  结论: (fun x => a * x) ⁻¹' Ioi b = Ioi (b / a)
+  结论: (fun x => a * x) ⁻¹' 左开右无界区间 b = 左开右无界区间 (b / a)
   证明: ext fun _x => div_lt_iff_lt_mul'.symm
 
 @[to_additive (attr := simp)]
@@ -741,7 +741,7 @@ theorem preimage_const_mul_Iic
 
 中文:
 定理 preimage_const_mul_Iic
-  结论: (fun x => a * x) ⁻¹' Iic b = Iic (b / a)
+  结论: (fun x => a * x) ⁻¹' 左无界右闭区间 b = 左无界右闭区间 (b / a)
   证明: ext fun _x => le_div_iff_mul_le'.symm
 
 @[to_additive (attr := simp)]
@@ -764,7 +764,7 @@ theorem preimage_const_mul_Iio
 
 中文:
 定理 preimage_const_mul_Iio
-  结论: (fun x => a * x) ⁻¹' Iio b = Iio (b / a)
+  结论: (fun x => a * x) ⁻¹' 左无界右开区间 b = 左无界右开区间 (b / a)
   证明: ext fun _x => lt_div_iff_mul_lt'.symm
 
 @[to_additive (attr := simp)]
@@ -788,7 +788,7 @@ theorem preimage_const_mul_Icc
 
 中文:
 定理 preimage_const_mul_Icc
-  结论: (fun x => a * x) ⁻¹' Icc b c = Icc (b / a) (c / a)
+  结论: (fun x => a * x) ⁻¹' 闭区间 b c = 闭区间 (b / a) (c / a)
   证明: by
   simp [← Ici_inter_Iic]
 
@@ -813,7 +813,7 @@ theorem preimage_const_mul_Ico
 
 中文:
 定理 preimage_const_mul_Ico
-  结论: (fun x => a * x) ⁻¹' Ico b c = Ico (b / a) (c / a)
+  结论: (fun x => a * x) ⁻¹' 左闭右开区间 b c = 左闭右开区间 (b / a) (c / a)
   证明: by
   simp [← Ici_inter_Iio]
 
@@ -838,7 +838,7 @@ theorem preimage_const_mul_Ioc
 
 中文:
 定理 preimage_const_mul_Ioc
-  结论: (fun x => a * x) ⁻¹' Ioc b c = Ioc (b / a) (c / a)
+  结论: (fun x => a * x) ⁻¹' 左开右闭区间 b c = 左开右闭区间 (b / a) (c / a)
   证明: by
   simp [← Ioi_inter_Iic]
 
@@ -861,7 +861,7 @@ theorem preimage_const_mul_Ioo
 
 中文:
 定理 preimage_const_mul_Ioo
-  结论: (fun x => a * x) ⁻¹' Ioo b c = Ioo (b / a) (c / a)
+  结论: (fun x => a * x) ⁻¹' 开区间 b c = 开区间 (b / a) (c / a)
   证明: by
   simp [← Ioi_inter_Iio]
 
@@ -887,7 +887,7 @@ theorem preimage_mul_const_Ici
 
 中文:
 定理 preimage_mul_const_Ici
-  结论: (fun x => x * a) ⁻¹' Ici b = Ici (b / a)
+  结论: (fun x => x * a) ⁻¹' 左闭右无界区间 b = 左闭右无界区间 (b / a)
   证明: ext fun _x => div_le_iff_le_mul.symm
 
 @[to_additive (attr := simp)]
@@ -910,7 +910,7 @@ theorem preimage_mul_const_Ioi
 
 中文:
 定理 preimage_mul_const_Ioi
-  结论: (fun x => x * a) ⁻¹' Ioi b = Ioi (b / a)
+  结论: (fun x => x * a) ⁻¹' 左开右无界区间 b = 左开右无界区间 (b / a)
   证明: ext fun _x => div_lt_iff_lt_mul.symm
 
 @[to_additive (attr := simp)]
@@ -933,7 +933,7 @@ theorem preimage_mul_const_Iic
 
 中文:
 定理 preimage_mul_const_Iic
-  结论: (fun x => x * a) ⁻¹' Iic b = Iic (b / a)
+  结论: (fun x => x * a) ⁻¹' 左无界右闭区间 b = 左无界右闭区间 (b / a)
   证明: ext fun _x => le_div_iff_mul_le.symm
 
 @[to_additive (attr := simp)]
@@ -956,7 +956,7 @@ theorem preimage_mul_const_Iio
 
 中文:
 定理 preimage_mul_const_Iio
-  结论: (fun x => x * a) ⁻¹' Iio b = Iio (b / a)
+  结论: (fun x => x * a) ⁻¹' 左无界右开区间 b = 左无界右开区间 (b / a)
   证明: ext fun _x => lt_div_iff_mul_lt.symm
 
 @[to_additive (attr := simp)]
@@ -980,7 +980,7 @@ theorem preimage_mul_const_Icc
 
 中文:
 定理 preimage_mul_const_Icc
-  结论: (fun x => x * a) ⁻¹' Icc b c = Icc (b / a) (c / a)
+  结论: (fun x => x * a) ⁻¹' 闭区间 b c = 闭区间 (b / a) (c / a)
   证明: by
   simp [← Ici_inter_Iic]
 
@@ -1005,7 +1005,7 @@ theorem preimage_mul_const_Ico
 
 中文:
 定理 preimage_mul_const_Ico
-  结论: (fun x => x * a) ⁻¹' Ico b c = Ico (b / a) (c / a)
+  结论: (fun x => x * a) ⁻¹' 左闭右开区间 b c = 左闭右开区间 (b / a) (c / a)
   证明: by
   simp [← Ici_inter_Iio]
 
@@ -1030,7 +1030,7 @@ theorem preimage_mul_const_Ioc
 
 中文:
 定理 preimage_mul_const_Ioc
-  结论: (fun x => x * a) ⁻¹' Ioc b c = Ioc (b / a) (c / a)
+  结论: (fun x => x * a) ⁻¹' 左开右闭区间 b c = 左开右闭区间 (b / a) (c / a)
   证明: by
   simp [← Ioi_inter_Iic]
 
@@ -1053,7 +1053,7 @@ theorem preimage_mul_const_Ioo
 
 中文:
 定理 preimage_mul_const_Ioo
-  结论: (fun x => x * a) ⁻¹' Ioo b c = Ioo (b / a) (c / a)
+  结论: (fun x => x * a) ⁻¹' 开区间 b c = 开区间 (b / a) (c / a)
   证明: by
   simp [← Ioi_inter_Iio]
 
@@ -1080,7 +1080,7 @@ theorem preimage_div_const_Ici
 
 中文:
 定理 preimage_div_const_Ici
-  结论: (fun x => x / a) ⁻¹' Ici b = Ici (b * a)
+  结论: (fun x => x / a) ⁻¹' 左闭右无界区间 b = 左闭右无界区间 (b * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1105,7 +1105,7 @@ theorem preimage_div_const_Ioi
 
 中文:
 定理 preimage_div_const_Ioi
-  结论: (fun x => x / a) ⁻¹' Ioi b = Ioi (b * a)
+  结论: (fun x => x / a) ⁻¹' 左开右无界区间 b = 左开右无界区间 (b * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1130,7 +1130,7 @@ theorem preimage_div_const_Iic
 
 中文:
 定理 preimage_div_const_Iic
-  结论: (fun x => x / a) ⁻¹' Iic b = Iic (b * a)
+  结论: (fun x => x / a) ⁻¹' 左无界右闭区间 b = 左无界右闭区间 (b * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1155,7 +1155,7 @@ theorem preimage_div_const_Iio
 
 中文:
 定理 preimage_div_const_Iio
-  结论: (fun x => x / a) ⁻¹' Iio b = Iio (b * a)
+  结论: (fun x => x / a) ⁻¹' 左无界右开区间 b = 左无界右开区间 (b * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1180,7 +1180,7 @@ theorem preimage_div_const_Icc
 
 中文:
 定理 preimage_div_const_Icc
-  结论: (fun x => x / a) ⁻¹' Icc b c = Icc (b * a) (c * a)
+  结论: (fun x => x / a) ⁻¹' 闭区间 b c = 闭区间 (b * a) (c * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1205,7 +1205,7 @@ theorem preimage_div_const_Ico
 
 中文:
 定理 preimage_div_const_Ico
-  结论: (fun x => x / a) ⁻¹' Ico b c = Ico (b * a) (c * a)
+  结论: (fun x => x / a) ⁻¹' 左闭右开区间 b c = 左闭右开区间 (b * a) (c * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1230,7 +1230,7 @@ theorem preimage_div_const_Ioc
 
 中文:
 定理 preimage_div_const_Ioc
-  结论: (fun x => x / a) ⁻¹' Ioc b c = Ioc (b * a) (c * a)
+  结论: (fun x => x / a) ⁻¹' 左开右闭区间 b c = 左开右闭区间 (b * a) (c * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1253,7 +1253,7 @@ theorem preimage_div_const_Ioo
 
 中文:
 定理 preimage_div_const_Ioo
-  结论: (fun x => x / a) ⁻¹' Ioo b c = Ioo (b * a) (c * a)
+  结论: (fun x => x / a) ⁻¹' 开区间 b c = 开区间 (b * a) (c * a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1279,7 +1279,7 @@ theorem preimage_const_div_Ici
 
 中文:
 定理 preimage_const_div_Ici
-  结论: (fun x => a / x) ⁻¹' Ici b = Iic (a / b)
+  结论: (fun x => a / x) ⁻¹' 左闭右无界区间 b = 左无界右闭区间 (a / b)
   证明: ext fun _x => le_div_comm
 
 @[to_additive (attr := simp)]
@@ -1302,7 +1302,7 @@ theorem preimage_const_div_Iic
 
 中文:
 定理 preimage_const_div_Iic
-  结论: (fun x => a / x) ⁻¹' Iic b = Ici (a / b)
+  结论: (fun x => a / x) ⁻¹' 左无界右闭区间 b = 左闭右无界区间 (a / b)
   证明: ext fun _x => div_le_comm
 
 @[to_additive (attr := simp)]
@@ -1325,7 +1325,7 @@ theorem preimage_const_div_Ioi
 
 中文:
 定理 preimage_const_div_Ioi
-  结论: (fun x => a / x) ⁻¹' Ioi b = Iio (a / b)
+  结论: (fun x => a / x) ⁻¹' 左开右无界区间 b = 左无界右开区间 (a / b)
   证明: ext fun _x => lt_div_comm
 
 @[to_additive (attr := simp)]
@@ -1348,7 +1348,7 @@ theorem preimage_const_div_Iio
 
 中文:
 定理 preimage_const_div_Iio
-  结论: (fun x => a / x) ⁻¹' Iio b = Ioi (a / b)
+  结论: (fun x => a / x) ⁻¹' 左无界右开区间 b = 左开右无界区间 (a / b)
   证明: ext fun _x => div_lt_comm
 
 @[to_additive (attr := simp)]
@@ -1372,7 +1372,7 @@ theorem preimage_const_div_Icc
 
 中文:
 定理 preimage_const_div_Icc
-  结论: (fun x => a / x) ⁻¹' Icc b c = Icc (a / c) (a / b)
+  结论: (fun x => a / x) ⁻¹' 闭区间 b c = 闭区间 (a / c) (a / b)
   证明: by
   simp [← Ici_inter_Iic, inter_comm]
 
@@ -1397,7 +1397,7 @@ theorem preimage_const_div_Ico
 
 中文:
 定理 preimage_const_div_Ico
-  结论: (fun x => a / x) ⁻¹' Ico b c = Ioc (a / c) (a / b)
+  结论: (fun x => a / x) ⁻¹' 左闭右开区间 b c = 左开右闭区间 (a / c) (a / b)
   证明: by
   simp [← Ioi_inter_Iic, ← Ici_inter_Iio, inter_comm]
 
@@ -1422,7 +1422,7 @@ theorem preimage_const_div_Ioc
 
 中文:
 定理 preimage_const_div_Ioc
-  结论: (fun x => a / x) ⁻¹' Ioc b c = Ico (a / c) (a / b)
+  结论: (fun x => a / x) ⁻¹' 左开右闭区间 b c = 左闭右开区间 (a / c) (a / b)
   证明: by
   simp [← Ioi_inter_Iic, ← Ici_inter_Iio, inter_comm]
 
@@ -1445,7 +1445,7 @@ theorem preimage_const_div_Ioo
 
 中文:
 定理 preimage_const_div_Ioo
-  结论: (fun x => a / x) ⁻¹' Ioo b c = Ioo (a / c) (a / b)
+  结论: (fun x => a / x) ⁻¹' 开区间 b c = 开区间 (a / c) (a / b)
   证明: by
   simp [← Ioi_inter_Iio, inter_comm]
 
@@ -1470,7 +1470,7 @@ theorem image_const_mul_Iic
 
 中文:
 定理 image_const_mul_Iic
-  结论: (fun x => a * x) '' Iic b = Iic (a * b)
+  结论: (fun x => a * x) '' 左无界右闭区间 b = 左无界右闭区间 (a * b)
   证明: by simp [mul_comm]
 
 Depends on / 依赖: mul_comm
@@ -1489,7 +1489,7 @@ theorem image_const_mul_Iio
 
 中文:
 定理 image_const_mul_Iio
-  结论: (fun x => a * x) '' Iio b = Iio (a * b)
+  结论: (fun x => a * x) '' 左无界右开区间 b = 左无界右开区间 (a * b)
   证明: by simp [mul_comm]
 
 Depends on / 依赖: mul_comm
@@ -1513,7 +1513,7 @@ theorem image_mul_const_Iic
 
 中文:
 定理 image_mul_const_Iic
-  结论: (fun x => x * a) '' Iic b = Iic (b * a)
+  结论: (fun x => x * a) '' 左无界右闭区间 b = 左无界右闭区间 (b * a)
   证明: by simp
 
 @[to_additive]
@@ -1531,7 +1531,7 @@ theorem image_mul_const_Iio
 
 中文:
 定理 image_mul_const_Iio
-  结论: (fun x => x * a) '' Iio b = Iio (b * a)
+  结论: (fun x => x * a) '' 左无界右开区间 b = 左无界右开区间 (b * a)
   证明: by simp
 -/
 theorem image_mul_const_Iio : (fun x => x * a) '' Iio b = Iio (b * a) := by simp
@@ -1554,7 +1554,7 @@ theorem image_inv_Ici
 
 中文:
 定理 image_inv_Ici
-  结论: Inv.inv '' Ici a = Iic (a⁻¹)
+  结论: 取逆.inv '' 左闭右无界区间 a = 左无界右闭区间 (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1574,7 +1574,7 @@ theorem image_inv_Iic
 
 中文:
 定理 image_inv_Iic
-  结论: Inv.inv '' Iic a = Ici (a⁻¹)
+  结论: 取逆.inv '' 左无界右闭区间 a = 左闭右无界区间 (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1594,7 +1594,7 @@ theorem image_inv_Ioi
 
 中文:
 定理 image_inv_Ioi
-  结论: Inv.inv '' Ioi a = Iio (a⁻¹)
+  结论: 取逆.inv '' 左开右无界区间 a = 左无界右开区间 (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1614,7 +1614,7 @@ theorem image_inv_Iio
 
 中文:
 定理 image_inv_Iio
-  结论: Inv.inv '' Iio a = Ioi (a⁻¹)
+  结论: 取逆.inv '' 左无界右开区间 a = 左开右无界区间 (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1634,7 +1634,7 @@ theorem image_inv_Icc
 
 中文:
 定理 image_inv_Icc
-  结论: Inv.inv '' Icc a b = Icc (b⁻¹) (a⁻¹)
+  结论: 取逆.inv '' 闭区间 a b = 闭区间 (b⁻¹) (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1654,7 +1654,7 @@ theorem image_inv_Ico
 
 中文:
 定理 image_inv_Ico
-  结论: Inv.inv '' Ico a b = Ioc (b⁻¹) (a⁻¹)
+  结论: 取逆.inv '' 左闭右开区间 a b = 左开右闭区间 (b⁻¹) (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1674,7 +1674,7 @@ theorem image_inv_Ioc
 
 中文:
 定理 image_inv_Ioc
-  结论: Inv.inv '' Ioc a b = Ico (b⁻¹) (a⁻¹)
+  结论: 取逆.inv '' 左开右闭区间 a b = 左闭右开区间 (b⁻¹) (a⁻¹)
   证明: by simp
 
 @[to_additive]
@@ -1692,7 +1692,7 @@ theorem image_inv_Ioo
 
 中文:
 定理 image_inv_Ioo
-  结论: Inv.inv '' Ioo a b = Ioo (b⁻¹) (a⁻¹)
+  结论: 取逆.inv '' 开区间 a b = 开区间 (b⁻¹) (a⁻¹)
   证明: by simp
 -/
 theorem image_inv_Ioo : Inv.inv '' Ioo a b = Ioo (b⁻¹) (a⁻¹) := by simp
@@ -1718,7 +1718,7 @@ theorem image_const_div_Ici
 
 中文:
 定理 image_const_div_Ici
-  结论: (fun x => a / x) '' Ici b = Iic (a / b)
+  结论: (fun x => a / x) '' 左闭右无界区间 b = 左无界右闭区间 (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1746,7 +1746,7 @@ theorem image_const_div_Iic
 
 中文:
 定理 image_const_div_Iic
-  结论: (fun x => a / x) '' Iic b = Ici (a / b)
+  结论: (fun x => a / x) '' 左无界右闭区间 b = 左闭右无界区间 (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1774,7 +1774,7 @@ theorem image_const_div_Ioi
 
 中文:
 定理 image_const_div_Ioi
-  结论: (fun x => a / x) '' Ioi b = Iio (a / b)
+  结论: (fun x => a / x) '' 左开右无界区间 b = 左无界右开区间 (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1802,7 +1802,7 @@ theorem image_const_div_Iio
 
 中文:
 定理 image_const_div_Iio
-  结论: (fun x => a / x) '' Iio b = Ioi (a / b)
+  结论: (fun x => a / x) '' 左无界右开区间 b = 左开右无界区间 (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1830,7 +1830,7 @@ theorem image_const_div_Icc
 
 中文:
 定理 image_const_div_Icc
-  结论: (fun x => a / x) '' Icc b c = Icc (a / c) (a / b)
+  结论: (fun x => a / x) '' 闭区间 b c = 闭区间 (a / c) (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1858,7 +1858,7 @@ theorem image_const_div_Ico
 
 中文:
 定理 image_const_div_Ico
-  结论: (fun x => a / x) '' Ico b c = Ioc (a / c) (a / b)
+  结论: (fun x => a / x) '' 左闭右开区间 b c = 左开右闭区间 (a / c) (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1886,7 +1886,7 @@ theorem image_const_div_Ioc
 
 中文:
 定理 image_const_div_Ioc
-  结论: (fun x => a / x) '' Ioc b c = Ico (a / c) (a / b)
+  结论: (fun x => a / x) '' 左开右闭区间 b c = 左闭右开区间 (a / c) (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1912,7 +1912,7 @@ theorem image_const_div_Ioo
 
 中文:
 定理 image_const_div_Ioo
-  结论: (fun x => a / x) '' Ioo b c = Ioo (a / c) (a / b)
+  结论: (fun x => a / x) '' 开区间 b c = 开区间 (a / c) (a / b)
   证明: by
   have := image_comp (fun x => a * x) fun x => x⁻¹; dsimp [Function.comp_def] at this
   simp [div_eq_mul_inv, this, mul_comm]
@@ -1940,7 +1940,7 @@ theorem image_div_const_Ici
 
 中文:
 定理 image_div_const_Ici
-  结论: (fun x => x / a) '' Ici b = Ici (b / a)
+  结论: (fun x => x / a) '' 左闭右无界区间 b = 左闭右无界区间 (b / a)
   证明: by simp [div_eq_mul_inv]
 
 @[to_additive (attr := simp)]
@@ -1962,7 +1962,7 @@ theorem image_div_const_Iic
 
 中文:
 定理 image_div_const_Iic
-  结论: (fun x => x / a) '' Iic b = Iic (b / a)
+  结论: (fun x => x / a) '' 左无界右闭区间 b = 左无界右闭区间 (b / a)
   证明: by simp [div_eq_mul_inv]
 
 @[to_additive (attr := simp)]
@@ -1984,7 +1984,7 @@ theorem image_div_const_Ioi
 
 中文:
 定理 image_div_const_Ioi
-  结论: (fun x => x / a) '' Ioi b = Ioi (b / a)
+  结论: (fun x => x / a) '' 左开右无界区间 b = 左开右无界区间 (b / a)
   证明: by simp [div_eq_mul_inv]
 
 @[to_additive (attr := simp)]
@@ -2006,7 +2006,7 @@ theorem image_div_const_Iio
 
 中文:
 定理 image_div_const_Iio
-  结论: (fun x => x / a) '' Iio b = Iio (b / a)
+  结论: (fun x => x / a) '' 左无界右开区间 b = 左无界右开区间 (b / a)
   证明: by simp [div_eq_mul_inv]
 
 @[to_additive (attr := simp)]
@@ -2029,7 +2029,7 @@ theorem image_div_const_Icc
 
 中文:
 定理 image_div_const_Icc
-  结论: (fun x => x / a) '' Icc b c = Icc (b / a) (c / a)
+  结论: (fun x => x / a) '' 闭区间 b c = 闭区间 (b / a) (c / a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -2054,7 +2054,7 @@ theorem image_div_const_Ico
 
 中文:
 定理 image_div_const_Ico
-  结论: (fun x => x / a) '' Ico b c = Ico (b / a) (c / a)
+  结论: (fun x => x / a) '' 左闭右开区间 b c = 左闭右开区间 (b / a) (c / a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -2079,7 +2079,7 @@ theorem image_div_const_Ioc
 
 中文:
 定理 image_div_const_Ioc
-  结论: (fun x => x / a) '' Ioc b c = Ioc (b / a) (c / a)
+  结论: (fun x => x / a) '' 左开右闭区间 b c = 左开右闭区间 (b / a) (c / a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -2102,7 +2102,7 @@ theorem image_div_const_Ioo
 
 中文:
 定理 image_div_const_Ioo
-  结论: (fun x => x / a) '' Ioo b c = Ioo (b / a) (c / a)
+  结论: (fun x => x / a) '' 开区间 b c = 开区间 (b / a) (c / a)
   证明: by
   simp [div_eq_mul_inv]
 
@@ -2128,7 +2128,7 @@ theorem Iic_mul_bij
 
 中文:
 定理 Iic_mul_bij
-  结论: BijOn (· * a) (Iic b) (Iic (b * a))
+  结论: 双射限制 (· * a) (左无界右闭区间 b) (左无界右闭区间 (b * a))
   证明: image_mul_const_Iic a b ▸ (mul_left_injective _).injOn.bijOn_image
 
 @[to_additive]
@@ -2149,7 +2149,7 @@ theorem Iio_mul_bij
 
 中文:
 定理 Iio_mul_bij
-  结论: BijOn (· * a) (Iio b) (Iio (b * a))
+  结论: 双射限制 (· * a) (左无界右开区间 b) (左无界右开区间 (b * a))
   证明: image_mul_const_Iio a b ▸ (mul_left_injective _).injOn.bijOn_image
 
 Depends on / 依赖: bijOn_image, image_mul_const_Iio, injOn.bijOn_image, mul_left_injective
@@ -2386,7 +2386,7 @@ theorem image_neg_uIcc
 
 中文:
 定理 image_neg_uIcc
-  结论: Neg.neg '' [[a, b]] = [[-a, -b]]
+  结论: 取负.neg '' [[a, b]] = [[-a, -b]]
   证明: by simp
 -/
 theorem image_neg_uIcc : Neg.neg '' [[a, b]] = [[-a, -b]] := by simp
@@ -2485,7 +2485,7 @@ theorem preimage_mul_const_Iic₀
 中文:
 定理 preimage_mul_const_Iic₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (· * c) ⁻¹' Iic a = Iic (a / c)
+  结论: (· * c) ⁻¹' 左无界右闭区间 a = 左无界右闭区间 (a / c)
   证明: by
   simpa only [division_def] using! (OrderIso.mulRight₀ c h).preimage_Iic a
 
@@ -2512,7 +2512,7 @@ theorem preimage_mul_const_Ici₀
 中文:
 定理 preimage_mul_const_Ici₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (· * c) ⁻¹' Ici a = Ici (a / c)
+  结论: (· * c) ⁻¹' 左闭右无界区间 a = 左闭右无界区间 (a / c)
   证明: by
   simpa only [division_def] using! (OrderIso.mulRight₀ c h).preimage_Ici a
 
@@ -2539,7 +2539,7 @@ theorem preimage_mul_const_Ioi₀
 中文:
 定理 preimage_mul_const_Ioi₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (· * c) ⁻¹' Ioi a = Ioi (a / c)
+  结论: (· * c) ⁻¹' 左开右无界区间 a = 左开右无界区间 (a / c)
   证明: by
   simpa only [division_def] using! (OrderIso.mulRight₀ c h).preimage_Ioi a
 
@@ -2566,7 +2566,7 @@ theorem preimage_mul_const_Iio₀
 中文:
 定理 preimage_mul_const_Iio₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (· * c) ⁻¹' Iio a = Iio (a / c)
+  结论: (· * c) ⁻¹' 左无界右开区间 a = 左无界右开区间 (a / c)
   证明: by
   simpa only [division_def] using! (OrderIso.mulRight₀ c h).preimage_Iio a
 
@@ -2789,7 +2789,7 @@ theorem image_mul_left_Ici
 中文:
 定理 image_mul_left_Ici
   条件: (h : 0 < a) (b : G₀)
-  结论: (a * ·) '' Ici b = Ici (a * b)
+  结论: (a * ·) '' 左闭右无界区间 b = 左闭右无界区间 (a * b)
   证明: (OrderIso.mulLeft₀ a h).image_Ici b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ici
@@ -2809,7 +2809,7 @@ theorem image_mul_left_Iic
 中文:
 定理 image_mul_left_Iic
   条件: (h : 0 < a) (b : G₀)
-  结论: (a * ·) '' Iic b = Iic (a * b)
+  结论: (a * ·) '' 左无界右闭区间 b = 左无界右闭区间 (a * b)
   证明: (OrderIso.mulLeft₀ a h).image_Iic b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iic
@@ -2829,7 +2829,7 @@ theorem image_mul_left_Ioi
 中文:
 定理 image_mul_left_Ioi
   条件: (h : 0 < a) (b : G₀)
-  结论: (a * ·) '' Ioi b = Ioi (a * b)
+  结论: (a * ·) '' 左开右无界区间 b = 左开右无界区间 (a * b)
   证明: (OrderIso.mulLeft₀ a h).image_Ioi b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioi
@@ -2849,7 +2849,7 @@ theorem image_mul_left_Iio
 中文:
 定理 image_mul_left_Iio
   条件: (h : 0 < a) (b : G₀)
-  结论: (a * ·) '' Iio b = Iio (a * b)
+  结论: (a * ·) '' 左无界右开区间 b = 左无界右开区间 (a * b)
   证明: (OrderIso.mulLeft₀ a h).image_Iio b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iio
@@ -2915,7 +2915,7 @@ theorem image_mul_left_Ioo
 中文:
 定理 image_mul_left_Ioo
   条件: (h : 0 < a) (b c : G₀)
-  结论: (a * ·) '' Ioo b c = Ioo (a * b) (a * c)
+  结论: (a * ·) '' 开区间 b c = 开区间 (a * b) (a * c)
   证明: (OrderIso.mulLeft₀ a h).image_Ioo b c
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioo
@@ -3002,7 +3002,7 @@ fun h => ⟨inv_pos.2 (inv_pos.2 ha).trans h, inv_lt_of_inv_lt₀ ha h⟩⟩
 中文:
 定理 inv_Ioo_0_left
   条件: (ha : 0 < a)
-  结论: (Ioo 0 a)⁻¹ = Ioi a⁻¹
+  结论: (开区间 0 a)⁻¹ = 左开右无界区间 a⁻¹
   证明: by
   ext x
   exact ⟨fun h => inv_lt_of_inv_lt₀ (inv_pos.1 h.1) h.2,
@@ -3028,7 +3028,7 @@ theorem inv_Ioi₀
 中文:
 定理 inv_Ioi₀
   条件: (ha : 0 < a)
-  结论: (Ioi a)⁻¹ = Ioo 0 a⁻¹
+  结论: (左开右无界区间 a)⁻¹ = 开区间 0 a⁻¹
   证明: by
   rw [inv_eq_iff_eq_inv]; rw [inv_Ioo_0_left (inv_pos.2 ha)]; rw [inv_inv]
 
@@ -3068,7 +3068,7 @@ theorem preimage_const_mul_Iic₀
 中文:
 定理 preimage_const_mul_Iic₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (c * ·) ⁻¹' Iic a = Iic (a / c)
+  结论: (c * ·) ⁻¹' 左无界右闭区间 a = 左无界右闭区间 (a / c)
   证明: ext fun _x => (le_div_iff₀' h).symm
 
 @[simp]
@@ -3091,7 +3091,7 @@ theorem preimage_const_mul_Ici₀
 中文:
 定理 preimage_const_mul_Ici₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (c * ·) ⁻¹' Ici a = Ici (a / c)
+  结论: (c * ·) ⁻¹' 左闭右无界区间 a = 左闭右无界区间 (a / c)
   证明: ext fun _x => (div_le_iff₀' h).symm
 
 @[simp]
@@ -3137,7 +3137,7 @@ theorem preimage_const_mul_Iio₀
 中文:
 定理 preimage_const_mul_Iio₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (c * ·) ⁻¹' Iio a = Iio (a / c)
+  结论: (c * ·) ⁻¹' 左无界右开区间 a = 左无界右开区间 (a / c)
   证明: ext fun _x => (lt_div_iff₀' h).symm
 
 @[simp]
@@ -3160,7 +3160,7 @@ theorem preimage_const_mul_Ioi₀
 中文:
 定理 preimage_const_mul_Ioi₀
   条件: (a : G₀) (h : 0 < c)
-  结论: (c * ·) ⁻¹' Ioi a = Ioi (a / c)
+  结论: (c * ·) ⁻¹' 左开右无界区间 a = 左开右无界区间 (a / c)
   证明: ext fun _x => (div_lt_iff₀' h).symm
 
 @[simp]
@@ -3878,7 +3878,7 @@ lemma preimage_const_mul_Ioi_or_Iio
 
 中文:
 引理 preimage_const_mul_Ioi_or_Iio
-  结论: (hb : a != 0) {U V : Set α}
+  结论: (hb : a != 0) {U V : 集合 α}
   证明: by
   obtain ⟨aU, (haU | haU)⟩ := hU <;>
   simp only [hV, haU, mem_ofPred_eq] <;>
@@ -4008,7 +4008,7 @@ theorem inv_Ioo_0_right
 中文:
 定理 inv_Ioo_0_right
   条件: {a : α} (ha : a < 0)
-  结论: (Ioo a 0)⁻¹ = Iio a⁻¹
+  结论: (开区间 a 0)⁻¹ = 左无界右开区间 a⁻¹
   证明: by
   ext x
   refine ⟨fun h => (lt_inv_of_neg (inv_neg''.1 h.2) ha).2 h.1, fun h => ?_⟩
@@ -4036,7 +4036,7 @@ theorem inv_Iio₀
 中文:
 定理 inv_Iio₀
   条件: {a : α} (ha : a < 0)
-  结论: (Iio a)⁻¹ = Ioo a⁻¹ 0
+  结论: (左无界右开区间 a)⁻¹ = 开区间 a⁻¹ 0
   证明: by
   rw [inv_eq_iff_eq_inv]; rw [inv_Ioo_0_right (inv_neg''.2 ha)]; rw [inv_inv]
 

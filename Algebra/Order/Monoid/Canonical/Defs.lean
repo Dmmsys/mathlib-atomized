@@ -34,8 +34,8 @@ class CanonicallyOrderedAdd
     - le_self_add : forall a b : α, a <= a + b
 
 中文:
-类 CanonicallyOrderedAdd
-  参数: (α : 类型) [Add α] [LE α]
+类 典范有序加法
+  参数: (α : 类型) [加法 α] [LE α]
   继承: ExistsAddOfLE α
   公理与运算 (2 个):
     - le_add_self : 对任意 a b : α, a <= b + a
@@ -70,8 +70,8 @@ class CanonicallyOrderedMul
     - le_self_mul : forall a b : α, a <= a * b
 
 中文:
-类 CanonicallyOrderedMul
-  参数: (α : 类型) [Mul α] [LE α]
+类 典范有序乘法
+  参数: (α : 类型) [乘法 α] [LE α]
   继承: ExistsMulOfLE α
   公理与运算 (2 个):
     - le_mul_self : 对任意 a b : α, a <= b * a
@@ -199,7 +199,7 @@ theorem le_iff_exists_mul
     exact le_self_mul⟩
 
 中文:
-定理 le_iff_exists_mul
+定理 le_iff_存在_mul
   结论: a <= b ↔ 存在 c, b = a * c
   证明: ⟨exists_mul_of_le, by
     rintro ⟨c, rfl⟩
@@ -332,7 +332,7 @@ theorem le_iff_exists_mul'
   simp only [mul_comm _ a, le_iff_exists_mul]
 
 中文:
-定理 le_iff_exists_mul'
+定理 le_iff_存在_mul'
   结论: a <= b ↔ 存在 c, b = c * a
   证明: by
   simp only [mul_comm _ a, le_iff_exists_mul]
@@ -361,7 +361,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBotOneClass α
+  签名: 是BotOne类 α
   定义体: le_self_mul.trans_eq (one_mul _)
 
 Depends on / 依赖: le_self_mul, le_self_mul.trans_eq, one_mul, trans_eq
@@ -391,7 +391,7 @@ theorem exists_one_lt_mul_of_lt
 @[to_additive]
 
 中文:
-定理 exists_one_lt_mul_of_lt
+定理 存在_one_lt_mul_of_lt
   条件: (h : a < b)
   结论: 存在 (c : _) (_ : 1 < c), a * c = b
   证明: by
@@ -432,7 +432,7 @@ theorem lt_iff_exists_mul
   · rw [← (self_le_mul_right a c).lt_
 
 中文:
-定理 lt_iff_exists_mul
+定理 lt_iff_存在_mul
   条件: [MulLeftStrictMono α]
   结论: a < b ↔ 存在 c > 1, b = a * c
   证明: by
@@ -497,7 +497,7 @@ lemma CanonicallyOrderedMul.toIsOrderedMonoid
   proof: mul_le_mul_left
 
 中文:
-引理 CanonicallyOrderedMul.toIsOrderedMonoid
+引理 典范有序乘法.toIsOrderedMonoid
   证明: mul_le_mul_left
 
 Depends on / 依赖: mul_le_mul_left
@@ -522,7 +522,7 @@ instance CanonicallyOrderedCommMonoid.toUniqueUnits
 
 中文:
 实例 CanonicallyOrderedCommMonoid.toUniqueUnits
-  签名: : Unique αˣ where
+  签名: : 唯一 αˣ where
   定义体: Units.ext le_one_iff_eq_one.mp (le_of_mul_le_left a.mul_inv.le)
 -/
 @[to_additive] instance CanonicallyOrderedCommMonoid.toUniqueUnits : Unique αˣ where
@@ -587,7 +587,7 @@ theorem min_mul_distrib
 中文:
 定理 min_mul_distrib
   条件: (a b c : α)
-  结论: min a (b * c) = min a (min a b * min a c)
+  结论: 最小值 a (b * c) = 最小值 a (最小值 a b * 最小值 a c)
   证明: by
   rcases le_total a b with hb | hb
   · simp [hb, le_mul_right]
@@ -620,7 +620,7 @@ theorem min_mul_distrib'
 中文:
 定理 min_mul_distrib'
   条件: (a b c : α)
-  结论: min (a * b) c = min (min a c * min b c) c
+  结论: 最小值 (a * b) c = 最小值 (最小值 a c * 最小值 b c) c
   证明: by
   simpa [min_comm _ c] using min_mul_distrib c a b
 
@@ -643,7 +643,7 @@ theorem bot_eq_one'
 
 中文:
 定理 bot_eq_one'
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: (⊥ : α) = 1
   证明: bot_eq_one
 

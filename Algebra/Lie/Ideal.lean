@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (LieIdeal R L) (LieSubalgebra R L)
+  签名: Coe (LieIdeal R L) (Lie子代数 R L)
   定义体: ⟨LieIdeal.toLieSubalgebra R L⟩
 
 @[simp]
@@ -172,7 +172,7 @@ theorem LieIdeal.coe_toLieSubalgebra
 中文:
 定理 LieIdeal.coe_toLieSubalgebra
   条件: (I : LieIdeal R L)
-  结论: ((I : LieSubalgebra R L) : Set L) = I
+  结论: ((I : Lie子代数 R L) : 集合 L) = I
   证明: rfl
 
 @[simp]
@@ -208,7 +208,7 @@ instance LieIdeal.bracket
 
 中文:
 实例 LieIdeal.bracket
-  签名: {R L : 类型} [CommRing R] [LieRing L] [LieAlgebra R L]
+  签名: {R L : 类型} [交换环 R] [Lie环 L] [Lie代数 R L]
   定义体: ⁅(x : L), m⁆
 -/
 instance LieIdeal.bracket {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
@@ -265,7 +265,7 @@ instance LieIdeal.lieRingModule
 
 中文:
 实例 LieIdeal.lieRingModule
-  签名: {R L : 类型} [CommRing R] [LieRing L] [LieAlgebra R L]
+  签名: {R L : 类型} [交换环 R] [Lie环 L] [Lie代数 R L]
   定义体: inferInstanceAs LieRingModule I.toLieSubalgebra M
 
 @[simp]
@@ -287,7 +287,7 @@ theorem LieIdeal.coe_bracket_of_module
 
 中文:
 定理 LieIdeal.coe_bracket_of_module
-  结论: {R L : 类型} [CommRing R] [LieRing L] [LieAlgebra R L]
+  结论: {R L : 类型} [交换环 R] [Lie环 L] [Lie代数 R L]
   证明: LieSubalgebra.coe_bracket_of_module (I : LieSubalgebra R L) x m
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.coe_bracket_of_module, coe_bracket_of_module
@@ -339,7 +339,7 @@ theorem exists_lieIdeal_coe_eq_iff
     Submodule.exists_lieSubmodule_coe_eq_iff L, mem_toSubmodule]
 
 中文:
-定理 exists_lieIdeal_coe_eq_iff
+定理 存在_lieIdeal_coe_eq_iff
   证明: by
   simp only [← toSubmodule_inj, LieIdeal.toLieSubalgebra_toSubmodule,
     Submodule.exists_lieSubmodule_coe_eq_iff L, mem_toSubmodule]
@@ -364,8 +364,8 @@ theorem exists_nested_lieIdeal_coe_eq_iff
   · rintro h' ⟨x, hx⟩ ⟨y, hy⟩ hy'; exact h' x y hx hy'
 
 中文:
-定理 exists_nested_lieIdeal_coe_eq_iff
-  条件: {K' : LieSubalgebra R L} (h : K <= K')
+定理 存在_nested_lieIdeal_coe_eq_iff
+  条件: {K' : Lie子代数 R L} (h : K <= K')
   证明: by
   simp only [exists_lieIdeal_coe_eq_iff, coe_bracket, mem_ofLe]
   constructor
@@ -408,7 +408,7 @@ theorem top_toLieSubalgebra
 
 中文:
 定理 top_toLieSubalgebra
-  结论: ((⊤ : LieIdeal R L) : LieSubalgebra R L) = ⊤
+  结论: ((⊤ : LieIdeal R L) : Lie子代数 R L) = ⊤
   证明: rfl
 -/
 theorem top_toLieSubalgebra : ((⊤ : LieIdeal R L) : LieSubalgebra R L) = ⊤ :=
@@ -697,7 +697,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: fun I₁ I₂ h => by
   unfold map
   gcongr; exact h
@@ -722,7 +722,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: fun J₁ J₂ h => by
   rw [← SetLike.coe_subset_coe] at h ⊢
   dsimp only [SetLike.coe]
@@ -796,7 +796,7 @@ instance subsingleton_of_bot
 
 中文:
 实例 subsingleton_of_bot
-  签名: : Subsingleton (LieIdeal R (⊥ : LieIdeal R L))
+  签名: : 子单例 (LieIdeal R (⊥ : LieIdeal R L))
   定义体: by
   apply subsingleton_of_bot_eq_top
   subsingleton
@@ -859,7 +859,7 @@ theorem idealRange_eq_lieSpan_range
 
 中文:
 定理 idealRange_eq_lieSpan_range
-  结论: f.idealRange = LieSubmodule.lieSpan R L' f.range
+  结论: f.idealRange = Lie子模.lieSpan R L' f.range
   证明: rfl
 -/
 theorem idealRange_eq_lieSpan_range : f.idealRange = LieSubmodule.lieSpan R L' f.range :=
@@ -919,7 +919,7 @@ theorem isIdealMorphism_def
 
 中文:
 定理 isIdealMorphism_def
-  结论: f.IsIdealMorphism ↔ (f.idealRange : LieSubalgebra R L') = f.range
+  结论: f.IsIdealMorphism ↔ (f.idealRange : Lie子代数 R L') = f.range
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -990,7 +990,7 @@ theorem range_subset_idealRange
 
 中文:
 定理 range_subset_idealRange
-  结论: (f.range : Set L') subseteq f.idealRange
+  结论: (f.range : 集合 L') subseteq f.idealRange
   证明: LieSubmodule.subset_lieSpan
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.subset_lieSpan, subset_lieSpan
@@ -1054,7 +1054,7 @@ theorem ker_toSubmodule
 
 中文:
 定理 ker_toSubmodule
-  结论: LieSubmodule.toSubmodule (ker f) = LinearMap.ker (f : L ->ₗ[R] L')
+  结论: Lie子模.toSubmodule (ker f) = 线性映射.ker (f : L ->ₗ[R] L')
   证明: rfl
 -/
 theorem ker_toSubmodule : LieSubmodule.toSubmodule (ker f) = LinearMap.ker (f : L ->ₗ[R] L') :=
@@ -1178,7 +1178,7 @@ theorem ker_eq_bot
 
 中文:
 定理 ker_eq_bot
-  结论: f.ker = ⊥ ↔ Function.Injective f
+  结论: f.ker = ⊥ ↔ 函数.单射 f
   证明: by
   rw [← LieSubmodule.toSubmodule_inj]; rw [ker_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [LinearMap.ker_eq_bot]; rw [coe_toLinearMap]
 
@@ -1200,7 +1200,7 @@ theorem range_toSubmodule
 
 中文:
 定理 range_toSubmodule
-  结论: (f.range : Submodule R L') = LinearMap.range (f : L ->ₗ[R] L')
+  结论: (f.range : 子模 R L') = 线性映射.range (f : L ->ₗ[R] L')
   证明: rfl
 -/
 theorem range_toSubmodule : (f.range : Submodule R L') = LinearMap.range (f : L ->ₗ[R] L') :=
@@ -1220,7 +1220,7 @@ theorem range_eq_top
 
 中文:
 定理 range_eq_top
-  结论: f.range = ⊤ ↔ Function.Surjective f
+  结论: f.range = ⊤ ↔ 函数.满射 f
   证明: by
   rw [← LieSubalgebra.toSubmodule_inj]; rw [range_toSubmodule]; rw [LieSubalgebra.top_toSubmodule]
   exact LinearMap.range_eq_top
@@ -1250,7 +1250,7 @@ theorem idealRange_eq_top_of_surjective
 
 中文:
 定理 idealRange_eq_top_of_surjective
-  条件: (h : Function.Surjective f)
+  条件: (h : 函数.满射 f)
   结论: f.idealRange = ⊤
   证明: by
   rw [← f.range_eq_top] at h
@@ -1280,7 +1280,7 @@ theorem isIdealMorphism_of_surjective
 
 中文:
 定理 isIdealMorphism_of_surjective
-  条件: (h : Function.Surjective f)
+  条件: (h : 函数.满射 f)
   结论: f.IsIdealMorphism
   证明: by
   rw [isIdealMorphism_def]; rw [f.idealRange_eq_top_of_surjective h]; rw [f.range_eq_top.mpr h]; rw [LieIdeal.top_toLieSubalgebra]
@@ -1337,7 +1337,7 @@ theorem coe_map_of_surjective
 
 中文:
 定理 coe_map_of_surjective
-  条件: (h : Function.Surjective f)
+  条件: (h : 函数.满射 f)
   证明: by
   let J : LieIdeal R L' :=
     { (I : Submodule R L).map (f : L ->ₗ[R] L') with
@@ -1378,7 +1378,7 @@ theorem mem_map_of_surjective
 
 中文:
 定理 mem_map_of_surjective
-  条件: {y : L'} (h₁ : Function.Surjective f) (h₂ : y in I.map f)
+  条件: {y : L'} (h₁ : 函数.满射 f) (h₂ : y in I.map f)
   证明: by
   rw [← LieSubmodule.mem_toSubmodule]; rw [coe_map_of_surjective h₁]; rw [Submodule.mem_map] at h₂
   obtain ⟨x, hx, rfl⟩ := h₂
@@ -1407,7 +1407,7 @@ theorem bot_of_map_eq_bot
 
 中文:
 定理 bot_of_map_eq_bot
-  条件: {I : LieIdeal R L} (h₁ : Function.Injective f) (h₂ : I.map f = ⊥)
+  条件: {I : LieIdeal R L} (h₁ : 函数.单射 f) (h₂ : I.map f = ⊥)
   证明: by
   rw [← f.ker_eq_bot]; rw [LieHom.ker] at h₁
   rw [eq_bot_iff]; rw [map_le_iff_le_comap]; rw [h₁] at h₂
@@ -1712,7 +1712,7 @@ theorem incl_coe
 
 中文:
 定理 incl_coe
-  结论: (I.incl.toLinearMap : I ->ₗ[R] L) = (I : Submodule R L).subtype
+  结论: (I.incl.toLinearMap : I ->ₗ[R] L) = (I : 子模 R L).subtype
   证明: rfl
 -/
 theorem incl_coe : (I.incl.toLinearMap : I ->ₗ[R] L) = (I : Submodule R L).subtype :=
@@ -1732,7 +1732,7 @@ lemma incl_injective
 中文:
 引理 incl_injective
   条件: (I : LieIdeal R L)
-  结论: Function.Injective I.incl
+  结论: 函数.单射 I.incl
   证明: Subtype.val_injective
 
 @[simp]

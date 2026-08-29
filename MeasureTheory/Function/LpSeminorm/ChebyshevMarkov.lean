@@ -173,7 +173,7 @@ theorem MemLp.meas_ge_lt_top'_enorm
 
 中文:
 定理 MemLp.meas_ge_lt_top'_enorm
-  结论: {μ : Measure α} {f : α -> ε'} (hℒp : MemLp f p μ)
+  结论: {μ : 测度 α} {f : α -> ε'} (hℒp : MemLp f p μ)
   证明: by
   apply meas_ge_le_mul_pow_eLpNorm_enorm μ hp_ne_zero hp_ne_top hℒp.aestronglyMeasurable hε hε'
 .trans_lt (ENNReal.mul_lt_top ?_ ?_)
@@ -204,7 +204,7 @@ theorem MemLp.meas_ge_lt_top'
 
 中文:
 定理 MemLp.meas_ge_lt_top'
-  结论: {μ : Measure α} {f : α -> E} (hℒp : MemLp f p μ) (hp_ne_zero : p != 0)
+  结论: {μ : 测度 α} {f : α -> E} (hℒp : MemLp f p μ) (hp_ne_zero : p != 0)
   证明: by
   by_cases h : ε = ∞
   · simp [h]
@@ -227,7 +227,7 @@ theorem MemLp.meas_ge_lt_top_enorm
 
 中文:
 定理 MemLp.meas_ge_lt_top_enorm
-  结论: {μ : Measure α} {f : α -> ε'} (hℒp : MemLp f p μ)
+  结论: {μ : 测度 α} {f : α -> ε'} (hℒp : MemLp f p μ)
   证明: hℒp.meas_ge_lt_top'_enorm hp_ne_zero hp_ne_top (by simp [hε]) (by simp)
 
 Depends on / 依赖: _enorm, hp_ne_top, hp_ne_zero, meas_ge_lt_top, p.meas_ge_lt_top
@@ -249,7 +249,7 @@ theorem MemLp.meas_ge_lt_top
 
 中文:
 定理 MemLp.meas_ge_lt_top
-  结论: {μ : Measure α} {f : α -> E} (hℒp : MemLp f p μ) (hp_ne_zero : p != 0)
+  结论: {μ : 测度 α} {f : α -> E} (hℒp : MemLp f p μ) (hp_ne_zero : p != 0)
   证明: by
   simp_rw [← ENNReal.coe_le_coe]
   apply hℒp.meas_ge_lt_top' hp_ne_zero hp_ne_top (by simp [hε])

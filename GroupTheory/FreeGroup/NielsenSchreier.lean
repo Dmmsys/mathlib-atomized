@@ -71,8 +71,8 @@ definition IsFreeGroupoid.Generators
   body: G
 
 中文:
-定义 IsFreeGroupoid.Generators
-  签名: (G) [Groupoid G]
+定义 是FreeGroupoid.生成元
+  签名: (G) [群胚 G]
   定义体: G
 -/
 def IsFreeGroupoid.Generators (G) [Groupoid G] :=
@@ -90,12 +90,12 @@ class IsFreeGroupoid
     - unique_lift : forall {X : Type v} [Group X] (f : Labelling (IsFreeGroupoid.Generators G) X), exists! F : G ⥤ CategoryTheory.SingleObj X, forall (a b) (g : a ⟶ b), F.map (of g) = f g
 
 中文:
-类 IsFreeGroupoid
-  参数: (G) [Groupoid.{v} G]
+类 是FreeGroupoid
+  参数: (G) [群胚.{v} G]
   公理与运算 (3 个):
-    - quiverGenerators : Quiver.{v} (IsFreeGroupoid.Generators G)
-    - of : 对任意 {a b : IsFreeGroupoid.Generators G}, (a ⟶ b) -> ((show G from a) ⟶ b)
-    - unique_lift : 对任意 {X : 类型v} [Group X] (f : Labelling (IsFreeGroupoid.Generators G) X), 存在! F : G ⥤ CategoryTheory.SingleObj X, 对任意 (a b) (g : a ⟶ b), F.map (of g) = f g
+    - quiverGenerators : 箭图.{v} (是FreeGroupoid.生成元 G)
+    - of : 对任意 {a b : 是FreeGroupoid.生成元 G}, (a ⟶ b) -> ((show G from a) ⟶ b)
+    - unique_lift : 对任意 {X : 类型v} [群 X] (f : Labelling (是FreeGroupoid.生成元 G) X), 存在! F : G ⥤ 范畴论.SingleObj X, 对任意 (a b) (g : a ⟶ b), F.map (of g) = f g
 -/
 class IsFreeGroupoid (G) [Groupoid.{v} G] where
   quiverGenerators : Quiver.{v} (IsFreeGroupoid.Generators G)
@@ -124,7 +124,7 @@ theorem ext_functor
 
 中文:
 定理 ext_functor
-  结论: {G} [Groupoid.{v} G] [IsFreeGroupoid G] {X : 类型v} [Group X]
+  结论: {G} [群胚.{v} G] [是FreeGroupoid G] {X : 类型v} [群 X]
   证明: let ⟨_, _, u⟩ := @unique_lift G _ _ X _ fun (a b : Generators G) (e : a ⟶ b) => g.map (of e)
   _root_.trans (u _ h) (u _ fun _ _ _ => rfl).symm
 
@@ -152,7 +152,7 @@ instance actionGroupoidIsFree
 
 中文:
 实例 actionGroupoidIsFree
-  签名: {G A : 类型u} [Group G] [IsFreeGroup G] [MulAction G A]
+  签名: {G A : 类型u} [群 G] [是自由群 G] [乘法作用 G A]
   定义体: ⟨fun a b => { e : IsFreeGroup.Generators G // IsFreeGroup.of e • a.back = b.back }⟩
   of := fun (e : Subtype _) => ⟨IsFreeGroup.of e, e.property⟩
   unique_lift := by
@@ -239,7 +239,7 @@ definition homOfPath
 
 中文:
 定义 homOfPath
-  签名: : 对任意 {a : G}, Path (root T) a -> (root' T ⟶ a)
+  签名: : 对任意 {a : G}, 道路 (root T) a -> (root' T ⟶ a)
 -/
 def homOfPath : forall {a : G}, Path (root T) a -> (root' T ⟶ a)
   | _, Path.nil => 𝟙 _
@@ -279,7 +279,7 @@ theorem treeHom_eq
 
 中文:
 定理 treeHom_eq
-  条件: {a : G} (p : Path (root T) a)
+  条件: {a : G} (p : 道路 (root T) a)
   结论: treeHom T a = homOfPath T p
   证明: by
   rw [treeHom]; rw [Unique.default_eq]
@@ -353,7 +353,7 @@ theorem loopOfHom_eq_id
 
 中文:
 定理 loopOfHom_eq_id
-  条件: {a b : Generators G} (e) (H : e in wideSubquiverSymmetrify T a b)
+  条件: {a b : 生成元 G} (e) (H : e in wideSubquiverSymmetrify T a b)
   证明: by
   rw [loopOfHom]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
   rcases H with H | H
@@ -398,7 +398,7 @@ definition functorOfMonoidHom
 
 中文:
 定义 functorOfMonoidHom
-  签名: {X} [Monoid X] (f : End (root' T) ->* X)
+  签名: {X} [幺半群 X] (f : End (root' T) ->* X)
   定义体: ()
   map p := f (loopOfHom T p)
   map_id := by
@@ -443,7 +443,7 @@ lemma endIsFree
 
 中文:
 引理 endIsFree
-  结论: IsFreeGroup (End (root' T))
+  结论: 是自由群 (End (root' T))
   证明: IsFreeGroup.ofUniqueLift ((wideSubquiverEquivSetTotal <| wideSubquiverSymmetrify T)ᶜ : Set _)
     (fun e => loopOfHom T (of e.val.hom))
     (by
@@ -507,7 +507,7 @@ definition symgen
 
 中文:
 定义 symgen
-  签名: {G : 类型u} [Groupoid.{v} G]
+  签名: {G : 类型u} [群胚.{v} G]
   定义体: id
 -/
 private def symgen {G : Type u} [Groupoid.{v} G] : G -> Symmetrify (Generators G) := id
@@ -531,7 +531,7 @@ theorem path_nonempty_of_hom
 
 中文:
 定理 path_nonempty_of_hom
-  条件: {G} [Groupoid.{u, u} G] [IsFreeGroupoid G] {a b : G}
+  条件: {G} [群胚.{u, u} G] [是FreeGroupoid G] {a b : G}
   证明: by
   rintro ⟨p⟩
   rw [← @WeaklyConnectedComponent.eq (Generators G)]; rw [eq_comm]; rw [← FreeGroup.of_injective.eq_iff]; rw [←
@@ -569,7 +569,7 @@ instance generators_connected
 
 中文:
 实例 generators_connected
-  签名: (G) [Groupoid.{u, u} G] [IsConnected G] [IsFreeGroupoid G] (r : G)
+  签名: (G) [群胚.{u, u} G] [是连通 G] [是FreeGroupoid G] (r : G)
   定义体: ⟨fun b => path_nonempty_of_hom (CategoryTheory.nonempty_hom_of_preconnected_groupoid r b)⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.nonempty_hom_of_preconnected_groupoid, nonempty_hom_of_preconnected_groupoid, path_nonempty_of_hom
@@ -609,7 +609,7 @@ instance subgroupIsFreeOfIsFree
 
 中文:
 实例 subgroupIsFreeOfIsFree
-  签名: {G : 类型u} [Group G] [IsFreeGroup G] (H : Subgroup G)
+  签名: {G : 类型u} [群 G] [是自由群 G] (H : 子群 G)
   定义体: IsFreeGroup.ofMulEquiv (endMulEquivSubgroup H)
 
 Depends on / 依赖: IsFreeGroup, IsFreeGroup.ofMulEquiv, endMulEquivSubgroup, ofMulEquiv

@@ -42,10 +42,10 @@ structure SpectralSequence
     - iso((r r' : Int) (pq : κ) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : (page r).homology pq ≅ (page r').X pq
 
 中文:
-结构 SpectralSequence
+结构 谱序列
   参数: where
   公理与运算 (2 个):
-    - page((r : 整数) (hr : r₀ <= r := by lia)) : HomologicalComplex C (c r)
+    - page((r : 整数) (hr : r₀ <= r := by lia)) : 同调复形 C (c r)
     - iso((r r' : 整数) (pq : κ) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : (page r).homology pq ≅ (page r').X pq
 
 Depends on / 依赖: HomologicalComplex
@@ -76,11 +76,11 @@ structure Hom
     - comm((r r' : Int) (pq : κ) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : HomologicalComplex.homologyMap (hom r) pq ≫ (E'.iso r r' pq).hom = (E.iso r r' pq).hom ≫ (hom r').f pq  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (E E' : SpectralSequence C c r₀)
+结构 态射
+  参数: (E E' : 谱序列 C c r₀)
   公理与运算 (2 个):
     - hom((r : 整数) (hr : r₀ <= r := by lia)) : E.page r ⟶ E'.page r
-    - comm((r r' : 整数) (pq : κ) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : HomologicalComplex.homologyMap (hom r) pq ≫ (E'.iso r r' pq).hom = (E.iso r r' pq).hom ≫ (hom r').f pq  [默认: by cat_disch]
+    - comm((r r' : 整数) (pq : κ) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : 同调复形.homologyMap (hom r) pq ≫ (E'.iso r r' pq).hom = (E.iso r r' pq).hom ≫ (hom r').f pq  [默认: by cat_disch]
 
 Depends on / 依赖: E.iso, E.page, HomologicalComplex, HomologicalComplex.homologyMap, cat_disch, homologyMap
 -/
@@ -101,7 +101,7 @@ definition pageXIsoOfEq
 
 中文:
 定义 pageXIsoOfEq
-  签名: (E : SpectralSequence C c r₀) (pq : κ) (r r' : 整数) (h : r = r' := by lia)
+  签名: (E : 谱序列 C c r₀) (pq : κ) (r r' : 整数) (h : r = r' := by lia)
   定义体: eqToIso (by subst h; rfl)
 
 Depends on / 依赖: E.page, eqToIso
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SpectralSequence C c r₀)
+  签名: 范畴 (谱序列 C c r₀)
   定义体: Hom
   id _ := { hom _ _ := 𝟙 _ }
   comp f g :=
@@ -160,7 +160,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {E E' : SpectralSequence C c r₀} {f f' : E ⟶ E'}
+  结论: {E E' : 谱序列 C c r₀} {f f' : E ⟶ E'}
   证明: Hom.ext (by grind)
 
 Depends on / 依赖: Hom.ext
@@ -212,7 +212,7 @@ definition pageHomologyNatIso
   body: NatIso.ofComponents (fun E => E.iso r r' pq)
 
 中文:
-定义 pageHomologyNatIso
+定义 pageHomology自然数Iso
   定义体: NatIso.ofComponents (fun E => E.iso r r' pq)
 
 Depends on / 依赖: E.iso, HomologicalComplex, HomologicalComplex.eval, HomologicalComplex.homologyFunctor, NatIso, NatIso.ofComponents, homologyFunctor, ofComponents, pageFunctor
@@ -264,7 +264,7 @@ abbreviation CohomologicalSpectralSequenceNat
   body: SpectralSequence C (fun r => ComplexShape.spectralSequenceNat ⟨r, 1 - r⟩)
 
 中文:
-缩写 CohomologicalSpectralSequenceNat
+缩写 CohomologicalSpectralSequence自然数
   定义体: SpectralSequence C (fun r => ComplexShape.spectralSequenceNat ⟨r, 1 - r⟩)
 
 Depends on / 依赖: ComplexShape, ComplexShape.spectralSequenceNat, SpectralSequence, spectralSequenceNat
@@ -280,7 +280,7 @@ abbreviation E₂CohomologicalSpectralSequenceNat
   body: CohomologicalSpectralSequenceNat C 2
 
 中文:
-缩写 E₂CohomologicalSpectralSequenceNat
+缩写 E₂CohomologicalSpectralSequence自然数
   定义体: CohomologicalSpectralSequenceNat C 2
 
 Depends on / 依赖: CohomologicalSpectralSequenceNat

@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive SemiNormedGrp.{u}
+  签名: 预加性 SemiNormedGrp.{u}
 -/
 instance : Preadditive SemiNormedGrp.{u} where
 
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Additive completion
+  签名: 函子.加性 completion
   定义体: SemiNormedGrp.hom_ext NormedAddGroupHom.completion_add _ _
 
 Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.completion_add, SemiNormedGrp, SemiNormedGrp.hom_ext, completion_add, hom_ext
@@ -250,7 +250,7 @@ definition completion.lift
 
 中文:
 定义 completion.lift
-  签名: {V W : SemiNormedGrp} [CompleteSpace W] [T0Space W] (f : V ⟶ W)
+  签名: {V W : SemiNormedGrp} [完备空间 W] [T0空间 W] (f : V ⟶ W)
   定义体: ofHom
   { toFun := f.hom.extension
     map_add' := f.hom.extension.toAddMonoidHom.map_add'
@@ -275,7 +275,7 @@ theorem completion.lift_comp_incl
 
 中文:
 定理 completion.lift_comp_incl
-  结论: {V W : SemiNormedGrp} [CompleteSpace W] [T0Space W]
+  结论: {V W : SemiNormedGrp} [完备空间 W] [T0空间 W]
   证明: ext NormedAddGroupHom.extension_coe _
 
 Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.extension_coe, extension_coe
@@ -295,7 +295,7 @@ theorem completion.lift_unique
 
 中文:
 定理 completion.lift_unique
-  结论: {V W : SemiNormedGrp} [CompleteSpace W] [T0Space W]
+  结论: {V W : SemiNormedGrp} [完备空间 W] [T0空间 W]
   证明: fun h => SemiNormedGrp.hom_ext (NormedAddGroupHom.extension_unique _ fun v =>
     ((SemiNormedGrp.ext_iff.1 h) v).symm).symm
 

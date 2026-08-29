@@ -35,8 +35,8 @@ structure IsStarProjection
     - isSelfAdjoint : IsSelfAdjoint p
 
 中文:
-结构 IsStarProjection
-  参数: [Mul R] [Star R] (p : R)
+结构 是StarProjection
+  参数: [乘法 R] [对合 R] (p : R)
   公理与运算 (2 个):
     - isIdempotentElem : IsIdempotentElem p
     - isSelfAdjoint : IsSelfAdjoint p
@@ -62,7 +62,7 @@ lemma _root_.isStarProjection_iff'
 
 中文:
 引理 _root_.isStarProjection_iff'
-  条件: [Mul R] [Star R]
+  条件: [乘法 R] [对合 R]
   证明: isStarProjection_iff _
 
 Depends on / 依赖: isStarProjection_iff
@@ -81,7 +81,7 @@ theorem isStarNormal
 
 中文:
 定理 isStarNormal
-  结论: [Mul R] [Star R]
+  结论: [乘法 R] [对合 R]
   证明: hp.isSelfAdjoint.isStarNormal
 
 Depends on / 依赖: hp.isSelfAdjoint.isStarNormal, isSelfAdjoint, isStarNormal
@@ -101,7 +101,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {A B : 类型} [Mul A] [Star A] [Mul B] [Star B]
+  结论: {A B : 类型} [乘法 A] [对合 A] [乘法 B] [对合 B]
   证明: hx.isIdempotentElem.map f
   isSelfAdjoint := hx.isSelfAdjoint.map f
 
@@ -126,8 +126,8 @@ theorem zero
 
 中文:
 定理 zero
-  条件: [NonUnitalNonAssocSemiring R] [StarAddMonoid R]
-  结论: IsStarProjection (0 : R)
+  条件: [非幺非结合半环 R] [StarAdd幺半群 R]
+  结论: 是StarProjection (0 : R)
   证明: ⟨.zero, .zero _⟩
 -/
 protected theorem zero [NonUnitalNonAssocSemiring R] [StarAddMonoid R] : IsStarProjection (0 : R) :=
@@ -146,8 +146,8 @@ theorem one
 
 中文:
 定理 one
-  条件: [MulOneClass R] [StarMul R]
-  结论: IsStarProjection (1 : R)
+  条件: [MulOne类 R] [StarMul R]
+  结论: 是StarProjection (1 : R)
   证明: ⟨.one, .one _⟩
 -/
 protected theorem one [MulOneClass R] [StarMul R] : IsStarProjection (1 : R) :=
@@ -164,7 +164,7 @@ theorem pow_eq
 
 中文:
 定理 pow_eq
-  条件: [Monoid R] [Star R] (hp : IsStarProjection p) {n : 自然数} (hn : n != 0)
+  条件: [幺半群 R] [对合 R] (hp : 是StarProjection p) {n : 自然数} (hn : n != 0)
   结论: p ^ n = p
   证明: hp.isIdempotentElem.pow_eq hn
 
@@ -184,7 +184,7 @@ theorem pow_succ_eq
 
 中文:
 定理 pow_succ_eq
-  条件: [Monoid R] [Star R] (hp : IsStarProjection p) (n : 自然数)
+  条件: [幺半群 R] [对合 R] (hp : 是StarProjection p) (n : 自然数)
   结论: p ^ (n + 1) = p
   证明: hp.isIdempotentElem.pow_succ_eq n
 
@@ -208,8 +208,8 @@ theorem one_sub
 
 中文:
 定理 one_sub
-  条件: [StarRing R] (hp : IsStarProjection p)
-  结论: IsStarProjection (1 - p) where
+  条件: [对合环 R] (hp : 是StarProjection p)
+  结论: 是StarProjection (1 - p) where
   证明: hp.isIdempotentElem.one_sub
   isSelfAdjoint := .sub (.one _) hp.isSelfAdjoint
 
@@ -231,7 +231,7 @@ alias ⟨of_one_sub, _⟩ := isStarProjection_one_sub_iff
 
 中文:
 定理 _root_.isStarProjection_one_sub_iff
-  条件: [StarRing R]
+  条件: [对合环 R]
   证明: ⟨fun h => sub_sub_cancel 1 p ▸ h.one_sub, .one_sub⟩
 
 alias ⟨of_one_sub, _⟩ := isStarProjection_one_sub_iff
@@ -255,7 +255,7 @@ lemma mul_one_sub_self
 
 中文:
 引理 mul_one_sub_self
-  条件: [Star R] (hp : IsStarProjection p)
+  条件: [对合 R] (hp : 是StarProjection p)
   结论: p * (1 - p) = 0
   证明: hp.isIdempotentElem.mul_one_sub_self
 
@@ -275,7 +275,7 @@ lemma one_sub_mul_self
 
 中文:
 引理 one_sub_mul_self
-  条件: [Star R] (hp : IsStarProjection p)
+  条件: [对合 R] (hp : 是StarProjection p)
   结论: (1 - p) * p = 0
   证明: hp.isIdempotentElem.one_sub_mul_self
 
@@ -299,7 +299,7 @@ isIdempotentElem := hp.isIdempotentElem.add hq.isIdempotentElem by
 
 中文:
 定理 add
-  结论: [NonUnitalNonAssocSemiring R] [StarRing R]
+  结论: [非幺非结合半环 R] [对合环 R]
   证明: hp.isSelfAdjoint.add hq.isSelfAdjoint
 isIdempotentElem := hp.isIdempotentElem.add hq.isIdempotentElem by
     rw [hpq]; rw [zero_add]
@@ -326,7 +326,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [NonUnitalSemiring R] [StarRing R]
+  结论: [非幺半环 R] [对合环 R]
   证明: (IsSelfAdjoint.commute_iff hp.isSelfAdjoint hq.isSelfAdjoint).mp hpq
   isIdempotentElem := hp.isIdempotentElem.mul_of_commute hpq hq.isIdempotentElem
 
@@ -351,7 +351,7 @@ theorem sub_of_mul_eq_left
 
 中文:
 定理 sub_of_mul_eq_left
-  结论: [NonUnitalNonAssocRing R] [StarRing R]
+  结论: [非幺非结合环 R] [对合环 R]
   证明: hq.isSelfAdjoint.sub hp.isSelfAdjoint
   isIdempotentElem := hp.isIdempotentElem.sub
     hq.isIdempotentElem hpq
@@ -378,7 +378,7 @@ theorem sub_of_mul_eq_right
 
 中文:
 定理 sub_of_mul_eq_right
-  结论: [NonUnitalNonAssocRing R] [StarRing R]
+  结论: [非幺非结合环 R] [对合环 R]
   证明: hp.sub_of_mul_eq_left hq
   (by simpa [hp.isSelfAdjoint.star_eq, hq.isSelfAdjoint.star_eq] using congr(star $(hqp)))
 
@@ -405,7 +405,7 @@ theorem sub_iff_mul_eq_left
 
 中文:
 定理 sub_iff_mul_eq_left
-  结论: [NonUnitalRing R] [StarRing R] [IsAddTorsionFree R]
+  结论: [非幺环 R] [对合环 R] [是加法无挠 R]
   证明: by
   rw [isStarProjection_iff]; rw [hp.isIdempotentElem.sub_iff hq.isIdempotentElem]
   simp_rw [hq.isSelfAdjoint.sub hp.isSelfAdjoint, and_true]
@@ -439,7 +439,7 @@ theorem sub_iff_mul_eq_right
 
 中文:
 定理 sub_iff_mul_eq_right
-  结论: [NonUnitalRing R] [StarRing R] [IsAddTorsionFree R]
+  结论: [非幺环 R] [对合环 R] [是加法无挠 R]
   证明: by
   rw [← star_inj]
   simp [star_mul, hp.isSelfAdjoint.star_eq, hq.isSelfAdjoint.star_eq,
@@ -466,7 +466,7 @@ theorem add_sub_mul_of_commute
 
 中文:
 定理 add_sub_mul_of_commute
-  结论: [NonUnitalRing R] [StarRing R]
+  结论: [非幺环 R] [对合环 R]
   证明: hp.isIdempotentElem.add_sub_mul_of_commute hpq hq.isIdempotentElem
   isSelfAdjoint := .sub (hp.isSelfAdjoint.add hq.isSelfAdjoint)
     ((IsSelfAdjoint.commute_iff hp.isSelfAdjoint hq.isSelfAdjoint).mp hpq)

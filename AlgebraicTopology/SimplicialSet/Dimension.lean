@@ -37,7 +37,7 @@ class HasDimensionLT
     - degenerate_eq_top((n : Nat) (hn : d <= n)) : X.degenerate n = ⊤
 
 中文:
-类 HasDimensionLT
+类 有DimensionLT
   参数: (X : SSet.{u}) (d : 自然数)
   公理与运算 (1 个):
     - degenerate_eq_top((n : 自然数) (hn : d <= n)) : X.degenerate n = ⊤
@@ -78,7 +78,7 @@ lemma degenerate_eq_univ_of_hasDimensionLT
 中文:
 引理 degenerate_eq_univ_of_hasDimensionLT
   条件: (hn : d <= n := by lia)
-  结论: X.degenerate n = Set.univ
+  结论: X.degenerate n = 集合.univ
   证明: HasDimensionLT.degenerate_eq_top n hn
 
 Depends on / 依赖: HasDimensionLT, HasDimensionLT.degenerate_eq_top, Set.univ, X.degenerate, degenerate, degenerate_eq_top
@@ -181,7 +181,7 @@ lemma hasDimensionLT_of_le
 中文:
 引理 hasDimensionLT_of_le
   条件: (hn : d <= n := by lia)
-  结论: HasDimensionLT X n where
+  结论: 有DimensionLT X n where
   证明: X.degenerate_eq_univ_of_hasDimensionLT d i (hn.trans hi)
 
 Depends on / 依赖: HasDimensionLT, X.degenerate_eq_univ_of_hasDimensionLT, degenerate_eq_top, degenerate_eq_univ_of_hasDimensionLT, hn.trans
@@ -199,7 +199,7 @@ instance [HasDimensionLT
   body: X.hasDimensionLT_of_le n _
 
 中文:
-实例 [HasDimensionLT
+实例 [有DimensionLT
   签名: X n] (k
   定义体: X.hasDimensionLT_of_le n _
 
@@ -234,7 +234,7 @@ lemma le_iff_of_hasDimensionLT
 
 中文:
 引理 le_iff_of_hasDimensionLT
-  条件: (A B : X.Subcomplex) (d : 自然数) [X.HasDimensionLT d]
+  条件: (A B : X.子复形) (d : 自然数) [X.有DimensionLT d]
   证明: by
   refine ⟨fun h i hi a ⟨ha, _⟩ => h _ ha, fun h => ?_⟩
   rw [le_iff_contains_nonDegenerate]
@@ -261,7 +261,7 @@ lemma eq_top_iff_of_hasDimensionLT
 
 中文:
 引理 eq_top_iff_of_hasDimensionLT
-  条件: (A : X.Subcomplex) (d : 自然数) [X.HasDimensionLT d]
+  条件: (A : X.子复形) (d : 自然数) [X.有DimensionLT d]
   证明: by
   simp [← top_le_iff, le_iff_of_hasDimensionLT ⊤ A d]
 
@@ -287,7 +287,7 @@ lemma hasDimensionLT_of_mono
 
 中文:
 引理 hasDimensionLT_of_mono
-  结论: {X Y : SSet.{u}} (f : X ⟶ Y) [Mono f] (d : 自然数)
+  结论: {X Y : SSet.{u}} (f : X ⟶ Y) [单态射 f] (d : 自然数)
   证明: by
     ext x
     rw [← degenerate_iff_of_isIso (Subcomplex.toRange f)]; rw [Subcomplex.mem_degenerate_iff]; rw [Y.degenerate_eq_univ_of_hasDimensionLT d n hn]
@@ -310,7 +310,7 @@ lemma Subcomplex.hasDimensionLT_of_le
   proof: hasDimensionLT_of_mono (Subcomplex.homOfLE h) d
 
 中文:
-引理 Subcomplex.hasDimensionLT_of_le
+引理 子复形.hasDimensionLT_of_le
   证明: hasDimensionLT_of_mono (Subcomplex.homOfLE h) d
 
 Depends on / 依赖: Subcomplex, Subcomplex.homOfLE, hasDimensionLT_of_mono, homOfLE
@@ -335,7 +335,7 @@ lemma hasDimensionLT_of_epi
 
 中文:
 引理 hasDimensionLT_of_epi
-  结论: {X Y : SSet.{u}} (f : X ⟶ Y) [Epi f] (d : 自然数)
+  结论: {X Y : SSet.{u}} (f : X ⟶ Y) [满态射 f] (d : 自然数)
   证明: by
     ext y
     simp only [Set.top_eq_univ, Set.mem_univ, iff_true]
@@ -389,7 +389,7 @@ lemma hasDimensionLT_iSup_iff
 
 中文:
 引理 hasDimensionLT_iSup_iff
-  条件: {X : SSet.{u}} {ι : 类型} (A : ι -> X.Subcomplex) (d : 自然数)
+  条件: {X : SSet.{u}} {ι : 类型} (A : ι -> X.子复形) (d : 自然数)
   证明: by
   simp only [hasDimensionLT_iff, Subcomplex.degenerate_eq_top_iff]
   aesop

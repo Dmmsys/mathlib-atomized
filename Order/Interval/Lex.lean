@@ -161,8 +161,8 @@ instance [Preorder
   Preorder.lift fun x => toLex (ofLex x).toDualProd
 
 中文:
-实例 [Preorder
-  签名: α] : Preorder (Lex (Nonempty整数erval α))
+实例 [预序
+  签名: α] : 预序 (Lex (Nonempty整数erval α))
   定义体: fast_instance%
   Preorder.lift fun x => toLex (ofLex x).toDualProd
 
@@ -182,8 +182,8 @@ theorem toLex_mono
 
 中文:
 定理 toLex_mono
-  条件: [PartialOrder α]
-  结论: Monotone (toLex : Nonempty整数erval α -> _)
+  条件: [偏序 α]
+  结论: 递增 (toLex : Nonempty整数erval α -> _)
   证明: Prod.Lex.toLex_mono.comp toDualProd_mono
 
 Depends on / 依赖: Prod.Lex.toLex_mono.comp, toDualProd_mono, toLex_mono
@@ -202,8 +202,8 @@ theorem toLex_strictMono
 
 中文:
 定理 toLex_strictMono
-  条件: [PartialOrder α]
-  结论: StrictMono (toLex : Nonempty整数erval α -> _)
+  条件: [偏序 α]
+  结论: 严格递增 (toLex : Nonempty整数erval α -> _)
   证明: Prod.Lex.toLex_strictMono.comp toDualProd_strictMono
 
 Depends on / 依赖: Prod.Lex.toLex_strictMono.comp, toDualProd_strictMono, toLex_strictMono
@@ -222,8 +222,8 @@ PartialOrder.lift (fun x => toLex (ofLex x).toDualProd)
 toLex.injective.comp toDualProd_injective.comp ofLex.injective
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (Lex (Nonempty整数erval α))
+实例 [偏序
+  签名: α] : 偏序 (Lex (Nonempty整数erval α))
   定义体: fast_instance%
 PartialOrder.lift (fun x => toLex (ofLex x).toDualProd)
 toLex.injective.comp toDualProd_injective.comp ofLex.injective
@@ -248,8 +248,8 @@ toLex.injective.comp toDualProd_injective.comp ofLex.injective with
     toDecidableLE := inferInstance }
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (Lex (Nonempty整数erval α))
+实例 [线性序
+  签名: α] : 线性序 (Lex (Nonempty整数erval α))
   定义体: fast_instance%
   { LinearOrder.lift' (fun x : Lex (NonemptyInterval α) => toLex (ofLex x).toDualProd) <|
 toLex.injective.comp toDualProd_injective.comp ofLex.injective with

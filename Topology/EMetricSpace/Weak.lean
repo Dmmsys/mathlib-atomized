@@ -71,7 +71,7 @@ theorem edist_none_none
 
 中文:
 定理 edist_none_none
-  结论: edist (self := Option.toEDist (α := α))
+  结论: edist (self := 选项类型.toEDist (α := α))
   证明: rfl
 
 @[simp]
@@ -165,7 +165,7 @@ theorem some_eball
 
 中文:
 定理 some_eball
-  条件: (a : α) (r : ENN实数)
+  条件: (a : α) (r : 广义非负实数)
   证明: by
   ext x
   constructor <;> intro h
@@ -198,7 +198,7 @@ lemma edist_self'
 
 中文:
 引理 edist_self'
-  条件: {α : 类型u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α)
+  条件: {α : 类型u} [拓扑空间 α] (m : WeakPseudoEMetric空间 α)
 -/
 lemma edist_self' {α : Type u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α) :
     forall x : Option α, edist x x = 0
@@ -214,7 +214,7 @@ lemma edist_comm'
 
 中文:
 引理 edist_comm'
-  条件: {α : 类型u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α)
+  条件: {α : 类型u} [拓扑空间 α] (m : WeakPseudoEMetric空间 α)
 -/
 lemma edist_comm' {α : Type u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α) :
     forall x y : Option α, edist x y = edist y x
@@ -232,7 +232,7 @@ lemma edist_triangle'
 
 中文:
 引理 edist_triangle'
-  条件: {α : 类型u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α)
+  条件: {α : 类型u} [拓扑空间 α] (m : WeakPseudoEMetric空间 α)
 -/
 lemma edist_triangle' {α : Type u} [TopologicalSpace α] (m : WeakPseudoEMetricSpace α) :
     forall x y z : Option α, edist x z <= edist x y + edist y z
@@ -260,7 +260,7 @@ theorem ball_infty_of_pos
 
 中文:
 定理 ball_infty_of_pos
-  条件: {r : ENN实数} (hr : 0 < r)
+  条件: {r : 广义非负实数} (hr : 0 < r)
   证明: by
   refine eq_singleton_iff_unique_mem.mpr ⟨Metric.mem_eball.mpr hr, ?_⟩
   intro x
@@ -293,8 +293,8 @@ abbreviation WeakPseudoEMetricSpace.OfIsOpenEmbedding
       (h_edist ▸ edist_self' m) (h_edist ▸ edist_comm' m) (h_edis
 
 中文:
-缩写 WeakPseudoEMetricSpace.OfIsOpenEmbedding
-  签名: {α : 类型u} [t : TopologicalSpace α]
+缩写 WeakPseudoEMetric空间.OfIsOpenEmbedding
+  签名: {α : 类型u} [t : 拓扑空间 α]
   定义体: edist
   edist_self := h_edist ▸ edist_self' m
   edist_comm := h_edist ▸ edist_comm' m
@@ -363,8 +363,8 @@ abbreviation WeakEMetricSpace.OfIsOpenEmbedding
     }
 
 中文:
-缩写 WeakEMetricSpace.OfIsOpenEmbedding
-  签名: {α : 类型u} [t : TopologicalSpace α]
+缩写 WeakEMetric空间.OfIsOpenEmbedding
+  签名: {α : 类型u} [t : 拓扑空间 α]
   定义体: { toWeakPseudoEMetricSpace := WeakPseudoEMetricSpace.OfIsOpenEmbedding h_edist h,
     eq_of_edist_eq_zero {x y} xy := by
       rw [congr(@edist _ $h_edist x y)] at xy
@@ -409,7 +409,7 @@ theorem WithTop.isOpenEmbedding_some
 
 中文:
 定理 WithTop.isOpenEmbedding_some
-  结论: IsOpenEmbedding (some (α := α))
+  结论: 是开嵌入 (some (α := α))
   证明: ⟨WithTop.coe_strictMono.isEmbedding_of_ordConnected (range_coe (α := α) ▸ ordConnected_Iio),
    range_coe (α := α) ▸ isOpen_Iio' ⊤⟩
 
@@ -455,7 +455,7 @@ inferInstanceAs WeakPseudoEMetricSpace (Option α)
 
 中文:
 实例 instWeakPseudoEMetricSpaceWithTop
-  签名: [m : WeakPseudoEMetricSpace α]
+  签名: [m : WeakPseudoEMetric空间 α]
   定义体: letI : TopologicalSpace (Option α) := TopologicalSpace.instWithTopOfOrderTopology
   letI : WeakPseudoEMetricSpace (Option α) :=
     Option.WeakPseudoEMetricSpace.OfIsOpenEmbedding (inst := instEDistWithTop) rfl
@@ -488,7 +488,7 @@ inferInstanceAs WeakEMetricSpace (Option α)
 
 中文:
 实例 instWeakEMetricSpaceWithTop
-  签名: [m : WeakEMetricSpace α]
+  签名: [m : WeakEMetric空间 α]
   定义体: let : TopologicalSpace (Option α) := TopologicalSpace.instWithTopOfOrderTopology
   let : WeakEMetricSpace (Option α) := Option.WeakEMetricSpace.OfIsOpenEmbedding
     (inst := instEDistWithTop) rfl WithTop.isOpenEmbedding_some
@@ -534,7 +534,7 @@ inferInstanceAs WeakPseudoEMetricSpace (Option α)
 
 中文:
 实例 instWeakPseudoEMetricSpaceOnePoint
-  签名: [m : WeakPseudoEMetricSpace α]
+  签名: [m : WeakPseudoEMetric空间 α]
   定义体: let : TopologicalSpace (Option α) := OnePoint.instTopologicalSpace
   let : WeakPseudoEMetricSpace (Option α) := Option.WeakPseudoEMetricSpace.OfIsOpenEmbedding
     (inst := instEDistOnePoint) rfl OnePoint.isOpenEmbedding_coe
@@ -562,7 +562,7 @@ inferInstanceAs WeakEMetricSpace (Option α)
 
 中文:
 实例 instWeakEMetricSpaceOnePoint
-  签名: [m : WeakEMetricSpace α]
+  签名: [m : WeakEMetric空间 α]
   定义体: let : TopologicalSpace (Option α) := OnePoint.instTopologicalSpace
   let : WeakEMetricSpace (Option α) := Option.WeakEMetricSpace.OfIsOpenEmbedding
     (inst := instEDistOnePoint) rfl OnePoint.isOpenEmbedding_coe
@@ -586,8 +586,8 @@ instance instWeakEMetricSpaceENNReal
   body: inferInstanceAs WeakEMetricSpace (WithTop Real>=0)
 
 中文:
-实例 instWeakEMetricSpaceENNReal
-  签名: : WeakEMetricSpace 实数>=0∞
+实例 instWeakEMetricSpaceENN实数
+  签名: : WeakEMetric空间 实数>=0∞
   定义体: inferInstanceAs WeakEMetricSpace (WithTop Real>=0)
 
 Depends on / 依赖: WeakEMetricSpace, WithTop
@@ -604,8 +604,8 @@ instance instWeakEMetricSpaceEReal
   body: inferInstanceAs WeakEMetricSpace (WithBot (WithTop Real))
 
 中文:
-实例 instWeakEMetricSpaceEReal
-  签名: : WeakEMetricSpace E实数
+实例 instWeakEMetricSpaceE实数
+  签名: : WeakEMetric空间 E实数
   定义体: inferInstanceAs WeakEMetricSpace (WithBot (WithTop Real))
 
 Depends on / 依赖: WeakEMetricSpace, WithBot, WithTop
@@ -622,8 +622,8 @@ instance instWeakEMetricSpaceENat
   body: inferInstanceAs WeakEMetricSpace (WithTop Nat)
 
 中文:
-实例 instWeakEMetricSpaceENat
-  签名: : WeakEMetricSpace 自然数∞
+实例 instWeakEMetricSpaceE自然数
+  签名: : WeakEMetric空间 自然数∞
   定义体: inferInstanceAs WeakEMetricSpace (WithTop Nat)
 
 Depends on / 依赖: WeakEMetricSpace, WithTop
@@ -648,7 +648,7 @@ theorem ENNReal.edist_eq_top_iff
   · exact edist_ne_top _ _
 
 中文:
-定理 ENNReal.edist_eq_top_iff
+定理 广义非负实数.edist_eq_top_iff
   条件: (a b : 实数>=0∞)
   结论: edist a b = ∞ ↔ a != b ∧ (a = ∞ ∨ b = ∞)
   证明: by

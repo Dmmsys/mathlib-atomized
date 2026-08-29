@@ -47,7 +47,7 @@ definition solutionFinsupp
 
 中文:
 定义 solutionFinsupp
-  签名: : relations.Solution (relations.G ->₀ A) where
+  签名: : relations.解 (relations.G ->₀ A) where
   定义体: Finsupp.single g 1
   linearCombination_var_relation r := by exfalso; exact IsEmpty.false r
 
@@ -110,8 +110,8 @@ lemma Solution.IsPresentation.free
   proof: Free.of_equiv ((solutionFinsupp_isPresentation relations).uniq h)
 
 中文:
-引理 Solution.IsPresentation.free
-  结论: {solution : relations.Solution M}
+引理 解.是呈现.free
+  结论: {solution : relations.解 M}
   证明: Free.of_equiv ((solutionFinsupp_isPresentation relations).uniq h)
 
 Depends on / 依赖: Free.of_equiv, of_equiv, relations, solutionFinsupp_isPresentation
@@ -143,7 +143,7 @@ definition presentationFinsupp
 
 中文:
 定义 presentationFinsupp
-  签名: (G : Type w₀)
+  签名: (G : 类型 w₀)
   定义体: G
   R := PEmpty.{w₁ + 1}
   relation := by rintro ⟨⟩
@@ -173,7 +173,7 @@ lemma free_iff_exists_presentation
     exact p.toIsPresentation.free
 
 中文:
-引理 free_iff_exists_presentation
+引理 free_iff_存在_presentation
   证明: by
   constructor
   · rw [free_def.{_, _, v}]

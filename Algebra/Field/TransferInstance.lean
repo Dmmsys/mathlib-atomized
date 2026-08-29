@@ -32,7 +32,7 @@ abbreviation nnratCast
 
 中文:
 缩写 nnratCast
-  签名: [NNRatCast β]
+  签名: [非负有理数嵌入 β]
   定义体: e.invFun q
 -/
 protected abbrev nnratCast [NNRatCast β] : NNRatCast α where nnratCast q := e.invFun q
@@ -47,7 +47,7 @@ abbreviation ratCast
 
 中文:
 缩写 ratCast
-  签名: [RatCast β]
+  签名: [有理数嵌入 β]
   定义体: e.invFun n
 -/
 protected abbrev ratCast [RatCast β] : RatCast α where ratCast n := e.invFun n
@@ -73,7 +73,7 @@ abbreviation divisionRing
 
 中文:
 缩写 divisionRing
-  签名: [DivisionRing β]
+  签名: [除环 β]
   定义体: by
   let add_group_with_one := e.addGroupWithOne
   let inv := e.Inv
@@ -122,7 +122,7 @@ abbreviation field
 
 中文:
 缩写 field
-  签名: [Field β]
+  签名: [域 β]
   定义体: by
   let add_group_with_one := e.addGroupWithOne
   let neg := e.Neg

@@ -40,7 +40,7 @@ theorem summable_norm_of_tsum_eLpNorm_ne_top
 
 中文:
 定理 summable_norm_of_tsum_eLpNorm_ne_top
-  结论: {ι : 类型} [Countable ι]
+  结论: {ι : 类型} [可数 ι]
   证明: by
   suffices H : forallᵐ a ∂μ, ∑' n, ‖f n a‖ₑ < ∞ by
     filter_upwards [H] with x hx using tsum_enorm_ne_top_iff_summable_norm.1 hx.ne
@@ -183,7 +183,7 @@ theorem hasSum_coeFn_tsum
 
 中文:
 定理 hasSum_coeFn_tsum
-  结论: {p : 实数>=0∞} [hp : Fact (1 <= p)] {ι : 类型} [Countable ι]
+  结论: {p : 实数>=0∞} [hp : Fact (1 <= p)] {ι : 类型} [可数 ι]
   证明: by
   rcases finite_or_infinite ι with hι | hι
   · let : Fintype ι := Fintype.ofFinite ι
@@ -223,7 +223,7 @@ theorem coeFn_tsum
 
 中文:
 定理 coeFn_tsum
-  结论: {ι : 类型} [Countable ι] {p : 实数>=0∞} [hp : Fact (1 <= p)]
+  结论: {ι : 类型} [可数 ι] {p : 实数>=0∞} [hp : Fact (1 <= p)]
   证明: by
   filter_upwards [Lp.hasSum_coeFn_tsum hf] with x hx using hx.tsum_eq.symm
 

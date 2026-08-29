@@ -493,7 +493,7 @@ lemma cast_negOnePow_natCast
 
 中文:
 引理 cast_negOnePow_natCast
-  条件: (R : 类型) [Ring R] (n : 自然数)
+  条件: (R : 类型) [环 R] (n : 自然数)
   结论: negOnePow n = (-1 : R) ^ n
   证明: by
   obtain ⟨k, rfl | rfl⟩ := Nat.even_or_odd' n <;> simp [pow_succ, pow_mul]
@@ -538,7 +538,7 @@ lemma coe_negOnePow
 
 中文:
 引理 coe_negOnePow
-  条件: (R : 类型) [Ring R] (n : 整数)
+  条件: (R : 类型) [环 R] (n : 整数)
   证明: by
   cases n with
   | ofNat n => exact cast_negOnePow_natCast R n

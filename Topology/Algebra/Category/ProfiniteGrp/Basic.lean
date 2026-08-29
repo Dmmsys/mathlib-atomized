@@ -57,8 +57,8 @@ structure ProfiniteGrp
   参数: where
   公理与运算 (3 个):
     - toProfinite : Profinite.{u}
-    - [group : Group toProfinite]
-    - [topologicalGroup : IsTopologicalGroup toProfinite]
+    - [group : 群 toProfinite]
+    - [topologicalGroup : 是拓扑群 toProfinite]
 -/
 structure ProfiniteGrp where
   /-- The underlying profinite topological space. -/
@@ -89,8 +89,8 @@ structure ProfiniteAddGrp
   参数: where
   公理与运算 (3 个):
     - toProfinite : Profinite.{u}
-    - [addGroup : AddGroup toProfinite]
-    - [topologicalAddGroup : IsTopologicalAddGroup toProfinite]
+    - [addGroup : 加法群 toProfinite]
+    - [topologicalAddGroup : 是拓扑加群 toProfinite]
 -/
 structure ProfiniteAddGrp where
   /-- The underlying profinite topological space. -/
@@ -144,7 +144,7 @@ abbreviation ProfiniteGrp.of
 
 中文:
 缩写 ProfiniteGrp.of
-  签名: (G : 类型u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  签名: (G : 类型u) [群 G] [拓扑空间 G] [是拓扑群 G]
   定义体: .of G
   group := ‹_›
   topologicalGroup := ‹_›
@@ -168,7 +168,7 @@ lemma ProfiniteGrp.coe_of
 
 中文:
 引理 ProfiniteGrp.coe_of
-  结论: (G : 类型u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  结论: (G : 类型u) [群 G] [拓扑空间 G] [是拓扑群 G]
   证明: rfl
 -/
 lemma ProfiniteGrp.coe_of (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
@@ -188,7 +188,7 @@ structure ProfiniteAddGrp.Hom
     - hom' : A ->ₜ+ B
 
 中文:
-结构 ProfiniteAddGrp.Hom
+结构 ProfiniteAddGrp.态射
   参数: (A B : ProfiniteAddGrp.{u})
   公理与运算 (2 个):
     - private(mk) : :
@@ -212,7 +212,7 @@ structure ProfiniteGrp.Hom
     - hom' : A ->ₜ* B
 
 中文:
-结构 ProfiniteGrp.Hom
+结构 ProfiniteGrp.态射
   参数: (A B : ProfiniteGrp.{u})
   公理与运算 (2 个):
     - private(mk) : :
@@ -238,7 +238,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category ProfiniteGrp
+  签名: 范畴 ProfiniteGrp
   定义体: ProfiniteGrp.Hom A B
   id A := ⟨ContinuousMonoidHom.id A⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -262,7 +262,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory ProfiniteGrp (fun X Y => X ->ₜ* Y)
+  签名: 余ncrete范畴 ProfiniteGrp (fun X Y => X ->ₜ* Y)
   定义体: f.hom'
   ofHom f := ⟨f⟩
 -/
@@ -281,8 +281,8 @@ abbreviation ProfiniteGrp.Hom.hom
   body: ConcreteCategory.hom (C := ProfiniteGrp) f
 
 中文:
-缩写 ProfiniteGrp.Hom.hom
-  签名: {M N : ProfiniteGrp.{u}} (f : ProfiniteGrp.Hom M N)
+缩写 ProfiniteGrp.态射.hom
+  签名: {M N : ProfiniteGrp.{u}} (f : ProfiniteGrp.态射 M N)
   定义体: ConcreteCategory.hom (C := ProfiniteGrp) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, ProfiniteGrp
@@ -303,7 +303,7 @@ abbreviation ProfiniteGrp.ofHom
 
 中文:
 缩写 ProfiniteGrp.ofHom
-  签名: {X Y : 类型u} [Group X] [TopologicalSpace X] [IsTopologicalGroup X]
+  签名: {X Y : 类型u} [群 X] [拓扑空间 X] [是拓扑群 X]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -333,7 +333,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {A : ProfiniteGrp.{u}}
-  结论: (𝟙 A : A ⟶ A).hom = ContinuousMonoidHom.id A
+  结论: (𝟙 A : A ⟶ A).hom = 余ntinuous幺半群态射.id A
   证明: rfl
 -/
 lemma hom_id {A : ProfiniteGrp.{u}} : (𝟙 A : A ⟶ A).hom = ContinuousMonoidHom.id A := rfl
@@ -486,7 +486,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  结论: ofHom (ContinuousMonoidHom.id X) = 𝟙 (of X)
+  结论: ofHom (余ntinuous幺半群态射.id X) = 𝟙 (of X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -642,7 +642,7 @@ abbreviation ofProfinite
 
 中文:
 缩写 ofProfinite
-  签名: (G : Profinite) [Group G] [IsTopologicalGroup G]
+  签名: (G : Profinite) [群 G] [是拓扑群 G]
   定义体: of G
 -/
 abbrev ofProfinite (G : Profinite) [Group G] [IsTopologicalGroup G] :
@@ -750,7 +750,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ FiniteGrp ProfiniteGrp
+  签名: 有Forget₂ FiniteGrp ProfiniteGrp
   定义体: { obj := ofFiniteGrp
     map := ofFiniteGrpHom }
 
@@ -775,7 +775,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ ProfiniteGrp GrpCat
+  签名: 有Forget₂ ProfiniteGrp 群范畴
   定义体: GrpCat.of P
   forget₂.map f := GrpCat.ofHom f.hom.toMonoidHom
 
@@ -798,7 +798,7 @@ definition ofClosedSubgroup
 
 中文:
 定义 ofClosedSubgroup
-  签名: {G : ProfiniteGrp} (H : ClosedSubgroup G)
+  签名: {G : ProfiniteGrp} (H : 闭子群 G)
   定义体: letI : CompactSpace H := inferInstance
   of H.1
 
@@ -823,7 +823,7 @@ definition ofContinuousMulEquiv
 
 中文:
 定义 ofContinuousMulEquiv
-  签名: {G : ProfiniteGrp.{u}} {H : 类型v} [TopologicalSpace H]
+  签名: {G : ProfiniteGrp.{u}} {H : 类型v} [拓扑空间 H]
   定义体: let _ : CompactSpace H := Homeomorph.compactSpace e.toHomeomorph
   let _ : TotallyDisconnectedSpace H := Homeomorph.totallyDisconnectedSpace e.toHomeomorph
   .of H
@@ -850,7 +850,7 @@ definition ContinuousMulEquiv.toProfiniteGrpIso
   inv := ofHom e.symm
 
 中文:
-定义 ContinuousMulEquiv.toProfiniteGrpIso
+定义 连续乘法等价.toProfiniteGrpIso
   签名: {X Y : ProfiniteGrp} (e : X ≃ₜ* Y)
   定义体: ofHom e
   inv := ofHom e.symm
@@ -875,7 +875,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ ProfiniteGrp Profinite
+  签名: 有Forget₂ ProfiniteGrp Profinite
   定义体: {
     obj G := G.toProfinite
     map f := CompHausLike.ofHom _ ⟨f, by fun_prop⟩}
@@ -902,7 +902,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ ProfiniteGrp Profinite).Faithful
+  签名: (forget₂ ProfiniteGrp Profinite).忠实
   定义体: {
   map_injective := fun {_ _} _ _ h =>
     ConcreteCategory.hom_ext _ _ fun x => CategoryTheory.congr_fun h x }
@@ -931,7 +931,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ ProfiniteGrp Profinite).ReflectsIsomorphisms
+  签名: (forget₂ ProfiniteGrp Profinite).反映同构
   定义体: by
     let i := asIso ((forget₂ ProfiniteGrp Profinite).map f)
     let e : X ≃ₜ* Y :=
@@ -962,7 +962,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget ProfiniteGrp.{u}).ReflectsIsomorphisms
+  签名: (forget ProfiniteGrp.{u}).反映同构
   定义体: CategoryTheory.reflectsIsomorphisms_comp (forget₂ ProfiniteGrp Profinite) (forget Profinite)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.reflectsIsomorphisms_comp, Profinite, ProfiniteGrp, forget, reflectsIsomorphisms_comp
@@ -1007,7 +1007,7 @@ definition limitConePtAux
 
 中文:
 定义 limitConePtAux
-  签名: : Subgroup (Π j : J, F.obj j) where
+  签名: : 子群 (Π j : J, F.obj j) where
   定义体: {x | forall ⦃i j : J⦄ (π : i ⟶ j), F.map π (x i) = x j}
   mul_mem' hx hy _ _ π := by simp only [Pi.mul_apply, map_mul, hx π, hy π]
   one_mem' := by simp only [Set.mem_ofPred_eq, Pi.one_apply, map_one, implies_true]
@@ -1036,7 +1036,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt
+  签名: 群 (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt
   定义体: inferInstanceAs (Group (limitConePtAux F))
 
 @[to_additive]
@@ -1057,7 +1057,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalGroup (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt
+  签名: 是拓扑群 (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt
   定义体: inferInstanceAs (IsTopologicalGroup (limitConePtAux F))
 
 Depends on / 依赖: IsTopologicalGroup, limitConePtAux
@@ -1087,7 +1087,7 @@ abbreviation limitCone
 
 中文:
 缩写 limitCone
-  签名: : Limits.Cone F where
+  签名: : Limits.锥 F where
   定义体: ofProfinite (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt
   π :=
   { app := fun j => ⟨{
@@ -1130,7 +1130,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : Limits.IsLimit (limitCone F) where
+  签名: : Limits.是极限 (limitCone F) where
   定义体: ofHom
     { ((Profinite.limitConeIsLimit (F ⋙ (forget₂ ProfiniteGrp Profinite))).lift
         ((forget₂ ProfiniteGrp Profinite).mapCone cone)).hom.hom with
@@ -1166,7 +1166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasLimit F
+  签名: Limits.有极限 F
   定义体: Nonempty.intro
     { cone := limitCone F
       isLimit := limitConeIsLimit F }
@@ -1218,7 +1218,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (limitConePtAux F)
+  签名: 紧空间 (limitConePtAux F)
   定义体: inferInstanceAs (CompactSpace (Profinite.limitCone (F ⋙ (forget₂ ProfiniteGrp Profinite))).pt)
 
 Depends on / 依赖: CompactSpace, Profinite, Profinite.limitCone, ProfiniteGrp, limitCone

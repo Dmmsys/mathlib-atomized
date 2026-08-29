@@ -78,7 +78,7 @@ refine ⟨⋃₀ (g '' S), isOpen_sUni
 
 中文:
 定义 induced
-  签名: (f : X -> Y) (t : TopologicalSpace Y)
+  签名: (f : X -> Y) (t : 拓扑空间 Y)
   定义体: exists t, IsOpen t ∧ f ⁻¹' t = s
   isOpen_univ := ⟨univ, isOpen_univ, preimage_univ⟩
   isOpen_inter := by
@@ -112,7 +112,7 @@ instance _root_.instTopologicalSpaceSubtype
 
 中文:
 实例 _root_.instTopologicalSpaceSubtype
-  签名: {p : X -> 命题} [t : TopologicalSpace X]
+  签名: {p : X -> 命题} [t : 拓扑空间 X]
   定义体: induced (↑) t
 
 Depends on / 依赖: induced
@@ -139,7 +139,7 @@ definition coinduced
 
 中文:
 定义 coinduced
-  签名: (f : X -> Y) (t : TopologicalSpace X)
+  签名: (f : X -> Y) (t : 拓扑空间 X)
   定义体: IsOpen (f ⁻¹' s)
   isOpen_univ := t.isOpen_univ
   isOpen_inter _ _ h₁ h₂ := h₁.inter h₂
@@ -167,7 +167,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: (X : 类型) (t : TopologicalSpace X)
+  签名: (X : 类型) (t : 拓扑空间 X)
   定义体: .coinduced (WithTopology.toTopology t) t
 
 Depends on / 依赖: WithTopology, WithTopology.toTopology, coinduced, toTopology
@@ -186,7 +186,7 @@ lemma topology_eq_coinduced
 
 中文:
 引理 topology_eq_coinduced
-  条件: (X : 类型) (t : TopologicalSpace X)
+  条件: (X : 类型) (t : 拓扑空间 X)
   证明: rfl
 -/
 lemma topology_eq_coinduced (X : Type*) (t : TopologicalSpace X) :
@@ -208,7 +208,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: (X : 类型) (t : TopologicalSpace X)
+  签名: (X : 类型) (t : 拓扑空间 X)
   定义体: WithTopology.ofTopology
   invFun := WithTopology.toTopology t
   left_inv _ := rfl
@@ -235,10 +235,10 @@ structure IsCoherentWith
     - isOpen_of_forall_induced((u : Set X)) : (forall s in S, IsOpen ((↑) ⁻¹' u : Set s)) -> IsOpen u
 
 中文:
-结构 IsCoherentWith
-  参数: (S : Set (Set X))
+结构 是余herentWith
+  参数: (S : 集合 (集合 X))
   公理与运算 (1 个):
-    - isOpen_of_forall_induced((u : Set X)) : (对任意 s in S, IsOpen ((↑) ⁻¹' u : Set s)) -> IsOpen u
+    - isOpen_of_forall_induced((u : 集合 X)) : (对任意 s in S, 是开集 ((↑) ⁻¹' u : 集合 s)) -> 是开集 u
 -/
 structure IsCoherentWith (S : Set (Set X)) : Prop where
   isOpen_of_forall_induced (u : Set X) : (forall s in S, IsOpen ((↑) ⁻¹' u : Set s)) -> IsOpen u
@@ -257,7 +257,7 @@ structure IsInducing
     - eq_induced : tX = tY.induced f
 
 中文:
-结构 IsInducing
+结构 是Inducing
   参数: (f : X -> Y)
   公理与运算 (1 个):
     - eq_induced : tX = tY.induced f
@@ -280,7 +280,7 @@ structure IsCoinducing
     - eq_coinduced : tY = tX.coinduced f
 
 中文:
-结构 IsCoinducing
+结构 是余inducing
   参数: (f : X -> Y)
   公理与运算 (1 个):
     - eq_coinduced : tY = tX.coinduced f
@@ -303,11 +303,11 @@ structure IsEmbedding
     - injective : Function.Injective f
 
 中文:
-结构 IsEmbedding
+结构 是嵌入
   参数: (f : X -> Y)
-  继承: IsInducing f
+  继承: 是Inducing f
   公理与运算 (1 个):
-    - injective : Function.Injective f
+    - injective : 函数.单射 f
 -/
 structure IsEmbedding (f : X -> Y) : Prop extends IsInducing f where
   /-- A topological embedding is injective. -/
@@ -326,11 +326,11 @@ structure IsOpenEmbedding
     - isOpen_range : IsOpen range f
 
 中文:
-结构 IsOpenEmbedding
+结构 是开嵌入
   参数: (f : X -> Y)
-  继承: IsEmbedding f
+  继承: 是嵌入 f
   公理与运算 (1 个):
-    - isOpen_range : IsOpen range f
+    - isOpen_range : 是开集 range f
 -/
 structure IsOpenEmbedding (f : X -> Y) : Prop extends IsEmbedding f where
   /-- The range of an open embedding is an open set. -/
@@ -349,11 +349,11 @@ structure IsClosedEmbedding
     - isClosed_range : IsClosed range f
 
 中文:
-结构 IsClosedEmbedding
+结构 是闭嵌入
   参数: (f : X -> Y)
-  继承: IsEmbedding f
+  继承: 是嵌入 f
   公理与运算 (1 个):
-    - isClosed_range : IsClosed range f
+    - isClosed_range : 是闭集 range f
 -/
 structure IsClosedEmbedding (f : X -> Y) : Prop extends IsEmbedding f where
   /-- The range of a closed embedding is a closed set. -/
@@ -373,11 +373,11 @@ structure IsQuotientMap
     - surjective : Function.Surjective f
 
 中文:
-结构 IsQuotientMap
-  参数: {X : 类型} {Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
-  继承: isCoinducing : IsCoinducing f
+结构 是商映射
+  参数: {X : 类型} {Y : 类型} [拓扑空间 X] [拓扑空间 Y]
+  继承: isCoinducing : 是余inducing f
   公理与运算 (1 个):
-    - surjective : Function.Surjective f
+    - surjective : 函数.满射 f
 -/
 structure IsQuotientMap {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     (f : X -> Y) : Prop extends isCoinducing : IsCoinducing f where

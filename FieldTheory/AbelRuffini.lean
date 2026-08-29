@@ -40,7 +40,7 @@ theorem gal_zero_isSolvable
 
 中文:
 定理 gal_zero_isSolvable
-  结论: Group.IsSolvable (0 : F[X]).Gal
+  结论: 群.是可解 (0 : F[X]).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -57,7 +57,7 @@ theorem gal_one_isSolvable
 
 中文:
 定理 gal_one_isSolvable
-  结论: Group.IsSolvable (1 : F[X]).Gal
+  结论: 群.是可解 (1 : F[X]).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -76,7 +76,7 @@ theorem gal_C_isSolvable
 中文:
 定理 gal_C_isSolvable
   条件: (x : F)
-  结论: Group.IsSolvable (C x).Gal
+  结论: 群.是可解 (C x).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -93,7 +93,7 @@ theorem gal_X_isSolvable
 
 中文:
 定理 gal_X_isSolvable
-  结论: Group.IsSolvable (X : F[X]).Gal
+  结论: 群.是可解 (X : F[X]).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -112,7 +112,7 @@ theorem gal_X_sub_C_isSolvable
 中文:
 定理 gal_X_sub_C_isSolvable
   条件: (x : F)
-  结论: Group.IsSolvable (X - C x).Gal
+  结论: 群.是可解 (X - C x).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -131,7 +131,7 @@ theorem gal_X_pow_isSolvable
 中文:
 定理 gal_X_pow_isSolvable
   条件: (n : 自然数)
-  结论: Group.IsSolvable (X ^ n : F[X]).Gal
+  结论: 群.是可解 (X ^ n : F[X]).Gal
   证明: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -148,7 +148,7 @@ theorem gal_mul_isSolvable
 
 中文:
 定理 gal_mul_isSolvable
-  条件: {p q : F[X]} (_ : Group.IsSolvable p.Gal) (_ : Group.IsSolvable q.Gal)
+  条件: {p q : F[X]} (_ : 群.是可解 p.Gal) (_ : 群.是可解 q.Gal)
   证明: Group.isSolvable_of_isSolvable_injective (Gal.restrictProd_injective p q)
 
 Depends on / 依赖: Gal.restrictProd_injective, Group.isSolvable_of_isSolvable_injective, isSolvable_of_isSolvable_injective, restrictProd_injective
@@ -172,7 +172,7 @@ theorem gal_prod_isSolvable
 
 中文:
 定理 gal_prod_isSolvable
-  条件: {s : Multiset F[X]} (hs : 对任意 p in s, Group.IsSolvable (Gal p))
+  条件: {s : Multiset F[X]} (hs : 对任意 p in s, 群.是可解 (Gal p))
   证明: by
   apply Multiset.induction_on' s
   · exact gal_one_isSolvable
@@ -229,7 +229,7 @@ theorem gal_isSolvable_tower
 
 中文:
 定理 gal_isSolvable_tower
-  结论: (p q : F[X]) (hpq : (p.map (algebraMap F q.SplittingField)).Splits)
+  结论: (p q : F[X]) (hpq : (p.map (algebraMap F q.分裂域)).Splits)
   证明: by
   let K := p.SplittingField
   let L := q.SplittingField
@@ -278,7 +278,7 @@ theorem gal_X_pow_sub_one_isSolvable
 中文:
 定理 gal_X_pow_sub_one_isSolvable
   条件: (n : 自然数)
-  结论: Group.IsSolvable (X ^ n - 1 : F[X]).Gal
+  结论: 群.是可解 (X ^ n - 1 : F[X]).Gal
   证明: by
   by_cases hn : n = 0
   · rw [hn, pow_zero, sub_self]
@@ -396,7 +396,7 @@ theorem splits_X_pow_sub_one_of_X_pow_sub_C
 
 中文:
 定理 splits_X_pow_sub_one_of_X_pow_sub_C
-  结论: {F : 类型} [Field F] {E : 类型} [Field E]
+  结论: {F : 类型} [域 F] {E : 类型} [域 E]
   证明: by
   have ha' : i a != 0 := mt ((injective_iff_map_eq_zero i).mp i.injective a) ha
   by_cases hn : n = 0
@@ -463,7 +463,7 @@ theorem gal_X_pow_sub_C_isSolvable
 中文:
 定理 gal_X_pow_sub_C_isSolvable
   条件: (n : 自然数) (x : F)
-  结论: Group.IsSolvable (X ^ n - C x).Gal
+  结论: 群.是可解 (X ^ n - C x).Gal
   证明: by
   by_cases hx : x = 0
   · rw [hx, C_0, sub_zero]
@@ -502,7 +502,7 @@ definition solvableByRad
 
 中文:
 定义 solvableByRad
-  签名: : 整数ermediateField F E
+  签名: : 中间域 F E
   定义体: sInf {s | forall x, forall n != 0, x ^ n in s -> x in s}
 -/
 def solvableByRad : IntermediateField F E :=
@@ -526,15 +526,15 @@ inductive IsSolvableByRad
     - rad: (α : E) (n : Nat) (hn : n != 0) : IsSolvableByRad (α ^ n) -> IsSolvableByRad α
 
 中文:
-归纳类型 IsSolvableByRad
+归纳类型 是SolvableByRad
   参数: : E -> 命题
   构造子 (6 个):
-    - base: (α : F) : IsSolvableByRad (algebraMap F E α)
-    - add: (α β : E) : IsSolvableByRad α -> IsSolvableByRad β -> IsSolvableByRad (α + β)
-    - neg: (α : E) : IsSolvableByRad α -> IsSolvableByRad (-α)
-    - mul: (α β : E) : IsSolvableByRad α -> IsSolvableByRad β -> IsSolvableByRad (α * β)
-    - inv: (α : E) : IsSolvableByRad α -> IsSolvableByRad α⁻¹
-    - rad: (α : E) (n : 自然数) (hn : n != 0) : IsSolvableByRad (α ^ n) -> IsSolvableByRad α
+    - base: (α : F) : 是SolvableByRad (algebraMap F E α)
+    - add: (α β : E) : 是SolvableByRad α -> 是SolvableByRad β -> 是SolvableByRad (α + β)
+    - neg: (α : E) : 是SolvableByRad α -> 是SolvableByRad (-α)
+    - mul: (α β : E) : 是SolvableByRad α -> 是SolvableByRad β -> 是SolvableByRad (α * β)
+    - inv: (α : E) : 是SolvableByRad α -> 是SolvableByRad α⁻¹
+    - rad: (α : E) (n : 自然数) (hn : n != 0) : 是SolvableByRad (α ^ n) -> 是SolvableByRad α
 -/
 inductive IsSolvableByRad : E -> Prop
   | base (α : F) : IsSolvableByRad (algebraMap F E α)
@@ -554,7 +554,7 @@ theorem solvableByRad_le
 
 中文:
 定理 solvableByRad_le
-  条件: {s : 整数ermediateField F E} (H : 对任意 x, 对任意 n != 0, x ^ n in s -> x in s)
+  条件: {s : 中间域 F E} (H : 对任意 x, 对任意 n != 0, x ^ n in s -> x in s)
   证明: sInf_le H
 
 Depends on / 依赖: sInf_le
@@ -631,7 +631,7 @@ theorem isAlgebraic_solvableByRad
 
 中文:
 定理 isAlgebraic_solvableByRad
-  结论: (solvableByRad F E).IsAlgebraic
+  结论: (solvableByRad F E).是代数
   证明: fun _ hx => mem_algebraicClosure_iff.1 (solvableByRad_le_algClosure _ _ hx)
 
 Depends on / 依赖: mem_algebraicClosure_iff, solvableByRad_le_algClosure
@@ -652,9 +652,9 @@ theorem isIntegral_of_mem_solvableByRad
 alias solvableByRad.isIntegral := isIntegral_of_mem_solvableByRad
 
 中文:
-定理 isIntegral_of_mem_solvableByRad
+定理 is整数egral_of_mem_solvableByRad
   条件: {x : E} (hx : x in solvableByRad F E)
-  结论: Is整数egral F x
+  结论: 是整 F x
   证明: (isAlgebraic_solvableByRad _ hx).isIntegral
 
 @[deprecated (since := "2026-02-28")]

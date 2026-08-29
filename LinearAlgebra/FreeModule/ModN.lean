@@ -32,7 +32,7 @@ abbreviation ModN
 
 中文:
 缩写 ModN
-  签名: : Type _
+  签名: : 类型 _
   定义体: G ⧸ LinearMap.range (LinearMap.lsmul Int G n)
 
 Depends on / 依赖: LinearMap, LinearMap.lsmul, LinearMap.range
@@ -51,7 +51,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (ZMod n) (ModN G n)
+  签名: 模 (ZMod n) (ModN G n)
   定义体: QuotientAddGroup.zmodModule (by simp)
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.zmodModule, zmodModule
@@ -73,7 +73,7 @@ definition liftEquiv
 
 中文:
 定义 liftEquiv
-  签名: [AddMonoid M]
+  签名: [加法幺半群 M]
   定义体: ⟨f.comp (QuotientAddGroup.mk' _), fun g => by
     let Gn : AddSubgroup G := (LinearMap.range (LinearMap.lsmul Int G n)).toAddSubgroup
     suffices n • g in (QuotientAddGroup.mk' Gn).ker by
@@ -105,7 +105,7 @@ definition liftEquiv'
 
 中文:
 定义 liftEquiv'
-  签名: [AddCommGroup H] [Module (ZMod n) H]
+  签名: [加法交换群 H] [模 (ZMod n) H]
   定义体: (AddMonoidHom.toZModLinearMapEquiv n).symm.toEquiv.trans ModN.liftEquiv
 -/
 protected def liftEquiv' [AddCommGroup H] [Module (ZMod n) H] :
@@ -149,7 +149,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: {ι : 类型} (b : Basis ι 整数 G)
+  签名: {ι : 类型} (b : 基 ι 整数 G)
   定义体: by
   set nG := LinearMap.range (LinearMap.lsmul Int G n)
   set H := G ⧸ nG
@@ -203,7 +203,7 @@ lemma basis_apply_eq_mkQ
 
 中文:
 引理 basis_apply_eq_mkQ
-  条件: {ι : 类型} (b : Basis ι 整数 G) (i : ι)
+  条件: {ι : 类型} (b : 基 ι 整数 G) (i : ι)
   结论: basis b i = mkQ n (b i)
   证明: by
   rw [Basis.apply_eq_iff]; simp [basis, mkQ]
@@ -225,7 +225,7 @@ instance instModuleFinite
 
 中文:
 实例 instModuleFinite
-  签名: : Module.Finite (ZMod n) (ModN G n)
+  签名: : 模.有限 (ZMod n) (ModN G n)
   定义体: .of_basis basis Module.Free.chooseBasis Int G
 
 Depends on / 依赖: IsMulLeftInvariant, IsMulLeftInvariant.isMulRightInvariant, Measure, Module, Module.Free.chooseBasis, chooseBasis, isMulRightInvariant, of_basis
@@ -243,7 +243,7 @@ instance instFinite
 
 中文:
 实例 instFinite
-  签名: : Finite (ModN G n)
+  签名: : 有限 (ModN G n)
   定义体: Module.finite_of_finite (ZMod n)
 
 Depends on / 依赖: Module, Module.finite_of_finite, finite_of_finite
@@ -263,7 +263,7 @@ lemma natCard_eq
 
 中文:
 引理 natCard_eq
-  结论: 自然数.card (ModN G n) = n ^ Module.finrank 整数 G
+  结论: 自然数.card (ModN G n) = n ^ 模.finrank 整数 G
   证明: by
   simp [Nat.card_congr (basis <| Module.Free.chooseBasis Int G).repr.toEquiv,
     Nat.card_eq_fintype_card, Module.finrank_eq_card_chooseBasisIndex]

@@ -100,7 +100,7 @@ lemma add_smul_subset
 
 中文:
 引理 add_smul_subset
-  条件: (a b : α) (s : Set β)
+  条件: (a b : α) (s : 集合 β)
   结论: (a + b) • s subseteq a • s + b • s
   证明: by
   rintro _ ⟨x, hx, rfl⟩
@@ -155,7 +155,7 @@ lemma zero_mem_smul_iff
 
 中文:
 引理 zero_mem_smul_iff
-  结论: 0 in s • t ↔ 0 in s ∧ t.Nonempty ∨ 0 in t ∧ s.Nonempty where
+  结论: 0 in s • t ↔ 0 in s ∧ t.非空 ∨ 0 in t ∧ s.非空 where
   证明: smul_eq_zero.1 h; exacts [.inl ⟨ha, b, hb⟩, .inr ⟨hb, a, ha⟩]
   mpr
   | .inl ⟨hs, b, hb⟩ => ⟨0, hs, b, hb, zero_smul _ _⟩

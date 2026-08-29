@@ -41,7 +41,7 @@ instance [Mono
   body: inferInstanceAs (Mono (((evaluation K C).obj k).map f))
 
 中文:
-实例 [Mono
+实例 [单态射
   签名: f] (k
   定义体: inferInstanceAs (Mono (((evaluation K C).obj k).map f))
 
@@ -59,8 +59,8 @@ lemma NatTrans.mono_iff_mono_app
   proof: ⟨fun _ => inferInstance, fun _ => mono_of_mono_app _⟩
 
 中文:
-引理 NatTrans.mono_iff_mono_app
-  结论: Mono f ↔ 对任意 (k : K), Mono (f.app k)
+引理 自然变换.mono_iff_mono_app
+  结论: 单态射 f ↔ 对任意 (k : K), 单态射 (f.app k)
   证明: ⟨fun _ => inferInstance, fun _ => mono_of_mono_app _⟩
 
 Depends on / 依赖: mono_of_mono_app
@@ -80,7 +80,7 @@ instance [Mono
   apply NatTrans.mono_of_mono_app
 
 中文:
-实例 [Mono
+实例 [单态射
   签名: f] (H
   定义体: by
   have : forall X, Mono ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
@@ -113,7 +113,7 @@ instance [Epi
   body: inferInstanceAs (Epi (((evaluation K C).obj k).map f))
 
 中文:
-实例 [Epi
+实例 [满态射
   签名: f] (k
   定义体: inferInstanceAs (Epi (((evaluation K C).obj k).map f))
 
@@ -131,8 +131,8 @@ lemma NatTrans.epi_iff_epi_app
   proof: ⟨fun _ => inferInstance, fun _ => epi_of_epi_app _⟩
 
 中文:
-引理 NatTrans.epi_iff_epi_app
-  结论: Epi f ↔ 对任意 (k : K), Epi (f.app k)
+引理 自然变换.epi_iff_epi_app
+  结论: 满态射 f ↔ 对任意 (k : K), 满态射 (f.app k)
   证明: ⟨fun _ => inferInstance, fun _ => epi_of_epi_app _⟩
 
 Depends on / 依赖: epi_of_epi_app
@@ -152,7 +152,7 @@ instance [Epi
   apply NatTrans.epi_of_epi_app
 
 中文:
-实例 [Epi
+实例 [满态射
   签名: f] (H
   定义体: by
   have : forall X, Epi ((whiskerRight f H).app X) := by intros; dsimp; infer_instance

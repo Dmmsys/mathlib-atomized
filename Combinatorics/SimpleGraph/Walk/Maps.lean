@@ -71,7 +71,7 @@ theorem map_nil
 
 中文:
 定理 map_nil
-  结论: (nil : G.Walk u u).map f = nil
+  结论: (nil : G.途径 u u).map f = nil
   证明: rfl
 
 @[simp]
@@ -92,7 +92,7 @@ theorem map_cons
 
 中文:
 定理 map_cons
-  条件: {w : V} (h : G.Adj w u)
+  条件: {w : V} (h : G.伴随 w u)
   结论: (cons h p).map f = cons (f.map_adj h) (p.map f)
   证明: rfl
 
@@ -142,8 +142,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (p : G.Walk u v)
-  结论: p.map Hom.id = p
+  条件: (p : G.途径 u v)
+  结论: p.map 态射.id = p
   证明: by
   induction p <;> simp [*]
 
@@ -231,7 +231,7 @@ theorem map_eq_nil_iff
 
 中文:
 定理 map_eq_nil_iff
-  条件: {p : G.Walk u u}
+  条件: {p : G.途径 u u}
   结论: p.map f = nil ↔ p = nil
   证明: by cases p <;> simp
 
@@ -272,7 +272,7 @@ theorem map_append
 
 中文:
 定理 map_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by induction p <;> simp [*]
 
 @[simp]
@@ -427,7 +427,7 @@ theorem map_injective_of_injective
 
 中文:
 定理 map_injective_of_injective
-  条件: {f : G ->g G'} (hinj : Function.Injective f) (u v : V)
+  条件: {f : G ->g G'} (hinj : 函数.单射 f) (u v : V)
   证明: by
   intro p p' h
   induction p with
@@ -467,7 +467,7 @@ abbreviation mapLe
 
 中文:
 缩写 mapLe
-  签名: : G'.Walk u v
+  签名: : G'.途径 u v
   定义体: p.map (.ofLE h)
 
 Depends on / 依赖: p.map
@@ -576,7 +576,7 @@ theorem mapLe_append
 
 中文:
 定理 mapLe_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by
   simp
 -/
@@ -603,7 +603,7 @@ definition transfer
 
 中文:
 定义 transfer
-  签名: {u v : V} (p : G.Walk u v)
+  签名: {u v : V} (p : G.途径 u v)
   定义体: match p with
   | nil => nil
   | cons' u v w _ p =>
@@ -760,7 +760,7 @@ theorem transfer_transfer
 
 中文:
 定理 transfer_transfer
-  条件: (hp) {K : SimpleGraph V} (hp')
+  条件: (hp) {K : 简单图 V} (hp')
   证明: by
   induction p <;> simp [*]
 -/
@@ -781,7 +781,7 @@ theorem transfer_append
 
 中文:
 定理 transfer_append
-  条件: {w : V} (q : G.Walk v w) (hpq)
+  条件: {w : V} (q : G.途径 v w) (hpq)
   证明: by
   induction p <;> simp [*]
 -/
@@ -847,7 +847,7 @@ lemma induce_nil
 中文:
 引理 induce_nil
   条件: (hw)
-  结论: (.nil : G.Walk u u).induce s hw = .nil
+  结论: (.nil : G.途径 u u).induce s hw = .nil
   证明: rfl
 -/
 @[simp] lemma induce_nil (hw) : (.nil : G.Walk u u).induce s hw = .nil := rfl
@@ -862,7 +862,7 @@ lemma induce_cons
 
 中文:
 引理 induce_cons
-  条件: (huu' : G.Adj u u') (w : G.Walk u' v) (hw)
+  条件: (huu' : G.伴随 u u') (w : G.途径 u' v) (hw)
   证明: rfl
 -/
 @[simp] lemma induce_cons (huu' : G.Adj u u') (w : G.Walk u' v) (hw) :
@@ -912,7 +912,7 @@ lemma map_induce_induceHomOfLE
 中文:
 引理 map_induce_induceHomOfLE
   条件: (hs : s subseteq s') {u v : V}
-  结论: 对任意 (w : G.Walk u v) (hw),
+  结论: 对任意 (w : G.途径 u v) (hw),
 
 Depends on / 依赖: map_induce_induceHomOfLE
 -/
@@ -937,7 +937,7 @@ abbreviation toDeleteEdges
 
 中文:
 缩写 toDeleteEdges
-  签名: (s : Set (Sym2 V)) {v w : V} (p : G.Walk v w)
+  签名: (s : 集合 (Sym2 V)) {v w : V} (p : G.途径 v w)
   定义体: p.transfer _ by
     simp only [edgeSet_deleteEdges, Set.mem_sdiff]
     exact fun e ep => ⟨edges_subset_edgeSet p ep, hp e ep⟩
@@ -965,7 +965,7 @@ theorem toDeleteEdges_nil
 
 中文:
 定理 toDeleteEdges_nil
-  条件: (s : Set (Sym2 V)) {v : V} (hp)
+  条件: (s : 集合 (Sym2 V)) {v : V} (hp)
   证明: rfl
 
 @[simp]
@@ -984,7 +984,7 @@ theorem toDeleteEdges_cons
 
 中文:
 定理 toDeleteEdges_cons
-  条件: (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G.Walk v w) (hp)
+  条件: (s : 集合 (Sym2 V)) {u v w : V} (h : G.伴随 u v) (p : G.途径 v w) (hp)
   证明: rfl
 -/
 theorem toDeleteEdges_cons (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G.Walk v w) (hp) :
@@ -1005,7 +1005,7 @@ abbreviation toDeleteEdge
 
 中文:
 缩写 toDeleteEdge
-  签名: (e : Sym2 V) (p : G.Walk v w) (hp : e ∉ p.edges)
+  签名: (e : Sym2 V) (p : G.途径 v w) (hp : e ∉ p.edges)
   定义体: p.toDeleteEdges {e} (fun _ => by contrapose; simp +contextual [hp])
 
 @[simp]
@@ -1029,7 +1029,7 @@ theorem map_toDeleteEdges_eq
 
 中文:
 定理 map_toDeleteEdges_eq
-  条件: (s : Set (Sym2 V)) {p : G.Walk v w} (hp)
+  条件: (s : 集合 (Sym2 V)) {p : G.途径 v w} (hp)
   证明: by
   rw [← transfer_eq_map_ofLE]; rw [transfer_transfer]; rw [transfer_self]
   apply edges_transfer _ _ ▸ p.edges_subset_edgeSet

@@ -54,12 +54,12 @@ class IsGaloisGroup
     - isInvariant : Algebra.IsInvariant A B G
 
 中文:
-类 IsGaloisGroup
+类 是Galois群
   参数: where
   公理与运算 (3 个):
-    - faithful : FaithfulSMul G B
-    - commutes : SMulCommClass G A B
-    - isInvariant : Algebra.IsInvariant A B G
+    - faithful : 忠实标量乘法 G B
+    - commutes : 标量交换类 G A B
+    - isInvariant : 代数.是不变 A B G
 -/
 class IsGaloisGroup where
   faithful : FaithfulSMul G B
@@ -83,7 +83,7 @@ theorem of_mulEquiv
 
 中文:
 定理 of_mulEquiv
-  结论: [hG : IsGaloisGroup G A B] {H : 类型} [Group H]
+  结论: [hG : 是Galois群 G A B] {H : 类型} [群 H]
   证明: ⟨fun h => e.injective hG.faithful.eq_of_smul_eq_smul by simpa only [he]⟩
   commutes := ⟨fun x a b => by simpa [he] using hG.commutes.smul_comm (e x) a b⟩
   isInvariant := ⟨fun b h =>
@@ -114,7 +114,7 @@ theorem iff_of_mulEquiv
 
 中文:
 定理 iff_of_mulEquiv
-  结论: {H : 类型} [Group H] [MulSemiringAction H B]
+  结论: {H : 类型} [群 H] [MulSemiring作用 H B]
   证明: by
   refine ⟨fun h => h.of_mulEquiv e.symm fun g x => ?_, fun h => h.of_mulEquiv e he⟩
   rw [← he]; rw [e.apply_symm_apply]
@@ -139,7 +139,7 @@ theorem top_iff
 
 中文:
 定理 top_iff
-  结论: IsGaloisGroup (⊤ : Subgroup G) A B ↔ IsGaloisGroup G A B
+  结论: 是Galois群 (⊤ : 子群 G) A B ↔ 是Galois群 G A B
   证明: iff_of_mulEquiv Subgroup.topEquiv fun _ _ => rfl
 
 Depends on / 依赖: Subgroup, Subgroup.topEquiv, iff_of_mulEquiv, topEquiv
@@ -156,8 +156,8 @@ instance [IsGaloisGroup
   body: IsGaloisGroup.top_iff.mpr ‹_›
 
 中文:
-实例 [IsGaloisGroup
-  签名: G A B] : IsGaloisGroup (⊤
+实例 [是Galois群
+  签名: G A B] : 是Galois群 (⊤
   定义体: IsGaloisGroup.top_iff.mpr ‹_›
 
 Depends on / 依赖: IsGaloisGroup, IsGaloisGroup.top_iff.mpr, top_iff
@@ -181,7 +181,7 @@ theorem of_algEquiv
 
 中文:
 定理 of_algEquiv
-  结论: [hG : IsGaloisGroup G A B] (B' : 类型) [Semiring B']
+  结论: [hG : 是Galois群 G A B] (B' : 类型) [半环 B']
   证明: ⟨fun h => hG.faithful.eq_of_smul_eq_smul fun b => by simpa [← he] using h (e b)⟩
   commutes := ⟨fun g a b' => by
     have h' {x'} : e.symm (g • x') = g • e.symm x' := by
@@ -227,7 +227,7 @@ theorem of_ringHom_surjective
 
 中文:
 定理 of_ringHom_surjective
-  结论: [hG : IsGaloisGroup G A B] [CommSemiring A']
+  结论: [hG : 是Galois群 G A B] [交换半环 A']
   证明: hG.faithful
   commutes := ⟨by
     intro g a' b
@@ -264,7 +264,7 @@ theorem of_ringEquiv
 
 中文:
 定理 of_ringEquiv
-  结论: [hG : IsGaloisGroup G A B] [CommSemiring A'] [Algebra A' B]
+  结论: [hG : 是Galois群 G A B] [交换半环 A'] [代数 A' B]
   证明: .of_ringHom_surjective G A A' B e he e.surjective
 
 Depends on / 依赖: e.surjective, of_ringHom_surjective, surjective

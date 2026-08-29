@@ -43,8 +43,8 @@ structure Complex
     - im : Real
 
 中文:
-结构 Complex
-  参数: : Type where
+结构 复形
+  参数: : 类型 where
   公理与运算 (2 个):
     - re : 实数
     - im : 实数
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableEq Complex
+  签名: DecidableEq 复形
   定义体: Classical.decEq _
 
 Depends on / 依赖: Classical, Classical.decEq
@@ -93,8 +93,8 @@ definition equivRealProd
 @[simp]
 
 中文:
-定义 equivRealProd
-  签名: : Complex ≃ 实数 × 实数 where
+定义 equiv实数Prod
+  签名: : 复形 ≃ 实数 × 实数 where
   定义体: ⟨z.re, z.im⟩
   invFun p := ⟨p.1, p.2⟩
 
@@ -116,7 +116,7 @@ theorem eta
 
 中文:
 定理 eta
-  结论: 对任意 z : Complex, Complex.mk z.re z.im = z
+  结论: 对任意 z : 复形, 复形.mk z.re z.im = z
 -/
 theorem eta : forall z : Complex, Complex.mk z.re z.im = z
   | ⟨_, _⟩ => rfl
@@ -131,7 +131,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: 对任意 {z w : Complex}, z.re = w.re -> z.im = w.im -> z = w
+  结论: 对任意 {z w : 复形}, z.re = w.re -> z.im = w.im -> z = w
 -/
 theorem ext : forall {z w : Complex}, z.re = w.re -> z.im = w.im -> z = w
   | ⟨_, _⟩, ⟨_, _⟩, rfl, rfl => rfl
@@ -148,8 +148,8 @@ lemma «forall»
   proof: by aesop
 
 中文:
-引理 «forall»
-  条件: {p : Complex -> 命题}
+引理 «对任意»
+  条件: {p : 复形 -> 命题}
   结论: (对任意 x, p x) ↔ 对任意 a b, p ⟨a, b⟩
   证明: by aesop
 -/
@@ -164,8 +164,8 @@ lemma «exists»
   proof: by aesop
 
 中文:
-引理 «exists»
-  条件: {p : Complex -> 命题}
+引理 «存在»
+  条件: {p : 复形 -> 命题}
   结论: (存在 x, p x) ↔ 存在 a b, p ⟨a, b⟩
   证明: by aesop
 -/
@@ -181,7 +181,7 @@ theorem re_surjective
 
 中文:
 定理 re_surjective
-  结论: Surjective re
+  结论: 满射 re
   证明: fun x => ⟨⟨x, 0⟩, rfl⟩
 -/
 theorem re_surjective : Surjective re := fun x => ⟨⟨x, 0⟩, rfl⟩
@@ -198,7 +198,7 @@ theorem im_surjective
 
 中文:
 定理 im_surjective
-  结论: Surjective im
+  结论: 满射 im
   证明: fun y => ⟨⟨0, y⟩, rfl⟩
 
 @[simp]
@@ -258,7 +258,7 @@ definition ofReal
   body: ⟨r, 0⟩
 
 中文:
-定义 ofReal
+定义 of实数
   签名: (r : 实数)
   定义体: ⟨r, 0⟩
 -/
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe 实数 Complex
+  签名: Coe 实数 复形
   定义体: ⟨ofReal⟩
 
 @[simp, norm_cast]
@@ -299,9 +299,9 @@ theorem ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_re
+定理 of实数_re
   条件: (r : 实数)
-  结论: Complex.re (r : Complex) = r
+  结论: 复形.re (r : 复形) = r
   证明: rfl
 
 @[simp, norm_cast]
@@ -320,9 +320,9 @@ theorem ofReal_im
   proof: rfl
 
 中文:
-定理 ofReal_im
+定理 of实数_im
   条件: (r : 实数)
-  结论: (r : Complex).im = 0
+  结论: (r : 复形).im = 0
   证明: rfl
 -/
 theorem ofReal_im (r : Real) : (r : Complex).im = 0 :=
@@ -340,9 +340,9 @@ theorem ofReal_def
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_def
+定理 of实数_def
   条件: (r : 实数)
-  结论: (r : Complex) = ⟨r, 0⟩
+  结论: (r : 复形) = ⟨r, 0⟩
   证明: rfl
 
 @[simp, norm_cast]
@@ -361,9 +361,9 @@ theorem ofReal_inj
   proof: ⟨congrArg re, by apply congrArg⟩
 
 中文:
-定理 ofReal_inj
+定理 of实数_inj
   条件: {z w : 实数}
-  结论: (z : Complex) = w ↔ z = w
+  结论: (z : 复形) = w ↔ z = w
   证明: ⟨congrArg re, by apply congrArg⟩
 -/
 theorem ofReal_inj {z w : Real} : (z : Complex) = w ↔ z = w :=
@@ -378,8 +378,8 @@ theorem ofReal_injective
   proof: fun _ _ => congrArg re
 
 中文:
-定理 ofReal_injective
-  结论: Function.Injective ((↑) : 实数 -> Complex)
+定理 of实数_injective
+  结论: 函数.单射 ((↑) : 实数 -> 复形)
   证明: fun _ _ => congrArg re
 -/
 theorem ofReal_injective : Function.Injective ((↑) : Real -> Complex) := fun _ _ => congrArg re
@@ -394,7 +394,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift Complex 实数 (↑) fun z => z.im = 0 where
+  签名: : CanLift 复形 实数 (↑) fun z => z.im = 0 where
   定义体: ⟨z.re, ext rfl hz.symm⟩
 
 Depends on / 依赖: hz.symm, z.re
@@ -415,7 +415,7 @@ infixl:72 " ×Complex " => reProdIm
 
 中文:
 定义 reProdIm
-  签名: (s t : Set 实数)
+  签名: (s t : 集合 实数)
   定义体: re ⁻¹' s inter im ⁻¹' t
 
 @[inherit_doc]
@@ -438,8 +438,8 @@ theorem mem_reProdIm
 
 中文:
 定理 mem_reProdIm
-  条件: {z : Complex} {s t : Set 实数}
-  结论: z in s ×Complex t ↔ z.re in s ∧ z.im in t
+  条件: {z : 复形} {s t : 集合 实数}
+  结论: z in s ×复形 t ↔ z.re in s ∧ z.im in t
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero Complex
+  签名: 零 复形
   定义体: ⟨(0 : Real)⟩
 -/
 instance : Zero Complex :=
@@ -475,7 +475,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Complex
+  签名: 可居 复形
   定义体: ⟨0⟩
 
 @[simp]
@@ -496,7 +496,7 @@ theorem zero_re
 
 中文:
 定理 zero_re
-  结论: (0 : Complex).re = 0
+  结论: (0 : 复形).re = 0
   证明: rfl
 
 @[simp]
@@ -517,7 +517,7 @@ theorem zero_im
 
 中文:
 定理 zero_im
-  结论: (0 : Complex).im = 0
+  结论: (0 : 复形).im = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -537,8 +537,8 @@ theorem ofReal_zero
 @[simp]
 
 中文:
-定理 ofReal_zero
-  结论: ((0 : 实数) : Complex) = 0
+定理 of实数_zero
+  结论: ((0 : 实数) : 复形) = 0
   证明: rfl
 
 @[simp]
@@ -557,9 +557,9 @@ theorem ofReal_eq_zero
   proof: ofReal_inj
 
 中文:
-定理 ofReal_eq_zero
+定理 of实数_eq_zero
   条件: {z : 实数}
-  结论: (z : Complex) = 0 ↔ z = 0
+  结论: (z : 复形) = 0 ↔ z = 0
   证明: ofReal_inj
 
 Depends on / 依赖: ofReal_inj
@@ -577,9 +577,9 @@ theorem ofReal_ne_zero
   proof: not_congr ofReal_eq_zero
 
 中文:
-定理 ofReal_ne_zero
+定理 of实数_ne_zero
   条件: {z : 实数}
-  结论: (z : Complex) != 0 ↔ z != 0
+  结论: (z : 复形) != 0 ↔ z != 0
   证明: not_congr ofReal_eq_zero
 
 Depends on / 依赖: not_congr, ofReal_eq_zero
@@ -599,7 +599,7 @@ instance :
 
 中文:
 实例 :
-  签名: One Complex
+  签名: 幺 复形
   定义体: ⟨(1 : Real)⟩
 
 @[simp]
@@ -620,7 +620,7 @@ theorem one_re
 
 中文:
 定理 one_re
-  结论: (1 : Complex).re = 1
+  结论: (1 : 复形).re = 1
   证明: rfl
 
 @[simp]
@@ -641,7 +641,7 @@ theorem one_im
 
 中文:
 定理 one_im
-  结论: (1 : Complex).im = 0
+  结论: (1 : 复形).im = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -661,8 +661,8 @@ theorem ofReal_one
 @[simp]
 
 中文:
-定理 ofReal_one
-  结论: ((1 : 实数) : Complex) = 1
+定理 of实数_one
+  结论: ((1 : 实数) : 复形) = 1
   证明: rfl
 
 @[simp]
@@ -681,9 +681,9 @@ theorem ofReal_eq_one
   proof: ofReal_inj
 
 中文:
-定理 ofReal_eq_one
+定理 of实数_eq_one
   条件: {z : 实数}
-  结论: (z : Complex) = 1 ↔ z = 1
+  结论: (z : 复形) = 1 ↔ z = 1
   证明: ofReal_inj
 
 Depends on / 依赖: ofReal_inj
@@ -701,9 +701,9 @@ theorem ofReal_ne_one
   proof: not_congr ofReal_eq_one
 
 中文:
-定理 ofReal_ne_one
+定理 of实数_ne_one
   条件: {z : 实数}
-  结论: (z : Complex) != 1 ↔ z != 1
+  结论: (z : 复形) != 1 ↔ z != 1
   证明: not_congr ofReal_eq_one
 
 Depends on / 依赖: not_congr, ofReal_eq_one
@@ -723,7 +723,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add Complex
+  签名: 加法 复形
   定义体: ⟨fun z w => ⟨z.re + w.re, z.im + w.im⟩⟩
 
 @[simp]
@@ -747,7 +747,7 @@ theorem add_re
 
 中文:
 定理 add_re
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z + w).re = z.re + w.re
   证明: rfl
 
@@ -770,7 +770,7 @@ theorem add_im
 
 中文:
 定理 add_im
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z + w).im = z.im + w.im
   证明: rfl
 
@@ -790,9 +790,9 @@ theorem ofReal_add
   proof: Complex.ext_iff.2 by simp [ofReal]
 
 中文:
-定理 ofReal_add
+定理 of实数_add
   条件: (r s : 实数)
-  结论: ((r + s : 实数) : Complex) = r + s
+  结论: ((r + s : 实数) : 复形) = r + s
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 Depends on / 依赖: Complex.ext_iff, ext_iff, ofReal
@@ -812,7 +812,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg Complex
+  签名: 取负 复形
   定义体: ⟨fun z => ⟨-z.re, -z.im⟩⟩
 
 @[simp]
@@ -836,7 +836,7 @@ theorem neg_re
 
 中文:
 定理 neg_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (-z).re = -z.re
   证明: rfl
 
@@ -859,7 +859,7 @@ theorem neg_im
 
 中文:
 定理 neg_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (-z).im = -z.im
   证明: rfl
 
@@ -879,9 +879,9 @@ theorem ofReal_neg
   proof: Complex.ext_iff.2 by simp [ofReal]
 
 中文:
-定理 ofReal_neg
+定理 of实数_neg
   条件: (r : 实数)
-  结论: ((-r : 实数) : Complex) = -r
+  结论: ((-r : 实数) : 复形) = -r
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 Depends on / 依赖: Complex.ext_iff, ext_iff, ofReal
@@ -899,7 +899,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub Complex
+  签名: 减法 复形
   定义体: ⟨fun z w => ⟨z.re - w.re, z.im - w.im⟩⟩
 
 Depends on / 依赖: w.im, w.re, z.im, z.re
@@ -923,7 +923,7 @@ definition mulAux
 
 中文:
 定义 mulAux
-  签名: {R : 类型} [SMul R 实数] (re : R) (im : 实数) (z : Complex)
+  签名: {R : 类型} [标量乘法 R 实数] (re : R) (im : 实数) (z : 复形)
   定义体: ⟨re • z.re - im * z.im, re • z.im + im * z.re⟩
 
 Depends on / 依赖: z.im, z.re
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul Complex
+  签名: 乘法 复形
   定义体: ⟨fun z w => mulAux z.re z.im w⟩
 
 Depends on / 依赖: mulAux, z.im, z.re
@@ -983,7 +983,7 @@ theorem mul_re
 
 中文:
 定理 mul_re
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z * w).re = z.re * w.re - z.im * w.im
   证明: (rfl)
 
@@ -1006,7 +1006,7 @@ theorem mul_im
 
 中文:
 定理 mul_im
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z * w).im = z.re * w.im + z.im * w.re
   证明: (rfl)
 
@@ -1026,9 +1026,9 @@ theorem ofReal_mul
   proof: Complex.ext_iff.2 by simp [ofReal]
 
 中文:
-定理 ofReal_mul
+定理 of实数_mul
   条件: (r s : 实数)
-  结论: ((r * s : 实数) : Complex) = r * s
+  结论: ((r * s : 实数) : 复形) = r * s
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 Depends on / 依赖: Complex.ext_iff, ext_iff, ofReal
@@ -1046,8 +1046,8 @@ theorem re_ofReal_mul
   proof: by simp [ofReal]
 
 中文:
-定理 re_ofReal_mul
-  条件: (r : 实数) (z : Complex)
+定理 re_of实数_mul
+  条件: (r : 实数) (z : 复形)
   结论: (r * z).re = r * z.re
   证明: by simp [ofReal]
 
@@ -1065,8 +1065,8 @@ theorem im_ofReal_mul
   proof: by simp [ofReal]
 
 中文:
-定理 im_ofReal_mul
-  条件: (r : 实数) (z : Complex)
+定理 im_of实数_mul
+  条件: (r : 实数) (z : 复形)
   结论: (r * z).im = r * z.im
   证明: by simp [ofReal]
 
@@ -1084,8 +1084,8 @@ lemma re_mul_ofReal
   proof: by simp [ofReal]
 
 中文:
-引理 re_mul_ofReal
-  条件: (z : Complex) (r : 实数)
+引理 re_mul_of实数
+  条件: (z : 复形) (r : 实数)
   结论: (z * r).re = z.re * r
   证明: by simp [ofReal]
 
@@ -1102,8 +1102,8 @@ lemma im_mul_ofReal
   proof: by simp [ofReal]
 
 中文:
-引理 im_mul_ofReal
-  条件: (z : Complex) (r : 实数)
+引理 im_mul_of实数
+  条件: (z : 复形) (r : 实数)
   结论: (z * r).im = z.im * r
   证明: by simp [ofReal]
 
@@ -1121,8 +1121,8 @@ theorem ofReal_mul'
   proof: ext (re_ofReal_mul _ _) (im_ofReal_mul _ _)
 
 中文:
-定理 ofReal_mul'
-  条件: (r : 实数) (z : Complex)
+定理 of实数_mul'
+  条件: (r : 实数) (z : 复形)
   结论: ↑r * z = ⟨r * z.re, r * z.im⟩
   证明: ext (re_ofReal_mul _ _) (im_ofReal_mul _ _)
 
@@ -1146,7 +1146,7 @@ definition I
 
 中文:
 定义 I
-  签名: : Complex
+  签名: : 复形
   定义体: ⟨0, 1⟩
 
 @[simp]
@@ -1226,7 +1226,7 @@ theorem I_mul
 
 中文:
 定理 I_mul
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: I * z = ⟨-z.im, z.re⟩
   证明: Complex.ext_iff.2 by simp
 
@@ -1245,7 +1245,7 @@ lemma I_ne_zero
 
 中文:
 引理 I_ne_zero
-  结论: (I : Complex) != 0
+  结论: (I : 复形) != 0
   证明: mt (congr_arg im) zero_ne_one.symm
 -/
 @[simp] lemma I_ne_zero : (I : Complex) != 0 := mt (congr_arg im) zero_ne_one.symm
@@ -1264,7 +1264,7 @@ theorem mk_eq_add_mul_I
 中文:
 定理 mk_eq_add_mul_I
   条件: (a b : 实数)
-  结论: Complex.mk a b = a + b * I
+  结论: 复形.mk a b = a + b * I
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 @[simp]
@@ -1286,8 +1286,8 @@ theorem re_add_im
 
 中文:
 定理 re_add_im
-  条件: (z : Complex)
-  结论: (z.re : Complex) + z.im * I = z
+  条件: (z : 复形)
+  结论: (z.re : 复形) + z.im * I = z
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 Depends on / 依赖: Complex.ext_iff, ext_iff, ofReal
@@ -1306,7 +1306,7 @@ theorem mul_I_re
 
 中文:
 定理 mul_I_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z * I).re = -z.im
   证明: by simp
 -/
@@ -1323,7 +1323,7 @@ theorem mul_I_im
 
 中文:
 定理 mul_I_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z * I).im = z.re
   证明: by simp
 -/
@@ -1340,7 +1340,7 @@ theorem I_mul_re
 
 中文:
 定理 I_mul_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (I * z).re = -z.im
   证明: by simp
 -/
@@ -1357,7 +1357,7 @@ theorem I_mul_im
 
 中文:
 定理 I_mul_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (I * z).im = z.re
   证明: by simp
 -/
@@ -1376,7 +1376,7 @@ theorem equivRealProd_symm_apply
   ext <;> simp [Complex.equivRealProd, ofReal]
 
 中文:
-定理 equivRealProd_symm_apply
+定理 equiv实数Prod_symm_apply
   条件: (p : 实数 × 实数)
   结论: equiv实数Prod.symm p = p.1 + p.2 * I
   证明: by
@@ -1398,8 +1398,8 @@ definition equivRealProdAddHom
   body: { equivRealProd with map_add' := by simp }
 
 中文:
-定义 equivRealProdAddHom
-  签名: : Complex ≃+ 实数 × 实数
+定义 equiv实数ProdAddHom
+  签名: : 复形 ≃+ 实数 × 实数
   定义体: { equivRealProd with map_add' := by simp }
 
 Depends on / 依赖: equivRealProd, map_add
@@ -1416,7 +1416,7 @@ theorem equivRealProdAddHom_symm_apply
   proof: equivRealProd_symm_apply p
 
 中文:
-定理 equivRealProdAddHom_symm_apply
+定理 equiv实数ProdAddHom_symm_apply
   条件: (p : 实数 × 实数)
   证明: equivRealProd_symm_apply p
 
@@ -1438,7 +1438,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial Complex
+  签名: 非平凡 复形
   定义体: domain_nontrivial re rfl rfl
 
 Depends on / 依赖: domain_nontrivial
@@ -1475,7 +1475,7 @@ theorem smul_re
 
 中文:
 定理 smul_re
-  条件: (r : R) (z : Complex)
+  条件: (r : R) (z : 复形)
   结论: (r • z).re = r • z.re
   证明: show r • z.re - 0 * z.im = r • z.re by simp
 
@@ -1497,7 +1497,7 @@ theorem smul_im
 
 中文:
 定理 smul_im
-  条件: (r : R) (z : Complex)
+  条件: (r : R) (z : 复形)
   结论: (r • z).im = r • z.im
   证明: show r • z.im + 0 * z.re = r • z.im by simp
 
@@ -1520,7 +1520,7 @@ theorem real_smul
 
 中文:
 定理 real_smul
-  条件: {x : 实数} {z : Complex}
+  条件: {x : 实数} {z : 复形}
   结论: x • z = x * z
   证明: rfl
 -/
@@ -1543,7 +1543,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup Complex where
+  签名: : 加法交换群 复形 where
   定义体: by intros; ext <;> simp [smul_re, smul_im]
   nsmul_zero := by intros; ext <;> simp [smul_re, smul_im]
   nsmul_succ := by intros; ext <;> simp [smul_re, smul_im] <;> ring
@@ -1574,8 +1574,8 @@ instance instNatCast
   body: ofReal n
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast Complex where natCast n
+实例 inst自然数Cast
+  签名: : 自然数嵌入 复形 where natCast n
   定义体: ofReal n
 
 Depends on / 依赖: ofReal
@@ -1590,8 +1590,8 @@ instance instIntCast
   body: ofReal n
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast Complex where intCast n
+实例 inst整数Cast
+  签名: : 整数嵌入 复形 where intCast n
   定义体: ofReal n
 
 Depends on / 依赖: ofReal
@@ -1607,7 +1607,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast Complex where nnratCast q
+  签名: : 非负有理数嵌入 复形 where nnratCast q
   定义体: ofReal q
 
 Depends on / 依赖: ofReal
@@ -1623,7 +1623,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: : RatCast Complex where ratCast q
+  签名: : 有理数嵌入 复形 where ratCast q
   定义体: ofReal q
 
 Depends on / 依赖: ofReal
@@ -1640,7 +1640,7 @@ lemma ofReal_ofNat
   proof: rfl
 
 中文:
-引理 ofReal_ofNat
+引理 of实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: of实数 of自然数(n) = of自然数(n)
   证明: rfl
@@ -1656,7 +1656,7 @@ lemma ofReal_natCast
   proof: rfl
 
 中文:
-引理 ofReal_natCast
+引理 of实数_natCast
   条件: (n : 自然数)
   结论: of实数 n = n
   证明: rfl
@@ -1672,7 +1672,7 @@ lemma ofReal_intCast
   proof: rfl
 
 中文:
-引理 ofReal_intCast
+引理 of实数_intCast
   条件: (n : 整数)
   结论: of实数 n = n
   证明: rfl
@@ -1688,8 +1688,8 @@ lemma ofReal_nnratCast
   proof: rfl
 
 中文:
-引理 ofReal_nnratCast
-  条件: (q : Rat>=0)
+引理 of实数_nnratCast
+  条件: (q : 有理数>=0)
   结论: of实数 q = q
   证明: rfl
 -/
@@ -1704,8 +1704,8 @@ lemma ofReal_ratCast
   proof: rfl
 
 中文:
-引理 ofReal_ratCast
-  条件: (q : Rat)
+引理 of实数_ratCast
+  条件: (q : 有理数)
   结论: of实数 q = q
   证明: rfl
 -/
@@ -1719,8 +1719,8 @@ lemma ofReal_ofScientific
   proof: rfl
 
 中文:
-引理 ofReal_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+引理 of实数_ofScientific
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 -/
 @[simp, norm_cast] lemma ofReal_ofScientific (m : Nat) (s : Bool) (e : Nat) :
@@ -1736,9 +1736,9 @@ lemma re_ofNat
   proof: rfl
 
 中文:
-引理 re_ofNat
+引理 re_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : Complex).re = of自然数(n)
+  结论: (of自然数(n) : 复形).re = of自然数(n)
   证明: rfl
 -/
 @[simp] lemma re_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Complex).re = ofNat(n) := rfl
@@ -1752,9 +1752,9 @@ lemma im_ofNat
   proof: rfl
 
 中文:
-引理 im_ofNat
+引理 im_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : Complex).im = 0
+  结论: (of自然数(n) : 复形).im = 0
   证明: rfl
 -/
 @[simp] lemma im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Complex).im = 0 := rfl
@@ -1770,7 +1770,7 @@ lemma natCast_re
 中文:
 引理 natCast_re
   条件: (n : 自然数)
-  结论: (n : Complex).re = n
+  结论: (n : 复形).re = n
   证明: rfl
 -/
 @[simp, norm_cast] lemma natCast_re (n : Nat) : (n : Complex).re = n := rfl
@@ -1786,7 +1786,7 @@ lemma natCast_im
 中文:
 引理 natCast_im
   条件: (n : 自然数)
-  结论: (n : Complex).im = 0
+  结论: (n : 复形).im = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma natCast_im (n : Nat) : (n : Complex).im = 0 := rfl
@@ -1802,7 +1802,7 @@ lemma intCast_re
 中文:
 引理 intCast_re
   条件: (n : 整数)
-  结论: (n : Complex).re = n
+  结论: (n : 复形).re = n
   证明: rfl
 -/
 @[simp, norm_cast] lemma intCast_re (n : Int) : (n : Complex).re = n := rfl
@@ -1818,7 +1818,7 @@ lemma intCast_im
 中文:
 引理 intCast_im
   条件: (n : 整数)
-  结论: (n : Complex).im = 0
+  结论: (n : 复形).im = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma intCast_im (n : Int) : (n : Complex).im = 0 := rfl
@@ -1833,8 +1833,8 @@ lemma re_nnratCast
 
 中文:
 引理 re_nnratCast
-  条件: (q : Rat>=0)
-  结论: (q : Complex).re = q
+  条件: (q : 有理数>=0)
+  结论: (q : 复形).re = q
   证明: rfl
 -/
 @[simp, norm_cast] lemma re_nnratCast (q : Rat>=0) : (q : Complex).re = q := rfl
@@ -1849,8 +1849,8 @@ lemma im_nnratCast
 
 中文:
 引理 im_nnratCast
-  条件: (q : Rat>=0)
-  结论: (q : Complex).im = 0
+  条件: (q : 有理数>=0)
+  结论: (q : 复形).im = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma im_nnratCast (q : Rat>=0) : (q : Complex).im = 0 := rfl
@@ -1865,8 +1865,8 @@ lemma ratCast_re
 
 中文:
 引理 ratCast_re
-  条件: (q : Rat)
-  结论: (q : Complex).re = q
+  条件: (q : 有理数)
+  结论: (q : 复形).re = q
   证明: rfl
 -/
 @[simp, norm_cast] lemma ratCast_re (q : Rat) : (q : Complex).re = q := rfl
@@ -1881,8 +1881,8 @@ lemma ratCast_im
 
 中文:
 引理 ratCast_im
-  条件: (q : Rat)
-  结论: (q : Complex).im = 0
+  条件: (q : 有理数)
+  结论: (q : 复形).im = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma ratCast_im (q : Rat) : (q : Complex).im = 0 := rfl
@@ -1896,7 +1896,7 @@ lemma re_ofScientific
 
 中文:
 引理 re_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 -/
 @[simp] lemma re_ofScientific (m : Nat) (s : Bool) (e : Nat) :
@@ -1911,7 +1911,7 @@ lemma im_ofScientific
 
 中文:
 引理 im_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 -/
 @[simp] lemma im_ofScientific (m : Nat) (s : Bool) (e : Nat) :
@@ -1933,7 +1933,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: : AddGroupWithOne Complex
+  签名: : 加法带幺群 复形
   定义体: { Complex.addCommGroup with
     natCast_zero := by ext <;> simp
     natCast_succ _ := by ext <;> simp
@@ -1964,7 +1964,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing Complex
+  签名: : 交换环 复形
   定义体: { addGroupWithOne with
     npow := @npowRec _ ⟨(1 : Complex)⟩ ⟨(· * ·)⟩
     add_comm := by intros; ext <;> simp <;> ring
@@ -1999,7 +1999,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring Complex
+  签名: 环 复形
   定义体: delta% inferInstance
 -/
 instance : Ring Complex :=
@@ -2015,7 +2015,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalCommRing Complex
+  签名: 非幺交换环 复形
   定义体: delta% inferInstance
 -/
 instance : NonUnitalCommRing Complex :=
@@ -2031,7 +2031,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring Complex
+  签名: 交换半环 复形
   定义体: delta% inferInstance
 -/
 instance : CommSemiring Complex :=
@@ -2047,7 +2047,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring Complex
+  签名: 半环 复形
   定义体: delta% inferInstance
 -/
 instance : Semiring Complex :=
@@ -2063,7 +2063,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid Complex
+  签名: 加法交换幺半群 复形
   定义体: delta% inferInstance
 -/
 instance : AddCommMonoid Complex :=
@@ -2085,7 +2085,7 @@ definition reAddGroupHom
 
 中文:
 定义 reAddGroupHom
-  签名: : Complex ->+ 实数 where
+  签名: : 复形 ->+ 实数 where
   定义体: re
   map_zero' := zero_re
   map_add' := add_re
@@ -2110,7 +2110,7 @@ theorem coe_reAddGroupHom
 
 中文:
 定理 coe_reAddGroupHom
-  结论: (reAddGroupHom : Complex -> 实数) = re
+  结论: (reAddGroupHom : 复形 -> 实数) = re
   证明: rfl
 
 Depends on / 依赖: List.nodupDecidable, Quot.recOnSubsingleton, nodupDecidable, recOnSubsingleton
@@ -2132,7 +2132,7 @@ definition imAddGroupHom
 
 中文:
 定义 imAddGroupHom
-  签名: : Complex ->+ 实数 where
+  签名: : 复形 ->+ 实数 where
   定义体: im
   map_zero' := zero_im
   map_add' := add_im
@@ -2155,7 +2155,7 @@ theorem coe_imAddGroupHom
 
 中文:
 定理 coe_imAddGroupHom
-  结论: (imAddGroupHom : Complex -> 实数) = im
+  结论: (imAddGroupHom : 复形 -> 实数) = im
   证明: rfl
 -/
 theorem coe_imAddGroupHom : (imAddGroupHom : Complex -> Real) = im :=
@@ -2172,7 +2172,7 @@ lemma re_nsmul
 
 中文:
 引理 re_nsmul
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   结论: (n • z).re = n • z.re
   证明: smul_re ..
 
@@ -2190,7 +2190,7 @@ lemma im_nsmul
 
 中文:
 引理 im_nsmul
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   结论: (n • z).im = n • z.im
   证明: smul_im ..
 
@@ -2208,7 +2208,7 @@ lemma re_zsmul
 
 中文:
 引理 re_zsmul
-  条件: (n : 整数) (z : Complex)
+  条件: (n : 整数) (z : 复形)
   结论: (n • z).re = n • z.re
   证明: smul_re ..
 
@@ -2226,7 +2226,7 @@ lemma im_zsmul
 
 中文:
 引理 im_zsmul
-  条件: (n : 整数) (z : Complex)
+  条件: (n : 整数) (z : 复形)
   结论: (n • z).im = n • z.im
   证明: smul_im ..
 
@@ -2244,7 +2244,7 @@ lemma re_nnqsmul
 
 中文:
 引理 re_nnqsmul
-  条件: (q : Rat>=0) (z : Complex)
+  条件: (q : 有理数>=0) (z : 复形)
   结论: (q • z).re = q • z.re
   证明: smul_re ..
 -/
@@ -2260,7 +2260,7 @@ lemma im_nnqsmul
 
 中文:
 引理 im_nnqsmul
-  条件: (q : Rat>=0) (z : Complex)
+  条件: (q : 有理数>=0) (z : 复形)
   结论: (q • z).im = q • z.im
   证明: smul_im ..
 -/
@@ -2276,7 +2276,7 @@ lemma re_qsmul
 
 中文:
 引理 re_qsmul
-  条件: (q : Rat) (z : Complex)
+  条件: (q : 有理数) (z : 复形)
   结论: (q • z).re = q • z.re
   证明: smul_re ..
 -/
@@ -2292,7 +2292,7 @@ lemma im_qsmul
 
 中文:
 引理 im_qsmul
-  条件: (q : Rat) (z : Complex)
+  条件: (q : 有理数) (z : 复形)
   结论: (q • z).im = q • z.im
   证明: smul_im ..
 -/
@@ -2308,9 +2308,9 @@ lemma ofReal_nsmul
   proof: by simp
 
 中文:
-引理 ofReal_nsmul
+引理 of实数_nsmul
   条件: (n : 自然数) (r : 实数)
-  结论: ↑(n • r) = n • (r : Complex)
+  结论: ↑(n • r) = n • (r : 复形)
   证明: by simp
 -/
 @[norm_cast] lemma ofReal_nsmul (n : Nat) (r : Real) : ↑(n • r) = n • (r : Complex) := by simp
@@ -2325,9 +2325,9 @@ lemma ofReal_zsmul
   proof: by simp
 
 中文:
-引理 ofReal_zsmul
+引理 of实数_zsmul
   条件: (n : 整数) (r : 实数)
-  结论: ↑(n • r) = n • (r : Complex)
+  结论: ↑(n • r) = n • (r : 复形)
   证明: by simp
 -/
 @[norm_cast] lemma ofReal_zsmul (n : Int) (r : Real) : ↑(n • r) = n • (r : Complex) := by simp
@@ -2350,7 +2350,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing Complex
+  签名: 对合环 复形
   定义体: ⟨z.re, -z.im⟩
   star_involutive x := by simp only [eta, neg_neg]
   star_mul a b := by ext <;> simp [add_comm] <;> ring
@@ -2380,7 +2380,7 @@ theorem conj_re
 
 中文:
 定理 conj_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (conj z).re = z.re
   证明: rfl
 
@@ -2403,7 +2403,7 @@ theorem conj_im
 
 中文:
 定理 conj_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (conj z).im = -z.im
   证明: rfl
 
@@ -2425,9 +2425,9 @@ theorem conj_ofReal
 @[simp]
 
 中文:
-定理 conj_ofReal
+定理 conj_of实数
   条件: (r : 实数)
-  结论: conj (r : Complex) = r
+  结论: conj (r : 复形) = r
   证明: Complex.ext_iff.2 by simp
 
 @[simp]
@@ -2468,7 +2468,7 @@ theorem conj_natCast
 中文:
 定理 conj_natCast
   条件: (n : 自然数)
-  结论: conj (n : Complex) = n
+  结论: conj (n : 复形) = n
   证明: map_natCast _ _
 
 Depends on / 依赖: map_natCast
@@ -2485,9 +2485,9 @@ theorem conj_ofNat
   proof: map_ofNat _ _
 
 中文:
-定理 conj_ofNat
+定理 conj_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: conj (of自然数(n) : Complex) = of自然数(n)
+  结论: conj (of自然数(n) : 复形) = of自然数(n)
   证明: map_ofNat _ _
 
 Depends on / 依赖: map_ofNat
@@ -2522,7 +2522,7 @@ theorem conj_eq_iff_real
 
 中文:
 定理 conj_eq_iff_real
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: conj z = z ↔ 存在 r : 实数, z = r
   证明: ⟨fun h => ⟨z.re, ext rfl eq_zero_of_neg_eq (congr_arg im h)⟩, fun ⟨h, e⟩ => by
     rw [e]; rw [conj_ofReal]⟩
@@ -2544,8 +2544,8 @@ theorem conj_eq_iff_re
 
 中文:
 定理 conj_eq_iff_re
-  条件: {z : Complex}
-  结论: conj z = z ↔ (z.re : Complex) = z
+  条件: {z : 复形}
+  结论: conj z = z ↔ (z.re : 复形) = z
   证明: conj_eq_iff_real.trans ⟨by rintro ⟨r, rfl⟩; simp [ofReal], fun h => ⟨_, h.symm⟩⟩
 
 Depends on / 依赖: conj_eq_iff_real, conj_eq_iff_real.trans, h.symm, ofReal
@@ -2567,7 +2567,7 @@ theorem conj_eq_iff_im
 
 中文:
 定理 conj_eq_iff_im
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: conj z = z ↔ z.im = 0
   证明: ⟨fun h => add_self_eq_zero.mp (neg_eq_iff_add_eq_zero.mp (congr_arg im h)), fun h =>
     ext rfl (neg_eq_iff_add_eq_zero.mpr (add_self_eq_zero.mpr h))⟩
@@ -2591,7 +2591,7 @@ theorem star_def
 
 中文:
 定理 star_def
-  结论: (Star.star : Complex -> Complex) = conj
+  结论: (对合.star : 复形 -> 复形) = conj
   证明: rfl
 -/
 theorem star_def : (Star.star : Complex -> Complex) = conj :=
@@ -2617,7 +2617,7 @@ definition normSq
 
 中文:
 定义 normSq
-  签名: : Complex ->*₀ 实数 where
+  签名: : 复形 ->*₀ 实数 where
   定义体: z.re * z.re + z.im * z.im
   map_zero' := by simp
   map_one' := by simp
@@ -2648,7 +2648,7 @@ theorem normSq_apply
 
 中文:
 定理 normSq_apply
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: normSq z = z.re * z.re + z.im * z.im
   证明: rfl
 
@@ -2671,7 +2671,7 @@ theorem normSq_ofReal
 @[simp]
 
 中文:
-定理 normSq_ofReal
+定理 normSq_of实数
   条件: (r : 实数)
   结论: normSq r = r * r
   证明: by
@@ -2746,7 +2746,7 @@ theorem normSq_ratCast
 
 中文:
 定理 normSq_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: normSq q = q * q
   证明: normSq_ofReal _
 
@@ -2768,7 +2768,7 @@ theorem normSq_ofNat
 @[simp]
 
 中文:
-定理 normSq_ofNat
+定理 normSq_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: normSq_natCast _
 
@@ -2833,8 +2833,8 @@ theorem normSq_eq_conj_mul_self
 
 中文:
 定理 normSq_eq_conj_mul_self
-  条件: {z : Complex}
-  结论: (normSq z : Complex) = conj z * z
+  条件: {z : 复形}
+  结论: (normSq z : 复形) = conj z * z
   证明: by
   ext <;> simp [normSq, mul_comm, ofReal]
 
@@ -2906,7 +2906,7 @@ theorem normSq_nonneg
 
 中文:
 定理 normSq_nonneg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: 0 <= normSq z
   证明: add_nonneg (mul_self_nonneg _) (mul_self_nonneg _)
 
@@ -2931,7 +2931,7 @@ theorem normSq_eq_zero
 
 中文:
 定理 normSq_eq_zero
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: normSq z = 0 ↔ z = 0
   证明: ⟨fun h =>
     ext (eq_zero_of_mul_self_add_mul_self_eq_zero h)
@@ -2962,7 +2962,7 @@ theorem normSq_pos
 
 中文:
 定理 normSq_pos
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: 0 < normSq z ↔ z != 0
   证明: (normSq_nonneg z).lt_iff_ne.trans not_congr (eq_comm.trans normSq_eq_zero)
 
@@ -2987,7 +2987,7 @@ theorem normSq_neg
 
 中文:
 定理 normSq_neg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: normSq (-z) = normSq z
   证明: by simp [normSq]
 
@@ -3009,7 +3009,7 @@ theorem normSq_conj
 
 中文:
 定理 normSq_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: normSq (conj z) = normSq z
   证明: by simp [normSq]
 
@@ -3028,7 +3028,7 @@ theorem normSq_mul
 
 中文:
 定理 normSq_mul
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: normSq (z * w) = normSq z * normSq w
   证明: normSq.map_mul z w
 
@@ -3049,7 +3049,7 @@ theorem normSq_add
 
 中文:
 定理 normSq_add
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: normSq (z + w) = normSq z + normSq w + 2 * (z * conj w).re
   证明: by
   simp [normSq]; ring
@@ -3070,7 +3070,7 @@ theorem re_sq_le_normSq
 
 中文:
 定理 re_sq_le_normSq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z.re * z.re <= normSq z
   证明: le_add_of_nonneg_right (mul_self_nonneg _)
 
@@ -3090,7 +3090,7 @@ theorem im_sq_le_normSq
 
 中文:
 定理 im_sq_le_normSq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z.im * z.im <= normSq z
   证明: le_add_of_nonneg_left (mul_self_nonneg _)
 
@@ -3110,7 +3110,7 @@ theorem mul_conj
 
 中文:
 定理 mul_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z * conj z = normSq z
   证明: Complex.ext_iff.2 by simp [normSq, mul_comm, sub_eq_neg_add, add_comm, ofReal]
 
@@ -3130,7 +3130,7 @@ theorem add_conj
 
 中文:
 定理 add_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z + conj z = (2 * z.re : 实数)
   证明: Complex.ext_iff.2 by simp [two_mul, ofReal]
 
@@ -3154,8 +3154,8 @@ definition ofRealHom
   map_add' := ofReal_add
 
 中文:
-定义 ofRealHom
-  签名: : 实数 ->+* Complex where
+定义 of实数Hom
+  签名: : 实数 ->+* 复形 where
   定义体: (x : Complex)
   map_one' := ofReal_one
   map_zero' := ofReal_zero
@@ -3179,7 +3179,7 @@ lemma ofRealHom_eq_coe
   proof: rfl
 
 中文:
-引理 ofRealHom_eq_coe
+引理 of实数Hom_eq_coe
   条件: (r : 实数)
   结论: of实数Hom r = r
   证明: rfl
@@ -3198,7 +3198,7 @@ lemma ofReal_comp_add
   proof: map_comp_add ofRealHom ..
 
 中文:
-引理 ofReal_comp_add
+引理 of实数_comp_add
   条件: (f g : α -> 实数)
   结论: of实数 ∘ (f + g) = of实数 ∘ f + of实数 ∘ g
   证明: map_comp_add ofRealHom ..
@@ -3216,7 +3216,7 @@ lemma ofReal_comp_sub
   proof: map_comp_sub ofRealHom ..
 
 中文:
-引理 ofReal_comp_sub
+引理 of实数_comp_sub
   条件: (f g : α -> 实数)
   结论: of实数 ∘ (f - g) = of实数 ∘ f - of实数 ∘ g
   证明: map_comp_sub ofRealHom ..
@@ -3234,7 +3234,7 @@ lemma ofReal_comp_neg
   proof: map_comp_neg ofRealHom _
 
 中文:
-引理 ofReal_comp_neg
+引理 of实数_comp_neg
   条件: (f : α -> 实数)
   结论: of实数 ∘ (-f) = -(of实数 ∘ f)
   证明: map_comp_neg ofRealHom _
@@ -3252,7 +3252,7 @@ lemma ofReal_comp_nsmul
   proof: map_comp_nsmul ofRealHom ..
 
 中文:
-引理 ofReal_comp_nsmul
+引理 of实数_comp_nsmul
   条件: (n : 自然数) (f : α -> 实数)
   结论: of实数 ∘ (n • f) = n • (of实数 ∘ f)
   证明: map_comp_nsmul ofRealHom ..
@@ -3272,7 +3272,7 @@ lemma ofReal_comp_zsmul
   proof: map_comp_zsmul ofRealHom ..
 
 中文:
-引理 ofReal_comp_zsmul
+引理 of实数_comp_zsmul
   条件: (n : 整数) (f : α -> 实数)
   结论: of实数 ∘ (n • f) = n • (of实数 ∘ f)
   证明: map_comp_zsmul ofRealHom ..
@@ -3292,7 +3292,7 @@ lemma ofReal_comp_mul
   proof: map_comp_mul ofRealHom ..
 
 中文:
-引理 ofReal_comp_mul
+引理 of实数_comp_mul
   条件: (f g : α -> 实数)
   结论: of实数 ∘ (f * g) = of实数 ∘ f * of实数 ∘ g
   证明: map_comp_mul ofRealHom ..
@@ -3312,7 +3312,7 @@ lemma ofReal_comp_pow
 @[simp]
 
 中文:
-引理 ofReal_comp_pow
+引理 of实数_comp_pow
   条件: (f : α -> 实数) (n : 自然数)
   结论: of实数 ∘ (f ^ n) = (of实数 ∘ f) ^ n
   证明: map_comp_pow ofRealHom ..
@@ -3436,7 +3436,7 @@ theorem sub_re
 
 中文:
 定理 sub_re
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z - w).re = z.re - w.re
   证明: rfl
 
@@ -3459,7 +3459,7 @@ theorem sub_im
 
 中文:
 定理 sub_im
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z - w).im = z.im - w.im
   证明: rfl
 
@@ -3481,9 +3481,9 @@ theorem ofReal_sub
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_sub
+定理 of实数_sub
   条件: (r s : 实数)
-  结论: ((r - s : 实数) : Complex) = r - s
+  结论: ((r - s : 实数) : 复形) = r - s
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 @[simp, norm_cast]
@@ -3505,9 +3505,9 @@ theorem ofReal_pow
   induction n <;> simp [*, ofReal_mul, pow_succ]
 
 中文:
-定理 ofReal_pow
+定理 of实数_pow
   条件: (r : 实数) (n : 自然数)
-  结论: ((r ^ n : 实数) : Complex) = (r : Complex) ^ n
+  结论: ((r ^ n : 实数) : 复形) = (r : 复形) ^ n
   证明: by
   induction n <;> simp [*, ofReal_mul, pow_succ]
 
@@ -3527,7 +3527,7 @@ theorem sub_conj
 
 中文:
 定理 sub_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z - conj z = (2 * z.im : 实数) * I
   证明: Complex.ext_iff.2 by simp [two_mul, sub_eq_add_neg, ofReal]
 
@@ -3550,7 +3550,7 @@ theorem normSq_sub
 
 中文:
 定理 normSq_sub
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: normSq (z - w) = normSq z + normSq w - 2 * (z * conj w).re
   证明: by
   rw [sub_eq_add_neg]; rw [normSq_add]
@@ -3578,7 +3578,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv Complex
+  签名: 取逆 复形
   定义体: ⟨fun z => conj z * ((normSq z)⁻¹ : Real)⟩
 
 Depends on / 依赖: normSq
@@ -3599,7 +3599,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z⁻¹ = conj z * ((normSq z)⁻¹ : 实数)
   证明: (rfl)
 
@@ -3622,7 +3622,7 @@ theorem inv_re
 
 中文:
 定理 inv_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z⁻¹.re = z.re / normSq z
   证明: by simp [inv_def, division_def, ofReal]
 
@@ -3646,7 +3646,7 @@ theorem inv_im
 
 中文:
 定理 inv_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z⁻¹.im = -z.im / normSq z
   证明: by simp [inv_def, division_def, ofReal]
 
@@ -3667,9 +3667,9 @@ theorem ofReal_inv
   proof: Complex.ext_iff.2 by simp [ofReal]
 
 中文:
-定理 ofReal_inv
+定理 of实数_inv
   条件: (r : 实数)
-  结论: ((r⁻¹ : 实数) : Complex) = (r : Complex)⁻¹
+  结论: ((r⁻¹ : 实数) : 复形) = (r : 复形)⁻¹
   证明: Complex.ext_iff.2 by simp [ofReal]
 
 Depends on / 依赖: Complex.ext_iff, ext_iff, ofReal
@@ -3688,7 +3688,7 @@ theorem inv_zero
 
 中文:
 定理 inv_zero
-  结论: (0⁻¹ : Complex) = 0
+  结论: (0⁻¹ : 复形) = 0
   证明: by
   rw [← ofReal_zero]; rw [← ofReal_inv]; rw [inv_zero]
 -/
@@ -3707,7 +3707,7 @@ theorem mul_inv_cancel
 
 中文:
 定理 mul_inv_cancel
-  条件: {z : Complex} (h : z != 0)
+  条件: {z : 复形} (h : z != 0)
   结论: z * z⁻¹ = 1
   证明: by
   rw [inv_def]; rw [← mul_assoc]; rw [mul_conj]; rw [← ofReal_mul]; rw [mul_inv_cancel₀ (mt normSq_eq_zero.1 h)]; rw [ofReal_one]
@@ -3724,7 +3724,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: : DivInvMonoid Complex where
+  签名: : 除逆幺半群 复形 where
 -/
 noncomputable instance instDivInvMonoid : DivInvMonoid Complex where
 
@@ -3740,7 +3740,7 @@ lemma div_re
 
 中文:
 引理 div_re
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z / w).re = z.re * w.re / normSq w + z.im * w.im / normSq w
   证明: by
   simp [div_eq_mul_inv, mul_assoc, sub_eq_add_neg]
@@ -3762,7 +3762,7 @@ lemma div_im
 
 中文:
 引理 div_im
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: (z / w).im = z.im * w.re / normSq w - z.re * w.im / normSq w
   证明: by
   simp [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, add_comm]
@@ -3789,7 +3789,7 @@ nnqsmul_def n z := Complex.ext_if
 
 中文:
 实例 instField
-  签名: : Field Complex where
+  签名: : 域 复形 where
   定义体: @Complex.mul_inv_cancel
   inv_zero := Complex.inv_zero
   nnqsmul := (· • ·)
@@ -3823,8 +3823,8 @@ lemma ofReal_nnqsmul
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_nnqsmul
-  条件: (q : Rat>=0) (r : 实数)
+引理 of实数_nnqsmul
+  条件: (q : 有理数>=0) (r : 实数)
   结论: of实数 (q • r) = q • r
   证明: by simp [NNRat.smul_def]
 
@@ -3845,8 +3845,8 @@ lemma ofReal_qsmul
   proof: by simp [Rat.smul_def]
 
 中文:
-引理 ofReal_qsmul
-  条件: (q : Rat) (r : 实数)
+引理 of实数_qsmul
+  条件: (q : 有理数) (r : 实数)
   结论: of实数 (q • r) = q • r
   证明: by simp [Rat.smul_def]
 
@@ -3867,7 +3867,7 @@ theorem conj_inv
 
 中文:
 定理 conj_inv
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: conj x⁻¹ = (conj x)⁻¹
   证明: star_inv₀ _
 
@@ -3891,9 +3891,9 @@ theorem ofReal_div
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_div
+定理 of实数_div
   条件: (r s : 实数)
-  结论: ((r / s : 实数) : Complex) = r / s
+  结论: ((r / s : 实数) : 复形) = r / s
   证明: map_div₀ ofRealHom r s
 
 @[simp, norm_cast]
@@ -3915,9 +3915,9 @@ theorem ofReal_zpow
 @[simp]
 
 中文:
-定理 ofReal_zpow
+定理 of实数_zpow
   条件: (r : 实数) (n : 整数)
-  结论: ((r ^ n : 实数) : Complex) = (r : Complex) ^ n
+  结论: ((r ^ n : 实数) : 复形) = (r : 复形) ^ n
   证明: map_zpow₀ ofRealHom r n
 
 @[simp]
@@ -3940,7 +3940,7 @@ theorem div_I
 
 中文:
 定理 div_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z / I = -(z * I)
   证明: (div_eq_iff_mul_eq I_ne_zero).2 by simp [mul_assoc]
 
@@ -4008,7 +4008,7 @@ theorem normSq_inv
 
 中文:
 定理 normSq_inv
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: normSq z⁻¹ = (normSq z)⁻¹
   证明: by simp
 
@@ -4027,7 +4027,7 @@ theorem normSq_div
 
 中文:
 定理 normSq_div
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: normSq (z / w) = normSq z / normSq w
   证明: by simp
 
@@ -4046,8 +4046,8 @@ lemma div_ofReal
   simp_rw [div_eq_inv_mul, ← ofReal_inv, ofReal_mul']
 
 中文:
-引理 div_ofReal
-  条件: (z : Complex) (x : 实数)
+引理 div_of实数
+  条件: (z : 复形) (x : 实数)
   结论: z / x = ⟨z.re / x, z.im / x⟩
   证明: by
   simp_rw [div_eq_inv_mul, ← ofReal_inv, ofReal_mul']
@@ -4068,7 +4068,7 @@ lemma div_natCast
 
 中文:
 引理 div_natCast
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   结论: z / n = ⟨z.re / n, z.im / n⟩
   证明: mod_cast div_ofReal z n
 
@@ -4088,7 +4088,7 @@ lemma div_intCast
 
 中文:
 引理 div_intCast
-  条件: (z : Complex) (n : 整数)
+  条件: (z : 复形) (n : 整数)
   结论: z / n = ⟨z.re / n, z.im / n⟩
   证明: mod_cast div_ofReal z n
 
@@ -4108,7 +4108,7 @@ lemma div_ratCast
 
 中文:
 引理 div_ratCast
-  条件: (z : Complex) (x : Rat)
+  条件: (z : 复形) (x : 有理数)
   结论: z / x = ⟨z.re / x, z.im / x⟩
   证明: mod_cast div_ofReal z x
 
@@ -4126,8 +4126,8 @@ lemma div_ofNat
   proof: div_natCast z n
 
 中文:
-引理 div_ofNat
-  条件: (z : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 div_of自然数
+  条件: (z : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: div_natCast z n
 
 Depends on / 依赖: div_natCast
@@ -4146,8 +4146,8 @@ lemma div_ofReal_re
   proof: by rw [div_ofReal]
 
 中文:
-引理 div_ofReal_re
-  条件: (z : Complex) (x : 实数)
+引理 div_of实数_re
+  条件: (z : 复形) (x : 实数)
   结论: (z / x).re = z.re / x
   证明: by rw [div_ofReal]
 -/
@@ -4162,8 +4162,8 @@ lemma div_ofReal_im
   proof: by rw [div_ofReal]
 
 中文:
-引理 div_ofReal_im
-  条件: (z : Complex) (x : 实数)
+引理 div_of实数_im
+  条件: (z : 复形) (x : 实数)
   结论: (z / x).im = z.im / x
   证明: by rw [div_ofReal]
 -/
@@ -4179,7 +4179,7 @@ lemma div_natCast_re
 
 中文:
 引理 div_natCast_re
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   结论: (z / n).re = z.re / n
   证明: by rw [div_natCast]
 -/
@@ -4195,7 +4195,7 @@ lemma div_natCast_im
 
 中文:
 引理 div_natCast_im
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   结论: (z / n).im = z.im / n
   证明: by rw [div_natCast]
 -/
@@ -4211,7 +4211,7 @@ lemma div_intCast_re
 
 中文:
 引理 div_intCast_re
-  条件: (z : Complex) (n : 整数)
+  条件: (z : 复形) (n : 整数)
   结论: (z / n).re = z.re / n
   证明: by rw [div_intCast]
 
@@ -4229,7 +4229,7 @@ lemma div_intCast_im
 
 中文:
 引理 div_intCast_im
-  条件: (z : Complex) (n : 整数)
+  条件: (z : 复形) (n : 整数)
   结论: (z / n).im = z.im / n
   证明: by rw [div_intCast]
 -/
@@ -4245,7 +4245,7 @@ lemma div_ratCast_re
 
 中文:
 引理 div_ratCast_re
-  条件: (z : Complex) (x : Rat)
+  条件: (z : 复形) (x : 有理数)
   结论: (z / x).re = z.re / x
   证明: by rw [div_ratCast]
 -/
@@ -4263,7 +4263,7 @@ lemma div_ratCast_im
 
 中文:
 引理 div_ratCast_im
-  条件: (z : Complex) (x : Rat)
+  条件: (z : 复形) (x : 有理数)
   结论: (z / x).im = z.im / x
   证明: by rw [div_ratCast]
 
@@ -4283,8 +4283,8 @@ lemma div_ofNat_re
 @[simp]
 
 中文:
-引理 div_ofNat_re
-  条件: (z : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 div_of自然数_re
+  条件: (z : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: div_natCast_re z n
 
 @[simp]
@@ -4304,8 +4304,8 @@ lemma div_ofNat_im
   proof: div_natCast_im z n
 
 中文:
-引理 div_ofNat_im
-  条件: (z : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 div_of自然数_im
+  条件: (z : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: div_natCast_im z n
 
 Depends on / 依赖: div_natCast_im
@@ -4325,7 +4325,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero Complex
+  签名: : 特征零 复形
   定义体: charZero_of_inj_zero fun n h => by rwa [← ofReal_natCast, ofReal_eq_zero, Nat.cast_eq_zero] at h
 
 Depends on / 依赖: Nat.cast_eq_zero, cast_eq_zero, charZero_of_inj_zero, ofReal_eq_zero, ofReal_natCast
@@ -4343,7 +4343,7 @@ instance instIsAddTorsionFree
 
 中文:
 实例 instIsAddTorsionFree
-  签名: : IsAddTorsionFree Complex
+  签名: : 是加法无挠 复形
   定义体: IsDomain.instIsAddTorsionFreeOfCharZero _
 
 Depends on / 依赖: IsDomain, IsDomain.instIsAddTorsionFreeOfCharZero, instIsAddTorsionFreeOfCharZero
@@ -4362,8 +4362,8 @@ theorem re_eq_add_conj
 
 中文:
 定理 re_eq_add_conj
-  条件: (z : Complex)
-  结论: (z.re : Complex) = (z + conj z) / 2
+  条件: (z : 复形)
+  结论: (z.re : 复形) = (z + conj z) / 2
   证明: by
   simp only [add_conj, ofReal_mul, ofReal_ofNat, mul_div_cancel_left₀ (z.re : Complex) two_ne_zero]
 
@@ -4385,8 +4385,8 @@ theorem im_eq_sub_conj
 
 中文:
 定理 im_eq_sub_conj
-  条件: (z : Complex)
-  结论: (z.im : Complex) = (z - conj z) / (2 * I)
+  条件: (z : 复形)
+  结论: (z.im : 复形) = (z - conj z) / (2 * I)
   证明: by
   simp only [sub_conj, ofReal_mul, ofReal_ofNat, mul_right_comm,
     mul_div_cancel_left₀ _ (mul_ne_zero two_ne_zero I_ne_zero : 2 * I != 0)]
@@ -4419,9 +4419,9 @@ lemma preimage_equivRealProd_prod
   proof: rfl
 
 中文:
-引理 preimage_equivRealProd_prod
-  条件: (s t : Set 实数)
-  结论: equiv实数Prod ⁻¹' (s ×ˢ t) = s ×Complex t
+引理 preimage_equiv实数Prod_prod
+  条件: (s t : 集合 实数)
+  结论: equiv实数Prod ⁻¹' (s ×ˢ t) = s ×复形 t
   证明: rfl
 -/
 lemma preimage_equivRealProd_prod (s t : Set Real) : equivRealProd ⁻¹' (s ×ˢ t) = s ×Complex t := rfl
@@ -4439,8 +4439,8 @@ lemma reProdIm_subset_iff
 
 中文:
 引理 reProdIm_subset_iff
-  条件: {s s₁ t t₁ : Set 实数}
-  结论: s ×Complex t subseteq s₁ ×Complex t₁ ↔ s ×ˢ t subseteq s₁ ×ˢ t₁
+  条件: {s s₁ t t₁ : 集合 实数}
+  结论: s ×复形 t subseteq s₁ ×复形 t₁ ↔ s ×ˢ t subseteq s₁ ×ˢ t₁
   证明: by
   rw [← @preimage_equivRealProd_prod s t]; rw [← @preimage_equivRealProd_prod s₁ t₁]
   exact Equiv.preimage_subset equivRealProd _ _
@@ -4463,7 +4463,7 @@ lemma reProdIm_subset_iff'
 
 中文:
 引理 reProdIm_subset_iff'
-  条件: {s s₁ t t₁ : Set 实数}
+  条件: {s s₁ t t₁ : 集合 实数}
   证明: by
   convert! prod_subset_prod_iff
   exact reProdIm_subset_iff
@@ -4488,7 +4488,7 @@ lemma reProdIm_nonempty
 
 中文:
 引理 reProdIm_nonempty
-  结论: (s ×Complex t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ×复形 t).非空 ↔ s.非空 ∧ t.非空
   证明: by
   simp [Set.Nonempty, reProdIm, Complex.exists]
 -/
@@ -4506,7 +4506,7 @@ lemma reProdIm_eq_empty
 
 中文:
 引理 reProdIm_eq_empty
-  结论: s ×Complex t = ∅ ↔ s = ∅ ∨ t = ∅
+  结论: s ×复形 t = ∅ ↔ s = ∅ ∨ t = ∅
   证明: by
   simp [← not_nonempty_iff_eq_empty, reProdIm_nonempty, -not_and, not_and_or]
 -/
@@ -4529,7 +4529,7 @@ definition Rectangle
 
 中文:
 定义 Rectangle
-  签名: (z w : Complex)
+  签名: (z w : 复形)
   定义体: [[z.re, w.re]] ×Complex [[z.im, w.im]]
 
 Depends on / 依赖: w.im, w.re, z.im, z.re

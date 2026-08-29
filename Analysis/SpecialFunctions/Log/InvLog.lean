@@ -237,7 +237,7 @@ theorem differentiableOn_inv_log
 
 中文:
 定理 differentiableOn_inv_log
-  结论: DifferentiableOn 实数 (fun x => (log x)⁻¹) (.Ioi 1)
+  结论: DifferentiableOn 实数 (fun x => (log x)⁻¹) (.左开右无界区间 1)
   证明: differentiableOn_inv_log'.mono (by grind)
 
 Depends on / 依赖: differentiableOn_inv_log
@@ -478,7 +478,7 @@ theorem differentiableOn_log_log
 
 中文:
 定理 differentiableOn_log_log
-  结论: DifferentiableOn 实数 (fun x => log (log x)) (.Ioi 1)
+  结论: DifferentiableOn 实数 (fun x => log (log x)) (.左开右无界区间 1)
   证明: differentiableOn_log_log'.mono (by grind)
 
 Depends on / 依赖: differentiableOn_log_log

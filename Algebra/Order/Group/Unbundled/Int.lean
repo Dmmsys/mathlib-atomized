@@ -43,7 +43,7 @@ theorem natCast_strictMono
 
 中文:
 定理 natCast_strictMono
-  结论: StrictMono (· : 自然数 -> 整数)
+  结论: 严格递增 (· : 自然数 -> 整数)
   证明: fun _ _ => Int.ofNat_lt.2
 
 Depends on / 依赖: Int.ofNat_lt, ofNat_lt

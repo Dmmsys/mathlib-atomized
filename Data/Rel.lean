@@ -205,7 +205,7 @@ definition dom
 
 中文:
 定义 dom
-  签名: : Set α
+  签名: : 集合 α
   定义体: {a | exists b, a ~[R] b}
 -/
 def dom : Set α := {a | exists b, a ~[R] b}
@@ -221,7 +221,7 @@ definition cod
 
 中文:
 定义 cod
-  签名: : Set β
+  签名: : 集合 β
   定义体: {b | exists a, a ~[R] b}
 -/
 def cod : Set β := {b | exists a, a ~[R] b}
@@ -370,7 +370,7 @@ lemma dom_univ
 
 中文:
 引理 dom_univ
-  条件: [Nonempty β]
+  条件: [非空 β]
   结论: dom (.univ : SetRel α β) = .univ
   证明: by aesop
 
@@ -388,7 +388,7 @@ lemma cod_univ
 
 中文:
 引理 cod_univ
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: cod (.univ : SetRel α β) = .univ
   证明: by aesop
 
@@ -706,7 +706,7 @@ lemma comp_sUnion
 
 中文:
 引理 comp_sUnion
-  条件: (R : SetRel α β) (𝒮 : Set (SetRel β γ))
+  条件: (R : SetRel α β) (𝒮 : 集合 (SetRel β γ))
   结论: R ○ ⋃₀ 𝒮 = ⋃ S in 𝒮, R ○ S
   证明: by aesop
 -/
@@ -724,7 +724,7 @@ lemma sUnion_comp
 
 中文:
 引理 sUnion_comp
-  条件: (ℛ : Set (SetRel α β)) (S : SetRel β γ)
+  条件: (ℛ : 集合 (SetRel α β)) (S : SetRel β γ)
   结论: ⋃₀ ℛ ○ S = ⋃ R in ℛ, R ○ S
   证明: by aesop
 
@@ -810,8 +810,8 @@ lemma _root_.Monotone.relComp
   proof: fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ => ⟨b, hf hij hab, hg hij hbc⟩
 
 中文:
-引理 _root_.Monotone.relComp
-  结论: {ι : 类型} [Preorder ι] {f : ι -> SetRel α β}
+引理 _root_.递增.relComp
+  结论: {ι : 类型} [预序 ι] {f : ι -> SetRel α β}
   证明: fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ => ⟨b, hf hij hab, hg hij hbc⟩
 -/
 protected lemma _root_.Monotone.relComp {ι : Type*} [Preorder ι] {f : ι -> SetRel α β}
@@ -828,7 +828,7 @@ lemma prod_comp_prod_of_inter_nonempty
 
 中文:
 引理 prod_comp_prod_of_inter_nonempty
-  条件: (ht : (t₁ inter t₂).Nonempty) (s : Set α) (u : Set γ)
+  条件: (ht : (t₁ inter t₂).非空) (s : 集合 α) (u : 集合 γ)
   证明: by aesop
 -/
 lemma prod_comp_prod_of_inter_nonempty (ht : (t₁ inter t₂).Nonempty) (s : Set α) (u : Set γ) :
@@ -844,7 +844,7 @@ lemma prod_comp_prod_of_disjoint
 
 中文:
 引理 prod_comp_prod_of_disjoint
-  条件: (ht : Disjoint t₁ t₂) (s : Set α) (u : Set γ)
+  条件: (ht : Disjoint t₁ t₂) (s : 集合 α) (u : 集合 γ)
   证明: Set.eq_empty_of_forall_notMem fun _ ⟨_z, ⟨_, hzs⟩, hzu, _⟩ => Set.disjoint_left.1 ht hzs hzu
 
 Depends on / 依赖: Set.disjoint_left, Set.eq_empty_of_forall_notMem, disjoint_left, eq_empty_of_forall_notMem
@@ -866,7 +866,7 @@ lemma prod_comp_prod
 
 中文:
 引理 prod_comp_prod
-  条件: (s : Set α) (t₁ t₂ : Set β) (u : Set γ) [Decidable (Disjoint t₁ t₂)]
+  条件: (s : 集合 α) (t₁ t₂ : 集合 β) (u : 集合 γ) [可判定 (Disjoint t₁ t₂)]
   证明: by
   split_ifs with hst
   · exact prod_comp_prod_of_disjoint hst ..
@@ -890,8 +890,8 @@ definition image
   body: {b | exists a in s, a ~[R] b}
 
 中文:
-定义 image
-  签名: : Set β
+定义 像
+  签名: : 集合 β
   定义体: {b | exists a in s, a ~[R] b}
 -/
 def image : Set β := {b | exists a in s, a ~[R] b}
@@ -906,8 +906,8 @@ definition preimage
   body: {a | exists b in t, a ~[R] b}
 
 中文:
-定义 preimage
-  签名: : Set α
+定义 原像
+  签名: : 集合 α
   定义体: {a | exists b in t, a ~[R] b}
 -/
 def preimage : Set α := {a | exists b in t, a ~[R] b}
@@ -922,7 +922,7 @@ lemma mem_image
 
 中文:
 引理 mem_image
-  结论: b in image R s ↔ 存在 a in s, a ~[R] b
+  结论: b in 像 R s ↔ 存在 a in s, a ~[R] b
   证明: .rfl
 -/
 @[simp] lemma mem_image : b in image R s ↔ exists a in s, a ~[R] b := .rfl
@@ -936,7 +936,7 @@ lemma mem_preimage
 
 中文:
 引理 mem_preimage
-  结论: a in preimage R t ↔ 存在 b in t, a ~[R] b
+  结论: a in 原像 R t ↔ 存在 b in t, a ~[R] b
   证明: .rfl
 -/
 @[simp] lemma mem_preimage : a in preimage R t ↔ exists b in t, a ~[R] b := .rfl
@@ -953,7 +953,7 @@ lemma image_subset_image
 中文:
 引理 image_subset_image
   条件: (hs : s₁ subseteq s₂)
-  结论: image R s₁ subseteq image R s₂
+  结论: 像 R s₁ subseteq 像 R s₂
   证明: fun _ ⟨a, ha, hab⟩ => ⟨a, hs ha, hab⟩
 -/
 @[gcongr] lemma image_subset_image (hs : s₁ subseteq s₂) : image R s₁ subseteq image R s₂ :=
@@ -971,7 +971,7 @@ lemma image_subset_image_left
 中文:
 引理 image_subset_image_left
   条件: (hR : R₁ subseteq R₂)
-  结论: image R₁ s subseteq image R₂ s
+  结论: 像 R₁ s subseteq 像 R₂ s
   证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
 -/
 @[gcongr] lemma image_subset_image_left (hR : R₁ subseteq R₂) : image R₁ s subseteq image R₂ s :=
@@ -989,7 +989,7 @@ lemma preimage_subset_preimage
 中文:
 引理 preimage_subset_preimage
   条件: (ht : t₁ subseteq t₂)
-  结论: preimage R t₁ subseteq preimage R t₂
+  结论: 原像 R t₁ subseteq 原像 R t₂
   证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ht ha, hab⟩
 -/
 @[gcongr] lemma preimage_subset_preimage (ht : t₁ subseteq t₂) : preimage R t₁ subseteq preimage R t₂ :=
@@ -1007,7 +1007,7 @@ lemma preimage_subset_preimage_left
 中文:
 引理 preimage_subset_preimage_left
   条件: (hR : R₁ subseteq R₂)
-  结论: preimage R₁ t subseteq preimage R₂ t
+  结论: 原像 R₁ t subseteq 原像 R₂ t
   证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
 -/
 @[gcongr] lemma preimage_subset_preimage_left (hR : R₁ subseteq R₂) : preimage R₁ t subseteq preimage R₂ t :=
@@ -1024,7 +1024,7 @@ lemma image_inv
 
 中文:
 引理 image_inv
-  结论: R.inv.image t = preimage R t
+  结论: R.inv.像 t = 原像 R t
   证明: rfl
 -/
 @[simp] lemma image_inv : R.inv.image t = preimage R t := rfl
@@ -1040,7 +1040,7 @@ lemma preimage_inv
 
 中文:
 引理 preimage_inv
-  结论: R.inv.preimage s = image R s
+  结论: R.inv.原像 s = 像 R s
   证明: rfl
 -/
 @[simp] lemma preimage_inv : R.inv.preimage s = image R s := rfl
@@ -1055,7 +1055,7 @@ lemma image_mono
 
 中文:
 引理 image_mono
-  结论: Monotone R.image
+  结论: 递增 R.像
   证明: fun _ _ => image_subset_image
 
 Depends on / 依赖: image_subset_image
@@ -1071,7 +1071,7 @@ lemma preimage_mono
 
 中文:
 引理 preimage_mono
-  结论: Monotone R.preimage
+  结论: 递增 R.原像
   证明: fun _ _ => preimage_subset_preimage
 
 Depends on / 依赖: preimage_subset_preimage
@@ -1088,7 +1088,7 @@ lemma image_empty_right
 
 中文:
 引理 image_empty_right
-  结论: image R ∅ = ∅
+  结论: 像 R ∅ = ∅
   证明: by aesop
 -/
 @[simp] lemma image_empty_right : image R ∅ = ∅ := by aesop
@@ -1102,7 +1102,7 @@ lemma preimage_empty_right
 
 中文:
 引理 preimage_empty_right
-  结论: preimage R ∅ = ∅
+  结论: 原像 R ∅ = ∅
   证明: by aesop
 -/
 @[simp] lemma preimage_empty_right : preimage R ∅ = ∅ := by aesop
@@ -1117,7 +1117,7 @@ lemma image_univ_right
 
 中文:
 引理 image_univ_right
-  结论: image R .univ = R.cod
+  结论: 像 R .univ = R.cod
   证明: by aesop
 -/
 @[simp] lemma image_univ_right : image R .univ = R.cod := by aesop
@@ -1131,7 +1131,7 @@ lemma preimage_univ_right
 
 中文:
 引理 preimage_univ_right
-  结论: preimage R .univ = R.dom
+  结论: 原像 R .univ = R.dom
   证明: by aesop
 -/
 @[simp] lemma preimage_univ_right : preimage R .univ = R.dom := by aesop
@@ -1147,7 +1147,7 @@ lemma image_inter_subset
 
 中文:
 引理 image_inter_subset
-  结论: image R (s₁ inter s₂) subseteq image R s₁ inter image R s₂
+  结论: 像 R (s₁ inter s₂) subseteq 像 R s₁ inter 像 R s₂
   证明: image_mono.map_inf_le ..
 
 Depends on / 依赖: image_mono, image_mono.map_inf_le, map_inf_le
@@ -1165,7 +1165,7 @@ lemma preimage_inter_subset
 
 中文:
 引理 preimage_inter_subset
-  结论: preimage R (t₁ inter t₂) subseteq preimage R t₁ inter preimage R t₂
+  结论: 原像 R (t₁ inter t₂) subseteq 原像 R t₁ inter 原像 R t₂
   证明: preimage_mono.map_inf_le ..
 
 Depends on / 依赖: map_inf_le, preimage_mono, preimage_mono.map_inf_le
@@ -1184,7 +1184,7 @@ lemma image_union
 
 中文:
 引理 image_union
-  结论: image R (s₁ union s₂) = image R s₁ union image R s₂
+  结论: 像 R (s₁ union s₂) = 像 R s₁ union 像 R s₂
   证明: by aesop
 -/
 lemma image_union : image R (s₁ union s₂) = image R s₁ union image R s₂ := by aesop
@@ -1201,8 +1201,8 @@ lemma image_iUnion
 
 中文:
 引理 image_iUnion
-  条件: (s : ι -> Set α)
-  结论: image R (⋃ i, s i) = ⋃ i, image R (s i)
+  条件: (s : ι -> 集合 α)
+  结论: 像 R (⋃ i, s i) = ⋃ i, 像 R (s i)
   证明: by aesop
 -/
 lemma image_iUnion (s : ι -> Set α) : image R (⋃ i, s i) = ⋃ i, image R (s i) := by aesop
@@ -1219,8 +1219,8 @@ lemma image_sUnion
 
 中文:
 引理 image_sUnion
-  条件: (S : Set (Set α))
-  结论: image R (⋃₀ S) = ⋃ s in S, image R s
+  条件: (S : 集合 (集合 α))
+  结论: 像 R (⋃₀ S) = ⋃ s in S, 像 R s
   证明: by aesop
 -/
 lemma image_sUnion (S : Set (Set α)) : image R (⋃₀ S) = ⋃ s in S, image R s := by aesop
@@ -1236,7 +1236,7 @@ lemma preimage_union
 
 中文:
 引理 preimage_union
-  结论: preimage R (t₁ union t₂) = preimage R t₁ union preimage R t₂
+  结论: 原像 R (t₁ union t₂) = 原像 R t₁ union 原像 R t₂
   证明: by aesop
 -/
 lemma preimage_union : preimage R (t₁ union t₂) = preimage R t₁ union preimage R t₂ := by aesop
@@ -1253,8 +1253,8 @@ lemma preimage_iUnion
 
 中文:
 引理 preimage_iUnion
-  条件: (t : ι -> Set β)
-  结论: preimage R (⋃ i, t i) = ⋃ i, preimage R (t i)
+  条件: (t : ι -> 集合 β)
+  结论: 原像 R (⋃ i, t i) = ⋃ i, 原像 R (t i)
   证明: by aesop
 -/
 lemma preimage_iUnion (t : ι -> Set β) : preimage R (⋃ i, t i) = ⋃ i, preimage R (t i) := by aesop
@@ -1271,8 +1271,8 @@ lemma preimage_sUnion
 
 中文:
 引理 preimage_sUnion
-  条件: (T : Set (Set β))
-  结论: preimage R (⋃₀ T) = ⋃ t in T, preimage R t
+  条件: (T : 集合 (集合 β))
+  结论: 原像 R (⋃₀ T) = ⋃ t in T, 原像 R t
   证明: by aesop
 -/
 lemma preimage_sUnion (T : Set (Set β)) : preimage R (⋃₀ T) = ⋃ t in T, preimage R t := by aesop
@@ -1288,7 +1288,7 @@ lemma image_id
 
 中文:
 引理 image_id
-  结论: image .id s = s
+  结论: 像 .id s = s
   证明: by aesop
 -/
 @[simp] lemma image_id : image .id s = s := by aesop
@@ -1304,7 +1304,7 @@ lemma preimage_id
 
 中文:
 引理 preimage_id
-  结论: preimage .id s = s
+  结论: 原像 .id s = s
   证明: by aesop
 -/
 @[simp] lemma preimage_id : preimage .id s = s := by aesop
@@ -1320,7 +1320,7 @@ lemma image_comp
 
 中文:
 引理 image_comp
-  结论: image (R ○ S) s = image S (image R s)
+  结论: 像 (R ○ S) s = 像 S (像 R s)
   证明: by aesop
 -/
 lemma image_comp : image (R ○ S) s = image S (image R s) := by aesop
@@ -1336,7 +1336,7 @@ lemma preimage_comp
 
 中文:
 引理 preimage_comp
-  结论: preimage (R ○ S) u = preimage R (preimage S u)
+  结论: 原像 (R ○ S) u = 原像 R (原像 S u)
   证明: by aesop
 -/
 lemma preimage_comp : preimage (R ○ S) u = preimage R (preimage S u) := by aesop
@@ -1352,7 +1352,7 @@ lemma image_empty_left
 
 中文:
 引理 image_empty_left
-  结论: image (∅ : SetRel α β) s = ∅
+  结论: 像 (∅ : SetRel α β) s = ∅
   证明: by aesop
 -/
 @[simp] lemma image_empty_left : image (∅ : SetRel α β) s = ∅ := by aesop
@@ -1368,7 +1368,7 @@ lemma preimage_empty_left
 
 中文:
 引理 preimage_empty_left
-  结论: preimage (∅ : SetRel α β) t = ∅
+  结论: 原像 (∅ : SetRel α β) t = ∅
   证明: by aesop
 -/
 @[simp] lemma preimage_empty_left : preimage (∅ : SetRel α β) t = ∅ := by aesop
@@ -1384,8 +1384,8 @@ lemma image_univ_left
 
 中文:
 引理 image_univ_left
-  条件: (hs : s.Nonempty)
-  结论: image (.univ : SetRel α β) s = .univ
+  条件: (hs : s.非空)
+  结论: 像 (.univ : SetRel α β) s = .univ
   证明: by aesop
 -/
 @[simp] lemma image_univ_left (hs : s.Nonempty) : image (.univ : SetRel α β) s = .univ := by aesop
@@ -1401,8 +1401,8 @@ lemma preimage_univ_left
 
 中文:
 引理 preimage_univ_left
-  条件: (ht : t.Nonempty)
-  结论: preimage (.univ : SetRel α β) t = .univ
+  条件: (ht : t.非空)
+  结论: 原像 (.univ : SetRel α β) t = .univ
   证明: by
   aesop
 -/
@@ -1421,7 +1421,7 @@ lemma image_eq_cod_of_dom_subset
 中文:
 引理 image_eq_cod_of_dom_subset
   条件: (h : R.dom subseteq s)
-  结论: R.image s = R.cod
+  结论: R.像 s = R.cod
   证明: by aesop
 -/
 lemma image_eq_cod_of_dom_subset (h : R.dom subseteq s) : R.image s = R.cod := by aesop
@@ -1437,7 +1437,7 @@ lemma preimage_eq_dom_of_cod_subset
 中文:
 引理 preimage_eq_dom_of_cod_subset
   条件: (h : R.cod subseteq t)
-  结论: R.preimage t = R.dom
+  结论: R.原像 t = R.dom
   证明: by aesop
 -/
 lemma preimage_eq_dom_of_cod_subset (h : R.cod subseteq t) : R.preimage t = R.dom := by aesop
@@ -1453,7 +1453,7 @@ lemma image_inter_dom
 
 中文:
 引理 image_inter_dom
-  结论: image R (s inter R.dom) = image R s
+  结论: 像 R (s inter R.dom) = 像 R s
   证明: by aesop
 -/
 @[simp] lemma image_inter_dom : image R (s inter R.dom) = image R s := by aesop
@@ -1469,7 +1469,7 @@ lemma preimage_inter_cod
 
 中文:
 引理 preimage_inter_cod
-  结论: preimage R (t inter R.cod) = preimage R t
+  结论: 原像 R (t inter R.cod) = 原像 R t
   证明: by aesop
 -/
 @[simp] lemma preimage_inter_cod : preimage R (t inter R.cod) = preimage R t := by aesop
@@ -1485,7 +1485,7 @@ lemma inter_dom_subset_preimage_image
 
 中文:
 引理 inter_dom_subset_preimage_image
-  结论: s inter R.dom subseteq R.preimage (image R s)
+  结论: s inter R.dom subseteq R.原像 (像 R s)
   证明: by
   aesop (add simp [Set.subset_def])
 
@@ -1505,7 +1505,7 @@ lemma inter_cod_subset_image_preimage
 
 中文:
 引理 inter_cod_subset_image_preimage
-  结论: t inter R.cod subseteq image R (R.preimage t)
+  结论: t inter R.cod subseteq 像 R (R.原像 t)
   证明: by
   aesop (add simp [Set.subset_def])
 
@@ -1524,7 +1524,7 @@ lemma image_eq_biUnion
 
 中文:
 引理 image_eq_biUnion
-  结论: R.image s = ⋃ x in s, {y | x ~[R] y}
+  结论: R.像 s = ⋃ x in s, {y | x ~[R] y}
   证明: by aesop
 -/
 lemma image_eq_biUnion : R.image s = ⋃ x in s, {y | x ~[R] y} := by aesop
@@ -1539,7 +1539,7 @@ lemma preimage_eq_biUnion
 
 中文:
 引理 preimage_eq_biUnion
-  结论: R.preimage t = ⋃ y in t, {x | x ~[R] y}
+  结论: R.原像 t = ⋃ y in t, {x | x ~[R] y}
   证明: by aesop
 -/
 lemma preimage_eq_biUnion : R.preimage t = ⋃ y in t, {x | x ~[R] y} := by aesop
@@ -1555,7 +1555,7 @@ definition core
 
 中文:
 定义 core
-  签名: : Set α
+  签名: : 集合 α
   定义体: {a | forall ⦃b⦄, a ~[R] b -> b in t}
 -/
 def core : Set α := {a | forall ⦃b⦄, a ~[R] b -> b in t}
@@ -1607,7 +1607,7 @@ lemma core_mono
 
 中文:
 引理 core_mono
-  结论: Monotone R.core
+  结论: 递增 R.core
   证明: fun _ _ => core_subset_core
 
 Depends on / 依赖: core_subset_core
@@ -1657,7 +1657,7 @@ lemma core_univ
 
 中文:
 引理 core_univ
-  结论: R.core Set.univ = Set.univ
+  结论: R.core 集合.univ = 集合.univ
   证明: by aesop
 -/
 @[simp] lemma core_univ : R.core Set.univ = Set.univ := by aesop
@@ -1704,7 +1704,7 @@ lemma image_subset_iff
 
 中文:
 引理 image_subset_iff
-  结论: image R s subseteq t ↔ s subseteq core R t
+  结论: 像 R s subseteq t ↔ s subseteq core R t
   证明: by aesop (add simp [Set.subset_def])
 
 Depends on / 依赖: Set.subset_def, subset_def
@@ -1721,7 +1721,7 @@ lemma image_core_gc
 
 中文:
 引理 image_core_gc
-  结论: GaloisConnection R.image R.core
+  结论: GaloisConnection R.像 R.core
   证明: fun _ _ => image_subset_iff
 
 Depends on / 依赖: image_subset_iff
@@ -1895,8 +1895,8 @@ lemma IsRefl.sInter
   proof: (hℛ R hR).refl _
 
 中文:
-引理 IsRefl.sInter
-  条件: {ℛ : Set <| SetRel α α} (hℛ : 对任意 R in ℛ, R.IsRefl)
+引理 IsRefl.集合交集
+  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.IsRefl)
   证明: (hℛ R hR).refl _
 -/
 protected lemma IsRefl.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsRefl) :
@@ -1912,7 +1912,7 @@ instance isRefl_iInter
   body: .sInter by simpa
 
 中文:
-实例 isRefl_iInter
+实例 isRefl_i整数er
   签名: {R : ι -> SetRel α α} [对任意 i, (R i).IsRefl]
   定义体: .sInter by simpa
 
@@ -2028,8 +2028,8 @@ lemma self_subset_image
 
 中文:
 引理 self_subset_image
-  条件: [R.IsRefl] (s : Set α)
-  结论: s subseteq R.image s
+  条件: [R.IsRefl] (s : 集合 α)
+  结论: s subseteq R.像 s
   证明: fun x hx => ⟨x, hx, R.rfl⟩
 
 Depends on / 依赖: R.rfl
@@ -2048,8 +2048,8 @@ lemma self_subset_preimage
 
 中文:
 引理 self_subset_preimage
-  条件: [R.IsRefl] (s : Set α)
-  结论: s subseteq R.preimage s
+  条件: [R.IsRefl] (s : 集合 α)
+  结论: s subseteq R.原像 s
   证明: fun x hx => ⟨x, hx, R.rfl⟩
 
 Depends on / 依赖: R.rfl
@@ -2072,8 +2072,8 @@ lemma exists_eq_singleton_of_prod_subset_id
   exact ⟨a, ha, (hst · · _ hb), hb, (hst _ ha · · |>.symm)⟩
 
 中文:
-引理 exists_eq_singleton_of_prod_subset_id
-  结论: {s t : Set α} (hs : s.Nonempty) (ht : t.Nonempty)
+引理 存在_eq_singleton_of_prod_subset_id
+  结论: {s t : 集合 α} (hs : s.非空) (ht : t.非空)
   证明: by
   obtain ⟨a, ha⟩ := hs
   obtain ⟨b, hb⟩ := ht
@@ -2105,7 +2105,7 @@ abbreviation IsSymm
   body: Std.Symm (· ~[R] ·)
 
 中文:
-缩写 IsSymm
+缩写 是Symm
   签名: : 命题
   定义体: Std.Symm (· ~[R] ·)
 -/
@@ -2123,7 +2123,7 @@ lemma symm
 
 中文:
 引理 symm
-  条件: [R.IsSymm] (hab : a ~[R] b)
+  条件: [R.是Symm] (hab : a ~[R] b)
   结论: b ~[R] a
   证明: symm_of (· ~[R] ·) hab
 -/
@@ -2141,7 +2141,7 @@ lemma comm
 
 中文:
 引理 comm
-  条件: [R.IsSymm]
+  条件: [R.是Symm]
   结论: a ~[R] b ↔ b ~[R] a
   证明: comm_of (· ~[R] ·)
 -/
@@ -2159,7 +2159,7 @@ lemma inv_eq_self
 
 中文:
 引理 inv_eq_self
-  条件: [R.IsSymm]
+  条件: [R.是Symm]
   结论: R.inv = R
   证明: by ext; exact R.comm
 -/
@@ -2176,7 +2176,7 @@ lemma inv_eq_self_iff
 
 中文:
 引理 inv_eq_self_iff
-  结论: R.inv = R ↔ R.IsSymm where
+  结论: R.inv = R ↔ R.是Symm where
   证明: ⟨fun a b hab => by rwa [← hR]⟩
   mpr _ := inv_eq_self _
 -/
@@ -2193,8 +2193,8 @@ instance [R.IsSymm]
   body: by simpa
 
 中文:
-实例 [R.IsSymm]
-  签名: : R.inv.IsSymm
+实例 [R.是Symm]
+  签名: : R.inv.是Symm
   定义体: by simpa
 -/
 instance [R.IsSymm] : R.inv.IsSymm := by simpa
@@ -2209,7 +2209,7 @@ instance isSymm_empty
 
 中文:
 实例 isSymm_empty
-  签名: : (∅ : SetRel α α).IsSymm where symm _ _
+  签名: : (∅ : SetRel α α).是Symm where symm _ _
   定义体: by simp
 -/
 instance isSymm_empty : (∅ : SetRel α α).IsSymm where symm _ _ := by simp
@@ -2223,7 +2223,7 @@ instance isSymm_univ
 
 中文:
 实例 isSymm_univ
-  签名: : SetRel.IsSymm (Set.univ : SetRel α α) where symm _ _
+  签名: : SetRel.是Symm (集合.univ : SetRel α α) where symm _ _
   定义体: by simp
 -/
 instance isSymm_univ : SetRel.IsSymm (Set.univ : SetRel α α) where symm _ _ := by simp
@@ -2238,7 +2238,7 @@ instance isSymm_inter
 
 中文:
 实例 isSymm_inter
-  签名: [R₁.IsSymm] [R₂.IsSymm]
+  签名: [R₁.是Symm] [R₂.是Symm]
   定义体: .imp R₁.symm R₂.symm
 -/
 instance isSymm_inter [R₁.IsSymm] [R₂.IsSymm] : (R₁ inter R₂).IsSymm where
@@ -2253,8 +2253,8 @@ lemma IsSymm.sInter
   proof: (hℛ R hR).symm _ _ hab R hR
 
 中文:
-引理 IsSymm.sInter
-  条件: {ℛ : Set <| SetRel α α} (hℛ : 对任意 R in ℛ, R.IsSymm)
+引理 是Symm.集合交集
+  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.是Symm)
   证明: (hℛ R hR).symm _ _ hab R hR
 -/
 protected lemma IsSymm.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsSymm) :
@@ -2270,8 +2270,8 @@ instance isSymm_iInter
   body: .sInter by simpa
 
 中文:
-实例 isSymm_iInter
-  签名: {R : ι -> SetRel α α} [对任意 i, (R i).IsSymm]
+实例 isSymm_i整数er
+  签名: {R : ι -> SetRel α α} [对任意 i, (R i).是Symm]
   定义体: .sInter by simpa
 
 Depends on / 依赖: sInter
@@ -2289,7 +2289,7 @@ instance isSymm_id
 
 中文:
 实例 isSymm_id
-  签名: : (SetRel.id : SetRel α α).IsSymm where symm _ _
+  签名: : (SetRel.id : SetRel α α).是Symm where symm _ _
   定义体: .symm
 -/
 instance isSymm_id : (SetRel.id : SetRel α α).IsSymm where symm _ _ := .symm
@@ -2304,7 +2304,7 @@ instance isSymm_preimage
 
 中文:
 实例 isSymm_preimage
-  签名: {f : β -> α} [R.IsSymm]
+  签名: {f : β -> α} [R.是Symm]
   定义体: R.symm
 
 Depends on / 依赖: R.symm
@@ -2326,7 +2326,7 @@ instance isSymm_image
 
 中文:
 实例 isSymm_image
-  签名: {f : α -> β} [R.IsSymm]
+  签名: {f : α -> β} [R.是Symm]
   定义体: by
     simp only [Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq, forall_exists_index,
       and_imp]
@@ -2352,7 +2352,7 @@ instance isSymm_comp_inv
 
 中文:
 实例 isSymm_comp_inv
-  签名: : (R ○ R.inv).IsSymm where
+  签名: : (R ○ R.inv).是Symm where
   定义体: by rintro ⟨b, hab, hbc⟩; exact ⟨b, hbc, hab⟩
 -/
 instance isSymm_comp_inv : (R ○ R.inv).IsSymm where
@@ -2368,7 +2368,7 @@ instance isSymm_inv_comp
 
 中文:
 实例 isSymm_inv_comp
-  签名: : (R.inv ○ R).IsSymm
+  签名: : (R.inv ○ R).是Symm
   定义体: isSymm_comp_inv
 
 Depends on / 依赖: isSymm_comp_inv
@@ -2385,7 +2385,7 @@ instance isSymm_comp_self
 
 中文:
 实例 isSymm_comp_self
-  签名: [R.IsSymm]
+  签名: [R.是Symm]
   定义体: by simpa using R.isSymm_comp_inv
 
 Depends on / 依赖: R.isSymm_comp_inv, isSymm_comp_inv
@@ -2404,7 +2404,7 @@ lemma prod_subset_comm
 
 中文:
 引理 prod_subset_comm
-  条件: [R.IsSymm]
+  条件: [R.是Symm]
   结论: s₁ ×ˢ s₂ subseteq R ↔ s₂ ×ˢ s₁ subseteq R
   证明: by
   rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← Set.image_subset_iff]; rw [Set.image_swap_prod]; rw [← SetRel.inv]; rw [R.inv_eq_self]
@@ -2426,8 +2426,8 @@ lemma preimage_eq_image
 
 中文:
 引理 preimage_eq_image
-  条件: [R.IsSymm]
-  结论: R.preimage s = R.image s
+  条件: [R.是Symm]
+  结论: R.原像 s = R.像 s
   证明: by
   rw [← preimage_inv]; rw [inv_eq_self]
 
@@ -2464,7 +2464,7 @@ instance isSymm_symmetrize
 
 中文:
 实例 isSymm_symmetrize
-  签名: : R.symmetrize.IsSymm where symm _ _
+  签名: : R.symmetrize.是Symm where symm _ _
   定义体: .symm
 -/
 instance isSymm_symmetrize : R.symmetrize.IsSymm where symm _ _ := .symm
@@ -2558,7 +2558,7 @@ abbreviation IsTrans
   body: IsTrans α (· ~[R] ·)
 
 中文:
-缩写 IsTrans
+缩写 是Trans
   签名: : 命题
   定义体: IsTrans α (· ~[R] ·)
 -/
@@ -2576,7 +2576,7 @@ lemma trans
 
 中文:
 引理 trans
-  条件: [R.IsTrans] (hab : a ~[R] b) (hbc : b ~[R] c)
+  条件: [R.是Trans] (hab : a ~[R] b) (hbc : b ~[R] c)
   结论: a ~[R] c
   证明: trans_of (· ~[R] ·) hab hbc
 -/
@@ -2596,7 +2596,7 @@ lemma comp_subset_self
 
 中文:
 引理 comp_subset_self
-  条件: [R.IsTrans]
+  条件: [R.是Trans]
   结论: R ○ R subseteq R
   证明: fun ⟨_, _⟩ ⟨_, hab, hbc⟩ => R.trans hab hbc
 
@@ -2615,7 +2615,7 @@ lemma comp_eq_self
 
 中文:
 引理 comp_eq_self
-  条件: [R.IsRefl] [R.IsTrans]
+  条件: [R.IsRefl] [R.是Trans]
   结论: R ○ R = R
   证明: subset_antisymm comp_subset_self left_subset_comp
 
@@ -2635,7 +2635,7 @@ lemma isTrans_iff_comp_subset_self
 
 中文:
 引理 isTrans_iff_comp_subset_self
-  结论: R.IsTrans ↔ R ○ R subseteq R where
+  结论: R.是Trans ↔ R ○ R subseteq R where
   证明: comp_subset_self
   mpr h := ⟨fun _ _ _ hx hy => h ⟨_, hx, hy⟩⟩
 
@@ -2655,7 +2655,7 @@ instance isTrans_empty
 
 中文:
 实例 isTrans_empty
-  签名: : (∅ : SetRel α α).IsTrans where trans _ _ _
+  签名: : (∅ : SetRel α α).是Trans where trans _ _ _
   定义体: by simp
 -/
 instance isTrans_empty : (∅ : SetRel α α).IsTrans where trans _ _ _ := by simp
@@ -2669,7 +2669,7 @@ instance isTrans_univ
 
 中文:
 实例 isTrans_univ
-  签名: : SetRel.IsTrans (Set.univ : SetRel α α) where trans _ _ _
+  签名: : SetRel.是Trans (集合.univ : SetRel α α) where trans _ _ _
   定义体: by simp
 -/
 instance isTrans_univ : SetRel.IsTrans (Set.univ : SetRel α α) where trans _ _ _ := by simp
@@ -2698,7 +2698,7 @@ instance isTrans_inter
 
 中文:
 实例 isTrans_inter
-  签名: [R₁.IsTrans] [R₂.IsTrans]
+  签名: [R₁.是Trans] [R₂.是Trans]
   定义体: ⟨R₁.trans hab.1 hbc.1, R₂.trans hab.2 hbc.2⟩
 -/
 instance isTrans_inter [R₁.IsTrans] [R₂.IsTrans] : (R₁ inter R₂).IsTrans where
@@ -2713,8 +2713,8 @@ lemma IsTrans.sInter
   proof: (hℛ R hR).trans _ _ _ (hab R hR) hbc R hR
 
 中文:
-引理 IsTrans.sInter
-  条件: {ℛ : Set <| SetRel α α} (hℛ : 对任意 R in ℛ, R.IsTrans)
+引理 是Trans.集合交集
+  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.是Trans)
   证明: (hℛ R hR).trans _ _ _ (hab R hR) hbc R hR
 -/
 protected lemma IsTrans.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsTrans) :
@@ -2730,8 +2730,8 @@ instance isTrans_iInter
   body: .sInter by simpa
 
 中文:
-实例 isTrans_iInter
-  签名: {R : ι -> SetRel α α} [对任意 i, (R i).IsTrans]
+实例 isTrans_i整数er
+  签名: {R : ι -> SetRel α α} [对任意 i, (R i).是Trans]
   定义体: .sInter by simpa
 
 Depends on / 依赖: sInter
@@ -2749,7 +2749,7 @@ instance isTrans_id
 
 中文:
 实例 isTrans_id
-  签名: : (.id : SetRel α α).IsTrans where trans _ _ _
+  签名: : (.id : SetRel α α).是Trans where trans _ _ _
   定义体: .trans
 -/
 instance isTrans_id : (.id : SetRel α α).IsTrans where trans _ _ _ := .trans
@@ -2764,7 +2764,7 @@ instance isTrans_preimage
 
 中文:
 实例 isTrans_preimage
-  签名: {f : β -> α} [R.IsTrans]
+  签名: {f : β -> α} [R.是Trans]
   定义体: R.trans
 
 Depends on / 依赖: R.trans
@@ -2782,7 +2782,7 @@ instance isTrans_symmetrize
 
 中文:
 实例 isTrans_symmetrize
-  签名: [R.IsTrans]
+  签名: [R.是Trans]
   定义体: ⟨R.trans hab.1 hbc.1, R.trans hbc.2 hab.2⟩
 
 Depends on / 依赖: R.trans
@@ -2836,7 +2836,7 @@ abbreviation IsWellFounded
   body: WellFounded (· ~[R] ·)
 
 中文:
-缩写 IsWellFounded
+缩写 是良基
   签名: : 命题
   定义体: WellFounded (· ~[R] ·)
 
@@ -2853,7 +2853,7 @@ abbreviation Hom
   body: (· ~[R] ·) ->r (· ~[S] ·)
 
 中文:
-缩写 Hom
+缩写 态射
   定义体: (· ~[R] ·) ->r (· ~[S] ·)
 -/
 abbrev Hom := (· ~[R] ·) ->r (· ~[S] ·)
@@ -2909,7 +2909,7 @@ theorem graph_injective
 
 中文:
 定理 graph_injective
-  结论: Injective (graph : (α -> β) -> SetRel α β)
+  结论: 单射 (graph : (α -> β) -> SetRel α β)
   证明: by
   aesop (add simp [Injective, Set.ext_iff])
 
@@ -2998,7 +2998,7 @@ theorem Equiv.graph_inv
   aesop
 
 中文:
-定理 Equiv.graph_inv
+定理 等价.graph_inv
   条件: (f : α ≃ β)
   结论: (f.symm : β -> α).graph = SetRel.inv (f : α -> β).graph
   证明: by
@@ -3026,7 +3026,7 @@ lemma SetRel.exists_graph_eq_iff
   · exact (h _).unique (hf _)
 
 中文:
-引理 SetRel.exists_graph_eq_iff
+引理 SetRel.存在_graph_eq_iff
   条件: (R : SetRel α β)
   证明: by
   constructor
@@ -3069,8 +3069,8 @@ theorem image_eq
 
 中文:
 定理 image_eq
-  条件: (f : α -> β) (s : Set α)
-  结论: f '' s = (Function.graph f).image s
+  条件: (f : α -> β) (s : 集合 α)
+  结论: f '' s = (函数.graph f).像 s
   证明: by
   rfl
 -/
@@ -3089,8 +3089,8 @@ theorem preimage_eq
 
 中文:
 定理 preimage_eq
-  条件: (f : α -> β) (s : Set β)
-  结论: f ⁻¹' s = (Function.graph f).preimage s
+  条件: (f : α -> β) (s : 集合 β)
+  结论: f ⁻¹' s = (函数.graph f).原像 s
   证明: by
   simp [Set.preimage, SetRel.preimage]
 
@@ -3111,8 +3111,8 @@ theorem preimage_eq_core
 
 中文:
 定理 preimage_eq_core
-  条件: (f : α -> β) (s : Set β)
-  结论: f ⁻¹' s = (Function.graph f).core s
+  条件: (f : α -> β) (s : 集合 β)
+  结论: f ⁻¹' s = (函数.graph f).core s
   证明: by
   simp [Set.preimage, SetRel.core]
 
@@ -3132,7 +3132,7 @@ abbreviation Rel
   body: α -> β -> Prop
 
 中文:
-缩写 Rel
+缩写 关系
   签名: (α β : 类型)
   定义体: α -> β -> Prop
 -/

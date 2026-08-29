@@ -496,7 +496,7 @@ instance instVectorBundle
 
 中文:
 实例 instVectorBundle
-  签名: : VectorBundle 𝕜 (F₁ [⋀^ι]->L[𝕜] F₂) (fun x => E₁ x [⋀^ι]->L[𝕜] E₂ x)
+  签名: : 向量丛 𝕜 (F₁ [⋀^ι]->L[𝕜] F₂) (fun x => E₁ x [⋀^ι]->L[𝕜] E₂ x)
   定义体: (vectorPrebundle 𝕜 ι F₁ E₁ F₂ E₂).toVectorBundle
 
 Depends on / 依赖: toVectorBundle, vectorPrebundle

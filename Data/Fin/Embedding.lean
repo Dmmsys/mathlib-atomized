@@ -57,7 +57,7 @@ definition valEmbedding
 
 中文:
 定义 valEmbedding
-  签名: : Fin n ↪ 自然数
+  签名: : 有限集 n ↪ 自然数
   定义体: ⟨val, val_injective⟩
 
 @[simp]
@@ -125,7 +125,7 @@ theorem coe_succEmb
 
 中文:
 定理 coe_succEmb
-  结论: ⇑(succEmb n) = Fin.succ
+  结论: ⇑(succEmb n) = 有限集.succ
   证明: rfl
 -/
 theorem coe_succEmb : ⇑(succEmb n) = Fin.succ :=
@@ -192,7 +192,7 @@ refine Nat.succ_le_succ ihn ⟨?_⟩
 
 中文:
 引理 nonempty_embedding_iff
-  结论: Nonempty (Fin n ↪ Fin m) ↔ n <= m
+  结论: 非空 (有限集 n ↪ 有限集 m) ↔ n <= m
   证明: by
   refine ⟨fun h => ?_, fun h => ⟨castLEEmb h⟩⟩
   induction n generalizing m with
@@ -230,7 +230,7 @@ lemma equiv_iff_eq
 
 中文:
 引理 equiv_iff_eq
-  结论: Nonempty (Fin m ≃ Fin n) ↔ m = n
+  结论: 非空 (有限集 m ≃ 有限集 n) ↔ m = n
   证明: ⟨fun ⟨e⟩ => le_antisymm (nonempty_embedding_iff.1 ⟨e⟩) (nonempty_embedding_iff.1 ⟨e.symm⟩),
     fun h => h ▸ ⟨.refl _⟩⟩
 
@@ -274,7 +274,7 @@ lemma coe_castAddEmb
 中文:
 引理 coe_castAddEmb
   条件: (m)
-  结论: (castAddEmb m : Fin n -> Fin (n + m)) = castAdd m
+  结论: (castAddEmb m : 有限集 n -> 有限集 (n + m)) = castAdd m
   证明: rfl
 -/
 lemma coe_castAddEmb (m) : (castAddEmb m : Fin n -> Fin (n + m)) = castAdd m := rfl
@@ -290,7 +290,7 @@ lemma castAddEmb_apply
 
 中文:
 引理 castAddEmb_apply
-  条件: (m) (i : Fin n)
+  条件: (m) (i : 有限集 n)
   结论: castAddEmb m i = castAdd m i
   证明: rfl
 -/
@@ -306,7 +306,7 @@ definition castSuccEmb
 
 中文:
 定义 castSuccEmb
-  签名: : Fin n ↪ Fin (n + 1)
+  签名: : 有限集 n ↪ 有限集 (n + 1)
   定义体: castAddEmb _
 
 Depends on / 依赖: castAddEmb
@@ -323,7 +323,7 @@ lemma coe_castSuccEmb
 
 中文:
 引理 coe_castSuccEmb
-  结论: (castSuccEmb : Fin n -> Fin (n + 1)) = Fin.castSucc
+  结论: (castSuccEmb : 有限集 n -> 有限集 (n + 1)) = 有限集.castSucc
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_castSuccEmb : (castSuccEmb : Fin n -> Fin (n + 1)) = Fin.castSucc := rfl
@@ -339,7 +339,7 @@ lemma castSuccEmb_apply
 
 中文:
 引理 castSuccEmb_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: castSuccEmb i = i.castSucc
   证明: rfl
 -/
@@ -357,7 +357,7 @@ definition addNatEmb
   inj' a b := by simp [Fin.ext_iff]
 
 中文:
-定义 addNatEmb
+定义 add自然数Emb
   签名: (m)
   定义体: (addNat · m)
   inj' a b := by simp [Fin.ext_iff]
@@ -409,7 +409,7 @@ definition succAboveEmb
 
 中文:
 定义 succAboveEmb
-  签名: (p : Fin (n + 1))
+  签名: (p : 有限集 (n + 1))
   定义体: ⟨p.succAbove, succAbove_right_injective⟩
 
 Depends on / 依赖: p.succAbove, succAbove, succAbove_right_injective
@@ -427,7 +427,7 @@ lemma coe_succAboveEmb
 
 中文:
 引理 coe_succAboveEmb
-  条件: (p : Fin (n + 1))
+  条件: (p : 有限集 (n + 1))
   结论: p.succAboveEmb = p.succAbove
   证明: rfl
 -/

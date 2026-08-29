@@ -78,7 +78,7 @@ theorem UniformSpace.ofDist_aux
   proof: ⟨ε / 2, half_pos hε, fun _x hx _y hy => add_halves ε ▸ add_lt_add hx hy⟩
 
 中文:
-定理 UniformSpace.ofDist_aux
+定理 一致空间.ofDist_aux
   条件: (ε : 实数) (hε : 0 < ε)
   结论: 存在 δ > (0 : 实数), 对任意 x < δ, 对任意 y < δ, x + y < ε
   证明: ⟨ε / 2, half_pos hε, fun _x hx _y hy => add_halves ε ▸ add_lt_add hx hy⟩
@@ -99,7 +99,7 @@ definition UniformSpace.ofDist
   body: .ofFun dist dist_self dist_comm dist_triangle ofDist_aux
 
 中文:
-定义 UniformSpace.ofDist
+定义 一致空间.ofDist
   签名: (dist : α -> α -> 实数) (dist_self : 对任意 x : α, dist x x = 0)
   定义体: .ofFun dist dist_self dist_comm dist_triangle ofDist_aux
 
@@ -123,7 +123,7 @@ abbreviation Bornology.ofDist
       · rwa [empty_unio
 
 中文:
-缩写 Bornology.ofDist
+缩写 有界结构.ofDist
   签名: {α : 类型} (dist : α -> α -> 实数) (dist_comm : 对任意 x y, dist x y = dist y x)
   定义体: Bornology.ofBounded { s : Set α | exists C, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C }
     ⟨0, fun _ hx _ => hx.elim⟩ (fun _ ⟨c, hc⟩ _ h => ⟨c, fun _ hx _ hy => hc (h hx) (h hy)⟩)
@@ -232,7 +232,7 @@ class PseudoMetricSpace
     - cobounded_sets : (Bornology.cobounded α).sets = { s | exists C : Real, forall x in sᶜ, forall y in sᶜ, dist x y <= C }  [default: by intros; rfl]
 
 中文:
-类 PseudoMetricSpace
+类 伪度量空间
   参数: (α : 类型u)
   继承: Dist α
   公理与运算 (9 个):
@@ -240,11 +240,11 @@ class PseudoMetricSpace
     - dist_comm : 对任意 x y : α, dist x y = dist y x
     - dist_triangle : 对任意 x y z : α, dist x z <= dist x y + dist y z
     - edist : α -> α -> 实数>=0∞  [默认: fun x y => ENNReal.ofNNReal (.mk (dist x y) (dist_nonneg' _ ]
-    - edist_dist : 对任意 x y : α, edist x y = ENN实数.of实数 (dist x y)  [默认: by intro x y; exact ENNReal.coe_nnreal_eq _]
-    - toUniformSpace : UniformSpace α  [默认: .ofDist dist dist_self dist_comm dist_triangle]
+    - edist_dist : 对任意 x y : α, edist x y = 广义非负实数.of实数 (dist x y)  [默认: by intro x y; exact ENNReal.coe_nnreal_eq _]
+    - toUniformSpace : 一致空间 α  [默认: .ofDist dist dist_self dist_comm dist_triangle]
     - uniformity_dist : 𝓤 α = ⨅ ε > 0, 𝓟 { p : α × α | dist p.1 p.2 < ε }  [默认: by intros; rfl]
-    - toBornology : Bornology α  [默认: Bornology.ofDist dist dist_comm dist_triangle]
-    - cobounded_sets : (Bornology.cobounded α).sets = { s | 存在 C : 实数, 对任意 x in sᶜ, 对任意 y in sᶜ, dist x y <= C }  [默认: by intros; rfl]
+    - toBornology : 有界结构 α  [默认: Bornology.ofDist dist dist_comm dist_triangle]
+    - cobounded_sets : (有界结构.cobounded α).sets = { s | 存在 C : 实数, 对任意 x in sᶜ, 对任意 y in sᶜ, dist x y <= C }  [默认: by intros; rfl]
 
 Depends on / 依赖: ENNReal, ENNReal.ofNNReal, dist_nonneg, ofNNReal
 -/
@@ -284,8 +284,8 @@ theorem PseudoMetricSpace.ext
     rw [← Filter.mem_sets
 
 中文:
-定理 PseudoMetricSpace.ext
-  结论: {α : 类型} {m m' : PseudoMetricSpace α}
+定理 伪度量空间.ext
+  结论: {α : 类型} {m m' : 伪度量空间 α}
   证明: by
   let d := m.toDist
   obtain ⟨_, _, _, _, hed, _, hU, _, hB⟩ := m
@@ -344,8 +344,8 @@ TopologicalSpace.ext_iff.2 fun s => (H s).trans forall₂_congr fun x _ =>
           ((UniformSpace
 
 中文:
-定义 PseudoMetricSpace.ofDistTopology
-  签名: {α : 类型u} [TopologicalSpace α] (dist : α -> α -> 实数)
+定义 伪度量空间.ofDistTopology
+  签名: {α : 类型u} [拓扑空间 α] (dist : α -> α -> 实数)
   定义体: { dist := dist
     dist_self := dist_self
     dist_comm := dist_comm
@@ -430,7 +430,7 @@ theorem edist_dist
 中文:
 定理 edist_dist
   条件: (x y : α)
-  结论: edist x y = ENN实数.of实数 (dist x y)
+  结论: edist x y = 广义非负实数.of实数 (dist x y)
   证明: PseudoMetricSpace.edist_dist x y
 
 @[bound]
@@ -624,7 +624,7 @@ theorem swap_dist
 
 中文:
 定理 swap_dist
-  结论: Function.swap (@dist α _) = dist
+  结论: 函数.swap (@dist α _) = dist
   证明: by funext x y; exact dist_comm _ _
 
 Depends on / 依赖: dist_comm
@@ -914,7 +914,7 @@ theorem edist_lt_top
 
 中文:
 定理 edist_lt_top
-  条件: {α : 类型} [PseudoMetricSpace α] (x y : α)
+  条件: {α : 类型} [伪度量空间 α] (x y : α)
   结论: edist x y < ⊤
   证明: (edist_dist x y).symm ▸ ENNReal.ofReal_lt_top
 
@@ -1030,9 +1030,9 @@ theorem edist_lt_ofReal
 @[simp]
 
 中文:
-定理 edist_lt_ofReal
+定理 edist_lt_of实数
   条件: {x y : α} {r : 实数}
-  结论: edist x y < ENN实数.of实数 r ↔ dist x y < r
+  结论: edist x y < 广义非负实数.of实数 r ↔ dist x y < r
   证明: by
   rw [edist_dist]; rw [ENNReal.ofReal_lt_ofReal_iff_of_nonneg dist_nonneg]
 
@@ -1054,7 +1054,7 @@ theorem edist_le_ofReal
   rw [edist_dist]; rw [ENNReal.ofReal_le_ofReal_iff hr]
 
 中文:
-定理 edist_le_ofReal
+定理 edist_le_of实数
   条件: {x y : α} {r : 实数} (hr : 0 <= r)
   证明: by
   rw [edist_dist]; rw [ENNReal.ofReal_le_ofReal_iff hr]
@@ -1310,7 +1310,7 @@ theorem nonempty_ball
 
 中文:
 定理 nonempty_ball
-  结论: (ball x ε).Nonempty ↔ 0 < ε
+  结论: (ball x ε).非空 ↔ 0 < ε
   证明: ⟨fun ⟨_x, hx⟩ => pos_of_mem_ball hx, fun h => ⟨x, mem_ball_self h⟩⟩
 
 @[simp]
@@ -1374,7 +1374,7 @@ theorem exists_lt_mem_ball_of_mem_ball
   simpa [mem_ball] using exists_between' h
 
 中文:
-定理 exists_lt_mem_ball_of_mem_ball
+定理 存在_lt_mem_ball_of_mem_ball
   条件: (h : x in ball y ε)
   结论: 存在 ε' < ε, x in ball y ε'
   证明: by
@@ -1667,7 +1667,7 @@ theorem sphere_eq_empty_of_subsingleton
 
 中文:
 定理 sphere_eq_empty_of_subsingleton
-  条件: [Subsingleton α] (hε : ε != 0)
+  条件: [子单例 α] (hε : ε != 0)
   结论: sphere x ε = ∅
   证明: Set.eq_empty_iff_forall_notMem.mpr fun _ h => ne_of_mem_sphere h hε (Subsingleton.elim _ _)
 
@@ -1687,7 +1687,7 @@ instance sphere_isEmpty_of_subsingleton
 
 中文:
 实例 sphere_isEmpty_of_subsingleton
-  签名: [Subsingleton α] [NeZero ε]
+  签名: [子单例 α] [NeZero ε]
   定义体: by
   rw [sphere_eq_empty_of_subsingleton (NeZero.ne ε)]; infer_instance
 
@@ -1708,7 +1708,7 @@ theorem closedBall_eq_singleton_of_subsingleton
 
 中文:
 定理 closedBall_eq_singleton_of_subsingleton
-  条件: [Subsingleton α] (h : 0 <= ε)
+  条件: [子单例 α] (h : 0 <= ε)
   证明: by
   ext x'
   simpa [Subsingleton.allEq x x']
@@ -1733,7 +1733,7 @@ theorem ball_eq_singleton_of_subsingleton
 
 中文:
 定理 ball_eq_singleton_of_subsingleton
-  条件: [Subsingleton α] (h : 0 < ε)
+  条件: [子单例 α] (h : 0 < ε)
   结论: ball x ε = {x}
   证明: by
   ext x'
@@ -1784,7 +1784,7 @@ theorem nonempty_closedBall
 
 中文:
 定理 nonempty_closedBall
-  结论: (closedBall x ε).Nonempty ↔ 0 <= ε
+  结论: (closedBall x ε).非空 ↔ 0 <= ε
   证明: ⟨fun ⟨_x, hx⟩ => dist_nonneg.trans hx, fun h => ⟨x, mem_closedBall_self h⟩⟩
 
 @[simp]
@@ -2198,7 +2198,7 @@ theorem closedBall_eq_bInter_ball
   ext y; rw [mem_closedBall, ← forall_gt_iff_le, mem_iInter₂]; rfl
 
 中文:
-定理 closedBall_eq_bInter_ball
+定理 closedBall_eq_b整数er_ball
   结论: closedBall x ε = ⋂ δ > ε, ball x δ
   证明: by
   ext y; rw [mem_closedBall, ← forall_gt_iff_le, mem_iInter₂]; rfl
@@ -2377,7 +2377,7 @@ theorem dist_lt_add_of_nonempty_closedBall_inter_ball
 
 中文:
 定理 dist_lt_add_of_nonempty_closedBall_inter_ball
-  条件: (h : (closedBall x ε₁ inter ball y ε₂).Nonempty)
+  条件: (h : (closedBall x ε₁ inter ball y ε₂).非空)
   证明: let ⟨z, hz⟩ := h
   calc
     dist x y <= dist z x + dist z y := dist_triangle_left _ _ _
@@ -2405,7 +2405,7 @@ theorem dist_lt_add_of_nonempty_ball_inter_closedBall
 
 中文:
 定理 dist_lt_add_of_nonempty_ball_inter_closedBall
-  条件: (h : (ball x ε₁ inter closedBall y ε₂).Nonempty)
+  条件: (h : (ball x ε₁ inter closedBall y ε₂).非空)
   证明: by
   rw [inter_comm] at h
   rw [add_comm]; rw [dist_comm]
@@ -2432,7 +2432,7 @@ theorem dist_lt_add_of_nonempty_ball_inter_ball
 
 中文:
 定理 dist_lt_add_of_nonempty_ball_inter_ball
-  条件: (h : (ball x ε₁ inter ball y ε₂).Nonempty)
+  条件: (h : (ball x ε₁ inter ball y ε₂).非空)
   证明: dist_lt_add_of_nonempty_closedBall_inter_ball
     h.mono (inter_subset_inter ball_subset_closedBall Subset.rfl)
 
@@ -2478,7 +2478,7 @@ theorem iUnion_inter_closedBall_nat
 
 中文:
 定理 iUnion_inter_closedBall_nat
-  条件: (s : Set α) (x : α)
+  条件: (s : 集合 α) (x : α)
   结论: ⋃ n : 自然数, s inter closedBall x n = s
   证明: by
   rw [← inter_iUnion]; rw [iUnion_closedBall_nat]; rw [inter_univ]
@@ -2543,7 +2543,7 @@ theorem exists_ball_subset_ball
   proof: ⟨_, sub_pos.2 h, ball_subset by rw [sub_sub_self]⟩
 
 中文:
-定理 exists_ball_subset_ball
+定理 存在_ball_subset_ball
   条件: (h : y in ball x ε)
   结论: 存在 ε' > 0, ball y ε' subseteq ball x ε
   证明: ⟨_, sub_pos.2 h, ball_subset by rw [sub_sub_self]⟩
@@ -2565,7 +2565,7 @@ theorem forall_of_forall_mem_closedBall
   exact h _ hR
 
 中文:
-定理 forall_of_forall_mem_closedBall
+定理 对任意_of_对任意_mem_closedBall
   结论: (p : α -> 命题) (x : α)
   证明: by
   obtain ⟨R, hR, h⟩ : exists R >= dist y x, forall z : α, z in closedBall x R -> p z :=
@@ -2592,7 +2592,7 @@ theorem forall_of_forall_mem_ball
   exact h _ hR
 
 中文:
-定理 forall_of_forall_mem_ball
+定理 对任意_of_对任意_mem_ball
   结论: (p : α -> 命题) (x : α)
   证明: by
   obtain ⟨R, hR, h⟩ : exists R > dist y x, forall z : α, z in ball x R -> p z :=
@@ -2618,7 +2618,7 @@ theorem isBounded_iff
 
 中文:
 定理 isBounded_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   rw [isBounded_def]; rw [← Filter.mem_sets]; rw [@PseudoMetricSpace.cobounded_sets α]; rw [mem_ofPred_eq]; rw [compl_compl]
 
@@ -2640,7 +2640,7 @@ lemma boundedSpace_iff
 
 中文:
 引理 boundedSpace_iff
-  结论: BoundedSpace α ↔ 存在 C, 对任意 a b : α, dist a b <= C
+  结论: 有界空间 α ↔ 存在 C, 对任意 a b : α, dist a b <= C
   证明: by
   rw [← isBounded_univ]; rw [Metric.isBounded_iff]
   simp
@@ -2663,7 +2663,7 @@ theorem isBounded_iff_eventually
 
 中文:
 定理 isBounded_iff_eventually
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: isBounded_iff.trans
     ⟨fun ⟨C, h⟩ => eventually_atTop.2 ⟨C, fun _C' hC' _x hx _y hy => (h hx hy).trans hC'⟩,
       Eventually.exists⟩
@@ -2686,8 +2686,8 @@ theorem isBounded_iff_exists_ge
 isBounded_iff.2 h.imp fun _ => And.right⟩
 
 中文:
-定理 isBounded_iff_exists_ge
-  条件: {s : Set α} (c : 实数)
+定理 isBounded_iff_存在_ge
+  条件: {s : 集合 α} (c : 实数)
   证明: ⟨fun h => ((eventually_ge_atTop c).and (isBounded_iff_eventually.1 h)).exists, fun h =>
 isBounded_iff.2 h.imp fun _ => And.right⟩
 
@@ -2710,7 +2710,7 @@ theorem isBounded_iff_nndist
 
 中文:
 定理 isBounded_iff_nndist
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   simp only [isBounded_iff_exists_ge 0, NNReal.exists, ← NNReal.coe_le_coe, ← dist_nndist,
     NNReal.coe_mk, exists_prop]
@@ -2734,7 +2734,7 @@ lemma boundedSpace_iff_nndist
 
 中文:
 引理 boundedSpace_iff_nndist
-  结论: BoundedSpace α ↔ 存在 C, 对任意 a b : α, nndist a b <= C
+  结论: 有界空间 α ↔ 存在 C, 对任意 a b : α, nndist a b <= C
   证明: by
   rw [← isBounded_univ]; rw [Metric.isBounded_iff_nndist]
   simp
@@ -2756,7 +2756,7 @@ lemma boundedSpace_iff_edist
 
 中文:
 引理 boundedSpace_iff_edist
-  结论: BoundedSpace α ↔ 存在 C : 实数>=0, 对任意 a b : α, edist a b <= C
+  结论: 有界空间 α ↔ 存在 C : 实数>=0, 对任意 a b : α, edist a b <= C
   证明: by
   simp [Metric.boundedSpace_iff_nndist]
 
@@ -3088,7 +3088,7 @@ theorem mem_uniformity_dist
 
 中文:
 定理 mem_uniformity_dist
-  条件: {s : Set (α × α)}
+  条件: {s : 集合 (α × α)}
   证明: uniformity_basis_dist.mem_uniformity_iff
 
 Depends on / 依赖: mem_uniformity_iff, uniformity_basis_dist, uniformity_basis_dist.mem_uniformity_iff
@@ -3127,7 +3127,7 @@ theorem uniformContinuous_iff
 
 中文:
 定理 uniformContinuous_iff
-  条件: [PseudoMetricSpace β] {f : α -> β}
+  条件: [伪度量空间 β] {f : α -> β}
   证明: uniformity_basis_dist.uniformContinuous_iff uniformity_basis_dist
 
 Depends on / 依赖: uniformContinuous_iff, uniformity_basis_dist, uniformity_basis_dist.uniformContinuous_iff
@@ -3146,7 +3146,7 @@ theorem uniformContinuousOn_iff
 
 中文:
 定理 uniformContinuousOn_iff
-  条件: [PseudoMetricSpace β] {f : α -> β} {s : Set α}
+  条件: [伪度量空间 β] {f : α -> β} {s : 集合 α}
   证明: uniformity_basis_dist.uniformContinuousOn_iff uniformity_basis_dist
 
 Depends on / 依赖: uniformContinuousOn_iff, uniformity_basis_dist, uniformity_basis_dist.uniformContinuousOn_iff
@@ -3166,7 +3166,7 @@ theorem uniformContinuous_iff_le
 
 中文:
 定理 uniformContinuous_iff_le
-  条件: [PseudoMetricSpace β] {f : α -> β}
+  条件: [伪度量空间 β] {f : α -> β}
   证明: uniformity_basis_dist_le.uniformContinuous_iff uniformity_basis_dist_le
 
 Depends on / 依赖: uniformContinuous_iff, uniformity_basis_dist_le, uniformity_basis_dist_le.uniformContinuous_iff
@@ -3185,7 +3185,7 @@ theorem uniformContinuousOn_iff_le
 
 中文:
 定理 uniformContinuousOn_iff_le
-  条件: [PseudoMetricSpace β] {f : α -> β} {s : Set α}
+  条件: [伪度量空间 β] {f : α -> β} {s : 集合 α}
   证明: uniformity_basis_dist_le.uniformContinuousOn_iff uniformity_basis_dist_le
 
 Depends on / 依赖: uniformContinuousOn_iff, uniformity_basis_dist_le, uniformity_basis_dist_le.uniformContinuousOn_iff
@@ -3205,7 +3205,7 @@ theorem nhds_basis_ball
 
 中文:
 定理 nhds_basis_ball
-  结论: (𝓝 x).HasBasis (0 < ·) (ball x)
+  结论: (𝓝 x).有基 (0 < ·) (ball x)
   证明: nhds_basis_uniformity uniformity_basis_dist
 
 Depends on / 依赖: nhds_basis_uniformity, uniformity_basis_dist
@@ -3282,7 +3282,7 @@ theorem eventually_nhds_prod_iff
 
 中文:
 定理 eventually_nhds_prod_iff
-  条件: {f : Filter ι} {x₀ : α} {p : α × ι -> 命题}
+  条件: {f : 滤子 ι} {x₀ : α} {p : α × ι -> 命题}
   证明: by
   refine (nhds_basis_ball.prod f.basis_sets).eventually_iff.trans ?_
   simp only [Prod.exists, forall_prod_set, id, mem_ball, and_assoc, exists_and_left,
@@ -3311,7 +3311,7 @@ theorem eventually_prod_nhds_iff
 
 中文:
 定理 eventually_prod_nhds_iff
-  条件: {f : Filter ι} {x₀ : α} {p : ι × α -> 命题}
+  条件: {f : 滤子 ι} {x₀ : α} {p : ι × α -> 命题}
   证明: by
   rw [eventually_swap_iff]; rw [Metric.eventually_nhds_prod_iff]
   constructor <;>
@@ -3338,7 +3338,7 @@ theorem nhds_basis_closedBall
 
 中文:
 定理 nhds_basis_closedBall
-  结论: (𝓝 x).HasBasis (fun ε : 实数 => 0 < ε) (closedBall x)
+  结论: (𝓝 x).有基 (fun ε : 实数 => 0 < ε) (closedBall x)
   证明: nhds_basis_uniformity uniformity_basis_dist_le
 
 Depends on / 依赖: nhds_basis_uniformity, uniformity_basis_dist_le
@@ -3463,7 +3463,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  结论: IsOpen s ↔ 对任意 x in s, 存在 ε > 0, ball x ε subseteq s
+  结论: 是开集 s ↔ 对任意 x in s, 存在 ε > 0, ball x ε subseteq s
   证明: by
   simp only [isOpen_iff_mem_nhds, mem_nhds_iff]
 
@@ -3482,7 +3482,7 @@ theorem isOpen_ball
 
 中文:
 定理 isOpen_ball
-  结论: IsOpen (ball x ε)
+  结论: 是开集 (ball x ε)
   证明: isOpen_iff.2 fun _ => exists_ball_subset_ball
 -/
 @[simp] theorem isOpen_ball : IsOpen (ball x ε) :=
@@ -3558,7 +3558,7 @@ theorem nhdsWithin_basis_ball
 
 中文:
 定理 nhdsWithin_basis_ball
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: nhdsWithin_hasBasis nhds_basis_ball s
 
 Depends on / 依赖: nhdsWithin_hasBasis, nhds_basis_ball
@@ -3578,7 +3578,7 @@ theorem mem_nhdsWithin_iff
 
 中文:
 定理 mem_nhdsWithin_iff
-  条件: {t : Set α}
+  条件: {t : 集合 α}
   结论: s in 𝓝[t] x ↔ 存在 ε > 0, ball x ε inter t subseteq s
   证明: nhdsWithin_basis_ball.mem_iff
 
@@ -3598,7 +3598,7 @@ theorem tendsto_nhdsWithin_nhdsWithin
 
 中文:
 定理 tendsto_nhdsWithin_nhdsWithin
-  条件: [PseudoMetricSpace β] {t : Set β} {f : α -> β} {a b}
+  条件: [伪度量空间 β] {t : 集合 β} {f : α -> β} {a b}
   证明: (nhdsWithin_basis_ball.tendsto_iff nhdsWithin_basis_ball).trans by
     simp only [inter_comm _ s, inter_comm _ t, mem_inter_iff, and_imp, gt_iff_lt, mem_ball]
 
@@ -3622,7 +3622,7 @@ theorem tendsto_nhdsWithin_nhds
 
 中文:
 定理 tendsto_nhdsWithin_nhds
-  条件: [PseudoMetricSpace β] {f : α -> β} {a b}
+  条件: [伪度量空间 β] {f : α -> β} {a b}
   证明: by
   rw [← nhdsWithin_univ b]; rw [tendsto_nhdsWithin_nhdsWithin]
   simp only [mem_univ, true_and]
@@ -3645,7 +3645,7 @@ theorem tendsto_nhds_nhds
 
 中文:
 定理 tendsto_nhds_nhds
-  条件: [PseudoMetricSpace β] {f : α -> β} {a b}
+  条件: [伪度量空间 β] {f : α -> β} {a b}
   证明: nhds_basis_ball.tendsto_iff nhds_basis_ball
 
 Depends on / 依赖: nhds_basis_ball, nhds_basis_ball.tendsto_iff, tendsto_iff
@@ -3665,7 +3665,7 @@ theorem continuousAt_iff
 
 中文:
 定理 continuousAt_iff
-  条件: [PseudoMetricSpace β] {f : α -> β} {a : α}
+  条件: [伪度量空间 β] {f : α -> β} {a : α}
   证明: by
   rw [ContinuousAt]; rw [tendsto_nhds_nhds]
 
@@ -3686,7 +3686,7 @@ theorem continuousWithinAt_iff
 
 中文:
 定理 continuousWithinAt_iff
-  条件: [PseudoMetricSpace β] {f : α -> β} {a : α} {s : Set α}
+  条件: [伪度量空间 β] {f : α -> β} {a : α} {s : 集合 α}
   证明: by
   rw [ContinuousWithinAt]; rw [tendsto_nhdsWithin_nhds]
 
@@ -3708,7 +3708,7 @@ theorem continuousOn_iff
 
 中文:
 定理 continuousOn_iff
-  条件: [PseudoMetricSpace β] {f : α -> β} {s : Set α}
+  条件: [伪度量空间 β] {f : α -> β} {s : 集合 α}
   证明: by
   simp [ContinuousOn, continuousWithinAt_iff]
 
@@ -3728,7 +3728,7 @@ theorem continuous_iff
 
 中文:
 定理 continuous_iff
-  条件: [PseudoMetricSpace β] {f : α -> β}
+  条件: [伪度量空间 β] {f : α -> β}
   证明: continuous_iff_continuousAt.trans forall_congr' fun _ => tendsto_nhds_nhds
 
 Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.trans, forall_congr, tendsto_nhds_nhds
@@ -3747,7 +3747,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {f : Filter β} {u : β -> α} {a : α}
+  条件: {f : 滤子 β} {u : β -> α} {a : α}
   证明: nhds_basis_ball.tendsto_right_iff
 
 Depends on / 依赖: nhds_basis_ball, nhds_basis_ball.tendsto_right_iff, tendsto_right_iff
@@ -3767,7 +3767,7 @@ theorem continuousAt_iff'
 
 中文:
 定理 continuousAt_iff'
-  条件: [TopologicalSpace β] {f : β -> α} {b : β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β}
   证明: by
   rw [ContinuousAt]; rw [tendsto_nhds]
 
@@ -3788,7 +3788,7 @@ theorem continuousWithinAt_iff'
 
 中文:
 定理 continuousWithinAt_iff'
-  条件: [TopologicalSpace β] {f : β -> α} {b : β} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β} {s : 集合 β}
   证明: by
   rw [ContinuousWithinAt]; rw [tendsto_nhds]
 
@@ -3809,7 +3809,7 @@ theorem continuousOn_iff'
 
 中文:
 定理 continuousOn_iff'
-  条件: [TopologicalSpace β] {f : β -> α} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {s : 集合 β}
   证明: by
   simp [ContinuousOn, continuousWithinAt_iff']
 
@@ -3829,7 +3829,7 @@ theorem continuous_iff'
 
 中文:
 定理 continuous_iff'
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: continuous_iff_continuousAt.trans forall_congr' fun _ => tendsto_nhds
 
 Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.trans, forall_congr, tendsto_nhds
@@ -3849,7 +3849,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α} {a : α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α} {a : α}
   证明: (atTop_basis.tendsto_iff nhds_basis_ball).trans by
     simp only [true_and, mem_ball, mem_Ici]
 
@@ -3871,7 +3871,7 @@ theorem tendsto_atTop'
 
 中文:
 定理 tendsto_atTop'
-  条件: [Nonempty β] [SemilatticeSup β] [NoMaxOrder β] {u : β -> α} {a : α}
+  条件: [非空 β] [SemilatticeSup β] [NoMax序 β] {u : β -> α} {a : α}
   证明: (atTop_basis_Ioi.tendsto_iff nhds_basis_ball).trans by
     simp only [true_and, gt_iff_lt, mem_Ioi, mem_ball]
 
@@ -3893,7 +3893,7 @@ theorem isOpen_singleton_iff
 
 中文:
 定理 isOpen_singleton_iff
-  条件: {α : 类型} [PseudoMetricSpace α] {x : α}
+  条件: {α : 类型} [伪度量空间 α] {x : α}
   证明: by
   simp [isOpen_iff, subset_singleton_iff, mem_ball]
 
@@ -3918,8 +3918,8 @@ nonrec theorem _root_.DenseRange.exists_dist_lt {β : Type*} {f : β -> α} (hf 
   exists_range_iff.1 (h
 
 中文:
-定理 _root_.Dense.exists_dist_lt
-  条件: {s : Set α} (hs : Dense s) (x : α) {ε : 实数} (hε : 0 < ε)
+定理 _root_.稠密.存在_dist_lt
+  条件: {s : 集合 α} (hs : 稠密 s) (x : α) {ε : 实数} (hε : 0 < ε)
   证明: by
   have : (ball x ε).Nonempty := by simp [hε]
   simpa only [mem_ball'] using hs.exists_mem_open isOpen_ball this
@@ -3970,8 +3970,8 @@ lemma DiscreteTopology.of_forall_le_dist
   proof: ⟨by rw [Metric.uniformSpace_eq_bot.2 ⟨r, hpos, hr⟩, UniformSpace.toTopologicalSpace_bot]⟩
 
 中文:
-引理 DiscreteTopology.of_forall_le_dist
-  结论: {α} [PseudoMetricSpace α] {r : 实数} (hpos : 0 < r)
+引理 离散拓扑.of_对任意_le_dist
+  结论: {α} [伪度量空间 α] {r : 实数} (hpos : 0 < r)
   证明: ⟨by rw [Metric.uniformSpace_eq_bot.2 ⟨r, hpos, hr⟩, UniformSpace.toTopologicalSpace_bot]⟩
 
 Depends on / 依赖: Metric, Metric.uniformSpace_eq_bot, UniformSpace, UniformSpace.toTopologicalSpace_bot, toTopologicalSpace_bot, uniformSpace_eq_bot
@@ -4066,7 +4066,7 @@ theorem Metric.eball_top_eq_univ
 中文:
 定理 Metric.eball_top_eq_univ
   条件: (x : α)
-  结论: eball x ∞ = Set.univ
+  结论: eball x ∞ = 集合.univ
   证明: Set.eq_univ_iff_forall.mpr fun y => edist_lt_top y x
 
 Depends on / 依赖: Set.eq_univ_iff_forall.mpr, edist_lt_top, eq_univ_iff_forall
@@ -4092,7 +4092,7 @@ theorem Metric.eball_ofReal
 alias Metric.emetric_ball := Metric.eball_ofReal
 
 中文:
-定理 Metric.eball_ofReal
+定理 Metric.eball_of实数
   条件: {x : α} {ε : 实数}
   结论: eball x (.of实数 ε) = ball x ε
   证明: by
@@ -4162,7 +4162,7 @@ theorem Metric.closedEBall_ofReal
 alias Metric.emetric_closedBall := Metric.closedEBall_ofReal
 
 中文:
-定理 Metric.closedEBall_ofReal
+定理 Metric.closedEBall_of实数
   条件: {x : α} {ε : 实数} (h : 0 <= ε)
   证明: by
   ext y; simp [edist_le_ofReal h]
@@ -4256,8 +4256,8 @@ abbreviation PseudoMetricSpace.replaceUniformity
     uniformity_dist := H.trans PseudoMetricSpace.uniformity_dist }
 
 中文:
-缩写 PseudoMetricSpace.replaceUniformity
-  签名: {α} [U : UniformSpace α] (m : PseudoMetricSpace α)
+缩写 伪度量空间.replaceUniformity
+  签名: {α} [U : 一致空间 α] (m : 伪度量空间 α)
   定义体: { m with
     toUniformSpace := U
     uniformity_dist := H.trans PseudoMetricSpace.uniformity_dist }
@@ -4281,8 +4281,8 @@ theorem PseudoMetricSpace.replaceUniformity_eq
   rfl
 
 中文:
-定理 PseudoMetricSpace.replaceUniformity_eq
-  结论: {α} [U : UniformSpace α] (m : PseudoMetricSpace α)
+定理 伪度量空间.replaceUniformity_eq
+  结论: {α} [U : 一致空间 α] (m : 伪度量空间 α)
   证明: by
   ext
   rfl
@@ -4307,8 +4307,8 @@ abbreviation PseudoMetricSpace.replaceTopology
   body: @PseudoMetricSpace.replaceUniformity γ (m.toUniformSpace.replaceTopology H) m rfl
 
 中文:
-缩写 PseudoMetricSpace.replaceTopology
-  签名: {γ} [U : TopologicalSpace γ] (m : PseudoMetricSpace γ)
+缩写 伪度量空间.replaceTopology
+  签名: {γ} [U : 拓扑空间 γ] (m : 伪度量空间 γ)
   定义体: @PseudoMetricSpace.replaceUniformity γ (m.toUniformSpace.replaceTopology H) m rfl
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.replaceUniformity, m.toUniformSpace.replaceTopology, replaceTopology, replaceUniformity, toUniformSpace
@@ -4328,8 +4328,8 @@ theorem PseudoMetricSpace.replaceTopology_eq
   rfl
 
 中文:
-定理 PseudoMetricSpace.replaceTopology_eq
-  结论: {γ} [U : TopologicalSpace γ] (m : PseudoMetricSpace γ)
+定理 伪度量空间.replaceTopology_eq
+  结论: {γ} [U : 拓扑空间 γ] (m : 伪度量空间 γ)
   证明: by
   ext
   rfl
@@ -4354,8 +4354,8 @@ abbreviation PseudoEMetricSpace.toPseudoMetricSpaceOfDist
   ed
 
 中文:
-缩写 PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-  签名: {X : 类型} [e : PseudoEMetricSpace X]
+缩写 PseudoEMetric空间.toPseudoMetricSpaceOfDist
+  签名: {X : 类型} [e : PseudoEMetric空间 X]
   定义体: dist
   dist_self x := by simpa [h, (dist_nonneg _ _).ge_iff_eq', -edist_self] using edist_self x
   dist_comm x y := by simpa [h, dist_nonneg] using edist_comm x y
@@ -4388,8 +4388,8 @@ abbreviation PseudoEMetricSpace.toPseudoMetricSpace
   body: PseudoEMetricSpace.toPseudoMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
 
 中文:
-缩写 PseudoEMetricSpace.toPseudoMetricSpace
-  签名: {α : 类型u} [PseudoEMetricSpace α]
+缩写 PseudoEMetric空间.toPseudoMetricSpace
+  签名: {α : 类型u} [PseudoEMetric空间 α]
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, toPseudoMetricSpaceOfDist, toReal
@@ -4410,8 +4410,8 @@ cobounded_sets := Set.ext compl_surjective.forall.2 fun s =>
 (H s).trans by rw [isBounded_iff, mem_ofPred_eq, compl_compl] }
 
 中文:
-缩写 PseudoMetricSpace.replaceBornology
-  签名: {α} [B : Bornology α] (m : PseudoMetricSpace α)
+缩写 伪度量空间.replaceBornology
+  签名: {α} [B : 有界结构 α] (m : 伪度量空间 α)
   定义体: { m with
     toBornology := B
 cobounded_sets := Set.ext compl_surjective.forall.2 fun s =>
@@ -4438,8 +4438,8 @@ theorem PseudoMetricSpace.replaceBornology_eq
   rfl
 
 中文:
-定理 PseudoMetricSpace.replaceBornology_eq
-  结论: {α} [m : PseudoMetricSpace α] [B : Bornology α]
+定理 伪度量空间.replaceBornology_eq
+  结论: {α} [m : 伪度量空间 α] [B : 有界结构 α]
   证明: by
   ext
   rfl
@@ -4470,8 +4470,8 @@ instance Real.pseudoMetricSpace
   dist_triangle _ _ _ := abs_sub_le _ _ _
 
 中文:
-实例 Real.pseudoMetricSpace
-  签名: : PseudoMetricSpace 实数 where
+实例 实数.pseudoMetricSpace
+  签名: : 伪度量空间 实数 where
   定义体: |x - y|
   dist_self := by simp [abs_zero]
   dist_comm _ _ := abs_sub_comm _ _
@@ -4493,7 +4493,7 @@ theorem Real.dist_eq
   proof: rfl
 
 中文:
-定理 Real.dist_eq
+定理 实数.dist_eq
   条件: (x y : 实数)
   结论: dist x y = |x - y|
   证明: rfl
@@ -4510,7 +4510,7 @@ theorem Real.nndist_eq
   proof: rfl
 
 中文:
-定理 Real.nndist_eq
+定理 实数.nndist_eq
   条件: (x y : 实数)
   结论: nndist x y = 实数.nnabs (x - y)
   证明: rfl
@@ -4527,7 +4527,7 @@ theorem Real.nndist_eq'
   proof: nndist_comm _ _
 
 中文:
-定理 Real.nndist_eq'
+定理 实数.nndist_eq'
   条件: (x y : 实数)
   结论: nndist x y = 实数.nnabs (y - x)
   证明: nndist_comm _ _
@@ -4547,7 +4547,7 @@ theorem Real.dist_0_eq_abs
   proof: by simp [Real.dist_eq]
 
 中文:
-定理 Real.dist_0_eq_abs
+定理 实数.dist_0_eq_abs
   条件: (x : 实数)
   结论: dist x 0 = |x|
   证明: by simp [Real.dist_eq]
@@ -4568,7 +4568,7 @@ theorem Real.sub_le_dist
   exact Or.inl (le_refl _)
 
 中文:
-定理 Real.sub_le_dist
+定理 实数.sub_le_dist
   条件: (x y : 实数)
   结论: x - y <= dist x y
   证明: by
@@ -4592,9 +4592,9 @@ theorem Real.ball_eq_Ioo
     rw [mem_ball]; rw [dist_comm]; rw [Real.dist_eq]; rw [abs_sub_lt_iff]; rw [mem_Ioo]; rw [← sub_lt_iff_lt_add']; rw [sub_lt_comm]
 
 中文:
-定理 Real.ball_eq_Ioo
+定理 实数.ball_eq_Ioo
   条件: (x r : 实数)
-  结论: ball x r = Ioo (x - r) (x + r)
+  结论: ball x r = 开区间 (x - r) (x + r)
   证明: Set.ext fun y => by
     rw [mem_ball]; rw [dist_comm]; rw [Real.dist_eq]; rw [abs_sub_lt_iff]; rw [mem_Ioo]; rw [← sub_lt_iff_lt_add']; rw [sub_lt_comm]
 
@@ -4615,9 +4615,9 @@ theorem Real.ball_zero_eq_Ioo
   simp [Real.ball_eq_Ioo]
 
 中文:
-定理 Real.ball_zero_eq_Ioo
+定理 实数.ball_zero_eq_Ioo
   条件: (r : 实数)
-  结论: ball 0 r = Ioo (-r) r
+  结论: ball 0 r = 开区间 (-r) r
   证明: by
   simp [Real.ball_eq_Ioo]
 
@@ -4638,9 +4638,9 @@ theorem Real.closedBall_eq_Icc
   rw [mem_closedBall]; rw [dist_comm]; rw [Real.dist_eq]; rw [abs_sub_le_iff]; rw [mem_Icc]; rw [← sub_le_iff_le_add']; rw [sub_le_comm]
 
 中文:
-定理 Real.closedBall_eq_Icc
+定理 实数.closedBall_eq_Icc
   条件: {x r : 实数}
-  结论: closedBall x r = Icc (x - r) (x + r)
+  结论: closedBall x r = 闭区间 (x - r) (x + r)
   证明: by
   ext y
   rw [mem_closedBall]; rw [dist_comm]; rw [Real.dist_eq]; rw [abs_sub_le_iff]; rw [mem_Icc]; rw [← sub_le_iff_le_add']; rw [sub_le_comm]
@@ -4662,9 +4662,9 @@ theorem Real.closedBall_zero_eq_Icc
   simp [Real.closedBall_eq_Icc]
 
 中文:
-定理 Real.closedBall_zero_eq_Icc
+定理 实数.closedBall_zero_eq_Icc
   条件: (r : 实数)
-  结论: closedBall 0 r = Icc (-r) r
+  结论: closedBall 0 r = 闭区间 (-r) r
   证明: by
   simp [Real.closedBall_eq_Icc]
 
@@ -4684,9 +4684,9 @@ theorem Real.Ioo_eq_ball
   rw [Real.ball_eq_Ioo]; rw [← sub_div]; rw [add_comm]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two]; rw [← add_div]; rw [add_assoc]; rw [add_sub_cancel]; rw [add_self_div_two]
 
 中文:
-定理 Real.Ioo_eq_ball
+定理 实数.Ioo_eq_ball
   条件: (x y : 实数)
-  结论: Ioo x y = ball ((x + y) / 2) ((y - x) / 2)
+  结论: 开区间 x y = ball ((x + y) / 2) ((y - x) / 2)
   证明: by
   rw [Real.ball_eq_Ioo]; rw [← sub_div]; rw [add_comm]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two]; rw [← add_div]; rw [add_assoc]; rw [add_sub_cancel]; rw [add_self_div_two]
 
@@ -4706,9 +4706,9 @@ theorem Real.Icc_eq_closedBall
   rw [Real.closedBall_eq_Icc]; rw [← sub_div]; rw [add_comm]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two]; rw [← add_div]; rw [add_assoc]; rw [add_sub_cancel]; rw [add_self_div_two]
 
 中文:
-定理 Real.Icc_eq_closedBall
+定理 实数.Icc_eq_closedBall
   条件: (x y : 实数)
-  结论: Icc x y = closedBall ((x + y) / 2) ((y - x) / 2)
+  结论: 闭区间 x y = closedBall ((x + y) / 2) ((y - x) / 2)
   证明: by
   rw [Real.closedBall_eq_Icc]; rw [← sub_div]; rw [add_comm]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two]; rw [← add_div]; rw [add_assoc]; rw [add_sub_cancel]; rw [add_self_div_two]
 
@@ -4728,7 +4728,7 @@ lemma Real.sphere_eq_pair
   ext; simp [dist_eq]; grind
 
 中文:
-引理 Real.sphere_eq_pair
+引理 实数.sphere_eq_pair
   条件: (x : 实数) {r : 实数} (hr : 0 <= r)
   结论: sphere x r = {x - r, x + r}
   证明: by
@@ -4775,7 +4775,7 @@ theorem tendsto_uniformity_iff_dist_tendsto_zero
 
 中文:
 定理 tendsto_uniformity_iff_dist_tendsto_zero
-  条件: {f : ι -> α × α} {p : Filter ι}
+  条件: {f : ι -> α × α} {p : 滤子 ι}
   证明: by
   rw [Metric.uniformity_eq_comap_nhds_zero]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -4796,8 +4796,8 @@ theorem Filter.Tendsto.congr_dist
 alias tendsto_of_tendsto_of_dist := Filter.Tendsto.congr_dist
 
 中文:
-定理 Filter.Tendsto.congr_dist
-  结论: {f₁ f₂ : ι -> α} {p : Filter ι} {a : α}
+定理 滤子.收敛.congr_dist
+  结论: {f₁ f₂ : ι -> α} {p : 滤子 ι} {a : α}
   证明: h₁.congr_uniformity tendsto_uniformity_iff_dist_tendsto_zero.2 h
 
 alias tendsto_of_tendsto_of_dist := Filter.Tendsto.congr_dist
@@ -4821,7 +4821,7 @@ theorem tendsto_iff_of_dist
 
 中文:
 定理 tendsto_iff_of_dist
-  结论: {f₁ f₂ : ι -> α} {p : Filter ι} {a : α}
+  结论: {f₁ f₂ : ι -> α} {p : 滤子 ι} {a : α}
   证明: Uniform.tendsto_congr tendsto_uniformity_iff_dist_tendsto_zero.2 h
 
 Depends on / 依赖: Uniform, Uniform.tendsto_congr, tendsto_congr, tendsto_uniformity_iff_dist_tendsto_zero
@@ -4841,7 +4841,7 @@ theorem PseudoMetricSpace.dist_eq_of_dist_zero
   proof: dist_comm y x ▸ dist_comm z x ▸ sub_eq_zero.1 (abs_nonpos_iff.1 (h ▸ abs_dist_sub_le y z x))
 
 中文:
-定理 PseudoMetricSpace.dist_eq_of_dist_zero
+定理 伪度量空间.dist_eq_of_dist_zero
   条件: (x : α) {y z : α} (h : dist y z = 0)
   证明: dist_comm y x ▸ dist_comm z x ▸ sub_eq_zero.1 (abs_nonpos_iff.1 (h ▸ abs_dist_sub_le y z x))
 
@@ -4952,7 +4952,7 @@ theorem tendsto_iff_dist_tendsto_zero
 
 中文:
 定理 tendsto_iff_dist_tendsto_zero
-  条件: {f : β -> α} {x : Filter β} {a : α}
+  条件: {f : β -> α} {x : 滤子 β} {a : α}
   证明: by
   rw [← nhds_comap_dist a]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -5030,7 +5030,7 @@ theorem mem_closure_iff
 
 中文:
 定理 mem_closure_iff
-  条件: {s : Set α} {a : α}
+  条件: {s : 集合 α} {a : α}
   结论: a in closure s ↔ 对任意 ε > 0, 存在 b in s, dist a b < ε
   证明: (mem_closure_iff_nhds_basis nhds_basis_ball).trans by simp only [mem_ball, dist_comm]
 
@@ -5093,7 +5093,7 @@ theorem mem_of_closed'
 
 中文:
 定理 mem_of_closed'
-  条件: {s : Set α} (hs : IsClosed s) {a : α}
+  条件: {s : 集合 α} (hs : 是闭集 s) {a : α}
   证明: by
   simpa only [hs.closure_eq] using @mem_closure_iff _ _ s a
 
@@ -5115,8 +5115,8 @@ theorem dense_iff
 
 中文:
 定理 dense_iff
-  条件: {s : Set α}
-  结论: Dense s ↔ 对任意 x, 对任意 r > 0, (ball x r inter s).Nonempty
+  条件: {s : 集合 α}
+  结论: 稠密 s ↔ 对任意 x, 对任意 r > 0, (ball x r inter s).非空
   证明: forall_congr' fun x => by
     simp only [mem_closure_iff, Set.Nonempty, mem_inter_iff, mem_ball', and_comm]
 
@@ -5139,8 +5139,8 @@ theorem dense_iff_iUnion_ball
 
 中文:
 定理 dense_iff_iUnion_ball
-  条件: (s : Set α)
-  结论: Dense s ↔ 对任意 r > 0, ⋃ c in s, ball c r = univ
+  条件: (s : 集合 α)
+  结论: 稠密 s ↔ 对任意 r > 0, ⋃ c in s, ball c r = univ
   证明: by
   simp_rw [eq_univ_iff_forall, mem_iUnion, exists_prop, mem_ball, Dense, mem_closure_iff,
     forall_comm (α := α)]
@@ -5185,7 +5185,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (Additive α)
+  签名: 伪度量空间 (加性 α)
   定义体: ‹_›
 -/
 instance : PseudoMetricSpace (Additive α) := ‹_›
@@ -5199,7 +5199,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (Multiplicative α)
+  签名: 伪度量空间 (Multiplicative α)
   定义体: ‹_›
 -/
 instance : PseudoMetricSpace (Multiplicative α) := ‹_›
@@ -5255,7 +5255,7 @@ theorem nndist_toMul
 
 中文:
 定理 nndist_toMul
-  条件: (a b : Additive X)
+  条件: (a b : 加性 X)
   结论: nndist a.toMul b.toMul = nndist a b
   证明: rfl
 
@@ -5295,7 +5295,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace αᵒᵈ
+  签名: 伪度量空间 αᵒᵈ
   定义体: ‹_›
 -/
 instance : PseudoMetricSpace αᵒᵈ := ‹_›

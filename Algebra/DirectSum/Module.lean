@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (⨁ i, M i)
+  签名: 模 R (⨁ i, M i)
   定义体: inferInstanceAs Module R (Π₀ i, M i)
 
 Depends on / 依赖: Module
@@ -74,8 +74,8 @@ instance [forall
   body: inferInstanceAs IsCentralScalar R (Π₀ i, M i)
 
 中文:
-实例 [forall
-  签名: i, Module Rᵐᵒᵖ (M i)] [对任意 i, IsCentralScalar R (M i)] : IsCentralScalar R (⨁ i, M i)
+实例 [对任意
+  签名: i, 模 Rᵐᵒᵖ (M i)] [对任意 i, 中心标量 R (M i)] : 中心标量 R (⨁ i, M i)
   定义体: inferInstanceAs IsCentralScalar R (Π₀ i, M i)
 
 Depends on / 依赖: IsCentralScalar
@@ -161,7 +161,7 @@ definition lmk
 
 中文:
 定义 lmk
-  签名: : 对任意 s : Finset ι, (对任意 i : (↑s : Set ι), M i.val) ->ₗ[R] ⨁ i, M i
+  签名: : 对任意 s : 有限集 ι, (对任意 i : (↑s : 集合 ι), M i.val) ->ₗ[R] ⨁ i, M i
   定义体: DFinsupp.lmk
 
 Depends on / 依赖: DFinsupp, DFinsupp.lmk
@@ -218,7 +218,7 @@ theorem single_eq_lof
 中文:
 定理 single_eq_lof
   条件: (i : ι) (b : M i)
-  结论: DFinsupp.single i b = lof R ι M i b
+  结论: 直和有限支撑.single i b = lof R ι M i b
   证明: rfl
 -/
 theorem single_eq_lof (i : ι) (b : M i) : DFinsupp.single i b = lof R ι M i b := rfl
@@ -234,7 +234,7 @@ theorem mk_smul
 
 中文:
 定理 mk_smul
-  条件: (s : Finset ι) (c : R) (x)
+  条件: (s : 有限集 ι) (c : R) (x)
   结论: mk M s (c • x) = c • mk M s x
   证明: (lmk R ι M s).map_smul c x
 
@@ -275,7 +275,7 @@ theorem support_smul
 
 中文:
 定理 support_smul
-  条件: [对任意 (i : ι) (x : M i), Decidable (x != 0)] (c : R) (v : ⨁ i, M i)
+  条件: [对任意 (i : ι) (x : M i), 可判定 (x != 0)] (c : R) (v : ⨁ i, M i)
   证明: DFinsupp.support_smul _ _
 
 Depends on / 依赖: DFinsupp, DFinsupp.support_smul, support_smul
@@ -404,7 +404,7 @@ definition lsetToSet
 
 中文:
 定义 lsetToSet
-  签名: (S T : Set ι) (H : S subseteq T)
+  签名: (S T : 集合 ι) (H : S subseteq T)
   定义体: toModule R _ _ fun i => lof R T (fun i : T => M i) ⟨i, H i.prop⟩
 
 Depends on / 依赖: i.prop, toModule
@@ -427,7 +427,7 @@ definition linearEquivFunOnFintype
 
 中文:
 定义 linearEquivFunOnFintype
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: DFinsupp.linearEquivFunOnFintype
 
 Depends on / 依赖: DFinsupp, DFinsupp.linearEquivFunOnFintype, linearEquivFunOnFintype
@@ -451,7 +451,7 @@ theorem linearEquivFunOnFintype_lof
 
 中文:
 定理 linearEquivFunOnFintype_lof
-  条件: [Fintype ι] (i : ι) (m : M i)
+  条件: [有限类型 ι] (i : ι) (m : M i)
   证明: by
   rfl
 
@@ -472,7 +472,7 @@ theorem linearEquivFunOnFintype_symm_single
 
 中文:
 定理 linearEquivFunOnFintype_symm_single
-  条件: [Fintype ι] (i : ι) (m : M i)
+  条件: [有限类型 ι] (i : ι) (m : M i)
   证明: DFinsupp.equivFunOnFintype_symm_single i m
 
 Depends on / 依赖: DFinsupp, DFinsupp.equivFunOnFintype_symm_single, equivFunOnFintype_symm_single
@@ -494,7 +494,7 @@ theorem linearEquivFunOnFintype_symm_coe
 
 中文:
 定理 linearEquivFunOnFintype_symm_coe
-  条件: [Fintype ι] (f : ⨁ i, M i)
+  条件: [有限类型 ι] (f : ⨁ i, M i)
   证明: (linearEquivFunOnFintype R ι M).symm_apply_apply _
 
 Depends on / 依赖: linearEquivFunOnFintype, symm_apply_apply
@@ -513,7 +513,7 @@ definition lid
 
 中文:
 定义 lid
-  签名: (M : 类型v) (ι : 类型 := PUnit) [AddCommMonoid M] [Module R M] [Unique ι]
+  签名: (M : 类型v) (ι : 类型 := 命题单元) [加法交换幺半群 M] [模 R M] [唯一 ι]
   定义体: { DirectSum.id M ι, toModule R ι M fun _ => LinearMap.id with }
 -/
 protected def lid (M : Type v) (ι : Type* := PUnit) [AddCommMonoid M] [Module R M] [Unique ι] :
@@ -530,7 +530,7 @@ lemma lid_apply
 
 中文:
 引理 lid_apply
-  结论: {M : 类型v} {ι : 类型} [AddCommMonoid M] [Module R M] [Unique ι]
+  结论: {M : 类型v} {ι : 类型} [加法交换幺半群 M] [模 R M] [唯一 ι]
   证明: DirectSum.id_apply x
 -/
 @[simp] lemma lid_apply {M : Type v} {ι : Type*} [AddCommMonoid M] [Module R M] [Unique ι]
@@ -547,7 +547,7 @@ lemma lid_symm_apply
 
 中文:
 引理 lid_symm_apply
-  结论: {M : 类型v} {ι : 类型} [AddCommMonoid M] [Module R M] [Unique ι]
+  结论: {M : 类型v} {ι : 类型} [加法交换幺半群 M] [模 R M] [唯一 ι]
   证明: DirectSum.id_symm_apply x
 -/
 @[simp] lemma lid_symm_apply {M : Type v} {ι : Type*} [AddCommMonoid M] [Module R M] [Unique ι]
@@ -890,7 +890,7 @@ lemma lmap_comp
 
 中文:
 引理 lmap_comp
-  结论: {K : ι -> 类型} [对任意 i, AddCommMonoid (K i)] [对任意 i, Module R (K i)]
+  结论: {K : ι -> 类型} [对任意 i, 加法交换幺半群 (K i)] [对任意 i, 模 R (K i)]
   证明: DFinsupp.mapRange.linearMap_comp _ _
 -/
 @[simp] lemma lmap_comp {K : ι -> Type*} [forall i, AddCommMonoid (K i)] [forall i, Module R (K i)]
@@ -909,7 +909,7 @@ theorem lmap_injective
 
 中文:
 定理 lmap_injective
-  结论: Function.Injective (lmap f) ↔ 对任意 i, Function.Injective (f i)
+  结论: 函数.单射 (lmap f) ↔ 对任意 i, 函数.单射 (f i)
   证明: by
   exact DFinsupp.mapRange_injective (hf := fun _ => map_zero _)
 
@@ -929,7 +929,7 @@ theorem lmap_surjective
 
 中文:
 定理 lmap_surjective
-  结论: Function.Surjective (lmap f) ↔ (对任意 i, Function.Surjective (f i))
+  结论: 函数.满射 (lmap f) ↔ (对任意 i, 函数.满射 (f i))
   证明: by
   exact DFinsupp.mapRange_surjective (hf := fun _ => map_zero _)
 
@@ -1041,7 +1041,7 @@ lemma ker_map
 
 中文:
 引理 ker_map
-  条件: [对任意 i, AddCommGroup (M i)] [对任意 i, AddCommMonoid (N i)] (f : 对任意 i, M i ->+ N i)
+  条件: [对任意 i, 加法交换群 (M i)] [对任意 i, 加法交换幺半群 (N i)] (f : 对任意 i, M i ->+ N i)
   证明: DFinsupp.ker_mapRangeAddMonoidHom f
 
 Depends on / 依赖: DFinsupp, DFinsupp.ker_mapRangeAddMonoidHom, ker_mapRangeAddMonoidHom
@@ -1061,7 +1061,7 @@ lemma range_map
 
 中文:
 引理 range_map
-  条件: [对任意 i, AddCommGroup (M i)] [对任意 i, AddCommGroup (N i)] (f : 对任意 i, M i ->+ N i)
+  条件: [对任意 i, 加法交换群 (M i)] [对任意 i, 加法交换群 (N i)] (f : 对任意 i, M i ->+ N i)
   证明: DFinsupp.range_mapRangeAddMonoidHom f
 
 Depends on / 依赖: DFinsupp, DFinsupp.range_mapRangeAddMonoidHom, range_mapRangeAddMonoidHom
@@ -1366,7 +1366,7 @@ theorem coeLinearMap_eq_dfinsuppSum
 
 中文:
 定理 coeLinearMap_eq_dfinsuppSum
-  条件: [DecidableEq M] (x : DirectSum ι fun i => A i)
+  条件: [DecidableEq M] (x : 直和 ι fun i => A i)
   证明: by
   simp only [coeLinearMap, toModule, DFinsupp.lsum, LinearEquiv.coe_mk, LinearMap.coe_mk,
     AddHom.coe_mk]
@@ -1398,7 +1398,7 @@ theorem coeLinearMap_of
 中文:
 定理 coeLinearMap_of
   条件: (i : ι) (x : A i)
-  结论: DirectSum.coeLinearMap A (of (fun i => A i) i x) = x
+  结论: 直和.coeLinearMap A (of (fun i => A i) i x) = x
   证明: -- Porting note: spelled out arguments. (I don't know how this works.)
   toAddMonoid_of (β := fun i => A i) (fun i => ((A i).subtype : A i ->+ M)) i x
 -/
@@ -1435,7 +1435,7 @@ theorem range_coeLinearMap
 
 中文:
 定理 range_coeLinearMap
-  结论: LinearMap.range (coeLinearMap A) = ⨆ i, A i
+  结论: 线性映射.range (coeLinearMap A) = ⨆ i, A i
   证明: (Submodule.iSup_eq_range_dfinsupp_lsum _).symm
 
 Depends on / 依赖: Submodule, Submodule.iSup_eq_range_dfinsupp_lsum, iSup_eq_range_dfinsupp_lsum
@@ -1455,7 +1455,7 @@ theorem IsInternal.ofBijective_coeLinearMap_same
   rw [← coeLinearMap_of]; rw [LinearEquiv.ofBijective_symm_apply_apply]; rw [of_eq_same]
 
 中文:
-定理 IsInternal.ofBijective_coeLinearMap_same
+定理 Is整数ernal.ofBijective_coeLinearMap_same
   结论: (h : Is整数ernal A)
   证明: by
   rw [← coeLinearMap_of]; rw [LinearEquiv.ofBijective_symm_apply_apply]; rw [of_eq_same]
@@ -1479,7 +1479,7 @@ theorem IsInternal.ofBijective_coeLinearMap_of_ne
   rw [← coeLinearMap_of]; rw [LinearEquiv.ofBijective_symm_apply_apply]; rw [of_eq_of_ne i j _ hij.symm]
 
 中文:
-定理 IsInternal.ofBijective_coeLinearMap_of_ne
+定理 Is整数ernal.ofBijective_coeLinearMap_of_ne
   结论: (h : Is整数ernal A)
   证明: by
   rw [← coeLinearMap_of]; rw [LinearEquiv.ofBijective_symm_apply_apply]; rw [of_eq_of_ne i j _ hij.symm]
@@ -1500,7 +1500,7 @@ theorem IsInternal.ofBijective_coeLinearMap_of_mem
   proof: h.ofBijective_coeLinearMap_same ⟨x, hx⟩
 
 中文:
-定理 IsInternal.ofBijective_coeLinearMap_of_mem
+定理 Is整数ernal.ofBijective_coeLinearMap_of_mem
   结论: (h : Is整数ernal A)
   证明: h.ofBijective_coeLinearMap_same ⟨x, hx⟩
 
@@ -1520,7 +1520,7 @@ theorem IsInternal.ofBijective_coeLinearMap_of_mem_ne
   proof: h.ofBijective_coeLinearMap_of_ne hij ⟨x, hx⟩
 
 中文:
-定理 IsInternal.ofBijective_coeLinearMap_of_mem_ne
+定理 Is整数ernal.ofBijective_coeLinearMap_of_mem_ne
   结论: (h : Is整数ernal A)
   证明: h.ofBijective_coeLinearMap_of_ne hij ⟨x, hx⟩
 
@@ -1543,7 +1543,7 @@ theorem IsInternal.submodule_iSup_eq_top
   exact Function.Bijective.surjective h
 
 中文:
-定理 IsInternal.submodule_iSup_eq_top
+定理 Is整数ernal.submodule_iSup_eq_top
   条件: (h : Is整数ernal A)
   结论: iSup A = ⊤
   证明: by
@@ -1566,7 +1566,7 @@ theorem IsInternal.submodule_iSupIndep
   proof: iSupIndep_of_dfinsupp_lsum_injective _ h.injective
 
 中文:
-定理 IsInternal.submodule_iSupIndep
+定理 Is整数ernal.submodule_iSupIndep
   条件: (h : Is整数ernal A)
   结论: iSupIndep A
   证明: iSupIndep_of_dfinsupp_lsum_injective _ h.injective
@@ -1587,7 +1587,7 @@ definition IsInternal.collectedBasis
       (sigmaFinsuppLequivDFinsupp R).symm
 
 中文:
-定义 IsInternal.collectedBasis
+定义 Is整数ernal.collectedBasis
   签名: (h : Is整数ernal A) {α : ι -> 类型}
   定义体: ((LinearEquiv.ofBijective (DirectSum.coeLinearMap A) h).symm ≪≫ₗ
         DFinsupp.mapRange.linearEquiv fun i => (v i).repr) ≪≫ₗ
@@ -1615,7 +1615,7 @@ theorem IsInternal.collectedBasis_coe
     toModule, DFinsupp.lsum]
 
 中文:
-定理 IsInternal.collectedBasis_coe
+定理 Is整数ernal.collectedBasis_coe
   结论: (h : Is整数ernal A) {α : ι -> 类型}
   证明: by
   simp [IsInternal.collectedBasis, coeLinearMap, DFinsupp.mapRange.linearEquiv,
@@ -1637,7 +1637,7 @@ theorem IsInternal.collectedBasis_mem
   proof: by simp
 
 中文:
-定理 IsInternal.collectedBasis_mem
+定理 Is整数ernal.collectedBasis_mem
   结论: (h : Is整数ernal A) {α : ι -> 类型}
   证明: by simp
 
@@ -1658,7 +1658,7 @@ theorem IsInternal.collectedBasis_repr_of_mem
   simp [h.ofBijective_coeLinearMap_of_mem hx]
 
 中文:
-定理 IsInternal.collectedBasis_repr_of_mem
+定理 Is整数ernal.collectedBasis_repr_of_mem
   结论: (h : Is整数ernal A) {α : ι -> 类型}
   证明: by
   change (sigmaFinsuppLequivDFinsupp R).symm (DFinsupp.mapRange _ (fun i => map_zero _) _) _ = _
@@ -1684,7 +1684,7 @@ theorem IsInternal.collectedBasis_repr_of_mem_ne
   simp [h.ofBijective_coeLinearMap_of_mem_ne hij hx]
 
 中文:
-定理 IsInternal.collectedBasis_repr_of_mem_ne
+定理 Is整数ernal.collectedBasis_repr_of_mem_ne
   结论: (h : Is整数ernal A) {α : ι -> 类型}
   证明: by
   change (sigmaFinsuppLequivDFinsupp R).symm (DFinsupp.mapRange _ (fun i => map_zero _) _) _ = _
@@ -1709,8 +1709,8 @@ codisjoint_iff.mpr Eq.symm hi.submodule_iSup_eq_top.symm.trans by
       rw [← sSup_pair]; rw [iSup]; rw [← Set.image_univ]; rw [h]; rw [Set.image_insert_eq]; rw [Set.image_singleton]⟩
 
 中文:
-定理 IsInternal.isCompl
-  结论: {A : ι -> Submodule R M} {i j : ι} (hij : i != j)
+定理 Is整数ernal.isCompl
+  结论: {A : ι -> 子模 R M} {i j : ι} (hij : i != j)
   证明: ⟨hi.submodule_iSupIndep.pairwiseDisjoint hij,
 codisjoint_iff.mpr Eq.symm hi.submodule_iSup_eq_top.symm.trans by
       rw [← sSup_pair]; rw [iSup]; rw [← Set.image_univ]; rw [h]; rw [Set.image_insert_eq]; rw [Set.image_singleton]⟩
@@ -1743,8 +1743,8 @@ theorem isInternal_submodule_of_iSupIndep_of_iSup_eq_top
       (Submodule.iSup_eq_range_dfinsupp_lsum _).symm.trans hs⟩
 
 中文:
-定理 isInternal_submodule_of_iSupIndep_of_iSup_eq_top
-  结论: {A : ι -> Submodule R M}
+定理 is整数ernal_submodule_of_iSupIndep_of_iSup_eq_top
+  结论: {A : ι -> 子模 R M}
   证明: ⟨hi.dfinsupp_lsum_injective,
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify value of `f`
 (LinearMap.range_eq_top (f := DFinsupp.lsum _ _)).1
@@ -1769,8 +1769,8 @@ theorem isInternal_submodule_iff_iSupIndep_and_iSup_eq_top
     And.rec isInternal_submodule_of_iSupIndep_of_iSup_eq_top⟩
 
 中文:
-定理 isInternal_submodule_iff_iSupIndep_and_iSup_eq_top
-  条件: (A : ι -> Submodule R M)
+定理 is整数ernal_submodule_iff_iSupIndep_and_iSup_eq_top
+  条件: (A : ι -> 子模 R M)
   证明: ⟨fun i => ⟨i.submodule_iSupIndep, i.submodule_iSup_eq_top⟩,
     And.rec isInternal_submodule_of_iSupIndep_of_iSup_eq_top⟩
 
@@ -1793,8 +1793,8 @@ theorem isInternal_submodule_iff_isCompl
   exact ⟨fun ⟨hd, ht
 
 中文:
-定理 isInternal_submodule_iff_isCompl
-  结论: (A : ι -> Submodule R M) {i j : ι} (hij : i != j)
+定理 is整数ernal_submodule_iff_isCompl
+  结论: (A : ι -> 子模 R M) {i j : ι} (hij : i != j)
   证明: by
   have : forall k, k = i ∨ k = j := fun k => by simpa using Set.ext_iff.mp h k
   rw [isInternal_submodule_iff_iSupIndep_and_iSup_eq_top]; rw [iSup]; rw [← Set.image_univ]; rw [h]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [sSup_pair]; rw [iSupIndep_pair hij this]
@@ -1819,8 +1819,8 @@ theorem isInternal_ne_bot_iff
   simp [isInternal_submodule_iff_iSupIndep_and_iSup_eq_top]
 
 中文:
-定理 isInternal_ne_bot_iff
-  条件: {A : ι -> Submodule R M}
+定理 is整数ernal_ne_bot_iff
+  条件: {A : ι -> 子模 R M}
   证明: by
   simp [isInternal_submodule_iff_iSupIndep_and_iSup_eq_top]
 
@@ -1844,8 +1844,8 @@ lemma isInternal_biSup_submodule_of_iSupIndep
   suffices (e ∘ fun i : s => (A i).comap p.subtype) = fun i =
 
 中文:
-引理 isInternal_biSup_submodule_of_iSupIndep
-  结论: {A : ι -> Submodule R M} (s : Set ι)
+引理 is整数ernal_biSup_submodule_of_iSupIndep
+  结论: {A : ι -> 子模 R M} (s : 集合 ι)
   证明: by
   refine (isInternal_submodule_iff_iSupIndep_and_iSup_eq_top _).mpr ⟨?_, by simp [iSup_subtype]⟩
   let p := ⨆ i in s, A i
@@ -1880,8 +1880,8 @@ theorem IsInternal.addSubmonoid_iSupIndep
   proof: iSupIndep_of_dfinsuppSumAddHom_injective _ h.injective
 
 中文:
-定理 IsInternal.addSubmonoid_iSupIndep
-  结论: {M : 类型} [AddCommMonoid M] {A : ι -> AddSubmonoid M}
+定理 Is整数ernal.addSubmonoid_iSupIndep
+  结论: {M : 类型} [加法交换幺半群 M] {A : ι -> 加法子幺半群 M}
   证明: iSupIndep_of_dfinsuppSumAddHom_injective _ h.injective
 
 Depends on / 依赖: h.injective, iSupIndep_of_dfinsuppSumAddHom_injective, injective
@@ -1899,8 +1899,8 @@ theorem IsInternal.addSubgroup_iSupIndep
   proof: iSupIndep_of_dfinsuppSumAddHom_injective' _ h.injective
 
 中文:
-定理 IsInternal.addSubgroup_iSupIndep
-  结论: {G : 类型} [AddCommGroup G] {A : ι -> AddSubgroup G}
+定理 Is整数ernal.addSubgroup_iSupIndep
+  结论: {G : 类型} [加法交换群 G] {A : ι -> 加法子群 G}
   证明: iSupIndep_of_dfinsuppSumAddHom_injective' _ h.injective
 
 Depends on / 依赖: h.injective, iSupIndep_of_dfinsuppSumAddHom_injective, injective

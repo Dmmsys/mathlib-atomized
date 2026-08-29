@@ -34,7 +34,7 @@ lemma cfcₙ_re_id
 
 中文:
 引理 cfcₙ_re_id
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   conv_rhs => rw [realPart_apply_coe, ← cfcₙ_id' Complex a, ← cfcₙ_star, ← cfcₙ_add .., ← cfcₙ_smul ..]
   refine cfcₙ_congr fun x hx => ?_
@@ -64,7 +64,7 @@ lemma cfcₙ_im_id
 
 中文:
 引理 cfcₙ_im_id
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   suffices cfcₙ (fun z : Complex => re z + I * im z) a = ℜ a + I • ℑ a by
     rw [cfcₙ_add ..]; rw [cfcₙ_const_mul ..]; rw [cfcₙ_re_id a] at this
@@ -91,7 +91,7 @@ lemma quasispectrum_realPart
 
 中文:
 引理 quasispectrum_realPart
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   rw [← cfcₙ_re_id a]; rw [cfcₙ_map_quasispectrum ..]
 
@@ -113,7 +113,7 @@ lemma quasispectrum_realPart'
 
 中文:
 引理 quasispectrum_realPart'
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   simp [← (ℜ a).2.quasispectrumRestricts.image, quasispectrum_realPart a, Set.image_image]
 
@@ -134,7 +134,7 @@ lemma quasispectrum_imaginaryPart
 
 中文:
 引理 quasispectrum_imaginaryPart
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   rw [← cfcₙ_im_id a]; rw [cfcₙ_map_quasispectrum ..]
 
@@ -156,7 +156,7 @@ lemma quasispectrum_imaginaryPart'
 
 中文:
 引理 quasispectrum_imaginaryPart'
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   simp [← (ℑ a).2.quasispectrumRestricts.image, quasispectrum_imaginaryPart a, Set.image_image]
 
@@ -180,7 +180,7 @@ lemma cfcₙ_realPart
 
 中文:
 引理 cfcₙ_realPart
-  结论: (f : Complex -> Complex) (a : A)
+  结论: (f : 复形 -> 复形) (a : A)
   证明: by
   rw [quasispectrum_realPart a] at hf
   rw [← cfcₙ_re_id a]; rw [← cfcₙ_comp' ..]
@@ -206,7 +206,7 @@ lemma cfcₙ_imaginaryPart
 
 中文:
 引理 cfcₙ_imaginaryPart
-  结论: (f : Complex -> Complex) (a : A)
+  结论: (f : 复形 -> 复形) (a : A)
   证明: by
   rw [quasispectrum_imaginaryPart a] at hf
   rw [← cfcₙ_im_id a]; rw [← cfcₙ_comp' ..]
@@ -313,7 +313,7 @@ lemma cfc_re_id
 
 中文:
 引理 cfc_re_id
-  条件: (a : A) (hp : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (hp : 是StarNormal a := by cfc_tac)
   证明: by
   conv_rhs => rw [realPart_apply_coe, ← cfc_id' Complex a, ← cfc_star, ← cfc_add .., ← cfc_smul ..]
   refine cfc_congr fun x hx => ?_
@@ -343,7 +343,7 @@ lemma cfc_im_id
 
 中文:
 引理 cfc_im_id
-  条件: (a : A) (hp : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (hp : 是StarNormal a := by cfc_tac)
   证明: by
   suffices cfc (fun z : Complex => re z + I * im z) a = ℜ a + I • ℑ a by
     rw [cfc_add ..]; rw [cfc_const_mul ..]; rw [cfc_re_id a] at this
@@ -370,7 +370,7 @@ lemma spectrum_realPart
 
 中文:
 引理 spectrum_realPart
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   rw [← cfc_re_id a]; rw [cfc_map_spectrum ..]
 
@@ -391,7 +391,7 @@ lemma spectrum_realPart'
 
 中文:
 引理 spectrum_realPart'
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   simp [← (ℜ a).2.spectrumRestricts.image, spectrum_realPart a, Set.image_image]
 
@@ -412,7 +412,7 @@ lemma spectrum_imaginaryPart
 
 中文:
 引理 spectrum_imaginaryPart
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   rw [← cfc_im_id a]; rw [cfc_map_spectrum ..]
 
@@ -433,7 +433,7 @@ lemma spectrum_imaginaryPart'
 
 中文:
 引理 spectrum_imaginaryPart'
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   simp [← (ℑ a).2.spectrumRestricts.image, spectrum_imaginaryPart a, Set.image_image]
 
@@ -457,7 +457,7 @@ lemma cfc_realPart
 
 中文:
 引理 cfc_realPart
-  结论: (f : Complex -> Complex) (a : A) (hf : ContinuousOn f (spectrum Complex (ℜ a : A)) := by cfc_tac)
+  结论: (f : 复形 -> 复形) (a : A) (hf : ContinuousOn f (spectrum 复形 (ℜ a : A)) := by cfc_tac)
   证明: by
   rw [spectrum_realPart a] at hf
   rw [← cfc_re_id a]; rw [← cfc_comp' ..]
@@ -482,7 +482,7 @@ lemma cfc_imaginaryPart
 
 中文:
 引理 cfc_imaginaryPart
-  结论: (f : Complex -> Complex) (a : A)
+  结论: (f : 复形 -> 复形) (a : A)
   证明: by
   rw [spectrum_imaginaryPart a] at hf
   rw [← cfc_im_id a]; rw [← cfc_comp' ..]

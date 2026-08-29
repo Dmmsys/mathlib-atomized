@@ -185,7 +185,7 @@ theorem of_convergence
 
 中文:
 定理 of_convergence
-  条件: [TopologicalSpace K] [OrderTopology K]
+  条件: [拓扑空间 K] [Order拓扑 K]
   证明: by
   simpa [LinearOrderedAddCommGroup.tendsto_nhds, abs_sub_comm] using of_convergence_epsilon v
 

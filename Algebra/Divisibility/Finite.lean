@@ -25,7 +25,7 @@ instance [Fintype
   body: decidable_of_iff (exists c, b = a * c) dvd_def
 
 中文:
-实例 [Fintype
+实例 [有限类型
   签名: M] [DecidableEq M] (a b
   定义体: decidable_of_iff (exists c, b = a * c) dvd_def
 

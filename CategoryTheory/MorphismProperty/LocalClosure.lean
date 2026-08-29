@@ -41,10 +41,10 @@ inductive sourceLocalClosure
 
 中文:
 归纳类型 sourceLocalClosure
-  参数: (K : Precoverage C) (P : Morphism命题erty C)
+  参数: (K : Precoverage C) (P : MorphismProperty C)
   构造子 (4 个):
     - of: {X Y : C} (f : X ⟶ Y) : P f -> sourceLocalClosure K P f
-    - of_iso: {X Y X' Y' : C} (f : X ⟶ Y) (g : X' ⟶ Y') (e : Arrow.mk f ≅ Arrow.mk g) : sourceLocalClosure K P f -> sourceLocalClosure K P g
+    - of_iso: {X Y X' Y' : C} (f : X ⟶ Y) (g : X' ⟶ Y') (e : 箭头.mk f ≅ 箭头.mk g) : sourceLocalClosure K P f -> sourceLocalClosure K P g
     - comp: {X Y : C} (f : X ⟶ Y) (hf : sourceLocalClosure K P f) (R : Presieve X) (hR : R in K X) {U : C} (g : U ⟶ X) : R g -> sourceLocalClosure K P (g ≫ f)
     - of_presieve: {X Y : C} (f : X ⟶ Y) (R : Presieve X) (hR : R in K X) (h : 对任意 (U : C) (g : U ⟶ X), R g -> sourceLocalClosure K P (g ≫ f)) : sourceLocalClosure K P f
 -/
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: (sourceLocalClosure K P).IsLocalAtSource K
+  签名: (sourceLocalClosure K P).是LocalAtSource K
   定义体: .of_iso _ _ (Arrow.isoMk' _ _ (asIso i).symm (.refl _)) hf
   postcomp i hi f hf := .of_iso _ _ (Arrow.isoMk' _ _ (.refl _) (asIso i)) hf
   comp hR _ g hg hf := .comp _ hf _ hR _ hg
@@ -126,7 +126,7 @@ lemma le_of_isLocalAtSource
 
 中文:
 引理 le_of_isLocalAtSource
-  条件: (h : P <= Q) [Q.IsLocalAtSource K]
+  条件: (h : P <= Q) [Q.是LocalAtSource K]
   结论: sourceLocalClosure K P <= Q
   证明: by
   intro X Y f hf
@@ -155,8 +155,8 @@ instance [P.ContainsIdentities]
   body: le _ (P.id_mem _)
 
 中文:
-实例 [P.ContainsIdentities]
-  签名: : ContainsIdentities (sourceLocalClosure K P) where
+实例 [P.余ntainsIdentities]
+  签名: : 余ntainsIdentities (sourceLocalClosure K P) where
   定义体: le _ (P.id_mem _)
 
 Depends on / 依赖: A.unop, P.id_mem, ShortComplex, ShortComplex.ab_exact_iff, T.coyoneda_exact, T.mor, T.obj, ab_exact_iff, id_mem
@@ -180,8 +180,8 @@ instance [P.IsStableUnderBaseChange]
       let u : W ⟶ pullback g f' :=
 
 中文:
-实例 [P.IsStableUnderBaseChange]
-  签名: [K.IsStableUnderBaseChange] [HasPullbacks C]
+实例 [P.是StableUnderBaseChange]
+  签名: [K.是StableUnderBaseChange] [有Pullbacks C]
   定义体: by
     induction hf generalizing W snd with
     | of f' hf' => exact .of _ (P.of_isPullback h hf')
@@ -235,7 +235,7 @@ lemma sourceLocalClosure_iff_of_respectsLeft
 
 中文:
 引理 sourceLocalClosure_iff_of_respectsLeft
-  结论: [P.RespectsIso] [P.RespectsLeft K.morphism命题erty]
+  结论: [P.RespectsIso] [P.RespectsLeft K.morphismProperty]
   证明: by
   refine ⟨?_, ?_⟩
   · intro h

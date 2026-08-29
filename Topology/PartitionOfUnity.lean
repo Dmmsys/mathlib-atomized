@@ -97,11 +97,11 @@ structure PartitionOfUnity
     - sum_le_one' : forall x, ∑ᶠ i, toFun i x <= 1
 
 中文:
-结构 PartitionOfUnity
-  参数: (ι X : 类型) [TopologicalSpace X] (s : Set X := univ)
+结构 单位分解
+  参数: (ι X : 类型) [拓扑空间 X] (s : 集合 X := univ)
   公理与运算 (5 个):
     - toFun : ι -> C(X, 实数)
-    - locallyFinite' : LocallyFinite fun i => support (toFun i)
+    - locallyFinite' : 局部有限 fun i => support (toFun i)
     - nonneg' : 0 <= toFun
     - sum_eq_one' : 对任意 x in s, ∑ᶠ i, toFun i x = 1
     - sum_le_one' : 对任意 x, ∑ᶠ i, toFun i x <= 1
@@ -133,10 +133,10 @@ structure BumpCovering
 
 中文:
 结构 BumpCovering
-  参数: (ι X : 类型) [TopologicalSpace X] (s : Set X := univ)
+  参数: (ι X : 类型) [拓扑空间 X] (s : 集合 X := univ)
   公理与运算 (5 个):
     - toFun : ι -> C(X, 实数)
-    - locallyFinite' : LocallyFinite fun i => support (toFun i)
+    - locallyFinite' : 局部有限 fun i => support (toFun i)
     - nonneg' : 0 <= toFun
     - le_one' : toFun <= 1
     - eventuallyEq_one' : 对任意 x in s, 存在 i, toFun i =ᶠ[𝓝 x] 1
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (PartitionOfUnity ι X s) ι C(X, 实数)
+  签名: 函数状 (单位分解 ι X s) ι C(X, 实数)
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -189,7 +189,7 @@ theorem locallyFinite
 
 中文:
 定理 locallyFinite
-  结论: LocallyFinite fun i => support (f i)
+  结论: 局部有限 fun i => support (f i)
   证明: f.locallyFinite'
 -/
 protected theorem locallyFinite : LocallyFinite fun i => support (f i) :=
@@ -205,7 +205,7 @@ theorem locallyFinite_tsupport
 
 中文:
 定理 locallyFinite_tsupport
-  结论: LocallyFinite fun i => tsupport (f i)
+  结论: 局部有限 fun i => tsupport (f i)
   证明: f.locallyFinite.closure
 
 Depends on / 依赖: closure, f.locallyFinite.closure, locallyFinite
@@ -266,7 +266,7 @@ theorem exists_pos
   simpa only [fun i => (H i).antisymm (f.nonneg i x), finsum_zero] using zero_ne_one
 
 中文:
-定理 exists_pos
+定理 存在_pos
   条件: {x : X} (hx : x in s)
   结论: 存在 i, 0 < f i x
   证明: by
@@ -357,7 +357,7 @@ definition finsupport
 
 中文:
 定义 finsupport
-  签名: : Finset ι
+  签名: : 有限集 ι
   定义体: (ρ.locallyFinite.point_finite x₀).toFinset
 
 @[simp]
@@ -458,7 +458,7 @@ theorem sum_finsupport'
 
 中文:
 定理 sum_finsupport'
-  条件: (hx₀ : x₀ in s) {I : Finset ι} (hI : ρ.finsupport x₀ subseteq I)
+  条件: (hx₀ : x₀ in s) {I : 有限集 ι} (hI : ρ.finsupport x₀ subseteq I)
   证明: by
   classical
   rw [← Finset.sum_sdiff hI]; rw [ρ.sum_finsupport hx₀]
@@ -496,7 +496,7 @@ theorem sum_finsupport_smul_eq_finsum
 
 中文:
 定理 sum_finsupport_smul_eq_finsum
-  条件: {M : 类型} [AddCommMonoid M] [Module 实数 M] (φ : ι -> X -> M)
+  条件: {M : 类型} [加法交换幺半群 M] [模 实数 M] (φ : ι -> X -> M)
   证明: by
   apply (finsum_eq_sum_of_support_subset _ _).symm
   have : (fun i => (ρ i) x₀ • φ i x₀) = (fun i => (ρ i) x₀) • (fun i => φ i x₀) :=
@@ -535,7 +535,7 @@ theorem finite_tsupport
 
 中文:
 定理 finite_tsupport
-  结论: {i | x₀ in tsupport (ρ i)}.Finite
+  结论: {i | x₀ in tsupport (ρ i)}.有限
   证明: by
   rcases ρ.locallyFinite x₀ with ⟨t, t_in, ht⟩
   apply ht.subset
@@ -700,7 +700,7 @@ theorem continuous_finsum_smul
 
 中文:
 定理 continuous_finsum_smul
-  结论: [ContinuousAdd E] {g : ι -> X -> E}
+  结论: [连续加法 E] {g : ι -> X -> E}
   证明: (continuous_finsum fun i => f.continuous_smul (hg i))
     f.locallyFinite.subset fun _ => support_smul_subset_left _ _
 
@@ -722,7 +722,7 @@ definition IsSubordinate
 
 中文:
 定义 IsSubordinate
-  签名: (U : ι -> Set X)
+  签名: (U : ι -> 集合 X)
   定义体: forall i, tsupport (f i) subseteq U i
 
 Depends on / 依赖: subseteq, tsupport
@@ -745,8 +745,8 @@ theorem exists_finset_nhds'
   rwa [eq_comm, ρ.sum_eq_one x_in] at this
 
 中文:
-定理 exists_finset_nhds'
-  条件: {s : Set X} (ρ : PartitionOfUnity ι X s) (x₀ : X)
+定理 存在_finset_nhds'
+  条件: {s : 集合 X} (ρ : 单位分解 ι X s) (x₀ : X)
   证明: by
   rcases ρ.locallyFinite.exists_finset_support x₀ with ⟨I, hI⟩
   refine ⟨I, eventually_nhdsWithin_iff.mpr (hI.mono fun x hx x_in => ?_), hI⟩
@@ -775,8 +775,8 @@ theorem exists_finset_nhds
   rwa [nhdsWithin_univ, ← eventually_and] at H
 
 中文:
-定理 exists_finset_nhds
-  条件: (ρ : PartitionOfUnity ι X univ) (x₀ : X)
+定理 存在_finset_nhds
+  条件: (ρ : 单位分解 ι X univ) (x₀ : X)
   证明: by
   rcases ρ.exists_finset_nhds' x₀ with ⟨I, H⟩
   use I
@@ -799,8 +799,8 @@ theorem exists_finset_nhds_support_subset
   proof: f.locallyFinite.exists_finset_nhds_support_subset hso ho x
 
 中文:
-定理 exists_finset_nhds_support_subset
-  结论: {U : ι -> Set X} (hso : f.IsSubordinate U)
+定理 存在_finset_nhds_support_subset
+  结论: {U : ι -> 集合 X} (hso : f.IsSubordinate U)
   证明: f.locallyFinite.exists_finset_nhds_support_subset hso ho x
 
 Depends on / 依赖: exists_finset_nhds_support_subset, f.locallyFinite.exists_finset_nhds_support_subset, locallyFinite
@@ -820,7 +820,7 @@ theorem IsSubordinate.continuous_finsum_smul
 
 中文:
 定理 IsSubordinate.continuous_finsum_smul
-  结论: [ContinuousAdd E] {U : ι -> Set X}
+  结论: [连续加法 E] {U : ι -> 集合 X}
   证明: f.continuous_finsum_smul fun i _ hx => (hg i).continuousAt (ho i).mem_nhds hf i hx
 
 Depends on / 依赖: continuousAt, continuous_finsum_smul, f.continuous_finsum_smul, mem_nhds
@@ -847,7 +847,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (BumpCovering ι X s) ι C(X, 实数)
+  签名: 函数状 (BumpCovering ι X s) ι C(X, 实数)
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -880,7 +880,7 @@ theorem locallyFinite
 
 中文:
 定理 locallyFinite
-  结论: LocallyFinite fun i => support (f i)
+  结论: 局部有限 fun i => support (f i)
   证明: f.locallyFinite'
 -/
 protected theorem locallyFinite : LocallyFinite fun i => support (f i) :=
@@ -896,7 +896,7 @@ theorem locallyFinite_tsupport
 
 中文:
 定理 locallyFinite_tsupport
-  结论: LocallyFinite fun i => tsupport (f i)
+  结论: 局部有限 fun i => tsupport (f i)
   证明: f.locallyFinite.closure
 
 Depends on / 依赖: closure, f.locallyFinite.closure, locallyFinite
@@ -916,7 +916,7 @@ theorem point_finite
 中文:
 定理 point_finite
   条件: (x : X)
-  结论: { i | f i x != 0 }.Finite
+  结论: { i | f i x != 0 }.有限
   证明: f.locallyFinite.point_finite x
 -/
 protected theorem point_finite (x : X) : { i | f i x != 0 }.Finite :=
@@ -981,7 +981,7 @@ definition single
 
 中文:
 定义 single
-  签名: (i : ι) (s : Set X)
+  签名: (i : ι) (s : 集合 X)
   定义体: Pi.single i 1
   locallyFinite' x := by
     refine ⟨univ, univ_mem, (finite_singleton i).subset ?_⟩
@@ -1018,8 +1018,8 @@ theorem coe_single
 
 中文:
 定理 coe_single
-  条件: (i : ι) (s : Set X)
-  结论: ⇑(BumpCovering.single i s) = Pi.single i 1
+  条件: (i : ι) (s : 集合 X)
+  结论: ⇑(BumpCovering.single i s) = 依赖函数类型.single i 1
   证明: by
   rfl
 -/
@@ -1035,8 +1035,8 @@ instance [Inhabited
   body: ⟨BumpCovering.single default s⟩
 
 中文:
-实例 [Inhabited
-  签名: ι] : Inhabited (BumpCovering ι X s)
+实例 [可居
+  签名: ι] : 可居 (BumpCovering ι X s)
   定义体: ⟨BumpCovering.single default s⟩
 
 Depends on / 依赖: BumpCovering, BumpCovering.single, single
@@ -1054,7 +1054,7 @@ definition IsSubordinate
 
 中文:
 定义 IsSubordinate
-  签名: (f : BumpCovering ι X s) (U : ι -> Set X)
+  签名: (f : BumpCovering ι X s) (U : ι -> 集合 X)
   定义体: forall i, tsupport (f i) subseteq U i
 
 Depends on / 依赖: subseteq, tsupport
@@ -1072,7 +1072,7 @@ theorem IsSubordinate.mono
 
 中文:
 定理 IsSubordinate.mono
-  结论: {f : BumpCovering ι X s} {U V : ι -> Set X} (hU : f.IsSubordinate U)
+  结论: {f : BumpCovering ι X s} {U V : ι -> 集合 X} (hU : f.IsSubordinate U)
   证明: fun i => Subset.trans (hU i) (hV i)
 -/
 theorem IsSubordinate.mono {f : BumpCovering ι X s} {U V : ι -> Set X} (hU : f.IsSubordinate U)
@@ -1092,8 +1092,8 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop
   rcases exists_subset_iUnion_closure_subset hs hVo (fun x _ => (hf.subset hVU').point_finite x
 
 中文:
-定理 exists_isSubordinate_of_locallyFinite_of_prop
-  结论: [NormalSpace X] (p : (X -> 实数) -> 命题)
+定理 存在_isSubordinate_of_locallyFinite_of_prop
+  结论: [正规空间 X] (p : (X -> 实数) -> 命题)
   证明: by
   rcases exists_subset_iUnion_closure_subset hs ho (fun x _ => hf.point_finite x) hU with
     ⟨V, hsV, hVo, hVU⟩
@@ -1137,8 +1137,8 @@ theorem exists_isSubordinate_of_locallyFinite
   ⟨f, hfU⟩
 
 中文:
-定理 exists_isSubordinate_of_locallyFinite
-  结论: [NormalSpace X] (hs : IsClosed s) (U : ι -> Set X)
+定理 存在_isSubordinate_of_locallyFinite
+  结论: [正规空间 X] (hs : 是闭集 s) (U : ι -> 集合 X)
   证明: let ⟨f, _, hfU⟩ :=
     exists_isSubordinate_of_locallyFinite_of_prop (fun _ => True)
       (fun _ _ hs ht hd =>
@@ -1170,8 +1170,8 @@ theorem exists_isSubordinate_of_prop
   exact ⟨f, hfp, hf.mono hVU⟩
 
 中文:
-定理 exists_isSubordinate_of_prop
-  结论: [NormalSpace X] [ParacompactSpace X] (p : (X -> 实数) -> 命题)
+定理 存在_isSubordinate_of_prop
+  结论: [正规空间 X] [仿紧空间 X] (p : (X -> 实数) -> 命题)
   证明: by
   rcases precise_refinement_set hs _ ho hU with ⟨V, hVo, hsV, hVf, hVU⟩
   rcases exists_isSubordinate_of_locallyFinite_of_prop p h01 hs V hVo hVf hsV with ⟨f, hfp, hf⟩
@@ -1200,8 +1200,8 @@ theorem exists_isSubordinate
   exact ⟨f, hf.mono hVU⟩
 
 中文:
-定理 exists_isSubordinate
-  结论: [NormalSpace X] [ParacompactSpace X] (hs : IsClosed s) (U : ι -> Set X)
+定理 存在_isSubordinate
+  结论: [正规空间 X] [仿紧空间 X] (hs : 是闭集 s) (U : ι -> 集合 X)
   证明: by
   rcases precise_refinement_set hs _ ho hU with ⟨V, hVo, hsV, hVf, hVU⟩
   rcases exists_isSubordinate_of_locallyFinite hs V hVo hVf hsV with ⟨f, hf⟩
@@ -1229,8 +1229,8 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop_t2space
     (fun x _ => (hf.subset hVU').point_finite 
 
 中文:
-定理 exists_isSubordinate_of_locallyFinite_of_prop_t2space
-  结论: [LocallyCompactSpace X] [T2Space X]
+定理 存在_isSubordinate_of_locallyFinite_of_prop_t2space
+  结论: [局部紧空间 X] [T2空间 X]
   证明: by
   rcases exists_subset_iUnion_closure_subset_t2space hs ho (fun x _ => hf.point_finite x) hU with
     ⟨V, hsV, hVo, hVU, hcp⟩
@@ -1278,8 +1278,8 @@ theorem exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
       hs U ho
 
 中文:
-定理 exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
-  结论: [LocallyCompactSpace X]
+定理 存在_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
+  结论: [局部紧空间 X]
   证明: by
   -- need to switch 0 and 1 in `exists_continuous_zero_one_of_isCompact`
   simpa using
@@ -1433,7 +1433,7 @@ theorem toPOUFun_eq_mul_prod
 
 中文:
 定理 toPOUFun_eq_mul_prod
-  结论: (i : ι) (x : X) (t : Finset ι)
+  结论: (i : ι) (x : X) (t : 有限集 ι)
   证明: by
   refine congr_arg _ (finprod_cond_eq_prod_of_cond_iff _ fun {j} hj => ?_)
   rw [Ne]; rw [sub_eq_self] at hj
@@ -1515,9 +1515,9 @@ theorem exists_finset_toPOUFun_eventuallyEq
   exact hf.mem_toFinset.2 ⟨y, ⟨hj, hyU⟩⟩
 
 中文:
-定理 exists_finset_toPOUFun_eventuallyEq
+定理 存在_finset_toPOUFun_eventuallyEq
   条件: (i : ι) (x : X)
-  结论: 存在 t : Finset ι,
+  结论: 存在 t : 有限集 ι,
   证明: by
   rcases f.locallyFinite x with ⟨U, hU, hf⟩
   use hf.toFinset
@@ -1554,7 +1554,7 @@ refine (map_continuous <| f i).mul continuous_finprod_cond (fun j _ => by fun_pr
 中文:
 定理 continuous_toPOUFun
   条件: (i : ι)
-  结论: Continuous (f.toPOUFun i)
+  结论: 连续 (f.toPOUFun i)
   证明: by
 refine (map_continuous <| f i).mul continuous_finprod_cond (fun j _ => by fun_prop) ?_
   simp only [mulSupport_one_sub]
@@ -1582,7 +1582,7 @@ definition toPartitionOfUnity
 
 中文:
 定义 toPartitionOfUnity
-  签名: : PartitionOfUnity ι X s where
+  签名: : 单位分解 ι X s where
   定义体: ⟨f.toPOUFun i, f.continuous_toPOUFun i⟩
   locallyFinite' := f.locallyFinite.subset f.support_toPOUFun_subset
   nonneg' i x :=
@@ -1634,7 +1634,7 @@ theorem toPartitionOfUnity_eq_mul_prod
 
 中文:
 定理 toPartitionOfUnity_eq_mul_prod
-  结论: (i : ι) (x : X) (t : Finset ι)
+  结论: (i : ι) (x : X) (t : 有限集 ι)
   证明: f.toPOUFun_eq_mul_prod i x t ht
 
 Depends on / 依赖: f.toPOUFun_eq_mul_prod, toPOUFun_eq_mul_prod
@@ -1655,9 +1655,9 @@ theorem exists_finset_toPartitionOfUnity_eventuallyEq
   proof: f.exists_finset_toPOUFun_eventuallyEq i x
 
 中文:
-定理 exists_finset_toPartitionOfUnity_eventuallyEq
+定理 存在_finset_toPartitionOfUnity_eventuallyEq
   条件: (i : ι) (x : X)
-  结论: 存在 t : Finset ι,
+  结论: 存在 t : 有限集 ι,
   证明: f.exists_finset_toPOUFun_eventuallyEq i x
 
 Depends on / 依赖: exists_finset_toPOUFun_eventuallyEq, f.exists_finset_toPOUFun_eventuallyEq
@@ -1733,7 +1733,7 @@ theorem IsSubordinate.toPartitionOfUnity
 
 中文:
 定理 IsSubordinate.toPartitionOfUnity
-  结论: {f : BumpCovering ι X s} {U : ι -> Set X}
+  结论: {f : BumpCovering ι X s} {U : ι -> 集合 X}
   证明: fun i => Subset.trans (closure_mono <| f.support_toPartitionOfUnity_subset i) (h i)
 
 Depends on / 依赖: Subset, Subset.trans, closure_mono, f.support_toPartitionOfUnity_subset, support_toPartitionOfUnity_subset
@@ -1757,8 +1757,8 @@ instance [Inhabited
   body: ⟨BumpCovering.toPartitionOfUnity default⟩
 
 中文:
-实例 [Inhabited
-  签名: ι] : Inhabited (PartitionOfUnity ι X s)
+实例 [可居
+  签名: ι] : 可居 (单位分解 ι X s)
   定义体: ⟨BumpCovering.toPartitionOfUnity default⟩
 
 Depends on / 依赖: BumpCovering, BumpCovering.toPartitionOfUnity, toPartitionOfUnity
@@ -1776,8 +1776,8 @@ theorem exists_isSubordinate_of_locallyFinite
   ⟨f.toPartitionOfUnity, hf.toPartitionOfUnity⟩
 
 中文:
-定理 exists_isSubordinate_of_locallyFinite
-  结论: [NormalSpace X] (hs : IsClosed s) (U : ι -> Set X)
+定理 存在_isSubordinate_of_locallyFinite
+  结论: [正规空间 X] (hs : 是闭集 s) (U : ι -> 集合 X)
   证明: let ⟨f, hf⟩ := BumpCovering.exists_isSubordinate_of_locallyFinite hs U ho hf hU
   ⟨f.toPartitionOfUnity, hf.toPartitionOfUnity⟩
 
@@ -1799,8 +1799,8 @@ theorem exists_isSubordinate
   ⟨f.toPartitionOfUnity, hf.toPartitionOfUnity⟩
 
 中文:
-定理 exists_isSubordinate
-  结论: [NormalSpace X] [ParacompactSpace X] (hs : IsClosed s) (U : ι -> Set X)
+定理 存在_isSubordinate
+  结论: [正规空间 X] [仿紧空间 X] (hs : 是闭集 s) (U : ι -> 集合 X)
   证明: let ⟨f, hf⟩ := BumpCovering.exists_isSubordinate hs U ho hU
   ⟨f.toPartitionOfUnity, hf.toPartitionOfUnity⟩
 
@@ -1824,8 +1824,8 @@ theorem exists_isSubordinate_of_locallyFinite_t2space
 isClosed_closure closure_mono (f.support_toPartitionOfUnity_subset i)⟩
 
 中文:
-定理 exists_isSubordinate_of_locallyFinite_t2space
-  结论: [LocallyCompactSpace X] [T2Space X]
+定理 存在_isSubordinate_of_locallyFinite_t2space
+  结论: [局部紧空间 X] [T2空间 X]
   证明: let ⟨f, hfsub, hfcp⟩ :=
     BumpCovering.exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space hs U ho hf hU
   ⟨f.toPartitionOfUnity, hfsub.toPartitionOfUnity, fun i => IsCompact.of_isClosed_subset (hfcp i)
@@ -1861,8 +1861,8 @@ theorem exists_continuous_sum_one_of_isOpen_isCompact
    
 
 中文:
-定理 exists_continuous_sum_one_of_isOpen_isCompact
-  结论: [T2Space X] [LocallyCompactSpace X]
+定理 存在_continuous_sum_one_of_isOpen_isCompact
+  结论: [T2空间 X] [局部紧空间 X]
   证明: by
   obtain ⟨f, hfsub, hfcp⟩ := PartitionOfUnity.exists_isSubordinate_of_locallyFinite_t2space htcp s
     hs (locallyFinite_of_finite _) hst

@@ -55,7 +55,7 @@ lemma mem_stabilizer_iff
 
 中文:
 引理 mem_stabilizer_iff
-  条件: {g : (Perm α)ᵈᵐᵃ}
+  条件: {g : (置换 α)ᵈᵐᵃ}
   证明: by
   simp only [MulAction.mem_stabilizer_iff]; rfl
 
@@ -75,7 +75,7 @@ definition stabilizerEquiv_invFun
 
 中文:
 定义 stabilizerEquiv_invFun
-  签名: (g : 对任意 i, Perm {a // f a = i}) (a : α)
+  签名: (g : 对任意 i, 置换 {a // f a = i}) (a : α)
   定义体: g (f a) ⟨a, rfl⟩
 -/
 def stabilizerEquiv_invFun (g : forall i, Perm {a // f a = i}) (a : α) : α := g (f a) ⟨a, rfl⟩
@@ -90,7 +90,7 @@ lemma stabilizerEquiv_invFun_eq
 
 中文:
 引理 stabilizerEquiv_invFun_eq
-  条件: (g : 对任意 i, Perm {a // f a = i}) {a : α} {i : ι} (h : f a = i)
+  条件: (g : 对任意 i, 置换 {a // f a = i}) {a : α} {i : ι} (h : f a = i)
   证明: by subst h; rfl
 -/
 lemma stabilizerEquiv_invFun_eq (g : forall i, Perm {a // f a = i}) {a : α} {i : ι} (h : f a = i) :
@@ -106,7 +106,7 @@ lemma comp_stabilizerEquiv_invFun
 
 中文:
 引理 comp_stabilizerEquiv_invFun
-  条件: (g : 对任意 i, Perm {a // f a = i}) (a : α)
+  条件: (g : 对任意 i, 置换 {a // f a = i}) (a : α)
   证明: (g (f a) ⟨a, rfl⟩).prop
 -/
 lemma comp_stabilizerEquiv_invFun (g : forall i, Perm {a // f a = i}) (a : α) :
@@ -129,7 +129,7 @@ definition stabilizerEquiv_invFun_aux
 
 中文:
 定义 stabilizerEquiv_invFun_aux
-  签名: (g : 对任意 i, Perm {a // f a = i})
+  签名: (g : 对任意 i, 置换 {a // f a = i})
   定义体: stabilizerEquiv_invFun g
   invFun := stabilizerEquiv_invFun (fun i => (g i).symm)
   left_inv a := by
@@ -167,7 +167,7 @@ definition stabilizerMulEquiv
 
 中文:
 定义 stabilizerMulEquiv
-  签名: : (stabilizer (Perm α)ᵈᵐᵃ f)ᵐᵒᵖ ≃* (对任意 i, Perm {a // f a = i}) where
+  签名: : (stabilizer (置换 α)ᵈᵐᵃ f)ᵐᵒᵖ ≃* (对任意 i, 置换 {a // f a = i}) where
   定义体: Perm.subtypePerm (mk.symm g.unop) fun a => by
     rw [← Function.comp_apply (f := f)]; rw [mem_stabilizer_iff.mp g.unop.prop]
   invFun g := ⟨mk (stabilizerEquiv_invFun_aux g), by
@@ -198,7 +198,7 @@ lemma stabilizerMulEquiv_apply
 
 中文:
 引理 stabilizerMulEquiv_apply
-  条件: (g : (stabilizer (Perm α)ᵈᵐᵃ f)ᵐᵒᵖ) {a : α} {i : ι} (h : f a = i)
+  条件: (g : (stabilizer (置换 α)ᵈᵐᵃ f)ᵐᵒᵖ) {a : α} {i : ι} (h : f a = i)
   证明: rfl
 -/
 lemma stabilizerMulEquiv_apply (g : (stabilizer (Perm α)ᵈᵐᵃ f)ᵐᵒᵖ) {a : α} {i : ι} (h : f a = i) :
@@ -225,7 +225,7 @@ theorem stabilizer_card
 
 中文:
 定理 stabilizer_card
-  条件: [DecidableEq α] [DecidableEq ι] [Fintype ι]
+  条件: [DecidableEq α] [DecidableEq ι] [有限类型 ι]
   证明: by
   -- rewriting via Nat.card because Fintype instance is not found
   rw [← Nat.card_eq_fintype_card]; rw [Nat.card_congr (subtypeEquiv mk fun _ => ?_)]; rw [Nat.card_congr MulOpposite.opEquiv]; rw [Nat.card_congr (DomMulAct.stabilizerMulEquiv f).toEquiv]; rw [Nat.card_pi]
@@ -253,7 +253,7 @@ theorem stabilizer_ncard
 
 中文:
 定理 stabilizer_ncard
-  条件: [Finite α] [Fintype ι]
+  条件: [有限 α] [有限类型 ι]
   证明: by
   classical
   cases nonempty_fintype α

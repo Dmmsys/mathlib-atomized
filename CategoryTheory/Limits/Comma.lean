@@ -56,7 +56,7 @@ definition limitAuxiliaryCone
 
 中文:
 定义 limitAuxiliaryCone
-  签名: (c₁ : Cone (F ⋙ fst L R))
+  签名: (c₁ : 锥 (F ⋙ fst L R))
   定义体: (Cone.postcompose (whiskerLeft F (Comma.natTrans L R) :)).obj (L.mapCone c₁)
 
 Depends on / 依赖: Comma.natTrans, Cone.postcompose, L.mapCone, mapCone, natTrans, postcompose, whiskerLeft
@@ -88,7 +88,7 @@ definition coneOfPreserves
 
 中文:
 定义 coneOfPreserves
-  签名: [PreservesLimit (F ⋙ snd L R) R] (c₁ : Cone (F ⋙ fst L R))
+  签名: [保持极限 (F ⋙ snd L R) R] (c₁ : 锥 (F ⋙ fst L R))
   定义体: { left := c₁.pt
       right := c₂.pt
       hom := (isLimitOfPreserves R t₂).lift (limitAuxiliaryCone _ c₁) }
@@ -134,7 +134,7 @@ definition fstSndJointlyReflectLimit
 
 中文:
 定义 fstSndJointlyReflectLimit
-  签名: {F : J ⥤ Comma L R} {c : Cone F}
+  签名: {F : J ⥤ 交换a L R} {c : 锥 F}
   定义体: { left := h₁.lift ((fst _ _).mapCone s)
       right := h₂.lift ((snd _ _).mapCone s)
       w := (isLimitOfPreserves R h₂).hom_ext (fun j => by
@@ -175,7 +175,7 @@ definition coneOfPreservesIsLimit
 
 中文:
 定义 coneOfPreservesIsLimit
-  签名: [PreservesLimit (F ⋙ snd L R) R] {c₁ : Cone (F ⋙ fst L R)}
+  签名: [保持极限 (F ⋙ snd L R) R] {c₁ : 锥 (F ⋙ fst L R)}
   定义体: fstSndJointlyReflectLimit t₁ t₂
 
 Depends on / 依赖: fstSndJointlyReflectLimit
@@ -198,7 +198,7 @@ definition colimitAuxiliaryCocone
 
 中文:
 定义 colimitAuxiliaryCocone
-  签名: (c₂ : Cocone (F ⋙ snd L R))
+  签名: (c₂ : 余锥 (F ⋙ snd L R))
   定义体: (Cocone.precompose (whiskerLeft F (Comma.natTrans L R) :)).obj (R.mapCocone c₂)
 
 Depends on / 依赖: Cocone, Cocone.precompose, Comma.natTrans, R.mapCocone, mapCocone, natTrans, precompose, whiskerLeft
@@ -231,7 +231,7 @@ definition coconeOfPreserves
 
 中文:
 定义 coconeOfPreserves
-  签名: [PreservesColimit (F ⋙ fst L R) L] {c₁ : Cocone (F ⋙ fst L R)}
+  签名: [保持余极限 (F ⋙ fst L R) L] {c₁ : 余锥 (F ⋙ fst L R)}
   定义体: { left := c₁.pt
       right := c₂.pt
       hom := (isColimitOfPreserves L t₁).desc (colimitAuxiliaryCocone _ c₂) }
@@ -277,7 +277,7 @@ definition fstSndJointlyReflectColimit
 
 中文:
 定义 fstSndJointlyReflectColimit
-  签名: {F : J ⥤ Comma L R} {c : Cocone F}
+  签名: {F : J ⥤ 交换a L R} {c : 余锥 F}
   定义体: { left := h₁.desc ((fst _ _).mapCocone s)
       right := h₂.desc ((snd _ _).mapCocone s)
       w := (isColimitOfPreserves L h₁).hom_ext (fun j => by
@@ -318,7 +318,7 @@ definition coconeOfPreservesIsColimit
 
 中文:
 定义 coconeOfPreservesIsColimit
-  签名: [PreservesColimit (F ⋙ fst L R) L]
+  签名: [保持余极限 (F ⋙ fst L R) L]
   定义体: fstSndJointlyReflectColimit t₁ t₂
 
 Depends on / 依赖: fstSndJointlyReflectColimit
@@ -339,7 +339,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: (F : J ⥤ Comma L R) [HasLimit (F ⋙ fst L R)] [HasLimit (F ⋙ snd L R)]
+  签名: (F : J ⥤ 交换a L R) [有极限 (F ⋙ fst L R)] [有极限 (F ⋙ snd L R)]
   定义体: HasLimit.mk ⟨_, coneOfPreservesIsLimit _ (limit.isLimit _) (limit.isLimit _)⟩
 
 Depends on / 依赖: HasLimit, HasLimit.mk, coneOfPreservesIsLimit, isLimit, limit.isLimit
@@ -357,7 +357,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: [HasLimitsOfShape J A] [HasLimitsOfShape J B]
+  签名: [有形状极限 J A] [有形状极限 J B]
 -/
 instance hasLimitsOfShape [HasLimitsOfShape J A] [HasLimitsOfShape J B]
     [PreservesLimitsOfShape J R] : HasLimitsOfShape J (Comma L R) where
@@ -372,7 +372,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: [HasLimitsOfSize.{w, w'} A] [HasLimitsOfSize.{w, w'} B]
+  签名: [有LimitsOfSize.{w, w'} A] [有LimitsOfSize.{w, w'} B]
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance hasLimitsOfSize [HasLimitsOfSize.{w, w'} A] [HasLimitsOfSize.{w, w'} B]
@@ -389,7 +389,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits A] [HasFiniteLimits B]
+  签名: [有有限极限 A] [有有限极限 B]
   定义体: inferInstance
 -/
 instance hasFiniteLimits [HasFiniteLimits A] [HasFiniteLimits B]
@@ -406,7 +406,7 @@ instance hasColimit
 
 中文:
 实例 hasColimit
-  签名: (F : J ⥤ Comma L R) [HasColimit (F ⋙ fst L R)] [HasColimit (F ⋙ snd L R)]
+  签名: (F : J ⥤ 交换a L R) [有余极限 (F ⋙ fst L R)] [有余极限 (F ⋙ snd L R)]
   定义体: HasColimit.mk ⟨_, coconeOfPreservesIsColimit _ (colimit.isColimit _) (colimit.isColimit _)⟩
 
 Depends on / 依赖: HasColimit, HasColimit.mk, coconeOfPreservesIsColimit, colimit, colimit.isColimit, isColimit
@@ -424,7 +424,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: [HasColimitsOfShape J A] [HasColimitsOfShape J B]
+  签名: [有形状余极限 J A] [有形状余极限 J B]
 -/
 instance hasColimitsOfShape [HasColimitsOfShape J A] [HasColimitsOfShape J B]
     [PreservesColimitsOfShape J L] : HasColimitsOfShape J (Comma L R) where
@@ -439,7 +439,7 @@ instance hasColimitsOfSize
 
 中文:
 实例 hasColimitsOfSize
-  签名: [HasColimitsOfSize.{w, w'} A] [HasColimitsOfSize.{w, w'} B]
+  签名: [有余limitsOfSize.{w, w'} A] [有余limitsOfSize.{w, w'} B]
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance hasColimitsOfSize [HasColimitsOfSize.{w, w'} A] [HasColimitsOfSize.{w, w'} B]
@@ -456,7 +456,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: [HasFiniteColimits A] [HasFiniteColimits B]
+  签名: [有有限余极限 A] [有有限余极限 B]
   定义体: inferInstance
 -/
 instance hasFiniteColimits [HasFiniteColimits A] [HasFiniteColimits B]
@@ -475,7 +475,7 @@ instance preservesColimitsOfShape_fst
 
 中文:
 实例 preservesColimitsOfShape_fst
-  签名: [HasColimitsOfShape J A] [HasColimitsOfShape J B]
+  签名: [有形状余极限 J A] [有形状余极限 J B]
   定义体: preservesColimit_of_preserves_colimit_cocone
       (coconeOfPreservesIsColimit _ (colimit.isColimit _) (colimit.isColimit _))
       (colimit.isColimit _)
@@ -501,7 +501,7 @@ instance preservesColimitsOfShape_snd
 
 中文:
 实例 preservesColimitsOfShape_snd
-  签名: [HasColimitsOfShape J A] [HasColimitsOfShape J B]
+  签名: [有形状余极限 J A] [有形状余极限 J B]
   定义体: preservesColimit_of_preserves_colimit_cocone
       (coconeOfPreservesIsColimit _ (colimit.isColimit _) (colimit.isColimit _))
       (colimit.isColimit _)
@@ -533,7 +533,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: (F : J ⥤ Arrow T) [i₁ : HasLimit (F ⋙ leftFunc)] [i₂ : HasLimit (F ⋙ rightFunc)]
+  签名: (F : J ⥤ 箭头 T) [i₁ : 有极限 (F ⋙ leftFunc)] [i₂ : 有极限 (F ⋙ rightFunc)]
   定义体: by
   have : HasLimit (F ⋙ Comma.fst _ _) := i₁
   have : HasLimit (F ⋙ Comma.snd _ _) := i₂
@@ -556,7 +556,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: [HasLimitsOfShape J T]
+  签名: [有形状极限 J T]
 -/
 instance hasLimitsOfShape [HasLimitsOfShape J T] : HasLimitsOfShape J (Arrow T) where
 
@@ -570,7 +570,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits T]
+  签名: [有有限极限 T]
   定义体: inferInstance
 -/
 instance hasFiniteLimits [HasFiniteLimits T] : HasFiniteLimits (Arrow T) where
@@ -586,7 +586,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: [HasLimits T]
+  签名: [有极限 T]
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance hasLimits [HasLimits T] : HasLimits (Arrow T) :=
@@ -606,7 +606,7 @@ instance hasColimit
 
 中文:
 实例 hasColimit
-  签名: (F : J ⥤ Arrow T) [i₁ : HasColimit (F ⋙ leftFunc)]
+  签名: (F : J ⥤ 箭头 T) [i₁ : 有余极限 (F ⋙ leftFunc)]
   定义体: by
   have : HasColimit (F ⋙ Comma.fst _ _) := i₁
   have : HasColimit (F ⋙ Comma.snd _ _) := i₂
@@ -629,7 +629,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: [HasColimitsOfShape J T]
+  签名: [有形状余极限 J T]
 -/
 instance hasColimitsOfShape [HasColimitsOfShape J T] : HasColimitsOfShape J (Arrow T) where
 
@@ -643,7 +643,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: [HasFiniteColimits T]
+  签名: [有有限余极限 T]
   定义体: inferInstance
 -/
 instance hasFiniteColimits [HasFiniteColimits T] : HasFiniteColimits (Arrow T) where
@@ -659,7 +659,7 @@ instance hasColimits
 
 中文:
 实例 hasColimits
-  签名: [HasColimits T]
+  签名: [有余极限 T]
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance hasColimits [HasColimits T] : HasColimits (Arrow T) :=
@@ -676,7 +676,7 @@ instance preservesColimitsOfShape_leftFunc
 
 中文:
 实例 preservesColimitsOfShape_leftFunc
-  签名: [HasColimitsOfShape J T]
+  签名: [有形状余极限 J T]
   定义体: by
   apply Comma.preservesColimitsOfShape_fst
 
@@ -697,7 +697,7 @@ instance preservesColimitsOfShape_rightFunc
 
 中文:
 实例 preservesColimitsOfShape_rightFunc
-  签名: [HasColimitsOfShape J T]
+  签名: [有形状余极限 J T]
   定义体: by
   apply Comma.preservesColimitsOfShape_snd
 
@@ -722,8 +722,8 @@ instance [G.Faithful]
   body: StructuredArrow.mkIdInitial.hasInitial
 
 中文:
-实例 [G.Faithful]
-  签名: [G.Full] {Y : A}
+实例 [G.忠实]
+  签名: [G.满] {Y : A}
   定义体: StructuredArrow.mkIdInitial.hasInitial
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mkIdInitial.hasInitial, hasInitial, mkIdInitial
@@ -745,7 +745,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: [i₁ : HasLimit (F ⋙ proj X G)] [i₂ : PreservesLimit (F ⋙ proj X G) G]
+  签名: [i₁ : 有极限 (F ⋙ proj X G)] [i₂ : 保持极限 (F ⋙ proj X G) G]
   定义体: by
   have : HasLimit (F ⋙ Comma.snd (Functor.fromPUnit X) G) := i₁
   have : PreservesLimit (F ⋙ Comma.snd (Functor.fromPUnit X) G) _ := i₂
@@ -768,7 +768,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: [HasLimitsOfShape J A] [PreservesLimitsOfShape J G]
+  签名: [有形状极限 J A] [保持形状极限 J G]
 -/
 instance hasLimitsOfShape [HasLimitsOfShape J A] [PreservesLimitsOfShape J G] :
     HasLimitsOfShape J (StructuredArrow X G) where
@@ -783,7 +783,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits A] [PreservesFiniteLimits G]
+  签名: [有有限极限 A] [保持FiniteLimits G]
   定义体: inferInstance
 -/
 instance hasFiniteLimits [HasFiniteLimits A] [PreservesFiniteLimits G] :
@@ -800,7 +800,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: [HasLimitsOfSize.{w, w'} A] [PreservesLimitsOfSize.{w, w'} G]
+  签名: [有LimitsOfSize.{w, w'} A] [保持LimitsOfSize.{w, w'} G]
   定义体: ⟨fun J hJ => by infer_instance⟩
 
 Depends on / 依赖: infer_instance
@@ -824,7 +824,7 @@ instance createsLimit
 
 中文:
 实例 createsLimit
-  签名: [i : PreservesLimit (F ⋙ proj X G) G]
+  签名: [i : 保持极限 (F ⋙ proj X G) G]
   定义体: letI : PreservesLimit (F ⋙ Comma.snd (Functor.fromPUnit X) G) G := i
   createsLimitOfReflectsIso fun _ t =>
     { liftedCone := Comma.coneOfPreserves F punitCone t
@@ -850,7 +850,7 @@ instance createsLimitsOfShape
 
 中文:
 实例 createsLimitsOfShape
-  签名: [PreservesLimitsOfShape J G]
+  签名: [保持形状极限 J G]
 -/
 noncomputable instance createsLimitsOfShape [PreservesLimitsOfShape J G] :
     CreatesLimitsOfShape J (proj X G) where
@@ -865,7 +865,7 @@ instance createsFiniteLimits
 
 中文:
 实例 createsFiniteLimits
-  签名: [PreservesFiniteLimits G]
+  签名: [保持FiniteLimits G]
   定义体: inferInstance
 -/
 noncomputable instance createsFiniteLimits [PreservesFiniteLimits G] :
@@ -881,7 +881,7 @@ instance createsLimitsOfSize
 
 中文:
 实例 createsLimitsOfSize
-  签名: [PreservesLimitsOfSize.{w, w'} G]
+  签名: [保持LimitsOfSize.{w, w'} G]
 -/
 noncomputable instance createsLimitsOfSize [PreservesLimitsOfSize.{w, w'} G] :
     CreatesLimitsOfSize.{w, w'} (proj X G :) where
@@ -896,7 +896,7 @@ instance mono_right_of_mono
 
 中文:
 实例 mono_right_of_mono
-  签名: [HasPullbacks A] [PreservesLimitsOfShape WalkingCospan G]
+  签名: [有Pullbacks A] [保持形状极限 WalkingCospan G]
   定义体: show Mono ((proj X G).map f) from inferInstance
 -/
 instance mono_right_of_mono [HasPullbacks A] [PreservesLimitsOfShape WalkingCospan G]
@@ -913,7 +913,7 @@ theorem mono_iff_mono_right
 
 中文:
 定理 mono_iff_mono_right
-  结论: [HasPullbacks A] [PreservesLimitsOfShape WalkingCospan G]
+  结论: [有Pullbacks A] [保持形状极限 WalkingCospan G]
   证明: ⟨fun _ => inferInstance, fun _ => mono_of_mono_right f⟩
 
 Depends on / 依赖: mono_of_mono_right
@@ -938,7 +938,7 @@ instance hasTerminal
 
 中文:
 实例 hasTerminal
-  签名: [G.Faithful] [G.Full] {Y : A}
+  签名: [G.忠实] [G.满] {Y : A}
   定义体: CostructuredArrow.mkIdTerminal.hasTerminal
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mkIdTerminal.hasTerminal, hasTerminal, mkIdTerminal
@@ -961,7 +961,7 @@ instance hasColimit
 
 中文:
 实例 hasColimit
-  签名: [i₁ : HasColimit (F ⋙ proj G X)] [i₂ : PreservesColimit (F ⋙ proj G X) G]
+  签名: [i₁ : 有余极限 (F ⋙ proj G X)] [i₂ : 保持余极限 (F ⋙ proj G X) G]
   定义体: by
   have : HasColimit (F ⋙ Comma.fst G (Functor.fromPUnit X)) := i₁
   have : PreservesColimit (F ⋙ Comma.fst G (Functor.fromPUnit X)) _ := i₂
@@ -984,7 +984,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: [HasColimitsOfShape J A] [PreservesColimitsOfShape J G]
+  签名: [有形状余极限 J A] [保持形状余极限 J G]
 -/
 instance hasColimitsOfShape [HasColimitsOfShape J A] [PreservesColimitsOfShape J G] :
     HasColimitsOfShape J (CostructuredArrow G X) where
@@ -999,7 +999,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: [HasFiniteColimits A] [PreservesFiniteColimits G]
+  签名: [有有限余极限 A] [保持FiniteColimits G]
   定义体: inferInstance
 -/
 instance hasFiniteColimits [HasFiniteColimits A] [PreservesFiniteColimits G] :
@@ -1016,7 +1016,7 @@ instance hasColimitsOfSize
 
 中文:
 实例 hasColimitsOfSize
-  签名: [HasColimitsOfSize.{w, w'} A] [PreservesColimitsOfSize.{w, w'} G]
+  签名: [有余limitsOfSize.{w, w'} A] [保持余limitsOfSize.{w, w'} G]
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance hasColimitsOfSize [HasColimitsOfSize.{w, w'} A] [PreservesColimitsOfSize.{w, w'} G] :
@@ -1038,7 +1038,7 @@ instance createsColimit
 
 中文:
 实例 createsColimit
-  签名: [i : PreservesColimit (F ⋙ proj G X) G]
+  签名: [i : 保持余极限 (F ⋙ proj G X) G]
   定义体: letI : PreservesColimit (F ⋙ Comma.fst G (Functor.fromPUnit X)) G := i
   createsColimitOfReflectsIso fun _ t =>
     { liftedCocone := Comma.coconeOfPreserves F t punitCocone
@@ -1064,7 +1064,7 @@ instance createsColimitsOfShape
 
 中文:
 实例 createsColimitsOfShape
-  签名: [PreservesColimitsOfShape J G]
+  签名: [保持形状余极限 J G]
 -/
 noncomputable instance createsColimitsOfShape [PreservesColimitsOfShape J G] :
     CreatesColimitsOfShape J (proj G X) where
@@ -1079,7 +1079,7 @@ instance createsFiniteColimits
 
 中文:
 实例 createsFiniteColimits
-  签名: [PreservesFiniteColimits G]
+  签名: [保持FiniteColimits G]
   定义体: inferInstance
 -/
 noncomputable instance createsFiniteColimits [PreservesFiniteColimits G] :
@@ -1095,7 +1095,7 @@ instance createsColimitsOfSize
 
 中文:
 实例 createsColimitsOfSize
-  签名: [PreservesColimitsOfSize.{w, w'} G]
+  签名: [保持余limitsOfSize.{w, w'} G]
 -/
 noncomputable instance createsColimitsOfSize [PreservesColimitsOfSize.{w, w'} G] :
     CreatesColimitsOfSize.{w, w'} (proj G X :) where
@@ -1110,7 +1110,7 @@ instance epi_left_of_epi
 
 中文:
 实例 epi_left_of_epi
-  签名: [HasPushouts A] [PreservesColimitsOfShape WalkingSpan G]
+  签名: [有Pushouts A] [保持形状余极限 WalkingSpan G]
   定义体: show Epi ((proj G X).map f) from inferInstance
 -/
 instance epi_left_of_epi [HasPushouts A] [PreservesColimitsOfShape WalkingSpan G]
@@ -1127,7 +1127,7 @@ theorem epi_iff_epi_left
 
 中文:
 定理 epi_iff_epi_left
-  结论: [HasPushouts A] [PreservesColimitsOfShape WalkingSpan G]
+  结论: [有Pushouts A] [保持形状余极限 WalkingSpan G]
   证明: ⟨fun _ => inferInstance, fun _ => epi_of_epi_left f⟩
 
 Depends on / 依赖: epi_of_epi_left

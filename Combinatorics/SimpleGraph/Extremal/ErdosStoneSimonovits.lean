@@ -322,7 +322,7 @@ theorem filter.pi.exists_le_card_fiber
   calc #(K.parts.pi (·.powersetCard t)) * 
 
 中文:
-定理 filter.pi.exists_le_card_fiber
+定理 filter.pi.存在_le_card_fiber
   结论: (hr_pos : 0 < r) (ht'_pos : 0 < t')
   证明: by
   have : Nonempty (K.parts.pi (·.powersetCard t)) := by

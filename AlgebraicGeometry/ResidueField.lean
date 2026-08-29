@@ -73,7 +73,7 @@ definition residue
 
 中文:
 定义 residue
-  签名: (X : Scheme.{u}) (x)
+  签名: (X : 概形.{u}) (x)
   定义体: CommRingCat.ofHom (IsLocalRing.residue (X.presheaf.stalk x))
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalRing, IsLocalRing.residue, X.presheaf.stalk, presheaf, residue
@@ -100,7 +100,7 @@ lemma SpecMap_residue_apply
 
 中文:
 引理 SpecMap_residue_apply
-  条件: {X : Scheme.{u}} (x : X) (s : Spec (X.residueField x))
+  条件: {X : 概形.{u}} (x : X) (s : Spec (X.residueField x))
   证明: IsLocalRing.PrimeSpectrum.comap_residue _ s
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.PrimeSpectrum.comap_residue, PrimeSpectrum, comap_residue
@@ -120,8 +120,8 @@ lemma residue_surjective
 
 中文:
 引理 residue_surjective
-  条件: (X : Scheme.{u}) (x)
-  结论: Function.Surjective (X.residue x)
+  条件: (X : 概形.{u}) (x)
+  结论: 函数.满射 (X.residue x)
   证明: Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
@@ -144,7 +144,7 @@ definition descResidueField
 
 中文:
 定义 descResidueField
-  签名: {K : 类型u} [Field K] {X : Scheme.{u}} {x : X}
+  签名: {K : 类型u} [域 K] {X : 概形.{u}} {x : X}
   定义体: CommRingCat.ofHom (IsLocalRing.ResidueField.lift (S := K) f.hom)
 
 @[reassoc (attr := simp)]
@@ -167,7 +167,7 @@ lemma residue_descResidueField
 
 中文:
 引理 residue_descResidueField
-  结论: {K : 类型u} [Field K] {X : Scheme.{u}} {x}
+  结论: {K : 类型u} [域 K] {X : 概形.{u}} {x}
   证明: CommRingCat.hom_ext RingHom.ext fun _ => rfl
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_ext, RingHom, RingHom.ext, hom_ext
@@ -287,7 +287,7 @@ lemma basicOpen_eq_bot_iff_forall_evaluation_eq_zero
   proof: X.toLocallyRingedSpace.basicOpen_eq_bot_iff_forall_evaluation_eq_zero f
 
 中文:
-引理 basicOpen_eq_bot_iff_forall_evaluation_eq_zero
+引理 basicOpen_eq_bot_iff_对任意_evaluation_eq_zero
   条件: (f : X.presheaf.obj (op U))
   证明: X.toLocallyRingedSpace.basicOpen_eq_bot_iff_forall_evaluation_eq_zero f
 
@@ -310,7 +310,7 @@ definition Hom.residueFieldMap
 @[reassoc]
 
 中文:
-定义 Hom.residueFieldMap
+定义 态射.residueFieldMap
   签名: (f : X ⟶ Y) (x : X)
   定义体: CommRingCat.ofHom IsLocalRing.ResidueField.map (f.stalkMap x).hom
 
@@ -386,7 +386,7 @@ lemma residueFieldMap_comp
 
 中文:
 引理 residueFieldMap_comp
-  条件: {Z : Scheme.{u}} (g : Y ⟶ Z) (x : X)
+  条件: {Z : 概形.{u}} (g : Y ⟶ Z) (x : X)
   证明: LocallyRingedSpace.residueFieldMap_comp _ _ _
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.residueFieldMap_comp, residueFieldMap_comp
@@ -407,7 +407,7 @@ definition Hom.residueDegree
 @[simp]
 
 中文:
-定义 Hom.residueDegree
+定义 态射.residueDegree
   签名: (f : X ⟶ Y) (x : X)
   定义体: letI := (f.residueFieldMap x).hom.toAlgebra
   Module.finrank (Y.residueField (f x)) (X.residueField x)
@@ -436,7 +436,7 @@ lemma Hom.residueDegree_id
 @[reassoc]
 
 中文:
-引理 Hom.residueDegree_id
+引理 态射.residueDegree_id
   条件: (x : X)
   结论: (𝟙 _ : X ⟶ X).residueDegree x = 1
   证明: by
@@ -547,8 +547,8 @@ instance [IsOpenImmersion
     (asIso (f.stalkMap x)).commRingCatIsoToRingEquiv).toCommRingCatIso.isIso_hom
 
 中文:
-实例 [IsOpenImmersion
-  签名: f] (x) : IsIso (f.residueFieldMap x)
+实例 [是开浸入
+  签名: f] (x) : 是同构 (f.residueFieldMap x)
   定义体: (IsLocalRing.ResidueField.mapEquiv
     (asIso (f.stalkMap x)).commRingCatIsoToRingEquiv).toCommRingCatIso.isIso_hom
 
@@ -689,7 +689,7 @@ lemma residueFieldCongr_trans_hom
 
 中文:
 引理 residueFieldCongr_trans_hom
-  条件: (X : Scheme) {x y z : X} (e : x = y) (e' : y = z)
+  条件: (X : 概形) {x y z : X} (e : x = y) (e' : y = z)
   证明: by
   subst e e'
   rfl
@@ -715,7 +715,7 @@ lemma residue_residueFieldCongr
 
 中文:
 引理 residue_residueFieldCongr
-  条件: (X : Scheme) {x y : X} (h : x = y)
+  条件: (X : 概形) {x y : X} (h : x = y)
   证明: by
   subst h
   simp
@@ -738,7 +738,7 @@ lemma Hom.residueFieldMap_congr
 @[reassoc]
 
 中文:
-引理 Hom.residueFieldMap_congr
+引理 态射.residueFieldMap_congr
   条件: {f g : X ⟶ Y} (e : f = g) (x : X)
   证明: by
   subst e; simp
@@ -761,7 +761,7 @@ lemma Hom.residueFieldMap_congr'
   simp
 
 中文:
-引理 Hom.residueFieldMap_congr'
+引理 态射.residueFieldMap_congr'
   条件: {f : X ⟶ Y} {x₁ x₂ : X} (e : x₁ = x₂)
   证明: by
   subst e
@@ -787,7 +787,7 @@ definition fromSpecResidueField
 
 中文:
 定义 fromSpecResidueField
-  签名: (X : Scheme) (x : X)
+  签名: (X : 概形) (x : X)
   定义体: Spec.map (X.residue x) ≫ X.fromSpecStalk x
 
 Depends on / 依赖: Spec.map, X.fromSpecStalk, X.residue, fromSpecStalk, residue
@@ -847,7 +847,7 @@ lemma Hom.SpecMap_residueFieldMap_fromSpecResidueField
 @[simp]
 
 中文:
-引理 Hom.SpecMap_residueFieldMap_fromSpecResidueField
+引理 态射.SpecMap_residueFieldMap_fromSpecResidueField
   条件: (x : X)
   证明: by
   dsimp only [fromSpecResidueField]
@@ -921,7 +921,7 @@ lemma descResidueField_fromSpecResidueField
 
 中文:
 引理 descResidueField_fromSpecResidueField
-  结论: {K : 类型} [Field K] (X : Scheme) {x}
+  结论: {K : 类型} [域 K] (X : 概形) {x}
   证明: by
   simp [fromSpecResidueField, ← Spec.map_comp_assoc]
 
@@ -1075,7 +1075,7 @@ lemma SpecToEquivOfField_eq_iff
 
 中文:
 引理 SpecToEquivOfField_eq_iff
-  结论: {K : 类型} [Field K] {X : Scheme}
+  结论: {K : 类型} [域 K] {X : 概形}
   证明: by
   constructor
   · rintro rfl
@@ -1115,7 +1115,7 @@ definition SpecToEquivOfField
 
 中文:
 定义 SpecToEquivOfField
-  签名: (K : 类型u) [Field K] (X : Scheme.{u})
+  签名: (K : 类型u) [域 K] (X : 概形.{u})
   定义体: ⟨_, X.descResidueField (Scheme.stalkClosedPointTo f)⟩
   invFun xf := Spec.map xf.2 ≫ X.fromSpecResidueField xf.1
   left_inv := Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField K X
@@ -1153,7 +1153,7 @@ lemma descResidueField_stalkClosedPointTo_comp
 
 中文:
 引理 descResidueField_stalkClosedPointTo_comp
-  条件: {K : 类型u} [Field K] (g : Spec (.of K) ⟶ X)
+  条件: {K : 类型u} [域 K] (g : Spec (.of K) ⟶ X)
   证明: by
   simp [← cancel_epi (Y.residue _), stalkClosedPointTo_comp, residue_residueFieldMap_assoc]
 

@@ -71,7 +71,7 @@ definition sigma
 
 中文:
 定义 sigma
-  签名: (M : (i : ι) -> Matroid (α i))
+  签名: (M : (i : ι) -> 拟阵 (α i))
   定义体: univ.sigma (fun i => (M i).E)
   Indep I := forall i, (M i).Indep (Sigma.mk i ⁻¹' I)
   IsBase B := forall i, (M i).IsBase (Sigma.mk i ⁻¹' B)
@@ -171,7 +171,7 @@ lemma sigma_ground_eq
 
 中文:
 引理 sigma_ground_eq
-  结论: (Matroid.sigma M).E = univ.sigma fun i => (M i).E
+  结论: (拟阵.sigma M).E = univ.sigma fun i => (M i).E
   证明: rfl
 -/
 @[simp] lemma sigma_ground_eq : (Matroid.sigma M).E = univ.sigma fun i => (M i).E := rfl
@@ -241,7 +241,7 @@ lemma Finitary.sigma
 中文:
 引理 Finitary.sigma
   条件: (h : 对任意 i, (M i).Finitary)
-  结论: (Matroid.sigma M).Finitary
+  结论: (拟阵.sigma M).Finitary
   证明: by
   refine ⟨fun I hI => ?_⟩
   simp only [sigma_indep_iff] at hI ⊢
@@ -277,8 +277,8 @@ definition sum'
   body: (Matroid.sigma M).mapEquiv Equiv.sigmaEquivProd ι α
 
 中文:
-定义 sum'
-  签名: (M : ι -> Matroid α)
+定义 求和'
+  签名: (M : ι -> 拟阵 α)
   定义体: (Matroid.sigma M).mapEquiv Equiv.sigmaEquivProd ι α
 -/
 protected def sum' (M : ι -> Matroid α) : Matroid (ι × α) :=
@@ -297,7 +297,7 @@ lemma sum'_indep_iff
   simp
 
 中文:
-引理 sum'_indep_iff
+引理 求和'_indep_iff
   条件: {I}
   证明: by
   simp only [Matroid.sum', mapEquiv_indep_iff, Equiv.sigmaEquivProd_symm_apply, sigma_indep_iff]
@@ -324,8 +324,8 @@ lemma sum'_ground_eq
   simp [Matroid.sum']
 
 中文:
-引理 sum'_ground_eq
-  条件: (M : ι -> Matroid α)
+引理 求和'_ground_eq
+  条件: (M : ι -> 拟阵 α)
   证明: by
   ext
   simp [Matroid.sum']
@@ -348,7 +348,7 @@ lemma sum'_isBase_iff
   simp
 
 中文:
-引理 sum'_isBase_iff
+引理 求和'_isBase_iff
   条件: {B}
   证明: by
   simp only [Matroid.sum', mapEquiv_isBase_iff, Equiv.sigmaEquivProd_symm_apply, sigma_isBase_iff]
@@ -375,7 +375,7 @@ lemma sum'_isBasis_iff
 exact ext by simp
 
 中文:
-引理 sum'_isBasis_iff
+引理 求和'_isBasis_iff
   条件: {I X}
   证明: by
   simp only [Matroid.sum', mapEquiv_isBasis_iff, Equiv.sigmaEquivProd_symm_apply, sigma_isBasis_iff]
@@ -401,9 +401,9 @@ lemma Finitary.sum'
   infer_instance
 
 中文:
-引理 Finitary.sum'
+引理 Finitary.求和'
   条件: (h : 对任意 i, (M i).Finitary)
-  结论: (Matroid.sum' M).Finitary
+  结论: (拟阵.求和' M).Finitary
   证明: by
   have := Finitary.sigma h
   rw [Matroid.sum']
@@ -435,7 +435,7 @@ definition disjointSigma
 
 中文:
 定义 disjointSigma
-  签名: (M : ι -> Matroid α) (h : Pairwise (Disjoint on fun i => (M i).E))
+  签名: (M : ι -> 拟阵 α) (h : 两两 (Disjoint on fun i => (M i).E))
   定义体: (Matroid.sigma (fun i => (M i).restrictSubtype (M i).E)).mapEmbedding
     (Function.Embedding.sigmaSet h)
 -/
@@ -457,7 +457,7 @@ lemma disjointSigma_ground_eq
 中文:
 引理 disjointSigma_ground_eq
   条件: {h}
-  结论: (Matroid.disjointSigma M h).E = ⋃ i : ι, (M i).E
+  结论: (拟阵.disjointSigma M h).E = ⋃ i : ι, (M i).E
   证明: by
   ext; simp [Matroid.disjointSigma, mapEmbedding, restrictSubtype]
 -/
@@ -541,8 +541,8 @@ definition sum
   (S.mapEquiv e.symm).mapEquiv (Equiv.sumCongr Equiv.ulift Equiv.ulift)
 
 中文:
-定义 sum
-  签名: (M : Matroid α) (N : Matroid β)
+定义 求和
+  签名: (M : 拟阵 α) (N : 拟阵 β)
   定义体: let S := Matroid.sigma (Bool.rec (M.mapEquiv Equiv.ulift.symm) (N.mapEquiv Equiv.ulift.symm))
   let e := Equiv.sumEquivSigmaBool (ULift.{v} α) (ULift.{u} β)
   (S.mapEquiv e.symm).mapEquiv (Equiv.sumCongr Equiv.ulift Equiv.ulift)
@@ -564,7 +564,7 @@ lemma sum_ground
 
 中文:
 引理 sum_ground
-  条件: (M : Matroid α) (N : Matroid β)
+  条件: (M : 拟阵 α) (N : 拟阵 β)
   证明: by
   simp [Matroid.sum, Set.ext_iff, mapEquiv, mapEmbedding, Equiv.ulift, Equiv.sumEquivSigmaBool]
 -/
@@ -587,7 +587,7 @@ lemma sum_indep_iff
 
 中文:
 引理 sum_indep_iff
-  条件: (M : Matroid α) (N : Matroid β) {I : Set (α oplus β)}
+  条件: (M : 拟阵 α) (N : 拟阵 β) {I : 集合 (α oplus β)}
   证明: by
   simp only [Matroid.sum, mapEquiv_indep_iff, Equiv.sumCongr_symm, Equiv.sumCongr_apply,
     Equiv.symm_symm, sigma_indep_iff, Bool.forall_bool]
@@ -616,7 +616,7 @@ lemma sum_isBase_iff
 
 中文:
 引理 sum_isBase_iff
-  条件: {M : Matroid α} {N : Matroid β} {B : Set (α oplus β)}
+  条件: {M : 拟阵 α} {N : 拟阵 β} {B : 集合 (α oplus β)}
   证明: by
   simp only [Matroid.sum, mapEquiv_isBase_iff, Equiv.sumCongr_symm, Equiv.sumCongr_apply,
     Equiv.symm_symm, sigma_isBase_iff, Bool.forall_bool]
@@ -645,7 +645,7 @@ convert! Iff.rfl <;> exact ext by simp
 
 中文:
 引理 sum_isBasis_iff
-  条件: {M : Matroid α} {N : Matroid β} {I X : Set (α oplus β)}
+  条件: {M : 拟阵 α} {N : 拟阵 β} {I X : 集合 (α oplus β)}
   证明: by
   simp only [Matroid.sum, mapEquiv_isBasis_iff, Equiv.sumCongr_symm,
     Equiv.sumCongr_apply, Equiv.symm_symm, sigma_isBasis_iff, Bool.forall_bool,
@@ -676,7 +676,7 @@ definition disjointSum
 
 中文:
 定义 disjointSum
-  签名: (M N : Matroid α) (h : Disjoint M.E N.E)
+  签名: (M N : 拟阵 α) (h : Disjoint M.E N.E)
   定义体: ((M.restrictSubtype M.E).sum (N.restrictSubtype N.E)).mapEmbedding Function.Embedding.sumSet h
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.sumSet, M.restrictSubtype, N.restrictSubtype, mapEmbedding, restrictSubtype, sumSet

@@ -44,7 +44,7 @@ theorem WfDvdMonoid.max_power_factor'
 
 中文:
 定理 WfDvdMonoid.max_power_factor'
-  结论: [CommMonoidWithZero α] [WfDvdMonoid α] {a₀ x : α}
+  结论: [带零交换幺半群 α] [WfDvdMonoid α] {a₀ x : α}
   证明: by
   obtain ⟨a, ⟨n, rfl⟩, hm⟩ := wellFounded_dvdNotUnit.has_min
     {a | exists n, x ^ n * a = a₀} ⟨a₀, 0, by rw [pow_zero, one_mul]⟩
@@ -72,7 +72,7 @@ theorem WfDvdMonoid.max_power_factor
 
 中文:
 定理 WfDvdMonoid.max_power_factor
-  结论: [CommMonoidWithZero α] [WfDvdMonoid α] {a₀ x : α}
+  结论: [带零交换幺半群 α] [WfDvdMonoid α] {a₀ x : α}
   证明: max_power_factor' h hx.not_isUnit
 
 Depends on / 依赖: hx.not_isUnit, max_power_factor, not_isUnit
@@ -93,7 +93,7 @@ theorem FiniteMultiplicity.of_not_isUnit
 
 中文:
 定理 FiniteMultiplicity.of_not_isUnit
-  结论: [CommMonoidWithZero α] [IsCancelMulZero α] [WfDvdMonoid α]
+  结论: [带零交换幺半群 α] [是乘零消去 α] [WfDvdMonoid α]
   证明: by
   obtain ⟨n, c, ndvd, rfl⟩ := WfDvdMonoid.max_power_factor' hb ha
   exact ⟨n, by rwa [pow_succ, mul_dvd_mul_iff_left (left_ne_zero_of_mul hb)]⟩
@@ -115,7 +115,7 @@ theorem FiniteMultiplicity.of_prime_left
 
 中文:
 定理 FiniteMultiplicity.of_prime_left
-  结论: [CommMonoidWithZero α] [IsCancelMulZero α] [WfDvdMonoid α]
+  结论: [带零交换幺半群 α] [是乘零消去 α] [WfDvdMonoid α]
   证明: .of_not_isUnit ha.not_isUnit hb
 
 Depends on / 依赖: ha.not_isUnit, not_isUnit, of_not_isUnit
@@ -154,7 +154,7 @@ theorem le_emultiplicity_iff_replicate_le_normalizedFactors
 
 中文:
 定理 le_emultiplicity_iff_replicate_le_normalizedFactors
-  结论: {a b : R} {n : 自然数} (ha : Irreducible a)
+  结论: {a b : R} {n : 自然数} (ha : 不可约 a)
   证明: by
   rw [← pow_dvd_iff_le_emultiplicity]
   revert b
@@ -205,7 +205,7 @@ theorem emultiplicity_eq_count_normalizedFactors
 
 中文:
 定理 emultiplicity_eq_count_normalizedFactors
-  条件: {a b : R} (ha : Irreducible a) (hb : b != 0)
+  条件: {a b : R} (ha : 不可约 a) (hb : b != 0)
   证明: by
   apply le_antisymm
   · apply Order.le_of_lt_add_one
@@ -236,7 +236,7 @@ theorem multiplicity_eq_count_normalizedFactors
 
 中文:
 定理 multiplicity_eq_count_normalizedFactors
-  条件: {a b : R} (ha : Irreducible a) (hb : b != 0)
+  条件: {a b : R} (ha : 不可约 a) (hb : b != 0)
   证明: by
   have := emultiplicity_eq_count_normalizedFactors ha hb
   rwa [(finiteMultiplicity_of_emultiplicity_eq_natCast this).emultiplicity_eq_multiplicity,
@@ -266,7 +266,7 @@ theorem count_normalizedFactors_eq
 
 中文:
 定理 count_normalizedFactors_eq
-  结论: {p x : R} (hp : Irreducible p) (hnorm : normalize p = p) {n : 自然数}
+  结论: {p x : R} (hp : 不可约 p) (hnorm : normalize p = p) {n : 自然数}
   证明: by
   by_cases hx0 : x = 0
   · simp [hx0] at hlt
@@ -303,7 +303,7 @@ theorem count_normalizedFactors_eq'
 
 中文:
 定理 count_normalizedFactors_eq'
-  结论: {p x : R} (hp : p = 0 ∨ Irreducible p) (hnorm : normalize p = p)
+  结论: {p x : R} (hp : p = 0 ∨ 不可约 p) (hnorm : normalize p = p)
   证明: by
   rcases hp with (rfl | hp)
   · cases n
@@ -358,7 +358,7 @@ lemma finprod_pow_count_eq_of_subsingleton_units
 
 中文:
 引理 finprod_pow_count_eq_of_subsingleton_units
-  条件: [Subsingleton Rˣ] {x : R} (hx : x != 0)
+  条件: [子单例 Rˣ] {x : R} (hx : x != 0)
   证明: associated_iff_eq.mp associated_finprod_pow_count hx
 
 Depends on / 依赖: associated_finprod_pow_count, associated_iff_eq, associated_iff_eq.mp
@@ -470,7 +470,7 @@ lemma hasFiniteMulSupport_fun_pow_multiplicity
 
 中文:
 引理 hasFiniteMulSupport_fun_pow_multiplicity
-  结论: {α M : 类型} [CommMonoid M] [Subsingleton Rˣ]
+  结论: {α M : 类型} [交换幺半群 M] [子单例 Rˣ]
   证明: by
   classical
   simp only [multiplicity_eq_count_normalizedFactors (hg _) hr, normalize_eq]

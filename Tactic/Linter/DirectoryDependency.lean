@@ -45,7 +45,7 @@ f n > match n with
 
 中文:
 定义 Lean.Name.findPrefix
-  签名: {α} (f : Name -> Option α) (n : Name)
+  签名: {α} (f : Name -> 选项类型 α) (n : Name)
   定义体: do
 f n > match n with
     | anonymous => none
@@ -122,7 +122,7 @@ definition Lean.Name.collectPrefixes
 
 中文:
 定义 Lean.Name.collectPrefixes
-  签名: (ns : Array Name)
+  签名: (ns : 数组 Name)
   定义体: ns.foldl (fun ns n => ns.append n.prefixes) ∅
 
 Depends on / 依赖: append, n.prefixes, ns.append, ns.foldl, prefixes
@@ -140,7 +140,7 @@ definition Lean.Name.prefixToName
 
 中文:
 定义 Lean.Name.prefixToName
-  签名: (p : Name) (ns : Array Name)
+  签名: (p : Name) (ns : 数组 Name)
   定义体: ns.find? p.isPrefixOf
 
 Depends on / 依赖: isPrefixOf, ns.find, p.isPrefixOf
@@ -235,7 +235,7 @@ definition ofArray
 
 中文:
 定义 ofArray
-  签名: (xs : Array (Name × Name))
+  签名: (xs : 数组 (Name × Name))
   定义体: xs.foldl (init := ∅)
     fun r (n₁, n₂) => r.insert n₁ n₂
 
@@ -299,7 +299,7 @@ definition findAny
 
 中文:
 定义 findAny
-  签名: (r : NamePrefixRel) (n₁ : Name) (ns : Array Name)
+  签名: (r : NamePrefixRel) (n₁ : Name) (ns : 数组 Name)
   定义体: let prefixes := Lean.Name.collectPrefixes ns
   n₁.findPrefix fun n₁' => do
     let ns ← r.find? n₁'
@@ -957,7 +957,7 @@ definition checkBlocklist
 
 中文:
 定义 checkBlocklist
-  签名: (env : Environment) (mainModule : Name) (imports : Array Name)
+  签名: (env : Environment) (mainModule : Name) (imports : 数组 Name)
   定义体: Id.run do
   match forbiddenImportDirs.findAny mainModule imports with
   | some (n₁, n₂) => do

@@ -138,8 +138,8 @@ theorem IsCompl.isTopCompl_of_isClosed
   exact (p.prodEquivOfIsCompl q h).continuous_symm (continuous_prodEquivOfIsCompl h)
 
 中文:
-定理 IsCompl.isTopCompl_of_isClosed
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+定理 是补集.isTopCompl_of_isClosed
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: by
   have := hp.completeSpace_coe; have := hq.completeSpace_coe
   rw [isTopCompl_iff_continuous_symm_prodEquivOfIsCompl h]
@@ -189,7 +189,7 @@ definition prodEquivOfClosedCompl
 
 中文:
 定义 prodEquivOfClosedCompl
-  签名: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  签名: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   定义体: by
   haveI := hp.completeSpace_coe; haveI := hq.completeSpace_coe
   refine (p.prodEquivOfIsCompl q h).toContinuousLinearEquivOfContinuous ?_
@@ -215,7 +215,7 @@ definition linearProjOfClosedCompl
 
 中文:
 定义 linearProjOfClosedCompl
-  签名: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  签名: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   定义体: ContinuousLinearMap.fst 𝕜 p q ∘L ↑(prodEquivOfClosedCompl p q h hp hq).symm
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.fst, prodEquivOfClosedCompl
@@ -239,7 +239,7 @@ theorem coe_prodEquivOfClosedCompl
 
 中文:
 定理 coe_prodEquivOfClosedCompl
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: rfl
 
 @[deprecated "Use `coe_symm_prodEquivOfIsTopCompl` instead" (since := "2026-06-07")]
@@ -261,7 +261,7 @@ theorem coe_prodEquivOfClosedCompl_symm
 
 中文:
 定理 coe_prodEquivOfClosedCompl_symm
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: rfl
 
 @[deprecated "Use `toLinearMap_projectionOntoL` instead" (since := "2026-06-07")]
@@ -283,7 +283,7 @@ theorem coe_continuous_linearProjOfClosedCompl
 
 中文:
 定理 coe_continuous_linearProjOfClosedCompl
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: rfl
 
 @[deprecated "Use `coe_projectionOntoL` instead" (since := "2026-06-07")]
@@ -303,7 +303,7 @@ theorem coe_continuous_linearProjOfClosedCompl'
 
 中文:
 定理 coe_continuous_linearProjOfClosedCompl'
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: rfl
 -/
 theorem coe_continuous_linearProjOfClosedCompl' (h : IsCompl p q) (hp : IsClosed (p : Set E))
@@ -322,7 +322,7 @@ alias IsCompl.closedComplemented_of_isClosed := ClosedComplemented.of_isCompl_is
 
 中文:
 定理 ClosedComplemented.of_isCompl_isClosed
-  结论: (h : IsCompl p q) (hp : IsClosed (p : Set E))
+  结论: (h : 是补集 p q) (hp : 是闭集 (p : 集合 E))
   证明: (IsCompl.isTopCompl_of_isClosed h hp hq).closedComplemented
 
 alias IsCompl.closedComplemented_of_isClosed := ClosedComplemented.of_isCompl_isClosed
@@ -344,7 +344,7 @@ theorem closedComplemented_iff_isClosed_exists_isClosed_isCompl
     fun ⟨hp, ⟨_, hq, hpq⟩⟩ => .of_isCompl_isClosed hpq hp hq⟩
 
 中文:
-定理 closedComplemented_iff_isClosed_exists_isClosed_isCompl
+定理 closedComplemented_iff_isClosed_存在_isClosed_isCompl
   证明: ⟨fun h => ⟨h.isClosed, h.exists_isClosed_isCompl⟩,
     fun ⟨hp, ⟨_, hq, hpq⟩⟩ => .of_isCompl_isClosed hpq hp hq⟩
 

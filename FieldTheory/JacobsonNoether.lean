@@ -72,7 +72,7 @@ lemma exists_pow_mem_center_of_inseparable
   obtain ⟨n, ⟨m, hm⟩⟩ := th
 
 中文:
-引理 exists_pow_mem_center_of_inseparable
+引理 存在_pow_mem_center_of_inseparable
   结论: (p : 自然数) [hchar : ExpChar D p] (a : D)
   证明: by
   have := (@isPurelyInseparable_iff_pow_mem k D _ _ _ _ p (ExpChar.expChar_center_iff.2 hchar)).1
@@ -108,7 +108,7 @@ lemma exists_pow_mem_center_of_inseparable'
   exact ⟨n, ⟨Nat.one_le_iff_ne_zero.mpr nzero, hn⟩⟩
 
 中文:
-引理 exists_pow_mem_center_of_inseparable'
+引理 存在_pow_mem_center_of_inseparable'
   结论: (p : 自然数) [ExpChar D p] {a : D}
   证明: by
   obtain ⟨n, hn⟩ := exists_pow_mem_center_of_inseparable p a hinsep
@@ -183,8 +183,8 @@ theorem exists_separable_and_not_isCentral
 obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr 
 
 中文:
-定理 exists_separable_and_not_isCentral
-  条件: (H : k != (⊤ : Subring D))
+定理 存在_separable_and_not_isCentral
+  条件: (H : k != (⊤ : 子环 D))
   证明: by
   obtain ⟨p, hp⟩ := ExpChar.exists D
   by_contra! insep
@@ -272,8 +272,8 @@ theorem exists_separable_and_not_isCentral'
   set equ
 
 中文:
-定理 exists_separable_and_not_isCentral'
-  结论: {L D : 类型} [Field L] [DivisionRing D]
+定理 存在_separable_and_not_isCentral'
+  结论: {L D : 类型} [域 L] [除环 D]
   证明: by
   have hcenter : Subalgebra.center L D = ⊥ := le_bot_iff.mp IsCentral.out
   have ntrivial : Subring.center D != ⊤ :=

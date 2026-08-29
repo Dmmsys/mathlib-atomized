@@ -52,7 +52,7 @@ structure State
   公理与运算 (3 个):
     - visited : NameSet  [默认: {}]
     - sorries : Std.HashSet Expr  [默认: {}]
-    - sorryMsgs : Array MessageData  [默认: #[]]
+    - sorryMsgs : 数组 MessageData  [默认: #[]]
 -/
 structure State where
   /-- The set of already visited declarations. -/
@@ -155,7 +155,7 @@ definition collectSorries
 
 中文:
 定义 collectSorries
-  签名: (constNames : Array Name)
+  签名: (constNames : 数组 Name)
   定义体: do
   let (_, s) ← (constNames.forM collect).run {}
   pure s.sorryMsgs
@@ -193,7 +193,7 @@ let mut names ← liftCoreM idents.flatMapM fun id =>
 
 中文:
 定义 evalCollectSorries
-  签名: (names : Array Name)
+  签名: (names : 数组 Name)
   定义体: do
 let msgs ← liftTermElabM collectSorries names
   if msgs.isEmpty then

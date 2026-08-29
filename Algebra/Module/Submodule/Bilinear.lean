@@ -52,7 +52,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q : Submodule R N)
+  签名: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q : 子模 R N)
   定义体: ⨆ s : p, q.map (f s)
 
 Depends on / 依赖: q.map
@@ -70,7 +70,7 @@ theorem apply_mem_map₂
 
 中文:
 定理 apply_mem_map₂
-  结论: (f : M ->ₗ[R] N ->ₗ[R] P) {m : M} {n : N} {p : Submodule R M}
+  结论: (f : M ->ₗ[R] N ->ₗ[R] P) {m : M} {n : N} {p : 子模 R M}
   证明: (le_iSup _ ⟨m, hm⟩ : _ <= map₂ f p q) ⟨n, hn, by rfl⟩
 
 Depends on / 依赖: le_iSup
@@ -90,7 +90,7 @@ theorem map₂_le
 
 中文:
 定理 map₂_le
-  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p : Submodule R M} {q : Submodule R N}
+  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p : 子模 R M} {q : 子模 R N}
   证明: ⟨fun H _m hm _n hn => H apply_mem_map₂ _ hm hn, fun H =>
     iSup_le fun ⟨m, hm⟩ => map_le_iff_le_comap.2 fun n hn => H m hm n hn⟩
 
@@ -124,7 +124,7 @@ theorem map₂_span_span
 
 中文:
 定理 map₂_span_span
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : Set M) (t : Set N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : 集合 M) (t : 集合 N)
   证明: by
   apply le_antisymm
   · rw [map₂_le]
@@ -174,7 +174,7 @@ theorem map₂_bot_right
 
 中文:
 定理 map₂_bot_right
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M)
   结论: map₂ f p ⊥ = ⊥
   证明: eq_bot_iff.2
     map₂_le.2 fun m _hm n hn => by
@@ -208,7 +208,7 @@ theorem map₂_bot_left
 
 中文:
 定理 map₂_bot_left
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (q : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (q : 子模 R N)
   结论: map₂ f ⊥ q = ⊥
   证明: eq_bot_iff.2
     map₂_le.2 fun m hm n _ => by
@@ -236,7 +236,7 @@ theorem map₂_le_map₂
 
 中文:
 定理 map₂_le_map₂
-  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p₁ p₂ : Submodule R M} {q₁ q₂ : Submodule R N}
+  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p₁ p₂ : 子模 R M} {q₁ q₂ : 子模 R N}
   证明: map₂_le.2 fun _m hm _n hn => apply_mem_map₂ _ (hp hm) (hq hn)
 -/
 theorem map₂_le_map₂ {f : M ->ₗ[R] N ->ₗ[R] P} {p₁ p₂ : Submodule R M} {q₁ q₂ : Submodule R N}
@@ -253,7 +253,7 @@ theorem map₂_le_map₂_left
 
 中文:
 定理 map₂_le_map₂_left
-  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p₁ p₂ : Submodule R M} {q : Submodule R N}
+  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p₁ p₂ : 子模 R M} {q : 子模 R N}
   证明: map₂_le_map₂ h (le_refl q)
 
 Depends on / 依赖: le_refl
@@ -272,7 +272,7 @@ theorem map₂_le_map₂_right
 
 中文:
 定理 map₂_le_map₂_right
-  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p : Submodule R M} {q₁ q₂ : Submodule R N}
+  结论: {f : M ->ₗ[R] N ->ₗ[R] P} {p : 子模 R M} {q₁ q₂ : 子模 R N}
   证明: map₂_le_map₂ (le_refl p) h
 
 Depends on / 依赖: le_refl
@@ -295,7 +295,7 @@ theorem map₂_sup_right
 
 中文:
 定理 map₂_sup_right
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q₁ q₂ : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q₁ q₂ : 子模 R N)
   证明: le_antisymm
     (map₂_le.2 fun _m hm _np hnp =>
       let ⟨_n, hn, _p, hp, hnp⟩ := mem_sup.1 hnp
@@ -328,7 +328,7 @@ theorem map₂_sup_left
 
 中文:
 定理 map₂_sup_left
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p₁ p₂ : Submodule R M) (q : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p₁ p₂ : 子模 R M) (q : 子模 R N)
   证明: le_antisymm
     (map₂_le.2 fun _mn hmn _p hp =>
       let ⟨_m, hm, _n, hn, hmn⟩ := mem_sup.1 hmn
@@ -361,7 +361,7 @@ theorem image2_subset_map₂
 
 中文:
 定理 image2_subset_map₂
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q : 子模 R N)
   证明: by
   rintro _ ⟨i, hi, j, hj, rfl⟩
   exact apply_mem_map₂ _ hi hj
@@ -382,7 +382,7 @@ theorem map₂_eq_span_image2
 
 中文:
 定理 map₂_eq_span_image2
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q : 子模 R N)
   证明: by
   rw [← map₂_span_span]; rw [span_eq]; rw [span_eq]
 
@@ -404,7 +404,7 @@ theorem map₂_flip
 
 中文:
 定理 map₂_flip
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q : 子模 R N)
   证明: by
   rw [map₂_eq_span_image2]; rw [map₂_eq_span_image2]; rw [Set.image2_swap]
   rfl
@@ -429,7 +429,7 @@ theorem map₂_iSup_left
 
 中文:
 定理 map₂_iSup_left
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : ι -> Submodule R M) (t : Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : ι -> 子模 R M) (t : 子模 R N)
   证明: by
   suffices map₂ f (⨆ i, span R (s i : Set M)) (span R t) = ⨆ i, map₂ f (span R (s i)) (span R t) by
     simpa only [span_eq] using this
@@ -456,7 +456,7 @@ theorem map₂_iSup_right
 
 中文:
 定理 map₂_iSup_right
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : Submodule R M) (t : ι -> Submodule R N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : 子模 R M) (t : ι -> 子模 R N)
   证明: by
   suffices map₂ f (span R s) (⨆ i, span R (t i : Set N)) = ⨆ i, map₂ f (span R s) (span R (t i)) by
     simpa only [span_eq] using this
@@ -504,7 +504,7 @@ theorem map₂_span_singleton_eq_map_flip
 
 中文:
 定理 map₂_span_singleton_eq_map_flip
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : Submodule R M) (n : N)
+  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (s : 子模 R M) (n : N)
   证明: by rw [← map₂_span_singleton_eq_map, map₂_flip]
 -/
 theorem map₂_span_singleton_eq_map_flip (f : M ->ₗ[R] N ->ₗ[R] P) (s : Submodule R M) (n : N) :
@@ -525,7 +525,7 @@ theorem map_map₂
 
 中文:
 定理 map_map₂
-  条件: (f : P ->ₗ[R] P₂) (g : M ->ₗ[R] N ->ₗ[R] P) (p : Submodule R M) (q : Submodule R N)
+  条件: (f : P ->ₗ[R] P₂) (g : M ->ₗ[R] N ->ₗ[R] P) (p : 子模 R M) (q : 子模 R N)
   证明: .trans .symm iSup_congr fun _ => map_comp _ _ _ map_iSup _ _
 
 Depends on / 依赖: iSup_congr, map_comp, map_iSup

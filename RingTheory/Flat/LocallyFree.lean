@@ -34,7 +34,7 @@ lemma bijective_of_surjective_of_rankAtStalk_eq
 
 中文:
 引理 bijective_of_surjective_of_rankAtStalk_eq
-  结论: {φ : M ->ₗ[R] N} (hs : Function.Surjective φ)
+  结论: {φ : M ->ₗ[R] N} (hs : 函数.满射 φ)
   证明: bijective_of_localized_maximal φ fun m _ =>
     OrzechProperty.bijective_of_surjective_of_finrank_le (map m.primeCompl φ)
       (map_surjective m.primeCompl φ hs) (h m).le
@@ -65,8 +65,8 @@ theorem Free.away_of_finite_of_flat_of_rankAtStalk_constant
     let f : (Fin n ->₀ R) ->ₗ[R] Fin 
 
 中文:
-定理 Free.away_of_finite_of_flat_of_rankAtStalk_constant
-  结论: (p : Ideal R) [p.IsPrime]
+定理 自由.away_of_finite_of_flat_of_rankAtStalk_constant
+  结论: (p : 理想 R) [p.是素]
   证明: by
   rcases subsingleton_or_nontrivial R with _ | _
   · use 1, Ideal.IsPrime.one_notMem ‹_›

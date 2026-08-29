@@ -53,7 +53,7 @@ lemma colim.map_mono'
 
 中文:
 引理 colim.map_mono'
-  结论: [HasColimitsOfShape J C]
+  结论: [有形状余极限 J C]
   证明: by
   refine ((MorphismProperty.monomorphisms C).arrow_mk_iso_iff ?_).2
     ((inferInstance : Mono (colim.map φ)))
@@ -122,7 +122,7 @@ lemma IsColimit.mono_ι_app_of_isFiltered
     ((
 
 中文:
-引理 IsColimit.mono_ι_app_of_isFiltered
+引理 是余极限.mono_ι_app_of_isFiltered
   证明: by
   let f : (Functor.const _).obj (X.obj j₀) ⟶ Under.forget j₀ ⋙ X :=
     { app j := X.map j.hom
@@ -177,7 +177,7 @@ definition colim.mapShortComplex
 
 中文:
 定义 colim.mapShortComplex
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk f g (hc₁.hom_ext (fun j => by
     rw [reassoc_of% (hf j)]; rw [hg j]; rw [comp_zero]; rw [← NatTrans.comp_app_assoc]; rw [S.zero]; rw [zero_app]; rw [zero_comp]))
 
@@ -291,7 +291,7 @@ instance [HasFilteredColimitsOfSize.{v',
   body: by infer_instance
 
 中文:
-实例 [HasFilteredColimitsOfSize.{v',
+实例 [有FilteredColimitsOfSize.{v',
   签名: u'} C] [AB5OfSize.{v', u'} C] :
   定义体: by infer_instance
 

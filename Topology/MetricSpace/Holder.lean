@@ -75,7 +75,7 @@ definition HolderOnWith
 
 中文:
 定义 HolderOnWith
-  签名: (C r : 实数>=0) (f : X -> Y) (s : Set X)
+  签名: (C r : 实数>=0) (f : X -> Y) (s : 集合 X)
   定义体: forall x in s, forall y in s, edist (f x) (f y) <= (C : Real>=0∞) * edist x y ^ (r : Real)
 
 @[simp]
@@ -139,8 +139,8 @@ theorem Set.Subsingleton.holderOnWith
   proof: hs.induction_on (holderOnWith_empty C r f) (holderOnWith_singleton C r f)
 
 中文:
-定理 Set.Subsingleton.holderOnWith
-  条件: {s : Set X} (hs : s.Subsingleton) (C r : 实数>=0) (f : X -> Y)
+定理 集合.子单例.holderOnWith
+  条件: {s : 集合 X} (hs : s.子单例) (C r : 实数>=0) (f : X -> Y)
   证明: hs.induction_on (holderOnWith_empty C r f) (holderOnWith_singleton C r f)
 
 Depends on / 依赖: holderOnWith_empty, holderOnWith_singleton, hs.induction_on, induction_on
@@ -191,7 +191,7 @@ alias ⟨_, LipschitzOnWith.holderOnWith⟩ := holderOnWith_one
 
 中文:
 定理 holderOnWith_one
-  条件: {C : 实数>=0} {f : X -> Y} {s : Set X}
+  条件: {C : 实数>=0} {f : X -> Y} {s : 集合 X}
   证明: by
   simp only [HolderOnWith, LipschitzOnWith, NNReal.coe_one, ENNReal.rpow_one]
 
@@ -321,7 +321,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {Cg rg : 实数>=0} {g : Y -> Z} {t : Set Y} (hg : HolderOnWith Cg rg g t) {Cf rf : 实数>=0}
+  结论: {Cg rg : 实数>=0} {g : Y -> Z} {t : 集合 Y} (hg : HolderOnWith Cg rg g t) {Cf rf : 实数>=0}
   证明: by
   intro x hx y hy
   rw [ENNReal.coe_mul]; rw [mul_comm rg]; rw [NNReal.coe_mul]; rw [ENNReal.rpow_mul]; rw [mul_assoc]; rw [ENNReal.coe_rpow_of_nonneg _ rg.coe_nonneg]; rw [← ENNReal.mul_rpow_of_nonneg _ _ rg.coe_nonneg]
@@ -346,7 +346,7 @@ theorem comp_holderWith
 
 中文:
 定理 comp_holderWith
-  结论: {Cg rg : 实数>=0} {g : Y -> Z} {t : Set Y} (hg : HolderOnWith Cg rg g t)
+  结论: {Cg rg : 实数>=0} {g : Y -> Z} {t : 集合 Y} (hg : HolderOnWith Cg rg g t)
   证明: holderOnWith_univ.mp hg.comp (hf.holderOnWith univ) fun x _ => ht x
 
 Depends on / 依赖: hf.holderOnWith, hg.comp, holderOnWith, holderOnWith_univ, holderOnWith_univ.mp
@@ -532,7 +532,7 @@ theorem ediam_image_inter_le
 
 中文:
 定理 ediam_image_inter_le
-  条件: (hf : HolderOnWith C r f s) (t : Set X)
+  条件: (hf : HolderOnWith C r f s) (t : 集合 X)
   证明: hf.ediam_image_inter_le_of_le le_rfl
 
 Depends on / 依赖: ediam_image_inter_le_of_le, hf.ediam_image_inter_le_of_le, le_rfl
@@ -556,7 +556,7 @@ lemma interpolate
 
 中文:
 引理 interpolate
-  结论: {C₁ C₂ s t₁ t₂ : 实数>=0} {A : Set X}
+  结论: {C₁ C₂ s t₁ t₂ : 实数>=0} {A : 集合 X}
   证明: by
   intro x hx y hy
   calc edist (f x) (f y)
@@ -594,7 +594,7 @@ lemma holderOnWith_zero_of_bounded
 
 中文:
 引理 holderOnWith_zero_of_bounded
-  结论: {C D : 实数>=0} {A : Set X}
+  结论: {C D : 实数>=0} {A : 集合 X}
   证明: by
   intro x hx y hy
   simp only [NNReal.coe_zero, ENNReal.rpow_zero, mul_one]
@@ -626,7 +626,7 @@ lemma of_le
 
 中文:
 引理 of_le
-  结论: {C D s : 实数>=0} {A : Set X}
+  结论: {C D s : 实数>=0} {A : 集合 X}
   证明: by
   obtain rfl | ht := eq_zero_or_pos s
   · simpa using hf.holderOnWith_zero_of_bounded hA
@@ -672,7 +672,7 @@ lemma mono_const
 
 中文:
 引理 mono_const
-  结论: {C₁ C₂ : 实数>=0} {A : Set X} (hf : HolderOnWith C₁ r f A)
+  结论: {C₁ C₂ : 实数>=0} {A : 集合 X} (hf : HolderOnWith C₁ r f A)
   证明: by
   intro x hx y hy
   grw [← hC]
@@ -696,7 +696,7 @@ lemma interpolate_const
 
 中文:
 引理 interpolate_const
-  结论: {C s t₁ t₂ : 实数>=0} {A : Set X}
+  结论: {C s t₁ t₂ : 实数>=0} {A : 集合 X}
   证明: by
   convert! hf₁.interpolate hf₂ ht
   simp [← NNReal.rpow_add_of_nonneg, ← NNReal.coe_add, ht]
@@ -726,7 +726,7 @@ alias _root_.convex_setOf_holderOnWith := _root_.convex_setOfPred_holderOnWith
 
 中文:
 引理 _root_.convex_setOfPred_holderOnWith
-  条件: (C : 实数>=0) (A : Set X)
+  条件: (C : 实数>=0) (A : 集合 X)
   证明: by
   intro r hr s hs _ _ _ _ ht
   rw [smul_eq_mul]; rw [smul_eq_mul]; rw [← mul_comm r]; rw [← mul_comm s]
@@ -760,7 +760,7 @@ lemma of_le_of_le
 
 中文:
 引理 of_le_of_le
-  结论: {C₁ C₂ s t : 实数>=0} {A : Set X}
+  结论: {C₁ C₂ s t : 实数>=0} {A : 集合 X}
   证明: by
   replace hf₁ := hf₁.mono_const (le_max_left C₁ C₂)
   replace hf₂ := hf₂.mono_const (le_max_right C₁ C₂)
@@ -797,7 +797,7 @@ protected alias ⟨_, _root_.HolderOnWith.holderWith⟩ := restrict_iff
 
 中文:
 定理 restrict_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: HolderWith C r (s.domRestrict f) ↔ HolderOnWith C r f s
   证明: by
   simp [HolderWith, HolderOnWith]
@@ -898,7 +898,7 @@ theorem uniformContinuous
 中文:
 定理 uniformContinuous
   条件: (hf : HolderWith C r f) (h0 : 0 < r)
-  结论: UniformContinuous f
+  结论: 一致连续 f
   证明: uniformContinuousOn_univ.mp (hf.holderOnWith univ).uniformContinuousOn h0
 -/
 protected theorem uniformContinuous (hf : HolderWith C r f) (h0 : 0 < r) : UniformContinuous f :=
@@ -916,7 +916,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (hf : HolderWith C r f) (h0 : 0 < r)
-  结论: Continuous f
+  结论: 连续 f
   证明: (hf.uniformContinuous h0).continuous
 -/
 protected theorem continuous (hf : HolderWith C r f) (h0 : 0 < r) : Continuous f :=
@@ -932,7 +932,7 @@ theorem ediam_image_le
 
 中文:
 定理 ediam_image_le
-  条件: (hf : HolderWith C r f) (s : Set X)
+  条件: (hf : HolderWith C r f) (s : 集合 X)
   证明: ediam_image_le_iff.2 fun _ hx _ hy => hf.edist_le_of_le edist_le_ediam_of_mem hx hy
 
 Depends on / 依赖: ediam_image_le_iff, edist_le_ediam_of_mem, edist_le_of_le, hf.edist_le_of_le
@@ -973,7 +973,7 @@ lemma zero
 
 中文:
 引理 zero
-  条件: [Zero Y]
+  条件: [零 Y]
   结论: HolderWith C r (0 : X -> Y)
   证明: .const
 -/
@@ -990,7 +990,7 @@ lemma of_isEmpty
 
 中文:
 引理 of_isEmpty
-  条件: [IsEmpty X]
+  条件: [是空 X]
   结论: HolderWith C r f
   证明: isEmptyElim
 
@@ -1427,7 +1427,7 @@ lemma smul
 
 中文:
 引理 smul
-  结论: {α} [SeminormedAddCommGroup α] [SMulZeroClass α Y] [IsBoundedSMul α Y] (a : α)
+  结论: {α} [SeminormedAddComm群 α] [SMulZero类 α Y] [是BoundedSMul α Y] (a : α)
   证明: fun x₁ x₂ => by
 .trans ?_ refine edist_smul_le _ _ _
   rw [ENNReal.coe_mul]; rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [mul_comm (C : Real>=0∞)]; rw [mul_assoc]
@@ -1456,7 +1456,7 @@ lemma smul_iff
 
 中文:
 引理 smul_iff
-  结论: {α} [SeminormedRing α] [Module α Y] [NormSMulClass α Y] (a : α)
+  结论: {α} [Seminormed环 α] [模 α Y] [NormSMul类 α Y] (a : α)
   证明: by
   simp_rw [HolderWith, ENNReal.coe_mul, Pi.smul_apply, edist_smul₀, ENNReal.smul_def, smul_eq_mul,
     mul_comm (C : Real>=0∞), mul_assoc,

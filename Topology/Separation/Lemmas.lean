@@ -32,7 +32,7 @@ theorem totallySeparatedSpace_of_cardinalMk_lt_continuum
 
 中文:
 定理 totallySeparatedSpace_of_cardinalMk_lt_continuum
-  条件: (h : Cardinal.mk X < Cardinal.continuum)
+  条件: (h : 基数.mk X < 基数.continuum)
   证明: totallySeparatedSpace_of_t0_of_basis_clopen
     CompletelyRegularSpace.isTopologicalBasis_clopens_of_cardinalMk_lt_continuum h
 
@@ -53,8 +53,8 @@ instance [Countable
     (Cardinal.mk_le_aleph0_iff.mpr inferInstance).trans_lt Cardinal.aleph0_lt_continuum
 
 中文:
-实例 [Countable
-  签名: X] : TotallySeparatedSpace X
+实例 [可数
+  签名: X] : TotallySeparated空间 X
   定义体: totallySeparatedSpace_of_cardinalMk_lt_continuum
     (Cardinal.mk_le_aleph0_iff.mpr inferInstance).trans_lt Cardinal.aleph0_lt_continuum
 
@@ -74,8 +74,8 @@ lemma _root_.Set.Countable.totallySeparatedSpace
   inferInstanceAs (TotallySeparatedSpace s)
 
 中文:
-引理 _root_.Set.Countable.totallySeparatedSpace
-  条件: {s : Set X} (h : s.Countable)
+引理 _root_.集合.可数.totallySeparatedSpace
+  条件: {s : 集合 X} (h : s.可数)
   证明: have : _root_.Countable s := h
   inferInstanceAs (TotallySeparatedSpace s)
 -/
@@ -98,8 +98,8 @@ theorem Set.Countable.isTotallyDisconnected
   infer_instance
 
 中文:
-定理 Set.Countable.isTotallyDisconnected
-  条件: [MetricSpace X] {s : Set X} (hs : s.Countable)
+定理 集合.可数.isTotallyDisconnected
+  条件: [度量空间 X] {s : 集合 X} (hs : s.可数)
   证明: by
   rw [← totallyDisconnectedSpace_subtype_iff]
   have : Countable s := hs

@@ -59,8 +59,8 @@ class SuccOrder
     - succ_le_of_lt({a b}) : a < b -> succ a <= b
 
 中文:
-类 SuccOrder
-  参数: (α : 类型) [Preorder α]
+类 Succ序
+  参数: (α : 类型) [预序 α]
   公理与运算 (4 个):
     - succ : α -> α
     - le_succ : 对任意 a, a <= succ a
@@ -94,8 +94,8 @@ class PredOrder
     - le_pred_of_lt({a b}) : a < b -> a <= pred b
 
 中文:
-类 PredOrder
-  参数: (α : 类型) [Preorder α]
+类 Pred序
+  参数: (α : 类型) [预序 α]
   公理与运算 (4 个):
     - pred : α -> α
     - pred_le : 对任意 a, pred a <= a
@@ -127,8 +127,8 @@ instance [Preorder
   le_pred_of_lt {a b} h := SuccOrder.succ_le_of_lt h
 
 中文:
-实例 [Preorder
-  签名: α] [SuccOrder α] : PredOrder αᵒᵈ where
+实例 [预序
+  签名: α] [Succ序 α] : Pred序 αᵒᵈ where
   定义体: toDual ∘ SuccOrder.succ ∘ ofDual
   pred_le := by simp [SuccOrder.le_succ]
   min_of_le_pred h := by apply SuccOrder.max_of_succ_le h
@@ -159,7 +159,7 @@ definition SuccOrder.ofSuccLeIff
   succ_le_of_lt := hsucc_le_iff.2
 
 中文:
-定义 SuccOrder.ofSuccLeIff
+定义 Succ序.ofSuccLeIff
   签名: (succ : α -> α) (hsucc_le_iff : 对任意 {a b}, succ a <= b ↔ a < b)
   定义体: succ
   le_succ _ := (hsucc_le_iff.1 le_rfl).le
@@ -194,7 +194,7 @@ le_succ a := by_cases (fun h => (hm a h).symm.le) fun h => le_of_lt by simpa usi
   max_of_succ_le {a} := not_imp_not.mp fun h => by simpa using (hn h a).not
 
 中文:
-定义 SuccOrder.ofCore
+定义 Succ序.ofCore
   签名: (succ : α -> α) (hn : 对任意 {a}, ¬IsMax a -> 对任意 b, a < b ↔ succ a <= b)
   定义体: succ
   succ_le_of_lt {a b} := by_cases (fun h hab => (hm a h).symm ▸ hab.le) fun h => (hn h b).mp
@@ -229,7 +229,7 @@ definition SuccOrder.ofLinearWellFoundedLT
     fun _ ha => dif_neg (no
 
 中文:
-定义 SuccOrder.ofLinearWellFoundedLT
+定义 Succ序.ofLinearWellFoundedLT
   签名: [WellFoundedLT α]
   定义体: ofCore (fun a => if h : (Ioi a).Nonempty then wellFounded_lt.min _ h else a)
     (fun ha _ => by
@@ -637,7 +637,7 @@ theorem succ_mono
 
 中文:
 定理 succ_mono
-  结论: Monotone (succ : α -> α)
+  结论: 递增 (succ : α -> α)
   证明: fun _ _ => succ_le_succ
 
 Depends on / 依赖: ResidueField, p.ResidueField, succ_le_succ
@@ -796,7 +796,7 @@ theorem Iic_subset_Iio_succ_of_not_isMax
 中文:
 定理 Iic_subset_Iio_succ_of_not_isMax
   条件: (ha : ¬IsMax a)
-  结论: Iic a subseteq Iio (succ a)
+  结论: 左无界右闭区间 a subseteq 左无界右开区间 (succ a)
   证明: by
   gcongr
   exact lt_succ_of_not_isMax ha
@@ -824,7 +824,7 @@ theorem Ici_succ_of_not_isMax
 中文:
 定理 Ici_succ_of_not_isMax
   条件: (ha : ¬IsMax a)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: Set.ext fun _ => succ_le_iff_of_not_isMax ha
 
 @[to_dual Icc_subset_Ioc_pred_left_of_not_isMin]
@@ -851,7 +851,7 @@ theorem Icc_subset_Ico_succ_right_of_not_isMax
 中文:
 定理 Icc_subset_Ico_succ_right_of_not_isMax
   条件: (hb : ¬IsMax b)
-  结论: Icc a b subseteq Ico a (succ b)
+  结论: 闭区间 a b subseteq 左闭右开区间 a (succ b)
   证明: by
   gcongr
   exact lt_succ_of_not_isMax hb
@@ -881,7 +881,7 @@ theorem Ioc_subset_Ioo_succ_right_of_not_isMax
 中文:
 定理 Ioc_subset_Ioo_succ_right_of_not_isMax
   条件: (hb : ¬IsMax b)
-  结论: Ioc a b subseteq Ioo a (succ b)
+  结论: 左开右闭区间 a b subseteq 开区间 a (succ b)
   证明: by
   gcongr
   exact lt_succ_of_not_isMax hb
@@ -910,7 +910,7 @@ theorem Icc_succ_left_of_not_isMax
 中文:
 定理 Icc_succ_left_of_not_isMax
   条件: (ha : ¬IsMax a)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: by
   rw [← Ici_inter_Iic]; rw [Ici_succ_of_not_isMax ha]; rw [Ioi_inter_Iic]
 
@@ -935,7 +935,7 @@ theorem Ico_succ_left_of_not_isMax
 中文:
 定理 Ico_succ_left_of_not_isMax
   条件: (ha : ¬IsMax a)
-  结论: Ico (succ a) b = Ioo a b
+  结论: 左闭右开区间 (succ a) b = 开区间 a b
   证明: by
   rw [← Ici_inter_Iio]; rw [Ici_succ_of_not_isMax ha]; rw [Ioi_inter_Iio]
 
@@ -1054,7 +1054,7 @@ theorem succ_strictMono
 
 中文:
 定理 succ_strictMono
-  结论: StrictMono (succ : α -> α)
+  结论: 严格递增 (succ : α -> α)
   证明: fun _ _ => succ_lt_succ
 
 @[to_dual pred_covBy]
@@ -1103,7 +1103,7 @@ theorem Iic_subset_Iio_succ
 中文:
 定理 Iic_subset_Iio_succ
   条件: (a : α)
-  结论: Iic a subseteq Iio (succ a)
+  结论: 左无界右闭区间 a subseteq 左无界右开区间 (succ a)
   证明: by simp
 
 @[to_dual (attr := simp)]
@@ -1125,7 +1125,7 @@ theorem Ici_succ
 中文:
 定理 Ici_succ
   条件: (a : α)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: Ici_succ_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp) Icc_subset_Ioc_pred_left]
@@ -1150,7 +1150,7 @@ theorem Icc_subset_Ico_succ_right
 中文:
 定理 Icc_subset_Ico_succ_right
   条件: (a b : α)
-  结论: Icc a b subseteq Ico a (succ b)
+  结论: 闭区间 a b subseteq 左闭右开区间 a (succ b)
   证明: Icc_subset_Ico_succ_right_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp) Ico_subset_Ioo_pred_left]
@@ -1175,7 +1175,7 @@ theorem Ioc_subset_Ioo_succ_right
 中文:
 定理 Ioc_subset_Ioo_succ_right
   条件: (a b : α)
-  结论: Ioc a b subseteq Ioo a (succ b)
+  结论: 左开右闭区间 a b subseteq 开区间 a (succ b)
   证明: Ioc_subset_Ioo_succ_right_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp) Icc_pred_right]
@@ -1200,7 +1200,7 @@ theorem Icc_succ_left
 中文:
 定理 Icc_succ_left
   条件: (a b : α)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: Icc_succ_left_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp) Ioc_pred_right]
@@ -1223,7 +1223,7 @@ theorem Ico_succ_left
 中文:
 定理 Ico_succ_left
   条件: (a b : α)
-  结论: Ico (succ a) b = Ioo a b
+  结论: 左闭右开区间 (succ a) b = 开区间 a b
   证明: Ico_succ_left_of_not_isMax not_isMax _
 
 Depends on / 依赖: Ico_succ_left_of_not_isMax, not_isMax
@@ -1439,7 +1439,7 @@ theorem _root_.OrderIso.map_succ
 
 中文:
 定理 _root_.OrderIso.map_succ
-  条件: [PartialOrder β] [SuccOrder β] (f : α ≃o β) (a : α)
+  条件: [偏序 β] [Succ序 β] (f : α ≃o β) (a : α)
   证明: by
   by_cases h : IsMax a
   · rw [h.succ_eq, (f.isMax_apply.2 h).succ_eq]
@@ -1621,7 +1621,7 @@ lemma succ_max
 中文:
 引理 succ_max
   条件: (a b : α)
-  结论: succ (max a b) = max (succ a) (succ b)
+  结论: succ (最大值 a b) = 最大值 (succ a) (succ b)
   证明: succ_mono.map_max
 -/
 @[to_dual] lemma succ_max (a b : α) : succ (max a b) = max (succ a) (succ b) := succ_mono.map_max
@@ -1639,7 +1639,7 @@ lemma succ_min
 中文:
 引理 succ_min
   条件: (a b : α)
-  结论: succ (min a b) = min (succ a) (succ b)
+  结论: succ (最小值 a b) = 最小值 (succ a) (succ b)
   证明: succ_mono.map_min
 
 @[to_dual le_of_pred_lt]
@@ -1805,7 +1805,7 @@ theorem Iio_succ_of_not_isMax
 中文:
 定理 Iio_succ_of_not_isMax
   条件: (ha : ¬IsMax a)
-  结论: Iio (succ a) = Iic a
+  结论: 左无界右开区间 (succ a) = 左无界右闭区间 a
   证明: Set.ext fun _ => lt_succ_iff_of_not_isMax ha
 
 @[to_dual Ioc_pred_left_of_not_isMin]
@@ -1831,7 +1831,7 @@ theorem Ico_succ_right_of_not_isMax
 中文:
 定理 Ico_succ_right_of_not_isMax
   条件: (hb : ¬IsMax b)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: by
   rw [← Ici_inter_Iio]; rw [Iio_succ_of_not_isMax hb]; rw [Ici_inter_Iic]
 
@@ -1858,7 +1858,7 @@ theorem Ioo_succ_right_of_not_isMax
 中文:
 定理 Ioo_succ_right_of_not_isMax
   条件: (hb : ¬IsMax b)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: by
   rw [← Ioi_inter_Iio]; rw [Iio_succ_of_not_isMax hb]; rw [Ioi_inter_Iic]
 
@@ -1968,7 +1968,7 @@ theorem not_isMin_succ
 
 中文:
 定理 not_isMin_succ
-  条件: [Nontrivial α] (a : α)
+  条件: [非平凡 α] (a : α)
   结论: ¬ IsMin (succ a)
   证明: by
   obtain ha | ha := (le_succ a).eq_or_lt
@@ -1999,7 +1999,7 @@ theorem Iic_succ
 中文:
 定理 Iic_succ
   条件: (a : α)
-  结论: Iic (succ a) = insert (succ a) (Iic a)
+  结论: 左无界右闭区间 (succ a) = insert (succ a) (左无界右闭区间 a)
   证明: ext fun _ => le_succ_iff_eq_or_le
 
 @[to_dual Icc_pred_left]
@@ -2025,7 +2025,7 @@ theorem Icc_succ_right
 中文:
 定理 Icc_succ_right
   条件: (h : a <= succ b)
-  结论: Icc a (succ b) = insert (succ b) (Icc a b)
+  结论: 闭区间 a (succ b) = insert (succ b) (闭区间 a b)
   证明: by
   simp_rw [← Ici_inter_Iic, Iic_succ, inter_insert_of_mem (mem_Ici.2 h)]
 
@@ -2052,7 +2052,7 @@ theorem Ioc_succ_right
 中文:
 定理 Ioc_succ_right
   条件: (h : a < succ b)
-  结论: Ioc a (succ b) = insert (succ b) (Ioc a b)
+  结论: 左开右闭区间 a (succ b) = insert (succ b) (左开右闭区间 a b)
   证明: by
   simp_rw [← Ioi_inter_Iic, Iic_succ, inter_insert_of_mem (mem_Ioi.2 h)]
 
@@ -2078,7 +2078,7 @@ theorem Iio_succ_eq_insert_of_not_isMax
 中文:
 定理 Iio_succ_eq_insert_of_not_isMax
   条件: (h : ¬IsMax a)
-  结论: Iio (succ a) = insert a (Iio a)
+  结论: 左无界右开区间 (succ a) = insert a (左无界右开区间 a)
   证明: ext fun _ => lt_succ_iff_eq_or_lt_of_not_isMax h
 
 @[to_dual Ioc_pred_left_eq_insert_of_not_isMin]
@@ -2213,7 +2213,7 @@ theorem Iio_succ
 中文:
 定理 Iio_succ
   条件: (a : α)
-  结论: Iio (succ a) = Iic a
+  结论: 左无界右开区间 (succ a) = 左无界右闭区间 a
   证明: Iio_succ_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp) Ioc_pred_left]
@@ -2236,7 +2236,7 @@ theorem Ico_succ_right
 中文:
 定理 Ico_succ_right
   条件: (a b : α)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: Ico_succ_right_of_not_isMax not_isMax _
 
 Depends on / 依赖: Ico_succ_right_of_not_isMax, not_isMax
@@ -2260,7 +2260,7 @@ theorem Ioo_succ_right
 中文:
 定理 Ioo_succ_right
   条件: (a b : α)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: Ioo_succ_right_of_not_isMax not_isMax _
 
 @[to_dual (attr := simp)]
@@ -2306,7 +2306,7 @@ theorem succ_injective
 
 中文:
 定理 succ_injective
-  结论: Injective (succ : α -> α)
+  结论: 单射 (succ : α -> α)
   证明: fun _ _ => succ_eq_succ_iff.1
 
 @[to_dual]
@@ -2410,7 +2410,7 @@ theorem Iio_succ_eq_insert
 中文:
 定理 Iio_succ_eq_insert
   条件: (a : α)
-  结论: Iio (succ a) = insert a (Iio a)
+  结论: 左无界右开区间 (succ a) = insert a (左无界右开区间 a)
   证明: Iio_succ_eq_insert_of_not_isMax not_isMax a
 
 @[to_dual Ioc_pred_left_eq_insert]
@@ -2437,7 +2437,7 @@ theorem Ico_succ_right_eq_insert
 中文:
 定理 Ico_succ_right_eq_insert
   条件: (h : a <= b)
-  结论: Ico a (succ b) = insert b (Ico a b)
+  结论: 左闭右开区间 a (succ b) = insert b (左闭右开区间 a b)
   证明: Ico_succ_right_eq_insert_of_not_isMax h not_isMax b
 
 @[deprecated (since := "2026-04-28")] alias Ico_pred_right_eq_insert := Ioc_pred_left_eq_insert
@@ -2468,7 +2468,7 @@ theorem Ioo_succ_right_eq_insert
 中文:
 定理 Ioo_succ_right_eq_insert
   条件: (h : a < b)
-  结论: Ioo a (succ b) = insert b (Ioo a b)
+  结论: 开区间 a (succ b) = insert b (开区间 a b)
   证明: Ioo_succ_right_eq_insert_of_not_isMax h not_isMax b
 
 @[deprecated (since := "2026-04-28")] alias Ioo_pred_right_eq_insert := Ioo_pred_left_eq_insert
@@ -2499,7 +2499,7 @@ exact fun hx => le_of_lt_succ lt_of_le_of_lt h succ_strictMono hx
 
 中文:
 定理 Ioo_eq_empty_iff_le_succ
-  结论: Ioo a b = ∅ ↔ b <= succ a
+  结论: 开区间 a b = ∅ ↔ b <= succ a
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · contrapose! h
@@ -2538,7 +2538,7 @@ theorem lt_succ_bot_iff
 
 中文:
 定理 lt_succ_bot_iff
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: a < succ ⊥ ↔ a = ⊥
   证明: by rw [lt_succ_iff, le_bot_iff]
 
@@ -2592,8 +2592,8 @@ instance [PartialOrder
 @[to_dual]
 
 中文:
-实例 [PartialOrder
-  签名: α] : Subsingleton (SuccOrder α)
+实例 [偏序
+  签名: α] : 子单例 (Succ序 α)
   定义体: ⟨by
     intro h₀ h₁
     ext a
@@ -2631,7 +2631,7 @@ theorem succ_eq_sInf
 
 中文:
 定理 succ_eq_sInf
-  条件: [CompleteLattice α] [SuccOrder α] (a : α)
+  条件: [完备格 α] [Succ序 α] (a : α)
   证明: by
   apply (le_sInf fun b => succ_le_of_lt).antisymm
   obtain rfl | ha := eq_or_ne a ⊤
@@ -2666,7 +2666,7 @@ theorem succ_eq_iInf
 
 中文:
 定理 succ_eq_iInf
-  条件: [CompleteLattice α] [SuccOrder α] (a : α)
+  条件: [完备格 α] [Succ序 α] (a : α)
   结论: succ a = ⨅ b > a, b
   证明: by
   rw [succ_eq_sInf]; rw [iInf_subtype']; rw [iInf]; rw [Subtype.range_coe_subtype]; rw [Ioi]
@@ -2691,7 +2691,7 @@ exact csInf_le ⟨a, fun b => le_of_lt⟩ lt_succ a
 
 中文:
 定理 succ_eq_csInf
-  条件: [ConditionallyCompleteLattice α] [SuccOrder α] [NoMaxOrder α] (a : α)
+  条件: [条件完备格 α] [Succ序 α] [NoMax序 α] (a : α)
   证明: by
   apply (le_csInf nonempty_Ioi fun b => succ_le_of_lt).antisymm
 exact csInf_le ⟨a, fun b => le_of_lt⟩ lt_succ a
@@ -2867,7 +2867,7 @@ theorem succ_pred
 
 中文:
 定理 succ_pred
-  条件: [NoMinOrder α] (a : α)
+  条件: [NoMin序 α] (a : α)
   结论: succ (pred a) = a
   证明: CovBy.succ_eq (pred_covBy _)
 
@@ -2980,7 +2980,7 @@ instance :
 
 中文:
 实例 :
-  签名: SuccOrder (WithTop α)
+  签名: Succ序 (WithTop α)
   定义体: by
     obtain - | a := a
     · exact le_top
@@ -3091,7 +3091,7 @@ theorem succ_coe
 
 中文:
 定理 succ_coe
-  条件: [NoMaxOrder α] {a : α}
+  条件: [NoMax序 α] {a : α}
   结论: succ (↑a : WithTop α) = ↑(succ a)
   证明: succ_coe_of_not_isMax not_isMax a
 
@@ -3126,7 +3126,7 @@ instance :
 
 中文:
 实例 :
-  签名: PredOrder (WithTop α)
+  签名: Pred序 (WithTop α)
   定义体: match a with
     | ⊤ => le_top
     | Option.some a => coe_le_coe.2 (pred_le a)
@@ -3235,7 +3235,7 @@ instance [hα
 
 中文:
 实例 [hα
-  签名: : Nonempty α] : IsEmpty (PredOrder (WithTop α))
+  签名: : 非空 α] : 是空 (Pred序 (WithTop α))
   定义体: ⟨by
     intro
     cases h : pred (⊤ : WithTop α) with
@@ -3284,8 +3284,8 @@ abbreviation SuccOrder.ofOrderIso
   succ_le_of_lt h := by rw [← le_map_inv_iff]; exact succ_le_of_lt (by simp [h])
 
 中文:
-缩写 SuccOrder.ofOrderIso
-  签名: [SuccOrder X] (f : X ≃o Y)
+缩写 Succ序.ofOrderIso
+  签名: [Succ序 X] (f : X ≃o Y)
   定义体: f (succ (f.symm y))
   le_succ y := by rw [← map_inv_le_iff f]; exact le_succ (f.symm y)
   max_of_succ_le h := by
@@ -3325,8 +3325,8 @@ instance Set.OrdConnected.predOrder
       rintro ⟨y, _⟩ 
 
 中文:
-实例 Set.OrdConnected.predOrder
-  签名: [PredOrder α]
+实例 集合.序连通.predOrder
+  签名: [Pred序 α]
   定义体: if h : Order.pred x.1 in s then ⟨Order.pred x.1, h⟩ else x
   pred_le := fun ⟨x, hx⟩ => by dsimp; split <;> simp_all [Order.pred_le]
   min_of_le_pred := @fun ⟨x, hx⟩ h => by
@@ -3374,7 +3374,7 @@ lemma coe_pred_of_mem
 
 中文:
 引理 coe_pred_of_mem
-  条件: [PredOrder α] {a : s} (h : pred a.1 in s)
+  条件: [Pred序 α] {a : s} (h : pred a.1 in s)
   证明: by classical
   change Subtype.val (dite ..) = _
   simp [h]
@@ -3400,7 +3400,7 @@ lemma isMin_of_pred_notMem
 
 中文:
 引理 isMin_of_pred_notMem
-  条件: [PredOrder α] {a : s} (h : pred ↑a ∉ s)
+  条件: [Pred序 α] {a : s} (h : pred ↑a ∉ s)
   结论: IsMin a
   证明: by classical
   rw [← pred_eq_iff_isMin]
@@ -3428,7 +3428,7 @@ lemma pred_notMem_iff_isMin
 
 中文:
 引理 pred_notMem_iff_isMin
-  条件: [PredOrder α] [NoMinOrder α] {a : s}
+  条件: [Pred序 α] [NoMin序 α] {a : s}
   证明: isMin_of_pred_notMem
   mpr h nh := by
     replace h := congr($h.pred_eq.1)
@@ -3455,8 +3455,8 @@ instance Set.OrdConnected.succOrder
   inferInstanceAs (SuccOrder sᵒᵈᵒᵈ)
 
 中文:
-实例 Set.OrdConnected.succOrder
-  签名: [SuccOrder α]
+实例 集合.序连通.succOrder
+  签名: [Succ序 α]
   定义体: letI : PredOrder sᵒᵈ := inferInstanceAs (PredOrder (OrderDual.ofDual ⁻¹' s))
   inferInstanceAs (SuccOrder sᵒᵈᵒᵈ)
 
@@ -3481,7 +3481,7 @@ lemma coe_succ_of_mem
 
 中文:
 引理 coe_succ_of_mem
-  条件: [SuccOrder α] {a : s} (h : succ ↑a in s)
+  条件: [Succ序 α] {a : s} (h : succ ↑a in s)
   证明: by classical
   change Subtype.val (dite ..) = _
   split_ifs <;> trivial
@@ -3509,7 +3509,7 @@ lemma isMax_of_succ_notMem
 
 中文:
 引理 isMax_of_succ_notMem
-  条件: [SuccOrder α] {a : s} (h : succ ↑a ∉ s)
+  条件: [Succ序 α] {a : s} (h : succ ↑a ∉ s)
   结论: IsMax a
   证明: by
   classical
@@ -3539,7 +3539,7 @@ lemma succ_notMem_iff_isMax
 
 中文:
 引理 succ_notMem_iff_isMax
-  条件: [SuccOrder α] [NoMaxOrder α] {a : s}
+  条件: [Succ序 α] [NoMax序 α] {a : s}
   证明: isMax_of_succ_notMem
   mpr h nh := by
     replace h := congr($h.succ_eq.1)

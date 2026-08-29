@@ -133,7 +133,7 @@ lemma oneLePart_mono
 
 中文:
 引理 oneLePart_mono
-  结论: Monotone (·⁺ᵐ : α -> α)
+  结论: 递增 (·⁺ᵐ : α -> α)
   证明: fun _a _b hab => sup_le_sup_right hab _
 -/
 @[to_additive] lemma oneLePart_mono : Monotone (·⁺ᵐ : α -> α) :=
@@ -397,7 +397,7 @@ lemma oneLePart_max
 中文:
 引理 oneLePart_max
   条件: (a b : α)
-  结论: (max a b)⁺ᵐ = max a⁺ᵐ b⁺ᵐ
+  结论: (最大值 a b)⁺ᵐ = 最大值 a⁺ᵐ b⁺ᵐ
   证明: by
   simp [oneLePart, sup_sup_distrib_right]
 -/
@@ -589,7 +589,7 @@ lemma oneLePart_leOnePart_injective
 
 中文:
 引理 oneLePart_leOnePart_injective
-  结论: Injective fun a : α => (a⁺ᵐ, a⁻ᵐ)
+  结论: 单射 fun a : α => (a⁺ᵐ, a⁻ᵐ)
   证明: by
   simp only [Injective, Prod.mk.injEq, and_imp]
   rintro a b hpos hneg
@@ -638,7 +638,7 @@ lemma leOnePart_anti
 
 中文:
 引理 leOnePart_anti
-  结论: Antitone (leOnePart : α -> α)
+  结论: 递减 (leOnePart : α -> α)
   证明: fun _a _b hab => sup_le_sup_right (inv_le_inv_iff.2 hab) _
 
 @[to_additive]
@@ -751,7 +751,7 @@ lemma leOnePart_min
 中文:
 引理 leOnePart_min
   条件: (a b : α)
-  结论: (min a b)⁻ᵐ = max a⁻ᵐ b⁻ᵐ
+  结论: (最小值 a b)⁻ᵐ = 最大值 a⁻ᵐ b⁻ᵐ
   证明: by
   simp [leOnePart, inv_inf, sup_sup_distrib_right]
 -/
@@ -963,7 +963,7 @@ lemma oneLePart_min
 中文:
 引理 oneLePart_min
   条件: (a b : α)
-  结论: (min a b)⁺ᵐ = min a⁺ᵐ b⁺ᵐ
+  结论: (最小值 a b)⁺ᵐ = 最小值 a⁺ᵐ b⁺ᵐ
   证明: by
   simp [oneLePart, sup_inf_right]
 -/
@@ -985,7 +985,7 @@ lemma leOnePart_max
 中文:
 引理 leOnePart_max
   条件: (a b : α)
-  结论: (max a b)⁻ᵐ = min a⁻ᵐ b⁻ᵐ
+  结论: (最大值 a b)⁻ᵐ = 最小值 a⁻ᵐ b⁻ᵐ
   证明: by
   simp [leOnePart, inv_sup, sup_inf_right]
 -/

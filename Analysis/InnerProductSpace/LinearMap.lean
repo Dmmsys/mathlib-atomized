@@ -64,7 +64,7 @@ theorem inner_map_polarization
 
 中文:
 定理 inner_map_polarization
-  条件: (T : V ->ₗ[Complex] V) (x y : V)
+  条件: (T : V ->ₗ[复形] V) (x y : V)
   证明: by
   simp only [map_add, map_sub, inner_add_left, inner_add_right, map_smul, inner_smul_left,
     inner_smul_right, Complex.conj_I, ← pow_two, Complex.I_sq, inner_sub_left, inner_sub_right,
@@ -99,7 +99,7 @@ theorem inner_map_polarization'
 
 中文:
 定理 inner_map_polarization'
-  条件: (T : V ->ₗ[Complex] V) (x y : V)
+  条件: (T : V ->ₗ[复形] V) (x y : V)
   证明: by
   simp only [map_add, map_sub, inner_add_left, inner_add_right, map_smul, inner_smul_left,
     inner_smul_right, Complex.conj_I, ← pow_two, Complex.I_sq, inner_sub_left, inner_sub_right,
@@ -144,7 +144,7 @@ theorem inner_map_self_eq_zero
 
 中文:
 定理 inner_map_self_eq_zero
-  条件: (T : V ->ₗ[Complex] V)
+  条件: (T : V ->ₗ[复形] V)
   结论: (对任意 x : V, ⟪T x, x⟫_Complex = 0) ↔ T = 0
   证明: by
   constructor
@@ -182,7 +182,7 @@ theorem ext_inner_map
 
 中文:
 定理 ext_inner_map
-  条件: (S T : V ->ₗ[Complex] V)
+  条件: (S T : V ->ₗ[复形] V)
   结论: (对任意 x : V, ⟪S x, x⟫_Complex = ⟪T x, x⟫_Complex) ↔ S = T
   证明: by
   rw [← sub_eq_zero]; rw [← inner_map_self_eq_zero]
@@ -218,7 +218,7 @@ theorem LinearIsometry.inner_map_map
   simp [inner_eq_sum_norm_sq_div_four, ← f.norm_map]
 
 中文:
-定理 LinearIsometry.inner_map_map
+定理 线性等距.inner_map_map
   条件: (f : E ->ₗᵢ[𝕜] E') (x y : E)
   结论: ⟪f x, f y⟫ = ⟪x, y⟫
   证明: by
@@ -241,7 +241,7 @@ theorem LinearIsometryEquiv.inner_map_map
   proof: f.toLinearIsometry.inner_map_map x y
 
 中文:
-定理 LinearIsometryEquiv.inner_map_map
+定理 线性等距等价.inner_map_map
   条件: (f : E ≃ₗᵢ[𝕜] E') (x y : E)
   结论: ⟪f x, f y⟫ = ⟪x, y⟫
   证明: f.toLinearIsometry.inner_map_map x y
@@ -261,7 +261,7 @@ theorem LinearIsometryEquiv.inner_map_eq_flip
   conv_lhs => rw [← f.apply_symm_apply y, f.inner_map_map]
 
 中文:
-定理 LinearIsometryEquiv.inner_map_eq_flip
+定理 线性等距等价.inner_map_eq_flip
   条件: (f : E ≃ₗᵢ[𝕜] E') (x : E) (y : E')
   证明: by
   conv_lhs => rw [← f.apply_symm_apply y, f.inner_map_map]
@@ -283,7 +283,7 @@ definition LinearMap.isometryOfInner
 @[simp]
 
 中文:
-定义 LinearMap.isometryOfInner
+定义 线性映射.isometryOfInner
   签名: (f : E ->ₗ[𝕜] E') (h : 对任意 x y, ⟪f x, f y⟫ = ⟪x, y⟫)
   定义体: ⟨f, fun x => by simp only [@norm_eq_sqrt_re_inner 𝕜, h]⟩
 
@@ -307,7 +307,7 @@ theorem LinearMap.coe_isometryOfInner
 @[simp]
 
 中文:
-定理 LinearMap.coe_isometryOfInner
+定理 线性映射.coe_isometryOfInner
   条件: (f : E ->ₗ[𝕜] E') (h)
   结论: ⇑(f.isometryOfInner h) = f
   证明: rfl
@@ -327,7 +327,7 @@ theorem LinearMap.isometryOfInner_toLinearMap
   proof: rfl
 
 中文:
-定理 LinearMap.isometryOfInner_toLinearMap
+定理 线性映射.isometryOfInner_toLinearMap
   条件: (f : E ->ₗ[𝕜] E') (h)
   证明: rfl
 -/
@@ -346,7 +346,7 @@ definition LinearEquiv.isometryOfInner
 @[simp]
 
 中文:
-定义 LinearEquiv.isometryOfInner
+定义 线性等价.isometryOfInner
   签名: (f : E ≃ₗ[𝕜] E') (h : 对任意 x y, ⟪f x, f y⟫ = ⟪x, y⟫)
   定义体: ⟨f, ((f : E ->ₗ[𝕜] E').isometryOfInner h).norm_map⟩
 
@@ -370,7 +370,7 @@ theorem LinearEquiv.coe_isometryOfInner
 @[simp]
 
 中文:
-定理 LinearEquiv.coe_isometryOfInner
+定理 线性等价.coe_isometryOfInner
   条件: (f : E ≃ₗ[𝕜] E') (h)
   结论: ⇑(f.isometryOfInner h) = f
   证明: rfl
@@ -390,7 +390,7 @@ theorem LinearEquiv.isometryOfInner_toLinearEquiv
   proof: rfl
 
 中文:
-定理 LinearEquiv.isometryOfInner_toLinearEquiv
+定理 线性等价.isometryOfInner_toLinearEquiv
   条件: (f : E ≃ₗ[𝕜] E') (h)
   证明: rfl
 -/
@@ -408,8 +408,8 @@ theorem LinearMap.norm_map_iff_inner_map_map
     (LinearMapClass.linearMap f |>.isometryOfInner · |>.norm_map)⟩
 
 中文:
-定理 LinearMap.norm_map_iff_inner_map_map
-  结论: {F : 类型} [FunLike F E E'] [LinearMapClass F 𝕜 E E']
+定理 线性映射.norm_map_iff_inner_map_map
+  结论: {F : 类型} [函数状 F E E'] [线性映射类 F 𝕜 E E']
   证明: ⟨({ toLinearMap := LinearMapClass.linearMap f, norm_map' := · : E ->ₗᵢ[𝕜] E' }.inner_map_map),
     (LinearMapClass.linearMap f |>.isometryOfInner · |>.norm_map)⟩
 
@@ -495,7 +495,7 @@ theorem ContinuousLinearMap.toLinearMap_innerSL_apply
   proof: rfl
 
 中文:
-定理 ContinuousLinearMap.toLinearMap_innerSL_apply
+定理 连续线性映射.toLinearMap_innerSL_apply
   条件: (v : E)
   证明: rfl
 -/
@@ -744,7 +744,7 @@ theorem inner_map_complex
 
 中文:
 定理 inner_map_complex
-  结论: [SeminormedAddCommGroup G] [InnerProductSpace 实数 G] (f : G ≃ₗᵢ[实数] Complex)
+  结论: [SeminormedAddComm群 G] [内积空间 实数 G] (f : G ≃ₗᵢ[实数] 复形)
   证明: by rw [← Complex.inner, f.inner_map_map]
 
 Depends on / 依赖: Complex.inner, FiniteDimensional, FiniteDimensional.proper_real, NormedAddCommGroup, f.inner_map_map, inner_map_map, proper_real
@@ -769,7 +769,7 @@ definition ContinuousLinearMap.reApplyInnerSelf
   body: re ⟪T x, x⟫
 
 中文:
-定义 ContinuousLinearMap.reApplyInnerSelf
+定义 连续线性映射.reApplyInnerSelf
   签名: (T : E ->L[𝕜] E) (x : E)
   定义体: re ⟪T x, x⟫
 
@@ -787,7 +787,7 @@ theorem ContinuousLinearMap.reApplyInnerSelf_apply
   proof: rfl
 
 中文:
-定理 ContinuousLinearMap.reApplyInnerSelf_apply
+定理 连续线性映射.reApplyInnerSelf_apply
   条件: (T : E ->L[𝕜] E) (x : E)
   证明: rfl
 -/
@@ -812,7 +812,7 @@ theorem ContinuousLinearMap.reApplyInnerSelf_continuous
   proof: reCLM.continuous.comp T.continuous.inner continuous_id
 
 中文:
-定理 ContinuousLinearMap.reApplyInnerSelf_continuous
+定理 连续线性映射.reApplyInnerSelf_continuous
   条件: (T : E ->L[𝕜] E)
   证明: reCLM.continuous.comp T.continuous.inner continuous_id
 
@@ -835,7 +835,7 @@ theorem ContinuousLinearMap.reApplyInnerSelf_smul
     Algebra.smul_def (‖c‖ ^ 2) ⟪T x, x⟫, algebraMap_eq_ofReal]
 
 中文:
-定理 ContinuousLinearMap.reApplyInnerSelf_smul
+定理 连续线性映射.reApplyInnerSelf_smul
   条件: (T : E ->L[𝕜] E) (x : E) {c : 𝕜}
   证明: by
   simp only [map_smul, ContinuousLinearMap.reApplyInnerSelf_apply, inner_smul_left,
@@ -1012,7 +1012,7 @@ lemma comp_rankOne
 
 中文:
 引理 comp_rankOne
-  结论: {G : 类型} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
+  结论: {G : 类型} [SeminormedAddComm群 G] [赋范空间 𝕜 G]
   证明: by
   simp_rw [rankOne_def', ← comp_assoc, comp_toSpanSingleton]
 
@@ -1270,7 +1270,7 @@ theorem exists_of_rankOne_eq_rankOne
     _ = (⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) • c := by si
 
 中文:
-定理 exists_of_rankOne_eq_rankOne
+定理 存在_of_rankOne_eq_rankOne
   结论: {a c : F} {b d : H}
   证明: by
   have h₂ := rankOne_eq_rankOne_iff_comm.mp h

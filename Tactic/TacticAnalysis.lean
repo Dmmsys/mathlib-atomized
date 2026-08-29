@@ -68,7 +68,7 @@ structure TacticNode
   公理与运算 (3 个):
     - ctxI : ContextInfo
     - tacI : TacticInfo
-    - mayFail : 布尔
+    - mayFail : 布尔值
 -/
 structure TacticNode where
   /-- `ContextInfo` at the infotree node. -/
@@ -126,10 +126,10 @@ structure Config
     - run : Array TacticNode -> CommandElabM Unit
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (1 个):
-    - run : Array TacticNode -> CommandElabM Unit
+    - run : 数组 TacticNode -> CommandElabM 单元
 -/
 structure Config where
   /-- The function that runs this pass. Takes an array of infotree nodes corresponding
@@ -150,10 +150,10 @@ structure Pass
 
 中文:
 结构 Pass
-  参数: extends Config
-  继承: Config
+  参数: extends 余nfig
+  继承: 余nfig
   公理与运算 (1 个):
-    - opt : Option (Lean.Option 布尔)
+    - opt : 选项类型 (Lean.选项类型 布尔值)
 -/
 structure Pass extends Config where
   /-- The option corresponding to this pass, used to enable it.
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord Entry
+  签名: 序 Entry
   定义体: (@lexOrd _ _ ⟨Lean.Name.cmp⟩ ⟨Lean.Name.cmp⟩).compare (a.1, a.2) (b.1, b.2)
 
 Depends on / 依赖: Lean.Name.cmp, compare, lexOrd
@@ -365,7 +365,7 @@ definition runPasses
 
 中文:
 定义 runPasses
-  签名: (configs : Array Pass) (trees : PersistentArray InfoTree)
+  签名: (configs : 数组 Pass) (trees : PersistentArray InfoTree)
   定义体: do
   let opts ← getLinterOptions
   let enabledConfigs := configs.filter fun config =>
@@ -453,7 +453,7 @@ inductive TriggerCondition
 
 中文:
 归纳类型 TriggerCondition
-  参数: (ctx : Type _)
+  参数: (ctx : 类型 _)
   构造子 (3 个):
     - skip: 
     - continue: (context : ctx)
@@ -482,14 +482,14 @@ structure ComplexConfig
     - tell((stx : Syntax) (originalSubgoals : List MVarId) (originalHeartbeats : Nat) (new : out) (newHeartbeats : Nat)) : CommandElabM (Option MessageData)
 
 中文:
-结构 ComplexConfig
+结构 余mplexConfig
   参数: where
   公理与运算 (5 个):
-    - out : Type
-    - ctx : Type
-    - trigger((context : Option ctx) (currentTactic : Syntax)) : TriggerCondition ctx
+    - out : 类型
+    - ctx : 类型
+    - trigger((context : 选项类型 ctx) (currentTactic : Syntax)) : TriggerCondition ctx
     - test((ctxI : ContextInfo) (i : TacticInfo) (context : ctx) (goal : MVarId)) : CommandElabM out
-    - tell((stx : Syntax) (originalSubgoals : List MVarId) (originalHeartbeats : 自然数) (new : out) (newHeartbeats : 自然数)) : CommandElabM (Option MessageData)
+    - tell((stx : Syntax) (originalSubgoals : 列表 MVarId) (originalHeartbeats : 自然数) (new : out) (newHeartbeats : 自然数)) : CommandElabM (选项类型 MessageData)
 -/
 structure ComplexConfig where
   /-- Type returned by the `.test` function. -/
@@ -527,7 +527,7 @@ definition testTacticSeq
 
 中文:
 定义 testTacticSeq
-  签名: (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic))
+  签名: (config : 余mplexConfig) (tacticSeq : 数组 (TSyntax `tactic))
   定义体: do
   /- Syntax quotations use the current ref's position info even for nodes which do not usually
   carry position info. We set the ref here to ensure we log messages on the correct range. -/
@@ -576,7 +576,7 @@ definition runPass
 
 中文:
 定义 runPass
-  签名: (config : ComplexConfig) (seq : Array TacticNode)
+  签名: (config : 余mplexConfig) (seq : 数组 TacticNode)
   定义体: do
   let mut acc := none
   let mut firstInfo := none
@@ -629,8 +629,8 @@ definition Config.ofComplex
   body: runPass config
 
 中文:
-定义 Config.ofComplex
-  签名: (config : ComplexConfig)
+定义 余nfig.ofComplex
+  签名: (config : 余mplexConfig)
   定义体: runPass config
 
 Depends on / 依赖: config, runPass

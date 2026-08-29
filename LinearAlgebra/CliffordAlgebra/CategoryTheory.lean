@@ -40,8 +40,8 @@ map {_M _N} f := AlgCat.ofHom CliffordAlgebra.map f.toIsometry
   map_comp {_M _N _P} f g := by ext; simp
 
 中文:
-定义 QuadraticModuleCat.cliffordAlgebra
-  签名: : QuadraticModuleCat.{u} R ⥤ AlgCat.{u} R where
+定义 二次模范畴.cliffordAlgebra
+  签名: : 二次模范畴.{u} R ⥤ Alg范畴.{u} R where
   定义体: AlgCat.of R (CliffordAlgebra M.form)
 map {_M _N} f := AlgCat.ofHom CliffordAlgebra.map f.toIsometry
   map_id _M := by simp

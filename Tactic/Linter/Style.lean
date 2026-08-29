@@ -74,7 +74,7 @@ definition parseSetOption
 
 中文:
 定义 parseSetOption
-  签名: : Syntax -> Option Name
+  签名: : Syntax -> 选项类型 Name
 
 Depends on / 依赖: _name, matches, parseSetOption
 -/
@@ -263,7 +263,7 @@ definition findCDot
 
 中文:
 定义 findCDot
-  签名: : Syntax -> Array Syntax
+  签名: : Syntax -> 数组 Syntax
   定义体: (args.map findCDot).flatten
     match kind with
       | ``Lean.Parser.Term.cdot | ``cdotTk => dargs.push stx
@@ -387,7 +387,7 @@ definition findDollarSyntax
 
 中文:
 定义 findDollarSyntax
-  签名: : Syntax -> Array Syntax
+  签名: : Syntax -> 数组 Syntax
   定义体: (args.map findDollarSyntax).flatten
     match kind with
 | ``«term_ __» => dargs.push stx
@@ -487,7 +487,7 @@ definition findLambdaSyntax
 
 中文:
 定义 findLambdaSyntax
-  签名: : Syntax -> Array Syntax
+  签名: : Syntax -> 数组 Syntax
   定义体: (args.map findLambdaSyntax).flatten
     match kind with
       | ``Parser.Term.fun => dargs.push stx
@@ -1002,7 +1002,7 @@ definition elabShow
 
 中文:
 定义 elabShow
-  签名: (newType : Term)
+  签名: (newType : 项)
   定义体: do
   let goal :: goals ← getGoals | throwNoGoalsToBeSolved
   let before ← instantiateMVars (← goal.getType)

@@ -112,7 +112,7 @@ lemma preimage_val_iInter
   proof: preimage_iInter
 
 中文:
-引理 preimage_val_iInter
+引理 preimage_val_i整数er
   结论: A ↓inter (⋂ i, s i) = ⋂ i, A ↓inter s i
   证明: preimage_iInter
 
@@ -131,7 +131,7 @@ lemma preimage_val_sInter
   simp_rw [sInter_eq_biInter, preimage_iInter]
 
 中文:
-引理 preimage_val_sInter
+引理 preimage_val_s整数er
   结论: A ↓inter (⋂₀ S) = ⋂₀ { (A ↓inter B) | B in S }
   证明: by
   rw [← Set.image]; rw [sInter_image]
@@ -153,7 +153,7 @@ lemma preimage_val_sInter_eq_sInter
   simp only [preimage_sInter, sInter_image]
 
 中文:
-引理 preimage_val_sInter_eq_sInter
+引理 preimage_val_s整数er_eq_s整数er
   结论: A ↓inter (⋂₀ S) = ⋂₀ ((A ↓inter ·) '' S)
   证明: by
   simp only [preimage_sInter, sInter_image]
@@ -209,7 +209,7 @@ lemma image_val_union
 
 中文:
 引理 image_val_union
-  结论: (↑(D union E) : Set α) = ↑D union ↑E
+  结论: (↑(D union E) : 集合 α) = ↑D union ↑E
   证明: image_union _ _ _
 
 @[simp]
@@ -231,7 +231,7 @@ lemma image_val_inter
 
 中文:
 引理 image_val_inter
-  结论: (↑(D inter E) : Set α) = ↑D inter ↑E
+  结论: (↑(D inter E) : 集合 α) = ↑D inter ↑E
   证明: image_inter Subtype.val_injective
 
 @[simp]
@@ -255,7 +255,7 @@ lemma image_val_sdiff
 
 中文:
 引理 image_val_sdiff
-  结论: (↑(D \ E) : Set α) = ↑D \ ↑E
+  结论: (↑(D \ E) : 集合 α) = ↑D \ ↑E
   证明: image_sdiff Subtype.val_injective _ _
 
 @[deprecated (since := "2026-06-03")] alias image_val_diff := image_val_sdiff
@@ -307,7 +307,7 @@ lemma image_val_sUnion
 
 中文:
 引理 image_val_sUnion
-  结论: ↑(⋃₀ T) = ⋃₀ { (B : Set α) | B in T}
+  结论: ↑(⋃₀ T) = ⋃₀ { (B : 集合 α) | B in T}
   证明: by
   rw [image_sUnion]; rw [image]
 
@@ -331,7 +331,7 @@ lemma image_val_iUnion
 
 中文:
 引理 image_val_iUnion
-  结论: ↑(⋃ i, t i) = ⋃ i, (t i : Set α)
+  结论: ↑(⋃ i, t i) = ⋃ i, (t i : 集合 α)
   证明: image_iUnion
 
 @[simp]
@@ -354,9 +354,9 @@ lemma image_val_sInter
 @[simp]
 
 中文:
-引理 image_val_sInter
-  条件: (hT : T.Nonempty)
-  结论: (↑(⋂₀ T) : Set α) = ⋂₀ { (↑B : Set α) | B in T }
+引理 image_val_s整数er
+  条件: (hT : T.非空)
+  结论: (↑(⋂₀ T) : 集合 α) = ⋂₀ { (↑B : 集合 α) | B in T }
   证明: by
   rw [← Set.image]; rw [sInter_image]; rw [sInter_eq_biInter]; rw [Subtype.val_injective.injOn.image_biInter_eq hT]
 
@@ -380,9 +380,9 @@ lemma image_val_iInter
 @[simp]
 
 中文:
-引理 image_val_iInter
-  条件: [Nonempty ι]
-  结论: (↑(⋂ i, t i) : Set α) = ⋂ i, (↑(t i) : Set α)
+引理 image_val_i整数er
+  条件: [非空 ι]
+  结论: (↑(⋂ i, t i) : 集合 α) = ⋂ i, (↑(t i) : 集合 α)
   证明: Subtype.val_injective.injOn.image_iInter_eq
 
 @[simp]
@@ -515,7 +515,7 @@ lemma image_val_inj
 
 中文:
 引理 image_val_inj
-  结论: (D : Set α) = ↑E ↔ D = E
+  结论: (D : 集合 α) = ↑E ↔ D = E
   证明: Subtype.val_injective.image_injective.eq_iff
 
 Depends on / 依赖: Subtype, Subtype.val_injective.image_injective.eq_iff, eq_iff, image_injective, val_injective
@@ -532,7 +532,7 @@ lemma image_val_injective
 
 中文:
 引理 image_val_injective
-  结论: Function.Injective ((↑) : Set A -> Set α)
+  结论: 函数.单射 ((↑) : 集合 A -> 集合 α)
   证明: Subtype.val_injective.image_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective.image_injective, image_injective, val_injective
@@ -553,7 +553,7 @@ lemma subset_of_image_val_subset_image_val
 
 中文:
 引理 subset_of_image_val_subset_image_val
-  条件: (h : (↑D : Set α) subseteq ↑E)
+  条件: (h : (↑D : 集合 α) subseteq ↑E)
   结论: D subseteq E
   证明: (image_subset_image_iff Subtype.val_injective).1 h
 
@@ -577,7 +577,7 @@ lemma image_val_mono
 中文:
 引理 image_val_mono
   条件: (h : D subseteq E)
-  结论: (↑D : Set α) subseteq ↑E
+  结论: (↑D : 集合 α) subseteq ↑E
   证明: (image_subset_image_iff Subtype.val_injective).2 h
 
 Depends on / 依赖: Subtype, Subtype.val_injective, image_subset_image_iff, val_injective

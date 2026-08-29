@@ -41,7 +41,7 @@ definition constructibleTopologySubbasis
 
 中文:
 定义 constructibleTopologySubbasis
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: { s | IsOpen s ∧ IsCompact s } union { s | IsClosed s ∧ IsCompact sᶜ }
 
 Depends on / 依赖: IsClosed, IsCompact, IsOpen
@@ -62,7 +62,7 @@ definition constructibleTopology
 
 中文:
 定义 constructibleTopology
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: .generateFrom (constructibleTopologySubbasis X)
 
 Depends on / 依赖: constructibleTopologySubbasis, generateFrom
@@ -82,7 +82,7 @@ abbreviation WithConstructibleTopology
 
 中文:
 缩写 WithConstructibleTopology
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: WithTopology X (constructibleTopology X)
 
 Depends on / 依赖: WithTopology, constructibleTopology
@@ -102,7 +102,7 @@ lemma WithConstructibleTopology.isOpen_iff
 
 中文:
 引理 WithConstructibleTopology.isOpen_iff
-  条件: {s : Set (WithConstructibleTopology X)}
+  条件: {s : 集合 (WithConstructibleTopology X)}
   证明: WithTopology.isOpen_iff _
 
 Depends on / 依赖: WithTopology, WithTopology.isOpen_iff, isOpen_iff
@@ -121,7 +121,7 @@ lemma WithConstructibleTopology.isClosed_iff
 
 中文:
 引理 WithConstructibleTopology.isClosed_iff
-  条件: {s : Set (WithConstructibleTopology X)}
+  条件: {s : 集合 (WithConstructibleTopology X)}
   证明: WithTopology.isClosed_iff _
 
 Depends on / 依赖: WithTopology, WithTopology.isClosed_iff, isClosed_iff
@@ -141,8 +141,8 @@ lemma IsCompact.isOpen_constructibleTopology_of_isOpen
   simp [constructibleTopologySubbasis, ho, hs]
 
 中文:
-引理 IsCompact.isOpen_constructibleTopology_of_isOpen
-  结论: {s : Set X}
+引理 是紧集.isOpen_constructibleTopology_of_isOpen
+  结论: {s : 集合 X}
   证明: by
   apply TopologicalSpace.isOpen_generateFrom_of_mem
   simp [constructibleTopologySubbasis, ho, hs]
@@ -167,8 +167,8 @@ lemma IsCompact.isOpen_constructibleTopology_of_isClosed
 @[simp]
 
 中文:
-引理 IsCompact.isOpen_constructibleTopology_of_isClosed
-  结论: {s : Set X}
+引理 是紧集.isOpen_constructibleTopology_of_isClosed
+  结论: {s : 集合 X}
   证明: by
   apply TopologicalSpace.isOpen_generateFrom_of_mem
   simp [constructibleTopologySubbasis, ho, hs]
@@ -194,7 +194,7 @@ lemma compl_mem_constructibleTopologySubbasis_iff
 
 中文:
 引理 compl_mem_constructibleTopologySubbasis_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   grind [constructibleTopologySubbasis, isClosed_compl_iff, compl_compl]
 
@@ -217,7 +217,7 @@ lemma isCompact_of_mem_constructibleTopologySubbasis
 
 中文:
 引理 isCompact_of_mem_constructibleTopologySubbasis
-  结论: [CompactSpace X] {s : Set X}
+  结论: [紧空间 X] {s : 集合 X}
   证明: by
   obtain (hs | hs) := hs
   · exact hs.2
@@ -243,8 +243,8 @@ lemma isCompact_sInter_of_subset_constructibleTopologySubbasis
   · exact isCompact_of_mem_constructibleTopologySubbasis (hs ht)
 
 中文:
-引理 isCompact_sInter_of_subset_constructibleTopologySubbasis
-  结论: [CompactSpace X]
+引理 isCompact_s整数er_of_subset_constructibleTopologySubbasis
+  结论: [紧空间 X]
   证明: by
   refine QuasiSeparatedSpace.isCompact_sInter hf (fun t ht => ?_) (fun t ht => ?_)
   · apply (hs ht).imp <;> grind
@@ -278,7 +278,7 @@ instance compactSpace_withConstructibleTopology
 
 中文:
 实例 compactSpace_withConstructibleTopology
-  签名: [CompactSpace X] [QuasiSober X]
+  签名: [紧空间 X] [拟醇 X]
   定义体: by
   suffices h : @CompactSpace X (constructibleTopology X) from
     @Function.Surjective.compactSpace _ _ (constructibleTopology X) _ _

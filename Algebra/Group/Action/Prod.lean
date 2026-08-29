@@ -60,7 +60,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul M N] [IsScalarTower M N α] [IsScalarTower M N β]
+  签名: [标量乘法 M N] [标量塔 M N α] [标量塔 M N β]
   定义体: by ext <;> exact smul_assoc ..
 
 @[to_additive]
@@ -84,7 +84,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulCommClass M N α] [SMulCommClass M N β]
+  签名: [标量交换类 M N α] [标量交换类 M N β]
   定义体: by ext <;> exact smul_comm ..
 
 @[to_additive]
@@ -107,7 +107,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul Mᵐᵒᵖ α] [SMul Mᵐᵒᵖ β] [IsCentralScalar M α] [IsCentralScalar M β]
+  签名: [标量乘法 Mᵐᵒᵖ α] [标量乘法 Mᵐᵒᵖ β] [中心标量 M α] [中心标量 M β]
   定义体: Prod.ext (op_smul_eq_smul _ _) (op_smul_eq_smul _ _)
 
 @[to_additive]
@@ -132,7 +132,7 @@ instance faithfulSMulLeft
 
 中文:
 实例 faithfulSMulLeft
-  签名: [FaithfulSMul M α] [Nonempty β]
+  签名: [忠实标量乘法 M α] [非空 β]
   定义体: let ⟨b⟩ := ‹Nonempty β›
     eq_of_smul_eq_smul fun a : α => by injection h (a, b)
 
@@ -157,7 +157,7 @@ instance faithfulSMulRight
 
 中文:
 实例 faithfulSMulRight
-  签名: [Nonempty α] [FaithfulSMul M β]
+  签名: [非空 α] [忠实标量乘法 M β]
   定义体: let ⟨a⟩ := ‹Nonempty α›
     eq_of_smul_eq_smul fun b : β => by injection h (a, b)
 
@@ -181,7 +181,7 @@ instance smulCommClassBoth
 
 中文:
 实例 smulCommClassBoth
-  签名: [Mul N] [Mul P] [SMul M N] [SMul M P] [SMulCommClass M N N]
+  签名: [乘法 N] [乘法 P] [标量乘法 M N] [标量乘法 M P] [标量交换类 M N N]
   定义体: by simp [smul_def, mul_def, mul_smul_comm]
 
 Depends on / 依赖: mul_def, mul_smul_comm, smul_def
@@ -202,7 +202,7 @@ instance isScalarTowerBoth
 
 中文:
 实例 isScalarTowerBoth
-  签名: [Mul N] [Mul P] [SMul M N] [SMul M P] [IsScalarTower M N N]
+  签名: [乘法 N] [乘法 P] [标量乘法 M N] [标量乘法 M P] [标量塔 M N N]
   定义体: by simp [smul_def, mul_def, smul_mul_assoc]
 
 @[to_additive]
@@ -225,7 +225,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [Monoid M] [MulAction M α] [MulAction M β]
+  签名: [幺半群 M] [乘法作用 M α] [乘法作用 M β]
   定义体: by ext <;> exact mul_smul ..
   one_smul _ := by ext <;> exact one_smul ..
 
@@ -254,7 +254,7 @@ definition smulMulHom
 
 中文:
 定义 smulMulHom
-  签名: [Monoid α] [Mul β] [MulAction α β] [IsScalarTower α β β] [SMulCommClass α β β]
+  签名: [幺半群 α] [乘法 β] [乘法作用 α β] [标量塔 α β β] [标量交换类 α β β]
   定义体: a.1 • a.2
   map_mul' _ _ := (smul_mul_smul_comm _ _ _ _).symm
 -/
@@ -275,7 +275,7 @@ definition smulMonoidHom
 
 中文:
 定义 smulMonoidHom
-  签名: [Monoid α] [MulOneClass β] [MulAction α β] [IsScalarTower α β β]
+  签名: [幺半群 α] [MulOne类 β] [乘法作用 α β] [标量塔 α β β]
   定义体: { smulMulHom with map_one' := one_smul _ _ }
 
 Depends on / 依赖: map_one, one_smul, smulMulHom
@@ -307,8 +307,8 @@ abbreviation MulAction.prodOfSMulCommClass
     rw [mul_smul]; rw [mul_smul]; rw [smul_comm y.1 x.2]
 
 中文:
-缩写 MulAction.prodOfSMulCommClass
-  签名: [MulAction M α] [MulAction N α] [SMulCommClass M N α]
+缩写 乘法作用.prodOfSMulCommClass
+  签名: [乘法作用 M α] [乘法作用 N α] [标量交换类 M N α]
   定义体: mn.1 • mn.2 • a
   one_smul a := (one_smul M _).trans (one_smul N a)
   mul_smul x y a := by
@@ -341,7 +341,7 @@ definition MulAction.prodEquiv
   invF
 
 中文:
-定义 MulAction.prodEquiv
+定义 乘法作用.prodEquiv
   签名: :
   定义体: letI instM := MulAction.compHom α (.inl M N)
     letI instN := MulAction.compHom α (.inr M N)

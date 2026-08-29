@@ -133,7 +133,7 @@ theorem Metric.uniformCauchySeqOn_iff
 
 中文:
 定理 Metric.uniformCauchySeqOn_iff
-  条件: {γ : 类型} {F : β -> γ -> α} {s : Set γ}
+  条件: {γ : 类型} {F : β -> γ -> α} {s : 集合 γ}
   证明: by
   constructor
   · intro h ε hε
@@ -322,7 +322,7 @@ lemma Metric.exists_subseq_bounded_of_cauchySeq
   exact Filter.extraction_forall_of_eventua
 
 中文:
-引理 Metric.exists_subseq_bounded_of_cauchySeq
+引理 Metric.存在_subseq_bounded_of_cauchySeq
   结论: (u : 自然数 -> α) (hu : CauchySeq u) (b : 自然数 -> 实数)
   证明: by
   rw [cauchySeq_iff] at hu

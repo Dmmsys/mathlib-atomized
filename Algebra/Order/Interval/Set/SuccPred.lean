@@ -54,7 +54,7 @@ lemma Ico_add_one_left_eq_Ioo
 中文:
 引理 Ico_add_one_left_eq_Ioo
   条件: (a b : α)
-  结论: Ico (a + 1) b = Ioo a b
+  结论: 左闭右开区间 (a + 1) b = 开区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ico_succ_left_eq_Ioo a b
 
@@ -76,7 +76,7 @@ lemma Icc_add_one_left_eq_Ioc_of_not_isMax
 中文:
 引理 Icc_add_one_left_eq_Ioc_of_not_isMax
   条件: (ha : ¬ IsMax a) (b : α)
-  结论: Icc (a + 1) b = Ioc a b
+  结论: 闭区间 (a + 1) b = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Icc_succ_left_eq_Ioc_of_not_isMax ha b
 
@@ -98,7 +98,7 @@ lemma Ico_add_one_right_eq_Icc_of_not_isMax
 中文:
 引理 Ico_add_one_right_eq_Icc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ico a (b + 1) = Icc a b
+  结论: 左闭右开区间 a (b + 1) = 闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ico_succ_right_eq_Icc_of_not_isMax hb a
 
@@ -120,7 +120,7 @@ lemma Ioo_add_one_right_eq_Ioc_of_not_isMax
 中文:
 引理 Ioo_add_one_right_eq_Ioc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ioo a (b + 1) = Ioc a b
+  结论: 开区间 a (b + 1) = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ioo_succ_right_eq_Ioc_of_not_isMax hb a
 
@@ -164,7 +164,7 @@ lemma insert_Icc_add_one_left_eq_Icc
 中文:
 引理 insert_Icc_add_one_left_eq_Icc
   条件: (h : a <= b)
-  结论: insert a (Icc (a + 1) b) = Icc a b
+  结论: insert a (闭区间 (a + 1) b) = 闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using insert_Icc_succ_left_eq_Icc h
 
@@ -228,7 +228,7 @@ lemma insert_Ico_add_one_left_eq_Ico
 中文:
 引理 insert_Ico_add_one_left_eq_Ico
   条件: (h : a < b)
-  结论: insert a (Ico (a + 1) b) = Ico a b
+  结论: insert a (左闭右开区间 (a + 1) b) = 左闭右开区间 a b
   证明: by
   simpa [succ_eq_add_one] using insert_Ico_succ_left_eq_Ico h
 
@@ -271,7 +271,7 @@ lemma insert_Ioc_add_one_left_eq_Ioc
 中文:
 引理 insert_Ioc_add_one_left_eq_Ioc
   条件: (h : a < b)
-  结论: insert (a + 1) (Ioc (a + 1) b) = Ioc a b
+  结论: insert (a + 1) (左开右闭区间 (a + 1) b) = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using insert_Ioc_succ_left_eq_Ioc h
 
@@ -301,7 +301,7 @@ lemma Icc_add_one_left_eq_Ioc
 中文:
 引理 Icc_add_one_left_eq_Ioc
   条件: (a b : α)
-  结论: Icc (a + 1) b = Ioc a b
+  结论: 闭区间 (a + 1) b = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Icc_succ_left_eq_Ioc a b
 
@@ -323,7 +323,7 @@ lemma Ico_add_one_right_eq_Icc
 中文:
 引理 Ico_add_one_right_eq_Icc
   条件: (a b : α)
-  结论: Ico a (b + 1) = Icc a b
+  结论: 左闭右开区间 a (b + 1) = 闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ico_succ_right_eq_Icc a b
 
@@ -345,7 +345,7 @@ lemma Ioo_add_one_right_eq_Ioc
 中文:
 引理 Ioo_add_one_right_eq_Ioc
   条件: (a b : α)
-  结论: Ioo a (b + 1) = Ioc a b
+  结论: 开区间 a (b + 1) = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ioo_succ_right_eq_Ioc a b
 
@@ -367,7 +367,7 @@ lemma Ico_add_one_add_one_eq_Ioc
 中文:
 引理 Ico_add_one_add_one_eq_Ioc
   条件: (a b : α)
-  结论: Ico (a + 1) (b + 1) = Ioc a b
+  结论: 左闭右开区间 (a + 1) (b + 1) = 左开右闭区间 a b
   证明: by
   simpa [succ_eq_add_one] using Ico_succ_succ_eq_Ioc a b
 
@@ -390,7 +390,7 @@ lemma insert_Ico_right_eq_Ico_add_one
 中文:
 引理 insert_Ico_right_eq_Ico_add_one
   条件: (h : a <= b)
-  结论: insert b (Ico a b) = Ico a (b + 1)
+  结论: insert b (左闭右开区间 a b) = 左闭右开区间 a (b + 1)
   证明: by
   simpa [succ_eq_add_one] using insert_Ico_right_eq_Ico_succ h
 
@@ -411,7 +411,7 @@ lemma insert_Ioc_right_eq_Ioc_add_one
 中文:
 引理 insert_Ioc_right_eq_Ioc_add_one
   条件: (h : a <= b)
-  结论: insert (b + 1) (Ioc a b) = Ioc a (b + 1)
+  结论: insert (b + 1) (左开右闭区间 a b) = 左开右闭区间 a (b + 1)
   证明: insert_Ioc_right_eq_Ioc_add_one_of_not_isMax h (not_isMax _)
 
 Depends on / 依赖: insert_Ioc_right_eq_Ioc_add_one_of_not_isMax, not_isMax
@@ -438,7 +438,7 @@ lemma Ioc_sub_one_right_eq_Ioo
 中文:
 引理 Ioc_sub_one_right_eq_Ioo
   条件: (a b : α)
-  结论: Ioc a (b - 1) = Ioo a b
+  结论: 左开右闭区间 a (b - 1) = 开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioc_pred_right_eq_Ioo a b
 
@@ -460,7 +460,7 @@ lemma Icc_sub_one_right_eq_Ico_of_not_isMin
 中文:
 引理 Icc_sub_one_right_eq_Ico_of_not_isMin
   条件: (hb : ¬ IsMin b) (a : α)
-  结论: Icc a (b - 1) = Ico a b
+  结论: 闭区间 a (b - 1) = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Icc_pred_right_eq_Ico_of_not_isMin hb a
 
@@ -482,7 +482,7 @@ lemma Ioc_sub_one_left_eq_Icc_of_not_isMin
 中文:
 引理 Ioc_sub_one_left_eq_Icc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioc (a - 1) b = Icc a b
+  结论: 左开右闭区间 (a - 1) b = 闭区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioc_pred_left_eq_Icc_of_not_isMin ha b
 
@@ -504,7 +504,7 @@ lemma Ioo_sub_one_left_eq_Ioc_of_not_isMin
 中文:
 引理 Ioo_sub_one_left_eq_Ioc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioo (a - 1) b = Ico a b
+  结论: 开区间 (a - 1) b = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioo_pred_left_eq_Ioc_of_not_isMin ha b
 
@@ -548,7 +548,7 @@ lemma insert_Icc_sub_one_right_eq_Icc
 中文:
 引理 insert_Icc_sub_one_right_eq_Icc
   条件: (h : a <= b)
-  结论: insert b (Icc a (b - 1)) = Icc a b
+  结论: insert b (闭区间 a (b - 1)) = 闭区间 a b
   证明: by
   simpa [pred_eq_sub_one] using insert_Icc_pred_right_eq_Icc h
 
@@ -612,7 +612,7 @@ lemma insert_Ioc_sub_one_right_eq_Ioc
 中文:
 引理 insert_Ioc_sub_one_right_eq_Ioc
   条件: (h : a < b)
-  结论: insert b (Ioc a (b - 1)) = Ioc a b
+  结论: insert b (左开右闭区间 a (b - 1)) = 左开右闭区间 a b
   证明: by
   simpa [pred_eq_sub_one] using insert_Ioc_pred_right_eq_Ioc h
 
@@ -655,7 +655,7 @@ lemma insert_Ico_sub_one_right_eq_Ico
 中文:
 引理 insert_Ico_sub_one_right_eq_Ico
   条件: (h : a < b)
-  结论: insert (b - 1) (Ico a (b - 1)) = Ico a b
+  结论: insert (b - 1) (左闭右开区间 a (b - 1)) = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using insert_Ico_pred_right_eq_Ico h
 
@@ -685,7 +685,7 @@ lemma Icc_sub_one_right_eq_Ico
 中文:
 引理 Icc_sub_one_right_eq_Ico
   条件: (a b : α)
-  结论: Icc a (b - 1) = Ico a b
+  结论: 闭区间 a (b - 1) = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Icc_pred_right_eq_Ico a b
 
@@ -707,7 +707,7 @@ lemma Ioc_sub_one_left_eq_Icc
 中文:
 引理 Ioc_sub_one_left_eq_Icc
   条件: (a b : α)
-  结论: Ioc (a - 1) b = Icc a b
+  结论: 左开右闭区间 (a - 1) b = 闭区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioc_pred_left_eq_Icc a b
 
@@ -729,7 +729,7 @@ lemma Ioo_sub_one_left_eq_Ioc
 中文:
 引理 Ioo_sub_one_left_eq_Ioc
   条件: (a b : α)
-  结论: Ioo (a - 1) b = Ico a b
+  结论: 开区间 (a - 1) b = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioo_pred_left_eq_Ioc a b
 
@@ -751,7 +751,7 @@ lemma Ioc_sub_one_sub_one_eq_Ico
 中文:
 引理 Ioc_sub_one_sub_one_eq_Ico
   条件: (a b : α)
-  结论: Ioc (a - 1) (b - 1) = Ico a b
+  结论: 左开右闭区间 (a - 1) (b - 1) = 左闭右开区间 a b
   证明: by
   simpa [pred_eq_sub_one] using Ioc_pred_pred_eq_Ico a b
 
@@ -774,7 +774,7 @@ lemma insert_Ioc_left_eq_Ioc_sub_one
 中文:
 引理 insert_Ioc_left_eq_Ioc_sub_one
   条件: (h : a <= b)
-  结论: insert a (Ioc a b) = Ioc (a - 1) b
+  结论: insert a (左开右闭区间 a b) = 左开右闭区间 (a - 1) b
   证明: by
   simpa [pred_eq_sub_one] using insert_Ioc_left_eq_Ioc_pred h
 
@@ -795,7 +795,7 @@ lemma insert_Ico_left_eq_Ico_sub_one
 中文:
 引理 insert_Ico_left_eq_Ico_sub_one
   条件: (h : a <= b)
-  结论: insert (a - 1) (Ico a b) = Ico (a - 1) b
+  结论: insert (a - 1) (左闭右开区间 a b) = 左闭右开区间 (a - 1) b
   证明: insert_Ico_left_eq_Ico_sub_one_of_not_isMin h (not_isMin _)
 
 Depends on / 依赖: insert_Ico_left_eq_Ico_sub_one_of_not_isMin, not_isMin
@@ -821,7 +821,7 @@ lemma Icc_add_one_sub_one_eq_Ioo
 中文:
 引理 Icc_add_one_sub_one_eq_Ioo
   条件: (a b : α)
-  结论: Icc (a + 1) (b - 1) = Ioo a b
+  结论: 闭区间 (a + 1) (b - 1) = 开区间 a b
   证明: by
   simpa [succ_eq_add_one, pred_eq_sub_one] using Icc_succ_pred_eq_Ioo a b
 
@@ -850,7 +850,7 @@ lemma Iio_add_one_eq_Iic_of_not_isMax
 中文:
 引理 Iio_add_one_eq_Iic_of_not_isMax
   条件: (hb : ¬ IsMax b)
-  结论: Iio (b + 1) = Iic b
+  结论: 左无界右开区间 (b + 1) = 左无界右闭区间 b
   证明: by
   simpa [succ_eq_add_one] using Iio_succ_eq_Iic_of_not_isMax hb
 
@@ -874,7 +874,7 @@ lemma Iio_add_one_eq_Iic
 中文:
 引理 Iio_add_one_eq_Iic
   条件: (b : α)
-  结论: Iio (b + 1) = Iic b
+  结论: 左无界右开区间 (b + 1) = 左无界右闭区间 b
   证明: by
   simpa [succ_eq_add_one] using Iio_succ_eq_Iic b
 
@@ -901,7 +901,7 @@ lemma Iic_sub_one_eq_Iio_of_not_isMin
 中文:
 引理 Iic_sub_one_eq_Iio_of_not_isMin
   条件: (hb : ¬ IsMin b)
-  结论: Iic (b - 1) = Iio b
+  结论: 左无界右闭区间 (b - 1) = 左无界右开区间 b
   证明: by
   simpa [pred_eq_sub_one] using Iic_pred_eq_Iio_of_not_isMin hb
 
@@ -925,7 +925,7 @@ lemma Iic_sub_one_eq_Iio
 中文:
 引理 Iic_sub_one_eq_Iio
   条件: (b : α)
-  结论: Iic (b - 1) = Iio b
+  结论: 左无界右闭区间 (b - 1) = 左无界右开区间 b
   证明: by
   simpa [pred_eq_sub_one] using Iic_pred_eq_Iio b
 
@@ -954,7 +954,7 @@ lemma Ici_add_one_eq_Ioi_of_not_isMax
 中文:
 引理 Ici_add_one_eq_Ioi_of_not_isMax
   条件: (ha : ¬ IsMax a)
-  结论: Ici (a + 1) = Ioi a
+  结论: 左闭右无界区间 (a + 1) = 左开右无界区间 a
   证明: by
   simpa [succ_eq_add_one] using Ici_succ_eq_Ioi_of_not_isMax ha
 
@@ -978,7 +978,7 @@ lemma Ici_add_one_eq_Ioi
 中文:
 引理 Ici_add_one_eq_Ioi
   条件: (a : α)
-  结论: Ici (a + 1) = Ioi a
+  结论: 左闭右无界区间 (a + 1) = 左开右无界区间 a
   证明: by
   simpa [succ_eq_add_one] using Ici_succ_eq_Ioi a
 
@@ -1005,7 +1005,7 @@ lemma Ioi_sub_one_eq_Ici_of_not_isMin
 中文:
 引理 Ioi_sub_one_eq_Ici_of_not_isMin
   条件: (ha : ¬ IsMin a)
-  结论: Ioi (a - 1) = Ici a
+  结论: 左开右无界区间 (a - 1) = 左闭右无界区间 a
   证明: by
   simpa [pred_eq_sub_one] using Ioi_pred_eq_Ici_of_not_isMin ha
 
@@ -1029,7 +1029,7 @@ lemma Ioi_sub_one_eq_Ici
 中文:
 引理 Ioi_sub_one_eq_Ici
   条件: (a : α)
-  结论: Ioi (a - 1) = Ici a
+  结论: 左开右无界区间 (a - 1) = 左闭右无界区间 a
   证明: by
   simpa [pred_eq_sub_one] using Ioi_pred_eq_Ici a
 

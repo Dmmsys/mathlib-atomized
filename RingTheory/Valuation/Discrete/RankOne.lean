@@ -53,7 +53,7 @@ definition valueGroup₀_equiv_withZeroMulInt
     (Subgroup.zpowers_inv (g := hv.generato
 
 中文:
-定义 valueGroup₀_equiv_withZeroMulInt
+定义 valueGroup₀_equiv_withZeroMul整数
   签名: : ValueGroup₀ (.ofClass v) ≃*o 整数ᵐ⁰ where
   定义体: MulEquiv.withZero (intEquivOfZPowersEqTop _
     (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)).symm
@@ -79,7 +79,7 @@ lemma valueGroup₀_equiv_withZeroMulInt_apply_zero
   proof: by simp
 
 中文:
-引理 valueGroup₀_equiv_withZeroMulInt_apply_zero
+引理 valueGroup₀_equiv_withZeroMul整数_apply_zero
   证明: by simp
 -/
 lemma valueGroup₀_equiv_withZeroMulInt_apply_zero :
@@ -96,7 +96,7 @@ lemma valueGroup₀_equiv_withZeroMulInt_apply_zpow
     (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)]
 
 中文:
-引理 valueGroup₀_equiv_withZeroMulInt_apply_zpow
+引理 valueGroup₀_equiv_withZeroMul整数_apply_zpow
   条件: (k : 整数)
   证明: by
   simp [WithZero.exp, ← mulintEquivOfZPowersEqTop_symm_apply_zpow
@@ -121,7 +121,7 @@ lemma valueGroup₀_equiv_withZeroMulInt_strictMono
     (Left.one_lt_inv_iff.mpr hv.generator'_lt_one)))).lt_iff_lt]
 
 中文:
-引理 valueGroup₀_equiv_withZeroMulInt_strictMono
+引理 valueGroup₀_equiv_withZeroMul整数_strictMono
   证明: by
   intro x y hxy
   rwa [(WithZero.map'_strictMono (MulEquiv.strictMono_symm (mulintEquivOfZPowersEqTop_strictMono
@@ -189,8 +189,8 @@ lemma valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
     ← (MulEquiv.injective (intEquivOf
 
 中文:
-引理 valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
-  结论: (hsurj : Function.Surjective v)
+引理 valueGroup₀_equiv_withZeroMul整数_restrict_apply_of_surjective
+  结论: (hsurj : 函数.满射 v)
   证明: by
   simp only [Valuation.restrict_def, ValueGroup₀.restrict₀_apply,
     valueGroup₀_equiv_withZeroMulInt_apply]

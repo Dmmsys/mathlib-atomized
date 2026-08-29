@@ -148,7 +148,7 @@ ne_of_mem_of_not_mem hx by simp [Algebra.algebraMapSubmonoid]
 
 中文:
 实例 :
-  签名: IsTorsionFree S Sₚ
+  签名: 是无挠 S Sₚ
   定义体: by
   rw [isTorsionFree_iff_algebraMap_injective]; rw [injective_iff_isRegular (algebraMapSubmonoid S P.primeCompl)]
 exact fun ⟨x, hx⟩ => isRegular_iff_ne_zero'.mpr
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree R Sₚ
+  签名: 是无挠 R Sₚ
   定义体: by
   have := IsLocalization.AtPrime.faithfulSMul Rₚ R P
   exact IsTorsionFree.trans_faithfulSMul R Rₚ _
@@ -196,7 +196,7 @@ abbreviation Localization.AtPrime.liftAlgebra
 
 中文:
 缩写 Localization.AtPrime.liftAlgebra
-  签名: : Algebra Sₚ L
+  签名: : 代数 Sₚ L
   定义体: (map _ (T := S⁰) (RingHom.id S)
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
       P.primeCompl_le_nonZeroDivisors)).toAlgebra
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower S Sₚ L
+  签名: 标量塔 S Sₚ L
   定义体: localization_isScalarTower_of_submonoid_le _ _ _ _
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
       P.primeCompl_le_nonZeroDivisors)
@@ -281,7 +281,7 @@ fun ⟨x, hx⟩ => by simpa using fun h => hx by simp [h]).toAlgebra
 
 中文:
 实例 :
-  签名: Algebra Rₚ L
+  签名: 代数 Rₚ L
   定义体: (lift (M := P.primeCompl) (g := algebraMap R L) <|
 fun ⟨x, hx⟩ => by simpa using fun h => hx by simp [h]).toAlgebra
 
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower Rₚ K L
+  签名: 标量塔 Rₚ K L
   定义体: of_algebraMap_eq' (ringHom_ext P.primeCompl
     (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra]))
 
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R Rₚ K
+  签名: 标量塔 R Rₚ K
   定义体: of_algebraMap_eq' (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra])
 
 Depends on / 依赖: RingHom, RingHom.algebraMap_toAlgebra, RingHom.ext, algebraMap_toAlgebra, of_algebraMap_eq
@@ -346,7 +346,7 @@ refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?
 
 中文:
 实例 :
-  签名: IsScalarTower Rₚ Sₚ L
+  签名: 标量塔 Rₚ Sₚ L
   定义体: by
 refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
   rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq R
@@ -368,8 +368,8 @@ instance [IsDedekindDomain
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ P.primeCompl_le_nonZeroDivisors) _
 
 中文:
-实例 [IsDedekindDomain
-  签名: S] : IsDedekindDomain Sₚ
+实例 [是Dedekind整环
+  签名: S] : 是Dedekind整环 Sₚ
   定义体: isDedekindDomain S
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ P.primeCompl_le_nonZeroDivisors) _
 
@@ -389,8 +389,8 @@ instance [IsDedekindDomain
   body: IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h => hP.1 h)
 
 中文:
-实例 [IsDedekindDomain
-  签名: R] [IsDedekindDomain S] [Module.Finite R S] [hP
+实例 [是Dedekind整环
+  签名: R] [是Dedekind整环 S] [模.有限 R S] [hP
   定义体: IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h => hP.1 h)
 
 Depends on / 依赖: IsDedekindDomain, IsDedekindDomain.isPrincipalIdealRing_localization_over_prime, isPrincipalIdealRing_localization_over_prime
@@ -413,7 +413,7 @@ instance [Algebra.IsSeparable
 local notation3 "P''" => algebraMapSubmonoid T P.primeC
 
 中文:
-实例 [Algebra.IsSeparable
+实例 [代数.是可分
   签名: K L] :
   定义体: OreLocalization.instAlgebra
     Algebra.IsSeparable (FractionRing Rₚ) (FractionRing Sₚ) :=
@@ -448,7 +448,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (algebraMapSubmonoid T P') Tₚ
+  签名: 是Localization (algebraMapSubmonoid T P') Tₚ
   定义体: by
   rw [show algebraMapSubmonoid T P' = P'' by simp]
   exact Localization.isLocalization
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower S Sₚ Tₚ
+  签名: 标量塔 S Sₚ Tₚ
   定义体: IsScalarTower.of_algebraMap_eq'
     by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
 
@@ -512,7 +512,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R Sₚ Tₚ
+  签名: 标量塔 R Sₚ Tₚ
   定义体: IsScalarTower.of_algebraMap_eq'
     by rw [IsScalarTower.algebraMap_eq R S Sₚ, ← RingHom.comp_assoc,
       ← IsScalarTower.algebraMap_eq S, ← IsScalarTower.algebraMap_eq]
@@ -533,8 +533,8 @@ instance [Module.Finite
   body: Module.Finite.of_isLocalization S T P'
 
 中文:
-实例 [Module.Finite
-  签名: S T] : Module.Finite Sₚ Tₚ
+实例 [模.有限
+  签名: S T] : 模.有限 Sₚ Tₚ
   定义体: Module.Finite.of_isLocalization S T P'
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_isLocalization, of_isLocalization
@@ -551,8 +551,8 @@ instance [IsTorsionFree
     Ideal.primeCompl_le_nonZeroDivisors P
 
 中文:
-实例 [IsTorsionFree
-  签名: S T] : IsTorsionFree Sₚ Tₚ
+实例 [是无挠
+  签名: S T] : 是无挠 Sₚ Tₚ
   定义体: .of_isLocalization S T algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
     Ideal.primeCompl_le_nonZeroDivisors P
 
@@ -572,8 +572,8 @@ instance [Algebra.IsIntegral
     isIntegral_localization : (algebraMap Rₚ Sₚ).IsIntegral)
 
 中文:
-实例 [Algebra.IsIntegral
-  签名: R S] : Algebra.Is整数egral Rₚ Sₚ
+实例 [代数.是整
+  签名: R S] : 代数.是整 Rₚ Sₚ
   定义体: Algebra.isIntegral_def.mpr (algebraMap_eq_map_map_submonoid P.primeCompl S Rₚ Sₚ ▸
     isIntegral_localization : (algebraMap Rₚ Sₚ).IsIntegral)
 
@@ -599,7 +599,7 @@ have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivis
 
 中文:
 实例 :
-  签名: IsScalarTower Rₚ Sₚ Tₚ
+  签名: 标量塔 Rₚ Sₚ Tₚ
   定义体: by
   refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
 have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
@@ -626,8 +626,8 @@ instance [IsTorsionFree
 exact fun _ h => mem_nonZeroDivisors_of_ne_zero ne_of_mem_of_not_mem h by simp
 
 中文:
-实例 [IsTorsionFree
-  签名: S T] [Algebra.IsSeparable L F] :
+实例 [是无挠
+  签名: S T] [代数.是可分 L F] :
   定义体: by
   refine FractionRing.isSeparable_of_isLocalization T Sₚ Tₚ (M := P') ?_
   apply algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul

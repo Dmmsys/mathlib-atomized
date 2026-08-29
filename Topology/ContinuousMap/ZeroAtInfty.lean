@@ -45,11 +45,11 @@ structure ZeroAtInftyContinuousMap
     - zero_at_infty' : Tendsto toFun (cocompact α) (𝓝 0)
 
 中文:
-结构 ZeroAtInftyContinuousMap
-  参数: (α : 类型u) (β : 类型v) [TopologicalSpace α] [Zero β]
-  继承: ContinuousMap α β
+结构 ZeroAtInftyContinuous映射
+  参数: (α : 类型u) (β : 类型v) [拓扑空间 α] [零 β]
+  继承: 连续映射 α β
   公理与运算 (1 个):
-    - zero_at_infty' : Tendsto toFun (cocompact α) (𝓝 0)
+    - zero_at_infty' : 收敛 toFun (cocompact α) (𝓝 0)
 -/
 structure ZeroAtInftyContinuousMap (α : Type u) (β : Type v) [TopologicalSpace α] [Zero β]
     [TopologicalSpace β] : Type max u v extends ContinuousMap α β where
@@ -77,11 +77,11 @@ class ZeroAtInftyContinuousMapClass
     - zero_at_infty((f : F)) : Tendsto f (cocompact α) (𝓝 0)
 
 中文:
-类 ZeroAtInftyContinuousMapClass
-  参数: (F : 类型) (α β : outParam 类型) [TopologicalSpace α]
-  继承: ContinuousMapClass F α β
+类 ZeroAtInftyContinuous映射类
+  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
-    - zero_at_infty((f : F)) : Tendsto f (cocompact α) (𝓝 0)
+    - zero_at_infty((f : F)) : 收敛 f (cocompact α) (𝓝 0)
 -/
 class ZeroAtInftyContinuousMapClass (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
     [Zero β] [TopologicalSpace β] [FunLike F α β] : Prop extends ContinuousMapClass F α β where
@@ -112,7 +112,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike C₀(α, β) α β where
+  签名: : 函数状 C₀(α, β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -139,7 +139,7 @@ instance instZeroAtInftyContinuousMapClass
 
 中文:
 实例 instZeroAtInftyContinuousMapClass
-  签名: : ZeroAtInftyContinuousMapClass C₀(α, β) α β where
+  签名: : ZeroAtInftyContinuous映射类 C₀(α, β) α β where
   定义体: f.continuous_toFun
   zero_at_infty f := f.zero_at_infty'
 
@@ -239,7 +239,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: {f : α -> β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 0))
+  条件: {f : α -> β} (hf : 连续 f) (hf' : 收敛 f (cocompact α) (𝓝 0))
   证明: rfl
 -/
 lemma coe_mk {f : α -> β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 0)) :
@@ -336,7 +336,7 @@ theorem eq_of_empty
 
 中文:
 定理 eq_of_empty
-  条件: [IsEmpty α] (f g : C₀(α, β))
+  条件: [是空 α] (f g : C₀(α, β))
   结论: f = g
   证明: ext IsEmpty.elim ‹_›
 
@@ -359,8 +359,8 @@ definition ContinuousMap.liftZeroAtInfty
   invFun f := f
 
 中文:
-定义 ContinuousMap.liftZeroAtInfty
-  签名: [CompactSpace α]
+定义 连续映射.liftZeroAtInfty
+  签名: [紧空间 α]
   定义体: { toFun := f
       zero_at_infty' := by simp }
   invFun f := f
@@ -384,7 +384,7 @@ lemma zeroAtInftyContinuousMapClass.ofCompact
 
 中文:
 引理 zeroAtInftyContinuousMapClass.ofCompact
-  结论: {G : 类型} [FunLike G α β]
+  结论: {G : 类型} [函数状 G α β]
   证明: map_continuous
   zero_at_infty := by simp
 
@@ -419,7 +419,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero β]
+  签名: [零 β]
   定义体: ⟨⟨0, tendsto_const_nhds⟩⟩
 
 Depends on / 依赖: tendsto_const_nhds
@@ -439,7 +439,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Zero β]
+  签名: [零 β]
   定义体: ⟨0⟩
 
 @[simp]
@@ -459,7 +459,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  条件: [Zero β]
+  条件: [零 β]
   结论: ⇑(0 : C₀(α, β)) = 0
   证明: rfl
 -/
@@ -477,7 +477,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [Zero β]
+  条件: [零 β]
   结论: (0 : C₀(α, β)) x = 0
   证明: rfl
 -/
@@ -497,7 +497,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [MulZeroClass β] [ContinuousMul β]
+  签名: [乘零类 β] [连续乘法 β]
   定义体: ⟨fun f g =>
     ⟨f * g, by simpa only [mul_zero] using! (zero_at_infty f).mul (zero_at_infty g)⟩⟩
 
@@ -521,7 +521,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β))
+  条件: [乘零类 β] [连续乘法 β] (f g : C₀(α, β))
   结论: ⇑(f * g) = f * g
   证明: rfl
 -/
@@ -539,7 +539,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β))
+  条件: [乘零类 β] [连续乘法 β] (f g : C₀(α, β))
   结论: (f * g) x = f x * g x
   证明: rfl
 -/
@@ -556,7 +556,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass β] [ContinuousMul β]
+  签名: [乘零类 β] [连续乘法 β]
   定义体: fast_instance% DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulZeroClass, coe_injective, coe_mul, coe_zero, fast_instance, mulZeroClass
@@ -575,7 +575,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero β] [ContinuousMul β]
+  签名: [带零半群 β] [连续乘法 β]
   定义体: fast_instance%
   DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
 
@@ -597,7 +597,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [AddZeroClass β] [ContinuousAdd β]
+  签名: [加法零类 β] [连续加法 β]
   定义体: ⟨fun f g => ⟨f + g, by simpa only [add_zero] using! (zero_at_infty f).add (zero_at_infty g)⟩⟩
 
 @[simp]
@@ -619,7 +619,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β))
+  条件: [加法零类 β] [连续加法 β] (f g : C₀(α, β))
   结论: ⇑(f + g) = f + g
   证明: rfl
 -/
@@ -637,7 +637,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β))
+  条件: [加法零类 β] [连续加法 β] (f g : C₀(α, β))
   结论: (f + g) x = f x + g x
   证明: rfl
 -/
@@ -654,7 +654,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: [AddZeroClass β] [ContinuousAdd β]
+  签名: [加法零类 β] [连续加法 β]
   定义体: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addZeroClass, addZeroClass, coe_add, coe_injective, coe_zero, fast_instance
@@ -674,7 +674,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [Zero β] {R : 类型} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
+  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β]
   定义体: ⟨fun r f => ⟨r • f, by simpa [smul_zero] using! (zero_at_infty f).const_smul r⟩⟩
 
 @[simp, norm_cast]
@@ -696,7 +696,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  结论: [Zero β] {R : 类型} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β] (r : R)
+  结论: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β] (r : R)
   证明: rfl
 -/
 theorem coe_smul [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β] (r : R)
@@ -713,7 +713,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  结论: [Zero β] {R : 类型} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
+  结论: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β]
   证明: rfl
 -/
 theorem smul_apply [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
@@ -735,7 +735,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid C₀(α, β)
+  签名: : 加法幺半群 C₀(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
@@ -756,7 +756,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid β] [ContinuousAdd β]
+  签名: [加法交换幺半群 β] [连续加法 β]
   定义体: fast_instance% DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_zero, fast_instance
@@ -780,7 +780,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg C₀(α, β)
+  签名: : 取负 C₀(α, β)
   定义体: ⟨fun f => ⟨-f, by simpa only [neg_zero] using! (zero_at_infty f).neg⟩⟩
 
 @[simp]
@@ -835,7 +835,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub C₀(α, β)
+  签名: : 减法 C₀(α, β)
   定义体: ⟨fun f g => ⟨f - g, by simpa only [sub_zero] using! (zero_at_infty f).sub (zero_at_infty g)⟩⟩
 
 @[simp]
@@ -889,7 +889,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: : AddGroup C₀(α, β)
+  签名: : 加法群 C₀(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
@@ -912,7 +912,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup β] [IsTopologicalAddGroup β]
+  签名: [加法交换群 β] [是拓扑加群 β]
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
     rfl
@@ -934,7 +934,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [Zero β] {R : 类型} [Zero R] [SMulWithZero R β] [SMulWithZero Rᵐᵒᵖ β]
+  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [带零标量乘法 Rᵐᵒᵖ β]
   定义体: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: op_smul_eq_smul
@@ -954,7 +954,7 @@ instance instSMulWithZero
 
 中文:
 实例 instSMulWithZero
-  签名: [Zero β] {R : 类型} [Zero R] [SMulWithZero R β]
+  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β]
   定义体: fast_instance%
   Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
 
@@ -975,7 +975,7 @@ instance instMulActionWithZero
 
 中文:
 实例 instMulActionWithZero
-  签名: [Zero β] {R : 类型} [MonoidWithZero R] [MulActionWithZero R β]
+  签名: [零 β] {R : 类型} [带零幺半群 R] [带零乘法作用 R β]
   定义体: fast_instance%
   Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
 
@@ -996,7 +996,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [AddCommMonoid β] [ContinuousAdd β] {R : 类型} [Semiring R] [Module R β]
+  签名: [加法交换幺半群 β] [连续加法 β] {R : 类型} [半环 R] [模 R β]
   定义体: fast_instance%
   Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
 
@@ -1017,7 +1017,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring β] [IsTopologicalSemiring β]
+  签名: [非幺非结合半环 β] [是TopologicalSemiring β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1038,7 +1038,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring β] [IsTopologicalSemiring β]
+  签名: [非幺半环 β] [是TopologicalSemiring β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1059,7 +1059,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring β] [IsTopologicalSemiring β]
+  签名: [非幺交换半环 β] [是TopologicalSemiring β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1081,7 +1081,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing β] [IsTopologicalRing β]
+  签名: [非幺非结合环 β] [是拓扑环 β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1105,7 +1105,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing β] [IsTopologicalRing β]
+  签名: [非幺环 β] [是拓扑环 β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
@@ -1129,7 +1129,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing β] [IsTopologicalRing β]
+  签名: [非幺交换环 β] [是拓扑环 β]
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1154,7 +1154,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: {R : 类型} [Semiring R] [NonUnitalNonAssocSemiring β]
+  签名: {R : 类型} [半环 R] [非幺非结合半环 β]
   定义体: by
     ext
     simp only [smul_eq_mul, coe_mul, coe_smul, Pi.mul_apply, Pi.smul_apply]
@@ -1183,7 +1183,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: {R : 类型} [Semiring R] [NonUnitalNonAssocSemiring β]
+  签名: {R : 类型} [半环 R] [非幺非结合半环 β]
   定义体: by
     ext
     simp only [smul_eq_mul, coe_smul, coe_mul, Pi.smul_apply, Pi.mul_apply]
@@ -1218,7 +1218,7 @@ theorem uniformContinuous
 中文:
 定理 uniformContinuous
   条件: (f : F)
-  结论: UniformContinuous (f : β -> γ)
+  结论: 一致连续 (f : β -> γ)
   证明: (map_continuous f).uniformContinuous_of_tendsto_cocompact (zero_at_infty f)
 
 Depends on / 依赖: map_continuous, uniformContinuous_of_tendsto_cocompact, zero_at_infty
@@ -1312,7 +1312,7 @@ theorem isBounded_image
 
 中文:
 定理 isBounded_image
-  条件: (f : C₀(α, β)) (s : Set α)
+  条件: (f : C₀(α, β)) (s : 集合 α)
   结论: IsBounded (f '' s)
   证明: f.isBounded_range.subset image_subset_range _ _
 
@@ -1361,7 +1361,7 @@ theorem toBCF_injective
 
 中文:
 定理 toBCF_injective
-  结论: Function.Injective (toBCF : C₀(α, β) -> α ->ᵇ β)
+  结论: 函数.单射 (toBCF : C₀(α, β) -> α ->ᵇ β)
   证明: fun f g h => by
   ext x
   simpa only using! DFunLike.congr_fun h x
@@ -1387,7 +1387,7 @@ instance instPseudoMetricSpace
 
 中文:
 实例 instPseudoMetricSpace
-  签名: : PseudoMetricSpace C₀(α, β)
+  签名: : 伪度量空间 C₀(α, β)
   定义体: fast_instance%
   PseudoMetricSpace.induced toBCF inferInstance
 
@@ -1409,7 +1409,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: {β : 类型} [MetricSpace β] [Zero β]
+  签名: {β : 类型} [度量空间 β] [零 β]
   定义体: fast_instance%
   MetricSpace.induced _ (toBCF_injective α β) inferInstance
 
@@ -1455,7 +1455,7 @@ theorem tendsto_iff_tendstoUniformly
 
 中文:
 定理 tendsto_iff_tendstoUniformly
-  条件: {ι : 类型} {F : ι -> C₀(α, β)} {f : C₀(α, β)} {l : Filter ι}
+  条件: {ι : 类型} {F : ι -> C₀(α, β)} {f : C₀(α, β)} {l : 滤子 ι}
   证明: by
   simpa only [Metric.tendsto_nhds] using!
     @BoundedContinuousFunction.tendsto_iff_tendstoUniformly _ _ _ _ _ (fun i => (F i).toBCF)
@@ -1479,7 +1479,7 @@ theorem isometry_toBCF
 
 中文:
 定理 isometry_toBCF
-  结论: Isometry (toBCF : C₀(α, β) -> α ->ᵇ β)
+  结论: 等距 (toBCF : C₀(α, β) -> α ->ᵇ β)
   证明: by tauto
 -/
 theorem isometry_toBCF : Isometry (toBCF : C₀(α, β) -> α ->ᵇ β) := by tauto
@@ -1500,7 +1500,7 @@ theorem isClosed_range_toBCF
 
 中文:
 定理 isClosed_range_toBCF
-  结论: IsClosed (range (toBCF : C₀(α, β) -> α ->ᵇ β))
+  结论: 是闭集 (range (toBCF : C₀(α, β) -> α ->ᵇ β))
   证明: by
   refine isClosed_iff_clusterPt.mpr fun f hf => ?_
   rw [clusterPt_principal_iff] at hf
@@ -1537,7 +1537,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace β]
+  签名: [完备空间 β]
   定义体: (completeSpace_iff_isComplete_range isometry_toBCF.isUniformInducing).mpr
     isClosed_range_toBCF.isComplete
 
@@ -1572,7 +1572,7 @@ instance instSeminormedAddCommGroup
 
 中文:
 实例 instSeminormedAddCommGroup
-  签名: [SeminormedAddCommGroup β]
+  签名: [SeminormedAddComm群 β]
   定义体: fast_instance%
   SeminormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
 
@@ -1594,7 +1594,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: [NormedAddCommGroup β]
+  签名: [赋范交换加群 β]
   定义体: fast_instance%
   NormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
     (toBCF_injective α β)
@@ -1637,7 +1637,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedSpace 𝕜 C₀(α, β)
+  签名: 赋范空间 𝕜 C₀(α, β)
   定义体: norm_smul_le k f.toBCF
 
 Depends on / 依赖: f.toBCF, norm_smul_le
@@ -1660,7 +1660,7 @@ instance instNonUnitalSeminormedRing
 
 中文:
 实例 instNonUnitalSeminormedRing
-  签名: [NonUnitalSeminormedRing β]
+  签名: [非幺Seminormed环 β]
   定义体: { instNonUnitalRing, instSeminormedAddCommGroup with
     norm_mul_le f g := norm_mul_le f.toBCF g.toBCF }
 
@@ -1681,7 +1681,7 @@ instance instNonUnitalNormedRing
 
 中文:
 实例 instNonUnitalNormedRing
-  签名: [NonUnitalNormedRing β]
+  签名: [非幺赋范环 β]
   定义体: { instNonUnitalSeminormedRing, instNormedAddCommGroup with }
 
 Depends on / 依赖: instNonUnitalSeminormedRing, instNormedAddCommGroup
@@ -1700,7 +1700,7 @@ instance instNonUnitalSeminormedCommRing
 
 中文:
 实例 instNonUnitalSeminormedCommRing
-  签名: [NonUnitalSeminormedCommRing β]
+  签名: [非幺SeminormedComm环 β]
   定义体: { instNonUnitalSeminormedRing, instNonUnitalCommRing with }
 
 Depends on / 依赖: instNonUnitalCommRing, instNonUnitalSeminormedRing
@@ -1719,7 +1719,7 @@ instance instNonUnitalNormedCommRing
 
 中文:
 实例 instNonUnitalNormedCommRing
-  签名: [NonUnitalNormedCommRing β]
+  签名: [非幺NormedComm环 β]
   定义体: { instNonUnitalNormedRing, instNonUnitalCommRing with }
 
 Depends on / 依赖: instNonUnitalCommRing, instNonUnitalNormedRing
@@ -1762,7 +1762,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: : Star C₀(α, β) where
+  签名: : 对合 C₀(α, β) where
   定义体: { toFun := fun x => star (f x)
       continuous_toFun := (map_continuous f).star
       zero_at_infty' := by
@@ -1827,7 +1827,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: [ContinuousAdd β]
+  签名: [连续加法 β]
   定义体: ext fun x => star_star (f x)
   star_add f g := ext fun x => star_add (f x) (g x)
 
@@ -1853,7 +1853,7 @@ instance instNormedStarGroup
 
 中文:
 实例 instNormedStarGroup
-  签名: : NormedStarGroup C₀(α, β) where
+  签名: : NormedStar群 C₀(α, β) where
   定义体: (norm_star f.toBCF :).le
 
 Depends on / 依赖: f.toBCF, norm_star
@@ -1878,7 +1878,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: : StarModule 𝕜 C₀(α, β) where
+  签名: : 对合模 𝕜 C₀(α, β) where
   定义体: ext fun x => star_smul k (f x)
 
 Depends on / 依赖: star_smul
@@ -1904,7 +1904,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: : StarRing C₀(α, β)
+  签名: : 对合环 C₀(α, β)
   定义体: { ZeroAtInftyContinuousMap.instStarAddMonoid with
     star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
 
@@ -1928,7 +1928,7 @@ instance instCStarRing
 
 中文:
 实例 instCStarRing
-  签名: [NonUnitalNormedRing β] [StarRing β] [CStarRing β]
+  签名: [非幺赋范环 β] [对合环 β] [CStar环 β]
   定义体: CStarRing.norm_mul_self_le (x := f.toBCF)
 
 Depends on / 依赖: CStarRing, CStarRing.norm_mul_self_le, f.toBCF, norm_mul_self_le
@@ -2014,7 +2014,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : C₀(γ, δ))
-  结论: f.comp (CocompactMap.id γ) = f
+  结论: f.comp (余compact映射.id γ) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -2077,7 +2077,7 @@ definition compAddMonoidHom
 
 中文:
 定义 compAddMonoidHom
-  签名: [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ)
+  签名: [加法幺半群 δ] [连续加法 δ] (g : β ->co γ)
   定义体: f.comp g
   map_zero' := zero_comp g
   map_add' _ _ := rfl
@@ -2100,7 +2100,7 @@ definition compMulHom
 
 中文:
 定义 compMulHom
-  签名: [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ)
+  签名: [乘零类 δ] [连续乘法 δ] (g : β ->co γ)
   定义体: f.comp g
   map_mul' _ _ := rfl
 
@@ -2122,7 +2122,7 @@ definition compLinearMap
 
 中文:
 定义 compLinearMap
-  签名: [AddCommMonoid δ] [ContinuousAdd δ] {R : 类型} [Semiring R] [Module R δ]
+  签名: [加法交换幺半群 δ] [连续加法 δ] {R : 类型} [半环 R] [模 R δ]
   定义体: f.comp g
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2149,7 +2149,7 @@ definition compNonUnitalAlgHom
 
 中文:
 定义 compNonUnitalAlgHom
-  签名: {R : 类型} [Semiring R] [NonUnitalNonAssocSemiring δ]
+  签名: {R : 类型} [半环 R] [非幺非结合半环 δ]
   定义体: f.comp g
   map_smul' _ _ := rfl
   map_zero' := rfl

@@ -40,7 +40,7 @@ definition iciSupHom
 
 中文:
 定义 iciSupHom
-  签名: : SupHom α (UpperSet α)
+  签名: : 并态射 α (上集 α)
   定义体: ⟨Ici, Ici_sup⟩
 
 @[simp]
@@ -63,7 +63,7 @@ theorem coe_iciSupHom
 
 中文:
 定理 coe_iciSupHom
-  结论: (iciSupHom : α -> UpperSet α) = Ici
+  结论: (iciSupHom : α -> 上集 α) = 左闭右无界区间
   证明: rfl
 
 @[simp]
@@ -84,7 +84,7 @@ theorem iciSupHom_apply
 中文:
 定理 iciSupHom_apply
   条件: (a : α)
-  结论: iciSupHom a = Ici a
+  结论: iciSupHom a = 左闭右无界区间 a
   证明: rfl
 -/
 theorem iciSupHom_apply (a : α) : iciSupHom a = Ici a :=
@@ -106,7 +106,7 @@ definition icisSupHom
 
 中文:
 定义 icisSupHom
-  签名: : sSupHom α (UpperSet α)
+  签名: : sSup态射 α (上集 α)
   定义体: ⟨Ici, fun s => (Ici_sSup s).trans sSup_image.symm⟩
 
 @[simp]
@@ -129,7 +129,7 @@ theorem coe_icisSupHom
 
 中文:
 定理 coe_icisSupHom
-  结论: (icisSupHom : α -> UpperSet α) = Ici
+  结论: (icisSupHom : α -> 上集 α) = 左闭右无界区间
   证明: rfl
 
 @[simp]
@@ -150,7 +150,7 @@ theorem icisSupHom_apply
 中文:
 定理 icisSupHom_apply
   条件: (a : α)
-  结论: icisSupHom a = Ici a
+  结论: icisSupHom a = 左闭右无界区间 a
   证明: rfl
 -/
 theorem icisSupHom_apply (a : α) : icisSupHom a = Ici a :=
@@ -176,7 +176,7 @@ definition iicInfHom
 
 中文:
 定义 iicInfHom
-  签名: : InfHom α (LowerSet α)
+  签名: : 交态射 α (下集 α)
   定义体: ⟨Iic, Iic_inf⟩
 
 @[simp]
@@ -199,7 +199,7 @@ theorem coe_iicInfHom
 
 中文:
 定理 coe_iicInfHom
-  结论: (iicInfHom : α -> LowerSet α) = Iic
+  结论: (iicInfHom : α -> 下集 α) = 左无界右闭区间
   证明: rfl
 
 @[simp]
@@ -220,7 +220,7 @@ theorem iicInfHom_apply
 中文:
 定理 iicInfHom_apply
   条件: (a : α)
-  结论: iicInfHom a = Iic a
+  结论: iicInfHom a = 左无界右闭区间 a
   证明: rfl
 -/
 theorem iicInfHom_apply (a : α) : iicInfHom a = Iic a :=
@@ -242,7 +242,7 @@ definition iicsInfHom
 
 中文:
 定义 iicsInfHom
-  签名: : sInfHom α (LowerSet α)
+  签名: : sInf态射 α (下集 α)
   定义体: ⟨Iic, fun s => (Iic_sInf s).trans sInf_image.symm⟩
 
 @[simp]
@@ -265,7 +265,7 @@ theorem coe_iicsInfHom
 
 中文:
 定理 coe_iicsInfHom
-  结论: (iicsInfHom : α -> LowerSet α) = Iic
+  结论: (iicsInfHom : α -> 下集 α) = 左无界右闭区间
   证明: rfl
 
 @[simp]
@@ -286,7 +286,7 @@ theorem iicsInfHom_apply
 中文:
 定理 iicsInfHom_apply
   条件: (a : α)
-  结论: iicsInfHom a = Iic a
+  结论: iicsInfHom a = 左无界右闭区间 a
   证明: rfl
 -/
 theorem iicsInfHom_apply (a : α) : iicsInfHom a = Iic a :=

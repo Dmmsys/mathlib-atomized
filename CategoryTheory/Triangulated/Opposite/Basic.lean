@@ -82,8 +82,8 @@ instance [Preadditive
   body: inferInstanceAs (shiftFunctor (OppositeShiftAux C) n).Additive
 
 中文:
-实例 [Preadditive
-  签名: C] [对任意 (n : 整数), (shiftFunctor C n).Additive] (n
+实例 [预加性
+  签名: C] [对任意 (n : 整数), (shiftFunctor C n).加性] (n
   定义体: inferInstanceAs (shiftFunctor (OppositeShiftAux C) n).Additive
 
 Depends on / 依赖: Additive, OppositeShiftAux, shiftFunctor

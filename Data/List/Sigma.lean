@@ -55,7 +55,7 @@ definition keys
 
 中文:
 定义 keys
-  签名: : List (Sigma β) -> List α
+  签名: : 列表 (依赖和类型 β) -> 列表 α
   定义体: map Sigma.fst
 
 @[simp, grind =]
@@ -100,7 +100,7 @@ theorem keys_cons
 
 中文:
 定理 keys_cons
-  条件: {s} {l : List (Sigma β)}
+  条件: {s} {l : 列表 (依赖和类型 β)}
   结论: (s :: l).keys = s.1 :: l.keys
   证明: rfl
 
@@ -139,7 +139,7 @@ theorem mem_keys_of_mem
 
 中文:
 定理 mem_keys_of_mem
-  条件: {s : Sigma β} {l : List (Sigma β)}
+  条件: {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)}
   结论: s in l -> s.1 in l.keys
   证明: mem_map_of_mem
 
@@ -161,8 +161,8 @@ theorem exists_of_mem_keys
 @[grind =]
 
 中文:
-定理 exists_of_mem_keys
-  条件: {a} {l : List (Sigma β)} (h : a in l.keys)
+定理 存在_of_mem_keys
+  条件: {a} {l : 列表 (依赖和类型 β)} (h : a in l.keys)
   证明: by
   have := exists_of_mem_map h
   grind
@@ -188,8 +188,8 @@ theorem mem_keys
 
 中文:
 定理 mem_keys
-  条件: {a} {l : List (Sigma β)}
-  结论: a in l.keys ↔ 存在 b : β a, Sigma.mk a b in l
+  条件: {a} {l : 列表 (依赖和类型 β)}
+  结论: a in l.keys ↔ 存在 b : β a, 依赖和类型.mk a b in l
   证明: ⟨exists_of_mem_keys, fun ⟨_, h⟩ => mem_keys_of_mem h⟩
 
 Depends on / 依赖: exists_of_mem_keys, mem_keys_of_mem
@@ -209,8 +209,8 @@ theorem notMem_keys
 
 中文:
 定理 notMem_keys
-  条件: {a} {l : List (Sigma β)}
-  结论: a ∉ l.keys ↔ 对任意 b : β a, Sigma.mk a b ∉ l
+  条件: {a} {l : 列表 (依赖和类型 β)}
+  结论: a ∉ l.keys ↔ 对任意 b : β a, 依赖和类型.mk a b ∉ l
   证明: by
   grind
 -/
@@ -229,8 +229,8 @@ theorem ne_key
 
 中文:
 定理 ne_key
-  条件: {a} {l : List (Sigma β)}
-  结论: a ∉ l.keys ↔ 对任意 s : Sigma β, s in l -> a != s.1
+  条件: {a} {l : 列表 (依赖和类型 β)}
+  结论: a ∉ l.keys ↔ 对任意 s : 依赖和类型 β, s in l -> a != s.1
   证明: by
   grind
 -/
@@ -252,7 +252,7 @@ definition NodupKeys
 
 中文:
 定义 NodupKeys
-  签名: (l : List (Sigma β))
+  签名: (l : 列表 (依赖和类型 β))
   定义体: l.keys.Nodup
 
 Depends on / 依赖: l.keys.Nodup
@@ -272,7 +272,7 @@ theorem nodupKeys_iff_pairwise
 中文:
 定理 nodupKeys_iff_pairwise
   条件: {l}
-  结论: NodupKeys l ↔ Pairwise (fun s s' : Sigma β => s.1 != s'.1) l
+  结论: NodupKeys l ↔ 两两 (fun s s' : 依赖和类型 β => s.1 != s'.1) l
   证明: pairwise_map
 
 Depends on / 依赖: pairwise_map
@@ -337,7 +337,7 @@ theorem nodupKeys_cons
 
 中文:
 定理 nodupKeys_cons
-  条件: {s : Sigma β} {l : List (Sigma β)}
+  条件: {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)}
   证明: by simp [keys, NodupKeys]
 
 Depends on / 依赖: NodupKeys
@@ -356,7 +356,7 @@ theorem nodupKeys_middle
 
 中文:
 定理 nodupKeys_middle
-  条件: {s : Sigma β}
+  条件: {s : 依赖和类型 β}
   证明: by
   simp_all [NodupKeys, keys, nodup_middle]
 
@@ -376,7 +376,7 @@ theorem notMem_keys_of_nodupKeys_cons
 
 中文:
 定理 notMem_keys_of_nodupKeys_cons
-  条件: {s : Sigma β} {l : List (Sigma β)} (h : NodupKeys (s :: l))
+  条件: {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)} (h : NodupKeys (s :: l))
   证明: by grind
 -/
 theorem notMem_keys_of_nodupKeys_cons {s : Sigma β} {l : List (Sigma β)} (h : NodupKeys (s :: l)) :
@@ -392,7 +392,7 @@ theorem nodupKeys_of_nodupKeys_cons
 
 中文:
 定理 nodupKeys_of_nodupKeys_cons
-  条件: {s : Sigma β} {l : List (Sigma β)} (h : NodupKeys (s :: l))
+  条件: {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)} (h : NodupKeys (s :: l))
   证明: (nodupKeys_cons.1 h).2
 
 Depends on / 依赖: nodupKeys_cons
@@ -413,7 +413,7 @@ theorem NodupKeys.eq_of_fst_eq
 
 中文:
 定理 NodupKeys.eq_of_fst_eq
-  结论: {l : List (Sigma β)} (nd : NodupKeys l) {s s' : Sigma β} (h : s in l)
+  结论: {l : 列表 (依赖和类型 β)} (nd : NodupKeys l) {s s' : 依赖和类型 β} (h : s in l)
   证明: @Pairwise.forall_of_forall _ (fun s s' : Sigma β => s.1 = s'.1 -> s = s') _
     ⟨fun _ _ H h => (H h.symm).symm⟩ (fun _ _ _ => rfl)
     ((nodupKeys_iff_pairwise.1 nd).imp fun h h' => (h h').elim) _ h _ h'
@@ -437,7 +437,7 @@ theorem NodupKeys.eq_of_mk_mem
 
 中文:
 定理 NodupKeys.eq_of_mk_mem
-  结论: {a : α} {b b' : β a} {l : List (Sigma β)} (nd : NodupKeys l)
+  结论: {a : α} {b b' : β a} {l : 列表 (依赖和类型 β)} (nd : NodupKeys l)
   证明: by
   grind [NodupKeys.eq_of_fst_eq]
 
@@ -458,7 +458,7 @@ theorem nodupKeys_singleton
 
 中文:
 定理 nodupKeys_singleton
-  条件: (s : Sigma β)
+  条件: (s : 依赖和类型 β)
   结论: NodupKeys [s]
   证明: nodup_singleton _
 
@@ -480,7 +480,7 @@ theorem NodupKeys.sublist
 
 中文:
 定理 NodupKeys.sublist
-  条件: {l₁ l₂ : List (Sigma β)} (h : l₁ <+ l₂)
+  条件: {l₁ l₂ : 列表 (依赖和类型 β)} (h : l₁ <+ l₂)
   结论: NodupKeys l₂ -> NodupKeys l₁
   证明: Nodup.sublist h.map _
 
@@ -503,7 +503,7 @@ theorem NodupKeys.nodup
 
 中文:
 定理 NodupKeys.nodup
-  条件: {l : List (Sigma β)}
+  条件: {l : 列表 (依赖和类型 β)}
   结论: NodupKeys l -> Nodup l
   证明: Nodup.of_map _
 -/
@@ -521,7 +521,7 @@ theorem perm_nodupKeys
 
 中文:
 定理 perm_nodupKeys
-  条件: {l₁ l₂ : List (Sigma β)} (h : l₁ ~ l₂)
+  条件: {l₁ l₂ : 列表 (依赖和类型 β)} (h : l₁ ~ l₂)
   结论: NodupKeys l₁ ↔ NodupKeys l₂
   证明: (h.map _).nodup_iff
 
@@ -543,7 +543,7 @@ theorem nodupKeys_flatten
 
 中文:
 定理 nodupKeys_flatten
-  条件: {L : List (List (Sigma β))}
+  条件: {L : 列表 (列表 (依赖和类型 β))}
   证明: by
   rw [nodupKeys_iff_pairwise]; rw [pairwise_flatten]; rw [pairwise_map]
   refine and_congr (forall₂_congr fun l _ => by simp [nodupKeys_iff_pairwise]) ?_
@@ -569,8 +569,8 @@ theorem nodup_zipIdx_map_snd
 
 中文:
 定理 nodup_zipIdx_map_snd
-  条件: (l : List α)
-  结论: (l.zipIdx.map Prod.snd).Nodup
+  条件: (l : 列表 α)
+  结论: (l.zipIdx.map 积类型.snd).Nodup
   证明: by
   simp [List.nodup_range']
 
@@ -589,7 +589,7 @@ theorem mem_ext
 
 中文:
 定理 mem_ext
-  结论: {l₀ l₁ : List (Sigma β)} (nd₀ : l₀.Nodup) (nd₁ : l₁.Nodup)
+  结论: {l₀ l₁ : 列表 (依赖和类型 β)} (nd₀ : l₀.Nodup) (nd₁ : l₁.Nodup)
   证明: by grind [perm_ext_iff_of_nodup]
 
 Depends on / 依赖: perm_ext_iff_of_nodup
@@ -676,7 +676,7 @@ theorem dlookup_cons_ne
 中文:
 定理 dlookup_cons_ne
   条件: (l) {a}
-  结论: 对任意 s : Sigma β, a != s.1 -> dlookup a (s :: l) = dlookup a l
+  结论: 对任意 s : 依赖和类型 β, a != s.1 -> dlookup a (s :: l) = dlookup a l
 -/
 theorem dlookup_cons_ne (l) {a} : forall s : Sigma β, a != s.1 -> dlookup a (s :: l) = dlookup a l
   | ⟨_, _⟩, h => dif_neg h.symm
@@ -696,7 +696,7 @@ theorem dlookup_isSome
 
 中文:
 定理 dlookup_isSome
-  条件: {a : α} {l : List (Sigma β)}
+  条件: {a : α} {l : 列表 (依赖和类型 β)}
   结论: (dlookup a l).isSome ↔ a in l.keys
   证明: by
   induction l with
@@ -722,7 +722,7 @@ theorem dlookup_eq_none
 
 中文:
 定理 dlookup_eq_none
-  条件: {a : α} {l : List (Sigma β)}
+  条件: {a : α} {l : 列表 (依赖和类型 β)}
   结论: dlookup a l = none ↔ a ∉ l.keys
   证明: by
   simp [← dlookup_isSome, Option.isNone_iff_eq_none]
@@ -745,7 +745,7 @@ theorem of_mem_dlookup
 
 中文:
 定理 of_mem_dlookup
-  条件: {a : α} {b : β a} {l : List (Sigma β)}
+  条件: {a : α} {b : β a} {l : 列表 (依赖和类型 β)}
   证明: by
   induction l with
   | nil => grind
@@ -772,7 +772,7 @@ theorem mem_dlookup
 
 中文:
 定理 mem_dlookup
-  条件: {a} {b : β a} {l : List (Sigma β)} (nd : l.NodupKeys) (h : Sigma.mk a b in l)
+  条件: {a} {b : β a} {l : 列表 (依赖和类型 β)} (nd : l.NodupKeys) (h : 依赖和类型.mk a b in l)
   证明: by
   obtain ⟨b', h'⟩ := Option.isSome_iff_exists.mp (dlookup_isSome.mpr (mem_keys_of_mem h))
   cases nd.eq_of_mk_mem h (of_mem_dlookup h')
@@ -799,7 +799,7 @@ theorem map_dlookup_eq_find
 
 中文:
 定理 map_dlookup_eq_find
-  条件: (a : α) (l : List (Sigma β))
+  条件: (a : α) (l : 列表 (依赖和类型 β))
   证明: by
   induction l with
   | nil => grind
@@ -823,7 +823,7 @@ theorem mem_dlookup_iff
 
 中文:
 定理 mem_dlookup_iff
-  条件: {a : α} {b : β a} {l : List (Sigma β)} (nd : l.NodupKeys)
+  条件: {a : α} {b : β a} {l : 列表 (依赖和类型 β)} (nd : l.NodupKeys)
   证明: ⟨of_mem_dlookup, mem_dlookup nd⟩
 
 Depends on / 依赖: mem_dlookup, of_mem_dlookup
@@ -844,7 +844,7 @@ theorem perm_dlookup
 
 中文:
 定理 perm_dlookup
-  条件: (a : α) {l₁ l₂ : List (Sigma β)} (nd₁ : l₁.NodupKeys) (p : l₁ ~ l₂)
+  条件: (a : α) {l₁ l₂ : 列表 (依赖和类型 β)} (nd₁ : l₁.NodupKeys) (p : l₁ ~ l₂)
   证明: by
   have nd₂ := (perm_nodupKeys p).mp nd₁
   ext b; simp only [← Option.mem_def, mem_dlookup_iff nd₁, mem_dlookup_iff nd₂, p.mem_iff]
@@ -867,7 +867,7 @@ theorem lookup_ext
 
 中文:
 定理 lookup_ext
-  结论: {l₀ l₁ : List (Sigma β)} (nd₀ : l₀.NodupKeys) (nd₁ : l₁.NodupKeys)
+  结论: {l₀ l₁ : 列表 (依赖和类型 β)} (nd₀ : l₀.NodupKeys) (nd₁ : l₁.NodupKeys)
   证明: by
   grind [_=_ mem_dlookup_iff, mem_ext]
 
@@ -892,7 +892,7 @@ have (h : a != s.fst) : ¬ f a = (⟨f s.fst, g s.fst s.snd⟩ : Sigma β').fst 
 
 中文:
 定理 dlookup_map
-  结论: (l : List (Sigma β))
+  结论: (l : 列表 (依赖和类型 β))
   证明: by
   induction l with
   | nil => grind
@@ -923,7 +923,7 @@ theorem dlookup_map₁
 
 中文:
 定理 dlookup_map₁
-  结论: {β : 类型v} (l : List (Σ _ : α, β))
+  结论: {β : 类型v} (l : 列表 (Σ _ : α, β))
   证明: by
   have := dlookup_map (β' := fun _ => β) (f := f) (g := fun _ => id)
   grind [Option.map_id']
@@ -952,7 +952,7 @@ may allow restorin
 
 中文:
 定理 dlookup_map₂
-  条件: {γ δ : α -> 类型} {l : List (Σ a, γ a)} {f : 对任意 a, γ a -> δ a} (a : α)
+  条件: {γ δ : α -> 类型} {l : 列表 (Σ a, γ a)} {f : 对任意 a, γ a -> δ a} (a : α)
   证明: dlookup_map l Function.injective_id _ _
 
 #adaptation_note /-- Before leanprover/lean4#13166
@@ -1002,7 +1002,7 @@ omit [Decidabl
 
 中文:
 定理 NodupKeys.map₁
-  结论: {β : 类型v} (f : α -> α') (hf : Function.Injective f) {l : List (Σ _ : α, β)}
+  结论: {β : 类型v} (f : α -> α') (hf : 函数.单射 f) {l : 列表 (Σ _ : α, β)}
   证明: by
   induction l with
   | nil => exact nodupKeys_nil
@@ -1042,7 +1042,7 @@ omit [DecidableEq α] in
 
 中文:
 定理 map₂_keys
-  条件: {β β' : α -> 类型} (f : (a : α) -> β a -> β' a) (l : List (Σ a, β a))
+  条件: {β β' : α -> 类型} (f : (a : α) -> β a -> β' a) (l : 列表 (Σ a, β a))
   证明: by
   induction l <;> grind [Sigma.map]
 
@@ -1068,7 +1068,7 @@ theorem NodupKeys.map₂
 
 中文:
 定理 NodupKeys.map₂
-  结论: {β β' : α -> 类型} (f : (a : α) -> β a -> β' a) (l : List (Σ a, β a))
+  结论: {β β' : α -> 类型} (f : (a : α) -> β a -> β' a) (l : 列表 (Σ a, β a))
   证明: by
   simp_all [NodupKeys, map₂_keys]
 
@@ -1094,7 +1094,7 @@ theorem dlookup_append
 
 中文:
 定理 dlookup_append
-  条件: (l₁ l₂ : List (Sigma β)) (a : α)
+  条件: (l₁ l₂ : 列表 (依赖和类型 β)) (a : α)
   证明: by
   induction l₁ with
   | nil => rfl
@@ -1119,7 +1119,7 @@ theorem sublist_dlookup
 
 中文:
 定理 sublist_dlookup
-  结论: {l₁ l₂ : List (Sigma β)} {a : α} {b : β a}
+  结论: {l₁ l₂ : 列表 (依赖和类型 β)} {a : α} {b : β a}
   证明: by
   grind [Option.mem_def, => perm_dlookup, -> Sublist.exists_perm_append]
 
@@ -1207,7 +1207,7 @@ theorem lookupAll_cons_ne
 中文:
 定理 lookupAll_cons_ne
   条件: (l) {a}
-  结论: 对任意 s : Sigma β, a != s.1 -> lookupAll a (s :: l) = lookupAll a l
+  结论: 对任意 s : 依赖和类型 β, a != s.1 -> lookupAll a (s :: l) = lookupAll a l
 -/
 theorem lookupAll_cons_ne (l) {a} : forall s : Sigma β, a != s.1 -> lookupAll a (s :: l) = lookupAll a l
   | ⟨_, _⟩, h => dif_neg h.symm
@@ -1246,7 +1246,7 @@ theorem head?_lookupAll
 中文:
 定理 head?_lookupAll
   条件: (a : α)
-  结论: 对任意 l : List (Sigma β), head? (lookupAll a l) = dlookup a l
+  结论: 对任意 l : 列表 (依赖和类型 β), head? (lookupAll a l) = dlookup a l
 -/
 theorem head?_lookupAll (a : α) : forall l : List (Sigma β), head? (lookupAll a l) = dlookup a l
   | [] => by simp
@@ -1286,7 +1286,7 @@ theorem lookupAll_sublist
 中文:
 定理 lookupAll_sublist
   条件: (a : α)
-  结论: 对任意 l : List (Sigma β), (lookupAll a l).map (Sigma.mk a) <+ l
+  结论: 对任意 l : 列表 (依赖和类型 β), (lookupAll a l).map (依赖和类型.mk a) <+ l
 -/
 theorem lookupAll_sublist (a : α) : forall l : List (Sigma β), (lookupAll a l).map (Sigma.mk a) <+ l
   | [] => by simp
@@ -1311,7 +1311,7 @@ theorem lookupAll_length_le_one
 
 中文:
 定理 lookupAll_length_le_one
-  条件: (a : α) {l : List (Sigma β)} (h : l.NodupKeys)
+  条件: (a : α) {l : 列表 (依赖和类型 β)} (h : l.NodupKeys)
   证明: by
   have := Nodup.sublist ((lookupAll_sublist a l).map _) h
   rw [map_map] at this
@@ -1339,7 +1339,7 @@ theorem lookupAll_eq_dlookup
 
 中文:
 定理 lookupAll_eq_dlookup
-  条件: (a : α) {l : List (Sigma β)} (h : l.NodupKeys)
+  条件: (a : α) {l : 列表 (依赖和类型 β)} (h : l.NodupKeys)
   证明: by
   rw [← head?_lookupAll]
   have h1 := lookupAll_length_le_one a h; revert h1
@@ -1367,7 +1367,7 @@ theorem lookupAll_nodup
 
 中文:
 定理 lookupAll_nodup
-  条件: (a : α) {l : List (Sigma β)} (h : l.NodupKeys)
+  条件: (a : α) {l : 列表 (依赖和类型 β)} (h : l.NodupKeys)
   结论: (lookupAll a l).Nodup
   证明: by
   (rw [lookupAll_eq_dlookup a h]; apply Option.toList_nodup)
@@ -1389,7 +1389,7 @@ theorem perm_lookupAll
 
 中文:
 定理 perm_lookupAll
-  结论: (a : α) {l₁ l₂ : List (Sigma β)} (nd₁ : l₁.NodupKeys)
+  结论: (a : α) {l₁ l₂ : 列表 (依赖和类型 β)} (nd₁ : l₁.NodupKeys)
   证明: by
   have nd₂ := (perm_nodupKeys p).mp nd₁
   simp [lookupAll_eq_dlookup, nd₁, nd₂, perm_dlookup a nd₁ p]
@@ -1432,8 +1432,8 @@ theorem kreplace_of_forall_not
     grind
 
 中文:
-定理 kreplace_of_forall_not
-  结论: (a : α) (b : β a) {l : List (Sigma β)}
+定理 kreplace_of_对任意_not
+  结论: (a : α) (b : β a) {l : 列表 (依赖和类型 β)}
   证明: lookmap_of_forall_not _ by
     grind
 
@@ -1464,7 +1464,7 @@ theorem kreplace_self
 
 中文:
 定理 kreplace_self
-  结论: {a : α} {b : β a} {l : List (Sigma β)} (nd : NodupKeys l)
+  结论: {a : α} {b : β a} {l : 列表 (依赖和类型 β)} (nd : NodupKeys l)
   证明: by
   refine (lookmap_congr ?_).trans (lookmap_id' (Option.guard fun (s : Sigma β) => a = s.1) ?_ _)
   · rintro ⟨a', b'⟩ h'
@@ -1507,7 +1507,7 @@ theorem keys_kreplace
 中文:
 定理 keys_kreplace
   条件: (a : α) (b : β a)
-  结论: 对任意 l : List (Sigma β), (kreplace a b l).keys = l.keys
+  结论: 对任意 l : 列表 (依赖和类型 β), (kreplace a b l).keys = l.keys
   证明: lookmap_map_eq _ _ by
     rintro ⟨a₁, b₂⟩ ⟨a₂, b₂⟩
     dsimp
@@ -1531,7 +1531,7 @@ theorem kreplace_nodupKeys
 
 中文:
 定理 kreplace_nodupKeys
-  条件: (a : α) (b : β a) {l : List (Sigma β)}
+  条件: (a : α) (b : β a) {l : 列表 (依赖和类型 β)}
   证明: by simp [NodupKeys, keys_kreplace]
 
 Depends on / 依赖: NodupKeys, keys_kreplace
@@ -1552,8 +1552,8 @@ theorem Perm.kreplace
     exact (h (h_2.symm.trans h_1)).elim
 
 中文:
-定理 Perm.kreplace
-  条件: {a : α} {b : β a} {l₁ l₂ : List (Sigma β)} (nd : l₁.NodupKeys)
+定理 置换.kreplace
+  条件: {a : α} {b : β a} {l₁ l₂ : 列表 (依赖和类型 β)} (nd : l₁.NodupKeys)
   证明: perm_lookmap _ by
     refine nd.pairwise_ne.imp ?_
     intro x y h z h₁ w h₂
@@ -1631,7 +1631,7 @@ theorem kerase_cons_eq
 
 中文:
 定理 kerase_cons_eq
-  条件: {a} {s : Sigma β} {l : List (Sigma β)} (h : a = s.1)
+  条件: {a} {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)} (h : a = s.1)
   证明: by simp [kerase, h]
 
 @[simp]
@@ -1654,7 +1654,7 @@ theorem kerase_cons_ne
 
 中文:
 定理 kerase_cons_ne
-  条件: {a} {s : Sigma β} {l : List (Sigma β)} (h : a != s.1)
+  条件: {a} {s : 依赖和类型 β} {l : 列表 (依赖和类型 β)} (h : a != s.1)
   证明: by simp [kerase, h]
 
 @[simp]
@@ -1679,7 +1679,7 @@ theorem kerase_of_notMem_keys
 
 中文:
 定理 kerase_of_notMem_keys
-  条件: {a} {l : List (Sigma β)} (h : a ∉ l.keys)
+  条件: {a} {l : 列表 (依赖和类型 β)} (h : a ∉ l.keys)
   结论: kerase a l = l
   证明: by
   induction l with
@@ -1704,7 +1704,7 @@ theorem kerase_sublist
 
 中文:
 定理 kerase_sublist
-  条件: (a : α) (l : List (Sigma β))
+  条件: (a : α) (l : 列表 (依赖和类型 β))
   结论: kerase a l <+ l
   证明: eraseP_sublist
 
@@ -1724,7 +1724,7 @@ theorem kerase_keys_subset
 
 中文:
 定理 kerase_keys_subset
-  条件: (a) (l : List (Sigma β))
+  条件: (a) (l : 列表 (依赖和类型 β))
   结论: (kerase a l).keys subseteq l.keys
   证明: ((kerase_sublist a l).map _).subset
 
@@ -1743,7 +1743,7 @@ theorem mem_keys_of_mem_keys_kerase
 
 中文:
 定理 mem_keys_of_mem_keys_kerase
-  条件: {a₁ a₂} {l : List (Sigma β)}
+  条件: {a₁ a₂} {l : 列表 (依赖和类型 β)}
   证明: @kerase_keys_subset _ _ _ _ _ _
 
 Depends on / 依赖: Exists, Exists.intro, eq_singleton_or_nontrivial, imp_left, kerase_keys_subset
@@ -1771,8 +1771,8 @@ theorem exists_of_kerase
       rcases ih h with ⟨b, tl₁, tl₂, h₁, 
 
 中文:
-定理 exists_of_kerase
-  条件: {a : α} {l : List (Sigma β)} (h : a in l.keys)
+定理 存在_of_kerase
+  条件: {a : α} {l : 列表 (依赖和类型 β)} (h : a in l.keys)
   证明: by
   induction l with
   | nil => cases h
@@ -1818,7 +1818,7 @@ theorem mem_keys_kerase_of_ne
 
 中文:
 定理 mem_keys_kerase_of_ne
-  条件: {a₁ a₂} {l : List (Sigma β)} (h : a₁ != a₂)
+  条件: {a₁ a₂} {l : 列表 (依赖和类型 β)} (h : a₁ != a₂)
   证明: (Iff.intro mem_keys_of_mem_keys_kerase) fun p =>
     if q : a₂ in l.keys then
       match l, kerase a₂ l, exists_of_kerase q, p with
@@ -1848,7 +1848,7 @@ theorem keys_kerase
 
 中文:
 定理 keys_kerase
-  条件: {a} {l : List (Sigma β)}
+  条件: {a} {l : 列表 (依赖和类型 β)}
   结论: (kerase a l).keys = l.keys.erase a
   证明: by
   rw [keys]; rw [kerase]; rw [erase_eq_eraseP]; rw [eraseP_map]; rw [Function.comp_def]
@@ -1882,7 +1882,7 @@ theorem kerase_kerase
 
 中文:
 定理 kerase_kerase
-  条件: {a a'} {l : List (Sigma β)}
+  条件: {a a'} {l : 列表 (依赖和类型 β)}
   证明: by
   by_cases h : a = a'
   · subst a'; rfl
@@ -1948,8 +1948,8 @@ theorem Perm.kerase
 @[simp]
 
 中文:
-定理 Perm.kerase
-  条件: {a : α} {l₁ l₂ : List (Sigma β)} (nd : l₁.NodupKeys)
+定理 置换.kerase
+  条件: {a : α} {l₁ l₂ : 列表 (依赖和类型 β)} (nd : l₁.NodupKeys)
   证明: by
   apply Perm.eraseP
   apply (nodupKeys_iff_pairwise.1 nd).imp
@@ -1986,7 +1986,7 @@ theorem notMem_keys_kerase
 
 中文:
 定理 notMem_keys_kerase
-  条件: (a) {l : List (Sigma β)} (nd : l.NodupKeys)
+  条件: (a) {l : 列表 (依赖和类型 β)} (nd : l.NodupKeys)
   证明: by
   induction l with
   | nil => simp
@@ -2025,7 +2025,7 @@ theorem dlookup_kerase
 
 中文:
 定理 dlookup_kerase
-  条件: (a) {l : List (Sigma β)} (nd : l.NodupKeys)
+  条件: (a) {l : 列表 (依赖和类型 β)} (nd : l.NodupKeys)
   证明: dlookup_eq_none.mpr (notMem_keys_kerase a nd)
 
 @[simp]
@@ -2059,7 +2059,7 @@ theorem dlookup_kerase_ne
 
 中文:
 定理 dlookup_kerase_ne
-  条件: {a a'} {l : List (Sigma β)} (h : a != a')
+  条件: {a a'} {l : 列表 (依赖和类型 β)} (h : a != a')
   证明: by
   induction l with
   | nil => rfl
@@ -2144,7 +2144,7 @@ theorem kerase_comm
 
 中文:
 定理 kerase_comm
-  条件: (a₁ a₂) (l : List (Sigma β))
+  条件: (a₁ a₂) (l : 列表 (依赖和类型 β))
   证明: if h : a₁ = a₂ then by simp [h]
   else
     if ha₁ : a₁ in l.keys then
@@ -2186,7 +2186,7 @@ theorem sizeOf_kerase
 
 中文:
 定理 sizeOf_kerase
-  结论: [SizeOf (Sigma β)] (x : α)
+  结论: [SizeOf (依赖和类型 β)] (x : α)
   证明: by
   induction xs with
   | nil => simp
@@ -2213,7 +2213,7 @@ definition kinsert
 
 中文:
 定义 kinsert
-  签名: (a : α) (b : β a) (l : List (Sigma β))
+  签名: (a : α) (b : β a) (l : 列表 (依赖和类型 β))
   定义体: ⟨a, b⟩ :: kerase a l
 
 @[simp]
@@ -2235,7 +2235,7 @@ theorem kinsert_def
 
 中文:
 定理 kinsert_def
-  条件: {a} {b : β a} {l : List (Sigma β)}
+  条件: {a} {b : β a} {l : 列表 (依赖和类型 β)}
   结论: kinsert a b l = ⟨a, b⟩ :: kerase a l
   证明: rfl
 -/
@@ -2252,7 +2252,7 @@ theorem mem_keys_kinsert
 
 中文:
 定理 mem_keys_kinsert
-  条件: {a a'} {b' : β a'} {l : List (Sigma β)}
+  条件: {a a'} {b' : β a'} {l : 列表 (依赖和类型 β)}
   证明: by by_cases h : a = a' <;> simp [h]
 -/
 theorem mem_keys_kinsert {a a'} {b' : β a'} {l : List (Sigma β)} :
@@ -2268,7 +2268,7 @@ theorem kinsert_nodupKeys
 
 中文:
 定理 kinsert_nodupKeys
-  条件: (a) (b : β a) {l : List (Sigma β)} (nd : l.NodupKeys)
+  条件: (a) (b : β a) {l : 列表 (依赖和类型 β)} (nd : l.NodupKeys)
   证明: nodupKeys_cons.mpr ⟨notMem_keys_kerase a nd, nd.kerase a⟩
 
 Depends on / 依赖: kerase, nd.kerase, nodupKeys_cons, nodupKeys_cons.mpr, notMem_keys_kerase
@@ -2286,8 +2286,8 @@ theorem Perm.kinsert
   proof: (p.kerase nd₁).cons _
 
 中文:
-定理 Perm.kinsert
-  条件: {a} {b : β a} {l₁ l₂ : List (Sigma β)} (nd₁ : l₁.NodupKeys) (p : l₁ ~ l₂)
+定理 置换.kinsert
+  条件: {a} {b : β a} {l₁ l₂ : 列表 (依赖和类型 β)} (nd₁ : l₁.NodupKeys) (p : l₁ ~ l₂)
   证明: (p.kerase nd₁).cons _
 
 Depends on / 依赖: Nonempty, Nonempty.of_image2_left, kerase, of_image2_left, p.kerase
@@ -2307,7 +2307,7 @@ theorem dlookup_kinsert
 
 中文:
 定理 dlookup_kinsert
-  条件: {a} {b : β a} (l : List (Sigma β))
+  条件: {a} {b : β a} (l : 列表 (依赖和类型 β))
   证明: by
   simp only [kinsert, dlookup_cons_eq]
 
@@ -2327,7 +2327,7 @@ theorem dlookup_kinsert_ne
 
 中文:
 定理 dlookup_kinsert_ne
-  条件: {a a'} {b' : β a'} {l : List (Sigma β)} (h : a != a')
+  条件: {a a'} {b' : β a'} {l : 列表 (依赖和类型 β)} (h : a != a')
   证明: by simp [h]
 -/
 theorem dlookup_kinsert_ne {a a'} {b' : β a'} {l : List (Sigma β)} (h : a != a') :
@@ -2399,7 +2399,7 @@ definition dedupKeys
 
 中文:
 定义 dedupKeys
-  签名: : List (Sigma β) -> List (Sigma β)
+  签名: : 列表 (依赖和类型 β) -> 列表 (依赖和类型 β)
   定义体: List.foldr (fun x => kinsert x.1 x.2) []
 
 Depends on / 依赖: List.foldr, kinsert
@@ -2417,7 +2417,7 @@ theorem dedupKeys_cons
 
 中文:
 定理 dedupKeys_cons
-  条件: {x : Sigma β} (l : List (Sigma β))
+  条件: {x : 依赖和类型 β} (l : 列表 (依赖和类型 β))
   证明: rfl
 -/
 theorem dedupKeys_cons {x : Sigma β} (l : List (Sigma β)) :
@@ -2449,7 +2449,7 @@ theorem nodupKeys_dedupKeys
 
 中文:
 定理 nodupKeys_dedupKeys
-  条件: (l : List (Sigma β))
+  条件: (l : 列表 (依赖和类型 β))
   结论: NodupKeys (dedupKeys l)
   证明: by
   dsimp [dedupKeys]
@@ -2506,7 +2506,7 @@ theorem dlookup_dedupKeys
 
 中文:
 定理 dlookup_dedupKeys
-  条件: (a : α) (l : List (Sigma β))
+  条件: (a : α) (l : 列表 (依赖和类型 β))
   结论: dlookup a (dedupKeys l) = dlookup a l
   证明: by
   induction l with
@@ -2544,7 +2544,7 @@ theorem sizeOf_cons_le_sizeOf_cons
 
 中文:
 定理 sizeOf_cons_le_sizeOf_cons
-  结论: {α : 类型} [SizeOf α] {l r : List α} (a : α)
+  结论: {α : 类型} [SizeOf α] {l r : 列表 α} (a : α)
   证明: by
   rw [cons.sizeOf_spec]; rw [cons.sizeOf_spec]
   exact Nat.add_le_add_iff_left.mpr h
@@ -2572,7 +2572,7 @@ theorem sizeOf_dedupKeys
 
 中文:
 定理 sizeOf_dedupKeys
-  结论: [SizeOf (Sigma β)]
+  结论: [SizeOf (依赖和类型 β)]
   证明: by
   induction xs with
   | nil => simp [dedupKeys]
@@ -2602,7 +2602,7 @@ definition kunion
 
 中文:
 定义 kunion
-  签名: : List (Sigma β) -> List (Sigma β) -> List (Sigma β)
+  签名: : 列表 (依赖和类型 β) -> 列表 (依赖和类型 β) -> 列表 (依赖和类型 β)
 -/
 def kunion : List (Sigma β) -> List (Sigma β) -> List (Sigma β)
   | [], l₂ => l₂
@@ -2622,7 +2622,7 @@ theorem nil_kunion
 
 中文:
 定理 nil_kunion
-  条件: {l : List (Sigma β)}
+  条件: {l : 列表 (依赖和类型 β)}
   结论: kunion [] l = l
   证明: rfl
 
@@ -2641,7 +2641,7 @@ theorem kunion_nil
 
 中文:
 定理 kunion_nil
-  结论: 对任意 {l : List (Sigma β)}, kunion l [] = l
+  结论: 对任意 {l : 列表 (依赖和类型 β)}, kunion l [] = l
 -/
 theorem kunion_nil : forall {l : List (Sigma β)}, kunion l [] = l
   | [] => rfl
@@ -2660,7 +2660,7 @@ theorem kunion_cons
 
 中文:
 定理 kunion_cons
-  条件: {s} {l₁ l₂ : List (Sigma β)}
+  条件: {s} {l₁ l₂ : 列表 (依赖和类型 β)}
   证明: rfl
 
 @[simp]
@@ -2685,7 +2685,7 @@ theorem mem_keys_kunion
 
 中文:
 定理 mem_keys_kunion
-  条件: {a} {l₁ l₂ : List (Sigma β)}
+  条件: {a} {l₁ l₂ : 列表 (依赖和类型 β)}
   证明: by
   induction l₁ generalizing l₂ with
   | nil => simp
@@ -2767,8 +2767,8 @@ theorem Perm.kunion_right
   | trans _ _ ih₁₂ ih₂₃ => exact Perm.trans (ih₁₂ l) (ih₂₃ l)
 
 中文:
-定理 Perm.kunion_right
-  条件: {l₁ l₂ : List (Sigma β)} (p : l₁ ~ l₂) (l)
+定理 置换.kunion_right
+  条件: {l₁ l₂ : 列表 (依赖和类型 β)} (p : l₁ ~ l₂) (l)
   证明: by
   induction p generalizing l with
   | nil => rfl
@@ -2795,7 +2795,7 @@ English:
 theorem Perm.kunion_left
 
 中文:
-定理 Perm.kunion_left
+定理 置换.kunion_left
 -/
 theorem Perm.kunion_left :
     forall (l) {l₁ l₂ : List (Sigma β)}, l₁.NodupKeys -> l₁ ~ l₂ -> kunion l l₁ ~ kunion l l₂
@@ -2813,8 +2813,8 @@ theorem Perm.kunion
 @[simp]
 
 中文:
-定理 Perm.kunion
-  结论: {l₁ l₂ l₃ l₄ : List (Sigma β)} (nd₃ : l₃.NodupKeys) (p₁₂ : l₁ ~ l₂)
+定理 置换.kunion
+  结论: {l₁ l₂ l₃ l₄ : 列表 (依赖和类型 β)} (nd₃ : l₃.NodupKeys) (p₁₂ : l₁ ~ l₂)
   证明: (p₁₂.kunion_right l₃).trans (p₃₄.kunion_left l₂ nd₃)
 
 @[simp]
@@ -2849,7 +2849,7 @@ theorem dlookup_kunion_left
 
 中文:
 定理 dlookup_kunion_left
-  条件: {a} {l₁ l₂ : List (Sigma β)} (h : a in l₁.keys)
+  条件: {a} {l₁ l₂ : 列表 (依赖和类型 β)} (h : a in l₁.keys)
   证明: by
   induction l₁ generalizing l₂ with
   | nil => simp at h
@@ -2895,7 +2895,7 @@ theorem dlookup_kunion_right
 
 中文:
 定理 dlookup_kunion_right
-  条件: {a} {l₁ l₂ : List (Sigma β)} (h : a ∉ l₁.keys)
+  条件: {a} {l₁ l₂ : 列表 (依赖和类型 β)} (h : a ∉ l₁.keys)
   证明: by
   induction l₁ generalizing l₂ with
   | nil => simp
@@ -2929,7 +2929,7 @@ theorem mem_dlookup_kunion
 
 中文:
 定理 mem_dlookup_kunion
-  条件: {a} {b : β a} {l₁ l₂ : List (Sigma β)}
+  条件: {a} {b : β a} {l₁ l₂ : 列表 (依赖和类型 β)}
   证明: by
   induction l₁ generalizing l₂ with
   | nil => simp
@@ -2966,7 +2966,7 @@ theorem dlookup_kunion_eq_some
 
 中文:
 定理 dlookup_kunion_eq_some
-  条件: {a} {b : β a} {l₁ l₂ : List (Sigma β)}
+  条件: {a} {b : β a} {l₁ l₂ : 列表 (依赖和类型 β)}
   证明: mem_dlookup_kunion
 
 Depends on / 依赖: mem_dlookup_kunion
@@ -2988,7 +2988,7 @@ theorem mem_dlookup_kunion_middle
 
 中文:
 定理 mem_dlookup_kunion_middle
-  结论: {a} {b : β a} {l₁ l₂ l₃ : List (Sigma β)}
+  结论: {a} {b : β a} {l₁ l₂ l₃ : 列表 (依赖和类型 β)}
   证明: match mem_dlookup_kunion.mp h₁ with
   | Or.inl h => mem_dlookup_kunion.mpr (Or.inl (mem_dlookup_kunion.mpr (Or.inl h)))
 | Or.inr h => mem_dlookup_kunion.mpr Or.inr ⟨mt mem_keys_kunion.mp (not_or.mpr ⟨h.1, h₂⟩), h.2⟩

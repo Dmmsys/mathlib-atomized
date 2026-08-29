@@ -47,7 +47,7 @@ theorem quotient_mk_comp_C_injective
 
 中文:
 定理 quotient_mk_comp_C_injective
-  条件: [Field K] (I : Ideal (MvPolynomial σ K)) (hI : I != ⊤)
+  条件: [域 K] (I : 理想 (多元多项式 σ K)) (hI : I != ⊤)
   证明: by
   refine (injective_iff_map_eq_zero _).2 fun x hx => ?_
   rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
@@ -79,7 +79,7 @@ theorem rank_eq_lift
 
 中文:
 定理 rank_eq_lift
-  结论: Module.rank K (MvPolynomial σ K) = lift.{v} #(σ ->₀ 自然数)
+  结论: 模.rank K (多元多项式 σ K) = lift.{v} #(σ ->₀ 自然数)
   证明: by
   rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]; rw [lift_lift]; rw [lift_umax.{u]; rw [v}]
 
@@ -101,7 +101,7 @@ theorem rank_eq
 中文:
 定理 rank_eq
   条件: {σ : 类型v}
-  结论: Module.rank K (MvPolynomial σ K) = #(σ ->₀ 自然数)
+  结论: 模.rank K (多元多项式 σ K) = #(σ ->₀ 自然数)
   证明: by
   rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]
 
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module K (MvPolynomial σ K)
+  签名: 模 K (多元多项式 σ K)
   定义体: inferInstanceAs Module K (AddMonoidAlgebra K (σ ->₀ Nat))
 
 Depends on / 依赖: AddMonoidAlgebra, Module
@@ -141,8 +141,8 @@ omit [Nontrivial K] in
 
 中文:
 定理 finrank_eq_zero
-  条件: [Nonempty σ]
-  结论: Module.finrank K (MvPolynomial σ K) = 0
+  条件: [非空 σ]
+  结论: 模.finrank K (多元多项式 σ K) = 0
   证明: (basisMonomials σ K).linearIndependent.finrank_eq_zero_of_infinite
 
 omit [Nontrivial K] in
@@ -165,8 +165,8 @@ theorem finrank_eq_one
 
 中文:
 定理 finrank_eq_one
-  条件: [IsEmpty σ]
-  结论: Module.finrank K (MvPolynomial σ K) = 1
+  条件: [是空 σ]
+  结论: 模.finrank K (多元多项式 σ K) = 1
   证明: Module.rank_eq_one_iff_finrank_eq_one.mp by
     cases subsingleton_or_nontrivial K <;> simp [rank_eq_lift]
 

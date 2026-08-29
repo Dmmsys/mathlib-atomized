@@ -181,7 +181,7 @@ definition _root_.Function.Embedding.coeWithTop
   inj' := WithTop.coe_injective
 
 中文:
-定义 _root_.Function.Embedding.coeWithTop
+定义 _root_.函数.嵌入.coeWithTop
   签名: : α ↪ WithTop α where
   定义体: (↑)
   inj' := WithTop.coe_injective
@@ -205,7 +205,7 @@ definition coeOrderHom
 
 中文:
 定义 coeOrderHom
-  签名: {α : 类型} [Preorder α]
+  签名: {α : 类型} [预序 α]
   定义体: (↑)
   inj' := WithTop.coe_injective
   map_rel_iff' := WithTop.coe_le_coe
@@ -228,7 +228,7 @@ theorem coeOrderHom_apply
 
 中文:
 定理 coeOrderHom_apply
-  条件: {α : 类型} [Preorder α]
+  条件: {α : 类型} [预序 α]
   结论: (coeOrderHom : α -> WithTop α) = some
   证明: rfl
 
@@ -262,7 +262,7 @@ definition subtypeOrderIso
 
 中文:
 定义 subtypeOrderIso
-  签名: [PartialOrder α] [OrderTop α] [DecidablePred (· = (⊤ : α))]
+  签名: [偏序 α] [有顶序 α] [DecidablePred (· = (⊤ : α))]
   定义体: (a.map (↑)).untopD ⊤
   invFun a := if h : a = ⊤ then ⊤ else .some ⟨a, h⟩
   left_inv
@@ -302,7 +302,7 @@ theorem subtypeOrderIso_apply_coe
 
 中文:
 定理 subtypeOrderIso_apply_coe
-  结论: [PartialOrder α] [OrderTop α] [DecidablePred (· = (⊤ : α))]
+  结论: [偏序 α] [有顶序 α] [DecidablePred (· = (⊤ : α))]
   证明: rfl
 
 @[to_dual]
@@ -324,7 +324,7 @@ theorem subtypeOrderIso_symm_apply
 
 中文:
 定理 subtypeOrderIso_symm_apply
-  结论: [PartialOrder α] [OrderTop α] [DecidablePred (· = (⊤ : α))]
+  结论: [偏序 α] [有顶序 α] [DecidablePred (· = (⊤ : α))]
   证明: by
   rw [OrderIso.symm_apply_eq]
   rfl
@@ -632,7 +632,7 @@ definition withTop
 
 中文:
 定义 withTop
-  签名: (f : SupHom α β)
+  签名: (f : 并态射 α β)
   定义体: WithTop.map f
   map_sup' a b :=
     match a, b with
@@ -665,7 +665,7 @@ theorem withTop_id
 
 中文:
 定理 withTop_id
-  结论: (SupHom.id α).withTop = SupHom.id _
+  结论: (并态射.id α).withTop = 并态射.id _
   证明: DFunLike.coe_injective WithTop.map_id
 
 @[to_dual (attr := simp)]
@@ -685,7 +685,7 @@ theorem withTop_comp
 
 中文:
 定理 withTop_comp
-  条件: (f : SupHom β γ) (g : SupHom α β)
+  条件: (f : 并态射 β γ) (g : 并态射 α β)
   证明: DFunLike.coe_injective Eq.symm WithTop.map_comp_map _ _
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Eq.symm, WithTop, WithTop.map_comp_map, coe_injective, map_comp_map
@@ -715,7 +715,7 @@ definition withBot
 
 中文:
 定义 withBot
-  签名: (f : SupHom α β)
+  签名: (f : 并态射 α β)
   定义体: WithBot.map f
   map_sup' a b :=
     match a, b with
@@ -750,7 +750,7 @@ theorem withBot_id
 
 中文:
 定理 withBot_id
-  结论: (SupHom.id α).withBot = SupBotHom.id _
+  结论: (并态射.id α).withBot = SupBot态射.id _
   证明: DFunLike.coe_injective WithBot.map_id
 
 @[to_dual (attr := simp)]
@@ -770,7 +770,7 @@ theorem withBot_comp
 
 中文:
 定理 withBot_comp
-  条件: (f : SupHom β γ) (g : SupHom α β)
+  条件: (f : 并态射 β γ) (g : 并态射 α β)
   证明: DFunLike.coe_injective Eq.symm WithBot.map_comp_map _ _
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Eq.symm, WithBot, WithBot.map_comp_map, coe_injective, map_comp_map
@@ -797,7 +797,7 @@ definition withTop'
 
 中文:
 定义 withTop'
-  签名: [OrderTop β] (f : SupHom α β)
+  签名: [有顶序 β] (f : 并态射 α β)
   定义体: a.elim ⊤ f
   map_sup' a b :=
     match a, b with
@@ -836,7 +836,7 @@ definition withBot'
 
 中文:
 定义 withBot'
-  签名: [OrderBot β] (f : SupHom α β)
+  签名: [有底序 β] (f : 并态射 α β)
   定义体: a.elim ⊥ f
   map_sup' a b :=
     match a, b with
@@ -874,7 +874,7 @@ definition withTop
 
 中文:
 定义 withTop
-  签名: (f : LatticeHom α β)
+  签名: (f : 格态射 α β)
   定义体: { f.toInfHom.withTop with toSupHom := f.toSupHom.withTop }
 -/
 protected def withTop (f : LatticeHom α β) : LatticeHom (WithTop α) (WithTop β) :=
@@ -892,7 +892,7 @@ definition withBot
 
 中文:
 定义 withBot
-  签名: (f : LatticeHom α β)
+  签名: (f : 格态射 α β)
   定义体: { f.toInfHom.withBot with toSupHom := f.toSupHom.withBot }
 -/
 protected def withBot (f : LatticeHom α β) : LatticeHom (WithBot α) (WithBot β) :=
@@ -913,7 +913,7 @@ lemma coe_withTop
 
 中文:
 引理 coe_withTop
-  条件: (f : LatticeHom α β)
+  条件: (f : 格态射 α β)
   结论: ⇑f.withTop = WithTop.map f
   证明: rfl
 
@@ -935,7 +935,7 @@ lemma withTop_apply
 
 中文:
 引理 withTop_apply
-  条件: (f : LatticeHom α β) (a : WithTop α)
+  条件: (f : 格态射 α β) (a : WithTop α)
   结论: f.withTop a = a.map f
   证明: rfl
 
@@ -956,7 +956,7 @@ theorem withTop_id
 
 中文:
 定理 withTop_id
-  结论: (LatticeHom.id α).withTop = LatticeHom.id _
+  结论: (格态射.id α).withTop = 格态射.id _
   证明: DFunLike.coe_injective WithTop.map_id
 
 @[to_dual (attr := simp)]
@@ -977,7 +977,7 @@ theorem withTop_comp
 
 中文:
 定理 withTop_comp
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β)
+  条件: (f : 格态射 β γ) (g : 格态射 α β)
   证明: DFunLike.coe_injective Eq.symm WithTop.map_comp_map _ _
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Eq.symm, WithTop, WithTop.map_comp_map, coe_injective, map_comp_map
@@ -998,7 +998,7 @@ definition withTopWithBot
 
 中文:
 定义 withTopWithBot
-  签名: (f : LatticeHom α β)
+  签名: (f : 格态射 α β)
   定义体: ⟨f.withBot.withTop, rfl, rfl⟩
 
 Depends on / 依赖: f.withBot.withTop, withBot, withTop
@@ -1021,7 +1021,7 @@ lemma coe_withTopWithBot
 
 中文:
 引理 coe_withTopWithBot
-  条件: (f : LatticeHom α β)
+  条件: (f : 格态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1043,7 +1043,7 @@ lemma withTopWithBot_apply
 
 中文:
 引理 withTopWithBot_apply
-  条件: (f : LatticeHom α β) (a : WithTop <| WithBot α)
+  条件: (f : 格态射 α β) (a : WithTop <| WithBot α)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1065,7 +1065,7 @@ theorem withTopWithBot_id
 
 中文:
 定理 withTopWithBot_id
-  结论: (LatticeHom.id α).withTopWithBot = BoundedLatticeHom.id _
+  结论: (格态射.id α).withTopWithBot = 有界格态射.id _
   证明: DFunLike.coe_injective by simp [WithTop.map_id, WithBot.map_id]
 
 @[to_dual (attr := simp)]
@@ -1087,7 +1087,7 @@ theorem withTopWithBot_comp
 
 中文:
 定理 withTopWithBot_comp
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β)
+  条件: (f : 格态射 β γ) (g : 格态射 α β)
   证明: by
   ext; simp
 -/
@@ -1105,7 +1105,7 @@ definition withTop'
 
 中文:
 定义 withTop'
-  签名: [OrderTop β] (f : LatticeHom α β)
+  签名: [有顶序 β] (f : 格态射 α β)
   定义体: { f.toSupHom.withTop', f.toInfHom.withTop' with }
 
 Depends on / 依赖: f.toInfHom.withTop, f.toSupHom.withTop, toInfHom, toSupHom, withTop
@@ -1125,7 +1125,7 @@ definition withBot'
 
 中文:
 定义 withBot'
-  签名: [OrderBot β] (f : LatticeHom α β)
+  签名: [有底序 β] (f : 格态射 α β)
   定义体: { f.toSupHom.withBot', f.toInfHom.withBot' with }
 
 Depends on / 依赖: f.toInfHom.withBot, f.toSupHom.withBot, toInfHom, toSupHom, withBot
@@ -1147,7 +1147,7 @@ definition withTopWithBot'
 
 中文:
 定义 withTopWithBot'
-  签名: [BoundedOrder β] (f : LatticeHom α β)
+  签名: [有界序 β] (f : 格态射 α β)
   定义体: f.withBot'.withTop'
   map_top' := rfl
   map_bot' := rfl

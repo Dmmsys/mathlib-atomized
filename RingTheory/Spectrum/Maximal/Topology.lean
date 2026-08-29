@@ -67,7 +67,7 @@ instance zariskiTopology
 
 中文:
 实例 zariskiTopology
-  签名: : TopologicalSpace MaximalSpectrum R
+  签名: : 拓扑空间 极大谱 R
   定义体: PrimeSpectrum.zariskiTopology.induced toPrimeSpectrum
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.zariskiTopology.induced, induced, toPrimeSpectrum, zariskiTopology
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: T1Space MaximalSpectrum R
+  签名: T1空间 极大谱 R
   定义体: ⟨fun x => isClosed_induced_iff.mpr
     ⟨{toPrimeSpectrum x}, (isClosed_singleton_iff_isMaximal _).mpr x.isMaximal, by
       simpa only [← image_singleton] using preimage_image_eq {x} toPrimeSpectrum_injective⟩⟩
@@ -109,7 +109,7 @@ theorem toPrimeSpectrum_continuous
 
 中文:
 定理 toPrimeSpectrum_continuous
-  结论: Continuous @toPrimeSpectrum R _
+  结论: 连续 @toPrimeSpectrum R _
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom

@@ -82,8 +82,8 @@ class IsZeroApply
     - zero_apply((x : α)) : (0 : F) x = 0
 
 中文:
-类 IsZeroApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Zero β] [Zero F]
+类 是ZeroApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [零 β] [零 F]
   公理与运算 (1 个):
     - zero_apply((x : α)) : (0 : F) x = 0
 -/
@@ -102,8 +102,8 @@ class IsOneApply
     - one_apply((x : α)) : (1 : F) x = 1
 
 中文:
-类 IsOneApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [One β] [One F]
+类 是OneApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [幺 β] [幺 F]
   公理与运算 (1 个):
     - one_apply((x : α)) : (1 : F) x = 1
 -/
@@ -122,8 +122,8 @@ class IsOneApplyEqSelf
     - one_apply_eq_self((x : α)) : (1 : F) x = x
 
 中文:
-类 IsOneApplyEqSelf
-  参数: (F : 类型) (α : outParam 类型) [FunLike F α α] [One F]
+类 是OneApplyEqSelf
+  参数: (F : 类型) (α : outParam 类型) [函数状 F α α] [幺 F]
   公理与运算 (1 个):
     - one_apply_eq_self((x : α)) : (1 : F) x = x
 -/
@@ -147,8 +147,8 @@ class IsAddApply
     - add_apply((f g : F) (x : α)) : (f + g) x = f x + g x
 
 中文:
-类 IsAddApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Add β] [Add F]
+类 是加法Apply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [加法 β] [加法 F]
   公理与运算 (1 个):
     - add_apply((f g : F) (x : α)) : (f + g) x = f x + g x
 -/
@@ -167,8 +167,8 @@ class IsMulApply
     - mul_apply((f g : F) (x : α)) : (f * g) x = f x * g x
 
 中文:
-类 IsMulApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Mul β] [Mul F]
+类 是MulApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [乘法 β] [乘法 F]
   公理与运算 (1 个):
     - mul_apply((f g : F) (x : α)) : (f * g) x = f x * g x
 -/
@@ -187,8 +187,8 @@ class IsMulApplyEqComp
     - mul_apply_eq_comp((f g : F) (x : α)) : (f * g) x = f (g x)
 
 中文:
-类 IsMulApplyEqComp
-  参数: (F : 类型) (α : outParam 类型) [FunLike F α α] [Mul F]
+类 是MulApplyEqComp
+  参数: (F : 类型) (α : outParam 类型) [函数状 F α α] [乘法 F]
   公理与运算 (1 个):
     - mul_apply_eq_comp((f g : F) (x : α)) : (f * g) x = f (g x)
 -/
@@ -212,7 +212,7 @@ lemma pow_apply_eq_iterate
 
 中文:
 引理 pow_apply_eq_iterate
-  结论: {F α : 类型} [FunLike F α α] [Monoid F] [IsOneApplyEqSelf F α]
+  结论: {F α : 类型} [函数状 F α α] [幺半群 F] [是OneApplyEqSelf F α]
   证明: by
   induction n with
   | zero => simp
@@ -241,8 +241,8 @@ class IsSubApply
     - sub_apply((f g : F) (x : α)) : (f - g) x = f x - g x
 
 中文:
-类 IsSubApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Sub β] [Sub F]
+类 是SubApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [减法 β] [减法 F]
   公理与运算 (1 个):
     - sub_apply((f g : F) (x : α)) : (f - g) x = f x - g x
 -/
@@ -261,8 +261,8 @@ class IsDivApply
     - div_apply((f g : F) (x : α)) : (f / g) x = f x / g x
 
 中文:
-类 IsDivApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Div β] [Div F]
+类 是DivApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [除法 β] [除法 F]
   公理与运算 (1 个):
     - div_apply((f g : F) (x : α)) : (f / g) x = f x / g x
 -/
@@ -285,8 +285,8 @@ class IsNegApply
     - neg_apply((f : F) (x : α)) : (-f) x = -f x
 
 中文:
-类 IsNegApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Neg β] [Neg F]
+类 是NegApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [取负 β] [取负 F]
   公理与运算 (1 个):
     - neg_apply((f : F) (x : α)) : (-f) x = -f x
 -/
@@ -305,8 +305,8 @@ class IsInvApply
     - inv_apply((f : F) (x : α)) : f⁻¹ x = (f x)⁻¹
 
 中文:
-类 IsInvApply
-  参数: (F : 类型) (α β : outParam 类型) [FunLike F α β] [Inv β] [Inv F]
+类 是InvApply
+  参数: (F : 类型) (α β : outParam 类型) [函数状 F α β] [取逆 β] [取逆 F]
   公理与运算 (1 个):
     - inv_apply((f : F) (x : α)) : f⁻¹ x = (f x)⁻¹
 -/
@@ -329,8 +329,8 @@ class IsVAddApply
     - vadd_apply((f : F) (n : M) (x : α)) : (n +ᵥ f) x = n +ᵥ f x
 
 中文:
-类 IsVAddApply
-  参数: (M F : 类型) (α β : outParam 类型) [FunLike F α β] [VAdd M β] [VAdd M F]
+类 是VAddApply
+  参数: (M F : 类型) (α β : outParam 类型) [函数状 F α β] [向量加法 M β] [向量加法 M F]
   公理与运算 (1 个):
     - vadd_apply((f : F) (n : M) (x : α)) : (n +ᵥ f) x = n +ᵥ f x
 -/
@@ -349,8 +349,8 @@ class IsSMulApply
     - smul_apply((f : F) (r : M) (x : α)) : (r • f) x = r • f x
 
 中文:
-类 IsSMulApply
-  参数: (M F : 类型) (α β : outParam 类型) [FunLike F α β] [SMul M β] [SMul M F]
+类 是SMulApply
+  参数: (M F : 类型) (α β : outParam 类型) [函数状 F α β] [标量乘法 M β] [标量乘法 M F]
   公理与运算 (1 个):
     - smul_apply((f : F) (r : M) (x : α)) : (r • f) x = r • f x
 -/
@@ -371,8 +371,8 @@ class IsPowApply
     - pow_apply((f : F) (n : M) (x : α)) : (f ^ n) x = (f x) ^ n
 
 中文:
-类 IsPowApply
-  参数: (M F : 类型) (α β : outParam 类型) [FunLike F α β] [Pow β M] [Pow F M]
+类 是PowApply
+  参数: (M F : 类型) (α β : outParam 类型) [函数状 F α β] [幂 β M] [幂 F M]
   公理与运算 (1 个):
     - pow_apply((f : F) (n : M) (x : α)) : (f ^ n) x = (f x) ^ n
 -/
@@ -399,8 +399,8 @@ class IsNatCastApply
     - natCast_apply((n : Nat) (x : α)) : (n : F) x = n • x
 
 中文:
-类 IsNatCastApply
-  参数: (F : 类型) (α : outParam 类型) [FunLike F α α] [自然数Cast F] [SMul 自然数 α]
+类 是自然数CastApply
+  参数: (F : 类型) (α : outParam 类型) [函数状 F α α] [自然数嵌入 F] [标量乘法 自然数 α]
   公理与运算 (1 个):
     - natCast_apply((n : 自然数) (x : α)) : (n : F) x = n • x
 -/
@@ -420,8 +420,8 @@ class IsIntCastApply
     - intCast_apply((n : Int) (x : α)) : (n : F) x = n • x
 
 中文:
-类 IsIntCastApply
-  参数: (F : 类型) (α : outParam 类型) [FunLike F α α] [整数Cast F] [SMul 整数 α]
+类 是整数CastApply
+  参数: (F : 类型) (α : outParam 类型) [函数状 F α α] [整数嵌入 F] [标量乘法 整数 α]
   公理与运算 (1 个):
     - intCast_apply((n : 整数) (x : α)) : (n : F) x = n • x
 -/
@@ -455,7 +455,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: [One F] [One β] [IsOneApply F α β]
+  条件: [幺 F] [幺 β] [是OneApply F α β]
   结论: ↑(1 : F) = (1 : α -> β)
   证明: by ext; simp
 
@@ -482,7 +482,7 @@ theorem coe_one_iff
 
 中文:
 定理 coe_one_iff
-  条件: [One F] [One β] [IsOneApply F α β] (f : F)
+  条件: [幺 F] [幺 β] [是OneApply F α β] (f : F)
   结论: (f : α -> β) = 1 ↔ f = 1
   证明: by
   constructor
@@ -517,7 +517,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul F] [Mul β] [IsMulApply F α β] (f g : F)
+  条件: [乘法 F] [乘法 β] [是MulApply F α β] (f g : F)
   结论: ↑(f * g) = (f : α -> β) * g
   证明: by
   ext; simp
@@ -542,7 +542,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: [Div F] [Div β] [IsDivApply F α β] (f g : F)
+  条件: [除法 F] [除法 β] [是DivApply F α β] (f g : F)
   结论: ↑(f / g) = (f : α -> β) / g
   证明: by
   ext; simp
@@ -567,7 +567,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv F] [Inv β] [IsInvApply F α β] (f : F)
+  条件: [取逆 F] [取逆 β] [是InvApply F α β] (f : F)
   结论: ↑(f⁻¹) = (f : α -> β)⁻¹
   证明: by
   ext; simp
@@ -593,7 +593,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul M F] [SMul M β] [IsSMulApply M F α β] (n : M) (f : F)
+  条件: [标量乘法 M F] [标量乘法 M β] [是SMulApply M F α β] (n : M) (f : F)
   证明: by
   ext; simp
 
@@ -621,7 +621,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: [Pow F M] [Pow β M] [IsPowApply M F α β] (f : F) (n : M)
+  条件: [幂 F M] [幂 β M] [是PowApply M F α β] (f : F) (n : M)
   证明: by
   ext; simp
 
@@ -646,7 +646,7 @@ theorem coe_one_eq_id
 
 中文:
 定理 coe_one_eq_id
-  条件: [One F'] [IsOneApplyEqSelf F' α]
+  条件: [幺 F'] [是OneApplyEqSelf F' α]
   结论: ↑(1 : F') = id
   证明: by
   ext; simp
@@ -675,7 +675,7 @@ theorem coe_one_eq_id_iff
 
 中文:
 定理 coe_one_eq_id_iff
-  条件: [One F'] [IsOneApplyEqSelf F' α] (f : F')
+  条件: [幺 F'] [是OneApplyEqSelf F' α] (f : F')
   结论: (f : α -> α) = id ↔ f = 1
   证明: by
   constructor
@@ -710,7 +710,7 @@ theorem coe_mul_eq_comp
 
 中文:
 定理 coe_mul_eq_comp
-  条件: [Mul F'] [IsMulApplyEqComp F' α] (f g : F')
+  条件: [乘法 F'] [是MulApplyEqComp F' α] (f g : F')
   结论: ↑(f * g) = f ∘ g
   证明: by
   ext; simp
@@ -731,7 +731,7 @@ lemma coe_pow_eq_iterate
 
 中文:
 引理 coe_pow_eq_iterate
-  结论: [Monoid F'] [IsMulApplyEqComp F' α] [IsOneApplyEqSelf F' α]
+  结论: [幺半群 F'] [是MulApplyEqComp F' α] [是OneApplyEqSelf F' α]
   证明: funext pow_apply_eq_iterate f n
 
 Depends on / 依赖: pow_apply_eq_iterate
@@ -756,7 +756,7 @@ theorem natCast_eq_nsmul_one
 
 中文:
 定理 natCast_eq_nsmul_one
-  结论: [自然数Cast F'] [One F'] [SMul 自然数 α] [SMul 自然数 F']
+  结论: [自然数嵌入 F'] [幺 F'] [标量乘法 自然数 α] [标量乘法 自然数 F']
   证明: by
   apply DFunLike.ext
   simp
@@ -789,7 +789,7 @@ theorem intCast_eq_zsmul_one
 
 中文:
 定理 intCast_eq_zsmul_one
-  结论: [整数Cast F'] [One F'] [SMul 整数 α] [SMul 整数 F']
+  结论: [整数嵌入 F'] [幺 F'] [标量乘法 整数 α] [标量乘法 整数 F']
   证明: by
   apply DFunLike.ext
   simp

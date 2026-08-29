@@ -38,7 +38,7 @@ lemma hasStrictDerivAt_sqrt
 
 中文:
 引理 hasStrictDerivAt_sqrt
-  条件: {z : Complex} (hz : z in slitPlane)
+  条件: {z : 复形} (hz : z in slitPlane)
   证明: by
   exact (Complex.hasStrictDerivAt_cpow_const (c := 2⁻¹) hz).congr_deriv (by
     rw [show (2 : Complex)⁻¹ - 1 = -1 / 2 by norm_num]; rw [mul_comm]; rw [← div_eq_mul_inv])
@@ -61,8 +61,8 @@ lemma hasDerivAt_sqrt
 
 中文:
 引理 hasDerivAt_sqrt
-  条件: {z : Complex} (hz : z in slitPlane)
-  结论: HasDerivAt sqrt (z ^ (-1 / 2 : Complex) / 2) z
+  条件: {z : 复形} (hz : z in slitPlane)
+  结论: 在点处可导 sqrt (z ^ (-1 / 2 : 复形) / 2) z
   证明: (hasStrictDerivAt_sqrt hz).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sqrt
@@ -82,7 +82,7 @@ lemma hasDerivWithinAt_sqrt
 
 中文:
 引理 hasDerivWithinAt_sqrt
-  条件: {z : Complex} {s : Set Complex} (hz : z in slitPlane)
+  条件: {z : 复形} {s : 集合 复形} (hz : z in slitPlane)
   证明: (hasDerivAt_sqrt hz).hasDerivWithinAt
 
 @[fun_prop]
@@ -107,8 +107,8 @@ lemma differentiableAt_sqrt
 
 中文:
 引理 differentiableAt_sqrt
-  条件: {z : Complex} (hz : z in slitPlane)
-  结论: DifferentiableAt Complex sqrt z
+  条件: {z : 复形} (hz : z in slitPlane)
+  结论: DifferentiableAt 复形 sqrt z
   证明: (hasDerivAt_sqrt hz).differentiableAt
 
 @[fun_prop]
@@ -131,7 +131,7 @@ lemma differentiableWithinAt_sqrt
 
 中文:
 引理 differentiableWithinAt_sqrt
-  条件: {z : Complex} {s : Set Complex} (hz : z in slitPlane)
+  条件: {z : 复形} {s : 集合 复形} (hz : z in slitPlane)
   证明: (differentiableAt_sqrt hz).differentiableWithinAt
 
 @[fun_prop]
@@ -153,7 +153,7 @@ lemma differentiableOn_sqrt
 
 中文:
 引理 differentiableOn_sqrt
-  结论: DifferentiableOn Complex sqrt slitPlane
+  结论: DifferentiableOn 复形 sqrt slitPlane
   证明: fun _ hz => (differentiableAt_sqrt hz).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_sqrt, differentiableWithinAt
@@ -172,8 +172,8 @@ lemma deriv_sqrt
 
 中文:
 引理 deriv_sqrt
-  条件: {z : Complex} (hz : z in slitPlane)
-  结论: deriv sqrt z = z ^ (-1 / 2 : Complex) / 2
+  条件: {z : 复形} (hz : z in slitPlane)
+  结论: deriv sqrt z = z ^ (-1 / 2 : 复形) / 2
   证明: (hasDerivAt_sqrt hz).deriv
 
 Depends on / 依赖: hasDerivAt_sqrt
@@ -191,7 +191,7 @@ lemma derivWithin_sqrt
 
 中文:
 引理 derivWithin_sqrt
-  条件: {z : Complex} (hz : z in slitPlane)
+  条件: {z : 复形} (hz : z in slitPlane)
   证明: (hasDerivWithinAt_sqrt hz).derivWithin (isOpen_slitPlane.uniqueDiffWithinAt hz)
 
 Depends on / 依赖: derivWithin, hasDerivWithinAt_sqrt, isOpen_slitPlane, isOpen_slitPlane.uniqueDiffWithinAt, uniqueDiffWithinAt
@@ -211,7 +211,7 @@ lemma continuousAt_sqrt
 
 中文:
 引理 continuousAt_sqrt
-  条件: {z : Complex} (hz : 0 <= z.re ∨ z.im != 0)
+  条件: {z : 复形} (hz : 0 <= z.re ∨ z.im != 0)
   结论: ContinuousAt sqrt z
   证明: continuousAt_cpow_const_of_re_pos hz (by norm_num)
 

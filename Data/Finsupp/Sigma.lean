@@ -346,7 +346,7 @@ theorem embSigma_single
 
 中文:
 定理 embSigma_single
-  条件: [Zero M] {k : κ} (i : ι k) (m : M)
+  条件: [零 M] {k : κ} (i : ι k) (m : M)
   证明: by
   classical
   grind

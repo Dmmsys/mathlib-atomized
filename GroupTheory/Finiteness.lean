@@ -55,8 +55,8 @@ definition Submonoid.FG
   body: exists S : Finset M, Submonoid.closure ↑S = P
 
 中文:
-定义 Submonoid.FG
-  签名: (P : Submonoid M)
+定义 子幺半群.FG
+  签名: (P : 子幺半群 M)
   定义体: exists S : Finset M, Submonoid.closure ↑S = P
 
 Depends on / 依赖: Finset, Submonoid, Submonoid.closure, closure
@@ -77,8 +77,8 @@ theorem Submonoid.fg_iff
     ⟨Set.Finite.toFinset hf, by simp [hS]⟩⟩
 
 中文:
-定理 Submonoid.fg_iff
-  条件: (P : Submonoid M)
+定理 子幺半群.fg_iff
+  条件: (P : 子幺半群 M)
   证明: ⟨fun ⟨S, hS⟩ => ⟨S, hS, Finset.finite_toSet S⟩, fun ⟨S, hS, hf⟩ =>
     ⟨Set.Finite.toFinset hf, by simp [hS]⟩⟩
 
@@ -100,7 +100,7 @@ lemma Submonoid.FG.exists_minimal_closure_eq
   proof: exists_minimal_of_wellFoundedLT _ hP
 
 中文:
-引理 Submonoid.FG.exists_minimal_closure_eq
+引理 子幺半群.FG.存在_minimal_closure_eq
   条件: (hP : P.FG)
   证明: exists_minimal_of_wellFoundedLT _ hP
 
@@ -127,8 +127,8 @@ theorem Submonoid.fg_iff_add_fg
       ⟨Additive.ofMul ⁻¹' T, by s
 
 中文:
-定理 Submonoid.fg_iff_add_fg
-  条件: (P : Submonoid M)
+定理 子幺半群.fg_iff_add_fg
+  条件: (P : 子幺半群 M)
   结论: P.FG ↔ P.toAddSubmonoid.FG
   证明: ⟨fun h =>
     let ⟨S, hS, hf⟩ := (Submonoid.fg_iff _).1 h
@@ -163,8 +163,8 @@ theorem AddSubmonoid.fg_iff_mul_fg
 @[to_additive]
 
 中文:
-定理 AddSubmonoid.fg_iff_mul_fg
-  条件: {M : 类型} [AddMonoid M] (P : AddSubmonoid M)
+定理 加法子幺半群.fg_iff_mul_fg
+  条件: {M : 类型} [加法幺半群 M] (P : 加法子幺半群 M)
   证明: by
   convert! (Submonoid.fg_iff_add_fg (toSubmonoid P)).symm
 
@@ -188,8 +188,8 @@ theorem Submonoid.FG.bot
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.bot
-  结论: FG (⊥ : Submonoid M)
+定理 子幺半群.FG.bot
+  结论: FG (⊥ : 子幺半群 M)
   证明: ⟨∅, by simp⟩
 
 @[to_additive]
@@ -214,8 +214,8 @@ theorem Submonoid.FG.sup
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.sup
-  条件: {Q : Submonoid M} (hP : P.FG) (hQ : Q.FG)
+定理 子幺半群.FG.上确界
+  条件: {Q : 子幺半群 M} (hP : P.FG) (hQ : Q.FG)
   结论: (P ⊔ Q).FG
   证明: by
   classical
@@ -245,8 +245,8 @@ theorem Submonoid.FG.finset_sup
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.finset_sup
-  结论: {ι : 类型} (s : Finset ι) (P : ι -> Submonoid M)
+定理 子幺半群.FG.finset_sup
+  结论: {ι : 类型} (s : 有限集 ι) (P : ι -> 子幺半群 M)
   证明: Finset.sup_induction bot (fun _ ha _ hb => ha.sup hb) hP
 
 @[to_additive]
@@ -270,8 +270,8 @@ theorem Submonoid.FG.biSup_finset
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.biSup_finset
-  结论: {ι : 类型} (s : Finset ι) (P : ι -> Submonoid M)
+定理 子幺半群.FG.biSup_finset
+  结论: {ι : 类型} (s : 有限集 ι) (P : ι -> 子幺半群 M)
   证明: by
   simpa only [Finset.sup_eq_iSup] using finset_sup s P hP
 
@@ -296,8 +296,8 @@ theorem Submonoid.FG.biSup
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.biSup
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite) (P : ι -> Submonoid M)
+定理 子幺半群.FG.biSup
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限) (P : ι -> 子幺半群 M)
   证明: by
   simpa using biSup_finset hs.toFinset P (by simpa)
 
@@ -320,8 +320,8 @@ theorem Submonoid.FG.iSup
   simpa [iSup_plift_down] using biSup Set.finite_univ (P ∘ PLift.down) fun i _ => hP i.down
 
 中文:
-定理 Submonoid.FG.iSup
-  条件: {ι : Sort*} [Finite ι] (P : ι -> Submonoid M) (hP : 对任意 i, (P i).FG)
+定理 子幺半群.FG.iSup
+  条件: {ι : 类型层*} [有限 ι] (P : ι -> 子幺半群 M) (hP : 对任意 i, (P i).FG)
   证明: by
   simpa [iSup_plift_down] using biSup Set.finite_univ (P ∘ PLift.down) fun i _ => hP i.down
 
@@ -350,9 +350,9 @@ theorem Submonoid.FG.prod
   simp [closure_union, hbM, hbN]
 
 中文:
-定理 Submonoid.FG.prod
+定理 子幺半群.FG.乘积
   条件: (hP : P.FG) (hQ : Q.FG)
-  结论: (P.prod Q).FG
+  结论: (P.乘积 Q).FG
   证明: by
   classical
   obtain ⟨bM, hbM⟩ := hP
@@ -389,7 +389,7 @@ theorem Submonoid.iSup_map_mulSingle
   exact noncommProd_mem _ _ _ _ fun i _ => mem_iSup_of_mem _ (mem_map_of_mem _ (hx i trivial))
 
 中文:
-定理 Submonoid.iSup_map_mulSingle
+定理 子幺半群.iSup_map_mulSingle
   条件: [DecidableEq ι]
   证明: by
   have := Fintype.ofFinite ι
@@ -425,9 +425,9 @@ theorem Submonoid.FG.pi
     ← MonoidHom.map_mclosure, hs, iSup_map_mulSingl
 
 中文:
-定理 Submonoid.FG.pi
+定理 子幺半群.FG.pi
   条件: (hP : 对任意 i, (P i).FG)
-  结论: (pi Set.univ P).FG
+  结论: (pi 集合.univ P).FG
   证明: by
   classical
   have := Fintype.ofFinite ι
@@ -465,10 +465,10 @@ class AddMonoid.FG
     - fg_top : (⊤ : AddSubmonoid M).FG
 
 中文:
-类 AddMonoid.FG
-  参数: (M : 类型) [AddMonoid M]
+类 加法幺半群.FG
+  参数: (M : 类型) [加法幺半群 M]
   公理与运算 (1 个):
-    - fg_top : (⊤ : AddSubmonoid M).FG
+    - fg_top : (⊤ : 加法子幺半群 M).FG
 -/
 class AddMonoid.FG (M : Type*) [AddMonoid M] : Prop where
   fg_top : (⊤ : AddSubmonoid M).FG
@@ -486,10 +486,10 @@ class Monoid.FG
     - fg_top : (⊤ : Submonoid M).FG
 
 中文:
-类 Monoid.FG
+类 幺半群.FG
   参数: : 命题 where
   公理与运算 (1 个):
-    - fg_top : (⊤ : Submonoid M).FG
+    - fg_top : (⊤ : 子幺半群 M).FG
 -/
 class Monoid.FG : Prop where
   fg_top : (⊤ : Submonoid M).FG
@@ -504,8 +504,8 @@ theorem Monoid.fg_def
   proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
 中文:
-定理 Monoid.fg_def
-  结论: Monoid.FG M ↔ (⊤ : Submonoid M).FG
+定理 幺半群.fg_def
+  结论: 幺半群.FG M ↔ (⊤ : 子幺半群 M).FG
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem Monoid.fg_def : Monoid.FG M ↔ (⊤ : Submonoid M).FG :=
@@ -522,7 +522,7 @@ theorem Monoid.fg_iff
   proof: ⟨fun _ => (Submonoid.fg_iff ⊤).1 FG.fg_top, fun h => ⟨(Submonoid.fg_iff ⊤).2 h⟩⟩
 
 中文:
-定理 Monoid.fg_iff
+定理 幺半群.fg_iff
   证明: ⟨fun _ => (Submonoid.fg_iff ⊤).1 FG.fg_top, fun h => ⟨(Submonoid.fg_iff ⊤).2 h⟩⟩
 
 Depends on / 依赖: FG.fg_top, Submonoid, Submonoid.fg_iff, fg_iff, fg_top
@@ -543,8 +543,8 @@ lemma Submonoid.exists_minimal_closure_eq_top
   proof: Monoid.FG.fg_top.exists_minimal_closure_eq
 
 中文:
-引理 Submonoid.exists_minimal_closure_eq_top
-  条件: [Monoid.FG M]
+引理 子幺半群.存在_minimal_closure_eq_top
+  条件: [幺半群.FG M]
   证明: Monoid.FG.fg_top.exists_minimal_closure_eq
 
 Depends on / 依赖: Monoid, Monoid.FG.fg_top.exists_minimal_closure_eq, exists_minimal_closure_eq, fg_top
@@ -563,8 +563,8 @@ theorem Monoid.fg_iff_add_fg
   mpr h := ⟨(Submonoid.fg_iff_add_fg ⊤).2 h.fg_top⟩
 
 中文:
-定理 Monoid.fg_iff_add_fg
-  结论: Monoid.FG M ↔ AddMonoid.FG (Additive M) where
+定理 幺半群.fg_iff_add_fg
+  结论: 幺半群.FG M ↔ 加法幺半群.FG (加性 M) where
   证明: ⟨(Submonoid.fg_iff_add_fg ⊤).1 FG.fg_top⟩
   mpr h := ⟨(Submonoid.fg_iff_add_fg ⊤).2 h.fg_top⟩
 
@@ -584,8 +584,8 @@ theorem AddMonoid.fg_iff_mul_fg
   mpr h := ⟨(AddSubmonoid.fg_iff_mul_fg ⊤).2 h.fg_top⟩
 
 中文:
-定理 AddMonoid.fg_iff_mul_fg
-  条件: {M : 类型} [AddMonoid M]
+定理 加法幺半群.fg_iff_mul_fg
+  条件: {M : 类型} [加法幺半群 M]
   证明: ⟨(AddSubmonoid.fg_iff_mul_fg ⊤).1 FG.fg_top⟩
   mpr h := ⟨(AddSubmonoid.fg_iff_mul_fg ⊤).2 h.fg_top⟩
 
@@ -605,8 +605,8 @@ instance AddMonoid.fg_of_monoid_fg
   body: Monoid.fg_iff_add_fg.1 ‹_›
 
 中文:
-实例 AddMonoid.fg_of_monoid_fg
-  签名: [Monoid.FG M]
+实例 加法幺半群.fg_of_monoid_fg
+  签名: [幺半群.FG M]
   定义体: Monoid.fg_iff_add_fg.1 ‹_›
 
 Depends on / 依赖: Monoid, Monoid.fg_iff_add_fg, fg_iff_add_fg
@@ -623,8 +623,8 @@ instance Monoid.fg_of_addMonoid_fg
   body: AddMonoid.fg_iff_mul_fg.1 ‹_›
 
 中文:
-实例 Monoid.fg_of_addMonoid_fg
-  签名: {M : 类型} [AddMonoid M] [AddMonoid.FG M]
+实例 幺半群.fg_of_addMonoid_fg
+  签名: {M : 类型} [加法幺半群 M] [加法幺半群.FG M]
   定义体: AddMonoid.fg_iff_mul_fg.1 ‹_›
 
 Depends on / 依赖: AddMonoid, AddMonoid.fg_iff_mul_fg, fg_iff_mul_fg
@@ -648,9 +648,9 @@ lemma Monoid.fg_of_finite
   exact ⟨⟨Finset.univ, by rw [Finset.coe_univ]; exact Submonoid.closure_univ⟩⟩
 
 中文:
-引理 Monoid.fg_of_finite
-  条件: [Finite M]
-  结论: Monoid.FG M
+引理 幺半群.fg_of_finite
+  条件: [有限 M]
+  结论: 幺半群.FG M
   证明: by
   cases nonempty_fintype M
   exact ⟨⟨Finset.univ, by rw [Finset.coe_univ]; exact Submonoid.closure_univ⟩⟩
@@ -678,8 +678,8 @@ theorem Submonoid.FG.map
 @[to_additive]
 
 中文:
-定理 Submonoid.FG.map
-  条件: {M' : 类型} [Monoid M'] {P : Submonoid M} (h : P.FG) (e : M ->* M')
+定理 子幺半群.FG.map
+  条件: {M' : 类型} [幺半群 M'] {P : 子幺半群 M} (h : P.FG) (e : M ->* M')
   证明: by
   classical
     obtain ⟨s, rfl⟩ := h
@@ -711,8 +711,8 @@ theorem Submonoid.FG.map_injective
   rw [Set.image_preimage_eq_iff]; rw [← MonoidHom.coe_mrange e]; rw [← Submonoid.closure_le]; rw [hs]; rw [MonoidHom.mrang
 
 中文:
-定理 Submonoid.FG.map_injective
-  结论: {M' : 类型} [Monoid M'] {P : Submonoid M} (e : M ->* M')
+定理 子幺半群.FG.map_injective
+  结论: {M' : 类型} [幺半群 M'] {P : 子幺半群 M} (e : M ->* M')
   证明: by
   obtain ⟨s, hs⟩ := h
   use s.preimage e he.injOn
@@ -748,9 +748,9 @@ theorem Monoid.fg_iff_submonoid_fg
 @[to_additive]
 
 中文:
-定理 Monoid.fg_iff_submonoid_fg
-  条件: (N : Submonoid M)
-  结论: Monoid.FG N ↔ N.FG
+定理 幺半群.fg_iff_submonoid_fg
+  条件: (N : 子幺半群 M)
+  结论: 幺半群.FG N ↔ N.FG
   证明: by
   conv_rhs => rw [← N.mrange_subtype, MonoidHom.mrange_eq_map]
   exact ⟨fun h => h.fg_top.map N.subtype, fun h => ⟨h.map_injective N.subtype Subtype.coe_injective⟩⟩
@@ -780,8 +780,8 @@ theorem Monoid.fg_of_surjective
 @[to_additive]
 
 中文:
-定理 Monoid.fg_of_surjective
-  结论: {M' : 类型} [Monoid M'] [Monoid.FG M] (f : M ->* M')
+定理 幺半群.fg_of_surjective
+  结论: {M' : 类型} [幺半群 M'] [幺半群.FG M] (f : M ->* M')
   证明: by
   classical
     obtain ⟨s, hs⟩ := Monoid.fg_def.mp ‹_›
@@ -811,8 +811,8 @@ instance Monoid.fg_range
   body: Monoid.fg_of_surjective f.mrangeRestrict f.mrangeRestrict_surjective
 
 中文:
-实例 Monoid.fg_range
-  签名: {M' : 类型} [Monoid M'] [Monoid.FG M] (f : M ->* M')
+实例 幺半群.fg_range
+  签名: {M' : 类型} [幺半群 M'] [幺半群.FG M] (f : M ->* M')
   定义体: Monoid.fg_of_surjective f.mrangeRestrict f.mrangeRestrict_surjective
 
 Depends on / 依赖: Monoid, Monoid.fg_of_surjective, f.mrangeRestrict, f.mrangeRestrict_surjective, fg_of_surjective, mrangeRestrict, mrangeRestrict_surjective
@@ -843,7 +843,7 @@ theorem Monoid.fg_iff_exists_freeMonoid_hom_surjective
     simp [← MonoidHom.map_mclosure,
 
 中文:
-定理 Monoid.fg_iff_exists_freeMonoid_hom_surjective
+定理 幺半群.fg_iff_存在_freeMonoid_hom_surjective
   证明: by
   refine ⟨fun ⟨S, hS⟩ => ⟨S, S.finite_toSet, FreeMonoid.lift Subtype.val, ?_⟩, ?_⟩
   · rwa [← MonoidHom.mrange_eq_top, ← Submonoid.closure_eq_mrange]
@@ -881,7 +881,7 @@ theorem Monoid.fg_iff_exists_freeGroup_hom_surjective_finite
  
 
 中文:
-定理 Monoid.fg_iff_exists_freeGroup_hom_surjective_finite
+定理 幺半群.fg_iff_存在_freeGroup_hom_surjective_finite
   证明: by
   constructor
   · rw [fg_iff_exists_freeMonoid_hom_surjective]
@@ -918,9 +918,9 @@ theorem Submonoid.powers_fg
 @[to_additive]
 
 中文:
-定理 Submonoid.powers_fg
+定理 子幺半群.powers_fg
   条件: (r : M)
-  结论: (Submonoid.powers r).FG
+  结论: (子幺半群.powers r).FG
   证明: ⟨{r}, (Finset.coe_singleton r).symm ▸ (Submonoid.powers_eq_closure r).symm⟩
 
 @[to_additive]
@@ -942,7 +942,7 @@ instance Monoid.powers_fg
 @[to_additive]
 
 中文:
-实例 Monoid.powers_fg
+实例 幺半群.powers_fg
   签名: (r : M)
   定义体: (Monoid.fg_iff_submonoid_fg _).mpr (Submonoid.powers_fg r)
 
@@ -967,8 +967,8 @@ instance Monoid.closure_finset_fg
 @[to_additive]
 
 中文:
-实例 Monoid.closure_finset_fg
-  签名: (s : Finset M)
+实例 幺半群.closure_finset_fg
+  签名: (s : 有限集 M)
   定义体: by
   refine ⟨⟨s.preimage Subtype.val Subtype.coe_injective.injOn, ?_⟩⟩
   rw [Finset.coe_preimage]; rw [Submonoid.closure_closure_coe_preimage]
@@ -992,8 +992,8 @@ instance Monoid.closure_finite_fg
   s.coe_toFinset ▸ Monoid.closure_finset_fg s.toFinset
 
 中文:
-实例 Monoid.closure_finite_fg
-  签名: (s : Set M) [Finite s]
+实例 幺半群.closure_finite_fg
+  签名: (s : 集合 M) [有限 s]
   定义体: haveI := Fintype.ofFinite s
   s.coe_toFinset ▸ Monoid.closure_finset_fg s.toFinset
 
@@ -1021,8 +1021,8 @@ definition Subgroup.FG
   body: exists S : Finset G, Subgroup.closure ↑S = P
 
 中文:
-定义 Subgroup.FG
-  签名: (P : Subgroup G)
+定义 子群.FG
+  签名: (P : 子群 G)
   定义体: exists S : Finset G, Subgroup.closure ↑S = P
 
 Depends on / 依赖: Finset, Subgroup, Subgroup.closure, closure
@@ -1047,8 +1047,8 @@ theorem Subgroup.fg_iff
     ⟨Set.Finite.toFinset hf, by simp [hS]⟩⟩
 
 中文:
-定理 Subgroup.fg_iff
-  条件: (P : Subgroup G)
+定理 子群.fg_iff
+  条件: (P : 子群 G)
   证明: ⟨fun ⟨S, hS⟩ => ⟨S, hS, Finset.finite_toSet S⟩, fun ⟨S, hS, hf⟩ =>
     ⟨Set.Finite.toFinset hf, by simp [hS]⟩⟩
 
@@ -1081,8 +1081,8 @@ theorem Subgroup.fg_iff_submonoid_fg
  
 
 中文:
-定理 Subgroup.fg_iff_submonoid_fg
-  条件: (P : Subgroup G)
+定理 子群.fg_iff_submonoid_fg
+  条件: (P : 子群 G)
   结论: P.FG ↔ P.toSubmonoid.FG
   证明: by
   constructor
@@ -1122,8 +1122,8 @@ theorem Subgroup.fg_iff_add_fg
   exact (Subgroup.toSubmonoid P).fg_iff_add_fg
 
 中文:
-定理 Subgroup.fg_iff_add_fg
-  条件: (P : Subgroup G)
+定理 子群.fg_iff_add_fg
+  条件: (P : 子群 G)
   结论: P.FG ↔ P.toAddSubgroup.FG
   证明: by
   rw [Subgroup.fg_iff_submonoid_fg]; rw [AddSubgroup.fg_iff_addSubmonoid_fg]
@@ -1149,8 +1149,8 @@ theorem AddSubgroup.fg_iff_mul_fg
 @[to_additive]
 
 中文:
-定理 AddSubgroup.fg_iff_mul_fg
-  条件: (P : AddSubgroup H)
+定理 加法子群.fg_iff_mul_fg
+  条件: (P : 加法子群 H)
   结论: P.FG ↔ P.toSubgroup.FG
   证明: by
   rw [AddSubgroup.fg_iff_addSubmonoid_fg]; rw [Subgroup.fg_iff_submonoid_fg]
@@ -1176,8 +1176,8 @@ theorem Subgroup.FG.bot
 @[to_additive]
 
 中文:
-定理 Subgroup.FG.bot
-  结论: FG (⊥ : Subgroup G)
+定理 子群.FG.bot
+  结论: FG (⊥ : 子群 G)
   证明: ⟨∅, by simp⟩
 
 @[to_additive]
@@ -1202,8 +1202,8 @@ theorem Subgroup.FG.sup
 @[to_additive]
 
 中文:
-定理 Subgroup.FG.sup
-  条件: {P Q : Subgroup G} (hP : P.FG) (hQ : Q.FG)
+定理 子群.FG.上确界
+  条件: {P Q : 子群 G} (hP : P.FG) (hQ : Q.FG)
   结论: (P ⊔ Q).FG
   证明: by
   classical
@@ -1233,8 +1233,8 @@ theorem Subgroup.FG.finset_sup
 @[to_additive]
 
 中文:
-定理 Subgroup.FG.finset_sup
-  结论: {ι : 类型} (s : Finset ι) (P : ι -> Subgroup G)
+定理 子群.FG.finset_sup
+  结论: {ι : 类型} (s : 有限集 ι) (P : ι -> 子群 G)
   证明: Finset.sup_induction bot (fun _ ha _ hb => ha.sup hb) hP
 
 @[to_additive]
@@ -1258,8 +1258,8 @@ theorem Subgroup.FG.biSup_finset
 @[to_additive]
 
 中文:
-定理 Subgroup.FG.biSup_finset
-  结论: {ι : 类型} (s : Finset ι) (P : ι -> Subgroup G)
+定理 子群.FG.biSup_finset
+  结论: {ι : 类型} (s : 有限集 ι) (P : ι -> 子群 G)
   证明: by
   simpa only [Finset.sup_eq_iSup] using finset_sup s P hP
 
@@ -1284,8 +1284,8 @@ theorem Subgroup.FG.biSup
 @[to_additive]
 
 中文:
-定理 Subgroup.FG.biSup
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite) (P : ι -> Subgroup G)
+定理 子群.FG.biSup
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限) (P : ι -> 子群 G)
   证明: by
   simpa using biSup_finset hs.toFinset P (by simpa)
 
@@ -1308,8 +1308,8 @@ theorem Subgroup.FG.iSup
   simpa [iSup_plift_down] using biSup Set.finite_univ (P ∘ PLift.down) fun i _ => hP i.down
 
 中文:
-定理 Subgroup.FG.iSup
-  条件: {ι : Sort*} [Finite ι] (P : ι -> Subgroup G) (hP : 对任意 i, (P i).FG)
+定理 子群.FG.iSup
+  条件: {ι : 类型层*} [有限 ι] (P : ι -> 子群 G) (hP : 对任意 i, (P i).FG)
   证明: by
   simpa [iSup_plift_down] using biSup Set.finite_univ (P ∘ PLift.down) fun i _ => hP i.down
 
@@ -1333,8 +1333,8 @@ theorem Subgroup.FG.prod
   exact hP.prod hQ
 
 中文:
-定理 Subgroup.FG.prod
-  结论: {G' : 类型} [Group G'] {P : Subgroup G} {Q : Subgroup G'}
+定理 子群.FG.乘积
+  结论: {G' : 类型} [群 G'] {P : 子群 G} {Q : 子群 G'}
   证明: by
   rw [fg_iff_submonoid_fg] at *
   exact hP.prod hQ
@@ -1359,8 +1359,8 @@ theorem Subgroup.FG.pi
   exact .pi hP
 
 中文:
-定理 Subgroup.FG.pi
-  结论: {ι : 类型} [Finite ι] {G : ι -> 类型} [对任意 i, Group (G i)]
+定理 子群.FG.pi
+  结论: {ι : 类型} [有限 ι] {G : ι -> 类型} [对任意 i, 群 (G i)]
   证明: by
   simp_rw [fg_iff_submonoid_fg] at *
   exact .pi hP
@@ -1388,10 +1388,10 @@ class Group.FG
     - out : (⊤ : Subgroup G).FG
 
 中文:
-类 Group.FG
+类 群.FG
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : (⊤ : Subgroup G).FG
+    - out : (⊤ : 子群 G).FG
 -/
 class Group.FG : Prop where
   out : (⊤ : Subgroup G).FG
@@ -1406,10 +1406,10 @@ class AddGroup.FG
     - out : (⊤ : AddSubgroup H).FG
 
 中文:
-类 AddGroup.FG
+类 加法群.FG
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : (⊤ : AddSubgroup H).FG
+    - out : (⊤ : 加法子群 H).FG
 -/
 class AddGroup.FG : Prop where
   out : (⊤ : AddSubgroup H).FG
@@ -1427,8 +1427,8 @@ theorem Group.fg_def
   proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
 中文:
-定理 Group.fg_def
-  结论: Group.FG G ↔ (⊤ : Subgroup G).FG
+定理 群.fg_def
+  结论: 群.FG G ↔ (⊤ : 子群 G).FG
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem Group.fg_def : Group.FG G ↔ (⊤ : Subgroup G).FG :=
@@ -1443,8 +1443,8 @@ theorem AddGroup.fg_def
   proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
 中文:
-定理 AddGroup.fg_def
-  结论: AddGroup.FG H ↔ (⊤ : AddSubgroup H).FG
+定理 加法群.fg_def
+  结论: 加法群.FG H ↔ (⊤ : 加法子群 H).FG
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem AddGroup.fg_def : AddGroup.FG H ↔ (⊤ : AddSubgroup H).FG :=
@@ -1464,8 +1464,8 @@ theorem Group.fg_iff
 @[to_additive]
 
 中文:
-定理 Group.fg_iff
-  结论: Group.FG G ↔ 存在 S : Set G, Subgroup.closure S = (⊤ : Subgroup G) ∧ S.Finite
+定理 群.fg_iff
+  结论: 群.FG G ↔ 存在 S : 集合 G, 子群.closure S = (⊤ : 子群 G) ∧ S.有限
   证明: ⟨fun h => (Subgroup.fg_iff ⊤).1 h.out, fun h => ⟨(Subgroup.fg_iff ⊤).2 h⟩⟩
 
 @[to_additive]
@@ -1484,7 +1484,7 @@ theorem Group.fg_iff'
   proof: Group.fg_def.trans ⟨fun ⟨S, hS⟩ => ⟨S.card, S, rfl, hS⟩, fun ⟨_n, S, _hn, hS⟩ => ⟨S, hS⟩⟩
 
 中文:
-定理 Group.fg_iff'
+定理 群.fg_iff'
   证明: Group.fg_def.trans ⟨fun ⟨S, hS⟩ => ⟨S.card, S, rfl, hS⟩, fun ⟨_n, S, _hn, hS⟩ => ⟨S, hS⟩⟩
 
 Depends on / 依赖: Group.fg_def.trans, S.card, fg_def
@@ -1508,8 +1508,8 @@ Group.fg_def.2 (Subgroup.fg_iff_submonoid_fg ⊤).2 (Monoid.fg_def.1 h)⟩
 @[to_additive]
 
 中文:
-定理 Group.fg_iff_monoid_fg
-  结论: Group.FG G ↔ Monoid.FG G
+定理 群.fg_iff_monoid_fg
+  结论: 群.FG G ↔ 幺半群.FG G
   证明: ⟨fun h => Monoid.fg_def.2 (Subgroup.fg_iff_submonoid_fg ⊤).1 (Group.fg_def.1 h), fun h =>
 Group.fg_def.2 (Subgroup.fg_iff_submonoid_fg ⊤).2 (Monoid.fg_def.1 h)⟩
 
@@ -1533,8 +1533,8 @@ instance Monoid.fg_of_group_fg
 @[to_additive (attr := simp)]
 
 中文:
-实例 Monoid.fg_of_group_fg
-  签名: [Group.FG G]
+实例 幺半群.fg_of_group_fg
+  签名: [群.FG G]
   定义体: Group.fg_iff_monoid_fg.1 ‹_›
 
 @[to_additive (attr := simp)]
@@ -1556,9 +1556,9 @@ theorem Group.fg_iff_subgroup_fg
     (Subgroup.fg_iff_submonoid_fg _).symm
 
 中文:
-定理 Group.fg_iff_subgroup_fg
-  条件: (H : Subgroup G)
-  结论: Group.FG H ↔ H.FG
+定理 群.fg_iff_subgroup_fg
+  条件: (H : 子群 G)
+  结论: 群.FG H ↔ H.FG
   证明: (fg_iff_monoid_fg.trans (Monoid.fg_iff_submonoid_fg _)).trans
     (Subgroup.fg_iff_submonoid_fg _).symm
 
@@ -1578,7 +1578,7 @@ theorem GroupFG.iff_add_fg
 
 中文:
 定理 GroupFG.iff_add_fg
-  结论: Group.FG G ↔ AddGroup.FG (Additive G)
+  结论: 群.FG G ↔ 加法群.FG (加性 G)
   证明: ⟨fun h => ⟨(Subgroup.fg_iff_add_fg ⊤).1 h.out⟩, fun h => ⟨(Subgroup.fg_iff_add_fg ⊤).2 h.out⟩⟩
 
 Depends on / 依赖: Subgroup, Subgroup.fg_iff_add_fg, fg_iff_add_fg, h.out
@@ -1596,8 +1596,8 @@ theorem AddGroup.fg_iff_mul_fg
     ⟨(AddSubgroup.fg_iff_mul_fg ⊤).2 h.out⟩⟩
 
 中文:
-定理 AddGroup.fg_iff_mul_fg
-  结论: AddGroup.FG H ↔ Group.FG (Multiplicative H)
+定理 加法群.fg_iff_mul_fg
+  结论: 加法群.FG H ↔ 群.FG (Multiplicative H)
   证明: ⟨fun h => ⟨(AddSubgroup.fg_iff_mul_fg ⊤).1 h.out⟩, fun h =>
     ⟨(AddSubgroup.fg_iff_mul_fg ⊤).2 h.out⟩⟩
 
@@ -1616,8 +1616,8 @@ instance AddGroup.fg_of_group_fg
   body: GroupFG.iff_add_fg.1 ‹_›
 
 中文:
-实例 AddGroup.fg_of_group_fg
-  签名: [Group.FG G]
+实例 加法群.fg_of_group_fg
+  签名: [群.FG G]
   定义体: GroupFG.iff_add_fg.1 ‹_›
 
 Depends on / 依赖: GroupFG, GroupFG.iff_add_fg, iff_add_fg
@@ -1636,8 +1636,8 @@ instance Group.fg_of_mul_group_fg
 @[to_additive]
 
 中文:
-实例 Group.fg_of_mul_group_fg
-  签名: [AddGroup.FG H]
+实例 群.fg_of_mul_group_fg
+  签名: [加法群.FG H]
   定义体: AddGroup.fg_iff_mul_fg.1 ‹_›
 
 @[to_additive]
@@ -1663,8 +1663,8 @@ theorem Group.fg_of_surjective
     @Monoid.fg_of_surjective G _ G' _ (Group.fg_iff_monoid_fg.mp hG) f hf
 
 中文:
-定理 Group.fg_of_surjective
-  结论: {G' : 类型} [Group G'] [hG : Group.FG G] {f : G ->* G'}
+定理 群.fg_of_surjective
+  结论: {G' : 类型} [群 G'] [hG : 群.FG G] {f : G ->* G'}
   证明: Group.fg_iff_monoid_fg.mpr
     @Monoid.fg_of_surjective G _ G' _ (Group.fg_iff_monoid_fg.mp hG) f hf
 
@@ -1696,7 +1696,7 @@ theorem Group.fg_iff_exists_freeGroup_hom_surjective
     exact Group.fg_of_surjective hφ
 
 中文:
-定理 Group.fg_iff_exists_freeGroup_hom_surjective
+定理 群.fg_iff_存在_freeGroup_hom_surjective
   证明: by
   refine ⟨fun ⟨S, hS⟩ => ⟨S, S.finite_toSet, FreeGroup.lift Subtype.val, ?_⟩, ?_⟩
   · rwa [← MonoidHom.range_eq_top, ← FreeGroup.closure_eq_range]
@@ -1732,7 +1732,7 @@ theorem Group.fg_iff_exists_freeGroup_hom_surjective_finite
     ex
 
 中文:
-定理 Group.fg_iff_exists_freeGroup_hom_surjective_finite
+定理 群.fg_iff_存在_freeGroup_hom_surjective_finite
   证明: by
   constructor
   · rw [fg_iff_exists_freeGroup_hom_surjective]
@@ -1768,8 +1768,8 @@ instance Group.fg_range
 @[to_additive]
 
 中文:
-实例 Group.fg_range
-  签名: {G' : 类型} [Group G'] [Group.FG G] (f : G ->* G')
+实例 群.fg_range
+  签名: {G' : 类型} [群 G'] [群.FG G] (f : G ->* G')
   定义体: Group.fg_of_surjective f.rangeRestrict_surjective
 
 @[to_additive]
@@ -1793,8 +1793,8 @@ instance Group.closure_finset_fg
 @[to_additive]
 
 中文:
-实例 Group.closure_finset_fg
-  签名: (s : Finset G)
+实例 群.closure_finset_fg
+  签名: (s : 有限集 G)
   定义体: by
   refine ⟨⟨s.preimage Subtype.val Subtype.coe_injective.injOn, ?_⟩⟩
   rw [Finset.coe_preimage]; rw [← Subgroup.coe_subtype]; rw [Subgroup.closure_preimage_eq_top]
@@ -1818,8 +1818,8 @@ instance Group.closure_finite_fg
   s.coe_toFinset ▸ Group.closure_finset_fg s.toFinset
 
 中文:
-实例 Group.closure_finite_fg
-  签名: (s : Set G) [Finite s]
+实例 群.closure_finite_fg
+  签名: (s : 集合 G) [有限 s]
   定义体: haveI := Fintype.ofFinite s
   s.coe_toFinset ▸ Group.closure_finset_fg s.toFinset
 
@@ -1843,8 +1843,8 @@ instance QuotientGroup.fg
   body: Group.fg_of_surjective QuotientGroup.mk'_surjective N
 
 中文:
-实例 QuotientGroup.fg
-  签名: [Group.FG G] (N : Subgroup G) [Subgroup.Normal N]
+实例 商群.fg
+  签名: [群.FG G] (N : 子群 G) [子群.正规 N]
   定义体: Group.fg_of_surjective QuotientGroup.mk'_surjective N
 
 Depends on / 依赖: Group.fg_of_surjective, QuotientGroup, QuotientGroup.mk, _surjective, fg_of_surjective
@@ -1932,7 +1932,7 @@ instance instMonoidFG
 
 中文:
 实例 instMonoidFG
-  签名: {M : ι -> 类型} [对任意 i, Monoid (M i)] [对任意 i, Monoid.FG (M i)]
+  签名: {M : ι -> 类型} [对任意 i, 幺半群 (M i)] [对任意 i, 幺半群.FG (M i)]
   定义体: by
     rw [← Submonoid.pi_top Set.univ]
     exact .pi fun i => Monoid.FG.fg_top
@@ -1959,7 +1959,7 @@ instance instGroupFG
 
 中文:
 实例 instGroupFG
-  签名: {G : ι -> 类型} [对任意 i, Group (G i)] [对任意 i, Group.FG (G i)]
+  签名: {G : ι -> 类型} [对任意 i, 群 (G i)] [对任意 i, 群.FG (G i)]
   定义体: by
     rw [← Subgroup.pi_top Set.univ]
     exact .pi fun i => Group.FG.out
@@ -2041,8 +2041,8 @@ theorem Submonoid.fg_of_divisive
     exact closure_mono ((
 
 中文:
-定理 Submonoid.fg_of_divisive
-  条件: {P : Submonoid M} (hP : 对任意 x in P, 对任意 y, x * y in P -> y in P)
+定理 子幺半群.fg_of_divisive
+  条件: {P : 子幺半群 M} (hP : 对任意 x in P, 对任意 y, x * y in P -> y in P)
   证明: by
   have hpwo := Set.isPWO_of_wellQuasiOrderedLE { x | x in P ∧ x != 1 }
   rw [fg_iff]
@@ -2097,8 +2097,8 @@ theorem CommMonoid.fg_of_wellQuasiOrderedLE
   proof: Submonoid.fg_of_divisive (by simp)
 
 中文:
-定理 CommMonoid.fg_of_wellQuasiOrderedLE
-  结论: Monoid.FG M where
+定理 交换幺半群.fg_of_wellQuasiOrderedLE
+  结论: 幺半群.FG M where
   证明: Submonoid.fg_of_divisive (by simp)
 
 Depends on / 依赖: Submonoid, Submonoid.fg_of_divisive, fg_of_divisive
@@ -2122,8 +2122,8 @@ theorem Submonoid.fg_eqLocusM
   proof: fg_of_divisive (by simp_all)
 
 中文:
-定理 Submonoid.fg_eqLocusM
-  条件: [Monoid N] [IsCancelMul N] (f g : M ->* N)
+定理 子幺半群.fg_eqLocusM
+  条件: [幺半群 N] [是消去乘法 N] (f g : M ->* N)
   结论: (f.eqLocusM g).FG
   证明: fg_of_divisive (by simp_all)
 

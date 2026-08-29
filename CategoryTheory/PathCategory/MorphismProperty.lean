@@ -92,7 +92,7 @@ lemma morphismProperty_eq_top_of_isMultiplicative
 
 中文:
 引理 morphismProperty_eq_top_of_isMultiplicative
-  结论: (P : Morphism命题erty (Paths V))
+  结论: (P : MorphismProperty (Paths V))
   证明: morphismProperty_eq_top _ _ (P.id_mem _) (fun _ q hp => P.comp_mem _ _ hp (hP q))
 
 Depends on / 依赖: P.comp_mem, P.id_mem, comp_mem, id_mem, morphismProperty_eq_top
@@ -123,7 +123,7 @@ definition liftNatTrans
     exact morphismProperty_eq_top_of_isMultiplicative _ _ α_nat
 
 中文:
-定义 liftNatTrans
+定义 lift自然数Trans
   签名: {F G : Paths V ⥤ C} (α_app : (v : V) -> (F.obj v ⟶ G.obj v))
   定义体: α_app
   naturality := by
@@ -152,8 +152,8 @@ definition liftNatIso
   body: NatIso.ofComponents α_app (fun f => (liftNatTrans (fun v => (α_app v).hom) α_nat).naturality f)
 
 中文:
-定义 liftNatIso
-  签名: {C} [Category* C] {F G : Paths V ⥤ C} (α_app : (v : V) -> (F.obj v ≅ G.obj v))
+定义 lift自然数Iso
+  签名: {C} [范畴* C] {F G : Paths V ⥤ C} (α_app : (v : V) -> (F.obj v ≅ G.obj v))
   定义体: NatIso.ofComponents α_app (fun f => (liftNatTrans (fun v => (α_app v).hom) α_nat).naturality f)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, liftNatTrans, naturality, ofComponents
@@ -186,7 +186,7 @@ definition paths
 
 中文:
 定义 paths
-  签名: (W : Morphism命题erty C)
+  签名: (W : MorphismProperty C)
   定义体: fun _ _ p => p.rec True fun _ f P => P ∧ W f
 
 @[simp]
@@ -208,7 +208,7 @@ lemma nil_mem_paths
 
 中文:
 引理 nil_mem_paths
-  条件: {W : Morphism命题erty C} {X : C}
+  条件: {W : MorphismProperty C} {X : C}
   结论: W.paths (.nil (a := X))
   证明: trivial
 -/
@@ -226,7 +226,7 @@ lemma cons_mem_paths
 
 中文:
 引理 cons_mem_paths
-  结论: {W : Morphism命题erty C} {X Y Z : C} {p : Path X Y} {f : Y ⟶ Z}
+  结论: {W : MorphismProperty C} {X Y Z : C} {p : 道路 X Y} {f : Y ⟶ Z}
   证明: ⟨hp, hf⟩
 
 @[simp]
@@ -246,7 +246,7 @@ lemma cons_mem_paths_iff
 
 中文:
 引理 cons_mem_paths_iff
-  条件: {W : Morphism命题erty C} {X Y Z : C} {p : Path X Y} {f : Y ⟶ Z}
+  条件: {W : MorphismProperty C} {X Y Z : C} {p : 道路 X Y} {f : Y ⟶ Z}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -267,7 +267,7 @@ lemma toPath_mem_paths
 
 中文:
 引理 toPath_mem_paths
-  条件: {W : Morphism命题erty C} {X Y : C} {f : X ⟶ Y} (hf : W f)
+  条件: {W : MorphismProperty C} {X Y : C} {f : X ⟶ Y} (hf : W f)
   证明: ⟨trivial, hf⟩
 
 @[simp]
@@ -289,7 +289,7 @@ lemma toPath_mem_paths_iff
 
 中文:
 引理 toPath_mem_paths_iff
-  条件: {W : Morphism命题erty C} {X Y : C} {f : X ⟶ Y}
+  条件: {W : MorphismProperty C} {X Y : C} {f : X ⟶ Y}
   证明: ⟨fun h => h.2, toPath_mem_paths⟩
 
 @[simp]
@@ -323,7 +323,7 @@ lemma comp_mem_paths_iff
 
 中文:
 引理 comp_mem_paths_iff
-  条件: {W : Morphism命题erty C} {X Y Z : C} {p : Path X Y} {q : Path Y Z}
+  条件: {W : MorphismProperty C} {X Y Z : C} {p : 道路 X Y} {q : 道路 Y Z}
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨hp, hq⟩ => ?_⟩
   · induction q with
@@ -368,7 +368,7 @@ lemma comp_mem_paths_iff'
 
 中文:
 引理 comp_mem_paths_iff'
-  条件: {W : Morphism命题erty C} {X Y Z : Paths C} {p : X ⟶ Y} {q : Y ⟶ Z}
+  条件: {W : MorphismProperty C} {X Y Z : Paths C} {p : X ⟶ Y} {q : Y ⟶ Z}
   证明: W.comp_mem_paths_iff
 
 Depends on / 依赖: W.comp_mem_paths_iff, comp_mem_paths_iff
@@ -393,7 +393,7 @@ lemma monotone_paths
 
 中文:
 引理 monotone_paths
-  结论: Monotone (paths (C := C))
+  结论: 递增 (paths (C := C))
   证明: fun _ _ h _ _ p => p.rec (fun _ => trivial) (fun _ _ hp' hp => ⟨hp' hp.1, h _ hp.2⟩)
 -/
 lemma monotone_paths : Monotone (paths (C := C)) :=
@@ -411,7 +411,7 @@ lemma composePath_mem_of_id_mem
 
 中文:
 引理 composePath_mem_of_id_mem
-  结论: (W : Morphism命题erty C) [W.IsStableUnderComposition] {X Y : C}
+  结论: (W : MorphismProperty C) [W.是StableUnderComposition] {X Y : C}
   证明: by
   revert hp
   exact p.rec (by simpa) fun p f hp hp' => W.comp_mem _ _ (hp hp'.1) hp'.2
@@ -438,7 +438,7 @@ lemma composePath_mem_of_length_pos
 
 中文:
 引理 composePath_mem_of_length_pos
-  结论: (W : Morphism命题erty C) [W.IsStableUnderComposition] {X Y : C}
+  结论: (W : MorphismProperty C) [W.是StableUnderComposition] {X Y : C}
   证明: by
   revert hp h
   refine p.rec (by simp) fun p f hp hp' hp'' => ?_
@@ -466,7 +466,7 @@ lemma composePath_mem
 
 中文:
 引理 composePath_mem
-  结论: (W : Morphism命题erty C) [W.IsMultiplicative] {X Y : C}
+  结论: (W : MorphismProperty C) [W.是Multiplicative] {X Y : C}
   证明: W.composePath_mem_of_id_mem hp W.id_mem X
 
 Depends on / 依赖: W.composePath_mem_of_id_mem, W.id_mem, composePath_mem_of_id_mem, id_mem
@@ -485,7 +485,7 @@ lemma paths_le_inverseImage
 
 中文:
 引理 paths_le_inverseImage
-  条件: (W : Morphism命题erty C) [W.IsMultiplicative]
+  条件: (W : MorphismProperty C) [W.是Multiplicative]
   证明: fun _ _ _ => W.composePath_mem
 
 Depends on / 依赖: W.composePath_mem, composePath_mem
@@ -515,7 +515,7 @@ lemma multiplicativeClosure_eq_strictMap_paths
 
 中文:
 引理 multiplicativeClosure_eq_strictMap_paths
-  条件: (W : Morphism命题erty C)
+  条件: (W : MorphismProperty C)
   证明: by
   refine le_antisymm ?_ fun _ _ _ ⟨h⟩ => ?_
   · refine (W.multiplicativeClosure_le_iff _).2 fun X Y f hf => ?_

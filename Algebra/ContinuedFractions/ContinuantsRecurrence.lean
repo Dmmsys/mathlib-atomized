@@ -36,7 +36,7 @@ theorem contsAux_recurrence
 
 中文:
 定理 contsAux_recurrence
-  结论: {gp ppred pred : Pair K} (nth_s_eq : g.s.get? n = some gp)
+  结论: {gp ppred pred : 对 K} (nth_s_eq : g.s.get? n = some gp)
   证明: by
   simp [*, contsAux, nextConts, nextDen, nextNum]
 
@@ -59,7 +59,7 @@ theorem conts_recurrenceAux
 
 中文:
 定理 conts_recurrenceAux
-  结论: {gp ppred pred : Pair K} (nth_s_eq : g.s.get? n = some gp)
+  结论: {gp ppred pred : 对 K} (nth_s_eq : g.s.get? n = some gp)
   证明: by
   rw [nth_cont_eq_succ_nth_contAux]; rw [contsAux_recurrence nth_s_eq nth_contsAux_eq succ_nth_contsAux_eq]
 
@@ -81,7 +81,7 @@ theorem conts_recurrence
 
 中文:
 定理 conts_recurrence
-  结论: {gp ppred pred : Pair K} (succ_nth_s_eq : g.s.get? (n + 1) = some gp)
+  结论: {gp ppred pred : 对 K} (succ_nth_s_eq : g.s.get? (n + 1) = some gp)
   证明: contsAux_recurrence succ_nth_s_eq nth_conts_eq succ_nth_conts_eq
 
 Depends on / 依赖: contsAux_recurrence, nth_conts_eq, succ_nth_conts_eq, succ_nth_s_eq
@@ -107,7 +107,7 @@ theorem nums_recurrence
 
 中文:
 定理 nums_recurrence
-  结论: {gp : Pair K} {ppredA predA : K}
+  结论: {gp : 对 K} {ppredA predA : K}
   证明: by
   obtain ⟨ppredConts, nth_conts_eq, ⟨rfl⟩⟩ : exists conts, g.conts n = conts ∧ conts.a = ppredA :=
     exists_conts_a_of_num nth_num_eq
@@ -145,7 +145,7 @@ theorem dens_recurrence
 
 中文:
 定理 dens_recurrence
-  结论: {gp : Pair K} {ppredB predB : K}
+  结论: {gp : 对 K} {ppredB predB : K}
   证明: by
   obtain ⟨ppredConts, nth_conts_eq, ⟨rfl⟩⟩ : exists conts, g.conts n = conts ∧ conts.b = ppredB :=
     exists_conts_b_of_den nth_den_eq

@@ -32,7 +32,7 @@ theorem volume_regionBetween_eq_integral'
 
 中文:
 定理 volume_regionBetween_eq_integral'
-  结论: [SigmaFinite μ] (f_int : 整数egrableOn f s μ)
+  结论: [σ有限 μ] (f_int : 整数egrableOn f s μ)
   证明: by
   have h : g - f =ᵐ[μ.restrict s] fun x => Real.toNNReal (g x - f x) :=
     hfg.mono fun x hx => (Real.coe_toNNReal _ <| sub_nonneg.2 hx).symm
@@ -59,7 +59,7 @@ theorem volume_regionBetween_eq_integral
 
 中文:
 定理 volume_regionBetween_eq_integral
-  结论: [SigmaFinite μ] (f_int : 整数egrableOn f s μ)
+  结论: [σ有限 μ] (f_int : 整数egrableOn f s μ)
   证明: volume_regionBetween_eq_integral' f_int g_int hs
     ((ae_restrict_iff' hs).mpr (Eventually.of_forall hfg))
 
@@ -94,8 +94,8 @@ theorem Real.integrable_of_summable_norm_Icc
   · simp only [Compacts.coe_mk, le_add_iff_nonneg_
 
 中文:
-定理 Real.integrable_of_summable_norm_Icc
-  结论: {E : 类型} [NormedAddCommGroup E] {f : C(实数, E)}
+定理 实数.integrable_of_summable_norm_Icc
+  结论: {E : 类型} [赋范交换加群 E] {f : C(实数, E)}
   证明: by
   refine integrable_of_summable_norm_restrict (.of_nonneg_of_le
     (fun n : Int => mul_nonneg (norm_nonneg
@@ -148,7 +148,7 @@ theorem integral_comp_neg_Iic
 
 中文:
 定理 integral_comp_neg_Iic
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   have A : MeasurableEmbedding fun x : Real => -x :=
     (Homeomorph.neg Real).isClosedEmbedding.measurableEmbedding
@@ -179,7 +179,7 @@ theorem integral_comp_neg_Ioi
 
 中文:
 定理 integral_comp_neg_Ioi
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← neg_neg c]; rw [← integral_comp_neg_Iic]
   simp only [neg_neg]

@@ -201,7 +201,7 @@ theorem coeff_pentagonalSeries_eq_zero
 
 中文:
 定理 coeff_pentagonalSeries_eq_zero
-  条件: {n : 自然数} (h : n ∉ Set.range pentagonal)
+  条件: {n : 自然数} (h : n ∉ 集合.range pentagonal)
   证明: dif_neg by simpa using h
 
 @[simp]
@@ -249,7 +249,7 @@ theorem coeff_pentagonalSeries_eq_zero_iff
 
 中文:
 定理 coeff_pentagonalSeries_eq_zero_iff
-  条件: [Nontrivial R] {n : 自然数}
+  条件: [非平凡 R] {n : 自然数}
   证明: by
   grind [pentagonalSeries, coeff_mk, neg_one_pow_ne_zero, Int.coe_negOnePow]
 
@@ -306,7 +306,7 @@ theorem pentagonalSeries_eq_tsum
 
 中文:
 定理 pentagonalSeries_eq_tsum
-  条件: [T2Space R]
+  条件: [T2空间 R]
   证明: (hasSum_pentagonalSeries R).tsum_eq.symm
 
 Depends on / 依赖: hasSum_pentagonalSeries, tsum_eq, tsum_eq.symm
@@ -360,7 +360,7 @@ theorem pentagonalSeries_eq_tsum_pow_pentagonal_sub
 
 中文:
 定理 pentagonalSeries_eq_tsum_pow_pentagonal_sub
-  条件: [T2Space R]
+  条件: [T2空间 R]
   证明: (hasSum_pow_pentagonal_sub_pentagonalSeries R).tsum_eq.symm
 
 Depends on / 依赖: hasSum_pow_pentagonal_sub_pentagonalSeries, tsum_eq, tsum_eq.symm
@@ -386,7 +386,7 @@ theorem tprod_one_sub_X_pow'
 
 中文:
 定理 tprod_one_sub_X_pow'
-  条件: [IsTopologicalRing R] [T2Space R]
+  条件: [是拓扑环 R] [T2空间 R]
   证明: by
   nontriviality R
   rw [pentagonalSeries_eq_tsum_pow_pentagonal_sub]
@@ -493,7 +493,7 @@ theorem tprod_one_sub_X_pow
 
 中文:
 定理 tprod_one_sub_X_pow
-  条件: [T2Space R]
+  条件: [T2空间 R]
   结论: ∏' n, (1 - X ^ (n + 1) : R⟦X⟧) = pentagonalSeries R
   证明: (hasProd_one_sub_X_pow R).tprod_eq
 

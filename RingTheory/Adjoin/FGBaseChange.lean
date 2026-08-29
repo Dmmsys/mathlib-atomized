@@ -38,8 +38,8 @@ lemma exists_fg_and_mem_baseChange
       (Algebra.subset_adjoin (Finset.mem_image_of_mem _ 
 
 中文:
-引理 exists_fg_and_mem_baseChange
-  结论: {R A B : 类型} [CommSemiring R]
+引理 存在_fg_and_mem_baseChange
+  结论: {R A B : 类型} [交换半环 R]
   证明: by
   obtain ⟨S, hS⟩ := TensorProduct.exists_finset x
   classical

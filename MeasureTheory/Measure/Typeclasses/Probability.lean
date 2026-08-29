@@ -37,8 +37,8 @@ class IsZeroOrProbabilityMeasure
     - measure_univ : μ univ = 0 ∨ μ univ = 1
 
 中文:
-类 IsZeroOrProbabilityMeasure
-  参数: (μ : Measure α)
+类 是ZeroOrProbabilityMeasure
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
     - measure_univ : μ univ = 0 ∨ μ univ = 1
 -/
@@ -55,7 +55,7 @@ lemma isZeroOrProbabilityMeasure_iff
 
 中文:
 引理 isZeroOrProbabilityMeasure_iff
-  结论: IsZeroOrProbabilityMeasure μ ↔ μ univ = 0 ∨ μ univ = 1
+  结论: 是ZeroOrProbabilityMeasure μ ↔ μ univ = 0 ∨ μ univ = 1
   证明: ⟨fun _ => IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk⟩
 
 Depends on / 依赖: IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk, measure_univ
@@ -78,7 +78,7 @@ lemma prob_le_one
 
 中文:
 引理 prob_le_one
-  条件: {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α}
+  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ] {s : 集合 α}
   结论: μ s <= 1
   证明: by
   apply (measure_mono (subset_univ _)).trans
@@ -104,8 +104,8 @@ lemma measureReal_le_one
 @[simp]
 
 中文:
-引理 measureReal_le_one
-  条件: {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α}
+引理 measure实数_le_one
+  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ] {s : 集合 α}
   证明: ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.ofReal_one.symm ▸ prob_le_one)
 
 @[simp]
@@ -128,7 +128,7 @@ theorem one_le_prob_iff
 
 中文:
 定理 one_le_prob_iff
-  条件: {μ : Measure α} [IsZeroOrProbabilityMeasure μ]
+  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ]
   结论: 1 <= μ s ↔ μ s = 1
   证明: ⟨fun h => le_antisymm prob_le_one h, fun h => h ▸ le_refl _⟩
 
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroOrProbabilityMeasure (0 : Measure α)
+  签名: 是ZeroOrProbabilityMeasure (0 : 测度 α)
   定义体: ⟨Or.inl rfl⟩
 
 Depends on / 依赖: Or.inl
@@ -173,8 +173,8 @@ class IsProbabilityMeasure
     - measure_univ : μ univ = 1
 
 中文:
-类 IsProbabilityMeasure
-  参数: (μ : Measure α)
+类 是概率测度
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
     - measure_univ : μ univ = 1
 -/
@@ -195,7 +195,7 @@ lemma isProbabilityMeasure_iff
 
 中文:
 引理 isProbabilityMeasure_iff
-  结论: IsProbabilityMeasure μ ↔ μ univ = 1
+  结论: 是概率测度 μ ↔ μ univ = 1
   证明: ⟨fun _ => measure_univ, IsProbabilityMeasure.mk⟩
 
 Depends on / 依赖: IsProbabilityMeasure, IsProbabilityMeasure.mk, measure_univ
@@ -222,8 +222,8 @@ theorem nonempty_of_isProbabilityMeasure
 
 中文:
 定理 nonempty_of_isProbabilityMeasure
-  条件: (μ : Measure α) [IsProbabilityMeasure μ]
-  结论: Nonempty α
+  条件: (μ : 测度 α) [是概率测度 μ]
+  结论: 非空 α
   证明: by
   by_contra! maybe_empty
   have : μ Set.univ = 0 := by
@@ -248,8 +248,8 @@ theorem IsProbabilityMeasure.ne_zero
   proof: mt measure_univ_eq_zero.2 by simp [measure_univ]
 
 中文:
-定理 IsProbabilityMeasure.ne_zero
-  条件: (μ : Measure α) [IsProbabilityMeasure μ]
+定理 是概率测度.ne_zero
+  条件: (μ : 测度 α) [是概率测度 μ]
   结论: μ != 0
   证明: mt measure_univ_eq_zero.2 by simp [measure_univ]
 
@@ -271,8 +271,8 @@ theorem IsProbabilityMeasure.ae_neBot
   proof: inferInstance
 
 中文:
-定理 IsProbabilityMeasure.ae_neBot
-  条件: [IsProbabilityMeasure μ]
+定理 是概率测度.ae_neBot
+  条件: [是概率测度 μ]
   结论: NeBot (ae μ)
   证明: inferInstance
 -/
@@ -289,7 +289,7 @@ theorem prob_add_prob_compl
 
 中文:
 定理 prob_add_prob_compl
-  条件: [IsProbabilityMeasure μ] (h : MeasurableSet s)
+  条件: [是概率测度 μ] (h : 可测集 s)
   结论: μ s + μ sᶜ = 1
   证明: (measure_add_measure_compl h).trans measure_univ
 
@@ -308,8 +308,8 @@ lemma probReal_add_probReal_compl
   simpa [Measure.real, ENNReal.toReal_add] using congr($(prob_add_prob_compl (μ := μ) h).toReal)
 
 中文:
-引理 probReal_add_probReal_compl
-  条件: [IsProbabilityMeasure μ] (h : MeasurableSet s)
+引理 prob实数_add_prob实数_compl
+  条件: [是概率测度 μ] (h : 可测集 s)
   证明: by
   simpa [Measure.real, ENNReal.toReal_add] using congr($(prob_add_prob_compl (μ := μ) h).toReal)
 
@@ -329,7 +329,7 @@ instance isProbabilityMeasureSMul
 
 中文:
 实例 isProbabilityMeasureSMul
-  签名: [IsFiniteMeasure μ] [NeZero μ]
+  签名: [是有限测度 μ] [NeZero μ]
   定义体: ⟨ENNReal.inv_mul_cancel (NeZero.ne (μ univ)) (measure_ne_top _ _)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, NeZero, NeZero.ne, inv_mul_cancel, measure_ne_top
@@ -348,7 +348,7 @@ instance isProbabilityMeasure_dite
 
 中文:
 实例 isProbabilityMeasure_dite
-  签名: {p : 命题} [Decidable p] {μ : p -> Measure α}
+  签名: {p : 命题} [可判定 p] {μ : p -> 测度 α}
   定义体: by split <;> infer_instance
 
 Depends on / 依赖: infer_instance
@@ -367,7 +367,7 @@ instance isProbabilityMeasure_ite
 
 中文:
 实例 isProbabilityMeasure_ite
-  签名: {p : 命题} [Decidable p] {μ ν : Measure α}
+  签名: {p : 命题} [可判定 p] {μ ν : 测度 α}
   定义体: by split <;> infer_instance
 
 Depends on / 依赖: infer_instance
@@ -392,7 +392,7 @@ lemma probReal_univ
   proof: by simp [Measure.real]
 
 中文:
-引理 probReal_univ
+引理 prob实数_univ
   结论: μ.real univ = 1
   证明: by simp [Measure.real]
 -/
@@ -409,7 +409,7 @@ lemma isProbabilityMeasure_iff_real
 
 中文:
 引理 isProbabilityMeasure_iff_real
-  条件: {μ : Measure α}
+  条件: {μ : 测度 α}
   证明: by
   refine ⟨fun h => probReal_univ, fun h => ⟨(ENNReal.toReal_eq_one_iff (μ univ)).mp h⟩⟩
 
@@ -428,8 +428,8 @@ theorem Measure.isProbabilityMeasure_map
   proof: ⟨by simp [map_apply_of_aemeasurable, hf]⟩
 
 中文:
-定理 Measure.isProbabilityMeasure_map
-  条件: {f : α -> β} (hf : AEMeasurable f μ)
+定理 测度.isProbabilityMeasure_map
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ)
   证明: ⟨by simp [map_apply_of_aemeasurable, hf]⟩
 
 Depends on / 依赖: map_apply_of_aemeasurable
@@ -450,8 +450,8 @@ theorem Measure.isProbabilityMeasure_of_map
     exact IsProbabilityMeasure.measure_univ
 
 中文:
-定理 Measure.isProbabilityMeasure_of_map
-  结论: {μ : Measure α} (f : α -> β)
+定理 测度.isProbabilityMeasure_of_map
+  结论: {μ : 测度 α} (f : α -> β)
   证明: by
     have hf : AEMeasurable f μ := AEMeasurable.of_map_ne_zero (IsProbabilityMeasure.ne_zero _)
     rw [← Set.preimage_univ (f := f)]; rw [← map_apply_of_aemeasurable hf .univ]
@@ -475,8 +475,8 @@ theorem Measure.isProbabilityMeasure_map_iff
   proof: ⟨fun _ => isProbabilityMeasure_of_map f, fun _ => isProbabilityMeasure_map hf⟩
 
 中文:
-定理 Measure.isProbabilityMeasure_map_iff
-  结论: {μ : Measure α} {f : α -> β}
+定理 测度.isProbabilityMeasure_map_iff
+  结论: {μ : 测度 α} {f : α -> β}
   证明: ⟨fun _ => isProbabilityMeasure_of_map f, fun _ => isProbabilityMeasure_map hf⟩
 
 Depends on / 依赖: isProbabilityMeasure_map, isProbabilityMeasure_of_map
@@ -538,7 +538,7 @@ theorem prob_compl_eq_one_sub
 
 中文:
 定理 prob_compl_eq_one_sub
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ sᶜ = 1 - μ s
   证明: prob_compl_eq_one_sub₀ hs.nullMeasurableSet
 
@@ -579,7 +579,7 @@ lemma prob_compl_eq_zero_iff
 
 中文:
 引理 prob_compl_eq_zero_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ sᶜ = 0 ↔ μ s = 1
   证明: by
   simp [hs]
@@ -619,7 +619,7 @@ lemma prob_compl_eq_one_iff
 
 中文:
 引理 prob_compl_eq_one_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ sᶜ = 1 ↔ μ s = 0
   证明: by
   simp [hs]
@@ -658,7 +658,7 @@ lemma mem_ae_iff_prob_eq_one
 
 中文:
 引理 mem_ae_iff_prob_eq_one
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: s in ae μ ↔ μ s = 1
   证明: mem_ae_iff.trans prob_compl_eq_zero_iff hs
 
@@ -678,7 +678,7 @@ lemma ae_iff_prob_eq_one
 
 中文:
 引理 ae_iff_prob_eq_one
-  条件: (hp : Measurable p)
+  条件: (hp : 可测 p)
   结论: (对任意ᵐ a ∂μ, p a) ↔ μ {a | p a} = 1
   证明: mem_ae_iff_prob_eq_one hp.setOf
 
@@ -699,7 +699,7 @@ lemma isProbabilityMeasure_comap
 
 中文:
 引理 isProbabilityMeasure_comap
-  结论: (hf : Injective f) (hf' : 对任意ᵐ a ∂μ, a in range f)
+  结论: (hf : 单射 f) (hf' : 对任意ᵐ a ∂μ, a in range f)
   证明: by
     rw [comap_apply _ hf hf'' _ MeasurableSet.univ]; rw [← mem_ae_iff_prob_eq_one (hf'' _ MeasurableSet.univ)]
     simpa
@@ -722,8 +722,8 @@ lemma _root_.MeasurableEmbedding.isProbabilityMeasure_comap
   proof: isProbabilityMeasure_comap hf.injective hf' hf.measurableSet_image'
 
 中文:
-引理 _root_.MeasurableEmbedding.isProbabilityMeasure_comap
-  结论: (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.isProbabilityMeasure_comap
+  结论: (hf : 可测嵌入 f)
   证明: isProbabilityMeasure_comap hf.injective hf' hf.measurableSet_image'
 -/
 protected lemma _root_.MeasurableEmbedding.isProbabilityMeasure_comap (hf : MeasurableEmbedding f)
@@ -759,7 +759,7 @@ instance isProbabilityMeasure_comap_down
 
 中文:
 实例 isProbabilityMeasure_comap_down
-  签名: : IsProbabilityMeasure (μ.comap ULift.down)
+  签名: : 是概率测度 (μ.comap 类型层提升.down)
   定义体: MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap ae_of_all _ by
     simp [Function.Surjective.range_eq <| EquivLike.surjective _]
 
@@ -778,8 +778,8 @@ lemma Measure.eq_of_le_of_isProbabilityMeasure
   proof: eq_of_le_of_measure_univ_eq hμν (by simp)
 
 中文:
-引理 Measure.eq_of_le_of_isProbabilityMeasure
-  结论: {μ ν : Measure α}
+引理 测度.eq_of_le_of_isProbabilityMeasure
+  结论: {μ ν : 测度 α}
   证明: eq_of_le_of_measure_univ_eq hμν (by simp)
 
 Depends on / 依赖: eq_of_le_of_measure_univ_eq
@@ -846,7 +846,7 @@ lemma eq_zero_or_isProbabilityMeasure
 
 中文:
 引理 eq_zero_or_isProbabilityMeasure
-  结论: μ = 0 ∨ IsProbabilityMeasure μ
+  结论: μ = 0 ∨ 是概率测度 μ
   证明: by
   rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h
   · apply Or.inl (measure_univ_eq_zero.mp h)
@@ -880,7 +880,7 @@ lemma prob_compl_lt_one_sub_of_lt_prob
 
 中文:
 引理 prob_compl_lt_one_sub_of_lt_prob
-  条件: {p : 实数>=0∞} (hμs : p < μ s) (s_mble : MeasurableSet s)
+  条件: {p : 实数>=0∞} (hμs : p < μ s) (s_mble : 可测集 s)
   证明: by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
   · simp at hμs
@@ -915,7 +915,7 @@ lemma prob_compl_le_one_sub_of_le_prob
 
 中文:
 引理 prob_compl_le_one_sub_of_le_prob
-  条件: {p : 实数>=0∞} (hμs : p <= μ s) (s_mble : MeasurableSet s)
+  条件: {p : 实数>=0∞} (hμs : p <= μ s) (s_mble : 可测集 s)
   证明: by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
   · simp

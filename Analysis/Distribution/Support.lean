@@ -68,7 +68,7 @@ definition IsVanishingOn
 
 中文:
 定义 IsVanishingOn
-  签名: (f : F -> V) (s : Set α)
+  签名: (f : F -> V) (s : 集合 α)
   定义体: forall (u : F), tsupport u subseteq s -> f u = 0
 
 @[gcongr]
@@ -91,7 +91,7 @@ theorem IsVanishingOn.mono
 中文:
 定理 IsVanishingOn.mono
   条件: ⦃s₁ s₂
-  结论: Set α⦄ (hs : s₂ subseteq s₁) (hf : IsVanishingOn f s₁) :
+  结论: 集合 α⦄ (hs : s₂ subseteq s₁) (hf : IsVanishingOn f s₁) :
   证明: (hf · <| ·.trans hs)
 -/
 theorem IsVanishingOn.mono ⦃s₁ s₂ : Set α⦄ (hs : s₂ subseteq s₁) (hf : IsVanishingOn f s₁) :
@@ -110,7 +110,7 @@ theorem not_isVanishingOn_mono
 中文:
 定理 not_isVanishingOn_mono
   条件: ⦃s₁ s₂
-  结论: Set α⦄ (hs : s₁ subseteq s₂) (hf : ¬ IsVanishingOn f s₁) :
+  结论: 集合 α⦄ (hs : s₁ subseteq s₂) (hf : ¬ IsVanishingOn f s₁) :
   证明: (hf <| ·.mono hs)
 -/
 theorem not_isVanishingOn_mono ⦃s₁ s₂ : Set α⦄ (hs : s₁ subseteq s₂) (hf : ¬ IsVanishingOn f s₁) :
@@ -201,7 +201,7 @@ theorem dsupport_compl_eq
 
 中文:
 定理 dsupport_compl_eq
-  结论: (dsupport f)ᶜ = ⋃₀ { a | IsVanishingOn f a ∧ IsOpen a }
+  结论: (dsupport f)ᶜ = ⋃₀ { a | IsVanishingOn f a ∧ 是开集 a }
   证明: by
   simp [dsupport, Set.compl_sInter, Set.compl_image_ofPred]
 
@@ -265,7 +265,7 @@ theorem mem_dsupport_iff_forall_exists_ne
   simp_rw [mem_dsupport_iff_not_isVanishingOn, not_isVanishingOn_iff]
 
 中文:
-定理 mem_dsupport_iff_forall_exists_ne
+定理 mem_dsupport_iff_对任意_存在_ne
   条件: (x : α)
   证明: by
   simp_rw [mem_dsupport_iff_not_isVanishingOn, not_isVanishingOn_iff]
@@ -311,8 +311,8 @@ theorem _root_.Filter.HasBasis.mem_dsupport
   exact hl.frequently_smallSets not_isVanishingOn_mono
 
 中文:
-定理 _root_.Filter.HasBasis.mem_dsupport
-  结论: {ι : Sort*} {p : ι -> 命题}
+定理 _root_.滤子.有基.mem_dsupport
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: by
   rw [mem_dsupport_iff_frequently]
   exact hl.frequently_smallSets not_isVanishingOn_mono
@@ -358,8 +358,8 @@ theorem _root_.Filter.HasBasis.notMem_dsupport
 @[gcongr only]
 
 中文:
-定理 _root_.Filter.HasBasis.notMem_dsupport
-  结论: {ι : Sort*} {p : ι -> 命题}
+定理 _root_.滤子.有基.notMem_dsupport
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: by
   simp [hl.mem_dsupport]
 
@@ -407,7 +407,7 @@ theorem isClosed_dsupport
 
 中文:
 定理 isClosed_dsupport
-  结论: IsClosed (dsupport f)
+  结论: 是闭集 (dsupport f)
   证明: by
   grind [dsupport, isClosed_sInter]
 
@@ -428,7 +428,7 @@ theorem IsVanishingOn.disjoint_dsupport
 
 中文:
 定理 IsVanishingOn.disjoint_dsupport
-  条件: (h : IsVanishingOn f s) (s_open : IsOpen s)
+  条件: (h : IsVanishingOn f s) (s_open : 是开集 s)
   证明: by
   rw [← Set.subset_compl_iff_disjoint_right]; rw [dsupport_compl_eq]
   exact Set.subset_sUnion_of_mem ⟨h, s_open⟩
@@ -506,7 +506,7 @@ theorem smulLeftCLM
 
 中文:
 定理 smulLeftCLM
-  条件: (hf : IsVanishingOn f s) {g : E -> Complex} (hg : g.HasTemperateGrowth)
+  条件: (hf : IsVanishingOn f s) {g : E -> 复形} (hg : g.有TemperateGrowth)
   证明: by
   intro u hu
   apply hf ((SchwartzMap.smulLeftCLM Complex g) u)
@@ -580,7 +580,7 @@ theorem iteratedLineDerivOp
 
 中文:
 定理 iteratedLineDerivOp
-  条件: {n : 自然数} (hf : IsVanishingOn f s) (m : Fin n -> E)
+  条件: {n : 自然数} (hf : IsVanishingOn f s) (m : 有限集 n -> E)
   证明: by
   induction n with
   | zero =>
@@ -646,7 +646,7 @@ theorem dsupport_smulLeftCLM_subset
 
 中文:
 定理 dsupport_smulLeftCLM_subset
-  条件: {g : E -> Complex} (hg : g.HasTemperateGrowth)
+  条件: {g : E -> 复形} (hg : g.有TemperateGrowth)
   证明: by
   gcongr; fun_prop
 
@@ -697,7 +697,7 @@ theorem dsupport_iteratedLineDerivOp_subset
 
 中文:
 定理 dsupport_iteratedLineDerivOp_subset
-  条件: {n : 自然数} (m : Fin n -> E)
+  条件: {n : 自然数} (m : 有限集 n -> E)
   证明: by
   gcongr; fun_prop
 
@@ -726,7 +726,7 @@ theorem dsupport_delta
 
 中文:
 定理 dsupport_delta
-  条件: [FiniteDimensional 实数 E] (x : E)
+  条件: [有限维 实数 E] (x : E)
   证明: by
   apply subset_antisymm
   · intro x' hx'
@@ -828,7 +828,7 @@ theorem iteratedLineDerivOp
 
 中文:
 定理 iteratedLineDerivOp
-  条件: {n : 自然数} (hf : IsVanishingOn f s) (m : Fin n -> E)
+  条件: {n : 自然数} (hf : IsVanishingOn f s) (m : 有限集 n -> E)
   证明: by
   induction n with
   | zero =>
@@ -861,7 +861,7 @@ theorem _root_.Distribution.isVanishingOn_delta
   apply image_eq_zero_of_notMem_tsupport hu
 
 中文:
-定理 _root_.Distribution.isVanishingOn_delta
+定理 _root_.分布.isVanishingOn_delta
   条件: (x : E)
   证明: by
   intro u hu
@@ -915,7 +915,7 @@ theorem dsupport_iteratedLineDerivOp_subset
 
 中文:
 定理 dsupport_iteratedLineDerivOp_subset
-  条件: {n : 自然数} (m : Fin n -> E)
+  条件: {n : 自然数} (m : 有限集 n -> E)
   证明: by
   gcongr; fun_prop
 
@@ -945,7 +945,7 @@ theorem dsupport_delta
 
 中文:
 定理 dsupport_delta
-  条件: [FiniteDimensional 实数 E] (x : E) (hx : x in Ω)
+  条件: [有限维 实数 E] (x : E) (hx : x in Ω)
   证明: by
   apply subset_antisymm
   · intro x' hx'

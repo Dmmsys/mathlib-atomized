@@ -37,7 +37,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: : Discrete (PUnit : Type w) × C ⥤ C where
+  签名: : 离散 (命题单元 : 类型 w) × C ⥤ C where
   定义体: X.2
   map f := f.2
 -/
@@ -58,7 +58,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: : C × Discrete (PUnit : Type w) ⥤ C where
+  签名: : C × 离散 (命题单元 : 类型 w) ⥤ C where
   定义体: X.1
   map f := f.1
 -/
@@ -79,7 +79,7 @@ definition leftInverseUnitor
 
 中文:
 定义 leftInverseUnitor
-  签名: : C ⥤ Discrete (PUnit : Type w) × C where
+  签名: : C ⥤ 离散 (命题单元 : 类型 w) × C where
   定义体: ⟨⟨PUnit.unit⟩, X⟩
   map f := 𝟙 _ ×ₘ f
 
@@ -102,7 +102,7 @@ definition rightInverseUnitor
 
 中文:
 定义 rightInverseUnitor
-  签名: : C ⥤ C × Discrete (PUnit : Type w) where
+  签名: : C ⥤ C × 离散 (命题单元 : 类型 w) where
   定义体: ⟨X, ⟨PUnit.unit⟩⟩
   map f := f ×ₘ 𝟙 _
 
@@ -128,7 +128,7 @@ definition leftUnitorEquivalence
 
 中文:
 定义 leftUnitorEquivalence
-  签名: : Discrete (PUnit : Type w) × C ≌ C where
+  签名: : 离散 (命题单元 : 类型 w) × C ≌ C where
   定义体: leftUnitor C
   inverse := leftInverseUnitor C
   unitIso := Iso.refl _
@@ -158,7 +158,7 @@ definition rightUnitorEquivalence
 
 中文:
 定义 rightUnitorEquivalence
-  签名: : C × Discrete (PUnit : Type w) ≌ C where
+  签名: : C × 离散 (命题单元 : 类型 w) ≌ C where
   定义体: rightUnitor C
   inverse := rightInverseUnitor C
   unitIso := Iso.refl _
@@ -182,7 +182,7 @@ instance leftUnitor_isEquivalence
 
 中文:
 实例 leftUnitor_isEquivalence
-  签名: : (leftUnitor C).IsEquivalence
+  签名: : (leftUnitor C).是等价
   定义体: (leftUnitorEquivalence C).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, leftUnitorEquivalence
@@ -200,7 +200,7 @@ instance rightUnitor_isEquivalence
 
 中文:
 实例 rightUnitor_isEquivalence
-  签名: : (rightUnitor C).IsEquivalence
+  签名: : (rightUnitor C).是等价
   定义体: (rightUnitorEquivalence C).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, rightUnitorEquivalence

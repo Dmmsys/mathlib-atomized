@@ -60,8 +60,8 @@ theorem exists_pair_mem_lattice_not_disjoint_vadd
       (measure_mono <| Set.iUnion_subset fun _ => Set.inter_subset_ri
 
 中文:
-定理 exists_pair_mem_lattice_not_disjoint_vadd
-  结论: [AddGroup L] [Countable L] [AddAction L E]
+定理 存在_pair_mem_lattice_not_disjoint_vadd
+  结论: [加法群 L] [可数 L] [加法作用 L E]
   证明: by
   contrapose! h
   exact ((fund.measure_eq_tsum _).trans (measure_iUnion₀
@@ -92,8 +92,8 @@ theorem exists_ne_zero_mem_lattice_of_measure_mul_two_pow_lt_measure
     rw [addHaar_smul_of_nonneg μ (by simp : 0 <= (2 : Real)⁻¹) s]; rw [← ENNReal.mul_lt_mul_iff_left (pow_ne_zero (finrank Real E) (two_ne_zero' _)) (by finiteness)]; rw [mul_right_comm]; rw [ofReal_pow (by simp : 0 <= (2 : Real)⁻¹)]; rw [ofReal_inv
 
 中文:
-定理 exists_ne_zero_mem_lattice_of_measure_mul_two_pow_lt_measure
-  结论: [NormedAddCommGroup E]
+定理 存在_ne_zero_mem_lattice_of_measure_mul_two_pow_lt_measure
+  结论: [赋范交换加群 E]
   证明: by
   have h_vol : μ F < μ ((2⁻¹ : Real) • s) := by
     rw [addHaar_smul_of_nonneg μ (by simp : 0 <= (2 : Real)⁻¹) s]; rw [← ENNReal.mul_lt_mul_iff_left (pow_ne_zero (finrank Real E) (two_ne_zero' _)) (by finiteness)]; rw [mul_right_comm]; rw [ofReal_pow (by simp : 0 <= (2 : Real)⁻¹)]; rw [ofReal_inv
@@ -132,8 +132,8 @@ have h_mes : μ s != 0 := fun hμ => fund.measure_ne_zero (NeZero.ne μ) by simp
   let S : Nat -> Co
 
 中文:
-定理 exists_ne_zero_mem_lattice_of_measure_mul_two_pow_le_measure
-  结论: [NormedAddCommGroup E]
+定理 存在_ne_zero_mem_lattice_of_measure_mul_two_pow_le_measure
+  结论: [赋范交换加群 E]
   证明: by
 have h_mes : μ s != 0 := fun hμ => fund.measure_ne_zero (NeZero.ne μ) by simpa [hμ] using h
   have h_nemp : s.Nonempty := nonempty_of_measure_ne_zero h_mes

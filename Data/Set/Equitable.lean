@@ -41,7 +41,7 @@ definition EquitableOn
 
 中文:
 定义 EquitableOn
-  签名: [LE β] [Add β] [One β] (s : Set α) (f : α -> β)
+  签名: [LE β] [加法 β] [幺 β] (s : 集合 α) (f : α -> β)
   定义体: forall ⦃a₁ a₂⦄, a₁ in s -> a₂ in s -> f a₁ <= f a₂ + 1
 
 @[simp]
@@ -62,7 +62,7 @@ theorem equitableOn_empty
 
 中文:
 定理 equitableOn_empty
-  条件: [LE β] [Add β] [One β] (f : α -> β)
+  条件: [LE β] [加法 β] [幺 β] (f : α -> β)
   结论: EquitableOn ∅ f
   证明: fun a _ ha =>
   (Set.notMem_empty a ha).elim
@@ -87,8 +87,8 @@ theorem equitableOn_iff_exists_le_le_add_one
   refine ⟨f w, fun y hy => ⟨Nat.le_of
 
 中文:
-定理 equitableOn_iff_exists_le_le_add_one
-  条件: {s : Set α} {f : α -> 自然数}
+定理 equitableOn_iff_存在_le_le_add_one
+  条件: {s : 集合 α} {f : α -> 自然数}
   证明: by
   refine ⟨?_, fun ⟨b, hb⟩ x y hx hy => by grw [(hb x hx).2, (hb y hy).1]⟩
   obtain rfl | ⟨x, hx⟩ := s.eq_empty_or_nonempty
@@ -124,8 +124,8 @@ theorem equitableOn_iff_exists_image_subset_icc
   simpa only [image_subset_iff] using! equitableOn_iff_exists_le_le_add_one
 
 中文:
-定理 equitableOn_iff_exists_image_subset_icc
-  条件: {s : Set α} {f : α -> 自然数}
+定理 equitableOn_iff_存在_image_subset_icc
+  条件: {s : 集合 α} {f : α -> 自然数}
   证明: by
   simpa only [image_subset_iff] using! equitableOn_iff_exists_le_le_add_one
 
@@ -145,8 +145,8 @@ theorem equitableOn_iff_exists_eq_eq_add_one
   simp_rw [equitableOn_iff_exists_le_le_add_one, Nat.le_and_le_add_one_iff]
 
 中文:
-定理 equitableOn_iff_exists_eq_eq_add_one
-  条件: {s : Set α} {f : α -> 自然数}
+定理 equitableOn_iff_存在_eq_eq_add_one
+  条件: {s : 集合 α} {f : α -> 自然数}
   证明: by
   simp_rw [equitableOn_iff_exists_le_le_add_one, Nat.le_and_le_add_one_iff]
 
@@ -198,8 +198,8 @@ theorem Subsingleton.equitableOn
   exact le_add_of_nonneg_right zero_le_one
 
 中文:
-定理 Subsingleton.equitableOn
-  条件: {s : Set α} (hs : s.Subsingleton) (f : α -> β)
+定理 子单例.equitableOn
+  条件: {s : 集合 α} (hs : s.子单例) (f : α -> β)
   结论: s.EquitableOn f
   证明: fun i j hi hj => by
   rw [hs hi hj]
@@ -224,7 +224,7 @@ theorem equitableOn_singleton
 中文:
 定理 equitableOn_singleton
   条件: (a : α) (f : α -> β)
-  结论: Set.EquitableOn {a} f
+  结论: 集合.EquitableOn {a} f
   证明: Set.subsingleton_singleton.equitableOn f
 
 Depends on / 依赖: Set.subsingleton_singleton.equitableOn, equitableOn, subsingleton_singleton
@@ -302,7 +302,7 @@ theorem EquitableOn.le
 
 中文:
 定理 EquitableOn.le
-  条件: (h : EquitableOn (s : Set α) f) (ha : a in s)
+  条件: (h : EquitableOn (s : 集合 α) f) (ha : a in s)
   证明: (equitableOn_iff_le_le_add_one.1 h a ha).1
 
 Depends on / 依赖: equitableOn_iff_le_le_add_one
@@ -321,7 +321,7 @@ theorem EquitableOn.le_add_one
 
 中文:
 定理 EquitableOn.le_add_one
-  条件: (h : EquitableOn (s : Set α) f) (ha : a in s)
+  条件: (h : EquitableOn (s : 集合 α) f) (ha : a in s)
   证明: (equitableOn_iff_le_le_add_one.1 h a ha).2
 
 Depends on / 依赖: equitableOn_iff_le_le_add_one

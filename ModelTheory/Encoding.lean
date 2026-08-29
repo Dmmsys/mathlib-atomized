@@ -61,7 +61,7 @@ definition listEncode
 
 中文:
 定义 listEncode
-  签名: : L.Term α -> List (α oplus (Σ i, L.Functions i))
+  签名: : L.项 α -> 列表 (α oplus (Σ i, L.函数 i))
 -/
 def listEncode : L.Term α -> List (α oplus (Σ i, L.Functions i))
   | var i => [Sum.inl i]
@@ -77,7 +77,7 @@ definition listDecode
 
 中文:
 定义 listDecode
-  签名: : List (α oplus (Σ i, L.Functions i)) -> List (L.Term α)
+  签名: : 列表 (α oplus (Σ i, L.函数 i)) -> 列表 (L.项 α)
 -/
 def listDecode : List (α oplus (Σ i, L.Functions i)) -> List (L.Term α)
   | [] => []
@@ -105,7 +105,7 @@ theorem listDecode_encode_list
 
 中文:
 定理 listDecode_encode_list
-  条件: (l : List (L.Term α))
+  条件: (l : 列表 (L.项 α))
   证明: by
   suffices h : forall (t : L.Term α) (l : List (α oplus (Σ i, L.Functions i))),
       listDecode (t.listEncode ++ l) = t::listDecode l by
@@ -160,7 +160,7 @@ definition encoding
 
 中文:
 定义 encoding
-  签名: : Encoding (L.Term α) (α oplus (Σ i, L.Functions i)) where
+  签名: : Encoding (L.项 α) (α oplus (Σ i, L.函数 i)) where
   定义体: listEncode
   decode l := (listDecode l).head?.join
   decode_encode t := by
@@ -207,7 +207,7 @@ theorem card_le
 
 中文:
 定理 card_le
-  结论: #(L.Term α) <= max ℵ₀ #(α oplus (Σ i, L.Functions i))
+  结论: #(L.项 α) <= 最大值 ℵ₀ #(α oplus (Σ i, L.函数 i))
   证明: lift_le.1 (_root_.trans Term.encoding.card_le_card_list (lift_le.2 (mk_list_le_max _)))
 
 Depends on / 依赖: Term.encoding.card_le_card_list, _root_, _root_.trans, card_le_card_list, encoding, lift_le, mk_list_le_max
@@ -231,7 +231,7 @@ theorem card_sigma
 
 中文:
 定理 card_sigma
-  结论: #(Σ n, L.Term (α oplus (Fin n))) = max ℵ₀ #(α oplus (Σ i, L.Functions i))
+  结论: #(Σ n, L.项 (α oplus (有限集 n))) = 最大值 ℵ₀ #(α oplus (Σ i, L.函数 i))
   证明: by
   refine le_antisymm ?_ ?_
   · rw [mk_sigma]
@@ -284,8 +284,8 @@ instance [Encodable
       id_eq]
 
 中文:
-实例 [Encodable
-  签名: α] [Encodable (Σ i, L.Functions i)] : Encodable (L.Term α)
+实例 [可编码
+  签名: α] [可编码 (Σ i, L.函数 i)] : 可编码 (L.项 α)
   定义体: Encodable.ofLeftInjection listEncode (fun l => (listDecode l).head?.join) fun t => by
     rw [← flatMap_singleton listEncode]; rw [listDecode_encode_list]
     simp only [Option.join, head?_cons, Option.pure_def, Option.bind_eq_bind, Option.bind_some,
@@ -312,7 +312,7 @@ instance [h1
 
 中文:
 实例 [h1
-  签名: : Countable α] [h2 : Countable (Σ l, L.Functions l)] : Countable (L.Term α)
+  签名: : 可数 α] [h2 : 可数 (Σ l, L.函数 l)] : 可数 (L.项 α)
   定义体: by
   refine mk_le_aleph0_iff.1 (card_le.trans (max_le_iff.2 ?_))
   simp only [le_refl, mk_sum, add_le_aleph0, lift_le_aleph0, true_and]
@@ -486,7 +486,7 @@ theorem listDecode_encode_list
 
 中文:
 定理 listDecode_encode_list
-  条件: (l : List (Σ n, L.BoundedFormula α n))
+  条件: (l : 列表 (Σ n, L.BoundedFormula α n))
   证明: by
   suffices h : forall (φ : Σ n, L.BoundedFormula α n)
       (l' : List ((Σ k, L.Term (α oplus Fin k)) oplus ((Σ n, L.Relations n) oplus Nat))),
@@ -660,7 +660,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (constantsOn α).Symbols
+  签名: 可数 (constantsOn α).Symbols
   定义体: by
   refine mk_le_aleph0_iff.mp ?_
   change (constantsOn α).card <= ℵ₀
@@ -688,7 +688,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable L[[α]].Symbols
+  签名: 可数 L[[α]].Symbols
   定义体: by
   simp only [← mk_le_aleph0_iff]
   change L[[α]].card <= ℵ₀
@@ -718,7 +718,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (Σ n, L.BoundedFormula α n)
+  签名: 可数 (Σ n, L.BoundedFormula α n)
   定义体: by
   refine Cardinal.mk_le_aleph0_iff.mp (BoundedFormula.card_le.trans (max_le (le_refl _) ?_))
   simp only [card, add_le_aleph0, lift_le_aleph0, mk_le_aleph0_iff]
@@ -742,7 +742,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (L.Formula α)
+  签名: 可数 (L.公式 α)
   定义体: (Function.Injective.countable
     (f := fun φ => (⟨0, φ⟩ : Σ n, L.BoundedFormula α n))) <| sigma_mk_injective
 

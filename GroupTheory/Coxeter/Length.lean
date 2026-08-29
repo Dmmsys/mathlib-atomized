@@ -76,7 +76,7 @@ theorem exists_word_with_prod
   use ω.length, ω
 
 中文:
-定理 exists_word_with_prod
+定理 存在_word_with_prod
   条件: (w : W)
   结论: 存在 n ω, n = ω.length ∧ π ω = w
   证明: by
@@ -118,8 +118,8 @@ definition IsReduced
   body: ℓ (π ω) = ω.length
 
 中文:
-定义 IsReduced
-  签名: (ω : List B)
+定义 是既约
+  签名: (ω : 列表 B)
   定义体: ℓ (π ω) = ω.length
 
 Depends on / 依赖: length
@@ -136,8 +136,8 @@ theorem IsReduced.eq
   proof: hω
 
 中文:
-定理 IsReduced.eq
-  条件: {ω : List B} (hω : cs.IsReduced ω)
+定理 是既约.eq
+  条件: {ω : 列表 B} (hω : cs.是既约 ω)
   结论: ℓ (π ω) = ω.length
   证明: hω
 -/
@@ -159,9 +159,9 @@ theorem exists_isReduced
 @[deprecated (since := "2026-03-25")] alias exists_reduced_word' := exists_isReduced
 
 中文:
-定理 exists_isReduced
+定理 存在_isReduced
   条件: (w : W)
-  结论: 存在 ω : List B, cs.IsReduced ω ∧ w = π ω
+  结论: 存在 ω : 列表 B, cs.是既约 ω ∧ w = π ω
   证明: by
   classical
   obtain ⟨ω, hω, rfl⟩ := Nat.find_spec (cs.exists_word_with_prod w)
@@ -193,7 +193,7 @@ theorem length_wordProd_le
 
 中文:
 定理 length_wordProd_le
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   结论: ℓ (π ω) <= ω.length
   证明: by
   classical
@@ -459,7 +459,7 @@ theorem length_mul_ge_max
 中文:
 定理 length_mul_ge_max
   条件: (w₁ w₂ : W)
-  结论: max (ℓ w₁ - ℓ w₂) (ℓ w₂ - ℓ w₁) <= ℓ (w₁ * w₂)
+  结论: 最大值 (ℓ w₁ - ℓ w₂) (ℓ w₂ - ℓ w₁) <= ℓ (w₁ * w₂)
   证明: max_le (length_mul_ge_length_sub_length ..) (length_mul_ge_length_sub_length' ..)
 
 Depends on / 依赖: length_mul_ge_length_sub_length, max_le
@@ -787,8 +787,8 @@ theorem isReduced_reverse_iff
 
 中文:
 定理 isReduced_reverse_iff
-  条件: (ω : List B)
-  结论: cs.IsReduced (ω.reverse) ↔ cs.IsReduced ω
+  条件: (ω : 列表 B)
+  结论: cs.是既约 (ω.reverse) ↔ cs.是既约 ω
   证明: by
   simp [IsReduced]
 
@@ -806,8 +806,8 @@ theorem IsReduced.reverse
   proof: (cs.isReduced_reverse_iff ω).mpr hω
 
 中文:
-定理 IsReduced.reverse
-  结论: {cs : CoxeterSystem M W} {ω : List B}
+定理 是既约.reverse
+  结论: {cs : 余xeterSystem M W} {ω : 列表 B}
   证明: (cs.isReduced_reverse_iff ω).mpr hω
 
 Depends on / 依赖: cs.isReduced_reverse_iff, isReduced_reverse_iff
@@ -832,7 +832,7 @@ theorem isReduced_take_and_drop
 
 中文:
 定理 isReduced_take_and_drop
-  条件: {ω : List B} (hω : cs.IsReduced ω) (j : 自然数)
+  条件: {ω : 列表 B} (hω : cs.是既约 ω) (j : 自然数)
   证明: by
   have h₁ : ℓ (π (ω.take j)) <= (ω.take j).length := cs.length_wordProd_le (ω.take j)
   have h₂ : ℓ (π (ω.drop j)) <= (ω.drop j).length := cs.length_wordProd_le (ω.drop j)
@@ -862,8 +862,8 @@ theorem IsReduced.take
   proof: (isReduced_take_and_drop _ hω _).1
 
 中文:
-定理 IsReduced.take
-  条件: {cs : CoxeterSystem M W} {ω : List B} (hω : cs.IsReduced ω) (j : 自然数)
+定理 是既约.take
+  条件: {cs : 余xeterSystem M W} {ω : 列表 B} (hω : cs.是既约 ω) (j : 自然数)
   证明: (isReduced_take_and_drop _ hω _).1
 
 Depends on / 依赖: isReduced_take_and_drop
@@ -881,8 +881,8 @@ theorem IsReduced.drop
   proof: (isReduced_take_and_drop _ hω _).2
 
 中文:
-定理 IsReduced.drop
-  条件: {cs : CoxeterSystem M W} {ω : List B} (hω : cs.IsReduced ω) (j : 自然数)
+定理 是既约.drop
+  条件: {cs : 余xeterSystem M W} {ω : 列表 B} (hω : cs.是既约 ω) (j : 自然数)
   证明: (isReduced_take_and_drop _ hω _).2
 
 Depends on / 依赖: isReduced_take_and_drop
@@ -1079,7 +1079,7 @@ theorem exists_leftDescent_of_ne_one
     ℓ (π ω') <= ω'.length := cs.length_word
 
 中文:
-定理 exists_leftDescent_of_ne_one
+定理 存在_leftDescent_of_ne_one
   条件: {w : W} (hw : w != 1)
   结论: 存在 i : B, cs.IsLeftDescent w i
   证明: by
@@ -1116,7 +1116,7 @@ theorem exists_rightDescent_of_ne_one
   simpa
 
 中文:
-定理 exists_rightDescent_of_ne_one
+定理 存在_rightDescent_of_ne_one
   条件: {w : W} (hw : w != 1)
   结论: 存在 i : B, cs.IsRightDescent w i
   证明: by

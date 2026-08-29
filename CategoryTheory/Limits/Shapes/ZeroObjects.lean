@@ -48,11 +48,11 @@ structure IsZero
     - unique_from : forall Y, Nonempty (Unique (Y ⟶ X))
 
 中文:
-结构 IsZero
+结构 是零
   参数: (X : C)
   公理与运算 (2 个):
-    - unique_to : 对任意 Y, Nonempty (Unique (X ⟶ Y))
-    - unique_from : 对任意 Y, Nonempty (Unique (Y ⟶ X))
+    - unique_to : 对任意 Y, 非空 (唯一 (X ⟶ Y))
+    - unique_from : 对任意 Y, 非空 (唯一 (Y ⟶ X))
 -/
 structure IsZero (X : C) : Prop where
   /-- there are unique morphisms to the object -/
@@ -74,7 +74,7 @@ definition to_
 
 中文:
 定义 to_
-  签名: (h : IsZero X) (Y : C)
+  签名: (h : 是零 X) (Y : C)
   定义体: @default _ (h.unique_to Y).some.toInhabited
 -/
 protected def to_ (h : IsZero X) (Y : C) : X ⟶ Y :=
@@ -91,7 +91,7 @@ theorem eq_to
 
 中文:
 定理 eq_to
-  条件: (h : IsZero X) (f : X ⟶ Y)
+  条件: (h : 是零 X) (f : X ⟶ Y)
   结论: f = h.to_ Y
   证明: @Unique.eq_default _ (id _) _
 
@@ -111,7 +111,7 @@ theorem to_eq
 
 中文:
 定理 to_eq
-  条件: (h : IsZero X) (f : X ⟶ Y)
+  条件: (h : 是零 X) (f : X ⟶ Y)
   结论: h.to_ Y = f
   证明: (h.eq_to f).symm
 
@@ -130,7 +130,7 @@ definition from_
 
 中文:
 定义 from_
-  签名: (h : IsZero X) (Y : C)
+  签名: (h : 是零 X) (Y : C)
   定义体: @default _ (h.unique_from Y).some.toInhabited
 -/
 protected def from_ (h : IsZero X) (Y : C) : Y ⟶ X :=
@@ -147,7 +147,7 @@ theorem eq_from
 
 中文:
 定理 eq_from
-  条件: (h : IsZero X) (f : Y ⟶ X)
+  条件: (h : 是零 X) (f : Y ⟶ X)
   结论: f = h.from_ Y
   证明: @Unique.eq_default _ (id _) _
 
@@ -167,7 +167,7 @@ theorem from_eq
 
 中文:
 定理 from_eq
-  条件: (h : IsZero X) (f : Y ⟶ X)
+  条件: (h : 是零 X) (f : Y ⟶ X)
   结论: h.from_ Y = f
   证明: (h.eq_from f).symm
 
@@ -187,7 +187,7 @@ theorem eq_of_src
 
 中文:
 定理 eq_of_src
-  条件: (hX : IsZero X) (f g : X ⟶ Y)
+  条件: (hX : 是零 X) (f g : X ⟶ Y)
   结论: f = g
   证明: (hX.eq_to f).trans (hX.eq_to g).symm
 
@@ -207,7 +207,7 @@ theorem eq_of_tgt
 
 中文:
 定理 eq_of_tgt
-  条件: (hX : IsZero X) (f g : Y ⟶ X)
+  条件: (hX : 是零 X) (f g : Y ⟶ X)
   结论: f = g
   证明: (hX.eq_from f).trans (hX.eq_from g).symm
 
@@ -227,8 +227,8 @@ lemma epi
 
 中文:
 引理 epi
-  条件: (h : IsZero X) {Y : C} (f : Y ⟶ X)
-  结论: Epi f where
+  条件: (h : 是零 X) {Y : C} (f : Y ⟶ X)
+  结论: 满态射 f where
   证明: h.eq_of_src _ _
 
 Depends on / 依赖: eq_of_src, h.eq_of_src
@@ -247,8 +247,8 @@ lemma mono
 
 中文:
 引理 mono
-  条件: (h : IsZero X) {Y : C} (f : X ⟶ Y)
-  结论: Mono f where
+  条件: (h : 是零 X) {Y : C} (f : X ⟶ Y)
+  结论: 单态射 f where
   证明: h.eq_of_tgt _ _
 
 Depends on / 依赖: eq_of_tgt, h.eq_of_tgt
@@ -269,7 +269,7 @@ definition iso
 
 中文:
 定义 iso
-  签名: (hX : IsZero X) (hY : IsZero Y)
+  签名: (hX : 是零 X) (hY : 是零 Y)
   定义体: hX.to_ Y
   inv := hX.from_ Y
   hom_inv_id := hX.eq_of_src _ _
@@ -294,8 +294,8 @@ lemma isIso
 
 中文:
 引理 isIso
-  条件: (hX : IsZero X) (hY : IsZero Y) (f : X ⟶ Y)
-  结论: IsIso f
+  条件: (hX : 是零 X) (hY : 是零 Y) (f : X ⟶ Y)
+  结论: 是同构 f
   证明: ⟨hY.to_ _, hX.eq_of_src _ _, hY.eq_of_src _ _⟩
 
 Depends on / 依赖: eq_of_src, hX.eq_of_src, hY.eq_of_src, hY.to_
@@ -313,7 +313,7 @@ definition isInitial
 
 中文:
 定义 isInitial
-  签名: (hX : IsZero X)
+  签名: (hX : 是零 X)
   定义体: @IsInitial.ofUnique _ _ X fun Y => (hX.unique_to Y).some
 -/
 protected def isInitial (hX : IsZero X) : IsInitial X :=
@@ -329,7 +329,7 @@ definition isTerminal
 
 中文:
 定义 isTerminal
-  签名: (hX : IsZero X)
+  签名: (hX : 是零 X)
   定义体: @IsTerminal.ofUnique _ _ X fun Y => (hX.unique_from Y).some
 -/
 protected def isTerminal (hX : IsZero X) : IsTerminal X :=
@@ -345,7 +345,7 @@ definition isoIsInitial
 
 中文:
 定义 isoIsInitial
-  签名: (hX : IsZero X) (hY : IsInitial Y)
+  签名: (hX : 是零 X) (hY : IsInitial Y)
   定义体: IsInitial.uniqueUpToIso hX.isInitial hY
 
 Depends on / 依赖: IsInitial, IsInitial.uniqueUpToIso, hX.isInitial, isInitial, uniqueUpToIso
@@ -363,7 +363,7 @@ definition isoIsTerminal
 
 中文:
 定义 isoIsTerminal
-  签名: (hX : IsZero X) (hY : IsTerminal Y)
+  签名: (hX : 是零 X) (hY : 是终止 Y)
   定义体: IsTerminal.uniqueUpToIso hX.isTerminal hY
 
 Depends on / 依赖: IsTerminal, IsTerminal.uniqueUpToIso, hX.isTerminal, isTerminal, uniqueUpToIso
@@ -388,8 +388,8 @@ theorem of_iso
 
 中文:
 定理 of_iso
-  条件: (hY : IsZero Y) (e : X ≅ Y)
-  结论: IsZero X
+  条件: (hY : 是零 Y) (e : X ≅ Y)
+  结论: 是零 X
   证明: by
   refine ⟨fun Z => ⟨⟨⟨e.hom ≫ hY.to_ Z⟩, fun f => ?_⟩⟩,
     fun Z => ⟨⟨⟨hY.from_ Z ≫ e.inv⟩, fun f => ?_⟩⟩⟩
@@ -420,8 +420,8 @@ theorem op
 
 中文:
 定理 op
-  条件: (h : IsZero X)
-  结论: IsZero (Opposite.op X)
+  条件: (h : 是零 X)
+  结论: 是零 (对偶.op X)
   证明: ⟨fun Y => ⟨⟨⟨(h.from_ (Opposite.unop Y)).op⟩, fun _ => Quiver.Hom.unop_inj (h.eq_of_tgt _ _)⟩⟩,
     fun Y => ⟨⟨⟨(h.to_ (Opposite.unop Y)).op⟩, fun _ => Quiver.Hom.unop_inj (h.eq_of_src _ _)⟩⟩⟩
 
@@ -443,8 +443,8 @@ theorem unop
 
 中文:
 定理 unop
-  条件: {X : Cᵒᵖ} (h : IsZero X)
-  结论: IsZero (Opposite.unop X)
+  条件: {X : Cᵒᵖ} (h : 是零 X)
+  结论: 是零 (对偶.unop X)
   证明: ⟨fun Y => ⟨⟨⟨(h.from_ (Opposite.op Y)).unop⟩, fun _ => Quiver.Hom.op_inj (h.eq_of_tgt _ _)⟩⟩,
     fun Y => ⟨⟨⟨(h.to_ (Opposite.op Y)).unop⟩, fun _ => Quiver.Hom.op_inj (h.eq_of_src _ _)⟩⟩⟩
 
@@ -467,7 +467,7 @@ definition retract
 
 中文:
 定义 retract
-  签名: (h : IsZero X)
+  签名: (h : 是零 X)
   定义体: h.to_ Y
   r := h.from_ Y
   retract := h.isInitial.hom_ext _ _
@@ -495,9 +495,9 @@ theorem Iso.isZero_iff
   proof: ⟨fun h => h.of_iso e.symm, fun h => h.of_iso e⟩
 
 中文:
-定理 Iso.isZero_iff
+定理 同构.isZero_iff
   条件: {X Y : C} (e : X ≅ Y)
-  结论: IsZero X ↔ IsZero Y
+  结论: 是零 X ↔ 是零 Y
   证明: ⟨fun h => h.of_iso e.symm, fun h => h.of_iso e⟩
 
 Depends on / 依赖: e.symm, h.of_iso, of_iso
@@ -528,9 +528,9 @@ theorem Functor.isZero
   
 
 中文:
-定理 Functor.isZero
-  条件: (F : C ⥤ D) (hF : 对任意 X, IsZero (F.obj X))
-  结论: IsZero F
+定理 函子.isZero
+  条件: (F : C ⥤ D) (hF : 对任意 X, 是零 (F.obj X))
+  结论: 是零 F
   证明: by
   constructor <;> intro G <;> refine ⟨⟨⟨?_⟩, ?_⟩⟩
   · refine
@@ -581,10 +581,10 @@ class HasZeroObject
     - zero : exists X : C, IsZero X
 
 中文:
-类 HasZeroObject
+类 有ZeroObject
   参数: : 命题 where
   公理与运算 (1 个):
-    - zero : 存在 X : C, IsZero X
+    - zero : 存在 X : C, 是零 X
 -/
 class HasZeroObject : Prop where
   /-- there exists a zero object -/
@@ -606,7 +606,7 @@ instance hasZeroObject_pUnit
 
 中文:
 实例 hasZeroObject_pUnit
-  签名: : HasZeroObject (Discrete PUnit) where zero
+  签名: : 有ZeroObject (离散 命题单元) where zero
   定义体: ⟨⟨⟨⟩⟩,
     { unique_to := fun ⟨⟨⟩⟩ =>
       ⟨{ default := 𝟙 _,
@@ -645,8 +645,8 @@ definition HasZeroObject.zero'
 scoped[ZeroObject] attribute [instance] CategoryTheory.Limits.HasZeroObject.zero'
 
 中文:
-定义 HasZeroObject.zero'
-  签名: : Zero C where zero
+定义 有ZeroObject.zero'
+  签名: : 零 C where zero
   定义体: HasZeroObject.zero.choose
 
 scoped[ZeroObject] attribute [instance] CategoryTheory.Limits.HasZeroObject.zero'
@@ -667,7 +667,7 @@ theorem isZero_zero
 
 中文:
 定理 isZero_zero
-  结论: IsZero (0 : C)
+  结论: 是零 (0 : C)
   证明: HasZeroObject.zero.choose_spec
 
 Depends on / 依赖: HasZeroObject, HasZeroObject.zero.choose_spec, choose_spec
@@ -685,7 +685,7 @@ instance hasZeroObject_op
 
 中文:
 实例 hasZeroObject_op
-  签名: : HasZeroObject Cᵒᵖ
+  签名: : 有ZeroObject Cᵒᵖ
   定义体: ⟨⟨Opposite.op 0, IsZero.op (isZero_zero C)⟩⟩
 
 Depends on / 依赖: IsZero, IsZero.op, Opposite, Opposite.op, isZero_zero
@@ -708,8 +708,8 @@ theorem hasZeroObject_unop
 
 中文:
 定理 hasZeroObject_unop
-  条件: [HasZeroObject Cᵒᵖ]
-  结论: HasZeroObject C
+  条件: [有ZeroObject Cᵒᵖ]
+  结论: 有ZeroObject C
   证明: ⟨⟨Opposite.unop 0, IsZero.unop (isZero_zero Cᵒᵖ)⟩⟩
 
 Depends on / 依赖: IsZero, IsZero.unop, Opposite, Opposite.unop, isZero_zero
@@ -729,9 +729,9 @@ theorem IsZero.hasZeroObject
   proof: ⟨⟨X, hX⟩⟩
 
 中文:
-定理 IsZero.hasZeroObject
-  条件: {X : C} (hX : IsZero X)
-  结论: HasZeroObject C
+定理 是零.hasZeroObject
+  条件: {X : C} (hX : 是零 X)
+  结论: 有ZeroObject C
   证明: ⟨⟨X, hX⟩⟩
 -/
 theorem IsZero.hasZeroObject {X : C} (hX : IsZero X) : HasZeroObject C :=
@@ -746,8 +746,8 @@ definition IsZero.isoZero
   body: hX.iso (isZero_zero C)
 
 中文:
-定义 IsZero.isoZero
-  签名: [HasZeroObject C] {X : C} (hX : IsZero X)
+定义 是零.isoZero
+  签名: [有ZeroObject C] {X : C} (hX : 是零 X)
   定义体: hX.iso (isZero_zero C)
 
 Depends on / 依赖: hX.iso, isZero_zero
@@ -769,9 +769,9 @@ theorem IsZero.obj
   exact (isZero_zero _).of_iso (e.app X)
 
 中文:
-定理 IsZero.obj
-  条件: [HasZeroObject D] {F : C ⥤ D} (hF : IsZero F) (X : C)
-  结论: IsZero (F.obj X)
+定理 是零.obj
+  条件: [有ZeroObject D] {F : C ⥤ D} (hF : 是零 F) (X : C)
+  结论: 是零 (F.obj X)
   证明: by
   let G : C ⥤ D := (CategoryTheory.Functor.const C).obj 0
   have hG : IsZero G := Functor.isZero _ fun _ => isZero_zero _
@@ -798,7 +798,7 @@ lemma IsZero.of_full_of_faithful_of_isZero
   exact ⟨fun Y => ⟨h.homEquiv.unique⟩, fun Y => ⟨h.homEquiv.unique⟩⟩
 
 中文:
-引理 IsZero.of_full_of_faithful_of_isZero
+引理 是零.of_full_of_faithful_of_isZero
   证明: by
   have h : F.FullyFaithful := .ofFullyFaithful _
   have (Y : C) := (hX.unique_to (F.obj Y)).some
@@ -974,7 +974,7 @@ definition zeroIsTerminal
 
 中文:
 定义 zeroIsTerminal
-  签名: : IsTerminal (0 : C)
+  签名: : 是终止 (0 : C)
   定义体: (isZero_zero C).isTerminal
 
 Depends on / 依赖: isTerminal, isZero_zero
@@ -1018,7 +1018,7 @@ definition zeroIsoIsTerminal
 
 中文:
 定义 zeroIsoIsTerminal
-  签名: {X : C} (t : IsTerminal X)
+  签名: {X : C} (t : 是终止 X)
   定义体: zeroIsTerminal.uniqueUpToIso t
 
 Depends on / 依赖: uniqueUpToIso, zeroIsTerminal, zeroIsTerminal.uniqueUpToIso
@@ -1054,7 +1054,7 @@ definition zeroIsoTerminal
 
 中文:
 定义 zeroIsoTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: zeroIsTerminal.uniqueUpToIso terminalIsTerminal
 
 Depends on / 依赖: terminalIsTerminal, uniqueUpToIso, zeroIsTerminal, zeroIsTerminal.uniqueUpToIso
@@ -1083,9 +1083,9 @@ theorem Functor.isZero_iff
   proof: ⟨fun hF X => hF.obj X, Functor.isZero _⟩
 
 中文:
-定理 Functor.isZero_iff
-  条件: [HasZeroObject D] (F : C ⥤ D)
-  结论: IsZero F ↔ 对任意 X, IsZero (F.obj X)
+定理 函子.isZero_iff
+  条件: [有ZeroObject D] (F : C ⥤ D)
+  结论: 是零 F ↔ 对任意 X, 是零 (F.obj X)
   证明: ⟨fun hF X => hF.obj X, Functor.isZero _⟩
 
 Depends on / 依赖: Functor, Functor.isZero, hF.obj, isZero

@@ -46,8 +46,8 @@ theorem tendsto_eval_pi
 
 中文:
 定理 tendsto_eval_pi
-  条件: (f : 对任意 i, Filter (α i)) (i : ι)
-  结论: Tendsto (eval i) (pi f) (f i)
+  条件: (f : 对任意 i, 滤子 (α i)) (i : ι)
+  结论: 收敛 (eval i) (pi f) (f i)
   证明: tendsto_iInf' i tendsto_comap
 
 Depends on / 依赖: tendsto_comap, tendsto_iInf
@@ -66,7 +66,7 @@ theorem tendsto_pi
 
 中文:
 定理 tendsto_pi
-  条件: {β : 类型} {m : β -> 对任意 i, α i} {l : Filter β}
+  条件: {β : 类型} {m : β -> 对任意 i, α i} {l : 滤子 β}
   证明: by
   simp only [pi, tendsto_iInf, tendsto_comap_iff]; rfl
 
@@ -94,8 +94,8 @@ theorem le_pi
 
 中文:
 定理 le_pi
-  条件: {g : Filter (对任意 i, α i)}
-  结论: g <= pi f ↔ 对任意 i, Tendsto (eval i) g (f i)
+  条件: {g : 滤子 (对任意 i, α i)}
+  结论: g <= pi f ↔ 对任意 i, 收敛 (eval i) g (f i)
   证明: tendsto_pi
 
 @[gcongr, mono]
@@ -137,7 +137,7 @@ theorem mem_pi_of_mem
 
 中文:
 定理 mem_pi_of_mem
-  条件: (i : ι) {s : Set (α i)} (hs : s in f i)
+  条件: (i : ι) {s : 集合 (α i)} (hs : s in f i)
   结论: eval i ⁻¹' s in pi f
   证明: mem_iInf_of_mem i preimage_mem_comap hs
 
@@ -160,7 +160,7 @@ theorem pi_mem_pi
 
 中文:
 定理 pi_mem_pi
-  条件: {I : Set ι} (hI : I.Finite) (h : 对任意 i in I, s i in f i)
+  条件: {I : 集合 ι} (hI : I.有限) (h : 对任意 i in I, s i in f i)
   结论: I.pi s in pi f
   证明: by
   rw [pi_def]; rw [biInter_eq_iInter]
@@ -191,7 +191,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: {s : Set (对任意 i, α i)}
+  条件: {s : 集合 (对任意 i, α i)}
   证明: by
   constructor
   · simp only [pi, mem_iInf', mem_comap, pi_def]
@@ -223,7 +223,7 @@ theorem mem_pi'
 
 中文:
 定理 mem_pi'
-  条件: {s : Set (对任意 i, α i)}
+  条件: {s : 集合 (对任意 i, α i)}
   证明: mem_pi.trans exists_finite_iff_finset
 
 Depends on / 依赖: exists_finite_iff_finset, mem_pi, mem_pi.trans
@@ -249,7 +249,7 @@ theorem mem_of_pi_mem_pi
 
 中文:
 定理 mem_of_pi_mem_pi
-  条件: [对任意 i, NeBot (f i)] {I : Set ι} (h : I.pi s in pi f) {i : ι} (hi : i in I)
+  条件: [对任意 i, NeBot (f i)] {I : 集合 ι} (h : I.pi s in pi f) {i : ι} (hi : i in I)
   证明: by
   classical
   rcases mem_pi.1 h with ⟨I', -, t, htf, hts⟩
@@ -283,7 +283,7 @@ theorem pi_mem_pi_iff
 
 中文:
 定理 pi_mem_pi_iff
-  条件: [对任意 i, NeBot (f i)] {I : Set ι} (hI : I.Finite)
+  条件: [对任意 i, NeBot (f i)] {I : 集合 ι} (hI : I.有限)
   证明: ⟨fun h _i hi => mem_of_pi_mem_pi h hi, pi_mem_pi hI⟩
 
 Depends on / 依赖: mem_of_pi_mem_pi, pi_mem_pi
@@ -320,7 +320,7 @@ theorem eventually_pi
 
 中文:
 定理 eventually_pi
-  条件: [Finite ι] (hf : 对任意 i, 对任意ᶠ x in f i, p i x)
+  条件: [有限 ι] (hf : 对任意 i, 对任意ᶠ x in f i, p i x)
   证明: eventually_all.2 fun _i => (hf _).eval_pi
 
 Depends on / 依赖: eval_pi, eventually_all
@@ -339,7 +339,7 @@ theorem hasBasis_pi
 
 中文:
 定理 hasBasis_pi
-  结论: {ι' : ι -> 类型} {s : 对任意 i, ι' i -> Set (α i)} {p : 对任意 i, ι' i -> 命题}
+  结论: {ι' : ι -> 类型} {s : 对任意 i, ι' i -> 集合 (α i)} {p : 对任意 i, ι' i -> 命题}
   证明: by
   simpa [Set.pi_def] using! HasBasis.iInf' fun i => (h i).comap (eval i : (forall j, α j) -> α i)
 
@@ -367,7 +367,7 @@ theorem hasBasis_pi_same_index
 
 中文:
 定理 hasBasis_pi_same_index
-  结论: {κ : 类型} {p : κ -> 命题} {s : Π i : ι, κ -> Set (α i)}
+  结论: {κ : 类型} {p : κ -> 命题} {s : Π i : ι, κ -> 集合 (α i)}
   证明: by
 .to_hasBasis ?_ ?_ refine hasBasis_pi h
   · rintro ⟨I, k⟩ ⟨hI, hk⟩
@@ -404,8 +404,8 @@ theorem HasBasis.pi_self
   exact ⟨k₀, hk₀, fun i hi => hk₀'.trans (biInter_subset_of_mem hi)⟩
 
 中文:
-定理 HasBasis.pi_self
-  结论: {α : 类型} {κ : 类型} {f : Filter α} {p : κ -> 命题} {s : κ -> Set α}
+定理 有基.pi_self
+  结论: {α : 类型} {κ : 类型} {f : 滤子 α} {p : κ -> 命题} {s : κ -> 集合 α}
   证明: by
   refine hasBasis_pi_same_index (fun _ => h) (fun I k hI hk => ?_)
   rcases h.mem_iff.mp (biInter_mem hI |>.mpr fun i hi => h.mem_of_mem (hk i hi))
@@ -433,7 +433,7 @@ theorem le_pi_principal
 
 中文:
 定理 le_pi_principal
-  条件: (s : (i : ι) -> Set (α i))
+  条件: (s : (i : ι) -> 集合 (α i))
   证明: le_pi.2 fun i => tendsto_principal_principal.2 fun _f hf => hf i trivial
 
 Depends on / 依赖: le_pi, tendsto_principal_principal
@@ -458,7 +458,7 @@ theorem pi_principal
 
 中文:
 定理 pi_principal
-  条件: [Finite ι] (s : (i : ι) -> Set (α i))
+  条件: [有限 ι] (s : (i : ι) -> 集合 (α i))
   证明: by
   simp [Filter.pi, Set.pi_def]
 
@@ -478,7 +478,7 @@ theorem mem_pi_principal
 
 中文:
 定理 mem_pi_principal
-  条件: {t : Set ((i : ι) -> α i)}
+  条件: {t : 集合 ((i : ι) -> α i)}
   证明: (hasBasis_pi (fun i => hasBasis_principal _)).mem_iff.trans by simp
 
 Depends on / 依赖: hasBasis_pi, hasBasis_principal, mem_iff, mem_iff.trans
@@ -497,7 +497,7 @@ theorem hasBasis_pi_principal
 
 中文:
 定理 hasBasis_pi_principal
-  条件: (s : (i : ι) -> Set (α i))
+  条件: (s : (i : ι) -> 集合 (α i))
   证明: ⟨fun _ => mem_pi_principal⟩
 
 Depends on / 依赖: mem_pi_principal
@@ -522,7 +522,7 @@ theorem pi_pure
 
 中文:
 定理 pi_pure
-  条件: [Finite ι] (f : (i : ι) -> α i)
+  条件: [有限 ι] (f : (i : ι) -> α i)
   结论: pi (pure <| f ·) = pure f
   证明: by
   simp only [← principal_singleton, pi_principal, univ_pi_singleton]
@@ -544,7 +544,7 @@ theorem mem_pi_pure
 
 中文:
 定理 mem_pi_pure
-  条件: {f : (i : ι) -> α i} {s : Set ((i : ι) -> α i)}
+  条件: {f : (i : ι) -> α i} {s : 集合 ((i : ι) -> α i)}
   证明: by
   simp only [← principal_singleton, mem_pi_principal]
   simp [subset_def]
@@ -637,7 +637,7 @@ theorem pi_inf_principal_pi_eq_bot
 
 中文:
 定理 pi_inf_principal_pi_eq_bot
-  条件: [对任意 i, NeBot (f i)] {I : Set ι}
+  条件: [对任意 i, NeBot (f i)] {I : 集合 ι}
   证明: by
   classical
   rw [← univ_pi_piecewise_univ I]; rw [pi_inf_principal_univ_pi_eq_bot]
@@ -687,7 +687,7 @@ theorem pi_inf_principal_pi_neBot
 
 中文:
 定理 pi_inf_principal_pi_neBot
-  条件: [对任意 i, NeBot (f i)] {I : Set ι}
+  条件: [对任意 i, NeBot (f i)] {I : 集合 ι}
   证明: by simp [neBot_iff]
 
 Depends on / 依赖: neBot_iff
@@ -708,7 +708,7 @@ inf_le_inf_left _ principal_mono.2 fun _ hx i _ => hx i trivial
 
 中文:
 实例 PiInfPrincipalPi.neBot
-  签名: [h : 对任意 i, NeBot (f i ⊓ 𝓟 (s i))] {I : Set ι}
+  签名: [h : 对任意 i, NeBot (f i ⊓ 𝓟 (s i))] {I : 集合 ι}
   定义体: (pi_inf_principal_univ_pi_neBot.2 ‹_›).mono
 inf_le_inf_left _ principal_mono.2 fun _ hx i _ => hx i trivial
 
@@ -775,7 +775,7 @@ instance [forall
 @[simp]
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, NeBot (f i)] : NeBot (pi f)
   定义体: pi_neBot.2 ‹_›
 
@@ -804,7 +804,7 @@ theorem map_eval_pi
 
 中文:
 定理 map_eval_pi
-  条件: (f : 对任意 i, Filter (α i)) [对任意 i, NeBot (f i)] (i : ι)
+  条件: (f : 对任意 i, 滤子 (α i)) [对任意 i, NeBot (f i)] (i : ι)
   证明: by
   refine le_antisymm (tendsto_eval_pi f i) fun s hs => ?_
   rcases mem_pi.1 (mem_map.1 hs) with ⟨I, hIf, t, htf, hI⟩
@@ -891,7 +891,7 @@ theorem tendsto_piMap_pi
 
 中文:
 定理 tendsto_piMap_pi
-  结论: {β : ι -> 类型} {f : 对任意 i, α i -> β i} {l : 对任意 i, Filter (α i)}
+  结论: {β : ι -> 类型} {f : 对任意 i, α i -> β i} {l : 对任意 i, 滤子 (α i)}
   证明: tendsto_pi.2 fun i => (h i).comp (tendsto_eval_pi _ _)
 
 Depends on / 依赖: tendsto_eval_pi, tendsto_pi
@@ -912,7 +912,7 @@ theorem pi_comap
 
 中文:
 定理 pi_comap
-  条件: {β : ι -> 类型} {f : 对任意 i, α i -> β i} {l : 对任意 i, Filter (β i)}
+  条件: {β : ι -> 类型} {f : 对任意 i, α i -> β i} {l : 对任意 i, 滤子 (β i)}
   证明: by
   simp [Filter.pi, Filter.comap_comap, Function.comp_def]
 
@@ -940,7 +940,7 @@ definition coprodᵢ
 
 中文:
 定义 coprodᵢ
-  签名: (f : 对任意 i, Filter (α i))
+  签名: (f : 对任意 i, 滤子 (α i))
   定义体: ⨆ i : ι, comap (eval i) (f i)
 -/
 protected def coprodᵢ (f : forall i, Filter (α i)) : Filter (forall i, α i) :=
@@ -956,7 +956,7 @@ theorem mem_coprodᵢ_iff
 
 中文:
 定理 mem_coprodᵢ_iff
-  条件: {s : Set (对任意 i, α i)}
+  条件: {s : 集合 (对任意 i, α i)}
   证明: by simp [Filter.coprodᵢ]
 
 Depends on / 依赖: Filter, Filter.coprod
@@ -975,7 +975,7 @@ theorem compl_mem_coprodᵢ
 
 中文:
 定理 compl_mem_coprodᵢ
-  条件: {s : Set (对任意 i, α i)}
+  条件: {s : 集合 (对任意 i, α i)}
   证明: by
   simp only [Filter.coprodᵢ, mem_iSup, compl_mem_comap]
 
@@ -1021,8 +1021,8 @@ theorem coprodᵢ_neBot_iff
 
 中文:
 定理 coprodᵢ_neBot_iff
-  条件: [对任意 i, Nonempty (α i)]
-  结论: NeBot (Filter.coprodᵢ f) ↔ 存在 d, NeBot (f d)
+  条件: [对任意 i, 非空 (α i)]
+  结论: NeBot (滤子.coprodᵢ f) ↔ 存在 d, NeBot (f d)
   证明: by
   simp [coprodᵢ_neBot_iff', *]
 -/
@@ -1043,7 +1043,7 @@ theorem coprodᵢ_eq_bot_iff'
 
 中文:
 定理 coprodᵢ_eq_bot_iff'
-  结论: Filter.coprodᵢ f = ⊥ ↔ (存在 i, IsEmpty (α i)) ∨ f = ⊥
+  结论: 滤子.coprodᵢ f = ⊥ ↔ (存在 i, 是空 (α i)) ∨ f = ⊥
   证明: by
   simpa only [not_neBot, not_and_or, funext_iff, not_forall, not_exists, not_nonempty_iff]
     using! coprodᵢ_neBot_iff'.not
@@ -1069,8 +1069,8 @@ theorem coprodᵢ_eq_bot_iff
 
 中文:
 定理 coprodᵢ_eq_bot_iff
-  条件: [对任意 i, Nonempty (α i)]
-  结论: Filter.coprodᵢ f = ⊥ ↔ f = ⊥
+  条件: [对任意 i, 非空 (α i)]
+  结论: 滤子.coprodᵢ f = ⊥ ↔ f = ⊥
   证明: by
   simpa [funext_iff] using coprodᵢ_neBot_iff.not
 
@@ -1091,7 +1091,7 @@ theorem coprodᵢ_bot'
 
 中文:
 定理 coprodᵢ_bot'
-  结论: Filter.coprodᵢ (⊥ : 对任意 i, Filter (α i)) = ⊥
+  结论: 滤子.coprodᵢ (⊥ : 对任意 i, 滤子 (α i)) = ⊥
   证明: coprodᵢ_eq_bot_iff'.2 (Or.inr rfl)
 
 @[simp]
@@ -1110,7 +1110,7 @@ theorem coprodᵢ_bot
 
 中文:
 定理 coprodᵢ_bot
-  结论: Filter.coprodᵢ (fun _ => ⊥ : 对任意 i, Filter (α i)) = ⊥
+  结论: 滤子.coprodᵢ (fun _ => ⊥ : 对任意 i, 滤子 (α i)) = ⊥
   证明: coprodᵢ_bot'
 -/
 theorem coprodᵢ_bot : Filter.coprodᵢ (fun _ => ⊥ : forall i, Filter (α i)) = ⊥ :=
@@ -1129,8 +1129,8 @@ theorem NeBot.coprodᵢ
 
 中文:
 定理 NeBot.coprodᵢ
-  条件: [对任意 i, Nonempty (α i)] {i : ι} (h : NeBot (f i))
-  结论: NeBot (Filter.coprodᵢ f)
+  条件: [对任意 i, 非空 (α i)] {i : ι} (h : NeBot (f i))
+  结论: NeBot (滤子.coprodᵢ f)
   证明: coprodᵢ_neBot_iff.2 ⟨i, h⟩
 
 @[instance]
@@ -1151,7 +1151,7 @@ theorem coprodᵢ_neBot
 
 中文:
 定理 coprodᵢ_neBot
-  结论: [对任意 i, Nonempty (α i)] [Nonempty ι] (f : 对任意 i, Filter (α i))
+  结论: [对任意 i, 非空 (α i)] [非空 ι] (f : 对任意 i, 滤子 (α i))
   证明: (H (Classical.arbitrary ι)).coprodᵢ
 
 @[gcongr, mono]
@@ -1175,7 +1175,7 @@ theorem coprodᵢ_mono
 中文:
 定理 coprodᵢ_mono
   条件: (hf : 对任意 i, f₁ i <= f₂ i)
-  结论: Filter.coprodᵢ f₁ <= Filter.coprodᵢ f₂
+  结论: 滤子.coprodᵢ f₁ <= 滤子.coprodᵢ f₂
   证明: iSup_mono fun i => comap_mono (hf i)
 
 Depends on / 依赖: comap_mono, iSup_mono
@@ -1223,8 +1223,8 @@ theorem Tendsto.pi_map_coprodᵢ
   proof: map_pi_map_coprodᵢ_le.trans (coprodᵢ_mono h)
 
 中文:
-定理 Tendsto.pi_map_coprodᵢ
-  条件: {g : 对任意 i, Filter (β i)} (h : 对任意 i, Tendsto (m i) (f i) (g i))
+定理 收敛.pi_map_coprodᵢ
+  条件: {g : 对任意 i, 滤子 (β i)} (h : 对任意 i, 收敛 (m i) (f i) (g i))
   证明: map_pi_map_coprodᵢ_le.trans (coprodᵢ_mono h)
 
 Depends on / 依赖: _le.trans

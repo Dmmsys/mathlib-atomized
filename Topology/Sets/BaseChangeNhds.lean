@@ -124,7 +124,7 @@ definition baseChangeOpenNhds
 
 中文:
 定义 baseChangeOpenNhds
-  签名: {K L : Compacts α} (h : K ⟶ L)
+  签名: {K L : 余mpacts α} (h : K ⟶ L)
   定义体: fun ⟨U, hU⟩ => ⟨U, fun _ hx => Set.mem_of_subset_of_mem hU (leOfHom h hx)⟩
 
 Depends on / 依赖: Set.mem_of_subset_of_mem, leOfHom, mem_of_subset_of_mem
@@ -145,8 +145,8 @@ lemma baseChangeOpenNhds_mono
 
 中文:
 引理 baseChangeOpenNhds_mono
-  条件: {K L : Compacts α} (h : K ⟶ L)
-  结论: Monotone baseChangeOpenNhds h
+  条件: {K L : 余mpacts α} (h : K ⟶ L)
+  结论: 递增 baseChangeOpenNhds h
   证明: fun _ _ hUV _ hx => SetLike.mem_coe.mpr (hUV hx)
 
 @[simp]
@@ -169,7 +169,7 @@ lemma baseChangeOpenNhds_comp
 
 中文:
 引理 baseChangeOpenNhds_comp
-  条件: {K L M : Compacts α} (h : K ⟶ L) (k : L ⟶ M) (U : M.openNhds)
+  条件: {K L M : 余mpacts α} (h : K ⟶ L) (k : L ⟶ M) (U : M.openNhds)
   证明: by rfl
 
 @[simp]
@@ -188,7 +188,7 @@ lemma baseChangeOpenNhds_id
 
 中文:
 引理 baseChangeOpenNhds_id
-  条件: {K : Compacts α} (U : K.openNhds)
+  条件: {K : 余mpacts α} (U : K.openNhds)
   证明: by rfl
 -/
 lemma baseChangeOpenNhds_id {K : Compacts α} (U : K.openNhds) :
@@ -206,7 +206,7 @@ definition isInitialBotOpensOpenNhdsBot
 
 中文:
 定义 isInitialBotOpensOpenNhdsBot
-  签名: : IsInitial (⊥ : (⊥ : Compacts α).openNhds)
+  签名: : IsInitial (⊥ : (⊥ : 余mpacts α).openNhds)
   定义体: .ofUniqueHom
   (fun _ => homOfLE <| by tauto)
   (fun _ _ => eq_of_comp_right_eq <| by tauto)

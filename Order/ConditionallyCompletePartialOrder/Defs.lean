@@ -55,11 +55,11 @@ class ConditionallyCompletePartialOrderInf
     - isGLB_csInf_of_directed : forall s, DirectedOn (· >= ·) s -> s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
 
 中文:
-类 ConditionallyCompletePartialOrderInf
+类 余nditionallyCompletePartialOrderInf
   参数: (α : 类型)
-  继承: PartialOrder α, InfSet α
+  继承: 偏序 α, 下确界集 α
   公理与运算 (1 个):
-    - isGLB_csInf_of_directed : 对任意 s, DirectedOn (· >= ·) s -> s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
+    - isGLB_csInf_of_directed : 对任意 s, DirectedOn (· >= ·) s -> s.非空 -> BddBelow s -> IsGLB s (sInf s)
 -/
 class ConditionallyCompletePartialOrderInf (α : Type*)
     extends PartialOrder α, InfSet α where
@@ -82,11 +82,11 @@ class ConditionallyCompletePartialOrderSup
     - isLUB_csSup_of_directed : forall s, DirectedOn (· <= ·) s -> s.Nonempty -> BddAbove s -> IsLUB s (sSup s)
 
 中文:
-类 ConditionallyCompletePartialOrderSup
+类 余nditionallyCompletePartialOrderSup
   参数: (α : 类型)
-  继承: PartialOrder α, SupSet α
+  继承: 偏序 α, 上确界集 α
   公理与运算 (1 个):
-    - isLUB_csSup_of_directed : 对任意 s, DirectedOn (· <= ·) s -> s.Nonempty -> BddAbove s -> IsLUB s (sSup s)
+    - isLUB_csSup_of_directed : 对任意 s, DirectedOn (· <= ·) s -> s.非空 -> BddAbove s -> IsLUB s (sSup s)
 -/
 class ConditionallyCompletePartialOrderSup (α : Type*)
     extends PartialOrder α, SupSet α where
@@ -105,9 +105,9 @@ class ConditionallyCompletePartialOrder
   (no additional axioms)
 
 中文:
-类 ConditionallyCompletePartialOrder
+类 余nditionallyCompletePartial序
   参数: (α : 类型)
-  继承: ConditionallyCompletePartialOrderSup α, ConditionallyCompletePartialOrderInf α
+  继承: 余nditionallyCompletePartialOrderSup α, 余nditionallyCompletePartialOrderInf α
   (无附加公理)
 -/
 class ConditionallyCompletePartialOrder (α : Type*)
@@ -176,7 +176,7 @@ lemma DirectedOn.csSup_le
 
 中文:
 引理 DirectedOn.csSup_le
-  结论: (hd : DirectedOn (· <= ·) s) (h_non : s.Nonempty)
+  结论: (hd : DirectedOn (· <= ·) s) (h_non : s.非空)
   证明: (hd.isLUB_csSup h_non ⟨a, ha⟩).2 ha
 
 @[to_dual ciInf_le]
@@ -218,7 +218,7 @@ lemma Directed.ciSup_le
 
 中文:
 引理 Directed.ciSup_le
-  结论: [Nonempty ι] (hf : Directed (· <= ·) f)
+  结论: [非空 ι] (hf : Directed (· <= ·) f)
   证明: hf.directedOn_range.csSup_le (Set.range_nonempty _) Set.forall_mem_range.2 ha
 -/
 protected lemma Directed.ciSup_le [Nonempty ι] (hf : Directed (· <= ·) f)

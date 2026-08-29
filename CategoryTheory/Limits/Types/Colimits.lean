@@ -69,7 +69,7 @@ definition coconeTypesEquiv
 
 中文:
 定义 coconeTypesEquiv
-  签名: : CoconeTypes.{u} F ≃ Cocone F where
+  签名: : 余coneTypes.{u} F ≃ 余锥 F where
   定义体: { pt := c.pt
       ι := { app j := ↾(c.ι j) } }
   invFun c :=
@@ -115,8 +115,8 @@ lemma CoconeTypes.isColimit_iff
           exact congr_fun (hc.funext fun j => f
 
 中文:
-引理 CoconeTypes.isColimit_iff
-  条件: (c : CoconeTypes.{u} F)
+引理 余coneTypes.isColimit_iff
+  条件: (c : 余coneTypes.{u} F)
   证明: by
   constructor
   · intro hc
@@ -179,7 +179,7 @@ theorem isColimit_iff_coconeTypesIsColimit
 
 中文:
 定理 isColimit_iff_coconeTypesIsColimit
-  条件: {F : J ⥤ 类型u} (c : Cocone F)
+  条件: {F : J ⥤ 类型u} (c : 余锥 F)
   证明: by
   simp only [Functor.CoconeTypes.isColimit_iff, Equiv.apply_symm_apply]
 
@@ -264,7 +264,7 @@ theorem small_colimitType_of_hasColimit
 
 中文:
 定理 small_colimitType_of_hasColimit
-  条件: (F : J ⥤ 类型u) [HasColimit F]
+  条件: (F : J ⥤ 类型u) [有余极限 F]
   证明: (hasColimit_iff_small_colimitType F).mp inferInstance
 
 Depends on / 依赖: hasColimit_iff_small_colimitType
@@ -335,7 +335,7 @@ abbreviation colimitCocone
 
 中文:
 缩写 colimitCocone
-  签名: (F : J ⥤ Type (max v u))
+  签名: (F : J ⥤ 类型 (最大值 v u))
   定义体: F.coconeTypesEquiv F.coconeTypes
 
 Depends on / 依赖: F.coconeTypes, F.coconeTypesEquiv, coconeTypes, coconeTypesEquiv
@@ -353,7 +353,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: (F : J ⥤ Type (max v u))
+  签名: (F : J ⥤ 类型 (最大值 v u))
   定义体: (F.coconeTypes.isColimit_iff.1 F.isColimit_coconeTypes).some
 
 Depends on / 依赖: F.coconeTypes.isColimit_iff, F.isColimit_coconeTypes, coconeTypes, isColimit_coconeTypes, isColimit_iff
@@ -463,7 +463,7 @@ theorem Colimit.w_apply
 @[deprecated colimit.ι_desc_apply (since := "2026-03-06")]
 
 中文:
-定理 Colimit.w_apply
+定理 余极限.w_apply
   条件: {j j' : J} {x : F.obj j} (f : j ⟶ j')
   证明: by
   rw [← comp_apply]
@@ -490,8 +490,8 @@ theorem Colimit.ι_desc_apply
 @[deprecated colimit.ι_map_apply (since := "2026-03-06")]
 
 中文:
-定理 Colimit.ι_desc_apply
-  条件: (s : Cocone F) (j : J) (x : F.obj j)
+定理 余极限.ι_desc_apply
+  条件: (s : 余锥 F) (j : J) (x : F.obj j)
   证明: congr_hom (colimit.ι_desc s j) x
 
 @[deprecated colimit.ι_map_apply (since := "2026-03-06")]
@@ -512,8 +512,8 @@ theorem Colimit.ι_map_apply
   proof: congr_hom (colimit.ι_map α j) x
 
 中文:
-定理 Colimit.ι_map_apply
-  结论: {F G : J ⥤ 类型u} [HasColimitsOfShape J (类型u)]
+定理 余极限.ι_map_apply
+  结论: {F G : J ⥤ 类型u} [有形状余极限 J (类型u)]
   证明: congr_hom (colimit.ι_map α j) x
 
 Depends on / 依赖: colimit, congr_hom
@@ -616,7 +616,7 @@ theorem jointly_surjective_of_isColimit
 
 中文:
 定理 jointly_surjective_of_isColimit
-  结论: {F : J ⥤ 类型u} {t : Cocone F} (h : IsColimit t)
+  结论: {F : J ⥤ 类型u} {t : 余锥 F} (h : 是余极限 t)
   证明: by
   by_contra hx
   simp_rw [not_exists] at hx
@@ -657,7 +657,7 @@ theorem jointly_surjective
 
 中文:
 定理 jointly_surjective
-  条件: (F : J ⥤ 类型u) {t : Cocone F} (h : IsColimit t) (x : t.pt)
+  条件: (F : J ⥤ 类型u) {t : 余锥 F} (h : 是余极限 t) (x : t.pt)
   证明: jointly_surjective_of_isColimit h x
 
 Depends on / 依赖: jointly_surjective_of_isColimit
@@ -695,7 +695,7 @@ theorem nonempty_of_nonempty_colimit
 
 中文:
 定理 nonempty_of_nonempty_colimit
-  条件: {F : J ⥤ 类型u} [HasColimit F]
+  条件: {F : J ⥤ 类型u} [有余极限 F]
   证明: Nonempty.map Sigma.fst ∘ Quot.out ∘ (colimitEquivColimitType F).toFun
 
 Depends on / 依赖: Nonempty, Nonempty.map, Quot.out, Sigma.fst, colimitEquivColimitType

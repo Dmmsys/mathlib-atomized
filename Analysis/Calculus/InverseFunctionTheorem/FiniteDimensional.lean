@@ -40,8 +40,8 @@ theorem exists_homeomorph_extension
     exists u : E -> F, LipschitzWith (lipschitzExtension
 
 中文:
-定理 exists_homeomorph_extension
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+定理 存在_homeomorph_extension
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   -- the difference `f - f'` is Lipschitz on `s`. It can be extended to a Lipschitz function `u`
   -- on the whole space, with a slightly worse Lipschitz constant. Then `f' + u` will be the

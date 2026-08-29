@@ -33,11 +33,11 @@ structure Set.FiniteExhaustion
     - iUnion_eq' : ⋃ n, toFun n = s
 
 中文:
-结构 Set.FiniteExhaustion
-  参数: {α : 类型} (s : Set α)
+结构 集合.FiniteExhaustion
+  参数: {α : 类型} (s : 集合 α)
   公理与运算 (4 个):
-    - toFun : 自然数 -> Set α
-    - finite' : 对任意 n, Finite (toFun n)
+    - toFun : 自然数 -> 集合 α
+    - finite' : 对任意 n, 有限 (toFun n)
     - subset_succ' : 对任意 n, toFun n subseteq toFun (n + 1)
     - iUnion_eq' : ⋃ n, toFun n = s
 -/
@@ -93,7 +93,7 @@ theorem finite
 中文:
 定理 finite
   条件: (n : 自然数)
-  结论: (K n).Finite
+  结论: (K n).有限
   证明: K.finite' n
 -/
 protected theorem finite (n : Nat) : (K n).Finite := K.finite' n
@@ -179,8 +179,8 @@ definition _root_.Set.Countable.finiteExhaustion
     · simp [← image_image, ← image_iUnion, iUnion_le_nat, ra
 
 中文:
-定义 _root_.Set.Countable.finiteExhaustion
-  签名: {s : Set α} (hs : s.Countable)
+定义 _root_.集合.可数.finiteExhaustion
+  签名: {s : 集合 α} (hs : s.可数)
   定义体: by
   apply Classical.choice
   by_cases h : Nonempty s
@@ -216,8 +216,8 @@ lemma _root_.Set.nonempty_finiteExhaustion_iff
 exact countable_iUnion fun i => (K.finite i).countable
 
 中文:
-引理 _root_.Set.nonempty_finiteExhaustion_iff
-  条件: {s : Set α}
+引理 _root_.集合.nonempty_finiteExhaustion_iff
+  条件: {s : 集合 α}
   证明: by
   refine ⟨fun ⟨K⟩ => ?_, fun h => ⟨h.finiteExhaustion⟩⟩
   rw [← K.iUnion_eq]
@@ -252,7 +252,7 @@ definition prod
       rw [Set.iUnion_prod_of_monotone (OrderHomClass.mono K) (OrderHomClass.mono K')]; rw [K.iUnion_eq]; rw [K'.iUnion_eq] }
 
 中文:
-定义 prod
+定义 乘积
   签名: :
   定义体: { toFun n := K n ×ˢ K' n
     finite' n := (K.finite n).prod (K'.finite n)
@@ -280,7 +280,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (n : 自然数)
-  结论: (K.prod K') n = K n ×ˢ K' n
+  结论: (K.乘积 K') n = K n ×ˢ K' n
   证明: by rfl
 -/
 protected theorem prod_apply (n : Nat) : (K.prod K') n = K n ×ˢ K' n := by rfl

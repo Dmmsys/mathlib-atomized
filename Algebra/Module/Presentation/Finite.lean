@@ -38,7 +38,7 @@ lemma finite
 
 中文:
 引理 finite
-  条件: [Finite pres.G]
+  条件: [有限 pres.G]
   证明: Finite.of_surjective _ pres.surjective_π
 
 Depends on / 依赖: Finite, Finite.of_surjective, of_surjective, pres.surjective_
@@ -59,7 +59,7 @@ lemma finitePresentation
 
 中文:
 引理 finitePresentation
-  条件: [Finite pres.G] [Finite pres.R]
+  条件: [有限 pres.G] [有限 pres.R]
   证明: Module.finitePresentation_of_surjective _ pres.surjective_π (by
     rw [pres.ker_π]
     exact Submodule.fg_span (Set.finite_range _))
@@ -90,7 +90,7 @@ lemma finitePresentation_iff_exists_presentation
         (Module
 
 中文:
-引理 finitePresentation_iff_exists_presentation
+引理 finitePresentation_iff_存在_presentation
   证明: by
   constructor
   · intro

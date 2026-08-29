@@ -48,7 +48,7 @@ theorem limit.lift_π_app
 
 中文:
 定理 limit.lift_π_app
-  条件: (H : J ⥤ K ⥤ C) [HasLimit H] (c : Cone H) (j : J) (k : K)
+  条件: (H : J ⥤ K ⥤ C) [有极限 H] (c : 锥 H) (j : J) (k : K)
   证明: congr_app (limit.lift_π c j) k
 
 @[reassoc (attr := simp)]
@@ -70,7 +70,7 @@ theorem colimit.ι_desc_app
 
 中文:
 定理 colimit.ι_desc_app
-  条件: (H : J ⥤ K ⥤ C) [HasColimit H] (c : Cocone H) (j : J) (k : K)
+  条件: (H : J ⥤ K ⥤ C) [有余极限 H] (c : 余锥 H) (j : J) (k : K)
   证明: congr_app (colimit.ι_desc c j) k
 
 Depends on / 依赖: colimit, congr_app
@@ -95,7 +95,7 @@ definition evaluationJointlyReflectsLimits
 
 中文:
 定义 evaluationJointlyReflectsLimits
-  签名: {F : J ⥤ K ⥤ C} (c : Cone F)
+  签名: {F : J ⥤ K ⥤ C} (c : 锥 F)
   定义体: { app := fun k => (t k).lift ⟨s.pt.obj k, whiskerRight s.π ((evaluation K C).obj k)⟩
       naturality := fun X Y f =>
         (t Y).hom_ext fun j => by
@@ -145,7 +145,7 @@ definition combineCones
 
 中文:
 定义 combineCones
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, LimitCone (F.flip.obj k))
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 极限锥 (F.flip.obj k))
   定义体: { obj := fun k => (c k).cone.pt
       map := fun {k₁} {k₂} f => (c k₂).isLimit.lift ⟨_, (c k₁).cone.π ≫ F.flip.map f⟩
       map_id := fun k =>
@@ -179,7 +179,7 @@ definition evaluateCombinedCones
 
 中文:
 定义 evaluateCombinedCones
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, LimitCone (F.flip.obj k)) (k : K)
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 极限锥 (F.flip.obj k)) (k : K)
   定义体: Cone.ext (Iso.refl _)
 
 Depends on / 依赖: Cone.ext, Iso.refl
@@ -200,7 +200,7 @@ definition combinedIsLimit
 
 中文:
 定义 combinedIsLimit
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, LimitCone (F.flip.obj k))
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 极限锥 (F.flip.obj k))
   定义体: evaluationJointlyReflectsLimits _ fun k =>
     (c k).isLimit.ofIsoLimit (evaluateCombinedCones F c k).symm
 
@@ -229,7 +229,7 @@ definition evaluationJointlyReflectsColimits
 
 中文:
 定义 evaluationJointlyReflectsColimits
-  签名: {F : J ⥤ K ⥤ C} (c : Cocone F)
+  签名: {F : J ⥤ K ⥤ C} (c : 余锥 F)
   定义体: { app := fun k => (t k).desc ⟨s.pt.obj k, whiskerRight s.ι ((evaluation K C).obj k)⟩
       naturality := fun X Y f =>
         (t X).hom_ext fun j => by
@@ -282,7 +282,7 @@ definition combineCocones
 
 中文:
 定义 combineCocones
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, ColimitCocone (F.flip.obj k))
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 余极限余锥 (F.flip.obj k))
   定义体: { obj := fun k => (c k).cocone.pt
       map := fun {k₁} {k₂} f => (c k₁).isColimit.desc ⟨_, F.flip.map f ≫ (c k₂).cocone.ι⟩
       map_id := fun k =>
@@ -316,7 +316,7 @@ definition evaluateCombinedCocones
 
 中文:
 定义 evaluateCombinedCocones
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, ColimitCocone (F.flip.obj k)) (k : K)
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 余极限余锥 (F.flip.obj k)) (k : K)
   定义体: Cocone.ext (Iso.refl _)
 
 Depends on / 依赖: Cocone, Cocone.ext, Iso.refl, Opposite, Opposite.unop, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, exists_leftFraction, h.exists_leftFraction, h.ext, op_inj, s.op, t.unop, unop_inj
@@ -337,7 +337,7 @@ definition combinedIsColimit
 
 中文:
 定义 combinedIsColimit
-  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, ColimitCocone (F.flip.obj k))
+  签名: (F : J ⥤ K ⥤ C) (c : 对任意 k : K, 余极限余锥 (F.flip.obj k))
   定义体: evaluationJointlyReflectsColimits _ fun k =>
     (c k).isColimit.ofIsoColimit (evaluateCombinedCocones F c k).symm
 
@@ -372,7 +372,7 @@ definition pointwiseCocone
 
 中文:
 定义 pointwiseCocone
-  签名: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  签名: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   定义体: F.flip ⋙ colim
   ι := {
     app X := { app Y := (colimit.ι _ X : (F.flip.obj Y).obj X ⟶ _) }
@@ -412,7 +412,7 @@ noncomputable section
 
 中文:
 定义 pointwiseIsColimit
-  签名: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  签名: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   定义体: by
   apply IsColimit.ofIsoColimit (combinedIsColimit _
     (fun k => ⟨colimit.cocone _, colimit.isColimit _⟩))
@@ -442,7 +442,7 @@ instance functorCategoryHasLimit
 
 中文:
 实例 functorCategoryHasLimit
-  签名: (F : J ⥤ K ⥤ C) [对任意 k, HasLimit (F.flip.obj k)]
+  签名: (F : J ⥤ K ⥤ C) [对任意 k, 有极限 (F.flip.obj k)]
   定义体: HasLimit.mk
     { cone := combineCones F fun _ => getLimitCone _
       isLimit := combinedIsLimit _ _ }
@@ -464,7 +464,7 @@ instance functorCategoryHasLimitsOfShape
 
 中文:
 实例 functorCategoryHasLimitsOfShape
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: inferInstance
 -/
 instance functorCategoryHasLimitsOfShape [HasLimitsOfShape J C] : HasLimitsOfShape J (K ⥤ C) where
@@ -482,7 +482,7 @@ instance functorCategoryHasColimit
 
 中文:
 实例 functorCategoryHasColimit
-  签名: (F : J ⥤ K ⥤ C) [对任意 k, HasColimit (F.flip.obj k)]
+  签名: (F : J ⥤ K ⥤ C) [对任意 k, 有余极限 (F.flip.obj k)]
   定义体: HasColimit.mk
     { cocone := combineCocones F fun _ => getColimitCocone _
       isColimit := combinedIsColimit _ _ }
@@ -505,7 +505,7 @@ instance functorCategoryHasColimitsOfShape
 
 中文:
 实例 functorCategoryHasColimitsOfShape
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: inferInstance
 -/
 instance functorCategoryHasColimitsOfShape [HasColimitsOfShape J C] :
@@ -522,7 +522,7 @@ instance functorCategoryHasLimitsOfSize
 
 中文:
 实例 functorCategoryHasLimitsOfSize
-  签名: [HasLimitsOfSize.{v₁, u₁} C]
+  签名: [有LimitsOfSize.{v₁, u₁} C]
   定义体: inferInstance
 -/
 instance functorCategoryHasLimitsOfSize [HasLimitsOfSize.{v₁, u₁} C] :
@@ -539,7 +539,7 @@ instance functorCategoryHasColimitsOfSize
 
 中文:
 实例 functorCategoryHasColimitsOfSize
-  签名: [HasColimitsOfSize.{v₁, u₁} C]
+  签名: [有余limitsOfSize.{v₁, u₁} C]
   定义体: inferInstance
 -/
 instance functorCategoryHasColimitsOfSize [HasColimitsOfSize.{v₁, u₁} C] :
@@ -563,7 +563,7 @@ preservesLimit_of_preserves_limit_cone (combinedIsLimit _ X)
 
 中文:
 实例 evaluation_preservesLimit
-  签名: (F : J ⥤ K ⥤ C) [对任意 k, HasLimit (F.flip.obj k)] (k : K)
+  签名: (F : J ⥤ K ⥤ C) [对任意 k, 有极限 (F.flip.obj k)] (k : K)
   定义体: -- Porting note: added a let because X was not inferred
   let X : (k : K) -> LimitCone (F.flip.obj k) := fun k => getLimitCone (F.flip.obj k)
 preservesLimit_of_preserves_limit_cone (combinedIsLimit _ X)
@@ -586,7 +586,7 @@ instance evaluation_preservesLimitsOfShape
 
 中文:
 实例 evaluation_preservesLimitsOfShape
-  签名: [HasLimitsOfShape J C] (k : K)
+  签名: [有形状极限 J C] (k : K)
   定义体: inferInstance
 -/
 instance evaluation_preservesLimitsOfShape [HasLimitsOfShape J C] (k : K) :
@@ -603,7 +603,7 @@ definition limitObjIsoLimitCompEvaluation
 
 中文:
 定义 limitObjIsoLimitCompEvaluation
-  签名: [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (k : K)
+  签名: [有形状极限 J C] (F : J ⥤ K ⥤ C) (k : K)
   定义体: preservesLimitIso ((evaluation K C).obj k) F
 
 Depends on / 依赖: evaluation, preservesLimitIso
@@ -626,7 +626,7 @@ theorem limitObjIsoLimitCompEvaluation_hom_π
 
 中文:
 定理 limitObjIsoLimitCompEvaluation_hom_π
-  结论: [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J)
+  结论: [有形状极限 J C] (F : J ⥤ K ⥤ C) (j : J)
   证明: by
   dsimp [limitObjIsoLimitCompEvaluation]
   simp
@@ -655,7 +655,7 @@ theorem limitObjIsoLimitCompEvaluation_inv_π_app
 
 中文:
 定理 limitObjIsoLimitCompEvaluation_inv_π_app
-  结论: [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J)
+  结论: [有形状极限 J C] (F : J ⥤ K ⥤ C) (j : J)
   证明: by
   dsimp [limitObjIsoLimitCompEvaluation]
   rw [Iso.inv_comp_eq]
@@ -687,7 +687,7 @@ theorem limit_map_limitObjIsoLimitCompEvaluation_hom
 
 中文:
 定理 limit_map_limitObjIsoLimitCompEvaluation_hom
-  结论: [HasLimitsOfShape J C] {i j : K}
+  结论: [有形状极限 J C] {i j : K}
   证明: by
   ext
   simp
@@ -712,7 +712,7 @@ theorem limitObjIsoLimitCompEvaluation_inv_limit_map
 
 中文:
 定理 limitObjIsoLimitCompEvaluation_inv_limit_map
-  结论: [HasLimitsOfShape J C] {i j : K}
+  结论: [有形状极限 J C] {i j : K}
   证明: by
   rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [limit_map_limitObjIsoLimitCompEvaluation_hom]
 
@@ -738,7 +738,7 @@ theorem limit_obj_ext
 
 中文:
 定理 limit_obj_ext
-  结论: {H : J ⥤ K ⥤ C} [HasLimitsOfShape J C] {k : K} {W : C}
+  结论: {H : J ⥤ K ⥤ C} [有形状极限 J C] {k : K} {W : C}
   证明: by
   apply (cancel_mono (limitObjIsoLimitCompEvaluation H k).hom).1
   ext j
@@ -768,7 +768,7 @@ definition limitCompWhiskeringLeftIsoCompLimit
 
 中文:
 定义 limitCompWhiskeringLeftIsoCompLimit
-  签名: (F : J ⥤ K ⥤ C) (G : D ⥤ K) [HasLimitsOfShape J C]
+  签名: (F : J ⥤ K ⥤ C) (G : D ⥤ K) [有形状极限 J C]
   定义体: NatIso.ofComponents (fun j =>
     limitObjIsoLimitCompEvaluation (F ⋙ (whiskeringLeft _ _ _).obj G) j ≪≫
       HasLimit.isoOfNatIso (isoWhiskerLeft F (whiskeringLeftCompEvaluation G j)) ≪≫
@@ -848,7 +848,7 @@ instance hasColimitCompEvaluation
 
 中文:
 实例 hasColimitCompEvaluation
-  签名: (F : J ⥤ K ⥤ C) (k : K) [HasColimit (F.flip.obj k)]
+  签名: (F : J ⥤ K ⥤ C) (k : K) [有余极限 (F.flip.obj k)]
   定义体: hasColimit_of_iso (F := F.flip.obj k) (Iso.refl _)
 
 Depends on / 依赖: F.flip.obj, Iso.refl, hasColimit_of_iso
@@ -870,7 +870,7 @@ preservesColimit_of_preserves_colimit_cocone (combinedIsColimit _ X)
 
 中文:
 实例 evaluation_preservesColimit
-  签名: (F : J ⥤ K ⥤ C) [对任意 k, HasColimit (F.flip.obj k)] (k : K)
+  签名: (F : J ⥤ K ⥤ C) [对任意 k, 有余极限 (F.flip.obj k)] (k : K)
   定义体: -- Porting note: added a let because X was not inferred
   let X : (k : K) -> ColimitCocone (F.flip.obj k) := fun k => getColimitCocone (F.flip.obj k)
 preservesColimit_of_preserves_colimit_cocone (combinedIsColimit _ X)
@@ -893,7 +893,7 @@ instance evaluation_preservesColimitsOfShape
 
 中文:
 实例 evaluation_preservesColimitsOfShape
-  签名: [HasColimitsOfShape J C] (k : K)
+  签名: [有形状余极限 J C] (k : K)
   定义体: inferInstance
 -/
 instance evaluation_preservesColimitsOfShape [HasColimitsOfShape J C] (k : K) :
@@ -910,7 +910,7 @@ definition colimitObjIsoColimitCompEvaluation
 
 中文:
 定义 colimitObjIsoColimitCompEvaluation
-  签名: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C) (k : K)
+  签名: [有形状余极限 J C] (F : J ⥤ K ⥤ C) (k : K)
   定义体: preservesColimitIso ((evaluation K C).obj k) F
 
 Depends on / 依赖: evaluation, preservesColimitIso
@@ -933,7 +933,7 @@ theorem colimitObjIsoColimitCompEvaluation_ι_inv
 
 中文:
 定理 colimitObjIsoColimitCompEvaluation_ι_inv
-  结论: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J)
+  结论: [有形状余极限 J C] (F : J ⥤ K ⥤ C) (j : J)
   证明: by
   dsimp [colimitObjIsoColimitCompEvaluation]
   simp
@@ -962,7 +962,7 @@ theorem colimitObjIsoColimitCompEvaluation_ι_app_hom
 
 中文:
 定理 colimitObjIsoColimitCompEvaluation_ι_app_hom
-  结论: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  结论: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   证明: by
   dsimp [colimitObjIsoColimitCompEvaluation]
   rw [← Iso.eq_comp_inv]
@@ -994,7 +994,7 @@ theorem colimitObjIsoColimitCompEvaluation_inv_colimit_map
 
 中文:
 定理 colimitObjIsoColimitCompEvaluation_inv_colimit_map
-  结论: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  结论: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   证明: by
   ext
   simp
@@ -1021,7 +1021,7 @@ theorem colimit_map_colimitObjIsoColimitCompEvaluation_hom
 
 中文:
 定理 colimit_map_colimitObjIsoColimitCompEvaluation_hom
-  结论: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  结论: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   证明: by
   rw [← Iso.inv_comp_eq]; rw [← Category.assoc]; rw [← Iso.eq_comp_inv]; rw [colimitObjIsoColimitCompEvaluation_inv_colimit_map]
 
@@ -1049,7 +1049,7 @@ theorem colimit_obj_ext
 
 中文:
 定理 colimit_obj_ext
-  结论: {H : J ⥤ K ⥤ C} [HasColimitsOfShape J C] {k : K} {W : C}
+  结论: {H : J ⥤ K ⥤ C} [有形状余极限 J C] {k : K} {W : C}
   证明: by
   apply (cancel_epi (colimitObjIsoColimitCompEvaluation H k).inv).1
   ext j
@@ -1079,7 +1079,7 @@ definition colimitCompWhiskeringLeftIsoCompColimit
 
 中文:
 定义 colimitCompWhiskeringLeftIsoCompColimit
-  签名: (F : J ⥤ K ⥤ C) (G : D ⥤ K) [HasColimitsOfShape J C]
+  签名: (F : J ⥤ K ⥤ C) (G : D ⥤ K) [有形状余极限 J C]
   定义体: NatIso.ofComponents (fun j =>
     colimitObjIsoColimitCompEvaluation (F ⋙ (whiskeringLeft _ _ _).obj G) j ≪≫
       HasColimit.isoOfNatIso (isoWhiskerLeft F (whiskeringLeftCompEvaluation G j)) ≪≫
@@ -1158,7 +1158,7 @@ instance evaluationPreservesLimits
 
 中文:
 实例 evaluationPreservesLimits
-  签名: [HasLimits C] (k : K)
+  签名: [有极限 C] (k : K)
   定义体: inferInstance
 -/
 instance evaluationPreservesLimits [HasLimits C] (k : K) :
@@ -1209,7 +1209,7 @@ lemma preservesLimitsOfShape_of_evaluation
 
 中文:
 引理 preservesLimitsOfShape_of_evaluation
-  结论: (F : D ⥤ K ⥤ C) (J : 类型) [Category* J]
+  结论: (F : D ⥤ K ⥤ C) (J : 类型) [范畴* J]
   证明: ⟨fun {G} => preservesLimit_of_evaluation F G fun _ => PreservesLimitsOfShape.preservesLimit⟩
 
 Depends on / 依赖: PreservesLimitsOfShape, PreservesLimitsOfShape.preservesLimit, preservesLimit, preservesLimit_of_evaluation
@@ -1253,7 +1253,7 @@ preservesLimits_of_natIso Iso.symm constCompEvaluationObj _ _
 
 中文:
 实例 preservesLimits_const
-  签名: : PreservesLimitsOfSize.{w', w} (const D : C ⥤ _)
+  签名: : 保持LimitsOfSize.{w', w} (const D : C ⥤ _)
   定义体: preservesLimits_of_evaluation _ fun _ =>
 preservesLimits_of_natIso Iso.symm constCompEvaluationObj _ _
 
@@ -1273,7 +1273,7 @@ instance evaluation_preservesColimits
 
 中文:
 实例 evaluation_preservesColimits
-  签名: [HasColimits C] (k : K)
+  签名: [有余极限 C] (k : K)
   定义体: inferInstance
 -/
 instance evaluation_preservesColimits [HasColimits C] (k : K) :
@@ -1324,7 +1324,7 @@ lemma preservesColimitsOfShape_of_evaluation
 
 中文:
 引理 preservesColimitsOfShape_of_evaluation
-  结论: (F : D ⥤ K ⥤ C) (J : 类型) [Category* J]
+  结论: (F : D ⥤ K ⥤ C) (J : 类型) [范畴* J]
   证明: ⟨fun {G} => preservesColimit_of_evaluation F G fun _ => PreservesColimitsOfShape.preservesColimit⟩
 
 Depends on / 依赖: PreservesColimitsOfShape, PreservesColimitsOfShape.preservesColimit, preservesColimit, preservesColimit_of_evaluation
@@ -1371,7 +1371,7 @@ preservesColimits_of_natIso Iso.symm constCompEvaluationObj _ _
 
 中文:
 实例 preservesColimits_const
-  签名: : PreservesColimitsOfSize.{w', w} (const D : C ⥤ _)
+  签名: : 保持余limitsOfSize.{w', w} (const D : C ⥤ _)
   定义体: preservesColimits_of_evaluation _ fun _ =>
 preservesColimits_of_natIso Iso.symm constCompEvaluationObj _ _
 
@@ -1397,7 +1397,7 @@ definition limitIsoFlipCompLim
 
 中文:
 定义 limitIsoFlipCompLim
-  签名: [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  签名: [有形状极限 J C] (F : J ⥤ K ⥤ C)
   定义体: NatIso.ofComponents (limitObjIsoLimitCompEvaluation F)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, limitObjIsoLimitCompEvaluation, ofComponents
@@ -1423,7 +1423,7 @@ definition limIsoFlipCompWhiskerLim
 
 中文:
 定义 limIsoFlipCompWhiskerLim
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: (NatIso.ofComponents (limitIsoFlipCompLim · |>.symm) fun {F G} η => by
     ext k
     apply limit_obj_ext
@@ -1456,7 +1456,7 @@ definition limitFlipIsoCompLim
 
 中文:
 定义 limitFlipIsoCompLim
-  签名: [HasLimitsOfShape J C] (F : K ⥤ J ⥤ C)
+  签名: [有形状极限 J C] (F : K ⥤ J ⥤ C)
   定义体: let f := fun k =>
     limitObjIsoLimitCompEvaluation F.flip k ≪≫ HasLimit.isoOfNatIso (flipCompEvaluation _ _)
   NatIso.ofComponents f
@@ -1486,7 +1486,7 @@ definition limCompFlipIsoWhiskerLim
 
 中文:
 定义 limCompFlipIsoWhiskerLim
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: (NatIso.ofComponents (limitFlipIsoCompLim · |>.symm) fun {F G} η => by
     ext k
     apply limit_obj_ext
@@ -1517,7 +1517,7 @@ definition limitIsoSwapCompLim
 
 中文:
 定义 limitIsoSwapCompLim
-  签名: [HasLimitsOfShape J C] (G : J ⥤ K ⥤ C)
+  签名: [有形状极限 J C] (G : J ⥤ K ⥤ C)
   定义体: limitIsoFlipCompLim G ≪≫ isoWhiskerRight (flipIsoCurrySwapUncurry _) _
 
 Depends on / 依赖: flipIsoCurrySwapUncurry, isoWhiskerRight, limitIsoFlipCompLim
@@ -1540,7 +1540,7 @@ definition colimitIsoFlipCompColim
 
 中文:
 定义 colimitIsoFlipCompColim
-  签名: [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C)
+  签名: [有形状余极限 J C] (F : J ⥤ K ⥤ C)
   定义体: NatIso.ofComponents (colimitObjIsoColimitCompEvaluation F)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, colimitObjIsoColimitCompEvaluation, ofComponents
@@ -1566,7 +1566,7 @@ definition colimIsoFlipCompWhiskerColim
 
 中文:
 定义 colimIsoFlipCompWhiskerColim
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: NatIso.ofComponents colimitIsoFlipCompColim fun {F G} η => by
     ext k
     apply colimit_obj_ext
@@ -1599,7 +1599,7 @@ definition colimitFlipIsoCompColim
 
 中文:
 定义 colimitFlipIsoCompColim
-  签名: [HasColimitsOfShape J C] (F : K ⥤ J ⥤ C)
+  签名: [有形状余极限 J C] (F : K ⥤ J ⥤ C)
   定义体: let f := fun _ =>
       colimitObjIsoColimitCompEvaluation _ _ ≪≫ HasColimit.isoOfNatIso (flipCompEvaluation _ _)
   NatIso.ofComponents f
@@ -1629,7 +1629,7 @@ definition colimCompFlipIsoWhiskerColim
 
 中文:
 定义 colimCompFlipIsoWhiskerColim
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: NatIso.ofComponents colimitFlipIsoCompColim fun {F G} η => by
     ext k
     apply colimit_obj_ext
@@ -1660,7 +1660,7 @@ definition colimitIsoSwapCompColim
 
 中文:
 定义 colimitIsoSwapCompColim
-  签名: [HasColimitsOfShape J C] (G : J ⥤ K ⥤ C)
+  签名: [有形状余极限 J C] (G : J ⥤ K ⥤ C)
   定义体: colimitIsoFlipCompColim G ≪≫ isoWhiskerRight (flipIsoCurrySwapUncurry _) _
 
 Depends on / 依赖: colimitIsoFlipCompColim, flipIsoCurrySwapUncurry, isoWhiskerRight

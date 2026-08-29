@@ -39,8 +39,8 @@ definition PrimeSpectrum.tensorProductTo
 @[fun_prop]
 
 中文:
-定义 PrimeSpectrum.tensorProductTo
-  签名: (x : PrimeSpectrum (S otimes[R] T))
+定义 素谱.tensorProductTo
+  签名: (x : 素谱 (S otimes[R] T))
   定义体: ⟨comap (algebraMap _ _) x, comap Algebra.TensorProduct.includeRight.toRingHom x⟩
 
 @[fun_prop]
@@ -61,8 +61,8 @@ lemma PrimeSpectrum.continuous_tensorProductTo
   proof: (continuous_comap _).prodMk (continuous_comap _)
 
 中文:
-引理 PrimeSpectrum.continuous_tensorProductTo
-  结论: Continuous (tensorProductTo R S T)
+引理 素谱.continuous_tensorProductTo
+  结论: 连续 (tensorProductTo R S T)
   证明: (continuous_comap _).prodMk (continuous_comap _)
 
 Depends on / 依赖: continuous_comap, prodMk
@@ -87,7 +87,7 @@ lemma PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks_aux
   have h₁ : a otimesₜ[R] t in p₁.asIdeal := e ▸ p₁.asIdeal.mul_mem_left (1 otimesₜ[R] (r • t)
 
 中文:
-引理 PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks_aux
+引理 素谱.isEmbedding_tensorProductTo_of_surjectiveOnStalks_aux
   证明: by
   let g : T ->+* S otimes[R] T := Algebra.TensorProduct.includeRight.toRingHom
   intro x hxp₁
@@ -132,7 +132,7 @@ lemma PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks
   refine ⟨(conti
 
 中文:
-引理 PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks
+引理 素谱.isEmbedding_tensorProductTo_of_surjectiveOnStalks
   证明: by
   refine ⟨?_, fun p₁ p₂ e =>
     (isEmbedding_tensorProductTo_of_surjectiveOnStalks_aux R S T hRT p₁ p₂ e).antisymm

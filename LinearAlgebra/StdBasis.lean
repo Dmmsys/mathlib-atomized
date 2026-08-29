@@ -55,7 +55,7 @@ theorem linearIndependent_single
 
 中文:
 定理 linearIndependent_single
-  结论: [Semiring R] [对任意 i, AddCommMonoid (Ms i)] [对任意 i, Module R (Ms i)]
+  结论: [半环 R] [对任意 i, 加法交换幺半群 (Ms i)] [对任意 i, 模 R (Ms i)]
   证明: by
   convert! (DFinsupp.linearIndependent_single _ hs).map_injOn _ DFinsupp.injective_pi_lapply.injOn
 
@@ -79,7 +79,7 @@ theorem linearIndependent_single_one
 
 中文:
 定理 linearIndependent_single_one
-  条件: (ι R : 类型) [Semiring R] [DecidableEq ι]
+  条件: (ι R : 类型) [半环 R] [DecidableEq ι]
   证明: by
   rw [← linearIndependent_equiv (Equiv.sigmaPUnit ι)]
   exact Pi.linearIndependent_single (fun (_ : ι) (_ : Unit) => (1 : R))
@@ -105,7 +105,7 @@ exact linearIndependent_single (fun i (_ : Unit) => v i) by simp +contextual [hv
 
 中文:
 引理 linearIndependent_single_of_ne_zero
-  结论: [Ring R] [IsDomain R] [AddCommGroup M] [Module R M]
+  结论: [环 R] [是整环 R] [加法交换群 M] [模 R M]
   证明: by
   rw [← linearIndependent_equiv (Equiv.sigmaPUnit ι)]
 exact linearIndependent_single (fun i (_ : Unit) => v i) by simp +contextual [hv]
@@ -138,7 +138,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def basis (s : 对任意 j, Basis (ιs j) R (Ms j))
+  签名: def basis (s : 对任意 j, 基 (ιs j) R (Ms j))
   定义体: Basis.ofRepr
     ((LinearEquiv.piCongrRight fun j => (s j).repr) ≪≫ₗ
       (Finsupp.sigmaFinsuppLEquivPiFinsupp R).symm)
@@ -171,7 +171,7 @@ theorem basis_repr_single
 
 中文:
 定理 basis_repr_single
-  条件: [DecidableEq η] (s : 对任意 j, Basis (ιs j) R (Ms j)) (j i)
+  条件: [DecidableEq η] (s : 对任意 j, 基 (ιs j) R (Ms j)) (j i)
   证明: by
   classical
   ext ⟨j', i'⟩
@@ -217,7 +217,7 @@ theorem basis_apply
 
 中文:
 定理 basis_apply
-  条件: [DecidableEq η] (s : 对任意 j, Basis (ιs j) R (Ms j)) (ji)
+  条件: [DecidableEq η] (s : 对任意 j, 基 (ιs j) R (Ms j)) (ji)
   证明: Basis.apply_eq_iff.mpr (by simp)
 
 @[simp]
@@ -239,7 +239,7 @@ theorem basis_repr
 
 中文:
 定理 basis_repr
-  条件: (s : 对任意 j, Basis (ιs j) R (Ms j)) (x) (ji)
+  条件: (s : 对任意 j, 基 (ιs j) R (Ms j)) (x) (ji)
   证明: rfl
 -/
 theorem basis_repr (s : forall j, Basis (ιs j) R (Ms j)) (x) (ji) :
@@ -265,7 +265,7 @@ definition basisFun
 
 中文:
 定义 basisFun
-  签名: : Basis η R (η -> R)
+  签名: : 基 η R (η -> R)
   定义体: Basis.ofEquivFun (LinearEquiv.refl _ _)
 
 @[simp]
@@ -316,7 +316,7 @@ theorem basisFun_repr
 中文:
 定理 basisFun_repr
   条件: (x : η -> R) (i : η)
-  结论: (Pi.basisFun R η).repr x i = x i
+  结论: (依赖函数类型.basisFun R η).repr x i = x i
   证明: by simp [basisFun]
 
 @[simp]
@@ -336,7 +336,7 @@ theorem basisFun_equivFun
 
 中文:
 定理 basisFun_equivFun
-  结论: (Pi.basisFun R η).equivFun = LinearEquiv.refl _ _
+  结论: (依赖函数类型.basisFun R η).equivFun = 线性等价.refl _ _
   证明: Basis.equivFun_ofEquivFun _
 
 Depends on / 依赖: Basis.equivFun_ofEquivFun, equivFun_ofEquivFun
@@ -358,7 +358,7 @@ definition spanSubset
 
 中文:
 定义 spanSubset
-  签名: (s : Set η)
+  签名: (s : 集合 η)
   定义体: .span R (Pi.basisFun R η '' s)
 
 Depends on / 依赖: Pi.basisFun, basisFun
@@ -379,7 +379,7 @@ lemma mem_spanSubset_iff
 
 中文:
 引理 mem_spanSubset_iff
-  条件: {s : Set η} {v : η -> R}
+  条件: {s : 集合 η} {v : η -> R}
   证明: by
   simp [spanSubset, Module.Basis.mem_span_image, Finsupp.support_subset_iff]
 
@@ -413,8 +413,8 @@ lemma AlgHom.eq_piEvalAlgHom
     re
 
 中文:
-引理 AlgHom.eq_piEvalAlgHom
-  结论: {k G : 类型} [CommSemiring k] [NoZeroDivisors k] [Nontrivial k]
+引理 代数态射.eq_piEvalAlgHom
+  结论: {k G : 类型} [交换半环 k] [无零因子 k] [非平凡 k]
   证明: by
   have h1 := map_one φ
   classical
@@ -483,7 +483,7 @@ lemma piEquiv_apply_apply
 
 中文:
 引理 piEquiv_apply_apply
-  结论: (ι R M : 类型) [Fintype ι] [CommSemiring R]
+  结论: (ι R M : 类型) [有限类型 ι] [交换半环 R]
   证明: by
   simp only [piEquiv, Basis.constr_apply_fintype, Basis.equivFun_apply]
   congr
@@ -548,8 +548,8 @@ instance _root_.Module.Free.pi
 .of_basis Pi.basis fun i => Module.Free.chooseBasis R (M i)
 
 中文:
-实例 _root_.Module.Free.pi
-  签名: (M : ι -> 类型) [Finite ι] [对任意 i : ι, AddCommMonoid (M i)]
+实例 _root_.模.自由.pi
+  签名: (M : ι -> 类型) [有限 ι] [对任意 i : ι, 加法交换幺半群 (M i)]
   定义体: let ⟨_⟩ := nonempty_fintype ι
 .of_basis Pi.basis fun i => Module.Free.chooseBasis R (M i)
 
@@ -570,8 +570,8 @@ instance _root_.Module.Free.function
   body: Free.pi _ _
 
 中文:
-实例 _root_.Module.Free.function
-  签名: [Finite ι] [Module.Free R M]
+实例 _root_.模.自由.function
+  签名: [有限 ι] [模.自由 R M]
   定义体: Free.pi _ _
 
 Depends on / 依赖: Free.pi

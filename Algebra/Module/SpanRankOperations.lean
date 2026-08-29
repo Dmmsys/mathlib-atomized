@@ -47,7 +47,7 @@ lemma Submodule.spanRank_baseChange_le
   · exact Cardinal.lift_umax.symm
 
 中文:
-引理 Submodule.spanRank_baseChange_le
+引理 子模.spanRank_baseChange_le
   结论: (N.baseChange A).spanRank <= N.spanRank.lift
   证明: by
   obtain ⟨s, hs₁, hs₂⟩ := N.exists_span_set_card_eq_spanRank
@@ -76,7 +76,7 @@ lemma Submodule.FG.spanFinrank_baseChange_le
   simp [Cardinal.lift_lt_aleph0, spanRank_finite_iff_fg.mpr fg]
 
 中文:
-引理 Submodule.FG.spanFinrank_baseChange_le
+引理 子模.FG.spanFinrank_baseChange_le
   条件: (fg : N.FG)
   证明: by
   grw [spanFinrank, spanRank_baseChange_le, Cardinal.toNat_lift, spanFinrank]
@@ -99,8 +99,8 @@ lemma TensorProduct.spanRank_top_le
   grw [← Submodule.baseChange_top, ← N.spanRank_top, spanRank_baseChange_le]
 
 中文:
-引理 TensorProduct.spanRank_top_le
-  结论: (⊤ : Submodule A (A otimes[R] N)).spanRank <= N.spanRank.lift
+引理 张量积.spanRank_top_le
+  结论: (⊤ : 子模 A (A otimes[R] N)).spanRank <= N.spanRank.lift
   证明: by
   grw [← Submodule.baseChange_top, ← N.spanRank_top, spanRank_baseChange_le]
 
@@ -119,7 +119,7 @@ lemma TensorProduct.spanFinrank_top_le_of_fg
   grw [← Submodule.baseChange_top, ← N.spanFinrank_top, (N.fg_top.mpr fg).spanFinrank_baseChange_le]
 
 中文:
-引理 TensorProduct.spanFinrank_top_le_of_fg
+引理 张量积.spanFinrank_top_le_of_fg
   条件: (fg : N.FG)
   证明: by
   grw [← Submodule.baseChange_top, ← N.spanFinrank_top, (N.fg_top.mpr fg).spanFinrank_baseChange_le]
@@ -146,7 +146,7 @@ lemma TensorProduct.spanFinrank_top_eq_of_residueField
   have hs₃ : s.Finite := Cardinal.mk_lt_aleph0_iff.mp (by simpa [hs₁] using Module.F
 
 中文:
-引理 TensorProduct.spanFinrank_top_eq_of_residueField
+引理 张量积.spanFinrank_top_eq_of_residueField
   条件: (fg : N.FG)
   证明: by
   let : Module.Finite R N := Module.Finite.iff_fg.mpr fg
@@ -189,7 +189,7 @@ lemma spanFinrank_eq_finrank_quotient
 
 中文:
 引理 spanFinrank_eq_finrank_quotient
-  条件: (N : Submodule R M) (fg : N.FG)
+  条件: (N : 子模 R M) (fg : N.FG)
   证明: by
   let : Module 𝓀 (N ⧸ maximalIdeal R • (⊤ : Submodule R N)) :=
     inferInstanceAs (Module (R ⧸ maximalIdeal R) _)
@@ -241,7 +241,7 @@ lemma spanFinrank_maximalIdeal_eq_finrank_cotangentSpace
 
 中文:
 引理 spanFinrank_maximalIdeal_eq_finrank_cotangentSpace
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: spanFinrank_maximalIdeal_eq_finrank_cotangentSpace_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 Depends on / 依赖: fg_of_isNoetherianRing, maximalIdeal, spanFinrank_maximalIdeal_eq_finrank_cotangentSpace_of_fg

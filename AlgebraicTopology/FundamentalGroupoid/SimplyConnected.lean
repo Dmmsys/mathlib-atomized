@@ -47,10 +47,10 @@ class SimplyConnectedSpace
     - equiv_unit : Nonempty (FundamentalGroupoid X ≌ Discrete Unit)
 
 中文:
-类 SimplyConnectedSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 单连通空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - equiv_unit : Nonempty (FundamentalGroupoid X ≌ Discrete Unit)
+    - equiv_unit : 非空 (FundamentalGroupoid X ≌ 离散 单元)
 -/
 class SimplyConnectedSpace (X : Type*) [TopologicalSpace X] : Prop where
   equiv_unit : Nonempty (FundamentalGroupoid X ≌ Discrete Unit)
@@ -72,7 +72,7 @@ theorem simply_connected_iff_unique_homotopic
 
 中文:
 定理 simply_connected_iff_unique_homotopic
-  条件: (X : 类型) [TopologicalSpace X]
+  条件: (X : 类型) [拓扑空间 X]
   证明: by
   simp only [simplyConnectedSpace_iff, equiv_punit_iff_unique,
     FundamentalGroupoid.nonempty_iff X, and_congr_right_iff, Nonempty.forall]
@@ -98,8 +98,8 @@ theorem ContinuousMap.HomotopyEquiv.simplyConnectedSpace
   proof: ⟨hY.1.map (FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).trans⟩
 
 中文:
-定理 ContinuousMap.HomotopyEquiv.simplyConnectedSpace
-  结论: [hY : SimplyConnectedSpace Y]
+定理 连续映射.同伦等价.simplyConnectedSpace
+  结论: [hY : 单连通空间 Y]
   证明: ⟨hY.1.map (FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).trans⟩
 
 Depends on / 依赖: FundamentalGroupoidFunctor, FundamentalGroupoidFunctor.equivOfHomotopyEquiv, equivOfHomotopyEquiv
@@ -117,7 +117,7 @@ theorem ContinuousMap.HomotopyEquiv.simplyConnectedSpace_iff
   proof: ⟨fun _ => e.symm.simplyConnectedSpace, fun _ => e.simplyConnectedSpace⟩
 
 中文:
-定理 ContinuousMap.HomotopyEquiv.simplyConnectedSpace_iff
+定理 连续映射.同伦等价.simplyConnectedSpace_iff
   条件: (e : X ≃ₕ Y)
   证明: ⟨fun _ => e.symm.simplyConnectedSpace, fun _ => e.simplyConnectedSpace⟩
 
@@ -154,8 +154,8 @@ theorem paths_homotopic
 
 中文:
 定理 paths_homotopic
-  条件: {x y : X} (p₁ p₂ : Path x y)
-  结论: Path.Homotopic p₁ p₂
+  条件: {x y : X} (p₁ p₂ : 道路 x y)
+  结论: 道路.同伦 p₁ p₂
   证明: Quotient.eq.mp (@Subsingleton.elim (Path.Homotopic.Quotient x y) _ _ _)
 
 Depends on / 依赖: Homotopic, Path.Homotopic.Quotient, Quotient, Quotient.eq.mp, Subsingleton, Subsingleton.elim
@@ -284,7 +284,7 @@ definition IsSimplyConnected
 
 中文:
 定义 IsSimplyConnected
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: SimplyConnectedSpace s
 
 Depends on / 依赖: SimplyConnectedSpace
@@ -301,7 +301,7 @@ theorem IsSimplyConnected.simplyConnectedSpace
 
 中文:
 定理 IsSimplyConnected.simplyConnectedSpace
-  条件: {s : Set X} (hs : IsSimplyConnected s)
+  条件: {s : 集合 X} (hs : IsSimplyConnected s)
   证明: hs
 -/
 theorem IsSimplyConnected.simplyConnectedSpace {s : Set X} (hs : IsSimplyConnected s) :
@@ -318,7 +318,7 @@ theorem IsSimplyConnected.isPathConnected
 
 中文:
 定理 IsSimplyConnected.isPathConnected
-  条件: {s : Set X} (hs : IsSimplyConnected s)
+  条件: {s : 集合 X} (hs : IsSimplyConnected s)
   证明: have := hs.simplyConnectedSpace
   isPathConnected_iff_pathConnectedSpace.mpr inferInstance
 
@@ -340,8 +340,8 @@ theorem IsSimplyConnected.nonempty
 
 中文:
 定理 IsSimplyConnected.nonempty
-  条件: {s : Set X} (hs : IsSimplyConnected s)
-  结论: s.Nonempty
+  条件: {s : 集合 X} (hs : IsSimplyConnected s)
+  结论: s.非空
   证明: hs.isPathConnected.nonempty
 
 Depends on / 依赖: hs.isPathConnected.nonempty, isPathConnected, nonempty
@@ -360,8 +360,8 @@ theorem Topology.IsEmbedding.isSimplyConnected_image
 @[simp]
 
 中文:
-定理 Topology.IsEmbedding.isSimplyConnected_image
-  结论: {f : X -> Y} (hf : Topology.IsEmbedding f)
+定理 拓扑.是嵌入.isSimplyConnected_image
+  结论: {f : X -> Y} (hf : 拓扑.是嵌入 f)
   证明: .symm .simplyConnectedSpace_iff .toHomotopyEquiv hf.homeomorphImage s
 
 @[simp]
@@ -385,8 +385,8 @@ theorem Homeomorph.isSimplyConnected_image
 @[simp]
 
 中文:
-定理 Homeomorph.isSimplyConnected_image
-  条件: (f : X ≃ₜ Y) {s : Set X}
+定理 同胚.isSimplyConnected_image
+  条件: (f : X ≃ₜ Y) {s : 集合 X}
   证明: f.isEmbedding.isSimplyConnected_image
 
 @[simp]
@@ -408,8 +408,8 @@ theorem Homeomorph.isSimplyConnected_preimage
   rw [← image_symm]; rw [isSimplyConnected_image]
 
 中文:
-定理 Homeomorph.isSimplyConnected_preimage
-  条件: (f : X ≃ₜ Y) {s : Set Y}
+定理 同胚.isSimplyConnected_preimage
+  条件: (f : X ≃ₜ Y) {s : 集合 Y}
   证明: by
   rw [← image_symm]; rw [isSimplyConnected_image]
 
@@ -435,8 +435,8 @@ theorem isSimplyConnected_iff_exists_homotopy_refl_forall_mem
  
 
 中文:
-定理 isSimplyConnected_iff_exists_homotopy_refl_forall_mem
-  条件: {s : Set X}
+定理 isSimplyConnected_iff_存在_homotopy_refl_对任意_mem
+  条件: {s : 集合 X}
   证明: by
   rw [IsSimplyConnected]; rw [simply_connected_iff_loops_nullhomotopic]; rw [← isPathConnected_iff_pathConnectedSpace]
   refine .and .rfl ⟨fun h x p hp => ?_, fun h x p => ?_⟩
@@ -483,7 +483,7 @@ theorem isSimplyConnected_smul_set_iff
 
 中文:
 定理 isSimplyConnected_smul_set_iff
-  结论: {G : 类型} [Group G]
+  结论: {G : 类型} [群 G]
   证明: .isSimplyConnected_image Homeomorph.smul c
 
 @[simp]
@@ -506,7 +506,7 @@ theorem isSimplyConnected_smul_set₀_iff
 
 中文:
 定理 isSimplyConnected_smul_set₀_iff
-  结论: {G : 类型} [GroupWithZero G] [MulAction G X]
+  结论: {G : 类型} [带零群 G] [乘法作用 G X]
   证明: isSimplyConnected_smul_set_iff (c := Units.mk0 c hc)
 
 Depends on / 依赖: Units.mk0, isSimplyConnected_smul_set_iff

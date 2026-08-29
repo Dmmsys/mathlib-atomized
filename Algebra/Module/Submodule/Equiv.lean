@@ -118,7 +118,7 @@ theorem ofEq_rfl
 
 中文:
 定理 ofEq_rfl
-  结论: ofEq p p rfl = LinearEquiv.refl R p
+  结论: ofEq p p rfl = 线性等价.refl R p
   证明: by ext; rfl
 -/
 theorem ofEq_rfl : ofEq p p rfl = LinearEquiv.refl R p := by ext; rfl
@@ -135,7 +135,7 @@ definition ofSubmodules
 
 中文:
 定义 ofSubmodules
-  签名: (p : Submodule R M) (q : Submodule R₂ M₂) (h : p.map (e : M ->ₛₗ[σ₁₂] M₂) = q)
+  签名: (p : 子模 R M) (q : 子模 R₂ M₂) (h : p.map (e : M ->ₛₗ[σ₁₂] M₂) = q)
   定义体: (e.submoduleMap p).trans (LinearEquiv.ofEq _ _ h)
 
 @[simp]
@@ -159,7 +159,7 @@ theorem ofSubmodules_apply
 
 中文:
 定理 ofSubmodules_apply
-  结论: {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 
 @[simp]
@@ -180,7 +180,7 @@ theorem ofSubmodules_symm_apply
 
 中文:
 定理 ofSubmodules_symm_apply
-  结论: {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem ofSubmodules_symm_apply {p : Submodule R M} {q : Submodule R₂ M₂}
@@ -198,7 +198,7 @@ definition ofSubmodule'
 
 中文:
 定义 ofSubmodule'
-  签名: [Module R M] [Module R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂) (U : Submodule R₂ M₂)
+  签名: [模 R M] [模 R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂) (U : 子模 R₂ M₂)
   定义体: (f.symm.ofSubmodules _ _ (U.map_equiv_eq_comap_symm f.symm)).symm
 
 Depends on / 依赖: U.map_equiv_eq_comap_symm, f.symm, f.symm.ofSubmodules, map_equiv_eq_comap_symm, ofSubmodules
@@ -221,7 +221,7 @@ theorem ofSubmodule'_toLinearMap
 
 中文:
 定理 ofSubmodule'_toLinearMap
-  结论: [Module R M] [Module R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂)
+  结论: [模 R M] [模 R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂)
   证明: by
   ext
   rfl
@@ -247,7 +247,7 @@ theorem ofSubmodule'_apply
 
 中文:
 定理 ofSubmodule'_apply
-  结论: [Module R M] [Module R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂) (U : Submodule R₂ M₂)
+  结论: [模 R M] [模 R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂) (U : 子模 R₂ M₂)
   证明: rfl
 
 @[simp]
@@ -267,7 +267,7 @@ theorem ofSubmodule'_symm_apply
 
 中文:
 定理 ofSubmodule'_symm_apply
-  结论: [Module R M] [Module R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂)
+  结论: [模 R M] [模 R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂)
   证明: rfl
 -/
 theorem ofSubmodule'_symm_apply [Module R M] [Module R₂ M₂] (f : M ≃ₛₗ[σ₁₂] M₂)
@@ -399,7 +399,7 @@ theorem range
 
 中文:
 定理 range
-  结论: LinearMap.range (e : M ->ₛₗ[σ₁₂] M₂) = ⊤
+  结论: 线性映射.range (e : M ->ₛₗ[σ₁₂] M₂) = ⊤
   证明: LinearMap.range_eq_top.2 e.toEquiv.surjective
 -/
 protected theorem range : LinearMap.range (e : M ->ₛₗ[σ₁₂] M₂) = ⊤ :=
@@ -421,7 +421,7 @@ theorem eq_bot_of_equiv
 
 中文:
 定理 eq_bot_of_equiv
-  条件: [Module R₂ M₂] (e : p ≃ₛₗ[σ₁₂] (⊥ : Submodule R₂ M₂))
+  条件: [模 R₂ M₂] (e : p ≃ₛₗ[σ₁₂] (⊥ : 子模 R₂ M₂))
   结论: p = ⊥
   证明: by
   refine bot_unique (SetLike.le_def.2 fun b hb => (Submodule.mem_bot R).2 ?_)
@@ -557,7 +557,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] (h : Injective f)
+  签名: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] (h : 单射 f)
   定义体: ofLeftInverse Classical.choose_spec h.hasLeftInverse
 
 @[simp]
@@ -581,7 +581,7 @@ theorem ofInjective_apply
 
 中文:
 定理 ofInjective_apply
-  结论: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] {h : Injective f}
+  结论: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] {h : 单射 f}
   证明: rfl
 
 @[simp]
@@ -604,7 +604,7 @@ lemma ofInjective_symm_apply
 
 中文:
 引理 ofInjective_symm_apply
-  结论: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] {h : Injective f}
+  结论: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] {h : 单射 f}
   证明: by
   obtain ⟨-, ⟨y, rfl⟩⟩ := x
   have : ⟨f y, LinearMap.mem_range_self f y⟩ = LinearEquiv.ofInjective f h y := rfl
@@ -632,7 +632,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] (hf : Bijective f)
+  签名: [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] (hf : 双射 f)
   定义体: (ofInjective f hf.injective).trans ofTop _
     LinearMap.range_eq_top.2 hf.surjective
 
@@ -742,7 +742,7 @@ definition equivSubtypeMap
 
 中文:
 定义 equivSubtypeMap
-  签名: (p : Submodule R M) (q : Submodule R p)
+  签名: (p : 子模 R M) (q : 子模 R p)
   定义体: { (p.subtype.domRestrict q).codRestrict _ (by rintro ⟨x, hx⟩; exact ⟨x, hx, rfl⟩) with
     invFun := by
       rintro ⟨x, hx⟩
@@ -771,7 +771,7 @@ theorem equivSubtypeMap_apply
 
 中文:
 定理 equivSubtypeMap_apply
-  条件: {p : Submodule R M} {q : Submodule R p} (x : q)
+  条件: {p : 子模 R M} {q : 子模 R p} (x : q)
   证明: rfl
 
 @[simp]
@@ -791,7 +791,7 @@ theorem equivSubtypeMap_symm_apply
 
 中文:
 定理 equivSubtypeMap_symm_apply
-  条件: {p : Submodule R M} {q : Submodule R p} (x : q.map p.subtype)
+  条件: {p : 子模 R M} {q : 子模 R p} (x : q.map p.subtype)
   证明: rfl
 -/
 theorem equivSubtypeMap_symm_apply {p : Submodule R M} {q : Submodule R p} (x : q.map p.subtype) :
@@ -813,7 +813,7 @@ definition comap_equiv_self_of_inj_of_le
 
 中文:
 定义 comap_equiv_self_of_inj_of_le
-  签名: {f : M ->ₗ[R] N} {p : Submodule R N}
+  签名: {f : M ->ₗ[R] N} {p : 子模 R N}
   定义体: LinearEquiv.ofBijective
   ((f ∘ₗ (p.comap f).subtype).codRestrict p <| fun ⟨_, hx⟩ => mem_comap.mp hx)
   (⟨fun x y hxy => by simpa using hf (Subtype.ext_iff.mp hxy),

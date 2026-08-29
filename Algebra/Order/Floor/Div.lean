@@ -72,7 +72,7 @@ class FloorDiv
     - zero_floorDiv((a)) : floorDiv 0 a = 0
 
 中文:
-类 FloorDiv
+类 下取整除
   参数: where
   公理与运算 (4 个):
     - floorDiv : β -> α -> β
@@ -103,7 +103,7 @@ class CeilDiv
     - zero_ceilDiv((a)) : ceilDiv 0 a = 0
 
 中文:
-类 CeilDiv
+类 上取整除
   参数: where
   公理与运算 (4 个):
     - ceilDiv : β -> α -> β
@@ -410,7 +410,7 @@ lemma floorDiv_one
 
 中文:
 引理 floorDiv_one
-  条件: [IsOrderedRing α] [Nontrivial α] (b : β)
+  条件: [是Ordered环 α] [非平凡 α] (b : β)
   结论: b ⌊/⌋ (1 : α) = b
   证明: eq_of_forall_le_iff fun c => by simp [zero_lt_one' α]
 -/
@@ -427,7 +427,7 @@ lemma smul_floorDiv
 
 中文:
 引理 smul_floorDiv
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a) (b : β)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a) (b : β)
   证明: eq_of_forall_le_iff by simp [smul_le_smul_iff_of_pos_left, ha]
 -/
 @[simp] lemma smul_floorDiv [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a) (b : β) :
@@ -450,7 +450,7 @@ lemma ceilDiv_one
 
 中文:
 引理 ceilDiv_one
-  条件: [IsOrderedRing α] [Nontrivial α] (b : β)
+  条件: [是Ordered环 α] [非平凡 α] (b : β)
   结论: b ⌈/⌉ (1 : α) = b
   证明: eq_of_forall_ge_iff fun c => by simp [zero_lt_one' α]
 -/
@@ -467,7 +467,7 @@ lemma smul_ceilDiv
 
 中文:
 引理 smul_ceilDiv
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a) (b : β)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a) (b : β)
   证明: eq_of_forall_ge_iff by simp [smul_le_smul_iff_of_pos_left, ha]
 -/
 @[simp] lemma smul_ceilDiv [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a) (b : β) :
@@ -576,7 +576,7 @@ instance instFloorDiv
 
 中文:
 实例 instFloorDiv
-  签名: : FloorDiv 自然数 自然数 where
+  签名: : 下取整除 自然数 自然数 where
   定义体: HDiv.hDiv
   floorDiv_gc a ha := by simpa [mul_comm] using Nat.galoisConnection_mul_div ha
   floorDiv_nonpos a ha b := by rw [ha.antisymm <| zero_le _, Nat.div_zero]
@@ -604,7 +604,7 @@ instance instCeilDiv
 
 中文:
 实例 instCeilDiv
-  签名: : CeilDiv 自然数 自然数 where
+  签名: : 上取整除 自然数 自然数 where
   定义体: (a + b - 1) / b
   ceilDiv_gc a ha b c := by
     simp [div_le_iff_le_mul_add_pred ha, add_assoc, tsub_add_cancel_of_le <| succ_le_iff.2 ha]
@@ -680,7 +680,7 @@ instance instFloorDiv
 
 中文:
 实例 instFloorDiv
-  签名: : FloorDiv α (对任意 i, π i) where
+  签名: : 下取整除 α (对任意 i, π i) where
   定义体: f i ⌊/⌋ a
   floorDiv_gc _a ha _f _g := forall_congr' fun _i => gc_floorDiv_smul ha _ _
   floorDiv_nonpos a ha f := by ext i; exact floorDiv_of_nonpos ha _
@@ -748,7 +748,7 @@ instance instCeilDiv
 
 中文:
 实例 instCeilDiv
-  签名: : CeilDiv α (对任意 i, π i) where
+  签名: : 上取整除 α (对任意 i, π i) where
   定义体: f i ⌈/⌉ a
   ceilDiv_gc _a ha _f _g := forall_congr' fun _i => gc_smul_ceilDiv ha _ _
   ceilDiv_nonpos a ha f := by ext i; exact ceilDiv_of_nonpos ha _
@@ -817,7 +817,7 @@ instance instFloorDiv
 
 中文:
 实例 instFloorDiv
-  签名: : FloorDiv α (ι ->₀ β) where
+  签名: : 下取整除 α (ι ->₀ β) where
   定义体: f.mapRange (· ⌊/⌋ a) zero_floorDiv _
   floorDiv_gc _a ha f _g := forall_congr' fun i => by
     simpa only [coe_smul, Pi.smul_apply, mapRange_apply] using gc_floorDiv_smul ha (f i) _
@@ -922,7 +922,7 @@ instance instCeilDiv
 
 中文:
 实例 instCeilDiv
-  签名: : CeilDiv α (ι ->₀ β) where
+  签名: : 上取整除 α (ι ->₀ β) where
   定义体: f.mapRange (· ⌈/⌉ a) zero_ceilDiv _
   ceilDiv_gc _a ha f _g := forall_congr' fun i => by
     simpa only [coe_smul, Pi.smul_apply, mapRange_apply] using gc_smul_ceilDiv ha (f i) _

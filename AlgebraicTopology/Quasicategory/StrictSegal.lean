@@ -50,7 +50,7 @@ use sx.spineToSimplex Path.map (horn.spineId i h₀ hₙ) σ₀
 中文:
 定理 quasicategory
   条件: {X : SSet.{u}} (sx : StrictSegal X)
-  结论: Quasicategory X
+  结论: 拟范畴 X
   证明: by
   apply quasicategory_of_filler X
   intro n i σ₀ h₀ hₙ
@@ -134,7 +134,7 @@ instance quasicategory'
 
 中文:
 实例 quasicategory'
-  签名: (X : SSet.{u}) [IsStrictSegal X]
+  签名: (X : SSet.{u}) [是StrictSegal X]
   定义体: quasicategory ofIsStrictSegal X
 
 Depends on / 依赖: ofIsStrictSegal, quasicategory

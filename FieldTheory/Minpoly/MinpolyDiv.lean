@@ -106,7 +106,7 @@ lemma minpolyDiv_eq_zero
 
 中文:
 引理 minpolyDiv_eq_zero
-  条件: (hx : ¬Is整数egral R x)
+  条件: (hx : ¬是整 R x)
   结论: minpolyDiv R x = 0
   证明: by
   delta minpolyDiv minpoly
@@ -151,7 +151,7 @@ lemma minpolyDiv_eval_eq_zero_of_ne_of_aeval_eq_zero
 
 中文:
 引理 minpolyDiv_eval_eq_zero_of_ne_of_aeval_eq_zero
-  结论: [IsDomain S]
+  结论: [是整环 S]
   证明: by
   rw [← eval_map_algebraMap]; rw [← minpolyDiv_spec R x] at hy
   simp only [eval_mul, eval_sub, eval_X, eval_C, mul_eq_zero] at hy
@@ -179,7 +179,7 @@ lemma eval₂_minpolyDiv_of_eval₂_eq_zero
 
 中文:
 引理 eval₂_minpolyDiv_of_eval₂_eq_zero
-  结论: {T} [CommRing T]
+  结论: {T} [交换环 T]
   证明: by
   split_ifs with h
   · rw [← h, eval₂_hom, eval_minpolyDiv_self]
@@ -210,7 +210,7 @@ lemma eval₂_minpolyDiv_self
 
 中文:
 引理 eval₂_minpolyDiv_self
-  结论: {T} [CommRing T] [Algebra R T] [IsDomain T] [DecidableEq T] (x : S)
+  结论: {T} [交换环 T] [代数 R T] [是整环 T] [DecidableEq T] (x : S)
   证明: by
   apply eval₂_minpolyDiv_of_eval₂_eq_zero
   rw [AlgHom.comp_algebraMap]; rw [← σ₂.comp_algebraMap]; rw [← eval₂_map]; rw [← RingHom.coe_coe]; rw [eval₂_hom]; rw [eval_map_algebraMap]; rw [minpoly.aeval]; rw [map_zero]
@@ -236,7 +236,7 @@ lemma eval_minpolyDiv_of_aeval_eq_zero
 
 中文:
 引理 eval_minpolyDiv_of_aeval_eq_zero
-  结论: [IsDomain S] [DecidableEq S]
+  结论: [是整环 S] [DecidableEq S]
   证明: by
   rw [eval]; rw [eval₂_minpolyDiv_of_eval₂_eq_zero]; rw [RingHom.id_apply]; rw [RingHom.id_apply]
   simpa [aeval_def] using hy
@@ -318,7 +318,7 @@ lemma minpolyDiv_ne_zero
 
 中文:
 引理 minpolyDiv_ne_zero
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   结论: minpolyDiv R x != 0
   证明: by
   intro e
@@ -379,7 +379,7 @@ lemma natDegree_minpolyDiv_succ
 
 中文:
 引理 natDegree_minpolyDiv_succ
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   证明: by
   rw [← (minpoly.monic hx).natDegree_map (algebraMap R S)]; rw [← minpolyDiv_spec]; rw [natDegree_mul']
   · simp
@@ -405,7 +405,7 @@ lemma natDegree_minpolyDiv_lt
 
 中文:
 引理 natDegree_minpolyDiv_lt
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   证明: by
   rw [← natDegree_minpolyDiv_succ hx]
   exact Nat.lt_succ_self _
@@ -428,8 +428,8 @@ lemma minpolyDiv_eq_of_isIntegrallyClosed
   rw [IsScalarTower.algebraMap_eq R K S]; rw [← map_map]; rw [← minpoly.isIntegrallyClosed_eq_field_fractions' _ hx]
 
 中文:
-引理 minpolyDiv_eq_of_isIntegrallyClosed
-  结论: [IsDomain R] [Is整数egrallyClosed R] [IsDomain S]
+引理 minpolyDiv_eq_of_is整数egrallyClosed
+  结论: [是整环 R] [是整闭 R] [是整环 S]
   证明: by
   delta minpolyDiv
   rw [IsScalarTower.algebraMap_eq R K S]; rw [← map_map]; rw [← minpoly.isIntegrallyClosed_eq_field_fractions' _ hx]
@@ -599,7 +599,7 @@ lemma sum_smul_minpolyDiv_eq_X_pow
 
 中文:
 引理 sum_smul_minpolyDiv_eq_X_pow
-  结论: (E) [Field E] [Algebra K E] [IsAlgClosed E]
+  结论: (E) [域 E] [代数 K E] [是代数闭 E]
   证明: by
   classical
   rw [← sub_eq_zero]

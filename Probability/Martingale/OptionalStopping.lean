@@ -57,7 +57,7 @@ theorem Submartingale.expected_stoppedValue_mono
 
 中文:
 定理 Submartingale.expected_stoppedValue_mono
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   rw [← sub_nonneg]; rw [← integral_sub']; rw [stoppedValue_sub_eq_sum' hle hbdd]
   · simp only [Finset.sum_apply]
@@ -114,7 +114,7 @@ theorem submartingale_of_expected_stoppedValue_mono
 
 中文:
 定理 submartingale_of_expected_stoppedValue_mono
-  结论: [SigmaFiniteFiltration μ 𝒢]
+  结论: [σ有限滤子 μ 𝒢]
   证明: by
   refine submartingale_of_setIntegral_le hadp hint fun i j hij s hs => ?_
   classical
@@ -156,7 +156,7 @@ theorem submartingale_iff_expected_stoppedValue_mono
 
 中文:
 定理 submartingale_iff_expected_stoppedValue_mono
-  结论: [SigmaFiniteFiltration μ 𝒢]
+  结论: [σ有限滤子 μ 𝒢]
   证明: ⟨fun hf _ _ hτ hπ hle ⟨_, hN⟩ => hf.expected_stoppedValue_mono hτ hπ hle hN,
     submartingale_of_expected_stoppedValue_mono hadp hint⟩
 
@@ -186,7 +186,7 @@ theorem Submartingale.stoppedProcess
 
 中文:
 定理 Submartingale.stoppedProcess
-  结论: [SigmaFiniteFiltration μ 𝒢]
+  结论: [σ有限滤子 μ 𝒢]
   证明: by
   rw [submartingale_iff_expected_stoppedValue_mono]
   · intro σ π hσ hπ hσ_le_π hπ_bdd
@@ -231,7 +231,7 @@ theorem smul_le_stoppedValue_hittingBtwn
 
 中文:
 定理 smul_le_stoppedValue_hittingBtwn
-  结论: [IsFiniteMeasure μ] (hsub : Submartingale f 𝒢 μ) {ε : 实数>=0}
+  结论: [是有限测度 μ] (hsub : Submartingale f 𝒢 μ) {ε : 实数>=0}
   证明: by
   have : forall ω, ((ε : Real) <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) ->
       (ε : Real) <= stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω := by
@@ -282,7 +282,7 @@ theorem maximal_ineq
 
 中文:
 定理 maximal_ineq
-  结论: [IsFiniteMeasure μ] (hsub : Submartingale f 𝒢 μ) (hnonneg : 0 <= f) {ε : 实数>=0}
+  结论: [是有限测度 μ] (hsub : Submartingale f 𝒢 μ) (hnonneg : 0 <= f) {ε : 实数>=0}
   证明: by
   suffices ε • μ {ω | (ε : Real) <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω} +
       ENNReal.ofReal

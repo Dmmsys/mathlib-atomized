@@ -28,8 +28,8 @@ instance [One
   body: (equivShrink α).symm.one
 
 中文:
-实例 [One
-  签名: α] : One (Shrink.{v} α)
+实例 [幺
+  签名: α] : 幺 (Shrink.{v} α)
   定义体: (equivShrink α).symm.one
 -/
 @[to_additive] instance [One α] : One (Shrink.{v} α) := (equivShrink α).symm.one
@@ -42,8 +42,8 @@ instance [Mul
   body: (equivShrink α).symm.mul
 
 中文:
-实例 [Mul
-  签名: α] : Mul (Shrink.{v} α)
+实例 [乘法
+  签名: α] : 乘法 (Shrink.{v} α)
   定义体: (equivShrink α).symm.mul
 -/
 @[to_additive] instance [Mul α] : Mul (Shrink.{v} α) := (equivShrink α).symm.mul
@@ -56,8 +56,8 @@ instance [Div
   body: (equivShrink α).symm.div
 
 中文:
-实例 [Div
-  签名: α] : Div (Shrink.{v} α)
+实例 [除法
+  签名: α] : 除法 (Shrink.{v} α)
   定义体: (equivShrink α).symm.div
 -/
 @[to_additive] instance [Div α] : Div (Shrink.{v} α) := (equivShrink α).symm.div
@@ -70,8 +70,8 @@ instance [Inv
   body: (equivShrink α).symm.Inv
 
 中文:
-实例 [Inv
-  签名: α] : Inv (Shrink.{v} α)
+实例 [取逆
+  签名: α] : 取逆 (Shrink.{v} α)
   定义体: (equivShrink α).symm.Inv
 -/
 @[to_additive] instance [Inv α] : Inv (Shrink.{v} α) := (equivShrink α).symm.Inv
@@ -84,8 +84,8 @@ instance [Pow
   body: (equivShrink α).symm.pow M
 
 中文:
-实例 [Pow
-  签名: α M] : Pow (Shrink.{v} α) M
+实例 [幂
+  签名: α M] : 幂 (Shrink.{v} α) M
   定义体: (equivShrink α).symm.pow M
 -/
 @[to_additive] instance [Pow α M] : Pow (Shrink.{v} α) M := (equivShrink α).symm.pow M
@@ -106,7 +106,7 @@ lemma equivShrink_symm_one
 
 中文:
 引理 equivShrink_symm_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (equivShrink α).symm 1 = 1
   证明: (equivShrink α).symm_apply_apply 1
 
@@ -131,7 +131,7 @@ lemma equivShrink_symm_mul
 
 中文:
 引理 equivShrink_symm_mul
-  条件: [Mul α] (x y : Shrink α)
+  条件: [乘法 α] (x y : Shrink α)
   证明: by
   simp [Equiv.mul_def]
 
@@ -157,7 +157,7 @@ lemma equivShrink_mul
 
 中文:
 引理 equivShrink_mul
-  条件: [Mul α] (x y : α)
+  条件: [乘法 α] (x y : α)
   证明: by
   simp [Equiv.mul_def]
 
@@ -183,7 +183,7 @@ lemma equivShrink_symm_smul
 
 中文:
 引理 equivShrink_symm_smul
-  条件: {M : 类型} [SMul M α] (m : M) (x : Shrink α)
+  条件: {M : 类型} [标量乘法 M α] (m : M) (x : Shrink α)
   证明: by
   simp [Equiv.smul_def]
 
@@ -208,7 +208,7 @@ lemma equivShrink_smul
 
 中文:
 引理 equivShrink_smul
-  条件: {M : 类型} [SMul M α] (m : M) (x : α)
+  条件: {M : 类型} [标量乘法 M α] (m : M) (x : α)
   证明: by
   simp [Equiv.smul_def]
 @[to_additive (attr := simp)]
@@ -232,7 +232,7 @@ lemma equivShrink_symm_div
 
 中文:
 引理 equivShrink_symm_div
-  条件: [Div α] (x y : Shrink α)
+  条件: [除法 α] (x y : Shrink α)
   证明: by
   simp [Equiv.div_def]
 
@@ -258,7 +258,7 @@ lemma equivShrink_div
 
 中文:
 引理 equivShrink_div
-  条件: [Div α] (x y : α)
+  条件: [除法 α] (x y : α)
   证明: by
   simp [Equiv.div_def]
 
@@ -284,7 +284,7 @@ lemma equivShrink_symm_inv
 
 中文:
 引理 equivShrink_symm_inv
-  条件: [Inv α] (x : Shrink α)
+  条件: [取逆 α] (x : Shrink α)
   证明: by
   simp [Equiv.inv_def]
 
@@ -309,7 +309,7 @@ lemma equivShrink_inv
 
 中文:
 引理 equivShrink_inv
-  条件: [Inv α] (x : α)
+  条件: [取逆 α] (x : α)
   结论: equivShrink α x⁻¹ = (equivShrink α x)⁻¹
   证明: by
   simp [Equiv.inv_def]
@@ -335,7 +335,7 @@ definition mulEquiv
 
 中文:
 定义 mulEquiv
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: (equivShrink α).symm.mulEquiv
 
 @[to_additive]
@@ -356,8 +356,8 @@ instance [Semigroup
 @[to_additive]
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup (Shrink.{v} α)
+实例 [半群
+  签名: α] : 半群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.semigroup
 
 @[to_additive]
@@ -378,8 +378,8 @@ instance [CommSemigroup
 @[to_additive]
 
 中文:
-实例 [CommSemigroup
-  签名: α] : CommSemigroup (Shrink.{v} α)
+实例 [交换半群
+  签名: α] : 交换半群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.commSemigroup
 
 @[to_additive]
@@ -400,8 +400,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsLeftCancelMul α] : IsLeftCancelMul (Shrink.{v} α)
+实例 [乘法
+  签名: α] [左乘消去 α] : 左乘消去 (Shrink.{v} α)
   定义体: (equivShrink α).symm.isLeftCancelMul
 
 @[to_additive]
@@ -423,8 +423,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsRightCancelMul α] : IsRightCancelMul (Shrink.{v} α)
+实例 [乘法
+  签名: α] [右乘消去 α] : 右乘消去 (Shrink.{v} α)
   定义体: (equivShrink α).symm.isRightCancelMul
 
 @[to_additive]
@@ -446,8 +446,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsCancelMul α] : IsCancelMul (Shrink.{v} α)
+实例 [乘法
+  签名: α] [是消去乘法 α] : 是消去乘法 (Shrink.{v} α)
   定义体: (equivShrink α).symm.isCancelMul
 
 @[to_additive]
@@ -468,8 +468,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass (Shrink.{v} α)
+实例 [MulOne类
+  签名: α] : MulOne类 (Shrink.{v} α)
   定义体: (equivShrink α).symm.mulOneClass
 
 @[to_additive]
@@ -490,8 +490,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] : Monoid (Shrink.{v} α)
+实例 [幺半群
+  签名: α] : 幺半群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.monoid
 
 @[to_additive]
@@ -512,8 +512,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid (Shrink.{v} α)
+实例 [交换幺半群
+  签名: α] : 交换幺半群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.commMonoid
 
 @[to_additive]
@@ -534,8 +534,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: α] : Group (Shrink.{v} α)
+实例 [群
+  签名: α] : 群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.group
 
 @[to_additive]
@@ -556,8 +556,8 @@ instance [CommGroup
 @[to_additive]
 
 中文:
-实例 [CommGroup
-  签名: α] : CommGroup (Shrink.{v} α)
+实例 [交换群
+  签名: α] : 交换群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.commGroup
 
 @[to_additive]
@@ -576,8 +576,8 @@ instance [Monoid
   body: (equivShrink α).symm.mulAction M
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M α] : MulAction M (Shrink.{v} α)
+实例 [幺半群
+  签名: M] [乘法作用 M α] : 乘法作用 M (Shrink.{v} α)
   定义体: (equivShrink α).symm.mulAction M
 
 Depends on / 依赖: equivShrink, mulAction, symm.mulAction

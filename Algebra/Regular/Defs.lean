@@ -77,8 +77,8 @@ structure IsAddRegular
     - right : IsAddRightRegular c
 
 中文:
-结构 IsAddRegular
-  参数: {R : 类型} [Add R] (c : R)
+结构 是加法正则
+  参数: {R : 类型} [加法 R] (c : R)
   公理与运算 (2 个):
     - left : IsAddLeftRegular c
     - right : IsAddRightRegular c
@@ -100,7 +100,7 @@ structure IsRegular
     - right : IsRightRegular c
 
 中文:
-结构 IsRegular
+结构 是正则
   参数: (c : R)
   公理与运算 (2 个):
     - left : IsLeftRegular c
@@ -129,7 +129,7 @@ theorem isRegular_iff
 中文:
 定理 isRegular_iff
   条件: {c : R}
-  结论: IsRegular c ↔ IsLeftRegular c ∧ IsRightRegular c
+  结论: 是正则 c ↔ IsLeftRegular c ∧ IsRightRegular c
   证明: ⟨fun ⟨h1, h2⟩ => ⟨h1, h2⟩, fun ⟨h1, h2⟩ => ⟨h1, h2⟩⟩
 -/
 theorem isRegular_iff {c : R} : IsRegular c ↔ IsLeftRegular c ∧ IsRightRegular c :=

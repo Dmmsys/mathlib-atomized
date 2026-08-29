@@ -95,7 +95,7 @@ lemma exists_mem_interior_convexHull_affineBasis
       Pi.vadd_def, -vadd_eq_add, v
 
 中文:
-引理 exists_mem_interior_convexHull_affineBasis
+引理 存在_mem_interior_convexHull_affineBasis
   条件: (hs : s in 𝓝 x)
   证明: by
   -- By translating, WLOG `x` is the origin.
@@ -162,7 +162,7 @@ theorem Convex.exists_subset_interior_convexHull_finset_of_isCompact
       (c := fun x => interio
 
 中文:
-定理 Convex.exists_subset_interior_convexHull_finset_of_isCompact
+定理 凸.存在_subset_interior_convexHull_finset_of_isCompact
   证明: by
   classical
   rcases mem_nhdsSet_iff_exists.1 ht with ⟨U, hU₁, hU₂, hU₃⟩

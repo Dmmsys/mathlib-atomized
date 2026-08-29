@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConvexSpace R (X × Y)
+  签名: 凸空间 R (X × Y)
   定义体: .mk
   (fun w => (w.iConvexComb fst, w.iConvexComb snd))
   (by simp)
@@ -64,7 +64,7 @@ lemma fst_sConvexComb
 
 中文:
 引理 fst_sConvexComb
-  条件: (w : StdSimplex R (X × Y))
+  条件: (w : 标准单纯形 R (X × Y))
   结论: w.sConvexComb.fst = w.iConvexComb fst
   证明: rfl
 
@@ -86,7 +86,7 @@ lemma snd_sConvexComb
 
 中文:
 引理 snd_sConvexComb
-  条件: (w : StdSimplex R (X × Y))
+  条件: (w : 标准单纯形 R (X × Y))
   结论: w.sConvexComb.snd = w.iConvexComb snd
   证明: rfl
 
@@ -107,7 +107,7 @@ lemma isAffineMap_fst
 
 中文:
 引理 isAffineMap_fst
-  结论: IsAffineMap R (fst : X × Y -> X) where map_sConvexComb
+  结论: 是仿射映射 R (fst : X × Y -> X) where map_sConvexComb
   证明: fst_sConvexComb
 
 @[fun_prop]
@@ -129,7 +129,7 @@ lemma isAffineMap_snd
 
 中文:
 引理 isAffineMap_snd
-  结论: IsAffineMap R (snd : X × Y -> Y) where map_sConvexComb
+  结论: 是仿射映射 R (snd : X × Y -> Y) where map_sConvexComb
   证明: snd_sConvexComb
 
 @[simp]
@@ -151,7 +151,7 @@ lemma fst_iConvexComb
 
 中文:
 引理 fst_iConvexComb
-  条件: (w : StdSimplex R I) (f : I -> X × Y)
+  条件: (w : 标准单纯形 R I) (f : I -> X × Y)
   证明: isAffineMap_fst.map_iConvexComb ..
 
 @[simp]
@@ -175,7 +175,7 @@ lemma snd_iConvexComb
 
 中文:
 引理 snd_iConvexComb
-  条件: (w : StdSimplex R I) (f : I -> X × Y)
+  条件: (w : 标准单纯形 R I) (f : I -> X × Y)
   证明: isAffineMap_snd.map_iConvexComb ..
 
 @[simp]
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConvexSpace R (对任意 i, X i)
+  签名: 凸空间 R (对任意 i, X i)
   定义体: .mk
   (fun w i => w.iConvexComb (· i))
   (by simp)
@@ -276,7 +276,7 @@ lemma sConvexComb_apply
 
 中文:
 引理 sConvexComb_apply
-  条件: (w : StdSimplex R (对任意 i, X i)) (i : ι)
+  条件: (w : 标准单纯形 R (对任意 i, X i)) (i : ι)
   证明: rfl
 
 @[fun_prop]
@@ -297,7 +297,7 @@ lemma isAffineMap_eval
 
 中文:
 引理 isAffineMap_eval
-  结论: IsAffineMap R (· i : (对任意 i, X i) -> X i) where
+  结论: 是仿射映射 R (· i : (对任意 i, X i) -> X i) where
   证明: sConvexComb_apply ..
 
 @[simp]
@@ -320,7 +320,7 @@ lemma iConvexComb_apply
 
 中文:
 引理 iConvexComb_apply
-  条件: (w : StdSimplex R I) (f : I -> 对任意 i, X i) (i : ι)
+  条件: (w : 标准单纯形 R I) (f : I -> 对任意 i, X i) (i : ι)
   证明: isAffineMap_eval.map_iConvexComb ..
 
 @[simp]
@@ -375,7 +375,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConvexSpace R (ι ->₀ X)
+  签名: 凸空间 R (ι ->₀ X)
   定义体: .mk
   (fun w => by
     classical
@@ -411,7 +411,7 @@ lemma sConvexComb_apply
 
 中文:
 引理 sConvexComb_apply
-  条件: (w : StdSimplex R (ι ->₀ X)) (i : ι)
+  条件: (w : 标准单纯形 R (ι ->₀ X)) (i : ι)
   证明: rfl
 
 @[fun_prop]
@@ -432,7 +432,7 @@ lemma isAffineMap_eval
 
 中文:
 引理 isAffineMap_eval
-  结论: IsAffineMap R (· i : (ι ->₀ X) -> X) where
+  结论: 是仿射映射 R (· i : (ι ->₀ X) -> X) where
   证明: sConvexComb_apply ..
 
 @[simp]
@@ -455,7 +455,7 @@ lemma iConvexComb_apply
 
 中文:
 引理 iConvexComb_apply
-  条件: (w : StdSimplex R I) (f : I -> ι ->₀ X) (i : ι)
+  条件: (w : 标准单纯形 R I) (f : I -> ι ->₀ X) (i : ι)
   证明: isAffineMap_eval.map_iConvexComb ..
 
 @[simp]

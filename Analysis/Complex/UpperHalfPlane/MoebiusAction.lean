@@ -36,7 +36,7 @@ definition num
 
 中文:
 定义 num
-  签名: (g : GL (Fin 2) 实数) (z : Complex)
+  签名: (g : GL (有限集 2) 实数) (z : 复形)
   定义体: g 0 0 * z + g 0 1
 -/
 def num (g : GL (Fin 2) Real) (z : Complex) : Complex := g 0 0 * z + g 0 1
@@ -53,7 +53,7 @@ definition denom
 
 中文:
 定义 denom
-  签名: (g : GL (Fin 2) 实数) (z : Complex)
+  签名: (g : GL (有限集 2) 实数) (z : 复形)
   定义体: g 1 0 * z + g 1 1
 
 @[simp]
@@ -75,7 +75,7 @@ lemma num_neg
 
 中文:
 引理 num_neg
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   结论: num (-g) z = -(num g z)
   证明: by
   simp [num]; ring
@@ -98,7 +98,7 @@ lemma denom_neg
 
 中文:
 引理 denom_neg
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   结论: denom (-g) z = -(denom g z)
   证明: by
   simp [denom]; ring
@@ -123,7 +123,7 @@ theorem linear_ne_zero_of_im
 
 中文:
 定理 linear_ne_zero_of_im
-  条件: {cd : Fin 2 -> 实数} {z : Complex} (hz : z.im != 0) (h : cd != 0)
+  条件: {cd : 有限集 2 -> 实数} {z : 复形} (hz : z.im != 0) (h : cd != 0)
   证明: by
   contrapose h
   have : cd 0 = 0 := by
@@ -157,7 +157,7 @@ theorem linear_ne_zero
 
 中文:
 定理 linear_ne_zero
-  条件: {cd : Fin 2 -> 实数} (τ : ℍ) (h : cd != 0)
+  条件: {cd : 有限集 2 -> 实数} (τ : ℍ) (h : cd != 0)
   证明: linear_ne_zero_of_im τ.im_ne_zero h
 
 Depends on / 依赖: im_ne_zero, linear_ne_zero_of_im
@@ -181,7 +181,7 @@ theorem denom_ne_zero_of_im
 
 中文:
 定理 denom_ne_zero_of_im
-  条件: (g : GL (Fin 2) 实数) {z : Complex} (hz : z.im != 0)
+  条件: (g : GL (有限集 2) 实数) {z : 复形} (hz : z.im != 0)
   结论: denom g z != 0
   证明: by
   refine linear_ne_zero_of_im hz fun H => g.det.ne_zero ?_
@@ -207,7 +207,7 @@ theorem denom_ne_zero
 
 中文:
 定理 denom_ne_zero
-  条件: (g : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g : GL (有限集 2) 实数) (z : ℍ)
   结论: denom g z != 0
   证明: denom_ne_zero_of_im g z.im_ne_zero
 
@@ -226,7 +226,7 @@ theorem normSq_denom_pos
 
 中文:
 定理 normSq_denom_pos
-  条件: (g : GL (Fin 2) 实数) {z : Complex} (hz : z.im != 0)
+  条件: (g : GL (有限集 2) 实数) {z : 复形} (hz : z.im != 0)
   证明: Complex.normSq_pos.mpr (denom_ne_zero_of_im g hz)
 
 Depends on / 依赖: Complex.normSq_pos.mpr, denom_ne_zero_of_im, normSq_pos
@@ -245,7 +245,7 @@ theorem normSq_denom_ne_zero
 
 中文:
 定理 normSq_denom_ne_zero
-  条件: (g : GL (Fin 2) 实数) {z : Complex} (hz : z.im != 0)
+  条件: (g : GL (有限集 2) 实数) {z : 复形} (hz : z.im != 0)
   证明: ne_of_gt (normSq_denom_pos g hz)
 
 Depends on / 依赖: ne_of_gt, normSq_denom_pos
@@ -270,7 +270,7 @@ lemma denom_cocycle
 
 中文:
 引理 denom_cocycle
-  条件: (g h : GL (Fin 2) 实数) {z : Complex} (hz : z.im != 0)
+  条件: (g h : GL (有限集 2) 实数) {z : 复形} (hz : z.im != 0)
   证明: by
   change _ = (_ * (_ / _) + _) * _
   field_simp [denom_ne_zero_of_im h hz]
@@ -304,7 +304,7 @@ lemma moebius_im
 
 中文:
 引理 moebius_im
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   证明: by
   simp only [num, denom, Complex.div_im, Complex.add_im, Complex.mul_im, Complex.ofReal_re,
     Complex.ofReal_im, zero_mul, add_zero, Complex.add_re, Complex.mul_re, sub_zero, ← sub_div,
@@ -330,7 +330,7 @@ definition σ
 
 中文:
 定义 σ
-  签名: (g : GL (Fin 2) 实数)
+  签名: (g : GL (有限集 2) 实数)
   定义体: if 0 < g.det.val then .refl Real Complex else Complex.conjCAE
 
 Depends on / 依赖: Complex.conjCAE, conjCAE, g.det.val
@@ -353,7 +353,7 @@ lemma σ_conj
 
 中文:
 引理 σ_conj
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   结论: σ g (conj z) = conj (σ g z)
   证明: by
   simp only [σ]
@@ -380,8 +380,8 @@ lemma σ_ofReal
   split_ifs <;> simp
 
 中文:
-引理 σ_ofReal
-  条件: (g : GL (Fin 2) 实数) (y : 实数)
+引理 σ_of实数
+  条件: (g : GL (有限集 2) 实数) (y : 实数)
   结论: σ g y = y
   证明: by
   simp only [σ]
@@ -405,7 +405,7 @@ lemma σ_num
 
 中文:
 引理 σ_num
-  条件: (g h : GL (Fin 2) 实数) (z : Complex)
+  条件: (g h : GL (有限集 2) 实数) (z : 复形)
   结论: σ g (num h z) = num h (σ g z)
   证明: by
   simp [num]
@@ -425,7 +425,7 @@ lemma σ_denom
 
 中文:
 引理 σ_denom
-  条件: (g h : GL (Fin 2) 实数) (z : Complex)
+  条件: (g h : GL (有限集 2) 实数) (z : 复形)
   结论: σ g (denom h z) = denom h (σ g z)
   证明: by
   simp [denom]
@@ -449,7 +449,7 @@ lemma σ_neg
 
 中文:
 引理 σ_neg
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: σ (-g) = σ g
   证明: by
   simp [σ, det_neg]
@@ -475,7 +475,7 @@ lemma σ_sq
 
 中文:
 引理 σ_sq
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   结论: σ g (σ g z) = z
   证明: by
   simp only [σ]
@@ -529,7 +529,7 @@ lemma σ_mul
 
 中文:
 引理 σ_mul
-  条件: (g g' : GL (Fin 2) 实数) (z : Complex)
+  条件: (g g' : GL (有限集 2) 实数) (z : 复形)
   结论: σ (g * g') z = σ g (σ g' z)
   证明: by
   simp only [σ, map_mul, Units.val_mul]
@@ -563,7 +563,7 @@ lemma σ_mul_comm
 
 中文:
 引理 σ_mul_comm
-  条件: (g h : GL (Fin 2) 实数) (z : Complex)
+  条件: (g h : GL (有限集 2) 实数) (z : 复形)
   结论: σ g (σ h z) = σ h (σ g z)
   证明: by
   simp only [σ]
@@ -588,7 +588,7 @@ lemma norm_σ
 
 中文:
 引理 norm_σ
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   结论: ‖σ g z‖ = ‖z‖
   证明: by
   simp only [σ]
@@ -608,7 +608,7 @@ definition smulAux'
 
 中文:
 定义 smulAux'
-  签名: (g : GL (Fin 2) 实数) (z : Complex)
+  签名: (g : GL (有限集 2) 实数) (z : 复形)
   定义体: σ g (num g z / denom g z)
 -/
 def smulAux' (g : GL (Fin 2) Real) (z : Complex) : Complex := σ g (num g z / denom g z)
@@ -628,7 +628,7 @@ lemma smulAux'_im
 
 中文:
 引理 smulAux'_im
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   证明: by
   simp only [smulAux', σ]
   split_ifs with h <;>
@@ -656,7 +656,7 @@ definition smulAux
 
 中文:
 定义 smulAux
-  签名: (g : GL (Fin 2) 实数) (z : ℍ)
+  签名: (g : GL (有限集 2) 实数) (z : ℍ)
   定义体: mk (smulAux' g z) by
     rw [smulAux'_im]
     exact div_pos (mul_pos (abs_pos.mpr g.det.ne_zero) z.im_pos) (normSq_denom_pos _ z.im_ne_zero)
@@ -679,7 +679,7 @@ lemma denom_cocycle'
 
 中文:
 引理 denom_cocycle'
-  条件: (g h : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g h : GL (有限集 2) 实数) (z : ℍ)
   证明: by
   simpa [smulAux, smulAux', denom, σ_sq] using denom_cocycle g h z.im_ne_zero
 
@@ -706,7 +706,7 @@ theorem mul_smul'
 
 中文:
 定理 mul_smul'
-  条件: (g h : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g h : GL (有限集 2) 实数) (z : ℍ)
   证明: by
   ext : 1
   simp only [smulAux, coe_mk, smulAux', map_div₀, σ_num, σ_denom, σ_mul]
@@ -750,7 +750,7 @@ instance glAction
 
 中文:
 实例 glAction
-  签名: : MulAction (GL (Fin 2) 实数) ℍ where
+  签名: : 乘法作用 (GL (有限集 2) 实数) ℍ where
   定义体: smulAux
   one_smul z := by
     change smulAux 1 z = z
@@ -776,7 +776,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (g : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g : GL (有限集 2) 实数) (z : ℍ)
   证明: rfl
 -/
 lemma coe_smul (g : GL (Fin 2) Real) (z : ℍ) :
@@ -794,7 +794,7 @@ lemma coe_smul_of_det_pos
 
 中文:
 引理 coe_smul_of_det_pos
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.det.val) (z : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.det.val) (z : ℍ)
   证明: by
   change smulAux' g z = _
   rw [smulAux']; rw [σ]; rw [if_pos hg]; rw [ContinuousAlgEquiv.refl_apply]; rw [num]; rw [denom]
@@ -816,7 +816,7 @@ lemma denom_cocycle_σ
 
 中文:
 引理 denom_cocycle_σ
-  条件: (g h : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g h : GL (有限集 2) 实数) (z : ℍ)
   证明: denom_cocycle' g h z
 
 Depends on / 依赖: denom_cocycle
@@ -836,7 +836,7 @@ lemma glPos_smul_def
 
 中文:
 引理 glPos_smul_def
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.det.val) (z : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.det.val) (z : ℍ)
   证明: by
   ext; simp [coe_smul_of_det_pos hg]
 
@@ -916,7 +916,7 @@ lemma im_smul_eq_div_normSq
 
 中文:
 引理 im_smul_eq_div_normSq
-  结论: (g • z).im = |g.det.val| * z.im / Complex.normSq (denom g z)
+  结论: (g • z).im = |g.det.val| * z.im / 复形.normSq (denom g z)
   证明: smulAux'_im g z
 
 Depends on / 依赖: smulAux
@@ -941,7 +941,7 @@ theorem c_mul_im_sq_le_normSq_denom
 
 中文:
 定理 c_mul_im_sq_le_normSq_denom
-  结论: (g 1 0 * z.im) ^ 2 <= Complex.normSq (denom g z)
+  结论: (g 1 0 * z.im) ^ 2 <= 复形.normSq (denom g z)
   证明: by
   set c := g 1 0
   set d := g 1 1
@@ -1047,7 +1047,7 @@ theorem num_scalar
 中文:
 定理 num_scalar
   条件: (u : 实数ˣ) (z : ℍ)
-  结论: num (.scalar (Fin 2) u) z = u * z
+  结论: num (.scalar (有限集 2) u) z = u * z
   证明: by
   simp [num]
 
@@ -1072,7 +1072,7 @@ theorem denom_scalar
 中文:
 定理 denom_scalar
   条件: (u : 实数ˣ) (z : ℍ)
-  结论: denom (.scalar (Fin 2) u) z = u
+  结论: denom (.scalar (有限集 2) u) z = u
   证明: by
   simp [denom]
 
@@ -1123,7 +1123,7 @@ refine ⟨.mkOfDetNeZero m by simp [m, im_ne_zero], ?_⟩
 
 中文:
 实例 :
-  签名: MulAction.IsPretransitive (GL (Fin 2) 实数) ℍ
+  签名: 乘法作用.是Pretransitive (GL (有限集 2) 实数) ℍ
   定义体: by
     set m : Matrix (Fin 2) (Fin 2) Real := !![w.im, z.im * w.re - w.im * z.re; 0, z.im]
 refine ⟨.mkOfDetNeZero m by simp [m, im_ne_zero], ?_⟩
@@ -1155,7 +1155,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction PGL(2, 实数) ℍ
+  签名: 乘法作用 PGL(2, 实数) ℍ
   定义体: Matrix.ProjGenLinGroup.mulActionOfGL glScalar_smul
 
 @[simp]
@@ -1176,7 +1176,7 @@ theorem pglMk_smul
 
 中文:
 定理 pglMk_smul
-  条件: (g : GL (Fin 2) 实数) (z : ℍ)
+  条件: (g : GL (有限集 2) 实数) (z : ℍ)
   证明: ProjGenLinGroup.mk_smul ..
 
 Depends on / 依赖: ProjGenLinGroup, ProjGenLinGroup.mk_smul, mk_smul
@@ -1195,7 +1195,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction.IsPretransitive PGL(2, 实数) ℍ
+  签名: 乘法作用.是Pretransitive PGL(2, 实数) ℍ
   定义体: .of_smul_eq .mk pglMk_smul _ _
 
 Depends on / 依赖: of_smul_eq, pglMk_smul
@@ -1217,7 +1217,7 @@ instance SLAction
 
 中文:
 实例 SLAction
-  签名: {R : 类型} [CommRing R] [Algebra R 实数]
+  签名: {R : 类型} [交换环 R] [代数 R 实数]
   定义体: MulAction.compHom ℍ SpecialLinearGroup.mapGL Real
 
 Depends on / 依赖: MulAction, MulAction.compHom, SpecialLinearGroup, SpecialLinearGroup.mapGL, compHom
@@ -1237,7 +1237,7 @@ theorem coe_specialLinearGroup_apply
 
 中文:
 定理 coe_specialLinearGroup_apply
-  条件: {R : 类型} [CommRing R] [Algebra R 实数] (g : SL(2, R)) (z : ℍ)
+  条件: {R : 类型} [交换环 R] [代数 R 实数] (g : SL(2, R)) (z : ℍ)
   证明: by
   rw [MulAction.compHom_smul_def]; rw [coe_smul_of_det_pos (by simp)]
   rfl
@@ -1262,7 +1262,7 @@ theorem specialLinearGroup_apply
 
 中文:
 定理 specialLinearGroup_apply
-  条件: {R : 类型} [CommRing R] [Algebra R 实数] (g : SL(2, R)) (z : ℍ)
+  条件: {R : 类型} [交换环 R] [代数 R 实数] (g : SL(2, R)) (z : ℍ)
   证明: by
   ext; simp [coe_specialLinearGroup_apply]
 
@@ -1368,7 +1368,7 @@ theorem exists_SL2_smul_eq_of_apply_zero_one_eq_zero
   ring
 
 中文:
-定理 exists_SL2_smul_eq_of_apply_zero_one_eq_zero
+定理 存在_SL2_smul_eq_of_apply_zero_one_eq_zero
   条件: (g : SL(2, 实数)) (hc : g 1 0 = 0)
   证明: by
   obtain ⟨a, b, ha, rfl⟩ := g.fin_two_exists_eq_mk_of_apply_zero_one_eq_zero hc
@@ -1403,7 +1403,7 @@ theorem exists_SL2_smul_eq_of_apply_zero_one_ne_zero
   suffices (↑a * z + b) / (↑c * z + d) = a / 
 
 中文:
-定理 exists_SL2_smul_eq_of_apply_zero_one_ne_zero
+定理 存在_SL2_smul_eq_of_apply_zero_one_ne_zero
   条件: (g : SL(2, 实数)) (hc : g 1 0 != 0)
   证明: by
   have h_denom (z : ℍ) := denom_ne_zero g z
@@ -1537,7 +1537,7 @@ instance isPretransitiveSL2R
 
 中文:
 实例 isPretransitiveSL2R
-  签名: : MulAction.IsPretransitive SL(2, 实数) ℍ
+  签名: : 乘法作用.是Pretransitive SL(2, 实数) ℍ
   定义体: .of_orbit fun z => ⟨_, toSL2R_smul_I z⟩
 
 Depends on / 依赖: of_orbit, toSL2R_smul_I
@@ -1555,7 +1555,7 @@ instance isPretransitiveGL2R
 
 中文:
 实例 isPretransitiveGL2R
-  签名: : MulAction.IsPretransitive (GL (Fin 2) 实数) ℍ
+  签名: : 乘法作用.是Pretransitive (GL (有限集 2) 实数) ℍ
   定义体: .of_smul_eq ((↑) : SL(2, Real) -> _) fun {g z} => (MulAction.compHom_smul_def _ g z).symm
 
 Depends on / 依赖: MulAction, MulAction.compHom_smul_def, compHom_smul_def, of_smul_eq
@@ -1577,7 +1577,7 @@ definition J
 
 中文:
 定义 J
-  签名: : GL (Fin 2) 实数
+  签名: : GL (有限集 2) 实数
   定义体: .mkOfDetNeZero !![-1, 0; 0, 1] (by simp)
 
 Depends on / 依赖: mkOfDetNeZero
@@ -1597,7 +1597,7 @@ lemma coe_J_smul
 中文:
 引理 coe_J_smul
   条件: (τ : ℍ)
-  结论: (↑(J • τ) : Complex) = -conj ↑τ
+  结论: (↑(J • τ) : 复形) = -conj ↑τ
   证明: by
   simp [UpperHalfPlane.coe_smul, σ, J, show ¬(1 : Real) < 0 by simp, num, denom]
 
@@ -1661,7 +1661,7 @@ lemma sigma_J
 
 中文:
 引理 sigma_J
-  结论: σ J = Complex.conjCAE
+  结论: σ J = 复形.conjCAE
   证明: by simp [σ, J]
 -/
 @[simp] lemma sigma_J : σ J = Complex.conjCAE := by simp [σ, J]
@@ -1679,7 +1679,7 @@ lemma denom_J
 
 中文:
 引理 denom_J
-  条件: (τ : Complex)
+  条件: (τ : 复形)
   结论: denom J τ = 1
   证明: by simp [J, denom]
 
@@ -1700,7 +1700,7 @@ lemma denom_J_mul
 
 中文:
 引理 denom_J_mul
-  条件: (g : GL (Fin 2) 实数) (τ : Complex)
+  条件: (g : GL (有限集 2) 实数) (τ : 复形)
   结论: denom (J * g) τ = denom g τ
   证明: by
   simp [denom, vecMul, vecHead, vecTail]
@@ -1827,7 +1827,7 @@ theorem coe_apply_complex
 
 中文:
 定理 coe_apply_complex
-  条件: {g : SL(2, 整数)} {i j : Fin 2}
+  条件: {g : SL(2, 整数)} {i j : 有限集 2}
   证明: rfl
 
 @[deprecated "use GL(2, Real)" (since := "2026-04-29")]
@@ -1852,7 +1852,7 @@ theorem det_coe
 中文:
 定理 det_coe
   条件: {g : SL(2, 整数)}
-  结论: det (Units.val <| Subtype.val <| coe g) = 1
+  结论: det (单位群.val <| 子类型.val <| coe g) = 1
   证明: by
   simp only [SpecialLinearGroup.coe_GLPos_coe_GL_coe_matrix, SpecialLinearGroup.det_coe, coe]
 
@@ -1896,7 +1896,7 @@ definition SLOnGLPos
 
 中文:
 定义 SLOnGLPos
-  签名: : SMul SL(2, 整数) GL(2, 实数)⁺
+  签名: : 标量乘法 SL(2, 整数) GL(2, 实数)⁺
   定义体: ⟨fun s g => s * g⟩
 -/
 def SLOnGLPos : SMul SL(2, Int) GL(2, Real)⁺ :=
@@ -1939,7 +1939,7 @@ lemma SL_to_GL_tower
 
 中文:
 引理 SL_to_GL_tower
-  结论: IsScalarTower SL(2, 整数) GL(2, 实数)⁺ ℍ where
+  结论: 标量塔 SL(2, 整数) GL(2, 实数)⁺ ℍ where
   证明: by
     simp only [SLOnGLPos_smul_apply]
     apply mul_smul'
@@ -1970,7 +1970,7 @@ theorem sl_moeb
 
 中文:
 定理 sl_moeb
-  结论: g • z = (g : GL (Fin 2) 实数) • z
+  结论: g • z = (g : GL (有限集 2) 实数) • z
   证明: rfl
 
 @[simp high]
@@ -2015,7 +2015,7 @@ theorem im_smul_eq_div_normSq
 
 中文:
 定理 im_smul_eq_div_normSq
-  结论: (g • z).im = z.im / Complex.normSq (denom g z)
+  结论: (g • z).im = z.im / 复形.normSq (denom g z)
   证明: by
   simpa using z.im_smul_eq_div_normSq g
 

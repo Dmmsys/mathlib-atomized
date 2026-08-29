@@ -94,8 +94,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: (f : α -> β) (hf : Injective f)
-  结论: Injective (mapFun f : 𝕎 α -> 𝕎 β)
+  条件: (f : α -> β) (hf : 单射 f)
+  结论: 单射 (mapFun f : 𝕎 α -> 𝕎 β)
   证明: fun _ _ h => ext fun n => hf (congr_arg (fun x => coeff x n) h :)
 
 Depends on / 依赖: congr_arg
@@ -116,8 +116,8 @@ theorem surjective
 
 中文:
 定理 surjective
-  条件: (f : α -> β) (hf : Surjective f)
-  结论: Surjective (mapFun f : 𝕎 α -> 𝕎 β)
+  条件: (f : α -> β) (hf : 满射 f)
+  结论: 满射 (mapFun f : 𝕎 α -> 𝕎 β)
   证明: fun x =>
 ⟨mk _ fun n => Classical.choose hf x.coeff n,
     by ext n; simp only [mapFun, coeff_mk, comp_apply, Classical.choose_spec (hf (x.coeff n))]⟩
@@ -258,7 +258,7 @@ theorem nsmul
 
 中文:
 定理 nsmul
-  条件: (n : 自然数) (x : WittVector p R)
+  条件: (n : 自然数) (x : Witt向量 p R)
   结论: mapFun f (n • x) = n • mapFun f x
   证明: by map_fun_tac
 
@@ -277,7 +277,7 @@ theorem zsmul
 
 中文:
 定理 zsmul
-  条件: (z : 整数) (x : WittVector p R)
+  条件: (z : 整数) (x : Witt向量 p R)
   结论: mapFun f (z • x) = z • mapFun f x
   证明: by map_fun_tac
 
@@ -581,7 +581,7 @@ lemma ghostFun_nsmul
 
 中文:
 引理 ghostFun_nsmul
-  条件: (m : 自然数) (x : WittVector p R)
+  条件: (m : 自然数) (x : Witt向量 p R)
   结论: ghostFun (m • x) = m • ghostFun x
   证明: by
   ghost_fun_tac m • (X 0), ![x.coeff]
@@ -601,7 +601,7 @@ lemma ghostFun_zsmul
 
 中文:
 引理 ghostFun_zsmul
-  条件: (m : 整数) (x : WittVector p R)
+  条件: (m : 整数) (x : Witt向量 p R)
   结论: ghostFun (m • x) = m • ghostFun x
   证明: by
   ghost_fun_tac m • (X 0), ![x.coeff]
@@ -653,7 +653,7 @@ definition ghostEquiv'
 
 中文:
 定义 ghostEquiv'
-  签名: [Invertible (p : R)]
+  签名: [可逆 (p : R)]
   定义体: ghostFun
   invFun x := mk p fun n => aeval x (xInTermsOfW p R n)
   left_inv := by
@@ -707,7 +707,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (𝕎 R)
+  签名: 交换环 (𝕎 R)
   定义体: (mapFun.surjective _ <| counit_surjective _).commRing (mapFun <| MvPolynomial.counit _)
     (mapFun.zero _) (mapFun.one _) (mapFun.add _) (mapFun.mul _) (mapFun.neg _) (mapFun.sub _)
     (mapFun.nsmul _) (mapFun.zsmul _) (mapFun.pow _) (mapFun.natCast _) (mapFun.intCast _)
@@ -762,8 +762,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (f : R ->+* S) (hf : Injective f)
-  结论: Injective (map f : 𝕎 R -> 𝕎 S)
+  条件: (f : R ->+* S) (hf : 单射 f)
+  结论: 单射 (map f : 𝕎 R -> 𝕎 S)
   证明: mapFun.injective f hf
 
 Depends on / 依赖: injective, mapFun, mapFun.injective
@@ -784,8 +784,8 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (f : R ->+* S) (hf : Surjective f)
-  结论: Surjective (map f : 𝕎 R -> 𝕎 S)
+  条件: (f : R ->+* S) (hf : 满射 f)
+  结论: 满射 (map f : 𝕎 R -> 𝕎 S)
   证明: mapFun.surjective f hf
 
 @[simp]
@@ -827,7 +827,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: WittVector.map (RingHom.id R) = RingHom.id (𝕎 R)
+  结论: Witt向量.map (环态射.id R) = 环态射.id (𝕎 R)
   证明: by
   ext; simp
 -/
@@ -849,7 +849,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: (f : R ->+* S) {x : WittVector p R}
+  条件: (f : R ->+* S) {x : Witt向量 p R}
   证明: by
   refine ⟨fun h n => ?_, fun h => ?_⟩
   · apply_fun (·.coeff n) at h
@@ -1052,7 +1052,7 @@ theorem ghostMap.bijective_of_invertible
 
 中文:
 定理 ghostMap.bijective_of_invertible
-  结论: Function.Bijective (ghostMap : 𝕎 R -> 自然数 -> R)
+  结论: 函数.双射 (ghostMap : 𝕎 R -> 自然数 -> R)
   证明: (ghostEquiv p R).bijective
 
 Depends on / 依赖: bijective, ghostEquiv
@@ -1103,8 +1103,8 @@ instance [Nontrivial
   body: constantCoeff.domain_nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (𝕎 R)
+实例 [非平凡
+  签名: R] : 非平凡 (𝕎 R)
   定义体: constantCoeff.domain_nontrivial
 
 Depends on / 依赖: constantCoeff, constantCoeff.domain_nontrivial, domain_nontrivial

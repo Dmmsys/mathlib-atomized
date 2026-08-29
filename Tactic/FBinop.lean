@@ -52,12 +52,12 @@ inductive Tree
     - macroExpansion: (macroName : Name) (stx stx' : Syntax) (nested : Tree)
 
 中文:
-归纳类型 Tree
+归纳类型 树
   参数: where
   构造子 (3 个):
     - term: (ref : Syntax) (infoTrees : PersistentArray InfoTree) (val : Expr)
-    - binop: (ref : Syntax) (f : Expr) (lhs rhs : Tree)
-    - macroExpansion: (macroName : Name) (stx stx' : Syntax) (nested : Tree)
+    - binop: (ref : Syntax) (f : Expr) (lhs rhs : 树)
+    - macroExpansion: (macroName : Name) (stx stx' : Syntax) (nested : 树)
 -/
 private inductive Tree where
   /-- Leaf of the tree. Stores the generated `InfoTree` from elaborating `val`. -/
@@ -135,7 +135,7 @@ structure SRec
   参数: where
   公理与运算 (2 个):
     - name : Name
-    - args : Array Expr
+    - args : 数组 Expr
 
 Depends on / 依赖: Meta.isType, args.back, args.pop, args.size, e.getAppArgs, e.getAppFn, e.letBody, e.letValue, extractS, getAppArgs, getAppFn, getFunInfoNArgs, info.back, info.pop, instantiate1, isInstImplicit, isType, letBody, letValue, paramInfo
 -/
@@ -277,8 +277,8 @@ structure AnalyzeResult
 结构 AnalyzeResult
   参数: where
   公理与运算 (2 个):
-    - maxS? : Option SRec  [默认: none]
-    - hasUncomparable : 布尔  [默认: false]
+    - maxS? : 选项类型 SRec  [默认: none]
+    - hasUncomparable : 布尔值  [默认: false]
 
 Depends on / 依赖: LinearOrder, LinearOrder.supConvergenceClass, TopologicalSpace, supConvergenceClass
 -/
@@ -307,7 +307,7 @@ definition analyze
 
 中文:
 定义 analyze
-  签名: (t : Tree) (expectedType? : Option Expr)
+  签名: (t : 树) (expectedType? : 选项类型 Expr)
   定义体: do
   let maxS? ←
     match expectedType? with
@@ -396,7 +396,7 @@ withRef ref withTermInfoContext' .anonymous ref do
 
 中文:
 定义 toExprCore
-  签名: (t : Tree)
+  签名: (t : 树)
   定义体: do
   match t with
   | .term _ trees e =>
@@ -433,7 +433,7 @@ definition applyCoe
 
 中文:
 定义 applyCoe
-  签名: (t : Tree) (maxS : SRec)
+  签名: (t : 树) (maxS : SRec)
   定义体: do
   go t none
 -/
@@ -486,7 +486,7 @@ definition toExpr
 
 中文:
 定义 toExpr
-  签名: (tree : Tree) (expectedType? : Option Expr)
+  签名: (tree : 树) (expectedType? : 选项类型 Expr)
   定义体: do
   let r ← analyze tree expectedType?
   trace[Elab.fbinop] "hasUncomparable: {r.hasUncomparable}, maxType: {Lean.toExpr r.maxS?}"

@@ -62,8 +62,8 @@ class Module
     - zero_smul : forall x : M, (0 : R) • x = 0
 
 中文:
-类 Module
-  参数: (R : 类型u) (M : 类型v) [Semiring R] [AddCommMonoid M]
+类 模
+  参数: (R : 类型u) (M : 类型v) [半环 R] [加法交换幺半群 M]
   公理与运算 (2 个):
     - add_smul : 对任意 (r s : R) (x : M), (r + s) • x = r • x + s • x
     - zero_smul : 对任意 x : M, (0 : R) • x = 0
@@ -116,7 +116,7 @@ theorem Convex.combo_self
   rw [← add_smul]; rw [h]; rw [one_smul]
 
 中文:
-定理 Convex.combo_self
+定理 凸.combo_self
   条件: {a b : R} (h : a + b = 1) (x : M)
   结论: a • x + b • x = x
   证明: by
@@ -157,8 +157,8 @@ add_smul := fun c₁ c₂ x => hf by simp only [smul, f.map_add, add_smul]
 zero_smul := fun x => hf by simp only [smul, zero_smul, f.map_zero] }
 
 中文:
-缩写 Function.Injective.module
-  签名: [AddCommMonoid M₂] [SMul R M₂] (f : M₂ ->+ M)
+缩写 函数.单射.module
+  签名: [加法交换幺半群 M₂] [标量乘法 R M₂] (f : M₂ ->+ M)
   定义体: { hf.distribMulAction f smul with
 add_smul := fun c₁ c₂ x => hf by simp only [smul, f.map_add, add_smul]
 zero_smul := fun x => hf by simp only [smul, zero_smul, f.map_zero] }
@@ -184,8 +184,8 @@ abbreviation Function.Surjective.module
       rw [← f.map_zero]; rw [← smul]; rw [zero_smul] }
 
 中文:
-缩写 Function.Surjective.module
-  签名: [AddCommMonoid M₂] [SMul R M₂] (f : M ->+ M₂)
+缩写 函数.满射.module
+  签名: [加法交换幺半群 M₂] [标量乘法 R M₂] (f : M ->+ M₂)
   定义体: { toDistribMulAction := hf.distribMulAction f smul
     add_smul := fun c₁ c₂ x => by
       rcases hf x with ⟨x, rfl⟩
@@ -219,7 +219,7 @@ theorem Module.eq_zero_of_zero_eq_one
 @[simp]
 
 中文:
-定理 Module.eq_zero_of_zero_eq_one
+定理 模.eq_zero_of_zero_eq_one
   条件: (zero_eq_one : (0 : R) = 1)
   结论: x = 0
   证明: by
@@ -243,7 +243,7 @@ theorem smul_add_one_sub_smul
 
 中文:
 定理 smul_add_one_sub_smul
-  条件: {R : 类型} [Ring R] [Module R M] {r : R} {m : M}
+  条件: {R : 类型} [环 R] [模 R M] {r : R} {m : M}
   证明: by rw [← add_smul, add_sub_cancel, one_smul]
 
 Depends on / 依赖: add_smul, add_sub_cancel, one_smul
@@ -268,8 +268,8 @@ theorem Convex.combo_eq_smul_sub_add
     _ = b • (y - x) + x := by rw [smul_sub, Convex.combo_self h]
 
 中文:
-定理 Convex.combo_eq_smul_sub_add
-  条件: [Module R M] {x y : M} {a b : R} (h : a + b = 1)
+定理 凸.combo_eq_smul_sub_add
+  条件: [模 R M] {x y : M} {a b : R} (h : a + b = 1)
   证明: calc
     a • x + b • y = b • y - b • x + (a • x + b • x) := by rw [sub_add_add_cancel, add_comm]
     _ = b • (y - x) + x := by rw [smul_sub, Convex.combo_self h]
@@ -296,8 +296,8 @@ theorem Module.ext'
   exact w _ _
 
 中文:
-定理 Module.ext'
-  结论: {R : 类型} [Semiring R] {M : 类型} [AddCommMonoid M] (P Q : Module R M)
+定理 模.ext'
+  结论: {R : 类型} [半环 R] {M : 类型} [加法交换幺半群 M] (P Q : 模 R M)
   证明: by
   ext
   exact w _ _
@@ -402,8 +402,8 @@ theorem Module.subsingleton
   proof: MulActionWithZero.subsingleton R M
 
 中文:
-定理 Module.subsingleton
-  结论: (R M : 类型) [MonoidWithZero R] [Subsingleton R] [Zero M]
+定理 模.subsingleton
+  结论: (R M : 类型) [带零幺半群 R] [子单例 R] [零 M]
   证明: MulActionWithZero.subsingleton R M
 -/
 protected theorem Module.subsingleton (R M : Type*) [MonoidWithZero R] [Subsingleton R] [Zero M]
@@ -419,8 +419,8 @@ theorem Module.nontrivial
   proof: MulActionWithZero.nontrivial R M
 
 中文:
-定理 Module.nontrivial
-  结论: (R M : 类型) [MonoidWithZero R] [Nontrivial M] [Zero M]
+定理 模.nontrivial
+  结论: (R M : 类型) [带零幺半群 R] [非平凡 M] [零 M]
   证明: MulActionWithZero.nontrivial R M
 -/
 protected theorem Module.nontrivial (R M : Type*) [MonoidWithZero R] [Nontrivial M] [Zero M]
@@ -443,8 +443,8 @@ instance [NonUnitalNonAssocSemiring
   body: left_distrib
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] : DistribSMul R R where
+实例 [非幺非结合半环
+  签名: R] : 分配标量乘法 R R where
   定义体: left_distrib
 
 Depends on / 依赖: left_distrib

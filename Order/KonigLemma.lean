@@ -70,8 +70,8 @@ theorem exists_seq_covby_of_forall_covby_finite
   ⟨fun i => (ks i).1, by simp [ks], fun i => by simpa using (h (ks i)).choose_spec.1⟩
 
 中文:
-定理 exists_seq_covby_of_forall_covby_finite
-  结论: (hfin : 对任意 (a : α), {x | a ⋖ x}.Finite)
+定理 存在_seq_covby_of_对任意_covby_finite
+  结论: (hfin : 对任意 (a : α), {x | a ⋖ x}.有限)
   证明: let h := fun a : {a : α // (Ici a).Infinite} =>
     exists_covby_infinite_Ici_of_infinite_Ici a.2 (hfin a)
   let ks : Nat -> {a : α // (Ici a).Infinite} := Nat.rec ⟨b, hb⟩ fun _ a => ⟨_, (h a).choose_spec.2⟩
@@ -97,8 +97,8 @@ theorem exists_orderEmbedding_covby_of_forall_covby_finite
   exact ⟨OrderEmbedding.ofStrictMono f (strictMono_nat_of_lt_succ (fun i => (hf.2 i).lt)), hf⟩
 
 中文:
-定理 exists_orderEmbedding_covby_of_forall_covby_finite
-  结论: (hfin : 对任意 (a : α), {x | a ⋖ x}.Finite)
+定理 存在_orderEmbedding_covby_of_对任意_covby_finite
+  结论: (hfin : 对任意 (a : α), {x | a ⋖ x}.有限)
   证明: by
   obtain ⟨f, hf⟩ := exists_seq_covby_of_forall_covby_finite hfin hb
   exact ⟨OrderEmbedding.ofStrictMono f (strictMono_nat_of_lt_succ (fun i => (hf.2 i).lt)), hf⟩
@@ -119,8 +119,8 @@ theorem exists_orderEmbedding_covby_of_forall_covby_finite_of_bot
   proof: exists_orderEmbedding_covby_of_forall_covby_finite hfin (by simpa using infinite_univ)
 
 中文:
-定理 exists_orderEmbedding_covby_of_forall_covby_finite_of_bot
-  结论: [OrderBot α] [Infinite α]
+定理 存在_orderEmbedding_covby_of_对任意_covby_finite_of_bot
+  结论: [有底序 α] [无限 α]
   证明: exists_orderEmbedding_covby_of_forall_covby_finite hfin (by simpa using infinite_univ)
 
 Depends on / 依赖: exists_orderEmbedding_covby_of_forall_covby_finite, infinite_univ
@@ -142,7 +142,7 @@ theorem GradeMinOrder.exists_nat_orderEmbedding_of_forall_covby_finite
 | succ i ih => simpa [Order.covBy_iff_add_one_eq, ih, eq_comm] using CovBy.grade Nat hf i
 
 中文:
-定理 GradeMinOrder.exists_nat_orderEmbedding_of_forall_covby_finite
+定理 GradeMin序.存在_nat_orderEmbedding_of_对任意_covby_finite
   证明: by
   obtain ⟨f, h0, hf⟩ := exists_orderEmbedding_covby_of_forall_covby_finite_of_bot hfin
   refine ⟨f, h0, hf, fun i => ?_⟩
@@ -181,8 +181,8 @@ theorem exists_seq_forall_proj_of_forall_finite
   have hcovby : forall {a 
 
 中文:
-定理 exists_seq_forall_proj_of_forall_finite
-  结论: {α : 自然数 -> 类型} [Finite (α 0)] [对任意 i, Nonempty (α i)]
+定理 存在_seq_对任意_proj_of_对任意_finite
+  结论: {α : 自然数 -> 类型} [有限 (α 0)] [对任意 i, 非空 (α i)]
   证明: by
   set αs := (i : Nat) × α i
   let _ : PartialOrder αs := {

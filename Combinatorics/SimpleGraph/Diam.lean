@@ -47,7 +47,7 @@ definition eccent
 
 中文:
 定义 eccent
-  签名: (G : SimpleGraph α) (u : α)
+  签名: (G : 简单图 α) (u : α)
   定义体: ⨆ v, G.edist u v
 
 Depends on / 依赖: G.edist
@@ -100,8 +100,8 @@ lemma exists_edist_eq_eccent_of_finite
   exists_eq_ciSup_of_finite
 
 中文:
-引理 exists_edist_eq_eccent_of_finite
-  条件: [Finite α] (u : α)
+引理 存在_edist_eq_eccent_of_finite
+  条件: [有限 α] (u : α)
   证明: have : Nonempty α := Nonempty.intro u
   exists_eq_ciSup_of_finite
 
@@ -127,7 +127,7 @@ lemma eccent_eq_top_of_not_connected
 
 中文:
 引理 eccent_eq_top_of_not_connected
-  条件: (h : ¬ G.Connected) (u : α)
+  条件: (h : ¬ G.连通) (u : α)
   证明: by
   rw [connected_iff_exists_forall_reachable] at h
   push Not at h
@@ -157,7 +157,7 @@ lemma eccent_eq_zero_of_subsingleton
 
 中文:
 引理 eccent_eq_zero_of_subsingleton
-  条件: [Subsingleton α] (u : α)
+  条件: [子单例 α] (u : α)
   结论: G.eccent u = 0
   证明: by
   simpa [eccent, edist_eq_zero_iff] using subsingleton_iff.mp ‹_› u
@@ -182,7 +182,7 @@ lemma eccent_ne_zero
 
 中文:
 引理 eccent_ne_zero
-  条件: [Nontrivial α] (u : α)
+  条件: [非平凡 α] (u : α)
   结论: G.eccent u != 0
   证明: by
   obtain ⟨v, huv⟩ := exists_ne ‹_›
@@ -213,7 +213,7 @@ lemma eccent_eq_zero_iff
 中文:
 引理 eccent_eq_zero_iff
   条件: (u : α)
-  结论: G.eccent u = 0 ↔ Subsingleton α
+  结论: G.eccent u = 0 ↔ 子单例 α
   证明: by
   refine ⟨fun h => ?_, fun _ => eccent_eq_zero_of_subsingleton u⟩
   contrapose! h
@@ -241,7 +241,7 @@ lemma eccent_pos_iff
 中文:
 引理 eccent_pos_iff
   条件: (u : α)
-  结论: 0 < G.eccent u ↔ Nontrivial α
+  结论: 0 < G.eccent u ↔ 非平凡 α
   证明: by
   rw [pos_iff_ne_zero]; rw [← not_subsingleton_iff_nontrivial]; rw [← eccent_eq_zero_iff]
 
@@ -266,8 +266,8 @@ lemma eccent_bot
 
 中文:
 引理 eccent_bot
-  条件: [Nontrivial α] (u : α)
-  结论: (⊥ : SimpleGraph α).eccent u = ⊤
+  条件: [非平凡 α] (u : α)
+  结论: (⊥ : 简单图 α).eccent u = ⊤
   证明: eccent_eq_top_of_not_connected not_connected_bot u
 
 @[simp]
@@ -293,8 +293,8 @@ apply le_antisymm ?_ Order.one_le_iff_pos.mpr pos_iff_ne_zero.mpr eccent_ne_zero
 
 中文:
 引理 eccent_top
-  条件: [Nontrivial α] (u : α)
-  结论: (⊤ : SimpleGraph α).eccent u = 1
+  条件: [非平凡 α] (u : α)
+  结论: (⊤ : 简单图 α).eccent u = 1
   证明: by
 apply le_antisymm ?_ Order.one_le_iff_pos.mpr pos_iff_ne_zero.mpr eccent_ne_zero u
   rw [eccent]; rw [iSup_le_iff]
@@ -325,8 +325,8 @@ lemma eq_top_iff_forall_eccent_eq_one
   exact huv.ne
 
 中文:
-引理 eq_top_iff_forall_eccent_eq_one
-  条件: [Nontrivial α]
+引理 eq_top_iff_对任意_eccent_eq_one
+  条件: [非平凡 α]
   证明: by
   refine ⟨fun h => h ▸ eccent_top, fun h => ?_⟩
   ext u v
@@ -389,7 +389,7 @@ lemma eccent_le_one_iff
 中文:
 引理 eccent_le_one_iff
   条件: (u : α)
-  结论: G.eccent u <= 1 ↔ 对任意 v, u != v -> G.Adj u v
+  结论: G.eccent u <= 1 ↔ 对任意 v, u != v -> G.伴随 u v
   证明: by
   constructor
   · intro h v huv
@@ -428,7 +428,7 @@ lemma eccent_eq_one_iff
 
 中文:
 引理 eccent_eq_one_iff
-  条件: [Nontrivial α] (u : α)
+  条件: [非平凡 α] (u : α)
   证明: by
   have h : 1 <= G.eccent u := Order.one_le_iff_ne_zero.mpr (eccent_ne_zero u)
   rw [← h.ge_iff_eq']
@@ -456,7 +456,7 @@ definition ediam
 
 中文:
 定义 ediam
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: ⨆ u, G.eccent u
 
 Depends on / 依赖: G.eccent, eccent
@@ -608,7 +608,7 @@ lemma ediam_eq_zero_of_subsingleton
 
 中文:
 引理 ediam_eq_zero_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: G.ediam = 0
   证明: by
   simp [ediam_def]
@@ -632,7 +632,7 @@ lemma nontrivial_of_ediam_ne_zero
 中文:
 引理 nontrivial_of_ediam_ne_zero
   条件: (h : G.ediam != 0)
-  结论: Nontrivial α
+  结论: 非平凡 α
   证明: by
   contrapose! h
   exact ediam_eq_zero_of_subsingleton
@@ -658,7 +658,7 @@ lemma ediam_ne_zero
 
 中文:
 引理 ediam_ne_zero
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: G.ediam != 0
   证明: by
   obtain ⟨u, v, huv⟩ := exists_pair_ne ‹_›
@@ -688,7 +688,7 @@ lemma subsingleton_of_ediam_eq_zero
 中文:
 引理 subsingleton_of_ediam_eq_zero
   条件: (h : G.ediam = 0)
-  结论: Subsingleton α
+  结论: 子单例 α
   证明: by
   contrapose! h
   exact ediam_ne_zero
@@ -754,7 +754,7 @@ lemma ediam_eq_top_of_not_connected
 
 中文:
 引理 ediam_eq_top_of_not_connected
-  条件: [Nonempty α] (h : ¬ G.Connected)
+  条件: [非空 α] (h : ¬ G.连通)
   结论: G.ediam = ⊤
   证明: by
   rw [connected_iff_exists_forall_reachable] at h
@@ -789,7 +789,7 @@ exact h IsEmpty.forall_iff.mpr trivial
 
 中文:
 引理 ediam_eq_top_of_not_preconnected
-  条件: (h : ¬ G.Preconnected)
+  条件: (h : ¬ G.预连通)
   结论: G.ediam = ⊤
   证明: by
   cases isEmpty_or_nonempty α
@@ -821,7 +821,7 @@ lemma preconnected_of_ediam_ne_top
 中文:
 引理 preconnected_of_ediam_ne_top
   条件: (h : G.ediam != ⊤)
-  结论: G.Preconnected
+  结论: G.预连通
   证明: Not.imp_symm G.ediam_eq_top_of_not_preconnected h
 
 Depends on / 依赖: G.ediam_eq_top_of_not_preconnected, Not.imp_symm, ediam_eq_top_of_not_preconnected, imp_symm
@@ -840,8 +840,8 @@ lemma connected_of_ediam_ne_top
 
 中文:
 引理 connected_of_ediam_ne_top
-  条件: [Nonempty α] (h : G.ediam != ⊤)
-  结论: G.Connected
+  条件: [非空 α] (h : G.ediam != ⊤)
+  结论: G.连通
   证明: G.connected_iff.mpr ⟨preconnected_of_ediam_ne_top h, ‹_›⟩
 
 Depends on / 依赖: G.connected_iff.mpr, connected_iff, preconnected_of_ediam_ne_top
@@ -858,8 +858,8 @@ lemma exists_eccent_eq_ediam_of_ne_top
   proof: ENat.exists_eq_iSup_of_lt_top h.lt_top
 
 中文:
-引理 exists_eccent_eq_ediam_of_ne_top
-  条件: [Nonempty α] (h : G.ediam != ⊤)
+引理 存在_eccent_eq_ediam_of_ne_top
+  条件: [非空 α] (h : G.ediam != ⊤)
   证明: ENat.exists_eq_iSup_of_lt_top h.lt_top
 
 Depends on / 依赖: ENat.exists_eq_iSup_of_lt_top, exists_eq_iSup_of_lt_top, h.lt_top, lt_top
@@ -878,8 +878,8 @@ lemma exists_eccent_eq_ediam_of_finite
   proof: exists_eq_ciSup_of_finite
 
 中文:
-引理 exists_eccent_eq_ediam_of_finite
-  条件: [Nonempty α] [Finite α]
+引理 存在_eccent_eq_ediam_of_finite
+  条件: [非空 α] [有限 α]
   证明: exists_eq_ciSup_of_finite
 
 Depends on / 依赖: exists_eq_ciSup_of_finite
@@ -897,8 +897,8 @@ lemma exists_edist_eq_ediam_of_ne_top
   proof: ENat.exists_eq_iSup₂_of_lt_top h.lt_top
 
 中文:
-引理 exists_edist_eq_ediam_of_ne_top
-  条件: [Nonempty α] (h : G.ediam != ⊤)
+引理 存在_edist_eq_ediam_of_ne_top
+  条件: [非空 α] (h : G.ediam != ⊤)
   证明: ENat.exists_eq_iSup₂_of_lt_top h.lt_top
 
 Depends on / 依赖: ENat.exists_eq_iSup, h.lt_top, lt_top
@@ -917,8 +917,8 @@ lemma exists_edist_eq_ediam_of_finite
   proof: Prod.exists'.mp ediam_def ▸ exists_eq_ciSup_of_finite
 
 中文:
-引理 exists_edist_eq_ediam_of_finite
-  条件: [Nonempty α] [Finite α]
+引理 存在_edist_eq_ediam_of_finite
+  条件: [非空 α] [有限 α]
   证明: Prod.exists'.mp ediam_def ▸ exists_eq_ciSup_of_finite
 
 Depends on / 依赖: Prod.exists, ediam_def, exists_eq_ciSup_of_finite
@@ -942,8 +942,8 @@ lemma connected_iff_ediam_ne_top
 
 中文:
 引理 connected_iff_ediam_ne_top
-  条件: [Nonempty α] [Finite α]
-  结论: G.Connected ↔ G.ediam != ⊤
+  条件: [非空 α] [有限 α]
+  结论: G.连通 ↔ G.ediam != ⊤
   证明: have ⟨u, v, huv⟩ := G.exists_edist_eq_ediam_of_finite
   ⟨fun h => huv ▸ edist_ne_top_iff_reachable.mpr (h u v),
    fun h => G.connected_of_ediam_ne_top h⟩
@@ -996,8 +996,8 @@ lemma ediam_bot
 
 中文:
 引理 ediam_bot
-  条件: [Nontrivial α]
-  结论: (⊥ : SimpleGraph α).ediam = ⊤
+  条件: [非平凡 α]
+  结论: (⊥ : 简单图 α).ediam = ⊤
   证明: ediam_eq_top_of_not_connected not_connected_bot
 
 @[simp]
@@ -1022,8 +1022,8 @@ lemma ediam_top
 
 中文:
 引理 ediam_top
-  条件: [Nontrivial α]
-  结论: (⊤ : SimpleGraph α).ediam = 1
+  条件: [非平凡 α]
+  结论: (⊤ : 简单图 α).ediam = 1
   证明: by
   simp [ediam]
 
@@ -1050,7 +1050,7 @@ lemma ediam_eq_one
 
 中文:
 引理 ediam_eq_one
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: G.ediam = 1 ↔ G = ⊤
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ ediam_top⟩
@@ -1124,7 +1124,7 @@ definition diam
 
 中文:
 定义 diam
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: G.ediam.toNat
 
 Depends on / 依赖: G.ediam.toNat
@@ -1186,7 +1186,7 @@ lemma nontrivial_of_diam_ne_zero
 中文:
 引理 nontrivial_of_diam_ne_zero
   条件: (h : G.diam != 0)
-  结论: Nontrivial α
+  结论: 非平凡 α
   证明: by
   contrapose! h
   simp [diam, h]
@@ -1211,7 +1211,7 @@ lemma diam_eq_zero_of_not_connected
 
 中文:
 引理 diam_eq_zero_of_not_connected
-  条件: (h : ¬ G.Connected)
+  条件: (h : ¬ G.连通)
   结论: G.diam = 0
   证明: by
   cases isEmpty_or_nonempty α
@@ -1281,8 +1281,8 @@ lemma exists_dist_eq_diam
     rw [diam]; rw [dist]; rw [congrArg ENat.toNat huv]
 
 中文:
-引理 exists_dist_eq_diam
-  条件: [Nonempty α]
+引理 存在_dist_eq_diam
+  条件: [非空 α]
   证明: by
   by_cases h : G.diam = 0
   · simp [h]
@@ -1315,7 +1315,7 @@ lt_of_lt_of_le ((connected_of_ediam_ne_top h).pos_dist_of_ne hne) dist_le_diam h
 
 中文:
 引理 diam_ne_zero_of_ediam_ne_top
-  条件: [Nontrivial α] (h : G.ediam != ⊤)
+  条件: [非平凡 α] (h : G.ediam != ⊤)
   结论: G.diam != 0
   证明: have ⟨_, _, hne⟩ := exists_pair_ne ‹_›
 pos_iff_ne_zero.mp
@@ -1372,7 +1372,7 @@ lemma diam_bot
 
 中文:
 引理 diam_bot
-  结论: (⊥ : SimpleGraph α).diam = 0
+  结论: (⊥ : 简单图 α).diam = 0
   证明: by
   rw [diam]; rw [ENat.toNat_eq_zero]
   cases subsingleton_or_nontrivial α
@@ -1404,8 +1404,8 @@ lemma diam_top
 
 中文:
 引理 diam_top
-  条件: [Nontrivial α]
-  结论: (⊤ : SimpleGraph α).diam = 1
+  条件: [非平凡 α]
+  结论: (⊤ : 简单图 α).diam = 1
   证明: by
   rw [diam]; rw [ediam_top]; rw [ENat.toNat_one]
 
@@ -1430,7 +1430,7 @@ lemma diam_eq_zero
 
 中文:
 引理 diam_eq_zero
-  结论: G.diam = 0 ↔ G.ediam = ⊤ ∨ Subsingleton α
+  结论: G.diam = 0 ↔ G.ediam = ⊤ ∨ 子单例 α
   证明: by
   rw [diam]; rw [ENat.toNat_eq_zero]; rw [or_comm]; rw [ediam_eq_zero_iff_subsingleton]
 
@@ -1454,7 +1454,7 @@ lemma diam_eq_one
 
 中文:
 引理 diam_eq_one
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: G.diam = 1 ↔ G = ⊤
   证明: by
   rw [diam]; rw [ENat.toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]; rw [ediam_eq_one]
@@ -1477,7 +1477,7 @@ lemma diam_eq_zero_iff_ediam_eq_top
 
 中文:
 引理 diam_eq_zero_iff_ediam_eq_top
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: G.diam = 0 ↔ G.ediam = ⊤
   证明: by
   rw [← not_iff_not]
@@ -1501,8 +1501,8 @@ lemma connected_iff_diam_ne_zero
 
 中文:
 引理 connected_iff_diam_ne_zero
-  条件: [Finite α] [Nontrivial α]
-  结论: G.Connected ↔ G.diam != 0
+  条件: [有限 α] [非平凡 α]
+  结论: G.连通 ↔ G.diam != 0
   证明: by
   rw [connected_iff_ediam_ne_top]; rw [not_iff_not]; rw [diam_eq_zero_iff_ediam_eq_top]
 
@@ -1525,7 +1525,7 @@ definition radius
 
 中文:
 定义 radius
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: ⨅ u, G.eccent u
 
 Depends on / 依赖: G.eccent, eccent
@@ -1579,8 +1579,8 @@ lemma exists_eccent_eq_radius
   proof: ENat.exists_eq_iInf G.eccent
 
 中文:
-引理 exists_eccent_eq_radius
-  条件: [Nonempty α]
+引理 存在_eccent_eq_radius
+  条件: [非空 α]
   结论: 存在 u, G.eccent u = G.radius
   证明: ENat.exists_eq_iInf G.eccent
 
@@ -1602,8 +1602,8 @@ lemma exists_edist_eq_radius_of_finite
   rw [hv]; rw [hw]
 
 中文:
-引理 exists_edist_eq_radius_of_finite
-  条件: [Nonempty α] [Finite α]
+引理 存在_edist_eq_radius_of_finite
+  条件: [非空 α] [有限 α]
   证明: by
   obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
   obtain ⟨v, hv⟩ := G.exists_edist_eq_eccent_of_finite w
@@ -1631,7 +1631,7 @@ lemma radius_eq_top_of_not_connected
 
 中文:
 引理 radius_eq_top_of_not_connected
-  条件: (h : ¬ G.Connected)
+  条件: (h : ¬ G.连通)
   结论: G.radius = ⊤
   证明: by
   simp [radius, eccent_eq_top_of_not_connected h]
@@ -1652,7 +1652,7 @@ lemma radius_eq_top_of_isEmpty
 
 中文:
 引理 radius_eq_top_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: G.radius = ⊤
   证明: iInf_of_empty G.eccent
 
@@ -1676,8 +1676,8 @@ lemma radius_ne_top_iff
 
 中文:
 引理 radius_ne_top_iff
-  条件: [Nonempty α] [Finite α]
-  结论: G.radius != ⊤ ↔ G.Connected
+  条件: [非空 α] [有限 α]
+  结论: G.radius != ⊤ ↔ G.连通
   证明: by
   refine ⟨Not.imp_symm radius_eq_top_of_not_connected, fun h => ?_⟩
   obtain ⟨u, v, huv⟩ := G.exists_edist_eq_radius_of_finite
@@ -1706,7 +1706,7 @@ lemma radius_ne_zero_of_nontrivial
 
 中文:
 引理 radius_ne_zero_of_nontrivial
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: G.radius != 0
   证明: by
   rw [← Order.one_le_iff_ne_zero]
@@ -1738,7 +1738,7 @@ lemma radius_eq_zero_iff
 
 中文:
 引理 radius_eq_zero_iff
-  结论: G.radius = 0 ↔ Nonempty α ∧ Subsingleton α
+  结论: G.radius = 0 ↔ 非空 α ∧ 子单例 α
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨_, _⟩ => ?_⟩
   · contrapose! h
@@ -1772,7 +1772,7 @@ lemma radius_le_ediam
 
 中文:
 引理 radius_le_ediam
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: G.radius <= G.ediam
   证明: iInf_le_iSup
 
@@ -1799,7 +1799,7 @@ exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 
 
 中文:
 引理 ediam_eq_top_iff_radius_eq_top
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: G.ediam = ⊤ ↔ G.radius = ⊤
   证明: by
   refine ⟨?_, fun hr => eq_top_iff.mpr (hr ▸ radius_le_ediam)⟩
@@ -1883,7 +1883,7 @@ lemma radius_eq_ediam_iff
 
 中文:
 引理 radius_eq_ediam_iff
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · use G.radius
@@ -1923,8 +1923,8 @@ lemma radius_bot
 
 中文:
 引理 radius_bot
-  条件: [Nontrivial α]
-  结论: (⊥ : SimpleGraph α).radius = ⊤
+  条件: [非平凡 α]
+  结论: (⊥ : 简单图 α).radius = ⊤
   证明: radius_eq_top_of_not_connected not_connected_bot
 
 @[simp]
@@ -1947,8 +1947,8 @@ lemma radius_top
 
 中文:
 引理 radius_top
-  条件: [Nontrivial α]
-  结论: (⊤ : SimpleGraph α).radius = 1
+  条件: [非平凡 α]
+  结论: (⊤ : 简单图 α).radius = 1
   证明: by
   simp [radius]
 
@@ -1971,7 +1971,7 @@ definition center
 
 中文:
 定义 center
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: {u | G.eccent u = G.radius}
 
 Depends on / 依赖: G.eccent, G.radius, eccent, radius
@@ -1990,8 +1990,8 @@ lemma center_nonempty
 
 中文:
 引理 center_nonempty
-  条件: [Nonempty α]
-  结论: G.center.Nonempty
+  条件: [非空 α]
+  结论: G.center.非空
   证明: exists_eccent_eq_radius
 
 Depends on / 依赖: exists_eccent_eq_radius
@@ -2034,7 +2034,7 @@ lemma center_eq_univ_iff_radius_eq_ediam
 
 中文:
 引理 center_eq_univ_iff_radius_eq_ediam
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   rw [radius_eq_ediam_iff]; rw [← Set.univ_subset_iff]
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -2073,8 +2073,8 @@ lemma center_eq_univ_of_subsingleton
 
 中文:
 引理 center_eq_univ_of_subsingleton
-  条件: [Subsingleton α]
-  结论: G.center = Set.univ
+  条件: [子单例 α]
+  结论: G.center = 集合.univ
   证明: by
   rw [Set.eq_univ_iff_forall]
   intro u
@@ -2104,7 +2104,7 @@ lemma center_bot
 
 中文:
 引理 center_bot
-  结论: (⊥ : SimpleGraph α).center = Set.univ
+  结论: (⊥ : 简单图 α).center = 集合.univ
   证明: by
   cases subsingleton_or_nontrivial α
   · exact center_eq_univ_of_subsingleton
@@ -2136,7 +2136,7 @@ lemma center_top
 
 中文:
 引理 center_top
-  结论: (⊤ : SimpleGraph α).center = Set.univ
+  结论: (⊤ : 简单图 α).center = 集合.univ
   证明: by
   cases subsingleton_or_nontrivial α
   · exact center_eq_univ_of_subsingleton

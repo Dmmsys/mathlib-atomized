@@ -53,7 +53,7 @@ definition card
 
 中文:
 定义 card
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: Multiset.card s.1
 
 @[inherit_doc] scoped prefix:arg "#" => Finset.card
@@ -76,7 +76,7 @@ theorem card_def
 
 中文:
 定理 card_def
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: #s = Multiset.card s.1
   证明: rfl
 -/
@@ -96,7 +96,7 @@ lemma card_val
 
 中文:
 引理 card_val
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: Multiset.card s.1 = #s
   证明: rfl
 
@@ -119,7 +119,7 @@ theorem card_mk
 中文:
 定理 card_mk
   条件: {m nodup}
-  结论: #(⟨m, nodup⟩ : Finset α) = Multiset.card m
+  结论: #(⟨m, nodup⟩ : 有限集 α) = Multiset.card m
   证明: rfl
 
 @[simp, grind =]
@@ -140,7 +140,7 @@ theorem card_empty
 
 中文:
 定理 card_empty
-  结论: #(∅ : Finset α) = 0
+  结论: #(∅ : 有限集 α) = 0
   证明: rfl
 
 @[gcongr]
@@ -182,7 +182,7 @@ theorem card_mono
 
 中文:
 定理 card_mono
-  结论: Monotone (@card α)
+  结论: 递增 (@card α)
   证明: by apply card_le_card
 
 Depends on / 依赖: card_le_card
@@ -213,7 +213,7 @@ lemma card_ne_zero
 
 中文:
 引理 card_ne_zero
-  结论: #s != 0 ↔ s.Nonempty
+  结论: #s != 0 ↔ s.非空
   证明: card_eq_zero.ne.trans nonempty_iff_ne_empty.symm
 
 Depends on / 依赖: card_eq_zero, card_eq_zero.ne.trans, nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
@@ -229,7 +229,7 @@ lemma card_pos
 
 中文:
 引理 card_pos
-  结论: 0 < #s ↔ s.Nonempty
+  结论: 0 < #s ↔ s.非空
   证明: Nat.pos_iff_ne_zero.trans card_ne_zero
 -/
 @[simp] lemma card_pos : 0 < #s ↔ s.Nonempty := Nat.pos_iff_ne_zero.trans card_ne_zero
@@ -246,7 +246,7 @@ alias ⟨_, Nonempty.card_ne_zero⟩ := card_ne_zero
 
 中文:
 引理 one_le_card
-  结论: 1 <= #s ↔ s.Nonempty
+  结论: 1 <= #s ↔ s.非空
   证明: card_pos
 
 alias ⟨_, Nonempty.card_pos⟩ := card_pos
@@ -407,7 +407,7 @@ theorem card_insert_le
 
 中文:
 定理 card_insert_le
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: #(insert a s) <= #s + 1
   证明: by grind
 -/
@@ -850,7 +850,7 @@ theorem List.card_toFinset
   proof: rfl
 
 中文:
-定理 List.card_toFinset
+定理 列表.card_toFinset
   结论: #l.toFinset = l.dedup.length
   证明: rfl
 -/
@@ -866,7 +866,7 @@ theorem List.toFinset_card_le
   proof: Multiset.toFinset_card_le ⟦l⟧
 
 中文:
-定理 List.toFinset_card_le
+定理 列表.toFinset_card_le
   结论: #l.toFinset <= l.length
   证明: Multiset.toFinset_card_le ⟦l⟧
 
@@ -885,8 +885,8 @@ theorem List.toFinset_card_of_nodup
   proof: Multiset.toFinset_card_of_nodup h
 
 中文:
-定理 List.toFinset_card_of_nodup
-  条件: {l : List α} (h : l.Nodup)
+定理 列表.toFinset_card_of_nodup
+  条件: {l : 列表 α} (h : l.Nodup)
   结论: #l.toFinset = l.length
   证明: Multiset.toFinset_card_of_nodup h
 
@@ -906,8 +906,8 @@ lemma List.Nodup.card_eq_countP
   exact toFinset_card_of_nodup (h.filter P)
 
 中文:
-引理 List.Nodup.card_eq_countP
-  条件: {l : List α} {P : α -> 命题} [DecidablePred P] (h : l.Nodup)
+引理 列表.Nodup.card_eq_countP
+  条件: {l : 列表 α} {P : α -> 命题} [DecidablePred P] (h : l.Nodup)
   证明: by
   rw [l.countP_eq_length_filter]; rw [l.filter_toFinset P]
   exact toFinset_card_of_nodup (h.filter P)
@@ -938,7 +938,7 @@ theorem length_toList
 
 中文:
 定理 length_toList
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.toList.length = #s
   证明: by
   rw [toList]; rw [← Multiset.coe_card]; rw [Multiset.coe_toList]; rw [card_def]
@@ -964,7 +964,7 @@ grind_pattern card_image_le => s.image f, #s
 中文:
 定理 card_image_le
   条件: [DecidableEq β]
-  结论: #(s.image f) <= #s
+  结论: #(s.像 f) <= #s
   证明: by
   simpa only [card_map] using! (s.1.map f).toFinset_card_le
 
@@ -991,8 +991,8 @@ theorem card_image_of_injOn
 
 中文:
 定理 card_image_of_injOn
-  条件: [DecidableEq β] (H : Set.InjOn f s)
-  结论: #(s.image f) = #s
+  条件: [DecidableEq β] (H : 集合.单射限制 f s)
+  结论: #(s.像 f) = #s
   证明: by
   simp only [card, image_val_of_injOn H, card_map]
 
@@ -1019,8 +1019,8 @@ theorem injOn_of_card_image_eq
 
 中文:
 定理 injOn_of_card_image_eq
-  条件: [DecidableEq β] (H : #(s.image f) = #s)
-  结论: Set.InjOn f s
+  条件: [DecidableEq β] (H : #(s.像 f) = #s)
+  结论: 集合.单射限制 f s
   证明: by
   rw [card_def]; rw [card_def]; rw [image]; rw [toFinset] at H
   dsimp only at H
@@ -1056,7 +1056,7 @@ grind_pattern card_image_iff => s.image f, #s
 中文:
 定理 card_image_iff
   条件: [DecidableEq β]
-  结论: #(s.image f) = #s ↔ Set.InjOn f s
+  结论: #(s.像 f) = #s ↔ 集合.单射限制 f s
   证明: ⟨injOn_of_card_image_eq, card_image_of_injOn⟩
 
 grind_pattern card_image_iff => #(s.image f)
@@ -1080,7 +1080,7 @@ theorem card_image_of_injective
 
 中文:
 定理 card_image_of_injective
-  条件: [DecidableEq β] (s : Finset α) (H : Injective f)
+  条件: [DecidableEq β] (s : 有限集 α) (H : 单射 f)
   证明: card_image_of_injOn fun _ _ _ _ h => H h
 
 Depends on / 依赖: card_image_of_injOn
@@ -1100,7 +1100,7 @@ theorem fiber_card_ne_zero_iff_mem_image
 
 中文:
 定理 fiber_card_ne_zero_iff_mem_image
-  条件: (s : Finset α) (f : α -> β) [DecidableEq β] (y : β)
+  条件: (s : 有限集 α) (f : α -> β) [DecidableEq β] (y : β)
   证明: by
   rw [← Nat.pos_iff_ne_zero]; rw [card_pos]; rw [fiber_nonempty_iff_mem_image]
 
@@ -1123,7 +1123,7 @@ lemma card_filter_le_iff
 
 中文:
 引理 card_filter_le_iff
-  条件: (s : Finset α) (P : α -> 命题) [DecidablePred P] (n : 自然数)
+  条件: (s : 有限集 α) (P : α -> 命题) [DecidablePred P] (n : 自然数)
   证明: (s.1.card_filter_le_iff P n).trans ⟨fun H s' hs' h => H s'.1 (by simp_all) h,
     fun H s' hs' h => H ⟨s', nodup_of_le hs' s.2⟩ (fun _ hx => Multiset.subset_of_le hs' hx) h⟩
 
@@ -1172,7 +1172,7 @@ theorem card_subtype
 
 中文:
 定理 card_subtype
-  条件: (p : α -> 命题) [DecidablePred p] (s : Finset α)
+  条件: (p : α -> 命题) [DecidablePred p] (s : 有限集 α)
   证明: by simp [Finset.subtype]
 
 Depends on / 依赖: Finset, Finset.subtype, subtype
@@ -1193,7 +1193,7 @@ grind_pattern card_filter_le => s.filter p, #s
 
 中文:
 定理 card_filter_le
-  条件: (s : Finset α) (p : α -> 命题) [DecidablePred p]
+  条件: (s : 有限集 α) (p : α -> 命题) [DecidablePred p]
   证明: card_le_card filter_subset _ _
 
 grind_pattern card_filter_le => #(s.filter p)
@@ -1395,7 +1395,7 @@ lemma card_strictMono
 
 中文:
 引理 card_strictMono
-  结论: StrictMono (card : Finset α -> 自然数)
+  结论: 严格递增 (card : 有限集 α -> 自然数)
   证明: fun _ _ => card_lt_card
 
 Depends on / 依赖: card_lt_card
@@ -1549,7 +1549,7 @@ lemma card_nbij
 
 中文:
 引理 card_nbij
-  结论: (i : α -> β) (hi : Set.MapsTo i s t) (i_inj : (s : Set α).InjOn i)
+  结论: (i : α -> β) (hi : 集合.映射到 i s t) (i_inj : (s : 集合 α).单射限制 i)
   证明: card_bij (fun a _ => i a) hi i_inj (by simpa using! i_surj)
 
 Depends on / 依赖: card_bij, i_inj, i_surj
@@ -1568,7 +1568,7 @@ lemma card_nbij'
 
 中文:
 引理 card_nbij'
-  结论: (i : α -> β) (j : β -> α) (hi : Set.MapsTo i s t) (hj : Set.MapsTo j t s)
+  结论: (i : α -> β) (j : β -> α) (hi : 集合.映射到 i s t) (hj : 集合.映射到 j t s)
   证明: card_bij' (fun a _ => i a) (fun b _ => j b) hi hj left_inv right_inv
 
 Depends on / 依赖: card_bij, left_inv, right_inv
@@ -1609,7 +1609,7 @@ lemma card_bijective
 
 中文:
 引理 card_bijective
-  条件: (e : α -> β) (he : e.Bijective) (hst : 对任意 i, i in s ↔ e i in t)
+  条件: (e : α -> β) (he : e.双射) (hst : 对任意 i, i in s ↔ e i in t)
   证明: card_equiv (.ofBijective e he) hst
 
 Depends on / 依赖: card_equiv, ofBijective
@@ -1627,8 +1627,8 @@ lemma _root_.Set.BijOn.finsetCard_eq
   proof: card_nbij e he.mapsTo he.injOn he.surjOn
 
 中文:
-引理 _root_.Set.BijOn.finsetCard_eq
-  条件: (e : α -> β) (he : Set.BijOn e s t)
+引理 _root_.集合.双射限制.finsetCard_eq
+  条件: (e : α -> β) (he : 集合.双射限制 e s t)
   结论: #s = #t
   证明: card_nbij e he.mapsTo he.injOn he.surjOn
 
@@ -1651,7 +1651,7 @@ _ <= #t := card_le_card image_subset_iff.2 hf
 
 中文:
 引理 card_le_card_of_injOn
-  条件: (f : α -> β) (hf : Set.MapsTo f s t) (f_inj : (s : Set α).InjOn f)
+  条件: (f : α -> β) (hf : 集合.映射到 f s t) (f_inj : (s : 集合 α).单射限制 f)
   证明: by
   classical
   calc
@@ -1687,7 +1687,7 @@ lemma card_le_card_of_injective
 
 中文:
 引理 card_le_card_of_injective
-  条件: {f : s -> t} (hf : f.Injective)
+  条件: {f : s -> t} (hf : f.单射)
   结论: #s <= #t
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | ⟨a₀, ha₀⟩
@@ -1729,7 +1729,7 @@ lemma card_le_card_of_surjOn
 
 中文:
 引理 card_le_card_of_surjOn
-  条件: (f : α -> β) (hf : Set.SurjOn f s t)
+  条件: (f : α -> β) (hf : 集合.满射限制 f s t)
   结论: #t <= #s
   证明: by
   classical unfold Set.SurjOn at hf; exact (card_le_card (mod_cast hf)).trans card_image_le
@@ -1753,7 +1753,7 @@ theorem exists_ne_map_eq_of_card_lt_of_maps_to
   exact hz x hx y hy
 
 中文:
-定理 exists_ne_map_eq_of_card_lt_of_maps_to
+定理 存在_ne_map_eq_of_card_lt_of_maps_to
   结论: (hc : #t < #s) {f : α -> β}
   证明: by
   by_contra! hz
@@ -1781,8 +1781,8 @@ theorem exists_ne_map_eq_of_card_image_lt
   proof: exists_ne_map_eq_of_card_lt_of_maps_to hc (coe_image (β := β) ▸ Set.mapsTo_image f s)
 
 中文:
-定理 exists_ne_map_eq_of_card_image_lt
-  条件: [DecidableEq β] {f : α -> β} (hc : #(s.image f) < #s)
+定理 存在_ne_map_eq_of_card_image_lt
+  条件: [DecidableEq β] {f : α -> β} (hc : #(s.像 f) < #s)
   证明: exists_ne_map_eq_of_card_lt_of_maps_to hc (coe_image (β := β) ▸ Set.mapsTo_image f s)
 
 Depends on / 依赖: Set.mapsTo_image, coe_image, exists_ne_map_eq_of_card_lt_of_maps_to, mapsTo_image
@@ -1801,7 +1801,7 @@ theorem not_injOn_of_card_image_lt
 
 中文:
 定理 not_injOn_of_card_image_lt
-  条件: [DecidableEq β] {f : α -> β} (hc : #(s.image f) < #s)
+  条件: [DecidableEq β] {f : α -> β} (hc : #(s.像 f) < #s)
   证明: mt card_image_of_injOn hc.ne
 
 Depends on / 依赖: card_image_of_injOn, hc.ne
@@ -1849,7 +1849,7 @@ lemma surjOn_of_injOn_of_card_le
 
 中文:
 引理 surjOn_of_injOn_of_card_le
-  结论: (f : α -> β) (hf : Set.MapsTo f s t) (hinj : Set.InjOn f s)
+  结论: (f : α -> β) (hf : 集合.映射到 f s t) (hinj : 集合.单射限制 f s)
   证明: by
   classical
   suffices s.image f = t by rw [Finset.surjOn_iff_subset_image, this]
@@ -1916,7 +1916,7 @@ have : s.image f = t := Finset.coe_injective by simp [hsurj.image_eq_of_mapsTo h
 
 中文:
 引理 injOn_of_surjOn_of_card_le
-  结论: (f : α -> β) (hf : Set.MapsTo f s t) (hsurj : Set.SurjOn f s t)
+  结论: (f : α -> β) (hf : 集合.映射到 f s t) (hsurj : 集合.满射限制 f s t)
   证明: by
   classical
 have : s.image f = t := Finset.coe_injective by simp [hsurj.image_eq_of_mapsTo hf]
@@ -2002,7 +2002,7 @@ theorem card_disjUnion
 
 中文:
 定理 card_disjUnion
-  条件: (s t : Finset α) (h)
+  条件: (s t : 有限集 α) (h)
   结论: #(s.disjUnion t h) = #s + #t
   证明: Multiset.card_add _ _
 
@@ -2037,7 +2037,7 @@ gr
 
 中文:
 定理 card_union_add_card_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: Finset.induction_on t (by simp) (by grind)
 
 grind_pattern card_union_add_card_inter => #(s union t), s inter t
@@ -2069,7 +2069,7 @@ theorem card_inter_add_card_union
 
 中文:
 定理 card_inter_add_card_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by grind
 -/
 theorem card_inter_add_card_union (s t : Finset α) :
@@ -2086,7 +2086,7 @@ lemma card_union
 
 中文:
 引理 card_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #(s union t) = #s + #t - #(s inter t)
   证明: by grind
 -/
@@ -2103,7 +2103,7 @@ lemma card_inter
 
 中文:
 引理 card_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #(s inter t) = #s + #t - #(s union t)
   证明: by grind
 -/
@@ -2120,7 +2120,7 @@ theorem card_union_le
 
 中文:
 定理 card_union_le
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #(s union t) <= #s + #t
   证明: by grind
 -/
@@ -2238,7 +2238,7 @@ lemma card_sub_card_eq
 
 中文:
 引理 card_sub_card_eq
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #t - #s = #(t \ s) - #(s \ t)
   证明: calc
     #t - #s = #t - #(s inter t) - #(s \ t) := by grind
@@ -2265,7 +2265,7 @@ grind_pattern le_card_sdiff => #(t \ s), #s
 
 中文:
 定理 le_card_sdiff
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #t - #s <= #(t \ s)
   证明: by grind
 
@@ -2304,7 +2304,7 @@ theorem card_sdiff_add_card
 
 中文:
 定理 card_sdiff_add_card
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #(s \ t) + #t = #(s union t)
   证明: by
   rw [← card_union_of_disjoint sdiff_disjoint]; rw [sdiff_union_self_eq_union]
@@ -2329,7 +2329,7 @@ omit [DecidableEq α] in
 中文:
 定理 sdiff_nonempty_of_card_lt_card
   条件: (h : #s < #t)
-  结论: (t \ s).Nonempty
+  结论: (t \ s).非空
   证明: by
   grind
 
@@ -2352,7 +2352,7 @@ theorem exists_mem_notMem_of_card_lt_card
 @[simp]
 
 中文:
-定理 exists_mem_notMem_of_card_lt_card
+定理 存在_mem_notMem_of_card_lt_card
   条件: (h : #s < #t)
   结论: 存在 e, e in t ∧ e ∉ s
   证明: by
@@ -2382,7 +2382,7 @@ grind_pattern card_sdiff_add_card_inter => #(s \ t), #s
 
 中文:
 引理 card_sdiff_add_card_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by
   rw [← card_union_of_disjoint (disjoint_sdiff_inter _ _)]; rw [sdiff_union_inter]
 
@@ -2411,7 +2411,7 @@ lemma card_inter_add_card_sdiff
 
 中文:
 引理 card_inter_add_card_sdiff
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by grind
 -/
 lemma card_inter_add_card_sdiff (s t : Finset α) :
@@ -2537,7 +2537,7 @@ lemma exists_subsuperset_card_eq
   exact ⟨u.erase a, by grind⟩
 
 中文:
-引理 exists_subsuperset_card_eq
+引理 存在_subsuperset_card_eq
   条件: (hst : s subseteq t) (hsn : #s <= n) (hnt : n <= #t)
   证明: by
   classical
@@ -2567,7 +2567,7 @@ lemma exists_subset_card_eq
   simpa using exists_subsuperset_card_eq s.empty_subset (by simp) hns
 
 中文:
-引理 exists_subset_card_eq
+引理 存在_subset_card_eq
   条件: (hns : n <= #s)
   结论: 存在 t subseteq s, #t = n
   证明: by
@@ -2589,7 +2589,7 @@ theorem le_card_iff_exists_subset_card
   exact exists_subset_card_eq h
 
 中文:
-定理 le_card_iff_exists_subset_card
+定理 le_card_iff_存在_subset_card
   结论: n <= #s ↔ 存在 t subseteq s, #t = n
   证明: by
   refine ⟨fun h => ?_, fun ⟨t, hst, ht⟩ => ht ▸ card_le_card hst⟩
@@ -2613,8 +2613,8 @@ theorem exists_subset_or_subset_of_two_mul_lt_card
     finish
 
 中文:
-定理 exists_subset_or_subset_of_two_mul_lt_card
-  结论: [DecidableEq α] {X Y : Finset α} {n : 自然数}
+定理 存在_subset_or_subset_of_two_mul_lt_card
+  结论: [DecidableEq α] {X Y : 有限集 α} {n : 自然数}
   证明: by
   grind =>
     have : #(X union Y) = #X + #(Y \ X)
@@ -2663,7 +2663,7 @@ theorem card_eq_one_iff_existsUnique
   simp [card_eq_one, Finset.singleton_iff_unique_mem]
 
 中文:
-定理 card_eq_one_iff_existsUnique
+定理 card_eq_one_iff_存在Unique
   结论: #s = 1 ↔ 存在! a, a in s
   证明: by
   simp [card_eq_one, Finset.singleton_iff_unique_mem]
@@ -2691,7 +2691,7 @@ theorem exists_eq_insert_iff
       instantiate
 
 中文:
-定理 exists_eq_insert_iff
+定理 存在_eq_insert_iff
   条件: [DecidableEq α]
   证明: by
   constructor
@@ -2780,7 +2780,7 @@ theorem card_le_one_iff_subsingleton_coe
 
 中文:
 定理 card_le_one_iff_subsingleton_coe
-  结论: #s <= 1 ↔ Subsingleton (s : Type _)
+  结论: #s <= 1 ↔ 子单例 (s : 类型 _)
   证明: card_le_one.trans (s : Set α).subsingleton_coe.symm
 
 Depends on / 依赖: card_le_one, card_le_one.trans, subsingleton_coe, subsingleton_coe.symm
@@ -2799,7 +2799,7 @@ theorem card_le_one_iff_subsingleton
 
 中文:
 定理 card_le_one_iff_subsingleton
-  结论: #s <= 1 ↔ (s : Set α).Subsingleton
+  结论: #s <= 1 ↔ (s : 集合 α).子单例
   证明: by
   rw [card_le_one_iff_subsingleton_coe]; rw [← Set.subsingleton_coe]; rw [SetLike.coe_sort_coe]
 
@@ -2826,7 +2826,7 @@ theorem card_le_one_iff_subset_singleton
 
 中文:
 定理 card_le_one_iff_subset_singleton
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: #s <= 1 ↔ 存在 x : α, s subseteq {x}
   证明: by
   refine ⟨fun H => ?_, ?_⟩
@@ -2861,7 +2861,7 @@ lemma exists_mem_ne
   exact hs.not_ge (card_le_one_iff_subset_singleton.2 ⟨a, subset_singleton_iff'.2 this⟩)
 
 中文:
-引理 exists_mem_ne
+引理 存在_mem_ne
   条件: (hs : 1 < #s) (a : α)
   结论: 存在 b in s, b != a
   证明: by
@@ -2887,7 +2887,7 @@ theorem card_le_one_of_subsingleton
 
 中文:
 定理 card_le_one_of_subsingleton
-  条件: [Subsingleton α] (s : Finset α)
+  条件: [子单例 α] (s : 有限集 α)
   结论: #s <= 1
   证明: Finset.card_le_one_iff.2 fun {_ _ _ _} => Subsingleton.elim _ _
 
@@ -2950,7 +2950,7 @@ theorem one_lt_card_iff_nontrivial
 
 中文:
 定理 one_lt_card_iff_nontrivial
-  结论: 1 < #s ↔ s.Nontrivial
+  结论: 1 < #s ↔ s.非平凡
   证明: by
   rw [← not_iff_not]; rw [not_lt]; rw [Finset.Nontrivial]; rw [← Set.nontrivial_coe_sort]; rw [not_nontrivial_iff_subsingleton]; rw [card_le_one_iff_subsingleton_coe]; rw [coe_sort_coe]
 
@@ -2970,7 +2970,7 @@ theorem existsUnique_notMem_image_of_injOn_of_card_eq_add_one
   simpa [card_eq_one_iff_existsUnique] using this
 
 中文:
-定理 existsUnique_notMem_image_of_injOn_of_card_eq_add_one
+定理 存在Unique_notMem_image_of_injOn_of_card_eq_add_one
   证明: by
   have : #(t \ s.image f) = 1 := by
     grind [card_sdiff_of_subset hf'.finsetImage_subset, card_image_of_injOn hf]
@@ -3001,7 +3001,7 @@ lemma exists_of_one_lt_card_pi
   exacts [⟨a1, h1, hne⟩, ⟨a2, h2, hne⟩]
 
 中文:
-引理 exists_of_one_lt_card_pi
+引理 存在_of_one_lt_card_pi
   结论: {ι : 类型} {α : ι -> 类型} [对任意 i, DecidableEq (α i)]
   证明: by
   simp_rw [one_lt_card_iff, Function.ne_iff] at h ⊢
@@ -3300,7 +3300,7 @@ definition strongInduction
 
 中文:
 定义 strongInduction
-  签名: {p : Finset α -> Sort*} (H : 对任意 s, (对任意 t ⊂ s, p t) -> p s)
+  签名: {p : 有限集 α -> 类型层*} (H : 对任意 s, (对任意 t ⊂ s, p t) -> p s)
   定义体: card_lt_card h
       strongInduction H t
   termination_by s => #s
@@ -3326,7 +3326,7 @@ theorem strongInduction_eq
 
 中文:
 定理 strongInduction_eq
-  结论: {p : Finset α -> Sort*} (H : 对任意 s, (对任意 t ⊂ s, p t) -> p s)
+  结论: {p : 有限集 α -> 类型层*} (H : 对任意 s, (对任意 t ⊂ s, p t) -> p s)
   证明: by
   rw [strongInduction]
 
@@ -3348,7 +3348,7 @@ definition strongInductionOn
 
 中文:
 定义 strongInductionOn
-  签名: {p : Finset α -> Sort*} (s : Finset α)
+  签名: {p : 有限集 α -> 类型层*} (s : 有限集 α)
   定义体: fun H => strongInduction H s
 
 Depends on / 依赖: strongInduction
@@ -3370,7 +3370,7 @@ theorem strongInductionOn_eq
 
 中文:
 定理 strongInductionOn_eq
-  结论: {p : Finset α -> Sort*} (s : Finset α)
+  结论: {p : 有限集 α -> 类型层*} (s : 有限集 α)
   证明: by
   dsimp only [strongInductionOn]
   rw [strongInduction]
@@ -3398,7 +3398,7 @@ theorem case_strong_induction_on
 
 中文:
 定理 case_strong_induction_on
-  结论: [DecidableEq α] {p : Finset α -> 命题} (s : Finset α) (h₀ : p ∅)
+  结论: [DecidableEq α] {p : 有限集 α -> 命题} (s : 有限集 α) (h₀ : p ∅)
   证明: Finset.strongInductionOn s fun s =>
     Finset.induction_on s (fun _ => h₀) fun a s n _ ih =>
       (h₁ a s n) fun t ss => ih _ (lt_of_le_of_lt ss (ssubset_insert n) : t < _)
@@ -3433,8 +3433,8 @@ lemma Nonempty.strong_induction
 termination_by s => #s
 
 中文:
-引理 Nonempty.strong_induction
-  结论: {p : 对任意 s, s.Nonempty -> 命题}
+引理 非空.strong_induction
+  结论: {p : 对任意 s, s.非空 -> 命题}
   证明: hs.exists_eq_singleton_or_nontrivial
     · exact h₀ _
     · refine h₁ hs fun t ht hts => ?_
@@ -3467,7 +3467,7 @@ definition strongDownwardInduction
 
 中文:
 定义 strongDownwardInduction
-  签名: {p : Finset α -> Sort*} {n : 自然数}
+  签名: {p : 有限集 α -> 类型层*} {n : 自然数}
   定义体: Finset.card_lt_card h
       have : n - #t < n - #s := by lia
       strongDownwardInduction H t ht
@@ -3496,7 +3496,7 @@ theorem strongDownwardInduction_eq
 
 中文:
 定理 strongDownwardInduction_eq
-  结论: {p : Finset α -> Sort*}
+  结论: {p : 有限集 α -> 类型层*}
   证明: by
   rw [strongDownwardInduction]
 
@@ -3520,7 +3520,7 @@ definition strongDownwardInductionOn
 
 中文:
 定义 strongDownwardInductionOn
-  签名: {p : Finset α -> Sort*} (s : Finset α)
+  签名: {p : 有限集 α -> 类型层*} (s : 有限集 α)
   定义体: strongDownwardInduction H s
 
 Depends on / 依赖: strongDownwardInduction
@@ -3542,7 +3542,7 @@ theorem strongDownwardInductionOn_eq
 
 中文:
 定理 strongDownwardInductionOn_eq
-  结论: {p : Finset α -> Sort*} (s : Finset α)
+  结论: {p : 有限集 α -> 类型层*} (s : 有限集 α)
   证明: by
   dsimp only [strongDownwardInductionOn]
   rw [strongDownwardInduction]
@@ -3569,7 +3569,7 @@ Subrelation.wf H InvImage.wf _ (Nat.lt_wfRel).2
 中文:
 定理 lt_wf
   条件: {α}
-  结论: WellFounded (@LT.lt (Finset α) _)
+  结论: 良基 (@LT.lt (有限集 α) _)
   证明: have H : Subrelation (@LT.lt (Finset α) _) (InvImage (· < ·) card) := fun {_ _} hxy =>
     card_lt_card hxy
 Subrelation.wf H InvImage.wf _ (Nat.lt_wfRel).2
@@ -3591,7 +3591,7 @@ theorem eraseInduction
 
 中文:
 定理 eraseInduction
-  结论: [DecidableEq α] {p : Finset α -> 命题}
+  结论: [DecidableEq α] {p : 有限集 α -> 命题}
   证明: S.strongInduction fun S ih => H S fun _ hs => ih _ (erase_ssubset hs)
 
 Depends on / 依赖: S.strongInduction, erase_ssubset, strongInduction
@@ -3616,7 +3616,7 @@ have hg : Antitone g := antitone_nat_of_succ_le fun i => by
 
 中文:
 定理 image_iterate_stabilises_lt_card
-  结论: [DecidableEq α] {f : α -> α} {s : Finset α}
+  结论: [DecidableEq α] {f : α -> α} {s : 有限集 α}
   证明: by
   let g (i : Nat) : Finset α := s.image f^[i]
   have (i : Nat) : 0 < #(g i) := (hs₀.image _).card_pos
@@ -3657,7 +3657,7 @@ theorem image_iterate_stabilises_le_card
 
 中文:
 定理 image_iterate_stabilises_le_card
-  结论: [DecidableEq α] {f : α -> α} {s : Finset α}
+  结论: [DecidableEq α] {f : α -> α} {s : 有限集 α}
   证明: by
   obtain rfl | hs₀ := s.eq_empty_or_nonempty
   · simp

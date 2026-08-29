@@ -41,8 +41,8 @@ theorem mem_tangentConeAt_iff_exists_seq
     simp only [tendsto_inf, tendsto_comap_iff, tendsto_prod_iff', tendsto_nhdsWithin
 
 中文:
-定理 mem_tangentConeAt_iff_exists_seq
-  结论: {R E : 类型} [AddCommGroup E] [SMul R E]
+定理 mem_tangentConeAt_iff_存在_seq
+  结论: {R E : 类型} [加法交换群 E] [标量乘法 R E]
   证明: by
   constructor
   · intro h
@@ -85,7 +85,7 @@ simpa using Tendsto.congr' this (tendsto_inv₀_cobounded.comp hc).smul hd
 
 中文:
 定理 tangentConeAt.lim_zero
-  结论: {α : 类型} (l : Filter α) {c : α -> 𝕜} {d : α -> E} {y : E}
+  结论: {α : 类型} (l : 滤子 α) {c : α -> 𝕜} {d : α -> E} {y : E}
   证明: by
   have : forallᶠ n in l, (c n)⁻¹ • c n • d n = d n :=
     (eventually_ne_of_tendsto_norm_atTop hc 0).mono fun n hn => inv_smul_smul₀ hn (d n)
@@ -149,7 +149,7 @@ theorem mem_tangentConeAt_iff_exists_seq_norm_tendsto_atTop
         rcas
 
 中文:
-定理 mem_tangentConeAt_iff_exists_seq_norm_tendsto_atTop
+定理 mem_tangentConeAt_iff_存在_seq_norm_tendsto_atTop
   结论: {𝕜 E : 类型}
   证明: by
   constructor

@@ -32,8 +32,8 @@ instance UnitsInt.fintype
 @[simp]
 
 中文:
-实例 UnitsInt.fintype
-  签名: : Fintype 整数ˣ
+实例 Units整数.fintype
+  签名: : 有限类型 整数ˣ
   定义体: ⟨{1, -1}, fun x => by cases Int.units_eq_one_or x <;> simp [*]⟩
 
 @[simp]
@@ -55,8 +55,8 @@ theorem UnitsInt.univ
 @[simp]
 
 中文:
-定理 UnitsInt.univ
-  结论: (Finset.univ : Finset 整数ˣ) = {1, -1}
+定理 Units整数.univ
+  结论: (有限集.univ : 有限集 整数ˣ) = {1, -1}
   证明: rfl
 
 @[simp]
@@ -73,8 +73,8 @@ theorem Fintype.card_units_int
   proof: rfl
 
 中文:
-定理 Fintype.card_units_int
-  结论: Fintype.card 整数ˣ = 2
+定理 有限类型.card_units_int
+  结论: 有限类型.card 整数ˣ = 2
   证明: rfl
 -/
 theorem Fintype.card_units_int : Fintype.card Intˣ = 2 := rfl
@@ -88,8 +88,8 @@ instance [Monoid
   body: Fintype.ofEquiv _ (unitsEquivProdSubtype α).symm
 
 中文:
-实例 [Monoid
-  签名: α] [Fintype α] [DecidableEq α] : Fintype αˣ
+实例 [幺半群
+  签名: α] [有限类型 α] [DecidableEq α] : 有限类型 αˣ
   定义体: Fintype.ofEquiv _ (unitsEquivProdSubtype α).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, ofEquiv, unitsEquivProdSubtype
@@ -106,8 +106,8 @@ instance [Monoid
   body: .of_injective _ Units.val_injective
 
 中文:
-实例 [Monoid
-  签名: α] [Finite α] : Finite αˣ
+实例 [幺半群
+  签名: α] [有限 α] : 有限 αˣ
   定义体: .of_injective _ Units.val_injective
 
 Depends on / 依赖: Units.val_injective, of_injective, val_injective
@@ -130,8 +130,8 @@ theorem Nat.card_units
   · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zer
 
 中文:
-定理 Nat.card_units
-  条件: [GroupWithZero α]
+定理 自然数.card_units
+  条件: [带零群 α]
   证明: by
   classical
   rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
@@ -159,8 +159,8 @@ theorem Nat.card_eq_card_units_add_one
   rw [Nat.card_units]; rw [tsub_add_cancel_of_le Nat.card_pos]
 
 中文:
-定理 Nat.card_eq_card_units_add_one
-  条件: [GroupWithZero α] [Finite α]
+定理 自然数.card_eq_card_units_add_one
+  条件: [带零群 α] [有限 α]
   证明: by
   rw [Nat.card_units]; rw [tsub_add_cancel_of_le Nat.card_pos]
 
@@ -180,8 +180,8 @@ theorem Fintype.card_units
   rw [← Nat.card_eq_fintype_card]; rw [Nat.card_units]; rw [Nat.card_eq_fintype_card]
 
 中文:
-定理 Fintype.card_units
-  条件: [GroupWithZero α] [Fintype α] [DecidableEq α]
+定理 有限类型.card_units
+  条件: [带零群 α] [有限类型 α] [DecidableEq α]
   证明: by
   rw [← Nat.card_eq_fintype_card]; rw [Nat.card_units]; rw [Nat.card_eq_fintype_card]
 
@@ -201,8 +201,8 @@ theorem Fintype.card_eq_card_units_add_one
   rw [Fintype.card_units]; rw [tsub_add_cancel_of_le Fintype.card_pos]
 
 中文:
-定理 Fintype.card_eq_card_units_add_one
-  条件: [GroupWithZero α] [Fintype α] [DecidableEq α]
+定理 有限类型.card_eq_card_units_add_one
+  条件: [带零群 α] [有限类型 α] [DecidableEq α]
   证明: by
   rw [Fintype.card_units]; rw [tsub_add_cancel_of_le Fintype.card_pos]
 

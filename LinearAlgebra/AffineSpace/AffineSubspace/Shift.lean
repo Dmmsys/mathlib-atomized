@@ -60,7 +60,7 @@ s.map AffineEquiv.constVAdd k P ((1 - r) • (c -ᵥ h.some))
 
 中文:
 定义 shift
-  签名: (s : AffineSubspace k P) (c : P) (r : k)
+  签名: (s : 仿射子空间 k P) (c : P) (r : k)
   定义体: if h : Nonempty s then
 s.map AffineEquiv.constVAdd k P ((1 - r) • (c -ᵥ h.some))
   else
@@ -91,7 +91,7 @@ theorem direction_shift
 
 中文:
 定理 direction_shift
-  条件: (s : AffineSubspace k P) (c : P) (r : k)
+  条件: (s : 仿射子空间 k P) (c : P) (r : k)
   证明: by
   rcases s.eq_bot_or_nonempty with h | h
   · simp [shift, h]
@@ -173,7 +173,7 @@ theorem shift_eq
 
 中文:
 定理 shift_eq
-  条件: {s : AffineSubspace k P} (p : s) (c : P) (r : k)
+  条件: {s : 仿射子空间 k P} (p : s) (c : P) (r : k)
   证明: by
   have h : Nonempty s := ⟨p⟩
   simp only [shift, h, ↓reduceDIte]
@@ -215,7 +215,7 @@ theorem shift_zero
 
 中文:
 定理 shift_zero
-  条件: (s : AffineSubspace k P) [h : Nonempty s] (c : P)
+  条件: (s : 仿射子空间 k P) [h : 非空 s] (c : P)
   证明: by
   refine ext_of_direction_eq (by simp) ⟨c, ?_⟩
   suffices exists x in s, (c -ᵥ h.some) +ᵥ x = c by simpa [shift, h]
@@ -247,7 +247,7 @@ theorem shift_one
 
 中文:
 定理 shift_one
-  条件: (s : AffineSubspace k P) (c : P)
+  条件: (s : 仿射子空间 k P) (c : P)
   结论: s.shift c 1 = s
   证明: by
   rcases s.eq_bot_or_nonempty with h | h
@@ -280,7 +280,7 @@ have : Subsingleton P := (AddTorsor.subsingleton_iff V P).mp Module.subsingleton
 
 中文:
 定理 affineCombination_mem_shift
-  结论: {ι : 类型} [Fintype ι] [Nontrivial ι]
+  结论: {ι : 类型} [有限类型 ι] [非平凡 ι]
   证明: by
   cases subsingleton_or_nontrivial k
   · suffices (affineSpan k <| p '' {i}ᶜ) = ⊤ by simp [this]
@@ -375,7 +375,7 @@ theorem shift_eq_map_homothety
 
 中文:
 定理 shift_eq_map_homothety
-  条件: (s : AffineSubspace k P) (c : P) {r : k} (hr : IsUnit r)
+  条件: (s : 仿射子空间 k P) (c : P) {r : k} (hr : 是单位 r)
   证明: by
   obtain ⟨t, ht⟩ := hr.exists_right_inv
   rcases s.eq_bot_or_nonempty with h | h
@@ -436,8 +436,8 @@ obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
   rw [affineCombination_mem_closedInterior_if
 
 中文:
-定理 closedInterior_inter_shift_zero
-  条件: [ZeroLEOneClass k]
+定理 closed整数erior_inter_shift_zero
+  条件: [ZeroLEOne类 k]
   证明: by
   refine subset_antisymm (fun p ⟨hp, hshift⟩ => ?_) (by simp [s.point_mem_closedInterior i])
 obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
@@ -476,7 +476,7 @@ obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
   rw [affineCombination_mem_close
 
 中文:
-定理 disjoint_closedInterior_shift
+定理 disjoint_closed整数erior_shift
   条件: {x : k} (hx : x < 0 ∨ 1 < x)
   证明: by
   refine Set.disjoint_left.mpr fun p hleft hright => ?_
@@ -515,8 +515,8 @@ theorem closedInterior_inter_shift_aux
     rw [inv_mul_le_one₀ hxpos]; rw [hi]; rw
 
 中文:
-定理 closedInterior_inter_shift_aux
-  结论: {n : 自然数} (i : Fin n) {x : k} (hxpos : 0 < x)
+定理 closed整数erior_inter_shift_aux
+  结论: {n : 自然数} (i : 有限集 n) {x : k} (hxpos : 0 < x)
   证明: by
   rw [show x⁻¹ * (w i - 1) + 1 = 0 ↔ w i = 1 - x by grind]
   refine and_congr_left fun hi => ⟨fun hj j hji => ⟨?_, ?_⟩, fun hj => ?_⟩
@@ -555,8 +555,8 @@ theorem closedInterior_inter_shift_eq_homothety
     rw [Set.mem_inter_iff]; r
 
 中文:
-定理 closedInterior_inter_shift_eq_homothety
-  结论: {n : 自然数} [NeZero n] (s : Affine.Simplex k P n)
+定理 closed整数erior_inter_shift_eq_homothety
+  结论: {n : 自然数} [NeZero n] (s : 仿射.单纯形 k P n)
   证明: by
   rcases hx.1.eq_or_lt with hx0 | hxpos
   · simpa [hx0.symm, nonempty_closedInterior] using s.closedInterior_inter_shift_zero i

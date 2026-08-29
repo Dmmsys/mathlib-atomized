@@ -491,7 +491,7 @@ theorem norm_image_sub_le_of_norm_deriv_le_segment
 
 中文:
 定理 norm_image_sub_le_of_norm_deriv_le_segment
-  结论: {C : 实数} (hf : DifferentiableOn 实数 f (Icc a b))
+  结论: {C : 实数} (hf : DifferentiableOn 实数 f (闭区间 a b))
   证明: by
   refine norm_image_sub_le_of_norm_deriv_le_segment' ?_ bound
   exact fun x hx => (hf x hx).hasDerivWithinAt
@@ -567,7 +567,7 @@ theorem constant_of_has_deriv_right_zero
 
 中文:
 定理 constant_of_has_deriv_right_zero
-  结论: (hcont : ContinuousOn f (Icc a b))
+  结论: (hcont : ContinuousOn f (闭区间 a b))
   证明: by
   have : forall x in Icc a b, ‖f x - f a‖ <= 0 * (x - a) := fun x hx =>
     norm_image_sub_le_of_norm_deriv_right_le_segment hcont hderiv (fun _ _ => norm_zero.le) x hx
@@ -595,7 +595,7 @@ theorem constant_of_derivWithin_zero
 
 中文:
 定理 constant_of_derivWithin_zero
-  结论: (hdiff : DifferentiableOn 实数 f (Icc a b))
+  结论: (hdiff : DifferentiableOn 实数 f (闭区间 a b))
   证明: by
   have H : forall x in Ico a b, ‖derivWithin f (Icc a b) x‖ <= 0 := by
     simpa only [norm_le_zero_iff] using fun x hx => hderiv x hx
@@ -626,7 +626,7 @@ theorem eq_of_has_deriv_right_eq
 
 中文:
 定理 eq_of_has_deriv_right_eq
-  结论: (derivf : 对任意 x in Ico a b, HasDerivWithinAt f (f' x) (Ici x) x)
+  结论: (derivf : 对任意 x in 左闭右开区间 a b, HasDerivWithinAt f (f' x) (左闭右无界区间 x) x)
   证明: by
   simp only [← @sub_eq_zero _ _ (f _)] at hi ⊢
   exact hi ▸ constant_of_has_deriv_right_zero (fcont.sub gcont) fun y hy => by
@@ -655,7 +655,7 @@ theorem eq_of_derivWithin_eq
 
 中文:
 定理 eq_of_derivWithin_eq
-  结论: (fdiff : DifferentiableOn 实数 f (Icc a b))
+  结论: (fdiff : DifferentiableOn 实数 f (闭区间 a b))
   证明: by
   have A : forall y in Ico a b, HasDerivWithinAt f (derivWithin f (Icc a b) y) (Ici y) y := fun y hy =>
     (fdiff y (mem_Icc_of_Ico hy)).hasDerivWithinAt.mono_of_mem_nhdsWithin
@@ -784,8 +784,8 @@ theorem exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
   refine ⟨s inter ball x ε, inter_mem_nhdsWithin _ (ball_mem_nhds _ 
 
 中文:
-定理 exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
-  结论: (hs : Convex 实数 s)
+定理 存在_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
+  结论: (hs : 凸 实数 s)
   证明: by
   obtain ⟨ε, ε0, hε⟩ : exists ε > 0,
       ball x ε inter s subseteq { y | HasFDerivWithinAt f (f' y) s y ∧ ‖f' y‖₊ < K } :=
@@ -818,8 +818,8 @@ theorem exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt
     hs.exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt hder hcont
 
 中文:
-定理 exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt
-  结论: (hs : Convex 实数 s) {f : E -> G}
+定理 存在_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt
+  结论: (hs : 凸 实数 s) {f : E -> G}
   证明: (exists_gt _).imp
     hs.exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt hder hcont
 
@@ -1044,7 +1044,7 @@ theorem is_const_of_fderivWithin_eq_zero
 
 中文:
 定理 is_const_of_fderivWithin_eq_zero
-  结论: (hs : Convex 实数 s) (hf : DifferentiableOn 𝕜 f s)
+  结论: (hs : 凸 实数 s) (hf : DifferentiableOn 𝕜 f s)
   证明: by
   have bound : forall x in s, ‖fderivWithin 𝕜 f s x‖ <= 0 := fun x hx => by
     simp only [hf' x hx, norm_zero, le_rfl]
@@ -1103,7 +1103,7 @@ theorem eqOn_of_fderivWithin_eq
 
 中文:
 定理 eqOn_of_fderivWithin_eq
-  结论: (hs : Convex 实数 s) (hf : DifferentiableOn 𝕜 f s)
+  结论: (hs : 凸 实数 s) (hf : DifferentiableOn 𝕜 f s)
   证明: fun y hy => by
   suffices f x - g x = f y - g y by rwa [hfgx, sub_self, eq_comm, sub_eq_zero] at this
   refine hs.is_const_of_fderivWithin_eq_zero (hf.sub hg) (fun z hz => ?_) hx hy
@@ -1135,7 +1135,7 @@ theorem _root_.IsOpen.isOpen_inter_preimage_of_fderiv_eq_zero
     simpa 
 
 中文:
-定理 _root_.IsOpen.isOpen_inter_preimage_of_fderiv_eq_zero
+定理 _root_.是开集.isOpen_inter_preimage_of_fderiv_eq_zero
   证明: by
   refine Metric.isOpen_iff.mpr fun y ⟨hy, hy'⟩ => ?_
   obtain ⟨r, hr, h⟩ := Metric.isOpen_iff.mp hs y hy
@@ -1170,7 +1170,7 @@ theorem _root_.isLocallyConstant_of_fderiv_eq_zero
 
 中文:
 定理 _root_.isLocallyConstant_of_fderiv_eq_zero
-  结论: (h₁ : Differentiable 𝕜 f)
+  结论: (h₁ : 可微 𝕜 f)
   证明: by
   simpa using!
     isOpen_univ.isOpen_inter_preimage_of_fderiv_eq_zero h₁.differentiableOn fun _ _ => h₂ _
@@ -1197,7 +1197,7 @@ theorem _root_.IsOpen.exists_is_const_of_fderiv_eq_zero
     obtain ⟨t, ht
 
 中文:
-定理 _root_.IsOpen.exists_is_const_of_fderiv_eq_zero
+定理 _root_.是开集.存在_is_const_of_fderiv_eq_zero
   证明: by
   obtain (rfl | ⟨y, hy⟩) := s.eq_empty_or_nonempty
   · exact ⟨0, by simp⟩
@@ -1234,7 +1234,7 @@ theorem _root_.IsOpen.is_const_of_fderiv_eq_zero
   rw [ha x hx]; rw [ha y hy]
 
 中文:
-定理 _root_.IsOpen.is_const_of_fderiv_eq_zero
+定理 _root_.是开集.is_const_of_fderiv_eq_zero
   证明: by
   obtain ⟨a, ha⟩ := hs.exists_is_const_of_fderiv_eq_zero hs' hf hf'
   rw [ha x hx]; rw [ha y hy]
@@ -1259,8 +1259,8 @@ theorem _root_.IsOpen.exists_eq_add_of_fderiv_eq
   rw [fderiv_fun_sub (hf.differentiableAt (hs.mem_nhds hx)) (hg.differentiableAt (hs.mem_nhds hx))]; rw [hf' hx]; rw [sub_self]; rw [Pi.zero_apply]
 
 中文:
-定理 _root_.IsOpen.exists_eq_add_of_fderiv_eq
-  结论: (hs : IsOpen s) (hs' : IsPreconnected s)
+定理 _root_.是开集.存在_eq_add_of_fderiv_eq
+  结论: (hs : 是开集 s) (hs' : 是预连通 s)
   证明: by
   simp_rw [Set.EqOn, ← sub_eq_iff_eq_add']
   refine hs.exists_is_const_of_fderiv_eq_zero hs' (hf.sub hg) fun x hx => ?_
@@ -1287,8 +1287,8 @@ theorem _root_.IsOpen.eqOn_of_fderiv_eq
   simpa using ha
 
 中文:
-定理 _root_.IsOpen.eqOn_of_fderiv_eq
-  结论: (hs : IsOpen s) (hs' : IsPreconnected s)
+定理 _root_.是开集.eqOn_of_fderiv_eq
+  结论: (hs : 是开集 s) (hs' : 是预连通 s)
   证明: by
   obtain ⟨a, ha⟩ := hs.exists_eq_add_of_fderiv_eq hs' hf hg hf'
   obtain rfl := left_eq_add.mp (hfgx.symm.trans (ha hx))
@@ -1353,7 +1353,7 @@ lemma isLittleO_pow_succ
 
 中文:
 引理 isLittleO_pow_succ
-  结论: {x₀ : E} {n : 自然数} (hs : Convex 实数 s) (hx₀s : x₀ in s)
+  结论: {x₀ : E} {n : 自然数} (hs : 凸 实数 s) (hx₀s : x₀ in s)
   证明: by
   rw [Asymptotics.isLittleO_iff] at hf' ⊢
   intro c hc
@@ -1403,7 +1403,7 @@ theorem isLittleO_pow_succ_real
 
 中文:
 定理 isLittleO_pow_succ_real
-  结论: {f f' : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : Set 实数}
+  结论: {f f' : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : 集合 实数}
   证明: by
   have h := hs.isLittleO_pow_succ hx₀s hff' ?_ (n := n)
   · rw [Asymptotics.isLittleO_iff] at h ⊢
@@ -1466,7 +1466,7 @@ theorem lipschitzOnWith_of_nnnorm_hasDerivWithin_le
 
 中文:
 定理 lipschitzOnWith_of_nnnorm_hasDerivWithin_le
-  结论: {C : 实数>=0} (hs : Convex 实数 s)
+  结论: {C : 实数>=0} (hs : 凸 实数 s)
   证明: Convex.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le (fun x hx => (hf x hx).hasFDerivWithinAt)
     (fun x hx => le_trans (by simp) (bound x hx)) hs
 
@@ -1511,7 +1511,7 @@ theorem lipschitzOnWith_of_nnnorm_derivWithin_le
 
 中文:
 定理 lipschitzOnWith_of_nnnorm_derivWithin_le
-  结论: {C : 实数>=0} (hs : Convex 实数 s)
+  结论: {C : 实数>=0} (hs : 凸 实数 s)
   证明: hs.lipschitzOnWith_of_nnnorm_hasDerivWithin_le (fun x hx => (hf x hx).hasDerivWithinAt) bound
 
 Depends on / 依赖: hasDerivWithinAt, hs.lipschitzOnWith_of_nnnorm_hasDerivWithin_le, lipschitzOnWith_of_nnnorm_hasDerivWithin_le
@@ -1577,7 +1577,7 @@ theorem _root_.lipschitzWith_of_nnnorm_deriv_le
 
 中文:
 定理 _root_.lipschitzWith_of_nnnorm_deriv_le
-  结论: {C : 实数>=0} (hf : Differentiable 𝕜 f)
+  结论: {C : 实数>=0} (hf : 可微 𝕜 f)
   证明: lipschitzOnWith_univ.1
     convex_univ.lipschitzOnWith_of_nnnorm_deriv_le (fun x _ => hf x) fun x _ => bound x
 
@@ -1598,7 +1598,7 @@ theorem _root_.is_const_of_deriv_eq_zero
 
 中文:
 定理 _root_.is_const_of_deriv_eq_zero
-  结论: (hf : Differentiable 𝕜 f) (hf' : 对任意 x, deriv f x = 0)
+  结论: (hf : 可微 𝕜 f) (hf' : 对任意 x, deriv f x = 0)
   证明: is_const_of_fderiv_eq_zero hf (fun z => by simp [← toSpanSingleton_deriv, hf']) _ _
 
 Depends on / 依赖: is_const_of_fderiv_eq_zero, toSpanSingleton_deriv
@@ -1616,7 +1616,7 @@ theorem _root_.IsOpen.isOpen_inter_preimage_of_deriv_eq_zero
     (fun x hx => by simp [← toSpanSingleton_deriv, hf' hx]) t
 
 中文:
-定理 _root_.IsOpen.isOpen_inter_preimage_of_deriv_eq_zero
+定理 _root_.是开集.isOpen_inter_preimage_of_deriv_eq_zero
   证明: hs.isOpen_inter_preimage_of_fderiv_eq_zero hf
     (fun x hx => by simp [← toSpanSingleton_deriv, hf' hx]) t
 
@@ -1637,7 +1637,7 @@ theorem _root_.IsOpen.exists_is_const_of_deriv_eq_zero
     ext; simp [← toSpanSingleton_deriv, hf' hx])
 
 中文:
-定理 _root_.IsOpen.exists_is_const_of_deriv_eq_zero
+定理 _root_.是开集.存在_is_const_of_deriv_eq_zero
   证明: hs.exists_is_const_of_fderiv_eq_zero hs' hf (fun {x} hx => by
     ext; simp [← toSpanSingleton_deriv, hf' hx])
 
@@ -1658,7 +1658,7 @@ theorem _root_.IsOpen.is_const_of_deriv_eq_zero
     ext; simp [← toSpanSingleton_deriv, hf' ha]) hx hy
 
 中文:
-定理 _root_.IsOpen.is_const_of_deriv_eq_zero
+定理 _root_.是开集.is_const_of_deriv_eq_zero
   证明: hs.is_const_of_fderiv_eq_zero hs' hf (fun a ha => by
     ext; simp [← toSpanSingleton_deriv, hf' ha]) hx hy
 
@@ -1679,8 +1679,8 @@ theorem _root_.IsOpen.exists_eq_add_of_deriv_eq
   proof: hs.exists_eq_add_of_fderiv_eq hs' hf hg (fun x hx => by simp [← toSpanSingleton_deriv, hf' hx])
 
 中文:
-定理 _root_.IsOpen.exists_eq_add_of_deriv_eq
-  结论: {f g : 𝕜 -> G} (hs : IsOpen s)
+定理 _root_.是开集.存在_eq_add_of_deriv_eq
+  结论: {f g : 𝕜 -> G} (hs : 是开集 s)
   证明: hs.exists_eq_add_of_fderiv_eq hs' hf hg (fun x hx => by simp [← toSpanSingleton_deriv, hf' hx])
 
 Depends on / 依赖: exists_eq_add_of_fderiv_eq, hs.exists_eq_add_of_fderiv_eq, toSpanSingleton_deriv
@@ -1700,8 +1700,8 @@ theorem _root_.IsOpen.eqOn_of_deriv_eq
   proof: hs.eqOn_of_fderiv_eq hs' hf hg (fun _ hx => ContinuousLinearMap.ext_ring (hf' hx)) hx hfgx
 
 中文:
-定理 _root_.IsOpen.eqOn_of_deriv_eq
-  结论: {f g : 𝕜 -> G} (hs : IsOpen s)
+定理 _root_.是开集.eqOn_of_deriv_eq
+  结论: {f g : 𝕜 -> G} (hs : 是开集 s)
   证明: hs.eqOn_of_fderiv_eq hs' hf hg (fun _ hx => ContinuousLinearMap.ext_ring (hf' hx)) hx hfgx
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext_ring, eqOn_of_fderiv_eq, ext_ring, hs.eqOn_of_fderiv_eq

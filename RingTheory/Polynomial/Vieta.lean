@@ -132,8 +132,8 @@ theorem _root_.Finset.prod_X_add_C_coeff
   rfl
 
 中文:
-定理 _root_.Finset.prod_X_add_C_coeff
-  条件: {σ} (s : Finset σ) (r : σ -> R) {k : 自然数} (h : k <= #s)
+定理 _root_.有限集.prod_X_add_C_coeff
+  条件: {σ} (s : 有限集 σ) (r : σ -> R) {k : 自然数} (h : k <= #s)
   证明: by
   rw [Finset.prod]; rw [prod_X_add_C_coeff' _ r h]; rw [Finset.esymm_map_val]
   rfl
@@ -168,7 +168,7 @@ theorem esymm_neg
 中文:
 定理 esymm_neg
   条件: (s : Multiset R) (k : 自然数)
-  结论: (map Neg.neg s).esymm k = (-1) ^ k * esymm s k
+  结论: (map 取负.neg s).esymm k = (-1) ^ k * esymm s k
   证明: by
   rw [esymm]; rw [esymm]; rw [← Multiset.sum_map_mul_left]; rw [Multiset.powersetCard_map]; rw [Multiset.map_map]; rw [map_congr rfl]
   intro x hx
@@ -298,8 +298,8 @@ theorem _root_.Polynomial.coeff_eq_esymm_roots_of_card
   convert! p.roots.prod_X_sub_C_coeff this using 3 <;> rw [hroots]
 
 中文:
-定理 _root_.Polynomial.coeff_eq_esymm_roots_of_card
-  结论: [IsDomain R] {p : R[X]}
+定理 _root_.多项式.coeff_eq_esymm_roots_of_card
+  结论: [是整环 R] {p : R[X]}
   证明: by
   conv_lhs => rw [← C_leadingCoeff_mul_prod_multiset_X_sub_C hroots]
   rw [coeff_C_mul]; rw [mul_assoc]; congr
@@ -325,8 +325,8 @@ theorem _root_.Polynomial.coeff_eq_esymm_roots_of_splits
   proof: Polynomial.coeff_eq_esymm_roots_of_card (splits_iff_card_roots.1 hsplit) h
 
 中文:
-定理 _root_.Polynomial.coeff_eq_esymm_roots_of_splits
-  结论: {F} [Field F] {p : F[X]}
+定理 _root_.多项式.coeff_eq_esymm_roots_of_splits
+  结论: {F} [域 F] {p : F[X]}
   证明: Polynomial.coeff_eq_esymm_roots_of_card (splits_iff_card_roots.1 hsplit) h
 
 Depends on / 依赖: Polynomial, Polynomial.coeff_eq_esymm_roots_of_card, coeff_eq_esymm_roots_of_card, hsplit, splits_iff_card_roots
@@ -359,7 +359,7 @@ theorem MvPolynomial.prod_C_add_X_eq_sum_esymm
   co
 
 中文:
-定理 MvPolynomial.prod_C_add_X_eq_sum_esymm
+定理 多元多项式.prod_C_add_X_eq_sum_esymm
   证明: by
   let s := Finset.univ.val.map fun i : σ => (MvPolynomial.X i : MvPolynomial σ R)
   have : Fintype.card σ = Multiset.card s := by
@@ -394,7 +394,7 @@ theorem MvPolynomial.prod_X_add_C_coeff
   rw [MvPolynomial.esymm_eq_multiset_esymm σ R]; rw [Finset.prod_eq_multiset_p
 
 中文:
-定理 MvPolynomial.prod_X_add_C_coeff
+定理 多元多项式.prod_X_add_C_coeff
   条件: (k : 自然数) (h : k <= card σ)
   证明: by
   let s := Finset.univ.val.map fun i => (MvPolynomial.X i : MvPolynomial σ R)

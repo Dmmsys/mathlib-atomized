@@ -47,7 +47,7 @@ lemma continuous_enorm
 
 中文:
 引理 continuous_enorm
-  结论: Continuous fun a : E => ‖a‖ₑ
+  结论: 连续 fun a : E => ‖a‖ₑ
   证明: ContinuousENorm.continuous_enorm
 
 Depends on / 依赖: ContinuousENorm, ContinuousENorm.continuous_enorm, continuous_enorm
@@ -66,8 +66,8 @@ lemma Continuous.enorm
   proof: continuous_enorm.comp
 
 中文:
-引理 Continuous.enorm
-  结论: Continuous f -> Continuous (‖f ·‖ₑ)
+引理 连续.enorm
+  结论: 连续 f -> 连续 (‖f ·‖ₑ)
   证明: continuous_enorm.comp
 
 Depends on / 依赖: continuous_enorm, continuous_enorm.comp
@@ -112,7 +112,7 @@ lemma ContinuousWithinAt.enorm
 
 中文:
 引理 ContinuousWithinAt.enorm
-  条件: {s : Set X} {a : X} (h : ContinuousWithinAt f s a)
+  条件: {s : 集合 X} {a : X} (h : ContinuousWithinAt f s a)
   证明: (ContinuousENorm.continuous_enorm.continuousWithinAt).comp (t := Set.univ) h
     (fun _ _ => by trivial)
 
@@ -162,7 +162,7 @@ theorem tendsto_iff_norm_inv_mul_tendsto_zero
 
 中文:
 定理 tendsto_iff_norm_inv_mul_tendsto_zero
-  条件: {f : α -> E} {a : Filter α} {b : E}
+  条件: {f : α -> E} {a : 滤子 α} {b : E}
   证明: by
   simp only [← dist_eq_norm_inv_mul, ← tendsto_iff_dist_tendsto_zero]
 
@@ -187,7 +187,7 @@ theorem tendsto_one_iff_norm_tendsto_zero
 
 中文:
 定理 tendsto_one_iff_norm_tendsto_zero
-  条件: {f : α -> E} {a : Filter α}
+  条件: {f : α -> E} {a : 滤子 α}
   证明: tendsto_iff_norm_inv_mul_tendsto_zero.trans by simp
 
 @[to_additive]
@@ -212,7 +212,7 @@ theorem tendsto_iff_enorm_inv_mul_tendsto_zero
 
 中文:
 定理 tendsto_iff_enorm_inv_mul_tendsto_zero
-  条件: {f : α -> E} {a : Filter α} {b : E}
+  条件: {f : α -> E} {a : 滤子 α} {b : E}
   证明: by
   simp only [← edist_eq_enorm_inv_mul, ← tendsto_iff_edist_tendsto_0]
 
@@ -237,7 +237,7 @@ theorem tendsto_one_iff_enorm_tendsto_zero
 
 中文:
 定理 tendsto_one_iff_enorm_tendsto_zero
-  条件: {f : α -> E} {a : Filter α}
+  条件: {f : α -> E} {a : 滤子 α}
   证明: tendsto_iff_enorm_inv_mul_tendsto_zero.trans by simp
 
 @[to_additive (attr := simp 1100)]
@@ -290,7 +290,7 @@ theorem squeeze_one_norm'
 
 中文:
 定理 squeeze_one_norm'
-  结论: {f : α -> E} {a : α -> 实数} {t₀ : Filter α} (h : 对任意ᶠ n in t₀, ‖f n‖ <= a n)
+  结论: {f : α -> E} {a : α -> 实数} {t₀ : 滤子 α} (h : 对任意ᶠ n in t₀, ‖f n‖ <= a n)
   证明: tendsto_one_iff_norm_tendsto_zero.2
     squeeze_zero' (Eventually.of_forall fun _n => norm_nonneg' _) h h'
 
@@ -317,7 +317,7 @@ theorem squeeze_one_norm
 
 中文:
 定理 squeeze_one_norm
-  条件: {f : α -> E} {a : α -> 实数} {t₀ : Filter α} (h : 对任意 n, ‖f n‖ <= a n)
+  条件: {f : α -> E} {a : α -> 实数} {t₀ : 滤子 α} (h : 对任意 n, ‖f n‖ <= a n)
   证明: squeeze_one_norm' Eventually.of_forall h
 
 @[to_additive]
@@ -345,7 +345,7 @@ theorem tendsto_norm_inv_mul_self
 中文:
 定理 tendsto_norm_inv_mul_self
   条件: (x : E)
-  结论: Tendsto (fun a => ‖a⁻¹ * x‖) (𝓝 x) (𝓝 0)
+  结论: 收敛 (fun a => ‖a⁻¹ * x‖) (𝓝 x) (𝓝 0)
   证明: by
   simpa [dist_eq_norm_inv_mul] using
     tendsto_id.dist (tendsto_const_nhds : Tendsto (fun _a => (x : E)) (𝓝 x) _)
@@ -373,7 +373,7 @@ theorem tendsto_norm_inv_mul_self_nhdsGE
 中文:
 定理 tendsto_norm_inv_mul_self_nhdsGE
   条件: (x : E)
-  结论: Tendsto (fun a => ‖a⁻¹ * x‖) (𝓝 x) (𝓝[>=] 0)
+  结论: 收敛 (fun a => ‖a⁻¹ * x‖) (𝓝 x) (𝓝[>=] 0)
   证明: tendsto_nhdsWithin_iff.mpr ⟨tendsto_norm_inv_mul_self x, by simp⟩
 
 @[to_additive tendsto_norm]
@@ -397,7 +397,7 @@ theorem tendsto_norm'
 中文:
 定理 tendsto_norm'
   条件: {x : E}
-  结论: Tendsto (fun a => ‖a‖) (𝓝 x) (𝓝 ‖x‖)
+  结论: 收敛 (fun a => ‖a‖) (𝓝 x) (𝓝 ‖x‖)
   证明: by
   simpa using tendsto_id.dist (tendsto_const_nhds : Tendsto (fun _a => (1 : E)) _ _)
 
@@ -421,7 +421,7 @@ theorem tendsto_norm_one
 
 中文:
 定理 tendsto_norm_one
-  结论: Tendsto (fun a : E => ‖a‖) (𝓝 1) (𝓝 0)
+  结论: 收敛 (fun a : E => ‖a‖) (𝓝 1) (𝓝 0)
   证明: by
   simpa using tendsto_norm_inv_mul_self (1 : E)
 
@@ -446,7 +446,7 @@ theorem continuous_norm'
 
 中文:
 定理 continuous_norm'
-  结论: Continuous fun a : E => ‖a‖
+  结论: 连续 fun a : E => ‖a‖
   证明: by
   simpa using continuous_id.dist (continuous_const : Continuous fun _a => (1 : E))
 
@@ -468,7 +468,7 @@ theorem continuous_nnnorm'
 
 中文:
 定理 continuous_nnnorm'
-  结论: Continuous fun a : E => ‖a‖₊
+  结论: 连续 fun a : E => ‖a‖₊
   证明: continuous_norm'.subtype_mk _
 
 Depends on / 依赖: continuous_norm, subtype_mk
@@ -492,8 +492,8 @@ instance SeminormedGroup.toContinuousENorm
 @[to_additive]
 
 中文:
-实例 SeminormedGroup.toContinuousENorm
-  签名: [SeminormedGroup E]
+实例 半赋范群.toContinuousENorm
+  签名: [半赋范群 E]
   定义体: ENNReal.isOpenEmbedding_coe.continuous.comp continuous_nnnorm'
 
 @[to_additive]
@@ -517,8 +517,8 @@ instance NormedGroup.toENormedMonoid
 @[to_additive]
 
 中文:
-实例 NormedGroup.toENormedMonoid
-  签名: {F : 类型} [NormedGroup F]
+实例 赋范群.toENormedMonoid
+  签名: {F : 类型} [赋范群 F]
   定义体: by simp [enorm_eq_nnnorm]
   enorm_eq_zero := by simp [enorm_eq_nnnorm]
   enorm_mul_le := by simp [enorm_eq_nnnorm, ← coe_add, nnnorm_mul_le']
@@ -543,8 +543,8 @@ instance NormedCommGroup.toENormedCommMonoid
   __ := ‹NormedCommGroup E›
 
 中文:
-实例 NormedCommGroup.toENormedCommMonoid
-  签名: [NormedCommGroup E]
+实例 NormedComm群.toENormedCommMonoid
+  签名: [NormedComm群 E]
   定义体: NormedGroup.toENormedMonoid
   __ := ‹NormedCommGroup E›
 
@@ -572,8 +572,8 @@ theorem Inseparable.norm_eq_norm'
   proof: .eq h.map continuous_norm'
 
 中文:
-定理 Inseparable.norm_eq_norm'
-  条件: {u v : E} (h : Inseparable u v)
+定理 不可分.norm_eq_norm'
+  条件: {u v : E} (h : 不可分 u v)
   结论: ‖u‖ = ‖v‖
   证明: .eq h.map continuous_norm'
 
@@ -594,8 +594,8 @@ theorem Inseparable.nnnorm_eq_nnnorm'
   proof: .eq h.map continuous_nnnorm'
 
 中文:
-定理 Inseparable.nnnorm_eq_nnnorm'
-  条件: {u v : E} (h : Inseparable u v)
+定理 不可分.nnnorm_eq_nnnorm'
+  条件: {u v : E} (h : 不可分 u v)
   结论: ‖u‖₊ = ‖v‖₊
   证明: .eq h.map continuous_nnnorm'
 
@@ -615,8 +615,8 @@ theorem Inseparable.enorm_eq_enorm
 @[to_additive]
 
 中文:
-定理 Inseparable.enorm_eq_enorm
-  结论: {E : 类型} [TopologicalSpace E] [ContinuousENorm E]
+定理 不可分.enorm_eq_enorm
+  结论: {E : 类型} [拓扑空间 E] [余ntinuousE范数 E]
   证明: .eq h.map continuous_enorm
 
 @[to_additive]
@@ -643,7 +643,7 @@ theorem mem_closure_one_iff_norm
 中文:
 定理 mem_closure_one_iff_norm
   条件: {x : E}
-  结论: x in closure ({1} : Set E) ↔ ‖x‖ = 0
+  结论: x in closure ({1} : 集合 E) ↔ ‖x‖ = 0
   证明: by
   rw [← closedBall_zero']; rw [mem_closedBall_one_iff]; rw [(norm_nonneg' x).ge_iff_eq']
 
@@ -665,7 +665,7 @@ theorem closure_one_eq
 
 中文:
 定理 closure_one_eq
-  结论: closure ({1} : Set E) = { x | ‖x‖ = 0 }
+  结论: closure ({1} : 集合 E) = { x | ‖x‖ = 0 }
   证明: Set.ext fun _x => mem_closure_one_iff_norm
 
 Depends on / 依赖: Set.ext, mem_closure_one_iff_norm
@@ -690,9 +690,9 @@ theorem Filter.Tendsto.norm'
 @[to_additive Filter.Tendsto.nnnorm]
 
 中文:
-定理 Filter.Tendsto.norm'
-  条件: (h : Tendsto f l (𝓝 a))
-  结论: Tendsto (fun x => ‖f x‖) l (𝓝 ‖a‖)
+定理 滤子.收敛.norm'
+  条件: (h : 收敛 f l (𝓝 a))
+  结论: 收敛 (fun x => ‖f x‖) l (𝓝 ‖a‖)
   证明: tendsto_norm'.comp h
 
 @[to_additive Filter.Tendsto.nnnorm]
@@ -713,9 +713,9 @@ theorem Filter.Tendsto.nnnorm'
   proof: Tendsto.comp continuous_nnnorm'.continuousAt h
 
 中文:
-定理 Filter.Tendsto.nnnorm'
-  条件: (h : Tendsto f l (𝓝 a))
-  结论: Tendsto (fun x => ‖f x‖₊) l (𝓝 ‖a‖₊)
+定理 滤子.收敛.nnnorm'
+  条件: (h : 收敛 f l (𝓝 a))
+  结论: 收敛 (fun x => ‖f x‖₊) l (𝓝 ‖a‖₊)
   证明: Tendsto.comp continuous_nnnorm'.continuousAt h
 
 Depends on / 依赖: Tendsto, Tendsto.comp, continuousAt, continuous_nnnorm
@@ -742,8 +742,8 @@ theorem Continuous.norm'
 @[to_additive (attr := fun_prop) Continuous.nnnorm]
 
 中文:
-定理 Continuous.norm'
-  结论: Continuous f -> Continuous fun x => ‖f x‖
+定理 连续.norm'
+  结论: 连续 f -> 连续 fun x => ‖f x‖
   证明: continuous_norm'.comp
 
 @[to_additive (attr := fun_prop) Continuous.nnnorm]
@@ -763,8 +763,8 @@ theorem Continuous.nnnorm'
   proof: continuous_nnnorm'.comp
 
 中文:
-定理 Continuous.nnnorm'
-  结论: Continuous f -> Continuous fun x => ‖f x‖₊
+定理 连续.nnnorm'
+  结论: 连续 f -> 连续 fun x => ‖f x‖₊
   证明: continuous_nnnorm'.comp
 
 Depends on / 依赖: continuous_nnnorm
@@ -789,9 +789,9 @@ lemma Filter.Tendsto.enorm
   proof: .comp continuous_enorm.continuousAt h
 
 中文:
-引理 Filter.Tendsto.enorm
-  条件: (h : Tendsto f l (𝓝 a))
-  结论: Tendsto (‖f ·‖ₑ) l (𝓝 ‖a‖ₑ)
+引理 滤子.收敛.enorm
+  条件: (h : 收敛 f l (𝓝 a))
+  结论: 收敛 (‖f ·‖ₑ) l (𝓝 ‖a‖ₑ)
   证明: .comp continuous_enorm.continuousAt h
 
 Depends on / 依赖: continuousAt, continuous_enorm, continuous_enorm.continuousAt
@@ -872,7 +872,7 @@ theorem ContinuousWithinAt.norm'
 
 中文:
 定理 ContinuousWithinAt.norm'
-  条件: {s : Set α} {a : α} (h : ContinuousWithinAt f s a)
+  条件: {s : 集合 α} {a : α} (h : ContinuousWithinAt f s a)
   证明: Tendsto.norm' h
 
 @[to_additive ContinuousWithinAt.nnnorm]
@@ -896,7 +896,7 @@ theorem ContinuousWithinAt.nnnorm'
 
 中文:
 定理 ContinuousWithinAt.nnnorm'
-  条件: {s : Set α} {a : α} (h : ContinuousWithinAt f s a)
+  条件: {s : 集合 α} {a : α} (h : ContinuousWithinAt f s a)
   证明: Tendsto.nnnorm' h
 
 @[to_additive (attr := fun_prop) ContinuousOn.norm]
@@ -921,7 +921,7 @@ theorem ContinuousOn.norm'
 
 中文:
 定理 ContinuousOn.norm'
-  条件: {s : Set α} (h : ContinuousOn f s)
+  条件: {s : 集合 α} (h : ContinuousOn f s)
   结论: ContinuousOn (fun x => ‖f x‖) s
   证明: fun x hx => (h x hx).norm'
 
@@ -941,7 +941,7 @@ theorem ContinuousOn.nnnorm'
 
 中文:
 定理 ContinuousOn.nnnorm'
-  条件: {s : Set α} (h : ContinuousOn f s)
+  条件: {s : 集合 α} (h : ContinuousOn f s)
   证明: fun x hx => (h x hx).nnnorm'
 
 Depends on / 依赖: nnnorm
@@ -966,7 +966,7 @@ theorem eventually_ne_of_tendsto_norm_atTop'
 
 中文:
 定理 eventually_ne_of_tendsto_norm_atTop'
-  结论: {l : Filter α} {f : α -> E}
+  结论: {l : 滤子 α} {f : α -> E}
   证明: (h.eventually_ne_atTop _).mono fun _x => ne_of_apply_ne norm
 
 @[to_additive]
@@ -989,7 +989,7 @@ theorem SeminormedGroup.mem_closure_iff
 @[to_additive]
 
 中文:
-定理 SeminormedGroup.mem_closure_iff
+定理 半赋范群.mem_closure_iff
   证明: by
   simp [Metric.mem_closure_iff, dist_eq_norm_inv_mul]
 
@@ -1014,8 +1014,8 @@ theorem SeminormedGroup.tendstoUniformlyOn_one
 @[to_additive]
 
 中文:
-定理 SeminormedGroup.tendstoUniformlyOn_one
-  条件: {f : ι -> κ -> G} {s : Set κ} {l : Filter ι}
+定理 半赋范群.tendstoUniformlyOn_one
+  条件: {f : ι -> κ -> G} {s : 集合 κ} {l : 滤子 ι}
   证明: by
   simp only [tendstoUniformlyOn_iff, Pi.one_apply, dist_one_left]
 
@@ -1043,7 +1043,7 @@ theorem SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_on
     simpa [dist_
 
 中文:
-定理 SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_one
+定理 半赋范群.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_one
   结论: {f : ι -> κ -> G}
   证明: by
   refine ⟨fun hf u hu => ?_, fun hf u hu => ?_⟩
@@ -1082,8 +1082,8 @@ theorem SeminormedGroup.uniformCauchySeqOn_iff_tendstoUniformlyOn_one
   rw [tendstoUniformlyOn_iff_tendstoUniformlyOnFilter]; rw [uniformCauchySeqOn_iff_uniformCauchySeqOnFilter]; rw [SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_one]
 
 中文:
-定理 SeminormedGroup.uniformCauchySeqOn_iff_tendstoUniformlyOn_one
-  结论: {f : ι -> κ -> G} {s : Set κ}
+定理 半赋范群.uniformCauchySeqOn_iff_tendstoUniformlyOn_one
+  结论: {f : ι -> κ -> G} {s : 集合 κ}
   证明: by
   rw [tendstoUniformlyOn_iff_tendstoUniformlyOnFilter]; rw [uniformCauchySeqOn_iff_uniformCauchySeqOnFilter]; rw [SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_one]
 
@@ -1115,7 +1115,7 @@ theorem tendsto_iff_norm_div_tendsto_zero
 
 中文:
 定理 tendsto_iff_norm_div_tendsto_zero
-  条件: {f : α -> E} {a : Filter α} {b : E}
+  条件: {f : α -> E} {a : 滤子 α} {b : E}
   证明: by
   simp only [← dist_eq_norm_div, ← tendsto_iff_dist_tendsto_zero]
 
@@ -1141,7 +1141,7 @@ theorem tendsto_iff_enorm_div_tendsto_zero
 
 中文:
 定理 tendsto_iff_enorm_div_tendsto_zero
-  条件: {f : α -> E} {a : Filter α} {b : E}
+  条件: {f : α -> E} {a : 滤子 α} {b : E}
   证明: by
   simp only [← edist_eq_enorm_div, ← tendsto_iff_edist_tendsto_0]
 
@@ -1166,8 +1166,8 @@ theorem SeminormedCommGroup.mem_closure_iff
 @[to_additive]
 
 中文:
-定理 SeminormedCommGroup.mem_closure_iff
-  条件: {s : Set E}
+定理 SeminormedComm群.mem_closure_iff
+  条件: {s : 集合 E}
   证明: by
   simp [Metric.mem_closure_iff, dist_eq_norm_div]
 
@@ -1196,7 +1196,7 @@ theorem tendsto_norm_div_self
 中文:
 定理 tendsto_norm_div_self
   条件: (x : E)
-  结论: Tendsto (fun a => ‖a / x‖) (𝓝 x) (𝓝 0)
+  结论: 收敛 (fun a => ‖a / x‖) (𝓝 x) (𝓝 0)
   证明: by
   simpa [dist_eq_norm_div] using
     tendsto_id.dist (tendsto_const_nhds : Tendsto (fun _a => (x : E)) (𝓝 x) _)
@@ -1222,7 +1222,7 @@ theorem tendsto_norm_div_self_nhdsGE
 中文:
 定理 tendsto_norm_div_self_nhdsGE
   条件: (x : E)
-  结论: Tendsto (fun a => ‖a / x‖) (𝓝 x) (𝓝[>=] 0)
+  结论: 收敛 (fun a => ‖a / x‖) (𝓝 x) (𝓝[>=] 0)
   证明: tendsto_nhdsWithin_iff.mpr ⟨tendsto_norm_div_self x, by simp⟩
 
 Depends on / 依赖: tendsto_nhdsWithin_iff, tendsto_nhdsWithin_iff.mpr, tendsto_norm_div_self
@@ -1249,7 +1249,7 @@ theorem controlled_prod_of_mem_closure
 
 中文:
 定理 controlled_prod_of_mem_closure
-  结论: {s : Subgroup E} (hg : a in closure (s : Set E)) {b : 自然数 -> 实数}
+  结论: {s : 子群 E} (hg : a in closure (s : 集合 E)) {b : 自然数 -> 实数}
   证明: by
   obtain ⟨u : Nat -> E, u_in : forall n, u n in s, lim_u : Tendsto u atTop (𝓝 a)⟩ :=
     mem_closure_iff_seq_limit.mp hg
@@ -1357,7 +1357,7 @@ lemma tendsto_norm_nhdsNE_one
 
 中文:
 引理 tendsto_norm_nhdsNE_one
-  结论: Tendsto (norm : E -> 实数) (𝓝[!=] 1) (𝓝[>] 0)
+  结论: 收敛 (norm : E -> 实数) (𝓝[!=] 1) (𝓝[>] 0)
   证明: tendsto_norm_one.inf tendsto_principal_principal.2 fun _ hx => norm_pos_iff'.2 hx
 
 @[to_additive]
@@ -1439,7 +1439,7 @@ theorem tendsto_norm_div_self_nhdsNE
 
 中文:
 定理 tendsto_norm_div_self_nhdsNE
-  条件: {E : 类型} [NormedCommGroup E] (a : E)
+  条件: {E : 类型} [NormedComm群 E] (a : E)
   证明: by
   simp_rw [← norm_inv_mul]
   exact tendsto_norm_inv_mul_self_nhdsNE a

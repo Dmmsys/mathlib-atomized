@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Computation α)
+  签名: 可居 (Computation α)
   定义体: ⟨empty _⟩
 -/
 instance : Inhabited (Computation α) :=
@@ -207,7 +207,7 @@ definition runFor
 
 中文:
 定义 runFor
-  签名: : Computation α -> 自然数 -> Option α
+  签名: : Computation α -> 自然数 -> 选项类型 α
   定义体: Subtype.val
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -267,7 +267,7 @@ theorem destruct_eq_pure
 中文:
 定理 destruct_eq_pure
   条件: {s : Computation α} {a : α}
-  结论: destruct s = Sum.inl a -> s = pure a
+  结论: destruct s = 和.inl a -> s = pure a
   证明: by
   dsimp [destruct]
   cases f0 : s.1 0 <;> intro h
@@ -314,7 +314,7 @@ theorem destruct_eq_think
 中文:
 定理 destruct_eq_think
   条件: {s : Computation α} {s'}
-  结论: destruct s = Sum.inr s' -> s = think s'
+  结论: destruct s = 和.inr s' -> s = think s'
   证明: by
   dsimp [destruct]
   rcases f0 : s.1 0 with - | a' <;> intro h
@@ -358,7 +358,7 @@ theorem destruct_pure
 中文:
 定理 destruct_pure
   条件: (a : α)
-  结论: destruct (pure a) = Sum.inl a
+  结论: destruct (pure a) = 和.inl a
   证明: rfl
 
 @[simp]
@@ -376,7 +376,7 @@ theorem destruct_think
 
 中文:
 定理 destruct_think
-  结论: 对任意 s : Computation α, destruct (think s) = Sum.inr s
+  结论: 对任意 s : Computation α, destruct (think s) = 和.inr s
 -/
 theorem destruct_think : forall s : Computation α, destruct (think s) = Sum.inr s
   | ⟨_, _⟩ => rfl
@@ -394,7 +394,7 @@ theorem destruct_empty
 
 中文:
 定理 destruct_empty
-  结论: destruct (empty α) = Sum.inr (empty α)
+  结论: destruct (empty α) = 和.inr (empty α)
   证明: rfl
 
 @[simp]
@@ -568,7 +568,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {motive : Computation α -> Sort v} (s : Computation α) (pure : 对任意 a, motive (pure a))
+  签名: {motive : Computation α -> 类型层 v} (s : Computation α) (pure : 对任意 a, motive (pure a))
   定义体: match H : destruct s with
   | Sum.inl v => by
     rw [destruct_eq_pure H]
@@ -767,7 +767,7 @@ definition IsBisimulation
   body: forall ⦃s₁ s₂⦄, s₁ ~ s₂ -> BisimO R (destruct s₁) (destruct s₂)
 
 中文:
-定义 IsBisimulation
+定义 是Bisimulation
   定义体: forall ⦃s₁ s₂⦄, s₁ ~ s₂ -> BisimO R (destruct s₁) (destruct s₂)
 
 Depends on / 依赖: BisimO, destruct
@@ -795,7 +795,7 @@ theorem eq_of_bisim
 
 中文:
 定理 eq_of_bisim
-  条件: (bisim : IsBisimulation R) {s₁ s₂} (r : s₁ ~ s₂)
+  条件: (bisim : 是Bisimulation R) {s₁ s₂} (r : s₁ ~ s₂)
   结论: s₁ = s₂
   证明: by
   apply Subtype.ext
@@ -1715,7 +1715,7 @@ theorem exists_results_of_mem
 @[simp]
 
 中文:
-定理 exists_results_of_mem
+定理 存在_results_of_mem
   条件: {s : Computation α} {a} (h : a in s)
   结论: 存在 n, Results s a n
   证明: haveI := terminates_of_mem h
@@ -2069,7 +2069,7 @@ definition memRecOn
 
 中文:
 定义 memRecOn
-  签名: {C : Computation α -> Sort v} {a s} (M : a in s) (h1 : C (pure a))
+  签名: {C : Computation α -> 类型层 v} {a s} (M : a in s) (h1 : C (pure a))
   定义体: by
   haveI T := terminates_of_mem M
   rw [eq_thinkN' s]; rw [get_eq_of_mem s M]
@@ -2737,7 +2737,7 @@ theorem exists_of_mem_bind
   ⟨a, h1.mem, h2.mem⟩
 
 中文:
-定理 exists_of_mem_bind
+定理 存在_of_mem_bind
   条件: {s : Computation α} {f : α -> Computation β} {b} (h : b in bind s f)
   证明: let ⟨_, h⟩ := exists_results_of_mem h
   let ⟨a, _, _, h1, h2, _⟩ := of_results_bind h
@@ -2787,7 +2787,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad Computation where
+  签名: : 单子 Computation where
   定义体: @map
   pure := @pure
   bind := @bind
@@ -2811,7 +2811,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad Computation
+  签名: 合法单子 Computation
   定义体: LawfulMonad.mk'
   (id_map := @map_id)
   (bind_pure_comp := @bind_pure)
@@ -2951,7 +2951,7 @@ theorem exists_of_mem_map
   exact ⟨a, as, mem_unique (ret_mem _) fb⟩
 
 中文:
-定理 exists_of_mem_map
+定理 存在_of_mem_map
   条件: {f : α -> β} {b : β} {s : Computation α} (h : b in map f s)
   证明: by
   rw [← bind_pure] at h
@@ -3034,7 +3034,7 @@ definition orElse
 
 中文:
 定义 orElse
-  签名: (c₁ : Computation α) (c₂ : Unit -> Computation α)
+  签名: (c₁ : Computation α) (c₂ : 单元 -> Computation α)
   定义体: @Computation.corec α (Computation α × Computation α)
     (fun ⟨c₁, c₂⟩ =>
       match destruct c₁ with
@@ -3262,7 +3262,7 @@ definition Equiv
   body: forall a, a in c₁ ↔ a in c₂
 
 中文:
-定义 Equiv
+定义 等价
   签名: (c₁ c₂ : Computation α)
   定义体: forall a, a in c₁ ↔ a in c₂
 -/
@@ -3285,7 +3285,7 @@ theorem Equiv.refl
 @[symm]
 
 中文:
-定理 Equiv.refl
+定理 等价.refl
   条件: (s : Computation α)
   结论: s ~ s
   证明: fun _ => Iff.rfl
@@ -3309,7 +3309,7 @@ theorem Equiv.symm
 @[trans]
 
 中文:
-定理 Equiv.symm
+定理 等价.symm
   条件: {s t : Computation α}
   结论: s ~ t -> t ~ s
   证明: fun h a => (h a).symm
@@ -3330,7 +3330,7 @@ theorem Equiv.trans
   (h1 a).trans (h2 a)
 
 中文:
-定理 Equiv.trans
+定理 等价.trans
   条件: {s t u : Computation α}
   结论: s ~ t -> t ~ u -> s ~ u
   证明: fun h1 h2 a =>
@@ -3348,8 +3348,8 @@ theorem Equiv.equivalence
   proof: ⟨@Equiv.refl _, @Equiv.symm _, @Equiv.trans _⟩
 
 中文:
-定理 Equiv.equivalence
-  结论: Equivalence (@Equiv α)
+定理 等价.equivalence
+  结论: 等价 (@等价 α)
   证明: ⟨@Equiv.refl _, @Equiv.symm _, @Equiv.trans _⟩
 
 Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.trans
@@ -3665,7 +3665,7 @@ instance LiftRel.trans
 
 中文:
 实例 LiftRel.trans
-  签名: (R : α -> α -> 命题) [IsTrans α R]
+  签名: (R : α -> α -> 命题) [是Trans α R]
   定义体: ⟨fun _ _ _ ⟨l1, r1⟩ ⟨l2, r2⟩ =>
   ⟨fun {_a} a1 =>
     let ⟨_b, b2, ab⟩ := l1 a1
@@ -3702,8 +3702,8 @@ theorem LiftRel.equiv
 
 中文:
 定理 LiftRel.equiv
-  条件: (R : α -> α -> 命题) (H : Equivalence R)
-  结论: Equivalence (LiftRel R) where
+  条件: (R : α -> α -> 命题) (H : 等价 R)
+  结论: 等价 (LiftRel R) where
   证明: @LiftRel.refl α R H.stdRefl
 .symm _ _ symm := @LiftRel.symm α R H.stdSymm
 .trans _ _ _ trans := @LiftRel.trans α R H.isTrans
@@ -3829,7 +3829,7 @@ theorem exists_of_liftRel_left
   proof: H.left h
 
 中文:
-定理 exists_of_liftRel_left
+定理 存在_of_liftRel_left
   条件: {R : α -> β -> 命题} {ca cb} (H : LiftRel R ca cb) {a} (h : a in ca)
   证明: H.left h
 
@@ -3848,7 +3848,7 @@ theorem exists_of_liftRel_right
   proof: H.right h
 
 中文:
-定理 exists_of_liftRel_right
+定理 存在_of_liftRel_right
   条件: {R : α -> β -> 命题} {ca cb} (H : LiftRel R ca cb) {b} (h : b in cb)
   证明: H.right h
 
@@ -4203,7 +4203,7 @@ lemma liftRelAux_inl_inl
 中文:
 引理 liftRelAux_inl_inl
   条件: {a : α} {b : β}
-  结论: LiftRelAux R C (Sum.inl a) (Sum.inl b) = R a b
+  结论: LiftRelAux R C (和.inl a) (和.inl b) = R a b
   证明: rfl
 -/
 @[simp] lemma liftRelAux_inl_inl {a : α} {b : β} : LiftRelAux R C (Sum.inl a) (Sum.inl b) = R a b :=

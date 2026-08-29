@@ -54,7 +54,7 @@ definition domCoprodDep
 
 中文:
 定义 domCoprodDep
-  签名: (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
+  签名: (a : 多重线性映射 R (fun i₁ => N (.inl i₁)) N₁)
   定义体: a (fun i₁ => v (.inl i₁)) otimesₜ b (fun i₂ => v (.inr i₂))
   map_update_add' := by
     rintro _ _ (_ | _) _ _
@@ -117,7 +117,7 @@ theorem domCoprodDep'_apply
 
 中文:
 定理 domCoprodDep'_apply
-  结论: (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
+  结论: (a : 多重线性映射 R (fun i₁ => N (.inl i₁)) N₁)
   证明: by
   rfl
 -/
@@ -154,7 +154,7 @@ definition domCoprod
 
 中文:
 定义 domCoprod
-  签名: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
+  签名: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
   定义体: domCoprodDep a b
 
 Depends on / 依赖: domCoprodDep
@@ -199,7 +199,7 @@ theorem domCoprod'_apply
 
 中文:
 定理 domCoprod'_apply
-  结论: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
+  结论: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
   证明: rfl
 -/
 theorem domCoprod'_apply (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
@@ -216,7 +216,7 @@ theorem domCoprod_domDomCongr_sumCongr
 
 中文:
 定理 domCoprod_domDomCongr_sumCongr
-  结论: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
+  结论: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
   证明: rfl
 -/
 theorem domCoprod_domDomCongr_sumCongr (a : MultilinearMap R (fun _ : ι₁ => N) N₁)

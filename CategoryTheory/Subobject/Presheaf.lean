@@ -59,7 +59,7 @@ definition presheaf
 
 中文:
 定义 presheaf
-  签名: : Cᵒᵖ ⥤ Type max u v where
+  签名: : Cᵒᵖ ⥤ 类型 最大值 u v where
   定义体: Subobject X.unop
   map f := ↾(pullback f.unop).obj
   map_id _ := by ext : 3; simp [pullback_id]

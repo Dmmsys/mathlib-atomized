@@ -41,7 +41,7 @@ definition square
 
 中文:
 定义 square
-  签名: : Subsemigroup S where
+  签名: : 子半群 S where
   定义体: {s : S | IsSquare s}
   mul_mem' := IsSquare.mul
 
@@ -118,7 +118,7 @@ definition square
 
 中文:
 定义 square
-  签名: : Submonoid M where
+  签名: : 子幺半群 M where
   定义体: Subsemigroup.square M
   one_mem' := IsSquare.one
 
@@ -215,7 +215,7 @@ definition square
 
 中文:
 定义 square
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: Submonoid.square G
   inv_mem' := IsSquare.inv
 

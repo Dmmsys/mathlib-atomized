@@ -44,11 +44,11 @@ structure Scheme
     - local_affine : forall x : toLocallyRingedSpace, exists (U : OpenNhds x) (R : CommRingCat), Nonempty (toLocallyRingedSpace.restrict U.isOpenEmbedding ≅ Spec.toLocallyRingedSpace.obj (op R))
 
 中文:
-结构 Scheme
-  参数: extends LocallyRingedSpace
-  继承: LocallyRingedSpace
+结构 概形
+  参数: extends LocallyRinged空间
+  继承: LocallyRinged空间
   公理与运算 (1 个):
-    - local_affine : 对任意 x : toLocallyRingedSpace, 存在 (U : OpenNhds x) (R : CommRingCat), Nonempty (toLocallyRingedSpace.restrict U.isOpenEmbedding ≅ Spec.toLocallyRingedSpace.obj (op R))
+    - local_affine : 对任意 x : toLocallyRingedSpace, 存在 (U : OpenNhds x) (R : 交换环范畴), 非空 (toLocallyRingedSpace.restrict U.isOpenEmbedding ≅ Spec.toLocallyRingedSpace.obj (op R))
 -/
 structure Scheme extends LocallyRingedSpace where
   local_affine :
@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Scheme 类型
+  签名: CoeSort 概形 类型
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -103,7 +103,7 @@ abbreviation Opens
 
 中文:
 缩写 Opens
-  签名: (X : Scheme)
+  签名: (X : 概形)
   定义体: TopologicalSpace.Opens X
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.Opens
@@ -120,9 +120,9 @@ structure Hom
   (no additional axioms)
 
 中文:
-结构 Hom
-  参数: (X Y : Scheme)
-  继承: toLRSHom' : X.toLocallyRingedSpace.Hom Y.toLocallyRingedSpace
+结构 态射
+  参数: (X Y : 概形)
+  继承: toLRSHom' : X.toLocallyRingedSpace.态射 Y.toLocallyRingedSpace
   (无附加公理)
 -/
 structure Hom (X Y : Scheme)
@@ -137,8 +137,8 @@ abbreviation Hom.toLRSHom
   body: f.toLRSHom'
 
 中文:
-缩写 Hom.toLRSHom
-  签名: {X Y : Scheme.{u}} (f : X.Hom Y)
+缩写 态射.toLRSHom
+  签名: {X Y : 概形.{u}} (f : X.态射 Y)
   定义体: f.toLRSHom'
 
 Depends on / 依赖: f.toLRSHom, toLRSHom
@@ -158,8 +158,8 @@ definition Hom.Simps.toLRSHom
 initialize_simps_projections Hom (toLRSHom' -> toLRSHom)
 
 中文:
-定义 Hom.Simps.toLRSHom
-  签名: {X Y : Scheme.{u}} (f : X.Hom Y)
+定义 态射.Simps.toLRSHom
+  签名: {X Y : 概形.{u}} (f : X.态射 Y)
   定义体: f.toLRSHom
 
 initialize_simps_projections Hom (toLRSHom' -> toLRSHom)
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category Scheme
+  签名: 范畴 概形
   定义体: Hom
   id X := Hom.mk (𝟙 X.toLocallyRingedSpace)
   comp f g := Hom.mk (f.toLRSHom ≫ g.toLRSHom)
@@ -257,9 +257,9 @@ lemma Hom.continuous
   proof: f.base.hom.2
 
 中文:
-引理 Hom.continuous
-  条件: {X Y : Scheme} (f : X ⟶ Y)
-  结论: Continuous f
+引理 态射.continuous
+  条件: {X Y : 概形} (f : X ⟶ Y)
+  结论: 连续 f
   证明: f.base.hom.2
 
 Depends on / 依赖: f.base.hom
@@ -276,7 +276,7 @@ abbreviation sheaf
 
 中文:
 缩写 sheaf
-  签名: (X : Scheme)
+  签名: (X : 概形)
   定义体: X.toSheafedSpace.sheaf
 -/
 protected abbrev sheaf (X : Scheme) :=
@@ -298,7 +298,7 @@ lemma le_iff_specializes
 
 中文:
 引理 le_iff_specializes
-  条件: {X : Scheme.{u}} {a b : X}
+  条件: {X : 概形.{u}} {a b : X}
   结论: a <= b ↔ b ⤳ a
   证明: by rfl
 -/
@@ -322,7 +322,7 @@ lemma height_of_isClosed
 
 中文:
 引理 height_of_isClosed
-  条件: {X : Scheme} {x : X} (hx : IsClosed {x})
+  条件: {X : 概形} {x : X} (hx : 是闭集 {x})
   结论: height x = 0
   证明: by
   simp only [height_eq_zero]
@@ -849,7 +849,7 @@ lemma comp_preimage
 
 中文:
 引理 comp_preimage
-  条件: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U)
+  条件: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U)
   证明: rfl
 -/
 lemma comp_preimage {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U) :
@@ -870,7 +870,7 @@ definition forgetToLocallyRingedSpace
 
 中文:
 定义 forgetToLocallyRingedSpace
-  签名: : Scheme ⥤ LocallyRingedSpace where
+  签名: : 概形 ⥤ LocallyRinged空间 where
   定义体: toLocallyRingedSpace
   map := Hom.toLRSHom
 
@@ -911,7 +911,7 @@ instance :
 
 中文:
 实例 :
-  签名: forgetToLocallyRingedSpace.Full
+  签名: forgetToLocallyRingedSpace.满
   定义体: fullyFaithfulForgetToLocallyRingedSpace.full
 
 Depends on / 依赖: fullyFaithfulForgetToLocallyRingedSpace, fullyFaithfulForgetToLocallyRingedSpace.full
@@ -929,7 +929,7 @@ instance :
 
 中文:
 实例 :
-  签名: forgetToLocallyRingedSpace.Faithful
+  签名: forgetToLocallyRingedSpace.忠实
   定义体: fullyFaithfulForgetToLocallyRingedSpace.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulForgetToLocallyRingedSpace, fullyFaithfulForgetToLocallyRingedSpace.faithful
@@ -949,7 +949,7 @@ definition forgetToTop
 
 中文:
 定义 forgetToTop
-  签名: : Scheme ⥤ TopCat
+  签名: : 概形 ⥤ 顶元素范畴
   定义体: Scheme.forgetToLocallyRingedSpace ⋙ LocallyRingedSpace.forgetToTop
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.forgetToTop, Scheme, Scheme.forgetToLocallyRingedSpace, forgetToLocallyRingedSpace, forgetToTop
@@ -969,7 +969,7 @@ definition homeoOfIso
 
 中文:
 定义 homeoOfIso
-  签名: {X Y : Scheme.{u}} (e : X ≅ Y)
+  签名: {X Y : 概形.{u}} (e : X ≅ Y)
   定义体: TopCat.homeoOfIso (forgetToTop.mapIso e)
 
 @[simp]
@@ -992,7 +992,7 @@ lemma coe_homeoOfIso
 
 中文:
 引理 coe_homeoOfIso
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y)
+  条件: {X Y : 概形.{u}} (e : X ≅ Y)
   证明: rfl
 
 @[simp]
@@ -1013,7 +1013,7 @@ lemma coe_homeoOfIso_symm
 
 中文:
 引理 coe_homeoOfIso_symm
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y)
+  条件: {X Y : 概形.{u}} (e : X ≅ Y)
   证明: rfl
 
 @[simp]
@@ -1032,7 +1032,7 @@ lemma homeoOfIso_symm
 
 中文:
 引理 homeoOfIso_symm
-  条件: {X Y : Scheme} (e : X ≅ Y)
+  条件: {X Y : 概形} (e : X ≅ Y)
   证明: rfl
 -/
 lemma homeoOfIso_symm {X Y : Scheme} (e : X ≅ Y) :
@@ -1050,7 +1050,7 @@ alias _root_.CategoryTheory.Iso.schemeIsoToHomeo := homeoOfIso
 
 中文:
 引理 homeoOfIso_apply
-  条件: {X Y : Scheme} (e : X ≅ Y) (x : X)
+  条件: {X Y : 概形} (e : X ≅ Y) (x : X)
   证明: rfl
 
 alias _root_.CategoryTheory.Iso.schemeIsoToHomeo := homeoOfIso
@@ -1071,8 +1071,8 @@ definition Hom.homeomorph
 @[simp]
 
 中文:
-定义 Hom.homeomorph
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
+定义 态射.homeomorph
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
   定义体: (asIso f).schemeIsoToHomeo
 
 @[simp]
@@ -1093,8 +1093,8 @@ lemma Hom.homeomorph_apply
   proof: rfl
 
 中文:
-引理 Hom.homeomorph_apply
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f] (x)
+引理 态射.homeomorph_apply
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f] (x)
   证明: rfl
 
 Depends on / 依赖: Scheme
@@ -1112,7 +1112,7 @@ instance hasCoeToTopCat
 
 中文:
 实例 hasCoeToTopCat
-  签名: : CoeOut Scheme TopCat where
+  签名: : CoeOut 概形 顶元素范畴 where
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -1136,7 +1136,7 @@ lemma forgetToTop_comp_forget
 
 中文:
 引理 forgetToTop_comp_forget
-  结论: forgetToTop ⋙ CategoryTheory.forget TopCat = forget
+  结论: forgetToTop ⋙ 范畴论.forget 顶元素范畴 = forget
   证明: rfl
 -/
 lemma forgetToTop_comp_forget : forgetToTop ⋙ CategoryTheory.forget TopCat = forget := rfl
@@ -1159,7 +1159,7 @@ lemma forget_obj
 中文:
 引理 forget_obj
   条件: (X)
-  结论: Scheme.forget.obj X = X
+  结论: 概形.forget.obj X = X
   证明: rfl
 -/
 @[simp] lemma forget_obj (X) : Scheme.forget.obj X = X := rfl
@@ -1212,7 +1212,7 @@ theorem id_base
 
 中文:
 定理 id_base
-  条件: (X : Scheme)
+  条件: (X : 概形)
   结论: (𝟙 X :).base = 𝟙 _
   证明: rfl
 
@@ -1234,7 +1234,7 @@ theorem id_app
 
 中文:
 定理 id_app
-  条件: {X : Scheme} (U : X.Opens)
+  条件: {X : 概形} (U : X.Opens)
   证明: rfl
 
 @[simp]
@@ -1255,7 +1255,7 @@ theorem id_appTop
 
 中文:
 定理 id_appTop
-  条件: {X : Scheme}
+  条件: {X : 概形}
   证明: rfl
 
 @[reassoc]
@@ -1277,7 +1277,7 @@ theorem comp_toLRSHom
 
 中文:
 定理 comp_toLRSHom
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp, reassoc]
@@ -1297,7 +1297,7 @@ theorem comp_base
 
 中文:
 定理 comp_base
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_base {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -1317,7 +1317,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by
   simp
 
@@ -1340,7 +1340,7 @@ theorem comp_app
 
 中文:
 定理 comp_app
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) (U)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) (U)
   证明: rfl
 
 @[simp, reassoc] -- reassoc lemma does not need `simp`
@@ -1362,7 +1362,7 @@ theorem comp_appTop
 
 中文:
 定理 comp_appTop
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[reassoc]
@@ -1385,7 +1385,7 @@ theorem appLE_comp_appLE
 
 中文:
 定理 appLE_comp_appLE
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) (U V W e₁ e₂)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) (U V W e₁ e₂)
   证明: by
   dsimp [Hom.appLE]
   rw [Category.assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]
@@ -1413,7 +1413,7 @@ theorem comp_appLE
 
 中文:
 定理 comp_appLE
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) (U V e)
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) (U V e)
   证明: by
   rw [g.app_eq_appLE]; rw [appLE_comp_appLE]
 
@@ -1434,7 +1434,7 @@ theorem congr_app
 
 中文:
 定理 congr_app
-  条件: {X Y : Scheme} {f g : X ⟶ Y} (e : f = g) (U)
+  条件: {X Y : 概形} {f g : X ⟶ Y} (e : f = g) (U)
   证明: by
   subst e; simp
 -/
@@ -1453,7 +1453,7 @@ theorem app_eq
 
 中文:
 定理 app_eq
-  条件: {X Y : Scheme} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
+  条件: {X Y : 概形} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
   证明: by
   aesop
 -/
@@ -1472,7 +1472,7 @@ theorem eqToHom_app
 
 中文:
 定理 eqToHom_app
-  条件: {X Y : Scheme} (e : X = Y) (U)
+  条件: {X Y : 概形} (e : X = Y) (U)
   证明: by subst e; rfl
 -/
 theorem eqToHom_app {X Y : Scheme} (e : X = Y) (U) :
@@ -1488,7 +1488,7 @@ instance isIso_toLRSHom
 
 中文:
 实例 isIso_toLRSHom
-  签名: {X Y : Scheme} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : 概形} (f : X ⟶ Y) [是同构 f]
   定义体: forgetToLocallyRingedSpace.map_isIso f
 
 Depends on / 依赖: forgetToLocallyRingedSpace, forgetToLocallyRingedSpace.map_isIso, map_isIso
@@ -1507,7 +1507,7 @@ instance isIso_toPshHom
 
 中文:
 实例 isIso_toPshHom
-  签名: {X Y : Scheme} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : 概形} (f : X ⟶ Y) [是同构 f]
   定义体: inferInstanceAs (IsIso ((LocallyRingedSpace.forgetToSheafedSpace ⋙
     SheafedSpace.forgetToPresheafedSpace).map f.toLRSHom))
 
@@ -1527,7 +1527,7 @@ instance isIso_base
 
 中文:
 实例 isIso_base
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 f]
   定义体: Scheme.forgetToTop.map_isIso f
 
 Depends on / 依赖: Scheme, Scheme.forgetToTop.map_isIso, forgetToTop, map_isIso
@@ -1553,7 +1553,7 @@ theorem inv_app
 
 中文:
 定理 inv_app
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsIso f] (U : X.Opens)
+  条件: {X Y : 概形} (f : X ⟶ Y) [是同构 f] (U : X.Opens)
   证明: by
   rw [IsIso.eq_comp_inv]; rw [← comp_app]; rw [congr_app (IsIso.hom_inv_id f)]; rw [id_app]; rw [Category.id_comp]
 
@@ -1576,7 +1576,7 @@ theorem inv_appTop
 
 中文:
 定理 inv_appTop
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : 概形} (f : X ⟶ Y) [是同构 f]
   证明: by simp
 -/
 theorem inv_appTop {X Y : Scheme} (f : X ⟶ Y) [IsIso f] :
@@ -1597,7 +1597,7 @@ definition copyBase
 
 中文:
 定义 copyBase
-  签名: {X Y : Scheme} (f : X.Hom Y) (g : X -> Y) (h : f.base = g)
+  签名: {X Y : 概形} (f : X.态射 Y) (g : X -> Y) (h : f.base = g)
   定义体: TopCat.ofHom ⟨g, h ▸ f.base.1.2⟩
   c := f.c ≫ (TopCat.Presheaf.pushforwardEq (by subst h; rfl) _).hom
   prop x := by
@@ -1630,7 +1630,7 @@ lemma copyBase_eq
 
 中文:
 引理 copyBase_eq
-  条件: {X Y : Scheme} (f : X.Hom Y) (g : X -> Y) (h : f.base = g)
+  条件: {X Y : 概形} (f : X.态射 Y) (g : X -> Y) (h : f.base = g)
   证明: by
   subst h
   obtain ⟨⟨⟨f₁, f₂⟩, f₃⟩, f₄⟩ := f
@@ -1663,7 +1663,7 @@ definition Spec
 
 中文:
 定义 Spec
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: ⟨⟨⊤, trivial⟩, R, ⟨(Spec.toLocallyRingedSpace.obj (op R)).restrictTopIso⟩⟩
   toLocallyRingedSpace := Spec.locallyRingedSpaceObj R
 
@@ -1683,7 +1683,7 @@ theorem Spec_toLocallyRingedSpace
 
 中文:
 定理 Spec_toLocallyRingedSpace
-  条件: (R : CommRingCat)
+  条件: (R : 交换环范畴)
   证明: rfl
 -/
 theorem Spec_toLocallyRingedSpace (R : CommRingCat) :
@@ -1702,7 +1702,7 @@ definition Spec.map
 
 中文:
 定义 Spec.map
-  签名: {R S : CommRingCat} (f : R ⟶ S)
+  签名: {R S : 交换环范畴} (f : R ⟶ S)
   定义体: ⟨Spec.locallyRingedSpaceMap f⟩
 
 @[simp]
@@ -1724,7 +1724,7 @@ theorem Spec.map_id
 
 中文:
 定理 Spec.map_id
-  条件: (R : CommRingCat)
+  条件: (R : 交换环范畴)
   结论: Spec.map (𝟙 R) = 𝟙 (Spec R)
   证明: Scheme.Hom.ext' Spec.locallyRingedSpaceMap_id R
 
@@ -1745,7 +1745,7 @@ theorem Spec.map_comp
 
 中文:
 定理 Spec.map_comp
-  条件: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: Scheme.Hom.ext' Spec.locallyRingedSpaceMap_comp f g
 
 Depends on / 依赖: Scheme, Scheme.Hom.ext, Spec.locallyRingedSpaceMap_comp, locallyRingedSpaceMap_comp
@@ -1768,8 +1768,8 @@ definition Scheme.Spec
   map_comp f g := by simp
 
 中文:
-定义 Scheme.Spec
-  签名: : CommRingCatᵒᵖ ⥤ Scheme where
+定义 概形.Spec
+  签名: : CommRingCatᵒᵖ ⥤ 概形 where
   定义体: Spec (unop R)
   map f := Spec.map f.unop
   map_id R := by simp
@@ -1792,7 +1792,7 @@ lemma Spec.map_eqToHom
 
 中文:
 引理 Spec.map_eqToHom
-  条件: {R S : CommRingCat} (e : R = S)
+  条件: {R S : 交换环范畴} (e : R = S)
   证明: by
   subst e; exact Spec.map_id _
 
@@ -1818,7 +1818,7 @@ lemma Spec.map_inv
 
 中文:
 引理 Spec.map_inv
-  条件: {R S : CommRingCat} (f : R ⟶ S) [IsIso f]
+  条件: {R S : 交换环范畴} (f : R ⟶ S) [是同构 f]
   证明: by
   change Scheme.Spec.map (inv f).op = inv (Scheme.Spec.map f.op)
   rw [op_inv]; rw [← Scheme.Spec.map_inv]
@@ -1845,7 +1845,7 @@ definition specOrderIsoPrimeSpectrum
 
 中文:
 定义 specOrderIsoPrimeSpectrum
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: .toDual x
   invFun x := OrderDual.ofDual x
   map_rel_iff' {a b} := PrimeSpectrum.le_iff_specializes b a
@@ -1871,7 +1871,7 @@ definition primeSpectrumOrderIsoSpec
 
 中文:
 定义 primeSpectrumOrderIsoSpec
-  签名: (R : 类型u) [CommRing R]
+  签名: (R : 类型u) [交换环 R]
   定义体: .toDual x
   invFun x := OrderDual.ofDual x
   map_rel_iff' {a b} := (PrimeSpectrum.le_iff_specializes a b).symm
@@ -1899,8 +1899,8 @@ lemma Spec_carrier
 
 中文:
 引理 Spec_carrier
-  条件: (R : CommRingCat.{u})
-  结论: (Spec R).carrier = PrimeSpectrum R
+  条件: (R : 交换环范畴.{u})
+  结论: (Spec R).carrier = 素谱 R
   证明: rfl
 -/
 lemma Spec_carrier (R : CommRingCat.{u}) : (Spec R).carrier = PrimeSpectrum R := rfl
@@ -1915,7 +1915,7 @@ lemma Spec_sheaf
 
 中文:
 引理 Spec_sheaf
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   结论: (Spec R).sheaf = Spec.structureSheaf R
   证明: rfl
 -/
@@ -1931,7 +1931,7 @@ lemma Spec_presheaf
 
 中文:
 引理 Spec_presheaf
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   结论: (Spec R).presheaf = (Spec.structureSheaf R).1
   证明: rfl
 -/
@@ -1946,7 +1946,7 @@ lemma Spec.map_base
 
 中文:
 引理 Spec.map_base
-  结论: (Spec.map f).base = ofHom ⟨_, PrimeSpectrum.continuous_comap f.hom⟩
+  结论: (Spec.map f).base = ofHom ⟨_, 素谱.continuous_comap f.hom⟩
   证明: rfl
 -/
 lemma Spec.map_base : (Spec.map f).base = ofHom ⟨_, PrimeSpectrum.continuous_comap f.hom⟩ := rfl
@@ -1962,7 +1962,7 @@ lemma Spec.map_apply
 中文:
 引理 Spec.map_apply
   条件: (x : Spec S)
-  结论: Spec.map f x = PrimeSpectrum.comap f.hom x
+  结论: Spec.map f x = 素谱.comap f.hom x
   证明: rfl
 -/
 lemma Spec.map_apply (x : Spec S) : Spec.map f x = PrimeSpectrum.comap f.hom x := rfl
@@ -2018,7 +2018,7 @@ theorem isEmpty_of_commSq
 
 中文:
 定理 isEmpty_of_commSq
-  结论: {W X Y S : Scheme.{u}} {f : X ⟶ S} {g : Y ⟶ S}
+  结论: {W X Y S : 概形.{u}} {f : X ⟶ S} {g : Y ⟶ S}
   证明: ⟨fun x => (Set.disjoint_iff_inter_eq_empty.mp H).le
     ⟨⟨i x, congr($(h.w) x)⟩, ⟨j x, rfl⟩⟩⟩
 
@@ -2046,7 +2046,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : Scheme where
+  签名: : 概形 where
   定义体: TopCat.of PEmpty
   presheaf := (CategoryTheory.Functor.const _).obj (CommRingCat.of PUnit)
   IsSheaf := Presheaf.isSheaf_of_isTerminal _ CommRingCat.punitIsTerminal
@@ -2072,7 +2072,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection Scheme
+  签名: EmptyCollection 概形
   定义体: ⟨empty⟩
 -/
 instance : EmptyCollection Scheme :=
@@ -2088,7 +2088,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : Schemeᵒᵖ ⥤ CommRingCat
+  签名: : Schemeᵒᵖ ⥤ 交换环范畴
   定义体: Scheme.forgetToLocallyRingedSpace.op ⋙ LocallyRingedSpace.Γ
 
 Depends on / 依赖: LocallyRingedSpace, Scheme, Scheme.forgetToLocallyRingedSpace.op, forgetToLocallyRingedSpace
@@ -2108,7 +2108,7 @@ theorem Γ_def
 
 中文:
 定理 Γ_def
-  结论: Γ = Scheme.forgetToLocallyRingedSpace.op ⋙ LocallyRingedSpace.Γ
+  结论: Γ = 概形.forgetToLocallyRingedSpace.op ⋙ LocallyRinged空间.Γ
   证明: rfl
 
 @[simp]
@@ -2148,7 +2148,7 @@ theorem Γ_obj_op
 
 中文:
 定理 Γ_obj_op
-  条件: (X : Scheme)
+  条件: (X : 概形)
   结论: Γ.obj (op X) = Γ(X, ⊤)
   证明: rfl
 
@@ -2187,7 +2187,7 @@ theorem Γ_map_op
 
 中文:
 定理 Γ_map_op
-  条件: {X Y : Scheme} (f : X ⟶ Y)
+  条件: {X Y : 概形} (f : X ⟶ Y)
   结论: Γ.map f.op = f.appTop
   证明: rfl
 -/
@@ -2204,7 +2204,7 @@ definition SpecΓIdentity
 
 中文:
 定义 SpecΓIdentity
-  签名: : Scheme.Spec.rightOp ⋙ Scheme.Γ ≅ 𝟭 _
+  签名: : 概形.Spec.rightOp ⋙ 概形.Γ ≅ 𝟭 _
   定义体: LocallyRingedSpace.SpecΓIdentity
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.Spec
@@ -2289,7 +2289,7 @@ lemma ΓSpecIso_naturality
 
 中文:
 引理 ΓSpecIso_naturality
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: SpecΓIdentity.hom.naturality f
 
 Depends on / 依赖: Identity.hom.naturality, naturality
@@ -2310,7 +2310,7 @@ lemma ΓSpecIso_inv_naturality
 
 中文:
 引理 ΓSpecIso_inv_naturality
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: SpecΓIdentity.inv.naturality f
 
 Depends on / 依赖: Identity.inv.naturality, naturality
@@ -2330,7 +2330,7 @@ lemma ΓSpecIso_inv
 
 中文:
 引理 ΓSpecIso_inv
-  结论: (ΓSpecIso R).inv = CommRingCat.ofHom (algebraMap _ _)
+  结论: (ΓSpecIso R).inv = 交换环范畴.ofHom (algebraMap _ _)
   证明: rfl
 -/
 lemma ΓSpecIso_inv : (ΓSpecIso R).inv = CommRingCat.ofHom (algebraMap _ _) := rfl
@@ -2368,7 +2368,7 @@ lemma default_asIdeal
 
 中文:
 引理 default_asIdeal
-  条件: {K} [Field K]
+  条件: {K} [域 K]
   结论: (default : Spec (.of K)).asIdeal = ⊥
   证明: rfl
 -/
@@ -2429,7 +2429,7 @@ theorem mem_basicOpen'
 中文:
 定理 mem_basicOpen'
   条件: (x : U)
-  结论: ↑x in X.basicOpen f ↔ IsUnit (X.presheaf.germ U x x.2 f)
+  结论: ↑x in X.basicOpen f ↔ 是单位 (X.presheaf.germ U x x.2 f)
   证明: RingedSpace.mem_basicOpen _ _ _ _
 
 Depends on / 依赖: RingedSpace, RingedSpace.mem_basicOpen, mem_basicOpen
@@ -2514,7 +2514,7 @@ theorem basicOpen_res_eq
 
 中文:
 定理 basicOpen_res_eq
-  条件: (i : op U ⟶ op V) [IsIso i]
+  条件: (i : op U ⟶ op V) [是同构 i]
   证明: RingedSpace.basicOpen_res_eq _ i f
 
 @[sheaf_restrict]
@@ -2585,7 +2585,7 @@ alias Hom.preimage_basicOpen := preimage_basicOpen
 
 中文:
 定理 preimage_basicOpen
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) {U : Y.Opens} (r : Γ(Y, U))
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) {U : Y.Opens} (r : Γ(Y, U))
   证明: LocallyRingedSpace.preimage_basicOpen f.toLRSHom r
 
 alias Hom.preimage_basicOpen := preimage_basicOpen
@@ -2610,7 +2610,7 @@ alias Hom.preimage_basicOpen_top := preimage_basicOpen_top
 
 中文:
 定理 preimage_basicOpen_top
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (r : Γ(Y, ⊤))
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (r : Γ(Y, ⊤))
   证明: preimage_basicOpen ..
 
 alias Hom.preimage_basicOpen_top := preimage_basicOpen_top
@@ -2637,7 +2637,7 @@ lemma basicOpen_appLE
 
 中文:
 引理 basicOpen_appLE
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : X.Opens) (V : Y.Opens) (e : U <= f ⁻¹ᵁ V)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) (U : X.Opens) (V : Y.Opens) (e : U <= f ⁻¹ᵁ V)
   证明: by
   simp only [preimage_basicOpen, Hom.appLE, CommRingCat.comp_apply]
   rw [basicOpen_res]
@@ -2759,7 +2759,7 @@ theorem basicOpen_of_isUnit
 
 中文:
 定理 basicOpen_of_isUnit
-  条件: {f : Γ(X, U)} (hf : IsUnit f)
+  条件: {f : Γ(X, U)} (hf : 是单位 f)
   结论: X.basicOpen f = U
   证明: RingedSpace.basicOpen_of_isUnit _ hf
 
@@ -2801,7 +2801,7 @@ instance algebra_section_section_basicOpen
 
 中文:
 实例 algebra_section_section_basicOpen
-  签名: {X : Scheme} {U : X.Opens} (f : Γ(X, U))
+  签名: {X : 概形} {U : X.Opens} (f : Γ(X, U))
   定义体: (X.presheaf.map (homOfLE <| X.basicOpen_le f : _ ⟶ U).op).hom.toAlgebra
 
 @[simp]
@@ -2823,7 +2823,7 @@ lemma _root_.AlgebraicGeometry.SpecMap_preimage_basicOpen
 
 中文:
 引理 _root_.AlgebraicGeometry.SpecMap_preimage_basicOpen
-  条件: {R S : CommRingCat} (f : R ⟶ S) (r : R)
+  条件: {R S : 交换环范畴} (f : R ⟶ S) (r : R)
   证明: rfl
 -/
 lemma _root_.AlgebraicGeometry.SpecMap_preimage_basicOpen {R S : CommRingCat} (f : R ⟶ S) (r : R) :
@@ -2845,7 +2845,7 @@ definition zeroLocus
 
 中文:
 定义 zeroLocus
-  签名: {U : X.Opens} (s : Set Γ(X, U))
+  签名: {U : X.Opens} (s : 集合 Γ(X, U))
   定义体: X.toRingedSpace.zeroLocus s
 
 Depends on / 依赖: X.toRingedSpace.zeroLocus, toRingedSpace, zeroLocus
@@ -2862,7 +2862,7 @@ lemma zeroLocus_def
 
 中文:
 引理 zeroLocus_def
-  条件: {U : X.Opens} (s : Set Γ(X, U))
+  条件: {U : X.Opens} (s : 集合 Γ(X, U))
   证明: rfl
 -/
 lemma zeroLocus_def {U : X.Opens} (s : Set Γ(X, U)) :
@@ -2879,7 +2879,7 @@ lemma zeroLocus_isClosed
 
 中文:
 引理 zeroLocus_isClosed
-  条件: {U : X.Opens} (s : Set Γ(X, U))
+  条件: {U : X.Opens} (s : 集合 Γ(X, U))
   证明: X.toRingedSpace.zeroLocus_isClosed s
 
 Depends on / 依赖: X.toRingedSpace.zeroLocus_isClosed, toRingedSpace, zeroLocus_isClosed
@@ -2946,7 +2946,7 @@ lemma mem_zeroLocus_iff
 
 中文:
 引理 mem_zeroLocus_iff
-  条件: {U : X.Opens} (s : Set Γ(X, U)) (x : X)
+  条件: {U : X.Opens} (s : 集合 Γ(X, U)) (x : X)
   证明: X.toRingedSpace.mem_zeroLocus_iff s x
 
 Depends on / 依赖: X.toRingedSpace.mem_zeroLocus_iff, mem_zeroLocus_iff, toRingedSpace
@@ -2995,7 +2995,7 @@ lemma zeroLocus_span
 
 中文:
 引理 zeroLocus_span
-  条件: {U : X.Opens} (s : Set Γ(X, U))
+  条件: {U : X.Opens} (s : 集合 Γ(X, U))
   证明: by
   ext x
   simp only [Scheme.mem_zeroLocus_iff, SetLike.mem_coe]
@@ -3028,7 +3028,7 @@ lemma zeroLocus_setMul
 
 中文:
 引理 zeroLocus_setMul
-  条件: {U : X.Opens} (s t : Set Γ(X, U))
+  条件: {U : X.Opens} (s t : 集合 Γ(X, U))
   证明: by
   simp only [← Set.image2_mul, zeroLocus_def, Set.biInter_image2]
   simp [Set.compl_inter, ← Set.union_iInter₂, ← Set.iInter₂_union]
@@ -3053,7 +3053,7 @@ lemma zeroLocus_mul
 
 中文:
 引理 zeroLocus_mul
-  条件: {U : X.Opens} (I J : Ideal Γ(X, U))
+  条件: {U : X.Opens} (I J : 理想 Γ(X, U))
   证明: by
   rw [← X.zeroLocus_setMul]; rw [← X.zeroLocus_span (U := U) (↑I * ↑J)]; rw [← Ideal.span_mul_span]
   simp
@@ -3079,7 +3079,7 @@ lemma zeroLocus_map
 
 中文:
 引理 zeroLocus_map
-  条件: {U V : X.Opens} (i : U <= V) (s : Set Γ(X, V))
+  条件: {U V : X.Opens} (i : U <= V) (s : 集合 Γ(X, V))
   证明: by
   ext x
   suffices (forall f in s, x in U -> x ∉ X.basicOpen f) ↔ x in U -> (forall f in s, x ∉ X.basicOpen f) by
@@ -3106,7 +3106,7 @@ lemma zeroLocus_map_of_eq
 
 中文:
 引理 zeroLocus_map_of_eq
-  条件: {U V : X.Opens} (i : U = V) (s : Set Γ(X, V))
+  条件: {U V : X.Opens} (i : U = V) (s : 集合 Γ(X, V))
   证明: by
   ext; simp
 -/
@@ -3126,7 +3126,7 @@ lemma zeroLocus_mono
 
 中文:
 引理 zeroLocus_mono
-  条件: {U : X.Opens} {s t : Set Γ(X, U)} (h : s subseteq t)
+  条件: {U : X.Opens} {s t : 集合 Γ(X, U)} (h : s subseteq t)
   证明: by
   simp only [Set.subset_def, Scheme.mem_zeroLocus_iff]
   exact fun x H f hf hxf => H f (h hf) hxf
@@ -3152,7 +3152,7 @@ lemma preimage_zeroLocus
 
 中文:
 引理 preimage_zeroLocus
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) {U : Y.Opens} (s : Set Γ(Y, U))
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) {U : Y.Opens} (s : 集合 Γ(Y, U))
   证明: by
   ext
   simp [← Scheme.preimage_basicOpen]
@@ -3208,7 +3208,7 @@ lemma zeroLocus_iUnion
 
 中文:
 引理 zeroLocus_iUnion
-  条件: {U : X.Opens} {ι : 类型} (f : ι -> Set Γ(X, U))
+  条件: {U : X.Opens} {ι : 类型} (f : ι -> 集合 Γ(X, U))
   证明: by
   simpa [zeroLocus, AlgebraicGeometry.RingedSpace.zeroLocus] using Set.iInter_comm _
 
@@ -3234,7 +3234,7 @@ lemma zeroLocus_radical
 
 中文:
 引理 zeroLocus_radical
-  条件: {U : X.Opens} (I : Ideal Γ(X, U))
+  条件: {U : X.Opens} (I : 理想 Γ(X, U))
   证明: by
   refine (X.zeroLocus_mono I.le_radical).antisymm ?_
   simp only [Set.subset_def, mem_zeroLocus_iff, SetLike.mem_coe]
@@ -3275,7 +3275,7 @@ theorem basicOpen_eq_of_affine
 
 中文:
 定理 basicOpen_eq_of_affine
-  条件: {R : CommRingCat} (f : R)
+  条件: {R : 交换环范畴} (f : R)
   证明: by
   ext x
   simp only [SetLike.mem_coe, Scheme.mem_basicOpen_top]
@@ -3309,7 +3309,7 @@ theorem basicOpen_eq_of_affine'
 
 中文:
 定理 basicOpen_eq_of_affine'
-  条件: {R : CommRingCat} (f : Γ(Spec R, ⊤))
+  条件: {R : 交换环范畴} (f : Γ(Spec R, ⊤))
   证明: by
   convert! basicOpen_eq_of_affine ((Scheme.ΓSpecIso R).hom f)
   exact (Iso.hom_inv_id_apply (Scheme.ΓSpecIso R) f).symm
@@ -3336,8 +3336,8 @@ theorem Scheme.SpecMap_presheaf_map_eqToHom
   simp [eqToHom_map]
 
 中文:
-定理 Scheme.SpecMap_presheaf_map_eqToHom
-  条件: {X : Scheme} {U V : X.Opens} (h : U = V) (W)
+定理 概形.SpecMap_presheaf_map_eqToHom
+  条件: {X : 概形} {U V : X.Opens} (h : U = V) (W)
   证明: by
   have : Scheme.Spec.map (X.presheaf.map (𝟙 (op U))).op = 𝟙 _ := by
     rw [X.presheaf.map_id]; rw [op_id]; rw [Scheme.Spec.map_id]
@@ -3372,7 +3372,7 @@ lemma germ_eq_zero_of_pow_mul_eq_zero
 
 中文:
 引理 germ_eq_zero_of_pow_mul_eq_zero
-  结论: {X : Scheme.{u}} {U : Opens X} (x : U) {f s : Γ(X, U)}
+  结论: {X : 概形.{u}} {U : Opens X} (x : U) {f s : Γ(X, U)}
   证明: by
   rw [Scheme.mem_basicOpen X s x x.2] at hx
   have hu : IsUnit (X.presheaf.germ _ x x.2 (s ^ n)) := by
@@ -3404,8 +3404,8 @@ lemma Scheme.hom_base_inv_base
 @[simp]
 
 中文:
-引理 Scheme.hom_base_inv_base
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y)
+引理 概形.hom_base_inv_base
+  条件: {X Y : 概形.{u}} (e : X ≅ Y)
   证明: LocallyRingedSpace.iso_hom_base_inv_base (Scheme.forgetToLocallyRingedSpace.mapIso e)
 
 @[simp]
@@ -3430,8 +3430,8 @@ lemma Scheme.hom_inv_apply
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.hom_inv_apply
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y) (x : X)
+引理 概形.hom_inv_apply
+  条件: {X Y : 概形.{u}} (e : X ≅ Y) (x : X)
   证明: by
   change (e.hom ≫ e.inv) x = 𝟙 X.toPresheafedSpace x
   simp
@@ -3457,8 +3457,8 @@ lemma Scheme.inv_base_hom_base
 @[simp]
 
 中文:
-引理 Scheme.inv_base_hom_base
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y)
+引理 概形.inv_base_hom_base
+  条件: {X Y : 概形.{u}} (e : X ≅ Y)
   证明: LocallyRingedSpace.iso_inv_base_hom_base (Scheme.forgetToLocallyRingedSpace.mapIso e)
 
 @[simp]
@@ -3481,8 +3481,8 @@ lemma Scheme.inv_hom_apply
   simp
 
 中文:
-引理 Scheme.inv_hom_apply
-  条件: {X Y : Scheme.{u}} (e : X ≅ Y) (y : Y)
+引理 概形.inv_hom_apply
+  条件: {X Y : 概形.{u}} (e : X ≅ Y) (y : Y)
   证明: by
   change (e.inv ≫ e.hom) y = 𝟙 Y.toPresheafedSpace y
   simp
@@ -3509,7 +3509,7 @@ theorem Spec_zeroLocus_eq_zeroLocus
 
 中文:
 定理 Spec_zeroLocus_eq_zeroLocus
-  条件: {R : CommRingCat} (s : Set R)
+  条件: {R : 交换环范畴} (s : 集合 R)
   证明: by
   ext x
   suffices (forall a in s, x ∉ PrimeSpectrum.basicOpen a) ↔ x in PrimeSpectrum.zeroLocus s by simpa
@@ -3538,7 +3538,7 @@ theorem Spec_zeroLocus
 
 中文:
 定理 Spec_zeroLocus
-  条件: {R : CommRingCat} (s : Set Γ(Spec R, ⊤))
+  条件: {R : 交换环范畴} (s : 集合 Γ(Spec R, ⊤))
   证明: by
   convert! Spec_zeroLocus_eq_zeroLocus ((Scheme.ΓSpecIso R).inv ⁻¹' s)
   rw [Set.image_preimage_eq]
@@ -3571,7 +3571,7 @@ lemma stalkMap_id
 
 中文:
 引理 stalkMap_id
-  条件: (X : Scheme.{u}) (x : X)
+  条件: (X : 概形.{u}) (x : X)
   证明: PresheafedSpace.stalkMap.id _ x
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.stalkMap.id, stalkMap
@@ -3592,7 +3592,7 @@ lemma stalkMap_comp
 
 中文:
 引理 stalkMap_comp
-  条件: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: PresheafedSpace.stalkMap.comp f.toPshHom g.toPshHom x
 
 @[reassoc]
@@ -3922,7 +3922,7 @@ lemma Spec_closedPoint
 
 中文:
 引理 Spec_closedPoint
-  结论: {R S : CommRingCat} [IsLocalRing R] [IsLocalRing S]
+  结论: {R S : 交换环范畴} [是局部环 R] [是局部环 S]
   证明: IsLocalRing.comap_closedPoint f.hom
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.comap_closedPoint, comap_closedPoint, f.hom

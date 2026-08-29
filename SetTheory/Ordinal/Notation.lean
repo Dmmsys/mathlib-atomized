@@ -45,7 +45,7 @@ inductive ONote
 
 中文:
 归纳类型 ONote
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - zero: ONote
     - oadd: ONote -> 自然数+ -> ONote -> ONote
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero ONote
+  签名: 零 ONote
   定义体: ⟨zero⟩
 
 @[simp]
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ONote
+  签名: 可居 ONote
   定义体: ⟨0⟩
 -/
 instance : Inhabited ONote :=
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: One ONote
+  签名: 幺 ONote
   定义体: ⟨oadd 0 1 0⟩
 -/
 instance : One ONote :=
@@ -153,7 +153,7 @@ definition repr
 
 中文:
 定义 repr
-  签名: : ONote -> Ordinal.{0}
+  签名: : ONote -> 序数.{0}
 -/
 noncomputable def repr : ONote -> Ordinal.{0}
   | 0 => 0
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder ONote
+  签名: 预序 ONote
   定义体: repr x <= repr y
   lt x y := repr x < repr y
   le_refl _ := @le_refl Ordinal _ _
@@ -352,7 +352,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation ONote
+  签名: 良基关系 ONote
   定义体: ⟨(· < ·), InvImage.wf repr Ordinal.lt_wf⟩
 
 Depends on / 依赖: InvImage, InvImage.wf, Ordinal, Ordinal.lt_wf, lt_wf
@@ -368,7 +368,7 @@ definition ofNat
   signature: : Nat -> ONote
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: : 自然数 -> ONote
 -/
 @[coe] def ofNat : Nat -> ONote
@@ -384,7 +384,7 @@ theorem ofNat_zero
   proof: rfl
 
 中文:
-定理 ofNat_zero
+定理 of自然数_zero
   结论: of自然数 0 = 0
   证明: rfl
 -/
@@ -401,7 +401,7 @@ theorem ofNat_succ
   proof: rfl
 
 中文:
-定理 ofNat_succ
+定理 of自然数_succ
   条件: (n)
   结论: of自然数 (自然数.succ n) = oadd 0 n.succP自然数 0
   证明: rfl
@@ -421,7 +421,7 @@ theorem ofNat_one
   proof: rfl
 
 中文:
-定理 ofNat_one
+定理 of自然数_one
   结论: of自然数 1 = 1
   证明: rfl
 -/
@@ -437,7 +437,7 @@ theorem repr_ofNat
   proof: by cases n <;> simp
 
 中文:
-定理 repr_ofNat
+定理 repr_of自然数
   条件: (n : 自然数)
   结论: repr (of自然数 n) = n
   证明: by cases n <;> simp
@@ -591,7 +591,7 @@ inductive NFBelow
 
 中文:
 归纳类型 NFBelow
-  参数: : ONote -> Ordinal.{0} -> 命题
+  参数: : ONote -> 序数.{0} -> 命题
   构造子 (2 个):
     - zero: {b} : NFBelow 0 b
     - oadd': {e n a eb b} : NFBelow e eb -> NFBelow a (repr e) -> repr e < b -> NFBelow (oadd e n a) b
@@ -613,7 +613,7 @@ class NF
 类 NF
   参数: (o : ONote)
   公理与运算 (1 个):
-    - out : Exists (NFBelow o)
+    - out : 存在 (NFBelow o)
 -/
 class NF (o : ONote) : Prop where
   out : Exists (NFBelow o)
@@ -950,7 +950,7 @@ theorem nfBelow_ofNat
   statement: forall n, NFBelow (ofNat n) 1
 
 中文:
-定理 nfBelow_ofNat
+定理 nfBelow_of自然数
   结论: 对任意 n, NFBelow (of自然数 n) 1
 -/
 theorem nfBelow_ofNat : forall n, NFBelow (ofNat n) 1
@@ -966,7 +966,7 @@ instance nf_ofNat
   body: ⟨⟨_, nfBelow_ofNat n⟩⟩
 
 中文:
-实例 nf_ofNat
+实例 nf_of自然数
   签名: (n)
   定义体: ⟨⟨_, nfBelow_ofNat n⟩⟩
 
@@ -1367,7 +1367,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add ONote
+  签名: 加法 ONote
   定义体: ⟨add⟩
 
 @[simp]
@@ -1445,7 +1445,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub ONote
+  签名: 减法 ONote
   定义体: ⟨sub⟩
 -/
 instance : Sub ONote :=
@@ -1711,7 +1711,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul ONote
+  签名: 乘法 ONote
   定义体: ⟨mul⟩
 -/
 instance : Mul ONote :=
@@ -1728,7 +1728,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulZeroClass ONote
+  签名: 乘零类 ONote
   定义体: by cases o <;> rfl
   mul_zero o := by cases o <;> rfl
 
@@ -1945,7 +1945,7 @@ definition mulNat
   signature: : ONote -> Nat -> ONote
 
 中文:
-定义 mulNat
+定义 mul自然数
   签名: : ONote -> 自然数 -> ONote
 -/
 def mulNat : ONote -> Nat -> ONote
@@ -2047,7 +2047,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow ONote ONote
+  签名: 幂 ONote ONote
   定义体: ⟨opow⟩
 -/
 instance : Pow ONote ONote :=
@@ -2381,7 +2381,7 @@ theorem mulNat_eq_mul
   proof: by cases o <;> cases n <;> rfl
 
 中文:
-定理 mulNat_eq_mul
+定理 mul自然数_eq_mul
   条件: (n o)
   结论: mul自然数 o n = o * of自然数 n
   证明: by cases o <;> cases n <;> rfl
@@ -2397,7 +2397,7 @@ instance nf_mulNat
   body: by simpa using ONote.mul_nf o (ofNat n)
 
 中文:
-实例 nf_mulNat
+实例 nf_mul自然数
   签名: (o) [NF o] (n)
   定义体: by simpa using ONote.mul_nf o (ofNat n)
 
@@ -2563,7 +2563,7 @@ theorem repr_opow_aux₁
 
 中文:
 定理 repr_opow_aux₁
-  结论: {e a} [Ne : NF e] [Na : NF a] {a' : Ordinal} (e0 : repr e != 0)
+  结论: {e a} [不等 : NF e] [Na : NF a] {a' : 序数} (e0 : repr e != 0)
   证明: by
   subst aa
   have No := Ne.oadd n (Na.below_of_lt' h)
@@ -2821,7 +2821,7 @@ definition fundamentalSequence
 
 中文:
 定义 fundamentalSequence
-  签名: : ONote -> (Option ONote) oplus (自然数 -> ONote)
+  签名: : ONote -> (选项类型 ONote) oplus (自然数 -> ONote)
 
 Depends on / 依赖: Ordinal, Ordinal.add_sub_cancel_of_le, add_lt_add_iff_left, add_sub_cancel_of_le, h.trans_le, le_self_add, lt_or_ge, trans_le
 -/
@@ -2855,8 +2855,8 @@ theorem exists_lt_add
     rwa [← Ordinal.add_sub_cancel_of_le h', add_lt_add_iff_left]
 
 中文:
-定理 exists_lt_add
-  结论: {α} [hα : Nonempty α] {o : Ordinal} {f : α -> Ordinal}
+定理 存在_lt_add
+  结论: {α} [hα : 非空 α] {o : 序数} {f : α -> 序数}
   证明: by
   rcases lt_or_ge a b with h | h'
   · obtain ⟨i⟩ := id hα
@@ -2886,8 +2886,8 @@ theorem exists_lt_mul_omega0'
   exact ⟨i, h'.trans_le le_self_add⟩
 
 中文:
-定理 exists_lt_mul_omega0'
-  条件: {o : Ordinal} ⦃a⦄ (h : a < o * ω)
+定理 存在_lt_mul_omega0'
+  条件: {o : 序数} ⦃a⦄ (h : a < o * ω)
   证明: by
   obtain ⟨i, hi, h'⟩ := (lt_mul_iff_of_isSuccLimit isSuccLimit_omega0).1 h
   obtain ⟨i, rfl⟩ := lt_omega0.1 hi
@@ -2910,8 +2910,8 @@ theorem exists_lt_omega0_opow'
 exact (H hd).imp fun i hi => h'.trans (opow_lt_opow_iff_right hb).2 hi
 
 中文:
-定理 exists_lt_omega0_opow'
-  结论: {α} {o b : Ordinal} (hb : 1 < b) (ho : IsSuccLimit o)
+定理 存在_lt_omega0_opow'
+  结论: {α} {o b : 序数} (hb : 1 < b) (ho : 是SuccLimit o)
   证明: by
   obtain ⟨d, hd, h'⟩ := (lt_opow_of_isSuccLimit (zero_lt_one.trans hb).ne' ho).1 h
 exact (H hd).imp fun i hi => h'.trans (opow_lt_opow_iff_right hb).2 hi
@@ -3020,7 +3020,7 @@ theorem fundamentalSequence_has_prop
 中文:
 定理 fundamentalSequence_has_prop
   条件: (o)
-  结论: FundamentalSequence命题 o (fundamentalSequence o)
+  结论: FundamentalSequenceProp o (fundamentalSequence o)
   证明: by
   induction o with
   | zero => exact rfl
@@ -3180,7 +3180,7 @@ theorem fastGrowing_zero'
 
 中文:
 定理 fastGrowing_zero'
-  条件: (o : ONote) (h : fundamentalSequence o = Sum.inl none)
+  条件: (o : ONote) (h : fundamentalSequence o = 和.inl none)
   证明: by
   rw [fastGrowing_def h]
 
@@ -3201,7 +3201,7 @@ theorem fastGrowing_succ
 
 中文:
 定理 fastGrowing_succ
-  条件: (o) {a} (h : fundamentalSequence o = Sum.inl (some a))
+  条件: (o) {a} (h : fundamentalSequence o = 和.inl (some a))
   证明: by
   rw [fastGrowing_def h]
 
@@ -3224,7 +3224,7 @@ theorem fastGrowing_limit
 
 中文:
 定理 fastGrowing_limit
-  条件: (o) {f} (h : fundamentalSequence o = Sum.inr f)
+  条件: (o) {f} (h : fundamentalSequence o = 和.inr f)
   证明: by
   rw [fastGrowing_def h]
 
@@ -3506,7 +3506,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder NONote
+  签名: 预序 NONote
   定义体: repr x <= repr y
   lt x y := repr x < repr y
   le_refl _ := @le_refl Ordinal _ _
@@ -3530,7 +3530,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero NONote
+  签名: 零 NONote
   定义体: ⟨⟨0, NF.zero⟩⟩
 
 Depends on / 依赖: NF.zero
@@ -3548,7 +3548,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited NONote
+  签名: 可居 NONote
   定义体: ⟨0⟩
 -/
 instance : Inhabited NONote :=
@@ -3564,7 +3564,7 @@ theorem lt_wf
 
 中文:
 定理 lt_wf
-  结论: @WellFounded NONote (· < ·)
+  结论: @良基 NONote (· < ·)
   证明: InvImage.wf repr Ordinal.lt_wf
 
 Depends on / 依赖: InvImage, InvImage.wf, Ordinal, Ordinal.lt_wf, lt_wf
@@ -3600,7 +3600,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation NONote
+  签名: 良基关系 NONote
   定义体: ⟨(· < ·), lt_wf⟩
 
 Depends on / 依赖: lt_wf
@@ -3617,7 +3617,7 @@ definition ofNat
   body: ⟨ONote.ofNat n, ⟨⟨_, nfBelow_ofNat _⟩⟩⟩
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: (n : 自然数)
   定义体: ⟨ONote.ofNat n, ⟨⟨_, nfBelow_ofNat _⟩⟩⟩
 
@@ -3680,7 +3680,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder NONote
+  签名: 线性序 NONote
   定义体: linearOrderOfCompares cmp cmp_compares
 
 Depends on / 依赖: cmp_compares, linearOrderOfCompares
@@ -3740,7 +3740,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {C : NONote -> Sort*} (o : NONote) (H0 : C 0)
+  签名: {C : NONote -> 类型层*} (o : NONote) (H0 : C 0)
   定义体: by
   obtain ⟨o, h⟩ := o; induction o with
   | zero => exact H0
@@ -3764,7 +3764,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add NONote
+  签名: 加法 NONote
   定义体: ⟨fun x y => mk (x.1 + y.1)⟩
 -/
 instance : Add NONote :=
@@ -3800,7 +3800,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub NONote
+  签名: 减法 NONote
   定义体: ⟨fun x y => mk (x.1 - y.1)⟩
 -/
 instance : Sub NONote :=
@@ -3836,7 +3836,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul NONote
+  签名: 乘法 NONote
   定义体: ⟨fun x y => mk (x.1 * y.1)⟩
 -/
 instance : Mul NONote :=

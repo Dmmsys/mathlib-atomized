@@ -382,7 +382,7 @@ theorem eq_smul_exp_of_invertible
 
 中文:
 定理 eq_smul_exp_of_invertible
-  条件: (x : tsze R M) [Invertible x.fst]
+  条件: (x : tsze R M) [可逆 x.fst]
   证明: by
   rw [← inr_smul]; rw [exp_inr]; rw [smul_add]; rw [← inl_one]; rw [← inl_smul]; rw [← inr_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [smul_smul]; rw [mul_invOf_self]; rw [one_smul]; rw [inl_fst_add_inr_snd_eq]
 
@@ -456,7 +456,7 @@ example :
 
 中文:
 实例 instL1SeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (tsze R M)
+  签名: : SeminormedAddComm群 (tsze R M)
   定义体: fast_instance% {
     WithLp.seminormedAddCommGroupToProd 1 R M with
     toUniformSpace := inferInstance }
@@ -620,7 +620,7 @@ instance instL1SeminormedRing
 
 中文:
 实例 instL1SeminormedRing
-  签名: : SeminormedRing (tsze R M) where
+  签名: : Seminormed环 (tsze R M) where
   定义体: by
       gcongr
       · apply norm_mul_le
@@ -661,7 +661,7 @@ instance instL1IsBoundedSMul
 
 中文:
 实例 instL1IsBoundedSMul
-  签名: : IsBoundedSMul S (tsze R M)
+  签名: : 是BoundedSMul S (tsze R M)
   定义体: WithLp.isBoundedSMulSeminormedAddCommGroupToProd 1 R M
 
 Depends on / 依赖: WithLp, WithLp.isBoundedSMulSeminormedAddCommGroupToProd, isBoundedSMulSeminormedAddCommGroupToProd
@@ -678,8 +678,8 @@ instance [NormOneClass
   body: by rw [norm_def, fst_one, snd_one, norm_zero, norm_one, add_zero]
 
 中文:
-实例 [NormOneClass
-  签名: R] : NormOneClass (tsze R M) where
+实例 [NormOne类
+  签名: R] : NormOne类 (tsze R M) where
   定义体: by rw [norm_def, fst_one, snd_one, norm_zero, norm_one, add_zero]
 
 Depends on / 依赖: add_zero, fst_one, norm_def, norm_one, norm_zero, snd_one
@@ -706,7 +706,7 @@ instance instL1SeminormedCommRing
 
 中文:
 实例 instL1SeminormedCommRing
-  签名: : SeminormedCommRing (tsze R M) where
+  签名: : SeminormedComm环 (tsze R M) where
   定义体: inferInstance
   __ : CommRing (tsze R M) := inferInstance
 -/
@@ -735,7 +735,7 @@ instance instL1NormedAddCommGroup
 
 中文:
 实例 instL1NormedAddCommGroup
-  签名: : NormedAddCommGroup (tsze R M)
+  签名: : 赋范交换加群 (tsze R M)
   定义体: fast_instance% WithLp.normedAddCommGroupToProd 1 R M
 
 Depends on / 依赖: WithLp, WithLp.normedAddCommGroupToProd, fast_instance, normedAddCommGroupToProd
@@ -754,7 +754,7 @@ instance instL1NormedRing
 
 中文:
 实例 instL1NormedRing
-  签名: : NormedRing (tsze R M) where
+  签名: : 赋范环 (tsze R M) where
   定义体: inferInstance
   __ : NormedAddCommGroup (tsze R M) := inferInstance
 -/
@@ -781,7 +781,7 @@ instance instL1NormedCommRing
 
 中文:
 实例 instL1NormedCommRing
-  签名: : NormedCommRing (tsze R M) where
+  签名: : NormedComm环 (tsze R M) where
   定义体: inferInstance
   __ : CommRing (tsze R M) := inferInstance
 -/
@@ -808,7 +808,7 @@ instance instL1NormedSpace
 
 中文:
 实例 instL1NormedSpace
-  签名: : NormedSpace 𝕜 (tsze R M)
+  签名: : 赋范空间 𝕜 (tsze R M)
   定义体: fast_instance% WithLp.normedSpaceSeminormedAddCommGroupToProd 1 R M
 
 Depends on / 依赖: WithLp, WithLp.normedSpaceSeminormedAddCommGroupToProd, fast_instance, normedSpaceSeminormedAddCommGroupToProd
@@ -826,7 +826,7 @@ instance instL1NormedAlgebra
 
 中文:
 实例 instL1NormedAlgebra
-  签名: : NormedAlgebra 𝕜 (tsze R M) where
+  签名: : 赋范代数 𝕜 (tsze R M) where
   定义体: _root_.norm_smul_le
 
 Depends on / 依赖: _root_, _root_.norm_smul_le, norm_smul_le

@@ -48,11 +48,11 @@ class IsPerfPair
     - bijective_right((p)) : Bijective p.flip
 
 中文:
-类 IsPerfPair
+类 是PerfPair
   参数: (p : M ->ₗ[R] N ->ₗ[R] R)
   公理与运算 (2 个):
-    - bijective_left((p)) : Bijective p
-    - bijective_right((p)) : Bijective p.flip
+    - bijective_left((p)) : 双射 p
+    - bijective_right((p)) : 双射 p.flip
 
 Depends on / 依赖: IsPerfPair, IsPerfPair.bijective_right, bijective_right
 -/
@@ -71,9 +71,9 @@ lemma IsPerfPair.flip
   bijective_right := IsPerfPair.bijective_left p
 
 中文:
-引理 IsPerfPair.flip
-  条件: (hp : p.IsPerfPair)
-  结论: p.flip.IsPerfPair where
+引理 是PerfPair.flip
+  条件: (hp : p.是PerfPair)
+  结论: p.flip.是PerfPair where
   证明: IsPerfPair.bijective_right p
   bijective_right := IsPerfPair.bijective_left p
 -/
@@ -93,7 +93,7 @@ instance flip.instIsPerfPair
 
 中文:
 实例 flip.instIsPerfPair
-  签名: : p.flip.IsPerfPair
+  签名: : p.flip.是PerfPair
   定义体: .flip ‹_›
 -/
 instance flip.instIsPerfPair : p.flip.IsPerfPair := .flip ‹_›
@@ -111,7 +111,7 @@ definition toPerfPair
 
 中文:
 定义 toPerfPair
-  签名: : M ≃ₗ[R] Dual R N
+  签名: : M ≃ₗ[R] 对偶 R N
   定义体: .ofBijective { toFun := _, map_add' x y := by simp, map_smul' r x := by simp }
     IsPerfPair.bijective_left p
 
@@ -165,7 +165,7 @@ lemma apply_symm_toPerfPair_self
 
 中文:
 引理 apply_symm_toPerfPair_self
-  条件: (f : Dual R N)
+  条件: (f : 对偶 R N)
   结论: p (p.toPerfPair.symm f) = f
   证明: p.toPerfPair.apply_symm_apply f
 -/
@@ -185,7 +185,7 @@ include p in
 
 中文:
 引理 apply_toPerfPair_flip
-  条件: (f : Dual R M) (x : M)
+  条件: (f : 对偶 R M) (x : M)
   结论: p x (p.flip.toPerfPair.symm f) = f x
   证明: congr($(p.flip.apply_symm_toPerfPair_self ..) x)
 
@@ -209,8 +209,8 @@ lemma _root_.Module.IsReflexive.of_isPerfPair
 include p in
 
 中文:
-引理 _root_.Module.IsReflexive.of_isPerfPair
-  结论: IsReflexive R M where
+引理 _root_.模.是自反.of_isPerfPair
+  结论: 是自反 R M where
   证明: by
     convert! (p.toPerfPair.trans p.flip.toPerfPair.dualMap.symm).bijective
     ext x f
@@ -236,8 +236,8 @@ lemma _root_.Module.finrank_of_isPerfPair
   proof: ((Module.Free.chooseBasis R M).toDualEquiv.trans p.flip.toPerfPair.symm).finrank_eq
 
 中文:
-引理 _root_.Module.finrank_of_isPerfPair
-  条件: [Module.Finite R M] [Module.Free R M]
+引理 _root_.模.finrank_of_isPerfPair
+  条件: [模.有限 R M] [模.自由 R M]
   证明: ((Module.Free.chooseBasis R M).toDualEquiv.trans p.flip.toPerfPair.symm).finrank_eq
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, finrank_eq, p.flip.toPerfPair.symm, toDualEquiv, toDualEquiv.trans, toPerfPair
@@ -256,8 +256,8 @@ instance IsPerfPair.id
   bijective_right := bijective_dual_eval R M
 
 中文:
-实例 IsPerfPair.id
-  签名: [IsReflexive R M]
+实例 是PerfPair.id
+  签名: [是自反 R M]
   定义体: bijective_id
   bijective_right := bijective_dual_eval R M
 -/
@@ -274,8 +274,8 @@ instance IsPerfPair.dualEval
   body: .flip .id
 
 中文:
-实例 IsPerfPair.dualEval
-  签名: [IsReflexive R M]
+实例 是PerfPair.dualEval
+  签名: [是自反 R M]
   定义体: .flip .id
 -/
 instance IsPerfPair.dualEval [IsReflexive R M] : IsPerfPair (Dual.eval R M) := .flip .id
@@ -292,7 +292,7 @@ instance IsPerfPair.compl₁₂
     (IsPerfPair.bijective_right p)).comp eN.bijective⟩
 
 中文:
-实例 IsPerfPair.compl₁₂
+实例 是PerfPair.compl₁₂
   签名: (eM : M' ≃ₗ[R] M) (eN : N' ≃ₗ[R] N)
   定义体: ⟨((LinearEquiv.congrLeft R R eN).symm.bijective.comp
     (IsPerfPair.bijective_left p)).comp eM.bijective,
@@ -319,7 +319,7 @@ lemma IsPerfPair.congr
   infer_instance
 
 中文:
-引理 IsPerfPair.congr
+引理 是PerfPair.congr
   结论: (eM : M' ≃ₗ[R] M) (eN : N' ≃ₗ[R] N) (q : M' ->ₗ[R] N' ->ₗ[R] R)
   证明: by
   obtain rfl : q = p.compl₁₂ eM eN := by subst H; ext; simp
@@ -343,8 +343,8 @@ lemma IsPerfPair.of_bijective
     (LinearEquiv.refl R N : N ->ₗ[R] N)).IsPerfPair
 
 中文:
-引理 IsPerfPair.of_bijective
-  条件: (p : M ->ₗ[R] N ->ₗ[R] R) [IsReflexive R N] (h : Bijective p)
+引理 是PerfPair.of_bijective
+  条件: (p : M ->ₗ[R] N ->ₗ[R] R) [是自反 R N] (h : 双射 p)
   证明: inferInstanceAs ((LinearMap.id (R := R) (M := Dual R N)).compl₁₂
     (LinearEquiv.ofBijective p h : M ->ₗ[R] N ->ₗ[R] R)
     (LinearEquiv.refl R N : N ->ₗ[R] N)).IsPerfPair
@@ -374,8 +374,8 @@ lemma IsPerfPair.of_injective
     rwa [← p.flip.flip_injective_iff₁, LinearMap.flip_flip]⟩
 
 中文:
-引理 IsPerfPair.of_injective
-  条件: [FiniteDimensional K M] (h : Injective p) (h' : Injective p.flip)
+引理 是PerfPair.of_injective
+  条件: [有限维 K M] (h : 单射 p) (h' : 单射 p.flip)
   证明: ⟨h, by rwa [← p.flip_injective_iff₁]⟩
   bijective_right := ⟨h', by
     have : FiniteDimensional K N := FiniteDimensional.of_injective p.flip h'
@@ -399,8 +399,8 @@ lemma IsPerfPair.of_injective'
   proof: .flip .of_injective h' h
 
 中文:
-引理 IsPerfPair.of_injective'
-  条件: [FiniteDimensional K N] (h : Injective p) (h' : Injective p.flip)
+引理 是PerfPair.of_injective'
+  条件: [有限维 K N] (h : 单射 p) (h' : 单射 p.flip)
   证明: .flip .of_injective h' h
 
 Depends on / 依赖: of_injective
@@ -430,11 +430,11 @@ structure IsPerfectCompl
     - isCompl_right : IsCompl V (U.dualAnnihilator.map (p.flip.toPerfPair.symm : Dual R M ->ₗ[R] N))
 
 中文:
-结构 IsPerfectCompl
-  参数: (U : Submodule R M) (V : Submodule R N)
+结构 是PerfectCompl
+  参数: (U : 子模 R M) (V : 子模 R N)
   公理与运算 (2 个):
-    - isCompl_left : IsCompl U (V.dualAnnihilator.map (p.toPerfPair.symm : Dual R N ->ₗ[R] M))
-    - isCompl_right : IsCompl V (U.dualAnnihilator.map (p.flip.toPerfPair.symm : Dual R M ->ₗ[R] N))
+    - isCompl_left : 是补集 U (V.dualAnnihilator.map (p.toPerfPair.symm : 对偶 R N ->ₗ[R] M))
+    - isCompl_right : 是补集 V (U.dualAnnihilator.map (p.flip.toPerfPair.symm : 对偶 R M ->ₗ[R] N))
 -/
 structure IsPerfectCompl (U : Submodule R M) (V : Submodule R N) : Prop where
   isCompl_left : IsCompl U (V.dualAnnihilator.map (p.toPerfPair.symm : Dual R N ->ₗ[R] M))
@@ -456,7 +456,7 @@ lemma flip
 
 中文:
 引理 flip
-  条件: (h : p.IsPerfectCompl U V)
+  条件: (h : p.是PerfectCompl U V)
   证明: h.isCompl_right
   isCompl_right := h.isCompl_left
 
@@ -569,7 +569,7 @@ definition flip
 
 中文:
 定义 flip
-  签名: : M ≃ₗ[R] Dual R N
+  签名: : M ≃ₗ[R] 对偶 R N
   定义体: (evalEquiv R M).trans e.dualMap
 
 Depends on / 依赖: dualMap, e.dualMap, evalEquiv
@@ -587,7 +587,7 @@ lemma coe_toLinearMap_flip
 
 中文:
 引理 coe_toLinearMap_flip
-  结论: e.flip = (↑e : N ->ₗ[R] Dual R M).flip
+  结论: e.flip = (↑e : N ->ₗ[R] 对偶 R M).flip
   证明: rfl
 -/
 @[simp] lemma coe_toLinearMap_flip : e.flip = (↑e : N ->ₗ[R] Dual R M).flip := rfl
@@ -637,7 +637,7 @@ include e in
 
 中文:
 引理 trans_dualMap_symm_flip
-  结论: e.trans e.flip.symm.dualMap = Dual.eval R N
+  结论: e.trans e.flip.symm.dualMap = 对偶.eval R N
   证明: by
   ext; simp [symm_flip]
 
@@ -662,7 +662,7 @@ lemma isReflexive_of_equiv_dual_of_isReflexive
 
 中文:
 引理 isReflexive_of_equiv_dual_of_isReflexive
-  结论: IsReflexive R N
+  结论: 是自反 R N
   证明: by
   constructor
   rw [← trans_dualMap_symm_flip e]
@@ -686,7 +686,7 @@ lemma flip_flip
 
 中文:
 引理 flip_flip
-  条件: (h : IsReflexive R N := isReflexive_of_equiv_dual_of_isReflexive e)
+  条件: (h : 是自反 R N := isReflexive_of_equiv_dual_of_isReflexive e)
   证明: by
   ext; rfl
 -/
@@ -705,7 +705,7 @@ instance :
 
 中文:
 实例 :
-  签名: e.toLinearMap.IsPerfPair
+  签名: e.toLinearMap.是PerfPair
   定义体: e.bijective
   bijective_right := e.flip.bijective
 
@@ -736,7 +736,7 @@ lemma dualCoannihilator_map_linearEquiv_flip
 
 中文:
 引理 dualCoannihilator_map_linearEquiv_flip
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: by
   ext; simp
 
@@ -762,7 +762,7 @@ lemma map_dualAnnihilator_linearEquiv_flip_symm
 
 中文:
 引理 map_dualAnnihilator_linearEquiv_flip_symm
-  条件: (p : Submodule R N)
+  条件: (p : 子模 R N)
   证明: by
   have : IsReflexive R N := e.isReflexive_of_equiv_dual_of_isReflexive
   rw [← dualCoannihilator_map_linearEquiv_flip]; rw [← LinearEquiv.coe_toLinearMap_flip]; rw [LinearEquiv.flip_flip]
@@ -793,7 +793,7 @@ lemma map_dualCoannihilator_linearEquiv_flip
 
 中文:
 引理 map_dualCoannihilator_linearEquiv_flip
-  条件: (p : Submodule R (Dual R M))
+  条件: (p : 子模 R (对偶 R M))
   证明: by
   have : IsReflexive R N := e.isReflexive_of_equiv_dual_of_isReflexive
   suffices
@@ -827,7 +827,7 @@ lemma dualAnnihilator_map_linearEquiv_flip_symm
 
 中文:
 引理 dualAnnihilator_map_linearEquiv_flip_symm
-  条件: (p : Submodule R (Dual R N))
+  条件: (p : 子模 R (对偶 R N))
   证明: by
   have : IsReflexive R N := e.isReflexive_of_equiv_dual_of_isReflexive
   rw [← map_dualCoannihilator_linearEquiv_flip]; rw [← LinearEquiv.coe_toLinearMap_flip]; rw [LinearEquiv.flip_flip]

@@ -93,7 +93,7 @@ lemma range_cfc
 中文:
 引理 range_cfc
   条件: {a : A} (ha : p a)
-  结论: Set.range (cfc (R := 𝕜) · a) = elemental 𝕜 a
+  结论: 集合.range (cfc (R := 𝕜) · a) = elemental 𝕜 a
   证明: by
   rw [range_cfc_eq_range_cfcHom 𝕜 ha]; rw [range_cfcHom 𝕜 ha]
 
@@ -151,7 +151,7 @@ lemma range_cfc_subset
 中文:
 引理 range_cfc_subset
   条件: {a : A} (ha : p a)
-  结论: Set.range (cfc (R := 𝕜) · a) subseteq elemental 𝕜 a
+  结论: 集合.range (cfc (R := 𝕜) · a) subseteq elemental 𝕜 a
   证明: by
   grw [range_cfc_eq_range_cfcHom 𝕜 ha, range_cfcHom_le 𝕜 ha]
 
@@ -232,7 +232,7 @@ lemma cfc_mem
 
 中文:
 引理 cfc_mem
-  结论: {𝕜' S : 类型} [Monoid 𝕜'] [MulAction 𝕜' A] [SetLike S A] [SubringClass S A]
+  结论: {𝕜' S : 类型} [幺半群 𝕜'] [乘法作用 𝕜' A] [集合状 S A] [子环类 S A]
   证明: have := SMulMemClass.ofIsScalarTower S 𝕜 𝕜' A
   StarSubalgebra.topologicalClosure_minimal (t := .ofClass s) (by simpa) (by simpa)
     (cfc_mem_elemental f a)
@@ -272,7 +272,7 @@ lemma range_cfc_nnreal_eq_image_cfc_real
 
 中文:
 引理 range_cfc_nnreal_eq_image_cfc_real
-  结论: [ContinuousFunctionalCalculus 实数 A IsSelfAdjoint]
+  结论: [余ntinuousFunctionalCalculus 实数 A IsSelfAdjoint]
   证明: by
   ext
   constructor
@@ -413,7 +413,7 @@ theorem range_cfcₙ
 中文:
 定理 range_cfcₙ
   条件: {a : A} (ha : p a)
-  结论: Set.range (cfcₙ (R := 𝕜) · a) = elemental 𝕜 a
+  结论: 集合.range (cfcₙ (R := 𝕜) · a) = elemental 𝕜 a
   证明: by
   rw [range_cfcₙ_eq_range_cfcₙHom 𝕜 ha]; rw [range_cfcₙHom 𝕜 ha]
 
@@ -473,7 +473,7 @@ theorem range_cfcₙ_subset
 中文:
 定理 range_cfcₙ_subset
   条件: {a : A} (ha : p a)
-  结论: Set.range (cfcₙ (R := 𝕜) · a) subseteq elemental 𝕜 a
+  结论: 集合.range (cfcₙ (R := 𝕜) · a) subseteq elemental 𝕜 a
   证明: by
   grw [range_cfcₙ_eq_range_cfcₙHom 𝕜 ha, range_cfcₙHom_le 𝕜 ha]
 
@@ -554,7 +554,7 @@ lemma cfcₙ_mem
 
 中文:
 引理 cfcₙ_mem
-  结论: {𝕜' S : 类型} [Monoid 𝕜'] [MulAction 𝕜' A] [SetLike S A] [NonUnitalSubringClass S A]
+  结论: {𝕜' S : 类型} [幺半群 𝕜'] [乘法作用 𝕜' A] [集合状 S A] [NonUnital子环类 S A]
   证明: have := SMulMemClass.ofIsScalarTower S 𝕜 𝕜' A
   NonUnitalStarSubalgebra.topologicalClosure_minimal (t := .ofClass s) _ (by simpa) (by simpa)
     (cfcₙ_mem_elemental f a)
@@ -659,7 +659,7 @@ lemma range_cfcₙ_nnreal
 
 中文:
 引理 range_cfcₙ_nnreal
-  结论: [NonUnitalClosedEmbeddingContinuousFunctionalCalculus 实数 A IsSelfAdjoint]
+  结论: [非幺ClosedEmbeddingContinuousFunctionalCalculus 实数 A IsSelfAdjoint]
   证明: by
   rw [range_cfcₙ_nnreal_eq_image_cfcₙ_real a ha]; rw [Set.ofPred_and]; rw [SetLike.setOfPred_mem_eq]; rw [← range_cfcₙ _ ha.isSelfAdjoint]; rw [Set.inter_comm]; rw [← Set.image_preimage_eq_inter_range]
   refine Set.Subset.antisymm (Set.image_mono (fun _ => cfcₙ_nonneg)) ?_

@@ -74,7 +74,7 @@ definition coindV
 
 中文:
 定义 coindV
-  签名: : Submodule k (H -> A) where
+  签名: : 子模 k (H -> A) where
   定义体: {f : H -> A | forall (g : G) (h : H), f (φ g * h) = σ g (f h) }
   add_mem' _ _ _ _ := by simp_all
   zero_mem' := by simp
@@ -163,7 +163,7 @@ definition coindMap
 
 中文:
 定义 coindMap
-  签名: (f : σ.整数ertwiningMap ρ)
+  签名: (f : σ.整数ertwining映射 ρ)
   定义体: (f.toLinearMap.compLeft H).restrict fun x h => by
     simp only [mem_coindV, LinearMap.compLeft_apply, Function.comp_apply,
       IntertwiningMap.toLinearMap_apply] at h ⊢
@@ -193,7 +193,7 @@ lemma coindMap_coe_apply
 
 中文:
 引理 coindMap_coe_apply
-  条件: (f : σ.整数ertwiningMap ρ) (x : coindV φ σ)
+  条件: (f : σ.整数ertwining映射 ρ) (x : coindV φ σ)
   证明: rfl
 
 @[simp]
@@ -212,7 +212,7 @@ lemma coindMap_coe_apply_apply
 
 中文:
 引理 coindMap_coe_apply_apply
-  条件: (f : σ.整数ertwiningMap ρ) (x : coindV φ σ) (h : H)
+  条件: (f : σ.整数ertwining映射 ρ) (x : coindV φ σ) (h : H)
   证明: rfl
 -/
 lemma coindMap_coe_apply_apply (f : σ.IntertwiningMap ρ) (x : coindV φ σ) (h : H) :
@@ -630,7 +630,7 @@ definition resCoindHomEquiv
 
 中文:
 定义 resCoindHomEquiv
-  签名: (B : Rep.{max w t} k H) (A : Rep.{max w t} k G)
+  签名: (B : Rep.{最大值 w t} k H) (A : Rep.{最大值 w t} k G)
   定义体: resCoindToHom φ B A f
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -675,7 +675,7 @@ abbreviation resCoindAdjunction
 
 中文:
 缩写 resCoindAdjunction
-  签名: : resFunctor.{max w t} φ ⊣ coindFunctor k φ
+  签名: : resFunctor.{最大值 w t} φ ⊣ coindFunctor k φ
   定义体: Adjunction.mkOfHomEquiv {
     homEquiv X Y := (resCoindHomEquiv φ X Y).toEquiv
     homEquiv_naturality_left_symm := by intros; rfl
@@ -699,7 +699,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coindFunctor.{max w t} k φ).IsRightAdjoint
+  签名: (coindFunctor.{最大值 w t} k φ).是右伴随
   定义体: (resCoindAdjunction k φ).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, resCoindAdjunction
@@ -717,7 +717,7 @@ instance :
 
 中文:
 实例 :
-  签名: (resFunctor.{max w t} (k := k) φ).IsLeftAdjoint
+  签名: (resFunctor.{最大值 w t} (k := k) φ).是左伴随
   定义体: (resCoindAdjunction k φ).isLeftAdjoint
 
 Depends on / 依赖: IsLeftAdjoint

@@ -45,7 +45,7 @@ definition orthRadius
 
 中文:
 定义 orthRadius
-  签名: (s : Sphere P) (p : P)
+  签名: (s : 球面 P) (p : P)
   定义体: .mk' p (Real ∙ (p -ᵥ s.center))ᗮ
 
 Depends on / 依赖: center, s.center
@@ -68,7 +68,7 @@ lemma self_mem_orthRadius
 
 中文:
 引理 self_mem_orthRadius
-  条件: (s : Sphere P) (p : P)
+  条件: (s : 球面 P) (p : P)
   结论: p in s.orthRadius p
   证明: self_mem_mk' _ _
 -/
@@ -86,7 +86,7 @@ lemma mem_orthRadius_iff_inner_left
 
 中文:
 引理 mem_orthRadius_iff_inner_left
-  条件: {s : Sphere P} {p x : P}
+  条件: {s : 球面 P} {p x : P}
   证明: by
   rw [orthRadius]; rw [mem_mk']; rw [Submodule.mem_orthogonal_singleton_iff_inner_left]
 
@@ -107,7 +107,7 @@ lemma mem_orthRadius_iff_inner_right
 
 中文:
 引理 mem_orthRadius_iff_inner_right
-  条件: {s : Sphere P} {p x : P}
+  条件: {s : 球面 P} {p x : P}
   证明: by
   rw [mem_orthRadius_iff_inner_left]; rw [inner_eq_zero_symm]
 
@@ -128,7 +128,7 @@ lemma direction_orthRadius
 
 中文:
 引理 direction_orthRadius
-  条件: (s : Sphere P) (p : P)
+  条件: (s : 球面 P) (p : P)
   证明: by
   rw [orthRadius]; rw [direction_mk']
 -/
@@ -152,7 +152,7 @@ lemma orthRadius_center
 
 中文:
 引理 orthRadius_center
-  条件: (s : Sphere P)
+  条件: (s : 球面 P)
   结论: s.orthRadius s.center = ⊤
   证明: by
   simp [orthRadius]
@@ -172,7 +172,7 @@ lemma center_mem_orthRadius_iff
 
 中文:
 引理 center_mem_orthRadius_iff
-  条件: {s : Sphere P} {p : P}
+  条件: {s : 球面 P} {p : P}
   证明: by
   rw [mem_orthRadius_iff_inner_left]; rw [← neg_vsub_eq_vsub_rev]; rw [inner_neg_left]
   simp
@@ -196,7 +196,7 @@ lemma orthogonalProjection_orthRadius_center
 
 中文:
 引理 orthogonalProjection_orthRadius_center
-  条件: (s : Sphere P) (p : P)
+  条件: (s : 球面 P) (p : P)
   证明: by
   simp_rw [orthRadius, coe_orthogonalProjection_eq_iff_mem]
   rw [← Submodule.neg_mem_iff]
@@ -225,7 +225,7 @@ lemma orthRadius_le_orthRadius_iff
 
 中文:
 引理 orthRadius_le_orthRadius_iff
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have h' := direction_le h
@@ -276,7 +276,7 @@ lemma orthRadius_eq_orthRadius_iff
 
 中文:
 引理 orthRadius_eq_orthRadius_iff
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ rfl⟩
   have hpq := orthRadius_le_orthRadius_iff.1 h.le
@@ -301,8 +301,8 @@ lemma orthRadius_injective
 
 中文:
 引理 orthRadius_injective
-  条件: (s : Sphere P)
-  结论: Injective s.orthRadius
+  条件: (s : 球面 P)
+  结论: 单射 s.orthRadius
   证明: fun _ _ => orthRadius_eq_orthRadius_iff.1
 
 Depends on / 依赖: orthRadius_eq_orthRadius_iff
@@ -323,7 +323,7 @@ lemma finrank_orthRadius
 
 中文:
 引理 finrank_orthRadius
-  条件: [FiniteDimensional 实数 V] {s : Sphere P} {p : P} (hp : p != s.center)
+  条件: [有限维 实数 V] {s : 球面 P} {p : P} (hp : p != s.center)
   证明: by
   rw [orthRadius]; rw [add_comm]; rw [direction_mk']
   convert! (Real ∙ (p -ᵥ s.center)).finrank_add_finrank_orthogonal
@@ -351,7 +351,7 @@ lemma orthRadius_map
 
 中文:
 引理 orthRadius_map
-  条件: {s : Sphere P} (p : P) {f : P ≃ᵃⁱ[实数] P} (h : f s.center = s.center)
+  条件: {s : 球面 P} (p : P) {f : P ≃ᵃⁱ[实数] P} (h : f s.center = s.center)
   证明: by
   rw [orthRadius]; rw [map_mk']; rw [orthRadius]
   convert! rfl using 2
@@ -378,7 +378,7 @@ lemma direction_orthRadius_le_iff
 
 中文:
 引理 direction_orthRadius_le_iff
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   simp [Submodule.orthogonal_le_orthogonal_iff, Submodule.mem_span_singleton, eq_comm]
 
@@ -403,7 +403,7 @@ lemma orthRadius_parallel_orthRadius_iff
 
 中文:
 引理 orthRadius_parallel_orthRadius_iff
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   simp_rw [orthRadius, parallel_iff_direction_eq_and_eq_bot_iff_eq_bot, direction_mk',
     Submodule.orthogonalComplement_eq_orthogonalComplement,
@@ -436,7 +436,7 @@ alias ⟨_, dist_sq_eq_of_mem_orthRadius⟩ := dist_sq_eq_iff_mem_orthRadius
 
 中文:
 引理 dist_sq_eq_iff_mem_orthRadius
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   simp_rw [dist_eq_norm_vsub, pow_two]
   rw [← vsub_add_vsub_cancel q p s.center]
@@ -472,7 +472,7 @@ lemma mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
 
 中文:
 引理 mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   simp only [Set.mem_inter_iff, Metric.mem_sphere, mem_coe', SetLike.mem_coe,
     ← dist_sq_eq_iff_mem_orthRadius, ← direction_orthRadius,
@@ -512,7 +512,7 @@ lemma mem_inter_orthRadius_iff_vsub_mem_and_norm_sq
 
 中文:
 引理 mem_inter_orthRadius_iff_vsub_mem_and_norm_sq
-  条件: {s : Sphere P} {p q : P} (h : 0 <= s.radius)
+  条件: {s : 球面 P} {p q : P} (h : 0 <= s.radius)
   证明: by
   rw [mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq]
   simp [h]
@@ -537,7 +537,7 @@ lemma vadd_mem_inter_orthRadius_iff_norm_sq
 
 中文:
 引理 vadd_mem_inter_orthRadius_iff_norm_sq
-  结论: {s : Sphere P} {p : P} {v : V} (h : 0 <= s.radius)
+  结论: {s : 球面 P} {p : P} {v : V} (h : 0 <= s.radius)
   证明: by
   rw [mem_inter_orthRadius_iff_vsub_mem_and_norm_sq h]
   simp [hv]
@@ -571,7 +571,7 @@ lemma inter_orthRadius_eq_singleton_of_dist_eq_radius
 
 中文:
 引理 inter_orthRadius_eq_singleton_of_dist_eq_radius
-  结论: {s : Sphere P} {p : P}
+  结论: {s : 球面 P} {p : P}
   证明: by
   ext p'
   simp only [Set.mem_inter_iff, Metric.mem_sphere, mem_coe', SetLike.mem_coe, Set.mem_singleton_iff]
@@ -613,7 +613,7 @@ lemma inter_orthRadius_eq_singleton_iff
 
 中文:
 引理 inter_orthRadius_eq_singleton_iff
-  条件: {s : Sphere P} {p q : P}
+  条件: {s : 球面 P} {p q : P}
   证明: by
   constructor
   · intro h
@@ -659,7 +659,7 @@ lemma inter_orthRadius_eq_empty_of_radius_lt_dist
 
 中文:
 引理 inter_orthRadius_eq_empty_of_radius_lt_dist
-  结论: {s : Sphere P} {p : P}
+  结论: {s : 球面 P} {p : P}
   证明: by
   ext p'
   rw [mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq]
@@ -694,7 +694,7 @@ lemma inter_orthRadius_eq_empty_of_finrank_eq_one
 
 中文:
 引理 inter_orthRadius_eq_empty_of_finrank_eq_one
-  结论: {s : Sphere P} {p : P} (hpc : p != s.center)
+  结论: {s : 球面 P} {p : P} (hpc : p != s.center)
   证明: by
   ext p'
   rw [mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq]
@@ -738,7 +738,7 @@ lemma inter_orthRadius_eq_empty_iff
 
 中文:
 引理 inter_orthRadius_eq_empty_iff
-  条件: {s : Sphere P} {p : P}
+  条件: {s : 球面 P} {p : P}
   证明: by
   rcases lt_trichotomy (dist p s.center) s.radius with h | h | h
   · simp only [h.not_gt, h, ne_eq, true_and, (dist_nonneg.trans_lt h).ne', not_false_eq_true,
@@ -826,7 +826,7 @@ lemma inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one
 
 中文:
 引理 inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one
-  结论: [hf2 : Fact (Module.finrank 实数 V = 2)]
+  结论: [hf2 : Fact (模.finrank 实数 V = 2)]
   证明: by
   have hr : 0 <= s.radius := dist_nonneg.trans hp
   have hv0 : v != 0 := by rw [← norm_ne_zero_iff, hv1]; simp
@@ -890,7 +890,7 @@ lemma inter_orthRadius_eq_of_dist_le_radius
 
 中文:
 引理 inter_orthRadius_eq_of_dist_le_radius
-  结论: [hf2 : Fact (Module.finrank 实数 V = 2)]
+  结论: [hf2 : Fact (模.finrank 实数 V = 2)]
   证明: by
   convert!
     inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one hp hpc (v := ‖v‖⁻¹ • v)
@@ -928,7 +928,7 @@ lemma ncard_inter_orthRadius_eq_two_of_dist_lt_radius
 
 中文:
 引理 ncard_inter_orthRadius_eq_two_of_dist_lt_radius
-  结论: [hf2 : Fact (Module.finrank 实数 V = 2)]
+  结论: [hf2 : Fact (模.finrank 实数 V = 2)]
   证明: by
   have hf := finrank_orthRadius hpc
   simp only [hf2.out, Nat.reduceEqDiff, finrank_eq_one_iff'] at hf
@@ -967,7 +967,7 @@ lemma ncard_inter_orthRadius_le_two
 
 中文:
 引理 ncard_inter_orthRadius_le_two
-  结论: [hf2 : Fact (Module.finrank 实数 V = 2)]
+  结论: [hf2 : Fact (模.finrank 实数 V = 2)]
   证明: by
   rcases lt_trichotomy (dist p s.center) s.radius with h | h | h
   · exact (ncard_inter_orthRadius_eq_two_of_dist_lt_radius h hpc).le

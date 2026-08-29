@@ -76,7 +76,7 @@ definition IsStoppingTime
 
 中文:
 定义 IsStoppingTime
-  签名: [Preorder ι] (f : Filtration ι m) (τ : Ω -> WithTop ι)
+  签名: [预序 ι] (f : 滤子 ι m) (τ : Ω -> WithTop ι)
   定义体: forall i : ι, MeasurableSet[f i] {ω | τ ω <= i}
 
 Depends on / 依赖: MeasurableSet
@@ -94,7 +94,7 @@ theorem isStoppingTime_const
 
 中文:
 定理 isStoppingTime_const
-  条件: [Preorder ι] (f : Filtration ι m) (i : ι)
+  条件: [预序 ι] (f : 滤子 ι m) (i : ι)
   证明: fun j => by simp only [MeasurableSet.const]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.const
@@ -143,7 +143,7 @@ theorem IsStoppingTime.measurableSet_lt_of_pred
 
 中文:
 定理 IsStoppingTime.measurableSet_lt_of_pred
-  条件: [PredOrder ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [Pred序 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: by
   by_cases hi_min : IsMin i
   · suffices {ω : Ω | τ ω < i} = ∅ by rw [this]; exact @MeasurableSet.empty _ (f i)
@@ -237,7 +237,7 @@ theorem measurableSet_eq_of_countable
 
 中文:
 定理 measurableSet_eq_of_countable
-  条件: [Countable ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [可数 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: hτ.measurableSet_eq_of_countable_range (Set.to_countable _) i
 -/
 protected theorem measurableSet_eq_of_countable [Countable ι] (hτ : IsStoppingTime f τ) (i : ι) :
@@ -279,7 +279,7 @@ theorem measurableSet_lt_of_countable
 
 中文:
 定理 measurableSet_lt_of_countable
-  条件: [Countable ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [可数 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: hτ.measurableSet_lt_of_countable_range (Set.to_countable _) i
 -/
 protected theorem measurableSet_lt_of_countable [Countable ι] (hτ : IsStoppingTime f τ) (i : ι) :
@@ -300,7 +300,7 @@ theorem measurableSet_ge_of_countable_range
 
 中文:
 定理 measurableSet_ge_of_countable_range
-  结论: {ι} [LinearOrder ι] {τ : Ω -> WithTop ι}
+  结论: {ι} [线性序 ι] {τ : Ω -> WithTop ι}
   证明: by
   have : {ω | i <= τ ω} = {ω | τ ω < i}ᶜ := by
     ext1 ω; simp only [Set.mem_ofPred_eq, Set.mem_compl_iff, not_lt]
@@ -325,7 +325,7 @@ theorem measurableSet_ge_of_countable
 
 中文:
 定理 measurableSet_ge_of_countable
-  结论: {ι} [LinearOrder ι] {τ : Ω -> WithTop ι}
+  结论: {ι} [线性序 ι] {τ : Ω -> WithTop ι}
   证明: hτ.measurableSet_ge_of_countable_range (Set.to_countable _) i
 -/
 protected theorem measurableSet_ge_of_countable {ι} [LinearOrder ι] {τ : Ω -> WithTop ι}
@@ -599,7 +599,7 @@ theorem isStoppingTime_of_measurableSet_eq
 
 中文:
 定理 isStoppingTime_of_measurableSet_eq
-  结论: [Preorder ι] [Countable ι] {f : Filtration ι m}
+  结论: [预序 ι] [可数 ι] {f : 滤子 ι m}
   证明: by
   intro i
   have h_eq_iUnion : {ω | τ ω <= i} = ⋃ k <= i, {ω | τ ω = k} := by
@@ -654,7 +654,7 @@ lemma isStoppingTime_of_measurableSet_lt_of_isRightContinuous'
 
 中文:
 引理 isStoppingTime_of_measurableSet_lt_of_isRightContinuous'
-  结论: [hf : f.IsRightContinuous]
+  结论: [hf : f.是RightContinuous]
   证明: by
   intro t
   by_cases ht : 𝓝[>] t = ⊥
@@ -735,7 +735,7 @@ lemma isStoppingTime_of_measurableSet_lt_of_isRightContinuous
 
 中文:
 引理 isStoppingTime_of_measurableSet_lt_of_isRightContinuous
-  结论: [DenselyOrdered ι] [NoMaxOrder ι]
+  结论: [稠密序 ι] [NoMax序 ι]
   证明: isStoppingTime_of_measurableSet_lt_of_isRightContinuous' hτ
  fun _ hi => absurd hi (NeBot.ne inferInstance)
 
@@ -765,8 +765,8 @@ theorem max
   exact (hτ i).inter (hπ i)
 
 中文:
-定理 max
-  结论: [LinearOrder ι] {f : Filtration ι m} {τ π : Ω -> WithTop ι}
+定理 最大值
+  结论: [线性序 ι] {f : 滤子 ι m} {τ π : Ω -> WithTop ι}
   证明: by
   intro i
   simp_rw [max_le_iff, Set.ofPred_and]
@@ -789,7 +789,7 @@ theorem max_const
 
 中文:
 定理 max_const
-  结论: [LinearOrder ι] {f : Filtration ι m} {τ : Ω -> WithTop ι}
+  结论: [线性序 ι] {f : 滤子 ι m} {τ : Ω -> WithTop ι}
   证明: hτ.max (isStoppingTime_const f i)
 -/
 protected theorem max_const [LinearOrder ι] {f : Filtration ι m} {τ : Ω -> WithTop ι}
@@ -808,8 +808,8 @@ theorem min
   exact (hτ i).union (hπ i)
 
 中文:
-定理 min
-  结论: [LinearOrder ι] {f : Filtration ι m} {τ π : Ω -> WithTop ι}
+定理 最小值
+  结论: [线性序 ι] {f : 滤子 ι m} {τ π : Ω -> WithTop ι}
   证明: by
   intro i
   simp_rw [min_le_iff, Set.ofPred_or]
@@ -832,7 +832,7 @@ theorem min_const
 
 中文:
 定理 min_const
-  结论: [LinearOrder ι] {f : Filtration ι m} {τ : Ω -> WithTop ι}
+  结论: [线性序 ι] {f : 滤子 ι m} {τ : Ω -> WithTop ι}
   证明: hτ.min (isStoppingTime_const f i)
 -/
 protected theorem min_const [LinearOrder ι] {f : Filtration ι m} {τ : Ω -> WithTop ι}
@@ -855,7 +855,7 @@ refine isStoppingTime_of_measurableSet_lt_of_isRightContinuous
 
 中文:
 引理 biInf
-  结论: [ConditionallyCompleteLinearOrderBot ι] [TopologicalSpace ι]
+  结论: [余nditionallyCompleteLinearOrderBot ι] [拓扑空间 ι]
   证明: by
 refine isStoppingTime_of_measurableSet_lt_of_isRightContinuous
     fun i => MeasurableSet.of_compl ?_
@@ -888,7 +888,7 @@ lemma iInf
 
 中文:
 引理 iInf
-  结论: [ConditionallyCompleteLinearOrderBot ι] [TopologicalSpace ι]
+  结论: [余nditionallyCompleteLinearOrderBot ι] [拓扑空间 ι]
   证明: by
   convert! IsStoppingTime.biInf (κ := κ) Set.countable_univ (fun n _ => hτ n) using 2
   simp
@@ -921,7 +921,7 @@ theorem add_const
 
 中文:
 定理 add_const
-  结论: [AddGroup ι] [Preorder ι] [AddRightMono ι]
+  结论: [加法群 ι] [预序 ι] [AddRightMono ι]
   证明: by
   intro j
   simp only
@@ -968,7 +968,7 @@ theorem add_const'
 
 中文:
 定理 add_const'
-  结论: [Add ι] [LinearOrder ι] [CanonicallyOrderedAdd ι] [Countable ι]
+  结论: [加法 ι] [线性序 ι] [典范有序加法 ι] [可数 ι]
   证明: by
   intro j
   have h : {ω | τ ω + i <= j} = ⋃ k : {k | k + i <= j}, {ω | τ ω = k} := by
@@ -1015,7 +1015,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [Add ι] [LinearOrder ι] [CanonicallyOrderedAdd ι] [Countable ι]
+  结论: [加法 ι] [线性序 ι] [典范有序加法 ι] [可数 ι]
   证明: by
   intro j
   have h : {ω | (τ + π) ω <= j} = ⋃ k : Set.Iic j, {ω | π ω = k} inter {ω | τ ω + k <= j} := by
@@ -1105,7 +1105,7 @@ theorem measurableSet
 
 中文:
 定理 measurableSet
-  条件: (hτ : IsStoppingTime f τ) (s : Set Ω)
+  条件: (hτ : IsStoppingTime f τ) (s : 集合 Ω)
   证明: Iff.rfl
 -/
 protected theorem measurableSet (hτ : IsStoppingTime f τ) (s : Set Ω) :
@@ -1212,7 +1212,7 @@ theorem measurableSpace_const
 
 中文:
 定理 measurableSpace_const
-  条件: (f : Filtration ι m) (i : ι)
+  条件: (f : 滤子 ι m) (i : ι)
   证明: by
   ext1 s
   rw [IsStoppingTime.measurableSet]
@@ -1259,7 +1259,7 @@ theorem measurableSet_inter_eq_iff
 
 中文:
 定理 measurableSet_inter_eq_iff
-  条件: (hτ : IsStoppingTime f τ) (s : Set Ω) (i : ι)
+  条件: (hτ : IsStoppingTime f τ) (s : 集合 Ω) (i : ι)
   证明: by
   have : forall j, {ω : Ω | τ ω = i} inter {ω : Ω | τ ω <= j} = {ω : Ω | τ ω = i} inter {_ω | i <= j} := by
     intro j
@@ -1364,7 +1364,7 @@ instance sigmaFinite_stopping_time
 
 中文:
 实例 sigmaFinite_stopping_time
-  签名: {ι} [SemilatticeSup ι] [OrderBot ι]
+  签名: {ι} [SemilatticeSup ι] [有底序 ι]
   定义体: by
   refine @sigmaFiniteTrim_mono _ _ ?_ _ _ _ ?_ ?_
   · exact f ⊥
@@ -1396,7 +1396,7 @@ instance sigmaFinite_stopping_time_of_le
 
 中文:
 实例 sigmaFinite_stopping_time_of_le
-  签名: {ι} [SemilatticeSup ι] [OrderBot ι] {μ : Measure Ω}
+  签名: {ι} [SemilatticeSup ι] [有底序 ι] {μ : 测度 Ω}
   定义体: by
   refine @sigmaFiniteTrim_mono _ _ ?_ _ _ _ ?_ ?_
   · exact f ⊥
@@ -1491,7 +1491,7 @@ theorem measurableSet_eq'
 
 中文:
 定理 measurableSet_eq'
-  结论: [TopologicalSpace ι] [OrderTopology ι]
+  结论: [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   rw [← Set.univ_inter {ω | τ ω = i}]; rw [measurableSet_inter_eq_iff]; rw [Set.univ_inter]
   exact hτ.measurableSet_eq i
@@ -1522,7 +1522,7 @@ theorem measurableSet_ge'
 
 中文:
 定理 measurableSet_ge'
-  结论: [TopologicalSpace ι] [OrderTopology ι]
+  结论: [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   have : {ω | i <= τ ω} = {ω | τ ω = i} union {ω | i < τ ω} := by
     ext1 ω
@@ -1564,7 +1564,7 @@ theorem measurableSet_lt'
 
 中文:
 定理 measurableSet_lt'
-  结论: [TopologicalSpace ι] [OrderTopology ι]
+  结论: [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   have : {ω | τ ω < i} = {ω | τ ω <= i} \ {ω | τ ω = i} := by
     ext1 ω
@@ -1616,7 +1616,7 @@ theorem measurableSet_eq_of_countable'
 
 中文:
 定理 measurableSet_eq_of_countable'
-  条件: [Countable ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [可数 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: hτ.measurableSet_eq_of_countable_range' (Set.to_countable _) i
 -/
 protected theorem measurableSet_eq_of_countable' [Countable ι] (hτ : IsStoppingTime f τ) (i : ι) :
@@ -1680,7 +1680,7 @@ theorem measurableSet_ge_of_countable'
 
 中文:
 定理 measurableSet_ge_of_countable'
-  条件: [Countable ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [可数 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: hτ.measurableSet_ge_of_countable_range' (Set.to_countable _) i
 -/
 protected theorem measurableSet_ge_of_countable' [Countable ι] (hτ : IsStoppingTime f τ) (i : ι) :
@@ -1729,7 +1729,7 @@ theorem measurableSet_lt_of_countable'
 
 中文:
 定理 measurableSet_lt_of_countable'
-  条件: [Countable ι] (hτ : IsStoppingTime f τ) (i : ι)
+  条件: [可数 ι] (hτ : IsStoppingTime f τ) (i : ι)
   证明: hτ.measurableSet_lt_of_countable_range' (Set.to_countable _) i
 -/
 protected theorem measurableSet_lt_of_countable' [Countable ι] (hτ : IsStoppingTime f τ) (i : ι) :
@@ -1752,7 +1752,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: by
   refine measurable_of_Iic fun i => ?_
   cases i with
@@ -1777,7 +1777,7 @@ theorem measurable'
 
 中文:
 定理 measurable'
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: hτ.measurable.mono (measurableSpace_le hτ) le_rfl
 -/
 protected theorem measurable' [TopologicalSpace ι]
@@ -1794,7 +1794,7 @@ theorem measurable_iSup
 
 中文:
 定理 measurable_iSup
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: hτ.measurable.mono (measurableSpace_le' hτ) le_rfl
 -/
 protected theorem measurable_iSup [TopologicalSpace ι]
@@ -1811,7 +1811,7 @@ lemma measurableSet_eq_top
 
 中文:
 引理 measurableSet_eq_top
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: (measurableSet_singleton _).preimage hτ.measurable'
 -/
 protected lemma measurableSet_eq_top [TopologicalSpace ι]
@@ -1829,7 +1829,7 @@ lemma measurableSet_eq_top'
 
 中文:
 引理 measurableSet_eq_top'
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: (measurableSet_singleton _).preimage hτ.measurable_iSup
 -/
 protected lemma measurableSet_eq_top' [TopologicalSpace ι]
@@ -1847,7 +1847,7 @@ theorem measurable_of_le
 
 中文:
 定理 measurable_of_le
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: hτ.measurable.mono (measurableSpace_le_of_le_const _ hτ_le) le_rfl
 -/
 protected theorem measurable_of_le [TopologicalSpace ι]
@@ -1907,7 +1907,7 @@ theorem measurableSet_min_iff
 
 中文:
 定理 measurableSet_min_iff
-  条件: (hτ : IsStoppingTime f τ) (hπ : IsStoppingTime f π) (s : Set Ω)
+  条件: (hτ : IsStoppingTime f τ) (hπ : IsStoppingTime f π) (s : 集合 Ω)
   证明: by
   rw [measurableSpace_min hτ hπ]; rfl
 
@@ -1950,7 +1950,7 @@ theorem measurableSet_min_const_iff
 
 中文:
 定理 measurableSet_min_const_iff
-  条件: (hτ : IsStoppingTime f τ) (s : Set Ω) {i : ι}
+  条件: (hτ : IsStoppingTime f τ) (s : 集合 Ω) {i : ι}
   证明: by
   rw [measurableSpace_min_const hτ]; apply MeasurableSpace.measurableSet_inf
 
@@ -1977,7 +1977,7 @@ theorem measurableSet_inter_le
 
 中文:
 定理 measurableSet_inter_le
-  结论: [TopologicalSpace ι] [SecondCountableTopology ι] [OrderTopology ι]
+  结论: [拓扑空间 ι] [第二可数拓扑 ι] [Order拓扑 ι]
   证明: by
   simp_rw [IsStoppingTime.measurableSet] at hs ⊢
   have h_eq i : s inter {ω | τ ω <= π ω} inter {ω | min (τ ω) (π ω) <= i} =
@@ -2022,7 +2022,7 @@ theorem measurableSet_inter_le_iff
 
 中文:
 定理 measurableSet_inter_le_iff
-  结论: [TopologicalSpace ι] [SecondCountableTopology ι]
+  结论: [拓扑空间 ι] [第二可数拓扑 ι]
   证明: by
   constructor <;> intro h
   · have : s inter {ω | τ ω <= π ω} = s inter {ω | τ ω <= π ω} inter {ω | τ ω <= π ω} := by
@@ -2061,7 +2061,7 @@ theorem measurableSet_inter_le_const_iff
 
 中文:
 定理 measurableSet_inter_le_const_iff
-  条件: (hτ : IsStoppingTime f τ) (s : Set Ω) (i : ι)
+  条件: (hτ : IsStoppingTime f τ) (s : 集合 Ω) (i : ι)
   证明: by
   rw [IsStoppingTime.measurableSet_min_iff hτ (isStoppingTime_const _ i)]; rw [IsStoppingTime.measurableSpace_const]; rw [IsStoppingTime.measurableSet]
   refine ⟨fun h => ⟨h, ?_⟩, fun h => h.1⟩
@@ -2095,7 +2095,7 @@ theorem measurableSet_le_stopping_time
 
 中文:
 定理 measurableSet_le_stopping_time
-  结论: [TopologicalSpace ι] [SecondCountableTopology ι]
+  结论: [拓扑空间 ι] [第二可数拓扑 ι]
   证明: by
   rw [hτ.measurableSet]
   refine ⟨measurableSet_le hτ.measurable_iSup hπ.measurable_iSup, fun j => ?_⟩
@@ -2133,7 +2133,7 @@ theorem measurableSet_stopping_time_le_min
 
 中文:
 定理 measurableSet_stopping_time_le_min
-  结论: [TopologicalSpace ι] [SecondCountableTopology ι]
+  结论: [拓扑空间 ι] [第二可数拓扑 ι]
   证明: by
   rw [← Set.univ_inter {ω : Ω | τ ω <= π ω}]; rw [← hτ.measurableSet_inter_le_iff hπ]; rw [Set.univ_inter]
   exact measurableSet_le_stopping_time hτ hπ
@@ -2159,7 +2159,7 @@ theorem measurableSet_stopping_time_le
 
 中文:
 定理 measurableSet_stopping_time_le
-  结论: [TopologicalSpace ι] [SecondCountableTopology ι]
+  结论: [拓扑空间 ι] [第二可数拓扑 ι]
   证明: by
   have : MeasurableSet[(hτ.min hπ).measurableSpace] {ω | τ ω <= π ω} :=
     measurableSet_stopping_time_le_min hτ hπ
@@ -2190,7 +2190,7 @@ theorem measurableSet_eq_stopping_time_min
 
 中文:
 定理 measurableSet_eq_stopping_time_min
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: by
   have : {ω | τ ω = π ω} = {ω | τ ω <= π ω} inter {ω | π ω <= τ ω} := by
     ext; simp only [Set.mem_ofPred_eq, le_antisymm_iff, Set.mem_inter_iff]
@@ -2225,7 +2225,7 @@ theorem measurableSet_eq_stopping_time
 
 中文:
 定理 measurableSet_eq_stopping_time
-  结论: [TopologicalSpace ι] [OrderTopology ι]
+  结论: [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   have h := measurableSet_eq_stopping_time_min hτ hπ
   rw [measurableSet_min_iff hτ hπ] at h
@@ -2321,7 +2321,7 @@ lemma stoppedValue_norm
 
 中文:
 引理 stoppedValue_norm
-  条件: [SeminormedAddCommGroup β]
+  条件: [SeminormedAddComm群 β]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2343,7 +2343,7 @@ lemma stoppedValue_inv
 
 中文:
 引理 stoppedValue_inv
-  条件: [Inv β]
+  条件: [取逆 β]
   结论: stoppedValue (u⁻¹) τ = (stoppedValue u τ)⁻¹
   证明: rfl
 
@@ -2364,7 +2364,7 @@ lemma stoppedValue_mul
 
 中文:
 引理 stoppedValue_mul
-  条件: [Mul β]
+  条件: [乘法 β]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2383,7 +2383,7 @@ lemma stoppedValue_div
 
 中文:
 引理 stoppedValue_div
-  条件: [Div β]
+  条件: [除法 β]
   证明: rfl
 -/
 lemma stoppedValue_div [Div β] :
@@ -2399,7 +2399,7 @@ lemma stoppedValue_const_smul
 
 中文:
 引理 stoppedValue_const_smul
-  条件: {𝕜 : 类型} [SMul 𝕜 β] (c : 𝕜)
+  条件: {𝕜 : 类型} [标量乘法 𝕜 β] (c : 𝕜)
   证明: rfl
 -/
 @[simp] lemma stoppedValue_const_smul {𝕜 : Type*} [SMul 𝕜 β] (c : 𝕜) :
@@ -2416,7 +2416,7 @@ lemma stoppedValue_const_bot
 
 中文:
 引理 stoppedValue_const_bot
-  条件: [Bot ι]
+  条件: [底元素 ι]
   证明: by
   ext; simp [stoppedValue, ← WithTop.coe_bot]
 -/
@@ -2523,7 +2523,7 @@ lemma stoppedProcess_norm
 
 中文:
 引理 stoppedProcess_norm
-  条件: [SeminormedAddCommGroup β]
+  条件: [SeminormedAddComm群 β]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2545,7 +2545,7 @@ lemma stoppedProcess_inv
 
 中文:
 引理 stoppedProcess_inv
-  条件: [Inv β]
+  条件: [取逆 β]
   结论: stoppedProcess (u⁻¹) τ = (stoppedProcess u τ)⁻¹
   证明: rfl
 
@@ -2566,7 +2566,7 @@ lemma stoppedProcess_mul
 
 中文:
 引理 stoppedProcess_mul
-  条件: [Mul β]
+  条件: [乘法 β]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2585,7 +2585,7 @@ lemma stoppedProcess_div
 
 中文:
 引理 stoppedProcess_div
-  条件: [Div β]
+  条件: [除法 β]
   证明: rfl
 -/
 lemma stoppedProcess_div [Div β] :
@@ -2601,7 +2601,7 @@ lemma stoppedProcess_const_smul
 
 中文:
 引理 stoppedProcess_const_smul
-  条件: {𝕜 : 类型} [SMul 𝕜 β] (c : 𝕜)
+  条件: {𝕜 : 类型} [标量乘法 𝕜 β] (c : 𝕜)
   证明: rfl
 -/
 @[simp] lemma stoppedProcess_const_smul {𝕜 : Type*} [SMul 𝕜 β] (c : 𝕜) :
@@ -2618,7 +2618,7 @@ lemma stoppedProcess_const_bot
 
 中文:
 引理 stoppedProcess_const_bot
-  条件: [OrderBot ι]
+  条件: [有底序 ι]
   证明: by
   ext; simp [stoppedProcess, ← WithTop.coe_bot]
 -/
@@ -2703,7 +2703,7 @@ theorem stoppedValue_stoppedProcess_ae_eq
 
 中文:
 定理 stoppedValue_stoppedProcess_ae_eq
-  结论: {μ : Measure Ω}
+  结论: {μ : 测度 Ω}
   证明: by
   filter_upwards [hσ] with ω hσ using by simp [stoppedValue_stoppedProcess, hσ]
 
@@ -2762,7 +2762,7 @@ lemma stoppedProcess_indicator_comm
 
 中文:
 引理 stoppedProcess_indicator_comm
-  条件: [Zero β] {s : Set Ω} (i : ι)
+  条件: [零 β] {s : 集合 Ω} (i : ι)
   证明: by
   ext ω
   by_cases hω : ω in s <;> simp [stoppedProcess, hω]
@@ -2788,7 +2788,7 @@ lemma stoppedProcess_indicator_comm'
 
 中文:
 引理 stoppedProcess_indicator_comm'
-  条件: [Zero β] {s : Set Ω}
+  条件: [零 β] {s : 集合 Ω}
   证明: by
   ext i ω
   rw [stoppedProcess_indicator_comm]
@@ -2930,7 +2930,7 @@ theorem isStronglyProgressive_min_stopping_time
 
 中文:
 定理 isStronglyProgressive_min_stopping_time
-  结论: [PseudoMetrizableSpace ι]
+  结论: [PseudoMetrizable空间 ι]
   证明: by
   refine fun i => (Measurable.untopA ?_).stronglyMeasurable
   let m_prod : MeasurableSpace (Set.Iic i × Ω) := Subtype.instMeasurableSpace.prod (f i)
@@ -3009,7 +3009,7 @@ theorem IsStronglyProgressive.stoppedProcess
 
 中文:
 定理 IsStronglyProgressive.stoppedProcess
-  结论: [PseudoMetrizableSpace ι]
+  结论: [PseudoMetrizable空间 ι]
   证明: by
   have h_meas := isStronglyProgressive_min_stopping_time hτ
   refine h.comp h_meas fun i ω => ?_
@@ -3053,7 +3053,7 @@ alias ProgMeasurable.stronglyAdapted_stoppedProcess :=
 
 中文:
 定理 IsStronglyProgressive.stronglyAdapted_stoppedProcess
-  结论: [PseudoMetrizableSpace ι]
+  结论: [PseudoMetrizable空间 ι]
   证明: (h.stoppedProcess hτ).stronglyAdapted
 
 @[deprecated (since := "2026-04-24")]
@@ -3081,7 +3081,7 @@ theorem IsStronglyProgressive.stronglyMeasurable_stoppedProcess
 
 中文:
 定理 IsStronglyProgressive.stronglyMeasurable_stoppedProcess
-  结论: [PseudoMetrizableSpace ι]
+  结论: [PseudoMetrizable空间 ι]
   证明: (hu.stronglyAdapted_stoppedProcess hτ i).mono (f.le _)
 
 Depends on / 依赖: f.le, hu.stronglyAdapted_stoppedProcess, stronglyAdapted_stoppedProcess
@@ -3144,7 +3144,7 @@ lemma measurableSet_preimage_stoppedValue_inter
 
 中文:
 引理 measurableSet_preimage_stoppedValue_inter
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β]
   证明: by
   have h_str_meas : forall i, StronglyMeasurable[f i] (stoppedValue u fun ω => min (τ ω) i) := fun i =>
     stronglyMeasurable_stoppedValue_of_le hf_prog (hτ.min_const i) fun _ => min_le_right _ _
@@ -3184,7 +3184,7 @@ theorem measurable_stoppedValue
 
 中文:
 定理 measurable_stoppedValue
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
   证明: by
   have h_str_meas : forall i, StronglyMeasurable[f i] (stoppedValue u fun ω => min (τ ω) i) := fun i =>
     stronglyMeasurable_stoppedValue_of_le hf_prog (hτ.min_const i) fun _ => min_le_right _ _
@@ -3258,7 +3258,7 @@ theorem stoppedValue_eq_of_mem_finset
 
 中文:
 定理 stoppedValue_eq_of_mem_finset
-  结论: [AddCommMonoid E] {s : Finset ι}
+  结论: [加法交换幺半群 E] {s : 有限集 ι}
   证明: by
   ext y
   classical
@@ -3304,7 +3304,7 @@ theorem stoppedValue_eq'
 
 中文:
 定理 stoppedValue_eq'
-  结论: [Preorder ι] [LocallyFiniteOrderBot ι] [AddCommMonoid E] {N : ι}
+  结论: [预序 ι] [LocallyFiniteOrderBot ι] [加法交换幺半群 E] {N : ι}
   证明: by
   refine stoppedValue_eq_of_mem_finset fun ω => ?_
   simp only [Finset.coe_Iic, Set.mem_image]
@@ -3343,7 +3343,7 @@ theorem stoppedProcess_eq_of_mem_finset
 
 中文:
 定理 stoppedProcess_eq_of_mem_finset
-  结论: [LinearOrder ι] [AddCommMonoid E] {s : Finset ι} (n : ι)
+  结论: [线性序 ι] [加法交换幺半群 E] {s : 有限集 ι} (n : ι)
   证明: by
   ext ω
   rw [Pi.add_apply]; rw [Finset.sum_apply]
@@ -3406,7 +3406,7 @@ theorem stoppedProcess_eq''
 
 中文:
 定理 stoppedProcess_eq''
-  条件: [LinearOrder ι] [LocallyFiniteOrderBot ι] [AddCommMonoid E] (n : ι)
+  条件: [线性序 ι] [LocallyFiniteOrderBot ι] [加法交换幺半群 E] (n : ι)
   证明: by
   have h_mem : forall ω, τ ω < n -> τ ω in WithTop.some '' (Finset.Iio n) := by
     intro ω h
@@ -3732,7 +3732,7 @@ theorem StronglyAdapted.stoppedProcess
 
 中文:
 定理 StronglyAdapted.stoppedProcess
-  结论: [MetrizableSpace ι] (hu : StronglyAdapted f u)
+  结论: [Metrizable空间 ι] (hu : StronglyAdapted f u)
   证明: ((hu.isStronglyProgressive_of_continuous hu_cont).stoppedProcess hτ).stronglyAdapted
 
 Depends on / 依赖: hu.isStronglyProgressive_of_continuous, hu_cont, isStronglyProgressive_of_continuous, stoppedProcess, stronglyAdapted
@@ -3752,7 +3752,7 @@ theorem StronglyAdapted.stoppedProcess_of_discrete
 
 中文:
 定理 StronglyAdapted.stoppedProcess_of_discrete
-  结论: [DiscreteTopology ι] (hu : StronglyAdapted f u)
+  结论: [离散拓扑 ι] (hu : StronglyAdapted f u)
   证明: (hu.isStronglyProgressive_of_discrete.stoppedProcess hτ).stronglyAdapted
 
 Depends on / 依赖: hu.isStronglyProgressive_of_discrete.stoppedProcess, isStronglyProgressive_of_discrete, stoppedProcess, stronglyAdapted
@@ -3771,7 +3771,7 @@ theorem StronglyAdapted.stronglyMeasurable_stoppedProcess
 
 中文:
 定理 StronglyAdapted.stronglyMeasurable_stoppedProcess
-  结论: [MetrizableSpace ι]
+  结论: [Metrizable空间 ι]
   证明: (hu.isStronglyProgressive_of_continuous hu_cont).stronglyMeasurable_stoppedProcess hτ n
 
 Depends on / 依赖: hu.isStronglyProgressive_of_continuous, hu_cont, isStronglyProgressive_of_continuous, stronglyMeasurable_stoppedProcess
@@ -3791,7 +3791,7 @@ theorem StronglyAdapted.stronglyMeasurable_stoppedProcess_of_discrete
 
 中文:
 定理 StronglyAdapted.stronglyMeasurable_stoppedProcess_of_discrete
-  结论: [DiscreteTopology ι]
+  结论: [离散拓扑 ι]
   证明: hu.isStronglyProgressive_of_discrete.stronglyMeasurable_stoppedProcess hτ n
 
 Depends on / 依赖: hu.isStronglyProgressive_of_discrete.stronglyMeasurable_stoppedProcess, isStronglyProgressive_of_discrete, stronglyMeasurable_stoppedProcess
@@ -3826,7 +3826,7 @@ theorem stoppedValue_sub_eq_sum
 
 中文:
 定理 stoppedValue_sub_eq_sum
-  条件: [AddCommGroup β] (hle : τ <= π) (hπ : 对任意 ω, π ω != ∞)
+  条件: [加法交换群 β] (hle : τ <= π) (hπ : 对任意 ω, π ω != ∞)
   证明: by
   ext ω
   have h_le' : (τ ω).untopA <= (π ω).untopA := untopA_mono (mod_cast hπ ω) (hle ω)
@@ -3859,7 +3859,7 @@ theorem stoppedValue_sub_eq_sum'
 
 中文:
 定理 stoppedValue_sub_eq_sum'
-  条件: [AddCommGroup β] (hle : τ <= π) {N : 自然数} (hbdd : 对任意 ω, π ω <= N)
+  条件: [加法交换群 β] (hle : τ <= π) {N : 自然数} (hbdd : 对任意 ω, π ω <= N)
   证明: by
   have hπ_top ω : π ω != ⊤ := fun h => by specialize hbdd ω; simp [h] at hbdd
   have hτ_top ω : τ ω != ⊤ := ne_top_of_le_ne_top (hπ_top ω) (mod_cast hle ω)
@@ -3950,7 +3950,7 @@ theorem stoppedProcess_eq
 中文:
 定理 stoppedProcess_eq
   条件: (n : 自然数)
-  结论: stoppedProcess u τ n = Set.indicator {a | n <= τ a} (u n) +
+  结论: stoppedProcess u τ n = 集合.indicator {a | n <= τ a} (u n) +
   证明: by
   rw [stoppedProcess_eq'' n]
   congr with i
@@ -3982,7 +3982,7 @@ theorem stoppedProcess_eq'
 中文:
 定理 stoppedProcess_eq'
   条件: (n : 自然数)
-  结论: stoppedProcess u τ n = Set.indicator {a | n + 1 <= τ a} (u n) +
+  结论: stoppedProcess u τ n = 集合.indicator {a | n + 1 <= τ a} (u n) +
   证明: by
   have : {a | n <= τ a}.indicator (u n) =
       {a | n + 1 <= τ a}.indicator (u n) + {a | τ a = n}.indicator (u n) := by
@@ -4082,7 +4082,7 @@ theorem isStoppingTime_piecewise_const
 
 中文:
 定理 isStoppingTime_piecewise_const
-  条件: (hij : i <= j) (hs : MeasurableSet[𝒢 i] s)
+  条件: (hij : i <= j) (hs : 可测集[𝒢 i] s)
   证明: (isStoppingTime_const 𝒢 i).piecewise_of_le (isStoppingTime_const 𝒢 j) (fun _ => le_rfl)
     (fun _ => mod_cast hij) hs
 
@@ -4104,7 +4104,7 @@ theorem stoppedValue_piecewise_const
 
 中文:
 定理 stoppedValue_piecewise_const
-  条件: {ι' α : 类型} [Nonempty ι'] {i j : ι'} {f : ι' -> Ω -> α}
+  条件: {ι' α : 类型} [非空 ι'] {i j : ι'} {f : ι' -> Ω -> α}
   证明: by
   ext ω; rw [stoppedValue]; by_cases hx : ω in s <;> simp [hx]
 
@@ -4125,7 +4125,7 @@ theorem stoppedValue_piecewise_const'
 
 中文:
 定理 stoppedValue_piecewise_const'
-  结论: {ι' α : 类型} [AddCommGroup α]
+  结论: {ι' α : 类型} [加法交换群 α]
   证明: by
   ext ω; rw [stoppedValue]; by_cases hx : ω in s <;> simp [hx]
 
@@ -4161,7 +4161,7 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_of_countable_range
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq_of_countable_range
-  结论: [SigmaFiniteFiltration μ ℱ]
+  结论: [σ有限滤子 μ ℱ]
   证明: by
   refine condExp_ae_eq_restrict_of_measurableSpace_eq_on
     (hτ.measurableSpace_le) (ℱ.le i)
@@ -4189,7 +4189,7 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_of_countable
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq_of_countable
-  结论: [Countable ι]
+  结论: [可数 ι]
   证明: condExp_stopping_time_ae_eq_restrict_eq_of_countable_range hτ (Set.to_countable _) i
 
 Depends on / 依赖: Set.to_countable, condExp_stopping_time_ae_eq_restrict_eq_of_countable_range, to_countable
@@ -4255,7 +4255,7 @@ theorem condExp_stopping_time_ae_eq_restrict_eq
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq
-  结论: [FirstCountableTopology ι]
+  结论: [第一可数拓扑 ι]
   证明: by
   refine condExp_ae_eq_restrict_of_measurableSpace_eq_on hτ.measurableSpace_le (ℱ.le i)
     (hτ.measurableSet_eq' i) fun t => ?_
@@ -4286,7 +4286,7 @@ theorem condExp_min_stopping_time_ae_eq_restrict_le
 
 中文:
 定理 condExp_min_stopping_time_ae_eq_restrict_le
-  结论: [SecondCountableTopology ι]
+  结论: [第二可数拓扑 ι]
   证明: by
   have : SigmaFinite (μ.trim hτ.measurableSpace_le) :=
     sigmaFiniteTrim_mono _ (hτ.measurableSpace_min hσ ▸ inf_le_left)

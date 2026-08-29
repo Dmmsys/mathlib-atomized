@@ -50,10 +50,10 @@ class SupSet
     - sSup : Set α -> α
 
 中文:
-类 SupSet
+类 上确界集
   参数: (α : 类型)
   公理与运算 (1 个):
-    - sSup : Set α -> α
+    - sSup : 集合 α -> α
 -/
 class SupSet (α : Type*) where
   /-- Supremum of a set -/
@@ -71,10 +71,10 @@ class InfSet
     - sInf : Set α -> α
 
 中文:
-类 InfSet
+类 下确界集
   参数: (α : 类型)
   公理与运算 (1 个):
-    - sInf : Set α -> α
+    - sInf : 集合 α -> α
 -/
 class InfSet (α : Type*) where
   /-- Infimum of a set -/
@@ -98,7 +98,7 @@ definition iSup
 
 中文:
 定义 iSup
-  签名: [SupSet α] (s : ι -> α)
+  签名: [上确界集 α] (s : ι -> α)
   定义体: sSup (range s)
 
 @[to_dual]
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Set α)
+  签名: 下确界集 (集合 α)
   定义体: ⟨fun s => { a | forall t in s, a in t }⟩
 -/
 instance : InfSet (Set α) :=
@@ -205,7 +205,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Set α)
+  签名: 上确界集 (集合 α)
   定义体: ⟨fun s => { a | exists t in s, a in t }⟩
 -/
 instance : SupSet (Set α) :=
@@ -220,8 +220,8 @@ definition sInter
   body: sInf S
 
 中文:
-定义 sInter
-  签名: (S : Set (Set α))
+定义 集合交集
+  签名: (S : 集合 (集合 α))
   定义体: sInf S
 -/
 def sInter (S : Set (Set α)) : Set α :=
@@ -239,8 +239,8 @@ definition sUnion
   body: sSup S
 
 中文:
-定义 sUnion
-  签名: (S : Set (Set α))
+定义 集合并集
+  签名: (S : 集合 (集合 α))
   定义体: sSup S
 -/
 def sUnion (S : Set (Set α)) : Set α :=
@@ -262,8 +262,8 @@ theorem mem_sInter
 @[simp, grind =, push]
 
 中文:
-定理 mem_sInter
-  条件: {x : α} {S : Set (Set α)}
+定理 mem_s整数er
+  条件: {x : α} {S : 集合 (集合 α)}
   结论: x in ⋂₀ S ↔ 对任意 t in S, x in t
   证明: Iff.rfl
 
@@ -286,7 +286,7 @@ theorem mem_sUnion
 
 中文:
 定理 mem_sUnion
-  条件: {x : α} {S : Set (Set α)}
+  条件: {x : α} {S : 集合 (集合 α)}
   结论: x in ⋃₀ S ↔ 存在 t in S, x in t
   证明: Iff.rfl
 
@@ -305,7 +305,7 @@ definition iUnion
 
 中文:
 定义 iUnion
-  签名: (s : ι -> Set α)
+  签名: (s : ι -> 集合 α)
   定义体: iSup s
 -/
 def iUnion (s : ι -> Set α) : Set α :=
@@ -320,8 +320,8 @@ definition iInter
   body: iInf s
 
 中文:
-定义 iInter
-  签名: (s : ι -> Set α)
+定义 i整数er
+  签名: (s : ι -> 集合 α)
   定义体: iInf s
 -/
 def iInter (s : ι -> Set α) : Set α :=
@@ -410,7 +410,7 @@ theorem mem_iUnion
 
 中文:
 定理 mem_iUnion
-  条件: {x : α} {s : ι -> Set α}
+  条件: {x : α} {s : ι -> 集合 α}
   结论: (x in ⋃ i, s i) ↔ 存在 i, x in s i
   证明: ⟨fun ⟨_, ⟨⟨a, (t_eq : s a = _)⟩, (h : x in _)⟩⟩ => ⟨a, t_eq.symm ▸ h⟩, fun ⟨a, h⟩ =>
     ⟨s a, ⟨⟨a, rfl⟩, h⟩⟩⟩
@@ -437,8 +437,8 @@ theorem mem_iInter
 @[simp]
 
 中文:
-定理 mem_iInter
-  条件: {x : α} {s : ι -> Set α}
+定理 mem_i整数er
+  条件: {x : α} {s : ι -> 集合 α}
   结论: (x in ⋂ i, s i) ↔ 对任意 i, x in s i
   证明: ⟨fun (h : forall a in { a : Set α | exists i, s i = a }, x in a) a => h (s a) ⟨a, rfl⟩,
     fun h _ ⟨a, (eq : s a = _)⟩ => eq ▸ h a⟩
@@ -463,7 +463,7 @@ theorem sSup_eq_sUnion
 
 中文:
 定理 sSup_eq_sUnion
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: sSup S = ⋃₀ S
   证明: rfl
 
@@ -485,8 +485,8 @@ theorem sInf_eq_sInter
 @[simp]
 
 中文:
-定理 sInf_eq_sInter
-  条件: (S : Set (Set α))
+定理 sInf_eq_s整数er
+  条件: (S : 集合 (集合 α))
   结论: sInf S = ⋂₀ S
   证明: rfl
 
@@ -509,7 +509,7 @@ theorem iSup_eq_iUnion
 
 中文:
 定理 iSup_eq_iUnion
-  条件: (s : ι -> Set α)
+  条件: (s : ι -> 集合 α)
   结论: iSup s = iUnion s
   证明: rfl
 
@@ -529,8 +529,8 @@ theorem iInf_eq_iInter
   proof: rfl
 
 中文:
-定理 iInf_eq_iInter
-  条件: (s : ι -> Set α)
+定理 iInf_eq_i整数er
+  条件: (s : ι -> 集合 α)
   结论: iInf s = i整数er s
   证明: rfl
 -/

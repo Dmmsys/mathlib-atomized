@@ -123,7 +123,7 @@ definition relationsSet
 
 中文:
 定义 relationsSet
-  签名: : Set (FreeGroup B)
+  签名: : 集合 (自由群 B)
   定义体: range uncurry M.relation
 
 Depends on / 依赖: M.relation, relation, uncurry
@@ -140,8 +140,8 @@ definition Group
 deriving Group
 
 中文:
-定义 Group
-  签名: : Type _
+定义 群
+  签名: : 类型 _
   定义体: PresentedGroup M.relationsSet
 deriving Group
 -/
@@ -216,7 +216,7 @@ definition reindexGroupEquiv
 
 中文:
 定义 reindexGroupEquiv
-  签名: : (M.reindex e).Group ≃* M.Group
+  签名: : (M.reindex e).群 ≃* M.群
   定义体: .symm QuotientGroup.congr
     (Subgroup.normalClosure M.relationsSet)
     (Subgroup.normalClosure (M.reindex e).relationsSet)
@@ -289,10 +289,10 @@ structure CoxeterSystem
     - mulEquiv : W ≃* M.Group
 
 中文:
-结构 CoxeterSystem
-  参数: (W : 类型) [Group W]
+结构 余xeterSystem
+  参数: (W : 类型) [群 W]
   公理与运算 (1 个):
-    - mulEquiv : W ≃* M.Group
+    - mulEquiv : W ≃* M.群
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, toMatrix
 -/
@@ -311,9 +311,9 @@ class IsCoxeterGroup.{u}
 
 中文:
 类 IsCoxeterGroup.{u}
-  参数: (W : 类型u) [Group W]
+  参数: (W : 类型u) [群 W]
   公理与运算 (1 个):
-    - nonempty_system : 存在 B : 类型u, 存在 M : CoxeterMatrix B, Nonempty (CoxeterSystem M W)
+    - nonempty_system : 存在 B : 类型u, 存在 M : 余xeterMatrix B, 非空 (余xeterSystem M W)
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, _comp, toMatrix
 -/
@@ -329,8 +329,8 @@ definition CoxeterMatrix.toCoxeterSystem
   body: ⟨.refl _⟩
 
 中文:
-定义 CoxeterMatrix.toCoxeterSystem
-  签名: : CoxeterSystem M M.Group
+定义 余xeterMatrix.toCoxeterSystem
+  签名: : 余xeterSystem M M.群
   定义体: ⟨.refl _⟩
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrixAlgEquiv, _comp, toMatrixAlgEquiv
@@ -415,8 +415,8 @@ theorem _root_.CoxeterMatrix.toCoxeterSystem_simple
   proof: rfl
 
 中文:
-定理 _root_.CoxeterMatrix.toCoxeterSystem_simple
-  条件: (M : CoxeterMatrix B)
+定理 _root_.余xeterMatrix.toCoxeterSystem_simple
+  条件: (M : 余xeterMatrix B)
   证明: rfl
 -/
 theorem _root_.CoxeterMatrix.toCoxeterSystem_simple (M : CoxeterMatrix B) :
@@ -660,7 +660,7 @@ theorem subgroup_closure_range_simple
 
 中文:
 定理 subgroup_closure_range_simple
-  结论: Subgroup.closure (range cs.simple) = ⊤
+  结论: 子群.closure (range cs.simple) = ⊤
   证明: by
   have : cs.simple = cs.mulEquiv.symm ∘ PresentedGroup.of := rfl
   rw [this]; rw [Set.range_comp]; rw [← MulEquiv.coe_toMonoidHom]; rw [← MonoidHom.map_closure]; rw [PresentedGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
@@ -686,7 +686,7 @@ theorem submonoid_closure_range_simple
 
 中文:
 定理 submonoid_closure_range_simple
-  结论: Submonoid.closure (range cs.simple) = ⊤
+  结论: 子幺半群.closure (range cs.simple) = ⊤
   证明: by
   have : range cs.simple = range cs.simple union (range cs.simple)⁻¹ := by
     simp_rw [inv_range, inv_simple, union_self]
@@ -820,7 +820,7 @@ theorem ext_simple
 
 中文:
 定理 ext_simple
-  条件: {G : 类型} [MulOneClass G] {φ₁ φ₂ : W ->* G} (h : 对任意 i : B, φ₁ (s i) = φ₂ (s i))
+  条件: {G : 类型} [MulOne类 G] {φ₁ φ₂ : W ->* G} (h : 对任意 i : B, φ₁ (s i) = φ₂ (s i))
   证明: MonoidHom.eq_of_eqOn_denseM cs.submonoid_closure_range_simple (fun _ ⟨i, hi⟩ => hi ▸ h i)
 
 Depends on / 依赖: MonoidHom, MonoidHom.eq_of_eqOn_denseM, cs.submonoid_closure_range_simple, eq_of_eqOn_denseM, submonoid_closure_range_simple
@@ -838,8 +838,8 @@ definition _root_.CoxeterMatrix.IsLiftable
   body: forall i i', (f i * f i') ^ M i i' = 1
 
 中文:
-定义 _root_.CoxeterMatrix.IsLiftable
-  签名: {G : 类型} [Monoid G] (M : CoxeterMatrix B) (f : B -> G)
+定义 _root_.余xeterMatrix.IsLiftable
+  签名: {G : 类型} [幺半群 G] (M : 余xeterMatrix B) (f : B -> G)
   定义体: forall i i', (f i * f i') ^ M i i' = 1
 -/
 def _root_.CoxeterMatrix.IsLiftable {G : Type*} [Monoid G] (M : CoxeterMatrix B) (f : B -> G) :
@@ -858,7 +858,7 @@ theorem relations_liftable
 
 中文:
 定理 relations_liftable
-  结论: {G : 类型} [Group G] {f : B -> G} (hf : IsLiftable M f)
+  结论: {G : 类型} [群 G] {f : B -> G} (hf : IsLiftable M f)
   证明: by
   rcases hr with ⟨⟨i, i'⟩, rfl⟩
   rw [uncurry]; rw [relation]; rw [map_pow]; rw [map_mul]; rw [FreeGroup.lift_apply_of]; rw [FreeGroup.lift_apply_of]
@@ -881,7 +881,7 @@ definition groupLift
 
 中文:
 定义 groupLift
-  签名: {G : 类型} [Group G] {f : B -> G} (hf : IsLiftable M f)
+  签名: {G : 类型} [群 G] {f : B -> G} (hf : IsLiftable M f)
   定义体: (PresentedGroup.toGroup (relations_liftable hf)).comp cs.mulEquiv.toMonoidHom
 -/
 private def groupLift {G : Type*} [Group G] {f : B -> G} (hf : IsLiftable M f) : W ->* G :=
@@ -901,7 +901,7 @@ definition restrictUnit
 
 中文:
 定义 restrictUnit
-  签名: {G : 类型} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B)
+  签名: {G : 类型} [幺半群 G] {f : B -> G} (hf : IsLiftable M f) (i : B)
   定义体: f i
   inv := f i
   val_inv := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
@@ -955,7 +955,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {G : 类型} [Monoid G]
+  签名: {G : 类型} [幺半群 G]
   定义体: MonoidHom.comp (Units.coeHom G) (cs.groupLift
     (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
       fun i i' => Units.ext (f.property i i')))
@@ -992,7 +992,7 @@ theorem lift_apply_simple
 
 中文:
 定理 lift_apply_simple
-  条件: {G : 类型} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B)
+  条件: {G : 类型} [幺半群 G] {f : B -> G} (hf : IsLiftable M f) (i : B)
   证明: congrFun (congrArg Subtype.val (cs.lift.left_inv ⟨f, hf⟩)) i
 
 Depends on / 依赖: Subtype, Subtype.val, cs.lift.left_inv, left_inv
@@ -1049,7 +1049,7 @@ local prefix:100 "π " => cs.wordProd
 
 中文:
 定义 wordProd
-  签名: (ω : List B)
+  签名: (ω : 列表 B)
   定义体: prod (map cs.simple ω)
 
 local prefix:100 "π " => cs.wordProd
@@ -1086,7 +1086,7 @@ theorem wordProd_cons
 
 中文:
 定理 wordProd_cons
-  条件: (i : B) (ω : List B)
+  条件: (i : B) (ω : 列表 B)
   结论: π (i :: ω) = s i * π ω
   证明: by simp [wordProd]
 
@@ -1122,7 +1122,7 @@ theorem wordProd_concat
 
 中文:
 定理 wordProd_concat
-  条件: (i : B) (ω : List B)
+  条件: (i : B) (ω : 列表 B)
   结论: π (ω.concat i) = π ω * s i
   证明: by simp [wordProd]
 
@@ -1141,7 +1141,7 @@ theorem wordProd_append
 
 中文:
 定理 wordProd_append
-  条件: (ω ω' : List B)
+  条件: (ω ω' : 列表 B)
   结论: π (ω ++ ω') = π ω * π ω'
   证明: by simp [wordProd]
 
@@ -1163,7 +1163,7 @@ theorem wordProd_reverse
 
 中文:
 定理 wordProd_reverse
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   结论: π (reverse ω) = (π ω)⁻¹
   证明: by
   induction ω with
@@ -1192,7 +1192,7 @@ theorem wordProd_surjective
 
 中文:
 定理 wordProd_surjective
-  结论: Surjective cs.wordProd
+  结论: 满射 cs.wordProd
   证明: by
   intro w
   apply cs.simple_induction_left w
@@ -1247,7 +1247,7 @@ abbreviation braidWord
 
 中文:
 缩写 braidWord
-  签名: (M : CoxeterMatrix B) (i i' : B)
+  签名: (M : 余xeterMatrix B) (i i' : B)
   定义体: alternatingWord i i' (M i i')
 
 Depends on / 依赖: alternatingWord

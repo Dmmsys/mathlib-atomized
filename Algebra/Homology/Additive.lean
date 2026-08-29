@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (C ⟶ D)
+  签名: 零 (C ⟶ D)
   定义体: ⟨{ f := fun _ => 0 }⟩
 
 Depends on / 依赖: h.isLimit, h.isLimitEquivIsLimitKernelFork, isLimit, isLimitEquivIsLimitKernelFork
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (C ⟶ D)
+  签名: 加法 (C ⟶ D)
   定义体: ⟨fun f g => { f := fun i => f.f i + g.f i }⟩
 -/
 instance : Add (C ⟶ D) :=
@@ -77,7 +77,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (C ⟶ D)
+  签名: 取负 (C ⟶ D)
   定义体: ⟨fun f => { f := fun i => -f.f i }⟩
 -/
 instance : Neg (C ⟶ D) :=
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (C ⟶ D)
+  签名: 减法 (C ⟶ D)
   定义体: ⟨fun f g => { f := fun i => f.f i - g.f i }⟩
 -/
 instance : Sub (C ⟶ D) :=
@@ -110,8 +110,8 @@ instance hasNatScalar
       comm' := fun i j _ => by simp [Preadditive.nsmul_comp, Preadditive.comp_nsmul] }⟩
 
 中文:
-实例 hasNatScalar
-  签名: : SMul 自然数 (C ⟶ D)
+实例 has自然数Scalar
+  签名: : 标量乘法 自然数 (C ⟶ D)
   定义体: ⟨fun n f =>
     { f := fun i => n • f.f i
       comm' := fun i j _ => by simp [Preadditive.nsmul_comp, Preadditive.comp_nsmul] }⟩
@@ -136,8 +136,8 @@ instance hasIntScalar
 @[simp]
 
 中文:
-实例 hasIntScalar
-  签名: : SMul 整数 (C ⟶ D)
+实例 has整数Scalar
+  签名: : 标量乘法 整数 (C ⟶ D)
   定义体: ⟨fun n f =>
     { f := fun i => n • f.f i
       comm' := fun i j _ => by simp [Preadditive.zsmul_comp, Preadditive.comp_zsmul] }⟩
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (C ⟶ D)
+  签名: 加法交换群 (C ⟶ D)
   定义体: Function.Injective.addCommGroup Hom.f HomologicalComplex.hom_f_injective
     (by cat_disch) (by cat_disch) (by cat_disch) (by cat_disch) (by cat_disch) (by cat_disch)
 
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (HomologicalComplex V c)
+  签名: 预加性 (同调复形 V c)
 -/
 instance : Preadditive (HomologicalComplex V c) where
 
@@ -330,8 +330,8 @@ definition Hom.fAddMonoidHom
   body: AddMonoidHom.mk' (fun f => Hom.f f i) fun _ _ => rfl
 
 中文:
-定义 Hom.fAddMonoidHom
-  签名: {C₁ C₂ : HomologicalComplex V c} (i : ι)
+定义 态射.fAddMonoidHom
+  签名: {C₁ C₂ : 同调复形 V c} (i : ι)
   定义体: AddMonoidHom.mk' (fun f => Hom.f f i) fun _ _ => rfl
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, Hom.f
@@ -376,8 +376,8 @@ definition Functor.mapHomologicalComplex
       comm' := fun i j _ => b
 
 中文:
-定义 Functor.mapHomologicalComplex
-  签名: (F : W₁ ⥤ W₂) [F.PreservesZeroMorphisms] (c : ComplexShape ι)
+定义 函子.mapHomologicalComplex
+  签名: (F : W₁ ⥤ W₂) [F.保持ZeroMorphisms] (c : 余mplexShape ι)
   定义体: { X := fun i => F.obj (C.X i)
       d := fun i j => F.map (C.d i j)
       shape := fun i j w => by
@@ -414,8 +414,8 @@ instance Functor.map_homogical_complex_additive
   signature: (F : V ⥤ W) [F.Additive] (c : ComplexShape ι)
 
 中文:
-实例 Functor.map_homogical_complex_additive
-  签名: (F : V ⥤ W) [F.Additive] (c : ComplexShape ι)
+实例 函子.map_homogical_complex_additive
+  签名: (F : V ⥤ W) [F.加性] (c : 余mplexShape ι)
 -/
 instance Functor.map_homogical_complex_additive (F : V ⥤ W) [F.Additive] (c : ComplexShape ι) :
     (F.mapHomologicalComplex c).Additive where
@@ -436,8 +436,8 @@ definition Functor.mapHomologicalComplexIdIso
   body: NatIso.ofComponents fun K => Hom.isoOfComponents fun _ => Iso.refl _
 
 中文:
-定义 Functor.mapHomologicalComplexIdIso
-  签名: (c : ComplexShape ι)
+定义 函子.mapHomologicalComplexIdIso
+  签名: (c : 余mplexShape ι)
   定义体: NatIso.ofComponents fun K => Hom.isoOfComponents fun _ => Iso.refl _
 
 Depends on / 依赖: Hom.isoOfComponents, Iso.refl, NatIso, NatIso.ofComponents, isoOfComponents, ofComponents
@@ -461,8 +461,8 @@ instance Functor.mapHomologicalComplex_reflects_iso
     exact HomologicalComplex.Hom.isIso_of_component
 
 中文:
-实例 Functor.mapHomologicalComplex_reflects_iso
-  签名: (F : W₁ ⥤ W₂) [F.PreservesZeroMorphisms]
+实例 函子.mapHomologicalComplex_reflects_iso
+  签名: (F : W₁ ⥤ W₂) [F.保持ZeroMorphisms]
   定义体: ⟨fun f => by
     intro
     have : forall n : ι, IsIso (F.map (f.f n)) := fun n =>
@@ -518,7 +518,7 @@ definition NatTrans.mapHomologicalComplex
 @[simp]
 
 中文:
-定义 NatTrans.mapHomologicalComplex
+定义 自然变换.mapHomologicalComplex
   签名: {F G : W₁ ⥤ W₂}
   定义体: { f := fun _ => α.app _ }
 
@@ -540,7 +540,7 @@ theorem NatTrans.mapHomologicalComplex_id
 @[simp]
 
 中文:
-定理 NatTrans.mapHomologicalComplex_id
+定理 自然变换.mapHomologicalComplex_id
   证明: by cat_disch
 
 @[simp]
@@ -564,8 +564,8 @@ theorem NatTrans.mapHomologicalComplex_comp
 @[reassoc]
 
 中文:
-定理 NatTrans.mapHomologicalComplex_comp
-  结论: (c : ComplexShape ι) {F G H : W₁ ⥤ W₂}
+定理 自然变换.mapHomologicalComplex_comp
+  结论: (c : 余mplexShape ι) {F G H : W₁ ⥤ W₂}
   证明: by
   cat_disch
 
@@ -591,8 +591,8 @@ theorem NatTrans.mapHomologicalComplex_naturality
   simp
 
 中文:
-定理 NatTrans.mapHomologicalComplex_naturality
-  结论: {c : ComplexShape ι} {F G : W₁ ⥤ W₂}
+定理 自然变换.mapHomologicalComplex_naturality
+  结论: {c : 余mplexShape ι} {F G : W₁ ⥤ W₂}
   证明: by
   simp
 -/
@@ -621,8 +621,8 @@ definition NatIso.mapHomologicalComplex
     NatT
 
 中文:
-定义 NatIso.mapHomologicalComplex
-  签名: {F G : W₁ ⥤ W₂} [F.PreservesZeroMorphisms]
+定义 自然数Iso.mapHomologicalComplex
+  签名: {F G : W₁ ⥤ W₂} [F.保持ZeroMorphisms]
   定义体: NatTrans.mapHomologicalComplex α.hom c
   inv := NatTrans.mapHomologicalComplex α.inv c
   hom_inv_id := by simp only [← NatTrans.mapHomologicalComplex_comp, α.hom_inv_id,
@@ -655,8 +655,8 @@ definition Functor.mapHomologicalComplexCompIso
   body: NatIso.mapHomologicalComplex e c
 
 中文:
-定义 Functor.mapHomologicalComplexCompIso
-  签名: {W' : 类型} [Category W'] [Preadditive W']
+定义 函子.mapHomologicalComplexCompIso
+  签名: {W' : 类型} [范畴 W'] [预加性 W']
   定义体: NatIso.mapHomologicalComplex e c
 
 Depends on / 依赖: NatIso, NatIso.mapHomologicalComplex, mapHomologicalComplex
@@ -687,8 +687,8 @@ definition Equivalence.mapHomologicalComplex
   Functor.mapHomologicalComplexIdIso W₂ c
 
 中文:
-定义 Equivalence.mapHomologicalComplex
-  签名: (e : W₁ ≌ W₂) [e.functor.PreservesZeroMorphisms]
+定义 等价.mapHomologicalComplex
+  签名: (e : W₁ ≌ W₂) [e.functor.保持ZeroMorphisms]
   定义体: e.functor.mapHomologicalComplex c
   inverse := e.inverse.mapHomologicalComplex c
   unitIso :=
@@ -729,7 +729,7 @@ theorem map_chain_complex_of
 
 中文:
 定理 map_chain_complex_of
-  结论: (F : W₁ ⥤ W₂) [F.PreservesZeroMorphisms] (X : α -> W₁)
+  结论: (F : W₁ ⥤ W₂) [F.保持ZeroMorphisms] (X : α -> W₁)
   证明: by
   refine HomologicalComplex.ext rfl ?_
   rintro i j (rfl : j + 1 = i)

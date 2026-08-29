@@ -63,7 +63,7 @@ definition Spec.topObj
 
 中文:
 定义 Spec.topObj
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: TopCat.of (PrimeSpectrum R)
 
 Depends on / 依赖: PrimeSpectrum, TopCat, TopCat.of
@@ -83,7 +83,7 @@ theorem Spec.topObj_forget
 中文:
 定理 Spec.topObj_forget
   条件: {R}
-  结论: ToType (Spec.topObj R) = PrimeSpectrum R
+  结论: ToType (Spec.topObj R) = 素谱 R
   证明: rfl
 -/
 @[simp] theorem Spec.topObj_forget {R} : ToType (Spec.topObj R) = PrimeSpectrum R :=
@@ -101,7 +101,7 @@ definition Spec.topMap
 
 中文:
 定义 Spec.topMap
-  签名: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  签名: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   定义体: TopCat.ofHom ⟨_, PrimeSpectrum.continuous_comap f.hom⟩
 
 @[simp]
@@ -125,7 +125,7 @@ theorem Spec.topMap_id
 
 中文:
 定理 Spec.topMap_id
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   结论: Spec.topMap (𝟙 R) = 𝟙 (Spec.topObj R)
   证明: rfl
 
@@ -145,7 +145,7 @@ theorem Spec.topMap_comp
 
 中文:
 定理 Spec.topMap_comp
-  条件: {R S T : CommRingCat.{u}} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换环范畴.{u}} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 -/
 theorem Spec.topMap_comp {R S T : CommRingCat.{u}} (f : R ⟶ S) (g : S ⟶ T) :
@@ -168,7 +168,7 @@ definition Spec.toTop
 
 中文:
 定义 Spec.toTop
-  签名: : CommRingCat.{u}ᵒᵖ ⥤ TopCat where
+  签名: : 交换环范畴.{u}ᵒᵖ ⥤ 顶元素范畴 where
   定义体: Spec.topObj (unop R)
   map {_ _} f := Spec.topMap f.unop
 
@@ -193,7 +193,7 @@ definition Spec.sheafedSpaceObj
 
 中文:
 定义 Spec.sheafedSpaceObj
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: Spec.topObj R
   presheaf := (structureSheaf R).1
   IsSheaf := (structureSheaf R).2
@@ -223,7 +223,7 @@ definition Spec.sheafedSpaceMap
 
 中文:
 定义 Spec.sheafedSpaceMap
-  签名: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  签名: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   定义体: Spec.topMap f
   hom.c :=
     { app := fun U => CommRingCat.ofHom <|
@@ -260,7 +260,7 @@ theorem Spec.sheafedSpaceMap_id
 
 中文:
 定理 Spec.sheafedSpaceMap_id
-  条件: {R : CommRingCat.{u}}
+  条件: {R : 交换环范畴.{u}}
   证明: by
   ext : 1
   · exact Spec.topMap_id R
@@ -300,7 +300,7 @@ theorem Spec.sheafedSpaceMap_comp
 
 中文:
 定理 Spec.sheafedSpaceMap_comp
-  条件: {R S T : CommRingCat.{u}} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换环范畴.{u}} (f : R ⟶ S) (g : S ⟶ T)
   证明: by
   ext : 1
   · exact Spec.topMap_comp f g
@@ -340,7 +340,7 @@ definition Spec.toSheafedSpace
 
 中文:
 定义 Spec.toSheafedSpace
-  签名: : CommRingCat.{u}ᵒᵖ ⥤ SheafedSpace CommRingCat where
+  签名: : 交换环范畴.{u}ᵒᵖ ⥤ Sheafed空间 交换环范畴 where
   定义体: Spec.sheafedSpaceObj (unop R)
   map f := Spec.sheafedSpaceMap f.unop
   map_comp f g := by simp [Spec.sheafedSpaceMap_comp]
@@ -364,7 +364,7 @@ definition Spec.toPresheafedSpace
 
 中文:
 定义 Spec.toPresheafedSpace
-  签名: : CommRingCat.{u}ᵒᵖ ⥤ PresheafedSpace CommRingCat
+  签名: : 交换环范畴.{u}ᵒᵖ ⥤ Presheafed空间 交换环范畴
   定义体: Spec.toSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace
 
 @[simp]
@@ -385,7 +385,7 @@ theorem Spec.toPresheafedSpace_obj
 
 中文:
 定理 Spec.toPresheafedSpace_obj
-  条件: (R : CommRingCat.{u}ᵒᵖ)
+  条件: (R : 交换环范畴.{u}ᵒᵖ)
   证明: rfl
 -/
 theorem Spec.toPresheafedSpace_obj (R : CommRingCat.{u}ᵒᵖ) :
@@ -404,7 +404,7 @@ theorem Spec.toPresheafedSpace_obj_op
 
 中文:
 定理 Spec.toPresheafedSpace_obj_op
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: rfl
 
 @[simp]
@@ -424,7 +424,7 @@ theorem Spec.toPresheafedSpace_map
 
 中文:
 定理 Spec.toPresheafedSpace_map
-  条件: (R S : CommRingCat.{u}ᵒᵖ) (f : R ⟶ S)
+  条件: (R S : 交换环范畴.{u}ᵒᵖ) (f : R ⟶ S)
   证明: rfl
 -/
 theorem Spec.toPresheafedSpace_map (R S : CommRingCat.{u}ᵒᵖ) (f : R ⟶ S) :
@@ -442,7 +442,7 @@ theorem Spec.toPresheafedSpace_map_op
 
 中文:
 定理 Spec.toPresheafedSpace_map_op
-  条件: (R S : CommRingCat.{u}) (f : R ⟶ S)
+  条件: (R S : 交换环范畴.{u}) (f : R ⟶ S)
   证明: rfl
 -/
 theorem Spec.toPresheafedSpace_map_op (R S : CommRingCat.{u}) (f : R ⟶ S) :
@@ -467,7 +467,7 @@ theorem Spec.basicOpen_hom_ext
 
 中文:
 定理 Spec.basicOpen_hom_ext
-  结论: {X : RingedSpace.{u}} {R : CommRingCat.{u}}
+  结论: {X : RingedSpace.{u}} {R : 交换环范畴.{u}}
   证明: by
   ext : 1
   · exact w
@@ -511,7 +511,7 @@ definition Spec.locallyRingedSpaceObj
 
 中文:
 定义 Spec.locallyRingedSpaceObj
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: Spec.sheafedSpaceObj R
   isLocalRing x := (stalkIso R x).toRingEquiv.isLocalRing
 
@@ -531,7 +531,7 @@ lemma Spec.locallyRingedSpaceObj_sheaf
 
 中文:
 引理 Spec.locallyRingedSpaceObj_sheaf
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: rfl
 -/
 lemma Spec.locallyRingedSpaceObj_sheaf (R : CommRingCat.{u}) :
@@ -547,7 +547,7 @@ lemma Spec.locallyRingedSpaceObj_sheaf'
 
 中文:
 引理 Spec.locallyRingedSpaceObj_sheaf'
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   证明: rfl
 -/
 lemma Spec.locallyRingedSpaceObj_sheaf' (R : Type u) [CommRing R] :
@@ -563,7 +563,7 @@ lemma Spec.locallyRingedSpaceObj_presheaf_map
 
 中文:
 引理 Spec.locallyRingedSpaceObj_presheaf_map
-  条件: (R : CommRingCat.{u}) {U V} (i : U ⟶ V)
+  条件: (R : 交换环范畴.{u}) {U V} (i : U ⟶ V)
   证明: rfl
 -/
 lemma Spec.locallyRingedSpaceObj_presheaf_map (R : CommRingCat.{u}) {U V} (i : U ⟶ V) :
@@ -580,7 +580,7 @@ lemma Spec.locallyRingedSpaceObj_presheaf'
 
 中文:
 引理 Spec.locallyRingedSpaceObj_presheaf'
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   证明: rfl
 -/
 lemma Spec.locallyRingedSpaceObj_presheaf' (R : Type u) [CommRing R] :
@@ -596,7 +596,7 @@ lemma Spec.locallyRingedSpaceObj_presheaf_map'
 
 中文:
 引理 Spec.locallyRingedSpaceObj_presheaf_map'
-  条件: (R : 类型u) [CommRing R] {U V} (i : U ⟶ V)
+  条件: (R : 类型u) [交换环 R] {U V} (i : U ⟶ V)
   证明: rfl
 -/
 lemma Spec.locallyRingedSpaceObj_presheaf_map' (R : Type u) [CommRing R] {U V} (i : U ⟶ V) :
@@ -620,7 +620,7 @@ theorem stalkMap_toStalk
 
 中文:
 定理 stalkMap_toStalk
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S) (p : PrimeSpectrum S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S) (p : 素谱 S)
   证明: by
   rw [← algebraMap_germ ⊤ p trivial]; rw [← algebraMap_germ ⊤ (PrimeSpectrum.comap f.hom p) trivial]; rw [Category.assoc]
   erw [PresheafedSpace.stalkMap_germ (Spec.sheafedSpaceMap f).hom ⊤ p trivial]
@@ -659,7 +659,7 @@ theorem localRingHom_comp_stalkIso
 
 中文:
 定理 localRingHom_comp_stalkIso
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S) (p : PrimeSpectrum S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S) (p : 素谱 S)
   证明: (stalkIso R (PrimeSpectrum.comap f.hom p)).toCommRingCatIso.symm.eq_inv_comp.mp
 (stalkIso S p).toCommRingCatIso.symm.comp_inv_eq.mpr CommRingCat.hom_ext
       Localization.localRingHom_unique _ _ _ (PrimeSpectrum.comap_asIdeal _ _) fun x => by
@@ -702,7 +702,7 @@ definition Spec.locallyRingedSpaceMap
 
 中文:
 定义 Spec.locallyRingedSpaceMap
-  签名: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  签名: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   定义体: LocallyRingedSpace.Hom.mk (Spec.sheafedSpaceMap f).hom fun p =>
     IsLocalHom.mk fun a ha => by
     rw [← localRingHom_comp_stalkIso] at ha
@@ -735,7 +735,7 @@ theorem Spec.locallyRingedSpaceMap_id
 
 中文:
 定理 Spec.locallyRingedSpaceMap_id
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: LocallyRingedSpace.Hom.ext' by
     rw [Spec.locallyRingedSpaceMap_toHom]; rw [Spec.sheafedSpaceMap_id]; rfl
 
@@ -757,7 +757,7 @@ theorem Spec.locallyRingedSpaceMap_comp
 
 中文:
 定理 Spec.locallyRingedSpaceMap_comp
-  条件: {R S T : CommRingCat.{u}} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换环范畴.{u}} (f : R ⟶ S) (g : S ⟶ T)
   证明: LocallyRingedSpace.Hom.ext' by
     rw [Spec.locallyRingedSpaceMap_toHom]; rw [Spec.sheafedSpaceMap_comp]; rfl
 
@@ -785,7 +785,7 @@ definition Spec.toLocallyRingedSpace
 
 中文:
 定义 Spec.toLocallyRingedSpace
-  签名: : CommRingCat.{u}ᵒᵖ ⥤ LocallyRingedSpace where
+  签名: : 交换环范畴.{u}ᵒᵖ ⥤ LocallyRinged空间 where
   定义体: Spec.locallyRingedSpaceObj (unop R)
   map f := Spec.locallyRingedSpaceMap f.unop
   map_id R := by dsimp; rw [Spec.locallyRingedSpaceMap_id]
@@ -814,7 +814,7 @@ definition toSpecΓ
 
 中文:
 定义 toSpecΓ
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: CommRingCat.ofHom (algebraMap _ _)
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, algebraMap
@@ -833,7 +833,7 @@ instance isIso_toSpecΓ
 
 中文:
 实例 isIso_toSpecΓ
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: (ConcreteCategory.isIso_iff_bijective _).mpr algebraMap_obj_top_bijective
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, algebraMap_obj_top_bijective, isIso_iff_bijective
@@ -860,7 +860,7 @@ refine Subtype.ext funext fun x' => ?_; symm
 
 中文:
 定理 Spec_Γ_naturality
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` failed to pick up one of the three lemmas
   ext : 2
@@ -893,7 +893,7 @@ definition LocallyRingedSpace.SpecΓIdentity
     fun {X Y} f => by convert! Spec_Γ_naturality (R := X) (S := Y) f
 
 中文:
-定义 LocallyRingedSpace.SpecΓIdentity
+定义 LocallyRinged空间.SpecΓIdentity
   签名: : Spec.toLocallyRingedSpace.rightOp ⋙ Γ ≅ 𝟭 _
   定义体: Iso.symm NatIso.ofComponents.{u, u, u + 1, u + 1} (fun R => asIso (toSpecΓ R) :)
     fun {X Y} f => by convert! Spec_Γ_naturality (R := X) (S := Y) f
@@ -924,7 +924,7 @@ theorem isIso_SpecMap_stakMap_localization
 
 中文:
 定理 isIso_SpecMap_stakMap_localization
-  结论: (R : CommRingCat.{u}) (M : Submonoid R)
+  结论: (R : 交换环范畴.{u}) (M : 子幺半群 R)
   证明: by
   dsimp only [Spec.toPresheafedSpace_map, Quiver.Hom.unop_op]
   rw [← localRingHom_comp_stalkIso]; rw [ConcreteCategory.isIso_iff_bijective]
@@ -1014,7 +1014,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R ((Spec.topMap f _* (structureSheaf S).1).stalk p)
+  签名: 代数 R ((Spec.topMap f _* (structureSheaf S).1).stalk p)
   定义体: (f ≫ StructureSheaf.toPushforwardStalk f p).hom.toAlgebra
 
 Depends on / 依赖: StructureSheaf, StructureSheaf.toPushforwardStalk, hom.toAlgebra, toAlgebra, toPushforwardStalk

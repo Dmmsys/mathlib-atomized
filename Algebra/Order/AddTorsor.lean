@@ -67,8 +67,8 @@ class IsOrderedVAdd
     - vadd_le_vadd_right : forall c d : G, c <= d -> forall a : P, c +ᵥ a <= d +ᵥ a
 
 中文:
-类 IsOrderedVAdd
-  参数: (G P : 类型) [LE G] [LE P] [VAdd G P]
+类 是OrderedVAdd
+  参数: (G P : 类型) [LE G] [LE P] [向量加法 G P]
   公理与运算 (2 个):
     - vadd_le_vadd_left : 对任意 a b : P, a <= b -> 对任意 c : G, c +ᵥ a <= c +ᵥ b
     - vadd_le_vadd_right : 对任意 c d : G, c <= d -> 对任意 a : P, c +ᵥ a <= d +ᵥ a
@@ -92,8 +92,8 @@ class IsOrderedSMul
     - smul_le_smul_right : forall c d : G, c <= d -> forall a : P, c • a <= d • a
 
 中文:
-类 IsOrderedSMul
-  参数: (G P : 类型) [LE G] [LE P] [SMul G P]
+类 是OrderedSMul
+  参数: (G P : 类型) [LE G] [LE P] [标量乘法 G P]
   公理与运算 (2 个):
     - smul_le_smul_left : 对任意 a b : P, a <= b -> 对任意 c : G, c • a <= c • b
     - smul_le_smul_right : 对任意 c d : G, c <= d -> 对任意 a : P, c • a <= d • a
@@ -115,7 +115,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: G] [LE P] [SMul G P] [IsOrderedSMul G P] : CovariantClass G P (· • ·) (· <= ·) where
+  签名: G] [LE P] [标量乘法 G P] [是OrderedSMul G P] : 协变类 G P (· • ·) (· <= ·) where
   定义体: fun a _ _ bc => IsOrderedSMul.smul_le_smul_left _ _ bc a
 
 @[to_additive]
@@ -138,8 +138,8 @@ instance [CommMonoid
 @[to_additive (attr := gcongr)]
 
 中文:
-实例 [CommMonoid
-  签名: G] [Preorder G] [IsOrderedMonoid G] : IsOrderedSMul G G where
+实例 [交换幺半群
+  签名: G] [预序 G] [是Ordered幺半群 G] : 是OrderedSMul G G where
   定义体: mul_le_mul_right
   smul_le_smul_right _ _ := mul_le_mul_left
 
@@ -163,8 +163,8 @@ theorem IsOrderedSMul.smul_le_smul
 @[to_additive]
 
 中文:
-定理 IsOrderedSMul.smul_le_smul
-  结论: [LE G] [Preorder P] [SMul G P] [IsOrderedSMul G P]
+定理 是OrderedSMul.smul_le_smul
+  结论: [LE G] [预序 P] [标量乘法 G P] [是OrderedSMul G P]
   证明: (IsOrderedSMul.smul_le_smul_left _ _ hcd _).trans (IsOrderedSMul.smul_le_smul_right _ _ hab _)
 
 @[to_additive]
@@ -186,8 +186,8 @@ theorem Monotone.smul
     (IsOrderedSMul.smul_le_smul_right _ _ (hf hab) _)
 
 中文:
-定理 Monotone.smul
-  结论: {γ : 类型} [Preorder G] [Preorder P] [Preorder γ] [SMul G P]
+定理 递增.smul
+  结论: {γ : 类型} [预序 G] [预序 P] [预序 γ] [标量乘法 G P]
   证明: fun _ _ hab => (IsOrderedSMul.smul_le_smul_left _ _ (hg hab) _).trans
     (IsOrderedSMul.smul_le_smul_right _ _ (hf hab) _)
 
@@ -211,9 +211,9 @@ class IsOrderedCancelVAdd
     - le_of_vadd_le_vadd_right : forall (a b : G) (c : P), a +ᵥ c <= b +ᵥ c -> a <= b
 
 中文:
-类 IsOrderedCancelVAdd
-  参数: (G P : 类型) [LE G] [LE P] [VAdd G P]
-  继承: IsOrderedVAdd G P
+类 是OrderedCancelVAdd
+  参数: (G P : 类型) [LE G] [LE P] [向量加法 G P]
+  继承: 是OrderedVAdd G P
   公理与运算 (2 个):
     - le_of_vadd_le_vadd_left : 对任意 (a : G) (b c : P), a +ᵥ b <= a +ᵥ c -> b <= c
     - le_of_vadd_le_vadd_right : 对任意 (a b : G) (c : P), a +ᵥ c <= b +ᵥ c -> a <= b
@@ -238,9 +238,9 @@ class IsOrderedCancelSMul
     - le_of_smul_le_smul_right : forall (a b : G) (c : P), a • c <= b • c -> a <= b
 
 中文:
-类 IsOrderedCancelSMul
-  参数: (G P : 类型) [LE G] [LE P] [SMul G P]
-  继承: IsOrderedSMul G P
+类 是OrderedCancelSMul
+  参数: (G P : 类型) [LE G] [LE P] [标量乘法 G P]
+  继承: 是OrderedSMul G P
   公理与运算 (2 个):
     - le_of_smul_le_smul_left : 对任意 (a : G) (b c : P), a • b <= a • c -> b <= c
     - le_of_smul_le_smul_right : 对任意 (a b : G) (c : P), a • c <= b • c -> a <= b
@@ -265,8 +265,8 @@ instance [PartialOrder
 @[to_additive]
 
 中文:
-实例 [PartialOrder
-  签名: G] [PartialOrder P] [SMul G P] [IsOrderedCancelSMul G P] :
+实例 [偏序
+  签名: G] [偏序 P] [标量乘法 G P] [是OrderedCancelSMul G P] :
   定义体: (IsOrderedCancelSMul.le_of_smul_le_smul_left a b c h.le).antisymm
     (IsOrderedCancelSMul.le_of_smul_le_smul_left a c b h.ge)
   right_cancel' a b c h := (IsOrderedCancelSMul.le_of_smul_le_smul_right a b c h.le).antisymm
@@ -296,8 +296,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: G] [Preorder G] [IsOrderedCancelMonoid G] : IsOrderedCancelSMul G G where
+实例 [交换幺半群
+  签名: G] [预序 G] [是OrderedCancel幺半群 G] : 是OrderedCancelSMul G G where
   定义体: le_of_mul_le_mul_left'
   le_of_smul_le_smul_right _ _ _ := le_of_mul_le_mul_right'
 
@@ -333,7 +333,7 @@ theorem smul_lt_smul_of_le_of_lt
 
 中文:
 定理 smul_lt_smul_of_le_of_lt
-  结论: [LE G] [Preorder P] [SMul G P] [IsOrderedCancelSMul G P]
+  结论: [LE G] [预序 P] [标量乘法 G P] [是OrderedCancelSMul G P]
   证明: by
   refine lt_of_le_of_lt (IsOrderedSMul.smul_le_smul_right a b h₁ c) ?_
   refine lt_of_le_not_ge (IsOrderedSMul.smul_le_smul_left c d (le_of_lt h₂) b) ?_
@@ -371,7 +371,7 @@ theorem smul_lt_smul_of_lt_of_le
 
 中文:
 定理 smul_lt_smul_of_lt_of_le
-  结论: [Preorder G] [Preorder P] [SMul G P] [IsOrderedCancelSMul G P]
+  结论: [预序 G] [预序 P] [标量乘法 G P] [是OrderedCancelSMul G P]
   证明: by
   refine lt_of_le_of_lt (IsOrderedSMul.smul_le_smul_left c d h₂ a) ?_
   refine lt_of_le_not_ge (IsOrderedSMul.smul_le_smul_right a b (le_of_lt h₁) d) ?_

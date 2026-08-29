@@ -56,7 +56,7 @@ definition ofMemClosureImageCoeBounded
 
 中文:
 定义 ofMemClosureImageCoeBounded
-  签名: (f : E' -> F) {s : Set (E' ->SL[σ₁₂] F)} (hs : IsBounded s)
+  签名: (f : E' -> F) {s : 集合 (E' ->SL[σ₁₂] F)} (hs : IsBounded s)
   定义体: by
   -- `f` is a linear map due to `linearMapOfMemClosureRangeCoe`
   refine (linearMapOfMemClosureRangeCoe f ?_).mkContinuousOfExistsBound ?_
@@ -93,7 +93,7 @@ Eventually.of_forall fun _ => mem_image_of_mem _ Set.mem_range_self _
 
 中文:
 定义 ofTendstoOfBoundedRange
-  签名: {α : 类型} {l : Filter α} [l.NeBot] (f : E' -> F)
+  签名: {α : 类型} {l : 滤子 α} [l.NeBot] (f : E' -> F)
   定义体: ofMemClosureImageCoeBounded f hg mem_closure_of_tendsto hf
 Eventually.of_forall fun _ => mem_image_of_mem _ Set.mem_range_self _
 
@@ -160,7 +160,7 @@ theorem isCompact_closure_image_coe_of_bounded
 
 中文:
 定理 isCompact_closure_image_coe_of_bounded
-  结论: [命题erSpace F] {s : Set (E' ->SL[σ₁₂] F)}
+  结论: [真空间 F] {s : 集合 (E' ->SL[σ₁₂] F)}
   证明: have : forall x, IsCompact (closure (apply' F σ₁₂ x '' s)) := fun x =>
     ((apply' F σ₁₂ x).lipschitz.isBounded_image hb).isCompact_closure
   (isCompact_pi_infinite this).closure_of_subset
@@ -185,7 +185,7 @@ theorem isCompact_image_coe_of_bounded_of_closed_image
 
 中文:
 定理 isCompact_image_coe_of_bounded_of_closed_image
-  结论: [命题erSpace F] {s : Set (E' ->SL[σ₁₂] F)}
+  结论: [真空间 F] {s : 集合 (E' ->SL[σ₁₂] F)}
   证明: hc.closure_eq ▸ isCompact_closure_image_coe_of_bounded hb
 
 Depends on / 依赖: closure_eq, hc.closure_eq, isCompact_closure_image_coe_of_bounded
@@ -206,7 +206,7 @@ theorem isClosed_image_coe_of_bounded_of_weak_closed
 
 中文:
 定理 isClosed_image_coe_of_bounded_of_weak_closed
-  结论: {s : Set (E' ->SL[σ₁₂] F)} (hb : IsBounded s)
+  结论: {s : 集合 (E' ->SL[σ₁₂] F)} (hb : IsBounded s)
   证明: isClosed_of_closure_subset fun f hf =>
     ⟨ofMemClosureImageCoeBounded f hb hf, hc (ofMemClosureImageCoeBounded f hb hf) hf, rfl⟩
 
@@ -230,7 +230,7 @@ theorem isCompact_image_coe_of_bounded_of_weak_closed
 
 中文:
 定理 isCompact_image_coe_of_bounded_of_weak_closed
-  结论: [命题erSpace F] {s : Set (E' ->SL[σ₁₂] F)}
+  结论: [真空间 F] {s : 集合 (E' ->SL[σ₁₂] F)}
   证明: isCompact_image_coe_of_bounded_of_closed_image hb
     isClosed_image_coe_of_bounded_of_weak_closed hb hc
 
@@ -308,7 +308,7 @@ theorem isCompact_image_coe_closedBall
 
 中文:
 定理 isCompact_image_coe_closedBall
-  条件: [命题erSpace F] (f₀ : E ->SL[σ₁₂] F) (r : 实数)
+  条件: [真空间 F] (f₀ : E ->SL[σ₁₂] F) (r : 实数)
   证明: isCompact_image_coe_of_bounded_of_weak_closed isBounded_closedBall
     is_weak_closed_closedBall f₀ r
 

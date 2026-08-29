@@ -39,7 +39,7 @@ theorem tendsto_div_of_monotone_of_exists_subseq_tendsto_div
     and fr
 
 中文:
-定理 tendsto_div_of_monotone_of_exists_subseq_tendsto_div
+定理 tendsto_div_of_monotone_of_存在_subseq_tendsto_div
   结论: (u : 自然数 -> 实数) (l : 实数)
   证明: by
   /- To check the result up to some `ε > 0`, we use a sequence `c` for which the ratio
@@ -209,7 +209,7 @@ theorem tendsto_div_of_monotone_of_tendsto_div_floor_pow
 
 中文:
 定理 tendsto_div_of_monotone_of_tendsto_div_floor_pow
-  结论: (u : 自然数 -> 实数) (l : 实数) (hmono : Monotone u)
+  结论: (u : 自然数 -> 实数) (l : 实数) (hmono : 递增 u)
   证明: by
   apply tendsto_div_of_monotone_of_exists_subseq_tendsto_div u l hmono
   intro a ha

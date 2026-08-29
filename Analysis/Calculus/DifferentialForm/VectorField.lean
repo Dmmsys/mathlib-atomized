@@ -112,7 +112,7 @@ theorem extDeriv_apply_vectorField
 
 中文:
 定理 extDeriv_apply_vectorField
-  结论: {ω : E -> E [⋀^Fin (n + 1)]->L[𝕜] F} {V : Fin (n + 2) -> E -> E}
+  结论: {ω : E -> E [⋀^有限集 (n + 1)]->L[𝕜] F} {V : 有限集 (n + 2) -> E -> E}
   证明: by
   simp only [← differentiableWithinAt_univ, ← extDerivWithin_univ, ← fderivWithin_univ,
     ← lieBracketWithin_univ] at *

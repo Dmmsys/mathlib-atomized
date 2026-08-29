@@ -67,7 +67,7 @@ class IsTriangulatedClosed₁
     - ext₁'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₂ -> P T.obj₃ -> P.isoClosure T.obj₁
 
 中文:
-类 IsTriangulatedClosed₁
+类 是TriangulatedClosed₁
   参数: : 命题 where
   公理与运算 (1 个):
     - ext₁'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₂ -> P T.obj₃ -> P.isoClosure T.obj₁
@@ -85,7 +85,7 @@ class IsTriangulatedClosed₂
     - ext₂'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₁ -> P T.obj₃ -> P.isoClosure T.obj₂
 
 中文:
-类 IsTriangulatedClosed₂
+类 是TriangulatedClosed₂
   参数: : 命题 where
   公理与运算 (1 个):
     - ext₂'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₁ -> P T.obj₃ -> P.isoClosure T.obj₂
@@ -103,7 +103,7 @@ class IsTriangulatedClosed₃
     - ext₃'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₁ -> P T.obj₂ -> P.isoClosure T.obj₃
 
 中文:
-类 IsTriangulatedClosed₃
+类 是TriangulatedClosed₃
   参数: : 命题 where
   公理与运算 (1 个):
     - ext₃'((T : Triangle C) (_ : T in distTriang C)) : P T.obj₁ -> P T.obj₂ -> P.isoClosure T.obj₃
@@ -175,7 +175,7 @@ lemma distinguished_cocone_triangle
 
 中文:
 引理 distinguished_cocone_triangle
-  结论: [P.IsTriangulatedClosed₃]
+  结论: [P.是TriangulatedClosed₃]
   证明: by
   obtain ⟨Z, b, c, h⟩ := distinguished_cocone_triangle a
   obtain ⟨Z', hZ', ⟨e⟩⟩ := P.ext_of_isTriangulatedClosed₃' _ h hX hY
@@ -206,7 +206,7 @@ lemma distinguished_cocone_triangle₁
 
 中文:
 引理 distinguished_cocone_triangle₁
-  结论: [P.IsTriangulatedClosed₁]
+  结论: [P.是TriangulatedClosed₁]
   证明: by
   obtain ⟨X, a, c, h⟩ := distinguished_cocone_triangle₁ b
   obtain ⟨X', hX', ⟨e⟩⟩ := P.ext_of_isTriangulatedClosed₁' _ h hY hZ
@@ -237,7 +237,7 @@ lemma distinguished_cocone_triangle₂
 
 中文:
 引理 distinguished_cocone_triangle₂
-  结论: [P.IsTriangulatedClosed₂]
+  结论: [P.是TriangulatedClosed₂]
   证明: by
   obtain ⟨Y, a, b, h⟩ := distinguished_cocone_triangle₂ c
   obtain ⟨Y', hY', ⟨e⟩⟩ := P.ext_of_isTriangulatedClosed₂' _ h hX hZ
@@ -326,8 +326,8 @@ lemma IsTriangulatedClosed₁.mk'
   proof: by simpa only [isoClosure_eq_self] using hP
 
 中文:
-引理 IsTriangulatedClosed₁.mk'
-  结论: [P.IsClosedUnderIsomorphisms]
+引理 是TriangulatedClosed₁.mk'
+  结论: [P.在同构下封闭]
   证明: by simpa only [isoClosure_eq_self] using hP
 
 Depends on / 依赖: isoClosure_eq_self
@@ -346,8 +346,8 @@ lemma IsTriangulatedClosed₂.mk'
   proof: by simpa only [isoClosure_eq_self] using hP
 
 中文:
-引理 IsTriangulatedClosed₂.mk'
-  结论: [P.IsClosedUnderIsomorphisms]
+引理 是TriangulatedClosed₂.mk'
+  结论: [P.在同构下封闭]
   证明: by simpa only [isoClosure_eq_self] using hP
 
 Depends on / 依赖: isoClosure_eq_self
@@ -366,8 +366,8 @@ lemma IsTriangulatedClosed₃.mk'
   proof: by simpa only [isoClosure_eq_self] using hP
 
 中文:
-引理 IsTriangulatedClosed₃.mk'
-  结论: [P.IsClosedUnderIsomorphisms]
+引理 是TriangulatedClosed₃.mk'
+  结论: [P.在同构下封闭]
   证明: by simpa only [isoClosure_eq_self] using hP
 
 Depends on / 依赖: isoClosure_eq_self
@@ -386,7 +386,7 @@ lemma IsTriangulatedClosed₂.of_isTriangulatedClosed₃
       (P.le_shift _ _ h₃) h₁
 
 中文:
-引理 IsTriangulatedClosed₂.of_isTriangulatedClosed₃
+引理 是TriangulatedClosed₂.of_isTriangulatedClosed₃
   证明: P.ext_of_isTriangulatedClosed₃' _ (inv_rot_of_distTriang _ hT)
       (P.le_shift _ _ h₃) h₁
 
@@ -417,8 +417,8 @@ instance [P.IsTriangulatedClosed₂]
         (Triangle.isoMk _ _ e₁.symm (Iso.
 
 中文:
-实例 [P.IsTriangulatedClosed₂]
-  签名: : P.isoClosure.IsTriangulatedClosed₂ where
+实例 [P.是TriangulatedClosed₂]
+  签名: : P.isoClosure.是TriangulatedClosed₂ where
   定义体: by
     rintro T hT ⟨X₁, h₁, ⟨e₁⟩⟩ ⟨X₃, h₃, ⟨e₃⟩⟩
     exact ObjectProperty.le_isoClosure _ _
@@ -451,9 +451,9 @@ class IsTriangulated
   (no additional axioms)
 
 中文:
-类 IsTriangulated
-  参数: : 命题 extends P.ContainsZero, P.IsStableUnderShift 整数,
-  继承: P.ContainsZero, P.IsStableUnderShift Int, 
+类 是三角
+  参数: : 命题 extends P.余ntainsZero, P.是StableUnderShift 整数,
+  继承: P.余ntainsZero, P.是StableUnderShift 整数, 
   (无附加公理)
 -/
 protected class IsTriangulated : Prop extends P.ContainsZero, P.IsStableUnderShift Int,
@@ -468,8 +468,8 @@ instance [P.IsTriangulated]
   body: P.ext_of_isTriangulatedClosed₂' _ (inv_rot_of_distTriang _ hT) (P.le_shift _ _ h₃) h₂
 
 中文:
-实例 [P.IsTriangulated]
-  签名: : P.IsTriangulatedClosed₁ where
+实例 [P.是三角]
+  签名: : P.是TriangulatedClosed₁ where
   定义体: P.ext_of_isTriangulatedClosed₂' _ (inv_rot_of_distTriang _ hT) (P.le_shift _ _ h₃) h₂
 
 Depends on / 依赖: P.ext_of_isTriangulatedClosed, P.le_shift, inv_rot_of_distTriang, le_shift
@@ -487,8 +487,8 @@ instance [P.IsTriangulated]
   body: P.ext_of_isTriangulatedClosed₂' _ (rot_of_distTriang _ hT) h₂ (P.le_shift _ _ h₁)
 
 中文:
-实例 [P.IsTriangulated]
-  签名: : P.IsTriangulatedClosed₃ where
+实例 [P.是三角]
+  签名: : P.是TriangulatedClosed₃ where
   定义体: P.ext_of_isTriangulatedClosed₂' _ (rot_of_distTriang _ hT) h₂ (P.le_shift _ _ h₁)
 
 Depends on / 依赖: P.ext_of_isTriangulatedClosed, P.le_shift, le_shift, rot_of_distTriang
@@ -505,8 +505,8 @@ instance [P.IsTriangulated]
   signature: : P.isoClosure.IsTriangulated where
 
 中文:
-实例 [P.IsTriangulated]
-  签名: : P.isoClosure.IsTriangulated where
+实例 [P.是三角]
+  签名: : P.isoClosure.是三角 where
 -/
 instance [P.IsTriangulated] : P.isoClosure.IsTriangulated where
 
@@ -532,7 +532,7 @@ definition extensionProduct
 
 中文:
 定义 extensionProduct
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (Y Z : C) (f : Y ⟶ X) (g : X ⟶ Z) (h : Z ⟶ Y⟦(1 : Int)⟧),
     Triangle.mk f g h in distTriang C ∧ P Y ∧ Q Z
 
@@ -576,8 +576,8 @@ instance [P.Nonempty]
 @[simp]
 
 中文:
-实例 [P.Nonempty]
-  签名: [Q.Nonempty]
+实例 [P.非空]
+  签名: [Q.非空]
   定义体: by
   obtain ⟨Y, f, g, hT⟩ := distinguished_cocone_triangle₂ (0 : Q.arbitrary ⟶ P.arbitrary⟦(1 : Int)⟧)
   exact ⟨_, _, _, _, _, _, hT, P.prop_arbitrary, Q.prop_arbitrary⟩
@@ -661,7 +661,7 @@ lemma monotone_extensionProduct_left
 
 中文:
 引理 monotone_extensionProduct_left
-  条件: {P' : Object命题erty C} (h : P <= P')
+  条件: {P' : ObjectProperty C} (h : P <= P')
   证明: by
   intro X ⟨Y, Z, f, g, k, hT, hP, hQ⟩
   exact ⟨Y, Z, f, g, k, hT, h Y hP, hQ⟩
@@ -684,7 +684,7 @@ lemma monotone_extensionProduct_right
 
 中文:
 引理 monotone_extensionProduct_right
-  条件: {Q' : Object命题erty C} (h : Q <= Q')
+  条件: {Q' : ObjectProperty C} (h : Q <= Q')
   证明: by
   intro X ⟨Y, Z, f, g, k, hT, hP, hQ⟩
   exact ⟨Y, Z, f, g, k, hT, hP, h Z hQ⟩
@@ -708,7 +708,7 @@ exact isomorphic_distinguished _ hT _ Triangle.isoMk _ _ (Iso.refl _) i.symm (Is
 
 中文:
 实例 :
-  签名: (extensionProduct P Q).IsClosedUnderIsomorphisms
+  签名: (extensionProduct P Q).在同构下封闭
   定义体: by
     intro X X' i ⟨Y, Z, f, g, h, hT, hP, hQ⟩
     refine ⟨Y, Z, f ≫ i.hom, i.inv ≫ g, h, ?_, hP, hQ⟩
@@ -797,7 +797,7 @@ lemma le_extensionProduct_left
 
 中文:
 引理 le_extensionProduct_left
-  条件: [Q.ContainsZero]
+  条件: [Q.余ntainsZero]
   结论: P <= extensionProduct P Q
   证明: by
   intro X hX
@@ -832,7 +832,7 @@ lemma le_extensionProduct_right
 
 中文:
 引理 le_extensionProduct_right
-  条件: [P.ContainsZero]
+  条件: [P.余ntainsZero]
   结论: Q <= extensionProduct P Q
   证明: by
   intro X hX
@@ -864,8 +864,8 @@ instance [P.IsStableUnderShift
 @[stacks 0FX1]
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: 整数] [Q.IsStableUnderShift 整数] :
+实例 [P.是StableUnderShift
+  签名: 整数] [Q.是StableUnderShift 整数] :
   定义体: IsStableUnderShiftBy.mk by
     intro X ⟨Y, Z, f, g, h, hT, hP, hQ⟩
     refine ⟨_, _, _, _, _, Triangle.shift_distinguished _ hT a, ?_, ?_⟩
@@ -900,7 +900,7 @@ lemma extensionProduct_assoc
 
 中文:
 引理 extensionProduct_assoc
-  条件: [IsTriangulated C]
+  条件: [是三角 C]
   证明: by
   ext X
   constructor
@@ -937,7 +937,7 @@ lemma extensionProduct_le_of_isTriangulatedClosed₂'
 
 中文:
 引理 extensionProduct_le_of_isTriangulatedClosed₂'
-  结论: {P₁ P₂ Q : Object命题erty C}
+  结论: {P₁ P₂ Q : ObjectProperty C}
   证明: by
   intro _ ⟨_, _, _, _, _, hT, hY, hZ⟩
   exact ext_of_isTriangulatedClosed₂' Q _ hT (h₁ _ hY) (h₂ _ hZ)
@@ -960,7 +960,7 @@ lemma extensionProduct_le_of_isTriangulatedClosed₂
 
 中文:
 引理 extensionProduct_le_of_isTriangulatedClosed₂
-  结论: {P₁ P₂ Q : Object命题erty C}
+  结论: {P₁ P₂ Q : ObjectProperty C}
   证明: by
   intro _ ⟨_, _, _, _, _, hT, hY, hZ⟩
   exact ext_of_isTriangulatedClosed₂ Q _ hT (h₁ _ hY) (h₂ _ hZ)
@@ -1118,7 +1118,7 @@ lemma extensionProductIter_succ'
 
 中文:
 引理 extensionProductIter_succ'
-  条件: [IsTriangulated C] (n : 自然数)
+  条件: [是三角 C] (n : 自然数)
   证明: by
   induction n with
   | zero => rfl
@@ -1146,7 +1146,7 @@ instance [P.Nonempty]
   | succ n h => rw [extensionProductIter_succ]; infer_instance
 
 中文:
-实例 [P.Nonempty]
+实例 [P.非空]
   签名: (n : 自然数)
   定义体: by
   induction n with
@@ -1174,7 +1174,7 @@ lemma extensionProductIter_add
 
 中文:
 引理 extensionProductIter_add
-  条件: [IsTriangulated C] {n m n' : 自然数} (h : n = n' + 1)
+  条件: [是三角 C] {n m n' : 自然数} (h : n = n' + 1)
   证明: by
   induction m with
   | zero => rw [add_zero, extensionProductIter_zero, h, extensionProductIter_succ']
@@ -1205,7 +1205,7 @@ lemma extensionProductIter_add'
 
 中文:
 引理 extensionProductIter_add'
-  条件: [IsTriangulated C] {n m m' : 自然数} (h : m = m' + 1)
+  条件: [是三角 C] {n m m' : 自然数} (h : m = m' + 1)
   证明: by
   induction n with
   | zero => rw [zero_add, extensionProductIter_zero, h, extensionProductIter_succ]
@@ -1237,7 +1237,7 @@ lemma monotone_extensionProductIter
 
 中文:
 引理 monotone_extensionProductIter
-  条件: {Q : Object命题erty C} (hPQ : P <= Q) (n : 自然数)
+  条件: {Q : ObjectProperty C} (hPQ : P <= Q) (n : 自然数)
   证明: by
   induction n with
   | zero => exact hPQ
@@ -1269,7 +1269,7 @@ lemma monotone'_extensionProductIter
 
 中文:
 引理 monotone'_extensionProductIter
-  条件: [P.ContainsZero] {n m : 自然数} (h : n <= m)
+  条件: [P.余ntainsZero] {n m : 自然数} (h : n <= m)
   证明: by
   induction m, h using Nat.le_induction
   case base => rfl
@@ -1300,7 +1300,7 @@ lemma le_extensionProductIter
 
 中文:
 引理 le_extensionProductIter
-  条件: [P.ContainsZero] (n : 自然数)
+  条件: [P.余ntainsZero] (n : 自然数)
   结论: P <= P.extensionProductIter n
   证明: P.monotone'_extensionProductIter (Nat.zero_le n)
 
@@ -1329,7 +1329,7 @@ lemma extensionProductIter_bot
 中文:
 引理 extensionProductIter_bot
   条件: (n : 自然数)
-  结论: extensionProductIter (⊥ : Object命题erty C) n = ⊥
+  结论: extensionProductIter (⊥ : ObjectProperty C) n = ⊥
   证明: by
   cases n
   case zero => rw [extensionProductIter_zero]
@@ -1357,7 +1357,7 @@ lemma extensionProductIter_top
 中文:
 引理 extensionProductIter_top
   条件: (n : 自然数)
-  结论: extensionProductIter (⊤ : Object命题erty C) n = ⊤
+  结论: extensionProductIter (⊤ : ObjectProperty C) n = ⊤
   证明: eq_top_iff.mpr (le_extensionProductIter _ n)
 
 Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, le_extensionProductIter
@@ -1379,7 +1379,7 @@ instance [P.IsStableUnderShift
     infer_instance
 
 中文:
-实例 [P.IsStableUnderShift
+实例 [P.是StableUnderShift
   签名: 整数] (n
   定义体: by
   induction n with
@@ -1414,7 +1414,7 @@ lemma extensionProductIter_le_of_isTriangulatedClosed₂'
 
 中文:
 引理 extensionProductIter_le_of_isTriangulatedClosed₂'
-  结论: {Q : Object命题erty C}
+  结论: {Q : ObjectProperty C}
   证明: by
   induction n with
   | zero =>
@@ -1446,7 +1446,7 @@ lemma extensionProductIter_le_of_isTriangulatedClosed₂
 
 中文:
 引理 extensionProductIter_le_of_isTriangulatedClosed₂
-  结论: {Q : Object命题erty C}
+  结论: {Q : ObjectProperty C}
   证明: Q.isoClosure_eq_self ▸ P.extensionProductIter_le_of_isTriangulatedClosed₂' h n
 
 Depends on / 依赖: P.extensionProductIter_le_of_isTriangulatedClosed, Q.isoClosure_eq_self, isoClosure_eq_self
@@ -1468,7 +1468,7 @@ instance [P.IsStableUnderShift
   | succ n H => rw [extensionProductIter_succ]; infer_instance
 
 中文:
-实例 [P.IsStableUnderShift
+实例 [P.是StableUnderShift
   签名: 整数] (n
   定义体: by
   induction n with
@@ -1559,7 +1559,7 @@ definition trW
 
 中文:
 定义 trW
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun X Y f => exists (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : Int)⟧)
     (_ : Triangle.mk f g h in distTriang C), P Z
 
@@ -1602,7 +1602,7 @@ lemma trW_iff'
 
 中文:
 引理 trW_iff'
-  条件: [P.IsStableUnderShift 整数] {Y Z : C} (g : Y ⟶ Z)
+  条件: [P.是StableUnderShift 整数] {Y Z : C} (g : Y ⟶ Z)
   证明: by
   rw [P.trW_iff]
   constructor
@@ -1653,7 +1653,7 @@ lemma trW.mk'
 
 中文:
 引理 trW.mk'
-  结论: [P.IsStableUnderShift 整数] {T : Triangle C} (hT : T in distTriang C)
+  结论: [P.是StableUnderShift 整数] {T : Triangle C} (hT : T in distTriang C)
   证明: by
   rw [trW_iff']
   exact ⟨_, _, _, hT, h⟩
@@ -1720,7 +1720,7 @@ lemma trW_monotone
 
 中文:
 引理 trW_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   结论: P.trW <= Q.trW
   证明: by
   intro X Y f hf
@@ -1788,8 +1788,8 @@ instance [P.ContainsZero]
   exact ⟨fun X => ⟨_, _, _, contractible_distinguished X, prop_zero _⟩⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: : P.trW.ContainsIdentities
+实例 [P.余ntainsZero]
+  签名: : P.trW.余ntainsIdentities
   定义体: by
   rw [← trW_isoClosure]
   exact ⟨fun X => ⟨_, _, _, contractible_distinguished X, prop_zero _⟩⟩
@@ -1814,7 +1814,7 @@ lemma trW_of_isIso
 
 中文:
 引理 trW_of_isIso
-  条件: [P.ContainsZero] {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: [P.余ntainsZero] {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: P.trW f
   证明: by
   refine (P.trW.arrow_mk_iso_iff ?_).1 (MorphismProperty.id_mem _ X)
@@ -1860,7 +1860,7 @@ lemma trW.shift
 
 中文:
 引理 trW.shift
-  结论: [P.IsStableUnderShift 整数]
+  结论: [P.是StableUnderShift 整数]
   证明: by
   rw [← smul_mem_trW_iff _ _ (n.negOnePow)]
   obtain ⟨X₃, g, h, hT, mem⟩ := hf
@@ -1885,7 +1885,7 @@ lemma trW.unshift
 
 中文:
 引理 trW.unshift
-  结论: [P.IsStableUnderShift 整数]
+  结论: [P.是StableUnderShift 整数]
   证明: (P.trW.arrow_mk_iso_iff
      (Arrow.isoOfNatIso (shiftEquiv C n).unitIso (Arrow.mk f))).2 (hf.shift (-n))
 
@@ -1907,8 +1907,8 @@ instance [P.IsStableUnderShift
     exact ⟨fun hf => hf.unshift, fun hf => hf.shift n⟩
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: 整数] : P.trW.IsCompatibleWithShift 整数 where
+实例 [P.是StableUnderShift
+  签名: 整数] : P.trW.是余mpatibleWithShift 整数 where
   定义体: by
     ext K L f
     exact ⟨fun hf => hf.unshift, fun hf => hf.shift n⟩
@@ -1934,8 +1934,8 @@ instance [IsTriangulated
       _ (someOctahedron rfl H₁₂ H₂₃ H₁₃).me
 
 中文:
-实例 [IsTriangulated
-  签名: C] [P.IsTriangulated] : P.trW.IsMultiplicative where
+实例 [是三角
+  签名: C] [P.是三角] : P.trW.是Multiplicative where
   定义体: by
     rw [← trW_isoClosure]
     rintro X₁ X₂ X₃ u₁₂ u₂₃ ⟨Z₁₂, v₁₂, w₁₂, H₁₂, mem₁₂⟩ ⟨Z₂₃, v₂₃, w₂₃, H₂₃, mem₂₃⟩
@@ -2000,7 +2000,7 @@ lemma trW_iff_of_distinguished'
 
 中文:
 引理 trW_iff_of_distinguished'
-  结论: [P.IsStableUnderShift 整数]
+  结论: [P.是StableUnderShift 整数]
   证明: by
   simpa [P.prop_shift_iff_of_isStableUnderShift]
     using! P.trW_iff_of_distinguished _ (rot_of_distTriang _ hT)
@@ -2028,8 +2028,8 @@ instance [P.IsTriangulated]
     P.ext_of_isTriangulatedClosed₂ _ (F.map_distinguished T hT) h₁ h₃)
 
 中文:
-实例 [P.IsTriangulated]
-  签名: : (P.inverseImage F).IsTriangulated where
+实例 [P.是三角]
+  签名: : (P.inverseImage F).是三角 where
   定义体: .mk' (fun T hT h₁ h₃ =>
     P.ext_of_isTriangulatedClosed₂ _ (F.map_distinguished T hT) h₁ h₃)
 -/
@@ -2082,7 +2082,7 @@ lemma inverseImage_trW_isInverted
 
 中文:
 引理 inverseImage_trW_isInverted
-  结论: {E : 类型} [Category E]
+  结论: {E : 类型} [范畴 E]
   证明: fun X Y f hf => Localization.inverts L P.trW (F.map f)
     (by simpa only [inverseImage_trW_iff] using hf)
 
@@ -2112,8 +2112,8 @@ instance [IsTriangulated
     exact ⟨MorphismProperty.LeftFraction.mk b s' ⟨_, _, _, mem', mem⟩, hb₁.
 
 中文:
-实例 [IsTriangulated
-  签名: C] [P.IsTriangulated] : P.trW.HasLeftCalculusOfFractions where
+实例 [是三角
+  签名: C] [P.是三角] : P.trW.有LeftCalculusOfFractions where
   定义体: by
     obtain ⟨Z, f, g, H, mem⟩ := φ.hs
     obtain ⟨Y', s', f', mem'⟩ := distinguished_cocone_triangle₂ (g ≫ φ.f⟦1⟧')
@@ -2158,8 +2158,8 @@ instance [IsTriangulated
   
 
 中文:
-实例 [IsTriangulated
-  签名: C] [P.IsTriangulated] : P.trW.HasRightCalculusOfFractions where
+实例 [是三角
+  签名: C] [P.是三角] : P.trW.有RightCalculusOfFractions where
   定义体: by
     obtain ⟨Z, f, g, H, mem⟩ := φ.hs
     obtain ⟨X', f', h', mem'⟩ := distinguished_cocone_triangle₁ (φ.f ≫ f)
@@ -2205,8 +2205,8 @@ instance [IsTriangulated
   let φ : T₁ ⟶ T₃ := H.triangleMorph
 
 中文:
-实例 [IsTriangulated
-  签名: C] [P.IsTriangulated] : P.trW.IsCompatibleWithTriangulation
+实例 [是三角
+  签名: C] [P.是三角] : P.trW.是余mpatibleWithTriangulation
   定义体: ⟨by
   rintro T₁ T₃ mem₁ mem₃ a b ⟨Z₅, g₅, h₅, mem₅, mem₅'⟩ ⟨Z₄, g₄, h₄, mem₄, mem₄'⟩ comm
   obtain ⟨Z₂, g₂, h₂, mem₂⟩ := distinguished_cocone_triangle (T₁.mor₁ ≫ b)
@@ -2251,8 +2251,8 @@ instance [P.IsTriangulated]
       ((IsLimit.postcomposeHomEquiv (diagram
 
 中文:
-实例 [P.IsTriangulated]
-  签名: [P.IsClosedUnderIsomorphisms]
+实例 [P.是三角]
+  签名: [P.在同构下封闭]
   定义体: by
     rintro X ⟨p⟩
     refine P.prop_of_iso ?_ (P.ext_of_isTriangulatedClosed₂ _
@@ -2282,8 +2282,8 @@ instance [P.IsTriangulated]
   body: .mk'
 
 中文:
-实例 [P.IsTriangulated]
-  签名: [P.IsClosedUnderIsomorphisms]
+实例 [P.是三角]
+  签名: [P.在同构下封闭]
   定义体: .mk'
 -/
 instance [P.IsTriangulated] [P.IsClosedUnderIsomorphisms] :
@@ -2306,8 +2306,8 @@ instance [P.IsTriangulated]
         
 
 中文:
-实例 [P.IsTriangulated]
-  签名: : P.trW.IsStableUnderFiniteProducts
+实例 [P.是三角]
+  签名: : P.trW.是StableUnderFiniteProducts
   定义体: by
   rw [← trW_isoClosure]
   exact ⟨fun J _ => by
@@ -2351,7 +2351,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pretriangulated P.FullSubcategory
+  签名: 预三角 P.满子范畴
   定义体: P.ι.mapTriangle.obj ⁻¹' (distTriang C)
   isomorphic_distinguished T₁ hT₁ T₂ e :=
     isomorphic_distinguished _ hT₁ _ (P.ι.mapTriangle.mapIso e)
@@ -2397,7 +2397,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.ι.IsTriangulated
+  签名: P.ι.是三角
   定义体: hT
 -/
 instance : P.ι.IsTriangulated where
@@ -2412,8 +2412,8 @@ instance [IsTriangulated
   body: IsTriangulated.of_fully_faithful_triangulated_functor P.ι
 
 中文:
-实例 [IsTriangulated
-  签名: C] : IsTriangulated P.FullSubcategory
+实例 [是三角
+  签名: C] : 是三角 P.满子范畴
   定义体: IsTriangulated.of_fully_faithful_triangulated_functor P.ι
 
 Depends on / 依赖: IsTriangulated, IsTriangulated.of_fully_faithful_triangulated_functor, of_fully_faithful_triangulated_functor

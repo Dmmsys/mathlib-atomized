@@ -36,8 +36,8 @@ structure AddIrreducible
     - isAddUnit_or_isAddUnit(⦃a b⦄) : p = a + b -> IsAddUnit a ∨ IsAddUnit b
 
 中文:
-结构 AddIrreducible
-  参数: [AddMonoid M] (p : M)
+结构 加法不可约
+  参数: [加法幺半群 M] (p : M)
   公理与运算 (2 个):
     - not_isAddUnit : ¬IsAddUnit p
     - isAddUnit_or_isAddUnit(⦃a b⦄) : p = a + b -> IsAddUnit a ∨ IsAddUnit b
@@ -67,11 +67,11 @@ structure Irreducible
     - isUnit_or_isUnit(⦃a b) : M⦄ : p = a * b -> IsUnit a ∨ IsUnit b
 
 中文:
-结构 Irreducible
+结构 不可约
   参数: (p : M)
   公理与运算 (2 个):
-    - not_isUnit : ¬IsUnit p
-    - isUnit_or_isUnit(⦃a b) : M⦄ : p = a * b -> IsUnit a ∨ IsUnit b
+    - not_isUnit : ¬是单位 p
+    - isUnit_or_isUnit(⦃a b) : M⦄ : p = a * b -> 是单位 a ∨ 是单位 b
 -/
 structure Irreducible (p : M) : Prop where
   /-- An irreducible element is not a unit. -/
@@ -114,7 +114,7 @@ lemma not_irreducible_one
 
 中文:
 引理 not_irreducible_one
-  结论: ¬Irreducible (1 : M)
+  结论: ¬不可约 (1 : M)
   证明: by simp [irreducible_iff]
 
 @[to_additive]
@@ -136,8 +136,8 @@ lemma Irreducible.ne_one
 @[to_additive]
 
 中文:
-引理 Irreducible.ne_one
-  条件: (hp : Irreducible p)
+引理 不可约.ne_one
+  条件: (hp : 不可约 p)
   结论: p != 1
   证明: by rintro rfl; exact not_irreducible_one hp
 
@@ -157,7 +157,7 @@ lemma of_irreducible_mul
 
 中文:
 引理 of_irreducible_mul
-  结论: Irreducible (a * b) -> IsUnit a ∨ IsUnit b | ⟨_, h⟩ => h rfl
+  结论: 不可约 (a * b) -> 是单位 a ∨ 是单位 b | ⟨_, h⟩ => h rfl
 -/
 lemma of_irreducible_mul : Irreducible (a * b) -> IsUnit a ∨ IsUnit b | ⟨_, h⟩ => h rfl
 
@@ -175,7 +175,7 @@ lemma irreducible_or_factor
 
 中文:
 引理 irreducible_or_factor
-  条件: (hp : ¬IsUnit p)
+  条件: (hp : ¬是单位 p)
   证明: by
   simpa [irreducible_iff, hp, and_rotate] using em (forall a b, p = a * b -> IsUnit a ∨ IsUnit b)
 
@@ -197,8 +197,8 @@ lemma Irreducible.eq_one_or_eq_one
   proof: by simpa using hab.isUnit_or_isUnit rfl
 
 中文:
-引理 Irreducible.eq_one_or_eq_one
-  条件: [Subsingleton Mˣ] (hab : Irreducible (a * b))
+引理 不可约.eq_one_or_eq_one
+  条件: [子单例 Mˣ] (hab : 不可约 (a * b))
   证明: by simpa using hab.isUnit_or_isUnit rfl
 
 Depends on / 依赖: hab.isUnit_or_isUnit, isUnit_or_isUnit

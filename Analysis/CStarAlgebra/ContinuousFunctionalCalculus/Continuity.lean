@@ -95,7 +95,7 @@ theorem tendsto_cfc_fun
 
 中文:
 定理 tendsto_cfc_fun
-  结论: {l : Filter X} {F : X -> R -> R} {f : R -> R} {a : A}
+  结论: {l : 滤子 X} {F : X -> R -> R} {f : R -> R} {a : A}
   证明: by
   open scoped ContinuousFunctionalCalculus in
   obtain (rfl | hl) := l.eq_or_neBot
@@ -141,7 +141,7 @@ theorem continuousAt_cfc_fun
 
 中文:
 定理 continuousAt_cfc_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A}
   证明: tendsto_cfc_fun h_tendsto hf
 
 Depends on / 依赖: h_tendsto, tendsto_cfc_fun
@@ -162,7 +162,7 @@ theorem continuousWithinAt_cfc_fun
 
 中文:
 定理 continuousWithinAt_cfc_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A}
   证明: tendsto_cfc_fun h_tendsto hf
 
 Depends on / 依赖: h_tendsto, tendsto_cfc_fun
@@ -189,7 +189,7 @@ theorem ContinuousOn.cfc_fun
 
 中文:
 定理 ContinuousOn.cfc_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A} {s : Set X}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A} {s : 集合 X}
   证明: by
   rw [ContinuousOn] at h_cont ⊢
   simp only [ContinuousWithinAt, UniformOnFun.tendsto_iff_tendstoUniformlyOn, Set.mem_singleton_iff,
@@ -222,8 +222,8 @@ theorem Continuous.cfc_fun
   exact h_cont.cfc_fun (fun x _ => hf x)
 
 中文:
-定理 Continuous.cfc_fun
-  结论: [TopologicalSpace X] (f : X -> R -> R) (a : A)
+定理 连续.cfc_fun
+  结论: [拓扑空间 X] (f : X -> R -> R) (a : A)
   证明: by
   rw [← continuousOn_univ] at h_cont ⊢
   exact h_cont.cfc_fun (fun x _ => hf x)
@@ -304,7 +304,7 @@ lemma lipschitzOnWith_cfc_fun_of_subset
 
 中文:
 引理 lipschitzOnWith_cfc_fun_of_subset
-  条件: (a : A) {s : Set R} (hs : spectrum R a subseteq s)
+  条件: (a : A) {s : 集合 R} (hs : spectrum R a subseteq s)
   证明: by
   have h₁ := lipschitzOnWith_cfc_fun R a
   have h₂ := lipschitzWith_one_ofFun_toFun' (𝔖 := {spectrum R a}) (𝔗 := {s}) (β := R) (by simpa)
@@ -406,7 +406,7 @@ theorem continuousOn_cfc
 
 中文:
 定理 continuousOn_cfc
-  结论: {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+  结论: {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: continuousOn_iff_continuous_domRestrict.mpr by
     convert!
       continuous_cfcHomSuperset_left hs ⟨_, hf.domRestrict⟩
@@ -442,7 +442,7 @@ theorem continuousOn_cfc_setProd
 
 中文:
 定理 continuousOn_cfc_setProd
-  条件: {s : Set 𝕜} (hs : IsCompact s)
+  条件: {s : 集合 𝕜} (hs : 是紧集 s)
   证明: continuousOn_prod_of_continuousOn_lipschitzOnWith _ 1
     (fun f hf => continuousOn_cfc A hs ((toFun {s}) f) hf)
     (fun a ⟨_, ha'⟩ => lipschitzOnWith_cfc_fun_of_subset a ha')
@@ -472,7 +472,7 @@ theorem continuousOn_cfc_setProd_nhdsSet
 
 中文:
 定理 continuousOn_cfc_setProd_nhdsSet
-  条件: [CompleteSpace A] {s : Set 𝕜}
+  条件: [完备空间 A] {s : 集合 𝕜}
   证明: by
   refine continuousOn_of_locally_continuousOn fun (f, a) ⟨hf, ha, has⟩ => ?_
   have hs := ContinuousFunctionalCalculus.isCompact_spectrum (R := 𝕜) a
@@ -510,8 +510,8 @@ theorem Filter.Tendsto.cfc
   exact ⟨ha_tendsto, ha'.and ha⟩
 
 中文:
-定理 Filter.Tendsto.cfc
-  结论: {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+定理 滤子.收敛.cfc
+  结论: {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: by
 .tendsto.comp .continuousWithinAt ⟨ha₀', ha₀⟩ apply continuousOn_cfc A hs f
   rw [tendsto_nhdsWithin_iff]
@@ -536,7 +536,7 @@ theorem ContinuousAt.cfc
 
 中文:
 定理 ContinuousAt.cfc
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: ha_cont.tendsto.cfc hs f ha ha' ha.self_of_nhds ha'.self_of_nhds
 -/
 protected theorem ContinuousAt.cfc [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
@@ -556,7 +556,7 @@ theorem ContinuousWithinAt.cfc
 
 中文:
 定理 ContinuousWithinAt.cfc
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s)
   证明: ha_cont.tendsto.cfc hs f ha ha' (ha.self_of_nhdsWithin hx₀) (ha'.self_of_nhdsWithin hx₀)
 -/
 protected theorem ContinuousWithinAt.cfc [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
@@ -580,7 +580,7 @@ theorem ContinuousOn.cfc
 
 中文:
 定理 ContinuousOn.cfc
-  结论: [TopologicalSpace X] {s : X -> Set 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
+  结论: [拓扑空间 X] {s : X -> 集合 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
   证明: by
   rw [ContinuousOn] at ha_cont ⊢
   refine fun x hx => (ha_cont x hx).cfc (hs x hx) f hx ?_ ?_ (hf x hx)
@@ -610,7 +610,7 @@ theorem ContinuousOn.cfc'
 
 中文:
 定理 ContinuousOn.cfc'
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s)
   证明: by
   refine ContinuousOn.cfc _ (fun _ _ => hs) ha_cont (fun _ _ => ?_) ha'
   filter_upwards [self_mem_nhdsWithin] with x hx
@@ -642,7 +642,7 @@ theorem ContinuousOn.cfc_of_mem_nhdsSet
 
 中文:
 定理 ContinuousOn.cfc_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 𝕜}
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 𝕜}
   证明: by
   have hs' := hs
   simp only [nhdsSet_iUnion, mem_iSup] at hs'
@@ -684,8 +684,8 @@ theorem Continuous.cfc
   exact ha_cont.cfc f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfc
-  结论: [TopologicalSpace X] {s : X -> Set 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
+定理 连续.cfc
+  结论: [拓扑空间 X] {s : X -> 集合 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
@@ -709,8 +709,8 @@ theorem Continuous.cfc'
   exact ha_cont.cfc' hs f (fun x _ => ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfc'
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+定理 连续.cfc'
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc' hs f (fun x _ => ha x) (fun x _ => ha' x)
@@ -735,8 +735,8 @@ theorem Continuous.cfc_of_mem_nhdsSet
   exact ha_cont.cfc_of_mem_nhdsSet f (by simpa) (by simpa)
 
 中文:
-定理 Continuous.cfc_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 𝕜}
+定理 连续.cfc_of_mem_nhdsSet
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 𝕜}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc_of_mem_nhdsSet f (by simpa) (by simpa)
@@ -775,7 +775,7 @@ theorem continuousOn_cfc_nnreal
 
 中文:
 定理 continuousOn_cfc_nnreal
-  结论: {s : Set 实数>=0} (hs : IsCompact s)
+  结论: {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: by
   have : {a : A | 0 <= a ∧ spectrum Real>=0 a subseteq s}.EqOn (cfc f) (cfc (fun x : Real => f x.toNNReal)) :=
     fun a ha => cfc_nnreal_eq_real _ _ ha.1
@@ -816,7 +816,7 @@ theorem continuousOn_cfc_nnreal_setProd
 
 中文:
 定理 continuousOn_cfc_nnreal_setProd
-  条件: {s : Set 实数>=0} (hs : IsCompact s)
+  条件: {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: continuousOn_prod_of_continuousOn_lipschitzOnWith _ 1
     (fun f hf => continuousOn_cfc_nnreal A hs ((toFun {s}) f) hf)
     (fun a ⟨_, ha'⟩ => lipschitzOnWith_cfc_fun_of_subset a ha')
@@ -846,7 +846,7 @@ theorem continuousOn_cfc_nnreal_setProd_nhdsSet
 
 中文:
 定理 continuousOn_cfc_nnreal_setProd_nhdsSet
-  条件: [CompleteSpace A] {s : Set 实数>=0}
+  条件: [完备空间 A] {s : 集合 实数>=0}
   证明: by
   refine continuousOn_of_locally_continuousOn fun (f, a) ⟨hf, ha, has⟩ => ?_
   have hs := ContinuousFunctionalCalculus.isCompact_spectrum (R := Real>=0) a
@@ -884,8 +884,8 @@ theorem Filter.Tendsto.cfc_nnreal
   exact ⟨ha_tendsto, ha'.and ha⟩
 
 中文:
-定理 Filter.Tendsto.cfc_nnreal
-  结论: {s : Set 实数>=0} (hs : IsCompact s)
+定理 滤子.收敛.cfc_nnreal
+  结论: {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: by
 .tendsto.comp .continuousWithinAt ⟨ha₀', ha₀⟩ apply continuousOn_cfc_nnreal A hs f
   rw [tendsto_nhdsWithin_iff]
@@ -912,7 +912,7 @@ theorem ContinuousAt.cfc_nnreal
 
 中文:
 定理 ContinuousAt.cfc_nnreal
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: ha_cont.tendsto.cfc_nnreal hs f ha ha' ha.self_of_nhds ha'.self_of_nhds
 
 Depends on / 依赖: ContinuousAt, cfc_cont_tac, cfc_nnreal, ha.self_of_nhds, ha_cont, ha_cont.tendsto.cfc_nnreal, self_of_nhds, tendsto
@@ -934,7 +934,7 @@ theorem ContinuousWithinAt.cfc_nnreal
 
 中文:
 定理 ContinuousWithinAt.cfc_nnreal
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: ha_cont.tendsto.cfc_nnreal hs f ha ha' (ha.self_of_nhdsWithin hx₀) (ha'.self_of_nhdsWithin hx₀)
 
 Depends on / 依赖: ContinuousWithinAt, cfc_cont_tac, cfc_nnreal, ha.self_of_nhdsWithin, ha_cont, ha_cont.tendsto.cfc_nnreal, self_of_nhdsWithin, tendsto
@@ -960,7 +960,7 @@ theorem ContinuousOn.cfc_nnreal
 
 中文:
 定理 ContinuousOn.cfc_nnreal
-  结论: [TopologicalSpace X] {s : X -> Set 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
+  结论: [拓扑空间 X] {s : X -> 集合 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
   证明: by
   rw [ContinuousOn] at ha_cont ⊢
   refine fun x hx => (ha_cont x hx).cfc_nnreal (hs x hx) f hx ?_ ?_ (hf x hx)
@@ -992,7 +992,7 @@ theorem ContinuousOn.cfc_nnreal'
 
 中文:
 定理 ContinuousOn.cfc_nnreal'
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: by
   refine ContinuousOn.cfc_nnreal _ (fun _ _ => hs) ha_cont (fun _ _ => ?_) ha'
   filter_upwards [self_mem_nhdsWithin] with x hx
@@ -1024,7 +1024,7 @@ theorem ContinuousOn.cfc_nnreal_of_mem_nhdsSet
 
 中文:
 定理 ContinuousOn.cfc_nnreal_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 实数>=0}
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 实数>=0}
   证明: by
   have hs' := hs
   simp only [nhdsSet_iUnion, mem_iSup] at hs'
@@ -1066,8 +1066,8 @@ theorem Continuous.cfc_nnreal
   exact ha_cont.cfc_nnreal f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfc_nnreal
-  结论: [TopologicalSpace X] {s : X -> Set 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
+定理 连续.cfc_nnreal
+  结论: [拓扑空间 X] {s : X -> 集合 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc_nnreal f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
@@ -1093,8 +1093,8 @@ theorem Continuous.cfc_nnreal'
   exact ha_cont.cfc_nnreal' hs f (fun x _ => ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfc_nnreal'
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s) (f : 实数>=0 -> 实数>=0)
+定理 连续.cfc_nnreal'
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s) (f : 实数>=0 -> 实数>=0)
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc_nnreal' hs f (fun x _ => ha x) (fun x _ => ha' x)
@@ -1119,8 +1119,8 @@ theorem Continuous.cfc_nnreal_of_mem_nhdsSet
   exact ha_cont.cfc_nnreal_of_mem_nhdsSet f (by simpa) (by simpa)
 
 中文:
-定理 Continuous.cfc_nnreal_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 实数>=0}
+定理 连续.cfc_nnreal_of_mem_nhdsSet
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 实数>=0}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfc_nnreal_of_mem_nhdsSet f (by simpa) (by simpa)
@@ -1169,7 +1169,7 @@ tendsto_nhds_unique (tendsto_const_nhds.congr' <| .symm hF0)
 
 中文:
 定理 tendsto_cfcₙ_fun
-  结论: {l : Filter X} {F : X -> R -> R} {f : R -> R} {a : A}
+  结论: {l : 滤子 X} {F : X -> R -> R} {f : R -> R} {a : A}
   证明: by
   open scoped NonUnitalContinuousFunctionalCalculus in
   obtain (rfl | hl) := l.eq_or_neBot
@@ -1222,7 +1222,7 @@ theorem continuousAt_cfcₙ_fun
 
 中文:
 定理 continuousAt_cfcₙ_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A}
   证明: tendsto_cfcₙ_fun h_tendsto hf hf0
 
 Depends on / 依赖: h_tendsto
@@ -1244,7 +1244,7 @@ theorem continuousWithinAt_cfcₙ_fun
 
 中文:
 定理 continuousWithinAt_cfcₙ_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A}
   证明: tendsto_cfcₙ_fun h_tendsto hf hf0
 
 Depends on / 依赖: ContinuousWithinAt, cfc_zero_tac, h_tendsto
@@ -1272,7 +1272,7 @@ theorem ContinuousOn.cfcₙ_fun
 
 中文:
 定理 ContinuousOn.cfcₙ_fun
-  结论: [TopologicalSpace X] {f : X -> R -> R} {a : A} {s : Set X}
+  结论: [拓扑空间 X] {f : X -> R -> R} {a : A} {s : 集合 X}
   证明: by
   rw [ContinuousOn] at h_cont ⊢
   simp only [ContinuousWithinAt, UniformOnFun.tendsto_iff_tendstoUniformlyOn, Set.mem_singleton_iff,
@@ -1306,8 +1306,8 @@ theorem Continuous.cfcₙ_fun
   exact h_cont.cfcₙ_fun (fun x _ => hf x) (fun x _ => hf0 x)
 
 中文:
-定理 Continuous.cfcₙ_fun
-  结论: [TopologicalSpace X] (f : X -> R -> R) (a : A)
+定理 连续.cfcₙ_fun
+  结论: [拓扑空间 X] (f : X -> R -> R) (a : A)
   证明: by
   rw [← continuousOn_univ] at h_cont ⊢
   exact h_cont.cfcₙ_fun (fun x _ => hf x) (fun x _ => hf0 x)
@@ -1388,7 +1388,7 @@ lemma lipschitzOnWith_cfcₙ_fun_of_subset
 
 中文:
 引理 lipschitzOnWith_cfcₙ_fun_of_subset
-  条件: (a : A) {s : Set R} (hs : quasispectrum R a subseteq s)
+  条件: (a : A) {s : 集合 R} (hs : quasispectrum R a subseteq s)
   证明: by
   have h₂ := lipschitzWith_one_ofFun_toFun' (𝔖 := {quasispectrum R a}) (𝔗 := {s}) (β := R)
     (by simpa)
@@ -1486,7 +1486,7 @@ theorem continuousOn_cfcₙ
 
 中文:
 定理 continuousOn_cfcₙ
-  结论: {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+  结论: {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: by
   by_cases hs0 : 0 in s
   · rw [continuousOn_iff_continuous_domRestrict]
@@ -1526,7 +1526,7 @@ theorem continuousOn_cfcₙ_setProd
 
 中文:
 定理 continuousOn_cfcₙ_setProd
-  条件: {s : Set 𝕜} (hs : IsCompact s)
+  条件: {s : 集合 𝕜} (hs : 是紧集 s)
   证明: continuousOn_prod_of_continuousOn_lipschitzOnWith _ 1
     (fun f hf => continuousOn_cfcₙ A hs ((toFun {s}) f) hf.1 hf.2)
     (fun a ⟨_, ha'⟩ => lipschitzOnWith_cfcₙ_fun_of_subset a ha')
@@ -1556,7 +1556,7 @@ theorem continuousOn_cfcₙ_setProd_nhdsSet
 
 中文:
 定理 continuousOn_cfcₙ_setProd_nhdsSet
-  条件: [CompleteSpace A] {s : Set 𝕜}
+  条件: [完备空间 A] {s : 集合 𝕜}
   证明: by
   refine continuousOn_of_locally_continuousOn fun (f, a) ⟨hf, ha, has⟩ => ?_
   have hs := NonUnitalContinuousFunctionalCalculus.isCompact_quasispectrum (R := 𝕜) a
@@ -1595,8 +1595,8 @@ theorem Filter.Tendsto.cfcₙ
   exact ⟨ha_tendsto, ha'.and ha⟩
 
 中文:
-定理 Filter.Tendsto.cfcₙ
-  结论: {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+定理 滤子.收敛.cfcₙ
+  结论: {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: by
 .tendsto.comp .continuousWithinAt ⟨ha₀', ha₀⟩ apply continuousOn_cfcₙ A hs f
   rw [tendsto_nhdsWithin_iff]
@@ -1622,7 +1622,7 @@ theorem ContinuousAt.cfcₙ
 
 中文:
 定理 ContinuousAt.cfcₙ
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: ha_cont.tendsto.cfcₙ hs f ha ha' ha.self_of_nhds ha'.self_of_nhds
 -/
 protected theorem ContinuousAt.cfcₙ [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
@@ -1642,7 +1642,7 @@ theorem ContinuousWithinAt.cfcₙ
 
 中文:
 定理 ContinuousWithinAt.cfcₙ
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s)
   证明: ha_cont.tendsto.cfcₙ hs f ha ha' (ha.self_of_nhdsWithin hx₀) (ha'.self_of_nhdsWithin hx₀)
 -/
 protected theorem ContinuousWithinAt.cfcₙ [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
@@ -1667,7 +1667,7 @@ theorem ContinuousOn.cfcₙ
 
 中文:
 定理 ContinuousOn.cfcₙ
-  结论: [TopologicalSpace X] {s : X -> Set 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
+  结论: [拓扑空间 X] {s : X -> 集合 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
   证明: by
   rw [ContinuousOn] at ha_cont ⊢
   refine fun x hx => (ha_cont x hx).cfcₙ (hs x hx) f hx ?_ ?_ (hf x hx)
@@ -1697,7 +1697,7 @@ theorem ContinuousOn.cfcₙ'
 
 中文:
 定理 ContinuousOn.cfcₙ'
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s)
   证明: by
   refine ContinuousOn.cfcₙ _ (fun _ _ => hs) ha_cont (fun _ _ => ?_) ha'
   filter_upwards [self_mem_nhdsWithin] with x hx
@@ -1729,7 +1729,7 @@ theorem ContinuousOn.cfcₙ_of_mem_nhdsSet
 
 中文:
 定理 ContinuousOn.cfcₙ_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 𝕜}
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 𝕜}
   证明: by
   have hs' := hs
   simp only [nhdsSet_iUnion, mem_iSup] at hs'
@@ -1771,8 +1771,8 @@ theorem Continuous.cfcₙ
   exact ha_cont.cfcₙ f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfcₙ
-  结论: [TopologicalSpace X] {s : X -> Set 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
+定理 连续.cfcₙ
+  结论: [拓扑空间 X] {s : X -> 集合 𝕜} (f : 𝕜 -> 𝕜) {a : X -> A}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
@@ -1797,8 +1797,8 @@ theorem Continuous.cfcₙ'
   exact ha_cont.cfcₙ' hs f (fun x _ => ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfcₙ'
-  结论: [TopologicalSpace X] {s : Set 𝕜} (hs : IsCompact s) (f : 𝕜 -> 𝕜)
+定理 连续.cfcₙ'
+  结论: [拓扑空间 X] {s : 集合 𝕜} (hs : 是紧集 s) (f : 𝕜 -> 𝕜)
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ' hs f (fun x _ => ha x) (fun x _ => ha' x)
@@ -1824,8 +1824,8 @@ theorem Continuous.cfcₙ_of_mem_nhdsSet
   exact ha_cont.cfcₙ_of_mem_nhdsSet f (by simpa) (by simpa)
 
 中文:
-定理 Continuous.cfcₙ_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 𝕜}
+定理 连续.cfcₙ_of_mem_nhdsSet
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 𝕜}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ_of_mem_nhdsSet f (by simpa) (by simpa)
@@ -1866,7 +1866,7 @@ theorem continuousOn_cfcₙ_nnreal
 
 中文:
 定理 continuousOn_cfcₙ_nnreal
-  结论: {s : Set 实数>=0} (hs : IsCompact s) (f : 实数>=0 -> 实数>=0)
+  结论: {s : 集合 实数>=0} (hs : 是紧集 s) (f : 实数>=0 -> 实数>=0)
   证明: by
   have : {a : A | 0 <= a ∧ quasispectrum Real>=0 a subseteq s}.EqOn (cfcₙ f)
       (cfcₙ (fun x : Real => f x.toNNReal)) :=
@@ -1907,7 +1907,7 @@ theorem continuousOn_cfcₙ_nnreal_setProd
 
 中文:
 定理 continuousOn_cfcₙ_nnreal_setProd
-  条件: {s : Set 实数>=0} (hs : IsCompact s)
+  条件: {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: continuousOn_prod_of_continuousOn_lipschitzOnWith _ 1
     (fun f hf => continuousOn_cfcₙ_nnreal A hs ((toFun {s}) f) hf.1 hf.2)
     (fun a ⟨_, ha'⟩ => lipschitzOnWith_cfcₙ_fun_of_subset a ha')
@@ -1936,7 +1936,7 @@ theorem continuousOn_cfcₙ_nnreal_setProd_nhdsSet
 
 中文:
 定理 continuousOn_cfcₙ_nnreal_setProd_nhdsSet
-  条件: [CompleteSpace A] {s : Set 实数>=0}
+  条件: [完备空间 A] {s : 集合 实数>=0}
   证明: by
   refine continuousOn_of_locally_continuousOn fun (f, a) ⟨hf, ha, has⟩ => ?_
   have hs := NonUnitalContinuousFunctionalCalculus.isCompact_quasispectrum (R := Real>=0) a
@@ -1974,8 +1974,8 @@ theorem Filter.Tendsto.cfcₙ_nnreal
   exact ⟨ha_tendsto, ha'.and ha⟩
 
 中文:
-定理 Filter.Tendsto.cfcₙ_nnreal
-  结论: {s : Set 实数>=0} (hs : IsCompact s) (f : 实数>=0 -> 实数>=0)
+定理 滤子.收敛.cfcₙ_nnreal
+  结论: {s : 集合 实数>=0} (hs : 是紧集 s) (f : 实数>=0 -> 实数>=0)
   证明: by
 .tendsto.comp .continuousWithinAt ⟨ha₀', ha₀⟩ apply continuousOn_cfcₙ_nnreal A hs f
   rw [tendsto_nhdsWithin_iff]
@@ -2003,7 +2003,7 @@ theorem ContinuousAt.cfcₙ_nnreal
 
 中文:
 定理 ContinuousAt.cfcₙ_nnreal
-  结论: [TopologicalSpace X] {s : Set 实数>=0}
+  结论: [拓扑空间 X] {s : 集合 实数>=0}
   证明: ha_cont.tendsto.cfcₙ_nnreal hs f ha ha' ha.self_of_nhds ha'.self_of_nhds
 
 Depends on / 依赖: ContinuousAt, cfc_cont_tac, cfc_zero_tac, ha.self_of_nhds, ha_cont, ha_cont.tendsto.cfc, self_of_nhds, tendsto
@@ -2025,7 +2025,7 @@ theorem ContinuousWithinAt.cfcₙ_nnreal
 
 中文:
 定理 ContinuousWithinAt.cfcₙ_nnreal
-  结论: [TopologicalSpace X] {s : Set 实数>=0}
+  结论: [拓扑空间 X] {s : 集合 实数>=0}
   证明: ha_cont.tendsto.cfcₙ_nnreal hs f ha ha' (ha.self_of_nhdsWithin hx₀) (ha'.self_of_nhdsWithin hx₀)
 
 Depends on / 依赖: ContinuousWithinAt, cfc_cont_tac, cfc_zero_tac, ha.self_of_nhdsWithin, ha_cont, ha_cont.tendsto.cfc, self_of_nhdsWithin, tendsto
@@ -2052,7 +2052,7 @@ theorem ContinuousOn.cfcₙ_nnreal
 
 中文:
 定理 ContinuousOn.cfcₙ_nnreal
-  结论: [TopologicalSpace X] {s : X -> Set 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
+  结论: [拓扑空间 X] {s : X -> 集合 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
   证明: by
   rw [ContinuousOn] at ha_cont ⊢
   refine fun x hx => (ha_cont x hx).cfcₙ_nnreal (hs x hx) f hx ?_ ?_ (hf x hx)
@@ -2084,7 +2084,7 @@ theorem ContinuousOn.cfcₙ_nnreal'
 
 中文:
 定理 ContinuousOn.cfcₙ_nnreal'
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s)
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: by
   refine ContinuousOn.cfcₙ_nnreal _ (fun _ _ => hs) ha_cont (fun _ _ => ?_) ha'
   filter_upwards [self_mem_nhdsWithin] with x hx
@@ -2116,7 +2116,7 @@ theorem ContinuousOn.cfcₙ_nnreal_of_mem_nhdsSet
 
 中文:
 定理 ContinuousOn.cfcₙ_nnreal_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 实数>=0}
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 实数>=0}
   证明: by
   have hs' := hs
   simp only [nhdsSet_iUnion, mem_iSup] at hs'
@@ -2158,8 +2158,8 @@ theorem Continuous.cfcₙ_nnreal
   exact ha_cont.cfcₙ_nnreal f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfcₙ_nnreal
-  结论: [TopologicalSpace X] {s : X -> Set 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
+定理 连续.cfcₙ_nnreal
+  结论: [拓扑空间 X] {s : X -> 集合 实数>=0} (f : 实数>=0 -> 实数>=0) {a : X -> A}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ_nnreal f (fun x _ => hs x) (fun x _ => by simpa using ha x) (fun x _ => ha' x)
@@ -2186,8 +2186,8 @@ theorem Continuous.cfcₙ_nnreal'
   exact ha_cont.cfcₙ_nnreal' hs f (fun x _ => ha x) (fun x _ => ha' x)
 
 中文:
-定理 Continuous.cfcₙ_nnreal'
-  结论: [TopologicalSpace X] {s : Set 实数>=0} (hs : IsCompact s)
+定理 连续.cfcₙ_nnreal'
+  结论: [拓扑空间 X] {s : 集合 实数>=0} (hs : 是紧集 s)
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ_nnreal' hs f (fun x _ => ha x) (fun x _ => ha' x)
@@ -2213,8 +2213,8 @@ theorem Continuous.cfcₙ_nnreal_of_mem_nhdsSet
   exact ha_cont.cfcₙ_nnreal_of_mem_nhdsSet f (by simpa) (by simpa)
 
 中文:
-定理 Continuous.cfcₙ_nnreal_of_mem_nhdsSet
-  结论: [CompleteSpace A] [TopologicalSpace X] {s : Set 实数>=0}
+定理 连续.cfcₙ_nnreal_of_mem_nhdsSet
+  结论: [完备空间 A] [拓扑空间 X] {s : 集合 实数>=0}
   证明: by
   rw [← continuousOn_univ] at ha_cont ⊢
   exact ha_cont.cfcₙ_nnreal_of_mem_nhdsSet f (by simpa) (by simpa)

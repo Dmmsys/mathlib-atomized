@@ -120,7 +120,7 @@ definition funMulInvSnorm
 
 中文:
 定义 funMulInvSnorm
-  签名: (f : α -> 实数>=0∞) (p : 实数) (μ : Measure α)
+  签名: (f : α -> 实数>=0∞) (p : 实数) (μ : 测度 α)
   定义体: fun a =>
   f a * ((∫⁻ c, f c ^ p ∂μ) ^ (1 / p))⁻¹
 -/
@@ -357,7 +357,7 @@ theorem lintegral_mul_le_Lp_mul_Lq
 
 中文:
 定理 lintegral_mul_le_Lp_mul_Lq
-  结论: (μ : Measure α) {p q : 实数} (hpq : p.HolderConjugate q)
+  结论: (μ : 测度 α) {p q : 实数} (hpq : p.HolderConjugate q)
   证明: by
   by_cases hf_zero : ∫⁻ a, f a ^ p ∂μ = 0
   · refine Eq.trans_le ?_ zero_le
@@ -408,7 +408,7 @@ theorem lintegral_mul_norm_pow_le
 
 中文:
 定理 lintegral_mul_norm_pow_le
-  结论: {α} [MeasurableSpace α] {μ : Measure α}
+  结论: {α} [可测空间 α] {μ : 测度 α}
   证明: by
   rcases hp.eq_or_lt with rfl | hp
   · rw [zero_add] at hpq
@@ -461,7 +461,7 @@ theorem lintegral_prod_norm_pow_le
 
 中文:
 定理 lintegral_prod_norm_pow_le
-  结论: {α ι : 类型} [MeasurableSpace α] {μ : Measure α}
+  结论: {α ι : 类型} [可测空间 α] {μ : 测度 α}
   证明: by
   classical
   induction s using Finset.induction generalizing p with
@@ -542,7 +542,7 @@ theorem lintegral_mul_prod_norm_pow_le
 
 中文:
 定理 lintegral_mul_prod_norm_pow_le
-  结论: {α ι : 类型} [MeasurableSpace α] {μ : Measure α}
+  结论: {α ι : 类型} [可测空间 α] {μ : 测度 α}
   证明: by
   suffices
     ∫⁻ t, ∏ j in insertNone s, Option.elim j (g t) (fun j => f j t) ^ Option.elim j q p ∂μ
@@ -635,7 +635,7 @@ theorem lintegral_Lp_mul_le_Lq_mul_Lr
 
 中文:
 定理 lintegral_Lp_mul_le_Lq_mul_Lr
-  结论: {α} [MeasurableSpace α] {p q r : 实数} (hp0_lt : 0 < p)
+  结论: {α} [可测空间 α] {p q r : 实数} (hp0_lt : 0 < p)
   证明: by
   have hp0_ne : p != 0 := (ne_of_lt hp0_lt).symm
   have hp0 : 0 <= p := le_of_lt hp0_lt
@@ -846,7 +846,7 @@ theorem lintegral_Lp_add_le
 
 中文:
 定理 lintegral_Lp_add_le
-  结论: {p : 实数} {f g : α -> 实数>=0∞} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+  结论: {p : 实数} {f g : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: by
   have hp_pos : 0 < p := lt_of_lt_of_le zero_lt_one hp1
   obtain hf_top | hf_top := eq_top_or_lt_top (∫⁻ a, f a ^ p ∂μ)
@@ -899,7 +899,7 @@ theorem lintegral_Lp_add_le_of_le_one
 
 中文:
 定理 lintegral_Lp_add_le_of_le_one
-  结论: {p : 实数} {f g : α -> 实数>=0∞} (hf : AEMeasurable f μ) (hp0 : 0 <= p)
+  结论: {p : 实数} {f g : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (hp0 : 0 <= p)
   证明: by
   rcases eq_or_lt_of_le hp0 with (rfl | hp)
   · simp only [Pi.add_apply, rpow_zero, lintegral_one, _root_.div_zero, zero_sub]
@@ -939,7 +939,7 @@ theorem NNReal.lintegral_mul_le_Lp_mul_Lq
   exact ENNReal.lintegral_mul_le_Lp_mul_Lq μ hpq hf.coe_nnreal_ennreal hg.coe_nnreal_ennreal
 
 中文:
-定理 NNReal.lintegral_mul_le_Lp_mul_Lq
+定理 非负实数.lintegral_mul_le_Lp_mul_Lq
   结论: {p q : 实数} (hpq : p.HolderConjugate q) {f g : α -> 实数>=0}
   证明: by
   simp_rw [Pi.mul_apply, ENNReal.coe_mul]

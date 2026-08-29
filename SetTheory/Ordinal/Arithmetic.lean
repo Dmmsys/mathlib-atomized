@@ -73,7 +73,7 @@ theorem lift_add
 
 中文:
 定理 lift_add
-  条件: (a b : Ordinal.{v})
+  条件: (a b : 序数.{v})
   结论: lift.{u} (a + b) = lift.{u} a + lift.{u} b
   证明: Quotient.inductionOn₂ a b fun ⟨_α, _r, _⟩ ⟨_β, _s, _⟩ =>
     Quotient.sound
@@ -100,7 +100,7 @@ theorem lift_add_one
 
 中文:
 定理 lift_add_one
-  条件: (a : Ordinal.{v})
+  条件: (a : 序数.{v})
   结论: lift.{u} (a + 1) = lift.{u} a + 1
   证明: by
   simp
@@ -120,7 +120,7 @@ theorem lift_succ
 
 中文:
 定理 lift_succ
-  条件: (a : Ordinal.{v})
+  条件: (a : 序数.{v})
   结论: lift.{u} (succ a) = succ (lift.{u} a)
   证明: lift_add_one a
 
@@ -145,7 +145,7 @@ instance instAddLeftReflectLE
 
 中文:
 实例 instAddLeftReflectLE
-  签名: : AddLeftReflectLE Ordinal.{u} where
+  签名: : 加法LeftReflectLE 序数.{u} where
   定义体: by
     refine inductionOn₃ a b c fun α r _ β s _ γ t _ ⟨f⟩ => ?_
     have H₁ a : f (Sum.inl a) = Sum.inl a := by
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLeftCancelAdd Ordinal
+  签名: 是左消去加法 序数
   定义体: by simpa only [le_antisymm_iff, add_le_add_iff_left] using h
 
 Depends on / 依赖: add_le_add_iff_left, le_antisymm_iff
@@ -201,7 +201,7 @@ theorem add_lt_add_iff_left'
 
 中文:
 定理 add_lt_add_iff_left'
-  条件: (a) {b c : Ordinal}
+  条件: (a) {b c : 序数}
   结论: a + b < a + c ↔ b < c
   证明: by
   rw [← not_le]; rw [← not_le]; rw [add_le_add_iff_left]
@@ -219,7 +219,7 @@ instance instAddLeftStrictMono
 
 中文:
 实例 instAddLeftStrictMono
-  签名: : AddLeftStrictMono Ordinal.{u}
+  签名: : AddLeftStrictMono 序数.{u}
   定义体: ⟨fun a _b _c => (add_lt_add_iff_left' a).2⟩
 
 Depends on / 依赖: add_lt_add_iff_left
@@ -237,7 +237,7 @@ instance instAddLeftReflectLT
 
 中文:
 实例 instAddLeftReflectLT
-  签名: : AddLeftReflectLT Ordinal.{u}
+  签名: : AddLeftReflectLT 序数.{u}
   定义体: ⟨fun a _b _c => (add_lt_add_iff_left' a).1⟩
 
 Depends on / 依赖: add_lt_add_iff_left
@@ -255,7 +255,7 @@ instance instAddRightReflectLT
 
 中文:
 实例 instAddRightReflectLT
-  签名: : AddRightReflectLT Ordinal.{u}
+  签名: : AddRightReflectLT 序数.{u}
   定义体: ⟨fun _a _b _c => lt_imp_lt_of_le_imp_le fun h => add_le_add_left h _⟩
 
 Depends on / 依赖: add_le_add_left, lt_imp_lt_of_le_imp_le
@@ -273,7 +273,7 @@ theorem add_le_add_iff_right
 
 中文:
 定理 add_le_add_iff_right
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: 对任意 n : 自然数, a + n <= b + n ↔ a <= b
 -/
 theorem add_le_add_iff_right {a b : Ordinal} : forall n : Nat, a + n <= b + n ↔ a <= b
@@ -294,7 +294,7 @@ theorem add_right_cancel
 
 中文:
 定理 add_right_cancel
-  条件: {a b : Ordinal} (n : 自然数)
+  条件: {a b : 序数} (n : 自然数)
   结论: a + n = b + n ↔ a = b
   证明: by
   simp only [le_antisymm_iff, add_le_add_iff_right]
@@ -320,7 +320,7 @@ theorem add_eq_zero_iff
 
 中文:
 定理 add_eq_zero_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a + b = 0 ↔ a = 0 ∧ b = 0
   证明: inductionOn₂ a b fun α r _ β s _ => by
     simp_rw [← type_sum_lex, type_eq_zero_iff_isEmpty]
@@ -344,7 +344,7 @@ theorem left_eq_zero_of_add_eq_zero
 
 中文:
 定理 left_eq_zero_of_add_eq_zero
-  条件: {a b : Ordinal} (h : a + b = 0)
+  条件: {a b : 序数} (h : a + b = 0)
   结论: a = 0
   证明: (add_eq_zero_iff.1 h).1
 
@@ -364,7 +364,7 @@ theorem right_eq_zero_of_add_eq_zero
 
 中文:
 定理 right_eq_zero_of_add_eq_zero
-  条件: {a b : Ordinal} (h : a + b = 0)
+  条件: {a b : 序数} (h : a + b = 0)
   结论: b = 0
   证明: (add_eq_zero_iff.1 h).2
 
@@ -387,8 +387,8 @@ theorem isSuccLimit_iff
 
 中文:
 定理 isSuccLimit_iff
-  条件: {o : Ordinal}
-  结论: IsSuccLimit o ↔ o != 0 ∧ IsSuccPrelimit o
+  条件: {o : 序数}
+  结论: 是SuccLimit o ↔ o != 0 ∧ IsSuccPrelimit o
   证明: isSuccLimit_iff_of_orderBot
 
 @[simp]
@@ -411,7 +411,7 @@ theorem isSuccPrelimit_zero
 
 中文:
 定理 isSuccPrelimit_zero
-  结论: IsSuccPrelimit (0 : Ordinal)
+  结论: IsSuccPrelimit (0 : 序数)
   证明: isSuccPrelimit_bot
 
 @[simp]
@@ -433,7 +433,7 @@ theorem not_isSuccLimit_zero
 
 中文:
 定理 not_isSuccLimit_zero
-  结论: ¬ IsSuccLimit (0 : Ordinal)
+  结论: ¬ 是SuccLimit (0 : 序数)
   证明: not_isSuccLimit_bot
 
 @[simp]
@@ -456,7 +456,7 @@ theorem isSuccPrelimit_lift
 
 中文:
 定理 isSuccPrelimit_lift
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: IsSuccPrelimit (lift.{u, v} o) ↔ IsSuccPrelimit o
   证明: liftInitialSeg.isSuccPrelimit_apply_iff
 
@@ -479,8 +479,8 @@ theorem isSuccLimit_lift
 
 中文:
 定理 isSuccLimit_lift
-  条件: {o : Ordinal}
-  结论: IsSuccLimit (lift.{u, v} o) ↔ IsSuccLimit o
+  条件: {o : 序数}
+  结论: 是SuccLimit (lift.{u, v} o) ↔ 是SuccLimit o
   证明: liftInitialSeg.isSuccLimit_apply_iff
 
 Depends on / 依赖: isSuccLimit_apply_iff, liftInitialSeg, liftInitialSeg.isSuccLimit_apply_iff
@@ -500,7 +500,7 @@ theorem natCast_lt_of_isSuccLimit
 
 中文:
 定理 natCast_lt_of_isSuccLimit
-  条件: {o : Ordinal} (h : IsSuccLimit o) (n : 自然数)
+  条件: {o : 序数} (h : 是SuccLimit o) (n : 自然数)
   结论: n < o
   证明: by
   simpa using h.add_natCast_lt h.bot_lt n
@@ -521,7 +521,7 @@ theorem one_lt_of_isSuccLimit
 
 中文:
 定理 one_lt_of_isSuccLimit
-  条件: {o : Ordinal} (h : IsSuccLimit o)
+  条件: {o : 序数} (h : 是SuccLimit o)
   结论: 1 < o
   证明: mod_cast natCast_lt_of_isSuccLimit h 1
 
@@ -542,8 +542,8 @@ theorem zero_or_succ_or_isSuccLimit
 
 中文:
 定理 zero_or_succ_or_isSuccLimit
-  条件: (o : Ordinal)
-  结论: o = 0 ∨ o in range succ ∨ IsSuccLimit o
+  条件: (o : 序数)
+  结论: o = 0 ∨ o in range succ ∨ 是SuccLimit o
   证明: by
   simpa using isMin_or_mem_range_succ_or_isSuccLimit o
 
@@ -570,7 +570,7 @@ definition limitRecOn
 
 中文:
 定义 limitRecOn
-  签名: {motive : Ordinal -> Sort*} (o : Ordinal)
+  签名: {motive : 序数 -> 类型层*} (o : 序数)
   定义体: SuccOrder.limitRecOn o (fun _a ha => ha.eq_bot ▸ zero) (fun a _ => add_one a) limit
 
 @[simp]
@@ -685,7 +685,7 @@ instance orderTopToTypeSucc
 
 中文:
 实例 orderTopToTypeSucc
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: @OrderTop.mk _ _ (Top.mk _) le_enum_succ
 
 Depends on / 依赖: OrderTop, OrderTop.mk, Top.mk, le_enum_succ
@@ -703,7 +703,7 @@ theorem enum_succ_eq_top
 
 中文:
 定理 enum_succ_eq_top
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   证明: rfl
 
 Depends on / 依赖: ToType, lt_succ, type_toType
@@ -730,7 +730,7 @@ theorem has_succ_of_type_succ_lt
 
 中文:
 定理 has_succ_of_type_succ_lt
-  结论: {α} {r : α -> α -> 命题} [wo : IsWellOrder α r]
+  结论: {α} {r : α -> α -> 命题} [wo : 是良序 α r]
   证明: by
   use enum r ⟨succ (typein r x), h _ (typein_lt_type r x)⟩
   convert! enum_lt_enum.mpr _
@@ -760,8 +760,8 @@ theorem toType_noMax_of_succ_lt
 
 中文:
 定理 toType_noMax_of_succ_lt
-  条件: {o : Ordinal} (ho : 对任意 a < o, succ a < o)
-  结论: NoMaxOrder o.ToType
+  条件: {o : 序数} (ho : 对任意 a < o, succ a < o)
+  结论: NoMax序 o.ToType
   证明: ⟨has_succ_of_type_succ_lt (type_toType _ ▸ ho)⟩
 
 Depends on / 依赖: has_succ_of_type_succ_lt, type_toType
@@ -786,7 +786,7 @@ theorem bounded_singleton
 
 中文:
 定理 bounded_singleton
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] (hr : IsSuccLimit (type r)) (x)
+  条件: {r : α -> α -> 命题} [是良序 α r] (hr : 是SuccLimit (type r)) (x)
   证明: by
   refine ⟨enum r ⟨succ (typein r x), hr.succ_lt (typein_lt_type r x)⟩, ?_⟩
   intro b hb
@@ -820,7 +820,7 @@ definition pred
 
 中文:
 定义 pred
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: isSuccPrelimitRecOn o (fun a _ => a) (fun a _ => a)
 
 @[simp]
@@ -914,8 +914,8 @@ theorem _root_.Order.IsSuccLimit.ordinalPred_eq
 @[simp]
 
 中文:
-定理 _root_.Order.IsSuccLimit.ordinalPred_eq
-  条件: {o} (ho : IsSuccLimit o)
+定理 _root_.Order.是SuccLimit.ordinalPred_eq
+  条件: {o} (ho : 是SuccLimit o)
   结论: pred o = o
   证明: ho.isSuccPrelimit.ordinalPred_eq
 
@@ -1033,7 +1033,7 @@ definition pred_succ_gi
 
 中文:
 定义 pred_succ_gi
-  签名: : GaloisInsertion pred succ
+  签名: : Galois嵌入 pred succ
   定义体: GaloisConnection.toGaloisInsertion @pred_le_iff_le_succ (by simp)
 
 Depends on / 依赖: GaloisConnection, GaloisConnection.toGaloisInsertion, pred_le_iff_le_succ, toGaloisInsertion
@@ -1051,7 +1051,7 @@ theorem pred_surjective
 
 中文:
 定理 pred_surjective
-  结论: Function.Surjective pred
+  结论: 函数.满射 pred
   证明: pred_succ_gi.l_surjective
 
 Depends on / 依赖: l_surjective, pred_succ_gi, pred_succ_gi.l_surjective
@@ -1173,7 +1173,7 @@ theorem lift_pred
 
 中文:
 定理 lift_pred
-  条件: (o : Ordinal.{v})
+  条件: (o : 序数.{v})
   结论: lift.{u} (pred o) = pred (lift.{u} o)
   证明: by
   obtain ⟨a, rfl⟩ | ho := mem_range_succ_or_isSuccPrelimit o
@@ -1199,7 +1199,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: : Sub Ordinal where
+  签名: : 减法 序数 where
   定义体: if h : b <= a then Classical.choose (exists_add_of_le h) else 0
 
 Depends on / 依赖: Classical, Classical.choose, exists_add_of_le
@@ -1218,7 +1218,7 @@ theorem sub_eq_zero_of_lt
 
 中文:
 定理 sub_eq_zero_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   结论: a - b = 0
   证明: dif_neg h.not_ge
 -/
@@ -1241,7 +1241,7 @@ theorem add_sub_cancel_of_le
 
 中文:
 定理 add_sub_cancel_of_le
-  条件: {a b : Ordinal} (h : b <= a)
+  条件: {a b : 序数} (h : b <= a)
   结论: b + (a - b) = a
   证明: by
   change b + dite _ _ _ = a
@@ -1268,7 +1268,7 @@ theorem add_sub_cancel
 
 中文:
 定理 add_sub_cancel
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a + b - a = b
   证明: by
   simpa using Ordinal.add_sub_cancel_of_le le_self_add
@@ -1292,7 +1292,7 @@ theorem le_add_sub
 
 中文:
 定理 le_add_sub
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a <= b + (a - b)
   证明: by
   obtain h | h := le_or_gt b a
@@ -1321,7 +1321,7 @@ theorem sub_le
 
 中文:
 定理 sub_le
-  条件: {a b c : Ordinal}
+  条件: {a b c : 序数}
   结论: a - b <= c ↔ a <= b + c
   证明: by
   refine ⟨fun h => (le_add_sub a b).trans (by gcongr), fun h => ?_⟩
@@ -1348,7 +1348,7 @@ theorem lt_sub
 
 中文:
 定理 lt_sub
-  条件: {a b c : Ordinal}
+  条件: {a b c : 序数}
   结论: a < b - c ↔ c + a < b
   证明: lt_iff_lt_of_le_iff_le sub_le
 
@@ -1368,7 +1368,7 @@ theorem sub_eq_of_add_eq
 
 中文:
 定理 sub_eq_of_add_eq
-  条件: {a b c : Ordinal} (h : a + b = c)
+  条件: {a b c : 序数} (h : a + b = c)
   结论: c - a = b
   证明: h ▸ add_sub_cancel _ _
 
@@ -1388,7 +1388,7 @@ theorem sub_le_self
 
 中文:
 定理 sub_le_self
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a - b <= a
   证明: sub_le.2 le_add_self
 
@@ -1408,7 +1408,7 @@ theorem le_sub_of_le
 
 中文:
 定理 le_sub_of_le
-  条件: {a b c : Ordinal} (h : b <= a)
+  条件: {a b c : 序数} (h : b <= a)
   结论: c <= a - b ↔ b + c <= a
   证明: by
   rw [← add_le_add_iff_left b]; rw [Ordinal.add_sub_cancel_of_le h]
@@ -1431,7 +1431,7 @@ theorem sub_lt_of_le
 
 中文:
 定理 sub_lt_of_le
-  条件: {a b c : Ordinal} (h : b <= a)
+  条件: {a b c : 序数} (h : b <= a)
   结论: a - b < c ↔ a < b + c
   证明: lt_iff_lt_of_le_iff_le (le_sub_of_le h)
 
@@ -1456,7 +1456,7 @@ theorem sub_zero
 
 中文:
 定理 sub_zero
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a - 0 = a
   证明: by simpa only [zero_add] using add_sub_cancel 0 a
 
@@ -1480,7 +1480,7 @@ theorem zero_sub
 
 中文:
 定理 zero_sub
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: 0 - a = 0
   证明: by simpa using sub_le_self 0 _
 
@@ -1502,7 +1502,7 @@ theorem sub_self
 
 中文:
 定理 sub_self
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a - a = 0
   证明: by simpa only [add_zero] using add_sub_cancel a 0
 
@@ -1522,7 +1522,7 @@ theorem sub_eq_zero_iff_le
 
 中文:
 定理 sub_eq_zero_iff_le
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a - b = 0 ↔ a <= b
   证明: by
   simp [← nonpos_iff_eq_zero, sub_le]
@@ -1542,7 +1542,7 @@ theorem sub_ne_zero_iff_lt
 
 中文:
 定理 sub_ne_zero_iff_lt
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a - b != 0 ↔ b < a
   证明: by
   simpa using Ordinal.sub_eq_zero_iff_le.not
@@ -1563,7 +1563,7 @@ theorem sub_sub
 
 中文:
 定理 sub_sub
-  条件: (a b c : Ordinal)
+  条件: (a b c : 序数)
   结论: a - b - c = a - (b + c)
   证明: eq_of_forall_ge_iff fun d => by rw [sub_le, sub_le, sub_le, add_assoc]
 
@@ -1587,7 +1587,7 @@ theorem add_sub_add_cancel
 
 中文:
 定理 add_sub_add_cancel
-  条件: (a b c : Ordinal)
+  条件: (a b c : 序数)
   结论: a + b - (a + c) = b - c
   证明: by
   rw [← sub_sub]; rw [add_sub_cancel]
@@ -1610,7 +1610,7 @@ theorem le_sub_of_add_le
 
 中文:
 定理 le_sub_of_add_le
-  条件: {a b c : Ordinal} (h : b + c <= a)
+  条件: {a b c : 序数} (h : b + c <= a)
   结论: c <= a - b
   证明: by
   rw [← add_le_add_iff_left b]
@@ -1636,7 +1636,7 @@ theorem sub_lt_of_lt_add
 
 中文:
 定理 sub_lt_of_lt_add
-  条件: {a b c : Ordinal} (h : a < b + c) (hc : 0 < c)
+  条件: {a b c : 序数} (h : a < b + c) (hc : 0 < c)
   结论: a - b < c
   证明: by
   obtain hab | hba := lt_or_ge a b
@@ -1664,7 +1664,7 @@ theorem lt_add_iff
 
 中文:
 定理 lt_add_iff
-  条件: {a b c : Ordinal} (hc : c != 0)
+  条件: {a b c : 序数} (hc : c != 0)
   结论: a < b + c ↔ 存在 d < c, a <= b + d
   证明: by
   use fun h => ⟨_, sub_lt_of_lt_add h hc.bot_lt, le_add_sub a b⟩
@@ -1690,7 +1690,7 @@ theorem add_le_iff
 
 中文:
 定理 add_le_iff
-  条件: {a b c : Ordinal} (hb : b != 0)
+  条件: {a b c : 序数} (hb : b != 0)
   结论: a + b <= c ↔ 对任意 d < b, a + d < c
   证明: by
   simpa using (lt_add_iff hb).not
@@ -1715,7 +1715,7 @@ theorem lt_add_iff_of_isSuccLimit
 
 中文:
 定理 lt_add_iff_of_isSuccLimit
-  条件: {a b c : Ordinal} (hc : IsSuccLimit c)
+  条件: {a b c : 序数} (hc : 是SuccLimit c)
   证明: by
   rw [lt_add_iff hc.ne_bot]
   constructor <;> rintro ⟨d, hd, ha⟩
@@ -1744,7 +1744,7 @@ theorem add_le_iff_of_isSuccLimit
 
 中文:
 定理 add_le_iff_of_isSuccLimit
-  条件: {a b c : Ordinal} (hb : IsSuccLimit b)
+  条件: {a b c : 序数} (hb : 是SuccLimit b)
   证明: by
   simpa using (lt_add_iff_of_isSuccLimit hb).not
 
@@ -1767,8 +1767,8 @@ theorem isNormal_add_right
 
 中文:
 定理 isNormal_add_right
-  条件: (a : Ordinal)
-  结论: IsNormal (a + ·)
+  条件: (a : 序数)
+  结论: 是正规 (a + ·)
   证明: by
   rw [isNormal_iff]
   exact ⟨add_right_strictMono, fun _ l _ => (add_le_iff_of_isSuccLimit l).2⟩
@@ -1790,8 +1790,8 @@ theorem isSuccLimit_add
 
 中文:
 定理 isSuccLimit_add
-  条件: (a : Ordinal) {b : Ordinal}
-  结论: IsSuccLimit b -> IsSuccLimit (a + b)
+  条件: (a : 序数) {b : 序数}
+  结论: 是SuccLimit b -> 是SuccLimit (a + b)
   证明: (isNormal_add_right a).map_isSuccLimit
 
 Depends on / 依赖: isNormal_add_right, map_isSuccLimit
@@ -1814,7 +1814,7 @@ theorem isSuccLimit_sub
 
 中文:
 定理 isSuccLimit_sub
-  条件: {a b : Ordinal} (ha : IsSuccPrelimit a) (h : b < a)
+  条件: {a b : 序数} (ha : IsSuccPrelimit a) (h : b < a)
   证明: by
   rw [isSuccLimit_iff]; rw [Ordinal.sub_ne_zero_iff_lt]; rw [isSuccPrelimit_iff_succ_lt]
   refine ⟨h, fun c hc => ?_⟩
@@ -1849,7 +1849,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: : Monoid Ordinal.{u} where
+  签名: : 幺半群 序数.{u} where
   定义体: Quotient.liftOn₂ a b (fun ⟨α, r, _⟩ ⟨β, s, _⟩ => ⟦⟨β × α, Prod.Lex s r, inferInstance⟩⟧)
       fun _ _ _ _ ⟨f⟩ ⟨g⟩ => Quot.sound ⟨RelIso.prodLexCongr g f⟩
   mul_assoc a b c :=
@@ -1880,7 +1880,7 @@ theorem type_prod_lex
 
 中文:
 定理 type_prod_lex
-  结论: {α β : 类型u} (r : α -> α -> 命题) (s : β -> β -> 命题) [IsWellOrder α r]
+  结论: {α β : 类型u} (r : α -> α -> 命题) (s : β -> β -> 命题) [是良序 α r]
   证明: rfl
 -/
 theorem type_prod_lex {α β : Type u} (r : α -> α -> Prop) (s : β -> β -> Prop) [IsWellOrder α r]
@@ -1900,7 +1900,7 @@ theorem mul_eq_zero'
 
 中文:
 定理 mul_eq_zero'
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a * b = 0 ↔ a = 0 ∨ b = 0
   证明: by
   induction a, b using inductionOn₂ with | _ α _ β _
@@ -1921,7 +1921,7 @@ instance monoidWithZero
 
 中文:
 实例 monoidWithZero
-  签名: : MonoidWithZero Ordinal where
+  签名: : 带零幺半群 序数 where
   定义体: by exact mul_eq_zero'.2 (.inr rfl)
   zero_mul _ := by exact mul_eq_zero'.2 (.inl rfl)
 
@@ -1943,7 +1943,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: : NoZeroDivisors Ordinal where
+  签名: : 无零因子 序数 where
   定义体: mul_eq_zero'.1
 
 @[simp]
@@ -1971,7 +1971,7 @@ theorem lift_mul
 
 中文:
 定理 lift_mul
-  条件: (a b : Ordinal.{v})
+  条件: (a b : 序数.{v})
   结论: lift.{u} (a * b) = lift.{u} a * lift.{u} b
   证明: Quotient.inductionOn₂ a b fun ⟨_α, _r, _⟩ ⟨_β, _s, _⟩ =>
     Quotient.sound
@@ -2022,7 +2022,7 @@ instance leftDistribClass
 
 中文:
 实例 leftDistribClass
-  签名: : LeftDistribClass Ordinal where
+  签名: : LeftDistrib类 序数 where
   定义体: Quotient.inductionOn₃ a b c fun ⟨α, r, _⟩ ⟨β, s, _⟩ ⟨γ, t, _⟩ =>
     Quotient.sound ⟨⟨sumProdDistrib .., by simp [Prod.lex_def]⟩⟩
 
@@ -2043,7 +2043,7 @@ theorem mul_succ
 
 中文:
 定理 mul_succ
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a * succ b = a * b + a
   证明: mul_add_one a b
 
@@ -2067,7 +2067,7 @@ instance mulLeftMono
 
 中文:
 实例 mulLeftMono
-  签名: : MulLeftMono Ordinal.{u}
+  签名: : MulLeftMono 序数.{u}
   定义体: ⟨fun c a b =>
     Quotient.inductionOn₃ a b c fun ⟨α, r, _⟩ ⟨β, s, _⟩ ⟨γ, t, _⟩ ⟨f⟩ => by
       refine
@@ -2102,7 +2102,7 @@ instance mulRightMono
 
 中文:
 实例 mulRightMono
-  签名: : MulRightMono Ordinal.{u}
+  签名: : MulRightMono 序数.{u}
   定义体: ⟨fun c a b =>
     Quotient.inductionOn₃ a b c fun ⟨α, r, _⟩ ⟨β, s, _⟩ ⟨γ, t, _⟩ ⟨f⟩ => by
       refine
@@ -2135,7 +2135,7 @@ theorem le_mul_left
 
 中文:
 定理 le_mul_left
-  条件: (a : Ordinal) {b : Ordinal} (hb : 0 < b)
+  条件: (a : 序数) {b : 序数} (hb : 0 < b)
   结论: a <= a * b
   证明: by
   convert! mul_le_mul_right (one_le_iff_pos.2 hb) a
@@ -2160,7 +2160,7 @@ theorem le_mul_right
 
 中文:
 定理 le_mul_right
-  条件: (a : Ordinal) {b : Ordinal} (hb : 0 < b)
+  条件: (a : 序数) {b : 序数} (hb : 0 < b)
   结论: a <= b * a
   证明: by
   convert! mul_le_mul_left (one_le_iff_pos.2 hb) a
@@ -2189,7 +2189,7 @@ theorem mul_le_of_limit_aux
 
 中文:
 定理 mul_le_of_limit_aux
-  结论: {α β r s} [IsWellOrder α r] [IsWellOrder β s] {c}
+  结论: {α β r s} [是良序 α r] [是良序 β s] {c}
   证明: by
   suffices forall a b, Prod.Lex s r (b, a) (enum _ ⟨_, l⟩) from irrefl _ (this _ _)
   intro a b
@@ -2227,7 +2227,7 @@ theorem mul_le_iff_of_isSuccLimit
 
 中文:
 定理 mul_le_iff_of_isSuccLimit
-  条件: {a b c : Ordinal} (h : IsSuccLimit b)
+  条件: {a b c : 序数} (h : 是SuccLimit b)
   证明: by
   refine ⟨fun h _ l => (mul_le_mul_right l.le _).trans h, fun H => le_of_not_gt ?_⟩
   induction a, b using inductionOn₂ with | type α r β s
@@ -2256,8 +2256,8 @@ theorem isNormal_mul_right
 
 中文:
 定理 isNormal_mul_right
-  条件: {a : Ordinal} (h : 0 < a)
-  结论: IsNormal (a * ·)
+  条件: {a : 序数} (h : 0 < a)
+  结论: 是正规 (a * ·)
   证明: by
   refine .of_succ_lt (fun b => ?_) fun hb => ?_
   · simpa [mul_add_one] using (add_lt_add_iff_left (a * b)).2 h
@@ -2283,7 +2283,7 @@ theorem lt_mul_iff_of_isSuccLimit
 
 中文:
 定理 lt_mul_iff_of_isSuccLimit
-  条件: {a b c : Ordinal} (h : IsSuccLimit c)
+  条件: {a b c : 序数} (h : 是SuccLimit c)
   证明: by
   simpa using (mul_le_iff_of_isSuccLimit h).not
 
@@ -2307,7 +2307,7 @@ theorem lt_mul_add_one_iff
 
 中文:
 定理 lt_mul_add_one_iff
-  条件: {a b c : Ordinal}
+  条件: {a b c : 序数}
   结论: a < b * (c + 1) ↔ 存在 d < b, a <= b * c + d
   证明: by
   obtain rfl | hb := eq_or_ne b 0
@@ -2331,7 +2331,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulStrictMono Ordinal
+  签名: 正乘严格递增 序数
   定义体: (isNormal_mul_right ha).strictMono
 
 Depends on / 依赖: isNormal_mul_right, strictMono
@@ -2349,7 +2349,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLeftCancelMulZero Ordinal
+  签名: 是左消去MulZero 序数
   定义体: mul_left_cancel_iff_of_pos h0.pos
 
 Depends on / 依赖: h0.pos, mul_left_cancel_iff_of_pos
@@ -2370,7 +2370,7 @@ alias isSuccLimit_mul := isSuccLimit_mul_right
 
 中文:
 定理 isSuccLimit_mul_right
-  条件: {a b : Ordinal} (a0 : 0 < a) (l : IsSuccLimit b)
+  条件: {a b : 序数} (a0 : 0 < a) (l : 是SuccLimit b)
   证明: (isNormal_mul_right a0).map_isSuccLimit l
 
 @[deprecated (since := "2026-02-01")]
@@ -2400,7 +2400,7 @@ theorem isSuccPrelimit_mul_right
 
 中文:
 定理 isSuccPrelimit_mul_right
-  条件: {a b : Ordinal} (hb : IsSuccLimit b)
+  条件: {a b : 序数} (hb : 是SuccLimit b)
   结论: IsSuccPrelimit (a * b)
   证明: by
   obtain rfl | ha := eq_zero_or_pos a
@@ -2431,7 +2431,7 @@ theorem isSuccLimit_mul_left
 
 中文:
 定理 isSuccLimit_mul_left
-  条件: {a b : Ordinal} (l : IsSuccLimit a) (b0 : 0 < b)
+  条件: {a b : 序数} (l : 是SuccLimit a) (b0 : 0 < b)
   证明: by
   rcases zero_or_succ_or_isSuccLimit b with (rfl | ⟨b, rfl⟩ | lb)
   · exact b0.false.elim
@@ -2466,7 +2466,7 @@ theorem isSuccPrelimit_mul_left
 
 中文:
 定理 isSuccPrelimit_mul_left
-  条件: {a b : Ordinal} (ha : IsSuccLimit a)
+  条件: {a b : 序数} (ha : 是SuccLimit a)
   结论: IsSuccPrelimit (a * b)
   证明: by
   obtain rfl | hb := eq_zero_or_pos b
@@ -2495,7 +2495,7 @@ theorem nsmul_eq_mul
 
 中文:
 定理 nsmul_eq_mul
-  结论: 对任意 (n : 自然数) (a : Ordinal), n • a = a * n
+  结论: 对任意 (n : 自然数) (a : 序数), n • a = a * n
   证明: nsmul_eq_mul
 -/
 theorem nsmul_eq_mul : forall (n : Nat) (a : Ordinal), n • a = a * n
@@ -2517,7 +2517,7 @@ theorem add_mul_limit_aux
 
 中文:
 定理 add_mul_limit_aux
-  结论: {a b c : Ordinal} (ba : b + a = a) (l : IsSuccLimit c)
+  结论: {a b c : 序数} (ba : b + a = a) (l : 是SuccLimit c)
   证明: le_antisymm
     ((mul_le_iff_of_isSuccLimit l).2 fun c' h => by
       grw [le_succ c', IH _ h, le_self_add (a := b), ba, ← mul_succ, succ_le_of_lt <| l.succ_lt h])
@@ -2544,7 +2544,7 @@ theorem add_mul_add_one
 
 中文:
 定理 add_mul_add_one
-  条件: {a b : Ordinal} (c) (ba : b + a = a)
+  条件: {a b : 序数} (c) (ba : b + a = a)
   证明: by
   induction c using limitRecOn with
   | zero => simp
@@ -2572,7 +2572,7 @@ theorem add_mul_succ
 
 中文:
 定理 add_mul_succ
-  条件: {a b : Ordinal} (c) (ba : b + a = a)
+  条件: {a b : 序数} (c) (ba : b + a = a)
   结论: (a + b) * succ c = a * succ c + b
   证明: add_mul_add_one c ba
 
@@ -2591,7 +2591,7 @@ theorem add_mul_of_isSuccLimit
 
 中文:
 定理 add_mul_of_isSuccLimit
-  条件: {a b c : Ordinal} (ba : b + a = a) (l : IsSuccLimit c)
+  条件: {a b c : 序数} (ba : b + a = a) (l : 是SuccLimit c)
   证明: add_mul_limit_aux ba l fun c' _ => add_mul_succ c' ba
 
 Depends on / 依赖: add_mul_limit_aux, add_mul_succ
@@ -2612,7 +2612,7 @@ theorem mul_two
 
 中文:
 定理 mul_two
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o * 2 = o + o
   证明: by
   rw [← one_add_one_eq_two]; rw [mul_add]; rw [mul_one]
@@ -2636,7 +2636,7 @@ instance div
 
 中文:
 实例 div
-  签名: : Div Ordinal where
+  签名: : 除法 序数 where
   定义体: sSup ((b * ·) ⁻¹' Iic a)
 
 @[simp]
@@ -2658,7 +2658,7 @@ theorem div_zero
 
 中文:
 定理 div_zero
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a / 0 = 0
   证明: by
   change sSup _ = _
@@ -2679,7 +2679,7 @@ theorem mul_div_gc
 
 中文:
 定理 mul_div_gc
-  条件: {a : Ordinal} (ha : a != 0)
+  条件: {a : 序数} (ha : a != 0)
   结论: GaloisConnection (a * ·) (· / a)
   证明: fun b c => (isNormal_mul_right ha.pos).le_iff_le_sSup' ⟨0, by simp⟩
 
@@ -2699,7 +2699,7 @@ theorem mul_le_iff_le_div
 
 中文:
 定理 mul_le_iff_le_div
-  条件: {a b c : Ordinal} (ha : a != 0)
+  条件: {a b c : 序数} (ha : a != 0)
   结论: a * b <= c ↔ b <= c / a
   证明: (mul_div_gc ha).le_iff_le
 
@@ -2719,7 +2719,7 @@ theorem lt_mul_iff_div_lt
 
 中文:
 定理 lt_mul_iff_div_lt
-  条件: {a b c : Ordinal} (ha : a != 0)
+  条件: {a b c : 序数} (ha : a != 0)
   结论: c < a * b ↔ c / a < b
   证明: (mul_div_gc ha).lt_iff_lt
 
@@ -2740,7 +2740,7 @@ theorem lt_mul_succ_div
 
 中文:
 定理 lt_mul_succ_div
-  条件: (a) {b : Ordinal} (h : b != 0)
+  条件: (a) {b : 序数} (h : b != 0)
   结论: a < b * succ (a / b)
   证明: by
   rw [lt_mul_iff_div_lt h]; rw [lt_succ_iff]
@@ -2762,7 +2762,7 @@ theorem lt_mul_div_add
 
 中文:
 定理 lt_mul_div_add
-  条件: (a) {b : Ordinal} (h : b != 0)
+  条件: (a) {b : 序数} (h : b != 0)
   结论: a < b * (a / b) + b
   证明: by
   simpa only [mul_succ] using lt_mul_succ_div a h
@@ -2784,7 +2784,7 @@ theorem div_le
 
 中文:
 定理 div_le
-  条件: {a b c : Ordinal} (b0 : b != 0)
+  条件: {a b c : 序数} (b0 : b != 0)
   结论: a / b <= c ↔ a < b * succ c
   证明: by
   rw [← lt_succ_iff]; rw [← lt_mul_iff_div_lt b0]
@@ -2806,7 +2806,7 @@ theorem lt_div
 
 中文:
 定理 lt_div
-  条件: {a b c : Ordinal} (h : c != 0)
+  条件: {a b c : 序数} (h : c != 0)
   结论: a < b / c ↔ c * succ a <= b
   证明: by
   rw [← not_le]; rw [div_le h]; rw [not_lt]
@@ -2829,7 +2829,7 @@ theorem div_pos
 
 中文:
 定理 div_pos
-  条件: {b c : Ordinal} (h : c != 0)
+  条件: {b c : 序数} (h : c != 0)
   结论: 0 < b / c ↔ c <= b
   证明: by simp [lt_div h]
 
@@ -2853,7 +2853,7 @@ theorem le_div
 
 中文:
 定理 le_div
-  条件: {a b c : Ordinal} (c0 : c != 0)
+  条件: {a b c : 序数} (c0 : c != 0)
   结论: a <= b / c ↔ c * a <= b
   证明: (mul_le_iff_le_div c0).symm
 
@@ -2876,7 +2876,7 @@ theorem div_lt
 
 中文:
 定理 div_lt
-  条件: {a b c : Ordinal} (b0 : b != 0)
+  条件: {a b c : 序数} (b0 : b != 0)
   结论: a / b < c ↔ a < b * c
   证明: (lt_mul_iff_div_lt b0).symm
 
@@ -2899,7 +2899,7 @@ theorem div_le_of_le_mul
 
 中文:
 定理 div_le_of_le_mul
-  条件: {a b c : Ordinal} (h : a <= b * c)
+  条件: {a b c : 序数} (h : a <= b * c)
   结论: a / b <= c
   证明: by
   obtain rfl | b0 := eq_or_ne b 0
@@ -2926,7 +2926,7 @@ theorem mul_lt_of_lt_div
 
 中文:
 定理 mul_lt_of_lt_div
-  条件: {a b c : Ordinal}
+  条件: {a b c : 序数}
   结论: a < b / c -> c * a < b
   证明: lt_imp_lt_of_le_imp_le div_le_of_le_mul
 
@@ -2949,7 +2949,7 @@ theorem zero_div
 
 中文:
 定理 zero_div
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: 0 / a = 0
   证明: nonpos_iff_eq_zero.1 div_le_of_le_mul zero_le
 
@@ -2968,7 +2968,7 @@ theorem mul_div_le
 
 中文:
 定理 mul_div_le
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: b * (a / b) <= a
   证明: if b0 : b = 0 then by simp [b0] else (mul_le_iff_le_div b0).2 le_rfl
 
@@ -2992,7 +2992,7 @@ theorem div_le_left
 
 中文:
 定理 div_le_left
-  条件: {a b : Ordinal} (h : a <= b) (c : Ordinal)
+  条件: {a b : 序数} (h : a <= b) (c : 序数)
   结论: a / c <= b / c
   证明: by
   obtain rfl | hc := eq_or_ne c 0
@@ -3025,7 +3025,7 @@ theorem mul_add_div
 
 中文:
 定理 mul_add_div
-  条件: (a) {b : Ordinal} (b0 : b != 0) (c)
+  条件: (a) {b : 序数} (b0 : b != 0) (c)
   结论: (b * a + c) / b = a + c / b
   证明: by
   apply le_antisymm
@@ -3060,7 +3060,7 @@ theorem div_eq_zero_of_lt
 
 中文:
 定理 div_eq_zero_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   结论: a / b = 0
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [div_le h.ne_bot]
@@ -3087,7 +3087,7 @@ theorem mul_div_cancel
 
 中文:
 定理 mul_div_cancel
-  条件: (a) {b : Ordinal} (b0 : b != 0)
+  条件: (a) {b : 序数} (b0 : b != 0)
   结论: b * a / b = a
   证明: by
   simpa using mul_add_div a b0 0
@@ -3117,7 +3117,7 @@ theorem mul_add_div_mul
 
 中文:
 定理 mul_add_div_mul
-  条件: {a c : Ordinal} (hc : c < a) (b d : Ordinal)
+  条件: {a c : 序数} (hc : c < a) (b d : 序数)
   证明: by
   obtain rfl | hd := eq_or_ne d 0
   · rw [mul_zero, div_zero, div_zero]
@@ -3158,7 +3158,7 @@ theorem mul_div_mul_cancel
 
 中文:
 定理 mul_div_mul_cancel
-  条件: {a : Ordinal} (ha : a != 0) (b c)
+  条件: {a : 序数} (ha : a != 0) (b c)
   结论: a * b / (a * c) = b / c
   证明: by
   convert! mul_add_div_mul (pos_iff_ne_zero.2 ha) b c using 1
@@ -3184,7 +3184,7 @@ theorem div_eq
 
 中文:
 定理 div_eq
-  条件: {a b c : Ordinal} (hle : b * c <= a) (hlt : a < b * (c + 1))
+  条件: {a b c : 序数} (hle : b * c <= a) (hlt : a < b * (c + 1))
   结论: a / b = c
   证明: by
   rcases eq_or_ne b 0 with (rfl | hb)
@@ -3209,7 +3209,7 @@ theorem div_eq_iff
 
 中文:
 定理 div_eq_iff
-  条件: {a b c : Ordinal} (hb : b != 0)
+  条件: {a b c : 序数} (hb : b != 0)
   结论: a / b = c ↔ b * c <= a ∧ a < b * (c + 1)
   证明: ⟨fun h => h ▸ ⟨mul_div_le a b, lt_mul_succ_div a hb⟩, fun ⟨hle, hlt⟩ => div_eq hle hlt⟩
 
@@ -3232,7 +3232,7 @@ theorem div_eq_iff'
 
 中文:
 定理 div_eq_iff'
-  条件: {a b c : Ordinal} (hc : c != 0)
+  条件: {a b c : 序数} (hc : c != 0)
   结论: a / b = c ↔ b * c <= a ∧ a < b * (c + 1)
   证明: by
   rcases eq_or_ne b 0 with (rfl | hb)
@@ -3260,7 +3260,7 @@ theorem div_eq_one_iff
 
 中文:
 定理 div_eq_one_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a / b = 1 ↔ b <= a ∧ a < b * 2
   证明: by
   rw [div_eq_iff' one_ne_zero]; rw [mul_one]; rw [one_add_one_eq_two]
@@ -3287,7 +3287,7 @@ theorem div_one
 
 中文:
 定理 div_one
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a / 1 = a
   证明: by
   simpa only [one_mul] using mul_div_cancel a one_ne_zero
@@ -3312,7 +3312,7 @@ theorem div_self
 
 中文:
 定理 div_self
-  条件: {a : Ordinal} (h : a != 0)
+  条件: {a : 序数} (h : a != 0)
   结论: a / a = 1
   证明: by
   simpa only [mul_one] using mul_div_cancel 1 h
@@ -3337,7 +3337,7 @@ theorem mul_sub
 
 中文:
 定理 mul_sub
-  条件: (a b c : Ordinal)
+  条件: (a b c : 序数)
   结论: a * (b - c) = a * b - a * c
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -3368,7 +3368,7 @@ exact .inl isSuccLimit_sub h.isSuccPrelimit lt_add_of_pos_right a h'.pos
 
 中文:
 定理 isSuccLimit_add_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   证明: by
   refine ⟨fun h => ?_, by grind [isSuccLimit_add]⟩
   rcases eq_or_ne b 0 with (rfl | h')
@@ -3400,7 +3400,7 @@ theorem isSuccLimit_add_iff_of_isSuccLimit
 
 中文:
 定理 isSuccLimit_add_iff_of_isSuccLimit
-  条件: {a b : Ordinal} (h : IsSuccLimit a)
+  条件: {a b : 序数} (h : 是SuccLimit a)
   证明: by
   rw [isSuccLimit_add_iff]
   obtain rfl | hb := eq_or_ne b 0
@@ -3425,7 +3425,7 @@ theorem dvd_add_iff
 
 中文:
 定理 dvd_add_iff
-  结论: 对任意 {a b c : Ordinal}, a ∣ b -> (a ∣ b + c ↔ a ∣ c)
+  结论: 对任意 {a b c : 序数}, a ∣ b -> (a ∣ b + c ↔ a ∣ c)
 -/
 theorem dvd_add_iff : forall {a b c : Ordinal}, a ∣ b -> (a ∣ b + c ↔ a ∣ c)
   | a, _, c, ⟨b, rfl⟩ =>
@@ -3442,7 +3442,7 @@ theorem div_mul_cancel
 
 中文:
 定理 div_mul_cancel
-  结论: 对任意 {a b : Ordinal}, a != 0 -> a ∣ b -> a * (b / a) = b
+  结论: 对任意 {a b : 序数}, a != 0 -> a ∣ b -> a * (b / a) = b
 -/
 theorem div_mul_cancel : forall {a b : Ordinal}, a != 0 -> a ∣ b -> a * (b / a) = b
   | a, _, a0, ⟨b, rfl⟩ => by rw [mul_div_cancel _ a0]
@@ -3460,7 +3460,7 @@ theorem le_of_dvd
 
 中文:
 定理 le_of_dvd
-  条件: {a b : Ordinal} (b0 : b != 0) (h : a ∣ b)
+  条件: {a b : 序数} (b0 : b != 0) (h : a ∣ b)
   结论: a <= b
   证明: by
   rcases h with ⟨b, rfl⟩
@@ -3486,7 +3486,7 @@ theorem dvd_antisymm
 
 中文:
 定理 dvd_antisymm
-  条件: {a b : Ordinal} (h₁ : a ∣ b) (h₂ : b ∣ a)
+  条件: {a b : 序数} (h₁ : a ∣ b) (h₂ : b ∣ a)
   结论: a = b
   证明: if a0 : a = 0 then by subst a; exact (eq_zero_of_zero_dvd h₁).symm
   else
@@ -3513,7 +3513,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPartialOrder Ordinal (· ∣ ·)
+  签名: 是偏序 序数 (· ∣ ·)
   定义体: dvd_refl
   trans _ _ _ := dvd_trans
   antisymm := @dvd_antisymm
@@ -3535,7 +3535,7 @@ instance mod
 
 中文:
 实例 mod
-  签名: : Mod Ordinal where
+  签名: : 取模 序数 where
   定义体: a - b * (a / b)
 -/
 instance mod : Mod Ordinal where
@@ -3552,7 +3552,7 @@ theorem mod_def
 
 中文:
 定理 mod_def
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a % b = a - b * (a / b)
   证明: rfl
 -/
@@ -3572,7 +3572,7 @@ theorem mod_le
 
 中文:
 定理 mod_le
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a % b <= a
   证明: sub_le_self a _
 
@@ -3595,7 +3595,7 @@ theorem mod_zero
 
 中文:
 定理 mod_zero
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a % 0 = a
   证明: by simp [mod_def]
 
@@ -3617,7 +3617,7 @@ theorem mod_eq_of_lt
 
 中文:
 定理 mod_eq_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   结论: a % b = a
   证明: by
   simp [mod_def, div_eq_zero_of_lt h]
@@ -3641,7 +3641,7 @@ theorem zero_mod
 
 中文:
 定理 zero_mod
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: 0 % b = 0
   证明: by simp [mod_def]
 
@@ -3660,7 +3660,7 @@ theorem div_add_mod
 
 中文:
 定理 div_add_mod
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: b * (a / b) + a % b = a
   证明: Ordinal.add_sub_cancel_of_le mul_div_le _ _
 
@@ -3684,7 +3684,7 @@ theorem mod_lt
 
 中文:
 定理 mod_lt
-  条件: (a) {b : Ordinal} (h : b != 0)
+  条件: (a) {b : 序数} (h : b != 0)
   结论: a % b < b
   证明: by
   rw [← add_lt_add_iff_left]; rw [div_add_mod]
@@ -3715,7 +3715,7 @@ theorem mod_self
 
 中文:
 定理 mod_self
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a % a = 0
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -3743,7 +3743,7 @@ theorem mod_one
 
 中文:
 定理 mod_one
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a % 1 = 0
   证明: by simp [mod_def]
 
@@ -3762,7 +3762,7 @@ theorem dvd_of_mod_eq_zero
 
 中文:
 定理 dvd_of_mod_eq_zero
-  条件: {a b : Ordinal} (H : a % b = 0)
+  条件: {a b : 序数} (H : a % b = 0)
   结论: b ∣ a
   证明: ⟨a / b, by simpa [H] using (div_add_mod a b).symm⟩
 
@@ -3786,7 +3786,7 @@ theorem mod_eq_zero_of_dvd
 
 中文:
 定理 mod_eq_zero_of_dvd
-  条件: {a b : Ordinal} (H : b ∣ a)
+  条件: {a b : 序数} (H : b ∣ a)
   结论: a % b = 0
   证明: by
   rcases H with ⟨c, rfl⟩
@@ -3815,7 +3815,7 @@ theorem dvd_iff_mod_eq_zero
 
 中文:
 定理 dvd_iff_mod_eq_zero
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: b ∣ a ↔ a % b = 0
   证明: ⟨mod_eq_zero_of_dvd, dvd_of_mod_eq_zero⟩
 
@@ -3843,7 +3843,7 @@ theorem mul_add_mod_self
 
 中文:
 定理 mul_add_mod_self
-  条件: (x y z : Ordinal)
+  条件: (x y z : 序数)
   结论: (x * y + z) % x = z % x
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
@@ -3872,7 +3872,7 @@ theorem mul_mod
 
 中文:
 定理 mul_mod
-  条件: (x y : Ordinal)
+  条件: (x y : 序数)
   结论: x * y % x = 0
   证明: by
   simpa using mul_add_mod_self x y 0
@@ -3895,7 +3895,7 @@ theorem mul_add_mod_mul
 
 中文:
 定理 mul_add_mod_mul
-  条件: {w x : Ordinal} (hw : w < x) (y z : Ordinal)
+  条件: {w x : 序数} (hw : w < x) (y z : 序数)
   证明: by
   rw [mod_def]; rw [mul_add_div_mul hw]
   apply sub_eq_of_add_eq
@@ -3924,7 +3924,7 @@ theorem mul_mod_mul
 
 中文:
 定理 mul_mod_mul
-  条件: (x y z : Ordinal)
+  条件: (x y z : 序数)
   结论: (x * y) % (x * z) = x * (y % z)
   证明: by
   obtain rfl | hx := eq_zero_or_pos x
@@ -3956,7 +3956,7 @@ theorem mod_mod_of_dvd
 
 中文:
 定理 mod_mod_of_dvd
-  条件: (a : Ordinal) {b c : Ordinal} (h : c ∣ b)
+  条件: (a : 序数) {b c : 序数} (h : c ∣ b)
   结论: a % b % c = a % c
   证明: by
   nth_rw 2 [← div_add_mod a b]
@@ -3984,7 +3984,7 @@ theorem mod_mod
 
 中文:
 定理 mod_mod
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a % b % b = a % b
   证明: mod_mod_of_dvd a dvd_rfl
 
@@ -4008,7 +4008,7 @@ theorem lt_mul_iff
 
 中文:
 定理 lt_mul_iff
-  条件: {a b c : Ordinal}
+  条件: {a b c : 序数}
   结论: a < b * c ↔ 存在 q < c, 存在 r < b, a = b * q + r
   证明: by
   obtain rfl | hb₀ := eq_or_ne b 0; · simp
@@ -4034,8 +4034,8 @@ theorem forall_lt_mul
   grind [lt_mul_iff]
 
 中文:
-定理 forall_lt_mul
-  条件: {b c : Ordinal} {P : Ordinal -> 命题}
+定理 对任意_lt_mul
+  条件: {b c : 序数} {P : 序数 -> 命题}
   证明: by
   grind [lt_mul_iff]
 
@@ -4055,8 +4055,8 @@ theorem exists_lt_mul
   grind [lt_mul_iff]
 
 中文:
-定理 exists_lt_mul
-  条件: {b c : Ordinal} {P : Ordinal -> 命题}
+定理 存在_lt_mul
+  条件: {b c : 序数} {P : 序数 -> 命题}
   证明: by
   grind [lt_mul_iff]
 
@@ -4081,7 +4081,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero Ordinal
+  签名: : 特征零 序数
   定义体: by
   refine ⟨fun a b h => ?_⟩
   rwa [← Cardinal.ord_natCast, ← Cardinal.ord_natCast, Cardinal.ord_inj, Nat.cast_inj] at h
@@ -4109,7 +4109,7 @@ theorem one_add_natCast
 中文:
 定理 one_add_natCast
   条件: (m : 自然数)
-  结论: 1 + (m : Ordinal) = succ m
+  结论: 1 + (m : 序数) = succ m
   证明: m.cast_add_one_comm.symm
 
 @[deprecated Nat.cast_add_one_comm (since := "2026-05-10")]
@@ -4131,7 +4131,7 @@ theorem one_add_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 one_add_ofNat
+定理 one_add_of自然数
   条件: (m : 自然数) [m.AtLeastTwo]
   证明: m.cast_add_one_comm.symm
 
@@ -4155,7 +4155,7 @@ theorem natCast_mul
 中文:
 定理 natCast_mul
   条件: (m : 自然数)
-  结论: 对任意 n : 自然数, ((m * n : 自然数) : Ordinal) = m * n
+  结论: 对任意 n : 自然数, ((m * n : 自然数) : 序数) = m * n
 -/
 theorem natCast_mul (m : Nat) : forall n : Nat, ((m * n : Nat) : Ordinal) = m * n
   | 0 => by simp
@@ -4180,7 +4180,7 @@ theorem natCast_sub
 中文:
 定理 natCast_sub
   条件: (m n : 自然数)
-  结论: ((m - n : 自然数) : Ordinal) = m - n
+  结论: ((m - n : 自然数) : 序数) = m - n
   证明: by
   rcases le_total m n with h | h
   · rw [tsub_eq_zero_iff_le.2 h, Ordinal.sub_eq_zero_iff_le.2 (Nat.cast_le.2 h), Nat.cast_zero]
@@ -4217,7 +4217,7 @@ theorem natCast_div
 中文:
 定理 natCast_div
   条件: (m n : 自然数)
-  结论: ((m / n : 自然数) : Ordinal) = m / n
+  结论: ((m / n : 自然数) : 序数) = m / n
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp
@@ -4256,7 +4256,7 @@ theorem natCast_mod
 中文:
 定理 natCast_mod
   条件: (m n : 自然数)
-  结论: ((m % n : 自然数) : Ordinal) = m % n
+  结论: ((m % n : 自然数) : 序数) = m % n
   证明: by
   rw [← add_left_cancel_iff]; rw [div_add_mod]; rw [← natCast_div]; rw [← natCast_mul]; rw [← Nat.cast_add]; rw [Nat.div_add_mod]
 
@@ -4295,7 +4295,7 @@ theorem lift_ofNat
 @[simp]
 
 中文:
-定理 lift_ofNat
+定理 lift_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: lift_natCast n
 
@@ -4357,7 +4357,7 @@ theorem typein_lt_fin
 
 中文:
 定理 typein_lt_fin
-  条件: {n : 自然数} (x : Fin n)
+  条件: {n : 自然数} (x : 有限集 n)
   结论: typein LT.lt x = x
   证明: by
   rw [← type_Iio_lt]; rw [type_fintype]; rw [Nat.cast_inj]
@@ -4383,7 +4383,7 @@ theorem enum_lt_fin
 
 中文:
 定理 enum_lt_fin
-  条件: {n : 自然数} (x : Fin n)
+  条件: {n : 自然数} (x : 有限集 n)
   结论: enum LT.lt ⟨x, by simp⟩ = x
   证明: by
   simp [← typein_inj LT.lt]
@@ -4408,7 +4408,7 @@ theorem lt_omega0
 
 中文:
 定理 lt_omega0
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: o < ω ↔ 存在 n : 自然数, o = n
   证明: by
   simp_rw [← Cardinal.ord_aleph0, Cardinal.lt_ord, lt_aleph0, card_eq_nat]
@@ -4482,7 +4482,7 @@ theorem eq_natCast_of_le_natCast
 
 中文:
 定理 eq_natCast_of_le_natCast
-  条件: {a : Ordinal} {b : 自然数} (h : a <= b)
+  条件: {a : 序数} {b : 自然数} (h : a <= b)
   结论: 存在 c : 自然数, a = c
   证明: lt_omega0.1 (h.trans_lt (natCast_lt_omega0 b))
 
@@ -4509,7 +4509,7 @@ theorem eq_natCast_or_omega0_le
 
 中文:
 定理 eq_natCast_or_omega0_le
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: (存在 n : 自然数, o = n) ∨ ω <= o
   证明: by
   obtain ho | ho := lt_or_ge o ω
@@ -4547,7 +4547,7 @@ theorem natCast_image_Iio
 中文:
 定理 natCast_image_Iio
   条件: (n : 自然数)
-  结论: 自然数.cast '' Set.Iio n = Set.Iio (n : Ordinal)
+  结论: 自然数.cast '' 集合.左无界右开区间 n = 集合.左无界右开区间 (n : 序数)
   证明: by
   ext o
   have := @eq_natCast_of_le_natCast o
@@ -4645,7 +4645,7 @@ theorem isSuccLimit_omega0
 
 中文:
 定理 isSuccLimit_omega0
-  结论: IsSuccLimit ω
+  结论: 是SuccLimit ω
   证明: by
   rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_lt]
   refine ⟨omega0_ne_zero, fun o h => ?_⟩
@@ -4674,7 +4674,7 @@ theorem omega0_le
 
 中文:
 定理 omega0_le
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: ω <= o ↔ 对任意 n : 自然数, ↑n <= o
   证明: ⟨fun h n => (natCast_lt_omega0 _).le.trans h, fun H =>
     le_of_forall_lt fun a h => by
@@ -4700,7 +4700,7 @@ theorem omega0_le_of_isSuccLimit
 
 中文:
 定理 omega0_le_of_isSuccLimit
-  条件: {o} (h : IsSuccLimit o)
+  条件: {o} (h : 是SuccLimit o)
   结论: ω <= o
   证明: omega0_le.2 fun n => le_of_lt natCast_lt_of_isSuccLimit h n
 
@@ -4776,7 +4776,7 @@ theorem add_omega0
 
 中文:
 定理 add_omega0
-  条件: {a : Ordinal} (h : a < ω)
+  条件: {a : 序数} (h : a < ω)
   结论: a + ω = ω
   证明: by
   obtain ⟨n, rfl⟩ := lt_omega0.1 h
@@ -4854,7 +4854,7 @@ theorem isSuccPrelimit_iff_omega0_dvd
 
 中文:
 定理 isSuccPrelimit_iff_omega0_dvd
-  条件: {a : Ordinal}
+  条件: {a : 序数}
   结论: IsSuccPrelimit a ↔ ω ∣ a
   证明: by
   refine ⟨fun l => ⟨a / ω, le_antisymm ?_ (mul_div_le _ _)⟩, fun h => ?_⟩
@@ -4889,8 +4889,8 @@ theorem isSuccLimit_iff_omega0_dvd
 
 中文:
 定理 isSuccLimit_iff_omega0_dvd
-  条件: {a : Ordinal}
-  结论: IsSuccLimit a ↔ a != 0 ∧ ω ∣ a
+  条件: {a : 序数}
+  结论: 是SuccLimit a ↔ a != 0 ∧ ω ∣ a
   证明: by
   rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_omega0_dvd]
 
@@ -4973,7 +4973,7 @@ theorem isSuccLimit_ord
 中文:
 定理 isSuccLimit_ord
   条件: {c} (hc : ℵ₀ <= c)
-  结论: IsSuccLimit (ord c)
+  结论: 是SuccLimit (ord c)
   证明: by
   constructor
   · simpa using (aleph0_pos.trans_le hc).ne'
@@ -5011,7 +5011,7 @@ theorem noMaxOrder
 中文:
 定理 noMaxOrder
   条件: {c} (h : ℵ₀ <= c)
-  结论: NoMaxOrder c.ord.ToType
+  结论: NoMax序 c.ord.ToType
   证明: by
   rw [← isSuccPrelimit_type_lt_iff]; rw [type_toType]
   exact (isSuccLimit_ord h).isSuccPrelimit
@@ -5032,7 +5032,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (ℵ₀ : Cardinal.{u}).ord.ToType
+  签名: 非空 (ℵ₀ : 基数.{u}).ord.ToType
   定义体: by simp
 -/
 instance : Nonempty (ℵ₀ : Cardinal.{u}).ord.ToType := by simp
@@ -5047,7 +5047,7 @@ abbreviation orderBotAleph0OrdToType
 
 中文:
 缩写 orderBotAleph0OrdToType
-  签名: : OrderBot Cardinal.aleph0.{u}.ord.ToType
+  签名: : 有底序 基数.aleph0.{u}.ord.ToType
   定义体: WellFoundedLT.toOrderBot _
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.toOrderBot, toOrderBot

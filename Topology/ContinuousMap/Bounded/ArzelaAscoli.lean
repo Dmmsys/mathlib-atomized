@@ -42,7 +42,7 @@ theorem arzela_ascoli₁
 
 中文:
 定理 arzela_ascoli₁
-  结论: [CompactSpace β] (A : Set (α ->ᵇ β)) (closed : IsClosed A)
+  结论: [紧空间 β] (A : 集合 (α ->ᵇ β)) (closed : 是闭集 A)
   证明: by
   simp_rw [Equicontinuous, Metric.equicontinuousAt_iff_pair] at H
   refine TotallyBounded.isCompact_of_isClosed ?_ closed
@@ -127,7 +127,7 @@ theorem arzela_ascoli₂
 
 中文:
 定理 arzela_ascoli₂
-  结论: (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A)
+  结论: (s : 集合 β) (hs : 是紧集 s) (A : 集合 (α ->ᵇ β)) (closed : 是闭集 A)
   证明: by
   /- This version is deduced from the previous one by restricting to the compact type in the target,
   using compactness there and then lifting everything to the original space. -/
@@ -166,7 +166,7 @@ theorem arzela_ascoli
 
 中文:
 定理 arzela_ascoli
-  结论: [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β))
+  结论: [T2空间 β] (s : 集合 β) (hs : 是紧集 s) (A : 集合 (α ->ᵇ β))
   证明: /- This version is deduced from the previous one by checking that the closure of `A`, in
   addition to being closed, still satisfies the properties of compact range and equicontinuity. -/
   arzela_ascoli₂ s hs (closure A) isClosed_closure

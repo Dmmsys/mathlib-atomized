@@ -74,8 +74,8 @@ definition IntervalIntegrable
   body: IntegrableOn f (Ioc a b) μ ∧ IntegrableOn f (Ioc b a) μ
 
 中文:
-定义 IntervalIntegrable
-  签名: (f : 实数 -> ε) (μ : Measure 实数) (a b : 实数)
+定义 整数erval整数egrable
+  签名: (f : 实数 -> ε) (μ : 测度 实数) (a b : 实数)
   定义体: IntegrableOn f (Ioc a b) μ ∧ IntegrableOn f (Ioc b a) μ
 
 Depends on / 依赖: IntegrableOn
@@ -100,7 +100,7 @@ theorem intervalIntegrable_iff
   rw [uIoc_eq_union]; rw [integrableOn_union]; rw [IntervalIntegrable]
 
 中文:
-定理 intervalIntegrable_iff
+定理 interval整数egrable_iff
   结论: 整数erval整数egrable f μ a b ↔ 整数egrableOn f (Ι a b) μ
   证明: by
   rw [uIoc_eq_union]; rw [integrableOn_union]; rw [IntervalIntegrable]
@@ -120,7 +120,7 @@ theorem IntervalIntegrable.def'
   proof: intervalIntegrable_iff.mp h
 
 中文:
-定理 IntervalIntegrable.def'
+定理 整数erval整数egrable.def'
   条件: (h : 整数erval整数egrable f μ a b)
   结论: 整数egrableOn f (Ι a b) μ
   证明: intervalIntegrable_iff.mp h
@@ -140,7 +140,7 @@ theorem intervalIntegrable_congr_ae
   rw [intervalIntegrable_iff]; rw [integrableOn_congr_fun_ae h]; rw [intervalIntegrable_iff]
 
 中文:
-定理 intervalIntegrable_congr_ae
+定理 interval整数egrable_congr_ae
   条件: {g : 实数 -> ε} (h : f =ᵐ[μ.restrict (Ι a b)] g)
   证明: by
   rw [intervalIntegrable_iff]; rw [integrableOn_congr_fun_ae h]; rw [intervalIntegrable_iff]
@@ -163,8 +163,8 @@ theorem intervalIntegrable_congr_uIoo
   apply ae_restrict_of_forall_mem measurableSet_Ioo h
 
 中文:
-定理 intervalIntegrable_congr_uIoo
-  条件: [NullSingletonClass μ] {g : 实数 -> ε} (h : EqOn f g (uIoo a b))
+定理 interval整数egrable_congr_uIoo
+  条件: [NullSingleton类 μ] {g : 实数 -> ε} (h : EqOn f g (uIoo a b))
   证明: by
   apply intervalIntegrable_congr_ae
   rw [uIoc]; rw [← restrict_Ioo_eq_restrict_Ioc]
@@ -188,7 +188,7 @@ theorem IntervalIntegrable.congr_ae
   rwa [← intervalIntegrable_congr_ae h]
 
 中文:
-定理 IntervalIntegrable.congr_ae
+定理 整数erval整数egrable.congr_ae
   结论: {g : 实数 -> ε} (hf : 整数erval整数egrable f μ a b)
   证明: by
   rwa [← intervalIntegrable_congr_ae h]
@@ -209,8 +209,8 @@ theorem IntervalIntegrable.congr_uIoo
   proof: .mp hf intervalIntegrable_congr_uIoo h
 
 中文:
-定理 IntervalIntegrable.congr_uIoo
-  结论: [NullSingletonClass μ] {g : 实数 -> ε}
+定理 整数erval整数egrable.congr_uIoo
+  结论: [NullSingleton类 μ] {g : 实数 -> ε}
   证明: .mp hf intervalIntegrable_congr_uIoo h
 
 Depends on / 依赖: intervalIntegrable_congr_uIoo
@@ -230,7 +230,7 @@ theorem intervalIntegrable_congr
 alias ⟨IntervalIntegrable.congr, _⟩ := intervalIntegrable_congr
 
 中文:
-定理 intervalIntegrable_congr
+定理 interval整数egrable_congr
   条件: {g : 实数 -> ε} (h : EqOn f g (Ι a b))
   证明: intervalIntegrable_congr_ae (ae_restrict_mem measurableSet_uIoc).mono h
 
@@ -253,8 +253,8 @@ theorem IntervalIntegrable.congr_codiscreteWithin
   proof: hf.congr_ae (ae_restrict_le_codiscreteWithin measurableSet_Ioc h)
 
 中文:
-定理 IntervalIntegrable.congr_codiscreteWithin
-  结论: {g : 实数 -> ε} [NullSingletonClass μ]
+定理 整数erval整数egrable.congr_codiscreteWithin
+  结论: {g : 实数 -> ε} [NullSingleton类 μ]
   证明: hf.congr_ae (ae_restrict_le_codiscreteWithin measurableSet_Ioc h)
 
 Depends on / 依赖: ae_restrict_le_codiscreteWithin, congr_ae, hf.congr_ae, measurableSet_Ioc
@@ -274,8 +274,8 @@ theorem intervalIntegrable_congr_codiscreteWithin
     (IntervalIntegrable.congr_codiscreteWithin h.symm ·)⟩
 
 中文:
-定理 intervalIntegrable_congr_codiscreteWithin
-  结论: {g : 实数 -> ε} [NullSingletonClass μ]
+定理 interval整数egrable_congr_codiscreteWithin
+  结论: {g : 实数 -> ε} [NullSingleton类 μ]
   证明: ⟨(IntervalIntegrable.congr_codiscreteWithin h ·),
     (IntervalIntegrable.congr_codiscreteWithin h.symm ·)⟩
 
@@ -297,7 +297,7 @@ theorem intervalIntegrable_iff_integrableOn_Ioc_of_le
   rw [intervalIntegrable_iff]; rw [uIoc_of_le hab]
 
 中文:
-定理 intervalIntegrable_iff_integrableOn_Ioc_of_le
+定理 interval整数egrable_iff_integrableOn_Ioc_of_le
   条件: (hab : a <= b)
   证明: by
   rw [intervalIntegrable_iff]; rw [uIoc_of_le hab]
@@ -318,8 +318,8 @@ theorem intervalIntegrable_iff'
   rw [intervalIntegrable_iff]; rw [← Icc_min_max]; rw [uIoc]; rw [integrableOn_Icc_iff_integrableOn_Ioc h]
 
 中文:
-定理 intervalIntegrable_iff'
-  条件: [NullSingletonClass μ] (h : ‖f (min a b)‖ₑ != ∞ := by finiteness)
+定理 interval整数egrable_iff'
+  条件: [NullSingleton类 μ] (h : ‖f (最小值 a b)‖ₑ != ∞ := by finiteness)
   证明: by
   rw [intervalIntegrable_iff]; rw [← Icc_min_max]; rw [uIoc]; rw [integrableOn_Icc_iff_integrableOn_Ioc h]
 
@@ -339,8 +339,8 @@ theorem intervalIntegrable_iff_integrableOn_Icc_of_le
   rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hab]; rw [integrableOn_Icc_iff_integrableOn_Ioc ha]
 
 中文:
-定理 intervalIntegrable_iff_integrableOn_Icc_of_le
-  结论: [NullSingletonClass μ]
+定理 interval整数egrable_iff_integrableOn_Icc_of_le
+  结论: [NullSingleton类 μ]
   证明: by
   rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hab]; rw [integrableOn_Icc_iff_integrableOn_Ioc ha]
 
@@ -361,8 +361,8 @@ theorem intervalIntegrable_iff_integrableOn_Ico_of_le
   rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab ha]; rw [integrableOn_Icc_iff_integrableOn_Ico hb]
 
 中文:
-定理 intervalIntegrable_iff_integrableOn_Ico_of_le
-  结论: [NullSingletonClass μ]
+定理 interval整数egrable_iff_integrableOn_Ico_of_le
+  结论: [NullSingleton类 μ]
   证明: by
   rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab ha]; rw [integrableOn_Icc_iff_integrableOn_Ico hb]
 
@@ -385,8 +385,8 @@ theorem intervalIntegrable_iff_integrableOn_Ioo_of_le
 omit [PseudoMetrizableSpace ε] in
 
 中文:
-定理 intervalIntegrable_iff_integrableOn_Ioo_of_le
-  结论: [NullSingletonClass μ]
+定理 interval整数egrable_iff_integrableOn_Ioo_of_le
+  结论: [NullSingleton类 μ]
   证明: by
   rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab ha]; rw [integrableOn_Icc_iff_integrableOn_Ioo ha hb]
 
@@ -411,8 +411,8 @@ theorem MeasureTheory.Integrable.intervalIntegrable
 omit [PseudoMetrizableSpace ε] in
 
 中文:
-定理 MeasureTheory.Integrable.intervalIntegrable
-  条件: (hf : 整数egrable f μ)
+定理 测度论.可积.interval整数egrable
+  条件: (hf : 可积 f μ)
   证明: ⟨hf.integrableOn, hf.integrableOn⟩
 
 omit [PseudoMetrizableSpace ε] in
@@ -434,7 +434,7 @@ theorem MeasureTheory.IntegrableOn.intervalIntegrable
     hf.mono_set (Ioc_subset_Icc_self.trans Icc_subset_uIcc')⟩
 
 中文:
-定理 MeasureTheory.IntegrableOn.intervalIntegrable
+定理 测度论.整数egrableOn.interval整数egrable
   条件: (hf : 整数egrableOn f [[a, b]] μ)
   证明: ⟨hf.mono_set (Ioc_subset_Icc_self.trans Icc_subset_uIcc),
     hf.mono_set (Ioc_subset_Icc_self.trans Icc_subset_uIcc')⟩
@@ -458,7 +458,7 @@ theorem intervalIntegrable_const_iff
 @[simp]
 
 中文:
-定理 intervalIntegrable_const_iff
+定理 interval整数egrable_const_iff
   条件: {c : ε} (hc : ‖c‖ₑ != ⊤ := by finiteness)
   证明: by
   simp [intervalIntegrable_iff, integrableOn_const_iff hc]
@@ -481,8 +481,8 @@ theorem intervalIntegrable_const
   proof: .2 Or.inr measure_Ioc_lt_top intervalIntegrable_const_iff (by simp)
 
 中文:
-定理 intervalIntegrable_const
-  条件: [IsLocallyFiniteMeasure μ] {c : E}
+定理 interval整数egrable_const
+  条件: [是局部有限测度 μ] {c : E}
   证明: .2 Or.inr measure_Ioc_lt_top intervalIntegrable_const_iff (by simp)
 
 Depends on / 依赖: Or.inr, intervalIntegrable_const_iff, measure_Ioc_lt_top
@@ -500,7 +500,7 @@ theorem IntervalIntegrable.zero
   proof: (intervalIntegrable_const_iff <| by finiteness).mpr .inl rfl
 
 中文:
-定理 IntervalIntegrable.zero
+定理 整数erval整数egrable.zero
   结论: 整数erval整数egrable (0 : 实数 -> E) μ a b
   证明: (intervalIntegrable_const_iff <| by finiteness).mpr .inl rfl
 -/
@@ -730,8 +730,8 @@ theorem intervalIntegrable_enorm_iff
   simp_rw [intervalIntegrable_iff, IntegrableOn, integrable_enorm_iff hf]
 
 中文:
-定理 intervalIntegrable_enorm_iff
-  结论: {μ : Measure 实数} {a b : 实数}
+定理 interval整数egrable_enorm_iff
+  结论: {μ : 测度 实数} {a b : 实数}
   证明: by
   simp_rw [intervalIntegrable_iff, IntegrableOn, integrable_enorm_iff hf]
 
@@ -752,8 +752,8 @@ theorem intervalIntegrable_norm_iff
   simp_rw [intervalIntegrable_iff, IntegrableOn, integrable_norm_iff hf]
 
 中文:
-定理 intervalIntegrable_norm_iff
-  结论: {f : 实数 -> E} {μ : Measure 实数} {a b : 实数}
+定理 interval整数egrable_norm_iff
+  结论: {f : 实数 -> E} {μ : 测度 实数} {a b : 实数}
   证明: by
   simp_rw [intervalIntegrable_iff, IntegrableOn, integrable_norm_iff hf]
 
@@ -889,7 +889,7 @@ theorem mono_fun_enorm
 
 中文:
 定理 mono_fun_enorm
-  结论: [PseudoMetrizableSpace ε'] {g : 实数 -> ε'}
+  结论: [PseudoMetrizable空间 ε'] {g : 实数 -> ε'}
   证明: intervalIntegrable_iff.2 hf.def'.integrable.mono_enorm hgm hle
 
 Depends on / 依赖: hf.def, integrable, integrable.mono_enorm, intervalIntegrable_iff, mono_enorm
@@ -909,7 +909,7 @@ theorem mono_fun
 
 中文:
 定理 mono_fun
-  结论: {f : 实数 -> E} [NormedAddCommGroup F] {g : 实数 -> F} (hf : 整数erval整数egrable f μ a b)
+  结论: {f : 实数 -> E} [赋范交换加群 F] {g : 实数 -> F} (hf : 整数erval整数egrable f μ a b)
   证明: intervalIntegrable_iff.2 hf.def'.integrable.mono hgm hle
 
 Depends on / 依赖: hf.def, integrable, integrable.mono, intervalIntegrable_iff
@@ -1050,7 +1050,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {R : 类型} [NormedAddCommGroup R] [SMulZeroClass R E] [IsBoundedSMul R E] {f : 实数 -> E}
+  结论: {R : 类型} [赋范交换加群 R] [SMulZero类 R E] [是BoundedSMul R E] {f : 实数 -> E}
   证明: ⟨h.1.smul r, h.2.smul r⟩
 
 @[simp]
@@ -1073,7 +1073,7 @@ theorem add
 
 中文:
 定理 add
-  条件: [ContinuousAdd ε] (hf : 整数erval整数egrable f μ a b) (hg : 整数erval整数egrable g μ a b)
+  条件: [连续加法 ε] (hf : 整数erval整数egrable f μ a b) (hg : 整数erval整数egrable g μ a b)
   证明: ⟨hf.1.add hg.1, hf.2.add hg.2⟩
 
 @[simp]
@@ -1109,8 +1109,8 @@ theorem sum
   proof: ⟨integrable_finsetSum' s fun i hi => (h i hi).1, integrable_finsetSum' s fun i hi => (h i hi).2⟩
 
 中文:
-定理 sum
-  结论: {ε} [TopologicalSpace ε] [ENormedAddCommMonoid ε] [ContinuousAdd ε]
+定理 求和
+  结论: {ε} [拓扑空间 ε] [ENormedAddComm幺半群 ε] [连续加法 ε]
   证明: ⟨integrable_finsetSum' s fun i hi => (h i hi).1, integrable_finsetSum' s fun i hi => (h i hi).2⟩
 
 Depends on / 依赖: integrable_finsetSum
@@ -1319,7 +1319,7 @@ theorem div_const
 
 中文:
 定理 div_const
-  结论: {𝕜 : 类型} {f : 实数 -> 𝕜} [NormedDivisionRing 𝕜] (h : 整数erval整数egrable f μ a b)
+  结论: {𝕜 : 类型} {f : 实数 -> 𝕜} [NormedDivision环 𝕜] (h : 整数erval整数egrable f μ a b)
   证明: by
   simpa only [div_eq_mul_inv] using mul_const h c⁻¹
 
@@ -1386,7 +1386,7 @@ theorem comp_mul_left_iff
 
 中文:
 定理 comp_mul_left_iff
-  结论: {f : 实数 -> E} {c : 实数} (hc : c != 0) (h : ‖f (min a b)‖ₑ != ∞ := by finiteness)
+  结论: {f : 实数 -> E} {c : 实数} (hc : c != 0) (h : ‖f (最小值 a b)‖ₑ != ∞ := by finiteness)
   证明: by
   exact ⟨fun h => by simpa [hc] using h.comp_mul_left (c := c⁻¹) h' (by simp),
     (comp_mul_left · h h')⟩
@@ -1483,7 +1483,7 @@ theorem comp_add_right_iff
 
 中文:
 定理 comp_add_right_iff
-  条件: {c : 实数} (h : ‖f (min a b + c)‖ₑ != ⊤ := by finiteness)
+  条件: {c : 实数} (h : ‖f (最小值 a b + c)‖ₑ != ⊤ := by finiteness)
   证明: by simpa using hf.comp_add_right (-c)
   mpr hf := by
     have : ‖f (min (a + c) (b + c))‖ₑ != ⊤ := by rwa [min_add_add_right]
@@ -1534,7 +1534,7 @@ theorem comp_add_left_iff
 
 中文:
 定理 comp_add_left_iff
-  条件: {c : 实数} (h : ‖f (min a b)‖ₑ != ⊤ := by finiteness)
+  条件: {c : 实数} (h : ‖f (最小值 a b)‖ₑ != ⊤ := by finiteness)
   证明: by
   simp_rw [add_comm c]
   rw [IntervalIntegrable.comp_add_right_iff (by grind)]
@@ -1584,7 +1584,7 @@ theorem comp_sub_right_iff
 
 中文:
 定理 comp_sub_right_iff
-  条件: {c : 实数} (h : ‖f (min a b)‖ₑ != ⊤ := by finiteness)
+  条件: {c : 实数} (h : ‖f (最小值 a b)‖ₑ != ⊤ := by finiteness)
   证明: by
   simp_rw [sub_eq_add_neg]
   rw [IntervalIntegrable.comp_add_right_iff (by grind)]
@@ -1611,7 +1611,7 @@ theorem iff_comp_neg
 
 中文:
 定理 iff_comp_neg
-  条件: {f : 实数 -> E} (h : ‖f (min a b)‖ₑ != ∞ := by finiteness)
+  条件: {f : 实数 -> E} (h : ‖f (最小值 a b)‖ₑ != ∞ := by finiteness)
   证明: by
   rw [← comp_mul_left_iff (neg_ne_zero.2 one_ne_zero) h (by simp)]; simp [div_neg]
 
@@ -1655,7 +1655,7 @@ theorem comp_sub_left_iff
 
 中文:
 定理 comp_sub_left_iff
-  条件: {f : 实数 -> E} (c : 实数) (h : ‖f (min a b)‖ₑ != ∞ := by finiteness)
+  条件: {f : 实数 -> E} (c : 实数) (h : ‖f (最小值 a b)‖ₑ != ∞ := by finiteness)
   证明: ⟨fun h => by simpa using h.comp_sub_left c, (.comp_sub_left · c h)⟩
 
 Depends on / 依赖: IntervalIntegrable, comp_sub_left, finiteness, h.comp_sub_left, volume
@@ -1683,7 +1683,7 @@ theorem ContinuousOn.intervalIntegrable
   proof: (ContinuousOn.integrableOn_Icc hu).intervalIntegrable
 
 中文:
-定理 ContinuousOn.intervalIntegrable
+定理 ContinuousOn.interval整数egrable
   条件: {u : 实数 -> E} {a b : 实数} (hu : ContinuousOn u (uIcc a b))
   证明: (ContinuousOn.integrableOn_Icc hu).intervalIntegrable
 
@@ -1702,7 +1702,7 @@ theorem ContinuousOn.intervalIntegrable_of_Icc
   proof: ContinuousOn.intervalIntegrable ((uIcc_of_le h).symm ▸ hu)
 
 中文:
-定理 ContinuousOn.intervalIntegrable_of_Icc
+定理 ContinuousOn.interval整数egrable_of_Icc
   结论: {u : 实数 -> E} {a b : 实数} (h : a <= b)
   证明: ContinuousOn.intervalIntegrable ((uIcc_of_le h).symm ▸ hu)
 
@@ -1721,8 +1721,8 @@ theorem Continuous.intervalIntegrable
   proof: hu.continuousOn.intervalIntegrable
 
 中文:
-定理 Continuous.intervalIntegrable
-  条件: {u : 实数 -> E} (hu : Continuous u) (a b : 实数)
+定理 连续.interval整数egrable
+  条件: {u : 实数 -> E} (hu : 连续 u) (a b : 实数)
   证明: hu.continuousOn.intervalIntegrable
 
 Depends on / 依赖: continuousOn, hu.continuousOn.intervalIntegrable, intervalIntegrable
@@ -1752,7 +1752,7 @@ theorem MonotoneOn.intervalIntegrable
   exact (hu.integrableOn_isCompact isCompact_uIcc).mono_set Ioc_subset_Icc_self
 
 中文:
-定理 MonotoneOn.intervalIntegrable
+定理 MonotoneOn.interval整数egrable
   条件: {u : 实数 -> E} {a b : 实数} (hu : MonotoneOn u (uIcc a b))
   证明: by
   rw [intervalIntegrable_iff]
@@ -1775,7 +1775,7 @@ theorem AntitoneOn.intervalIntegrable
   proof: hu.dual_right.intervalIntegrable
 
 中文:
-定理 AntitoneOn.intervalIntegrable
+定理 AntitoneOn.interval整数egrable
   条件: {u : 实数 -> E} {a b : 实数} (hu : AntitoneOn u (uIcc a b))
   证明: hu.dual_right.intervalIntegrable
 
@@ -1794,8 +1794,8 @@ theorem Monotone.intervalIntegrable
   proof: (hu.monotoneOn _).intervalIntegrable
 
 中文:
-定理 Monotone.intervalIntegrable
-  条件: {u : 实数 -> E} {a b : 实数} (hu : Monotone u)
+定理 递增.interval整数egrable
+  条件: {u : 实数 -> E} {a b : 实数} (hu : 递增 u)
   证明: (hu.monotoneOn _).intervalIntegrable
 
 Depends on / 依赖: hu.monotoneOn, intervalIntegrable, monotoneOn
@@ -1813,8 +1813,8 @@ theorem Antitone.intervalIntegrable
   proof: (hu.antitoneOn _).intervalIntegrable
 
 中文:
-定理 Antitone.intervalIntegrable
-  条件: {u : 实数 -> E} {a b : 实数} (hu : Antitone u)
+定理 递减.interval整数egrable
+  条件: {u : 实数 -> E} {a b : 实数} (hu : 递减 u)
   证明: (hu.antitoneOn _).intervalIntegrable
 
 Depends on / 依赖: antitoneOn, hu.antitoneOn, intervalIntegrable
@@ -1847,7 +1847,7 @@ lemma intervalIntegrable_of_even₀
   · exact h₂f t h
 
 中文:
-引理 intervalIntegrable_of_even₀
+引理 interval整数egrable_of_even₀
   结论: (h₁f : 对任意 x, f x = f (-x))
   证明: by
   rcases lt_trichotomy t 0 with h | h | h
@@ -1880,7 +1880,7 @@ theorem intervalIntegrable_of_even
     (intervalIntegrable_of_even₀ h₁f h₂f hb)
 
 中文:
-定理 intervalIntegrable_of_even
+定理 interval整数egrable_of_even
   证明: -- Split integral and apply lemma
   (intervalIntegrable_of_even₀ h₁f h₂f ha).symm.trans (b := 0)
     (intervalIntegrable_of_even₀ h₁f h₂f hb)
@@ -1911,7 +1911,7 @@ lemma intervalIntegrable_of_odd₀
   · exact h₂f t h
 
 中文:
-引理 intervalIntegrable_of_odd₀
+引理 interval整数egrable_of_odd₀
   结论: (h₁f : 对任意 x, -f x = f (-x))
   证明: by
   rcases lt_trichotomy t 0 with h | h | h
@@ -1945,7 +1945,7 @@ theorem intervalIntegrable_of_odd
   (intervalIntegrable_of_odd₀ h₁f h₂f ha).symm.trans (intervalIntegrable_of_odd₀ h₁f h₂f hb)
 
 中文:
-定理 intervalIntegrable_of_odd
+定理 interval整数egrable_of_odd
   证明: -- Split integral and apply lemma
   (intervalIntegrable_of_odd₀ h₁f h₂f ha).symm.trans (intervalIntegrable_of_odd₀ h₁f h₂f hb)
 
@@ -1974,8 +1974,8 @@ theorem Filter.Tendsto.eventually_intervalIntegrable_ae
 ((hu.Ioc hv).eventually this).and (hv.Ioc hu).eventually this
 
 中文:
-定理 Filter.Tendsto.eventually_intervalIntegrable_ae
-  结论: {f : 实数 -> E} {μ : Measure 实数}
+定理 滤子.收敛.eventually_interval整数egrable_ae
+  结论: {f : 实数 -> E} {μ : 测度 实数}
   证明: have := (hf.integrableAtFilter_ae hfm hμ).eventually
 ((hu.Ioc hv).eventually this).and (hv.Ioc hu).eventually this
 
@@ -1998,8 +1998,8 @@ theorem Filter.Tendsto.eventually_intervalIntegrable
   proof: (hf.mono_left inf_le_left).eventually_intervalIntegrable_ae hfm hμ hu hv
 
 中文:
-定理 Filter.Tendsto.eventually_intervalIntegrable
-  结论: {f : 实数 -> E} {μ : Measure 实数} {l l' : Filter 实数}
+定理 滤子.收敛.eventually_interval整数egrable
+  结论: {f : 实数 -> E} {μ : 测度 实数} {l l' : 滤子 实数}
   证明: (hf.mono_left inf_le_left).eventually_intervalIntegrable_ae hfm hμ hu hv
 
 Depends on / 依赖: eventually_intervalIntegrable_ae, hf.mono_left, inf_le_left, mono_left
@@ -2031,8 +2031,8 @@ definition intervalIntegral
 notation3"∫ "(...)" in "a".."b", "r:60:(scoped f => f)" ∂"μ:70 => intervalIntegral r a b μ
 
 中文:
-定义 intervalIntegral
-  签名: (f : 实数 -> E) (a b : 实数) (μ : Measure 实数)
+定义 interval整数egral
+  签名: (f : 实数 -> E) (a b : 实数) (μ : 测度 实数)
   定义体: (∫ x in Ioc a b, f x ∂μ) - ∫ x in Ioc b a, f x ∂μ
 
 @[inherit_doc intervalIntegral]
@@ -2088,7 +2088,7 @@ theorem integral_of_le
 中文:
 定理 integral_of_le
   条件: (h : a <= b)
-  结论: ∫ x in a..b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+  结论: ∫ x in a..b, f x ∂μ = ∫ x in 左开右闭区间 a b, f x ∂μ
   证明: by
   simp [intervalIntegral, h]
 
@@ -2153,7 +2153,7 @@ theorem integral_of_ge
 中文:
 定理 integral_of_ge
   条件: (h : b <= a)
-  结论: ∫ x in a..b, f x ∂μ = -∫ x in Ioc b a, f x ∂μ
+  结论: ∫ x in a..b, f x ∂μ = -∫ x in 左开右闭区间 b a, f x ∂μ
   证明: by
   simp only [integral_symm b, integral_of_le h]
 
@@ -2174,8 +2174,8 @@ theorem intervalIntegral_eq_integral_uIoc
   · simp only [integral_of_ge (not_le.1 h).le, uIoc_of_ge (not_le.1 h).le, neg_one_smul]
 
 中文:
-定理 intervalIntegral_eq_integral_uIoc
-  条件: (f : 实数 -> E) (a b : 实数) (μ : Measure 实数)
+定理 interval整数egral_eq_integral_uIoc
+  条件: (f : 实数 -> E) (a b : 实数) (μ : 测度 实数)
   证明: by
   split_ifs with h
   · simp only [integral_of_le h, uIoc_of_le h, one_smul]
@@ -2200,8 +2200,8 @@ theorem norm_intervalIntegral_eq
   split_ifs <;> simp only [norm_neg, norm_one, one_mul]
 
 中文:
-定理 norm_intervalIntegral_eq
-  条件: (f : 实数 -> E) (a b : 实数) (μ : Measure 实数)
+定理 norm_interval整数egral_eq
+  条件: (f : 实数 -> E) (a b : 实数) (μ : 测度 实数)
   证明: by
   simp_rw [intervalIntegral_eq_integral_uIoc, norm_smul]
   split_ifs <;> simp only [norm_neg, norm_one, one_mul]
@@ -2222,8 +2222,8 @@ theorem abs_intervalIntegral_eq
   proof: norm_intervalIntegral_eq f a b μ
 
 中文:
-定理 abs_intervalIntegral_eq
-  条件: (f : 实数 -> 实数) (a b : 实数) (μ : Measure 实数)
+定理 abs_interval整数egral_eq
+  条件: (f : 实数 -> 实数) (a b : 实数) (μ : 测度 实数)
   证明: norm_intervalIntegral_eq f a b μ
 
 Depends on / 依赖: norm_intervalIntegral_eq
@@ -2279,8 +2279,8 @@ nonrec theorem integral_non_aestronglyMeasurable
   rw [intervalIntegral_eq_integral_uIoc]; rw [integral_non_aestronglyMeasurable hf]; rw [smul_zero]
 
 中文:
-定理 intervalIntegrable_of_integral_ne_zero
-  结论: {a b : 实数} {f : 实数 -> E} {μ : Measure 实数}
+定理 interval整数egrable_of_integral_ne_zero
+  结论: {a b : 实数} {f : 实数 -> E} {μ : 测度 实数}
   证明: not_imp_comm.1 integral_undef h
 
 nonrec theorem integral_non_aestronglyMeasurable
@@ -2616,7 +2616,7 @@ nonrec theorem integral_smul_const [CompleteSpace E]
   simp only [interval
 
 中文:
-定理 _root_.IntervalIntegrable.integral_smul
+定理 _root_.整数erval整数egrable.integral_smul
   证明: by
   simp only [intervalIntegral, smul_sub, hf.1.integral_smul, hf.2.integral_smul]
 
@@ -2653,7 +2653,7 @@ theorem integral_const_mul
 
 中文:
 定理 integral_const_mul
-  条件: [NormedDivisionRing 𝕜] [NormedAlgebra 实数 𝕜] (r : 𝕜) (f : 实数 -> 𝕜)
+  条件: [NormedDivision环 𝕜] [赋范代数 实数 𝕜] (r : 𝕜) (f : 实数 -> 𝕜)
   证明: integral_smul r f
 
 @[simp]
@@ -2725,7 +2725,7 @@ theorem integral_const'
 
 中文:
 定理 integral_const'
-  条件: [CompleteSpace E] (c : E)
+  条件: [完备空间 E] (c : E)
   证明: by
   simp only [measureReal_def, intervalIntegral, setIntegral_const, sub_smul]
 
@@ -2755,7 +2755,7 @@ nonrec theorem integral_smul_measure (c : Real>=0∞) :
 
 中文:
 定理 integral_const
-  条件: [CompleteSpace E] (c : E)
+  条件: [完备空间 E] (c : E)
   结论: ∫ _ in a..b, c = (b - a) • c
   证明: by
   simp only [integral_const', Real.volume_Ioc, ENNReal.toReal_ofReal', ← neg_sub b,
@@ -2804,7 +2804,7 @@ theorem _root_.ContinuousLinearMap.intervalIntegral_apply
   simp_rw [intervalIntegral_eq_integral_uIoc, ← integral_apply hφ.def' v, smul_apply]
 
 中文:
-定理 _root_.ContinuousLinearMap.intervalIntegral_apply
+定理 _root_.连续线性映射.interval整数egral_apply
   结论: {a b : 实数} {φ : 实数 -> F ->L[𝕜] E}
   证明: by
   simp_rw [intervalIntegral_eq_integral_uIoc, ← integral_apply hφ.def' v, smul_apply]
@@ -2828,8 +2828,8 @@ theorem _root_.ContinuousLinearMap.intervalIntegral_comp_comm
   simp_rw [intervalIntegral, L.integral_comp_comm hf.1, L.integral_comp_comm hf.2, L.map_sub]
 
 中文:
-定理 _root_.ContinuousLinearMap.intervalIntegral_comp_comm
-  结论: [CompleteSpace E] (L : E ->L[𝕜] F)
+定理 _root_.连续线性映射.interval整数egral_comp_comm
+  结论: [完备空间 E] (L : E ->L[𝕜] F)
   证明: by
   simp_rw [intervalIntegral, L.integral_comp_comm hf.1, L.integral_comp_comm hf.2, L.map_sub]
 
@@ -2858,7 +2858,7 @@ theorem _root_.LinearIsometry.intervalIntegral_comp_comm
   simp_rw [intervalIntegral, L.integral_comp_comm, L.map_sub]
 
 中文:
-定理 _root_.LinearIsometry.intervalIntegral_comp_comm
+定理 _root_.线性等距.interval整数egral_comp_comm
   条件: (L : E ->ₗᵢ[𝕜] F) (f : 实数 -> E)
   证明: by
   simp_rw [intervalIntegral, L.integral_comp_comm, L.map_sub]
@@ -2884,7 +2884,7 @@ theorem intervalIntegral_re
   proof: RCLike.reCLM.intervalIntegral_comp_comm hf
 
 中文:
-定理 intervalIntegral_re
+定理 interval整数egral_re
   条件: (hf : 整数erval整数egrable f μ a b)
   证明: RCLike.reCLM.intervalIntegral_comp_comm hf
 
@@ -2903,7 +2903,7 @@ theorem intervalIntegral_im
   proof: RCLike.imCLM.intervalIntegral_comp_comm hf
 
 中文:
-定理 intervalIntegral_im
+定理 interval整数egral_im
   条件: (hf : 整数erval整数egrable f μ a b)
   证明: RCLike.imCLM.intervalIntegral_comp_comm hf
 
@@ -2923,7 +2923,7 @@ theorem intervalIntegral_conj
   proof: RCLike.conjLIE.toLinearIsometry.intervalIntegral_comp_comm f
 
 中文:
-定理 intervalIntegral_conj
+定理 interval整数egral_conj
   结论: ∫ x in a..b, conj (f x) ∂μ = conj (∫ x in a..b, f x ∂μ)
   证明: RCLike.conjLIE.toLinearIsometry.intervalIntegral_comp_comm f
 
@@ -3927,7 +3927,7 @@ theorem integral_Iic_sub_Iic
 
 中文:
 定理 integral_Iic_sub_Iic
-  条件: (ha : 整数egrableOn f (Iic a) μ) (hb : 整数egrableOn f (Iic b) μ)
+  条件: (ha : 整数egrableOn f (左无界右闭区间 a) μ) (hb : 整数egrableOn f (左无界右闭区间 b) μ)
   证明: by
   wlog hab : a <= b generalizing a b
   · rw [integral_symm, ← this hb ha (le_of_not_ge hab), neg_sub]
@@ -3957,7 +3957,7 @@ theorem integral_interval_add_Ioi
 
 中文:
 定理 integral_interval_add_Ioi
-  结论: (ha : 整数egrableOn f (Ioi a) μ)
+  结论: (ha : 整数egrableOn f (左开右无界区间 a) μ)
   证明: by
   wlog hab : a <= b generalizing a b
   · rw [integral_symm, ← this hb ha (le_of_not_ge hab)]; grind
@@ -4020,7 +4020,7 @@ theorem integral_Ioi_sub_Ioi
 
 中文:
 定理 integral_Ioi_sub_Ioi
-  条件: (hf : 整数egrableOn f (Ioi a) μ) (hab : a <= b)
+  条件: (hf : 整数egrableOn f (左开右无界区间 a) μ) (hab : a <= b)
   证明: sub_eq_of_eq_add (integral_interval_add_Ioi hf (hf.mono_set (Ioi_subset_Ioi hab))).symm
 
 Depends on / 依赖: Ioi_subset_Ioi, hf.mono_set, integral_interval_add_Ioi, mono_set, sub_eq_of_eq_add
@@ -4042,7 +4042,7 @@ theorem integral_Ioi_sub_Ioi'
 
 中文:
 定理 integral_Ioi_sub_Ioi'
-  条件: (hf : 整数egrableOn f (Ioi a) μ) (hg : 整数egrableOn f (Ioi b) μ)
+  条件: (hf : 整数egrableOn f (左开右无界区间 a) μ) (hg : 整数egrableOn f (左开右无界区间 b) μ)
   证明: by
   wlog! hab : a <= b generalizing a b
   · rw [integral_symm, ← this hg hf hab.le, neg_sub]
@@ -4069,7 +4069,7 @@ theorem integral_Iio_sub_Iio
 
 中文:
 定理 integral_Iio_sub_Iio
-  条件: (hf : 整数egrableOn f (Iio b) μ) (hab : a <= b)
+  条件: (hf : 整数egrableOn f (左无界右开区间 b) μ) (hab : a <= b)
   证明: by
   have ha : IntegrableOn f (Iio a) μ := hf.mono_set (Iio_subset_Iio hab)
   have h : IntegrableOn f (Ico a b) μ := hf.mono_set Ico_subset_Iio_self
@@ -4096,7 +4096,7 @@ theorem integral_Iio_sub_Iio'
 
 中文:
 定理 integral_Iio_sub_Iio'
-  结论: [NullSingletonClass μ] (hf : 整数egrableOn f (Iio b) μ)
+  结论: [NullSingleton类 μ] (hf : 整数egrableOn f (左无界右开区间 b) μ)
   证明: by
   wlog! hab : a <= b generalizing a b
   · rw [integral_symm, ← this hg hf hab.le, neg_sub]
@@ -4124,7 +4124,7 @@ theorem integral_Ici_sub_Ici
 
 中文:
 定理 integral_Ici_sub_Ici
-  条件: (hf : 整数egrableOn f (Ici a) μ) (hab : a <= b)
+  条件: (hf : 整数egrableOn f (左闭右无界区间 a) μ) (hab : a <= b)
   证明: by
   have ha : IntegrableOn f (Ici b) μ := hf.mono_set (Ici_subset_Ici.2 hab)
   have h : IntegrableOn f (Ico a b) μ := hf.mono_set Ico_subset_Ici_self
@@ -4151,7 +4151,7 @@ theorem integral_Ici_sub_Ici'
 
 中文:
 定理 integral_Ici_sub_Ici'
-  结论: [NullSingletonClass μ] (hf : 整数egrableOn f (Ici a) μ)
+  结论: [NullSingleton类 μ] (hf : 整数egrableOn f (左闭右无界区间 a) μ)
   证明: by
   wlog! hab : a <= b generalizing a b
   · rw [integral_symm, ← this hg hf hab.le, neg_sub]
@@ -4178,7 +4178,7 @@ theorem integral_Iic_add_Ioi
 
 中文:
 定理 integral_Iic_add_Ioi
-  结论: (h_left : 整数egrableOn f (Iic b) μ)
+  结论: (h_left : 整数egrableOn f (左无界右闭区间 b) μ)
   证明: by
   convert! (setIntegral_union (Iic_disjoint_Ioi <| Eq.le rfl) measurableSet_Ioi h_left h_right).symm
   rw [Iic_union_Ioi]; rw [Measure.restrict_univ]
@@ -4203,7 +4203,7 @@ theorem integral_Iio_add_Ici
 
 中文:
 定理 integral_Iio_add_Ici
-  结论: (h_left : 整数egrableOn f (Iio b) μ)
+  结论: (h_left : 整数egrableOn f (左无界右开区间 b) μ)
   证明: by
   convert! (setIntegral_union (Iio_disjoint_Ici <| Eq.le rfl) measurableSet_Ici h_left h_right).symm
   rw [Iio_union_Ici]; rw [Measure.restrict_univ]
@@ -4228,7 +4228,7 @@ theorem integral_const_of_cdf
 
 中文:
 定理 integral_const_of_cdf
-  条件: [CompleteSpace E] [IsFiniteMeasure μ] (c : E)
+  条件: [完备空间 E] [是有限测度 μ] (c : E)
   证明: by
   simp only [sub_smul, ← setIntegral_const]
   refine (integral_Iic_sub_Iic ?_ ?_).symm <;> simp
@@ -4254,7 +4254,7 @@ theorem integral_eq_integral_of_support_subset
 
 中文:
 定理 integral_eq_integral_of_support_subset
-  条件: {a b} (h : support f subseteq Ioc a b)
+  条件: {a b} (h : support f subseteq 左开右闭区间 a b)
   证明: by
   rcases le_total a b with hab | hab
   · rw [integral_of_le hab, ← integral_indicator measurableSet_Ioc, indicator_eq_self.2 h]
@@ -4282,7 +4282,7 @@ theorem integral_congr_ae'
 
 中文:
 定理 integral_congr_ae'
-  结论: (h : 对任意ᵐ x ∂μ, x in Ioc a b -> f x = g x)
+  结论: (h : 对任意ᵐ x ∂μ, x in 左开右闭区间 a b -> f x = g x)
   证明: by
   simp only [intervalIntegral, setIntegral_congr_ae measurableSet_Ioc h,
     setIntegral_congr_ae measurableSet_Ioc h']
@@ -4326,7 +4326,7 @@ theorem integral_congr_uIoo
 
 中文:
 定理 integral_congr_uIoo
-  条件: [NullSingletonClass μ] (h : (uIoo a b).EqOn f g)
+  条件: [NullSingleton类 μ] (h : (uIoo a b).EqOn f g)
   证明: by
   apply integral_congr_ae
   filter_upwards [μ.ae_ne <| a ⊔ b] with x _ hx
@@ -4350,7 +4350,7 @@ theorem integral_congr_Ioo_of_le
 
 中文:
 定理 integral_congr_Ioo_of_le
-  条件: [NullSingletonClass μ] (hab : a <= b) (h : (Ioo a b).EqOn f g)
+  条件: [NullSingleton类 μ] (hab : a <= b) (h : (开区间 a b).EqOn f g)
   证明: integral_congr_uIoo uIoo_of_le hab ▸ h
 
 Depends on / 依赖: integral_congr_uIoo, uIoo_of_le
@@ -4369,7 +4369,7 @@ theorem integral_congr_ae_restrict
 
 中文:
 定理 integral_congr_ae_restrict
-  结论: {a b : 实数} {f g : 实数 -> E} {μ : Measure 实数}
+  结论: {a b : 实数} {f g : 实数 -> E} {μ : 测度 实数}
   证明: integral_congr_ae (ae_imp_of_ae_restrict h)
 
 Depends on / 依赖: ae_imp_of_ae_restrict, integral_congr_ae
@@ -4457,7 +4457,7 @@ theorem integral_eq_zero_iff_of_le_of_nonneg_ae
 
 中文:
 定理 integral_eq_zero_iff_of_le_of_nonneg_ae
-  结论: (hab : a <= b) (hf : 0 <=ᵐ[μ.restrict (Ioc a b)] f)
+  结论: (hab : a <= b) (hf : 0 <=ᵐ[μ.restrict (左开右闭区间 a b)] f)
   证明: by
   rw [integral_of_le hab]; rw [integral_eq_zero_iff_of_nonneg_ae hf hfi.1]
 
@@ -4482,7 +4482,7 @@ theorem integral_eq_zero_iff_of_nonneg_ae
 
 中文:
 定理 integral_eq_zero_iff_of_nonneg_ae
-  结论: (hf : 0 <=ᵐ[μ.restrict (Ioc a b union Ioc b a)] f)
+  结论: (hf : 0 <=ᵐ[μ.restrict (左开右闭区间 a b union 左开右闭区间 b a)] f)
   证明: by
   rcases le_total a b with hab | hab <;>
     simp only [Ioc_eq_empty hab.not_gt, empty_union, union_empty] at hf ⊢
@@ -4572,7 +4572,7 @@ theorem intervalIntegral_pos_of_pos_on
 
 
 中文:
-定理 intervalIntegral_pos_of_pos_on
+定理 interval整数egral_pos_of_pos_on
   结论: {f : 实数 -> 实数} {a b : 实数} (hfi : 整数erval整数egrable f volume a b)
   证明: by
   have hsupp : Ioo a b subseteq support f inter Ioc a b := fun x hx =>
@@ -4605,7 +4605,7 @@ theorem intervalIntegral_pos_of_pos
   proof: intervalIntegral_pos_of_pos_on hfi (fun x _ => hpos x) hab
 
 中文:
-定理 intervalIntegral_pos_of_pos
+定理 interval整数egral_pos_of_pos
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: intervalIntegral_pos_of_pos_on hfi (fun x _ => hpos x) hab
 
@@ -4671,7 +4671,7 @@ theorem integral_lt_integral_of_continuousOn_of_le_of_exists_lt
   have h_eq
 
 中文:
-定理 integral_lt_integral_of_continuousOn_of_le_of_exists_lt
+定理 integral_lt_integral_of_continuousOn_of_le_of_存在_lt
   结论: {f g : 实数 -> 实数} {a b : 实数}
   证明: by
   apply integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero hab.le
@@ -4711,7 +4711,7 @@ theorem integral_nonneg_of_ae_restrict
 
 中文:
 定理 integral_nonneg_of_ae_restrict
-  条件: (hab : a <= b) (hf : 0 <=ᵐ[μ.restrict (Icc a b)] f)
+  条件: (hab : a <= b) (hf : 0 <=ᵐ[μ.restrict (闭区间 a b)] f)
   证明: by
   let H := ae_restrict_of_ae_restrict_of_subset Ioc_subset_Icc_self hf
   simpa only [integral_of_le hab] using setIntegral_nonneg_of_ae_restrict H
@@ -4753,7 +4753,7 @@ theorem integral_nonneg_of_forall
   proof: integral_nonneg_of_ae hab Eventually.of_forall hf
 
 中文:
-定理 integral_nonneg_of_forall
+定理 integral_nonneg_of_对任意
   条件: (hab : a <= b) (hf : 对任意 u, 0 <= f u)
   结论: 0 <= ∫ u in a..b, f u ∂μ
   证明: integral_nonneg_of_ae hab Eventually.of_forall hf
@@ -4774,7 +4774,7 @@ theorem integral_nonneg
 
 中文:
 定理 integral_nonneg
-  条件: (hab : a <= b) (hf : 对任意 u, u in Icc a b -> 0 <= f u)
+  条件: (hab : a <= b) (hf : 对任意 u, u in 闭区间 a b -> 0 <= f u)
   结论: 0 <= ∫ u in a..b, f u ∂μ
   证明: integral_nonneg_of_ae_restrict hab (ae_restrict_iff' measurableSet_Icc).mpr ae_of_all μ hf
 
@@ -4902,7 +4902,7 @@ let H := h.filter_mono ae_mono Measure.restrict_mono Ioc_subset_Icc_self le_refl
 
 中文:
 定理 integral_mono_ae_restrict
-  条件: (h : f <=ᵐ[μ.restrict (Icc a b)] g)
+  条件: (h : f <=ᵐ[μ.restrict (闭区间 a b)] g)
   证明: by
 let H := h.filter_mono ae_mono Measure.restrict_mono Ioc_subset_Icc_self le_refl μ
   simpa only [integral_of_le hab] using setIntegral_mono_ae_restrict hf.1 hg.1 H
@@ -4948,7 +4948,7 @@ let H x hx := h x Ioc_subset_Icc_self hx
 
 中文:
 定理 integral_mono_on
-  条件: (h : 对任意 x in Icc a b, f x <= g x)
+  条件: (h : 对任意 x in 闭区间 a b, f x <= g x)
   证明: by
 let H x hx := h x Ioc_subset_Icc_self hx
   simpa only [integral_of_le hab] using setIntegral_mono_on hf.1 hg.1 measurableSet_Ioc H
@@ -4976,7 +4976,7 @@ theorem integral_mono_on_of_le_Ioo
 
 中文:
 定理 integral_mono_on_of_le_Ioo
-  条件: [NullSingletonClass μ] (h : 对任意 x in Ioo a b, f x <= g x)
+  条件: [NullSingleton类 μ] (h : 对任意 x in 开区间 a b, f x <= g x)
   证明: by
   simp only [integral_of_le hab, integral_Ioc_eq_integral_Ioo]
   apply setIntegral_mono_on
@@ -5038,8 +5038,8 @@ theorem _root_.MeasureTheory.Integrable.hasSum_intervalIntegral
       hfi.integrableOn
 
 中文:
-定理 _root_.MeasureTheory.Integrable.hasSum_intervalIntegral
-  条件: (hfi : 整数egrable f μ) (y : 实数)
+定理 _root_.测度论.可积.hasSum_interval整数egral
+  条件: (hfi : 可积 f μ) (y : 实数)
   证明: by
   simp_rw [integral_of_le (le_add_of_nonneg_right zero_le_one)]
   rw [← setIntegral_univ]; rw [← iUnion_Ioc_add_intCast y]
@@ -5068,8 +5068,8 @@ theorem _root_.MeasureTheory.Integrable.hasSum_intervalIntegral_comp_add_int
     hfi.hasSum_intervalIntegral 0
 
 中文:
-定理 _root_.MeasureTheory.Integrable.hasSum_intervalIntegral_comp_add_int
-  条件: (hfi : 整数egrable f)
+定理 _root_.测度论.可积.hasSum_interval整数egral_comp_add_int
+  条件: (hfi : 可积 f)
   证明: by
   simpa only [integral_comp_add_right, zero_add, add_comm (1 : Real)] using
     hfi.hasSum_intervalIntegral 0

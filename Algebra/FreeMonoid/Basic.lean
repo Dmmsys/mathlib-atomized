@@ -71,7 +71,7 @@ definition FreeMonoid
   body: List α
 
 中文:
-定义 FreeMonoid
+定义 自由幺半群
   签名: (α)
   定义体: List α
 -/
@@ -91,7 +91,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : FreeMonoid α ≃ List α
+  签名: : 自由幺半群 α ≃ 列表 α
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -112,7 +112,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: : List α ≃ FreeMonoid α
+  签名: : 列表 α ≃ 自由幺半群 α
   定义体: Equiv.refl _
 
 @[to_additive (attr := simp)]
@@ -175,7 +175,7 @@ theorem toList_ofList
 
 中文:
 定理 toList_ofList
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: toList (ofList l) = l
   证明: rfl
 
@@ -197,7 +197,7 @@ theorem ofList_toList
 
 中文:
 定理 ofList_toList
-  条件: (xs : FreeMonoid α)
+  条件: (xs : 自由幺半群 α)
   结论: ofList (toList xs) = xs
   证明: rfl
 
@@ -264,7 +264,7 @@ instance :
 
 中文:
 实例 :
-  签名: CancelMonoid (FreeMonoid α)
+  签名: 消去幺半群 (自由幺半群 α)
   定义体: ofList []
   mul x y := ofList (toList x ++ toList y)
   mul_one := List.append_nil
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FreeMonoid α)
+  签名: 可居 (自由幺半群 α)
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -318,8 +318,8 @@ instance [IsEmpty
 @[to_additive (attr := simp)]
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (FreeMonoid α)
+实例 [是空
+  签名: α] : 唯一 (自由幺半群 α)
   定义体: inferInstanceAs Unique (List α)
 
 @[to_additive (attr := simp)]
@@ -341,7 +341,7 @@ theorem toList_one
 
 中文:
 定理 toList_one
-  结论: toList (1 : FreeMonoid α) = []
+  结论: toList (1 : 自由幺半群 α) = []
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -361,7 +361,7 @@ theorem ofList_nil
 
 中文:
 定理 ofList_nil
-  结论: ofList ([] : List α) = 1
+  结论: ofList ([] : 列表 α) = 1
   证明: rfl
 
 @[to_additive (attr := deprecated toList_one (since := "2026-03-26"))]
@@ -381,7 +381,7 @@ theorem toList_nil
 
 中文:
 定理 toList_nil
-  结论: toList ([] : FreeMonoid α) = []
+  结论: toList ([] : 自由幺半群 α) = []
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -402,7 +402,7 @@ theorem toList_mul
 
 中文:
 定理 toList_mul
-  条件: (xs ys : FreeMonoid α)
+  条件: (xs ys : 自由幺半群 α)
   结论: toList (xs * ys) = toList xs ++ toList ys
   证明: rfl
 
@@ -424,7 +424,7 @@ theorem toList_cons
 
 中文:
 定理 toList_cons
-  条件: (x : α) (xs : FreeMonoid α)
+  条件: (x : α) (xs : 自由幺半群 α)
   结论: toList (x :: xs) = x :: toList xs
   证明: rfl
 
@@ -446,7 +446,7 @@ theorem ofList_append
 
 中文:
 定理 ofList_append
-  条件: (xs ys : List α)
+  条件: (xs ys : 列表 α)
   结论: ofList (xs ++ ys) = ofList xs * ofList ys
   证明: rfl
 
@@ -469,8 +469,8 @@ theorem toList_prod
 
 中文:
 定理 toList_prod
-  条件: (xs : List (FreeMonoid α))
-  结论: toList xs.prod = (xs.map toList).flatten
+  条件: (xs : 列表 (自由幺半群 α))
+  结论: toList xs.乘积 = (xs.map toList).flatten
   证明: by
   induction xs <;> simp [*]
 
@@ -491,8 +491,8 @@ theorem ofList_flatten
 
 中文:
 定理 ofList_flatten
-  条件: (xs : List (List α))
-  结论: ofList xs.flatten = (xs.map ofList).prod
+  条件: (xs : 列表 (列表 α))
+  结论: ofList xs.flatten = (xs.map ofList).乘积
   证明: toList.injective by simp
 
 Depends on / 依赖: injective, toList, toList.injective
@@ -581,7 +581,7 @@ theorem ofList_cons
 
 中文:
 定理 ofList_cons
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   结论: ofList (x :: xs) = of x * ofList xs
   证明: rfl
 
@@ -603,7 +603,7 @@ theorem toList_of_mul
 
 中文:
 定理 toList_of_mul
-  条件: (x : α) (xs : FreeMonoid α)
+  条件: (x : α) (xs : 自由幺半群 α)
   结论: toList (of x * xs) = x :: toList xs
   证明: rfl
 
@@ -622,7 +622,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: Function.Injective (@of α)
+  结论: 函数.单射 (@of α)
   证明: List.singleton_injective
 
 Depends on / 依赖: List.countP_append, List.singleton_injective, countP, countP_append, singleton_injective
@@ -649,7 +649,7 @@ definition length
 
 中文:
 定义 length
-  签名: (a : FreeMonoid α)
+  签名: (a : 自由幺半群 α)
   定义体: a.toList.length
 
 @[to_additive (attr := simp)]
@@ -671,7 +671,7 @@ theorem length_one
 
 中文:
 定理 length_one
-  结论: length (1 : FreeMonoid α) = 0
+  结论: length (1 : 自由幺半群 α) = 0
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -736,8 +736,8 @@ theorem length_surjective
 
 中文:
 定理 length_surjective
-  条件: [Nonempty α]
-  结论: (@length α).Surjective
+  条件: [非空 α]
+  结论: (@length α).满射
   证明: ‹Nonempty α›.elim fun a n => ⟨FreeMonoid.ofList (List.replicate n a), by simp [length]⟩
 
 @[to_additive FreeAddMonoid.length_eq_one]
@@ -760,7 +760,7 @@ theorem length_eq_one
 
 中文:
 定理 length_eq_one
-  结论: length a = 1 ↔ 存在 m, a = FreeMonoid.of m
+  结论: length a = 1 ↔ 存在 m, a = 自由幺半群.of m
   证明: List.length_eq_one_iff
 
 @[to_additive]
@@ -783,7 +783,7 @@ theorem length_eq_two
 
 中文:
 定理 length_eq_two
-  条件: {v : FreeMonoid α}
+  条件: {v : 自由幺半群 α}
   证明: List.length_eq_two
 
 @[to_additive]
@@ -807,7 +807,7 @@ theorem length_eq_three
 
 中文:
 定理 length_eq_three
-  条件: {v : FreeMonoid α}
+  条件: {v : 自由幺半群 α}
   结论: v.length = 3 ↔ 存在 (a b c : α), v = of a * of b * of c
   证明: List.length_eq_three
 
@@ -831,7 +831,7 @@ theorem length_eq_four
 
 中文:
 定理 length_eq_four
-  条件: {v : FreeMonoid α}
+  条件: {v : 自由幺半群 α}
   证明: List.length_eq_four
 
 @[to_additive (attr := simp)]
@@ -855,7 +855,7 @@ theorem length_mul
 
 中文:
 定理 length_mul
-  条件: (a b : FreeMonoid α)
+  条件: (a b : 自由幺半群 α)
   结论: (a * b).length = a.length + b.length
   证明: List.length_append
 
@@ -923,7 +923,7 @@ definition mem
 
 中文:
 定义 mem
-  签名: (a : FreeMonoid α) (m : α)
+  签名: (a : 自由幺半群 α) (m : α)
   定义体: m in toList a
 
 @[to_additive]
@@ -945,7 +945,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (FreeMonoid α)
+  签名: Membership α (自由幺半群 α)
   定义体: ⟨mem⟩
 
 @[to_additive]
@@ -965,7 +965,7 @@ theorem notMem_one
 
 中文:
 定理 notMem_one
-  结论: m ∉ (1 : FreeMonoid α)
+  结论: m ∉ (1 : 自由幺半群 α)
   证明: List.not_mem_nil
 
 @[to_additive (attr := simp)]
@@ -1032,7 +1032,7 @@ theorem mem_mul
 
 中文:
 定理 mem_mul
-  条件: {a b : FreeMonoid α}
+  条件: {a b : 自由幺半群 α}
   结论: m in (a * b) ↔ m in a ∨ m in b
   证明: List.mem_append
 
@@ -1059,7 +1059,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
+  签名: {motive : 自由幺半群 α -> 类型层*} (xs : 自由幺半群 α) (one : motive 1)
   定义体: List.rec one of_mul xs
 
 @[to_additive (attr := simp)]
@@ -1082,7 +1082,7 @@ theorem recOn_one
 
 中文:
 定理 recOn_one
-  结论: {motive : FreeMonoid α -> Sort*} (one : motive 1)
+  结论: {motive : 自由幺半群 α -> 类型层*} (one : motive 1)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1102,7 +1102,7 @@ theorem recOn_of_mul
 
 中文:
 定理 recOn_of_mul
-  结论: {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
+  结论: {motive : 自由幺半群 α -> 类型层*} (x : α) (xs : 自由幺半群 α) (one : motive 1)
   证明: rfl
 -/
 theorem recOn_of_mul {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
@@ -1127,7 +1127,7 @@ theorem inductionOn
 
 中文:
 定理 inductionOn
-  结论: {motive : FreeMonoid α -> 命题} (z : FreeMonoid α) (one : motive 1)
+  结论: {motive : 自由幺半群 α -> 命题} (z : 自由幺半群 α) (one : motive 1)
   证明: recOn z one fun x xs ih => mul (.of x) xs (of x) ih
 -/
 protected theorem inductionOn {motive : FreeMonoid α -> Prop} (z : FreeMonoid α) (one : motive 1)
@@ -1150,7 +1150,7 @@ theorem inductionOn'
 
 中文:
 定理 inductionOn'
-  结论: {motive : FreeMonoid α -> 命题} (a : FreeMonoid α)
+  结论: {motive : 自由幺半群 α -> 命题} (a : 自由幺半群 α)
   证明: recOn a one of_mul
 -/
 protected theorem inductionOn' {motive : FreeMonoid α -> Prop} (a : FreeMonoid α)
@@ -1176,7 +1176,7 @@ definition casesOn
 
 中文:
 定义 casesOn
-  签名: {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
+  签名: {motive : 自由幺半群 α -> 类型层*} (xs : 自由幺半群 α) (one : motive 1)
   定义体: List.casesOn xs one of_mul
 
 @[to_additive (attr := simp)]
@@ -1199,7 +1199,7 @@ theorem casesOn_one
 
 中文:
 定理 casesOn_one
-  结论: {motive : FreeMonoid α -> Sort*} (one : motive 1)
+  结论: {motive : 自由幺半群 α -> 类型层*} (one : motive 1)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1221,7 +1221,7 @@ theorem casesOn_of_mul
 
 中文:
 定理 casesOn_of_mul
-  结论: {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
+  结论: {motive : 自由幺半群 α -> 类型层*} (x : α) (xs : 自由幺半群 α) (one : motive 1)
   证明: rfl
 
 @[to_additive (attr := ext)]
@@ -1244,7 +1244,7 @@ theorem hom_eq
 中文:
 定理 hom_eq
   条件: ⦃f g
-  结论: FreeMonoid α ->* M⦄ (h : 对任意 x, f (of x) = g (of x)) : f = g
+  结论: 自由幺半群 α ->* M⦄ (h : 对任意 x, f (of x) = g (of x)) : f = g
   证明: MonoidHom.ext fun l => recOn l (f.map_one.trans g.map_one.symm)
     (fun x xs hxs => by simp only [h, hxs, map_mul])
 
@@ -1267,7 +1267,7 @@ definition prodAux
 
 中文:
 定义 prodAux
-  签名: {M} [Monoid M]
+  签名: {M} [幺半群 M]
 -/
 def prodAux {M} [Monoid M] : List M -> M
   | [] => 1
@@ -1283,7 +1283,7 @@ lemma prodAux_eq
 
 中文:
 引理 prodAux_eq
-  结论: 对任意 l : List M, FreeMonoid.prodAux l = l.prod
+  结论: 对任意 l : 列表 M, 自由幺半群.prodAux l = l.乘积
 -/
 lemma prodAux_eq : forall l : List M, FreeMonoid.prodAux l = l.prod
   | [] => rfl
@@ -1307,7 +1307,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (α -> M) ≃ (FreeMonoid α ->* M) where
+  签名: : (α -> M) ≃ (自由幺半群 α ->* M) where
   定义体: { toFun := fun l => prodAux ((toList l).map f)
     map_one' := rfl
     map_mul' := fun _ _ => by simp only [prodAux_eq, toList_mul, List.map_append, List.prod_append] }
@@ -1338,8 +1338,8 @@ theorem lift_ofList
 
 中文:
 定理 lift_ofList
-  条件: (f : α -> M) (l : List α)
-  结论: lift f (ofList l) = (l.map f).prod
+  条件: (f : α -> M) (l : 列表 α)
+  结论: lift f (ofList l) = (l.map f).乘积
   证明: prodAux_eq _
 
 @[to_additive (attr := simp)]
@@ -1363,7 +1363,7 @@ theorem lift_symm_apply
 
 中文:
 定理 lift_symm_apply
-  条件: (f : FreeMonoid α ->* M)
+  条件: (f : 自由幺半群 α ->* M)
   结论: lift.symm f = f ∘ of
   证明: rfl
 
@@ -1385,8 +1385,8 @@ theorem lift_apply
 
 中文:
 定理 lift_apply
-  条件: (f : α -> M) (l : FreeMonoid α)
-  结论: lift f l = ((toList l).map f).prod
+  条件: (f : α -> M) (l : 自由幺半群 α)
+  结论: lift f l = ((toList l).map f).乘积
   证明: prodAux_eq _
 
 @[to_additive]
@@ -1454,7 +1454,7 @@ theorem lift_restrict
 
 中文:
 定理 lift_restrict
-  条件: (f : FreeMonoid α ->* M)
+  条件: (f : 自由幺半群 α ->* M)
   结论: lift (f ∘ of) = f
   证明: lift.apply_symm_apply f
 
@@ -1504,7 +1504,7 @@ theorem hom_map_lift
 
 中文:
 定理 hom_map_lift
-  条件: (g : M ->* N) (f : α -> M) (x : FreeMonoid α)
+  条件: (g : M ->* N) (f : α -> M) (x : 自由幺半群 α)
   结论: g (lift f x) = lift (g ∘ f) x
   证明: DFunLike.ext_iff.1 (comp_lift g f) x
 
@@ -1558,7 +1558,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: (f : α -> β -> β) (l : FreeMonoid α) (b : β)
+  条件: (f : α -> β -> β) (l : 自由幺半群 α) (b : β)
   证明: mkMulAction f
     l • b = l.toList.foldr f b := rfl
 
@@ -1584,7 +1584,7 @@ theorem ofList_smul
 
 中文:
 定理 ofList_smul
-  条件: (f : α -> β -> β) (l : List α) (b : β)
+  条件: (f : α -> β -> β) (l : 列表 α) (b : β)
   证明: mkMulAction f
     ofList l • b = l.foldr f b := rfl
 
@@ -1710,7 +1710,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {α₁ : 类型} {g : α₁ -> α} {x : FreeMonoid α₁}
+  条件: {α₁ : 类型} {g : α₁ -> α} {x : 自由幺半群 α₁}
   证明: by
   unfold map
   simp only [MonoidHom.coe_mk, OneHom.coe_mk, toList_ofList, List.map_map]
@@ -1738,7 +1738,7 @@ theorem toList_map
 
 中文:
 定理 toList_map
-  条件: (f : α -> β) (xs : FreeMonoid α)
+  条件: (f : α -> β) (xs : 自由幺半群 α)
   结论: toList (map f xs) = xs.toList.map f
   证明: rfl
 
@@ -1760,7 +1760,7 @@ theorem ofList_map
 
 中文:
 定理 ofList_map
-  条件: (f : α -> β) (xs : List α)
+  条件: (f : α -> β) (xs : 列表 α)
   结论: ofList (xs.map f) = map f (ofList xs)
   证明: rfl
 
@@ -1829,7 +1829,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (@id α) = MonoidHom.id (FreeMonoid α)
+  结论: map (@id α) = 幺半群态射.id (自由幺半群 α)
   证明: hom_eq fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -1851,7 +1851,7 @@ theorem map_symm_apply_map_eq
 
 中文:
 定理 map_symm_apply_map_eq
-  条件: {x : FreeMonoid α} (e : α ≃ β)
+  条件: {x : 自由幺半群 α} (e : α ≃ β)
   证明: by simp [map_map]
 
 @[to_additive (attr := simp)]
@@ -1872,7 +1872,7 @@ theorem map_apply_map_symm_eq
 
 中文:
 定理 map_apply_map_symm_eq
-  条件: {x : FreeMonoid β} (e : α ≃ β)
+  条件: {x : 自由幺半群 β} (e : α ≃ β)
   证明: by simp [map_map]
 
 Depends on / 依赖: map_map
@@ -1896,7 +1896,7 @@ instance uniqueUnits
 
 中文:
 实例 uniqueUnits
-  签名: : Unique (FreeMonoid α)ˣ where
+  签名: : 唯一 (自由幺半群 α)ˣ where
   定义体: Units.ext toList.injective
     have : toList u.val ++ toList u.inv = [] := DFunLike.congr_arg toList u.val_inv
     (List.append_eq_nil_iff.mp this).1
@@ -1932,7 +1932,7 @@ theorem map_surjective
 中文:
 定理 map_surjective
   条件: {f : α -> β}
-  结论: Function.Surjective (map f) ↔ Function.Surjective f
+  结论: 函数.满射 (map f) ↔ 函数.满射 f
   证明: by
   constructor
   · intro fs d
@@ -1990,7 +1990,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: : FreeMonoid α -> FreeMonoid α
+  签名: : 自由幺半群 α -> 自由幺半群 α
   定义体: List.reverse
 
 @[to_additive (attr := simp)]
@@ -2035,7 +2035,7 @@ theorem reverse_mul
 
 中文:
 定理 reverse_mul
-  条件: {a b : FreeMonoid α}
+  条件: {a b : 自由幺半群 α}
   结论: reverse (a * b) = reverse b * reverse a
   证明: List.reverse_append
 
@@ -2061,7 +2061,7 @@ theorem reverse_reverse
 
 中文:
 定理 reverse_reverse
-  条件: {a : FreeMonoid α}
+  条件: {a : 自由幺半群 α}
   结论: reverse (reverse a) = a
   证明: by
   apply List.reverse_reverse
@@ -2085,7 +2085,7 @@ theorem length_reverse
 
 中文:
 定理 length_reverse
-  条件: {a : FreeMonoid α}
+  条件: {a : 自由幺半群 α}
   结论: a.reverse.length = a.length
   证明: List.length_reverse
 

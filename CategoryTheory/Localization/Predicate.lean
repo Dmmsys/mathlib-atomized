@@ -57,11 +57,11 @@ class IsLocalization
     - isEquivalence : IsEquivalence (Localization.Construction.lift L inverts)
 
 中文:
-类 IsLocalization
+类 是Localization
   参数: : 命题 where
   公理与运算 (2 个):
     - inverts : W.IsInvertedBy L
-    - isEquivalence : IsEquivalence (Localization.Construction.lift L inverts)
+    - isEquivalence : 是等价 (Localization.Construction.lift L inverts)
 -/
 class IsLocalization : Prop where
   /-- the functor inverts the given `MorphismProperty` -/
@@ -86,7 +86,7 @@ instance q_isLocalization
 
 中文:
 实例 q_isLocalization
-  签名: : W.Q.IsLocalization W where
+  签名: : W.Q.是Localization W where
   定义体: W.Q_inverts
   isEquivalence := by
     suffices Localization.Construction.lift W.Q W.Q_inverts = 𝟭 _ by
@@ -159,7 +159,7 @@ definition strictUniversalPropertyFixedTargetQ
 
 中文:
 定义 strictUniversalPropertyFixedTargetQ
-  签名: : StrictUniversal命题ertyFixedTarget W.Q W E where
+  签名: : StrictUniversalPropertyFixedTarget W.Q W E where
   定义体: W.Q_inverts
   lift := Construction.lift
   fac := Construction.fac
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (StrictUniversal命题ertyFixedTarget W.Q W E)
+  签名: 可居 (StrictUniversalPropertyFixedTarget W.Q W E)
   定义体: ⟨strictUniversalPropertyFixedTargetQ _ _⟩
 
 Depends on / 依赖: strictUniversalPropertyFixedTargetQ
@@ -212,7 +212,7 @@ definition strictUniversalPropertyFixedTargetId
 
 中文:
 定义 strictUniversalPropertyFixedTargetId
-  签名: (hW : W <= Morphism命题erty.isomorphisms C)
+  签名: (hW : W <= MorphismProperty.isomorphisms C)
   定义体: hW f hf
   lift F _ := F
   fac F hF := by
@@ -255,8 +255,8 @@ theorem IsLocalization.mk'
         simp only [← Functor.
 
 中文:
-定理 IsLocalization.mk'
-  结论: (h₁ : Localization.StrictUniversal命题ertyFixedTarget L W D)
+定理 是Localization.mk'
+  结论: (h₁ : Localization.StrictUniversalPropertyFixedTarget L W D)
   证明: { inverts := h₁.inverts
     isEquivalence := IsEquivalence.mk' (h₂.lift W.Q W.Q_inverts)
       (eqToIso (Localization.Construction.uniq _ _ (by
@@ -285,9 +285,9 @@ theorem IsLocalization.for_id
     (Localization.strictUniversalPropertyFixedTargetId W _ hW)
 
 中文:
-定理 IsLocalization.for_id
-  条件: (hW : W <= Morphism命题erty.isomorphisms C)
-  结论: (𝟭 C).IsLocalization W
+定理 是Localization.for_id
+  条件: (hW : W <= MorphismProperty.isomorphisms C)
+  结论: (𝟭 C).是Localization W
   证明: IsLocalization.mk' _ _ (Localization.strictUniversalPropertyFixedTargetId W _ hW)
     (Localization.strictUniversalPropertyFixedTargetId W _ hW)
 
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟭 C).IsLocalization (Morphism命题erty.isomorphisms C)
+  签名: (𝟭 C).是Localization (MorphismProperty.isomorphisms C)
   定义体: IsLocalization.for_id _ (by rfl)
 
 Depends on / 依赖: IsLocalization, IsLocalization.for_id, for_id
@@ -484,7 +484,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Localization.Construction.lift L (inverts L W)).IsEquivalence
+  签名: (Localization.Construction.lift L (inverts L W)).是等价
   定义体: (inferInstance : L.IsLocalization W).isEquivalence
 
 Depends on / 依赖: IsLocalization, L.IsLocalization, isEquivalence
@@ -579,8 +579,8 @@ theorem essSurj
 
 中文:
 定理 essSurj
-  条件: (W) [L.IsLocalization W]
-  结论: L.EssSurj
+  条件: (W) [L.是Localization W]
+  结论: L.本质满射
   证明: ⟨fun X =>
     ⟨(Construction.objEquiv W).invFun ((equivalenceFromModel L W).inverse.obj X),
       Nonempty.intro
@@ -635,7 +635,7 @@ instance :
 
 中文:
 实例 :
-  签名: (whiskeringLeftFunctor L W E).IsEquivalence
+  签名: (whiskeringLeftFunctor L W E).是等价
   定义体: by
   let iso : (whiskeringLeft (MorphismProperty.Localization W) D E).obj
     (equivalenceFromModel L W).functor ⋙
@@ -694,7 +694,7 @@ definition whiskeringLeftFunctor'
 
 中文:
 定义 whiskeringLeftFunctor'
-  签名: [L.IsLocalization W] (E : 类型) [Category* E]
+  签名: [L.是Localization W] (E : 类型) [范畴* E]
   定义体: (whiskeringLeft C D E).obj L
 
 Depends on / 依赖: whiskeringLeft
@@ -752,7 +752,7 @@ instance :
 
 中文:
 实例 :
-  签名: (whiskeringLeftFunctor' L W E).Full
+  签名: (whiskeringLeftFunctor' L W E).满
   定义体: by
   rw [whiskeringLeftFunctor'_eq]
   apply @Functor.Full.comp _ _ _ _ _ _ _ _ ?_ ?_
@@ -781,7 +781,7 @@ instance :
 
 中文:
 实例 :
-  签名: (whiskeringLeftFunctor' L W E).Faithful
+  签名: (whiskeringLeftFunctor' L W E).忠实
   定义体: by
   rw [whiskeringLeftFunctor'_eq]
   apply @Functor.Faithful.comp _ _ _ _ _ _ _ _ ?_ ?_
@@ -806,7 +806,7 @@ lemma full_whiskeringLeft
 
 中文:
 引理 full_whiskeringLeft
-  条件: (L : C ⥤ D) (W) [L.IsLocalization W] (E : 类型) [Category* E]
+  条件: (L : C ⥤ D) (W) [L.是Localization W] (E : 类型) [范畴* E]
   证明: inferInstanceAs (whiskeringLeftFunctor' L W E).Full
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_id, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, _inv_app, cancel_epi, hom_inv_id_app, hom_inv_id_app_assoc, inv.app, inv_hom_id_app, inv_hom_id_app_assoc, map_comp, map_id, pullbackShiftFunctorAdd, shiftFunctorAdd, whiskeringLeftFunctor
@@ -825,7 +825,7 @@ lemma faithful_whiskeringLeft
 
 中文:
 引理 faithful_whiskeringLeft
-  条件: (L : C ⥤ D) (W) [L.IsLocalization W] (E : 类型) [Category* E]
+  条件: (L : C ⥤ D) (W) [L.是Localization W] (E : 类型) [范畴* E]
   证明: inferInstanceAs (whiskeringLeftFunctor' L W E).Faithful
 
 Depends on / 依赖: Faithful, whiskeringLeftFunctor
@@ -847,7 +847,7 @@ definition fullyFaithfulWhiskeringLeft
 
 中文:
 定义 fullyFaithfulWhiskeringLeft
-  签名: (L : C ⥤ D) (W) [L.IsLocalization W] (E : 类型) [Category* E]
+  签名: (L : C ⥤ D) (W) [L.是Localization W] (E : 类型) [范畴* E]
   定义体: by
   have := full_whiskeringLeft L W E
   have := faithful_whiskeringLeft L W E
@@ -876,7 +876,7 @@ theorem natTrans_ext
 
 中文:
 定理 natTrans_ext
-  结论: (L : C ⥤ D) (W) [L.IsLocalization W] {F₁ F₂ : D ⥤ E} {τ τ' : F₁ ⟶ F₂}
+  结论: (L : C ⥤ D) (W) [L.是Localization W] {F₁ F₂ : D ⥤ E} {τ τ' : F₁ ⟶ F₂}
   证明: by
   have := essSurj L W
   ext Y
@@ -900,8 +900,8 @@ class Lifting
     - iso((L W F F')) : L ⋙ F' ≅ F
 
 中文:
-类 Lifting
-  参数: (L : C ⥤ D) (W : Morphism命题erty C) (F : C ⥤ E) (F' : D ⥤ E)
+类 提升
+  参数: (L : C ⥤ D) (W : MorphismProperty C) (F : C ⥤ E) (F' : D ⥤ E)
   公理与运算 (1 个):
     - iso((L W F F')) : L ⋙ F' ≅ F
 -/
@@ -921,7 +921,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W]
+  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.是Localization W]
   定义体: (functorEquivalence L W E).inverse.obj ⟨F, hF⟩
 
 Depends on / 依赖: functorEquivalence, inverse, inverse.obj
@@ -939,7 +939,7 @@ instance liftingLift
 
 中文:
 实例 liftingLift
-  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W]
+  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.是Localization W]
   定义体: ⟨(inducedFunctor _).mapIso ((functorEquivalence L W E).counitIso.app ⟨F, hF⟩)⟩
 
 Depends on / 依赖: counitIso, counitIso.app, functorEquivalence, inducedFunctor, mapIso
@@ -958,7 +958,7 @@ definition fac
 
 中文:
 定义 fac
-  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W]
+  签名: (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.是Localization W]
   定义体: Lifting.iso L W F _
 
 Depends on / 依赖: Lifting, Lifting.iso
@@ -1000,8 +1000,8 @@ definition liftNatTrans
 @[simp]
 
 中文:
-定义 liftNatTrans
-  签名: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂']
+定义 lift自然数Trans
+  签名: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [提升 L W F₁ F₁'] [提升 L W F₂ F₂']
   定义体: (whiskeringLeftFunctor' L W E).preimage
     ((Lifting.iso L W F₁ F₁').hom ≫ τ ≫ (Lifting.iso L W F₂ F₂').inv)
 
@@ -1026,8 +1026,8 @@ theorem liftNatTrans_app
 @[reassoc (attr := simp)]
 
 中文:
-定理 liftNatTrans_app
-  结论: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂']
+定理 lift自然数Trans_app
+  结论: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [提升 L W F₁ F₁'] [提升 L W F₂ F₂']
   证明: congr_app (Functor.map_preimage (whiskeringLeftFunctor' L W E) _) X
 
 @[reassoc (attr := simp)]
@@ -1053,8 +1053,8 @@ theorem comp_liftNatTrans
 @[simp]
 
 中文:
-定理 comp_liftNatTrans
-  结论: (F₁ F₂ F₃ : C ⥤ E) (F₁' F₂' F₃' : D ⥤ E) [h₁ : Lifting L W F₁ F₁']
+定理 comp_lift自然数Trans
+  结论: (F₁ F₂ F₃ : C ⥤ E) (F₁' F₂' F₃' : D ⥤ E) [h₁ : 提升 L W F₁ F₁']
   证明: natTrans_ext L W fun X => by
     simp only [NatTrans.comp_app, liftNatTrans_app, assoc, Iso.inv_hom_id_app_assoc]
 
@@ -1081,8 +1081,8 @@ theorem liftNatTrans_id
     rfl
 
 中文:
-定理 liftNatTrans_id
-  条件: (F : C ⥤ E) (F' : D ⥤ E) [h : Lifting L W F F']
+定理 lift自然数Trans_id
+  条件: (F : C ⥤ E) (F' : D ⥤ E) [h : 提升 L W F F']
   证明: natTrans_ext L W fun X => by
     simp only [liftNatTrans_app, NatTrans.id_app, id_comp, Iso.hom_inv_id_app]
     rfl
@@ -1109,8 +1109,8 @@ definition liftNatIso
   inv := liftNatTrans L W F₂ F₁ F₂' F₁' e.inv
 
 中文:
-定义 liftNatIso
-  签名: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [h₁ : Lifting L W F₁ F₁'] [h₂ : Lifting L W F₂ F₂']
+定义 lift自然数Iso
+  签名: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E) [h₁ : 提升 L W F₁ F₁'] [h₂ : 提升 L W F₂ F₂']
   定义体: liftNatTrans L W F₁ F₂ F₁' F₂' e.hom
   inv := liftNatTrans L W F₂ F₁ F₂' F₁' e.inv
 
@@ -1136,7 +1136,7 @@ instance compRight
 
 中文:
 实例 compRight
-  签名: {E' : 类型} [Category* E'] (F : C ⥤ E) (F' : D ⥤ E) [Lifting L W F F']
+  签名: {E' : 类型} [范畴* E'] (F : C ⥤ E) (F' : D ⥤ E) [提升 L W F F']
   定义体: ⟨isoWhiskerRight (iso L W F F') G⟩
 
 @[simps]
@@ -1160,7 +1160,7 @@ instance id
 
 中文:
 实例 id
-  签名: : Lifting L W L (𝟭 D)
+  签名: : 提升 L W L (𝟭 D)
   定义体: ⟨rightUnitor L⟩
 
 @[simps]
@@ -1202,7 +1202,7 @@ definition ofIsos
 
 中文:
 定义 ofIsos
-  签名: {F₁ F₂ : C ⥤ E} {F₁' F₂' : D ⥤ E} (e : F₁ ≅ F₂) (e' : F₁' ≅ F₂') [Lifting L W F₁ F₁']
+  签名: {F₁ F₂ : C ⥤ E} {F₁' F₂' : D ⥤ E} (e : F₁ ≅ F₂) (e' : F₁' ≅ F₂') [提升 L W F₁ F₁']
   定义体: ⟨isoWhiskerLeft L e'.symm ≪≫ iso L W F₁ F₁' ≪≫ e⟩
 
 Depends on / 依赖: isoWhiskerLeft
@@ -1239,8 +1239,8 @@ theorem of_iso
 
 中文:
 定理 of_iso
-  条件: {L₁ L₂ : C ⥤ D} (e : L₁ ≅ L₂) [L₁.IsLocalization W]
-  结论: L₂.IsLocalization W
+  条件: {L₁ L₂ : C ⥤ D} (e : L₁ ≅ L₂) [L₁.是Localization W]
+  结论: L₂.是Localization W
   证明: by
   have h := Localization.inverts L₁ W
   rw [MorphismProperty.IsInvertedBy.iff_of_iso W e] at h
@@ -1276,7 +1276,7 @@ theorem of_equivalence_target
 
 中文:
 定理 of_equivalence_target
-  结论: {E : 类型} [Category* E] (L' : C ⥤ E) (eq : D ≌ E)
+  结论: {E : 类型} [范畴* E] (L' : C ⥤ E) (eq : D ≌ E)
   证明: by
   have h : W.IsInvertedBy L' := by
     rw [← MorphismProperty.IsInvertedBy.iff_of_iso W e]
@@ -1314,7 +1314,7 @@ lemma of_isEquivalence
 
 中文:
 引理 of_isEquivalence
-  结论: (L : C ⥤ D) (W : Morphism命题erty C)
+  结论: (L : C ⥤ D) (W : MorphismProperty C)
   证明: by
   have : (𝟭 C).IsLocalization W := for_id W hW
   exact of_equivalence_target (𝟭 C) W L L.asEquivalence L.leftUnitor
@@ -1438,7 +1438,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lifting L₁ W' L₂ (uniq L₁ L₂ W').functor
+  签名: 提升 L₁ W' L₂ (uniq L₁ L₂ W').functor
   定义体: ⟨compUniqFunctor L₁ L₂ W'⟩
 
 Depends on / 依赖: compUniqFunctor
@@ -1454,7 +1454,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lifting L₂ W' L₁ (uniq L₁ L₂ W').inverse
+  签名: 提升 L₂ W' L₁ (uniq L₁ L₂ W').inverse
   定义体: ⟨compUniqInverse L₁ L₂ W'⟩
 
 Depends on / 依赖: compUniqInverse
@@ -1501,7 +1501,7 @@ lemma morphismProperty_eq_top
 
 中文:
 引理 morphismProperty_eq_top
-  结论: [L.IsLocalization W] (P : Morphism命题erty D) [P.RespectsIso]
+  结论: [L.是Localization W] (P : MorphismProperty D) [P.RespectsIso]
   证明: by
   let e := compUniqFunctor W.Q L W
   have hP : P.inverseImage (uniq W.Q L W).functor = ⊤ :=
@@ -1542,7 +1542,7 @@ lemma isGroupoid
 
 中文:
 引理 isGroupoid
-  条件: [L.IsLocalization ⊤]
+  条件: [L.是Localization ⊤]
   证明: by
   rw [isGroupoid_iff_isomorphisms_eq_top]
   exact morphismProperty_eq_top L ⊤ _
@@ -1568,7 +1568,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGroupoid (⊤ : Morphism命题erty C).Localization
+  签名: 是群胚 (⊤ : MorphismProperty C).Localization
   定义体: isGroupoid MorphismProperty.Q ⊤
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Q, isGroupoid
@@ -1588,7 +1588,7 @@ definition groupoid
 
 中文:
 定义 groupoid
-  签名: : Groupoid (⊤ : Morphism命题erty C).Localization
+  签名: : 群胚 (⊤ : MorphismProperty C).Localization
   定义体: Groupoid.ofIsGroupoid
 
 Depends on / 依赖: Groupoid, Groupoid.ofIsGroupoid, ofIsGroupoid
@@ -1639,7 +1639,7 @@ lemma areEqualizedByLocalization_iff
 
 中文:
 引理 areEqualizedByLocalization_iff
-  条件: [L.IsLocalization W]
+  条件: [L.是Localization W]
   证明: by
   dsimp [AreEqualizedByLocalization]
   constructor
@@ -1681,7 +1681,7 @@ lemma mk
 
 中文:
 引理 mk
-  条件: (L : C ⥤ D) [L.IsLocalization W] (h : L.map f = L.map g)
+  条件: (L : C ⥤ D) [L.是Localization W] (h : L.map f = L.map g)
   证明: (areEqualizedByLocalization_iff L W f g).2 h
 
 Depends on / 依赖: areEqualizedByLocalization_iff
@@ -1702,7 +1702,7 @@ lemma map_eq
 
 中文:
 引理 map_eq
-  条件: (h : AreEqualizedByLocalization W f g) (L : C ⥤ D) [L.IsLocalization W]
+  条件: (h : AreEqualizedByLocalization W f g) (L : C ⥤ D) [L.是Localization W]
   证明: (areEqualizedByLocalization_iff L W f g).1 h
 
 Depends on / 依赖: areEqualizedByLocalization_iff

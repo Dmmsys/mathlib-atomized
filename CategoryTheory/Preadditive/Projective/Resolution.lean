@@ -48,14 +48,14 @@ structure ProjectiveResolution
     - quasiIso : QuasiIso π  [default: by infer_instance]
 
 中文:
-结构 ProjectiveResolution
+结构 投射消解
   参数: (Z : C)
   公理与运算 (5 个):
-    - complex : ChainComplex C 自然数
-    - projective : 对任意 n, Projective (complex.X n)  [默认: by infer_instance]
-    - [hasHomology : 对任意 i, complex.HasHomology i]
-    - π : complex ⟶ (ChainComplex.single₀ C).obj Z
-    - quasiIso : QuasiIso π  [默认: by infer_instance]
+    - complex : 链复形 C 自然数
+    - projective : 对任意 n, 投射 (complex.X n)  [默认: by infer_instance]
+    - [hasHomology : 对任意 i, complex.有同调 i]
+    - π : complex ⟶ (链复形.single₀ C).obj Z
+    - quasiIso : 拟同构 π  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -84,10 +84,10 @@ class HasProjectiveResolution
     - out : Nonempty (ProjectiveResolution Z)
 
 中文:
-类 HasProjectiveResolution
+类 有投射消解
   参数: (Z : C)
   公理与运算 (1 个):
-    - out : Nonempty (ProjectiveResolution Z)
+    - out : 非空 (投射消解 Z)
 -/
 class HasProjectiveResolution (Z : C) : Prop where
   out : Nonempty (ProjectiveResolution Z)
@@ -104,10 +104,10 @@ class HasProjectiveResolutions
     - out : forall Z : C, HasProjectiveResolution Z
 
 中文:
-类 HasProjectiveResolutions
+类 有ProjectiveResolutions
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 Z : C, HasProjectiveResolution Z
+    - out : 对任意 Z : C, 有投射消解 Z
 
 Depends on / 依赖: Fintype, Fintype.ofSurjective, ofComposition, ofComposition_surj, ofSurjective
 -/
@@ -248,7 +248,7 @@ definition cokernelCofork
 
 中文:
 定义 cokernelCofork
-  签名: : CokernelCofork (P.complex.d 1 0)
+  签名: : 余核余叉 (P.complex.d 1 0)
   定义体: CokernelCofork.ofπ _ P.complex_d_comp_π_f_zero
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.of, P.complex_d_comp_
@@ -272,7 +272,7 @@ definition isColimitCokernelCofork
 
 中文:
 定义 isColimitCokernelCofork
-  签名: : IsColimit (P.cokernelCofork)
+  签名: : 是余极限 (P.cokernelCofork)
   定义体: by
   refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
   refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
@@ -318,7 +318,7 @@ definition self
 
 中文:
 定义 self
-  签名: [Projective Z]
+  签名: [投射 Z]
   定义体: (ChainComplex.single₀ C).obj Z
   π := 𝟙 ((ChainComplex.single₀ C).obj Z)
   projective n := by
@@ -353,7 +353,7 @@ structure Hom
     - hom_f_zero_comp_π_f_zero : hom.f 0 ≫ P'.π.f 0 = P.π.f 0 ≫ ((single₀ C).map f).f 0
 
 中文:
-结构 Hom
+结构 态射
   参数: (f : Z ⟶ Z')
   公理与运算 (2 个):
     - hom : P.complex ⟶ P'.complex
@@ -381,7 +381,7 @@ lemma hom_comp_π
 
 中文:
 引理 hom_comp_π
-  条件: {f : Z ⟶ Z'} (φ : Hom P P' f)
+  条件: {f : Z ⟶ Z'} (φ : 态射 P P' f)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -417,7 +417,7 @@ definition mapProjectiveResolution
 
 中文:
 定义 mapProjectiveResolution
-  签名: (F : C ⥤ D) [F.Additive]
+  签名: (F : C ⥤ D) [F.加性]
   定义体: (F.mapHomologicalComplex _).obj P.complex
   projective n := PreservesProjectiveObjects.projective_obj (P.projective n)
   π := (F.mapHomologicalComplex _).map P.π ≫

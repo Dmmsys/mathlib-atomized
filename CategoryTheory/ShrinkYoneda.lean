@@ -42,7 +42,7 @@ abbreviation Small
 
 中文:
 缩写 Small
-  签名: (F : C ⥤ Type w')
+  签名: (F : C ⥤ 类型 w')
   定义体: forall (X : C), _root_.Small.{w} (F.obj X)
 -/
 protected abbrev Small (F : C ⥤ Type w') := forall (X : C), _root_.Small.{w} (F.obj X)
@@ -61,7 +61,7 @@ definition shrink
 
 中文:
 定义 shrink
-  签名: (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F]
+  签名: (F : C ⥤ 类型 w') [FunctorToTypes.Small.{w} F]
   定义体: Shrink.{w} (F.obj X)
   map f := ↾(equivShrink.{w} _ ∘ F.map f ∘ (equivShrink.{w} _).symm)
 
@@ -85,7 +85,7 @@ definition shrinkMap
 
 中文:
 定义 shrinkMap
-  签名: {F G : C ⥤ Type w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F]
+  签名: {F G : C ⥤ 类型 w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F]
   定义体: ↾(equivShrink.{w} _ ∘ τ.app X ∘ (equivShrink.{w} _).symm)
 
 Depends on / 依赖: equivShrink
@@ -114,7 +114,7 @@ unif_hint (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] (X : C) where ⊢
 
 中文:
 定义 shrinkCompUliftFunctorIso
-  签名: (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F]
+  签名: (F : C ⥤ 类型 w') [FunctorToTypes.Small.{w} F]
   定义体: NatIso.ofComponents
     (fun X => Equiv.toIso ((Equiv.ulift.trans (equivShrink _).symm).trans (equivShrink _)))
 
@@ -336,7 +336,7 @@ definition shrinkYonedaEquiv
 
 中文:
 定义 shrinkYonedaEquiv
-  签名: {X : C} {P : Cᵒᵖ ⥤ Type w}
+  签名: {X : C} {P : Cᵒᵖ ⥤ 类型 w}
   定义体: τ.app _ (equivShrink.{w} _ (𝟙 X))
   invFun x :=
     { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f).op x
@@ -374,7 +374,7 @@ lemma map_shrinkYonedaEquiv
 
 中文:
 引理 map_shrinkYonedaEquiv
-  结论: {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X ⟶ P)
+  结论: {X Y : C} {P : Cᵒᵖ ⥤ 类型 w} (f : shrinkYoneda.obj X ⟶ P)
   证明: by
   simp [shrinkYonedaObjObjEquiv, shrinkYonedaEquiv, shrinkYoneda,
     ← comp_apply, ← NatTrans.naturality]
@@ -422,7 +422,7 @@ lemma shrinkYonedaEquiv_comp
 
 中文:
 引理 shrinkYonedaEquiv_comp
-  结论: {X : C} {P Q : Cᵒᵖ ⥤ Type w} (α : shrinkYoneda.obj X ⟶ P)
+  结论: {X : C} {P Q : Cᵒᵖ ⥤ 类型 w} (α : shrinkYoneda.obj X ⟶ P)
   证明: by
   simp [shrinkYonedaEquiv]
 
@@ -448,7 +448,7 @@ lemma shrinkYonedaEquiv_naturality
 
 中文:
 引理 shrinkYonedaEquiv_naturality
-  结论: {X Y : C} {P : Cᵒᵖ ⥤ Type w}
+  结论: {X Y : C} {P : Cᵒᵖ ⥤ 类型 w}
   证明: by
   simpa [shrinkYonedaEquiv, shrinkYoneda]
     using (f.naturality_apply g.op ((equivShrink _) (𝟙 _))).symm
@@ -477,7 +477,7 @@ lemma shrinkYonedaEquiv_symm_map
 
 中文:
 引理 shrinkYonedaEquiv_symm_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ Type w} (t : P.obj X)
+  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ 类型 w} (t : P.obj X)
   证明: shrinkYonedaEquiv.injective (by
     obtain ⟨t, rfl⟩ := shrinkYonedaEquiv.surjective t
     rw [← shrinkYonedaEquiv_naturality]
@@ -505,7 +505,7 @@ lemma shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm
 
 中文:
 引理 shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm
-  结论: {X : C} {P : Cᵒᵖ ⥤ Type w}
+  结论: {X : C} {P : Cᵒᵖ ⥤ 类型 w}
   证明: by
   obtain ⟨g, rfl⟩ := shrinkYonedaEquiv.surjective s
   simp [map_shrinkYonedaEquiv]
@@ -562,7 +562,7 @@ instance :
 
 中文:
 实例 :
-  签名: (shrinkYoneda.{w} (C := C)).Faithful
+  签名: (shrinkYoneda.{w} (C := C)).忠实
   定义体: (fullyFaithfulShrinkYoneda C).faithful
 
 Depends on / 依赖: Faithful, faithful, fullyFaithfulShrinkYoneda
@@ -579,7 +579,7 @@ instance :
 
 中文:
 实例 :
-  签名: (shrinkYoneda.{w} (C := C)).Full
+  签名: (shrinkYoneda.{w} (C := C)).满
   定义体: (fullyFaithfulShrinkYoneda C).full
 
 Depends on / 依赖: fullyFaithfulShrinkYoneda
@@ -631,7 +631,7 @@ definition shrinkYonedaUliftFunctorIso
 
 中文:
 定义 shrinkYonedaUliftFunctorIso
-  签名: [LocallySmall.{max w w'} C]
+  签名: [LocallySmall.{最大值 w w'} C]
   定义体: NatIso.ofComponents
     (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (yoneda.obj X))
     fun _ => by ext; simp [shrinkYoneda]
@@ -759,7 +759,7 @@ abbreviation shrinkCoyoneda
 
 中文:
 缩写 shrinkCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ Type w
+  签名: : Cᵒᵖ ⥤ C ⥤ 类型 w
   定义体: shrinkYoneda.flip
 
 Depends on / 依赖: shrinkYoneda, shrinkYoneda.flip
@@ -961,7 +961,7 @@ definition shrinkCoyonedaEquiv
 
 中文:
 定义 shrinkCoyonedaEquiv
-  签名: {X : Cᵒᵖ} {P : C ⥤ Type w}
+  签名: {X : Cᵒᵖ} {P : C ⥤ 类型 w}
   定义体: τ.app _ (equivShrink.{w} _ (𝟙 X.unop))
   invFun x :=
     { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f) x
@@ -999,7 +999,7 @@ lemma map_shrinkCoyonedaEquiv
 
 中文:
 引理 map_shrinkCoyonedaEquiv
-  结论: {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.obj X ⟶ P)
+  结论: {X Y : Cᵒᵖ} {P : C ⥤ 类型 w} (f : shrinkCoyoneda.obj X ⟶ P)
   证明: by
   simp [shrinkYonedaObjObjEquiv, shrinkCoyonedaEquiv, shrinkYoneda,
     ← comp_apply, ← NatTrans.naturality]
@@ -1047,7 +1047,7 @@ lemma shrinkCoyonedaEquiv_comp
 
 中文:
 引理 shrinkCoyonedaEquiv_comp
-  结论: {X : Cᵒᵖ} {P Q : C ⥤ Type w} (α : shrinkCoyoneda.obj X ⟶ P)
+  结论: {X : Cᵒᵖ} {P Q : C ⥤ 类型 w} (α : shrinkCoyoneda.obj X ⟶ P)
   证明: by
   simp [shrinkCoyonedaEquiv]
 
@@ -1073,7 +1073,7 @@ lemma shrinkCoyonedaEquiv_naturality
 
 中文:
 引理 shrinkCoyonedaEquiv_naturality
-  结论: {X Y : Cᵒᵖ} {P : C ⥤ Type w}
+  结论: {X Y : Cᵒᵖ} {P : C ⥤ 类型 w}
   证明: by
   simpa [shrinkCoyonedaEquiv, shrinkYoneda]
     using (f.naturality_apply g.unop ((equivShrink _) (𝟙 _))).symm
@@ -1102,7 +1102,7 @@ lemma shrinkCoyonedaEquiv_symm_map
 
 中文:
 引理 shrinkCoyonedaEquiv_symm_map
-  条件: {X Y : C} (f : X ⟶ Y) {P : C ⥤ Type w} (t : P.obj X)
+  条件: {X Y : C} (f : X ⟶ Y) {P : C ⥤ 类型 w} (t : P.obj X)
   证明: shrinkCoyonedaEquiv.injective (by
     obtain ⟨t, rfl⟩ := shrinkCoyonedaEquiv.surjective t
     rw [← shrinkCoyonedaEquiv_naturality]
@@ -1130,7 +1130,7 @@ lemma shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm
 
 中文:
 引理 shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm
-  结论: {X : Cᵒᵖ} {P : C ⥤ Type w}
+  结论: {X : Cᵒᵖ} {P : C ⥤ 类型 w}
   证明: by
   obtain ⟨g, rfl⟩ := shrinkCoyonedaEquiv.surjective s
   simp [map_shrinkCoyonedaEquiv]
@@ -1189,7 +1189,7 @@ instance :
 
 中文:
 实例 :
-  签名: (shrinkCoyoneda.{w} (C := C)).Faithful
+  签名: (shrinkCoyoneda.{w} (C := C)).忠实
   定义体: (fullyFaithfulShrinkCoyoneda C).faithful
 
 Depends on / 依赖: Faithful, faithful, fullyFaithfulShrinkCoyoneda
@@ -1206,7 +1206,7 @@ instance :
 
 中文:
 实例 :
-  签名: (shrinkCoyoneda.{w} (C := C)).Full
+  签名: (shrinkCoyoneda.{w} (C := C)).满
   定义体: (fullyFaithfulShrinkCoyoneda C).full
 
 Depends on / 依赖: fullyFaithfulShrinkCoyoneda
@@ -1259,7 +1259,7 @@ definition shrinkCoyonedaUliftFunctorIso
 
 中文:
 定义 shrinkCoyonedaUliftFunctorIso
-  签名: [LocallySmall.{max w w'} C]
+  签名: [LocallySmall.{最大值 w w'} C]
   定义体: NatIso.ofComponents
     (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (coyoneda.obj X))
     fun _ => by ext; simp [shrinkYoneda]

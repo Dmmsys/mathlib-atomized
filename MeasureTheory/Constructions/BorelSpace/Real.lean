@@ -75,7 +75,7 @@ theorem borel_eq_generateFrom_Iio_rat
 
 中文:
 定理 borel_eq_generateFrom_Iio_rat
-  结论: borel 实数 = .generateFrom (⋃ a : Rat, {Iio (a : 实数)})
+  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左无界右开区间 (a : 实数)})
   证明: by
   rw [borel_eq_generateFrom_Iio]
   refine le_antisymm
@@ -116,7 +116,7 @@ theorem borel_eq_generateFrom_Ioi_rat
 
 中文:
 定理 borel_eq_generateFrom_Ioi_rat
-  结论: borel 实数 = .generateFrom (⋃ a : Rat, {Ioi (a : 实数)})
+  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左开右无界区间 (a : 实数)})
   证明: by
   rw [borel_eq_generateFrom_Ioi]
   refine le_antisymm
@@ -156,7 +156,7 @@ theorem borel_eq_generateFrom_Iic_rat
 
 中文:
 定理 borel_eq_generateFrom_Iic_rat
-  结论: borel 实数 = .generateFrom (⋃ a : Rat, {Iic (a : 实数)})
+  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左无界右闭区间 (a : 实数)})
   证明: by
   rw [borel_eq_generateFrom_Ioi_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
   refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
@@ -191,7 +191,7 @@ theorem borel_eq_generateFrom_Ici_rat
 
 中文:
 定理 borel_eq_generateFrom_Ici_rat
-  结论: borel 实数 = .generateFrom (⋃ a : Rat, {Ici (a : 实数)})
+  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左闭右无界区间 (a : 实数)})
   证明: by
   rw [borel_eq_generateFrom_Iio_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
   refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
@@ -248,7 +248,7 @@ theorem isPiSystem_Iio_rat
 
 中文:
 定理 isPiSystem_Iio_rat
-  结论: IsPiSystem (⋃ a : Rat, {Iio (a : 实数)})
+  结论: IsPiSystem (⋃ a : 有理数, {左无界右开区间 (a : 实数)})
   证明: by
   convert! isPiSystem_image_Iio (((↑) : Rat -> Real) '' univ)
   ext x
@@ -274,7 +274,7 @@ theorem isPiSystem_Ioi_rat
 
 中文:
 定理 isPiSystem_Ioi_rat
-  结论: IsPiSystem (⋃ a : Rat, {Ioi (a : 实数)})
+  结论: IsPiSystem (⋃ a : 有理数, {左开右无界区间 (a : 实数)})
   证明: by
   convert! isPiSystem_image_Ioi (((↑) : Rat -> Real) '' univ)
   ext x
@@ -300,7 +300,7 @@ theorem isPiSystem_Iic_rat
 
 中文:
 定理 isPiSystem_Iic_rat
-  结论: IsPiSystem (⋃ a : Rat, {Iic (a : 实数)})
+  结论: IsPiSystem (⋃ a : 有理数, {左无界右闭区间 (a : 实数)})
   证明: by
   convert! isPiSystem_image_Iic (((↑) : Rat -> Real) '' univ)
   ext x
@@ -326,7 +326,7 @@ theorem isPiSystem_Ici_rat
 
 中文:
 定理 isPiSystem_Ici_rat
-  结论: IsPiSystem (⋃ a : Rat, {Ici (a : 实数)})
+  结论: IsPiSystem (⋃ a : 有理数, {左闭右无界区间 (a : 实数)})
   证明: by
   convert! isPiSystem_image_Ici (((↑) : Rat -> Real) '' univ)
   ext x
@@ -358,7 +358,7 @@ definition finiteSpanningSetsInIooRat
 
 中文:
 定义 finiteSpanningSetsInIooRat
-  签名: (μ : Measure 实数) [IsLocallyFiniteMeasure μ]
+  签名: (μ : 测度 实数) [是局部有限测度 μ]
   定义体: Ioo (-(n + 1)) (n + 1)
   set_mem n := by
     simp only [mem_iUnion, mem_singleton_iff]
@@ -398,7 +398,7 @@ theorem measure_ext_Ioo_rat
 
 中文:
 定理 measure_ext_Ioo_rat
-  结论: {μ ν : Measure 实数} [IsLocallyFiniteMeasure μ]
+  结论: {μ ν : 测度 实数} [是局部有限测度 μ]
   证明: (finiteSpanningSetsInIooRat μ).ext borel_eq_generateFrom_Ioo_rat isPiSystem_Ioo_rat by
     simp only [mem_iUnion, mem_singleton_iff]
     rintro _ ⟨a, b, -, rfl⟩
@@ -429,8 +429,8 @@ theorem measurable_real_toNNReal
 @[fun_prop]
 
 中文:
-定理 measurable_real_toNNReal
-  结论: Measurable 实数.toNN实数
+定理 measurable_real_toNN实数
+  结论: 可测 实数.toNN实数
   证明: continuous_real_toNNReal.measurable
 
 @[fun_prop]
@@ -452,8 +452,8 @@ theorem Measurable.real_toNNReal
 @[fun_prop]
 
 中文:
-定理 Measurable.real_toNNReal
-  条件: {f : α -> 实数} (hf : Measurable f)
+定理 可测.real_toNN实数
+  条件: {f : α -> 实数} (hf : 可测 f)
   证明: measurable_real_toNNReal.comp hf
 
 @[fun_prop]
@@ -474,8 +474,8 @@ theorem AEMeasurable.real_toNNReal
   proof: measurable_real_toNNReal.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.real_toNNReal
-  条件: {f : α -> 实数} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.real_toNN实数
+  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_real_toNNReal.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_real_toNNReal, measurable_real_toNNReal.comp_aemeasurable
@@ -496,7 +496,7 @@ theorem measurable_coe_nnreal_real
 
 中文:
 定理 measurable_coe_nnreal_real
-  结论: Measurable ((↑) : 实数>=0 -> 实数)
+  结论: 可测 ((↑) : 实数>=0 -> 实数)
   证明: NNReal.continuous_coe.measurable
 
 @[fun_prop]
@@ -518,8 +518,8 @@ theorem Measurable.coe_nnreal_real
 @[fun_prop]
 
 中文:
-定理 Measurable.coe_nnreal_real
-  条件: {f : α -> 实数>=0} (hf : Measurable f)
+定理 可测.coe_nnreal_real
+  条件: {f : α -> 实数>=0} (hf : 可测 f)
   证明: measurable_coe_nnreal_real.comp hf
 
 @[fun_prop]
@@ -540,8 +540,8 @@ theorem AEMeasurable.coe_nnreal_real
   proof: measurable_coe_nnreal_real.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.coe_nnreal_real
-  条件: {f : α -> 实数>=0} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.coe_nnreal_real
+  条件: {f : α -> 实数>=0} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_coe_nnreal_real.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_coe_nnreal_real, measurable_coe_nnreal_real.comp_aemeasurable
@@ -562,7 +562,7 @@ theorem measurable_coe_nnreal_ennreal
 
 中文:
 定理 measurable_coe_nnreal_ennreal
-  结论: Measurable ((↑) : 实数>=0 -> 实数>=0∞)
+  结论: 可测 ((↑) : 实数>=0 -> 实数>=0∞)
   证明: ENNReal.continuous_coe.measurable
 
 @[fun_prop]
@@ -584,8 +584,8 @@ theorem Measurable.coe_nnreal_ennreal
 @[fun_prop]
 
 中文:
-定理 Measurable.coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} (hf : Measurable f)
+定理 可测.coe_nnreal_ennreal
+  条件: {f : α -> 实数>=0} (hf : 可测 f)
   证明: ENNReal.continuous_coe.measurable.comp hf
 
 @[fun_prop]
@@ -608,8 +608,8 @@ theorem AEMeasurable.coe_nnreal_ennreal
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.coe_nnreal_ennreal
+  条件: {f : α -> 实数>=0} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: ENNReal.continuous_coe.measurable.comp_aemeasurable hf
 
 @[fun_prop]
@@ -632,8 +632,8 @@ theorem Measurable.ennreal_ofReal
 @[fun_prop]
 
 中文:
-定理 Measurable.ennreal_ofReal
-  条件: {f : α -> 实数} (hf : Measurable f)
+定理 可测.ennreal_of实数
+  条件: {f : α -> 实数} (hf : 可测 f)
   证明: ENNReal.continuous_ofReal.measurable.comp hf
 
 @[fun_prop]
@@ -656,8 +656,8 @@ lemma AEMeasurable.ennreal_ofReal
 @[simp, norm_cast]
 
 中文:
-引理 AEMeasurable.ennreal_ofReal
-  条件: {f : α -> 实数} {μ : Measure α} (hf : AEMeasurable f μ)
+引理 几乎处处可测.ennreal_of实数
+  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: ENNReal.continuous_ofReal.measurable.comp_aemeasurable hf
 
 @[simp, norm_cast]
@@ -704,8 +704,8 @@ theorem Measurable.nnreal_mk
 @[simp, norm_cast]
 
 中文:
-定理 Measurable.nnreal_mk
-  条件: {f : α -> 实数} (hf : Measurable f) {h'f : 对任意 x, 0 <= f x}
+定理 可测.nnreal_mk
+  条件: {f : α -> 实数} (hf : 可测 f) {h'f : 对任意 x, 0 <= f x}
   证明: measurable_coe_nnreal_real_iff.mp hf
 
 @[simp, norm_cast]
@@ -727,7 +727,7 @@ theorem aemeasurable_coe_nnreal_real_iff
 
 中文:
 定理 aemeasurable_coe_nnreal_real_iff
-  条件: {f : α -> 实数>=0} {μ : Measure α}
+  条件: {f : α -> 实数>=0} {μ : 测度 α}
   证明: ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, AEMeasurable.coe_nnreal_real⟩
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.coe_nnreal_real, Real.toNNReal_coe, coe_nnreal_real, h.real_toNNReal, real_toNNReal, toNNReal_coe
@@ -745,7 +745,7 @@ definition MeasurableEquiv.ennrealEquivNNReal
   body: ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv
 
 中文:
-定义 MeasurableEquiv.ennrealEquivNNReal
+定义 可测等价.ennrealEquivNN实数
   签名: : { r : 实数>=0∞ | r != ∞ } ≃ᵐ 实数>=0
   定义体: ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv
 
@@ -767,7 +767,7 @@ theorem measurable_of_measurable_nnreal
 
 中文:
 定理 measurable_of_measurable_nnreal
-  条件: {f : 实数>=0∞ -> α} (h : Measurable fun p : 实数>=0 => f p)
+  条件: {f : 实数>=0∞ -> α} (h : 可测 fun p : 实数>=0 => f p)
   证明: measurable_of_measurable_on_compl_singleton ∞
     (MeasurableEquiv.ennrealEquivNNReal.symm.measurable_comp_iff.1 h)
 
@@ -791,7 +791,7 @@ definition ennrealEquivSum
 
 中文:
 定义 ennrealEquivSum
-  签名: : 实数>=0∞ ≃ᵐ 实数>=0 oplus Unit
+  签名: : 实数>=0∞ ≃ᵐ 实数>=0 oplus 单元
   定义体: { Equiv.optionEquivSumPUnit Real>=0 with
     measurable_toFun := measurable_of_measurable_nnreal measurable_inl
     measurable_invFun :=
@@ -820,7 +820,7 @@ e.symm.measurable_comp_iff.1 measurable_fun_sum H₁ (H₂.comp measurable_id.sn
 
 中文:
 定理 measurable_of_measurable_nnreal_prod
-  结论: {_ : MeasurableSpace β} {_ : MeasurableSpace γ}
+  结论: {_ : 可测空间 β} {_ : 可测空间 γ}
   证明: let e : Real>=0∞ × β ≃ᵐ (Real>=0 × β) oplus (Unit × β) :=
     (ennrealEquivSum.prodCongr (MeasurableEquiv.refl β)).trans
       (MeasurableEquiv.sumProdDistrib _ _ _)
@@ -848,7 +848,7 @@ theorem measurable_of_measurable_nnreal_nnreal
 
 中文:
 定理 measurable_of_measurable_nnreal_nnreal
-  结论: {_ : MeasurableSpace β} {f : 实数>=0∞ × 实数>=0∞ -> β}
+  结论: {_ : 可测空间 β} {f : 实数>=0∞ × 实数>=0∞ -> β}
   证明: measurable_of_measurable_nnreal_prod
     (measurable_swap_iff.1 <| measurable_of_measurable_nnreal_prod (h₁.comp measurable_swap) h₃)
     (measurable_of_measurable_nnreal h₂)
@@ -871,8 +871,8 @@ theorem measurable_ofReal
   proof: ENNReal.continuous_ofReal.measurable
 
 中文:
-定理 measurable_ofReal
-  结论: Measurable ENN实数.of实数
+定理 measurable_of实数
+  结论: 可测 广义非负实数.of实数
   证明: ENNReal.continuous_ofReal.measurable
 
 Depends on / 依赖: ENNReal, ENNReal.continuous_ofReal.measurable, continuous_ofReal, measurable
@@ -889,8 +889,8 @@ theorem measurable_toReal
   proof: ENNReal.measurable_of_measurable_nnreal measurable_coe_nnreal_real
 
 中文:
-定理 measurable_toReal
-  结论: Measurable ENN实数.to实数
+定理 measurable_to实数
+  结论: 可测 广义非负实数.to实数
   证明: ENNReal.measurable_of_measurable_nnreal measurable_coe_nnreal_real
 
 Depends on / 依赖: ENNReal, ENNReal.measurable_of_measurable_nnreal, measurable_coe_nnreal_real, measurable_of_measurable_nnreal
@@ -907,8 +907,8 @@ theorem measurable_toNNReal
   proof: ENNReal.measurable_of_measurable_nnreal measurable_id
 
 中文:
-定理 measurable_toNNReal
-  结论: Measurable ENN实数.toNN实数
+定理 measurable_toNN实数
+  结论: 可测 广义非负实数.toNN实数
   证明: ENNReal.measurable_of_measurable_nnreal measurable_id
 
 Depends on / 依赖: ENNReal, ENNReal.measurable_of_measurable_nnreal, measurable_id, measurable_of_measurable_nnreal
@@ -998,7 +998,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSMul 实数>=0 实数>=0∞
+  签名: 可测标量乘法 实数>=0 实数>=0∞
   定义体: by simp_rw [ENNReal.smul_def]; exact measurable_const_smul _
   measurable_smul_const _ := by
     simp_rw [ENNReal.smul_def]
@@ -1030,7 +1030,7 @@ theorem measurable_of_tendsto'
 
 中文:
 定理 measurable_of_tendsto'
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (u : Filter ι)
+  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (u : 滤子 ι)
   证明: by
   rcases u.exists_seq_tendsto with ⟨x, hx⟩
   rw [tendsto_pi_nhds] at lim
@@ -1065,7 +1065,7 @@ theorem measurable_of_tendsto
 
 中文:
 定理 measurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (hf : 对任意 i, Measurable (f i))
+  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (hf : 对任意 i, 可测 (f i))
   证明: measurable_of_tendsto' atTop hf lim
 
 Depends on / 依赖: measurable_of_tendsto
@@ -1131,7 +1131,7 @@ lemma aemeasurable_of_tendsto
 
 中文:
 引理 aemeasurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} {μ : Measure α}
+  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} {μ : 测度 α}
   证明: aemeasurable_of_tendsto' atTop hf hlim
 
 Depends on / 依赖: aemeasurable_of_tendsto
@@ -1155,8 +1155,8 @@ theorem Measurable.ennreal_toNNReal
 @[fun_prop]
 
 中文:
-定理 Measurable.ennreal_toNNReal
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+定理 可测.ennreal_toNN实数
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: ENNReal.measurable_toNNReal.comp hf
 
 @[fun_prop]
@@ -1179,8 +1179,8 @@ theorem AEMeasurable.ennreal_toNNReal
 @[simp, norm_cast]
 
 中文:
-定理 AEMeasurable.ennreal_toNNReal
-  条件: {f : α -> 实数>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.ennreal_toNN实数
+  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: ENNReal.measurable_toNNReal.comp_aemeasurable hf
 
 @[simp, norm_cast]
@@ -1228,7 +1228,7 @@ theorem aemeasurable_coe_nnreal_ennreal_iff
 
 中文:
 定理 aemeasurable_coe_nnreal_ennreal_iff
-  条件: {f : α -> 实数>=0} {μ : Measure α}
+  条件: {f : α -> 实数>=0} {μ : 测度 α}
   证明: ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
 
 @[fun_prop]
@@ -1251,8 +1251,8 @@ theorem Measurable.ennreal_toReal
 @[fun_prop]
 
 中文:
-定理 Measurable.ennreal_toReal
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+定理 可测.ennreal_to实数
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: ENNReal.measurable_toReal.comp hf
 
 @[fun_prop]
@@ -1277,8 +1277,8 @@ theorem AEMeasurable.ennreal_toReal
   (since := "2026-04-30")]
 
 中文:
-定理 AEMeasurable.ennreal_toReal
-  条件: {f : α -> 实数>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.ennreal_to实数
+  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: ENNReal.measurable_toReal.comp_aemeasurable hf
 
 @[fun_prop, deprecated
@@ -1309,8 +1309,8 @@ theorem Measurable.ennreal_tsum
   (since := "2026-04-30")]
 
 中文:
-定理 Measurable.ennreal_tsum
-  条件: {ι} [Countable ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, Measurable (f i))
+定理 可测.ennreal_tsum
+  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, 可测 (f i))
   证明: by
   simp_rw [ENNReal.tsum_eq_iSup_sum]
   exact .iSup fun s => s.measurable_fun_sum fun i _ => h i
@@ -1344,8 +1344,8 @@ theorem Measurable.ennreal_tsum'
   (since := "2026-04-30")]
 
 中文:
-定理 Measurable.ennreal_tsum'
-  条件: {ι} [Countable ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, Measurable (f i))
+定理 可测.ennreal_tsum'
+  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, 可测 (f i))
   证明: by
   convert! Measurable.ennreal_tsum h with x
   exact tsum_apply (Pi.summable.2 fun _ => ENNReal.summable)
@@ -1379,8 +1379,8 @@ theorem Measurable.nnreal_tsum
   (since := "2026-04-30")]
 
 中文:
-定理 Measurable.nnreal_tsum
-  条件: {ι} [Countable ι] {f : ι -> α -> 实数>=0} (h : 对任意 i, Measurable (f i))
+定理 可测.nnreal_tsum
+  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0} (h : 对任意 i, 可测 (f i))
   证明: by
   simp_rw [NNReal.tsum_eq_toNNReal_tsum]
   exact (Measurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
@@ -1414,8 +1414,8 @@ theorem AEMeasurable.ennreal_tsum
   (since := "2026-04-30")]
 
 中文:
-定理 AEMeasurable.ennreal_tsum
-  结论: {ι} [Countable ι] {f : ι -> α -> 实数>=0∞} {μ : Measure α}
+定理 几乎处处可测.ennreal_tsum
+  结论: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} {μ : 测度 α}
   证明: by
   simp_rw [ENNReal.tsum_eq_iSup_sum]
   exact .iSup fun s => Finset.aemeasurable_fun_sum s fun i _ => h i
@@ -1447,8 +1447,8 @@ theorem AEMeasurable.nnreal_tsum
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.nnreal_tsum
-  结论: {α : 类型} {_ : MeasurableSpace α} {ι : 类型} [Countable ι]
+定理 几乎处处可测.nnreal_tsum
+  结论: {α : 类型} {_ : 可测空间 α} {ι : 类型} [可数 ι]
   证明: by
   simp_rw [NNReal.tsum_eq_toNNReal_tsum]
   exact (AEMeasurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
@@ -1474,7 +1474,7 @@ theorem measurable_coe_real_ereal
 
 中文:
 定理 measurable_coe_real_ereal
-  结论: Measurable ((↑) : 实数 -> E实数)
+  结论: 可测 ((↑) : 实数 -> E实数)
   证明: continuous_coe_real_ereal.measurable
 
 Depends on / 依赖: continuous_coe_real_ereal, continuous_coe_real_ereal.measurable, measurable
@@ -1493,8 +1493,8 @@ theorem Measurable.coe_real_ereal
 @[fun_prop]
 
 中文:
-定理 Measurable.coe_real_ereal
-  条件: {f : α -> 实数} (hf : Measurable f)
+定理 可测.coe_real_ereal
+  条件: {f : α -> 实数} (hf : 可测 f)
   证明: measurable_coe_real_ereal.comp hf
 
 @[fun_prop]
@@ -1515,8 +1515,8 @@ theorem AEMeasurable.coe_real_ereal
   proof: measurable_coe_real_ereal.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.coe_real_ereal
-  条件: {f : α -> 实数} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.coe_real_ereal
+  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_coe_real_ereal.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_coe_real_ereal, measurable_coe_real_ereal.comp_aemeasurable
@@ -1534,8 +1534,8 @@ definition MeasurableEquiv.erealEquivReal
   body: EReal.neBotTopHomeomorphReal.toMeasurableEquiv
 
 中文:
-定义 MeasurableEquiv.erealEquivReal
-  签名: : ({⊥, ⊤}ᶜ : Set E实数) ≃ᵐ 实数
+定义 可测等价.erealEquiv实数
+  签名: : ({⊥, ⊤}ᶜ : 集合 E实数) ≃ᵐ 实数
   定义体: EReal.neBotTopHomeomorphReal.toMeasurableEquiv
 
 Depends on / 依赖: EReal.neBotTopHomeomorphReal.toMeasurableEquiv, neBotTopHomeomorphReal, toMeasurableEquiv
@@ -1553,8 +1553,8 @@ theorem EReal.measurable_of_measurable_real
     (MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff.1 h)
 
 中文:
-定理 EReal.measurable_of_measurable_real
-  条件: {f : E实数 -> α} (h : Measurable fun p : 实数 => f p)
+定理 E实数.measurable_of_measurable_real
+  条件: {f : E实数 -> α} (h : 可测 fun p : 实数 => f p)
   证明: measurable_of_measurable_on_compl_finite {⊥, ⊤} (by simp)
     (MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff.1 h)
 
@@ -1576,8 +1576,8 @@ theorem measurable_ereal_toReal
 @[fun_prop]
 
 中文:
-定理 measurable_ereal_toReal
-  结论: Measurable E实数.to实数
+定理 measurable_ereal_to实数
+  结论: 可测 E实数.to实数
   证明: EReal.measurable_of_measurable_real (by simpa using! measurable_id)
 
 @[fun_prop]
@@ -1599,8 +1599,8 @@ theorem Measurable.ereal_toReal
 @[fun_prop]
 
 中文:
-定理 Measurable.ereal_toReal
-  条件: {f : α -> E实数} (hf : Measurable f)
+定理 可测.ereal_to实数
+  条件: {f : α -> E实数} (hf : 可测 f)
   证明: measurable_ereal_toReal.comp hf
 
 @[fun_prop]
@@ -1621,8 +1621,8 @@ theorem AEMeasurable.ereal_toReal
   proof: measurable_ereal_toReal.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.ereal_toReal
-  条件: {f : α -> E实数} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.ereal_to实数
+  条件: {f : α -> E实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_ereal_toReal.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_ereal_toReal, measurable_ereal_toReal.comp_aemeasurable
@@ -1643,7 +1643,7 @@ theorem measurable_coe_ennreal_ereal
 
 中文:
 定理 measurable_coe_ennreal_ereal
-  结论: Measurable ((↑) : 实数>=0∞ -> E实数)
+  结论: 可测 ((↑) : 实数>=0∞ -> E实数)
   证明: continuous_coe_ennreal_ereal.measurable
 
 @[fun_prop]
@@ -1665,8 +1665,8 @@ theorem Measurable.coe_ereal_ennreal
 @[fun_prop]
 
 中文:
-定理 Measurable.coe_ereal_ennreal
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+定理 可测.coe_ereal_ennreal
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: measurable_coe_ennreal_ereal.comp hf
 
 @[fun_prop]
@@ -1687,8 +1687,8 @@ theorem AEMeasurable.coe_ereal_ennreal
   proof: measurable_coe_ennreal_ereal.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.coe_ereal_ennreal
-  条件: {f : α -> 实数>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.coe_ereal_ennreal
+  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_coe_ennreal_ereal.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_coe_ennreal_ereal, measurable_coe_ennreal_ereal.comp_aemeasurable
@@ -1708,8 +1708,8 @@ theorem measurable_ereal_toENNReal
 @[fun_prop]
 
 中文:
-定理 measurable_ereal_toENNReal
-  结论: Measurable E实数.toENN实数
+定理 measurable_ereal_toENN实数
+  结论: 可测 E实数.toENN实数
   证明: EReal.measurable_of_measurable_real (by simpa using ENNReal.measurable_ofReal)
 
 @[fun_prop]
@@ -1731,8 +1731,8 @@ theorem Measurable.ereal_toENNReal
 @[fun_prop]
 
 中文:
-定理 Measurable.ereal_toENNReal
-  条件: {f : α -> E实数} (hf : Measurable f)
+定理 可测.ereal_toENN实数
+  条件: {f : α -> E实数} (hf : 可测 f)
   证明: measurable_ereal_toENNReal.comp hf
 
 @[fun_prop]
@@ -1753,8 +1753,8 @@ theorem AEMeasurable.ereal_toENNReal
   proof: measurable_ereal_toENNReal.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.ereal_toENNReal
-  条件: {f : α -> E实数} {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.ereal_toENN实数
+  条件: {f : α -> E实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: measurable_ereal_toENNReal.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_ereal_toENNReal, measurable_ereal_toENNReal.comp_aemeasurable
@@ -1797,7 +1797,7 @@ theorem measurable_of_tendsto'
 
 中文:
 定理 measurable_of_tendsto'
-  结论: {ι} {f : ι -> α -> 实数>=0} {g : α -> 实数>=0} (u : Filter ι) [NeBot u]
+  结论: {ι} {f : ι -> α -> 实数>=0} {g : α -> 实数>=0} (u : 滤子 ι) [NeBot u]
   证明: by
   simp_rw [← measurable_coe_nnreal_ennreal_iff] at hf ⊢
   refine ENNReal.measurable_of_tendsto' u hf ?_
@@ -1824,7 +1824,7 @@ theorem measurable_of_tendsto
 
 中文:
 定理 measurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0} {g : α -> 实数>=0} (hf : 对任意 i, Measurable (f i))
+  结论: {f : 自然数 -> α -> 实数>=0} {g : α -> 实数>=0} (hf : 对任意 i, 可测 (f i))
   证明: measurable_of_tendsto' atTop hf lim
 
 Depends on / 依赖: measurable_of_tendsto
@@ -1847,7 +1847,7 @@ lemma measurableEmbedding_coe
 
 中文:
 引理 measurableEmbedding_coe
-  结论: MeasurableEmbedding 实数.toE实数
+  结论: 可测嵌入 实数.toE实数
   证明: isOpenEmbedding_coe.measurableEmbedding
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.measurableEmbedding, measurableEmbedding
@@ -1957,7 +1957,7 @@ lemma measurable_const_mul
 中文:
 引理 measurable_const_mul
   条件: (c : E实数)
-  结论: Measurable fun (x : E实数) => c * x
+  结论: 可测 fun (x : E实数) => c * x
   证明: by
   rcases eq_or_ne c 0 with rfl | hc
   · simp
@@ -2029,8 +2029,8 @@ theorem exists_spanning_measurableSet_le
   let sets n := sigma_finite_sets n inter norm
 
 中文:
-定理 exists_spanning_measurableSet_le
-  结论: {f : α -> 实数>=0} (hf : Measurable f) (μ : Measure α)
+定理 存在_spanning_measurableSet_le
+  结论: {f : α -> 实数>=0} (hf : 可测 f) (μ : 测度 α)
   证明: by
   let sigma_finite_sets := spanningSets μ
   let norm_sets := fun n : Nat => { x | f x <= n }
@@ -2152,7 +2152,7 @@ lemma tendsto_measure_Icc
 
 中文:
 引理 tendsto_measure_Icc
-  条件: [NullSingletonClass μ] (b : 实数)
+  条件: [NullSingleton类 μ] (b : 实数)
   证明: by
   rw [← nhdsLT_sup_nhdsGE]; rw [tendsto_sup]
   constructor

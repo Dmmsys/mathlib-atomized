@@ -30,8 +30,8 @@ instance [NNRatCast
   body: (equivShrink α).symm.nnratCast
 
 中文:
-实例 [NNRatCast
-  签名: α] : NNRatCast (Shrink.{v} α)
+实例 [非负有理数嵌入
+  签名: α] : 非负有理数嵌入 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nnratCast
 -/
 instance [NNRatCast α] : NNRatCast (Shrink.{v} α) := (equivShrink α).symm.nnratCast
@@ -44,8 +44,8 @@ instance [RatCast
   body: (equivShrink α).symm.ratCast
 
 中文:
-实例 [RatCast
-  签名: α] : RatCast (Shrink.{v} α)
+实例 [有理数嵌入
+  签名: α] : 有理数嵌入 (Shrink.{v} α)
   定义体: (equivShrink α).symm.ratCast
 
 Depends on / 依赖: equivShrink, ratCast, symm.ratCast
@@ -60,8 +60,8 @@ instance [DivisionRing
   body: (equivShrink _).symm.divisionRing
 
 中文:
-实例 [DivisionRing
-  签名: α] : DivisionRing (Shrink.{v} α)
+实例 [除环
+  签名: α] : 除环 (Shrink.{v} α)
   定义体: (equivShrink _).symm.divisionRing
 
 Depends on / 依赖: divisionRing, equivShrink, symm.divisionRing
@@ -76,8 +76,8 @@ instance [Field
   body: (equivShrink _).symm.field
 
 中文:
-实例 [Field
-  签名: α] : Field (Shrink.{v} α)
+实例 [域
+  签名: α] : 域 (Shrink.{v} α)
   定义体: (equivShrink _).symm.field
 
 Depends on / 依赖: equivShrink, symm.field

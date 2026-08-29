@@ -76,7 +76,7 @@ theorem what
 
 中文:
 定理 what
-  结论: False
+  结论: 假
   证明: sorry
 -/
 theorem what : False := sorry
@@ -141,7 +141,7 @@ definition getGlobalAttributesIn?
 
 中文:
 定义 getGlobalAttributesIn?
-  签名: : Syntax -> Option (Ident × Array (TSyntax `attr))
+  签名: : Syntax -> 选项类型 (Ident × 数组 (TSyntax `attr))
   定义体: x.getElems.filterMap fun a => match a.raw with
       | `(Parser.Command.eraseAttr| -$_) => none
       | `(Parser.Term.attrInstance| local $_attr:attr) => none

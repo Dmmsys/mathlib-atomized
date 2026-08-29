@@ -42,7 +42,7 @@ definition quadraticCharFun
 
 中文:
 定义 quadraticCharFun
-  签名: (α : 类型) [MonoidWithZero α] [DecidableEq α]
+  签名: (α : 类型) [带零幺半群 α] [DecidableEq α]
   定义体: if a = 0 then 0 else if IsSquare a then 1 else -1
 
 Depends on / 依赖: IsSquare
@@ -264,7 +264,7 @@ definition quadraticChar
 
 中文:
 定义 quadraticChar
-  签名: : MulChar F 整数 where
+  签名: : 乘法特征 F 整数 where
   定义体: quadraticCharFun F
   map_one' := quadraticCharFun_one
   map_mul' := quadraticCharFun_mul
@@ -465,7 +465,7 @@ theorem quadraticChar_exists_neg_one
   proof: (FiniteField.exists_nonsquare hF).imp fun _ h₁ => quadraticChar_neg_one_iff_not_isSquare.mpr h₁
 
 中文:
-定理 quadraticChar_exists_neg_one
+定理 quadraticChar_存在_neg_one
   条件: (hF : ringChar F != 2)
   结论: 存在 a, quadraticChar F a = -1
   证明: (FiniteField.exists_nonsquare hF).imp fun _ h₁ => quadraticChar_neg_one_iff_not_isSquare.mpr h₁
@@ -488,7 +488,7 @@ lemma quadraticChar_exists_neg_one'
   exact ne_of_eq_of_ne ((quadraticChar F).map_nonunit ha) (mt zero_eq_neg.mp one_ne_zero)
 
 中文:
-引理 quadraticChar_exists_neg_one'
+引理 quadraticChar_存在_neg_one'
   条件: (hF : ringChar F != 2)
   结论: 存在 a : Fˣ, quadraticChar F a = -1
   证明: by
@@ -774,7 +774,7 @@ one_ne_zero
 
 中文:
 定理 FiniteField.isSquare_neg_one_iff
-  结论: IsSquare (-1 : F) ↔ Fintype.card F % 4 != 3
+  结论: IsSquare (-1 : F) ↔ 有限类型.card F % 4 != 3
   证明: by
   classical -- suggested by the linter (instead of `[DecidableEq F]`)
   by_cases hF : ringChar F = 2

@@ -63,7 +63,7 @@ instance unit_mono_of_L_faithful
 
 中文:
 实例 unit_mono_of_L_faithful
-  签名: [L.Faithful] (X : C)
+  签名: [L.忠实] (X : C)
   定义体: L.map_injective (h.homEquiv Y (L.obj X)).injective by simpa using hfg
 
 Depends on / 依赖: L.map_injective, L.obj, h.homEquiv, homEquiv, injective, map_injective
@@ -84,7 +84,7 @@ definition unitSplitEpiOfLFull
 
 中文:
 定义 unitSplitEpiOfLFull
-  签名: [L.Full] (X : C)
+  签名: [L.满] (X : C)
   定义体: L.preimage (h.counit.app (L.obj X))
   id := by simp [← h.unit_naturality (L.preimage (h.counit.app (L.obj X)))]
 -/
@@ -102,7 +102,7 @@ instance unit_isSplitEpi_of_L_full
 
 中文:
 实例 unit_isSplitEpi_of_L_full
-  签名: [L.Full] (X : C)
+  签名: [L.满] (X : C)
   定义体: ⟨⟨h.unitSplitEpiOfLFull X⟩⟩
 
 Depends on / 依赖: h.unitSplitEpiOfLFull, unitSplitEpiOfLFull
@@ -119,8 +119,8 @@ instance [L.Full]
   body: isIso_of_mono_of_isSplitEpi _
 
 中文:
-实例 [L.Full]
-  签名: [L.Faithful] (X : C)
+实例 [L.满]
+  签名: [L.忠实] (X : C)
   定义体: isIso_of_mono_of_isSplitEpi _
 
 Depends on / 依赖: isIso_of_mono_of_isSplitEpi
@@ -138,7 +138,7 @@ instance unit_isIso_of_L_fully_faithful
 
 中文:
 实例 unit_isIso_of_L_fully_faithful
-  签名: [L.Full] [L.Faithful]
+  签名: [L.满] [L.忠实]
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
@@ -156,7 +156,7 @@ instance counit_epi_of_R_faithful
 
 中文:
 实例 counit_epi_of_R_faithful
-  签名: [R.Faithful] (X : D)
+  签名: [R.忠实] (X : D)
   定义体: R.map_injective (h.homEquiv (R.obj X) Y).symm.injective by simpa using! hfg
 
 Depends on / 依赖: R.map_injective, R.obj, h.homEquiv, homEquiv, injective, map_injective, symm.injective
@@ -177,7 +177,7 @@ definition counitSplitMonoOfRFull
 
 中文:
 定义 counitSplitMonoOfRFull
-  签名: [R.Full] (X : D)
+  签名: [R.满] (X : D)
   定义体: R.preimage (h.unit.app (R.obj X))
   id := by simp [← h.counit_naturality (R.preimage (h.unit.app (R.obj X)))]
 
@@ -197,7 +197,7 @@ instance counit_isSplitMono_of_R_full
 
 中文:
 实例 counit_isSplitMono_of_R_full
-  签名: [R.Full] (X : D)
+  签名: [R.满] (X : D)
   定义体: ⟨⟨h.counitSplitMonoOfRFull X⟩⟩
 
 Depends on / 依赖: counitSplitMonoOfRFull, h.counitSplitMonoOfRFull
@@ -214,8 +214,8 @@ instance [R.Full]
   body: isIso_of_epi_of_isSplitMono _
 
 中文:
-实例 [R.Full]
-  签名: [R.Faithful] (X : D)
+实例 [R.满]
+  签名: [R.忠实] (X : D)
   定义体: isIso_of_epi_of_isSplitMono _
 
 Depends on / 依赖: isIso_of_epi_of_isSplitMono
@@ -233,7 +233,7 @@ instance counit_isIso_of_R_fully_faithful
 
 中文:
 实例 counit_isIso_of_R_fully_faithful
-  签名: [R.Full] [R.Faithful]
+  签名: [R.满] [R.忠实]
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
@@ -254,7 +254,7 @@ theorem inv_map_unit
 
 中文:
 定理 inv_map_unit
-  条件: {X : C} [IsIso (h.unit.app X)]
+  条件: {X : C} [是同构 (h.unit.app X)]
   证明: IsIso.inv_eq_of_hom_inv_id (h.left_triangle_components X)
 
 Depends on / 依赖: IsIso.inv_eq_of_hom_inv_id, h.left_triangle_components, inv_eq_of_hom_inv_id, left_triangle_components
@@ -275,7 +275,7 @@ definition whiskerLeftLCounitIsoOfIsIsoUnit
 
 中文:
 定义 whiskerLeftLCounitIsoOfIsIsoUnit
-  签名: [IsIso h.unit]
+  签名: [是同构 h.unit]
   定义体: (L.associator R L).symm ≪≫ isoWhiskerRight (asIso h.unit).symm L ≪≫ Functor.leftUnitor _
 
 Depends on / 依赖: Functor, Functor.leftUnitor, L.associator, associator, h.unit, isoWhiskerRight, leftUnitor
@@ -296,7 +296,7 @@ theorem inv_counit_map
 
 中文:
 定理 inv_counit_map
-  条件: {X : D} [IsIso (h.counit.app X)]
+  条件: {X : D} [是同构 (h.counit.app X)]
   证明: IsIso.inv_eq_of_inv_hom_id (h.right_triangle_components X)
 
 Depends on / 依赖: IsIso.inv_eq_of_inv_hom_id, h.right_triangle_components, inv_eq_of_inv_hom_id, right_triangle_components
@@ -318,7 +318,7 @@ definition whiskerLeftRUnitIsoOfIsIsoCounit
 
 中文:
 定义 whiskerLeftRUnitIsoOfIsIsoCounit
-  签名: [IsIso h.counit]
+  签名: [是同构 h.counit]
   定义体: (R.associator L R).symm ≪≫ isoWhiskerRight (asIso h.counit) R ≪≫ Functor.leftUnitor _
 
 Depends on / 依赖: Functor, Functor.leftUnitor, R.associator, associator, counit, h.counit, isoWhiskerRight, leftUnitor
@@ -341,8 +341,8 @@ lemma faithful_L_of_mono_unit_app
 
 中文:
 引理 faithful_L_of_mono_unit_app
-  条件: [对任意 X, Mono (h.unit.app X)]
-  结论: L.Faithful where
+  条件: [对任意 X, 单态射 (h.unit.app X)]
+  结论: L.忠实 where
   证明: by
     apply Mono.right_cancellation (f := h.unit.app Y)
     apply (h.homEquiv X (L.obj Y)).symm.injective
@@ -372,8 +372,8 @@ lemma full_L_of_isSplitEpi_unit_app
 
 中文:
 引理 full_L_of_isSplitEpi_unit_app
-  条件: [对任意 X, IsSplitEpi (h.unit.app X)]
-  结论: L.Full where
+  条件: [对任意 X, 是分裂满态射 (h.unit.app X)]
+  结论: L.满 where
   证明: by
     use ((h.homEquiv X (L.obj Y)) f ≫ section_ (h.unit.app Y))
     suffices L.map (section_ (h.unit.app Y)) = h.counit.app (L.obj Y) by simp [this]
@@ -401,7 +401,7 @@ definition fullyFaithfulLOfIsIsoUnit
 
 中文:
 定义 fullyFaithfulLOfIsIsoUnit
-  签名: [IsIso h.unit]
+  签名: [是同构 h.unit]
   定义体: h.homEquiv _ (L.obj Y) f ≫ inv (h.unit.app Y)
 
 Depends on / 依赖: L.obj, h.homEquiv, h.unit.app, homEquiv
@@ -424,8 +424,8 @@ lemma faithful_R_of_epi_counit_app
 
 中文:
 引理 faithful_R_of_epi_counit_app
-  条件: [对任意 X, Epi (h.counit.app X)]
-  结论: R.Faithful where
+  条件: [对任意 X, 满态射 (h.counit.app X)]
+  结论: R.忠实 where
   证明: by
     apply Epi.left_cancellation (f := h.counit.app X)
     apply (h.homEquiv (R.obj X) Y).injective
@@ -455,8 +455,8 @@ lemma full_R_of_isSplitMono_counit_app
 
 中文:
 引理 full_R_of_isSplitMono_counit_app
-  条件: [对任意 X, IsSplitMono (h.counit.app X)]
-  结论: R.Full where
+  条件: [对任意 X, 是分裂单态射 (h.counit.app X)]
+  结论: R.满 where
   证明: by
     use (retraction (h.counit.app X) ≫ (h.homEquiv (R.obj X) Y).symm f)
     suffices R.map (retraction (h.counit.app X)) = h.unit.app (R.obj X) by simp [this]
@@ -484,7 +484,7 @@ definition fullyFaithfulROfIsIsoCounit
 
 中文:
 定义 fullyFaithfulROfIsIsoCounit
-  签名: [IsIso h.counit]
+  签名: [是同构 h.counit]
   定义体: inv (h.counit.app X) ≫ (h.homEquiv (R.obj X) Y).symm f
 
 Depends on / 依赖: R.obj, counit, h.counit.app, h.homEquiv, homEquiv
@@ -507,7 +507,7 @@ instance whiskerLeft_counit_iso_of_L_fully_faithful
 
 中文:
 实例 whiskerLeft_counit_iso_of_L_fully_faithful
-  签名: [L.Full] [L.Faithful]
+  签名: [L.满] [L.忠实]
   定义体: by
   have := ((Functor.associator ..).inv ≫ whiskerRight (inv h.unit) L) ≫= h.left_triangle
   simp only [assoc, ← whiskerRight_comp_assoc, IsIso.inv_hom_id, whiskerRight_id', id_comp,
@@ -539,7 +539,7 @@ instance whiskerRight_counit_iso_of_L_fully_faithful
 
 中文:
 实例 whiskerRight_counit_iso_of_L_fully_faithful
-  签名: [L.Full] [L.Faithful]
+  签名: [L.满] [L.忠实]
   定义体: by
   have := h.right_triangle
   rw [← IsIso.eq_inv_comp]; rw [Iso.inv_comp_eq] at this
@@ -569,7 +569,7 @@ instance whiskerLeft_unit_iso_of_R_fully_faithful
 
 中文:
 实例 whiskerLeft_unit_iso_of_R_fully_faithful
-  签名: [R.Full] [R.Faithful]
+  签名: [R.满] [R.忠实]
   定义体: by
   have := h.right_triangle
   rw [← IsIso.eq_comp_inv] at this
@@ -599,7 +599,7 @@ instance whiskerRight_unit_iso_of_R_fully_faithful
 
 中文:
 实例 whiskerRight_unit_iso_of_R_fully_faithful
-  签名: [R.Full] [R.Faithful]
+  签名: [R.满] [R.忠实]
   定义体: by
   have := h.left_triangle
   rw [← IsIso.eq_comp_inv] at this
@@ -624,8 +624,8 @@ instance [L.Faithful]
   body: isIso_of_hom_comp_eq_id _ (h.left_triangle_components Y)
 
 中文:
-实例 [L.Faithful]
-  签名: [L.Full] {Y : C}
+实例 [L.忠实]
+  签名: [L.满] {Y : C}
   定义体: isIso_of_hom_comp_eq_id _ (h.left_triangle_components Y)
 
 Depends on / 依赖: h.left_triangle_components, isIso_of_hom_comp_eq_id, left_triangle_components
@@ -642,8 +642,8 @@ instance [L.Faithful]
   body: isIso_of_hom_comp_eq_id _ (h.right_triangle_components Y)
 
 中文:
-实例 [L.Faithful]
-  签名: [L.Full] {Y : D}
+实例 [L.忠实]
+  签名: [L.满] {Y : D}
   定义体: isIso_of_hom_comp_eq_id _ (h.right_triangle_components Y)
 
 Depends on / 依赖: h.right_triangle_components, isIso_of_hom_comp_eq_id, right_triangle_components
@@ -667,7 +667,7 @@ lemma isIso_counit_app_iff_mem_essImage
 
 中文:
 引理 isIso_counit_app_iff_mem_essImage
-  条件: [L.Faithful] [L.Full] {X : D}
+  条件: [L.忠实] [L.满] {X : D}
   证明: by
   constructor
   · intro
@@ -716,7 +716,7 @@ lemma isIso_counit_app_of_iso
 
 中文:
 引理 isIso_counit_app_of_iso
-  条件: [L.Faithful] [L.Full] {X : D} {Y : C} (e : X ≅ L.obj Y)
+  条件: [L.忠实] [L.满] {X : D} {Y : C} (e : X ≅ L.obj Y)
   证明: (isIso_counit_app_iff_mem_essImage h).mpr ⟨Y, ⟨e.symm⟩⟩
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.tensorHom_comp_tensorHom_assoc, comp_id, e.symm, id_comp, isIso_counit_app_iff_mem_essImage, tensorHom_comp_tensorHom_assoc, tensorHom_id
@@ -734,8 +734,8 @@ instance [R.Faithful]
   body: isIso_of_comp_hom_eq_id _ (h.right_triangle_components Y)
 
 中文:
-实例 [R.Faithful]
-  签名: [R.Full] {Y : D}
+实例 [R.忠实]
+  签名: [R.满] {Y : D}
   定义体: isIso_of_comp_hom_eq_id _ (h.right_triangle_components Y)
 
 Depends on / 依赖: h.right_triangle_components, isIso_of_comp_hom_eq_id, right_triangle_components
@@ -752,8 +752,8 @@ instance [R.Faithful]
   body: isIso_of_comp_hom_eq_id _ (h.left_triangle_components X)
 
 中文:
-实例 [R.Faithful]
-  签名: [R.Full] {X : C}
+实例 [R.忠实]
+  签名: [R.满] {X : C}
   定义体: isIso_of_comp_hom_eq_id _ (h.left_triangle_components X)
 
 Depends on / 依赖: h.left_triangle_components, isIso_of_comp_hom_eq_id, left_triangle_components
@@ -777,7 +777,7 @@ lemma isIso_unit_app_iff_mem_essImage
 
 中文:
 引理 isIso_unit_app_iff_mem_essImage
-  条件: [R.Faithful] [R.Full] {Y : C}
+  条件: [R.忠实] [R.满] {Y : C}
   证明: by
   constructor
   · intro
@@ -826,7 +826,7 @@ lemma isIso_unit_app_of_iso
 
 中文:
 引理 isIso_unit_app_of_iso
-  条件: [R.Faithful] [R.Full] {X : D} {Y : C} (e : Y ≅ R.obj X)
+  条件: [R.忠实] [R.满] {X : D} {Y : C} (e : Y ≅ R.obj X)
   证明: (isIso_unit_app_iff_mem_essImage h).mpr ⟨X, ⟨e.symm⟩⟩
 
 Depends on / 依赖: e.symm, isIso_unit_app_iff_mem_essImage
@@ -846,8 +846,8 @@ instance [R.IsEquivalence]
   apply NatIso.isIso_of_isIso_app
 
 中文:
-实例 [R.IsEquivalence]
-  签名: : IsIso h.unit
+实例 [R.是等价]
+  签名: : 是同构 h.unit
   定义体: by
   have := fun Y => isIso_unit_app_of_iso h (R.objObjPreimageIso Y).symm
   apply NatIso.isIso_of_isIso_app
@@ -869,8 +869,8 @@ instance [L.IsEquivalence]
   apply NatIso.isIso_of_isIso_app
 
 中文:
-实例 [L.IsEquivalence]
-  签名: : IsIso h.counit
+实例 [L.是等价]
+  签名: : 是同构 h.counit
   定义体: by
   have := fun X => isIso_counit_app_of_iso h (L.objObjPreimageIso X).symm
   apply NatIso.isIso_of_isIso_app
@@ -892,8 +892,8 @@ lemma isEquivalence_left_of_isEquivalence_right
 
 中文:
 引理 isEquivalence_left_of_isEquivalence_right
-  条件: (h : L ⊣ R) [R.IsEquivalence]
-  结论: L.IsEquivalence
+  条件: (h : L ⊣ R) [R.是等价]
+  结论: L.是等价
   证明: h.toEquivalence.isEquivalence_functor
 
 Depends on / 依赖: h.toEquivalence.isEquivalence_functor, isEquivalence_functor, toEquivalence
@@ -912,8 +912,8 @@ lemma isEquivalence_right_of_isEquivalence_left
 
 中文:
 引理 isEquivalence_right_of_isEquivalence_left
-  条件: (h : L ⊣ R) [L.IsEquivalence]
-  结论: R.IsEquivalence
+  条件: (h : L ⊣ R) [L.是等价]
+  结论: R.是等价
   证明: h.toEquivalence.isEquivalence_inverse
 
 Depends on / 依赖: h.toEquivalence.isEquivalence_inverse, isEquivalence_inverse, toEquivalence
@@ -932,8 +932,8 @@ instance [L.IsEquivalence]
   infer_instance
 
 中文:
-实例 [L.IsEquivalence]
-  签名: : IsIso h.unit
+实例 [L.是等价]
+  签名: : 是同构 h.unit
   定义体: by
   have := h.isEquivalence_right_of_isEquivalence_left
   infer_instance
@@ -955,8 +955,8 @@ instance [R.IsEquivalence]
   infer_instance
 
 中文:
-实例 [R.IsEquivalence]
-  签名: : IsIso h.counit
+实例 [R.是等价]
+  签名: : 是同构 h.counit
   定义体: by
   have := h.isEquivalence_left_of_isEquivalence_right
   infer_instance
@@ -987,7 +987,7 @@ FF.homEquiv.symm.trans
 
 中文:
 定理 isIso_map_unit_of_isLeftAdjoint_comp
-  结论: {E : 类型} [Category* E]
+  结论: {E : 类型} [范畴* E]
   证明: by
   let FF := FullyFaithful.ofFullyFaithful R
   apply isIso_of_coyoneda_map_bijective

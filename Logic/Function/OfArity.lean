@@ -185,7 +185,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: {α β n} [Inhabited β]
+  签名: {α β n} [可居 β]
   定义体: inferInstanceAs (Inhabited (FromTypes (fun _ => α) β))
 
 Depends on / 依赖: FromTypes, Inhabited

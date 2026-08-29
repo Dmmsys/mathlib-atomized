@@ -76,7 +76,7 @@ structure Hom
     - coroot_coweightMap : coweightMap ∘ Q.coroot = P.coroot ∘ indexEquiv.symm
 
 中文:
-结构 Hom
+结构 态射
   参数: {ι₂ M₂ N₂ : 类型}
   公理与运算 (6 个):
     - weightMap : M ->ₗ[R] M₂
@@ -217,7 +217,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
+  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
   定义体: g.weightMap ∘ₗ f.weightMap
   coweightMap := f.coweightMap ∘ₗ g.coweightMap
   indexEquiv := f.indexEquiv.trans g.indexEquiv
@@ -311,7 +311,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [AddCommGroup M₁] [Module R M₁]
+  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [加法交换群 M₁] [模 R M₁]
   证明: by
   ext <;> simp
 -/
@@ -416,7 +416,7 @@ lemma weightMap_mul
 
 中文:
 引理 weightMap_mul
-  条件: (P : RootPairing ι R M N) (x y : Hom P P)
+  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
   证明: rfl
 
 @[simp]
@@ -438,7 +438,7 @@ lemma coweightMap_mul
 
 中文:
 引理 coweightMap_mul
-  条件: (P : RootPairing ι R M N) (x y : Hom P P)
+  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
   证明: rfl
 
 @[simp]
@@ -460,7 +460,7 @@ lemma indexEquiv_mul
 
 中文:
 引理 indexEquiv_mul
-  条件: (P : RootPairing ι R M N) (x y : Hom P P)
+  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
   证明: rfl
 -/
 lemma indexEquiv_mul (P : RootPairing ι R M N) (x y : Hom P P) :
@@ -525,7 +525,7 @@ lemma weightHom_injective
 中文:
 引理 weightHom_injective
   条件: (P : RootPairing ι R M N)
-  结论: Injective (weightHom P)
+  结论: 单射 (weightHom P)
   证明: by
   intro f g hfg
   ext x
@@ -597,7 +597,7 @@ lemma coweightHom_injective
 中文:
 引理 coweightHom_injective
   条件: (P : RootPairing ι R M N)
-  结论: Injective (coweightHom P)
+  结论: 单射 (coweightHom P)
   证明: by
   intro f g hfg
   ext x
@@ -679,12 +679,12 @@ structure Equiv
     - bijective_coweightMap : Bijective coweightMap
 
 中文:
-结构 Equiv
-  参数: extends Hom P Q
-  继承: Hom P Q
+结构 等价
+  参数: extends 态射 P Q
+  继承: 态射 P Q
   公理与运算 (2 个):
-    - bijective_weightMap : Bijective weightMap
-    - bijective_coweightMap : Bijective coweightMap
+    - bijective_weightMap : 双射 weightMap
+    - bijective_coweightMap : 双射 coweightMap
 -/
 protected structure Equiv extends Hom P Q where
   bijective_weightMap : Bijective weightMap
@@ -709,7 +709,7 @@ definition weightEquiv
 
 中文:
 定义 weightEquiv
-  签名: (e : RootPairing.Equiv P Q)
+  签名: (e : RootPairing.等价 P Q)
   定义体: LinearEquiv.ofBijective _ e.bijective_weightMap
 
 @[simp]
@@ -732,7 +732,7 @@ lemma weightEquiv_apply
 
 中文:
 引理 weightEquiv_apply
-  条件: (e : RootPairing.Equiv P Q) (m : M)
+  条件: (e : RootPairing.等价 P Q) (m : M)
   证明: rfl
 
 @[simp]
@@ -754,7 +754,7 @@ lemma weightEquiv_symm_weightMap
 
 中文:
 引理 weightEquiv_symm_weightMap
-  条件: (e : RootPairing.Equiv P Q) (m : M)
+  条件: (e : RootPairing.等价 P Q) (m : M)
   证明: (LinearEquiv.symm_apply_eq (weightEquiv P Q e)).mpr rfl
 
 @[simp]
@@ -778,7 +778,7 @@ lemma weightMap_weightEquiv_symm
 
 中文:
 引理 weightMap_weightEquiv_symm
-  条件: (e : RootPairing.Equiv P Q) (m : M₂)
+  条件: (e : RootPairing.等价 P Q) (m : M₂)
   证明: by
   rw [← weightEquiv_apply]
   exact LinearEquiv.apply_symm_apply (weightEquiv P Q e) m
@@ -802,7 +802,7 @@ definition coweightEquiv
 
 中文:
 定义 coweightEquiv
-  签名: (e : RootPairing.Equiv P Q)
+  签名: (e : RootPairing.等价 P Q)
   定义体: LinearEquiv.ofBijective _ e.bijective_coweightMap
 
 @[simp]
@@ -825,7 +825,7 @@ lemma coweightEquiv_apply
 
 中文:
 引理 coweightEquiv_apply
-  条件: (e : RootPairing.Equiv P Q) (n : N₂)
+  条件: (e : RootPairing.等价 P Q) (n : N₂)
   证明: rfl
 
 @[simp]
@@ -847,7 +847,7 @@ lemma coweightEquiv_symm_coweightMap
 
 中文:
 引理 coweightEquiv_symm_coweightMap
-  条件: (e : RootPairing.Equiv P Q) (n : N₂)
+  条件: (e : RootPairing.等价 P Q) (n : N₂)
   证明: (LinearEquiv.symm_apply_eq (coweightEquiv P Q e)).mpr rfl
 
 @[simp]
@@ -871,7 +871,7 @@ lemma coweightMap_coweightEquiv_symm
 
 中文:
 引理 coweightMap_coweightEquiv_symm
-  条件: (e : RootPairing.Equiv P Q) (n : N)
+  条件: (e : RootPairing.等价 P Q) (n : N)
   证明: by
   rw [← coweightEquiv_apply]
   exact LinearEquiv.apply_symm_apply (coweightEquiv P Q e) n
@@ -925,7 +925,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
+  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
   定义体: { Hom.comp g.toHom f.toHom with
     bijective_weightMap := by
       simp only [Hom.comp, LinearMap.coe_comp]
@@ -962,7 +962,7 @@ lemma toHom_comp
 
 中文:
 引理 toHom_comp
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
+  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
   证明: by
   rfl
 
@@ -1039,7 +1039,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [AddCommGroup M₁] [Module R M₁]
+  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [加法交换群 M₁] [模 R M₁]
   证明: by
   ext <;> simp
 -/
@@ -1142,7 +1142,7 @@ lemma mul_eq_comp
 
 中文:
 引理 mul_eq_comp
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
+  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
   证明: rfl
 
 @[simp]
@@ -1165,7 +1165,7 @@ lemma weightEquiv_comp_toLin
 
 中文:
 引理 weightEquiv_comp_toLin
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
+  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
   证明: by
   ext; simp
 
@@ -1189,7 +1189,7 @@ lemma weightEquiv_mul
 
 中文:
 引理 weightEquiv_mul
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
+  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
   证明: by
   rfl
 
@@ -1213,7 +1213,7 @@ lemma coweightEquiv_comp_toLin
 
 中文:
 引理 coweightEquiv_comp_toLin
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
+  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
   证明: by
   ext; simp
 
@@ -1235,7 +1235,7 @@ lemma coweightEquiv_mul
 
 中文:
 引理 coweightEquiv_mul
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
+  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
   证明: by
   rfl
 -/
@@ -1260,7 +1260,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {ι₂ M₂ N₂ : 类型} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
+  签名: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂] [模 R N₂]
   定义体: (weightEquiv P Q f).symm
   coweightMap := (coweightEquiv P Q f).symm
   indexEquiv := f.indexEquiv.symm
@@ -1323,7 +1323,7 @@ lemma inv_weightMap
 
 中文:
 引理 inv_weightMap
-  结论: {ι₂ M₂ N₂ : 类型} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
+  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
   证明: rfl
 
 @[simp]
@@ -1346,7 +1346,7 @@ lemma inv_coweightMap
 
 中文:
 引理 inv_coweightMap
-  结论: {ι₂ M₂ N₂ : 类型} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
+  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
   证明: rfl
 
 @[simp]
@@ -1367,7 +1367,7 @@ lemma inv_indexEquiv
 
 中文:
 引理 inv_indexEquiv
-  结论: {ι₂ M₂ N₂ : 类型} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
+  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
   证明: rfl
 -/
 lemma inv_indexEquiv {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
@@ -1407,7 +1407,7 @@ let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.
 
 中文:
 定义 mk'
-  签名: [IsDomain R] [CharZero R] [Module.IsTorsionFree R M₂] [Finite ι₂]
+  签名: [是整环 R] [特征零 R] [模.是无挠 R M₂] [有限 ι₂]
   定义体: f
   coweightMap := Q.flip.toPerfPair.trans (f.dualMap.trans P.flip.toPerfPair.symm)
   indexEquiv := e
@@ -1625,7 +1625,7 @@ lemma weightHom_injective
 中文:
 引理 weightHom_injective
   条件: (P : RootPairing ι R M N)
-  结论: Injective (Equiv.weightHom P)
+  结论: 单射 (等价.weightHom P)
   证明: by
   refine Injective.of_comp (f := LinearEquiv.toLinearMap) fun g g' hgg' => ?_
   let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
@@ -1737,7 +1737,7 @@ lemma coweightHom_injective
 中文:
 引理 coweightHom_injective
   条件: (P : RootPairing ι R M N)
-  结论: Injective (Equiv.coweightHom P)
+  结论: 单射 (等价.coweightHom P)
   证明: by
   refine Injective.of_comp (f := fun a => MulOpposite.op a) fun g g' hgg' => ?_
   have h : (MulOpposite.unop (coweightHom P g)).toLinearMap =
@@ -2009,7 +2009,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction P.Aut M
+  签名: 分配乘法作用 P.Aut M
   定义体: weightHom P w x
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -2037,7 +2037,7 @@ lemma reflection_smul
 中文:
 引理 reflection_smul
   条件: (i : ι) (x : M)
-  结论: Equiv.reflection P i • x = P.reflection i x
+  结论: 等价.reflection P i • x = P.reflection i x
   证明: rfl
 -/
 @[simp] lemma reflection_smul (i : ι) (x : M) : Equiv.reflection P i • x = P.reflection i x := rfl
@@ -2078,7 +2078,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction P.Autᵐᵒᵖ N
+  签名: 分配乘法作用 P.Autᵐᵒᵖ N
   定义体: unop (coweightHom P (unop w)) x
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -2108,7 +2108,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass P.Aut R M
+  签名: 标量交换类 P.Aut R M
   定义体: show weightHom P w (t • x) = t • weightHom P w x by simp
 
 Depends on / 依赖: weightHom
@@ -2129,7 +2129,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass P.Autᵐᵒᵖ R N
+  签名: 标量交换类 P.Autᵐᵒᵖ R N
   定义体: by
     change unop (coweightHom P (unop w)) (t • x) = t • unop (coweightHom P (unop w)) x
     simp
@@ -2153,7 +2153,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction P.Aut ι
+  签名: 乘法作用 P.Aut ι
   定义体: Equiv.indexHom P w i
   one_smul _ := rfl
   mul_smul _ _ _ := rfl

@@ -44,8 +44,8 @@ instance Algebra.FormallyUnramified.isOpenImmersion_SpecMap_lmul
 exact inferInstanceAs Subsingleton Ω[S⁄R]
 
 中文:
-实例 Algebra.FormallyUnramified.isOpenImmersion_SpecMap_lmul
-  签名: {R S : 类型u} [CommRing R]
+实例 代数.形式非分歧.isOpenImmersion_SpecMap_lmul
+  签名: {R S : 类型u} [交换环 R]
   定义体: by
   rw [isOpenImmersion_SpecMap_iff_of_surjective _ (fun x => ⟨1 otimesₜ x]; rw [by simp⟩)]
   apply (Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
@@ -82,10 +82,10 @@ class FormallyUnramified
     - formallyUnramified_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FormallyUnramified
 
 中文:
-类 FormallyUnramified
+类 形式非分歧
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - formallyUnramified_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FormallyUnramified
+    - formallyUnramified_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.形式非分歧
 
 Depends on / 依赖: FormallyUnramified, FormallyUnramified.formallyUnramified_appLE, formallyUnramified_appLE
 -/
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @FormallyUnramified RingHom.FormallyUnramified
+  签名: 有RingHomProperty @形式非分歧 环态射.形式非分歧
   定义体: RingHom.FormallyUnramified.propertyIsLocal
   eq_affineLocally' := by
     ext X Y f
@@ -138,7 +138,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @FormallyUnramified
+  签名: MorphismProperty.是StableUnderComposition @形式非分歧
   定义体: HasRingHomProperty.stableUnderComposition RingHom.FormallyUnramified.stableUnderComposition
 
 Depends on / 依赖: FormallyUnramified, HasRingHomProperty, HasRingHomProperty.stableUnderComposition, RingHom, RingHom.FormallyUnramified.stableUnderComposition, stableUnderComposition
@@ -194,7 +194,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: HasRingHomProperty.of_comp (fun {R S T _ _ _} f g H => by
     algebraize [f, g, g.comp f]
     exact Algebra.FormallyUnramified.of_restrictScalars R S T) ‹_›
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @FormallyUnramified
+  签名: MorphismProperty.是Multiplicative @形式非分歧
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @FormallyUnramified where
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderBaseChange @FormallyUnramified
+  签名: MorphismProperty.是StableUnderBaseChange @形式非分歧
   定义体: HasRingHomProperty.isStableUnderBaseChange RingHom.FormallyUnramified.isStableUnderBaseChange
 
 Depends on / 依赖: FormallyUnramified, HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, RingHom, RingHom.FormallyUnramified.isStableUnderBaseChange, isStableUnderBaseChange
@@ -259,7 +259,7 @@ instance isOpenImmersion_diagonal
 
 中文:
 实例 isOpenImmersion_diagonal
-  签名: [FormallyUnramified f] [LocallyOfFiniteType f]
+  签名: [形式非分歧 f] [局部有限型 f]
   定义体: by
   wlog hX : (exists S, X = Spec S) ∧ exists R, Y = Spec R
   · let 𝒰Y := Y.affineCover
@@ -308,8 +308,8 @@ lemma stalkMap
 
 中文:
 引理 stalkMap
-  条件: [FormallyUnramified f] (x : X)
-  结论: (f.stalkMap x).hom.FormallyUnramified
+  条件: [形式非分歧 f] (x : X)
+  结论: (f.stalkMap x).hom.形式非分歧
   证明: HasRingHomProperty.stalkMap
     (fun f hf p q =>
       RingHom.FormallyUnramified.holdsForLocalization.localRingHom
@@ -339,8 +339,8 @@ inferInstanceAs IsLocalHom (f.stalkMap x).hom
   suffices h : Algebra.Is
 
 中文:
-实例 [FormallyUnramified
-  签名: f] [LocallyOfFiniteType f] (x
+实例 [形式非分歧
+  签名: f] [局部有限型 f] (x
   定义体: (f.residueFieldMap x).hom.toAlgebra
     Algebra.IsSeparable (Y.residueField (f.base x)) (X.residueField x) := by
   algebraize [(f.stalkMap x).hom]
@@ -401,7 +401,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {Z' Z : Scheme} (i : Z' ⟶ Z) (hi : IsNilpotent i.ker) [IsClosedImmersion i]
+  结论: {Z' Z : 概形} (i : Z' ⟶ Z) (hi : 是幂零 i.ker) [是闭浸入 i]
   证明: by
   have : IsDominant i := by
     obtain ⟨n, hn⟩ := hi

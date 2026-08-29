@@ -36,7 +36,7 @@ lemma mk
 
 中文:
 引理 mk
-  结论: (h₁ : IsUnit (algebraMap R (Module.End R N) r))
+  结论: (h₁ : 是单位 (algebraMap R (模.End R N) r))
   证明: fun ⟨_, ⟨n, rfl⟩⟩ => by simp [h₁.pow]
   surj x := by
     obtain ⟨n, y, hy⟩ := h₂ x
@@ -72,7 +72,7 @@ lemma mk_of_addCommGroup
 
 中文:
 引理 mk_of_addCommGroup
-  结论: {M N : 类型} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
+  结论: {M N : 类型} [加法交换群 M] [加法交换群 N] [模 R M] [模 R N]
   证明: by
   refine IsLocalizedModule.Away.mk h₁ h₂ fun x y hxy => ?_
   have : f (x - y) = 0 := by simp [hxy]
@@ -107,7 +107,7 @@ lemma isUnit_algebraMap
 
 中文:
 引理 isUnit_algebraMap
-  结论: IsUnit (algebraMap R (Module.End R N) r)
+  结论: 是单位 (algebraMap R (模.End R N) r)
   证明: IsLocalizedModule.map_units (S := .powers r) f ⟨_, 1, by simp⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.map_units, map_units, powers
@@ -127,7 +127,7 @@ lemma exists_of_eq
   use n, hn
 
 中文:
-引理 exists_of_eq
+引理 存在_of_eq
   条件: {x y : M} (h : f x = f y)
   结论: 存在 (n : 自然数), r ^ n • x = r ^ n • y
   证明: by
@@ -186,7 +186,7 @@ lemma of_associated
 
 中文:
 引理 of_associated
-  条件: {r r' : R} (h : Associated r r') [IsLocalizedModule.Away r f]
+  条件: {r r' : R} (h : Associated r r') [是Localized模.Away r f]
   证明: by
   obtain ⟨u, rfl⟩ := h
   rw [mul_comm]

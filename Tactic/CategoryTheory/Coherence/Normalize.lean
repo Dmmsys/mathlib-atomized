@@ -81,9 +81,9 @@ inductive WhiskerRight
 
 中文:
 归纳类型 WhiskerRight
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
-    - of: (η : Atom) : WhiskerRight
+    - of: (η : 原子) : WhiskerRight
     - whisker: (e : Mor₂) (η : WhiskerRight) (f : Atom₁) : WhiskerRight
 -/
 inductive WhiskerRight : Type
@@ -120,7 +120,7 @@ inductive HorizontalComp
 
 中文:
 归纳类型 HorizontalComp
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - of: (η : WhiskerRight) : HorizontalComp
     - cons: (e : Mor₂) (η : WhiskerRight) (ηs : HorizontalComp) : HorizontalComp
@@ -158,7 +158,7 @@ inductive WhiskerLeft
 
 中文:
 归纳类型 WhiskerLeft
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - of: (η : HorizontalComp) : WhiskerLeft
     - whisker: (e : Mor₂) (f : Atom₁) (η : WhiskerLeft) : WhiskerLeft
@@ -250,7 +250,7 @@ inductive NormalExpr
 
 中文:
 归纳类型 NormalExpr
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - nil: (e : Mor₂) (α : Structural) : NormalExpr
     - cons: (e : Mor₂) (α : Structural) (η : WhiskerLeft) (ηs : NormalExpr) : NormalExpr
@@ -288,7 +288,7 @@ class MonadWhiskerRight
 
 中文:
 类 MonadWhiskerRight
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
     - whiskerRightM((η : WhiskerRight) (f : Atom₁)) : m WhiskerRight
 -/
@@ -308,7 +308,7 @@ class MonadHorizontalComp
 
 中文:
 类 MonadHorizontalComp
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   继承: MonadWhiskerRight m
   公理与运算 (1 个):
     - hConsM((η : WhiskerRight) (ηs : HorizontalComp)) : m HorizontalComp
@@ -329,7 +329,7 @@ class MonadWhiskerLeft
 
 中文:
 类 MonadWhiskerLeft
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   继承: MonadHorizontalComp m
   公理与运算 (1 个):
     - whiskerLeftM((f : Atom₁) (η : WhiskerLeft)) : m WhiskerLeft
@@ -353,7 +353,7 @@ class MonadNormalExpr
 
 中文:
 类 MonadNormalExpr
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   继承: MonadWhiskerLeft m
   公理与运算 (2 个):
     - nilM((α : Structural)) : m NormalExpr
@@ -653,7 +653,7 @@ definition ofAtomM
 
 中文:
 定义 ofAtomM
-  签名: [MonadMor₁ m] (η : Atom)
+  签名: [MonadMor₁ m] (η : 原子)
   定义体: NormalExpr.ofM .of .of .of η
 
 Depends on / 依赖: NormalExpr, NormalExpr.ofM
@@ -672,7 +672,7 @@ definition NormalExpr.toList
 
 中文:
 定义 NormalExpr.toList
-  签名: : NormalExpr -> List WhiskerLeft
+  签名: : NormalExpr -> 列表 WhiskerLeft
 -/
 def NormalExpr.toList : NormalExpr -> List WhiskerLeft
   | NormalExpr.nil _ _ => []
@@ -721,7 +721,7 @@ class MkEvalComp
 
 中文:
 类 MkEvalComp
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (3 个):
     - mkEvalCompNilNil((α β : Structural)) : m Expr
     - mkEvalCompNilCons((α β : Structural) (η : WhiskerLeft) (ηs : NormalExpr)) : m Expr
@@ -749,7 +749,7 @@ class MkEvalWhiskerLeft
 
 中文:
 类 MkEvalWhiskerLeft
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (4 个):
     - mkEvalWhiskerLeftNil((f : Mor₁) (α : Structural)) : m Expr
     - mkEvalWhiskerLeftOfCons((f : Atom₁) (α : Structural) (η : WhiskerLeft) (ηs θ : NormalExpr) (e_θ : Expr)) : m Expr
@@ -785,7 +785,7 @@ class MkEvalWhiskerRight
 
 中文:
 类 MkEvalWhiskerRight
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (7 个):
     - mkEvalWhiskerRightAuxOf((η : WhiskerRight) (f : Atom₁)) : m Expr
     - mkEvalWhiskerRightAuxCons((f : Atom₁) (η : WhiskerRight) (ηs : HorizontalComp) (ηs' η₁ η₂ η₃ : NormalExpr) (e_ηs' e_η₁ e_η₂ e_η₃ : Expr)) : m Expr
@@ -834,7 +834,7 @@ class MkEvalHorizontalComp
 
 中文:
 类 MkEvalHorizontalComp
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (8 个):
     - mkEvalHorizontalCompAuxOf((η : WhiskerRight) (θ : HorizontalComp)) : m Expr
     - mkEvalHorizontalCompAuxCons((η : WhiskerRight) (ηs θ : HorizontalComp) (ηθ η₁ ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_η₁ e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
@@ -885,13 +885,13 @@ class MkEval
 
 中文:
 类 MkEval
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (6 个):
     - mkEvalComp((η θ : Mor₂) (η' θ' ηθ : NormalExpr) (e_η e_θ e_ηθ : Expr)) : m Expr
     - mkEvalWhiskerLeft((f : Mor₁) (η : Mor₂) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
     - mkEvalWhiskerRight((η : Mor₂) (h : Mor₁) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
     - mkEvalHorizontalComp((η θ : Mor₂) (η' θ' ι : NormalExpr) (e_η e_θ e_ι : Expr)) : m Expr
-    - mkEvalOf((η : Atom)) : m Expr
+    - mkEvalOf((η : 原子)) : m Expr
     - mkEvalMonoidalComp((η θ : Mor₂) (α : Structural) (η' θ' αθ ηαθ : NormalExpr) (e_η e_θ e_αθ e_ηαθ : Expr)) : m Expr
 
 Depends on / 依赖: normalized

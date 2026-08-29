@@ -36,7 +36,7 @@ definition exteriorPower
 
 中文:
 定义 exteriorPower
-  签名: (M : ModuleCat.{v} R) (n : 自然数)
+  签名: (M : 模范畴.{v} R) (n : 自然数)
   定义体: ModuleCat.of R (⋀[R]^n M)
 
 Depends on / 依赖: ModuleCat, ModuleCat.of
@@ -54,8 +54,8 @@ definition AlternatingMap
   body: _root_.AlternatingMap R M N (Fin n)
 
 中文:
-定义 AlternatingMap
-  签名: (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : 自然数)
+定义 交错映射
+  签名: (M : 模范畴.{v} R) (N : 模范畴.{最大值 u v} R) (n : 自然数)
   定义体: _root_.AlternatingMap R M N (Fin n)
 
 Depends on / 依赖: AlternatingMap, _root_, _root_.AlternatingMap
@@ -82,7 +82,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {φ φ' : M.AlternatingMap N n} (h : 对任意 (x : Fin n -> M), φ x = φ' x)
+  条件: {φ φ' : M.交错映射 N n} (h : 对任意 (x : 有限集 n -> M), φ x = φ' x)
   证明: _root_.AlternatingMap.ext h
 
 Depends on / 依赖: AlternatingMap, _root_, _root_.AlternatingMap.ext
@@ -105,7 +105,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: : M.AlternatingMap N' n
+  签名: : M.交错映射 N' n
   定义体: g.hom.compAlternatingMap φ
 
 @[simp]
@@ -126,7 +126,7 @@ lemma postcomp_apply
 
 中文:
 引理 postcomp_apply
-  条件: (x : Fin n -> M)
+  条件: (x : 有限集 n -> M)
   证明: rfl
 -/
 lemma postcomp_apply (x : Fin n -> M) :
@@ -148,7 +148,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {M : ModuleCat.{v} R} {n : 自然数}
+  签名: {M : 模范畴.{v} R} {n : 自然数}
   定义体: exteriorPower.ιMulti _ _
 
 @[ext]
@@ -172,7 +172,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : 自然数}
+  结论: {M : 模范畴.{v} R} {N : 模范畴.{最大值 u v} R} {n : 自然数}
   证明: by
   ext : 1
   exact exteriorPower.linearMap_ext h
@@ -197,7 +197,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: {M : ModuleCat.{v} R} {n : 自然数} {N : ModuleCat.{max u v} R}
+  签名: {M : 模范畴.{v} R} {n : 自然数} {N : 模范畴.{最大值 u v} R}
   定义体: ofHom (exteriorPower.alternatingMapLinearEquiv φ)
 
 @[simp]
@@ -220,7 +220,7 @@ lemma desc_mk
 
 中文:
 引理 desc_mk
-  结论: {M : ModuleCat.{v} R} {n : 自然数} {N : ModuleCat.{max u v} R}
+  结论: {M : 模范畴.{v} R} {n : 自然数} {N : 模范畴.{最大值 u v} R}
   证明: by
   apply exteriorPower.alternatingMapLinearEquiv_apply_ιMulti
 
@@ -243,7 +243,7 @@ definition map
 
 中文:
 定义 map
-  签名: {M N : ModuleCat.{v} R} (f : M ⟶ N) (n : 自然数)
+  签名: {M N : 模范畴.{v} R} (f : M ⟶ N) (n : 自然数)
   定义体: ofHom (_root_.exteriorPower.map n f.hom)
 
 @[simp]
@@ -266,7 +266,7 @@ lemma map_mk
 
 中文:
 引理 map_mk
-  条件: {M N : ModuleCat.{v} R} (f : M ⟶ N) {n : 自然数} (x : Fin n -> M)
+  条件: {M N : 模范畴.{v} R} (f : M ⟶ N) {n : 自然数} (x : 有限集 n -> M)
   证明: by
   apply exteriorPower.map_apply_ιMulti
 
@@ -313,7 +313,7 @@ definition iso₀
 
 中文:
 定义 iso₀
-  签名: (M : ModuleCat.{u} R)
+  签名: (M : 模范畴.{u} R)
   定义体: (exteriorPower.zeroEquiv R M).toModuleIso
 
 @[simp]
@@ -336,7 +336,7 @@ lemma iso₀_hom_apply
 
 中文:
 引理 iso₀_hom_apply
-  条件: {M : ModuleCat.{u} R} (f : Fin 0 -> M)
+  条件: {M : 模范畴.{u} R} (f : 有限集 0 -> M)
   证明: exteriorPower.zeroEquiv_ιMulti _
 
 @[reassoc (attr := simp)]
@@ -358,7 +358,7 @@ lemma iso₀_hom_naturality
 
 中文:
 引理 iso₀_hom_naturality
-  条件: {M N : ModuleCat.{u} R} (f : M ⟶ N)
+  条件: {M N : 模范畴.{u} R} (f : M ⟶ N)
   证明: ModuleCat.hom_ext (exteriorPower.zeroEquiv_naturality f.hom)
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, exteriorPower, exteriorPower.zeroEquiv_naturality, f.hom, hom_ext, zeroEquiv_naturality
@@ -379,7 +379,7 @@ definition iso₁
 
 中文:
 定义 iso₁
-  签名: (M : ModuleCat.{u} R)
+  签名: (M : 模范畴.{u} R)
   定义体: (exteriorPower.oneEquiv R M).toModuleIso
 
 @[simp]
@@ -402,7 +402,7 @@ lemma iso₁_hom_apply
 
 中文:
 引理 iso₁_hom_apply
-  条件: {M : ModuleCat.{u} R} (f : Fin 1 -> M)
+  条件: {M : 模范畴.{u} R} (f : 有限集 1 -> M)
   证明: exteriorPower.oneEquiv_ιMulti _
 
 @[reassoc (attr := simp)]
@@ -424,7 +424,7 @@ lemma iso₁_hom_naturality
 
 中文:
 引理 iso₁_hom_naturality
-  条件: {M N : ModuleCat.{u} R} (f : M ⟶ N)
+  条件: {M N : 模范畴.{u} R} (f : M ⟶ N)
   证明: ModuleCat.hom_ext (exteriorPower.oneEquiv_naturality f.hom)
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, exteriorPower, exteriorPower.oneEquiv_naturality, f.hom, hom_ext, oneEquiv_naturality
@@ -446,7 +446,7 @@ definition natIso₀
 
 中文:
 定义 natIso₀
-  签名: : functor.{u} R 0 ≅ (Functor.const _).obj (ModuleCat.of R R)
+  签名: : functor.{u} R 0 ≅ (函子.const _).obj (模范畴.of R R)
   定义体: NatIso.ofComponents iso₀
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents

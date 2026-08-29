@@ -31,7 +31,7 @@ instance instMonad
 
 中文:
 实例 instMonad
-  签名: : Monad List.{u} where
+  签名: : 单子 列表.{u} where
   定义体: [x]
   bind l f := l.flatMap f
   map f l := l.map f
@@ -72,7 +72,7 @@ instance instLawfulMonad
 
 中文:
 实例 instLawfulMonad
-  签名: : LawfulMonad List.{u}
+  签名: : 合法单子 列表.{u}
   定义体: LawfulMonad.mk'
   (id_map := map_id)
   (pure_bind := fun _ _ => List.append_nil _)
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlternativeMonad List.{u}
+  签名: AlternativeMonad 列表.{u}
   定义体: @List.nil
   orElse l l' := List.append l (l' ())
 
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulAlternative List
+  签名: LawfulAlternative 列表
   定义体: List.map_nil
   failure_seq _ := List.flatMap_nil
   orElse_failure _ := List.append_nil _

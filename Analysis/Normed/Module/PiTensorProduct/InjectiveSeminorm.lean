@@ -144,7 +144,7 @@ lemma dualSeminorms_bounded
 
 中文:
 引理 dualSeminorms_bounded
-  结论: BddAbove {p | 存在 (G : Type (max uι u𝕜 uE))
+  结论: BddAbove {p | 存在 (G : 类型 (最大值 uι u𝕜 uE))
   证明: by
   use projectiveSeminorm
   simp only [mem_upperBounds, Set.mem_ofPred_eq, forall_exists_index]
@@ -214,7 +214,7 @@ theorem norm_eval_le_injectiveSeminorm
 
 中文:
 定理 norm_eval_le_injectiveSeminorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E F) (x : ⨂[𝕜] i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E F) (x : ⨂[𝕜] i, E i)
   证明: by
     /- If `F` were in `Type (max uι u𝕜 uE)` (which is the type of `⨂[𝕜] i, E i`), then the
     property that we want to prove would hold by definition of `injectiveSeminorm`. This is

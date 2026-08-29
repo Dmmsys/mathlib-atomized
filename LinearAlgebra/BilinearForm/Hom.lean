@@ -86,7 +86,7 @@ theorem sum_left
 
 中文:
 定理 sum_left
-  条件: {α} (t : Finset α) (g : α -> M) (w : M)
+  条件: {α} (t : 有限集 α) (g : α -> M) (w : M)
   证明: B.map_sum₂ t g w
 
 Depends on / 依赖: B.map_sum
@@ -107,7 +107,7 @@ theorem sum_right
 
 中文:
 定理 sum_right
-  条件: {α} (t : Finset α) (w : M) (g : α -> M)
+  条件: {α} (t : 有限集 α) (w : M) (g : α -> M)
   证明: map_sum _ _ _
 
 Depends on / 依赖: map_sum
@@ -126,7 +126,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: {α} (t : Finset α) (B : α -> BilinForm R M) (v w : M)
+  条件: {α} (t : 有限集 α) (B : α -> BilinForm R M) (v w : M)
   证明: by
   simp only [coe_sum, Finset.sum_apply]
 
@@ -277,7 +277,7 @@ theorem comp_comp
 
 中文:
 定理 comp_comp
-  结论: {M'' : 类型} [AddCommMonoid M''] [Module R M''] (B : BilinForm R M'')
+  结论: {M'' : 类型} [加法交换幺半群 M''] [模 R M''] (B : BilinForm R M'')
   证明: rfl
 
 @[simp]
@@ -471,7 +471,7 @@ theorem compLeft_id
 中文:
 定理 compLeft_id
   条件: (B : BilinForm R M)
-  结论: B.compLeft LinearMap.id = B
+  结论: B.compLeft 线性映射.id = B
   证明: by
   ext
   rfl
@@ -497,7 +497,7 @@ theorem compRight_id
 中文:
 定理 compRight_id
   条件: (B : BilinForm R M)
-  结论: B.compRight LinearMap.id = B
+  结论: B.compRight 线性映射.id = B
   证明: by
   ext
   rfl
@@ -523,7 +523,7 @@ theorem comp_id_id
 中文:
 定理 comp_id_id
   条件: (B : BilinForm R M)
-  结论: B.comp LinearMap.id LinearMap.id = B
+  结论: B.comp 线性映射.id 线性映射.id = B
   证明: by
   ext
   rfl
@@ -550,7 +550,7 @@ theorem comp_inj
 
 中文:
 定理 comp_inj
-  结论: (B₁ B₂ : BilinForm R M') {l r : M ->ₗ[R] M'} (hₗ : Function.Surjective l)
+  结论: (B₁ B₂ : BilinForm R M') {l r : M ->ₗ[R] M'} (hₗ : 函数.满射 l)
   证明: by
   constructor <;> intro h
   · -- B₁.comp l r = B₂.comp l r → B₁ = B₂
@@ -661,7 +661,7 @@ theorem congr_refl
 
 中文:
 定理 congr_refl
-  结论: congr (LinearEquiv.refl R M) = LinearEquiv.refl R _
+  结论: congr (线性等价.refl R M) = 线性等价.refl R _
   证明: LinearEquiv.ext fun _ => ext₂ fun _ _ => rfl
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ext
@@ -759,7 +759,7 @@ definition _root_.LinearEquiv.congrRight₂
 @[simp]
 
 中文:
-定义 _root_.LinearEquiv.congrRight₂
+定义 _root_.线性等价.congrRight₂
   签名: (e : N₁ ≃ₗ[R] N₂)
   定义体: LinearEquiv.congrRight (LinearEquiv.congrRight e)
 
@@ -782,7 +782,7 @@ theorem _root_.LinearEquiv.congrRight₂_apply
 @[simp]
 
 中文:
-定理 _root_.LinearEquiv.congrRight₂_apply
+定理 _root_.线性等价.congrRight₂_apply
   条件: (e : N₁ ≃ₗ[R] N₂) (B : BilinMap R M N₁)
   证明: rfl
 
@@ -802,7 +802,7 @@ theorem _root_.LinearEquiv.congrRight₂_refl
 @[simp]
 
 中文:
-定理 _root_.LinearEquiv.congrRight₂_refl
+定理 _root_.线性等价.congrRight₂_refl
   证明: rfl
 
 @[simp]
@@ -820,7 +820,7 @@ theorem _root_.LinearEquiv.congrRight_symm
   proof: rfl
 
 中文:
-定理 _root_.LinearEquiv.congrRight_symm
+定理 _root_.线性等价.congrRight_symm
   条件: (e : N₁ ≃ₗ[R] N₂)
   证明: rfl
 
@@ -839,7 +839,7 @@ theorem _root_.LinearEquiv.congrRight₂_trans
   proof: rfl
 
 中文:
-定理 _root_.LinearEquiv.congrRight₂_trans
+定理 _root_.线性等价.congrRight₂_trans
   条件: (e₁₂ : N₁ ≃ₗ[R] N₂) (e₂₃ : N₂ ≃ₗ[R] N₃)
   证明: rfl
 -/

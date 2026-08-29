@@ -61,8 +61,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {l : List G}
-  结论: (对任意 x in l, x in K) -> l.prod in K
+  条件: {l : 列表 G}
+  结论: (对任意 x in l, x in K) -> l.乘积 in K
   证明: list_prod_mem
 -/
 protected theorem list_prod_mem {l : List G} : (forall x in l, x in K) -> l.prod in K :=
@@ -83,7 +83,7 @@ theorem multiset_prod_mem
 
 中文:
 定理 multiset_prod_mem
-  条件: {G} [CommGroup G] (K : Subgroup G) (g : Multiset G)
+  条件: {G} [交换群 G] (K : 子群 G) (g : Multiset G)
   证明: multiset_prod_mem g
 
 @[to_additive]
@@ -103,7 +103,7 @@ theorem multiset_noncommProd_mem
 
 中文:
 定理 multiset_noncommProd_mem
-  条件: (K : Subgroup G) (g : Multiset G) (comm)
+  条件: (K : 子群 G) (g : Multiset G) (comm)
   证明: K.toSubmonoid.multiset_noncommProd_mem g comm
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_le, AddSubmonoid.subset_closure, K.toSubmonoid.multiset_noncommProd_mem, Multiplicative, Submonoid, Submonoid.closure_le, Submonoid.subset_closure, Submonoid.toAddSubmonoid, closure_le, l_le, le_antisymm, multiset_noncommProd_mem, subset_closure, toAddSubmonoid, toSubmonoid, to_galoisConnection, to_galoisConnection.l_le
@@ -128,7 +128,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {G : 类型} [CommGroup G] (K : Subgroup G) {ι : 类型} {t : Finset ι}
+  结论: {G : 类型} [交换群 G] (K : 子群 G) {ι : 类型} {t : 有限集 ι}
   证明: prod_mem h
 
 @[to_additive]
@@ -150,7 +150,7 @@ theorem noncommProd_mem
 
 中文:
 定理 noncommProd_mem
-  条件: (K : Subgroup G) {ι : 类型} {t : Finset ι} {f : ι -> G} (comm)
+  条件: (K : 子群 G) {ι : 类型} {t : 有限集 ι} {f : ι -> G} (comm)
   证明: K.toSubmonoid.noncommProd_mem t f comm
 
 @[to_additive (attr := simp 1100, norm_cast)]
@@ -175,8 +175,8 @@ theorem val_list_prod
 
 中文:
 定理 val_list_prod
-  条件: (l : List H)
-  结论: (l.prod : G) = (l.map Subtype.val).prod
+  条件: (l : 列表 H)
+  结论: (l.乘积 : G) = (l.map 子类型.val).乘积
   证明: SubmonoidClass.coe_list_prod l
 
 @[to_additive (attr := simp 1100, norm_cast)]
@@ -199,7 +199,7 @@ theorem val_multiset_prod
 
 中文:
 定理 val_multiset_prod
-  条件: {G} [CommGroup G] (H : Subgroup G) (m : Multiset H)
+  条件: {G} [交换群 G] (H : 子群 G) (m : Multiset H)
   证明: SubmonoidClass.coe_multiset_prod m
 
 @[to_additive (attr := simp 1100, norm_cast)]
@@ -229,7 +229,7 @@ alias val_finset_prod := val_finsetProd
 
 中文:
 定理 val_finsetProd
-  条件: {ι G} [CommGroup G] (H : Subgroup G) (f : ι -> H) (s : Finset ι)
+  条件: {ι G} [交换群 G] (H : 子群 G) (f : ι -> H) (s : 有限集 ι)
   证明: SubmonoidClass.coe_finsetProd f s
 
 @[deprecated (since := "2026-04-08")]
@@ -267,7 +267,7 @@ instance fintypeBot
 
 中文:
 实例 fintypeBot
-  签名: : Fintype (⊥ : Subgroup G)
+  签名: : 有限类型 (⊥ : 子群 G)
   定义体: ⟨{1}, by
     rintro ⟨x, ⟨hx⟩⟩
     exact Finset.mem_singleton_self _⟩
@@ -294,7 +294,7 @@ theorem card_bot
 
 中文:
 定理 card_bot
-  结论: 自然数.card (⊥ : Subgroup G) = 1
+  结论: 自然数.card (⊥ : 子群 G) = 1
   证明: by simp
 
 @[to_additive]
@@ -314,7 +314,7 @@ theorem card_top
 
 中文:
 定理 card_top
-  结论: 自然数.card (⊤ : Subgroup G) = 自然数.card G
+  结论: 自然数.card (⊤ : 子群 G) = 自然数.card G
   证明: Nat.card_congr Subgroup.topEquiv.toEquiv
 
 @[to_additive]
@@ -337,7 +337,7 @@ theorem eq_of_le_of_card_ge
 
 中文:
 定理 eq_of_le_of_card_ge
-  结论: {H K : Subgroup G} [Finite K] (hle : H <= K)
+  结论: {H K : 子群 G} [有限 K] (hle : H <= K)
   证明: SetLike.coe_injective Set.Finite.eq_of_subset_of_card_le (Set.toFinite _) hle hcard
 
 @[to_additive]
@@ -363,7 +363,7 @@ theorem eq_top_of_le_card
 
 中文:
 定理 eq_top_of_le_card
-  条件: [Finite G] (h : 自然数.card G <= 自然数.card H)
+  条件: [有限 G] (h : 自然数.card G <= 自然数.card H)
   结论: H = ⊤
   证明: eq_of_le_of_card_ge le_top (Nat.card_congr (Equiv.Set.univ G) ▸ h)
 
@@ -390,7 +390,7 @@ theorem eq_top_of_card_eq
 
 中文:
 定理 eq_top_of_card_eq
-  条件: [Finite H] (h : 自然数.card H = 自然数.card G)
+  条件: [有限 H] (h : 自然数.card H = 自然数.card G)
   结论: H = ⊤
   证明: by
   have : Finite G := Nat.finite_of_card_ne_zero (h ▸ Nat.card_pos.ne')
@@ -418,7 +418,7 @@ theorem card_eq_iff_eq_top
 
 中文:
 定理 card_eq_iff_eq_top
-  条件: [Finite H]
+  条件: [有限 H]
   结论: 自然数.card H = 自然数.card G ↔ H = ⊤
   证明: Iff.intro (eq_top_of_card_eq H) (fun h => by simpa only [h] using card_top)
 
@@ -444,7 +444,7 @@ theorem eq_bot_of_card_le
 
 中文:
 定理 eq_bot_of_card_le
-  条件: [Finite H] (h : 自然数.card H <= 1)
+  条件: [有限 H] (h : 自然数.card H <= 1)
   结论: H = ⊥
   证明: let _ := Finite.card_le_one_iff_subsingleton.mp h
   eq_bot_of_subsingleton H
@@ -497,7 +497,7 @@ theorem card_le_one_iff_eq_bot
 
 中文:
 定理 card_le_one_iff_eq_bot
-  条件: [Finite H]
+  条件: [有限 H]
   结论: 自然数.card H <= 1 ↔ H = ⊥
   证明: ⟨H.eq_bot_of_card_le, fun h => by simp [h]⟩
 
@@ -540,7 +540,7 @@ theorem one_lt_card_iff_ne_bot
 
 中文:
 定理 one_lt_card_iff_ne_bot
-  条件: [Finite H]
+  条件: [有限 H]
   结论: 1 < 自然数.card H ↔ H != ⊥
   证明: lt_iff_not_ge.trans H.card_le_one_iff_eq_bot.not
 
@@ -565,7 +565,7 @@ theorem card_le_card_group
 
 中文:
 定理 card_le_card_group
-  条件: [Finite G]
+  条件: [有限 G]
   结论: 自然数.card H <= 自然数.card G
   证明: Nat.card_le_card_of_injective _ Subtype.coe_injective
 
@@ -590,7 +590,7 @@ theorem card_le_of_le
 
 中文:
 定理 card_le_of_le
-  条件: {H K : Subgroup G} [Finite K] (h : H <= K)
+  条件: {H K : 子群 G} [有限 K] (h : H <= K)
   结论: 自然数.card H <= 自然数.card K
   证明: Nat.card_le_card_of_injective _ (Subgroup.inclusion_injective h)
 
@@ -615,7 +615,7 @@ theorem card_map_of_injective
 
 中文:
 定理 card_map_of_injective
-  结论: {H : 类型} [Group H] {K : Subgroup G} {f : G ->* H}
+  结论: {H : 类型} [群 H] {K : 子群 G} {f : G ->* H}
   证明: by
   apply Nat.card_image_of_injective hf
 
@@ -641,7 +641,7 @@ theorem card_subtype
 
 中文:
 定理 card_subtype
-  条件: (K : Subgroup G) (L : Subgroup K)
+  条件: (K : 子群 G) (L : 子群 K)
   证明: card_map_of_injective K.subtype_injective
 
 @[to_additive]
@@ -663,7 +663,7 @@ theorem card_mapSubgroup
 
 中文:
 定理 card_mapSubgroup
-  条件: {G' : 类型} [Group G'] (e : G ≃* G')
+  条件: {G' : 类型} [群 G'] (e : G ≃* G')
   证明: Subgroup.card_map_of_injective e.injective
 
 Depends on / 依赖: Subgroup, Subgroup.card_map_of_injective, card_map_of_injective, e.injective, injective
@@ -693,7 +693,7 @@ theorem pi_mem_of_mulSingle_mem
 
 中文:
 定理 pi_mem_of_mulSingle_mem
-  结论: [Finite η] [DecidableEq η] {H : Subgroup (对任意 i, f i)} (x : 对任意 i, f i)
+  结论: [有限 η] [DecidableEq η] {H : 子群 (对任意 i, f i)} (x : 对任意 i, f i)
   证明: Submonoid.pi_mem_of_mulSingle_mem x h
 
 Depends on / 依赖: Submonoid, Submonoid.pi_mem_of_mulSingle_mem, pi_mem_of_mulSingle_mem
@@ -717,7 +717,7 @@ theorem pi_le_iff
 
 中文:
 定理 pi_le_iff
-  条件: [DecidableEq η] [Finite η] {H : 对任意 i, Subgroup (f i)} {J : Subgroup (对任意 i, f i)}
+  条件: [DecidableEq η] [有限 η] {H : 对任意 i, 子群 (f i)} {J : 子群 (对任意 i, f i)}
   证明: Submonoid.pi_le_iff
 
 @[to_additive]
@@ -748,7 +748,7 @@ subset_closure mem_univ_pi.mpr fun j => by
 
 中文:
 定理 closure_pi
-  条件: [Finite η] {s : Π i, Set (f i)} (hs : 对任意 i, 1 in s i)
+  条件: [有限 η] {s : Π i, 集合 (f i)} (hs : 对任意 i, 1 in s i)
   证明: le_antisymm
     ((closure_le _).2 <| pi_subset_pi_iff.2 <| .inl fun _ _ => subset_closure)
     (by
@@ -796,7 +796,7 @@ theorem mem_normalizer_fintype
 
 中文:
 定理 mem_normalizer_fintype
-  条件: {S : Set G} [Finite S] {x : G} (h : 对任意 n, n in S -> x * n * x⁻¹ in S)
+  条件: {S : 集合 G} [有限 S] {x : G} (h : 对任意 n, n in S -> x * n * x⁻¹ in S)
   证明: by
   have := Classical.propDecidable; cases nonempty_fintype S
   exact fun n =>
@@ -841,7 +841,7 @@ instance decidableMemRange
 
 中文:
 实例 decidableMemRange
-  签名: (f : G ->* N) [Fintype G] [DecidableEq N]
+  签名: (f : G ->* N) [有限类型 G] [DecidableEq N]
   定义体: fun _ => Fintype.decidableExistsFintype
 
 Depends on / 依赖: Fintype, Fintype.decidableExistsFintype, decidableExistsFintype
@@ -869,7 +869,7 @@ instance fintypeMrange
 
 中文:
 实例 fintypeMrange
-  签名: {M N : 类型} [Monoid M] [Monoid N] [Fintype M] [DecidableEq N]
+  签名: {M N : 类型} [幺半群 M] [幺半群 N] [有限类型 M] [DecidableEq N]
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -897,7 +897,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [Fintype G] [DecidableEq N] (f : G ->* N)
+  签名: [有限类型 G] [DecidableEq N] (f : G ->* N)
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -914,8 +914,8 @@ lemma _root_.Fintype.card_coeSort_mrange
   proof: Set.card_range_of_injective hf
 
 中文:
-引理 _root_.Fintype.card_coeSort_mrange
-  结论: {M N : 类型} [Monoid M] [Monoid N] [Fintype M]
+引理 _root_.有限类型.card_coeSort_mrange
+  结论: {M N : 类型} [幺半群 M] [幺半群 N] [有限类型 M]
   证明: Set.card_range_of_injective hf
 
 Depends on / 依赖: Set.card_range_of_injective, card_range_of_injective
@@ -934,8 +934,8 @@ lemma _root_.Fintype.card_coeSort_range
   proof: Set.card_range_of_injective hf
 
 中文:
-引理 _root_.Fintype.card_coeSort_range
-  结论: [Fintype G] [DecidableEq N] {f : G ->* N}
+引理 _root_.有限类型.card_coeSort_range
+  结论: [有限类型 G] [DecidableEq N] {f : G ->* N}
   证明: Set.card_range_of_injective hf
 
 Depends on / 依赖: Set.card_range_of_injective, card_range_of_injective

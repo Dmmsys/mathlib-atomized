@@ -90,7 +90,7 @@ theorem derivative_apply
 中文:
 定理 derivative_apply
   条件: (p : R[X])
-  结论: derivative p = p.sum fun n a => C (a * n) * X ^ (n - 1)
+  结论: derivative p = p.求和 fun n a => C (a * n) * X ^ (n - 1)
   证明: rfl
 -/
 theorem derivative_apply (p : R[X]) : derivative p = p.sum fun n a => C (a * n) * X ^ (n - 1) :=
@@ -514,7 +514,7 @@ theorem derivative_sum
 
 中文:
 定理 derivative_sum
-  条件: {s : Finset ι} {f : ι -> R[X]}
+  条件: {s : 有限集 ι} {f : ι -> R[X]}
   证明: map_sum ..
 
 Depends on / 依赖: map_sum
@@ -534,7 +534,7 @@ theorem iterate_derivative_sum
 
 中文:
 定理 iterate_derivative_sum
-  条件: (k : 自然数) (s : Finset ι) (f : ι -> R[X])
+  条件: (k : 自然数) (s : 有限集 ι) (f : ι -> R[X])
   证明: by
   simp_rw [← Module.End.pow_apply, map_sum]
 
@@ -556,7 +556,7 @@ theorem derivative_smul
 
 中文:
 定理 derivative_smul
-  结论: {S : 类型} [SMulZeroClass S R] [IsScalarTower S R R] (s : S)
+  结论: {S : 类型} [SMulZero类 S R] [标量塔 S R R] (s : S)
   证明: derivative.map_smul_of_tower s p
 
 @[simp]
@@ -583,7 +583,7 @@ theorem iterate_derivative_smul
 
 中文:
 定理 iterate_derivative_smul
-  结论: {S : 类型} [SMulZeroClass S R] [IsScalarTower S R R]
+  结论: {S : 类型} [SMulZero类 S R] [标量塔 S R R]
   证明: by
   induction k generalizing p with
   | zero => simp
@@ -848,7 +848,7 @@ theorem derivative_ofNat
   proof: derivative_natCast
 
 中文:
-定理 derivative_ofNat
+定理 derivative_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: derivative_natCast
 
@@ -1060,7 +1060,7 @@ theorem derivative_map
 
 中文:
 定理 derivative_map
-  条件: [Semiring S] (p : R[X]) (f : R ->+* S)
+  条件: [半环 S] (p : R[X]) (f : R ->+* S)
   证明: by
   let n := max p.natDegree (map f p).natDegree
   rw [derivative_apply]; rw [derivative_apply]
@@ -1095,7 +1095,7 @@ theorem iterate_derivative_map
 
 中文:
 定理 iterate_derivative_map
-  条件: [Semiring S] (p : R[X]) (f : R ->+* S) (k : 自然数)
+  条件: [半环 S] (p : R[X]) (f : R ->+* S) (k : 自然数)
   证明: by
   induction k generalizing p with
   | zero => simp
@@ -1506,7 +1506,7 @@ theorem derivativeFinsupp_map
 
 中文:
 定理 derivativeFinsupp_map
-  条件: [Semiring S] (p : R[X]) (f : R ->+* S)
+  条件: [半环 S] (p : R[X]) (f : R ->+* S)
   证明: by
   ext i : 1
   simp
@@ -2374,7 +2374,7 @@ theorem derivative_prod_finset
 
 中文:
 定理 derivative_prod_finset
-  条件: [DecidableEq ι] {s : Finset ι} {f : ι -> R[X]}
+  条件: [DecidableEq ι] {s : 有限集 ι} {f : ι -> R[X]}
   证明: by
   simpa using! derivative_prod
 
@@ -2813,7 +2813,7 @@ theorem iterate_derivative_prod_X_sub_C
 
 中文:
 定理 iterate_derivative_prod_X_sub_C
-  条件: {k : 自然数} {S : Finset R} (hk : k <= #S)
+  条件: {k : 自然数} {S : 有限集 R} (hk : k <= #S)
   证明: by
   classical
   induction k

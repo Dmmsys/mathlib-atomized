@@ -65,7 +65,7 @@ instance instHasAntidiagonal
 
 中文:
 实例 instHasAntidiagonal
-  签名: : HasAntidiagonal (α ->₀ 自然数) where
+  签名: : 有Antidiagonal (α ->₀ 自然数) where
   定义体: f.antidiagonal'.support
   mem_antidiagonal {f} {p} := by
     rcases p with ⟨p₁, p₂⟩
@@ -116,7 +116,7 @@ theorem prod_antidiagonal_swap
 
 中文:
 定理 prod_antidiagonal_swap
-  结论: {M : 类型} [CommMonoid M] (n : α ->₀ 自然数)
+  结论: {M : 类型} [交换幺半群 M] (n : α ->₀ 自然数)
   证明: prod_equiv (Equiv.prodComm _ _) (by simp [add_comm]) (by simp)
 
 @[simp]

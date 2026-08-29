@@ -105,7 +105,7 @@ definition piContent
 
 中文:
 定义 piContent
-  签名: : AddContent 实数>=0∞ (measurableCylinders X)
+  签名: : 加法内容 实数>=0∞ (measurableCylinders X)
   定义体: projectiveFamilyContent (isProjectiveMeasureFamily_pi μ)
 
 Depends on / 依赖: isProjectiveMeasureFamily_pi, projectiveFamilyContent
@@ -123,7 +123,7 @@ lemma piContent_cylinder
 
 中文:
 引理 piContent_cylinder
-  条件: {I : Finset ι} {S : Set (Π i : I, X i)} (hS : MeasurableSet S)
+  条件: {I : 有限集 ι} {S : 集合 (Π i : I, X i)} (hS : 可测集 S)
   证明: projectiveFamilyContent_cylinder _ hS
 
 Depends on / 依赖: projectiveFamilyContent_cylinder
@@ -150,7 +150,7 @@ theorem piContent_eq_measure_pi
 
 中文:
 定理 piContent_eq_measure_pi
-  条件: [Fintype ι] {s : Set (Π i, X i)} (hs : MeasurableSet s)
+  条件: [有限类型 ι] {s : 集合 (Π i, X i)} (hs : 可测集 s)
   证明: by
   let e : @Finset.univ ι _ ≃ ι :=
     { toFun i := i
@@ -196,8 +196,8 @@ definition infinitePiNat
   body: (traj (fun n => const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 => μ i))
 
 中文:
-定义 infinitePiNat
-  签名: : Measure (Π n, X n)
+定义 infinitePi自然数
+  签名: : 测度 (Π n, X n)
   定义体: (traj (fun n => const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 => μ i))
 
 Depends on / 依赖: Measure, Measure.pi
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure (Measure.infinitePi自然数 μ)
+  签名: 是概率测度 (测度.infinitePi自然数 μ)
   定义体: by
   rw [Measure.infinitePiNat]; infer_instance
 
@@ -320,7 +320,7 @@ lemma map_piSingleton
 
 中文:
 引理 map_piSingleton
-  条件: (μ : (n : 自然数) -> Measure (X n)) [对任意 n, SigmaFinite (μ n)] (n : 自然数)
+  条件: (μ : (n : 自然数) -> 测度 (X n)) [对任意 n, σ有限 (μ n)] (n : 自然数)
   证明: by
   refine (Measure.pi_eq fun s hs => ?_).symm
   have : Subsingleton (Ioc n (n + 1)) := by rw [Nat.Ioc_succ_singleton]; infer_instance
@@ -421,7 +421,7 @@ theorem isProjectiveLimit_infinitePiNat
   rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id]; rw [← restrict₂_comp_restrict I.subset_Iic_sup_id]; rw [← map_map]; rw [← frestrictLe]; rw [infinitePiNat]; rw [map_comp]; rw [traj_map_frestrictLe]; rw [partialTraj_const]; rw [← map_comp]; rw [← compProd_eq_comp_prod]; rw 
 
 中文:
-定理 isProjectiveLimit_infinitePiNat
+定理 isProjectiveLimit_infinitePi自然数
   证明: by
   intro I
   rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id]; rw [← restrict₂_comp_restrict I.subset_Iic_sup_id]; rw [← map_map]; rw [← frestrictLe]; rw [infinitePiNat]; rw [map_comp]; rw [traj_map_frestrictLe]; rw [partialTraj_const]; rw [← map_comp]; rw [← compProd_eq_comp_prod]; rw 
@@ -443,8 +443,8 @@ lemma infinitePiNat_map_restrict
   proof: isProjectiveLimit_infinitePiNat μ I
 
 中文:
-引理 infinitePiNat_map_restrict
-  条件: (I : Finset 自然数)
+引理 infinitePi自然数_map_restrict
+  条件: (I : 有限集 自然数)
   证明: isProjectiveLimit_infinitePiNat μ I
 
 Depends on / 依赖: isProjectiveLimit_infinitePiNat
@@ -465,8 +465,8 @@ theorem piContent_eq_infinitePiNat
   rw [piContent_cylinder _ mS]; rw [cylinder]; rw [← map_apply (measurable_restrict _) mS]; rw [infinitePiNat_map_restrict]
 
 中文:
-定理 piContent_eq_infinitePiNat
-  条件: {A : Set (Π n, X n)} (hA : A in measurableCylinders X)
+定理 piContent_eq_infinitePi自然数
+  条件: {A : 集合 (Π n, X n)} (hA : A in measurableCylinders X)
   证明: by
   obtain ⟨s, S, mS, rfl⟩ : exists s S, MeasurableSet S ∧ A = cylinder s S := by
     simpa [mem_measurableCylinders] using hA
@@ -506,8 +506,8 @@ lemma Measure.infinitePiNat_map_piCongrLeft
   rw [map_apply _ hS.cylinder]; rw [cylinder]; rw [← Set.preimage_comp]; rw [coe_piCongrLeft]; rw [restrict_comp_piCongrLeft]; rw [Set.preimage_comp]; rw [← map_apply]; rw [infinitePiNat_map_restrict (fun n => μ (e n))]; rw [← cylinder]
 
 中文:
-引理 Measure.infinitePiNat_map_piCongrLeft
-  结论: (e : 自然数 ≃ ι) {s : Set (Π i, X i)}
+引理 测度.infinitePi自然数_map_piCongrLeft
+  结论: (e : 自然数 ≃ ι) {s : 集合 (Π i, X i)}
   证明: by
   obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders s).1 hs
   rw [map_apply _ hS.cylinder]; rw [cylinder]; rw [← Set.preimage_comp]; rw [coe_piCongrLeft]; rw [restrict_comp_piCongrLeft]; rw [Set.preimage_comp]; rw [← map_apply]; rw [infinitePiNat_map_restrict (fun n => μ (e n))]; rw [← cylinder]
@@ -539,7 +539,7 @@ theorem piContent_tendsto_zero
 
 中文:
 定理 piContent_tendsto_zero
-  结论: {A : 自然数 -> Set (Π i, X i)} (A_mem : 对任意 n, A n in measurableCylinders X)
+  结论: {A : 自然数 -> 集合 (Π i, X i)} (A_mem : 对任意 n, A n in measurableCylinders X)
   证明: by
   have : forall i, Nonempty (X i) := fun i => nonempty_of_isProbabilityMeasure (μ i)
   have A_cyl n : exists s S, MeasurableSet S ∧ A n = cylinder s S :=
@@ -669,7 +669,7 @@ definition infinitePi
 
 中文:
 定义 infinitePi
-  签名: : Measure (Π i, X i)
+  签名: : 测度 (Π i, X i)
   定义体: if h : forall i, IsProbabilityMeasure (μ i) then
     (piContent μ).measure isSetSemiring_measurableCylinders
       generateFrom_measurableCylinders.ge (isSigmaSubadditive_piContent (hμ := h) μ)
@@ -724,7 +724,7 @@ theorem infinitePi_map_restrict
 
 中文:
 定理 infinitePi_map_restrict
-  条件: {I : Finset ι}
+  条件: {I : 有限集 ι}
   证明: isProjectiveLimit_infinitePi μ I
 
 Depends on / 依赖: isProjectiveLimit_infinitePi
@@ -745,7 +745,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure (infinitePi μ)
+  签名: 是概率测度 (infinitePi μ)
   定义体: by
   constructor
   rw [← cylinder_univ ∅]; rw [cylinder]; rw [← map_apply (measurable_restrict _) .univ]; rw [infinitePi_map_restrict]; rw [measure_univ]
@@ -775,7 +775,7 @@ theorem eq_infinitePi
 
 中文:
 定理 eq_infinitePi
-  结论: {ν : Measure (Π i, X i)}
+  结论: {ν : 测度 (Π i, X i)}
   证明: by
 .symm refine (isProjectiveLimit_infinitePi μ).unique ?_
   refine fun s => (pi_eq fun t ht => ?_).symm
@@ -823,7 +823,7 @@ lemma infinitePi_pi
 
 中文:
 引理 infinitePi_pi
-  结论: {s : Finset ι} {t : (i : ι) -> Set (X i)}
+  结论: {s : 有限集 ι} {t : (i : ι) -> 集合 (X i)}
   证明: by
   have : Set.pi s t = cylinder s ((@Set.univ s).pi (fun i : s => t i)) := by
     ext x
@@ -862,7 +862,7 @@ theorem infinitePi_map_restrict'
 
 中文:
 定理 infinitePi_map_restrict'
-  条件: {I : Set ι}
+  条件: {I : 集合 ι}
   证明: by
   apply eq_infinitePi
   intro s t ht
@@ -898,7 +898,7 @@ lemma infinitePi_pi_of_countable
 
 中文:
 引理 infinitePi_pi_of_countable
-  结论: {s : Set ι} (hs : Countable s) {t : (i : ι) -> Set (X i)}
+  结论: {s : 集合 ι} (hs : 可数 s) {t : (i : ι) -> 集合 (X i)}
   证明: by
   wlog s_ne : Nonempty s
   · simp [Set.not_nonempty_iff_eq_empty'.mp s_ne]
@@ -950,7 +950,7 @@ lemma infinitePi_pi_univ
 
 中文:
 引理 infinitePi_pi_univ
-  结论: [Countable ι] {t : (i : ι) -> Set (X i)}
+  结论: [可数 ι] {t : (i : ι) -> 集合 (X i)}
   证明: by
   rw [infinitePi_pi_of_countable]; rw [tprod_univ (f := fun i => μ i (t i))]
   · simpa [Set.countable_univ_iff]
@@ -979,7 +979,7 @@ lemma infinitePi_singleton
 
 中文:
 引理 infinitePi_singleton
-  结论: [Countable ι] [对任意 i, MeasurableSingletonClass (X i)]
+  结论: [可数 ι] [对任意 i, MeasurableSingleton类 (X i)]
   证明: by
   rw [← Set.univ_pi_singleton]; rw [infinitePi_pi_univ _ (by measurability)]
 
@@ -999,7 +999,7 @@ lemma infinitePi_singleton_of_fintype
 
 中文:
 引理 infinitePi_singleton_of_fintype
-  结论: [Fintype ι] [对任意 i, MeasurableSingletonClass (X i)]
+  结论: [有限类型 ι] [对任意 i, MeasurableSingleton类 (X i)]
   证明: by simp
 -/
 lemma infinitePi_singleton_of_fintype [Fintype ι] [forall i, MeasurableSingletonClass (X i)]
@@ -1098,7 +1098,7 @@ lemma infinitePi_map_pi
 
 中文:
 引理 infinitePi_map_pi
-  结论: {Y : ι -> 类型} [对任意 i, MeasurableSpace (Y i)] {f : (i : ι) -> X i -> Y i}
+  结论: {Y : ι -> 类型} [对任意 i, 可测空间 (Y i)] {f : (i : ι) -> X i -> Y i}
   证明: by
   have (i : ι) : IsProbabilityMeasure ((μ i).map (f i)) :=
     isProbabilityMeasure_map (hf i).aemeasurable
@@ -1178,8 +1178,8 @@ theorem infinitePi_eq_pi
 
 中文:
 定理 infinitePi_eq_pi
-  条件: [Fintype ι]
-  结论: infinitePi μ = Measure.pi μ
+  条件: [有限类型 ι]
+  结论: infinitePi μ = 测度.pi μ
   证明: by
   refine (pi_eq fun s hs => ?_).symm
   rw [← coe_univ]; rw [infinitePi_pi]
@@ -1203,7 +1203,7 @@ lemma infinitePi_cylinder
 
 中文:
 引理 infinitePi_cylinder
-  条件: {s : Finset ι} {S : Set (Π i : s, X i)} (mS : MeasurableSet S)
+  条件: {s : 有限集 ι} {S : 集合 (Π i : s, X i)} (mS : 可测集 S)
   证明: by
   rw [cylinder]; rw [← Measure.map_apply (measurable_restrict _) mS]; rw [infinitePi_map_restrict]
 
@@ -1348,7 +1348,7 @@ theorem integral_restrict_infinitePi
 
 中文:
 定理 integral_restrict_infinitePi
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← integral_map]; rw [infinitePi_map_restrict]
   · fun_prop
@@ -1375,7 +1375,7 @@ theorem lintegral_restrict_infinitePi
 
 中文:
 定理 lintegral_restrict_infinitePi
-  结论: {s : Finset ι}
+  结论: {s : 有限集 ι}
   证明: by
   rw [← lintegral_map hf (measurable_restrict _)]; rw [isProjectiveLimit_infinitePi μ]
 
@@ -1403,7 +1403,7 @@ theorem integral_infinitePi_of_piFinset
 
 中文:
 定理 integral_infinitePi_of_piFinset
-  结论: [DecidableEq ι] {E : 类型} [NormedAddCommGroup E]
+  结论: [DecidableEq ι] {E : 类型} [赋范交换加群 E]
   证明: by
   let g : (Π i : s, X i) -> E := fun y => f (Function.updateFinset x _ y)
   have this y : g (s.restrict y) = f y :=
@@ -1441,7 +1441,7 @@ theorem lintegral_infinitePi_of_piFinset
 
 中文:
 定理 lintegral_infinitePi_of_piFinset
-  结论: [DecidableEq ι] {s : Finset ι}
+  结论: [DecidableEq ι] {s : 有限集 ι}
   证明: by
   let g : (Π i : s, X i) -> Real>=0∞ := fun y => f (Function.updateFinset x _ y)
   have this y : g (s.restrict y) = f y :=

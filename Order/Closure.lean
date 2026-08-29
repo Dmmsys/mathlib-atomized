@@ -69,14 +69,14 @@ structure ClosureOperator
     - isClosed_iff({x : α}) : IsClosed x ↔ toFun x = x  [default: by aesop]
 
 中文:
-结构 ClosureOperator
-  参数: [Preorder α]
+结构 闭包算子
+  参数: [预序 α]
   继承: α ->o α
   公理与运算 (4 个):
     - le_closure' : 对任意 x, x <= toFun x
     - idempotent' : 对任意 x, toFun (toFun x) = toFun x
     - IsClosed((x : α)) : 命题  [默认: toFun x = x]
-    - isClosed_iff({x : α}) : IsClosed x ↔ toFun x = x  [默认: by aesop]
+    - isClosed_iff({x : α}) : 是闭集 x ↔ toFun x = x  [默认: by aesop]
 
 Depends on / 依赖: isClosed_iff
 -/
@@ -104,8 +104,8 @@ instance [Preorder
   coe_injective := by rintro ⟨⟩ ⟨⟩ h; obtain rfl := DFunLike.ext' h; congr with x; simp_all
 
 中文:
-实例 [Preorder
-  签名: α] : FunLike (ClosureOperator α) α α where
+实例 [预序
+  签名: α] : 函数状 (闭包算子 α) α α where
   定义体: c.1
   coe_injective := by rintro ⟨⟩ ⟨⟩ h; obtain rfl := DFunLike.ext' h; congr with x; simp_all
 -/
@@ -124,8 +124,8 @@ instance [Preorder
 initialize_simps_projections ClosureOperator (toFun -> apply, IsClosed -> isClosed)
 
 中文:
-实例 [Preorder
-  签名: α] : OrderHomClass (ClosureOperator α) α α where
+实例 [预序
+  签名: α] : 序态射类 (闭包算子 α) α α where
   定义体: f.mono h
 
 initialize_simps_projections ClosureOperator (toFun -> apply, IsClosed -> isClosed)
@@ -158,7 +158,7 @@ congrArg e Eq.trans (congrArg c (e.symm_apply_apply _)) (c.idempotent' _)
 
 中文:
 定义 conjBy
-  签名: {α β} [Preorder α] [Preorder β] (c : ClosureOperator α)
+  签名: {α β} [预序 α] [预序 β] (c : 闭包算子 α)
   定义体: e.conj c
   IsClosed b := c.IsClosed (e.symm b)
   monotone' _ _ h :=
@@ -191,7 +191,7 @@ lemma conjBy_refl
 
 中文:
 引理 conjBy_refl
-  条件: {α} [Preorder α] (c : ClosureOperator α)
+  条件: {α} [预序 α] (c : 闭包算子 α)
   证明: rfl
 -/
 lemma conjBy_refl {α} [Preorder α] (c : ClosureOperator α) :
@@ -207,7 +207,7 @@ lemma conjBy_trans
 
 中文:
 引理 conjBy_trans
-  结论: {α β γ} [Preorder α] [Preorder β] [Preorder γ]
+  结论: {α β γ} [预序 α] [预序 β] [预序 γ]
   证明: rfl
 -/
 lemma conjBy_trans {α β γ} [Preorder α] [Preorder β] [Preorder γ]
@@ -233,7 +233,7 @@ definition id
 
 中文:
 定义 id
-  签名: : ClosureOperator α where
+  签名: : 闭包算子 α where
   定义体: OrderHom.id
   le_closure' _ := le_rfl
   idempotent' _ := rfl
@@ -257,7 +257,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ClosureOperator α)
+  签名: 可居 (闭包算子 α)
   定义体: ⟨id α⟩
 -/
 instance : Inhabited (ClosureOperator α) :=
@@ -278,7 +278,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: 对任意 c₁ c₂ : ClosureOperator α, (对任意 x, c₁ x = c₂ x) -> c₁ = c₂
+  结论: 对任意 c₁ c₂ : 闭包算子 α, (对任意 x, c₁ x = c₂ x) -> c₁ = c₂
   证明: DFunLike.ext
 
 @[gcongr, mono]
@@ -299,7 +299,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone c
+  结论: 递增 c
   证明: c.monotone'
 
 Depends on / 依赖: c.monotone, monotone
@@ -364,7 +364,7 @@ lemma isClosed_closure
 中文:
 引理 isClosed_closure
   条件: (x : α)
-  结论: c.IsClosed (c x)
+  结论: c.是闭集 (c x)
   证明: c.isClosed_iff.2 c.idempotent x
 -/
 @[simp] lemma isClosed_closure (x : α) : c.IsClosed (c x) := c.isClosed_iff.2 c.idempotent x
@@ -412,8 +412,8 @@ theorem IsClosed.closure_eq
   proof: c.isClosed_iff.1
 
 中文:
-定理 IsClosed.closure_eq
-  结论: c.IsClosed x -> c x = x
+定理 是闭集.closure_eq
+  结论: c.是闭集 x -> c x = x
   证明: c.isClosed_iff.1
 
 Depends on / 依赖: c.isClosed_iff, isClosed_iff
@@ -434,7 +434,7 @@ alias setOf_isClosed_eq_range_closure := setOfPred_isClosed_eq_range_closure
 
 中文:
 定理 setOfPred_isClosed_eq_range_closure
-  结论: {x | c.IsClosed x} = Set.range c
+  结论: {x | c.是闭集 x} = 集合.range c
   证明: by
   ext x; exact ⟨fun hx => ⟨x, hx.closure_eq⟩, by rintro ⟨y, rfl⟩; exact c.isClosed_closure _⟩
 
@@ -483,8 +483,8 @@ theorem IsClosed.closure_le_iff
   rw [← hy.closure_eq]; rw [← le_closure_iff]
 
 中文:
-定理 IsClosed.closure_le_iff
-  条件: (hy : c.IsClosed y)
+定理 是闭集.closure_le_iff
+  条件: (hy : c.是闭集 y)
   结论: c x <= y ↔ x <= y
   证明: by
   rw [← hy.closure_eq]; rw [← le_closure_iff]
@@ -505,7 +505,7 @@ lemma closure_min
 
 中文:
 引理 closure_min
-  条件: (hxy : x <= y) (hy : c.IsClosed y)
+  条件: (hxy : x <= y) (hy : c.是闭集 y)
   结论: c x <= y
   证明: hy.closure_le_iff.2 hxy
 
@@ -526,7 +526,7 @@ lemma closure_isGLB
 中文:
 引理 closure_isGLB
   条件: (x : α)
-  结论: IsGLB { y | x <= y ∧ c.IsClosed y } (c x) where
+  结论: IsGLB { y | x <= y ∧ c.是闭集 y } (c x) where
   证明: and_imp.mpr closure_min
   right _ h := h ⟨c.le_closure x, c.isClosed_closure x⟩
 
@@ -557,7 +557,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (f : α -> α) (hf₁ : Monotone f) (hf₂ : 对任意 x, x <= f x) (hf₃ : 对任意 x, f (f x) <= f x)
+  签名: (f : α -> α) (hf₁ : 递增 f) (hf₂ : 对任意 x, x <= f x) (hf₃ : 对任意 x, f (f x) <= f x)
   定义体: f
   monotone' := hf₁
   le_closure' := hf₂
@@ -635,7 +635,7 @@ theorem isClosed_iff_closure_le
 
 中文:
 定理 isClosed_iff_closure_le
-  结论: c.IsClosed x ↔ c x <= x
+  结论: c.是闭集 x ↔ c x <= x
   证明: ⟨fun h => h.closure_eq.le, fun h => c.isClosed_iff.2 h.antisymm c.le_closure x⟩
 
 Depends on / 依赖: antisymm, c.isClosed_iff, c.le_closure, closure_eq, h.antisymm, h.closure_eq.le, isClosed_iff, le_closure
@@ -653,7 +653,7 @@ theorem ext_isClosed
 
 中文:
 定理 ext_isClosed
-  结论: (c₁ c₂ : ClosureOperator α)
+  结论: (c₁ c₂ : 闭包算子 α)
   证明: ext c₁ c₂ fun x => IsGLB.unique (c₁.closure_isGLB x) by simpa [h] using c₂.closure_isGLB x
 
 Depends on / 依赖: IsGLB.unique, closure_isGLB, unique
@@ -674,7 +674,7 @@ theorem eq_ofPred_closed
 
 中文:
 定理 eq_ofPred_closed
-  条件: (c : ClosureOperator α)
+  条件: (c : 闭包算子 α)
   证明: by
   ext
   simp
@@ -721,7 +721,7 @@ lemma isClosed_top
 
 中文:
 引理 isClosed_top
-  结论: c.IsClosed ⊤
+  结论: c.是闭集 ⊤
   证明: c.isClosed_iff.2 c.closure_top
 -/
 @[simp] lemma isClosed_top : c.IsClosed ⊤ := c.isClosed_iff.2 c.closure_top
@@ -738,7 +738,7 @@ theorem closure_inf_le
 
 中文:
 定理 closure_inf_le
-  条件: [SemilatticeInf α] (c : ClosureOperator α) (x y : α)
+  条件: [SemilatticeInf α] (c : 闭包算子 α) (x y : α)
   证明: c.monotone.map_inf_le _ _
 
 Depends on / 依赖: c.monotone.map_inf_le, map_inf_le, monotone
@@ -889,7 +889,7 @@ theorem sInf_isClosed
 
 中文:
 定理 sInf_isClosed
-  结论: {c : ClosureOperator α} {S : Set α}
+  结论: {c : 闭包算子 α} {S : 集合 α}
   证明: isClosed_iff_closure_le.mpr le_of_le_of_eq c.monotone.map_sInf_le
     Eq.trans (biInf_congr (c.isClosed_iff.mp <| H · ·)) sInf_eq_iInf.symm
 
@@ -976,7 +976,7 @@ definition OrderIso.equivClosureOperator
 
 中文:
 定义 OrderIso.equivClosureOperator
-  签名: {α β} [Preorder α] [Preorder β] (e : α ≃o β)
+  签名: {α β} [预序 α] [预序 β] (e : α ≃o β)
   定义体: c.conjBy e
   invFun c := c.conjBy e.symm
   left_inv c := Eq.trans (c.conjBy_trans _ _).symm
@@ -1012,7 +1012,7 @@ structure LowerAdjoint
 
 中文:
 结构 LowerAdjoint
-  参数: [Preorder α] [Preorder β] (u : β -> α)
+  参数: [预序 α] [预序 β] (u : β -> α)
   公理与运算 (2 个):
     - toFun : α -> β
     - gc' : GaloisConnection toFun u
@@ -1040,7 +1040,7 @@ definition id
 
 中文:
 定义 id
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: x
   gc' := GaloisConnection.id
 -/
@@ -1059,8 +1059,8 @@ instance [Preorder
   body: ⟨LowerAdjoint.id α⟩
 
 中文:
-实例 [Preorder
-  签名: α] : Inhabited (LowerAdjoint (id : α -> α))
+实例 [预序
+  签名: α] : 可居 (LowerAdjoint (id : α -> α))
   定义体: ⟨LowerAdjoint.id α⟩
 
 Depends on / 依赖: LowerAdjoint, LowerAdjoint.id
@@ -1136,7 +1136,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone (u ∘ l)
+  结论: 递增 (u ∘ l)
   证明: l.gc.monotone_u.comp l.gc.monotone_l
 
 Depends on / 依赖: l.gc.monotone_l, l.gc.monotone_u.comp, monotone_l, monotone_u
@@ -1186,7 +1186,7 @@ definition closureOperator
 
 中文:
 定义 closureOperator
-  签名: : ClosureOperator α where
+  签名: : 闭包算子 α where
   定义体: u (l x)
   monotone' := l.monotone
   le_closure' := l.le_closure
@@ -1254,7 +1254,7 @@ definition closed
 
 中文:
 定义 closed
-  签名: : Set α
+  签名: : 集合 α
   定义体: {x | u (l x) = x}
 -/
 def closed : Set α := {x | u (l x) = x}
@@ -1358,7 +1358,7 @@ theorem closed_eq_range_close
 
 中文:
 定理 closed_eq_range_close
-  结论: l.closed = Set.range (u ∘ l)
+  结论: l.closed = 集合.range (u ∘ l)
   证明: l.closureOperator.setOfPred_isClosed_eq_range_closure
 
 Depends on / 依赖: closureOperator, l.closureOperator.setOfPred_isClosed_eq_range_closure, setOfPred_isClosed_eq_range_closure
@@ -1421,7 +1421,7 @@ theorem closure_top
 
 中文:
 定理 closure_top
-  条件: [PartialOrder α] [OrderTop α] [Preorder β] {u : β -> α} (l : LowerAdjoint u)
+  条件: [偏序 α] [有顶序 α] [预序 β] {u : β -> α} (l : LowerAdjoint u)
   证明: l.closureOperator.closure_top
 
 Depends on / 依赖: closureOperator, closure_top, l.closureOperator.closure_top
@@ -1440,7 +1440,7 @@ theorem closure_inf_le
 
 中文:
 定理 closure_inf_le
-  条件: [SemilatticeInf α] [Preorder β] {u : β -> α} (l : LowerAdjoint u) (x y : α)
+  条件: [SemilatticeInf α] [预序 β] {u : β -> α} (l : LowerAdjoint u) (x y : α)
   证明: l.closureOperator.closure_inf_le x y
 
 Depends on / 依赖: closureOperator, closure_inf_le, l.closureOperator.closure_inf_le
@@ -1600,7 +1600,7 @@ theorem subset_closure
 
 中文:
 定理 subset_closure
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: s subseteq l s
   证明: l.le_closure s
 
@@ -1621,7 +1621,7 @@ theorem notMem_of_notMem_closure
 
 中文:
 定理 notMem_of_notMem_closure
-  条件: {s : Set β} {P : β} (hP : P ∉ l s)
+  条件: {s : 集合 β} {P : β} (hP : P ∉ l s)
   结论: P ∉ s
   证明: fun h =>
   hP (subset_closure _ s h)
@@ -1640,7 +1640,7 @@ theorem le_iff_subset
 
 中文:
 定理 le_iff_subset
-  条件: (s : Set β) (S : α)
+  条件: (s : 集合 β) (S : α)
   结论: l s <= S ↔ s subseteq S
   证明: l.gc s S
 
@@ -1662,7 +1662,7 @@ theorem mem_iff
 
 中文:
 定理 mem_iff
-  条件: (s : Set β) (x : β)
+  条件: (s : 集合 β) (x : β)
   结论: x in l s ↔ 对任意 S : α, s subseteq S -> x in S
   证明: by
   simp_rw [← SetLike.mem_coe, ← Set.singleton_subset_iff, ← l.le_iff_subset]
@@ -1688,7 +1688,7 @@ theorem closure_union_closure_subset
 中文:
 定理 closure_union_closure_subset
   条件: (x y : α)
-  结论: (l x : Set β) union l y subseteq l (x union y)
+  结论: (l x : 集合 β) union l y subseteq l (x union y)
   证明: l.closure_sup_closure_le x y
 
 @[simp]
@@ -1832,7 +1832,7 @@ theorem eq_of_le
 
 中文:
 定理 eq_of_le
-  条件: {s : Set β} {S : α} (h₁ : s subseteq S) (h₂ : S <= l s)
+  条件: {s : 集合 β} {S : α} (h₁ : s subseteq S) (h₂ : S <= l s)
   结论: l s = S
   证明: ((l.le_iff_subset _ _).2 h₁).antisymm h₂
 
@@ -1862,7 +1862,7 @@ definition GaloisConnection.lowerAdjoint
 
 中文:
 定义 GaloisConnection.lowerAdjoint
-  签名: [Preorder α] [Preorder β] {l : α -> β} {u : β -> α}
+  签名: [预序 α] [预序 β] {l : α -> β} {u : β -> α}
   定义体: l
   gc' := gc
 -/
@@ -1884,7 +1884,7 @@ definition GaloisConnection.closureOperator
 
 中文:
 定义 GaloisConnection.closureOperator
-  签名: [PartialOrder α] [Preorder β] {l : α -> β} {u : β -> α}
+  签名: [偏序 α] [预序 β] {l : α -> β} {u : β -> α}
   定义体: gc.lowerAdjoint.closureOperator
 
 Depends on / 依赖: closureOperator, gc.lowerAdjoint.closureOperator, lowerAdjoint
@@ -1905,8 +1905,8 @@ definition ClosureOperator.gi
   choice_eq x hx := le_antisymm (c.le_closure x) hx
 
 中文:
-定义 ClosureOperator.gi
-  签名: [PartialOrder α] (c : ClosureOperator α)
+定义 闭包算子.gi
+  签名: [偏序 α] (c : 闭包算子 α)
   定义体: ⟨x, isClosed_iff_closure_le.2 hx⟩
   gc _ y := y.2.closure_le_iff
   le_l_u _ := c.le_closure _
@@ -1937,7 +1937,7 @@ theorem closureOperator_gi_self
 
 中文:
 定理 closureOperator_gi_self
-  条件: [PartialOrder α] (c : ClosureOperator α)
+  条件: [偏序 α] (c : 闭包算子 α)
   证明: by
   ext x
   rfl

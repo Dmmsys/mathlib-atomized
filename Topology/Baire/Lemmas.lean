@@ -61,8 +61,8 @@ theorem Set.Finite.dense_sInter
     exact ih ((fun y hy => ho y (Or.in
 
 中文:
-定理 Set.Finite.dense_sInter
-  结论: {s : Set (Set X)} (hs : s.Finite)
+定理 集合.有限.dense_s整数er
+  结论: {s : 集合 (集合 X)} (hs : s.有限)
   证明: by
   induction s, hs using Set.Finite.induction_on with
   | empty => simp [sInter_empty]
@@ -93,8 +93,8 @@ theorem baire_of_finite
 
 中文:
 定理 baire_of_finite
-  条件: [Finite X]
-  结论: BaireSpace X where
+  条件: [有限 X]
+  结论: Baire空间 X where
   证明: sInter_range f ▸ (toFinite (range f)).dense_sInter (by grind) (by grind)
 
 Depends on / 依赖: dense_sInter, sInter_range, toFinite
@@ -113,8 +113,8 @@ theorem dense_iInter_of_isOpen_nat
   proof: BaireSpace.baire_property f ho hd
 
 中文:
-定理 dense_iInter_of_isOpen_nat
-  结论: {f : 自然数 -> Set X} (ho : 对任意 n, IsOpen (f n))
+定理 dense_i整数er_of_isOpen_nat
+  结论: {f : 自然数 -> 集合 X} (ho : 对任意 n, 是开集 (f n))
   证明: BaireSpace.baire_property f ho hd
 
 Depends on / 依赖: BaireSpace, BaireSpace.baire_property, baire_property
@@ -139,8 +139,8 @@ theorem IsGδ.baireSpace_of_dense
 
 中文:
 定理 IsGδ.baireSpace_of_dense
-  条件: {s : Set X} (hG : IsGδ s) (hd : Dense s)
-  结论: BaireSpace s
+  条件: {s : 集合 X} (hG : IsGδ s) (hd : 稠密 s)
+  结论: Baire空间 s
   证明: by
   constructor
   intro f hof hdf
@@ -178,8 +178,8 @@ theorem Topology.IsOpenEmbedding.baireSpace
     rw [dense_iff_closure_eq]
 
 中文:
-定理 Topology.IsOpenEmbedding.baireSpace
-  结论: {Y : 类型} [TopologicalSpace Y] {p : Y -> X}
+定理 拓扑.是开嵌入.baireSpace
+  结论: {Y : 类型} [拓扑空间 Y] {p : Y -> X}
   证明: by
   constructor
   intro f hof hdf
@@ -230,9 +230,9 @@ theorem IsOpen.baireSpace
   proof: hO.isOpenEmbedding_subtypeVal.baireSpace
 
 中文:
-定理 IsOpen.baireSpace
-  条件: {s : Set X} (hO : IsOpen s)
-  结论: BaireSpace s
+定理 是开集.baireSpace
+  条件: {s : 集合 X} (hO : 是开集 s)
+  结论: Baire空间 s
   证明: hO.isOpenEmbedding_subtypeVal.baireSpace
 
 Depends on / 依赖: baireSpace, hO.isOpenEmbedding_subtypeVal.baireSpace, isOpenEmbedding_subtypeVal
@@ -254,8 +254,8 @@ theorem IsOpenQuotientMap.baireSpace
   simp_all [← preimage_iInter, IsOpenQuotientMap.dense_preimage_iff]
 
 中文:
-定理 IsOpenQuotientMap.baireSpace
-  结论: {Y : 类型} [TopologicalSpace Y] {f : X -> Y}
+定理 是OpenQuotient映射.baireSpace
+  结论: {Y : 类型} [拓扑空间 Y] {f : X -> Y}
   证明: by
   constructor
   intro u hou hdu
@@ -286,8 +286,8 @@ theorem dense_sInter_of_isOpen
     exact dense_iInter_of_isOpen_nat (forall_mem_range.1 ho) (forall_mem_range.1 hd)
 
 中文:
-定理 dense_sInter_of_isOpen
-  结论: {S : Set (Set X)} (ho : 对任意 s in S, IsOpen s) (hS : S.Countable)
+定理 dense_s整数er_of_isOpen
+  结论: {S : 集合 (集合 X)} (ho : 对任意 s in S, 是开集 s) (hS : S.可数)
   证明: by
   rcases S.eq_empty_or_nonempty with h | h
   · simp [h]
@@ -314,8 +314,8 @@ theorem dense_biInter_of_isOpen
   refine dense_sInter_of_isOpen ?_ (hS.image _) ?_ <;> rwa [forall_mem_image]
 
 中文:
-定理 dense_biInter_of_isOpen
-  结论: {S : Set α} {f : α -> Set X} (ho : 对任意 s in S, IsOpen (f s))
+定理 dense_bi整数er_of_isOpen
+  结论: {S : 集合 α} {f : α -> 集合 X} (ho : 对任意 s in S, 是开集 (f s))
   证明: by
   rw [← sInter_image]
   refine dense_sInter_of_isOpen ?_ (hS.image _) ?_ <;> rwa [forall_mem_image]
@@ -339,8 +339,8 @@ theorem dense_iInter_of_isOpen
   proof: dense_sInter_of_isOpen (forall_mem_range.2 ho) (countable_range _) (forall_mem_range.2 hd)
 
 中文:
-定理 dense_iInter_of_isOpen
-  结论: [Countable ι] {f : ι -> Set X} (ho : 对任意 i, IsOpen (f i))
+定理 dense_i整数er_of_isOpen
+  结论: [可数 ι] {f : ι -> 集合 X} (ho : 对任意 i, 是开集 (f i))
   证明: dense_sInter_of_isOpen (forall_mem_range.2 ho) (countable_range _) (forall_mem_range.2 hd)
 
 Depends on / 依赖: countable_range, dense_sInter_of_isOpen, forall_mem_range
@@ -367,8 +367,8 @@ theorem mem_residual
 
 中文:
 定理 mem_residual
-  条件: {s : Set X}
-  结论: s in residual X ↔ 存在 t subseteq s, IsGδ t ∧ Dense t
+  条件: {s : 集合 X}
+  结论: s in residual X ↔ 存在 t subseteq s, IsGδ t ∧ 稠密 t
   证明: by
   constructor
   · rw [mem_residual_iff]
@@ -425,8 +425,8 @@ theorem dense_of_mem_residual
 
 中文:
 定理 dense_of_mem_residual
-  条件: {s : Set X} (hs : s in residual X)
-  结论: Dense s
+  条件: {s : 集合 X} (hs : s in residual X)
+  结论: 稠密 s
   证明: let ⟨_, hts, _, hd⟩ := mem_residual.1 hs
   hd.mono hts
 
@@ -451,7 +451,7 @@ theorem not_isMeagre_of_isOpen
 
 中文:
 定理 not_isMeagre_of_isOpen
-  条件: {s : Set X} (hs : IsOpen s) (hne : s.Nonempty)
+  条件: {s : 集合 X} (hs : 是开集 s) (hne : s.非空)
   结论: ¬ IsMeagre s
   证明: by
   intro h
@@ -477,8 +477,8 @@ theorem dense_sInter_of_Gδ
     (fun _ hs => residual_of_dense_Gδ (ho _ hs) (hd _ hs)))
 
 中文:
-定理 dense_sInter_of_Gδ
-  结论: {S : Set (Set X)} (ho : 对任意 s in S, IsGδ s) (hS : S.Countable)
+定理 dense_s整数er_of_Gδ
+  结论: {S : 集合 (集合 X)} (ho : 对任意 s in S, IsGδ s) (hS : S.可数)
   证明: dense_of_mem_residual ((countable_sInter_mem hS).mpr
     (fun _ hs => residual_of_dense_Gδ (ho _ hs) (hd _ hs)))
 
@@ -498,8 +498,8 @@ theorem dense_iInter_of_Gδ
   proof: dense_sInter_of_Gδ (forall_mem_range.2 ‹_›) (countable_range _) (forall_mem_range.2 ‹_›)
 
 中文:
-定理 dense_iInter_of_Gδ
-  结论: [Countable ι] {f : ι -> Set X} (ho : 对任意 s, IsGδ (f s))
+定理 dense_i整数er_of_Gδ
+  结论: [可数 ι] {f : ι -> 集合 X} (ho : 对任意 s, IsGδ (f s))
   证明: dense_sInter_of_Gδ (forall_mem_range.2 ‹_›) (countable_range _) (forall_mem_range.2 ‹_›)
 
 Depends on / 依赖: countable_range, forall_mem_range
@@ -520,8 +520,8 @@ theorem dense_biInter_of_Gδ
   exact dense_iInter_of_Gδ (fun s => ho s s.2) fun s => hd s s.2
 
 中文:
-定理 dense_biInter_of_Gδ
-  结论: {S : Set α} {f : 对任意 x in S, Set X} (ho : 对任意 s (H : s in S), IsGδ (f s H))
+定理 dense_bi整数er_of_Gδ
+  结论: {S : 集合 α} {f : 对任意 x in S, 集合 X} (ho : 对任意 s (H : s in S), IsGδ (f s H))
   证明: by
   rw [biInter_eq_iInter]
   have := hS.to_subtype
@@ -546,8 +546,8 @@ theorem Dense.inter_of_Gδ
   apply dense_iInter_of_Gδ <;> simp [Bool.forall_bool, *]
 
 中文:
-定理 Dense.inter_of_Gδ
-  结论: {s t : Set X} (hs : IsGδ s) (ht : IsGδ t) (hsc : Dense s)
+定理 稠密.inter_of_Gδ
+  结论: {s t : 集合 X} (hs : IsGδ s) (ht : IsGδ t) (hsc : 稠密 s)
   证明: by
   rw [inter_eq_iInter]
   apply dense_iInter_of_Gδ <;> simp [Bool.forall_bool, *]
@@ -576,7 +576,7 @@ theorem IsGδ.dense_iUnion_interior_of_closed
 
 中文:
 定理 IsGδ.dense_iUnion_interior_of_closed
-  结论: [Countable ι] {s : Set X} (hs : IsGδ s) (hd : Dense s)
+  结论: [可数 ι] {s : 集合 X} (hs : IsGδ s) (hd : 稠密 s)
   证明: by
   let g i := (frontier (f i))ᶜ
   have hgo : forall i, IsOpen (g i) := fun i => isClosed_frontier.isOpen_compl
@@ -616,7 +616,7 @@ theorem IsGδ.dense_biUnion_interior_of_closed
 
 中文:
 定理 IsGδ.dense_biUnion_interior_of_closed
-  结论: {t : Set α} {s : Set X} (hs : IsGδ s) (hd : Dense s)
+  结论: {t : 集合 α} {s : 集合 X} (hs : IsGδ s) (hd : 稠密 s)
   证明: by
   have := ht.to_subtype
   simp only [biUnion_eq_iUnion, SetCoe.forall'] at *
@@ -641,7 +641,7 @@ theorem IsGδ.dense_sUnion_interior_of_closed
 
 中文:
 定理 IsGδ.dense_sUnion_interior_of_closed
-  结论: {T : Set (Set X)} {s : Set X} (hs : IsGδ s)
+  结论: {T : 集合 (集合 X)} {s : 集合 X} (hs : IsGδ s)
   证明: hs.dense_biUnion_interior_of_closed hd hc hc' by rwa [← sUnion_eq_biUnion]
 
 Depends on / 依赖: dense_biUnion_interior_of_closed, hs.dense_biUnion_interior_of_closed, sUnion_eq_biUnion
@@ -661,7 +661,7 @@ theorem dense_biUnion_interior_of_closed
 
 中文:
 定理 dense_biUnion_interior_of_closed
-  结论: {S : Set α} {f : α -> Set X} (hc : 对任意 s in S, IsClosed (f s))
+  结论: {S : 集合 α} {f : α -> 集合 X} (hc : 对任意 s in S, 是闭集 (f s))
   证明: IsGδ.univ.dense_biUnion_interior_of_closed dense_univ hS hc hU.ge
 
 Depends on / 依赖: dense_biUnion_interior_of_closed, dense_univ, hU.ge, univ.dense_biUnion_interior_of_closed
@@ -680,7 +680,7 @@ theorem dense_sUnion_interior_of_closed
 
 中文:
 定理 dense_sUnion_interior_of_closed
-  结论: {S : Set (Set X)} (hc : 对任意 s in S, IsClosed s)
+  结论: {S : 集合 (集合 X)} (hc : 对任意 s in S, 是闭集 s)
   证明: IsGδ.univ.dense_sUnion_interior_of_closed dense_univ hS hc hU.ge
 
 Depends on / 依赖: dense_sUnion_interior_of_closed, dense_univ, hU.ge, univ.dense_sUnion_interior_of_closed
@@ -699,7 +699,7 @@ theorem dense_iUnion_interior_of_closed
 
 中文:
 定理 dense_iUnion_interior_of_closed
-  结论: [Countable ι] {f : ι -> Set X} (hc : 对任意 i, IsClosed (f i))
+  结论: [可数 ι] {f : ι -> 集合 X} (hc : 对任意 i, 是闭集 (f i))
   证明: IsGδ.univ.dense_iUnion_interior_of_closed dense_univ hc hU.ge
 
 Depends on / 依赖: dense_iUnion_interior_of_closed, dense_univ, hU.ge, univ.dense_iUnion_interior_of_closed
@@ -721,7 +721,7 @@ theorem nonempty_interior_of_iUnion_of_closed
 
 中文:
 定理 nonempty_interior_of_iUnion_of_closed
-  结论: [Countable ι] {f : ι -> Set X}
+  结论: [可数 ι] {f : ι -> 集合 X}
   证明: by
   simpa using (dense_iUnion_interior_of_closed hc hU).nonempty
 
@@ -745,7 +745,7 @@ theorem not_isMeagre_of_isGδ_of_dense
 
 中文:
 定理 not_isMeagre_of_isGδ_of_dense
-  条件: {s : Set X} (hs : IsGδ s) (hd : Dense s)
+  条件: {s : 集合 X} (hs : IsGδ s) (hd : 稠密 s)
   证明: by
   intro h
   rcases mem_residual.1 h with ⟨t, hts, htG, hd'⟩
@@ -774,7 +774,7 @@ theorem not_isMeagre_of_mem_residual
 
 中文:
 定理 not_isMeagre_of_mem_residual
-  条件: {s : Set X} (hs : s in residual X)
+  条件: {s : 集合 X} (hs : s in residual X)
   证明: by
   rcases (mem_residual (X := X)).1 hs with ⟨t, ht_sub, htGδ, ht_dense⟩
   intro hs_meagre

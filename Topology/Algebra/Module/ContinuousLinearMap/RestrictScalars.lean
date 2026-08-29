@@ -141,7 +141,7 @@ lemma restrictScalars_add
 
 中文:
 引理 restrictScalars_add
-  条件: [ContinuousAdd M₂] (f g : M₁ ->L[A] M₂)
+  条件: [连续加法 M₂] (f g : M₁ ->L[A] M₂)
   证明: rfl
 -/
 lemma restrictScalars_add [ContinuousAdd M₂] (f g : M₁ ->L[A] M₂) :

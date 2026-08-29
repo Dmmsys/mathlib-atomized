@@ -37,7 +37,7 @@ instance subcanonical_over
 
 中文:
 实例 subcanonical_over
-  签名: (J : GrothendieckTopology C) [J.Subcanonical] (X : C)
+  签名: (J : Grothendieck拓扑 C) [J.子典范] (X : C)
   定义体: by
   refine .of_isSheaf_yoneda_obj _ fun E Z R hR t ht => ?_
   obtain ⟨ι, T, g, rfl⟩ := R.exists_eq_ofArrows

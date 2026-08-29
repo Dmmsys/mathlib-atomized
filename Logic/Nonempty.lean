@@ -36,9 +36,9 @@ theorem Nonempty.forall
 @[simp]
 
 中文:
-定理 Nonempty.forall
-  条件: {α} {p : Nonempty α -> 命题}
-  结论: (对任意 h : Nonempty α, p h) ↔ 对任意 a, p ⟨a⟩
+定理 非空.对任意
+  条件: {α} {p : 非空 α -> 命题}
+  结论: (对任意 h : 非空 α, p h) ↔ 对任意 a, p ⟨a⟩
   证明: Iff.intro (fun h _ => h _) fun h ⟨a⟩ => h a
 
 @[simp]
@@ -59,9 +59,9 @@ theorem Nonempty.exists
   proof: Iff.intro (fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩
 
 中文:
-定理 Nonempty.exists
-  条件: {α} {p : Nonempty α -> 命题}
-  结论: (存在 h : Nonempty α, p h) ↔ 存在 a, p ⟨a⟩
+定理 非空.存在
+  条件: {α} {p : 非空 α -> 命题}
+  结论: (存在 h : 非空 α, p h) ↔ 存在 a, p ⟨a⟩
   证明: Iff.intro (fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩
 
 Depends on / 依赖: Iff.intro
@@ -82,9 +82,9 @@ theorem exists_const_iff
   proof: Iff.intro (fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩
 
 中文:
-定理 exists_const_iff
-  条件: {α : Sort*} {P : 命题}
-  结论: (存在 _ : α, P) ↔ Nonempty α ∧ P
+定理 存在_const_iff
+  条件: {α : 类型层*} {P : 命题}
+  结论: (存在 _ : α, P) ↔ 非空 α ∧ P
   证明: Iff.intro (fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩
 
 Depends on / 依赖: Iff.intro
@@ -102,9 +102,9 @@ theorem exists_true_iff_nonempty
   proof: Iff.intro (fun ⟨a, _⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨a, trivial⟩
 
 中文:
-定理 exists_true_iff_nonempty
-  条件: {α : Sort*}
-  结论: (存在 _ : α, True) ↔ Nonempty α
+定理 存在_true_iff_nonempty
+  条件: {α : 类型层*}
+  结论: (存在 _ : α, 真) ↔ 非空 α
   证明: Iff.intro (fun ⟨a, _⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨a, trivial⟩
 
 Depends on / 依赖: Iff.intro
@@ -122,9 +122,9 @@ theorem Nonempty.imp
   proof: Nonempty.forall
 
 中文:
-定理 Nonempty.imp
+定理 非空.imp
   条件: {α} {p : 命题}
-  结论: (Nonempty α -> p) ↔ (α -> p)
+  结论: (非空 α -> p) ↔ (α -> p)
   证明: Nonempty.forall
 
 Depends on / 依赖: Nonempty, Nonempty.forall
@@ -145,8 +145,8 @@ theorem not_nonempty_iff_imp_false
 
 中文:
 定理 not_nonempty_iff_imp_false
-  条件: {α : Sort*}
-  结论: ¬Nonempty α ↔ α -> False
+  条件: {α : 类型层*}
+  结论: ¬非空 α ↔ α -> 假
   证明: Nonempty.imp
 
 @[simp]
@@ -170,8 +170,8 @@ theorem nonempty_psigma
 
 中文:
 定理 nonempty_psigma
-  条件: {α} {β : α -> Sort*}
-  结论: Nonempty (PSigma β) ↔ 存在 a : α, Nonempty (β a)
+  条件: {α} {β : α -> 类型层*}
+  结论: 非空 (命题和类型 β) ↔ 存在 a : α, 非空 (β a)
   证明: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
 
 @[simp]
@@ -196,7 +196,7 @@ theorem nonempty_subtype
 中文:
 定理 nonempty_subtype
   条件: {α} {p : α -> 命题}
-  结论: Nonempty (Subtype p) ↔ 存在 a : α, p a
+  结论: 非空 (子类型 p) ↔ 存在 a : α, p a
   证明: Iff.intro (fun ⟨⟨a, h⟩⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a, h⟩⟩
 
 @[simp]
@@ -221,7 +221,7 @@ theorem nonempty_pprod
 中文:
 定理 nonempty_pprod
   条件: {α β}
-  结论: Nonempty (PProd α β) ↔ Nonempty α ∧ Nonempty β
+  结论: 非空 (命题积类型 α β) ↔ 非空 α ∧ 非空 β
   证明: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
 
 @[simp]
@@ -254,7 +254,7 @@ theorem nonempty_psum
 中文:
 定理 nonempty_psum
   条件: {α β}
-  结论: Nonempty (α oplus' β) ↔ Nonempty α ∨ Nonempty β
+  结论: 非空 (α oplus' β) ↔ 非空 α ∨ 非空 β
   证明: Iff.intro
     (fun ⟨h⟩ =>
       match h with
@@ -293,7 +293,7 @@ theorem nonempty_plift
 中文:
 定理 nonempty_plift
   条件: {α}
-  结论: Nonempty (PLift α) ↔ Nonempty α
+  结论: 非空 (命题层提升 α) ↔ 非空 α
   证明: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
 
 Depends on / 依赖: Iff.intro
@@ -314,8 +314,8 @@ definition Classical.inhabited_of_nonempty'
   body: ⟨Classical.choice h⟩
 
 中文:
-定义 Classical.inhabited_of_nonempty'
-  签名: {α} [h : Nonempty α]
+定义 经典.inhabited_of_nonempty'
+  签名: {α} [h : 非空 α]
   定义体: ⟨Classical.choice h⟩
 
 Depends on / 依赖: Classical, Classical.choice, choice
@@ -333,7 +333,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev Nonempty.some {α} (h : Nonempty α)
+  签名: abbrev 非空.some {α} (h : 非空 α)
   定义体: Classical.choice h
 -/
 protected noncomputable abbrev Nonempty.some {α} (h : Nonempty α) : α :=
@@ -349,7 +349,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev Classical.arbitrary (α) [h : Nonempty α]
+  签名: abbrev 经典.arbitrary (α) [h : 非空 α]
   定义体: Classical.choice h
 -/
 protected noncomputable abbrev Classical.arbitrary (α) [h : Nonempty α] : α :=
@@ -364,9 +364,9 @@ theorem Nonempty.map
   statement: Nonempty α -> Nonempty β
 
 中文:
-定理 Nonempty.map
+定理 非空.map
   条件: {α β} (f : α -> β)
-  结论: Nonempty α -> Nonempty β
+  结论: 非空 α -> 非空 β
 
 Depends on / 依赖: Nonempty, Nonempty.map
 -/
@@ -381,8 +381,8 @@ theorem Nonempty.map2
   given: {α β γ : Sort*} (f : α -> β -> γ)
 
 中文:
-定理 Nonempty.map2
-  条件: {α β γ : Sort*} (f : α -> β -> γ)
+定理 非空.map2
+  条件: {α β γ : 类型层*} (f : α -> β -> γ)
 -/
 protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> γ) :
     Nonempty α -> Nonempty β -> Nonempty γ
@@ -398,9 +398,9 @@ theorem Nonempty.congr
   proof: ⟨Nonempty.map f, Nonempty.map g⟩
 
 中文:
-定理 Nonempty.congr
+定理 非空.congr
   条件: {α β} (f : α -> β) (g : β -> α)
-  结论: Nonempty α ↔ Nonempty β
+  结论: 非空 α ↔ 非空 β
   证明: ⟨Nonempty.map f, Nonempty.map g⟩
 -/
 protected theorem Nonempty.congr {α β} (f : α -> β) (g : β -> α) : Nonempty α ↔ Nonempty β :=
@@ -415,8 +415,8 @@ theorem Nonempty.elim_to_inhabited
   proof: h.elim f ∘ Inhabited.mk
 
 中文:
-定理 Nonempty.elim_to_inhabited
-  条件: {α : Sort*} [h : Nonempty α] {p : 命题} (f : Inhabited α -> p)
+定理 非空.elim_to_inhabited
+  条件: {α : 类型层*} [h : 非空 α] {p : 命题} (f : 可居 α -> p)
   证明: h.elim f ∘ Inhabited.mk
 
 Depends on / 依赖: Inhabited, Inhabited.mk, h.elim
@@ -435,9 +435,9 @@ theorem Classical.nonempty_pi
   proof: ⟨fun ⟨f⟩ a => ⟨f a⟩, @Pi.instNonempty _ _⟩
 
 中文:
-定理 Classical.nonempty_pi
-  条件: {ι} {α : ι -> Sort*}
-  结论: Nonempty (对任意 i, α i) ↔ 对任意 i, Nonempty (α i)
+定理 经典.nonempty_pi
+  条件: {ι} {α : ι -> 类型层*}
+  结论: 非空 (对任意 i, α i) ↔ 对任意 i, 非空 (α i)
   证明: ⟨fun ⟨f⟩ a => ⟨f a⟩, @Pi.instNonempty _ _⟩
 
 Depends on / 依赖: Pi.instNonempty, instNonempty
@@ -456,8 +456,8 @@ theorem subsingleton_of_not_nonempty
 
 中文:
 定理 subsingleton_of_not_nonempty
-  条件: {α : Sort*} (h : ¬Nonempty α)
-  结论: Subsingleton α
+  条件: {α : 类型层*} (h : ¬非空 α)
+  结论: 子单例 α
   证明: ⟨fun x => False.elim not_nonempty_iff_imp_false.mp h x⟩
 
 Depends on / 依赖: False.elim, not_nonempty_iff_imp_false, not_nonempty_iff_imp_false.mp
@@ -476,8 +476,8 @@ theorem Function.Surjective.nonempty
   ⟨x⟩
 
 中文:
-定理 Function.Surjective.nonempty
-  条件: [h : Nonempty β] {f : α -> β} (hf : Function.Surjective f)
+定理 函数.满射.nonempty
+  条件: [h : 非空 β] {f : α -> β} (hf : 函数.满射 f)
   证明: let ⟨y⟩ := h
   let ⟨x, _⟩ := hf y
   ⟨x⟩
@@ -506,7 +506,7 @@ theorem nonempty_sigma
 
 中文:
 定理 nonempty_sigma
-  结论: Nonempty (Σ a : α, γ a) ↔ 存在 a : α, Nonempty (γ a)
+  结论: 非空 (Σ a : α, γ a) ↔ 存在 a : α, 非空 (γ a)
   证明: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
 
 @[simp]
@@ -537,7 +537,7 @@ theorem nonempty_sum
 
 中文:
 定理 nonempty_sum
-  结论: Nonempty (α oplus β) ↔ Nonempty α ∨ Nonempty β
+  结论: 非空 (α oplus β) ↔ 非空 α ∨ 非空 β
   证明: Iff.intro
     (fun ⟨h⟩ =>
       match h with
@@ -576,7 +576,7 @@ theorem nonempty_prod
 
 中文:
 定理 nonempty_prod
-  结论: Nonempty (α × β) ↔ Nonempty α ∧ Nonempty β
+  结论: 非空 (α × β) ↔ 非空 α ∧ 非空 β
   证明: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
 
 @[simp]
@@ -597,7 +597,7 @@ theorem nonempty_ulift
 
 中文:
 定理 nonempty_ulift
-  结论: Nonempty (ULift α) ↔ Nonempty α
+  结论: 非空 (类型层提升 α) ↔ 非空 α
   证明: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
 
 Depends on / 依赖: Iff.intro

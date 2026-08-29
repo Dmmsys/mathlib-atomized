@@ -38,7 +38,7 @@ abbreviation HasTerminal
   body: HasLimitsOfShape (Discrete.{0} PEmpty) C
 
 中文:
-缩写 HasTerminal
+缩写 有终止
   定义体: HasLimitsOfShape (Discrete.{0} PEmpty) C
 
 Depends on / 依赖: Discrete, HasLimitsOfShape, PEmpty
@@ -78,8 +78,8 @@ theorem hasTerminalChangeDiagram
 
 中文:
 定理 hasTerminalChangeDiagram
-  条件: (h : HasLimit F₁)
-  结论: HasLimit F₂
+  条件: (h : 有极限 F₁)
+  结论: 有极限 F₂
   证明: ⟨⟨⟨⟨limit F₁, by cat_disch, by simp⟩,
     isLimitChangeEmptyCone C (limit.isLimit F₁) _ (eqToIso rfl)⟩⟩⟩
 
@@ -99,7 +99,7 @@ theorem hasTerminalChangeUniverse
 
 中文:
 定理 hasTerminalChangeUniverse
-  条件: [h : HasLimitsOfShape (Discrete.{w} PEmpty) C]
+  条件: [h : 有形状极限 (离散.{w} 命题空) C]
   证明: hasTerminalChangeDiagram C (h.1 (Functor.empty C))
 
 Depends on / 依赖: Functor, Functor.empty, hasTerminalChangeDiagram
@@ -120,8 +120,8 @@ theorem hasInitialChangeDiagram
 
 中文:
 定理 hasInitialChangeDiagram
-  条件: (h : HasColimit F₁)
-  结论: HasColimit F₂
+  条件: (h : 有余极限 F₁)
+  结论: 有余极限 F₂
   证明: ⟨⟨⟨⟨colimit F₁, by cat_disch, by simp⟩,
     isColimitChangeEmptyCocone C (colimit.isColimit F₁) _ (eqToIso rfl)⟩⟩⟩
 
@@ -141,7 +141,7 @@ theorem hasInitialChangeUniverse
 
 中文:
 定理 hasInitialChangeUniverse
-  条件: [h : HasColimitsOfShape (Discrete.{w} PEmpty) C]
+  条件: [h : 有形状余极限 (离散.{w} 命题空) C]
   证明: hasInitialChangeDiagram C (h.1 (Functor.empty C))
 
 Depends on / 依赖: Functor, Functor.empty, hasInitialChangeDiagram
@@ -162,7 +162,7 @@ abbreviation terminal
 
 中文:
 缩写 terminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: limit (Functor.empty.{0} C)
 
 Depends on / 依赖: Functor, Functor.empty
@@ -209,7 +209,7 @@ theorem hasTerminal_of_unique
 
 中文:
 定理 hasTerminal_of_unique
-  条件: (X : C) [对任意 Y, Nonempty (Y ⟶ X)] [对任意 Y, Subsingleton (Y ⟶ X)]
+  条件: (X : C) [对任意 Y, 非空 (Y ⟶ X)] [对任意 Y, 子单例 (Y ⟶ X)]
   证明: .mk ⟨_, (isTerminalEquivUnique F X).invFun fun _ =>
     ⟨Classical.inhabited_of_nonempty', (Subsingleton.elim · _)⟩⟩
 
@@ -231,9 +231,9 @@ theorem IsTerminal.hasTerminal
     isLimitChangeEmptyCone _ h _ (Iso.refl _)⟩ }
 
 中文:
-定理 IsTerminal.hasTerminal
-  条件: {X : C} (h : IsTerminal X)
-  结论: HasTerminal C
+定理 是终止.hasTerminal
+  条件: {X : C} (h : 是终止 X)
+  结论: 有终止 C
   证明: { has_limit := fun F => HasLimit.mk ⟨⟨X, by cat_disch, by simp⟩,
     isLimitChangeEmptyCone _ h _ (Iso.refl _)⟩ }
 
@@ -254,7 +254,7 @@ theorem hasInitial_of_unique
 
 中文:
 定理 hasInitial_of_unique
-  条件: (X : C) [对任意 Y, Nonempty (X ⟶ Y)] [对任意 Y, Subsingleton (X ⟶ Y)]
+  条件: (X : C) [对任意 Y, 非空 (X ⟶ Y)] [对任意 Y, 子单例 (X ⟶ Y)]
   证明: .mk ⟨_, (isInitialEquivUnique F X).invFun fun _ =>
     ⟨Classical.inhabited_of_nonempty', (Subsingleton.elim · _)⟩⟩
 
@@ -296,7 +296,7 @@ abbreviation terminal.from
 
 中文:
 缩写 terminal.from
-  签名: [HasTerminal C] (P : C)
+  签名: [有终止 C] (P : C)
   定义体: limit.lift (Functor.empty C) (asEmptyCone P)
 
 Depends on / 依赖: Functor, Functor.empty, asEmptyCone, limit.lift
@@ -332,7 +332,7 @@ definition terminalIsTerminal
 
 中文:
 定义 terminalIsTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: terminal.from _
 
 Depends on / 依赖: terminal, terminal.from
@@ -368,7 +368,7 @@ instance uniqueToTerminal
 
 中文:
 实例 uniqueToTerminal
-  签名: [HasTerminal C] (P : C)
+  签名: [有终止 C] (P : C)
   定义体: isTerminalEquivUnique _ (⊤_ C) terminalIsTerminal P
 
 Depends on / 依赖: isTerminalEquivUnique, terminalIsTerminal
@@ -405,7 +405,7 @@ theorem terminal.hom_ext
 
 中文:
 定理 terminal.hom_ext
-  条件: [HasTerminal C] {P : C} (f g : P ⟶ ⊤_ C)
+  条件: [有终止 C] {P : C} (f g : P ⟶ ⊤_ C)
   结论: f = g
   证明: by ext ⟨⟨⟩⟩
 -/
@@ -444,7 +444,7 @@ theorem terminal.comp_from
 
 中文:
 定理 terminal.comp_from
-  条件: [HasTerminal C] {P Q : C} (f : P ⟶ Q)
+  条件: [有终止 C] {P Q : C} (f : P ⟶ Q)
   证明: by
   simp [eq_iff_true_of_subsingleton]
 
@@ -510,7 +510,7 @@ definition terminalIsoIsTerminal
 
 中文:
 定义 terminalIsoIsTerminal
-  签名: [HasTerminal C] {P : C} (t : IsTerminal P)
+  签名: [有终止 C] {P : C} (t : 是终止 P)
   定义体: terminalIsTerminal.uniqueUpToIso t
 
 Depends on / 依赖: terminalIsTerminal, terminalIsTerminal.uniqueUpToIso, uniqueUpToIso
@@ -528,7 +528,7 @@ instance terminal.isSplitMono_from
 
 中文:
 实例 terminal.isSplitMono_from
-  签名: {Y : C} [HasTerminal C] (f : ⊤_ C ⟶ Y)
+  签名: {Y : C} [有终止 C] (f : ⊤_ C ⟶ Y)
   定义体: IsTerminal.isSplitMono_from terminalIsTerminal _
 
 Depends on / 依赖: IsTerminal, IsTerminal.isSplitMono_from, isSplitMono_from, terminalIsTerminal
@@ -564,7 +564,7 @@ instance hasInitial_op_of_hasTerminal
 
 中文:
 实例 hasInitial_op_of_hasTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: (initialOpOfTerminal terminalIsTerminal).hasInitial
 
 Depends on / 依赖: hasInitial, initialOpOfTerminal, terminalIsTerminal
@@ -602,7 +602,7 @@ theorem hasTerminal_of_hasInitial_op
 中文:
 定理 hasTerminal_of_hasInitial_op
   条件: [HasInitial Cᵒᵖ]
-  结论: HasTerminal C
+  结论: 有终止 C
   证明: (terminalUnopOfInitial initialIsInitial).hasTerminal
 
 Depends on / 依赖: hasTerminal, initialIsInitial, terminalUnopOfInitial
@@ -621,7 +621,7 @@ theorem hasInitial_of_hasTerminal_op
 
 中文:
 定理 hasInitial_of_hasTerminal_op
-  条件: [HasTerminal Cᵒᵖ]
+  条件: [有终止 Cᵒᵖ]
   结论: HasInitial C
   证明: (initialUnopOfTerminal terminalIsTerminal).hasInitial
 
@@ -656,7 +656,7 @@ definition limitConstTerminal
 
 中文:
 定义 limitConstTerminal
-  签名: {J : 类型} [Category* J] {C : 类型} [Category* C] [HasTerminal C]
+  签名: {J : 类型} [范畴* J] {C : 类型} [范畴* C] [有终止 C]
   定义体: terminal.from _
   inv :=
     limit.lift ((CategoryTheory.Functor.const J).obj (⊤_ C))
@@ -686,7 +686,7 @@ theorem limitConstTerminal_inv_π
 
 中文:
 定理 limitConstTerminal_inv_π
-  结论: {J : 类型} [Category* J] {C : 类型} [Category* C] [HasTerminal C]
+  结论: {J : 类型} [范畴* J] {C : 类型} [范畴* C] [有终止 C]
   证明: by cat_disch
 
 Depends on / 依赖: P.le_shift, cat_disch, le_shift
@@ -721,7 +721,7 @@ definition colimitConstInitial
 
 中文:
 定义 colimitConstInitial
-  签名: {J : 类型} [Category* J] {C : 类型} [Category* C] [HasInitial C]
+  签名: {J : 类型} [范畴* J] {C : 类型} [范畴* C] [HasInitial C]
   定义体: colimit.desc ((CategoryTheory.Functor.const J).obj (⊥_ C))
       { pt := ⊥_ C
         ι := { app := fun _ => initial.to _ } }
@@ -750,7 +750,7 @@ theorem ι_colimitConstInitial_hom
 
 中文:
 定理 ι_colimitConstInitial_hom
-  结论: {J : 类型} [Category* J] {C : 类型} [Category* C] [HasInitial C]
+  结论: {J : 类型} [范畴* J] {C : 类型} [范畴* C] [HasInitial C]
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -773,8 +773,8 @@ theorem InitialMonoClass.of_initial
   proof: InitialMonoClass.of_isInitial initialIsInitial h
 
 中文:
-定理 InitialMonoClass.of_initial
-  条件: [HasInitial C] (h : 对任意 X : C, Mono (initial.to X))
+定理 InitialMono类.of_initial
+  条件: [HasInitial C] (h : 对任意 X : C, 单态射 (initial.to X))
   证明: InitialMonoClass.of_isInitial initialIsInitial h
 
 Depends on / 依赖: InitialMonoClass, InitialMonoClass.of_isInitial, P.le_shift, initialIsInitial, le_shift, mapIso, of_isInitial, shiftFunctor
@@ -792,8 +792,8 @@ theorem InitialMonoClass.of_terminal
   proof: InitialMonoClass.of_isTerminal initialIsInitial terminalIsTerminal h
 
 中文:
-定理 InitialMonoClass.of_terminal
-  条件: [HasInitial C] [HasTerminal C] (h : Mono (initial.to (⊤_ C)))
+定理 InitialMono类.of_terminal
+  条件: [HasInitial C] [有终止 C] (h : 单态射 (initial.to (⊤_ C)))
   证明: InitialMonoClass.of_isTerminal initialIsInitial terminalIsTerminal h
 
 Depends on / 依赖: InitialMonoClass, InitialMonoClass.of_isTerminal, P.le_shift, Q.le_shift, initialIsInitial, le_shift, of_isTerminal, terminalIsTerminal
@@ -816,7 +816,7 @@ definition terminalComparison
 
 中文:
 定义 terminalComparison
-  签名: [HasTerminal C] [HasTerminal D]
+  签名: [有终止 C] [有终止 D]
   定义体: terminal.from _
 
 Depends on / 依赖: terminal, terminal.from
@@ -894,7 +894,7 @@ instance hasLimit_of_domain_hasTerminal
 
 中文:
 实例 hasLimit_of_domain_hasTerminal
-  签名: [HasTerminal J] {F : J ⥤ C}
+  签名: [有终止 J] {F : J ⥤ C}
   定义体: HasLimit.mk { cone := _, isLimit := limitOfDiagramTerminal (terminalIsTerminal) F }
 
 Depends on / 依赖: HasLimit, HasLimit.mk, isLimit, limitOfDiagramTerminal, terminalIsTerminal
@@ -914,7 +914,7 @@ abbreviation limitOfTerminal
 
 中文:
 缩写 limitOfTerminal
-  签名: (F : J ⥤ C) [HasTerminal J] [对任意 (i j : J) (f : i ⟶ j), IsIso (F.map f)]
+  签名: (F : J ⥤ C) [有终止 J] [对任意 (i j : J) (f : i ⟶ j), 是同构 (F.map f)]
   定义体: IsLimit.conePointUniqueUpToIso (limit.isLimit _) (limitOfDiagramTerminal terminalIsTerminal F)
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, limit.isLimit, limitOfDiagramTerminal, terminalIsTerminal
@@ -933,7 +933,7 @@ instance hasColimit_of_domain_hasTerminal
 
 中文:
 实例 hasColimit_of_domain_hasTerminal
-  签名: [HasTerminal J] {F : J ⥤ C}
+  签名: [有终止 J] {F : J ⥤ C}
   定义体: HasColimit.mk { cocone := _, isColimit := colimitOfDiagramTerminal (terminalIsTerminal) F }
 
 Depends on / 依赖: HasColimit, HasColimit.mk, cocone, colimitOfDiagramTerminal, isColimit, terminalIsTerminal
@@ -953,7 +953,7 @@ abbreviation colimitOfTerminal
 
 中文:
 缩写 colimitOfTerminal
-  签名: (F : J ⥤ C) [HasTerminal J]
+  签名: (F : J ⥤ C) [有终止 J]
   定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
     (colimitOfDiagramTerminal terminalIsTerminal F)
 
@@ -994,7 +994,7 @@ abbreviation colimitOfInitial
 
 中文:
 缩写 colimitOfInitial
-  签名: (F : J ⥤ C) [HasInitial J] [对任意 (i j : J) (f : i ⟶ j), IsIso (F.map f)]
+  签名: (F : J ⥤ C) [HasInitial J] [对任意 (i j : J) (f : i ⟶ j), 是同构 (F.map f)]
   定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
     (colimitOfDiagramInitial initialIsInitial _)
 
@@ -1015,7 +1015,7 @@ theorem isIso_π_of_isInitial
 
 中文:
 定理 isIso_π_of_isInitial
-  条件: {j : J} (I : IsInitial j) (F : J ⥤ C) [HasLimit F]
+  条件: {j : J} (I : IsInitial j) (F : J ⥤ C) [有极限 F]
   证明: ⟨⟨limit.lift _ (coneOfDiagramInitial I F), ⟨by ext; simp, by simp⟩⟩⟩
 
 Depends on / 依赖: coneOfDiagramInitial, limit.lift
@@ -1052,7 +1052,7 @@ theorem isIso_π_of_isTerminal
 
 中文:
 定理 isIso_π_of_isTerminal
-  结论: {j : J} (I : IsTerminal j) (F : J ⥤ C) [HasLimit F]
+  结论: {j : J} (I : 是终止 j) (F : J ⥤ C) [有极限 F]
   证明: ⟨⟨limit.lift _ (coneOfDiagramTerminal I F), by ext; simp, by simp⟩⟩
 
 Depends on / 依赖: coneOfDiagramTerminal, limit.lift, mapIso, shiftFunctor, shiftFunctorAdd, symm.app
@@ -1071,7 +1071,7 @@ instance isIso_π_terminal
 
 中文:
 实例 isIso_π_terminal
-  签名: [HasTerminal J] (F : J ⥤ C) [对任意 (i j : J) (f : i ⟶ j), IsIso (F.map f)]
+  签名: [有终止 J] (F : J ⥤ C) [对任意 (i j : J) (f : i ⟶ j), 是同构 (F.map f)]
   定义体: isIso_π_of_isTerminal terminalIsTerminal F
 
 Depends on / 依赖: terminalIsTerminal
@@ -1090,7 +1090,7 @@ theorem isIso_ι_of_isTerminal
 
 中文:
 定理 isIso_ι_of_isTerminal
-  条件: {j : J} (I : IsTerminal j) (F : J ⥤ C) [HasColimit F]
+  条件: {j : J} (I : 是终止 j) (F : J ⥤ C) [有余极限 F]
   证明: ⟨⟨colimit.desc _ (coconeOfDiagramTerminal I F), ⟨by simp, by ext; simp⟩⟩⟩
 
 Depends on / 依赖: coconeOfDiagramTerminal, colimit, colimit.desc
@@ -1109,7 +1109,7 @@ instance isIso_ι_terminal
 
 中文:
 实例 isIso_ι_terminal
-  签名: [HasTerminal J] (F : J ⥤ C)
+  签名: [有终止 J] (F : J ⥤ C)
   定义体: isIso_ι_of_isTerminal terminalIsTerminal F
 
 Depends on / 依赖: terminalIsTerminal
@@ -1132,7 +1132,7 @@ theorem isIso_ι_of_isInitial
 
 中文:
 定理 isIso_ι_of_isInitial
-  结论: {j : J} (I : IsInitial j) (F : J ⥤ C) [HasColimit F]
+  结论: {j : J} (I : IsInitial j) (F : J ⥤ C) [有余极限 F]
   证明: ⟨⟨colimit.desc _ (coconeOfDiagramInitial I F), by
     refine ⟨?_, by ext; simp⟩
     simp only [colimit.ι_desc, coconeOfDiagramInitial_pt, coconeOfDiagramInitial_ι_app,
@@ -1161,7 +1161,7 @@ instance isIso_ι_initial
 
 中文:
 实例 isIso_ι_initial
-  签名: [HasInitial J] (F : J ⥤ C) [对任意 (i j : J) (f : i ⟶ j), IsIso (F.map f)]
+  签名: [HasInitial J] (F : J ⥤ C) [对任意 (i j : J) (f : i ⟶ j), 是同构 (F.map f)]
   定义体: isIso_ι_of_isInitial initialIsInitial F
 
 Depends on / 依赖: initialIsInitial

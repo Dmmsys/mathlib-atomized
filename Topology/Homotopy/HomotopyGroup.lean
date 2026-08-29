@@ -169,7 +169,7 @@ instance LoopSpace.inhabited
 
 中文:
 实例 LoopSpace.inhabited
-  签名: : Inhabited (Path x x)
+  签名: : 可居 (道路 x x)
   定义体: ⟨Path.refl x⟩
 
 Depends on / 依赖: Path.refl
@@ -189,7 +189,7 @@ definition GenLoop
 
 中文:
 定义 GenLoop
-  签名: : Set C(I^N, X)
+  签名: : 集合 C(I^N, X)
   定义体: {p | forall y in Cube.boundary N, p y = x}
 
 @[inherit_doc] scoped[Topology.Homotopy] notation "Ω^" => GenLoop
@@ -220,7 +220,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Ω^ N X x) (I^N) X where
+  签名: : 函数状 (Ω^ N X x) (I^N) X where
   定义体: f.1
   coe_injective := fun ⟨⟨f, _⟩, _⟩ ⟨⟨g, _⟩, _⟩ _ => by congr
 
@@ -306,7 +306,7 @@ instance instContinuousEval
 
 中文:
 实例 instContinuousEval
-  签名: : ContinuousEval (Ω^ N X x) (I^N) X
+  签名: : 余ntinuousEval (Ω^ N X x) (I^N) X
   定义体: .of_continuous_forget continuous_subtype_val
 
 Depends on / 依赖: continuous_subtype_val, of_continuous_forget
@@ -324,7 +324,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: : ContinuousEvalConst (Ω^ N X x) (I^N) X
+  签名: : 余ntinuousEvalConst (Ω^ N X x) (I^N) X
   定义体: inferInstance
 -/
 instance instContinuousEvalConst : ContinuousEvalConst (Ω^ N X x) (I^N) X := inferInstance
@@ -459,7 +459,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (Ω^ N X x)
+  签名: : 可居 (Ω^ N X x)
   定义体: ⟨const⟩
 -/
 instance inhabited : Inhabited (Ω^ N X x) :=
@@ -649,7 +649,7 @@ lemma continuous_currySum
 
 中文:
 引理 continuous_currySum
-  结论: Continuous (currySum x (M := M) (N := N))
+  结论: 连续 (currySum x (M := M) (N := N))
   证明: ContinuousMap.continuous_of_continuous_uncurry _ Continuous.subtype_mk
     (ContinuousMap.continuous_of_continuous_uncurry _ (by dsimp; fun_prop)) _
 -/
@@ -744,7 +744,7 @@ definition Homotopic
   body: f.1.HomotopicRel g.1 (Cube.boundary N)
 
 中文:
-定义 Homotopic
+定义 同伦
   签名: (f g : Ω^ N X x)
   定义体: f.1.HomotopicRel g.1 (Cube.boundary N)
 
@@ -778,7 +778,7 @@ nonrec theorem trans (H0 : Homotopic f g) (H1 : Homotopic g h) : Homotopic f h :
 中文:
 定理 refl
   条件: (f : Ω^ N X x)
-  结论: Homotopic f f
+  结论: 同伦 f f
   证明: ContinuousMap.HomotopicRel.refl _
 
 @[symm]
@@ -812,7 +812,7 @@ theorem equiv
 
 中文:
 定理 equiv
-  结论: Equivalence (@Homotopic N X _ x)
+  结论: 等价 (@同伦 N X _ x)
   证明: ⟨Homotopic.refl, Homotopic.symm, Homotopic.trans⟩
 
 Depends on / 依赖: Homotopic, Homotopic.refl, Homotopic.symm, Homotopic.trans
@@ -894,7 +894,7 @@ theorem continuous_toLoop
 中文:
 定理 continuous_toLoop
   条件: (i : N)
-  结论: Continuous (@toLoop N X _ x _ i)
+  结论: 连续 (@toLoop N X _ x _ i)
   证明: Path.continuous_uncurry_iff.1
     Continuous.subtype_mk
       (continuous_eval.comp <|
@@ -974,7 +974,7 @@ ContinuousMap.continuous_uncurry.comp
 中文:
 定理 continuous_fromLoop
   条件: (i : N)
-  结论: Continuous (@fromLoop N X _ x _ i)
+  结论: 连续 (@fromLoop N X _ x _ i)
   证明: ((ContinuousMap.continuous_precomp _).comp <|
 ContinuousMap.continuous_uncurry.comp
           (ContinuousMap.continuous_postcomp _).comp continuous_induced_dom).subtype_mk
@@ -1219,7 +1219,7 @@ definition homotopyFrom
 
 中文:
 定义 homotopyFrom
-  签名: (i : N) {p q : Ω^ N X x} (H : (toLoop i p).Homotopy (toLoop i q))
+  签名: (i : N) {p q : Ω^ N X x} (H : (toLoop i p).同伦 (toLoop i q))
   定义体: (ContinuousMap.comp ⟨_, ContinuousMap.continuous_uncurry⟩
           (ContinuousMap.comp ⟨Subtype.val, by fun_prop⟩ H.toContinuousMap).curry).uncurry.comp <|
     (ContinuousMap.id I).prodMap (Cube.splitAt i)
@@ -1429,7 +1429,7 @@ definition HomotopyGroup
 
 中文:
 定义 HomotopyGroup
-  签名: (N X : 类型) [TopologicalSpace X] (x : X)
+  签名: (N X : 类型) [拓扑空间 X] (x : X)
   定义体: Quotient (GenLoop.Homotopic.setoid N x)
 
 Depends on / 依赖: GenLoop, GenLoop.Homotopic.setoid, Homotopic, Quotient, setoid
@@ -1447,7 +1447,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomotopyGroup N X x)
+  签名: 可居 (HomotopyGroup N X x)
   定义体: inferInstanceAs Inhabited Quotient (GenLoop.Homotopic.setoid N x)
 
 Depends on / 依赖: GenLoop, GenLoop.Homotopic.setoid, Homotopic, Inhabited, Quotient, setoid
@@ -1489,8 +1489,8 @@ abbreviation HomotopyGroup.Pi
 @[inherit_doc] scoped[Topology] notation "π_" => HomotopyGroup.Pi
 
 中文:
-缩写 HomotopyGroup.Pi
-  签名: (n) (X : 类型) [TopologicalSpace X] (x : X)
+缩写 HomotopyGroup.依赖函数类型
+  签名: (n) (X : 类型) [拓扑空间 X] (x : X)
   定义体: HomotopyGroup (Fin n) _ x
 
 @[inherit_doc] scoped[Topology] notation "π_" => HomotopyGroup.Pi
@@ -1515,7 +1515,7 @@ definition genLoopHomeoOfIsEmpty
 
 中文:
 定义 genLoopHomeoOfIsEmpty
-  签名: (N x) [IsEmpty N]
+  签名: (N x) [是空 N]
   定义体: f 0
   invFun y := ⟨ContinuousMap.const _ y, fun _ ⟨i, _⟩ => isEmptyElim i⟩
   left_inv f := by ext; exact congr_arg f (Subsingleton.elim _ _)
@@ -1545,7 +1545,7 @@ definition homotopyGroupEquivZerothHomotopyOfIsEmpty
 
 中文:
 定义 homotopyGroupEquivZerothHomotopyOfIsEmpty
-  签名: (N x) [IsEmpty N]
+  签名: (N x) [是空 N]
   定义体: Quotient.congr (genLoopHomeoOfIsEmpty N x).toEquiv
     (by
       -- joined iff homotopic
@@ -1608,7 +1608,7 @@ definition genLoopEquivOfUnique
 
 中文:
 定义 genLoopEquivOfUnique
-  签名: (N) [Unique N]
+  签名: (N) [唯一 N]
   定义体: Path.mk ⟨fun t => p fun _ => t, by fun_prop⟩
       (GenLoop.boundary _ (fun _ => 0) ⟨default, Or.inl rfl⟩)
       (GenLoop.boundary _ (fun _ => 1) ⟨default, Or.inr rfl⟩)
@@ -1651,7 +1651,7 @@ definition homotopyGroupEquivFundamentalGroupOfUnique
 
 中文:
 定义 homotopyGroupEquivFundamentalGroupOfUnique
-  签名: (N) [Unique N]
+  签名: (N) [唯一 N]
   定义体: Quotient.congr (genLoopEquivOfUnique N) fun a₁ a₂ => by
     constructor <;> rintro ⟨H⟩
     · exact
@@ -1690,7 +1690,7 @@ definition HomotopyGroup.pi1EquivFundamentalGroup
 
 中文:
 定义 HomotopyGroup.pi1EquivFundamentalGroup
-  签名: : π_ 1 X x ≃ FundamentalGroup X x
+  签名: : π_ 1 X x ≃ 基本群 X x
   定义体: homotopyGroupEquivFundamentalGroupOfUnique (Fin 1)
 
 Depends on / 依赖: homotopyGroupEquivFundamentalGroupOfUnique
@@ -1715,7 +1715,7 @@ lemma HomotopyGroup.genLoopEquivOfUnique_transAt
 
 中文:
 引理 HomotopyGroup.genLoopEquivOfUnique_transAt
-  条件: (N) [DecidableEq N] [Unique N] (p q : Ω^ N X x)
+  条件: (N) [DecidableEq N] [唯一 N] (p q : Ω^ N X x)
   证明: by
   ext t
   simp only [genLoopEquivOfUnique, GenLoop.transAt, GenLoop.copy,
@@ -1750,7 +1750,7 @@ instance group
 
 中文:
 实例 group
-  签名: (N) [DecidableEq N] [Nonempty N]
+  签名: (N) [DecidableEq N] [非空 N]
   定义体: (homotopyGroupEquivFundamentalGroup <| Classical.arbitrary N).group
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, homotopyGroupEquivFundamentalGroup
@@ -1817,7 +1817,7 @@ theorem auxGroup_indep
 中文:
 定理 auxGroup_indep
   条件: (i j : N)
-  结论: (auxGroup i : Group (HomotopyGroup N X x)) = auxGroup j
+  结论: (auxGroup i : 群 (HomotopyGroup N X x)) = auxGroup j
   证明: by
   by_cases h : i = j; · rw [h]
   refine Group.ext (EckmannHilton.mul (isUnital_auxGroup i) (isUnital_auxGroup j) ?_)
@@ -1903,7 +1903,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  条件: [Nonempty N]
+  条件: [非空 N]
   结论: (1 : HomotopyGroup N X x) = ⟦const⟧
   证明: rfl
 -/
@@ -1923,7 +1923,7 @@ theorem mul_spec
 
 中文:
 定理 mul_spec
-  条件: [Nonempty N] {i} {p q : Ω^ N X x}
+  条件: [非空 N] {i} {p q : Ω^ N X x}
   证明: by
   rw [transAt_indep (Classical.arbitrary N) q]; rw [← fromLoop_trans_toLoop]
   apply Quotient.sound
@@ -1951,7 +1951,7 @@ theorem inv_spec
 
 中文:
 定理 inv_spec
-  条件: [Nonempty N] {i} {p : Ω^ N X x}
+  条件: [非空 N] {i} {p : Ω^ N X x}
   证明: by
   rw [symmAt_indep (Classical.arbitrary N) p]; rw [← fromLoop_symm_toLoop]
   apply Quotient.sound
@@ -1981,7 +1981,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: [Nontrivial N]
+  签名: [非平凡 N]
   定义体: let h := exists_ne (Classical.arbitrary N)
   fast_instance% @EckmannHilton.commGroup (HomotopyGroup N X x) _ 1
     (isUnital_auxGroup <| Classical.choose h) _
@@ -2016,7 +2016,7 @@ definition homotopyGroupOfUniqueMulEquivFundamentalGroup
 
 中文:
 定义 homotopyGroupOfUniqueMulEquivFundamentalGroup
-  签名: (N) [Unique N]
+  签名: (N) [唯一 N]
   定义体: homotopyGroupEquivFundamentalGroupOfUnique N
   map_mul' a b := Quotient.inductionOn₂ a b fun p q => by
     simp only [HomotopyGroup.mul_spec (i := default)]

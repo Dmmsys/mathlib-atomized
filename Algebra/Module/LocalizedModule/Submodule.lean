@@ -54,7 +54,7 @@ definition localized₀
 
 中文:
 定义 localized₀
-  签名: : Submodule R N where
+  签名: : 子模 R N where
   定义体: { x | exists m in M', exists s : p, IsLocalizedModule.mk' f m s = x }
   add_mem' := fun {x y} ⟨m, hm, s, hx⟩ ⟨n, hn, t, hy⟩ => ⟨t • m + s • n, add_mem (M'.smul_mem t hm)
     (M'.smul_mem s hn), s * t, by rw [← hx, ← hy, IsLocalizedModule.mk'_add_mk']⟩
@@ -85,7 +85,7 @@ definition localized'
 
 中文:
 定义 localized'
-  签名: : Submodule S N where
+  签名: : 子模 S N where
   定义体: localized₀ p f M'
   smul_mem' := fun r x ⟨m, hm, s, hx⟩ => by
     have ⟨y, t, hyt⟩ := IsLocalization.exists_mk'_eq p r
@@ -218,7 +218,7 @@ definition localized'gi
 
 中文:
 定义 localized'gi
-  签名: : GaloisInsertion (localized' S p f) (comap f <| ·.restrictScalars R) where
+  签名: : Galois嵌入 (localized' S p f) (comap f <| ·.restrictScalars R) where
   定义体: ⟨fun h m hm => h ⟨m, hm, 1, by simp⟩, fun h => by
     rw [localized'_eq_span]; rw [span_le]; apply map_le_iff_le_comap.mpr h⟩
   le_l_u N' n hn := by
@@ -249,7 +249,7 @@ abbreviation localized
 
 中文:
 缩写 localized
-  签名: : Submodule (Localization p) (LocalizedModule p M)
+  签名: : 子模 (Localization p) (LocalizedModule p M)
   定义体: M'.localized' (Localization p) p (LocalizedModule.mkLinearMap p M)
 
 @[simp]
@@ -275,7 +275,7 @@ lemma localized₀_bot
 
 中文:
 引理 localized₀_bot
-  结论: (⊥ : Submodule R M).localized₀ p f = ⊥
+  结论: (⊥ : 子模 R M).localized₀ p f = ⊥
   证明: by
   rw [← le_bot_iff]
   rintro _ ⟨_, rfl, s, rfl⟩
@@ -303,7 +303,7 @@ lemma localized'_bot
 
 中文:
 引理 localized'_bot
-  结论: (⊥ : Submodule R M).localized' S p f = ⊥
+  结论: (⊥ : 子模 R M).localized' S p f = ⊥
   证明: SetLike.ext' (by apply SetLike.ext'_iff.mp <| Submodule.localized₀_bot p f)
 
 @[simp]
@@ -328,7 +328,7 @@ lemma localized₀_top
 
 中文:
 引理 localized₀_top
-  结论: (⊤ : Submodule R M).localized₀ p f = ⊤
+  结论: (⊤ : 子模 R M).localized₀ p f = ⊤
   证明: by
   rw [← top_le_iff]
   rintro x _
@@ -356,7 +356,7 @@ lemma localized'_top
 
 中文:
 引理 localized'_top
-  结论: (⊤ : Submodule R M).localized' S p f = ⊤
+  结论: (⊤ : 子模 R M).localized' S p f = ⊤
   证明: SetLike.ext' (by apply SetLike.ext'_iff.mp <| Submodule.localized₀_top p f)
 -/
 lemma localized'_top : (⊤ : Submodule R M).localized' S p f = ⊤ :=
@@ -428,7 +428,7 @@ theorem localized'_iSup
 
 中文:
 定理 localized'_iSup
-  条件: {ι : 类型} (g : ι -> Submodule R M)
+  条件: {ι : 类型} (g : ι -> 子模 R M)
   证明: by
   exact GaloisConnection.l_iSup (localized'gi S p f).gc
 -/
@@ -449,7 +449,7 @@ theorem localized₀_iSup
 
 中文:
 定理 localized₀_iSup
-  条件: {ι : 类型} (g : ι -> Submodule R M)
+  条件: {ι : 类型} (g : ι -> 子模 R M)
   证明: by
   let : Module (Localization p) N := IsLocalizedModule.module p f
   have : IsScalarTower R (Localization p) N := IsLocalizedModule.isScalarTower_module p f
@@ -478,7 +478,7 @@ definition localized₀FrameHom
 
 中文:
 定义 localized₀FrameHom
-  签名: : FrameHom (Submodule R M) (Submodule R N) where
+  签名: : 框架态射 (子模 R M) (子模 R N) where
   定义体: localized₀ p f
   map_inf' := localized₀_inf p f
   map_top' := localized₀_top p f
@@ -501,7 +501,7 @@ lemma IsLocalizedModule.localized₀FrameHom_apply
   proof: rfl
 
 中文:
-引理 IsLocalizedModule.localized₀FrameHom_apply
+引理 是Localized模.localized₀FrameHom_apply
   证明: rfl
 -/
 lemma IsLocalizedModule.localized₀FrameHom_apply :
@@ -522,7 +522,7 @@ definition localized'FrameHom
 @[simp]
 
 中文:
-定义 localized'FrameHom
+定义 localized'框架态射
   签名: :
   定义体: localized' S p f
   map_inf' := localized'_inf S p f
@@ -549,7 +549,7 @@ lemma IsLocalizedModule.localized'FrameHom_apply
 @[simp]
 
 中文:
-引理 IsLocalizedModule.localized'FrameHom_apply
+引理 是Localized模.localized'FrameHom_apply
   证明: rfl
 
 @[simp]
@@ -571,7 +571,7 @@ lemma localized'_span
 
 中文:
 引理 localized'_span
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: (span R s).localized' S p f = span S (f '' s)
   证明: by
   rw [localized'_eq_span]; rw [← map_coe]; rw [map_span]; rw [span_span_of_tower]
@@ -598,7 +598,7 @@ lemma localized₀_smul
 
 中文:
 引理 localized₀_smul
-  条件: (I : Submodule R R)
+  条件: (I : 子模 R R)
   结论: (I • M').localized₀ p f = I • M'.localized₀ p f
   证明: by
   apply le_antisymm
@@ -639,7 +639,7 @@ lemma restrictScalars_localized'_smul
 
 中文:
 引理 restrictScalars_localized'_smul
-  条件: (I : Submodule R R) (N' : Submodule S N)
+  条件: (I : 子模 R R) (N' : 子模 S N)
   证明: by
   refine le_antisymm (fun x hx => ?_) (Submodule.smul_le.mpr fun r hr n hn => ?_)
   · refine smul_induction_on ((Submodule.restrictScalars_mem _ _ _).mp hx) ?_ fun _ _ => add_mem
@@ -668,7 +668,7 @@ lemma localized'_smul
 
 中文:
 引理 localized'_smul
-  条件: (I : Submodule R R)
+  条件: (I : 子模 R R)
   证明: Submodule.restrictScalars_injective R _ _ by
     simp_rw [restrictScalars_localized'_smul, restrictScalars_localized', localized₀_smul]
 -/
@@ -748,7 +748,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalizedModule p (M'.toLocalized₀ p f)
+  签名: 是Localized模 p (M'.toLocalized₀ p f)
   定义体: by
     simp_rw [Module.End.isUnit_iff]
     constructor
@@ -785,7 +785,7 @@ instance isLocalizedModule
 
 中文:
 实例 isLocalizedModule
-  签名: : IsLocalizedModule p (M'.toLocalized' S p f)
+  签名: : 是Localized模 p (M'.toLocalized' S p f)
   定义体: inferInstanceAs (IsLocalizedModule p (M'.toLocalized₀ p f))
 
 Depends on / 依赖: IsLocalizedModule
@@ -832,7 +832,7 @@ lemma localized₀_le_localized₀_of_smul_le
 
 中文:
 引理 localized₀_le_localized₀_of_smul_le
-  条件: {P Q : Submodule R M} (x : p) (h : x • P <= Q)
+  条件: {P Q : 子模 R M} (x : p) (h : x • P <= Q)
   证明: by
   rintro - ⟨a, ha, r, rfl⟩
   refine ⟨x • a, h ⟨a, ha, rfl⟩, x * r, ?_⟩
@@ -854,7 +854,7 @@ lemma localized'_le_localized'_of_smul_le
 
 中文:
 引理 localized'_le_localized'_of_smul_le
-  条件: {P Q : Submodule R M} (x : p) (h : x • P <= Q)
+  条件: {P Q : 子模 R M} (x : p) (h : x • P <= Q)
   证明: localized₀_le_localized₀_of_smul_le p f x h
 -/
 lemma localized'_le_localized'_of_smul_le {P Q : Submodule R M} (x : p) (h : x • P <= Q) :
@@ -880,7 +880,7 @@ definition Submodule.toLocalizedQuotient'
   body: Submodule.mapQ M' ((M'.localized' S p f).restrictScalars R) f (fun x hx => ⟨x, hx, 1, by simp⟩)
 
 中文:
-定义 Submodule.toLocalizedQuotient'
+定义 子模.toLocalizedQuotient'
   签名: : M ⧸ M' ->ₗ[R] N ⧸ M'.localized' S p f
   定义体: Submodule.mapQ M' ((M'.localized' S p f).restrictScalars R) f (fun x hx => ⟨x, hx, 1, by simp⟩)
 
@@ -900,7 +900,7 @@ abbreviation Submodule.toLocalizedQuotient
 @[simp]
 
 中文:
-缩写 Submodule.toLocalizedQuotient
+缩写 子模.toLocalizedQuotient
   签名: :
   定义体: M'.toLocalizedQuotient' (Localization p) p (LocalizedModule.mkLinearMap p M)
 
@@ -922,7 +922,7 @@ lemma Submodule.toLocalizedQuotient'_mk
   proof: rfl
 
 中文:
-引理 Submodule.toLocalizedQuotient'_mk
+引理 子模.toLocalizedQuotient'_mk
   条件: (x : M)
   证明: rfl
 -/
@@ -943,8 +943,8 @@ instance IsLocalizedModule.toLocalizedQuotient'
     simp only [Module
 
 中文:
-实例 IsLocalizedModule.toLocalizedQuotient'
-  签名: (M' : Submodule R M)
+实例 是Localized模.toLocalizedQuotient'
+  签名: (M' : 子模 R M)
   定义体: by
     refine (Module.End.isUnit_iff _).mpr ⟨fun m n e => ?_, fun m => ⟨(IsLocalization.mk' S 1 x) • m,
       by rw [Module.algebraMap_end_apply, ← smul_assoc, smul_mk'_one, mk'_self', one_smul]⟩⟩
@@ -1206,7 +1206,7 @@ lemma localizedMap_surjective_iff_subsingleton_localized_coker
 
 中文:
 引理 localizedMap_surjective_iff_subsingleton_localized_coker
-  结论: {R M N : 类型} [CommRing R]
+  结论: {R M N : 类型} [交换环 R]
   证明: by
   simp [(localizedQuotientEquiv S φ.range).symm.subsingleton_congr,
     LinearMap.localized'_range_eq_range_localizedMap (Localization S) S

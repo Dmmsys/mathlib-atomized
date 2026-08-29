@@ -54,7 +54,7 @@ definition setBernoulli
 
 中文:
 定义 setBernoulli
-  签名: : Measure (Set ι)
+  签名: : 测度 (集合 ι)
   定义体: .comap (fun s i => i in s) infinitePi fun i : ι =>
     toNNReal p • dirac (i in u) + toNNReal (σ p) • dirac False
 
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure setBer(u, p)
+  签名: 是概率测度 setBer(u, p)
   定义体: MeasurableEquiv.setOfPred.symm.measurableEmbedding.isProbabilityMeasure_comap
     .of_forall fun P => ⟨{i | P i}, rfl⟩
 
@@ -118,7 +118,7 @@ lemma setBernoulli_apply
 
 中文:
 引理 setBernoulli_apply
-  条件: (S : Set (Set ι))
+  条件: (S : 集合 (集合 ι))
   证明: MeasurableEquiv.setOfPred.symm.measurableEmbedding.comap_apply ..
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.setOfPred.symm.measurableEmbedding.comap_apply, comap_apply, measurableEmbedding, setOfPred
@@ -137,7 +137,7 @@ lemma setBernoulli_apply'
 
 中文:
 引理 setBernoulli_apply'
-  条件: (S : Set (Set ι))
+  条件: (S : 集合 (集合 ι))
   证明: MeasurableEquiv.setOfPred.symm.comap_apply ..
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.setOfPred.symm.comap_apply, comap_apply, setOfPred
@@ -237,7 +237,7 @@ lemma setBernoulli_singleton_of_not_subset
 
 中文:
 引理 setBernoulli_singleton_of_not_subset
-  条件: {s : Set ι} (p : I) (hs : ¬ s subseteq u)
+  条件: {s : 集合 ι} (p : I) (hs : ¬ s subseteq u)
   证明: Measure.mono_null (by simpa) setBernoulli_ae_subset
 
 Depends on / 依赖: Measure, Measure.mono_null, mono_null, setBernoulli_ae_subset
@@ -258,7 +258,7 @@ lemma setBernoulli_apply_eq_apply_subsets
 
 中文:
 引理 setBernoulli_apply_eq_apply_subsets
-  条件: (u : Set ι) (p : I) (S : Set (Set ι))
+  条件: (u : 集合 ι) (p : I) (S : 集合 (集合 ι))
   证明: by
   apply (measure_eq_measure_of_null_sdiff (by grind) ?_).symm
   exact Measure.mono_null (by grind) setBernoulli_ae_subset
@@ -282,7 +282,7 @@ lemma map_ncard_setBernoulli_apply
 
 中文:
 引理 map_ncard_setBernoulli_apply
-  条件: (u : Set ι) (p : I) (s : Set 自然数)
+  条件: (u : 集合 ι) (p : I) (s : 集合 自然数)
   证明: by
   rw [map_apply (by fun_prop) .of_discrete]; rw [setBernoulli_apply_eq_apply_subsets]
   simp [And.comm]
@@ -313,7 +313,7 @@ lemma setBernoulli_singleton
 
 中文:
 引理 setBernoulli_singleton
-  条件: (hsu : s subseteq u) (hu : u.Finite)
+  条件: (hsu : s subseteq u) (hu : u.有限)
   证明: by
   classical
   lift u to Finset ι using hu
@@ -352,7 +352,7 @@ lemma setBernoulli_real_singleton
 
 中文:
 引理 setBernoulli_real_singleton
-  条件: (p : I) (hsu : s subseteq u) (hu : u.Finite)
+  条件: (p : I) (hsu : s subseteq u) (hu : u.有限)
   证明: by
   simp [measureReal_def, setBernoulli_singleton p hsu hu]
 
@@ -376,7 +376,7 @@ lemma map_ncard_setBernoulli_real_singleton
 
 中文:
 引理 map_ncard_setBernoulli_real_singleton
-  条件: {u : Set ι} (hu : u.Finite) (p : I) (k : 自然数)
+  条件: {u : 集合 ι} (hu : u.有限) (p : I) (k : 自然数)
   证明: by
   have : {s subseteq u | s.ncard in ({k} : Set Nat)}.Finite := hu.finite_subsets.subset (by grind)
   rw [measureReal_def]; rw [map_ncard_setBernoulli_apply]; rw [← measureReal_def]; rw [← Set.biUnion_of_singleton (Set.ofPred _)]
@@ -412,7 +412,7 @@ lemma map_ncard_setBernoulli_singleton
 
 中文:
 引理 map_ncard_setBernoulli_singleton
-  条件: {u : Set ι} (hu : u.Finite) (p : I) (k : 自然数)
+  条件: {u : 集合 ι} (hu : u.有限) (p : I) (k : 自然数)
   证明: by
   rw [← ENNReal.ofReal_toReal (a := (Measure.map _ _) _) (by simp)]; rw [← measureReal_def]; rw [map_ncard_setBernoulli_real_singleton hu]
 
@@ -444,7 +444,7 @@ lemma setBernoulli_empty
 
 中文:
 引理 setBernoulli_empty
-  结论: setBer((∅ : Set ι), p) = dirac ∅
+  结论: setBer((∅ : 集合 ι), p) = dirac ∅
   证明: by
   ext s hs
   rw [setBernoulli_apply_eq_apply_subsets]

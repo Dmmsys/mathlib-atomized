@@ -36,10 +36,10 @@ class ContinuousEvalConst
     - continuous_eval_const((x : α)) : Continuous fun f : F => f x
 
 中文:
-类 ContinuousEvalConst
-  参数: (F : 类型) (α X : outParam 类型) [FunLike F α X]
+类 余ntinuousEvalConst
+  参数: (F : 类型) (α X : outParam 类型) [函数状 F α X]
   公理与运算 (1 个):
-    - continuous_eval_const((x : α)) : Continuous fun f : F => f x
+    - continuous_eval_const((x : α)) : 连续 fun f : F => f x
 -/
 class ContinuousEvalConst (F : Type*) (α X : outParam Type*) [FunLike F α X]
     [TopologicalSpace F] [TopologicalSpace X] : Prop where
@@ -63,8 +63,8 @@ theorem ContinuousEvalConst.of_continuous_forget
 @[continuity, fun_prop]
 
 中文:
-定理 ContinuousEvalConst.of_continuous_forget
-  结论: {F' : 类型} [FunLike F' α X] [TopologicalSpace F']
+定理 余ntinuousEvalConst.of_continuous_forget
+  结论: {F' : 类型} [函数状 F' α X] [拓扑空间 F']
   证明: by simpa only [← hf] using! (continuous_eval_const x).comp hc
 
 @[continuity, fun_prop]
@@ -87,9 +87,9 @@ theorem Continuous.eval_const
   proof: (continuous_eval_const x).comp hf
 
 中文:
-定理 Continuous.eval_const
-  条件: (hf : Continuous f) (x : α)
-  结论: Continuous (f · x)
+定理 连续.eval_const
+  条件: (hf : 连续 f) (x : α)
+  结论: 连续 (f · x)
   证明: (continuous_eval_const x).comp hf
 -/
 protected theorem Continuous.eval_const (hf : Continuous f) (x : α) : Continuous (f · x) :=
@@ -105,7 +105,7 @@ theorem continuous_coeFun
 
 中文:
 定理 continuous_coeFun
-  结论: Continuous (DFunLike.coe : F -> α -> X)
+  结论: 连续 (依赖函数状.coe : F -> α -> X)
   证明: continuous_pi continuous_eval_const
 
 Depends on / 依赖: continuous_eval_const, continuous_pi
@@ -123,9 +123,9 @@ theorem Continuous.coeFun
   proof: continuous_pi hf.eval_const
 
 中文:
-定理 Continuous.coeFun
-  条件: (hf : Continuous f)
-  结论: Continuous fun z => ⇑(f z)
+定理 连续.coeFun
+  条件: (hf : 连续 f)
+  结论: 连续 fun z => ⇑(f z)
   证明: continuous_pi hf.eval_const
 -/
 protected theorem Continuous.coeFun (hf : Continuous f) : Continuous fun z => ⇑(f z) :=
@@ -140,8 +140,8 @@ theorem Filter.Tendsto.eval_const
   proof: ((continuous_id.eval_const a).tendsto _).comp hf
 
 中文:
-定理 Filter.Tendsto.eval_const
-  结论: {ι : 类型} {l : Filter ι} {f : ι -> F} {g : F}
+定理 滤子.收敛.eval_const
+  结论: {ι : 类型} {l : 滤子 ι} {f : ι -> F} {g : F}
   证明: ((continuous_id.eval_const a).tendsto _).comp hf
 -/
 protected theorem Filter.Tendsto.eval_const {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
@@ -167,8 +167,8 @@ protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
 pr
 
 中文:
-定理 Filter.Tendsto.coeFun
-  结论: {ι : 类型} {l : Filter ι} {f : ι -> F} {g : F}
+定理 滤子.收敛.coeFun
+  结论: {ι : 类型} {l : 滤子 ι} {f : ι -> F} {g : F}
   证明: (continuous_id.coeFun.tendsto _).comp hf
 
 protected nonrec theorem ContinuousAt.eval_const (hf : ContinuousAt f z) (x : α) :

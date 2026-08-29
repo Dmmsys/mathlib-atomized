@@ -99,7 +99,7 @@ theorem σ_comp_P_eq_zero
 
 中文:
 定理 σ_comp_P_eq_zero
-  条件: (X : SimplicialObject C) {n q : 自然数} (i : Fin (n + 1)) (hi : n + 1 <= i + q)
+  条件: (X : SimplicialObject C) {n q : 自然数} (i : 有限集 (n + 1)) (hi : n + 1 <= i + q)
   证明: by
   induction q generalizing i with
   | zero => lia
@@ -176,7 +176,7 @@ theorem σ_comp_PInfty
 
 中文:
 定理 σ_comp_PInfty
-  条件: (X : SimplicialObject C) {n : 自然数} (i : Fin (n + 1))
+  条件: (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   rw [PInfty_f]; rw [σ_comp_P_eq_zero X i]
   simp only [le_add_iff_nonneg_left, zero_le]
@@ -210,7 +210,7 @@ theorem degeneracy_comp_PInfty
 
 中文:
 定理 degeneracy_comp_PInfty
-  结论: (X : SimplicialObject C) (n : 自然数) {Δ' : SimplexCategory}
+  结论: (X : SimplicialObject C) (n : 自然数) {Δ' : 单纯形范畴}
   证明: by
   rw [SimplexCategory.mono_iff_injective] at hθ
   cases n

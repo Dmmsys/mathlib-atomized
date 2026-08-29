@@ -35,8 +35,8 @@ instance Subtype.orderBot
   bot_le x := Nat.find_min' _ x.2
 
 中文:
-实例 Subtype.orderBot
-  签名: (s : Set 自然数) [DecidablePred (· in s)] [h : Nonempty s]
+实例 子类型.orderBot
+  签名: (s : 集合 自然数) [DecidablePred (· in s)] [h : 非空 s]
   定义体: ⟨Nat.find (nonempty_subtype.1 h), Nat.find_spec (nonempty_subtype.1 h)⟩
   bot_le x := Nat.find_min' _ x.2
 
@@ -55,7 +55,7 @@ instance Subtype.semilatticeSup
   body: { Subtype.instLinearOrder p, LinearOrder.toLattice with }
 
 中文:
-实例 Subtype.semilatticeSup
+实例 子类型.semilatticeSup
   签名: (p : 自然数 -> 命题)
   定义体: { Subtype.instLinearOrder p, LinearOrder.toLattice with }
 
@@ -73,8 +73,8 @@ theorem Subtype.coe_bot
   proof: rfl
 
 中文:
-定理 Subtype.coe_bot
-  条件: {s : Set 自然数} [DecidablePred (· in s)] [h : Nonempty s]
+定理 子类型.coe_bot
+  条件: {s : 集合 自然数} [DecidablePred (· in s)] [h : 非空 s]
   证明: rfl
 -/
 theorem Subtype.coe_bot {s : Set Nat} [DecidablePred (· in s)] [h : Nonempty s] :
@@ -92,8 +92,8 @@ theorem set_eq_univ
 
 中文:
 定理 set_eq_univ
-  条件: {S : Set 自然数}
-  结论: S = Set.univ ↔ 0 in S ∧ 对任意 k : 自然数, k in S -> k + 1 in S
+  条件: {S : 集合 自然数}
+  结论: S = 集合.univ ↔ 0 in S ∧ 对任意 k : 自然数, k in S -> k + 1 in S
   证明: ⟨by rintro rfl; simp, fun ⟨h0, hs⟩ => Set.eq_univ_of_forall (set_induction h0 hs)⟩
 
 Depends on / 依赖: Set.eq_univ_of_forall, eq_univ_of_forall, set_induction
@@ -118,7 +118,7 @@ lemma exists_not_and_succ_of_not_zero_of_exists
   exact H' (contra ▸ hk)
 
 中文:
-引理 exists_not_and_succ_of_not_zero_of_exists
+引理 存在_not_and_succ_of_not_zero_of_存在
   条件: {p : 自然数 -> 命题} (H' : ¬ p 0) (H : 存在 n, p n)
   证明: by
   classical

@@ -51,7 +51,7 @@ theorem exists_integer_polynomial_multiple_and_support_subset
   exact ⟨b, hb, q', h₁, h₂ ▸ support_smul b p⟩
 
 中文:
-定理 exists_integer_polynomial_multiple_and_support_subset
+定理 存在_integer_polynomial_multiple_and_support_subset
   条件: (p : S[X])
   证明: by
   obtain ⟨⟨_, b, hb, rfl⟩, h⟩ := exists_integer_multiple (Submonoid.map C M) p
@@ -137,7 +137,7 @@ definition coeffIntegerNormalization
 @[deprecated integerNormalization_support (since := "2026-02-05")]
 
 中文:
-定义 coeffIntegerNormalization
+定义 coeff整数egerNormalization
   签名: (p : S[X]) (i : 自然数)
   定义体: (integerNormalization M p).coeff i
 
@@ -161,7 +161,7 @@ theorem coeffIntegerNormalization_of_coeff_zero
 @[deprecated integerNormalization_support (since := "2026-02-05")]
 
 中文:
-定理 coeffIntegerNormalization_of_coeff_zero
+定理 coeff整数egerNormalization_of_coeff_zero
   条件: (p : S[X]) (i : 自然数) (h : coeff p i = 0)
   证明: notMem_support_iff.mp Finset.not_mem_subset (integerNormalization_support M p)
     notMem_support_iff.mpr h
@@ -190,7 +190,7 @@ theorem coeffIntegerNormalization_mem_support
 @[deprecated integerNormalization_spec (since := "2026-02-05")]
 
 中文:
-定理 coeffIntegerNormalization_mem_support
+定理 coeff整数egerNormalization_mem_support
   结论: (p : S[X]) (i : 自然数)
   证明: by
   contrapose h
@@ -242,7 +242,7 @@ let : Function.Injective mapRingHom (algebraMap R S) := by
 
 中文:
 定理 integerNormalization_eq_zero_iff
-  条件: [IsDomain R] (hM : M <= nonZeroDivisors R) (p : S[X])
+  条件: [是整环 R] (hM : M <= nonZeroDivisors R) (p : S[X])
   证明: by
   obtain ⟨_, hb₁, hb₂⟩ := integerNormalization_spec M p
   let := isDomain_of_le_nonZeroDivisors S hM
@@ -327,7 +327,7 @@ theorem integerNormalization_aeval_eq_zero
 
 中文:
 定理 integerNormalization_aeval_eq_zero
-  结论: [Algebra R R'] [Algebra S R'] [IsScalarTower R S R']
+  结论: [代数 R R'] [代数 S R'] [标量塔 R S R']
   证明: by
   rwa [aeval_def, IsScalarTower.algebraMap_eq R S R', integerNormalization_eval₂_eq_zero]
 
@@ -385,7 +385,7 @@ theorem isAlgebraic_iff
 
 中文:
 定理 isAlgebraic_iff
-  条件: [Algebra A C] [Algebra K C] [IsScalarTower A K C] {x : C}
+  条件: [代数 A C] [代数 K C] [标量塔 A K C] {x : C}
   证明: by
   constructor <;> rintro ⟨p, hp, px⟩
   · refine ⟨p.map (algebraMap A K), fun h => hp (Polynomial.ext fun i => ?_), ?_⟩
@@ -421,7 +421,7 @@ theorem comap_isAlgebraic_iff
 
 中文:
 定理 comap_isAlgebraic_iff
-  条件: [Algebra A C] [Algebra K C] [IsScalarTower A K C]
+  条件: [代数 A C] [代数 K C] [标量塔 A K C]
   证明: ⟨fun h => ⟨fun x => (isAlgebraic_iff A K C).mp (h.isAlgebraic x)⟩,
    fun h => ⟨fun x => (isAlgebraic_iff A K C).mpr (h.isAlgebraic x)⟩⟩
 
@@ -460,8 +460,8 @@ theorem RingHom.isIntegralElem_localization_at_leadingCoeff
   · refi
 
 中文:
-定理 RingHom.isIntegralElem_localization_at_leadingCoeff
-  结论: {R S : 类型} [CommSemiring R]
+定理 环态射.is整数egralElem_localization_at_leadingCoeff
+  结论: {R S : 类型} [交换半环 R]
   证明: by
   by_cases triv : (1 : Rₘ) = 0
   · exact ⟨0, ⟨_root_.trans leadingCoeff_zero triv.symm, eval₂_zero _ _⟩⟩
@@ -534,8 +534,8 @@ theorem isIntegral_localization
   · replace hv' := co
 
 中文:
-定理 isIntegral_localization
-  条件: [Algebra.Is整数egral R S]
+定理 is整数egral_localization
+  条件: [代数.是整 R S]
   证明: by
   intro x
   obtain ⟨⟨s, ⟨u, hu⟩⟩, hx⟩ := surj (Algebra.algebraMapSubmonoid S M) x
@@ -574,8 +574,8 @@ theorem isIntegral_localization'
   isIntegral_localization
 
 中文:
-定理 isIntegral_localization'
-  结论: {R S : 类型} [CommRing R] [CommRing S] {f : R ->+* S}
+定理 is整数egral_localization'
+  结论: {R S : 类型} [交换环 R] [交换环 S] {f : R ->+* S}
   证明: let _ := f.toAlgebra
   have : Algebra.IsIntegral R S := ⟨hf⟩
   have : IsLocalization (Algebra.algebraMapSubmonoid S M)
@@ -613,7 +613,7 @@ theorem IsLocalization.scaleRoots_commonDenom_mem_lifts
   · have : n + 1 <= p.natDegree := lt_of_le_of_ne (Polynom
 
 中文:
-定理 IsLocalization.scaleRoots_commonDenom_mem_lifts
+定理 是Localization.scaleRoots_commonDenom_mem_lifts
   结论: (p : Rₘ[X])
   证明: by
   rw [Polynomial.lifts_iff_coeff_lifts]
@@ -663,8 +663,8 @@ theorem IsIntegral.exists_multiple_integral_of_isLocalization
     lifts_and_natDegree_eq_and_
 
 中文:
-定理 IsIntegral.exists_multiple_integral_of_isLocalization
-  结论: [Algebra Rₘ S] [IsScalarTower R Rₘ S]
+定理 是整.存在_multiple_integral_of_isLocalization
+  结论: [代数 Rₘ S] [标量塔 R Rₘ S]
   证明: by
   rcases subsingleton_or_nontrivial Rₘ with _ | nontriv
   · have := (algebraMap Rₘ S).codomain_trivial
@@ -706,7 +706,7 @@ lemma IsLocalization.exists_isIntegral_smul_of_isIntegral_map
   obtain ⟨m, hm, e⟩ := h
 
 中文:
-引理 IsLocalization.exists_isIntegral_smul_of_isIntegral_map
+引理 是Localization.存在_is整数egral_smul_of_is整数egral_map
   证明: by
   obtain ⟨p, hpm, hp⟩ := hx
   simp only [IsScalarTower.algebraMap_eq R S Sₘ, ← hom_eval₂,
@@ -744,7 +744,7 @@ lemma IsLocalization.Away.exists_isIntegral_mul_of_isIntegral_algebraMap
   have := isIntegral_trans (R :
 
 中文:
-引理 IsLocalization.Away.exists_isIntegral_mul_of_isIntegral_algebraMap
+引理 是Localization.Away.存在_is整数egral_mul_of_is整数egral_algebraMap
   证明: by
   nontriviality S
   obtain ⟨p, hpm, hp⟩ := hx
@@ -784,7 +784,7 @@ lemma IsLocalization.Away.exists_isIntegral_mul_of_isIntegral_mk'
   exact (mk'_spec'_mk ..).symm
 
 中文:
-引理 IsLocalization.Away.exists_isIntegral_mul_of_isIntegral_mk'
+引理 是Localization.Away.存在_is整数egral_mul_of_is整数egral_mk'
   证明: by
   refine IsLocalization.Away.exists_isIntegral_mul_of_isIntegral_algebraMap (Sₘ := Sₘ) hr ?_
   obtain ⟨_, ⟨n, rfl⟩⟩ := a
@@ -818,7 +818,7 @@ lemma isIntegral_of_isIntegral_adjoin_of_mul_eq_one
       (by simp [← AlgHom.mem_range, φ, ← Algebra.adjoin_singleton_eq_range_aeval])
 
 中文:
-引理 isIntegral_of_isIntegral_adjoin_of_mul_eq_one
+引理 is整数egral_of_is整数egral_adjoin_of_mul_eq_one
   证明: by
   nontriviality S
   let φ := aeval (R := R) s
@@ -881,7 +881,7 @@ lemma IsLocalization.Away.isIntegral_of_isIntegral_map
   exact ⟨X ^ n * p, (monic_X_pow n).mul hpm, by simpa
 
 中文:
-引理 IsLocalization.Away.isIntegral_of_isIntegral_map
+引理 是Localization.Away.is整数egral_of_is整数egral_map
   证明: by
   obtain ⟨p, hpm, hp⟩ := hx
   simp only [IsScalarTower.algebraMap_eq R S Sₘ, IsLocalization.map_eq_zero_iff (.powers x),
@@ -930,7 +930,7 @@ theorem isFractionRing_of_algebraic
 
 中文:
 定理 isFractionRing_of_algebraic
-  结论: [Algebra.IsAlgebraic A L]
+  结论: [代数.是代数 A L]
   证明: { map_units := fun ⟨y, hy⟩ =>
       IsUnit.mk0 _
         (show algebraMap C L y != 0 from fun h =>
@@ -972,7 +972,7 @@ theorem isFractionRing_of_finite_extension
 
 中文:
 定理 isFractionRing_of_finite_extension
-  结论: [IsDomain A] [Algebra K L] [IsScalarTower A K L]
+  结论: [是整环 A] [代数 K L] [标量塔 A K L]
   证明: have : Algebra.IsAlgebraic A L := IsFractionRing.comap_isAlgebraic_iff.mpr
     (inferInstance : Algebra.IsAlgebraic K L)
   isFractionRing_of_algebraic A C
@@ -1009,7 +1009,7 @@ theorem isFractionRing_of_algebraic
 
 中文:
 定理 isFractionRing_of_algebraic
-  结论: [Algebra A L] [Algebra.IsAlgebraic A L]
+  结论: [代数 A L] [代数.是代数 A L]
   证明: IsIntegralClosure.isFractionRing_of_algebraic A (integralClosure A L) inj
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isFractionRing_of_algebraic, integralClosure, isFractionRing_of_algebraic
@@ -1030,7 +1030,7 @@ theorem isFractionRing_of_finite_extension
 
 中文:
 定理 isFractionRing_of_finite_extension
-  结论: [IsDomain A] [Algebra A L] [Algebra K L]
+  结论: [是整环 A] [代数 A L] [代数 K L]
   证明: IsIntegralClosure.isFractionRing_of_finite_extension A K L (integralClosure A L)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isFractionRing_of_finite_extension, integralClosure, isFractionRing_of_finite_extension
@@ -1063,7 +1063,7 @@ lemma IsLocalization.integralClosure
     obtain ⟨⟨x, _, m₁, hm₁, rfl⟩, e⟩ := IsLocalization.surj (Algebra.algebr
 
 中文:
-引理 IsLocalization.integralClosure
+引理 是Localization.integralClosure
   证明: by
   refine ⟨⟨?_, ?_, ?_⟩⟩
   · rintro ⟨_, f, hf, rfl⟩
@@ -1119,7 +1119,7 @@ lemma IsLocalization.Away.integralClosure
   simp
 
 中文:
-引理 IsLocalization.Away.integralClosure
+引理 是Localization.Away.integralClosure
   证明: by
   convert! IsLocalization.integralClosure (S := S) (Rf := Rf) (Sf := Sf) (.powers f)
   simp
@@ -1155,7 +1155,7 @@ theorem isAlgebraic_iff'
 
 中文:
 定理 isAlgebraic_iff'
-  结论: [Field K] [IsDomain R] [Algebra R K] [Algebra S K]
+  结论: [域 K] [是整环 R] [代数 R K] [代数 S K]
   证明: by
   simp only [Algebra.isAlgebraic_def]
   constructor
@@ -1211,7 +1211,7 @@ theorem ideal_span_singleton_map_subset
 
 中文:
 定理 ideal_span_singleton_map_subset
-  结论: {L : 类型} [IsDomain R] [IsDomain S] [Field K] [Field L]
+  结论: {L : 类型} [是整环 R] [是整环 S] [域 K] [域 L]
   证明: by
   intro x hx
   obtain ⟨x', rfl⟩ := Ideal.mem_span_singleton.mp hx
@@ -1275,7 +1275,7 @@ lemma isAlgebraic_of_isFractionRing
 
 中文:
 引理 isAlgebraic_of_isFractionRing
-  结论: (R S K L) [CommRing R] [CommRing S] [Field K] [CommRing L]
+  结论: (R S K L) [交换环 R] [交换环 S] [域 K] [交换环 L]
   证明: by
   constructor
   intro x

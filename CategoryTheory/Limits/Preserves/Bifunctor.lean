@@ -52,7 +52,7 @@ definition Functor.mapCocone₂
           ← Functor.map_comp, NatTrans.n
 
 中文:
-定义 Functor.mapCocone₂
+定义 函子.mapCocone₂
   签名: (G : C₁ ⥤ C₂ ⥤ C) {K₁ : J₁ ⥤ C₁} {K₂ : J₂ ⥤ C₂}
   定义体: (G.obj c₁.pt).obj c₂.pt
   ι :=
@@ -100,7 +100,7 @@ definition Functor.mapCone₂
           
 
 中文:
-定义 Functor.mapCone₂
+定义 函子.mapCone₂
   签名: (G : C₁ ⥤ C₂ ⥤ C) {K₁ : J₁ ⥤ C₁} {K₂ : J₂ ⥤ C₂}
   定义体: (G.obj c₁.pt).obj c₂.pt
   π :=
@@ -139,10 +139,10 @@ class PreservesColimit₂
     - nonempty_isColimit_mapCocone₂({c₁ : Cocone K₁} (hc₁ : IsColimit c₁) {c₂ : Cocone K₂} (hc₂ : IsColimit c₂))
 
 中文:
-类 PreservesColimit₂
+类 保持余limit₂
   参数: (K₁ : J₁ ⥤ C₁) (K₂ : J₂ ⥤ C₂) (G : C₁ ⥤ C₂ ⥤ C)
   公理与运算 (1 个):
-    - nonempty_isColimit_mapCocone₂({c₁ : Cocone K₁} (hc₁ : IsColimit c₁) {c₂ : Cocone K₂} (hc₂ : IsColimit c₂))
+    - nonempty_isColimit_mapCocone₂({c₁ : 余锥 K₁} (hc₁ : 是余极限 c₁) {c₂ : 余锥 K₂} (hc₂ : 是余极限 c₂))
 -/
 class PreservesColimit₂ (K₁ : J₁ ⥤ C₁) (K₂ : J₂ ⥤ C₂) (G : C₁ ⥤ C₂ ⥤ C) : Prop where
   nonempty_isColimit_mapCocone₂ {c₁ : Cocone K₁} (hc₁ : IsColimit c₁)
@@ -159,10 +159,10 @@ class PreservesLimit₂
     - nonempty_isLimit_mapCone₂({c₁ : Cone K₁} (hc₁ : IsLimit c₁) {c₂ : Cone K₂} (hc₂ : IsLimit c₂))
 
 中文:
-类 PreservesLimit₂
+类 保持Limit₂
   参数: (K₁ : J₁ ⥤ C₁) (K₂ : J₂ ⥤ C₂) (G : C₁ ⥤ C₂ ⥤ C)
   公理与运算 (1 个):
-    - nonempty_isLimit_mapCone₂({c₁ : Cone K₁} (hc₁ : IsLimit c₁) {c₂ : Cone K₂} (hc₂ : IsLimit c₂))
+    - nonempty_isLimit_mapCone₂({c₁ : 锥 K₁} (hc₁ : 是极限 c₁) {c₂ : 锥 K₂} (hc₂ : 是极限 c₂))
 -/
 class PreservesLimit₂ (K₁ : J₁ ⥤ C₁) (K₂ : J₂ ⥤ C₂) (G : C₁ ⥤ C₂ ⥤ C) : Prop where
   nonempty_isLimit_mapCone₂ {c₁ : Cone K₁} (hc₁ : IsLimit c₁)
@@ -181,7 +181,7 @@ definition isColimitOfPreserves₂
 
 中文:
 定义 isColimitOfPreserves₂
-  签名: [PreservesColimit₂ K₁ K₂ G]
+  签名: [保持余limit₂ K₁ K₂ G]
   定义体: .some PreservesColimit₂.nonempty_isColimit_mapCocone₂ hc₁ hc₂
 -/
 noncomputable def isColimitOfPreserves₂ [PreservesColimit₂ K₁ K₂ G]
@@ -200,7 +200,7 @@ definition isLimitOfPreserves₂
 
 中文:
 定义 isLimitOfPreserves₂
-  签名: [PreservesLimit₂ K₁ K₂ G]
+  签名: [保持Limit₂ K₁ K₂ G]
   定义体: .some PreservesLimit₂.nonempty_isLimit_mapCone₂ hc₁ hc₂
 -/
 noncomputable def isLimitOfPreserves₂ [PreservesLimit₂ K₁ K₂ G]
@@ -223,8 +223,8 @@ instance [HasColimit
 .some }⟩ (getColimitCocone K₂).isColimit
 
 中文:
-实例 [HasColimit
-  签名: K₁] [HasColimit K₂] [PreservesColimit₂ K₁ K₂ G] :
+实例 [有余极限
+  签名: K₁] [有余极限 K₂] [保持余limit₂ K₁ K₂ G] :
   定义体: ⟨{
     cocone := _
     isColimit :=
@@ -255,8 +255,8 @@ instance [HasLimit
 .some }⟩ (getLimitCone K₂).isLimit
 
 中文:
-实例 [HasLimit
-  签名: K₁] [HasLimit K₂] [PreservesLimit₂ K₁ K₂ G] :
+实例 [有极限
+  签名: K₁] [有极限 K₂] [保持Limit₂ K₁ K₂ G] :
   定义体: ⟨{
     cone := _
     isLimit :=
@@ -526,7 +526,7 @@ theorem of_preservesColimit₂_flip
 
 中文:
 定理 of_preservesColimit₂_flip
-  结论: PreservesColimit₂ K₂ K₁ G.flip where
+  结论: 保持余limit₂ K₂ K₁ G.flip where
   证明: by
     constructor
     let E₀ : uncurry.obj (whiskeringLeft₂ C |>.obj K₂ |>.obj K₁ |>.obj G.flip) ≅
@@ -807,7 +807,7 @@ theorem of_preservesLimit₂_flip
 
 中文:
 定理 of_preservesLimit₂_flip
-  结论: PreservesLimit₂ K₂ K₁ G.flip where
+  结论: 保持Limit₂ K₂ K₁ G.flip where
   证明: by
     constructor
     let E₀ : uncurry.obj (whiskeringLeft₂ C |>.obj K₂ |>.obj K₁ |>.obj G.flip) ≅

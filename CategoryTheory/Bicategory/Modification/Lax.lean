@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Modification η η)
+  签名: 可居 (Modification η η)
   定义体: ⟨Modification.id η⟩
 
 Depends on / 依赖: Modification, Modification.id
@@ -166,7 +166,7 @@ structure Hom
     - as : Modification η θ
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
     - of : :
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (η ⟶ η)
+  签名: 可居 (η ⟶ η)
   定义体: ⟨𝟙 η⟩
 
 @[ext]
@@ -340,7 +340,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Modification η η)
+  签名: 可居 (Modification η η)
   定义体: ⟨Modification.id η⟩
 
 Depends on / 依赖: Modification, Modification.id
@@ -385,7 +385,7 @@ structure Hom
     - as : Modification η θ
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
     - of : :
@@ -417,7 +417,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (η ⟶ η)
+  签名: 可居 (η ⟶ η)
   定义体: ⟨𝟙 η⟩
 
 @[ext]

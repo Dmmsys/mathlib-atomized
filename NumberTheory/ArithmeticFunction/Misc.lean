@@ -60,7 +60,7 @@ definition prodPrimeFactors
 
 中文:
 定义 prodPrimeFactors
-  签名: [CommMonoidWithZero R] (f : 自然数 -> R)
+  签名: [带零交换幺半群 R] (f : 自然数 -> R)
   定义体: if d = 0 then 0 else ∏ p in d.primeFactors, f p
   map_zero' := if_pos rfl
 
@@ -88,7 +88,7 @@ theorem prodPrimeFactors_apply
 
 中文:
 定理 prodPrimeFactors_apply
-  条件: [CommMonoidWithZero R] {f : 自然数 -> R} {n : 自然数} (hn : n != 0)
+  条件: [带零交换幺半群 R] {f : 自然数 -> R} {n : 自然数} (hn : n != 0)
   证明: if_neg hn
 
 Depends on / 依赖: if_neg
@@ -116,7 +116,7 @@ theorem prodPrimeFactors
 
 中文:
 定理 prodPrimeFactors
-  条件: [CommMonoidWithZero R] (f : 自然数 -> R)
+  条件: [带零交换幺半群 R] (f : 自然数 -> R)
   证明: by
   rw [iff_ne_zero]
   simp only [ne_eq, one_ne_zero, not_false_eq_true, prodPrimeFactors_apply, primeFactors_one,
@@ -151,7 +151,7 @@ theorem prodPrimeFactors_add_of_squarefree
 
 中文:
 定理 prodPrimeFactors_add_of_squarefree
-  结论: [CommSemiring R] {f g : ArithmeticFunction R}
+  结论: [交换半环 R] {f g : ArithmeticFunction R}
   证明: by
   rw [prodPrimeFactors_apply hn.ne_zero]
   simp_rw [add_apply (f := f) (g := g)]
@@ -231,7 +231,7 @@ theorem isMultiplicative_id
 
 中文:
 定理 isMultiplicative_id
-  结论: IsMultiplicative .id
+  结论: 是Multiplicative .id
   证明: ⟨rfl, fun _ => rfl⟩
 -/
 theorem isMultiplicative_id : IsMultiplicative .id :=
@@ -343,7 +343,7 @@ theorem isMultiplicative_pow
 中文:
 定理 isMultiplicative_pow
   条件: {k : 自然数}
-  结论: IsMultiplicative (pow k)
+  结论: 是Multiplicative (pow k)
   证明: isMultiplicative_id.ppow
 
 Depends on / 依赖: isMultiplicative_id, isMultiplicative_id.ppow
@@ -475,7 +475,7 @@ theorem sigma_apply_prime_pow
 
 中文:
 定理 sigma_apply_prime_pow
-  条件: {k p i : 自然数} (hp : p.Prime)
+  条件: {k p i : 自然数} (hp : p.素)
   证明: by
   simp [sigma_apply, divisors_prime_pow hp, pow_mul]
 
@@ -515,7 +515,7 @@ theorem sigma_one_apply_prime_pow
 
 中文:
 定理 sigma_one_apply_prime_pow
-  条件: {p i : 自然数} (hp : p.Prime)
+  条件: {p i : 自然数} (hp : p.素)
   证明: by
   simp [sigma_apply_prime_pow hp]
 
@@ -580,7 +580,7 @@ theorem sigma_zero_apply_prime_pow
 
 中文:
 定理 sigma_zero_apply_prime_pow
-  条件: {p i : 自然数} (hp : p.Prime)
+  条件: {p i : 自然数} (hp : p.素)
   结论: σ 0 (p ^ i) = i + 1
   证明: by
   simp [sigma_apply_prime_pow hp]
@@ -715,7 +715,7 @@ theorem isMultiplicative_sigma
 中文:
 定理 isMultiplicative_sigma
   条件: {k : 自然数}
-  结论: IsMultiplicative (σ k)
+  结论: 是Multiplicative (σ k)
   证明: by
   rw [← zeta_mul_pow_eq_sigma]
   apply isMultiplicative_zeta.mul isMultiplicative_pow
@@ -799,7 +799,7 @@ sigma_zero_apply_prime_pow prime_of_mem_primeFactors h
 @[simp]
 
 中文:
-定理 _root_.Nat.card_divisors
+定理 _root_.自然数.card_divisors
   条件: {n : 自然数} (hn : n != 0)
   证明: by
   rw [← sigma_zero_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
@@ -831,7 +831,7 @@ theorem _root_.Nat.divisors_card_eq_one_iff
     exact (card_le_one.mp h.le 1 (one_mem_divisors.mpr hn) n (n.mem_divisors_self hn)).symm
 
 中文:
-定理 _root_.Nat.divisors_card_eq_one_iff
+定理 _root_.自然数.divisors_card_eq_one_iff
   条件: (n : 自然数)
   结论: #n.divisors = 1 ↔ n = 1
   证明: by
@@ -931,7 +931,7 @@ theorem _root_.Nat.sum_divisors
 sigma_one_apply_prime_pow prime_of_mem_primeFactors h
 
 中文:
-定理 _root_.Nat.sum_divisors
+定理 _root_.自然数.sum_divisors
   条件: {n : 自然数} (hn : n != 0)
   证明: by
   rw [← sigma_one_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
@@ -1099,7 +1099,7 @@ theorem cardFactors_eq_one_iff_prime
 中文:
 定理 cardFactors_eq_one_iff_prime
   条件: {n : 自然数}
-  结论: Ω n = 1 ↔ n.Prime
+  结论: Ω n = 1 ↔ n.素
   证明: by
   refine ⟨fun h => ?_, fun h => List.length_eq_one_iff.2 ⟨n, primeFactorsList_prime h⟩⟩
   cases n with | zero => simp at h | succ n =>
@@ -1154,7 +1154,7 @@ theorem cardFactors_multiset_prod
 
 中文:
 定理 cardFactors_multiset_prod
-  条件: {s : Multiset 自然数} (h0 : s.prod != 0)
+  条件: {s : Multiset 自然数} (h0 : s.乘积 != 0)
   证明: by
   induction s using Multiset.induction_on with
   | empty => simp
@@ -1182,7 +1182,7 @@ theorem cardFactors_apply_prime
 
 中文:
 定理 cardFactors_apply_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: Ω p = 1
   证明: cardFactors_eq_one_iff_prime.2 hp
 
@@ -1248,7 +1248,7 @@ theorem cardFactors_apply_prime_pow
 
 中文:
 定理 cardFactors_apply_prime_pow
-  条件: {p k : 自然数} (hp : p.Prime)
+  条件: {p k : 自然数} (hp : p.素)
   结论: Ω (p ^ k) = k
   证明: by
   simp [cardFactors_pow, hp]
@@ -1486,7 +1486,7 @@ theorem cardDistinctFactors_apply_prime_pow
 
 中文:
 定理 cardDistinctFactors_apply_prime_pow
-  条件: {p k : 自然数} (hp : p.Prime) (hk : k != 0)
+  条件: {p k : 自然数} (hp : p.素) (hk : k != 0)
   证明: cardDistinctFactors_eq_one_iff.mpr hp.isPrimePow.pow hk
 
 @[simp]
@@ -1510,7 +1510,7 @@ theorem cardDistinctFactors_apply_prime
 
 中文:
 定理 cardDistinctFactors_apply_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: ω p = 1
   证明: by
   rw [← pow_one p]; rw [cardDistinctFactors_apply_prime_pow hp one_ne_zero]
@@ -1563,7 +1563,7 @@ theorem cardDistinctFactors_prod
 
 中文:
 定理 cardDistinctFactors_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 自然数}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 自然数}
   证明: by
   induction s using cons_induction_on with
   | empty => simp
@@ -1604,7 +1604,7 @@ theorem sum_Ioc_zeta
 中文:
 定理 sum_Ioc_zeta
   条件: (N : 自然数)
-  结论: ∑ n in Ioc 0 N, zeta n = N
+  结论: ∑ n in 左开右闭区间 0 N, zeta n = N
   证明: by
   simp only [zeta_apply, sum_ite, sum_const_zero, sum_const, smul_eq_mul, mul_one, zero_add]
   rw [show {x in Ioc 0 N | ¬x = 0} = Ioc 0 N by ext; simp; lia]

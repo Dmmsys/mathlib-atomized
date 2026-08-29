@@ -119,7 +119,7 @@ theorem trop_injective
 
 中文:
 定理 trop_injective
-  结论: Function.Injective (trop : R -> Tropical R)
+  结论: 函数.单射 (trop : R -> Tropical R)
   证明: fun _ _ => id
 -/
 theorem trop_injective : Function.Injective (trop : R -> Tropical R) := fun _ _ => id
@@ -136,7 +136,7 @@ theorem untrop_injective
 
 中文:
 定理 untrop_injective
-  结论: Function.Injective (untrop : Tropical R -> R)
+  结论: 函数.单射 (untrop : Tropical R -> R)
   证明: fun _ _ => id
 
 @[simp]
@@ -247,7 +247,7 @@ theorem leftInverse_trop
 
 中文:
 定理 leftInverse_trop
-  结论: Function.LeftInverse (trop : R -> Tropical R) untrop
+  结论: 函数.左逆 (trop : R -> Tropical R) untrop
   证明: trop_untrop
 
 Depends on / 依赖: trop_untrop
@@ -265,7 +265,7 @@ theorem rightInverse_trop
 
 中文:
 定理 rightInverse_trop
-  结论: Function.RightInverse (trop : R -> Tropical R) untrop
+  结论: 函数.右逆 (trop : R -> Tropical R) untrop
   证明: untrop_trop
 
 Depends on / 依赖: untrop_trop
@@ -390,7 +390,7 @@ theorem injective_trop
 
 中文:
 定理 injective_trop
-  结论: Function.Injective (trop : R -> Tropical R)
+  结论: 函数.单射 (trop : R -> Tropical R)
   证明: tropEquiv.injective
 
 Depends on / 依赖: injective, tropEquiv, tropEquiv.injective
@@ -408,7 +408,7 @@ theorem injective_untrop
 
 中文:
 定理 injective_untrop
-  结论: Function.Injective (untrop : Tropical R -> R)
+  结论: 函数.单射 (untrop : Tropical R -> R)
   证明: tropEquiv.symm.injective
 
 Depends on / 依赖: injective, tropEquiv, tropEquiv.symm.injective
@@ -426,7 +426,7 @@ theorem surjective_trop
 
 中文:
 定理 surjective_trop
-  结论: Function.Surjective (trop : R -> Tropical R)
+  结论: 函数.满射 (trop : R -> Tropical R)
   证明: tropEquiv.surjective
 
 Depends on / 依赖: surjective, tropEquiv, tropEquiv.surjective
@@ -444,7 +444,7 @@ theorem surjective_untrop
 
 中文:
 定理 surjective_untrop
-  结论: Function.Surjective (untrop : Tropical R -> R)
+  结论: 函数.满射 (untrop : Tropical R -> R)
   证明: tropEquiv.symm.surjective
 
 Depends on / 依赖: surjective, tropEquiv, tropEquiv.symm.surjective
@@ -461,8 +461,8 @@ instance [Inhabited
   body: ⟨trop default⟩
 
 中文:
-实例 [Inhabited
-  签名: R] : Inhabited (Tropical R)
+实例 [可居
+  签名: R] : 可居 (Tropical R)
   定义体: ⟨trop default⟩
 -/
 instance [Inhabited R] : Inhabited (Tropical R) :=
@@ -481,7 +481,7 @@ definition tropRec
 
 中文:
 定义 tropRec
-  签名: {F : Tropical R -> Sort v} (h : 对任意 X, F (trop X))
+  签名: {F : Tropical R -> 类型层 v} (h : 对任意 X, F (trop X))
   定义体: fun X => h (untrop X)
 
 Depends on / 依赖: untrop
@@ -641,7 +641,7 @@ instance instPreorderTropical
 
 中文:
 实例 instPreorderTropical
-  签名: [Preorder R]
+  签名: [预序 R]
   定义体: { instLETropical, instLTTropical with
     le_refl := fun x => le_refl (untrop x)
     le_trans := fun _ _ _ h h' => le_trans (α := R) h h'
@@ -667,7 +667,7 @@ definition tropOrderIso
 
 中文:
 定义 tropOrderIso
-  签名: [Preorder R]
+  签名: [预序 R]
   定义体: { tropEquiv with map_rel_iff' := untrop_le_iff }
 
 @[simp]
@@ -691,7 +691,7 @@ theorem tropOrderIso_coe_fn
 
 中文:
 定理 tropOrderIso_coe_fn
-  条件: [Preorder R]
+  条件: [预序 R]
   结论: (tropOrderIso : R -> Tropical R) = trop
   证明: rfl
 
@@ -714,7 +714,7 @@ theorem tropOrderIso_symm_coe_fn
 
 中文:
 定理 tropOrderIso_symm_coe_fn
-  条件: [Preorder R]
+  条件: [预序 R]
   结论: (tropOrderIso.symm : Tropical R -> R) = untrop
   证明: rfl
 
@@ -734,8 +734,8 @@ theorem trop_monotone
 
 中文:
 定理 trop_monotone
-  条件: [Preorder R]
-  结论: Monotone (trop : R -> Tropical R)
+  条件: [预序 R]
+  结论: 递增 (trop : R -> Tropical R)
   证明: fun _ _ => id
 -/
 theorem trop_monotone [Preorder R] : Monotone (trop : R -> Tropical R) := fun _ _ => id
@@ -751,8 +751,8 @@ theorem untrop_monotone
 
 中文:
 定理 untrop_monotone
-  条件: [Preorder R]
-  结论: Monotone (untrop : Tropical R -> R)
+  条件: [预序 R]
+  结论: 递增 (untrop : Tropical R -> R)
   证明: fun _ _ => id
 -/
 theorem untrop_monotone [Preorder R] : Monotone (untrop : Tropical R -> R) := fun _ _ => id
@@ -767,7 +767,7 @@ instance instPartialOrderTropical
 
 中文:
 实例 instPartialOrderTropical
-  签名: [PartialOrder R]
+  签名: [偏序 R]
   定义体: { instPreorderTropical with le_antisymm := fun _ _ h h' => untrop_injective (le_antisymm h h') }
 
 Depends on / 依赖: instPreorderTropical, le_antisymm, untrop_injective
@@ -785,7 +785,7 @@ instance instZeroTropical
 
 中文:
 实例 instZeroTropical
-  签名: [Top R]
+  签名: [顶元素 R]
   定义体: ⟨trop ⊤⟩
 -/
 instance instZeroTropical [Top R] : Zero (Tropical R) :=
@@ -803,7 +803,7 @@ instance instTopTropical
 
 中文:
 实例 instTopTropical
-  签名: [Top R]
+  签名: [顶元素 R]
   定义体: ⟨0⟩
 
 @[simp]
@@ -827,7 +827,7 @@ theorem untrop_zero
 
 中文:
 定理 untrop_zero
-  条件: [Top R]
+  条件: [顶元素 R]
   结论: untrop (0 : Tropical R) = ⊤
   证明: rfl
 
@@ -852,7 +852,7 @@ theorem trop_top
 
 中文:
 定理 trop_top
-  条件: [Top R]
+  条件: [顶元素 R]
   结论: trop (⊤ : R) = 0
   证明: rfl
 
@@ -925,7 +925,7 @@ theorem le_zero
 
 中文:
 定理 le_zero
-  条件: [LE R] [OrderTop R] (x : Tropical R)
+  条件: [LE R] [有顶序 R] (x : Tropical R)
   结论: x <= 0
   证明: le_top (α := R)
 
@@ -944,7 +944,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: R] [OrderTop R] : OrderTop (Tropical R)
+  签名: R] [有顶序 R] : 有顶序 (Tropical R)
   定义体: { instTopTropical with le_top := fun _ => le_top (α := R) }
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_isPullback, instTopTropical, le_top, of_isPullback, pullback_map_diagonal_isPullback
@@ -964,7 +964,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Tropical R)
+  签名: 加法 (Tropical R)
   定义体: ⟨fun x y => trop (min (untrop x) (untrop y))⟩
 
 Depends on / 依赖: untrop
@@ -985,7 +985,7 @@ instance instAddCommSemigroupTropical
 
 中文:
 实例 instAddCommSemigroupTropical
-  签名: : AddCommSemigroup (Tropical R) where
+  签名: : 加法交换半群 (Tropical R) where
   定义体: untrop_injective (min_assoc _ _ _)
   add_comm _ _ := untrop_injective (min_comm _ _)
 
@@ -1012,7 +1012,7 @@ theorem untrop_add
 中文:
 定理 untrop_add
   条件: (x y : Tropical R)
-  结论: untrop (x + y) = min (untrop x) (untrop y)
+  结论: untrop (x + y) = 最小值 (untrop x) (untrop y)
   证明: rfl
 
 @[simp]
@@ -1035,7 +1035,7 @@ theorem trop_min
 中文:
 定理 trop_min
   条件: (x y : R)
-  结论: trop (min x y) = trop x + trop y
+  结论: trop (最小值 x y) = trop x + trop y
   证明: rfl
 
 @[simp]
@@ -1076,7 +1076,7 @@ theorem trop_add_def
 中文:
 定理 trop_add_def
   条件: (x y : Tropical R)
-  结论: x + y = trop (min (untrop x) (untrop y))
+  结论: x + y = trop (最小值 (untrop x) (untrop y))
   证明: rfl
 -/
 theorem trop_add_def (x y : Tropical R) : x + y = trop (min (untrop x) (untrop y)) :=
@@ -1098,7 +1098,7 @@ instance instLinearOrderTropical
 
 中文:
 实例 instLinearOrderTropical
-  签名: : LinearOrder (Tropical R)
+  签名: : 线性序 (Tropical R)
   定义体: { instPartialOrderTropical with
     le_total := fun a b => le_total (untrop a) (untrop b)
     toDecidableLE := Tropical.decidableLE
@@ -1160,7 +1160,7 @@ theorem untrop_max
 中文:
 定理 untrop_max
   条件: (x y : Tropical R)
-  结论: untrop (max x y) = max (untrop x) (untrop y)
+  结论: untrop (最大值 x y) = 最大值 (untrop x) (untrop y)
   证明: rfl
 
 @[simp]
@@ -1181,7 +1181,7 @@ theorem min_eq_add
 
 中文:
 定理 min_eq_add
-  结论: (min : Tropical R -> Tropical R -> Tropical R) = (· + ·)
+  结论: (最小值 : Tropical R -> Tropical R -> Tropical R) = (· + ·)
   证明: rfl
 
 @[simp]
@@ -1218,7 +1218,7 @@ theorem trop_max_def
 中文:
 定理 trop_max_def
   条件: (x y : Tropical R)
-  结论: max x y = trop (max (untrop x) (untrop y))
+  结论: 最大值 x y = trop (最大值 (untrop x) (untrop y))
   证明: rfl
 -/
 theorem trop_max_def (x y : Tropical R) : max x y = trop (max (untrop x) (untrop y)) :=
@@ -1439,7 +1439,7 @@ instance instAddCommMonoidTropical
 
 中文:
 实例 instAddCommMonoidTropical
-  签名: [OrderTop R]
+  签名: [有顶序 R]
   定义体: { instZeroTropical, instAddCommSemigroupTropical with
     zero_add := fun _ => untrop_injective (min_top_left _)
     add_zero := fun _ => untrop_injective (min_top_right _)
@@ -1468,8 +1468,8 @@ instance [Add
 @[simp]
 
 中文:
-实例 [Add
-  签名: R] : Mul (Tropical R)
+实例 [加法
+  签名: R] : 乘法 (Tropical R)
   定义体: ⟨fun x y => trop (untrop x + untrop y)⟩
 
 @[simp]
@@ -1493,7 +1493,7 @@ theorem trop_add
 
 中文:
 定理 trop_add
-  条件: [Add R] (x y : R)
+  条件: [加法 R] (x y : R)
   结论: trop (x + y) = trop x * trop y
   证明: rfl
 
@@ -1514,7 +1514,7 @@ theorem untrop_mul
 
 中文:
 定理 untrop_mul
-  条件: [Add R] (x y : Tropical R)
+  条件: [加法 R] (x y : Tropical R)
   结论: untrop (x * y) = untrop x + untrop y
   证明: rfl
 
@@ -1534,7 +1534,7 @@ theorem trop_mul_def
 
 中文:
 定理 trop_mul_def
-  条件: [Add R] (x y : Tropical R)
+  条件: [加法 R] (x y : Tropical R)
   结论: x * y = trop (untrop x + untrop y)
   证明: rfl
 
@@ -1555,7 +1555,7 @@ instance instOneTropical
 
 中文:
 实例 instOneTropical
-  签名: [Zero R]
+  签名: [零 R]
   定义体: ⟨trop 0⟩
 
 @[simp]
@@ -1577,7 +1577,7 @@ theorem trop_zero
 
 中文:
 定理 trop_zero
-  条件: [Zero R]
+  条件: [零 R]
   结论: trop (0 : R) = 1
   证明: rfl
 
@@ -1598,7 +1598,7 @@ theorem untrop_one
 
 中文:
 定理 untrop_one
-  条件: [Zero R]
+  条件: [零 R]
   结论: untrop (1 : Tropical R) = 0
   证明: rfl
 -/
@@ -1618,7 +1618,7 @@ instance instAddMonoidWithOneTropical
 
 中文:
 实例 instAddMonoidWithOneTropical
-  签名: [LinearOrder R] [OrderTop R] [Zero R]
+  签名: [线性序 R] [有顶序 R] [零 R]
   定义体: { instOneTropical, instAddCommMonoidTropical with
     natCast := fun n => if n = 0 then 0 else 1
     natCast_zero := rfl
@@ -1642,8 +1642,8 @@ instance [Zero
   body: ⟨⟨0, 1, trop_injective.ne WithTop.top_ne_coe⟩⟩
 
 中文:
-实例 [Zero
-  签名: R] : Nontrivial (Tropical (WithTop R))
+实例 [零
+  签名: R] : 非平凡 (Tropical (WithTop R))
   定义体: ⟨⟨0, 1, trop_injective.ne WithTop.top_ne_coe⟩⟩
 
 Depends on / 依赖: WithTop, WithTop.top_ne_coe, top_ne_coe, trop_injective, trop_injective.ne
@@ -1662,8 +1662,8 @@ instance [Neg
 @[simp]
 
 中文:
-实例 [Neg
-  签名: R] : Inv (Tropical R)
+实例 [取负
+  签名: R] : 取逆 (Tropical R)
   定义体: ⟨fun x => trop (-untrop x)⟩
 
 @[simp]
@@ -1685,7 +1685,7 @@ theorem untrop_inv
 
 中文:
 定理 untrop_inv
-  条件: [Neg R] (x : Tropical R)
+  条件: [取负 R] (x : Tropical R)
   结论: untrop x⁻¹ = -untrop x
   证明: rfl
 -/
@@ -1703,8 +1703,8 @@ instance [Sub
 @[simp]
 
 中文:
-实例 [Sub
-  签名: R] : Div (Tropical R)
+实例 [减法
+  签名: R] : 除法 (Tropical R)
   定义体: ⟨fun x y => trop (untrop x - untrop y)⟩
 
 @[simp]
@@ -1726,7 +1726,7 @@ theorem untrop_div
 
 中文:
 定理 untrop_div
-  条件: [Sub R] (x y : Tropical R)
+  条件: [减法 R] (x y : Tropical R)
   结论: untrop (x / y) = untrop x - untrop y
   证明: rfl
 -/
@@ -1743,7 +1743,7 @@ instance instSemigroupTropical
 
 中文:
 实例 instSemigroupTropical
-  签名: [AddSemigroup R]
+  签名: [加法半群 R]
   定义体: untrop_injective (add_assoc _ _ _)
 
 Depends on / 依赖: add_assoc, untrop_injective
@@ -1761,7 +1761,7 @@ instance instCommSemigroupTropical
 
 中文:
 实例 instCommSemigroupTropical
-  签名: [AddCommSemigroup R]
+  签名: [加法交换半群 R]
   定义体: { instSemigroupTropical with mul_comm := fun _ _ => untrop_injective (add_comm _ _) }
 
 Depends on / 依赖: add_comm, instSemigroupTropical, mul_comm, untrop_injective
@@ -1784,7 +1784,7 @@ theorem untrop_pow
 
 中文:
 定理 untrop_pow
-  条件: {α : 类型} [SMul α R] (x : Tropical R) (n : α)
+  条件: {α : 类型} [标量乘法 α R] (x : Tropical R) (n : α)
   证明: rfl
 
 @[simp]
@@ -1805,7 +1805,7 @@ theorem trop_smul
 
 中文:
 定理 trop_smul
-  条件: {α : 类型} [SMul α R] (x : R) (n : α)
+  条件: {α : 类型} [标量乘法 α R] (x : R) (n : α)
   结论: trop (n • x) = trop x ^ n
   证明: rfl
 -/
@@ -1823,7 +1823,7 @@ mul_one _ := untrop_injective add_zero _
 
 中文:
 实例 instMulOneClassTropical
-  签名: [AddZeroClass R]
+  签名: [加法零类 R]
   定义体: untrop_injective zero_add _
 mul_one _ := untrop_injective add_zero _
 
@@ -1848,7 +1848,7 @@ npow_succ := fun _ _ => untrop_injective succ_nsmul _ _ }
 
 中文:
 实例 instMonoidTropical
-  签名: [AddMonoid R]
+  签名: [加法幺半群 R]
   定义体: { instMulOneClassTropical, instSemigroupTropical with
     npow := fun n x => x ^ n
 npow_zero := fun _ => untrop_injective by simp
@@ -1876,7 +1876,7 @@ theorem trop_nsmul
 
 中文:
 定理 trop_nsmul
-  条件: [AddMonoid R] (x : R) (n : 自然数)
+  条件: [加法幺半群 R] (x : R) (n : 自然数)
   结论: trop (n • x) = trop x ^ n
   证明: rfl
 -/
@@ -1893,7 +1893,7 @@ instance instCommMonoidTropical
 
 中文:
 实例 instCommMonoidTropical
-  签名: [AddCommMonoid R]
+  签名: [加法交换幺半群 R]
   定义体: { instMonoidTropical, instCommSemigroupTropical with }
 
 Depends on / 依赖: instCommSemigroupTropical, instMonoidTropical
@@ -1916,7 +1916,7 @@ zpow_succ' := fun _ _ => untrop_injective SubNegMono
 
 中文:
 实例 instGroupTropical
-  签名: [AddGroup R]
+  签名: [加法群 R]
   定义体: { instMonoidTropical with
 div_eq_mul_inv := fun _ _ => untrop_injective by simp [sub_eq_add_neg]
 inv_mul_cancel := fun _ => untrop_injective neg_add_cancel _
@@ -1946,8 +1946,8 @@ instance [AddCommGroup
 @[simp]
 
 中文:
-实例 [AddCommGroup
-  签名: R] : CommGroup (Tropical R)
+实例 [加法交换群
+  签名: R] : 交换群 (Tropical R)
   定义体: { instGroupTropical with mul_comm := fun _ _ => untrop_injective (add_comm _ _) }
 
 @[simp]
@@ -1971,7 +1971,7 @@ theorem untrop_zpow
 
 中文:
 定理 untrop_zpow
-  条件: [AddGroup R] (x : Tropical R) (n : 整数)
+  条件: [加法群 R] (x : Tropical R) (n : 整数)
   结论: untrop (x ^ n) = n • untrop x
   证明: rfl
 
@@ -1992,7 +1992,7 @@ theorem trop_zsmul
 
 中文:
 定理 trop_zsmul
-  条件: [AddGroup R] (x : R) (n : 整数)
+  条件: [加法群 R] (x : R) (n : 整数)
   结论: trop (n • x) = trop x ^ n
   证明: rfl
 -/
@@ -2013,7 +2013,7 @@ instance mulLeftMono
 
 中文:
 实例 mulLeftMono
-  签名: [LE R] [Add R] [AddLeftMono R]
+  签名: [LE R] [加法 R] [AddLeftMono R]
   定义体: ⟨fun _ y z h => add_le_add_right (show untrop y <= untrop z from h) _⟩
 
 Depends on / 依赖: add_le_add_right, untrop
@@ -2032,7 +2032,7 @@ instance mulRightMono
 
 中文:
 实例 mulRightMono
-  签名: [LE R] [Add R] [AddRightMono R]
+  签名: [LE R] [加法 R] [AddRightMono R]
   定义体: ⟨fun _ y z h => add_le_add_left (show untrop y <= untrop z from h) _⟩
 
 Depends on / 依赖: add_le_add_left, untrop
@@ -2057,7 +2057,7 @@ instance addLeftMono
 
 中文:
 实例 addLeftMono
-  签名: [LinearOrder R]
+  签名: [线性序 R]
   定义体: ⟨fun x y z h => by
     rcases le_total x y with hx | hy
     · rw [add_eq_left hx, add_eq_left (hx.trans h)]
@@ -2087,7 +2087,7 @@ instance mulLeftStrictMono
 
 中文:
 实例 mulLeftStrictMono
-  签名: [LT R] [Add R] [AddLeftStrictMono R]
+  签名: [LT R] [加法 R] [AddLeftStrictMono R]
   定义体: ⟨fun _ _ _ h => add_lt_add_right (untrop_lt_iff.2 h) _⟩
 
 Depends on / 依赖: add_lt_add_right, untrop_lt_iff
@@ -2106,7 +2106,7 @@ instance mulRightStrictMono
 
 中文:
 实例 mulRightStrictMono
-  签名: [Preorder R] [Add R] [AddRightStrictMono R]
+  签名: [预序 R] [加法 R] [AddRightStrictMono R]
   定义体: ⟨fun _ y z h => add_lt_add_left (show untrop y < untrop z from h) _⟩
 
 Depends on / 依赖: add_lt_add_left, untrop
@@ -2128,7 +2128,7 @@ instance instDistribTropical
 
 中文:
 实例 instDistribTropical
-  签名: [LinearOrder R] [Add R] [AddLeftMono R] [AddRightMono R]
+  签名: [线性序 R] [加法 R] [AddLeftMono R] [AddRightMono R]
   定义体: untrop_injective (min_add_add_left _ _ _).symm
   right_distrib _ _ _ := untrop_injective (min_add_add_right _ _ _).symm
 
@@ -2155,7 +2155,7 @@ theorem add_pow
 
 中文:
 定理 add_pow
-  结论: [LinearOrder R] [AddMonoid R] [AddLeftMono R] [AddRightMono R]
+  结论: [线性序 R] [加法幺半群 R] [AddLeftMono R] [AddRightMono R]
   证明: by
   rcases le_total x y with h | h
   · rw [add_eq_left h, add_eq_left (pow_le_pow_left' h _)]
@@ -2193,7 +2193,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (Tropical R)
+  签名: 交换半环 (Tropical R)
   定义体: { instAddMonoidWithOneTropical,
     instDistribTropical,
     instAddCommMonoidTropical,
@@ -2228,7 +2228,7 @@ theorem succ_nsmul
 
 中文:
 定理 succ_nsmul
-  条件: {R} [LinearOrder R] [OrderTop R] (x : Tropical R) (n : 自然数)
+  条件: {R} [线性序 R] [有顶序 R] (x : Tropical R) (n : 自然数)
   结论: (n + 1) • x = x
   证明: by
   induction n with
@@ -2257,7 +2257,7 @@ theorem mul_eq_zero_iff
 
 中文:
 定理 mul_eq_zero_iff
-  结论: {R : 类型} [AddCommMonoid R]
+  结论: {R : 类型} [加法交换幺半群 R]
   证明: by
   simp [← untrop_inj_iff, WithTop.add_eq_top]
 

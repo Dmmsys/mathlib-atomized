@@ -43,7 +43,7 @@ lemma up_nat_odd_add
 
 中文:
 引理 up_nat_odd_add
-  条件: {i j : 自然数} (h : (ComplexShape.up 自然数).Rel i j)
+  条件: {i j : 自然数} (h : (余mplexShape.up 自然数).关系 i j)
   结论: Odd (i + j)
   证明: by
   subst h
@@ -66,7 +66,7 @@ lemma down_nat_odd_add
 
 中文:
 引理 down_nat_odd_add
-  条件: {i j : 自然数} (h : (ComplexShape.down 自然数).Rel i j)
+  条件: {i j : 自然数} (h : (余mplexShape.down 自然数).关系 i j)
   结论: Odd (i + j)
   证明: by
   subst h
@@ -112,7 +112,7 @@ definition alternatingConst
 
 中文:
 定义 alternatingConst
-  签名: {c : ComplexShape 自然数} [DecidableRel c.Rel]
+  签名: {c : 余mplexShape 自然数} [DecidableRel c.关系]
   定义体: A
   d i j :=
     if hij : c.Rel i j then
@@ -243,7 +243,7 @@ lemma alternatingConst_iCycles_even_comp
 
 中文:
 引理 alternatingConst_iCycles_even_comp
-  结论: [CategoryWithHomology C]
+  结论: [带同调范畴 C]
   证明: by
   rw [← cancel_epi (ShortComplex.cyclesMapIso
     (alternatingConstScIsoEven A hOdd hEven hc hpj hnj h)).inv]
@@ -281,7 +281,7 @@ lemma alternatingConst_iCycles_odd_comp
 
 中文:
 引理 alternatingConst_iCycles_odd_comp
-  结论: [CategoryWithHomology C]
+  结论: [带同调范畴 C]
   证明: by
   rw [← cancel_epi (ShortComplex.cyclesMapIso
     (alternatingConstScIsoOdd A hOdd hEven hc hpj hnj h)).inv]
@@ -311,7 +311,7 @@ definition alternatingConstHomologyIsoEven
 
 中文:
 定义 alternatingConstHomologyIsoEven
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: ShortComplex.homologyMapIso (alternatingConstScIsoEven A hOdd hEven hc hpj hnj h)
 
 Depends on / 依赖: ShortComplex, ShortComplex.homologyMapIso, alternatingConstScIsoEven, homologyMapIso
@@ -331,7 +331,7 @@ definition alternatingConstHomologyIsoOdd
 
 中文:
 定义 alternatingConstHomologyIsoOdd
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: ShortComplex.homologyMapIso (alternatingConstScIsoOdd A hOdd hEven hc hpj hnj h)
 
 Depends on / 依赖: ShortComplex, ShortComplex.homologyMapIso, alternatingConstScIsoOdd, homologyMapIso
@@ -367,7 +367,7 @@ definition alternatingConst
 
 中文:
 定义 alternatingConst
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: HomologicalComplex.alternatingConst X (Category.id_comp 0) (Category.comp_id 0)
     (fun _ _ => ComplexShape.down_nat_odd_add)
   map {X Y} f := {

@@ -55,7 +55,7 @@ definition omega
 
 中文:
 定义 omega
-  签名: : QuadraticAlgebra R a b
+  签名: : 二次代数 R a b
   定义体: ⟨0, 1⟩
 
 Depends on / 依赖: star_smul
@@ -79,7 +79,7 @@ theorem omega_re
 
 中文:
 定理 omega_re
-  结论: (ω : QuadraticAlgebra R a b).re = 0
+  结论: (ω : 二次代数 R a b).re = 0
   证明: rfl
 
 @[simp]
@@ -98,7 +98,7 @@ theorem omega_im
 
 中文:
 定理 omega_im
-  结论: (ω : QuadraticAlgebra R a b).im = 1
+  结论: (ω : 二次代数 R a b).im = 1
   证明: rfl
 -/
 theorem omega_im : (ω : QuadraticAlgebra R a b).im = 1 :=
@@ -119,7 +119,7 @@ theorem omega_mul_omega_eq_mk
 
 中文:
 定理 omega_mul_omega_eq_mk
-  结论: (ω : QuadraticAlgebra R a b) * ω = ⟨a, b⟩
+  结论: (ω : 二次代数 R a b) * ω = ⟨a, b⟩
   证明: by
   ext <;> simp
 -/
@@ -182,7 +182,7 @@ theorem omega_mul_mk
 中文:
 定理 omega_mul_mk
   条件: (x y : R)
-  结论: (ω : QuadraticAlgebra R a b) * ⟨x, y⟩ = ⟨a * y, x + b * y⟩
+  结论: (ω : 二次代数 R a b) * ⟨x, y⟩ = ⟨a * y, x + b * y⟩
   证明: by
   ext <;> simp
 
@@ -246,7 +246,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: {f g : QuadraticAlgebra R a b ->ₐ[R] A}
+  结论: {f g : 二次代数 R a b ->ₐ[R] A}
   证明: by
   ext ⟨x, y⟩
   simp [mk_eq_add_smul_omega, h]
@@ -285,7 +285,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : { u : A // u * u = a • 1 + b • u } ≃ (QuadraticAlgebra R a b ->ₐ[R] A) where
+  签名: : { u : A // u * u = a • 1 + b • u } ≃ (二次代数 R a b ->ₐ[R] A) where
   定义体: { toFun z := z.re • 1 + z.im • u
       map_zero' := by simp
       map_add' z w := by
@@ -363,7 +363,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (QuadraticAlgebra R a b)
+  签名: 对合 (二次代数 R a b)
   定义体: ⟨z.re + b * z.im, -z.im⟩
 
 @[simp]
@@ -408,7 +408,7 @@ theorem re_star
 
 中文:
 定理 re_star
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -428,7 +428,7 @@ theorem im_star
 
 中文:
 定理 im_star
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: rfl
 -/
 theorem im_star (z : QuadraticAlgebra R a b) :
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (QuadraticAlgebra R a b)
+  签名: 对合环 (二次代数 R a b)
   定义体: by
     refine QuadraticAlgebra.ext (by simp) (neg_neg _)
   star_mul a b := by ext <;>
@@ -497,7 +497,7 @@ theorem sub_star
 
 中文:
 定理 sub_star
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: by
   ext <;> simp <;> ring
 -/
@@ -523,7 +523,7 @@ definition norm
 
 中文:
 定义 norm
-  签名: : QuadraticAlgebra R a b ->* R where
+  签名: : 二次代数 R a b ->* R where
   定义体: z.re * z.re + b * z.re * z.im - a * z.im * z.im
   map_mul' z w := by simp only [re_mul, im_mul]; ring
   map_one' := by simp
@@ -547,7 +547,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -569,7 +569,7 @@ theorem norm_zero
 
 中文:
 定理 norm_zero
-  结论: norm (0 : QuadraticAlgebra R a b) = 0
+  结论: norm (0 : 二次代数 R a b) = 0
   证明: by simp [norm]
 
 @[simp]
@@ -589,7 +589,7 @@ theorem norm_one
 
 中文:
 定理 norm_one
-  结论: norm (1 : QuadraticAlgebra R a b) = 1
+  结论: norm (1 : 二次代数 R a b) = 1
   证明: by simp [norm]
 
 @[simp]
@@ -612,7 +612,7 @@ theorem norm_algebraMap
 中文:
 定理 norm_algebraMap
   条件: (r : R)
-  结论: norm (algebraMap R (QuadraticAlgebra R a b) r) = r ^ 2
+  结论: norm (algebraMap R (二次代数 R a b) r) = r ^ 2
   证明: by
   simp [norm_def, pow_two]
 
@@ -639,7 +639,7 @@ theorem norm_natCast
 中文:
 定理 norm_natCast
   条件: (n : 自然数)
-  结论: norm (n : QuadraticAlgebra R a b) = n ^ 2
+  结论: norm (n : 二次代数 R a b) = n ^ 2
   证明: by
   simp [norm_def, pow_two]
 
@@ -664,7 +664,7 @@ theorem norm_intCast
 中文:
 定理 norm_intCast
   条件: (n : 整数)
-  结论: norm (n : QuadraticAlgebra R a b) = n ^ 2
+  结论: norm (n : 二次代数 R a b) = n ^ 2
   证明: by
   simp [norm_def, pow_two]
 
@@ -686,7 +686,7 @@ theorem algebraMap_norm_eq_mul_star
 
 中文:
 定理 algebraMap_norm_eq_mul_star
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: by
   ext <;> simp [norm, star, mul_comm] <;> ring
 
@@ -713,7 +713,7 @@ theorem norm_neg
 
 中文:
 定理 norm_neg
-  条件: (x : QuadraticAlgebra R a b)
+  条件: (x : 二次代数 R a b)
   结论: (-x).norm = x.norm
   证明: by
   simp [norm]
@@ -738,7 +738,7 @@ theorem norm_star
 
 中文:
 定理 norm_star
-  条件: (x : QuadraticAlgebra R a b)
+  条件: (x : 二次代数 R a b)
   结论: (star x).norm = x.norm
   证明: by
   simp only [norm, MonoidHom.coe_mk, OneHom.coe_mk, re_star, im_star, mul_neg, neg_mul, neg_neg,
@@ -769,7 +769,7 @@ theorem isUnit_iff_norm_isUnit
 
 中文:
 定理 isUnit_iff_norm_isUnit
-  条件: {x : QuadraticAlgebra R a b}
+  条件: {x : 二次代数 R a b}
   证明: by
   constructor
   · exact IsUnit.map norm
@@ -805,7 +805,7 @@ alias ⟨mem_unitary, norm_eq_one⟩ := norm_eq_one_iff_mem_unitary
 
 中文:
 定理 norm_eq_one_iff_mem_unitary
-  条件: {z : QuadraticAlgebra R a b}
+  条件: {z : 二次代数 R a b}
   证明: by
   rw [Unitary.mem_iff_self_mul_star]; rw [← algebraMap_norm_eq_mul_star]
   simp [← algebraMap_inj (R := R) (a := a) (b := b)]
@@ -902,7 +902,7 @@ theorem star_mem_nonZeroDivisors
 
 中文:
 定理 star_mem_nonZeroDivisors
-  结论: {z : QuadraticAlgebra R a b}
+  结论: {z : 二次代数 R a b}
   证明: by
   rw [mem_nonZeroDivisors_iff_right] at hz ⊢
   intro w hw
@@ -936,7 +936,7 @@ theorem star_mem_nonZeroDivisors_iff
 
 中文:
 定理 star_mem_nonZeroDivisors_iff
-  条件: {z : QuadraticAlgebra R a b}
+  条件: {z : 二次代数 R a b}
   证明: by
   refine ⟨fun h => ?_, star_mem_nonZeroDivisors⟩
   rw [← star_involutive z]
@@ -966,7 +966,7 @@ theorem norm_mem_nonZeroDivisors_iff
 
 中文:
 定理 norm_mem_nonZeroDivisors_iff
-  条件: {z : QuadraticAlgebra R a b}
+  条件: {z : 二次代数 R a b}
   证明: by
   constructor
   · simp only [mem_nonZeroDivisors_iff_right]
@@ -1012,7 +1012,7 @@ definition trace
 
 中文:
 定义 trace
-  签名: : QuadraticAlgebra R a b ->ₗ[R] R where
+  签名: : 二次代数 R a b ->ₗ[R] R where
   定义体: 2 * z.re + b * z.im
   map_add' := by grind
   map_smul' := by grind [smul_eq_mul]
@@ -1087,7 +1087,7 @@ theorem trace_natCast
 中文:
 定理 trace_natCast
   条件: (n : 自然数)
-  结论: trace (n : QuadraticAlgebra R a b) = 2 * n
+  结论: trace (n : 二次代数 R a b) = 2 * n
   证明: by
   simp [trace_def, re_natCast, im_natCast]
 
@@ -1114,7 +1114,7 @@ theorem trace_intCast
 中文:
 定理 trace_intCast
   条件: (n : 整数)
-  结论: trace (n : QuadraticAlgebra R a b) = 2 * n
+  结论: trace (n : 二次代数 R a b) = 2 * n
   证明: by
   simp [trace_def, re_intCast, im_intCast]
 
@@ -1139,7 +1139,7 @@ theorem trace_omega
 
 中文:
 定理 trace_omega
-  结论: trace (ω : QuadraticAlgebra R a b) = b
+  结论: trace (ω : 二次代数 R a b) = b
   证明: by
   simp [trace_def]
 
@@ -1164,7 +1164,7 @@ theorem trace_one
 
 中文:
 定理 trace_one
-  结论: trace (1 : QuadraticAlgebra R a b) = 2
+  结论: trace (1 : 二次代数 R a b) = 2
   证明: by
   simp [trace_def]
 
@@ -1300,7 +1300,7 @@ lemma norm_eq_zero_iff_eq_zero
 
 中文:
 引理 norm_eq_zero_iff_eq_zero
-  条件: {z : QuadraticAlgebra K a b}
+  条件: {z : 二次代数 K a b}
   证明: by
   constructor
   · intro hz
@@ -1342,7 +1342,7 @@ instance :
 
 中文:
 实例 :
-  签名: NNRatCast (QuadraticAlgebra K a b)
+  签名: 非负有理数嵌入 (二次代数 K a b)
   定义体: ⟨q, 0⟩
 -/
 @[simps] instance : NNRatCast (QuadraticAlgebra K a b) where nnratCast q := ⟨q, 0⟩
@@ -1356,7 +1356,7 @@ instance :
 
 中文:
 实例 :
-  签名: RatCast (QuadraticAlgebra K a b)
+  签名: 有理数嵌入 (二次代数 K a b)
   定义体: ⟨q, 0⟩
 -/
 @[simps] instance : RatCast (QuadraticAlgebra K a b) where ratCast q := ⟨q, 0⟩
@@ -1371,7 +1371,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (QuadraticAlgebra K a b)
+  签名: 取逆 (二次代数 K a b)
   定义体: (norm z)⁻¹ • star z
 -/
 @[simps -isSimp, simps!] instance : Inv (QuadraticAlgebra K a b) where inv z := (norm z)⁻¹ • star z
@@ -1385,7 +1385,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (QuadraticAlgebra K a b)
+  签名: 除法 (二次代数 K a b)
   定义体: w * z⁻¹
 -/
 @[simps -isSimp, simps!] instance : Div (QuadraticAlgebra K a b) where div w z := w * z⁻¹
@@ -1405,7 +1405,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (QuadraticAlgebra K a b)
+  签名: 域 (二次代数 K a b)
   定义体: by ext <;> simp
   mul_inv_cancel z hz := by
     rw [ne_eq]; rw [← norm_eq_zero_iff_eq_zero] at hz

@@ -43,7 +43,7 @@ definition Iio
   body: { x | x < b }
 
 中文:
-定义 Iio
+定义 左无界右开区间
   签名: (b : α)
   定义体: { x | x < b }
 -/
@@ -59,7 +59,7 @@ theorem mem_Iio
 
 中文:
 定理 mem_Iio
-  结论: x in Iio b ↔ x < b
+  结论: x in 左无界右开区间 b ↔ x < b
   证明: .rfl
 -/
 @[to_dual (attr := simp, grind =, push)] theorem mem_Iio : x in Iio b ↔ x < b := .rfl
@@ -75,7 +75,7 @@ theorem Iio_def
 中文:
 定理 Iio_def
   条件: (a : α)
-  结论: { x | x < a } = Iio a
+  结论: { x | x < a } = 左无界右开区间 a
   证明: rfl
 -/
 @[to_dual] theorem Iio_def (a : α) : { x | x < a } = Iio a := rfl
@@ -91,7 +91,7 @@ definition Iic
   body: { x | x <= b }
 
 中文:
-定义 Iic
+定义 左无界右闭区间
   签名: (b : α)
   定义体: { x | x <= b }
 -/
@@ -107,7 +107,7 @@ theorem mem_Iic
 
 中文:
 定理 mem_Iic
-  结论: x in Iic b ↔ x <= b
+  结论: x in 左无界右闭区间 b ↔ x <= b
   证明: .rfl
 -/
 @[to_dual (attr := simp, grind =, push)] theorem mem_Iic : x in Iic b ↔ x <= b := .rfl
@@ -123,7 +123,7 @@ theorem Iic_def
 中文:
 定理 Iic_def
   条件: (b : α)
-  结论: { x | x <= b } = Iic b
+  结论: { x | x <= b } = 左无界右闭区间 b
   证明: rfl
 -/
 @[to_dual] theorem Iic_def (b : α) : { x | x <= b } = Iic b := rfl
@@ -141,7 +141,7 @@ definition Ioo
 to_dual_insert_cast Ioo := by simp only [and_comm]
 
 中文:
-定义 Ioo
+定义 开区间
   签名: (a b : α)
   定义体: { x | a < x ∧ x < b }
 
@@ -161,7 +161,7 @@ theorem mem_Ioo
 
 中文:
 定理 mem_Ioo
-  结论: x in Ioo a b ↔ a < x ∧ x < b
+  结论: x in 开区间 a b ↔ a < x ∧ x < b
   证明: .rfl
 -/
 @[simp, grind =, push, to_dual none] theorem mem_Ioo : x in Ioo a b ↔ a < x ∧ x < b := .rfl
@@ -177,7 +177,7 @@ theorem Ioo_def
 中文:
 定理 Ioo_def
   条件: (a b : α)
-  结论: { x | a < x ∧ x < b } = Ioo a b
+  结论: { x | a < x ∧ x < b } = 开区间 a b
   证明: rfl
 -/
 @[to_dual none] theorem Ioo_def (a b : α) : { x | a < x ∧ x < b } = Ioo a b := rfl
@@ -191,7 +191,7 @@ definition Ico
   body: { x | a <= x ∧ x < b }
 
 中文:
-定义 Ico
+定义 左闭右开区间
   签名: (a b : α)
   定义体: { x | a <= x ∧ x < b }
 -/
@@ -211,7 +211,7 @@ to_dual_insert_cast Ico := by simp only [and_comm]
 to_dual_insert_cast Ioc := by simp only [and_comm]
 
 中文:
-定义 Ioc
+定义 左开右闭区间
   签名: (a b : α)
   定义体: { x | a < x ∧ x <= b }
 
@@ -233,7 +233,7 @@ theorem mem_Ico
 
 中文:
 定理 mem_Ico
-  结论: x in Ico a b ↔ a <= x ∧ x < b
+  结论: x in 左闭右开区间 a b ↔ a <= x ∧ x < b
   证明: .rfl
 -/
 @[simp, grind =, push, to_dual none] theorem mem_Ico : x in Ico a b ↔ a <= x ∧ x < b := .rfl
@@ -249,7 +249,7 @@ theorem Ico_def
 中文:
 定理 Ico_def
   条件: (a b : α)
-  结论: { x | a <= x ∧ x < b } = Ico a b
+  结论: { x | a <= x ∧ x < b } = 左闭右开区间 a b
   证明: rfl
 -/
 @[to_dual none] theorem Ico_def (a b : α) : { x | a <= x ∧ x < b } = Ico a b := rfl
@@ -264,7 +264,7 @@ theorem mem_Ioc
 
 中文:
 定理 mem_Ioc
-  结论: x in Ioc a b ↔ a < x ∧ x <= b
+  结论: x in 左开右闭区间 a b ↔ a < x ∧ x <= b
   证明: .rfl
 -/
 @[simp, grind =, push, to_dual none] theorem mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b := .rfl
@@ -280,7 +280,7 @@ theorem Ioc_def
 中文:
 定理 Ioc_def
   条件: (a b : α)
-  结论: { x | a < x ∧ x <= b } = Ioc a b
+  结论: { x | a < x ∧ x <= b } = 左开右闭区间 a b
   证明: rfl
 -/
 @[to_dual none] theorem Ioc_def (a b : α) : { x | a < x ∧ x <= b } = Ioc a b := rfl
@@ -298,7 +298,7 @@ definition Icc
 to_dual_insert_cast Icc := by simp only [and_comm]
 
 中文:
-定义 Icc
+定义 闭区间
   签名: (a b : α)
   定义体: { x | a <= x ∧ x <= b }
 
@@ -318,7 +318,7 @@ theorem mem_Icc
 
 中文:
 定理 mem_Icc
-  结论: x in Icc a b ↔ a <= x ∧ x <= b
+  结论: x in 闭区间 a b ↔ a <= x ∧ x <= b
   证明: .rfl
 -/
 @[simp, grind =, push, to_dual none] theorem mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b := .rfl
@@ -334,7 +334,7 @@ theorem Icc_def
 中文:
 定理 Icc_def
   条件: (a b : α)
-  结论: { x | a <= x ∧ x <= b } = Icc a b
+  结论: { x | a <= x ∧ x <= b } = 闭区间 a b
   证明: rfl
 -/
 @[to_dual none] theorem Icc_def (a b : α) : { x | a <= x ∧ x <= b } = Icc a b := rfl
@@ -349,10 +349,10 @@ class OrdConnected
     - out'(⦃x) : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : Icc x y subseteq s
 
 中文:
-类 OrdConnected
-  参数: (s : Set α)
+类 序连通
+  参数: (s : 集合 α)
   公理与运算 (1 个):
-    - out'(⦃x) : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : Icc x y subseteq s
+    - out'(⦃x) : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : 闭区间 x y subseteq s
 
 Depends on / 依赖: OrdConnected, OrdConnected.mk
 -/

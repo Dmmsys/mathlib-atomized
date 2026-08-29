@@ -82,7 +82,7 @@ definition newCone
 
 中文:
 定义 newCone
-  签名: : Cone (D ⋙ forget T) where
+  签名: : 锥 (D ⋙ forget T) where
   定义体: T.obj c.pt
   π := (Functor.constComp _ _ (T : C ⥤ C)).inv ≫ whiskerRight c.π (T : C ⥤ C) ≫ γ D
 
@@ -113,7 +113,7 @@ definition conePoint
 
 中文:
 定义 conePoint
-  签名: : Algebra T where
+  签名: : 代数 T where
   定义体: c.pt
   a := t.lift (newCone D c)
   unit :=
@@ -157,7 +157,7 @@ definition liftedCone
 
 中文:
 定义 liftedCone
-  签名: : Cone D where
+  签名: : 锥 D where
   定义体: conePoint D c t
   π :=
     { app := fun j => { f := c.π.app j }
@@ -195,7 +195,7 @@ definition liftedConeIsLimit
 
 中文:
 定义 liftedConeIsLimit
-  签名: : IsLimit (liftedCone D c t) where
+  签名: : 是极限 (liftedCone D c t) where
   定义体: { f := t.lift ((forget T).mapCone s)
       h :=
         t.hom_ext fun j => by
@@ -265,7 +265,7 @@ theorem hasLimit_of_comp_forget_hasLimit
 
 中文:
 定理 hasLimit_of_comp_forget_hasLimit
-  条件: (D : J ⥤ Algebra T) [HasLimit (D ⋙ forget T)]
+  条件: (D : J ⥤ 代数 T) [有极限 (D ⋙ forget T)]
   证明: hasLimit_of_created D (forget T)
 
 Depends on / 依赖: forget, hasLimit_of_created
@@ -326,7 +326,7 @@ definition newCocone
 
 中文:
 定义 newCocone
-  签名: : Cocone ((D ⋙ forget T) ⋙ (T : C ⥤ C)) where
+  签名: : 余锥 ((D ⋙ forget T) ⋙ (T : C ⥤ C)) where
   定义体: c.pt
   ι := γ ≫ c.ι
 
@@ -404,7 +404,7 @@ definition coconePoint
 
 中文:
 定义 coconePoint
-  签名: : Algebra T where
+  签名: : 代数 T where
   定义体: c.pt
   a := lambda c t
   unit := by
@@ -455,7 +455,7 @@ definition liftedCocone
 
 中文:
 定义 liftedCocone
-  签名: : Cocone D where
+  签名: : 余锥 D where
   定义体: coconePoint c t
   ι :=
     { app := fun j =>
@@ -500,7 +500,7 @@ definition liftedCoconeIsColimit
 
 中文:
 定义 liftedCoconeIsColimit
-  签名: : IsColimit (liftedCocone c t) where
+  签名: : 是余极限 (liftedCocone c t) where
   定义体: { f := t.desc ((forget T).mapCocone s)
       h :=
         (isColimitOfPreserves (T : C ⥤ C) t).hom_ext fun j => by
@@ -550,7 +550,7 @@ instance forgetCreatesColimit
 
 中文:
 实例 forgetCreatesColimit
-  签名: (D : J ⥤ Algebra T)
+  签名: (D : J ⥤ 代数 T)
   定义体: createsColimitOfReflectsIso fun c t =>
     { liftedCocone :=
         { pt := coconePoint c t
@@ -590,7 +590,7 @@ instance forgetCreatesColimitsOfShape
 
 中文:
 实例 forgetCreatesColimitsOfShape
-  签名: [PreservesColimitsOfShape J (T : C ⥤ C)]
+  签名: [保持形状余极限 J (T : C ⥤ C)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -608,7 +608,7 @@ instance forgetCreatesColimits
 
 中文:
 实例 forgetCreatesColimits
-  签名: [PreservesColimitsOfSize.{v, u} (T : C ⥤ C)]
+  签名: [保持余limitsOfSize.{v, u} (T : C ⥤ C)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -626,7 +626,7 @@ theorem forget_creates_colimits_of_monad_preserves
 
 中文:
 定理 forget_creates_colimits_of_monad_preserves
-  结论: [PreservesColimitsOfShape J (T : C ⥤ C)]
+  结论: [保持形状余极限 J (T : C ⥤ C)]
   证明: hasColimit_of_created D (forget T)
 
 Depends on / 依赖: forget, hasColimit_of_created
@@ -822,7 +822,7 @@ theorem hasLimit_of_reflective
 
 中文:
 定理 hasLimit_of_reflective
-  条件: (F : J ⥤ D) (R : D ⥤ C) [HasLimit (F ⋙ R)] [Reflective R]
+  条件: (F : J ⥤ D) (R : D ⥤ C) [有极限 (F ⋙ R)] [反射 R]
   证明: haveI := monadicCreatesLimits.{v, u} R
   hasLimit_of_created F R
 
@@ -843,7 +843,7 @@ theorem hasLimitsOfShape_of_reflective
 
 中文:
 定理 hasLimitsOfShape_of_reflective
-  条件: [HasLimitsOfShape J C] (R : D ⥤ C) [Reflective R]
+  条件: [有形状极限 J C] (R : D ⥤ C) [反射 R]
   证明: ⟨fun F => hasLimit_of_reflective F R⟩
 
 Depends on / 依赖: hasLimit_of_reflective
@@ -862,7 +862,7 @@ theorem hasLimits_of_reflective
 
 中文:
 定理 hasLimits_of_reflective
-  条件: (R : D ⥤ C) [HasLimitsOfSize.{v, u} C] [Reflective R]
+  条件: (R : D ⥤ C) [有LimitsOfSize.{v, u} C] [反射 R]
   证明: ⟨fun _ => hasLimitsOfShape_of_reflective R⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_reflective
@@ -886,7 +886,7 @@ theorem hasColimitsOfShape_of_reflective
 
 中文:
 定理 hasColimitsOfShape_of_reflective
-  条件: (R : D ⥤ C) [Reflective R] [HasColimitsOfShape J C]
+  条件: (R : D ⥤ C) [反射 R] [有形状余极限 J C]
   证明: fun F => by
       let c := (monadicLeftAdjoint R).mapCocone (colimit.cocone (F ⋙ R))
       let : PreservesColimitsOfShape J _ :=
@@ -917,7 +917,7 @@ theorem hasColimits_of_reflective
 
 中文:
 定理 hasColimits_of_reflective
-  条件: (R : D ⥤ C) [Reflective R] [HasColimitsOfSize.{v, u} C]
+  条件: (R : D ⥤ C) [反射 R] [有余limitsOfSize.{v, u} C]
   证明: ⟨fun _ => hasColimitsOfShape_of_reflective R⟩
 
 Depends on / 依赖: hasColimitsOfShape_of_reflective
@@ -944,7 +944,7 @@ lemma leftAdjoint_preservesTerminal_of_reflective
 
 中文:
 引理 leftAdjoint_preservesTerminal_of_reflective
-  条件: (R : D ⥤ C) [Reflective R]
+  条件: (R : D ⥤ C) [反射 R]
   证明: by
     let F := Functor.empty.{v} D
     let : PreservesLimit (F ⋙ R) (monadicLeftAdjoint R) := by
@@ -1018,7 +1018,7 @@ definition newCocone
 
 中文:
 定义 newCocone
-  签名: : Cocone (D ⋙ forget T) where
+  签名: : 余锥 (D ⋙ forget T) where
   定义体: T.obj c.pt
   ι := γ D ≫ whiskerRight c.ι (T : C ⥤ C) ≫ (Functor.constComp J _ (T : C ⥤ C)).hom
 
@@ -1047,7 +1047,7 @@ definition coconePoint
 
 中文:
 定义 coconePoint
-  签名: : Coalgebra T where
+  签名: : 余algebra T where
   定义体: c.pt
   a := t.desc (newCocone D c)
   counit := t.hom_ext fun j => by
@@ -1088,7 +1088,7 @@ definition liftedCocone
 
 中文:
 定义 liftedCocone
-  签名: : Cocone D where
+  签名: : 余锥 D where
   定义体: coconePoint D c t
   ι :=
     { app := fun j => { f := c.ι.app j }
@@ -1124,7 +1124,7 @@ definition liftedCoconeIsColimit
 
 中文:
 定义 liftedCoconeIsColimit
-  签名: : IsColimit (liftedCocone D c t) where
+  签名: : 是余极限 (liftedCocone D c t) where
   定义体: { f := t.desc ((forget T).mapCocone s)
       h :=
         t.hom_ext fun j => by
@@ -1192,7 +1192,7 @@ theorem hasColimit_of_comp_forget_hasColimit
 
 中文:
 定理 hasColimit_of_comp_forget_hasColimit
-  条件: (D : J ⥤ Coalgebra T) [HasColimit (D ⋙ forget T)]
+  条件: (D : J ⥤ 余algebra T) [有余极限 (D ⋙ forget T)]
   证明: hasColimit_of_created D (forget T)
 
 Depends on / 依赖: forget, hasColimit_of_created
@@ -1244,7 +1244,7 @@ definition newCone
 
 中文:
 定义 newCone
-  签名: : Cone ((D ⋙ forget T) ⋙ (T : C ⥤ C)) where
+  签名: : 锥 ((D ⋙ forget T) ⋙ (T : C ⥤ C)) where
   定义体: c.pt
   π := c.π ≫ γ
 
@@ -1321,7 +1321,7 @@ definition conePoint
 
 中文:
 定义 conePoint
-  签名: : Coalgebra T where
+  签名: : 余algebra T where
   定义体: c.pt
   a := lambda c t
   counit := t.hom_ext fun j => by
@@ -1367,7 +1367,7 @@ definition liftedCone
 
 中文:
 定义 liftedCone
-  签名: : Cone D where
+  签名: : 锥 D where
   定义体: conePoint c t
   π :=
     { app := fun j =>
@@ -1410,7 +1410,7 @@ definition liftedConeIsLimit
 
 中文:
 定义 liftedConeIsLimit
-  签名: : IsLimit (liftedCone c t) where
+  签名: : 是极限 (liftedCone c t) where
   定义体: { f := t.lift ((forget T).mapCone s)
       h :=
         (isLimitOfPreserves (T : C ⥤ C) t).hom_ext fun j => by
@@ -1458,7 +1458,7 @@ instance forgetCreatesLimit
 
 中文:
 实例 forgetCreatesLimit
-  签名: (D : J ⥤ Coalgebra T)
+  签名: (D : J ⥤ 余algebra T)
   定义体: createsLimitOfReflectsIso fun c t =>
     { liftedCone :=
         { pt := conePoint c t
@@ -1498,7 +1498,7 @@ instance forgetCreatesLimitsOfShape
 
 中文:
 实例 forgetCreatesLimitsOfShape
-  签名: [PreservesLimitsOfShape J (T : C ⥤ C)]
+  签名: [保持形状极限 J (T : C ⥤ C)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1516,7 +1516,7 @@ instance forgetCreatesLimits
 
 中文:
 实例 forgetCreatesLimits
-  签名: [PreservesLimitsOfSize.{v, u} (T : C ⥤ C)]
+  签名: [保持LimitsOfSize.{v, u} (T : C ⥤ C)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1534,7 +1534,7 @@ theorem forget_creates_limits_of_comonad_preserves
 
 中文:
 定理 forget_creates_limits_of_comonad_preserves
-  结论: [PreservesLimitsOfShape J (T : C ⥤ C)]
+  结论: [保持形状极限 J (T : C ⥤ C)]
   证明: hasLimit_of_created D (forget T)
 
 Depends on / 依赖: forget, hasLimit_of_created
@@ -1556,7 +1556,7 @@ instance comp_comparison_forget_hasColimit
 
 中文:
 实例 comp_comparison_forget_hasColimit
-  签名: (F : J ⥤ D) (R : D ⥤ C) [ComonadicLeftAdjoint R]
+  签名: (F : J ⥤ D) (R : D ⥤ C) [余monadicLeftAdjoint R]
   定义体: by
   assumption
 -/
@@ -1575,7 +1575,7 @@ instance comp_comparison_hasColimit
 
 中文:
 实例 comp_comparison_hasColimit
-  签名: (F : J ⥤ D) (R : D ⥤ C) [ComonadicLeftAdjoint R]
+  签名: (F : J ⥤ D) (R : D ⥤ C) [余monadicLeftAdjoint R]
   定义体: Comonad.hasColimit_of_comp_forget_hasColimit (F ⋙ Comonad.comparison (comonadicAdjunction R))
 
 Depends on / 依赖: Comonad, Comonad.comparison, Comonad.hasColimit_of_comp_forget_hasColimit, comonadicAdjunction, comparison, hasColimit_of_comp_forget_hasColimit
@@ -1596,7 +1596,7 @@ definition comonadicCreatesColimits
 
 中文:
 定义 comonadicCreatesColimits
-  签名: (R : D ⥤ C) [ComonadicLeftAdjoint R]
+  签名: (R : D ⥤ C) [余monadicLeftAdjoint R]
   定义体: createsColimitsOfNatIso (Comonad.comparisonForget (comonadicAdjunction R))
 
 Depends on / 依赖: Comonad, Comonad.comparisonForget, comonadicAdjunction, comparisonForget, createsColimitsOfNatIso
@@ -1704,7 +1704,7 @@ definition comonadicCreatesLimitsOfPreservesLimits
 
 中文:
 定义 comonadicCreatesLimitsOfPreservesLimits
-  签名: (R : D ⥤ C) [ComonadicLeftAdjoint R]
+  签名: (R : D ⥤ C) [余monadicLeftAdjoint R]
   定义体: comonadicCreatesLimitsOfShapeOfPreservesLimitsOfShape _
 
 Depends on / 依赖: comonadicCreatesLimitsOfShapeOfPreservesLimitsOfShape
@@ -1727,7 +1727,7 @@ theorem hasColimit_of_coreflective
 
 中文:
 定理 hasColimit_of_coreflective
-  条件: (F : J ⥤ D) (R : D ⥤ C) [HasColimit (F ⋙ R)] [Coreflective R]
+  条件: (F : J ⥤ D) (R : D ⥤ C) [有余极限 (F ⋙ R)] [余反射 R]
   证明: haveI := comonadicCreatesColimits.{v, u} R
   hasColimit_of_created F R
 
@@ -1748,7 +1748,7 @@ theorem hasColimitsOfShape_of_coreflective
 
 中文:
 定理 hasColimitsOfShape_of_coreflective
-  条件: [HasColimitsOfShape J C] (R : D ⥤ C) [Coreflective R]
+  条件: [有形状余极限 J C] (R : D ⥤ C) [余反射 R]
   证明: ⟨fun F => hasColimit_of_coreflective F R⟩
 
 Depends on / 依赖: hasColimit_of_coreflective
@@ -1767,7 +1767,7 @@ theorem hasColimits_of_coreflective
 
 中文:
 定理 hasColimits_of_coreflective
-  条件: (R : D ⥤ C) [HasColimitsOfSize.{v, u} C] [Coreflective R]
+  条件: (R : D ⥤ C) [有余limitsOfSize.{v, u} C] [余反射 R]
   证明: ⟨fun _ => hasColimitsOfShape_of_coreflective R⟩
 
 Depends on / 依赖: hasColimitsOfShape_of_coreflective
@@ -1791,7 +1791,7 @@ theorem hasLimitsOfShape_of_coreflective
 
 中文:
 定理 hasLimitsOfShape_of_coreflective
-  条件: (R : D ⥤ C) [Coreflective R] [HasLimitsOfShape J C]
+  条件: (R : D ⥤ C) [余反射 R] [有形状极限 J C]
   证明: fun F => by
       let c := (comonadicRightAdjoint R).mapCone (limit.cone (F ⋙ R))
       let : PreservesLimitsOfShape J _ :=
@@ -1822,7 +1822,7 @@ theorem hasLimits_of_coreflective
 
 中文:
 定理 hasLimits_of_coreflective
-  条件: (R : D ⥤ C) [Coreflective R] [HasLimitsOfSize.{v, u} C]
+  条件: (R : D ⥤ C) [余反射 R] [有LimitsOfSize.{v, u} C]
   证明: ⟨fun _ => hasLimitsOfShape_of_coreflective R⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_coreflective
@@ -1849,7 +1849,7 @@ lemma rightAdjoint_preservesInitial_of_coreflective
 
 中文:
 引理 rightAdjoint_preservesInitial_of_coreflective
-  条件: (R : D ⥤ C) [Coreflective R]
+  条件: (R : D ⥤ C) [余反射 R]
   证明: by
     let F := Functor.empty.{v} D
     let : PreservesColimit (F ⋙ R) (comonadicRightAdjoint R) := by

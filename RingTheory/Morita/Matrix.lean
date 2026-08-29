@@ -50,8 +50,8 @@ map_id _ := ModuleCat.hom_ext LinearMap.mapMatrixModule_id
   map_comp f g := ModuleCat.hom_ext (LinearMap.mapMatrixModule_comp f.hom g.hom)
 
 中文:
-定义 ModuleCat.toMatrixModCat
-  签名: : ModuleCat R ⥤ ModuleCat (Matrix ι ι R) where
+定义 模范畴.toMatrixModCat
+  签名: : 模范畴 R ⥤ 模范畴 (矩阵 ι ι R) where
   定义体: ModuleCat.of (Matrix ι ι R) (ι -> M)
 map f := ModuleCat.ofHom f.hom.mapMatrixModule ι
 map_id _ := ModuleCat.hom_ext LinearMap.mapMatrixModule_id
@@ -151,7 +151,7 @@ definition fromMatrixLinear
 
 中文:
 定义 fromMatrixLinear
-  签名: {N : 类型} [AddCommGroup N] [Module (Matrix ι ι R) N] (i : ι)
+  签名: {N : 类型} [加法交换群 N] [模 (矩阵 ι ι R) N] (i : ι)
   定义体: .restrict fun x hx => by f.restrictScalars R
 .1 hx obtain ⟨y, rfl⟩ := mem_toModuleCatObj i
 .symm⟩ exact ⟨f y, map_smul _ _ _
@@ -183,7 +183,7 @@ lemma MatrixModCat.isScalarTower_toModuleCat
 
 中文:
 引理 MatrixModCat.isScalarTower_toModuleCat
-  条件: (M : ModuleCat (Matrix ι ι R))
+  条件: (M : 模范畴 (矩阵 ι ι R))
   证明: Module.compHom M (Matrix.scalar (α := R) ι)
     IsScalarTower R (Matrix ι ι R) M :=
   letI := Module.compHom M (Matrix.scalar (α := R) ι)
@@ -279,7 +279,7 @@ definition fromModuleCatToModuleCatLinearEquiv
 
 中文:
 定义 fromModuleCatToModuleCatLinearEquiv
-  签名: (M : 类型) [AddCommGroup M] [Module R M] (i : ι)
+  签名: (M : 类型) [加法交换群 M] [模 R M] (i : ι)
   定义体: ∑ i : ι, x.1 i
   map_add' := by simp [Finset.sum_add_distrib]
   map_smul' r := fun ⟨x, hx⟩ => by simp [Finset.smul_sum]
@@ -350,7 +350,7 @@ map_smul' x m
 
 中文:
 定义 toModuleCatFromModuleCatLinearEquiv
-  签名: (M : ModuleCat (Matrix ι ι R)) (j : ι)
+  签名: (M : 模范畴 (矩阵 ι ι R)) (j : ι)
   定义体: Module.compHom M (Matrix.scalar (α := R) ι)
     haveI := MatrixModCat.isScalarTower_toModuleCat
     M ≃ₗ[Matrix ι ι R] (ι -> MatrixModCat.toModuleCatObj R M j) where
@@ -440,7 +440,7 @@ definition ModuleCat.matrixEquivalence
       i).symm.
 
 中文:
-定义 ModuleCat.matrixEquivalence
+定义 模范畴.matrixEquivalence
   签名: (i : ι)
   定义体: ModuleCat.toMatrixModCat R ι
   inverse := MatrixModCat.toModuleCat R i
@@ -487,7 +487,7 @@ definition moritaEquivalenceMatrix
 
 中文:
 定义 moritaEquivalenceMatrix
-  签名: (R₀ : 类型) [CommRing R₀] [Algebra R₀ R] (i : ι)
+  签名: (R₀ : 类型) [交换环 R₀] [代数 R₀ R] (i : ι)
   定义体: ModuleCat.matrixEquivalence R i
   linear.map_smul {X Y} f r := by
     ext (v : ι -> X)
@@ -520,8 +520,8 @@ theorem IsMoritaEquivalent.matrix
   proof: ⟨Nonempty.map (moritaEquivalenceMatrix R R₀) inferInstance⟩
 
 中文:
-定理 IsMoritaEquivalent.matrix
-  条件: (R₀ : 类型) [CommRing R₀] [Algebra R₀ R] [Nonempty ι]
+定理 是MoritaEquivalent.matrix
+  条件: (R₀ : 类型) [交换环 R₀] [代数 R₀ R] [非空 ι]
   证明: ⟨Nonempty.map (moritaEquivalenceMatrix R R₀) inferInstance⟩
 
 Depends on / 依赖: MulAction, Nonempty, Nonempty.map, moritaEquivalenceMatrix

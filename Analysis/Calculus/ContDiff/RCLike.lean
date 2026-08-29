@@ -42,7 +42,7 @@ theorem HasFTaylorSeriesUpToOn.hasStrictFDerivAt
       (hf.cont 1 <| ENat.one_le_iff_ne_zero_withTop.mpr hn).continuousAt hs
 
 中文:
-定理 HasFTaylorSeriesUpToOn.hasStrictFDerivAt
+定理 有FTaylorSeriesUpToOn.hasStrictFDerivAt
   结论: {n : WithTop 自然数∞}
   证明: hasStrictFDerivAt_of_hasFDerivAt_of_continuousAt (hf.eventually_hasFDerivAt hn hs)
 (continuousMultilinearCurryFin1 𝕂 E' F').continuousAt.comp
@@ -155,8 +155,8 @@ theorem ContDiff.hasStrictFDerivAt
   proof: hf.contDiffAt.hasStrictFDerivAt hn
 
 中文:
-定理 ContDiff.hasStrictFDerivAt
-  条件: {f : E' -> F'} {x : E'} (hf : ContDiff 𝕂 n f) (hn : n != 0)
+定理 连续可微.hasStrictFDerivAt
+  条件: {f : E' -> F'} {x : E'} (hf : 连续可微 𝕂 n f) (hn : n != 0)
   证明: hf.contDiffAt.hasStrictFDerivAt hn
 
 Depends on / 依赖: contDiffAt, hasStrictFDerivAt, hf.contDiffAt.hasStrictFDerivAt
@@ -174,8 +174,8 @@ theorem ContDiff.hasStrictDerivAt
   proof: hf.contDiffAt.hasStrictDerivAt hn
 
 中文:
-定理 ContDiff.hasStrictDerivAt
-  条件: {f : 𝕂 -> F'} {x : 𝕂} (hf : ContDiff 𝕂 n f) (hn : n != 0)
+定理 连续可微.hasStrictDerivAt
+  条件: {f : 𝕂 -> F'} {x : 𝕂} (hf : 连续可微 𝕂 n f) (hn : n != 0)
   证明: hf.contDiffAt.hasStrictDerivAt hn
 
 Depends on / 依赖: contDiffAt, hasStrictDerivAt, hf.contDiffAt.hasStrictDerivAt
@@ -201,7 +201,7 @@ theorem HasFTaylorSeriesUpToOn.exists_lipschitzOnWith_of_nnnorm_lt
     (continuousMultili
 
 中文:
-定理 HasFTaylorSeriesUpToOn.exists_lipschitzOnWith_of_nnnorm_lt
+定理 有FTaylorSeriesUpToOn.存在_lipschitzOnWith_of_nnnorm_lt
   证明: by
   set f' := fun y => continuousMultilinearCurryFin1 Real E F (p y 1)
   have hder : forall y in s, HasFDerivWithinAt f (f' y) s y := fun y hy =>
@@ -233,7 +233,7 @@ theorem HasFTaylorSeriesUpToOn.exists_lipschitzOnWith
   proof: (exists_gt _).imp hf.exists_lipschitzOnWith_of_nnnorm_lt hs
 
 中文:
-定理 HasFTaylorSeriesUpToOn.exists_lipschitzOnWith
+定理 有FTaylorSeriesUpToOn.存在_lipschitzOnWith
   证明: (exists_gt _).imp hf.exists_lipschitzOnWith_of_nnnorm_lt hs
 
 Depends on / 依赖: exists_gt, exists_lipschitzOnWith_of_nnnorm_lt, hf.exists_lipschitzOnWith_of_nnnorm_lt
@@ -256,7 +256,7 @@ theorem ContDiffWithinAt.exists_lipschitzOnWith
   rw [← insert_eq_of_mem (Metric.mem_ball_self ε0)]; rw [← insert_inter_distrib] at hp
 
 中文:
-定理 ContDiffWithinAt.exists_lipschitzOnWith
+定理 ContDiffWithinAt.存在_lipschitzOnWith
   证明: by
   rcases hf 1 le_rfl with ⟨t, hst, p, hp⟩
   rcases Metric.mem_nhdsWithin_iff.mp hst with ⟨ε, ε0, hε⟩
@@ -287,7 +287,7 @@ theorem ContDiffAt.exists_lipschitzOnWith_of_nnnorm_lt
   proof: (hf.hasStrictFDerivAt one_ne_zero).exists_lipschitzOnWith_of_nnnorm_lt K hK
 
 中文:
-定理 ContDiffAt.exists_lipschitzOnWith_of_nnnorm_lt
+定理 ContDiffAt.存在_lipschitzOnWith_of_nnnorm_lt
   结论: {f : E' -> F'} {x : E'}
   证明: (hf.hasStrictFDerivAt one_ne_zero).exists_lipschitzOnWith_of_nnnorm_lt K hK
 
@@ -307,7 +307,7 @@ theorem ContDiffAt.exists_lipschitzOnWith
   proof: (hf.hasStrictFDerivAt one_ne_zero).exists_lipschitzOnWith
 
 中文:
-定理 ContDiffAt.exists_lipschitzOnWith
+定理 ContDiffAt.存在_lipschitzOnWith
   条件: {f : E' -> F'} {x : E'} (hf : ContDiffAt 𝕂 1 f x)
   证明: (hf.hasStrictFDerivAt one_ne_zero).exists_lipschitzOnWith
 
@@ -330,7 +330,7 @@ lemma ContDiffOn.locallyLipschitzOn
 
 中文:
 引理 ContDiffOn.locallyLipschitzOn
-  结论: {f : E -> F} {s : Set E} (hs : Convex 实数 s)
+  结论: {f : E -> F} {s : 集合 E} (hs : 凸 实数 s)
   证明: by
   intro x hx
   obtain ⟨K, t, ht, hf⟩ := ContDiffWithinAt.exists_lipschitzOnWith (hf x hx) hs
@@ -357,8 +357,8 @@ lemma ContDiff.locallyLipschitz
   use K, t
 
 中文:
-引理 ContDiff.locallyLipschitz
-  条件: {f : E' -> F'} (hf : ContDiff 𝕂 1 f)
+引理 连续可微.locallyLipschitz
+  条件: {f : E' -> F'} (hf : 连续可微 𝕂 1 f)
   结论: LocallyLipschitz f
   证明: by
   intro x
@@ -383,8 +383,8 @@ theorem ContDiffOn.exists_lipschitzOnWith
   exact (hf.of_le <| ENat.one_le_iff_ne_zero_withTop.2 hn).locallyLipschitzOn hs
 
 中文:
-定理 ContDiffOn.exists_lipschitzOnWith
-  结论: {s : Set E} {f : E -> F} {n} (hf : ContDiffOn 实数 n f s)
+定理 ContDiffOn.存在_lipschitzOnWith
+  结论: {s : 集合 E} {f : E -> F} {n} (hf : ContDiffOn 实数 n f s)
   证明: by
   apply LocallyLipschitzOn.exists_lipschitzOnWith_of_compact hs'
   exact (hf.of_le <| ENat.one_le_iff_ne_zero_withTop.2 hn).locallyLipschitzOn hs
@@ -410,7 +410,7 @@ theorem ContDiff.lipschitzWith_of_hasCompactSupport
   simp [← NNReal.coe_le_coe, hC x]
 
 中文:
-定理 ContDiff.lipschitzWith_of_hasCompactSupport
+定理 连续可微.lipschitzWith_of_hasCompactSupport
   结论: {f : E' -> F'}
   证明: by
   obtain ⟨C, hC⟩ := (hf.fderiv 𝕂).exists_bound_of_continuous (h'f.continuous_fderiv hn)

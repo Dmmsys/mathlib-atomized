@@ -31,7 +31,7 @@ theorem card_eq_card_quotient_mul_card
 
 中文:
 定理 card_eq_card_quotient_mul_card
-  条件: (S : Submodule R M)
+  条件: (S : 子模 R M)
   证明: by
   rw [mul_comm]; rw [← Nat.card_prod]
   exact Nat.card_congr AddSubgroup.addGroupEquivQuotientProdAddSubgroup

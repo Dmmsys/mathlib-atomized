@@ -36,10 +36,10 @@ class IsLocalIso
     - exists_isOpenImmersion((x : X)) : exists (U : X.Opens), x in U ∧ IsOpenImmersion (U.ι ≫ f)
 
 中文:
-类 IsLocalIso
+类 是LocalIso
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - exists_isOpenImmersion((x : X)) : 存在 (U : X.Opens), x in U ∧ IsOpenImmersion (U.ι ≫ f)
+    - exists_isOpenImmersion((x : X)) : 存在 (U : X.Opens), x in U ∧ 是开浸入 (U.ι ≫ f)
 -/
 class IsLocalIso (f : X ⟶ Y) : Prop where
   exists_isOpenImmersion (x : X) : exists (U : X.Opens), x in U ∧ IsOpenImmersion (U.ι ≫ f)
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtSource @IsLocalIso
+  签名: IsZariskiLocalAtSource @是LocalIso
   定义体: by
   rw [eq_sourceLocalClosure_isOpenImmersion]
   infer_instance
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative @IsLocalIso
+  签名: 是Multiplicative @是LocalIso
   定义体: by
   rw [eq_sourceLocalClosure_isOpenImmersion]
   infer_instance
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @IsLocalIso
+  签名: 是StableUnderBaseChange @是LocalIso
   定义体: by
   rw [eq_sourceLocalClosure_isOpenImmersion]
   infer_instance
@@ -153,7 +153,7 @@ lemma le_of_isZariskiLocalAtSource
 
 中文:
 引理 le_of_isZariskiLocalAtSource
-  结论: (P : Morphism命题erty Scheme.{u}) [P.ContainsIdentities]
+  结论: (P : MorphismProperty 概形.{u}) [P.余ntainsIdentities]
   证明: by
   intro X Y f hf
   obtain ⟨𝒰, h⟩ := eq_sourceLocalClosure_isOpenImmersion ▸ hf

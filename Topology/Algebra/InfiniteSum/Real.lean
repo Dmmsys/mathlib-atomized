@@ -252,7 +252,7 @@ lemma summable_partition
 
 中文:
 引理 summable_partition
-  结论: {α β : 类型} {f : β -> 实数} (hf : 0 <= f) {s : α -> Set β}
+  结论: {α β : 类型} {f : β -> 实数} (hf : 0 <= f) {s : α -> 集合 β}
   证明: by
   simpa only [← (Set.sigmaEquiv s hs).summable_iff] using! summable_sigma_of_nonneg (fun _ => hf _)
 
@@ -340,7 +340,7 @@ theorem Real.tsum_le_of_sum_le
   proof: (summable_of_sum_le hf h).tsum_le_of_sum_le h
 
 中文:
-定理 Real.tsum_le_of_sum_le
+定理 实数.tsum_le_of_sum_le
   结论: {ι : 类型} {f : ι -> 实数} {c : 实数} (hf : 0 <= f)
   证明: (summable_of_sum_le hf h).tsum_le_of_sum_le h
 
@@ -359,7 +359,7 @@ theorem Real.tsum_le_of_sum_range_le
   proof: (summable_of_sum_range_le hf h).tsum_le_of_sum_range_le h
 
 中文:
-定理 Real.tsum_le_of_sum_range_le
+定理 实数.tsum_le_of_sum_range_le
   结论: {f : 自然数 -> 实数} {c : 实数} (hf : 对任意 n, 0 <= f n)
   证明: (summable_of_sum_range_le hf h).tsum_le_of_sum_range_le h
 

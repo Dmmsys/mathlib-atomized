@@ -42,8 +42,8 @@ MulSemiringAction.toRingEquiv_apply_apply
 @[deprecated (since := "2026
 
 中文:
-定义 MulSemiringAction.toRingEquiv
-  签名: [MulSemiringAction G R]
+定义 MulSemiring作用.toRingEquiv
+  签名: [MulSemiring作用 G R]
   定义体: { DistribMulAction.toAddEquiv R x, MulSemiringAction.toRingHom G R x with }
   map_one' := by ext; simp
   map_mul' x y := by ext; simp [mul_smul]
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulSemiringAction (R ≃+* R) R
+  签名: MulSemiring作用 (R ≃+* R) R
   定义体: (· ·)
   mul_smul _ _ _ := rfl
   one_smul _ := rfl

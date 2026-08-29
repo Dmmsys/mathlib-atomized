@@ -91,8 +91,8 @@ structure Equivalence
   (no additional axioms)
 
 中文:
-结构 Equivalence
-  参数: (C : 类型u₁) (D : 类型u₂) [Category.{v₁} C] [Category.{v₂} D]
+结构 等价
+  参数: (C : 类型u₁) (D : 类型u₂) [范畴.{v₁} C] [范畴.{v₂} D]
   (无附加公理)
 
 Depends on / 依赖: cat_disch
@@ -331,7 +331,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (C ≌ D)
+  签名: 范畴 (C ≌ D)
   定义体: e.functor ⟶ f.functor
   id e := 𝟙 e.functor
   comp {a b c} f g := (f ≫ g : a.functor ⟶ _)
@@ -374,7 +374,7 @@ definition asNatTrans
 @[ext, to_dual self]
 
 中文:
-定义 asNatTrans
+定义 as自然数Trans
   签名: {e f : C ≌ D} (η : e ⟶ f)
   定义体: η
 
@@ -416,7 +416,7 @@ lemma mkHom_asNatTrans
 @[simp, to_dual self]
 
 中文:
-引理 mkHom_asNatTrans
+引理 mkHom_as自然数Trans
   条件: {e f : C ≌ D} (η : e.functor ⟶ f.functor)
   证明: rfl
 
@@ -438,7 +438,7 @@ lemma asNatTrans_mkHom
 @[simp]
 
 中文:
-引理 asNatTrans_mkHom
+引理 as自然数Trans_mkHom
   条件: {e f : C ≌ D} (η : e ⟶ f)
   证明: rfl
 
@@ -461,7 +461,7 @@ lemma id_asNatTrans
 @[simp, to_dual self, reassoc]
 
 中文:
-引理 id_asNatTrans
+引理 id_as自然数Trans
   条件: {e : C ≌ D}
   结论: as自然数Trans (𝟙 e) = 𝟙 _
   证明: rfl
@@ -482,7 +482,7 @@ lemma comp_asNatTrans
 @[simp]
 
 中文:
-引理 comp_asNatTrans
+引理 comp_as自然数Trans
   条件: {e f g : C ≌ D} (α : e ⟶ f) (β : f ⟶ g)
   证明: rfl
 
@@ -1024,7 +1024,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (C ≌ C)
+  签名: 可居 (C ≌ C)
   定义体: ⟨refl⟩
 -/
 instance : Inhabited (C ≌ C) :=
@@ -1573,7 +1573,7 @@ definition powNat
   signature: (e : C ≌ C)
 
 中文:
-定义 powNat
+定义 pow自然数
   签名: (e : C ≌ C)
 -/
 def powNat (e : C ≌ C) : Nat -> (C ≌ C)
@@ -1608,7 +1608,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (C ≌ C) 整数
+  签名: 幂 (C ≌ C) 整数
   定义体: ⟨pow⟩
 
 @[simp]
@@ -1631,7 +1631,7 @@ theorem pow_zero
 中文:
 定理 pow_zero
   条件: (e : C ≌ C)
-  结论: e ^ (0 : 整数) = Equivalence.refl
+  结论: e ^ (0 : 整数) = 等价.refl
   证明: rfl
 
 @[simp]
@@ -1876,7 +1876,7 @@ theorem changeFunctor_refl
 中文:
 定理 changeFunctor_refl
   条件: (e : C ≌ D)
-  结论: e.changeFunctor (Iso.refl _) = e
+  结论: e.changeFunctor (同构.refl _) = e
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -1954,12 +1954,12 @@ class Functor.IsEquivalence
     - essSurj : F.EssSurj  [default: by infer_instance]
 
 中文:
-类 Functor.IsEquivalence
+类 函子.是等价
   参数: (F : C ⥤ D)
   公理与运算 (3 个):
-    - faithful : F.Faithful  [默认: by infer_instance]
-    - full : F.Full  [默认: by infer_instance]
-    - essSurj : F.EssSurj  [默认: by infer_instance]
+    - faithful : F.忠实  [默认: by infer_instance]
+    - full : F.满  [默认: by infer_instance]
+    - essSurj : F.本质满射  [默认: by infer_instance]
 
 Depends on / 依赖: EssSurj, F.EssSurj, F.Full, essSurj, infer_instance
 -/
@@ -1976,7 +1976,7 @@ instance Equivalence.isEquivalence_functor
   signature: (F : C ≌ D)
 
 中文:
-实例 Equivalence.isEquivalence_functor
+实例 等价.isEquivalence_functor
   签名: (F : C ≌ D)
 -/
 instance Equivalence.isEquivalence_functor (F : C ≌ D) : IsEquivalence F.functor where
@@ -1990,7 +1990,7 @@ instance Equivalence.isEquivalence_inverse
   body: F.symm.isEquivalence_functor
 
 中文:
-实例 Equivalence.isEquivalence_inverse
+实例 等价.isEquivalence_inverse
   签名: (F : C ≌ D)
   定义体: F.symm.isEquivalence_functor
 
@@ -2040,7 +2040,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (F : C ⥤ D) [F.IsEquivalence]
+  签名: (F : C ⥤ D) [F.是等价]
   定义体: F.objPreimage X
   map {X Y} f := F.preimage ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso Y).inv)
   map_id X := by apply F.map_injective; simp
@@ -2072,7 +2072,7 @@ definition asEquivalence
 
 中文:
 定义 asEquivalence
-  签名: (F : C ⥤ D) [F.IsEquivalence]
+  签名: (F : C ⥤ D) [F.是等价]
   定义体: F
   inverse := F.inv
   unitIso := NatIso.ofComponents
@@ -2098,7 +2098,7 @@ instance isEquivalence_refl
 
 中文:
 实例 isEquivalence_refl
-  签名: : IsEquivalence (𝟭 C)
+  签名: : 是等价 (𝟭 C)
   定义体: Equivalence.refl.isEquivalence_functor
 
 Depends on / 依赖: Equivalence, Equivalence.refl.isEquivalence_functor, isEquivalence_functor
@@ -2116,7 +2116,7 @@ instance isEquivalence_inv
 
 中文:
 实例 isEquivalence_inv
-  签名: (F : C ⥤ D) [IsEquivalence F]
+  签名: (F : C ⥤ D) [是等价 F]
   定义体: F.asEquivalence.symm.isEquivalence_functor
 
 Depends on / 依赖: F.asEquivalence.symm.isEquivalence_functor, asEquivalence, isEquivalence_functor
@@ -2135,7 +2135,7 @@ instance isEquivalence_trans
 
 中文:
 实例 isEquivalence_trans
-  签名: (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEquivalence G]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [是等价 F] [是等价 G]
 -/
 instance isEquivalence_trans (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEquivalence G] :
     IsEquivalence (F ⋙ G) where
@@ -2163,7 +2163,7 @@ theorem fun_inv_map
 
 中文:
 定理 fun_inv_map
-  条件: (F : C ⥤ D) [IsEquivalence F] (X Y : D) (f : X ⟶ Y)
+  条件: (F : C ⥤ D) [是等价 F] (X Y : D) (f : X ⟶ Y)
   证明: (NatIso.naturality_2 (α := F.asEquivalence.counitIso) (f := f)).symm
 
 @[simp]
@@ -2185,7 +2185,7 @@ theorem inv_fun_map
 
 中文:
 定理 inv_fun_map
-  条件: (F : C ⥤ D) [IsEquivalence F] (X Y : C) (f : X ⟶ Y)
+  条件: (F : C ⥤ D) [是等价 F] (X Y : C) (f : X ⟶ Y)
   证明: (NatIso.naturality_1 (α := F.asEquivalence.unitIso) (f := f)).symm
 
 Depends on / 依赖: F.asEquivalence.unitIso, NatIso, NatIso.naturality_1, asEquivalence, naturality_1, unitIso
@@ -2205,8 +2205,8 @@ lemma isEquivalence_of_iso
 
 中文:
 引理 isEquivalence_of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G) [F.IsEquivalence]
-  结论: G.IsEquivalence
+  条件: {F G : C ⥤ D} (e : F ≅ G) [F.是等价]
+  结论: G.是等价
   证明: ((asEquivalence F).changeFunctor e).isEquivalence_functor
 
 Depends on / 依赖: asEquivalence, changeFunctor, isEquivalence_functor
@@ -2245,7 +2245,7 @@ lemma isEquivalence_of_comp_right
 
 中文:
 引理 isEquivalence_of_comp_right
-  结论: {E : 类型} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   rw [isEquivalence_iff_of_iso (F.rightUnitor.symm ≪≫ isoWhiskerLeft F (G.asEquivalence.unitIso))]
   exact ((F ⋙ G).asEquivalence.trans G.asEquivalence.symm).isEquivalence_functor
@@ -2270,7 +2270,7 @@ lemma isEquivalence_of_comp_left
 
 中文:
 引理 isEquivalence_of_comp_left
-  结论: {E : 类型} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   rw [isEquivalence_iff_of_iso (G.leftUnitor.symm ≪≫
     isoWhiskerRight F.asEquivalence.counitIso.symm G)]
@@ -2329,7 +2329,7 @@ instance fullyFaithfulToEssImage
 
 中文:
 实例 fullyFaithfulToEssImage
-  签名: (F : C ⥤ D) [F.Full] [F.Faithful]
+  签名: (F : C ⥤ D) [F.满] [F.忠实]
 -/
 noncomputable instance fullyFaithfulToEssImage (F : C ⥤ D) [F.Full] [F.Faithful] :
     IsEquivalence F.toEssImage where
@@ -2352,7 +2352,7 @@ definition ObjectProperty.fullSubcategoryCongr
 
 中文:
 定义 ObjectProperty.fullSubcategoryCongr
-  签名: {P P' : Object命题erty C} (h : P = P')
+  签名: {P P' : ObjectProperty C} (h : P = P')
   定义体: ObjectProperty.ιOfLE h.le
   inverse := ObjectProperty.ιOfLE h.symm.le
   unitIso := Iso.refl _

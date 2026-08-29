@@ -37,9 +37,9 @@ inductive innerHornInclusions
 
 中文:
 归纳类型 innerHornInclusions
-  参数: : Morphism命题erty SSet.{u} where
+  参数: : MorphismProperty SSet.{u} where
   构造子 (1 个):
-    - intro: {n : 自然数} (i : Fin (n + 3)) (h0 : 0 < i) (hn : i < Fin.last (n + 2)) : innerHornInclusions Λ[n + 2, i].ι
+    - intro: {n : 自然数} (i : 有限集 (n + 3)) (h0 : 0 < i) (hn : i < 有限集.last (n + 2)) : innerHornInclusions Λ[n + 2, i].ι
 -/
 inductive innerHornInclusions : MorphismProperty SSet.{u} where
   | intro {n : Nat} (i : Fin (n + 3)) (h0 : 0 < i) (hn : i < Fin.last (n + 2)) :
@@ -59,7 +59,7 @@ lemma horn_ι_mem_innerHornInclusions
 
 中文:
 引理 horn_ι_mem_innerHornInclusions
-  结论: {n : 自然数} {i : Fin (n + 1)}
+  结论: {n : 自然数} {i : 有限集 (n + 1)}
   证明: by
   obtain _ | _ | k := n
   · grind
@@ -164,7 +164,7 @@ deriving IsMultiplicative, RespectsIso, IsStableUnderBaseChange,
 
 中文:
 定义 innerFibrations
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: innerHornInclusions.rlp
 deriving IsMultiplicative, RespectsIso, IsStableUnderBaseChange,
   IsStableUnderRetracts
@@ -187,7 +187,7 @@ class InnerFibration
     - mem : innerFibrations q
 
 中文:
-类 InnerFibration
+类 内纤维化
   参数: {X Y : SSet} (q : X ⟶ Y)
   公理与运算 (1 个):
     - mem : innerFibrations q
@@ -206,7 +206,7 @@ lemma mem_innerFibrations
 
 中文:
 引理 mem_innerFibrations
-  条件: {X Y : SSet} (q : X ⟶ Y) [InnerFibration q]
+  条件: {X Y : SSet} (q : X ⟶ Y) [内纤维化 q]
   结论: innerFibrations q
   证明: InnerFibration.mem
 
@@ -323,7 +323,7 @@ lemma quasicategory_of_from_innerFibrations
 
 中文:
 引理 quasicategory_of_from_innerFibrations
-  结论: (S : SSet) {X : SSet} (t : Limits.IsTerminal X)
+  结论: (S : SSet) {X : SSet} (t : Limits.是终止 X)
   证明: quasicategory_of_hasLiftingProperty S t (fun h0 hn => h _ (horn_ι_mem_innerHornInclusions h0 hn))
 
 @[deprecated quasicategory_iff_of_isTerminal (since := "2026-06-08")]
@@ -350,8 +350,8 @@ alias quasicategory_iff_from_innerFibration := quasicategory_iff_innerFibration
 alias quasicategory_of_innerFibration_quasicategory := quasicategory_of_innerFibration
 
 中文:
-引理 Quasicategory.from_innerFibrations
-  结论: (S : SSet) [Quasicategory S]
+引理 拟范畴.from_innerFibrations
+  结论: (S : SSet) [拟范畴 S]
   证明: fun _ _ _ ⟨_, h0, hn⟩ => hasLiftingProperty S t h0 hn
 
 @[deprecated (since := "2026-06-08")]

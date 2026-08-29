@@ -43,7 +43,7 @@ exact fun x => ⟨⟨p, hp⟩, (of R M a).symm.injective by simp [h]⟩
 
 中文:
 定理 isTorsion_of_aeval_eq_zero
-  结论: [CommSemiring R] [NoZeroDivisors R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [无零因子 R] [半环 A] [代数 R A]
   证明: by
   have hp : p in nonZeroDivisors R[X] := mem_nonZeroDivisors_iff_right.mpr
     fun q hq => Or.resolve_right (mul_eq_zero.mp hq) h'
@@ -71,7 +71,7 @@ theorem isTorsion_of_finiteDimensional
 
 中文:
 定理 isTorsion_of_finiteDimensional
-  结论: [Field K] [Ring A] [Algebra K A]
+  结论: [域 K] [环 A] [代数 K A]
   证明: isTorsion_of_aeval_eq_zero (minpoly.aeval K a) (minpoly.ne_zero_of_finite K a)
 
 Depends on / 依赖: isTorsion_of_aeval_eq_zero, minpoly, minpoly.aeval, minpoly.ne_zero_of_finite, ne_zero_of_finite

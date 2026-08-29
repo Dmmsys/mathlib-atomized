@@ -56,7 +56,7 @@ definition isTerminalLast
 
 中文:
 定义 isTerminalLast
-  签名: : IsTerminal (Fin.last n)
+  签名: : 是终止 (有限集.last n)
   定义体: isTerminalTop
 
 Depends on / 依赖: isTerminalTop

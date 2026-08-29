@@ -61,7 +61,7 @@ class HasLeftKanExtension
     - hasInitial : HasInitial LeftExtension f g
 
 中文:
-类 HasLeftKanExtension
+类 有LeftKanExtension
   参数: (f : a ⟶ b) (g : a ⟶ c)
   公理与运算 (1 个):
     - hasInitial : HasInitial LeftExtension f g
@@ -97,7 +97,7 @@ instance [HasLeftKanExtension
   body: HasLeftKanExtension.hasInitial
 
 中文:
-实例 [HasLeftKanExtension
+实例 [有LeftKanExtension
   签名: f g] : HasInitial LeftExtension f g
   定义体: HasLeftKanExtension.hasInitial
 
@@ -116,7 +116,7 @@ definition lanLeftExtension
 
 中文:
 定义 lanLeftExtension
-  签名: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   定义体: ⊥_ (LeftExtension f g)
 
 Depends on / 依赖: LeftExtension
@@ -134,7 +134,7 @@ definition lan
 
 中文:
 定义 lan
-  签名: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   定义体: (lanLeftExtension f g).extension
 
 Depends on / 依赖: extension, lanLeftExtension
@@ -166,7 +166,7 @@ theorem lanLeftExtension_extension
 
 中文:
 定理 lanLeftExtension_extension
-  条件: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  条件: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   证明: rfl
 -/
 theorem lanLeftExtension_extension (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] :
@@ -184,7 +184,7 @@ definition lanUnit
 
 中文:
 定义 lanUnit
-  签名: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   定义体: (lanLeftExtension f g).unit
 
 @[simp]
@@ -205,7 +205,7 @@ theorem lanLeftExtension_unit
 
 中文:
 定理 lanLeftExtension_unit
-  条件: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  条件: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   证明: rfl
 
 Depends on / 依赖: preservesLimit_of_createsLimit_and_hasLimit
@@ -223,7 +223,7 @@ definition lanIsKan
 
 中文:
 定义 lanIsKan
-  签名: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
+  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
   定义体: initialIsInitial
 
 Depends on / 依赖: initialIsInitial, preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape
@@ -245,7 +245,7 @@ definition lanDesc
 
 中文:
 定义 lanDesc
-  签名: [HasLeftKanExtension f g] (s : LeftExtension f g)
+  签名: [有LeftKanExtension f g] (s : LeftExtension f g)
   定义体: (lanIsKan f g).desc s
 
 @[reassoc (attr := simp)]
@@ -269,7 +269,7 @@ theorem lanUnit_desc
 
 中文:
 定理 lanUnit_desc
-  条件: [HasLeftKanExtension f g] (s : LeftExtension f g)
+  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
   证明: (lanIsKan f g).fac s
 
 @[simp]
@@ -291,7 +291,7 @@ theorem lanIsKan_desc
 
 中文:
 定理 lanIsKan_desc
-  条件: [HasLeftKanExtension f g] (s : LeftExtension f g)
+  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
   证明: rfl
 -/
 theorem lanIsKan_desc [HasLeftKanExtension f g] (s : LeftExtension f g) :
@@ -307,8 +307,8 @@ theorem Lan.existsUnique
   proof: (lanIsKan f g).existsUnique _
 
 中文:
-定理 Lan.existsUnique
-  条件: [HasLeftKanExtension f g] (s : LeftExtension f g)
+定理 Lan.存在Unique
+  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
   证明: (lanIsKan f g).existsUnique _
 
 Depends on / 依赖: existsUnique, lanIsKan
@@ -326,9 +326,9 @@ class Lan.CommuteWith
     - commute : Nonempty IsKan (lanLeftExtension f g).whisker h
 
 中文:
-类 Lan.CommuteWith
+类 Lan.交换uteWith
   公理与运算 (1 个):
-    - commute : Nonempty IsKan (lanLeftExtension f g).whisker h
+    - commute : 非空 IsKan (lanLeftExtension f g).whisker h
 -/
 class Lan.CommuteWith
     (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] {x : B} (h : c ⟶ x) : Prop where
@@ -346,7 +346,7 @@ theorem of_isKan_whisker
 
 中文:
 定理 of_isKan_whisker
-  结论: [HasLeftKanExtension f g] (t : LeftExtension f g) {x : B} (h : c ⟶ x)
+  结论: [有LeftKanExtension f g] (t : LeftExtension f g) {x : B} (h : c ⟶ x)
   证明: ⟨⟨IsKan.ofIsoKan H i⟩⟩
 
 Depends on / 依赖: IsKan.ofIsoKan, ofIsoKan
@@ -366,7 +366,7 @@ theorem of_lan_comp_iso
 
 中文:
 定理 of_lan_comp_iso
-  结论: [HasLeftKanExtension f g]
+  结论: [有LeftKanExtension f g]
   证明: ⟨⟨(lanIsKan f (g ≫ h)).ofIsoKan StructuredArrow.isoMk i⟩⟩
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, lanIsKan, ofIsoKan
@@ -408,7 +408,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLeftKanExtension f (g ≫ h)
+  签名: 有LeftKanExtension f (g ≫ h)
   定义体: (Lan.CommuteWith.isKan f g h).hasLeftKanExtension
 
 Depends on / 依赖: CommuteWith, Lan.CommuteWith.isKan, hasLeftKanExtension, preservesColimit_of_createsColimit_and_hasColimit
@@ -526,11 +526,11 @@ class HasAbsLeftKanExtension
     - commute({x : B} (h : c ⟶ x)) : Lan.CommuteWith f g h
 
 中文:
-类 HasAbsLeftKanExtension
+类 有AbsLeftKanExtension
   参数: (f : a ⟶ b) (g : a ⟶ c)
-  继承: HasLeftKanExtension f g
+  继承: 有LeftKanExtension f g
   公理与运算 (1 个):
-    - commute({x : B} (h : c ⟶ x)) : Lan.CommuteWith f g h
+    - commute({x : B} (h : c ⟶ x)) : Lan.交换uteWith f g h
 -/
 class HasAbsLeftKanExtension (f : a ⟶ b) (g : a ⟶ c) : Prop extends HasLeftKanExtension f g where
   commute {x : B} (h : c ⟶ x) : Lan.CommuteWith f g h
@@ -544,7 +544,7 @@ instance [HasAbsLeftKanExtension
   body: HasAbsLeftKanExtension.commute h
 
 中文:
-实例 [HasAbsLeftKanExtension
+实例 [有AbsLeftKanExtension
   签名: f g] {x
   定义体: HasAbsLeftKanExtension.commute h
 
@@ -592,7 +592,7 @@ class HasLeftKanLift
   (no additional axioms)
 
 中文:
-类 HasLeftKanLift
+类 有LeftKanLift
   参数: (f : b ⟶ a) (g : c ⟶ a)
   (无附加公理)
 -/
@@ -611,7 +611,7 @@ theorem LeftLift.IsKan.hasLeftKanLift
 中文:
 定理 LeftLift.IsKan.hasLeftKanLift
   条件: {t : LeftLift f g} (H : IsKan t)
-  结论: HasLeftKanLift f g
+  结论: 有LeftKanLift f g
   证明: ⟨IsInitial.hasInitial H⟩
 
 Depends on / 依赖: IsInitial, IsInitial.hasInitial, hasInitial
@@ -628,7 +628,7 @@ instance [HasLeftKanLift
   body: HasLeftKanLift.hasInitial
 
 中文:
-实例 [HasLeftKanLift
+实例 [有LeftKanLift
   签名: f g] : HasInitial LeftLift f g
   定义体: HasLeftKanLift.hasInitial
 
@@ -646,7 +646,7 @@ definition lanLiftLeftLift
 
 中文:
 定义 lanLiftLeftLift
-  签名: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   定义体: ⊥_ (LeftLift f g)
 
 Depends on / 依赖: LeftLift
@@ -664,7 +664,7 @@ definition lanLift
 
 中文:
 定义 lanLift
-  签名: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   定义体: (lanLiftLeftLift f g).lift
 
 Depends on / 依赖: lanLiftLeftLift
@@ -696,7 +696,7 @@ theorem lanLiftLeftLift_lift
 
 中文:
 定理 lanLiftLeftLift_lift
-  条件: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  条件: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   证明: rfl
 -/
 theorem lanLiftLeftLift_lift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] :
@@ -714,7 +714,7 @@ definition lanLiftUnit
 
 中文:
 定义 lanLiftUnit
-  签名: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   定义体: (lanLiftLeftLift f g).unit
 
 @[simp]
@@ -735,7 +735,7 @@ theorem lanLiftLeftLift_unit
 
 中文:
 定理 lanLiftLeftLift_unit
-  条件: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  条件: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   证明: rfl
 -/
 theorem lanLiftLeftLift_unit (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] :
@@ -751,7 +751,7 @@ definition lanLiftIsKan
 
 中文:
 定义 lanLiftIsKan
-  签名: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
+  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
   定义体: initialIsInitial
 
 Depends on / 依赖: initialIsInitial
@@ -773,7 +773,7 @@ definition lanLiftDesc
 
 中文:
 定义 lanLiftDesc
-  签名: [HasLeftKanLift f g] (s : LeftLift f g)
+  签名: [有LeftKanLift f g] (s : LeftLift f g)
   定义体: (lanLiftIsKan f g).desc s
 
 @[reassoc (attr := simp)]
@@ -797,7 +797,7 @@ theorem lanLiftUnit_desc
 
 中文:
 定理 lanLiftUnit_desc
-  条件: [HasLeftKanLift f g] (s : LeftLift f g)
+  条件: [有LeftKanLift f g] (s : LeftLift f g)
   证明: (lanLiftIsKan f g).fac s
 
 @[simp]
@@ -819,7 +819,7 @@ theorem lanLiftIsKan_desc
 
 中文:
 定理 lanLiftIsKan_desc
-  条件: [HasLeftKanLift f g] (s : LeftLift f g)
+  条件: [有LeftKanLift f g] (s : LeftLift f g)
   证明: rfl
 -/
 theorem lanLiftIsKan_desc [HasLeftKanLift f g] (s : LeftLift f g) :
@@ -835,8 +835,8 @@ theorem LanLift.existsUnique
   proof: (lanLiftIsKan f g).existsUnique _
 
 中文:
-定理 LanLift.existsUnique
-  条件: [HasLeftKanLift f g] (s : LeftLift f g)
+定理 LanLift.存在Unique
+  条件: [有LeftKanLift f g] (s : LeftLift f g)
   证明: (lanLiftIsKan f g).existsUnique _
 
 Depends on / 依赖: existsUnique, lanLiftIsKan
@@ -854,9 +854,9 @@ class LanLift.CommuteWith
     - commute : Nonempty IsKan (lanLiftLeftLift f g).whisker h
 
 中文:
-类 LanLift.CommuteWith
+类 LanLift.交换uteWith
   公理与运算 (1 个):
-    - commute : Nonempty IsKan (lanLiftLeftLift f g).whisker h
+    - commute : 非空 IsKan (lanLiftLeftLift f g).whisker h
 -/
 class LanLift.CommuteWith
     (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] {x : B} (h : x ⟶ c) : Prop where
@@ -874,7 +874,7 @@ theorem of_isKan_whisker
 
 中文:
 定理 of_isKan_whisker
-  结论: [HasLeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ c)
+  结论: [有LeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ c)
   证明: ⟨⟨IsKan.ofIsoKan H i⟩⟩
 
 Depends on / 依赖: IsKan.ofIsoKan, ofIsoKan
@@ -894,7 +894,7 @@ theorem of_lanLift_comp_iso
 
 中文:
 定理 of_lanLift_comp_iso
-  结论: [HasLeftKanLift f g]
+  结论: [有LeftKanLift f g]
   证明: ⟨⟨(lanLiftIsKan f (h ≫ g)).ofIsoKan StructuredArrow.isoMk i⟩⟩
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, lanLiftIsKan, ofIsoKan
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLeftKanLift f (h ≫ g)
+  签名: 有LeftKanLift f (h ≫ g)
   定义体: (LanLift.CommuteWith.isKan f g h).hasLeftKanLift
 
 Depends on / 依赖: CommuteWith, LanLift, LanLift.CommuteWith.isKan, hasLeftKanLift
@@ -1056,11 +1056,11 @@ class HasAbsLeftKanLift
     - commute : forall {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
 
 中文:
-类 HasAbsLeftKanLift
+类 有AbsLeftKanLift
   参数: (f : b ⟶ a) (g : c ⟶ a)
-  继承: HasLeftKanLift f g
+  继承: 有LeftKanLift f g
   公理与运算 (1 个):
-    - commute : 对任意 {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
+    - commute : 对任意 {x : B} (h : x ⟶ c), LanLift.交换uteWith f g h
 -/
 class HasAbsLeftKanLift (f : b ⟶ a) (g : c ⟶ a) : Prop extends HasLeftKanLift f g where
   commute : forall {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
@@ -1074,7 +1074,7 @@ instance [HasAbsLeftKanLift
   body: HasAbsLeftKanLift.commute h
 
 中文:
-实例 [HasAbsLeftKanLift
+实例 [有AbsLeftKanLift
   签名: f g] {x
   定义体: HasAbsLeftKanLift.commute h
 

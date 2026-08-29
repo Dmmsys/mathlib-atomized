@@ -83,7 +83,7 @@ theorem exists_eq_mul_right_of_dvd
   proof: h
 
 中文:
-定理 exists_eq_mul_right_of_dvd
+定理 存在_eq_mul_right_of_dvd
   条件: (h : a ∣ b)
   结论: 存在 c, b = a * c
   证明: h
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans α Dvd.dvd
+  签名: 是Trans α Dvd.dvd
   定义体: ⟨fun _ _ _ => dvd_trans⟩
 
 @[simp]
@@ -273,7 +273,7 @@ class DecompositionMonoid
     - primal((a : α)) : IsPrimal a
 
 中文:
-类 DecompositionMonoid
+类 分解幺半群
   参数: : 命题 where
   公理与运算 (1 个):
     - primal((a : α)) : IsPrimal a
@@ -292,8 +292,8 @@ theorem exists_dvd_and_dvd_of_dvd_mul
 @[gcongr]
 
 中文:
-定理 exists_dvd_and_dvd_of_dvd_mul
-  条件: [DecompositionMonoid α] {b c a : α} (H : a ∣ b * c)
+定理 存在_dvd_and_dvd_of_dvd_mul
+  条件: [分解幺半群 α] {b c a : α} (H : a ∣ b * c)
   证明: DecompositionMonoid.primal a H
 
 @[gcongr]
@@ -407,7 +407,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans α RightDvd
+  签名: 是Trans α RightDvd
   定义体: ⟨fun _ _ _ => RightDvd.trans⟩
 
 @[simp]
@@ -798,7 +798,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder α RightDvd
+  签名: 是预序 α RightDvd
   定义体: .refl
 -/
 instance : IsPreorder α RightDvd where
@@ -869,7 +869,7 @@ theorem exists_eq_mul_left_of_dvd
   proof: Dvd.elim h fun c => fun H1 : b = a * c => Exists.intro c (Eq.trans H1 (mul_comm a c))
 
 中文:
-定理 exists_eq_mul_left_of_dvd
+定理 存在_eq_mul_left_of_dvd
   条件: (h : a ∣ b)
   结论: 存在 c, b = c * a
   证明: Dvd.elim h fun c => fun H1 : b = a * c => Exists.intro c (Eq.trans H1 (mul_comm a c))
@@ -890,7 +890,7 @@ theorem dvd_iff_exists_eq_mul_left
     exact ⟨c, mul_comm _ _⟩⟩
 
 中文:
-定理 dvd_iff_exists_eq_mul_left
+定理 dvd_iff_存在_eq_mul_left
   结论: a ∣ b ↔ 存在 c, b = c * a
   证明: ⟨exists_eq_mul_left_of_dvd, by
     rintro ⟨c, rfl⟩
@@ -1028,7 +1028,7 @@ theorem dvd_mul
 
 中文:
 定理 dvd_mul
-  条件: [DecompositionMonoid α] {k m n : α}
+  条件: [分解幺半群 α] {k m n : α}
   证明: by
   refine ⟨exists_dvd_and_dvd_of_dvd_mul, ?_⟩
   rintro ⟨d₁, d₂, hy, hz, rfl⟩

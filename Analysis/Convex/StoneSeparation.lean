@@ -119,8 +119,8 @@ theorem exists_convex_convex_compl_subset
           fun s 
 
 中文:
-定理 exists_convex_convex_compl_subset
-  条件: (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) (hst : Disjoint s t)
+定理 存在_convex_convex_compl_subset
+  条件: (hs : 凸 𝕜 s) (ht : 凸 𝕜 t) (hst : Disjoint s t)
   证明: by
   let S : Set (Set E) := { C | Convex 𝕜 C ∧ Disjoint C t }
   obtain ⟨C, hsC, hmax⟩ :=

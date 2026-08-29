@@ -76,7 +76,7 @@ definition covolume
 
 中文:
 定义 covolume
-  签名: (μ : Measure E := by volume_tac)
+  签名: (μ : 测度 E := by volume_tac)
   定义体: (addCovolume L E μ).toReal
 
 Depends on / 依赖: addCovolume, toReal, volume_tac
@@ -106,7 +106,7 @@ theorem covolume_eq_measure_fundamentalDomain
 
 中文:
 定理 covolume_eq_measure_fundamentalDomain
-  条件: {F : Set E} (h : IsAddFundamentalDomain L F μ)
+  条件: {F : 集合 E} (h : 是加法FundamentalDomain L F μ)
   证明: by
   have : MeasurableVAdd L E := (inferInstance : MeasurableVAdd L.toAddSubgroup E)
   have : VAddInvariantMeasure L E μ := (inferInstance : VAddInvariantMeasure L.toAddSubgroup E μ)
@@ -180,7 +180,7 @@ theorem covolume_comap
 
 中文:
 定理 covolume_comap
-  结论: {F : 类型} [NormedAddCommGroup F] [NormedSpace 实数 F] [FiniteDimensional 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [赋范空间 实数 F] [有限维 实数 F]
   证明: by
   rw [covolume_eq_measure_fundamentalDomain _ _ (isAddFundamentalDomain (Free.chooseBasis Int L) μ)]; rw [covolume_eq_measure_fundamentalDomain _ _ ((isAddFundamentalDomain
     ((Free.chooseBasis Int L).ofZLatticeComap Real L e.toLinearEquiv) ν))]; rw [← he.measureReal_preimage
@@ -212,8 +212,8 @@ theorem covolume_eq_det_mul_measureReal
   exact b.ofZLatticeBasis_apply Real L _
 
 中文:
-定理 covolume_eq_det_mul_measureReal
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (b : Basis ι 整数 L)
+定理 covolume_eq_det_mul_measure实数
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (b : 基 ι 整数 L)
   证明: by
   rw [covolume_eq_measure_fundamentalDomain L μ (isAddFundamentalDomain b μ)]; rw [measureReal_fundamentalDomain _ _ b₀]; rw [measureReal_congr (fundamentalDomain_ae_parallelepiped b₀ μ)]
   congr
@@ -244,7 +244,7 @@ theorem covolume_eq_det
 
 中文:
 定理 covolume_eq_det
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (L : Submodule 整数 (ι -> 实数))
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (L : 子模 整数 (ι -> 实数))
   证明: by
   rw [covolume_eq_measure_fundamentalDomain L volume (isAddFundamentalDomain b volume)]; rw [volume_real_fundamentalDomain]
   congr
@@ -275,7 +275,7 @@ theorem covolume_eq_det_inv
 
 中文:
 定理 covolume_eq_det_inv
-  结论: {ι : 类型} [Fintype ι] (L : Submodule 整数 (ι -> 实数))
+  结论: {ι : 类型} [有限类型 ι] (L : 子模 整数 (ι -> 实数))
   证明: by
   classical
   rw [covolume_eq_det L b]; rw [← Pi.basisFun_det_apply]; rw [show (((↑) : L -> _) ∘ ⇑b) =
@@ -309,7 +309,7 @@ theorem covolume_div_covolume_eq_relIndex
 
 中文:
 定理 covolume_div_covolume_eq_relIndex
-  结论: {ι : 类型} [Fintype ι] (L₁ L₂ : Submodule 整数 (ι -> 实数))
+  结论: {ι : 类型} [有限类型 ι] (L₁ L₂ : 子模 整数 (ι -> 实数))
   证明: by
   classical
   let b₁ := IsZLattice.basis L₁
@@ -352,7 +352,7 @@ theorem covolume_div_covolume_eq_relIndex'
 
 中文:
 定理 covolume_div_covolume_eq_relIndex'
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   let f := (EuclideanSpace.equiv _ Real).symm.trans
     (stdOrthonormalBasis Real E).repr.toContinuousLinearEquiv.symm
@@ -384,7 +384,7 @@ theorem volume_image_eq_volume_div_covolume
 
 中文:
 定理 volume_image_eq_volume_div_covolume
-  结论: {ι : 类型} [Fintype ι] (L : Submodule 整数 (ι -> 实数))
+  结论: {ι : 类型} [有限类型 ι] (L : 子模 整数 (ι -> 实数))
   证明: by
   rw [LinearEquiv.image_eq_preimage_symm]; rw [Measure.addHaar_preimage_linearEquiv]; rw [LinearEquiv.symm_symm]; rw [covolume_eq_det_inv L b]; rw [ENNReal.div_eq_inv_mul]; rw [ENNReal.ofReal_inv_of_pos (abs_pos.2 (LinearEquiv.det _).ne_zero)]; rw [inv_inv]; rw [LinearEquiv.coe_det]
 
@@ -411,7 +411,7 @@ theorem volume_image_eq_volume_div_covolume'
 
 中文:
 定理 volume_image_eq_volume_div_covolume'
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   let e : Fin (finrank Real E) ≃ ι :=
     Fintype.equivOfCardEq (by rw [Fintype.card_fin, finrank_eq_card_basis (b.ofZLatticeBasis Real)])
@@ -466,7 +466,7 @@ refine Nat.card_congr ((b.ofZLatticeBasis Real).equivFun.toEquiv.subtypeEquiv fu
 
 中文:
 定理 tendsto_card_div_pow''
-  结论: [FiniteDimensional 实数 E] [MeasurableSpace E] [BorelSpace E]
+  结论: [有限维 实数 E] [可测空间 E] [Borel空间 E]
   证明: by
   refine Tendsto.congr' ?_
     (tendsto_card_div_pow_atTop_volume ((b.ofZLatticeBasis Real).equivFun '' s) ?_ ?_ hs₃)
@@ -538,7 +538,7 @@ refine Tendsto.congr' ?_ (tendsto_card_div_pow_atTop_volume'
 
 中文:
 定理 tendsto_card_le_div''
-  结论: [FiniteDimensional 实数 E] [MeasurableSpace E] [BorelSpace E]
+  结论: [有限维 实数 E] [可测空间 E] [Borel空间 E]
   证明: by
 refine Tendsto.congr' ?_ (tendsto_card_div_pow_atTop_volume'
       ((b.ofZLatticeBasis Real).equivFun '' {x in X | F x <= 1}) ?_ ?_ h₄ fun x y hx hy => ?_).comp
@@ -599,7 +599,7 @@ theorem frontier_equivFun
 
 中文:
 定理 frontier_equivFun
-  结论: {E : 类型} [AddCommGroup E] [Module 实数 E] {ι : 类型} [Finite ι]
+  结论: {E : 类型} [加法交换群 E] [模 实数 E] {ι : 类型} [有限 ι]
   证明: by
   rw [LinearEquiv.image_eq_preimage_symm]; rw [LinearEquiv.image_eq_preimage_symm]
   exact (Homeomorph.preimage_frontier b.equivFunL.toHomeomorph.symm s).symm
@@ -628,7 +628,7 @@ theorem tendsto_card_div_pow
 
 中文:
 定理 tendsto_card_div_pow
-  结论: (b : Basis ι 整数 L) {s : Set (ι -> 实数)} (hs₁ : IsBounded s)
+  结论: (b : 基 ι 整数 L) {s : 集合 (ι -> 实数)} (hs₁ : IsBounded s)
   证明: by
   convert! tendsto_card_div_pow'' b hs₁ hs₂ ?_
   · simp only [measureReal_def]
@@ -662,7 +662,7 @@ theorem tendsto_card_le_div
 
 中文:
 定理 tendsto_card_le_div
-  结论: {X : Set (ι -> 实数)} (hX : 对任意 ⦃x⦄ ⦃r : 实数⦄, x in X -> 0 < r -> r • x in X)
+  结论: {X : 集合 (ι -> 实数)} (hX : 对任意 ⦃x⦄ ⦃r : 实数⦄, x in X -> 0 < r -> r • x in X)
   证明: by
   let e : Free.ChooseBasisIndex Int ↥L ≃ ι := by
     refine Fintype.equivOfCardEq ?_
@@ -714,7 +714,7 @@ theorem tendsto_card_div_pow'
 
 中文:
 定理 tendsto_card_div_pow'
-  结论: {s : Set E} (hs₁ : IsBounded s) (hs₂ : MeasurableSet s)
+  结论: {s : 集合 E} (hs₁ : IsBounded s) (hs₂ : 可测集 s)
   证明: by
   let b := Module.Free.chooseBasis Int L
   convert! tendsto_card_div_pow'' b hs₁ hs₂ ?_
@@ -751,7 +751,7 @@ theorem tendsto_card_le_div'
 
 中文:
 定理 tendsto_card_le_div'
-  结论: [Nontrivial E] {X : Set E} {F : E -> 实数}
+  结论: [非平凡 E] {X : 集合 E} {F : E -> 实数}
   证明: by
   let b := Module.Free.chooseBasis Int L
   convert! tendsto_card_le_div'' b hX ?_ h₂ h₃ ?_

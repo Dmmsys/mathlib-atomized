@@ -90,7 +90,7 @@ definition Pi.equivalenceOfEquivCompPointwiseProduct
     (fun a => (Pi.whiskerEquiv f (fun j => (Iso.refl ((F (f j)).obj <| a (f j))))).symm)).symm
 
 中文:
-定义 Pi.equivalenceOfEquivCompPointwiseProduct
+定义 依赖函数类型.equivalenceOfEquivCompPointwiseProduct
   签名: {β : 类型} (f : β ≃ α) [HasProductsOfShape β C]
   定义体: (NatIso.ofComponents
     (fun a => (Pi.whiskerEquiv f (fun j => (Iso.refl ((F (f j)).obj <| a (f j))))).symm)).symm
@@ -119,7 +119,7 @@ definition coconePointwiseProduct
 
 中文:
 定义 coconePointwiseProduct
-  签名: (c : 对任意 i, Cocone (F i))
+  签名: (c : 对任意 i, 余锥 (F i))
   定义体: ∏ᶜ fun i => (c i).pt
   ι := Functor.whiskerRight (NatTrans.pi fun i => (c i).ι) _ ≫ (Pi.constCompPiIsoConst _).hom
 -/
@@ -143,7 +143,7 @@ definition coconePointwiseProductIso
 
 中文:
 定义 coconePointwiseProductIso
-  签名: {c c' : 对任意 i, Cocone (F i)} (e : 对任意 i, c i ≅ c' i)
+  签名: {c c' : 对任意 i, 余锥 (F i)} (e : 对任意 i, c i ≅ c' i)
   定义体: Cocone.ext (Pi.mapIso fun i => (Cocone.forget _).mapIso (e i)) fun i => by
     dsimp
     ext
@@ -168,7 +168,7 @@ definition colimitPointwiseProductToProductColimit
 
 中文:
 定义 colimitPointwiseProductToProductColimit
-  签名: [对任意 i, HasColimit (F i)]
+  签名: [对任意 i, 有余极限 (F i)]
   定义体: colimit.desc _ (coconePointwiseProduct _)
 
 Depends on / 依赖: coconePointwiseProduct, colimit, colimit.desc
@@ -257,7 +257,7 @@ definition evaluationCoconePointwiseProductIso
 
 中文:
 定义 evaluationCoconePointwiseProductIso
-  签名: (X : D) (c : 对任意 i, Cocone (F i))
+  签名: (X : D) (c : 对任意 i, 余锥 (F i))
   定义体: Cocone.ext (piObjIso (fun i => (c i).pt) X) fun j => by
     dsimp
     ext
@@ -336,10 +336,10 @@ class IsIPCOfShape
     - nonempty_isColimit(⦃J) : ι -> Type w⦄ [forall i, SmallCategory (J i)] [forall i, IsFiltered (J i)] ⦃F : forall i, J i ⥤ C⦄ ⦃c : forall i, Cocone (F i)⦄ : (forall i, IsColimit (c i)) -> Nonempty (IsColimit (coconePointwiseProduct c))
 
 中文:
-类 IsIPCOfShape
-  参数: (ι : 类型) (C : 类型) [Category* C] [HasProductsOfShape ι C]
+类 是IPCOfShape
+  参数: (ι : 类型) (C : 类型) [范畴* C] [HasProductsOfShape ι C]
   公理与运算 (1 个):
-    - nonempty_isColimit(⦃J) : ι -> Type w⦄ [对任意 i, SmallCategory (J i)] [对任意 i, IsFiltered (J i)] ⦃F : 对任意 i, J i ⥤ C⦄ ⦃c : 对任意 i, Cocone (F i)⦄ : (对任意 i, IsColimit (c i)) -> Nonempty (IsColimit (coconePointwiseProduct c))
+    - nonempty_isColimit(⦃J) : ι -> 类型 w⦄ [对任意 i, 小范畴 (J i)] [对任意 i, 是Filtered (J i)] ⦃F : 对任意 i, J i ⥤ C⦄ ⦃c : 对任意 i, 余锥 (F i)⦄ : (对任意 i, 是余极限 (c i)) -> 非空 (是余极限 (coconePointwiseProduct c))
 -/
 class IsIPCOfShape (ι : Type*) (C : Type*) [Category* C] [HasProductsOfShape ι C] : Prop where
   nonempty_isColimit ⦃J : ι -> Type w⦄ [forall i, SmallCategory (J i)]
@@ -358,7 +358,7 @@ instance [IsIPCOfShape.{w}
   exact IsIPCOfShape.nonempty_isColimit fun i => colimit.isColimit _
 
 中文:
-实例 [IsIPCOfShape.{w}
+实例 [是IPCOfShape.{w}
   签名: ι C] {J
   定义体: by
   rw [colimitPointwiseProductToProductColimit]; rw [colimit.desc]
@@ -388,7 +388,7 @@ lemma IsIPCOfShape.of_forall_exists
     rwa [(IsColimit.equivIsoColimit e).nonempty_congr]
 
 中文:
-引理 IsIPCOfShape.of_forall_exists
+引理 是IPCOfShape.of_对任意_存在
   证明: by
     have (i : ι) : HasColimit (F i) := ⟨_, hc i⟩
     obtain ⟨c', hc', _⟩ := H F
@@ -422,7 +422,7 @@ lemma IsIPCOfShape.of_isIso
   rwa [IsColimit.nonempty_isColimit_iff_isIso_desc (colimit.isColimit _)]
 
 中文:
-引理 IsIPCOfShape.of_isIso
+引理 是IPCOfShape.of_isIso
   证明: by
   refine .of_forall_exists fun J _ _ F _ => ?_
   refine ⟨fun i => colimit.cocone _, fun i => colimit.isColimit _, ?_⟩
@@ -460,8 +460,8 @@ apply IsColimit.equivOfNatIsoOfIso _ _ _ _
     · -- Without the double `symm`, one runs into DTT hel
 
 中文:
-引理 IsIPCOfShape.of_equiv
-  结论: {ι' : 类型} [HasProductsOfShape ι' C] [IsIPCOfShape.{w} ι C]
+引理 是IPCOfShape.of_equiv
+  结论: {ι' : 类型} [HasProductsOfShape ι' C] [是IPCOfShape.{w} ι C]
   证明: by
     obtain ⟨h⟩ := nonempty_isColimit fun i : ι => hc (e i)
     constructor
@@ -495,10 +495,10 @@ class IsIPC
     - isIPCOfShape((ι : Type w)) : IsIPCOfShape.{w} ι C  [default: by infer_instance]
 
 中文:
-类 IsIPC
-  参数: [HasProducts.{w} C] [HasFilteredColimitsOfSize.{w} C]
+类 是IPC
+  参数: [HasProducts.{w} C] [有FilteredColimitsOfSize.{w} C]
   公理与运算 (1 个):
-    - isIPCOfShape((ι : Type w)) : IsIPCOfShape.{w} ι C  [默认: by infer_instance]
+    - isIPCOfShape((ι : 类型 w)) : 是IPCOfShape.{w} ι C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -517,7 +517,7 @@ instance [HasProducts.{w}
 
 中文:
 实例 [HasProducts.{w}
-  签名: C] [HasFilteredColimitsOfSize.{w, w} C] [IsIPC.{w} C] (ι
+  签名: C] [有FilteredColimitsOfSize.{w, w} C] [是IPC.{w} C] (ι
   定义体: by
   suffices IsIPCOfShape (Shrink.{w} ι) C from .of_equiv (equivShrink ι).symm
   apply IsIPC.isIPCOfShape
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIPC.{u} (类型u)
+  签名: 是IPC.{u} (类型u)
   定义体: .of_isIso fun _ _ _ _ _ => ⟨inferInstance, Types.isIso_colimitPointwiseProductToProductColimit _⟩
 
 Depends on / 依赖: Types.isIso_colimitPointwiseProductToProductColimit, isIso_colimitPointwiseProductToProductColimit, of_isIso
@@ -647,7 +647,7 @@ instance [HasProducts.{w}
 
 中文:
 实例 [HasProducts.{w}
-  签名: C] [HasFilteredColimitsOfSize.{w, w} C] [IsIPC.{w} C] {D
+  签名: C] [有FilteredColimitsOfSize.{w, w} C] [是IPC.{w} C] {D
 -/
 instance [HasProducts.{w} C] [HasFilteredColimitsOfSize.{w, w} C] [IsIPC.{w} C] {D : Type u₁}
     [Category.{v₁} D] : IsIPC.{w} (D ⥤ C) where

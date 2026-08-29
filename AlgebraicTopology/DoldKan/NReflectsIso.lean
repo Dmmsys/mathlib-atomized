@@ -54,7 +54,7 @@ instance :
 
 中文:
 实例 :
-  签名: (N₁ : SimplicialObject C ⥤ Karoubi (ChainComplex C 自然数)).ReflectsIsomorphisms
+  签名: (N₁ : SimplicialObject C ⥤ Karoubi (链复形 C 自然数)).反映同构
   定义体: ⟨fun {X Y} f => by
     intro
     -- restating the result in a way that allows induction on the degree n
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: (N₂ : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C 自然数)).ReflectsIsomorphisms
+  签名: (N₂ : Karoubi (SimplicialObject C) ⥤ Karoubi (链复形 C 自然数)).反映同构
   定义体: ⟨fun f => by
     intro
     -- The following functor `F` reflects isomorphisms because it is

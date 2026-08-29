@@ -114,7 +114,7 @@ lemma coe_mulLeft
 中文:
 引理 coe_mulLeft
   条件: (r : R)
-  结论: (mulLeft r : R -> R) = HMul.hMul r
+  结论: (mulLeft r : R -> R) = 异质乘法.hMul r
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_mulLeft (r : R) : (mulLeft r : R -> R) = HMul.hMul r := rfl
@@ -273,7 +273,7 @@ lemma mulLeft_eq_mulRight_iff_forall_commute
   proof: DFunLike.ext_iff
 
 中文:
-引理 mulLeft_eq_mulRight_iff_forall_commute
+引理 mulLeft_eq_mulRight_iff_对任意_commute
   结论: mulLeft a = mulRight a ↔ 对任意 b, Commute a b
   证明: DFunLike.ext_iff
 
@@ -291,7 +291,7 @@ lemma mulRight_eq_mulLeft_iff_forall_commute
   proof: DFunLike.ext_iff
 
 中文:
-引理 mulRight_eq_mulLeft_iff_forall_commute
+引理 mulRight_eq_mulLeft_iff_对任意_commute
   结论: mulRight b = mulLeft b ↔ 对任意 a, Commute a b
   证明: DFunLike.ext_iff
 
@@ -318,7 +318,7 @@ definition mulLeft
 
 中文:
 定义 mulLeft
-  签名: : R ->+ AddMonoid.End R
+  签名: : R ->+ 加法幺半群.End R
   定义体: .mul
 -/
 def mulLeft : R ->+ AddMonoid.End R := .mul
@@ -335,7 +335,7 @@ definition mulRight
 
 中文:
 定义 mulRight
-  签名: : R ->+ AddMonoid.End R
+  签名: : R ->+ 加法幺半群.End R
   定义体: (.mul : R ->+ AddMonoid.End R).flip
 
 Depends on / 依赖: AddMonoid, AddMonoid.End
@@ -358,7 +358,7 @@ Eq.symm AddMonoidHom.mulLeft_eq_mulRight_iff_forall_commute.2 (.all _)
 
 中文:
 引理 mulRight_eq_mulLeft
-  结论: mulRight = (mulLeft : R ->+ AddMonoid.End R)
+  结论: mulRight = (mulLeft : R ->+ 加法幺半群.End R)
   证明: AddMonoidHom.ext fun _ =>
 Eq.symm AddMonoidHom.mulLeft_eq_mulRight_iff_forall_commute.2 (.all _)
 
@@ -390,7 +390,7 @@ mul_neg _ _ := unop_injective neg_mul _ _
 
 中文:
 实例 MulOpposite.instHasDistribNeg
-  签名: : HasDistribNeg αᵐᵒᵖ where
+  签名: : 有DistribNeg αᵐᵒᵖ where
   定义体: unop_injective mul_neg _ _
 mul_neg _ _ := unop_injective neg_mul _ _
 
@@ -451,7 +451,7 @@ theorem succ_ne_self
 
 中文:
 定理 succ_ne_self
-  条件: {α : 类型} [NonAssocRing α] [Nontrivial α] (a : α)
+  条件: {α : 类型} [非结合环 α] [非平凡 α] (a : α)
   结论: a + 1 != a
   证明: fun h =>
   one_ne_zero ((add_right_inj a).mp (by simp [h]))
@@ -471,7 +471,7 @@ theorem pred_ne_self
 
 中文:
 定理 pred_ne_self
-  条件: {α : 类型} [NonAssocRing α] [Nontrivial α] (a : α)
+  条件: {α : 类型} [非结合环 α] [非平凡 α] (a : α)
   结论: a - 1 != a
   证明: fun h =>
   one_ne_zero (neg_injective ((add_right_inj a).mp (by simp [← sub_eq_add_neg, h])))
@@ -563,7 +563,7 @@ lemma noZeroDivisors_tfae
 
 中文:
 引理 noZeroDivisors_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   simp_rw [isLeftCancelMulZero_iff, isRightCancelMulZero_iff, isCancelMulZero_iff_forall_isRegular,
     isLeftRegular_iff_right_eq_zero_of_mul, isRightRegular_iff_left_eq_zero_of_mul,
@@ -593,7 +593,7 @@ lemma isCancelMulZero_iff_noZeroDivisors
 
 中文:
 引理 isCancelMulZero_iff_noZeroDivisors
-  结论: IsCancelMulZero R ↔ NoZeroDivisors R
+  结论: 是乘零消去 R ↔ 无零因子 R
   证明: noZeroDivisors_tfae.out 3 0
 
 Depends on / 依赖: noZeroDivisors_tfae, noZeroDivisors_tfae.out
@@ -617,8 +617,8 @@ lemma NoZeroDivisors.to_isDomain
   proof: { NoZeroDivisors.to_isCancelMulZero α, h with .. }
 
 中文:
-引理 NoZeroDivisors.to_isDomain
-  条件: [Ring α] [h : Nontrivial α] [NoZeroDivisors α]
+引理 无零因子.to_isDomain
+  条件: [环 α] [h : 非平凡 α] [无零因子 α]
   证明: { NoZeroDivisors.to_isCancelMulZero α, h with .. }
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isCancelMulZero, to_isCancelMulZero
@@ -641,8 +641,8 @@ instance Subsingleton.to_isCancelMulZero
   mul_left_cancel_of_ne_zero hb := (hb <| Subsingleton.eq_zero _).elim
 
 中文:
-实例 Subsingleton.to_isCancelMulZero
-  签名: [Mul α] [Zero α] [Subsingleton α]
+实例 子单例.to_isCancelMulZero
+  签名: [乘法 α] [零 α] [子单例 α]
   定义体: (hb <| Subsingleton.eq_zero _).elim
   mul_left_cancel_of_ne_zero hb := (hb <| Subsingleton.eq_zero _).elim
 
@@ -667,9 +667,9 @@ lemma Subsingleton.to_noZeroDivisors
 scoped[Subsingleton] attribute [instance] Subsingleton.to_noZeroDivisors
 
 中文:
-引理 Subsingleton.to_noZeroDivisors
-  条件: [Mul α] [Zero α] [Subsingleton α]
-  结论: NoZeroDivisors α where
+引理 子单例.to_noZeroDivisors
+  条件: [乘法 α] [零 α] [子单例 α]
+  结论: 无零因子 α where
   证明: .inl (Subsingleton.eq_zero _)
 
 scoped[Subsingleton] attribute [instance] Subsingleton.to_noZeroDivisors
@@ -691,7 +691,7 @@ lemma isDomain_iff_cancelMulZero_and_nontrivial
 
 中文:
 引理 isDomain_iff_cancelMulZero_and_nontrivial
-  条件: [Semiring α]
+  条件: [半环 α]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => {}⟩
 -/
 lemma isDomain_iff_cancelMulZero_and_nontrivial [Semiring α] :
@@ -711,7 +711,7 @@ lemma isCancelMulZero_iff_isDomain_or_subsingleton
 
 中文:
 引理 isCancelMulZero_iff_isDomain_or_subsingleton
-  条件: [Semiring α]
+  条件: [半环 α]
   证明: by
   refine ⟨fun t => ?_, fun h => h.elim (fun _ => inferInstance) (fun _ => inferInstance)⟩
   rw [or_iff_not_imp_right]; rw [not_subsingleton_iff_nontrivial]
@@ -736,7 +736,7 @@ lemma isDomain_iff_noZeroDivisors_and_nontrivial
 
 中文:
 引理 isDomain_iff_noZeroDivisors_and_nontrivial
-  条件: [Ring α]
+  条件: [环 α]
   证明: by
   rw [← isCancelMulZero_iff_noZeroDivisors]; rw [isDomain_iff_cancelMulZero_and_nontrivial]
 
@@ -757,7 +757,7 @@ lemma noZeroDivisors_iff_isDomain_or_subsingleton
 
 中文:
 引理 noZeroDivisors_iff_isDomain_or_subsingleton
-  条件: [Ring α]
+  条件: [环 α]
   证明: by
   rw [← isCancelMulZero_iff_noZeroDivisors]; rw [isCancelMulZero_iff_isDomain_or_subsingleton]
 

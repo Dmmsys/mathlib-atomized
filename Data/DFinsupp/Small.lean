@@ -35,7 +35,7 @@ instance DFinsupp.small
   body: small_of_injective (f := fun x j => x j) (fun f f' eq => by ext j; exact congr_fun eq j)
 
 中文:
-实例 DFinsupp.small
+实例 直和有限支撑.small
   签名: [Small.{w} ι] [对任意 (i : ι), Small.{w} (π i)]
   定义体: small_of_injective (f := fun x j => x j) (fun f f' eq => by ext j; exact congr_fun eq j)
 
@@ -56,8 +56,8 @@ instance Finsupp.small
   exact small_map finsuppEquivDFinsupp
 
 中文:
-实例 Finsupp.small
-  签名: {σ : 类型} {R : 类型} [Zero R]
+实例 有限支撑.small
+  签名: {σ : 类型} {R : 类型} [零 R]
   定义体: by
   classical
   exact small_map finsuppEquivDFinsupp

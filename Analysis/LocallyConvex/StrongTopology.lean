@@ -61,7 +61,7 @@ theorem locallyConvexSpace
 
 中文:
 定理 locallyConvexSpace
-  结论: (𝔖 : Set (Set E)) (h𝔖₁ : 𝔖.Nonempty)
+  结论: (𝔖 : 集合 (集合 E)) (h𝔖₁ : 𝔖.非空)
   证明: by
   apply LocallyConvexSpace.ofBasisZero _ _ _ _
     (UniformConvergenceCLM.hasBasis_nhds_zero_of_basis _ _ _ h𝔖₁ h𝔖₂
@@ -103,7 +103,7 @@ instance instLocallyConvexSpace
 
 中文:
 实例 instLocallyConvexSpace
-  签名: : LocallyConvexSpace R (E ->SL[σ] F)
+  签名: : LocallyConvex空间 R (E ->SL[σ] F)
   定义体: UniformConvergenceCLM.locallyConvexSpace R _ ⟨∅, Bornology.isVonNBounded_empty 𝕜₁ E⟩
     (directedOn_of_sup_mem fun _ _ => Bornology.IsVonNBounded.union)
 

@@ -48,7 +48,7 @@ lemma MDifferentiable.slash_of_pos
 
 中文:
 引理 MDifferentiable.slash_of_pos
-  结论: {f : ℍ -> Complex} (hf : MDiff f)
+  结论: {f : ℍ -> 复形} (hf : MDiff f)
   证明: by
   refine .mul (.mul ?_ mdifferentiable_const) (mdifferentiable_denom_zpow g _)
   simpa only [σ, hg, ↓reduceIte] using! hf.comp (mdifferentiable_smul hg)
@@ -70,7 +70,7 @@ lemma slash_J
 
 中文:
 引理 slash_J
-  条件: (f : ℍ -> Complex) (k : 整数)
+  条件: (f : ℍ -> 复形) (k : 整数)
   证明: by
   simp [slash_def, J_smul]
 -/
@@ -92,7 +92,7 @@ lemma MDifferentiable.slashJ
 
 中文:
 引理 MDifferentiable.slashJ
-  条件: {f : ℍ -> Complex} (hf : MDiff f) (k : 整数)
+  条件: {f : ℍ -> 复形} (hf : MDiff f) (k : 整数)
   证明: by
   simp only [mdifferentiable_iff, slash_J, Function.comp_def] at hf ⊢
   have : {z | 0 < z.im}.EqOn (fun x => conj (f <| ofComplex <| -conj ↑(ofComplex x)))
@@ -122,7 +122,7 @@ lemma MDifferentiable.slash
 
 中文:
 引理 MDifferentiable.slash
-  结论: {f : ℍ -> Complex} (hf : MDiff f)
+  结论: {f : ℍ -> 复形} (hf : MDiff f)
   证明: by
   refine g.det_ne_zero.lt_or_gt.elim (fun hg => ?_) (hf.slash_of_pos k)
   rw [show g = J * (J * g) by simp [← mul_assoc]; rw [← sq], SlashAction.slash_mul]
@@ -152,11 +152,11 @@ structure ModularForm
     - bdd_at_cusps'({c : OnePoint Real} (hc : IsCusp c Γ)) : c.IsBoundedAt toFun k
 
 中文:
-结构 ModularForm
-  参数: extends SlashInvariantForm Γ k
-  继承: SlashInvariantForm Γ k
+结构 模形式
+  参数: extends 斜不变形式 Γ k
+  继承: 斜不变形式 Γ k
   公理与运算 (2 个):
-    - holo' : MDiff (toSlashInvariantForm : ℍ -> Complex)
+    - holo' : MDiff (toSlashInvariantForm : ℍ -> 复形)
     - bdd_at_cusps'({c : OnePoint 实数} (hc : IsCusp c Γ)) : c.IsBoundedAt toFun k
 -/
 structure ModularForm extends SlashInvariantForm Γ k where
@@ -178,11 +178,11 @@ structure CuspForm
     - zero_at_cusps'({c : OnePoint Real} (hc : IsCusp c Γ)) : c.IsZeroAt toFun k
 
 中文:
-结构 CuspForm
-  参数: extends SlashInvariantForm Γ k
-  继承: SlashInvariantForm Γ k
+结构 尖点形式
+  参数: extends 斜不变形式 Γ k
+  继承: 斜不变形式 Γ k
   公理与运算 (2 个):
-    - holo' : MDiff (toSlashInvariantForm : ℍ -> Complex)
+    - holo' : MDiff (toSlashInvariantForm : ℍ -> 复形)
     - zero_at_cusps'({c : OnePoint 实数} (hc : IsCusp c Γ)) : c.IsZeroAt toFun k
 -/
 structure CuspForm extends SlashInvariantForm Γ k where
@@ -204,11 +204,11 @@ class ModularFormClass
     - bdd_at_cusps((f : F) {c : OnePoint Real} (hc : IsCusp c Γ)) : c.IsBoundedAt f k
 
 中文:
-类 ModularFormClass
-  参数: (F : 类型) (Γ : outParam <| Subgroup (GL (Fin 2) 实数)) (k : outParam 整数)
-  继承: SlashInvariantFormClass F Γ k
+类 模形式类
+  参数: (F : 类型) (Γ : outParam <| 子群 (GL (有限集 2) 实数)) (k : outParam 整数)
+  继承: 斜不变形式类 F Γ k
   公理与运算 (2 个):
-    - holo : 对任意 f : F, MDiff (f : ℍ -> Complex)
+    - holo : 对任意 f : F, MDiff (f : ℍ -> 复形)
     - bdd_at_cusps((f : F) {c : OnePoint 实数} (hc : IsCusp c Γ)) : c.IsBoundedAt f k
 -/
 class ModularFormClass (F : Type*) (Γ : outParam <| Subgroup (GL (Fin 2) Real)) (k : outParam Int)
@@ -228,11 +228,11 @@ class CuspFormClass
     - zero_at_cusps((f : F) {c : OnePoint Real} (hc : IsCusp c Γ)) : c.IsZeroAt f k
 
 中文:
-类 CuspFormClass
-  参数: (F : 类型) (Γ : outParam <| Subgroup (GL (Fin 2) 实数)) (k : outParam 整数)
-  继承: SlashInvariantFormClass F Γ k
+类 尖点形式类
+  参数: (F : 类型) (Γ : outParam <| 子群 (GL (有限集 2) 实数)) (k : outParam 整数)
+  继承: 斜不变形式类 F Γ k
   公理与运算 (2 个):
-    - holo : 对任意 f : F, MDiff (f : ℍ -> Complex)
+    - holo : 对任意 f : F, MDiff (f : ℍ -> 复形)
     - zero_at_cusps((f : F) {c : OnePoint 实数} (hc : IsCusp c Γ)) : c.IsZeroAt f k
 -/
 class CuspFormClass (F : Type*) (Γ : outParam <| Subgroup (GL (Fin 2) Real)) (k : outParam Int)
@@ -261,8 +261,8 @@ lemma ModularFormClass.continuous
   proof: (ModularFormClass.holo f).continuous
 
 中文:
-引理 ModularFormClass.continuous
-  结论: {k : 整数} {Γ : Subgroup (GL (Fin 2) 实数)}
+引理 模形式类.continuous
+  结论: {k : 整数} {Γ : 子群 (GL (有限集 2) 实数)}
   证明: (ModularFormClass.holo f).continuous
 
 Depends on / 依赖: ModularFormClass, ModularFormClass.holo, continuous
@@ -302,8 +302,8 @@ definition ModularFormClass.modularForm
   bdd_at_cusps' := ModularFormClass.bdd_at_cusps f
 
 中文:
-定义 ModularFormClass.modularForm
-  签名: [FunLike F ℍ Complex] [ModularFormClass F Γ k] (f : F)
+定义 模形式类.modularForm
+  签名: [函数状 F ℍ 复形] [模形式类 F Γ k] (f : F)
   定义体: f
   slash_action_eq' := SlashInvariantFormClass.slash_action_eq f
   holo' := ModularFormClass.holo f
@@ -325,8 +325,8 @@ instance [FunLike
   body: ⟨ModularFormClass.modularForm⟩
 
 中文:
-实例 [FunLike
-  签名: F ℍ Complex] [ModularFormClass F Γ k] : CoeTC F (ModularForm Γ k)
+实例 [函数状
+  签名: F ℍ 复形] [模形式类 F Γ k] : CoeTC F (模形式 Γ k)
   定义体: ⟨ModularFormClass.modularForm⟩
 
 Depends on / 依赖: ModularFormClass, ModularFormClass.modularForm, modularForm
@@ -346,9 +346,9 @@ theorem ModularForm.toFun_eq_coe
 @[simp]
 
 中文:
-定理 ModularForm.toFun_eq_coe
-  条件: (f : ModularForm Γ k)
-  结论: f.toFun = (f : ℍ -> Complex)
+定理 模形式.toFun_eq_coe
+  条件: (f : 模形式 Γ k)
+  结论: f.toFun = (f : ℍ -> 复形)
   证明: rfl
 
 @[simp]
@@ -367,8 +367,8 @@ theorem ModularForm.toSlashInvariantForm_coe
   proof: rfl
 
 中文:
-定理 ModularForm.toSlashInvariantForm_coe
-  条件: (f : ModularForm Γ k)
+定理 模形式.toSlashInvariantForm_coe
+  条件: (f : 模形式 Γ k)
   结论: ⇑f.1 = f
   证明: rfl
 -/
@@ -387,9 +387,9 @@ theorem CuspForm.toFun_eq_coe
 @[simp]
 
 中文:
-定理 CuspForm.toFun_eq_coe
-  条件: {f : CuspForm Γ k}
-  结论: f.toFun = (f : ℍ -> Complex)
+定理 尖点形式.toFun_eq_coe
+  条件: {f : 尖点形式 Γ k}
+  结论: f.toFun = (f : ℍ -> 复形)
   证明: rfl
 
 @[simp]
@@ -410,8 +410,8 @@ theorem CuspForm.toSlashInvariantForm_coe
 @[ext]
 
 中文:
-定理 CuspForm.toSlashInvariantForm_coe
-  条件: (f : CuspForm Γ k)
+定理 尖点形式.toSlashInvariantForm_coe
+  条件: (f : 尖点形式 Γ k)
   结论: ⇑f.1 = f
   证明: rfl
 
@@ -432,8 +432,8 @@ theorem ModularForm.ext
 @[ext]
 
 中文:
-定理 ModularForm.ext
-  条件: {f g : ModularForm Γ k} (h : 对任意 x, f x = g x)
+定理 模形式.ext
+  条件: {f g : 模形式 Γ k} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -455,8 +455,8 @@ theorem CuspForm.ext
   proof: DFunLike.ext f g h
 
 中文:
-定理 CuspForm.ext
-  条件: {f g : CuspForm Γ k} (h : 对任意 x, f x = g x)
+定理 尖点形式.ext
+  条件: {f g : 尖点形式 Γ k} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -477,8 +477,8 @@ definition ModularForm.copy
   bdd_at_cusps' hc := h.symm ▸ f.bdd_at_cusps' (hΓ ▸ hc)
 
 中文:
-定义 ModularForm.copy
-  签名: {Γ' : Subgroup (GL (Fin 2) 实数)} (f : ModularForm Γ k) (f' : ℍ -> Complex)
+定义 模形式.copy
+  签名: {Γ' : 子群 (GL (有限集 2) 实数)} (f : 模形式 Γ k) (f' : ℍ -> 复形)
   定义体: f'
   slash_action_eq' A hA := h.symm ▸ f.slash_action_eq' A (hΓ ▸ hA)
   holo' := h.symm ▸ f.holo'
@@ -503,8 +503,8 @@ definition CuspForm.copy
   zero_at_cusps' hc := h.symm ▸ f.zero_at_cusps' (hΓ ▸ hc)
 
 中文:
-定义 CuspForm.copy
-  签名: {Γ' : Subgroup (GL (Fin 2) 实数)} (f : CuspForm Γ k) (f' : ℍ -> Complex)
+定义 尖点形式.copy
+  签名: {Γ' : 子群 (GL (有限集 2) 实数)} (f : 尖点形式 Γ k) (f' : ℍ -> 复形)
   定义体: f'
   slash_action_eq' A hA := h.symm ▸ f.slash_action_eq' A (hΓ ▸ hA)
   holo' := h.symm ▸ f.holo'
@@ -537,7 +537,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (ModularForm Γ k) where add f g
+  签名: : 加法 (模形式 Γ k) where add f g
   定义体: { toSlashInvariantForm := f + g
     holo' := f.holo'.add g.holo'
     bdd_at_cusps' hc := by simpa using (f.bdd_at_cusps' hc).add (g.bdd_at_cusps' hc) }
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (ModularForm Γ k) ℍ Complex
+  签名: 是加法Apply (模形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_add := FunLike.coe_add
@@ -589,7 +589,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (ModularForm Γ k)
+  签名: : 零 (模形式 Γ k)
   定义体: ⟨ { toSlashInvariantForm := 0
       holo' := fun _ => mdifferentiableAt_const
       bdd_at_cusps' hc g hg := by simpa using zero_form_isBoundedAtImInfty } ⟩
@@ -617,7 +617,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (ModularForm Γ k) ℍ Complex
+  签名: 是ZeroApply (模形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_zero := FunLike.coe_zero
@@ -650,7 +650,7 @@ lemma eq_zero_of_neg_one_mem
 
 中文:
 引理 eq_zero_of_neg_one_mem
-  结论: [Γ.HasDetOne] (h_neg_one : -1 in Γ) (hk : Odd k)
+  结论: [Γ.有DetOne] (h_neg_one : -1 in Γ) (hk : Odd k)
   证明: by
   ext z
   have hf := slash_action_eqn'' f h_neg_one z
@@ -689,8 +689,8 @@ instance instSMulReal
         FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Comp
 
 中文:
-实例 instSMulReal
-  签名: : SMul α (ModularForm Γ k) where
+实例 instSMul实数
+  签名: : 标量乘法 α (模形式 Γ k) where
   定义体: { toSlashInvariantForm := c • f.1
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
@@ -721,8 +721,8 @@ instance instIsSMulApplyReal
 @[deprecated (since := "2026-07-10")] protected alias smul_apply := smul_apply
 
 中文:
-实例 instIsSMulApplyReal
-  签名: : IsSMulApply α (ModularForm Γ k) ℍ Complex where
+实例 instIsSMulApply实数
+  签名: : 是SMulApply α (模形式 Γ k) ℍ 复形 where
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -756,7 +756,7 @@ instance instSMulComplex
 
 中文:
 实例 instSMulComplex
-  签名: : SMul α (ModularForm Γ k) where
+  签名: : 标量乘法 α (模形式 Γ k) where
   定义体: { toSlashInvariantForm := c • f.1
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
@@ -788,7 +788,7 @@ instance instIsSMulApplyComplex
 
 中文:
 实例 instIsSMulApplyComplex
-  签名: : IsSMulApply α (ModularForm Γ k) ℍ Complex where
+  签名: : 是SMulApply α (模形式 Γ k) ℍ 复形 where
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias IsGLPos.coe_smul := FunLike.coe_smul
@@ -817,7 +817,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (ModularForm Γ k)
+  签名: : 取负 (模形式 Γ k)
   定义体: ⟨fun f =>
     { toSlashInvariantForm := -f.1
       holo' := f.holo'.neg
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (ModularForm Γ k) ℍ Complex
+  签名: 是NegApply (模形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_neg := FunLike.coe_neg
@@ -869,7 +869,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (ModularForm Γ k)
+  签名: : 减法 (模形式 Γ k)
   定义体: ⟨fun f g => f + -g⟩
 -/
 instance instSub : Sub (ModularForm Γ k) :=
@@ -889,7 +889,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (ModularForm Γ k) ℍ Complex
+  签名: 是SubApply (模形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_sub := FunLike.coe_sub
@@ -915,7 +915,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (ModularForm Γ k)
+  签名: 加法交换群 (模形式 Γ k)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-07-10")] alias coeHom := FunLike.coeMonoidHom
@@ -936,7 +936,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 实数 (ModularForm Γ k)
+  签名: 模 实数 (模形式 Γ k)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -952,8 +952,8 @@ instance [Γ.HasDetOne]
   body: fast_instance% FunLike.module
 
 中文:
-实例 [Γ.HasDetOne]
-  签名: : Module Complex (ModularForm Γ k)
+实例 [Γ.有DetOne]
+  签名: : 模 复形 (模形式 Γ k)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -970,7 +970,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ModularForm Γ k)
+  签名: 可居 (模形式 Γ k)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (ModularForm Γ k) :=
@@ -992,7 +992,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: {k_1 k_2 : 整数} [Γ.HasDetPlusMinusOne] (f : ModularForm Γ k_1) (g : ModularForm Γ k_2)
+  签名: {k_1 k_2 : 整数} [Γ.有DetPlusMinusOne] (f : 模形式 Γ k_1) (g : 模形式 Γ k_2)
   定义体: f.1.mul g.1
   holo' := f.holo'.mul g.holo'
   bdd_at_cusps' hc γ hγ := by
@@ -1020,7 +1020,7 @@ definition const
 
 中文:
 定义 const
-  签名: (x : Complex) [Γ.HasDetOne]
+  签名: (x : 复形) [Γ.有DetOne]
   定义体: .const x
   holo' _ := mdifferentiableAt_const
   bdd_at_cusps' hc g hg := by simpa only [coe_const, slash_def, SlashInvariantForm.toFun_eq_coe,
@@ -1046,8 +1046,8 @@ lemma const_apply
 
 中文:
 引理 const_apply
-  条件: [Γ.HasDetOne] (x : Complex) (τ : ℍ)
-  结论: (const x : ModularForm Γ 0) τ = x
+  条件: [Γ.有DetOne] (x : 复形) (τ : ℍ)
+  结论: (const x : 模形式 Γ 0) τ = x
   证明: rfl
 -/
 lemma const_apply [Γ.HasDetOne] (x : Complex) (τ : ℍ) : (const x : ModularForm Γ 0) τ = x := rfl
@@ -1066,8 +1066,8 @@ definition constReal
 @[simp]
 
 中文:
-定义 constReal
-  签名: (x : 实数) [Γ.HasDetPlusMinusOne]
+定义 const实数
+  签名: (x : 实数) [Γ.有DetPlusMinusOne]
   定义体: .constReal x
   holo' _ := mdifferentiableAt_const
   bdd_at_cusps' hc g hg := by simpa only [coe_constReal, slash_def, SlashInvariantForm.toFun_eq_coe,
@@ -1091,8 +1091,8 @@ lemma constReal_apply
   proof: rfl
 
 中文:
-引理 constReal_apply
-  条件: [Γ.HasDetPlusMinusOne] (x : 实数) (τ : ℍ)
+引理 const实数_apply
+  条件: [Γ.有DetPlusMinusOne] (x : 实数) (τ : ℍ)
   证明: rfl
 -/
 lemma constReal_apply [Γ.HasDetPlusMinusOne] (x : Real) (τ : ℍ) :
@@ -1110,8 +1110,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : One (ModularForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 幺 (模形式 Γ 0) where
   定义体: { constReal 1 with toSlashInvariantForm := 1 }
 
 @[simp]
@@ -1133,8 +1133,8 @@ theorem one_coe_eq_one
 
 中文:
 定理 one_coe_eq_one
-  条件: [Γ.HasDetPlusMinusOne]
-  结论: ⇑(1 : ModularForm Γ 0) = 1
+  条件: [Γ.有DetPlusMinusOne]
+  结论: ⇑(1 : 模形式 Γ 0) = 1
   证明: rfl
 -/
 theorem one_coe_eq_one [Γ.HasDetPlusMinusOne] : ⇑(1 : ModularForm Γ 0) = 1 :=
@@ -1151,8 +1151,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp, norm_cast]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : 自然数Cast (ModularForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 自然数嵌入 (模形式 Γ 0) where
   定义体: constReal n
 
 @[simp, norm_cast]
@@ -1173,7 +1173,7 @@ lemma coe_natCast
 
 中文:
 引理 coe_natCast
-  条件: [Γ.HasDetPlusMinusOne] (n : 自然数)
+  条件: [Γ.有DetPlusMinusOne] (n : 自然数)
   证明: rfl
 -/
 lemma coe_natCast [Γ.HasDetPlusMinusOne] (n : Nat) :
@@ -1189,7 +1189,7 @@ lemma toSlashInvariantForm_natCast
 
 中文:
 引理 toSlashInvariantForm_natCast
-  条件: [Γ.HasDetPlusMinusOne] (n : 自然数)
+  条件: [Γ.有DetPlusMinusOne] (n : 自然数)
   证明: rfl
 -/
 lemma toSlashInvariantForm_natCast [Γ.HasDetPlusMinusOne] (n : Nat) :
@@ -1206,8 +1206,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp, norm_cast]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : 整数Cast (ModularForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 整数嵌入 (模形式 Γ 0) where
   定义体: constReal z
 
 @[simp, norm_cast]
@@ -1228,7 +1228,7 @@ lemma coe_intCast
 
 中文:
 引理 coe_intCast
-  条件: [Γ.HasDetPlusMinusOne] (z : 整数)
+  条件: [Γ.有DetPlusMinusOne] (z : 整数)
   证明: rfl
 -/
 lemma coe_intCast [Γ.HasDetPlusMinusOne] (z : Int) :
@@ -1244,7 +1244,7 @@ lemma toSlashInvariantForm_intCast
 
 中文:
 引理 toSlashInvariantForm_intCast
-  条件: [Γ.HasDetPlusMinusOne] (z : 整数)
+  条件: [Γ.有DetPlusMinusOne] (z : 整数)
   证明: rfl
 -/
 lemma toSlashInvariantForm_intCast [Γ.HasDetPlusMinusOne] (z : Int) :
@@ -1271,7 +1271,7 @@ instance hasAdd
 
 中文:
 实例 hasAdd
-  签名: : Add (CuspForm Γ k)
+  签名: : 加法 (尖点形式 Γ k)
   定义体: ⟨fun f g =>
     { toSlashInvariantForm := f + g
       holo' := f.holo'.add g.holo'
@@ -1299,7 +1299,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (CuspForm Γ k) ℍ Complex
+  签名: 是加法Apply (尖点形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_add := FunLike.coe_add
@@ -1325,7 +1325,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (CuspForm Γ k)
+  签名: : 零 (尖点形式 Γ k)
   定义体: ⟨ { toSlashInvariantForm := 0
       holo' := fun _ => mdifferentiableAt_const
       zero_at_cusps' hc g hg := by simpa using! Filter.zero_zeroAtFilter _ } ⟩
@@ -1351,7 +1351,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (CuspForm Γ k) ℍ Complex
+  签名: 是ZeroApply (尖点形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_zero := FunLike.coe_zero
@@ -1387,7 +1387,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul α (CuspForm Γ k) where smul c f
+  签名: : 标量乘法 α (尖点形式 Γ k) where smul c f
   定义体: { toSlashInvariantForm := c • f.1
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
@@ -1418,7 +1418,7 @@ instance instSMulApply
 
 中文:
 实例 instSMulApply
-  签名: : IsSMulApply α (CuspForm Γ k) ℍ Complex where
+  签名: : 是SMulApply α (尖点形式 Γ k) ℍ 复形 where
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -1453,7 +1453,7 @@ instance IsGLPos.instSMul
 
 中文:
 实例 IsGLPos.instSMul
-  签名: : SMul α (CuspForm Γ k) where smul c f
+  签名: : 标量乘法 α (尖点形式 Γ k) where smul c f
   定义体: { toSlashInvariantForm := c • f.1
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
@@ -1485,7 +1485,7 @@ instance IsGLPos.instSMulApply
 
 中文:
 实例 IsGLPos.instSMulApply
-  签名: : IsSMulApply α (CuspForm Γ k) ℍ Complex where
+  签名: : 是SMulApply α (尖点形式 Γ k) ℍ 复形 where
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias IsGLPos.coe_smul := FunLike.coe_smul
@@ -1514,7 +1514,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (CuspForm Γ k)
+  签名: : 取负 (尖点形式 Γ k)
   定义体: ⟨fun f =>
     { toSlashInvariantForm := -f.1
       holo' := f.holo'.neg
@@ -1542,7 +1542,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (CuspForm Γ k) ℍ Complex
+  签名: 是NegApply (尖点形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_neg := FunLike.coe_neg
@@ -1566,7 +1566,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (CuspForm Γ k)
+  签名: : 减法 (尖点形式 Γ k)
   定义体: ⟨fun f g => f + -g⟩
 -/
 instance instSub : Sub (CuspForm Γ k) :=
@@ -1586,7 +1586,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (CuspForm Γ k) ℍ Complex
+  签名: 是SubApply (尖点形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_sub := FunLike.coe_sub
@@ -1614,7 +1614,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (CuspForm Γ k)
+  签名: 加法交换群 (尖点形式 Γ k)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-07-10")] alias coeHom := FunLike.coeMonoidHom
@@ -1639,7 +1639,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 实数 (CuspForm Γ k)
+  签名: 模 实数 (尖点形式 Γ k)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -1655,8 +1655,8 @@ instance [Γ.HasDetOne]
   body: fast_instance% FunLike.module
 
 中文:
-实例 [Γ.HasDetOne]
-  签名: : Module Complex (CuspForm Γ k)
+实例 [Γ.有DetOne]
+  签名: : 模 复形 (尖点形式 Γ k)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -1673,7 +1673,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CuspForm Γ k)
+  签名: 可居 (尖点形式 Γ k)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (CuspForm Γ k) :=
@@ -1701,7 +1701,7 @@ definition mulModularForm
 
 中文:
 定义 mulModularForm
-  签名: [Γ.HasDetPlusMinusOne] {k₁ k₂ : 整数} (f : CuspForm Γ k₁) (g : ModularForm Γ k₂)
+  签名: [Γ.有DetPlusMinusOne] {k₁ k₂ : 整数} (f : 尖点形式 Γ k₁) (g : 模形式 Γ k₂)
   定义体: f.1.mul g.1
   holo' := f.holo'.mul g.holo'
   zero_at_cusps' hc γ hγ := by
@@ -1729,7 +1729,7 @@ definition mcast
 
 中文:
 定义 mcast
-  签名: {a b : 整数} {Γ Γ' : Subgroup (GL (Fin 2) 实数)} (h : a = b) (f : CuspForm Γ a)
+  签名: {a b : 整数} {Γ Γ' : 子群 (GL (有限集 2) 实数)} (h : a = b) (f : 尖点形式 Γ a)
   定义体: (f : ℍ -> Complex)
   slash_action_eq' A hA := h ▸ f.slash_action_eq' A (hΓ ▸ hA)
   holo' := f.holo'
@@ -1766,7 +1766,7 @@ definition mcast
 
 中文:
 定义 mcast
-  签名: {a b : 整数} {Γ Γ' : Subgroup (GL (Fin 2) 实数)} (h : a = b) (f : ModularForm Γ a)
+  签名: {a b : 整数} {Γ Γ' : 子群 (GL (有限集 2) 实数)} (h : a = b) (f : 模形式 Γ a)
   定义体: (f : ℍ -> Complex)
   slash_action_eq' A hA := h ▸ f.slash_action_eq' A (hΓ ▸ hA)
   holo' := f.holo'
@@ -1793,7 +1793,7 @@ theorem mcast_apply
 
 中文:
 定理 mcast_apply
-  结论: {a b : 整数} {Γ Γ' : Subgroup (GL (Fin 2) 实数)} (h : a = b) (f : ModularForm Γ a)
+  结论: {a b : 整数} {Γ Γ' : 子群 (GL (有限集 2) 实数)} (h : a = b) (f : 模形式 Γ a)
   证明: rfl
 
 @[simp]
@@ -1815,7 +1815,7 @@ lemma mcast_eq_zero_iff
 
 中文:
 引理 mcast_eq_zero_iff
-  结论: {a b : 整数} {Γ Γ' : Subgroup (GL (Fin 2) 实数)} (h : a = b)
+  结论: {a b : 整数} {Γ Γ' : 子群 (GL (有限集 2) 实数)} (h : a = b)
   证明: by
   simp [← FunLike.coe_zero_iff]
 
@@ -1841,7 +1841,7 @@ theorem gradedMonoid_eq_of_cast
 
 中文:
 定理 gradedMonoid_eq_of_cast
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} {a b : GradedMonoid (ModularForm Γ)}
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} {a b : 分次幺半群 (模形式 Γ)}
   证明: by
   obtain ⟨i, a⟩ := a
   cases h
@@ -1867,7 +1867,7 @@ definition pow
 
 中文:
 定义 pow
-  签名: {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetPlusMinusOne] {k : 整数} (f : ModularForm Γ k)
+  签名: {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetPlusMinusOne] {k : 整数} (f : 模形式 Γ k)
   定义体: n.rec (mcast (by simp) (1 : ModularForm Γ 0)) (fun n g => (g.mul f).mcast (by grind))
 
 @[simp]
@@ -1892,7 +1892,7 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetPlusMinusOne] {k : 整数}
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetPlusMinusOne] {k : 整数}
   证明: by
   induction n with
   | zero => simp [pow]
@@ -1928,7 +1928,7 @@ instance instGCommRing
 
 中文:
 实例 instGCommRing
-  签名: (Γ : Subgroup (GL (Fin 2) 实数)) [Γ.HasDetPlusMinusOne]
+  签名: (Γ : 子群 (GL (有限集 2) 实数)) [Γ.有DetPlusMinusOne]
   定义体: gradedMonoid_eq_of_cast (zero_add _) (ext fun _ => one_mul _)
   mul_one _ := gradedMonoid_eq_of_cast (add_zero _) (ext fun _ => mul_one _)
   mul_assoc _ _ _ := gradedMonoid_eq_of_cast (add_assoc _ _ _) (ext fun _ => mul_assoc _ _ _)
@@ -1968,7 +1968,7 @@ instance instGAlgebra
 
 中文:
 实例 instGAlgebra
-  签名: (Γ : Subgroup (GL (Fin 2) 实数)) [Γ.HasDetOne]
+  签名: (Γ : 子群 (GL (有限集 2) 实数)) [Γ.有DetOne]
   定义体: { toFun z := const z, map_zero' := rfl, map_add' := fun _ _ => rfl }
   map_one := rfl
   map_mul _x _y := rfl
@@ -2006,7 +2006,7 @@ theorem gnpow_eq_pow
 
 中文:
 定理 gnpow_eq_pow
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetPlusMinusOne]
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetPlusMinusOne]
   证明: by
   induction n with
   | zero =>
@@ -2043,7 +2043,7 @@ lemma directSum_of_pow
 
 中文:
 引理 directSum_of_pow
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetPlusMinusOne]
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetPlusMinusOne]
   证明: by
   grind [DirectSum.ofPow, DirectSum.of_eq_of_gradedMonoid_eq (gnpow_eq_pow f n)]
 
@@ -2073,8 +2073,8 @@ definition prod
       prod
 
 中文:
-定义 prod
-  签名: {ι : Type} {s : Finset ι} {k : ι -> 整数} (m : 整数)
+定义 乘积
+  签名: {ι : 类型} {s : 有限集 ι} {k : ι -> 整数} (m : 整数)
   定义体: SlashInvariantForm.prod m hm (fun i => (F i))
   holo' := MDifferentiable.prod (t := s) (f := fun (i : ι) => (F i).1)
       (by intro (i : ι) hi; simpa using! (F i).holo')
@@ -2110,7 +2110,7 @@ definition prodEqualWeights
 
 中文:
 定义 prodEqualWeights
-  签名: {ι : Type} {s : Finset ι} {k : 整数}
+  签名: {ι : 类型} {s : 有限集 ι} {k : 整数}
   定义体: prod (s := s) (s.card * k) (by simp) F
 
 Depends on / 依赖: s.card
@@ -2144,8 +2144,8 @@ definition ModularForm.translate
     simpa [mu
 
 中文:
-定义 ModularForm.translate
-  签名: [ModularFormClass F Γ k] (g : GL (Fin 2) 实数)
+定义 模形式.translate
+  签名: [模形式类 F Γ k] (g : GL (有限集 2) 实数)
   定义体: SlashInvariantForm.translate f g
   bdd_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [SlashInvariantForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isBoundedAt_infty_iff]; rw [← OnePoint.IsBoundedAt.smul_iff]
@@ -2173,8 +2173,8 @@ lemma ModularForm.coe_translate
   proof: rfl
 
 中文:
-引理 ModularForm.coe_translate
-  条件: [ModularFormClass F Γ k] (g : GL (Fin 2) 实数)
+引理 模形式.coe_translate
+  条件: [模形式类 F Γ k] (g : GL (有限集 2) 实数)
   证明: rfl
 -/
 lemma ModularForm.coe_translate [ModularFormClass F Γ k] (g : GL (Fin 2) Real) :
@@ -2194,8 +2194,8 @@ definition CuspForm.translate
     apply CuspFormClass.zero_at
 
 中文:
-定义 CuspForm.translate
-  签名: [CuspFormClass F Γ k] (g : GL (Fin 2) 实数)
+定义 尖点形式.translate
+  签名: [尖点形式类 F Γ k] (g : GL (有限集 2) 实数)
   定义体: ModularForm.translate f g
   zero_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [ModularForm.toSlashInvariantForm_coe]; rw [ModularForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isZeroAt_infty_iff]; rw [← OnePoint.IsZeroAt.smul_iff]
@@ -2221,8 +2221,8 @@ lemma CuspForm.coe_translate
   proof: rfl
 
 中文:
-引理 CuspForm.coe_translate
-  条件: [CuspFormClass F Γ k] (g : SL(2, 整数))
+引理 尖点形式.coe_translate
+  条件: [尖点形式类 F Γ k] (g : SL(2, 整数))
   证明: rfl
 -/
 lemma CuspForm.coe_translate [CuspFormClass F Γ k] (g : SL(2, Int)) :
@@ -2247,7 +2247,7 @@ instance [Γ.IsArithmetic]
     using ⟨_, OnePoint.map_infty _⟩⟩
 
 中文:
-实例 [Γ.IsArithmetic]
+实例 [Γ.是Arithmetic]
   签名: : Fact (IsCusp ∞ Γ)
   定义体: ⟨by simpa [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z, isCusp_SL2Z_iff]
     using ⟨_, OnePoint.map_infty _⟩⟩
@@ -2267,8 +2267,8 @@ lemma ModularFormClass.bdd_at_infty
   proof: isBoundedAt_infty_iff.mp bdd_at_cusps f Fact.out
 
 中文:
-引理 ModularFormClass.bdd_at_infty
-  条件: [ModularFormClass F Γ k] [Fact (IsCusp ∞ Γ)]
+引理 模形式类.bdd_at_infty
+  条件: [模形式类 F Γ k] [Fact (IsCusp ∞ Γ)]
   证明: isBoundedAt_infty_iff.mp bdd_at_cusps f Fact.out
 
 Depends on / 依赖: Fact.out, bdd_at_cusps, isBoundedAt_infty_iff, isBoundedAt_infty_iff.mp
@@ -2286,8 +2286,8 @@ lemma CuspFormClass.zero_at_infty
   proof: isZeroAt_infty_iff.mp zero_at_cusps f Fact.out
 
 中文:
-引理 CuspFormClass.zero_at_infty
-  条件: [CuspFormClass F Γ k] [Fact (IsCusp ∞ Γ)]
+引理 尖点形式类.zero_at_infty
+  条件: [尖点形式类 F Γ k] [Fact (IsCusp ∞ Γ)]
   证明: isZeroAt_infty_iff.mp zero_at_cusps f Fact.out
 
 Depends on / 依赖: Fact.out, isZeroAt_infty_iff, isZeroAt_infty_iff.mp, zero_at_cusps
@@ -2311,8 +2311,8 @@ lemma ModularFormClass.bdd_at_infty_slash
   exact ⟨g, by simp [mapGL]⟩
 
 中文:
-引理 ModularFormClass.bdd_at_infty_slash
-  条件: [ModularFormClass F Γ k]
+引理 模形式类.bdd_at_infty_slash
+  条件: [模形式类 F Γ k]
   证明: by
   rw [← OnePoint.isBoundedAt_infty_iff]; rw [SL_slash]; rw [← OnePoint.IsBoundedAt.smul_iff]
   apply bdd_at_cusps f
@@ -2341,8 +2341,8 @@ lemma CuspFormClass.zero_at_infty_slash
   exact ⟨g, by simp [mapGL]⟩
 
 中文:
-引理 CuspFormClass.zero_at_infty_slash
-  条件: [CuspFormClass F Γ k]
+引理 尖点形式类.zero_at_infty_slash
+  条件: [尖点形式类 F Γ k]
   证明: by
   rw [← OnePoint.isZeroAt_infty_iff]; rw [SL_slash]; rw [← OnePoint.IsZeroAt.smul_iff]
   apply zero_at_cusps f

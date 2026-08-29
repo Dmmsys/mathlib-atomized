@@ -49,7 +49,7 @@ structure HomObj
 
 中文:
 结构 HomObj
-  参数: (A : C ⥤ Type w)
+  参数: (A : C ⥤ 类型 w)
   公理与运算 (2 个):
     - app((c : C) (a : A.obj c)) : F.obj c ⟶ G.obj c
     - naturality({c d : C} (f : c ⟶ d) (a : A.obj c)) : F.map f ≫ app d (A.map f a) = app c a ≫ G.map f  [默认: by cat_disch]
@@ -82,7 +82,7 @@ definition homObjEquiv
 
 中文:
 定义 homObjEquiv
-  签名: (F G A : C ⥤ Type w)
+  签名: (F G A : C ⥤ 类型 w)
   定义体: ⟨fun X => ↾fun ⟨x, y⟩ => a.app X y x, fun X Y f => by
     ext ⟨x, y⟩
     simpa using! ConcreteCategory.congr_hom (a.naturality f y) x⟩
@@ -137,7 +137,7 @@ definition ofNatTrans
   body: f.app X
 
 中文:
-定义 ofNatTrans
+定义 of自然数Trans
   签名: (f : F ⟶ G)
   定义体: f.app X
 
@@ -158,7 +158,7 @@ definition id
 
 中文:
 定义 id
-  签名: (A : C ⥤ Type w)
+  签名: (A : C ⥤ 类型 w)
   定义体: ofNatTrans (𝟙 F)
 
 Depends on / 依赖: ofNatTrans
@@ -199,7 +199,7 @@ definition map
 
 中文:
 定义 map
-  签名: {A' : C ⥤ Type w} (f : A' ⟶ A) (x : HomObj F G A)
+  签名: {A' : C ⥤ 类型 w} (f : A' ⟶ A) (x : HomObj F G A)
   定义体: x.app Δ (f.app Δ a)
   naturality {Δ Δ'} φ a := by
     rw [← x.naturality φ (f.app Δ a)]; rw [f.naturality_apply φ a]
@@ -231,7 +231,7 @@ definition homObjFunctor
 
 中文:
 定义 homObjFunctor
-  签名: : (C ⥤ Type w)ᵒᵖ ⥤ Type (max w v' u) where
+  签名: : (C ⥤ 类型 w)ᵒᵖ ⥤ 类型 (最大值 w v' u) where
   定义体: HomObj F G A.unop
   map {A A'} f := ↾fun x =>
     { app := fun X a => x.app X (f.unop.app _ a)
@@ -309,7 +309,7 @@ definition functorHomEquiv
 
 中文:
 定义 functorHomEquiv
-  签名: (A : C ⥤ Type (max u v v'))
+  签名: (A : C ⥤ 类型 (最大值 u v v'))
   定义体: { app := fun X a => (φ.app X a).app X (𝟙 _)
       naturality := fun {X Y} f a => by
         rw [← (φ.app X a).naturality f (𝟙 _)]
@@ -360,7 +360,7 @@ definition natTransEquiv
 
 中文:
 定义 natTransEquiv
-  签名: : (𝟙_ (C ⥤ Type (max v' v u)) ⟶ F.functorHom G) ≃ (F ⟶ G) where
+  签名: : (𝟙_ (C ⥤ 类型 (最大值 v' v u)) ⟶ F.functorHom G) ≃ (F ⟶ G) where
   定义体: ⟨fun X => (f.app X (PUnit.unit)).app X (𝟙 _), by
     intro X Y φ
     rw [← (f.app X (PUnit.unit)).naturality φ]
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedCategory (C ⥤ Type (max v' v u)) (C ⥤ D)
+  签名: Enriched范畴 (C ⥤ 类型 (最大值 v' v u)) (C ⥤ D)
   定义体: functorHom
   id F := natTransEquiv.symm (𝟙 F)
   comp F G H := { app _ := ↾fun f => f.1.comp f.2 }

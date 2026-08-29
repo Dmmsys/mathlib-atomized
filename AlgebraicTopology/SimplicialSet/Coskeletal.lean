@@ -443,7 +443,7 @@ instance isCoskeletal'
 
 中文:
 实例 isCoskeletal'
-  签名: [IsStrictSegal X]
+  签名: [是StrictSegal X]
   定义体: isCoskeletal ofIsStrictSegal X
 
 Depends on / 依赖: isCoskeletal, ofIsStrictSegal

@@ -83,15 +83,15 @@ class CStarModule
     - norm_eq_sqrt_norm_inner_self(x) : ‖x‖ = √‖inner x x‖
 
 中文:
-类 CStarModule
-  参数: (A E : 类型) [NonUnitalSemiring A] [StarRing A]
-  继承: Inner A E
+类 CStar模
+  参数: (A E : 类型) [非幺半环 A] [对合环 A]
+  继承: 内积 A E
   公理与运算 (7 个):
     - inner_add_right({x} {y} {z}) : inner x (y + z) = inner x y + inner x z
     - inner_self_nonneg({x}) : 0 <= inner x x
     - inner_self({x}) : inner x x = 0 ↔ x = 0
     - inner_op_smul_right({a : A} {x y : E}) : inner x (a • y) = a * inner x y
-    - inner_smul_right_complex({z : Complex} {x} {y}) : inner x (z • y) = z • inner x y
+    - inner_smul_right_complex({z : 复形} {x} {y}) : inner x (z • y) = z • inner x y
     - star_inner(x y) : star (inner x y) = inner y x
     - norm_eq_sqrt_norm_inner_self(x) : ‖x‖ = √‖inner x x‖
 
@@ -193,7 +193,7 @@ lemma inner_smul_left_complex
 
 中文:
 引理 inner_smul_left_complex
-  条件: {z : Complex} {x y : E}
+  条件: {z : 复形} {x y : E}
   结论: ⟪z • x, y⟫ = star z • ⟪x, y⟫
   证明: by
   rw [← star_inner]
@@ -283,7 +283,7 @@ definition innerₛₗ
 
 中文:
 定义 innerₛₗ
-  签名: : E ->ₗ⋆[Complex] E ->ₗ[Complex] A where
+  签名: : E ->ₗ⋆[复形] E ->ₗ[复形] A where
   定义体: { toFun := fun y => ⟪x, y⟫
                map_add' := fun z y => by simp
                map_smul' := fun z y => by simp }
@@ -434,7 +434,7 @@ lemma inner_sum_right
 
 中文:
 引理 inner_sum_right
-  条件: {ι : 类型} {s : Finset ι} {x : E} {y : ι -> E}
+  条件: {ι : 类型} {s : 有限集 ι} {x : E} {y : ι -> E}
   证明: map_sum (innerₛₗ x) ..
 
 @[simp]
@@ -456,7 +456,7 @@ lemma inner_sum_left
 
 中文:
 引理 inner_sum_left
-  条件: {ι : 类型} {s : Finset ι} {x : ι -> E} {y : E}
+  条件: {ι : 类型} {s : 有限集 ι} {x : ι -> E} {y : E}
   证明: map_sum (innerₛₗ.flip y) ..
 
 Depends on / 依赖: map_sum
@@ -510,7 +510,7 @@ definition norm
 
 中文:
 定义 norm
-  签名: (A : 类型) {E : 类型} [Norm A] [Inner A E]
+  签名: (A : 类型) {E : 类型} [范数 A] [内积 A E]
   定义体: √‖⟪x, x⟫_A‖
 -/
 noncomputable def norm (A : Type*) {E : Type*} [Norm A] [Inner A E] : Norm E where
@@ -786,7 +786,7 @@ lemma normedSpaceCore
 
 中文:
 引理 normedSpaceCore
-  结论: NormedSpace.Core Complex E where
+  结论: 赋范空间.核 复形 E where
   证明: (CStarModule.norm_nonneg A)
   norm_eq_zero_iff x := norm_zero_iff A x
   norm_smul c x := by simp [norm_eq_sqrt_norm_inner_self (A := A), norm_smul, ← mul_assoc]
@@ -811,7 +811,7 @@ abbreviation normedAddCommGroup
 
 中文:
 缩写 normedAddCommGroup
-  签名: : NormedAddCommGroup E
+  签名: : 赋范交换加群 E
   定义体: NormedAddCommGroup.ofCore (CStarModule.normedSpaceCore A)
 
 Depends on / 依赖: CStarModule, CStarModule.normedSpaceCore, NormedAddCommGroup, NormedAddCommGroup.ofCore, normedSpaceCore, ofCore
@@ -879,7 +879,7 @@ definition innerSL
 
 中文:
 定义 innerSL
-  签名: : E ->L⋆[Complex] E ->L[Complex] A
+  签名: : E ->L⋆[复形] E ->L[复形] A
   定义体: LinearMap.mkContinuous₂ (innerₛₗ : E ->ₗ⋆[Complex] E ->ₗ[Complex] A) 1 fun x y => by
     simp [innerₛₗ_apply, norm_inner_le E]
 
@@ -923,7 +923,7 @@ lemma continuous_inner
 
 中文:
 引理 continuous_inner
-  结论: Continuous (fun x : E × E => ⟪x.1, x.2⟫_A)
+  结论: 连续 (fun x : E × E => ⟪x.1, x.2⟫_A)
   证明: by
   simp_rw [← innerSL_apply]
   fun_prop

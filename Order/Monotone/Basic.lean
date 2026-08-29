@@ -87,7 +87,7 @@ theorem monotone_comp_ofDual_iff
 
 中文:
 定理 monotone_comp_ofDual_iff
-  结论: Monotone (f ∘ ofDual) ↔ Antitone f
+  结论: 递增 (f ∘ ofDual) ↔ 递减 f
   证明: forall_comm
 
 @[simp]
@@ -110,7 +110,7 @@ theorem antitone_comp_ofDual_iff
 
 中文:
 定理 antitone_comp_ofDual_iff
-  结论: Antitone (f ∘ ofDual) ↔ Monotone f
+  结论: 递减 (f ∘ ofDual) ↔ 递增 f
   证明: forall_comm
 
 @[simp]
@@ -133,7 +133,7 @@ theorem monotone_toDual_comp_iff
 
 中文:
 定理 monotone_toDual_comp_iff
-  结论: Monotone (toDual ∘ f) ↔ Antitone f
+  结论: 递增 (toDual ∘ f) ↔ 递减 f
   证明: Iff.rfl
 
 @[simp]
@@ -156,7 +156,7 @@ theorem antitone_toDual_comp_iff
 
 中文:
 定理 antitone_toDual_comp_iff
-  结论: Antitone (toDual ∘ f) ↔ Monotone f
+  结论: 递减 (toDual ∘ f) ↔ 递增 f
   证明: Iff.rfl
 
 @[simp]
@@ -267,7 +267,7 @@ theorem strictMono_comp_ofDual_iff
 
 中文:
 定理 strictMono_comp_ofDual_iff
-  结论: StrictMono (f ∘ ofDual) ↔ StrictAnti f
+  结论: 严格递增 (f ∘ ofDual) ↔ 严格递减 f
   证明: forall_comm
 
 @[simp]
@@ -290,7 +290,7 @@ theorem strictAnti_comp_ofDual_iff
 
 中文:
 定理 strictAnti_comp_ofDual_iff
-  结论: StrictAnti (f ∘ ofDual) ↔ StrictMono f
+  结论: 严格递减 (f ∘ ofDual) ↔ 严格递增 f
   证明: forall_comm
 
 @[simp]
@@ -313,7 +313,7 @@ theorem strictMono_toDual_comp_iff
 
 中文:
 定理 strictMono_toDual_comp_iff
-  结论: StrictMono (toDual ∘ f : α -> βᵒᵈ) ↔ StrictAnti f
+  结论: 严格递增 (toDual ∘ f : α -> βᵒᵈ) ↔ 严格递减 f
   证明: Iff.rfl
 
 @[simp]
@@ -336,7 +336,7 @@ theorem strictAnti_toDual_comp_iff
 
 中文:
 定理 strictAnti_toDual_comp_iff
-  结论: StrictAnti (toDual ∘ f : α -> βᵒᵈ) ↔ StrictMono f
+  结论: 严格递减 (toDual ∘ f : α -> βᵒᵈ) ↔ 严格递增 f
   证明: Iff.rfl
 
 @[simp]
@@ -441,7 +441,7 @@ theorem monotone_dual_iff
 
 中文:
 定理 monotone_dual_iff
-  结论: Monotone (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ Monotone f
+  结论: 递增 (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ 递增 f
   证明: by
   rw [monotone_toDual_comp_iff]; rw [antitone_comp_ofDual_iff]
 
@@ -461,7 +461,7 @@ theorem antitone_dual_iff
 
 中文:
 定理 antitone_dual_iff
-  结论: Antitone (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ Antitone f
+  结论: 递减 (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ 递减 f
   证明: by
   rw [antitone_toDual_comp_iff]; rw [monotone_comp_ofDual_iff]
 
@@ -523,7 +523,7 @@ theorem strictMono_dual_iff
 
 中文:
 定理 strictMono_dual_iff
-  结论: StrictMono (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ StrictMono f
+  结论: 严格递增 (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ 严格递增 f
   证明: by
   rw [strictMono_toDual_comp_iff]; rw [strictAnti_comp_ofDual_iff]
 
@@ -543,7 +543,7 @@ theorem strictAnti_dual_iff
 
 中文:
 定理 strictAnti_dual_iff
-  结论: StrictAnti (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ StrictAnti f
+  结论: 严格递减 (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ) ↔ 严格递减 f
   证明: by
   rw [strictAnti_toDual_comp_iff]; rw [strictMono_comp_ofDual_iff]
 
@@ -675,8 +675,8 @@ theorem StrictMono.wellFoundedLT
 @[to_dual]
 
 中文:
-定理 StrictMono.wellFoundedLT
-  条件: [WellFoundedLT β] (hf : StrictMono f)
+定理 严格递增.wellFoundedLT
+  条件: [WellFoundedLT β] (hf : 严格递增 f)
   结论: WellFoundedLT α
   证明: Subrelation.isWellFounded (InvImage (· < ·) f) hf.imp
 
@@ -698,8 +698,8 @@ theorem StrictAnti.wellFoundedLT
   proof: Subrelation.isWellFounded (InvImage (· > ·) f) hf.imp
 
 中文:
-定理 StrictAnti.wellFoundedLT
-  条件: [WellFoundedGT β] (hf : StrictAnti f)
+定理 严格递减.wellFoundedLT
+  条件: [WellFoundedGT β] (hf : 严格递减 f)
   结论: WellFoundedLT α
   证明: Subrelation.isWellFounded (InvImage (· > ·) f) hf.imp
 
@@ -726,7 +726,7 @@ theorem MonotoneOn.strictMonoOn_of_injOn
 
 中文:
 定理 MonotoneOn.strictMonoOn_of_injOn
-  条件: (hmono : MonotoneOn f s) (hinj : s.InjOn f)
+  条件: (hmono : MonotoneOn f s) (hinj : s.单射限制 f)
   证明: .lt_of_ne mt (hinj hx hy) h.ne fun _ hx _ hy h => hmono hx hy h.le
 
 Depends on / 依赖: h.le, h.ne, lt_of_ne
@@ -745,7 +745,7 @@ theorem AntitoneOn.strictAntiOn_of_injOn
 
 中文:
 定理 AntitoneOn.strictAntiOn_of_injOn
-  条件: (hanti : AntitoneOn f s) (hinj : s.InjOn f)
+  条件: (hanti : AntitoneOn f s) (hinj : s.单射限制 f)
   证明: .lt_of_ne' mt (hinj hx hy) h.ne fun _ hx _ hy h => hanti hx hy h.le
 
 Depends on / 依赖: h.le, h.ne, lt_of_ne
@@ -775,8 +775,8 @@ theorem StrictMono.isMax_of_apply
 @[to_dual]
 
 中文:
-定理 StrictMono.isMax_of_apply
-  条件: (hf : StrictMono f) (ha : IsMax (f a))
+定理 严格递增.isMax_of_apply
+  条件: (hf : 严格递增 f) (ha : IsMax (f a))
   结论: IsMax a
   证明: of_not_not fun h =>
     let ⟨_, hb⟩ := not_isMax_iff.1 h
@@ -804,8 +804,8 @@ theorem StrictAnti.isMax_of_apply
     (hf hb).not_isMin ha
 
 中文:
-定理 StrictAnti.isMax_of_apply
-  条件: (hf : StrictAnti f) (ha : IsMin (f a))
+定理 严格递减.isMax_of_apply
+  条件: (hf : 严格递减 f) (ha : IsMin (f a))
   结论: IsMax a
   证明: of_not_not fun h =>
     let ⟨_, hb⟩ := not_isMax_iff.1 h
@@ -834,8 +834,8 @@ lemma StrictMono.add_le_nat
     exact ih.trans_lt (hf (n + m).lt_succ_self)
 
 中文:
-引理 StrictMono.add_le_nat
-  条件: {f : 自然数 -> 自然数} (hf : StrictMono f) (m n : 自然数)
+引理 严格递增.add_le_nat
+  条件: {f : 自然数 -> 自然数} (hf : 严格递增 f) (m n : 自然数)
   结论: m + f n <= f (m + n)
   证明: by
   rw [Nat.add_comm m]; rw [Nat.add_comm m]
@@ -871,8 +871,8 @@ theorem StrictMono.ite'
   · simpa [hx, hy] using hg h
 
 中文:
-定理 StrictMono.ite'
-  结论: (hf : StrictMono f) (hg : StrictMono g) {p : α -> 命题}
+定理 严格递增.ite'
+  结论: (hf : 严格递增 f) (hg : 严格递增 g) {p : α -> 命题}
   证明: by
   intro x y h
   by_cases hy : p y
@@ -903,8 +903,8 @@ theorem StrictMono.ite
   proof: (hf.ite' hg hp) fun _ y _ _ h => (hf h).trans_le (hfg y)
 
 中文:
-定理 StrictMono.ite
-  结论: (hf : StrictMono f) (hg : StrictMono g) {p : α -> 命题}
+定理 严格递增.ite
+  结论: (hf : 严格递增 f) (hg : 严格递增 g) {p : α -> 命题}
   证明: (hf.ite' hg hp) fun _ y _ _ h => (hf h).trans_le (hfg y)
 -/
 protected theorem StrictMono.ite (hf : StrictMono f) (hg : StrictMono g) {p : α -> Prop}
@@ -921,8 +921,8 @@ theorem StrictAnti.ite'
   proof: StrictMono.ite' hf.dual_right hg.dual_right hp hfg
 
 中文:
-定理 StrictAnti.ite'
-  结论: (hf : StrictAnti f) (hg : StrictAnti g) {p : α -> 命题}
+定理 严格递减.ite'
+  结论: (hf : 严格递减 f) (hg : 严格递减 g) {p : α -> 命题}
   证明: StrictMono.ite' hf.dual_right hg.dual_right hp hfg
 -/
 protected theorem StrictAnti.ite' (hf : StrictAnti f) (hg : StrictAnti g) {p : α -> Prop}
@@ -940,8 +940,8 @@ theorem StrictAnti.ite
   proof: (hf.ite' hg hp) fun _ y _ _ h => (hfg y).trans_lt (hf h)
 
 中文:
-定理 StrictAnti.ite
-  结论: (hf : StrictAnti f) (hg : StrictAnti g) {p : α -> 命题}
+定理 严格递减.ite
+  结论: (hf : 严格递减 f) (hg : 严格递减 g) {p : α -> 命题}
   证明: (hf.ite' hg hp) fun _ y _ _ h => (hfg y).trans_lt (hf h)
 -/
 protected theorem StrictAnti.ite (hf : StrictAnti f) (hg : StrictAnti g) {p : α -> Prop}
@@ -965,7 +965,7 @@ theorem foldl_monotone
 
 中文:
 定理 foldl_monotone
-  结论: [Preorder α] {f : α -> β -> α} (H : 对任意 b, Monotone fun a => f a b)
+  结论: [预序 α] {f : α -> β -> α} (H : 对任意 b, 递增 fun a => f a b)
   证明: List.recOn l (fun _ _ => id) fun _ _ hl _ _ h => hl (H _ h)
 
 Depends on / 依赖: List.recOn
@@ -984,7 +984,7 @@ theorem foldr_monotone
 
 中文:
 定理 foldr_monotone
-  条件: [Preorder β] {f : α -> β -> β} (H : 对任意 a, Monotone (f a)) (l : List α)
+  条件: [预序 β] {f : α -> β -> β} (H : 对任意 a, 递增 (f a)) (l : 列表 α)
   证明: fun _ _ h => List.recOn l h fun i _ hl => H i hl
 
 Depends on / 依赖: List.recOn
@@ -1002,7 +1002,7 @@ theorem foldl_strictMono
 
 中文:
 定理 foldl_strictMono
-  结论: [Preorder α] {f : α -> β -> α} (H : 对任意 b, StrictMono fun a => f a b)
+  结论: [预序 α] {f : α -> β -> α} (H : 对任意 b, 严格递增 fun a => f a b)
   证明: List.recOn l (fun _ _ => id) fun _ _ hl _ _ h => hl (H _ h)
 
 Depends on / 依赖: List.recOn
@@ -1021,7 +1021,7 @@ theorem foldr_strictMono
 
 中文:
 定理 foldr_strictMono
-  条件: [Preorder β] {f : α -> β -> β} (H : 对任意 a, StrictMono (f a)) (l : List α)
+  条件: [预序 β] {f : α -> β -> β} (H : 对任意 a, 严格递增 (f a)) (l : 列表 α)
   证明: fun _ _ h => List.recOn l h fun i _ hl => H i hl
 
 Depends on / 依赖: List.recOn
@@ -1204,8 +1204,8 @@ theorem StrictMono.le_iff_le
 @[to_dual self]
 
 中文:
-定理 StrictMono.le_iff_le
-  条件: (hf : StrictMono f) {a b : α}
+定理 严格递增.le_iff_le
+  条件: (hf : 严格递增 f) {a b : α}
   结论: f a <= f b ↔ a <= b
   证明: (hf.strictMonoOn Set.univ).le_iff_le trivial trivial
 
@@ -1229,8 +1229,8 @@ theorem StrictAnti.le_iff_ge
 @[to_dual self]
 
 中文:
-定理 StrictAnti.le_iff_ge
-  条件: (hf : StrictAnti f) {a b : α}
+定理 严格递减.le_iff_ge
+  条件: (hf : 严格递减 f) {a b : α}
   结论: f a <= f b ↔ b <= a
   证明: (hf.strictAntiOn Set.univ).le_iff_ge trivial trivial
 
@@ -1254,8 +1254,8 @@ theorem StrictMono.lt_iff_lt
 @[to_dual self]
 
 中文:
-定理 StrictMono.lt_iff_lt
-  条件: (hf : StrictMono f) {a b : α}
+定理 严格递增.lt_iff_lt
+  条件: (hf : 严格递增 f) {a b : α}
   结论: f a < f b ↔ a < b
   证明: (hf.strictMonoOn Set.univ).lt_iff_lt trivial trivial
 
@@ -1277,8 +1277,8 @@ theorem StrictAnti.lt_iff_gt
   proof: (hf.strictAntiOn Set.univ).lt_iff_gt trivial trivial
 
 中文:
-定理 StrictAnti.lt_iff_gt
-  条件: (hf : StrictAnti f) {a b : α}
+定理 严格递减.lt_iff_gt
+  条件: (hf : 严格递减 f) {a b : α}
   结论: f a < f b ↔ b < a
   证明: (hf.strictAntiOn Set.univ).lt_iff_gt trivial trivial
 
@@ -1331,8 +1331,8 @@ theorem StrictMono.compares
   proof: (hf.strictMonoOn Set.univ).compares trivial trivial
 
 中文:
-定理 StrictMono.compares
-  条件: (hf : StrictMono f) {a b : α} {o : Ordering}
+定理 严格递增.compares
+  条件: (hf : 严格递增 f) {a b : α} {o : Ordering}
   证明: (hf.strictMonoOn Set.univ).compares trivial trivial
 -/
 protected theorem StrictMono.compares (hf : StrictMono f) {a b : α} {o : Ordering} :
@@ -1348,8 +1348,8 @@ theorem StrictAnti.compares
   proof: (hf.strictAntiOn Set.univ).compares trivial trivial
 
 中文:
-定理 StrictAnti.compares
-  条件: (hf : StrictAnti f) {a b : α} {o : Ordering}
+定理 严格递减.compares
+  条件: (hf : 严格递减 f) {a b : α} {o : Ordering}
   证明: (hf.strictAntiOn Set.univ).compares trivial trivial
 -/
 protected theorem StrictAnti.compares (hf : StrictAnti f) {a b : α} {o : Ordering} :
@@ -1366,9 +1366,9 @@ theorem StrictMono.injective
   proof: fun x y h => show Compares eq x y from hf.compares.1 h
 
 中文:
-定理 StrictMono.injective
-  条件: (hf : StrictMono f)
-  结论: Injective f
+定理 严格递增.injective
+  条件: (hf : 严格递增 f)
+  结论: 单射 f
   证明: fun x y h => show Compares eq x y from hf.compares.1 h
 
 Depends on / 依赖: Compares, compares, hf.compares
@@ -1386,9 +1386,9 @@ theorem StrictAnti.injective
   proof: fun x y h => show Compares eq x y from hf.compares.1 h.symm
 
 中文:
-定理 StrictAnti.injective
-  条件: (hf : StrictAnti f)
-  结论: Injective f
+定理 严格递减.injective
+  条件: (hf : 严格递减 f)
+  结论: 单射 f
   证明: fun x y h => show Compares eq x y from hf.compares.1 h.symm
 
 Depends on / 依赖: CommRing, Compares, I.IsTwoSided, IsTwoSided, compares, h.symm, hf.compares, quotientAlgebra
@@ -1409,7 +1409,7 @@ lemma StrictMonoOn.injOn
 中文:
 引理 StrictMonoOn.injOn
   条件: (hf : StrictMonoOn f s)
-  结论: s.InjOn f
+  结论: s.单射限制 f
   证明: fun x hx y hy hxy =>
   show Ordering.eq.Compares x y from (hf.compares hx hy).1 hxy
 -/
@@ -1430,7 +1430,7 @@ lemma StrictAntiOn.injOn
 中文:
 引理 StrictAntiOn.injOn
   条件: (hf : StrictAntiOn f s)
-  结论: s.InjOn f
+  结论: s.单射限制 f
   证明: hf.dual_left.injOn
 
 @[to_dual]
@@ -1451,8 +1451,8 @@ theorem StrictMono.maximal_of_maximal_image
 @[to_dual]
 
 中文:
-定理 StrictMono.maximal_of_maximal_image
-  条件: (hf : StrictMono f) {a} (hmax : 对任意 p, p <= f a) (x : α)
+定理 严格递增.maximal_of_maximal_image
+  条件: (hf : 严格递增 f) {a} (hmax : 对任意 p, p <= f a) (x : α)
   证明: hf.le_iff_le.mp (hmax (f x))
 
 @[to_dual]
@@ -1473,8 +1473,8 @@ theorem StrictAnti.minimal_of_maximal_image
   proof: hf.le_iff_ge.mp (hmax (f x))
 
 中文:
-定理 StrictAnti.minimal_of_maximal_image
-  条件: (hf : StrictAnti f) {a} (hmax : 对任意 p, p <= f a) (x : α)
+定理 严格递减.minimal_of_maximal_image
+  条件: (hf : 严格递减 f) {a} (hmax : 对任意 p, p <= f a) (x : α)
   证明: hf.le_iff_ge.mp (hmax (f x))
 
 Depends on / 依赖: hf.le_iff_ge.mp, le_iff_ge
@@ -1499,9 +1499,9 @@ theorem Monotone.strictMono_iff_injective
   proof: ⟨fun h => h.injective, hf.strictMono_of_injective⟩
 
 中文:
-定理 Monotone.strictMono_iff_injective
-  条件: (hf : Monotone f)
-  结论: StrictMono f ↔ Injective f
+定理 递增.strictMono_iff_injective
+  条件: (hf : 递增 f)
+  结论: 严格递增 f ↔ 单射 f
   证明: ⟨fun h => h.injective, hf.strictMono_of_injective⟩
 
 Depends on / 依赖: h.injective, hf.strictMono_of_injective, injective, strictMono_of_injective
@@ -1519,9 +1519,9 @@ theorem Antitone.strictAnti_iff_injective
   proof: ⟨fun h => h.injective, hf.strictAnti_of_injective⟩
 
 中文:
-定理 Antitone.strictAnti_iff_injective
-  条件: (hf : Antitone f)
-  结论: StrictAnti f ↔ Injective f
+定理 递减.strictAnti_iff_injective
+  条件: (hf : 递减 f)
+  结论: 严格递减 f ↔ 单射 f
   证明: ⟨fun h => h.injective, hf.strictAnti_of_injective⟩
 
 Depends on / 依赖: h.injective, hf.strictAnti_of_injective, injective, strictAnti_of_injective
@@ -1541,7 +1541,7 @@ theorem MonotoneOn.strictMonoOn_iff_injOn
 中文:
 定理 MonotoneOn.strictMonoOn_iff_injOn
   条件: (hf : MonotoneOn f s)
-  结论: StrictMonoOn f s ↔ s.InjOn f
+  结论: StrictMonoOn f s ↔ s.单射限制 f
   证明: ⟨StrictMonoOn.injOn, hf.strictMonoOn_of_injOn⟩
 
 Depends on / 依赖: StrictMonoOn, StrictMonoOn.injOn, hf.strictMonoOn_of_injOn, strictMonoOn_of_injOn
@@ -1561,7 +1561,7 @@ theorem AntitoneOn.strictAnti_iff_injOn
 中文:
 定理 AntitoneOn.strictAnti_iff_injOn
   条件: (hf : AntitoneOn f s)
-  结论: StrictAntiOn f s ↔ s.InjOn f
+  结论: StrictAntiOn f s ↔ s.单射限制 f
   证明: ⟨StrictAntiOn.injOn, hf.strictAntiOn_of_injOn⟩
 
 Depends on / 依赖: StrictAntiOn, StrictAntiOn.injOn, hf.strictAntiOn_of_injOn, strictAntiOn_of_injOn
@@ -1581,8 +1581,8 @@ theorem Monotone.eq_of_ge_of_le
   · exact h_mon h₁
 
 中文:
-定理 Monotone.eq_of_ge_of_le
-  结论: {a₁ a₂ : α} (h_mon : Monotone f) (h_fa : f a₁ = f a₂) {i : α}
+定理 递增.eq_of_ge_of_le
+  结论: {a₁ a₂ : α} (h_mon : 递增 f) (h_fa : f a₁ = f a₂) {i : α}
   证明: by
   apply le_antisymm
   · rw [h_fa]; exact h_mon h₂
@@ -1608,8 +1608,8 @@ theorem Antitone.eq_of_ge_of_le
   · rw [h_fa]; exact h_anti h₂
 
 中文:
-定理 Antitone.eq_of_ge_of_le
-  结论: {a₁ a₂ : α} (h_anti : Antitone f) (h_fa : f a₁ = f a₂) {i : α}
+定理 递减.eq_of_ge_of_le
+  结论: {a₁ a₂ : α} (h_anti : 递减 f) (h_fa : f a₁ = f a₂) {i : α}
   证明: by
   apply le_antisymm
   · exact h_anti h₁
@@ -1637,7 +1637,7 @@ lemma not_monotone_not_antitone_iff_exists_le_le
   grind [not_le]
 
 中文:
-引理 not_monotone_not_antitone_iff_exists_le_le
+引理 not_monotone_not_antitone_iff_存在_le_le
   证明: by
   simp only [Monotone, Antitone]
   grind [not_le]
@@ -1662,7 +1662,7 @@ fun h => (Ne.le_iff_lt ?_).and Ne.le_iff_lt ?_) <;>
   (rintro rfl; simp at h)
 
 中文:
-引理 not_monotone_not_antitone_iff_exists_lt_lt
+引理 not_monotone_not_antitone_iff_存在_lt_lt
   证明: by
   simp_rw [not_monotone_not_antitone_iff_exists_le_le, ← and_assoc]
   refine exists₃_congr (fun a b c => and_congr_left <|
@@ -1710,8 +1710,8 @@ theorem StrictMono.cmp_map_eq
   proof: (hf.strictMonoOn Set.univ).cmp_map_eq trivial trivial
 
 中文:
-定理 StrictMono.cmp_map_eq
-  条件: (hf : StrictMono f) (x y : α)
+定理 严格递增.cmp_map_eq
+  条件: (hf : 严格递增 f) (x y : α)
   结论: cmp (f x) (f y) = cmp x y
   证明: (hf.strictMonoOn Set.univ).cmp_map_eq trivial trivial
 
@@ -1749,8 +1749,8 @@ theorem StrictAnti.cmp_map_eq
   proof: (hf.strictAntiOn Set.univ).cmp_map_eq trivial trivial
 
 中文:
-定理 StrictAnti.cmp_map_eq
-  条件: (hf : StrictAnti f) (x y : α)
+定理 严格递减.cmp_map_eq
+  条件: (hf : 严格递减 f) (x y : α)
   结论: cmp (f x) (f y) = cmp y x
   证明: (hf.strictAntiOn Set.univ).cmp_map_eq trivial trivial
 
@@ -1780,8 +1780,8 @@ theorem Nat.rel_of_forall_rel_succ_of_le_of_lt
   | step b_lt_k r_b_k => exact _root_.trans r_b_k (h _ (hab.trans_lt b_lt_k).le)
 
 中文:
-定理 Nat.rel_of_forall_rel_succ_of_le_of_lt
-  结论: (r : β -> β -> 命题) [IsTrans β r] {f : 自然数 -> β} {a : 自然数}
+定理 自然数.rel_of_对任意_rel_succ_of_le_of_lt
+  结论: (r : β -> β -> 命题) [是Trans β r] {f : 自然数 -> β} {a : 自然数}
   证明: by
   induction hbc with
   | refl => exact h _ hab
@@ -1805,8 +1805,8 @@ theorem Nat.rel_of_forall_rel_succ_of_le_of_le
   proof: hbc.eq_or_lt.elim (fun h => h ▸ refl _) (Nat.rel_of_forall_rel_succ_of_le_of_lt r h hab)
 
 中文:
-定理 Nat.rel_of_forall_rel_succ_of_le_of_le
-  结论: (r : β -> β -> 命题) [Std.Refl r] [IsTrans β r]
+定理 自然数.rel_of_对任意_rel_succ_of_le_of_le
+  结论: (r : β -> β -> 命题) [Std.Refl r] [是Trans β r]
   证明: hbc.eq_or_lt.elim (fun h => h ▸ refl _) (Nat.rel_of_forall_rel_succ_of_le_of_lt r h hab)
 
 Depends on / 依赖: Nat.rel_of_forall_rel_succ_of_le_of_lt, eq_or_lt, hbc.eq_or_lt.elim, rel_of_forall_rel_succ_of_le_of_lt
@@ -1825,8 +1825,8 @@ theorem Nat.rel_of_forall_rel_succ_of_lt
   proof: Nat.rel_of_forall_rel_succ_of_le_of_lt r (fun n _ => h n) le_rfl hab
 
 中文:
-定理 Nat.rel_of_forall_rel_succ_of_lt
-  结论: (r : β -> β -> 命题) [IsTrans β r] {f : 自然数 -> β}
+定理 自然数.rel_of_对任意_rel_succ_of_lt
+  结论: (r : β -> β -> 命题) [是Trans β r] {f : 自然数 -> β}
   证明: Nat.rel_of_forall_rel_succ_of_le_of_lt r (fun n _ => h n) le_rfl hab
 
 Depends on / 依赖: Nat.rel_of_forall_rel_succ_of_le_of_lt, le_rfl, rel_of_forall_rel_succ_of_le_of_lt
@@ -1844,8 +1844,8 @@ theorem Nat.rel_of_forall_rel_succ_of_le
   proof: Nat.rel_of_forall_rel_succ_of_le_of_le r (fun n _ => h n) le_rfl hab
 
 中文:
-定理 Nat.rel_of_forall_rel_succ_of_le
-  结论: (r : β -> β -> 命题) [Std.Refl r] [IsTrans β r] {f : 自然数 -> β}
+定理 自然数.rel_of_对任意_rel_succ_of_le
+  结论: (r : β -> β -> 命题) [Std.Refl r] [是Trans β r] {f : 自然数 -> β}
   证明: Nat.rel_of_forall_rel_succ_of_le_of_le r (fun n _ => h n) le_rfl hab
 
 Depends on / 依赖: Nat.rel_of_forall_rel_succ_of_le_of_le, le_rfl, rel_of_forall_rel_succ_of_le_of_le
@@ -1866,7 +1866,7 @@ theorem monotone_nat_of_le_succ
 中文:
 定理 monotone_nat_of_le_succ
   条件: {f : 自然数 -> α} (hf : 对任意 n, f n <= f (n + 1))
-  结论: Monotone f
+  结论: 递增 f
   证明: Nat.rel_of_forall_rel_succ_of_le (· <= ·) hf
 
 Depends on / 依赖: Nat.rel_of_forall_rel_succ_of_le, rel_of_forall_rel_succ_of_le
@@ -1965,7 +1965,7 @@ theorem antitone_nat_of_succ_le
 中文:
 定理 antitone_nat_of_succ_le
   条件: {f : 自然数 -> α} (hf : 对任意 n, f (n + 1) <= f n)
-  结论: Antitone f
+  结论: 递减 f
   证明: @monotone_nat_of_le_succ αᵒᵈ _ _ hf
 
 Depends on / 依赖: monotone_nat_of_le_succ
@@ -2044,7 +2044,7 @@ theorem strictMono_nat_of_lt_succ
 中文:
 定理 strictMono_nat_of_lt_succ
   条件: {f : 自然数 -> α} (hf : 对任意 n, f n < f (n + 1))
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: Nat.rel_of_forall_rel_succ_of_lt (· < ·) hf
 
 Depends on / 依赖: Nat.rel_of_forall_rel_succ_of_lt, rel_of_forall_rel_succ_of_lt
@@ -2064,7 +2064,7 @@ theorem strictAnti_nat_of_succ_lt
 中文:
 定理 strictAnti_nat_of_succ_lt
   条件: {f : 自然数 -> α} (hf : 对任意 n, f (n + 1) < f n)
-  结论: StrictAnti f
+  结论: 严格递减 f
   证明: @strictMono_nat_of_lt_succ αᵒᵈ _ f hf
 
 Depends on / 依赖: strictMono_nat_of_lt_succ
@@ -2086,9 +2086,9 @@ theorem exists_strictMono'
   exact ⟨fun n => Nat.recOn n a fun _ => g, strictMono_nat_of_lt_succ fun n => hg _, rfl⟩
 
 中文:
-定理 exists_strictMono'
-  条件: [NoMaxOrder α] (a : α)
-  结论: 存在 f : 自然数 -> α, StrictMono f ∧ f 0 = a
+定理 存在_strictMono'
+  条件: [NoMax序 α] (a : α)
+  结论: 存在 f : 自然数 -> α, 严格递增 f ∧ f 0 = a
   证明: by
   choose g hg using fun x : α => exists_gt x
   exact ⟨fun n => Nat.recOn n a fun _ => g, strictMono_nat_of_lt_succ fun n => hg _, rfl⟩
@@ -2109,9 +2109,9 @@ theorem exists_strictAnti'
   proof: exists_strictMono' (OrderDual.toDual a)
 
 中文:
-定理 exists_strictAnti'
-  条件: [NoMinOrder α] (a : α)
-  结论: 存在 f : 自然数 -> α, StrictAnti f ∧ f 0 = a
+定理 存在_strictAnti'
+  条件: [NoMin序 α] (a : α)
+  结论: 存在 f : 自然数 -> α, 严格递减 f ∧ f 0 = a
   证明: exists_strictMono' (OrderDual.toDual a)
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, exists_strictMono, toDual
@@ -2132,7 +2132,7 @@ theorem exists_strictMono_subsequence
   exact Exists.intro (fun n => (f n).1) ⟨hf, fun n => (f n).2⟩
 
 中文:
-定理 exists_strictMono_subsequence
+定理 存在_strictMono_subsequence
   条件: {P : 自然数 -> 命题} (h : 对任意 N, 存在 n > N, P n)
   证明: by
   have : NoMaxOrder {n // P n} :=
@@ -2163,9 +2163,9 @@ theorem exists_strictMono
   ⟨f, hf⟩
 
 中文:
-定理 exists_strictMono
-  条件: [Nonempty α] [NoMaxOrder α]
-  结论: 存在 f : 自然数 -> α, StrictMono f
+定理 存在_strictMono
+  条件: [非空 α] [NoMax序 α]
+  结论: 存在 f : 自然数 -> α, 严格递增 f
   证明: let ⟨a⟩ := ‹Nonempty α›
   let ⟨f, hf, _⟩ := exists_strictMono' a
   ⟨f, hf⟩
@@ -2187,9 +2187,9 @@ theorem exists_strictAnti
   proof: exists_strictMono αᵒᵈ
 
 中文:
-定理 exists_strictAnti
-  条件: [Nonempty α] [NoMinOrder α]
-  结论: 存在 f : 自然数 -> α, StrictAnti f
+定理 存在_strictAnti
+  条件: [非空 α] [NoMin序 α]
+  结论: 存在 f : 自然数 -> α, 严格递减 f
   证明: exists_strictMono αᵒᵈ
 
 Depends on / 依赖: exists_strictMono
@@ -2210,7 +2210,7 @@ lemma pow_self_mono
 
 中文:
 引理 pow_self_mono
-  结论: Monotone fun n : 自然数 => n ^ n
+  结论: 递增 fun n : 自然数 => n ^ n
   证明: by
   refine monotone_nat_of_le_succ fun n => ?_
   rw [Nat.pow_succ]
@@ -2278,8 +2278,8 @@ theorem Int.rel_of_forall_rel_succ_of_lt
   | succ n ihn => rw [Int.natCast_succ, ← Int.add_assoc]; exact _root_.trans ihn (h _)
 
 中文:
-定理 Int.rel_of_forall_rel_succ_of_lt
-  结论: (r : β -> β -> 命题) [IsTrans β r] {f : 整数 -> β}
+定理 整数.rel_of_对任意_rel_succ_of_lt
+  结论: (r : β -> β -> 命题) [是Trans β r] {f : 整数 -> β}
   证明: by
   rcases lt.dest hab with ⟨n, rfl⟩
   clear hab
@@ -2306,8 +2306,8 @@ theorem Int.rel_of_forall_rel_succ_of_le
   proof: hab.eq_or_lt.elim (fun h => h ▸ refl _) fun h' => Int.rel_of_forall_rel_succ_of_lt r h h'
 
 中文:
-定理 Int.rel_of_forall_rel_succ_of_le
-  结论: (r : β -> β -> 命题) [Std.Refl r] [IsTrans β r] {f : 整数 -> β}
+定理 整数.rel_of_对任意_rel_succ_of_le
+  结论: (r : β -> β -> 命题) [Std.Refl r] [是Trans β r] {f : 整数 -> β}
   证明: hab.eq_or_lt.elim (fun h => h ▸ refl _) fun h' => Int.rel_of_forall_rel_succ_of_lt r h h'
 
 Depends on / 依赖: Int.rel_of_forall_rel_succ_of_lt, eq_or_lt, hab.eq_or_lt.elim, rel_of_forall_rel_succ_of_lt
@@ -2328,7 +2328,7 @@ theorem monotone_int_of_le_succ
 中文:
 定理 monotone_int_of_le_succ
   条件: {f : 整数 -> α} (hf : 对任意 n, f n <= f (n + 1))
-  结论: Monotone f
+  结论: 递增 f
   证明: Int.rel_of_forall_rel_succ_of_le (· <= ·) hf
 
 Depends on / 依赖: Int.rel_of_forall_rel_succ_of_le, rel_of_forall_rel_succ_of_le
@@ -2348,7 +2348,7 @@ theorem antitone_int_of_succ_le
 中文:
 定理 antitone_int_of_succ_le
   条件: {f : 整数 -> α} (hf : 对任意 n, f (n + 1) <= f n)
-  结论: Antitone f
+  结论: 递减 f
   证明: Int.rel_of_forall_rel_succ_of_le (· >= ·) hf
 
 Depends on / 依赖: Int.rel_of_forall_rel_succ_of_le, rel_of_forall_rel_succ_of_le
@@ -2368,7 +2368,7 @@ theorem strictMono_int_of_lt_succ
 中文:
 定理 strictMono_int_of_lt_succ
   条件: {f : 整数 -> α} (hf : 对任意 n, f n < f (n + 1))
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: Int.rel_of_forall_rel_succ_of_lt (· < ·) hf
 
 Depends on / 依赖: Int.rel_of_forall_rel_succ_of_lt, rel_of_forall_rel_succ_of_lt
@@ -2388,7 +2388,7 @@ theorem strictAnti_int_of_succ_lt
 中文:
 定理 strictAnti_int_of_succ_lt
   条件: {f : 整数 -> α} (hf : 对任意 n, f (n + 1) < f n)
-  结论: StrictAnti f
+  结论: 严格递减 f
   证明: Int.rel_of_forall_rel_succ_of_lt (· > ·) hf
 
 Depends on / 依赖: Int.rel_of_forall_rel_succ_of_lt, rel_of_forall_rel_succ_of_lt
@@ -2418,8 +2418,8 @@ theorem exists_strictMono
   
 
 中文:
-定理 exists_strictMono
-  结论: 存在 f : 整数 -> α, StrictMono f
+定理 存在_strictMono
+  结论: 存在 f : 整数 -> α, 严格递增 f
   证明: by
   inhabit α
   rcases Nat.exists_strictMono' (default : α) with ⟨f, hf, hf₀⟩
@@ -2453,8 +2453,8 @@ theorem exists_strictAnti
   proof: exists_strictMono αᵒᵈ
 
 中文:
-定理 exists_strictAnti
-  结论: 存在 f : 整数 -> α, StrictAnti f
+定理 存在_strictAnti
+  结论: 存在 f : 整数 -> α, 严格递减 f
   证明: exists_strictMono αᵒᵈ
 
 Depends on / 依赖: exists_strictMono
@@ -2476,8 +2476,8 @@ theorem Monotone.ne_of_lt_of_lt_nat
   exact (hf.reflect_lt h1).not_ge (Nat.le_of_lt_succ <| hf.reflect_lt h2)
 
 中文:
-定理 Monotone.ne_of_lt_of_lt_nat
-  结论: {f : 自然数 -> α} (hf : Monotone f) (n : 自然数) {x : α} (h1 : f n < x)
+定理 递增.ne_of_lt_of_lt_nat
+  结论: {f : 自然数 -> α} (hf : 递增 f) (n : 自然数) {x : α} (h1 : f n < x)
   证明: by
   rintro rfl
   exact (hf.reflect_lt h1).not_ge (Nat.le_of_lt_succ <| hf.reflect_lt h2)
@@ -2500,8 +2500,8 @@ theorem Antitone.ne_of_lt_of_lt_nat
   exact (hf.reflect_lt h2).not_ge (Nat.le_of_lt_succ <| hf.reflect_lt h1)
 
 中文:
-定理 Antitone.ne_of_lt_of_lt_nat
-  结论: {f : 自然数 -> α} (hf : Antitone f) (n : 自然数) {x : α}
+定理 递减.ne_of_lt_of_lt_nat
+  结论: {f : 自然数 -> α} (hf : 递减 f) (n : 自然数) {x : α}
   证明: by
   rintro rfl
   exact (hf.reflect_lt h2).not_ge (Nat.le_of_lt_succ <| hf.reflect_lt h1)
@@ -2524,8 +2524,8 @@ theorem Monotone.ne_of_lt_of_lt_int
   exact (hf.reflect_lt h1).not_ge (Int.le_of_lt_add_one <| hf.reflect_lt h2)
 
 中文:
-定理 Monotone.ne_of_lt_of_lt_int
-  结论: {f : 整数 -> α} (hf : Monotone f) (n : 整数) {x : α} (h1 : f n < x)
+定理 递增.ne_of_lt_of_lt_int
+  结论: {f : 整数 -> α} (hf : 递增 f) (n : 整数) {x : α} (h1 : f n < x)
   证明: by
   rintro rfl
   exact (hf.reflect_lt h1).not_ge (Int.le_of_lt_add_one <| hf.reflect_lt h2)
@@ -2548,8 +2548,8 @@ theorem Antitone.ne_of_lt_of_lt_int
   exact (hf.reflect_lt h2).not_ge (Int.le_of_lt_add_one <| hf.reflect_lt h1)
 
 中文:
-定理 Antitone.ne_of_lt_of_lt_int
-  结论: {f : 整数 -> α} (hf : Antitone f) (n : 整数) {x : α}
+定理 递减.ne_of_lt_of_lt_int
+  结论: {f : 整数 -> α} (hf : 递减 f) (n : 整数) {x : α}
   证明: by
   rintro rfl
   exact (hf.reflect_lt h2).not_ge (Int.le_of_lt_add_one <| hf.reflect_lt h1)
@@ -2579,8 +2579,8 @@ hfb _ Nat.le_of_succ_le_succ hmb
     exact ⟨
 
 中文:
-引理 Nat.stabilises_of_monotone
-  结论: {f : 自然数 -> 自然数} {b n : 自然数} (hfmono : Monotone f) (hfb : 对任意 m, f m <= b)
+引理 自然数.stabilises_of_monotone
+  结论: {f : 自然数 -> 自然数} {b n : 自然数} (hfmono : 递增 f) (hfb : 对任意 m, f m <= b)
   证明: by
   obtain ⟨m, hmb, hm⟩ : exists m <= b, f m = f (m + 1) := by
     contrapose! hfb
@@ -2622,8 +2622,8 @@ lemma Nat.stabilises_of_antitone
     · have hlt : f 1 < f 0 := (hfmono (Nat.le_su
 
 中文:
-引理 Nat.stabilises_of_antitone
-  结论: {f : 自然数 -> 自然数} (hfmono : Antitone f)
+引理 自然数.stabilises_of_antitone
+  结论: {f : 自然数 -> 自然数} (hfmono : 递减 f)
   证明: by
   induction h : f 0 using Nat.strongRecOn generalizing f with
   | ind n ih =>
@@ -2669,7 +2669,7 @@ lemma converges_of_monotone_of_bounded
 
 中文:
 引理 converges_of_monotone_of_bounded
-  结论: {f : 自然数 -> 自然数} (mono_f : Monotone f)
+  结论: {f : 自然数 -> 自然数} (mono_f : 递增 f)
   证明: by
   induction c with
   | zero => use 0, 0, fun n _ => Nat.eq_zero_of_le_zero (hc n)

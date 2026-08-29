@@ -146,7 +146,7 @@ definition ranges
 
 中文:
 定义 ranges
-  签名: : List 自然数 -> List (List 自然数)
+  签名: : 列表 自然数 -> 列表 (列表 自然数)
 -/
 def ranges : List Nat -> List (List Nat)
   | [] => nil
@@ -175,7 +175,7 @@ theorem ranges_disjoint
 
 中文:
 定理 ranges_disjoint
-  条件: (l : List 自然数)
+  条件: (l : 列表 自然数)
   证明: by
   induction l with
   | nil => exact Pairwise.nil
@@ -230,7 +230,7 @@ theorem ranges_length
 
 中文:
 定理 ranges_length
-  条件: (l : List 自然数)
+  条件: (l : 列表 自然数)
   证明: by
   induction l with
   | nil => simp only [ranges, map_nil]

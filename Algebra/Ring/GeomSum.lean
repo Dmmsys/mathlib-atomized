@@ -397,7 +397,7 @@ lemma RingHom.map_geom_sum
   proof: by simp [map_sum f]
 
 中文:
-引理 RingHom.map_geom_sum
+引理 环态射.map_geom_sum
   条件: (x : R) (n : 自然数) (f : R ->+* S)
   证明: by simp [map_sum f]
 
@@ -416,7 +416,7 @@ lemma RingHom.map_geom_sum₂
   simp [map_sum f]
 
 中文:
-引理 RingHom.map_geom_sum₂
+引理 环态射.map_geom_sum₂
   条件: (x y : R) (n : 自然数) (f : R ->+* S)
   证明: by
   simp [map_sum f]

@@ -34,7 +34,7 @@ instance finite_iSup
 
 中文:
 实例 finite_iSup
-  签名: {ι : Sort*} [Finite ι] (S : ι -> Submodule R V)
+  签名: {ι : 类型层*} [有限 ι] (S : ι -> 子模 R V)
   定义体: by
   cases nonempty_fintype (PLift ι)
   rw [← iSup_plift_down]; rw [← Finset.sup_univ_eq_iSup]

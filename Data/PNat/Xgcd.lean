@@ -415,7 +415,7 @@ definition IsReduced
   body: u.ap = u.bp
 
 中文:
-定义 IsReduced
+定义 是既约
   签名: : 命题
   定义体: u.ap = u.bp
 
@@ -433,7 +433,7 @@ definition IsReduced'
   body: u.a = u.b
 
 中文:
-定义 IsReduced'
+定义 是既约'
   签名: : 命题
   定义体: u.a = u.b
 -/
@@ -450,7 +450,7 @@ theorem isReduced_iff
 
 中文:
 定理 isReduced_iff
-  结论: u.IsReduced ↔ u.IsReduced'
+  结论: u.是既约 ↔ u.是既约'
   证明: succPNat_inj.symm
 
 Depends on / 依赖: succPNat_inj, succPNat_inj.symm
@@ -629,7 +629,7 @@ theorem flip_isReduced
 
 中文:
 定理 flip_isReduced
-  结论: (flip u).IsReduced ↔ u.IsReduced
+  结论: (flip u).是既约 ↔ u.是既约
   证明: by
   dsimp [IsReduced, flip]
   constructor <;> intro h <;> exact h.symm
@@ -853,7 +853,7 @@ theorem finish_isReduced
 
 中文:
 定理 finish_isReduced
-  结论: u.finish.IsReduced
+  结论: u.finish.是既约
   证明: by
   dsimp [IsReduced]
   rfl
@@ -1145,7 +1145,7 @@ theorem reduce_isReduced
 
 中文:
 定理 reduce_isReduced
-  结论: 对任意 u : XgcdType, u.reduce.IsReduced
+  结论: 对任意 u : XgcdType, u.reduce.是既约
   证明: u.step_wf h
       rw [reduce_b h]; rw [flip_isReduced]
       apply reduce_isReduced
@@ -1175,7 +1175,7 @@ theorem reduce_isReduced'
 中文:
 定理 reduce_isReduced'
   条件: (u : XgcdType)
-  结论: u.reduce.IsReduced'
+  结论: u.reduce.是既约'
   证明: (isReduced_iff _).mp u.reduce_isReduced
 
 Depends on / 依赖: isReduced_iff, reduce_isReduced, u.reduce_isReduced
@@ -1533,7 +1533,7 @@ theorem gcd_eq
 
 中文:
 定理 gcd_eq
-  结论: gcdD a b = gcd a b
+  结论: gcdD a b = 最大公约数 a b
   证明: by
   rcases gcd_props a b with ⟨_, h₁, h₂, _, _, h₅, _⟩
   apply dvd_antisymm
@@ -1584,7 +1584,7 @@ theorem gcd_a_eq
 
 中文:
 定理 gcd_a_eq
-  结论: a = gcdA' a b * gcd a b
+  结论: a = gcdA' a b * 最大公约数 a b
   证明: gcd_eq a b ▸ (gcd_props a b).2.1
 
 Depends on / 依赖: gcd_eq, gcd_props
@@ -1602,7 +1602,7 @@ theorem gcd_b_eq
 
 中文:
 定理 gcd_b_eq
-  结论: b = gcdB' a b * gcd a b
+  结论: b = gcdB' a b * 最大公约数 a b
   证明: gcd_eq a b ▸ (gcd_props a b).2.2.1
 
 Depends on / 依赖: gcd_eq, gcd_props
@@ -1656,7 +1656,7 @@ theorem gcd_rel_left
 
 中文:
 定理 gcd_rel_left
-  结论: (gcdZ a b * a : 自然数) = gcdX a b * b + gcd a b
+  结论: (gcdZ a b * a : 自然数) = gcdX a b * b + 最大公约数 a b
   证明: gcd_eq a b ▸ (gcd_props a b).2.2.2.2.2.1
 
 Depends on / 依赖: gcd_eq, gcd_props
@@ -1674,7 +1674,7 @@ theorem gcd_rel_right
 
 中文:
 定理 gcd_rel_right
-  结论: (gcdW a b * b : 自然数) = gcdY a b * a + gcd a b
+  结论: (gcdW a b * b : 自然数) = gcdY a b * a + 最大公约数 a b
   证明: gcd_eq a b ▸ (gcd_props a b).2.2.2.2.2.2
 
 Depends on / 依赖: gcd_eq, gcd_props

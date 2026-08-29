@@ -39,10 +39,10 @@ class WStarAlgebra
     - exists_predual : exists (X : Type u) (_ : NormedAddCommGroup X) (_ : NormedSpace Complex X) (_ : CompleteSpace X), Nonempty (StrongDual Complex X ≃ₗᵢ⋆[Complex] M)
 
 中文:
-类 WStarAlgebra
-  参数: (M : 类型u) [CStarAlgebra M]
+类 WStar代数
+  参数: (M : 类型u) [CStar代数 M]
   公理与运算 (1 个):
-    - exists_predual : 存在 (X : 类型u) (_ : NormedAddCommGroup X) (_ : NormedSpace Complex X) (_ : CompleteSpace X), Nonempty (StrongDual Complex X ≃ₗᵢ⋆[Complex] M)
+    - exists_predual : 存在 (X : 类型u) (_ : 赋范交换加群 X) (_ : 赋范空间 复形 X) (_ : 完备空间 X), 非空 (StrongDual 复形 X ≃ₗᵢ⋆[复形] M)
 -/
 class WStarAlgebra (M : Type u) [CStarAlgebra M] : Prop where
   /-- There is a Banach space `X` whose dual is isometrically (conjugate-linearly) isomorphic
@@ -63,11 +63,11 @@ structure VonNeumannAlgebra
     - centralizer_centralizer' : Set.centralizer (Set.centralizer carrier) = carrier
 
 中文:
-结构 VonNeumannAlgebra
-  参数: (H : 类型u) [NormedAddCommGroup H] [InnerProductSpace Complex H]
-  继承: StarSubalgebra Complex (H ->L[Complex] H)
+结构 VonNeumann代数
+  参数: (H : 类型u) [赋范交换加群 H] [内积空间 复形 H]
+  继承: 对合子代数 复形 (H ->L[复形] H)
   公理与运算 (1 个):
-    - centralizer_centralizer' : Set.centralizer (Set.centralizer carrier) = carrier
+    - centralizer_centralizer' : 集合.centralizer (集合.centralizer carrier) = carrier
 -/
 structure VonNeumannAlgebra (H : Type u) [NormedAddCommGroup H] [InnerProductSpace Complex H]
     [CompleteSpace H] extends StarSubalgebra Complex (H ->L[Complex] H) where
@@ -95,7 +95,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (VonNeumannAlgebra H) (H ->L[Complex] H) where
+  签名: : 集合状 (VonNeumann代数 H) (H ->L[复形] H) where
   定义体: S.carrier
   coe_injective S T h := by obtain ⟨⟨⟨⟨⟨⟨_, _⟩, _⟩, _⟩, _⟩, _⟩, _⟩ := S; cases T; congr
 
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (VonNeumannAlgebra H)
+  签名: 偏序 (VonNeumann代数 H)
   定义体: .ofSetLike (VonNeumannAlgebra H) (H ->L[Complex] H)
 
 Depends on / 依赖: VonNeumannAlgebra, ofSetLike
@@ -132,7 +132,7 @@ instance instStarMemClass
 
 中文:
 实例 instStarMemClass
-  签名: : StarMemClass (VonNeumannAlgebra H) (H ->L[Complex] H) where
+  签名: : StarMem类 (VonNeumann代数 H) (H ->L[复形] H) where
   定义体: s.star_mem'
 
 Depends on / 依赖: s.star_mem, star_mem
@@ -156,7 +156,7 @@ instance instSubringClass
 
 中文:
 实例 instSubringClass
-  签名: : SubringClass (VonNeumannAlgebra H) (H ->L[Complex] H) where
+  签名: : 子环类 (VonNeumann代数 H) (H ->L[复形] H) where
   定义体: s.add_mem'
   mul_mem {s} := s.mul_mem'
   one_mem {s} := s.one_mem'
@@ -187,7 +187,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {S : VonNeumannAlgebra H} {x : H ->L[Complex] H}
+  条件: {S : VonNeumann代数 H} {x : H ->L[复形] H}
   证明: Iff.rfl
 
 @[simp]
@@ -211,7 +211,7 @@ theorem coe_toStarSubalgebra
 
 中文:
 定理 coe_toStarSubalgebra
-  条件: (S : VonNeumannAlgebra H)
+  条件: (S : VonNeumann代数 H)
   证明: rfl
 
 @[simp]
@@ -233,7 +233,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (S : StarSubalgebra Complex (H ->L[Complex] H)) (h)
+  条件: (S : 对合子代数 复形 (H ->L[复形] H)) (h)
   证明: rfl
 
 @[ext]
@@ -256,7 +256,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : VonNeumannAlgebra H} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : VonNeumann代数 H} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -278,7 +278,7 @@ theorem centralizer_centralizer
 
 中文:
 定理 centralizer_centralizer
-  条件: (S : VonNeumannAlgebra H)
+  条件: (S : VonNeumann代数 H)
   证明: S.centralizer_centralizer'
 
 Depends on / 依赖: S.centralizer_centralizer, centralizer_centralizer
@@ -300,7 +300,7 @@ definition commutant
 
 中文:
 定义 commutant
-  签名: (S : VonNeumannAlgebra H)
+  签名: (S : VonNeumann代数 H)
   定义体: StarSubalgebra.centralizer Complex (S : Set (H ->L[Complex] H))
   centralizer_centralizer' := by simp
 
@@ -326,7 +326,7 @@ theorem coe_commutant
 
 中文:
 定理 coe_commutant
-  条件: (S : VonNeumannAlgebra H)
+  条件: (S : VonNeumann代数 H)
   证明: by
   simp [commutant]
 
@@ -353,7 +353,7 @@ theorem mem_commutant_iff
 
 中文:
 定理 mem_commutant_iff
-  条件: {S : VonNeumannAlgebra H} {z : H ->L[Complex] H}
+  条件: {S : VonNeumann代数 H} {z : H ->L[复形] H}
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_commutant]
   rfl
@@ -379,7 +379,7 @@ theorem commutant_commutant
 
 中文:
 定理 commutant_commutant
-  条件: (S : VonNeumannAlgebra H)
+  条件: (S : VonNeumann代数 H)
   结论: S.commutant.commutant = S
   证明: SetLike.coe_injective by simp
 
@@ -400,7 +400,7 @@ theorem IsIdempotentElem.mem_iff
 
 中文:
 定理 IsIdempotentElem.mem_iff
-  结论: {e : H ->L[Complex] H} (h : IsIdempotentElem e)
+  结论: {e : H ->L[复形] H} (h : IsIdempotentElem e)
   证明: by
   conv_rhs => simp [← h.commute_iff, Commute.symm_iff (a := e), commute_iff_eq, ← mem_commutant_iff]
 
@@ -426,8 +426,8 @@ theorem IsStarProjection.mem_iff
   simpa [he.isSelfAdjoint.star_eq] using! congr(star $(h _ (star_mem hx)))
 
 中文:
-定理 IsStarProjection.mem_iff
-  结论: {e : H ->L[Complex] H} (he : IsStarProjection e)
+定理 是StarProjection.mem_iff
+  结论: {e : H ->L[复形] H} (he : 是StarProjection e)
   证明: by
   simp_rw [he.isIdempotentElem.mem_iff, he.isIdempotentElem.range_mem_invtSubmodule_iff,
     he.isIdempotentElem.ker_mem_invtSubmodule_iff, forall_and, and_iff_left_iff_imp, ← mul_def]

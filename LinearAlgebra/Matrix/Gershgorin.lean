@@ -42,7 +42,7 @@ theorem eigenvalue_mem_ball
 
 中文:
 定理 eigenvalue_mem_ball
-  条件: {μ : K} (hμ : Module.End.HasEigenvalue (Matrix.toLin' A) μ)
+  条件: {μ : K} (hμ : 模.End.HasEigenvalue (矩阵.toLin' A) μ)
   证明: by
   cases isEmpty_or_nonempty n
   · exfalso
@@ -102,7 +102,7 @@ theorem det_ne_zero_of_sum_row_lt_diag
 
 中文:
 定理 det_ne_zero_of_sum_row_lt_diag
-  条件: (h : 对任意 k, ∑ j in Finset.univ.erase k, ‖A k j‖ < ‖A k k‖)
+  条件: (h : 对任意 k, ∑ j in 有限集.univ.erase k, ‖A k j‖ < ‖A k k‖)
   证明: by
   contrapose! h
   suffices exists k, 0 in Metric.closedBall (A k k) (∑ j in Finset.univ.erase k, ‖A k j‖) by
@@ -133,7 +133,7 @@ theorem det_ne_zero_of_sum_col_lt_diag
 
 中文:
 定理 det_ne_zero_of_sum_col_lt_diag
-  条件: (h : 对任意 k, ∑ i in Finset.univ.erase k, ‖A i k‖ < ‖A k k‖)
+  条件: (h : 对任意 k, ∑ i in 有限集.univ.erase k, ‖A i k‖ < ‖A k k‖)
   证明: by
   rw [← Matrix.det_transpose]
   exact det_ne_zero_of_sum_row_lt_diag (by simp_rw [Matrix.transpose_apply]; exact h)

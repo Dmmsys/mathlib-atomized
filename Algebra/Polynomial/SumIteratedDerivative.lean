@@ -295,7 +295,7 @@ exact (natDegree_C_mul_le _ _).trans (natDegree_X_pow_le _).trans
 (le_natDegree_of_mem_supp _ hi).trans natDegree_it
 
 中文:
-定理 exists_iterate_derivative_eq_factorial_smul
+定理 存在_iterate_derivative_eq_factorial_smul
   条件: (p : R[X]) (k : 自然数)
   证明: by
   refine ⟨_, (natDegree_sum_le _ _).trans ?_, iterate_derivative_eq_factorial_smul_sum p k⟩
@@ -536,7 +536,7 @@ theorem aeval_sumIDeriv_of_pos
 
 中文:
 定理 aeval_sumIDeriv_of_pos
-  结论: [Nontrivial A] [NoZeroDivisors A] (p : R[X]) {q : 自然数} (hq : 0 < q)
+  结论: [非平凡 A] [无零因子 A] (p : R[X]) {q : 自然数} (hq : 0 < q)
   证明: by
   rcases eq_or_ne p 0 with (rfl | p0)
   · use 0

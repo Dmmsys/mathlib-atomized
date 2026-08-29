@@ -78,11 +78,11 @@ structure OrderAddMonoidHom
     - monotone' : Monotone toFun
 
 中文:
-结构 OrderAddMonoidHom
-  参数: (α β : 类型) [Preorder α] [Preorder β] [AddZeroClass α]
+结构 OrderAdd幺半群态射
+  参数: (α β : 类型) [预序 α] [预序 β] [加法零类 α]
   继承: α ->+ β
   公理与运算 (1 个):
-    - monotone' : Monotone toFun
+    - monotone' : 递增 toFun
 -/
 structure OrderAddMonoidHom (α β : Type*) [Preorder α] [Preorder β] [AddZeroClass α]
   [AddZeroClass β] extends α ->+ β where
@@ -104,7 +104,7 @@ structure OrderAddMonoidIso
 
 中文:
 结构 OrderAddMonoidIso
-  参数: (α β : 类型) [Preorder α] [Preorder β] [Add α] [Add β]
+  参数: (α β : 类型) [预序 α] [预序 β] [加法 α] [加法 β]
   继承: α ≃+ β
   公理与运算 (1 个):
     - map_le_map_iff'({a b : α}) : toFun a <= toFun b ↔ a <= b
@@ -141,11 +141,11 @@ structure OrderMonoidHom
     - monotone' : Monotone toFun
 
 中文:
-结构 OrderMonoidHom
-  参数: (α β : 类型) [Preorder α] [Preorder β] [MulOneClass α]
+结构 Order幺半群态射
+  参数: (α β : 类型) [预序 α] [预序 β] [MulOne类 α]
   继承: α ->* β
   公理与运算 (1 个):
-    - monotone' : Monotone toFun
+    - monotone' : 递增 toFun
 -/
 structure OrderMonoidHom (α β : Type*) [Preorder α] [Preorder β] [MulOneClass α]
   [MulOneClass β] extends α ->* β where
@@ -173,7 +173,7 @@ definition OrderMonoidHomClass.toOrderMonoidHom
 
 中文:
 定义 OrderMonoidHomClass.toOrderMonoidHom
-  签名: [OrderHomClass F α β] [MonoidHomClass F α β] (f : F)
+  签名: [序态射类 F α β] [幺半群态射类 F α β] (f : F)
   定义体: { (f : α ->* β) with monotone' := OrderHomClass.monotone f }
 
 Depends on / 依赖: OrderHomClass, OrderHomClass.monotone, monotone
@@ -195,8 +195,8 @@ instance [OrderHomClass
   body: ⟨OrderMonoidHomClass.toOrderMonoidHom⟩
 
 中文:
-实例 [OrderHomClass
-  签名: F α β] [MonoidHomClass F α β] : CoeTC F (α ->*o β)
+实例 [序态射类
+  签名: F α β] [幺半群态射类 F α β] : CoeTC F (α ->*o β)
   定义体: ⟨OrderMonoidHomClass.toOrderMonoidHom⟩
 
 Depends on / 依赖: OrderMonoidHomClass, OrderMonoidHomClass.toOrderMonoidHom, toOrderMonoidHom
@@ -224,7 +224,7 @@ structure OrderMonoidIso
 
 中文:
 结构 OrderMonoidIso
-  参数: (α β : 类型) [Preorder α] [Preorder β] [Mul α] [Mul β]
+  参数: (α β : 类型) [预序 α] [预序 β] [乘法 α] [乘法 β]
   继承: α ≃* β
   公理与运算 (1 个):
     - map_le_map_iff'({a b : α}) : toFun a <= toFun b ↔ a <= b
@@ -253,7 +253,7 @@ definition OrderMonoidIsoClass.toOrderMonoidIso
 
 中文:
 定义 OrderMonoidIsoClass.toOrderMonoidIso
-  签名: [EquivLike F α β] [OrderIsoClass F α β]
+  签名: [等价状 F α β] [OrderIso类 F α β]
   定义体: { (f : α ≃* β) with map_le_map_iff' := OrderIsoClass.map_le_map_iff f }
 
 Depends on / 依赖: OrderIsoClass, OrderIsoClass.map_le_map_iff, map_le_map_iff
@@ -276,8 +276,8 @@ instance [EquivLike
   body: ⟨OrderMonoidIsoClass.toOrderMonoidIso⟩
 
 中文:
-实例 [EquivLike
-  签名: F α β] [OrderIsoClass F α β] [MulEquivClass F α β] : CoeTC F (α ≃*o β)
+实例 [等价状
+  签名: F α β] [OrderIso类 F α β] [乘法等价类 F α β] : CoeTC F (α ≃*o β)
   定义体: ⟨OrderMonoidIsoClass.toOrderMonoidIso⟩
 
 Depends on / 依赖: OrderMonoidIsoClass, OrderMonoidIsoClass.toOrderMonoidIso, toOrderMonoidIso
@@ -345,8 +345,8 @@ theorem MonoidHomClass.ext_iff_le
     fun x => le_antisymm (h x) (map_inv_le_map_inv_iff_map_le_map.mp <| h x⁻¹)
 
 中文:
-定理 MonoidHomClass.ext_iff_le
-  条件: [PartialOrder β] [MulRightMono β] [MulLeftMono β] {f g : F}
+定理 幺半群态射类.ext_iff_le
+  条件: [偏序 β] [MulRightMono β] [MulLeftMono β] {f g : F}
   证明: by simp +contextual
   mpr h := DFunLike.ext f g
     fun x => le_antisymm (h x) (map_inv_le_map_inv_iff_map_le_map.mp <| h x⁻¹)
@@ -439,7 +439,7 @@ theorem monotone_iff_map_nonneg
 
 中文:
 定理 monotone_iff_map_nonneg
-  条件: [iamhc : AddMonoidHomClass F α β]
+  条件: [iamhc : 加法幺半群态射类 F α β]
   证明: ⟨fun h a => by
     rw [← map_zero f]
     apply h, fun h a b hl => by
@@ -468,7 +468,7 @@ theorem antitone_iff_map_nonpos
 
 中文:
 定理 antitone_iff_map_nonpos
-  结论: Antitone (f : α -> β) ↔ 对任意 a, 0 <= a -> f a <= 0
+  结论: 递减 (f : α -> β) ↔ 对任意 a, 0 <= a -> f a <= 0
   证明: monotone_toDual_comp_iff.symm.trans monotone_iff_map_nonneg (β := βᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: monotone_iff_map_nonneg, monotone_toDual_comp_iff, monotone_toDual_comp_iff.symm.trans
@@ -486,7 +486,7 @@ theorem monotone_iff_map_nonpos
 
 中文:
 定理 monotone_iff_map_nonpos
-  结论: Monotone (f : α -> β) ↔ 对任意 a <= 0, f a <= 0
+  结论: 递增 (f : α -> β) ↔ 对任意 a <= 0, f a <= 0
   证明: antitone_comp_ofDual_iff.symm.trans antitone_iff_map_nonpos (α := αᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: antitone_comp_ofDual_iff, antitone_comp_ofDual_iff.symm.trans, antitone_iff_map_nonpos
@@ -504,7 +504,7 @@ theorem antitone_iff_map_nonneg
 
 中文:
 定理 antitone_iff_map_nonneg
-  结论: Antitone (f : α -> β) ↔ 对任意 a <= 0, 0 <= f a
+  结论: 递减 (f : α -> β) ↔ 对任意 a <= 0, 0 <= f a
   证明: monotone_comp_ofDual_iff.symm.trans monotone_iff_map_nonneg (α := αᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: monotone_comp_ofDual_iff, monotone_comp_ofDual_iff.symm.trans, monotone_iff_map_nonneg
@@ -553,7 +553,7 @@ theorem strictAnti_iff_map_neg
 
 中文:
 定理 strictAnti_iff_map_neg
-  结论: StrictAnti (f : α -> β) ↔ 对任意 a, 0 < a -> f a < 0
+  结论: 严格递减 (f : α -> β) ↔ 对任意 a, 0 < a -> f a < 0
   证明: strictMono_toDual_comp_iff.symm.trans strictMono_iff_map_pos (β := βᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: strictMono_iff_map_pos, strictMono_toDual_comp_iff, strictMono_toDual_comp_iff.symm.trans
@@ -571,7 +571,7 @@ theorem strictMono_iff_map_neg
 
 中文:
 定理 strictMono_iff_map_neg
-  结论: StrictMono (f : α -> β) ↔ 对任意 a < 0, f a < 0
+  结论: 严格递增 (f : α -> β) ↔ 对任意 a < 0, f a < 0
   证明: strictAnti_comp_ofDual_iff.symm.trans strictAnti_iff_map_neg (α := αᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: strictAnti_comp_ofDual_iff, strictAnti_comp_ofDual_iff.symm.trans, strictAnti_iff_map_neg
@@ -589,7 +589,7 @@ theorem strictAnti_iff_map_pos
 
 中文:
 定理 strictAnti_iff_map_pos
-  结论: StrictAnti (f : α -> β) ↔ 对任意 a < 0, 0 < f a
+  结论: 严格递减 (f : α -> β) ↔ 对任意 a < 0, 0 < f a
   证明: strictMono_comp_ofDual_iff.symm.trans strictMono_iff_map_pos (α := αᵒᵈ) (iamhc := iamhc) _
 
 Depends on / 依赖: strictMono_comp_ofDual_iff, strictMono_comp_ofDual_iff.symm.trans, strictMono_iff_map_pos
@@ -626,7 +626,7 @@ initialize_simps_projections OrderMonoidHom (toFun -> apply, -toMonoidHom)
 
 中文:
 实例 :
-  签名: FunLike (α ->*o β) α β
+  签名: 函数状 (α ->*o β) α β
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨⟨_, _⟩⟩, _⟩ := f
@@ -663,7 +663,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (α ->*o β) α β
+  签名: 序态射类 (α ->*o β) α β
   定义体: f.monotone' h
 
 @[to_additive]
@@ -685,7 +685,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass (α ->*o β) α β
+  签名: 幺半群态射类 (α ->*o β) α β
   定义体: f.map_mul'
   map_one f := f.map_one'
 
@@ -759,7 +759,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : α ->* β) (h)
-  结论: (OrderMonoidHom.mk f h : α -> β) = f
+  结论: (Order幺半群态射.mk f h : α -> β) = f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -782,7 +782,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f : α ->*o β) (h)
-  结论: OrderMonoidHom.mk (f : α ->* β) h = f
+  结论: Order幺半群态射.mk (f : α ->* β) h = f
   证明: by
   ext
   rfl
@@ -873,7 +873,7 @@ ext by convert! DFunLike.ext_iff.1 h using 0
 
 中文:
 定理 toMonoidHom_injective
-  结论: Injective (toMonoidHom : _ -> α ->* β)
+  结论: 单射 (toMonoidHom : _ -> α ->* β)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h using 0
 
@@ -894,7 +894,7 @@ ext by convert! DFunLike.ext_iff.1 h using 0
 
 中文:
 定理 toOrderHom_injective
-  结论: Injective (toOrderHom : _ -> α ->o β)
+  结论: 单射 (toOrderHom : _ -> α ->o β)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h using 0
 -/
@@ -1006,7 +1006,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(OrderMonoidHom.id α) = id
+  结论: ⇑(Order幺半群态射.id α) = id
   证明: rfl
 
 @[to_additive]
@@ -1025,7 +1025,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->*o α)
+  签名: 可居 (α ->*o α)
   定义体: ⟨OrderMonoidHom.id α⟩
 
 Depends on / 依赖: OrderMonoidHom, OrderMonoidHom.id
@@ -1186,7 +1186,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->*o β)
-  结论: f.comp (OrderMonoidHom.id α) = f
+  结论: f.comp (Order幺半群态射.id α) = f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1209,7 +1209,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->*o β)
-  结论: (OrderMonoidHom.id β).comp f = f
+  结论: (Order幺半群态射.id β).comp f = f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1230,7 +1230,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->*o γ} {f : α ->*o β} (hf : Function.Surjective f)
+  条件: {g₁ g₂ : β ->*o γ} {f : α ->*o β} (hf : 函数.满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
 
 @[to_additive (attr := simp)]
@@ -1252,7 +1252,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->*o γ} {f₁ f₂ : α ->*o β} (hg : Function.Injective g)
+  条件: {g : β ->*o γ} {f₁ f₂ : α ->*o β} (hg : 函数.单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -1275,7 +1275,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (α ->*o β)
+  签名: 幺 (α ->*o β)
   定义体: ⟨{ (1 : α ->* β) with monotone' := monotone_const }⟩
 
 @[to_additive (attr := simp)]
@@ -1396,8 +1396,8 @@ instance [IsOrderedMonoid
 @[to_additive (attr := simp)]
 
 中文:
-实例 [IsOrderedMonoid
-  签名: β] : Mul (α ->*o β)
+实例 [是Ordered幺半群
+  签名: β] : 乘法 (α ->*o β)
   定义体: ⟨fun f g => { (f * g : α ->* β) with monotone' := f.monotone'.mul' g.monotone' }⟩
 
 @[to_additive (attr := simp)]
@@ -1421,7 +1421,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [IsOrderedMonoid β] (f g : α ->*o β)
+  条件: [是Ordered幺半群 β] (f g : α ->*o β)
   结论: ⇑(f * g) = f * g
   证明: rfl
 
@@ -1444,7 +1444,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [IsOrderedMonoid β] (f g : α ->*o β) (a : α)
+  条件: [是Ordered幺半群 β] (f g : α ->*o β) (a : α)
   结论: (f * g) a = f a * g a
   证明: rfl
 
@@ -1466,7 +1466,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  条件: [IsOrderedMonoid γ] (g₁ g₂ : β ->*o γ) (f : α ->*o β)
+  条件: [是Ordered幺半群 γ] (g₁ g₂ : β ->*o γ) (f : α ->*o β)
   证明: rfl
 
 @[to_additive]
@@ -1486,7 +1486,7 @@ theorem comp_mul
 
 中文:
 定理 comp_mul
-  条件: [IsOrderedMonoid β] [IsOrderedMonoid γ] (g : β ->*o γ) (f₁ f₂ : α ->*o β)
+  条件: [是Ordered幺半群 β] [是Ordered幺半群 γ] (g : β ->*o γ) (f₁ f₂ : α ->*o β)
   证明: ext fun _ => map_mul g _ _
 
 Depends on / 依赖: map_mul
@@ -1563,7 +1563,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (f : α -> β) (hf : Monotone f) (map_mul : 对任意 a b : α, f (a * b) = f a * f b)
+  签名: (f : α -> β) (hf : 递增 f) (map_mul : 对任意 a b : α, f (a * b) = f a * f b)
   定义体: { MonoidHom.mk' f map_mul with monotone' := hf }
 
 Depends on / 依赖: MonoidHom, MonoidHom.mk, map_mul, monotone
@@ -1602,7 +1602,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (α ≃*o β) α β
+  签名: 等价状 (α ≃*o β) α β
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -1639,7 +1639,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderIsoClass (α ≃*o β) α β
+  签名: OrderIso类 (α ≃*o β) α β
   定义体: f.map_le_map_iff'
 
 @[to_additive]
@@ -1660,7 +1660,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulEquivClass (α ≃*o β) α β
+  签名: 乘法等价类 (α ≃*o β) α β
   定义体: map_mul f.toMulEquiv
 
 Depends on / 依赖: f.toMulEquiv, map_mul, toMulEquiv
@@ -1846,7 +1846,7 @@ ext by convert! DFunLike.ext_iff.1 h using 0
 
 中文:
 定理 toMulEquiv_injective
-  结论: Injective (toMulEquiv : _ -> α ≃* β)
+  结论: 单射 (toMulEquiv : _ -> α ≃* β)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h using 0
 
@@ -1867,7 +1867,7 @@ ext by convert! DFunLike.ext_iff.1 h using 0
 
 中文:
 定理 toOrderIso_injective
-  结论: Injective (toOrderIso : _ -> α ≃o β)
+  结论: 单射 (toOrderIso : _ -> α ≃o β)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h using 0
 -/
@@ -1930,7 +1930,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ≃*o α)
+  签名: 可居 (α ≃*o α)
   定义体: ⟨OrderMonoidIso.refl α⟩
 
 Depends on / 依赖: OrderMonoidIso, OrderMonoidIso.refl
@@ -2135,7 +2135,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : α ≃*o β} {f : β ≃*o γ} (hf : Function.Injective f)
+  条件: {g₁ g₂ : α ≃*o β} {f : β ≃*o γ} (hf : 函数.单射 f)
   证明: ⟨fun h => ext fun a => hf by rw [← trans_apply, h, trans_apply], by rintro rfl; rfl⟩
 
 @[to_additive (attr := simp)]
@@ -2159,7 +2159,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : α ≃*o β} {f₁ f₂ : β ≃*o γ} (hg : Function.Surjective g)
+  条件: {g : α ≃*o β} {f₁ f₂ : β ≃*o γ} (hg : 函数.满射 g)
   证明: ⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
 
 @[to_additive (attr := simp)]
@@ -2341,7 +2341,7 @@ theorem equivLike_inv_eq_symm
 中文:
 定理 equivLike_inv_eq_symm
   条件: (f : α ≃*o β)
-  结论: EquivLike.inv f = f.symm
+  结论: 等价状.inv f = f.symm
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2411,7 +2411,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (α ≃*o β) -> β ≃*o α)
+  结论: 函数.双射 (symm : (α ≃*o β) -> β ≃*o α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[to_additive (attr := simp)]
@@ -2771,7 +2771,7 @@ lemma strictMono
 
 中文:
 引理 strictMono
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: strictMono_of_le_iff_le fun _ _ => (map_le_map_iff _).symm
 
 @[to_additive]
@@ -2795,7 +2795,7 @@ lemma strictMono_symm
 
 中文:
 引理 strictMono_symm
-  结论: StrictMono f.symm
+  结论: 严格递增 f.symm
   证明: strictMono_of_le_iff_le fun a b => by
     rw [← map_le_map_iff f]
     convert! Iff.rfl <;>

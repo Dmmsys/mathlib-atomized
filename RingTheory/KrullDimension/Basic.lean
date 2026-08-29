@@ -34,7 +34,7 @@ definition ringKrullDim
 
 中文:
 定义 ringKrullDim
-  签名: (R : 类型) [CommSemiring R]
+  签名: (R : 类型) [交换半环 R]
   定义体: krullDim (PrimeSpectrum R)
 
 Depends on / 依赖: PrimeSpectrum, krullDim
@@ -51,8 +51,8 @@ abbreviation Ring.KrullDimLE
   body: Order.KrullDimLE n (PrimeSpectrum R)
 
 中文:
-缩写 Ring.KrullDimLE
-  签名: (n : 自然数) (R : 类型) [CommSemiring R]
+缩写 环.Krull维数不超过
+  签名: (n : 自然数) (R : 类型) [交换半环 R]
   定义体: Order.KrullDimLE n (PrimeSpectrum R)
 
 Depends on / 依赖: KrullDimLE, Order.KrullDimLE, PrimeSpectrum
@@ -73,7 +73,7 @@ lemma Ring.krullDimLE_iff
 @[nontriviality]
 
 中文:
-引理 Ring.krullDimLE_iff
+引理 环.krullDimLE_iff
   条件: {n : 自然数}
   证明: Order.krullDimLE_iff n (PrimeSpectrum R)
 
@@ -95,7 +95,7 @@ lemma ringKrullDim_eq_bot_of_subsingleton
 
 中文:
 引理 ringKrullDim_eq_bot_of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   证明: krullDim_eq_bot
 
 Depends on / 依赖: krullDim_eq_bot
@@ -114,7 +114,7 @@ lemma ringKrullDim_nonneg_of_nontrivial
 
 中文:
 引理 ringKrullDim_nonneg_of_nontrivial
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: krullDim_nonneg
 
 Depends on / 依赖: krullDim_nonneg
@@ -136,7 +136,7 @@ theorem ringKrullDim_le_of_surjective
 
 中文:
 定理 ringKrullDim_le_of_surjective
-  条件: (f : R ->+* S) (hf : Function.Surjective f)
+  条件: (f : R ->+* S) (hf : 函数.满射 f)
   证明: krullDim_le_of_strictMono (fun I => ⟨Ideal.comap f I.asIdeal, inferInstance⟩)
     (Monotone.strictMono_of_injective (fun _ _ hab => Ideal.comap_mono hab)
       (fun _ _ h => PrimeSpectrum.ext_iff.mpr <| Ideal.comap_injective_of_surjective f hf <| by
@@ -161,7 +161,7 @@ theorem ringKrullDim_quotient_le
 
 中文:
 定理 ringKrullDim_quotient_le
-  条件: {R : 类型} [CommRing R] (I : Ideal R)
+  条件: {R : 类型} [交换环 R] (I : 理想 R)
   证明: ringKrullDim_le_of_surjective _ Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective, ringKrullDim_le_of_surjective
@@ -208,7 +208,7 @@ abbreviation FiniteRingKrullDim
 
 中文:
 缩写 FiniteRingKrullDim
-  签名: (R : 类型) [CommSemiring R]
+  签名: (R : 类型) [交换半环 R]
   定义体: FiniteDimensionalOrder (PrimeSpectrum R)
 
 Depends on / 依赖: FiniteDimensionalOrder, PrimeSpectrum
@@ -303,9 +303,9 @@ proof_wanted MvPolynomial.fin_ringKrullDim_eq_add_of_isNoetherianRing
     ringKrullDim (MvPolynomial (Fin n) R) = ringKrullDim R + n
 
 中文:
-引理 Nontrivial.of_finiteRingKrullDim
+引理 非平凡.of_finiteRingKrullDim
   条件: [FiniteRingKrullDim R]
-  结论: Nontrivial R
+  结论: 非平凡 R
   证明: by
   rw [← PrimeSpectrum.nonempty_iff_nontrivial]
   exact LTSeries.nonempty_of_finiteDimensionalOrder _
@@ -341,8 +341,8 @@ lemma Ring.krullDimLE_zero_iff
   rfl
 
 中文:
-引理 Ring.krullDimLE_zero_iff
-  结论: Ring.KrullDimLE 0 R ↔ 对任意 I : Ideal R, I.IsPrime -> I.IsMaximal
+引理 环.krullDimLE_zero_iff
+  结论: 环.Krull维数不超过 0 R ↔ 对任意 I : 理想 R, I.是素 -> I.是极大
   证明: by
   simp_rw [Ring.KrullDimLE, Order.krullDimLE_iff, Nat.cast_zero,
     Order.krullDim_nonpos_iff_forall_isMax,
@@ -368,7 +368,7 @@ theorem Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal
   exact (h J hJ).eq_of_le hI.ne_top hle ▸ h J hJ
 
 中文:
-定理 Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal
+定理 环.krullDimLE_zero_iff_对任意_minimalPrimes_isMaximal
   证明: by
   refine Ring.krullDimLE_zero_iff.trans ⟨fun h I hI => h I hI.1.1, fun h I hI => ?_⟩
   obtain ⟨J, hJ, hle⟩ := Ideal.exists_minimalPrimes_le bot_le (J := I)
@@ -393,9 +393,9 @@ lemma Ring.KrullDimLE.mk₀
   rwa [Ring.krullDimLE_zero_iff]
 
 中文:
-引理 Ring.KrullDimLE.mk₀
-  条件: (H : 对任意 I : Ideal R, I.IsPrime -> I.IsMaximal)
-  结论: Ring.KrullDimLE 0 R
+引理 环.Krull维数不超过.mk₀
+  条件: (H : 对任意 I : 理想 R, I.是素 -> I.是极大)
+  结论: 环.Krull维数不超过 0 R
   证明: by
   rwa [Ring.krullDimLE_zero_iff]
 
@@ -414,9 +414,9 @@ lemma Ideal.isMaximal_of_isPrime
   proof: Ring.krullDimLE_zero_iff.mp ‹_› I ‹_›
 
 中文:
-引理 Ideal.isMaximal_of_isPrime
-  条件: [Ring.KrullDimLE 0 R] (I : Ideal R) [I.IsPrime]
-  结论: I.IsMaximal
+引理 理想.isMaximal_of_isPrime
+  条件: [环.Krull维数不超过 0 R] (I : 理想 R) [I.是素]
+  结论: I.是极大
   证明: Ring.krullDimLE_zero_iff.mp ‹_› I ‹_›
 
 Depends on / 依赖: Ring.krullDimLE_zero_iff.mp, krullDimLE_zero_iff
@@ -434,9 +434,9 @@ lemma Ideal.IsPrime.isMaximal'
   proof: I.isMaximal_of_isPrime
 
 中文:
-引理 Ideal.IsPrime.isMaximal'
-  条件: [Ring.KrullDimLE 0 R] {I : Ideal R} (hI : I.IsPrime)
-  结论: I.IsMaximal
+引理 理想.是素.isMaximal'
+  条件: [环.Krull维数不超过 0 R] {I : 理想 R} (hI : I.是素)
+  结论: I.是极大
   证明: I.isMaximal_of_isPrime
 
 Depends on / 依赖: I.isMaximal_of_isPrime, isMaximal_of_isPrime
@@ -457,9 +457,9 @@ lemma Ideal.isMaximal_iff_isPrime
   proof: ⟨IsMaximal.isPrime, fun _ => inferInstance⟩
 
 中文:
-引理 Ideal.isMaximal_iff_isPrime
-  条件: [Ring.KrullDimLE 0 R] {I : Ideal R}
-  结论: I.IsMaximal ↔ I.IsPrime
+引理 理想.isMaximal_iff_isPrime
+  条件: [环.Krull维数不超过 0 R] {I : 理想 R}
+  结论: I.是极大 ↔ I.是素
   证明: ⟨IsMaximal.isPrime, fun _ => inferInstance⟩
 
 Depends on / 依赖: IsMaximal, IsMaximal.isPrime, isPrime
@@ -477,8 +477,8 @@ lemma Ideal.mem_minimalPrimes_of_krullDimLE_zero
     ⟨‹_›, fun J hJ hJI => (IsMaximal.eq_of_le inferInstance IsPrime.ne_top' hJI).ge⟩
 
 中文:
-引理 Ideal.mem_minimalPrimes_of_krullDimLE_zero
-  结论: [Ring.KrullDimLE 0 R]
+引理 理想.mem_minimalPrimes_of_krullDimLE_zero
+  结论: [环.Krull维数不超过 0 R]
   证明: minimalPrimes_eq_minimals (R := R) ▸
     ⟨‹_›, fun J hJ hJI => (IsMaximal.eq_of_le inferInstance IsPrime.ne_top' hJI).ge⟩
 
@@ -498,8 +498,8 @@ lemma Ideal.mem_minimalPrimes_iff_isPrime
   proof: ⟨(·.1.1), fun _ => I.mem_minimalPrimes_of_krullDimLE_zero⟩
 
 中文:
-引理 Ideal.mem_minimalPrimes_iff_isPrime
-  条件: [Ring.KrullDimLE 0 R] {I : Ideal R}
+引理 理想.mem_minimalPrimes_iff_isPrime
+  条件: [环.Krull维数不超过 0 R] {I : 理想 R}
   证明: ⟨(·.1.1), fun _ => I.mem_minimalPrimes_of_krullDimLE_zero⟩
 
 Depends on / 依赖: I.mem_minimalPrimes_of_krullDimLE_zero, mem_minimalPrimes_of_krullDimLE_zero
@@ -519,8 +519,8 @@ theorem nilradical_le_jacobson
 
 中文:
 定理 nilradical_le_jacobson
-  条件: (R) [CommRing R]
-  结论: nilradical R <= Ring.jacobson R
+  条件: (R) [交换环 R]
+  结论: nilradical R <= 环.jacobson R
   证明: nilradical_eq_sInf R ▸ le_sInf fun _I hI => sInf_le (Ideal.IsMaximal.isPrime ⟨hI⟩)
 
 Depends on / 依赖: Ideal.IsMaximal.isPrime, IsMaximal, isPrime, le_sInf, nilradical_eq_sInf, sInf_le
@@ -538,8 +538,8 @@ theorem Ring.jacobson_eq_nilradical_of_krullDimLE_zero
     sInf_le Ideal.IsMaximal.out
 
 中文:
-定理 Ring.jacobson_eq_nilradical_of_krullDimLE_zero
-  条件: (R) [CommRing R] [KrullDimLE 0 R]
+定理 环.jacobson_eq_nilradical_of_krullDimLE_zero
+  条件: (R) [交换环 R] [Krull维数不超过 0 R]
   证明: (nilradical_le_jacobson R).antisymm' nilradical_eq_sInf R ▸ le_sInf fun I (_ : I.IsPrime) =>
     sInf_le Ideal.IsMaximal.out
 
@@ -563,8 +563,8 @@ instance [Ring.KrullDimLE
   body: .mono zero_le_one _
 
 中文:
-实例 [Ring.KrullDimLE
-  签名: 0 R] : Ring.KrullDimLE 1 R
+实例 [环.Krull维数不超过
+  签名: 0 R] : 环.Krull维数不超过 1 R
   定义体: .mono zero_le_one _
 -/
 instance [Ring.KrullDimLE 0 R] : Ring.KrullDimLE 1 R := .mono zero_le_one _
@@ -582,8 +582,8 @@ lemma Ring.krullDimLE_one_iff
   rfl
 
 中文:
-引理 Ring.krullDimLE_one_iff
-  结论: Ring.KrullDimLE 1 R ↔
+引理 环.krullDimLE_one_iff
+  结论: 环.Krull维数不超过 1 R ↔
   证明: by
   simp_rw [Ring.KrullDimLE, Order.krullDimLE_iff, Nat.cast_one,
     Order.krullDim_le_one_iff, (PrimeSpectrum.equivSubtype R).forall_congr_left,
@@ -609,8 +609,8 @@ lemma Ring.KrullDimLE.mk₁
   rwa [Ring.krullDimLE_one_iff]
 
 中文:
-引理 Ring.KrullDimLE.mk₁
-  条件: (H : 对任意 I : Ideal R, I.IsPrime -> I in minimalPrimes R ∨ I.IsMaximal)
+引理 环.Krull维数不超过.mk₁
+  条件: (H : 对任意 I : 理想 R, I.是素 -> I in minimalPrimes R ∨ I.是极大)
   证明: by
   rwa [Ring.krullDimLE_one_iff]
 
@@ -633,8 +633,8 @@ lemma Ring.krullDimLE_one_iff_of_isPrime_bot
     Subtype.forall, PrimeSpectrum.isMax_iff, foral
 
 中文:
-引理 Ring.krullDimLE_one_iff_of_isPrime_bot
-  条件: [(⊥ : Ideal R).IsPrime]
+引理 环.krullDimLE_one_iff_of_isPrime_bot
+  条件: [(⊥ : 理想 R).是素]
   证明: by
   let : OrderBot (PrimeSpectrum R) := { bot := ⟨⊥, ‹_›⟩, bot_le I := bot_le (a := I.1) }
   simp_rw [Ring.KrullDimLE, Order.krullDimLE_iff, Nat.cast_one,
@@ -664,8 +664,8 @@ lemma Ring.krullDimLE_one_iff_of_noZeroDivisors
   exact Ring.krullDimLE_one_iff_of_isPrime_bot
 
 中文:
-引理 Ring.krullDimLE_one_iff_of_noZeroDivisors
-  条件: [NoZeroDivisors R]
+引理 环.krullDimLE_one_iff_of_noZeroDivisors
+  条件: [无零因子 R]
   证明: by
   cases subsingleton_or_nontrivial R
   · exact iff_of_true inferInstance fun I h => (h <| Subsingleton.elim ..).elim
@@ -688,8 +688,8 @@ lemma Ideal.IsPrime.isMaximal_of_ne_bot
   proof: Ring.krullDimLE_one_iff_of_noZeroDivisors.mp ‹_› _ hI' hI
 
 中文:
-引理 Ideal.IsPrime.isMaximal_of_ne_bot
-  结论: [NoZeroDivisors R] [Ring.KrullDimLE 1 R]
+引理 理想.是素.isMaximal_of_ne_bot
+  结论: [无零因子 R] [环.Krull维数不超过 1 R]
   证明: Ring.krullDimLE_one_iff_of_noZeroDivisors.mp ‹_› _ hI' hI
 
 Depends on / 依赖: Ring.krullDimLE_one_iff_of_noZeroDivisors.mp, krullDimLE_one_iff_of_noZeroDivisors
@@ -708,8 +708,8 @@ lemma Ideal.isMaximal_of_isPrime_of_ne_bot
   proof: Ideal.IsPrime.isMaximal_of_ne_bot ‹_› hI'
 
 中文:
-引理 Ideal.isMaximal_of_isPrime_of_ne_bot
-  结论: [NoZeroDivisors R] [Ring.KrullDimLE 1 R]
+引理 理想.isMaximal_of_isPrime_of_ne_bot
+  结论: [无零因子 R] [环.Krull维数不超过 1 R]
   证明: Ideal.IsPrime.isMaximal_of_ne_bot ‹_› hI'
 
 Depends on / 依赖: Ideal.IsPrime.isMaximal_of_ne_bot, IsPrime, isMaximal_of_ne_bot
@@ -732,8 +732,8 @@ lemma Ring.KrullDimLE.mk₁'
   exact .mk₀ fun I hI => H I (fun e => hR (e ▸ hI)) hI
 
 中文:
-引理 Ring.KrullDimLE.mk₁'
-  条件: (H : 对任意 I : Ideal R, I != ⊥ -> I.IsPrime -> I.IsMaximal)
+引理 环.Krull维数不超过.mk₁'
+  条件: (H : 对任意 I : 理想 R, I != ⊥ -> I.是素 -> I.是极大)
   证明: by
   by_cases hR : (⊥ : Ideal R).IsPrime
   · rwa [Ring.krullDimLE_one_iff_of_isPrime_bot]
@@ -758,8 +758,8 @@ lemma Prime.isMaximal_span_singleton
   proof: ((Ideal.span_singleton_prime ha.ne_zero).mpr ha).isMaximal_of_ne_bot (by simpa using ha.ne_zero)
 
 中文:
-引理 Prime.isMaximal_span_singleton
-  结论: [NoZeroDivisors R] [Ring.KrullDimLE 1 R]
+引理 素.isMaximal_span_singleton
+  结论: [无零因子 R] [环.Krull维数不超过 1 R]
   证明: ((Ideal.span_singleton_prime ha.ne_zero).mpr ha).isMaximal_of_ne_bot (by simpa using ha.ne_zero)
 
 Depends on / 依赖: Ideal.span_singleton_prime, ha.ne_zero, isMaximal_of_ne_bot, ne_zero, span_singleton_prime
@@ -779,8 +779,8 @@ lemma Ideal.liesOver_span_iff
   simp [Ideal.liesOver_iff, Ideal.IsMaximal.eq_iff_le hp.isMaximal_span_singleton hP]
 
 中文:
-引理 Ideal.liesOver_span_iff
-  结论: [NoZeroDivisors R] [Ring.KrullDimLE 1 R] [Algebra R S]
+引理 理想.liesOver_span_iff
+  结论: [无零因子 R] [环.Krull维数不超过 1 R] [代数 R S]
   证明: by
   have hP : P.under R != ⊤ := Ideal.comap_ne_top _ hP
   simp [Ideal.liesOver_iff, Ideal.IsMaximal.eq_iff_le hp.isMaximal_span_singleton hP]

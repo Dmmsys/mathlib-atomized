@@ -55,7 +55,7 @@ abbreviation forget
 
 中文:
 缩写 forget
-  签名: : C ⥤ Type w where
+  签名: : C ⥤ 类型 w where
   定义体: ToType X
   map f := ↾f
 
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
   定义体: ConcreteCategory.hom_ext _ _ fun x => ConcreteCategory.congr_hom h x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, congr_hom, hom_ext, reflectsLimitsOfShape_of_reflectsIsomorphisms
@@ -98,7 +98,7 @@ lemma ConcreteCategory.forget_map_eq_ofHom
   ConcreteCategory.forget_map_eq_ofHom
 
 中文:
-引理 ConcreteCategory.forget_map_eq_ofHom
+引理 余ncrete范畴.forget_map_eq_ofHom
   条件: {X Y : C} (f : X ⟶ Y)
   证明: rfl
 
@@ -184,7 +184,7 @@ class HasForget₂
     - forget_comp : forget₂ ⋙ forget D = forget C  [default: by aesop]
 
 中文:
-类 HasForget₂
+类 有Forget₂
   参数: where
   公理与运算 (2 个):
     - forget₂ : C ⥤ D
@@ -206,7 +206,7 @@ abbreviation forget₂
 
 中文:
 缩写 forget₂
-  签名: [HasForget₂ C D]
+  签名: [有Forget₂ C D]
   定义体: HasForget₂.forget₂
 -/
 abbrev forget₂ [HasForget₂ C D] : C ⥤ D :=
@@ -225,7 +225,7 @@ lemma forget₂_comp_apply
 
 中文:
 引理 forget₂_comp_apply
-  结论: [HasForget₂ C D] {X Y Z : C}
+  结论: [有Forget₂ C D] {X Y Z : C}
   证明: by
   rw [Functor.map_comp]; rw [CategoryTheory.comp_apply]
 
@@ -246,7 +246,7 @@ instance forget₂_faithful
 
 中文:
 实例 forget₂_faithful
-  签名: [HasForget₂ C D]
+  签名: [有Forget₂ C D]
   定义体: HasForget₂.forget_comp.faithful_of_comp
 
 Depends on / 依赖: faithful_of_comp, forget_comp, forget_comp.faithful_of_comp
@@ -289,8 +289,8 @@ instance ObjectProperty.FullSubcategory.hasForget₂
   ObjectProperty.FullSubcategory.hasForget₂
 
 中文:
-实例 ObjectProperty.FullSubcategory.hasForget₂
-  签名: (P : Object命题erty C)
+实例 ObjectProperty.满子范畴.hasForget₂
+  签名: (P : ObjectProperty C)
   定义体: P.ι
   forget_comp := rfl
 
@@ -319,7 +319,7 @@ definition HasForget₂.mk'
   forget_comp := by apply Functor.Faithful.div_comp
 
 中文:
-定义 HasForget₂.mk'
+定义 有Forget₂.mk'
   签名: (obj : C -> D) (h_obj : 对任意 X, (forget D).obj (obj X) = (forget C).obj X)
   定义体: Functor.Faithful.div _ _ _ @h_obj _ @h_map
   forget_comp := by apply Functor.Faithful.div_comp
@@ -349,8 +349,8 @@ definition HasForget₂.trans
     simp only [HasForget₂.forget_comp]
 
 中文:
-定义 HasForget₂.trans
-  签名: (E : 类型) [Category* E] {FE : outParam <| E -> E -> 类型}
+定义 有Forget₂.trans
+  签名: (E : 类型) [范畴* E] {FE : outParam <| E -> E -> 类型}
   定义体: CategoryTheory.forget₂ C D ⋙ CategoryTheory.forget₂ D E
   forget_comp := by
     change (CategoryTheory.forget₂ _ D) ⋙ (CategoryTheory.forget₂ D E ⋙ CategoryTheory.forget E) = _
@@ -377,8 +377,8 @@ lemma ConcreteCategory.forget₂_comp_apply
   rw [Functor.map_comp]; rw [CategoryTheory.comp_apply]
 
 中文:
-引理 ConcreteCategory.forget₂_comp_apply
-  结论: [HasForget₂ C D] {X Y Z : C}
+引理 余ncrete范畴.forget₂_comp_apply
+  结论: [有Forget₂ C D] {X Y Z : C}
   证明: by
   rw [Functor.map_comp]; rw [CategoryTheory.comp_apply]
 
@@ -400,7 +400,7 @@ instance hom_isIso
 
 中文:
 实例 hom_isIso
-  签名: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : C} (f : X ⟶ Y) [是同构 f]
   定义体: ((forget C).mapIso (asIso f)).isIso_hom
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom

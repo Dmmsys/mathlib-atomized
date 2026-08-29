@@ -50,7 +50,7 @@ definition directSum
 
 中文:
 定义 directSum
-  签名: : Relations A where
+  签名: : 关系 A where
   定义体: Σ i, (relations i).G
   R := Σ i, (relations i).R
   relation := fun ⟨i, r⟩ => Finsupp.embDomain (Function.Embedding.sigmaMk
@@ -130,7 +130,7 @@ definition directSum
 
 中文:
 定义 directSum
-  签名: (solution : 对任意 (i : ι), (relations i).Solution (M i))
+  签名: (solution : 对任意 (i : ι), (relations i).解 (M i))
   定义体: directSumEquiv.symm (fun i => (solution i).postcomp (lof A ι M i))
 
 @[simp]
@@ -152,7 +152,7 @@ lemma directSum_var
 
 中文:
 引理 directSum_var
-  结论: (solution : 对任意 (i : ι), (relations i).Solution (M i))
+  结论: (solution : 对任意 (i : ι), (relations i).解 (M i))
   证明: rfl
 -/
 lemma directSum_var (solution : forall (i : ι), (relations i).Solution (M i))
@@ -217,7 +217,7 @@ lemma directSum
 
 中文:
 引理 directSum
-  结论: (directSum solution).IsPresentation
+  结论: (directSum solution).是呈现
   证明: (directSum.isRepresentationCore h).isPresentation
 
 Depends on / 依赖: directSum, directSum.isRepresentationCore, isPresentation, isRepresentationCore
@@ -249,7 +249,7 @@ definition directSum
 
 中文:
 定义 directSum
-  签名: (pres : 对任意 (i : ι), Presentation A (M i))
+  签名: (pres : 对任意 (i : ι), 呈现 A (M i))
   定义体: ofIsPresentation
     (Relations.Solution.IsPresentation.directSum (fun i => (pres i).toIsPresentation))
 
@@ -273,7 +273,7 @@ lemma directSum_var
 
 中文:
 引理 directSum_var
-  条件: (pres : 对任意 (i : ι), Presentation A (M i)) (i : ι) (g : (pres i).G)
+  条件: (pres : 对任意 (i : ι), 呈现 A (M i)) (i : ι) (g : (pres i).G)
   证明: rfl
 -/
 lemma directSum_var (pres : forall (i : ι), Presentation A (M i)) (i : ι) (g : (pres i).G) :
@@ -299,7 +299,7 @@ definition finsupp
 
 中文:
 定义 finsupp
-  签名: : Presentation A (ι ->₀ N)
+  签名: : 呈现 A (ι ->₀ N)
   定义体: (directSum (fun (_ : ι) => pres)).ofLinearEquiv (finsuppLequivDFinsupp _).symm
 
 @[simp]

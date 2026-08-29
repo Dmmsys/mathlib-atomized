@@ -40,7 +40,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: Submonoid.center G
   inv_mem' := Set.inv_mem_center
 
@@ -65,7 +65,7 @@ theorem coe_center
 
 中文:
 定理 coe_center
-  结论: ↑(center G) = Set.center G
+  结论: ↑(center G) = 集合.center G
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -84,7 +84,7 @@ theorem center_toSubmonoid
 
 中文:
 定理 center_toSubmonoid
-  结论: (center G).toSubmonoid = Submonoid.center G
+  结论: (center G).toSubmonoid = 子幺半群.center G
   证明: rfl
 -/
 theorem center_toSubmonoid : (center G).toSubmonoid = Submonoid.center G :=
@@ -100,7 +100,7 @@ instance center.isMulCommutative
 
 中文:
 实例 center.isMulCommutative
-  签名: : IsMulCommutative (center G)
+  签名: : 是MulCommutative (center G)
   定义体: ⟨⟨fun a b => Subtype.ext (b.2.comm a).symm⟩⟩
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -121,7 +121,7 @@ definition centerCongr
 
 中文:
 定义 centerCongr
-  签名: {H} [Group H] (e : G ≃* H)
+  签名: {H} [群 H] (e : G ≃* H)
   定义体: Submonoid.centerCongr e
 
 Depends on / 依赖: Submonoid, Submonoid.centerCongr, centerCongr
@@ -188,7 +188,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: (z : G) [Decidable (对任意 g, g * z = z * g)]
+  签名: (z : G) [可判定 (对任意 g, g * z = z * g)]
   定义体: decidable_of_iff' _ mem_center_iff
 
 @[to_additive]
@@ -216,7 +216,7 @@ instance centerCharacteristic
 
 中文:
 实例 centerCharacteristic
-  签名: : (center G).Characteristic
+  签名: : (center G).特征
   定义体: by
   refine characteristic_iff_comap_le.mpr fun ϕ g hg => ?_
   rw [mem_center_iff]
@@ -253,8 +253,8 @@ theorem _root_.CommGroup.center_eq_top
 @[to_additive]
 
 中文:
-定理 _root_.CommGroup.center_eq_top
-  条件: {G : 类型} [CommGroup G]
+定理 _root_.交换群.center_eq_top
+  条件: {G : 类型} [交换群 G]
   结论: center G = ⊤
   证明: by
   rw [eq_top_iff']
@@ -288,7 +288,7 @@ theorem center_eq_top_iff
 
 中文:
 定理 center_eq_top_iff
-  结论: center G = ⊤ ↔ IsMulCommutative G
+  结论: center G = ⊤ ↔ 是MulCommutative G
   证明: by
   simp [eq_top_iff', isMulCommutative_iff, mem_center_iff, eq_comm]
 
@@ -311,7 +311,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: [hG : IsMulCommutative G]
+  条件: [hG : 是MulCommutative G]
   结论: center G = ⊤
   证明: center_eq_top_iff.mpr hG
 
@@ -340,7 +340,7 @@ definition _root_.Group.commGroupOfCenterEqTop
 @[to_additive]
 
 中文:
-定义 _root_.Group.commGroupOfCenterEqTop
+定义 _root_.群.commGroupOfCenterEqTop
   签名: (h : center G = ⊤)
   定义体: { ‹Group G› with
     mul_comm := by
@@ -377,8 +377,8 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  条件: {H : 类型} [Group H]
-  结论: center (G × H) = prod (center G) (center H)
+  条件: {H : 类型} [群 H]
+  结论: center (G × H) = 乘积 (center G) (center H)
   证明: SetLike.coe_injective Set.center_prod
 
 @[to_additive]
@@ -399,7 +399,7 @@ theorem center_pi
 
 中文:
 定理 center_pi
-  条件: {η : 类型} {G : η -> 类型} [Π i, Group (G i)]
+  条件: {η : 类型} {G : η -> 类型} [Π i, 群 (G i)]
   证明: SetLike.coe_injective Set.center_pi
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.preimage, preimage
@@ -425,7 +425,7 @@ instance instNormalCenter
 
 中文:
 实例 instNormalCenter
-  签名: : (center G).Normal
+  签名: : (center G).正规
   定义体: ⟨fun a ha b => by simpa [mem_center_iff.mp ha b]⟩
 
 @[to_additive]
@@ -449,7 +449,7 @@ theorem center_le_normalizer
 
 中文:
 定理 center_le_normalizer
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: center G <= normalizer s
   证明: by
   intro x hx y
@@ -481,7 +481,7 @@ theorem eq_of_left_mem_center
 
 中文:
 定理 eq_of_left_mem_center
-  条件: {g h : M} (H : IsConj g h) (Hg : g in Set.center M)
+  条件: {g h : M} (H : IsConj g h) (Hg : g in 集合.center M)
   结论: g = h
   证明: by
   rcases H with ⟨u, hu⟩; rwa [← u.mul_left_inj, Hg.comm u]
@@ -502,7 +502,7 @@ theorem eq_of_right_mem_center
 
 中文:
 定理 eq_of_right_mem_center
-  条件: {g h : M} (H : IsConj g h) (Hh : h in Set.center M)
+  条件: {g h : M} (H : IsConj g h) (Hh : h in 集合.center M)
   结论: g = h
   证明: (H.symm.eq_of_left_mem_center Hh).symm
 
@@ -531,7 +531,7 @@ theorem mk_bijOn
 
 中文:
 定理 mk_bijOn
-  条件: (G : 类型) [Group G]
+  条件: (G : 类型) [群 G]
   证明: by
   refine ⟨fun g hg => ?_, fun x hx y _ H => ?_, ?_⟩
   · simp only [mem_noncenter, Set.compl_def, Set.mem_ofPred, Set.not_nontrivial_iff]

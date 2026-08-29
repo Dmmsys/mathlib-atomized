@@ -37,7 +37,7 @@ lemma ScottContinuousOn.fromProd
 
 中文:
 引理 ScottContinuousOn.fromProd
-  结论: [Preorder α] [Preorder β] [Preorder γ]
+  结论: [预序 α] [预序 β] [预序 γ]
   证明: fun d hX hd₁ hd₂ ⟨p1, p2⟩ hdp => by
   rw [isLUB_congr ((monotone_prod_iff.mpr ⟨h₁']; rw [h₂'⟩).upperBounds_image_of_directedOn_prod hd₂)]; rw [← iUnion_of_singleton_coe (Prod.fst '' d)]; rw [iUnion_prod_const]; rw [image_iUnion]; rw [← isLUB_iUnion_iff_of_isLUB (fun a => by
       rw [singleton_prod]
@@ -74,7 +74,7 @@ lemma ScottContinuous.fromProd
 
 中文:
 引理 ScottContinuous.fromProd
-  结论: {γ : 类型} [Preorder α] [Preorder β] [Preorder γ]
+  结论: {γ : 类型} [预序 α] [预序 β] [预序 γ]
   证明: by
   simp_rw [← scottContinuousOn_univ] at ⊢
   exact .fromProd (fun a => (h₁ a).scottContinuousOn) (fun b => (h₂ b).scottContinuousOn)
@@ -103,8 +103,8 @@ lemma ScottContinuous.prod
   · have e2 : ((fun a => (
 
 中文:
-引理 ScottContinuous.prod
-  结论: {α' β' : 类型} [Preorder α] [Preorder β] [Preorder α'] [Preorder β']
+引理 ScottContinuous.乘积
+  结论: {α' β' : 类型} [预序 α] [预序 β] [预序 α'] [预序 β']
   证明: by
   refine .fromProd (fun a d hd₁ hd₂ c hdc => ?_) (fun b d hd₁ hd₂ c hdc => ?_)
   · have e1 : (fun b => (f a, g b)) '' d = {f a} ×ˢ (g '' d) := by aesop

@@ -122,7 +122,7 @@ theorem IsIsotypicOfType.of_subsingleton
 
 中文:
 定理 IsIsotypicOfType.of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   结论: IsIsotypicOfType R M S
   证明: fun S => have := IsSimpleModule.nontrivial R S
     (not_subsingleton _ S.subtype_injective.subsingleton).elim
@@ -144,7 +144,7 @@ theorem IsIsotypic.of_subsingleton
 
 中文:
 定理 IsIsotypic.of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   结论: IsIsotypic R M
   证明: fun S => (IsIsotypicOfType.of_subsingleton R M S).isIsotypic S
 -/
@@ -164,7 +164,7 @@ theorem IsIsotypicOfType.of_isSimpleModule
 
 中文:
 定理 IsIsotypicOfType.of_isSimpleModule
-  条件: [IsSimpleModule R M]
+  条件: [是单模 R M]
   结论: IsIsotypicOfType R M M
   证明: fun S hS => by
     rw [isSimpleModule_iff_isAtom]; rw [isAtom_iff_eq_top] at hS
@@ -272,7 +272,7 @@ theorem IsIsotypic.of_injective
 
 中文:
 定理 IsIsotypic.of_injective
-  条件: (h : IsIsotypic R N) (f : M ->ₗ[R] N) (inj : Function.Injective f)
+  条件: (h : IsIsotypic R N) (f : M ->ₗ[R] N) (inj : 函数.单射 f)
   证明: fun m _ =>
   have em := (m.equivMapOfInjective f inj).symm
   have := IsSimpleModule.congr em
@@ -293,7 +293,7 @@ theorem LinearEquiv.isIsotypicOfType_iff
   proof: ⟨(·.of_injective _ e.symm.injective), (·.of_injective _ e.injective)⟩
 
 中文:
-定理 LinearEquiv.isIsotypicOfType_iff
+定理 线性等价.isIsotypicOfType_iff
   条件: (e : M ≃ₗ[R] N)
   证明: ⟨(·.of_injective _ e.symm.injective), (·.of_injective _ e.injective)⟩
 
@@ -312,7 +312,7 @@ theorem LinearEquiv.isIsotypicOfType_iff_type
   proof: ⟨(·.of_linearEquiv_type e), (·.of_linearEquiv_type e.symm)⟩
 
 中文:
-定理 LinearEquiv.isIsotypicOfType_iff_type
+定理 线性等价.isIsotypicOfType_iff_type
   条件: (e : N ≃ₗ[R] S)
   证明: ⟨(·.of_linearEquiv_type e), (·.of_linearEquiv_type e.symm)⟩
 
@@ -332,7 +332,7 @@ theorem LinearEquiv.isIsotypic_iff
   proof: ⟨(·.of_injective _ e.symm.injective), (·.of_injective _ e.injective)⟩
 
 中文:
-定理 LinearEquiv.isIsotypic_iff
+定理 线性等价.isIsotypic_iff
   条件: (e : M ≃ₗ[R] N)
   结论: IsIsotypic R M ↔ IsIsotypic R N
   证明: ⟨(·.of_injective _ e.symm.injective), (·.of_injective _ e.injective)⟩
@@ -357,7 +357,7 @@ theorem isIsotypicOfType_submodule_iff
 
 中文:
 定理 isIsotypicOfType_submodule_iff
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: by
   rw [Subtype.forall']; rw [← (Submodule.MapSubtype.orderIso N).forall_congr_right]
   have e := Submodule.equivMapOfInjective _ N.subtype_injective
@@ -388,7 +388,7 @@ theorem isIsotypic_submodule_iff
 
 中文:
 定理 isIsotypic_submodule_iff
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: by
   rw [Subtype.forall']; rw [← (Submodule.MapSubtype.orderIso N).forall_congr_right]
   have e := Submodule.equivMapOfInjective _ N.subtype_injective
@@ -450,7 +450,7 @@ theorem IsIsotypic.linearEquiv_finsupp
 
 中文:
 定理 IsIsotypic.linearEquiv_finsupp
-  条件: [Nontrivial M] (h : IsIsotypic R M)
+  条件: [非平凡 M] (h : IsIsotypic R M)
   证明: by
   have ⟨S, hS⟩ := IsAtomic.exists_atom (Submodule R M)
   rw [← isSimpleModule_iff_isAtom] at hS
@@ -482,7 +482,7 @@ theorem IsIsotypicOfType.linearEquiv_fun
 
 中文:
 定理 IsIsotypicOfType.linearEquiv_fun
-  条件: [Module.Finite R M] (h : IsIsotypicOfType R M S)
+  条件: [模.有限 R M] (h : IsIsotypicOfType R M S)
   证明: by
   have ⟨n, S, e, hs⟩ := IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp R M
   classical exact ⟨n, ⟨e.trans (DFinsupp.mapRange.linearEquiv fun i => (h (S i)).some)
@@ -510,7 +510,7 @@ exact ⟨n, neZero_iff.2 by rintro rfl; exact not_subsingleton _ (e.some.subsing
 
 中文:
 定理 IsIsotypic.linearEquiv_fun
-  条件: [Module.Finite R M] [Nontrivial M] (h : IsIsotypic R M)
+  条件: [模.有限 R M] [非平凡 M] (h : IsIsotypic R M)
   证明: by
   have ⟨S, hS⟩ := IsAtomic.exists_atom (Submodule R M)
   rw [← isSimpleModule_iff_isAtom] at hS
@@ -539,7 +539,7 @@ theorem IsIsotypic.submodule_linearEquiv_fun
 
 中文:
 定理 IsIsotypic.submodule_linearEquiv_fun
-  结论: {m : Submodule R M} [Module.Finite R m] [Nontrivial m]
+  结论: {m : 子模 R M} [模.有限 R m] [非平凡 m]
   证明: have ⟨n, hn, S, _, ⟨e⟩⟩ := h.linearEquiv_fun
   let e' := S.equivMapOfInjective _ m.subtype_injective
 ⟨n, hn, _, m.map_subtype_le S, .congr e'.symm, ⟨e.trans .piCongrRight fun _ => e'⟩⟩
@@ -567,7 +567,7 @@ definition isotypicComponent
 
 中文:
 定义 isotypicComponent
-  签名: : Submodule R M
+  签名: : 子模 R M
   定义体: sSup {m | Nonempty (m ≃ₗ[R] S)}
 
 Depends on / 依赖: Nonempty
@@ -584,7 +584,7 @@ definition isotypicComponents
 
 中文:
 定义 isotypicComponents
-  签名: : Set (Submodule R M)
+  签名: : 集合 (子模 R M)
   定义体: { m | exists S : Submodule R M, IsSimpleModule R S ∧ m = isotypicComponent R M S }
 
 Depends on / 依赖: IsSimpleModule, Submodule, isotypicComponent
@@ -604,8 +604,8 @@ theorem Submodule.le_isotypicComponent
   proof: le_sSup ⟨.refl ..⟩
 
 中文:
-定理 Submodule.le_isotypicComponent
-  条件: (m : Submodule R M)
+定理 子模.le_isotypicComponent
+  条件: (m : 子模 R M)
   结论: m <= isotypicComponent R M m
   证明: le_sSup ⟨.refl ..⟩
 
@@ -625,7 +625,7 @@ theorem bot_lt_isotypicComponent
 
 中文:
 定理 bot_lt_isotypicComponent
-  条件: (S : Submodule R M) [IsSimpleModule R S]
+  条件: (S : 子模 R M) [是单模 R S]
   证明: (bot_lt_iff_ne_bot.mpr <| (S.nontrivial_iff_ne_bot).mp <| IsSimpleModule.nontrivial R S).trans_le
     S.le_isotypicComponent
 
@@ -648,7 +648,7 @@ theorem bot_lt_isotypicComponents
 
 中文:
 定理 bot_lt_isotypicComponents
-  条件: {m : Submodule R M} (h : m in isotypicComponents R M)
+  条件: {m : 子模 R M} (h : m in isotypicComponents R M)
   结论: ⊥ < m
   证明: by
   obtain ⟨_, _, rfl⟩ := h; exact bot_lt_isotypicComponent ..
@@ -674,8 +674,8 @@ instance [IsSemisimpleModule
   infer_instance
 
 中文:
-实例 [IsSemisimpleModule
-  签名: R S] : IsSemisimpleModule R (isotypicComponent R M S)
+实例 [是半单模
+  签名: R S] : 是半单模 R (isotypicComponent R M S)
   定义体: by
   rw [isotypicComponent]; rw [sSup_eq_iSup]
   refine isSemisimpleModule_biSup_of_isSemisimpleModule_submodule fun m ⟨e⟩ => ?_
@@ -703,7 +703,7 @@ theorem LinearEquiv.isotypicComponent_eq
   proof: congr_arg sSup Set.ext fun _ => Nonempty.congr (·.trans e) (·.trans e.symm)
 
 中文:
-定理 LinearEquiv.isotypicComponent_eq
+定理 线性等价.isotypicComponent_eq
   条件: (e : N ≃ₗ[R] S)
   证明: congr_arg sSup Set.ext fun _ => Nonempty.congr (·.trans e) (·.trans e.symm)
 
@@ -733,8 +733,8 @@ theorem Submodule.le_linearEquiv_of_sSup_eq_top
   exact ⟨m, hm, _, m.map_subtype_le S, ⟨e.trans (S.equi
 
 中文:
-定理 Submodule.le_linearEquiv_of_sSup_eq_top
-  结论: [IsSemisimpleModule R M]
+定理 子模.le_linearEquiv_of_sSup_eq_top
+  结论: [是半单模 R M]
   证明: by
   have := IsSimpleModule.nontrivial R N
   have ⟨_, compl⟩ := exists_isCompl N
@@ -767,8 +767,8 @@ theorem Submodule.linearEquiv_of_sSup_eq_top
   have := ((isSimpleModule_iff_isAtom.mp <| h ⟨m, h
 
 中文:
-定理 Submodule.linearEquiv_of_sSup_eq_top
-  结论: [h : 对任意 m : s, IsSimpleModule R m]
+定理 子模.linearEquiv_of_sSup_eq_top
+  结论: [h : 对任意 m : s, 是单模 R m]
   证明: have := isSemisimpleModule_of_isSemisimpleModule_submodule' (fun _ => inferInstance)
     (sSup_eq_iSup' s ▸ hs)
   have ⟨m, hm, _S, le, ⟨e⟩⟩ := N.le_linearEquiv_of_sSup_eq_top _ hs
@@ -801,8 +801,8 @@ theorem Submodule.le_linearEquiv_of_le_sSup
 .le_li
 
 中文:
-定理 Submodule.le_linearEquiv_of_le_sSup
-  结论: [hs : 对任意 m : s, IsSemisimpleModule R m]
+定理 子模.le_linearEquiv_of_le_sSup
+  结论: [hs : 对任意 m : s, 是半单模 R m]
   证明: by
   rw [sSup_eq_iSup] at hN
   have e := LinearEquiv.ofInjective _ (inclusion_injective hN)
@@ -837,8 +837,8 @@ theorem Submodule.linearEquiv_of_le_sSup
   ⟨m, hm, ⟨e.trans (.ofEq _ _ this)⟩⟩
 
 中文:
-定理 Submodule.linearEquiv_of_le_sSup
-  结论: [simple : 对任意 m : s, IsSimpleModule R m]
+定理 子模.linearEquiv_of_le_sSup
+  结论: [simple : 对任意 m : s, 是单模 R m]
   证明: have ⟨m, hm, _S, le, ⟨e⟩⟩ := N.le_linearEquiv_of_le_sSup _ hs
   have := isSimpleModule_iff_isAtom.mp (.congr e.symm)
   have := ((isSimpleModule_iff_isAtom.mp <| simple ⟨m, hm⟩).le_iff_eq this.1).mp le
@@ -911,7 +911,7 @@ theorem IsIsotypic.isotypicComponents
 
 中文:
 定理 IsIsotypic.isotypicComponents
-  结论: {m : Submodule R M}
+  结论: {m : 子模 R M}
   证明: by
   obtain ⟨_, _, rfl⟩ := h; exact .isotypicComponent R M _
 -/
@@ -933,7 +933,7 @@ theorem eq_isotypicComponent_of_le
 
 中文:
 定理 eq_isotypicComponent_of_le
-  结论: {S c : Submodule R M} (hc : c in isotypicComponents R M)
+  结论: {S c : 子模 R M} (hc : c in isotypicComponents R M)
   证明: by
   obtain ⟨S', _, rfl⟩ := hc
   have ⟨e⟩ := isIsotypicOfType_submodule_iff.mp (.isotypicComponent R M S') _ le
@@ -995,8 +995,8 @@ instance [IsNoetherian
   body: Set.finite_coe_iff.mpr WellFoundedGT.finite_of_sSupIndep (sSupIndep_isotypicComponents R M)
 
 中文:
-实例 [IsNoetherian
-  签名: R M] : Finite (isotypicComponents R M)
+实例 [是Noether
+  签名: R M] : 有限 (isotypicComponents R M)
   定义体: Set.finite_coe_iff.mpr WellFoundedGT.finite_of_sSupIndep (sSupIndep_isotypicComponents R M)
 
 Depends on / 依赖: Set.finite_coe_iff.mpr, WellFoundedGT, WellFoundedGT.finite_of_sSupIndep, finite_coe_iff, finite_of_sSupIndep, sSupIndep_isotypicComponents
@@ -1038,8 +1038,8 @@ theorem Submodule.map_le_isotypicComponent
   · simp_rw [eq, LinearMap.range_zero, bot_le]
 
 中文:
-定理 Submodule.map_le_isotypicComponent
-  结论: (S : Submodule R M) [IsSimpleModule R S]
+定理 子模.map_le_isotypicComponent
+  结论: (S : 子模 R M) [是单模 R S]
   证明: by
   conv_lhs => rw [← S.range_subtype, ← LinearMap.range_comp]
   obtain inj | eq := (f ∘ₗ S.subtype).injective_or_eq_zero
@@ -1067,7 +1067,7 @@ theorem LinearMap.le_comap_isotypicComponent
     (m.map_le_isotypicComponent f).trans_eq e.isotypicComponent_eq
 
 中文:
-定理 LinearMap.le_comap_isotypicComponent
+定理 线性映射.le_comap_isotypicComponent
   条件: (f : M ->ₗ[R] N)
   证明: sSup_le fun m ⟨e⟩ => Submodule.map_le_iff_le_comap.mp
     have := IsSimpleModule.congr e
@@ -1094,8 +1094,8 @@ definition Submodule.IsFullyInvariant
   body: forall f : Module.End R M, N <= N.comap f
 
 中文:
-定义 Submodule.IsFullyInvariant
-  签名: (N : Submodule R M)
+定义 子模.IsFullyInvariant
+  签名: (N : 子模 R M)
   定义体: forall f : Module.End R M, N <= N.comap f
 
 Depends on / 依赖: Module, Module.End, N.comap
@@ -1116,8 +1116,8 @@ theorem isFullyInvariant_iff_isTwoSided
 
 中文:
 定理 isFullyInvariant_iff_isTwoSided
-  条件: {I : Ideal R}
-  结论: I.IsFullyInvariant ↔ I.IsTwoSided
+  条件: {I : 理想 R}
+  结论: I.IsFullyInvariant ↔ I.是TwoSided
   证明: by
   simpa only [Submodule.IsFullyInvariant, ← MulOpposite.opEquiv.trans (RingEquiv.moduleEndSelf R
 .toEquiv) |>.forall_congr_right, SetLike.le_def, I.isTwoSided_iff] using! forall_comm
@@ -1142,7 +1142,7 @@ Submodule.map_le_iff_le_comap.mpr (sInf_le hN).trans (hs hN f)
 
 中文:
 定义 fullyInvariantSubmodule
-  签名: : CompleteSublattice (Submodule R M)
+  签名: : 余mpleteSublattice (子模 R M)
   定义体: .mk' { N : Submodule R M | N.IsFullyInvariant }
     (fun _s hs f => sSup_le fun _N hN => (hs hN f).trans <| Submodule.comap_mono <| le_sSup hN)
 fun _s hs f => Submodule.map_le_iff_le_comap.mp le_sInf fun _N hN =>
@@ -1166,7 +1166,7 @@ theorem mem_fullyInvariantSubmodule_iff
 
 中文:
 定理 mem_fullyInvariantSubmodule_iff
-  条件: {m : Submodule R M}
+  条件: {m : 子模 R M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1196,7 +1196,7 @@ definition iSupIndep.ringEquiv
 
 中文:
 定义 iSupIndep.ringEquiv
-  签名: : Module.End R M ≃+* Π i, Module.End R (N i) where
+  签名: : 模.End R M ≃+* Π i, 模.End R (N i) where
   定义体: f.restrict (invar i f)
   invFun f := letI e := ind.linearEquiv iSup_top; e ∘ₗ DFinsupp.mapRange.linearMap f ∘ₗ e.symm
   left_inv f := LinearMap.ext fun x => by
@@ -1227,7 +1227,7 @@ definition iSupIndep.algEquiv
 
 中文:
 定义 iSupIndep.algEquiv
-  签名: [Module R₀ M] [IsScalarTower R₀ R M]
+  签名: [模 R₀ M] [标量塔 R₀ R M]
   定义体: ind.ringEquiv iSup_top invar
   commutes' _ := rfl
 
@@ -1249,7 +1249,7 @@ theorem Submodule.IsFullyInvariant.isotypicComponent
   proof: LinearMap.le_comap_isotypicComponent S
 
 中文:
-定理 Submodule.IsFullyInvariant.isotypicComponent
+定理 子模.IsFullyInvariant.isotypicComponent
   证明: LinearMap.le_comap_isotypicComponent S
 -/
 protected theorem Submodule.IsFullyInvariant.isotypicComponent :
@@ -1266,8 +1266,8 @@ theorem Submodule.IsFullyInvariant.of_mem_isotypicComponents
   obtain ⟨_, _, rfl⟩ := h; exact .isotypicComponent R M _
 
 中文:
-定理 Submodule.IsFullyInvariant.of_mem_isotypicComponents
-  结论: {m : Submodule R M}
+定理 子模.IsFullyInvariant.of_mem_isotypicComponents
+  结论: {m : 子模 R M}
   证明: by
   obtain ⟨_, _, rfl⟩ := h; exact .isotypicComponent R M _
 
@@ -1291,7 +1291,7 @@ hc.trans by
       exact fun c hc => le_sSup ⟨c.2, Subty
 
 中文:
-定义 GaloisCoinsertion.setIsotypicComponents
+定义 Galois余嵌入.setIsotypicComponents
   签名: :
   定义体: GaloisConnection.toGaloisCoinsertion (fun _ _ => iSup₂_le_iff) fun s c hc => of_not_not fun hcs =>
 (bot_lt_isotypicComponents c.2).ne' (sSupIndep_isotypicComponents R M c.2).eq_bot_of_le
@@ -1322,7 +1322,7 @@ theorem le_isotypicComponent_iff
 
 中文:
 定理 le_isotypicComponent_iff
-  条件: [IsSemisimpleModule R M] {m : Submodule R M}
+  条件: [是半单模 R M] {m : 子模 R M}
   证明: .of_injective (.isotypicComponent R M S) _ (Submodule.inclusion_injective h)
   mpr h := (IsSemisimpleModule.sSup_simples_le m).ge.trans
     (sSup_le_sSup fun S ⟨_, le⟩ => isIsotypicOfType_submodule_iff.mp h S le)
@@ -1346,7 +1346,7 @@ theorem isotypicComponent_eq_top_iff
 
 中文:
 定理 isotypicComponent_eq_top_iff
-  条件: [IsSemisimpleModule R M]
+  条件: [是半单模 R M]
   证明: by
   rw [← top_le_iff]; rw [le_isotypicComponent_iff]; rw [Submodule.topEquiv.isIsotypicOfType_iff]
 
@@ -1371,7 +1371,7 @@ mpr
 
 中文:
 定理 isFullyInvariant_iff_le_imp_isotypicComponent_le
-  结论: [IsSemisimpleModule R M]
+  结论: [是半单模 R M]
   证明: sSup_le fun S' ⟨e⟩ => by
     have ⟨p, eq⟩ := extension_property _ S.subtype_injective (S'.subtype ∘ₗ e.symm)
     refine le_trans ?_ (Submodule.map_le_iff_le_comap.mpr (le.trans (h p)))
@@ -1403,7 +1403,7 @@ mpr := fun ⟨iso, invar⟩ => (le_isotypicComponent_iff.mpr iso).antisymm
 
 中文:
 定理 eq_isotypicComponent_iff
-  条件: [IsSemisimpleModule R M] {m : Submodule R M} (ne : m != ⊥)
+  条件: [是半单模 R M] {m : 子模 R M} (ne : m != ⊥)
   证明: by rintro rfl; exact ⟨.isotypicComponent R M S, .isotypicComponent R M S⟩
 mpr := fun ⟨iso, invar⟩ => (le_isotypicComponent_iff.mpr iso).antisymm
     have ⟨S', le, _⟩ := (IsSemisimpleModule.eq_bot_or_exists_simple_le m).resolve_left ne
@@ -1468,7 +1468,7 @@ theorem mem_isotypicComponents_iff
 
 中文:
 定理 mem_isotypicComponents_iff
-  条件: {m : Submodule R M}
+  条件: {m : 子模 R M}
   证明: by rintro ⟨S, _, rfl⟩; exact ⟨.isotypicComponent R M S,
     .isotypicComponent R M S, (bot_lt_isotypicComponent S).ne'⟩
   mpr := fun ⟨iso, invar, ne⟩ =>
@@ -1537,7 +1537,7 @@ theorem isFullyInvariant_iff_sSup_isotypicComponents
 
 中文:
 定理 isFullyInvariant_iff_sSup_isotypicComponents
-  条件: {m : Submodule R M}
+  条件: {m : 子模 R M}
   证明: by
   refine ⟨fun h => ⟨OrderIso.setIsotypicComponents.symm ⟨m, h⟩, ⟨?_, ?_⟩⟩, ?_⟩
   · rintro _ ⟨c, _, rfl⟩; exact c.2

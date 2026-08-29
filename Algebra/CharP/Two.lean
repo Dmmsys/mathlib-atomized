@@ -50,7 +50,7 @@ theorem of_one_ne_zero_of_two_eq_zero
 中文:
 定理 of_one_ne_zero_of_two_eq_zero
   条件: (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0)
-  结论: CharP R 2 where
+  结论: 特征p R 2 where
   证明: by
     obtain hn | hn := Nat.even_or_odd n
     · simp_rw [hn.two_dvd, iff_true]
@@ -131,7 +131,7 @@ theorem range_natCast
 
 中文:
 定理 range_natCast
-  结论: Set.range ((↑) : 自然数 -> R) = {0, 1}
+  结论: 集合.range ((↑) : 自然数 -> R) = {0, 1}
   证明: by
   rw [funext natCast_eq_ite]; rw [Set.range_ite_const]
   · use 0; simp
@@ -204,7 +204,7 @@ theorem ofNat_eq_mod
 example : (37 : R) = 1 := by simp
 
 中文:
-定理 ofNat_eq_mod
+定理 of自然数_eq_mod
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (Of自然数.of自然数 n : R) = (of自然数(n) % 2 : 自然数)
   证明: natCast_eq_mod n
@@ -357,7 +357,7 @@ theorem neg_eq'
 
 中文:
 定理 neg_eq'
-  结论: Neg.neg = (id : R -> R)
+  结论: 取负.neg = (id : R -> R)
   证明: funext neg_eq
 
 @[scoped simp]
@@ -516,7 +516,7 @@ theorem range_intCast
 
 中文:
 定理 range_intCast
-  结论: Set.range ((↑) : 整数 -> R) = {0, 1}
+  结论: 集合.range ((↑) : 整数 -> R) = {0, 1}
   证明: by
   rw [funext intCast_eq_ite]; rw [Set.range_ite_const]
   · use 0; simp
@@ -655,8 +655,8 @@ theorem list_sum_sq
 
 中文:
 定理 list_sum_sq
-  条件: (l : List R)
-  结论: l.sum ^ 2 = (l.map (· ^ 2)).sum
+  条件: (l : 列表 R)
+  结论: l.求和 ^ 2 = (l.map (· ^ 2)).求和
   证明: map_list_sum sqAddMonoidHom _
 
 Depends on / 依赖: map_list_sum, sqAddMonoidHom
@@ -676,8 +676,8 @@ theorem list_sum_mul_self
 
 中文:
 定理 list_sum_mul_self
-  条件: (l : List R)
-  结论: l.sum * l.sum = (List.map (fun x => x * x) l).sum
+  条件: (l : 列表 R)
+  结论: l.求和 * l.求和 = (列表.map (fun x => x * x) l).求和
   证明: by
   simp_rw [← pow_two, list_sum_sq]
 
@@ -698,7 +698,7 @@ theorem multiset_sum_sq
 中文:
 定理 multiset_sum_sq
   条件: (l : Multiset R)
-  结论: l.sum ^ 2 = (l.map (· ^ 2)).sum
+  结论: l.求和 ^ 2 = (l.map (· ^ 2)).求和
   证明: map_multiset_sum sqAddMonoidHom _
 
 Depends on / 依赖: map_multiset_sum, sqAddMonoidHom
@@ -735,7 +735,7 @@ theorem sum_sq
 
 中文:
 定理 sum_sq
-  条件: (s : Finset ι) (f : ι -> R)
+  条件: (s : 有限集 ι) (f : ι -> R)
   结论: (∑ i in s, f i) ^ 2 = ∑ i in s, f i ^ 2
   证明: map_sum sqAddMonoidHom _ _
 
@@ -754,7 +754,7 @@ theorem sum_mul_self
 
 中文:
 定理 sum_mul_self
-  条件: (s : Finset ι) (f : ι -> R)
+  条件: (s : 有限集 ι) (f : ι -> R)
   证明: by simp_rw [← pow_two, sum_sq]
 
 Depends on / 依赖: pow_two, simp_rw, sum_sq
@@ -782,7 +782,7 @@ theorem sq_injective
 
 中文:
 定理 sq_injective
-  结论: Function.Injective fun x : R => x ^ 2
+  结论: 函数.单射 fun x : R => x ^ 2
   证明: by
   intro x y h
   rwa [← CharTwo.add_eq_zero, ← add_sq, pow_eq_zero_iff two_ne_zero, CharTwo.add_eq_zero] at h
@@ -844,7 +844,7 @@ theorem neg_one_eq_one_iff
 
 中文:
 定理 neg_one_eq_one_iff
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (-1 : R) = 1 ↔ ringChar R = 2
   证明: by
   refine ⟨fun h => ?_, fun h => @CharTwo.neg_eq _ _ (ringChar.of_eq h) 1⟩

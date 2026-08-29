@@ -39,7 +39,7 @@ instance [μ.IsMulLeftInvariant]
     refine (hμs.and_eventual
 
 中文:
-实例 [μ.IsMulLeftInvariant]
+实例 [μ.是MulLeftInvariant]
   签名: : ErgodicSMul G G μ
   定义体: by
   refine ⟨fun {s} hsm hs => ?_⟩
@@ -83,7 +83,7 @@ instance [μ.IsMulRightInvariant]
     refine (hμs.and_eventual
 
 中文:
-实例 [μ.IsMulRightInvariant]
+实例 [μ.是MulRightInvariant]
   签名: : ErgodicSMul Gᵐᵒᵖ G μ
   定义体: by
   refine ⟨fun {s} hsm hs => ?_⟩

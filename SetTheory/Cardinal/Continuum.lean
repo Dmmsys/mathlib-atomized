@@ -41,7 +41,7 @@ definition continuum
 
 中文:
 定义 continuum
-  签名: : Cardinal.{u}
+  签名: : 基数.{u}
   定义体: 2 ^ ℵ₀
 
 @[inherit_doc] scoped notation "𝔠" => Cardinal.continuum
@@ -114,7 +114,7 @@ theorem continuum_le_lift
 
 中文:
 定理 continuum_le_lift
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: 𝔠 <= lift.{v} c ↔ 𝔠 <= c
   证明: by
   rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
@@ -141,7 +141,7 @@ theorem lift_le_continuum
 
 中文:
 定理 lift_le_continuum
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: lift.{v} c <= 𝔠 ↔ c <= 𝔠
   证明: by
   rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
@@ -168,7 +168,7 @@ theorem continuum_lt_lift
 
 中文:
 定理 continuum_lt_lift
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: 𝔠 < lift.{v} c ↔ 𝔠 < c
   证明: by
   rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
@@ -193,7 +193,7 @@ theorem lift_lt_continuum
 
 中文:
 定理 lift_lt_continuum
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: lift.{v} c < 𝔠 ↔ c < 𝔠
   证明: by
   rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
@@ -293,7 +293,7 @@ theorem mk_set_nat
 
 中文:
 定理 mk_set_nat
-  结论: #(Set 自然数) = 𝔠
+  结论: #(集合 自然数) = 𝔠
   证明: by simp
 -/
 theorem mk_set_nat : #(Set Nat) = 𝔠 := by simp
@@ -373,7 +373,7 @@ theorem continuum_toNat
 @[simp]
 
 中文:
-定理 continuum_toNat
+定理 continuum_to自然数
   结论: to自然数 continuum = 0
   证明: toNat_apply_of_aleph0_le aleph0_le_continuum
 
@@ -394,7 +394,7 @@ theorem continuum_toENat
   proof: (toENat_eq_top.2 aleph0_le_continuum)
 
 中文:
-定理 continuum_toENat
+定理 continuum_toE自然数
   结论: toE自然数 continuum = ⊤
   证明: (toENat_eq_top.2 aleph0_le_continuum)
 
@@ -540,7 +540,7 @@ theorem ofNat_add_continuum
 @[simp]
 
 中文:
-定理 ofNat_add_continuum
+定理 of自然数_add_continuum
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) + 𝔠 = 𝔠
   证明: nat_add_continuum n
@@ -563,7 +563,7 @@ theorem continuum_add_ofNat
   proof: continuum_add_nat n
 
 中文:
-定理 continuum_add_ofNat
+定理 continuum_add_of自然数
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: 𝔠 + of自然数(n) = 𝔠
   证明: continuum_add_nat n
@@ -710,7 +710,7 @@ theorem ofNat_mul_continuum
 @[simp]
 
 中文:
-定理 ofNat_mul_continuum
+定理 of自然数_mul_continuum
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) * 𝔠 = 𝔠
   证明: nat_mul_continuum (OfNat.ofNat_ne_zero n)
@@ -733,7 +733,7 @@ theorem continuum_mul_ofNat
   proof: continuum_mul_nat (OfNat.ofNat_ne_zero n)
 
 中文:
-定理 continuum_mul_ofNat
+定理 continuum_mul_of自然数
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: 𝔠 * of自然数(n) = 𝔠
   证明: continuum_mul_nat (OfNat.ofNat_ne_zero n)
@@ -833,7 +833,7 @@ theorem power_aleph0_of_le_continuum
 
 中文:
 定理 power_aleph0_of_le_continuum
-  条件: {x : Cardinal} (h₁ : 2 <= x) (h₂ : x <= 𝔠)
+  条件: {x : 基数} (h₁ : 2 <= x) (h₂ : x <= 𝔠)
   结论: x ^ ℵ₀ = 𝔠
   证明: by
   apply le_antisymm

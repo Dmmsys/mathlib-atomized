@@ -35,7 +35,7 @@ lemma dens_inv
 
 中文:
 引理 dens_inv
-  条件: [Fintype α] (s : Finset α)
+  条件: [有限类型 α] (s : 有限集 α)
   结论: s⁻¹.dens = s.dens
   证明: by simp [dens]
 -/
@@ -54,7 +54,7 @@ lemma dens_smul_finset
 
 中文:
 引理 dens_smul_finset
-  条件: [Fintype β] (a : α) (s : Finset β)
+  条件: [有限类型 β] (a : α) (s : 有限集 β)
   结论: (a • s).dens = s.dens
   证明: by simp [dens]
 -/

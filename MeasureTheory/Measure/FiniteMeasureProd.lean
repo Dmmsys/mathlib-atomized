@@ -51,8 +51,8 @@ definition prod
   body: ⟨μ.toMeasure.prod ν.toMeasure, inferInstance⟩
 
 中文:
-定义 prod
-  签名: (μ : FiniteMeasure α) (ν : FiniteMeasure β)
+定义 乘积
+  签名: (μ : 有限测度 α) (ν : 有限测度 β)
   定义体: ⟨μ.toMeasure.prod ν.toMeasure, inferInstance⟩
 
 Depends on / 依赖: toMeasure, toMeasure.prod
@@ -72,7 +72,7 @@ lemma toMeasure_prod
 
 中文:
 引理 toMeasure_prod
-  结论: (μ.prod ν).toMeasure = μ.toMeasure.prod ν.toMeasure
+  结论: (μ.乘积 ν).toMeasure = μ.toMeasure.乘积 ν.toMeasure
   证明: rfl
 -/
 @[simp] lemma toMeasure_prod : (μ.prod ν).toMeasure = μ.toMeasure.prod ν.toMeasure := rfl
@@ -88,7 +88,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  条件: (s : Set (α × β)) (s_mble : MeasurableSet s)
+  条件: (s : 集合 (α × β)) (s_mble : 可测集 s)
   证明: by
   simp [coeFn_def, Measure.prod_apply s_mble]
 
@@ -109,7 +109,7 @@ lemma prod_apply_symm
 
 中文:
 引理 prod_apply_symm
-  条件: (s : Set (α × β)) (s_mble : MeasurableSet s)
+  条件: (s : 集合 (α × β)) (s_mble : 可测集 s)
   证明: by
   simp [coeFn_def, Measure.prod_apply_symm s_mble]
 
@@ -131,8 +131,8 @@ lemma prod_prod
 
 中文:
 引理 prod_prod
-  条件: (s : Set α) (t : Set β)
-  结论: μ.prod ν (s ×ˢ t) = μ s * ν t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: μ.乘积 ν (s ×ˢ t) = μ s * ν t
   证明: by
   simp [coeFn_def]
 -/
@@ -152,7 +152,7 @@ lemma mass_prod
 
 中文:
 引理 mass_prod
-  结论: (μ.prod ν).mass = μ.mass * ν.mass
+  结论: (μ.乘积 ν).mass = μ.mass * ν.mass
   证明: by
   simp only [coeFn_def, mass, univ_prod_univ.symm, toMeasure_prod]
   rw [← ENNReal.toNNReal_mul]
@@ -176,7 +176,7 @@ lemma zero_prod
 
 中文:
 引理 zero_prod
-  结论: (0 : FiniteMeasure α).prod ν = 0
+  结论: (0 : 有限测度 α).乘积 ν = 0
   证明: by
   rw [← mass_zero_iff]; rw [mass_prod]; rw [zero_mass]; rw [zero_mul]
 
@@ -196,7 +196,7 @@ lemma prod_zero
 
 中文:
 引理 prod_zero
-  结论: μ.prod (0 : FiniteMeasure β) = 0
+  结论: μ.乘积 (0 : 有限测度 β) = 0
   证明: by
   rw [← mass_zero_iff]; rw [mass_prod]; rw [zero_mass]; rw [mul_zero]
 -/
@@ -213,7 +213,7 @@ lemma map_fst_prod
 
 中文:
 引理 map_fst_prod
-  结论: (μ.prod ν).map Prod.fst = ν univ • μ
+  结论: (μ.乘积 ν).map 积类型.fst = ν univ • μ
   证明: by ext; simp
 -/
 @[simp] lemma map_fst_prod : (μ.prod ν).map Prod.fst = ν univ • μ := by ext; simp
@@ -227,7 +227,7 @@ lemma map_snd_prod
 
 中文:
 引理 map_snd_prod
-  结论: (μ.prod ν).map Prod.snd = μ univ • ν
+  结论: (μ.乘积 ν).map 积类型.snd = μ univ • ν
   证明: by ext; simp
 
 Depends on / 依赖: WellFoundedGT, WellFoundedLT
@@ -247,7 +247,7 @@ lemma map_prod_map
 
 中文:
 引理 map_prod_map
-  结论: {α' : 类型} [MeasurableSpace α'] {β' : 类型} [MeasurableSpace β']
+  结论: {α' : 类型} [可测空间 α'] {β' : 类型} [可测空间 β']
   证明: by
   apply Subtype.ext
   simp only [val_eq_toMeasure, toMeasure_prod, toMeasure_map]
@@ -274,7 +274,7 @@ lemma prod_swap
 
 中文:
 引理 prod_swap
-  结论: (μ.prod ν).map Prod.swap = ν.prod μ
+  结论: (μ.乘积 ν).map 积类型.swap = ν.乘积 μ
   证明: by
   apply Subtype.ext
   simp [Measure.prod_swap]
@@ -304,8 +304,8 @@ definition prod
   body: ⟨μ.toMeasure.prod ν.toMeasure, by infer_instance⟩
 
 中文:
-定义 prod
-  签名: (μ : ProbabilityMeasure α) (ν : ProbabilityMeasure β)
+定义 乘积
+  签名: (μ : 概率测度 α) (ν : 概率测度 β)
   定义体: ⟨μ.toMeasure.prod ν.toMeasure, by infer_instance⟩
 
 Depends on / 依赖: IsWellOrder, infer_instance, toMeasure, toMeasure.prod
@@ -326,7 +326,7 @@ lemma toMeasure_prod
 
 中文:
 引理 toMeasure_prod
-  结论: (μ.prod ν).toMeasure = μ.toMeasure.prod ν.toMeasure
+  结论: (μ.乘积 ν).toMeasure = μ.toMeasure.乘积 ν.toMeasure
   证明: rfl
 -/
 @[simp] lemma toMeasure_prod : (μ.prod ν).toMeasure = μ.toMeasure.prod ν.toMeasure := rfl
@@ -342,7 +342,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  条件: (s : Set (α × β)) (s_mble : MeasurableSet s)
+  条件: (s : 集合 (α × β)) (s_mble : 可测集 s)
   证明: by
   simp [coeFn_def, Measure.prod_apply s_mble]
 
@@ -363,7 +363,7 @@ lemma prod_apply_symm
 
 中文:
 引理 prod_apply_symm
-  条件: (s : Set (α × β)) (s_mble : MeasurableSet s)
+  条件: (s : 集合 (α × β)) (s_mble : 可测集 s)
   证明: by
   simp [coeFn_def, Measure.prod_apply_symm s_mble]
 
@@ -385,8 +385,8 @@ lemma prod_prod
 
 中文:
 引理 prod_prod
-  条件: (s : Set α) (t : Set β)
-  结论: μ.prod ν (s ×ˢ t) = μ s * ν t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: μ.乘积 ν (s ×ˢ t) = μ s * ν t
   证明: by
   simp [coeFn_def]
 -/
@@ -406,7 +406,7 @@ lemma map_fst_prod
 
 中文:
 引理 map_fst_prod
-  结论: (μ.prod ν).map measurable_fst.aemeasurable = μ
+  结论: (μ.乘积 ν).map measurable_fst.aemeasurable = μ
   证明: by
   apply Subtype.ext
   simp only [val_eq_to_measure, toMeasure_map, toMeasure_prod, Measure.map_fst_prod,
@@ -430,7 +430,7 @@ lemma map_snd_prod
 
 中文:
 引理 map_snd_prod
-  结论: (μ.prod ν).map measurable_snd.aemeasurable = ν
+  结论: (μ.乘积 ν).map measurable_snd.aemeasurable = ν
   证明: by
   apply Subtype.ext
   simp only [val_eq_to_measure, toMeasure_map, toMeasure_prod, Measure.map_snd_prod,
@@ -454,7 +454,7 @@ lemma map_prod_map
 
 中文:
 引理 map_prod_map
-  结论: {α' : 类型} [MeasurableSpace α'] {β' : 类型} [MeasurableSpace β']
+  结论: {α' : 类型} [可测空间 α'] {β' : 类型} [可测空间 β']
   证明: by
   apply Subtype.ext
   simp only [val_eq_to_measure, toMeasure_prod, toMeasure_map]
@@ -482,7 +482,7 @@ lemma prod_swap
 
 中文:
 引理 prod_swap
-  结论: (μ.prod ν).map measurable_swap.aemeasurable = ν.prod μ
+  结论: (μ.乘积 ν).map measurable_swap.aemeasurable = ν.乘积 μ
   证明: by
   apply Subtype.ext
   simp [Measure.prod_swap]
@@ -511,7 +511,7 @@ theorem continuous_prod
 
 中文:
 定理 continuous_prod
-  结论: [TopologicalSpace α] [TopologicalSpace β] [SecondCountableTopology α]
+  结论: [拓扑空间 α] [拓扑空间 β] [第二可数拓扑 α]
   证明: by
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily

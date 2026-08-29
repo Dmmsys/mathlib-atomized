@@ -66,7 +66,7 @@ definition allNames
 
 中文:
 定义 allNames
-  签名: (p : Name -> 布尔)
+  签名: (p : Name -> 布尔值)
   定义体: do
   (← getEnv).constants.foldM (init := #[]) fun names n _ => do
     if p n && !(← isBlackListed n) then
@@ -98,7 +98,7 @@ definition allNamesByModule
 
 中文:
 定义 allNamesByModule
-  签名: (p : Name -> 布尔)
+  签名: (p : Name -> 布尔值)
   定义体: do
   (← getEnv).constants.foldM (init := ∅) fun names n _ => do
     if p n && !(← isBlackListed n) then

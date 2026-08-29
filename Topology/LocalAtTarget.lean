@@ -51,8 +51,8 @@ theorem Set.restrictPreimage_isInducing
 alias Topology.IsInducing.restrictPr
 
 中文:
-定理 Set.restrictPreimage_isInducing
-  条件: (s : Set β) (h : IsInducing f)
+定理 集合.restrictPreimage_isInducing
+  条件: (s : 集合 β) (h : 是Inducing f)
   证明: by
   simp_rw [← IsInducing.subtypeVal.of_comp_iff, isInducing_iff_nhds, restrictPreimage,
     MapsTo.coe_restrict, domRestrict_eq, ← @Filter.comap_comap _ _ _ _ _ f,
@@ -85,8 +85,8 @@ theorem Set.restrictPreimage_isEmbedding
 alias Topology.IsEmbedding.restrictPreimage := Set.restrictPreimage_isEmbedding
 
 中文:
-定理 Set.restrictPreimage_isEmbedding
-  条件: (s : Set β) (h : IsEmbedding f)
+定理 集合.restrictPreimage_isEmbedding
+  条件: (s : 集合 β) (h : 是嵌入 f)
   证明: ⟨h.1.restrictPreimage s, h.2.restrictPreimage s⟩
 
 alias Topology.IsEmbedding.restrictPreimage := Set.restrictPreimage_isEmbedding
@@ -111,8 +111,8 @@ theorem Set.restrictPreimage_isOpenEmbedding
 alias Topology.IsOpenEmbedding.restrictPreimage := Set.restrictPreimage_isOpenEmbedding
 
 中文:
-定理 Set.restrictPreimage_isOpenEmbedding
-  条件: (s : Set β) (h : IsOpenEmbedding f)
+定理 集合.restrictPreimage_isOpenEmbedding
+  条件: (s : 集合 β) (h : 是开嵌入 f)
   证明: ⟨h.1.restrictPreimage s,
     (s.range_restrictPreimage f).symm ▸ continuous_subtype_val.isOpen_preimage _ h.isOpen_range⟩
 
@@ -139,8 +139,8 @@ theorem Set.restrictPreimage_isClosedEmbedding
 alias Topology.IsClosedEmbedding.restrictPreimage := Set.restrictPreimage_isClosedEmbedding
 
 中文:
-定理 Set.restrictPreimage_isClosedEmbedding
-  条件: (s : Set β) (h : IsClosedEmbedding f)
+定理 集合.restrictPreimage_isClosedEmbedding
+  条件: (s : 集合 β) (h : 是闭嵌入 f)
   证明: ⟨h.1.restrictPreimage s,
     (s.range_restrictPreimage f).symm ▸ IsInducing.subtypeVal.isClosed_preimage _ h.isClosed_range⟩
 
@@ -169,8 +169,8 @@ theorem IsClosedMap.restrictPreimage
   exact fun u hu e => ⟨f '' u, H u hu, by simp [← e, image_restrictPreimage]⟩
 
 中文:
-定理 IsClosedMap.restrictPreimage
-  条件: (H : IsClosedMap f) (s : Set β)
+定理 是闭映射.restrictPreimage
+  条件: (H : 是闭映射 f) (s : 集合 β)
   证明: by
   intro t
   suffices forall u, IsClosed u -> Subtype.val ⁻¹' u = t ->
@@ -202,8 +202,8 @@ theorem IsOpenMap.restrictPreimage
   exact fun u hu e => ⟨f '' u, H u hu, by simp [← e, image_restrictPreimage]⟩
 
 中文:
-定理 IsOpenMap.restrictPreimage
-  条件: (H : IsOpenMap f) (s : Set β)
+定理 是开映射.restrictPreimage
+  条件: (H : 是开映射 f) (s : 集合 β)
   证明: by
   intro t
   suffices forall u, IsOpen u -> Subtype.val ⁻¹' u = t ->
@@ -235,7 +235,7 @@ lemma GeneralizingMap.restrictPreimage
 
 中文:
 引理 GeneralizingMap.restrictPreimage
-  条件: (H : GeneralizingMap f) (s : Set β)
+  条件: (H : GeneralizingMap f) (s : 集合 β)
   证明: by
   intro x y h
   obtain ⟨a, ha, hy⟩ := H (h.map <| continuous_subtype_val (p := (· in s)))
@@ -264,8 +264,8 @@ lemma IsProperMap.restrictPreimage
   exact H.isCompact_preimage isCompact_singleto
 
 中文:
-引理 IsProperMap.restrictPreimage
-  条件: (H : Is命题erMap f) (s : Set β)
+引理 是真映射.restrictPreimage
+  条件: (H : 是真映射 f) (s : 集合 β)
   证明: by
   rw [isProperMap_iff_isClosedMap_and_compact_fibers]
   refine ⟨H.continuous.restrictPreimage, H.isClosedMap.restrictPreimage _, fun y => ?_⟩
@@ -290,8 +290,8 @@ lemma IsOpenQuotientMap.restrictPreimage
   proof: ⟨H.surjective.restrictPreimage _, H.continuous.restrictPreimage, H.isOpenMap.restrictPreimage _⟩
 
 中文:
-引理 IsOpenQuotientMap.restrictPreimage
-  条件: (H : IsOpenQuotientMap f) (s : Set β)
+引理 是OpenQuotient映射.restrictPreimage
+  条件: (H : 是OpenQuotient映射 f) (s : 集合 β)
   证明: ⟨H.surjective.restrictPreimage _, H.continuous.restrictPreimage, H.isOpenMap.restrictPreimage _⟩
 
 Depends on / 依赖: H.continuous.restrictPreimage, H.isOpenMap.restrictPreimage, H.surjective.restrictPreimage, continuous, isOpenMap, restrictPreimage, surjective
@@ -368,7 +368,7 @@ theorem isClosed_iff_coe_preimage
 
 中文:
 定理 isClosed_iff_coe_preimage
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   证明: by
   simpa using hU.isOpen_iff_coe_preimage (s := sᶜ)
 
@@ -391,7 +391,7 @@ theorem isLocallyClosed_iff_coe_preimage
 
 中文:
 定理 isLocallyClosed_iff_coe_preimage
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   证明: by
   have (i : _) : coborder ((↑) ⁻¹' s : Set (U i)) = Subtype.val ⁻¹' coborder s :=
     (U i).isOpen.isOpenEmbedding_subtypeVal.coborder_preimage _
@@ -496,7 +496,7 @@ theorem isInducing_iff_restrictPreimage
 
 中文:
 定理 isInducing_iff_restrictPreimage
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: by
   simp_rw [← IsInducing.subtypeVal.of_comp_iff, isInducing_iff_nhds, restrictPreimage,
     MapsTo.coe_restrict, domRestrict_eq, ← Filter.comap_comap]
@@ -532,7 +532,7 @@ theorem isEmbedding_iff_restrictPreimage
 
 中文:
 定理 isEmbedding_iff_restrictPreimage
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: by
   simpa [isEmbedding_iff, forall_and] using and_congr (hU.isInducing_iff_restrictPreimage h)
     (injective_iff_injective_of_iUnion_eq_univ hU.iSup_set_eq_univ)
@@ -559,7 +559,7 @@ theorem isOpenEmbedding_iff_restrictPreimage
 
 中文:
 定理 isOpenEmbedding_iff_restrictPreimage
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: by
   simp_rw [isOpenEmbedding_iff, forall_and]
   apply and_congr
@@ -592,7 +592,7 @@ theorem isClosedEmbedding_iff_restrictPreimage
 
 中文:
 定理 isClosedEmbedding_iff_restrictPreimage
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: by
   simp_rw [isClosedEmbedding_iff, forall_and]
   apply and_congr
@@ -625,7 +625,7 @@ omit [TopologicalSpace α] in
 
 中文:
 定理 isHomeomorph_iff_restrictPreimage
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: by
   simp_rw [isHomeomorph_iff_isEmbedding_surjective, forall_and,
     ← isEmbedding_iff_restrictPreimage hU h,
@@ -733,7 +733,7 @@ lemma isOpenMap_iff_comp
 
 中文:
 引理 isOpenMap_iff_comp
-  结论: IsOpenMap f ↔ 对任意 i, IsOpenMap (f ∘ ((↑) : U i -> α))
+  结论: 是开映射 f ↔ 对任意 i, 是开映射 (f ∘ ((↑) : U i -> α))
   证明: by
   refine ⟨fun hf i => hf.comp (U i).isOpenEmbedding'.isOpenMap, fun hf => ?_⟩
   intro V hV

@@ -27,7 +27,7 @@ instance Shrink.instFintype
 
 中文:
 实例 Shrink.instFintype
-  签名: : Fintype (Shrink.{v} α)
+  签名: : 有限类型 (Shrink.{v} α)
   定义体: .ofEquiv _ (equivShrink _)
 
 Depends on / 依赖: equivShrink, ofEquiv
@@ -44,7 +44,7 @@ instance Shrink.instFinite
 
 中文:
 实例 Shrink.instFinite
-  签名: {α : 类型u} [Finite α]
+  签名: {α : 类型u} [有限 α]
   定义体: .of_equiv _ (equivShrink _)
 
 Depends on / 依赖: equivShrink, of_equiv
@@ -62,8 +62,8 @@ lemma Fintype.card_shrink
   proof: card_congr (equivShrink _).symm
 
 中文:
-引理 Fintype.card_shrink
-  条件: [Fintype (Shrink.{v} α)]
+引理 有限类型.card_shrink
+  条件: [有限类型 (Shrink.{v} α)]
   结论: card (Shrink.{v} α) = card α
   证明: card_congr (equivShrink _).symm
 -/

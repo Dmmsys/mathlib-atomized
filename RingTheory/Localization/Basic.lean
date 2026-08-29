@@ -122,7 +122,7 @@ theorem mapPiEvalRingHom_bijective
 
 中文:
 定理 mapPiEvalRingHom_bijective
-  结论: Bijective (mapPiEvalRingHom S)
+  结论: 双射 (mapPiEvalRingHom S)
   证明: by
   let T := S.comap (Pi.evalRingHom R i)
   classical
@@ -182,8 +182,8 @@ lemma finite
 
 中文:
 引理 finite
-  条件: [Finite R]
-  结论: Finite S
+  条件: [有限 R]
+  结论: 有限 S
   证明: by
   have : Function.Surjective (Function.uncurry (mk' (M := M) S)) := fun x => by
     simpa using IsLocalization.exists_mk'_eq M x
@@ -214,7 +214,7 @@ theorem linearMap_compatibleSMul
 
 中文:
 定理 linearMap_compatibleSMul
-  结论: [Module S N₁] [Module S N₂]
+  结论: [模 S N₁] [模 S N₂]
   证明: by
     obtain ⟨r, m, rfl⟩ := exists_mk'_eq M s
     rw [← (map_units S m).smul_left_cancel]
@@ -239,8 +239,8 @@ instance [Module
   body: linearMap_compatibleSMul M ..
 
 中文:
-实例 [Module
-  签名: (Localization M) N₁] [Module (Localization M) N₂]
+实例 [模
+  签名: (Localization M) N₁] [模 (Localization M) N₂]
   定义体: linearMap_compatibleSMul M ..
 
 Depends on / 依赖: linearMap_compatibleSMul
@@ -270,8 +270,8 @@ IsLocalization.ringHom_ext M by rw [f.comp_algebraMap, g.comp_algebraMap]⟩
 
 中文:
 定理 algHom_subsingleton
-  条件: [Algebra R P]
-  结论: Subsingleton (S ->ₐ[R] P)
+  条件: [代数 R P]
+  结论: 子单例 (S ->ₐ[R] P)
   证明: ⟨fun f g =>
 AlgHom.coe_ringHom_injective
 IsLocalization.ringHom_ext M by rw [f.comp_algebraMap, g.comp_algebraMap]⟩
@@ -604,7 +604,7 @@ lemma smul_mem_iff
 
 中文:
 引理 smul_mem_iff
-  条件: {N' : Submodule R' M'} {x : M'} {s : S}
+  条件: {N' : 子模 R' M'} {x : M'} {s : S}
   证明: by
   refine ⟨fun h => ?_, fun h => Submodule.smul_of_tower_mem N' s h⟩
   rwa [← Submodule.smul_mem_iff_of_isUnit (r := algebraMap R R' s) N' (map_units R' s),
@@ -637,7 +637,7 @@ lemma of_le_isUnit_of_bijective
 
 中文:
 引理 of_le_isUnit_of_bijective
-  结论: {M : Submonoid R}
+  结论: {M : 子幺半群 R}
   证明: hM ⟨_, y.prop, rfl⟩
   surj y := by
     obtain ⟨x, rfl⟩ := h.surjective y
@@ -672,8 +672,8 @@ alias at_units := of_le_isUnit
 
 中文:
 引理 of_le_isUnit
-  条件: {S : Submonoid R} (hS : S <= IsUnit.submonoid R)
-  结论: IsLocalization S R
+  条件: {S : 子幺半群 R} (hS : S <= 是单位.submonoid R)
+  结论: 是Localization S R
   证明: of_le_isUnit_of_bijective (by simpa) Function.bijective_id
 
 @[deprecated (since := "2026-04-15")]
@@ -697,7 +697,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (IsUnit.submonoid R) R
+  签名: 是Localization (是单位.submonoid R) R
   定义体: of_le_isUnit le_rfl
 
 Depends on / 依赖: le_rfl, of_le_isUnit
@@ -714,7 +714,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (Algebra.algebraMapSubmonoid S (IsUnit.submonoid R)) S
+  签名: 是Localization (代数.algebraMapSubmonoid S (是单位.submonoid R)) S
   定义体: IsLocalization.of_le_isUnit Algebra.algebraMapSubmonoid_isUnit_le
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid_isUnit_le, IsLocalization, IsLocalization.of_le_isUnit, algebraMapSubmonoid_isUnit_le, of_le_isUnit
@@ -743,7 +743,7 @@ definition atUnits
 
 中文:
 定义 atUnits
-  签名: (H : M <= IsUnit.submonoid R)
+  签名: (H : M <= 是单位.submonoid R)
   定义体: by
   refine AlgEquiv.ofBijective (Algebra.ofId R S) ⟨?_, ?_⟩
   · intro x y hxy
@@ -796,7 +796,7 @@ theorem isLocalization_of_algEquiv
 
 中文:
 定理 isLocalization_of_algEquiv
-  条件: [Algebra R P] [IsLocalization M S] (h : S ≃ₐ[R] P)
+  条件: [代数 R P] [是Localization M S] (h : S ≃ₐ[R] P)
   证明: by
   constructor; constructor
   · intro y
@@ -837,8 +837,8 @@ theorem self
 
 中文:
 定理 self
-  条件: (H : M <= IsUnit.submonoid R)
-  结论: IsLocalization M R
+  条件: (H : M <= 是单位.submonoid R)
+  结论: 是Localization M R
   证明: isLocalization_of_algEquiv _ (atUnits _ _ (S := Localization M) H).symm
 -/
 protected theorem self (H : M <= IsUnit.submonoid R) : IsLocalization M R :=
@@ -854,7 +854,7 @@ theorem isLocalization_iff_of_algEquiv
 
 中文:
 定理 isLocalization_iff_of_algEquiv
-  条件: [Algebra R P] (h : S ≃ₐ[R] P)
+  条件: [代数 R P] (h : S ≃ₐ[R] P)
   证明: ⟨fun _ => isLocalization_of_algEquiv M h, fun _ => isLocalization_of_algEquiv M h.symm⟩
 
 Depends on / 依赖: h.symm, isLocalization_of_algEquiv
@@ -900,7 +900,7 @@ theorem isLocalization_iff_of_isLocalization
 
 中文:
 定理 isLocalization_iff_of_isLocalization
-  结论: [IsLocalization M S] [IsLocalization N S]
+  结论: [是Localization M S] [是Localization N S]
   证明: ⟨fun _ => isLocalization_of_algEquiv N (algEquiv M S P),
     fun _ => isLocalization_of_algEquiv M (algEquiv N S P)⟩
 
@@ -921,8 +921,8 @@ theorem iff_of_le_of_exists_dvd
   isLocalization_iff_of_isLocalization _ _ (Localization M)
 
 中文:
-定理 iff_of_le_of_exists_dvd
-  条件: (N : Submonoid R) (h₁ : M <= N) (h₂ : 对任意 n in N, 存在 m in M, n ∣ m)
+定理 iff_of_le_of_存在_dvd
+  条件: (N : 子幺半群 R) (h₁ : M <= N) (h₂ : 对任意 n in N, 存在 m in M, n ∣ m)
   证明: have : IsLocalization N (Localization M) := of_le_of_exists_dvd _ _ h₁ h₂
   isLocalization_iff_of_isLocalization _ _ (Localization M)
 
@@ -953,7 +953,7 @@ lemma commutes
 
 中文:
 引理 commutes
-  结论: (S₁ S₂ T : 类型) [CommSemiring S₁]
+  结论: (S₁ S₂ T : 类型) [交换半环 S₁]
   证明: by
     rintro ⟨m, ⟨a, ha, rfl⟩⟩
     rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R S₂ T]
@@ -1126,8 +1126,8 @@ definition _root_.IsLocalization.unique
   (algEquiv M Rₘ).symm.injective.unique
 
 中文:
-定义 _root_.IsLocalization.unique
-  签名: (R Rₘ) [CommSemiring R] [CommSemiring Rₘ]
+定义 _root_.是Localization.unique
+  签名: (R Rₘ) [交换半环 R] [交换半环 Rₘ]
   定义体: have : Inhabited Rₘ := ⟨1⟩
   (algEquiv M Rₘ).symm.injective.unique
 
@@ -1241,8 +1241,8 @@ theorem IsField.localization_map_bijective
   exact ⟨r * n, by rw [eq_mk'_iff_mul_eq, ← ma
 
 中文:
-定理 IsField.localization_map_bijective
-  结论: {R Rₘ : 类型} [CommRing R] [CommRing Rₘ]
+定理 是域.localization_map_bijective
+  结论: {R Rₘ : 类型} [交换环 R] [交换环 Rₘ]
   证明: by
   let := hR.toField
   replace hM := le_nonZeroDivisors_of_noZeroDivisors hM
@@ -1272,8 +1272,8 @@ theorem Field.localization_map_bijective
   proof: (Field.toIsField K).localization_map_bijective hM
 
 中文:
-定理 Field.localization_map_bijective
-  结论: {K Kₘ : 类型} [Field K] [CommRing Kₘ] {M : Submonoid K}
+定理 域.localization_map_bijective
+  结论: {K Kₘ : 类型} [域 K] [交换环 Kₘ] {M : 子幺半群 K}
   证明: (Field.toIsField K).localization_map_bijective hM
 
 Depends on / 依赖: Field.toIsField, localization_map_bijective, toIsField
@@ -1318,7 +1318,7 @@ definition localizationAlgebra
 
 中文:
 定义 localizationAlgebra
-  签名: : Algebra Rₘ Sₘ
+  签名: : 代数 Rₘ Sₘ
   定义体: (map Sₘ (algebraMap R S)
         (show _ <= (Algebra.algebraMapSubmonoid S M).comap _ from M.le_comap_map) :
       Rₘ ->+* Sₘ).toAlgebra
@@ -1340,7 +1340,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (Localization M)
+  签名: 代数 (Localization M)
   定义体: localizationAlgebra M S
 
 Depends on / 依赖: localizationAlgebra
@@ -1364,7 +1364,7 @@ lemma isScalarTower_localizationAlgebra
 
 中文:
 引理 isScalarTower_localizationAlgebra
-  条件: [Algebra R Sₘ] [IsScalarTower R S Sₘ]
+  条件: [代数 R Sₘ] [标量塔 R S Sₘ]
   证明: localizationAlgebra M S
     IsScalarTower R Rₘ Sₘ :=
   letI : Algebra Rₘ Sₘ := localizationAlgebra M S
@@ -1390,7 +1390,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (Localization M) (Localization (Algebra.algebraMapSubmonoid S M))
+  签名: 标量塔 R (Localization M) (Localization (代数.algebraMapSubmonoid S M))
   定义体: isScalarTower_localizationAlgebra _ _
 -/
 instance : IsScalarTower R (Localization M) (Localization (Algebra.algebraMapSubmonoid S M)) :=
@@ -1415,9 +1415,9 @@ theorem IsLocalization.map_units_map_submonoid
   exact IsLocalization.map_units Sₘ ⟨algebraMap R S y, Algebra.mem_algebraMapSubmonoid_of_mem y⟩
 
 中文:
-定理 IsLocalization.map_units_map_submonoid
+定理 是Localization.map_units_map_submonoid
   条件: (y : M)
-  结论: IsUnit (algebraMap R Sₘ y)
+  结论: 是单位 (algebraMap R Sₘ y)
   证明: by
   rw [IsScalarTower.algebraMap_apply _ S]
   exact IsLocalization.map_units Sₘ ⟨algebraMap R S y, Algebra.mem_algebraMapSubmonoid_of_mem y⟩
@@ -1440,7 +1440,7 @@ theorem IsLocalization.algebraMap_mk'
     IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [← map_mul]; rw [mul_comm]; rw [IsLocalization.mul_mk'_eq_mk
 
 中文:
-定理 IsLocalization.algebraMap_mk'
+定理 是Localization.algebraMap_mk'
   条件: (x : R) (y : M)
   证明: by
   rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [Subtype.coe_mk]; rw [← IsScalarTower.algebraMap_apply]; rw [←
@@ -1468,7 +1468,7 @@ theorem IsLocalization.algebraMap_eq_map_map_submonoid
       rw [← IsScalarTower.algebraMap_apply R S Sₘ]; rw [← IsScalarTower.algebraMap_apply R Rₘ Sₘ]
 
 中文:
-定理 IsLocalization.algebraMap_eq_map_map_submonoid
+定理 是Localization.algebraMap_eq_map_map_submonoid
   证明: Eq.symm
     IsLocalization.map_unique _ (algebraMap Rₘ Sₘ) fun x => by
       rw [← IsScalarTower.algebraMap_apply R S Sₘ]; rw [← IsScalarTower.algebraMap_apply R Rₘ Sₘ]
@@ -1492,7 +1492,7 @@ theorem IsLocalization.algebraMap_apply_eq_map_map_submonoid
   proof: DFunLike.congr_fun (IsLocalization.algebraMap_eq_map_map_submonoid _ _ _ _) x
 
 中文:
-定理 IsLocalization.algebraMap_apply_eq_map_map_submonoid
+定理 是Localization.algebraMap_apply_eq_map_map_submonoid
   条件: (x)
   证明: DFunLike.congr_fun (IsLocalization.algebraMap_eq_map_map_submonoid _ _ _ _) x
 
@@ -1512,7 +1512,7 @@ theorem IsLocalization.lift_algebraMap_eq_algebraMap
   proof: IsLocalization.lift_unique _ fun _ => (IsScalarTower.algebraMap_apply _ _ _ _).symm
 
 中文:
-定理 IsLocalization.lift_algebraMap_eq_algebraMap
+定理 是Localization.lift_algebraMap_eq_algebraMap
   证明: IsLocalization.lift_unique _ fun _ => (IsScalarTower.algebraMap_apply _ _ _ _).symm
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_units_map_submonoid, map_units_map_submonoid
@@ -1554,7 +1554,7 @@ theorem localizationAlgebra_injective
 
 中文:
 定理 localizationAlgebra_injective
-  条件: (hRS : Function.Injective (algebraMap R S))
+  条件: (hRS : 函数.单射 (algebraMap R S))
   证明: have : IsLocalization (M.map (algebraMap R S)) Sₘ := i
   IsLocalization.map_injective_of_injective _ _ _ hRS
 
@@ -1576,7 +1576,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (Algebra.algebraMapSubmonoid R M) Rₘ
+  签名: 是Localization (代数.algebraMapSubmonoid R M) Rₘ
   定义体: by
   simpa
 -/
@@ -1607,7 +1607,7 @@ theorem map_injective_of_injective'
 
 中文:
 定理 map_injective_of_injective'
-  结论: {f : R ->+* S} {Rₘ : 类型} [CommRing Rₘ] [Algebra R Rₘ]
+  结论: {f : R ->+* S} {Rₘ : 类型} [交换环 Rₘ] [代数 R Rₘ]
   证明: by
   refine (injective_iff_map_eq_zero (map Sₘ f hf)).mpr fun x h => ?_
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
@@ -1698,7 +1698,7 @@ theorem IsLocalization.algHom_ext
   proof: AlgHom.coe_ringHom_injective IsLocalization.ringHom_ext W RingHom.ext AlgHom.ext_iff.mp h
 
 中文:
-定理 IsLocalization.algHom_ext
+定理 是Localization.algHom_ext
   结论: {R A L B : 类型}
   证明: AlgHom.coe_ringHom_injective IsLocalization.ringHom_ext W RingHom.ext AlgHom.ext_iff.mp h
 
@@ -1758,7 +1758,7 @@ definition AlgHom.extendScalarsOfIsLocalization
     
 
 中文:
-定义 AlgHom.extendScalarsOfIsLocalization
+定义 代数态射.extendScalarsOfIsLocalization
   签名: (f : A ->ₐ[R] B)
   定义体: f
   commutes' := by
@@ -1789,7 +1789,7 @@ theorem AlgHom.extendScalarsOfIsLocalization_apply
   proof: rfl
 
 中文:
-定理 AlgHom.extendScalarsOfIsLocalization_apply
+定理 代数态射.extendScalarsOfIsLocalization_apply
   条件: (f : A ->ₐ[R] B) (a : A)
   证明: rfl
 -/
@@ -1810,7 +1810,7 @@ definition AlgEquiv.extendScalarsOfIsLocalization
   __ := f
 
 中文:
-定义 AlgEquiv.extendScalarsOfIsLocalization
+定义 代数等价.extendScalarsOfIsLocalization
   签名: (f : A ≃ₐ[R] B)
   定义体: f.toAlgHom.extendScalarsOfIsLocalization S M
   __ := f

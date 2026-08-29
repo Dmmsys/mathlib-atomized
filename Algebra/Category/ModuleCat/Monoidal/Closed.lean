@@ -38,7 +38,7 @@ definition monoidalClosedHomEquiv
 
 中文:
 定义 monoidalClosedHomEquiv
-  签名: (M N P : ModuleCat.{u} R)
+  签名: (M N P : 模范畴.{u} R)
   定义体: ofHom₂ LinearMap.compr₂ (TensorProduct.mk R N M) ((β_ N M).hom ≫ f).hom
   invFun f := (β_ M N).hom ≫ ofHom (TensorProduct.lift f.hom₂)
   left_inv f := by
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalClosed (ModuleCat.{u} R)
+  签名: 幺半群闭 (模范畴.{u} R)
   定义体: { rightAdj := (linearCoyoneda R (ModuleCat.{u} R)).obj (op M)
       adj := Adjunction.mkOfHomEquiv
             { homEquiv := fun N P => monoidalClosedHomEquiv M N P
@@ -106,7 +106,7 @@ theorem ihom_map_apply
 
 中文:
 定理 ihom_map_apply
-  条件: {M N P : ModuleCat.{u} R} (f : N ⟶ P) (g : ModuleCat.of R (M ⟶ N))
+  条件: {M N P : 模范畴.{u} R} (f : N ⟶ P) (g : 模范畴.of R (M ⟶ N))
   证明: rfl
 -/
 theorem ihom_map_apply {M N P : ModuleCat.{u} R} (f : N ⟶ P) (g : ModuleCat.of R (M ⟶ N)) :
@@ -127,7 +127,7 @@ theorem monoidalClosed_curry
 
 中文:
 定理 monoidalClosed_curry
-  条件: {M N P : ModuleCat.{u} R} (f : M otimes N ⟶ P) (x : M) (y : N)
+  条件: {M N P : 模范畴.{u} R} (f : M otimes N ⟶ P) (x : M) (y : N)
   证明: rfl
 
 @[simp]
@@ -169,7 +169,7 @@ theorem ihom_ev_app
 
 中文:
 定理 ihom_ev_app
-  条件: (M N : ModuleCat.{u} R)
+  条件: (M N : 模范畴.{u} R)
   证明: by
   rw [← MonoidalClosed.uncurry_id_eq_ev]
   ext : 1
@@ -197,7 +197,7 @@ theorem ihom_coev_app
 
 中文:
 定理 ihom_coev_app
-  条件: (M N : ModuleCat.{u} R)
+  条件: (M N : 模范畴.{u} R)
   证明: rfl
 -/
 theorem ihom_coev_app (M N : ModuleCat.{u} R) :
@@ -214,7 +214,7 @@ theorem monoidalClosed_pre_app
 
 中文:
 定理 monoidalClosed_pre_app
-  条件: {M N : ModuleCat.{u} R} (P : ModuleCat.{u} R) (f : N ⟶ M)
+  条件: {M N : 模范畴.{u} R} (P : 模范畴.{u} R) (f : N ⟶ M)
   证明: rfl
 -/
 theorem monoidalClosed_pre_app {M N : ModuleCat.{u} R} (P : ModuleCat.{u} R) (f : N ⟶ M) :

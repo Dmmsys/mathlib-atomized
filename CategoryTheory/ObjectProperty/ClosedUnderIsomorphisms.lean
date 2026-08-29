@@ -37,7 +37,7 @@ class IsClosedUnderIsomorphisms
     - of_iso({X Y : C} (_ : X ≅ Y) (_ : P X)) : P Y
 
 中文:
-类 IsClosedUnderIsomorphisms
+类 在同构下封闭
   参数: : 命题 where
   公理与运算 (1 个):
     - of_iso({X Y : C} (_ : X ≅ Y) (_ : P X)) : P Y
@@ -56,7 +56,7 @@ lemma prop_of_iso
 
 中文:
 引理 prop_of_iso
-  条件: [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) (hX : P X)
+  条件: [在同构下封闭 P] {X Y : C} (e : X ≅ Y) (hX : P X)
   结论: P Y
   证明: IsClosedUnderIsomorphisms.of_iso e hX
 
@@ -76,7 +76,7 @@ lemma prop_iff_of_iso
 
 中文:
 引理 prop_iff_of_iso
-  条件: [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y)
+  条件: [在同构下封闭 P] {X Y : C} (e : X ≅ Y)
   结论: P X ↔ P Y
   证明: ⟨prop_of_iso P e, prop_of_iso P e.symm⟩
 
@@ -95,7 +95,7 @@ lemma prop_of_isIso
 
 中文:
 引理 prop_of_isIso
-  条件: [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f] (hX : P X)
+  条件: [在同构下封闭 P] {X Y : C} (f : X ⟶ Y) [是同构 f] (hX : P X)
   证明: prop_of_iso P (asIso f) hX
 
 Depends on / 依赖: prop_of_iso
@@ -115,7 +115,7 @@ lemma prop_iff_of_isIso
 
 中文:
 引理 prop_iff_of_isIso
-  条件: [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: [在同构下封闭 P] {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: P X ↔ P Y
   证明: prop_iff_of_iso P (asIso f)
 
@@ -134,7 +134,7 @@ definition isoClosure
 
 中文:
 定义 isoClosure
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (Y : C) (_ : P Y), Nonempty (X ≅ Y)
 
 Depends on / 依赖: Nonempty
@@ -169,7 +169,7 @@ lemma prop_isoClosure
 
 中文:
 引理 prop_isoClosure
-  条件: {X Y : C} (h : P X) (e : X ⟶ Y) [IsIso e]
+  条件: {X Y : C} (h : P X) (e : X ⟶ Y) [是同构 e]
   结论: isoClosure P Y
   证明: ⟨X, h, ⟨(asIso e).symm⟩⟩
 -/
@@ -203,8 +203,8 @@ instance [P.Nonempty]
   body: .mono P.le_isoClosure
 
 中文:
-实例 [P.Nonempty]
-  签名: : P.isoClosure.Nonempty
+实例 [P.非空]
+  签名: : P.isoClosure.非空
   定义体: .mono P.le_isoClosure
 
 Depends on / 依赖: P.le_isoClosure, le_isoClosure
@@ -250,7 +250,7 @@ lemma isoClosure_eq_self
 
 中文:
 引理 isoClosure_eq_self
-  条件: [IsClosedUnderIsomorphisms P]
+  条件: [在同构下封闭 P]
   结论: isoClosure P = P
   证明: by
   apply le_antisymm
@@ -278,7 +278,7 @@ lemma isoClosure_le_iff
 
 中文:
 引理 isoClosure_le_iff
-  条件: [IsClosedUnderIsomorphisms Q]
+  条件: [在同构下封闭 Q]
   结论: isoClosure P <= Q ↔ P <= Q
   证明: ⟨(le_isoClosure P).trans,
     fun h => (monotone_isoClosure h).trans (by rw [isoClosure_eq_self])⟩
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderIsomorphisms (isoClosure P)
+  签名: 在同构下封闭 (isoClosure P)
   定义体: by
     rintro X Y e ⟨Z, hZ, ⟨f⟩⟩
     exact ⟨Z, hZ, ⟨e.symm.trans f⟩⟩

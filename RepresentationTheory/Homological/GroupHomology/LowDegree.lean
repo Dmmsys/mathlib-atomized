@@ -69,7 +69,7 @@ definition chainsIso₀
 
 中文:
 定义 chainsIso₀
-  签名: : (inhomogeneousChains A).X 0 ≅ ModuleCat.of k A.V
+  签名: : (inhomogeneousChains A).X 0 ≅ 模范畴.of k A.V
   定义体: (uniqueLinearEquiv _ _ default).toModuleIso
 
 Depends on / 依赖: toModuleIso, uniqueLinearEquiv
@@ -87,7 +87,7 @@ definition chainsIso₁
 
 中文:
 定义 chainsIso₁
-  签名: : (inhomogeneousChains A).X 1 ≅ ModuleCat.of k (G ->₀ A)
+  签名: : (inhomogeneousChains A).X 1 ≅ 模范畴.of k (G ->₀ A)
   定义体: (Finsupp.domLCongr (Equiv.funUnique (Fin 1) G)).toModuleIso
 
 Depends on / 依赖: Equiv.funUnique, Finsupp, Finsupp.domLCongr, domLCongr, funUnique, toModuleIso
@@ -105,7 +105,7 @@ definition chainsIso₂
 
 中文:
 定义 chainsIso₂
-  签名: : (inhomogeneousChains A).X 2 ≅ ModuleCat.of k (G × G ->₀ A)
+  签名: : (inhomogeneousChains A).X 2 ≅ 模范畴.of k (G × G ->₀ A)
   定义体: (Finsupp.domLCongr (piFinTwoEquiv fun _ => G)).toModuleIso
 
 Depends on / 依赖: Finsupp, Finsupp.domLCongr, domLCongr, piFinTwoEquiv, toModuleIso
@@ -124,7 +124,7 @@ definition chainsIso₃
 
 中文:
 定义 chainsIso₃
-  签名: : (inhomogeneousChains A).X 3 ≅ ModuleCat.of k (G × G × G ->₀ A)
+  签名: : (inhomogeneousChains A).X 3 ≅ 模范畴.of k (G × G × G ->₀ A)
   定义体: (Finsupp.domLCongr ((Fin.consEquiv _).symm.trans
     ((Equiv.refl G).prodCongr (piFinTwoEquiv fun _ => G)))).toModuleIso
 
@@ -150,7 +150,7 @@ definition d₁₀
 
 中文:
 定义 d₁₀
-  签名: : ModuleCat.of k (G ->₀ A) ⟶ ModuleCat.of k A.V
+  签名: : 模范畴.of k (G ->₀ A) ⟶ 模范畴.of k A.V
   定义体: ModuleCat.ofHom lsum k fun g => A.ρ g⁻¹ - LinearMap.id
 
 @[simp]
@@ -356,7 +356,7 @@ theorem d₁₀_eq_zero_of_isTrivial
 
 中文:
 定理 d₁₀_eq_zero_of_isTrivial
-  条件: [A.IsTrivial]
+  条件: [A.是平凡]
   结论: d₁₀ A = 0
   证明: by
   ext
@@ -376,7 +376,7 @@ definition d₂₁
 
 中文:
 定义 d₂₁
-  签名: : ModuleCat.of k (G × G ->₀ A) ⟶ ModuleCat.of k (G ->₀ A)
+  签名: : 模范畴.of k (G × G ->₀ A) ⟶ 模范畴.of k (G ->₀ A)
   定义体: ModuleCat.ofHom lsum k fun g => lsingle g.2 ∘ₗ A.ρ g.1⁻¹ - lsingle (g.1 * g.2) + lsingle g.1
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, lsingle
@@ -565,7 +565,7 @@ definition d₃₂
 
 中文:
 定义 d₃₂
-  签名: : ModuleCat.of k (G × G × G ->₀ A) ⟶ ModuleCat.of k (G × G ->₀ A)
+  签名: : 模范畴.of k (G × G × G ->₀ A) ⟶ 模范畴.of k (G × G ->₀ A)
   定义体: ModuleCat.ofHom lsum k fun g =>
     lsingle (g.2.1, g.2.2) ∘ₗ A.ρ g.1⁻¹ - lsingle (g.1 * g.2.1, g.2.2) +
     lsingle (g.1, g.2.1 * g.2.2) - lsingle (g.1, g.2.1)
@@ -867,7 +867,7 @@ definition shortComplexH0
 
 中文:
 定义 shortComplexH0
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk _ _ (d₁₀_comp_coinvariantsMk A)
 -/
 def shortComplexH0 : ShortComplex (ModuleCat k) :=
@@ -885,7 +885,7 @@ definition shortComplexH1
 
 中文:
 定义 shortComplexH1
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk _ _ (d₂₁_comp_d₁₀ A)
 -/
 def shortComplexH1 : ShortComplex (ModuleCat k) :=
@@ -903,7 +903,7 @@ definition shortComplexH2
 
 中文:
 定义 shortComplexH2
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk _ _ (d₃₂_comp_d₂₁ A)
 -/
 def shortComplexH2 : ShortComplex (ModuleCat k) :=
@@ -923,7 +923,7 @@ definition cycles₁
 
 中文:
 定义 cycles₁
-  签名: : Submodule k (G ->₀ A)
+  签名: : 子模 k (G ->₀ A)
   定义体: LinearMap.ker (d₁₀ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.ker
@@ -940,7 +940,7 @@ definition cycles₂
 
 中文:
 定义 cycles₂
-  签名: : Submodule k (G × G ->₀ A)
+  签名: : 子模 k (G × G ->₀ A)
   定义体: LinearMap.ker (d₂₁ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.ker
@@ -1041,7 +1041,7 @@ theorem cycles₁_eq_top_of_isTrivial
 
 中文:
 定理 cycles₁_eq_top_of_isTrivial
-  条件: [A.IsTrivial]
+  条件: [A.是平凡]
   结论: cycles₁ A = ⊤
   证明: by
   rw [cycles₁]; rw [d₁₀_eq_zero_of_isTrivial]; rw [ModuleCat.hom_zero]; rw [LinearMap.ker_zero]
@@ -1064,7 +1064,7 @@ definition cycles₁IsoOfIsTrivial
 
 中文:
 定义 cycles₁IsoOfIsTrivial
-  签名: [A.IsTrivial]
+  签名: [A.是平凡]
   定义体: (LinearEquiv.ofTop _ (cycles₁_eq_top_of_isTrivial A)).toModuleIso
 
 @[simp]
@@ -1088,7 +1088,7 @@ lemma cycles₁IsoOfIsTrivial_hom_apply
 
 中文:
 引理 cycles₁IsoOfIsTrivial_hom_apply
-  条件: [A.IsTrivial] (x : cycles₁ A)
+  条件: [A.是平凡] (x : cycles₁ A)
   证明: rfl
 
 @[simp]
@@ -1107,7 +1107,7 @@ lemma cycles₁IsoOfIsTrivial_inv_apply
 
 中文:
 引理 cycles₁IsoOfIsTrivial_inv_apply
-  条件: [A.IsTrivial] (x : G ->₀ A)
+  条件: [A.是平凡] (x : G ->₀ A)
   证明: rfl
 -/
 lemma cycles₁IsoOfIsTrivial_inv_apply [A.IsTrivial] (x : G ->₀ A) :
@@ -1213,7 +1213,7 @@ definition boundaries₁
 
 中文:
 定义 boundaries₁
-  签名: : Submodule k (G ->₀ A)
+  签名: : 子模 k (G ->₀ A)
   定义体: LinearMap.range (d₂₁ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.range
@@ -1231,7 +1231,7 @@ definition boundaries₂
 
 中文:
 定义 boundaries₂
-  签名: : Submodule k (G × G ->₀ A)
+  签名: : 子模 k (G × G ->₀ A)
   定义体: LinearMap.range (d₃₂ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.range
@@ -2154,7 +2154,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (shortComplexH0 A).g
+  签名: 满态射 (shortComplexH0 A).g
   定义体: inferInstanceAs Epi ((coinvariantsMk k G).app A)
 
 Depends on / 依赖: coinvariantsMk
@@ -2178,7 +2178,7 @@ lemma shortComplexH0_exact
 
 中文:
 引理 shortComplexH0_exact
-  结论: (shortComplexH0 A).Exact
+  结论: (shortComplexH0 A).正合
   证明: by
   rw [ShortComplex.moduleCat_exact_iff]
   intro x (hx : Coinvariants.mk _ _ = 0)
@@ -2209,7 +2209,7 @@ definition cyclesIso₀
 
 中文:
 定义 cyclesIso₀
-  签名: : cycles A 0 ≅ ModuleCat.of k A.V
+  签名: : cycles A 0 ≅ 模范畴.of k A.V
   定义体: (inhomogeneousChains A).iCyclesIso _ 0 (by simp) (by simp [ChainComplex.of.d]) ≪≫ chainsIso₀ A
 
 @[reassoc (attr := simp), elementwise (attr := simp)]
@@ -2391,7 +2391,7 @@ definition isoCycles₁
 
 中文:
 定义 isoCycles₁
-  签名: : cycles A 1 ≅ ModuleCat.of k (cycles₁ A)
+  签名: : cycles A 1 ≅ 模范畴.of k (cycles₁ A)
   定义体: cyclesMapIso' (isoShortComplexH1 A) ((inhomogeneousChains A).sc 1).leftHomologyData
       (shortComplexH1 A).moduleCatLeftHomologyData
 
@@ -2545,7 +2545,7 @@ definition isoCycles₂
 
 中文:
 定义 isoCycles₂
-  签名: : cycles A 2 ≅ ModuleCat.of k (cycles₂ A)
+  签名: : cycles A 2 ≅ 模范畴.of k (cycles₂ A)
   定义体: cyclesMapIso' (isoShortComplexH2 A) ((inhomogeneousChains A).sc 2).leftHomologyData
       (shortComplexH2 A).moduleCatLeftHomologyData
 
@@ -2706,7 +2706,7 @@ definition H0π
 
 中文:
 定义 H0π
-  签名: : ModuleCat.of k A.V ⟶ H0 A
+  签名: : 模范畴.of k A.V ⟶ H0 A
   定义体: (cyclesIso₀ A).inv ≫ π A 0
 -/
 def H0π : ModuleCat.of k A.V ⟶ H0 A := (cyclesIso₀ A).inv ≫ π A 0
@@ -2722,7 +2722,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H0π A)
+  签名: 满态射 (H0π A)
   定义体: inferInstanceAs Epi (_ ≫ _)
 -/
 instance : Epi (H0π A) := inferInstanceAs Epi (_ ≫ _)
@@ -2936,7 +2936,7 @@ definition H1π
 
 中文:
 定义 H1π
-  签名: : ModuleCat.of k (cycles₁ A) ⟶ H1 A
+  签名: : 模范畴.of k (cycles₁ A) ⟶ H1 A
   定义体: (isoCycles₁ A).inv ≫ π A 1
 -/
 def H1π : ModuleCat.of k (cycles₁ A) ⟶ H1 A :=
@@ -2953,7 +2953,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H1π A)
+  签名: 满态射 (H1π A)
   定义体: inferInstanceAs Epi (_ ≫ _)
 -/
 instance : Epi (H1π A) := inferInstanceAs Epi (_ ≫ _)
@@ -3128,7 +3128,7 @@ map_one' := Multiplicative.toAdd.inject
 
 中文:
 定义 mkH1OfIsTrivial
-  签名: : Additive (Abelianization G) ->ₗ[整数] A ->ₗ[整数] H1 A
+  签名: : 加性 (交换化 G) ->ₗ[整数] A ->ₗ[整数] H1 A
   定义体: AddMonoidHom.toIntLinearMap AddMonoidHom.toMultiplicativeRight.symm Abelianization.lift {
     toFun g := Multiplicative.ofAdd (AddMonoidHom.toIntLinearMap (AddMonoidHomClass.toAddMonoidHom
       ((H1π A).hom ∘ₗ (cycles₁IsoOfIsTrivial A).inv.hom ∘ₗ lsingle g)))
@@ -3180,7 +3180,7 @@ definition H1ToTensorOfIsTrivial
 
 中文:
 定义 H1ToTensorOfIsTrivial
-  签名: : H1 A ->ₗ[整数] (Additive <| Abelianization G) otimes[整数] A
+  签名: : H1 A ->ₗ[整数] (加性 <| 交换化 G) otimes[整数] A
   定义体: ((QuotientAddGroup.lift _ ((Finsupp.liftAddHom fun g => AddMonoidHomClass.toAddMonoidHom
     (TensorProduct.mk Int _ _ (Additive.ofMul (Abelianization.of g)))).comp
       (cycles₁ A).toAddSubgroup.subtype) fun ⟨y, hy⟩ ⟨z, hz⟩ => AddMonoidHom.mem_ker.2 <| by
@@ -3359,7 +3359,7 @@ definition H2π
 
 中文:
 定义 H2π
-  签名: : ModuleCat.of k (cycles₂ A) ⟶ H2 A
+  签名: : 模范畴.of k (cycles₂ A) ⟶ H2 A
   定义体: (isoCycles₂ A).inv ≫ π A 2
 -/
 def H2π : ModuleCat.of k (cycles₂ A) ⟶ H2 A :=
@@ -3376,7 +3376,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H2π A)
+  签名: 满态射 (H2π A)
   定义体: inferInstanceAs Epi (_ ≫ _)
 -/
 instance : Epi (H2π A) := inferInstanceAs Epi (_ ≫ _)

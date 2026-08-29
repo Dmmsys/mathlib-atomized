@@ -61,7 +61,7 @@ definition SameCycle
 
 中文:
 定义 SameCycle
-  签名: (f : Perm α) (x y : α)
+  签名: (f : 置换 α) (x y : α)
   定义体: exists i : Int, (f ^ i) x = y
 
 @[refl]
@@ -81,7 +81,7 @@ theorem SameCycle.refl
 
 中文:
 定理 SameCycle.refl
-  条件: (f : Perm α) (x : α)
+  条件: (f : 置换 α) (x : α)
   结论: SameCycle f x x
   证明: ⟨0, rfl⟩
 -/
@@ -118,8 +118,8 @@ theorem _root_.Eq.sameCycle
 @[symm]
 
 中文:
-定理 _root_.Eq.sameCycle
-  条件: (h : x = y) (f : Perm α)
+定理 _root_.相等.sameCycle
+  条件: (h : x = y) (f : 置换 α)
   结论: f.SameCycle x y
   证明: by rw [h]
 
@@ -198,7 +198,7 @@ theorem SameCycle.equivalence
 
 中文:
 定理 SameCycle.equivalence
-  结论: Equivalence (SameCycle f)
+  结论: 等价 (SameCycle f)
   证明: ⟨SameCycle.refl f, SameCycle.symm, SameCycle.trans⟩
 
 Depends on / 依赖: SameCycle, SameCycle.refl, SameCycle.symm, SameCycle.trans
@@ -221,7 +221,7 @@ definition SameCycle.setoid
 
 中文:
 定义 SameCycle.setoid
-  签名: (f : Perm α)
+  签名: (f : 置换 α)
   定义体: f.SameCycle
   iseqv := SameCycle.equivalence f
 
@@ -709,7 +709,7 @@ alias ⟨_, SameCycle.extendDomain⟩ := sameCycle_extendDomain
 
 中文:
 定理 sameCycle_extendDomain
-  条件: {p : β -> 命题} [DecidablePred p] {f : α ≃ Subtype p}
+  条件: {p : β -> 命题} [DecidablePred p] {f : α ≃ 子类型 p}
   证明: exists_congr fun n => by
     rw [← extendDomain_zpow]; rw [extendDomain_apply_image]; rw [Subtype.coe_inj]; rw [f.injective.eq_iff]
 
@@ -742,8 +742,8 @@ theorem SameCycle.exists_pow_eq'
   exact Int.em
 
 中文:
-定理 SameCycle.exists_pow_eq'
-  条件: [Finite α]
+定理 SameCycle.存在_pow_eq'
+  条件: [有限 α]
   结论: SameCycle f x y -> 存在 i < orderOf f, (f ^ i) x = y
   证明: by
   rintro ⟨k, rfl⟩
@@ -780,8 +780,8 @@ theorem SameCycle.exists_pow_eq''
   · exact ⟨i.succ, i.zero_lt_succ, hi.le, by rfl⟩
 
 中文:
-定理 SameCycle.exists_pow_eq''
-  条件: [Finite α] (h : SameCycle f x y)
+定理 SameCycle.存在_pow_eq''
+  条件: [有限 α] (h : SameCycle f x y)
   证明: by
   obtain ⟨_ | i, hi, rfl⟩ := h.exists_pow_eq'
   · refine ⟨orderOf f, orderOf_pos f, le_rfl, ?_⟩
@@ -808,8 +808,8 @@ theorem SameCycle.exists_fin_pow_eq
   exact ⟨⟨i, hi⟩, hx⟩
 
 中文:
-定理 SameCycle.exists_fin_pow_eq
-  条件: [Finite α] (h : SameCycle f x y)
+定理 SameCycle.存在_fin_pow_eq
+  条件: [有限 α] (h : SameCycle f x y)
   证明: by
   obtain ⟨i, hi, hx⟩ := SameCycle.exists_pow_eq' h
   exact ⟨⟨i, hi⟩, hx⟩
@@ -832,8 +832,8 @@ theorem SameCycle.exists_nat_pow_eq
   exact ⟨i, hi⟩
 
 中文:
-定理 SameCycle.exists_nat_pow_eq
-  条件: [Finite α] (h : SameCycle f x y)
+定理 SameCycle.存在_nat_pow_eq
+  条件: [有限 α] (h : SameCycle f x y)
   证明: by
   obtain ⟨i, _, hi⟩ := h.exists_pow_eq'
   exact ⟨i, hi⟩
@@ -871,8 +871,8 @@ definition IsCycle
   body: exists x, f x != x ∧ forall ⦃y⦄, f y != y -> SameCycle f x y
 
 中文:
-定义 IsCycle
-  签名: (f : Perm α)
+定义 是环
+  签名: (f : 置换 α)
   定义体: exists x, f x != x ∧ forall ⦃y⦄, f y != y -> SameCycle f x y
 
 Depends on / 依赖: SameCycle
@@ -892,8 +892,8 @@ theorem IsCycle.ne_one
 @[simp]
 
 中文:
-定理 IsCycle.ne_one
-  条件: (h : IsCycle f)
+定理 是环.ne_one
+  条件: (h : 是环 f)
   结论: f != 1
   证明: fun hf => by simp [hf, IsCycle] at h
 
@@ -914,7 +914,7 @@ theorem not_isCycle_one
 
 中文:
 定理 not_isCycle_one
-  结论: ¬(1 : Perm α).IsCycle
+  结论: ¬(1 : 置换 α).是环
   证明: fun H => H.ne_one rfl
 
 Depends on / 依赖: H.ne_one, ne_one
@@ -933,8 +933,8 @@ theorem IsCycle.sameCycle
   ⟨b - a, by rw [← ha, ← mul_apply, ← zpow_add, sub_add_cancel, hb]⟩
 
 中文:
-定理 IsCycle.sameCycle
-  条件: (hf : IsCycle f) (hx : f x != x) (hy : f y != y)
+定理 是环.sameCycle
+  条件: (hf : 是环 f) (hx : f x != x) (hy : f y != y)
   证明: let ⟨g, hg⟩ := hf
   let ⟨a, ha⟩ := hg.2 hx
   let ⟨b, hb⟩ := hg.2 hy
@@ -956,8 +956,8 @@ theorem IsCycle.exists_zpow_eq
   proof: IsCycle.sameCycle
 
 中文:
-定理 IsCycle.exists_zpow_eq
-  结论: IsCycle f -> f x != x -> f y != y -> 存在 i : 整数, (f ^ i) x = y
+定理 是环.存在_zpow_eq
+  结论: 是环 f -> f x != x -> f y != y -> 存在 i : 整数, (f ^ i) x = y
   证明: IsCycle.sameCycle
 
 Depends on / 依赖: IsCycle, IsCycle.sameCycle, sameCycle
@@ -978,9 +978,9 @@ theorem IsCycle.inv
 @[simp]
 
 中文:
-定理 IsCycle.inv
-  条件: (hf : IsCycle f)
-  结论: IsCycle f⁻¹
+定理 是环.inv
+  条件: (hf : 是环 f)
+  结论: 是环 f⁻¹
   证明: hf.imp fun _ ⟨hx, h⟩ =>
     ⟨inv_eq_iff_eq.not.2 hx.symm, fun _ hy => (h <| inv_eq_iff_eq.not.2 hy.symm).inv⟩
 
@@ -1003,7 +1003,7 @@ theorem isCycle_inv
 
 中文:
 定理 isCycle_inv
-  结论: IsCycle f⁻¹ ↔ IsCycle f
+  结论: 是环 f⁻¹ ↔ 是环 f
   证明: ⟨fun h => h.inv, IsCycle.inv⟩
 
 Depends on / 依赖: IsCycle, IsCycle.inv, h.inv
@@ -1023,8 +1023,8 @@ theorem IsCycle.conj
   simpa using (h <| eq_inv_iff_eq.not.2 hy).conj (g := g)
 
 中文:
-定理 IsCycle.conj
-  结论: IsCycle f -> IsCycle (g * f * g⁻¹)
+定理 是环.conj
+  结论: 是环 f -> 是环 (g * f * g⁻¹)
   证明: by
   rintro ⟨x, hx, h⟩
   refine ⟨g x, by simp [coe_mul, hx], fun y hy => ?_⟩
@@ -1053,8 +1053,8 @@ theorem IsCycle.extendDomain
   rw [h] at h
 
 中文:
-定理 IsCycle.extendDomain
-  条件: {p : β -> 命题} [DecidablePred p] (f : α ≃ Subtype p)
+定理 是环.extendDomain
+  条件: {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
   证明: by
   rintro ⟨a, ha, ha'⟩
   refine ⟨f a, ?_, fun b hb => ?_⟩
@@ -1094,7 +1094,7 @@ hx by
 中文:
 定理 isCycle_iff_sameCycle
   条件: (hx : f x != x)
-  结论: IsCycle f ↔ 对任意 {y}, SameCycle f x y ↔ f y != y
+  结论: 是环 f ↔ 对任意 {y}, SameCycle f x y ↔ f y != y
   证明: ⟨fun hf y =>
     ⟨fun ⟨i, hi⟩ hy =>
 hx by
@@ -1132,8 +1132,8 @@ theorem IsCycle.exists_pow_eq
          rwa [← zpow_natCast, Int.toNat_of_nonneg this, zpow_mod_orderOf]}⟩
 
 中文:
-定理 IsCycle.exists_pow_eq
-  条件: (hf : IsCycle f) (hx : f x != x) (hy : f y != y)
+定理 是环.存在_pow_eq
+  条件: (hf : 是环 f) (hx : f x != x) (hy : f y != y)
   证明: by
   let ⟨n, hn⟩ := hf.exists_zpow_eq hx hy
   exact
@@ -1172,7 +1172,7 @@ theorem isCycle_swap
 中文:
 定理 isCycle_swap
   条件: (hxy : x != y)
-  结论: IsCycle (swap x y)
+  结论: 是环 (swap x y)
   证明: ⟨y, by rwa [swap_apply_right], fun a (ha : ite (a = x) y (ite (a = y) x a) != a) =>
     if hya : y = a then ⟨0, hya⟩
     else
@@ -1202,7 +1202,7 @@ theorem IsSwap.isCycle
 
 中文:
 定理 IsSwap.isCycle
-  结论: IsSwap f -> IsCycle f
+  结论: IsSwap f -> 是环 f
   证明: by
   rintro ⟨x, y, hxy, rfl⟩
   exact isCycle_swap hxy
@@ -1256,8 +1256,8 @@ theorem IsCycle.two_le_card_support
   proof: two_le_card_support_of_ne_one h.ne_one
 
 中文:
-定理 IsCycle.two_le_card_support
-  条件: (h : IsCycle f)
+定理 是环.two_le_card_support
+  条件: (h : 是环 f)
   结论: 2 <= #f.support
   证明: two_le_card_support_of_ne_one h.ne_one
 
@@ -1284,8 +1284,8 @@ definition IsCycle.zpowersEquivSupport
  
 
 中文:
-定义 IsCycle.zpowersEquivSupport
-  签名: {σ : Perm α} (hσ : IsCycle σ)
+定义 是环.zpowersEquivSupport
+  签名: {σ : 置换 α} (hσ : 是环 σ)
   定义体: Equiv.ofBijective
     (fun (τ : ↥((Subgroup.zpowers σ) : Set (Perm α))) =>
       ⟨(τ : Perm α) (Classical.choose hσ), by
@@ -1332,8 +1332,8 @@ theorem IsCycle.zpowersEquivSupport_apply
 @[simp]
 
 中文:
-定理 IsCycle.zpowersEquivSupport_apply
-  条件: {σ : Perm α} (hσ : IsCycle σ) {n : 自然数}
+定理 是环.zpowersEquivSupport_apply
+  条件: {σ : 置换 α} (hσ : 是环 σ) {n : 自然数}
   证明: rfl
 
 @[simp]
@@ -1354,8 +1354,8 @@ theorem IsCycle.zpowersEquivSupport_symm_apply
   proof: (Equiv.symm_apply_eq _).2 hσ.zpowersEquivSupport_apply
 
 中文:
-定理 IsCycle.zpowersEquivSupport_symm_apply
-  条件: {σ : Perm α} (hσ : IsCycle σ) (n : 自然数)
+定理 是环.zpowersEquivSupport_symm_apply
+  条件: {σ : 置换 α} (hσ : 是环 σ) (n : 自然数)
   证明: (Equiv.symm_apply_eq _).2 hσ.zpowersEquivSupport_apply
 
 Depends on / 依赖: Equiv.symm_apply_eq, symm_apply_eq, zpowersEquivSupport_apply
@@ -1379,8 +1379,8 @@ theorem IsCycle.orderOf
   convert! Fintype.card_congr (IsCycle.zpowersEquivSupport hf)
 
 中文:
-定理 IsCycle.orderOf
-  条件: (hf : IsCycle f)
+定理 是环.orderOf
+  条件: (hf : 是环 f)
   结论: orderOf f = #f.support
   证明: by
   rw [← Fintype.card_zpowers]; rw [← Fintype.card_coe]
@@ -1506,8 +1506,8 @@ theorem IsCycle.eq_swap_of_apply_apply_eq_self
         obtain ⟨j, hj⟩ := hz.2
 
 中文:
-定理 IsCycle.eq_swap_of_apply_apply_eq_self
-  结论: {α : 类型} [DecidableEq α] {f : Perm α}
+定理 是环.eq_swap_of_apply_apply_eq_self
+  结论: {α : 类型} [DecidableEq α] {f : 置换 α}
   证明: Equiv.ext fun y =>
     let ⟨z, hz⟩ := hf
     let ⟨i, hi⟩ := hz.2 hfx
@@ -1553,8 +1553,8 @@ theorem IsCycle.swap_mul
   exact isCycle_swap_mul_aux₂ (i - 1) hy (by simp [← mul_apply, -coe_mul, ← zpow_add_one])
 
 中文:
-定理 IsCycle.swap_mul
-  结论: {α : 类型} [DecidableEq α] {f : Perm α} (hf : IsCycle f) {x : α}
+定理 是环.swap_mul
+  结论: {α : 类型} [DecidableEq α] {f : 置换 α} (hf : 是环 f) {x : α}
   证明: by
   refine ⟨f x, ?_, fun y hy => ?_⟩
   · simp [swap_apply_def, mul_apply, if_neg hffx, f.injective.eq_iff, hx]
@@ -1587,8 +1587,8 @@ theorem IsCycle.sign
           rw [hf.eq_swap_of_apply_apply_eq_self hx.1 
 
 中文:
-定理 IsCycle.sign
-  条件: {f : Perm α} (hf : IsCycle f)
+定理 是环.sign
+  条件: {f : 置换 α} (hf : 是环 f)
   结论: sign f = -(-1) ^ #f.support
   证明: let ⟨x, hx⟩ := hf
   calc
@@ -1635,8 +1635,8 @@ theorem IsCycle.of_pow
   exact ⟨n * i, by rwa [zpow_mul]⟩
 
 中文:
-定理 IsCycle.of_pow
-  条件: {n : 自然数} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
+定理 是环.of_pow
+  条件: {n : 自然数} (h1 : 是环 (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
   证明: by
   have key : forall x : α, (f ^ n) x != x ↔ f x != x := by
     simp_rw [← mem_support, ← Finset.ext_iff]
@@ -1673,8 +1673,8 @@ theorem IsCycle.of_zpow
     exact (inv_inv (f ^ _) ▸ h1.inv).of_pow h2
 
 中文:
-定理 IsCycle.of_zpow
-  条件: {n : 整数} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
+定理 是环.of_zpow
+  条件: {n : 整数} (h1 : 是环 (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
   证明: by
   cases n
   · exact h1.of_pow h2
@@ -1700,7 +1700,7 @@ theorem nodup_of_pairwise_disjoint_cycles
 
 中文:
 定理 nodup_of_pairwise_disjoint_cycles
-  结论: {l : List (Perm β)} (h1 : 对任意 f in l, IsCycle f)
+  结论: {l : 列表 (置换 β)} (h1 : 对任意 f in l, 是环 f)
   证明: nodup_of_pairwise_disjoint (fun h => (h1 1 h).ne_one rfl) h2
 
 Depends on / 依赖: ne_one, nodup_of_pairwise_disjoint
@@ -1725,8 +1725,8 @@ theorem IsCycle.support_congr
     have h'' : forall x in f.support inter g.support, f x =
 
 中文:
-定理 IsCycle.support_congr
-  结论: (hf : IsCycle f) (hg : IsCycle g) (h : f.support subseteq g.support)
+定理 是环.support_congr
+  结论: (hf : 是环 f) (hg : 是环 g) (h : f.support subseteq g.support)
   证明: by
   have : f.support = g.support := by
     refine le_antisymm h ?_
@@ -1770,8 +1770,8 @@ theorem IsCycle.eq_on_support_inter_nonempty_congr
     rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_
 
 中文:
-定理 IsCycle.eq_on_support_inter_nonempty_congr
-  结论: (hf : IsCycle f) (hg : IsCycle g)
+定理 是环.eq_on_support_inter_nonempty_congr
+  结论: (hf : 是环 f) (hg : 是环 g)
   证明: by
   have hx'' : x in g.support := by rwa [mem_support, ← hx, ← mem_support]
   have : f.support subseteq g.support := by
@@ -1813,8 +1813,8 @@ theorem IsCycle.support_pow_eq_iff
     · rw [pow_appl
 
 中文:
-定理 IsCycle.support_pow_eq_iff
-  条件: (hf : IsCycle f) {n : 自然数}
+定理 是环.support_pow_eq_iff
+  条件: (hf : 是环 f) {n : 自然数}
   证明: by
   rw [orderOf_dvd_iff_pow_eq_one]
   constructor
@@ -1859,8 +1859,8 @@ theorem IsCycle.support_pow_of_pos_of_lt_orderOf
   proof: hf.support_pow_eq_iff.2 Nat.not_dvd_of_pos_of_lt npos hn
 
 中文:
-定理 IsCycle.support_pow_of_pos_of_lt_orderOf
-  结论: (hf : IsCycle f) {n : 自然数} (npos : 0 < n)
+定理 是环.support_pow_of_pos_of_lt_orderOf
+  结论: (hf : 是环 f) {n : 自然数} (npos : 0 < n)
   证明: hf.support_pow_eq_iff.2 Nat.not_dvd_of_pos_of_lt npos hn
 
 Depends on / 依赖: Nat.not_dvd_of_pos_of_lt, hf.support_pow_eq_iff, not_dvd_of_pos_of_lt, support_pow_eq_iff
@@ -1888,8 +1888,8 @@ theorem IsCycle.pow_iff
       have : orderOf (f ^ n) = orderOf f := by 
 
 中文:
-定理 IsCycle.pow_iff
-  条件: [Finite β] {f : Perm β} (hf : IsCycle f) {n : 自然数}
+定理 是环.pow_iff
+  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
   证明: by
   classical
     cases nonempty_fintype β
@@ -1948,8 +1948,8 @@ theorem IsCycle.pow_eq_one_iff
       · rw [hf
 
 中文:
-定理 IsCycle.pow_eq_one_iff
-  条件: [Finite β] {f : Perm β} (hf : IsCycle f) {n : 自然数}
+定理 是环.pow_eq_one_iff
+  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
   证明: by
   classical
     cases nonempty_fintype β
@@ -1991,8 +1991,8 @@ theorem IsCycle.pow_eq_one_iff'
   proof: ⟨fun h => DFunLike.congr_fun h x, fun h => hf.pow_eq_one_iff.2 ⟨x, hx, h⟩⟩
 
 中文:
-定理 IsCycle.pow_eq_one_iff'
-  结论: [Finite β] {f : Perm β} (hf : IsCycle f) {n : 自然数} {x : β}
+定理 是环.pow_eq_one_iff'
+  结论: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数} {x : β}
   证明: ⟨fun h => DFunLike.congr_fun h x, fun h => hf.pow_eq_one_iff.2 ⟨x, hx, h⟩⟩
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, hf.pow_eq_one_iff, pow_eq_one_iff
@@ -2013,8 +2013,8 @@ theorem IsCycle.pow_eq_one_iff''
     (hf.pow_eq_one_iff' hx).2 (h _ hx)⟩
 
 中文:
-定理 IsCycle.pow_eq_one_iff''
-  条件: [Finite β] {f : Perm β} (hf : IsCycle f) {n : 自然数}
+定理 是环.pow_eq_one_iff''
+  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
   证明: ⟨fun h _ hx => (hf.pow_eq_one_iff' hx).1 h, fun h =>
     let ⟨_, hx, _⟩ := id hf
     (hf.pow_eq_one_iff' hx).2 (h _ hx)⟩
@@ -2048,8 +2048,8 @@ theorem IsCycle.pow_eq_pow_iff
      
 
 中文:
-定理 IsCycle.pow_eq_pow_iff
-  条件: [Finite β] {f : Perm β} (hf : IsCycle f) {a b : 自然数}
+定理 是环.pow_eq_pow_iff
+  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {a b : 自然数}
   证明: by
   classical
     cases nonempty_fintype β
@@ -2103,8 +2103,8 @@ theorem IsCycle.isCycle_pow_pos_of_lt_prime_order
   exact (pow_iff hf).mpr this
 
 中文:
-定理 IsCycle.isCycle_pow_pos_of_lt_prime_order
-  结论: [Finite β] {f : Perm β} (hf : IsCycle f)
+定理 是环.isCycle_pow_pos_of_lt_prime_order
+  结论: [有限 β] {f : 置换 β} (hf : 是环 f)
   证明: by
   cases nonempty_fintype β
   have : n.Coprime (orderOf f) := by
@@ -2137,8 +2137,8 @@ theorem _root_.Int.addLeft_one_isCycle
   proof: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
 
 中文:
-定理 _root_.Int.addLeft_one_isCycle
-  结论: (Equiv.addLeft 1 : Perm 整数).IsCycle
+定理 _root_.整数.addLeft_one_isCycle
+  结论: (等价.addLeft 1 : 置换 整数).是环
   证明: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
 
 Depends on / 依赖: one_ne_zero
@@ -2155,8 +2155,8 @@ theorem _root_.Int.addRight_one_isCycle
   proof: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
 
 中文:
-定理 _root_.Int.addRight_one_isCycle
-  结论: (Equiv.addRight 1 : Perm 整数).IsCycle
+定理 _root_.整数.addRight_one_isCycle
+  结论: (等价.addRight 1 : 置换 整数).是环
   证明: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
 
 Depends on / 依赖: one_ne_zero
@@ -2185,8 +2185,8 @@ theorem IsCycle.isConj
   obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).
 
 中文:
-定理 IsCycle.isConj
-  条件: (hσ : IsCycle σ) (hτ : IsCycle τ) (h : #σ.support = #τ.support)
+定理 是环.isConj
+  条件: (hσ : 是环 σ) (hτ : 是环 τ) (h : #σ.support = #τ.support)
   证明: by
   refine
     isConj_of_support_equiv
@@ -2223,8 +2223,8 @@ theorem IsCycle.isConj_iff
   mpr := hσ.isConj hτ
 
 中文:
-定理 IsCycle.isConj_iff
-  条件: (hσ : IsCycle σ) (hτ : IsCycle τ)
+定理 是环.isConj_iff
+  条件: (hσ : 是环 σ) (hτ : 是环 τ)
   证明: by
     obtain ⟨π, rfl⟩ := (_root_.isConj_iff).1 h
     exact card_support_conj.symm
@@ -2259,7 +2259,7 @@ definition IsCycleOn
 
 中文:
 定义 IsCycleOn
-  签名: (f : Perm α) (s : Set α)
+  签名: (f : 置换 α) (s : 集合 α)
   定义体: Set.BijOn f s s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> f.SameCycle x y
 
 @[simp]
@@ -2307,7 +2307,7 @@ alias ⟨IsCycleOn.subsingleton, _root_.Set.Subsingleton.isCycleOn_one⟩ := isC
 
 中文:
 定理 isCycleOn_one
-  结论: (1 : Perm α).IsCycleOn s ↔ s.Subsingleton
+  结论: (1 : 置换 α).IsCycleOn s ↔ s.子单例
   证明: by
   simp [IsCycleOn, Set.bijOn_id, Set.Subsingleton]
 
@@ -2353,7 +2353,7 @@ theorem isCycleOn_of_subsingleton
 
 中文:
 定理 isCycleOn_of_subsingleton
-  条件: [Subsingleton α] (f : Perm α) (s : Set α)
+  条件: [子单例 α] (f : 置换 α) (s : 集合 α)
   结论: f.IsCycleOn s
   证明: ⟨s.bijOn_of_subsingleton _, fun x _ y _ => (Subsingleton.elim x y).sameCycle _⟩
 
@@ -2408,7 +2408,7 @@ theorem IsCycleOn.conj
 中文:
 定理 IsCycleOn.conj
   条件: (h : f.IsCycleOn s)
-  结论: (g * f * g⁻¹).IsCycleOn ((g : Perm α) '' s)
+  结论: (g * f * g⁻¹).IsCycleOn ((g : 置换 α) '' s)
   证明: ⟨(g.bijOn_image.comp h.1).comp g.bijOn_symm_image, fun x hx y hy => by
     rw [Equiv.image_eq_preimage_symm] at hx hy
     convert! Equiv.Perm.SameCycle.conj (h.2 hx hy) (g := g) <;> simp⟩
@@ -2469,7 +2469,7 @@ theorem IsCycleOn.apply_ne
 
 中文:
 定理 IsCycleOn.apply_ne
-  条件: (hf : f.IsCycleOn s) (hs : s.Nontrivial) (ha : a in s)
+  条件: (hf : f.IsCycleOn s) (hs : s.非平凡) (ha : a in s)
   证明: by
   obtain ⟨b, hb, hba⟩ := hs.exists_ne a
   obtain ⟨n, rfl⟩ := hf.2 ha hb
@@ -2491,8 +2491,8 @@ theorem IsCycle.isCycleOn
   proof: ⟨f.bijOn fun _ => f.apply_eq_iff_eq.not, fun _ ha _ => hf.sameCycle ha⟩
 
 中文:
-定理 IsCycle.isCycleOn
-  条件: (hf : f.IsCycle)
+定理 是环.isCycleOn
+  条件: (hf : f.是环)
   结论: f.IsCycleOn { x | f x != x }
   证明: ⟨f.bijOn fun _ => f.apply_eq_iff_eq.not, fun _ ha _ => hf.sameCycle ha⟩
 -/
@@ -2513,7 +2513,7 @@ theorem isCycle_iff_exists_isCycleOn
 exact ⟨a, hf.apply_ne hs ha, fun b hb => hf.2 ha hsf hb⟩
 
 中文:
-定理 isCycle_iff_exists_isCycleOn
+定理 isCycle_iff_存在_isCycleOn
   证明: by
   refine ⟨fun hf => ⟨{ x | f x != x }, ?_, hf.isCycleOn, fun _ => id⟩, ?_⟩
   · obtain ⟨a, ha⟩ := hf
@@ -2567,7 +2567,7 @@ theorem IsCycleOn.isCycle_subtypePerm
 
 中文:
 定理 IsCycleOn.isCycle_subtypePerm
-  条件: (hf : f.IsCycleOn s) (hs : s.Nontrivial)
+  条件: (hf : f.IsCycleOn s) (hs : s.非平凡)
   证明: by
   obtain ⟨a, ha⟩ := hs.nonempty
   exact
@@ -2635,7 +2635,7 @@ theorem IsCycleOn.pow_apply_eq
 
 中文:
 定理 IsCycleOn.pow_apply_eq
-  条件: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) {n : 自然数}
+  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s) {n : 自然数}
   证明: by
   obtain rfl | hs := Finset.eq_singleton_or_nontrivial ha
   · rw [coe_singleton, isCycleOn_singleton] at hf
@@ -2670,7 +2670,7 @@ theorem IsCycleOn.zpow_apply_eq
 
 中文:
 定理 IsCycleOn.zpow_apply_eq
-  条件: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
+  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
 -/
 theorem IsCycleOn.zpow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) :
     forall {n : Int}, (f ^ n) a = a ↔ (#s : Int) ∣ n
@@ -2691,7 +2691,7 @@ theorem IsCycleOn.pow_apply_eq_pow_apply
 
 中文:
 定理 IsCycleOn.pow_apply_eq_pow_apply
-  结论: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
+  结论: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
   证明: by
   rw [Nat.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
   simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
@@ -2715,7 +2715,7 @@ theorem IsCycleOn.zpow_apply_eq_zpow_apply
 
 中文:
 定理 IsCycleOn.zpow_apply_eq_zpow_apply
-  结论: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
+  结论: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
   证明: by
   rw [Int.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
   simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
@@ -2737,7 +2737,7 @@ theorem IsCycleOn.pow_card_apply
 
 中文:
 定理 IsCycleOn.pow_card_apply
-  条件: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
+  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
   证明: (hf.pow_apply_eq ha).2 dvd_rfl
 
 Depends on / 依赖: dvd_rfl, hf.pow_apply_eq, pow_apply_eq
@@ -2760,8 +2760,8 @@ theorem IsCycleOn.exists_pow_eq
       (Nonempty.card_pos ⟨a]; rw [ha
 
 中文:
-定理 IsCycleOn.exists_pow_eq
-  条件: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
+定理 IsCycleOn.存在_pow_eq
+  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
   证明: by
   obtain ⟨n, rfl⟩ := hf.2 ha hb
   obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
@@ -2793,8 +2793,8 @@ theorem IsCycleOn.exists_pow_eq'
   exact ⟨n, hn⟩
 
 中文:
-定理 IsCycleOn.exists_pow_eq'
-  条件: (hs : s.Finite) (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
+定理 IsCycleOn.存在_pow_eq'
+  条件: (hs : s.有限) (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
   证明: by
   lift s to Finset α using hs
   obtain ⟨n, -, hn⟩ := hf.exists_pow_eq ha hb
@@ -2819,7 +2819,7 @@ theorem IsCycleOn.range_pow
 
 中文:
 定理 IsCycleOn.range_pow
-  条件: (hs : s.Finite) (h : f.IsCycleOn s) (ha : a in s)
+  条件: (hs : s.有限) (h : f.IsCycleOn s) (ha : a in s)
   证明: Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => h.1.mapsTo.perm_pow _ ha) fun _ =>
     h.exists_pow_eq' hs ha
 
@@ -2860,7 +2860,7 @@ theorem IsCycleOn.of_pow
 
 中文:
 定理 IsCycleOn.of_pow
-  条件: {n : 自然数} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s)
+  条件: {n : 自然数} (hf : (f ^ n).IsCycleOn s) (h : 集合.双射限制 f s s)
   结论: f.IsCycleOn s
   证明: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_pow⟩
 
@@ -2879,7 +2879,7 @@ theorem IsCycleOn.of_zpow
 
 中文:
 定理 IsCycleOn.of_zpow
-  条件: {n : 整数} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s)
+  条件: {n : 整数} (hf : (f ^ n).IsCycleOn s) (h : 集合.双射限制 f s s)
   证明: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_zpow⟩
 
 Depends on / 依赖: of_zpow
@@ -2900,7 +2900,7 @@ theorem IsCycleOn.extendDomain
 
 中文:
 定理 IsCycleOn.extendDomain
-  结论: {p : β -> 命题} [DecidablePred p] (f : α ≃ Subtype p)
+  结论: {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
   证明: ⟨h.1.extendDomain, by
     rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩
     exact (h.2 ha hb).extendDomain⟩
@@ -2928,7 +2928,7 @@ theorem IsCycleOn.countable
 中文:
 定理 IsCycleOn.countable
   条件: (hs : f.IsCycleOn s)
-  结论: s.Countable
+  结论: s.可数
   证明: by
   obtain rfl | ⟨a, ha⟩ := s.eq_empty_or_nonempty
   · exact Set.countable_empty
@@ -3006,8 +3006,8 @@ theorem exists_cycleOn
   simp
 
 中文:
-定理 exists_cycleOn
-  条件: (s : Finset α)
+定理 存在_cycleOn
+  条件: (s : 有限集 α)
   证明: by
   refine ⟨s.toList.formPerm, ?_, fun x hx => by
     simpa using List.mem_of_formPerm_apply_ne (Perm.mem_support.1 hx)⟩
@@ -3047,8 +3047,8 @@ theorem Countable.exists_cycleOn
     obtai
 
 中文:
-定理 Countable.exists_cycleOn
-  条件: (hs : s.Countable)
+定理 可数.存在_cycleOn
+  条件: (hs : s.可数)
   证明: by
   classical
   obtain hs' | hs' := s.finite_or_infinite
@@ -3279,7 +3279,7 @@ theorem subtypePerm_apply_pow_of_mem
 
 中文:
 定理 subtypePerm_apply_pow_of_mem
-  结论: {g : Perm α} {s : Finset α}
+  结论: {g : 置换 α} {s : 有限集 α}
   证明: by
   simp only [subtypePerm_pow, subtypePerm_apply]
 
@@ -3301,7 +3301,7 @@ theorem subtypePerm_apply_zpow_of_mem
 
 中文:
 定理 subtypePerm_apply_zpow_of_mem
-  结论: {g : Perm α} {s : Finset α}
+  结论: {g : 置换 α} {s : 有限集 α}
   证明: by
   simp only [subtypePerm_zpow, subtypePerm_apply]
 
@@ -3324,7 +3324,7 @@ definition subtypePermOfSupport
 
 中文:
 定义 subtypePermOfSupport
-  签名: (c : Perm α)
+  签名: (c : 置换 α)
   定义体: subtypePerm c fun _ : α => apply_mem_support
 
 Depends on / 依赖: apply_mem_support, subtypePerm
@@ -3342,7 +3342,7 @@ definition subtypePerm_of_support_le
 
 中文:
 定义 subtypePerm_of_support_le
-  签名: (c : Perm α) {s : Finset α}
+  签名: (c : 置换 α) {s : 有限集 α}
   定义体: subtypePerm c (isInvariant_of_support_le hcs)
 
 Depends on / 依赖: isInvariant_of_support_le, subtypePerm
@@ -3362,8 +3362,8 @@ theorem IsCycle.nonempty_support
   exact IsCycle.ne_one hg
 
 中文:
-定理 IsCycle.nonempty_support
-  条件: {g : Perm α} (hg : g.IsCycle)
+定理 是环.nonempty_support
+  条件: {g : 置换 α} (hg : g.是环)
   证明: by
   rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty_iff]
   exact IsCycle.ne_one hg
@@ -3393,8 +3393,8 @@ theorem IsCycle.commute_iff'
     simp only [subtypePermOfSupport, Subty
 
 中文:
-定理 IsCycle.commute_iff'
-  条件: {g c : Perm α} (hc : c.IsCycle)
+定理 是环.commute_iff'
+  条件: {g c : 置换 α} (hc : c.是环)
   证明: by
   constructor
   · intro hgc
@@ -3459,8 +3459,8 @@ theorem IsCycle.commute_iff
   by_cases ha : a 
 
 中文:
-定理 IsCycle.commute_iff
-  条件: {g c : Perm α} (hc : c.IsCycle)
+定理 是环.commute_iff
+  条件: {g c : 置换 α} (hc : c.是环)
   证明: by
   simp_rw [hc.commute_iff', Subgroup.mem_zpowers_iff]
   refine exists_congr fun hc' => exists_congr fun k => ?_
@@ -3557,7 +3557,7 @@ theorem cycle_zpow_mem_support_iff
 
 中文:
 定理 cycle_zpow_mem_support_iff
-  结论: {g : Perm α}
+  结论: {g : 置换 α}
   证明: by
   set q := n / #g.support
   set r := n % #g.support

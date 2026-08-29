@@ -49,10 +49,10 @@ class Algebra.FinitePresentation
     - out : exists (n : Nat) (f : MvPolynomial (Fin n) R ->ₐ[R] A), Surjective f ∧ (RingHom.ker f.toRingHom).FG
 
 中文:
-类 Algebra.FinitePresentation
-  参数: [CommSemiring R] [Semiring A] [Algebra R A]
+类 代数.有限呈现
+  参数: [交换半环 R] [半环 A] [代数 R A]
   公理与运算 (1 个):
-    - out : 存在 (n : 自然数) (f : MvPolynomial (Fin n) R ->ₐ[R] A), Surjective f ∧ (RingHom.ker f.toRingHom).FG
+    - out : 存在 (n : 自然数) (f : 多元多项式 (有限集 n) R ->ₐ[R] A), 满射 f ∧ (环态射.ker f.toRingHom).FG
 -/
 class Algebra.FinitePresentation [CommSemiring R] [Semiring A] [Algebra R A] : Prop where
   out : exists (n : Nat) (f : MvPolynomial (Fin n) R ->ₐ[R] A), Surjective f ∧ (RingHom.ker f.toRingHom).FG
@@ -78,7 +78,7 @@ instance of_finitePresentation
 
 中文:
 实例 of_finitePresentation
-  签名: [FinitePresentation R A]
+  签名: [有限呈现 R A]
   定义体: by
   obtain ⟨n, f, hf⟩ := FinitePresentation.out (R := R) (A := A)
   apply FiniteType.iff_quotient_mvPolynomial''.2
@@ -113,8 +113,8 @@ theorem of_finiteType
 
 中文:
 定理 of_finiteType
-  条件: [IsNoetherianRing R]
-  结论: FiniteType R A ↔ FinitePresentation R A
+  条件: [是Noether环 R]
+  结论: 有限型 R A ↔ 有限呈现 R A
   证明: by
   refine ⟨fun h => ?_, fun hfp => Algebra.FiniteType.of_finitePresentation⟩
   obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.1 h
@@ -150,8 +150,8 @@ theorem equiv
 
 中文:
 定理 equiv
-  条件: [FinitePresentation R A] (e : A ≃ₐ[R] B)
-  结论: FinitePresentation R B
+  条件: [有限呈现 R A] (e : A ≃ₐ[R] B)
+  结论: 有限呈现 R B
   证明: by
   obtain ⟨n, f, hf⟩ := FinitePresentation.out (R := R) (A := A)
   use n, AlgHom.comp (↑e) f
@@ -198,7 +198,7 @@ lemma mvPolynomial_aux
 
 中文:
 引理 mvPolynomial_aux
-  条件: (ι : 类型) [Finite ι]
+  条件: (ι : 类型) [有限 ι]
   证明: by
     cases nonempty_fintype ι
     let eqv := (MvPolynomial.renameEquiv R <| Fintype.equivFin ι).symm
@@ -232,7 +232,7 @@ theorem quotient
 
 中文:
 定理 quotient
-  条件: {I : Ideal A} (h : I.FG) [FinitePresentation R A]
+  条件: {I : 理想 A} (h : I.FG) [有限呈现 R A]
   证明: by
     obtain ⟨n, f, hf⟩ := FinitePresentation.out (R := R) (A := A)
     refine ⟨n, (Ideal.Quotient.mkₐ R I).comp f, ?_, ?_⟩
@@ -260,7 +260,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  结论: {f : A ->ₐ[R] B} (hf : Function.Surjective f)
+  结论: {f : A ->ₐ[R] B} (hf : 函数.满射 f)
   证明: letI : FinitePresentation R (A ⧸ RingHom.ker f) := FinitePresentation.quotient hker
   equiv (Ideal.quotientKerAlgEquivOfSurjective hf)
 
@@ -367,7 +367,7 @@ theorem mvPolynomial_of_finitePresentation
 
 中文:
 定理 mvPolynomial_of_finitePresentation
-  条件: [FinitePresentation R A] (ι : 类型v) [Finite ι]
+  条件: [有限呈现 R A] (ι : 类型v) [有限 ι]
   证明: by
   have hfp : FinitePresentation R A := inferInstance
   rw [iff_quotient_mvPolynomial'] at hfp ⊢
@@ -411,7 +411,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: [Algebra A B] [IsScalarTower R A B] [FinitePresentation R A]
+  结论: [代数 A B] [标量塔 R A B] [有限呈现 R A]
   证明: by
   have hfpB : FinitePresentation A B := inferInstance
   obtain ⟨n, I, e, hfg⟩ := iff.1 hfpB
@@ -439,7 +439,7 @@ instance mvPolynomial
 
 中文:
 实例 mvPolynomial
-  签名: [FinitePresentation R A] (ι : 类型) [Finite ι]
+  签名: [有限呈现 R A] (ι : 类型) [有限 ι]
   定义体: have := FinitePresentation.mvPolynomial_aux A ι; .trans _ A _
 -/
 protected instance mvPolynomial [FinitePresentation R A] (ι : Type*) [Finite ι] :
@@ -457,7 +457,7 @@ instance self
 
 中文:
 实例 self
-  签名: : FinitePresentation R R
+  签名: : 有限呈现 R R
   定义体: have := FinitePresentation.mvPolynomial_aux R Empty
   equiv (MvPolynomial.isEmptyAlgEquiv R Empty)
 
@@ -479,7 +479,7 @@ instance polynomial
 
 中文:
 实例 polynomial
-  签名: [FinitePresentation R A]
+  签名: [有限呈现 R A]
   定义体: letI := FinitePresentation.mvPolynomial R A Unit
   have := equiv (MvPolynomial.uniqueAlgEquiv.{_, 0} A PUnit)
   .trans _ A _
@@ -512,7 +512,7 @@ theorem of_restrict_scalars_finitePresentation
 
 中文:
 定理 of_restrict_scalars_finitePresentation
-  结论: [Algebra A B] [IsScalarTower R A B]
+  结论: [代数 A B] [标量塔 R A B]
   证明: by
   classical
   obtain ⟨n, f, hf, s, hs⟩ := FinitePresentation.out (R := R) (A := B)
@@ -628,7 +628,7 @@ theorem ker_fg_of_mvPolynomial
 
 中文:
 定理 ker_fg_of_mvPolynomial
-  结论: {n : 自然数} (f : MvPolynomial (Fin n) R ->ₐ[R] A)
+  结论: {n : 自然数} (f : 多元多项式 (有限集 n) R ->ₐ[R] A)
   证明: by
   classical
     obtain ⟨m, f', hf', s, hs⟩ := FinitePresentation.out (R := R) (A := A)
@@ -725,7 +725,7 @@ theorem ker_fG_of_surjective
 
 中文:
 定理 ker_fG_of_surjective
-  结论: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+  结论: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   证明: by
   obtain ⟨n, g, hg, _⟩ := FinitePresentation.out (R := R) (A := A)
   convert! (ker_fg_of_mvPolynomial (f.comp g) (hf.comp hg)).map g.toRingHom
@@ -765,7 +765,7 @@ definition FinitePresentation
 @[simp]
 
 中文:
-定义 FinitePresentation
+定义 有限呈现
   签名: (f : A ->+* B)
   定义体: @Algebra.FinitePresentation A B _ _ f.toAlgebra
 
@@ -788,7 +788,7 @@ lemma finitePresentation_algebraMap
 
 中文:
 引理 finitePresentation_algebraMap
-  条件: [Algebra A B]
+  条件: [代数 A B]
   证明: by
   rw [RingHom.FinitePresentation]; rw [toAlgebra_algebraMap]
 
@@ -811,8 +811,8 @@ theorem of_finitePresentation
 
 中文:
 定理 of_finitePresentation
-  条件: {f : A ->+* B} (hf : f.FinitePresentation)
-  结论: f.FiniteType
+  条件: {f : A ->+* B} (hf : f.有限呈现)
+  结论: f.有限型
   证明: @Algebra.FiniteType.of_finitePresentation A B _ _ f.toAlgebra hf
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.of_finitePresentation, FiniteType, f.toAlgebra, of_finitePresentation, toAlgebra
@@ -835,7 +835,7 @@ theorem id
 
 中文:
 定理 id
-  结论: FinitePresentation (RingHom.id A)
+  结论: 有限呈现 (环态射.id A)
   证明: Algebra.FinitePresentation.self A
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation.self, FinitePresentation
@@ -860,7 +860,7 @@ theorem comp_surjective
 
 中文:
 定理 comp_surjective
-  结论: {f : A ->+* B} {g : B ->+* C} (hf : f.FinitePresentation) (hg : Surjective g)
+  结论: {f : A ->+* B} {g : B ->+* C} (hf : f.有限呈现) (hg : 满射 g)
   证明: by
   algebraize [f, g.comp f]
   exact Algebra.FinitePresentation.of_surjective
@@ -894,7 +894,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->+* B) (hf : Surjective f) (hker : (RingHom.ker f).FG)
+  条件: (f : A ->+* B) (hf : 满射 f) (hker : (环态射.ker f).FG)
   证明: by
   rw [← f.comp_id]
   exact (id A).comp_surjective hf hker
@@ -920,8 +920,8 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: {f : A ->+* B} (hf : Function.Bijective f)
-  结论: f.FinitePresentation
+  条件: {f : A ->+* B} (hf : 函数.双射 f)
+  结论: f.有限呈现
   证明: .of_surjective f hf.2 by
     have : ker f = ⊥ := by rw [← RingHom.injective_iff_ker_eq_bot]; exact hf.1
     rw [this]
@@ -946,8 +946,8 @@ theorem of_finiteType
 
 中文:
 定理 of_finiteType
-  条件: [IsNoetherianRing A] {f : A ->+* B}
-  结论: f.FiniteType ↔ f.FinitePresentation
+  条件: [是Noether环 A] {f : A ->+* B}
+  结论: f.有限型 ↔ f.有限呈现
   证明: @Algebra.FinitePresentation.of_finiteType A B _ _ f.toAlgebra _
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation.of_finiteType, FinitePresentation, f.toAlgebra, of_finiteType, toAlgebra
@@ -967,7 +967,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.FinitePresentation) (hf : f.FinitePresentation)
+  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.有限呈现) (hf : f.有限呈现)
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FinitePresentation.trans A B C
@@ -991,7 +991,7 @@ theorem of_comp_finiteType
 
 中文:
 定理 of_comp_finiteType
-  结论: (f : A ->+* B) {g : B ->+* C} (hg : (g.comp f).FinitePresentation)
+  结论: (f : A ->+* B) {g : B ->+* C} (hg : (g.comp f).有限呈现)
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FinitePresentation.of_restrict_scalars_finitePresentation A B C
@@ -1105,7 +1105,7 @@ definition FinitePresentation
   body: f.toRingHom.FinitePresentation
 
 中文:
-定义 FinitePresentation
+定义 有限呈现
   签名: (f : A ->ₐ[R] B)
   定义体: f.toRingHom.FinitePresentation
 
@@ -1127,8 +1127,8 @@ theorem of_finitePresentation
 
 中文:
 定理 of_finitePresentation
-  条件: {f : A ->ₐ[R] B} (hf : f.FinitePresentation)
-  结论: f.FiniteType
+  条件: {f : A ->ₐ[R] B} (hf : f.有限呈现)
+  结论: f.有限型
   证明: RingHom.FiniteType.of_finitePresentation hf
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.of_finitePresentation, of_finitePresentation
@@ -1152,7 +1152,7 @@ theorem id
 
 中文:
 定理 id
-  结论: FinitePresentation (AlgHom.id R A)
+  结论: 有限呈现 (代数态射.id R A)
   证明: RingHom.FinitePresentation.id A
 
 Depends on / 依赖: FinitePresentation, RingHom, RingHom.FinitePresentation.id
@@ -1172,7 +1172,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.FinitePresentation)
+  结论: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.有限呈现)
   证明: RingHom.FinitePresentation.comp hg hf
 
 Depends on / 依赖: FinitePresentation, RingHom, RingHom.FinitePresentation.comp
@@ -1191,7 +1191,7 @@ theorem comp_surjective
 
 中文:
 定理 comp_surjective
-  结论: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (hf : f.FinitePresentation)
+  结论: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (hf : f.有限呈现)
   证明: RingHom.FinitePresentation.comp_surjective hf hg hker
 
 Depends on / 依赖: FinitePresentation, RingHom, RingHom.FinitePresentation.comp_surjective, comp_surjective
@@ -1212,7 +1212,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->ₐ[R] B) (hf : Surjective f) (hker : (RingHom.ker f.toRingHom).FG)
+  条件: (f : A ->ₐ[R] B) (hf : 满射 f) (hker : (环态射.ker f.toRingHom).FG)
   证明: by
   -- Porting note: added `convert`
   convert! RingHom.FinitePresentation.of_surjective f hf hker
@@ -1237,8 +1237,8 @@ nonrec theorem of_comp_finiteType (f : A ->ₐ[R] B) {g : B ->ₐ[R] C}
 
 中文:
 定理 of_finiteType
-  条件: [IsNoetherianRing A] {f : A ->ₐ[R] B}
-  结论: f.FiniteType ↔ f.FinitePresentation
+  条件: [是Noether环 A] {f : A ->ₐ[R] B}
+  结论: f.有限型 ↔ f.有限呈现
   证明: RingHom.FinitePresentation.of_finiteType
 
 nonrec theorem of_comp_finiteType (f : A ->ₐ[R] B) {g : B ->ₐ[R] C}

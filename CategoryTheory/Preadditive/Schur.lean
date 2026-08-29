@@ -45,7 +45,7 @@ theorem mono_of_nonzero_from_simple
 
 中文:
 定理 mono_of_nonzero_from_simple
-  条件: [HasKernels C] {X Y : C} [Simple X] {f : X ⟶ Y} (w : f != 0)
+  条件: [有Kernels C] {X Y : C} [单 X] {f : X ⟶ Y} (w : f != 0)
   证明: Preadditive.mono_of_kernel_zero (kernel_zero_of_nonzero_from_simple w)
 
 Depends on / 依赖: Preadditive, Preadditive.mono_of_kernel_zero, kernel_zero_of_nonzero_from_simple, mono_of_kernel_zero
@@ -88,7 +88,7 @@ theorem isIso_iff_nonzero
 
 中文:
 定理 isIso_iff_nonzero
-  条件: [HasKernels C] {X Y : C} [Simple X] [Simple Y] (f : X ⟶ Y)
+  条件: [有Kernels C] {X Y : C} [单 X] [单 Y] (f : X ⟶ Y)
   证明: ⟨fun I => by
     intro h
     apply id_nonzero X
@@ -124,7 +124,7 @@ instance [HasKernels
   nnqsmul_def := fun _ _ => rfl
 
 中文:
-实例 [HasKernels
+实例 [有Kernels
   签名: C] {X
   定义体: if h : f = 0 then 0 else haveI := isIso_of_hom_simple h; inv f
   exists_pair_ne := ⟨𝟙 X, 0, id_nonzero _⟩
@@ -174,7 +174,7 @@ theorem finrank_hom_simple_simple_eq_zero_of_not_iso
 
 中文:
 定理 finrank_hom_simple_simple_eq_zero_of_not_iso
-  结论: [HasKernels C] [Linear 𝕜 C] {X Y : C}
+  结论: [有Kernels C] [线性 𝕜 C] {X Y : C}
   证明: haveI :=
     subsingleton_of_forall_eq (0 : X ⟶ Y) fun f => by
       have p := not_congr (isIso_iff_nonzero f)
@@ -218,7 +218,7 @@ theorem finrank_endomorphism_eq_one
 
 中文:
 定理 finrank_endomorphism_eq_one
-  结论: {X : C} (isIso_iff_nonzero : 对任意 f : X ⟶ X, IsIso f ↔ f != 0)
+  结论: {X : C} (isIso_iff_nonzero : 对任意 f : X ⟶ X, 是同构 f ↔ f != 0)
   证明: by
   have id_nonzero := (isIso_iff_nonzero (𝟙 X)).mp (by infer_instance)
   refine finrank_eq_one (𝟙 X) id_nonzero ?_
@@ -253,7 +253,7 @@ theorem finrank_endomorphism_simple_eq_one
 
 中文:
 定理 finrank_endomorphism_simple_eq_one
-  条件: (X : C) [Simple X] [FiniteDimensional 𝕜 (X ⟶ X)]
+  条件: (X : C) [单 X] [有限维 𝕜 (X ⟶ X)]
   证明: finrank_endomorphism_eq_one 𝕜 isIso_iff_nonzero
 
 Depends on / 依赖: finrank_endomorphism_eq_one, isIso_iff_nonzero
@@ -273,7 +273,7 @@ theorem endomorphism_simple_eq_smul_id
 
 中文:
 定理 endomorphism_simple_eq_smul_id
-  结论: {X : C} [Simple X] [FiniteDimensional 𝕜 (X ⟶ X)]
+  结论: {X : C} [单 X] [有限维 𝕜 (X ⟶ X)]
   证明: (finrank_eq_one_iff_of_nonzero' (𝟙 X) (id_nonzero X)).mp (finrank_endomorphism_simple_eq_one 𝕜 X)
     f
 
@@ -304,7 +304,7 @@ definition fieldEndOfFiniteDimensional
 
 中文:
 定义 fieldEndOfFiniteDimensional
-  签名: (X : C) [Simple X] [I : FiniteDimensional 𝕜 (X ⟶ X)]
+  签名: (X : C) [单 X] [I : 有限维 𝕜 (X ⟶ X)]
   定义体: by
   exact
     { (inferInstance : DivisionRing (End X)) with
@@ -344,7 +344,7 @@ theorem finrank_hom_simple_simple_le_one
 
 中文:
 定理 finrank_hom_simple_simple_le_one
-  结论: (X Y : C) [FiniteDimensional 𝕜 (X ⟶ X)] [Simple X]
+  结论: (X Y : C) [有限维 𝕜 (X ⟶ X)] [单 X]
   证明: by
   obtain (h | h) := subsingleton_or_nontrivial (X ⟶ Y)
   · rw [finrank_zero_of_subsingleton]
@@ -389,7 +389,7 @@ theorem finrank_hom_simple_simple_eq_one_iff
 
 中文:
 定理 finrank_hom_simple_simple_eq_one_iff
-  结论: (X Y : C) [FiniteDimensional 𝕜 (X ⟶ X)]
+  结论: (X Y : C) [有限维 𝕜 (X ⟶ X)]
   证明: by
   fconstructor
   · intro h
@@ -432,7 +432,7 @@ theorem finrank_hom_simple_simple_eq_zero_iff
 
 中文:
 定理 finrank_hom_simple_simple_eq_zero_iff
-  结论: (X Y : C) [FiniteDimensional 𝕜 (X ⟶ X)]
+  结论: (X Y : C) [有限维 𝕜 (X ⟶ X)]
   证明: by
   rw [← not_nonempty_iff]; rw [← not_congr (finrank_hom_simple_simple_eq_one_iff 𝕜 X Y)]
   have := finrank_hom_simple_simple_le_one 𝕜 X Y
@@ -461,7 +461,7 @@ theorem finrank_hom_simple_simple
 
 中文:
 定理 finrank_hom_simple_simple
-  结论: (X Y : C) [对任意 X Y : C, FiniteDimensional 𝕜 (X ⟶ Y)] [Simple X]
+  结论: (X Y : C) [对任意 X Y : C, 有限维 𝕜 (X ⟶ Y)] [单 X]
   证明: by
   split_ifs with h
   · exact (finrank_hom_simple_simple_eq_one_iff 𝕜 X Y).2 h

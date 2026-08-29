@@ -67,7 +67,7 @@ definition rpowIntegrand₀₁
   body: t ^ p * (t⁻¹ - (t + x)⁻¹)
 
 中文:
-定义 rpowIntegrand₀₁
+定义 rpow整数egrand₀₁
   签名: (p t x : 实数)
   定义体: t ^ p * (t⁻¹ - (t + x)⁻¹)
 -/
@@ -82,7 +82,7 @@ definition rpowIntegrand₁₂
   body: t ^ (p - 1) * (t⁻¹ * x + t * (t + x)⁻¹ - 1)
 
 中文:
-定义 rpowIntegrand₁₂
+定义 rpow整数egrand₁₂
   签名: (p t x : 实数)
   定义体: t ^ (p - 1) * (t⁻¹ * x + t * (t + x)⁻¹ - 1)
 -/
@@ -105,7 +105,7 @@ lemma rpowIntegrand₀₁_zero_right
   proof: by simp [rpowIntegrand₀₁]
 
 中文:
-引理 rpowIntegrand₀₁_zero_right
+引理 rpow整数egrand₀₁_zero_right
   结论: rpow整数egrand₀₁ p t 0 = 0
   证明: by simp [rpowIntegrand₀₁]
 -/
@@ -122,7 +122,7 @@ lemma rpowIntegrand₀₁_zero_left
   simp [rpowIntegrand₀₁, Real.zero_rpow hp.ne']
 
 中文:
-引理 rpowIntegrand₀₁_zero_left
+引理 rpow整数egrand₀₁_zero_left
   条件: (hp : 0 < p)
   结论: rpow整数egrand₀₁ p 0 x = 0
   证明: by
@@ -146,7 +146,7 @@ lemma rpowIntegrand₀₁_eq_sub
   grind only
 
 中文:
-引理 rpowIntegrand₀₁_eq_sub
+引理 rpow整数egrand₀₁_eq_sub
   条件: {p t : 实数} (hp : p != 1) (ht : 0 < t)
   证明: by
   unfold rpowIntegrand₀₁
@@ -180,7 +180,7 @@ lemma rpowIntegrand₀₁_nonneg
     linarith
 
 中文:
-引理 rpowIntegrand₀₁_nonneg
+引理 rpow整数egrand₀₁_nonneg
   条件: (hp : 0 < p) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   unfold rpowIntegrand₀₁
@@ -222,8 +222,8 @@ lemma rpowIntegrand₀₁_eq_pow_div
           sim
 
 中文:
-引理 rpowIntegrand₀₁_eq_pow_div
-  条件: (hp : p in Ioo 0 1) (ht : 0 <= t) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_eq_pow_div
+  条件: (hp : p in 开区间 0 1) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   by_cases ht' : t = 0
   case neg =>
@@ -264,8 +264,8 @@ lemma rpowIntegrand₀₁_eqOn_pow_div
   simp [rpowIntegrand₀₁_eq_pow_div hp (le_of_lt ht) hx]
 
 中文:
-引理 rpowIntegrand₀₁_eqOn_pow_div
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_eqOn_pow_div
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   intro t ht
   simp [rpowIntegrand₀₁_eq_pow_div hp (le_of_lt ht) hx]
@@ -292,8 +292,8 @@ lemma rpowIntegrand₀₁_apply_mul
               rw [← mul_assoc]; rw [mul_div_assoc]; r
 
 中文:
-引理 rpowIntegrand₀₁_apply_mul
-  条件: (hp : p in Ioo 0 1) (ht : 0 <= t) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_apply_mul
+  条件: (hp : p in 开区间 0 1) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   have hxt : 0 <= x * t := by positivity
   rw [rpowIntegrand₀₁_eq_pow_div hp hxt hx]; rw [rpowIntegrand₀₁_eq_pow_div hp ht zero_le_one]
@@ -332,8 +332,8 @@ lemma rpowIntegrand₀₁_apply_mul'
 simpa using Eq.symm Real.rpow_add' hx (by aesop : (p - 1) + 1 != 0)
 
 中文:
-引理 rpowIntegrand₀₁_apply_mul'
-  条件: (hp : p in Ioo 0 1) (ht : 0 <= t) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_apply_mul'
+  条件: (hp : p in 开区间 0 1) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   simp only [rpowIntegrand₀₁_apply_mul hp ht hx, mul_assoc]
   congr
@@ -356,8 +356,8 @@ lemma rpowIntegrand₀₁_apply_mul_eqOn_Ici
   proof: fun _ ht => rpowIntegrand₀₁_apply_mul' hp ht hx
 
 中文:
-引理 rpowIntegrand₀₁_apply_mul_eqOn_Ici
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_apply_mul_eqOn_Ici
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: fun _ ht => rpowIntegrand₀₁_apply_mul' hp ht hx
 -/
 lemma rpowIntegrand₀₁_apply_mul_eqOn_Ici (hp : p in Ioo 0 1) (hx : 0 <= x) :
@@ -378,8 +378,8 @@ have h₀ : ContinuousOn (· ^ (p - 1) : Real -> Real) (Ioi 0) := .rpow_const (b
   fun_prop (disch := grind -abstractProof)
 
 中文:
-引理 continuousOn_rpowIntegrand₀₁
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 continuousOn_rpow整数egrand₀₁
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
 refine ContinuousOn.congr ?_ rpowIntegrand₀₁_eqOn_pow_div hp hx
 have h₀ : ContinuousOn (· ^ (p - 1) : Real -> Real) (Ioi 0) := .rpow_const (by fun_prop)
@@ -404,8 +404,8 @@ lemma aestronglyMeasurable_rpowIntegrand₀₁
   proof: (continuousOn_rpowIntegrand₀₁ hp hx).aestronglyMeasurable measurableSet_Ioi
 
 中文:
-引理 aestronglyMeasurable_rpowIntegrand₀₁
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 aestronglyMeasurable_rpow整数egrand₀₁
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: (continuousOn_rpowIntegrand₀₁ hp hx).aestronglyMeasurable measurableSet_Ioi
 
 Depends on / 依赖: aestronglyMeasurable, measurableSet_Ioi
@@ -429,8 +429,8 @@ lemma rpowIntegrand₀₁_monotoneOn
     gcongr
 
 中文:
-引理 rpowIntegrand₀₁_monotoneOn
-  条件: (hp : p in Ioo 0 1) (ht : 0 <= t)
+引理 rpow整数egrand₀₁_monotoneOn
+  条件: (hp : p in 开区间 0 1) (ht : 0 <= t)
   证明: by
   intro x hx y hy hxy
   by_cases h : x = 0
@@ -466,8 +466,8 @@ lemma continuousOn_rpowIntegrand₀₁_uncurry
     · exa
 
 中文:
-引理 continuousOn_rpowIntegrand₀₁_uncurry
-  条件: (hp : p in Ioo 0 1) (s : Set 实数) (hs : s subseteq Ici 0)
+引理 continuousOn_rpow整数egrand₀₁_uncurry
+  条件: (hp : p in 开区间 0 1) (s : 集合 实数) (hs : s subseteq 左闭右无界区间 0)
   证明: by
   let g : Real × Real -> Real := fun q => q.1 ^ (p - 1) * q.2 / (q.1 + q.2)
   refine ContinuousOn.congr (f := g) ?_ fun q => ?_
@@ -500,8 +500,8 @@ lemma continuousOn_rpowIntegrand₀₁_Ici
   proof: (continuousOn_rpowIntegrand₀₁_uncurry hp _ fun _ a => a).uncurry_left _ ht
 
 中文:
-引理 continuousOn_rpowIntegrand₀₁_Ici
-  条件: (hp : p in Ioo 0 1) (ht : 0 < t)
+引理 continuousOn_rpow整数egrand₀₁_Ici
+  条件: (hp : p in 开区间 0 1) (ht : 0 < t)
   证明: (continuousOn_rpowIntegrand₀₁_uncurry hp _ fun _ a => a).uncurry_left _ ht
 
 Depends on / 依赖: uncurry_left
@@ -527,8 +527,8 @@ lemma rpowIntegrand₀₁_le_rpow_sub_two_mul_self
     ring
 
 中文:
-引理 rpowIntegrand₀₁_le_rpow_sub_two_mul_self
-  条件: (hp : p in Ioo 0 1) (ht : 0 < t) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_le_rpow_sub_two_mul_self
+  条件: (hp : p in 开区间 0 1) (ht : 0 < t) (hx : 0 <= x)
   证明: calc
   _ = t ^ (p - 1) * x / (t + x) := by rw [rpowIntegrand₀₁_eq_pow_div hp (le_of_lt ht) hx]
   _ <= t ^ (p - 1) * x / t := by gcongr; linarith
@@ -568,8 +568,8 @@ lemma rpowIntegrand₀₁_le_rpow_sub_one
     _ = t ^ (p
 
 中文:
-引理 rpowIntegrand₀₁_le_rpow_sub_one
-  条件: (hp : p in Ioo 0 1) (ht : 0 <= t) (hx : 0 <= x)
+引理 rpow整数egrand₀₁_le_rpow_sub_one
+  条件: (hp : p in 开区间 0 1) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   by_cases hx_zero : x = 0
   case pos =>
@@ -613,8 +613,8 @@ lemma rpowIntegrand₀₁_one_ge_rpow_sub_two
             rw [mul_div_assoc]; rw 
 
 中文:
-引理 rpowIntegrand₀₁_one_ge_rpow_sub_two
-  条件: (hp : p in Ioo 0 1) (ht : 1 <= t)
+引理 rpow整数egrand₀₁_one_ge_rpow_sub_two
+  条件: (hp : p in 开区间 0 1) (ht : 1 <= t)
   证明: calc
   _ = t ^ (p - 1) * (1 / 2 * 1 / t) := by
             have : p - 2 = p - 1 - 1 := by ring
@@ -652,7 +652,7 @@ lemma rpowIntegrand₀₁_eqOn_mul_rpowIntegrand₀₁_one
     _ = _ := by simp [mul_comm, smul_eq_mul, rpowIntegrand₀₁]
 
 中文:
-引理 rpowIntegrand₀₁_eqOn_mul_rpowIntegrand₀₁_one
+引理 rpow整数egrand₀₁_eqOn_mul_rpow整数egrand₀₁_one
   条件: (ht : 0 < t)
   证明: by
   intro x hx
@@ -689,8 +689,8 @@ lemma integrableOn_rpowIntegrand₀₁_Ioc
   case fini
 
 中文:
-引理 integrableOn_rpowIntegrand₀₁_Ioc
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 integrableOn_rpow整数egrand₀₁_Ioc
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   refine IntegrableOn.congr_set_ae (t := Ioo 0 1) ?_ (Filter.EventuallyEq.symm Ioo_ae_eq_Ioc)
   refine ⟨?meas, ?finite⟩
@@ -735,8 +735,8 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi_one
     ca
 
 中文:
-引理 integrableOn_rpowIntegrand₀₁_Ioi_one
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 integrableOn_rpow整数egrand₀₁_Ioi_one
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   refine ⟨?meas, ?finite⟩
   case meas =>
@@ -779,8 +779,8 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi
     (integrableOn_rpowIntegrand
 
 中文:
-引理 integrableOn_rpowIntegrand₀₁_Ioi
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 integrableOn_rpow整数egrand₀₁_Ioi
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   /- The integral converges because it is `O(t ^ (p-1))` at the origin and `O(t ^ (p-2))` at
   infinity. Hence we break the integral into two parts. -/
@@ -805,8 +805,8 @@ lemma integrableOn_rpowIntegrand₀₁_Ici
   proof: .congr_set_ae Ioi_ae_eq_Ici.symm integrableOn_rpowIntegrand₀₁_Ioi hp hx
 
 中文:
-引理 integrableOn_rpowIntegrand₀₁_Ici
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 integrableOn_rpow整数egrand₀₁_Ici
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: .congr_set_ae Ioi_ae_eq_Ici.symm integrableOn_rpowIntegrand₀₁_Ioi hp hx
 
 Depends on / 依赖: Ioi_ae_eq_Ici, Ioi_ae_eq_Ici.symm, congr_set_ae
@@ -829,8 +829,8 @@ lemma integral_rpowIntegrand₀₁_eq_rpow_mul_const
       x ^ p * (∫ t in Ioi 0, rpowIntegrand₀
 
 中文:
-引理 integral_rpowIntegrand₀₁_eq_rpow_mul_const
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+引理 integral_rpow整数egrand₀₁_eq_rpow_mul_const
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   -- We use the change of variables formula with `f t = x * t`. Here `g = rpowIntegrand₀₁ p · x`.
   obtain (rfl | hx) := hx.eq_or_lt
@@ -874,8 +874,8 @@ lemma le_integral_rpowIntegrand₀₁_one
         ring_nf -- ring alone succeeds but giv
 
 中文:
-引理 le_integral_rpowIntegrand₀₁_one
-  条件: (hp : p in Ioo 0 1)
+引理 le_integral_rpow整数egrand₀₁_one
+  条件: (hp : p in 开区间 0 1)
   证明: calc
   _ = (1 / 2) * -((1 : Real) ^ (p - 1)) / (p - 1) := by rw [← div_div]; simp [neg_div]
   _ = ∫ t in Ioi 1, (1 / 2) * t ^ (p - 2) := by
@@ -917,8 +917,8 @@ lemma integral_rpowIntegrand₀₁_one_pos
   _ <= ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 := le_integral_rpowIntegrand₀₁_one hp
 
 中文:
-引理 integral_rpowIntegrand₀₁_one_pos
-  条件: (hp : p in Ioo 0 1)
+引理 integral_rpow整数egrand₀₁_one_pos
+  条件: (hp : p in 开区间 0 1)
   证明: calc
   0 < -1 / (2 * (p - 1)) := by
       rw [neg_div]; rw [neg_pos]; rw [one_div_neg]
@@ -952,7 +952,7 @@ ne_of_gt integral_rpowIntegrand₀₁_one_pos hp
 
 中文:
 引理 rpow_eq_const_mul_integral
-  条件: (hp : p in Ioo 0 1) (hx : 0 <= x)
+  条件: (hp : p in 开区间 0 1) (hx : 0 <= x)
   证明: by
   rcases eq_or_lt_of_le' hx with hx_zero | _
   case inl =>
@@ -992,8 +992,8 @@ lemma exists_measure_rpow_eq_integral_rpowIntegrand₀₁
 exact Integrable.smul_measure_nnreal integrableOn_rpo
 
 中文:
-引理 exists_measure_rpow_eq_integral_rpowIntegrand₀₁
-  条件: (hp : p in Ioo 0 1)
+引理 存在_measure_rpow_eq_integral_rpow整数egrand₀₁
+  条件: (hp : p in 开区间 0 1)
   证明: by
   let C : Real>=0 := .mk (∫ t in Ioi 0, rpowIntegrand₀₁ p t 1)⁻¹
     (by rw [inv_nonneg]; exact le_of_lt <| integral_rpowIntegrand₀₁_one_pos hp)
@@ -1038,7 +1038,7 @@ lemma rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁
   grind [rpowIntegrand₁₂, rpowIntegrand₀₁]
 
 中文:
-引理 rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁
+引理 rpow整数egrand₁₂_eq_mul_rpow整数egrand₀₁
   条件: (hx : 0 <= x) (ht : 0 < t)
   证明: by
   grind [rpowIntegrand₁₂, rpowIntegrand₀₁]
@@ -1062,7 +1062,7 @@ lemma rpowIntegrand₁₂_nonneg
     simp [rpowIntegrand₁₂, ht', zero_rpow (by grind : p - 1 != 0)]
 
 中文:
-引理 rpowIntegrand₁₂_nonneg
+引理 rpow整数egrand₁₂_nonneg
   条件: (hp : 1 < p) (ht : 0 <= t) (hx : 0 <= x)
   证明: by
   by_cases ht' : 0 < t
@@ -1094,7 +1094,7 @@ lemma rpowIntegrand₁₂_zero
 @[fun_prop]
 
 中文:
-引理 rpowIntegrand₁₂_zero
+引理 rpow整数egrand₁₂_zero
   条件: (ht : 0 < t)
   证明: by grind [rpowIntegrand₁₂]
 
@@ -1115,8 +1115,8 @@ lemma continuousOn_rpowIntegrand₁₂_uncurry
   fun_prop (disch := grind)
 
 中文:
-引理 continuousOn_rpowIntegrand₁₂_uncurry
-  条件: (hp : p in Ioi 1) (s : Set 实数) (hs : s subseteq Ici 0)
+引理 continuousOn_rpow整数egrand₁₂_uncurry
+  条件: (hp : p in 左开右无界区间 1) (s : 集合 实数) (hs : s subseteq 左闭右无界区间 0)
   证明: by
   unfold rpowIntegrand₁₂
   fun_prop (disch := grind)
@@ -1139,8 +1139,8 @@ lemma monotoneOn_rpowIntegrand₁₂
   apply monotoneOn_id.mul <;> grind [rpowIntegrand₀₁_monotoneOn, rpowIntegrand₀₁_nonneg]
 
 中文:
-引理 monotoneOn_rpowIntegrand₁₂
-  条件: (hp : p in Ioo 1 2) (ht : 0 < t)
+引理 monotoneOn_rpow整数egrand₁₂
+  条件: (hp : p in 开区间 1 2) (ht : 0 < t)
   证明: by
   refine MonotoneOn.congr ?_ fun x hx => (rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁ hx ht).symm
   apply monotoneOn_id.mul <;> grind [rpowIntegrand₀₁_monotoneOn, rpowIntegrand₀₁_nonneg]
@@ -1167,8 +1167,8 @@ lemma integrableOn_rpowIntegrand₁₂
   refine Integrable.const_mu
 
 中文:
-引理 integrableOn_rpowIntegrand₁₂
-  条件: (hp : p in Ioo 1 2) (hx : 0 <= x)
+引理 integrableOn_rpow整数egrand₁₂
+  条件: (hp : p in 开区间 1 2) (hx : 0 <= x)
   证明: by
   have hmain : (rpowIntegrand₁₂ p · x)
       =ᵐ[volume.restrict (Ioi 0)] (x * rpowIntegrand₀₁ (p-1) · x) := by
@@ -1203,8 +1203,8 @@ lemma rpow_eq_const_mul_integral_rpowIntegrand₁₂
   rw [integral_congr_ae hmain]; rw [integral_const_mul_of_integrabl
 
 中文:
-引理 rpow_eq_const_mul_integral_rpowIntegrand₁₂
-  条件: (hp : p in Ioo 1 2) (hx : 0 <= x)
+引理 rpow_eq_const_mul_integral_rpow整数egrand₁₂
+  条件: (hp : p in 开区间 1 2) (hx : 0 <= x)
   证明: by
   have hmain : (rpowIntegrand₁₂ p · x)
       =ᵐ[volume.restrict (Ioi 0)] (x * rpowIntegrand₀₁ (p-1) · x) := by
@@ -1247,8 +1247,8 @@ exact le_of_lt integral_rpowIntegrand₀₁_one_pos (by grind)
 exact Integra
 
 中文:
-引理 exists_measure_rpow_eq_integral_rpowIntegrand₁₂
-  条件: (hp : p in Ioo 1 2)
+引理 存在_measure_rpow_eq_integral_rpow整数egrand₁₂
+  条件: (hp : p in 开区间 1 2)
   证明: by
   let C : Real>=0 := .mk
 (∫ t in Ioi 0, rpowIntegrand₀₁ (p - 1) t 1)⁻¹ by
@@ -1307,8 +1307,8 @@ lemma cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one
   calc _ = cfcₙ (fun x => t ^ ((p : Real) - 1) * (rpowIntegrand₀₁ p 1 (t⁻¹ • x))) a := 
 
 中文:
-引理 cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one
-  结论: {p t : 实数} (hp : p in Ioo 0 1) (ht : 0 < t)
+引理 cfcₙ_rpow整数egrand₀₁_eq_cfcₙ_rpow整数egrand₀₁_one
+  结论: {p t : 实数} (hp : p in 开区间 0 1) (ht : 0 < t)
   证明: by
   have hspec : quasispectrum Real a subseteq Ici 0 := by grind
   have h_mapsTo : MapsTo (t⁻¹ • · : Real -> Real) (Ici 0) (Ici 0) := by
@@ -1359,8 +1359,8 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁
    
 
 中文:
-引理 exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁
-  结论: [CompleteSpace A] {p : 实数>=0}
+引理 存在_measure_nnrpow_eq_integral_cfcₙ_rpow整数egrand₀₁
+  结论: [完备空间 A] {p : 实数>=0}
   证明: by
   obtain ⟨μ, hμ⟩ := exists_measure_rpow_eq_integral_rpowIntegrand₀₁ hp
   refine ⟨μ, fun a (ha : 0 <= a) => ?_⟩
@@ -1431,8 +1431,8 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₁₂
     le_csSup_of_
 
 中文:
-引理 exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₁₂
-  结论: [CompleteSpace A] {p : 实数>=0}
+引理 存在_measure_nnrpow_eq_integral_cfcₙ_rpow整数egrand₁₂
+  结论: [完备空间 A] {p : 实数>=0}
   证明: by
   obtain ⟨μ, hμ⟩ := exists_measure_rpow_eq_integral_rpowIntegrand₁₂ hp
   refine ⟨μ, fun a (ha : 0 <= a) => ?_⟩
@@ -1510,8 +1510,8 @@ lemma concaveOn_cfc_rpowIntegrand₀₁
     have hg : ContinuousOn (fun z : Real => (t + z)⁻¹) (spect
 
 中文:
-引理 concaveOn_cfc_rpowIntegrand₀₁
-  条件: {p t : 实数} (hp : p in Ioo 0 1) (ht : 0 < t)
+引理 concaveOn_cfc_rpow整数egrand₀₁
+  条件: {p t : 实数} (hp : p in 开区间 0 1) (ht : 0 < t)
   证明: by
   have h₁ : (Ici (0 : A)).EqOn (cfc (rpowIntegrand₀₁ p t))
       (fun x : A =>
@@ -1561,8 +1561,8 @@ lemma monotoneOn_cfcₙ_rpowIntegrand₀₁
       unfold 
 
 中文:
-引理 monotoneOn_cfcₙ_rpowIntegrand₀₁
-  条件: {p : 实数} {t : 实数} (hp : p in Ioo 0 1) (ht : 0 < t)
+引理 monotoneOn_cfcₙ_rpow整数egrand₀₁
+  条件: {p : 实数} {t : 实数} (hp : p in 开区间 0 1) (ht : 0 < t)
   证明: by
   intro a (ha : 0 <= a) b (hb : 0 <= b) hab
   calc
@@ -1603,8 +1603,8 @@ lemma concaveOn_cfcₙ_rpowIntegrand₀₁
   exact Convex.linear_image (convex_Ici _) (Unitization.inrHom Real Complex A)
 
 中文:
-引理 concaveOn_cfcₙ_rpowIntegrand₀₁
-  条件: {p : 实数} {t : 实数} (hp : p in Ioo 0 1) (ht : 0 < t)
+引理 concaveOn_cfcₙ_rpow整数egrand₀₁
+  条件: {p : 实数} {t : 实数} (hp : p in 开区间 0 1) (ht : 0 < t)
   证明: by
   apply concaveOn_cfcₙ_of_concaveOn_cfc
   refine ConcaveOn.subset (concaveOn_cfc_rpowIntegrand₀₁ hp ht) inr_map_Ici_zero ?_

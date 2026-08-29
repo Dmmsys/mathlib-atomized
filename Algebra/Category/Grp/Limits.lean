@@ -74,7 +74,7 @@ definition sectionsSubgroup
 
 中文:
 定义 sectionsSubgroup
-  签名: : Subgroup (对任意 j, F.obj j)
+  签名: : 子群 (对任意 j, F.obj j)
   定义体: { MonCat.sectionsSubmonoid (F ⋙ forget₂ GrpCat MonCat) with
     carrier := (F ⋙ forget GrpCat).sections
     inv_mem' := fun {a} ah j j' f => by
@@ -105,7 +105,7 @@ instance sectionsGroup
 
 中文:
 实例 sectionsGroup
-  签名: : Group (F ⋙ forget GrpCat.{u}).sections
+  签名: : 群 (F ⋙ forget 群范畴.{u}).sections
   定义体: (sectionsSubgroup F).toGroup
 
 Depends on / 依赖: sectionsSubgroup, toGroup
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: Small.{u} (Functor.sections ((F ⋙ forget₂ GrpCat MonCat) ⋙ forget MonCat))
+  签名: Small.{u} (函子.sections ((F ⋙ forget₂ 群范畴 幺半群范畴) ⋙ forget 幺半群范畴))
   定义体: inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget GrpCat))
 
 Depends on / 依赖: Functor, Functor.sections, GrpCat, forget, sections
@@ -255,7 +255,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: liftLimit (limit.isLimit (F ⋙ forget₂ GrpCat.{u} MonCat.{u}))
 
 Depends on / 依赖: GrpCat, MonCat, isLimit, liftLimit, limit.isLimit
@@ -277,7 +277,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: CommBialgCat, ConcreteCategory, ConcreteCategory.hom, liftedLimitIsLimit
@@ -300,7 +300,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: HasLimit.mk {
     cone := limitCone F
     isLimit := limitConeIsLimit F
@@ -399,7 +399,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits GrpCat.{u}
+  签名: : 有极限 群范畴.{u}
   定义体: GrpCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: GrpCat, GrpCat.hasLimitsOfSize, hasLimitsOfSize
@@ -448,7 +448,7 @@ instance forget₂Mon_preservesLimits
 
 中文:
 实例 forget₂Mon_preservesLimits
-  签名: : PreservesLimits (forget₂ GrpCat.{u} MonCat.{u})
+  签名: : PreservesLimits (forget₂ 群范畴.{u} 幺半群范畴.{u})
   定义体: GrpCat.forget₂Mon_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: GrpCat, GrpCat.forget
@@ -521,7 +521,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget GrpCat.{u})
+  签名: : PreservesLimits (forget 群范畴.{u})
   定义体: GrpCat.forget_preservesLimitsOfSize.{u, u}
 
 @[to_additive]
@@ -670,7 +670,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommGrpCat.{u} GrpCat.{u}).ReflectsIsomorphisms
+  签名: (forget₂ 交换群范畴.{u} 群范畴.{u}).反映同构
   定义体: reflectsIsomorphisms_forget₂ _ _
 -/
 instance : (forget₂ CommGrpCat.{u} GrpCat.{u}).ReflectsIsomorphisms :=
@@ -751,7 +751,7 @@ inferInstanceAs Small (Functor.sections (F ⋙ forget CommGrpCat))
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: letI : Small.{u} (Functor.sections ((F ⋙ forget₂ CommGrpCat GrpCat) ⋙ forget GrpCat)) :=
 inferInstanceAs Small (Functor.sections (F ⋙ forget CommGrpCat))
   liftLimit (limit.isLimit (F ⋙ forget₂ CommGrpCat.{u} GrpCat.{u}))
@@ -778,7 +778,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone.{v, u} F)
+  签名: : 是极限 (limitCone.{v, u} F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: liftedLimitIsLimit
@@ -801,7 +801,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: HasLimit.mk {
     cone := limitCone F
     isLimit := limitConeIsLimit F
@@ -905,7 +905,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits CommGrpCat.{u}
+  签名: : 有极限 交换群范畴.{u}
   定义体: CommGrpCat.hasLimitsOfSize.{u, u}
 
 @[to_additive]
@@ -1155,7 +1155,7 @@ instance _root_.AddCommGrpCat.forget_preservesLimits
 @[to_additive existing]
 
 中文:
-实例 _root_.AddCommGrpCat.forget_preservesLimits
+实例 _root_.加法交换群范畴.forget_preservesLimits
   签名: :
   定义体: AddCommGrpCat.forget_preservesLimitsOfSize.{u, u}
 
@@ -1180,7 +1180,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget CommGrpCat.{u})
+  签名: : PreservesLimits (forget 交换群范畴.{u})
   定义体: CommGrpCat.forget_preservesLimitsOfSize.{u, u}
 
 @[to_additive]
@@ -1230,7 +1230,7 @@ instance forget_createsLimitsOfShape
 
 中文:
 实例 forget_createsLimitsOfShape
-  签名: (J : 类型v) [Category.{w} J]
+  签名: (J : 类型v) [范畴.{w} J]
   定义体: inferInstance
 -/
 noncomputable instance forget_createsLimitsOfShape (J : Type v) [Category.{w} J] :
@@ -1284,7 +1284,7 @@ inv := kernel.lift f (
 
 中文:
 定义 kernelIsoKer
-  签名: {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
+  签名: {G H : 加法交换群范畴.{u}} (f : G ⟶ H)
   定义体: ofHom
     { toFun := fun g => ⟨kernel.ι f g, ConcreteCategory.congr_hom (kernel.condition f) g⟩
       map_zero' := by
@@ -1331,7 +1331,7 @@ theorem kernelIsoKer_hom_comp_subtype
 
 中文:
 定理 kernelIsoKer_hom_comp_subtype
-  条件: {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
+  条件: {G H : 加法交换群范畴.{u}} (f : G ⟶ H)
   证明: by ext; rfl
 
 @[simp]
@@ -1351,7 +1351,7 @@ theorem kernelIsoKer_inv_comp_ι
 
 中文:
 定理 kernelIsoKer_inv_comp_ι
-  条件: {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
+  条件: {G H : 加法交换群范畴.{u}} (f : G ⟶ H)
   证明: by
   simp [kernelIsoKer]
 
@@ -1371,7 +1371,7 @@ definition kernelIsoKerOver
 
 中文:
 定义 kernelIsoKerOver
-  签名: {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
+  签名: {G H : 加法交换群范畴.{u}} (f : G ⟶ H)
   定义体: Over.isoMk (kernelIsoKer f)
 
 Depends on / 依赖: Over.isoMk, kernelIsoKer

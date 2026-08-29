@@ -47,7 +47,7 @@ definition dfinsupp
 
 中文:
 定义 dfinsupp
-  签名: (s : Finset ι) (t : 对任意 i, Finset (α i))
+  签名: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   定义体: (s.pi t).map
     ⟨fun f => DFinsupp.mk s fun i => f i i.2, by
       refine (mk_injective _).comp fun f g h => ?_
@@ -77,7 +77,7 @@ theorem card_dfinsupp
 
 中文:
 定理 card_dfinsupp
-  条件: (s : Finset ι) (t : 对任意 i, Finset (α i))
+  条件: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   结论: #(s.dfinsupp t) = ∏ i in s, #(t i)
   证明: (card_map _).trans card_pi _ _
 
@@ -154,7 +154,7 @@ fun h => ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun
 
 中文:
 定理 mem_dfinsupp_iff_of_support_subset
-  条件: {t : Π₀ i, Finset (α i)} (ht : t.support subseteq s)
+  条件: {t : Π₀ i, 有限集 (α i)} (ht : t.support subseteq s)
   证明: by
   refine mem_dfinsupp_iff.trans (forall_and.symm.trans <| forall_congr' fun i =>
       ⟨ fun h => ?_,
@@ -280,7 +280,7 @@ theorem rangeIcc_apply
 中文:
 定理 rangeIcc_apply
   条件: (f g : Π₀ i, α i) (i : ι)
-  结论: f.rangeIcc g i = Icc (f i) (g i)
+  结论: f.rangeIcc g i = 闭区间 (f i) (g i)
   证明: rfl
 -/
 theorem rangeIcc_apply (f g : Π₀ i, α i) (i : ι) : f.rangeIcc g i = Icc (f i) (g i) := rfl
@@ -353,7 +353,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (f : Π₀ i, Finset (α i))
+  签名: (f : Π₀ i, 有限集 (α i))
   定义体: f.support.dfinsupp f
 
 @[simp]
@@ -376,7 +376,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: {f : Π₀ i, Finset (α i)} {g : Π₀ i, α i}
+  条件: {f : Π₀ i, 有限集 (α i)} {g : Π₀ i, α i}
   结论: g in f.pi ↔ 对任意 i, g i in f i
   证明: mem_dfinsupp_iff_of_support_subset Subset.refl _
 
@@ -401,8 +401,8 @@ theorem card_pi
 
 中文:
 定理 card_pi
-  条件: (f : Π₀ i, Finset (α i))
-  结论: #f.pi = f.prod fun i => #(f i)
+  条件: (f : Π₀ i, 有限集 (α i))
+  结论: #f.pi = f.乘积 fun i => #(f i)
   证明: by
   rw [pi]; rw [card_dfinsupp]
   exact Finset.prod_congr rfl fun i _ => by simp only [Pi.natCast_apply, Nat.cast_id]
@@ -435,7 +435,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (Π₀ i, α i)
+  签名: : 局部有限序 (Π₀ i, α i)
   定义体: LocallyFiniteOrder.ofIcc (Π₀ i, α i)
     (fun f g => (f.support union g.support).dfinsupp <| f.rangeIcc g)
     (fun f g x => by
@@ -465,7 +465,7 @@ theorem Icc_eq
 
 中文:
 定理 Icc_eq
-  结论: Icc f g = (f.support union g.support).dfinsupp (f.rangeIcc g)
+  结论: 闭区间 f g = (f.support union g.support).dfinsupp (f.rangeIcc g)
   证明: rfl
 -/
 theorem Icc_eq : Icc f g = (f.support union g.support).dfinsupp (f.rangeIcc g) := rfl
@@ -480,7 +480,7 @@ lemma card_Icc
 
 中文:
 引理 card_Icc
-  结论: #(Icc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i))
+  结论: #(闭区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i))
   证明: card_dfinsupp _ _
 
 Depends on / 依赖: card_dfinsupp
@@ -499,7 +499,7 @@ lemma card_Ico
 
 中文:
 引理 card_Ico
-  结论: #(Ico f g) = (∏ i in f.support union g.support, #(Icc (f i) (g i))) - 1
+  结论: #(左闭右开区间 f g) = (∏ i in f.support union g.support, #(闭区间 (f i) (g i))) - 1
   证明: by
   rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -519,7 +519,7 @@ lemma card_Ioc
 
 中文:
 引理 card_Ioc
-  结论: #(Ioc f g) = (∏ i in f.support union g.support, #(Icc (f i) (g i))) - 1
+  结论: #(左开右闭区间 f g) = (∏ i in f.support union g.support, #(闭区间 (f i) (g i))) - 1
   证明: by
   rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -539,7 +539,7 @@ lemma card_Ioo
 
 中文:
 引理 card_Ioo
-  结论: #(Ioo f g) = (∏ i in f.support union g.support, #(Icc (f i) (g i))) - 2
+  结论: #(开区间 f g) = (∏ i in f.support union g.support, #(闭区间 (f i) (g i))) - 2
   证明: by
   rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
 
@@ -594,7 +594,7 @@ lemma card_Iic
 
 中文:
 引理 card_Iic
-  结论: #(Iic f) = ∏ i in f.support, #(Iic (f i))
+  结论: #(左无界右闭区间 f) = ∏ i in f.support, #(左无界右闭区间 (f i))
   证明: by
   simp [Iic_eq_Icc, card_Icc, bot_eq_zero]
 
@@ -614,7 +614,7 @@ lemma card_Iio
 
 中文:
 引理 card_Iio
-  结论: #(Iio f) = (∏ i in f.support, #(Iic (f i))) - 1
+  结论: #(左无界右开区间 f) = (∏ i in f.support, #(左无界右闭区间 (f i))) - 1
   证明: by
   rw [card_Iio_eq_card_Iic_sub_one]; rw [card_Iic]
 

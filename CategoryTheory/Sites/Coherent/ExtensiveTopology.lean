@@ -46,7 +46,7 @@ lemma extensiveTopology.mem_sieves_iff_contains_colimit_cofan
 
 中文:
 引理 extensiveTopology.mem_sieves_iff_contains_colimit_cofan
-  条件: {X : C} (S : Sieve X)
+  条件: {X : C} (S : 筛 X)
   证明: by
   constructor
   · intro h

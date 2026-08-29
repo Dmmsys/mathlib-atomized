@@ -55,7 +55,7 @@ theorem hom_elementwise
 
 中文:
 定理 hom_elementwise
-  结论: {C : 类型} [Category* C]
+  结论: {C : 类型} [范畴* C]
   证明: by rw [h]
 -/
 theorem hom_elementwise {C : Type*} [Category* C]
@@ -79,7 +79,7 @@ definition elementwiseThms
 
 中文:
 定义 elementwiseThms
-  签名: : List Name
+  签名: : 列表 Name
   定义体: [ -- ConcreteCategory lemmas
     ``ConcreteCategory.coe_id, ``ConcreteCategory.coe_comp,
     ``CategoryTheory.comp_apply, ``CategoryTheory.id_apply,
@@ -211,7 +211,7 @@ definition mkUnusedName
 
 中文:
 定义 mkUnusedName
-  签名: (names : List Name) (baseName : Name)
+  签名: (names : 列表 Name) (baseName : Name)
   定义体: if not (names.contains baseName) then
     baseName
   else

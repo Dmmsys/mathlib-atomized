@@ -273,7 +273,7 @@ definition coreHomEquivToOverSections
 
 中文:
 定义 coreHomEquivToOverSections
-  签名: : CoreHomEquiv (toOver I) (sections I) where
+  签名: : 核态射等价 (toOver I) (sections I) where
   定义体: { toFun := sectionsCurry
       invFun := sectionsUncurry
       left_inv {u} := sectionsUncurry_sectionsCurry

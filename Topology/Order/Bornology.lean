@@ -46,7 +46,7 @@ definition orderBornology
 
 中文:
 定义 orderBornology
-  签名: : Bornology α
+  签名: : 有界结构 α
   定义体: .ofBounded
   {s | BddBelow s ∧ BddAbove s}
   (by simp)
@@ -97,10 +97,10 @@ class IsOrderBornology
     - isBounded_iff_bddBelow_bddAbove((s : Set α)) : IsBounded s ↔ BddBelow s ∧ BddAbove s
 
 中文:
-类 IsOrderBornology
+类 是OrderBornology
   参数: : 命题 where
   公理与运算 (1 个):
-    - isBounded_iff_bddBelow_bddAbove((s : Set α)) : IsBounded s ↔ BddBelow s ∧ BddAbove s
+    - isBounded_iff_bddBelow_bddAbove((s : 集合 α)) : IsBounded s ↔ BddBelow s ∧ BddAbove s
 -/
 class IsOrderBornology : Prop where
   protected isBounded_iff_bddBelow_bddAbove (s : Set α) : IsBounded s ↔ BddBelow s ∧ BddAbove s
@@ -118,7 +118,7 @@ lemma isOrderBornology_iff_eq_orderBornology
 
 中文:
 引理 isOrderBornology_iff_eq_orderBornology
-  条件: [Lattice α] [Nonempty α]
+  条件: [格 α] [非空 α]
   证明: by
   refine ⟨fun h => ?_, fun h => ⟨fun s => by rw [h, orderBornology_isBounded]⟩⟩
   ext s
@@ -163,7 +163,7 @@ lemma Bornology.IsBounded.bddBelow
   proof: (isBounded_iff_bddBelow_bddAbove.1 hs).1
 
 中文:
-引理 Bornology.IsBounded.bddBelow
+引理 有界结构.IsBounded.bddBelow
   条件: (hs : IsBounded s)
   结论: BddBelow s
   证明: (isBounded_iff_bddBelow_bddAbove.1 hs).1
@@ -181,7 +181,7 @@ lemma Bornology.IsBounded.bddAbove
   proof: (isBounded_iff_bddBelow_bddAbove.1 hs).2
 
 中文:
-引理 Bornology.IsBounded.bddAbove
+引理 有界结构.IsBounded.bddAbove
   条件: (hs : IsBounded s)
   结论: BddAbove s
   证明: (isBounded_iff_bddBelow_bddAbove.1 hs).2
@@ -276,7 +276,7 @@ instance OrderDual.instIsOrderBornology
 
 中文:
 实例 OrderDual.instIsOrderBornology
-  签名: : IsOrderBornology αᵒᵈ where
+  签名: : 是OrderBornology αᵒᵈ where
   定义体: by
     rw [← isBounded_preimage_toDual]; rw [← bddBelow_preimage_toDual]; rw [← bddAbove_preimage_toDual]; rw [isBounded_iff_bddBelow_bddAbove]; rw [and_comm]
 
@@ -296,8 +296,8 @@ instance Prod.instIsOrderBornology
     rw [← isBounded_image_fst_and_snd]; rw [bddBelow_prod]; rw [bddAbove_prod]; rw [and_and_and_comm]; rw [isBounded_iff_bddBelow_bddAbove]; rw [isBounded_iff_bddBelow_bddAbove]
 
 中文:
-实例 Prod.instIsOrderBornology
-  签名: {β : 类型} [Preorder β] [Bornology β] [IsOrderBornology β]
+实例 积类型.instIsOrderBornology
+  签名: {β : 类型} [预序 β] [有界结构 β] [是OrderBornology β]
   定义体: by
     rw [← isBounded_image_fst_and_snd]; rw [bddBelow_prod]; rw [bddAbove_prod]; rw [and_and_and_comm]; rw [isBounded_iff_bddBelow_bddAbove]; rw [isBounded_iff_bddBelow_bddAbove]
 
@@ -319,8 +319,8 @@ instance Pi.instIsOrderBornology
       isBounded_iff_bddBelow_bddAbove]
 
 中文:
-实例 Pi.instIsOrderBornology
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Preorder (α i)]
+实例 依赖函数类型.instIsOrderBornology
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 预序 (α i)]
   定义体: by
     simp_rw [← forall_isBounded_image_eval_iff, bddBelow_pi, bddAbove_pi, ← forall_and,
       isBounded_iff_bddBelow_bddAbove]
@@ -343,8 +343,8 @@ lemma Nonempty.of_isOrderBornology
   proof: Bornology.isBounded_empty.bddBelow.nonempty
 
 中文:
-引理 Nonempty.of_isOrderBornology
-  结论: Nonempty α
+引理 非空.of_isOrderBornology
+  结论: 非空 α
   证明: Bornology.isBounded_empty.bddBelow.nonempty
 
 Depends on / 依赖: Bornology, Bornology.isBounded_empty.bddBelow.nonempty, bddBelow, isBounded_empty, nonempty
@@ -361,8 +361,8 @@ instance IsOrderBornology.neBot_cobounded_of_noBotOrder
   simp [Filter.neBot_iff, cobounded_eq_bot_iff, ← isBounded_univ, isBounded_iff_bddBelow_bddAbove]
 
 中文:
-实例 IsOrderBornology.neBot_cobounded_of_noBotOrder
-  签名: [NoBotOrder α]
+实例 是OrderBornology.neBot_cobounded_of_noBotOrder
+  签名: [无底序 α]
   定义体: by
   simp [Filter.neBot_iff, cobounded_eq_bot_iff, ← isBounded_univ, isBounded_iff_bddBelow_bddAbove]
 
@@ -380,8 +380,8 @@ instance IsOrderBornology.neBot_cobounded_of_noTopOrder
   body: neBot_cobounded_of_noBotOrder (α := αᵒᵈ)
 
 中文:
-实例 IsOrderBornology.neBot_cobounded_of_noTopOrder
-  签名: [NoTopOrder α]
+实例 是OrderBornology.neBot_cobounded_of_noTopOrder
+  签名: [无顶序 α]
   定义体: neBot_cobounded_of_noBotOrder (α := αᵒᵈ)
 
 Depends on / 依赖: neBot_cobounded_of_noBotOrder
@@ -406,9 +406,9 @@ lemma IsOrderBornology.atTop_le_cobounded
 exact hbc.not_ge hx.trans hb mem_compl hx'
 
 中文:
-引理 IsOrderBornology.atTop_le_cobounded
-  条件: [NoMaxOrder α]
-  结论: .atTop <= Bornology.cobounded α
+引理 是OrderBornology.atTop_le_cobounded
+  条件: [NoMax序 α]
+  结论: .atTop <= 有界结构.cobounded α
   证明: by
   intro s hs
   rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove] at hs
@@ -441,9 +441,9 @@ lemma IsOrderBornology.atBot_le_cobounded
   proof: atTop_le_cobounded (α := αᵒᵈ)
 
 中文:
-引理 IsOrderBornology.atBot_le_cobounded
-  条件: [NoMinOrder α]
-  结论: .atBot <= Bornology.cobounded α
+引理 是OrderBornology.atBot_le_cobounded
+  条件: [NoMin序 α]
+  结论: .atBot <= 有界结构.cobounded α
   证明: atTop_le_cobounded (α := αᵒᵈ)
 
 Depends on / 依赖: atTop_le_cobounded
@@ -471,7 +471,7 @@ lemma IsOrderBornology.cobounded_le_atBot_sup_atTop
   refine ⟨⟨b, fun x hx 
 
 中文:
-引理 IsOrderBornology.cobounded_le_atBot_sup_atTop
+引理 是OrderBornology.cobounded_le_atBot_sup_atTop
   结论: cobounded α <= .atBot ⊔ .atTop
   证明: by
   have := Nonempty.of_isOrderBornology α
@@ -502,8 +502,8 @@ lemma IsOrderBornology.cobounded_eq
     sup_le IsOrderBornology.atBot_le_cobounded IsOrderBornology.atTop_le_cobounded
 
 中文:
-引理 IsOrderBornology.cobounded_eq
-  条件: [NoMaxOrder α] [NoMinOrder α]
+引理 是OrderBornology.cobounded_eq
+  条件: [NoMax序 α] [NoMin序 α]
   证明: cobounded_le_atBot_sup_atTop.antisymm
     sup_le IsOrderBornology.atBot_le_cobounded IsOrderBornology.atTop_le_cobounded
 
@@ -528,8 +528,8 @@ lemma IsOrderBornology.cobounded_eq_atTop
   exact hx (hb hx'.
 
 中文:
-引理 IsOrderBornology.cobounded_eq_atTop
-  条件: [NoMaxOrder α] [OrderBot α]
+引理 是OrderBornology.cobounded_eq_atTop
+  条件: [NoMax序 α] [有底序 α]
   证明: by
   refine atTop_le_cobounded.antisymm' fun s => ?_
   rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
@@ -559,8 +559,8 @@ lemma IsOrderBornology.cobounded_eq_atBot
   proof: cobounded_eq_atTop (α := αᵒᵈ)
 
 中文:
-引理 IsOrderBornology.cobounded_eq_atBot
-  条件: [NoMinOrder α] [OrderTop α]
+引理 是OrderBornology.cobounded_eq_atBot
+  条件: [NoMin序 α] [有顶序 α]
   证明: cobounded_eq_atTop (α := αᵒᵈ)
 
 Depends on / 依赖: cobounded_eq_atTop
@@ -582,7 +582,7 @@ lemma Bornology.IsBounded.subset_Icc_sInf_sSup
   proof: subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
 
 中文:
-引理 Bornology.IsBounded.subset_Icc_sInf_sSup
+引理 有界结构.IsBounded.subset_Icc_sInf_sSup
   条件: (hs : IsBounded s)
   证明: subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
 -/

@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Full
+  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).满
   定义体: fullyFaithfulUncurry₃.full
 -/
 instance : (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Full :=
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Faithful
+  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).忠实
   定义体: fullyFaithfulUncurry₃.faithful
 
 Depends on / 依赖: faithful
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Full
+  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).满
   定义体: fullyFaithfulCurry₃.full
 -/
 instance : (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Full :=
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Faithful
+  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).忠实
   定义体: fullyFaithfulCurry₃.faithful
 
 @[simp]

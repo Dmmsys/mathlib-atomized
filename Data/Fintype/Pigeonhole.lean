@@ -50,8 +50,8 @@ theorem exists_ne_map_eq_of_card_lt
   ⟨x, y, h⟩
 
 中文:
-定理 exists_ne_map_eq_of_card_lt
-  条件: (f : α -> β) (h : Fintype.card β < Fintype.card α)
+定理 存在_ne_map_eq_of_card_lt
+  条件: (f : α -> β) (h : 有限类型.card β < 有限类型.card α)
   证明: let ⟨x, _, y, _, h⟩ := Finset.exists_ne_map_eq_of_card_lt_of_maps_to h fun x _ => mem_univ (f x)
   ⟨x, y, h⟩
 
@@ -83,7 +83,7 @@ ne f.injective feq⟩
 
 中文:
 定理 isEmpty_of_card_lt
-  条件: [Fintype α] [Fintype β] (h : Fintype.card β < Fintype.card α)
+  条件: [有限类型 α] [有限类型 β] (h : 有限类型.card β < 有限类型.card α)
   证明: ⟨fun f =>
     let ⟨_x, _y, ne, feq⟩ := Fintype.exists_ne_map_eq_of_card_lt f h
 ne f.injective feq⟩
@@ -108,8 +108,8 @@ theorem Finite.exists_ne_map_eq_of_infinite
   simpa [Injective, and_comm] using not_injective_infinite_finite f
 
 中文:
-定理 Finite.exists_ne_map_eq_of_infinite
-  条件: {α β} [Infinite α] [Finite β] (f : α -> β)
+定理 有限.存在_ne_map_eq_of_infinite
+  条件: {α β} [无限 α] [有限 β] (f : α -> β)
   证明: by
   simpa [Injective, and_comm] using not_injective_infinite_finite f
 
@@ -136,8 +136,8 @@ theorem Finite.exists_infinite_fiber
     exact key.false
 
 中文:
-定理 Finite.exists_infinite_fiber
-  条件: [Infinite α] [Finite β] (f : α -> β)
+定理 有限.存在_infinite_fiber
+  条件: [无限 α] [有限 β] (f : α -> β)
   证明: by
   classical
     by_contra! hf

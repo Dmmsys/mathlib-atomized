@@ -71,11 +71,11 @@ structure Ideal
     - directed' : DirectedOn (· <= ·) carrier
 
 中文:
-结构 Ideal
+结构 理想
   参数: (P) [LE P]
-  继承: LowerSet P
+  继承: 下集 P
   公理与运算 (2 个):
-    - nonempty' : carrier.Nonempty
+    - nonempty' : carrier.非空
     - directed' : DirectedOn (· <= ·) carrier
 -/
 structure Ideal (P) [LE P] extends LowerSet P where
@@ -105,11 +105,11 @@ structure IsIdeal
     - Directed : DirectedOn (· <= ·) I
 
 中文:
-结构 IsIdeal
-  参数: {P} [LE P] (I : Set P)
+结构 Is理想
+  参数: {P} [LE P] (I : 集合 P)
   公理与运算 (3 个):
-    - IsLowerSet : IsLowerSet I
-    - Nonempty : I.Nonempty
+    - IsLowerSet : 是下集 I
+    - Nonempty : I.非空
     - Directed : DirectedOn (· <= ·) I
 -/
 structure IsIdeal {P} [LE P] (I : Set P) : Prop where
@@ -129,8 +129,8 @@ definition IsIdeal.toIdeal
   body: ⟨⟨I, h.IsLowerSet⟩, h.Nonempty, h.Directed⟩
 
 中文:
-定义 IsIdeal.toIdeal
-  签名: [LE P] {I : Set P} (h : IsIdeal I)
+定义 Is理想.toIdeal
+  签名: [LE P] {I : 集合 P} (h : Is理想 I)
   定义体: ⟨⟨I, h.IsLowerSet⟩, h.Nonempty, h.Directed⟩
 
 Depends on / 依赖: Directed, IsLowerSet, Nonempty, h.Directed, h.IsLowerSet, h.Nonempty
@@ -161,7 +161,7 @@ theorem toLowerSet_injective
 
 中文:
 定理 toLowerSet_injective
-  结论: Injective (toLowerSet : Ideal P -> LowerSet P)
+  结论: 单射 (toLowerSet : 理想 P -> 下集 P)
   证明: fun s t _ => by
   cases s
   cases t
@@ -183,7 +183,7 @@ coe_injective _ _ h := toLowerSet_injective SetLike.coe_injective h
 
 中文:
 实例 :
-  签名: SetLike (Ideal P) P
+  签名: 集合状 (理想 P) P
   定义体: s.carrier
 coe_injective _ _ h := toLowerSet_injective SetLike.coe_injective h
 
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Ideal P)
+  签名: 偏序 (理想 P)
   定义体: .ofSetLike (Ideal P) P
 
 @[deprecated (since := "2026-04-01")] alias instPartialOrderIdeal := Order.Ideal.instPartialOrder
@@ -234,8 +234,8 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : Ideal P}
-  结论: (s : Set P) = t -> s = t
+  条件: {s t : 理想 P}
+  结论: (s : 集合 P) = t -> s = t
   证明: SetLike.ext'
 
 @[simp]
@@ -259,7 +259,7 @@ theorem carrier_eq_coe
 
 中文:
 定理 carrier_eq_coe
-  条件: (s : Ideal P)
+  条件: (s : 理想 P)
   结论: s.carrier = s
   证明: rfl
 
@@ -280,8 +280,8 @@ theorem coe_toLowerSet
 
 中文:
 定理 coe_toLowerSet
-  条件: (s : Ideal P)
-  结论: (s.toLowerSet : Set P) = s
+  条件: (s : 理想 P)
+  结论: (s.toLowerSet : 集合 P) = s
   证明: rfl
 -/
 theorem coe_toLowerSet (s : Ideal P) : (s.toLowerSet : Set P) = s :=
@@ -298,8 +298,8 @@ theorem lower
 
 中文:
 定理 lower
-  条件: (s : Ideal P)
-  结论: IsLowerSet (s : Set P)
+  条件: (s : 理想 P)
+  结论: 是下集 (s : 集合 P)
   证明: s.lower'
 -/
 protected theorem lower (s : Ideal P) : IsLowerSet (s : Set P) :=
@@ -316,8 +316,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (s : Ideal P)
-  结论: (s : Set P).Nonempty
+  条件: (s : 理想 P)
+  结论: (s : 集合 P).非空
   证明: s.nonempty'
 -/
 protected theorem nonempty (s : Ideal P) : (s : Set P).Nonempty :=
@@ -334,8 +334,8 @@ theorem directed
 
 中文:
 定理 directed
-  条件: (s : Ideal P)
-  结论: DirectedOn (· <= ·) (s : Set P)
+  条件: (s : 理想 P)
+  结论: DirectedOn (· <= ·) (s : 集合 P)
   证明: s.directed'
 -/
 protected theorem directed (s : Ideal P) : DirectedOn (· <= ·) (s : Set P) :=
@@ -352,8 +352,8 @@ theorem isIdeal
 
 中文:
 定理 isIdeal
-  条件: (s : Ideal P)
-  结论: IsIdeal (s : Set P)
+  条件: (s : 理想 P)
+  结论: Is理想 (s : 集合 P)
   证明: ⟨s.lower, s.nonempty, s.directed⟩
 -/
 protected theorem isIdeal (s : Ideal P) : IsIdeal (s : Set P) :=
@@ -372,7 +372,7 @@ mt I.lower h
 中文:
 定理 mem_compl_of_ge
   条件: {x y : P}
-  结论: x <= y -> x in (I : Set P)ᶜ -> y in (I : Set P)ᶜ
+  结论: x <= y -> x in (I : 集合 P)ᶜ -> y in (I : 集合 P)ᶜ
   证明: fun h =>
 mt I.lower h
 -/
@@ -389,7 +389,7 @@ theorem coe_subset_coe
 
 中文:
 定理 coe_subset_coe
-  结论: (s : Set P) subseteq t ↔ s <= t
+  结论: (s : 集合 P) subseteq t ↔ s <= t
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -409,7 +409,7 @@ theorem coe_ssubset_coe
 
 中文:
 定理 coe_ssubset_coe
-  结论: (s : Set P) ⊂ t ↔ s < t
+  结论: (s : 集合 P) ⊂ t ↔ s < t
   证明: Iff.rfl
 
 @[trans]
@@ -433,7 +433,7 @@ theorem mem_of_mem_of_le
 
 中文:
 定理 mem_of_mem_of_le
-  条件: {x : P} {I J : Ideal P}
+  条件: {x : P} {I J : 理想 P}
   结论: x in I -> I <= J -> x in J
   证明: @Set.mem_of_mem_of_subset P x I J
 
@@ -458,7 +458,7 @@ theorem mem_toIdeal
 
 中文:
 定理 mem_toIdeal
-  条件: {I : Set P} (h : IsIdeal I) {a : P}
+  条件: {I : 集合 P} (h : Is理想 I) {a : P}
   结论: a in h.toIdeal ↔ a in I
   证明: Iff.rfl
 
@@ -483,8 +483,8 @@ theorem coe_toIdeal
 
 中文:
 定理 coe_toIdeal
-  条件: {I : Set P} (h : IsIdeal I)
-  结论: (h.toIdeal : Set P) = I
+  条件: {I : 集合 P} (h : Is理想 I)
+  结论: (h.toIdeal : 集合 P) = I
   证明: rfl
 
 @[simp]
@@ -506,7 +506,7 @@ theorem toIdeal_le
 
 中文:
 定理 toIdeal_le
-  条件: {I : Set P} (h : IsIdeal I) {J : Ideal P}
+  条件: {I : 集合 P} (h : Is理想 I) {J : 理想 P}
   结论: h.toIdeal <= J ↔ I subseteq J
   证明: Iff.rfl
 
@@ -529,8 +529,8 @@ theorem le_toIdeal
 
 中文:
 定理 le_toIdeal
-  条件: {I : Set P} (h : IsIdeal I) {J : Ideal P}
-  结论: J <= h.toIdeal ↔ (J : Set P) subseteq I
+  条件: {I : 集合 P} (h : Is理想 I) {J : 理想 P}
+  结论: J <= h.toIdeal ↔ (J : 集合 P) subseteq I
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -551,10 +551,10 @@ class IsProper
     - ne_univ : (I : Set P) != univ
 
 中文:
-类 IsProper
-  参数: (I : Ideal P)
+类 是真
+  参数: (I : 理想 P)
   公理与运算 (1 个):
-    - ne_univ : (I : Set P) != univ
+    - ne_univ : (I : 集合 P) != univ
 -/
 class IsProper (I : Ideal P) : Prop where
   /-- This ideal is not the whole set. -/
@@ -574,8 +574,8 @@ theorem isProper_of_notMem
 
 中文:
 定理 isProper_of_notMem
-  条件: {I : Ideal P} {p : P} (notMem : p ∉ I)
-  结论: Is命题er I
+  条件: {I : 理想 P} {p : P} (notMem : p ∉ I)
+  结论: 是真 I
   证明: ⟨fun hp => by
     have := mem_univ p
     rw [← hp] at this
@@ -605,11 +605,11 @@ class IsMaximal
     - maximal_proper : forall ⦃J : Ideal P⦄, I < J -> (J : Set P) = univ
 
 中文:
-类 IsMaximal
-  参数: (I : Ideal P)
-  继承: IsProper I
+类 是极大
+  参数: (I : 理想 P)
+  继承: 是真 I
   公理与运算 (1 个):
-    - maximal_proper : 对任意 ⦃J : Ideal P⦄, I < J -> (J : Set P) = univ
+    - maximal_proper : 对任意 ⦃J : 理想 P⦄, I < J -> (J : 集合 P) = univ
 -/
 class IsMaximal (I : Ideal P) : Prop extends IsProper I where
   /-- This ideal is maximal in the collection of proper ideals. -/
@@ -630,8 +630,8 @@ theorem inter_nonempty
 
 中文:
 定理 inter_nonempty
-  条件: [IsCodirectedOrder P] (I J : Ideal P)
-  结论: (I inter J : Set P).Nonempty
+  条件: [IsCodirectedOrder P] (I J : 理想 P)
+  结论: (I inter J : 集合 P).非空
   证明: by
   obtain ⟨a, ha⟩ := I.nonempty
   obtain ⟨b, hb⟩ := J.nonempty
@@ -665,7 +665,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (Ideal P)
+  签名: 有顶序 (理想 P)
   定义体: ⟨⊤, univ_nonempty, directedOn_univ⟩
   le_top _ _ _ := LowerSet.mem_top
 
@@ -690,7 +690,7 @@ theorem top_toLowerSet
 
 中文:
 定理 top_toLowerSet
-  结论: (⊤ : Ideal P).toLowerSet = ⊤
+  结论: (⊤ : 理想 P).toLowerSet = ⊤
   证明: rfl
 
 @[simp]
@@ -709,7 +709,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Ideal P) : Set P) = univ
+  结论: ((⊤ : 理想 P) : 集合 P) = univ
   证明: rfl
 -/
 theorem coe_top : ((⊤ : Ideal P) : Set P) = univ :=
@@ -727,7 +727,7 @@ theorem isProper_of_ne_top
 中文:
 定理 isProper_of_ne_top
   条件: (ne_top : I != ⊤)
-  结论: Is命题er I
+  结论: 是真 I
   证明: ⟨fun h => ne_top ext h⟩
 
 Depends on / 依赖: ne_top
@@ -745,8 +745,8 @@ theorem IsProper.ne_top
   proof: fun h => IsProper.ne_univ congr_arg SetLike.coe h
 
 中文:
-定理 IsProper.ne_top
-  条件: (_ : Is命题er I)
+定理 是真.ne_top
+  条件: (_ : 是真 I)
   结论: I != ⊤
   证明: fun h => IsProper.ne_univ congr_arg SetLike.coe h
 
@@ -767,7 +767,7 @@ theorem _root_.IsCoatom.isProper
 中文:
 定理 _root_.IsCoatom.isProper
   条件: (hI : IsCoatom I)
-  结论: Is命题er I
+  结论: 是真 I
   证明: isProper_of_ne_top hI.1
 
 Depends on / 依赖: isProper_of_ne_top
@@ -785,7 +785,7 @@ theorem isProper_iff_ne_top
 
 中文:
 定理 isProper_iff_ne_top
-  结论: Is命题er I ↔ I != ⊤
+  结论: 是真 I ↔ I != ⊤
   证明: ⟨fun h => h.ne_top, fun h => isProper_of_ne_top h⟩
 
 Depends on / 依赖: h.ne_top, isProper_of_ne_top, ne_top
@@ -803,8 +803,8 @@ theorem IsMaximal.isCoatom
   proof: ⟨IsMaximal.toIsProper.ne_top, fun _ h => ext IsMaximal.maximal_proper h⟩
 
 中文:
-定理 IsMaximal.isCoatom
-  条件: (_ : IsMaximal I)
+定理 是极大.isCoatom
+  条件: (_ : 是极大 I)
   结论: IsCoatom I
   证明: ⟨IsMaximal.toIsProper.ne_top, fun _ h => ext IsMaximal.maximal_proper h⟩
 
@@ -823,8 +823,8 @@ theorem IsMaximal.isCoatom'
   proof: IsMaximal.isCoatom ‹_›
 
 中文:
-定理 IsMaximal.isCoatom'
-  条件: [IsMaximal I]
+定理 是极大.isCoatom'
+  条件: [是极大 I]
   结论: IsCoatom I
   证明: IsMaximal.isCoatom ‹_›
 
@@ -845,7 +845,7 @@ theorem _root_.IsCoatom.isMaximal
 中文:
 定理 _root_.IsCoatom.isMaximal
   条件: (hI : IsCoatom I)
-  结论: IsMaximal I
+  结论: 是极大 I
   证明: { IsCoatom.isProper hI with maximal_proper := fun _ hJ => by simp [hI.2 _ hJ] }
 
 Depends on / 依赖: IsCoatom, IsCoatom.isProper, isProper, maximal_proper
@@ -863,7 +863,7 @@ theorem isMaximal_iff_isCoatom
 
 中文:
 定理 isMaximal_iff_isCoatom
-  结论: IsMaximal I ↔ IsCoatom I
+  结论: 是极大 I ↔ IsCoatom I
   证明: ⟨fun h => h.isCoatom, fun h => IsCoatom.isMaximal h⟩
 
 Depends on / 依赖: IsCoatom, IsCoatom.isMaximal, h.isCoatom, isCoatom, isMaximal
@@ -889,7 +889,7 @@ theorem bot_mem
 
 中文:
 定理 bot_mem
-  条件: (s : Ideal P)
+  条件: (s : 理想 P)
   结论: ⊥ in s
   证明: s.lower bot_le s.nonempty'.some_mem
 
@@ -954,7 +954,7 @@ alias ⟨IsProper.top_notMem, _⟩ := isProper_iff_top_notMem
 
 中文:
 定理 isProper_iff_top_notMem
-  结论: I.Is命题er ↔ ⊤ ∉ I
+  结论: I.是真 ↔ ⊤ ∉ I
   证明: by
   rw [isProper_iff_ne_top]; rw [ne_eq]; rw [top_mem_iff_eq_top]
 
@@ -1018,8 +1018,8 @@ instance [Inhabited
 @[simp]
 
 中文:
-实例 [Inhabited
-  签名: P] : Inhabited (Ideal P)
+实例 [可居
+  签名: P] : 可居 (理想 P)
   定义体: ⟨Ideal.principal default⟩
 
 @[simp]
@@ -1108,7 +1108,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Ideal P)
+  签名: 有底序 (理想 P)
   定义体: principal ⊥
   bot_le := by simp
 
@@ -1178,7 +1178,7 @@ theorem isProper_principal_iff
 
 中文:
 定理 isProper_principal_iff
-  条件: [PartialOrder P] [OrderTop P] {a : P}
+  条件: [偏序 P] [有顶序 P] {a : P}
   证明: by
   rw [isProper_iff_top_notMem]; rw [mem_principal]; rw [top_le_iff]
 
@@ -1255,7 +1255,7 @@ lemma finsetSup_mem_iff
 
 中文:
 引理 finsetSup_mem_iff
-  结论: {P : 类型} [SemilatticeSup P] [OrderBot P]
+  结论: {P : 类型} [SemilatticeSup P] [有底序 P]
   证明: by
   classical
   induction s using Finset.induction_on <;> simp [*]
@@ -1287,7 +1287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Ideal P)
+  签名: 最小值 (理想 P)
   定义体: ⟨fun I J =>
     { toLowerSet := I.toLowerSet ⊓ J.toLowerSet
       nonempty' := inter_nonempty I J
@@ -1317,7 +1317,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Ideal P)
+  签名: 最大值 (理想 P)
   定义体: ⟨fun I J =>
     { carrier := { x | exists i in I, exists j in J, x <= i ⊔ j }
       nonempty' := by
@@ -1364,7 +1364,7 @@ K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (
 
 中文:
 实例 :
-  签名: Lattice (Ideal P)
+  签名: 格 (理想 P)
   定义体: (· ⊔ ·)
   le_sup_left := fun _ J i hi =>
     let ⟨w, hw⟩ := J.nonempty
@@ -1426,7 +1426,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  结论: (↑(s ⊓ t) : Set P) = ↑s inter ↑t
+  结论: (↑(s ⊓ t) : 集合 P) = ↑s inter ↑t
   证明: rfl
 
 @[simp]
@@ -1521,7 +1521,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Ideal P)
+  签名: 下确界集 (理想 P)
   定义体: ⟨fun S =>
     { toLowerSet := ⨅ s in S, toLowerSet s
       nonempty' :=
@@ -1563,7 +1563,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  结论: (↑(sInf S) : Set P) = ⋂ s in S, ↑s
+  结论: (↑(sInf S) : 集合 P) = ⋂ s in S, ↑s
   证明: LowerSet.coe_iInf₂ _
 
 @[simp]
@@ -1609,7 +1609,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Ideal P)
+  签名: 完备格 (理想 P)
   定义体: (inferInstance : Lattice (Ideal P))
   __ := (inferInstance : OrderTop (Ideal P))
   __ := (inferInstance : OrderBot (Ideal P))
@@ -1709,8 +1709,8 @@ theorem IsProper.notMem_of_compl_mem
   rwa [sup_compl_eq_top] at ht
 
 中文:
-定理 IsProper.notMem_of_compl_mem
-  条件: (hI : Is命题er I) (hxc : xᶜ in I)
+定理 是真.notMem_of_compl_mem
+  条件: (hI : 是真 I) (hxc : xᶜ in I)
   结论: x ∉ I
   证明: by
   intro hx
@@ -1738,8 +1738,8 @@ theorem IsProper.notMem_or_compl_notMem
   tauto
 
 中文:
-定理 IsProper.notMem_or_compl_notMem
-  条件: (hI : Is命题er I)
+定理 是真.notMem_or_compl_notMem
+  条件: (hI : 是真 I)
   结论: x ∉ I ∨ xᶜ ∉ I
   证明: by
   have h : xᶜ in I -> x ∉ I := hI.notMem_of_compl_mem
@@ -1771,7 +1771,7 @@ theorem biSup_mem_iff
 
 中文:
 定理 biSup_mem_iff
-  条件: {α : 类型} {f : α -> P} {s : Set α} (hs : s.Finite)
+  条件: {α : 类型} {f : α -> P} {s : 集合 α} (hs : s.有限)
   证明: by
   induction s, hs using Finite.induction_on with simp [↓iSup_insert, sup_mem_iff, *]
 
@@ -1796,7 +1796,7 @@ theorem biSup_finset_mem_iff
 
 中文:
 定理 biSup_finset_mem_iff
-  条件: {α : 类型} {f : α -> P} {s : Finset α}
+  条件: {α : 类型} {f : α -> P} {s : 有限集 α}
   证明: biSup_mem_iff s.finite_toSet
 
 @[simp]
@@ -1825,7 +1825,7 @@ alias ⟨_, iSup_mem⟩ := iSup_mem_iff
 
 中文:
 定理 iSup_mem_iff
-  条件: {α : Sort*} [Finite α] {f : α -> P}
+  条件: {α : 类型层*} [有限 α] {f : α -> P}
   结论: ⨆ i, f i in I ↔ 对任意 i, f i in I
   证明: by
   simpa [← Equiv.plift.symm.iSup_comp, Equiv.plift.forall_congr_left]
@@ -1860,10 +1860,10 @@ structure Cofinal
     - isCofinal : IsCofinal carrier
 
 中文:
-结构 Cofinal
-  参数: (P) [Preorder P]
+结构 余终
+  参数: (P) [预序 P]
   公理与运算 (2 个):
-    - carrier : Set P
+    - carrier : 集合 P
     - isCofinal : IsCofinal carrier
 -/
 structure Cofinal (P) [Preorder P] where
@@ -1886,7 +1886,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Cofinal P)
+  签名: 可居 (余终 P)
   定义体: ⟨_, .univ⟩
 -/
 instance : Inhabited (Cofinal P) :=
@@ -1902,7 +1902,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership P (Cofinal P)
+  签名: Membership P (余终 P)
   定义体: ⟨fun D x => x in D.carrier⟩
 
 Depends on / 依赖: D.carrier, carrier
@@ -2006,7 +2006,7 @@ theorem sequenceOfCofinals.monotone
 
 中文:
 定理 sequenceOfCofinals.monotone
-  结论: Monotone (sequenceOfCofinals p 𝒟)
+  结论: 递增 (sequenceOfCofinals p 𝒟)
   证明: by
   apply monotone_nat_of_le_succ
   intro n
@@ -2067,7 +2067,7 @@ le_trans hm sequenceOfCofinals.mon
 
 中文:
 定义 idealOfCofinals
-  签名: : Ideal P where
+  签名: : 理想 P where
   定义体: { x : P | exists n, x <= sequenceOfCofinals p 𝒟 n }
   lower' := fun _ _ hxy ⟨n, hn⟩ => ⟨n, le_trans hxy hn⟩
   nonempty' := ⟨p, 0, le_rfl⟩
@@ -2143,7 +2143,7 @@ lemma isIdeal_sUnion_of_directedOn
 
 中文:
 引理 isIdeal_sUnion_of_directedOn
-  结论: {C : Set (Set P)} (hidl : 对任意 I in C, IsIdeal I)
+  结论: {C : 集合 (集合 P)} (hidl : 对任意 I in C, Is理想 I)
   证明: by
   refine ⟨isLowerSet_sUnion (fun I hI => (hidl I hI).1), Set.nonempty_sUnion.2 ?_,
     directedOn_sUnion hD (fun J hJ => (hidl J hJ).3)⟩
@@ -2169,7 +2169,7 @@ lemma isIdeal_sUnion_of_isChain
 
 中文:
 引理 isIdeal_sUnion_of_isChain
-  结论: {C : Set (Set P)} (hidl : 对任意 I in C, IsIdeal I)
+  结论: {C : 集合 (集合 P)} (hidl : 对任意 I in C, Is理想 I)
   证明: isIdeal_sUnion_of_directedOn hidl hC.directedOn hNe
 
 Depends on / 依赖: directedOn, hC.directedOn, isIdeal_sUnion_of_directedOn
@@ -2199,7 +2199,7 @@ refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
 
 中文:
 实例 [LE
-  签名: P] [OrderTop P] : IsCoatomic (Ideal P)
+  签名: P] [有顶序 P] : 是余原子的 (理想 P)
   定义体: by
   apply IsCoatomic.of_isChain_bounded
   intro S hS₁ hS₂ hS₃
@@ -2234,8 +2234,8 @@ theorem IsProper.exists_le_maximal
   · exact ⟨J, hJ', isMaximal_iff_isCoatom.2 hJ⟩
 
 中文:
-定理 IsProper.exists_le_maximal
-  条件: [LE P] [OrderTop P] {I : Ideal P} (hI : I.Is命题er)
+定理 是真.存在_le_maximal
+  条件: [LE P] [有顶序 P] {I : 理想 P} (hI : I.是真)
   证明: by
   rcases IsCoatomic.eq_top_or_exists_le_coatom I with rfl | ⟨J, hJ, hJ'⟩
   · simp [isProper_iff_ne_top] at hI
@@ -2262,8 +2262,8 @@ theorem exists_maximal
   exact ⟨I, hI⟩
 
 中文:
-定理 exists_maximal
-  条件: [PartialOrder P] [OrderTop P] [Nontrivial P]
+定理 存在_maximal
+  条件: [偏序 P] [有顶序 P] [非平凡 P]
   证明: by
   rcases exists_ne (⊤ : P) with ⟨a, ha⟩
   rw [← isProper_principal_iff] at ha

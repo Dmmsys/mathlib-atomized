@@ -51,8 +51,8 @@ theorem pairwise_iff_forall_infix
   · grind [h _ _ <| List.drop_suffix i _ |>.isInfix.trans <| l.take_prefix (j + 1) |>.isInfix]
 
 中文:
-定理 pairwise_iff_forall_infix
-  条件: {α : 类型} {l : List α} {R : α -> α -> 命题}
+定理 pairwise_iff_对任意_infix
+  条件: {α : 类型} {l : 列表 α} {R : α -> α -> 命题}
   证明: by
   refine l.pairwise_iff_getElem.trans ⟨fun h l' hne ⟨l₁, l₂, hl⟩ => ?_, fun h i j hi hj hij => ?_⟩
   · grind [getElem_append_left', getElem_append_right']
@@ -76,8 +76,8 @@ theorem Pairwise.forall_of_forall
   proof: H₂.forall_of_forall_of_flip H₁ by rwa [Std.Symm.flip_eq]
 
 中文:
-定理 Pairwise.forall_of_forall
-  条件: [Std.Symm R] (H₁ : 对任意 x in l, R x x) (H₂ : l.Pairwise R)
+定理 两两.对任意_of_对任意
+  条件: [Std.Symm R] (H₁ : 对任意 x in l, R x x) (H₂ : l.两两 R)
   证明: H₂.forall_of_forall_of_flip H₁ by rwa [Std.Symm.flip_eq]
 
 Depends on / 依赖: Std.Symm.flip_eq, flip_eq, forall_of_forall_of_flip
@@ -99,8 +99,8 @@ theorem Pairwise.forall
   · exact hl.imp @fun a b h _ => by exact h
 
 中文:
-定理 Pairwise.forall
-  条件: [Std.Symm R] (hl : l.Pairwise R)
+定理 两两.对任意
+  条件: [Std.Symm R] (hl : l.两两 R)
   证明: by
   have : Std.Symm fun x y => x != y -> R x y := { symm a b h hne := symm <| h hne.symm }
   apply Pairwise.forall_of_forall
@@ -126,9 +126,9 @@ theorem Pairwise.set_pairwise
   proof: hl.forall
 
 中文:
-定理 Pairwise.set_pairwise
-  条件: (hl : Pairwise R l) [Std.Symm R]
-  结论: { x | x in l }.Pairwise R
+定理 两两.set_pairwise
+  条件: (hl : 两两 R l) [Std.Symm R]
+  结论: { x | x in l }.两两 R
   证明: hl.forall
 
 Depends on / 依赖: hl.forall
@@ -152,7 +152,7 @@ theorem pairwise_of_reflexive_of_forall_ne
     exact heq
 
 中文:
-定理 pairwise_of_reflexive_of_forall_ne
+定理 pairwise_of_reflexive_of_对任意_ne
   条件: [Std.Refl R] (h : 对任意 a in l, 对任意 b in l, a != b -> R a b)
   证明: by
   rw [pairwise_iff_forall_sublist]
@@ -185,8 +185,8 @@ theorem Pairwise.rel_head_tail
   grind +splitIndPred
 
 中文:
-定理 Pairwise.rel_head_tail
-  条件: (h₁ : l.Pairwise R) (ha : a in l.tail)
+定理 两两.rel_head_tail
+  条件: (h₁ : l.两两 R) (ha : a in l.tail)
   证明: by
   grind +splitIndPred
 
@@ -206,8 +206,8 @@ theorem Pairwise.rel_head_of_rel_head_head
   grind +splitIndPred
 
 中文:
-定理 Pairwise.rel_head_of_rel_head_head
-  结论: (h₁ : l.Pairwise R) (ha : a in l)
+定理 两两.rel_head_of_rel_head_head
+  结论: (h₁ : l.两两 R) (ha : a in l)
   证明: by
   grind +splitIndPred
 
@@ -227,8 +227,8 @@ theorem Pairwise.rel_head
   proof: h₁.rel_head_of_rel_head_head ha (refl_of ..)
 
 中文:
-定理 Pairwise.rel_head
-  条件: [Std.Refl R] (h₁ : l.Pairwise R) (ha : a in l)
+定理 两两.rel_head
+  条件: [Std.Refl R] (h₁ : l.两两 R) (ha : a in l)
   证明: h₁.rel_head_of_rel_head_head ha (refl_of ..)
 
 Depends on / 依赖: refl_of, rel_head_of_rel_head_head
@@ -249,8 +249,8 @@ theorem Pairwise.rel_dropLast_getLast
   exact h.rel_head_tail (by rwa [tail_reverse, mem_reverse])
 
 中文:
-定理 Pairwise.rel_dropLast_getLast
-  条件: (h : l.Pairwise R) (ha : a in l.dropLast)
+定理 两两.rel_dropLast_getLast
+  条件: (h : l.两两 R) (ha : a in l.dropLast)
   证明: by
   rw [← pairwise_reverse] at h
   rw [getLast_eq_head_reverse]
@@ -275,8 +275,8 @@ theorem Pairwise.rel_getLast_of_rel_getLast_getLast
   exact ha.elim h₁.rel_dropLast_getLast (· ▸ hlast)
 
 中文:
-定理 Pairwise.rel_getLast_of_rel_getLast_getLast
-  结论: (h₁ : l.Pairwise R) (ha : a in l)
+定理 两两.rel_getLast_of_rel_getLast_getLast
+  结论: (h₁ : l.两两 R) (ha : a in l)
   证明: by
   rw [← dropLast_concat_getLast (ne_nil_of_mem ha)]; rw [mem_append]; rw [List.mem_singleton] at ha
   exact ha.elim h₁.rel_dropLast_getLast (· ▸ hlast)
@@ -300,8 +300,8 @@ theorem Pairwise.rel_getLast
 protected alias ⟨Pairwise.of_reverse, Pairwise.reverse⟩ := pairwise_reverse
 
 中文:
-定理 Pairwise.rel_getLast
-  条件: [Std.Refl R] (h₁ : l.Pairwise R) (ha : a in l)
+定理 两两.rel_getLast
+  条件: [Std.Refl R] (h₁ : l.两两 R) (ha : a in l)
   证明: h₁.rel_getLast_of_rel_getLast_getLast ha (refl_of ..)
 
 protected alias ⟨Pairwise.of_reverse, Pairwise.reverse⟩ := pairwise_reverse
@@ -328,8 +328,8 @@ theorem Pairwise.head!_le
     | tail => exact rel_of_pairwise_cons h (by assumption)
 
 中文:
-定理 Pairwise.head!_le
-  结论: [Inhabited α] [Std.Refl R] (h : l.Pairwise R)
+定理 两两.head!_le
+  结论: [可居 α] [Std.Refl R] (h : l.两两 R)
   证明: by
   cases l
   · contradiction
@@ -359,7 +359,7 @@ theorem pairwise_replicate_of_refl
 中文:
 定理 pairwise_replicate_of_refl
   条件: {n} [Std.Refl R]
-  结论: (replicate n a).Pairwise R
+  结论: (replicate n a).两两 R
   证明: pairwise_replicate.mpr (Or.inr <| refl_of ..)
 
 Depends on / 依赖: Or.inr, pairwise_replicate, pairwise_replicate.mpr, refl_of
@@ -382,7 +382,7 @@ theorem pairwise_cons_cons_iff_of_trans
 
 中文:
 定理 pairwise_cons_cons_iff_of_trans
-  条件: [IsTrans α R] {l : List α} {a b : α}
+  条件: [是Trans α R] {l : 列表 α} {a b : α}
   证明: by
   simp_rw [← isChain_iff_pairwise, isChain_cons_cons]
 
@@ -403,8 +403,8 @@ theorem Pairwise.cons_cons_of_trans
   exact And.intro
 
 中文:
-定理 Pairwise.cons_cons_of_trans
-  条件: [IsTrans α R] {l : List α} {a b : α}
+定理 两两.cons_cons_of_trans
+  条件: [是Trans α R] {l : 列表 α} {a b : α}
   证明: by
   simp_rw [pairwise_cons_cons_iff_of_trans]
   exact And.intro
@@ -425,8 +425,8 @@ theorem Pairwise.rel_get_of_lt
   proof: List.pairwise_iff_get.1 h _ _ hab
 
 中文:
-定理 Pairwise.rel_get_of_lt
-  条件: {l : List α} (h : l.Pairwise R) {a b : Fin l.length} (hab : a < b)
+定理 两两.rel_get_of_lt
+  条件: {l : 列表 α} (h : l.两两 R) {a b : 有限集 l.length} (hab : a < b)
   证明: List.pairwise_iff_get.1 h _ _ hab
 
 Depends on / 依赖: List.pairwise_iff_get, pairwise_iff_get
@@ -445,8 +445,8 @@ theorem Pairwise.rel_get_of_le
   obtain rfl | hlt := Fin.eq_or_lt_of_le hab; exacts [refl _, (pairwise_iff_get.1 h) _ _ hlt]
 
 中文:
-定理 Pairwise.rel_get_of_le
-  结论: [Std.Refl R] {l : List α} (h : l.Pairwise R) {a b : Fin l.length}
+定理 两两.rel_get_of_le
+  结论: [Std.Refl R] {l : 列表 α} (h : l.两两 R) {a b : 有限集 l.length}
   证明: by
   obtain rfl | hlt := Fin.eq_or_lt_of_le hab; exacts [refl _, (pairwise_iff_get.1 h) _ _ hlt]
 
@@ -466,8 +466,8 @@ theorem Pairwise.decide
   refine h.imp fun {a b} h => by simpa using h
 
 中文:
-定理 Pairwise.decide
-  条件: [DecidableRel R] (l : List α) (h : Pairwise R l)
+定理 两两.decide
+  条件: [DecidableRel R] (l : 列表 α) (h : 两两 R l)
   证明: by
   refine h.imp fun {a b} h => by simpa using h
 

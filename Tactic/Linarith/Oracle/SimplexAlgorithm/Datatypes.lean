@@ -32,15 +32,15 @@ class UsableInSimplexAlgorithm
 
 中文:
 类 UsableInSimplexAlgorithm
-  参数: (α : 自然数 -> 自然数 -> Type)
+  参数: (α : 自然数 -> 自然数 -> 类型)
   公理与运算 (7 个):
-    - getElem({n m : 自然数} (mat : α n m) (i j : 自然数)) : Rat
-    - setElem({n m : 自然数} (mat : α n m) (i j : 自然数) (v : Rat)) : α n m
-    - getValues({n m : 自然数} (mat : α n m)) : List (自然数 × 自然数 × Rat)
-    - ofValues({n m : 自然数} (values : List (自然数 × 自然数 × Rat))) : α n m
+    - getElem({n m : 自然数} (mat : α n m) (i j : 自然数)) : 有理数
+    - setElem({n m : 自然数} (mat : α n m) (i j : 自然数) (v : 有理数)) : α n m
+    - getValues({n m : 自然数} (mat : α n m)) : 列表 (自然数 × 自然数 × 有理数)
+    - ofValues({n m : 自然数} (values : 列表 (自然数 × 自然数 × 有理数))) : α n m
     - swapRows({n m : 自然数} (mat : α n m) (i j : 自然数)) : α n m
-    - subtractRow({n m : 自然数} (mat : α n m) (i j : 自然数) (coef : Rat)) : α n m
-    - divideRow({n m : 自然数} (mat : α n m) (i : 自然数) (coef : Rat)) : α n m
+    - subtractRow({n m : 自然数} (mat : α n m) (i j : 自然数) (coef : 有理数)) : α n m
+    - divideRow({n m : 自然数} (mat : α n m) (i : 自然数) (coef : 有理数)) : α n m
 -/
 class UsableInSimplexAlgorithm (α : Nat -> Nat -> Type) where
   /-- Returns `mat[i, j]`. -/
@@ -77,7 +77,7 @@ structure DenseMatrix
 结构 DenseMatrix
   参数: (n m : 自然数)
   公理与运算 (1 个):
-    - data : Array (Array Rat)
+    - data : 数组 (数组 有理数)
 -/
 structure DenseMatrix (n m : Nat) where
   /-- The content of the matrix. -/
@@ -150,7 +150,7 @@ structure SparseMatrix
 结构 SparseMatrix
   参数: (n m : 自然数)
   公理与运算 (1 个):
-    - data : Array Std.HashMap 自然数 Rat
+    - data : 数组 Std.HashMap 自然数 有理数
 -/
 structure SparseMatrix (n m : Nat) where
   /-- The content of the matrix. -/
@@ -230,10 +230,10 @@ structure Tableau
 
 中文:
 结构 Tableau
-  参数: (matType : 自然数 -> 自然数 -> Type) [UsableInSimplexAlgorithm matType]
+  参数: (matType : 自然数 -> 自然数 -> 类型) [UsableInSimplexAlgorithm matType]
   公理与运算 (3 个):
-    - basic : Array 自然数
-    - free : Array 自然数
+    - basic : 数组 自然数
+    - free : 数组 自然数
     - mat : matType basic.size free.size
 -/
 structure Tableau (matType : Nat -> Nat -> Type) [UsableInSimplexAlgorithm matType] where

@@ -119,7 +119,7 @@ lemma pos_mono
 中文:
 引理 pos_mono
   条件: ⦃s t
-  结论: Set α⦄ (h : s subseteq t) (hs : 0 < μ s) :
+  结论: 集合 α⦄ (h : s subseteq t) (hs : 0 < μ s) :
   证明: hs.trans_le measure_mono h
 
 Depends on / 依赖: hs.trans_le, measure_mono, trans_le
@@ -201,7 +201,7 @@ theorem measure_iUnion_le
 
 中文:
 定理 measure_iUnion_le
-  条件: [Countable ι] (s : ι -> Set α)
+  条件: [可数 ι] (s : ι -> 集合 α)
   结论: μ (⋃ i, s i) <= ∑' i, μ (s i)
   证明: by
   refine rel_iSup_tsum μ measure_empty (· <= ·) (fun t => ?_) _
@@ -234,7 +234,7 @@ theorem measure_biUnion_le
 
 中文:
 定理 measure_biUnion_le
-  条件: {I : Set ι} (μ : F) (hI : I.Countable) (s : ι -> Set α)
+  条件: {I : 集合 ι} (μ : F) (hI : I.可数) (s : ι -> 集合 α)
   证明: by
   have := hI.to_subtype
   rw [biUnion_eq_iUnion]
@@ -258,7 +258,7 @@ theorem measure_biUnion_finset_le
 
 中文:
 定理 measure_biUnion_finset_le
-  条件: (I : Finset ι) (s : ι -> Set α)
+  条件: (I : 有限集 ι) (s : ι -> 集合 α)
   证明: (measure_biUnion_le μ I.countable_toSet s).trans_eq I.tsum_subtype (μ <| s ·)
 
 Depends on / 依赖: I.countable_toSet, I.tsum_subtype, countable_toSet, measure_biUnion_le, trans_eq, tsum_subtype
@@ -278,7 +278,7 @@ theorem measure_iUnion_fintype_le
 
 中文:
 定理 measure_iUnion_fintype_le
-  条件: [Fintype ι] (μ : F) (s : ι -> Set α)
+  条件: [有限类型 ι] (μ : F) (s : ι -> 集合 α)
   证明: by
   simpa using measure_biUnion_finset_le Finset.univ s
 
@@ -300,7 +300,7 @@ theorem measure_union_le
 
 中文:
 定理 measure_union_le
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: μ (s union t) <= μ s + μ t
   证明: by
   simpa [union_eq_iUnion] using measure_iUnion_fintype_le μ (cond · s t)
@@ -321,7 +321,7 @@ lemma measure_univ_le_add_compl
 
 中文:
 引理 measure_univ_le_add_compl
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: μ univ <= μ s + μ sᶜ
   证明: s.union_compl_self ▸ measure_union_le s sᶜ
 
@@ -344,7 +344,7 @@ theorem measure_le_inter_add_sdiff
 
 中文:
 定理 measure_le_inter_add_sdiff
-  条件: (μ : F) (s t : Set α)
+  条件: (μ : F) (s t : 集合 α)
   结论: μ s <= μ (s inter t) + μ (s \ t)
   证明: by
   simpa using measure_union_le (s inter t) (s \ t)
@@ -406,7 +406,7 @@ theorem measure_biUnion_null_iff
 
 中文:
 定理 measure_biUnion_null_iff
-  条件: {I : Set ι} (hI : I.Countable) {s : ι -> Set α}
+  条件: {I : 集合 ι} (hI : I.可数) {s : ι -> 集合 α}
   证明: by
   refine ⟨fun h i hi => measure_mono_null (subset_biUnion_of_mem hi) h, fun h => ?_⟩
   have _ := hI.to_subtype
@@ -433,7 +433,7 @@ theorem measure_sUnion_null_iff
 
 中文:
 定理 measure_sUnion_null_iff
-  条件: {S : Set (Set α)} (hS : S.Countable)
+  条件: {S : 集合 (集合 α)} (hS : S.可数)
   证明: by
   rw [sUnion_eq_biUnion]; rw [measure_biUnion_null_iff hS]
 
@@ -461,7 +461,7 @@ alias ⟨_, measure_iUnion_null⟩ := measure_iUnion_null_iff
 
 中文:
 定理 measure_iUnion_null_iff
-  条件: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+  条件: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: by
   rw [← sUnion_range]; rw [measure_sUnion_null_iff (countable_range s)]; rw [forall_mem_range]
 
@@ -527,7 +527,7 @@ lemma measure_null_iff_singleton
 
 中文:
 引理 measure_null_iff_singleton
-  条件: (hs : s.Countable)
+  条件: (hs : s.可数)
   结论: μ s = 0 ↔ 对任意 x in s, μ {x} = 0
   证明: by
   rw [← measure_biUnion_null_iff hs]; rw [biUnion_of_singleton]
@@ -553,7 +553,7 @@ refine le_antisymm ?_ iSup_le fun n => measure_mono subset_iUnion _ _
 
 中文:
 定理 measure_iUnion_of_tendsto_zero
-  结论: {ι} (μ : F) {s : ι -> Set α} (l : Filter ι) [NeBot l]
+  结论: {ι} (μ : F) {s : ι -> 集合 α} (l : 滤子 ι) [NeBot l]
   证明: by
 refine le_antisymm ?_ iSup_le fun n => measure_mono subset_iUnion _ _
   set S := ⋃ n, s n
@@ -591,7 +591,7 @@ theorem measure_null_of_locally_null
 
 中文:
 定理 measure_null_of_locally_null
-  结论: [TopologicalSpace α] [SecondCountableTopology α]
+  结论: [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   choose! u hxu hu₀ using hs
   choose t ht using TopologicalSpace.countable_cover_nhdsWithin hxu
@@ -621,8 +621,8 @@ theorem exists_mem_forall_mem_nhdsWithin_pos_measure
   exact measure_null_of_locally_null s hs
 
 中文:
-定理 exists_mem_forall_mem_nhdsWithin_pos_measure
-  结论: [TopologicalSpace α]
+定理 存在_mem_对任意_mem_nhdsWithin_pos_measure
+  结论: [拓扑空间 α]
   证明: by
   contrapose! hs
   simp only [nonpos_iff_eq_zero] at hs
@@ -653,7 +653,7 @@ theorem iUnion_of_tendsto_zero
 
 中文:
 定理 iUnion_of_tendsto_zero
-  结论: {ι} (m : OuterMeasure α) {s : ι -> Set α} (l : Filter ι) [NeBot l]
+  结论: {ι} (m : 外测度 α) {s : ι -> 集合 α} (l : 滤子 ι) [NeBot l]
   证明: measure_iUnion_of_tendsto_zero m l h0
 
 Depends on / 依赖: measure_iUnion_of_tendsto_zero
@@ -678,7 +678,7 @@ theorem iUnion_nat_of_monotone_of_tsum_ne_top
 
 中文:
 定理 iUnion_nat_of_monotone_of_tsum_ne_top
-  结论: (m : OuterMeasure α) {s : 自然数 -> Set α}
+  结论: (m : 外测度 α) {s : 自然数 -> 集合 α}
   证明: by
   classical
   refine measure_iUnion_of_tendsto_zero m atTop ?_
@@ -722,7 +722,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: Injective fun (μ : OuterMeasure α) (s : Set α) => μ s
+  结论: 单射 fun (μ : 外测度 α) (s : 集合 α) => μ s
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -744,7 +744,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {μ₁ μ₂ : OuterMeasure α} (h : 对任意 s, μ₁ s = μ₂ s)
+  条件: {μ₁ μ₂ : 外测度 α} (h : 对任意 s, μ₁ s = μ₂ s)
   结论: μ₁ = μ₂
   证明: DFunLike.ext _ _ h
 
@@ -763,7 +763,7 @@ theorem ext_nonempty
 
 中文:
 定理 ext_nonempty
-  条件: {μ₁ μ₂ : OuterMeasure α} (h : 对任意 s : Set α, s.Nonempty -> μ₁ s = μ₂ s)
+  条件: {μ₁ μ₂ : 外测度 α} (h : 对任意 s : 集合 α, s.非空 -> μ₁ s = μ₂ s)
   证明: ext fun s => s.eq_empty_or_nonempty.elim (fun he => by simp [he]) (h s)
 
 Depends on / 依赖: eq_empty_or_nonempty, s.eq_empty_or_nonempty.elim

@@ -87,7 +87,7 @@ lemma isStronglyTranscendental_iff_of_field
 
 中文:
 引理 isStronglyTranscendental_iff_of_field
-  结论: {K : 类型} [Field K] [Algebra R K] [FaithfulSMul R K]
+  结论: {K : 类型} [域 K] [代数 R K] [忠实标量乘法 R K]
   证明: by
   refine ⟨fun h => h.transcendental, fun h => ?_⟩
   simpa [IsStronglyTranscendental, or_imp, forall_and, @forall_comm K, ← subsingleton_iff_forall_eq,
@@ -116,7 +116,7 @@ lemma IsStronglyTranscendental.of_map
 
 中文:
 引理 IsStronglyTranscendental.of_map
-  结论: {x : S} {f : S ->ₐ[R] T} (hf : Function.Injective f)
+  结论: {x : S} {f : S ->ₐ[R] T} (hf : 函数.单射 f)
   证明: by
   intro u p hp
   have := h (f u) p (by rw [aeval_algHom_apply, ← map_mul, hp, map_zero])
@@ -151,7 +151,7 @@ lemma IsStronglyTranscendental.of_isLocalization
 
 中文:
 引理 IsStronglyTranscendental.of_isLocalization
-  结论: [Algebra S T] (M : Submonoid S)
+  结论: [代数 S T] (M : 子幺半群 S)
   证明: by
   intro u p hp
   obtain ⟨u, s, rfl⟩ := IsLocalization.exists_mk'_eq M u
@@ -192,7 +192,7 @@ lemma IsStronglyTranscendental.of_isLocalization_left
 
 中文:
 引理 IsStronglyTranscendental.of_isLocalization_left
-  结论: [Algebra S T] (M : Submonoid R)
+  结论: [代数 S T] (M : 子幺半群 R)
   证明: by
   intro t p hp
   obtain ⟨a, ha₁, ha₂⟩ := IsLocalization.integerNormalization_spec M p
@@ -227,7 +227,7 @@ lemma IsStronglyTranscendental.restrictScalars
 
 中文:
 引理 IsStronglyTranscendental.restrictScalars
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: by
   intro t p hp
   simpa [map_map, ← IsScalarTower.algebraMap_eq] using h t (p.map (algebraMap R S)) (by simpa)
@@ -253,7 +253,7 @@ lemma IsStronglyTranscendental.of_surjective_left
 
 中文:
 引理 IsStronglyTranscendental.of_surjective_left
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: by
   intro t p hp
   obtain ⟨p, rfl⟩ := map_surjective _ H p
@@ -279,7 +279,7 @@ lemma IsStronglyTranscendental.iff_of_isLocalization
 
 中文:
 引理 IsStronglyTranscendental.iff_of_isLocalization
-  结论: [Algebra S T] {M : Submonoid S}
+  结论: [代数 S T] {M : 子幺半群 S}
   证明: ⟨fun h => .of_map (f := IsScalarTower.toAlgHom R S T) (IsLocalization.injective _ hM) h,
     fun h => .of_isLocalization M h⟩
 
@@ -303,7 +303,7 @@ lemma IsStronglyTranscendental.iff_of_isFractionRing
 
 中文:
 引理 IsStronglyTranscendental.iff_of_isFractionRing
-  结论: (K : 类型) [Field K] [Algebra R K]
+  结论: (K : 类型) [域 K] [代数 R K]
   证明: by
   have : FaithfulSMul R K := .trans R S K
   rw [← IsStronglyTranscendental.iff_of_isLocalization (T := K) le_rfl]; rw [isStronglyTranscendental_iff_of_field]
@@ -331,7 +331,7 @@ lemma IsStronglyTranscendental.of_transcendental
 
 中文:
 引理 IsStronglyTranscendental.of_transcendental
-  结论: {K : 类型} [Field K] [Algebra R K]
+  结论: {K : 类型} [域 K] [代数 R K]
   证明: by
   have : FaithfulSMul R K := .trans R S K
   rw [← isStronglyTranscendental_iff_of_field] at H
@@ -364,7 +364,7 @@ lemma isStronglyTranscendental_mk_of_mem_minimalPrimes
 
 中文:
 引理 isStronglyTranscendental_mk_of_mem_minimalPrimes
-  结论: [IsReduced S]
+  结论: [是既约 S]
   证明: by
   refine Ideal.Quotient.mk_surjective.forall.mpr fun u p e => ?_
   rw [← Ideal.Quotient.algebraMap_eq]; rw [aeval_algebraMap_apply]; rw [Ideal.Quotient.algebraMap_eq]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem] at e

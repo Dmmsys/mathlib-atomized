@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasPushouts.{u} (类型u)
+  签名: 有Pushouts.{u} (类型u)
   定义体: hasPushouts_of_hasWidePushouts.{u} (Type u)
 
 Depends on / 依赖: hasPushouts_of_hasWidePushouts
@@ -56,10 +56,10 @@ inductive Pushout.Rel
     - inl_inr: (s : S) : Pushout.Rel f g (Sum.inl (f s)) (Sum.inr (g s))
 
 中文:
-归纳类型 Pushout.Rel
+归纳类型 推出.关系
   参数: (f : S ⟶ X₁) (g : S ⟶ X₂)
   构造子 (1 个):
-    - inl_inr: (s : S) : Pushout.Rel f g (Sum.inl (f s)) (Sum.inr (g s))
+    - inl_inr: (s : S) : 推出.关系 f g (和.inl (f s)) (和.inr (g s))
 -/
 inductive Pushout.Rel (f : S ⟶ X₁) (g : S ⟶ X₂) : X₁ oplus X₂ -> X₁ oplus X₂ -> Prop
   | inl_inr (s : S) : Pushout.Rel f g (Sum.inl (f s)) (Sum.inr (g s))
@@ -73,7 +73,7 @@ definition Pushout
   body: (_root_.Quot (Pushout.Rel f g))
 
 中文:
-定义 Pushout
+定义 推出
   签名: : 类型u
   定义体: (_root_.Quot (Pushout.Rel f g))
 
@@ -94,13 +94,13 @@ inductive Pushout.Rel'
     - inr_inl: (s : S) : Rel' (Sum.inr (g s)) (Sum.inl (f s))
 
 中文:
-归纳类型 Pushout.Rel'
+归纳类型 推出.关系'
   参数: : X₁ oplus X₂ -> X₁ oplus X₂ -> 命题
   构造子 (4 个):
-    - refl: (x : X₁ oplus X₂) : Rel' x x
-    - inl_inl: (x₀ y₀ : S) (h : g x₀ = g y₀) : Rel' (Sum.inl (f x₀)) (Sum.inl (f y₀))
-    - inl_inr: (s : S) : Rel' (Sum.inl (f s)) (Sum.inr (g s))
-    - inr_inl: (s : S) : Rel' (Sum.inr (g s)) (Sum.inl (f s))
+    - refl: (x : X₁ oplus X₂) : 关系' x x
+    - inl_inl: (x₀ y₀ : S) (h : g x₀ = g y₀) : 关系' (和.inl (f x₀)) (和.inl (f y₀))
+    - inl_inr: (s : S) : 关系' (和.inl (f s)) (和.inr (g s))
+    - inr_inl: (s : S) : 关系' (和.inr (g s)) (和.inl (f s))
 -/
 inductive Pushout.Rel' : X₁ oplus X₂ -> X₁ oplus X₂ -> Prop
   | refl (x : X₁ oplus X₂) : Rel' x x
@@ -117,7 +117,7 @@ definition Pushout'
   body: _root_.Quot (Pushout.Rel' f g)
 
 中文:
-定义 Pushout'
+定义 推出'
   签名: : 类型u
   定义体: _root_.Quot (Pushout.Rel' f g)
 
@@ -139,7 +139,7 @@ definition inl
 
 中文:
 定义 inl
-  签名: : X₁ ⟶ Pushout f g
+  签名: : X₁ ⟶ 推出 f g
   定义体: ↾fun x => Quot.mk _ (Sum.inl x)
 
 Depends on / 依赖: Quot.mk, Sum.inl
@@ -158,7 +158,7 @@ definition inr
 
 中文:
 定义 inr
-  签名: : X₂ ⟶ Pushout f g
+  签名: : X₂ ⟶ 推出 f g
   定义体: ↾fun x => Quot.mk _ (Sum.inr x)
 
 Depends on / 依赖: Quot.mk, Sum.inr
@@ -224,7 +224,7 @@ definition isColimitCocone
 
 中文:
 定义 isColimitCocone
-  签名: : IsColimit (cocone f g)
+  签名: : 是余极限 (cocone f g)
   定义体: PushoutCocone.IsColimit.mk _ (fun s => ↾(Quot.lift (fun x => match x with
       | Sum.inl x₁ => s.inl x₁
       | Sum.inr x₂ => s.inr x₂) (by
@@ -377,8 +377,8 @@ lemma Rel'.symm
   · exact Rel'.inl_inr _
 
 中文:
-引理 Rel'.symm
-  条件: {x y : X₁ oplus X₂} (h : Rel' f g x y)
+引理 关系'.symm
+  条件: {x y : X₁ oplus X₂} (h : 关系' f g x y)
   证明: by
   obtain _ | ⟨_, _, h⟩ | _ | _ := h
   · apply Rel'.refl
@@ -418,8 +418,8 @@ lemma equivalence_rel'
 
 中文:
 引理 equivalence_rel'
-  条件: [Mono f]
-  结论: _root_.Equivalence (Rel' f g) where
+  条件: [单态射 f]
+  结论: _root_.等价 (关系' f g) where
   证明: Rel'.refl
   symm h := h.symm
   trans := by
@@ -489,7 +489,7 @@ definition equivPushout'
 
 中文:
 定义 equivPushout'
-  签名: : Pushout f g ≃ Pushout' f g where
+  签名: : 推出 f g ≃ 推出' f g where
   定义体: Quot.lift (Quot.mk _) (by
     rintro _ _ ⟨⟩
     apply Quot.sound
@@ -539,7 +539,7 @@ lemma quot_mk_eq_iff
 
 中文:
 引理 quot_mk_eq_iff
-  条件: [Mono f] (a b : X₁ oplus X₂)
+  条件: [单态射 f] (a b : X₁ oplus X₂)
   证明: by
   rw [← (equivalence_rel' f g).quot_mk_eq_iff]
   exact ⟨fun h => (equivPushout' f g).symm.injective h,
@@ -569,7 +569,7 @@ lemma inl_eq_inr_iff
 
 中文:
 引理 inl_eq_inr_iff
-  条件: [Mono f] (x₁ : X₁) (x₂ : X₂)
+  条件: [单态射 f] (x₁ : X₁) (x₂ : X₂)
   证明: by
   refine (Pushout.quot_mk_eq_iff f g (Sum.inl x₁) (Sum.inr x₂)).trans ?_
   constructor
@@ -603,7 +603,7 @@ instance mono_inr
 
 中文:
 实例 mono_inr
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: by
   rw [mono_iff_injective]
   intro x₂ y₂ h
@@ -692,7 +692,7 @@ lemma pushoutCocone_inl_eq_inr_iff_of_isColimit
 
 中文:
 引理 pushoutCocone_inl_eq_inr_iff_of_isColimit
-  结论: {c : PushoutCocone f g} (hc : IsColimit c)
+  结论: {c : PushoutCocone f g} (hc : 是余极限 c)
   证明: by
   rw [pushoutCocone_inl_eq_inr_iff_of_iso
     (Cocone.ext (IsColimit.coconePointUniqueUpToIso hc (Pushout.isColimitCocone f g))
@@ -727,7 +727,7 @@ lemma pushoutCocone_inr_mono_of_isColimit
 
 中文:
 引理 pushoutCocone_inr_mono_of_isColimit
-  结论: {c : PushoutCocone f g} (hc : IsColimit c)
+  结论: {c : PushoutCocone f g} (hc : 是余极限 c)
   证明: by
   change Mono ((Pushout.inr f g) ≫
     ((Cocone.forget _).mapIso
@@ -757,7 +757,7 @@ lemma pushoutCocone_inr_injective_of_isColimit
 
 中文:
 引理 pushoutCocone_inr_injective_of_isColimit
-  结论: {c : PushoutCocone f g} (hc : IsColimit c)
+  结论: {c : PushoutCocone f g} (hc : 是余极限 c)
   证明: by
   rw [← mono_iff_injective] at h₁ ⊢
   exact pushoutCocone_inr_mono_of_isColimit hc
@@ -780,7 +780,7 @@ instance mono_inl
 
 中文:
 实例 mono_inl
-  签名: [Mono g]
+  签名: [单态射 g]
   定义体: pushoutCocone_inr_mono_of_isColimit
     (PushoutCocone.flipIsColimit (Pushout.isColimitCocone f g))
 
@@ -799,8 +799,8 @@ instance [Mono
   body: (pushoutCocone_inr_mono_of_isColimit (pushoutIsPushout f g) :)
 
 中文:
-实例 [Mono
-  签名: f] : Mono (pushout.inr f g)
+实例 [单态射
+  签名: f] : 单态射 (pushout.inr f g)
   定义体: (pushoutCocone_inr_mono_of_isColimit (pushoutIsPushout f g) :)
 
 Depends on / 依赖: pushoutCocone_inr_mono_of_isColimit, pushoutIsPushout
@@ -818,8 +818,8 @@ instance [Mono
     (PushoutCocone.flipIsColimit (pushoutIsPushout f g))
 
 中文:
-实例 [Mono
-  签名: g] : Mono (pushout.inl f g)
+实例 [单态射
+  签名: g] : 单态射 (pushout.inl f g)
   定义体: pushoutCocone_inr_mono_of_isColimit
     (PushoutCocone.flipIsColimit (pushoutIsPushout f g))
 
@@ -849,7 +849,7 @@ lemma eq_or_eq_of_isPushout
 
 中文:
 引理 eq_or_eq_of_isPushout
-  结论: (h : IsPushout t l r b)
+  结论: (h : 是推出 t l r b)
   证明: by
   obtain ⟨j, x, rfl⟩ := jointly_surjective_of_isColimit h.isColimit x₄
   obtain (_ | _ | _) := j
@@ -883,7 +883,7 @@ lemma eq_or_eq_of_isPushout'
 
 中文:
 引理 eq_or_eq_of_isPushout'
-  结论: (h : IsPushout t l r b)
+  结论: (h : 是推出 t l r b)
   证明: by
   obtain h₁ | ⟨x₃, hx₃⟩ := eq_or_eq_of_isPushout h x₄
   · exact Or.inl h₁
@@ -917,7 +917,7 @@ lemma isPullback_of_isPushout
 
 中文:
 引理 isPullback_of_isPushout
-  条件: (h : IsPushout t l r b) (ht : Function.Injective t)
+  条件: (h : 是推出 t l r b) (ht : 函数.单射 t)
   证明: by
   rw [isPullback_iff]
   refine ⟨h.w, fun x₁ y₁ ⟨h₂, _⟩ => ht h₂, fun x₂ x₃ hx => ?_⟩
@@ -950,7 +950,7 @@ lemma mono_of_isPushout_of_isPullback
 
 中文:
 引理 mono_of_isPushout_of_isPullback
-  结论: {k : X₄ ⟶ X₅} (h₁ : IsPushout t l r b)
+  结论: {k : X₄ ⟶ X₅} (h₁ : 是推出 t l r b)
   证明: by
   subst facr facb
   have : Function.Injective l :=

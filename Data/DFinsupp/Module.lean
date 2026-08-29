@@ -38,8 +38,8 @@ instance [forall
   smul_zero _ := mapRange_zero _ _
 
 中文:
-实例 [forall
-  签名: i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)] : SMulZeroClass γ (Π₀ i, β i) where
+实例 [对任意
+  签名: i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)] : SMulZero类 γ (Π₀ i, β i) where
   定义体: v.mapRange (fun _ => (c • ·)) fun _ => smul_zero _
   smul_zero _ := mapRange_zero _ _
 
@@ -61,7 +61,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)] (b : γ)
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)] (b : γ)
   证明: rfl
 
 @[simp, norm_cast]
@@ -81,7 +81,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)] (b : γ)
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)] (b : γ)
   证明: rfl
 -/
 theorem coe_smul [forall i, Zero (β i)] [forall i, SMulZeroClass γ (β i)] (b : γ)
@@ -98,7 +98,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: {δ : 类型} [对任意 i, Zero (β i)]
+  签名: {δ : 类型} [对任意 i, 零 (β i)]
   定义体: ext fun i => by simp only [smul_apply, smul_comm r s (m i)]
 
 Depends on / 依赖: smul_apply, smul_comm
@@ -118,7 +118,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: {δ : 类型} [对任意 i, Zero (β i)]
+  签名: {δ : 类型} [对任意 i, 零 (β i)]
   定义体: ext fun i => by simp only [smul_apply, smul_assoc r s (m i)]
 
 Depends on / 依赖: smul_apply, smul_assoc
@@ -138,7 +138,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)]
+  签名: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)]
   定义体: ext fun i => by simp only [smul_apply, op_smul_eq_smul r (m i)]
 
 Depends on / 依赖: op_smul_eq_smul, smul_apply
@@ -158,7 +158,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid γ] [对任意 i, AddMonoid (β i)] [对任意 i, DistribMulAction γ (β i)]
+  签名: [幺半群 γ] [对任意 i, 加法幺半群 (β i)] [对任意 i, 分配乘法作用 γ (β i)]
   定义体: Function.Injective.distribMulAction coeFnAddMonoidHom DFunLike.coe_injective coe_smul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, distribMulAction
@@ -179,7 +179,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring γ] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module γ (β i)]
+  签名: [半环 γ] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 γ (β i)]
   定义体: { (inferInstance : DistribMulAction γ (Π₀ i, β i)) with
     zero_smul := fun c => ext fun i => by simp only [smul_apply, zero_smul, zero_apply]
     add_smul := fun c x y => ext fun i => by simp only [add_apply, smul_apply, add_smul] }
@@ -209,7 +209,7 @@ definition coeFnLinearMap
 
 中文:
 定义 coeFnLinearMap
-  签名: [Semiring γ] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module γ (β i)]
+  签名: [半环 γ] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 γ (β i)]
   定义体: (⇑)
   map_add' := coe_add
   map_smul' := coe_smul
@@ -233,7 +233,7 @@ lemma coeFnLinearMap_apply
 
 中文:
 引理 coeFnLinearMap_apply
-  结论: [Semiring γ] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module γ (β i)]
+  结论: [半环 γ] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 γ (β i)]
   证明: rfl
 -/
 lemma coeFnLinearMap_apply [Semiring γ] [forall i, AddCommMonoid (β i)] [forall i, Module γ (β i)]
@@ -255,7 +255,7 @@ theorem filter_smul
 
 中文:
 定理 filter_smul
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)] (p : ι -> 命题)
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)] (p : ι -> 命题)
   证明: by
   ext
   simp [smul_apply, smul_ite]
@@ -283,7 +283,7 @@ definition filterLinearMap
 
 中文:
 定义 filterLinearMap
-  签名: [Semiring γ] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module γ (β i)] (p : ι -> 命题)
+  签名: [半环 γ] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 γ (β i)] (p : ι -> 命题)
   定义体: filter p
   map_add' := filter_add p
   map_smul' := filter_smul p
@@ -309,7 +309,7 @@ theorem subtypeDomain_smul
 
 中文:
 定理 subtypeDomain_smul
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)]
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)]
   证明: DFunLike.coe_injective rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -335,7 +335,7 @@ definition subtypeDomainLinearMap
 
 中文:
 定义 subtypeDomainLinearMap
-  签名: [Semiring γ] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module γ (β i)]
+  签名: [半环 γ] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 γ (β i)]
   定义体: subtypeDomain p
   map_add' := subtypeDomain_add
   map_smul' := subtypeDomain_smul
@@ -370,7 +370,7 @@ theorem mk_smul
 
 中文:
 定理 mk_smul
-  条件: {s : Finset ι} (c : γ) (x : 对任意 i : (↑s : Set ι), β (i : ι))
+  条件: {s : 有限集 ι} (c : γ) (x : 对任意 i : (↑s : 集合 ι), β (i : ι))
   证明: ext fun i => by simp only [smul_apply, mk_apply]; split_ifs <;> [rfl; rw [smul_zero]]
 
 @[simp]
@@ -426,7 +426,7 @@ theorem support_smul
 
 中文:
 定理 support_smul
-  结论: {γ : Type w} [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)]
+  结论: {γ : 类型 w} [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)]
   证明: support_mapRange
 
 Depends on / 依赖: support_mapRange
@@ -459,7 +459,7 @@ theorem comapDomain_smul
 
 中文:
 定理 comapDomain_smul
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)]
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)]
   证明: by
   ext
   rw [smul_apply]; rw [comapDomain_apply]; rw [smul_apply]; rw [comapDomain_apply]
@@ -487,7 +487,7 @@ theorem comapDomain'_smul
 
 中文:
 定理 comapDomain'_smul
-  结论: [对任意 i, Zero (β i)] [对任意 i, SMulZeroClass γ (β i)]
+  结论: [对任意 i, 零 (β i)] [对任意 i, SMulZero类 γ (β i)]
   证明: by
   ext
   rw [smul_apply]; rw [comapDomain'_apply]; rw [smul_apply]; rw [comapDomain'_apply]
@@ -512,7 +512,7 @@ instance distribMulAction₂
 
 中文:
 实例 distribMulAction₂
-  签名: [Monoid γ] [对任意 i j, AddMonoid (δ i j)]
+  签名: [幺半群 γ] [对任意 i j, 加法幺半群 (δ i j)]
   定义体: @DFinsupp.distribMulAction ι _ (fun i => Π₀ j, δ i j) _ _ _
 
 Depends on / 依赖: DFinsupp, DFinsupp.distribMulAction, distribMulAction
@@ -535,7 +535,7 @@ theorem equivProdDFinsupp_smul
 
 中文:
 定理 equivProdDFinsupp_smul
-  结论: [对任意 i, Zero (α i)] [对任意 i, SMulZeroClass γ (α i)]
+  结论: [对任意 i, 零 (α i)] [对任意 i, SMulZero类 γ (α i)]
   证明: Prod.ext (smul_apply _ _ _) (comapDomain_smul _ (Option.some_injective _) _ _)
 
 Depends on / 依赖: Option.some_injective, Prod.ext, comapDomain_smul, smul_apply, some_injective

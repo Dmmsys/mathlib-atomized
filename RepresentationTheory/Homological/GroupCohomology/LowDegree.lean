@@ -76,7 +76,7 @@ definition cochainsIso₀
 
 中文:
 定义 cochainsIso₀
-  签名: : (inhomogeneousCochains A).X 0 ≅ ModuleCat.of k A.V
+  签名: : (inhomogeneousCochains A).X 0 ≅ 模范畴.of k A.V
   定义体: (LinearEquiv.funUnique (Fin 0 -> G) k A).toModuleIso
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.funUnique, funUnique, toModuleIso
@@ -94,7 +94,7 @@ definition cochainsIso₁
 
 中文:
 定义 cochainsIso₁
-  签名: : (inhomogeneousCochains A).X 1 ≅ ModuleCat.of k (G -> A)
+  签名: : (inhomogeneousCochains A).X 1 ≅ 模范畴.of k (G -> A)
   定义体: (LinearEquiv.funCongrLeft k A (Equiv.funUnique (Fin 1) G)).toModuleIso.symm
 
 Depends on / 依赖: Equiv.funUnique, LinearEquiv, LinearEquiv.funCongrLeft, funCongrLeft, funUnique, toModuleIso, toModuleIso.symm
@@ -112,7 +112,7 @@ definition cochainsIso₂
 
 中文:
 定义 cochainsIso₂
-  签名: : (inhomogeneousCochains A).X 2 ≅ ModuleCat.of k (G × G -> A)
+  签名: : (inhomogeneousCochains A).X 2 ≅ 模范畴.of k (G × G -> A)
   定义体: (LinearEquiv.funCongrLeft k A <| (piFinTwoEquiv fun _ => G)).toModuleIso.symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.funCongrLeft, funCongrLeft, piFinTwoEquiv, toModuleIso, toModuleIso.symm
@@ -131,7 +131,7 @@ definition cochainsIso₃
 
 中文:
 定义 cochainsIso₃
-  签名: : (inhomogeneousCochains A).X 3 ≅ ModuleCat.of k (G × G × G -> A)
+  签名: : (inhomogeneousCochains A).X 3 ≅ 模范畴.of k (G × G × G -> A)
   定义体: (LinearEquiv.funCongrLeft k A <| ((Fin.consEquiv _).symm.trans
     ((Equiv.refl G).prodCongr (piFinTwoEquiv fun _ => G)))).toModuleIso.symm
 
@@ -161,7 +161,7 @@ definition d₀₁
 
 中文:
 定义 d₀₁
-  签名: : ModuleCat.of k A.V ⟶ ModuleCat.of k (G -> A)
+  签名: : 模范畴.of k A.V ⟶ 模范畴.of k (G -> A)
   定义体: ModuleCat.ofHom
   { toFun m g := A.ρ g m - m
     map_add' x y := funext fun g => by simp only [map_add, add_sub_add_comm]; rfl
@@ -188,7 +188,7 @@ theorem d₀₁_ker_eq_invariants
 
 中文:
 定理 d₀₁_ker_eq_invariants
-  结论: LinearMap.ker (d₀₁ A).hom = invariants A.ρ
+  结论: 线性映射.ker (d₀₁ A).hom = invariants A.ρ
   证明: by
   ext x
   simp only [LinearMap.mem_ker, mem_invariants, ← @sub_eq_zero _ _ _ x, funext_iff]
@@ -217,7 +217,7 @@ theorem d₀₁_eq_zero
 
 中文:
 定理 d₀₁_eq_zero
-  条件: [A.IsTrivial]
+  条件: [A.是平凡]
   结论: d₀₁ A = 0
   证明: by
   ext
@@ -246,7 +246,7 @@ lemma subtype_comp_d₀₁
 
 中文:
 引理 subtype_comp_d₀₁
-  结论: ModuleCat.ofHom (A.ρ.invariants.subtype) ≫ d₀₁ A = 0
+  结论: 模范畴.ofHom (A.ρ.invariants.subtype) ≫ d₀₁ A = 0
   证明: by
   ext ⟨x, hx⟩ g
   replace hx := hx g
@@ -278,7 +278,7 @@ definition d₁₂
 
 中文:
 定义 d₁₂
-  签名: : ModuleCat.of k (G -> A) ⟶ ModuleCat.of k (G × G -> A)
+  签名: : 模范畴.of k (G -> A) ⟶ 模范畴.of k (G × G -> A)
   定义体: ModuleCat.ofHom
   { toFun f g := A.ρ g.1 (f g.2) - f (g.1 * g.2) + f g.1
     map_add' x y := funext fun g => by dsimp; rw [map_add, add_add_add_comm, add_sub_add_comm]
@@ -312,7 +312,7 @@ definition d₂₃
 
 中文:
 定义 d₂₃
-  签名: : ModuleCat.of k (G × G -> A) ⟶ ModuleCat.of k (G × G × G -> A)
+  签名: : 模范畴.of k (G × G -> A) ⟶ 模范畴.of k (G × G × G -> A)
   定义体: ModuleCat.ofHom
   { toFun f g :=
       A.ρ g.1 (f (g.2.1, g.2.2)) - f (g.1 * g.2.1, g.2.2) + f (g.1, g.2.1 * g.2.2) - f (g.1, g.2.1)
@@ -578,7 +578,7 @@ definition shortComplexH0
 
 中文:
 定义 shortComplexH0
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk _ _ (subtype_comp_d₀₁ A)
 -/
 def shortComplexH0 : ShortComplex (ModuleCat k) :=
@@ -596,7 +596,7 @@ definition shortComplexH1
 
 中文:
 定义 shortComplexH1
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk (d₀₁ A) (d₁₂ A) (d₀₁_comp_d₁₂ A)
 -/
 def shortComplexH1 : ShortComplex (ModuleCat k) :=
@@ -614,7 +614,7 @@ definition shortComplexH2
 
 中文:
 定义 shortComplexH2
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: mk (d₁₂ A) (d₂₃ A) (d₁₂_comp_d₂₃ A)
 -/
 def shortComplexH2 : ShortComplex (ModuleCat k) :=
@@ -634,7 +634,7 @@ definition cocycles₁
 
 中文:
 定义 cocycles₁
-  签名: : Submodule k (G -> A)
+  签名: : 子模 k (G -> A)
   定义体: LinearMap.ker (d₁₂ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.ker
@@ -651,7 +651,7 @@ definition cocycles₂
 
 中文:
 定义 cocycles₂
-  签名: : Submodule k (G × G -> A)
+  签名: : 子模 k (G × G -> A)
   定义体: LinearMap.ker (d₂₃ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.ker
@@ -672,7 +672,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (cocycles₁ A) G A
+  签名: 函数状 (cocycles₁ A) G A
   定义体: ⟨Subtype.val, Subtype.val_injective⟩
 
 @[simp]
@@ -883,7 +883,7 @@ theorem cocycles₁_map_mul_of_isTrivial
 
 中文:
 定理 cocycles₁_map_mul_of_isTrivial
-  条件: [A.IsTrivial] (f : cocycles₁ A) (g h : G)
+  条件: [A.是平凡] (f : cocycles₁ A) (g h : G)
   证明: by
   rw [(mem_cocycles₁_iff f).1 f.2]; rw [isTrivial_apply A.ρ g (f h)]; rw [add_comm]
 
@@ -905,7 +905,7 @@ theorem mem_cocycles₁_of_addMonoidHom
 
 中文:
 定理 mem_cocycles₁_of_addMonoidHom
-  条件: [A.IsTrivial] (f : Additive G ->+ A)
+  条件: [A.是平凡] (f : 加性 G ->+ A)
   证明: (mem_cocycles₁_iff _).2 fun g h => by
     simp only [Function.comp_apply, ofMul_mul, map_add,
       isTrivial_apply A.ρ g (f (Additive.ofMul h)), add_comm (f (Additive.ofMul g))]
@@ -941,7 +941,7 @@ definition cocycles₁IsoOfIsTrivial
 
 中文:
 定义 cocycles₁IsoOfIsTrivial
-  签名: [hA : A.IsTrivial]
+  签名: [hA : A.是平凡]
   定义体: LinearEquiv.toModuleIso
   { toFun f :=
       { toFun := f ∘ Additive.toMul
@@ -980,7 +980,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (cocycles₂ A) (G × G) A
+  签名: 函数状 (cocycles₂ A) (G × G) A
   定义体: ⟨Subtype.val, Subtype.val_injective⟩
 
 @[simp]
@@ -1237,7 +1237,7 @@ definition coboundaries₁
 
 中文:
 定义 coboundaries₁
-  签名: : Submodule k (G -> A)
+  签名: : 子模 k (G -> A)
   定义体: LinearMap.range (d₀₁ A).hom
 
 Depends on / 依赖: LinearMap, LinearMap.range
@@ -1255,7 +1255,7 @@ definition coboundaries₂
 
 中文:
 定义 coboundaries₂
-  签名: : Submodule k (G × G -> A)
+  签名: : 子模 k (G × G -> A)
   定义体: LinearMap.range (d₁₂ A).hom
 
 Depends on / 依赖: CommMonoidWithZero, LinearMap, LinearMap.range, MonoidHom, MonoidHom.mrange, MonoidWithZeroHom, MonoidWithZeroHom.ofClass, mrange, ofClass
@@ -1277,7 +1277,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (coboundaries₁ A) G A
+  签名: 函数状 (coboundaries₁ A) G A
   定义体: ⟨Subtype.val, Subtype.val_injective⟩
 
 @[simp]
@@ -1426,7 +1426,7 @@ theorem coboundaries₁_eq_bot_of_isTrivial
 
 中文:
 定理 coboundaries₁_eq_bot_of_isTrivial
-  条件: (A : Rep k G) [A.IsTrivial]
+  条件: (A : Rep k G) [A.是平凡]
   证明: by
   simp_rw [coboundaries₁, d₀₁_eq_zero]
   exact LinearMap.range_eq_bot.2 rfl
@@ -1450,7 +1450,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (coboundaries₂ A) (G × G) A
+  签名: 函数状 (coboundaries₂ A) (G × G) A
   定义体: ⟨Subtype.val, Subtype.val_injective⟩
 
 @[simp]
@@ -2357,7 +2357,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (shortComplexH0 A).f
+  签名: 单态射 (shortComplexH0 A).f
   定义体: by
   rw [ModuleCat.mono_iff_injective]
   apply Submodule.injective_subtype
@@ -2383,7 +2383,7 @@ lemma shortComplexH0_exact
 
 中文:
 引理 shortComplexH0_exact
-  结论: (shortComplexH0 A).Exact
+  结论: (shortComplexH0 A).正合
   证明: by
   rw [ShortComplex.moduleCat_exact_iff]
   intro (x : A) (hx : d₀₁ _ x = 0)
@@ -2434,7 +2434,7 @@ definition cocyclesIso₀
 
 中文:
 定义 cocyclesIso₀
-  签名: : cocycles A 0 ≅ ModuleCat.of k A.ρ.invariants
+  签名: : cocycles A 0 ≅ 模范畴.of k A.ρ.invariants
   定义体: KernelFork.mapIsoOfIsLimit
     ((inhomogeneousCochains A).cyclesIsKernel 0 1 (by simp)) (shortComplexH0_exact A).fIsKernel
       (dArrowIso₀₁ A)
@@ -2562,7 +2562,7 @@ definition isoCocycles₁
 
 中文:
 定义 isoCocycles₁
-  签名: : cocycles A 1 ≅ ModuleCat.of k (cocycles₁ A)
+  签名: : cocycles A 1 ≅ 模范畴.of k (cocycles₁ A)
   定义体: cyclesMapIso' (isoShortComplexH1 A) _ (shortComplexH1 A).moduleCatLeftHomologyData
 
 Depends on / 依赖: cyclesMapIso, isoShortComplexH1, moduleCatLeftHomologyData, shortComplexH1
@@ -2723,7 +2723,7 @@ definition isoCocycles₂
 
 中文:
 定义 isoCocycles₂
-  签名: : cocycles A 2 ≅ ModuleCat.of k (cocycles₂ A)
+  签名: : cocycles A 2 ≅ 模范畴.of k (cocycles₂ A)
   定义体: cyclesMapIso' (isoShortComplexH2 A) _ (shortComplexH2 A).moduleCatLeftHomologyData
 
 Depends on / 依赖: cyclesMapIso, isoShortComplexH2, moduleCatLeftHomologyData, shortComplexH2
@@ -2865,7 +2865,7 @@ definition H0Iso
 
 中文:
 定义 H0Iso
-  签名: : H0 A ≅ ModuleCat.of k A.ρ.invariants
+  签名: : H0 A ≅ 模范畴.of k A.ρ.invariants
   定义体: (CochainComplex.isoHomologyπ₀ _).symm ≪≫ cocyclesIso₀ A
 
 Depends on / 依赖: CochainComplex, CochainComplex.isoHomology
@@ -3024,7 +3024,7 @@ definition H1π
 
 中文:
 定义 H1π
-  签名: : ModuleCat.of k (cocycles₁ A) ⟶ H1 A
+  签名: : 模范畴.of k (cocycles₁ A) ⟶ H1 A
   定义体: (isoCocycles₁ A).inv ≫ π A 1
 -/
 def H1π : ModuleCat.of k (cocycles₁ A) ⟶ H1 A :=
@@ -3041,7 +3041,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H1π A)
+  签名: 满态射 (H1π A)
   定义体: inferInstanceAs Epi (_ ≫ _)
 -/
 instance : Epi (H1π A) := inferInstanceAs Epi (_ ≫ _)
@@ -3257,7 +3257,7 @@ theorem H1IsoOfIsTrivial_inv_apply
 
 中文:
 定理 H1IsoOfIsTrivial_inv_apply
-  条件: (f : Additive G ->+ A)
+  条件: (f : 加性 G ->+ A)
   证明: rfl
 -/
 theorem H1IsoOfIsTrivial_inv_apply (f : Additive G ->+ A) :
@@ -3292,7 +3292,7 @@ definition H2π
 
 中文:
 定义 H2π
-  签名: : ModuleCat.of k (cocycles₂ A) ⟶ H2 A
+  签名: : 模范畴.of k (cocycles₂ A) ⟶ H2 A
   定义体: (isoCocycles₂ A).inv ≫ π A 2
 -/
 def H2π : ModuleCat.of k (cocycles₂ A) ⟶ H2 A :=
@@ -3309,7 +3309,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H2π A)
+  签名: 满态射 (H2π A)
   定义体: inferInstanceAs Epi (_ ≫ _)
 -/
 instance : Epi (H2π A) := inferInstanceAs Epi (_ ≫ _)

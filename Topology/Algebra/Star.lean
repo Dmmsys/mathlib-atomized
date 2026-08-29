@@ -30,10 +30,10 @@ class ContinuousStar
     - continuous_star : Continuous (star : R -> R)
 
 中文:
-类 ContinuousStar
-  参数: (R : 类型) [TopologicalSpace R] [Star R]
+类 余ntinuousStar
+  参数: (R : 类型) [拓扑空间 R] [对合 R]
   公理与运算 (1 个):
-    - continuous_star : Continuous (star : R -> R)
+    - continuous_star : 连续 (star : R -> R)
 -/
 class ContinuousStar (R : Type*) [TopologicalSpace R] [Star R] : Prop where
   /-- The `star` operator is continuous. -/
@@ -56,7 +56,7 @@ theorem continuousOn_star
 
 中文:
 定理 continuousOn_star
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   结论: ContinuousOn star s
   证明: continuous_star.continuousOn
 
@@ -76,7 +76,7 @@ theorem continuousWithinAt_star
 
 中文:
 定理 continuousWithinAt_star
-  条件: {s : Set R} {x : R}
+  条件: {s : 集合 R} {x : R}
   结论: ContinuousWithinAt star s x
   证明: continuous_star.continuousWithinAt
 
@@ -117,7 +117,7 @@ theorem tendsto_star
 中文:
 定理 tendsto_star
   条件: (a : R)
-  结论: Tendsto star (𝓝 a) (𝓝 (star a))
+  结论: 收敛 star (𝓝 a) (𝓝 (star a))
   证明: continuousAt_star
 
 Depends on / 依赖: continuousAt_star
@@ -134,8 +134,8 @@ theorem Filter.Tendsto.star
   proof: (continuous_star.tendsto y).comp h
 
 中文:
-定理 Filter.Tendsto.star
-  条件: {f : α -> R} {l : Filter α} {y : R} (h : Tendsto f l (𝓝 y))
+定理 滤子.收敛.star
+  条件: {f : α -> R} {l : 滤子 α} {y : R} (h : 收敛 f l (𝓝 y))
   证明: (continuous_star.tendsto y).comp h
 
 Depends on / 依赖: continuous_star, continuous_star.tendsto, tendsto
@@ -159,9 +159,9 @@ theorem Continuous.star
 @[fun_prop]
 
 中文:
-定理 Continuous.star
-  条件: (hf : Continuous f)
-  结论: Continuous fun x => star (f x)
+定理 连续.star
+  条件: (hf : 连续 f)
+  结论: 连续 fun x => star (f x)
   证明: continuous_star.comp hf
 
 @[fun_prop]
@@ -271,8 +271,8 @@ instance [Star
   body: ⟨(continuous_star.comp continuous_fst).prodMk (continuous_star.comp continuous_snd)⟩
 
 中文:
-实例 [Star
-  签名: R] [Star S] [TopologicalSpace R] [TopologicalSpace S] [ContinuousStar R]
+实例 [对合
+  签名: R] [对合 S] [拓扑空间 R] [拓扑空间 S] [余ntinuousStar R]
   定义体: ⟨(continuous_star.comp continuous_fst).prodMk (continuous_star.comp continuous_snd)⟩
 
 Depends on / 依赖: continuous_fst, continuous_snd, continuous_star, continuous_star.comp, prodMk
@@ -294,8 +294,8 @@ instance [Star
   body: ⟨MulOpposite.continuous_op.comp MulOpposite.continuous_unop.star⟩
 
 中文:
-实例 [Star
-  签名: R] [TopologicalSpace R] [ContinuousStar R] : ContinuousStar Rᵐᵒᵖ
+实例 [对合
+  签名: R] [拓扑空间 R] [余ntinuousStar R] : 余ntinuousStar Rᵐᵒᵖ
   定义体: ⟨MulOpposite.continuous_op.comp MulOpposite.continuous_unop.star⟩
 
 Depends on / 依赖: MulOpposite, MulOpposite.continuous_op.comp, MulOpposite.continuous_unop.star, continuous_op, continuous_unop
@@ -312,8 +312,8 @@ instance [Monoid
   body: ⟨continuous_induced_rng.2 Units.continuous_embedProduct.star⟩
 
 中文:
-实例 [Monoid
-  签名: R] [StarMul R] [TopologicalSpace R] [ContinuousStar R] :
+实例 [幺半群
+  签名: R] [StarMul R] [拓扑空间 R] [余ntinuousStar R] :
   定义体: ⟨continuous_induced_rng.2 Units.continuous_embedProduct.star⟩
 
 Depends on / 依赖: Units.continuous_embedProduct.star, continuous_embedProduct, continuous_induced_rng

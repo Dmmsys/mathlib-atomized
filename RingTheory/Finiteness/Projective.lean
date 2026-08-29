@@ -38,8 +38,8 @@ theorem exists_comp_eq_id_of_projective
   ⟨n, f, g, surj, LinearMap.injective_of_comp_eq_id _ _ hfg, hfg⟩
 
 中文:
-定理 exists_comp_eq_id_of_projective
-  条件: [Module.Finite R M] [Projective R M]
+定理 存在_comp_eq_id_of_projective
+  条件: [模.有限 R M] [投射 R M]
   证明: have ⟨n, f, surj⟩ := exists_fin' R M
   have ⟨g, hfg⟩ := Module.projective_lifting_property f .id surj
   ⟨n, f, g, surj, LinearMap.injective_of_comp_eq_id _ _ hfg, hfg⟩

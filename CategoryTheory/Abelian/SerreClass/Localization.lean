@@ -53,7 +53,7 @@ lemma exists_epiModSerre_comp_eq_zero_iff
   · exact ⟨_, kernel.ι f, P.prop_of_iso (Abel
 
 中文:
-引理 exists_epiModSerre_comp_eq_zero_iff
+引理 存在_epiModSerre_comp_eq_zero_iff
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   refine ⟨?_, fun hf => ?_⟩
@@ -93,7 +93,7 @@ lemma exists_isoModSerre_comp_eq_zero_iff
       P.prop_of_iso (Abelian.coimageIsoImage f).symm hf
 
 中文:
-引理 exists_isoModSerre_comp_eq_zero_iff
+引理 存在_isoModSerre_comp_eq_zero_iff
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   refine ⟨?_, fun hf => ?_⟩
@@ -133,7 +133,7 @@ lemma exists_comp_monoModSerre_eq_zero_iff
       monoModSerre_zer
 
 中文:
-引理 exists_comp_monoModSerre_eq_zero_iff
+引理 存在_comp_monoModSerre_eq_zero_iff
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   refine ⟨?_, fun hf => ?_⟩
@@ -172,7 +172,7 @@ lemma exists_comp_isoModSerre_eq_zero_iff
   · refine ⟨_, cokernel.π f, by rwa [isoModSerre_iff_of_epi], by simp⟩
 
 中文:
-引理 exists_comp_isoModSerre_eq_zero_iff
+引理 存在_comp_isoModSerre_eq_zero_iff
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   refine ⟨?_, fun hf => ?_⟩
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.HasLeftCalculusOfFractions
+  签名: P.isoModSerre.有LeftCalculusOfFractions
   定义体: ⟨{s := pushout.inl φ.f φ.s
       f := pushout.inr φ.f φ.s,
       hs := MorphismProperty.pushout_inl _ _ φ.hs}, pushout.condition⟩
@@ -305,7 +305,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.HasRightCalculusOfFractions
+  签名: P.isoModSerre.有RightCalculusOfFractions
   定义体: ⟨{s := pullback.fst φ.f φ.s
       f := pullback.snd φ.f φ.s,
       hs := MorphismProperty.pullback_fst _ _ φ.hs}, pullback.condition⟩
@@ -618,7 +618,7 @@ lemma preservesMonomorphisms
 
 中文:
 引理 preservesMonomorphisms
-  结论: L.PreservesMonomorphisms where
+  结论: L.保持Monomorphisms where
   证明: by simpa only [mono_map_iff _ P] using P.monoModSerre_of_mono f
 
 Depends on / 依赖: P.monoModSerre_of_mono, monoModSerre_of_mono, mono_map_iff
@@ -636,7 +636,7 @@ lemma preservesEpimorphisms
 
 中文:
 引理 preservesEpimorphisms
-  结论: L.PreservesEpimorphisms where
+  结论: L.保持Epimorphisms where
   证明: by simpa only [epi_map_iff _ P] using P.epiModSerre_of_epi f
 
 Depends on / 依赖: P.epiModSerre_of_epi, epiModSerre_of_epi, epi_map_iff
@@ -873,7 +873,7 @@ lemma hasKernels
 
 中文:
 引理 hasKernels
-  结论: HasKernels D where
+  结论: 有Kernels D where
   证明: by
     obtain ⟨g, ⟨e⟩⟩ :=
       (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
@@ -912,7 +912,7 @@ lemma hasCokernels
 
 中文:
 引理 hasCokernels
-  结论: HasCokernels D where
+  结论: 有余kernels D where
   证明: by
     obtain ⟨g, ⟨e⟩⟩ :=
       (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
@@ -999,7 +999,7 @@ lemma hasFiniteProducts
 
 中文:
 引理 hasFiniteProducts
-  结论: HasFiniteProducts D
+  结论: 有FiniteProducts D
   证明: have := Localization.essSurj L P.isoModSerre
   L.hasFiniteProducts_of_additive_of_essSurj
 
@@ -1029,7 +1029,7 @@ lemma isNormalMonoCategory
 
 中文:
 引理 isNormalMonoCategory
-  结论: IsNormalMonoCategory D where
+  结论: 是正规单态射范畴 D where
   证明: by
     rw [mono_iff L P] at hf
     obtain ⟨X', Y', f', _, ⟨e⟩⟩ := hf
@@ -1079,7 +1079,7 @@ lemma isNormalEpiCategory
 
 中文:
 引理 isNormalEpiCategory
-  结论: IsNormalEpiCategory D where
+  结论: 是正规满态射范畴 D where
   证明: by
     rw [epi_iff L P] at hf
     obtain ⟨X', Y', f', _, ⟨e⟩⟩ := hf
@@ -1132,7 +1132,7 @@ definition abelian
 
 中文:
 定义 abelian
-  签名: : Abelian D
+  签名: : 交换 D
   定义体: by
   have := hasFiniteProducts L P
   have := hasKernels L P
@@ -1162,7 +1162,7 @@ lemma hasZeroObject
 
 中文:
 引理 hasZeroObject
-  结论: HasZeroObject D
+  结论: 有ZeroObject D
   证明: have := abelian L P
   Abelian.hasZeroObject
 
@@ -1186,7 +1186,7 @@ lemma preservesFiniteLimits
 
 中文:
 引理 preservesFiniteLimits
-  结论: PreservesFiniteLimits L
+  结论: 保持FiniteLimits L
   证明: by
   let := abelian L P
   rw [((Functor.preservesFiniteLimits_tfae L).out 3 2 :)]
@@ -1215,7 +1215,7 @@ lemma preservesFiniteColimits
 
 中文:
 引理 preservesFiniteColimits
-  结论: PreservesFiniteColimits L
+  结论: 保持FiniteColimits L
   证明: by
   let := abelian L P
   rw [((Functor.preservesFiniteColimits_tfae L).out 3 2 :)]
@@ -1478,7 +1478,7 @@ instance :
 
 中文:
 实例 :
-  签名: (whiskeringLeft L P E).Faithful
+  签名: (whiskeringLeft L P E).忠实
   定义体: (fullyFaithfulWhiskeringLeft L P E).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulWhiskeringLeft
@@ -1496,7 +1496,7 @@ instance :
 
 中文:
 实例 :
-  签名: (whiskeringLeft L P E).Full
+  签名: (whiskeringLeft L P E).满
   定义体: (fullyFaithfulWhiskeringLeft L P E).full
 
 Depends on / 依赖: fullyFaithfulWhiskeringLeft

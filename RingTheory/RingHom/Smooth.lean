@@ -38,7 +38,7 @@ definition FormallySmooth
   Algebra.FormallySmooth R S
 
 中文:
-定义 FormallySmooth
+定义 形式光滑
   签名: (f : R ->+* S)
   定义体: letI := f.toAlgebra
   Algebra.FormallySmooth R S
@@ -58,8 +58,8 @@ lemma FormallySmooth.toAlgebra
   proof: hf
 
 中文:
-引理 FormallySmooth.toAlgebra
-  条件: {f : R ->+* S} (hf : FormallySmooth f)
+引理 形式光滑.toAlgebra
+  条件: {f : R ->+* S} (hf : 形式光滑 f)
   证明: hf
 -/
 lemma FormallySmooth.toAlgebra {f : R ->+* S} (hf : FormallySmooth f) :
@@ -76,7 +76,7 @@ lemma formallySmooth_algebraMap
 
 中文:
 引理 formallySmooth_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [FormallySmooth]; rw [toAlgebra_algebraMap]
 
@@ -97,8 +97,8 @@ lemma FormallySmooth.comp
   exact Algebra.FormallySmooth.comp R S T
 
 中文:
-引理 FormallySmooth.comp
-  结论: {T : 类型} [CommRing T] {f : R ->+* S} {g : S ->+* T}
+引理 形式光滑.comp
+  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T}
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallySmooth.comp R S T
@@ -121,8 +121,8 @@ lemma FormallySmooth.of_bijective
   exact Algebra.FormallySmooth.of_equiv (AlgEquiv.ofBijective (Algebra.ofId R S) hf)
 
 中文:
-引理 FormallySmooth.of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
+引理 形式光滑.of_bijective
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
   证明: by
   algebraize [f]
   exact Algebra.FormallySmooth.of_equiv (AlgEquiv.ofBijective (Algebra.ofId R S) hf)
@@ -143,8 +143,8 @@ lemma FormallySmooth.holdsForLocalizationAway
   proof: fun _ _ _ _ _ r _ => formallySmooth_algebraMap.mpr .of_isLocalization (.powers r)
 
 中文:
-引理 FormallySmooth.holdsForLocalizationAway
-  结论: HoldsForLocalizationAway @FormallySmooth
+引理 形式光滑.holdsForLocalizationAway
+  结论: HoldsForLocalizationAway @形式光滑
   证明: fun _ _ _ _ _ r _ => formallySmooth_algebraMap.mpr .of_isLocalization (.powers r)
 
 Depends on / 依赖: formallySmooth_algebraMap, formallySmooth_algebraMap.mpr, of_isLocalization, powers
@@ -161,8 +161,8 @@ lemma FormallySmooth.stableUnderComposition
   proof: fun _ _ _ _ _ _ _ _ hf hg => hf.comp hg
 
 中文:
-引理 FormallySmooth.stableUnderComposition
-  结论: StableUnderComposition @FormallySmooth
+引理 形式光滑.stableUnderComposition
+  结论: StableUnderComposition @形式光滑
   证明: fun _ _ _ _ _ _ _ _ hf hg => hf.comp hg
 
 Depends on / 依赖: hf.comp
@@ -179,8 +179,8 @@ lemma FormallySmooth.respectsIso
   proof: stableUnderComposition.respectsIso fun e => holdsForLocalizationAway.of_bijective _ _ e.bijective
 
 中文:
-引理 FormallySmooth.respectsIso
-  结论: RespectsIso @FormallySmooth
+引理 形式光滑.respectsIso
+  结论: RespectsIso @形式光滑
   证明: stableUnderComposition.respectsIso fun e => holdsForLocalizationAway.of_bijective _ _ e.bijective
 
 Depends on / 依赖: bijective, e.bijective, holdsForLocalizationAway, holdsForLocalizationAway.of_bijective, of_bijective, respectsIso, stableUnderComposition, stableUnderComposition.respectsIso
@@ -201,8 +201,8 @@ lemma FormallySmooth.isStableUnderBaseChange
   infer_instance
 
 中文:
-引理 FormallySmooth.isStableUnderBaseChange
-  结论: IsStableUnderBaseChange @FormallySmooth
+引理 形式光滑.isStableUnderBaseChange
+  结论: 是StableUnderBaseChange @形式光滑
   证明: by
   refine .mk respectsIso ?_
   introv H
@@ -226,8 +226,8 @@ lemma FormallySmooth.localizationPreserves
   proof: isStableUnderBaseChange.localizationPreserves
 
 中文:
-引理 FormallySmooth.localizationPreserves
-  结论: LocalizationPreserves @FormallySmooth
+引理 形式光滑.localizationPreserves
+  结论: LocalizationPreserves @形式光滑
   证明: isStableUnderBaseChange.localizationPreserves
 
 Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves, localizationPreserves
@@ -247,7 +247,7 @@ definition Smooth
   Algebra.Smooth R S
 
 中文:
-定义 Smooth
+定义 光滑
   签名: (f : R ->+* S)
   定义体: letI : Algebra R S := f.toAlgebra
   Algebra.Smooth R S
@@ -267,8 +267,8 @@ lemma Smooth.toAlgebra
   proof: hf
 
 中文:
-引理 Smooth.toAlgebra
-  条件: {f : R ->+* S} (hf : Smooth f)
+引理 光滑.toAlgebra
+  条件: {f : R ->+* S} (hf : 光滑 f)
   证明: hf
 -/
 lemma Smooth.toAlgebra {f : R ->+* S} (hf : Smooth f) :
@@ -285,7 +285,7 @@ lemma smooth_algebraMap
 
 中文:
 引理 smooth_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [RingHom.Smooth]; rw [toAlgebra_algebraMap]
 
@@ -308,7 +308,7 @@ lemma smooth_def
 中文:
 引理 smooth_def
   条件: {f : R ->+* S}
-  结论: f.Smooth ↔ f.FormallySmooth ∧ f.FinitePresentation
+  结论: f.光滑 ↔ f.形式光滑 ∧ f.有限呈现
   证明: letI := f.toAlgebra
   Algebra.smooth_iff _ _
 
@@ -335,8 +335,8 @@ lemma formallySmooth
 
 中文:
 引理 formallySmooth
-  条件: {f : R ->+* S} (hf : f.Smooth)
-  结论: f.FormallySmooth
+  条件: {f : R ->+* S} (hf : f.光滑)
+  结论: f.形式光滑
   证明: by
   rw [smooth_def] at hf
   exact hf.1
@@ -360,8 +360,8 @@ lemma finitePresentation
 
 中文:
 引理 finitePresentation
-  条件: {f : R ->+* S} (hf : f.Smooth)
-  结论: f.FinitePresentation
+  条件: {f : R ->+* S} (hf : f.光滑)
+  结论: f.有限呈现
   证明: by
   rw [smooth_def] at hf
   exact hf.2
@@ -385,8 +385,8 @@ lemma comp
 
 中文:
 引理 comp
-  条件: {f : R ->+* S} {g : S ->+* T} (hf : f.Smooth) (hg : g.Smooth)
-  结论: (g.comp f).Smooth
+  条件: {f : R ->+* S} {g : S ->+* T} (hf : f.光滑) (hg : g.光滑)
+  结论: (g.comp f).光滑
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.Smooth.comp R S T
@@ -407,7 +407,7 @@ lemma stableUnderComposition
 
 中文:
 引理 stableUnderComposition
-  结论: StableUnderComposition Smooth
+  结论: StableUnderComposition 光滑
   证明: fun _ _ _ _ _ _ _ _ => RingHom.Smooth.comp
 
 Depends on / 依赖: RingHom, RingHom.Smooth.comp, Smooth
@@ -429,7 +429,7 @@ lemma isStableUnderBaseChange
 
 中文:
 引理 isStableUnderBaseChange
-  结论: IsStableUnderBaseChange Smooth
+  结论: 是StableUnderBaseChange 光滑
   证明: by
   convert!
     RingHom.FormallySmooth.isStableUnderBaseChange.and
@@ -458,7 +458,7 @@ lemma holdsForLocalizationAway
 
 中文:
 引理 holdsForLocalizationAway
-  结论: HoldsForLocalizationAway Smooth
+  结论: HoldsForLocalizationAway 光滑
   证明: by
   introv R h
   rw [smooth_algebraMap]
@@ -486,8 +486,8 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
-  结论: f.Smooth
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
+  结论: f.光滑
   证明: by
   rw [RingHom.smooth_def]
   exact ⟨.of_bijective hf, .of_bijective hf⟩
@@ -509,7 +509,7 @@ lemma id
 
 中文:
 引理 id
-  结论: RingHom.Smooth (RingHom.id R)
+  结论: 环态射.光滑 (环态射.id R)
   证明: holdsForLocalizationAway.containsIdentities R
 
 Depends on / 依赖: containsIdentities, holdsForLocalizationAway, holdsForLocalizationAway.containsIdentities
@@ -533,7 +533,7 @@ lemma ofLocalizationSpanTarget
 
 中文:
 引理 ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget Smooth
+  结论: OfLocalizationSpanTarget 光滑
   证明: by
   introv R hs hf
   have : f.FinitePresentation :=
@@ -570,7 +570,7 @@ lemma propertyIsLocal
 
 中文:
 引理 propertyIsLocal
-  结论: 命题ertyIsLocal Smooth where
+  结论: PropertyIsLocal 光滑 where
   证明: isStableUnderBaseChange.localizationPreserves.away
   ofLocalizationSpanTarget := ofLocalizationSpanTarget
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
@@ -600,7 +600,7 @@ lemma respectsIso
 
 中文:
 引理 respectsIso
-  结论: RespectsIso Smooth
+  结论: RespectsIso 光滑
   证明: propertyIsLocal.respectsIso
 
 Depends on / 依赖: propertyIsLocal, propertyIsLocal.respectsIso, respectsIso

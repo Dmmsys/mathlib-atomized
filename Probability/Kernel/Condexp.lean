@@ -54,8 +54,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prod_id
   proof: hf.comp_snd_map_prodMk id
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prod_id
-  结论: [TopologicalSpace F]
+定理 _root_.测度论.AEStronglyMeasurable.comp_snd_map_prod_id
+  结论: [拓扑空间 F]
   证明: hf.comp_snd_map_prodMk id
 
 Depends on / 依赖: comp_snd_map_prodMk, hf.comp_snd_map_prodMk
@@ -74,8 +74,8 @@ theorem _root_.MeasureTheory.Integrable.comp_snd_map_prod_id
   proof: hf.comp_snd_map_prodMk id
 
 中文:
-定理 _root_.MeasureTheory.Integrable.comp_snd_map_prod_id
-  结论: [NormedAddCommGroup F]
+定理 _root_.测度论.可积.comp_snd_map_prod_id
+  结论: [赋范交换加群 F]
   证明: hf.comp_snd_map_prodMk id
 
 Depends on / 依赖: comp_snd_map_prodMk, hf.comp_snd_map_prodMk
@@ -115,7 +115,7 @@ lemma condExpKernel_eq
 
 中文:
 引理 condExpKernel_eq
-  结论: (μ : Measure Ω) [IsFiniteMeasure μ] [h : Nonempty Ω]
+  结论: (μ : 测度 Ω) [是有限测度 μ] [h : 非空 Ω]
   证明: by
   simp [condExpKernel, h]
 
@@ -138,7 +138,7 @@ lemma condExpKernel_apply_eq_condDistrib
 
 中文:
 引理 condExpKernel_apply_eq_condDistrib
-  条件: [Nonempty Ω] {ω : Ω}
+  条件: [非空 Ω] {ω : Ω}
   证明: by
   simp [condExpKernel_eq, Kernel.comap_apply]
 
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel (condExpKernel μ m)
+  签名: 是MarkovKernel (condExpKernel μ m)
   定义体: by
   rcases isEmpty_or_nonempty Ω with h | h
   · exact ⟨fun a => (IsEmpty.false a).elim⟩
@@ -252,7 +252,7 @@ theorem measurable_condExpKernel
 
 中文:
 定理 measurable_condExpKernel
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: (condExpKernel μ m).measurable_coe hs
 
 Depends on / 依赖: condExpKernel, measurable_coe
@@ -271,7 +271,7 @@ theorem stronglyMeasurable_condExpKernel
 
 中文:
 定理 stronglyMeasurable_condExpKernel
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: Measurable.stronglyMeasurable (measurable_condExpKernel hs)
 
 Depends on / 依赖: Measurable, Measurable.stronglyMeasurable, measurable_condExpKernel, stronglyMeasurable
@@ -292,8 +292,8 @@ theorem _root_.MeasureTheory.StronglyMeasurable.integral_condExpKernel'
   exact (hf.comp_measurable measurable_snd).integral_condDistrib
 
 中文:
-定理 _root_.MeasureTheory.StronglyMeasurable.integral_condExpKernel'
-  结论: [NormedSpace 实数 F]
+定理 _root_.测度论.StronglyMeasurable.integral_condExpKernel'
+  结论: [赋范空间 实数 F]
   证明: by
   nontriviality Ω
   simp_rw [condExpKernel_apply_eq_condDistrib]
@@ -317,8 +317,8 @@ theorem _root_.MeasureTheory.StronglyMeasurable.integral_condExpKernel
   proof: hf.integral_condExpKernel'.mono inf_le_left
 
 中文:
-定理 _root_.MeasureTheory.StronglyMeasurable.integral_condExpKernel
-  结论: [NormedSpace 实数 F]
+定理 _root_.测度论.StronglyMeasurable.integral_condExpKernel
+  结论: [赋范空间 实数 F]
   证明: hf.integral_condExpKernel'.mono inf_le_left
 
 Depends on / 依赖: hf.integral_condExpKernel, inf_le_left, integral_condExpKernel
@@ -342,8 +342,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condExpKernel
     hf.comp_snd_map_prod_id
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integral_condExpKernel
-  结论: [NormedSpace 实数 F]
+定理 _root_.测度论.AEStronglyMeasurable.integral_condExpKernel
+  结论: [赋范空间 实数 F]
   证明: by
   nontriviality Ω
   simp_rw [condExpKernel_apply_eq_condDistrib]
@@ -378,7 +378,7 @@ theorem aestronglyMeasurable_integral_condExpKernel
 
 中文:
 定理 aestronglyMeasurable_integral_condExpKernel
-  结论: [NormedSpace 实数 F]
+  结论: [赋范空间 实数 F]
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -446,8 +446,8 @@ theorem _root_.MeasureTheory.Integrable.condExpKernel_ae
       hf_int.comp_snd_map_prod_id using 1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.condExpKernel_ae
-  条件: (hf_int : 整数egrable f μ)
+定理 _root_.测度论.可积.condExpKernel_ae
+  条件: (hf_int : 可积 f μ)
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -479,8 +479,8 @@ theorem _root_.MeasureTheory.Integrable.integral_norm_condExpKernel
       aemeasurable_id hf_int.comp_snd_map_prod_id using 1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_norm_condExpKernel
-  条件: (hf_int : 整数egrable f μ)
+定理 _root_.测度论.可积.integral_norm_condExpKernel
+  条件: (hf_int : 可积 f μ)
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -512,8 +512,8 @@ theorem _root_.MeasureTheory.Integrable.norm_integral_condExpKernel
       aemeasurable_id hf_int.comp_snd_map_prod_id using 1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.norm_integral_condExpKernel
-  结论: [NormedSpace 实数 F]
+定理 _root_.测度论.可积.norm_integral_condExpKernel
+  结论: [赋范空间 实数 F]
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -546,8 +546,8 @@ theorem _root_.MeasureTheory.Integrable.integral_condExpKernel
       aemeasurable_id hf_int.comp_snd_map_prod_id using 1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_condExpKernel
-  结论: [NormedSpace 实数 F]
+定理 _root_.测度论.可积.integral_condExpKernel
+  结论: [赋范空间 实数 F]
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -578,8 +578,8 @@ theorem integrable_toReal_condExpKernel
   exact integrable_toReal_condDistrib (aemeasurable_id'' μ (inf_le_right : m ⊓ mΩ <= mΩ)) hs
 
 中文:
-定理 integrable_toReal_condExpKernel
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+定理 integrable_to实数_condExpKernel
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   nontriviality Ω
   rw [condExpKernel_eq]
@@ -611,7 +611,7 @@ lemma condExpKernel_ae_eq_condExp'
 
 中文:
 引理 condExpKernel_ae_eq_condExp'
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rcases isEmpty_or_nonempty Ω with h | h
   · have : μ = 0 := Measure.eq_zero_of_isEmpty μ
@@ -694,7 +694,7 @@ lemma condDistrib_apply_ae_eq_condExpKernel_map
 
 中文:
 引理 condDistrib_apply_ae_eq_condExpKernel_map
-  结论: {β γ : 类型} {mβ : MeasurableSpace β}
+  结论: {β γ : 类型} {mβ : 可测空间 β}
   证明: by
   simp_rw [Kernel.map_apply' _ hX _ hs]
   filter_upwards [condDistrib_ae_eq_condExp hY hX (μ := μ) hs,
@@ -729,7 +729,7 @@ theorem condExp_ae_eq_integral_condExpKernel'
 
 中文:
 定理 condExp_ae_eq_integral_condExpKernel'
-  结论: [NormedAddCommGroup F] {f : Ω -> F}
+  结论: [赋范交换加群 F] {f : Ω -> F}
   证明: by
   rcases isEmpty_or_nonempty Ω with h | h
   · have : μ = 0 := Measure.eq_zero_of_isEmpty μ
@@ -761,7 +761,7 @@ theorem condExp_ae_eq_integral_condExpKernel
 
 中文:
 定理 condExp_ae_eq_integral_condExpKernel
-  结论: [NormedAddCommGroup F] {f : Ω -> F}
+  结论: [赋范交换加群 F] {f : Ω -> F}
   证明: ((condExp_ae_eq_integral_condExpKernel' hf_int).symm.trans (by rw [inf_of_le_left hm])).symm
 
 Depends on / 依赖: condExp_ae_eq_integral_condExpKernel, hf_int, inf_of_le_left, symm.trans
@@ -816,7 +816,7 @@ theorem condExp_ae_eq_trim_integral_condExpKernel
 
 中文:
 定理 condExp_ae_eq_trim_integral_condExpKernel
-  结论: [NormedAddCommGroup F] {f : Ω -> F}
+  结论: [赋范交换加群 F] {f : Ω -> F}
   证明: by
   refine (condExp_congr_ae_trim hm hf_int.1.ae_eq_mk).trans ?_
   refine (condExp_ae_eq_trim_integral_condExpKernel_of_stronglyMeasurable hm
@@ -863,7 +863,7 @@ lemma condExp_generateFrom_singleton
 
 中文:
 引理 condExp_generateFrom_singleton
-  条件: (hs : MeasurableSet s) {f : Ω -> F} (hf : 整数egrable f μ)
+  条件: (hs : 可测集 s) {f : Ω -> F} (hf : 可积 f μ)
   证明: by
   by_cases hμs : μ s = 0
   · rw [Measure.restrict_eq_zero.2 hμs]
@@ -917,7 +917,7 @@ exact condExp_generateFrom_singleton hs Integrable.indicator (integrable_const 1
 
 中文:
 引理 condExp_set_generateFrom_singleton
-  条件: (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   rw [← integral_indicator_one ht]
 exact condExp_generateFrom_singleton hs Integrable.indicator (integrable_const 1) ht
@@ -945,7 +945,7 @@ ae_restrict_le condExpKernel_ae_eq_condExp
 
 中文:
 引理 condExpKernel_singleton_ae_eq_cond
-  结论: [StandardBorelSpace Ω] (hs : MeasurableSet s)
+  结论: [StandardBorel空间 Ω] (hs : 可测集 s)
   证明: by
   have : (fun ω => (condExpKernel μ (generateFrom {s}) ω).real t) =ᵐ[μ.restrict s]
       μ⟦t | generateFrom {s}⟧ :=

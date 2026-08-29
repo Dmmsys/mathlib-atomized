@@ -48,7 +48,7 @@ structure LeftResolution
   公理与运算 (3 个):
     - F : A ⥤ C
     - π : F ⋙ ι ⟶ 𝟭 A
-    - epi_π_app((X : A)) : Epi (π.app X)  [默认: by infer_instance]
+    - epi_π_app((X : A)) : 满态射 (π.app X)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -99,7 +99,7 @@ definition chainComplex
 
 中文:
 定义 chainComplex
-  签名: : ChainComplex C 自然数
+  签名: : 链复形 C 自然数
   定义体: ChainComplex.mk' _ _ (ι.preimage (Λ.π.app (kernel (Λ.π.app X)) ≫ kernel.ι _))
     (fun f => ⟨_, ι.preimage (Λ.π.app (kernel (ι.map f)) ≫ kernel.ι _),
       ι.map_injective (by simp)⟩)
@@ -428,7 +428,7 @@ lemma chainComplexMap_zero
 
 中文:
 引理 chainComplexMap_zero
-  条件: [Λ.F.PreservesZeroMorphisms]
+  条件: [Λ.F.保持ZeroMorphisms]
   证明: by
   ext n
   induction n with
@@ -504,7 +504,7 @@ definition chainComplexFunctor
 
 中文:
 定义 chainComplexFunctor
-  签名: : A ⥤ ChainComplex C 自然数 where
+  签名: : A ⥤ 链复形 C 自然数 where
   定义体: Λ.chainComplex X
   map f := Λ.chainComplexMap f
 

@@ -60,7 +60,7 @@ deriving TopologicalSpace
 
 中文:
 定义 Circle
-  签名: : Type
+  签名: : 类型
   定义体: Submonoid.unitSphere Complex
 deriving TopologicalSpace
 
@@ -82,7 +82,7 @@ instance instCoeOut
 
 中文:
 实例 instCoeOut
-  签名: : CoeOut Circle Complex
+  签名: : CoeOut Circle 复形
   定义体: subtypeCoe
 
 Depends on / 依赖: subtypeCoe
@@ -99,7 +99,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: : CommGroup Circle
+  签名: : 交换群 Circle
   定义体: inferInstanceAs CommGroup (sphere _ _)
 
 Depends on / 依赖: CommGroup, RCLike, RCLike.instContinuousMapUniqueHom, TopologicalSpace, instContinuousMapUniqueHom, sphere
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg Circle
+  签名: 有DistribNeg Circle
   定义体: inferInstanceAs HasDistribNeg (sphere _ _)
 
 Depends on / 依赖: HasDistribNeg, sphere
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg Circle
+  签名: 连续取负 Circle
   定义体: inferInstanceAs ContinuousNeg (sphere _ _)
 
 Depends on / 依赖: ContinuousNeg, sphere
@@ -147,7 +147,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: : MetricSpace Circle
+  签名: : 度量空间 Circle
   定义体: inferInstanceAs MetricSpace (sphere _ _)
 
 Depends on / 依赖: MetricSpace, sphere
@@ -164,7 +164,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (x : Complex) = y -> x = y
+  结论: (x : 复形) = y -> x = y
   证明: Subtype.ext
 -/
 @[ext] lemma ext : (x : Complex) = y -> x = y := Subtype.ext
@@ -179,7 +179,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  结论: Injective ((↑) : Circle -> Complex)
+  结论: 单射 ((↑) : Circle -> 复形)
   证明: fun _ _ => ext
 -/
 lemma coe_injective : Injective ((↑) : Circle -> Complex) := fun _ _ => ext
@@ -195,7 +195,7 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  结论: (x : Complex) = y ↔ x = y
+  结论: (x : 复形) = y ↔ x = y
   证明: coe_injective.eq_iff
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
@@ -214,7 +214,7 @@ lemma norm_coe
 中文:
 引理 norm_coe
   条件: (z : Circle)
-  结论: ‖(z : Complex)‖ = 1
+  结论: ‖(z : 复形)‖ = 1
   证明: mem_sphere_zero_iff_norm.1 z.2
 
 Depends on / 依赖: mem_sphere_zero_iff_norm
@@ -250,7 +250,7 @@ lemma coe_ne_zero
 中文:
 引理 coe_ne_zero
   条件: (z : Circle)
-  结论: (z : Complex) != 0
+  结论: (z : 复形) != 0
   证明: ne_zero_of_mem_unit_sphere z
 -/
 @[simp] lemma coe_ne_zero (z : Circle) : (z : Complex) != 0 := ne_zero_of_mem_unit_sphere z
@@ -264,7 +264,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ↑(1 : Circle) = (1 : Complex)
+  结论: ↑(1 : Circle) = (1 : 复形)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_one : ↑(1 : Circle) = (1 : Complex) := rfl
@@ -279,7 +279,7 @@ lemma coe_eq_one
 
 中文:
 引理 coe_eq_one
-  结论: (x : Complex) = 1 ↔ x = 1
+  结论: (x : 复形) = 1 ↔ x = 1
   证明: by rw [← coe_inj, coe_one]
 -/
 @[norm_cast] lemma coe_eq_one : (x : Complex) = 1 ↔ x = 1 := by rw [← coe_inj, coe_one]
@@ -295,7 +295,7 @@ lemma coe_mul
 中文:
 引理 coe_mul
   条件: (z w : Circle)
-  结论: ↑(z * w) = (z : Complex) * w
+  结论: ↑(z * w) = (z : 复形) * w
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_mul (z w : Circle) : ↑(z * w) = (z : Complex) * w := rfl
@@ -311,7 +311,7 @@ lemma coe_inv
 中文:
 引理 coe_inv
   条件: (z : Circle)
-  结论: ↑z⁻¹ = (z : Complex)⁻¹
+  结论: ↑z⁻¹ = (z : 复形)⁻¹
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inv (z : Circle) : ↑z⁻¹ = (z : Complex)⁻¹ := rfl
@@ -328,7 +328,7 @@ lemma coe_inv_eq_conj
 中文:
 引理 coe_inv_eq_conj
   条件: (z : Circle)
-  结论: ↑z⁻¹ = conj (z : Complex)
+  结论: ↑z⁻¹ = conj (z : 复形)
   证明: by
   rw [coe_inv]; rw [inv_def]; rw [normSq_coe]; rw [inv_one]; rw [ofReal_one]; rw [mul_one]
 
@@ -349,7 +349,7 @@ lemma coe_div
 中文:
 引理 coe_div
   条件: (z w : Circle)
-  结论: ↑(z / w) = (z : Complex) / w
+  结论: ↑(z / w) = (z : 复形) / w
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_div (z w : Circle) : ↑(z / w) = (z : Complex) / w := rfl
@@ -365,7 +365,7 @@ lemma coe_pow
 中文:
 引理 coe_pow
   条件: (z : Circle) (n : 自然数)
-  结论: ↑(z ^ n) = (z : Complex) ^ n
+  结论: ↑(z ^ n) = (z : 复形) ^ n
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_pow (z : Circle) (n : Nat) : ↑(z ^ n) = (z : Complex) ^ n := rfl
@@ -381,7 +381,7 @@ lemma coe_zpow
 中文:
 引理 coe_zpow
   条件: (z : Circle) (n : 整数)
-  结论: ↑(z ^ n) = (z : Complex) ^ n
+  结论: ↑(z ^ n) = (z : 复形) ^ n
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zpow (z : Circle) (n : Int) : ↑(z ^ n) = (z : Complex) ^ n := rfl
@@ -397,7 +397,7 @@ lemma coe_neg
 中文:
 引理 coe_neg
   条件: (x : Circle)
-  结论: ↑(-x) = -(x : Complex)
+  结论: ↑(-x) = -(x : 复形)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_neg (x : Circle) : ↑(-x) = -(x : Complex) := rfl
@@ -436,7 +436,7 @@ definition coeHom
 
 中文:
 定义 coeHom
-  签名: : Circle ->* Complex where
+  签名: : Circle ->* 复形 where
   定义体: (↑)
   map_one' := coe_one
   map_mul' := coe_mul
@@ -456,7 +456,7 @@ definition toUnits
 
 中文:
 定义 toUnits
-  签名: : Circle ->* Units Complex
+  签名: : Circle ->* 单位群 复形
   定义体: unitSphereToUnits Complex
 
 Depends on / 依赖: unitSphereToUnits
@@ -476,7 +476,7 @@ lemma toUnits_apply
 中文:
 引理 toUnits_apply
   条件: (z : Circle)
-  结论: toUnits z = Units.mk0 ↑z z.coe_ne_zero
+  结论: toUnits z = 单位群.mk0 ↑z z.coe_ne_zero
   证明: rfl
 -/
 @[simp] lemma toUnits_apply (z : Circle) : toUnits z = Units.mk0 ↑z z.coe_ne_zero := rfl
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace Circle
+  签名: 紧空间 Circle
   定义体: inferInstanceAs CompactSpace (sphere _ _)
 
 Depends on / 依赖: CompactSpace, sphere
@@ -507,7 +507,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalGroup Circle
+  签名: 是拓扑群 Circle
   定义体: inferInstanceAs IsTopologicalGroup (sphere _ _)
 
 Depends on / 依赖: IsTopologicalGroup, sphere
@@ -523,7 +523,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace Circle
+  签名: : 一致空间 Circle
   定义体: inferInstanceAs UniformSpace (sphere _ _)
 
 Depends on / 依赖: UniformSpace, sphere
@@ -544,7 +544,7 @@ property := mem_sphere_zero_iff_norm.2 by
 
 中文:
 定义 ofConjDivSelf
-  签名: (z : Complex) (hz : z != 0)
+  签名: (z : 复形) (hz : z != 0)
   定义体: conj z / z
 property := mem_sphere_zero_iff_norm.2 by
     rw [norm_div]; rw [RCLike.norm_conj]; rw [div_self]; exact norm_ne_zero_iff.mpr hz
@@ -597,7 +597,7 @@ theorem coe_exp
 中文:
 定理 coe_exp
   条件: (t : 实数)
-  结论: exp t = Complex.exp (t * Complex.I)
+  结论: exp t = 复形.exp (t * 复形.I)
   证明: rfl
 
 @[simp]
@@ -666,7 +666,7 @@ definition expHom
 
 中文:
 定义 expHom
-  签名: : 实数 ->+ Additive Circle where
+  签名: : 实数 ->+ 加性 Circle where
   定义体: Additive.ofMul ∘ exp
   map_zero' := exp_zero
   map_add' := exp_add
@@ -837,7 +837,7 @@ lemma star_addChar
 中文:
 引理 star_addChar
   条件: (x : 实数)
-  结论: star ((e x) : Complex) = e (-x)
+  结论: star ((e x) : 复形) = e (-x)
   证明: by
   have h := Circle.coe_inv_eq_conj ⟨e x, ?_⟩
   · simp [← h, e.map_neg_eq_inv]
@@ -865,7 +865,7 @@ lemma starRingEnd_addChar
 中文:
 引理 starRingEnd_addChar
   条件: (x : 实数)
-  结论: starRingEnd Complex (e x) = e (-x)
+  结论: starRingEnd 复形 (e x) = e (-x)
   证明: star_addChar x
 
 Depends on / 依赖: star_addChar
@@ -884,7 +884,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul Complex α]
+  签名: [标量乘法 复形 α]
   定义体: inferInstanceAs SMul (Submonoid.unitSphere _) α
 
 Depends on / 依赖: Submonoid, Submonoid.unitSphere, unitSphere
@@ -901,7 +901,7 @@ instance instSMulCommClass_left
 
 中文:
 实例 instSMulCommClass_left
-  签名: [SMul Complex β] [SMul α β] [SMulCommClass Complex α β]
+  签名: [标量乘法 复形 β] [标量乘法 α β] [标量交换类 复形 α β]
   定义体: inferInstanceAs SMulCommClass (Submonoid.unitSphere _) α β
 
 Depends on / 依赖: SMulCommClass, Submonoid, Submonoid.unitSphere, unitSphere
@@ -920,7 +920,7 @@ instance instSMulCommClass_right
 
 中文:
 实例 instSMulCommClass_right
-  签名: [SMul Complex β] [SMul α β] [SMulCommClass α Complex β]
+  签名: [标量乘法 复形 β] [标量乘法 α β] [标量交换类 α 复形 β]
   定义体: inferInstanceAs SMulCommClass α (Submonoid.unitSphere _) β
 
 Depends on / 依赖: SMulCommClass, Submonoid, Submonoid.unitSphere, unitSphere
@@ -939,7 +939,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul Complex α] [SMul Complex β] [SMul α β] [IsScalarTower Complex α β]
+  签名: [标量乘法 复形 α] [标量乘法 复形 β] [标量乘法 α β] [标量塔 复形 α β]
   定义体: inferInstanceAs IsScalarTower (Submonoid.unitSphere _) α β
 
 Depends on / 依赖: IsScalarTower, Submonoid, Submonoid.unitSphere, unitSphere
@@ -958,7 +958,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [MulAction Complex α]
+  签名: [乘法作用 复形 α]
   定义体: inferInstanceAs MulAction (Submonoid.unitSphere _) α
 
 Depends on / 依赖: MulAction, Submonoid, Submonoid.unitSphere, unitSphere
@@ -976,7 +976,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [AddMonoid M] [DistribMulAction Complex M]
+  签名: [加法幺半群 M] [分配乘法作用 复形 M]
   定义体: inferInstanceAs DistribMulAction (Submonoid.unitSphere _) M
 
 Depends on / 依赖: DistribMulAction, Submonoid, Submonoid.unitSphere, unitSphere
@@ -996,8 +996,8 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: [SMul Complex α] (z : Circle) (a : α)
-  结论: z • a = (z : Complex) • a
+  条件: [标量乘法 复形 α] (z : Circle) (a : α)
+  结论: z • a = (z : 复形) • a
   证明: rfl
 -/
 lemma smul_def [SMul Complex α] (z : Circle) (a : α) : z • a = (z : Complex) • a := rfl
@@ -1012,7 +1012,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: [TopologicalSpace α] [MulAction Complex α] [ContinuousSMul Complex α]
+  签名: [拓扑空间 α] [乘法作用 复形 α] [连续标量乘法 复形 α]
   定义体: inferInstanceAs ContinuousSMul (Submonoid.unitSphere _) α
 
 Depends on / 依赖: ContinuousSMul, Submonoid, Submonoid.unitSphere, unitSphere
@@ -1034,7 +1034,7 @@ lemma norm_smul
 
 中文:
 引理 norm_smul
-  结论: {E : 类型} [SeminormedAddCommGroup E] [NormedSpace Complex E]
+  结论: {E : 类型} [SeminormedAddComm群 E] [赋范空间 复形 E]
   证明: by
   rw [smul_def]; rw [norm_smul]; rw [norm_eq_of_mem_sphere]; rw [one_mul]
 -/
@@ -1061,7 +1061,7 @@ definition fourierChar
 
 中文:
 定义 fourierChar
-  签名: : AddChar 实数 Circle where
+  签名: : 加法特征 实数 Circle where
   定义体: .exp (2 * π * z)
   map_zero_eq_one' := by rw [mul_zero, Circle.exp_zero]
   map_add_eq_mul' x y := by rw [mul_add, Circle.exp_add]
@@ -1108,7 +1108,7 @@ theorem fourierChar_apply
 中文:
 定理 fourierChar_apply
   条件: (x : 实数)
-  结论: 𝐞 x = Complex.exp (↑(2 * π * x) * Complex.I)
+  结论: 𝐞 x = 复形.exp (↑(2 * π * x) * 复形.I)
   证明: rfl
 
 @[continuity, fun_prop]
@@ -1126,7 +1126,7 @@ theorem continuous_fourierChar
 
 中文:
 定理 continuous_fourierChar
-  结论: Continuous 𝐞
+  结论: 连续 𝐞
   证明: Circle.exp.continuous.comp (continuous_const_mul _)
 
 Depends on / 依赖: Circle, Circle.exp.continuous.comp, continuous, continuous_const_mul
@@ -1177,7 +1177,7 @@ definition probChar
 
 中文:
 定义 probChar
-  签名: : AddChar 实数 Circle where
+  签名: : 加法特征 实数 Circle where
   定义体: Circle.exp
   map_zero_eq_one' := Circle.exp_zero
   map_add_eq_mul' := Circle.exp_add
@@ -1220,7 +1220,7 @@ theorem probChar_apply
 中文:
 定理 probChar_apply
   条件: (x : 实数)
-  结论: probChar x = Complex.exp (x * Complex.I)
+  结论: probChar x = 复形.exp (x * 复形.I)
   证明: rfl
 
 @[continuity, fun_prop]
@@ -1238,7 +1238,7 @@ theorem continuous_probChar
 
 中文:
 定理 continuous_probChar
-  结论: Continuous probChar
+  结论: 连续 probChar
   证明: map_continuous Circle.exp
 
 Depends on / 依赖: Circle, Circle.exp, map_continuous

@@ -59,7 +59,7 @@ definition leftActionOfMonoidalOppositeRightAction
 
 中文:
 定义 leftActionOfMonoidalOppositeRightAction
-  签名: [MonoidalRightAction Cᴹᵒᵖ D]
+  签名: [MonoidalRight作用 Cᴹᵒᵖ D]
   定义体: d ⊙ᵣ mop c
   actionHomLeft {c c'} f d := d ⊴ᵣ f.mop
   actionHomRight c {d d'} f := f ⊵ᵣ mop c
@@ -111,7 +111,7 @@ definition monoidalOppositeLeftAction
 
 中文:
 定义 monoidalOppositeLeftAction
-  签名: [MonoidalRightAction C D]
+  签名: [MonoidalRight作用 C D]
   定义体: d ⊙ᵣ unmop c
   actionHomLeft {c c'} f d := d ⊴ᵣ f.unmop
   actionHomRight c {d d'} f := f ⊵ᵣ unmop c
@@ -250,7 +250,7 @@ actionUnitIso _ := Iso.op (funₗ _).symm
 
 中文:
 定义 oppositeLeftAction
-  签名: [MonoidalLeftAction C D]
+  签名: [MonoidalLeft作用 C D]
   定义体: op c.unop ⊙ₗ d.unop
   actionHomLeft f d := (f.unop ⊵ₗ unop d).op
   actionHomRight c _ _ f := (unop c ⊴ₗ f.unop).op
@@ -322,7 +322,7 @@ actionUnitIso _ := Iso.unop (funₗ _).symm
 
 中文:
 定义 leftActionOfOppositeLeftAction
-  签名: [MonoidalLeftAction Cᵒᵖ Dᵒᵖ]
+  签名: [MonoidalLeft作用 Cᵒᵖ Dᵒᵖ]
   定义体: unop op c ⊙ₗ op d
   actionHomLeft {c c'} f d := (f.op ⊵ₗ op d).unop
   actionHomRight c {d d'} f := (op c ⊴ₗ f.op).unop
@@ -562,7 +562,7 @@ definition rightActionOfMonoidalOppositeLeftAction
 
 中文:
 定义 rightActionOfMonoidalOppositeLeftAction
-  签名: [MonoidalLeftAction Cᴹᵒᵖ D]
+  签名: [MonoidalLeft作用 Cᴹᵒᵖ D]
   定义体: mop c ⊙ₗ d
   actionHomLeft {d d'} f c := mop c ⊴ₗ f
   actionHomRight d _ _ f := f.mop ⊵ₗ d
@@ -612,7 +612,7 @@ definition monoidalOppositeRightAction
 
 中文:
 定义 monoidalOppositeRightAction
-  签名: [MonoidalLeftAction C D]
+  签名: [MonoidalLeft作用 C D]
   定义体: unmop c ⊙ₗ d
   actionHomLeft {d d'} f c := unmop c ⊴ₗ f
   actionHomRight d _ _ f := f.unmop ⊵ₗ d
@@ -748,7 +748,7 @@ actionUnitIso _ := Iso.op (ρᵣ _).symm
 
 中文:
 定义 oppositeRightAction
-  签名: [MonoidalRightAction C D]
+  签名: [MonoidalRight作用 C D]
   定义体: op c.unop ⊙ᵣ d.unop
   actionHomLeft {c c'} f d := (f.unop ⊵ᵣ unop d).op
   actionHomRight c {d d'} f := (unop c ⊴ᵣ f.unop).op
@@ -819,7 +819,7 @@ actionUnitIso _ := Iso.unop (ρᵣ _).symm
 
 中文:
 定义 rightActionOfOppositeRightAction
-  签名: [MonoidalRightAction Cᵒᵖ Dᵒᵖ]
+  签名: [MonoidalRight作用 Cᵒᵖ Dᵒᵖ]
   定义体: unop op c ⊙ᵣ op d
   actionHomLeft {c c'} f d := (f.op ⊵ᵣ op d).unop
   actionHomRight c {d d'} f := (op c ⊴ᵣ f.op).unop

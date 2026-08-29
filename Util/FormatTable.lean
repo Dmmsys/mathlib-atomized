@@ -89,7 +89,7 @@ definition formatTable
 
 中文:
 定义 formatTable
-  签名: (headers : Array String) (table : Array (Array String))
+  签名: (headers : 数组 String) (table : 数组 (数组 String))
   定义体: Id.run do
   -- If no alignments are provided, default to left alignment for all columns.
   let alignments := alignments.getD (Array.replicate headers.size Alignment.left)

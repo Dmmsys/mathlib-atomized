@@ -244,7 +244,7 @@ instance [hu
 
 中文:
 实例 [hu
-  签名: : Fact (IsUnit (3 : R))] : (ofJ0 R).IsElliptic
+  签名: : Fact (是单位 (3 : R))] : (ofJ0 R).是Elliptic
   定义体: by
   rw [isElliptic_iff]; rw [ofJ0_Δ]
   convert! (hu.out.pow 3).neg
@@ -271,7 +271,7 @@ lemma ofJ0_j
 
 中文:
 引理 ofJ0_j
-  条件: [Fact (IsUnit (3 : R))]
+  条件: [Fact (是单位 (3 : R))]
   结论: (ofJ0 R).j = 0
   证明: by
   rw [j]; rw [ofJ0_c₄]
@@ -295,7 +295,7 @@ instance [hu
 
 中文:
 实例 [hu
-  签名: : Fact (IsUnit (2 : R))] : (ofJ1728 R).IsElliptic
+  签名: : Fact (是单位 (2 : R))] : (ofJ1728 R).是Elliptic
   定义体: by
   rw [isElliptic_iff]; rw [ofJ1728_Δ]
   convert! (hu.out.pow 6).neg
@@ -322,7 +322,7 @@ lemma ofJ1728_j
 
 中文:
 引理 ofJ1728_j
-  条件: [Fact (IsUnit (2 : R))]
+  条件: [Fact (是单位 (2 : R))]
   结论: (ofJ1728 R).j = 1728
   证明: by
   rw [j]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [ofJ1728_c₄]; rw [coe_Δ']; rw [ofJ1728_Δ]
@@ -358,7 +358,7 @@ lemma ofJNe0Or1728_j
 
 中文:
 引理 ofJNe0Or1728_j
-  条件: (j : R) [Fact (IsUnit j)] [Fact (IsUnit (j - 1728))]
+  条件: (j : R) [Fact (是单位 j)] [Fact (是单位 (j - 1728))]
   证明: by
   rw [WeierstrassCurve.j]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [ofJNe0Or1728_c₄]; rw [coe_Δ']; rw [ofJNe0Or1728_Δ]
   ring1
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofJ j).IsElliptic
+  签名: (ofJ j).是Elliptic
   定义体: by
   by_cases h0 : j = 0
   · by_cases h3 : (3 : F) = 0
@@ -661,7 +661,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited { W : WeierstrassCurve F // W.IsElliptic }
+  签名: 可居 { W : WeierstrassCurve F // W.是Elliptic }
   定义体: ⟨⟨ofJ 37, inferInstance⟩⟩
 -/
 instance : Inhabited { W : WeierstrassCurve F // W.IsElliptic } :=

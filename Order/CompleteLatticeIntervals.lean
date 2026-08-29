@@ -51,7 +51,7 @@ definition subsetSupSet
 
 中文:
 定义 subsetSupSet
-  签名: [Inhabited s]
+  签名: [可居 s]
   定义体: if ht : t.Nonempty ∧ BddAbove t ∧ sSup ((↑) '' t : Set α) in s
     then ⟨sSup ((↑) '' t : Set α), ht.2.2⟩
     else default
@@ -78,7 +78,7 @@ theorem subset_sSup_def
 
 中文:
 定理 subset_sSup_def
-  条件: [Inhabited s]
+  条件: [可居 s]
   证明: rfl
 -/
 theorem subset_sSup_def [Inhabited s] :
@@ -98,7 +98,7 @@ theorem subset_sSup_of_within
 
 中文:
 定理 subset_sSup_of_within
-  结论: [Inhabited s] {t : Set s}
+  结论: [可居 s] {t : 集合 s}
   证明: by simp [h, h', h'']
 -/
 theorem subset_sSup_of_within [Inhabited s] {t : Set s}
@@ -116,7 +116,7 @@ theorem subset_sSup_emptyset
 
 中文:
 定理 subset_sSup_emptyset
-  条件: [Inhabited s]
+  条件: [可居 s]
   证明: by
   simp [sSup]
 -/
@@ -135,7 +135,7 @@ theorem subset_sSup_of_not_bddAbove
 
 中文:
 定理 subset_sSup_of_not_bddAbove
-  条件: [Inhabited s] {t : Set s} (ht : ¬BddAbove t)
+  条件: [可居 s] {t : 集合 s} (ht : ¬BddAbove t)
   证明: by
   simp [sSup, ht]
 -/
@@ -166,7 +166,7 @@ definition subsetInfSet
 
 中文:
 定义 subsetInfSet
-  签名: [Inhabited s]
+  签名: [可居 s]
   定义体: if ht : t.Nonempty ∧ BddBelow t ∧ sInf ((↑) '' t : Set α) in s
     then ⟨sInf ((↑) '' t : Set α), ht.2.2⟩
     else default
@@ -193,7 +193,7 @@ theorem subset_sInf_def
 
 中文:
 定理 subset_sInf_def
-  条件: [Inhabited s]
+  条件: [可居 s]
   证明: rfl
 -/
 theorem subset_sInf_def [Inhabited s] :
@@ -213,7 +213,7 @@ theorem subset_sInf_of_within
 
 中文:
 定理 subset_sInf_of_within
-  结论: [Inhabited s] {t : Set s}
+  结论: [可居 s] {t : 集合 s}
   证明: by simp [h, h', h'']
 -/
 theorem subset_sInf_of_within [Inhabited s] {t : Set s}
@@ -231,7 +231,7 @@ theorem subset_sInf_emptyset
 
 中文:
 定理 subset_sInf_emptyset
-  条件: [Inhabited s]
+  条件: [可居 s]
   证明: by
   simp [sInf]
 -/
@@ -250,7 +250,7 @@ theorem subset_sInf_of_not_bddBelow
 
 中文:
 定理 subset_sInf_of_not_bddBelow
-  条件: [Inhabited s] {t : Set s} (ht : ¬BddBelow t)
+  条件: [可居 s] {t : 集合 s} (ht : ¬BddBelow t)
   证明: by
   simp [sInf, ht]
 -/
@@ -282,7 +282,7 @@ isG
 
 中文:
 缩写 subsetConditionallyCompleteLinearOrder
-  签名: [Inhabited s]
+  签名: [可居 s]
   定义体: { subsetSupSet s, subsetInfSet s, DistribLattice.toLattice, (inferInstance : LinearOrder s) with
 isLUB_csSup t ht h_bdd := .of_image Subtype.coe_le_coe by
       rw [← subset_sSup_of_within s ht h_bdd (h_Sup ht h_bdd)]
@@ -321,8 +321,8 @@ theorem sSup_within_of_ordConnected
 
 中文:
 定理 sSup_within_of_ordConnected
-  条件: {s : Set α} [hs : OrdConnected s] ⦃t
-  结论: Set s⦄ (ht : t.Nonempty)
+  条件: {s : 集合 α} [hs : 序连通 s] ⦃t
+  结论: 集合 s⦄ (ht : t.非空)
   证明: by
   obtain ⟨c, hct⟩ : exists c, c in t := ht
   obtain ⟨B, hB⟩ : exists B, B in upperBounds t := h_bdd
@@ -356,8 +356,8 @@ theorem sInf_within_of_ordConnected
 
 中文:
 定理 sInf_within_of_ordConnected
-  条件: {s : Set α} [hs : OrdConnected s] ⦃t
-  结论: Set s⦄ (ht : t.Nonempty)
+  条件: {s : 集合 α} [hs : 序连通 s] ⦃t
+  结论: 集合 s⦄ (ht : t.非空)
   证明: by
   obtain ⟨c, hct⟩ : exists c, c in t := ht
   obtain ⟨B, hB⟩ : exists B, B in lowerBounds t := h_bdd
@@ -387,7 +387,7 @@ instance ordConnectedSubsetConditionallyCompleteLinearOrder
 
 中文:
 实例 ordConnectedSubsetConditionallyCompleteLinearOrder
-  签名: [Inhabited s]
+  签名: [可居 s]
   定义体: subsetConditionallyCompleteLinearOrder s
     (fun h => sSup_within_of_ordConnected h)
     (fun h => sInf_within_of_ordConnected h)
@@ -418,8 +418,8 @@ instance Set.Icc.completeLattice
     exact c
 
 中文:
-实例 Set.Icc.completeLattice
-  签名: [ConditionallyCompleteLattice α]
+实例 集合.闭区间.completeLattice
+  签名: [条件完备格 α]
   定义体: (inferInstance : BoundedOrder ↑(Icc a b))
   sSup S := if hS : S = ∅ then ⟨a, le_rfl, Fact.out⟩ else ⟨sSup ((↑) '' S), by
     rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hS
@@ -462,7 +462,7 @@ instance [ConditionallyCompleteLinearOrder
   body: { Set.Icc.completeLattice, Subtype.instLinearOrder _, LinearOrder.toBiheytingAlgebra _ with }
 
 中文:
-实例 [ConditionallyCompleteLinearOrder
+实例 [条件完备线性序
   签名: α] {a b
   定义体: { Set.Icc.completeLattice, Subtype.instLinearOrder _, LinearOrder.toBiheytingAlgebra _ with }
 
@@ -483,8 +483,8 @@ lemma Set.Icc.coe_sSup
   congrArg Subtype.val (dif_neg hS.ne_empty)
 
 中文:
-引理 Set.Icc.coe_sSup
-  结论: [ConditionallyCompleteLattice α] {a b : α} (h : a <= b)
+引理 集合.闭区间.coe_sSup
+  结论: [条件完备格 α] {a b : α} (h : a <= b)
   证明: ⟨h⟩
     ↑(sSup S) = sSup ((↑) '' S : Set α) :=
   congrArg Subtype.val (dif_neg hS.ne_empty)
@@ -505,8 +505,8 @@ lemma Set.Icc.coe_sInf
   congrArg Subtype.val (dif_neg hS.ne_empty)
 
 中文:
-引理 Set.Icc.coe_sInf
-  结论: [ConditionallyCompleteLattice α] {a b : α} (h : a <= b)
+引理 集合.闭区间.coe_sInf
+  结论: [条件完备格 α] {a b : α} (h : a <= b)
   证明: ⟨h⟩
     ↑(sInf S) = sInf ((↑) '' S : Set α) :=
   congrArg Subtype.val (dif_neg hS.ne_empty)
@@ -527,8 +527,8 @@ lemma Set.Icc.coe_iSup
   (Set.Icc.coe_sSup h (range_nonempty S)).trans (congrArg sSup (range_comp Subtype.val S).symm)
 
 中文:
-引理 Set.Icc.coe_iSup
-  结论: [ConditionallyCompleteLattice α] {a b : α} (h : a <= b)
+引理 集合.闭区间.coe_iSup
+  结论: [条件完备格 α] {a b : α} (h : a <= b)
   证明: ⟨h⟩
     ↑(iSup S) = (⨆ i, S i : α) :=
   (Set.Icc.coe_sSup h (range_nonempty S)).trans (congrArg sSup (range_comp Subtype.val S).symm)
@@ -549,8 +549,8 @@ lemma Set.Icc.coe_iInf
   (Set.Icc.coe_sInf h (range_nonempty S)).trans (congrArg sInf (range_comp Subtype.val S).symm)
 
 中文:
-引理 Set.Icc.coe_iInf
-  结论: [ConditionallyCompleteLattice α] {a b : α} (h : a <= b)
+引理 集合.闭区间.coe_iInf
+  结论: [条件完备格 α] {a b : α} (h : a <= b)
   证明: ⟨h⟩
     ↑(iInf S) = (⨅ i, S i : α) :=
   (Set.Icc.coe_sInf h (range_nonempty S)).trans (congrArg sInf (range_comp Subtype.val S).symm)
@@ -581,7 +581,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (Iic a) where
+  签名: : 完备格 (左无界右闭区间 a) where
   定义体: ⟨sSup ((↑) '' S), by simpa using fun b hb _ => hb⟩
   sInf S := ⟨a ⊓ sInf ((↑) '' S), by simp⟩
   isLUB_sSup _ := .of_image Subtype.coe_le_coe (isLUB_sSup _)

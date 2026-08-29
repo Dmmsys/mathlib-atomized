@@ -43,7 +43,7 @@ abbreviation WeightedCone
 
 中文:
 缩写 WeightedCone
-  签名: (W : J ⥤ Type w) (F : J ⥤ C)
+  签名: (W : J ⥤ 类型 w) (F : J ⥤ C)
   定义体: Cone (CategoryOfElements.π W ⋙ F)
 
 Depends on / 依赖: CategoryOfElements, CoconePt, Limits, Limits.CoconePt.isCardinalFiltered_pt, Limits.isColimitCocone, PartOrdEmb, coconePointUniqueUpToIso, colimit, colimit.isColimit, forget, isCardinalFiltered, isCardinalFiltered_iff, isCardinalFiltered_pt, isColimit, isColimitCocone, isFiltered_of_isCardinalFiltered, p.diag, p.isColimit.coconePointUniqueUpToIso, p.prop_diag_obj, prop_diag_obj
@@ -61,7 +61,7 @@ abbreviation HasWeightedLimit
 
 中文:
 缩写 HasWeightedLimit
-  签名: (W : J ⥤ Type w) (F : J ⥤ C)
+  签名: (W : J ⥤ 类型 w) (F : J ⥤ C)
   定义体: HasLimit (CategoryOfElements.π W ⋙ F)
 
 Depends on / 依赖: CategoryOfElements, HasLimit
@@ -174,7 +174,7 @@ abbreviation IsLimit
   body: Limits.IsLimit c
 
 中文:
-缩写 IsLimit
+缩写 是极限
   签名: (c : WeightedCone W F)
   定义体: Limits.IsLimit c
 

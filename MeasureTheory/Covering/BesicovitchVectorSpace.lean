@@ -160,7 +160,7 @@ definition multiplicity
 
 中文:
 定义 multiplicity
-  签名: (E : 类型) [NormedAddCommGroup E]
+  签名: (E : 类型) [赋范交换加群 E]
   定义体: sSup {N | exists s : Finset E, s.card = N ∧ (forall c in s, ‖c‖ <= 2) ∧ forall c in s, forall d in s, c != d -> 1 <= ‖c - d‖}
 
 Depends on / 依赖: Finset, s.card
@@ -189,7 +189,7 @@ theorem card_le_of_separated
 
 中文:
 定理 card_le_of_separated
-  结论: (s : Finset E) (hs : 对任意 c in s, ‖c‖ <= 2)
+  结论: (s : 有限集 E) (hs : 对任意 c in s, ‖c‖ <= 2)
   证明: by
   /- We consider balls of radius `1/2` around the points in `s`. They are disjoint, and all
     contained in the ball of radius `5/2`. A volume argument gives `s.card * (1/2)^dim ≤ (5/2)^dim`,
@@ -285,7 +285,7 @@ theorem card_le_multiplicity
 
 中文:
 定理 card_le_multiplicity
-  结论: {s : Finset E} (hs : 对任意 c in s, ‖c‖ <= 2)
+  结论: {s : 有限集 E} (hs : 对任意 c in s, ‖c‖ <= 2)
   证明: by
   apply le_csSup
   · refine ⟨5 ^ finrank Real E, ?_⟩
@@ -321,7 +321,7 @@ theorem exists_goodδ
   by_contra! 
 
 中文:
-定理 exists_goodδ
+定理 存在_goodδ
   证明: by
   classical
   /- This follows from a compactness argument: otherwise, one could extract a converging
@@ -488,7 +488,7 @@ theorem card_le_multiplicity_of_δ
 
 中文:
 定理 card_le_multiplicity_of_δ
-  结论: {s : Finset E} (hs : 对任意 c in s, ‖c‖ <= 2)
+  结论: {s : 有限集 E} (hs : 对任意 c in s, ‖c‖ <= 2)
   证明: (Classical.choose_spec (exists_goodδ E)).2.2 s hs h's
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
@@ -516,7 +516,7 @@ theorem le_multiplicity_of_δ_of_fin
 
 中文:
 定理 le_multiplicity_of_δ_of_fin
-  结论: {n : 自然数} (f : Fin n -> E) (h : 对任意 i, ‖f i‖ <= 2)
+  结论: {n : 自然数} (f : 有限集 n -> E) (h : 对任意 i, ‖f i‖ <= 2)
   证明: by
   classical
   have finj : Function.Injective f := by
@@ -575,7 +575,7 @@ theorem exists_normalized_aux1
   hav
 
 中文:
-定理 exists_normalized_aux1
+定理 存在_normalized_aux1
   结论: {N : 自然数} {τ : 实数} (a : SatelliteConfig E N τ)
   证明: by
   have ah :
@@ -635,7 +635,7 @@ theorem exists_normalized_aux2
   hav
 
 中文:
-定理 exists_normalized_aux2
+定理 存在_normalized_aux2
   结论: {N : 自然数} {τ : 实数} (a : SatelliteConfig E N τ)
   证明: by
   have ah :
@@ -715,7 +715,7 @@ theorem exists_normalized_aux3
   have hcrj : ‖a.c j‖ <= a.r j + 1 := by simpa only [last
 
 中文:
-定理 exists_normalized_aux3
+定理 存在_normalized_aux3
   结论: {N : 自然数} {τ : 实数} (a : SatelliteConfig E N τ)
   证明: by
   have ah :
@@ -798,7 +798,7 @@ theorem exists_normalized
   refine ⟨c', fun n => norm_c'_le n, f
 
 中文:
-定理 exists_normalized
+定理 存在_normalized
   结论: {N : 自然数} {τ : 实数} (a : SatelliteConfig E N τ) (lastc : a.c (last N) = 0)
   证明: by
   let c' : Fin N.succ -> E := fun i => if ‖a.c i‖ <= 2 then a.c i else (2 / ‖a.c i‖) • a.c i

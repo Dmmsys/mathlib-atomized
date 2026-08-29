@@ -42,7 +42,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsOpenQuotientMap (id : X -> X)
+  结论: 是OpenQuotient映射 (id : X -> X)
   证明: ⟨surjective_id, continuous_id, .id⟩
 -/
 protected theorem id : IsOpenQuotientMap (id : X -> X) := ⟨surjective_id, continuous_id, .id⟩
@@ -58,8 +58,8 @@ theorem isQuotientMap
 
 中文:
 定理 isQuotientMap
-  条件: (h : IsOpenQuotientMap f)
-  结论: IsQuotientMap f
+  条件: (h : 是OpenQuotient映射 f)
+  结论: 是商映射 f
   证明: h.isOpenMap.isQuotientMap h.continuous h.surjective
 
 Depends on / 依赖: continuous, h.continuous, h.isOpenMap.isQuotientMap, h.surjective, isOpenMap, isQuotientMap, surjective
@@ -77,7 +77,7 @@ theorem iff_isOpenMap_isQuotientMap
 
 中文:
 定理 iff_isOpenMap_isQuotientMap
-  结论: IsOpenQuotientMap f ↔ IsOpenMap f ∧ IsQuotientMap f
+  结论: 是OpenQuotient映射 f ↔ 是开映射 f ∧ 是商映射 f
   证明: ⟨fun h => ⟨h.isOpenMap, h.isQuotientMap⟩, fun ⟨ho, hq⟩ => ⟨hq.surjective, hq.continuous, ho⟩⟩
 
 Depends on / 依赖: continuous, h.isOpenMap, h.isQuotientMap, hq.continuous, hq.surjective, isOpenMap, isQuotientMap, surjective
@@ -95,7 +95,7 @@ theorem of_isOpenMap_isQuotientMap
 
 中文:
 定理 of_isOpenMap_isQuotientMap
-  条件: (ho : IsOpenMap f) (hq : IsQuotientMap f)
+  条件: (ho : 是开映射 f) (hq : 是商映射 f)
   证明: iff_isOpenMap_isQuotientMap.2 ⟨ho, hq⟩
 
 Depends on / 依赖: iff_isOpenMap_isQuotientMap
@@ -114,7 +114,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : Y -> Z} (hg : IsOpenQuotientMap g) (hf : IsOpenQuotientMap f)
+  条件: {g : Y -> Z} (hg : 是OpenQuotient映射 g) (hf : 是OpenQuotient映射 f)
   证明: ⟨.comp hg.1 hf.1, .comp hg.2 hf.2, .comp hg.3 hf.3⟩
 -/
 theorem comp {g : Y -> Z} (hg : IsOpenQuotientMap g) (hf : IsOpenQuotientMap f) :
@@ -131,7 +131,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: {g : Y -> Z} (hf : Continuous f) (f_surj : Surjective f) (hg : Continuous g)
+  结论: {g : Y -> Z} (hf : 连续 f) (f_surj : 满射 f) (hg : 连续 g)
   证明: ⟨.of_comp h.surjective, hg, .of_comp hf f_surj h.isOpenMap ⟩
 
 Depends on / 依赖: f_surj, h.isOpenMap, h.surjective, isOpenMap, of_comp, surjective
@@ -151,7 +151,7 @@ theorem of_comp_iff
 
 中文:
 定理 of_comp_iff
-  条件: {g : Y -> Z} (hf : IsOpenQuotientMap f)
+  条件: {g : Y -> Z} (hf : 是OpenQuotient映射 f)
   证明: ⟨fun h => .of_comp hf.continuous hf.surjective
     (hf.isQuotientMap.continuous_iff.mpr h.continuous) h, fun hg => hg.comp hf⟩
 
@@ -173,7 +173,7 @@ theorem map_nhds_eq
 
 中文:
 定理 map_nhds_eq
-  条件: (h : IsOpenQuotientMap f) (x : X)
+  条件: (h : 是OpenQuotient映射 f) (x : X)
   结论: map f (𝓝 x) = 𝓝 (f x)
   证明: le_antisymm h.continuous.continuousAt h.isOpenMap.nhds_le _
 
@@ -192,7 +192,7 @@ theorem continuous_comp_iff
 
 中文:
 定理 continuous_comp_iff
-  条件: (h : IsOpenQuotientMap f) {g : Y -> Z}
+  条件: (h : 是OpenQuotient映射 f) {g : Y -> Z}
   证明: h.isQuotientMap.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, h.isQuotientMap.continuous_iff.symm, isQuotientMap
@@ -212,7 +212,7 @@ theorem continuousAt_comp_iff
 
 中文:
 定理 continuousAt_comp_iff
-  条件: (h : IsOpenQuotientMap f) {g : Y -> Z} {x : X}
+  条件: (h : 是OpenQuotient映射 f) {g : Y -> Z} {x : X}
   证明: by
   simp only [ContinuousAt, ← h.map_nhds_eq, tendsto_map'_iff, comp_def]
 
@@ -232,7 +232,7 @@ theorem isOpenMap_iff
 
 中文:
 定理 isOpenMap_iff
-  条件: (hf : IsOpenQuotientMap f) {g : Y -> Z}
+  条件: (hf : 是OpenQuotient映射 f) {g : Y -> Z}
   证明: ⟨fun hg => hg.comp hf.isOpenMap, fun h => .of_comp hf.continuous hf.surjective h⟩
 
 Depends on / 依赖: continuous, hf.continuous, hf.isOpenMap, hf.surjective, hg.comp, isOpenMap, of_comp, surjective
@@ -253,8 +253,8 @@ theorem dense_preimage_iff
 
 中文:
 定理 dense_preimage_iff
-  条件: (h : IsOpenQuotientMap f) {s : Set Y}
-  结论: Dense (f ⁻¹' s) ↔ Dense s
+  条件: (h : 是OpenQuotient映射 f) {s : 集合 Y}
+  结论: 稠密 (f ⁻¹' s) ↔ 稠密 s
   证明: ⟨fun hs => h.surjective.denseRange.dense_of_mapsTo h.continuous hs (mapsTo_preimage _ _),
     fun hs => hs.preimage h.isOpenMap⟩
 
@@ -279,8 +279,8 @@ theorem Topology.IsInducing.isOpenQuotientMap_of_surjective
     rwa [V.image_preimage_eq surj]
 
 中文:
-定理 Topology.IsInducing.isOpenQuotientMap_of_surjective
-  结论: (ind : IsInducing f)
+定理 拓扑.是Inducing.isOpenQuotientMap_of_surjective
+  结论: (ind : 是Inducing f)
   证明: surj
   continuous := ind.continuous
   isOpenMap U U_open := by
@@ -304,8 +304,8 @@ theorem Topology.IsInducing.isQuotientMap_of_surjective
   proof: (ind.isOpenQuotientMap_of_surjective surj).isQuotientMap
 
 中文:
-定理 Topology.IsInducing.isQuotientMap_of_surjective
-  结论: (ind : IsInducing f)
+定理 拓扑.是Inducing.isQuotientMap_of_surjective
+  结论: (ind : 是Inducing f)
   证明: (ind.isOpenQuotientMap_of_surjective surj).isQuotientMap
 
 Depends on / 依赖: ind.isOpenQuotientMap_of_surjective, isOpenQuotientMap_of_surjective, isQuotientMap

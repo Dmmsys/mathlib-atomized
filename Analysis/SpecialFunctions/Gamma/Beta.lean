@@ -65,8 +65,8 @@ definition betaIntegral
   body: ∫ x : Real in 0..1, (x : Complex) ^ (u - 1) * (1 - (x : Complex)) ^ (v - 1)
 
 中文:
-定义 betaIntegral
-  签名: (u v : Complex)
+定义 beta整数egral
+  签名: (u v : 复形)
   定义体: ∫ x : Real in 0..1, (x : Complex) ^ (u - 1) * (1 - (x : Complex)) ^ (v - 1)
 
 Depends on / 依赖: _unit, adj.homEquiv_unit, homEquiv_unit
@@ -90,8 +90,8 @@ theorem betaIntegral_convergent_left
     apply Con
 
 中文:
-定理 betaIntegral_convergent_left
-  条件: {u : Complex} (hu : 0 < re u) (v : Complex)
+定理 beta整数egral_convergent_left
+  条件: {u : 复形} (hu : 0 < re u) (v : 复形)
   证明: by
   apply IntervalIntegrable.mul_continuousOn
   · refine intervalIntegral.intervalIntegrable_cpow' ?_
@@ -133,8 +133,8 @@ theorem betaIntegral_convergent
   · simp
 
 中文:
-定理 betaIntegral_convergent
-  条件: {u v : Complex} (hu : 0 < re u) (hv : 0 < re v)
+定理 beta整数egral_convergent
+  条件: {u v : 复形} (hu : 0 < re u) (hv : 0 < re v)
   证明: by
   refine (betaIntegral_convergent_left hu v).trans ?_
   rw [IntervalIntegrable.iff_comp_neg]
@@ -172,8 +172,8 @@ theorem betaIntegral_symm
       (fun x : Real => (x : Complex) ^ (u - 1) * (1 - (x : Complex)) ^ (v - 1)) neg_one_lt_zero.ne 1
 
 中文:
-定理 betaIntegral_symm
-  条件: (u v : Complex)
+定理 beta整数egral_symm
+  条件: (u v : 复形)
   结论: beta整数egral v u = beta整数egral u v
   证明: by
   simpa [betaIntegral, ← intervalIntegral.integral_symm, add_comm, mul_comm, sub_eq_add_neg]
@@ -203,8 +203,8 @@ theorem betaIntegral_eval_one_right
   · rwa [sub_re, one_re, ← sub_pos, sub_neg_eq_add, sub_add_cancel]
 
 中文:
-定理 betaIntegral_eval_one_right
-  条件: {u : Complex} (hu : 0 < re u)
+定理 beta整数egral_eval_one_right
+  条件: {u : 复形} (hu : 0 < re u)
   结论: beta整数egral u 1 = 1 / u
   证明: by
   simp_rw [betaIntegral, sub_self, cpow_zero, mul_one]
@@ -237,8 +237,8 @@ theorem betaIntegral_scaled
     rw [(by abel : s + t - 1 = 1 + (s - 1) + (t - 1))]; rw [cpow_add _ _ ha']; rw [cpow_add 1 _ ha']; rw [cpow_on
 
 中文:
-定理 betaIntegral_scaled
-  条件: (s t : Complex) {a : 实数} (ha : 0 < a)
+定理 beta整数egral_scaled
+  条件: (s t : 复形) {a : 实数} (ha : 0 < a)
   证明: by
   have ha' : (a : Complex) != 0 := ofReal_ne_zero.mpr ha.ne'
   rw [betaIntegral]
@@ -280,8 +280,8 @@ theorem Gamma_mul_Gamma_eq_betaIntegral
   sim
 
 中文:
-定理 Gamma_mul_Gamma_eq_betaIntegral
-  条件: {s t : Complex} (hs : 0 < re s) (ht : 0 < re t)
+定理 Gamma_mul_Gamma_eq_beta整数egral
+  条件: {s t : 复形} (hs : 0 < re s) (ht : 0 < re t)
   证明: by
   -- Note that we haven't proved (yet) that the Gamma function has no zeroes, so we can't formulate
   -- this as a formula for the Beta function.
@@ -318,8 +318,8 @@ theorem betaIntegral_recurrence
   let F : Real -> Complex := 
 
 中文:
-定理 betaIntegral_recurrence
-  条件: {u v : Complex} (hu : 0 < re u) (hv : 0 < re v)
+定理 beta整数egral_recurrence
+  条件: {u v : 复形} (hu : 0 < re u) (hv : 0 < re v)
   证明: by
   -- NB: If we knew `Gamma (u + v + 1) ≠ 0` this would be an easy consequence of
   -- `Gamma_mul_Gamma_eq_betaIntegral`; but we don't know that yet. We will prove it later, but
@@ -397,8 +397,8 @@ theorem betaIntegral_eval_nat_add_one_right
     swap; · rw [← ofReal_natCast, ofReal_re]; 
 
 中文:
-定理 betaIntegral_eval_nat_add_one_right
-  条件: {u : Complex} (hu : 0 < re u) (n : 自然数)
+定理 beta整数egral_eval_nat_add_one_right
+  条件: {u : 复形} (hu : 0 < re u) (n : 自然数)
   证明: by
   induction n generalizing u with
   | zero =>
@@ -449,7 +449,7 @@ definition GammaSeq
 
 中文:
 定义 GammaSeq
-  签名: (s : Complex) (n : 自然数)
+  签名: (s : 复形) (n : 自然数)
   定义体: (n : Complex) ^ s * n ! / ∏ j in Finset.range (n + 1), (s + j)
 
 Depends on / 依赖: Finset, Finset.range
@@ -467,8 +467,8 @@ theorem GammaSeq_eq_betaIntegral_of_re_pos
   rw [GammaSeq]; rw [betaIntegral_eval_nat_add_one_right hs n]; rw [← mul_div_assoc]
 
 中文:
-定理 GammaSeq_eq_betaIntegral_of_re_pos
-  条件: {s : Complex} (hs : 0 < re s) (n : 自然数)
+定理 GammaSeq_eq_beta整数egral_of_re_pos
+  条件: {s : 复形} (hs : 0 < re s) (n : 自然数)
   证明: by
   rw [GammaSeq]; rw [betaIntegral_eval_nat_add_one_right hs n]; rw [← mul_div_assoc]
 
@@ -493,7 +493,7 @@ theorem GammaSeq_add_one_left
 
 中文:
 定理 GammaSeq_add_one_left
-  条件: (s : Complex) {n : 自然数} (hn : n != 0)
+  条件: (s : 复形) {n : 自然数} (hn : n != 0)
   证明: by
   conv_lhs => rw [GammaSeq, Finset.prod_range_succ, div_div]
   conv_rhs =>
@@ -529,7 +529,7 @@ theorem GammaSeq_eq_approx_Gamma_integral
 
 中文:
 定理 GammaSeq_eq_approx_Gamma_integral
-  条件: {s : Complex} (hs : 0 < re s) {n : 自然数} (hn : n != 0)
+  条件: {s : 复形} (hs : 0 < re s) {n : 自然数} (hn : n != 0)
   证明: by
   have : forall x : Real, x = x / n * n := by intro x; rw [div_mul_cancel₀]; exact Nat.cast_ne_zero.mpr hn
   conv_rhs => enter [1, x, 2, 1]; rw [this x]
@@ -574,7 +574,7 @@ theorem approx_Gamma_integral_tendsto_Gamma_integral
 
 中文:
 定理 approx_Gamma_integral_tendsto_Gamma_integral
-  条件: {s : Complex} (hs : 0 < re s)
+  条件: {s : 复形} (hs : 0 < re s)
   证明: by
   rw [Gamma_eq_integral hs]
   -- We apply dominated convergence to the following function, which we will show is uniformly
@@ -659,8 +659,8 @@ theorem GammaSeq_tendsto_Gamma
 
 中文:
 定理 GammaSeq_tendsto_Gamma
-  条件: (s : Complex)
-  结论: Tendsto (GammaSeq s) atTop (𝓝 <| Gamma s)
+  条件: (s : 复形)
+  结论: 收敛 (GammaSeq s) atTop (𝓝 <| Gamma s)
   证明: by
   suffices forall m : Nat, ⌊1 - s.re⌋₊ = m -> Tendsto (GammaSeq s) atTop (𝓝 <| Gamma s) by tauto
   intro m
@@ -725,7 +725,7 @@ theorem GammaSeq_mul
 
 中文:
 定理 GammaSeq_mul
-  条件: (z : Complex) {n : 自然数} (hn : n != 0)
+  条件: (z : 复形) {n : 自然数} (hn : n != 0)
   证明: by
   -- also true for n = 0 but we don't need it
   have aux : forall a b c d : Complex, a * b * (c * d) = a * c * (b * d) := by intros; ring
@@ -769,7 +769,7 @@ theorem Gamma_mul_Gamma_one_sub
 
 中文:
 定理 Gamma_mul_Gamma_one_sub
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: Gamma z * Gamma (1 - z) = π / sin (π * z)
   证明: by
   have pi_ne : (π : Complex) != 0 := Complex.ofReal_ne_zero.mpr pi_ne_zero
@@ -827,7 +827,7 @@ theorem Gamma_ne_zero
 
 中文:
 定理 Gamma_ne_zero
-  条件: {s : Complex} (hs : 对任意 m : 自然数, s != -m)
+  条件: {s : 复形} (hs : 对任意 m : 自然数, s != -m)
   结论: Gamma s != 0
   证明: by
   by_cases h_im : s.im = 0
@@ -877,7 +877,7 @@ theorem Gamma_eq_zero_iff
 
 中文:
 定理 Gamma_eq_zero_iff
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: Gamma s = 0 ↔ 存在 m : 自然数, s = -m
   证明: by
   constructor
@@ -905,7 +905,7 @@ theorem Gamma_ne_zero_of_re_pos
 
 中文:
 定理 Gamma_ne_zero_of_re_pos
-  条件: {s : Complex} (hs : 0 < re s)
+  条件: {s : 复形} (hs : 0 < re s)
   结论: Gamma s != 0
   证明: by
   refine Gamma_ne_zero fun m => ?_
@@ -937,7 +937,7 @@ theorem Gamma_add_nat_div_Gamma_eq
 
 中文:
 定理 Gamma_add_nat_div_Gamma_eq
-  条件: {n : 自然数} (z : Complex) (hz : 对任意 k : 自然数, z != -k)
+  条件: {n : 自然数} (z : 复形) (hz : 对任意 k : 自然数, z != -k)
   证明: by
   induction n generalizing z with
   | zero =>
@@ -1002,7 +1002,7 @@ theorem GammaSeq_tendsto_Gamma
 中文:
 定理 GammaSeq_tendsto_Gamma
   条件: (s : 实数)
-  结论: Tendsto (GammaSeq s) atTop (𝓝 <| Gamma s)
+  结论: 收敛 (GammaSeq s) atTop (𝓝 <| Gamma s)
   证明: by
   suffices Tendsto ((↑) ∘ GammaSeq s : Nat -> Complex) atTop (𝓝 <| Complex.Gamma s) by
     exact (Complex.continuous_re.tendsto (Complex.Gamma ↑s)).comp this
@@ -1081,7 +1081,7 @@ theorem one_div_Gamma_eq_self_mul_one_div_Gamma_add_one
 
 中文:
 定理 one_div_Gamma_eq_self_mul_one_div_Gamma_add_one
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rcases ne_or_eq s 0 with (h | rfl)
   · rw [Gamma_add_one s h, mul_inv, mul_inv_cancel_left₀ h]
@@ -1114,7 +1114,7 @@ theorem differentiable_one_div_Gamma
 
 中文:
 定理 differentiable_one_div_Gamma
-  结论: Differentiable Complex fun s : Complex => (Gamma s)⁻¹
+  结论: 可微 复形 fun s : 复形 => (Gamma s)⁻¹
   证明: fun s => by
   rcases exists_nat_gt (-s.re) with ⟨n, hs⟩
   induction n generalizing s with
@@ -1153,8 +1153,8 @@ lemma betaIntegral_eq_Gamma_mul_div
   rw [Gamma_mul_Gamma_eq_betaIntegral hu hv]; rw [mul_div_cancel_left₀ _ (Gamma_ne_zero_of_re_pos (add_pos hu hv))]
 
 中文:
-引理 betaIntegral_eq_Gamma_mul_div
-  条件: (u v : Complex) (hu : 0 < u.re) (hv : 0 < v.re)
+引理 beta整数egral_eq_Gamma_mul_div
+  条件: (u v : 复形) (hu : 0 < u.re) (hv : 0 < v.re)
   证明: by
   rw [Gamma_mul_Gamma_eq_betaIntegral hu hv]; rw [mul_div_cancel_left₀ _ (Gamma_ne_zero_of_re_pos (add_pos hu hv))]
 
@@ -1196,7 +1196,7 @@ theorem Gamma_mul_Gamma_add_half
 
 中文:
 定理 Gamma_mul_Gamma_add_half
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   suffices (fun z => (Gamma z)⁻¹ * (Gamma (z + 1 / 2))⁻¹) = fun z =>
       (Gamma (2 * z))⁻¹ * (2 : Complex) ^ (2 * z - 1) / ↑(√π) by

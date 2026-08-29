@@ -80,7 +80,7 @@ definition localPowerSeries
 
 中文:
 定义 localPowerSeries
-  签名: : PowerSeries 整数
+  签名: : 幂级数 整数
   定义体: PowerSeries.invOfUnit (W.localPolynomial R) 1
 
 Depends on / 依赖: PowerSeries, PowerSeries.invOfUnit, W.localPolynomial, invOfUnit, localPolynomial
@@ -124,7 +124,7 @@ definition LFunction
       (W.baseChange (p.adicCompletion K)).localEulerFactor (p.adicCompletionIntegers K)
 
 中文:
-定义 LFunction
+定义 L函数
   签名: : ArithmeticFunction 整数
   定义体: eulerProduct fun p : HeightOneSpectrum (𝓞 K) =>
       (W.baseChange (p.adicCompletion K)).localEulerFactor (p.adicCompletionIntegers K)
@@ -145,7 +145,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def LSeries (W : WeierstrassCurve K) (s : Complex)
+  签名: def LSeries (W : WeierstrassCurve K) (s : 复形)
   定义体: LSeries ((↑) ∘ W.LFunction) s
 -/
 protected noncomputable def LSeries (W : WeierstrassCurve K) (s : Complex) :=

@@ -66,10 +66,10 @@ inductive Rel
     - of: (m : M) : Rel (ι R m * ι R m) (algebraMap R _ (Q m))
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : TensorAlgebra R M -> TensorAlgebra R M -> 命题
   构造子 (1 个):
-    - of: (m : M) : Rel (ι R m * ι R m) (algebraMap R _ (Q m))
+    - of: (m : M) : 关系 (ι R m * ι R m) (algebraMap R _ (Q m))
 -/
 inductive Rel : TensorAlgebra R M -> TensorAlgebra R M -> Prop
   | of (m : M) : Rel (ι R m * ι R m) (algebraMap R _ (Q m))
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (CliffordAlgebra Q)
+  签名: 代数 R (CliffordAlgebra Q)
   定义体: inferInstance
 -/
 instance : Algebra R (CliffordAlgebra Q) := inferInstance
@@ -402,7 +402,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {A : 类型} [Semiring A] [Algebra R A] {f g : CliffordAlgebra Q ->ₐ[R] A}
+  条件: {A : 类型} [半环 A] [代数 R A] {f g : CliffordAlgebra Q ->ₐ[R] A}
   证明: by
   intro h
   apply (lift Q).symm.injective
@@ -498,7 +498,7 @@ theorem adjoin_range_ι
 
 中文:
 定理 adjoin_range_ι
-  结论: Algebra.adjoin R (Set.range (ι Q)) = ⊤
+  结论: 代数.adjoin R (集合.range (ι Q)) = ⊤
   证明: by
   refine top_unique fun x hx => ?_; clear hx
   induction x using induction with
@@ -558,8 +558,8 @@ theorem mul_add_swap_eq_polar_of_forall_mul_self_eq
     _ = algebraMap R _ (Q (
 
 中文:
-定理 mul_add_swap_eq_polar_of_forall_mul_self_eq
-  结论: {A : 类型} [Ring A] [Algebra R A]
+定理 mul_add_swap_eq_polar_of_对任意_mul_self_eq
+  结论: {A : 类型} [环 A] [代数 R A]
   证明: calc
     f a * f b + f b * f a = f (a + b) * f (a + b) - f a * f a - f b * f b := by
       rw [f.map_add]; rw [mul_add]; rw [add_mul]; rw [add_mul]; abel
@@ -594,8 +594,8 @@ theorem forall_mul_self_eq_iff
   rw [two_mul]; rw [two_mul]; rw [h x x]; rw [QuadraticMap.polar_self]; r
 
 中文:
-定理 forall_mul_self_eq_iff
-  结论: {A : 类型} [Ring A] [Algebra R A] (h2 : IsUnit (2 : A))
+定理 对任意_mul_self_eq_iff
+  结论: {A : 类型} [环 A] [代数 R A] (h2 : 是单位 (2 : A))
   证明: by
   simp_rw [DFunLike.ext_iff]
   refine ⟨mul_add_swap_eq_polar_of_forall_mul_self_eq _, fun h x => ?_⟩
@@ -922,7 +922,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (QuadraticMap.Isometry.id Q₁) = AlgHom.id R (CliffordAlgebra Q₁)
+  结论: map (二次映射.等距.id Q₁) = 代数态射.id R (CliffordAlgebra Q₁)
   证明: by
   ext m; exact map_apply_ι _ m
 
@@ -1063,7 +1063,7 @@ definition equivOfIsometry
 
 中文:
 定义 equivOfIsometry
-  签名: (e : Q₁.IsometryEquiv Q₂)
+  签名: (e : Q₁.等距等价 Q₂)
   定义体: AlgEquiv.ofAlgHom (map e.toIsometry) (map e.symm.toIsometry)
     ((map_comp_map _ _).trans <| by
       convert! map_id Q₂ using 2
@@ -1100,7 +1100,7 @@ theorem equivOfIsometry_symm
 
 中文:
 定理 equivOfIsometry_symm
-  条件: (e : Q₁.IsometryEquiv Q₂)
+  条件: (e : Q₁.等距等价 Q₂)
   证明: rfl
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem equivOfIsometry_trans
 
 中文:
 定理 equivOfIsometry_trans
-  条件: (e₁₂ : Q₁.IsometryEquiv Q₂) (e₂₃ : Q₂.IsometryEquiv Q₃)
+  条件: (e₁₂ : Q₁.等距等价 Q₂) (e₂₃ : Q₂.等距等价 Q₃)
   证明: by
   ext x
   exact AlgHom.congr_fun (map_comp_map _ _) x

@@ -79,7 +79,7 @@ definition free
 
 中文:
 定义 free
-  签名: : (Cᵒᵖ ⥤ 类型u) ⥤ PresheafOfModules.{u} R where
+  签名: : (Cᵒᵖ ⥤ 类型u) ⥤ 预模层.{u} R where
   定义体: freeObj
   map {F G} φ := { app := fun X => (ModuleCat.free (R.obj X)).map (φ.app X) }
 

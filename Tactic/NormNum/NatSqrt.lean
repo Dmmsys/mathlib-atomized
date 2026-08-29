@@ -56,8 +56,8 @@ theorem isNat_sqrt
   statement: {x nx z : Nat} -> IsNat x nx -> Nat.sqrt nx = z -> IsNat (Nat.sqrt x) z
 
 中文:
-定理 isNat_sqrt
-  结论: {x nx z : 自然数} -> Is自然数 x nx -> 自然数.sqrt nx = z -> Is自然数 (自然数.sqrt x) z
+定理 is自然数_sqrt
+  结论: {x nx z : 自然数} -> 是自然数 x nx -> 自然数.sqrt nx = z -> 是自然数 (自然数.sqrt x) z
 
 Depends on / 依赖: RegularSpace, T0Space, T3Space, instT3Space
 -/
@@ -80,7 +80,7 @@ definition proveNatSqrt
     have hr : Q($ey 
 
 中文:
-定义 proveNatSqrt
+定义 prove自然数Sqrt
   签名: (ex : Q(自然数))
   定义体: match ex.natLit! with
 | 0 => have : ex =Q nat_lit 0 := ⟨⟩; ⟨q(nat_lit 0), q(Nat.sqrt_zero)⟩
@@ -122,7 +122,7 @@ definition evalNatSqrt
   return .isNat sNat ey pf'
 
 中文:
-定义 evalNatSqrt
+定义 eval自然数Sqrt
   签名: : NormNumExt where eval {_ _} e
   定义体: do
   let .app _ (x : Q(Nat)) ← Meta.whnfR e | failure

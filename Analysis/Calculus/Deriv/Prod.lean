@@ -87,8 +87,8 @@ theorem HasDerivAt.prodMk
   proof: HasDerivAtFilter.prodMk hf₁ hf₂
 
 中文:
-定理 HasDerivAt.prodMk
-  条件: (hf₁ : HasDerivAt f₁ f₁' x) (hf₂ : HasDerivAt f₂ f₂' x)
+定理 在点处可导.prodMk
+  条件: (hf₁ : 在点处可导 f₁ f₁' x) (hf₂ : 在点处可导 f₂ f₂' x)
   证明: HasDerivAtFilter.prodMk hf₁ hf₂
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.prodMk, prodMk
@@ -175,7 +175,7 @@ theorem hasDerivAt_pi
 
 中文:
 定理 hasDerivAt_pi
-  结论: HasDerivAt φ φ' x ↔ 对任意 i, HasDerivAt (fun x => φ x i) (φ' i) x
+  结论: 在点处可导 φ φ' x ↔ 对任意 i, 在点处可导 (fun x => φ x i) (φ' i) x
   证明: hasDerivAtFilter_pi
 
 Depends on / 依赖: hasDerivAtFilter_pi
@@ -307,7 +307,7 @@ theorem hasStrictDerivAt_finCons'
 
 中文:
 定理 hasStrictDerivAt_finCons'
-  条件: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+  条件: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasStrictDerivAt_finCons
 
 Depends on / 依赖: hasStrictDerivAt_finCons
@@ -327,7 +327,7 @@ theorem HasStrictDerivAt.finCons
 
 中文:
 定理 HasStrictDerivAt.finCons
-  结论: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+  结论: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasStrictDerivAt_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasStrictDerivAt_finCons
@@ -347,7 +347,7 @@ theorem hasDerivAtFilter_finCons
 
 中文:
 定理 hasDerivAtFilter_finCons
-  条件: {φ' : Π i, F' i} {l : Filter (𝕜 × 𝕜)}
+  条件: {φ' : Π i, F' i} {l : 滤子 (𝕜 × 𝕜)}
   证明: hasFDerivAtFilter_finCons
 
 Depends on / 依赖: hasFDerivAtFilter_finCons
@@ -367,7 +367,7 @@ theorem hasDerivAtFilter_finCons'
 
 中文:
 定理 hasDerivAtFilter_finCons'
-  条件: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)} {l : Filter (𝕜 × 𝕜)}
+  条件: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)} {l : 滤子 (𝕜 × 𝕜)}
   证明: hasDerivAtFilter_finCons
 
 Depends on / 依赖: hasDerivAtFilter_finCons
@@ -387,7 +387,7 @@ theorem HasDerivAtFilter.finCons
 
 中文:
 定理 HasDerivAtFilter.finCons
-  结论: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)} {l : Filter (𝕜 × 𝕜)}
+  结论: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)} {l : 滤子 (𝕜 × 𝕜)}
   证明: hasDerivAtFilter_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasDerivAtFilter_finCons
@@ -427,7 +427,7 @@ theorem hasDerivAt_finCons'
 
 中文:
 定理 hasDerivAt_finCons'
-  条件: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+  条件: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasDerivAt_finCons
 
 Depends on / 依赖: hasDerivAt_finCons
@@ -446,8 +446,8 @@ theorem HasDerivAt.finCons
   proof: hasDerivAt_finCons'.mpr ⟨h, hs⟩
 
 中文:
-定理 HasDerivAt.finCons
-  结论: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+定理 在点处可导.finCons
+  结论: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasDerivAt_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasDerivAt_finCons
@@ -487,7 +487,7 @@ theorem hasDerivWithinAt_finCons'
 
 中文:
 定理 hasDerivWithinAt_finCons'
-  条件: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+  条件: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasDerivAtFilter_finCons
 
 Depends on / 依赖: hasDerivAtFilter_finCons
@@ -507,7 +507,7 @@ theorem HasDerivWithinAt.finCons
 
 中文:
 定理 HasDerivWithinAt.finCons
-  结论: {φ' : F' 0} {φs' : Π i, F' (Fin.succ i)}
+  结论: {φ' : F' 0} {φs' : Π i, F' (有限集.succ i)}
   证明: hasDerivWithinAt_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasDerivWithinAt_finCons

@@ -40,10 +40,10 @@ class IsJointlySurjectivePreserving
     - exists_preimage_fst_triplet_of_prop({X Y S : Scheme.{u}} {f : X ⟶ S} {g : Y ⟶ S} [HasPullback f g] (hg : P g) (x : X) (y : Y) (h : f x = g y)) : exists a : ↑(pullback f g), pullback.fst f g a = x
 
 中文:
-类 IsJointlySurjectivePreserving
-  参数: (P : Morphism命题erty Scheme.{u})
+类 是JointlySurjectivePreserving
+  参数: (P : MorphismProperty 概形.{u})
   公理与运算 (1 个):
-    - exists_preimage_fst_triplet_of_prop({X Y S : Scheme.{u}} {f : X ⟶ S} {g : Y ⟶ S} [HasPullback f g] (hg : P g) (x : X) (y : Y) (h : f x = g y)) : 存在 a : ↑(pullback f g), pullback.fst f g a = x
+    - exists_preimage_fst_triplet_of_prop({X Y S : 概形.{u}} {f : X ⟶ S} {g : Y ⟶ S} [HasPullback f g] (hg : P g) (x : X) (y : Y) (h : f x = g y)) : 存在 a : ↑(pullback f g), pullback.fst f g a = x
 -/
 class IsJointlySurjectivePreserving (P : MorphismProperty Scheme.{u}) where
   exists_preimage_fst_triplet_of_prop {X Y S : Scheme.{u}} {f : X ⟶ S} {g : Y ⟶ S} [HasPullback f g]
@@ -65,7 +65,7 @@ lemma IsJointlySurjectivePreserving.exists_preimage_snd_triplet_of_prop
   rwa [← Scheme.Hom.comp_apply, pullbackSymmetry_inv_comp_snd]
 
 中文:
-引理 IsJointlySurjectivePreserving.exists_preimage_snd_triplet_of_prop
+引理 是JointlySurjectivePreserving.存在_preimage_snd_triplet_of_prop
   证明: by
   let iso := pullbackSymmetry f g
   have : HasPullback g f := hasPullback_symmetry f g
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsJointlySurjectivePreserving @IsOpenImmersion
+  签名: 是JointlySurjectivePreserving @是开浸入
   定义体: by
     rw [← show _ = (pullback.fst _ _ : pullback f g ⟶ _).base from
         PreservesPullback.iso_hom_fst Scheme.forgetToTop f g]
@@ -136,7 +136,7 @@ abbreviation jointlySurjectivePrecoverage
 
 中文:
 缩写 jointlySurjectivePrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: Types.jointlySurjectivePrecoverage.comap Scheme.forget
 
 Depends on / 依赖: Scheme, Scheme.forget, Types.jointlySurjectivePrecoverage.comap, forget, jointlySurjectivePrecoverage
@@ -158,7 +158,7 @@ definition precoverage
 
 中文:
 定义 precoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: jointlySurjectivePrecoverage ⊓ P.precoverage
 
 @[simp]
@@ -184,7 +184,7 @@ lemma ofArrows_mem_precoverage_iff
 
 中文:
 引理 ofArrows_mem_precoverage_iff
-  结论: {S : Scheme.{u}} {ι : 类型} {X : ι -> Scheme.{u}}
+  结论: {S : 概形.{u}} {ι : 类型} {X : ι -> 概形.{u}}
   证明: by
   simp_rw [← Scheme.forget_map', ← Scheme.forget_obj,
     ← Presieve.ofArrows_mem_comap_jointlySurjectivePrecoverage_iff]
@@ -214,7 +214,7 @@ lemma singleton_mem_precoverage_iff
 
 中文:
 引理 singleton_mem_precoverage_iff
-  条件: {X S : Scheme.{u}} (f : X ⟶ S)
+  条件: {X S : 概形.{u}} (f : X ⟶ S)
   证明: by
   rw [← Presieve.ofArrows_pUnit.{0}]; rw [ofArrows_mem_precoverage_iff]
   aesop
@@ -237,8 +237,8 @@ lemma bot_mem_precoverage
 
 中文:
 引理 bot_mem_precoverage
-  条件: (X : Scheme.{u}) [IsEmpty X]
-  结论: ⊥ in Scheme.precoverage P X
+  条件: (X : 概形.{u}) [是空 X]
+  结论: ⊥ in 概形.precoverage P X
   证明: ⟨fun x => ‹IsEmpty X›.elim x, P.bot_mem_precoverage _⟩
 
 Depends on / 依赖: IsEmpty, P.bot_mem_precoverage, bot_mem_precoverage
@@ -257,7 +257,7 @@ lemma precoverage_mono
 
 中文:
 引理 precoverage_mono
-  条件: {P Q : Morphism命题erty Scheme.{u}} (h : P <= Q)
+  条件: {P Q : MorphismProperty 概形.{u}} (h : P <= Q)
   证明: by
   grw [precoverage, precoverage, MorphismProperty.precoverage_monotone h]
 
@@ -277,8 +277,8 @@ instance [P.IsStableUnderComposition]
   dsimp only [precoverage]; infer_instance
 
 中文:
-实例 [P.IsStableUnderComposition]
-  签名: : (precoverage P).IsStableUnderComposition
+实例 [P.是StableUnderComposition]
+  签名: : (precoverage P).是StableUnderComposition
   定义体: by
   dsimp only [precoverage]; infer_instance
 
@@ -297,7 +297,7 @@ instance [P.ContainsIdentities]
   dsimp only [precoverage]; infer_instance
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: [P.RespectsIso]
   定义体: by
   dsimp only [precoverage]; infer_instance
@@ -316,8 +316,8 @@ instance [P.HasPullbacks]
   body: ⟨fun hg => P.hasPullback _ (hR.2 hg)⟩
 
 中文:
-实例 [P.HasPullbacks]
-  签名: : (precoverage P).HasPullbacks where
+实例 [P.有Pullbacks]
+  签名: : (precoverage P).有Pullbacks where
   定义体: ⟨fun hg => P.hasPullback _ (hR.2 hg)⟩
 
 Depends on / 依赖: P.hasPullback, hasPullback
@@ -340,8 +340,8 @@ instance [IsJointlySurjectivePreserving
       (f := g) x 
 
 中文:
-实例 [IsJointlySurjectivePreserving
-  签名: P] [P.IsStableUnderBaseChange] :
+实例 [是JointlySurjectivePreserving
+  签名: P] [P.是StableUnderBaseChange] :
   定义体: by
     rw [ofArrows_mem_precoverage_iff] at hf ⊢
     refine ⟨fun x => ?_, fun i => P.of_isPullback (H i).flip (hf.2 i)⟩
@@ -374,7 +374,7 @@ abbreviation zariskiPrecoverage
 
 中文:
 缩写 zariskiPrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: precoverage @IsOpenImmersion
 
 Depends on / 依赖: IsOpenImmersion, precoverage

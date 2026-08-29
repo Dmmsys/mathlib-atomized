@@ -49,10 +49,10 @@ class GeometricallyIrreducible
     - geometrically_irreducibleSpace : geometrically (IrreducibleSpace ·) f
 
 中文:
-类 GeometricallyIrreducible
+类 几何不可约
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - geometrically_irreducibleSpace : geometrically (IrreducibleSpace ·) f
+    - geometrically_irreducibleSpace : geometrically (不可约空间 ·) f
 -/
 class GeometricallyIrreducible (f : X ⟶ Y) : Prop where
   geometrically_irreducibleSpace : geometrically (IrreducibleSpace ·) f
@@ -66,7 +66,7 @@ lemma GeometricallyIrreducible.eq_geometrically
   ext; exact geometricallyIrreducible_iff _
 
 中文:
-引理 GeometricallyIrreducible.eq_geometrically
+引理 几何不可约.eq_geometrically
   证明: by
   ext; exact geometricallyIrreducible_iff _
 
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @GeometricallyIrreducible
+  签名: 是StableUnderBaseChange @几何不可约
   定义体: GeometricallyIrreducible.eq_geometrically ▸ inferInstance
 
 Depends on / 依赖: GeometricallyIrreducible, GeometricallyIrreducible.eq_geometrically, eq_geometrically
@@ -104,8 +104,8 @@ instance [GeometricallyIrreducible
   body: MorphismProperty.pullback_fst f g inferInstance
 
 中文:
-实例 [GeometricallyIrreducible
-  签名: g] : GeometricallyIrreducible (pullback.fst f g)
+实例 [几何不可约
+  签名: g] : 几何不可约 (pullback.fst f g)
   定义体: MorphismProperty.pullback_fst f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, SimplexCategory, SimplexCategory.mono_iff_injective, homEquiv, injective, mono_iff_injective, pullback_fst
@@ -123,8 +123,8 @@ instance [GeometricallyIrreducible
   body: MorphismProperty.pullback_snd f g inferInstance
 
 中文:
-实例 [GeometricallyIrreducible
-  签名: f] : GeometricallyIrreducible (pullback.snd f g)
+实例 [几何不可约
+  签名: f] : 几何不可约 (pullback.snd f g)
   定义体: MorphismProperty.pullback_snd f g inferInstance
 
 Depends on / 依赖: Functor, Functor.map_comp, MorphismProperty, MorphismProperty.pullback_snd, cancel_mono, map_comp, map_injective, pullback_snd, toSimplexCategory, toSimplexCategory.map, toSimplexCategory.map_injective
@@ -161,7 +161,7 @@ lemma Scheme.Hom.isIrreducible_preimage
   rw [← f.ra
 
 中文:
-引理 Scheme.Hom.isIrreducible_preimage
+引理 概形.态射.isIrreducible_preimage
   证明: by
   wlog H : exists x, s = {x} generalizing s
   · refine hs.preimage_of_isPreirreducible_fiber _ hf
@@ -199,8 +199,8 @@ definition Scheme.Hom.irreducibleComponentsEquiv
     f.surjective).symm.toEquiv
 
 中文:
-定义 Scheme.Hom.irreducibleComponentsEquiv
-  签名: [GeometricallyIrreducible f] (hf : IsOpenMap f)
+定义 概形.态射.irreducibleComponentsEquiv
+  签名: [几何不可约 f] (hf : 是开映射 f)
   定义体: (irreducibleComponentsEquivOfIsPreirreducibleFiber f f.continuous hf
     (fun _ => (f.isIrreducible_preimage hf isIrreducible_singleton).isPreirreducible)
     f.surjective).symm.toEquiv
@@ -223,7 +223,7 @@ lemma GeometricallyIrreducible.irreducibleSpace
     f.isIrreducible_preimage hf (IrreducibleSpace.isIrreducible_univ _)
 
 中文:
-引理 GeometricallyIrreducible.irreducibleSpace
+引理 几何不可约.irreducibleSpace
   证明: by
   simpa [irreducibleSpace_def] using
     f.isIrreducible_preimage hf (IrreducibleSpace.isIrreducible_univ _)
@@ -244,7 +244,7 @@ lemma GeometricallyIrreducible.irreducibleSpace_of_subsingleton
   GeometricallyIrreducible.irreducibleSpace (f := f) fun _ _ => isOpen_discrete _
 
 中文:
-引理 GeometricallyIrreducible.irreducibleSpace_of_subsingleton
+引理 几何不可约.irreducibleSpace_of_subsingleton
   证明: have : IrreducibleSpace S := ⟨‹_›⟩
   GeometricallyIrreducible.irreducibleSpace (f := f) fun _ _ => isOpen_discrete _
 
@@ -264,8 +264,8 @@ instance [GeometricallyIrreducible
   body: GeometricallyIrreducible.irreducibleSpace (pullback.snd _ _) (pullback.snd f g).isOpenMap
 
 中文:
-实例 [GeometricallyIrreducible
-  签名: f] [UniversallyOpen f] [IrreducibleSpace Y] :
+实例 [几何不可约
+  签名: f] [普遍开 f] [不可约空间 Y] :
   定义体: GeometricallyIrreducible.irreducibleSpace (pullback.snd _ _) (pullback.snd f g).isOpenMap
 
 Depends on / 依赖: GeometricallyIrreducible, GeometricallyIrreducible.irreducibleSpace, irreducibleSpace, isOpenMap, pullback, pullback.snd
@@ -283,8 +283,8 @@ instance [GeometricallyIrreducible
   body: GeometricallyIrreducible.irreducibleSpace (pullback.fst _ _) (pullback.fst f g).isOpenMap
 
 中文:
-实例 [GeometricallyIrreducible
-  签名: g] [UniversallyOpen g] [IrreducibleSpace X] :
+实例 [几何不可约
+  签名: g] [普遍开 g] [不可约空间 X] :
   定义体: GeometricallyIrreducible.irreducibleSpace (pullback.fst _ _) (pullback.fst f g).isOpenMap
 
 Depends on / 依赖: GeometricallyIrreducible, GeometricallyIrreducible.irreducibleSpace, irreducibleSpace, isOpenMap, pullback, pullback.fst
@@ -303,7 +303,7 @@ lemma GeometricallyIrreducible.iff_geometricallyIrreducible_fiber
     ← geometrically_iff_forall_fiberToSpecResidueField]
 
 中文:
-引理 GeometricallyIrreducible.iff_geometricallyIrreducible_fiber
+引理 几何不可约.iff_geometricallyIrreducible_fiber
   证明: by
   simp only [GeometricallyIrreducible.eq_geometrically,
     ← geometrically_iff_forall_fiberToSpecResidueField]
@@ -326,7 +326,7 @@ lemma GeometricallyIrreducible.comp
   infer_instance
 
 中文:
-引理 GeometricallyIrreducible.comp
+引理 几何不可约.comp
   证明: by
   refine ⟨geometrically_iff_of_isClosedUnderIsomorphisms.mpr fun K _ x => ?_⟩
   rw [← (pullbackRightPullbackFstIso g x f).hom.homeomorph.irreducibleSpace_iff]

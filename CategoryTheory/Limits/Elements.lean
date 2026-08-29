@@ -126,7 +126,7 @@ lemma map_lift_mapCone
 
 中文:
 引理 map_lift_mapCone
-  条件: (c : Cone F)
+  条件: (c : 锥 F)
   证明: by
   apply (preservesLimitIso A (F ⋙ π A)).toEquiv.injective
   ext i
@@ -191,7 +191,7 @@ definition liftedCone
 
 中文:
 定义 liftedCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: ⟨_, liftedConeElement F⟩
   π :=
     { app := fun i => ⟨limit.π (F ⋙ π A) i, by simpa using! map_π_liftedConeElement _ _⟩
@@ -237,7 +237,7 @@ uniq s m h := ext _ _ _ limit.hom_ext
 
 中文:
 定义 isLimit
-  签名: : IsLimit (liftedCone F) where
+  签名: : 是极限 (liftedCone F) where
   定义体: ⟨limit.lift (F ⋙ π A) ((π A).mapCone s), by simp⟩
 uniq s m h := ext _ _ _ limit.hom_ext
     fun i => by simpa using congrArg Subtype.val (h i)
@@ -271,7 +271,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimitsOfShape I (π A)
+  签名: 创造形状极限 I (π A)
 -/
 noncomputable instance : CreatesLimitsOfShape I (π A) where
 
@@ -285,7 +285,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfShape I A.Elements
+  签名: 有形状极限 I A.Elements
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (π A)
 
 Depends on / 依赖: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -320,7 +320,7 @@ definition corepresentableByOfIsInitial
 
 中文:
 定义 corepresentableByOfIsInitial
-  签名: {F : C ⥤ Type w} {E : Elements F} (he : IsInitial E)
+  签名: {F : C ⥤ 类型 w} {E : Elements F} (he : IsInitial E)
   定义体: { toFun f := F.map f E.snd
       invFun y := (he.to ⟨_, y⟩).val
       left_inv f := Subtype.ext_iff.mp (he.hom_ext (he.to ⟨_, F.map f E.snd⟩) ⟨f, rfl⟩)
@@ -347,7 +347,7 @@ lemma isCorepresentable_of_hasInitial
 
 中文:
 引理 isCorepresentable_of_hasInitial
-  条件: (F : C ⥤ Type w) [HasInitial (Elements F)]
+  条件: (F : C ⥤ 类型 w) [HasInitial (Elements F)]
   证明: ⟨(⊥_ F.Elements).fst,
       (Nonempty.intro (corepresentableByOfIsInitial initialIsInitial))⟩
 
@@ -370,7 +370,7 @@ theorem hasInitial_iff_isCorepresentable
 
 中文:
 定理 hasInitial_iff_isCorepresentable
-  条件: (F : C ⥤ Type w)
+  条件: (F : C ⥤ 类型 w)
   证明: isCorepresentable_of_hasInitial F
   mpr _ := inferInstance
 
@@ -397,7 +397,7 @@ definition representableByOfIsInitial
 
 中文:
 定义 representableByOfIsInitial
-  签名: {F : Cᵒᵖ ⥤ Type w} {E : Elements F} (he : IsInitial E)
+  签名: {F : Cᵒᵖ ⥤ 类型 w} {E : Elements F} (he : IsInitial E)
   定义体: { toFun f := F.map f.op E.snd
       invFun y := (he.to ⟨_, y⟩).val.unop
       left_inv f := by
@@ -430,7 +430,7 @@ lemma isRepresentable_of_hasInitial
 
 中文:
 引理 isRepresentable_of_hasInitial
-  条件: (F : Cᵒᵖ ⥤ Type w) [HasInitial (Elements F)]
+  条件: (F : Cᵒᵖ ⥤ 类型 w) [HasInitial (Elements F)]
   证明: ⟨(⊥_ F.Elements).fst.unop,
       (Nonempty.intro (representableByOfIsInitial initialIsInitial))⟩
 
@@ -453,7 +453,7 @@ theorem hasInitial_iff_isRepresentable
 
 中文:
 定理 hasInitial_iff_isRepresentable
-  条件: (F : Cᵒᵖ ⥤ Type w)
+  条件: (F : Cᵒᵖ ⥤ 类型 w)
   证明: isRepresentable_of_hasInitial F
   mpr _ := inferInstance
 

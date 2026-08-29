@@ -37,7 +37,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Ideal.primeHeight [hI : I.IsPrime]
+  签名: def 理想.primeHeight [hI : I.是素]
   定义体: Order.height (⟨I, hI⟩ : PrimeSpectrum R)
 -/
 private noncomputable def Ideal.primeHeight [hI : I.IsPrime] : Nat∞ :=
@@ -52,7 +52,7 @@ definition Ideal.height
   body: ⨅ J in I.minimalPrimes, @Ideal.primeHeight _ _ J ‹J in I.minimalPrimes›.isPrime
 
 中文:
-定义 Ideal.height
+定义 理想.height
   签名: : 自然数∞
   定义体: ⨅ J in I.minimalPrimes, @Ideal.primeHeight _ _ J ‹J in I.minimalPrimes›.isPrime
 
@@ -73,8 +73,8 @@ lemma Ideal.height_eq_primeHeight
   simp [height, primeHeight, Ideal.minimalPrimes_eq_subsingleton_self]
 
 中文:
-引理 Ideal.height_eq_primeHeight
-  条件: [I.IsPrime]
+引理 理想.height_eq_primeHeight
+  条件: [I.是素]
   结论: I.height = I.primeHeight
   证明: by
   simp [height, primeHeight, Ideal.minimalPrimes_eq_subsingleton_self]
@@ -91,8 +91,8 @@ lemma PrimeSpectrum.height_eq_orderHeight
   proof: p.asIdeal.height_eq_primeHeight
 
 中文:
-引理 PrimeSpectrum.height_eq_orderHeight
-  条件: (p : PrimeSpectrum R)
+引理 素谱.height_eq_orderHeight
+  条件: (p : 素谱 R)
   证明: p.asIdeal.height_eq_primeHeight
 
 Depends on / 依赖: asIdeal, height_eq_primeHeight, p.asIdeal.height_eq_primeHeight
@@ -113,7 +113,7 @@ lemma Ideal.height_eq_inf_minimalPrimes
   exact (Ideal.height_eq_primeHeight _).symm
 
 中文:
-引理 Ideal.height_eq_inf_minimalPrimes
+引理 理想.height_eq_inf_minimalPrimes
   结论: I.height = ⨅ J in I.minimalPrimes, J.height
   证明: by
   apply iInf_congr (fun p => iInf_congr fun hp => ?_)
@@ -139,8 +139,8 @@ lemma Ideal.exists_isPrime_height_eq
   exact ⟨p, hpp, hIp, h ▸ p.height_eq_primeHeight⟩
 
 中文:
-引理 Ideal.exists_isPrime_height_eq
-  条件: {I : Ideal R} {n : 自然数} (hI : I.height = n)
+引理 理想.存在_isPrime_height_eq
+  条件: {I : 理想 R} {n : 自然数} (hI : I.height = n)
   证明: by
   simp only [Ideal.height, ENat.iInf_eq_natCast_iff] at hI
   rcases hI with ⟨⟨p, ⟨⟨⟨hpp, hIp⟩, _⟩, h⟩, -⟩, -⟩
@@ -167,7 +167,7 @@ class Ideal.FiniteHeight
     - eq_top_or_height_ne_top : I = ⊤ ∨ I.height != ⊤
 
 中文:
-类 Ideal.FiniteHeight
+类 理想.FiniteHeight
   参数: : 命题 where
   公理与运算 (1 个):
     - eq_top_or_height_ne_top : I = ⊤ ∨ I.height != ⊤
@@ -185,8 +185,8 @@ lemma Ideal.finiteHeight_iff_lt
   rw [Ideal.finiteHeight_iff]; rw [lt_top_iff_ne_top]
 
 中文:
-引理 Ideal.finiteHeight_iff_lt
-  条件: {I : Ideal R}
+引理 理想.finiteHeight_iff_lt
+  条件: {I : 理想 R}
   证明: by
   rw [Ideal.finiteHeight_iff]; rw [lt_top_iff_ne_top]
 
@@ -205,8 +205,8 @@ lemma Ideal.height_ne_top
   proof: (‹I.FiniteHeight›.eq_top_or_height_ne_top).resolve_left hI
 
 中文:
-引理 Ideal.height_ne_top
-  条件: {I : Ideal R} (hI : I != ⊤) [I.FiniteHeight]
+引理 理想.height_ne_top
+  条件: {I : 理想 R} (hI : I != ⊤) [I.FiniteHeight]
   证明: (‹I.FiniteHeight›.eq_top_or_height_ne_top).resolve_left hI
 
 Depends on / 依赖: FiniteHeight, I.FiniteHeight, eq_top_or_height_ne_top, resolve_left
@@ -224,8 +224,8 @@ lemma Ideal.height_lt_top
   proof: (Ideal.height_ne_top hI).lt_top
 
 中文:
-引理 Ideal.height_lt_top
-  条件: {I : Ideal R} (hI : I != ⊤) [I.FiniteHeight]
+引理 理想.height_lt_top
+  条件: {I : 理想 R} (hI : I != ⊤) [I.FiniteHeight]
   证明: (Ideal.height_ne_top hI).lt_top
 
 Depends on / 依赖: Ideal.height_ne_top, height_ne_top, lt_top
@@ -245,8 +245,8 @@ lemma Ideal.height_ne_top_of_isPrime
 @[deprecated "Use `Ideal.height_ne_top_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
-引理 Ideal.height_ne_top_of_isPrime
-  条件: {I : Ideal R} [I.FiniteHeight] [I.IsPrime]
+引理 理想.height_ne_top_of_isPrime
+  条件: {I : 理想 R} [I.FiniteHeight] [I.是素]
   证明: Ideal.height_ne_top ‹I.IsPrime›.ne_top
 
 @[deprecated "Use `Ideal.height_ne_top_of_isPrime` instead." (since := "2026-04-04")]
@@ -269,8 +269,8 @@ lemma Ideal.primeHeight_ne_top
   exact Ideal.height_ne_top ‹I.IsPrime›.ne_top
 
 中文:
-引理 Ideal.primeHeight_ne_top
-  条件: (I : Ideal R) [I.FiniteHeight] [I.IsPrime]
+引理 理想.primeHeight_ne_top
+  条件: (I : 理想 R) [I.FiniteHeight] [I.是素]
   证明: by
   rw [← I.height_eq_primeHeight]
   exact Ideal.height_ne_top ‹I.IsPrime›.ne_top
@@ -291,8 +291,8 @@ lemma Ideal.height_lt_top_of_isPrime
 @[deprecated "Use `Ideal.height_lt_top_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
-引理 Ideal.height_lt_top_of_isPrime
-  条件: {I : Ideal R} [I.FiniteHeight] [I.IsPrime]
+引理 理想.height_lt_top_of_isPrime
+  条件: {I : 理想 R} [I.FiniteHeight] [I.是素]
   证明: Ideal.height_lt_top ‹I.IsPrime›.ne_top
 
 @[deprecated "Use `Ideal.height_lt_top_of_isPrime` instead." (since := "2026-04-04")]
@@ -315,8 +315,8 @@ lemma Ideal.primeHeight_lt_top
   exact Ideal.height_lt_top ‹I.IsPrime›.ne_top
 
 中文:
-引理 Ideal.primeHeight_lt_top
-  条件: (I : Ideal R) [I.FiniteHeight] [I.IsPrime]
+引理 理想.primeHeight_lt_top
+  条件: (I : 理想 R) [I.FiniteHeight] [I.是素]
   证明: by
   rw [← I.height_eq_primeHeight]
   exact Ideal.height_lt_top ‹I.IsPrime›.ne_top
@@ -339,8 +339,8 @@ lemma Ideal.exists_ltSeries_length_eq_height
   exact ⟨l, last, len ▸ hn⟩
 
 中文:
-引理 Ideal.exists_ltSeries_length_eq_height
-  条件: (p : Ideal R) [p.IsPrime] [p.FiniteHeight]
+引理 理想.存在_ltSeries_length_eq_height
+  条件: (p : 理想 R) [p.是素] [p.FiniteHeight]
   证明: by
   obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp (p.height_ne_top (IsPrime.ne_top ‹_›))
   rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight] at hn ⊢
@@ -371,8 +371,8 @@ lemma Ideal.height_mono_of_isPrime
 @[deprecated "Use `Ideal.height_mono_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
-引理 Ideal.height_mono_of_isPrime
-  条件: {I J : Ideal R} [I.IsPrime] [J.IsPrime] (h : I <= J)
+引理 理想.height_mono_of_isPrime
+  条件: {I J : 理想 R} [I.是素] [J.是素] (h : I <= J)
   证明: by
   simp only [Ideal.height_eq_primeHeight, Ideal.primeHeight]
   gcongr
@@ -397,8 +397,8 @@ lemma Ideal.primeHeight_mono
   simpa [Ideal.height_eq_primeHeight] using Ideal.height_mono_of_isPrime h
 
 中文:
-引理 Ideal.primeHeight_mono
-  条件: {I J : Ideal R} [I.IsPrime] [J.IsPrime] (h : I <= J)
+引理 理想.primeHeight_mono
+  条件: {I J : 理想 R} [I.是素] [J.是素] (h : I <= J)
   证明: by
   simpa [Ideal.height_eq_primeHeight] using Ideal.height_mono_of_isPrime h
 -/
@@ -419,8 +419,8 @@ lemma Ideal.height_add_one_le_of_lt_of_isPrime
 @[deprecated "Use `Ideal.height_add_one_le_of_lt_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
-引理 Ideal.height_add_one_le_of_lt_of_isPrime
-  条件: {I J : Ideal R} [I.IsPrime] [J.IsPrime] (h : I < J)
+引理 理想.height_add_one_le_of_lt_of_isPrime
+  条件: {I J : 理想 R} [I.是素] [J.是素] (h : I < J)
   证明: by
   simp only [Ideal.height_eq_primeHeight, Ideal.primeHeight]
   exact Order.height_add_one_le h
@@ -447,8 +447,8 @@ lemma Ideal.primeHeight_add_one_le_of_lt
 @[simp]
 
 中文:
-引理 Ideal.primeHeight_add_one_le_of_lt
-  结论: {I J : Ideal R} [I.IsPrime] [J.IsPrime]
+引理 理想.primeHeight_add_one_le_of_lt
+  结论: {I J : 理想 R} [I.是素] [J.是素]
   证明: by
   simpa [Ideal.height_eq_primeHeight] using Ideal.height_add_one_le_of_lt_of_isPrime h
 
@@ -471,8 +471,8 @@ theorem Ideal.height_top
 @[gcongr]
 
 中文:
-定理 Ideal.height_top
-  结论: (⊤ : Ideal R).height = ⊤
+定理 理想.height_top
+  结论: (⊤ : 理想 R).height = ⊤
   证明: by
   simp [height, minimalPrimes_top]
 
@@ -502,8 +502,8 @@ theorem Ideal.height_mono
 @[gcongr]
 
 中文:
-定理 Ideal.height_mono
-  条件: {I J : Ideal R} (h : I <= J)
+定理 理想.height_mono
+  条件: {I J : 理想 R} (h : I <= J)
   结论: I.height <= J.height
   证明: by
   simp only [I.height_eq_inf_minimalPrimes, J.height_eq_inf_minimalPrimes]
@@ -543,8 +543,8 @@ lemma Ideal.height_strict_mono_of_isPrime
     exact
 
 中文:
-引理 Ideal.height_strict_mono_of_isPrime
-  结论: {I J : Ideal R} [I.IsPrime]
+引理 理想.height_strict_mono_of_isPrime
+  结论: {I J : 理想 R} [I.是素]
   证明: by
   by_cases hJ : J = ⊤
   · grw [hJ, height_top]
@@ -584,8 +584,8 @@ alias Ideal.height_strict_mono_of_isPrime_of_is_prime :=
   Ideal.heigh
 
 中文:
-引理 Ideal.height_strict_mono_of_isPrime_of_isPrime
-  结论: {I J : Ideal R} [I.IsPrime] [J.IsPrime]
+引理 理想.height_strict_mono_of_isPrime_of_isPrime
+  结论: {I J : 理想 R} [I.是素] [J.是素]
   证明: by
   have : I.FiniteHeight := I.finiteHeight_iff.mpr
     (Or.inr (lt_of_le_of_lt (Ideal.height_mono h.le) (J.height_lt_top IsPrime.ne_top')).ne)
@@ -619,8 +619,8 @@ lemma Ideal.primeHeight_strict_mono
   simpa [← Ideal.height_eq_primeHeight] using Ideal.height_strict_mono_of_isPrime_of_isPrime h
 
 中文:
-引理 Ideal.primeHeight_strict_mono
-  结论: {I J : Ideal R} [I.IsPrime] [J.IsPrime] (h : I < J)
+引理 理想.primeHeight_strict_mono
+  结论: {I J : 理想 R} [I.是素] [J.是素] (h : I < J)
   证明: by
   simpa [← Ideal.height_eq_primeHeight] using Ideal.height_strict_mono_of_isPrime_of_isPrime h
 -/
@@ -639,8 +639,8 @@ lemma Ideal.height_le_ringKrullDim_of_isPrime
   exact Order.height_le_krullDim _
 
 中文:
-引理 Ideal.height_le_ringKrullDim_of_isPrime
-  条件: {I : Ideal R} [I.IsPrime]
+引理 理想.height_le_ringKrullDim_of_isPrime
+  条件: {I : 理想 R} [I.是素]
   证明: by
   rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]
   exact Order.height_le_krullDim _
@@ -663,8 +663,8 @@ lemma Ideal.eq_of_le_of_height_le
 @[deprecated "Use `Ideal.height_le_ringKrullDim_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
-引理 Ideal.eq_of_le_of_height_le
-  结论: [I.IsPrime] [I.FiniteHeight]
+引理 理想.eq_of_le_of_height_le
+  结论: [I.是素] [I.FiniteHeight]
   证明: eq_of_le_of_not_lt h fun hlt => not_le.mpr (Ideal.height_strict_mono_of_isPrime hlt) h_height
 
 @[deprecated "Use `Ideal.height_le_ringKrullDim_of_isPrime` instead." (since := "2026-04-04")]
@@ -685,8 +685,8 @@ lemma Ideal.primeHeight_le_ringKrullDim
   proof: Order.height_le_krullDim _
 
 中文:
-引理 Ideal.primeHeight_le_ringKrullDim
-  条件: {I : Ideal R} [I.IsPrime]
+引理 理想.primeHeight_le_ringKrullDim
+  条件: {I : 理想 R} [I.是素]
   证明: Order.height_le_krullDim _
 
 Depends on / 依赖: le_lift, mem_of_superset, subset_closure
@@ -707,8 +707,8 @@ lemma Ideal.height_le_ringKrullDim_of_ne_top
   refine (WithBot.coe_le_coe.mpr (iInf₂_le _ hP)).trans P.height_le_ringKrullDim_of_isPrime
 
 中文:
-引理 Ideal.height_le_ringKrullDim_of_ne_top
-  条件: {I : Ideal R} (h : I != ⊤)
+引理 理想.height_le_ringKrullDim_of_ne_top
+  条件: {I : 理想 R} (h : I != ⊤)
   证明: by
   obtain ⟨P, hP⟩ : Nonempty (I.minimalPrimes) := Ideal.nonempty_minimalPrimes h
   rw [I.height_eq_inf_minimalPrimes]
@@ -739,7 +739,7 @@ lemma Ideal.exists_isMaximal_height
     exa
 
 中文:
-引理 Ideal.exists_isMaximal_height
+引理 理想.存在_isMaximal_height
   条件: [FiniteRingKrullDim R]
   证明: by
   let l := LTSeries.longestOf (PrimeSpectrum R)
@@ -777,8 +777,8 @@ lemma Ideal.finiteHeight_of_le
     lt_top_iff_ne_top.mp ((height_mono e).trans_lt (height_lt_top hJ))
 
 中文:
-引理 Ideal.finiteHeight_of_le
-  条件: {I J : Ideal R} (e : I <= J) (hJ : J != ⊤) [FiniteHeight J]
+引理 理想.finiteHeight_of_le
+  条件: {I J : 理想 R} (e : I <= J) (hJ : J != ⊤) [FiniteHeight J]
   证明: Or.inr
     lt_top_iff_ne_top.mp ((height_mono e).trans_lt (height_lt_top hJ))
 
@@ -807,8 +807,8 @@ lemma Ideal.mem_minimalPrimes_of_height_le
 @[de
 
 中文:
-引理 Ideal.mem_minimalPrimes_of_height_le
-  结论: {I J : Ideal R} (e : I <= J) [J.IsPrime]
+引理 理想.mem_minimalPrimes_of_height_le
+  结论: {I J : 理想 R} (e : I <= J) [J.是素]
   证明: by
   obtain ⟨p, h₁, h₂⟩ := Ideal.exists_minimalPrimes_le e
   convert! h₁
@@ -851,8 +851,8 @@ lemma Ideal.height_eq_zero_iff
 @[deprecated "Use `Ideal.height_eq_z
 
 中文:
-引理 Ideal.height_eq_zero_iff
-  条件: {I : Ideal R} [I.IsPrime]
+引理 理想.height_eq_zero_iff
+  条件: {I : 理想 R} [I.是素]
   结论: height I = 0 ↔ I in minimalPrimes R
   证明: by
   rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]; rw [Order.height_eq_zero]; rw [minimalPrimes_eq_minimals]
@@ -881,8 +881,8 @@ lemma Ideal.primeHeight_eq_zero_iff
   rw [← Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_zero_iff]
 
 中文:
-引理 Ideal.primeHeight_eq_zero_iff
-  条件: {I : Ideal R} [I.IsPrime]
+引理 理想.primeHeight_eq_zero_iff
+  条件: {I : 理想 R} [I.是素]
   证明: by
   rw [← Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_zero_iff]
 -/
@@ -905,7 +905,7 @@ exact absurd hx notMem_nonZeroDivisors_of_mem_mem_minimalPrimes
     (hq.1.2 <| Ideal.mem_span_singleton.mpr <| 
 
 中文:
-引理 Ideal.one_le_height_span_singleton_of_mem_nonZeroDivisors
+引理 理想.one_le_height_span_singleton_of_mem_nonZeroDivisors
   证明: by
   rw [Ideal.height_eq_inf_minimalPrimes]
   refine le_iInf₂ fun q hq => ?_
@@ -944,9 +944,9 @@ lemma Ideal.height_bot
 @[simp]
 
 中文:
-引理 Ideal.height_bot
-  条件: [Nontrivial R]
-  结论: (⊥ : Ideal R).height = 0
+引理 理想.height_bot
+  条件: [非平凡 R]
+  结论: (⊥ : 理想 R).height = 0
   证明: by
   obtain ⟨p, hp⟩ := Ideal.nonempty_minimalPrimes (R := R) (I := ⊥) top_ne_bot.symm
   rw [Ideal.height_eq_inf_minimalPrimes]
@@ -978,8 +978,8 @@ lemma Ideal.height_eq_zero_iff_eq_bot
   exact bot_unique (hIp.trans_eq hp0)
 
 中文:
-引理 Ideal.height_eq_zero_iff_eq_bot
-  条件: [IsDomain R] {I : Ideal R}
+引理 理想.height_eq_zero_iff_eq_bot
+  条件: [是整环 R] {I : 理想 R}
   结论: I.height = 0 ↔ I = ⊥
   证明: by
   refine ⟨fun hI => ?_, fun hI0 => by simp [hI0]⟩
@@ -1005,8 +1005,8 @@ theorem Ideal.ne_bot_of_height_eq_one
   proof: I.height_eq_zero_iff_eq_bot.not.mp (ne_zero_of_eq_one h)
 
 中文:
-定理 Ideal.ne_bot_of_height_eq_one
-  条件: [IsDomain R] {I : Ideal R} (h : I.height = 1)
+定理 理想.ne_bot_of_height_eq_one
+  条件: [是整环 R] {I : 理想 R} (h : I.height = 1)
   结论: I != ⊥
   证明: I.height_eq_zero_iff_eq_bot.not.mp (ne_zero_of_eq_one h)
 
@@ -1028,8 +1028,8 @@ lemma Ideal.height_of_subsingleton
   rw [Subsingleton.elim I ⊤]; rw [Ideal.height_top]
 
 中文:
-引理 Ideal.height_of_subsingleton
-  条件: [Subsingleton R]
+引理 理想.height_of_subsingleton
+  条件: [子单例 R]
   结论: I.height = ⊤
   证明: by
   rw [Subsingleton.elim I ⊤]; rw [Ideal.height_top]
@@ -1055,8 +1055,8 @@ theorem Ideal.isMaximal_of_height_eq_ringKrullDim
   · exa
 
 中文:
-定理 Ideal.isMaximal_of_height_eq_ringKrullDim
-  结论: {I : Ideal R} [I.IsPrime]
+定理 理想.isMaximal_of_height_eq_ringKrullDim
+  结论: {I : 理想 R} [I.是素]
   证明: by
   have h : I != ⊤ := Ideal.IsPrime.ne_top'
   obtain ⟨M, hM, hM'⟩ := Ideal.exists_le_maximal I h
@@ -1088,8 +1088,8 @@ theorem Ideal.isMaximal_of_primeHeight_eq_ringKrullDim
   proof: Ideal.isMaximal_of_height_eq_ringKrullDim (by simpa [Ideal.height_eq_primeHeight])
 
 中文:
-定理 Ideal.isMaximal_of_primeHeight_eq_ringKrullDim
-  结论: {I : Ideal R} [I.IsPrime]
+定理 理想.isMaximal_of_primeHeight_eq_ringKrullDim
+  结论: {I : 理想 R} [I.是素]
   证明: Ideal.isMaximal_of_height_eq_ringKrullDim (by simpa [Ideal.height_eq_primeHeight])
 -/
 private theorem Ideal.isMaximal_of_primeHeight_eq_ringKrullDim {I : Ideal R} [I.IsPrime]
@@ -1112,8 +1112,8 @@ theorem IsLocalRing.maximalIdeal_height_eq_ringKrullDim
   (since := "2026-04-04")]
 
 中文:
-定理 IsLocalRing.maximalIdeal_height_eq_ringKrullDim
-  条件: [IsLocalRing R]
+定理 是局部环.maximalIdeal_height_eq_ringKrullDim
+  条件: [是局部环 R]
   证明: by
   rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]
   exact Order.height_top_eq_krullDim
@@ -1140,8 +1140,8 @@ theorem IsLocalRing.maximalIdeal_primeHeight_eq_ringKrullDim
   simp [← Ideal.height_eq_primeHeight]
 
 中文:
-定理 IsLocalRing.maximalIdeal_primeHeight_eq_ringKrullDim
-  条件: [IsLocalRing R]
+定理 是局部环.maximalIdeal_primeHeight_eq_ringKrullDim
+  条件: [是局部环 R]
   证明: by
   simp [← Ideal.height_eq_primeHeight]
 -/
@@ -1165,8 +1165,8 @@ theorem Ideal.height_eq_ringKrullDim_iff
 @[deprecated "Use `Ideal.height_eq_ringKrullDim_iff` instead." (since := "2026-04-02")]
 
 中文:
-定理 Ideal.height_eq_ringKrullDim_iff
-  结论: [FiniteRingKrullDim R] [IsLocalRing R] {I : Ideal R}
+定理 理想.height_eq_ringKrullDim_iff
+  结论: [FiniteRingKrullDim R] [是局部环 R] {I : 理想 R}
   证明: by
   constructor
   · intro h
@@ -1197,8 +1197,8 @@ theorem Ideal.primeHeight_eq_ringKrullDim_iff
   rw [← Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_ringKrullDim_iff]
 
 中文:
-定理 Ideal.primeHeight_eq_ringKrullDim_iff
-  结论: [FiniteRingKrullDim R] [IsLocalRing R]
+定理 理想.primeHeight_eq_ringKrullDim_iff
+  结论: [FiniteRingKrullDim R] [是局部环 R]
   证明: by
   rw [← Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_ringKrullDim_iff]
 -/
@@ -1220,8 +1220,8 @@ lemma Ideal.height_le_iff
   rfl
 
 中文:
-引理 Ideal.height_le_iff
-  条件: {p : Ideal R} {n : 自然数} [p.IsPrime]
+引理 理想.height_le_iff
+  条件: {p : 理想 R} {n : 自然数} [p.是素]
   证明: by
   rw [height_eq_primeHeight]; rw [primeHeight]; rw [Order.height_le_coe_iff]; rw [(PrimeSpectrum.equivSubtype R).forall_congr_left]; rw [Subtype.forall]
   congr!
@@ -1255,8 +1255,8 @@ lemma Ideal.height_le_iff_covBy
       (H _ hx hxp.1 (fun I hI e => hxp.
 
 中文:
-引理 Ideal.height_le_iff_covBy
-  条件: {p : Ideal R} {n : 自然数} [p.IsPrime] [IsNoetherianRing R]
+引理 理想.height_le_iff_covBy
+  条件: {p : 理想 R} {n : 自然数} [p.是素] [是Noether环 R]
   证明: by
   rw [Ideal.height_le_iff]
   constructor
@@ -1297,8 +1297,8 @@ lemma RingEquiv.height_comap_of_isPrime
 @[simp]
 
 中文:
-引理 RingEquiv.height_comap_of_isPrime
-  结论: {S : 类型} [CommRing S] (e : R ≃+* S)
+引理 环等价.height_comap_of_isPrime
+  结论: {S : 类型} [交换环 S] (e : R ≃+* S)
   证明: by
   rw [height_eq_primeHeight]; rw [height_eq_primeHeight]; rw [primeHeight]; rw [primeHeight]; rw [← Order.height_orderIso (PrimeSpectrum.comapEquiv e.symm) ⟨p]; rw [‹_›⟩]
   have := p.map_comap_of_equiv e.symm
@@ -1327,8 +1327,8 @@ lemma RingEquiv.height_comap
   
 
 中文:
-引理 RingEquiv.height_comap
-  条件: {S : 类型} [CommRing S] (e : R ≃+* S) (I : Ideal S)
+引理 环等价.height_comap
+  条件: {S : 类型} [交换环 S] (e : R ≃+* S) (I : 理想 S)
   证明: by
   refine (Equiv.iInf_congr e.idealComapOrderIso fun J => (Equiv.iInf_congr ?_ fun h => ?_).symm).symm
   · refine .ofIff ?_
@@ -1359,8 +1359,8 @@ lemma RingEquiv.height_map
   rw [← Ideal.comap_symm e]; rw [height_comap]
 
 中文:
-引理 RingEquiv.height_map
-  条件: {S : 类型} [CommRing S] (e : R ≃+* S) (I : Ideal R)
+引理 环等价.height_map
+  条件: {S : 类型} [交换环 S] (e : R ≃+* S) (I : 理想 R)
   证明: by
   rw [← Ideal.comap_symm e]; rw [height_comap]
 
@@ -1386,7 +1386,7 @@ lemma ringKrullDim_le_iff_height_le
 
 中文:
 引理 ringKrullDim_le_iff_height_le
-  条件: {R : 类型} [CommRing R] (n : WithBot 自然数∞)
+  条件: {R : 类型} [交换环 R] (n : WithBot 自然数∞)
   证明: by
   rw [ringKrullDim]; rw [Order.krullDim_eq_iSup_height]; rw [iSup_le_iff]
   refine ⟨fun h p hp => ?_, fun h p => ?_⟩
@@ -1422,7 +1422,7 @@ lemma ringKrullDim_le_iff_isMaximal_height_le
 
 中文:
 引理 ringKrullDim_le_iff_isMaximal_height_le
-  条件: {R : 类型} [CommRing R] (n : WithBot 自然数∞)
+  条件: {R : 类型} [交换环 R] (n : WithBot 自然数∞)
   证明: by
   rw [ringKrullDim_le_iff_height_le]
   refine ⟨fun h m hm => h hm.isPrime, fun h p hp => ?_⟩
@@ -1454,8 +1454,8 @@ theorem IsLocalization.height_under_eq_of_isPrime
   have H (p : Ideal R) (hp
 
 中文:
-定理 IsLocalization.height_under_eq_of_isPrime
-  结论: (S : Submonoid R) {A : 类型} [CommRing A]
+定理 是Localization.height_under_eq_of_isPrime
+  结论: (S : 子幺半群 R) {A : 类型} [交换环 A]
   证明: by
   rw [eq_comm]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]; rw [Ideal.primeHeight]; rw [← WithBot.coe_inj]; rw [Order.height_eq_krullDim_Iic]; rw [Order.height_eq_krullDim_Iic]
   let e := IsLocalization.orderIsoOfPrime S A
@@ -1488,8 +1488,8 @@ theorem IsLocalization.primeHeight_comap
   simpa [Ideal.height_eq_primeHeight] using IsLocalization.height_under_eq_of_isPrime S J
 
 中文:
-定理 IsLocalization.primeHeight_comap
-  结论: (S : Submonoid R) {A : 类型} [CommRing A]
+定理 是Localization.primeHeight_comap
+  结论: (S : 子幺半群 R) {A : 类型} [交换环 A]
   证明: by
   simpa [Ideal.height_eq_primeHeight] using IsLocalization.height_under_eq_of_isPrime S J
 -/
@@ -1514,8 +1514,8 @@ theorem IsLocalization.height_under
 @[deprecated (since
 
 中文:
-定理 IsLocalization.height_under
-  结论: (S : Submonoid R) {A : 类型} [CommRing A] [Algebra R A]
+定理 是Localization.height_under
+  结论: (S : 子幺半群 R) {A : 类型} [交换环 A] [代数 R A]
   证明: by
   rw [(J.comap _).height_eq_inf_minimalPrimes]; rw [J.height_eq_inf_minimalPrimes]
   simp only [IsLocalization.minimalPrimes_comap S A, iInf_image]
@@ -1549,8 +1549,8 @@ theorem IsLocalization.AtPrime.ringKrullDim_eq_height
   rw [← IsLocalRing.maximalIdeal_height_eq_ringKrullDim]; rw [← IsLocalization.height_under I.primeCompl]; rw [← IsLocalization.AtPrime.under_maximalIdeal A I]
 
 中文:
-定理 IsLocalization.AtPrime.ringKrullDim_eq_height
-  结论: (I : Ideal R) [I.IsPrime] (A : 类型)
+定理 是Localization.AtPrime.ringKrullDim_eq_height
+  结论: (I : 理想 R) [I.是素] (A : 类型)
   证明: by
   have := IsLocalization.AtPrime.isLocalRing A I
   rw [← IsLocalRing.maximalIdeal_height_eq_ringKrullDim]; rw [← IsLocalization.height_under I.primeCompl]; rw [← IsLocalization.AtPrime.under_maximalIdeal A I]
@@ -1577,8 +1577,8 @@ lemma IsLocalization.height_map_of_disjoint
   have := ringKrullDim_eq_of_ringEquiv (I
 
 中文:
-引理 IsLocalization.height_map_of_disjoint
-  结论: {S : 类型} [CommRing S] [Algebra R S] (M : Submonoid R)
+引理 是Localization.height_map_of_disjoint
+  结论: {S : 类型} [交换环 S] [代数 R S] (M : 子幺半群 R)
   证明: by
   let P := p.map (algebraMap R S)
   have : P.IsPrime := isPrime_of_isPrime_disjoint M S p ‹_› h
@@ -1613,7 +1613,7 @@ lemma mem_minimalPrimes_of_primeHeight_eq_height
 
 中文:
 引理 mem_minimalPrimes_of_primeHeight_eq_height
-  结论: {I J : Ideal R} [J.IsPrime] (e : I <= J)
+  结论: {I J : 理想 R} [J.是素] (e : I <= J)
   证明: by
   rw [← J.height_eq_primeHeight] at e'
   exact mem_minimalPrimes_of_height_le e (e' ▸ le_refl _)
@@ -1639,8 +1639,8 @@ lemma exists_spanRank_le_and_le_height_of_le_height
       (fun 
 
 中文:
-引理 exists_spanRank_le_and_le_height_of_le_height
-  结论: [IsNoetherianRing R] (I : Ideal R) (r : 自然数)
+引理 存在_spanRank_le_and_le_height_of_le_height
+  结论: [是Noether环 R] (I : 理想 R) (r : 自然数)
   证明: by
   induction r with
   | zero => simp
@@ -1711,8 +1711,8 @@ lemma Ideal.sup_height_eq_ringKrullDim
   · refine iSup_le fun p => WithBot.coe_le_coe.mpr (le_trans (b := p.last.a
 
 中文:
-引理 Ideal.sup_height_eq_ringKrullDim
-  条件: [Nontrivial R]
+引理 理想.sup_height_eq_ringKrullDim
+  条件: [非平凡 R]
   证明: by
   apply le_antisymm
   · rw [WithBot.coe_iSup ⟨⊤, fun _ _ => le_top⟩]
@@ -1757,8 +1757,8 @@ lemma Ideal.sup_isPrime_height_eq_ringKrullDim
     · obtain ⟨P, hP⟩ := Set.nonempty_coe_sort.mp (no
 
 中文:
-引理 Ideal.sup_isPrime_height_eq_ringKrullDim
-  条件: [Nontrivial R]
+引理 理想.sup_isPrime_height_eq_ringKrullDim
+  条件: [非平凡 R]
   证明: by
   rw [← sup_height_eq_ringKrullDim]; rw [WithBot.coe_inj]
   apply le_antisymm
@@ -1794,8 +1794,8 @@ lemma Ideal.sup_primeHeight_eq_ringKrullDim
   simp [← Ideal.height_eq_primeHeight, Ideal.sup_isPrime_height_eq_ringKrullDim]
 
 中文:
-引理 Ideal.sup_primeHeight_eq_ringKrullDim
-  条件: [Nontrivial R]
+引理 理想.sup_primeHeight_eq_ringKrullDim
+  条件: [非平凡 R]
   证明: by
   simp [← Ideal.height_eq_primeHeight, Ideal.sup_isPrime_height_eq_ringKrullDim]
 -/
@@ -1818,8 +1818,8 @@ lemma Ideal.sup_isMaximal_height_eq_ringKrullDim
     · exact ⟨⊥, by grind [iSup_le_iff, Ideal.IsPrime.ne_top]⟩
 
 中文:
-引理 Ideal.sup_isMaximal_height_eq_ringKrullDim
-  条件: [Nontrivial R]
+引理 理想.sup_isMaximal_height_eq_ringKrullDim
+  条件: [非平凡 R]
   证明: by
   rw [← Ideal.sup_height_eq_ringKrullDim]; rw [WithBot.coe_inj]
   apply le_antisymm
@@ -1852,8 +1852,8 @@ lemma Ideal.sup_primeHeight_of_maximal_eq_ringKrullDim
   simp_rw [← Ideal.height_eq_primeHeight, Ideal.sup_isMaximal_height_eq_ringKrullDim]
 
 中文:
-引理 Ideal.sup_primeHeight_of_maximal_eq_ringKrullDim
-  条件: [Nontrivial R]
+引理 理想.sup_primeHeight_of_maximal_eq_ringKrullDim
+  条件: [非平凡 R]
   证明: by
   simp_rw [← Ideal.height_eq_primeHeight, Ideal.sup_isMaximal_height_eq_ringKrullDim]
 -/
@@ -1884,7 +1884,7 @@ lemma Ring.krullDimLE_of_isLocalization_maximal
   exact h P
 
 中文:
-引理 Ring.krullDimLE_of_isLocalization_maximal
+引理 环.krullDimLE_of_isLocalization_maximal
   结论: {n : 自然数}
   证明: by
   simp_rw [Ring.krullDimLE_iff] at h ⊢
@@ -1923,8 +1923,8 @@ lemma Ideal.eq_span_singleton_of_height_eq_one
   refine height_stri
 
 中文:
-引理 Ideal.eq_span_singleton_of_height_eq_one
-  结论: [IsDomain R] {p : Ideal R} [p.IsPrime]
+引理 理想.eq_span_singleton_of_height_eq_one
+  结论: [是整环 R] {p : 理想 R} [p.是素]
   证明: by
   have : (span {x}).IsPrime := by simp [span_singleton_prime hxp.ne_zero, hxp]
   have : p.FiniteHeight := by simp [p.finiteHeight_iff, h1]

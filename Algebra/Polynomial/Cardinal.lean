@@ -38,8 +38,8 @@ lemma cardinalMk_eq_max
 
 中文:
 引理 cardinalMk_eq_max
-  条件: {R : 类型u} [Semiring R] [Nontrivial R]
-  结论: #(R[X]) = max #R ℵ₀
+  条件: {R : 类型u} [半环 R] [非平凡 R]
+  结论: #(R[X]) = 最大值 #R ℵ₀
   证明: by
   simp [(toFinsuppIso R).toEquiv.cardinal_eq]
 
@@ -62,8 +62,8 @@ lemma cardinalMk_le_max
 
 中文:
 引理 cardinalMk_le_max
-  条件: {R : 类型u} [Semiring R]
-  结论: #(R[X]) <= max #R ℵ₀
+  条件: {R : 类型u} [半环 R]
+  结论: #(R[X]) <= 最大值 #R ℵ₀
   证明: by
   cases subsingleton_or_nontrivial R
   · exact (mk_eq_one _).trans_le (le_max_of_le_right one_le_aleph0)

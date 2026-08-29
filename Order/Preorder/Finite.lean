@@ -45,8 +45,8 @@ lemma exists_maximalFor
       exact fun k
 
 中文:
-引理 exists_maximalFor
-  条件: (f : ι -> α) (s : Finset ι) (hs : s.Nonempty)
+引理 存在_maximalFor
+  条件: (f : ι -> α) (s : 有限集 ι) (hs : s.非空)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton i => exact ⟨i, by simp⟩
@@ -82,9 +82,9 @@ lemma exists_maximal
   proof: s.exists_maximalFor id hs
 
 中文:
-引理 exists_maximal
-  条件: (hs : s.Nonempty)
-  结论: 存在 i, Maximal (· in s) i
+引理 存在_maximal
+  条件: (hs : s.非空)
+  结论: 存在 i, 极大 (· in s) i
   证明: s.exists_maximalFor id hs
 
 Depends on / 依赖: exists_maximalFor, s.exists_maximalFor
@@ -111,9 +111,9 @@ lemma exists_le_maximal
   exact ⟨b, hab, hb, fun c hc hbc => hbmin hc (hab.trans hbc) hbc⟩
 
 中文:
-引理 exists_le_maximal
-  条件: (s : Finset α) (ha : a in s)
-  结论: 存在 b, a <= b ∧ Maximal (· in s) b
+引理 存在_le_maximal
+  条件: (s : 有限集 α) (ha : a in s)
+  结论: 存在 b, a <= b ∧ 极大 (· in s) b
   证明: by
   classical
   obtain ⟨b, hb, hab, hbmin⟩ : exists b in s, a <= b ∧ _ := by
@@ -148,8 +148,8 @@ lemma Finite.exists_maximalFor
 @[to_dual]
 
 中文:
-引理 Finite.exists_maximalFor
-  条件: (f : ι -> α) (s : Set ι) (h : s.Finite) (hs : s.Nonempty)
+引理 有限.存在_maximalFor
+  条件: (f : ι -> α) (s : 集合 ι) (h : s.有限) (hs : s.非空)
   证明: by
   lift s to Finset ι using h; exact s.exists_maximalFor f hs
 
@@ -172,9 +172,9 @@ lemma Finite.exists_maximal
   proof: h.exists_maximalFor id _ hs
 
 中文:
-引理 Finite.exists_maximal
-  条件: (h : s.Finite) (hs : s.Nonempty)
-  结论: 存在 i, Maximal (· in s) i
+引理 有限.存在_maximal
+  条件: (h : s.有限) (hs : s.非空)
+  结论: 存在 i, 极大 (· in s) i
   证明: h.exists_maximalFor id _ hs
 
 Depends on / 依赖: exists_maximalFor, h.exists_maximalFor
@@ -197,8 +197,8 @@ lemma Finite.exists_maximalFor'
   exact ⟨a, ha, fun a' ha' hf => hmax (mem_image_of_mem f ha') hf⟩
 
 中文:
-引理 Finite.exists_maximalFor'
-  条件: (f : ι -> α) (s : Set ι) (h : (f '' s).Finite) (hs : s.Nonempty)
+引理 有限.存在_maximalFor'
+  条件: (f : ι -> α) (s : 集合 ι) (h : (f '' s).有限) (hs : s.非空)
   证明: by
   obtain ⟨_, ⟨a, ha, rfl⟩, hmax⟩ := Finite.exists_maximalFor id (f '' s) h (hs.image f)
   exact ⟨a, ha, fun a' ha' hf => hmax (mem_image_of_mem f ha') hf⟩
@@ -227,9 +227,9 @@ lemma Finite.exists_le_maximal
   lift s to Finset α using hs; exact s.exists_le_maximal ha
 
 中文:
-引理 Finite.exists_le_maximal
-  条件: (hs : s.Finite) (ha : a in s)
-  结论: 存在 b, a <= b ∧ Maximal (· in s) b
+引理 有限.存在_le_maximal
+  条件: (hs : s.有限) (ha : a in s)
+  结论: 存在 b, a <= b ∧ 极大 (· in s) b
   证明: by
   lift s to Finset α using hs; exact s.exists_le_maximal ha
 
@@ -257,9 +257,9 @@ lemma infinite_of_forall_exists_gt
 @[to_du
 
 中文:
-引理 infinite_of_forall_exists_gt
+引理 infinite_of_对任意_存在_gt
   条件: (h : 对任意 a, 存在 b in s, a < b)
-  结论: s.Infinite
+  结论: s.无限
   证明: by
   inhabit α
   let f (n : Nat) : α := Nat.recOn n (h default).choose fun _ a => (h a).choose
@@ -289,9 +289,9 @@ lemma infinite_of_forall_exists_lt
   proof: infinite_of_forall_exists_gt (α := αᵒᵈ) h
 
 中文:
-引理 infinite_of_forall_exists_lt
+引理 infinite_of_对任意_存在_lt
   条件: (h : 对任意 a, 存在 b in s, b < a)
-  结论: s.Infinite
+  结论: s.无限
   证明: infinite_of_forall_exists_gt (α := αᵒᵈ) h
 
 Depends on / 依赖: infinite_of_forall_exists_gt
@@ -315,7 +315,7 @@ lemma finite_isTop
 
 中文:
 引理 finite_isTop
-  结论: {a : α | IsTop a}.Finite
+  结论: {a : α | IsTop a}.有限
   证明: (subsingleton_isTop α).finite
 
 Depends on / 依赖: finite, subsingleton_isTop
@@ -337,8 +337,8 @@ lemma Infinite.exists_lt_map_eq_of_mapsTo
   hxy.lt_or_gt.elim (fun hxy => ⟨x, hx, y, hy, hxy, hf⟩) fun hyx => ⟨y, hy, x, hx, hyx, hf.symm⟩
 
 中文:
-引理 Infinite.exists_lt_map_eq_of_mapsTo
-  条件: (hs : s.Infinite) (hf : MapsTo f s t) (ht : t.Finite)
+引理 无限.存在_lt_map_eq_of_mapsTo
+  条件: (hs : s.无限) (hf : 映射到 f s t) (ht : t.有限)
   证明: let ⟨x, hx, y, hy, hxy, hf⟩ := hs.exists_ne_map_eq_of_mapsTo hf ht
   hxy.lt_or_gt.elim (fun hxy => ⟨x, hx, y, hy, hxy, hf⟩) fun hyx => ⟨y, hy, x, hx, hyx, hf.symm⟩
 
@@ -361,8 +361,8 @@ lemma Finite.exists_lt_map_eq_of_forall_mem
   exact ⟨a, b, h⟩
 
 中文:
-引理 Finite.exists_lt_map_eq_of_forall_mem
-  条件: [Infinite α] (hf : 对任意 a, f a in t) (ht : t.Finite)
+引理 有限.存在_lt_map_eq_of_对任意_mem
+  条件: [无限 α] (hf : 对任意 a, f a in t) (ht : t.有限)
   证明: by
   rw [← mapsTo_univ_iff] at hf
   obtain ⟨a, -, b, -, h⟩ := infinite_univ.exists_lt_map_eq_of_mapsTo hf ht
@@ -393,8 +393,8 @@ theorem Finite.exists_subsingleton_isCofinal
     exact hbc.trans (ha.le hc)
 
 中文:
-定理 Finite.exists_subsingleton_isCofinal
-  条件: {s : Set α} (hs : s.Finite) (hs' : IsCofinal s)
+定理 有限.存在_subsingleton_isCofinal
+  条件: {s : 集合 α} (hs : s.有限) (hs' : IsCofinal s)
   证明: by
   obtain rfl | hn := s.eq_empty_or_nonempty
   · use ∅; simpa
@@ -435,9 +435,9 @@ lemma Finite.exists_le_maximal
   proof: {x | p x}.toFinite.exists_le_maximal h
 
 中文:
-引理 Finite.exists_le_maximal
+引理 有限.存在_le_maximal
   条件: (h : p a)
-  结论: 存在 b, a <= b ∧ Maximal p b
+  结论: 存在 b, a <= b ∧ 极大 p b
   证明: {x | p x}.toFinite.exists_le_maximal h
 -/
 lemma Finite.exists_le_maximal (h : p a) : exists b, a <= b ∧ Maximal p b :=
@@ -454,7 +454,7 @@ lemma LinearOrder.strong_induction_of_finite
   proof: WellFoundedLT.induction _ h
 
 中文:
-引理 LinearOrder.strong_induction_of_finite
+引理 线性序.strong_induction_of_finite
   证明: WellFoundedLT.induction _ h
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction
@@ -521,8 +521,8 @@ lemma OrderHom.range_eq_iff
     (g := .ofStrictMono g (g.monotone.strictMono_of_injective hg))).1 (by simpa)) _
 
 中文:
-引理 OrderHom.range_eq_iff
-  结论: {α β : 类型} [LinearOrder α] [PartialOrder β]
+引理 序态射.range_eq_iff
+  结论: {α β : 类型} [线性序 α] [偏序 β]
   证明: by
   refine ⟨fun h => ?_, by rintro rfl; rfl⟩
   ext : 2
@@ -552,8 +552,8 @@ lemma OrderHom.eq_id_of_injective
     simpa [Set.range_eq_univ] using Finite.surjective_of_injective hf)
 
 中文:
-引理 OrderHom.eq_id_of_injective
-  结论: {α : 类型} [LinearOrder α] [Finite α] (f : α ->o α)
+引理 序态射.eq_id_of_injective
+  结论: {α : 类型} [线性序 α] [有限 α] (f : α ->o α)
   证明: (range_eq_iff hf Function.injective_id).1 (by
     simpa [Set.range_eq_univ] using Finite.surjective_of_injective hf)
 
@@ -574,8 +574,8 @@ theorem StrictMono.eq_id
   proof: le_antisymm hf.le_id hf.id_le
 
 中文:
-定理 StrictMono.eq_id
-  结论: {α : 类型} [LinearOrder α] [Finite α] {f : α -> α}
+定理 严格递增.eq_id
+  结论: {α : 类型} [线性序 α] [有限 α] {f : α -> α}
   证明: le_antisymm hf.le_id hf.id_le
 
 Depends on / 依赖: hf.id_le, hf.le_id, id_le, le_antisymm, le_id
@@ -593,8 +593,8 @@ theorem StrictMono.apply_eq
   proof: congrFun hf.eq_id x
 
 中文:
-定理 StrictMono.apply_eq
-  结论: {α : 类型} [LinearOrder α] [Finite α] {f : α -> α}
+定理 严格递增.apply_eq
+  结论: {α : 类型} [线性序 α] [有限 α] {f : α -> α}
   证明: congrFun hf.eq_id x
 
 Depends on / 依赖: eq_id, hf.eq_id

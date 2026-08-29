@@ -43,8 +43,8 @@ structure AbsoluteValue
     - add_le' : forall x y, toFun (x + y) <= toFun x + toFun y
 
 中文:
-结构 AbsoluteValue
-  参数: (R S : 类型) [Semiring R] [Semiring S] [PartialOrder S]
+结构 绝对值
+  参数: (R S : 类型) [半环 R] [半环 S] [偏序 S]
   继承: R ->ₙ* S
   公理与运算 (3 个):
     - nonneg' : 对任意 x, 0 <= toFun x
@@ -81,7 +81,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (AbsoluteValue R S) R S where
+  签名: : 函数状 (绝对值 R S) R S where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
 
@@ -101,7 +101,7 @@ instance zeroHomClass
 
 中文:
 实例 zeroHomClass
-  签名: : ZeroHomClass (AbsoluteValue R S) R S where
+  签名: : 保零态射类 (绝对值 R S) R S where
   定义体: (f.eq_zero' _).2 rfl
 
 Depends on / 依赖: eq_zero, f.eq_zero
@@ -119,7 +119,7 @@ instance mulHomClass
 
 中文:
 实例 mulHomClass
-  签名: : MulHomClass (AbsoluteValue R S) R S
+  签名: : 乘法态射类 (绝对值 R S) R S
   定义体: { AbsoluteValue.zeroHomClass (R := R) (S := S) with map_mul := fun f => f.map_mul' }
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.zeroHomClass, f.map_mul, map_mul, zeroHomClass
@@ -137,7 +137,7 @@ instance nonnegHomClass
 
 中文:
 实例 nonnegHomClass
-  签名: : NonnegHomClass (AbsoluteValue R S) R S
+  签名: : Nonneg态射类 (绝对值 R S) R S
   定义体: { AbsoluteValue.zeroHomClass (R := R) (S := S) with apply_nonneg := fun f => f.nonneg' }
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.zeroHomClass, apply_nonneg, f.nonneg, nonneg, zeroHomClass
@@ -157,7 +157,7 @@ instance subadditiveHomClass
 
 中文:
 实例 subadditiveHomClass
-  签名: : SubadditiveHomClass (AbsoluteValue R S) R S
+  签名: : Subadditive态射类 (绝对值 R S) R S
   定义体: { AbsoluteValue.zeroHomClass (R := R) (S := S) with map_add_le_add := fun f => f.add_le' }
 
 @[simp]
@@ -182,7 +182,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : R ->ₙ* S) {h₁ h₂ h₃}
-  结论: (AbsoluteValue.mk f h₁ h₂ h₃ : R -> S) = f
+  结论: (绝对值.mk f h₁ h₂ h₃ : R -> S) = f
   证明: rfl
 
 @[ext]
@@ -203,7 +203,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃f g
-  结论: AbsoluteValue R S⦄ : (对任意 x, f x = g x) -> f = g
+  结论: 绝对值 R S⦄ : (对任意 x, f x = g x) -> f = g
   证明: DFunLike.ext _ _
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -225,7 +225,7 @@ initialize_simps_projections AbsoluteValue (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: (f : AbsoluteValue R S)
+  签名: (f : 绝对值 R S)
   定义体: f
 
 initialize_simps_projections AbsoluteValue (toFun -> apply)
@@ -339,8 +339,8 @@ lemma listSum_le
 
 中文:
 引理 listSum_le
-  条件: [AddLeftMono S] (l : List R)
-  结论: abv l.sum <= (l.map abv).sum
+  条件: [AddLeftMono S] (l : 列表 R)
+  结论: abv l.求和 <= (l.map abv).求和
   证明: by
   induction l with
   | nil => simp
@@ -578,7 +578,7 @@ instance monoidWithZeroHomClass
 
 中文:
 实例 monoidWithZeroHomClass
-  签名: : MonoidWithZeroHomClass (AbsoluteValue R S) R S
+  签名: : 带零幺半群态射类 (绝对值 R S) R S
   定义体: { AbsoluteValue.mulHomClass with
     map_zero := fun f => f.map_zero
     map_one := fun f => f.map_one }
@@ -711,7 +711,7 @@ lemma apply_nat_le_self
 
 中文:
 引理 apply_nat_le_self
-  条件: [IsOrderedRing S] (n : 自然数)
+  条件: [是Ordered环 S] (n : 自然数)
   结论: abv n <= n
   证明: by
   cases subsingleton_or_nontrivial R
@@ -876,7 +876,7 @@ instance addGroupSeminormClass
 
 中文:
 实例 addGroupSeminormClass
-  签名: : AddGroupSeminormClass (AbsoluteValue R S) R S where
+  签名: : 加法群半范数类 (绝对值 R S) R S where
   定义体: AbsoluteValue.subadditiveHomClass
   map_zero := AbsoluteValue.map_zero
   map_neg_eq_map f a := AbsoluteValue.map_neg f a
@@ -900,8 +900,8 @@ instance [Nontrivial
     eq_zero_of_map_eq_zero := fun f _ => f.eq_zero.1 }
 
 中文:
-实例 [Nontrivial
-  签名: R] [IsDomain S] : MulRingNormClass (AbsoluteValue R S) R S
+实例 [非平凡
+  签名: R] [是整环 S] : 乘法环范数类 (绝对值 R S) R S
   定义体: { AbsoluteValue.subadditiveHomClass,
     AbsoluteValue.monoidWithZeroHomClass with
     map_neg_eq_map := fun f => f.map_neg
@@ -951,7 +951,7 @@ lemma eq_on_nat_iff_eq_on_int
 
 中文:
 引理 eq_on_nat_iff_eq_on_int
-  条件: {f g : AbsoluteValue R S}
+  条件: {f g : 绝对值 R S}
   证明: by
   refine ⟨fun h z => ?_, fun a n => mod_cast a n⟩
   obtain ⟨n, rfl | rfl⟩ := Int.eq_nat_or_neg z <;> simp [h n]
@@ -986,7 +986,7 @@ definition abs
 
 中文:
 定义 abs
-  签名: : AbsoluteValue S S where
+  签名: : 绝对值 S S where
   定义体: abs
   nonneg' := abs_nonneg
   eq_zero' _ := abs_eq_zero
@@ -1010,7 +1010,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AbsoluteValue S S)
+  签名: 可居 (绝对值 S S)
   定义体: ⟨AbsoluteValue.abs⟩
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.abs
@@ -1074,7 +1074,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : AbsoluteValue R S where
+  签名: : 绝对值 R S where
   定义体: if x = 0 then 0 else 1
   map_mul' x y := by
     rcases eq_or_ne x 0 with rfl | hx
@@ -1117,7 +1117,7 @@ lemma trivial_apply
 中文:
 引理 trivial_apply
   条件: {x : R} (hx : x != 0)
-  结论: AbsoluteValue.trivial (S := S) x = 1
+  结论: 绝对值.trivial (S := S) x = 1
   证明: if_neg hx
 -/
 lemma trivial_apply {x : R} (hx : x != 0) : AbsoluteValue.trivial (S := S) x = 1 :=
@@ -1140,8 +1140,8 @@ definition IsNontrivial
   body: exists x != 0, v x != 1
 
 中文:
-定义 IsNontrivial
-  签名: (v : AbsoluteValue R S)
+定义 是非平凡
+  签名: (v : 绝对值 R S)
   定义体: exists x != 0, v x != 1
 -/
 def IsNontrivial (v : AbsoluteValue R S) : Prop :=
@@ -1166,7 +1166,7 @@ omit [IsOrderedRing S] in
 
 中文:
 引理 isNontrivial_iff_ne_trivial
-  结论: [DecidablePred fun x : R => x = 0] [NoZeroDivisors R]
+  结论: [DecidablePred fun x : R => x = 0] [无零因子 R]
   证明: by
 refine ⟨fun ⟨x, hx₀, hx₁⟩ h => hx₁ h.symm ▸ trivial_apply hx₀, fun H => ?_⟩
   simp only [IsNontrivial]
@@ -1208,7 +1208,7 @@ omit [IsOrderedRing S] in
 
 中文:
 引理 not_isNontrivial_iff
-  条件: (v : AbsoluteValue R S)
+  条件: (v : 绝对值 R S)
   证明: by
   simp only [IsNontrivial]
   push Not
@@ -1237,7 +1237,7 @@ lemma not_isNontrivial_apply
 
 中文:
 引理 not_isNontrivial_apply
-  条件: {v : AbsoluteValue R S} (hv : ¬ v.IsNontrivial) {x : R} (hx : x != 0)
+  条件: {v : 绝对值 R S} (hv : ¬ v.是非平凡) {x : R} (hx : x != 0)
   证明: v.not_isNontrivial_iff.mp hv _ hx
 
 Depends on / 依赖: not_isNontrivial_iff, v.not_isNontrivial_iff.mp
@@ -1269,8 +1269,8 @@ lemma IsNontrivial.exists_abv_gt_one
   · exact ⟨x, h⟩
 
 中文:
-引理 IsNontrivial.exists_abv_gt_one
-  条件: (h : v.IsNontrivial)
+引理 是非平凡.存在_abv_gt_one
+  条件: (h : v.是非平凡)
   结论: 存在 x, 1 < v x
   证明: by
   obtain ⟨x, hx₀, hx₁⟩ := h
@@ -1305,8 +1305,8 @@ have hy₀ := v.ne_zero_iff.mp (zero_lt_one.trans hy).ne'
   exact (inv_lt_one₀ <| v.pos hy₀).mpr hy
 
 中文:
-引理 IsNontrivial.exists_abv_lt_one
-  条件: (h : v.IsNontrivial)
+引理 是非平凡.存在_abv_lt_one
+  条件: (h : v.是非平凡)
   结论: 存在 x != 0, v x < 1
   证明: by
   obtain ⟨y, hy⟩ := h.exists_abv_gt_one
@@ -1343,8 +1343,8 @@ class IsAbsoluteValue
     - abv_mul' : forall x y, f (x * y) = f x * f y
 
 中文:
-类 IsAbsoluteValue
-  参数: {S} [Semiring S] [PartialOrder S] {R} [Semiring R] (f : R -> S)
+类 是绝对值
+  参数: {S} [半环 S] [偏序 S] {R} [半环 R] (f : R -> S)
   公理与运算 (4 个):
     - abv_nonneg' : 对任意 x, 0 <= f x
     - abv_eq_zero' : 对任意 {x}, f x = 0 ↔ x = 0
@@ -1469,8 +1469,8 @@ instance _root_.AbsoluteValue.isAbsoluteValue
   abv_mul' := abv.map_mul
 
 中文:
-实例 _root_.AbsoluteValue.isAbsoluteValue
-  签名: (abv : AbsoluteValue R S)
+实例 _root_.绝对值.isAbsoluteValue
+  签名: (abv : 绝对值 R S)
   定义体: abv.nonneg
   abv_eq_zero' := abv.eq_zero
   abv_add' := abv.add_le
@@ -1500,7 +1500,7 @@ definition toAbsoluteValue
 
 中文:
 定义 toAbsoluteValue
-  签名: : AbsoluteValue R S where
+  签名: : 绝对值 R S where
   定义体: abv
   add_le' := abv_add'
   eq_zero' _ := abv_eq_zero'
@@ -1568,7 +1568,7 @@ instance abs_isAbsoluteValue
 
 中文:
 实例 abs_isAbsoluteValue
-  签名: : IsAbsoluteValue (abs : S -> S)
+  签名: : 是绝对值 (abs : S -> S)
   定义体: AbsoluteValue.abs.isAbsoluteValue
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.abs.isAbsoluteValue, isAbsoluteValue
@@ -1598,7 +1598,7 @@ theorem abv_one
 
 中文:
 定理 abv_one
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: abv 1 = 1
   证明: (toAbsoluteValue abv).map_one
 
@@ -1617,7 +1617,7 @@ definition abvHom
 
 中文:
 定义 abvHom
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: (toAbsoluteValue abv).toMonoidWithZeroHom
 
 Depends on / 依赖: toAbsoluteValue, toMonoidWithZeroHom
@@ -1635,7 +1635,7 @@ theorem abv_pow
 
 中文:
 定理 abv_pow
-  条件: [Nontrivial R] (abv : R -> S) [IsAbsoluteValue abv] (a : R) (n : 自然数)
+  条件: [非平凡 R] (abv : R -> S) [是绝对值 abv] (a : R) (n : 自然数)
   证明: (toAbsoluteValue abv).map_pow a n
 
 Depends on / 依赖: map_pow, toAbsoluteValue
@@ -1683,7 +1683,7 @@ theorem sub_abv_le_abv_sub
 
 中文:
 定理 sub_abv_le_abv_sub
-  条件: [IsOrderedRing S] (a b : R)
+  条件: [是Ordered环 S] (a b : R)
   结论: abv a - abv b <= abv (a - b)
   证明: (toAbsoluteValue abv).le_sub a b
 

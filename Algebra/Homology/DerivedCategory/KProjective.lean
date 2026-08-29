@@ -77,7 +77,7 @@ lemma quasiIso_iff
 
 中文:
 引理 quasiIso_iff
-  条件: {K L : CochainComplex C 整数} [K.IsKProjective] [L.IsKProjective] (f : K ⟶ L)
+  条件: {K L : 上链复形 C 整数} [K.是KProjective] [L.是KProjective] (f : K ⟶ L)
   证明: by
   refine ⟨fun _ => ?_, fun hf => homotopyEquivalences_le_quasiIso _ _ _ hf⟩
   rw [← HomotopyCategory.inverseImage_quotient_isomorphisms]; rw [MorphismProperty.inverseImage_iff]; rw [MorphismProperty.isomorphisms.iff]
@@ -117,7 +117,7 @@ lemma bijective_toSmallShiftedHom_of_isKProjective
 
 中文:
 引理 bijective_toSmallShiftedHom_of_isKProjective
-  条件: [K.IsKProjective]
+  条件: [K.是KProjective]
   证明: by
   let := HasDerivedCategory.standard C
   rw [← Function.Bijective.of_comp_iff'
@@ -152,7 +152,7 @@ definition equivOfIsKProjective
 
 中文:
 定义 equivOfIsKProjective
-  签名: [K.IsKProjective]
+  签名: [K.是KProjective]
   定义体: Equiv.ofBijective _ (bijective_toSmallShiftedHom_of_isKProjective _ _ _)
 
 Depends on / 依赖: Equiv.ofBijective, bijective_toSmallShiftedHom_of_isKProjective, ofBijective
@@ -181,7 +181,7 @@ lemma quasiIso_iff_of_projective
 
 中文:
 引理 quasiIso_iff_of_projective
-  结论: {K L : ChainComplex C 自然数}
+  结论: {K L : 链复形 C 自然数}
   证明: by
   rw [← quasiIso_extendMap_iff _ ComplexShape.embeddingDownNat]; rw [CochainComplex.IsKProjective.quasiIso_iff]; rw [homotopyEquivalences_extendMap_iff]
 

@@ -37,7 +37,7 @@ definition countP'
 
 中文:
 定义 countP'
-  签名: (l : FreeMonoid α)
+  签名: (l : 自由幺半群 α)
   定义体: l.toList.countP p
 
 @[to_additive]
@@ -59,7 +59,7 @@ lemma countP'_one
 
 中文:
 引理 countP'_one
-  结论: (1 : FreeMonoid α).countP' p = 0
+  结论: (1 : 自由幺半群 α).countP' p = 0
   证明: rfl
 
 @[to_additive]
@@ -82,7 +82,7 @@ lemma countP'_mul
 
 中文:
 引理 countP'_mul
-  条件: (l₁ l₂ : FreeMonoid α)
+  条件: (l₁ l₂ : 自由幺半群 α)
   结论: (l₁ * l₂).countP' p = l₁.countP' p + l₂.countP' p
   证明: by
   dsimp [countP']
@@ -106,7 +106,7 @@ definition countP
 
 中文:
 定义 countP
-  签名: : FreeMonoid α ->* Multiplicative 自然数 where
+  签名: : 自由幺半群 α ->* Multiplicative 自然数 where
   定义体: .ofAdd ∘ FreeMonoid.countP' p
   map_one' := by
     simp [countP'_one p]
@@ -133,7 +133,7 @@ theorem countP_apply
 
 中文:
 定理 countP_apply
-  条件: (l : FreeMonoid α)
+  条件: (l : 自由幺半群 α)
   结论: l.countP p = .ofAdd (l.toList.countP p)
   证明: rfl
 
@@ -325,7 +325,7 @@ lemma count_of
 中文:
 引理 count_of
   条件: [DecidableEq α] (x y : α)
-  结论: count x (of y) = (Pi.single x 1 : α -> 自然数) y
+  结论: count x (of y) = (依赖函数类型.single x 1 : α -> 自然数) y
   证明: by
   dsimp [count]
   rw [countP_of]

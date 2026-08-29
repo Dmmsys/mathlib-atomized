@@ -67,7 +67,7 @@ definition MeasurableEquiv.shearMulRight
   body: .prodShear (.refl _) .mulLeft
 
 中文:
-定义 MeasurableEquiv.shearMulRight
+定义 可测等价.shearMulRight
   签名: [MeasurableInv G]
   定义体: .prodShear (.refl _) .mulLeft
 -/
@@ -86,7 +86,7 @@ definition MeasurableEquiv.shearDivRight
   body: .prodShear (.refl _) .divRight
 
 中文:
-定义 MeasurableEquiv.shearDivRight
+定义 可测等价.shearDivRight
   签名: [MeasurableInv G]
   定义体: .prodShear (.refl _) .divRight
 -/
@@ -117,7 +117,7 @@ Filter.Eventually.of_forall map_mul_left_eq_self ν
 
 中文:
 定理 measurePreserving_prod_mul
-  条件: [IsMulLeftInvariant ν]
+  条件: [是MulLeftInvariant ν]
   证明: (MeasurePreserving.id μ).skew_product measurable_mul
 Filter.Eventually.of_forall map_mul_left_eq_self ν
 
@@ -145,7 +145,7 @@ theorem measurePreserving_prod_mul_swap
 
 中文:
 定理 measurePreserving_prod_mul_swap
-  条件: [IsMulLeftInvariant μ]
+  条件: [是MulLeftInvariant μ]
   证明: (measurePreserving_prod_mul ν μ).comp measurePreserving_swap
 
 @[to_additive]
@@ -173,7 +173,7 @@ theorem measurable_measure_mul_right
 
 中文:
 定理 measurable_measure_mul_right
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   suffices
     Measurable fun y =>
@@ -211,7 +211,7 @@ theorem measurePreserving_prod_inv_mul
 
 中文:
 定理 measurePreserving_prod_inv_mul
-  条件: [IsMulLeftInvariant ν]
+  条件: [是MulLeftInvariant ν]
   证明: (measurePreserving_prod_mul μ ν).symm MeasurableEquiv.shearMulRight G
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.shearMulRight, measurePreserving_prod_mul, shearMulRight
@@ -265,7 +265,7 @@ theorem measurePreserving_mul_prod_inv
 
 中文:
 定理 measurePreserving_mul_prod_inv
-  条件: [IsMulLeftInvariant ν]
+  条件: [是MulLeftInvariant ν]
   证明: by
   convert!
     (measurePreserving_prod_inv_mul_swap ν μ).comp (measurePreserving_prod_mul_swap μ ν) using 1
@@ -299,7 +299,7 @@ theorem quasiMeasurePreserving_inv
 
 中文:
 定理 quasiMeasurePreserving_inv
-  结论: QuasiMeasurePreserving (Inv.inv : G -> G) μ μ
+  结论: 拟保测 (取逆.inv : G -> G) μ μ
   证明: by
   refine ⟨measurable_inv, AbsolutelyContinuous.mk fun s hsm hμs => ?_⟩
   rw [map_apply measurable_inv hsm]; rw [inv_preimage]
@@ -475,7 +475,7 @@ theorem lintegral_lintegral_mul_inv
 
 中文:
 定理 lintegral_lintegral_mul_inv
-  结论: [IsMulLeftInvariant ν] (f : G -> G -> 实数>=0∞)
+  结论: [是MulLeftInvariant ν] (f : G -> G -> 实数>=0∞)
   证明: by
   have h : Measurable fun z : G × G => (z.2 * z.1, z.1⁻¹) :=
     (measurable_snd.mul measurable_fst).prodMk measurable_fst.inv
@@ -642,7 +642,7 @@ theorem measure_mul_lintegral_eq
 
 中文:
 定理 measure_mul_lintegral_eq
-  结论: [IsMulLeftInvariant ν] (sm : MeasurableSet s) (f : G -> 实数>=0∞)
+  结论: [是MulLeftInvariant ν] (sm : 可测集 s) (f : G -> 实数>=0∞)
   证明: by
   rw [← setLIntegral_one]; rw [← lintegral_indicator sm]; rw [← lintegral_lintegral_mul (measurable_const.indicator sm).aemeasurable hf.aemeasurable]; rw [← lintegral_lintegral_mul_inv μ ν]
   swap
@@ -684,7 +684,7 @@ theorem absolutelyContinuous_of_isMulLeftInvariant
 
 中文:
 定理 absolutelyContinuous_of_isMulLeftInvariant
-  条件: [IsMulLeftInvariant ν] (hν : ν != 0)
+  条件: [是MulLeftInvariant ν] (hν : ν != 0)
   结论: μ ≪ ν
   证明: by
   refine AbsolutelyContinuous.mk fun s sm hνs => ?_
@@ -817,7 +817,7 @@ theorem measure_lintegral_div_measure
 
 中文:
 定理 measure_lintegral_div_measure
-  结论: (sm : MeasurableSet s) (h2s : ν' s != 0) (h3s : ν' s != ∞)
+  结论: (sm : 可测集 s) (h2s : ν' s != 0) (h3s : ν' s != ∞)
   证明: by
   set g := fun y => f y⁻¹ / ν' ((fun x => x * y⁻¹) ⁻¹' s)
   have hg : Measurable g :=
@@ -856,7 +856,7 @@ theorem measure_mul_measure_eq
 
 中文:
 定理 measure_mul_measure_eq
-  条件: (s t : Set G) (h2s : ν' s != 0) (h3s : ν' s != ∞)
+  条件: (s t : 集合 G) (h2s : ν' s != 0) (h3s : ν' s != ∞)
   证明: by
   wlog hs : MeasurableSet s generalizing s
   · rcases exists_measurable_superset₂ μ' ν' s with ⟨s', -, hm, hμ, hν⟩
@@ -927,7 +927,7 @@ theorem measurePreserving_prod_mul_right
 
 中文:
 定理 measurePreserving_prod_mul_right
-  条件: [IsMulRightInvariant ν]
+  条件: [是MulRightInvariant ν]
   证明: MeasurePreserving.skew_product (g := fun x y => y * x) (MeasurePreserving.id μ)
 (measurable_snd.mul measurable_fst) Filter.Eventually.of_forall map_mul_right_eq_self ν
 
@@ -951,7 +951,7 @@ theorem measurePreserving_prod_mul_swap_right
 
 中文:
 定理 measurePreserving_prod_mul_swap_right
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: (measurePreserving_prod_mul_right ν μ).comp measurePreserving_swap
 
 Depends on / 依赖: measurePreserving_prod_mul_right, measurePreserving_swap
@@ -973,7 +973,7 @@ theorem measurePreserving_mul_prod
 
 中文:
 定理 measurePreserving_mul_prod
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: measurePreserving_swap.comp (measurePreserving_prod_mul_swap_right μ ν)
 
 Depends on / 依赖: measurePreserving_prod_mul_swap_right, measurePreserving_swap, measurePreserving_swap.comp
@@ -997,7 +997,7 @@ theorem measurePreserving_prod_div
 
 中文:
 定理 measurePreserving_prod_div
-  条件: [IsMulRightInvariant ν]
+  条件: [是MulRightInvariant ν]
   证明: (measurePreserving_prod_mul_right μ ν).symm (MeasurableEquiv.shearDivRight G).symm
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.shearDivRight, measurePreserving_prod_mul_right, shearDivRight
@@ -1019,7 +1019,7 @@ theorem measurePreserving_prod_div_swap
 
 中文:
 定理 measurePreserving_prod_div_swap
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: (measurePreserving_prod_div ν μ).comp measurePreserving_swap
 
 Depends on / 依赖: measurePreserving_prod_div, measurePreserving_swap
@@ -1041,7 +1041,7 @@ theorem measurePreserving_div_prod
 
 中文:
 定理 measurePreserving_div_prod
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: measurePreserving_swap.comp (measurePreserving_prod_div_swap μ ν)
 
 Depends on / 依赖: measurePreserving_prod_div_swap, measurePreserving_swap, measurePreserving_swap.comp
@@ -1067,7 +1067,7 @@ theorem measurePreserving_mul_prod_inv_right
 
 中文:
 定理 measurePreserving_mul_prod_inv_right
-  条件: [IsMulRightInvariant μ] [IsMulRightInvariant ν]
+  条件: [是MulRightInvariant μ] [是MulRightInvariant ν]
   证明: by
   convert!
     (measurePreserving_prod_div_swap ν μ).comp (measurePreserving_prod_mul_swap_right μ ν) using 1
@@ -1099,7 +1099,7 @@ theorem quasiMeasurePreserving_mul
 
 中文:
 定理 quasiMeasurePreserving_mul
-  条件: [IsMulLeftInvariant ν]
+  条件: [是MulLeftInvariant ν]
   证明: quasiMeasurePreserving_snd.comp (measurePreserving_prod_mul _ _).quasiMeasurePreserving
 
 Depends on / 依赖: measurePreserving_prod_mul, quasiMeasurePreserving, quasiMeasurePreserving_snd, quasiMeasurePreserving_snd.comp
@@ -1120,7 +1120,7 @@ theorem quasiMeasurePreserving_mul_swap
 
 中文:
 定理 quasiMeasurePreserving_mul_swap
-  条件: [IsMulLeftInvariant μ]
+  条件: [是MulLeftInvariant μ]
   证明: quasiMeasurePreserving_snd.comp (measurePreserving_prod_mul_swap _ _).quasiMeasurePreserving
 
 Depends on / 依赖: measurePreserving_prod_mul_swap, quasiMeasurePreserving, quasiMeasurePreserving_snd, quasiMeasurePreserving_snd.comp
@@ -1145,7 +1145,7 @@ theorem quasiMeasurePreserving_inv_mul
 
 中文:
 定理 quasiMeasurePreserving_inv_mul
-  条件: [IsMulLeftInvariant ν]
+  条件: [是MulLeftInvariant ν]
   证明: quasiMeasurePreserving_snd.comp (measurePreserving_prod_inv_mul _ _).quasiMeasurePreserving
 
 Depends on / 依赖: measurePreserving_prod_inv_mul, quasiMeasurePreserving, quasiMeasurePreserving_snd, quasiMeasurePreserving_snd.comp
@@ -1168,7 +1168,7 @@ theorem quasiMeasurePreserving_inv_mul_swap
 
 中文:
 定理 quasiMeasurePreserving_inv_mul_swap
-  条件: [IsMulLeftInvariant μ]
+  条件: [是MulLeftInvariant μ]
   证明: quasiMeasurePreserving_snd.comp (measurePreserving_prod_inv_mul_swap _ _).quasiMeasurePreserving
 
 @[to_additive (attr := fun_prop)]
@@ -1196,7 +1196,7 @@ theorem quasiMeasurePreserving_inv_of_right_invariant
 
 中文:
 定理 quasiMeasurePreserving_inv_of_right_invariant
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: by
   rw [← μ.inv_inv]
   exact
@@ -1230,7 +1230,7 @@ theorem quasiMeasurePreserving_div_left
 
 中文:
 定理 quasiMeasurePreserving_div_left
-  条件: [IsMulLeftInvariant μ] (g : G)
+  条件: [是MulLeftInvariant μ] (g : G)
   证明: by
   simp_rw [div_eq_mul_inv]
   exact
@@ -1263,7 +1263,7 @@ theorem quasiMeasurePreserving_div_left_of_right_invariant
 
 中文:
 定理 quasiMeasurePreserving_div_left_of_right_invariant
-  条件: [IsMulRightInvariant μ] (g : G)
+  条件: [是MulRightInvariant μ] (g : G)
   证明: by
   rw [← μ.inv_inv]
   exact
@@ -1296,7 +1296,7 @@ theorem quasiMeasurePreserving_div_of_right_invariant
 
 中文:
 定理 quasiMeasurePreserving_div_of_right_invariant
-  条件: [IsMulRightInvariant μ]
+  条件: [是MulRightInvariant μ]
   证明: by
   refine QuasiMeasurePreserving.prod_of_left measurable_div (Eventually.of_forall fun y => ?_)
   exact (measurePreserving_div_right μ y).quasiMeasurePreserving
@@ -1322,7 +1322,7 @@ theorem quasiMeasurePreserving_div
 
 中文:
 定理 quasiMeasurePreserving_div
-  条件: [IsMulLeftInvariant μ]
+  条件: [是MulLeftInvariant μ]
   证明: (quasiMeasurePreserving_div_of_right_invariant μ.inv ν).mono
     ((absolutelyContinuous_inv μ).prod AbsolutelyContinuous.rfl) (inv_absolutelyContinuous μ)
 
@@ -1350,7 +1350,7 @@ theorem quasiMeasurePreserving_mul_right
 
 中文:
 定理 quasiMeasurePreserving_mul_right
-  条件: [IsMulLeftInvariant μ] (g : G)
+  条件: [是MulLeftInvariant μ] (g : G)
   证明: by
   refine ⟨measurable_mul_const g, AbsolutelyContinuous.mk fun s hs => ?_⟩
   rw [map_apply (measurable_mul_const g) hs]; rw [measure_mul_right_null]; exact id
@@ -1384,7 +1384,7 @@ theorem quasiMeasurePreserving_mul_left
 
 中文:
 定理 quasiMeasurePreserving_mul_left
-  条件: [IsMulRightInvariant μ] (g : G)
+  条件: [是MulRightInvariant μ] (g : G)
   证明: by
   have :=
     (quasiMeasurePreserving_mul_right μ.inv g⁻¹).mono (inv_absolutelyContinuous μ.inv)

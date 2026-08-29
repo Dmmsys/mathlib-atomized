@@ -57,7 +57,7 @@ definition fvarId?
 
 中文:
 定义 fvarId?
-  签名: : GoalsLocation -> Option FVarId
+  签名: : GoalsLocation -> 选项类型 FVarId
 -/
 def fvarId? : GoalsLocation -> Option FVarId
   | ⟨_, .hyp fvarId⟩ => fvarId

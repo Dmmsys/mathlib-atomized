@@ -81,7 +81,7 @@ definition ZariskisMainProperty
 
 中文:
 定义 ZariskisMainProperty
-  签名: (p : Ideal S)
+  签名: (p : 理想 S)
   定义体: exists r : integralClosure R S, r.1 ∉ p ∧ Function.Bijective
     (Localization.awayMap (integralClosure R S).val.toRingHom r)
 
@@ -105,7 +105,7 @@ lemma zariskisMainProperty_iff
 
 中文:
 引理 zariskisMainProperty_iff
-  条件: {p : Ideal S}
+  条件: {p : 理想 S}
   证明: by
   simp only [ZariskisMainProperty, Subtype.exists, ← exists_prop, @exists_comm (_ ∉ p)]
   refine exists₃_congr fun r hr hrp => ?_
@@ -137,7 +137,7 @@ lemma zariskisMainProperty_iff'
 
 中文:
 引理 zariskisMainProperty_iff'
-  条件: {p : Ideal S}
+  条件: {p : 理想 S}
   证明: by
   refine zariskisMainProperty_iff.trans (exists_congr fun r => and_congr_right fun hrp =>
     and_iff_right_of_imp fun H => ?_)
@@ -166,8 +166,8 @@ lemma zariskisMainProperty_iff_exists_saturation_eq_top
     Submonoid.mem_powers_iff, mem_integralClosure_iff]
 
 中文:
-引理 zariskisMainProperty_iff_exists_saturation_eq_top
-  条件: {p : Ideal S}
+引理 zariskisMainProperty_iff_存在_saturation_eq_top
+  条件: {p : 理想 S}
   证明: by
   simp [zariskisMainProperty_iff, ← top_le_iff, SetLike.le_def,
     Submonoid.mem_powers_iff, mem_integralClosure_iff]
@@ -193,7 +193,7 @@ lemma ZariskisMainProperty.restrictScalars
 
 中文:
 引理 ZariskisMainProperty.restrictScalars
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: by
   rw [zariskisMainProperty_iff'] at H ⊢
   obtain ⟨r, hrp, H⟩ := H
@@ -226,7 +226,7 @@ lemma ZariskisMainProperty.trans
 
 中文:
 引理 ZariskisMainProperty.trans
-  结论: [Algebra S T] [IsScalarTower R S T] (p : Ideal T) [p.IsPrime]
+  结论: [代数 S T] [标量塔 R S T] (p : 理想 T) [p.是素]
   证明: by
   rw [zariskisMainProperty_iff] at h₁
   rw [zariskisMainProperty_iff']
@@ -271,8 +271,8 @@ lemma ZariskisMainProperty.of_isIntegral
     fun _ => ⟨0, Algebra.IsIntegral.isIntegral _⟩⟩
 
 中文:
-引理 ZariskisMainProperty.of_isIntegral
-  条件: (p : Ideal S) [p.IsPrime] [Algebra.Is整数egral R S]
+引理 ZariskisMainProperty.of_is整数egral
+  条件: (p : 理想 S) [p.是素] [代数.是整 R S]
   证明: zariskisMainProperty_iff'.mpr ⟨1, p.primeCompl.one_mem,
     fun _ => ⟨0, Algebra.IsIntegral.isIntegral _⟩⟩
 
@@ -305,7 +305,7 @@ lemma isIntegral_of_isIntegralElem_of_monic_of_natDegree_lt
 
 
 中文:
-引理 isIntegral_of_isIntegralElem_of_monic_of_natDegree_lt
+引理 is整数egral_of_is整数egralElem_of_monic_of_natDegree_lt
   证明: by
   let St := Localization.Away t
   let t' : St := IsLocalization.Away.invSelf t
@@ -363,7 +363,7 @@ lemma exists_isIntegral_sub_of_isIntegralElem_of_mul_mem_range
     (by simp
 
 中文:
-引理 exists_isIntegral_sub_of_isIntegralElem_of_mul_mem_range
+引理 存在_is整数egral_sub_of_is整数egralElem_of_mul_mem_range
   证明: by
   obtain ⟨r, hr : φ r = _⟩ := hp
   obtain rfl | hp1 := eq_or_ne p 1
@@ -401,7 +401,7 @@ lemma exists_isIntegral_leadingCoeff_pow_smul_sub_of_isIntegralElem_of_mul_mem_r
     simp +zetaDelta [RingHom.algebraMap_toAlgebra, IsLoca
 
 中文:
-引理 exists_isIntegral_leadingCoeff_pow_smul_sub_of_isIntegralElem_of_mul_mem_range
+引理 存在_is整数egral_leadingCoeff_pow_smul_sub_of_is整数egralElem_of_mul_mem_range
   证明: by
   set a := p.leadingCoeff
   let R' := Localization.Away a
@@ -467,7 +467,7 @@ lemma exists_leadingCoeff_pow_smul_mem_conductor
       
 
 中文:
-引理 exists_leadingCoeff_pow_smul_mem_conductor
+引理 存在_leadingCoeff_pow_smul_mem_conductor
   证明: by
   algebraize [φ.toRingHom]
   have : IsScalarTower R R[X] S := .of_algebraMap_eq' φ.comp_algebraMap.symm
@@ -523,7 +523,7 @@ lemma exists_leadingCoeff_pow_smul_mem_radical_conductor
       · si
 
 中文:
-引理 exists_leadingCoeff_pow_smul_mem_radical_conductor
+引理 存在_leadingCoeff_pow_smul_mem_radical_conductor
   证明: by
   wlog hi : i = p.natDegree generalizing p i
   · clear hi
@@ -625,7 +625,7 @@ lemma not_isStronglyTranscendental_of_weaklyQuasiFiniteAt_of_isIntegrallyClosed
   obtain rfl 
 
 中文:
-引理 not_isStronglyTranscendental_of_weaklyQuasiFiniteAt_of_isIntegrallyClosed
+引理 not_isStronglyTranscendental_of_weaklyQuasiFiniteAt_of_is整数egrallyClosed
   证明: by
   intro hx
   have : IsDomain R := (FaithfulSMul.algebraMap_injective R S).isDomain
@@ -1112,7 +1112,7 @@ lemma ZariskisMainProperty.of_finiteType.{u,
 中文:
 引理 ZariskisMainProperty.of_finiteType.{u,
   条件: v} {R
-  结论: 类型u} {S : 类型v} [CommRing R]
+  结论: 类型u} {S : 类型v} [交换环 R]
   证明: .of_finiteType_of_weaklyQuasiFiniteAt _
 
 Depends on / 依赖: of_finiteType_of_weaklyQuasiFiniteAt
@@ -1136,7 +1136,7 @@ lemma ZariskisMainProperty.exists_fg_and_exists_notMem_and_awayMap_bijective
   refine ⟨Algebra.adjoin R t, fg_adjoin_of_finite ?_ ?_, ?
 
 中文:
-引理 ZariskisMainProperty.exists_fg_and_exists_notMem_and_awayMap_bijective
+引理 ZariskisMainProperty.存在_fg_and_存在_notMem_and_awayMap_bijective
   证明: by
   obtain ⟨s, hs⟩ := Algebra.FiniteType.out (R := R) (A := S)
   choose r hrp hr m hm using zariskisMainProperty_iff.mp H
@@ -1192,7 +1192,7 @@ lemma QuasiFiniteAt.exists_fg_and_exists_notMem_and_awayMap_bijective
     (.of_finiteType_of_weaklyQuasiFiniteAt _)
 
 中文:
-引理 QuasiFiniteAt.exists_fg_and_exists_notMem_and_awayMap_bijective
+引理 QuasiFiniteAt.存在_fg_and_存在_notMem_and_awayMap_bijective
   证明: ZariskisMainProperty.exists_fg_and_exists_notMem_and_awayMap_bijective _
     (.of_finiteType_of_weaklyQuasiFiniteAt _)
 

@@ -78,13 +78,13 @@ structure Content
     - sup_le' : forall K₁ K₂ : Compacts G, toFun (K₁ ⊔ K₂) <= toFun K₁ + toFun K₂
 
 中文:
-结构 Content
-  参数: (G : Type w) [TopologicalSpace G]
+结构 内容
+  参数: (G : 类型 w) [拓扑空间 G]
   公理与运算 (4 个):
-    - toFun : Compacts G -> 实数>=0
-    - mono' : 对任意 K₁ K₂ : Compacts G, (K₁ : Set G) subseteq K₂ -> toFun K₁ <= toFun K₂
-    - sup_disjoint' : 对任意 K₁ K₂ : Compacts G, Disjoint (K₁ : Set G) K₂ -> IsClosed (K₁ : Set G) -> IsClosed (K₂ : Set G) -> toFun (K₁ ⊔ K₂) = toFun K₁ + toFun K₂
-    - sup_le' : 对任意 K₁ K₂ : Compacts G, toFun (K₁ ⊔ K₂) <= toFun K₁ + toFun K₂
+    - toFun : 余mpacts G -> 实数>=0
+    - mono' : 对任意 K₁ K₂ : 余mpacts G, (K₁ : 集合 G) subseteq K₂ -> toFun K₁ <= toFun K₂
+    - sup_disjoint' : 对任意 K₁ K₂ : 余mpacts G, Disjoint (K₁ : 集合 G) K₂ -> 是闭集 (K₁ : 集合 G) -> 是闭集 (K₂ : 集合 G) -> toFun (K₁ ⊔ K₂) = toFun K₁ + toFun K₂
+    - sup_le' : 对任意 K₁ K₂ : 余mpacts G, toFun (K₁ ⊔ K₂) <= toFun K₁ + toFun K₂
 -/
 structure Content (G : Type w) [TopologicalSpace G] where
   /-- The underlying additive function -/
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Content G)
+  签名: 可居 (内容 G)
   定义体: ⟨{ toFun := fun _ => 0
       mono' := by simp
       sup_disjoint' := by simp
@@ -136,7 +136,7 @@ rintro ⟨μ, _, _⟩ ⟨v, _, _⟩ h; congr!; ext s : 1; exact ENNReal.coe_inje
 
 中文:
 实例 :
-  签名: FunLike (Content G) (Compacts G) 实数>=0∞
+  签名: 函数状 (内容 G) (余mpacts G) 实数>=0∞
   定义体: μ.toFun s
   coe_injective := by
 rintro ⟨μ, _, _⟩ ⟨v, _, _⟩ h; congr!; ext s : 1; exact ENNReal.coe_injective congr_fun h s
@@ -160,8 +160,8 @@ lemma toFun_eq_toNNReal_apply
 @[simp]
 
 中文:
-引理 toFun_eq_toNNReal_apply
-  条件: (K : Compacts G)
+引理 toFun_eq_toNN实数_apply
+  条件: (K : 余mpacts G)
   结论: μ.toFun K = (μ K).toNN实数
   证明: rfl
 
@@ -180,7 +180,7 @@ lemma mk_apply
 
 中文:
 引理 mk_apply
-  条件: (toFun : Compacts G -> 实数>=0) (mono' sup_disjoint' sup_le') (K : Compacts G)
+  条件: (toFun : 余mpacts G -> 实数>=0) (mono' sup_disjoint' sup_le') (K : 余mpacts G)
   证明: rfl
 -/
 lemma mk_apply (toFun : Compacts G -> Real>=0) (mono' sup_disjoint' sup_le') (K : Compacts G) :
@@ -197,7 +197,7 @@ lemma apply_ne_top
 
 中文:
 引理 apply_ne_top
-  条件: {K : Compacts G}
+  条件: {K : 余mpacts G}
   结论: μ K != ∞
   证明: coe_ne_top
 -/
@@ -215,7 +215,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: (K₁ K₂ : Compacts G) (h : (K₁ : Set G) subseteq K₂)
+  条件: (K₁ K₂ : 余mpacts G) (h : (K₁ : 集合 G) subseteq K₂)
   结论: μ K₁ <= μ K₂
   证明: by
   simpa using μ.mono' _ _ h
@@ -234,7 +234,7 @@ theorem sup_disjoint
 
 中文:
 定理 sup_disjoint
-  结论: (K₁ K₂ : Compacts G) (h : Disjoint (K₁ : Set G) K₂)
+  结论: (K₁ K₂ : 余mpacts G) (h : Disjoint (K₁ : 集合 G) K₂)
   证明: by
   simpa [toNNReal_eq_toNNReal_iff, ← toNNReal_add] using μ.sup_disjoint' _ _ h h₁ h₂
 
@@ -257,7 +257,7 @@ theorem sup_le
 
 中文:
 定理 sup_le
-  条件: (K₁ K₂ : Compacts G)
+  条件: (K₁ K₂ : 余mpacts G)
   结论: μ (K₁ ⊔ K₂) <= μ K₁ + μ K₂
   证明: by
   simpa [← toNNReal_add] using μ.sup_le' _ _
@@ -278,7 +278,7 @@ theorem lt_top
 
 中文:
 定理 lt_top
-  条件: (K : Compacts G)
+  条件: (K : 余mpacts G)
   结论: μ K < ∞
   证明: ENNReal.coe_lt_top
 
@@ -332,7 +332,7 @@ theorem le_innerContent
 
 中文:
 定理 le_innerContent
-  条件: (K : Compacts G) (U : Opens G) (h2 : (K : Set G) subseteq U)
+  条件: (K : 余mpacts G) (U : Opens G) (h2 : (K : 集合 G) subseteq U)
   证明: le_iSup_of_le K le_iSup (fun _ => (μ.toFun K : Real>=0∞)) h2
 
 Depends on / 依赖: le_iSup, le_iSup_of_le
@@ -351,7 +351,7 @@ theorem innerContent_le
 
 中文:
 定理 innerContent_le
-  条件: (U : Opens G) (K : Compacts G) (h2 : (U : Set G) subseteq K)
+  条件: (U : Opens G) (K : 余mpacts G) (h2 : (U : 集合 G) subseteq K)
   证明: iSup₂_le fun _ hK' => μ.mono _ _ (Subset.trans hK' h2)
 
 Depends on / 依赖: Subset, Subset.trans
@@ -370,7 +370,7 @@ theorem innerContent_of_isCompact
 
 中文:
 定理 innerContent_of_isCompact
-  条件: {K : Set G} (h1K : IsCompact K) (h2K : IsOpen K)
+  条件: {K : 集合 G} (h1K : 是紧集 K) (h2K : 是开集 K)
   证明: le_antisymm (iSup₂_le fun _ hK' => μ.mono _ ⟨K, h1K⟩ hK') (μ.le_innerContent _ _ Subset.rfl)
 
 Depends on / 依赖: Subset, Subset.rfl, le_antisymm, le_innerContent
@@ -426,7 +426,7 @@ theorem innerContent_mono
 中文:
 定理 innerContent_mono
   条件: ⦃U V
-  结论: Set G⦄ (hU : IsOpen U) (hV : IsOpen V) (h2 : U subseteq V) :
+  结论: 集合 G⦄ (hU : 是开集 U) (hV : 是开集 V) (h2 : U subseteq V) :
   证明: biSup_mono fun _ hK => hK.trans h2
 
 Depends on / 依赖: biSup_mono, hK.trans
@@ -451,7 +451,7 @@ theorem innerContent_exists_compact
   rcases h₂ with ⟨U, h1U, h2U⟩; refine ⟨U, 
 
 中文:
-定理 innerContent_exists_compact
+定理 innerContent_存在_compact
   结论: {U : Opens G} (hU : μ.innerContent U != ∞) {ε : 实数>=0}
   证明: by
   have h'ε := ENNReal.coe_ne_zero.2 hε
@@ -491,7 +491,7 @@ theorem innerContent_iSup_nat
 
 中文:
 定理 innerContent_iSup_nat
-  条件: [R1Space G] (U : 自然数 -> Opens G)
+  条件: [R1空间 G] (U : 自然数 -> Opens G)
   证明: by
   have h3 : forall (t : Finset Nat) (K : Nat -> Compacts G), μ (t.sup K) <= t.sum fun i => μ (K i) := by
     intro t K
@@ -539,8 +539,8 @@ theorem innerContent_iUnion_nat
 
 中文:
 定理 innerContent_iUnion_nat
-  条件: [R1Space G] ⦃U
-  结论: 自然数 -> Set G⦄
+  条件: [R1空间 G] ⦃U
+  结论: 自然数 -> 集合 G⦄
   证明: by
   have := μ.innerContent_iSup_nat fun i => ⟨U i, hU i⟩
   rwa [Opens.iSup_def] at this
@@ -569,7 +569,7 @@ theorem innerContent_comap
 
 中文:
 定理 innerContent_comap
-  结论: (f : G ≃ₜ G) (h : 对任意 ⦃K : Compacts G⦄, μ (K.map f f.continuous) = μ K)
+  结论: (f : G ≃ₜ G) (h : 对任意 ⦃K : 余mpacts G⦄, μ (K.map f f.continuous) = μ K)
   证明: by
   refine (Compacts.equiv f).surjective.iSup_congr _ fun K => iSup_congr_Prop image_subset_iff ?_
   intro hK
@@ -601,7 +601,7 @@ theorem is_mul_left_invariant_innerContent
 
 中文:
 定理 is_mul_left_invariant_innerContent
-  结论: [Group G] [SeparatelyContinuousMul G]
+  结论: [群 G] [SeparatelyContinuousMul G]
   证明: by
   convert! μ.innerContent_comap (Homeomorph.mulLeft g) (fun K => h g) U
 
@@ -631,7 +631,7 @@ theorem innerContent_pos_of_is_mul_left_invariant
 
 中文:
 定理 innerContent_pos_of_is_mul_left_invariant
-  结论: [Group G] [IsTopologicalGroup G]
+  结论: [群 G] [是拓扑群 G]
   证明: by
   have : (interior (U : Set G)).Nonempty := by rwa [U.isOpen.interior_eq]
   rcases compact_covered_by_mul_left_translates K.2 this with ⟨s, hs⟩
@@ -667,7 +667,7 @@ theorem innerContent_mono'
 中文:
 定理 innerContent_mono'
   条件: ⦃U V
-  结论: Set G⦄ (hU : IsOpen U) (hV : IsOpen V) (h2 : U subseteq V) :
+  结论: 集合 G⦄ (hU : 是开集 U) (hV : 是开集 V) (h2 : U subseteq V) :
   证明: biSup_mono fun _ hK => hK.trans h2
 
 Depends on / 依赖: biSup_mono, hK.trans
@@ -688,7 +688,7 @@ definition outerMeasure
 
 中文:
 定义 outerMeasure
-  签名: : OuterMeasure G
+  签名: : 外测度 G
   定义体: inducedOuterMeasure (fun U hU => μ.innerContent ⟨U, hU⟩) isOpen_empty μ.innerContent_bot
 -/
 protected def outerMeasure : OuterMeasure G :=
@@ -726,7 +726,7 @@ theorem outerMeasure_of_isOpen
 
 中文:
 定理 outerMeasure_of_isOpen
-  条件: (U : Set G) (hU : IsOpen U)
+  条件: (U : 集合 G) (hU : 是开集 U)
   证明: μ.outerMeasure_opens ⟨U, hU⟩
 
 Depends on / 依赖: outerMeasure_opens
@@ -745,7 +745,7 @@ theorem outerMeasure_le
 
 中文:
 定理 outerMeasure_le
-  条件: (U : Opens G) (K : Compacts G) (hUK : (U : Set G) subseteq K)
+  条件: (U : Opens G) (K : 余mpacts G) (hUK : (U : 集合 G) subseteq K)
   证明: (μ.outerMeasure_opens U).le.trans μ.innerContent_le U K hUK
 
 Depends on / 依赖: innerContent_le, le.trans, outerMeasure_opens
@@ -771,7 +771,7 @@ theorem le_outerMeasure_compacts
 
 中文:
 定理 le_outerMeasure_compacts
-  条件: (K : Compacts G)
+  条件: (K : 余mpacts G)
   结论: μ K <= μ.outerMeasure K
   证明: by
   rw [Content.outerMeasure]; rw [inducedOuterMeasure_eq_iInf]
@@ -799,7 +799,7 @@ theorem outerMeasure_eq_iInf
 
 中文:
 定理 outerMeasure_eq_iInf
-  条件: (A : Set G)
+  条件: (A : 集合 G)
   证明: inducedOuterMeasure_eq_iInf _ μ.innerContent_iUnion_nat μ.innerContent_mono A
 
 Depends on / 依赖: inducedOuterMeasure_eq_iInf, innerContent_iUnion_nat, innerContent_mono
@@ -819,7 +819,7 @@ theorem outerMeasure_interior_compacts
 
 中文:
 定理 outerMeasure_interior_compacts
-  条件: (K : Compacts G)
+  条件: (K : 余mpacts G)
   结论: μ.outerMeasure (interior K) <= μ K
   证明: (μ.outerMeasure_opens <| Opens.interior K).le.trans μ.innerContent_le _ _ interior_subset
 
@@ -840,7 +840,7 @@ theorem outerMeasure_exists_compact
   exact ⟨K, h1K, by grw [h2K, μ.le_outerMeasure_compacts K]⟩
 
 中文:
-定理 outerMeasure_exists_compact
+定理 outerMeasure_存在_compact
   结论: {U : Opens G} (hU : μ.outerMeasure U != ∞) {ε : 实数>=0}
   证明: by
   rw [μ.outerMeasure_opens] at hU ⊢
@@ -868,8 +868,8 @@ theorem outerMeasure_exists_open
   exact ⟨⟨U, hU⟩, h2U, h3U⟩
 
 中文:
-定理 outerMeasure_exists_open
-  条件: {A : Set G} (hA : μ.outerMeasure A != ∞) {ε : 实数>=0} (hε : ε != 0)
+定理 outerMeasure_存在_open
+  条件: {A : 集合 G} (hA : μ.outerMeasure A != ∞) {ε : 实数>=0} (hε : ε != 0)
   证明: by
   rcases inducedOuterMeasure_exists_set _ μ.innerContent_iUnion_nat μ.innerContent_mono hA
       (ENNReal.coe_ne_zero.2 hε) with
@@ -899,7 +899,7 @@ theorem outerMeasure_preimage
 
 中文:
 定理 outerMeasure_preimage
-  结论: (f : G ≃ₜ G) (h : 对任意 ⦃K : Compacts G⦄, μ (K.map f f.continuous) = μ K)
+  结论: (f : G ≃ₜ G) (h : 对任意 ⦃K : 余mpacts G⦄, μ (K.map f f.continuous) = μ K)
   证明: by
   refine inducedOuterMeasure_preimage _ μ.innerContent_iUnion_nat μ.innerContent_mono _
     (fun _ => f.isOpen_preimage) ?_
@@ -933,7 +933,7 @@ theorem outerMeasure_lt_top_of_isCompact
 
 中文:
 定理 outerMeasure_lt_top_of_isCompact
-  结论: [WeaklyLocallyCompactSpace G]
+  结论: [WeaklyLocallyCompact空间 G]
   证明: by
   rcases exists_compact_superset hK with ⟨F, h1F, h2F⟩
   calc
@@ -968,7 +968,7 @@ theorem is_mul_left_invariant_outerMeasure
 
 中文:
 定理 is_mul_left_invariant_outerMeasure
-  结论: [Group G] [SeparatelyContinuousMul G]
+  结论: [群 G] [SeparatelyContinuousMul G]
   证明: by
   convert! μ.outerMeasure_preimage (Homeomorph.mulLeft g) (fun K => h g) A
 
@@ -995,7 +995,7 @@ theorem outerMeasure_caratheodory
 
 中文:
 定理 outerMeasure_caratheodory
-  条件: (A : Set G)
+  条件: (A : 集合 G)
   证明: by
   rw [Opens.forall]
   apply inducedOuterMeasure_caratheodory
@@ -1027,7 +1027,7 @@ theorem outerMeasure_pos_of_is_mul_left_invariant
 
 中文:
 定理 outerMeasure_pos_of_is_mul_left_invariant
-  结论: [Group G] [IsTopologicalGroup G]
+  结论: [群 G] [是拓扑群 G]
   证明: by
   convert! μ.innerContent_pos_of_is_mul_left_invariant h3 K hK ⟨U, h1U⟩ h2U
   exact μ.outerMeasure_opens ⟨U, h1U⟩
@@ -1125,7 +1125,7 @@ definition measure
 
 中文:
 定义 measure
-  签名: : Measure G
+  签名: : 测度 G
   定义体: μ.outerMeasure.toMeasure μ.borel_le_caratheodory
 -/
 protected def measure : Measure G :=
@@ -1142,7 +1142,7 @@ theorem measure_apply
 
 中文:
 定理 measure_apply
-  条件: {s : Set G} (hs : MeasurableSet s)
+  条件: {s : 集合 G} (hs : 可测集 s)
   结论: μ.measure s = μ.outerMeasure s
   证明: toMeasure_apply _ _ hs
 
@@ -1167,7 +1167,7 @@ instance outerRegular
 
 中文:
 实例 outerRegular
-  签名: : μ.measure.OuterRegular
+  签名: : μ.measure.外正则
   定义体: by
   refine ⟨fun A hA r (hr : _ < _) => ?_⟩
   rw [μ.measure_apply hA]; rw [outerMeasure_eq_iInf] at hr
@@ -1203,7 +1203,7 @@ instance regular
 
 中文:
 实例 regular
-  签名: [WeaklyLocallyCompactSpace G]
+  签名: [WeaklyLocallyCompact空间 G]
   定义体: by
   have : IsFiniteMeasureOnCompacts μ.measure := by
     refine ⟨fun K hK => ?_⟩
@@ -1266,8 +1266,8 @@ theorem contentRegular_exists_compact
   rw [← H] at lower_bound_iI
 
 中文:
-定理 contentRegular_exists_compact
-  结论: (H : ContentRegular μ) (K : TopologicalSpace.Compacts G)
+定理 contentRegular_存在_compact
+  结论: (H : ContentRegular μ) (K : 拓扑空间.余mpacts G)
   证明: by
   by_contra hc
   simp only [not_exists, not_and, not_le] at hc
@@ -1310,7 +1310,7 @@ theorem measure_eq_content_of_regular
 
 中文:
 定理 measure_eq_content_of_regular
-  结论: (H : MeasureTheory.Content.ContentRegular μ)
+  结论: (H : 测度论.内容.ContentRegular μ)
   证明: by
   refine le_antisymm ?_ ?_
   · apply ENNReal.le_of_forall_pos_le_add

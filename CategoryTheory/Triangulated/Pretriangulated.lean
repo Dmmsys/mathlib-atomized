@@ -77,10 +77,10 @@ class Pretriangulated
     - complete_distinguished_triangle_morphism : forall (T₁ T₂ : Triangle C) (_ : T₁ in distinguishedTriangles) (_ : T₂ in distinguishedTriangles) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁), exists c : T₁.obj₃ ⟶ T₂.obj₃, T₁.mor₂ ≫ c = b ≫ T₂.mor₂ ∧ T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃
 
 中文:
-类 Pretriangulated
-  参数: [对任意 n : 整数, Functor.Additive (shiftFunctor C n)]
+类 预三角
+  参数: [对任意 n : 整数, 函子.加性 (shiftFunctor C n)]
   公理与运算 (6 个):
-    - distinguishedTriangles : Set (Triangle C)
+    - distinguishedTriangles : 集合 (Triangle C)
     - isomorphic_distinguished : 对任意 T₁ in distinguishedTriangles, 对任意 (T₂) (_ : T₂ ≅ T₁), T₂ in distinguishedTriangles
     - contractible_distinguished : 对任意 X : C, contractibleTriangle X in distinguishedTriangles
     - distinguished_cocone_triangle : 对任意 {X Y : C} (f : X ⟶ Y), 存在 (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : 整数)⟧), Triangle.mk f g h in distinguishedTriangles
@@ -674,7 +674,7 @@ lemma mor₃_eq_zero_iff_epi₂
 
 中文:
 引理 mor₃_eq_zero_iff_epi₂
-  结论: T.mor₃ = 0 ↔ Epi T.mor₂
+  结论: T.mor₃ = 0 ↔ 满态射 T.mor₂
   证明: by
   constructor
   · intro h
@@ -712,7 +712,7 @@ lemma mor₂_eq_zero_iff_epi₁
 
 中文:
 引理 mor₂_eq_zero_iff_epi₁
-  结论: T.mor₂ = 0 ↔ Epi T.mor₁
+  结论: T.mor₂ = 0 ↔ 满态射 T.mor₁
   证明: by
   have h := mor₃_eq_zero_iff_epi₂ _ (inv_rot_of_distTriang _ hT)
   dsimp at h
@@ -741,7 +741,7 @@ lemma mor₁_eq_zero_iff_epi₃
 
 中文:
 引理 mor₁_eq_zero_iff_epi₃
-  结论: T.mor₁ = 0 ↔ Epi T.mor₃
+  结论: T.mor₁ = 0 ↔ 满态射 T.mor₃
   证明: by
   have h := mor₃_eq_zero_iff_epi₂ _ (rot_of_distTriang _ hT)
   dsimp at h
@@ -767,7 +767,7 @@ lemma mor₃_eq_zero_of_epi₂
 
 中文:
 引理 mor₃_eq_zero_of_epi₂
-  条件: (h : Epi T.mor₂)
+  条件: (h : 满态射 T.mor₂)
   结论: T.mor₃ = 0
   证明: (T.mor₃_eq_zero_iff_epi₂ hT).2 h
 
@@ -785,7 +785,7 @@ lemma mor₂_eq_zero_of_epi₁
 
 中文:
 引理 mor₂_eq_zero_of_epi₁
-  条件: (h : Epi T.mor₁)
+  条件: (h : 满态射 T.mor₁)
   结论: T.mor₂ = 0
   证明: (T.mor₂_eq_zero_iff_epi₁ hT).2 h
 
@@ -803,7 +803,7 @@ lemma mor₁_eq_zero_of_epi₃
 
 中文:
 引理 mor₁_eq_zero_of_epi₃
-  条件: (h : Epi T.mor₃)
+  条件: (h : 满态射 T.mor₃)
   结论: T.mor₁ = 0
   证明: (T.mor₁_eq_zero_iff_epi₃ hT).2 h
 
@@ -823,7 +823,7 @@ lemma epi₂
 中文:
 引理 epi₂
   条件: (h : T.mor₃ = 0)
-  结论: Epi T.mor₂
+  结论: 满态射 T.mor₂
   证明: (T.mor₃_eq_zero_iff_epi₂ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -841,7 +841,7 @@ lemma epi₁
 中文:
 引理 epi₁
   条件: (h : T.mor₂ = 0)
-  结论: Epi T.mor₁
+  结论: 满态射 T.mor₁
   证明: (T.mor₂_eq_zero_iff_epi₁ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -859,7 +859,7 @@ lemma epi₃
 中文:
 引理 epi₃
   条件: (h : T.mor₁ = 0)
-  结论: Epi T.mor₃
+  结论: 满态射 T.mor₃
   证明: (T.mor₁_eq_zero_iff_epi₃ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -884,7 +884,7 @@ lemma mor₁_eq_zero_iff_mono₂
 
 中文:
 引理 mor₁_eq_zero_iff_mono₂
-  结论: T.mor₁ = 0 ↔ Mono T.mor₂
+  结论: T.mor₁ = 0 ↔ 单态射 T.mor₂
   证明: by
   constructor
   · intro h
@@ -917,7 +917,7 @@ lemma mor₂_eq_zero_iff_mono₃
 
 中文:
 引理 mor₂_eq_zero_iff_mono₃
-  结论: T.mor₂ = 0 ↔ Mono T.mor₃
+  结论: T.mor₂ = 0 ↔ 单态射 T.mor₃
   证明: mor₁_eq_zero_iff_mono₂ _ (rot_of_distTriang _ hT)
 
 Depends on / 依赖: rot_of_distTriang
@@ -941,7 +941,7 @@ lemma mor₃_eq_zero_iff_mono₁
 
 中文:
 引理 mor₃_eq_zero_iff_mono₁
-  结论: T.mor₃ = 0 ↔ Mono T.mor₁
+  结论: T.mor₃ = 0 ↔ 单态射 T.mor₁
   证明: by
   have h := mor₁_eq_zero_iff_mono₂ _ (inv_rot_of_distTriang _ hT)
   dsimp at h
@@ -967,7 +967,7 @@ lemma mor₁_eq_zero_of_mono₂
 
 中文:
 引理 mor₁_eq_zero_of_mono₂
-  条件: (h : Mono T.mor₂)
+  条件: (h : 单态射 T.mor₂)
   结论: T.mor₁ = 0
   证明: (T.mor₁_eq_zero_iff_mono₂ hT).2 h
 
@@ -985,7 +985,7 @@ lemma mor₂_eq_zero_of_mono₃
 
 中文:
 引理 mor₂_eq_zero_of_mono₃
-  条件: (h : Mono T.mor₃)
+  条件: (h : 单态射 T.mor₃)
   结论: T.mor₂ = 0
   证明: (T.mor₂_eq_zero_iff_mono₃ hT).2 h
 
@@ -1003,7 +1003,7 @@ lemma mor₃_eq_zero_of_mono₁
 
 中文:
 引理 mor₃_eq_zero_of_mono₁
-  条件: (h : Mono T.mor₁)
+  条件: (h : 单态射 T.mor₁)
   结论: T.mor₃ = 0
   证明: (T.mor₃_eq_zero_iff_mono₁ hT).2 h
 
@@ -1023,7 +1023,7 @@ lemma mono₂
 中文:
 引理 mono₂
   条件: (h : T.mor₁ = 0)
-  结论: Mono T.mor₂
+  结论: 单态射 T.mor₂
   证明: (T.mor₁_eq_zero_iff_mono₂ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -1041,7 +1041,7 @@ lemma mono₃
 中文:
 引理 mono₃
   条件: (h : T.mor₂ = 0)
-  结论: Mono T.mor₃
+  结论: 单态射 T.mor₃
   证明: (T.mor₂_eq_zero_iff_mono₃ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -1059,7 +1059,7 @@ lemma mono₁
 中文:
 引理 mono₁
   条件: (h : T.mor₃ = 0)
-  结论: Mono T.mor₁
+  结论: 单态射 T.mor₁
   证明: (T.mor₃_eq_zero_iff_mono₁ hT).1 h
 
 Depends on / 依赖: T.mor
@@ -1082,7 +1082,7 @@ lemma isZero₂_iff
 
 中文:
 引理 isZero₂_iff
-  结论: IsZero T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0)
+  结论: 是零 T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0)
   证明: by
   constructor
   · intro h
@@ -1117,7 +1117,7 @@ lemma isZero₁_iff
 
 中文:
 引理 isZero₁_iff
-  结论: IsZero T.obj₁ ↔ (T.mor₁ = 0 ∧ T.mor₃ = 0)
+  结论: 是零 T.obj₁ ↔ (T.mor₁ = 0 ∧ T.mor₃ = 0)
   证明: by
   refine (isZero₂_iff _ (inv_rot_of_distTriang _ hT)).trans ?_
   dsimp
@@ -1144,7 +1144,7 @@ lemma isZero₃_iff
 
 中文:
 引理 isZero₃_iff
-  结论: IsZero T.obj₃ ↔ (T.mor₂ = 0 ∧ T.mor₃ = 0)
+  结论: 是零 T.obj₃ ↔ (T.mor₂ = 0 ∧ T.mor₃ = 0)
   证明: by
   refine (isZero₂_iff _ (rot_of_distTriang _ hT)).trans ?_
   tauto
@@ -1168,8 +1168,8 @@ lemma isZero₁_of_isZero₂₃
 
 中文:
 引理 isZero₁_of_isZero₂₃
-  条件: (h₂ : IsZero T.obj₂) (h₃ : IsZero T.obj₃)
-  结论: IsZero T.obj₁
+  条件: (h₂ : 是零 T.obj₂) (h₃ : 是零 T.obj₃)
+  结论: 是零 T.obj₁
   证明: by
   rw [T.isZero₁_iff hT]
   exact ⟨h₂.eq_of_tgt _ _, h₃.eq_of_src _ _⟩
@@ -1193,8 +1193,8 @@ lemma isZero₂_of_isZero₁₃
 
 中文:
 引理 isZero₂_of_isZero₁₃
-  条件: (h₁ : IsZero T.obj₁) (h₃ : IsZero T.obj₃)
-  结论: IsZero T.obj₂
+  条件: (h₁ : 是零 T.obj₁) (h₃ : 是零 T.obj₃)
+  结论: 是零 T.obj₂
   证明: by
   rw [T.isZero₂_iff hT]
   exact ⟨h₁.eq_of_src _ _, h₃.eq_of_tgt _ _⟩
@@ -1220,8 +1220,8 @@ lemma isZero₃_of_isZero₁₂
 
 中文:
 引理 isZero₃_of_isZero₁₂
-  条件: (h₁ : IsZero T.obj₁) (h₂ : IsZero T.obj₂)
-  结论: IsZero T.obj₃
+  条件: (h₁ : 是零 T.obj₁) (h₂ : 是零 T.obj₂)
+  结论: 是零 T.obj₃
   证明: isZero₂_of_isZero₁₃ _ (rot_of_distTriang _ hT) h₂ (by
     dsimp
     simp only [IsZero.iff_id_eq_zero] at h₁ ⊢
@@ -1286,7 +1286,7 @@ lemma isZero₂_iff_isIso₃
 
 中文:
 引理 isZero₂_iff_isIso₃
-  结论: IsZero T.obj₂ ↔ IsIso T.mor₃
+  结论: 是零 T.obj₂ ↔ 是同构 T.mor₃
   证明: isZero₁_iff_isIso₂ _ (rot_of_distTriang _ hT)
 
 Depends on / 依赖: rot_of_distTriang
@@ -1308,7 +1308,7 @@ lemma isZero₃_iff_isIso₁
 
 中文:
 引理 isZero₃_iff_isIso₁
-  结论: IsZero T.obj₃ ↔ IsIso T.mor₁
+  结论: 是零 T.obj₃ ↔ 是同构 T.mor₁
   证明: by
   refine Iff.trans ?_ (Triangle.isZero₁_iff_isIso₂ _ (inv_rot_of_distTriang _ hT))
   dsimp
@@ -1332,8 +1332,8 @@ lemma isZero₁_of_isIso₂
 
 中文:
 引理 isZero₁_of_isIso₂
-  条件: (h : IsIso T.mor₂)
-  结论: IsZero T.obj₁
+  条件: (h : 是同构 T.mor₂)
+  结论: 是零 T.obj₁
   证明: (T.isZero₁_iff_isIso₂ hT).2 h
 
 Depends on / 依赖: T.isZero
@@ -1350,8 +1350,8 @@ lemma isZero₂_of_isIso₃
 
 中文:
 引理 isZero₂_of_isIso₃
-  条件: (h : IsIso T.mor₃)
-  结论: IsZero T.obj₂
+  条件: (h : 是同构 T.mor₃)
+  结论: 是零 T.obj₂
   证明: (T.isZero₂_iff_isIso₃ hT).2 h
 
 Depends on / 依赖: T.isZero
@@ -1368,8 +1368,8 @@ lemma isZero₃_of_isIso₁
 
 中文:
 引理 isZero₃_of_isIso₁
-  条件: (h : IsIso T.mor₁)
-  结论: IsZero T.obj₃
+  条件: (h : 是同构 T.mor₁)
+  结论: 是零 T.obj₃
   证明: (T.isZero₃_iff_isIso₁ hT).2 h
 
 Depends on / 依赖: T.isZero
@@ -1475,7 +1475,7 @@ lemma distinguished_iff_of_isZero₃
 
 中文:
 引理 distinguished_iff_of_isZero₃
-  条件: (T : Triangle C) (h : IsZero T.obj₃)
+  条件: (T : Triangle C) (h : 是零 T.obj₃)
   证明: ⟨fun hT => by rwa [← isZero₃_iff_isIso₁ _ hT],
     fun _ => isomorphic_distinguished _ (contractible_distinguished T.obj₁) _
       (isoMk _ _ (Iso.refl _) (asIso T.mor₁).symm h.isoZero (by simp)
@@ -1503,7 +1503,7 @@ lemma distinguished_iff_of_isZero₁
 
 中文:
 引理 distinguished_iff_of_isZero₁
-  条件: (T : Triangle C) (h : IsZero T.obj₁)
+  条件: (T : Triangle C) (h : 是零 T.obj₁)
   证明: by
   rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₃ _ (Functor.map_isZero (CategoryTheory.shiftFunctor C 1) h)]
   simp
@@ -1528,7 +1528,7 @@ lemma distinguished_iff_of_isZero₂
 
 中文:
 引理 distinguished_iff_of_isZero₂
-  条件: (T : Triangle C) (h : IsZero T.obj₂)
+  条件: (T : Triangle C) (h : 是零 T.obj₂)
   证明: by
   rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₁ _ h]
   simp
@@ -1558,7 +1558,7 @@ instance :
 
 中文:
 实例 :
-  签名: SplitEpiCategory C
+  签名: 分裂满态射范畴 C
   定义体: by
     obtain ⟨Z, g, h, hT⟩ := distinguished_cocone_triangle f
     obtain ⟨r, hr⟩ := Triangle.coyoneda_exact₂ _ hT (𝟙 _)
@@ -1588,7 +1588,7 @@ instance :
 
 中文:
 实例 :
-  签名: SplitMonoCategory C
+  签名: 分裂单态射范畴 C
   定义体: by
     obtain ⟨X, g, h, hT⟩ := distinguished_cocone_triangle₁ f
     obtain ⟨r, hr⟩ := Triangle.yoneda_exact₂ _ hT (𝟙 _) (by
@@ -1808,7 +1808,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasBinaryBiproducts C
+  签名: 有BinaryBiproducts C
   定义体: ⟨fun X₁ X₃ => by
   obtain ⟨X₂, inl, snd, mem⟩ := distinguished_cocone_triangle₂ (0 : X₃ ⟶ X₁⟦(1 : Int)⟧)
   obtain ⟨inr : X₃ ⟶ X₂, inr_snd : 𝟙 _ = inr ≫ snd⟩ :=
@@ -1840,7 +1840,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteProducts C
+  签名: 有FiniteProducts C
   定义体: hasFiniteProducts_of_has_binary_and_terminal
 
 Depends on / 依赖: hasFiniteProducts_of_has_binary_and_terminal
@@ -1856,7 +1856,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteCoproducts C
+  签名: 有FiniteCoproducts C
   定义体: hasFiniteCoproducts_of_has_binary_and_initial
 
 Depends on / 依赖: hasFiniteCoproducts_of_has_binary_and_initial
@@ -1872,7 +1872,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteBiproducts C
+  签名: 有FiniteBiproducts C
   定义体: HasFiniteBiproducts.of_hasFiniteProducts
 
 Depends on / 依赖: HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, of_hasFiniteProducts
@@ -1895,7 +1895,7 @@ lemma exists_iso_binaryBiproduct_of_distTriang
   refine ⟨biprod.uniqueUpTo
 
 中文:
-引理 exists_iso_binaryBiproduct_of_distTriang
+引理 存在_iso_binaryBiproduct_of_distTriang
   结论: (T : Triangle C) (hT : T in distTriang C)
   证明: by
   have := T.epi₂ hT zero
@@ -2130,7 +2130,7 @@ lemma exists_iso_of_arrow_iso
   have : 
 
 中文:
-引理 exists_iso_of_arrow_iso
+引理 存在_iso_of_arrow_iso
   结论: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
   证明: by
   let φ := completeDistinguishedTriangleMorphism T₁ T₂ hT₁ hT₂ e.hom.left e.hom.right e.hom.w.symm

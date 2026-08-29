@@ -50,9 +50,9 @@ class EnrichedOrdinaryCategory
     - homEquiv_comp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : homEquiv (f ≫ g) = (fun_ _).inv ≫ (homEquiv f otimesₘ homEquiv g) ≫ eComp V X Y Z  [default: by cat_disch]
 
 中文:
-类 EnrichedOrdinaryCategory
-  参数: extends EnrichedCategory V C
-  继承: EnrichedCategory V C
+类 EnrichedOrdinary范畴
+  参数: extends Enriched范畴 V C
+  继承: Enriched范畴 V C
   公理与运算 (3 个):
     - homEquiv({X Y : C}) : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))
     - homEquiv_id((X : C)) : homEquiv (𝟙 X) = eId V X  [默认: by cat_disch]
@@ -485,7 +485,7 @@ instance ForgetEnrichment.enrichedOrdinaryCategory
 
 中文:
 实例 ForgetEnrichment.enrichedOrdinaryCategory
-  签名: {D : 类型} [EnrichedCategory V D]
+  签名: {D : 类型} [Enriched范畴 V D]
   定义体: inferInstanceAs (EnrichedCategory V D)
   homEquiv := Equiv.refl _
   homEquiv_id _ := Category.id_comp _
@@ -515,7 +515,7 @@ definition ForgetEnrichment.equivInverse
 
 中文:
 定义 ForgetEnrichment.equivInverse
-  签名: (D : 类型u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D]
+  签名: (D : 类型u'') [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
   定义体: .of V X
   map f := ForgetEnrichment.homOf V (eHomEquiv V f)
   map_comp f g := by simp [eHomEquiv_comp]
@@ -544,7 +544,7 @@ definition ForgetEnrichment.equivFunctor
 
 中文:
 定义 ForgetEnrichment.equivFunctor
-  签名: (D : 类型u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D]
+  签名: (D : 类型u'') [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
   定义体: ForgetEnrichment.to V X
   map f := (eHomEquiv V).symm (ForgetEnrichment.homTo V f)
   map_id X := by rw [ForgetEnrichment.homTo_id, ← eHomEquiv_id, Equiv.symm_apply_apply]
@@ -582,7 +582,7 @@ definition ForgetEnrichment.equiv
 
 中文:
 定义 ForgetEnrichment.equiv
-  签名: {D : 类型u''} [Category.{v''} D] [EnrichedOrdinaryCategory V D]
+  签名: {D : 类型u''} [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
   定义体: equivFunctor V D
   inverse := equivInverse V D
   unitIso := NatIso.ofComponents (fun X => Iso.refl _)
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (TransportEnrichment F C)
+  签名: 范畴 (TransportEnrichment F C)
   定义体: inferInstanceAs (Category C)
 
 Depends on / 依赖: Category

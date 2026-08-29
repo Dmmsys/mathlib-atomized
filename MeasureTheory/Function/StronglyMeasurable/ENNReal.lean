@@ -33,7 +33,7 @@ lemma ENNReal.finStronglyMeasurable_of_measurable
     SimpleFunc.tendsto_eapprox hf_meas⟩
 
 中文:
-引理 ENNReal.finStronglyMeasurable_of_measurable
+引理 广义非负实数.finStronglyMeasurable_of_measurable
   结论: (hf : ∫⁻ x, f x ∂μ != ∞)
   证明: ⟨SimpleFunc.eapprox f, measure_support_eapprox_lt_top hf_meas hf,
     SimpleFunc.tendsto_eapprox hf_meas⟩
@@ -58,7 +58,7 @@ lemma ENNReal.aefinStronglyMeasurable_of_aemeasurable
   rwa [lintegral_congr_ae hf_meas.ae_eq_mk.symm]
 
 中文:
-引理 ENNReal.aefinStronglyMeasurable_of_aemeasurable
+引理 广义非负实数.aefinStronglyMeasurable_of_aemeasurable
   结论: (hf : ∫⁻ x, f x ∂μ != ∞)
   证明: by
   refine ⟨hf_meas.mk f, ENNReal.finStronglyMeasurable_of_measurable ?_ hf_meas.measurable_mk,

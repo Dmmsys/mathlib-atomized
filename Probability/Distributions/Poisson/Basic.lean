@@ -205,7 +205,7 @@ lemma integrable_map_cast_poissonMeasure_iff
 
 中文:
 引理 integrable_map_cast_poissonMeasure_iff
-  结论: {r : 实数>=0} [Countable R] [MeasurableSingletonClass R]
+  结论: {r : 实数>=0} [可数 R] [MeasurableSingleton类 R]
   证明: integrable_map_measure .of_discrete .of_discrete
 
 Depends on / 依赖: integrable_map_measure, of_discrete
@@ -233,7 +233,7 @@ lemma hasSum_integral_poissonMeasure
 
 中文:
 引理 hasSum_integral_poissonMeasure
-  结论: [CompleteSpace E] {r : 实数>=0} {f : 自然数 -> E}
+  结论: [完备空间 E] {r : 实数>=0} {f : 自然数 -> E}
   证明: by
   have : (fun n => (exp (-r) * r ^ n / (n)!) • f n) =
       fun n => (ENNReal.ofReal (exp (-r) * r ^ n / (n)!)).toReal • f n := by
@@ -266,7 +266,7 @@ lemma integral_poissonMeasure'
 
 中文:
 引理 integral_poissonMeasure'
-  结论: [CompleteSpace E] {r : 实数>=0} {f : 自然数 -> E}
+  结论: [完备空间 E] {r : 实数>=0} {f : 自然数 -> E}
   证明: (hasSum_integral_poissonMeasure hf).tsum_eq.symm
 
 Depends on / 依赖: hasSum_integral_poissonMeasure, tsum_eq, tsum_eq.symm
@@ -289,7 +289,7 @@ lemma integral_map_cast_poissonMeasure'
 
 中文:
 引理 integral_map_cast_poissonMeasure'
-  结论: [CompleteSpace E] [Countable R] [MeasurableSingletonClass R]
+  结论: [完备空间 E] [可数 R] [MeasurableSingleton类 R]
   证明: by
   rw [integral_map .of_discrete .of_discrete]
   rw [integrable_map_cast_poissonMeasure_iff] at hf
@@ -317,7 +317,7 @@ lemma integral_poissonMeasure
 
 中文:
 引理 integral_poissonMeasure
-  条件: [FiniteDimensional 实数 E] (r : 实数>=0) (f : 自然数 -> E)
+  条件: [有限维 实数 E] (r : 实数>=0) (f : 自然数 -> E)
   证明: by
   rw [poissonMeasure]; rw [integral_sum_dirac (by simp)]
   congr with n
@@ -342,7 +342,7 @@ lemma integral_map_cast_poissonMeasure
 
 中文:
 引理 integral_map_cast_poissonMeasure
-  结论: [FiniteDimensional 实数 E] (r : 实数>=0) [Countable R]
+  结论: [有限维 实数 E] (r : 实数>=0) [可数 R]
   证明: by
   rw [integral_map .of_discrete .of_discrete]; rw [integral_poissonMeasure]
 
@@ -500,7 +500,7 @@ theorem IndepFun.hasLaw_add_poissonMeasure
 
 中文:
 定理 IndepFun.hasLaw_add_poissonMeasure
-  结论: {Ω : 类型} {mΩ : MeasurableSpace Ω}
+  结论: {Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   rw [← poissonMeasure_conv_poissonMeasure]
   exact hXY.hasLaw_add hX hY
@@ -526,7 +526,7 @@ theorem IndepFun.hasLaw_add_map_cast_poissonMeasure
 
 中文:
 定理 IndepFun.hasLaw_add_map_cast_poissonMeasure
-  结论: {Ω : 类型} {mΩ : MeasurableSpace Ω}
+  结论: {Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   rw [← map_cast_poissonMeasure_conv]
   exact hXY.hasLaw_add hX hY
@@ -561,7 +561,7 @@ alias poissonPMFRealSum := hasSum_one_poissonMeasure
 @[deprecated poissonMeasure_real_singleton_pos (since := "2026-03-08")]
 
 中文:
-定义 poissonPMFReal
+定义 poissonPMF实数
   签名: (r : 实数>=0) (n : 自然数)
   定义体: exp (-r) * r ^ n / (n)!
 
@@ -590,7 +590,7 @@ lemma poissonPMFReal_pos
 @[deprecated measureReal_nonneg (since := "2026-03-08")]
 
 中文:
-引理 poissonPMFReal_pos
+引理 poissonPMF实数_pos
   条件: {r : 实数>=0} {n : 自然数} (hr : 0 < r)
   结论: 0 < poissonPMF实数 r n
   证明: by
@@ -618,7 +618,7 @@ lemma poissonPMFReal_nonneg
   positivity
 
 中文:
-引理 poissonPMFReal_nonneg
+引理 poissonPMF实数_nonneg
   条件: {r : 实数>=0} {n : 自然数}
   结论: 0 <= poissonPMF实数 r n
   证明: by
@@ -680,7 +680,7 @@ lemma poissonPMFReal_ofReal_eq_poissonPMF
 @[deprecated Measurable.of_discrete (since := "2026-03-08")]
 
 中文:
-引理 poissonPMFReal_ofReal_eq_poissonPMF
+引理 poissonPMF实数_of实数_eq_poissonPMF
   条件: (r : 实数>=0) (n : 自然数)
   证明: by
   simpa only [poissonPMF] using by rfl
@@ -706,9 +706,9 @@ lemma measurable_poissonPMFReal
 @[deprecated StronglyMeasurable.of_discrete (since := "2026-03-08")]
 
 中文:
-引理 measurable_poissonPMFReal
+引理 measurable_poissonPMF实数
   条件: (r : 实数>=0)
-  结论: Measurable (poissonPMF实数 r)
+  结论: 可测 (poissonPMF实数 r)
   证明: by fun_prop
 
 @[deprecated StronglyMeasurable.of_discrete (since := "2026-03-08")]
@@ -728,7 +728,7 @@ lemma stronglyMeasurable_poissonPMFReal
   proof: stronglyMeasurable_iff_measurable.mpr (measurable_poissonPMFReal r)
 
 中文:
-引理 stronglyMeasurable_poissonPMFReal
+引理 stronglyMeasurable_poissonPMF实数
   条件: (r : 实数>=0)
   结论: StronglyMeasurable (poissonPMF实数 r)
   证明: stronglyMeasurable_iff_measurable.mpr (measurable_poissonPMFReal r)

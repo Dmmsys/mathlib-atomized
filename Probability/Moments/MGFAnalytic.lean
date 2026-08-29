@@ -405,7 +405,7 @@ lemma continuous_mgf
 
 中文:
 引理 continuous_mgf
-  条件: (h : 对任意 t, 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: (h : 对任意 t, 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   rw [← continuousOn_univ]
   convert! continuousOn_mgf
@@ -785,8 +785,8 @@ lemma exists_cgf_eq_iteratedDeriv_two_cgf_mul
       convert! (anal
 
 中文:
-引理 exists_cgf_eq_iteratedDeriv_two_cgf_mul
-  结论: [IsZeroOrProbabilityMeasure μ] (ht : 0 < t)
+引理 存在_cgf_eq_iteratedDeriv_two_cgf_mul
+  结论: [是ZeroOrProbabilityMeasure μ] (ht : 0 < t)
   证明: by
   have hu : UniqueDiffOn Real (Set.Icc 0 t) := uniqueDiffOn_Icc ht
   rw [← sub_zero (cgf X μ t)]

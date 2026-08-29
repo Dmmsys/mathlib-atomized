@@ -48,7 +48,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (N : Submodule R M)
+  签名: (N : 子模 R M)
   定义体: exists S : Finset M, span R ↑S = N
 
 Depends on / 依赖: Finset
@@ -71,8 +71,8 @@ theorem fg_def
 
 中文:
 定理 fg_def
-  条件: {N : Submodule R M}
-  结论: N.FG ↔ 存在 S : Set M, S.Finite ∧ span R S = N
+  条件: {N : 子模 R M}
+  结论: N.FG ↔ 存在 S : 集合 M, S.有限 ∧ span R S = N
   证明: by
   refine ⟨fun ⟨t, h⟩ => ⟨_, t.finite_toSet, h⟩, ?_⟩
   rintro ⟨t', h, rfl⟩
@@ -99,7 +99,7 @@ theorem fg_iff_addSubmonoid_fg
 
 中文:
 定理 fg_iff_addSubmonoid_fg
-  条件: (P : Submodule 自然数 M)
+  条件: (P : 子模 自然数 M)
   结论: P.FG ↔ P.toAddSubmonoid.FG
   证明: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure]⟩,
     fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure] using hS⟩⟩
@@ -121,7 +121,7 @@ theorem fg_iff_addSubgroup_fg
 
 中文:
 定理 fg_iff_addSubgroup_fg
-  条件: {G : 类型} [AddCommGroup G] (P : Submodule 整数 G)
+  条件: {G : 类型} [加法交换群 G] (P : 子模 整数 G)
   证明: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure]⟩,
     fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure] using hS⟩⟩
 
@@ -150,8 +150,8 @@ theorem fg_iff_exists_fin_generating_family
 universe w v u in
 
 中文:
-定理 fg_iff_exists_fin_generating_family
-  条件: {N : Submodule R M}
+定理 fg_iff_存在_fin_generating_family
+  条件: {N : 子模 R M}
   证明: by
   rw [fg_def]
   constructor
@@ -195,8 +195,8 @@ lemma fg_iff_exists_finite_generating_family
     exact ⟨(range g).toFinset, by simpa⟩
 
 中文:
-引理 fg_iff_exists_finite_generating_family
-  结论: {A : 类型u} [Semiring A] {M : 类型v}
+引理 fg_iff_存在_finite_generating_family
+  结论: {A : 类型u} [半环 A] {M : 类型v}
   证明: by
   constructor
   · intro hN
@@ -245,7 +245,7 @@ obtain ⟨s', hs's, hss'⟩ := subset_span_finite_of_subset_span hs'' ▸ subset
 
 中文:
 定理 fg_span_iff_fg_span_finset_subset
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   constructor
   · intro ⟨s'', hs''⟩
@@ -289,7 +289,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: exists S : Finset R, span ↑S = I
 
 Depends on / 依赖: Finset
@@ -313,10 +313,10 @@ class Module.Finite
     - of_fg_top : : fg_top : (⊤ : Submodule R M).FG
 
 中文:
-类 Module.Finite
-  参数: [Semiring R] [AddCommMonoid M] [Module R M]
+类 模.有限
+  参数: [半环 R] [加法交换幺半群 M] [模 R M]
   公理与运算 (1 个):
-    - of_fg_top : : fg_top : (⊤ : Submodule R M).FG
+    - of_fg_top : : fg_top : (⊤ : 子模 R M).FG
 -/
 protected class Module.Finite [Semiring R] [AddCommMonoid M] [Module R M] : Prop where
   of_fg_top ::
@@ -338,7 +338,7 @@ theorem finite_def
 
 中文:
 定理 finite_def
-  条件: {R M} [Semiring R] [AddCommMonoid M] [Module R M]
+  条件: {R M} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: ⟨(·.fg_top), .of_fg_top⟩
 
 Depends on / 依赖: fg_top, of_fg_top
@@ -363,8 +363,8 @@ fun h => of_fg_top (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
 
 中文:
 定理 iff_addMonoid_fg
-  条件: {M : 类型} [AddCommMonoid M]
-  结论: Module.Finite 自然数 M ↔ AddMonoid.FG M
+  条件: {M : 类型} [加法交换幺半群 M]
+  结论: 模.有限 自然数 M ↔ 加法幺半群.FG M
   证明: ⟨fun h => AddMonoid.fg_def.mpr (fg_iff_addSubmonoid_fg ⊤).mp h.fg_top,
 fun h => of_fg_top (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
 
@@ -386,8 +386,8 @@ fun h => of_fg_top (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
 
 中文:
 定理 iff_addGroup_fg
-  条件: {G : 类型} [AddCommGroup G]
-  结论: Module.Finite 整数 G ↔ AddGroup.FG G
+  条件: {G : 类型} [加法交换群 G]
+  结论: 模.有限 整数 G ↔ 加法群.FG G
   证明: ⟨fun h => AddGroup.fg_def.mpr (fg_iff_addSubgroup_fg ⊤).mp h.fg_top,
 fun h => of_fg_top (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
 
@@ -409,9 +409,9 @@ lemma exists_fin
   proof: fg_iff_exists_fin_generating_family.mp fg_top
 
 中文:
-引理 exists_fin
-  条件: [Module.Finite R M]
-  结论: 存在 (n : 自然数) (s : Fin n -> M), span R (range s) = ⊤
+引理 存在_fin
+  条件: [模.有限 R M]
+  结论: 存在 (n : 自然数) (s : 有限集 n -> M), span R (range s) = ⊤
   证明: fg_iff_exists_fin_generating_family.mp fg_top
 
 Depends on / 依赖: fg_iff_exists_fin_generating_family, fg_iff_exists_fin_generating_family.mp, fg_top
@@ -432,8 +432,8 @@ instance AddMonoid.FG.to_moduleFinite_nat
   body: Module.Finite.iff_addMonoid_fg.mpr ‹_›
 
 中文:
-实例 AddMonoid.FG.to_moduleFinite_nat
-  签名: {M : 类型} [AddCommMonoid M] [FG M]
+实例 加法幺半群.FG.to_moduleFinite_nat
+  签名: {M : 类型} [加法交换幺半群 M] [FG M]
   定义体: Module.Finite.iff_addMonoid_fg.mpr ‹_›
 
 Depends on / 依赖: Finite, Module, Module.Finite.iff_addMonoid_fg.mpr, iff_addMonoid_fg
@@ -451,8 +451,8 @@ instance AddMonoid.FG.to_moduleFinite_int
   body: Module.Finite.iff_addGroup_fg.mpr AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
 
 中文:
-实例 AddMonoid.FG.to_moduleFinite_int
-  签名: {G : 类型} [AddCommGroup G] [FG G]
+实例 加法幺半群.FG.to_moduleFinite_int
+  签名: {G : 类型} [加法交换群 G] [FG G]
   定义体: Module.Finite.iff_addGroup_fg.mpr AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
 
 Depends on / 依赖: AddGroup, AddGroup.fg_iff_addMonoid_fg.mpr, Finite, Module, Module.Finite.iff_addGroup_fg.mpr, fg_iff_addMonoid_fg, iff_addGroup_fg
@@ -481,7 +481,7 @@ definition Finite
 @[simp]
 
 中文:
-定义 Finite
+定义 有限
   签名: (f : A ->+* B)
   定义体: letI : Algebra A B := f.toAlgebra
   Module.Finite A B
@@ -506,7 +506,7 @@ lemma finite_algebraMap
 
 中文:
 引理 finite_algebraMap
-  条件: [Algebra A B]
+  条件: [代数 A B]
   证明: by
   rw [Finite]; rw [toAlgebra_algebraMap]
 
@@ -533,7 +533,7 @@ definition Finite
   body: f.toRingHom.Finite
 
 中文:
-定义 Finite
+定义 有限
   签名: (f : A ->ₐ[R] B)
   定义体: f.toRingHom.Finite
 

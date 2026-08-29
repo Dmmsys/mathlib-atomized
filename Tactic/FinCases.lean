@@ -44,7 +44,7 @@ definition getMemType
 
 中文:
 定义 getMemType
-  签名: {m : Type -> Type} [Monad m] [MonadError m] (e : Expr)
+  签名: {m : 类型 -> 类型} [单子 m] [MonadError m] (e : Expr)
   定义体: do
   match e.getAppFnArgs with
   | (``Membership.mem, #[_, type, _, _, _]) =>

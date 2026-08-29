@@ -46,7 +46,7 @@ definition rev
 
 中文:
 定义 rev
-  签名: : SimplexCategory ⥤ SimplexCategory where
+  签名: : 单纯形范畴 ⥤ 单纯形范畴 where
   定义体: n
   map {n m} f := Hom.mk ⟨fun i => (f i.rev).rev, fun i j hij => by
     rw [Fin.rev_le_rev]
@@ -73,7 +73,7 @@ lemma rev_map_apply
 
 中文:
 引理 rev_map_apply
-  条件: {n m : SimplexCategory} (f : n ⟶ m) (i : Fin (n.len + 1))
+  条件: {n m : 单纯形范畴} (f : n ⟶ m) (i : 有限集 (n.len + 1))
   证明: rfl
 
 @[simp]
@@ -99,7 +99,7 @@ lemma rev_map_δ
 
 中文:
 引理 rev_map_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: by
   ext j : 3
   simp [δ, Fin.succAbove_rev_right, Fin.rev_rev, rev_map_apply]
@@ -126,7 +126,7 @@ lemma rev_map_σ
 
 中文:
 引理 rev_map_σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   ext j : 3
   simp [σ, Fin.predAbove_rev_right, Fin.rev_rev, rev_map_apply]
@@ -175,7 +175,7 @@ lemma rev_map_rev_map
 
 中文:
 引理 rev_map_rev_map
-  条件: {n m : SimplexCategory} (f : n ⟶ m)
+  条件: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: by
   aesop
 -/
@@ -199,7 +199,7 @@ definition revEquivalence
 
 中文:
 定义 revEquivalence
-  签名: : SimplexCategory ≌ SimplexCategory where
+  签名: : 单纯形范畴 ≌ 单纯形范畴 where
   定义体: rev
   inverse := rev
   unitIso := revCompRevIso.symm
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: rev.IsEquivalence
+  签名: rev.是等价
   定义体: revEquivalence.isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, revEquivalence, revEquivalence.isEquivalence_functor

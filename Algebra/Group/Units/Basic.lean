@@ -51,7 +51,7 @@ theorem unique_one
 
 中文:
 定理 unique_one
-  条件: {α : 类型} [Unique α] [One α]
+  条件: {α : 类型} [唯一 α] [幺 α]
   结论: default = (1 : α)
   证明: Unique.default_eq 1
 
@@ -1151,8 +1151,8 @@ theorem isUnit_of_subsingleton
 
 中文:
 定理 isUnit_of_subsingleton
-  条件: [Monoid M] [Subsingleton M] (a : M)
-  结论: IsUnit a
+  条件: [幺半群 M] [子单例 M] (a : M)
+  结论: 是单位 a
   证明: ⟨⟨a, a, by subsingleton, by subsingleton⟩, rfl⟩
 
 @[to_additive]
@@ -1172,8 +1172,8 @@ instance [Monoid
   body: { prf := fun _ => id }
 
 中文:
-实例 [Monoid
-  签名: M] : CanLift M Mˣ Units.val IsUnit
+实例 [幺半群
+  签名: M] : CanLift M Mˣ 单位群.val 是单位
   定义体: { prf := fun _ => id }
 -/
 instance [Monoid M] : CanLift M Mˣ Units.val IsUnit :=
@@ -1190,8 +1190,8 @@ instance [Monoid
   body: Units.val_eq_one.mp (by subsingleton)
 
 中文:
-实例 [Monoid
-  签名: M] [Subsingleton M] : Unique Mˣ where
+实例 [幺半群
+  签名: M] [子单例 M] : 唯一 Mˣ where
   定义体: Units.val_eq_one.mp (by subsingleton)
 
 Depends on / 依赖: Units.val_eq_one.mp, subsingleton, val_eq_one
@@ -1220,7 +1220,7 @@ theorem mul_left_inj
 
 中文:
 定理 mul_left_inj
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: b * a = c * a ↔ b = c
   证明: let ⟨u, hu⟩ := h
   hu ▸ u.mul_left_inj
@@ -1248,7 +1248,7 @@ theorem mul_right_inj
 
 中文:
 定理 mul_right_inj
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * b = a * c ↔ b = c
   证明: let ⟨u, hu⟩ := h
   hu ▸ u.mul_right_inj
@@ -1275,7 +1275,7 @@ theorem mul_left_cancel
 
 中文:
 定理 mul_left_cancel
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * b = a * c -> b = c
   证明: h.mul_right_inj.1
 
@@ -1298,7 +1298,7 @@ theorem mul_right_cancel
 
 中文:
 定理 mul_right_cancel
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a * b = c * b -> a = c
   证明: h.mul_left_inj.1
 
@@ -1323,7 +1323,7 @@ theorem mul_eq_right
 
 中文:
 定理 mul_eq_right
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a * b = b ↔ a = 1
   证明: calc
   a * b = b ↔ a * b = 1 * b := by rw [one_mul]
@@ -1351,7 +1351,7 @@ theorem mul_eq_left
 
 中文:
 定理 mul_eq_left
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * b = a ↔ b = 1
   证明: calc
   a * b = a ↔ a * b = a * 1 := by rw [mul_one]
@@ -1377,8 +1377,8 @@ theorem mul_right_injective
 
 中文:
 定理 mul_right_injective
-  条件: (h : IsUnit a)
-  结论: Injective (a * ·)
+  条件: (h : 是单位 a)
+  结论: 单射 (a * ·)
   证明: fun _ _ => h.mul_left_cancel
 
 @[to_additive]
@@ -1400,8 +1400,8 @@ theorem mul_left_injective
 
 中文:
 定理 mul_left_injective
-  条件: (h : IsUnit b)
-  结论: Injective (· * b)
+  条件: (h : 是单位 b)
+  结论: 单射 (· * b)
   证明: fun _ _ => h.mul_right_cancel
 
 @[to_additive]
@@ -1484,7 +1484,7 @@ lemma mul_inv_cancel_right
 
 中文:
 引理 mul_inv_cancel_right
-  条件: (h : IsUnit b) (a : α)
+  条件: (h : 是单位 b) (a : α)
   结论: a * b * b⁻¹ = a
   证明: h.unit'.mul_inv_cancel_right _
 
@@ -1507,7 +1507,7 @@ lemma inv_mul_cancel_right
 
 中文:
 引理 inv_mul_cancel_right
-  条件: (h : IsUnit b) (a : α)
+  条件: (h : 是单位 b) (a : α)
   结论: a * b⁻¹ * b = a
   证明: h.unit'.inv_mul_cancel_right _
 
@@ -1530,7 +1530,7 @@ lemma eq_mul_inv_iff_mul_eq
 
 中文:
 引理 eq_mul_inv_iff_mul_eq
-  条件: (h : IsUnit c)
+  条件: (h : 是单位 c)
   结论: a = b * c⁻¹ ↔ a * c = b
   证明: h.unit'.eq_mul_inv_iff_mul_eq
 
@@ -1553,7 +1553,7 @@ lemma eq_inv_mul_iff_mul_eq
 
 中文:
 引理 eq_inv_mul_iff_mul_eq
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a = b⁻¹ * c ↔ b * a = c
   证明: h.unit'.eq_inv_mul_iff_mul_eq
 
@@ -1576,7 +1576,7 @@ lemma inv_mul_eq_iff_eq_mul
 
 中文:
 引理 inv_mul_eq_iff_eq_mul
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a⁻¹ * b = c ↔ b = a * c
   证明: h.unit'.inv_mul_eq_iff_eq_mul
 
@@ -1599,7 +1599,7 @@ lemma mul_inv_eq_iff_eq_mul
 
 中文:
 引理 mul_inv_eq_iff_eq_mul
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a * b⁻¹ = c ↔ a = c * b
   证明: h.unit'.mul_inv_eq_iff_eq_mul
 
@@ -1622,7 +1622,7 @@ lemma mul_inv_eq_one
 
 中文:
 引理 mul_inv_eq_one
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a * b⁻¹ = 1 ↔ a = b
   证明: @Units.mul_inv_eq_one _ _ h.unit' _
 
@@ -1645,7 +1645,7 @@ lemma inv_mul_eq_one
 
 中文:
 引理 inv_mul_eq_one
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a⁻¹ * b = 1 ↔ a = b
   证明: @Units.inv_mul_eq_one _ _ h.unit' _
 
@@ -1668,7 +1668,7 @@ lemma mul_eq_one_iff_eq_inv
 
 中文:
 引理 mul_eq_one_iff_eq_inv
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a * b = 1 ↔ a = b⁻¹
   证明: @Units.mul_eq_one_iff_eq_inv _ _ h.unit' _
 
@@ -1691,7 +1691,7 @@ lemma mul_eq_one_iff_inv_eq
 
 中文:
 引理 mul_eq_one_iff_inv_eq
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * b = 1 ↔ a⁻¹ = b
   证明: @Units.mul_eq_one_iff_inv_eq _ _ h.unit' _
 
@@ -1715,7 +1715,7 @@ lemma div_mul_cancel
 
 中文:
 引理 div_mul_cancel
-  条件: (h : IsUnit b) (a : α)
+  条件: (h : 是单位 b) (a : α)
   结论: a / b * b = a
   证明: by
   rw [div_eq_mul_inv]; rw [h.inv_mul_cancel_right]
@@ -1740,7 +1740,7 @@ lemma mul_div_cancel_right
 
 中文:
 引理 mul_div_cancel_right
-  条件: (h : IsUnit b) (a : α)
+  条件: (h : 是单位 b) (a : α)
   结论: a * b / b = a
   证明: by
   rw [div_eq_mul_inv]; rw [h.mul_inv_cancel_right]
@@ -1764,7 +1764,7 @@ lemma mul_one_div_cancel
 
 中文:
 引理 mul_one_div_cancel
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * (1 / a) = 1
   证明: by simp [h]
 
@@ -1786,7 +1786,7 @@ lemma one_div_mul_cancel
 
 中文:
 引理 one_div_mul_cancel
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: 1 / a * a = 1
   证明: by simp [h]
 
@@ -1810,7 +1810,7 @@ lemma div_left_inj
 
 中文:
 引理 div_left_inj
-  条件: (h : IsUnit c)
+  条件: (h : 是单位 c)
   结论: a / c = b / c ↔ a = b
   证明: by
   simp only [div_eq_mul_inv]
@@ -1837,7 +1837,7 @@ lemma div_eq_iff
 
 中文:
 引理 div_eq_iff
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a / b = c ↔ a = c * b
   证明: by
   rw [div_eq_mul_inv]; rw [h.mul_inv_eq_iff_eq_mul]
@@ -1862,7 +1862,7 @@ lemma eq_div_iff
 
 中文:
 引理 eq_div_iff
-  条件: (h : IsUnit c)
+  条件: (h : 是单位 c)
   结论: a = b / c ↔ a * c = b
   证明: by
   rw [div_eq_mul_inv]; rw [h.eq_mul_inv_iff_mul_eq]
@@ -1886,7 +1886,7 @@ lemma div_eq_of_eq_mul
 
 中文:
 引理 div_eq_of_eq_mul
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a = c * b -> a / b = c
   证明: h.div_eq_iff.2
 
@@ -1909,7 +1909,7 @@ lemma eq_div_of_mul_eq
 
 中文:
 引理 eq_div_of_mul_eq
-  条件: (h : IsUnit c)
+  条件: (h : 是单位 c)
   结论: a * c = b -> a = b / c
   证明: h.eq_div_iff.2
 
@@ -1932,7 +1932,7 @@ lemma div_eq_one_iff_eq
 
 中文:
 引理 div_eq_one_iff_eq
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: a / b = 1 ↔ a = b
   证明: ⟨eq_of_div_eq_one, fun hab => hab.symm ▸ h.div_self⟩
 
@@ -1956,7 +1956,7 @@ lemma div_mul_left
 
 中文:
 引理 div_mul_left
-  条件: (h : IsUnit b)
+  条件: (h : 是单位 b)
   结论: b / (a * b) = 1 / a
   证明: by
   rw [h.div_mul_cancel_right]; rw [one_div]
@@ -1978,7 +1978,7 @@ lemma mul_mul_div
 
 中文:
 引理 mul_mul_div
-  条件: (a : α) (h : IsUnit b)
+  条件: (a : α) (h : 是单位 b)
   结论: a * b * (1 / b) = a
   证明: by simp [h]
 -/
@@ -2004,7 +2004,7 @@ lemma div_mul_right
 
 中文:
 引理 div_mul_right
-  条件: (h : IsUnit a) (b : α)
+  条件: (h : 是单位 a) (b : α)
   结论: a / (a * b) = 1 / b
   证明: by
   rw [mul_comm]; rw [h.div_mul_left]
@@ -2029,7 +2029,7 @@ lemma mul_div_cancel_left
 
 中文:
 引理 mul_div_cancel_left
-  条件: (h : IsUnit a) (b : α)
+  条件: (h : 是单位 a) (b : α)
   结论: a * b / a = b
   证明: by
   rw [mul_comm]; rw [h.mul_div_cancel_right]
@@ -2054,7 +2054,7 @@ lemma mul_div_cancel
 
 中文:
 引理 mul_div_cancel
-  条件: (h : IsUnit a) (b : α)
+  条件: (h : 是单位 a) (b : α)
   结论: a * (b / a) = b
   证明: by
   rw [mul_comm]; rw [h.div_mul_cancel]
@@ -2078,7 +2078,7 @@ lemma mul_eq_mul_of_div_eq_div
 
 中文:
 引理 mul_eq_mul_of_div_eq_div
-  结论: (hb : IsUnit b) (hd : IsUnit d)
+  结论: (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← mul_one a]; rw [← hb.div_self]; rw [← mul_comm_div]; rw [h]; rw [div_mul_eq_mul_div]; rw [hd.div_mul_cancel]
 
@@ -2102,7 +2102,7 @@ lemma div_eq_div_iff
 
 中文:
 引理 div_eq_div_iff
-  条件: (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← (hb.mul hd).mul_left_inj]; rw [← mul_assoc]; rw [hb.div_mul_cancel]; rw [← mul_assoc]; rw [mul_right_comm]; rw [hd.div_mul_cancel]
 
@@ -2126,7 +2126,7 @@ lemma mul_inv_eq_mul_inv_iff
 
 中文:
 引理 mul_inv_eq_mul_inv_iff
-  条件: (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← div_eq_mul_inv]; rw [← div_eq_mul_inv]; rw [hb.div_eq_div_iff hd]
 
@@ -2150,7 +2150,7 @@ lemma inv_mul_eq_inv_mul_iff
 
 中文:
 引理 inv_mul_eq_inv_mul_iff
-  条件: (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← div_eq_inv_mul]; rw [← div_eq_inv_mul]; rw [hb.div_eq_div_iff hd]
 
@@ -2175,7 +2175,7 @@ lemma div_div_cancel
 
 中文:
 引理 div_div_cancel
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a / (a / b) = b
   证明: by
   rw [div_div_eq_mul_div]; rw [h.mul_div_cancel_left]
@@ -2198,7 +2198,7 @@ lemma div_div_cancel_left
 
 中文:
 引理 div_div_cancel_left
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a / b / a = b⁻¹
   证明: by
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [h.mul_inv_cancel]; rw [one_mul]

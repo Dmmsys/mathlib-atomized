@@ -62,7 +62,7 @@ lemma restrictOpenCommRingCat_apply
 
 中文:
 引理 restrictOpenCommRingCat_apply
-  结论: {X : TopCat.{w}}
+  结论: {X : 顶元素范畴.{w}}
   证明: rfl
 
 Depends on / 依赖: F.map, homOfLE, restrict_tac
@@ -92,9 +92,9 @@ structure SubmonoidPresheaf
 
 中文:
 结构 SubmonoidPresheaf
-  参数: (F : X.Presheaf CommRingCat)
+  参数: (F : X.预层 交换环范畴)
   公理与运算 (2 个):
-    - obj : 对任意 U, Submonoid (F.obj U)
+    - obj : 对任意 U, 子幺半群 (F.obj U)
     - map : 对任意 {U V : (Opens X)ᵒᵖ} (i : U ⟶ V), obj U <= (obj V).comap (F.map i).hom
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, G.obj, Localization
@@ -189,7 +189,7 @@ instance epi_toLocalizationPresheaf
 
 中文:
 实例 epi_toLocalizationPresheaf
-  签名: : Epi G.toLocalizationPresheaf
+  签名: : 满态射 G.toLocalizationPresheaf
   定义体: @NatTrans.epi_of_epi_app _ _ _ _ _ _ G.toLocalizationPresheaf fun U => Localization.epi' (G.obj U)
 
 Depends on / 依赖: G.obj, G.toLocalizationPresheaf, Localization, Localization.epi, NatTrans, NatTrans.epi_of_epi_app, epi_of_epi_app, toLocalizationPresheaf
@@ -219,7 +219,7 @@ definition submonoidPresheafOfStalk
 
 中文:
 定义 submonoidPresheafOfStalk
-  签名: (S : 对任意 x : X, Submonoid (F.stalk x))
+  签名: (S : 对任意 x : X, 子幺半群 (F.stalk x))
   定义体: ⨅ x : U.unop, Submonoid.comap (F.germ U.unop x.1 x.2).hom (S x)
   map {U V} i := by
     intro s hs
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited F.SubmonoidPresheaf
+  签名: 可居 F.SubmonoidPresheaf
   定义体: ⟨F.submonoidPresheafOfStalk fun _ => ⊥⟩
 
 Depends on / 依赖: F.submonoidPresheafOfStalk, submonoidPresheafOfStalk
@@ -270,7 +270,7 @@ definition totalQuotientPresheaf
 
 中文:
 定义 totalQuotientPresheaf
-  签名: : X.Presheaf CommRingCat.{w}
+  签名: : X.预层 交换环范畴.{w}
   定义体: (F.submonoidPresheafOfStalk fun x => (F.stalk x)⁰).localizationPresheaf
 
 Depends on / 依赖: F.stalk, F.submonoidPresheafOfStalk, localizationPresheaf, submonoidPresheafOfStalk
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 自然数嵌入 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom n
 -/
 instance : NatCast (X ⟶ (forget₂ TopCommRingCat TopCat).obj R) where
@@ -352,7 +352,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 整数嵌入 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom n
 -/
 instance : IntCast (X ⟶ (forget₂ TopCommRingCat TopCat).obj R) where
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 零 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom 0
 -/
 instance : Zero (X ⟶ (forget₂ TopCommRingCat TopCat).obj R) where
@@ -384,7 +384,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 幺 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom 1
 -/
 instance : One (X ⟶ (forget₂ TopCommRingCat TopCat).obj R) where
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 取负 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (-f.hom)
 
 Depends on / 依赖: f.hom
@@ -418,7 +418,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 减法 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (f.hom - g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -436,7 +436,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 加法 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (f.hom + g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -454,7 +454,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 乘法 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (f.hom * g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -472,7 +472,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 标量乘法 自然数 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: f.hom
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 标量乘法 整数 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: f.hom
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (X ⟶ (forget₂ TopCommRingCat TopCat).obj R) 自然数
+  签名: 幂 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R) 自然数
   定义体: ofHom (f.hom ^ n)
 
 Depends on / 依赖: f.hom
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (X ⟶ (forget₂ TopCommRingCat TopCat).obj R)
+  签名: 交换环 (X ⟶ (forget₂ TopComm环范畴 顶元素范畴).obj R)
   定义体: Function.Injective.commRing _ ConcreteCategory.hom_injective
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl)
@@ -551,7 +551,7 @@ definition continuousFunctions
 
 中文:
 定义 continuousFunctions
-  签名: (X : TopCat.{v}ᵒᵖ) (R : TopCommRingCat.{v})
+  签名: (X : 顶元素范畴.{v}ᵒᵖ) (R : TopComm环范畴.{v})
   定义体: CommRingCat.of (X.unop ⟶ (forget₂ TopCommRingCat TopCat).obj R)
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, TopCat, TopCommRingCat, X.unop
@@ -576,7 +576,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: {X Y : TopCatᵒᵖ} (f : X ⟶ Y) (R : TopCommRingCat)
+  签名: {X Y : TopCatᵒᵖ} (f : X ⟶ Y) (R : TopComm环范畴)
   定义体: CommRingCat.ofHom
   { toFun g := f.unop ≫ g
     map_one' := rfl
@@ -609,7 +609,7 @@ definition map
 
 中文:
 定义 map
-  签名: (X : TopCat.{u}ᵒᵖ) {R S : TopCommRingCat.{u}} (φ : R ⟶ S)
+  签名: (X : 顶元素范畴.{u}ᵒᵖ) {R S : TopComm环范畴.{u}} (φ : R ⟶ S)
   定义体: CommRingCat.ofHom
   { toFun g := g ≫ (forget₂ TopCommRingCat TopCat).map φ
     map_one' := by ext; exact φ.1.map_one
@@ -647,7 +647,7 @@ definition commRingYoneda
 
 中文:
 定义 commRingYoneda
-  签名: : TopCommRingCat.{u} ⥤ TopCat.{u}ᵒᵖ ⥤ CommRingCat.{u} where
+  签名: : TopComm环范畴.{u} ⥤ 顶元素范畴.{u}ᵒᵖ ⥤ 交换环范畴.{u} where
   定义体: { obj := fun X => continuousFunctions X R
       map := fun {_ _} f => continuousFunctions.pullback f R
       map_id := fun X => by
@@ -686,7 +686,7 @@ definition presheafToTopCommRing
 
 中文:
 定义 presheafToTopCommRing
-  签名: (T : TopCommRingCat.{v})
+  签名: (T : TopComm环范畴.{v})
   定义体: (Opens.toTopCat X).op ⋙ commRingYoneda.obj T
 
 Depends on / 依赖: Opens.toTopCat, commRingYoneda, commRingYoneda.obj, toTopCat
@@ -716,7 +716,7 @@ instance algebra_section_stalk
 
 中文:
 实例 algebra_section_stalk
-  签名: (F : X.Presheaf CommRingCat) {U : Opens X} (x : U)
+  签名: (F : X.预层 交换环范畴) {U : Opens X} (x : U)
   定义体: (F.germ U x.1 x.2).hom.toAlgebra
 
 @[simp]
@@ -738,7 +738,7 @@ theorem stalk_open_algebraMap
 
 中文:
 定理 stalk_open_algebraMap
-  条件: {X : TopCat.{v}} (F : X.Presheaf CommRingCat) {U : Opens X} (x : U)
+  条件: {X : 顶元素范畴.{v}} (F : X.预层 交换环范畴) {U : Opens X} (x : U)
   证明: rfl
 -/
 theorem stalk_open_algebraMap {X : TopCat.{v}} (F : X.Presheaf CommRingCat) {U : Opens X} (x : U) :
@@ -771,7 +771,7 @@ definition objSupIsoProdEqLocus
 
 中文:
 定义 objSupIsoProdEqLocus
-  签名: {X : TopCat.{w}} (F : X.Sheaf CommRingCat) (U V : Opens X)
+  签名: {X : 顶元素范畴.{w}} (F : X.层 交换环范畴) (U V : Opens X)
   定义体: (F.isLimitPullbackCone U V).conePointUniqueUpToIso (CommRingCat.pullbackConeIsLimit _ _)
 
 Depends on / 依赖: CommRingCat, CommRingCat.pullbackConeIsLimit, F.isLimitPullbackCone, conePointUniqueUpToIso, isLimitPullbackCone, pullbackConeIsLimit
@@ -799,7 +799,7 @@ theorem objSupIsoProdEqLocus_hom_fst
 
 中文:
 定理 objSupIsoProdEqLocus_hom_fst
-  结论: {X : TopCat.{w}} (F : X.Sheaf CommRingCat) (U V : Opens X)
+  结论: {X : 顶元素范畴.{w}} (F : X.层 交换环范畴) (U V : Opens X)
   证明: ConcreteCategory.congr_hom
     ((F.isLimitPullbackCone U V).conePointUniqueUpToIso_hom_comp
       (CommRingCat.pullbackConeIsLimit _ _) WalkingCospan.left)
@@ -828,7 +828,7 @@ theorem objSupIsoProdEqLocus_hom_snd
 
 中文:
 定理 objSupIsoProdEqLocus_hom_snd
-  结论: {X : TopCat.{w}} (F : X.Sheaf CommRingCat) (U V : Opens X)
+  结论: {X : 顶元素范畴.{w}} (F : X.层 交换环范畴) (U V : Opens X)
   证明: ConcreteCategory.congr_hom
     ((F.isLimitPullbackCone U V).conePointUniqueUpToIso_hom_comp
       (CommRingCat.pullbackConeIsLimit _ _) WalkingCospan.right)
@@ -857,7 +857,7 @@ theorem objSupIsoProdEqLocus_inv_fst
 
 中文:
 定理 objSupIsoProdEqLocus_inv_fst
-  结论: {X : TopCat.{w}} (F : X.Sheaf CommRingCat) (U V : Opens X)
+  结论: {X : 顶元素范畴.{w}} (F : X.层 交换环范畴) (U V : Opens X)
   证明: ConcreteCategory.congr_hom
     ((F.isLimitPullbackCone U V).conePointUniqueUpToIso_inv_comp
       (CommRingCat.pullbackConeIsLimit _ _) WalkingCospan.left)
@@ -886,7 +886,7 @@ theorem objSupIsoProdEqLocus_inv_snd
 
 中文:
 定理 objSupIsoProdEqLocus_inv_snd
-  结论: {X : TopCat.{w}} (F : X.Sheaf CommRingCat) (U V : Opens X)
+  结论: {X : 顶元素范畴.{w}} (F : X.层 交换环范畴) (U V : Opens X)
   证明: ConcreteCategory.congr_hom
     ((F.isLimitPullbackCone U V).conePointUniqueUpToIso_inv_comp
       (CommRingCat.pullbackConeIsLimit _ _) WalkingCospan.right)
@@ -920,7 +920,7 @@ theorem objSupIsoProdEqLocus_inv_eq_iff
 
 中文:
 定理 objSupIsoProdEqLocus_inv_eq_iff
-  结论: {X : TopCat.{u}} (F : X.Sheaf CommRingCat.{u})
+  结论: {X : 顶元素范畴.{u}} (F : X.层 交换环范畴.{u})
   证明: by
   subst h₁ h₂
   constructor

@@ -48,7 +48,7 @@ definition dualSubmodule
 
 中文:
 定义 dualSubmodule
-  签名: (N : Submodule R M)
+  签名: (N : 子模 R M)
   定义体: { x | forall y in N, B x y in (1 : Submodule R S) }
   add_mem' {a b} ha hb y hy := by simpa using add_mem (ha y hy) (hb y hy)
   zero_mem' y _ := by rw [B.zero_left]; exact zero_mem _
@@ -77,7 +77,7 @@ lemma mem_dualSubmodule
 
 中文:
 引理 mem_dualSubmodule
-  条件: {N : Submodule R M} {x}
+  条件: {N : 子模 R M} {x}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -98,7 +98,7 @@ lemma le_flip_dualSubmodule
 
 中文:
 引理 le_flip_dualSubmodule
-  条件: {N₁ N₂ : Submodule R M}
+  条件: {N₁ N₂ : 子模 R M}
   证明: by
   change (forall (x : M), x in N₁ -> _) ↔ forall (x : M), x in N₂ -> _
   simp only [mem_dualSubmodule, Submodule.mem_one, flip_apply]
@@ -127,7 +127,7 @@ definition dualSubmoduleParing
 
 中文:
 定义 dualSubmoduleParing
-  签名: {N : Submodule R M} (x : B.dualSubmodule N) (y : N)
+  签名: {N : 子模 R M} (x : B.dualSubmodule N) (y : N)
   定义体: (Submodule.mem_one.mp <| x.prop y y.prop).choose
 
 @[simp]
@@ -148,7 +148,7 @@ lemma dualSubmoduleParing_spec
 
 中文:
 引理 dualSubmoduleParing_spec
-  条件: {N : Submodule R M} (x : B.dualSubmodule N) (y : N)
+  条件: {N : 子模 R M} (x : B.dualSubmodule N) (y : N)
   证明: (Submodule.mem_one.mp <| x.prop y y.prop).choose_spec
 
 Depends on / 依赖: Submodule, Submodule.mem_one.mp, choose_spec, mem_one, x.prop, y.prop
@@ -176,7 +176,7 @@ definition dualSubmoduleToDual
 
 中文:
 定义 dualSubmoduleToDual
-  签名: [IsDomain R] [IsTorsionFree R S] (N : Submodule R M)
+  签名: [是整环 R] [是无挠 R S] (N : 子模 R M)
   定义体: { toFun := fun x =>
     { toFun := B.dualSubmoduleParing x
       map_add' := fun x y => FaithfulSMul.algebraMap_injective R S (by simp)
@@ -214,7 +214,7 @@ lemma dualSubmoduleToDual_injective
 
 中文:
 引理 dualSubmoduleToDual_injective
-  结论: [IsDomain R] (hB : B.Nondegenerate) [IsTorsionFree R S]
+  结论: [是整环 R] (hB : B.非退化) [是无挠 R S]
   证明: by
   intro x y e
   ext
@@ -254,7 +254,7 @@ obtain ⟨r, hr⟩ := Submodule.mem_one.mp hx (b i) (Submodule.subset_span ⟨_,
 
 中文:
 引理 dualSubmodule_span_of_basis
-  结论: {ι} [Finite ι] [DecidableEq ι]
+  结论: {ι} [有限 ι] [DecidableEq ι]
   证明: by
   cases nonempty_fintype ι
   apply le_antisymm
@@ -306,7 +306,7 @@ lemma dualSubmodule_dualSubmodule_flip_of_basis
 
 中文:
 引理 dualSubmodule_dualSubmodule_flip_of_basis
-  结论: {ι : 类型} [Finite ι]
+  结论: {ι : 类型} [有限 ι]
   证明: by
   classical
   let := b.finiteDimensional_of_finite
@@ -335,7 +335,7 @@ lemma dualSubmodule_flip_dualSubmodule_of_basis
 
 中文:
 引理 dualSubmodule_flip_dualSubmodule_of_basis
-  结论: {ι : 类型} [Finite ι]
+  结论: {ι : 类型} [有限 ι]
   证明: by
   classical
   let := b.finiteDimensional_of_finite

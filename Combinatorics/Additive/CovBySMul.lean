@@ -43,7 +43,7 @@ definition CovBySMul
 
 中文:
 定义 CovBySMul
-  签名: (K : 实数) (A B : Set X)
+  签名: (K : 实数) (A B : 集合 X)
   定义体: exists F : Finset M, #F <= K ∧ A subseteq (F : Set M) • B
 
 @[to_additive (attr := simp, refl)]
@@ -178,7 +178,7 @@ lemma CovBySMul.trans
 
 中文:
 引理 CovBySMul.trans
-  结论: [SMul M N] [IsScalarTower M N X]
+  结论: [标量乘法 M N] [标量塔 M N X]
   证明: by
   classical
   have := hAB.nonneg

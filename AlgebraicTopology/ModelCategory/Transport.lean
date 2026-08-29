@@ -49,7 +49,7 @@ definition ModelCategory.transport
   have {X Y : C} (f : X ⟶ Y) [hf : Cofibratio
 
 中文:
-定义 ModelCategory.transport
+定义 模型范畴.transport
   定义体: by
   have h₁' : trivialCofibrations C = (trivialCofibrations D).inverseImage e.functor := by
     simp [trivialCofibrations, h₁, h₃]

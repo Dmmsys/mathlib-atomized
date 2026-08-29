@@ -86,8 +86,8 @@ definition Flag.rangeFin
   max_chain' := (IsMaxChain.range_fin_of_covBy h0 hlast hcovBy).2
 
 中文:
-定义 Flag.rangeFin
-  签名: (f : Fin (n + 1) -> α) (h0 : f 0 = ⊥) (hlast : f (.last n) = ⊤)
+定义 旗.rangeFin
+  签名: (f : 有限集 (n + 1) -> α) (h0 : f 0 = ⊥) (hlast : f (.last n) = ⊤)
   定义体: range f
   Chain' := (IsMaxChain.range_fin_of_covBy h0 hlast hcovBy).1
   max_chain' := (IsMaxChain.range_fin_of_covBy h0 hlast hcovBy).2
@@ -107,7 +107,7 @@ theorem Flag.mem_rangeFin
   proof: Iff.rfl
 
 中文:
-定理 Flag.mem_rangeFin
+定理 旗.mem_rangeFin
   条件: {x h0 hlast hcovBy}
   证明: Iff.rfl
 -/

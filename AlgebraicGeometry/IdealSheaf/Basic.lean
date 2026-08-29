@@ -67,11 +67,11 @@ structure IdealSheafData
 
 中文:
 结构 IdealSheafData
-  参数: (X : Scheme.{u})
+  参数: (X : 概形.{u})
   公理与运算 (4 个):
-    - ideal : 对任意 U : X.affineOpens, Ideal Γ(X, U)
+    - ideal : 对任意 U : X.affineOpens, 理想 Γ(X, U)
     - map_ideal_basicOpen : 对任意 (U : X.affineOpens) (f : Γ(X, U)), (ideal U).map (X.presheaf.map (homOfLE <| X.basicOpen_le f).op).hom = ideal (X.affineBasicOpen f)
-    - supportSet : Set X  [默认: ⋂ U, X.zeroLocus (U := U.1) (ideal U)]
+    - supportSet : 集合 X  [默认: ⋂ U, X.zeroLocus (U := U.1) (ideal U)]
     - supportSet_eq_iInter_zeroLocus : supportSet = ⋂ U, X.zeroLocus (U := U.1) (ideal U)  [默认: by rfl]
 
 Depends on / 依赖: X.zeroLocus, zeroLocus
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (IdealSheafData X)
+  签名: 偏序 (IdealSheafData X)
   定义体: PartialOrder.lift ideal fun _ _ => IdealSheafData.ext
 
 Depends on / 依赖: IdealSheafData, IdealSheafData.ext, PartialOrder, PartialOrder.lift
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeSup (IdealSheafData X)
+  签名: 余mpleteSemilatticeSup (IdealSheafData X)
   定义体: { ideal := sSup (ideal '' s),
     map_ideal_basicOpen := by
       have : sSup (ideal '' s) = ⨆ i : s, ideal i.1 := by
@@ -206,7 +206,7 @@ definition ofIdeals
 
 中文:
 定义 ofIdeals
-  签名: (I : 对任意 U : X.affineOpens, Ideal Γ(X, U))
+  签名: (I : 对任意 U : X.affineOpens, 理想 Γ(X, U))
   定义体: sSup { J : IdealSheafData X | J.ideal <= I }
 
 Depends on / 依赖: IdealSheafData, J.ideal
@@ -224,7 +224,7 @@ lemma ideal_ofIdeals_le
 
 中文:
 引理 ideal_ofIdeals_le
-  条件: (I : 对任意 U : X.affineOpens, Ideal Γ(X, U))
+  条件: (I : 对任意 U : X.affineOpens, 理想 Γ(X, U))
   证明: sSup_le (Set.forall_mem_image.mpr fun _ => id)
 
 Depends on / 依赖: Set.forall_mem_image.mpr, forall_mem_image, sSup_le
@@ -248,7 +248,7 @@ definition gci
 
 中文:
 定义 gci
-  签名: : GaloisCoinsertion ideal (ofIdeals (X := X)) where
+  签名: : Galois余嵌入 ideal (ofIdeals (X := X)) where
   定义体: { ideal := I
     map_ideal_basicOpen U f :=
       (ideal_ofIdeals_le I).antisymm hI ▸ (ofIdeals I).map_ideal_basicOpen U f }
@@ -275,7 +275,7 @@ lemma strictMono_ideal
 
 中文:
 引理 strictMono_ideal
-  结论: StrictMono (ideal (X := X))
+  结论: 严格递增 (ideal (X := X))
   证明: IdealSheafData.gci.strictMono_l
 
 Depends on / 依赖: IdealSheafData, IdealSheafData.gci.strictMono_l, strictMono_l
@@ -291,7 +291,7 @@ lemma ideal_mono
 
 中文:
 引理 ideal_mono
-  结论: Monotone (ideal (X := X))
+  结论: 递增 (ideal (X := X))
   证明: strictMono_ideal.monotone
 
 Depends on / 依赖: monotone, strictMono_ideal, strictMono_ideal.monotone
@@ -307,7 +307,7 @@ lemma ofIdeals_mono
 
 中文:
 引理 ofIdeals_mono
-  结论: Monotone (ofIdeals (X := X))
+  结论: 递增 (ofIdeals (X := X))
   证明: IdealSheafData.gci.gc.monotone_u
 
 Depends on / 依赖: IdealSheafData, IdealSheafData.gci.gc.monotone_u, monotone_u
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (IdealSheafData X)
+  签名: 有顶序 (IdealSheafData X)
   定义体: ⊤
   top.map_ideal_basicOpen := by simp [Ideal.map_top]
   top.supportSet := ⊥
@@ -401,7 +401,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (IdealSheafData X)
+  签名: 有底序 (IdealSheafData X)
   定义体: ⊥
   bot.map_ideal_basicOpen := by simp
   bot.supportSet := ⊤
@@ -480,7 +480,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (IdealSheafData X)
+  签名: 完备格 (IdealSheafData X)
   定义体: (inferInstance : OrderTop (IdealSheafData X))
   __ := (inferInstance : OrderBot (IdealSheafData X))
   __ := (inferInstance : SemilatticeInf (IdealSheafData X))
@@ -574,7 +574,7 @@ lemma ideal_sSup
 
 中文:
 引理 ideal_sSup
-  条件: {I : Set (IdealSheafData X)}
+  条件: {I : 集合 (IdealSheafData X)}
   结论: (sSup I).ideal = sSup (ideal '' I)
   证明: rfl
 
@@ -646,7 +646,7 @@ lemma ideal_biInf
 
 中文:
 引理 ideal_biInf
-  条件: {ι : 类型} (I : ι -> IdealSheafData X) {s : Set ι} (hs : s.Finite)
+  条件: {ι : 类型} (I : ι -> IdealSheafData X) {s : 集合 ι} (hs : s.有限)
   证明: by
   refine hs.induction_on _ (by simp) fun {i s} his hs e => ?_
   simp only [iInf_insert, e, ideal_inf]
@@ -672,7 +672,7 @@ lemma ideal_iInf
 
 中文:
 引理 ideal_iInf
-  条件: {ι : 类型} (I : ι -> IdealSheafData X) [Finite ι]
+  条件: {ι : 类型} (I : ι -> IdealSheafData X) [有限 ι]
   证明: by
   simpa using ideal_biInf I Set.finite_univ
 
@@ -759,7 +759,7 @@ lemma map_ideal'
 
 中文:
 引理 map_ideal'
-  条件: {U V : X.affineOpens} (h : Opposite.op V.1 ⟶ .op U.1)
+  条件: {U V : X.affineOpens} (h : 对偶.op V.1 ⟶ .op U.1)
   证明: map_ideal _ _
 
 Depends on / 依赖: map_ideal
@@ -1025,7 +1025,7 @@ lemma isClosed_supportSet
 中文:
 引理 isClosed_supportSet
   条件: (I : IdealSheafData X)
-  结论: IsClosed I.supportSet
+  结论: 是闭集 I.supportSet
   证明: by
   rw [TopologicalSpace.IsOpenCover.isClosed_iff_coe_preimage (iSup_affineOpens_eq_top X)]
   intro U
@@ -1069,7 +1069,7 @@ lemma coe_support_eq_eq_iInter_zeroLocus
   proof: I.supportSet_eq_iInter_zeroLocus
 
 中文:
-引理 coe_support_eq_eq_iInter_zeroLocus
+引理 coe_support_eq_eq_i整数er_zeroLocus
   证明: I.supportSet_eq_iInter_zeroLocus
 
 Depends on / 依赖: I.ideal
@@ -1165,7 +1165,7 @@ initialize_simps_projections IdealSheafData (supportSet -> coe_support, as_prefi
 
 中文:
 定义 Simps.coe_support
-  签名: : Set X
+  签名: : 集合 X
   定义体: I.support
 
 initialize_simps_projections IdealSheafData (supportSet -> coe_support, as_prefix coe_support)
@@ -1274,7 +1274,7 @@ lemma support_antitone
 
 中文:
 引理 support_antitone
-  结论: Antitone (support (X := X))
+  结论: 递减 (support (X := X))
   证明: by
   intro I J h
   rw [← SetLike.coe_subset_coe]; rw [I.coe_support_eq_eq_iInter_zeroLocus]; rw [J.coe_support_eq_eq_iInter_zeroLocus]
@@ -1337,7 +1337,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero X.IdealSheafData
+  签名: 零 X.IdealSheafData
   定义体: ⊥
 -/
 instance : Zero X.IdealSheafData where zero := ⊥
@@ -1351,7 +1351,7 @@ instance :
 
 中文:
 实例 :
-  签名: One X.IdealSheafData
+  签名: 幺 X.IdealSheafData
   定义体: ⊤
 -/
 instance : One X.IdealSheafData where one := ⊤
@@ -1365,7 +1365,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add X.IdealSheafData
+  签名: 加法 X.IdealSheafData
   定义体: (· ⊔ ·)
 -/
 instance : Add X.IdealSheafData where add := (· ⊔ ·)
@@ -1383,7 +1383,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul X.IdealSheafData
+  签名: 乘法 X.IdealSheafData
   定义体: mkOfMemSupportIff (I.ideal * J.ideal) (by simp [Ideal.map_mul, map_ideal_basicOpen])
     (I.supportSet union J.supportSet) fun U x hxU => by
     simp [-mem_zeroLocus_iff, zeroLocus_mul, mem_support_iff_of_mem hxU]
@@ -1409,7 +1409,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow X.IdealSheafData 自然数
+  签名: 幂 X.IdealSheafData 自然数
   定义体: mkOfMemSupportIff (I.ideal ^ n) (by simp [Ideal.map_pow, map_ideal_basicOpen])
 (if n = 0 then ∅ else I.supportSet) fun U x hxU => .symm by
     induction n <;> simp_all [-mem_zeroLocus_iff, zeroLocus_mul,
@@ -1657,7 +1657,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing X.IdealSheafData
+  签名: 是Ordered环 X.IdealSheafData
 -/
 instance : IsOrderedRing X.IdealSheafData where
 
@@ -1725,7 +1725,7 @@ definition ofIdealTop
 
 中文:
 定义 ofIdealTop
-  签名: (I : Ideal Γ(X, ⊤))
+  签名: (I : 理想 Γ(X, ⊤))
   定义体: mkOfMemSupportIff
     (fun U => I.map (X.presheaf.map (homOfLE le_top).op).hom)
     (fun U f => by rw [Ideal.map_map, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl)
@@ -1757,7 +1757,7 @@ lemma le_of_isAffine
 
 中文:
 引理 le_of_isAffine
-  结论: [IsAffine X] {I J : IdealSheafData X}
+  结论: [是仿射 X] {I J : IdealSheafData X}
   证明: by
   intro U
   rw [← map_ideal (U := U) (V := ⟨⊤]; rw [isAffineOpen_top X⟩) I (le_top (a := U.1))]; rw [← map_ideal (U := U) (V := ⟨⊤]; rw [isAffineOpen_top X⟩) J (le_top (a := U.1))]
@@ -1781,7 +1781,7 @@ lemma ext_of_isAffine
 
 中文:
 引理 ext_of_isAffine
-  结论: [IsAffine X] {I J : IdealSheafData X}
+  结论: [是仿射 X] {I J : IdealSheafData X}
   证明: (le_of_isAffine H.le).antisymm (le_of_isAffine H.ge)
 
 Depends on / 依赖: H.ge, H.le, antisymm, le_of_isAffine
@@ -1808,7 +1808,7 @@ definition equivOfIsAffine
 
 中文:
 定义 equivOfIsAffine
-  签名: [IsAffine X]
+  签名: [是仿射 X]
   定义体: (ideal · ⟨⊤, isAffineOpen_top X⟩)
   invFun := ofIdealTop
   left_inv I := ext_of_isAffine (by simp)
@@ -1843,7 +1843,7 @@ lemma equivOfIsAffine_apply
 
 中文:
 引理 equivOfIsAffine_apply
-  条件: [IsAffine X] (I : IdealSheafData X)
+  条件: [是仿射 X] (I : IdealSheafData X)
   证明: rfl
 
 @[simp]
@@ -1862,7 +1862,7 @@ lemma equivOfIsAffine_symm_apply
 
 中文:
 引理 equivOfIsAffine_symm_apply
-  条件: [IsAffine X] (I : Ideal Γ(X, ⊤))
+  条件: [是仿射 X] (I : 理想 Γ(X, ⊤))
   证明: rfl
 -/
 lemma equivOfIsAffine_symm_apply [IsAffine X] (I : Ideal Γ(X, ⊤)) :
@@ -1945,8 +1945,8 @@ definition _root_.AlgebraicGeometry.Scheme.nilradical
 @[simp]
 
 中文:
-定义 _root_.AlgebraicGeometry.Scheme.nilradical
-  签名: (X : Scheme.{u})
+定义 _root_.AlgebraicGeometry.概形.nilradical
+  签名: (X : 概形.{u})
   定义体: .radical ⊥
 
 @[simp]
@@ -1966,8 +1966,8 @@ lemma _root_.AlgebraicGeometry.Scheme.support_nilradical
   proof: rfl
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.support_nilradical
-  条件: (X : Scheme.{u})
+引理 _root_.AlgebraicGeometry.概形.support_nilradical
+  条件: (X : 概形.{u})
   证明: rfl
 -/
 lemma _root_.AlgebraicGeometry.Scheme.support_nilradical (X : Scheme.{u}) :
@@ -2313,7 +2313,7 @@ lemma vanishingIdeal_iSup
 
 中文:
 引理 vanishingIdeal_iSup
-  条件: {ι : Sort*} (Z : ι -> Closeds X)
+  条件: {ι : 类型层*} (Z : ι -> Closeds X)
   证明: gc.u_iInf
 -/
 @[simp] lemma vanishingIdeal_iSup {ι : Sort*} (Z : ι -> Closeds X) :
@@ -2329,7 +2329,7 @@ lemma vanishingIdeal_sSup
 
 中文:
 引理 vanishingIdeal_sSup
-  条件: (Z : Set (Closeds X))
+  条件: (Z : 集合 (Closeds X))
   证明: gc.u_sInf
 -/
 @[simp] lemma vanishingIdeal_sSup (Z : Set (Closeds X)) :
@@ -2345,7 +2345,7 @@ lemma vanishingIdeal_sup
 
 中文:
 引理 vanishingIdeal_sup
-  条件: (Z Z' : TopologicalSpace.Closeds X)
+  条件: (Z Z' : 拓扑空间.Closeds X)
   证明: gc.u_inf
 -/
 @[simp] lemma vanishingIdeal_sup (Z Z' : TopologicalSpace.Closeds X) :
@@ -2377,7 +2377,7 @@ lemma support_iSup
 
 中文:
 引理 support_iSup
-  条件: {ι : Sort*} (I : ι -> X.IdealSheafData)
+  条件: {ι : 类型层*} (I : ι -> X.IdealSheafData)
   证明: gc.l_iSup
 -/
 @[simp] lemma support_iSup {ι : Sort*} (I : ι -> X.IdealSheafData) :
@@ -2393,7 +2393,7 @@ lemma support_sSup
 
 中文:
 引理 support_sSup
-  条件: (I : Set X.IdealSheafData)
+  条件: (I : 集合 X.IdealSheafData)
   证明: gc.l_sSup
 -/
 @[simp] lemma support_sSup (I : Set X.IdealSheafData) :
@@ -2417,7 +2417,7 @@ lemma nilradical_eq_bot
 
 中文:
 引理 nilradical_eq_bot
-  条件: [IsReduced X]
+  条件: [是既约 X]
   结论: X.nilradical = ⊥
   证明: by
   ext; simp [nilradical, Ideal.radical_eq_iff.mpr (Ideal.isRadical_bot)]
@@ -2438,7 +2438,7 @@ lemma IdealSheafData.support_eq_top_iff
 
 中文:
 引理 IdealSheafData.support_eq_top_iff
-  条件: [IsReduced X] {I : X.IdealSheafData}
+  条件: [是既约 X] {I : X.IdealSheafData}
   证明: by
   rw [← top_le_iff]; rw [le_support_iff_le_vanishingIdeal]; rw [vanishingIdeal_top]; rw [nilradical_eq_bot]; rw [le_bot_iff]
 
@@ -2465,8 +2465,8 @@ definition Hom.ker
   body: ofIdeals fun U => RingHom.ker (f.app U).hom
 
 中文:
-定义 Hom.ker
-  签名: (f : X.Hom Y)
+定义 态射.ker
+  签名: (f : X.态射 Y)
   定义体: ofIdeals fun U => RingHom.ker (f.app U).hom
 
 Depends on / 依赖: RingHom, RingHom.ker, f.app, ofIdeals
@@ -2483,8 +2483,8 @@ lemma Hom.ideal_ker_le
   proof: ideal_ofIdeals_le _ _
 
 中文:
-引理 Hom.ideal_ker_le
-  条件: (f : X.Hom Y) (U : Y.affineOpens)
+引理 态射.ideal_ker_le
+  条件: (f : X.态射 Y) (U : Y.affineOpens)
   证明: ideal_ofIdeals_le _ _
 
 Depends on / 依赖: ideal_ofIdeals_le
@@ -2511,8 +2511,8 @@ lemma Hom.ker_apply
     simp_rw [RingHom.comap_ker, ← CommRingCat.hom_comp, Scheme.affineBasicOpen_coe, f
 
 中文:
-引理 Hom.ker_apply
-  条件: (f : X.Hom Y) [QuasiCompact f] (U : Y.affineOpens)
+引理 态射.ker_apply
+  条件: (f : X.态射 Y) [拟紧 f] (U : Y.affineOpens)
   证明: by
   let I : IdealSheafData Y := ⟨fun U => RingHom.ker (f.app U).hom, ?_, _, rfl⟩
   · exact congr($(ofIdeals_ideal I).ideal U)
@@ -2566,8 +2566,8 @@ lemma Hom.le_ker_comp
   exact Ideal.ker_le_comap _
 
 中文:
-引理 Hom.le_ker_comp
-  条件: (f : X ⟶ Y) (g : Y.Hom Z)
+引理 态射.le_ker_comp
+  条件: (f : X ⟶ Y) (g : Y.态射 Z)
   结论: g.ker <= (f ≫ g).ker
   证明: by
   refine ofIdeals_mono fun U => ?_
@@ -2594,7 +2594,7 @@ lemma ker_eq_top_of_isEmpty
 
 中文:
 引理 ker_eq_top_of_isEmpty
-  条件: (f : X.Hom Y) [IsEmpty X]
+  条件: (f : X.态射 Y) [是空 X]
   结论: f.ker = ⊤
   证明: top_le_iff.mp (le_ofIdeals_iff.mpr fun U x _ => by simpa using Subsingleton.elim _ _)
 
@@ -2618,8 +2618,8 @@ lemma Hom.ker_eq_bot_of_isIso
   simp [map_eq_zero_iff _ (ConcreteCategory.bijective_of_isIso (f.app U)).1]
 
 中文:
-引理 Hom.ker_eq_bot_of_isIso
-  条件: (f : X ⟶ Y) [IsIso f]
+引理 态射.ker_eq_bot_of_isIso
+  条件: (f : X ⟶ Y) [是同构 f]
   结论: f.ker = ⊥
   证明: by
   ext U
@@ -2641,8 +2641,8 @@ lemma Hom.ker_comp_of_isIso
   proof: (f.le_ker_comp g).antisymm' (((inv f).le_ker_comp _).trans (by simp))
 
 中文:
-引理 Hom.ker_comp_of_isIso
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f]
+引理 态射.ker_comp_of_isIso
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 f]
   结论: (f ≫ g).ker = g.ker
   证明: (f.le_ker_comp g).antisymm' (((inv f).le_ker_comp _).trans (by simp))
 
@@ -2668,7 +2668,7 @@ lemma ker_of_isAffine
 
 中文:
 引理 ker_of_isAffine
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsAffine Y]
+  条件: {X Y : 概形} (f : X ⟶ Y) [是仿射 Y]
   证明: by
   refine (le_of_isAffine ((f.ideal_ker_le _).trans (by simp))).antisymm
     (le_ofIdeals_iff.mpr fun U => ?_)
@@ -2704,7 +2704,7 @@ lemma Hom.range_subset_ker_support
   have : x in f ⁻¹ᵁ Y
 
 中文:
-引理 Hom.range_subset_ker_support
+引理 态射.range_subset_ker_support
   条件: (f : X ⟶ Y)
   证明: by
   rintro _ ⟨x, rfl⟩
@@ -2739,9 +2739,9 @@ lemma Hom.ker_eq_top_iff_isEmpty
   proof: ⟨fun H => by simpa [H] using f.range_subset_ker_support, fun _ => ker_eq_top_of_isEmpty f⟩
 
 中文:
-引理 Hom.ker_eq_top_iff_isEmpty
-  条件: (f : X.Hom Y)
-  结论: f.ker = ⊤ ↔ IsEmpty X
+引理 态射.ker_eq_top_iff_isEmpty
+  条件: (f : X.态射 Y)
+  结论: f.ker = ⊤ ↔ 是空 X
   证明: ⟨fun H => by simpa [H] using f.range_subset_ker_support, fun _ => ker_eq_top_of_isEmpty f⟩
 
 Depends on / 依赖: f.range_subset_ker_support, ker_eq_top_of_isEmpty, range_subset_ker_support
@@ -2766,7 +2766,7 @@ lemma Hom.iInf_ker_openCover_map_comp_apply
   refine ⟨𝒰.f i ''ᵁ 𝒰.f i ⁻¹ᵁ f 
 
 中文:
-引理 Hom.iInf_ker_openCover_map_comp_apply
+引理 态射.iInf_ker_openCover_map_comp_apply
   证明: by
   refine le_antisymm ?_ (le_iInf fun i => (𝒰.f i).le_ker_comp f U)
   intro s hs
@@ -2810,8 +2810,8 @@ lemma Hom.iInf_ker_openCover_map_comp
   exact fun i => hI i U
 
 中文:
-引理 Hom.iInf_ker_openCover_map_comp
-  条件: (f : X ⟶ Y) [QuasiCompact f] (𝒰 : X.OpenCover)
+引理 态射.iInf_ker_openCover_map_comp
+  条件: (f : X ⟶ Y) [拟紧 f] (𝒰 : X.OpenCover)
   证明: by
   refine le_antisymm ?_ (le_iInf fun i => (𝒰.f i).le_ker_comp f)
   refine iInf_le_iff.mpr fun I hI U => ?_
@@ -2843,7 +2843,7 @@ lemma Hom.iUnion_support_ker_openCover_map_comp
       Y.isBasis
 
 中文:
-引理 Hom.iUnion_support_ker_openCover_map_comp
+引理 态射.iUnion_support_ker_openCover_map_comp
   证明: by
   cases isEmpty_or_nonempty 𝒰.I₀
   · have : IsEmpty X := Function.isEmpty 𝒰.idx
@@ -2886,7 +2886,7 @@ lemma ker_morphismRestrict_ideal
 
 中文:
 引理 ker_morphismRestrict_ideal
-  结论: (f : X.Hom Y) [QuasiCompact f]
+  结论: (f : X.态射 Y) [拟紧 f]
   证明: by
   ext x
   simpa [Scheme.Hom.appLE] using! map_eq_zero_iff _
@@ -2919,7 +2919,7 @@ lemma ker_ideal_of_isPullback_of_isOpenImmersion
 
 中文:
 引理 ker_ideal_of_isPullback_of_isOpenImmersion
-  结论: {X Y U V : Scheme.{u}}
+  结论: {X Y U V : 概形.{u}}
   证明: by
   have : QuasiCompact f' := MorphismProperty.of_isPullback H.flip inferInstance
   have : IsOpenImmersion iU := MorphismProperty.of_isPullback H inferInstance
@@ -2968,8 +2968,8 @@ lemma Hom.support_ker
       have := this (𝒰.pullbackHom f i) ⟨
 
 中文:
-引理 Hom.support_ker
-  条件: (f : X ⟶ Y) [QuasiCompact f]
+引理 态射.support_ker
+  条件: (f : X ⟶ Y) [拟紧 f]
   证明: by
   apply subset_antisymm
   · wlog hY : exists S, Y = Spec S
@@ -3037,7 +3037,7 @@ map {f g} hfg := homOfLE by simpa only [Functor.id_obj, Functor.const_obj_obj,
 
 中文:
 定义 kerFunctor
-  签名: (Y : Scheme.{u})
+  签名: (Y : 概形.{u})
   定义体: f.unop.hom.ker
 map {f g} hfg := homOfLE by simpa only [Functor.id_obj, Functor.const_obj_obj,
     OrderDual.toDual_le_toDual, ← Over.w hfg.unop] using hfg.unop.left.le_ker_comp f.unop.hom
@@ -3068,7 +3068,7 @@ lemma ker_toSpecΓ
 
 中文:
 引理 ker_toSpecΓ
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   结论: X.toSpecΓ.ker = ⊥
   证明: by
   apply IdealSheafData.ext_of_isAffine

@@ -55,7 +55,7 @@ instance instLieRing
 
 中文:
 实例 instLieRing
-  签名: : LieRing (L₁ × L₂) where
+  签名: : Lie环 (L₁ × L₂) where
   定义体: ⟨⁅x.1, y.1⁆, ⁅x.2, y.2⁆⟩
   add_lie := by simp
   lie_add := by simp
@@ -99,7 +99,7 @@ instance instLieAlgebra
 
 中文:
 实例 instLieAlgebra
-  签名: : LieAlgebra R (L₁ × L₂) where
+  签名: : Lie代数 R (L₁ × L₂) where
   定义体: by simp
 -/
 instance instLieAlgebra : LieAlgebra R (L₁ × L₂) where
@@ -242,7 +242,7 @@ lemma coe_fst
 
 中文:
 引理 coe_fst
-  结论: ⇑(fst R L₁ L₂) = Prod.fst
+  结论: ⇑(fst R L₁ L₂) = 积类型.fst
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_fst : ⇑(fst R L₁ L₂) = Prod.fst := rfl
@@ -257,7 +257,7 @@ lemma coe_snd
 
 中文:
 引理 coe_snd
-  结论: ⇑(snd R L₁ L₂) = Prod.snd
+  结论: ⇑(snd R L₁ L₂) = 积类型.snd
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_snd : ⇑(snd R L₁ L₂) = Prod.snd := rfl
@@ -272,7 +272,7 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  结论: Function.Surjective (fst R L₁ L₂)
+  结论: 函数.满射 (fst R L₁ L₂)
   证明: fun x => ⟨(x, 0), rfl⟩
 -/
 theorem fst_surjective : Function.Surjective (fst R L₁ L₂) := fun x => ⟨(x, 0), rfl⟩
@@ -287,7 +287,7 @@ theorem snd_surjective
 
 中文:
 定理 snd_surjective
-  结论: Function.Surjective (snd R L₁ L₂)
+  结论: 函数.满射 (snd R L₁ L₂)
   证明: fun x => ⟨(0, x), rfl⟩
 -/
 theorem snd_surjective : Function.Surjective (snd R L₁ L₂) := fun x => ⟨(0, x), rfl⟩
@@ -304,7 +304,7 @@ definition prod
   map_lie' := by simp
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : L ->ₗ⁅R⁆ L₁) (g : L ->ₗ⁅R⁆ L₂)
   定义体: LinearMap.prod f g
   map_lie' := by simp
@@ -329,7 +329,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : L ->ₗ⁅R⁆ L₁) (g : L ->ₗ⁅R⁆ L₂)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -352,7 +352,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : L ->ₗ⁅R⁆ L₁) (g : L ->ₗ⁅R⁆ L₂)
-  结论: (fst R L₁ L₂).comp (prod f g) = f
+  结论: (fst R L₁ L₂).comp (乘积 f g) = f
   证明: rfl
 
 @[simp]
@@ -374,7 +374,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : L ->ₗ⁅R⁆ L₁) (g : L ->ₗ⁅R⁆ L₂)
-  结论: (snd R L₁ L₂).comp (prod f g) = g
+  结论: (snd R L₁ L₂).comp (乘积 f g) = g
   证明: rfl
 
 @[simp]
@@ -392,7 +392,7 @@ theorem pair_fst_snd
 
 中文:
 定理 pair_fst_snd
-  结论: prod (fst R L₁ L₂) (snd R L₁ L₂) = LieHom.id
+  结论: 乘积 (fst R L₁ L₂) (snd R L₁ L₂) = Lie态射.id
   证明: rfl
 -/
 theorem pair_fst_snd : prod (fst R L₁ L₂) (snd R L₁ L₂) = LieHom.id := rfl
@@ -473,7 +473,7 @@ theorem coe_inr
 
 中文:
 定理 coe_inr
-  结论: (inr R L₁ L₂ : L₂ -> L₁ × L₂) = Prod.mk 0
+  结论: (inr R L₁ L₂ : L₂ -> L₁ × L₂) = 积类型.mk 0
   证明: rfl
 -/
 @[simp] theorem coe_inr : (inr R L₁ L₂ : L₂ -> L₁ × L₂) = Prod.mk 0 := rfl
@@ -488,7 +488,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Function.Injective (inl R L₁ L₂)
+  结论: 函数.单射 (inl R L₁ L₂)
   证明: fun _ => by simp
 -/
 theorem inl_injective : Function.Injective (inl R L₁ L₂) := fun _ => by simp
@@ -503,7 +503,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Function.Injective (inr R L₁ L₂)
+  结论: 函数.单射 (inr R L₁ L₂)
   证明: fun _ => by simp
 -/
 theorem inr_injective : Function.Injective (inr R L₁ L₂) := fun _ => by simp
@@ -663,7 +663,7 @@ theorem inl_eq_prod
 
 中文:
 定理 inl_eq_prod
-  结论: inl R L₁ L₂ = prod LieHom.id 0
+  结论: inl R L₁ L₂ = 乘积 Lie态射.id 0
   证明: rfl
 -/
 theorem inl_eq_prod : inl R L₁ L₂ = prod LieHom.id 0 :=
@@ -679,7 +679,7 @@ theorem inr_eq_prod
 
 中文:
 定理 inr_eq_prod
-  结论: inr R L₁ L₂ = prod 0 LieHom.id
+  结论: inr R L₁ L₂ = 乘积 0 Lie态射.id
   证明: rfl
 -/
 theorem inr_eq_prod : inr R L₁ L₂ = prod 0 LieHom.id :=
@@ -776,7 +776,7 @@ theorem coe_prodMap
 中文:
 定理 coe_prodMap
   条件: (f : L₁ ->ₗ⁅R⁆ L₃) (g : L₂ ->ₗ⁅R⁆ L₄)
-  结论: ⇑(prodMap f g) = Prod.map f g
+  结论: ⇑(prodMap f g) = 积类型.map f g
   证明: rfl
 
 @[simp]
@@ -897,7 +897,7 @@ definition LieEquiv.prodComm
   map_lie' := by simp
 
 中文:
-定义 LieEquiv.prodComm
+定义 Lie等价.prodComm
   签名: : (L₁ × L₂) ≃ₗ⁅R⁆ L₂ × L₁ where
   定义体: LinearEquiv.prodComm R L₁ L₂
   map_lie' := by simp

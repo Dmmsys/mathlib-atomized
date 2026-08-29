@@ -565,9 +565,9 @@ theorem _root_.WellFounded.cutExpand
   proof: ⟨have := hr.irrefl; fun _ => acc_of_singleton fun a _ => (hr.apply a).cutExpand⟩
 
 中文:
-定理 _root_.WellFounded.cutExpand
-  条件: (hr : WellFounded r)
-  结论: WellFounded (CutExpand r)
+定理 _root_.良基.cutExpand
+  条件: (hr : 良基 r)
+  结论: 良基 (CutExpand r)
   证明: ⟨have := hr.irrefl; fun _ => acc_of_singleton fun a _ => (hr.apply a).cutExpand⟩
 
 Depends on / 依赖: acc_of_singleton, cutExpand, hr.apply, hr.irrefl, irrefl
@@ -585,7 +585,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : IsWellFounded α r] : IsWellFounded _ (CutExpand r)
+  签名: : 是良基 α r] : 是良基 _ (CutExpand r)
   定义体: ⟨h.wf.cutExpand⟩
 
 Depends on / 依赖: cutExpand, h.wf.cutExpand

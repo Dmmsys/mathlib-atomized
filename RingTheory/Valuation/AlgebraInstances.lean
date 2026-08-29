@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra v.valuationSubring L
+  签名: 代数 v.valuationSubring L
   定义体: inferInstance
 -/
 instance : Algebra v.valuationSubring L := inferInstance
@@ -59,7 +59,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: Injective (algebraMap v.valuationSubring L)
+  结论: 单射 (algebraMap v.valuationSubring L)
   证明: (FaithfulSMul.algebraMap_injective K L).comp (IsFractionRing.injective _ _)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.injective, algebraMap_injective, injective
@@ -76,7 +76,7 @@ theorem isIntegral_of_mem_ringOfIntegers
   proof: integralClosure.isIntegral ⟨x, hx⟩
 
 中文:
-定理 isIntegral_of_mem_ringOfIntegers
+定理 is整数egral_of_mem_ringOf整数egers
   条件: {x : L} (hx : x in integralClosure v.valuationSubring L)
   证明: integralClosure.isIntegral ⟨x, hx⟩
 
@@ -96,7 +96,7 @@ theorem isIntegral_of_mem_ringOfIntegers'
   apply isIntegral_of_mem_ringOfIntegers
 
 中文:
-定理 isIntegral_of_mem_ringOfIntegers'
+定理 is整数egral_of_mem_ringOf整数egers'
   条件: {x : integralClosure v.valuationSubring L}
   证明: by
   apply isIntegral_of_mem_ringOfIntegers
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower v.valuationSubring L E
+  签名: 标量塔 v.valuationSubring L E
   定义体: inferInstance
 -/
 instance : IsScalarTower v.valuationSubring L E := inferInstance
@@ -176,7 +176,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def equiv (R : 类型) [CommRing R] [Algebra v.valuationSubring R]
+  签名: def equiv (R : 类型) [交换环 R] [代数 v.valuationSubring R]
   定义体: (IsIntegralClosure.equiv v.valuationSubring R L
     (integralClosure v.valuationSubring L)).symm.toRingEquiv
 -/

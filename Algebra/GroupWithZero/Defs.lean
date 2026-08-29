@@ -44,9 +44,9 @@ class MulZeroClass
     - mul_zero : forall a : M₀, a * 0 = 0
 
 中文:
-类 MulZeroClass
+类 乘零类
   参数: (M₀ : 类型u)
-  继承: Mul M₀, Zero M₀
+  继承: 乘法 M₀, 零 M₀
   公理与运算 (2 个):
     - zero_mul : 对任意 a : M₀, 0 * a = 0
     - mul_zero : 对任意 a : M₀, a * 0 = 0
@@ -70,8 +70,8 @@ class IsLeftCancelMulZero
     - mul_left_cancel_of_ne_zero : forall {a : M₀}, a != 0 -> IsLeftRegular a
 
 中文:
-类 IsLeftCancelMulZero
-  参数: (M₀ : 类型u) [Mul M₀] [Zero M₀]
+类 是左消去MulZero
+  参数: (M₀ : 类型u) [乘法 M₀] [零 M₀]
   公理与运算 (1 个):
     - mul_left_cancel_of_ne_zero : 对任意 {a : M₀}, a != 0 -> IsLeftRegular a
 -/
@@ -115,7 +115,7 @@ theorem mul_right_injective₀
 中文:
 定理 mul_right_injective₀
   条件: (ha : a != 0)
-  结论: Function.Injective (a * ·)
+  结论: 函数.单射 (a * ·)
   证明: fun _ _ => mul_left_cancel₀ ha
 -/
 theorem mul_right_injective₀ (ha : a != 0) : Function.Injective (a * ·) :=
@@ -174,8 +174,8 @@ class IsRightCancelMulZero
     - mul_right_cancel_of_ne_zero : forall {a : M₀}, a != 0 -> IsRightRegular a
 
 中文:
-类 IsRightCancelMulZero
-  参数: (M₀ : 类型u) [Mul M₀] [Zero M₀]
+类 是右消去MulZero
+  参数: (M₀ : 类型u) [乘法 M₀] [零 M₀]
   公理与运算 (1 个):
     - mul_right_cancel_of_ne_zero : 对任意 {a : M₀}, a != 0 -> IsRightRegular a
 -/
@@ -219,7 +219,7 @@ theorem mul_left_injective₀
 中文:
 定理 mul_left_injective₀
   条件: (hb : b != 0)
-  结论: Function.Injective fun a => a * b
+  结论: 函数.单射 fun a => a * b
   证明: fun _ _ => mul_right_cancel₀ hb
 -/
 theorem mul_left_injective₀ (hb : b != 0) : Function.Injective fun a => a * b :=
@@ -278,9 +278,9 @@ class IsCancelMulZero
   (no additional axioms)
 
 中文:
-类 IsCancelMulZero
-  参数: (M₀ : 类型u) [Mul M₀] [Zero M₀]
-  继承: IsLeftCancelMulZero M₀, IsRightCancelMulZero M₀
+类 是乘零消去
+  参数: (M₀ : 类型u) [乘法 M₀] [零 M₀]
+  继承: 是左消去MulZero M₀, 是右消去MulZero M₀
   (无附加公理)
 -/
 @[mk_iff] class IsCancelMulZero (M₀ : Type u) [Mul M₀] [Zero M₀] : Prop
@@ -297,8 +297,8 @@ theorem isCancelMulZero_iff_forall_isRegular
   exact forall₂_congr fun _ _ => isRegular_iff.symm
 
 中文:
-定理 isCancelMulZero_iff_forall_isRegular
-  条件: {M₀} [Mul M₀] [Zero M₀]
+定理 isCancelMulZero_iff_对任意_isRegular
+  条件: {M₀} [乘法 M₀] [零 M₀]
   证明: by
   simp only [isCancelMulZero_iff, isLeftCancelMulZero_iff, isRightCancelMulZero_iff, ← forall_and]
   exact forall₂_congr fun _ _ => isRegular_iff.symm
@@ -320,8 +320,8 @@ class NoZeroDivisors
     - eq_zero_or_eq_zero_of_mul_eq_zero : forall {a b : M₀}, a * b = 0 -> a = 0 ∨ b = 0
 
 中文:
-类 NoZeroDivisors
-  参数: (M₀ : 类型) [Mul M₀] [Zero M₀]
+类 无零因子
+  参数: (M₀ : 类型) [乘法 M₀] [零 M₀]
   公理与运算 (1 个):
     - eq_zero_or_eq_zero_of_mul_eq_zero : 对任意 {a b : M₀}, a * b = 0 -> a = 0 ∨ b = 0
 -/
@@ -340,9 +340,9 @@ class SemigroupWithZero
   (no additional axioms)
 
 中文:
-类 SemigroupWithZero
+类 带零半群
   参数: (S₀ : 类型u)
-  继承: Semigroup S₀, MulZeroClass S₀
+  继承: 半群 S₀, 乘零类 S₀
   (无附加公理)
 -/
 class SemigroupWithZero (S₀ : Type u) extends Semigroup S₀, MulZeroClass S₀
@@ -357,9 +357,9 @@ class MulZeroOneClass
   (no additional axioms)
 
 中文:
-类 MulZeroOneClass
+类 乘零幺类
   参数: (M₀ : 类型u)
-  继承: MulOneClass M₀, MulZeroClass M₀
+  继承: MulOne类 M₀, 乘零类 M₀
   (无附加公理)
 -/
 class MulZeroOneClass (M₀ : Type u) extends MulOneClass M₀, MulZeroClass M₀
@@ -374,9 +374,9 @@ class MonoidWithZero
   (no additional axioms)
 
 中文:
-类 MonoidWithZero
+类 带零幺半群
   参数: (M₀ : 类型u)
-  继承: Monoid M₀, MulZeroOneClass M₀, SemigroupWithZero M₀
+  继承: 幺半群 M₀, 乘零幺类 M₀, 带零半群 M₀
   (无附加公理)
 -/
 class MonoidWithZero (M₀ : Type u) extends Monoid M₀, MulZeroOneClass M₀, SemigroupWithZero M₀
@@ -398,7 +398,7 @@ theorem pow_mul_apply_eq_pow_mul
 
 中文:
 定理 pow_mul_apply_eq_pow_mul
-  结论: {M : 类型} [Monoid M] (f : M₀ -> M) {x : M₀}
+  结论: {M : 类型} [幺半群 M] (f : M₀ -> M) {x : M₀}
   证明: by
   induction n with
   | zero => intro y; rw [pow_zero, pow_zero, one_mul, one_mul]
@@ -428,9 +428,9 @@ structure CancelMonoidWithZero
   (no additional axioms)
 
 中文:
-结构 CancelMonoidWithZero
+结构 消去带零幺半群
   参数: (M₀ : 类型)
-  继承: MonoidWithZero M₀, IsCancelMulZero M₀
+  继承: 带零幺半群 M₀, 是乘零消去 M₀
   (无附加公理)
 -/
 structure CancelMonoidWithZero (M₀ : Type*) extends MonoidWithZero M₀, IsCancelMulZero M₀
@@ -445,9 +445,9 @@ class CommMonoidWithZero
   (no additional axioms)
 
 中文:
-类 CommMonoidWithZero
+类 带零交换幺半群
   参数: (M₀ : 类型)
-  继承: CommMonoid M₀, MonoidWithZero M₀
+  继承: 交换幺半群 M₀, 带零幺半群 M₀
   (无附加公理)
 -/
 class CommMonoidWithZero (M₀ : Type*) extends CommMonoid M₀, MonoidWithZero M₀
@@ -483,8 +483,8 @@ lemma IsLeftCancelMulZero.to_isRightCancelMulZero
   proof: fun hb _ _ h => mul_left_cancel₀ hb (mul_comm _ _).trans (h.trans (mul_comm _ _))
 
 中文:
-引理 IsLeftCancelMulZero.to_isRightCancelMulZero
-  条件: [IsLeftCancelMulZero M₀]
+引理 是左消去MulZero.to_isRightCancelMulZero
+  条件: [是左消去MulZero M₀]
   证明: fun hb _ _ h => mul_left_cancel₀ hb (mul_comm _ _).trans (h.trans (mul_comm _ _))
 
 Depends on / 依赖: h.trans, mul_comm
@@ -503,8 +503,8 @@ lemma IsRightCancelMulZero.to_isLeftCancelMulZero
   proof: fun hb _ _ h => mul_right_cancel₀ hb (mul_comm _ _).trans (h.trans (mul_comm _ _))
 
 中文:
-引理 IsRightCancelMulZero.to_isLeftCancelMulZero
-  条件: [IsRightCancelMulZero M₀]
+引理 是右消去MulZero.to_isLeftCancelMulZero
+  条件: [是右消去MulZero M₀]
   证明: fun hb _ _ h => mul_right_cancel₀ hb (mul_comm _ _).trans (h.trans (mul_comm _ _))
 
 Depends on / 依赖: h.trans, mul_comm
@@ -523,8 +523,8 @@ lemma IsLeftCancelMulZero.to_isCancelMulZero
   proof: { IsLeftCancelMulZero.to_isRightCancelMulZero with }
 
 中文:
-引理 IsLeftCancelMulZero.to_isCancelMulZero
-  条件: [IsLeftCancelMulZero M₀]
+引理 是左消去MulZero.to_isCancelMulZero
+  条件: [是左消去MulZero M₀]
   证明: { IsLeftCancelMulZero.to_isRightCancelMulZero with }
 
 Depends on / 依赖: IsLeftCancelMulZero, IsLeftCancelMulZero.to_isRightCancelMulZero, to_isRightCancelMulZero
@@ -542,8 +542,8 @@ lemma IsRightCancelMulZero.to_isCancelMulZero
   proof: { IsRightCancelMulZero.to_isLeftCancelMulZero with }
 
 中文:
-引理 IsRightCancelMulZero.to_isCancelMulZero
-  条件: [IsRightCancelMulZero M₀]
+引理 是右消去MulZero.to_isCancelMulZero
+  条件: [是右消去MulZero M₀]
   证明: { IsRightCancelMulZero.to_isLeftCancelMulZero with }
 
 Depends on / 依赖: IsRightCancelMulZero, IsRightCancelMulZero.to_isLeftCancelMulZero, to_isLeftCancelMulZero
@@ -568,9 +568,9 @@ structure CancelCommMonoidWithZero
   (no additional axioms)
 
 中文:
-结构 CancelCommMonoidWithZero
+结构 消去带零交换幺半群
   参数: (M₀ : 类型)
-  继承: CommMonoidWithZero M₀, IsLeftCancelMulZero M₀
+  继承: 带零交换幺半群 M₀, 是左消去MulZero M₀
   (无附加公理)
 -/
 structure CancelCommMonoidWithZero (M₀ : Type*)
@@ -586,8 +586,8 @@ class MulDivCancelClass
     - mul_div_cancel((a b : M₀)) : b != 0 -> a * b / b = a
 
 中文:
-类 MulDivCancelClass
-  参数: (M₀ : 类型) [MonoidWithZero M₀] [Div M₀]
+类 MulDivCancel类
+  参数: (M₀ : 类型) [带零幺半群 M₀] [除法 M₀]
   公理与运算 (1 个):
     - mul_div_cancel((a b : M₀)) : b != 0 -> a * b / b = a
 -/
@@ -654,9 +654,9 @@ class GroupWithZero
     - mul_inv_cancel((a : G₀)) : a != 0 -> a * a⁻¹ = 1
 
 中文:
-类 GroupWithZero
+类 带零群
   参数: (G₀ : 类型u)
-  继承: MonoidWithZero G₀, DivInvMonoid G₀, Nontrivial G₀
+  继承: 带零幺半群 G₀, 除逆幺半群 G₀, 非平凡 G₀
   公理与运算 (2 个):
     - inv_zero : (0 : G₀)⁻¹ = 0
     - mul_inv_cancel((a : G₀)) : a != 0 -> a * a⁻¹ = 1
@@ -725,9 +725,9 @@ class CommGroupWithZero
   (no additional axioms)
 
 中文:
-类 CommGroupWithZero
+类 带零交换群
   参数: (G₀ : 类型)
-  继承: CommMonoidWithZero G₀, GroupWithZero G₀
+  继承: 带零交换幺半群 G₀, 带零群 G₀
   (无附加公理)
 -/
 class CommGroupWithZero (G₀ : Type*) extends CommMonoidWithZero G₀, GroupWithZero G₀
@@ -742,7 +742,7 @@ lemma eq_zero_or_one_of_sq_eq_self
 
 中文:
 引理 eq_zero_or_one_of_sq_eq_self
-  结论: [MonoidWithZero M₀] [IsRightCancelMulZero M₀]
+  结论: [带零幺半群 M₀] [是右消去MulZero M₀]
   证明: or_iff_not_imp_left.mpr (mul_left_injective₀ · <| by simpa [sq] using hx)
 
 Depends on / 依赖: or_iff_not_imp_left, or_iff_not_imp_left.mpr

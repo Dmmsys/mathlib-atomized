@@ -51,7 +51,7 @@ alias mul_pos := Left.mul_pos
 
 中文:
 定理 Left.mul_pos
-  条件: [PosMulStrictMono α] (ha : 0 < a) (hb : 0 < b)
+  条件: [正乘严格递增 α] (ha : 0 < a) (hb : 0 < b)
   结论: 0 < a * b
   证明: by
   simpa only [mul_zero] using mul_lt_mul_of_pos_left hb ha
@@ -79,7 +79,7 @@ theorem mul_neg_of_pos_of_neg
 
 中文:
 定理 mul_neg_of_pos_of_neg
-  条件: [PosMulStrictMono α] (ha : 0 < a) (hb : b < 0)
+  条件: [正乘严格递增 α] (ha : 0 < a) (hb : b < 0)
   结论: a * b < 0
   证明: by
   simpa only [mul_zero] using mul_lt_mul_of_pos_left hb ha
@@ -102,7 +102,7 @@ theorem mul_pos_iff_of_pos_left
 
 中文:
 定理 mul_pos_iff_of_pos_left
-  条件: [PosMulStrictMono α] [PosMulReflectLT α] (h : 0 < a)
+  条件: [正乘严格递增 α] [正乘反映严格偏序 α] (h : 0 < a)
   证明: by simpa using mul_lt_mul_iff_right₀ (b := 0) h
 
 Depends on / 依赖: CovariantClass, Group.covconv_swap, covconv_swap
@@ -122,7 +122,7 @@ theorem Right.mul_pos
 
 中文:
 定理 Right.mul_pos
-  条件: [MulPosStrictMono α] (ha : 0 < a) (hb : 0 < b)
+  条件: [乘正严格递增 α] (ha : 0 < a) (hb : 0 < b)
   结论: 0 < a * b
   证明: by
   simpa only [zero_mul] using mul_lt_mul_of_pos_right ha hb
@@ -146,7 +146,7 @@ theorem mul_neg_of_neg_of_pos
 
 中文:
 定理 mul_neg_of_neg_of_pos
-  条件: [MulPosStrictMono α] (ha : a < 0) (hb : 0 < b)
+  条件: [乘正严格递增 α] (ha : a < 0) (hb : 0 < b)
   结论: a * b < 0
   证明: by
   simpa only [zero_mul] using mul_lt_mul_of_pos_right ha hb
@@ -169,7 +169,7 @@ theorem mul_pos_iff_of_pos_right
 
 中文:
 定理 mul_pos_iff_of_pos_right
-  条件: [MulPosStrictMono α] [MulPosReflectLT α] (h : 0 < b)
+  条件: [乘正严格递增 α] [乘正反映严格偏序 α] (h : 0 < b)
   证明: by simpa using mul_lt_mul_iff_left₀ (b := 0) h
 -/
 theorem mul_pos_iff_of_pos_right [MulPosStrictMono α] [MulPosReflectLT α] (h : 0 < b) :
@@ -189,7 +189,7 @@ alias mul_nonneg := Left.mul_nonneg
 
 中文:
 定理 Left.mul_nonneg
-  条件: [PosMulMono α] (ha : 0 <= a) (hb : 0 <= b)
+  条件: [正乘递增 α] (ha : 0 <= a) (hb : 0 <= b)
   结论: 0 <= a * b
   证明: by
   simpa only [mul_zero] using mul_le_mul_of_nonneg_left hb ha
@@ -215,7 +215,7 @@ theorem mul_nonpos_of_nonneg_of_nonpos
 
 中文:
 定理 mul_nonpos_of_nonneg_of_nonpos
-  条件: [PosMulMono α] (ha : 0 <= a) (hb : b <= 0)
+  条件: [正乘递增 α] (ha : 0 <= a) (hb : b <= 0)
   结论: a * b <= 0
   证明: by
   simpa only [mul_zero] using mul_le_mul_of_nonneg_left hb ha
@@ -237,7 +237,7 @@ theorem Right.mul_nonneg
 
 中文:
 定理 Right.mul_nonneg
-  条件: [MulPosMono α] (ha : 0 <= a) (hb : 0 <= b)
+  条件: [乘正递增 α] (ha : 0 <= a) (hb : 0 <= b)
   结论: 0 <= a * b
   证明: by
   simpa only [zero_mul] using mul_le_mul_of_nonneg_right ha hb
@@ -259,7 +259,7 @@ theorem mul_nonpos_of_nonpos_of_nonneg
 
 中文:
 定理 mul_nonpos_of_nonpos_of_nonneg
-  条件: [MulPosMono α] (ha : a <= 0) (hb : 0 <= b)
+  条件: [乘正递增 α] (ha : a <= 0) (hb : 0 <= b)
   结论: a * b <= 0
   证明: by
   simpa only [zero_mul] using mul_le_mul_of_nonneg_right ha hb
@@ -280,7 +280,7 @@ theorem pos_of_mul_pos_right
 
 中文:
 定理 pos_of_mul_pos_right
-  条件: [PosMulReflectLT α] (h : 0 < a * b) (ha : 0 <= a)
+  条件: [正乘反映严格偏序 α] (h : 0 < a * b) (ha : 0 <= a)
   结论: 0 < b
   证明: lt_of_mul_lt_mul_left ((mul_zero a).symm ▸ h : a * 0 < a * b) ha
 
@@ -300,7 +300,7 @@ theorem pos_of_mul_pos_left
 
 中文:
 定理 pos_of_mul_pos_left
-  条件: [MulPosReflectLT α] (h : 0 < a * b) (hb : 0 <= b)
+  条件: [乘正反映严格偏序 α] (h : 0 < a * b) (hb : 0 <= b)
   结论: 0 < a
   证明: lt_of_mul_lt_mul_right ((zero_mul b).symm ▸ h : 0 * b < a * b) hb
 
@@ -319,7 +319,7 @@ theorem pos_iff_pos_of_mul_pos
 
 中文:
 定理 pos_iff_pos_of_mul_pos
-  条件: [PosMulReflectLT α] [MulPosReflectLT α] (hab : 0 < a * b)
+  条件: [正乘反映严格偏序 α] [乘正反映严格偏序 α] (hab : 0 < a * b)
   证明: ⟨pos_of_mul_pos_right hab ∘ le_of_lt, pos_of_mul_pos_left hab ∘ le_of_lt⟩
 
 Depends on / 依赖: le_of_lt, pos_of_mul_pos_left, pos_of_mul_pos_right
@@ -338,7 +338,7 @@ theorem Left.mul_lt_mul_of_nonneg
 
 中文:
 定理 Left.mul_lt_mul_of_nonneg
-  结论: [PosMulStrictMono α] [MulPosMono α]
+  结论: [正乘严格递增 α] [乘正递增 α]
   证明: mul_lt_mul_of_le_of_lt_of_nonneg_of_pos h₁.le h₂ c0 (a0.trans_lt h₁)
 
 Depends on / 依赖: a0.trans_lt, mul_lt_mul_of_le_of_lt_of_nonneg_of_pos, trans_lt
@@ -361,7 +361,7 @@ alias mul_lt_mul'' := Left.mul_lt_mul_of_nonneg
 
 中文:
 定理 Right.mul_lt_mul_of_nonneg
-  结论: [PosMulMono α] [MulPosStrictMono α]
+  结论: [正乘递增 α] [乘正严格递增 α]
   证明: mul_lt_mul_of_lt_of_le_of_nonneg_of_pos h₁ h₂.le a0 (c0.trans_lt h₂)
 
 alias mul_lt_mul_of_nonneg := Left.mul_lt_mul_of_nonneg
@@ -389,7 +389,7 @@ theorem mul_self_le_mul_self
 
 中文:
 定理 mul_self_le_mul_self
-  条件: [PosMulMono α] [MulPosMono α] (ha : 0 <= a) (hab : a <= b)
+  条件: [正乘递增 α] [乘正递增 α] (ha : 0 <= a) (hab : a <= b)
   证明: mul_le_mul hab hab ha ha.trans hab
 
 Depends on / 依赖: ha.trans, mul_le_mul
@@ -567,7 +567,7 @@ theorem mul_left_cancel_iff_of_pos
 
 中文:
 定理 mul_left_cancel_iff_of_pos
-  条件: [PosMulReflectLE α] (a0 : 0 < a)
+  条件: [正乘反映偏序 α] (a0 : 0 < a)
   结论: a * b = a * c ↔ b = c
   证明: ⟨fun h => (le_of_mul_le_mul_of_pos_left h.le a0).antisymm
     le_of_mul_le_mul_of_pos_left h.ge a0, congr_arg _⟩
@@ -590,7 +590,7 @@ theorem mul_right_cancel_iff_of_pos
 
 中文:
 定理 mul_right_cancel_iff_of_pos
-  条件: [MulPosReflectLE α] (b0 : 0 < b)
+  条件: [乘正反映偏序 α] (b0 : 0 < b)
   结论: a * b = c * b ↔ a = c
   证明: ⟨fun h => (le_of_mul_le_mul_of_pos_right h.le b0).antisymm
     le_of_mul_le_mul_of_pos_right h.ge b0, congr_arg (· * b)⟩
@@ -616,7 +616,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos
 
 中文:
 定理 mul_eq_mul_iff_eq_and_eq_of_pos
-  结论: [PosMulStrictMono α] [MulPosStrictMono α]
+  结论: [正乘严格递增 α] [乘正严格递增 α]
   证明: by
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
@@ -650,7 +650,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos'
 
 中文:
 定理 mul_eq_mul_iff_eq_and_eq_of_pos'
-  结论: [PosMulStrictMono α] [MulPosStrictMono α]
+  结论: [正乘严格递增 α] [乘正严格递增 α]
   证明: by
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
@@ -686,7 +686,7 @@ theorem eq_and_eq_of_pos_of_le_of_mul_le_mul
 
 中文:
 定理 eq_and_eq_of_pos_of_le_of_mul_le_mul
-  结论: [PosMulReflectLE α] [MulPosReflectLE α]
+  结论: [正乘反映偏序 α] [乘正反映偏序 α]
   证明: by
   refine ⟨le_antisymm hab ?_, le_antisymm hcd ?_⟩
   · grw [hcd] at h
@@ -732,7 +732,7 @@ theorem pos_and_pos_or_neg_and_neg_of_mul_pos
 
 中文:
 定理 pos_and_pos_or_neg_and_neg_of_mul_pos
-  条件: [PosMulMono α] [MulPosMono α] (hab : 0 < a * b)
+  条件: [正乘递增 α] [乘正递增 α] (hab : 0 < a * b)
   证明: by
   rcases lt_trichotomy a 0 with (ha | rfl | ha)
   · refine Or.inr ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
@@ -765,7 +765,7 @@ theorem neg_of_mul_pos_right
 
 中文:
 定理 neg_of_mul_pos_right
-  条件: [PosMulMono α] [MulPosMono α] (h : 0 < a * b) (ha : a <= 0)
+  条件: [正乘递增 α] [乘正递增 α] (h : 0 < a * b) (ha : a <= 0)
   结论: b < 0
   证明: ((pos_and_pos_or_neg_and_neg_of_mul_pos h).resolve_left fun h => h.1.not_ge ha).2
 
@@ -785,7 +785,7 @@ theorem neg_of_mul_pos_left
 
 中文:
 定理 neg_of_mul_pos_left
-  条件: [PosMulMono α] [MulPosMono α] (h : 0 < a * b) (ha : b <= 0)
+  条件: [正乘递增 α] [乘正递增 α] (h : 0 < a * b) (ha : b <= 0)
   结论: a < 0
   证明: ((pos_and_pos_or_neg_and_neg_of_mul_pos h).resolve_left fun h => h.2.not_ge ha).1
 
@@ -805,7 +805,7 @@ theorem neg_iff_neg_of_mul_pos
 
 中文:
 定理 neg_iff_neg_of_mul_pos
-  条件: [PosMulMono α] [MulPosMono α] (hab : 0 < a * b)
+  条件: [正乘递增 α] [乘正递增 α] (hab : 0 < a * b)
   结论: a < 0 ↔ b < 0
   证明: ⟨neg_of_mul_pos_right hab ∘ le_of_lt, neg_of_mul_pos_left hab ∘ le_of_lt⟩
 
@@ -827,7 +827,7 @@ alias neg_of_mul_neg_right := Left.neg_of_mul_neg_right
 
 中文:
 定理 Left.neg_of_mul_neg_right
-  条件: [PosMulMono α] (h : a * b < 0) (a0 : 0 <= a)
+  条件: [正乘递增 α] (h : a * b < 0) (a0 : 0 <= a)
   结论: b < 0
   证明: lt_of_not_ge fun b0 : b >= 0 => (Left.mul_nonneg a0 b0).not_gt h
 
@@ -851,7 +851,7 @@ theorem Right.neg_of_mul_neg_right
 
 中文:
 定理 Right.neg_of_mul_neg_right
-  条件: [MulPosMono α] (h : a * b < 0) (a0 : 0 <= a)
+  条件: [乘正递增 α] (h : a * b < 0) (a0 : 0 <= a)
   结论: b < 0
   证明: lt_of_not_ge fun b0 : b >= 0 => (Right.mul_nonneg a0 b0).not_gt h
 
@@ -873,7 +873,7 @@ alias neg_of_mul_neg_left := Left.neg_of_mul_neg_left
 
 中文:
 定理 Left.neg_of_mul_neg_left
-  条件: [PosMulMono α] (h : a * b < 0) (b0 : 0 <= b)
+  条件: [正乘递增 α] (h : a * b < 0) (b0 : 0 <= b)
   结论: a < 0
   证明: lt_of_not_ge fun a0 : a >= 0 => (Left.mul_nonneg a0 b0).not_gt h
 
@@ -897,7 +897,7 @@ theorem Right.neg_of_mul_neg_left
 
 中文:
 定理 Right.neg_of_mul_neg_left
-  条件: [MulPosMono α] (h : a * b < 0) (b0 : 0 <= b)
+  条件: [乘正递增 α] (h : a * b < 0) (b0 : 0 <= b)
   结论: a < 0
   证明: lt_of_not_ge fun a0 : a >= 0 => (Right.mul_nonneg a0 b0).not_gt h
 
@@ -930,7 +930,7 @@ lemma one_lt_of_lt_mul_left₀
 
 中文:
 引理 one_lt_of_lt_mul_left₀
-  条件: [PosMulReflectLT α] (ha : 0 <= a) (h : a < a * b)
+  条件: [正乘反映严格偏序 α] (ha : 0 <= a) (h : a < a * b)
   结论: 1 < b
   证明: lt_of_mul_lt_mul_left (by simpa) ha
 
@@ -950,7 +950,7 @@ lemma one_lt_of_lt_mul_right₀
 
 中文:
 引理 one_lt_of_lt_mul_right₀
-  条件: [MulPosReflectLT α] (hb : 0 <= b) (h : b < a * b)
+  条件: [乘正反映严格偏序 α] (hb : 0 <= b) (h : b < a * b)
   结论: 1 < a
   证明: lt_of_mul_lt_mul_right (by simpa) hb
 
@@ -970,7 +970,7 @@ lemma one_le_of_le_mul_left₀
 
 中文:
 引理 one_le_of_le_mul_left₀
-  条件: [PosMulReflectLE α] (ha : 0 < a) (h : a <= a * b)
+  条件: [正乘反映偏序 α] (ha : 0 < a) (h : a <= a * b)
   结论: 1 <= b
   证明: le_of_mul_le_mul_left (by simpa) ha
 
@@ -992,7 +992,7 @@ lemma one_le_of_le_mul_right₀
 
 中文:
 引理 one_le_of_le_mul_right₀
-  条件: [MulPosReflectLE α] (hb : 0 < b) (h : b <= a * b)
+  条件: [乘正反映偏序 α] (hb : 0 < b) (h : b <= a * b)
   结论: 1 <= a
   证明: le_of_mul_le_mul_right (by simpa) hb
 
@@ -1017,7 +1017,7 @@ lemma le_mul_iff_one_le_right
 
 中文:
 引理 le_mul_iff_one_le_right
-  条件: [PosMulMono α] [PosMulReflectLE α] (a0 : 0 < a)
+  条件: [正乘递增 α] [正乘反映偏序 α] (a0 : 0 < a)
   结论: a <= a * b ↔ 1 <= b
   证明: Iff.trans (by rw [mul_one]) (mul_le_mul_iff_right₀ a0)
 
@@ -1041,7 +1041,7 @@ theorem lt_mul_iff_one_lt_right
 
 中文:
 定理 lt_mul_iff_one_lt_right
-  条件: [PosMulStrictMono α] [PosMulReflectLT α] (a0 : 0 < a)
+  条件: [正乘严格递增 α] [正乘反映严格偏序 α] (a0 : 0 < a)
   证明: Iff.trans (by rw [mul_one]) (mul_lt_mul_iff_right₀ a0)
 
 @[simp]
@@ -1066,7 +1066,7 @@ lemma mul_le_iff_le_one_right
 
 中文:
 引理 mul_le_iff_le_one_right
-  条件: [PosMulMono α] [PosMulReflectLE α] (a0 : 0 < a)
+  条件: [正乘递增 α] [正乘反映偏序 α] (a0 : 0 < a)
   结论: a * b <= a ↔ b <= 1
   证明: Iff.trans (by rw [mul_one]) (mul_le_mul_iff_right₀ a0)
 
@@ -1088,7 +1088,7 @@ theorem mul_lt_iff_lt_one_right
 
 中文:
 定理 mul_lt_iff_lt_one_right
-  条件: [PosMulStrictMono α] [PosMulReflectLT α] (a0 : 0 < a)
+  条件: [正乘严格递增 α] [正乘反映严格偏序 α] (a0 : 0 < a)
   证明: Iff.trans (by rw [mul_one]) (mul_lt_mul_iff_right₀ a0)
 
 Depends on / 依赖: Iff.trans, mul_one
@@ -1113,7 +1113,7 @@ lemma le_mul_iff_one_le_left
 
 中文:
 引理 le_mul_iff_one_le_left
-  条件: [MulPosMono α] [MulPosReflectLE α] (a0 : 0 < a)
+  条件: [乘正递增 α] [乘正反映偏序 α] (a0 : 0 < a)
   结论: a <= b * a ↔ 1 <= b
   证明: Iff.trans (by rw [one_mul]) (mul_le_mul_iff_left₀ a0)
 
@@ -1137,7 +1137,7 @@ theorem lt_mul_iff_one_lt_left
 
 中文:
 定理 lt_mul_iff_one_lt_left
-  条件: [MulPosStrictMono α] [MulPosReflectLT α] (a0 : 0 < a)
+  条件: [乘正严格递增 α] [乘正反映严格偏序 α] (a0 : 0 < a)
   证明: Iff.trans (by rw [one_mul]) (mul_lt_mul_iff_left₀ a0)
 
 @[simp]
@@ -1162,7 +1162,7 @@ lemma mul_le_iff_le_one_left
 
 中文:
 引理 mul_le_iff_le_one_left
-  条件: [MulPosMono α] [MulPosReflectLE α] (b0 : 0 < b)
+  条件: [乘正递增 α] [乘正反映偏序 α] (b0 : 0 < b)
   结论: a * b <= b ↔ a <= 1
   证明: Iff.trans (by rw [one_mul]) (mul_le_mul_iff_left₀ b0)
 
@@ -1184,7 +1184,7 @@ theorem mul_lt_iff_lt_one_left
 
 中文:
 定理 mul_lt_iff_lt_one_left
-  条件: [MulPosStrictMono α] [MulPosReflectLT α] (b0 : 0 < b)
+  条件: [乘正严格递增 α] [乘正反映严格偏序 α] (b0 : 0 < b)
   证明: Iff.trans (by rw [one_mul]) (mul_lt_mul_iff_left₀ b0)
 
 Depends on / 依赖: ExistsMulOfLE, Group.existsMulOfLE, Iff.trans, existsMulOfLE, one_mul
@@ -1206,7 +1206,7 @@ theorem mul_le_of_le_one_left
 
 中文:
 定理 mul_le_of_le_one_left
-  条件: [MulPosMono α] (hb : 0 <= b) (h : a <= 1)
+  条件: [乘正递增 α] (hb : 0 <= b) (h : a <= 1)
   结论: a * b <= b
   证明: by
   simpa only [one_mul] using mul_le_mul_of_nonneg_right h hb
@@ -1228,7 +1228,7 @@ theorem le_mul_of_one_le_left
 
 中文:
 定理 le_mul_of_one_le_left
-  条件: [MulPosMono α] (hb : 0 <= b) (h : 1 <= a)
+  条件: [乘正递增 α] (hb : 0 <= b) (h : 1 <= a)
   结论: b <= a * b
   证明: by
   simpa only [one_mul] using mul_le_mul_of_nonneg_right h hb
@@ -1250,7 +1250,7 @@ theorem mul_le_of_le_one_right
 
 中文:
 定理 mul_le_of_le_one_right
-  条件: [PosMulMono α] (ha : 0 <= a) (h : b <= 1)
+  条件: [正乘递增 α] (ha : 0 <= a) (h : b <= 1)
   结论: a * b <= a
   证明: by
   simpa only [mul_one] using mul_le_mul_of_nonneg_left h ha
@@ -1272,7 +1272,7 @@ theorem le_mul_of_one_le_right
 
 中文:
 定理 le_mul_of_one_le_right
-  条件: [PosMulMono α] (ha : 0 <= a) (h : 1 <= b)
+  条件: [正乘递增 α] (ha : 0 <= a) (h : 1 <= b)
   结论: a <= a * b
   证明: by
   simpa only [mul_one] using mul_le_mul_of_nonneg_left h ha
@@ -1294,7 +1294,7 @@ theorem mul_lt_of_lt_one_left
 
 中文:
 定理 mul_lt_of_lt_one_left
-  条件: [MulPosStrictMono α] (hb : 0 < b) (h : a < 1)
+  条件: [乘正严格递增 α] (hb : 0 < b) (h : a < 1)
   结论: a * b < b
   证明: by
   simpa only [one_mul] using mul_lt_mul_of_pos_right h hb
@@ -1316,7 +1316,7 @@ theorem lt_mul_of_one_lt_left
 
 中文:
 定理 lt_mul_of_one_lt_left
-  条件: [MulPosStrictMono α] (hb : 0 < b) (h : 1 < a)
+  条件: [乘正严格递增 α] (hb : 0 < b) (h : 1 < a)
   结论: b < a * b
   证明: by
   simpa only [one_mul] using mul_lt_mul_of_pos_right h hb
@@ -1338,7 +1338,7 @@ theorem mul_lt_of_lt_one_right
 
 中文:
 定理 mul_lt_of_lt_one_right
-  条件: [PosMulStrictMono α] (ha : 0 < a) (h : b < 1)
+  条件: [正乘严格递增 α] (ha : 0 < a) (h : b < 1)
   结论: a * b < a
   证明: by
   simpa only [mul_one] using mul_lt_mul_of_pos_left h ha
@@ -1360,7 +1360,7 @@ theorem lt_mul_of_one_lt_right
 
 中文:
 定理 lt_mul_of_one_lt_right
-  条件: [PosMulStrictMono α] (ha : 0 < a) (h : 1 < b)
+  条件: [正乘严格递增 α] (ha : 0 < a) (h : 1 < b)
   结论: a < a * b
   证明: by
   simpa only [mul_one] using mul_lt_mul_of_pos_left h ha
@@ -1387,8 +1387,8 @@ lemma Monotone.mul
   proof: fun _ _ h => mul_le_mul (hf h) (hg h) (hg₀ _) (hf₀ _)
 
 中文:
-引理 Monotone.mul
-  结论: [PosMulMono M₀] [MulPosMono M₀] (hf : Monotone f) (hg : Monotone g)
+引理 递增.mul
+  结论: [正乘递增 M₀] [乘正递增 M₀] (hf : 递增 f) (hg : 递增 g)
   证明: fun _ _ h => mul_le_mul (hf h) (hg h) (hg₀ _) (hf₀ _)
 
 Depends on / 依赖: mul_le_mul
@@ -1407,7 +1407,7 @@ lemma MonotoneOn.mul
 
 中文:
 引理 MonotoneOn.mul
-  结论: [PosMulMono M₀] [MulPosMono M₀] {s : Set α} (hf : MonotoneOn f s)
+  结论: [正乘递增 M₀] [乘正递增 M₀] {s : 集合 α} (hf : MonotoneOn f s)
   证明: fun _ ha _ hb h => mul_le_mul (hf ha hb h) (hg ha hb h) (hg₀ _ ha) (hf₀ _ hb)
 
 Depends on / 依赖: mul_le_mul
@@ -1435,7 +1435,7 @@ lemma pow_succ_nonneg
 
 中文:
 引理 pow_succ_nonneg
-  条件: [PosMulMono M₀] (ha : 0 <= a)
+  条件: [正乘递增 M₀] (ha : 0 <= a)
   结论: 对任意 n, 0 <= a ^ (n + 1)
 -/
 @[simp] lemma pow_succ_nonneg [PosMulMono M₀] (ha : 0 <= a) : forall n, 0 <= a ^ (n + 1)
@@ -1452,7 +1452,7 @@ lemma pow_nonneg
 
 中文:
 引理 pow_nonneg
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 0 <= a)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 0 <= a)
   结论: 对任意 n, 0 <= a ^ n
 -/
 @[simp] lemma pow_nonneg [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 0 <= a) : forall n, 0 <= a ^ n
@@ -1469,7 +1469,7 @@ lemma zero_pow_le_one
 
 中文:
 引理 zero_pow_le_one
-  条件: [ZeroLEOneClass M₀]
+  条件: [ZeroLEOne类 M₀]
   结论: 对任意 n : 自然数, (0 : M₀) ^ n <= 1
 -/
 lemma zero_pow_le_one [ZeroLEOneClass M₀] : forall n : Nat, (0 : M₀) ^ n <= 1
@@ -1491,8 +1491,8 @@ lemma pow_right_anti₀
 
 中文:
 引理 pow_right_anti₀
-  条件: [PosMulMono M₀] (ha₀ : 0 <= a) (ha₁ : a <= 1)
-  结论: Antitone (fun n : 自然数 => a ^ n)
+  条件: [正乘递增 M₀] (ha₀ : 0 <= a) (ha₁ : a <= 1)
+  结论: 递减 (fun n : 自然数 => a ^ n)
   证明: antitone_nat_of_succ_le fun n => by
     have : ZeroLEOneClass M₀ := ⟨ha₀.trans ha₁⟩
     rw [← mul_one (a ^ n)]; rw [pow_succ]
@@ -1518,7 +1518,7 @@ lemma pow_le_pow_of_le_one
 
 中文:
 引理 pow_le_pow_of_le_one
-  结论: [PosMulMono M₀] (ha₀ : 0 <= a) (ha₁ : a <= 1) {m n : 自然数}
+  结论: [正乘递增 M₀] (ha₀ : 0 <= a) (ha₁ : a <= 1) {m n : 自然数}
   证明: pow_right_anti₀ ha₀ ha₁ hmn
 -/
 lemma pow_le_pow_of_le_one [PosMulMono M₀] (ha₀ : 0 <= a) (ha₁ : a <= 1) {m n : Nat}
@@ -1535,7 +1535,7 @@ lemma pow_le_of_le_one
 
 中文:
 引理 pow_le_of_le_one
-  条件: [PosMulMono M₀] (h₀ : 0 <= a) (h₁ : a <= 1) (hn : n != 0)
+  条件: [正乘递增 M₀] (h₀ : 0 <= a) (h₁ : a <= 1) (hn : n != 0)
   结论: a ^ n <= a
   证明: (pow_one a).subst (pow_le_pow_of_le_one h₀ h₁ (Nat.pos_of_ne_zero hn))
 
@@ -1555,7 +1555,7 @@ lemma sq_le
 
 中文:
 引理 sq_le
-  条件: [PosMulMono M₀] (h₀ : 0 <= a) (h₁ : a <= 1)
+  条件: [正乘递增 M₀] (h₀ : 0 <= a) (h₁ : a <= 1)
   结论: a ^ 2 <= a
   证明: pow_le_of_le_one h₀ h₁ two_ne_zero
 
@@ -1575,7 +1575,7 @@ lemma pow_le_one₀
 
 中文:
 引理 pow_le_one₀
-  条件: [PosMulMono M₀] {n : 自然数} (ha₀ : 0 <= a) (ha₁ : a <= 1)
+  条件: [正乘递增 M₀] {n : 自然数} (ha₀ : 0 <= a) (ha₁ : a <= 1)
   结论: a ^ n <= 1
   证明: pow_zero a ▸ pow_right_anti₀ ha₀ ha₁ (Nat.zero_le n)
 
@@ -1594,7 +1594,7 @@ lemma one_le_mul_of_one_le_of_one_le
 
 中文:
 引理 one_le_mul_of_one_le_of_one_le
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) (hb : 1 <= b)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 <= a) (hb : 1 <= b)
   证明: ha.trans le_mul_of_one_le_right (zero_le_one.trans ha) hb
 
 Depends on / 依赖: ha.trans, le_mul_of_one_le_right, zero_le_one, zero_le_one.trans
@@ -1612,7 +1612,7 @@ lemma one_lt_mul_of_le_of_lt
 
 中文:
 引理 one_lt_mul_of_le_of_lt
-  条件: [ZeroLEOneClass M₀] [MulPosMono M₀] (ha : 1 <= a) (hb : 1 < b)
+  条件: [ZeroLEOne类 M₀] [乘正递增 M₀] (ha : 1 <= a) (hb : 1 < b)
   证明: hb.trans_le le_mul_of_one_le_left (zero_le_one.trans hb.le) ha
 
 Depends on / 依赖: hb.le, hb.trans_le, le_mul_of_one_le_left, trans_le, zero_le_one, zero_le_one.trans
@@ -1632,7 +1632,7 @@ alias one_lt_mul := one_lt_mul_of_le_of_lt
 
 中文:
 引理 one_lt_mul_of_lt_of_le
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 < a) (hb : 1 <= b)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 < a) (hb : 1 <= b)
   证明: ha.trans_le le_mul_of_one_le_right (zero_le_one.trans ha.le) hb
 
 alias one_lt_mul := one_lt_mul_of_le_of_lt
@@ -1654,7 +1654,7 @@ lemma mul_lt_one_of_nonneg_of_lt_one_left
 
 中文:
 引理 mul_lt_one_of_nonneg_of_lt_one_left
-  条件: [PosMulMono M₀] (ha₀ : 0 <= a) (ha : a < 1) (hb : b <= 1)
+  条件: [正乘递增 M₀] (ha₀ : 0 <= a) (ha : a < 1) (hb : b <= 1)
   证明: (mul_le_of_le_one_right ha₀ hb).trans_lt ha
 
 Depends on / 依赖: mul_le_of_le_one_right, trans_lt
@@ -1674,7 +1674,7 @@ lemma mul_lt_one_of_nonneg_of_lt_one_right
 
 中文:
 引理 mul_lt_one_of_nonneg_of_lt_one_right
-  条件: [MulPosMono M₀] (ha : a <= 1) (hb₀ : 0 <= b) (hb : b < 1)
+  条件: [乘正递增 M₀] (ha : a <= 1) (hb₀ : 0 <= b) (hb : b < 1)
   证明: (mul_le_of_le_one_left hb₀ ha).trans_lt hb
 
 @[bound]
@@ -1698,7 +1698,7 @@ lemma Bound.one_lt_mul
 
 中文:
 引理 Bound.one_lt_mul
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] [MulPosMono M₀]
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] [乘正递增 M₀]
   证明: by
   rintro (⟨ha, hb⟩ | ⟨ha, hb⟩); exacts [one_lt_mul ha hb, one_lt_mul_of_lt_of_le ha hb]
 
@@ -1720,7 +1720,7 @@ lemma mul_le_one₀
 
 中文:
 引理 mul_le_one₀
-  条件: [MulPosMono M₀] (ha : a <= 1) (hb₀ : 0 <= b) (hb : b <= 1)
+  条件: [乘正递增 M₀] (ha : a <= 1) (hb₀ : 0 <= b) (hb : b <= 1)
   结论: a * b <= 1
   证明: (mul_le_mul_of_nonneg_right ha hb₀).trans by rwa [one_mul]
 
@@ -1739,7 +1739,7 @@ lemma pow_lt_one₀
 
 中文:
 引理 pow_lt_one₀
-  条件: [PosMulMono M₀] (h₀ : 0 <= a) (h₁ : a < 1)
+  条件: [正乘递增 M₀] (h₀ : 0 <= a) (h₁ : a < 1)
   结论: 对任意 {n : 自然数}, n != 0 -> a ^ n < 1
 -/
 lemma pow_lt_one₀ [PosMulMono M₀] (h₀ : 0 <= a) (h₁ : a < 1) : forall {n : Nat}, n != 0 -> a ^ n < 1
@@ -1759,8 +1759,8 @@ lemma pow_right_mono₀
 
 中文:
 引理 pow_right_mono₀
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (h : 1 <= a)
-  结论: Monotone (a ^ ·)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (h : 1 <= a)
+  结论: 递增 (a ^ ·)
   证明: monotone_nat_of_le_succ fun n => by
     rw [pow_succ]; exact le_mul_of_one_le_right (pow_nonneg (zero_le_one.trans h) _) h
 
@@ -1781,7 +1781,7 @@ lemma one_le_pow₀
 
 中文:
 引理 one_le_pow₀
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) {n : 自然数}
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 <= a) {n : 自然数}
   结论: 1 <= a ^ n
   证明: pow_zero a ▸ pow_right_mono₀ ha n.zero_le
 
@@ -1800,7 +1800,7 @@ lemma one_lt_pow₀
 
 中文:
 引理 one_lt_pow₀
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 < a)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 < a)
   结论: 对任意 {n : 自然数}, n != 0 -> 1 < a ^ n
 -/
 lemma one_lt_pow₀ [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 < a) : forall {n : Nat}, n != 0 -> 1 < a ^ n
@@ -1824,7 +1824,7 @@ lemma Bound.pow_le_pow_right_of_le_one_or_one_le
 
 中文:
 引理 Bound.pow_le_pow_right_of_le_one_or_one_le
-  结论: [ZeroLEOneClass M₀] [PosMulMono M₀]
+  结论: [ZeroLEOne类 M₀] [正乘递增 M₀]
   证明: by
   obtain ⟨a1, nm⟩ | ⟨a0, a1, mn⟩ := h
   · exact pow_right_mono₀ a1 nm
@@ -1852,7 +1852,7 @@ lemma pow_le_pow_right₀
 
 中文:
 引理 pow_le_pow_right₀
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) (hmn : m <= n)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 <= a) (hmn : m <= n)
   证明: pow_right_mono₀ ha hmn
 -/
 lemma pow_le_pow_right₀ [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) (hmn : m <= n) :
@@ -1871,7 +1871,7 @@ simpa only [pow_one] using pow_le_pow_right₀ ha Nat.pos_iff_ne_zero.2 hn
 
 中文:
 引理 le_self_pow₀
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) (hn : n != 0)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 <= a) (hn : n != 0)
   结论: a <= a ^ n
   证明: by
 simpa only [pow_one] using pow_le_pow_right₀ ha Nat.pos_iff_ne_zero.2 hn
@@ -1895,7 +1895,7 @@ lemma Bound.le_self_pow_of_pos
 
 中文:
 引理 Bound.le_self_pow_of_pos
-  条件: [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 <= a) (hn : 0 < n)
+  条件: [ZeroLEOne类 M₀] [正乘递增 M₀] (ha : 1 <= a) (hn : 0 < n)
   证明: le_self_pow₀ ha hn.ne'
 
 @[mono, gcongr, bound]
@@ -1915,7 +1915,7 @@ theorem pow_le_pow_left₀
 
 中文:
 定理 pow_le_pow_left₀
-  结论: [PosMulMono M₀] [MulPosMono M₀]
+  结论: [正乘递增 M₀] [乘正递增 M₀]
 -/
 theorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]
     (ha : 0 <= a) (hab : a <= b) : forall n, a ^ n <= b ^ n
@@ -1934,7 +1934,7 @@ lemma pow_left_monotoneOn
 
 中文:
 引理 pow_left_monotoneOn
-  条件: [PosMulMono M₀] [MulPosMono M₀]
+  条件: [正乘递增 M₀] [乘正递增 M₀]
   证明: fun _a ha _b _ hab => pow_le_pow_left₀ ha hab _
 -/
 lemma pow_left_monotoneOn [PosMulMono M₀] [MulPosMono M₀] :
@@ -1954,8 +1954,8 @@ lemma monotone_mul_left_of_nonneg
 
 中文:
 引理 monotone_mul_left_of_nonneg
-  条件: [PosMulMono M₀] (ha : 0 <= a)
-  结论: Monotone fun x => a * x
+  条件: [正乘递增 M₀] (ha : 0 <= a)
+  结论: 递增 fun x => a * x
   证明: fun _ _ h => mul_le_mul_of_nonneg_left h ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_left
@@ -1974,8 +1974,8 @@ lemma monotone_mul_right_of_nonneg
 
 中文:
 引理 monotone_mul_right_of_nonneg
-  条件: [MulPosMono M₀] (ha : 0 <= a)
-  结论: Monotone fun x => x * a
+  条件: [乘正递增 M₀] (ha : 0 <= a)
+  结论: 递增 fun x => x * a
   证明: fun _ _ h => mul_le_mul_of_nonneg_right h ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_right
@@ -1992,8 +1992,8 @@ lemma Monotone.mul_const
   proof: (monotone_mul_right_of_nonneg ha).comp hf
 
 中文:
-引理 Monotone.mul_const
-  条件: [MulPosMono M₀] (hf : Monotone f) (ha : 0 <= a)
+引理 递增.mul_const
+  条件: [乘正递增 M₀] (hf : 递增 f) (ha : 0 <= a)
   证明: (monotone_mul_right_of_nonneg ha).comp hf
 
 Depends on / 依赖: monotone_mul_right_of_nonneg
@@ -2010,8 +2010,8 @@ lemma Monotone.const_mul
   proof: (monotone_mul_left_of_nonneg ha).comp hf
 
 中文:
-引理 Monotone.const_mul
-  条件: [PosMulMono M₀] (hf : Monotone f) (ha : 0 <= a)
+引理 递增.const_mul
+  条件: [正乘递增 M₀] (hf : 递增 f) (ha : 0 <= a)
   证明: (monotone_mul_left_of_nonneg ha).comp hf
 
 Depends on / 依赖: monotone_mul_left_of_nonneg
@@ -2028,8 +2028,8 @@ lemma Antitone.mul_const
   proof: (monotone_mul_right_of_nonneg ha).comp_antitone hf
 
 中文:
-引理 Antitone.mul_const
-  条件: [MulPosMono M₀] (hf : Antitone f) (ha : 0 <= a)
+引理 递减.mul_const
+  条件: [乘正递增 M₀] (hf : 递减 f) (ha : 0 <= a)
   证明: (monotone_mul_right_of_nonneg ha).comp_antitone hf
 
 Depends on / 依赖: comp_antitone, monotone_mul_right_of_nonneg
@@ -2046,8 +2046,8 @@ lemma Antitone.const_mul
   proof: (monotone_mul_left_of_nonneg ha).comp_antitone hf
 
 中文:
-引理 Antitone.const_mul
-  条件: [PosMulMono M₀] (hf : Antitone f) (ha : 0 <= a)
+引理 递减.const_mul
+  条件: [正乘递增 M₀] (hf : 递减 f) (ha : 0 <= a)
   证明: (monotone_mul_left_of_nonneg ha).comp_antitone hf
 
 Depends on / 依赖: comp_antitone, monotone_mul_left_of_nonneg
@@ -2070,7 +2070,7 @@ lemma mul_self_lt_mul_self
 
 中文:
 引理 mul_self_lt_mul_self
-  条件: [PosMulStrictMono M₀] [MulPosMono M₀] (ha : 0 <= a) (hab : a < b)
+  条件: [正乘严格递增 M₀] [乘正递增 M₀] (ha : 0 <= a) (hab : a < b)
   证明: mul_lt_mul' hab.le hab ha ha.trans_lt hab
 
 Depends on / 依赖: ha.trans_lt, hab.le, mul_lt_mul, trans_lt
@@ -2092,7 +2092,7 @@ lemma strictMonoOn_mul_self
 
 中文:
 引理 strictMonoOn_mul_self
-  条件: [PosMulStrictMono M₀] [MulPosMono M₀]
+  条件: [正乘严格递增 M₀] [乘正递增 M₀]
   证明: fun _ hx _ _ hxy => mul_self_lt_mul_self hx hxy
 
 Depends on / 依赖: mul_self_lt_mul_self
@@ -2111,8 +2111,8 @@ lemma Decidable.mul_lt_mul''
     rw [← b0]; rw [mul_zero]; exact mul_pos (h3.trans_lt h1) (h4.trans_lt h2)
 
 中文:
-引理 Decidable.mul_lt_mul''
-  结论: [PosMulMono M₀] [PosMulStrictMono M₀] [MulPosStrictMono M₀]
+引理 可判定.mul_lt_mul''
+  结论: [正乘递增 M₀] [正乘严格递增 M₀] [乘正严格递增 M₀]
   证明: h4.lt_or_eq_dec.elim (fun b0 => mul_lt_mul h1 h2.le b0 <| h3.trans h1.le) fun b0 => by
     rw [← b0]; rw [mul_zero]; exact mul_pos (h3.trans_lt h1) (h4.trans_lt h2)
 -/
@@ -2133,7 +2133,7 @@ lemma lt_mul_left
 
 中文:
 引理 lt_mul_left
-  条件: [MulPosStrictMono M₀] (ha : 0 < a) (hb : 1 < b)
+  条件: [乘正严格递增 M₀] (ha : 0 < a) (hb : 1 < b)
   结论: a < b * a
   证明: by
   simpa using mul_lt_mul_of_pos_right hb ha
@@ -2155,7 +2155,7 @@ lemma lt_mul_right
 
 中文:
 引理 lt_mul_right
-  条件: [PosMulStrictMono M₀] (ha : 0 < a) (hb : 1 < b)
+  条件: [正乘严格递增 M₀] (ha : 0 < a) (hb : 1 < b)
   结论: a < a * b
   证明: by
   simpa using mul_lt_mul_of_pos_left hb ha
@@ -2176,7 +2176,7 @@ lemma lt_mul_self
 
 中文:
 引理 lt_mul_self
-  条件: [ZeroLEOneClass M₀] [MulPosStrictMono M₀] (ha : 1 < a)
+  条件: [ZeroLEOne类 M₀] [乘正严格递增 M₀] (ha : 1 < a)
   结论: a < a * a
   证明: lt_mul_left (ha.trans_le' zero_le_one) ha
 
@@ -2197,7 +2197,7 @@ lemma sq_pos_of_pos
 
 中文:
 引理 sq_pos_of_pos
-  条件: [PosMulStrictMono M₀] (ha : 0 < a)
+  条件: [正乘严格递增 M₀] (ha : 0 < a)
   结论: 0 < a ^ 2
   证明: by
   simpa only [sq] using mul_pos ha ha
@@ -2237,7 +2237,7 @@ lemma pow_pos
 
 中文:
 引理 pow_pos
-  条件: [ZeroLEOneClass M₀] (ha : 0 < a)
+  条件: [ZeroLEOne类 M₀] (ha : 0 < a)
   结论: 对任意 n, 0 < a ^ n
 -/
 @[simp] lemma pow_pos [ZeroLEOneClass M₀] (ha : 0 < a) : forall n, 0 < a ^ n
@@ -2254,7 +2254,7 @@ lemma pow_lt_pow_left₀
 
 中文:
 引理 pow_lt_pow_left₀
-  结论: [MulPosMono M₀] (hab : a < b)
+  结论: [乘正递增 M₀] (hab : a < b)
 -/
 lemma pow_lt_pow_left₀ [MulPosMono M₀] (hab : a < b)
     (ha : 0 <= a) : forall {n : Nat}, n != 0 -> a ^ n < b ^ n
@@ -2273,7 +2273,7 @@ lemma pow_left_strictMonoOn₀
 
 中文:
 引理 pow_left_strictMonoOn₀
-  条件: [MulPosMono M₀] (hn : n != 0)
+  条件: [乘正递增 M₀] (hn : n != 0)
   证明: fun _a ha _b _ hab => pow_lt_pow_left₀ hab ha hn
 -/
 lemma pow_left_strictMonoOn₀ [MulPosMono M₀] (hn : n != 0) :
@@ -2299,7 +2299,7 @@ lemma pow_right_strictMono₀
 中文:
 引理 pow_right_strictMono₀
   条件: (h : 1 < a)
-  结论: StrictMono (a ^ ·)
+  结论: 严格递增 (a ^ ·)
   证明: strictMono_nat_of_lt_succ fun n => by
     simpa only [one_mul, pow_succ] using lt_mul_right (pow_pos (zero_le_one.trans_lt h) _) h
 
@@ -2407,7 +2407,7 @@ lemma pow_right_strictAnti₀
 中文:
 引理 pow_right_strictAnti₀
   条件: (h₀ : 0 < a) (h₁ : a < 1)
-  结论: StrictAnti (a ^ ·)
+  结论: 严格递减 (a ^ ·)
   证明: strictAnti_nat_of_succ_lt fun n => by
     have : ZeroLEOneClass M₀ := ⟨(h₀.trans h₁).le⟩
     simpa only [pow_succ, mul_one] using mul_lt_mul_of_pos_left h₁ (pow_pos h₀ n)
@@ -2513,7 +2513,7 @@ lemma strictMono_mul_left_of_pos
 
 中文:
 引理 strictMono_mul_left_of_pos
-  条件: [PosMulStrictMono M₀] (ha : 0 < a)
+  条件: [正乘严格递增 M₀] (ha : 0 < a)
   证明: fun _ _ b_lt_c => mul_lt_mul_of_pos_left b_lt_c ha
 
 Depends on / 依赖: b_lt_c, mul_lt_mul_of_pos_left
@@ -2531,7 +2531,7 @@ lemma strictMono_mul_right_of_pos
 
 中文:
 引理 strictMono_mul_right_of_pos
-  条件: [MulPosStrictMono M₀] (ha : 0 < a)
+  条件: [乘正严格递增 M₀] (ha : 0 < a)
   证明: fun _ _ b_lt_c => mul_lt_mul_of_pos_right b_lt_c ha
 
 Depends on / 依赖: b_lt_c, mul_lt_mul_of_pos_right
@@ -2548,8 +2548,8 @@ lemma StrictMono.mul_const
   proof: (strictMono_mul_right_of_pos ha).comp hf
 
 中文:
-引理 StrictMono.mul_const
-  条件: [MulPosStrictMono M₀] (hf : StrictMono f) (ha : 0 < a)
+引理 严格递增.mul_const
+  条件: [乘正严格递增 M₀] (hf : 严格递增 f) (ha : 0 < a)
   证明: (strictMono_mul_right_of_pos ha).comp hf
 
 Depends on / 依赖: strictMono_mul_right_of_pos
@@ -2566,8 +2566,8 @@ lemma StrictMono.const_mul
   proof: (strictMono_mul_left_of_pos ha).comp hf
 
 中文:
-引理 StrictMono.const_mul
-  条件: [PosMulStrictMono M₀] (hf : StrictMono f) (ha : 0 < a)
+引理 严格递增.const_mul
+  条件: [正乘严格递增 M₀] (hf : 严格递增 f) (ha : 0 < a)
   证明: (strictMono_mul_left_of_pos ha).comp hf
 
 Depends on / 依赖: strictMono_mul_left_of_pos
@@ -2584,8 +2584,8 @@ lemma StrictAnti.mul_const
   proof: (strictMono_mul_right_of_pos ha).comp_strictAnti hf
 
 中文:
-引理 StrictAnti.mul_const
-  条件: [MulPosStrictMono M₀] (hf : StrictAnti f) (ha : 0 < a)
+引理 严格递减.mul_const
+  条件: [乘正严格递增 M₀] (hf : 严格递减 f) (ha : 0 < a)
   证明: (strictMono_mul_right_of_pos ha).comp_strictAnti hf
 
 Depends on / 依赖: comp_strictAnti, strictMono_mul_right_of_pos
@@ -2602,8 +2602,8 @@ lemma StrictAnti.const_mul
   proof: (strictMono_mul_left_of_pos ha).comp_strictAnti hf
 
 中文:
-引理 StrictAnti.const_mul
-  条件: [PosMulStrictMono M₀] (hf : StrictAnti f) (ha : 0 < a)
+引理 严格递减.const_mul
+  条件: [正乘严格递增 M₀] (hf : 严格递减 f) (ha : 0 < a)
   证明: (strictMono_mul_left_of_pos ha).comp_strictAnti hf
 
 Depends on / 依赖: comp_strictAnti, strictMono_mul_left_of_pos
@@ -2620,8 +2620,8 @@ lemma StrictMono.mul_monotone
   proof: fun _ _ h => mul_lt_mul (hf h) (hg h.le) (hg₀ _) (hf₀ _)
 
 中文:
-引理 StrictMono.mul_monotone
-  结论: [PosMulMono M₀] [MulPosStrictMono M₀] (hf : StrictMono f)
+引理 严格递增.mul_monotone
+  结论: [正乘递增 M₀] [乘正严格递增 M₀] (hf : 严格递增 f)
   证明: fun _ _ h => mul_lt_mul (hf h) (hg h.le) (hg₀ _) (hf₀ _)
 
 Depends on / 依赖: h.le, mul_lt_mul
@@ -2639,8 +2639,8 @@ lemma Monotone.mul_strictMono
   proof: fun _ _ h => mul_lt_mul' (hf h.le) (hg h) (hg₀ _) (hf₀ _)
 
 中文:
-引理 Monotone.mul_strictMono
-  结论: [PosMulStrictMono M₀] [MulPosMono M₀] (hf : Monotone f)
+引理 递增.mul_strictMono
+  结论: [正乘严格递增 M₀] [乘正递增 M₀] (hf : 递增 f)
   证明: fun _ _ h => mul_lt_mul' (hf h.le) (hg h) (hg₀ _) (hf₀ _)
 
 Depends on / 依赖: h.le, mul_lt_mul
@@ -2658,8 +2658,8 @@ lemma StrictMono.mul
   proof: fun _ _ h => mul_lt_mul'' (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 中文:
-引理 StrictMono.mul
-  结论: [PosMulStrictMono M₀] [MulPosStrictMono M₀] (hf : StrictMono f)
+引理 严格递增.mul
+  结论: [正乘严格递增 M₀] [乘正严格递增 M₀] (hf : 严格递增 f)
   证明: fun _ _ h => mul_lt_mul'' (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 Depends on / 依赖: mul_lt_mul
@@ -2684,7 +2684,7 @@ lemma pow_le_pow_iff_left₀
 
 中文:
 引理 pow_le_pow_iff_left₀
-  条件: [MulPosMono M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
+  条件: [乘正递增 M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
   证明: (pow_left_strictMonoOn₀ hn).le_iff_le ha hb
 
 Depends on / 依赖: le_iff_le
@@ -2705,7 +2705,7 @@ lemma pow_lt_pow_iff_left₀
 
 中文:
 引理 pow_lt_pow_iff_left₀
-  条件: [MulPosMono M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
+  条件: [乘正递增 M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
   证明: (pow_left_strictMonoOn₀ hn).lt_iff_lt ha hb
 
 @[simp]
@@ -2727,7 +2727,7 @@ lemma pow_left_inj₀
 
 中文:
 引理 pow_left_inj₀
-  条件: [MulPosMono M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
+  条件: [乘正递增 M₀] (ha : 0 <= a) (hb : 0 <= b) (hn : n != 0)
   证明: (pow_left_strictMonoOn₀ hn).eq_iff_eq ha hb
 
 Depends on / 依赖: eq_iff_eq
@@ -2757,7 +2757,7 @@ lemma pow_right_injective₀
 中文:
 引理 pow_right_injective₀
   条件: (ha₀ : 0 < a) (ha₁ : a != 1)
-  结论: Injective (a ^ ·)
+  结论: 单射 (a ^ ·)
   证明: by
   obtain ha₁ | ha₁ := ha₁.lt_or_gt
   · exact (pow_right_strictAnti₀ ha₀ ha₁).injective
@@ -3139,8 +3139,8 @@ theorem PosMulMono.toPosMulStrictMono
   proof: (mul_le_mul_of_nonneg_left hbc.le ha.le).lt_of_ne (hbc.ne ∘ mul_left_cancel₀ ha.ne')
 
 中文:
-定理 PosMulMono.toPosMulStrictMono
-  条件: [IsLeftCancelMulZero α] [PosMulMono α]
+定理 正乘递增.toPosMulStrictMono
+  条件: [是左消去MulZero α] [正乘递增 α]
   证明: (mul_le_mul_of_nonneg_left hbc.le ha.le).lt_of_ne (hbc.ne ∘ mul_left_cancel₀ ha.ne')
 
 Depends on / 依赖: ha.le, ha.ne, hbc.le, hbc.ne, lt_of_ne, mul_le_mul_of_nonneg_left
@@ -3160,7 +3160,7 @@ theorem posMulMono_iff_posMulStrictMono
 
 中文:
 定理 posMulMono_iff_posMulStrictMono
-  条件: [IsLeftCancelMulZero α]
+  条件: [是左消去MulZero α]
   证明: ⟨(·.toPosMulStrictMono), (·.toPosMulMono)⟩
 
 Depends on / 依赖: toPosMulMono, toPosMulStrictMono
@@ -3178,8 +3178,8 @@ theorem MulPosMono.toMulPosStrictMono
   proof: (mul_le_mul_of_nonneg_right hbc.le ha.le).lt_of_ne (hbc.ne ∘ mul_right_cancel₀ ha.ne')
 
 中文:
-定理 MulPosMono.toMulPosStrictMono
-  条件: [IsRightCancelMulZero α] [MulPosMono α]
+定理 乘正递增.toMulPosStrictMono
+  条件: [是右消去MulZero α] [乘正递增 α]
   证明: (mul_le_mul_of_nonneg_right hbc.le ha.le).lt_of_ne (hbc.ne ∘ mul_right_cancel₀ ha.ne')
 
 Depends on / 依赖: ha.le, ha.ne, hbc.le, hbc.ne, lt_of_ne, mul_le_mul_of_nonneg_right
@@ -3199,7 +3199,7 @@ theorem mulPosMono_iff_mulPosStrictMono
 
 中文:
 定理 mulPosMono_iff_mulPosStrictMono
-  条件: [IsRightCancelMulZero α]
+  条件: [是右消去MulZero α]
   证明: ⟨(·.toMulPosStrictMono), (·.toMulPosMono)⟩
 
 Depends on / 依赖: toMulPosMono, toMulPosStrictMono
@@ -3219,8 +3219,8 @@ theorem PosMulReflectLT.toPosMulReflectLE
       (lt_of_mul_lt_mul_left h' x.2.le).le
 
 中文:
-定理 PosMulReflectLT.toPosMulReflectLE
-  条件: [IsLeftCancelMulZero α] [PosMulReflectLT α]
+定理 正乘反映严格偏序.toPosMulReflectLE
+  条件: [是左消去MulZero α] [正乘反映严格偏序 α]
   证明: fun x _ _ h =>
     h.eq_or_lt.elim (le_of_eq ∘ mul_left_cancel₀ x.2.ne.symm) fun h' =>
       (lt_of_mul_lt_mul_left h' x.2.le).le
@@ -3241,7 +3241,7 @@ theorem posMulReflectLE_iff_posMulReflectLT
 
 中文:
 定理 posMulReflectLE_iff_posMulReflectLT
-  条件: [IsLeftCancelMulZero α]
+  条件: [是左消去MulZero α]
   证明: ⟨(·.toPosMulReflectLT), (·.toPosMulReflectLE)⟩
 
 Depends on / 依赖: toPosMulReflectLE, toPosMulReflectLT
@@ -3260,8 +3260,8 @@ theorem MulPosReflectLT.toMulPosReflectLE
     (lt_of_mul_lt_mul_right h' x.2.le).le
 
 中文:
-定理 MulPosReflectLT.toMulPosReflectLE
-  条件: [IsRightCancelMulZero α] [MulPosReflectLT α]
+定理 乘正反映严格偏序.toMulPosReflectLE
+  条件: [是右消去MulZero α] [乘正反映严格偏序 α]
   证明: fun x _ _ h => h.eq_or_lt.elim (le_of_eq ∘ mul_right_cancel₀ x.2.ne.symm) fun h' =>
     (lt_of_mul_lt_mul_right h' x.2.le).le
 
@@ -3282,7 +3282,7 @@ theorem mulPosReflectLE_iff_mulPosReflectLT
 
 中文:
 定理 mulPosReflectLE_iff_mulPosReflectLT
-  条件: [IsRightCancelMulZero α]
+  条件: [是右消去MulZero α]
   证明: ⟨(·.toMulPosReflectLT), (·.toMulPosReflectLE)⟩
 
 Depends on / 依赖: toMulPosReflectLE, toMulPosReflectLT
@@ -3700,8 +3700,8 @@ theorem PosMulReflectLT.toPosMulStrictMono
   proof: lt_of_mul_lt_mul_left (by simpa [ha.ne']) (inv_pos_of_pos ha).le
 
 中文:
-定理 PosMulReflectLT.toPosMulStrictMono
-  结论: PosMulStrictMono G₀ where
+定理 正乘反映严格偏序.toPosMulStrictMono
+  结论: 正乘严格递增 G₀ where
   证明: lt_of_mul_lt_mul_left (by simpa [ha.ne']) (inv_pos_of_pos ha).le
 
 Depends on / 依赖: ha.ne, inv_pos_of_pos, lt_of_mul_lt_mul_left
@@ -3723,9 +3723,9 @@ theorem MulPosReflectLE.of_posMulReflectLT_of_mulPosMono
     simpa [ha.ne'] using mul_le_mul_of_nonneg_right h (inv_nonneg.2 ha.le)
 
 中文:
-定理 MulPosReflectLE.of_posMulReflectLT_of_mulPosMono
-  条件: [MulPosMono G₀]
-  结论: MulPosReflectLE G₀ where
+定理 乘正反映偏序.of_posMulReflectLT_of_mulPosMono
+  条件: [乘正递增 G₀]
+  结论: 乘正反映偏序 G₀ where
   证明: by
     rintro ⟨a, ha⟩ b c h
     simpa [ha.ne'] using mul_le_mul_of_nonneg_right h (inv_nonneg.2 ha.le)
@@ -4288,7 +4288,7 @@ lemma zpow_right_mono₀
 中文:
 引理 zpow_right_mono₀
   条件: (ha : 1 <= a)
-  结论: Monotone fun n : 整数 => a ^ n
+  结论: 递增 fun n : 整数 => a ^ n
   证明: by
   refine monotone_int_of_le_succ fun n => ?_
   rw [zpow_add_one₀ (zero_lt_one.trans_le ha).ne']
@@ -4316,7 +4316,7 @@ lemma zpow_right_anti₀
 中文:
 引理 zpow_right_anti₀
   条件: (ha₀ : 0 < a) (ha₁ : a <= 1)
-  结论: Antitone fun n : 整数 => a ^ n
+  结论: 递减 fun n : 整数 => a ^ n
   证明: by
   refine antitone_int_of_succ_le fun n => ?_
   rw [zpow_add_one₀ ha₀.ne']
@@ -4344,7 +4344,7 @@ lemma zpow_right_strictMono₀
 中文:
 引理 zpow_right_strictMono₀
   条件: (ha : 1 < a)
-  结论: StrictMono fun n : 整数 => a ^ n
+  结论: 严格递增 fun n : 整数 => a ^ n
   证明: by
   refine strictMono_int_of_lt_succ fun n => ?_
   rw [zpow_add_one₀ (zero_lt_one.trans ha).ne']
@@ -4374,7 +4374,7 @@ lemma zpow_right_strictAnti₀
 中文:
 引理 zpow_right_strictAnti₀
   条件: (ha₀ : 0 < a) (ha₁ : a < 1)
-  结论: StrictAnti fun n : 整数 => a ^ n
+  结论: 严格递减 fun n : 整数 => a ^ n
   证明: by
   refine strictAnti_int_of_succ_lt fun n => ?_
   rw [zpow_add_one₀ ha₀.ne']
@@ -4994,8 +4994,8 @@ theorem _root_.MulPosReflectLT.toMulPosStrictMono
   proof: lt_of_mul_lt_mul_right (by simpa [ha.ne']) (inv_pos.2 ha).le
 
 中文:
-定理 _root_.MulPosReflectLT.toMulPosStrictMono
-  结论: MulPosStrictMono G₀ where
+定理 _root_.乘正反映严格偏序.toMulPosStrictMono
+  结论: 乘正严格递增 G₀ where
   证明: lt_of_mul_lt_mul_right (by simpa [ha.ne']) (inv_pos.2 ha).le
 
 Depends on / 依赖: ha.ne, inv_pos, lt_of_mul_lt_mul_right
@@ -5499,7 +5499,7 @@ lemma mul_inv_le_one_of_le₀
 
 中文:
 引理 mul_inv_le_one_of_le₀
-  条件: [ZeroLEOneClass G₀] (h : a <= b) (hb : 0 <= b)
+  条件: [ZeroLEOne类 G₀] (h : a <= b) (hb : 0 <= b)
   结论: a * b⁻¹ <= 1
   证明: mul_inv_le_of_le_mul₀ hb zero_le_one by rwa [one_mul]
 
@@ -5524,7 +5524,7 @@ lemma div_le_one_of_le₀
 
 中文:
 引理 div_le_one_of_le₀
-  条件: [ZeroLEOneClass G₀] (h : a <= b) (hb : 0 <= b)
+  条件: [ZeroLEOne类 G₀] (h : a <= b) (hb : 0 <= b)
   结论: a / b <= 1
   证明: div_le_of_le_mul₀ hb zero_le_one by rwa [one_mul]
 
@@ -6307,7 +6307,7 @@ lemma zpow_right_injective₀
 中文:
 引理 zpow_right_injective₀
   条件: (ha₀ : 0 < a) (ha₁ : a != 1)
-  结论: Injective fun n : 整数 => a ^ n
+  结论: 单射 fun n : 整数 => a ^ n
   证明: by
   obtain ha₁ | ha₁ := ha₁.lt_or_gt
   · exact (zpow_right_strictAnti₀ ha₀ ha₁).injective
@@ -6426,7 +6426,7 @@ lemma zpow_left_injOn₀
 
 中文:
 引理 zpow_left_injOn₀
-  结论: 对任意 {n : 整数}, n != 0 -> {a | 0 <= a}.InjOn fun a : G₀ => a ^ n
+  结论: 对任意 {n : 整数}, n != 0 -> {a | 0 <= a}.单射限制 fun a : G₀ => a ^ n
 -/
 lemma zpow_left_injOn₀ : forall {n : Int}, n != 0 -> {a | 0 <= a}.InjOn fun a : G₀ => a ^ n
   | (n + 1 : Nat), _ => by simpa using! mod_cast (pow_left_strictMonoOn₀ n.succ_ne_zero).injOn

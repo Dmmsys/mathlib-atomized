@@ -54,7 +54,7 @@ definition IsHomogeneous
 
 中文:
 定义 IsHomogeneous
-  签名: [CommSemiring R] (φ : MvPolynomial σ R) (n : 自然数)
+  签名: [交换半环 R] (φ : 多元多项式 σ R) (n : 自然数)
   定义体: IsWeightedHomogeneous 1 φ n
 
 Depends on / 依赖: IsWeightedHomogeneous
@@ -78,7 +78,7 @@ theorem weightedTotalDegree_singleton
 
 中文:
 定理 weightedTotalDegree_singleton
-  条件: [DecidableEq σ] (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p : 多元多项式 σ R)
   证明: by
   rw [degrees_def]; rfl
 
@@ -101,7 +101,7 @@ theorem weightedTotalDegree_one
 
 中文:
 定理 weightedTotalDegree_one
-  条件: (φ : MvPolynomial σ R)
+  条件: (φ : 多元多项式 σ R)
   证明: by
   simp only [totalDegree, weightedTotalDegree, weight, LinearMap.toAddMonoidHom_coe,
     linearCombination, Pi.one_apply, Finsupp.coe_lsum, LinearMap.coe_smulRight, LinearMap.id_coe,
@@ -132,7 +132,7 @@ theorem weightedTotalDegree_piSingle
 
 中文:
 定理 weightedTotalDegree_piSingle
-  条件: [DecidableEq σ] (i : σ) (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (i : σ) (p : 多元多项式 σ R)
   证明: by
   simp only [weightedTotalDegree, weight, linearCombination, Pi.single_apply, degreeOf, degrees,
     Multiset.count_finset_sup]
@@ -236,7 +236,7 @@ theorem mem_homogeneousSubmodule
 
 中文:
 定理 mem_homogeneousSubmodule
-  条件: (n : 自然数) (p : MvPolynomial σ R)
+  条件: (n : 自然数) (p : 多元多项式 σ R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -280,7 +280,7 @@ lemma homogeneousSubmodule_fg
 
 中文:
 引理 homogeneousSubmodule_fg
-  条件: [Finite σ] (n : 自然数)
+  条件: [有限 σ] (n : 自然数)
   证明: weightedHomogeneousSubmodule_fg R (1 : σ -> Nat) (by simp) n
 
 Depends on / 依赖: weightedHomogeneousSubmodule_fg
@@ -377,7 +377,7 @@ theorem totalDegree_eq_zero_iff
 
 中文:
 定理 totalDegree_eq_zero_iff
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   rw [← weightedTotalDegree_one]; rw [weightedTotalDegree_eq_zero_iff _ p]
   exact nonTorsionWeight_of (Function.const σ one_ne_zero)
@@ -404,7 +404,7 @@ alias ⟨isHomogeneous_of_totalDegree_zero, _⟩ := totalDegree_zero_iff_isHomog
 
 中文:
 定理 totalDegree_zero_iff_isHomogeneous
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   证明: by
   rw [← weightedTotalDegree_one]; rw [← isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero]; rw [IsHomogeneous]
 
@@ -460,7 +460,7 @@ theorem isHomogeneous_C
 中文:
 定理 isHomogeneous_C
   条件: (r : R)
-  结论: IsHomogeneous (C r : MvPolynomial σ R) 0
+  结论: IsHomogeneous (C r : 多元多项式 σ R) 0
   证明: by
   apply isHomogeneous_monomial
   simp only [degree_apply, Finsupp.support_zero, zero_apply, Finset.sum_const_zero]
@@ -485,7 +485,7 @@ theorem isHomogeneous_zero
 中文:
 定理 isHomogeneous_zero
   条件: (n : 自然数)
-  结论: IsHomogeneous (0 : MvPolynomial σ R) n
+  结论: IsHomogeneous (0 : 多元多项式 σ R) n
   证明: (homogeneousSubmodule σ R n).zero_mem
 
 Depends on / 依赖: homogeneousSubmodule, zero_mem
@@ -503,7 +503,7 @@ theorem isHomogeneous_one
 
 中文:
 定理 isHomogeneous_one
-  结论: IsHomogeneous (1 : MvPolynomial σ R) 0
+  结论: IsHomogeneous (1 : 多元多项式 σ R) 0
   证明: isHomogeneous_C _ _
 
 Depends on / 依赖: isHomogeneous_C
@@ -524,7 +524,7 @@ lemma isHomogeneous_of_isEmpty
 
 中文:
 引理 isHomogeneous_of_isEmpty
-  条件: [IsEmpty σ] (f : MvPolynomial σ R)
+  条件: [是空 σ] (f : 多元多项式 σ R)
   结论: f.IsHomogeneous 0
   证明: by
   rw [eq_C_of_isEmpty f]
@@ -553,7 +553,7 @@ theorem isHomogeneous_X
 中文:
 定理 isHomogeneous_X
   条件: (i : σ)
-  结论: IsHomogeneous (X i : MvPolynomial σ R) 1
+  结论: IsHomogeneous (X i : 多元多项式 σ R) 1
   证明: by
   apply isHomogeneous_monomial
   simp only [degree_apply, Finsupp.support_single _ one_ne_zero, Finset.sum_singleton,
@@ -735,8 +735,8 @@ theorem sum
   proof: (homogeneousSubmodule σ R n).sum_mem h
 
 中文:
-定理 sum
-  结论: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R) (n : 自然数)
+定理 求和
+  结论: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R) (n : 自然数)
   证明: (homogeneousSubmodule σ R n).sum_mem h
 
 Depends on / 依赖: homogeneousSubmodule, sum_mem
@@ -784,8 +784,8 @@ theorem prod
     grind
 
 中文:
-定理 prod
-  结论: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R) (n : ι -> 自然数)
+定理 乘积
+  结论: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R) (n : ι -> 自然数)
   证明: by
   classical
   revert h
@@ -841,7 +841,7 @@ lemma _root_.MvPolynomial.isHomogeneous_C_mul_X
   proof: (isHomogeneous_X _ _).C_mul _
 
 中文:
-引理 _root_.MvPolynomial.isHomogeneous_C_mul_X
+引理 _root_.多元多项式.isHomogeneous_C_mul_X
   条件: (r : R) (i : σ)
   证明: (isHomogeneous_X _ _).C_mul _
 
@@ -889,7 +889,7 @@ lemma _root_.MvPolynomial.isHomogeneous_X_pow
   simpa only [one_mul] using (isHomogeneous_X _ _).pow n
 
 中文:
-引理 _root_.MvPolynomial.isHomogeneous_X_pow
+引理 _root_.多元多项式.isHomogeneous_X_pow
   条件: (i : σ) (n : 自然数)
   证明: by
   simpa only [one_mul] using (isHomogeneous_X _ _).pow n
@@ -909,7 +909,7 @@ lemma _root_.MvPolynomial.isHomogeneous_C_mul_X_pow
   proof: (isHomogeneous_X_pow _ _).C_mul _
 
 中文:
-引理 _root_.MvPolynomial.isHomogeneous_C_mul_X_pow
+引理 _root_.多元多项式.isHomogeneous_C_mul_X_pow
   条件: (r : R) (i : σ) (n : 自然数)
   证明: (isHomogeneous_X_pow _ _).C_mul _
 
@@ -937,7 +937,7 @@ lemma eval₂
 
 中文:
 引理 eval₂
-  结论: (hφ : φ.IsHomogeneous m) (f : R ->+* MvPolynomial τ S) (g : σ -> MvPolynomial τ S)
+  结论: (hφ : φ.IsHomogeneous m) (f : R ->+* 多元多项式 τ S) (g : σ -> 多元多项式 τ S)
   证明: by
   apply IsHomogeneous.sum
   intro i hi
@@ -997,7 +997,7 @@ lemma of_map
 
 中文:
 引理 of_map
-  结论: {f : R ->+* S} (hf : Function.Injective f)
+  结论: {f : R ->+* S} (hf : 函数.单射 f)
   证明: fun u hu => h (coeff_map f φ u ▸ map_zero f ▸ hf.ne hu)
 
 Depends on / 依赖: coeff_map, hf.ne, map_zero
@@ -1016,7 +1016,7 @@ lemma aeval
 
 中文:
 引理 aeval
-  结论: [Algebra R S] (hφ : φ.IsHomogeneous m)
+  结论: [代数 R S] (hφ : φ.IsHomogeneous m)
   证明: hφ.eval₂ _ _ (fun _ => isHomogeneous_C _ _) hg
 
 Depends on / 依赖: isHomogeneous_C
@@ -1217,7 +1217,7 @@ theorem rename_isHomogeneous_iff
 
 中文:
 定理 rename_isHomogeneous_iff
-  条件: {f : σ -> τ} (hf : f.Injective)
+  条件: {f : σ -> τ} (hf : f.单射)
   证明: by
   refine ⟨fun h d hd => ?_, rename_isHomogeneous⟩
   convert! ← @h (d.mapDomain f) _
@@ -1251,7 +1251,7 @@ lemma finSuccEquiv_coeff_isHomogeneous
 
 中文:
 引理 finSuccEquiv_coeff_isHomogeneous
-  结论: {N : 自然数} {φ : MvPolynomial (Fin (N + 1)) R} {n : 自然数}
+  结论: {N : 自然数} {φ : 多元多项式 (有限集 (N + 1)) R} {n : 自然数}
   证明: by
   intro d hd
   rw [finSuccEquiv_coeff_coeff] at hd
@@ -1335,7 +1335,7 @@ lemma exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
   have aux : forall i in Finset.range n, constantCoeff ((finSuccEquiv R N F).
 
 中文:
-引理 exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
+引理 存在_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
   证明: by
   have hF₀ : F != 0 := by contrapose hFn; simp [hFn]
   have hdeg : natDegree (finSuccEquiv R N F) < n + 1 := by
@@ -1403,8 +1403,8 @@ lemma exists_eval_ne_zero_of_totalDegree_le_card_aux
       linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDe
 
 中文:
-引理 exists_eval_ne_zero_of_totalDegree_le_card_aux
-  结论: {N : 自然数} {F : MvPolynomial (Fin N) R} {n : 自然数}
+引理 存在_eval_ne_zero_of_totalDegree_le_card_aux
+  结论: {N : 自然数} {F : 多元多项式 (有限集 N) R} {n : 自然数}
   证明: by
   induction N generalizing n with
   | zero =>
@@ -1472,7 +1472,7 @@ lemma eq_zero_of_forall_eval_eq_zero_of_le_card
   obtain ⟨r, hr⟩ := exists_eval_ne_zero_of_totalDegree_le_card_a
 
 中文:
-引理 eq_zero_of_forall_eval_eq_zero_of_le_card
+引理 eq_zero_of_对任意_eval_eq_zero_of_le_card
   证明: by
   contrapose! h
   -- reduce to the case where σ is finite
@@ -1535,8 +1535,8 @@ lemma eq_zero_of_forall_eval_eq_zero
 exact Cardinal.natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite R›
 
 中文:
-引理 eq_zero_of_forall_eval_eq_zero
-  结论: [Infinite R] {F : MvPolynomial σ R} {n : 自然数}
+引理 eq_zero_of_对任意_eval_eq_zero
+  结论: [无限 R] {F : 多元多项式 σ R} {n : 自然数}
   证明: by
   apply eq_zero_of_forall_eval_eq_zero_of_le_card hF h
 exact Cardinal.natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite R›
@@ -1560,7 +1560,7 @@ exact Cardinal.natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite R›
 
 中文:
 引理 funext
-  结论: [Infinite R] {F G : MvPolynomial σ R} {n : 自然数}
+  结论: [无限 R] {F G : 多元多项式 σ R} {n : 自然数}
   证明: by
   apply funext_of_le_card hF hG h
 exact Cardinal.natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite R›
@@ -1585,8 +1585,8 @@ instance HomogeneousSubmodule.gcommSemiring
   mul_mem _ _ _ _ := IsHomogeneous.mul
 
 中文:
-实例 HomogeneousSubmodule.gcommSemiring
-  签名: : SetLike.GradedMonoid (homogeneousSubmodule σ R) where
+实例 齐次子模.gcommSemiring
+  签名: : 集合状.分次幺半群 (homogeneousSubmodule σ R) where
   定义体: isHomogeneous_one σ R
   mul_mem _ _ _ _ := IsHomogeneous.mul
 
@@ -1843,7 +1843,7 @@ theorem homogeneousComponent_of_mem
 
 中文:
 定理 homogeneousComponent_of_mem
-  结论: {m n : 自然数} {p : MvPolynomial σ R}
+  结论: {m n : 自然数} {p : 多元多项式 σ R}
   证明: weightedHomogeneousComponent_of_mem h
 
 Depends on / 依赖: weightedHomogeneousComponent_of_mem
@@ -1864,7 +1864,7 @@ lemma homogeneousComponent_eq_self
 
 中文:
 引理 homogeneousComponent_eq_self
-  结论: {n : 自然数} {p : MvPolynomial σ R}
+  结论: {n : 自然数} {p : 多元多项式 σ R}
   证明: by
   simp [homogeneousComponent_of_mem hp]
 
@@ -1886,7 +1886,7 @@ lemma support_homogeneousComponent
 
 中文:
 引理 support_homogeneousComponent
-  条件: (n : 自然数) (p : MvPolynomial σ R)
+  条件: (n : 自然数) (p : 多元多项式 σ R)
   证明: by
   rw [degree_eq_weight_one]
   exact support_weightedHomogeneousComponent n p
@@ -1913,7 +1913,7 @@ lemma rename_homogeneousComponent
 
 中文:
 引理 rename_homogeneousComponent
-  条件: {τ : 类型} {φ : σ -> τ} (n : 自然数) (p : MvPolynomial σ R)
+  条件: {τ : 类型} {φ : σ -> τ} (n : 自然数) (p : 多元多项式 σ R)
   证明: by
   induction p using MvPolynomial.induction_on' with
   | monomial d c =>
@@ -1946,7 +1946,7 @@ lemma HomogeneousSubmodule.gradedMonoid
   proof: WeightedHomogeneousSubmodule.gradedMonoid
 
 中文:
-引理 HomogeneousSubmodule.gradedMonoid
+引理 齐次子模.gradedMonoid
   证明: WeightedHomogeneousSubmodule.gradedMonoid
 
 Depends on / 依赖: WeightedHomogeneousSubmodule, WeightedHomogeneousSubmodule.gradedMonoid, gradedMonoid
@@ -1984,7 +1984,7 @@ abbreviation gradedAlgebra
 
 中文:
 缩写 gradedAlgebra
-  签名: : GradedAlgebra (homogeneousSubmodule σ R)
+  签名: : 分次代数 (homogeneousSubmodule σ R)
   定义体: fast_instance% weightedGradedAlgebra R (1 : σ -> Nat)
 
 Depends on / 依赖: fast_instance, weightedGradedAlgebra
@@ -2002,7 +2002,7 @@ theorem decomposition.decompose'_apply
 
 中文:
 定理 decomposition.decompose'_apply
-  条件: (φ : MvPolynomial σ R) (i : 自然数)
+  条件: (φ : 多元多项式 σ R) (i : 自然数)
   证明: weightedDecomposition.decompose'_apply R _ φ i
 
 Depends on / 依赖: _apply, decompose, weightedDecomposition, weightedDecomposition.decompose
@@ -2045,7 +2045,7 @@ lemma mem_iff_homogeneousComponent_mem
 
 中文:
 引理 mem_iff_homogeneousComponent_mem
-  结论: {I : Ideal (MvPolynomial σ R)}
+  结论: {I : 理想 (多元多项式 σ R)}
   证明: mem_iff_weightedHomogeneousComponent_mem R (1 : σ -> Nat) h p
 
 Depends on / 依赖: mem_iff_weightedHomogeneousComponent_mem
@@ -2065,7 +2065,7 @@ lemma homogeneousComponent_mem_of_mem
 
 中文:
 引理 homogeneousComponent_mem_of_mem
-  结论: {I : Ideal (MvPolynomial σ R)}
+  结论: {I : 理想 (多元多项式 σ R)}
   证明: weightedHomogeneousComponent_mem_of_mem R (1 : σ -> Nat) h hp n
 
 Depends on / 依赖: weightedHomogeneousComponent_mem_of_mem
@@ -2090,8 +2090,8 @@ lemma Ideal.span_eq_map_homogeneousSubmodule
     Function.comp_def]
 
 中文:
-引理 Ideal.span_eq_map_homogeneousSubmodule
-  结论: {ι R : 类型} [CommSemiring R]
+引理 理想.span_eq_map_homogeneousSubmodule
+  结论: {ι R : 类型} [交换半环 R]
   证明: by
   simp [MvPolynomial.homogeneousSubmodule_one_eq_span_X, Submodule.map_span, ← Set.range_comp,
     Function.comp_def]
@@ -2116,8 +2116,8 @@ lemma Ideal.span_pow_eq_map_homogeneousSubmodule
   rw [← MvPolynomial.homogeneousSubmodule_one_pow]; rw [Submodule.map_pow]; rw [Ideal.span_eq_map_homogeneousSubmodule]
 
 中文:
-引理 Ideal.span_pow_eq_map_homogeneousSubmodule
-  结论: {ι R : 类型} [CommSemiring R]
+引理 理想.span_pow_eq_map_homogeneousSubmodule
+  结论: {ι R : 类型} [交换半环 R]
   证明: by
   rw [← MvPolynomial.homogeneousSubmodule_one_pow]; rw [Submodule.map_pow]; rw [Ideal.span_eq_map_homogeneousSubmodule]
 
@@ -2140,8 +2140,8 @@ lemma Ideal.mem_span_pow_iff_exists_isHomogeneous
   simp [Ideal.span_pow_eq_map_homogeneousSubmodule]
 
 中文:
-引理 Ideal.mem_span_pow_iff_exists_isHomogeneous
-  结论: {ι R : 类型} [CommSemiring R] {n : 自然数} (x : ι -> R)
+引理 理想.mem_span_pow_iff_存在_isHomogeneous
+  结论: {ι R : 类型} [交换半环 R] {n : 自然数} (x : ι -> R)
   证明: by
   simp [Ideal.span_pow_eq_map_homogeneousSubmodule]
 
@@ -2163,8 +2163,8 @@ lemma Ideal.mem_span_iff_exists_isHomogeneous
   simp [Ideal.span_eq_map_homogeneousSubmodule]
 
 中文:
-引理 Ideal.mem_span_iff_exists_isHomogeneous
-  条件: {ι R : 类型} [CommSemiring R] (x : ι -> R) (y : R)
+引理 理想.mem_span_iff_存在_isHomogeneous
+  条件: {ι R : 类型} [交换半环 R] (x : ι -> R) (y : R)
   证明: by
   simp [Ideal.span_eq_map_homogeneousSubmodule]
 

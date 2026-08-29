@@ -45,8 +45,8 @@ theorem Module.free_of_isLocalizedModule
 universe uR' uM' in
 
 中文:
-定理 Module.free_of_isLocalizedModule
-  结论: {Rₛ Mₛ} [AddCommGroup Mₛ] [Module R Mₛ]
+定理 模.free_of_isLocalizedModule
+  结论: {Rₛ Mₛ} [加法交换群 Mₛ] [模 R Mₛ]
   证明: Free.of_equiv (IsLocalizedModule.isBaseChange S Rₛ f).equiv
 
 universe uR' uM' in
@@ -75,7 +75,7 @@ theorem Module.lift_rank_of_isLocalizedModule_of_free
   exact C
 
 中文:
-定理 Module.lift_rank_of_isLocalizedModule_of_free
+定理 模.lift_rank_of_isLocalizedModule_of_free
   证明: by
   apply Cardinal.lift_injective.{max uM' uR'}
   have := (algebraMap R Rₛ).domain_nontrivial
@@ -110,7 +110,7 @@ theorem Module.finrank_of_isLocalizedModule_of_free
   simpa using! congr(Cardinal.toNat $(Module.lift_rank_of_isLocalizedModule_of_free Rₛ S f))
 
 中文:
-定理 Module.finrank_of_isLocalizedModule_of_free
+定理 模.finrank_of_isLocalizedModule_of_free
   证明: by
   simpa using! congr(Cardinal.toNat $(Module.lift_rank_of_isLocalizedModule_of_free Rₛ S f))
 
@@ -133,8 +133,8 @@ theorem Module.projective_of_isLocalizedModule
   proof: Projective.of_equiv (IsLocalizedModule.isBaseChange S Rₛ f).equiv
 
 中文:
-定理 Module.projective_of_isLocalizedModule
-  结论: {Rₛ Mₛ} [AddCommGroup Mₛ] [Module R Mₛ]
+定理 模.projective_of_isLocalizedModule
+  结论: {Rₛ Mₛ} [加法交换群 Mₛ] [模 R Mₛ]
   证明: Projective.of_equiv (IsLocalizedModule.isBaseChange S Rₛ f).equiv
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.isBaseChange, Projective, Projective.of_equiv, isBaseChange, of_equiv
@@ -154,8 +154,8 @@ instance [Module.Projective
   body: Module.projective_of_isLocalizedModule S (LocalizedModule.mkLinearMap S M)
 
 中文:
-实例 [Module.Projective
-  签名: R M] : Module.Projective (Localization S) (LocalizedModule S M)
+实例 [模.投射
+  签名: R M] : 模.投射 (Localization S) (LocalizedModule S M)
   定义体: Module.projective_of_isLocalizedModule S (LocalizedModule.mkLinearMap S M)
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.projective_of_isLocalizedModule, mkLinearMap, projective_of_isLocalizedModule
@@ -181,7 +181,7 @@ theorem LinearMap.split_surjective_of_localization_maximal
     (LocalizedModu
 
 中文:
-定理 LinearMap.split_surjective_of_localization_maximal
+定理 线性映射.split_surjective_of_localization_maximal
   证明: by
   change LinearMap.id in LinearMap.range (LinearMap.llcomp R N M N f)
   refine Submodule.mem_of_localization_maximal _ (fun P _ => LocalizedModule.map P.primeCompl) _ _
@@ -255,8 +255,8 @@ theorem Module.projective_of_localization_maximal
     rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombination]; rw [Subtype.range
 
 中文:
-定理 Module.projective_of_localization_maximal
-  结论: (H : 对任意 (I : Ideal R) (_ : I.IsMaximal),
+定理 模.projective_of_localization_maximal
+  结论: (H : 对任意 (I : 理想 R) (_ : I.是极大),
   证明: by
   have : Module.Finite R M := by infer_instance
   obtain ⟨s, hs⟩ := this
@@ -316,7 +316,7 @@ theorem Module.projective_of_localization_maximal'
       
 
 中文:
-定理 Module.projective_of_localization_maximal'
+定理 模.projective_of_localization_maximal'
   证明: by
   apply Module.projective_of_localization_maximal
   intro P hP

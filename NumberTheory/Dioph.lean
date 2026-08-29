@@ -86,13 +86,13 @@ inductive IsPoly
     - mul: forall {f g : (α -> Nat) -> Int}, IsPoly f -> IsPoly g -> IsPoly fun x => f x * g x
 
 中文:
-归纳类型 IsPoly
+归纳类型 是Poly
   参数: : ((α -> 自然数) -> 整数) -> 命题
   构造子 (4 个):
-    - proj: 对任意 i, IsPoly fun x : α -> 自然数 => x i
-    - const: 对任意 n : 整数, IsPoly fun _ : α -> 自然数 => n
-    - sub: 对任意 {f g : (α -> 自然数) -> 整数}, IsPoly f -> IsPoly g -> IsPoly fun x => f x - g x
-    - mul: 对任意 {f g : (α -> 自然数) -> 整数}, IsPoly f -> IsPoly g -> IsPoly fun x => f x * g x
+    - proj: 对任意 i, 是Poly fun x : α -> 自然数 => x i
+    - const: 对任意 n : 整数, 是Poly fun _ : α -> 自然数 => n
+    - sub: 对任意 {f g : (α -> 自然数) -> 整数}, 是Poly f -> 是Poly g -> 是Poly fun x => f x - g x
+    - mul: 对任意 {f g : (α -> 自然数) -> 整数}, 是Poly f -> 是Poly g -> 是Poly fun x => f x * g x
 -/
 inductive IsPoly : ((α -> Nat) -> Int) -> Prop
   | proj : forall i, IsPoly fun x : α -> Nat => x i
@@ -111,9 +111,9 @@ theorem IsPoly.neg
   rw [← zero_sub]; exact (IsPoly.const 0).sub
 
 中文:
-定理 IsPoly.neg
+定理 是Poly.neg
   条件: {f : (α -> 自然数) -> 整数}
-  结论: IsPoly f -> IsPoly (-f)
+  结论: 是Poly f -> 是Poly (-f)
   证明: by
   rw [← zero_sub]; exact (IsPoly.const 0).sub
 
@@ -133,9 +133,9 @@ theorem IsPoly.add
   rw [← sub_neg_eq_add]; exact hf.sub hg.neg
 
 中文:
-定理 IsPoly.add
-  条件: {f g : (α -> 自然数) -> 整数} (hf : IsPoly f) (hg : IsPoly g)
-  结论: IsPoly (f + g)
+定理 是Poly.add
+  条件: {f g : (α -> 自然数) -> 整数} (hf : 是Poly f) (hg : 是Poly g)
+  结论: 是Poly (f + g)
   证明: by
   rw [← sub_neg_eq_add]; exact hf.sub hg.neg
 
@@ -175,7 +175,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Poly α) (α -> 自然数) 整数
+  签名: : 函数状 (Poly α) (α -> 自然数) 整数
   定义体: ⟨Subtype.val, Subtype.val_injective⟩
 
 Depends on / 依赖: Subtype, Subtype.val, Subtype.val_injective, val_injective
@@ -195,7 +195,7 @@ theorem isPoly
 中文:
 定理 isPoly
   条件: (f : Poly α)
-  结论: IsPoly f
+  结论: 是Poly f
   证明: f.2
 -/
 protected theorem isPoly (f : Poly α) : IsPoly f := f.2
@@ -309,7 +309,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Poly α)
+  签名: 零 (Poly α)
   定义体: ⟨const 0⟩
 -/
 instance : Zero (Poly α) := ⟨const 0⟩
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Poly α)
+  签名: 幺 (Poly α)
   定义体: ⟨const 1⟩
 -/
 instance : One (Poly α) := ⟨const 1⟩
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (Poly α)
+  签名: 取负 (Poly α)
   定义体: ⟨fun f => ⟨-f, f.2.neg⟩⟩
 -/
 instance : Neg (Poly α) := ⟨fun f => ⟨-f, f.2.neg⟩⟩
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Poly α)
+  签名: 加法 (Poly α)
   定义体: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
 -/
 instance : Add (Poly α) := ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Poly α)
+  签名: 减法 (Poly α)
   定义体: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
 -/
 instance : Sub (Poly α) := ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Poly α)
+  签名: 乘法 (Poly α)
   定义体: ⟨fun f g => ⟨f * g, f.2.mul g.2⟩⟩
 
 @[simp]
@@ -673,7 +673,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (Poly α)
+  签名: 加法交换群 (Poly α)
   定义体: @nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩
   zsmul := @zsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩)
   add_zero _ := by ext; simp_rw [add_apply, zero_apply, add_zero]
@@ -702,7 +702,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroupWithOne (Poly α)
+  签名: 加法带幺群 (Poly α)
   定义体: fun n => Poly.const n
   intCast := Poly.const
 
@@ -727,7 +727,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (Poly α)
+  签名: 交换环 (Poly α)
   定义体: (inferInstance : AddCommGroup (Poly α))
   __ := (inferInstance : AddGroupWithOne (Poly α))
   npow := @npowRec _ ⟨(1 : Poly α)⟩ ⟨(· * ·)⟩
@@ -793,7 +793,7 @@ definition sumsq
 
 中文:
 定义 sumsq
-  签名: : List (Poly α) -> Poly α
+  签名: : 列表 (Poly α) -> Poly α
 -/
 def sumsq : List (Poly α) -> Poly α
   | [] => 0
@@ -829,7 +829,7 @@ theorem sumsq_eq_zero
 中文:
 定理 sumsq_eq_zero
   条件: (x)
-  结论: 对任意 l, sumsq l x = 0 ↔ l.Forall fun a : Poly α => a x = 0
+  结论: 对任意 l, sumsq l x = 0 ↔ l.任意 fun a : Poly α => a x = 0
 -/
 theorem sumsq_eq_zero (x) : forall l, sumsq l x = 0 ↔ l.Forall fun a : Poly α => a x = 0
   | [] => eq_self_iff_true _
@@ -903,7 +903,7 @@ definition Dioph
 
 中文:
 定义 Dioph
-  签名: {α : 类型u} (S : Set (α -> 自然数))
+  签名: {α : 类型u} (S : 集合 (α -> 自然数))
   定义体: exists (β : Type u) (p : Poly (α oplus β)), forall v, v in S ↔ exists t, p (v otimes t) = 0
 
 Depends on / 依赖: otimes
@@ -947,7 +947,7 @@ theorem of_no_dummies
 
 中文:
 定理 of_no_dummies
-  条件: (S : Set (α -> 自然数)) (p : Poly α) (h : 对任意 v, v in S ↔ p v = 0)
+  条件: (S : 集合 (α -> 自然数)) (p : Poly α) (h : 对任意 v, v in S ↔ p v = 0)
   结论: Dioph S
   证明: ⟨PEmpty, ⟨p.map inl, fun v => (h v).trans ⟨fun h => ⟨PEmpty.elim, h⟩, fun ⟨_, ht⟩ => ht⟩⟩⟩
 
@@ -971,7 +971,7 @@ theorem inject_dummies_lem
 
 中文:
 定理 inject_dummies_lem
-  结论: (f : β -> γ) (g : γ -> Option β) (inv : 对任意 x, g (f x) = some x)
+  结论: (f : β -> γ) (g : γ -> 选项类型 β) (inv : 对任意 x, g (f x) = some x)
   证明: by
   dsimp; refine ⟨fun t => ?_, fun t => ?_⟩ <;> obtain ⟨t, ht⟩ := t
   · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
@@ -1001,7 +1001,7 @@ theorem inject_dummies
 
 中文:
 定理 inject_dummies
-  结论: (f : β -> γ) (g : γ -> Option β) (inv : 对任意 x, g (f x) = some x)
+  结论: (f : β -> γ) (g : γ -> 选项类型 β) (inv : 对任意 x, g (f x) = some x)
   证明: ⟨p.map (inl otimes inr ∘ f), fun v => (h v).trans inject_dummies_lem f g inv _ _⟩
 
 Depends on / 依赖: inject_dummies_lem, otimes, p.map
@@ -1046,8 +1046,8 @@ theorem DiophList.forall
 ⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly
 
 中文:
-定理 DiophList.forall
-  条件: (l : List (Set <| α -> 自然数)) (d : l.Forall Dioph)
+定理 DiophList.对任意
+  条件: (l : 列表 (集合 <| α -> 自然数)) (d : l.任意 Dioph)
   证明: by
   suffices exists (β : _) (pl : List (Poly (α oplus β))), forall v, List.Forall (fun S : Set _ => v in S) l ↔
           exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
@@ -1206,7 +1206,7 @@ theorem ex_dioph
 
 中文:
 定理 ex_dioph
-  条件: {S : Set (α oplus β -> 自然数)}
+  条件: {S : 集合 (α oplus β -> 自然数)}
   结论: Dioph S -> Dioph {v | 存在 x, v otimes x in S}
   证明: (pe _).1 hx
         ⟨x otimes t, by
@@ -1252,7 +1252,7 @@ theorem ex1_dioph
 
 中文:
 定理 ex1_dioph
-  条件: {S : Set (Option α -> 自然数)}
+  条件: {S : 集合 (选项类型 α -> 自然数)}
   结论: Dioph S -> Dioph {v | 存在 x, x ::ₒ v in S}
   证明: (pe _).1 hx
         ⟨x ::ₒ t, by
@@ -1382,7 +1382,7 @@ theorem diophPFun_comp1
 
 中文:
 定理 diophPFun_comp1
-  条件: {S : Set (Option α -> 自然数)} (d : Dioph S) {f} (df : DiophPFun f)
+  条件: {S : 集合 (选项类型 α -> 自然数)} (d : Dioph S) {f} (df : DiophPFun f)
   证明: ext (ex1_dioph (d.inter df)) fun v =>
     ⟨fun ⟨x, hS, (h : Exists _)⟩ => by
       rw [show (x ::ₒ v) ∘ some = v from funext fun s => rfl] at h
@@ -1414,7 +1414,7 @@ theorem diophFn_comp1
 
 中文:
 定理 diophFn_comp1
-  条件: {S : Set (Option α -> 自然数)} (d : Dioph S) {f : (α -> 自然数) -> 自然数} (df : DiophFn f)
+  条件: {S : 集合 (选项类型 α -> 自然数)} (d : Dioph S) {f : (α -> 自然数) -> 自然数} (df : DiophFn f)
   证明: ext (diophPFun_comp1 d <| cast (diophFn_iff_pFun f) df)
     fun _ => ⟨fun ⟨_, h⟩ => h, fun h => ⟨trivial, h⟩⟩
 
@@ -1450,7 +1450,7 @@ theorem diophFn_vec_comp1
 
 中文:
 定理 diophFn_vec_comp1
-  结论: {S : Set (Vector3 自然数 (succ n))} (d : Dioph S) {f : Vector3 自然数 n -> 自然数}
+  结论: {S : 集合 (Vector3 自然数 (succ n))} (d : Dioph S) {f : Vector3 自然数 n -> 自然数}
   证明: Dioph.ext (diophFn_comp1 (reindex_dioph _ (none :: some) d) df) (fun v => by
     dsimp
     -- TODO: `apply iff_of_eq` is required here, even though `congr!` works on iff below.
@@ -1484,7 +1484,7 @@ theorem vec_ex1_dioph
 
 中文:
 定理 vec_ex1_dioph
-  条件: (n) {S : Set (Vector3 自然数 (succ n))} (d : Dioph S)
+  条件: (n) {S : 集合 (Vector3 自然数 (succ n))} (d : Dioph S)
   证明: ext (ex1_dioph <| reindex_dioph _ (none :: some) d) fun v =>
     exists_congr fun x => by
       dsimp
@@ -1604,7 +1604,7 @@ theorem dioph_comp
 
 中文:
 定理 dioph_comp
-  结论: {S : Set (Vector3 自然数 n)} (d : Dioph S) (f : Vector3 ((α -> 自然数) -> 自然数) n)
+  结论: {S : 集合 (Vector3 自然数 n)} (d : Dioph S) (f : Vector3 ((α -> 自然数) -> 自然数) n)
   证明: diophFn_compn (reindex_dioph _ inr d) df
 
 Depends on / 依赖: diophFn_compn, reindex_dioph
@@ -1671,7 +1671,7 @@ theorem proj_dioph_of_nat
 
 中文:
 定理 proj_dioph_of_nat
-  条件: {n : 自然数} (m : 自然数) [IsLT m n]
+  条件: {n : 自然数} (m : 自然数) [是LT m n]
   结论: DiophFn fun v : Vector3 自然数 n => v &m
   证明: proj_dioph &m
 

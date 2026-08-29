@@ -127,7 +127,7 @@ theorem ker_eq_bot_of_mono
 
 中文:
 定理 ker_eq_bot_of_mono
-  条件: [Mono f]
+  条件: [单态射 f]
   结论: f.hom.ker = ⊥
   证明: MonoidHom.ker_eq_bot_of_cancel fun u v h => ConcreteCategory.ext_iff.mp
 (@cancel_mono _ _ _ _ _ f _ (ofHom u) (ofHom v)).1 ConcreteCategory.ext h
@@ -154,7 +154,7 @@ ConcreteCategory.mono_of_injective _ (MonoidHom.ker_eq_bot_iff f.hom).1 h⟩
 
 中文:
 定理 mono_iff_ker_eq_bot
-  结论: Mono f ↔ f.hom.ker = ⊥
+  结论: 单态射 f ↔ f.hom.ker = ⊥
   证明: ⟨fun _ => ker_eq_bot_of_mono f, fun h =>
 ConcreteCategory.mono_of_injective _ (MonoidHom.ker_eq_bot_iff f.hom).1 h⟩
 
@@ -177,7 +177,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  结论: Mono f ↔ Function.Injective f
+  结论: 单态射 f ↔ 函数.单射 f
   证明: Iff.trans (mono_iff_ker_eq_bot f) MonoidHom.ker_eq_bot_iff f.hom
 
 Depends on / 依赖: Iff.trans, MonoidHom, MonoidHom.ker_eq_bot_iff, f.hom, ker_eq_bot_iff, mono_iff_ker_eq_bot
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul B X'
+  签名: 标量乘法 B X'
   定义体: match x with
     | fromCoset y => fromCoset ⟨b • y, by
           rw [← y.2.choose_spec]; rw [leftCoset_assoc]
@@ -903,8 +903,8 @@ theorem surjective_of_epi
 
 中文:
 定理 surjective_of_epi
-  条件: [Epi f]
-  结论: Function.Surjective f
+  条件: [满态射 f]
+  结论: 函数.满射 f
   证明: by
   dsimp [Function.Surjective]
   by_contra! ⟨b, hb⟩
@@ -931,7 +931,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: ⟨fun _ => surjective_of_epi f, ConcreteCategory.epi_of_surjective f⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.epi_of_surjective, epi_of_surjective, surjective_of_epi
@@ -949,7 +949,7 @@ theorem epi_iff_range_eq_top
 
 中文:
 定理 epi_iff_range_eq_top
-  结论: Epi f ↔ f.hom.range = ⊤
+  结论: 满态射 f ↔ f.hom.range = ⊤
   证明: Iff.trans (epi_iff_surjective _) (Subgroup.eq_top_iff' f.hom.range).symm
 
 Depends on / 依赖: Iff.trans, Subgroup, Subgroup.eq_top_iff, epi_iff_surjective, eq_top_iff, f.hom.range
@@ -978,7 +978,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   have i1 : Epi f ↔ Epi (groupAddGroupEquivalence.inverse.map f) := by
     refine ⟨?_, groupAddGroupEquivalence.inverse.epi_of_epi_map⟩
@@ -1003,7 +1003,7 @@ theorem epi_iff_range_eq_top
 
 中文:
 定理 epi_iff_range_eq_top
-  结论: Epi f ↔ f.hom.range = ⊤
+  结论: 满态射 f ↔ f.hom.range = ⊤
   证明: Iff.trans (epi_iff_surjective _) (AddSubgroup.eq_top_iff' f.hom.range).symm
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.eq_top_iff, Iff.trans, epi_iff_surjective, eq_top_iff, f.hom.range
@@ -1031,7 +1031,7 @@ instance forget_grp_preserves_mono
 
 中文:
 实例 forget_grp_preserves_mono
-  签名: : (forget GrpCat).PreservesMonomorphisms where
+  签名: : (forget 群范畴).保持Monomorphisms where
   定义体: by rwa [mono_iff_injective, ← CategoryTheory.ofHom_mono_iff_injective] at e
 
 @[to_additive AddGrpCat.forget_grp_preserves_epi]
@@ -1052,7 +1052,7 @@ instance forget_grp_preserves_epi
 
 中文:
 实例 forget_grp_preserves_epi
-  签名: : (forget GrpCat).PreservesEpimorphisms where
+  签名: : (forget 群范畴).保持Epimorphisms where
   定义体: by rwa [epi_iff_surjective, ← CategoryTheory.ofHom_epi_iff_surjective] at e
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.ofHom_epi_iff_surjective, epi_iff_surjective, ofHom_epi_iff_surjective
@@ -1082,7 +1082,7 @@ theorem ker_eq_bot_of_mono
 
 中文:
 定理 ker_eq_bot_of_mono
-  条件: [Mono f]
+  条件: [单态射 f]
   结论: f.hom.ker = ⊥
   证明: MonoidHom.ker_eq_bot_of_cancel fun u v h => ConcreteCategory.ext_iff.mp
 (@cancel_mono _ _ _ _ _ f _ (ofHom u) (ofHom v)).1 ConcreteCategory.ext h
@@ -1109,7 +1109,7 @@ ConcreteCategory.mono_of_injective _ (MonoidHom.ker_eq_bot_iff f.hom).1 h⟩
 
 中文:
 定理 mono_iff_ker_eq_bot
-  结论: Mono f ↔ f.hom.ker = ⊥
+  结论: 单态射 f ↔ f.hom.ker = ⊥
   证明: ⟨fun _ => ker_eq_bot_of_mono f, fun h =>
 ConcreteCategory.mono_of_injective _ (MonoidHom.ker_eq_bot_iff f.hom).1 h⟩
 
@@ -1134,7 +1134,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  结论: Mono f ↔ Function.Injective f
+  结论: 单态射 f ↔ 函数.单射 f
   证明: Iff.trans (mono_iff_ker_eq_bot f) MonoidHom.ker_eq_bot_iff f.hom
 
 @[to_additive]
@@ -1159,7 +1159,7 @@ theorem range_eq_top_of_epi
 
 中文:
 定理 range_eq_top_of_epi
-  条件: [Epi f]
+  条件: [满态射 f]
   结论: f.hom.range = ⊤
   证明: MonoidHom.range_eq_top_of_cancel fun u v h => ConcreteCategory.ext_iff.mp
     (@cancel_epi _ _ _ _ _ f _ (ofHom u) (ofHom v)).1 (ConcreteCategory.ext h)
@@ -1187,7 +1187,7 @@ ConcreteCategory.epi_of_surjective _ show Function.Surjective f.hom from
 
 中文:
 定理 epi_iff_range_eq_top
-  结论: Epi f ↔ f.hom.range = ⊤
+  结论: 满态射 f ↔ f.hom.range = ⊤
   证明: ⟨fun _ => range_eq_top_of_epi _, fun hf =>
 ConcreteCategory.epi_of_surjective _ show Function.Surjective f.hom from
       MonoidHom.range_eq_top.mp hf⟩
@@ -1215,7 +1215,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   rw [epi_iff_range_eq_top]; rw [MonoidHom.range_eq_top]
 
@@ -1239,7 +1239,7 @@ instance forget_commGrp_preserves_mono
 
 中文:
 实例 forget_commGrp_preserves_mono
-  签名: : (forget CommGrpCat).PreservesMonomorphisms where
+  签名: : (forget 交换群范畴).保持Monomorphisms where
   定义体: by rwa [mono_iff_injective, ← CategoryTheory.ofHom_mono_iff_injective] at e
 
 @[to_additive AddCommGrpCat.forget_commGrp_preserves_epi]
@@ -1260,7 +1260,7 @@ instance forget_commGrp_preserves_epi
 
 中文:
 实例 forget_commGrp_preserves_epi
-  签名: : (forget CommGrpCat).PreservesEpimorphisms where
+  签名: : (forget 交换群范畴).保持Epimorphisms where
   定义体: by rwa [epi_iff_surjective, ← CategoryTheory.ofHom_epi_iff_surjective] at e
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.ofHom_epi_iff_surjective, epi_iff_surjective, ofHom_epi_iff_surjective

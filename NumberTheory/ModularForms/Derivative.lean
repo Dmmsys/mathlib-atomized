@@ -44,7 +44,7 @@ definition normalizedDerivOfComplex
 
 中文:
 定义 normalizedDerivOfComplex
-  签名: (F : ℍ -> Complex) (z : ℍ)
+  签名: (F : ℍ -> 复形) (z : ℍ)
   定义体: (2 * π * I)⁻¹ * deriv (F ∘ ofComplex) z
 
 Depends on / 依赖: ofComplex
@@ -71,7 +71,7 @@ theorem normalizedDerivOfComplex_mdifferentiable
 
 中文:
 定理 normalizedDerivOfComplex_mdifferentiable
-  条件: {F : ℍ -> Complex} (hF : MDiff F)
+  条件: {F : ℍ -> 复形} (hF : MDiff F)
   结论: MDiff (D F)
   证明: by
   rw [UpperHalfPlane.mdifferentiable_iff] at hF ⊢
@@ -113,7 +113,7 @@ theorem normalizedDerivOfComplex_add
 
 中文:
 定理 normalizedDerivOfComplex_add
-  条件: (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   have hFz := UpperHalfPlane.mdifferentiableAt_iff.mp (hF z)
@@ -151,7 +151,7 @@ theorem normalizedDerivOfComplex_sub
 
 中文:
 定理 normalizedDerivOfComplex_sub
-  条件: (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   have hFz := UpperHalfPlane.mdifferentiableAt_iff.mp (hF z)
@@ -188,7 +188,7 @@ theorem normalizedDerivOfComplex_const
 
 中文:
 定理 normalizedDerivOfComplex_const
-  条件: (c : Complex)
+  条件: (c : 复形)
   结论: D (fun _ => c) = 0
   证明: by
   ext z
@@ -223,7 +223,7 @@ theorem normalizedDerivOfComplex_smul
 
 中文:
 定理 normalizedDerivOfComplex_smul
-  条件: (c : Complex) (F : ℍ -> Complex) (hF : MDiff F)
+  条件: (c : 复形) (F : ℍ -> 复形) (hF : MDiff F)
   结论: D (c • F) = c • D F
   证明: by
   ext z
@@ -261,7 +261,7 @@ theorem normalizedDerivOfComplex_neg
 
 中文:
 定理 normalizedDerivOfComplex_neg
-  条件: (F : ℍ -> Complex) (hF : MDiff F)
+  条件: (F : ℍ -> 复形) (hF : MDiff F)
   结论: D (-F) = -D F
   证明: by
   have : -F = (-1 : Complex) • F := by ext; simp
@@ -295,7 +295,7 @@ theorem normalizedDerivOfComplex_mul
 
 中文:
 定理 normalizedDerivOfComplex_mul
-  条件: (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   have hFz := UpperHalfPlane.mdifferentiableAt_iff.mp (hF z)
@@ -332,7 +332,7 @@ theorem normalizedDerivOfComplex_pow
 
 中文:
 定理 normalizedDerivOfComplex_pow
-  条件: (F : ℍ -> Complex) (n : 自然数) (hF : MDiff F)
+  条件: (F : ℍ -> 复形) (n : 自然数) (hF : MDiff F)
   证明: by
   ext z
   have hFz := UpperHalfPlane.mdifferentiableAt_iff.mp (hF z)
@@ -364,7 +364,7 @@ definition serreDerivative
 
 中文:
 定义 serreDerivative
-  签名: (k : Complex) (F : ℍ -> Complex) (z : ℍ)
+  签名: (k : 复形) (F : ℍ -> 复形) (z : ℍ)
   定义体: D F z - k * 12⁻¹ * EisensteinSeries.E2 z * F z
 
 @[simp]
@@ -387,7 +387,7 @@ lemma serreDerivative_apply
 
 中文:
 引理 serreDerivative_apply
-  条件: (k : Complex) (F : ℍ -> Complex) (z : ℍ)
+  条件: (k : 复形) (F : ℍ -> 复形) (z : ℍ)
   证明: rfl
 
 @[simp]
@@ -406,7 +406,7 @@ lemma serreDerivative_eq
 
 中文:
 引理 serreDerivative_eq
-  条件: (k : Complex) (F : ℍ -> Complex)
+  条件: (k : 复形) (F : ℍ -> 复形)
   证明: rfl
 -/
 lemma serreDerivative_eq (k : Complex) (F : ℍ -> Complex) :
@@ -425,7 +425,7 @@ theorem serreDerivative_add
 
 中文:
 定理 serreDerivative_add
-  条件: (k : Complex) (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (k : 复形) (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   simp [serreDerivative, normalizedDerivOfComplex_add F G hF hG]
@@ -452,7 +452,7 @@ theorem serreDerivative_sub
 
 中文:
 定理 serreDerivative_sub
-  条件: (k : Complex) (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (k : 复形) (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   simp [serreDerivative, normalizedDerivOfComplex_sub F G hF hG]
@@ -479,7 +479,7 @@ theorem serreDerivative_smul
 
 中文:
 定理 serreDerivative_smul
-  条件: (k : Complex) (c : Complex) (F : ℍ -> Complex) (hF : MDiff F)
+  条件: (k : 复形) (c : 复形) (F : ℍ -> 复形) (hF : MDiff F)
   证明: by
   ext z
   simp [serreDerivative, normalizedDerivOfComplex_smul c F hF, smul_eq_mul]
@@ -506,7 +506,7 @@ theorem serreDerivative_mul
 
 中文:
 定理 serreDerivative_mul
-  条件: (k₁ k₂ : Complex) (F G : ℍ -> Complex) (hF : MDiff F) (hG : MDiff G)
+  条件: (k₁ k₂ : 复形) (F G : ℍ -> 复形) (hF : MDiff F) (hG : MDiff G)
   证明: by
   ext z
   simp [serreDerivative, normalizedDerivOfComplex_mul F G hF hG]
@@ -536,7 +536,7 @@ theorem serreDerivative_mdifferentiable
 
 中文:
 定理 serreDerivative_mdifferentiable
-  条件: {F : ℍ -> Complex} (k : Complex) (hF : MDiff F)
+  条件: {F : ℍ -> 复形} (k : 复形) (hF : MDiff F)
   证明: by
   refine (normalizedDerivOfComplex_mdifferentiable hF).sub ?_
   convert!
@@ -571,7 +571,7 @@ lemma normalizedDerivOfComplex_slash
 
 中文:
 引理 normalizedDerivOfComplex_slash
-  结论: {k : 整数} {F : ℍ -> Complex} (hF : MDiff F)
+  结论: {k : 整数} {F : ℍ -> 复形} (hF : MDiff F)
   证明: by
   have hdet : g.det.val = g.val.det := Matrix.GeneralLinearGroup.val_det_apply g
   have hdetComplex : (g.val.det : Complex) != 0 := Complex.ofReal_ne_zero.mpr hg.ne'
@@ -626,7 +626,7 @@ lemma normalizedDerivOfComplex_SL_slash
 
 中文:
 引理 normalizedDerivOfComplex_SL_slash
-  条件: {k : 整数} {F : ℍ -> Complex} (hF : MDiff F) {γ : SL(2, 整数)}
+  条件: {k : 整数} {F : ℍ -> 复形} (hF : MDiff F) {γ : SL(2, 整数)}
   证明: by
   have hdet : (γ : GL (Fin 2) Real).val.det = 1 := by
     rw [← Matrix.GeneralLinearGroup.val_det_apply]; simp
@@ -664,7 +664,7 @@ theorem serreDerivative_slash_equivariant
 
 中文:
 定理 serreDerivative_slash_equivariant
-  条件: {k : 整数} {F : ℍ -> Complex} (hF : MDiff F) {γ : SL(2, 整数)}
+  条件: {k : 整数} {F : ℍ -> 复形} (hF : MDiff F) {γ : SL(2, 整数)}
   证明: by
   ext z
   have hLHS : (serreDerivative (k : Complex) F ∣[k + 2] γ) z =
@@ -700,7 +700,7 @@ theorem serreDerivative_slash_invariant
 
 中文:
 定理 serreDerivative_slash_invariant
-  结论: {k : 整数} {F : ℍ -> Complex} (hF : MDiff F) {γ : SL(2, 整数)}
+  结论: {k : 整数} {F : ℍ -> 复形} (hF : MDiff F) {γ : SL(2, 整数)}
   证明: by
   grind [serreDerivative_slash_equivariant]
 

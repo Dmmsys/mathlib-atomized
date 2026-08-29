@@ -53,7 +53,7 @@ definition partialOrder
 
 中文:
 定义 partialOrder
-  签名: : PartialOrder Complex where
+  签名: : 偏序 复形 where
   定义体: z.re <= w.re ∧ z.im = w.im
   lt z w := z.re < w.re ∧ z.im = w.im
   lt_iff_le_not_ge z w := by
@@ -92,7 +92,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {z w : Complex}
+  条件: {z w : 复形}
   结论: z <= w ↔ z.re <= w.re ∧ z.im = w.im
   证明: Iff.rfl
 
@@ -112,7 +112,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: {z w : Complex}
+  条件: {z w : 复形}
   结论: z < w ↔ z.re < w.re ∧ z.im = w.im
   证明: Iff.rfl
 
@@ -132,7 +132,7 @@ theorem nonneg_iff
 
 中文:
 定理 nonneg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: 0 <= z ↔ 0 <= z.re ∧ 0 = z.im
   证明: le_def
 
@@ -152,7 +152,7 @@ theorem pos_iff
 
 中文:
 定理 pos_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: 0 < z ↔ 0 < z.re ∧ 0 = z.im
   证明: lt_def
 
@@ -172,7 +172,7 @@ theorem nonpos_iff
 
 中文:
 定理 nonpos_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z <= 0 ↔ z.re <= 0 ∧ z.im = 0
   证明: le_def
 
@@ -192,7 +192,7 @@ theorem neg_iff
 
 中文:
 定理 neg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z < 0 ↔ z.re < 0 ∧ z.im = 0
   证明: lt_def
 
@@ -214,7 +214,7 @@ theorem sq_nonneg_iff
 
 中文:
 定理 sq_nonneg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: 0 <= z ^ 2 ↔ z.im = 0
   证明: by
   rw [nonneg_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [eq_comm]; rw [mul_eq_zero_iff_right two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
@@ -242,7 +242,7 @@ theorem sq_nonpos_iff
 
 中文:
 定理 sq_nonpos_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z ^ 2 <= 0 ↔ z.re = 0
   证明: by
   rw [nonpos_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [mul_eq_zero_iff_right
@@ -273,7 +273,7 @@ theorem real_le_real
 中文:
 定理 real_le_real
   条件: {x y : 实数}
-  结论: (x : Complex) <= (y : Complex) ↔ x <= y
+  结论: (x : 复形) <= (y : 复形) ↔ x <= y
   证明: by simp [le_def, ofReal]
 
 @[simp, norm_cast]
@@ -297,7 +297,7 @@ theorem real_lt_real
 中文:
 定理 real_lt_real
   条件: {x y : 实数}
-  结论: (x : Complex) < (y : Complex) ↔ x < y
+  结论: (x : 复形) < (y : 复形) ↔ x < y
   证明: by simp [lt_def, ofReal]
 
 @[simp, norm_cast]
@@ -321,7 +321,7 @@ theorem zero_le_real
 中文:
 定理 zero_le_real
   条件: {x : 实数}
-  结论: (0 : Complex) <= (x : Complex) ↔ 0 <= x
+  结论: (0 : 复形) <= (x : 复形) ↔ 0 <= x
   证明: real_le_real
 
 @[simp, norm_cast]
@@ -344,7 +344,7 @@ theorem zero_lt_real
 中文:
 定理 zero_lt_real
   条件: {x : 实数}
-  结论: (0 : Complex) < (x : Complex) ↔ 0 < x
+  结论: (0 : 复形) < (x : 复形) ↔ 0 < x
   证明: real_lt_real
 
 Depends on / 依赖: real_lt_real
@@ -364,7 +364,7 @@ theorem not_le_iff
 
 中文:
 定理 not_le_iff
-  条件: {z w : Complex}
+  条件: {z w : 复形}
   结论: ¬z <= w ↔ w.re < z.re ∨ z.im != w.im
   证明: by
   rw [le_def]; rw [not_and_or]; rw [not_le]
@@ -386,7 +386,7 @@ theorem not_lt_iff
 
 中文:
 定理 not_lt_iff
-  条件: {z w : Complex}
+  条件: {z w : 复形}
   结论: ¬z < w ↔ w.re <= z.re ∨ z.im != w.im
   证明: by
   rw [lt_def]; rw [not_and_or]; rw [not_lt]
@@ -407,7 +407,7 @@ theorem not_le_zero_iff
 
 中文:
 定理 not_le_zero_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: ¬z <= 0 ↔ 0 < z.re ∨ z.im != 0
   证明: not_le_iff
 
@@ -427,7 +427,7 @@ theorem not_lt_zero_iff
 
 中文:
 定理 not_lt_zero_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: ¬z < 0 ↔ 0 <= z.re ∨ z.im != 0
   证明: not_lt_iff
 
@@ -449,8 +449,8 @@ theorem eq_re_of_ofReal_le
 @[simp]
 
 中文:
-定理 eq_re_of_ofReal_le
-  条件: {r : 实数} {z : Complex} (hz : (r : Complex) <= z)
+定理 eq_re_of_of实数_le
+  条件: {r : 实数} {z : 复形} (hz : (r : 复形) <= z)
   结论: z = z.re
   证明: by
   rw [eq_comm]; rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [← (Complex.le_def.1 hz).2]; rw [Complex.ofReal_im]
@@ -478,7 +478,7 @@ lemma re_eq_norm
 
 中文:
 引理 re_eq_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z.re = ‖z‖ ↔ 0 <= z
   证明: have : 0 <= ‖z‖ := norm_nonneg z
   ⟨fun h => ⟨h.symm ▸ this, (abs_re_eq_norm.1 <| h.symm ▸ abs_of_nonneg this).symm⟩,
@@ -509,7 +509,7 @@ exact neg_nonneg.and eq_comm.trans neg_eq_zero
 
 中文:
 引理 neg_re_eq_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: -z.re = ‖z‖ ↔ z <= 0
   证明: by
   rw [← neg_re]; rw [← norm_neg z]; rw [re_eq_norm]
@@ -535,7 +535,7 @@ lemma re_eq_neg_norm
 
 中文:
 引理 re_eq_neg_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z.re = -‖z‖ ↔ z <= 0
   证明: by rw [← neg_eq_iff_eq_neg, neg_re_eq_norm]
 
@@ -554,8 +554,8 @@ lemma monotone_ofReal
   simp only [real_le_real, hxy]
 
 中文:
-引理 monotone_ofReal
-  结论: Monotone of实数
+引理 monotone_of实数
+  结论: 递增 of实数
   证明: by
   intro x y hxy
   simp only [real_le_real, hxy]

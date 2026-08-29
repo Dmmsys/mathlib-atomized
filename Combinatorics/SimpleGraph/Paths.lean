@@ -76,8 +76,8 @@ structure IsTrail
     - edges_nodup : p.edges.Nodup
 
 中文:
-结构 IsTrail
-  参数: {u v : V} (p : G.Walk u v)
+结构 是Trail
+  参数: {u v : V} (p : G.途径 u v)
   公理与运算 (1 个):
     - edges_nodup : p.edges.Nodup
 -/
@@ -95,9 +95,9 @@ structure IsPath
     - support_nodup : p.support.Nodup
 
 中文:
-结构 IsPath
-  参数: {u v : V} (p : G.Walk u v)
-  继承: isTrail : IsTrail p
+结构 是道路
+  参数: {u v : V} (p : G.途径 u v)
+  继承: isTrail : 是Trail p
   公理与运算 (1 个):
     - support_nodup : p.support.Nodup
 -/
@@ -117,9 +117,9 @@ structure IsCircuit
     - ne_nil : p != nil
 
 中文:
-结构 IsCircuit
-  参数: {u : V} (p : G.Walk u u)
-  继承: isTrail : IsTrail p
+结构 是Circuit
+  参数: {u : V} (p : G.途径 u u)
+  继承: isTrail : 是Trail p
   公理与运算 (1 个):
     - ne_nil : p != nil
 -/
@@ -137,9 +137,9 @@ structure IsCycle
     - support_nodup : p.support.tail.Nodup
 
 中文:
-结构 IsCycle
-  参数: {u : V} (p : G.Walk u u)
-  继承: isCircuit : IsCircuit p
+结构 是环
+  参数: {u : V} (p : G.途径 u u)
+  继承: isCircuit : 是Circuit p
   公理与运算 (1 个):
     - support_nodup : p.support.tail.Nodup
 -/
@@ -159,7 +159,7 @@ theorem isTrail_copy
 
 中文:
 定理 isTrail_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -179,9 +179,9 @@ theorem IsPath.mk'
   proof: ⟨⟨edges_nodup_of_support_nodup h⟩, h⟩
 
 中文:
-定理 IsPath.mk'
-  条件: {u v : V} {p : G.Walk u v} (h : p.support.Nodup)
-  结论: p.IsPath
+定理 是道路.mk'
+  条件: {u v : V} {p : G.途径 u v} (h : p.support.Nodup)
+  结论: p.是道路
   证明: ⟨⟨edges_nodup_of_support_nodup h⟩, h⟩
 
 Depends on / 依赖: edges_nodup_of_support_nodup
@@ -200,8 +200,8 @@ theorem isPath_def
 
 中文:
 定理 isPath_def
-  条件: {u v : V} (p : G.Walk u v)
-  结论: p.IsPath ↔ p.support.Nodup
+  条件: {u v : V} (p : G.途径 u v)
+  结论: p.是道路 ↔ p.support.Nodup
   证明: ⟨IsPath.support_nodup, IsPath.mk'⟩
 
 Depends on / 依赖: IsPath, IsPath.mk, IsPath.support_nodup, support_nodup
@@ -221,7 +221,7 @@ theorem isPath_iff_injective_get_support
 
 中文:
 定理 isPath_iff_injective_get_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: p.isPath_def.trans List.nodup_iff_injective_get
 
 @[simp]
@@ -247,7 +247,7 @@ theorem isPath_copy
 
 中文:
 定理 isPath_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -272,7 +272,7 @@ theorem isCircuit_copy
 
 中文:
 定理 isCircuit_copy
-  条件: {u u'} (p : G.Walk u u) (hu : u = u')
+  条件: {u u'} (p : G.途径 u u) (hu : u = u')
   证明: by
   subst_vars
   rfl
@@ -292,8 +292,8 @@ lemma IsCircuit.not_nil
   proof: (hp.ne_nil ·.eq_nil)
 
 中文:
-引理 IsCircuit.not_nil
-  条件: {p : G.Walk v v} (hp : IsCircuit p)
+引理 是Circuit.not_nil
+  条件: {p : G.途径 v v} (hp : 是Circuit p)
   结论: ¬ p.Nil
   证明: (hp.ne_nil ·.eq_nil)
 
@@ -313,7 +313,7 @@ theorem isCycle_def
 
 中文:
 定理 isCycle_def
-  条件: {u : V} (p : G.Walk u u)
+  条件: {u : V} (p : G.途径 u u)
   证明: Iff.intro (fun h => ⟨h.1.1, h.1.2, h.2⟩) fun h => ⟨⟨h.1, h.2.1⟩, h.2.2⟩
 
 @[simp]
@@ -337,7 +337,7 @@ theorem isCycle_copy
 
 中文:
 定理 isCycle_copy
-  条件: {u u'} (p : G.Walk u u) (hu : u = u')
+  条件: {u u'} (p : G.途径 u u) (hu : u = u')
   证明: by
   subst_vars
   rfl
@@ -359,8 +359,8 @@ lemma IsCycle.not_nil
 @[simp]
 
 中文:
-引理 IsCycle.not_nil
-  条件: {p : G.Walk v v} (hp : IsCycle p)
+引理 是环.not_nil
+  条件: {p : G.途径 v v} (hp : 是环 p)
   结论: ¬ p.Nil
   证明: (hp.ne_nil ·.eq_nil)
 
@@ -381,9 +381,9 @@ theorem IsTrail.nil
   proof: ⟨by simp [edges]⟩
 
 中文:
-定理 IsTrail.nil
+定理 是Trail.nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).IsTrail
+  结论: (nil : G.途径 u u).是Trail
   证明: ⟨by simp [edges]⟩
 -/
 theorem IsTrail.nil {u : V} : (nil : G.Walk u u).IsTrail :=
@@ -400,8 +400,8 @@ theorem IsTrail.of_cons
 @[simp]
 
 中文:
-定理 IsTrail.of_cons
-  条件: {u v w : V} {h : G.Adj u v} {p : G.Walk v w}
+定理 是Trail.of_cons
+  条件: {u v w : V} {h : G.伴随 u v} {p : G.途径 v w}
   证明: by simp [isTrail_def]
 
 @[simp]
@@ -422,7 +422,7 @@ theorem isTrail_cons
 
 中文:
 定理 isTrail_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: by simp [isTrail_def, and_comm]
 
 Depends on / 依赖: and_comm, isTrail_def
@@ -439,8 +439,8 @@ lemma IsTrail.cons
   proof: by simp [*]
 
 中文:
-引理 IsTrail.cons
-  结论: {w : G.Walk u' v} (hw : w.IsTrail) (hu : G.Adj u u')
+引理 是Trail.cons
+  结论: {w : G.途径 u' v} (hw : w.是Trail) (hu : G.伴随 u u')
   证明: by simp [*]
 -/
 protected lemma IsTrail.cons {w : G.Walk u' v} (hw : w.IsTrail) (hu : G.Adj u u')
@@ -459,9 +459,9 @@ theorem IsTrail.reverse
 @[simp]
 
 中文:
-定理 IsTrail.reverse
-  条件: {u v : V} (p : G.Walk u v) (h : p.IsTrail)
-  结论: p.reverse.IsTrail
+定理 是Trail.reverse
+  条件: {u v : V} (p : G.途径 u v) (h : p.是Trail)
+  结论: p.reverse.是Trail
   证明: by
   simpa [isTrail_def] using h
 
@@ -490,8 +490,8 @@ theorem reverse_isTrail_iff
 
 中文:
 定理 reverse_isTrail_iff
-  条件: {u v : V} (p : G.Walk u v)
-  结论: p.reverse.IsTrail ↔ p.IsTrail
+  条件: {u v : V} (p : G.途径 u v)
+  结论: p.reverse.是Trail ↔ p.是Trail
   证明: by
   constructor <;>
     · intro h
@@ -520,7 +520,7 @@ theorem isTrail_append
 
 中文:
 定理 isTrail_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by
   simp [Walk.isTrail_def, List.nodup_append']
 
@@ -540,8 +540,8 @@ theorem IsTrail.of_append_left
   simp_all
 
 中文:
-定理 IsTrail.of_append_left
-  结论: {u v w : V} {p : G.Walk u v} {q : G.Walk v w}
+定理 是Trail.of_append_left
+  结论: {u v w : V} {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   simp_all
 -/
@@ -559,8 +559,8 @@ theorem IsTrail.of_append_right
   simp_all
 
 中文:
-定理 IsTrail.of_append_right
-  结论: {u v w : V} {p : G.Walk u v} {q : G.Walk v w}
+定理 是Trail.of_append_right
+  结论: {u v w : V} {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   simp_all
 -/
@@ -577,8 +577,8 @@ theorem IsTrail.count_edges_le_one
   proof: List.nodup_iff_count_le_one.mp h.edges_nodup e
 
 中文:
-定理 IsTrail.count_edges_le_one
-  结论: [DecidableEq V] {u v : V} {p : G.Walk u v} (h : p.IsTrail)
+定理 是Trail.count_edges_le_one
+  结论: [DecidableEq V] {u v : V} {p : G.途径 u v} (h : p.是Trail)
   证明: List.nodup_iff_count_le_one.mp h.edges_nodup e
 
 Depends on / 依赖: List.nodup_iff_count_le_one.mp, edges_nodup, h.edges_nodup, nodup_iff_count_le_one
@@ -596,8 +596,8 @@ theorem IsTrail.count_edges_eq_one
   proof: List.count_eq_one_of_mem h.edges_nodup he
 
 中文:
-定理 IsTrail.count_edges_eq_one
-  结论: [DecidableEq V] {u v : V} {p : G.Walk u v} (h : p.IsTrail)
+定理 是Trail.count_edges_eq_one
+  结论: [DecidableEq V] {u v : V} {p : G.途径 u v} (h : p.是Trail)
   证明: List.count_eq_one_of_mem h.edges_nodup he
 
 Depends on / 依赖: List.count_eq_one_of_mem, count_eq_one_of_mem, edges_nodup, h.edges_nodup
@@ -624,8 +624,8 @@ theorem IsTrail.length_le_card_edgeFinset
     simpa [edges] using
 
 中文:
-定理 IsTrail.length_le_card_edgeFinset
-  结论: [Fintype G.edgeSet] {u v : V}
+定理 是Trail.length_le_card_edgeFinset
+  结论: [有限类型 G.edgeSet] {u v : V}
   证明: by
   classical
   let edges := w.edges.toFinset
@@ -662,9 +662,9 @@ theorem IsPath.nil
   proof: by constructor <;> simp
 
 中文:
-定理 IsPath.nil
+定理 是道路.nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).IsPath
+  结论: (nil : G.途径 u u).是道路
   证明: by constructor <;> simp
 -/
 theorem IsPath.nil {u : V} : (nil : G.Walk u u).IsPath := by constructor <;> simp
@@ -680,8 +680,8 @@ theorem IsPath.of_cons
 @[simp]
 
 中文:
-定理 IsPath.of_cons
-  条件: {u v w : V} {h : G.Adj u v} {p : G.Walk v w}
+定理 是道路.of_cons
+  条件: {u v w : V} {h : G.伴随 u v} {p : G.途径 v w}
   证明: by simp [isPath_def]
 
 @[simp]
@@ -703,7 +703,7 @@ theorem cons_isPath_iff
 
 中文:
 定理 cons_isPath_iff
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: by
   constructor <;> simp +contextual [isPath_def]
 
@@ -724,8 +724,8 @@ lemma IsPath.cons
 @[simp]
 
 中文:
-引理 IsPath.cons
-  条件: {p : Walk G v w} (hp : p.IsPath) (hu : u ∉ p.support) {h : G.Adj u v}
+引理 是道路.cons
+  条件: {p : 途径 G v w} (hp : p.是道路) (hu : u ∉ p.support) {h : G.伴随 u v}
   证明: (cons_isPath_iff _ _).2 ⟨hp, hu⟩
 
 @[simp]
@@ -749,8 +749,8 @@ theorem isPath_iff_nil
 
 中文:
 定理 isPath_iff_nil
-  条件: {u : V} {p : G.Walk u u}
-  结论: p.IsPath ↔ p.Nil
+  条件: {u : V} {p : G.途径 u u}
+  结论: p.是道路 ↔ p.Nil
   证明: by
   cases p <;> simp [IsPath.nil]
 
@@ -774,8 +774,8 @@ theorem isPath_iff_eq_nil
 
 中文:
 定理 isPath_iff_eq_nil
-  条件: {u : V} {p : G.Walk u u}
-  结论: p.IsPath ↔ p = nil
+  条件: {u : V} {p : G.途径 u u}
+  结论: p.是道路 ↔ p = nil
   证明: by
   simp
 -/
@@ -795,8 +795,8 @@ theorem IsPath.nil_iff_eq
   exact isPath_iff_nil.mp hp
 
 中文:
-定理 IsPath.nil_iff_eq
-  条件: {u v : V} {p : G.Walk u v} (hp : p.IsPath)
+定理 是道路.nil_iff_eq
+  条件: {u v : V} {p : G.途径 u v} (hp : p.是道路)
   结论: p.Nil ↔ u = v
   证明: by
   refine ⟨fun ⟨⟩ => rfl, ?_⟩
@@ -821,9 +821,9 @@ theorem _root_.SimpleGraph.Adj.isPath_toWalk
   simp [h.ne]
 
 中文:
-定理 _root_.SimpleGraph.Adj.isPath_toWalk
-  条件: (h : G.Adj u v)
-  结论: h.toWalk.IsPath
+定理 _root_.简单图.伴随.isPath_toWalk
+  条件: (h : G.伴随 u v)
+  结论: h.toWalk.是道路
   证明: by
   simp [h.ne]
 
@@ -845,9 +845,9 @@ theorem IsPath.reverse
 @[simp]
 
 中文:
-定理 IsPath.reverse
-  条件: {u v : V} {p : G.Walk u v} (h : p.IsPath)
-  结论: p.reverse.IsPath
+定理 是道路.reverse
+  条件: {u v : V} {p : G.途径 u v} (h : p.是道路)
+  结论: p.reverse.是道路
   证明: by
   simpa [isPath_def] using h
 
@@ -871,8 +871,8 @@ theorem isPath_reverse_iff
 
 中文:
 定理 isPath_reverse_iff
-  条件: {u v : V} (p : G.Walk u v)
-  结论: p.reverse.IsPath ↔ p.IsPath
+  条件: {u v : V} (p : G.途径 u v)
+  结论: p.reverse.是道路 ↔ p.是道路
   证明: by
   constructor <;> intro h <;> convert! h.reverse; simp
 
@@ -892,8 +892,8 @@ theorem IsPath.of_append_left
   exact List.Nodup.of_append_left
 
 中文:
-定理 IsPath.of_append_left
-  条件: {u v w : V} {p : G.Walk u v} {q : G.Walk v w}
+定理 是道路.of_append_left
+  条件: {u v w : V} {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   simp only [isPath_def, support_append]
   exact List.Nodup.of_append_left
@@ -917,8 +917,8 @@ theorem IsPath.of_append_right
   apply h.of_append_left
 
 中文:
-定理 IsPath.of_append_right
-  结论: {u v w : V} {p : G.Walk u v} {q : G.Walk v w}
+定理 是道路.of_append_right
+  结论: {u v w : V} {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   rw [← isPath_reverse_iff] at h ⊢
   rw [reverse_append] at h
@@ -945,7 +945,7 @@ theorem isTrail_of_isSubwalk
 
 中文:
 定理 isTrail_of_isSubwalk
-  结论: {v w v' w'} {p₁ : G.Walk v w} {p₂ : G.Walk v' w'}
+  结论: {v w v' w'} {p₁ : G.途径 v w} {p₂ : G.途径 v' w'}
   证明: by
   obtain ⟨_, _, h⟩ := h
   rw [h] at h₂
@@ -972,7 +972,7 @@ theorem isPath_of_isSubwalk
 
 中文:
 定理 isPath_of_isSubwalk
-  结论: {v w v' w' : V} {p₁ : G.Walk v w} {p₂ : G.Walk v' w'}
+  结论: {v w v' w' : V} {p₁ : G.途径 v w} {p₂ : G.途径 v' w'}
   证明: by
   obtain ⟨_, _, h⟩ := h
   rw [h] at h₂
@@ -997,9 +997,9 @@ lemma IsPath.of_adj
   aesop
 
 中文:
-引理 IsPath.of_adj
-  条件: {G : SimpleGraph V} {u v : V} (h : G.Adj u v)
-  结论: h.toWalk.IsPath
+引理 是道路.of_adj
+  条件: {G : 简单图 V} {u v : V} (h : G.伴随 u v)
+  结论: h.toWalk.是道路
   证明: by
   aesop
 -/
@@ -1018,7 +1018,7 @@ theorem concat_isPath_iff
 
 中文:
 定理 concat_isPath_iff
-  条件: {p : G.Walk u v} (h : G.Adj v w)
+  条件: {p : G.途径 u v} (h : G.伴随 v w)
   证明: by
   rw [← (p.concat h).isPath_reverse_iff]; rw [← p.isPath_reverse_iff]; rw [reverse_concat]; rw [← List.mem_reverse]; rw [← support_reverse]
   exact cons_isPath_iff h.symm p.reverse
@@ -1039,8 +1039,8 @@ theorem IsPath.concat
   proof: (concat_isPath_iff h).mpr ⟨hp, hw⟩
 
 中文:
-定理 IsPath.concat
-  结论: {p : G.Walk u v} (hp : p.IsPath) (hw : w ∉ p.support)
+定理 是道路.concat
+  结论: {p : G.途径 u v} (hp : p.是道路) (hw : w ∉ p.support)
   证明: (concat_isPath_iff h).mpr ⟨hp, hw⟩
 
 Depends on / 依赖: concat_isPath_iff
@@ -1058,8 +1058,8 @@ lemma IsPath.take_of_take
   proof: isPath_of_isSubwalk (p.take_isSubwalk_take hle) h
 
 中文:
-引理 IsPath.take_of_take
-  条件: {n k} {p : G.Walk u v} (h : (p.take k).IsPath) (hle : n <= k)
+引理 是道路.take_of_take
+  条件: {n k} {p : G.途径 u v} (h : (p.take k).是道路) (hle : n <= k)
   证明: isPath_of_isSubwalk (p.take_isSubwalk_take hle) h
 
 Depends on / 依赖: isPath_of_isSubwalk, p.take_isSubwalk_take, take_isSubwalk_take
@@ -1077,8 +1077,8 @@ lemma IsPath.drop_of_drop
   proof: isPath_of_isSubwalk (p.drop_isSubwalk_drop hle) h
 
 中文:
-引理 IsPath.drop_of_drop
-  条件: {n k} {p : G.Walk u v} (h : (p.drop k).IsPath) (hle : k <= n)
+引理 是道路.drop_of_drop
+  条件: {n k} {p : G.途径 u v} (h : (p.drop k).是道路) (hle : k <= n)
   证明: isPath_of_isSubwalk (p.drop_isSubwalk_drop hle) h
 
 Depends on / 依赖: drop_isSubwalk_drop, isPath_of_isSubwalk, p.drop_isSubwalk_drop
@@ -1096,8 +1096,8 @@ lemma IsPath.take
   proof: isPath_of_isSubwalk (p.isSubwalk_take n) h
 
 中文:
-引理 IsPath.take
-  条件: {p : G.Walk u v} (h : p.IsPath) (n : 自然数)
+引理 是道路.take
+  条件: {p : G.途径 u v} (h : p.是道路) (n : 自然数)
   证明: isPath_of_isSubwalk (p.isSubwalk_take n) h
 
 Depends on / 依赖: isPath_of_isSubwalk, isSubwalk_take, p.isSubwalk_take
@@ -1115,8 +1115,8 @@ lemma IsPath.drop
   proof: isPath_of_isSubwalk (p.isSubwalk_drop n) h
 
 中文:
-引理 IsPath.drop
-  条件: {p : G.Walk u v} (h : p.IsPath) (n : 自然数)
+引理 是道路.drop
+  条件: {p : G.途径 u v} (h : p.是道路) (n : 自然数)
   证明: isPath_of_isSubwalk (p.isSubwalk_drop n) h
 
 Depends on / 依赖: isPath_of_isSubwalk, isSubwalk_drop, p.isSubwalk_drop
@@ -1138,8 +1138,8 @@ lemma IsPath.mem_support_iff_exists_append
   exact ⟨q, r, this.of_append_left, this.of_append_right, hqr⟩
 
 中文:
-引理 IsPath.mem_support_iff_exists_append
-  条件: {p : G.Walk u v} (hp : p.IsPath)
+引理 是道路.mem_support_iff_存在_append
+  条件: {p : G.途径 u v} (hp : p.是道路)
   证明: by
   refine ⟨fun hw => ?_, fun ⟨q, r, hq, hr, hqr⟩ => p.mem_support_iff_exists_append.mpr ⟨q, r, hqr⟩⟩
   obtain ⟨q, r, hqr⟩ := p.mem_support_iff_exists_append.mp hw
@@ -1168,8 +1168,8 @@ lemma IsPath.disjoint_support_of_append
   exact List.disjoint_of_nodup_append hpq'
 
 中文:
-引理 IsPath.disjoint_support_of_append
-  结论: {p : G.Walk u v} {q : G.Walk v w}
+引理 是道路.disjoint_support_of_append
+  结论: {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   have hpq' := hpq.support_nodup
   rw [support_append] at hpq'
@@ -1205,8 +1205,8 @@ lemma IsPath.ne_of_mem_support_of_append
 @[si
 
 中文:
-引理 IsPath.ne_of_mem_support_of_append
-  结论: {p : G.Walk u v} {q : G.Walk v w}
+引理 是道路.ne_of_mem_support_of_append
+  结论: {p : G.途径 u v} {q : G.途径 v w}
   证明: by
   rintro rfl
   have hq : ¬q.Nil := by
@@ -1250,7 +1250,7 @@ theorem not_isCircuit_nil
 中文:
 定理 not_isCircuit_nil
   条件: {u : V}
-  结论: ¬(nil : G.Walk u u).IsCircuit
+  结论: ¬(nil : G.途径 u u).是Circuit
   证明: (·.ne_nil rfl)
 
 @[simp]
@@ -1275,7 +1275,7 @@ theorem not_isCycle_nil
 中文:
 定理 not_isCycle_nil
   条件: {u : V}
-  结论: ¬(nil : G.Walk u u).IsCycle
+  结论: ¬(nil : G.途径 u u).是环
   证明: (·.ne_nil rfl)
 
 @[deprecated (since := "2026-06-16")] alias IsCycle.not_of_nil := not_isCycle_nil
@@ -1295,8 +1295,8 @@ lemma IsCircuit.ne_bot
   statement: forall {p : G.Walk u u}, p.IsCircuit -> G != ⊥
 
 中文:
-引理 IsCircuit.ne_bot
-  结论: 对任意 {p : G.Walk u u}, p.IsCircuit -> G != ⊥
+引理 是Circuit.ne_bot
+  结论: 对任意 {p : G.途径 u u}, p.是Circuit -> G != ⊥
 -/
 lemma IsCircuit.ne_bot : forall {p : G.Walk u u}, p.IsCircuit -> G != ⊥
   | cons h _, hp => by rintro rfl; exact h
@@ -1315,8 +1315,8 @@ lemma IsCircuit.three_le_length
 | .cons _ .cons _ .cons _ _ => grind [length_cons]
 
 中文:
-引理 IsCircuit.three_le_length
-  条件: {p : G.Walk v v} (hp : p.IsCircuit)
+引理 是Circuit.three_le_length
+  条件: {p : G.途径 v v} (hp : p.是Circuit)
   结论: 3 <= p.length
   证明: by
   match p with
@@ -1343,7 +1343,7 @@ lemma not_nil_of_isCycle_cons
 
 中文:
 引理 not_nil_of_isCycle_cons
-  条件: {p : G.Walk u v} {h : G.Adj v u} (hc : (Walk.cons h p).IsCycle)
+  条件: {p : G.途径 u v} {h : G.伴随 v u} (hc : (途径.cons h p).是环)
   证明: by
   grind [not_nil_iff_lt_length, hc.three_le_length, length_cons]
 
@@ -1367,7 +1367,7 @@ theorem cons_isCycle_iff
 
 中文:
 定理 cons_isCycle_iff
-  条件: {u v : V} (p : G.Walk v u) (h : G.Adj u v)
+  条件: {u v : V} (p : G.途径 v u) (h : G.伴随 u v)
   证明: by
   simp only [Walk.isCycle_def, Walk.isPath_def, Walk.isTrail_def, edges_cons, List.nodup_cons,
     support_cons, List.tail_cons]
@@ -1392,8 +1392,8 @@ theorem IsCycle.nodup_dropLast_support
   proof: p.tail_support_perm_dropLast_support.nodup_iff.mp h.support_nodup
 
 中文:
-定理 IsCycle.nodup_dropLast_support
-  条件: {p : G.Walk u u} (h : p.IsCycle)
+定理 是环.nodup_dropLast_support
+  条件: {p : G.途径 u u} (h : p.是环)
   证明: p.tail_support_perm_dropLast_support.nodup_iff.mp h.support_nodup
 
 Depends on / 依赖: h.support_nodup, nodup_iff, p.tail_support_perm_dropLast_support.nodup_iff.mp, support_nodup, tail_support_perm_dropLast_support
@@ -1416,9 +1416,9 @@ lemma IsCycle.reverse
 @[simp]
 
 中文:
-引理 IsCycle.reverse
-  条件: {p : G.Walk u u} (h : p.IsCycle)
-  结论: p.reverse.IsCycle
+引理 是环.reverse
+  条件: {p : G.途径 u u} (h : p.是环)
+  结论: p.reverse.是环
   证明: by
   simp only [Walk.isCycle_def, nodup_tail_support_reverse] at h ⊢
   exact ⟨h.1.reverse, fun h' => h.2.1 (by simp_all [← Walk.length_eq_zero_iff]), h.2.2⟩
@@ -1442,8 +1442,8 @@ lemma isCycle_reverse
 
 中文:
 引理 isCycle_reverse
-  条件: {p : G.Walk u u}
-  结论: p.reverse.IsCycle ↔ p.IsCycle where
+  条件: {p : G.途径 u u}
+  结论: p.reverse.是环 ↔ p.是环 where
   证明: by simpa using h.reverse
   mpr := .reverse
 
@@ -1466,8 +1466,8 @@ lemma IsCycle.isPath_of_append_right
   exact ⟨this.2.2 (p.end_mem_tail_support h), this.2.1⟩
 
 中文:
-引理 IsCycle.isPath_of_append_right
-  结论: {p : G.Walk u v} {q : G.Walk v u} (h : ¬ p.Nil)
+引理 是环.isPath_of_append_right
+  结论: {p : G.途径 u v} {q : G.途径 v u} (h : ¬ p.Nil)
   证明: by
   have := hcyc.2
   rw [tail_support_append]; rw [List.nodup_append'] at this
@@ -1492,8 +1492,8 @@ lemma IsCycle.isPath_of_append_left
   proof: p.isPath_reverse_iff.mp ((reverse_append _ _ ▸ hcyc.reverse).isPath_of_append_right (by simpa))
 
 中文:
-引理 IsCycle.isPath_of_append_left
-  结论: {p : G.Walk u v} {q : G.Walk v u} (h : ¬ q.Nil)
+引理 是环.isPath_of_append_left
+  结论: {p : G.途径 u v} {q : G.途径 v u} (h : ¬ q.Nil)
   证明: p.isPath_reverse_iff.mp ((reverse_append _ _ ▸ hcyc.reverse).isPath_of_append_right (by simpa))
 
 Depends on / 依赖: hcyc.reverse, isPath_of_append_right, isPath_reverse_iff, p.isPath_reverse_iff.mp, reverse, reverse_append
@@ -1512,9 +1512,9 @@ theorem IsCycle.isPath_tail
   proof: IsPath.mk' p.support_tail_of_not_nil h.not_nil ▸ h.support_nodup
 
 中文:
-定理 IsCycle.isPath_tail
-  条件: {p : G.Walk u u} (h : p.IsCycle)
-  结论: p.tail.IsPath
+定理 是环.isPath_tail
+  条件: {p : G.途径 u u} (h : p.是环)
+  结论: p.tail.是道路
   证明: IsPath.mk' p.support_tail_of_not_nil h.not_nil ▸ h.support_nodup
 
 Depends on / 依赖: IsPath, IsPath.mk, h.not_nil, h.support_nodup, not_nil, p.support_tail_of_not_nil, support_nodup, support_tail_of_not_nil
@@ -1536,9 +1536,9 @@ lemma IsPath.tail
     simp_all [Walk.isPath_def]
 
 中文:
-引理 IsPath.tail
-  条件: {p : G.Walk u v} (hp : p.IsPath)
-  结论: p.tail.IsPath
+引理 是道路.tail
+  条件: {p : G.途径 u v} (hp : p.是道路)
+  结论: p.tail.是道路
   证明: by
   cases p with
   | nil => simp
@@ -1563,9 +1563,9 @@ theorem IsCycle.isPath_dropLast
   proof: .mk' p.support_dropLast h.not_nil ▸ h.nodup_dropLast_support
 
 中文:
-定理 IsCycle.isPath_dropLast
-  条件: {p : G.Walk u u} (h : p.IsCycle)
-  结论: p.dropLast.IsPath
+定理 是环.isPath_dropLast
+  条件: {p : G.途径 u u} (h : p.是环)
+  结论: p.dropLast.是道路
   证明: .mk' p.support_dropLast h.not_nil ▸ h.nodup_dropLast_support
 
 Depends on / 依赖: h.nodup_dropLast_support, h.not_nil, nodup_dropLast_support, not_nil, p.support_dropLast, support_dropLast
@@ -1583,9 +1583,9 @@ theorem IsPath.dropLast
   proof: hp.take _
 
 中文:
-定理 IsPath.dropLast
-  条件: (hp : p.IsPath)
-  结论: p.dropLast.IsPath
+定理 是道路.dropLast
+  条件: (hp : p.是道路)
+  结论: p.dropLast.是道路
   证明: hp.take _
 
 Depends on / 依赖: hp.take
@@ -1605,8 +1605,8 @@ theorem IsCycle.isPath_drop
   simp [h.drop (n - 1), -drop_drop]
 
 中文:
-定理 IsCycle.isPath_drop
-  条件: {u n} {p : G.Walk u u} (h : p.IsCycle) (hn : 0 < n)
+定理 是环.isPath_drop
+  条件: {u n} {p : G.途径 u u} (h : p.是环) (hn : 0 < n)
   证明: by
   replace h : (p.drop 1).IsPath := h.isPath_tail
   rw [← Nat.add_sub_of_le hn]; rw [drop_add_eq]
@@ -1633,8 +1633,8 @@ theorem IsCycle.isPath_take
   exact h.take n
 
 中文:
-定理 IsCycle.isPath_take
-  条件: {u n} {p : G.Walk u u} (h : p.IsCycle) (hn : n < p.length)
+定理 是环.isPath_take
+  条件: {u n} {p : G.途径 u u} (h : p.是环) (hn : n < p.length)
   证明: by
   replace h : (p.take (p.length - 1)).IsPath := h.isPath_dropLast
   suffices ((p.take (p.length - 1)).take n).IsPath by
@@ -1665,8 +1665,8 @@ lemma exists_isTrail_forall_isTrail_length_le_length
   obtain ⟨_, ⟨⟨u, v, p,
 
 中文:
-引理 exists_isTrail_forall_isTrail_length_le_length
-  结论: (G : SimpleGraph V) [N : Nonempty V]
+引理 存在_isTrail_对任意_isTrail_length_le_length
+  结论: (G : 简单图 V) [N : 非空 V]
   证明: by
   have := Fintype.ofFinite G.edgeSet
   let s := {n | exists (u v : V) (p : G.Walk u v), p.IsTrail ∧ p.length = n}
@@ -1706,8 +1706,8 @@ lemma exists_isPath_forall_isPath_length_le_length
   obtain ⟨_, ⟨⟨u
 
 中文:
-引理 exists_isPath_forall_isPath_length_le_length
-  结论: (G : SimpleGraph V) [N : Nonempty V]
+引理 存在_isPath_对任意_isPath_length_le_length
+  结论: (G : 简单图 V) [N : 非空 V]
   证明: by
   have := Fintype.ofFinite G.edgeSet
   let s := {n | exists (u v : V) (p : G.Walk u v), p.IsPath ∧ p.length = n}
@@ -1767,8 +1767,8 @@ theorem IsPath.length_lt
   exact hp.support_nodup.length_le_card
 
 中文:
-定理 IsPath.length_lt
-  条件: [Fintype V] {u v : V} {p : G.Walk u v} (hp : p.IsPath)
+定理 是道路.length_lt
+  条件: [有限类型 V] {u v : V} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   rw [Nat.lt_iff_add_one_le]; rw [← length_support]
   exact hp.support_nodup.length_le_card
@@ -1798,8 +1798,8 @@ lemma IsPath.getVert_injOn
   
 
 中文:
-引理 IsPath.getVert_injOn
-  条件: {p : G.Walk u v} (hp : p.IsPath)
+引理 是道路.getVert_injOn
+  条件: {p : G.途径 u v} (hp : p.是道路)
   证明: by
   intro n hn m hm hnm
   induction p generalizing n m with
@@ -1849,8 +1849,8 @@ lemma IsPath.getVert_eq_start_iff_of_not_nil
     simp_all
 
 中文:
-引理 IsPath.getVert_eq_start_iff_of_not_nil
-  条件: {i : 自然数} {p : G.Walk u w} (hp : p.IsPath) (h : ¬p.Nil)
+引理 是道路.getVert_eq_start_iff_of_not_nil
+  条件: {i : 自然数} {p : G.途径 u w} (hp : p.是道路) (h : ¬p.Nil)
   证明: by
   refine ⟨fun h => ?_, by simp_all⟩
   by_cases h' : i <= p.length
@@ -1884,8 +1884,8 @@ lemma IsPath.getVert_eq_start_iff
   · exact hp.getVert_eq_start_iff_of_not_nil not_nil_cons
 
 中文:
-引理 IsPath.getVert_eq_start_iff
-  条件: {i : 自然数} {p : G.Walk u w} (hp : p.IsPath) (hi : i <= p.length)
+引理 是道路.getVert_eq_start_iff
+  条件: {i : 自然数} {p : G.途径 u w} (hp : p.是道路) (hi : i <= p.length)
   证明: by
   cases p
   · simpa using hi
@@ -1912,8 +1912,8 @@ lemma IsPath.getVert_eq_end_iff
   lia
 
 中文:
-引理 IsPath.getVert_eq_end_iff
-  条件: {i : 自然数} {p : G.Walk u w} (hp : p.IsPath) (hi : i <= p.length)
+引理 是道路.getVert_eq_end_iff
+  条件: {i : 自然数} {p : G.途径 u w} (hp : p.是道路) (hi : i <= p.length)
   证明: by
   have := hp.reverse.getVert_eq_start_iff (by lia : p.reverse.length - i <= p.reverse.length)
   simp only [length_reverse, getVert_reverse, show p.length - (p.length - i) = i by lia] at this
@@ -1950,9 +1950,9 @@ lemma IsPath.getVert_injOn_iff
         (by rw [length_cons]; lia : n + 1 <= (q.cons h
 
 中文:
-引理 IsPath.getVert_injOn_iff
-  条件: (p : G.Walk u v)
-  结论: Set.InjOn p.getVert {i | i <= p.length} ↔
+引理 是道路.getVert_injOn_iff
+  条件: (p : G.途径 u v)
+  结论: 集合.单射限制 p.getVert {i | i <= p.length} ↔
   证明: by
   refine ⟨?_, fun a => a.getVert_injOn⟩
   induction p with
@@ -2004,8 +2004,8 @@ have hnil := edges_eq_nil.not.mp List.ne_nil_of_mem hmem
   grind [fst_mem_support_of_mem_edges]
 
 中文:
-定理 IsPath.eq_snd_of_mem_edges
-  条件: {p : G.Walk u v} (hp : p.IsPath) (hmem : s(u, w) in p.edges)
+定理 是道路.eq_snd_of_mem_edges
+  条件: {p : G.途径 u v} (hp : p.是道路) (hmem : s(u, w) in p.edges)
   证明: by
 have hnil := edges_eq_nil.not.mp List.ne_nil_of_mem hmem
   rw [← cons_tail_eq _ hnil]; rw [edges_cons]; rw [List.mem_cons]; rw [Sym2.eq]; rw [Sym2.rel_iff'] at hmem
@@ -2031,8 +2031,8 @@ theorem IsPath.eq_penultimate_of_mem_edges
 .eq_snd_of_mem_edges (w := w) .mpr hp simpa [hmem] using isPath_reverse_iff p
 
 中文:
-定理 IsPath.eq_penultimate_of_mem_edges
-  结论: {p : G.Walk u v} (hp : p.IsPath)
+定理 是道路.eq_penultimate_of_mem_edges
+  结论: {p : G.途径 u v} (hp : p.是道路)
   证明: by
 .eq_snd_of_mem_edges (w := w) .mpr hp simpa [hmem] using isPath_reverse_iff p
 
@@ -2059,8 +2059,8 @@ theorem IsPath.injOn_support_of_isPath_map
   simpa
 
 中文:
-定理 IsPath.injOn_support_of_isPath_map
-  条件: (h : (p.map f).IsPath)
+定理 是道路.injOn_support_of_isPath_map
+  条件: (h : (p.map f).是道路)
   证明: by
   intro u hu v hv hf
   obtain ⟨u, rfl⟩ := List.get_of_mem hu
@@ -2101,8 +2101,8 @@ lemma IsCycle.getVert_injOn
     (by lia : n - 1 <= p.tail.l
 
 中文:
-引理 IsCycle.getVert_injOn
-  条件: {p : G.Walk u u} (hpc : p.IsCycle)
+引理 是环.getVert_injOn
+  条件: {p : G.途径 u u} (hpc : p.是环)
   证明: by
   rw [← p.cons_tail_eq hpc.not_nil] at hpc
   intro n hn m hm hnm
@@ -2139,8 +2139,8 @@ lemma IsCycle.getVert_injOn'
     (by simp only [Walk.length_reverse, Set.mem_ofPre
 
 中文:
-引理 IsCycle.getVert_injOn'
-  条件: {p : G.Walk u u} (hpc : p.IsCycle)
+引理 是环.getVert_injOn'
+  条件: {p : G.途径 u u} (hpc : p.是环)
   证明: by
   intro n hn m hm hnm
   simp only [Set.mem_ofPred_eq] at *
@@ -2177,8 +2177,8 @@ lemma IsCycle.snd_ne_penultimate
   lia
 
 中文:
-引理 IsCycle.snd_ne_penultimate
-  条件: {p : G.Walk u u} (hp : p.IsCycle)
+引理 是环.snd_ne_penultimate
+  条件: {p : G.途径 u u} (hp : p.是环)
   结论: p.snd != p.penultimate
   证明: by
   intro h
@@ -2208,8 +2208,8 @@ lemma IsCycle.getVert_endpoint_iff
     (by simp only [Set.mem_ofPred_eq]; lia) (h.symm ▸ (Walk.getVert_length p).symm)
 
 中文:
-引理 IsCycle.getVert_endpoint_iff
-  条件: {i : 自然数} {p : G.Walk u u} (hpc : p.IsCycle) (hl : i <= p.length)
+引理 是环.getVert_endpoint_iff
+  条件: {i : 自然数} {p : G.途径 u u} (hpc : p.是环) (hl : i <= p.length)
   证明: by
   refine ⟨?_, by aesop⟩
   rw [or_iff_not_imp_left]
@@ -2244,8 +2244,8 @@ lemma IsCycle.getVert_sub_one_ne_getVert_add_one
     (by si
 
 中文:
-引理 IsCycle.getVert_sub_one_ne_getVert_add_one
-  结论: {i : 自然数} {p : G.Walk u u} (hpc : p.IsCycle)
+引理 是环.getVert_sub_one_ne_getVert_add_one
+  结论: {i : 自然数} {p : G.途径 u u} (hpc : p.是环)
   证明: by
   intro h'
   have hl := hpc.three_le_length
@@ -2287,7 +2287,7 @@ theorem isCycle_iff_isPath_tail_and_le_length
 
 中文:
 定理 isCycle_iff_isPath_tail_and_le_length
-  条件: {p : G.Walk u u}
+  条件: {p : G.途径 u u}
   证明: by
   refine ⟨fun h => ⟨h.isPath_tail, h.three_le_length⟩, fun ⟨h₁, h₂⟩ => ?_⟩
   cases p with
@@ -2327,8 +2327,8 @@ theorem IsTrail.takeUntil
   proof: IsTrail.of_append_left (q := p.dropUntil u h) (by rwa [← take_spec _ h] at hc)
 
 中文:
-定理 IsTrail.takeUntil
-  结论: {u v w : V} {p : G.Walk v w} (hc : p.IsTrail)
+定理 是Trail.takeUntil
+  结论: {u v w : V} {p : G.途径 v w} (hc : p.是Trail)
   证明: IsTrail.of_append_left (q := p.dropUntil u h) (by rwa [← take_spec _ h] at hc)
 -/
 protected theorem IsTrail.takeUntil {u v w : V} {p : G.Walk v w} (hc : p.IsTrail)
@@ -2345,8 +2345,8 @@ theorem IsTrail.dropUntil
     (by rwa [← take_spec _ h] at hc)
 
 中文:
-定理 IsTrail.dropUntil
-  结论: {u v w : V} {p : G.Walk v w} (hc : p.IsTrail)
+定理 是Trail.dropUntil
+  结论: {u v w : V} {p : G.途径 v w} (hc : p.是Trail)
   证明: IsTrail.of_append_right (p := p.takeUntil u h) (q := p.dropUntil u h)
     (by rwa [← take_spec _ h] at hc)
 -/
@@ -2364,8 +2364,8 @@ theorem IsPath.takeUntil
   proof: IsPath.of_append_left (q := p.dropUntil u h) (by rwa [← take_spec _ h] at hc)
 
 中文:
-定理 IsPath.takeUntil
-  结论: {u v w : V} {p : G.Walk v w} (hc : p.IsPath)
+定理 是道路.takeUntil
+  结论: {u v w : V} {p : G.途径 v w} (hc : p.是道路)
   证明: IsPath.of_append_left (q := p.dropUntil u h) (by rwa [← take_spec _ h] at hc)
 -/
 protected theorem IsPath.takeUntil {u v w : V} {p : G.Walk v w} (hc : p.IsPath)
@@ -2382,8 +2382,8 @@ theorem IsPath.dropUntil
     (by rwa [← take_spec _ h] at hc)
 
 中文:
-定理 IsPath.dropUntil
-  结论: {u v w : V} {p : G.Walk v w} (hc : p.IsPath)
+定理 是道路.dropUntil
+  结论: {u v w : V} {p : G.途径 v w} (hc : p.是道路)
   证明: IsPath.of_append_right (p := p.takeUntil u h) (q := p.dropUntil u h)
     (by rwa [← take_spec _ h] at hc)
 -/
@@ -2401,8 +2401,8 @@ lemma IsTrail.disjoint_edges_takeUntil_dropUntil
   proof: List.disjoint_of_nodup_append by simpa [← edges_append] using hw.edges_nodup
 
 中文:
-引理 IsTrail.disjoint_edges_takeUntil_dropUntil
-  结论: {x : V} {w : G.Walk u v} (hw : w.IsTrail)
+引理 是Trail.disjoint_edges_takeUntil_dropUntil
+  结论: {x : V} {w : G.途径 u v} (hw : w.是Trail)
   证明: List.disjoint_of_nodup_append by simpa [← edges_append] using hw.edges_nodup
 
 Depends on / 依赖: List.disjoint_of_nodup_append, disjoint_of_nodup_append, edges_append, edges_nodup, hw.edges_nodup
@@ -2422,7 +2422,7 @@ lemma isTrail_rotate
 
 中文:
 引理 isTrail_rotate
-  条件: {c : G.Walk v v} (hu : u in c.support)
+  条件: {c : G.途径 v v} (hu : u in c.support)
   证明: by
   rw [isTrail_def]; rw [isTrail_def]; rw [(c.rotate_edges u hu).perm.nodup_iff]
 -/
@@ -2440,7 +2440,7 @@ lemma isCircuit_rotate
 
 中文:
 引理 isCircuit_rotate
-  条件: {c : G.Walk v v} (hu : u in c.support)
+  条件: {c : G.途径 v v} (hu : u in c.support)
   证明: by simp [isCircuit_def]
 -/
 @[simp] lemma isCircuit_rotate {c : G.Walk v v} (hu : u in c.support) :
@@ -2460,7 +2460,7 @@ protected alias ⟨IsCycle.of_rotate, IsCycle.rotate⟩ := isCycle_rotate
 
 中文:
 引理 isCycle_rotate
-  条件: {c : G.Walk v v} (hu : u in c.support)
+  条件: {c : G.途径 v v} (hu : u in c.support)
   证明: by simp [isCycle_def, (support_rotate ..).perm.nodup_iff]
 
 protected alias ⟨IsTrail.of_rotate, IsTrail.rotate⟩ := isTrail_rotate
@@ -2488,8 +2488,8 @@ lemma IsCycle.isPath_takeUntil
   exact (c.takeUntil w h).isPath_reverse_iff.mp (hc.isPath_of_append_right (not_nil_of_ne hvw))
 
 中文:
-引理 IsCycle.isPath_takeUntil
-  条件: {c : G.Walk v v} (hc : c.IsCycle) (h : w in c.support)
+引理 是环.isPath_takeUntil
+  条件: {c : G.途径 v v} (hc : c.是环) (h : w in c.support)
   证明: by
   by_cases hvw : v = w
   · subst hvw
@@ -2520,8 +2520,8 @@ have := List.count_eq_one_of_mem hc.support_nodup c.end_mem_tail_support hc.not_
   grind
 
 中文:
-定理 IsCycle.count_support
-  条件: {c : G.Walk v v} (hc : c.IsCycle)
+定理 是环.count_support
+  条件: {c : G.途径 v v} (hc : c.是环)
   结论: c.support.count v = 2
   证明: by
 have := List.count_eq_one_of_mem hc.support_nodup c.end_mem_tail_support hc.not_nil
@@ -2548,8 +2548,8 @@ have := List.count_eq_one_of_mem hc.support_nodup this.resolve_left head_support
   grind
 
 中文:
-定理 IsCycle.count_support_of_mem
-  结论: {c : G.Walk v v} (hc : c.IsCycle) (hu : u in c.support)
+定理 是环.count_support_of_mem
+  结论: {c : G.途径 v v} (hc : c.是环) (hu : u in c.support)
   证明: by
 have := List.eq_or_mem_of_mem_cons List.cons_head_tail c.support_ne_nil ▸ hu
 have := List.count_eq_one_of_mem hc.support_nodup this.resolve_left head_support _ ▸ hv
@@ -2583,7 +2583,7 @@ lemma endpoint_notMem_support_takeUntil
 
 中文:
 引理 endpoint_notMem_support_takeUntil
-  结论: {p : G.Walk u v} (hp : p.IsPath) (hw : w in p.support)
+  结论: {p : G.途径 u v} (hp : p.是道路) (hw : w in p.support)
   证明: by
   intro hv
   rw [Walk.mem_support_iff_exists_getVert] at hv
@@ -2625,7 +2625,7 @@ theorem isPath_iff_isSubwalk_imp_nil
 
 中文:
 定理 isPath_iff_isSubwalk_imp_nil
-  条件: {u v} {p : G.Walk u v}
+  条件: {u v} {p : G.途径 u v}
   证明: by
   refine ⟨fun hp v w hwp => ?_, fun h => .mk' ?_⟩
   · simp [w.isPath_iff_nil.mp <| isPath_of_isSubwalk hwp hp]
@@ -2662,8 +2662,8 @@ theorem IsTrail.isPath_iff_isSubwalk_imp_not_isCycle
 .mpr ⟨hp, fun hup => h u (p.takeUntil u hup |>.cons hadj) ?_ ?_⟩ 
 
 中文:
-定理 IsTrail.isPath_iff_isSubwalk_imp_not_isCycle
-  条件: {u v} {p : G.Walk u v} (ht : p.IsTrail)
+定理 是Trail.isPath_iff_isSubwalk_imp_not_isCycle
+  条件: {u v} {p : G.途径 u v} (ht : p.是Trail)
   证明: by
   refine ⟨by grind [isPath_iff_isSubwalk_imp_nil, IsCycle.not_nil], fun h => ?_⟩
   classical
@@ -2702,7 +2702,7 @@ abbreviation Path
   body: { p : G.Walk u v // p.IsPath }
 
 中文:
-缩写 Path
+缩写 道路
   签名: (u v : V)
   定义体: { p : G.Walk u v // p.IsPath }
 
@@ -2728,8 +2728,8 @@ theorem isPath
 
 中文:
 定理 isPath
-  条件: {u v : V} (p : G.Path u v)
-  结论: (p : G.Walk u v).IsPath
+  条件: {u v : V} (p : G.道路 u v)
+  结论: (p : G.途径 u v).是道路
   证明: p.property
 
 @[simp]
@@ -2748,8 +2748,8 @@ theorem isTrail
 
 中文:
 定理 isTrail
-  条件: {u v : V} (p : G.Path u v)
-  结论: (p : G.Walk u v).IsTrail
+  条件: {u v : V} (p : G.道路 u v)
+  结论: (p : G.途径 u v).是Trail
   证明: p.property.isTrail
 -/
 protected theorem isTrail {u v : V} (p : G.Path u v) : (p : G.Walk u v).IsTrail :=
@@ -2785,7 +2785,7 @@ definition singleton
 
 中文:
 定义 singleton
-  签名: {u v : V} (h : G.Adj u v)
+  签名: {u v : V} (h : G.伴随 u v)
   定义体: ⟨Walk.cons h Walk.nil, by simp [h.ne]⟩
 
 Depends on / 依赖: Walk.cons, Walk.nil, h.ne
@@ -2803,7 +2803,7 @@ theorem mk'_mem_edges_singleton
 
 中文:
 定理 mk'_mem_edges_singleton
-  条件: {u v : V} (h : G.Adj u v)
+  条件: {u v : V} (h : G.伴随 u v)
   证明: by simp [singleton]
 
 Depends on / 依赖: singleton
@@ -2823,7 +2823,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: {u v : V} (p : G.Path u v)
+  签名: {u v : V} (p : G.道路 u v)
   定义体: ⟨Walk.reverse p, p.property.reverse⟩
 
 Depends on / 依赖: Walk.reverse, p.property.reverse, property, reverse
@@ -2841,7 +2841,7 @@ theorem count_support_eq_one
 
 中文:
 定理 count_support_eq_one
-  结论: [DecidableEq V] {u v w : V} {p : G.Path u v}
+  结论: [DecidableEq V] {u v w : V} {p : G.道路 u v}
   证明: List.count_eq_one_of_mem p.property.support_nodup hw
 
 Depends on / 依赖: List.count_eq_one_of_mem, count_eq_one_of_mem, p.property.support_nodup, property, support_nodup
@@ -2862,7 +2862,7 @@ theorem count_edges_eq_one
 
 中文:
 定理 count_edges_eq_one
-  结论: [DecidableEq V] {u v : V} {p : G.Path u v} (e : Sym2 V)
+  结论: [DecidableEq V] {u v : V} {p : G.道路 u v} (e : Sym2 V)
   证明: List.count_eq_one_of_mem p.property.isTrail.edges_nodup hw
 
 @[simp]
@@ -2885,8 +2885,8 @@ theorem nodup_support
 
 中文:
 定理 nodup_support
-  条件: {u v : V} (p : G.Path u v)
-  结论: (p : G.Walk u v).support.Nodup
+  条件: {u v : V} (p : G.道路 u v)
+  结论: (p : G.途径 u v).support.Nodup
   证明: (Walk.isPath_def _).mp p.property
 
 Depends on / 依赖: Walk.isPath_def, isPath_def, p.property, property
@@ -2908,8 +2908,8 @@ theorem loop_eq
 
 中文:
 定理 loop_eq
-  条件: {v : V} (p : G.Path v v)
-  结论: p = Path.nil
+  条件: {v : V} (p : G.道路 v v)
+  结论: p = 道路.nil
   证明: by
   obtain ⟨_ | _, h⟩ := p
   · rfl
@@ -2930,7 +2930,7 @@ theorem notMem_edges_of_loop
 
 中文:
 定理 notMem_edges_of_loop
-  条件: {v : V} {e : Sym2 V} {p : G.Path v v}
+  条件: {v : V} {e : Sym2 V} {p : G.道路 v v}
   证明: by simp [p.loop_eq]
 
 Depends on / 依赖: loop_eq, p.loop_eq
@@ -2949,7 +2949,7 @@ theorem cons_isCycle
 
 中文:
 定理 cons_isCycle
-  结论: {u v : V} (p : G.Path v u) (h : G.Adj u v)
+  结论: {u v : V} (p : G.道路 v u) (h : G.伴随 u v)
   证明: by
   simp [Walk.isCycle_def, Walk.isTrail_cons, he]
 
@@ -2980,8 +2980,8 @@ theorem IsPath.length_eq_one_of_mem_edges
   exact (hp.eq_penultimate_of_mem_edges <| Sym2.eq_swap ▸ h).symm
 
 中文:
-定理 IsPath.length_eq_one_of_mem_edges
-  条件: {p : G.Walk u v} (hp : p.IsPath) (h : s(u, v) in p.edges)
+定理 是道路.length_eq_one_of_mem_edges
+  条件: {p : G.途径 u v} (hp : p.是道路) (h : s(u, v) in p.edges)
   证明: by
   suffices p.length - 1 = 0 by grind [length_edges]
   rw [← hp.getVert_eq_start_iff <| p.length.sub_le 1]
@@ -3010,8 +3010,8 @@ apply p.ext_getVert_le_length by simp [hp.length_eq_one_of_mem_edges h]
     rw [hl]; rw [getVert_cons_succ]; rw [getVert_zero]; rw [← hp.length_eq_one_of_mem_
 
 中文:
-定理 IsPath.eq_adj_toWalk_of_mem_edges
-  条件: {p : G.Walk u v} (hp : p.IsPath) (h : s(u, v) in p.edges)
+定理 是道路.eq_adj_toWalk_of_mem_edges
+  条件: {p : G.途径 u v} (hp : p.是道路) (h : s(u, v) in p.edges)
   证明: by
 apply p.ext_getVert_le_length by simp [hp.length_eq_one_of_mem_edges h]
   intro _ hl
@@ -3047,8 +3047,8 @@ have := q.mem_support_iff.mp q.fst_mem_support_of_mem_edges heq
 have := q.mem
 
 中文:
-定理 IsPath.disjoint_edges_of_disjoint_support
-  结论: {p : G.Walk u v} {q : G.Walk v u} (hp : p.IsPath)
+定理 是道路.disjoint_edges_of_disjoint_support
+  结论: {p : G.途径 u v} {q : G.途径 v u} (hp : p.是道路)
   证明: by
   simp only [List.disjoint_left] at hd ⊢
   contrapose! hd
@@ -3087,8 +3087,8 @@ lemma IsPath.isCycle_append
     exact ⟨hp.support_nodup.tail, hq.support_nodup.tail, h⟩
 
 中文:
-引理 IsPath.isCycle_append
-  结论: {p : G.Walk u v} {q : G.Walk v u} (hp : p.IsPath) (hq : q.IsPath)
+引理 是道路.isCycle_append
+  结论: {p : G.途径 u v} {q : G.途径 v u} (hp : p.是道路) (hq : q.是道路)
   证明: by
   rw [isCycle_def]; rw [isTrail_append]
   refine ⟨⟨hp.isTrail, hq.isTrail, ?_⟩, ?_, ?_⟩
@@ -3124,8 +3124,8 @@ theorem IsPath.exists_isCycle_of_ne
     · have := ih _ (hs ▸ length_
 
 中文:
-定理 IsPath.exists_isCycle_of_ne
-  结论: {p q : G.Walk u v} (hp : p.IsPath) (hq : q.IsPath)
+定理 是道路.存在_isCycle_of_ne
+  结论: {p q : G.途径 u v} (hp : p.是道路) (hq : q.是道路)
   证明: by
   induction hs : p.length using Nat.strongRec generalizing u v with | ind s ih =>
   by_cases! hw : exists w, w in p.support ∧ w in q.support ∧ w != u ∧ w != v
@@ -3171,8 +3171,8 @@ refine .append ?_ .tail .reverse ?_
 .sublist · exact isSubwalk_iff_
 
 中文:
-定理 IsPath.exists_isCycle_sublist_of_ne
-  结论: {p q : G.Walk u v} (hp : p.IsPath)
+定理 是道路.存在_isCycle_sublist_of_ne
+  结论: {p q : G.途径 u v} (hp : p.是道路)
   证明: by
   have ⟨u', v', p', q', hp', hq', hcyc⟩ := hp.exists_isCycle_of_ne hq h
   use u', hp'.support_subset p'.start_mem_support, hq'.support_subset q'.start_mem_support
@@ -3206,8 +3206,8 @@ theorem IsPath.exists_isCycle_length_le_add_of_ne
   use w, hw₁, hw₂, c, hc₁, by grind [hc₂.length_le]
 
 中文:
-定理 IsPath.exists_isCycle_length_le_add_of_ne
-  结论: {p q : G.Walk u v} (hp : p.IsPath)
+定理 是道路.存在_isCycle_length_le_add_of_ne
+  结论: {p q : G.途径 u v} (hp : p.是道路)
   证明: by
   obtain ⟨w, hw₁, hw₂, c, hc₁, hc₂⟩ := hp.exists_isCycle_sublist_of_ne hq h
   use w, hw₁, hw₂, c, hc₁, by grind [hc₂.length_le]
@@ -3272,7 +3272,7 @@ theorem bypass_copy
 
 中文:
 定理 bypass_copy
-  条件: (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -3300,8 +3300,8 @@ theorem bypass_isPath
 
 中文:
 定理 bypass_isPath
-  条件: (p : G.Walk u v)
-  结论: p.bypass.IsPath
+  条件: (p : G.途径 u v)
+  结论: p.bypass.是道路
   证明: by
   induction p with
   | nil => simp!
@@ -3332,7 +3332,7 @@ definition toPath
 
 中文:
 定义 toPath
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: ⟨p.bypass, p.bypass_isPath⟩
 
 Depends on / 依赖: bypass, bypass_isPath, p.bypass, p.bypass_isPath
@@ -3359,7 +3359,7 @@ theorem support_bypass_sublist_support
 
 中文:
 定理 support_bypass_sublist_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.support <+ p.support
   证明: by
   induction p with
@@ -3394,7 +3394,7 @@ theorem support_bypass_subset_support
 
 中文:
 定理 support_bypass_subset_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.support subseteq p.support
   证明: p.support_bypass_sublist_support.subset
 
@@ -3419,7 +3419,7 @@ theorem support_toPath_subset_support
 
 中文:
 定理 support_toPath_subset_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: p.support_bypass_subset_support
 
 @[deprecated (since := "2026-05-25")] alias support_toPath_subset := support_toPath_subset_support
@@ -3451,7 +3451,7 @@ theorem darts_bypass_sublist_darts
 
 中文:
 定理 darts_bypass_sublist_darts
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.darts <+ p.darts
   证明: by
   induction p with
@@ -3486,7 +3486,7 @@ theorem darts_bypass_subset_darts
 
 中文:
 定理 darts_bypass_subset_darts
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.darts subseteq p.darts
   证明: p.darts_bypass_sublist_darts.subset
 
@@ -3511,7 +3511,7 @@ theorem edges_bypass_sublist_edges
 
 中文:
 定理 edges_bypass_sublist_edges
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.edges <+ p.edges
   证明: p.darts_bypass_sublist_darts.map _
 
@@ -3533,7 +3533,7 @@ theorem edges_bypass_subset_edges
 
 中文:
 定理 edges_bypass_subset_edges
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.edges subseteq p.edges
   证明: p.edges_bypass_sublist_edges.subset
 
@@ -3560,7 +3560,7 @@ theorem length_bypass_le_length
 
 中文:
 定理 length_bypass_le_length
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.bypass.length <= p.length
   证明: by
   simpa using p.darts_bypass_sublist_darts.length_le
@@ -3589,7 +3589,7 @@ alias bypass_eq_self_of_length_le := bypass_eq_self_of_length_le_length_bypass
 
 中文:
 引理 bypass_eq_self_of_length_le_length_bypass
-  条件: (p : G.Walk u v) (h : p.length <= p.bypass.length)
+  条件: (p : G.途径 u v) (h : p.length <= p.bypass.length)
   证明: ext_support p.support_bypass_sublist_support.eq_of_length_le by simpa using h
 
 @[deprecated (since := "2026-05-25")]
@@ -3618,8 +3618,8 @@ lemma IsPath.bypass_eq_self
   induction p <;> simp_all [cons_isPath_iff, bypass]
 
 中文:
-引理 IsPath.bypass_eq_self
-  条件: {p : G.Walk u v} (hp : p.IsPath)
+引理 是道路.bypass_eq_self
+  条件: {p : G.途径 u v} (hp : p.是道路)
   结论: p.bypass = p
   证明: by
   induction p <;> simp_all [cons_isPath_iff, bypass]
@@ -3642,8 +3642,8 @@ theorem darts_toPath_subset_darts
 
 中文:
 定理 darts_toPath_subset_darts
-  条件: (p : G.Walk u v)
-  结论: (p.toPath : G.Walk u v).darts subseteq p.darts
+  条件: (p : G.途径 u v)
+  结论: (p.toPath : G.途径 u v).darts subseteq p.darts
   证明: p.darts_bypass_subset_darts
 
 @[deprecated (since := "2026-05-25")] alias darts_toPath_subset := darts_toPath_subset_darts
@@ -3668,8 +3668,8 @@ theorem edges_toPath_subset_edges
 
 中文:
 定理 edges_toPath_subset_edges
-  条件: (p : G.Walk u v)
-  结论: (p.toPath : G.Walk u v).edges subseteq p.edges
+  条件: (p : G.途径 u v)
+  结论: (p.toPath : G.途径 u v).edges subseteq p.edges
   证明: p.edges_bypass_subset_edges
 
 @[deprecated (since := "2026-05-25")] alias edges_toPath_subset := edges_toPath_subset_edges
@@ -3690,7 +3690,7 @@ definition cycleBypass
 
 中文:
 定义 cycleBypass
-  签名: : G.Walk v v -> G.Walk v v
+  签名: : G.途径 v v -> G.途径 v v
 -/
 def cycleBypass : G.Walk v v -> G.Walk v v
   | .nil => .nil
@@ -3706,7 +3706,7 @@ lemma cycleBypass_nil
 
 中文:
 引理 cycleBypass_nil
-  结论: (.nil : G.Walk v v).cycleBypass = .nil
+  结论: (.nil : G.途径 v v).cycleBypass = .nil
   证明: rfl
 -/
 @[simp] lemma cycleBypass_nil : (.nil : G.Walk v v).cycleBypass = .nil := rfl
@@ -3721,7 +3721,7 @@ theorem support_cycleBypass_sublist_support
 
 中文:
 定理 support_cycleBypass_sublist_support
-  结论: 对任意 (w : G.Walk v v), w.cycleBypass.support <+ w.support
+  结论: 对任意 (w : G.途径 v v), w.cycleBypass.support <+ w.support
 -/
 theorem support_cycleBypass_sublist_support : forall (w : G.Walk v v), w.cycleBypass.support <+ w.support
   | .nil => .refl _
@@ -3737,7 +3737,7 @@ theorem darts_cycleBypass_sublist_darts
 
 中文:
 定理 darts_cycleBypass_sublist_darts
-  结论: 对任意 (w : G.Walk v v), w.cycleBypass.darts <+ w.darts
+  结论: 对任意 (w : G.途径 v v), w.cycleBypass.darts <+ w.darts
 -/
 theorem darts_cycleBypass_sublist_darts : forall (w : G.Walk v v), w.cycleBypass.darts <+ w.darts
   | .nil => .refl _
@@ -3753,7 +3753,7 @@ theorem edges_cycleBypass_sublist_edges
 
 中文:
 定理 edges_cycleBypass_sublist_edges
-  结论: 对任意 (w : G.Walk v v), w.cycleBypass.edges <+ w.edges
+  结论: 对任意 (w : G.途径 v v), w.cycleBypass.edges <+ w.edges
 -/
 theorem edges_cycleBypass_sublist_edges : forall (w : G.Walk v v), w.cycleBypass.edges <+ w.edges
   | .nil => .refl _
@@ -3773,7 +3773,7 @@ alias edges_cycleBypass_subset := edges_cycleBypass_subset_edges
 
 中文:
 引理 edges_cycleBypass_subset_edges
-  条件: (w : G.Walk v v)
+  条件: (w : G.途径 v v)
   结论: w.cycleBypass.edges subseteq w.edges
   证明: w.edges_cycleBypass_sublist_edges.subset
 
@@ -3800,7 +3800,7 @@ lemma length_cycleBypass_le_length
 
 中文:
 引理 length_cycleBypass_le_length
-  条件: (w : G.Walk v v)
+  条件: (w : G.途径 v v)
   结论: w.cycleBypass.length <= w.length
   证明: by
   simpa using w.darts_cycleBypass_sublist_darts.length_le
@@ -3818,8 +3818,8 @@ lemma IsCircuit.isCycle_cycleBypass
   statement: forall {w : G.Walk v v}, w.IsCircuit -> w.cycleBypass.IsCycle
 
 中文:
-引理 IsCircuit.isCycle_cycleBypass
-  结论: 对任意 {w : G.Walk v v}, w.IsCircuit -> w.cycleBypass.IsCycle
+引理 是Circuit.isCycle_cycleBypass
+  结论: 对任意 {w : G.途径 v v}, w.是Circuit -> w.cycleBypass.是环
 
 Depends on / 依赖: and_true, bypass_isPath, cycleBypass, edges_bypass_subset_edges, isCircuit_def, isTrail, isTrail.cons, isTrail_cons, ne_eq, not_false_eq_true, reduceCtorEq, support_nodup
 -/
@@ -3841,8 +3841,8 @@ lemma IsTrail.isCycle_cycleBypass
   proof: (w.isCircuit_def.mpr ⟨hw', hw⟩).isCycle_cycleBypass
 
 中文:
-引理 IsTrail.isCycle_cycleBypass
-  条件: {w : G.Walk v v} (hw : w != .nil) (hw' : w.IsTrail)
+引理 是Trail.isCycle_cycleBypass
+  条件: {w : G.途径 v v} (hw : w != .nil) (hw' : w.是Trail)
   证明: (w.isCircuit_def.mpr ⟨hw', hw⟩).isCycle_cycleBypass
 
 Depends on / 依赖: isCircuit_def, isCycle_cycleBypass, w.isCircuit_def.mpr
@@ -3872,9 +3872,9 @@ theorem IsTrail.of_map
   exact hp.of_map
 
 中文:
-定理 IsTrail.of_map
-  条件: (hp : (p.map f).IsTrail)
-  结论: p.IsTrail
+定理 是Trail.of_map
+  条件: (hp : (p.map f).是Trail)
+  结论: p.是Trail
   证明: by
   rw [isTrail_def]
   rw [isTrail_def]; rw [edges_map] at hp
@@ -3903,7 +3903,7 @@ alias ⟨_, IsTrail.map⟩ := isTrail_map_iff_of_injective
 
 中文:
 定理 isTrail_map_iff_of_injective
-  条件: (hinj : Function.Injective f)
+  条件: (hinj : 函数.单射 f)
   证明: by
   rw [isTrail_def]; rw [isTrail_def]; rw [edges_map]; rw [List.nodup_map_iff <| Sym2.map.injective hinj]
 
@@ -3940,9 +3940,9 @@ theorem IsPath.of_map
   exact hp.of_map
 
 中文:
-定理 IsPath.of_map
-  条件: (hp : (p.map f).IsPath)
-  结论: p.IsPath
+定理 是道路.of_map
+  条件: (hp : (p.map f).是道路)
+  结论: p.是道路
   证明: by
   rw [isPath_def]
   rw [isPath_def]; rw [support_map] at hp
@@ -3971,7 +3971,7 @@ alias ⟨_, IsPath.map⟩ := isPath_map_iff_of_injective
 
 中文:
 定理 isPath_map_iff_of_injective
-  条件: (hinj : Function.Injective f)
+  条件: (hinj : 函数.单射 f)
   证明: by
   rw [isPath_def]; rw [isPath_def]; rw [support_map]; rw [List.nodup_map_iff hinj]
 
@@ -4008,9 +4008,9 @@ theorem IsCircuit.of_map
   exact hp.imp_left .of_map
 
 中文:
-定理 IsCircuit.of_map
-  条件: {p : G.Walk u u} (hp : (p.map f).IsCircuit)
-  结论: p.IsCircuit
+定理 是Circuit.of_map
+  条件: {p : G.途径 u u} (hp : (p.map f).是Circuit)
+  结论: p.是Circuit
   证明: by
   rw [isCircuit_def]; rw [ne_eq]; rw [eq_nil_iff_nil]
   rw [isCircuit_def]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [nil_map_iff] at hp
@@ -4034,7 +4034,7 @@ alias ⟨_, IsCircuit.map⟩ := isCircuit_map_iff_of_injective
 
 中文:
 定理 isCircuit_map_iff_of_injective
-  条件: {p : G.Walk u u} (hinj : Function.Injective f)
+  条件: {p : G.途径 u u} (hinj : 函数.单射 f)
   证明: by
   rw [isCircuit_def]; rw [isCircuit_def]; rw [isTrail_map_iff_of_injective hinj]; rw [ne_eq]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [eq_nil_iff_nil]; rw [nil_map_iff]
 
@@ -4061,9 +4061,9 @@ theorem IsCycle.of_map
 exact hp.imp .of_map .imp_right .of_map f
 
 中文:
-定理 IsCycle.of_map
-  条件: {p : G.Walk u u} (hp : (p.map f).IsCycle)
-  结论: p.IsCycle
+定理 是环.of_map
+  条件: {p : G.途径 u u} (hp : (p.map f).是环)
+  结论: p.是环
   证明: by
   rw [isCycle_def]; rw [ne_eq]; rw [eq_nil_iff_nil]
   rw [isCycle_def]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [nil_map_iff]; rw [support_map]; rw [← List.map_tail] at hp
@@ -4088,7 +4088,7 @@ alias map_isCycle_iff_of_in
 
 中文:
 定理 isCycle_map_iff_of_injective
-  条件: {p : G.Walk u u} (hinj : Function.Injective f)
+  条件: {p : G.途径 u u} (hinj : 函数.单射 f)
   证明: by
   rw [isCycle_def]; rw [isCycle_def]; rw [isTrail_map_iff_of_injective hinj]; rw [ne_eq]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [eq_nil_iff_nil]; rw [nil_map_iff]; rw [support_map]; rw [← List.map_tail]; rw [List.nodup_map_iff hinj]
 
@@ -4123,7 +4123,7 @@ alias ⟨IsTrail.of_mapLe, IsTrail.mapLe⟩ := isTrail_mapLe
 
 中文:
 定理 isTrail_mapLe
-  条件: {G G' : SimpleGraph V} (h : G <= G') {u v : V} {p : G.Walk u v}
+  条件: {G G' : 简单图 V} (h : G <= G') {u v : V} {p : G.途径 u v}
   证明: isTrail_map_iff_of_injective Function.injective_id
 
 @[deprecated (since := "2026-06-16")] alias mapLe_isTrail := isTrail_mapLe
@@ -4159,7 +4159,7 @@ alias ⟨IsPath.of_mapLe, IsPath.mapLe⟩ := isPath_mapLe
 
 中文:
 定理 isPath_mapLe
-  条件: {G G' : SimpleGraph V} (h : G <= G') {u v : V} {p : G.Walk u v}
+  条件: {G G' : 简单图 V} (h : G <= G') {u v : V} {p : G.途径 u v}
   证明: isPath_map_iff_of_injective Function.injective_id
 
 @[deprecated (since := "2026-06-16")] alias mapLe_isPath := isPath_mapLe
@@ -4193,7 +4193,7 @@ alias ⟨IsCircuit.of_mapLe, IsCircuit.mapLe⟩ := isCircuit_mapLe
 
 中文:
 定理 isCircuit_mapLe
-  条件: {G G' : SimpleGraph V} (h : G <= G') {u : V} {p : G.Walk u u}
+  条件: {G G' : 简单图 V} (h : G <= G') {u : V} {p : G.途径 u u}
   证明: isCircuit_map_iff_of_injective Function.injective_id
 
 alias ⟨IsCircuit.of_mapLe, IsCircuit.mapLe⟩ := isCircuit_mapLe
@@ -4223,7 +4223,7 @@ alias ⟨IsCycle.of_mapLe, IsCycle.mapLe⟩ := isCycle_mapLe
 
 中文:
 定理 isCycle_mapLe
-  条件: {G G' : SimpleGraph V} (h : G <= G') {u : V} {p : G.Walk u u}
+  条件: {G G' : 简单图 V} (h : G <= G') {u : V} {p : G.途径 u u}
   证明: isCycle_map_iff_of_injective Function.injective_id
 
 @[deprecated (since := "2026-06-16")] alias mapLe_isCycle := isCycle_mapLe
@@ -4258,7 +4258,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : G ->g G') (hinj : Function.Injective f) {u v : V} (p : G.Path u v)
+  签名: (f : G ->g G') (hinj : 函数.单射 f) {u v : V} (p : G.道路 u v)
   定义体: ⟨Walk.map f p, p.isPath.map hinj⟩
 -/
 protected def map (f : G ->g G') (hinj : Function.Injective f) {u v : V} (p : G.Path u v) :
@@ -4278,7 +4278,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : G ->g G'} (hinj : Function.Injective f) (u v : V)
+  条件: {f : G ->g G'} (hinj : 函数.单射 f) (u v : V)
   证明: by
   rintro ⟨p, hp⟩ ⟨p', hp'⟩ h
   simp only [Path.map, Subtype.mk.injEq] at h
@@ -4304,7 +4304,7 @@ definition mapEmbedding
 
 中文:
 定义 mapEmbedding
-  签名: (f : G ↪g G') {u v : V} (p : G.Path u v)
+  签名: (f : G ↪g G') {u v : V} (p : G.道路 u v)
   定义体: Path.map f.toHom f.injective p
 -/
 protected def mapEmbedding (f : G ↪g G') {u v : V} (p : G.Path u v) : G'.Path (f u) (f v) :=
@@ -4353,8 +4353,8 @@ theorem IsPath.transfer
     exact ⟨ih _ pp.1, pp.2⟩
 
 中文:
-定理 IsPath.transfer
-  条件: (hp) (pp : p.IsPath)
+定理 是道路.transfer
+  条件: (hp) (pp : p.是道路)
   证明: by
   induction p with
   | nil => simp
@@ -4386,8 +4386,8 @@ theorem IsCycle.transfer
     exact ⟨qc.1.transfer hq.2, qc.2⟩
 
 中文:
-定理 IsCycle.transfer
-  条件: {q : G.Walk u u} (qc : q.IsCycle) (hq)
+定理 是环.transfer
+  条件: {q : G.途径 u u} (qc : q.是环) (hq)
   证明: by
   cases q with
   | nil => simp at qc
@@ -4422,8 +4422,8 @@ theorem IsPath.toDeleteEdges
   proof: h.transfer _
 
 中文:
-定理 IsPath.toDeleteEdges
-  结论: (s : Set (Sym2 V))
+定理 是道路.toDeleteEdges
+  结论: (s : 集合 (Sym2 V))
   证明: h.transfer _
 -/
 protected theorem IsPath.toDeleteEdges (s : Set (Sym2 V))
@@ -4441,8 +4441,8 @@ theorem IsCycle.toDeleteEdges
 @[simp]
 
 中文:
-定理 IsCycle.toDeleteEdges
-  结论: (s : Set (Sym2 V))
+定理 是环.toDeleteEdges
+  结论: (s : 集合 (Sym2 V))
   证明: h.transfer _
 
 @[simp]
@@ -4464,7 +4464,7 @@ theorem toDeleteEdges_copy
 
 中文:
 定理 toDeleteEdges_copy
-  结论: {v u u' v' : V} (s : Set (Sym2 V))
+  结论: {v u u' v' : V} (s : 集合 (Sym2 V))
   证明: by
   subst_vars
   rfl

@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (Subfield Rat)
+  签名: 子单例 (子域 有理数)
   定义体: subsingleton_of_top_le_bot fun x _ =>
   have h := Subsingleton.elim ((⊥ : Subfield Rat).subtype.comp (Rat.castHom _)) (.id _ : Rat ->+* Rat)
   (congr($h x) : _ = x) ▸ Subtype.prop _
@@ -68,8 +68,8 @@ theorem Subfield.bot_eq_of_charZero
   rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap Rat K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
 
 中文:
-定理 Subfield.bot_eq_of_charZero
-  条件: {K : 类型} [Field K] [CharZero K]
+定理 子域.bot_eq_of_charZero
+  条件: {K : 类型} [域 K] [特征零 K]
   证明: by
   rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap Rat K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
 
@@ -89,8 +89,8 @@ theorem Subfield.bot_eq_of_zMod_algebra
   rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap (ZMod p) K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
 
 中文:
-定理 Subfield.bot_eq_of_zMod_algebra
-  结论: {K : 类型} (p : 自然数) [hp : Fact (自然数.Prime p)]
+定理 子域.bot_eq_of_zMod_algebra
+  结论: {K : 类型} (p : 自然数) [hp : Fact (自然数.素 p)]
   证明: by
   rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap (ZMod p) K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
 

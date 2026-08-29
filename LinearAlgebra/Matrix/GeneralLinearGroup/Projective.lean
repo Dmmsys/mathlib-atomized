@@ -53,7 +53,7 @@ scoped[MatrixGroups] notation "PGL(" n ", " R ")" => Matrix.ProjGenLinGroup (Fin
 
 中文:
 定义 ProjGenLinGroup
-  签名: (n : 类型) [Fintype n] [DecidableEq n] (R : 类型) [CommRing R]
+  签名: (n : 类型) [有限类型 n] [DecidableEq n] (R : 类型) [交换环 R]
   定义体: GL n R ⧸ Subgroup.center (GL n R)
   deriving Group
 
@@ -105,7 +105,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk : GL n R -> PGL(n, R))
+  结论: 函数.满射 (mk : GL n R -> PGL(n, R))
   证明: Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
@@ -170,7 +170,7 @@ theorem ker_mk
 
 中文:
 定理 ker_mk
-  结论: mk.ker = Subgroup.center (GL n R)
+  结论: mk.ker = 子群.center (GL n R)
   证明: QuotientGroup.ker_mk' _
 
 @[simp]
@@ -195,7 +195,7 @@ theorem mk_eq_one
 中文:
 定理 mk_eq_one
   条件: {g : GL n R}
-  结论: mk g = 1 ↔ g in Subgroup.center (GL n R)
+  结论: mk g = 1 ↔ g in 子群.center (GL n R)
   证明: by
   rw [← MonoidHom.mem_ker]; rw [ker_mk]
 
@@ -314,7 +314,7 @@ lemma toPGL_ker
 
 中文:
 引理 toPGL_ker
-  结论: toPGL.ker = Subgroup.center (SpecialLinearGroup n R)
+  结论: toPGL.ker = 子群.center (SpecialLinearGroup n R)
   证明: by
   ext; simp [toGL_mem_center_iff]
 
@@ -437,7 +437,7 @@ lemma toPGL_surj_iff
 
 中文:
 引理 toPGL_surj_iff
-  条件: [Nonempty n]
+  条件: [非空 n]
   证明: by
   refine ⟨fun h r => ?_, ProjectiveSpecialLinearGroup.toPGL_surj_of_roots⟩
   obtain ⟨A, hA⟩ := GeneralLinearGroup.det_surjective (n := n) r
@@ -471,7 +471,7 @@ definition isoPSLOfAlgClosedOfNonempty
 
 中文:
 定义 isoPSLOfAlgClosedOfNonempty
-  签名: [Nonempty n] {F : 类型} [Field F] [IsAlgClosed F]
+  签名: [非空 n] {F : 类型} [域 F] [是代数闭 F]
   定义体: MulEquiv.symm (MulEquiv.ofBijective Matrix.ProjectiveSpecialLinearGroup.toPGL
     ⟨Matrix.ProjectiveSpecialLinearGroup.toPGL_injective,
     Matrix.ProjectiveSpecialLinearGroup.toPGL_surj_of_roots fun r => by
@@ -506,7 +506,7 @@ definition isoPSLOfAlgClosed
 
 中文:
 定义 isoPSLOfAlgClosed
-  签名: {F : 类型} [Field F] [IsAlgClosed F]
+  签名: {F : 类型} [域 F] [是代数闭 F]
   定义体: open scoped Classical in
   if h : Nonempty n then isoPSLOfAlgClosedOfNonempty else
   have : IsEmpty n := by simpa using h
@@ -621,7 +621,7 @@ definition mulActionOfGL
 
 中文:
 定义 mulActionOfGL
-  签名: {α : 类型} [MulAction (GL n R) α]
+  签名: {α : 类型} [乘法作用 (GL n R) α]
   定义体: .ofEndHom lift MulAction.toEndHom by
     ext u
     funext a -- TODO: should we add an `ext` lemma for `Function.End`?
@@ -649,7 +649,7 @@ theorem mk_smul
 
 中文:
 定理 mk_smul
-  条件: {α : 类型} [MulAction (GL n R) α] (h) (g : GL n R) (a : α)
+  条件: {α : 类型} [乘法作用 (GL n R) α] (h) (g : GL n R) (a : α)
   证明: mulActionOfGL h
     mk g • a = g • a := by
   rfl
@@ -673,7 +673,7 @@ definition map
 
 中文:
 定义 map
-  签名: {S : 类型} [CommRing S] (f : R ->+* S)
+  签名: {S : 类型} [交换环 S] (f : R ->+* S)
   定义体: QuotientGroup.map _ _ (GeneralLinearGroup.map (n := n) f) GeneralLinearGroup.map_center_le f
 
 @[simp]
@@ -696,7 +696,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (RingHom.id R) = MonoidHom.id (PGL(n, R))
+  结论: map (环态射.id R) = 幺半群态射.id (PGL(n, R))
   证明: QuotientGroup.map_id _
 
 @[simp]
@@ -716,7 +716,7 @@ lemma map_mk
 
 中文:
 引理 map_mk
-  条件: {S : 类型} [CommRing S] (f : R ->+* S) (g : GL n R)
+  条件: {S : 类型} [交换环 S] (f : R ->+* S) (g : GL n R)
   证明: rfl
 -/
 lemma map_mk {S : Type*} [CommRing S] (f : R ->+* S) (g : GL n R) :
@@ -734,7 +734,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {S T : 类型} [CommRing S] [CommRing T] (f : R ->+* S) (g : S ->+* T)
+  条件: {S T : 类型} [交换环 S] [交换环 T] (f : R ->+* S) (g : S ->+* T)
   证明: by
   ext g
   induction g using Matrix.ProjGenLinGroup.induction_on with | mk g => simp
@@ -787,7 +787,7 @@ theorem signDet_mk
 中文:
 定理 signDet_mk
   条件: (g : GL n R)
-  结论: signDet (mk g) = Units.map signHom.toMonoidHom g.det
+  结论: signDet (mk g) = 单位群.map signHom.toMonoidHom g.det
   证明: by
   rfl
 

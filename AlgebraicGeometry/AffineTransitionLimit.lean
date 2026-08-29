@@ -60,8 +60,8 @@ lemma Scheme.nonempty_of_isLimit
     let 𝒰 := (D.obj i).affineCover.finiteSubcover
 
 中文:
-引理 Scheme.nonempty_of_isLimit
-  结论: [IsCofilteredOrEmpty I]
+引理 概形.nonempty_of_isLimit
+  结论: [是余filteredOrEmpty I]
   证明: by
   classical
   cases isEmpty_or_nonempty I
@@ -144,7 +144,7 @@ lemma exists_mem_of_isClosed_of_nonempty
     map_id _ := by sim
 
 中文:
-引理 exists_mem_of_isClosed_of_nonempty
+引理 存在_mem_of_isClosed_of_nonempty
   证明: by
   let D' : I ⥤ Scheme :=
   { obj i := (vanishingIdeal ⟨Z i, hZc i⟩).subscheme
@@ -218,7 +218,7 @@ lemma exists_mem_of_isClosed_of_nonempty'
     (fun i => Z i.left i.
 
 中文:
-引理 exists_mem_of_isClosed_of_nonempty'
+引理 存在_mem_of_isClosed_of_nonempty'
   证明: by
   have {i₁ i₂ : Over j} (f : i₁ ⟶ i₂) : IsAffineHom ((Over.forget j ⋙ D).map f) := by
     dsimp; infer_instance
@@ -264,7 +264,7 @@ lemma exists_map_eq_top
   
 
 中文:
-引理 exists_map_eq_top
+引理 存在_map_eq_top
   证明: by
   by_contra! H
   obtain ⟨s, hs⟩ := exists_mem_of_isClosed_of_nonempty' D c hc (fun j f => (D.map f ⁻¹ᵁ U)ᶜ)
@@ -389,7 +389,7 @@ definition isLimitOpensCone
 
 中文:
 定义 isLimitOpensCone
-  签名: [IsCofiltered I] (i : I) (U : (D.obj i).Opens)
+  签名: [是余filtered I] (i : I) (U : (D.obj i).Opens)
   定义体: isLimitOfIsPullbackOfIsConnected (opensDiagramι D i U) _ _
     (by exact { hom := (c.π.app i ⁻¹ᵁ U).ι })
     (fun j => IsOpenImmersion.isPullback _ _ _ _ (by simp) (by simp [← Scheme.Hom.comp_preimage]))
@@ -424,8 +424,8 @@ instance [forall
     · chan
 
 中文:
-实例 [forall
-  签名: {i j} (f : i ⟶ j), IsAffineHom (D.map f)] {i
+实例 [对任意
+  签名: {i j} (f : i ⟶ j), 是仿射态射 (D.map f)] {i
   定义体: by
   refine ⟨fun V hV => ?_⟩
   convert!
@@ -481,7 +481,7 @@ lemma exists_map_preimage_le_map_preimage
     exact .trans 
 
 中文:
-引理 exists_map_preimage_le_map_preimage
+引理 存在_map_preimage_le_map_preimage
   证明: by
   have (j : Over i) : CompactSpace ↥((opensDiagram D i U).obj j) :=
     isCompact_iff_compactSpace.mp (QuasiCompact.isCompact_preimage (f := (D.map j.hom)) _ U.2 hU)
@@ -526,7 +526,7 @@ lemma exists_map_preimage_eq_map_preimage
   · simpa only [Scheme.Hom.comp_pre
 
 中文:
-引理 exists_map_preimage_eq_map_preimage
+引理 存在_map_preimage_eq_map_preimage
   证明: by
   obtain ⟨j₁, fj₁i, e₁⟩ := exists_map_preimage_le_map_preimage D c hc hU H.le
   obtain ⟨j₂, fj₂i, e₂⟩ := exists_map_preimage_le_map_preimage D c hc hV H.ge
@@ -569,7 +569,7 @@ lemma isBasis_preimage_isAffineOpen
 
 中文:
 引理 isBasis_preimage_isAffineOpen
-  条件: [IsCofiltered I] [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+  条件: [是余filtered I] [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   refine TopologicalSpace.Opens.isBasis_iff_nbhd.mpr fun {U x} hxU => ?_
   obtain ⟨i⟩ := IsCofiltered.nonempty (C := I)
@@ -621,7 +621,7 @@ lemma exists_preimage_eq
     fun x => i ⟨x.1, (by simpa only [Se
 
 中文:
-引理 exists_preimage_eq
+引理 存在_preimage_eq
   证明: by
   classical
   obtain ⟨s, hs, hsf, rfl⟩ := (isBasis_preimage_isAffineOpen D c hc).exists_finite_of_isCompact hU
@@ -665,7 +665,7 @@ lemma isAffineHom_π_app
 
 中文:
 引理 isAffineHom_π_app
-  条件: [IsCofiltered I] [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)] (i : I)
+  条件: [是余filtered I] [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)] (i : I)
   证明: have (j : _) : IsAffine ((opensDiagram D i U).obj j) := hU.preimage _
     Scheme.isAffine_of_isLimit _ (isLimitOpensCone D c hc i U)
 
@@ -690,8 +690,8 @@ lemma Scheme.compactSpace_of_isLimit
   exact QuasiCompact.compactSpace_of_compactSpace (c.π.app i)
 
 中文:
-引理 Scheme.compactSpace_of_isLimit
-  结论: [IsCofiltered I]
+引理 概形.compactSpace_of_isLimit
+  结论: [是余filtered I]
   证明: by
   obtain ⟨i⟩ := IsCofiltered.nonempty (C := I)
   have := isAffineHom_π_app _ _ hc
@@ -818,18 +818,18 @@ structure ExistsHomHomCompEqCompAux
 结构 ExistsHomHomCompEqCompAux
   参数: where
   公理与运算 (12 个):
-    - c : Cone D
-    - hc : IsLimit c
+    - c : 锥 D
+    - hc : 是极限 c
     - i : I
     - a : D.obj i ⟶ X
     - ha : t.app i = a ≫ f
     - b : D.obj i ⟶ X
     - hb : t.app i = b ≫ f
     - hab : c.π.app i ≫ a = c.π.app i ≫ b
-    - 𝒰S : Scheme.OpenCover.{u} S
-    - [h𝒰S : 对任意 i, IsAffine (𝒰S.X i)]
-    - 𝒰X((i : (𝒰S.pullback₁ f).I₀)) : Scheme.OpenCover.{u} ((𝒰S.pullback₁ f).X i)
-    - [h𝒰X : 对任意 i j, IsAffine ((𝒰X i).X j)]
+    - 𝒰S : 概形.OpenCover.{u} S
+    - [h𝒰S : 对任意 i, 是仿射 (𝒰S.X i)]
+    - 𝒰X((i : (𝒰S.pullback₁ f).I₀)) : 概形.OpenCover.{u} ((𝒰S.pullback₁ f).X i)
+    - [h𝒰X : 对任意 i j, 是仿射 ((𝒰X i).X j)]
 -/
 structure ExistsHomHomCompEqCompAux where
   /-- (Implementation) The limit cone. See the section docstring. -/
@@ -878,7 +878,7 @@ lemma exists_index
 (W.isOpen.isClosed_compl).preimage Scheme.Hom.co
 
 中文:
-引理 exists_index
+引理 存在_index
   结论: 存在 (i' : I) (hii' : i' ⟶ A.i),
   证明: by
   let W := Scheme.Pullback.diagonalCoverDiagonalRange f A.𝒰S A.𝒰X
@@ -996,7 +996,7 @@ definition 𝒰D₀
 
 中文:
 定义 𝒰D₀
-  签名: : Scheme.OpenCover.{u} (D.obj A.i')
+  签名: : 概形.OpenCover.{u} (D.obj A.i')
   定义体: Scheme.Cover.mkOfCovers (Σ i : A.𝒰S.I₀, (A.𝒰X i).I₀) _
     (fun i => ((Scheme.Pullback.diagonalCover f A.𝒰S A.𝒰X).pullback₁ A.g).f ⟨i.1, i.2, i.2⟩)
     (fun x => by simpa [← Set.mem_range, Scheme.Pullback.range_fst,
@@ -1020,7 +1020,7 @@ definition 𝒰D
 
 中文:
 定义 𝒰D
-  签名: : Scheme.OpenCover.{u} (D.obj A.i')
+  签名: : 概形.OpenCover.{u} (D.obj A.i')
   定义体: A.𝒰D₀.bind fun _ => Scheme.affineCover _
 
 Depends on / 依赖: Scheme, Scheme.affineCover, affineCover
@@ -1105,7 +1105,7 @@ lemma exists_eq
       ((Over.conePost D A.i').obj
 
 中文:
-引理 exists_eq
+引理 存在_eq
   条件: (j : A.𝒰D.I₀)
   结论: 存在 (k : I) (hki' : k ⟶ A.i'),
   证明: by
@@ -1192,7 +1192,7 @@ lemma Scheme.exists_hom_comp_eq_comp_of_locallyOfFiniteType
   let W := Sche
 
 中文:
-引理 Scheme.exists_hom_comp_eq_comp_of_locallyOfFiniteType
+引理 概形.存在_hom_comp_eq_comp_of_locallyOfFiniteType
   证明: by
   classical
   have := isAffineHom_π_app _ _ hc
@@ -1273,7 +1273,7 @@ lemma Scheme.exists_hom_hom_comp_eq_comp_of_locallyOfFiniteType
   use k, hik ≫ IsCofiltered.minToL
 
 中文:
-引理 Scheme.exists_hom_hom_comp_eq_comp_of_locallyOfFiniteType
+引理 概形.存在_hom_hom_comp_eq_comp_of_locallyOfFiniteType
   证明: by
   let o := IsCofiltered.min i j
   obtain ⟨k, hik, heq⟩ := Scheme.exists_hom_comp_eq_comp_of_locallyOfFiniteType D t f c hc
@@ -1338,7 +1338,7 @@ lemma exists_appTop_map_eq_zero_of_isAffine_of_isLimit
   exact ⟨j.unop, f.unop, by simpa 
 
 中文:
-引理 exists_appTop_map_eq_zero_of_isAffine_of_isLimit
+引理 存在_appTop_map_eq_zero_of_isAffine_of_isLimit
   证明: by
   have : forall i, IsAffine (D.op.obj i).unop := by dsimp; infer_instance
   obtain ⟨j, f, hj⟩ := (Types.FilteredColimit.isColimit_eq_iff'
@@ -1377,8 +1377,8 @@ lemma exists_appTop_map_eq_zero_of_isLimit
       (D.obj i).isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x)
 
 中文:
-引理 exists_appTop_map_eq_zero_of_isLimit
-  结论: [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+引理 存在_appTop_map_eq_zero_of_isLimit
+  结论: [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   classical
   have (x : D.obj i) : exists (U : (D.obj i).Opens) (hU : IsAffineOpen U)
@@ -1453,8 +1453,8 @@ lemma exists_app_map_eq_zero_of_isLimit
     ((D.obj i
 
 中文:
-引理 exists_app_map_eq_zero_of_isLimit
-  结论: [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+引理 存在_app_map_eq_zero_of_isLimit
+  结论: [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   have : CompactSpace ↥((opensDiagram D i U).obj (Over.mk (𝟙 i))) :=
     isCompact_iff_compactSpace.mp (by simpa)
@@ -1505,8 +1505,8 @@ lemma exists_app_map_eq_map_of_isLimit
     (by simpa +instances [map_sub, sub_eq_zero])
 
 中文:
-引理 exists_app_map_eq_map_of_isLimit
-  结论: [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+引理 存在_app_map_eq_map_of_isLimit
+  结论: [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   simpa [sub_eq_zero] using exists_app_map_eq_zero_of_isLimit _ _ hc hU (s - t)
     (by simpa +instances [map_sub, sub_eq_zero])
@@ -1533,7 +1533,7 @@ lemma exists_appTop_π_eq_of_isAffine_of_isLimit
     (isColimitOfPreserves (Scheme.Γ ⋙ forget _) hc.op) s).choose_spec⟩
 
 中文:
-引理 exists_appTop_π_eq_of_isAffine_of_isLimit
+引理 存在_appTop_π_eq_of_isAffine_of_isLimit
   证明: by
   have : forall i, IsAffine (D.op.obj i).unop := by dsimp; infer_instance
   exact ⟨_, (Types.jointly_surjective_of_isColimit
@@ -1566,8 +1566,8 @@ lemma exists_appTop_π_eq_of_isLimit
     obtain ⟨_, 
 
 中文:
-引理 exists_appTop_π_eq_of_isLimit
-  结论: [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+引理 存在_appTop_π_eq_of_isLimit
+  结论: [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   classical
   have := Scheme.compactSpace_of_isLimit _ _ hc
@@ -1709,7 +1709,7 @@ lemma nonempty_isColimit_Γ_mapCocone
 
 中文:
 引理 nonempty_isColimit_Γ_mapCocone
-  结论: [对任意 {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+  结论: [对任意 {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   证明: by
   have : ReflectsFilteredColimits (forget CommRingCat) :=
     ⟨fun _ => reflectsColimitsOfShape_of_reflectsIsomorphisms⟩
@@ -1738,8 +1738,8 @@ instance [forall
   preservesLimit_rightOp _ _
 
 中文:
-实例 [forall
-  签名: {i j} (f : i ⟶ j), IsAffineHom (D.map f)]
+实例 [对任意
+  签名: {i j} (f : i ⟶ j), 是仿射态射 (D.map f)]
   定义体: have : PreservesColimit D.op Scheme.Γ := ⟨fun hc => nonempty_isColimit_Γ_mapCocone D _ hc.unop⟩
   preservesLimit_rightOp _ _
 
@@ -1774,8 +1774,8 @@ lemma Scheme.exists_isQuasiAffine_of_isLimit
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := (D.obj i).isBasis_affineOpens.exists_subset_of_mem_o
 
 中文:
-引理 Scheme.exists_isQuasiAffine_of_isLimit
-  结论: [IsCofiltered I]
+引理 概形.存在_isQuasiAffine_of_isLimit
+  结论: [是余filtered I]
   证明: by
   classical
   have (x : c.pt) : exists (i : I) (f : Γ(D.obj i, ⊤)),
@@ -1853,8 +1853,8 @@ lemma Scheme.exists_isAffine_of_isLimit
   have (j : _) : CompactSpace ((D ⋙ Γ.rightOp ⋙ Scheme.Spec).obj j) := by d
 
 中文:
-引理 Scheme.exists_isAffine_of_isLimit
-  结论: [IsCofiltered I]
+引理 概形.存在_isAffine_of_isLimit
+  结论: [是余filtered I]
   证明: by
   have := isAffineHom_π_app _ _ hc
   obtain ⟨i, hi⟩ := Scheme.exists_isQuasiAffine_of_isLimit D c hc
@@ -1900,7 +1900,7 @@ lemma exists_isAffineOpen_preimage_eq
     (isQ
 
 中文:
-引理 exists_isAffineOpen_preimage_eq
+引理 存在_isAffineOpen_preimage_eq
   证明: by
   obtain ⟨i, U, hU', rfl⟩ := exists_preimage_eq D c hc U hU.isCompact
   have (j : Over i) : CompactSpace ((opensDiagram D i U).obj j) :=
@@ -1942,8 +1942,8 @@ lemma Scheme.exists_isOpenCover_and_isAffine_of_finite
   obtain ⟨k, fkj, e⟩ := exists_map
 
 中文:
-引理 Scheme.exists_isOpenCover_and_isAffine_of_finite
-  结论: [IsCofiltered I]
+引理 概形.存在_isOpenCover_and_isAffine_of_finite
+  结论: [是余filtered I]
   证明: by
   classical
   choose j V hV hVU using fun k => exists_isAffineOpen_preimage_eq D c hc (U k) (hU' k)
@@ -1992,8 +1992,8 @@ lemma Scheme.exists_isOpenCover_and_isAffine
   
 
 中文:
-引理 Scheme.exists_isOpenCover_and_isAffine
-  结论: [IsCofiltered I]
+引理 概形.存在_isOpenCover_and_isAffine
+  结论: [是余filtered I]
   证明: by
   have := compactSpace_of_isLimit D c hc
   obtain ⟨s, hs⟩ := isCompact_univ.elim_finite_subcover _
@@ -2036,8 +2036,8 @@ lemma Scheme.OpenCover.exists_of_isCofiltered_of_finite
   refine ⟨i, fun k => Γ(_, V k), fun k => (hV' k).left.isoSpec.inv ≫ (V k).ι, ?_, ?
 
 中文:
-引理 Scheme.OpenCover.exists_of_isCofiltered_of_finite
-  结论: [IsCofiltered I]
+引理 概形.OpenCover.存在_of_isCofiltered_of_finite
+  结论: [是余filtered I]
   证明: by
   obtain ⟨i, V, hV, hV'⟩ := Scheme.exists_isOpenCover_and_isAffine_of_finite _ _ hc _
     𝒰.isOpenCover_opensRange fun k => isAffineOpen_opensRange (𝒰.f k)
@@ -2161,7 +2161,7 @@ lemma Scheme.exists_π_app_comp_eq_of_locallyOfFinitePresentation
     ((S.isBasis_affine
 
 中文:
-引理 Scheme.exists_π_app_comp_eq_of_locallyOfFinitePresentation
+引理 概形.存在_π_app_comp_eq_of_locallyOfFinitePresentation
   证明: by
   -- The open cover of `c := lim Dᵢ` indexed by triplets of affine opens `(U, V, W)` with
   -- `U ⊆ c`, `V ⊆ X`, `W ⊆ S` such that `U` maps to `V` maps to `W`.
@@ -2292,8 +2292,8 @@ instance Scheme.preservesColimit_yoneda
     have {i j : I} (f : i ⟶ j) : IsAffineHom ((D ⋙ Over.f
 
 中文:
-实例 Scheme.preservesColimit_yoneda
-  签名: (D : I ⥤ Over S) [IsCofiltered I]
+实例 概形.preservesColimit_yoneda
+  签名: (D : I ⥤ Over S) [是余filtered I]
   定义体: by
     rw [Limits.Types.isColimit_iff_coconeTypesIsColimit]
     have (i : I) : CompactSpace ((D ⋙ Over.forget S).obj i) := by dsimp; infer_instance

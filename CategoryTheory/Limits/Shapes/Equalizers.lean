@@ -68,7 +68,7 @@ inductive WalkingParallelPair
 
 中文:
 归纳类型 WalkingParallelPair
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - zero: 
     - one: 
@@ -94,12 +94,12 @@ inductive WalkingParallelPairHom
     - id: (X : WalkingParallelPair) : WalkingParallelPairHom X X
 
 中文:
-归纳类型 WalkingParallelPairHom
-  参数: : WalkingParallelPair -> WalkingParallelPair -> Type
+归纳类型 WalkingParallelPair态射
+  参数: : WalkingParallelPair -> WalkingParallelPair -> 类型
   构造子 (3 个):
-    - left: WalkingParallelPairHom zero one
-    - right: WalkingParallelPairHom zero one
-    - id: (X : WalkingParallelPair) : WalkingParallelPairHom X X
+    - left: WalkingParallelPair态射 zero one
+    - right: WalkingParallelPair态射 zero one
+    - id: (X : WalkingParallelPair) : WalkingParallelPair态射 X X
 -/
 inductive WalkingParallelPairHom : WalkingParallelPair -> WalkingParallelPair -> Type
   | left : WalkingParallelPairHom zero one
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WalkingParallelPairHom zero one)
+  签名: 可居 (WalkingParallelPair态射 zero one)
   定义体: WalkingParallelPairHom.left
 
 Depends on / 依赖: WalkingParallelPairHom, WalkingParallelPairHom.left
@@ -134,7 +134,7 @@ definition WalkingParallelPairHom.comp
   signature: :
 
 中文:
-定义 WalkingParallelPairHom.comp
+定义 WalkingParallelPair态射.comp
   签名: :
 -/
 def WalkingParallelPairHom.comp :
@@ -152,7 +152,7 @@ theorem WalkingParallelPairHom.id_comp
   proof: rfl
 
 中文:
-定理 WalkingParallelPairHom.id_comp
+定理 WalkingParallelPair态射.id_comp
   证明: rfl
 -/
 theorem WalkingParallelPairHom.id_comp
@@ -168,7 +168,7 @@ theorem WalkingParallelPairHom.comp_id
   cases f <;> rfl
 
 中文:
-定理 WalkingParallelPairHom.comp_id
+定理 WalkingParallelPair态射.comp_id
   证明: by
   cases f <;> rfl
 -/
@@ -186,7 +186,7 @@ theorem WalkingParallelPairHom.assoc
   cases f <;> cases g <;> cases h <;> rfl
 
 中文:
-定理 WalkingParallelPairHom.assoc
+定理 WalkingParallelPair态射.assoc
   结论: {X Y Z W : WalkingParallelPair}
   证明: by
   cases f <;> cases g <;> cases h <;> rfl
@@ -213,7 +213,7 @@ instance walkingParallelPairHomCategory
 
 中文:
 实例 walkingParallelPairHomCategory
-  签名: : SmallCategory WalkingParallelPair where
+  签名: : 小范畴 WalkingParallelPair where
   定义体: WalkingParallelPairHom
   id := id
   comp := comp
@@ -246,7 +246,7 @@ theorem walkingParallelPairHom_id
 中文:
 定理 walkingParallelPairHom_id
   条件: (X : WalkingParallelPair)
-  结论: WalkingParallelPairHom.id X = 𝟙 X
+  结论: WalkingParallelPair态射.id X = 𝟙 X
   证明: rfl
 -/
 theorem walkingParallelPairHom_id (X : WalkingParallelPair) : WalkingParallelPairHom.id X = 𝟙 X :=
@@ -1146,7 +1146,7 @@ abbreviation Fork
   body: Cone (parallelPair f g)
 
 中文:
-缩写 Fork
+缩写 叉
   签名: (f g : X ⟶ Y)
   定义体: Cone (parallelPair f g)
 
@@ -1164,7 +1164,7 @@ abbreviation Cofork
   body: Cocone (parallelPair f g)
 
 中文:
-缩写 Cofork
+缩写 余叉
   签名: (f g : X ⟶ Y)
   定义体: Cocone (parallelPair f g)
 
@@ -1186,8 +1186,8 @@ definition Fork.ι
 @[simp]
 
 中文:
-定义 Fork.ι
-  签名: (t : Fork f g)
+定义 叉.ι
+  签名: (t : 叉 f g)
   定义体: t.π.app zero
 
 @[simp]
@@ -1206,8 +1206,8 @@ theorem Fork.app_zero_eq_ι
   proof: rfl
 
 中文:
-定理 Fork.app_zero_eq_ι
-  条件: (t : Fork f g)
+定理 叉.app_zero_eq_ι
+  条件: (t : 叉 f g)
   结论: t.π.app zero = t.ι
   证明: rfl
 -/
@@ -1225,8 +1225,8 @@ definition Cofork.π
 @[simp]
 
 中文:
-定义 Cofork.π
-  签名: (t : Cofork f g)
+定义 余叉.π
+  签名: (t : 余叉 f g)
   定义体: t.ι.app one
 
 @[simp]
@@ -1247,8 +1247,8 @@ theorem Cofork.app_one_eq_π
 @[simp]
 
 中文:
-定理 Cofork.app_one_eq_π
-  条件: (t : Cofork f g)
+定理 余叉.app_one_eq_π
+  条件: (t : 余叉 f g)
   结论: t.ι.app one = t.π
   证明: rfl
 
@@ -1271,8 +1271,8 @@ theorem Fork.app_one_eq_ι_comp_left
 @[reassoc]
 
 中文:
-定理 Fork.app_one_eq_ι_comp_left
-  条件: (s : Fork f g)
+定理 叉.app_one_eq_ι_comp_left
+  条件: (s : 叉 f g)
   结论: s.π.app one = s.ι ≫ f
   证明: by
   rw [← s.app_zero_eq_ι]; rw [← s.w left]; rw [parallelPair_map_left]
@@ -1298,8 +1298,8 @@ theorem Fork.app_one_eq_ι_comp_right
 @[simp]
 
 中文:
-定理 Fork.app_one_eq_ι_comp_right
-  条件: (s : Fork f g)
+定理 叉.app_one_eq_ι_comp_right
+  条件: (s : 叉 f g)
   结论: s.π.app one = s.ι ≫ g
   证明: by
   rw [← s.app_zero_eq_ι]; rw [← s.w right]; rw [parallelPair_map_right]
@@ -1325,8 +1325,8 @@ theorem Cofork.app_zero_eq_comp_π_left
 @[reassoc]
 
 中文:
-定理 Cofork.app_zero_eq_comp_π_left
-  条件: (s : Cofork f g)
+定理 余叉.app_zero_eq_comp_π_left
+  条件: (s : 余叉 f g)
   结论: s.ι.app zero = f ≫ s.π
   证明: by
   rw [← s.app_one_eq_π]; rw [← s.w left]; rw [parallelPair_map_left]
@@ -1350,8 +1350,8 @@ theorem Cofork.app_zero_eq_comp_π_right
   rw [← s.app_one_eq_π]; rw [← s.w right]; rw [parallelPair_map_right]
 
 中文:
-定理 Cofork.app_zero_eq_comp_π_right
-  条件: (s : Cofork f g)
+定理 余叉.app_zero_eq_comp_π_right
+  条件: (s : 余叉 f g)
   结论: s.ι.app zero = g ≫ s.π
   证明: by
   rw [← s.app_one_eq_π]; rw [← s.w right]; rw [parallelPair_map_right]
@@ -1380,7 +1380,7 @@ definition Fork.ofι
         by cases X <;> cases Y <;> cases f <;> simp [w] }
 
 中文:
-定义 Fork.ofι
+定义 叉.ofι
   签名: {P : C} (ι : P ⟶ X) (w : ι ≫ f = ι ≫ g)
   定义体: P
   π :=
@@ -1418,7 +1418,7 @@ definition Cofork.ofπ
 @[simp]
 
 中文:
-定义 Cofork.ofπ
+定义 余叉.ofπ
   签名: {P : C} (π : Y ⟶ P) (w : f ≫ π = g ≫ π)
   定义体: P
   ι :=
@@ -1446,9 +1446,9 @@ theorem Fork.ι_ofι
 @[simp]
 
 中文:
-定理 Fork.ι_ofι
+定理 叉.ι_ofι
   条件: {P : C} (ι : P ⟶ X) (w : ι ≫ f = ι ≫ g)
-  结论: (Fork.ofι ι w).ι = ι
+  结论: (叉.ofι ι w).ι = ι
   证明: rfl
 
 @[simp]
@@ -1469,9 +1469,9 @@ theorem Cofork.π_ofπ
 @[reassoc]
 
 中文:
-定理 Cofork.π_ofπ
+定理 余叉.π_ofπ
   条件: {P : C} (π : Y ⟶ P) (w : f ≫ π = g ≫ π)
-  结论: (Cofork.ofπ π w).π = π
+  结论: (余叉.ofπ π w).π = π
   证明: rfl
 
 @[reassoc]
@@ -1493,8 +1493,8 @@ theorem Fork.condition
 @[reassoc]
 
 中文:
-定理 Fork.condition
-  条件: (t : Fork f g)
+定理 叉.condition
+  条件: (t : 叉 f g)
   结论: t.ι ≫ f = t.ι ≫ g
   证明: by
   rw [← t.app_one_eq_ι_comp_left]; rw [← t.app_one_eq_ι_comp_right]
@@ -1518,8 +1518,8 @@ theorem Cofork.condition
   rw [← t.app_zero_eq_comp_π_left]; rw [← t.app_zero_eq_comp_π_right]
 
 中文:
-定理 Cofork.condition
-  条件: (t : Cofork f g)
+定理 余叉.condition
+  条件: (t : 余叉 f g)
   结论: f ≫ t.π = g ≫ t.π
   证明: by
   rw [← t.app_zero_eq_comp_π_left]; rw [← t.app_zero_eq_comp_π_right]
@@ -1540,8 +1540,8 @@ theorem Fork.equalizer_ext
     rw [s.app_one_eq_ι_comp_left]; rw [this]
 
 中文:
-定理 Fork.equalizer_ext
-  条件: (s : Fork f g) {W : C} {k l : W ⟶ s.pt} (h : k ≫ s.ι = l ≫ s.ι)
+定理 叉.equalizer_ext
+  条件: (s : 叉 f g) {W : C} {k l : W ⟶ s.pt} (h : k ≫ s.ι = l ≫ s.ι)
   证明: by
       simp only [← Category.assoc]; exact congrArg (· ≫ f) h
     rw [s.app_one_eq_ι_comp_left]; rw [this]
@@ -1564,8 +1564,8 @@ theorem Cofork.coequalizer_ext
   statement: (s : Cofork f g) {W : C} {k l : s.pt ⟶ W}
 
 中文:
-定理 Cofork.coequalizer_ext
-  结论: (s : Cofork f g) {W : C} {k l : s.pt ⟶ W}
+定理 余叉.coequalizer_ext
+  结论: (s : 余叉 f g) {W : C} {k l : s.pt ⟶ W}
 -/
 theorem Cofork.coequalizer_ext (s : Cofork f g) {W : C} {k l : s.pt ⟶ W}
     (h : Cofork.π s ≫ k = Cofork.π s ≫ l) : forall j : WalkingParallelPair, s.ι.app j ≫ k = s.ι.app j ≫ l
@@ -1581,8 +1581,8 @@ theorem Fork.IsLimit.hom_ext
   proof: hs.hom_ext Fork.equalizer_ext _ h
 
 中文:
-定理 Fork.IsLimit.hom_ext
-  结论: {s : Fork f g} (hs : IsLimit s) {W : C} {k l : W ⟶ s.pt}
+定理 叉.是极限.hom_ext
+  结论: {s : 叉 f g} (hs : 是极限 s) {W : C} {k l : W ⟶ s.pt}
   证明: hs.hom_ext Fork.equalizer_ext _ h
 
 Depends on / 依赖: Fork.equalizer_ext, equalizer_ext, hom_ext, hs.hom_ext
@@ -1602,8 +1602,8 @@ theorem Cofork.IsColimit.hom_ext
 @[reassoc (attr := simp)]
 
 中文:
-定理 Cofork.IsColimit.hom_ext
-  结论: {s : Cofork f g} (hs : IsColimit s) {W : C} {k l : s.pt ⟶ W}
+定理 余叉.是余极限.hom_ext
+  结论: {s : 余叉 f g} (hs : 是余极限 s) {W : C} {k l : s.pt ⟶ W}
   证明: hs.hom_ext Cofork.coequalizer_ext _ h
 
 @[reassoc (attr := simp)]
@@ -1627,8 +1627,8 @@ theorem Fork.IsLimit.lift_ι
 @[reassoc (attr := simp)]
 
 中文:
-定理 Fork.IsLimit.lift_ι
-  条件: {s t : Fork f g} (hs : IsLimit s)
+定理 叉.是极限.lift_ι
+  条件: {s t : 叉 f g} (hs : 是极限 s)
   结论: hs.lift t ≫ s.ι = t.ι
   证明: hs.fac _ _
 
@@ -1650,8 +1650,8 @@ theorem Cofork.IsColimit.π_desc
   proof: hs.fac _ _
 
 中文:
-定理 Cofork.IsColimit.π_desc
-  条件: {s t : Cofork f g} (hs : IsColimit s)
+定理 余叉.是余极限.π_desc
+  条件: {s t : 余叉 f g} (hs : 是余极限 s)
   结论: s.π ≫ hs.desc t = t.π
   证明: hs.fac _ _
 
@@ -1671,8 +1671,8 @@ definition Fork.IsLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 Fork.IsLimit.lift
-  签名: {s : Fork f g} (hs : IsLimit s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
+定义 叉.是极限.lift
+  签名: {s : 叉 f g} (hs : 是极限 s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
   定义体: hs.lift (Fork.ofι _ h)
 
 @[reassoc (attr := simp)]
@@ -1693,8 +1693,8 @@ lemma Fork.IsLimit.lift_ι'
   proof: hs.fac _ _
 
 中文:
-引理 Fork.IsLimit.lift_ι'
-  条件: {s : Fork f g} (hs : IsLimit s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
+引理 叉.是极限.lift_ι'
+  条件: {s : 叉 f g} (hs : 是极限 s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
   证明: hs.fac _ _
 
 Depends on / 依赖: hs.fac
@@ -1712,8 +1712,8 @@ definition Fork.IsLimit.lift'
   body: ⟨Fork.IsLimit.lift hs k h, by simp⟩
 
 中文:
-定义 Fork.IsLimit.lift'
-  签名: {s : Fork f g} (hs : IsLimit s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
+定义 叉.是极限.lift'
+  签名: {s : 叉 f g} (hs : 是极限 s) {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
   定义体: ⟨Fork.IsLimit.lift hs k h, by simp⟩
 
 Depends on / 依赖: Fork.IsLimit.lift, IsLimit
@@ -1732,9 +1732,9 @@ lemma Fork.IsLimit.mono
   proof: hom_ext hs h
 
 中文:
-引理 Fork.IsLimit.mono
-  条件: {s : Fork f g} (hs : IsLimit s)
-  结论: Mono s.ι where
+引理 叉.是极限.mono
+  条件: {s : 叉 f g} (hs : 是极限 s)
+  结论: 单态射 s.ι where
   证明: hom_ext hs h
 
 Depends on / 依赖: hom_ext
@@ -1753,8 +1753,8 @@ definition Cofork.IsColimit.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 Cofork.IsColimit.desc
-  签名: {s : Cofork f g} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
+定义 余叉.是余极限.desc
+  签名: {s : 余叉 f g} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
   定义体: hs.desc (Cofork.ofπ _ h)
 
 @[reassoc (attr := simp)]
@@ -1775,8 +1775,8 @@ lemma Cofork.IsColimit.π_desc'
   proof: hs.fac _ _
 
 中文:
-引理 Cofork.IsColimit.π_desc'
-  结论: {s : Cofork f g} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
+引理 余叉.是余极限.π_desc'
+  结论: {s : 余叉 f g} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
   证明: hs.fac _ _
 
 Depends on / 依赖: hs.fac
@@ -1794,8 +1794,8 @@ definition Cofork.IsColimit.desc'
   body: ⟨Cofork.IsColimit.desc hs k h, by simp⟩
 
 中文:
-定义 Cofork.IsColimit.desc'
-  签名: {s : Cofork f g} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
+定义 余叉.是余极限.desc'
+  签名: {s : 余叉 f g} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
   定义体: ⟨Cofork.IsColimit.desc hs k h, by simp⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.desc, IsColimit
@@ -1814,9 +1814,9 @@ lemma Cofork.IsColimit.epi
   proof: hom_ext hs h
 
 中文:
-引理 Cofork.IsColimit.epi
-  条件: {s : Cofork f g} (hs : IsColimit s)
-  结论: Epi s.π where
+引理 余叉.是余极限.epi
+  条件: {s : 余叉 f g} (hs : 是余极限 s)
+  结论: 满态射 s.π where
   证明: hom_ext hs h
 
 Depends on / 依赖: hom_ext
@@ -1834,8 +1834,8 @@ theorem Fork.IsLimit.existsUnique
 Fork.IsLimit.hom_ext hs hm.symm ▸ (hs.fac (Fork.ofι _ h) WalkingParallelPair.zero).symm⟩
 
 中文:
-定理 Fork.IsLimit.existsUnique
-  结论: {s : Fork f g} (hs : IsLimit s) {W : C} (k : W ⟶ X)
+定理 叉.是极限.存在Unique
+  结论: {s : 叉 f g} (hs : 是极限 s) {W : C} (k : W ⟶ X)
   证明: ⟨hs.lift Fork.ofι _ h, hs.fac _ _, fun _ hm =>
 Fork.IsLimit.hom_ext hs hm.symm ▸ (hs.fac (Fork.ofι _ h) WalkingParallelPair.zero).symm⟩
 
@@ -1856,8 +1856,8 @@ theorem Cofork.IsColimit.existsUnique
 Cofork.IsColimit.hom_ext hs hm.symm ▸ (hs.fac (Cofork.ofπ _ h) WalkingParallelPair.one).symm⟩
 
 中文:
-定理 Cofork.IsColimit.existsUnique
-  结论: {s : Cofork f g} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
+定理 余叉.是余极限.存在Unique
+  结论: {s : 余叉 f g} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
   证明: ⟨hs.desc Cofork.ofπ _ h, hs.fac _ _, fun _ hm =>
 Cofork.IsColimit.hom_ext hs hm.symm ▸ (hs.fac (Cofork.ofπ _ h) WalkingParallelPair.one).symm⟩
 
@@ -1884,8 +1884,8 @@ WalkingParallelPair.casesOn j (fac s) by
     uniq := fun s m j => by aesop }
 
 中文:
-定义 Fork.IsLimit.mk
-  签名: (t : Fork f g) (lift : 对任意 s : Fork f g, s.pt ⟶ t.pt)
+定义 叉.是极限.mk
+  签名: (t : 叉 f g) (lift : 对任意 s : 叉 f g, s.pt ⟶ t.pt)
   定义体: { lift
     fac := fun s j =>
 WalkingParallelPair.casesOn j (fac s) by
@@ -1912,8 +1912,8 @@ definition Fork.IsLimit.mk'
   body: Fork.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w => (create s).2.2 w
 
 中文:
-定义 Fork.IsLimit.mk'
-  签名: {X Y : C} {f g : X ⟶ Y} (t : Fork f g)
+定义 叉.是极限.mk'
+  签名: {X Y : C} {f g : X ⟶ Y} (t : 叉 f g)
   定义体: Fork.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w => (create s).2.2 w
 
 Depends on / 依赖: Fork.IsLimit.mk, IsLimit, create
@@ -1934,8 +1934,8 @@ definition Cofork.IsColimit.mk
     uniq := by aesop }
 
 中文:
-定义 Cofork.IsColimit.mk
-  签名: (t : Cofork f g) (desc : 对任意 s : Cofork f g, t.pt ⟶ s.pt)
+定义 余叉.是余极限.mk
+  签名: (t : 余叉 f g) (desc : 对任意 s : 余叉 f g, t.pt ⟶ s.pt)
   定义体: { desc
     fac := fun s j =>
       WalkingParallelPair.casesOn j (by simp_all) (fac s)
@@ -1961,8 +1961,8 @@ definition Cofork.IsColimit.mk'
     (create s).2.2 w
 
 中文:
-定义 Cofork.IsColimit.mk'
-  签名: {X Y : C} {f g : X ⟶ Y} (t : Cofork f g)
+定义 余叉.是余极限.mk'
+  签名: {X Y : C} {f g : X ⟶ Y} (t : 余叉 f g)
   定义体: Cofork.IsColimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
     (create s).2.2 w
 
@@ -1985,8 +1985,8 @@ definition Fork.IsLimit.ofExistsUnique
   exact Fork.IsLimit.mk _ d hd fun s m hm => hd' _ _ hm
 
 中文:
-定义 Fork.IsLimit.ofExistsUnique
-  签名: {t : Fork f g}
+定义 叉.是极限.ofExistsUnique
+  签名: {t : 叉 f g}
   定义体: by
   choose d hd hd' using hs
   exact Fork.IsLimit.mk _ d hd fun s m hm => hd' _ _ hm
@@ -2009,8 +2009,8 @@ definition Cofork.IsColimit.ofExistsUnique
   exact Cofork.IsColimit.mk _ d hd fun s m hm => hd' _ _ hm
 
 中文:
-定义 Cofork.IsColimit.ofExistsUnique
-  签名: {t : Cofork f g}
+定义 余叉.是余极限.ofExistsUnique
+  签名: {t : 余叉 f g}
   定义体: by
   choose d hd hd' using hs
   exact Cofork.IsColimit.mk _ d hd fun s m hm => hd' _ _ hm
@@ -2041,8 +2041,8 @@ definition Fork.IsLimit.homIso
   right_inv _ := Subtype.ext (Fork.IsLimit.lift' ht _ _).prop
 
 中文:
-定义 Fork.IsLimit.homIso
-  签名: {X Y : C} {f g : X ⟶ Y} {t : Fork f g} (ht : IsLimit t) (Z : C)
+定义 叉.是极限.homIso
+  签名: {X Y : C} {f g : X ⟶ Y} {t : 叉 f g} (ht : 是极限 t) (Z : C)
   定义体: ⟨k ≫ t.ι, by simp only [Category.assoc, t.condition]⟩
   invFun h := (Fork.IsLimit.lift' ht _ h.prop).1
   left_inv _ := Fork.IsLimit.hom_ext ht (Fork.IsLimit.lift' _ _ _).prop
@@ -2066,8 +2066,8 @@ theorem Fork.IsLimit.homIso_natural
   proof: Category.assoc _ _ _
 
 中文:
-定理 Fork.IsLimit.homIso_natural
-  结论: {X Y : C} {f g : X ⟶ Y} {t : Fork f g} (ht : IsLimit t)
+定理 叉.是极限.homIso_natural
+  结论: {X Y : C} {f g : X ⟶ Y} {t : 叉 f g} (ht : 是极限 t)
   证明: Category.assoc _ _ _
 
 Depends on / 依赖: Category, Category.assoc
@@ -2095,8 +2095,8 @@ definition Cofork.IsColimit.homIso
   right_inv _ := Subtype.ext (Cofork.IsColimit.desc' ht _ _).prop
 
 中文:
-定义 Cofork.IsColimit.homIso
-  签名: {X Y : C} {f g : X ⟶ Y} {t : Cofork f g} (ht : IsColimit t) (Z : C)
+定义 余叉.是余极限.homIso
+  签名: {X Y : C} {f g : X ⟶ Y} {t : 余叉 f g} (ht : 是余极限 t) (Z : C)
   定义体: ⟨t.π ≫ k, by simp only [← Category.assoc, t.condition]⟩
   invFun h := (Cofork.IsColimit.desc' ht _ h.prop).1
   left_inv _ := Cofork.IsColimit.hom_ext ht (Cofork.IsColimit.desc' _ _ _).prop
@@ -2120,8 +2120,8 @@ theorem Cofork.IsColimit.homIso_natural
   proof: (Category.assoc _ _ _).symm
 
 中文:
-定理 Cofork.IsColimit.homIso_natural
-  结论: {X Y : C} {f g : X ⟶ Y} {t : Cofork f g} {Z Z' : C}
+定理 余叉.是余极限.homIso_natural
+  结论: {X Y : C} {f g : X ⟶ Y} {t : 余叉 f g} {Z Z' : C}
   证明: (Category.assoc _ _ _).symm
 
 Depends on / 依赖: Category, Category.assoc
@@ -2144,8 +2144,8 @@ definition Cone.ofFork
       naturality := by rintro _ _ (_ | _ | _) <;> simp [t.condition] }
 
 中文:
-定义 Cone.ofFork
-  签名: {F : WalkingParallelPair ⥤ C} (t : Fork (F.map left) (F.map right))
+定义 锥.ofFork
+  签名: {F : WalkingParallelPair ⥤ C} (t : 叉 (F.map left) (F.map right))
   定义体: t.pt
   π :=
     { app := fun X => t.π.app X ≫ eqToHom (by simp)
@@ -2173,8 +2173,8 @@ definition Cocone.ofCofork
 @[simp]
 
 中文:
-定义 Cocone.ofCofork
-  签名: {F : WalkingParallelPair ⥤ C} (t : Cofork (F.map left) (F.map right))
+定义 余锥.ofCofork
+  签名: {F : WalkingParallelPair ⥤ C} (t : 余叉 (F.map left) (F.map right))
   定义体: t.pt
   ι :=
     { app := fun X => eqToHom (by simp) ≫ t.ι.app X
@@ -2203,8 +2203,8 @@ theorem Cone.ofFork_π
 @[simp]
 
 中文:
-定理 Cone.ofFork_π
-  条件: {F : WalkingParallelPair ⥤ C} (t : Fork (F.map left) (F.map right)) (j)
+定理 锥.ofFork_π
+  条件: {F : WalkingParallelPair ⥤ C} (t : 叉 (F.map left) (F.map right)) (j)
   证明: rfl
 
 @[simp]
@@ -2222,8 +2222,8 @@ theorem Cocone.ofCofork_ι
   proof: rfl
 
 中文:
-定理 Cocone.ofCofork_ι
-  结论: {F : WalkingParallelPair ⥤ C} (t : Cofork (F.map left) (F.map right))
+定理 余锥.ofCofork_ι
+  结论: {F : WalkingParallelPair ⥤ C} (t : 余叉 (F.map left) (F.map right))
   证明: rfl
 -/
 theorem Cocone.ofCofork_ι {F : WalkingParallelPair ⥤ C} (t : Cofork (F.map left) (F.map right))
@@ -2240,8 +2240,8 @@ definition Fork.ofCone
          naturality := by rintro _ _ (_ | _ | _) <;> simp }
 
 中文:
-定义 Fork.ofCone
-  签名: {F : WalkingParallelPair ⥤ C} (t : Cone F)
+定义 叉.ofCone
+  签名: {F : WalkingParallelPair ⥤ C} (t : 锥 F)
   定义体: t.pt
   π := { app := fun X => t.π.app X ≫ eqToHom (by simp)
          naturality := by rintro _ _ (_ | _ | _) <;> simp }
@@ -2266,8 +2266,8 @@ definition Cofork.ofCocone
 @[simp]
 
 中文:
-定义 Cofork.ofCocone
-  签名: {F : WalkingParallelPair ⥤ C} (t : Cocone F)
+定义 余叉.ofCocone
+  签名: {F : WalkingParallelPair ⥤ C} (t : 余锥 F)
   定义体: t.pt
   ι := { app := fun X => eqToHom (by simp) ≫ t.ι.app X
          naturality := by rintro _ _ (_ | _ | _) <;> simp }
@@ -2294,8 +2294,8 @@ theorem Fork.ofCone_π
 @[simp]
 
 中文:
-定理 Fork.ofCone_π
-  条件: {F : WalkingParallelPair ⥤ C} (t : Cone F) (j)
+定理 叉.ofCone_π
+  条件: {F : WalkingParallelPair ⥤ C} (t : 锥 F) (j)
   证明: rfl
 
 @[simp]
@@ -2315,8 +2315,8 @@ theorem Cofork.ofCocone_ι
 @[simp]
 
 中文:
-定理 Cofork.ofCocone_ι
-  条件: {F : WalkingParallelPair ⥤ C} (t : Cocone F) (j)
+定理 余叉.ofCocone_ι
+  条件: {F : WalkingParallelPair ⥤ C} (t : 余锥 F) (j)
   证明: rfl
 
 @[simp]
@@ -2336,7 +2336,7 @@ theorem Fork.ι_postcompose
 @[simp]
 
 中文:
-定理 Fork.ι_postcompose
+定理 叉.ι_postcompose
   结论: {f' g' : X ⟶ Y} {α : parallelPair f g ⟶ parallelPair f' g'}
   证明: rfl
 
@@ -2356,7 +2356,7 @@ theorem Cofork.π_precompose
   proof: rfl
 
 中文:
-定理 Cofork.π_precompose
+定理 余叉.π_precompose
   结论: {f' g' : X ⟶ Y} {α : parallelPair f g ⟶ parallelPair f' g'}
   证明: rfl
 -/
@@ -2381,8 +2381,8 @@ definition Fork.mkHom
       congr
 
 中文:
-定义 Fork.mkHom
-  签名: {s t : Fork f g} (k : s.pt ⟶ t.pt) (w : k ≫ t.ι = s.ι)
+定义 叉.mkHom
+  签名: {s t : 叉 f g} (k : s.pt ⟶ t.pt) (w : k ≫ t.ι = s.ι)
   定义体: k
   w := by
     rintro ⟨_ | _⟩
@@ -2413,8 +2413,8 @@ definition Fork.ext
   inv := Fork.mkHom i.inv (by rw [← w, Iso.inv_hom_id_assoc])
 
 中文:
-定义 Fork.ext
-  签名: {s t : Fork f g} (i : s.pt ≅ t.pt) (w : i.hom ≫ t.ι = s.ι := by cat_disch)
+定义 叉.ext
+  签名: {s t : 叉 f g} (i : s.pt ≅ t.pt) (w : i.hom ≫ t.ι = s.ι := by cat_disch)
   定义体: Fork.mkHom i.hom w
   inv := Fork.mkHom i.inv (by rw [← w, Iso.inv_hom_id_assoc])
 
@@ -2455,8 +2455,8 @@ definition Fork.isoForkOfι
   body: Fork.ext (Iso.refl _)
 
 中文:
-定义 Fork.isoForkOfι
-  签名: (c : Fork f g)
+定义 叉.isoForkOfι
+  签名: (c : 叉 f g)
   定义体: Fork.ext (Iso.refl _)
 
 Depends on / 依赖: Fork.ext, Iso.refl
@@ -2476,7 +2476,7 @@ definition Fork.equivOfIsos
 @[simp]
 
 中文:
-定义 Fork.equivOfIsos
+定义 叉.equivOfIsos
   签名: {X Y : C} {f g : X ⟶ Y} {X' Y' : C}
   定义体: Cone.postcomposeEquivalence
     parallelPair.ext e₀ e₁ (by simp [comm₁]) (by simp [comm₂])
@@ -2505,7 +2505,7 @@ lemma Fork.equivOfIsos_functor_obj_ι
 @[simp]
 
 中文:
-引理 Fork.equivOfIsos_functor_obj_ι
+引理 叉.equivOfIsos_functor_obj_ι
   结论: {X Y : C} {f g : X ⟶ Y}
   证明: rfl
 
@@ -2530,7 +2530,7 @@ lemma Fork.equivOfIsos_inverse_obj_ι
   proof: rfl
 
 中文:
-引理 Fork.equivOfIsos_inverse_obj_ι
+引理 叉.equivOfIsos_inverse_obj_ι
   结论: {X Y : C} {f g : X ⟶ Y}
   证明: rfl
 
@@ -2553,7 +2553,7 @@ definition Fork.isLimitEquivOfIsos
   IsLimit.equivOfNatIsoOfIso i c c' (Fork.ext e comm₃)
 
 中文:
-定义 Fork.isLimitEquivOfIsos
+定义 叉.isLimitEquivOfIsos
   签名: {X Y : C} {f g : X ⟶ Y} {X' Y' : C}
   定义体: let i : parallelPair f g ≅ parallelPair f' g' := parallelPair.ext e₀ e₁ comm₁.symm comm₂.symm
   IsLimit.equivOfNatIsoOfIso i c c' (Fork.ext e comm₃)
@@ -2580,8 +2580,8 @@ definition Fork.isLimitOfIsos
   body: (Fork.isLimitEquivOfIsos c c' e₀ e₁ e) hc
 
 中文:
-定义 Fork.isLimitOfIsos
-  签名: {X' Y' : C} (c : Fork f g) (hc : IsLimit c)
+定义 叉.isLimitOfIsos
+  签名: {X' Y' : C} (c : 叉 f g) (hc : 是极限 c)
   定义体: (Fork.isLimitEquivOfIsos c c' e₀ e₁ e) hc
 
 Depends on / 依赖: Fork.isLimitEquivOfIsos, IsLimit, cat_disch, e.hom, isLimitEquivOfIsos
@@ -2612,8 +2612,8 @@ definition Cofork.mkHom
 @[reassoc (attr := simp)]
 
 中文:
-定义 Cofork.mkHom
-  签名: {s t : Cofork f g} (k : s.pt ⟶ t.pt) (w : s.π ≫ k = t.π)
+定义 余叉.mkHom
+  签名: {s t : 余叉 f g} (k : s.pt ⟶ t.pt) (w : s.π ≫ k = t.π)
   定义体: k
   w := by
     rintro ⟨_ | _⟩
@@ -2643,8 +2643,8 @@ theorem Fork.hom_comp_ι
 @[reassoc (attr := simp)]
 
 中文:
-定理 Fork.hom_comp_ι
-  条件: {s t : Fork f g} (f : s ⟶ t)
+定理 叉.hom_comp_ι
+  条件: {s t : 叉 f g} (f : s ⟶ t)
   结论: f.hom ≫ t.ι = s.ι
   证明: by
   cases s; cases t; cases f; aesop
@@ -2666,8 +2666,8 @@ theorem Fork.π_comp_hom
   cases s; cases t; cases f; aesop
 
 中文:
-定理 Fork.π_comp_hom
-  条件: {s t : Cofork f g} (f : s ⟶ t)
+定理 叉.π_comp_hom
+  条件: {s t : 余叉 f g} (f : s ⟶ t)
   结论: s.π ≫ f.hom = t.π
   证明: by
   cases s; cases t; cases f; aesop
@@ -2690,8 +2690,8 @@ definition Cofork.ext
   inv := Cofork.mkHom i.inv (by rw [Iso.comp_inv_eq, w])
 
 中文:
-定义 Cofork.ext
-  签名: {s t : Cofork f g} (i : s.pt ≅ t.pt) (w : s.π ≫ i.hom = t.π := by cat_disch)
+定义 余叉.ext
+  签名: {s t : 余叉 f g} (i : s.pt ≅ t.pt) (w : s.π ≫ i.hom = t.π := by cat_disch)
   定义体: Cofork.mkHom i.hom w
   inv := Cofork.mkHom i.inv (by rw [Iso.comp_inv_eq, w])
 
@@ -2730,8 +2730,8 @@ definition Cofork.isoCoforkOfπ
   body: Cofork.ext (Iso.refl _)
 
 中文:
-定义 Cofork.isoCoforkOfπ
-  签名: (c : Cofork f g)
+定义 余叉.isoCoforkOfπ
+  签名: (c : 余叉 f g)
   定义体: Cofork.ext (Iso.refl _)
 
 Depends on / 依赖: Cofork, Cofork.ext, Iso.refl
@@ -2749,7 +2749,7 @@ definition Cofork.isColimitEquivOfIsos
   IsColimit.equivOfNatIsoOfIso i c c' (Cofork.ext e (by rw [← comm₃, ← Category.assoc]; rfl))
 
 中文:
-定义 Cofork.isColimitEquivOfIsos
+定义 余叉.isColimitEquivOfIsos
   签名: {X Y : C} {f g : X ⟶ Y} {X' Y' : C}
   定义体: let i : parallelPair f g ≅ parallelPair f' g' := parallelPair.ext e₀ e₁ comm₁.symm comm₂.symm
   IsColimit.equivOfNatIsoOfIso i c c' (Cofork.ext e (by rw [← comm₃, ← Category.assoc]; rfl))
@@ -2776,8 +2776,8 @@ definition Cofork.isColimitOfIsos
   body: (Cofork.isColimitEquivOfIsos c c' e₀ e₁ e) hc
 
 中文:
-定义 Cofork.isColimitOfIsos
-  签名: {X' Y' : C} (c : Cofork f g) (hc : IsColimit c)
+定义 余叉.isColimitOfIsos
+  签名: {X' Y' : C} (c : 余叉 f g) (hc : 是余极限 c)
   定义体: (Cofork.isColimitEquivOfIsos c c' e₀ e₁ e) hc
 
 Depends on / 依赖: Cofork, Cofork.isColimitEquivOfIsos, IsColimit, cat_disch, e.hom, isColimitEquivOfIsos
@@ -2860,7 +2860,7 @@ abbreviation equalizer.fork
 
 中文:
 缩写 equalizer.fork
-  签名: : Fork f g
+  签名: : 叉 f g
   定义体: limit.cone (parallelPair f g)
 
 @[simp]
@@ -2941,7 +2941,7 @@ definition equalizerIsEqualizer
 
 中文:
 定义 equalizerIsEqualizer
-  签名: : IsLimit (Fork.ofι (equalizer.ι f g)
+  签名: : 是极限 (叉.ofι (equalizer.ι f g)
   定义体: IsLimit.ofIsoLimit (limit.isLimit _) (Fork.ext (Iso.refl _) (by simp))
 
 Depends on / 依赖: Fork.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, isLimit, limit.isLimit, ofIsoLimit
@@ -3043,7 +3043,7 @@ theorem equalizer.existsUnique
   proof: Fork.IsLimit.existsUnique (limit.isLimit _) _ h
 
 中文:
-定理 equalizer.existsUnique
+定理 equalizer.存在Unique
   条件: {W : C} (k : W ⟶ X) (h : k ≫ f = k ≫ g)
   证明: Fork.IsLimit.existsUnique (limit.isLimit _) _ h
 
@@ -3063,7 +3063,7 @@ instance equalizer.ι_mono
 
 中文:
 实例 equalizer.ι_mono
-  签名: : Mono (equalizer.ι f g) where
+  签名: : 单态射 (equalizer.ι f g) where
   定义体: equalizer.hom_ext w
 
 Depends on / 依赖: equalizer, equalizer.hom_ext, hom_ext
@@ -3088,8 +3088,8 @@ theorem mono_of_isLimit_fork
 
 中文:
 定理 mono_of_isLimit_fork
-  条件: {c : Fork f g} (i : IsLimit c)
-  结论: Mono (Fork.ι c)
+  条件: {c : 叉 f g} (i : 是极限 c)
+  结论: 单态射 (叉.ι c)
   证明: { right_cancellation := fun _ _ w => Fork.IsLimit.hom_ext i w }
 
 Depends on / 依赖: Fork.IsLimit.hom_ext, IsLimit, hom_ext, right_cancellation
@@ -3157,7 +3157,7 @@ theorem isIso_limit_cone_parallelPair_of_eq
 
 中文:
 定理 isIso_limit_cone_parallelPair_of_eq
-  条件: (h₀ : f = g) {c : Fork f g} (h : IsLimit c)
+  条件: (h₀ : f = g) {c : 叉 f g} (h : 是极限 c)
   证明: Iso.isIso_hom IsLimit.conePointUniqueUpToIso h isLimitIdFork h₀
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, Iso.isIso_hom, conePointUniqueUpToIso, isIso_hom, isLimitIdFork
@@ -3178,7 +3178,7 @@ theorem equalizer.ι_of_eq
 中文:
 定理 equalizer.ι_of_eq
   条件: [HasEqualizer f g] (h : f = g)
-  结论: IsIso (equalizer.ι f g)
+  结论: 是同构 (equalizer.ι f g)
   证明: isIso_limit_cone_parallelPair_of_eq h limit.isLimit _
 
 Depends on / 依赖: isIso_limit_cone_parallelPair_of_eq, isLimit, limit.isLimit
@@ -3197,8 +3197,8 @@ theorem isIso_limit_cone_parallelPair_of_self
 
 中文:
 定理 isIso_limit_cone_parallelPair_of_self
-  条件: {c : Fork f f} (h : IsLimit c)
-  结论: IsIso c.ι
+  条件: {c : 叉 f f} (h : 是极限 c)
+  结论: 是同构 c.ι
   证明: isIso_limit_cone_parallelPair_of_eq rfl h
 
 Depends on / 依赖: isIso_limit_cone_parallelPair_of_eq
@@ -3217,8 +3217,8 @@ theorem isIso_limit_cone_parallelPair_of_epi
 
 中文:
 定理 isIso_limit_cone_parallelPair_of_epi
-  条件: {c : Fork f g} (h : IsLimit c) [Epi c.ι]
-  结论: IsIso c.ι
+  条件: {c : 叉 f g} (h : 是极限 c) [满态射 c.ι]
+  结论: 是同构 c.ι
   证明: isIso_limit_cone_parallelPair_of_eq ((cancel_epi _).1 (Fork.condition c)) h
 
 Depends on / 依赖: Fork.condition, cancel_epi, condition, isIso_limit_cone_parallelPair_of_eq
@@ -3237,7 +3237,7 @@ theorem eq_of_epi_fork_ι
 
 中文:
 定理 eq_of_epi_fork_ι
-  条件: (t : Fork f g) [Epi (Fork.ι t)]
+  条件: (t : 叉 f g) [满态射 (叉.ι t)]
   结论: f = g
   证明: (cancel_epi (Fork.ι t)).1 Fork.condition t
 
@@ -3257,7 +3257,7 @@ theorem eq_of_epi_equalizer
 
 中文:
 定理 eq_of_epi_equalizer
-  条件: [HasEqualizer f g] [Epi (equalizer.ι f g)]
+  条件: [HasEqualizer f g] [满态射 (equalizer.ι f g)]
   结论: f = g
   证明: (cancel_epi (equalizer.ι f g)).1 equalizer.condition _ _
 
@@ -3302,7 +3302,7 @@ instance equalizer.ι_of_self
 
 中文:
 实例 equalizer.ι_of_self
-  签名: : IsIso (equalizer.ι f f)
+  签名: : 是同构 (equalizer.ι f f)
   定义体: equalizer.ι_of_eq rfl
 
 Depends on / 依赖: equalizer
@@ -3392,7 +3392,7 @@ definition precompFork
 
 中文:
 定义 precompFork
-  签名: (s : Fork f g) (c : PullbackCone s.ι h)
+  签名: (s : 叉 f g) (c : PullbackCone s.ι h)
   定义体: Fork.ofι c.snd by
     rw [← c.condition_assoc]; rw [← c.condition_assoc]; rw [s.condition]
 
@@ -3413,7 +3413,7 @@ definition liftPrecomp
 
 中文:
 定义 liftPrecomp
-  签名: {s : Fork f g} (hs : IsLimit s) {c : PullbackCone s.ι h} (hc : IsLimit c)
+  签名: {s : 叉 f g} (hs : 是极限 s) {c : PullbackCone s.ι h} (hc : 是极限 c)
   定义体: hc.lift PullbackCone.mk
     (hs.lift <| Fork.ofι (s'.ι ≫ h) (by simp [s'.condition])) s'.ι
 
@@ -3444,7 +3444,7 @@ definition isLimitPrecompFork
 
 中文:
 定义 isLimitPrecompFork
-  签名: {s : Fork f g} (hs : IsLimit s) {c : PullbackCone s.ι h} (hc : IsLimit c)
+  签名: {s : 叉 f g} (hs : 是极限 s) {c : PullbackCone s.ι h} (hc : 是极限 c)
   定义体: Fork.IsLimit.mk _
     (fun s' => liftPrecomp h hs hc s')
     (by simp [liftPrecomp, precompFork])
@@ -3483,7 +3483,7 @@ lemma hasEqualizer_precomp_of_equalizer
 
 中文:
 引理 hasEqualizer_precomp_of_equalizer
-  结论: {s : Fork f g} (hs : IsLimit s)
+  结论: {s : 叉 f g} (hs : 是极限 s)
   证明: HasLimit.mk
     { cone := precompFork h s c
       isLimit := isLimitPrecompFork h hs hc }
@@ -3589,7 +3589,7 @@ abbreviation coequalizer.cofork
 
 中文:
 缩写 coequalizer.cofork
-  签名: : Cofork f g
+  签名: : 余叉 f g
   定义体: colimit.cocone (parallelPair f g)
 
 @[simp]
@@ -3793,7 +3793,7 @@ theorem coequalizer.existsUnique
   proof: Cofork.IsColimit.existsUnique (colimit.isColimit _) _ h
 
 中文:
-定理 coequalizer.existsUnique
+定理 coequalizer.存在Unique
   条件: {W : C} (k : Y ⟶ W) (h : f ≫ k = g ≫ k)
   证明: Cofork.IsColimit.existsUnique (colimit.isColimit _) _ h
 
@@ -3813,7 +3813,7 @@ instance coequalizer.π_epi
 
 中文:
 实例 coequalizer.π_epi
-  签名: : Epi (coequalizer.π f g) where
+  签名: : 满态射 (coequalizer.π f g) where
   定义体: coequalizer.hom_ext w
 
 Depends on / 依赖: coequalizer, coequalizer.hom_ext, hom_ext
@@ -3838,8 +3838,8 @@ theorem epi_of_isColimit_cofork
 
 中文:
 定理 epi_of_isColimit_cofork
-  条件: {c : Cofork f g} (i : IsColimit c)
-  结论: Epi c.π
+  条件: {c : 余叉 f g} (i : 是余极限 c)
+  结论: 满态射 c.π
   证明: { left_cancellation := fun _ _ w => Cofork.IsColimit.hom_ext i w }
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, IsColimit, hom_ext, left_cancellation
@@ -3907,7 +3907,7 @@ theorem isIso_colimit_cocone_parallelPair_of_eq
 
 中文:
 定理 isIso_colimit_cocone_parallelPair_of_eq
-  条件: (h₀ : f = g) {c : Cofork f g} (h : IsColimit c)
+  条件: (h₀ : f = g) {c : 余叉 f g} (h : 是余极限 c)
   证明: Iso.isIso_hom IsColimit.coconePointUniqueUpToIso (isColimitIdCofork h₀) h
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, Iso.isIso_hom, coconePointUniqueUpToIso, isColimitIdCofork, isIso_hom
@@ -3928,7 +3928,7 @@ theorem coequalizer.π_of_eq
 中文:
 定理 coequalizer.π_of_eq
   条件: [HasCoequalizer f g] (h : f = g)
-  结论: IsIso (coequalizer.π f g)
+  结论: 是同构 (coequalizer.π f g)
   证明: isIso_colimit_cocone_parallelPair_of_eq h colimit.isColimit _
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isIso_colimit_cocone_parallelPair_of_eq
@@ -3947,8 +3947,8 @@ theorem isIso_colimit_cocone_parallelPair_of_self
 
 中文:
 定理 isIso_colimit_cocone_parallelPair_of_self
-  条件: {c : Cofork f f} (h : IsColimit c)
-  结论: IsIso c.π
+  条件: {c : 余叉 f f} (h : 是余极限 c)
+  结论: 是同构 c.π
   证明: isIso_colimit_cocone_parallelPair_of_eq rfl h
 
 Depends on / 依赖: isIso_colimit_cocone_parallelPair_of_eq
@@ -3966,7 +3966,7 @@ theorem isIso_limit_cocone_parallelPair_of_epi
 
 中文:
 定理 isIso_limit_cocone_parallelPair_of_epi
-  条件: {c : Cofork f g} (h : IsColimit c) [Mono c.π]
+  条件: {c : 余叉 f g} (h : 是余极限 c) [单态射 c.π]
   证明: isIso_colimit_cocone_parallelPair_of_eq ((cancel_mono _).1 (Cofork.condition c)) h
 
 Depends on / 依赖: Cofork, Cofork.condition, cancel_mono, condition, isIso_colimit_cocone_parallelPair_of_eq
@@ -3986,7 +3986,7 @@ theorem eq_of_mono_cofork_π
 
 中文:
 定理 eq_of_mono_cofork_π
-  条件: (t : Cofork f g) [Mono (Cofork.π t)]
+  条件: (t : 余叉 f g) [单态射 (余叉.π t)]
   结论: f = g
   证明: (cancel_mono (Cofork.π t)).1 Cofork.condition t
 
@@ -4006,7 +4006,7 @@ theorem eq_of_mono_coequalizer
 
 中文:
 定理 eq_of_mono_coequalizer
-  条件: [HasCoequalizer f g] [Mono (coequalizer.π f g)]
+  条件: [HasCoequalizer f g] [单态射 (coequalizer.π f g)]
   结论: f = g
   证明: (cancel_mono (coequalizer.π f g)).1 coequalizer.condition _ _
 
@@ -4051,7 +4051,7 @@ instance coequalizer.π_of_self
 
 中文:
 实例 coequalizer.π_of_self
-  签名: : IsIso (coequalizer.π f f)
+  签名: : 是同构 (coequalizer.π f f)
   定义体: coequalizer.π_of_eq rfl
 
 Depends on / 依赖: coequalizer
@@ -4374,7 +4374,7 @@ definition coneOfIsSplitMono
 
 中文:
 定义 coneOfIsSplitMono
-  签名: : Fork (𝟙 Y) (retraction f ≫ f)
+  签名: : 叉 (𝟙 Y) (retraction f ≫ f)
   定义体: Fork.ofι f (by simp)
 
 @[simp]
@@ -4416,7 +4416,7 @@ definition isSplitMonoEqualizes
 
 中文:
 定义 isSplitMonoEqualizes
-  签名: {X Y : C} (f : X ⟶ Y) [IsSplitMono f]
+  签名: {X Y : C} (f : X ⟶ Y) [是分裂单态射 f]
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨s.ι ≫ retraction f, by
       dsimp
@@ -4474,7 +4474,7 @@ definition isEqualizerCompMono
 
 中文:
 定义 isEqualizerCompMono
-  签名: {c : Fork f g} (i : IsLimit c) {Z : C} (h : Y ⟶ Z) [hm : Mono h]
+  签名: {c : 叉 f g} (i : 是极限 c) {Z : C} (h : Y ⟶ Z) [hm : 单态射 h]
   定义体: by
       simp only [← Category.assoc]
       exact congrArg (· ≫ h) c.condition
@@ -4510,7 +4510,7 @@ theorem hasEqualizer_comp_mono
 
 中文:
 定理 hasEqualizer_comp_mono
-  条件: [HasEqualizer f g] {Z : C} (h : Y ⟶ Z) [Mono h]
+  条件: [HasEqualizer f g] {Z : C} (h : Y ⟶ Z) [单态射 h]
   证明: ⟨⟨{ cone := _
         isLimit := isEqualizerCompMono (limit.isLimit _) h }⟩⟩
 
@@ -4537,7 +4537,7 @@ definition splitMonoOfIdempotentOfIsLimitFork
 
 中文:
 定义 splitMonoOfIdempotentOfIsLimitFork
-  签名: {X : C} {f : X ⟶ X} (hf : f ≫ f = f) {c : Fork (𝟙 X) f}
+  签名: {X : C} {f : X ⟶ X} (hf : f ≫ f = f) {c : 叉 (𝟙 X) f}
   定义体: i.lift (Fork.ofι f (by simp [hf]))
   id := by
     let := mono_of_isLimit_fork i
@@ -4594,7 +4594,7 @@ definition coconeOfIsSplitEpi
 
 中文:
 定义 coconeOfIsSplitEpi
-  签名: : Cofork (𝟙 X) (f ≫ section_ f)
+  签名: : 余叉 (𝟙 X) (f ≫ section_ f)
   定义体: Cofork.ofπ f (by simp)
 
 @[simp]
@@ -4637,7 +4637,7 @@ definition isSplitEpiCoequalizes
 
 中文:
 定义 isSplitEpiCoequalizes
-  签名: {X Y : C} (f : X ⟶ Y) [IsSplitEpi f]
+  签名: {X Y : C} (f : X ⟶ Y) [是分裂满态射 f]
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨section_ f ≫ s.π, by
       dsimp
@@ -4700,7 +4700,7 @@ definition isCoequalizerEpiComp
 
 中文:
 定义 isCoequalizerEpiComp
-  签名: {c : Cofork f g} (i : IsColimit c) {W : C} (h : W ⟶ X) [hm : Epi h]
+  签名: {c : 余叉 f g} (i : 是余极限 c) {W : C} (h : W ⟶ X) [hm : 满态射 h]
   定义体: by
       simp only [Category.assoc]
       exact congrArg (h ≫ ·) c.condition
@@ -4735,7 +4735,7 @@ theorem hasCoequalizer_epi_comp
 
 中文:
 定理 hasCoequalizer_epi_comp
-  条件: [HasCoequalizer f g] {W : C} (h : W ⟶ X) [Epi h]
+  条件: [HasCoequalizer f g] {W : C} (h : W ⟶ X) [满态射 h]
   证明: ⟨⟨{ cocone := _
         isColimit := isCoequalizerEpiComp (colimit.isColimit _) h }⟩⟩
 
@@ -4765,7 +4765,7 @@ definition splitEpiOfIdempotentOfIsColimitCofork
 
 中文:
 定义 splitEpiOfIdempotentOfIsColimitCofork
-  签名: {X : C} {f : X ⟶ X} (hf : f ≫ f = f) {c : Cofork (𝟙 X) f}
+  签名: {X : C} {f : X ⟶ X} (hf : f ≫ f = f) {c : 余叉 (𝟙 X) f}
   定义体: i.desc (Cofork.ofπ f (by simp [hf]))
   id := by
     let := epi_of_isColimit_cofork i

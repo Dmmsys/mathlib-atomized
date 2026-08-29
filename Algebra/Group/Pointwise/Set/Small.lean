@@ -30,7 +30,7 @@ instance small_set_zero
 
 中文:
 实例 small_set_zero
-  签名: [Zero α]
+  签名: [零 α]
   定义体: small_single _
 
 Depends on / 依赖: small_single
@@ -46,7 +46,7 @@ instance small_set_one
 
 中文:
 实例 small_set_one
-  签名: [One α]
+  签名: [幺 α]
   定义体: small_single _
 
 Depends on / 依赖: small_single
@@ -86,7 +86,7 @@ instance small_add
 
 中文:
 实例 small_add
-  签名: [Add α] [Small.{u} s] [Small.{u} t]
+  签名: [加法 α] [Small.{u} s] [Small.{u} t]
   定义体: small_image2 ..
 
 Depends on / 依赖: small_image2
@@ -102,7 +102,7 @@ instance small_sub
 
 中文:
 实例 small_sub
-  签名: [Sub α] [Small.{u} s] [Small.{u} t]
+  签名: [减法 α] [Small.{u} s] [Small.{u} t]
   定义体: small_image2 ..
 
 Depends on / 依赖: small_image2
@@ -118,7 +118,7 @@ instance small_mul
 
 中文:
 实例 small_mul
-  签名: [Mul α] [Small.{u} s] [Small.{u} t]
+  签名: [乘法 α] [Small.{u} s] [Small.{u} t]
   定义体: small_image2 ..
 
 Depends on / 依赖: small_image2
@@ -134,7 +134,7 @@ instance small_div
 
 中文:
 实例 small_div
-  签名: [Div α] [Small.{u} s] [Small.{u} t]
+  签名: [除法 α] [Small.{u} s] [Small.{u} t]
   定义体: small_image2 ..
 
 Depends on / 依赖: small_image2

@@ -44,7 +44,7 @@ definition oscillation
 
 中文:
 定义 oscillation
-  签名: [TopologicalSpace E] (f : E -> F) (x : E)
+  签名: [拓扑空间 E] (f : E -> F) (x : E)
   定义体: ⨅ S in (𝓝 x).map f, ediam S
 -/
 noncomputable def oscillation [TopologicalSpace E] (f : E -> F) (x : E) : ENNReal :=
@@ -60,7 +60,7 @@ definition oscillationWithin
 
 中文:
 定义 oscillationWithin
-  签名: [TopologicalSpace E] (f : E -> F) (D : Set E) (x : E)
+  签名: [拓扑空间 E] (f : E -> F) (D : 集合 E) (x : E)
   定义体: ⨅ S in (𝓝[D] x).map f, ediam S
 -/
 noncomputable def oscillationWithin [TopologicalSpace E] (f : E -> F) (D : Set E) (x : E) :
@@ -78,7 +78,7 @@ theorem oscillationWithin_nhds_eq_oscillation
 
 中文:
 定理 oscillationWithin_nhds_eq_oscillation
-  结论: [TopologicalSpace E] (f : E -> F) (D : Set E) (x : E)
+  结论: [拓扑空间 E] (f : E -> F) (D : 集合 E) (x : E)
   证明: by
   rw [oscillation]; rw [oscillationWithin]; rw [nhdsWithin_eq_nhds.2 hD]
 
@@ -98,7 +98,7 @@ theorem oscillationWithin_univ_eq_oscillation
 
 中文:
 定理 oscillationWithin_univ_eq_oscillation
-  条件: [TopologicalSpace E] (f : E -> F) (x : E)
+  条件: [拓扑空间 E] (f : E -> F) (x : E)
   证明: oscillationWithin_nhds_eq_oscillation f univ x Filter.univ_mem
 
 Depends on / 依赖: Filter, Filter.univ_mem, oscillationWithin_nhds_eq_oscillation, univ_mem
@@ -126,7 +126,7 @@ hf eball_mem_nhds _ (by simp [ne_of_gt hε])
 
 中文:
 定理 oscillationWithin_eq_zero
-  结论: [TopologicalSpace E] {f : E -> F} {D : Set E}
+  结论: [拓扑空间 E] {f : E -> F} {D : 集合 E}
   证明: by
   rw [← nonpos_iff_eq_zero]
   refine _root_.le_of_forall_pos_le_add fun ε hε => ?_
@@ -164,7 +164,7 @@ theorem oscillation_eq_zero
 
 中文:
 定理 oscillation_eq_zero
-  条件: [TopologicalSpace E] {f : E -> F} {x : E} (hf : ContinuousAt f x)
+  条件: [拓扑空间 E] {f : E -> F} {x : E} (hf : ContinuousAt f x)
   证明: by
   rw [← continuousWithinAt_univ f x] at hf
   exact oscillationWithin_univ_eq_oscillation f x ▸ hf.oscillationWithin_eq_zero
@@ -195,7 +195,7 @@ exact edist_le_ediam_of_mem (mem_preimage.
 
 中文:
 定理 eq_zero_iff_continuousWithinAt
-  结论: [TopologicalSpace E] (f : E -> F) {D : Set E}
+  结论: [拓扑空间 E] (f : E -> F) {D : 集合 E}
   证明: by
   refine ⟨fun hf => EMetric.tendsto_nhds.mpr (fun ε ε0 => ?_), fun hf => hf.oscillationWithin_eq_zero⟩
   simp_rw [← hf, oscillationWithin, iInf_lt_iff] at ε0
@@ -229,7 +229,7 @@ theorem eq_zero_iff_continuousAt
 
 中文:
 定理 eq_zero_iff_continuousAt
-  条件: [TopologicalSpace E] (f : E -> F) (x : E)
+  条件: [拓扑空间 E] (f : E -> F) (x : E)
   证明: by
   rw [← oscillationWithin_univ_eq_oscillation]; rw [← continuousWithinAt_univ f x]
   exact OscillationWithin.eq_zero_iff_continuousWithinAt f (mem_univ x)
@@ -264,7 +264,7 @@ theorem uniform_oscillationWithin
 
 中文:
 定理 uniform_oscillationWithin
-  条件: (comp : IsCompact K) (hK : 对任意 x in K, oscillationWithin f D x < ε)
+  条件: (comp : 是紧集 K) (hK : 对任意 x in K, oscillationWithin f D x < ε)
   证明: by
   let S := fun r =>
     {x : E | exists (a : Real), (a > r ∧ ediam (f '' (eball x (ENNReal.ofReal a) inter D)) <= ε)}
@@ -333,7 +333,7 @@ theorem uniform_oscillation
 
 中文:
 定理 uniform_oscillation
-  结论: {K : Set E} (comp : IsCompact K)
+  结论: {K : 集合 E} (comp : 是紧集 K)
   证明: by
   simp only [← oscillationWithin_univ_eq_oscillation] at hK
   convert! ← comp.uniform_oscillationWithin hK

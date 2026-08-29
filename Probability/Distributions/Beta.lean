@@ -83,7 +83,7 @@ theorem beta_eq_betaIntegralReal
   all_goals simpa
 
 中文:
-定理 beta_eq_betaIntegralReal
+定理 beta_eq_beta整数egral实数
   条件: (α β : 实数) (hα : 0 < α) (hβ : 0 < β)
   证明: by
   rw [betaIntegral_eq_Gamma_mul_div]
@@ -112,7 +112,7 @@ definition betaPDFReal
     0
 
 中文:
-定义 betaPDFReal
+定义 betaPDF实数
   签名: (α β x : 实数)
   定义体: if 0 < x ∧ x < 1 then
     (1 / beta α β) * x ^ (α - 1) * (1 - x) ^ (β - 1)
@@ -259,7 +259,7 @@ lemma betaPDFReal_pos
     (Real.rpow_pos_of_pos (by linarith) (β - 1))
 
 中文:
-引理 betaPDFReal_pos
+引理 betaPDF实数_pos
   条件: {α β x : 实数} (hx1 : 0 < x) (hx2 : x < 1) (hα : 0 < α) (hβ : 0 < β)
   证明: by
   rw [betaPDFReal]; rw [if_pos ⟨hx1]; rw [hx2⟩]
@@ -286,9 +286,9 @@ lemma measurable_betaPDFReal
   proof: Measurable.ite measurableSet_Ioo (by fun_prop) (by fun_prop)
 
 中文:
-引理 measurable_betaPDFReal
+引理 measurable_betaPDF实数
   条件: (α β : 实数)
-  结论: Measurable (betaPDF实数 α β)
+  结论: 可测 (betaPDF实数 α β)
   证明: Measurable.ite measurableSet_Ioo (by fun_prop) (by fun_prop)
 
 Depends on / 依赖: Measurable, Measurable.ite, fun_prop, measurableSet_Ioo
@@ -307,7 +307,7 @@ lemma stronglyMeasurable_betaPDFReal
   proof: (measurable_betaPDFReal α β).stronglyMeasurable
 
 中文:
-引理 stronglyMeasurable_betaPDFReal
+引理 stronglyMeasurable_betaPDF实数
   条件: (α β : 实数)
   证明: (measurable_betaPDFReal α β).stronglyMeasurable
 

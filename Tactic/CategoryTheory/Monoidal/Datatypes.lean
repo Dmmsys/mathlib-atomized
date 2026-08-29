@@ -137,14 +137,14 @@ structure Context
     - instMonoidal? : Option Q(MonoidalCategory.{level₂, level₁} $C)
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (5 个):
     - level₂ : Level
     - level₁ : Level
-    - C : Q(Type level₁)
-    - instCat : Q(Category.{level₂, level₁} $C)
-    - instMonoidal? : Option Q(MonoidalCategory.{level₂, level₁} $C)
+    - C : Q(类型 level₁)
+    - instCat : Q(范畴.{level₂, level₁} $C)
+    - instMonoidal? : 选项类型 Q(幺半群范畴.{level₂, level₁} $C)
 -/
 structure Context where
   /-- The level for morphisms. -/
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: BicategoryLike.Context Monoidal.Context
+  签名: BicategoryLike.余ntext 幺半群.余ntext
   定义体: Monoidal.mkContext?
 
 Depends on / 依赖: Monoidal, Monoidal.mkContext, mkContext
@@ -246,7 +246,7 @@ definition synthMonoidalError
 
 中文:
 定义 synthMonoidalError
-  签名: {α : Type}
+  签名: {α : 类型}
   定义体: do
   throwError "failed to find monoidal category instance"
 -/
@@ -333,7 +333,7 @@ theorem StructuralOfExpr_monoidalComp
 
 中文:
 定理 StructuralOfExpr_monoidalComp
-  结论: {f g h i : C} [MonoidalCoherence g h]
+  结论: {f g h i : C} [幺半群相干 g h]
   证明: by
   simp [ih_η, ih_θ, monoidalIsoComp, monoidalComp]
 
@@ -1018,7 +1018,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonadCoherehnceHom MonoidalM
+  签名: MonadCoherehnce态射 MonoidalM
   定义体: Mor₂IsoOfExpr α.unfold
 -/
 instance : MonadCoherehnceHom MonoidalM where

@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: DirectSum.Decomposition (fun n => ⋀[R]^n M)
+  签名: 直和.分解 (fun n => ⋀[R]^n M)
   定义体: GradedRing.toDecomposition (self := ExteriorAlgebra.gradedAlgebra R M)
 
 Depends on / 依赖: ExteriorAlgebra, ExteriorAlgebra.gradedAlgebra, GradedRing, GradedRing.toDecomposition, gradedAlgebra, toDecomposition
@@ -50,8 +50,8 @@ definition _root_.Module.Basis.ExteriorAlgebra
     Set.powersetCard.prodEquiv
 
 中文:
-定义 _root_.Module.Basis.ExteriorAlgebra
-  签名: : Basis (Finset I) R (ExteriorAlgebra R M)
+定义 _root_.模.基.ExteriorAlgebra
+  签名: : 基 (有限集 I) R (ExteriorAlgebra R M)
   定义体: .reindex
     ((DirectSum.Decomposition.isInternal (fun n => ⋀[R]^n M)).collectedBasis b.exteriorPower)
     Set.powersetCard.prodEquiv
@@ -74,7 +74,7 @@ lemma basis_apply
 
 中文:
 引理 basis_apply
-  条件: (s : Finset I)
+  条件: (s : 有限集 I)
   证明: by
   simp [Basis.ExteriorAlgebra]
 
@@ -96,7 +96,7 @@ lemma basis_apply_ofCard
 
 中文:
 引理 basis_apply_ofCard
-  条件: {s : Finset I} (s_card : s.card = n)
+  条件: {s : 有限集 I} (s_card : s.card = n)
   证明: by
   subst s_card
   simp [basis_apply]

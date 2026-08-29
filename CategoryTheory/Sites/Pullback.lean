@@ -60,7 +60,7 @@ definition sheafPullback
 
 中文:
 定义 sheafPullback
-  签名: : Sheaf J A ⥤ Sheaf K A
+  签名: : 层 J A ⥤ 层 K A
   定义体: (G.sheafPushforwardContinuous A J K).leftAdjoint
 
 Depends on / 依赖: G.sheafPushforwardContinuous, leftAdjoint, sheafPushforwardContinuous
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (sheafPullback G A J K)
+  签名: 保持FiniteLimits (sheafPullback G A J K)
   定义体: by
   have : PreservesFiniteLimits (G.op.lan ⋙ presheafToSheaf K A) :=
     comp_preservesFiniteLimits _ _
@@ -213,7 +213,7 @@ instance preservesFiniteLimits
 
 中文:
 实例 preservesFiniteLimits
-  签名: : PreservesFiniteLimits (Functor.sheafPullback G A J K)
+  签名: : 保持FiniteLimits (函子.sheafPullback G A J K)
   定义体: preservesFiniteLimits_of_natIso (sheafPullbackIso G A J K).symm
 
 Depends on / 依赖: preservesFiniteLimits_of_natIso, sheafPullbackIso
@@ -251,7 +251,7 @@ instance [RepresentablyFlat
 
 中文:
 实例 [RepresentablyFlat
-  签名: G] : PreservesFiniteLimits (G.sheafPullback A J K)
+  签名: G] : 保持FiniteLimits (G.sheafPullback A J K)
   定义体: by
   apply sheafPullbackConstruction.preservesFiniteLimits
 

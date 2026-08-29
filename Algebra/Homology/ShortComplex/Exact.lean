@@ -51,10 +51,10 @@ structure Exact
     - condition : exists (h : S.HomologyData), IsZero h.left.H
 
 中文:
-结构 Exact
+结构 正合
   参数: : 命题 where
   公理与运算 (1 个):
-    - condition : 存在 (h : S.HomologyData), IsZero h.left.H
+    - condition : 存在 (h : S.同调数据), 是零 h.left.H
 -/
 structure Exact : Prop where
   /-- the condition that there exists a homology data whose `left.H` field is zero -/
@@ -72,9 +72,9 @@ lemma Exact.hasHomology
   proof: HasHomology.mk' h.condition.choose
 
 中文:
-引理 Exact.hasHomology
-  条件: (h : S.Exact)
-  结论: S.HasHomology
+引理 正合.hasHomology
+  条件: (h : S.正合)
+  结论: S.有同调
   证明: HasHomology.mk' h.condition.choose
 
 Depends on / 依赖: HasHomology, HasHomology.mk, condition, h.condition.choose
@@ -92,9 +92,9 @@ lemma Exact.hasZeroObject
   proof: ⟨h.condition.choose.left.H, h.condition.choose_spec⟩
 
 中文:
-引理 Exact.hasZeroObject
-  条件: (h : S.Exact)
-  结论: HasZeroObject C
+引理 正合.hasZeroObject
+  条件: (h : S.正合)
+  结论: 有ZeroObject C
   证明: ⟨h.condition.choose.left.H, h.condition.choose_spec⟩
 
 Depends on / 依赖: choose_spec, condition, h.condition.choose.left.H, h.condition.choose_spec
@@ -119,7 +119,7 @@ lemma exact_iff_isZero_homology
 
 中文:
 引理 exact_iff_isZero_homology
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   constructor
   · rintro ⟨⟨h', z⟩⟩
@@ -151,7 +151,7 @@ lemma LeftHomologyData.exact_iff
 
 中文:
 引理 LeftHomologyData.exact_iff
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   rw [S.exact_iff_isZero_homology]
   exact Iso.isZero_iff h.homologyIso
@@ -176,7 +176,7 @@ lemma RightHomologyData.exact_iff
 
 中文:
 引理 RightHomologyData.exact_iff
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   rw [S.exact_iff_isZero_homology]
   exact Iso.isZero_iff h.homologyIso
@@ -201,7 +201,7 @@ lemma exact_iff_isZero_leftHomology
 
 中文:
 引理 exact_iff_isZero_leftHomology
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: LeftHomologyData.exact_iff _
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.exact_iff, exact_iff
@@ -220,7 +220,7 @@ lemma exact_iff_isZero_rightHomology
 
 中文:
 引理 exact_iff_isZero_rightHomology
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: RightHomologyData.exact_iff _
 
 Depends on / 依赖: RightHomologyData, RightHomologyData.exact_iff, exact_iff
@@ -242,8 +242,8 @@ lemma HomologyData.exact_iff
   exact LeftHomologyData.exact_iff h.left
 
 中文:
-引理 HomologyData.exact_iff
-  条件: (h : S.HomologyData)
+引理 同调数据.exact_iff
+  条件: (h : S.同调数据)
   证明: by
   have := HasHomology.mk' h
   exact LeftHomologyData.exact_iff h.left
@@ -266,8 +266,8 @@ lemma HomologyData.exact_iff'
   exact RightHomologyData.exact_iff h.right
 
 中文:
-引理 HomologyData.exact_iff'
-  条件: (h : S.HomologyData)
+引理 同调数据.exact_iff'
+  条件: (h : S.同调数据)
   证明: by
   have := HasHomology.mk' h
   exact RightHomologyData.exact_iff h.right
@@ -297,7 +297,7 @@ lemma exact_iff_homology_iso_zero
 
 中文:
 引理 exact_iff_homology_iso_zero
-  条件: [S.HasHomology] [HasZeroObject C]
+  条件: [S.有同调] [有ZeroObject C]
   证明: by
   rw [exact_iff_isZero_homology]
   constructor
@@ -330,8 +330,8 @@ lemma exact_of_iso
 
 中文:
 引理 exact_of_iso
-  条件: (e : S₁ ≅ S₂) (h : S₁.Exact)
-  结论: S₂.Exact
+  条件: (e : S₁ ≅ S₂) (h : S₁.正合)
+  结论: S₂.正合
   证明: by
   obtain ⟨⟨h, z⟩⟩ := h
   exact ⟨⟨HomologyData.ofIso e h, z⟩⟩
@@ -354,7 +354,7 @@ lemma exact_iff_of_iso
 中文:
 引理 exact_iff_of_iso
   条件: (e : S₁ ≅ S₂)
-  结论: S₁.Exact ↔ S₂.Exact
+  结论: S₁.正合 ↔ S₂.正合
   证明: ⟨exact_of_iso e, exact_of_iso e.symm⟩
 
 Depends on / 依赖: e.symm, exact_of_iso
@@ -435,8 +435,8 @@ lemma exact_of_isZero_X₂
 
 中文:
 引理 exact_of_isZero_X₂
-  条件: (h : IsZero S.X₂)
-  结论: S.Exact
+  条件: (h : 是零 S.X₂)
+  结论: S.正合
   证明: by
   rw [(HomologyData.ofZeros S (IsZero.eq_of_tgt h _ _) (IsZero.eq_of_src h _ _)).exact_iff]
   exact h
@@ -462,7 +462,7 @@ lemma exact_iff_of_epi_of_isIso_of_mono
 
 中文:
 引理 exact_iff_of_epi_of_isIso_of_mono
-  条件: (φ : S₁ ⟶ S₂) [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃]
+  条件: (φ : S₁ ⟶ S₂) [满态射 φ.τ₁] [是同构 φ.τ₂] [单态射 φ.τ₃]
   证明: by
   constructor
   · rintro ⟨h₁, z₁⟩
@@ -499,8 +499,8 @@ lemma HomologyData.exact_iff_i_p_zero
       ← cancel_epi h.l
 
 中文:
-引理 HomologyData.exact_iff_i_p_zero
-  条件: (h : S.HomologyData)
+引理 同调数据.exact_iff_i_p_zero
+  条件: (h : S.同调数据)
   证明: by
   have := HasHomology.mk' h
   rw [h.left.exact_iff]; rw [← h.comm]
@@ -536,7 +536,7 @@ lemma exact_iff_i_p_zero
 
 中文:
 引理 exact_iff_i_p_zero
-  结论: [S.HasHomology] (h₁ : S.LeftHomologyData)
+  结论: [S.有同调] (h₁ : S.LeftHomologyData)
   证明: (HomologyData.ofIsIsoLeftRightHomologyComparison' h₁ h₂).exact_iff_i_p_zero
 
 Depends on / 依赖: HomologyData, HomologyData.ofIsIsoLeftRightHomologyComparison, exact_iff_i_p_zero, ofIsIsoLeftRightHomologyComparison
@@ -556,7 +556,7 @@ lemma exact_iff_iCycles_pOpcycles_zero
 
 中文:
 引理 exact_iff_iCycles_pOpcycles_zero
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: S.exact_iff_i_p_zero _ _
 
 Depends on / 依赖: S.exact_iff_i_p_zero, exact_iff_i_p_zero
@@ -579,7 +579,7 @@ lemma exact_iff_kernel_ι_comp_cokernel_π_zero
 
 中文:
 引理 exact_iff_kernel_ι_comp_cokernel_π_zero
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   have := HasLeftHomology.hasCokernel S
   have := HasRightHomology.hasKernel S
@@ -610,9 +610,9 @@ lemma Exact.op
   exact ⟨⟨h.op, (IsZero.of_iso z h.iso.symm).op⟩⟩
 
 中文:
-引理 Exact.op
-  条件: (h : S.Exact)
-  结论: S.op.Exact
+引理 正合.op
+  条件: (h : S.正合)
+  结论: S.op.正合
   证明: by
   obtain ⟨h, z⟩ := h
   exact ⟨⟨h.op, (IsZero.of_iso z h.iso.symm).op⟩⟩
@@ -635,9 +635,9 @@ lemma Exact.unop
   exact ⟨⟨h.unop, (IsZero.of_iso z h.iso.symm).unop⟩⟩
 
 中文:
-引理 Exact.unop
-  条件: {S : ShortComplex Cᵒᵖ} (h : S.Exact)
-  结论: S.unop.Exact
+引理 正合.unop
+  条件: {S : 短复形 Cᵒᵖ} (h : S.正合)
+  结论: S.unop.正合
   证明: by
   obtain ⟨h, z⟩ := h
   exact ⟨⟨h.unop, (IsZero.of_iso z h.iso.symm).unop⟩⟩
@@ -663,7 +663,7 @@ lemma exact_op_iff
 
 中文:
 引理 exact_op_iff
-  结论: S.op.Exact ↔ S.Exact
+  结论: S.op.正合 ↔ S.正合
   证明: ⟨Exact.unop, Exact.op⟩
 
 @[simp]
@@ -685,8 +685,8 @@ lemma exact_unop_iff
 
 中文:
 引理 exact_unop_iff
-  条件: (S : ShortComplex Cᵒᵖ)
-  结论: S.unop.Exact ↔ S.Exact
+  条件: (S : 短复形 Cᵒᵖ)
+  结论: S.unop.正合 ↔ S.正合
   证明: S.unop.exact_op_iff.symm
 
 Depends on / 依赖: S.unop.exact_op_iff.symm, exact_op_iff
@@ -748,8 +748,8 @@ lemma Exact.map_of_preservesLeftHomologyOf
   rw [S.leftHomologyData.exact_map_iff F]; rw [IsZero.iff_id_eq_zero]; rw [← F.map_id]; rw [h]; rw [F.map_zero]
 
 中文:
-引理 Exact.map_of_preservesLeftHomologyOf
-  结论: (h : S.Exact) (F : C ⥤ D)
+引理 正合.map_of_preservesLeftHomologyOf
+  结论: (h : S.正合) (F : C ⥤ D)
   证明: by
   have := h.hasHomology
   rw [S.leftHomologyData.exact_iff]; rw [IsZero.iff_id_eq_zero] at h
@@ -776,8 +776,8 @@ lemma Exact.map_of_preservesRightHomologyOf
   rw [S.rightHomologyData.exact_map_iff F]; rw [IsZero.iff_id_eq_zero]; rw [← F.map_id]; rw [h]; rw [F.map_zero]
 
 中文:
-引理 Exact.map_of_preservesRightHomologyOf
-  结论: (h : S.Exact) (F : C ⥤ D)
+引理 正合.map_of_preservesRightHomologyOf
+  结论: (h : S.正合) (F : C ⥤ D)
   证明: by
   have : S.HasHomology := h.hasHomology
   rw [S.rightHomologyData.exact_iff]; rw [IsZero.iff_id_eq_zero] at h
@@ -803,8 +803,8 @@ lemma Exact.map
   exact h.map_of_preservesLeftHomologyOf F
 
 中文:
-引理 Exact.map
-  结论: (h : S.Exact) (F : C ⥤ D)
+引理 正合.map
+  结论: (h : S.正合) (F : C ⥤ D)
   证明: by
   have := h.hasHomology
   exact h.map_of_preservesLeftHomologyOf F
@@ -837,7 +837,7 @@ lemma exact_map_iff_of_faithful
 
 中文:
 引理 exact_map_iff_of_faithful
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   constructor
   · intro h
@@ -879,8 +879,8 @@ lemma Exact.comp_eq_zero
   rw [← S.liftCycles_i a ha]; rw [← S.p_descOpcycles b hb]; rw [assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]
 
 中文:
-引理 Exact.comp_eq_zero
-  结论: (h : S.Exact) {X Y : C} {a : X ⟶ S.X₂} (ha : a ≫ S.g = 0)
+引理 正合.comp_eq_zero
+  结论: (h : S.正合) {X Y : C} {a : X ⟶ S.X₂} (ha : a ≫ S.g = 0)
   证明: by
   have := h.hasHomology
   have eq := h
@@ -905,8 +905,8 @@ lemma Exact.isZero_of_both_zeros
   proof: (ShortComplex.HomologyData.ofZeros S hf hg).exact_iff.1 ex
 
 中文:
-引理 Exact.isZero_of_both_zeros
-  条件: (ex : S.Exact) (hf : S.f = 0) (hg : S.g = 0)
+引理 正合.isZero_of_both_zeros
+  条件: (ex : S.正合) (hf : S.f = 0) (hg : S.g = 0)
   证明: (ShortComplex.HomologyData.ofZeros S hf hg).exact_iff.1 ex
 
 Depends on / 依赖: HomologyData, ShortComplex, ShortComplex.HomologyData.ofZeros, exact_iff, ofZeros
@@ -924,8 +924,8 @@ lemma Exact.isZero_of_both_isZero
   proof: ex.isZero_of_both_zeros (hX₁.eq_zero_of_src _) (hX₃.eq_zero_of_tgt _)
 
 中文:
-引理 Exact.isZero_of_both_isZero
-  条件: (ex : S.Exact) (hX₁ : IsZero S.X₁) (hX₃ : IsZero S.X₃)
+引理 正合.isZero_of_both_isZero
+  条件: (ex : S.正合) (hX₁ : 是零 S.X₁) (hX₃ : 是零 S.X₃)
   证明: ex.isZero_of_both_zeros (hX₁.eq_zero_of_src _) (hX₃.eq_zero_of_tgt _)
 
 Depends on / 依赖: eq_zero_of_src, eq_zero_of_tgt, ex.isZero_of_both_zeros, isZero_of_both_zeros
@@ -961,7 +961,7 @@ lemma exact_iff_mono
 
 中文:
 引理 exact_iff_mono
-  条件: [HasZeroObject C] (hf : S.f = 0)
+  条件: [有ZeroObject C] (hf : S.f = 0)
   证明: by
   constructor
   · intro h
@@ -1013,7 +1013,7 @@ lemma exact_iff_epi
 
 中文:
 引理 exact_iff_epi
-  条件: [HasZeroObject C] (hg : S.g = 0)
+  条件: [有ZeroObject C] (hg : S.g = 0)
   证明: by
   constructor
   · intro h
@@ -1060,9 +1060,9 @@ lemma Exact.epi_f'
     simpa only [← h.exact_iff] using hS)
 
 中文:
-引理 Exact.epi_f'
-  条件: (hS : S.Exact) (h : LeftHomologyData S)
-  结论: Epi h.f'
+引理 正合.epi_f'
+  条件: (hS : S.正合) (h : LeftHomologyData S)
+  结论: 满态射 h.f'
   证明: epi_of_isZero_cokernel' _ h.hπ (by
     have := hS.hasHomology
     dsimp
@@ -1090,9 +1090,9 @@ lemma Exact.mono_g'
     simpa only [← h.exact_iff] using hS)
 
 中文:
-引理 Exact.mono_g'
-  条件: (hS : S.Exact) (h : RightHomologyData S)
-  结论: Mono h.g'
+引理 正合.mono_g'
+  条件: (hS : S.正合) (h : RightHomologyData S)
+  结论: 单态射 h.g'
   证明: mono_of_isZero_kernel' _ h.hι (by
     have := hS.hasHomology
     dsimp
@@ -1116,9 +1116,9 @@ lemma Exact.epi_toCycles
   proof: hS.epi_f' _
 
 中文:
-引理 Exact.epi_toCycles
-  条件: (hS : S.Exact) [S.HasLeftHomology]
-  结论: Epi S.toCycles
+引理 正合.epi_toCycles
+  条件: (hS : S.正合) [S.有LeftHomology]
+  结论: 满态射 S.toCycles
   证明: hS.epi_f' _
 
 Depends on / 依赖: epi_f, hS.epi_f
@@ -1136,9 +1136,9 @@ lemma Exact.mono_fromOpcycles
   proof: hS.mono_g' _
 
 中文:
-引理 Exact.mono_fromOpcycles
-  条件: (hS : S.Exact) [S.HasRightHomology]
-  结论: Mono S.fromOpcycles
+引理 正合.mono_fromOpcycles
+  条件: (hS : S.正合) [S.有RightHomology]
+  结论: 单态射 S.fromOpcycles
   证明: hS.mono_g' _
 
 Depends on / 依赖: hS.mono_g, mono_g
@@ -1162,7 +1162,7 @@ lemma LeftHomologyData.exact_iff_epi_f'
 
 中文:
 引理 LeftHomologyData.exact_iff_epi_f'
-  条件: [S.HasHomology] (h : LeftHomologyData S)
+  条件: [S.有同调] (h : LeftHomologyData S)
   证明: by
   constructor
   · intro hS
@@ -1198,7 +1198,7 @@ lemma RightHomologyData.exact_iff_mono_g'
 
 中文:
 引理 RightHomologyData.exact_iff_mono_g'
-  条件: [S.HasHomology] (h : RightHomologyData S)
+  条件: [S.有同调] (h : RightHomologyData S)
   证明: by
   constructor
   · intro hS
@@ -1240,7 +1240,7 @@ definition Exact.leftHomologyDataOfIsLimitKernelFork
       hS.ep
 
 中文:
-定义 Exact.leftHomologyDataOfIsLimitKernelFork
+定义 正合.leftHomologyDataOfIsLimitKernelFork
   定义体: kf.pt
   H := 0
   i := kf.ι
@@ -1297,7 +1297,7 @@ definition Exact.rightHomologyDataOfIsColimitCokernelCofork
       hS.
 
 中文:
-定义 Exact.rightHomologyDataOfIsColimitCokernelCofork
+定义 正合.rightHomologyDataOfIsColimitCokernelCofork
   定义体: cc.pt
   H := 0
   p := cc.π
@@ -1344,8 +1344,8 @@ lemma exact_iff_epi_toCycles
 
 中文:
 引理 exact_iff_epi_toCycles
-  条件: [S.HasHomology]
-  结论: S.Exact ↔ Epi S.toCycles
+  条件: [S.有同调]
+  结论: S.正合 ↔ 满态射 S.toCycles
   证明: S.leftHomologyData.exact_iff_epi_f'
 
 Depends on / 依赖: S.leftHomologyData.exact_iff_epi_f, exact_iff_epi_f, leftHomologyData
@@ -1364,8 +1364,8 @@ lemma exact_iff_mono_fromOpcycles
 
 中文:
 引理 exact_iff_mono_fromOpcycles
-  条件: [S.HasHomology]
-  结论: S.Exact ↔ Mono S.fromOpcycles
+  条件: [S.有同调]
+  结论: S.正合 ↔ 单态射 S.fromOpcycles
   证明: S.rightHomologyData.exact_iff_mono_g'
 
 Depends on / 依赖: S.rightHomologyData.exact_iff_mono_g, exact_iff_mono_g, rightHomologyData
@@ -1387,7 +1387,7 @@ lemma exact_iff_epi_kernel_lift
 
 中文:
 引理 exact_iff_epi_kernel_lift
-  条件: [S.HasHomology] [HasKernel S.g]
+  条件: [S.有同调] [HasKernel S.g]
   证明: by
   rw [exact_iff_epi_toCycles]
   apply (MorphismProperty.epimorphisms C).arrow_mk_iso_iff
@@ -1415,7 +1415,7 @@ lemma exact_iff_mono_cokernel_desc
 
 中文:
 引理 exact_iff_mono_cokernel_desc
-  条件: [S.HasHomology] [HasCokernel S.f]
+  条件: [S.有同调] [HasCokernel S.f]
   证明: by
   rw [exact_iff_mono_fromOpcycles]
   refine (MorphismProperty.monomorphisms C).arrow_mk_iso_iff (Iso.symm ?_)
@@ -1439,8 +1439,8 @@ lemma Exact.mono_cokernelDesc
   proof: S.exact_iff_mono_cokernel_desc.1 hS
 
 中文:
-引理 Exact.mono_cokernelDesc
-  条件: [S.HasHomology] [HasCokernel S.f] (hS : S.Exact)
+引理 正合.mono_cokernelDesc
+  条件: [S.有同调] [HasCokernel S.f] (hS : S.正合)
   证明: S.exact_iff_mono_cokernel_desc.1 hS
 
 Depends on / 依赖: S.exact_iff_mono_cokernel_desc, exact_iff_mono_cokernel_desc
@@ -1459,8 +1459,8 @@ lemma Exact.epi_kernelLift
   proof: S.exact_iff_epi_kernel_lift.1 hS
 
 中文:
-引理 Exact.epi_kernelLift
-  条件: [S.HasHomology] [HasKernel S.g] (hS : S.Exact)
+引理 正合.epi_kernelLift
+  条件: [S.有同调] [HasKernel S.g] (hS : S.正合)
   证明: S.exact_iff_epi_kernel_lift.1 hS
 
 Depends on / 依赖: S.exact_iff_epi_kernel_lift, exact_iff_epi_kernel_lift
@@ -1480,8 +1480,8 @@ lemma QuasiIso.exact_iff
   exact Iso.isZero_iff (asIso (homologyMap φ))
 
 中文:
-引理 QuasiIso.exact_iff
-  结论: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+引理 拟同构.exact_iff
+  结论: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   simp only [exact_iff_isZero_homology]
   exact Iso.isZero_iff (asIso (homologyMap φ))
@@ -1510,7 +1510,7 @@ lemma exact_of_f_is_kernel
 
 中文:
 引理 exact_of_f_is_kernel
-  结论: (hS : IsLimit (KernelFork.ofι S.f S.zero))
+  结论: (hS : 是极限 (核叉.ofι S.f S.zero))
   证明: by
   rw [exact_iff_epi_toCycles]
   have : IsSplitEpi S.toCycles :=
@@ -1549,7 +1549,7 @@ lemma exact_of_g_is_cokernel
 
 中文:
 引理 exact_of_g_is_cokernel
-  结论: (hS : IsColimit (CokernelCofork.ofπ S.g S.zero))
+  结论: (hS : 是余极限 (余核余叉.ofπ S.g S.zero))
   证明: by
   rw [exact_iff_mono_fromOpcycles]
   have : IsSplitMono S.fromOpcycles :=
@@ -1589,9 +1589,9 @@ lemma Exact.mono_g
   rw [← S.liftCycles_i x₂ hx₂]; rw [this]; rw [comp_zero]
 
 中文:
-引理 Exact.mono_g
-  条件: (hS : S.Exact) (hf : S.f = 0)
-  结论: Mono S.g
+引理 正合.mono_g
+  条件: (hS : S.正合) (hf : S.f = 0)
+  结论: 单态射 S.g
   证明: by
   have := hS.hasHomology
   have := hS.epi_toCycles
@@ -1626,9 +1626,9 @@ lemma Exact.epi_f
   rw [← S.p_descOpcycles x₂ hx₂]; rw [this]; rw [zero_comp]
 
 中文:
-引理 Exact.epi_f
-  条件: (hS : S.Exact) (hg : S.g = 0)
-  结论: Epi S.f
+引理 正合.epi_f
+  条件: (hS : S.正合) (hg : S.g = 0)
+  结论: 满态射 S.f
   证明: by
   have := hS.hasHomology
   have := hS.mono_fromOpcycles
@@ -1661,9 +1661,9 @@ lemma Exact.mono_g_iff
   · exact hS.mono_g
 
 中文:
-引理 Exact.mono_g_iff
-  条件: (hS : S.Exact)
-  结论: Mono S.g ↔ S.f = 0
+引理 正合.mono_g_iff
+  条件: (hS : S.正合)
+  结论: 单态射 S.g ↔ S.f = 0
   证明: by
   constructor
   · intro
@@ -1692,9 +1692,9 @@ lemma Exact.epi_f_iff
   · exact hS.epi_f
 
 中文:
-引理 Exact.epi_f_iff
-  条件: (hS : S.Exact)
-  结论: Epi S.f ↔ S.g = 0
+引理 正合.epi_f_iff
+  条件: (hS : S.正合)
+  结论: 满态射 S.f ↔ S.g = 0
   证明: by
   constructor
   · intro
@@ -1721,9 +1721,9 @@ lemma Exact.isZero_X₂
   rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono S.g]; rw [hg]; rw [comp_zero]; rw [comp_zero]
 
 中文:
-引理 Exact.isZero_X₂
-  条件: (hS : S.Exact) (hf : S.f = 0) (hg : S.g = 0)
-  结论: IsZero S.X₂
+引理 正合.isZero_X₂
+  条件: (hS : S.正合) (hf : S.f = 0) (hg : S.g = 0)
+  结论: 是零 S.X₂
   证明: by
   have := hS.mono_g hf
   rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono S.g]; rw [hg]; rw [comp_zero]; rw [comp_zero]
@@ -1749,9 +1749,9 @@ lemma Exact.isZero_X₂_iff
     exact hS.isZero_X₂ hf hg
 
 中文:
-引理 Exact.isZero_X₂_iff
-  条件: (hS : S.Exact)
-  结论: IsZero S.X₂ ↔ S.f = 0 ∧ S.g = 0
+引理 正合.isZero_X₂_iff
+  条件: (hS : S.正合)
+  结论: 是零 S.X₂ ↔ S.f = 0 ∧ S.g = 0
   证明: by
   constructor
   · intro h
@@ -1785,7 +1785,7 @@ structure Splitting
 
 中文:
 结构 Splitting
-  参数: (S : ShortComplex C)
+  参数: (S : 短复形 C)
   公理与运算 (5 个):
     - r : S.X₂ ⟶ S.X₁
     - s : S.X₃ ⟶ S.X₂
@@ -1884,7 +1884,7 @@ lemma isSplitMono_f
 中文:
 引理 isSplitMono_f
   条件: (s : S.Splitting)
-  结论: IsSplitMono S.f
+  结论: 是分裂单态射 S.f
   证明: ⟨⟨s.splitMono_f⟩⟩
 
 Depends on / 依赖: s.splitMono_f, splitMono_f
@@ -1905,7 +1905,7 @@ lemma mono_f
 中文:
 引理 mono_f
   条件: (s : S.Splitting)
-  结论: Mono S.f
+  结论: 单态射 S.f
   证明: by
   have := s.isSplitMono_f
   infer_instance
@@ -1943,7 +1943,7 @@ lemma isSplitEpi_g
 中文:
 引理 isSplitEpi_g
   条件: (s : S.Splitting)
-  结论: IsSplitEpi S.g
+  结论: 是分裂满态射 S.g
   证明: ⟨⟨s.splitEpi_g⟩⟩
 
 Depends on / 依赖: s.splitEpi_g, splitEpi_g
@@ -1966,7 +1966,7 @@ lemma epi_g
 中文:
 引理 epi_g
   条件: (s : S.Splitting)
-  结论: Epi S.g
+  结论: 满态射 S.g
   证明: by
   have := s.isSplitEpi_g
   infer_instance
@@ -2095,7 +2095,7 @@ definition leftHomologyData
 
 中文:
 定义 leftHomologyData
-  签名: [HasZeroObject C] (s : S.Splitting)
+  签名: [有ZeroObject C] (s : S.Splitting)
   定义体: by
   have hi := KernelFork.IsLimit.ofι S.f S.zero
     (fun x _ => x ≫ s.r)
@@ -2148,7 +2148,7 @@ definition rightHomologyData
 
 中文:
 定义 rightHomologyData
-  签名: [HasZeroObject C] (s : S.Splitting)
+  签名: [有ZeroObject C] (s : S.Splitting)
   定义体: by
   have hp := CokernelCofork.IsColimit.ofπ S.g S.zero
     (fun x _ => s.s ≫ x)
@@ -2195,7 +2195,7 @@ definition homologyData
 
 中文:
 定义 homologyData
-  签名: [HasZeroObject C] (s : S.Splitting)
+  签名: [有ZeroObject C] (s : S.Splitting)
   定义体: s.leftHomologyData
   right := s.rightHomologyData
   iso := Iso.refl 0
@@ -2218,8 +2218,8 @@ lemma exact
 
 中文:
 引理 exact
-  条件: [HasZeroObject C] (s : S.Splitting)
-  结论: S.Exact
+  条件: [有ZeroObject C] (s : S.Splitting)
+  结论: S.正合
   证明: ⟨s.homologyData, isZero_zero _⟩
 
 Depends on / 依赖: homologyData, isZero_zero, s.homologyData
@@ -2237,7 +2237,7 @@ definition fIsKernel
 
 中文:
 定义 fIsKernel
-  签名: [HasZeroObject C] (s : S.Splitting)
+  签名: [有ZeroObject C] (s : S.Splitting)
   定义体: s.homologyData.left.hi
 
 Depends on / 依赖: homologyData, s.homologyData.left.hi
@@ -2256,7 +2256,7 @@ definition gIsCokernel
 
 中文:
 定义 gIsCokernel
-  签名: [HasZeroObject C] (s : S.Splitting)
+  签名: [有ZeroObject C] (s : S.Splitting)
   定义体: s.homologyData.right.hp
 
 Depends on / 依赖: homologyData, s.homologyData.right.hp
@@ -2289,7 +2289,7 @@ definition map
 
 中文:
 定义 map
-  签名: (s : S.Splitting) (F : C ⥤ D) [F.Additive]
+  签名: (s : S.Splitting) (F : C ⥤ D) [F.加性]
   定义体: F.map s.r
   s := F.map s.s
   f_r := by
@@ -2335,7 +2335,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: {S₁ S₂ : ShortComplex C} (s : S₁.Splitting) (e : S₁ ≅ S₂)
+  签名: {S₁ S₂ : 短复形 C} (s : S₁.Splitting) (e : S₁ ≅ S₂)
   定义体: e.inv.τ₂ ≫ s.r ≫ e.hom.τ₁
   s := e.inv.τ₃ ≫ s.s ≫ e.hom.τ₂
   f_r := by rw [← e.inv.comm₁₂_assoc, s.f_r_assoc, ← comp_τ₁, e.inv_hom_id, id_τ₁]
@@ -2367,7 +2367,7 @@ definition ofHasBinaryBiproduct
 
 中文:
 定义 ofHasBinaryBiproduct
-  签名: (X₁ X₂ : C) [HasBinaryBiproduct X₁ X₂]
+  签名: (X₁ X₂ : C) [有BinaryBiproduct X₁ X₂]
   定义体: biprod.fst
   s := biprod.inr
 
@@ -2392,7 +2392,7 @@ definition ofIsZeroOfIsIso
 
 中文:
 定义 ofIsZeroOfIsIso
-  签名: (hf : IsZero S.X₁) (hg : IsIso S.g)
+  签名: (hf : 是零 S.X₁) (hg : 是同构 S.g)
   定义体: 0
   s := inv S.g
   f_r := hf.eq_of_src _ _
@@ -2414,7 +2414,7 @@ definition ofIsIsoOfIsZero
 
 中文:
 定义 ofIsIsoOfIsZero
-  签名: (hf : IsIso S.f) (hg : IsZero S.X₃)
+  签名: (hf : 是同构 S.f) (hg : 是零 S.X₃)
   定义体: inv S.f
   s := 0
   s_g := hg.eq_of_src _ _
@@ -2490,7 +2490,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {S : ShortComplex Cᵒᵖ} (h : Splitting S)
+  签名: {S : 短复形 Cᵒᵖ} (h : Splitting S)
   定义体: h.s.unop
   s := h.r.unop
   f_r := Quiver.Hom.op_inj (by simp)
@@ -2526,7 +2526,7 @@ definition isoBinaryBiproduct
 
 中文:
 定义 isoBinaryBiproduct
-  签名: (h : Splitting S) [HasBinaryBiproduct S.X₁ S.X₃]
+  签名: (h : Splitting S) [有BinaryBiproduct S.X₁ S.X₃]
   定义体: biprod.lift h.r S.g
   inv := biprod.desc S.f h.s
   hom_inv_id := by simp [h.id]
@@ -2561,7 +2561,7 @@ lemma isIso_f'
 
 中文:
 引理 isIso_f'
-  条件: (hS : S.Exact) (h : S.LeftHomologyData) [Mono S.f]
+  条件: (hS : S.正合) (h : S.LeftHomologyData) [单态射 S.f]
   证明: by
   have := hS.epi_f' h
   have := mono_of_mono_fac h.f'_i
@@ -2585,7 +2585,7 @@ lemma isIso_toCycles
 
 中文:
 引理 isIso_toCycles
-  条件: (hS : S.Exact) [Mono S.f] [S.HasLeftHomology]
+  条件: (hS : S.正合) [单态射 S.f] [S.有LeftHomology]
   证明: hS.isIso_f' _
 
 Depends on / 依赖: hS.isIso_f, isIso_f
@@ -2607,7 +2607,7 @@ lemma isIso_g'
 
 中文:
 引理 isIso_g'
-  条件: (hS : S.Exact) (h : S.RightHomologyData) [Epi S.g]
+  条件: (hS : S.正合) (h : S.RightHomologyData) [满态射 S.g]
   证明: by
   have := hS.mono_g' h
   have := epi_of_epi_fac h.p_g'
@@ -2631,7 +2631,7 @@ lemma isIso_fromOpcycles
 
 中文:
 引理 isIso_fromOpcycles
-  条件: (hS : S.Exact) [Epi S.g] [S.HasRightHomology]
+  条件: (hS : S.正合) [满态射 S.g] [S.有RightHomology]
   证明: hS.isIso_g' _
 
 Depends on / 依赖: hS.isIso_g, isIso_g
@@ -2655,7 +2655,7 @@ definition fIsKernel
 
 中文:
 定义 fIsKernel
-  签名: (hS : S.Exact) [Mono S.f]
+  签名: (hS : S.正合) [单态射 S.f]
   定义体: by
   have := hS.hasHomology
   have := hS.isIso_toCycles
@@ -2680,7 +2680,7 @@ lemma map_of_mono_of_preservesKernel
 
 中文:
 引理 map_of_mono_of_preservesKernel
-  结论: (hS : S.Exact) (F : C ⥤ D)
+  结论: (hS : S.正合) (F : C ⥤ D)
   证明: exact_of_f_is_kernel _ (KernelFork.mapIsLimit _ hS.fIsKernel F)
 
 Depends on / 依赖: KernelFork, KernelFork.mapIsLimit, exact_of_f_is_kernel, fIsKernel, hS.fIsKernel, mapIsLimit
@@ -2706,7 +2706,7 @@ definition gIsCokernel
 
 中文:
 定义 gIsCokernel
-  签名: (hS : S.Exact) [Epi S.g]
+  签名: (hS : S.正合) [满态射 S.g]
   定义体: by
   have := hS.hasHomology
   have := hS.isIso_fromOpcycles
@@ -2732,7 +2732,7 @@ lemma map_of_epi_of_preservesCokernel
 
 中文:
 引理 map_of_epi_of_preservesCokernel
-  结论: (hS : S.Exact) (F : C ⥤ D)
+  结论: (hS : S.正合) (F : C ⥤ D)
   证明: exact_of_g_is_cokernel _ (CokernelCofork.mapIsColimit _ hS.gIsCokernel F)
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.mapIsColimit, exact_of_g_is_cokernel, gIsCokernel, hS.gIsCokernel, mapIsColimit
@@ -2755,7 +2755,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (hS : S.Exact) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [Mono S.f]
+  签名: (hS : S.正合) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [单态射 S.f]
   定义体: hS.fIsKernel.lift (KernelFork.ofι k hk)
 
 @[reassoc (attr := simp)]
@@ -2776,7 +2776,7 @@ lemma lift_f
 
 中文:
 引理 lift_f
-  条件: (hS : S.Exact) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [Mono S.f]
+  条件: (hS : S.正合) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [单态射 S.f]
   证明: Fork.IsLimit.lift_ι _
 
 Depends on / 依赖: Fork.IsLimit.lift_, IsLimit
@@ -2795,7 +2795,7 @@ lemma lift'
 
 中文:
 引理 lift'
-  条件: (hS : S.Exact) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [Mono S.f]
+  条件: (hS : S.正合) {A : C} (k : A ⟶ S.X₂) (hk : k ≫ S.g = 0) [单态射 S.f]
   证明: ⟨hS.lift k hk, by simp⟩
 
 Depends on / 依赖: hS.lift
@@ -2816,7 +2816,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (hS : S.Exact) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [Epi S.g]
+  签名: (hS : S.正合) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [满态射 S.g]
   定义体: hS.gIsCokernel.desc (CokernelCofork.ofπ k hk)
 
 @[reassoc (attr := simp)]
@@ -2837,7 +2837,7 @@ lemma g_desc
 
 中文:
 引理 g_desc
-  条件: (hS : S.Exact) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [Epi S.g]
+  条件: (hS : S.正合) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [满态射 S.g]
   证明: Cofork.IsColimit.π_desc (hS.gIsCokernel)
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, IsColimit, gIsCokernel, hS.gIsCokernel
@@ -2856,7 +2856,7 @@ lemma desc'
 
 中文:
 引理 desc'
-  条件: (hS : S.Exact) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [Epi S.g]
+  条件: (hS : S.正合) {A : C} (k : S.X₂ ⟶ A) (hk : S.f ≫ k = 0) [满态射 S.g]
   证明: ⟨hS.desc k hk, by simp⟩
 
 Depends on / 依赖: hS.desc
@@ -2883,7 +2883,7 @@ lemma mono_τ₂_of_exact_of_mono
 
 中文:
 引理 mono_τ₂_of_exact_of_mono
-  结论: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   rw [mono_iff_cancel_zero]
   intro A x₂ hx₂
@@ -2923,7 +2923,7 @@ lemma epi_τ₂_of_exact_of_epi
 
 中文:
 引理 epi_τ₂_of_exact_of_epi
-  结论: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   have : Mono S₁.op.f := by dsimp; infer_instance
   have : Mono S₂.op.f := by dsimp; infer_instance
@@ -2960,7 +2960,7 @@ lemma exact_and_mono_f_iff_f_is_kernel
 
 中文:
 引理 exact_and_mono_f_iff_f_is_kernel
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   constructor
   · intro ⟨hS, _⟩
@@ -2993,7 +2993,7 @@ lemma exact_and_epi_g_iff_g_is_cokernel
 
 中文:
 引理 exact_and_epi_g_iff_g_is_cokernel
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   constructor
   · intro ⟨hS, _⟩
@@ -3035,7 +3035,7 @@ definition kernelSequence
 
 中文:
 定义 kernelSequence
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk _ _ (kernel.condition f)
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, condition, kernel, kernel.condition
@@ -3055,7 +3055,7 @@ definition cokernelSequence
 
 中文:
 定义 cokernelSequence
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk _ _ (cokernel.condition f)
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, cokernel, cokernel.condition, condition
@@ -3076,7 +3076,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (kernelSequence f).f
+  签名: 单态射 (kernelSequence f).f
   定义体: by
   dsimp
   infer_instance
@@ -3100,7 +3100,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (cokernelSequence f).g
+  签名: 满态射 (cokernelSequence f).g
   定义体: by
   dsimp
   infer_instance
@@ -3121,7 +3121,7 @@ lemma kernelSequence_exact
 
 中文:
 引理 kernelSequence_exact
-  结论: (kernelSequence f).Exact
+  结论: (kernelSequence f).正合
   证明: exact_of_f_is_kernel _ (kernelIsKernel f)
 
 Depends on / 依赖: exact_of_f_is_kernel, kernelIsKernel
@@ -3139,7 +3139,7 @@ lemma cokernelSequence_exact
 
 中文:
 引理 cokernelSequence_exact
-  结论: (cokernelSequence f).Exact
+  结论: (cokernelSequence f).正合
   证明: exact_of_g_is_cokernel _ (cokernelIsCokernel f)
 
 Depends on / 依赖: cokernelIsCokernel, exact_of_g_is_cokernel
@@ -3170,7 +3170,7 @@ lemma quasiIso_iff_of_zeros
 
 中文:
 引理 quasiIso_iff_of_zeros
-  结论: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   have w : φ.τ₂ ≫ S₂.g = 0 := by rw [φ.comm₂₃, hg₁, zero_comp]
   rw [quasiIso_iff_isIso_liftCycles φ hf₁ hg₁ hf₂]
@@ -3228,7 +3228,7 @@ lemma quasiIso_iff_of_zeros'
 
 中文:
 引理 quasiIso_iff_of_zeros'
-  结论: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   rw [← quasiIso_opMap_iff]; rw [quasiIso_iff_of_zeros]
   rotate_left
@@ -3275,7 +3275,7 @@ definition Exact.descToInjective
 @[reassoc (attr := simp, nolint unusedHavesSuffices)]
 
 中文:
-定义 Exact.descToInjective
+定义 正合.descToInjective
   定义体: by
   have := hS.mono_fromOpcycles
   exact Injective.factorThru (S.descOpcycles f hf) S.fromOpcycles
@@ -3301,7 +3301,7 @@ lemma Exact.comp_descToInjective
   simp only [← p_fromOpcycles, assoc, Injective.comp_factorThru, p_descOpcycles]
 
 中文:
-引理 Exact.comp_descToInjective
+引理 正合.comp_descToInjective
   证明: by
   dsimp [descToInjective]
   simp only [← p_fromOpcycles, assoc, Injective.comp_factorThru, p_descOpcycles]
@@ -3326,7 +3326,7 @@ definition Exact.liftFromProjective
 @[reassoc (attr := simp, nolint unusedHavesSuffices)]
 
 中文:
-定义 Exact.liftFromProjective
+定义 正合.liftFromProjective
   定义体: by
   have := hS.epi_toCycles
   exact Projective.factorThru (S.liftCycles f hf) S.toCycles
@@ -3352,7 +3352,7 @@ lemma Exact.liftFromProjective_comp
   rw [← toCycles_i]; rw [Projective.factorThru_comp_assoc]; rw [liftCycles_i]
 
 中文:
-引理 Exact.liftFromProjective_comp
+引理 正合.liftFromProjective_comp
   证明: by
   dsimp [liftFromProjective]
   rw [← toCycles_i]; rw [Projective.factorThru_comp_assoc]; rw [liftCycles_i]
@@ -3389,7 +3389,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.PreservesMonomorphisms
+  签名: F.保持Monomorphisms
   定义体: by
     let S := ShortComplex.mk (0 : X ⟶ X) f zero_comp
     exact ((S.map F).exact_iff_mono (by simp [S])).1
@@ -3418,7 +3418,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.PreservesEpimorphisms
+  签名: F.保持Epimorphisms
   定义体: by
     let S := ShortComplex.mk f (0 : Y ⟶ Y) comp_zero
     exact ((S.map F).exact_iff_epi (by simp [S])).1
@@ -3455,7 +3455,7 @@ definition ofExactOfSection
 
 中文:
 定义 ofExactOfSection
-  签名: (S : ShortComplex C) (hS : S.Exact) (s : S.X₃ ⟶ S.X₂)
+  签名: (S : 短复形 C) (hS : S.正合) (s : S.X₃ ⟶ S.X₂)
   定义体: hS.lift (𝟙 S.X₂ - S.g ≫ s) (by simp [s_g])
   s := s
   f_r := by rw [← cancel_mono S.f, assoc, Exact.lift_f, comp_sub, comp_id,
@@ -3487,7 +3487,7 @@ definition ofExactOfRetraction
 
 中文:
 定义 ofExactOfRetraction
-  签名: (S : ShortComplex C) (hS : S.Exact) (r : S.X₂ ⟶ S.X₁)
+  签名: (S : 短复形 C) (hS : S.正合) (r : S.X₂ ⟶ S.X₁)
   定义体: r
   s := hS.desc (𝟙 S.X₂ - r ≫ S.f) (by simp [reassoc_of% f_r])
   f_r := f_r

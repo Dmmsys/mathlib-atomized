@@ -91,7 +91,7 @@ theorem isUniformInducing_equivBoundedOfCompact
 
 中文:
 定理 isUniformInducing_equivBoundedOfCompact
-  结论: IsUniformInducing (equivBoundedOfCompact α β)
+  结论: 是UniformInducing (equivBoundedOfCompact α β)
   证明: IsUniformInducing.mk'
     (by
       simp only [hasBasis_compactConvergenceUniformity.mem_iff, uniformity_basis_dist_le.mem_iff]
@@ -127,7 +127,7 @@ theorem isUniformEmbedding_equivBoundedOfCompact
 
 中文:
 定理 isUniformEmbedding_equivBoundedOfCompact
-  结论: IsUniformEmbedding (equivBoundedOfCompact α β)
+  结论: 是一致嵌入 (equivBoundedOfCompact α β)
   证明: { isUniformInducing_equivBoundedOfCompact α β with
     injective := (equivBoundedOfCompact α β).injective }
 
@@ -157,7 +157,7 @@ definition addEquivBoundedOfCompact
 
 中文:
 定义 addEquivBoundedOfCompact
-  签名: [AddMonoid β] [LipschitzAdd β]
+  签名: [加法幺半群 β] [Lipschitz加法 β]
   定义体: ({ toContinuousMapAddMonoidHom α β, (equivBoundedOfCompact α β).symm with } :
     (α ->ᵇ β) ≃+ C(α, β)).symm
 
@@ -177,7 +177,7 @@ instance instPseudoMetricSpace
 
 中文:
 实例 instPseudoMetricSpace
-  签名: : PseudoMetricSpace C(α, β)
+  签名: : 伪度量空间 C(α, β)
   定义体: (isUniformEmbedding_equivBoundedOfCompact α β).comapPseudoMetricSpace _
 
 Depends on / 依赖: comapPseudoMetricSpace, isUniformEmbedding_equivBoundedOfCompact
@@ -195,7 +195,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: {β : 类型} [MetricSpace β]
+  签名: {β : 类型} [度量空间 β]
   定义体: (isUniformEmbedding_equivBoundedOfCompact α β).comapMetricSpace _
 
 Depends on / 依赖: comapMetricSpace, isUniformEmbedding_equivBoundedOfCompact
@@ -242,7 +242,7 @@ theorem _root_.BoundedContinuousFunction.dist_mkOfCompact
 @[simp]
 
 中文:
-定理 _root_.BoundedContinuousFunction.dist_mkOfCompact
+定理 _root_.有界连续函数.dist_mkOfCompact
   条件: (f g : C(α, β))
   证明: rfl
 
@@ -262,7 +262,7 @@ theorem _root_.BoundedContinuousFunction.dist_toContinuousMap
   proof: rfl
 
 中文:
-定理 _root_.BoundedContinuousFunction.dist_toContinuousMap
+定理 _root_.有界连续函数.dist_toContinuousMap
   条件: (f g : α ->ᵇ β)
   证明: rfl
 -/
@@ -333,7 +333,7 @@ theorem dist_le_iff_of_nonempty
 
 中文:
 定理 dist_le_iff_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: dist f g <= C ↔ 对任意 x, dist (f x) (g x) <= C
   证明: by
   simp only [← dist_mkOfCompact, BoundedContinuousFunction.dist_le_iff_of_nonempty,
@@ -357,7 +357,7 @@ theorem dist_lt_iff_of_nonempty
 
 中文:
 定理 dist_lt_iff_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: dist f g < C ↔ 对任意 x : α, dist (f x) (g x) < C
   证明: by
   simp only [← dist_mkOfCompact, dist_lt_iff_of_nonempty_compact, mkOfCompact_apply]
@@ -378,7 +378,7 @@ theorem dist_lt_of_nonempty
 
 中文:
 定理 dist_lt_of_nonempty
-  条件: [Nonempty α] (w : 对任意 x : α, dist (f x) (g x) < C)
+  条件: [非空 α] (w : 对任意 x : α, dist (f x) (g x) < C)
   结论: dist f g < C
   证明: dist_lt_iff_of_nonempty.2 w
 
@@ -504,7 +504,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm C(α, E)
+  签名: 范数 C(α, E)
   定义体: dist x 0
 
 @[simp]
@@ -524,7 +524,7 @@ theorem _root_.BoundedContinuousFunction.norm_mkOfCompact
 @[simp]
 
 中文:
-定理 _root_.BoundedContinuousFunction.norm_mkOfCompact
+定理 _root_.有界连续函数.norm_mkOfCompact
   条件: (f : C(α, E))
   结论: ‖mkOfCompact f‖ = ‖f‖
   证明: rfl
@@ -544,7 +544,7 @@ theorem _root_.BoundedContinuousFunction.norm_toContinuousMap_eq
   proof: rfl
 
 中文:
-定理 _root_.BoundedContinuousFunction.norm_toContinuousMap_eq
+定理 _root_.有界连续函数.norm_toContinuousMap_eq
   条件: (f : α ->ᵇ E)
   证明: rfl
 -/
@@ -569,7 +569,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeminormedAddCommGroup C(α, E)
+  签名: SeminormedAddComm群 C(α, E)
   定义体: ContinuousMap.instPseudoMetricSpace _ _
   __ := ContinuousMap.instAddCommGroupContinuousMap
   dist_eq x y := by rw [← norm_mkOfCompact, ← dist_mkOfCompact, dist_eq_norm_neg_add,
@@ -601,7 +601,7 @@ instance [Nonempty
   simpa [nontrivialTopology_iff_exists_norm_ne_zero] using exists_ne (0 : C(α, E))
 
 中文:
-实例 [Nonempty
+实例 [非空
   签名: α] {E
   定义体: by
   simpa [nontrivialTopology_iff_exists_norm_ne_zero] using exists_ne (0 : C(α, E))
@@ -621,8 +621,8 @@ instance [Nonempty
   body: by simp only [← norm_mkOfCompact, mkOfCompact_one, norm_one]
 
 中文:
-实例 [Nonempty
-  签名: α] [One E] [NormOneClass E] : NormOneClass C(α, E) where
+实例 [非空
+  签名: α] [幺 E] [NormOne类 E] : NormOne类 C(α, E) where
   定义体: by simp only [← norm_mkOfCompact, mkOfCompact_one, norm_one]
 
 Depends on / 依赖: mkOfCompact_one, norm_mkOfCompact, norm_one
@@ -707,7 +707,7 @@ theorem norm_le_of_nonempty
 
 中文:
 定理 norm_le_of_nonempty
-  条件: [Nonempty α] {M : 实数}
+  条件: [非空 α] {M : 实数}
   结论: ‖f‖ <= M ↔ 对任意 x, ‖f x‖ <= M
   证明: @BoundedContinuousFunction.norm_le_of_nonempty _ _ _ _ _ (mkOfCompact f) _
 
@@ -767,7 +767,7 @@ theorem norm_lt_iff_of_nonempty
 
 中文:
 定理 norm_lt_iff_of_nonempty
-  条件: [Nonempty α] {M : 实数}
+  条件: [非空 α] {M : 实数}
   结论: ‖f‖ < M ↔ 对任意 x, ‖f x‖ < M
   证明: @BoundedContinuousFunction.norm_lt_iff_of_nonempty_compact _ _ _ _ _ _ (mkOfCompact f) _
 
@@ -787,7 +787,7 @@ theorem nnnorm_lt_iff_of_nonempty
 
 中文:
 定理 nnnorm_lt_iff_of_nonempty
-  条件: [Nonempty α] {M : 实数>=0}
+  条件: [非空 α] {M : 实数>=0}
   结论: ‖f‖₊ < M ↔ 对任意 x, ‖f x‖₊ < M
   证明: f.norm_lt_iff_of_nonempty
 
@@ -905,7 +905,7 @@ theorem norm_restrict_mono_set
 
 中文:
 定理 norm_restrict_mono_set
-  结论: {X : 类型} [TopologicalSpace X] (f : C(X, E))
+  结论: {X : 类型} [拓扑空间 X] (f : C(X, E))
   证明: (norm_le _ (norm_nonneg _)).mpr fun x => norm_coe_le_norm (f.restrict L) Set.inclusion hKL x
 
 Depends on / 依赖: Set.inclusion, f.restrict, inclusion, norm_coe_le_norm, norm_le, norm_nonneg, restrict
@@ -930,7 +930,7 @@ lemma norm_eq_norm_coeFn
 
 中文:
 引理 norm_eq_norm_coeFn
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: ‖f‖ = ‖(f : α -> E)‖
   证明: by
   apply le_antisymm
@@ -965,8 +965,8 @@ instance [NonUnitalSeminormedRing
   norm_mul_le f g := norm_mul_le (mkOfCompact f) (mkOfCompact g)
 
 中文:
-实例 [NonUnitalSeminormedRing
-  签名: R] : NonUnitalSeminormedRing C(α, R) where
+实例 [非幺Seminormed环
+  签名: R] : 非幺Seminormed环 C(α, R) where
   定义体: inferInstance
   __ : NonUnitalRing C(α, R) := inferInstance
   norm_mul_le f g := norm_mul_le (mkOfCompact f) (mkOfCompact g)
@@ -986,8 +986,8 @@ instance [NonUnitalSeminormedCommRing
   __ : NonUnitalCommRing C(α, R) := inferInstance
 
 中文:
-实例 [NonUnitalSeminormedCommRing
-  签名: R] : NonUnitalSeminormedCommRing C(α, R) where
+实例 [非幺SeminormedComm环
+  签名: R] : 非幺SeminormedComm环 C(α, R) where
   定义体: inferInstance
   __ : NonUnitalCommRing C(α, R) := inferInstance
 -/
@@ -1005,8 +1005,8 @@ instance [SeminormedRing
   __ : Ring C(α, R) := inferInstance
 
 中文:
-实例 [SeminormedRing
-  签名: R] : SeminormedRing C(α, R) where
+实例 [Seminormed环
+  签名: R] : Seminormed环 C(α, R) where
   定义体: inferInstance
   __ : Ring C(α, R) := inferInstance
 -/
@@ -1024,8 +1024,8 @@ instance [SeminormedCommRing
   __ : CommRing C(α, R) := inferInstance
 
 中文:
-实例 [SeminormedCommRing
-  签名: R] : SeminormedCommRing C(α, R) where
+实例 [SeminormedComm环
+  签名: R] : SeminormedComm环 C(α, R) where
   定义体: inferInstance
   __ : CommRing C(α, R) := inferInstance
 -/
@@ -1043,8 +1043,8 @@ instance [NonUnitalNormedRing
   __ : NonUnitalSeminormedRing C(α, R) := inferInstance
 
 中文:
-实例 [NonUnitalNormedRing
-  签名: R] : NonUnitalNormedRing C(α, R) where
+实例 [非幺赋范环
+  签名: R] : 非幺赋范环 C(α, R) where
   定义体: inferInstance
   __ : NonUnitalSeminormedRing C(α, R) := inferInstance
 -/
@@ -1062,8 +1062,8 @@ instance [NonUnitalNormedCommRing
   __ : NonUnitalCommRing C(α, R) := inferInstance
 
 中文:
-实例 [NonUnitalNormedCommRing
-  签名: R] : NonUnitalNormedCommRing C(α, R) where
+实例 [非幺NormedComm环
+  签名: R] : 非幺NormedComm环 C(α, R) where
   定义体: inferInstance
   __ : NonUnitalCommRing C(α, R) := inferInstance
 -/
@@ -1081,8 +1081,8 @@ instance [NormedRing
   __ : SeminormedRing C(α, R) := inferInstance
 
 中文:
-实例 [NormedRing
-  签名: R] : NormedRing C(α, R) where
+实例 [赋范环
+  签名: R] : 赋范环 C(α, R) where
   定义体: inferInstance
   __ : SeminormedRing C(α, R) := inferInstance
 -/
@@ -1100,8 +1100,8 @@ instance [NormedCommRing
   __ : CommRing C(α, R) := inferInstance
 
 中文:
-实例 [NormedCommRing
-  签名: R] : NormedCommRing C(α, R) where
+实例 [NormedComm环
+  签名: R] : NormedComm环 C(α, R) where
   定义体: inferInstance
   __ : CommRing C(α, R) := inferInstance
 -/
@@ -1125,7 +1125,7 @@ instance normedSpace
 
 中文:
 实例 normedSpace
-  签名: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+  签名: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -1285,7 +1285,7 @@ lemma nnnorm_smul_const
 
 中文:
 引理 nnnorm_smul_const
-  结论: {R β : 类型} [SeminormedAddCommGroup β] [SeminormedRing R]
+  结论: {R β : 类型} [SeminormedAddComm群 β] [Seminormed环 R]
   证明: by
   simp only [nnnorm_eq_iSup_nnnorm, smul_apply', const_apply, nnnorm_smul, iSup_mul]
 -/
@@ -1305,7 +1305,7 @@ lemma norm_smul_const
 
 中文:
 引理 norm_smul_const
-  结论: {R β : 类型} [SeminormedAddCommGroup β] [SeminormedRing R]
+  结论: {R β : 类型} [SeminormedAddComm群 β] [Seminormed环 R]
   证明: by
   simp only [← coe_nnnorm, NNReal.coe_mul, nnnorm_smul_const]
 -/
@@ -1420,7 +1420,7 @@ lemma nnnorm_sum_eq_sup
 
 中文:
 引理 nnnorm_sum_eq_sup
-  结论: {ι : 类型} {f : ι -> C(α, R)} (s : Finset ι)
+  结论: {ι : 类型} {f : ι -> C(α, R)} (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1457,7 +1457,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAlgebra 𝕜 C(α, γ)
+  签名: 赋范代数 𝕜 C(α, γ)
   定义体: { ContinuousMap.normedSpace, ContinuousMap.algebra with }
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.algebra, ContinuousMap.normedSpace, algebra, normedSpace
@@ -1640,8 +1640,8 @@ theorem _root_.BoundedContinuousFunction.mkOfCompact_star
   proof: rfl
 
 中文:
-定理 _root_.BoundedContinuousFunction.mkOfCompact_star
-  条件: [CompactSpace α] (f : C(α, β))
+定理 _root_.有界连续函数.mkOfCompact_star
+  条件: [紧空间 α] (f : C(α, β))
   证明: rfl
 -/
 theorem _root_.BoundedContinuousFunction.mkOfCompact_star [CompactSpace α] (f : C(α, β)) :
@@ -1658,8 +1658,8 @@ instance [CompactSpace
     rw [← BoundedContinuousFunction.norm_mkOfCompact]; rw [BoundedContinuousFunction.mkOfCompact_star]; rw [norm_star]; rw [BoundedContinuousFunction.norm_mkOfCompact]
 
 中文:
-实例 [CompactSpace
-  签名: α] : NormedStarGroup C(α, β) where
+实例 [紧空间
+  签名: α] : NormedStar群 C(α, β) where
   定义体: by
     rw [← BoundedContinuousFunction.norm_mkOfCompact]; rw [BoundedContinuousFunction.mkOfCompact_star]; rw [norm_star]; rw [BoundedContinuousFunction.norm_mkOfCompact]
 
@@ -1689,8 +1689,8 @@ instance [NonUnitalNormedRing
     exact ContinuousMap.norm_coe_le_norm (star f * f) x
 
 中文:
-实例 [NonUnitalNormedRing
-  签名: β] [StarRing β] [CStarRing β] : CStarRing C(α, β) where
+实例 [非幺赋范环
+  签名: β] [对合环 β] [CStar环 β] : CStar环 C(α, β) where
   定义体: by
     rw [← sq]; rw [← Real.le_sqrt (norm_nonneg _) (norm_nonneg _)]; rw [ContinuousMap.norm_le _ (Real.sqrt_nonneg _)]
     intro x

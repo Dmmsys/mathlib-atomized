@@ -43,7 +43,7 @@ definition llr
 
 中文:
 定义 llr
-  签名: (μ ν : Measure α) (x : α)
+  签名: (μ ν : 测度 α) (x : α)
   定义体: log (μ.rnDeriv ν x).toReal
 
 Depends on / 依赖: rnDeriv, toReal
@@ -61,7 +61,7 @@ lemma llr_def
 
 中文:
 引理 llr_def
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   结论: llr μ ν = fun x => log (μ.rnDeriv ν x).to实数
   证明: rfl
 -/
@@ -79,7 +79,7 @@ lemma llr_self
 
 中文:
 引理 llr_self
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   结论: llr μ μ =ᵐ[μ] 0
   证明: by
   filter_upwards [μ.rnDeriv_self] with a ha using by simp [llr, ha]
@@ -104,7 +104,7 @@ lemma exp_llr
 
 中文:
 引理 exp_llr
-  条件: (μ ν : Measure α) [SigmaFinite μ]
+  条件: (μ ν : 测度 α) [σ有限 μ]
   证明: by
   filter_upwards [Measure.rnDeriv_lt_top μ ν] with x hx
   by_cases h_zero : μ.rnDeriv ν x = 0
@@ -135,7 +135,7 @@ lemma exp_llr_of_ac
 
 中文:
 引理 exp_llr_of_ac
-  结论: (μ ν : Measure α) [SigmaFinite μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: (μ ν : 测度 α) [σ有限 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   filter_upwards [hμν.ae_le (exp_llr μ ν), Measure.rnDeriv_pos hμν] with x hx_eq hx_pos
   rw [hx_eq]; rw [if_neg hx_pos.ne']
@@ -160,7 +160,7 @@ lemma exp_llr_of_ac'
 
 中文:
 引理 exp_llr_of_ac'
-  条件: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν] (hμν : ν ≪ μ)
+  条件: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν] (hμν : ν ≪ μ)
   证明: by
   filter_upwards [exp_llr μ ν, Measure.rnDeriv_pos' hμν] with x hx hx_pos
   rwa [if_neg hx_pos.ne'] at hx
@@ -185,7 +185,7 @@ lemma neg_llr
 
 中文:
 引理 neg_llr
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   filter_upwards [Measure.inv_rnDeriv hμν] with x hx
   rw [Pi.neg_apply]; rw [llr]; rw [llr]; rw [← log_inv]; rw [← ENNReal.toReal_inv]
@@ -212,7 +212,7 @@ lemma exp_neg_llr
 
 中文:
 引理 exp_neg_llr
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   filter_upwards [neg_llr hμν, exp_llr_of_ac' ν μ hμν] with x hx hx_exp_log
   rw [Pi.neg_apply] at hx
@@ -241,7 +241,7 @@ lemma exp_neg_llr'
 
 中文:
 引理 exp_neg_llr'
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : ν ≪ μ)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : ν ≪ μ)
   证明: by
   filter_upwards [neg_llr hμν, exp_llr_of_ac ν μ hμν] with x hx hx_exp_log
   rw [Pi.neg_apply]; rw [neg_eq_iff_eq_neg] at hx
@@ -271,8 +271,8 @@ lemma measurable_llr
 
 中文:
 引理 measurable_llr
-  条件: (μ ν : Measure α)
-  结论: Measurable (llr μ ν)
+  条件: (μ ν : 测度 α)
+  结论: 可测 (llr μ ν)
   证明: (Measure.measurable_rnDeriv μ ν).ennreal_toReal.log
 
 @[fun_prop]
@@ -294,7 +294,7 @@ lemma stronglyMeasurable_llr
 
 中文:
 引理 stronglyMeasurable_llr
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   结论: StronglyMeasurable (llr μ ν)
   证明: (measurable_llr μ ν).stronglyMeasurable
 
@@ -320,7 +320,7 @@ lemma llr_smul_left
 
 中文:
 引理 llr_smul_left
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   simp only [llr, llr_def]
   have h := Measure.rnDeriv_smul_left_of_ne_top μ ν hc_ne_top
@@ -363,7 +363,7 @@ lemma llr_smul_nnreal_left
 
 中文:
 引理 llr_smul_nnreal_left
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   rw [← Measure.coe_nnreal_smul]
   filter_upwards [llr_smul_left hμν (c : Real>=0∞) (by simpa) (by simp)] with x hx
@@ -397,7 +397,7 @@ lemma llr_smul_right
 
 中文:
 引理 llr_smul_right
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   simp only [llr, llr_def]
   have h := Measure.rnDeriv_smul_right_of_ne_top μ ν hc hc_ne_top
@@ -441,7 +441,7 @@ lemma llr_smul_nnreal_right
 
 中文:
 引理 llr_smul_nnreal_right
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   rw [← Measure.coe_nnreal_smul]
   filter_upwards [llr_smul_right hμν (c : Real>=0∞) (by simpa) (by simp)] with x hx
@@ -474,7 +474,7 @@ lemma llr_smul_inv_left_eq_smul_right
 
 中文:
 引理 llr_smul_inv_left_eq_smul_right
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   have hc' : c⁻¹ != 0 := by simp [hc_ne_top]
   have hc_ne_top' : c⁻¹ != ∞ := by simp [hc]
@@ -509,7 +509,7 @@ lemma llr_smul_same
 
 中文:
 引理 llr_smul_same
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   simp only [llr_def]
   lift c to Real>=0 using hc_ne_top
@@ -539,7 +539,7 @@ lemma llr_smul_nnreal_same
 
 中文:
 引理 llr_smul_nnreal_same
-  结论: [IsFiniteMeasure μ] [Measure.HaveLebesgueDecomposition μ ν]
+  结论: [是有限测度 μ] [测度.有Lebesgue分解 μ ν]
   证明: by
   simp_rw [← Measure.coe_nnreal_smul]
   filter_upwards [llr_smul_same hμν (c : Real>=0∞) (by simpa) (by simp)] with x hx
@@ -564,7 +564,7 @@ lemma integrable_rnDeriv_mul_log_iff
 
 中文:
 引理 integrable_rnDeriv_mul_log_iff
-  条件: [SigmaFinite μ] [μ.HaveLebesgueDecomposition ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [μ.有Lebesgue分解 ν] (hμν : μ ≪ ν)
   证明: integrable_rnDeriv_smul_iff hμν
 
 Depends on / 依赖: integrable_rnDeriv_smul_iff
@@ -585,7 +585,7 @@ lemma integral_rnDeriv_mul_log
 
 中文:
 引理 integral_rnDeriv_mul_log
-  条件: [SigmaFinite μ] [μ.HaveLebesgueDecomposition ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [μ.有Lebesgue分解 ν] (hμν : μ ≪ ν)
   证明: by
   simp_rw [← smul_eq_mul, integral_rnDeriv_smul hμν, llr]
 
@@ -614,7 +614,7 @@ lemma llr_tilted_left
 
 中文:
 引理 llr_tilted_left
-  结论: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  结论: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   cases eq_zero_or_neZero μ with
   | inl hμ =>
@@ -655,7 +655,7 @@ lemma integrable_llr_tilted_left
 
 中文:
 引理 integrable_llr_tilted_left
-  结论: [IsFiniteMeasure μ] [SigmaFinite ν]
+  结论: [是有限测度 μ] [σ有限 ν]
   证明: by
   rw [integrable_congr (llr_tilted_left hμν hfμ hfν)]
   exact Integrable.add (hf.sub (integrable_const _)) h_int
@@ -685,7 +685,7 @@ lemma integral_llr_tilted_left
 
 中文:
 引理 integral_llr_tilted_left
-  结论: [IsProbabilityMeasure μ] [SigmaFinite ν]
+  结论: [是概率测度 μ] [σ有限 ν]
   证明: by
   calc ∫ x, llr (μ.tilted f) ν x ∂μ
     = ∫ x, f x - log (∫ x, exp (f x) ∂μ) + llr μ ν x ∂μ :=
@@ -727,7 +727,7 @@ lemma llr_tilted_right
 
 中文:
 引理 llr_tilted_right
-  结论: [SigmaFinite μ] [SigmaFinite ν]
+  结论: [σ有限 μ] [σ有限 ν]
   证明: by
   cases eq_zero_or_neZero ν with
   | inl h =>
@@ -766,7 +766,7 @@ lemma integrable_llr_tilted_right
 
 中文:
 引理 integrable_llr_tilted_right
-  结论: [IsFiniteMeasure μ] [SigmaFinite ν]
+  结论: [是有限测度 μ] [σ有限 ν]
   证明: by
   rw [integrable_congr (llr_tilted_right hμν hfν)]
   exact Integrable.add (hfμ.neg.add (integrable_const _)) h_int
@@ -796,7 +796,7 @@ lemma integral_llr_tilted_right
 
 中文:
 引理 integral_llr_tilted_right
-  结论: [IsProbabilityMeasure μ] [SigmaFinite ν]
+  结论: [是概率测度 μ] [σ有限 ν]
   证明: by
   calc ∫ x, llr μ (ν.tilted f) x ∂μ
     = ∫ x, -f x + log (∫ x, exp (f x) ∂ν) + llr μ ν x ∂μ :=

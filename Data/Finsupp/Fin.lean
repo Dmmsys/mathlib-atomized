@@ -39,7 +39,7 @@ definition tail
 
 中文:
 定义 tail
-  签名: (s : Fin (n + 1) ->₀ M)
+  签名: (s : 有限集 (n + 1) ->₀ M)
   定义体: Finsupp.equivFunOnFinite.symm (Fin.tail s)
 
 Depends on / 依赖: Fin.tail, Finsupp, Finsupp.equivFunOnFinite.symm, equivFunOnFinite
@@ -57,7 +57,7 @@ definition cons
 
 中文:
 定义 cons
-  签名: (y : M) (s : Fin n ->₀ M)
+  签名: (y : M) (s : 有限集 n ->₀ M)
   定义体: Finsupp.equivFunOnFinite.symm (Fin.cons y s : Fin (n + 1) -> M)
 
 Depends on / 依赖: Fin.cons, Finsupp, Finsupp.equivFunOnFinite.symm, equivFunOnFinite
@@ -232,7 +232,7 @@ lemma cons_zero_eq_single_zero
 
 中文:
 引理 cons_zero_eq_single_zero
-  结论: cons y (0 : Fin n ->₀ M) = single 0 y
+  结论: cons y (0 : 有限集 n ->₀ M) = single 0 y
   证明: by
   ext j
   cases j using Fin.cases <;> simp
@@ -281,7 +281,7 @@ theorem cons_zero_zero
 
 中文:
 定理 cons_zero_zero
-  结论: cons 0 (0 : Fin n ->₀ M) = 0
+  结论: cons 0 (0 : 有限集 n ->₀ M) = 0
   证明: by simp [cons_zero_eq_single_zero]
 
 Depends on / 依赖: cons_zero_eq_single_zero
@@ -384,7 +384,7 @@ lemma cons_support
 
 中文:
 引理 cons_support
-  结论: (s.cons y).support subseteq insert 0 (s.support.map (Fin.succEmb n))
+  结论: (s.cons y).support subseteq insert 0 (s.support.map (有限集.succEmb n))
   证明: by
   intro i hi
   suffices i = 0 ∨ exists a, ¬s a = 0 ∧ a.succ = i by simpa
@@ -412,7 +412,7 @@ lemma cons_right_injective
 
 中文:
 引理 cons_right_injective
-  结论: Injective (Finsupp.cons y : (Fin n ->₀ M) -> Fin (n + 1) ->₀ M)
+  结论: 单射 (有限支撑.cons y : (有限集 n ->₀ M) -> 有限集 (n + 1) ->₀ M)
   证明: (equivFunOnFinite.symm.injective.comp ((Fin.cons_right_injective _).comp DFunLike.coe_injective))
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Fin.cons_right_injective, coe_injective, cons_right_injective, equivFunOnFinite, equivFunOnFinite.symm.injective.comp, injective
@@ -434,7 +434,7 @@ theorem cons_injective2
 
 中文:
 定理 cons_injective2
-  结论: Function.Injective2 (cons (n := n) (M := M))
+  结论: 函数.Injective2 (cons (n := n) (M := M))
   证明: by
   refine fun x₀ y₀ x y h => ?_
   have := DFunLike.congr_fun h 0

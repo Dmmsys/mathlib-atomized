@@ -86,7 +86,7 @@ lemma conjneg_involutive
 
 中文:
 引理 conjneg_involutive
-  结论: Involutive (conjneg : (G -> R) -> G -> R)
+  结论: 对合 (conjneg : (G -> R) -> G -> R)
   证明: conjneg_conjneg
 
 Depends on / 依赖: conjneg_conjneg
@@ -102,7 +102,7 @@ lemma conjneg_bijective
 
 中文:
 引理 conjneg_bijective
-  结论: Bijective (conjneg : (G -> R) -> G -> R)
+  结论: 双射 (conjneg : (G -> R) -> G -> R)
   证明: conjneg_involutive.bijective
 
 Depends on / 依赖: bijective, conjneg_involutive, conjneg_involutive.bijective
@@ -118,7 +118,7 @@ lemma conjneg_injective
 
 中文:
 引理 conjneg_injective
-  结论: Injective (conjneg : (G -> R) -> G -> R)
+  结论: 单射 (conjneg : (G -> R) -> G -> R)
   证明: conjneg_involutive.injective
 
 Depends on / 依赖: conjneg_involutive, conjneg_involutive.injective, injective
@@ -134,7 +134,7 @@ lemma conjneg_surjective
 
 中文:
 引理 conjneg_surjective
-  结论: Surjective (conjneg : (G -> R) -> G -> R)
+  结论: 满射 (conjneg : (G -> R) -> G -> R)
   证明: conjneg_involutive.surjective
 
 Depends on / 依赖: conjneg_involutive, conjneg_involutive.surjective, surjective
@@ -260,7 +260,7 @@ lemma conjneg_sum
 
 中文:
 引理 conjneg_sum
-  条件: (s : Finset ι) (f : ι -> G -> R)
+  条件: (s : 有限集 ι) (f : ι -> G -> R)
   证明: by ext; simp
 -/
 @[simp] lemma conjneg_sum (s : Finset ι) (f : ι -> G -> R) :
@@ -276,7 +276,7 @@ lemma conjneg_prod
 
 中文:
 引理 conjneg_prod
-  条件: (s : Finset ι) (f : ι -> G -> R)
+  条件: (s : 有限集 ι) (f : ι -> G -> R)
   证明: by ext; simp
 -/
 @[simp] lemma conjneg_prod (s : Finset ι) (f : ι -> G -> R) :
@@ -362,7 +362,7 @@ lemma sum_conjneg
 
 中文:
 引理 sum_conjneg
-  条件: [Fintype G] (f : G -> R)
+  条件: [有限类型 G] (f : G -> R)
   结论: ∑ a, conjneg f a = ∑ a, conj (f a)
   证明: Fintype.sum_equiv (Equiv.neg _) _ _ fun _ => rfl
 

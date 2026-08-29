@@ -140,7 +140,7 @@ include hY' hm in
 
 中文:
 定义 φ₀
-  签名: (B : Set X) (hB : HasCardinalLT B κ₂)
+  签名: (B : 集合 X) (hB : HasCardinalLT B κ₂)
   定义体: ⋃ (C : Y B hB), Subtype.val '' C.val.val union {m B hB C C.prop}
 
 omit [Fact κ₁.IsRegular] [Fact κ₂.IsRegular] in
@@ -168,7 +168,7 @@ lemma hφ₀
 
 中文:
 引理 hφ₀
-  结论: (B : Set X) (hB : HasCardinalLT B κ₂) {T : Type w} (f : T -> B)
+  结论: (B : 集合 X) (hB : HasCardinalLT B κ₂) {T : 类型 w} (f : T -> B)
   证明: by
   let C₀ : SetCardinalLT κ₁ B :=
     ⟨Set.range f, hT.of_surjective _ Set.rangeFactorization_surjective⟩
@@ -202,7 +202,7 @@ omit [Fact κ₁.IsRegular] [Fact κ₂.IsRegular] [PartialOrder X] in
 
 中文:
 定义 φ
-  签名: (B : Set X)
+  签名: (B : 集合 X)
   定义体: if hB : HasCardinalLT B κ₂ then φ₀ Y m B hB else B
 
 omit [Fact κ₁.IsRegular] [Fact κ₂.IsRegular] [PartialOrder X] in
@@ -226,7 +226,7 @@ omit [Fact κ₂.IsRegular] [PartialOrder X] in
 
 中文:
 引理 φ_eq
-  条件: (B : Set X) (hB : HasCardinalLT B κ₂)
+  条件: (B : 集合 X) (hB : HasCardinalLT B κ₂)
   证明: dif_pos hB
 
 include hY' in
@@ -258,7 +258,7 @@ lemma le_φ
 
 中文:
 引理 le_φ
-  条件: (B : Set X)
+  条件: (B : 集合 X)
   结论: B <= φ Y m B
   证明: by
   dsimp [φ]

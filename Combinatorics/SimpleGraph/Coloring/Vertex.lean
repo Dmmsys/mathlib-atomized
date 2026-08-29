@@ -77,7 +77,7 @@ abbreviation Coloring
   body: G ->g completeGraph α
 
 中文:
-缩写 Coloring
+缩写 染色
   签名: (α : 类型v)
   定义体: G ->g completeGraph α
 
@@ -98,8 +98,8 @@ theorem Coloring.valid
   proof: C.map_rel h
 
 中文:
-定理 Coloring.valid
-  条件: {v w : V} (h : G.Adj v w)
+定理 染色.valid
+  条件: {v w : V} (h : G.伴随 v w)
   结论: C v != C w
   证明: C.map_rel h
 
@@ -117,8 +117,8 @@ lemma Coloring.injective_comp_of_pairwise_adj
   proof: Function.injective_iff_pairwise_ne.2 hf.mono fun _ _ => C.valid
 
 中文:
-引理 Coloring.injective_comp_of_pairwise_adj
-  结论: (C : G.Coloring α) (f : ι -> V)
+引理 染色.injective_comp_of_pairwise_adj
+  结论: (C : G.染色 α) (f : ι -> V)
   证明: Function.injective_iff_pairwise_ne.2 hf.mono fun _ _ => C.valid
 
 Depends on / 依赖: C.valid, Function, Function.injective_iff_pairwise_ne, hf.mono, injective_iff_pairwise_ne
@@ -143,8 +143,8 @@ definition Coloring.mk
   body: ⟨color, @valid⟩
 
 中文:
-定义 Coloring.mk
-  签名: (color : V -> α) (valid : 对任意 {v w : V}, G.Adj v w -> color v != color w)
+定义 染色.mk
+  签名: (color : V -> α) (valid : 对任意 {v w : V}, G.伴随 v w -> color v != color w)
   定义体: ⟨color, @valid⟩
 -/
 def Coloring.mk (color : V -> α) (valid : forall {v w : V}, G.Adj v w -> color v != color w) :
@@ -160,7 +160,7 @@ definition Coloring.colorClass
   body: { v : V | C v = c }
 
 中文:
-定义 Coloring.colorClass
+定义 染色.colorClass
   签名: (c : α)
   定义体: { v : V | C v = c }
 -/
@@ -175,8 +175,8 @@ definition Coloring.colorClasses
   body: (Setoid.ker C).classes
 
 中文:
-定义 Coloring.colorClasses
-  签名: : Set (Set V)
+定义 染色.colorClasses
+  签名: : 集合 (集合 V)
   定义体: (Setoid.ker C).classes
 
 Depends on / 依赖: Setoid, Setoid.ker, classes
@@ -193,7 +193,7 @@ theorem Coloring.mem_colorClass
   proof: rfl
 
 中文:
-定理 Coloring.mem_colorClass
+定理 染色.mem_colorClass
   条件: (v : V)
   结论: v in C.colorClass (C v)
   证明: rfl
@@ -209,8 +209,8 @@ theorem Coloring.colorClasses_isPartition
   proof: Setoid.isPartition_classes (Setoid.ker C)
 
 中文:
-定理 Coloring.colorClasses_isPartition
-  结论: Setoid.IsPartition C.colorClasses
+定理 染色.colorClasses_isPartition
+  结论: 集合等价关系.IsPartition C.colorClasses
   证明: Setoid.isPartition_classes (Setoid.ker C)
 
 Depends on / 依赖: Setoid, Setoid.isPartition_classes, Setoid.ker, isPartition_classes
@@ -228,7 +228,7 @@ theorem Coloring.mem_colorClasses
   proof: ⟨v, rfl⟩
 
 中文:
-定理 Coloring.mem_colorClasses
+定理 染色.mem_colorClasses
   条件: {v : V}
   结论: C.colorClass (C v) in C.colorClasses
   证明: ⟨v, rfl⟩
@@ -246,9 +246,9 @@ theorem Coloring.colorClasses_finite
   proof: Setoid.finite_classes_ker _
 
 中文:
-定理 Coloring.colorClasses_finite
-  条件: [Finite α]
-  结论: C.colorClasses.Finite
+定理 染色.colorClasses_finite
+  条件: [有限 α]
+  结论: C.colorClasses.有限
   证明: Setoid.finite_classes_ker _
 
 Depends on / 依赖: Setoid, Setoid.finite_classes_ker, finite_classes_ker
@@ -267,8 +267,8 @@ theorem Coloring.card_colorClasses_le
   convert! Setoid.card_classes_ker_le C
 
 中文:
-定理 Coloring.card_colorClasses_le
-  条件: [Fintype α] [Fintype C.colorClasses]
+定理 染色.card_colorClasses_le
+  条件: [有限类型 α] [有限类型 C.colorClasses]
   证明: by
   simp only [colorClasses]
   convert! Setoid.card_classes_ker_le C
@@ -289,7 +289,7 @@ theorem Coloring.not_adj_of_mem_colorClass
   proof: fun h => C.valid h (Eq.trans hv (Eq.symm hw))
 
 中文:
-定理 Coloring.not_adj_of_mem_colorClass
+定理 染色.not_adj_of_mem_colorClass
   结论: {c : α} {v w : V} (hv : v in C.colorClass c)
   证明: fun h => C.valid h (Eq.trans hv (Eq.symm hw))
 
@@ -310,7 +310,7 @@ theorem Coloring.isIndepSet_colorClass
 @[deprecated isIndepSet_colorClass (since := "2026-02-07")]
 
 中文:
-定理 Coloring.isIndepSet_colorClass
+定理 染色.isIndepSet_colorClass
   条件: (c : α)
   结论: G.IsIndepSet C.colorClass c
   证明: fun _ hv _ hw _ => C.not_adj_of_mem_colorClass hv hw
@@ -333,9 +333,9 @@ theorem Coloring.color_classes_independent
   proof: C.isIndepSet_colorClass c
 
 中文:
-定理 Coloring.color_classes_independent
+定理 染色.color_classes_independent
   条件: (c : α)
-  结论: IsAntichain G.Adj (C.colorClass c)
+  结论: IsAntichain G.伴随 (C.colorClass c)
   证明: C.isIndepSet_colorClass c
 
 Depends on / 依赖: C.isIndepSet_colorClass, isIndepSet_colorClass
@@ -352,8 +352,8 @@ abbreviation Coloring.comap
   body: C.comp f
 
 中文:
-缩写 Coloring.comap
-  签名: {V' : 类型} {G' : SimpleGraph V'} {α : 类型} (C : G'.Coloring α)
+缩写 染色.comap
+  签名: {V' : 类型} {G' : 简单图 V'} {α : 类型} (C : G'.染色 α)
   定义体: C.comp f
 
 Depends on / 依赖: C.comp
@@ -375,8 +375,8 @@ instance [Fintype
   apply Fintype.ofInjective _ RelHom.coe_fn_injective
 
 中文:
-实例 [Fintype
-  签名: V] [Fintype α] : Fintype (Coloring G α)
+实例 [有限类型
+  签名: V] [有限类型 α] : 有限类型 (染色 G α)
   定义体: by
   classical
   change Fintype (RelHom G.Adj (completeGraph α).Adj)
@@ -424,8 +424,8 @@ have ⟨C⟩ := ‹Nonempty G.Coloring α›
   dsimp [Iso.completeGrap
 
 中文:
-实例 [Nonempty
-  签名: <| G.Coloring α] [Nontrivial α] [Nonempty V] : Nontrivial G.Coloring α
+实例 [非空
+  签名: <| G.染色 α] [非平凡 α] [非空 V] : 非平凡 G.染色 α
   定义体: by
   classical
 have ⟨C⟩ := ‹Nonempty G.Coloring α›
@@ -464,8 +464,8 @@ have ⟨C⟩ := ‹Nonempty G.Coloring α›
   grind
 
 中文:
-实例 [Nonempty
-  签名: <| G.Coloring α] [Infinite α] [Nonempty V] : Infinite G.Coloring α
+实例 [非空
+  签名: <| G.染色 α] [无限 α] [非空 V] : 无限 G.染色 α
   定义体: by
   classical
 have ⟨C⟩ := ‹Nonempty G.Coloring α›
@@ -515,8 +515,8 @@ definition Coloring.ofIsEmpty
   body: .mk isEmptyElim fun {v} => isEmptyElim v
 
 中文:
-定义 Coloring.ofIsEmpty
-  签名: [IsEmpty V]
+定义 染色.ofIsEmpty
+  签名: [是空 V]
   定义体: .mk isEmptyElim fun {v} => isEmptyElim v
 
 Depends on / 依赖: isEmptyElim
@@ -539,7 +539,7 @@ theorem Colorable.of_isEmpty
 
 中文:
 定理 Colorable.of_isEmpty
-  条件: [IsEmpty V] (n : 自然数)
+  条件: [是空 V] (n : 自然数)
   结论: G.Colorable n
   证明: ⟨.ofIsEmpty⟩
 
@@ -572,7 +572,7 @@ alias ⟨Colorable.isEmpty, _⟩ := colorable_zero_iff
 
 中文:
 引理 colorable_zero_iff
-  结论: G.Colorable 0 ↔ IsEmpty V
+  结论: G.Colorable 0 ↔ 是空 V
   证明: ⟨fun ⟨C⟩ => Function.isEmpty C, fun _ => .of_isEmpty 0⟩
 
 alias ⟨Colorable.isEmpty, _⟩ := colorable_zero_iff
@@ -623,8 +623,8 @@ abbreviation Coloring.homMap
   body: .map f G f.map_adj
 
 中文:
-缩写 Coloring.homMap
-  签名: {α : 类型} (f : G.Coloring α)
+缩写 染色.homMap
+  签名: {α : 类型} (f : G.染色 α)
   定义体: .map f G f.map_adj
 
 Depends on / 依赖: f.map_adj, map_adj
@@ -701,7 +701,7 @@ definition selfColoring
 
 中文:
 定义 selfColoring
-  签名: : G.Coloring V
+  签名: : G.染色 V
   定义体: Coloring.mk id fun {_ _} => G.ne_of_adj
 
 Depends on / 依赖: Coloring, Coloring.mk, G.ne_of_adj, ne_of_adj
@@ -795,7 +795,7 @@ lemma chromaticNumber_eq_biInf
 
 中文:
 引理 chromaticNumber_eq_biInf
-  结论: G.chromaticNumber = ⨅ n in Set.ofPred G.Colorable, (n : 自然数∞)
+  结论: G.chromaticNumber = ⨅ n in 集合.ofPred G.Colorable, (n : 自然数∞)
   证明: rfl
 -/
 lemma chromaticNumber_eq_biInf : G.chromaticNumber = ⨅ n in Set.ofPred G.Colorable, (n : Nat∞) := rfl
@@ -952,7 +952,7 @@ definition recolorOfCardLE
 
 中文:
 定义 recolorOfCardLE
-  签名: {α β : 类型} [Fintype α] [Fintype β]
+  签名: {α β : 类型} [有限类型 α] [有限类型 β]
   定义体: G.recolorOfEmbedding (Function.Embedding.nonempty_of_card_le hn).some
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.nonempty_of_card_le, G.recolorOfEmbedding, nonempty_of_card_le, recolorOfEmbedding
@@ -972,7 +972,7 @@ lemma coe_recolorOfCardLE
 
 中文:
 引理 coe_recolorOfCardLE
-  条件: [Fintype α] [Fintype β] (hαβ : card α <= card β)
+  条件: [有限类型 α] [有限类型 β] (hαβ : card α <= card β)
   证明: rfl
 -/
 @[simp] lemma coe_recolorOfCardLE [Fintype α] [Fintype β] (hαβ : card α <= card β) :
@@ -1009,9 +1009,9 @@ theorem Coloring.colorable
   proof: ⟨G.recolorOfCardLE (by simp) C⟩
 
 中文:
-定理 Coloring.colorable
-  条件: [Fintype α] (C : G.Coloring α)
-  结论: G.Colorable (Fintype.card α)
+定理 染色.colorable
+  条件: [有限类型 α] (C : G.染色 α)
+  结论: G.Colorable (有限类型.card α)
   证明: ⟨G.recolorOfCardLE (by simp) C⟩
 
 Depends on / 依赖: G.recolorOfCardLE, recolorOfCardLE
@@ -1030,8 +1030,8 @@ theorem colorable_of_fintype
 
 中文:
 定理 colorable_of_fintype
-  条件: (G : SimpleGraph V) [Fintype V]
-  结论: G.Colorable (Fintype.card V)
+  条件: (G : 简单图 V) [有限类型 V]
+  结论: G.Colorable (有限类型.card V)
   证明: G.selfColoring.colorable
 
 Depends on / 依赖: G.selfColoring.colorable, colorable, selfColoring
@@ -1051,7 +1051,7 @@ definition Colorable.toColoring
 
 中文:
 定义 Colorable.toColoring
-  签名: [Fintype α] {n : 自然数} (hc : G.Colorable n)
+  签名: [有限类型 α] {n : 自然数} (hc : G.Colorable n)
   定义体: by
   rw [← Fintype.card_fin n] at hn
   exact G.recolorOfCardLE hn hc.some
@@ -1073,7 +1073,7 @@ theorem Colorable.of_hom
 
 中文:
 定理 Colorable.of_hom
-  结论: {V' : 类型} {G' : SimpleGraph V'} {n : 自然数} (f : G ->g G')
+  结论: {V' : 类型} {G' : 简单图 V'} {n : 自然数} (f : G ->g G')
   证明: ⟨h.some.comap f⟩
 
 Depends on / 依赖: h.some.comap
@@ -1102,7 +1102,7 @@ theorem colorable_iff_exists_bdd_nat_coloring
     ·
 
 中文:
-定理 colorable_iff_exists_bdd_nat_coloring
+定理 colorable_iff_存在_bdd_nat_coloring
   条件: (n : 自然数)
   证明: by
   constructor
@@ -1148,7 +1148,7 @@ theorem colorable_iff_forall_connectedComponent
 alias colorable_iff_forall_connectedComponents := colorable_iff_forall_connectedComponent
 
 中文:
-定理 colorable_iff_forall_connectedComponent
+定理 colorable_iff_对任意_connectedComponent
   条件: {n : 自然数}
   证明: ⟨fun ⟨C⟩ _ => ⟨fun v => C v, fun h h1 => C.valid h h1⟩,
    fun h => ⟨G.homOfConnectedComponents (fun c => (h c).some)⟩⟩
@@ -1243,7 +1243,7 @@ theorem chromaticNumber_ne_top_iff_exists
   simp
 
 中文:
-定理 chromaticNumber_ne_top_iff_exists
+定理 chromaticNumber_ne_top_iff_存在
   结论: G.chromaticNumber != ⊤ ↔ 存在 n, G.Colorable n
   证明: by
   rw [chromaticNumber]
@@ -1355,7 +1355,7 @@ theorem colorable_chromaticNumber_of_fintype
 
 中文:
 定理 colorable_chromaticNumber_of_fintype
-  条件: (G : SimpleGraph V) [Finite V]
+  条件: (G : 简单图 V) [有限 V]
   证明: by
   cases nonempty_fintype V
   exact colorable_chromaticNumber G.colorable_of_fintype
@@ -1382,7 +1382,7 @@ theorem chromaticNumber_le_one_of_subsingleton
 
 中文:
 定理 chromaticNumber_le_one_of_subsingleton
-  条件: (G : SimpleGraph V) [Subsingleton V]
+  条件: (G : 简单图 V) [子单例 V]
   证明: by
   rw [← Nat.cast_one]; rw [chromaticNumber_le_iff_colorable]
   refine ⟨Coloring.mk (fun _ => 0) ?_⟩
@@ -1418,7 +1418,7 @@ theorem Colorable.chromaticNumber_pos
 
 中文:
 定理 Colorable.chromaticNumber_pos
-  条件: [Nonempty V] {n : 自然数} (hc : G.Colorable n)
+  条件: [非空 V] {n : 自然数} (hc : G.Colorable n)
   证明: by
   rw [hc.chromaticNumber_eq_sInf]; rw [Nat.cast_pos]
   apply le_csInf (colorable_set_nonempty_of_colorable hc)
@@ -1481,7 +1481,7 @@ theorem Colorable.mono_left
 
 中文:
 定理 Colorable.mono_left
-  条件: {G' : SimpleGraph V} (h : G <= G') {n : 自然数} (hc : G'.Colorable n)
+  条件: {G' : 简单图 V} (h : G <= G') {n : 自然数} (hc : G'.Colorable n)
   证明: ⟨hc.some.comp (.ofLE h)⟩
 
 Depends on / 依赖: hc.some.comp
@@ -1505,8 +1505,8 @@ theorem chromaticNumber_le_of_forall_imp
   exact this
 
 中文:
-定理 chromaticNumber_le_of_forall_imp
-  结论: {V' : 类型} {G' : SimpleGraph V'}
+定理 chromaticNumber_le_of_对任意_imp
+  结论: {V' : 类型} {G' : 简单图 V'}
   证明: by
   rw [chromaticNumber]; rw [chromaticNumber]
   simp only [Set.mem_ofPred_eq, le_iInf_iff]
@@ -1537,7 +1537,7 @@ theorem chromaticNumber_mono
 
 中文:
 定理 chromaticNumber_mono
-  结论: (G' : SimpleGraph V)
+  结论: (G' : 简单图 V)
   证明: chromaticNumber_le_of_forall_imp fun _ => Colorable.mono_left h
 
 Depends on / 依赖: Colorable, Colorable.mono_left, chromaticNumber_le_of_forall_imp, mono_left
@@ -1556,7 +1556,7 @@ theorem chromaticNumber_mono_of_hom
 
 中文:
 定理 chromaticNumber_mono_of_hom
-  条件: {V' : 类型} {G' : SimpleGraph V'} (f : G ->g G')
+  条件: {V' : 类型} {G' : 简单图 V'} (f : G ->g G')
   证明: chromaticNumber_le_of_forall_imp fun _ hc => hc.of_hom f
 
 Depends on / 依赖: chromaticNumber_le_of_forall_imp, hc.of_hom, of_hom
@@ -1581,8 +1581,8 @@ lemma card_le_chromaticNumber_iff_forall_surjective
     exact Nat.notMem_of_lt_sInf ((Nat.sub_one_lt_
 
 中文:
-引理 card_le_chromaticNumber_iff_forall_surjective
-  条件: [Fintype α]
+引理 card_le_chromaticNumber_iff_对任意_surjective
+  条件: [有限类型 α]
   证明: by
   refine ⟨fun h C => ?_, fun h => ?_⟩
   · rw [C.colorable.chromaticNumber_eq_sInf, Nat.cast_le] at h
@@ -1620,7 +1620,7 @@ lemma le_chromaticNumber_iff_forall_surjective
   simp [← card_le_chromaticNumber_iff_forall_surjective]
 
 中文:
-引理 le_chromaticNumber_iff_forall_surjective
+引理 le_chromaticNumber_iff_对任意_surjective
   证明: by
   simp [← card_le_chromaticNumber_iff_forall_surjective]
 
@@ -1640,8 +1640,8 @@ lemma chromaticNumber_eq_card_iff_forall_surjective
   rw [← hG.chromaticNumber_le.ge_iff_eq]; rw [card_le_chromaticNumber_iff_forall_surjective]
 
 中文:
-引理 chromaticNumber_eq_card_iff_forall_surjective
-  条件: [Fintype α] (hG : G.Colorable (card α))
+引理 chromaticNumber_eq_card_iff_对任意_surjective
+  条件: [有限类型 α] (hG : G.Colorable (card α))
   证明: by
   rw [← hG.chromaticNumber_le.ge_iff_eq]; rw [card_le_chromaticNumber_iff_forall_surjective]
 
@@ -1661,7 +1661,7 @@ lemma chromaticNumber_eq_iff_forall_surjective
   rw [← hG.chromaticNumber_le.ge_iff_eq]; rw [le_chromaticNumber_iff_forall_surjective]
 
 中文:
-引理 chromaticNumber_eq_iff_forall_surjective
+引理 chromaticNumber_eq_iff_对任意_surjective
   条件: (hG : G.Colorable n)
   证明: by
   rw [← hG.chromaticNumber_le.ge_iff_eq]; rw [le_chromaticNumber_iff_forall_surjective]
@@ -1686,8 +1686,8 @@ this.chromaticNumber_le.antisymm Order.one_le_iff_pos.2 this.chromaticNumber_pos
 
 中文:
 定理 chromaticNumber_bot
-  条件: [Nonempty V]
-  结论: (⊥ : SimpleGraph V).chromaticNumber = 1
+  条件: [非空 V]
+  结论: (⊥ : 简单图 V).chromaticNumber = 1
   证明: have : (⊥ : SimpleGraph V).Colorable 1 := by simp
 this.chromaticNumber_le.antisymm Order.one_le_iff_pos.2 this.chromaticNumber_pos
 
@@ -1717,8 +1717,8 @@ theorem chromaticNumber_top
 
 中文:
 定理 chromaticNumber_top
-  条件: [Fintype V]
-  结论: (⊤ : SimpleGraph V).chromaticNumber = Fintype.card V
+  条件: [有限类型 V]
+  结论: (⊤ : 简单图 V).chromaticNumber = 有限类型.card V
   证明: by
   rw [chromaticNumber_eq_card_iff_forall_surjective (selfColoring _).colorable]
   intro C
@@ -1752,7 +1752,7 @@ theorem chromaticNumber_top_eq_top_of_infinite
 
 中文:
 定理 chromaticNumber_top_eq_top_of_infinite
-  条件: (V : 类型) [Infinite V]
+  条件: (V : 类型) [无限 V]
   证明: by
   by_contra hc
   rw [← Ne]; rw [chromaticNumber_ne_top_iff_exists] at hc
@@ -1785,7 +1785,7 @@ theorem chromaticNumber_top_eq_enat_card
 
 中文:
 定理 chromaticNumber_top_eq_enat_card
-  结论: (⊤ : SimpleGraph V).chromaticNumber = E自然数.card V
+  结论: (⊤ : 简单图 V).chromaticNumber = E自然数.card V
   证明: by
   cases finite_or_infinite V
   · have := Fintype.ofFinite ‹_›
@@ -1817,7 +1817,7 @@ theorem eq_top_of_chromaticNumber_eq_card
 
 中文:
 定理 eq_top_of_chromaticNumber_eq_card
-  结论: [Fintype V]
+  结论: [有限类型 V]
   证明: by
   classical
   by_contra! hh
@@ -1853,7 +1853,7 @@ theorem chromaticNumber_eq_card_iff
 
 中文:
 定理 chromaticNumber_eq_card_iff
-  条件: [Fintype V]
+  条件: [有限类型 V]
   证明: ⟨eq_top_of_chromaticNumber_eq_card, fun h => h ▸ chromaticNumber_top⟩
 
 Depends on / 依赖: chromaticNumber_top, eq_top_of_chromaticNumber_eq_card
@@ -1875,8 +1875,8 @@ theorem chromaticNumber_le_card
 
 中文:
 定理 chromaticNumber_le_card
-  条件: [Fintype V]
-  结论: G.chromaticNumber <= Fintype.card V
+  条件: [有限类型 V]
+  结论: G.chromaticNumber <= 有限类型.card V
   证明: by
   rw [← chromaticNumber_top]
   exact chromaticNumber_mono_of_hom G.selfColoring
@@ -1903,7 +1903,7 @@ theorem two_le_chromaticNumber_of_adj
 
 中文:
 定理 two_le_chromaticNumber_of_adj
-  条件: {u v : V} (hadj : G.Adj u v)
+  条件: {u v : V} (hadj : G.伴随 u v)
   结论: 2 <= G.chromaticNumber
   证明: by
   refine le_of_not_gt fun h => ?_
@@ -1932,7 +1932,7 @@ theorem chromaticNumber_eq_zero_iff
 
 中文:
 定理 chromaticNumber_eq_zero_iff
-  结论: G.chromaticNumber = 0 ↔ IsEmpty V
+  结论: G.chromaticNumber = 0 ↔ 是空 V
   证明: nonpos_iff_eq_zero.symm.trans chromaticNumber_le_iff_colorable.trans colorable_zero_iff
 
 @[simp]
@@ -1958,7 +1958,7 @@ alias ⟨isEmpty_of_chromaticNumber_eq_zero, _⟩ := chromaticNumber_eq_zero_iff
 
 中文:
 定理 chromaticNumber_eq_zero_of_isEmpty
-  条件: [IsEmpty V]
+  条件: [是空 V]
   结论: G.chromaticNumber = 0
   证明: by
   simpa
@@ -1983,7 +1983,7 @@ theorem chromaticNumber_eq_one_iff
 
 中文:
 定理 chromaticNumber_eq_one_iff
-  结论: G.chromaticNumber = 1 ↔ G = ⊥ ∧ Nonempty V
+  结论: G.chromaticNumber = 1 ↔ G = ⊥ ∧ 非空 V
   证明: by
   rw [eq_iff_le_not_lt]; rw [Order.lt_one_iff_nonpos]; rw [← not_isEmpty_iff]; rw [← Nat.cast_one]; rw [← Nat.cast_zero]; rw [chromaticNumber_le_iff_colorable]; rw [chromaticNumber_le_iff_colorable]; rw [colorable_one_iff]; rw [colorable_zero_iff]
 
@@ -2073,7 +2073,7 @@ theorem CompleteBipartiteGraph.chromaticNumber
 
 中文:
 定理 CompleteBipartiteGraph.chromaticNumber
-  条件: {V W : 类型} [Nonempty V] [Nonempty W]
+  条件: {V W : 类型} [非空 V] [非空 W]
   证明: by
   rw [← Nat.cast_two]; rw [chromaticNumber_eq_iff_forall_surjective
     (by simpa using (CompleteBipartiteGraph.bicoloring V W).colorable)]
@@ -2110,7 +2110,7 @@ simpa using! hc.card_le_of_pairwise_adj (Subtype.val : s -> V) by simpa [Pairwis
 
 中文:
 定理 IsClique.card_le_of_colorable
-  条件: {s : Finset V} (h : G.IsClique s) (hc : G.Colorable n)
+  条件: {s : 有限集 V} (h : G.IsClique s) (hc : G.Colorable n)
   证明: by
 simpa using! hc.card_le_of_pairwise_adj (Subtype.val : s -> V) by simpa [Pairwise] using! h
 
@@ -2130,7 +2130,7 @@ theorem IsClique.card_le_of_coloring
 
 中文:
 定理 IsClique.card_le_of_coloring
-  结论: {s : Finset V} (h : G.IsClique s) [Fintype α]
+  结论: {s : 有限集 V} (h : G.IsClique s) [有限类型 α]
   证明: h.card_le_of_colorable C.colorable
 
 Depends on / 依赖: C.colorable, card_le_of_colorable, colorable, h.card_le_of_colorable
@@ -2148,7 +2148,7 @@ theorem IsClique.card_le_chromaticNumber
 
 中文:
 定理 IsClique.card_le_chromaticNumber
-  条件: {s : Finset V} (h : G.IsClique s)
+  条件: {s : 有限集 V} (h : G.IsClique s)
   证明: le_chromaticNumber_of_pairwise_adj (by simp) (Subtype.val : s -> V) by simpa [Pairwise] using! h
 
 Depends on / 依赖: Pairwise, Subtype, Subtype.val, le_chromaticNumber_of_pairwise_adj
@@ -2260,8 +2260,8 @@ lemma Coloring.surjOn_of_card_le_isClique
   exact ⟨_, Subtype.coe_prop _, hx⟩
 
 中文:
-引理 Coloring.surjOn_of_card_le_isClique
-  结论: [Fintype α] {s : Finset V} (h : G.IsClique s)
+引理 染色.surjOn_of_card_le_isClique
+  结论: [有限类型 α] {s : 有限集 V} (h : G.IsClique s)
   证明: by
   intro _ _
   obtain ⟨_, hx⟩ := card_le_chromaticNumber_iff_forall_surjective.mp
@@ -2291,7 +2291,7 @@ definition coloring
 
 中文:
 定义 coloring
-  签名: : (completeMultipartiteGraph V).Coloring ι
+  签名: : (completeMultipartiteGraph V).染色 ι
   定义体: Coloring.mk (fun v => v.1) (by simp)
 
 Depends on / 依赖: Coloring, Coloring.mk
@@ -2309,8 +2309,8 @@ lemma colorable
 
 中文:
 引理 colorable
-  条件: [Fintype ι]
-  结论: (completeMultipartiteGraph V).Colorable (Fintype.card ι)
+  条件: [有限类型 ι]
+  结论: (completeMultipartiteGraph V).Colorable (有限类型.card ι)
   证明: (coloring V).colorable
 
 Depends on / 依赖: colorable, coloring
@@ -2331,7 +2331,7 @@ exact not_cliqueFree_of_le_card V f le_rfl cliqueFree_of_chromaticNumber_lt h
 
 中文:
 定理 chromaticNumber
-  条件: [Fintype ι] (f : 对任意 (i : ι), V i)
+  条件: [有限类型 ι] (f : 对任意 (i : ι), V i)
   证明: by
   apply le_antisymm (colorable V).chromaticNumber_le
   by_contra! h
@@ -2409,7 +2409,7 @@ theorem free_of_colorable
 中文:
 定理 free_of_colorable
   条件: (nhc : ¬H.Colorable n) (hc : G.Colorable n)
-  结论: H.Free G
+  结论: H.自由 G
   证明: by
   contrapose! nhc with hc'
   exact hc.of_hom hc'.some.toHom

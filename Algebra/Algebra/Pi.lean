@@ -49,7 +49,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra R (Π i, A i) where
+  签名: : 代数 R (Π i, A i) where
   定义体: RingHom.pi fun i => algebraMap R (A i)
   commutes' := fun a f => by ext; simp [Algebra.commutes]
   smul_def' := fun a f => by ext; simp [Algebra.smul_def]
@@ -121,8 +121,8 @@ definition _root_.AlgHom.pi
   commutes' r := by ext; simp
 
 中文:
-定义 _root_.AlgHom.pi
-  签名: {B : 类型} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i)
+定义 _root_.代数态射.pi
+  签名: {B : 类型} [半环 B] [代数 R B] (g : Π i, B ->ₐ[R] A i)
   定义体: RingHom.pi fun i => (g i).toRingHom
   commutes' r := by ext; simp
 
@@ -143,8 +143,8 @@ theorem _root_.AlgHom.pi_comp
   proof: rfl
 
 中文:
-定理 _root_.AlgHom.pi_comp
-  结论: {B C : 类型} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
+定理 _root_.代数态射.pi_comp
+  结论: {B C : 类型} [半环 B] [代数 R B] [半环 C] [代数 R C]
   证明: rfl
 -/
 theorem _root_.AlgHom.pi_comp {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
@@ -165,7 +165,7 @@ abbreviation algHom
 
 中文:
 缩写 algHom
-  签名: {B : 类型} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i)
+  签名: {B : 类型} [半环 B] [代数 R B] (g : Π i, B ->ₐ[R] A i)
   定义体: .pi g
 -/
 abbrev algHom {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i) : B ->ₐ[R] Π i, A i :=
@@ -185,7 +185,7 @@ theorem algHom_apply
 
 中文:
 定理 algHom_apply
-  结论: {B : 类型} [Semiring B] [Algebra R B]
+  结论: {B : 类型} [半环 B] [代数 R B]
   证明: AlgHom.pi_apply g x i
 
 @[deprecated AlgHom.pi_comp (since := "2026-05-30")]
@@ -207,7 +207,7 @@ theorem algHom_comp
 
 中文:
 定理 algHom_comp
-  结论: {B C : 类型} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
+  结论: {B C : 类型} [半环 B] [代数 R B] [半环 C] [代数 R C]
   证明: rfl
 -/
 theorem algHom_comp {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
@@ -275,8 +275,8 @@ theorem _root_.AlgHom.pi_evalAlgHom
 alias algHom_evalAlgHom := _root_.AlgHom.pi_evalAlgHom
 
 中文:
-定理 _root_.AlgHom.pi_evalAlgHom
-  结论: AlgHom.pi (evalAlgHom R A) = AlgHom.id R (Π i, A i)
+定理 _root_.代数态射.pi_evalAlgHom
+  结论: 代数态射.pi (evalAlgHom R A) = 代数态射.id R (Π i, A i)
   证明: rfl
 
 @[deprecated (since := "2026-06-03")]
@@ -303,8 +303,8 @@ instance [forall
 example : Pi.instAlgebraForall S S = Algebra.id _ := rfl
 
 中文:
-实例 [forall
-  签名: i, Algebra (S i) (A i)] : Algebra (Π i, S i) (Π i, A i) where
+实例 [对任意
+  签名: i, 代数 (S i) (A i)] : 代数 (Π i, S i) (Π i, A i) where
   定义体: RingHom.pi fun _ => (algebraMap _ _).comp (Pi.evalRingHom S _)
   commutes' _ _ := funext fun _ => Algebra.commutes _ _
   smul_def' _ _ := funext fun _ => Algebra.smul_def _ _
@@ -383,7 +383,7 @@ theorem constAlgHom_eq_algebra_ofId
 
 中文:
 定理 constAlgHom_eq_algebra_ofId
-  结论: constAlgHom R A R = Algebra.ofId R (A -> R)
+  结论: constAlgHom R A R = 代数.ofId R (A -> R)
   证明: rfl
 
 Depends on / 依赖: vadd_add_assoc
@@ -402,8 +402,8 @@ instance Function.algebra
   body: Pi.algebra _ _
 
 中文:
-实例 Function.algebra
-  签名: {R : 类型} (ι : 类型) (A : 类型) [CommSemiring R] [Semiring A]
+实例 函数.algebra
+  签名: {R : 类型} (ι : 类型) (A : 类型) [交换半环 R] [半环 A]
   定义体: Pi.algebra _ _
 
 Depends on / 依赖: Pi.algebra, algebra
@@ -713,7 +713,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: [Unique ι]
+  签名: [唯一 ι]
   定义体: .ofRingEquiv (f := .piUnique (fun i : ι => S)) (by simp)
 
 Depends on / 依赖: ofRingEquiv, piUnique
@@ -734,8 +734,8 @@ lemma funUnique_apply
 
 中文:
 引理 funUnique_apply
-  条件: [Unique ι] (x : ι -> S)
-  结论: funUnique R ι S x = Equiv.funUnique ι S x
+  条件: [唯一 ι] (x : ι -> S)
+  结论: funUnique R ι S x = 等价.funUnique ι S x
   证明: rfl
 
 Depends on / 依赖: f.toEquiv, toEquiv
@@ -754,7 +754,7 @@ lemma funUnique_symm_apply
 
 中文:
 引理 funUnique_symm_apply
-  条件: [Unique ι] (x : S)
+  条件: [唯一 ι] (x : S)
   证明: rfl
 
 Depends on / 依赖: f.map_add_const, map_add_const
@@ -833,8 +833,8 @@ definition Pi.algebraMap
   map_smul' t v := by ext; simp [Algebra.smul_def]
 
 中文:
-定义 Pi.algebraMap
-  签名: (ι R A : 类型) [CommSemiring R] [Semiring A] [Algebra R A]
+定义 依赖函数类型.algebraMap
+  签名: (ι R A : 类型) [交换半环 R] [半环 A] [代数 R A]
   定义体: algebraMap R A ∘ v
   map_add' v w := by simp
   map_smul' t v := by ext; simp [Algebra.smul_def]

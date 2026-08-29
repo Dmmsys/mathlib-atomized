@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightProfiniteToLightCondSet.Full
+  签名: lightProfiniteToLightCondSet.满
   定义体: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Full
 
 Depends on / 依赖: LightProfinite, coherentTopology, yoneda
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightProfiniteToLightCondSet.Faithful
+  签名: lightProfiniteToLightCondSet.忠实
   定义体: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Faithful
 
 Depends on / 依赖: Faithful, LightProfinite, coherentTopology, yoneda
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits lightProfiniteToLightCondSet.{u}
+  签名: 保持FiniteLimits lightProfiniteToLightCondSet.{u}
   定义体: inferInstance
 -/
 instance : PreservesFiniteLimits lightProfiniteToLightCondSet.{u} where
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightProfiniteToLightCondSet.{u}.Monoidal
+  签名: lightProfiniteToLightCondSet.{u}.幺半群
   定义体: .some (Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts _).mpr inferInstance
 
 Depends on / 依赖: Functor, Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts, Monoidal, nonempty_monoidal_iff_preservesFiniteProducts
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteCoproducts lightProfiniteToLightCondSet.{u}
+  签名: 保持FiniteCoproducts lightProfiniteToLightCondSet.{u}
   定义体: inferInstanceAs PreservesFiniteCoproducts (coherentTopology _).yoneda
 
 Depends on / 依赖: PreservesFiniteCoproducts, coherentTopology, yoneda

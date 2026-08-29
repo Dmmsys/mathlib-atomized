@@ -79,7 +79,7 @@ le_antisymm (le_Ici.2 ha) hst.ge.trans inf_le_right
 中文:
 引理 infIrred_Ici
   条件: (a : α)
-  结论: InfIrred (Ici a)
+  结论: InfIrred (左闭右无界区间 a)
   证明: by
   refine ⟨fun h => Ici_ne_top h.eq_top, fun s t hst => ?_⟩
   have := mem_Ici_iff.2 (le_refl a)
@@ -112,7 +112,7 @@ lemma infIrred_iff_of_finite
 
 中文:
 引理 infIrred_iff_of_finite
-  结论: InfIrred s ↔ 存在 a, Ici a = s
+  结论: InfIrred s ↔ 存在 a, 左闭右无界区间 a = s
   证明: by
   refine ⟨fun hs => ?_, ?_⟩
   · obtain ⟨a, ha, has⟩ := (s : Set α).toFinite.exists_minimal (coe_nonempty.2 hs.ne_top)
@@ -151,7 +151,7 @@ lemma supIrred_Iic
 中文:
 引理 supIrred_Iic
   条件: (a : α)
-  结论: SupIrred (Iic a)
+  结论: SupIrred (左无界右闭区间 a)
   证明: by
   refine ⟨fun h => Iic_ne_bot h.eq_bot, fun s t hst => ?_⟩
   have := mem_Iic_iff.2 (le_refl a)
@@ -184,7 +184,7 @@ le_imp_eq_iff_le_imp_ge'.2 has hb).resolve_left (erase_lt.2 ha).ne⟩
 
 中文:
 引理 supIrred_iff_of_finite
-  结论: SupIrred s ↔ 存在 a, Iic a = s
+  结论: SupIrred s ↔ 存在 a, 左无界右闭区间 a = s
   证明: by
   refine ⟨fun hs => ?_, ?_⟩
   · obtain ⟨a, ha, has⟩ := (s : Set α).toFinite.exists_maximal (coe_nonempty.2 hs.ne_bot)
@@ -218,7 +218,7 @@ definition supIrredLowerSet
 
 中文:
 定义 supIrredLowerSet
-  签名: : α ↪o {s : LowerSet α // SupIrred s} where
+  签名: : α ↪o {s : 下集 α // SupIrred s} where
   定义体: ⟨Iic a, supIrred_Iic _⟩
   inj' _ := by simp
   map_rel_iff' := by simp
@@ -243,7 +243,7 @@ definition infIrredUpperSet
 
 中文:
 定义 infIrredUpperSet
-  签名: : α ↪o {s : UpperSet α // InfIrred s} where
+  签名: : α ↪o {s : 上集 α // InfIrred s} where
   定义体: ⟨Ici a, infIrred_Ici _⟩
   inj' _ := by simp
   map_rel_iff' := by simp
@@ -267,7 +267,7 @@ lemma supIrredLowerSet_apply
 中文:
 引理 supIrredLowerSet_apply
   条件: (a : α)
-  结论: supIrredLowerSet a = ⟨Iic a, supIrred_Iic _⟩
+  结论: supIrredLowerSet a = ⟨左无界右闭区间 a, supIrred_Iic _⟩
   证明: rfl
 -/
 @[simp] lemma supIrredLowerSet_apply (a : α) : supIrredLowerSet a = ⟨Iic a, supIrred_Iic _⟩ := rfl
@@ -283,7 +283,7 @@ lemma infIrredUpperSet_apply
 中文:
 引理 infIrredUpperSet_apply
   条件: (a : α)
-  结论: infIrredUpperSet a = ⟨Ici a, infIrred_Ici _⟩
+  结论: infIrredUpperSet a = ⟨左闭右无界区间 a, infIrred_Ici _⟩
   证明: rfl
 -/
 @[simp] lemma infIrredUpperSet_apply (a : α) : infIrredUpperSet a = ⟨Ici a, infIrred_Ici _⟩ := rfl
@@ -301,7 +301,7 @@ lemma supIrredLowerSet_surjective
 
 中文:
 引理 supIrredLowerSet_surjective
-  结论: Surjective (supIrredLowerSet (α := α))
+  结论: 满射 (supIrredLowerSet (α := α))
   证明: by
   aesop (add simp Surjective)
 
@@ -321,7 +321,7 @@ lemma infIrredUpperSet_surjective
 
 中文:
 引理 infIrredUpperSet_surjective
-  结论: Surjective (infIrredUpperSet (α := α))
+  结论: 满射 (infIrredUpperSet (α := α))
   证明: by
   aesop (add simp Surjective)
 
@@ -345,7 +345,7 @@ definition supIrredLowerSet
 
 中文:
 定义 supIrredLowerSet
-  签名: : α ≃o {s : LowerSet α // SupIrred s}
+  签名: : α ≃o {s : 下集 α // SupIrred s}
   定义体: RelIso.ofSurjective _ OrderEmbedding.supIrredLowerSet_surjective
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.supIrredLowerSet_surjective, RelIso, RelIso.ofSurjective, ofSurjective, supIrredLowerSet_surjective
@@ -363,7 +363,7 @@ definition infIrredUpperSet
 
 中文:
 定义 infIrredUpperSet
-  签名: : α ≃o {s : UpperSet α // InfIrred s}
+  签名: : α ≃o {s : 上集 α // InfIrred s}
   定义体: RelIso.ofSurjective _ OrderEmbedding.infIrredUpperSet_surjective
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.infIrredUpperSet_surjective, RelIso, RelIso.ofSurjective, infIrredUpperSet_surjective, ofSurjective
@@ -383,7 +383,7 @@ lemma supIrredLowerSet_apply
 中文:
 引理 supIrredLowerSet_apply
   条件: (a : α)
-  结论: supIrredLowerSet a = ⟨Iic a, supIrred_Iic _⟩
+  结论: supIrredLowerSet a = ⟨左无界右闭区间 a, supIrred_Iic _⟩
   证明: rfl
 -/
 @[simp] lemma supIrredLowerSet_apply (a : α) : supIrredLowerSet a = ⟨Iic a, supIrred_Iic _⟩ := rfl
@@ -399,7 +399,7 @@ lemma infIrredUpperSet_apply
 中文:
 引理 infIrredUpperSet_apply
   条件: (a : α)
-  结论: infIrredUpperSet a = ⟨Ici a, infIrred_Ici _⟩
+  结论: infIrredUpperSet a = ⟨左闭右无界区间 a, infIrred_Ici _⟩
   证明: rfl
 -/
 @[simp] lemma infIrredUpperSet_apply (a : α) : infIrredUpperSet a = ⟨Ici a, infIrred_Ici _⟩ := rfl
@@ -428,7 +428,7 @@ lemma supIrredLowerSet_symm_apply
 
 中文:
 引理 supIrredLowerSet_symm_apply
-  条件: (s : {s : LowerSet α // SupIrred s}) [Fintype s]
+  条件: (s : {s : 下集 α // SupIrred s}) [有限类型 s]
   证明: by
   classical
   obtain ⟨s, hs⟩ := s
@@ -468,7 +468,7 @@ lemma infIrredUpperSet_symm_apply
 
 中文:
 引理 infIrredUpperSet_symm_apply
-  条件: (s : {s : UpperSet α // InfIrred s}) [Fintype s]
+  条件: (s : {s : 上集 α // InfIrred s}) [有限类型 s]
   证明: by
   classical
   obtain ⟨s, hs⟩ := s
@@ -508,7 +508,7 @@ definition OrderIso.lowerSetSupIrred
 
 中文:
 定义 OrderIso.lowerSetSupIrred
-  签名: [OrderBot α]
+  签名: [有底序 α]
   定义体: Equiv.toOrderIso
     { toFun := fun a => ⟨{b | ↑b <= a}, fun _ _ hcb hba => hba.trans' hcb⟩
       invFun := fun s => (s : Set {a : α // SupIrred a}).toFinset.sup (↑)
@@ -552,7 +552,7 @@ definition birkhoffSet
 
 中文:
 定义 birkhoffSet
-  签名: : α ↪o Set {a : α // SupIrred a}
+  签名: : α ↪o 集合 {a : α // SupIrred a}
   定义体: by
   by_cases! h : IsEmpty α
   · exact OrderEmbedding.ofIsEmpty
@@ -578,7 +578,7 @@ definition birkhoffFinset
 
 中文:
 定义 birkhoffFinset
-  签名: : α ↪o Finset {a : α // SupIrred a}
+  签名: : α ↪o 有限集 {a : α // SupIrred a}
   定义体: by
   exact birkhoffSet.trans Fintype.finsetOrderIsoSet.symm.toOrderEmbedding
 
@@ -668,7 +668,7 @@ lemma birkhoffSet_apply
 
 中文:
 引理 birkhoffSet_apply
-  条件: [OrderBot α] (a : α)
+  条件: [有底序 α] (a : α)
   证明: by
   have : Subsingleton (OrderBot α) := inferInstance
   simp +instances [birkhoffSet, this.allEq]
@@ -746,7 +746,7 @@ definition birkhoffSet
 
 中文:
 定义 birkhoffSet
-  签名: : LatticeHom α (Set {a : α // SupIrred a}) where
+  签名: : 格态射 α (集合 {a : α // SupIrred a}) where
   定义体: OrderEmbedding.birkhoffSet
   map_sup' := OrderEmbedding.birkhoffSet_sup
   map_inf' := OrderEmbedding.birkhoffSet_inf
@@ -771,7 +771,7 @@ definition birkhoffFinset
 
 中文:
 定义 birkhoffFinset
-  签名: : LatticeHom α (Finset {a : α // SupIrred a}) where
+  签名: : 格态射 α (有限集 {a : α // SupIrred a}) where
   定义体: OrderEmbedding.birkhoffFinset
   map_sup' := OrderEmbedding.birkhoffFinset_sup
   map_inf' := OrderEmbedding.birkhoffFinset_inf
@@ -793,7 +793,7 @@ lemma birkhoffFinset_injective
 
 中文:
 引理 birkhoffFinset_injective
-  结论: Injective (birkhoffFinset (α := α))
+  结论: 单射 (birkhoffFinset (α := α))
   证明: OrderEmbedding.birkhoffFinset.injective
 -/
 lemma birkhoffFinset_injective : Injective (birkhoffFinset (α := α)) :=
@@ -813,8 +813,8 @@ lemma exists_birkhoff_representation.{u}
   exact ⟨{a : α // SupIrred a}, _, inferInstance, _, LatticeHom.birkhoffFinset_injective⟩
 
 中文:
-引理 exists_birkhoff_representation.{u}
-  条件: (α : 类型u) [Finite α] [DistribLattice α]
+引理 存在_birkhoff_representation.{u}
+  条件: (α : 类型u) [有限 α] [Distrib格 α]
   证明: by
   classical
   cases nonempty_fintype α

@@ -37,8 +37,8 @@ definition OpenNormalSubgroup.pathComponentOne
   isNormal' := .pathComponentOne G
 
 中文:
-定义 OpenNormalSubgroup.pathComponentOne
-  签名: [Group G]
+定义 OpenNormal子群.pathComponentOne
+  签名: [群 G]
   定义体: .pathComponentOne G
   isOpen' := .pathComponent 1
   isNormal' := .pathComponentOne G
@@ -64,8 +64,8 @@ instance [Group
   body: .pathComponent 1
 
 中文:
-实例 [Group
-  签名: G] [IsTopologicalGroup G] [LocallyPathConnectedSpace G] :
+实例 [群
+  签名: G] [是拓扑群 G] [LocallyPathConnected空间 G] :
   定义体: .pathComponent 1
 
 Depends on / 依赖: pathComponent

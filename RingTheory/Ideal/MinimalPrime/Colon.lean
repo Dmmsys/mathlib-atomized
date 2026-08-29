@@ -42,8 +42,8 @@ theorem exists_eq_colon_of_mem_minimalPrimes
   have key : 
 
 中文:
-定理 exists_eq_colon_of_mem_minimalPrimes
-  结论: [IsNoetherianRing R]
+定理 存在_eq_colon_of_mem_minimalPrimes
+  结论: [是Noether环 R]
   证明: by
   by_cases hx : x in N
   · simp [show (colon N {x}) = ⊤ by simpa, Ideal.minimalPrimes_top] at hI

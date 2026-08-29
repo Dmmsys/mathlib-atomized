@@ -46,7 +46,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: {G : 类型} [Mul G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: ⟨fun f g => ⟨f * g, f.contMDiff.mul g.contMDiff⟩⟩
 
 @[to_additive (attr := simp)]
@@ -68,7 +68,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: {G : 类型} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
+  结论: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G] [余ntMDiffMul I' n G]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -90,7 +90,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  结论: {G : 类型} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
+  结论: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G] [余ntMDiffMul I' n G]
   证明: rfl
 
 @[to_additive]
@@ -112,7 +112,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: {G : 类型} [One G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [幺 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: ⟨ContMDiffMap.const (1 : G)⟩
 
 @[to_additive (attr := simp)]
@@ -134,7 +134,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: {G : 类型} [One G] [TopologicalSpace G] [ChartedSpace H' G]
+  条件: {G : 类型} [幺 G] [拓扑空间 G] [Charted空间 H' G]
   证明: rfl
 
 @[to_additive]
@@ -156,7 +156,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: {G : 类型} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: ⟨(f : N -> G) ^ n, (contMDiff_pow n).comp f.contMDiff⟩
 
 @[to_additive (attr := simp)]
@@ -179,7 +179,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  结论: {G : 类型} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  结论: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   证明: rfl
 -/
 theorem coe_pow {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
@@ -209,7 +209,7 @@ instance semigroup
 
 中文:
 实例 semigroup
-  签名: {G : 类型} [Semigroup G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: DFunLike.coe_injective.semigroup _ coe_mul
 
 @[to_additive]
@@ -231,7 +231,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: {G : 类型} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: DFunLike.coe_injective.monoid _ coe_one coe_mul coe_pow
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.monoid, coe_injective, coe_mul, coe_one, coe_pow, monoid
@@ -255,7 +255,7 @@ definition coeFnMonoidHom
 
 中文:
 定义 coeFnMonoidHom
-  签名: {G : 类型} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: DFunLike.coe
   map_one' := coe_one
   map_mul' := coe_mul
@@ -287,7 +287,7 @@ definition compLeftMonoidHom
 
 中文:
 定义 compLeftMonoidHom
-  签名: {G' : 类型} [Monoid G'] [TopologicalSpace G'] [ChartedSpace H' G']
+  签名: {G' : 类型} [幺半群 G'] [拓扑空间 G'] [Charted空间 H' G']
   定义体: ⟨φ ∘ f, hφ.comp f.contMDiff⟩
   map_one' := by ext; change φ 1 = 1; simp
   map_mul' f g := by ext x; change φ (f x * g x) = φ (f x) * φ (g x); simp
@@ -321,7 +321,7 @@ definition restrictMonoidHom
 
 中文:
 定义 restrictMonoidHom
-  签名: (G : 类型) [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: (G : 类型) [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -349,7 +349,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: {G : 类型} [CommMonoid G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [交换幺半群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: DFunLike.coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
 @[to_additive]
@@ -377,7 +377,7 @@ instance group
 
 中文:
 实例 group
-  签名: {G : 类型} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
+  签名: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
   定义体: { ContMDiffMap.monoid with
     inv := fun f => ⟨fun x => (f x)⁻¹, f.contMDiff.inv⟩
     inv_mul_cancel := fun a => by ext; exact inv_mul_cancel _
@@ -409,7 +409,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  结论: {G : 类型} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
+  结论: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -431,7 +431,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  结论: {G : 类型} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
+  结论: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
   证明: rfl
 
 @[to_additive]
@@ -451,7 +451,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: {G : 类型} [CommGroup G] [TopologicalSpace G] [ChartedSpace H' G]
+  签名: {G : 类型} [交换群 G] [拓扑空间 G] [Charted空间 H' G]
   定义体: { ContMDiffMap.group, ContMDiffMap.commMonoid with }
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.commMonoid, ContMDiffMap.group, commMonoid
@@ -481,7 +481,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: {R : 类型} [Semiring R] [TopologicalSpace R] [ChartedSpace H' R]
+  签名: {R : 类型} [半环 R] [拓扑空间 R] [Charted空间 H' R]
   定义体: { ContMDiffMap.addCommMonoid,
     ContMDiffMap.monoid with
     left_distrib := fun a b c => by ext; exact left_distrib _ _ _
@@ -510,7 +510,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: {R : 类型} [Ring R] [TopologicalSpace R] [ChartedSpace H' R] [ContMDiffRing I' n R]
+  签名: {R : 类型} [环 R] [拓扑空间 R] [Charted空间 H' R] [余ntMDiff环 I' n R]
   定义体: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup with }
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.addCommGroup, ContMDiffMap.semiring, addCommGroup, semiring
@@ -529,7 +529,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: {R : 类型} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
+  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
   定义体: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup, ContMDiffMap.commMonoid with }
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.addCommGroup, ContMDiffMap.commMonoid, ContMDiffMap.semiring, addCommGroup, commMonoid, semiring
@@ -552,7 +552,7 @@ definition compLeftRingHom
 
 中文:
 定义 compLeftRingHom
-  签名: {R' : 类型} [Ring R'] [TopologicalSpace R'] [ChartedSpace H' R']
+  签名: {R' : 类型} [环 R'] [拓扑空间 R'] [Charted空间 H' R']
   定义体: { ContMDiffMap.compLeftMonoidHom I N φ.toMonoidHom hφ,
     ContMDiffMap.compLeftAddMonoidHom I N φ.toAddMonoidHom hφ with
     toFun := fun f => ⟨φ ∘ f, hφ.comp f.contMDiff⟩ }
@@ -580,7 +580,7 @@ definition restrictRingHom
 
 中文:
 定义 restrictRingHom
-  签名: (R : 类型) [Ring R] [TopologicalSpace R] [ChartedSpace H' R]
+  签名: (R : 类型) [环 R] [拓扑空间 R] [Charted空间 H' R]
   定义体: { ContMDiffMap.restrictMonoidHom I I' R h, ContMDiffMap.restrictAddMonoidHom I I' R h with
     toFun := fun f => ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩ }
 
@@ -607,7 +607,7 @@ definition coeFnRingHom
 
 中文:
 定义 coeFnRingHom
-  签名: {R : 类型} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
+  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
   定义体: { (coeFnMonoidHom : C^n⟮I, N; I', R⟯ ->* _), (coeFnAddMonoidHom : C^n⟮I, N; I', R⟯ ->+ _) with
     toFun := (↑) }
 
@@ -628,7 +628,7 @@ definition evalRingHom
 
 中文:
 定义 evalRingHom
-  签名: {R : 类型} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
+  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
   定义体: (Pi.evalRingHom _ m : (N -> R) ->+* R).comp ContMDiffMap.coeFnRingHom
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.coeFnRingHom, Pi.evalRingHom, coeFnRingHom, evalRingHom
@@ -655,7 +655,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
   定义体: ⟨fun r f => ⟨r • ⇑f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩⟩
 
 @[simp]
@@ -679,7 +679,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  结论: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
+  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (r : 𝕜)
   证明: rfl
 
 @[simp]
@@ -699,7 +699,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  结论: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
+  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (r : 𝕜)
   证明: rfl
 -/
 theorem smul_comp {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
@@ -716,7 +716,7 @@ instance module
 
 中文:
 实例 module
-  签名: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
   定义体: Function.Injective.module 𝕜 coeFnAddMonoidHom ContMDiffMap.coe_injective coe_smul
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.coe_injective, Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
@@ -739,7 +739,7 @@ definition coeFnLinearMap
 
 中文:
 定义 coeFnLinearMap
-  签名: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
   定义体: { (coeFnAddMonoidHom : C^n⟮I, N; 𝓘(𝕜, V), V⟯ ->+ _) with
     toFun := (↑)
     map_smul' := coe_smul }
@@ -809,7 +809,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
+  签名: : 代数 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
   定义体: fun r f => ⟨r • f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩
   algebraMap := ContMDiffMap.C
   commutes' := fun c f => by ext x; exact Algebra.commutes' _ _
@@ -879,7 +879,7 @@ instance instSMul'
 
 中文:
 实例 instSMul'
-  签名: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
   定义体: ⟨fun f g => ⟨fun x => f x • g x, ContMDiff.smul f.2 g.2⟩⟩
 
 Depends on / 依赖: ContMDiff, ContMDiff.smul
@@ -900,7 +900,7 @@ theorem smul_comp'
 
 中文:
 定理 smul_comp'
-  结论: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
+  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
   证明: rfl
 -/
 theorem smul_comp' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
@@ -923,7 +923,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: {V : 类型} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
+  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
   定义体: by ext x; exact smul_add (c x) (f x) (g x)
   add_smul c₁ c₂ f := by ext x; exact add_smul (c₁ x) (c₂ x) (f x)
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)

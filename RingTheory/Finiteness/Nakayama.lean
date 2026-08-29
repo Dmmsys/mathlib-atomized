@@ -44,8 +44,8 @@ theorem exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul
       change (1 
 
 中文:
-定理 exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul
-  结论: {R : 类型} [CommRing R] {M : 类型}
+定理 存在_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul
+  结论: {R : 类型} [交换环 R] {M : 类型}
   证明: by
   rw [fg_def] at hn
   rcases hn with ⟨s, hfs, hs⟩
@@ -126,8 +126,8 @@ theorem exists_mem_and_smul_eq_self_of_fg_of_le_smul
   exact ⟨-(r - 1), I.neg_mem hr, fun n hn => by simpa [sub_smul] using hr' n hn⟩
 
 中文:
-定理 exists_mem_and_smul_eq_self_of_fg_of_le_smul
-  结论: {R : 类型} [CommRing R] {M : 类型}
+定理 存在_mem_and_smul_eq_self_of_fg_of_le_smul
+  结论: {R : 类型} [交换环 R] {M : 类型}
   证明: by
   obtain ⟨r, hr, hr'⟩ := exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul I N hn hin
   exact ⟨-(r - 1), I.neg_mem hr, fun n hn => by simpa [sub_smul] using hr' n hn⟩

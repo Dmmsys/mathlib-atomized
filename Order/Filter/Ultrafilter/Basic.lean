@@ -44,7 +44,7 @@ theorem finite_sUnion_mem_iff
 
 中文:
 定理 finite_sUnion_mem_iff
-  条件: {s : Set (Set α)} (hs : s.Finite)
+  条件: {s : 集合 (集合 α)} (hs : s.有限)
   结论: ⋃₀ s in f ↔ 存在 t in s, t in f
   证明: by
   induction s, hs using Set.Finite.induction_on with
@@ -69,7 +69,7 @@ theorem finite_biUnion_mem_iff
 
 中文:
 定理 finite_biUnion_mem_iff
-  条件: {is : Set β} {s : β -> Set α} (his : is.Finite)
+  条件: {is : 集合 β} {s : β -> 集合 α} (his : is.有限)
   证明: by
   simp only [← sUnion_image, finite_sUnion_mem_iff (his.image s), exists_mem_image]
 
@@ -92,8 +92,8 @@ lemma eventually_exists_mem_iff
   aesop
 
 中文:
-引理 eventually_exists_mem_iff
-  条件: {is : Set β} {P : β -> α -> 命题} (his : is.Finite)
+引理 eventually_存在_mem_iff
+  条件: {is : 集合 β} {P : β -> α -> 命题} (his : is.有限)
   证明: by
   simp only [Filter.Eventually, Ultrafilter.mem_coe]
   convert! f.finite_biUnion_mem_iff his (s := P) with i
@@ -117,8 +117,8 @@ lemma eventually_exists_iff
   simpa using eventually_exists_mem_iff (f := f) (P := P) Set.finite_univ
 
 中文:
-引理 eventually_exists_iff
-  条件: [Finite β] {P : β -> α -> 命题}
+引理 eventually_存在_iff
+  条件: [有限 β] {P : β -> α -> 命题}
   证明: by
   simpa using eventually_exists_mem_iff (f := f) (P := P) Set.finite_univ
 
@@ -142,7 +142,7 @@ theorem eq_pure_of_finite_mem
 
 中文:
 定理 eq_pure_of_finite_mem
-  条件: (h : s.Finite) (h' : s in f)
+  条件: (h : s.有限) (h' : s in f)
   结论: 存在 x in s, f = pure x
   证明: by
   rw [← biUnion_of_singleton s] at h'
@@ -167,7 +167,7 @@ theorem eq_pure_of_finite
 
 中文:
 定理 eq_pure_of_finite
-  条件: [Finite α] (f : Ultrafilter α)
+  条件: [有限 α] (f : Ultrafilter α)
   结论: 存在 a, f = pure a
   证明: (eq_pure_of_finite_mem finite_univ univ_mem).imp fun _ ⟨_, ha⟩ => ha
 
@@ -191,7 +191,7 @@ theorem le_cofinite_or_eq_pure
 中文:
 定理 le_cofinite_or_eq_pure
   条件: (f : Ultrafilter α)
-  结论: (f : Filter α) <= cofinite ∨ 存在 a, f = pure a
+  结论: (f : 滤子 α) <= cofinite ∨ 存在 a, f = pure a
   证明: or_iff_not_imp_left.2 fun h =>
     let ⟨_, hs, hfin⟩ := Filter.disjoint_cofinite_right.1 (disjoint_iff_not_le.2 h)
     let ⟨a, _, hf⟩ := eq_pure_of_finite_mem hfin hs
@@ -217,8 +217,8 @@ theorem exists_ultrafilter_of_finite_inter_nonempty
 ⟨of (generate S), fun _ ht => (of_le <| generate S) GenerateSets.basic ht⟩
 
 中文:
-定理 exists_ultrafilter_of_finite_inter_nonempty
-  结论: (S : Set (Set α))
+定理 存在_ultrafilter_of_finite_inter_nonempty
+  结论: (S : 集合 (集合 α))
   证明: haveI : NeBot (generate S) :=
     generate_neBot_iff.2 fun _ hts ht =>
       ht.coe_toFinset ▸ cond ht.toFinset (ht.coe_toFinset.symm ▸ hts)
@@ -251,7 +251,7 @@ lemma atTop_eq_pure_of_isTop
 
 中文:
 引理 atTop_eq_pure_of_isTop
-  条件: [PartialOrder α] {x : α} (hx : IsTop x)
+  条件: [偏序 α] {x : α} (hx : IsTop x)
   证明: { top := x, le_top := hx : OrderTop α }.atTop_eq
 
 Depends on / 依赖: OrderTop, atTop_eq, le_top
@@ -271,7 +271,7 @@ theorem tendsto_iff_ultrafilter
 
 中文:
 定理 tendsto_iff_ultrafilter
-  条件: (f : α -> β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (f : α -> β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: by
   simpa only [tendsto_iff_comap] using le_iff_ultrafilter
 
@@ -334,7 +334,7 @@ theorem _root_.Nat.hyperfilter_le_atTop
 @[simp]
 
 中文:
-定理 _root_.Nat.hyperfilter_le_atTop
+定理 _root_.自然数.hyperfilter_le_atTop
   结论: (hyperfilter 自然数).toFilter <= atTop
   证明: hyperfilter_le_cofinite.trans_eq Nat.cofinite_eq_atTop
 
@@ -356,7 +356,7 @@ theorem bot_ne_hyperfilter
 
 中文:
 定理 bot_ne_hyperfilter
-  结论: (⊥ : Filter α) != hyperfilter α
+  结论: (⊥ : 滤子 α) != hyperfilter α
   证明: (NeBot.ne inferInstance).symm
 
 Depends on / 依赖: NeBot.ne
@@ -378,7 +378,7 @@ alias _root_.Set.Finite.notMem_hyperfilter := notMem_hyperfilter_of_finite
 
 中文:
 定理 notMem_hyperfilter_of_finite
-  条件: {s : Set α} (hf : s.Finite)
+  条件: {s : 集合 α} (hf : s.有限)
   结论: s ∉ hyperfilter α
   证明: fun hy =>
 compl_notMem hy hyperfilter_le_cofinite hf.compl_mem_cofinite
@@ -403,7 +403,7 @@ alias _root_.Set.Finite.compl_mem_hyperfilter := compl_mem_hyperfilter_of_finite
 
 中文:
 定理 compl_mem_hyperfilter_of_finite
-  条件: {s : Set α} (hf : Set.Finite s)
+  条件: {s : 集合 α} (hf : 集合.有限 s)
   结论: sᶜ in hyperfilter α
   证明: compl_mem_iff_notMem.2 hf.notMem_hyperfilter
 
@@ -427,7 +427,7 @@ theorem mem_hyperfilter_of_finite_compl
 
 中文:
 定理 mem_hyperfilter_of_finite_compl
-  条件: {s : Set α} (hf : Set.Finite sᶜ)
+  条件: {s : 集合 α} (hf : 集合.有限 sᶜ)
   结论: s in hyperfilter α
   证明: compl_compl s ▸ hf.compl_mem_hyperfilter
 

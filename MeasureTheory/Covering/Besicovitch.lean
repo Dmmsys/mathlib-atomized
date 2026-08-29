@@ -123,12 +123,12 @@ structure Besicovitch.SatelliteConfig
 
 中文:
 结构 Besicovitch.SatelliteConfig
-  参数: (α : 类型) [MetricSpace α] (N : 自然数) (τ : 实数)
+  参数: (α : 类型) [度量空间 α] (N : 自然数) (τ : 实数)
   公理与运算 (6 个):
-    - c : Fin N.succ -> α
-    - r : Fin N.succ -> 实数
+    - c : 有限集 N.succ -> α
+    - r : 有限集 N.succ -> 实数
     - rpos : 对任意 i, 0 < r i
-    - h : Pairwise fun i j => r i <= dist (c i) (c j) ∧ r j <= τ * r i ∨ r j <= dist (c j) (c i) ∧ r i <= τ * r j
+    - h : 两两 fun i j => r i <= dist (c i) (c j) ∧ r j <= τ * r i ∨ r j <= dist (c j) (c i) ∧ r i <= τ * r j
     - hlast : 对任意 i < last N, r i <= dist (c i) (c (last N)) ∧ r (last N) <= τ * r i
     - inter : 对任意 i < last N, dist (c i) (c (last N)) <= r i + r (last N)
 -/
@@ -169,10 +169,10 @@ class HasBesicovitchCovering
     - no_satelliteConfig : exists (N : Nat) (τ : Real), 1 < τ ∧ IsEmpty (Besicovitch.SatelliteConfig α N τ)
 
 中文:
-类 HasBesicovitchCovering
-  参数: (α : 类型) [MetricSpace α]
+类 有BesicovitchCovering
+  参数: (α : 类型) [度量空间 α]
   公理与运算 (1 个):
-    - no_satelliteConfig : 存在 (N : 自然数) (τ : 实数), 1 < τ ∧ IsEmpty (Besicovitch.SatelliteConfig α N τ)
+    - no_satelliteConfig : 存在 (N : 自然数) (τ : 实数), 1 < τ ∧ 是空 (Besicovitch.SatelliteConfig α N τ)
 -/
 class HasBesicovitchCovering (α : Type*) [MetricSpace α] : Prop where
   no_satelliteConfig : exists (N : Nat) (τ : Real), 1 < τ ∧ IsEmpty (Besicovitch.SatelliteConfig α N τ)
@@ -239,7 +239,7 @@ theorem inter'
 
 中文:
 定理 inter'
-  条件: (i : Fin N.succ)
+  条件: (i : 有限集 N.succ)
   结论: dist (a.c i) (a.c (last N)) <= a.r i + a.r (last N)
   证明: by
   rcases lt_or_ge i (last N) with (H | H)
@@ -273,7 +273,7 @@ theorem hlast'
 
 中文:
 定理 hlast'
-  条件: (i : Fin N.succ) (h : 1 <= τ)
+  条件: (i : 有限集 N.succ) (h : 1 <= τ)
   结论: a.r (last N) <= τ * a.r i
   证明: by
   rcases lt_or_ge i (last N) with (H | H)
@@ -443,7 +443,7 @@ definition index
 
 中文:
 定义 index
-  签名: : Ordinal.{u} -> β
+  签名: : 序数.{u} -> β
   定义体: ⋃ j : { j // j < i }, ball (p.c (index j)) (p.r (index j))
       -- `R` is the supremum of the radii of balls with centers not in `Z`
       let R := iSup fun b : { b : β // p.c b ∉ Z } => p.r b
@@ -472,7 +472,7 @@ definition iUnionUpTo
 
 中文:
 定义 iUnionUpTo
-  签名: (i : Ordinal.{u})
+  签名: (i : 序数.{u})
   定义体: ⋃ j : { j // j < i }, ball (p.c (p.index j)) (p.r (p.index j))
 
 Depends on / 依赖: p.index
@@ -493,7 +493,7 @@ theorem monotone_iUnionUpTo
 
 中文:
 定理 monotone_iUnionUpTo
-  结论: Monotone p.iUnionUpTo
+  结论: 递增 p.iUnionUpTo
   证明: by
   intro i j hij
   simp only [iUnionUpTo]
@@ -516,7 +516,7 @@ definition R
 
 中文:
 定义 R
-  签名: (i : Ordinal.{u})
+  签名: (i : 序数.{u})
   定义体: iSup fun b : { b : β // p.c b ∉ p.iUnionUpTo i } => p.r b
 
 Depends on / 依赖: iUnionUpTo, p.iUnionUpTo
@@ -539,7 +539,7 @@ definition color
 
 中文:
 定义 color
-  签名: : Ordinal.{u} -> 自然数
+  签名: : 序数.{u} -> 自然数
   定义体: ⋃ (j : { j // j < i })
         (_ : (closedBall (p.c (p.index j)) (p.r (p.index j)) inter
           closedBall (p.c (p.index i)) (p.r (p.index i))).Nonempty), {color j}
@@ -569,7 +569,7 @@ definition lastStep
 
 中文:
 定义 lastStep
-  签名: : Ordinal.{u}
+  签名: : 序数.{u}
   定义体: sInf {i | ¬exists b : β, p.c b ∉ p.iUnionUpTo i ∧ p.R i <= p.τ * p.r b}
 
 Depends on / 依赖: iUnionUpTo, p.iUnionUpTo
@@ -691,7 +691,7 @@ theorem color_lt
 
 中文:
 定理 color_lt
-  结论: {i : Ordinal.{u}} (hi : i < p.lastStep) {N : 自然数}
+  结论: {i : 序数.{u}} (hi : i < p.lastStep) {N : 自然数}
   证明: by
   /- By contradiction, consider the first ordinal `i` for which one would have `p.color i = N`.
     Choose for each `k < N` a ball with color `k` that intersects the ball at color `i`
@@ -928,7 +928,7 @@ theorem exist_finset_disjoint_balls_large_measure
 
 中文:
 定理 exist_finset_disjoint_balls_large_measure
-  结论: (μ : Measure α) [IsFiniteMeasure μ] {N : 自然数}
+  结论: (μ : 测度 α) [是有限测度 μ] {N : 自然数}
   证明: by
   classical
   -- exclude the trivial case where `μ s = 0`.
@@ -1077,8 +1077,8 @@ theorem exists_disjoint_closedBall_covering_ae_of_finiteMeasure_aux
     ((t : Set (α × Rea
 
 中文:
-定理 exists_disjoint_closedBall_covering_ae_of_finiteMeasure_aux
-  结论: (μ : Measure α)
+定理 存在_disjoint_closedBall_covering_ae_of_finiteMeasure_aux
+  结论: (μ : 测度 α)
   证明: by
   classical
   rcases HasBesicovitchCovering.no_satelliteConfig (α := α) with ⟨N, τ, hτ, hN⟩
@@ -1234,8 +1234,8 @@ theorem exists_disjoint_closedBall_covering_ae_aux
   rcases exists_disjoint_closedBall_covering_ae_of_finit
 
 中文:
-定理 exists_disjoint_closedBall_covering_ae_aux
-  结论: (μ : Measure α) [SFinite μ] (f : α -> Set 实数)
+定理 存在_disjoint_closedBall_covering_ae_aux
+  结论: (μ : 测度 α) [SFinite μ] (f : α -> 集合 实数)
   证明: by
   /- This is deduced from the finite measure case, by using a finite measure with respect to which
     the initial sigma-finite measure is absolutely continuous. -/
@@ -1268,8 +1268,8 @@ theorem exists_disjoint_closedBall_covering_ae
       ⟨hr.2.1, hr.2.2.trans_le
 
 中文:
-定理 exists_disjoint_closedBall_covering_ae
-  结论: (μ : Measure α) [SFinite μ] (f : α -> Set 实数)
+定理 存在_disjoint_closedBall_covering_ae
+  结论: (μ : 测度 α) [SFinite μ] (f : α -> 集合 实数)
   证明: by
   let g x := f x inter Ioo 0 (R x)
   have hg : forall x in s, forall δ > 0, (g x inter Ioo 0 δ).Nonempty := fun x hx δ δpos => by
@@ -1313,8 +1313,8 @@ theorem exists_closedBall_covering_tsum_measure_le
     measu
 
 中文:
-定理 exists_closedBall_covering_tsum_measure_le
-  结论: (μ : Measure α) [SFinite μ]
+定理 存在_closedBall_covering_tsum_measure_le
+  结论: (μ : 测度 α) [SFinite μ]
   证明: by
   /- For the proof, first cover almost all `s` with disjoint balls thanks to the usual Besicovitch
     theorem. Taking the balls included in a well-chosen open neighborhood `u` of `s`, one may
@@ -1497,7 +1497,7 @@ definition vitaliFamily
 
 中文:
 定义 vitaliFamily
-  签名: (μ : Measure α) [SFinite μ]
+  签名: (μ : 测度 α) [SFinite μ]
   定义体: (fun r : Real => closedBall x r) '' Ioi (0 : Real)
   measurableSet _ := forall_mem_image.2 fun _ _ => isClosed_closedBall.measurableSet
   nonempty_interior _ := forall_mem_image.2 fun _ rpos =>
@@ -1557,7 +1557,7 @@ theorem tendsto_filterAt
 
 中文:
 定理 tendsto_filterAt
-  条件: (μ : Measure α) [SFinite μ] (x : α)
+  条件: (μ : 测度 α) [SFinite μ] (x : α)
   证明: by
   intro s hs
   simp only [mem_map]
@@ -1598,7 +1598,7 @@ theorem ae_tendsto_rnDeriv
 
 中文:
 定理 ae_tendsto_rnDeriv
-  条件: (ρ μ : Measure β) [IsLocallyFiniteMeasure μ] [IsLocallyFiniteMeasure ρ]
+  条件: (ρ μ : 测度 β) [是局部有限测度 μ] [是局部有限测度 ρ]
   证明: by
   filter_upwards [VitaliFamily.ae_tendsto_rnDeriv (Besicovitch.vitaliFamily μ) ρ] with x hx
   exact hx.comp (tendsto_filterAt μ x)
@@ -1625,7 +1625,7 @@ theorem ae_tendsto_measure_inter_div_of_measurableSet
 
 中文:
 定理 ae_tendsto_measure_inter_div_of_measurableSet
-  结论: (μ : Measure β) [IsLocallyFiniteMeasure μ]
+  结论: (μ : 测度 β) [是局部有限测度 μ]
   证明: by
   filter_upwards [VitaliFamily.ae_tendsto_measure_inter_div_of_measurableSet
       (Besicovitch.vitaliFamily μ) hs]
@@ -1656,7 +1656,7 @@ theorem ae_tendsto_measure_inter_div
 
 中文:
 定理 ae_tendsto_measure_inter_div
-  条件: (μ : Measure β) [IsLocallyFiniteMeasure μ] (s : Set β)
+  条件: (μ : 测度 β) [是局部有限测度 μ] (s : 集合 β)
   证明: by
   filter_upwards [VitaliFamily.ae_tendsto_measure_inter_div (Besicovitch.vitaliFamily μ) s] with x
     hx using hx.comp (tendsto_filterAt μ x)

@@ -51,7 +51,7 @@ definition fromBinary
 
 中文:
 定义 fromBinary
-  签名: : (自然数 -> 布尔) -> unit整数erval
+  签名: : (自然数 -> 布尔值) -> unit整数erval
   定义体: let φ : (Nat -> Bool) ≃ₜ (Nat -> Fin 2) := Homeomorph.piCongrRight
     (fun _ => finTwoEquiv.toHomeomorphOfDiscrete.symm)
   Subtype.coind (ofDigits ∘ φ) (fun _ => ⟨ofDigits_nonneg _, ofDigits_le_one _⟩)
@@ -73,7 +73,7 @@ theorem fromBinary_continuous
 
 中文:
 定理 fromBinary_continuous
-  结论: Continuous fromBinary
+  结论: 连续 fromBinary
   证明: Continuous.subtype_mk (continuous_ofDigits.comp' (Homeomorph.continuous _)) _
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, Homeomorph, Homeomorph.continuous, continuous, continuous_ofDigits, continuous_ofDigits.comp, subtype_mk
@@ -93,7 +93,7 @@ theorem fromBinary_surjective
 
 中文:
 定理 fromBinary_surjective
-  结论: fromBinary.Surjective
+  结论: fromBinary.满射
   证明: by
   refine Subtype.coind_surjective _ ((ofDigits_SurjOn (by norm_num)).comp ?_)
   simp only [Set.surjOn_univ, Homeomorph.surjective _]
@@ -118,7 +118,7 @@ definition cantorToHilbert
 
 中文:
 定义 cantorToHilbert
-  签名: (x : 自然数 -> 布尔)
+  签名: (x : 自然数 -> 布尔值)
   定义体: Pi.map (fun _ b => fromBinary b) (cantorSpaceHomeomorphNatToCantorSpace x)
 
 Depends on / 依赖: Pi.map, cantorSpaceHomeomorphNatToCantorSpace, fromBinary
@@ -136,7 +136,7 @@ theorem cantorToHilbert_continuous
 
 中文:
 定理 cantorToHilbert_continuous
-  结论: Continuous cantorToHilbert
+  结论: 连续 cantorToHilbert
   证明: continuous_pi (fun _ => fromBinary_continuous.comp (by fun_prop))
 
 Depends on / 依赖: continuous_pi, fromBinary_continuous, fromBinary_continuous.comp, fun_prop
@@ -155,7 +155,7 @@ theorem cantorToHilbert_surjective
 
 中文:
 定理 cantorToHilbert_surjective
-  结论: cantorToHilbert.Surjective
+  结论: cantorToHilbert.满射
   证明: (Function.Surjective.piMap (fun _ => fromBinary_surjective)).comp
     cantorSpaceHomeomorphNatToCantorSpace.surjective
 
@@ -177,8 +177,8 @@ theorem exists_retractionCantorSet
   exact ⟨f, hf.continuous, frange⟩
 
 中文:
-定理 exists_retractionCantorSet
-  结论: {X : Set (自然数 -> 布尔)} (h_closed : IsClosed X)
+定理 存在_retractionCantorSet
+  结论: {X : 集合 (自然数 -> 布尔值)} (h_closed : 是闭集 X)
   证明: by
   obtain ⟨f, fs, frange, hf⟩ := PiNat.exists_lipschitz_retraction_of_isClosed h_closed h_nonempty
   exact ⟨f, hf.continuous, frange⟩
@@ -204,8 +204,8 @@ theorem exists_nat_bool_continuous_surjective_of_compact
   let KH : Set (Nat -> unitInterva
 
 中文:
-定理 exists_nat_bool_continuous_surjective_of_compact
-  结论: (X : 类型) [Nonempty X] [MetricSpace X]
+定理 存在_nat_bool_continuous_surjective_of_compact
+  结论: (X : 类型) [非空 X] [度量空间 X]
   证明: by
   -- `X` is homeomorphic to a closed subset `KH` of the Hilbert cube.
   let : TopologicalSpace.SeparableSpace X :=

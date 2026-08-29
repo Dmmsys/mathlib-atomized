@@ -35,8 +35,8 @@ lemma Submonoid.isOpen_units
   proof: (hU.preimage Units.continuous_val).inter (hU.preimage Units.continuous_coe_inv)
 
 中文:
-引理 Submonoid.isOpen_units
-  结论: {M : 类型} [TopologicalSpace M] [Monoid M]
+引理 子幺半群.isOpen_units
+  结论: {M : 类型} [拓扑空间 M] [幺半群 M]
   证明: (hU.preimage Units.continuous_val).inter (hU.preimage Units.continuous_coe_inv)
 
 Depends on / 依赖: Units.continuous_coe_inv, Units.continuous_val, continuous_coe_inv, continuous_val, hU.preimage, preimage
@@ -63,7 +63,7 @@ definition ContinuousMulEquiv.piUnits
 ⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply
 
 中文:
-定义 ContinuousMulEquiv.piUnits
+定义 连续乘法等价.piUnits
   签名: {ι : 类型}
   定义体: MulEquiv.piUnits
   continuous_toFun := continuous_pi fun _ => Units.continuous_iff.mpr

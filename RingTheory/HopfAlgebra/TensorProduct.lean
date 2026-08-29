@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: HopfAlgebra S (B otimes[R] A)
+  签名: Hopf代数 S (B otimes[R] A)
   定义体: AlgebraTensorModule.map (HopfAlgebra.antipode S) (HopfAlgebra.antipode R)
   mul_antipode_rTensor_comul := by
     ext x y

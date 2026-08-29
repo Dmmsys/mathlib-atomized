@@ -34,7 +34,7 @@ definition convexHull
 
 中文:
 定义 convexHull
-  签名: : ClosureOperator (Set X)
+  签名: : 闭包算子 (集合 X)
   定义体: .ofCompletePred (IsConvexSet R) (fun _ => .sInter)
 
 Depends on / 依赖: IsConvexSet, ofCompletePred, sInter
@@ -104,7 +104,7 @@ lemma convexHull_eq_iInter
   simp [convexHull, iInter_subtype, iInter_and]
 
 中文:
-引理 convexHull_eq_iInter
+引理 convexHull_eq_i整数er
   证明: by
   simp [convexHull, iInter_subtype, iInter_and]
 
@@ -252,7 +252,7 @@ lemma convexHull_empty
 
 中文:
 引理 convexHull_empty
-  结论: convexHull R (∅ : Set X) = ∅
+  结论: convexHull R (∅ : 集合 X) = ∅
   证明: IsConvexSet.empty.convexHull_eq_self
 -/
 @[simp] lemma convexHull_empty : convexHull R (∅ : Set X) = ∅ :=
@@ -289,7 +289,7 @@ protected alias ⟨_, Set.Nonempty.convexHull'⟩ := convexHull_nonempty
 
 中文:
 引理 convexHull_nonempty
-  结论: (convexHull R s).Nonempty ↔ s.Nonempty
+  结论: (convexHull R s).非空 ↔ s.非空
   证明: by
   simp [nonempty_iff_ne_empty]
 
@@ -327,7 +327,7 @@ lemma convexHull_univ
 
 中文:
 引理 convexHull_univ
-  结论: convexHull R (univ : Set X) = univ
+  结论: convexHull R (univ : 集合 X) = univ
   证明: IsConvexSet.univ.convexHull_eq_self
 -/
 @[simp] lemma convexHull_univ : convexHull R (univ : Set X) = univ :=
@@ -450,8 +450,8 @@ lemma IsAffineMap.image_convexHull
   exact ⟨subset_convexHull_self, image_mono subset_convexHull_self⟩
 
 中文:
-引理 IsAffineMap.image_convexHull
-  条件: {f : X -> Y} (hf : IsAffineMap R f) (s : Set X)
+引理 是仿射映射.image_convexHull
+  条件: {f : X -> Y} (hf : 是仿射映射 R f) (s : 集合 X)
   证明: by
   rw [subset_antisymm_iff]; rw [image_subset_iff]; rw [(IsConvexSet.convexHull.preimage hf).convexHull_subset_iff]; rw [← image_subset_iff]; rw [(IsConvexSet.convexHull.image hf).convexHull_subset_iff]
   exact ⟨subset_convexHull_self, image_mono subset_convexHull_self⟩

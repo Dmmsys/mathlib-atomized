@@ -35,8 +35,8 @@ instance Finsupp.wellQuasiOrderedLE
   body: orderIsoFunOnFinite.wellQuasiOrderedLE_iff.2 inferInstance
 
 中文:
-实例 Finsupp.wellQuasiOrderedLE
-  签名: {α σ : 类型} [Zero α] [Preorder α] [WellQuasiOrderedLE α]
+实例 有限支撑.wellQuasiOrderedLE
+  签名: {α σ : 类型} [零 α] [预序 α] [良拟序 α]
   定义体: orderIsoFunOnFinite.wellQuasiOrderedLE_iff.2 inferInstance
 
 Depends on / 依赖: orderIsoFunOnFinite, orderIsoFunOnFinite.wellQuasiOrderedLE_iff, wellQuasiOrderedLE_iff

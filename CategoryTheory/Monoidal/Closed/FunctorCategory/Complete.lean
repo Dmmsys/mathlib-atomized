@@ -42,7 +42,7 @@ abbreviation incl
 
 中文:
 缩写 incl
-  签名: : Discrete I ⥤ I
+  签名: : 离散 I ⥤ I
   定义体: Discrete.functor id
 -/
 private abbrev incl : Discrete I ⥤ I := Discrete.functor id
@@ -67,7 +67,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsIsomorphisms (whiskeringLeft _ _ C).obj (incl I)
+  签名: 反映同构 (whiskeringLeft _ _ C).obj (incl I)
   定义体: by
     simp only [NatTrans.isIso_iff_isIso_app] at *
     intro X
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Comonad.PreservesLimitOfIsCoreflexivePair ((whiskeringLeft _ _ C).obj (incl I))
+  签名: 余单子.保持LimitOfIsCoreflexivePair ((whiskeringLeft _ _ C).obj (incl I))
   定义体: ⟨inferInstance⟩
 
 Depends on / 依赖: precoherent
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: ComonadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I))
+  签名: 余monadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I))
   定义体: Comonad.comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
     ((incl I).ranAdjunction C)
 
@@ -183,7 +183,7 @@ definition functorCategoryMonoidalClosed
 
 中文:
 定义 functorCategoryMonoidalClosed
-  签名: : MonoidalClosed (I ⥤ C) where
+  签名: : 幺半群闭 (I ⥤ C) where
   定义体: functorCategoryClosed I C F
 
 Depends on / 依赖: functorCategoryClosed

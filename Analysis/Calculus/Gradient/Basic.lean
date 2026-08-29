@@ -62,7 +62,7 @@ definition HasGradientAtFilter
 
 中文:
 定义 HasGradientAtFilter
-  签名: (f : F -> 𝕜) (f' x : F) (L : Filter F)
+  签名: (f : F -> 𝕜) (f' x : F) (L : 滤子 F)
   定义体: HasFDerivAtFilter f (toDual 𝕜 F f') (L ×ˢ pure x)
 
 Depends on / 依赖: HasFDerivAtFilter, toDual
@@ -80,7 +80,7 @@ definition HasGradientWithinAt
 
 中文:
 定义 HasGradientWithinAt
-  签名: (f : F -> 𝕜) (f' : F) (s : Set F) (x : F)
+  签名: (f : F -> 𝕜) (f' : F) (s : 集合 F) (x : F)
   定义体: HasGradientAtFilter f f' x (𝓝[s] x)
 
 Depends on / 依赖: HasGradientAtFilter
@@ -116,7 +116,7 @@ definition gradientWithin
 
 中文:
 定义 gradientWithin
-  签名: (f : F -> 𝕜) (s : Set F) (x : F)
+  签名: (f : F -> 𝕜) (s : 集合 F) (x : F)
   定义体: (toDual 𝕜 F).symm (fderivWithin 𝕜 f s x)
 
 Depends on / 依赖: fderivWithin, toDual
@@ -171,7 +171,7 @@ theorem hasGradientWithinAt_iff_hasFDerivWithinAt
 
 中文:
 定理 hasGradientWithinAt_iff_hasFDerivWithinAt
-  条件: {s : Set F}
+  条件: {s : 集合 F}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -191,7 +191,7 @@ theorem hasFDerivWithinAt_iff_hasGradientWithinAt
 
 中文:
 定理 hasFDerivWithinAt_iff_hasGradientWithinAt
-  条件: {frechet : StrongDual 𝕜 F} {s : Set F}
+  条件: {frechet : StrongDual 𝕜 F} {s : 集合 F}
   证明: by
   rw [hasGradientWithinAt_iff_hasFDerivWithinAt]; rw [(toDual 𝕜 F).apply_symm_apply frechet]
 
@@ -649,7 +649,7 @@ theorem HasGradientAt.hasDerivAt
 中文:
 定理 HasGradientAt.hasDerivAt
   条件: (h : HasGradientAt g g' u)
-  结论: HasDerivAt g (conj g') u
+  结论: 在点处可导 g (conj g') u
   证明: by
   rw [hasGradientAt_iff_hasFDerivAt]; rw [hasFDerivAt_iff_hasDerivAt] at h
   simpa using h
@@ -672,8 +672,8 @@ theorem HasDerivAt.hasGradientAt
   simpa
 
 中文:
-定理 HasDerivAt.hasGradientAt
-  条件: (h : HasDerivAt g g' u)
+定理 在点处可导.hasGradientAt
+  条件: (h : 在点处可导 g g' u)
   结论: HasGradientAt g (conj g') u
   证明: by
   rw [hasGradientAt_iff_hasFDerivAt]; rw [hasFDerivAt_iff_hasDerivAt]
@@ -780,8 +780,8 @@ theorem HasDerivAt.hasGradientAt'
   proof: h.hasGradientAt
 
 中文:
-定理 HasDerivAt.hasGradientAt'
-  条件: (h : HasDerivAt g g' u)
+定理 在点处可导.hasGradientAt'
+  条件: (h : 在点处可导 g g' u)
   证明: h.hasGradientAt
 
 Depends on / 依赖: h.hasGradientAt, hasGradientAt
@@ -932,7 +932,7 @@ theorem hasGradientWithinAt_congr_set'
 
 中文:
 定理 hasGradientWithinAt_congr_set'
-  条件: {s t : Set F} (y : F) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: {s t : 集合 F} (y : F) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: hasFDerivWithinAt_congr_set' y h
 
 Depends on / 依赖: hasFDerivWithinAt_congr_set
@@ -951,7 +951,7 @@ theorem hasGradientWithinAt_congr_set
 
 中文:
 定理 hasGradientWithinAt_congr_set
-  条件: {s t : Set F} (h : s =ᶠ[𝓝 x] t)
+  条件: {s t : 集合 F} (h : s =ᶠ[𝓝 x] t)
   证明: hasFDerivWithinAt_congr_set h
 
 Depends on / 依赖: hasFDerivWithinAt_congr_set
@@ -1140,7 +1140,7 @@ theorem Filter.EventuallyEq.hasGradientAtFilter_iff
   proof: (h₀.prodMap <| by assumption).hasFDerivAtFilter_iff by simp [h₁]
 
 中文:
-定理 Filter.EventuallyEq.hasGradientAtFilter_iff
+定理 滤子.EventuallyEq.hasGradientAtFilter_iff
   结论: (h₀ : f₀ =ᶠ[L] f₁) (hx : f₀ x = f₁ x)
   证明: (h₀.prodMap <| by assumption).hasFDerivAtFilter_iff by simp [h₁]
 
@@ -1297,7 +1297,7 @@ theorem Filter.EventuallyEq.gradient_eq
   rwa [Filter.EventuallyEq.fderiv_eq]
 
 中文:
-定理 Filter.EventuallyEq.gradient_eq
+定理 滤子.EventuallyEq.gradient_eq
   条件: (hL : f₁ =ᶠ[𝓝 x] f)
   结论: ∇ f₁ x = ∇ f x
   证明: by
@@ -1320,7 +1320,7 @@ theorem Filter.EventuallyEq.gradient
   proof: h.eventuallyEq_nhds.mono fun _ h => h.gradient_eq
 
 中文:
-定理 Filter.EventuallyEq.gradient
+定理 滤子.EventuallyEq.gradient
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   结论: ∇ f₁ =ᶠ[𝓝 x] ∇ f
   证明: h.eventuallyEq_nhds.mono fun _ h => h.gradient_eq

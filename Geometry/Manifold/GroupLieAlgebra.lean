@@ -63,7 +63,7 @@ abbreviation GroupLieAlgebra
 
 中文:
 缩写 GroupLieAlgebra
-  签名: : Type _
+  签名: : 类型 _
   定义体: TangentSpace% (1 : G)
 
 Depends on / 依赖: TangentSpace
@@ -131,7 +131,7 @@ lemma addInvariantVectorField_smul
 
 中文:
 引理 addInvariantVectorField_smul
-  结论: {G : 类型} [TopologicalSpace G] [ChartedSpace H G] [AddGroup G]
+  结论: {G : 类型} [拓扑空间 G] [Charted空间 H G] [加法群 G]
   证明: by
   ext g
   simp [addInvariantVectorField]
@@ -537,7 +537,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (GroupLieAlgebra I G)
+  签名: Lie环 (GroupLieAlgebra I G)
   定义体: by
     simp only [GroupLieAlgebra.bracket_def, mulInvariantVectorField_add]
     rw [mlieBracket_add_left]
@@ -608,7 +608,7 @@ instance instLieAlgebraGroupLieAlgebra
 
 中文:
 实例 instLieAlgebraGroupLieAlgebra
-  签名: : LieAlgebra 𝕜 (GroupLieAlgebra I G) where
+  签名: : Lie代数 𝕜 (GroupLieAlgebra I G) where
   定义体: by
     simp only [GroupLieAlgebra.bracket_def, mulInvariantVectorField_smul]
     rw [mlieBracket_const_smul_right]

@@ -53,8 +53,8 @@ definition lcm
   body: s.fold GCDMonoid.lcm 1 f
 
 中文:
-定义 lcm
-  签名: (s : Finset β) (f : β -> α)
+定义 最小公倍数
+  签名: (s : 有限集 β) (f : β -> α)
   定义体: s.fold GCDMonoid.lcm 1 f
 
 Depends on / 依赖: GCDMonoid, GCDMonoid.lcm, s.fold
@@ -76,7 +76,7 @@ theorem lcm_def
 
 中文:
 定理 lcm_def
-  结论: s.lcm f = (s.1.map f).lcm
+  结论: s.最小公倍数 f = (s.1.map f).最小公倍数
   证明: rfl
 
 @[simp]
@@ -97,7 +97,7 @@ theorem lcm_empty
 
 中文:
 定理 lcm_empty
-  结论: (∅ : Finset β).lcm f = 1
+  结论: (∅ : 有限集 β).最小公倍数 f = 1
   证明: rfl
 
 @[simp]
@@ -121,7 +121,7 @@ theorem lcm_dvd_iff
 中文:
 定理 lcm_dvd_iff
   条件: {a : α}
-  结论: s.lcm f ∣ a ↔ 对任意 b in s, f b ∣ a
+  结论: s.最小公倍数 f ∣ a ↔ 对任意 b in s, f b ∣ a
   证明: by
   apply Iff.trans Multiset.lcm_dvd
   simp only [Multiset.mem_map, and_imp, exists_imp]
@@ -146,7 +146,7 @@ theorem lcm_dvd
 中文:
 定理 lcm_dvd
   条件: {a : α}
-  结论: (对任意 b in s, f b ∣ a) -> s.lcm f ∣ a
+  结论: (对任意 b in s, f b ∣ a) -> s.最小公倍数 f ∣ a
   证明: lcm_dvd_iff.2
 
 Depends on / 依赖: lcm_dvd_iff
@@ -168,7 +168,7 @@ theorem dvd_lcm
 中文:
 定理 dvd_lcm
   条件: {b : β} (hb : b in s)
-  结论: f b ∣ s.lcm f
+  结论: f b ∣ s.最小公倍数 f
   证明: lcm_dvd_iff.1 dvd_rfl _ hb
 
 @[simp]
@@ -228,7 +228,7 @@ theorem lcm_singleton
 中文:
 定理 lcm_singleton
   条件: {b : β}
-  结论: ({b} : Finset β).lcm f = normalize (f b)
+  结论: ({b} : 有限集 β).最小公倍数 f = normalize (f b)
   证明: Multiset.lcm_singleton
 
 @[local simp] -- This will later be provable by other `simp` lemmas.
@@ -249,7 +249,7 @@ theorem normalize_lcm
 
 中文:
 定理 normalize_lcm
-  结论: normalize (s.lcm f) = s.lcm f
+  结论: normalize (s.最小公倍数 f) = s.最小公倍数 f
   证明: by simp [lcm_def]
 
 Depends on / 依赖: lcm_def
@@ -269,7 +269,7 @@ theorem lcm_union
 中文:
 定理 lcm_union
   条件: [DecidableEq β]
-  结论: (s₁ union s₂).lcm f = GCDMonoid.lcm (s₁.lcm f) (s₂.lcm f)
+  结论: (s₁ union s₂).最小公倍数 f = 最大公约数幺半群.最小公倍数 (s₁.最小公倍数 f) (s₂.最小公倍数 f)
   证明: Finset.induction_on s₁ (by rw [empty_union, lcm_empty, lcm_one_left, normalize_lcm])
     fun a s _ ih => by rw [insert_union, lcm_insert, lcm_insert, ih, lcm_assoc]
 
@@ -315,7 +315,7 @@ theorem lcm_mono_fun
 中文:
 定理 lcm_mono_fun
   条件: {g : β -> α} (h : 对任意 b in s, f b ∣ g b)
-  结论: s.lcm f ∣ s.lcm g
+  结论: s.最小公倍数 f ∣ s.最小公倍数 g
   证明: lcm_dvd fun b hb => (h b hb).trans (dvd_lcm hb)
 
 Depends on / 依赖: dvd_lcm, lcm_dvd
@@ -335,7 +335,7 @@ theorem lcm_mono
 中文:
 定理 lcm_mono
   条件: (h : s₁ subseteq s₂)
-  结论: s₁.lcm f ∣ s₂.lcm f
+  结论: s₁.最小公倍数 f ∣ s₂.最小公倍数 f
   证明: lcm_dvd fun _ hb => dvd_lcm (h hb)
 
 Depends on / 依赖: dvd_lcm, lcm_dvd
@@ -354,7 +354,7 @@ theorem lcm_image
 
 中文:
 定理 lcm_image
-  条件: [DecidableEq β] {g : γ -> β} (s : Finset γ)
+  条件: [DecidableEq β] {g : γ -> β} (s : 有限集 γ)
   证明: by
   classical induction s using Finset.induction <;> simp [*]
 
@@ -378,7 +378,7 @@ theorem lcm_eq_lcm_image
 中文:
 定理 lcm_eq_lcm_image
   条件: [DecidableEq α]
-  结论: s.lcm f = (s.image f).lcm id
+  结论: s.最小公倍数 f = (s.像 f).最小公倍数 id
   证明: Eq.symm lcm_image _
 
 @[simp]
@@ -401,8 +401,8 @@ theorem lcm_eq_zero_iff
 
 中文:
 定理 lcm_eq_zero_iff
-  条件: [Nontrivial α]
-  结论: s.lcm f = 0 ↔ 存在 x in s, f x = 0
+  条件: [非平凡 α]
+  结论: s.最小公倍数 f = 0 ↔ 存在 x in s, f x = 0
   证明: by
   simp only [lcm_def, Multiset.lcm_eq_zero_iff, Multiset.mem_map, mem_val]
 
@@ -423,8 +423,8 @@ theorem lcm_ne_zero_iff
 
 中文:
 定理 lcm_ne_zero_iff
-  条件: [Nontrivial α]
-  结论: s.lcm f != 0 ↔ 对任意 x in s, f x != 0
+  条件: [非平凡 α]
+  结论: s.最小公倍数 f != 0 ↔ 对任意 x in s, f x != 0
   证明: by
   simp [lcm_eq_zero_iff]
 
@@ -449,8 +449,8 @@ definition gcd
   body: s.fold GCDMonoid.gcd 0 f
 
 中文:
-定义 gcd
-  签名: (s : Finset β) (f : β -> α)
+定义 最大公约数
+  签名: (s : 有限集 β) (f : β -> α)
   定义体: s.fold GCDMonoid.gcd 0 f
 
 Depends on / 依赖: GCDMonoid, GCDMonoid.gcd, s.fold
@@ -472,7 +472,7 @@ theorem gcd_def
 
 中文:
 定理 gcd_def
-  结论: s.gcd f = (s.1.map f).gcd
+  结论: s.最大公约数 f = (s.1.map f).最大公约数
   证明: rfl
 
 @[simp]
@@ -491,7 +491,7 @@ theorem gcd_empty
 
 中文:
 定理 gcd_empty
-  结论: (∅ : Finset β).gcd f = 0
+  结论: (∅ : 有限集 β).最大公约数 f = 0
   证明: rfl
 -/
 theorem gcd_empty : (∅ : Finset β).gcd f = 0 :=
@@ -512,7 +512,7 @@ theorem dvd_gcd_iff
 中文:
 定理 dvd_gcd_iff
   条件: {a : α}
-  结论: a ∣ s.gcd f ↔ 对任意 b in s, a ∣ f b
+  结论: a ∣ s.最大公约数 f ↔ 对任意 b in s, a ∣ f b
   证明: by
   apply Iff.trans Multiset.dvd_gcd
   simp only [Multiset.mem_map, and_imp, exists_imp]
@@ -537,7 +537,7 @@ theorem gcd_dvd
 中文:
 定理 gcd_dvd
   条件: {b : β} (hb : b in s)
-  结论: s.gcd f ∣ f b
+  结论: s.最大公约数 f ∣ f b
   证明: dvd_gcd_iff.1 dvd_rfl _ hb
 
 Depends on / 依赖: dvd_gcd_iff, dvd_rfl
@@ -557,7 +557,7 @@ theorem dvd_gcd
 中文:
 定理 dvd_gcd
   条件: {a : α}
-  结论: (对任意 b in s, a ∣ f b) -> a ∣ s.gcd f
+  结论: (对任意 b in s, a ∣ f b) -> a ∣ s.最大公约数 f
   证明: dvd_gcd_iff.2
 
 Depends on / 依赖: dvd_gcd_iff
@@ -638,7 +638,7 @@ theorem gcd_singleton
 中文:
 定理 gcd_singleton
   条件: {b : β}
-  结论: ({b} : Finset β).gcd f = normalize (f b)
+  结论: ({b} : 有限集 β).最大公约数 f = normalize (f b)
   证明: Multiset.gcd_singleton
 
 @[local simp] -- This will later be provable by other `simp` lemmas.
@@ -659,7 +659,7 @@ theorem normalize_gcd
 
 中文:
 定理 normalize_gcd
-  结论: normalize (s.gcd f) = s.gcd f
+  结论: normalize (s.最大公约数 f) = s.最大公约数 f
   证明: by simp [gcd_def]
 
 Depends on / 依赖: gcd_def
@@ -679,7 +679,7 @@ theorem gcd_union
 中文:
 定理 gcd_union
   条件: [DecidableEq β]
-  结论: (s₁ union s₂).gcd f = GCDMonoid.gcd (s₁.gcd f) (s₂.gcd f)
+  结论: (s₁ union s₂).最大公约数 f = 最大公约数幺半群.最大公约数 (s₁.最大公约数 f) (s₂.最大公约数 f)
   证明: Finset.induction_on s₁ (by rw [empty_union, gcd_empty, gcd_zero_left, normalize_gcd])
     fun a s _ ih => by rw [insert_union, gcd_insert, gcd_insert, ih, gcd_assoc]
 
@@ -725,7 +725,7 @@ theorem gcd_mono_fun
 中文:
 定理 gcd_mono_fun
   条件: {g : β -> α} (h : 对任意 b in s, f b ∣ g b)
-  结论: s.gcd f ∣ s.gcd g
+  结论: s.最大公约数 f ∣ s.最大公约数 g
   证明: dvd_gcd fun b hb => (gcd_dvd hb).trans (h b hb)
 
 Depends on / 依赖: dvd_gcd, gcd_dvd
@@ -745,7 +745,7 @@ theorem gcd_mono
 中文:
 定理 gcd_mono
   条件: (h : s₁ subseteq s₂)
-  结论: s₂.gcd f ∣ s₁.gcd f
+  结论: s₂.最大公约数 f ∣ s₁.最大公约数 f
   证明: dvd_gcd fun _ hb => gcd_dvd (h hb)
 
 Depends on / 依赖: dvd_gcd, gcd_dvd
@@ -764,7 +764,7 @@ theorem gcd_image
 
 中文:
 定理 gcd_image
-  条件: [DecidableEq β] {g : γ -> β} (s : Finset γ)
+  条件: [DecidableEq β] {g : γ -> β} (s : 有限集 γ)
   证明: by
   classical induction s using Finset.induction <;> simp [*]
 
@@ -786,7 +786,7 @@ theorem gcd_eq_gcd_image
 中文:
 定理 gcd_eq_gcd_image
   条件: [DecidableEq α]
-  结论: s.gcd f = (s.image f).gcd id
+  结论: s.最大公约数 f = (s.像 f).最大公约数 id
   证明: Eq.symm gcd_image _
 
 Depends on / 依赖: Eq.symm, gcd_image
@@ -807,7 +807,7 @@ theorem gcd_eq_zero_iff
 
 中文:
 定理 gcd_eq_zero_iff
-  结论: s.gcd f = 0 ↔ 对任意 x in s, f x = 0
+  结论: s.最大公约数 f = 0 ↔ 对任意 x in s, f x = 0
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -831,7 +831,7 @@ theorem gcd_ne_zero_iff
 
 中文:
 定理 gcd_ne_zero_iff
-  结论: s.gcd f != 0 ↔ 存在 x in s, f x != 0
+  结论: s.最大公约数 f != 0 ↔ 存在 x in s, f x != 0
   证明: by
   simp [gcd_eq_zero_iff]
 
@@ -957,7 +957,7 @@ theorem extract_gcd
 
 中文:
 定理 extract_gcd
-  条件: (f : β -> α) (hs : s.Nonempty)
+  条件: (f : β -> α) (hs : s.非空)
   证明: by
   classical
     by_cases! h : forall x in s, f x = (0 : α)
@@ -998,7 +998,7 @@ exact mt Finset.gcd_eq_zero_iff.1 fun h => hfi h i his
 中文:
 引理 gcd_div_eq_one
   条件: (his : i in s) (hfi : f i != 0)
-  结论: s.gcd (fun j => f j / s.gcd f) = 1
+  结论: s.最大公约数 (fun j => f j / s.最大公约数 f) = 1
   证明: by
   obtain ⟨g, he, hg⟩ := Finset.extract_gcd f ⟨i, his⟩
   refine (Finset.gcd_congr rfl fun a ha => ?_).trans hg
@@ -1023,7 +1023,7 @@ lemma gcd_div_id_eq_one
 
 中文:
 引理 gcd_div_id_eq_one
-  条件: {s : Finset α} {a : α} (has : a in s) (ha : a != 0)
+  条件: {s : 有限集 α} {a : α} (has : a in s) (ha : a != 0)
   证明: gcd_div_eq_one has ha
 
 Depends on / 依赖: gcd_div_eq_one
@@ -1057,7 +1057,7 @@ theorem gcd_eq_of_dvd_sub
 
 中文:
 定理 gcd_eq_of_dvd_sub
-  结论: {s : Finset β} {f g : β -> α} {a : α}
+  结论: {s : 有限集 β} {f g : β -> α} {a : α}
   证明: by
   classical
     revert h
@@ -1100,9 +1100,9 @@ theorem Int.finsetGcd_nonneg
     grind
 
 中文:
-定理 Int.finsetGcd_nonneg
+定理 整数.finsetGcd_nonneg
   条件: {f : ι -> 整数}
-  结论: 0 <= s.gcd f
+  结论: 0 <= s.最大公约数 f
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp

@@ -36,7 +36,7 @@ theorem prod_atTop_atTop_eq
 
 中文:
 定理 prod_atTop_atTop_eq
-  条件: [Preorder α] [Preorder β]
+  条件: [预序 α] [预序 β]
   证明: by
   cases isEmpty_or_nonempty α
   · subsingleton
@@ -107,7 +107,7 @@ theorem prod_atBot_atBot_eq
 
 中文:
 定理 prod_atBot_atBot_eq
-  条件: [Preorder α] [Preorder β]
+  条件: [预序 α] [预序 β]
   证明: @prod_atTop_atTop_eq αᵒᵈ βᵒᵈ _ _
 
 Depends on / 依赖: prod_atTop_atTop_eq
@@ -127,7 +127,7 @@ theorem prod_map_atTop_eq
 
 中文:
 定理 prod_map_atTop_eq
-  结论: {α₁ α₂ β₁ β₂ : 类型} [Preorder β₁] [Preorder β₂]
+  结论: {α₁ α₂ β₁ β₂ : 类型} [预序 β₁] [预序 β₂]
   证明: by
   rw [prod_map_map_eq]; rw [prod_atTop_atTop_eq]; rw [Prod.map_def]
 
@@ -147,7 +147,7 @@ theorem prod_map_atBot_eq
 
 中文:
 定理 prod_map_atBot_eq
-  结论: {α₁ α₂ β₁ β₂ : 类型} [Preorder β₁] [Preorder β₂]
+  结论: {α₁ α₂ β₁ β₂ : 类型} [预序 β₁] [预序 β₂]
   证明: @prod_map_atTop_eq _ _ β₁ᵒᵈ β₂ᵒᵈ _ _ _ _
 
 Depends on / 依赖: prod_map_atTop_eq
@@ -169,8 +169,8 @@ theorem tendsto_atBot_diagonal
 
 中文:
 定理 tendsto_atBot_diagonal
-  条件: [Preorder α]
-  结论: Tendsto (fun a : α => (a, a)) atBot atBot
+  条件: [预序 α]
+  结论: 收敛 (fun a : α => (a, a)) atBot atBot
   证明: by
   rw [← prod_atBot_atBot_eq]
   exact tendsto_id.prodMk tendsto_id
@@ -194,8 +194,8 @@ theorem tendsto_atTop_diagonal
 
 中文:
 定理 tendsto_atTop_diagonal
-  条件: [Preorder α]
-  结论: Tendsto (fun a : α => (a, a)) atTop atTop
+  条件: [预序 α]
+  结论: 收敛 (fun a : α => (a, a)) atTop atTop
   证明: by
   rw [← prod_atTop_atTop_eq]
   exact tendsto_id.prodMk tendsto_id
@@ -217,8 +217,8 @@ theorem Tendsto.prod_map_prod_atBot
   exact hf.prodMap hg
 
 中文:
-定理 Tendsto.prod_map_prod_atBot
-  结论: [Preorder γ] {F : Filter α} {G : Filter β} {f : α -> γ}
+定理 收敛.prod_map_prod_atBot
+  结论: [预序 γ] {F : 滤子 α} {G : 滤子 β} {f : α -> γ}
   证明: by
   rw [← prod_atBot_atBot_eq]
   exact hf.prodMap hg
@@ -242,8 +242,8 @@ theorem Tendsto.prod_map_prod_atTop
   exact hf.prodMap hg
 
 中文:
-定理 Tendsto.prod_map_prod_atTop
-  结论: [Preorder γ] {F : Filter α} {G : Filter β} {f : α -> γ}
+定理 收敛.prod_map_prod_atTop
+  结论: [预序 γ] {F : 滤子 α} {G : 滤子 β} {f : α -> γ}
   证明: by
   rw [← prod_atTop_atTop_eq]
   exact hf.prodMap hg
@@ -267,8 +267,8 @@ theorem Tendsto.prod_atBot
   exact hf.prod_map_prod_atBot hg
 
 中文:
-定理 Tendsto.prod_atBot
-  结论: [Preorder α] [Preorder γ] {f g : α -> γ}
+定理 收敛.prod_atBot
+  结论: [预序 α] [预序 γ] {f g : α -> γ}
   证明: by
   rw [← prod_atBot_atBot_eq]
   exact hf.prod_map_prod_atBot hg
@@ -292,8 +292,8 @@ theorem Tendsto.prod_atTop
   exact hf.prod_map_prod_atTop hg
 
 中文:
-定理 Tendsto.prod_atTop
-  结论: [Preorder α] [Preorder γ] {f g : α -> γ}
+定理 收敛.prod_atTop
+  结论: [预序 α] [预序 γ] {f g : α -> γ}
   证明: by
   rw [← prod_atTop_atTop_eq]
   exact hf.prod_map_prod_atTop hg
@@ -317,7 +317,7 @@ theorem eventually_atBot_prod_self
 
 中文:
 定理 eventually_atBot_prod_self
-  结论: [Nonempty α] [Preorder α] [IsCodirectedOrder α]
+  结论: [非空 α] [预序 α] [IsCodirectedOrder α]
   证明: by
   simp [← prod_atBot_atBot_eq, (@atBot_basis α _ _).prod_self.eventually_iff]
 
@@ -337,7 +337,7 @@ theorem eventually_atTop_prod_self
 
 中文:
 定理 eventually_atTop_prod_self
-  结论: [Nonempty α] [Preorder α] [IsDirectedOrder α]
+  结论: [非空 α] [预序 α] [IsDirectedOrder α]
   证明: eventually_atBot_prod_self (α := αᵒᵈ)
 
 Depends on / 依赖: eventually_atBot_prod_self
@@ -357,7 +357,7 @@ theorem eventually_atBot_prod_self'
 
 中文:
 定理 eventually_atBot_prod_self'
-  结论: [Nonempty α] [Preorder α] [IsCodirectedOrder α]
+  结论: [非空 α] [预序 α] [IsCodirectedOrder α]
   证明: by
   simp only [eventually_atBot_prod_self, forall_cond_comm]
 
@@ -378,7 +378,7 @@ theorem eventually_atTop_prod_self'
 
 中文:
 定理 eventually_atTop_prod_self'
-  结论: [Nonempty α] [Preorder α] [IsDirectedOrder α]
+  结论: [非空 α] [预序 α] [IsDirectedOrder α]
   证明: by
   simp only [eventually_atTop_prod_self, forall_cond_comm]
 
@@ -400,7 +400,7 @@ theorem eventually_atTop_curry
 
 中文:
 定理 eventually_atTop_curry
-  结论: [Preorder α] [Preorder β] {p : α × β -> 命题}
+  结论: [预序 α] [预序 β] {p : α × β -> 命题}
   证明: by
   rw [← prod_atTop_atTop_eq] at hp
   exact hp.curry
@@ -422,7 +422,7 @@ theorem eventually_atBot_curry
 
 中文:
 定理 eventually_atBot_curry
-  结论: [Preorder α] [Preorder β] {p : α × β -> 命题}
+  结论: [预序 α] [预序 β] {p : α × β -> 命题}
   证明: @eventually_atTop_curry αᵒᵈ βᵒᵈ _ _ _ hp
 
 Depends on / 依赖: eventually_atTop_curry

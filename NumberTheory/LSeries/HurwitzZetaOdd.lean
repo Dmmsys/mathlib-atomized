@@ -67,7 +67,7 @@ definition jacobiTheta₂''
 
 中文:
 定义 jacobiTheta₂''
-  签名: (z τ : Complex)
+  签名: (z τ : 复形)
   定义体: cexp (π * I * z ^ 2 * τ) * (jacobiTheta₂' (z * τ) τ / (2 * π * I) + z * jacobiTheta₂ (z * τ) τ)
 -/
 def jacobiTheta₂'' (z τ : Complex) : Complex :=
@@ -85,7 +85,7 @@ lemma jacobiTheta₂''_conj
 
 中文:
 引理 jacobiTheta₂''_conj
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   simp [jacobiTheta₂'', jacobiTheta₂'_conj, jacobiTheta₂_conj, ← exp_conj, map_ofNat, div_neg,
     neg_div, jacobiTheta₂'_neg_left]
@@ -112,7 +112,7 @@ lemma jacobiTheta₂''_add_left
 
 中文:
 引理 jacobiTheta₂''_add_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂'' (z + 1) τ = jacobiTheta₂'' z τ
   证明: by
   simp only [jacobiTheta₂'', add_mul z 1, one_mul, jacobiTheta₂'_add_left', jacobiTheta₂_add_left']
@@ -145,7 +145,7 @@ lemma jacobiTheta₂''_neg_left
 
 中文:
 引理 jacobiTheta₂''_neg_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂'' (-z) τ = -jacobiTheta₂'' z τ
   证明: by
   simp [jacobiTheta₂'', jacobiTheta₂'_neg_left, neg_div, -neg_add_rev, ← neg_add]
@@ -167,7 +167,7 @@ lemma jacobiTheta₂'_functional_equation'
 
 中文:
 引理 jacobiTheta₂'_functional_equation'
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   rcases eq_or_ne τ 0 with rfl | hτ
   · rw [jacobiTheta₂'_undef _ (by simp), mul_zero, zero_cpow (by simp), div_zero, zero_mul]
@@ -459,7 +459,7 @@ lemma continuousOn_oddKernel
 中文:
 引理 continuousOn_oddKernel
   条件: (a : UnitAddCircle)
-  结论: ContinuousOn (oddKernel a) (Ioi 0)
+  结论: ContinuousOn (oddKernel a) (左开右无界区间 0)
   证明: by
   induction a using QuotientAddGroup.induction_on with | H a =>
   suffices ContinuousOn (fun x => (oddKernel a x : Complex)) (Ioi 0) from
@@ -500,7 +500,7 @@ lemma continuousOn_sinKernel
 中文:
 引理 continuousOn_sinKernel
   条件: (a : UnitAddCircle)
-  结论: ContinuousOn (sinKernel a) (Ioi 0)
+  结论: ContinuousOn (sinKernel a) (左开右无界区间 0)
   证明: by
   induction a using QuotientAddGroup.induction_on with | H a =>
   suffices ContinuousOn (fun x => (sinKernel a x : Complex)) (Ioi 0) from
@@ -841,7 +841,7 @@ lemma isStrong_hurwitzOddFEPair
 中文:
 引理 isStrong_hurwitzOddFEPair
   条件: (a : UnitAddCircle)
-  结论: IsStrongFEPair (hurwitzOddFEPair a) where
+  结论: 是StrongFEPair (hurwitzOddFEPair a) where
   证明: rfl
   hg₀ := rfl
 -/
@@ -865,7 +865,7 @@ definition completedHurwitzZetaOdd
 
 中文:
 定义 completedHurwitzZetaOdd
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzOddFEPair a).Λ ((s + 1) / 2)) / 2
 
 Depends on / 依赖: hurwitzOddFEPair
@@ -905,7 +905,7 @@ definition completedSinZeta
 
 中文:
 定义 completedSinZeta
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzOddFEPair a).symm.Λ ((s + 1) / 2)) / 2
 
 Depends on / 依赖: hurwitzOddFEPair
@@ -948,7 +948,7 @@ lemma completedHurwitzZetaOdd_neg
 
 中文:
 引理 completedHurwitzZetaOdd_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedHurwitzZetaOdd, (isStrong_hurwitzOddFEPair _).Λ_eq, mellin,
     oddKernel_neg, integral_neg, neg_div]
@@ -972,7 +972,7 @@ lemma completedSinZeta_neg
 
 中文:
 引理 completedSinZeta_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedSinZeta, (isStrong_hurwitzOddFEPair _).symm_Λ_eq, mellin, sinKernel_neg,
     integral_neg, neg_div]
@@ -995,7 +995,7 @@ theorem completedHurwitzZetaOdd_one_sub
 
 中文:
 定理 completedHurwitzZetaOdd_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [completedHurwitzZetaOdd]; rw [completedSinZeta]; rw [(by { push_cast; ring } : (1 - s + 1) / 2 = ↑(3 / 2 : Real) - (s + 1) / 2)]; rw [← hurwitzOddFEPair_k]; rw [(hurwitzOddFEPair a).functional_equation ((s + 1) / 2)]; rw [hurwitzOddFEPair_ε]; rw [one_smul]
 
@@ -1016,7 +1016,7 @@ lemma completedSinZeta_one_sub
 
 中文:
 引理 completedSinZeta_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [← completedHurwitzZetaOdd_one_sub]
 
@@ -1045,7 +1045,7 @@ lemma hasSum_int_completedSinZeta
 
 中文:
 引理 hasSum_int_completedSinZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   let c (n : Int) : Complex := -I * cexp (2 * π * I * a * n) / 2
   have hc (n : Int) : ‖c n‖ = 1 / 2 := by
@@ -1093,7 +1093,7 @@ lemma hasSum_nat_completedSinZeta
 
 中文:
 引理 hasSum_nat_completedSinZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   have := (hasSum_int_completedSinZeta a hs).nat_add_neg
   simp_rw [Int.sign_zero, Int.cast_zero, mul_zero, zero_mul, zero_div, add_zero, abs_neg,
@@ -1136,7 +1136,7 @@ lemma hasSum_int_completedHurwitzZetaOdd
 
 中文:
 引理 hasSum_int_completedHurwitzZetaOdd
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   let r (n : Int) : Real := n + a
   let c (n : Int) : Complex := 1 / 2
@@ -1179,7 +1179,7 @@ definition hurwitzZetaOdd
 
 中文:
 定义 hurwitzZetaOdd
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: completedHurwitzZetaOdd a s / GammaReal (s + 1)
 
 Depends on / 依赖: GammaReal, completedHurwitzZetaOdd
@@ -1198,7 +1198,7 @@ lemma hurwitzZetaOdd_neg
 
 中文:
 引理 hurwitzZetaOdd_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp_rw [hurwitzZetaOdd, completedHurwitzZetaOdd_neg, neg_div]
 
@@ -1240,7 +1240,7 @@ definition sinZeta
 
 中文:
 定义 sinZeta
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: completedSinZeta a s / GammaReal (s + 1)
 
 Depends on / 依赖: GammaReal, completedSinZeta
@@ -1259,7 +1259,7 @@ lemma sinZeta_neg
 
 中文:
 引理 sinZeta_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp_rw [sinZeta, completedSinZeta_neg, neg_div]
 
@@ -1304,7 +1304,7 @@ theorem hasSum_int_hurwitzZetaOdd
 
 中文:
 定理 hasSum_int_hurwitzZetaOdd
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   refine ((hasSum_int_completedHurwitzZetaOdd a hs).div_const (GammaReal _)).congr_fun fun n => ?_
   have : 0 < re (s + 1) := by rw [add_re, one_re]; positivity
@@ -1332,7 +1332,7 @@ lemma hasSum_nat_hurwitzZetaOdd
 
 中文:
 引理 hasSum_nat_hurwitzZetaOdd
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   refine (hasSum_int_hurwitzZetaOdd a hs).nat_add_neg_add_one.congr_fun fun n => ?_
   rw [Int.cast_neg]; rw [Int.cast_add]; rw [Int.cast_one]; rw [sub_div]; rw [sub_eq_add_neg]; rw [Int.cast_natCast]
@@ -1364,7 +1364,7 @@ lemma hasSum_nat_hurwitzZetaOdd_of_mem_Icc
 
 中文:
 引理 hasSum_nat_hurwitzZetaOdd_of_mem_Icc
-  条件: {a : 实数} (ha : a in Icc 0 1) {s : Complex} (hs : 1 < re s)
+  条件: {a : 实数} (ha : a in 闭区间 0 1) {s : 复形} (hs : 1 < re s)
   证明: by
   refine (hasSum_nat_hurwitzZetaOdd a hs).congr_fun fun n => ?_
   suffices forall b : Real, 0 <= b -> SignType.sign (n + b) / (↑|n + b| : Complex) ^ s = 1 / (n + b) ^ s by
@@ -1402,7 +1402,7 @@ theorem hasSum_int_sinZeta
 
 中文:
 定理 hasSum_int_sinZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   rw [sinZeta]
   refine ((hasSum_int_completedSinZeta a hs).div_const (GammaReal (s + 1))).congr_fun fun n => ?_
@@ -1435,7 +1435,7 @@ lemma hasSum_nat_sinZeta
 
 中文:
 引理 hasSum_nat_sinZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   have := (hasSum_int_sinZeta a hs).nat_add_neg
   simp_rw [abs_neg, Int.sign_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero,
@@ -1468,7 +1468,7 @@ lemma LSeriesHasSum_sin
 
 中文:
 引理 LSeriesHasSum_sin
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: (hasSum_nat_sinZeta a hs).congr_fun (LSeries.term_of_ne_zero' (ne_zero_of_one_lt_re hs) _)
 
 Depends on / 依赖: LSeries, LSeries.term_of_ne_zero, congr_fun, hasSum_nat_sinZeta, ne_zero_of_one_lt_re, term_of_ne_zero
@@ -1530,7 +1530,7 @@ lemma hurwitzZetaOdd_one_sub
 
 中文:
 引理 hurwitzZetaOdd_one_sub
-  条件: (a : UnitAddCircle) {s : Complex} (hs : 对任意 (n : 自然数), s != -n)
+  条件: (a : UnitAddCircle) {s : 复形} (hs : 对任意 (n : 自然数), s != -n)
   证明: by
   rw [← GammaComplex]; rw [hurwitzZetaOdd]; rw [(by ring : 1 - s + 1 = 2 - s)]; rw [div_eq_mul_inv]; rw [inv_GammaReal_two_sub hs]; rw [completedHurwitzZetaOdd_one_sub]; rw [sinZeta]; rw [← div_eq_mul_inv]; rw [← mul_div_assoc]; rw [← mul_div_assoc]; rw [mul_comm]
 
@@ -1551,7 +1551,7 @@ lemma sinZeta_one_sub
 
 中文:
 引理 sinZeta_one_sub
-  条件: (a : UnitAddCircle) {s : Complex} (hs : 对任意 (n : 自然数), s != -n)
+  条件: (a : UnitAddCircle) {s : 复形} (hs : 对任意 (n : 自然数), s != -n)
   证明: by
   rw [← GammaComplex]; rw [sinZeta]; rw [(by ring : 1 - s + 1 = 2 - s)]; rw [div_eq_mul_inv]; rw [inv_GammaReal_two_sub hs]; rw [completedSinZeta_one_sub]; rw [hurwitzZetaOdd]; rw [← div_eq_mul_inv]; rw [← mul_div_assoc]; rw [← mul_div_assoc]; rw [mul_comm]
 

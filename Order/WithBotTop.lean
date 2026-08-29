@@ -83,7 +83,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective (WithBotTop.coe : ι -> _)
+  结论: 函数.单射 (WithBotTop.coe : ι -> _)
   证明: by rintro _ _ ⟨⟩; rfl
 -/
 theorem coe_injective : Function.Injective (WithBotTop.coe : ι -> _) := by rintro _ _ ⟨⟩; rfl
@@ -275,8 +275,8 @@ theorem coe_strictMono
 
 中文:
 定理 coe_strictMono
-  条件: [Preorder ι]
-  结论: StrictMono (WithBotTop.coe : ι -> _)
+  条件: [预序 ι]
+  结论: 严格递增 (WithBotTop.coe : ι -> _)
   证明: WithBot.coe_strictMono.comp WithTop.coe_strictMono
 
 Depends on / 依赖: WithBot, WithBot.coe_strictMono.comp, WithTop, WithTop.coe_strictMono, coe_strictMono
@@ -294,7 +294,7 @@ lemma coe_monotone
 
 中文:
 引理 coe_monotone
-  条件: [Preorder ι]
+  条件: [预序 ι]
   证明: fun _ _ _ => by simpa
 -/
 lemma coe_monotone [Preorder ι] :
@@ -311,7 +311,7 @@ abbreviation EInt
   body: WithBotTop Int
 
 中文:
-缩写 EInt
+缩写 E整数
   定义体: WithBotTop Int
 
 Depends on / 依赖: WithBotTop

@@ -705,7 +705,7 @@ theorem res_injective
 
 中文:
 定理 res_injective
-  结论: Injective (@res α)
+  结论: 单射 (@res α)
   证明: by
   intro x y h
   ext n
@@ -916,7 +916,7 @@ theorem dist_triangle_nonarch
 中文:
 定理 dist_triangle_nonarch
   条件: (x y z : 对任意 n, E n)
-  结论: dist x z <= max (dist x y) (dist y z)
+  结论: dist x z <= 最大值 (dist x y) (dist y z)
   证明: by
   rcases eq_or_ne x z with (rfl | hxz)
   · simp [PiNat.dist_self x, PiNat.dist_nonneg]
@@ -1086,7 +1086,7 @@ theorem lipschitz_with_one_iff_forall_dist_image_le_of_mem_cylinder
 
 
 中文:
-定理 lipschitz_with_one_iff_forall_dist_image_le_of_mem_cylinder
+定理 lipschitz_with_one_iff_对任意_dist_image_le_of_mem_cylinder
   结论: {α : 类型}
   证明: by
   constructor
@@ -1138,7 +1138,7 @@ theorem isOpen_cylinder
 中文:
 定理 isOpen_cylinder
   条件: (x : 对任意 n, E n) (n : 自然数)
-  结论: IsOpen (cylinder x n)
+  结论: 是开集 (cylinder x n)
   证明: by
   rw [PiNat.cylinder_eq_pi]
   exact isOpen_set_pi (Finset.range n).finite_toSet fun a _ => isOpen_discrete _
@@ -1216,7 +1216,7 @@ theorem isOpen_iff_dist
 
 中文:
 定理 isOpen_iff_dist
-  条件: (s : Set (对任意 n, E n))
+  条件: (s : 集合 (对任意 n, E n))
   证明: by
   constructor
   · intro hs x hx
@@ -1264,7 +1264,7 @@ definition metricSpace
 
 中文:
 定义 metricSpace
-  签名: : MetricSpace (对任意 n, E n)
+  签名: : 度量空间 (对任意 n, E n)
   定义体: MetricSpace.ofDistTopology dist PiNat.dist_self PiNat.dist_comm PiNat.dist_triangle
     isOpen_iff_dist PiNat.eq_of_dist_eq_zero
 -/
@@ -1291,7 +1291,7 @@ definition metricSpaceOfDiscreteUniformity
 
 中文:
 定义 metricSpaceOfDiscreteUniformity
-  签名: {E : 自然数 -> 类型} [对任意 n, UniformSpace (E n)]
+  签名: {E : 自然数 -> 类型} [对任意 n, 一致空间 (E n)]
   定义体: haveI : forall n, DiscreteTopology (E n) := fun n => discreteTopology_of_discrete_uniformity (h n)
   { dist_triangle := PiNat.dist_triangle
     dist_comm := PiNat.dist_comm
@@ -1344,8 +1344,8 @@ definition metricSpaceNatNat
   body: PiNat.metricSpaceOfDiscreteUniformity fun _ => rfl
 
 中文:
-定义 metricSpaceNatNat
-  签名: : MetricSpace (自然数 -> 自然数)
+定义 metricSpace自然数自然数
+  签名: : 度量空间 (自然数 -> 自然数)
   定义体: PiNat.metricSpaceOfDiscreteUniformity fun _ => rfl
 
 Depends on / 依赖: PiNat.metricSpaceOfDiscreteUniformity, metricSpaceOfDiscreteUniformity
@@ -1371,7 +1371,7 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  结论: CompleteSpace (对任意 n, E n)
+  结论: 完备空间 (对任意 n, E n)
   证明: by
   refine Metric.complete_of_convergent_controlled_sequences (fun n => (1 / 2) ^ n) (by simp) ?_
   intro u hu
@@ -1401,7 +1401,7 @@ theorem boundedSpace
 
 中文:
 定理 boundedSpace
-  结论: BoundedSpace (对任意 n, E n)
+  结论: 有界空间 (对任意 n, E n)
   证明: by
   rw [Metric.boundedSpace_iff]
   use 1
@@ -1428,8 +1428,8 @@ theorem exists_disjoint_cylinder
   a
 
 中文:
-定理 exists_disjoint_cylinder
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s) {x : 对任意 n, E n}
+定理 存在_disjoint_cylinder
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) {x : 对任意 n, E n}
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hne)
   · exact ⟨0, by simp⟩
@@ -1466,7 +1466,7 @@ definition shortestPrefixDiff
 
 中文:
 定义 shortestPrefixDiff
-  签名: {E : 自然数 -> 类型} (x : 对任意 n, E n) (s : Set (对任意 n, E n))
+  签名: {E : 自然数 -> 类型} (x : 对任意 n, E n) (s : 集合 (对任意 n, E n))
   定义体: if h : exists n, Disjoint s (cylinder x n) then Nat.find h else 0
 
 Depends on / 依赖: Disjoint, Nat.find, cylinder
@@ -1493,7 +1493,7 @@ theorem firstDiff_lt_shortestPrefixDiff
 
 中文:
 定理 firstDiff_lt_shortestPrefixDiff
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s) {x y : 对任意 n, E n}
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) {x y : 对任意 n, E n}
   证明: by
   have A := exists_disjoint_cylinder hs hx
   rw [shortestPrefixDiff]; rw [dif_pos A]
@@ -1531,7 +1531,7 @@ theorem shortestPrefixDiff_pos
 
 中文:
 定理 shortestPrefixDiff_pos
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s) (hne : s.Nonempty)
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) (hne : s.非空)
   证明: by
   rcases hne with ⟨y, hy⟩
   exact (firstDiff_lt_shortestPrefixDiff hs hx hy).pos
@@ -1553,7 +1553,7 @@ definition longestPrefix
 
 中文:
 定义 longestPrefix
-  签名: {E : 自然数 -> 类型} (x : 对任意 n, E n) (s : Set (对任意 n, E n))
+  签名: {E : 自然数 -> 类型} (x : 对任意 n, E n) (s : 集合 (对任意 n, E n))
   定义体: shortestPrefixDiff x s - 1
 
 Depends on / 依赖: shortestPrefixDiff
@@ -1574,7 +1574,7 @@ theorem firstDiff_le_longestPrefix
 
 中文:
 定理 firstDiff_le_longestPrefix
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s) {x y : 对任意 n, E n}
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) {x y : 对任意 n, E n}
   证明: by
   rw [longestPrefix]; rw [le_tsub_iff_right]
   · exact firstDiff_lt_shortestPrefixDiff hs hx hy
@@ -1605,7 +1605,7 @@ theorem inter_cylinder_longestPrefix_nonempty
 
 中文:
 定理 inter_cylinder_longestPrefix_nonempty
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s)
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s)
   证明: by
   by_cases hx : x in s
   · exact ⟨x, hx, self_mem_cylinder _ _⟩
@@ -1647,7 +1647,7 @@ theorem disjoint_cylinder_of_longestPrefix_lt
 
 中文:
 定理 disjoint_cylinder_of_longestPrefix_lt
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s) {x : 对任意 n, E n}
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) {x : 对任意 n, E n}
   证明: by
   contrapose! hn
   rcases not_disjoint_iff_nonempty_inter.1 hn with ⟨y, ys, hy⟩
@@ -1726,8 +1726,8 @@ theorem exists_lipschitz_retraction_of_isClosed
 
 
 中文:
-定理 exists_lipschitz_retraction_of_isClosed
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s)
+定理 存在_lipschitz_retraction_of_isClosed
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s)
   证明: by
   /- The map `f` is defined as follows. For `x ∈ s`, let `f x = x`. Otherwise, consider the longest
     prefix `w` that `x` shares with an element of `s`, and let `f x = z_w` where `z_w` is an element
@@ -1846,8 +1846,8 @@ theorem exists_retraction_of_isClosed
   exact ⟨f, fs, frange, hf.continuous⟩
 
 中文:
-定理 exists_retraction_of_isClosed
-  条件: {s : Set (对任意 n, E n)} (hs : IsClosed s) (hne : s.Nonempty)
+定理 存在_retraction_of_isClosed
+  条件: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s) (hne : s.非空)
   证明: by
   rcases exists_lipschitz_retraction_of_isClosed hs hne with ⟨f, fs, frange, hf⟩
   exact ⟨f, fs, frange, hf.continuous⟩
@@ -1873,8 +1873,8 @@ have A : forall x : range f, rangeFactorization f x = x := fun x => Subtype.ext 
   exact ⟨rangeFactorization f
 
 中文:
-定理 exists_retraction_subtype_of_isClosed
-  结论: {s : Set (对任意 n, E n)} (hs : IsClosed s)
+定理 存在_retraction_subtype_of_isClosed
+  结论: {s : 集合 (对任意 n, E n)} (hs : 是闭集 s)
   证明: by
   obtain ⟨f, fs, rfl, f_cont⟩ :
     exists f : (forall n, E n) -> forall n, E n, (forall x in s, f x = x) ∧ range f = s ∧ Continuous f :=
@@ -1910,8 +1910,8 @@ theorem exists_nat_nat_continuous_surjective_of_completeSpace
     balls `closedBall (u 
 
 中文:
-定理 exists_nat_nat_continuous_surjective_of_completeSpace
-  结论: (α : 类型) [MetricSpace α]
+定理 存在_nat_nat_continuous_surjective_of_completeSpace
+  结论: (α : 类型) [度量空间 α]
   证明: by
   /- First, we define a surjective map from a closed subset `s` of `ℕ → ℕ`. Then, we compose
     this map with a retraction of `ℕ → ℕ` onto `s` to obtain the desired map.
@@ -2162,7 +2162,7 @@ definition pseudoEMetricSpace
 
 中文:
 定义 pseudoEMetricSpace
-  签名: : PseudoEMetricSpace (对任意 i, F i) where
+  签名: : PseudoEMetric空间 (对任意 i, F i) where
   定义体: by simp [edist_eq_tsum]
   edist_comm x y := by simp [edist_eq_tsum, edist_comm]
   edist_triangle x y z := calc
@@ -2245,7 +2245,7 @@ definition emetricSpace
 
 中文:
 定义 emetricSpace
-  签名: : EMetricSpace (对任意 i, F i) where
+  签名: : 广义度量空间 (对任意 i, F i) where
   定义体: by simp [edist_eq_tsum, funext_iff]
 -/
 protected def emetricSpace : EMetricSpace (forall i, F i) where
@@ -2294,7 +2294,7 @@ lemma dist_eq_tsum
 中文:
 引理 dist_eq_tsum
   条件: (x y : 对任意 i, F i)
-  结论: dist x y = ∑' i, min (2⁻¹ ^ encode i) (dist (x i) (y i))
+  结论: dist x y = ∑' i, 最小值 (2⁻¹ ^ encode i) (dist (x i) (y i))
   证明: rfl
 -/
 lemma dist_eq_tsum (x y : forall i, F i) : dist x y = ∑' i, min (2⁻¹ ^ encode i) (dist (x i) (y i)) :=
@@ -2387,7 +2387,7 @@ definition pseudoMetricSpace
 
 中文:
 定义 pseudoMetricSpace
-  签名: : PseudoMetricSpace (对任意 i, F i)
+  签名: : 伪度量空间 (对任意 i, F i)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist (fun x y => by rw [dist_eq_tsum]; positivity)
   fun x y => by
     rw [edist_eq_tsum]; rw [dist_eq_tsum]; rw [ENNReal.ofReal_tsum_of_nonneg (fun _ => by positivity) (dist_summable ..)]
@@ -2422,7 +2422,7 @@ definition metricSpace
 
 中文:
 定义 metricSpace
-  签名: : MetricSpace (对任意 i, F i)
+  签名: : 度量空间 (对任意 i, F i)
   定义体: EMetricSpace.toMetricSpaceOfDist dist (by simp) (by simp [edist_dist])
 -/
 protected def metricSpace : MetricSpace (forall i, F i) :=
@@ -2452,7 +2452,7 @@ structure PiNatEmbed
     - ofPiNat : X
 
 中文:
-结构 PiNatEmbed
+结构 Pi自然数Embed
   参数: (X : 类型) (Y : ι -> 类型) (f : 对任意 i, X -> Y i)
   公理与运算 (2 个):
     - toPiNat : :
@@ -2501,7 +2501,7 @@ definition toPiNatEquiv
   right_inv _ := rfl
 
 中文:
-定义 toPiNatEquiv
+定义 toPi自然数Equiv
   签名: : X ≃ Pi自然数Embed X Y f where
   定义体: toPiNat
   invFun := ofPiNat
@@ -2526,7 +2526,7 @@ lemma ofPiNat_inj
   proof: (toPiNatEquiv X Y f).symm.injective.eq_iff
 
 中文:
-引理 ofPiNat_inj
+引理 ofPi自然数_inj
   条件: {x y : Pi自然数Embed X Y f}
   结论: x.ofPi自然数 = y.ofPi自然数 ↔ x = y
   证明: (toPiNatEquiv X Y f).symm.injective.eq_iff
@@ -2544,7 +2544,7 @@ lemma «forall»
   proof: (toPiNatEquiv X Y f).symm.forall_congr_left
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {P : Pi自然数Embed X Y f -> 命题}
   结论: (对任意 x, P x) ↔ 对任意 x, P (toPi自然数 x)
   证明: (toPiNatEquiv X Y f).symm.forall_congr_left
@@ -2581,7 +2581,7 @@ lemma embed_injective
 
 中文:
 引理 embed_injective
-  条件: (separating_f : Pairwise fun x y => 存在 i, f i x != f i y)
+  条件: (separating_f : 两两 fun x y => 存在 i, f i x != f i y)
   证明: by
   simpa [Pairwise, not_imp_comm (a := _ = _), funext_iff, Function.Injective] using! separating_f
 
@@ -2606,7 +2606,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (Pi自然数Embed X Y f)
+  签名: PseudoEMetric空间 (Pi自然数Embed X Y f)
   定义体: .induced (embed X Y f) PiCountable.pseudoEMetricSpace
 
 Depends on / 依赖: PiCountable, PiCountable.pseudoEMetricSpace, induced, pseudoEMetricSpace
@@ -2640,7 +2640,7 @@ lemma isometry_embed
 
 中文:
 引理 isometry_embed
-  结论: Isometry (embed X Y f)
+  结论: 等距 (embed X Y f)
   证明: PseudoEMetricSpace.isometry_induced _
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.isometry_induced, isometry_induced
@@ -2662,7 +2662,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (Pi自然数Embed X Y f)
+  签名: 伪度量空间 (Pi自然数Embed X Y f)
   定义体: .induced (embed X Y f) PiCountable.pseudoMetricSpace
 
 Depends on / 依赖: PiCountable, PiCountable.pseudoMetricSpace, induced, pseudoMetricSpace
@@ -2700,8 +2700,8 @@ lemma continuous_toPiNat
 apply continuous_tsum (by fun_prop) summable_geometric_two_encode by simp [abs_of_nonneg]
 
 中文:
-引理 continuous_toPiNat
-  条件: (continuous_f : 对任意 i, Continuous (f i))
+引理 continuous_toPi自然数
+  条件: (continuous_f : 对任意 i, 连续 (f i))
   证明: by
   rw [continuous_iff_continuous_dist]
   simp only [dist_def]
@@ -2730,7 +2730,7 @@ abbreviation emetricSpace
 
 中文:
 缩写 emetricSpace
-  签名: (separating_f : Pairwise fun x y => 存在 i, f i x != f i y)
+  签名: (separating_f : 两两 fun x y => 存在 i, f i x != f i y)
   定义体: .induced (embed X Y f) (embed_injective separating_f) PiCountable.emetricSpace
 
 Depends on / 依赖: PiCountable, PiCountable.emetricSpace, embed_injective, emetricSpace, induced, separating_f
@@ -2749,7 +2749,7 @@ lemma isUniformEmbedding_embed
 
 中文:
 引理 isUniformEmbedding_embed
-  条件: (separating_f : Pairwise fun x y => 存在 i, f i x != f i y)
+  条件: (separating_f : 两两 fun x y => 存在 i, f i x != f i y)
   证明: let := emetricSpace separating_f; isometry_embed.isUniformEmbedding
 
 Depends on / 依赖: emetricSpace, isUniformEmbedding, isometry_embed, isometry_embed.isUniformEmbedding, separating_f
@@ -2774,7 +2774,7 @@ abbreviation metricSpace
 
 中文:
 缩写 metricSpace
-  签名: (separating_f : Pairwise fun x y => 存在 i, f i x != f i y)
+  签名: (separating_f : 两两 fun x y => 存在 i, f i x != f i y)
   定义体: (emetricSpace separating_f).toMetricSpace fun x y => by simp [edist_dist]
 
 Depends on / 依赖: edist_dist, emetricSpace, separating_f, toMetricSpace
@@ -2798,8 +2798,8 @@ lemma isHomeomorph_toPiNat
   exact ⟨continuous_toPiNat continuous_f, (toPiNatEquiv X Y f).bijective⟩
 
 中文:
-引理 isHomeomorph_toPiNat
-  结论: (continuous_f : 对任意 i, Continuous (f i))
+引理 isHomeomorph_toPi自然数
+  结论: (continuous_f : 对任意 i, 连续 (f i))
   证明: by
   let := emetricSpace separating_f
   rw [isHomeomorph_iff_continuous_bijective]
@@ -2828,8 +2828,8 @@ definition toPiNatHomeo
     (isHomeomorph_toPiNat continuous_f separating_f).isInducing
 
 中文:
-定义 toPiNatHomeo
-  签名: (continuous_f : 对任意 i, Continuous (f i))
+定义 toPi自然数Homeo
+  签名: (continuous_f : 对任意 i, 连续 (f i))
   定义体: (toPiNatEquiv X Y f).toHomeomorphOfIsInducing
     (isHomeomorph_toPiNat continuous_f separating_f).isInducing
 
@@ -2851,7 +2851,7 @@ lemma TopologicalSpace.MetrizableSpace.of_countable_separating
   (Metric.PiNatEmbed.toPiNatHomeo X Y f continuous_f separating_f).isEmbedding.metrizableSpace
 
 中文:
-引理 TopologicalSpace.MetrizableSpace.of_countable_separating
+引理 拓扑空间.Metrizable空间.of_countable_separating
   结论: (f : 对任意 i, X -> Y i)
   证明: letI := Metric.PiNatEmbed.metricSpace separating_f
   (Metric.PiNatEmbed.toPiNatHomeo X Y f continuous_f separating_f).isEmbedding.metrizableSpace
@@ -2908,7 +2908,7 @@ refine continuous_projIcc.comp Continuous.dist continuous_id' ?_
 中文:
 引理 continuous_distDenseSeq
   条件: (n : 自然数)
-  结论: Continuous (distDenseSeq X n)
+  结论: 连续 (distDenseSeq X n)
   证明: by
   cases isEmpty_or_nonempty X
   · exact continuous_of_discreteTopology
@@ -2939,7 +2939,7 @@ lemma separation
 
 中文:
 引理 separation
-  条件: {x : X} {C : Set X} (hxC : C in 𝓝 x)
+  条件: {x : X} {C : 集合 X} (hxC : C in 𝓝 x)
   证明: by
   let ε : Real := min (infDist x (closure Cᶜ)) 1
   obtain hC | hC := (closure Cᶜ).eq_empty_or_nonempty
@@ -3038,8 +3038,8 @@ continuous_toFun := continuous_toPiNat fun i => continuous_distDenseSeq i
   let sec
 
 中文:
-定理 exists_embedding_to_hilbert_cube
-  结论: 存在 F : X -> 自然数 -> I, IsEmbedding F
+定理 存在_embedding_to_hilbert_cube
+  结论: 存在 F : X -> 自然数 -> I, 是嵌入 F
   证明: by
   let firststep : X ≃ₜ PiNatEmbed X (fun i => I) (distDenseSeq X) := {
     toFun := toPiNat

@@ -48,7 +48,7 @@ lemma exists_dist_slope_lt_pairwiseDisjoint_hasSum
   let t := {z : Real × Real |
 
 中文:
-引理 exists_dist_slope_lt_pairwiseDisjoint_hasSum
+引理 存在_dist_slope_lt_pairwiseDisjoint_hasSum
   结论: {f f' : 实数 -> F} {d b η : 实数}
   证明: by
   -- Proof idea: Use `Vitali.exists_disjoint_covering_ae'` to get a Vitali cover of `[a, b]`
@@ -130,7 +130,7 @@ lemma AbsolutelyContinuousOnInterval.dist_le_of_pairwiseDisjoint_hasSum
   -- Their total length tends to `0` as 
 
 中文:
-引理 AbsolutelyContinuousOnInterval.dist_le_of_pairwiseDisjoint_hasSum
+引理 AbsolutelyContinuousOn整数erval.dist_le_of_pairwiseDisjoint_hasSum
   结论: {f : 实数 -> X} {d b y : 实数}
   证明: by
   -- Proof idea: The complement of the collection of subintervals of `[d, b]` encoded in `u` can
@@ -214,7 +214,7 @@ theorem AbsolutelyContinuousOnInterval.const_of_ae_hasDerivAt_zero
   -- get a cover of `[d, b]` cons
 
 中文:
-定理 AbsolutelyContinuousOnInterval.const_of_ae_hasDerivAt_zero
+定理 AbsolutelyContinuousOn整数erval.const_of_ae_hasDerivAt_zero
   结论: {f : 实数 -> F} {a b : 实数}
   证明: by
   -- Proof idea : Assume wlog `a < b`. We need to show that `f d = f b` for any `d ∈ [a, b]`.
@@ -291,7 +291,7 @@ theorem AbsolutelyContinuousOnInterval.integral_deriv_eq_sub
   have g_ae_deriv_zer
 
 中文:
-定理 AbsolutelyContinuousOnInterval.integral_deriv_eq_sub
+定理 AbsolutelyContinuousOn整数erval.integral_deriv_eq_sub
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: by
   have f_deriv_integral_ac :=
@@ -336,7 +336,7 @@ theorem AbsolutelyContinuousOnInterval.integral_deriv_mul_eq_sub
   exact hx₅
 
 中文:
-定理 AbsolutelyContinuousOnInterval.integral_deriv_mul_eq_sub
+定理 AbsolutelyContinuousOn整数erval.integral_deriv_mul_eq_sub
   证明: by
   rw [← (hf.fun_mul hg).integral_deriv_eq_sub]
   apply intervalIntegral.integral_congr_ae
@@ -372,7 +372,7 @@ theorem AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul
   · exa
 
 中文:
-定理 AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul
+定理 AbsolutelyContinuousOn整数erval.integral_mul_deriv_eq_deriv_mul
   结论: {f g : 实数 -> 实数} {a b : 实数}
   证明: by
   rw [← AbsolutelyContinuousOnInterval.integral_deriv_mul_eq_sub hf hg]; rw [← intervalIntegral.integral_sub]

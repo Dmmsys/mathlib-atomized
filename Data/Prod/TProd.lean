@@ -56,7 +56,7 @@ abbreviation TProd
 
 中文:
 缩写 TProd
-  签名: (l : List ι)
+  签名: (l : 列表 ι)
   定义体: l.foldr (fun i β => α i × β) PUnit
 
 Depends on / 依赖: l.foldr
@@ -75,7 +75,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : 对任意 (l : List ι) (_f : 对任意 i, α i), TProd α l
+  签名: : 对任意 (l : 列表 ι) (_f : 对任意 i, α i), TProd α l
 -/
 protected def mk : forall (l : List ι) (_f : forall i, α i), TProd α l
   | [] => fun _ => PUnit.unit
@@ -92,8 +92,8 @@ instance [forall
 @[simp]
 
 中文:
-实例 [forall
-  签名: i, Inhabited (α i)] : Inhabited (TProd α l)
+实例 [对任意
+  签名: i, 可居 (α i)] : 可居 (TProd α l)
   定义体: ⟨TProd.mk l default⟩
 
 @[simp]
@@ -117,7 +117,7 @@ theorem fst_mk
 
 中文:
 定理 fst_mk
-  条件: (i : ι) (l : List ι) (f : 对任意 i, α i)
+  条件: (i : ι) (l : 列表 ι) (f : 对任意 i, α i)
   结论: (TProd.mk (i :: l) f).1 = f i
   证明: rfl
 
@@ -137,7 +137,7 @@ theorem snd_mk
 
 中文:
 定理 snd_mk
-  条件: (i : ι) (l : List ι) (f : 对任意 i, α i)
+  条件: (i : ι) (l : 列表 ι) (f : 对任意 i, α i)
   证明: rfl
 -/
 theorem snd_mk (i : ι) (l : List ι) (f : forall i, α i) :
@@ -155,7 +155,7 @@ definition elim
 
 中文:
 定义 elim
-  签名: : 对任意 {l : List ι} (_ : TProd α l) {i : ι} (_ : i in l), α i
+  签名: : 对任意 {l : 列表 ι} (_ : TProd α l) {i : ι} (_ : i in l), α i
 -/
 protected def elim : forall {l : List ι} (_ : TProd α l) {i : ι} (_ : i in l), α i
   | i :: is, v, j, hj =>
@@ -248,7 +248,7 @@ theorem elim_mk
 
 中文:
 定理 elim_mk
-  结论: 对任意 (l : List ι) (f : 对任意 i, α i) {i : ι} (hi : i in l), (TProd.mk l f).elim hi = f i
+  结论: 对任意 (l : 列表 ι) (f : 对任意 i, α i) {i : ι} (hi : i in l), (TProd.mk l f).elim hi = f i
 -/
 theorem elim_mk : forall (l : List ι) (f : forall i, α i) {i : ι} (hi : i in l), (TProd.mk l f).elim hi = f i
   | i :: is, f, j, hj => by
@@ -351,7 +351,7 @@ definition tprod
 
 中文:
 定义 tprod
-  签名: : 对任意 (l : List ι) (_t : 对任意 i, Set (α i)), Set (TProd α l)
+  签名: : 对任意 (l : 列表 ι) (_t : 对任意 i, 集合 (α i)), 集合 (TProd α l)
 -/
 protected def tprod : forall (l : List ι) (_t : forall i, Set (α i)), Set (TProd α l)
   | [], _ => univ
@@ -411,7 +411,7 @@ theorem elim_preimage_pi
 
 中文:
 定理 elim_preimage_pi
-  结论: [DecidableEq ι] {l : List ι} (hnd : l.Nodup) (h : 对任意 i, i in l)
+  结论: [DecidableEq ι] {l : 列表 ι} (hnd : l.Nodup) (h : 对任意 i, i in l)
   证明: by
   have h2 : { i | i in l } = univ := by
     ext i

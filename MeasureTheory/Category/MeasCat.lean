@@ -51,12 +51,12 @@ structure MeasCat
     - [str : MeasurableSpace carrier]
 
 中文:
-结构 MeasCat
-  参数: : Type (u + 1) where
+结构 Meas范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : MeasurableSpace carrier]
+    - [str : 可测空间 carrier]
 -/
 structure MeasCat : Type (u + 1) where
   /-- Construct a bundled `MeasCat` from the underlying type and the typeclass. -/
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort MeasCat 类型
+  签名: CoeSort Meas范畴 类型
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: _root_, _root_.multiplicity, carrier, multiplicity, toInteger
@@ -98,7 +98,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [MeasurableSpace X]
+  条件: (X : 类型u) [可测空间 X]
   结论: (of X : 类型u) = X
   证明: rfl
 -/
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory MeasCat
+  签名: 大范畴 Meas范畴
   定义体: { f : X -> Y // Measurable f }
   id X := ⟨id, measurable_id⟩
   comp f g := ⟨g.1 ∘ f.1, g.2.comp f.2⟩
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory MeasCat ({ f : · -> · // Measurable f })
+  签名: 余ncrete范畴 Meas范畴 ({ f : · -> · // 可测 f })
   定义体: f
   ofHom f := f
 -/
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited MeasCat
+  签名: 可居 Meas范畴
   定义体: ⟨MeasCat.of Empty⟩
 
 Depends on / 依赖: MeasCat, MeasCat.of
@@ -182,8 +182,8 @@ map_id X := Subtype.ext funext fun μ => @Measure.map_id X.carrier X.str μ
 map_comp := fun ⟨_, hf⟩ ⟨_, hg⟩ => Subtype.ext funext fun _ => (Measure.map_map hg hf).symm
 
 中文:
-定义 Measure
-  签名: : MeasCat ⥤ MeasCat where
+定义 测度
+  签名: : Meas范畴 ⥤ Meas范畴 where
   定义体: of (@MeasureTheory.Measure X.1 X.2)
   map f := ⟨Measure.map (⇑f), Measure.measurable_map f.1 f.2⟩
 map_id X := Subtype.ext funext fun μ => @Measure.map_id X.carrier X.str μ
@@ -214,7 +214,7 @@ naturality := fun _ _ ⟨_, hf⟩ => S
 
 中文:
 定义 Giry
-  签名: : CategoryTheory.Monad MeasCat where
+  签名: : 范畴论.单子 Meas范畴 where
   定义体: Measure
   η :=
     { app := fun X => ⟨@Measure.dirac X.1 X.2, Measure.measurable_dirac⟩
@@ -252,8 +252,8 @@ assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measur
 
 
 中文:
-定义 Integral
-  签名: : Giry.Algebra where
+定义 积分
+  签名: : Giry.代数 where
   定义体: MeasCat.of Real>=0∞
   a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
 unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
@@ -283,8 +283,8 @@ instance TopCat.hasForgetToMeasCat
   forget₂.map f := ⟨f.1, f.hom.2.borel_measurable⟩
 
 中文:
-实例 TopCat.hasForgetToMeasCat
-  签名: : HasForget₂ TopCat.{u} MeasCat.{u} where
+实例 顶元素范畴.hasForgetToMeasCat
+  签名: : 有Forget₂ 顶元素范畴.{u} Meas范畴.{u} where
   定义体: @MeasCat.of _ (borel X)
   forget₂.map f := ⟨f.1, f.hom.2.borel_measurable⟩
 
@@ -304,7 +304,7 @@ abbreviation Borel
 
 中文:
 缩写 Borel
-  签名: : TopCat.{u} ⥤ MeasCat.{u}
+  签名: : 顶元素范畴.{u} ⥤ Meas范畴.{u}
   定义体: forget₂ TopCat.{u} MeasCat.{u}
 
 Depends on / 依赖: MeasCat, TopCat

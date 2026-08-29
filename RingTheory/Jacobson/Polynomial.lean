@@ -76,7 +76,7 @@ refine fun f hf => (Submodule.mem_bot R[X]).2 Polynomial.ext fun n =>
 
 中文:
 定理 jacobson_bot_polynomial_of_jacobson_bot
-  条件: (h : jacobson (⊥ : Ideal R) = ⊥)
+  条件: (h : jacobson (⊥ : 理想 R) = ⊥)
   证明: by
   refine eq_bot_iff.2 (le_trans jacobson_bot_polynomial_le_sInf_map_maximal ?_)
 refine fun f hf => (Submodule.mem_bot R[X]).2 Polynomial.ext fun n =>

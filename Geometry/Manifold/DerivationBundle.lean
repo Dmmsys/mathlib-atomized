@@ -41,7 +41,7 @@ instance smoothFunctionsAlgebra
 
 中文:
 实例 smoothFunctionsAlgebra
-  签名: : Algebra 𝕜 C^∞⟮I, M; 𝕜⟯
+  签名: : 代数 𝕜 C^∞⟮I, M; 𝕜⟯
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -58,7 +58,7 @@ instance smooth_functions_tower
 
 中文:
 实例 smooth_functions_tower
-  签名: : IsScalarTower 𝕜 C^∞⟮I, M; 𝕜⟯ C^∞⟮I, M; 𝕜⟯
+  签名: : 标量塔 𝕜 C^∞⟮I, M; 𝕜⟯ C^∞⟮I, M; 𝕜⟯
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance

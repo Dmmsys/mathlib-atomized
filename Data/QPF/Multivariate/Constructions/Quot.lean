@@ -100,7 +100,7 @@ instance Quot1.inhabited
 
 中文:
 实例 Quot1.inhabited
-  签名: {α : TypeVec n} [Inhabited <| F α]
+  签名: {α : TypeVec n} [可居 <| F α]
   定义体: ⟨Quot.mk _ default⟩
 
 Depends on / 依赖: Quot.mk
@@ -142,7 +142,7 @@ definition Quot1.mvFunctor
 
 中文:
 定义 Quot1.mvFunctor
-  签名: : MvFunctor (Quot1 R) where map
+  签名: : Mv函子 (Quot1 R) where map
   定义体: @Quot1.map _ _ R _ Hfunc
 
 Depends on / 依赖: Quot1.map

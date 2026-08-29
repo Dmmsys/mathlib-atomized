@@ -56,7 +56,7 @@ definition toCommGrp
 
 中文:
 定义 toCommGrp
-  签名: : C ⥤ CommGrp C where
+  签名: : C ⥤ 交换群 C where
   定义体: ⟨X⟩
   map {X Y} f := InducedCategory.homMk (Grp.homMk'' f)
 -/
@@ -109,7 +109,7 @@ definition commGrpEquivalenceAux
 
 中文:
 定义 commGrpEquivalenceAux
-  签名: : CommGrp.forget C ⋙ toCommGrp C ≅
+  签名: : 交换群.forget C ⋙ toCommGrp C ≅
   定义体: by
   refine NatIso.ofComponents (fun _ => CommGrp.mkIso (Iso.refl _) ?_ ?_) ?_
   · exact ((IsZero.iff_id_eq_zero _).2 (Subsingleton.elim _ _)).eq_of_src _ _
@@ -153,7 +153,7 @@ definition commGrpEquivalence
 
 中文:
 定义 commGrpEquivalence
-  签名: : C ≌ CommGrp C where
+  签名: : C ≌ 交换群 C where
   定义体: toCommGrp C
   inverse := CommGrp.forget C
   unitIso := Iso.refl _

@@ -36,7 +36,7 @@ definition directSumNeZeroMulHom
 
 中文:
 定义 directSumNeZeroMulHom
-  签名: {ι : Type} [DecidableEq ι] (p : ι -> 自然数) (n : ι -> 自然数)
+  签名: {ι : 类型} [DecidableEq ι] (p : ι -> 自然数) (n : ι -> 自然数)
   定义体: DirectSum.toAddMonoid fun i => DirectSum.of (fun i => ZMod (p i ^ n i)) i
 -/
 private def directSumNeZeroMulHom {ι : Type} [DecidableEq ι] (p : ι -> Nat) (n : ι -> Nat) :
@@ -60,7 +60,7 @@ definition directSumNeZeroMulEquiv
 
 中文:
 定义 directSumNeZeroMulEquiv
-  签名: (ι : Type) [DecidableEq ι] (p : ι -> 自然数) (n : ι -> 自然数)
+  签名: (ι : 类型) [DecidableEq ι] (p : ι -> 自然数) (n : ι -> 自然数)
   定义体: directSumNeZeroMulHom p n
   invFun := DirectSum.toAddMonoid fun i =>
     if h : n i = 0 then 0 else DirectSum.of (fun j : {i // n i != 0} => ZMod (p j ^ n j)) ⟨i, h⟩
@@ -113,7 +113,7 @@ have : forall i : ι, _root_.Finite Int ⧸ Submodule.span Int {p i ^ e i} := fu
 
 中文:
 定理 finite_of_fg_torsion
-  结论: [AddCommGroup M] [Module 整数 M] [Module.Finite 整数 M]
+  结论: [加法交换群 M] [模 整数 M] [模.有限 整数 M]
   证明: by
   rcases Module.equiv_directSum_of_isTorsion hM with ⟨ι, _, p, h, e, ⟨l⟩⟩
   have : forall i : ι, NeZero (p i ^ e i).natAbs := fun i =>
@@ -158,7 +158,7 @@ theorem equiv_free_prod_directSum_zmod
 
 中文:
 定理 equiv_free_prod_directSum_zmod
-  条件: [hG : AddGroup.FG G]
+  条件: [hG : 加法群.FG G]
   证明: by
   obtain ⟨n, ι, fι, p, hp, e, ⟨f⟩⟩ :=
     @Module.equiv_free_prod_directSum _ _ _ _ _ _ _ (Module.Finite.iff_addGroup_fg.mpr hG)
@@ -200,7 +200,7 @@ theorem equiv_directSum_zmod_of_finite
 
 中文:
 定理 equiv_directSum_zmod_of_finite
-  条件: [Finite G]
+  条件: [有限 G]
   证明: by
   cases nonempty_fintype G
   obtain ⟨n, ι, fι, p, hp, e, ⟨f⟩⟩ := equiv_free_prod_directSum_zmod G
@@ -242,7 +242,7 @@ lemma equiv_directSum_zmod_of_finite'
 
 中文:
 引理 equiv_directSum_zmod_of_finite'
-  条件: (G : 类型) [AddCommGroup G] [Finite G]
+  条件: (G : 类型) [加法交换群 G] [有限 G]
   证明: by
   classical
   obtain ⟨ι, hι, p, hp, n, ⟨e⟩⟩ := AddCommGroup.equiv_directSum_zmod_of_finite G
@@ -277,8 +277,8 @@ theorem finite_of_fg_isAddTorsion
 
 中文:
 定理 finite_of_fg_isAddTorsion
-  条件: [hG' : AddGroup.FG G] (hG : IsAddTorsion G)
-  结论: Finite G
+  条件: [hG' : 加法群.FG G] (hG : IsAddTorsion G)
+  结论: 有限 G
   证明: @Module.finite_of_fg_torsion _ _ _ (Module.Finite.iff_addGroup_fg.mpr hG')
     isAddTorsion_iff_isTorsion_int.mp hG
 
@@ -310,8 +310,8 @@ theorem finite_of_fg_isMulTorsion
 
 中文:
 定理 finite_of_fg_isMulTorsion
-  条件: [CommGroup G] [Group.FG G] (hG : IsMulTorsion G)
-  结论: Finite G
+  条件: [交换群 G] [群.FG G] (hG : IsMulTorsion G)
+  结论: 有限 G
   证明: @Finite.of_equiv _ _ (AddCommGroup.finite_of_fg_isAddTorsion (Additive G) hG) Multiplicative.ofAdd
 
 @[deprecated (since := "2026-07-01")] alias finite_of_fg_torsion := finite_of_fg_isMulTorsion
@@ -336,7 +336,7 @@ exact ⟨ι, inst, n, h₁, ⟨MulEquiv.toAdditive.symm h₂.some.trans
 
 中文:
 定理 equiv_prod_multiplicative_zmod_of_finite
-  条件: (G : 类型) [CommGroup G] [Finite G]
+  条件: (G : 类型) [交换群 G] [有限 G]
   证明: by
   obtain ⟨ι, inst, n, h₁, h₂⟩ := AddCommGroup.equiv_directSum_zmod_of_finite' (Additive G)
 exact ⟨ι, inst, n, h₁, ⟨MulEquiv.toAdditive.symm h₂.some.trans
@@ -365,7 +365,7 @@ exact ⟨ι, Fin n, inst, inferInstance, x, p, e, ⟨MulEquiv.toAdditive.symm eq
 
 中文:
 定理 equiv_free_prod_prod_multiplicative_zmod
-  条件: (G : 类型) [CommGroup G] [hG : Group.FG G]
+  条件: (G : 类型) [交换群 G] [hG : 群.FG G]
   证明: by
   obtain ⟨n, ι, inst, x, p, e, equiv⟩ := AddCommGroup.equiv_free_prod_directSum_zmod (Additive G)
 exact ⟨ι, Fin n, inst, inferInstance, x, p, e, ⟨MulEquiv.toAdditive.symm equiv.some.trans
@@ -402,7 +402,7 @@ lemma finiteIndex_range_powMonoidHom_of_fg
 
 中文:
 引理 finiteIndex_range_powMonoidHom_of_fg
-  结论: (A : 类型) [CommGroup A] [Group.FG A] {n : 自然数}
+  结论: (A : 类型) [交换群 A] [群.FG A] {n : 自然数}
   证明: finiteIndex_iff_finite_quotient.mpr CommGroup.finite_of_fg_isMulTorsion _
     CommGroup.isMulTorsion_quotient_range_powMonoidHom A hn
 
@@ -434,7 +434,7 @@ lemma isFiniteRelIndex_map_powMonoidHom_of_fg
 
 中文:
 引理 isFiniteRelIndex_map_powMonoidHom_of_fg
-  结论: {A : 类型} [CommGroup A] {B : Subgroup A}
+  结论: {A : 类型} [交换群 A] {B : 子群 A}
   证明: by B.map (powMonoidHom (α := A) n)
   rw [isFiniteRelIndex_iff_finiteIndex]
   have : (map (powMonoidHom (α := A) n) B).subgroupOf B = (powMonoidHom (α := B) n).range := by
@@ -477,7 +477,7 @@ lemma fg_toAddSubgroup
 
 中文:
 引理 fg_toAddSubgroup
-  条件: {A : Submodule R M} (hfg : A.FG)
+  条件: {A : 子模 R M} (hfg : A.FG)
   结论: A.toAddSubgroup.FG
   证明: by
   rw [← AddSubgroup.toIntSubmodule_toAddSubgroup A.toAddSubgroup]; rw [← fg_iff_addSubgroup_fg]
@@ -506,7 +506,7 @@ lemma isFiniteRelIndex_of_map_linearMapMulLeft_le
 
 中文:
 引理 isFiniteRelIndex_of_map_linearMapMulLeft_le
-  结论: {A B : Submodule R K} {n : 自然数} (hn : n != 0)
+  结论: {A B : 子模 R K} {n : 自然数} (hn : n != 0)
   证明: by
   have := fg_toAddSubgroup hfg
   have := isFiniteRelIndex_map_nsmulAddMonoidHom_of_fg this hn

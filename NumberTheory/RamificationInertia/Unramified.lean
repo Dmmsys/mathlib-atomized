@@ -39,7 +39,7 @@ lemma Ideal.ramificationIdx_eq_one_of_isUnramifiedAt
   proof: p.ramificationIdx_eq_one R
 
 中文:
-引理 Ideal.ramificationIdx_eq_one_of_isUnramifiedAt
+引理 理想.ramificationIdx_eq_one_of_isUnramifiedAt
   证明: p.ramificationIdx_eq_one R
 
 Depends on / 依赖: p.ramificationIdx_eq_one, ramificationIdx_eq_one
@@ -172,7 +172,7 @@ theorem isUnramifiedAt_bot
 
 中文:
 定理 isUnramifiedAt_bot
-  结论: [IsDomain R] [IsDomain S] [Module.IsTorsionFree R S] [CharZero R]
+  结论: [是整环 R] [是整环 S] [模.是无挠 R S] [特征零 R]
   证明: by
   have : IsFractionRing S (Localization.AtPrime (⊥ : Ideal S)) := by
     simpa [Ideal.primeCompl_bot] using Localization.isLocalization (M := (⊥ : Ideal S).primeCompl)
@@ -208,7 +208,7 @@ theorem isUnramifiedIn_bot
 
 中文:
 定理 isUnramifiedIn_bot
-  结论: [IsDomain R] [IsDomain S] [FaithfulSMul R S] [CharZero R]
+  结论: [是整环 R] [是整环 S] [忠实标量乘法 R S] [特征零 R]
   证明: by
   intro P _ hP
   simpa [Ideal.eq_bot_of_liesOver_bot R P] using isUnramifiedAt_bot
@@ -230,8 +230,8 @@ theorem isUnramifiedIn_iff_forall_of_isDedekindDomain'
     fun h P hP hlo => h P (hP.isMaximal (Ideal.ne_bot_of_liesOver_of_ne_bot hp P)) hlo⟩
 
 中文:
-定理 isUnramifiedIn_iff_forall_of_isDedekindDomain'
-  结论: [IsDomain R] [IsDedekindDomain S]
+定理 isUnramifiedIn_iff_对任意_of_isDedekindDomain'
+  结论: [是整环 R] [是Dedekind整环 S]
   证明: ⟨fun h P hP hlo => h P hP.isPrime hlo,
     fun h P hP hlo => h P (hP.isMaximal (Ideal.ne_bot_of_liesOver_of_ne_bot hp P)) hlo⟩
 
@@ -257,8 +257,8 @@ theorem isUnramifiedIn_iff_forall_of_isDedekindDomain
   · exact h P (hP.isMaximal hPbot) hlo
 
 中文:
-定理 isUnramifiedIn_iff_forall_of_isDedekindDomain
-  结论: [IsDomain R] [IsDedekindDomain S]
+定理 isUnramifiedIn_iff_对任意_of_isDedekindDomain
+  结论: [是整环 R] [是Dedekind整环 S]
   证明: by
   refine ⟨fun h P hP hlo => h P hP.isPrime hlo, fun h P hP hlo => ?_⟩
   rcases eq_or_ne P ⊥ with rfl | hPbot
@@ -287,7 +287,7 @@ theorem IsUnramifiedIn.ramificationIdx_eq_one
 
 中文:
 定理 IsUnramifiedIn.ramificationIdx_eq_one
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: Ideal.ramificationIdx_eq_one_iff.mpr
     (hunr 𝔓 inferInstance hP)
 
@@ -312,8 +312,8 @@ theorem isUnramifiedIn_iff_forall_ramificationIdx_eq_one
   exact h 𝔓 hP
 
 中文:
-定理 isUnramifiedIn_iff_forall_ramificationIdx_eq_one
-  结论: [IsDomain R]
+定理 isUnramifiedIn_iff_对任意_ramificationIdx_eq_one
+  结论: [是整环 R]
   证明: by
   refine ⟨fun hunr 𝔓 _ hP => hunr.ramificationIdx_eq_one hP, fun h 𝔓 _ hP => ?_⟩
   rw [← Ideal.ramificationIdx_eq_one_iff]

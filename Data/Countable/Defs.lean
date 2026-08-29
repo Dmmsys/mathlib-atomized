@@ -48,10 +48,10 @@ class Countable
     - exists_injective_nat' : exists f : α -> Nat, Injective f
 
 中文:
-类 Countable
-  参数: (α : Sort u)
+类 可数
+  参数: (α : 类型层 u)
   公理与运算 (1 个):
-    - exists_injective_nat' : 存在 f : α -> 自然数, Injective f
+    - exists_injective_nat' : 存在 f : α -> 自然数, 单射 f
 -/
 class Countable (α : Sort u) : Prop where
   /-- A type `α` is countable if there exists an injective map `α → ℕ`. -/
@@ -67,9 +67,9 @@ lemma Countable.exists_injective_nat
   proof: Countable.exists_injective_nat'
 
 中文:
-引理 Countable.exists_injective_nat
-  条件: (α : Sort u) [Countable α]
-  结论: 存在 f : α -> 自然数, Injective f
+引理 可数.存在_injective_nat
+  条件: (α : 类型层 u) [可数 α]
+  结论: 存在 f : α -> 自然数, 单射 f
   证明: Countable.exists_injective_nat'
 
 Depends on / 依赖: Countable, Countable.exists_injective_nat, exists_injective_nat
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable 自然数
+  签名: 可数 自然数
   定义体: ⟨⟨id, injective_id⟩⟩
 
 Depends on / 依赖: injective_id
@@ -107,8 +107,8 @@ theorem Function.Injective.countable
   ⟨⟨g ∘ f, hg.comp hf⟩⟩
 
 中文:
-定理 Function.Injective.countable
-  条件: [Countable β] {f : α -> β} (hf : Injective f)
+定理 函数.单射.countable
+  条件: [可数 β] {f : α -> β} (hf : 单射 f)
   证明: let ⟨g, hg⟩ := exists_injective_nat β
   ⟨⟨g ∘ f, hg.comp hf⟩⟩
 -/
@@ -126,8 +126,8 @@ theorem Function.Surjective.countable
   proof: (injective_surjInv hf).countable
 
 中文:
-定理 Function.Surjective.countable
-  条件: [Countable α] {f : α -> β} (hf : Surjective f)
+定理 函数.满射.countable
+  条件: [可数 α] {f : α -> β} (hf : 满射 f)
   证明: (injective_surjInv hf).countable
 -/
 protected theorem Function.Surjective.countable [Countable α] {f : α -> β} (hf : Surjective f) :
@@ -145,9 +145,9 @@ theorem exists_surjective_nat
   ⟨invFun f, invFun_surjective hf⟩
 
 中文:
-定理 exists_surjective_nat
-  条件: (α : Sort u) [Nonempty α] [Countable α]
-  结论: 存在 f : 自然数 -> α, Surjective f
+定理 存在_surjective_nat
+  条件: (α : 类型层 u) [非空 α] [可数 α]
+  结论: 存在 f : 自然数 -> α, 满射 f
   证明: let ⟨f, hf⟩ := exists_injective_nat α
   ⟨invFun f, invFun_surjective hf⟩
 
@@ -167,9 +167,9 @@ theorem countable_iff_exists_surjective
   proof: ⟨@exists_surjective_nat _ _, fun ⟨_, hf⟩ => hf.countable⟩
 
 中文:
-定理 countable_iff_exists_surjective
-  条件: [Nonempty α]
-  结论: Countable α ↔ 存在 f : 自然数 -> α, Surjective f
+定理 countable_iff_存在_surjective
+  条件: [非空 α]
+  结论: 可数 α ↔ 存在 f : 自然数 -> α, 满射 f
   证明: ⟨@exists_surjective_nat _ _, fun ⟨_, hf⟩ => hf.countable⟩
 
 Depends on / 依赖: countable, exists_surjective_nat, hf.countable
@@ -187,9 +187,9 @@ theorem Countable.of_equiv
   proof: e.symm.injective.countable
 
 中文:
-定理 Countable.of_equiv
-  条件: (α : Sort*) [Countable α] (e : α ≃ β)
-  结论: Countable β
+定理 可数.of_equiv
+  条件: (α : 类型层*) [可数 α] (e : α ≃ β)
+  结论: 可数 β
   证明: e.symm.injective.countable
 
 Depends on / 依赖: countable, e.symm.injective.countable, injective
@@ -207,9 +207,9 @@ theorem Equiv.countable_iff
   proof: ⟨fun h => @Countable.of_equiv _ _ h e, fun h => @Countable.of_equiv _ _ h e.symm⟩
 
 中文:
-定理 Equiv.countable_iff
+定理 等价.countable_iff
   条件: (e : α ≃ β)
-  结论: Countable α ↔ Countable β
+  结论: 可数 α ↔ 可数 β
   证明: ⟨fun h => @Countable.of_equiv _ _ h e, fun h => @Countable.of_equiv _ _ h e.symm⟩
 
 Depends on / 依赖: Countable, Countable.of_equiv, e.symm, of_equiv
@@ -231,8 +231,8 @@ instance [Countable
   body: Equiv.plift.injective.countable
 
 中文:
-实例 [Countable
-  签名: α] : Countable (PLift α)
+实例 [可数
+  签名: α] : 可数 (命题层提升 α)
   定义体: Equiv.plift.injective.countable
 
 Depends on / 依赖: Equiv.plift.injective.countable, countable, injective
@@ -264,7 +264,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable PUnit.{u}
+  签名: 可数 命题单元.{u}
   定义体: Subsingleton.to_countable
 
 Depends on / 依赖: Subsingleton, Subsingleton.to_countable, to_countable
@@ -284,8 +284,8 @@ instance Bool.countable
   body: ⟨⟨fun b => cond b 0 1, Bool.injective_iff.2 Nat.one_ne_zero⟩⟩
 
 中文:
-实例 Bool.countable
-  签名: : Countable 布尔
+实例 布尔值.countable
+  签名: : 可数 布尔值
   定义体: ⟨⟨fun b => cond b 0 1, Bool.injective_iff.2 Nat.one_ne_zero⟩⟩
 
 Depends on / 依赖: Bool.injective_iff, Nat.one_ne_zero, injective_iff, one_ne_zero
@@ -302,8 +302,8 @@ instance Prop.countable'
   body: Countable.of_equiv Bool Equiv.propEquivBool.symm
 
 中文:
-实例 Prop.countable'
-  签名: : Countable 命题
+实例 命题.countable'
+  签名: : 可数 命题
   定义体: Countable.of_equiv Bool Equiv.propEquivBool.symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.propEquivBool.symm, of_equiv, propEquivBool
@@ -334,10 +334,10 @@ class Uncountable
     - not_countable : ¬Countable α
 
 中文:
-类 Uncountable
-  参数: (α : Sort*)
+类 不可数
+  参数: (α : 类型层*)
   公理与运算 (1 个):
-    - not_countable : ¬Countable α
+    - not_countable : ¬可数 α
 -/
 class Uncountable (α : Sort*) : Prop where
   /-- A type `α` is uncountable if it is not countable. -/
@@ -357,7 +357,7 @@ lemma not_uncountable_iff
 
 中文:
 引理 not_uncountable_iff
-  结论: ¬Uncountable α ↔ Countable α
+  结论: ¬不可数 α ↔ 可数 α
   证明: by
   rw [uncountable_iff_not_countable]; rw [not_not]
 
@@ -381,7 +381,7 @@ lemma not_countable_iff
 
 中文:
 引理 not_countable_iff
-  结论: ¬Countable α ↔ Uncountable α
+  结论: ¬可数 α ↔ 不可数 α
   证明: (uncountable_iff_not_countable α).symm
 
 @[simp]
@@ -404,8 +404,8 @@ lemma not_uncountable
 
 中文:
 引理 not_uncountable
-  条件: [Countable α]
-  结论: ¬Uncountable α
+  条件: [可数 α]
+  结论: ¬不可数 α
   证明: not_uncountable_iff.2 ‹_›
 
 @[simp]
@@ -426,8 +426,8 @@ lemma not_countable
 
 中文:
 引理 not_countable
-  条件: [Uncountable α]
-  结论: ¬Countable α
+  条件: [不可数 α]
+  结论: ¬可数 α
   证明: Uncountable.not_countable
 
 Depends on / 依赖: Uncountable, Uncountable.not_countable, not_countable
@@ -443,8 +443,8 @@ theorem Function.Injective.uncountable
   proof: ⟨fun _ => not_countable hf.countable⟩
 
 中文:
-定理 Function.Injective.uncountable
-  条件: [Uncountable α] {f : α -> β} (hf : Injective f)
+定理 函数.单射.uncountable
+  条件: [不可数 α] {f : α -> β} (hf : 单射 f)
   证明: ⟨fun _ => not_countable hf.countable⟩
 -/
 protected theorem Function.Injective.uncountable [Uncountable α] {f : α -> β} (hf : Injective f) :
@@ -460,8 +460,8 @@ theorem Function.Surjective.uncountable
   proof: (injective_surjInv hf).uncountable
 
 中文:
-定理 Function.Surjective.uncountable
-  条件: [Uncountable β] {f : α -> β} (hf : Surjective f)
+定理 函数.满射.uncountable
+  条件: [不可数 β] {f : α -> β} (hf : 满射 f)
   证明: (injective_surjInv hf).uncountable
 -/
 protected theorem Function.Surjective.uncountable [Uncountable β] {f : α -> β} (hf : Surjective f) :
@@ -477,7 +477,7 @@ lemma not_injective_uncountable_countable
 
 中文:
 引理 not_injective_uncountable_countable
-  条件: [Uncountable α] [Countable β] (f : α -> β)
+  条件: [不可数 α] [可数 β] (f : α -> β)
   证明: fun hf => not_countable hf.countable
 
 Depends on / 依赖: countable, hf.countable, not_countable
@@ -496,7 +496,7 @@ lemma not_surjective_countable_uncountable
 
 中文:
 引理 not_surjective_countable_uncountable
-  条件: [Countable α] [Uncountable β] (f : α -> β)
+  条件: [可数 α] [不可数 β] (f : α -> β)
   证明: fun hf =>
   not_countable hf.countable
 -/
@@ -514,8 +514,8 @@ theorem uncountable_iff_forall_not_surjective
   rw [← not_countable_iff]; rw [countable_iff_exists_surjective]; rw [not_exists]
 
 中文:
-定理 uncountable_iff_forall_not_surjective
-  条件: [Nonempty α]
+定理 uncountable_iff_对任意_not_surjective
+  条件: [非空 α]
   证明: by
   rw [← not_countable_iff]; rw [countable_iff_exists_surjective]; rw [not_exists]
 
@@ -535,9 +535,9 @@ theorem Uncountable.of_equiv
   proof: e.injective.uncountable
 
 中文:
-定理 Uncountable.of_equiv
-  条件: (α : Sort*) [Uncountable α] (e : α ≃ β)
-  结论: Uncountable β
+定理 不可数.of_equiv
+  条件: (α : 类型层*) [不可数 α] (e : α ≃ β)
+  结论: 不可数 β
   证明: e.injective.uncountable
 
 Depends on / 依赖: e.injective.uncountable, injective, uncountable
@@ -555,9 +555,9 @@ theorem Equiv.uncountable_iff
   proof: ⟨fun h => @Uncountable.of_equiv _ _ h e, fun h => @Uncountable.of_equiv _ _ h e.symm⟩
 
 中文:
-定理 Equiv.uncountable_iff
+定理 等价.uncountable_iff
   条件: (e : α ≃ β)
-  结论: Uncountable α ↔ Uncountable β
+  结论: 不可数 α ↔ 不可数 β
   证明: ⟨fun h => @Uncountable.of_equiv _ _ h e, fun h => @Uncountable.of_equiv _ _ h e.symm⟩
 
 Depends on / 依赖: Uncountable, Uncountable.of_equiv, e.symm, of_equiv
@@ -577,8 +577,8 @@ instance [Uncountable
   body: .of_equiv _ Equiv.plift.symm
 
 中文:
-实例 [Uncountable
-  签名: α] : Uncountable (PLift α)
+实例 [不可数
+  签名: α] : 不可数 (命题层提升 α)
   定义体: .of_equiv _ Equiv.plift.symm
 
 Depends on / 依赖: Equiv.plift.symm, of_equiv

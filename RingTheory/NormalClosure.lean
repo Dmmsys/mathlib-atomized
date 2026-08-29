@@ -68,8 +68,8 @@ definition NormalClosure
 local notation3 "T" => NormalClosure R S
 
 中文:
-定义 NormalClosure
-  签名: : Type _
+定义 正规闭包
+  签名: : 类型 _
   定义体: integralClosure S E
 
 local notation3 "T" => NormalClosure R S
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing T
+  签名: 交换环 T
   定义体: inferInstanceAs (CommRing (integralClosure S E))
 
 Depends on / 依赖: CommRing, integralClosure
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain T
+  签名: 是整环 T
   定义体: inferInstanceAs (IsDomain (integralClosure S E))
 
 Depends on / 依赖: IsDomain, integralClosure
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial T
+  签名: 非平凡 T
   定义体: inferInstanceAs (Nontrivial (integralClosure S E))
 
 Depends on / 依赖: Nontrivial, integralClosure
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra S T
+  签名: 代数 S T
   定义体: inferInstanceAs (Algebra S (integralClosure S E))
 
 Depends on / 依赖: Algebra, integralClosure
@@ -168,7 +168,7 @@ local instance : IsIntegralClosure T S E := integralClosure.isIntegralClosure S 
 
 中文:
 实例 :
-  签名: Algebra R T
+  签名: 代数 R T
   定义体: ((algebraMap S T).comp (algebraMap R S)).toAlgebra
 
 local instance : IsScalarTower S T E :=
@@ -203,7 +203,7 @@ local instance : FaithfulSMul S E := (faithfulSMul_iff_a
 
 中文:
 实例 :
-  签名: IsScalarTower R S T
+  签名: 标量塔 R S T
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 local instance : IsScalarTower R L E := IsScalarTower.to₁₃₄ R K L E
@@ -237,7 +237,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.IsTorsionFree S T
+  签名: 模.是无挠 S T
   定义体: Subalgebra.instIsTorsionFree (integralClosure S E)
 
 Depends on / 依赖: Subalgebra, Subalgebra.instIsTorsionFree, instIsTorsionFree, integralClosure
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul R T
+  签名: 忠实标量乘法 R T
   定义体: (faithfulSMul_iff_algebraMap_injective R T).mpr
       (FaithfulSMul.algebraMap_injective S T).comp (FaithfulSMul.algebraMap_injective R S)
 
@@ -282,7 +282,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egrallyClosed T
+  签名: 是整闭 T
   定义体: integralClosure.isIntegrallyClosedOfFiniteExtension L
 
 Depends on / 依赖: integralClosure, integralClosure.isIntegrallyClosedOfFiniteExtension, isIntegrallyClosedOfFiniteExtension
@@ -311,7 +311,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGalois K (FractionRing T)
+  签名: 是Galois K (FractionRing T)
   定义体: by
   refine IsGalois.of_equiv_equiv (F := K) («E» := E)
     (f := (FractionRing.algEquiv R K).symm.toRingEquiv)
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite S T
+  签名: 模.有限 S T
   定义体: IsIntegralClosure.finite S L E T
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.finite, finite
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R T
+  签名: 模.有限 R T
   定义体: Module.Finite.trans S T
 
 Depends on / 依赖: Finite, Module, Module.Finite.trans
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDedekindDomain T
+  签名: 是Dedekind整环 T
   定义体: integralClosure.isDedekindDomain S L E
 
 Depends on / 依赖: integralClosure, integralClosure.isDedekindDomain, isDedekindDomain

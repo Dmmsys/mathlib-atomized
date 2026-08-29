@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction ℋ ℋ
+  签名: 乘法作用 ℋ ℋ
   定义体: Monoid.toMulAction ..
 
 Depends on / 依赖: Monoid, Monoid.toMulAction, toMulAction
@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction ℋ 𝒬
+  签名: 乘法作用 ℋ 𝒬
   定义体: .quotient ..
 
 Depends on / 依赖: quotient
@@ -101,7 +101,7 @@ lemma quotientFunc_mk
 中文:
 引理 quotientFunc_mk
   条件: (h : ℋ)
-  结论: quotientFunc f ⟦h⟧ = (f : ℍ -> Complex) ∣[k] h.val⁻¹
+  结论: quotientFunc f ⟦h⟧ = (f : ℍ -> 复形) ∣[k] h.val⁻¹
   证明: rfl
 -/
 @[simp] lemma quotientFunc_mk (h : ℋ) : quotientFunc f ⟦h⟧ = (f : ℍ -> Complex) ∣[k] h.val⁻¹ :=
@@ -149,7 +149,7 @@ definition trace
 
 中文:
 定义 trace
-  签名: : SlashInvariantForm ℋ k where
+  签名: : 斜不变形式 ℋ k where
   定义体: let := Fintype.ofFinite 𝒬; ∑ q : 𝒬, quotientFunc f q
   slash_action_eq' h hh := by
     let := Fintype.ofFinite 𝒬
@@ -180,7 +180,7 @@ definition norm
 
 中文:
 定义 norm
-  签名: [ℋ.HasDetPlusMinusOne]
+  签名: [ℋ.有DetPlusMinusOne]
   定义体: let := Fintype.ofFinite 𝒬; ∏ q : 𝒬, quotientFunc f q
   slash_action_eq' h hh := by
     let := Fintype.ofFinite 𝒬
@@ -220,8 +220,8 @@ definition ModularForm.trace
     refine .fun
 
 中文:
-定义 ModularForm.trace
-  签名: [ModularFormClass F 𝒢 k]
+定义 模形式.trace
+  签名: [模形式类 F 𝒢 k]
   定义体: SlashInvariantForm.trace ℋ f
   holo' := .sum (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f r⁻¹).holo')
   bdd_at_cusps' h γ := by
@@ -255,8 +255,8 @@ definition CuspForm.trace
     rw [show (0 : Complex) = ∑ c : ℋ ⧸ 𝒢.subgroupOf ℋ]; rw [0 
 
 中文:
-定义 CuspForm.trace
-  签名: [CuspFormClass F 𝒢 k]
+定义 尖点形式.trace
+  签名: [尖点形式类 F 𝒢 k]
   定义体: ModularForm.trace ℋ f
   zero_at_cusps' h γ := by
     rintro rfl
@@ -294,8 +294,8 @@ definition ModularForm.norm
     rw [Nat.card_eq_fintype_card]; rw [
 
 中文:
-定义 ModularForm.norm
-  签名: [ℋ.HasDetPlusMinusOne] [ModularFormClass F 𝒢 k]
+定义 模形式.norm
+  签名: [ℋ.有DetPlusMinusOne] [模形式类 F 𝒢 k]
   定义体: SlashInvariantForm.norm ℋ f
   holo' := .prod (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f r⁻¹).holo')
   bdd_at_cusps' h γ := by
@@ -332,8 +332,8 @@ lemma ModularForm.norm_ne_zero
   · exact Quotient.forall.mpr fun r _ => (translate f r.val⁻¹).holo'
 
 中文:
-引理 ModularForm.norm_ne_zero
-  结论: [ℋ.HasDetPlusMinusOne] [ModularFormClass F 𝒢 k]
+引理 模形式.norm_ne_zero
+  结论: [ℋ.有DetPlusMinusOne] [模形式类 F 𝒢 k]
   证明: by
   contrapose hf
   rw [← DFunLike.coe_injective.eq_iff]; rw [coe_norm]; rw [FunLike.coe_zero]; rw [prod_eq_zero_iff] at hf
@@ -364,8 +364,8 @@ lemma ModularForm.norm_eq_zero_iff
       using ⟨1, by simpa using congr_fun hf τ⟩
 
 中文:
-引理 ModularForm.norm_eq_zero_iff
-  条件: [ℋ.HasDetPlusMinusOne] [ModularFormClass F 𝒢 k]
+引理 模形式.norm_eq_zero_iff
+  条件: [ℋ.有DetPlusMinusOne] [模形式类 F 𝒢 k]
   证明: by
   refine ⟨fun hn => ?_, fun hf => ?_⟩
   · contrapose! hn
@@ -401,8 +401,8 @@ lemma ModularForm.isZero_of_neg_weight
     (ModularForm.norm 𝒮ℒ f)]; rw [Pi.zero_apply]; rw [zero_apply]
 
 中文:
-引理 ModularForm.isZero_of_neg_weight
-  结论: [𝒢.IsArithmetic]
+引理 模形式.isZero_of_neg_weight
+  结论: [𝒢.是Arithmetic]
   证明: by
   suffices ModularForm.norm 𝒮ℒ f = 0 by simpa [ModularForm.norm_eq_zero_iff]
   ext
@@ -434,8 +434,8 @@ lemma ModularForm.eq_const_of_weight_zero₀
     (Mod
 
 中文:
-引理 ModularForm.eq_const_of_weight_zero₀
-  结论: [𝒢.IsArithmetic] [𝒢.HasDetOne]
+引理 模形式.eq_const_of_weight_zero₀
+  结论: [𝒢.是Arithmetic] [𝒢.有DetOne]
   证明: by
   -- Consider the norm of `f - (f I)`. This must be a constant, since it's a weight 0 level 1 form.
   let : ModularFormClass (ModularForm 𝒮ℒ (0 * Nat.card (𝒮ℒ ⧸ 𝒢.subgroupOf 𝒮ℒ))) 𝒮ℒ 0 := by
@@ -471,8 +471,8 @@ lemma ModularForm.eq_const_of_weight_zero
     slash_action_eq' γ hγ := f.slash_action_eq' γ hγ.1 }
 
 中文:
-引理 ModularForm.eq_const_of_weight_zero
-  条件: [𝒢.IsArithmetic] (f : ModularForm 𝒢 0)
+引理 模形式.eq_const_of_weight_zero
+  条件: [𝒢.是Arithmetic] (f : 模形式 𝒢 0)
   证明: eq_const_of_weight_zero₀ (𝒢 := 𝒢 ⊓ 𝒮ℒ) {
     toFun := f
     holo' := f.holo'

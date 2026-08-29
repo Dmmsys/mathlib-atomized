@@ -60,7 +60,7 @@ theorem isEmbedding_sigmaMk_comp
 
 中文:
 定理 isEmbedding_sigmaMk_comp
-  条件: [Nonempty X]
+  条件: [非空 X]
   证明: inducing_sigma.2
     ⟨fun i => (sigmaMk i).isInducing_postcomp IsEmbedding.sigmaMk.isInducing, fun i =>
       let ⟨x⟩ := ‹Nonempty X›
@@ -98,7 +98,7 @@ theorem exists_lift_sigma
   ⟨i, ⟨g, hg⟩, DFunLike.ext' hfg⟩
 
 中文:
-定理 exists_lift_sigma
+定理 存在_lift_sigma
   条件: (f : C(X, Σ i, Y i))
   结论: 存在 i g, f = (sigmaMk i).comp g
   证明: let ⟨i, g, hg, hfg⟩ := (map_continuous f).exists_lift_sigma

@@ -42,7 +42,7 @@ grind_pattern count_not_add_count => count (!b) l
 
 中文:
 定理 count_not_add_count
-  条件: (l : List 布尔) (b : 布尔)
+  条件: (l : 列表 布尔值) (b : 布尔值)
   结论: count (!b) l + count b l = length l
   证明: by
   have := length_eq_countP_add_countP (l := l) (· == !b)
@@ -75,7 +75,7 @@ theorem count_add_count_not
 
 中文:
 定理 count_add_count_not
-  条件: (l : List 布尔) (b : 布尔)
+  条件: (l : 列表 布尔值) (b : 布尔值)
   结论: count b l + count (!b) l = length l
   证明: by
   grind
@@ -102,7 +102,7 @@ grind_pattern count_false_add_count_true => count true l
 
 中文:
 定理 count_false_add_count_true
-  条件: (l : List 布尔)
+  条件: (l : 列表 布尔值)
   结论: count false l + count true l = length l
   证明: count_not_add_count l true
 
@@ -131,7 +131,7 @@ theorem count_true_add_count_false
 
 中文:
 定理 count_true_add_count_false
-  条件: (l : List 布尔)
+  条件: (l : 列表 布尔值)
   结论: count true l + count false l = length l
   证明: count_not_add_count l false
 
@@ -173,7 +173,7 @@ theorem count_not_eq_count
 
 中文:
 定理 count_not_eq_count
-  条件: (hl : IsChain (· != ·) l) (h2 : Even (length l)) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (h2 : Even (length l)) (b : 布尔值)
   证明: by
   rcases l with - | ⟨x, l⟩
   · rfl
@@ -219,7 +219,7 @@ theorem count_not_le_count_add_one
 
 中文:
 定理 count_not_le_count_add_one
-  条件: (hl : IsChain (· != ·) l) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (b : 布尔值)
   证明: by
   cases l
   · exact zero_le
@@ -282,7 +282,7 @@ theorem two_mul_count_bool_of_even
 
 中文:
 定理 two_mul_count_bool_of_even
-  条件: (hl : IsChain (· != ·) l) (h2 : Even (length l)) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (h2 : Even (length l)) (b : 布尔值)
   证明: by
   rw [← count_not_add_count l b]; rw [hl.count_not_eq_count h2]; rw [two_mul]
 
@@ -307,7 +307,7 @@ theorem two_mul_count_bool_eq_ite
 
 中文:
 定理 two_mul_count_bool_eq_ite
-  条件: (hl : IsChain (· != ·) l) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (b : 布尔值)
   证明: by
   by_cases h2 : Even (length l)
   · rw [if_pos h2, hl.two_mul_count_bool_of_even h2]
@@ -338,7 +338,7 @@ theorem length_sub_one_le_two_mul_count_bool
 
 中文:
 定理 length_sub_one_le_two_mul_count_bool
-  条件: (hl : IsChain (· != ·) l) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (b : 布尔值)
   证明: by
   grind [hl.two_mul_count_bool_eq_ite]
 
@@ -360,7 +360,7 @@ theorem length_div_two_le_count_bool
 
 中文:
 定理 length_div_two_le_count_bool
-  条件: (hl : IsChain (· != ·) l) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (b : 布尔值)
   证明: by
   rw [Nat.div_le_iff_le_mul_add_pred two_pos]; rw [← tsub_le_iff_right]
   exact length_sub_one_le_two_mul_count_bool hl b
@@ -383,7 +383,7 @@ theorem two_mul_count_bool_le_length_add_one
 
 中文:
 定理 two_mul_count_bool_le_length_add_one
-  条件: (hl : IsChain (· != ·) l) (b : 布尔)
+  条件: (hl : IsChain (· != ·) l) (b : 布尔值)
   证明: by
   grind [hl.two_mul_count_bool_eq_ite]
 

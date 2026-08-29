@@ -163,9 +163,9 @@ theorem NatTrans.mono_iff_mono_app'
     apply NatTrans.mono_of_mono_app
 
 中文:
-定理 NatTrans.mono_iff_mono_app'
+定理 自然变换.mono_iff_mono_app'
   条件: {F G : C ⥤ D} (η : F ⟶ G)
-  结论: Mono η ↔ 对任意 c, Mono (η.app c)
+  结论: 单态射 η ↔ 对任意 c, 单态射 (η.app c)
   证明: by
   constructor
   · intro h c
@@ -299,9 +299,9 @@ theorem NatTrans.epi_iff_epi_app'
     apply NatTrans.epi_of_epi_app
 
 中文:
-定理 NatTrans.epi_iff_epi_app'
+定理 自然变换.epi_iff_epi_app'
   条件: {F G : C ⥤ D} (η : F ⟶ G)
-  结论: Epi η ↔ 对任意 c, Epi (η.app c)
+  结论: 满态射 η ↔ 对任意 c, 满态射 (η.app c)
   证明: by
   constructor
   · intro h c

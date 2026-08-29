@@ -45,7 +45,7 @@ definition TStructure.t
 
 中文:
 定义 TStructure.t
-  签名: : TStructure (DerivedCategory C) where
+  签名: : TStructure (导出范畴 C) where
   定义体: exists (K : CochainComplex C Int) (_ : X ≅ DerivedCategory.Q.obj K), K.IsStrictlyLE n
   ge n X := exists (K : CochainComplex C Int) (_ : X ≅ DerivedCategory.Q.obj K), K.IsStrictlyGE n
   le_isClosedUnderIsomorphisms n :=
@@ -109,8 +109,8 @@ abbreviation IsLE
   body: TStructure.t.IsLE X n
 
 中文:
-缩写 IsLE
-  签名: (X : DerivedCategory C) (n : 整数)
+缩写 是LE
+  签名: (X : 导出范畴 C) (n : 整数)
   定义体: TStructure.t.IsLE X n
 
 Depends on / 依赖: TStructure, TStructure.t.IsLE
@@ -126,8 +126,8 @@ abbreviation IsGE
   body: TStructure.t.IsGE X n
 
 中文:
-缩写 IsGE
-  签名: (X : DerivedCategory C) (n : 整数)
+缩写 是GE
+  签名: (X : 导出范畴 C) (n : 整数)
   定义体: TStructure.t.IsGE X n
 
 Depends on / 依赖: TStructure, TStructure.t.IsGE
@@ -153,7 +153,7 @@ lemma isGE_iff
 
 中文:
 引理 isGE_iff
-  条件: (X : DerivedCategory C) (n : 整数)
+  条件: (X : 导出范畴 C) (n : 整数)
   证明: by
   constructor
   · rintro ⟨K, e, _⟩ i hi
@@ -203,7 +203,7 @@ lemma isLE_iff
 
 中文:
 引理 isLE_iff
-  条件: (X : DerivedCategory C) (n : 整数)
+  条件: (X : 导出范畴 C) (n : 整数)
   证明: by
   constructor
   · rintro ⟨K, e, _⟩ i hi
@@ -246,7 +246,7 @@ lemma isZero_of_isGE
 
 中文:
 引理 isZero_of_isGE
-  条件: (X : DerivedCategory C) (n i : 整数) (hi : i < n) [hX : X.IsGE n]
+  条件: (X : 导出范畴 C) (n i : 整数) (hi : i < n) [hX : X.是GE n]
   证明: by
   rw [isGE_iff] at hX
   exact hX i hi
@@ -270,7 +270,7 @@ lemma isZero_of_isLE
 
 中文:
 引理 isZero_of_isLE
-  条件: (X : DerivedCategory C) (n i : 整数) (hi : n < i) [hX : X.IsLE n]
+  条件: (X : 导出范畴 C) (n i : 整数) (hi : n < i) [hX : X.是LE n]
   证明: by
   rw [isLE_iff] at hX
   exact hX i hi
@@ -296,7 +296,7 @@ lemma isGE_Q_obj_iff
 
 中文:
 引理 isGE_Q_obj_iff
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: by
   have eq := fun i => ((homologyFunctorFactors C i).app K).isZero_iff
   simp only [Functor.comp_obj, HomologicalComplex.homologyFunctor_obj] at eq
@@ -326,7 +326,7 @@ lemma isLE_Q_obj_iff
 
 中文:
 引理 isLE_Q_obj_iff
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: by
   have eq := fun i => ((homologyFunctorFactors C i).app K).isZero_iff
   simp only [Functor.comp_obj, HomologicalComplex.homologyFunctor_obj] at eq
@@ -375,8 +375,8 @@ lemma exists_iso_Q_obj_of_isLE
   exact ⟨K, inferInstance, ⟨e⟩⟩
 
 中文:
-引理 exists_iso_Q_obj_of_isLE
-  条件: (X : DerivedCategory C) (n : 整数) [hX : X.IsLE n]
+引理 存在_iso_Q_obj_of_isLE
+  条件: (X : 导出范畴 C) (n : 整数) [hX : X.是LE n]
   证明: by
   obtain ⟨K, e, _⟩ := hX
   exact ⟨K, inferInstance, ⟨e⟩⟩
@@ -397,8 +397,8 @@ lemma exists_iso_Q_obj_of_isGE
   exact ⟨K, inferInstance, ⟨e⟩⟩
 
 中文:
-引理 exists_iso_Q_obj_of_isGE
-  条件: (X : DerivedCategory C) (n : 整数) [hX : X.IsGE n]
+引理 存在_iso_Q_obj_of_isGE
+  条件: (X : 导出范畴 C) (n : 整数) [hX : X.是GE n]
   证明: by
   obtain ⟨K, e, _⟩ := hX
   exact ⟨K, inferInstance, ⟨e⟩⟩
@@ -422,8 +422,8 @@ lemma exists_iso_Q_obj_of_isGE_of_isLE
   exact ⟨K.truncGE a, inferInstance, inferInstance, ⟨e ≪≫ asIso (Q.map (K.πTruncGE a))⟩⟩
 
 中文:
-引理 exists_iso_Q_obj_of_isGE_of_isLE
-  条件: (X : DerivedCategory C) (a b : 整数) [X.IsGE a] [X.IsLE b]
+引理 存在_iso_Q_obj_of_isGE_of_isLE
+  条件: (X : 导出范畴 C) (a b : 整数) [X.是GE a] [X.是LE b]
   证明: by
   obtain ⟨K, hK, ⟨e⟩⟩ := X.exists_iso_Q_obj_of_isLE b
   have : K.IsGE a := by
@@ -453,7 +453,7 @@ lemma exists_iso_singleFunctor_obj_of_isGE_of_isLE
   exact ⟨Y, ⟨e ≪≫ Q.mapIso e'⟩⟩
 
 中文:
-引理 exists_iso_singleFunctor_obj_of_isGE_of_isLE
+引理 存在_iso_singleFunctor_obj_of_isGE_of_isLE
   证明: by
   obtain ⟨K, _, _, ⟨e⟩⟩ := exists_iso_Q_obj_of_isGE_of_isLE X n n
   obtain ⟨Y, ⟨e'⟩⟩ := CochainComplex.exists_iso_single K n
@@ -482,7 +482,7 @@ abbreviation Minus
 
 中文:
 缩写 Minus
-  签名: : Type max u v
+  签名: : 类型 最大值 u v
   定义体: (t : TStructure (DerivedCategory C)).minus.FullSubcategory
 
 Depends on / 依赖: DerivedCategory, FullSubcategory, TStructure, minus.FullSubcategory
@@ -499,7 +499,7 @@ abbreviation Plus
 
 中文:
 缩写 Plus
-  签名: : Type max u v
+  签名: : 类型 最大值 u v
   定义体: (t : TStructure (DerivedCategory C)).plus.FullSubcategory
 
 Depends on / 依赖: DerivedCategory, FullSubcategory, TStructure, plus.FullSubcategory
@@ -515,8 +515,8 @@ abbreviation Bounded
   body: (t : TStructure (DerivedCategory C)).bounded.FullSubcategory
 
 中文:
-缩写 Bounded
-  签名: : Type max u v
+缩写 有界
+  签名: : 类型 最大值 u v
   定义体: (t : TStructure (DerivedCategory C)).bounded.FullSubcategory
 
 Depends on / 依赖: DerivedCategory, FullSubcategory, TStructure, bounded, bounded.FullSubcategory
@@ -535,7 +535,7 @@ abbreviation Minus.ι
 
 中文:
 缩写 Minus.ι
-  签名: : Minus C ⥤ DerivedCategory C
+  签名: : Minus C ⥤ 导出范畴 C
   定义体: t.minus.ι
 
 Depends on / 依赖: t.minus
@@ -552,7 +552,7 @@ abbreviation Plus.ι
 
 中文:
 缩写 Plus.ι
-  签名: : Plus C ⥤ DerivedCategory C
+  签名: : Plus C ⥤ 导出范畴 C
   定义体: t.plus.ι
 
 Depends on / 依赖: t.plus
@@ -568,8 +568,8 @@ abbreviation Bounded.ι
   body: t.bounded.ι
 
 中文:
-缩写 Bounded.ι
-  签名: : Bounded C ⥤ DerivedCategory C
+缩写 有界.ι
+  签名: : 有界 C ⥤ 导出范畴 C
   定义体: t.bounded.ι
 
 Depends on / 依赖: bounded, t.bounded

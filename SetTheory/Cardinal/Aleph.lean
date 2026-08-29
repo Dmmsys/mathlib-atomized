@@ -68,7 +68,7 @@ definition IsInitial
 
 中文:
 定义 IsInitial
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: o.card.ord = o
 
 Depends on / 依赖: o.card.ord
@@ -87,7 +87,7 @@ theorem IsInitial.ord_card
 
 中文:
 定理 IsInitial.ord_card
-  条件: {o : Ordinal} (h : IsInitial o)
+  条件: {o : 序数} (h : IsInitial o)
   结论: o.card.ord = o
   证明: h
 -/
@@ -104,7 +104,7 @@ theorem IsInitial.le_ord_iff_card_le
 
 中文:
 定理 IsInitial.le_ord_iff_card_le
-  条件: {o : Ordinal} (ho : o.IsInitial) (c : Cardinal)
+  条件: {o : 序数} (ho : o.IsInitial) (c : 基数)
   证明: by
   grw [← ord_le_ord, ho.ord_card]
 
@@ -128,7 +128,7 @@ theorem IsInitial.card_le_card
 
 中文:
 定理 IsInitial.card_le_card
-  条件: {a b : Ordinal} (ha : IsInitial a)
+  条件: {a b : 序数} (ha : IsInitial a)
   结论: a.card <= b.card ↔ a <= b
   证明: by
   refine ⟨fun h => ?_, Ordinal.card_le_card⟩
@@ -153,7 +153,7 @@ theorem IsInitial.card_lt_card
 
 中文:
 定理 IsInitial.card_lt_card
-  条件: {a b : Ordinal} (hb : IsInitial b)
+  条件: {a b : 序数} (hb : IsInitial b)
   结论: a.card < b.card ↔ a < b
   证明: lt_iff_lt_of_le_iff_le hb.card_le_card
 
@@ -176,7 +176,7 @@ theorem isInitial_ord
 
 中文:
 定理 isInitial_ord
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: IsInitial c.ord
   证明: by
   rw [IsInitial]; rw [card_ord]
@@ -283,7 +283,7 @@ theorem isInitial_succ
 
 中文:
 定理 isInitial_succ
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: IsInitial (succ o) ↔ o < ω
   证明: ⟨Function.mtr fun hwo => ne_of_lt by simp_all [ord_card_le],
   fun how => (Ordinal.lt_omega0.1 how).rec fun n h => h ▸ isInitial_natCast (n + 1)⟩
@@ -339,7 +339,7 @@ definition isInitialIso
 
 中文:
 定义 isInitialIso
-  签名: : {x // IsInitial x} ≃o Cardinal where
+  签名: : {x // IsInitial x} ≃o 基数 where
   定义体: x.1.card
   invFun x := ⟨x.ord, isInitial_ord _⟩
   left_inv x := Subtype.ext x.2.ord_card
@@ -365,7 +365,7 @@ definition preOmega
 
 中文:
 定义 preOmega
-  签名: : Ordinal.{u} ↪o Ordinal.{u} where
+  签名: : 序数.{u} ↪o 序数.{u} where
   定义体: enumOrd {x | IsInitial x}
   inj' _ _ h := enumOrd_injective not_bddAbove_isInitial h
   map_rel_iff' := enumOrd_le_enumOrd not_bddAbove_isInitial
@@ -403,7 +403,7 @@ theorem preOmega_strictMono
 
 中文:
 定理 preOmega_strictMono
-  结论: StrictMono preOmega
+  结论: 严格递增 preOmega
   证明: preOmega.strictMono
 
 Depends on / 依赖: preOmega, preOmega.strictMono, strictMono
@@ -422,7 +422,7 @@ theorem preOmega_lt_preOmega
 
 中文:
 定理 preOmega_lt_preOmega
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preOmega o₁ < preOmega o₂ ↔ o₁ < o₂
   证明: preOmega.lt_iff_lt
 
@@ -442,7 +442,7 @@ theorem preOmega_le_preOmega
 
 中文:
 定理 preOmega_le_preOmega
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preOmega o₁ <= preOmega o₂ ↔ o₁ <= o₂
   证明: preOmega.le_iff_le
 
@@ -462,8 +462,8 @@ theorem preOmega_max
 
 中文:
 定理 preOmega_max
-  条件: (o₁ o₂ : Ordinal)
-  结论: preOmega (max o₁ o₂) = max (preOmega o₁) (preOmega o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: preOmega (最大值 o₁ o₂) = 最大值 (preOmega o₁) (preOmega o₂)
   证明: preOmega.monotone.map_max
 
 Depends on / 依赖: map_max, monotone, preOmega, preOmega.monotone.map_max
@@ -482,7 +482,7 @@ theorem isInitial_preOmega
 
 中文:
 定理 isInitial_preOmega
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: IsInitial (preOmega o)
   证明: enumOrd_mem not_bddAbove_isInitial o
 
@@ -504,7 +504,7 @@ theorem le_preOmega_self
 
 中文:
 定理 le_preOmega_self
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o <= preOmega o
   证明: preOmega_strictMono.le_apply
 
@@ -599,7 +599,7 @@ theorem preOmega_ofNat
   proof: preOmega_natCast n
 
 中文:
-定理 preOmega_ofNat
+定理 preOmega_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: preOmega of自然数(n) = n
   证明: preOmega_natCast n
@@ -618,8 +618,8 @@ theorem preOmega_le_of_forall_lt
   proof: enumOrd_le_of_forall_lt ha H
 
 中文:
-定理 preOmega_le_of_forall_lt
-  条件: {o a : Ordinal} (ha : IsInitial a) (H : 对任意 b < o, preOmega b < a)
+定理 preOmega_le_of_对任意_lt
+  条件: {o a : 序数} (ha : IsInitial a) (H : 对任意 b < o, preOmega b < a)
   证明: enumOrd_le_of_forall_lt ha H
 
 Depends on / 依赖: enumOrd_le_of_forall_lt
@@ -644,7 +644,7 @@ theorem isNormal_preOmega
 
 中文:
 定理 isNormal_preOmega
-  结论: IsNormal preOmega
+  结论: 是正规 preOmega
   证明: by
   rw [isNormal_iff]
   refine ⟨preOmega_strictMono, fun o ho a ha =>
@@ -699,7 +699,7 @@ alias ⟨_, IsInitial.mem_range_preOmega⟩ := mem_range_preOmega_iff
 
 中文:
 定理 mem_range_preOmega_iff
-  条件: {x : Ordinal}
+  条件: {x : 序数}
   结论: x in range preOmega ↔ IsInitial x
   证明: by
   rw [range_preOmega]; rw [mem_ofPred]
@@ -755,7 +755,7 @@ theorem omega0_le_preOmega_iff
 
 中文:
 定理 omega0_le_preOmega_iff
-  条件: {x : Ordinal}
+  条件: {x : 序数}
   结论: ω <= preOmega x ↔ ω <= x
   证明: by
   conv_lhs => rw [← preOmega_omega0, preOmega_le_preOmega]
@@ -780,7 +780,7 @@ theorem omega0_lt_preOmega_iff
 
 中文:
 定理 omega0_lt_preOmega_iff
-  条件: {x : Ordinal}
+  条件: {x : 序数}
   结论: ω < preOmega x ↔ ω < x
   证明: by
   conv_lhs => rw [← preOmega_omega0, preOmega_lt_preOmega]
@@ -803,7 +803,7 @@ recommended_spelling "omega" for "ω_" in [omega, «termω_»]
 
 中文:
 定义 omega
-  签名: : Ordinal ↪o Ordinal
+  签名: : 序数 ↪o 序数
   定义体: (OrderEmbedding.addLeft ω).trans preOmega
 
 @[inherit_doc] scoped notation "ω_ " => omega
@@ -832,7 +832,7 @@ theorem omega_eq_preOmega
 
 中文:
 定理 omega_eq_preOmega
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ω_ o = preOmega (ω + o)
   证明: rfl
 -/
@@ -849,7 +849,7 @@ theorem omega_strictMono
 
 中文:
 定理 omega_strictMono
-  结论: StrictMono omega
+  结论: 严格递增 omega
   证明: omega.strictMono
 
 Depends on / 依赖: omega.strictMono, strictMono
@@ -868,7 +868,7 @@ theorem omega_lt_omega
 
 中文:
 定理 omega_lt_omega
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ω_ o₁ < ω_ o₂ ↔ o₁ < o₂
   证明: omega.lt_iff_lt
 
@@ -888,7 +888,7 @@ theorem omega_le_omega
 
 中文:
 定理 omega_le_omega
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ω_ o₁ <= ω_ o₂ ↔ o₁ <= o₂
   证明: omega.le_iff_le
 
@@ -908,8 +908,8 @@ theorem omega_max
 
 中文:
 定理 omega_max
-  条件: (o₁ o₂ : Ordinal)
-  结论: ω_ (max o₁ o₂) = max (ω_ o₁) (ω_ o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: ω_ (最大值 o₁ o₂) = 最大值 (ω_ o₁) (ω_ o₂)
   证明: omega.monotone.map_max
 
 Depends on / 依赖: map_max, monotone, omega.monotone.map_max
@@ -928,7 +928,7 @@ theorem preOmega_le_omega
 
 中文:
 定理 preOmega_le_omega
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preOmega o <= ω_ o
   证明: preOmega_le_preOmega.2 le_add_self
 
@@ -948,7 +948,7 @@ theorem isInitial_omega
 
 中文:
 定理 isInitial_omega
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: IsInitial (omega o)
   证明: isInitial_preOmega _
 
@@ -970,7 +970,7 @@ theorem le_omega_self
 
 中文:
 定理 le_omega_self
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o <= omega o
   证明: omega_strictMono.le_apply
 
@@ -1015,7 +1015,7 @@ theorem omega0_le_omega
 
 中文:
 定理 omega0_le_omega
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ω <= ω_ o
   证明: by
   rw [← omega_zero]; rw [omega_le_omega]
@@ -1040,7 +1040,7 @@ theorem omega_pos
 
 中文:
 定理 omega_pos
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: 0 < ω_ o
   证明: omega0_pos.trans_le (omega0_le_omega o)
 
@@ -1087,7 +1087,7 @@ theorem isNormal_omega
 
 中文:
 定理 isNormal_omega
-  结论: IsNormal omega
+  结论: 是正规 omega
   证明: isNormal_preOmega.comp (isNormal_add_right _)
 
 @[simp]
@@ -1154,7 +1154,7 @@ theorem mem_range_omega_iff
 
 中文:
 定理 mem_range_omega_iff
-  条件: {x : Ordinal}
+  条件: {x : 序数}
   结论: x in range omega ↔ ω <= x ∧ IsInitial x
   证明: by
   rw [range_omega]; rw [mem_ofPred]
@@ -1179,7 +1179,7 @@ theorem preOmega_of_omega0_sq_le
 
 中文:
 定理 preOmega_of_omega0_sq_le
-  条件: {o : Ordinal} (ho : ω ^ 2 <= o)
+  条件: {o : 序数} (ho : ω ^ 2 <= o)
   结论: preOmega o = ω_ o
   证明: by
   rw [← opow_natCast] at ho
@@ -1213,7 +1213,7 @@ definition preAleph
 
 中文:
 定义 preAleph
-  签名: : Ordinal.{u} ≃o Cardinal.{u}
+  签名: : 序数.{u} ≃o 基数.{u}
   定义体: (enumOrdOrderIso _ not_bddAbove_isInitial).trans isInitialIso
 
 @[simp]
@@ -1236,8 +1236,8 @@ theorem _root_.Ordinal.card_preOmega
 @[simp]
 
 中文:
-定理 _root_.Ordinal.card_preOmega
-  条件: (o : Ordinal)
+定理 _root_.序数.card_preOmega
+  条件: (o : 序数)
   结论: (preOmega o).card = preAleph o
   证明: rfl
 
@@ -1261,7 +1261,7 @@ theorem ord_preAleph
 
 中文:
 定理 ord_preAleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: (preAleph o).ord = preOmega o
   证明: by
   rw [← o.card_preOmega]; rw [(isInitial_preOmega o).ord_card]
@@ -1288,8 +1288,8 @@ theorem _root_.Ordinal.type_lt_cardinal
 @[simp]
 
 中文:
-定理 _root_.Ordinal.type_lt_cardinal
-  结论: typeLT Cardinal = Ordinal.univ.{u, u + 1}
+定理 _root_.序数.type_lt_cardinal
+  结论: typeLT 基数 = 序数.univ.{u, u + 1}
   证明: by
   simpa using preAleph.symm.ordinalType_congr
 
@@ -1316,7 +1316,7 @@ theorem mk_cardinal
 
 中文:
 定理 mk_cardinal
-  结论: #Cardinal = univ.{u, u + 1}
+  结论: #基数 = univ.{u, u + 1}
   证明: by
   simpa only [card_type, card_univ] using congr_arg card type_lt_cardinal
 
@@ -1336,7 +1336,7 @@ theorem _root_.Order.cof_cardinal
 
 中文:
 定理 _root_.Order.cof_cardinal
-  结论: Order.cof Cardinal.{u} = Cardinal.univ.{u, u + 1}
+  结论: Order.cof 基数.{u} = 基数.univ.{u, u + 1}
   证明: by
   simpa using preAleph.cof_congr.symm
 
@@ -1355,7 +1355,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularCardinalOrder Cardinal
+  签名: 是RegularCardinal序 基数
   定义体: ⟨by simp [Order.cof_cardinal]⟩
 
 Depends on / 依赖: ContractibleSpace, Joined, Order.cof_cardinal, PathConnectedSpace, cof_cardinal, evalAt, h.evalAt, id_nullhomotopic, pathConnectedSpace_iff_eq
@@ -1373,7 +1373,7 @@ theorem preAleph_lt_preAleph
 
 中文:
 定理 preAleph_lt_preAleph
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preAleph o₁ < preAleph o₂ ↔ o₁ < o₂
   证明: preAleph.lt_iff_lt
 
@@ -1393,7 +1393,7 @@ theorem preAleph_le_preAleph
 
 中文:
 定理 preAleph_le_preAleph
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preAleph o₁ <= preAleph o₂ ↔ o₁ <= o₂
   证明: preAleph.le_iff_le
 
@@ -1415,8 +1415,8 @@ theorem preAleph_max
 
 中文:
 定理 preAleph_max
-  条件: (o₁ o₂ : Ordinal)
-  结论: preAleph (max o₁ o₂) = max (preAleph o₁) (preAleph o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: preAleph (最大值 o₁ o₂) = 最大值 (preAleph o₁) (preAleph o₂)
   证明: preAleph.monotone.map_max
 
 @[simp]
@@ -1463,7 +1463,7 @@ theorem succ_preAleph
 
 中文:
 定理 succ_preAleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: succ (preAleph o) = preAleph (o + 1)
   证明: (preAleph.map_succ o).symm
 
@@ -1488,7 +1488,7 @@ theorem preAleph_add_one
 
 中文:
 定理 preAleph_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preAleph (o + 1) = succ (preAleph o)
   证明: preAleph.map_succ o
 
@@ -1513,7 +1513,7 @@ theorem preAleph_succ
 
 中文:
 定理 preAleph_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preAleph (succ o) = succ (preAleph o)
   证明: preAleph.map_succ o
 
@@ -1564,7 +1564,7 @@ theorem preAleph_ofNat
 @[simp]
 
 中文:
-定理 preAleph_ofNat
+定理 preAleph_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: preAleph of自然数(n) = of自然数(n)
   证明: preAleph_natCast n
@@ -1618,7 +1618,7 @@ theorem preAleph_symm_ofNat
 @[simp]
 
 中文:
-定理 preAleph_symm_ofNat
+定理 preAleph_symm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: preAleph.symm of自然数(n) = of自然数(n)
   证明: preAleph_symm_natCast n
@@ -1699,7 +1699,7 @@ theorem preAleph_pos
 
 中文:
 定理 preAleph_pos
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: 0 < preAleph o ↔ 0 < o
   证明: by
   rw [← preAleph_zero]; rw [preAleph_lt_preAleph]
@@ -1724,7 +1724,7 @@ theorem aleph0_le_preAleph
 
 中文:
 定理 aleph0_le_preAleph
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: ℵ₀ <= preAleph o ↔ ω <= o
   证明: by
   rw [← preAleph_omega0]; rw [preAleph_le_preAleph]
@@ -1744,8 +1744,8 @@ theorem _root_.Ordinal.card_le_preAleph
   proof: o.card_preOmega.trans_ge card_le_card o.le_preOmega_self
 
 中文:
-定理 _root_.Ordinal.card_le_preAleph
-  条件: (o : Ordinal)
+定理 _root_.序数.card_le_preAleph
+  条件: (o : 序数)
   结论: o.card <= preAleph o
   证明: o.card_preOmega.trans_ge card_le_card o.le_preOmega_self
 
@@ -1768,7 +1768,7 @@ theorem le_preAleph_ord
 
 中文:
 定理 le_preAleph_ord
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c <= preAleph c.ord
   证明: by
   simpa using c.ord.card_le_preAleph
@@ -1795,8 +1795,8 @@ theorem lift_preAleph
 
 中文:
 定理 lift_preAleph
-  条件: (o : Ordinal.{u})
-  结论: lift.{v} (preAleph o) = preAleph (Ordinal.lift.{v} o)
+  条件: (o : 序数.{u})
+  结论: lift.{v} (preAleph o) = preAleph (序数.lift.{v} o)
   证明: (preAleph.toInitialSeg.trans liftInitialSeg).eq
     (Ordinal.liftInitialSeg.trans preAleph.toInitialSeg) o
 
@@ -1819,8 +1819,8 @@ theorem _root_.Ordinal.lift_preOmega
   rw [← ord_preAleph]; rw [lift_ord]; rw [lift_preAleph]; rw [ord_preAleph]
 
 中文:
-定理 _root_.Ordinal.lift_preOmega
-  条件: (o : Ordinal.{u})
+定理 _root_.序数.lift_preOmega
+  条件: (o : 序数.{u})
   证明: by
   rw [← ord_preAleph]; rw [lift_ord]; rw [lift_preAleph]; rw [ord_preAleph]
 
@@ -1840,7 +1840,7 @@ theorem isNormal_preAleph
 
 中文:
 定理 isNormal_preAleph
-  结论: Order.IsNormal preAleph
+  结论: Order.是正规 preAleph
   证明: OrderIso.isNormal _
 
 Depends on / 依赖: OrderIso, OrderIso.isNormal, isNormal
@@ -1861,7 +1861,7 @@ theorem preAleph_le_of_isSuccPrelimit
 
 中文:
 定理 preAleph_le_of_isSuccPrelimit
-  条件: {o : Ordinal} (l : IsSuccPrelimit o) {c}
+  条件: {o : 序数} (l : IsSuccPrelimit o) {c}
   证明: by
   obtain rfl | ho := eq_or_ne o 0
   · simp
@@ -1888,7 +1888,7 @@ theorem preAleph_limit
 
 中文:
 定理 preAleph_limit
-  条件: {o : Ordinal} (ho : IsSuccPrelimit o)
+  条件: {o : 序数} (ho : IsSuccPrelimit o)
   证明: by
   obtain rfl | h := eq_or_ne o 0
   · simp
@@ -1913,7 +1913,7 @@ theorem preAleph_le_of_strictMono
 
 中文:
 定理 preAleph_le_of_strictMono
-  条件: {f : Ordinal -> Cardinal} (hf : StrictMono f) (o : Ordinal)
+  条件: {f : 序数 -> 基数} (hf : 严格递增 f) (o : 序数)
   证明: by
   simpa using (hf.comp preAleph.symm.strictMono).id_le (preAleph o)
 
@@ -1936,7 +1936,7 @@ recommended_spelling "aleph" for "ℵ_" in [aleph, «termℵ_»]
 
 中文:
 定义 aleph
-  签名: : Ordinal ↪o Cardinal
+  签名: : 序数 ↪o 基数
   定义体: (OrderEmbedding.addLeft ω).trans preAleph
 
 @[inherit_doc] scoped notation "ℵ_ " => aleph
@@ -1967,7 +1967,7 @@ theorem aleph_eq_preAleph
 
 中文:
 定理 aleph_eq_preAleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ_ o = preAleph (ω + o)
   证明: rfl
 
@@ -1989,8 +1989,8 @@ theorem _root_.Ordinal.card_omega
 @[simp]
 
 中文:
-定理 _root_.Ordinal.card_omega
-  条件: (o : Ordinal)
+定理 _root_.序数.card_omega
+  条件: (o : 序数)
   结论: (ω_ o).card = ℵ_ o
   证明: rfl
 
@@ -2013,7 +2013,7 @@ theorem preAleph_symm_aleph
 
 中文:
 定理 preAleph_symm_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preAleph.symm (ℵ_ o) = ω + o
   证明: preAleph.symm_apply_apply _
 
@@ -2036,7 +2036,7 @@ theorem ord_aleph
 
 中文:
 定理 ord_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: (ℵ_ o).ord = ω_ o
   证明: ord_preAleph _
 
@@ -2056,7 +2056,7 @@ theorem aleph_lt_aleph
 
 中文:
 定理 aleph_lt_aleph
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ℵ_ o₁ < ℵ_ o₂ ↔ o₁ < o₂
   证明: aleph.lt_iff_lt
 
@@ -2076,7 +2076,7 @@ theorem aleph_le_aleph
 
 中文:
 定理 aleph_le_aleph
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ℵ_ o₁ <= ℵ_ o₂ ↔ o₁ <= o₂
   证明: aleph.le_iff_le
 
@@ -2096,8 +2096,8 @@ theorem aleph_max
 
 中文:
 定理 aleph_max
-  条件: (o₁ o₂ : Ordinal)
-  结论: ℵ_ (max o₁ o₂) = max (ℵ_ o₁) (ℵ_ o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: ℵ_ (最大值 o₁ o₂) = 最大值 (ℵ_ o₁) (ℵ_ o₂)
   证明: aleph.monotone.map_max
 
 Depends on / 依赖: aleph.monotone.map_max, map_max, monotone
@@ -2118,7 +2118,7 @@ theorem preAleph_le_aleph
 
 中文:
 定理 preAleph_le_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preAleph o <= ℵ_ o
   证明: preAleph_le_preAleph.2 le_add_self
 
@@ -2144,7 +2144,7 @@ theorem succ_aleph
 
 中文:
 定理 succ_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: succ (ℵ_ o) = ℵ_ (o + 1)
   证明: by
   rw [aleph_eq_preAleph]; rw [succ_preAleph]; rw [add_assoc]; rw [aleph_eq_preAleph]
@@ -2171,7 +2171,7 @@ theorem aleph_add_one
 
 中文:
 定理 aleph_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ_ (o + 1) = succ (ℵ_ o)
   证明: by
   simp
@@ -2195,7 +2195,7 @@ theorem aleph_succ
 
 中文:
 定理 aleph_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ_ (succ o) = succ (ℵ_ o)
   证明: (succ_aleph o).symm
 
@@ -2241,8 +2241,8 @@ theorem lift_aleph
 
 中文:
 定理 lift_aleph
-  条件: (o : Ordinal.{u})
-  结论: lift.{v} (aleph o) = aleph (Ordinal.lift.{v} o)
+  条件: (o : 序数.{u})
+  结论: lift.{v} (aleph o) = aleph (序数.lift.{v} o)
   证明: by
   simp [aleph_eq_preAleph]
 
@@ -2263,8 +2263,8 @@ theorem _root_.Ordinal.lift_omega
   simp [omega_eq_preOmega]
 
 中文:
-定理 _root_.Ordinal.lift_omega
-  条件: (o : Ordinal.{u})
+定理 _root_.序数.lift_omega
+  条件: (o : 序数.{u})
   证明: by
   simp [omega_eq_preOmega]
 
@@ -2284,7 +2284,7 @@ theorem isNormal_aleph
 
 中文:
 定理 isNormal_aleph
-  结论: Order.IsNormal aleph
+  结论: Order.是正规 aleph
   证明: isNormal_preAleph.comp (isNormal_add_right _)
 
 Depends on / 依赖: isNormal_add_right, isNormal_preAleph, isNormal_preAleph.comp
@@ -2305,8 +2305,8 @@ theorem aleph_limit
 
 中文:
 定理 aleph_limit
-  条件: {o : Ordinal} (ho : IsSuccLimit o)
-  结论: ℵ_ o = ⨆ a : Iio o, ℵ_ a
+  条件: {o : 序数} (ho : 是SuccLimit o)
+  结论: ℵ_ o = ⨆ a : 左无界右开区间 o, ℵ_ a
   证明: isNormal_aleph.apply_of_isSuccLimit ho
 
 @[simp]
@@ -2332,7 +2332,7 @@ theorem aleph0_le_aleph
 
 中文:
 定理 aleph0_le_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ₀ <= ℵ_ o
   证明: by
   rw [aleph_eq_preAleph]; rw [aleph0_le_preAleph]
@@ -2359,7 +2359,7 @@ theorem aleph0_lt_aleph
 
 中文:
 定理 aleph0_lt_aleph
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: ℵ₀ < ℵ_ o ↔ 0 < o
   证明: by
   rw [← aleph_zero]; rw [aleph_lt_aleph]
@@ -2380,7 +2380,7 @@ theorem aleph_pos
 
 中文:
 定理 aleph_pos
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: 0 < ℵ_ o
   证明: aleph0_pos.trans_le (aleph0_le_aleph o)
 
@@ -2399,8 +2399,8 @@ theorem _root_.Ordinal.card_le_aleph
   proof: o.card_le_preAleph.trans (preAleph_le_aleph o)
 
 中文:
-定理 _root_.Ordinal.card_le_aleph
-  条件: (o : Ordinal)
+定理 _root_.序数.card_le_aleph
+  条件: (o : 序数)
   结论: o.card <= ℵ_ o
   证明: o.card_le_preAleph.trans (preAleph_le_aleph o)
 
@@ -2423,7 +2423,7 @@ theorem le_aleph_ord
 
 中文:
 定理 le_aleph_ord
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c <= ℵ_ c.ord
   证明: by
   simpa using c.ord.card_le_aleph
@@ -2448,8 +2448,8 @@ theorem aleph_toNat
 @[simp]
 
 中文:
-定理 aleph_toNat
-  条件: (o : Ordinal)
+定理 aleph_to自然数
+  条件: (o : 序数)
   结论: to自然数 (ℵ_ o) = 0
   证明: toNat_apply_of_aleph0_le aleph0_le_aleph o
 
@@ -2471,8 +2471,8 @@ theorem aleph_toENat
   proof: (toENat_eq_top.2 (aleph0_le_aleph o))
 
 中文:
-定理 aleph_toENat
-  条件: (o : Ordinal)
+定理 aleph_toE自然数
+  条件: (o : 序数)
   结论: toE自然数 (ℵ_ o) = ⊤
   证明: (toENat_eq_top.2 (aleph0_le_aleph o))
 
@@ -2496,8 +2496,8 @@ theorem isSuccLimit_omega
 
 中文:
 定理 isSuccLimit_omega
-  条件: (o : Ordinal)
-  结论: IsSuccLimit (ω_ o)
+  条件: (o : 序数)
+  结论: 是SuccLimit (ω_ o)
   证明: by
   rw [← ord_aleph]
   exact isSuccLimit_ord (aleph0_le_aleph _)
@@ -2525,7 +2525,7 @@ theorem range_aleph
 
 中文:
 定理 range_aleph
-  结论: range aleph = Set.Ici ℵ₀
+  结论: range aleph = 集合.左闭右无界区间 ℵ₀
   证明: by
   ext c
   refine ⟨fun ⟨o, e⟩ => e ▸ aleph0_le_aleph _, fun hc => ⟨preAleph.symm c - ω, ?_⟩⟩
@@ -2552,7 +2552,7 @@ theorem mem_range_aleph_iff
 
 中文:
 定理 mem_range_aleph_iff
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: c in range aleph ↔ ℵ₀ <= c
   证明: by
   rw [range_aleph]; rw [mem_Ici]
@@ -2576,7 +2576,7 @@ theorem lt_omega_iff_card_lt
 
 中文:
 定理 lt_omega_iff_card_lt
-  条件: {x o : Ordinal}
+  条件: {x o : 序数}
   结论: x < ω_ o ↔ x.card < ℵ_ o
   证明: by
   rw [← (isInitial_omega o).card_lt_card]; rw [card_omega]
@@ -2628,7 +2628,7 @@ theorem aleph_one_le_iff
 
 中文:
 定理 aleph_one_le_iff
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: ℵ₁ <= c ↔ ℵ₀ < c
   证明: by
   rw [← succ_aleph0]; rw [succ_le_iff]
@@ -2653,7 +2653,7 @@ theorem lt_aleph_one_iff
 
 中文:
 定理 lt_aleph_one_iff
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: c < ℵ₁ ↔ c <= ℵ₀
   证明: by
   rw [← succ_aleph0]; rw [lt_succ_iff]
@@ -2723,7 +2723,7 @@ theorem aleph1_le_mk_iff
 中文:
 定理 aleph1_le_mk_iff
   条件: {α : 类型}
-  结论: ℵ₁ <= #α ↔ Uncountable α
+  结论: ℵ₁ <= #α ↔ 不可数 α
   证明: by
   rw [aleph_one_le_iff]; rw [aleph0_lt_mk_iff]
 
@@ -2749,7 +2749,7 @@ theorem aleph1_le_mk
 
 中文:
 定理 aleph1_le_mk
-  条件: (α : 类型) [Uncountable α]
+  条件: (α : 类型) [不可数 α]
   结论: ℵ₁ <= #α
   证明: by
   simp
@@ -2772,8 +2772,8 @@ theorem countable_iff_lt_aleph_one
 
 中文:
 定理 countable_iff_lt_aleph_one
-  条件: {α : 类型} (s : Set α)
-  结论: s.Countable ↔ #s < ℵ₁
+  条件: {α : 类型} (s : 集合 α)
+  结论: s.可数 ↔ #s < ℵ₁
   证明: by
   rw [lt_aleph_one_iff]; rw [le_aleph0_iff_set_countable]
 
@@ -2794,7 +2794,7 @@ theorem preAleph_of_omega0_sq_le
 
 中文:
 定理 preAleph_of_omega0_sq_le
-  条件: {o : Ordinal} (ho : ω ^ 2 <= o)
+  条件: {o : 序数} (ho : ω ^ 2 <= o)
   结论: preAleph o = ℵ_ o
   证明: by
   simpa [← ord_inj] using preOmega_of_omega0_sq_le ho
@@ -2822,7 +2822,7 @@ decreasing_by exact a.2
 
 中文:
 定义 preBeth
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: ⨆ a : Iio o, 2 ^ preBeth a
 termination_by o
 decreasing_by exact a.2
@@ -2848,7 +2848,7 @@ theorem preBeth_strictMono
 
 中文:
 定理 preBeth_strictMono
-  结论: StrictMono preBeth
+  结论: 严格递增 preBeth
   证明: by
   intro a b h
   conv_rhs => rw [preBeth]
@@ -2873,7 +2873,7 @@ theorem preBeth_mono
 
 中文:
 定理 preBeth_mono
-  结论: Monotone preBeth
+  结论: 递增 preBeth
   证明: preBeth_strictMono.monotone
 
 Depends on / 依赖: monotone, preBeth_strictMono, preBeth_strictMono.monotone
@@ -2894,7 +2894,7 @@ theorem preAleph_le_preBeth
 
 中文:
 定理 preAleph_le_preBeth
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preAleph o <= preBeth o
   证明: preAleph_le_of_strictMono preBeth_strictMono o
 
@@ -2919,7 +2919,7 @@ theorem preBeth_lt_preBeth
 
 中文:
 定理 preBeth_lt_preBeth
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preBeth o₁ < preBeth o₂ ↔ o₁ < o₂
   证明: preBeth_strictMono.lt_iff_lt
 
@@ -2944,7 +2944,7 @@ theorem preBeth_le_preBeth
 
 中文:
 定理 preBeth_le_preBeth
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preBeth o₁ <= preBeth o₂ ↔ o₁ <= o₂
   证明: preBeth_strictMono.le_iff_le
 
@@ -2969,7 +2969,7 @@ theorem preBeth_inj
 
 中文:
 定理 preBeth_inj
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: preBeth o₁ = preBeth o₂ ↔ o₁ = o₂
   证明: preBeth_strictMono.injective.eq_iff
 
@@ -3024,7 +3024,7 @@ theorem preBeth_add_one
 
 中文:
 定理 preBeth_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preBeth (o + 1) = 2 ^ preBeth o
   证明: by
   rw [preBeth]; rw [← succ_eq_add_one]; rw [Iio_succ]
@@ -3050,7 +3050,7 @@ theorem preBeth_succ
 
 中文:
 定理 preBeth_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preBeth (succ o) = 2 ^ preBeth o
   证明: preBeth_add_one o
 
@@ -3075,7 +3075,7 @@ theorem preBeth_limit
 
 中文:
 定理 preBeth_limit
-  条件: {o : Ordinal} (ho : IsSuccPrelimit o)
+  条件: {o : 序数} (ho : IsSuccPrelimit o)
   证明: by
   rw [preBeth]
   apply (ciSup_mono bddAbove_of_small fun _ => (cantor _).le).antisymm'
@@ -3108,7 +3108,7 @@ theorem isNormal_preBeth
 
 中文:
 定理 isNormal_preBeth
-  结论: Order.IsNormal preBeth
+  结论: Order.是正规 preBeth
   证明: by
   rw [isNormal_iff]
   refine ⟨preBeth_strictMono, fun o ho => ?_⟩
@@ -3217,7 +3217,7 @@ theorem preBeth_pos
 
 中文:
 定理 preBeth_pos
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: 0 < preBeth o ↔ 0 < o
   证明: by
   simpa using preBeth_lt_preBeth (o₁ := 0)
@@ -3237,8 +3237,8 @@ theorem _root_.Ordinal.card_le_preBeth
   proof: o.card_le_preAleph.trans (preAleph_le_preBeth o)
 
 中文:
-定理 _root_.Ordinal.card_le_preBeth
-  条件: (o : Ordinal)
+定理 _root_.序数.card_le_preBeth
+  条件: (o : 序数)
   结论: o.card <= preBeth o
   证明: o.card_le_preAleph.trans (preAleph_le_preBeth o)
 
@@ -3261,7 +3261,7 @@ theorem le_preBeth_ord
 
 中文:
 定理 le_preBeth_ord
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c <= preBeth c.ord
   证明: by
   simpa using c.ord.card_le_preBeth
@@ -3288,7 +3288,7 @@ theorem preBeth_eq_zero
 
 中文:
 定理 preBeth_eq_zero
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: preBeth o = 0 ↔ o = 0
   证明: by
   simpa using preBeth_inj (o₂ := 0)
@@ -3320,7 +3320,7 @@ theorem isStrongPrelimit_preBeth
 
 中文:
 定理 isStrongPrelimit_preBeth
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   证明: by
   refine ⟨?_, fun ho x hx => ?_⟩
   · contrapose!
@@ -3363,8 +3363,8 @@ theorem isStrongLimit_preBeth
 
 中文:
 定理 isStrongLimit_preBeth
-  条件: {o : Ordinal}
-  结论: IsStrongLimit (preBeth o) ↔ IsSuccLimit o
+  条件: {o : 序数}
+  结论: 是StrongLimit (preBeth o) ↔ 是SuccLimit o
   证明: by
   rw [isStrongLimit_iff]; rw [isSuccLimit_iff]; rw [preBeth_eq_zero.ne]; rw [isStrongPrelimit_preBeth]
 
@@ -3395,8 +3395,8 @@ theorem lift_preBeth
 
 中文:
 定理 lift_preBeth
-  条件: (o : Ordinal)
-  结论: lift.{v} (preBeth o) = preBeth (Ordinal.lift.{v} o)
+  条件: (o : 序数)
+  结论: lift.{v} (preBeth o) = preBeth (序数.lift.{v} o)
   证明: by
   induction o using SuccOrder.prelimitRecOn with
   | succ o _ IH => simp [IH]
@@ -3436,7 +3436,7 @@ recommended_spelling "beth" for "ℶ_" in [«termℶ_»]
 
 中文:
 定义 beth
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: preBeth (ω + o)
 
 @[inherit_doc] scoped notation "ℶ_ " => beth
@@ -3461,7 +3461,7 @@ theorem beth_eq_preBeth
 
 中文:
 定理 beth_eq_preBeth
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: beth o = preBeth (ω + o)
   证明: rfl
 -/
@@ -3479,7 +3479,7 @@ theorem preBeth_le_beth
 
 中文:
 定理 preBeth_le_beth
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: preBeth o <= ℶ_ o
   证明: preBeth_le_preBeth.2 le_add_self
 
@@ -3498,7 +3498,7 @@ theorem beth_strictMono
 
 中文:
 定理 beth_strictMono
-  结论: StrictMono beth
+  结论: 严格递增 beth
   证明: preBeth_strictMono.comp fun _ _ h => by gcongr
 
 Depends on / 依赖: preBeth_strictMono, preBeth_strictMono.comp
@@ -3518,7 +3518,7 @@ theorem beth_mono
 
 中文:
 定理 beth_mono
-  结论: Monotone beth
+  结论: 递增 beth
   证明: beth_strictMono.monotone
 
 @[simp]
@@ -3542,7 +3542,7 @@ theorem beth_lt_beth
 
 中文:
 定理 beth_lt_beth
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ℶ_ o₁ < ℶ_ o₂ ↔ o₁ < o₂
   证明: beth_strictMono.lt_iff_lt
 
@@ -3567,7 +3567,7 @@ theorem beth_le_beth
 
 中文:
 定理 beth_le_beth
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: ℶ_ o₁ <= ℶ_ o₂ ↔ o₁ <= o₂
   证明: beth_strictMono.le_iff_le
 
@@ -3614,7 +3614,7 @@ theorem beth_add_one
 
 中文:
 定理 beth_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℶ_ (o + 1) = 2 ^ ℶ_ o
   证明: by
   simp [beth, ← add_assoc]
@@ -3636,7 +3636,7 @@ theorem beth_succ
 
 中文:
 定理 beth_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℶ_ (succ o) = 2 ^ ℶ_ o
   证明: beth_add_one o
 
@@ -3655,7 +3655,7 @@ theorem isNormal_beth
 
 中文:
 定理 isNormal_beth
-  结论: Order.IsNormal beth
+  结论: Order.是正规 beth
   证明: isNormal_preBeth.comp (isNormal_add_right _)
 
 Depends on / 依赖: isNormal_add_right, isNormal_preBeth, isNormal_preBeth.comp
@@ -3674,8 +3674,8 @@ theorem beth_limit
 
 中文:
 定理 beth_limit
-  条件: {o : Ordinal} (ho : IsSuccLimit o)
-  结论: ℶ_ o = ⨆ a : Iio o, ℶ_ a
+  条件: {o : 序数} (ho : 是SuccLimit o)
+  结论: ℶ_ o = ⨆ a : 左无界右开区间 o, ℶ_ a
   证明: isNormal_beth.apply_of_isSuccLimit ho
 
 Depends on / 依赖: apply_of_isSuccLimit, isNormal_beth, isNormal_beth.apply_of_isSuccLimit
@@ -3694,7 +3694,7 @@ theorem aleph_le_beth
 
 中文:
 定理 aleph_le_beth
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ_ o <= ℶ_ o
   证明: preAleph_le_preBeth _
 
@@ -3714,7 +3714,7 @@ theorem aleph0_le_beth
 
 中文:
 定理 aleph0_le_beth
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ₀ <= ℶ_ o
   证明: (aleph0_le_aleph o).trans aleph_le_beth o
 
@@ -3734,7 +3734,7 @@ theorem beth_pos
 
 中文:
 定理 beth_pos
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: 0 < ℶ_ o
   证明: aleph0_pos.trans_le aleph0_le_beth o
 
@@ -3754,7 +3754,7 @@ theorem beth_ne_zero
 
 中文:
 定理 beth_ne_zero
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℶ_ o != 0
   证明: (beth_pos o).ne'
 
@@ -3773,8 +3773,8 @@ theorem _root_.Ordinal.card_le_beth
   proof: o.card_le_aleph.trans (aleph_le_beth o)
 
 中文:
-定理 _root_.Ordinal.card_le_beth
-  条件: (o : Ordinal)
+定理 _root_.序数.card_le_beth
+  条件: (o : 序数)
   结论: o.card <= ℶ_ o
   证明: o.card_le_aleph.trans (aleph_le_beth o)
 
@@ -3797,7 +3797,7 @@ theorem le_beth_ord
 
 中文:
 定理 le_beth_ord
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c <= ℶ_ c.ord
   证明: by
   simpa using c.ord.card_le_beth
@@ -3824,8 +3824,8 @@ theorem isStrongLimit_beth
 
 中文:
 定理 isStrongLimit_beth
-  条件: {o : Ordinal}
-  结论: IsStrongLimit (ℶ_ o) ↔ IsSuccPrelimit o
+  条件: {o : 序数}
+  结论: 是StrongLimit (ℶ_ o) ↔ IsSuccPrelimit o
   证明: by
   rw [beth_eq_preBeth]; rw [isStrongLimit_preBeth]; rw [isSuccLimit_add_iff_of_isSuccLimit isSuccLimit_omega0]
 
@@ -3849,8 +3849,8 @@ theorem lift_beth
 
 中文:
 定理 lift_beth
-  条件: (o : Ordinal)
-  结论: lift.{v} (ℶ_ o) = ℶ_ (Ordinal.lift.{v} o)
+  条件: (o : 序数)
+  结论: lift.{v} (ℶ_ o) = ℶ_ (序数.lift.{v} o)
   证明: by
   rw [beth_eq_preBeth]; rw [beth_eq_preBeth]; rw [lift_preBeth]; rw [Ordinal.lift_add]; rw [lift_omega0]
 
@@ -3874,7 +3874,7 @@ theorem preBeth_of_omega0_sq_le
 
 中文:
 定理 preBeth_of_omega0_sq_le
-  条件: {o : Ordinal} (ho : ω ^ 2 <= o)
+  条件: {o : 序数} (ho : ω ^ 2 <= o)
   结论: preBeth o = ℶ_ o
   证明: by
   rw [← opow_natCast] at ho
@@ -4204,7 +4204,7 @@ theorem aleph_ofNat_le_lift
 @[simp]
 
 中文:
-定理 aleph_ofNat_le_lift
+定理 aleph_of自然数_le_lift
   条件: [n.AtLeastTwo]
   结论: ℵ_ of自然数(n) <= lift.{v} c ↔ ℵ_ of自然数(n) <= c
   证明: aleph_natCast_le_lift
@@ -4229,7 +4229,7 @@ theorem lift_le_aleph_ofNat
 @[simp]
 
 中文:
-定理 lift_le_aleph_ofNat
+定理 lift_le_aleph_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c <= ℵ_ of自然数(n) ↔ c <= ℵ_ of自然数(n)
   证明: lift_le_aleph_natCast
@@ -4254,7 +4254,7 @@ theorem aleph_ofNat_lt_lift
 @[simp]
 
 中文:
-定理 aleph_ofNat_lt_lift
+定理 aleph_of自然数_lt_lift
   条件: [n.AtLeastTwo]
   结论: ℵ_ of自然数(n) < lift.{v} c ↔ ℵ_ of自然数(n) < c
   证明: aleph_natCast_lt_lift
@@ -4279,7 +4279,7 @@ theorem lift_lt_aleph_ofNat
 @[simp]
 
 中文:
-定理 lift_lt_aleph_ofNat
+定理 lift_lt_aleph_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c < ℵ_ of自然数(n) ↔ c < ℵ_ of自然数(n)
   证明: lift_lt_aleph_natCast
@@ -4304,7 +4304,7 @@ theorem aleph_ofNat_eq_lift
 @[simp]
 
 中文:
-定理 aleph_ofNat_eq_lift
+定理 aleph_of自然数_eq_lift
   条件: [n.AtLeastTwo]
   结论: ℵ_ of自然数(n) = lift.{v} c ↔ ℵ_ of自然数(n) = c
   证明: aleph_natCast_eq_lift
@@ -4329,7 +4329,7 @@ theorem lift_eq_aleph_ofNat
 @[simp]
 
 中文:
-定理 lift_eq_aleph_ofNat
+定理 lift_eq_aleph_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c = ℵ_ of自然数(n) ↔ c = ℵ_ of自然数(n)
   证明: lift_eq_aleph_natCast
@@ -4504,7 +4504,7 @@ theorem beth_ofNat_le_lift
 @[simp]
 
 中文:
-定理 beth_ofNat_le_lift
+定理 beth_of自然数_le_lift
   条件: [n.AtLeastTwo]
   结论: ℶ_ of自然数(n) <= lift.{v} c ↔ ℶ_ of自然数(n) <= c
   证明: beth_natCast_le_lift
@@ -4529,7 +4529,7 @@ theorem lift_le_beth_ofNat
 @[simp]
 
 中文:
-定理 lift_le_beth_ofNat
+定理 lift_le_beth_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c <= ℶ_ of自然数(n) ↔ c <= ℶ_ of自然数(n)
   证明: lift_le_beth_natCast
@@ -4554,7 +4554,7 @@ theorem beth_ofNat_lt_lift
 @[simp]
 
 中文:
-定理 beth_ofNat_lt_lift
+定理 beth_of自然数_lt_lift
   条件: [n.AtLeastTwo]
   结论: ℶ_ of自然数(n) < lift.{v} c ↔ ℶ_ of自然数(n) < c
   证明: beth_natCast_lt_lift
@@ -4579,7 +4579,7 @@ theorem lift_lt_beth_ofNat
 @[simp]
 
 中文:
-定理 lift_lt_beth_ofNat
+定理 lift_lt_beth_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c < ℶ_ of自然数(n) ↔ c < ℶ_ of自然数(n)
   证明: lift_lt_beth_natCast
@@ -4604,7 +4604,7 @@ theorem beth_ofNat_eq_lift
 @[simp]
 
 中文:
-定理 beth_ofNat_eq_lift
+定理 beth_of自然数_eq_lift
   条件: [n.AtLeastTwo]
   结论: ℶ_ of自然数(n) = lift.{v} c ↔ ℶ_ of自然数(n) = c
   证明: beth_natCast_eq_lift
@@ -4627,7 +4627,7 @@ theorem lift_eq_beth_ofNat
   proof: lift_eq_beth_natCast
 
 中文:
-定理 lift_eq_beth_ofNat
+定理 lift_eq_beth_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} c = ℶ_ of自然数(n) ↔ c = ℶ_ of自然数(n)
   证明: lift_eq_beth_natCast
@@ -4957,7 +4957,7 @@ theorem omega_ofNat_le_lift
 @[simp]
 
 中文:
-定理 omega_ofNat_le_lift
+定理 omega_of自然数_le_lift
   条件: [n.AtLeastTwo]
   结论: ω_ of自然数(n) <= lift.{v} o ↔ ω_ of自然数(n) <= o
   证明: omega_natCast_le_lift
@@ -4982,7 +4982,7 @@ theorem lift_le_omega_ofNat
 @[simp]
 
 中文:
-定理 lift_le_omega_ofNat
+定理 lift_le_omega_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} o <= ω_ of自然数(n) ↔ o <= ω_ of自然数(n)
   证明: lift_le_omega_natCast
@@ -5007,7 +5007,7 @@ theorem omega_ofNat_lt_lift
 @[simp]
 
 中文:
-定理 omega_ofNat_lt_lift
+定理 omega_of自然数_lt_lift
   条件: [n.AtLeastTwo]
   结论: ω_ of自然数(n) < lift.{v} o ↔ ω_ of自然数(n) < o
   证明: omega_natCast_lt_lift
@@ -5032,7 +5032,7 @@ theorem lift_lt_omega_ofNat
 @[simp]
 
 中文:
-定理 lift_lt_omega_ofNat
+定理 lift_lt_omega_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} o < ω_ of自然数(n) ↔ o < ω_ of自然数(n)
   证明: lift_lt_omega_natCast
@@ -5057,7 +5057,7 @@ theorem omega_ofNat_eq_lift
 @[simp]
 
 中文:
-定理 omega_ofNat_eq_lift
+定理 omega_of自然数_eq_lift
   条件: [n.AtLeastTwo]
   结论: ω_ of自然数(n) = lift.{v} o ↔ ω_ of自然数(n) = o
   证明: omega_natCast_eq_lift
@@ -5080,7 +5080,7 @@ theorem lift_eq_omega_ofNat
   proof: lift_eq_omega_natCast
 
 中文:
-定理 lift_eq_omega_ofNat
+定理 lift_eq_omega_of自然数
   条件: [n.AtLeastTwo]
   结论: lift.{v} o = ω_ of自然数(n) ↔ o = ω_ of自然数(n)
   证明: lift_eq_omega_natCast

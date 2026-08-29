@@ -46,7 +46,7 @@ definition πSummand
 
 中文:
 定义 πSummand
-  签名: [HasZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A : IndexSet Δ)
+  签名: [有ZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A : IndexSet Δ)
   定义体: s.desc Δ (fun B => by
     by_cases h : B = A
     · exact eqToHom (by subst h; rfl)
@@ -74,7 +74,7 @@ theorem cofan_inj_πSummand_eq_id
 
 中文:
 定理 cofan_inj_πSummand_eq_id
-  条件: [HasZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A : IndexSet Δ)
+  条件: [有ZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A : IndexSet Δ)
   证明: by
   simp [πSummand]
 -/
@@ -96,7 +96,7 @@ theorem cofan_inj_πSummand_eq_zero
 
 中文:
 定理 cofan_inj_πSummand_eq_zero
-  结论: [HasZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A B : IndexSet Δ)
+  结论: [有ZeroMorphisms C] {Δ : SimplexCategoryᵒᵖ} (A B : IndexSet Δ)
   证明: by
   dsimp [πSummand]
   rw [ι_desc]; rw [dif_neg h.symm]
@@ -171,7 +171,7 @@ theorem σ_comp_πSummand_id_eq_zero
 
 中文:
 定理 σ_comp_πSummand_id_eq_zero
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   apply s.hom_ext'
   intro A
@@ -421,7 +421,7 @@ definition nondegComplex
 
 中文:
 定义 nondegComplex
-  签名: : ChainComplex C 自然数 where
+  签名: : 链复形 C 自然数 where
   定义体: s.N
   d := s.d
   shape i j hij := by simp only [d, K[X].shape i j hij, zero_comp, comp_zero]
@@ -724,7 +724,7 @@ instance isSplitEpi_toNondegComplex
 
 中文:
 实例 isSplitEpi_toNondegComplex
-  签名: : IsSplitEpi s.toNondegComplex where
+  签名: : 是分裂满态射 s.toNondegComplex where
   定义体: ⟨⟨s.fromNondegComplex, by simp⟩⟩
 
 Depends on / 依赖: fromNondegComplex, s.fromNondegComplex
@@ -742,7 +742,7 @@ instance isSplitMono_fromNondegComplex
 
 中文:
 实例 isSplitMono_fromNondegComplex
-  签名: : IsSplitMono s.fromNondegComplex where
+  签名: : 是分裂单态射 s.fromNondegComplex where
   定义体: ⟨⟨s.toNondegComplex, by simp⟩⟩
 
 Depends on / 依赖: s.toNondegComplex, toNondegComplex
@@ -831,7 +831,7 @@ definition nondegComplexFunctor
 
 中文:
 定义 nondegComplexFunctor
-  签名: : Split C ⥤ ChainComplex C 自然数 where
+  签名: : 分裂 C ⥤ 链复形 C 自然数 where
   定义体: S.s.nondegComplex
   map {S₁ S₂} Φ :=
     { f := Φ.f

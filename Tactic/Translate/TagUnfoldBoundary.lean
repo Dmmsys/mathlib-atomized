@@ -86,7 +86,7 @@ addDecl ←
 
 中文:
 定义 elabInsertCastAux
-  签名: (declName : Name) (castKind : CastKind) (stx : Term) (t : TranslateData)
+  签名: (declName : Name) (castKind : CastKind) (stx : 项) (t : TranslateData)
   定义体: Command.liftTermElabM do withDeclNameForAuxNaming declName do withExporting do
   let info ← getConstInfoDefn declName
   let addDecl (name : Name) (type value : Expr) : MetaM Unit := do

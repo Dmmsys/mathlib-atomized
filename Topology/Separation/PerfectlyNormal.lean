@@ -39,7 +39,7 @@ theorem perfectlyNormalSpace_iff_forall_isClosed_preimage_zero
     -- for each `n`, construct a continuous function `
 
 中文:
-定理 perfectlyNormalSpace_iff_forall_isClosed_preimage_zero
+定理 perfectlyNormalSpace_iff_对任意_isClosed_preimage_zero
   证明: by
     -- write `s` as the intersection of a sequence of open sets `U n`
     obtain ⟨U, ho, hu⟩ := isGδ_iff_eq_iInter_nat.1 hs.isGδ

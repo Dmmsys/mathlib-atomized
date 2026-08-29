@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ArchimedeanClass R)
+  签名: 零 (ArchimedeanClass R)
   定义体: mk 1
 -/
 instance : Zero (ArchimedeanClass R) where
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (ArchimedeanClass R)
+  签名: 加法 (ArchimedeanClass R)
   定义体: lift₂ (fun x y => .mk <| x * y) fun _ _ _ _ hx hy => by
     exact (mk_mul_le_of_le hx.le hy.le).antisymm (mk_mul_le_of_le hx.ge hy.ge)
 
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (ArchimedeanClass R)
+  签名: 标量乘法 自然数 (ArchimedeanClass R)
   定义体: lift (fun x => mk (x ^ n)) fun x y h => by
     induction n with
     | zero => simp
@@ -238,7 +238,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMagma (ArchimedeanClass R)
+  签名: 加法交换原群 (ArchimedeanClass R)
   定义体: by
     induction x with | mk x
     induction y with | mk y
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (ArchimedeanClass R)
+  签名: 加法交换幺半群 (ArchimedeanClass R)
   定义体: private add_assoc'
   zero_add := private zero_add'
   add_zero x := private add_comm x _ ▸ zero_add' x
@@ -349,7 +349,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (ArchimedeanClass R)
+  签名: 是OrderedAdd幺半群 (ArchimedeanClass R)
   定义体: by
     induction x with | mk x
     induction y with | mk y
@@ -384,7 +384,7 @@ lemma isAddRegular_mk
 中文:
 引理 isAddRegular_mk
   条件: {x : R} (hx : x != 0)
-  结论: IsAddRegular (mk x)
+  结论: 是加法正则 (mk x)
   证明: by
   rw [← isAddLeftRegular_iff_isAddRegular]
   rintro y z hyz
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommMonoidWithTop (ArchimedeanClass R)
+  签名: LinearOrderedAddComm幺半群带顶 (ArchimedeanClass R)
   定义体: by induction x with | mk x => rw [← mk_zero, ← mk_mul, zero_mul]
   isAddLeftRegular_of_ne_top x := by induction x with | mk x => simp +contextual [isAddRegular_mk]
 
@@ -501,7 +501,7 @@ theorem mk_eq_zero_of_archimedean
 
 中文:
 定理 mk_eq_zero_of_archimedean
-  条件: [Archimedean S] {x : S} (h : x != 0)
+  条件: [阿基米德 S] {x : S} (h : x != 0)
   结论: mk x = 0
   证明: mk_eq_mk_of_archimedean h one_ne_zero
 
@@ -523,7 +523,7 @@ theorem eq_zero_or_top_of_archimedean
 
 中文:
 定理 eq_zero_or_top_of_archimedean
-  条件: [Archimedean S] (x : ArchimedeanClass S)
+  条件: [阿基米德 S] (x : ArchimedeanClass S)
   结论: x = 0 ∨ x = ⊤
   证明: by
   induction x with | mk x
@@ -546,7 +546,7 @@ theorem mk_map_of_archimedean
 
 中文:
 定理 mk_map_of_archimedean
-  条件: [Archimedean S] (f : S ->+o R) {x : S} (h : x != 0)
+  条件: [阿基米德 S] (f : S ->+o R) {x : S} (h : x != 0)
   证明: by
   rw [← orderHom_mk]; rw [mk_eq_zero_of_archimedean h]; rw [orderHom_zero]
 
@@ -567,7 +567,7 @@ theorem mk_map_of_archimedean'
 
 中文:
 定理 mk_map_of_archimedean'
-  条件: [Archimedean S] (f : S ->+*o R) {x : S} (h : x != 0)
+  条件: [阿基米德 S] (f : S ->+*o R) {x : S} (h : x != 0)
   证明: by
   simpa using mk_map_of_archimedean f.toOrderAddMonoidHom h
 
@@ -590,7 +590,7 @@ theorem mk_le_mk_add_of_archimedean
 
 中文:
 定理 mk_le_mk_add_of_archimedean
-  条件: [Archimedean S] (f : S ->+*o R) (x : R) (y : S)
+  条件: [阿基米德 S] (f : S ->+*o R) (x : R) (y : S)
   证明: by
   obtain rfl | hy := eq_or_ne y 0
   · simp
@@ -616,7 +616,7 @@ theorem mk_le_add_mk_of_archimedean
 
 中文:
 定理 mk_le_add_mk_of_archimedean
-  条件: [Archimedean S] (f : S ->+*o R) (x : R) (y : S)
+  条件: [阿基米德 S] (f : S ->+*o R) (x : R) (y : S)
   证明: by
   rw [add_comm]
   exact mk_le_mk_add_of_archimedean f x y
@@ -640,7 +640,7 @@ theorem mk_map_nonneg_of_archimedean
 
 中文:
 定理 mk_map_nonneg_of_archimedean
-  条件: [Archimedean S] (f : S ->+*o R) (y : S)
+  条件: [阿基米德 S] (f : S ->+*o R) (y : S)
   结论: 0 <= mk (f y)
   证明: by
   simpa using mk_le_mk_add_of_archimedean f 1 y
@@ -663,7 +663,7 @@ theorem lt_of_pos_of_archimedean
 
 中文:
 定理 lt_of_pos_of_archimedean
-  结论: [Archimedean S] (f : S ->+*o R)
+  结论: [阿基米德 S] (f : S ->+*o R)
   证明: by
   apply lt_of_mk_lt_mk_of_nonneg
   · rwa [mk_map_of_archimedean' f hy.ne']
@@ -692,7 +692,7 @@ theorem lt_of_neg_of_archimedean
 
 中文:
 定理 lt_of_neg_of_archimedean
-  结论: [Archimedean S] (f : S ->+*o R)
+  结论: [阿基米德 S] (f : S ->+*o R)
   证明: by
   apply lt_of_mk_lt_mk_of_nonpos
   · rwa [mk_map_of_archimedean' f hy.ne]
@@ -805,7 +805,7 @@ theorem mk_ofNat
   proof: mod_cast mk_intCast (n := n) (mod_cast NeZero.ne n)
 
 中文:
-定理 mk_ofNat
+定理 mk_of自然数
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: mk (of自然数(n) : S) = 0
   证明: mod_cast mk_intCast (n := n) (mod_cast NeZero.ne n)
@@ -848,7 +848,7 @@ theorem exists_nat_ge_of_mk_nonneg
   simpa using hn
 
 中文:
-定理 exists_nat_ge_of_mk_nonneg
+定理 存在_nat_ge_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 自然数, x <= n
   证明: by
@@ -876,7 +876,7 @@ theorem exists_nat_gt_of_mk_nonneg
   simp
 
 中文:
-定理 exists_nat_gt_of_mk_nonneg
+定理 存在_nat_gt_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 自然数, x < n
   证明: by
@@ -903,7 +903,7 @@ theorem exists_int_ge_of_mk_nonneg
   exact ⟨n, mod_cast hn⟩
 
 中文:
-定理 exists_int_ge_of_mk_nonneg
+定理 存在_int_ge_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 整数, x <= n
   证明: by
@@ -928,7 +928,7 @@ theorem exists_int_gt_of_mk_nonneg
   exact ⟨n, mod_cast hn⟩
 
 中文:
-定理 exists_int_gt_of_mk_nonneg
+定理 存在_int_gt_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 整数, x < n
   证明: by
@@ -954,7 +954,7 @@ theorem exists_int_le_of_mk_nonneg
   simpa [neg_le]
 
 中文:
-定理 exists_int_le_of_mk_nonneg
+定理 存在_int_le_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 整数, n <= x
   证明: by
@@ -982,7 +982,7 @@ theorem exists_int_lt_of_mk_nonneg
   simpa [neg_lt]
 
 中文:
-定理 exists_int_lt_of_mk_nonneg
+定理 存在_int_lt_of_mk_nonneg
   条件: {x : R} (hx : 0 <= mk x)
   结论: 存在 n : 整数, n < x
   证明: by
@@ -1009,7 +1009,7 @@ theorem mk_nonneg_of_le_of_le_of_archimedean
 
 中文:
 定理 mk_nonneg_of_le_of_le_of_archimedean
-  结论: [Archimedean S] (f : S ->+*o R) {x : R} {r s : S}
+  结论: [阿基米德 S] (f : S ->+*o R) {x : R} {r s : S}
   证明: by
   apply (min_le_mk_of_le_of_le hr hs).trans'
   simp [mk_map_nonneg_of_archimedean]
@@ -1086,7 +1086,7 @@ theorem mk_le_mk_iff_denselyOrdered
 
 中文:
 定理 mk_le_mk_iff_denselyOrdered
-  结论: [Ring S] [IsStrictOrderedRing S]
+  结论: [环 S] [是StrictOrdered环 S]
   证明: by
   have H {q} : 0 < f q ↔ 0 < q := by simpa using hf.lt_iff_lt (a := 0)
   constructor
@@ -1141,7 +1141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (ArchimedeanClass R)
+  签名: 取负 (ArchimedeanClass R)
   定义体: lift (fun x => mk x⁻¹) fun x y h => by
     obtain rfl | hx := eq_or_ne x 0
     · simp_all
@@ -1193,7 +1193,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (ArchimedeanClass R)
+  签名: 标量乘法 整数 (ArchimedeanClass R)
   定义体: lift (fun x => mk (x ^ n)) fun x y h => by
     obtain ⟨n, rfl | rfl⟩ := n.eq_nat_or_neg <;> simp [h]
 
@@ -1267,7 +1267,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommGroupWithTop (ArchimedeanClass R)
+  签名: LinearOrderedAddComm群带顶 (ArchimedeanClass R)
   定义体: by simp [← mk_zero, ← mk_inv]
   top_add' := by simp
   add_neg_cancel_of_ne_top x h := by
@@ -1330,7 +1330,7 @@ theorem mk_ratCast
 
 中文:
 定理 mk_ratCast
-  条件: {q : Rat} (h : q != 0)
+  条件: {q : 有理数} (h : q != 0)
   结论: mk (q : R) = 0
   证明: by
   simpa using mk_map_of_archimedean ⟨(Rat.castHom R).toAddMonoidHom, fun _ => by simp⟩ h
@@ -1354,7 +1354,7 @@ theorem mk_ratCast_nonneg
 
 中文:
 定理 mk_ratCast_nonneg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: 0 <= mk (q : R)
   证明: by
   obtain rfl | hn := eq_or_ne q 0
@@ -1381,7 +1381,7 @@ theorem mk_le_mk_iff_ratCast
 中文:
 定理 mk_le_mk_iff_ratCast
   条件: {x y : R}
-  结论: mk x <= mk y ↔ 存在 q : Rat, 0 < q ∧ q * |y| <= |x|
+  结论: mk x <= mk y ↔ 存在 q : 有理数, 0 < q ∧ q * |y| <= |x|
   证明: by
   simpa using mk_le_mk_iff_denselyOrdered (Rat.castHom _) Rat.cast_strictMono (x := x)
 

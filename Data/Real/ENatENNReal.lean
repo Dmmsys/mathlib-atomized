@@ -35,7 +35,7 @@ definition toENNReal
   body: ENat.map Nat.cast
 
 中文:
-定义 toENNReal
+定义 toENN实数
   签名: : 自然数∞ -> 实数>=0∞
   定义体: ENat.map Nat.cast
 -/
@@ -52,7 +52,7 @@ instance hasCoeENNReal
 @[simp]
 
 中文:
-实例 hasCoeENNReal
+实例 hasCoeENN实数
   签名: : CoeTC 自然数∞ 实数>=0∞
   定义体: ⟨toENNReal⟩
 
@@ -90,7 +90,7 @@ definition toENNRealOrderEmbedding
   body: Nat.castOrderEmbedding.withTopMap
 
 中文:
-定义 toENNRealOrderEmbedding
+定义 toENN实数OrderEmbedding
   签名: : 自然数∞ ↪o 实数>=0∞
   定义体: Nat.castOrderEmbedding.withTopMap
 
@@ -112,7 +112,7 @@ definition toENNRealRingHom
 @[simp, norm_cast]
 
 中文:
-定义 toENNRealRingHom
+定义 toENN实数RingHom
   签名: : 自然数∞ ->+* 实数>=0∞
   定义体: .ENatMap (Nat.castRingHom Real>=0) Nat.cast_injective
 
@@ -135,7 +135,7 @@ theorem toENNReal_top
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_top
+定理 toENN实数_top
   结论: ((⊤ : 自然数∞) : 实数>=0∞) = ⊤
   证明: rfl
 
@@ -157,7 +157,7 @@ theorem toENNReal_coe
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_coe
+定理 toENN实数_coe
   条件: (n : 自然数)
   结论: ((n : 自然数∞) : 实数>=0∞) = n
   证明: rfl
@@ -180,7 +180,7 @@ theorem toENNReal_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_ofNat
+定理 toENN实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ((of自然数(n) : 自然数∞) : 实数>=0∞) = of自然数(n)
   证明: rfl
@@ -200,7 +200,7 @@ theorem toENNReal_inj
   proof: toENNRealOrderEmbedding.eq_iff_eq
 
 中文:
-定理 toENNReal_inj
+定理 toENN实数_inj
   结论: (m : 实数>=0∞) = (n : 实数>=0∞) ↔ m = n
   证明: toENNRealOrderEmbedding.eq_iff_eq
 
@@ -218,7 +218,7 @@ lemma toENNReal_eq_top
   proof: by simp [← toENNReal_inj]
 
 中文:
-引理 toENNReal_eq_top
+引理 toENN实数_eq_top
   结论: (n : 实数>=0∞) = ∞ ↔ n = ⊤
   证明: by simp [← toENNReal_inj]
 -/
@@ -234,7 +234,7 @@ lemma toENNReal_ne_top
 @[simp, norm_cast, gcongr]
 
 中文:
-引理 toENNReal_ne_top
+引理 toENN实数_ne_top
   结论: (n : 实数>=0∞) != ∞ ↔ n != ⊤
   证明: by simp
 
@@ -254,7 +254,7 @@ theorem toENNReal_le
 @[simp, norm_cast, gcongr]
 
 中文:
-定理 toENNReal_le
+定理 toENN实数_le
   结论: (m : 实数>=0∞) <= n ↔ m <= n
   证明: toENNRealOrderEmbedding.le_iff_le
 
@@ -277,7 +277,7 @@ theorem toENNReal_lt
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_lt
+定理 toENN实数_lt
   结论: (m : 实数>=0∞) < n ↔ m < n
   证明: toENNRealOrderEmbedding.lt_iff_lt
 
@@ -300,7 +300,7 @@ lemma toENNReal_lt_top
 @[gcongr, mono]
 
 中文:
-引理 toENNReal_lt_top
+引理 toENN实数_lt_top
   结论: (n : 实数>=0∞) < ∞ ↔ n < ⊤
   证明: by simp [← toENNReal_lt]
 
@@ -322,8 +322,8 @@ theorem toENNReal_mono
 @[gcongr, mono]
 
 中文:
-定理 toENNReal_mono
-  结论: Monotone ((↑) : 自然数∞ -> 实数>=0∞)
+定理 toENN实数_mono
+  结论: 递增 ((↑) : 自然数∞ -> 实数>=0∞)
   证明: toENNRealOrderEmbedding.monotone
 
 @[gcongr, mono]
@@ -345,8 +345,8 @@ theorem toENNReal_strictMono
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_strictMono
-  结论: StrictMono ((↑) : 自然数∞ -> 实数>=0∞)
+定理 toENN实数_strictMono
+  结论: 严格递增 ((↑) : 自然数∞ -> 实数>=0∞)
   证明: toENNRealOrderEmbedding.strictMono
 
 @[simp, norm_cast]
@@ -366,7 +366,7 @@ theorem toENNReal_zero
   proof: map_zero toENNRealRingHom
 
 中文:
-定理 toENNReal_zero
+定理 toENN实数_zero
   结论: ((0 : 自然数∞) : 实数>=0∞) = 0
   证明: map_zero toENNRealRingHom
 
@@ -386,7 +386,7 @@ lemma toENNReal_eq_zero
 @[simp, norm_cast]
 
 中文:
-引理 toENNReal_eq_zero
+引理 toENN实数_eq_zero
   结论: toENN实数 n = 0 ↔ n = 0
   证明: by rw [← toENNReal_zero, toENNReal_inj]
 
@@ -407,7 +407,7 @@ theorem toENNReal_add
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_add
+定理 toENN实数_add
   条件: (m n : 自然数∞)
   结论: ↑(m + n) = (m + n : 实数>=0∞)
   证明: map_add toENNRealRingHom m n
@@ -431,7 +431,7 @@ theorem toENNReal_one
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_one
+定理 toENN实数_one
   结论: ((1 : 自然数∞) : 实数>=0∞) = 1
   证明: map_one toENNRealRingHom
 
@@ -455,7 +455,7 @@ theorem toENNReal_mul
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_mul
+定理 toENN实数_mul
   条件: (m n : 自然数∞)
   结论: ↑(m * n) = (m * n : 实数>=0∞)
   证明: map_mul toENNRealRingHom m n
@@ -480,7 +480,7 @@ theorem toENNReal_pow
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_pow
+定理 toENN实数_pow
   条件: (x : 自然数∞) (n : 自然数)
   结论: (x ^ n : 自然数∞) = (x : 实数>=0∞) ^ n
   证明: map_pow toENNRealRingHom x n
@@ -505,9 +505,9 @@ theorem toENNReal_min
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_min
+定理 toENN实数_min
   条件: (m n : 自然数∞)
-  结论: ↑(min m n) = (min m n : 实数>=0∞)
+  结论: ↑(最小值 m n) = (最小值 m n : 实数>=0∞)
   证明: toENNReal_mono.map_min
 
 @[simp, norm_cast]
@@ -530,9 +530,9 @@ theorem toENNReal_max
 @[simp, norm_cast]
 
 中文:
-定理 toENNReal_max
+定理 toENN实数_max
   条件: (m n : 自然数∞)
-  结论: ↑(max m n) = (max m n : 实数>=0∞)
+  结论: ↑(最大值 m n) = (最大值 m n : 实数>=0∞)
   证明: toENNReal_mono.map_max
 
 @[simp, norm_cast]
@@ -553,7 +553,7 @@ theorem toENNReal_sub
   proof: WithTop.map_sub Nat.cast_tsub Nat.cast_zero m n
 
 中文:
-定理 toENNReal_sub
+定理 toENN实数_sub
   条件: (m n : 自然数∞)
   结论: ↑(m - n) = (m - n : 实数>=0∞)
   证明: WithTop.map_sub Nat.cast_tsub Nat.cast_zero m n

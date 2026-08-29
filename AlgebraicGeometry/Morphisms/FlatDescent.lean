@@ -46,7 +46,7 @@ instance Flat.surjective_descendsAlong_surjective_inf_flat_inf_quasicompact
   body: .of_le (Q := @Surjective) (le_of_inf_eq' (by grind))
 
 中文:
-实例 Flat.surjective_descendsAlong_surjective_inf_flat_inf_quasicompact
+实例 平坦.surjective_descendsAlong_surjective_inf_flat_inf_quasicompact
   签名: :
   定义体: .of_le (Q := @Surjective) (le_of_inf_eq' (by grind))
 
@@ -318,8 +318,8 @@ lemma HasRingHomProperty.descendsAlong_flat
     rwa [HasRingHomPrope
 
 中文:
-引理 HasRingHomProperty.descendsAlong_flat
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有RingHomProperty.descendsAlong_flat
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
   refine HasRingHomProperty.descendsAlong _ _ _ _ ?_ ?_ h
   · rw [inf_comm]

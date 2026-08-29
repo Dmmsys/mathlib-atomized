@@ -99,8 +99,8 @@ definition Functor.relativelyRepresentable
     (fst : F.obj b ⟶ X), IsPullback fst (F.map snd) f g
 
 中文:
-定义 Functor.relativelyRepresentable
-  签名: : Morphism命题erty D
+定义 函子.relativelyRepresentable
+  签名: : MorphismProperty D
   定义体: fun X Y f => forall ⦃a : C⦄ (g : F.obj a ⟶ Y), exists (b : C) (snd : b ⟶ a)
     (fst : F.obj b ⟶ X), IsPullback fst (F.map snd) f g
 
@@ -181,7 +181,7 @@ abbreviation fst'
 
 中文:
 缩写 fst'
-  签名: [Full F]
+  签名: [满 F]
   定义体: F.preimage (hf'.fst g)
 
 Depends on / 依赖: F.preimage, preimage
@@ -200,7 +200,7 @@ lemma map_fst'
 
 中文:
 引理 map_fst'
-  条件: [Full F]
+  条件: [满 F]
   结论: F.map (hf'.fst' g) = hf'.fst g
   证明: F.map_preimage _
 
@@ -221,7 +221,7 @@ lemma isPullback
 
 中文:
 引理 isPullback
-  结论: IsPullback (hf.fst g) (F.map (hf.snd g)) f g
+  结论: 是拉回 (hf.fst g) (F.map (hf.snd g)) f g
   证明: (hf g).choose_spec.choose_spec.choose_spec
 
 @[reassoc]
@@ -262,8 +262,8 @@ lemma isPullback'
 
 中文:
 引理 isPullback'
-  条件: [Full F]
-  结论: IsPullback (F.map (hf'.fst' g)) (F.map (hf'.snd g)) f' g
+  条件: [满 F]
+  结论: 是拉回 (F.map (hf'.fst' g)) (F.map (hf'.snd g)) f' g
   证明: (hf'.map_fst' _) ▸ hf'.isPullback g
 
 @[reassoc]
@@ -330,7 +330,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: [Faithful F] {c : C} {a b : c ⟶ hf.pullback g}
+  结论: [忠实 F] {c : C} {a b : c ⟶ hf.pullback g}
   证明: F.map_injective
     PullbackCone.IsLimit.hom_ext (hf.isPullback g).isLimit h₁ (by simpa using! F.congr_map h₂)
 
@@ -357,7 +357,7 @@ lemma hom_ext'
 
 中文:
 引理 hom_ext'
-  结论: [Full F] [Faithful F] {c : C} {a b : c ⟶ hf'.pullback g}
+  结论: [满 F] [忠实 F] {c : C} {a b : c ⟶ hf'.pullback g}
   证明: hf'.hom_ext (by simpa [map_fst'] using F.congr_map h₁) h₂
 
 Depends on / 依赖: F.congr_map, congr_map, hom_ext, map_fst
@@ -381,7 +381,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [Full F]
+  签名: [满 F]
   定义体: F.preimage PullbackCone.IsLimit.lift (hf.isPullback g).isLimit _ _ hi
 
 Depends on / 依赖: F.preimage, IsLimit, PullbackCone, PullbackCone.IsLimit.lift, hf.isPullback, isLimit, isPullback, preimage
@@ -403,7 +403,7 @@ lemma lift_fst
 
 中文:
 引理 lift_fst
-  条件: [Full F]
+  条件: [满 F]
   结论: F.map (hf.lift i h hi) ≫ hf.fst g = i
   证明: by
   simpa [lift] using! PullbackCone.IsLimit.lift_fst _ _ _ _
@@ -426,7 +426,7 @@ lemma lift_snd
 
 中文:
 引理 lift_snd
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf.lift i h hi ≫ hf.snd g = h
   证明: F.map_injective by simpa [lift] using! PullbackCone.IsLimit.lift_snd _ _ _ _
 
@@ -453,7 +453,7 @@ definition lift'
 
 中文:
 定义 lift'
-  签名: [Full F]
+  签名: [满 F]
   定义体: hf'.lift _ _ hi
 
 @[reassoc (attr := simp)]
@@ -474,7 +474,7 @@ lemma lift'_fst
 
 中文:
 引理 lift'_fst
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf'.lift' i h hi ≫ hf'.fst' g = i
   证明: F.map_injective (by simp [lift'])
 
@@ -496,7 +496,7 @@ lemma lift'_snd
 
 中文:
 引理 lift'_snd
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf'.lift' i h hi ≫ hf'.snd g = h
   证明: by
   simp [lift']
@@ -518,7 +518,7 @@ definition symmetry
 
 中文:
 定义 symmetry
-  签名: [Full F]
+  签名: [满 F]
   定义体: hg.lift' (hf'.snd g) (hf'.fst' g) (hf'.isPullback' _).w.symm
 
 @[reassoc (attr := simp)]
@@ -543,7 +543,7 @@ lemma symmetry_fst
 
 中文:
 引理 symmetry_fst
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf'.symmetry hg ≫ hg.fst' f' = hf'.snd g
   证明: by
   simp [symmetry]
@@ -570,7 +570,7 @@ lemma symmetry_snd
 
 中文:
 引理 symmetry_snd
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf'.symmetry hg ≫ hg.snd f' = hf'.fst' g
   证明: by
   simp [symmetry]
@@ -594,7 +594,7 @@ lemma symmetry_symmetry
 
 中文:
 引理 symmetry_symmetry
-  条件: [Full F] [Faithful F]
+  条件: [满 F] [忠实 F]
   结论: hf'.symmetry hg ≫ hg.symmetry hf' = 𝟙 _
   证明: hom_ext' hf' (by simp) (by simp)
 
@@ -616,7 +616,7 @@ definition symmetryIso
 
 中文:
 定义 symmetryIso
-  签名: [Full F] [Faithful F]
+  签名: [满 F] [忠实 F]
   定义体: hf'.symmetry hg
   inv := hg.symmetry hf'
 
@@ -635,8 +635,8 @@ instance [Full
   body: (hf'.symmetryIso hg).isIso_hom
 
 中文:
-实例 [Full
-  签名: F] [Faithful F] : IsIso (hf'.symmetry hg)
+实例 [满
+  签名: F] [忠实 F] : 是同构 (hf'.symmetry hg)
   定义体: (hf'.symmetryIso hg).isIso_hom
 
 Depends on / 依赖: isIso_hom, symmetryIso
@@ -659,7 +659,7 @@ apply F.map_isPullback IsPullback.of_hasPullback f g
 
 中文:
 引理 map
-  结论: [Full F] [HasPullbacks C] {a b : C} (f : a ⟶ b)
+  结论: [满 F] [有Pullbacks C] {a b : C} (f : a ⟶ b)
   证明: fun c g => by
   obtain ⟨g, rfl⟩ := F.map_surjective g
   refine ⟨Limits.pullback f g, Limits.pullback.snd f g, F.map (Limits.pullback.fst f g), ?_⟩
@@ -685,7 +685,7 @@ lemma of_isIso
 
 中文:
 引理 of_isIso
-  条件: {X Y : D} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : D} (f : X ⟶ Y) [是同构 f]
   结论: F.relativelyRepresentable f
   证明: fun a g => ⟨a, 𝟙 a, g ≫ CategoryTheory.inv f, IsPullback.of_vert_isIso ⟨by simp⟩⟩
 
@@ -704,7 +704,7 @@ lemma isomorphisms_le
 
 中文:
 引理 isomorphisms_le
-  结论: Morphism命题erty.isomorphisms D <= F.relativelyRepresentable
+  结论: MorphismProperty.isomorphisms D <= F.relativelyRepresentable
   证明: fun _ _ f hf => letI : IsIso f := hf; of_isIso F f
 
 Depends on / 依赖: of_isIso
@@ -725,7 +725,7 @@ instance isMultiplicative
 
 中文:
 实例 isMultiplicative
-  签名: : IsMultiplicative F.relativelyRepresentable where
+  签名: : 是Multiplicative F.relativelyRepresentable where
   定义体: of_isIso F _
   comp_mem {F G H} f g hf hg := fun X h =>
     ⟨hf.pullback (hg.fst h), hf.snd (hg.fst h) ≫ hg.snd h, hf.fst (hg.fst h),
@@ -752,7 +752,7 @@ instance isStableUnderBaseChange
 
 中文:
 实例 isStableUnderBaseChange
-  签名: : IsStableUnderBaseChange F.relativelyRepresentable where
+  签名: : 是StableUnderBaseChange F.relativelyRepresentable where
   定义体: by
     refine ⟨hg.pullback (h ≫ f), hg.snd (h ≫ f), ?_, ?_⟩
     · apply P₁.lift (hg.fst (h ≫ f)) (F.map (hg.snd (h ≫ f)) ≫ h) (by simpa using hg.w (h ≫ f))
@@ -804,7 +804,7 @@ definition relative
 
 中文:
 定义 relative
-  签名: : Morphism命题erty D
+  签名: : MorphismProperty D
   定义体: fun X Y f => F.relativelyRepresentable f ∧
     forall ⦃a b : C⦄ (g : F.obj a ⟶ Y) (fst : F.obj b ⟶ X) (snd : b ⟶ a)
       (_ : IsPullback fst (F.map snd) f g), P snd
@@ -826,7 +826,7 @@ abbreviation presheaf
 
 中文:
 缩写 presheaf
-  签名: : Morphism命题erty (Cᵒᵖ ⥤ 类型v₁)
+  签名: : MorphismProperty (Cᵒᵖ ⥤ 类型v₁)
   定义体: P.relative yoneda
 
 Depends on / 依赖: Opposite, Opposite.op, P.ext_of_isTriangulatedClosed, P.relative, e.symm.op, mem_distTriang_op_iff, relative, yoneda
@@ -908,8 +908,8 @@ lemma relative.of_exists
       (F.map_injective (by simp))
 
 中文:
-引理 relative.of_exists
-  结论: [F.Faithful] [F.Full] [P.RespectsIso] {f : X ⟶ Y}
+引理 relative.of_存在
+  结论: [F.忠实] [F.满] [P.RespectsIso] {f : X ⟶ Y}
   证明: by
   refine ⟨fun a g => ?_, fun a b g fst snd h => ?_⟩
   all_goals obtain ⟨c, g_fst, g_snd, BC, H⟩ := h₀ g
@@ -940,7 +940,7 @@ lemma relative_of_snd
 
 中文:
 引理 relative_of_snd
-  结论: [F.Faithful] [F.Full] [P.RespectsIso] {f : X ⟶ Y}
+  结论: [F.忠实] [F.满] [P.RespectsIso] {f : X ⟶ Y}
   证明: relative.of_exists (fun _ g => ⟨hf.pullback g, hf.fst g, hf.snd g, hf.isPullback g, h g⟩)
 
 Depends on / 依赖: hf.fst, hf.isPullback, hf.pullback, hf.snd, isPullback, of_exists, pullback, relative, relative.of_exists
@@ -964,7 +964,7 @@ lemma relative_map
 
 中文:
 引理 relative_map
-  结论: [F.Faithful] [F.Full] [HasPullbacks C] [IsStableUnderBaseChange P]
+  结论: [F.忠实] [F.满] [有Pullbacks C] [是StableUnderBaseChange P]
   证明: by
   apply relative.of_exists
   intro Y' g
@@ -1011,7 +1011,7 @@ lemma relative_map_iff
 
 中文:
 引理 relative_map_iff
-  结论: [F.Faithful] [F.Full] [PreservesLimitsOfShape WalkingCospan F]
+  结论: [F.忠实] [F.满] [保持形状极限 WalkingCospan F]
   证明: ⟨fun hf => of_relative_map hf, fun hf => relative_map hf⟩
 
 Depends on / 依赖: of_relative_map, relative_map
@@ -1032,7 +1032,7 @@ lemma relative_monotone
 
 中文:
 引理 relative_monotone
-  条件: {P' : Morphism命题erty C} (h : P <= P')
+  条件: {P' : MorphismProperty C} (h : P <= P')
   证明: fun _ _ _ hf =>
   ⟨hf.rep, fun _ _ g fst snd BC => h _ (hf.property g fst snd BC)⟩
 -/
@@ -1055,7 +1055,7 @@ lemma relative_isStableUnderBaseChange
 
 中文:
 引理 relative_isStableUnderBaseChange
-  结论: IsStableUnderBaseChange (P.relative F) where
+  结论: 是StableUnderBaseChange (P.relative F) where
   证明: ⟨of_isPullback hfBC hg.rep,
       fun _ _ _ _ _ BC => hg.property _ _ _ (IsPullback.paste_horiz BC hfBC)⟩
 
@@ -1082,7 +1082,7 @@ instance relative_isStableUnderComposition
 
 中文:
 实例 relative_isStableUnderComposition
-  签名: [F.Faithful] [F.Full] [P.IsStableUnderComposition]
+  签名: [F.忠实] [F.满] [P.是StableUnderComposition]
   定义体: by
     refine ⟨comp_mem _ _ _ hf.1 hg.1, fun Z X p fst snd h => ?_⟩
     rw [← hg.1.lift_snd (fst ≫ f) snd (by simpa using h.w)]
@@ -1134,7 +1134,7 @@ instance relative_isMultiplicative
 
 中文:
 实例 relative_isMultiplicative
-  签名: [F.Faithful] [F.Full] [P.IsMultiplicative] [P.RespectsIso]
+  签名: [F.忠实] [F.满] [P.是Multiplicative] [P.RespectsIso]
   定义体: relative.of_exists
     (fun Y g => ⟨Y, g, 𝟙 Y, by simpa using IsPullback.of_id_snd, id_mem _ _⟩)
 
@@ -1200,7 +1200,7 @@ lemma presheaf_mono_of_le
 
 中文:
 引理 presheaf_mono_of_le
-  结论: (hP : P <= Morphism命题erty.monomorphisms C)
+  结论: (hP : P <= MorphismProperty.monomorphisms C)
   证明: MorphismProperty.presheaf_monomorphisms_le_monomorphisms _
     (MorphismProperty.relative_monotone hP _ hf)
 
@@ -1224,7 +1224,7 @@ lemma fst'_self_eq_snd
 
 中文:
 引理 fst'_self_eq_snd
-  结论: (hP : P <= Morphism命题erty.monomorphisms C)
+  结论: (hP : P <= MorphismProperty.monomorphisms C)
   证明: by
   have := P.presheaf_mono_of_le hP hf
   apply yoneda.map_injective
@@ -1250,7 +1250,7 @@ lemma isIso_fst'_self
 
 中文:
 引理 isIso_fst'_self
-  结论: (hP : P <= Morphism命题erty.monomorphisms C)
+  结论: (hP : P <= MorphismProperty.monomorphisms C)
   证明: have := P.presheaf_mono_of_le hP hf
   have := (hf.rep.isPullback' f).isIso_fst_of_mono
   Yoneda.fullyFaithful.isIso_of_isIso_map _
@@ -1614,7 +1614,7 @@ lemma pullback₃.hom_ext
 
 中文:
 引理 pullback₃.hom_ext
-  结论: [Faithful F] {Z : C} {φ φ' : Z ⟶ pullback₃ hf₁ f₂ f₃}
+  结论: [忠实 F] {Z : C} {φ φ' : Z ⟶ pullback₃ hf₁ f₂ f₃}
   证明: by
   apply pullback.hom_ext <;> ext <;> simpa
 
@@ -1738,7 +1738,7 @@ lemma diag_of_map_from_obj
 
 中文:
 引理 diag_of_map_from_obj
-  结论: [HasPullbacks C] [PreservesLimitsOfShape WalkingCospan F]
+  结论: [有Pullbacks C] [保持形状极限 WalkingCospan F]
   证明: by
   rw [(by cat_disch : Limits.diag X = pullback.lift (𝟙 X) (𝟙 X) ≫ (prodIsoPullback X X).inv)]
   suffices F.relativelyRepresentable (pullback.lift (𝟙 _) (𝟙 _)) from
@@ -1781,7 +1781,7 @@ lemma diag_iff
 
 中文:
 引理 diag_iff
-  条件: {X : D} [HasPullbacks C] [PreservesLimitsOfShape WalkingCospan F]
+  条件: {X : D} [有Pullbacks C] [保持形状极限 WalkingCospan F]
   证明: ⟨fun h _ g => of_diag h g, fun h => diag_of_map_from_obj h⟩
 
 Depends on / 依赖: diag_of_map_from_obj, of_diag

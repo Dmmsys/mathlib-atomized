@@ -46,7 +46,7 @@ lemma isLocallySurjective_iff_locallySurjective_on_lightProfinite
 
 中文:
 引理 isLocallySurjective_iff_locallySurjective_on_lightProfinite
-  结论: IsLocallySurjective f ↔
+  结论: 是LocallySurjective f ↔
   证明: by
   rw [coherentTopology.isLocallySurjective_iff]; rw [regularTopology.isLocallySurjective_iff]
   simp_rw [LightProfinite.effectiveEpi_iff_surjective]
@@ -79,7 +79,7 @@ lemma epi_iff_locallySurjective_on_lightProfinite
 
 中文:
 引理 epi_iff_locallySurjective_on_lightProfinite
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: by
   rw [← isLocallySurjective_iff_epi']
   exact LightCondensed.isLocallySurjective_iff_locallySurjective_on_lightProfinite _ f
@@ -111,7 +111,7 @@ lemma epi_iff_locallySurjective_on_lightProfinite
 
 中文:
 引理 epi_iff_locallySurjective_on_lightProfinite
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: by
   rw [← isLocallySurjective_iff_epi']
   exact LightCondensed.isLocallySurjective_iff_locallySurjective_on_lightProfinite _ f
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: (LightCondensed.forget R).ReflectsEpimorphisms
+  签名: (LightCondensed.forget R).反映满态射
   定义体: by
     rw [← Sheaf.isLocallySurjective_iff_epi'] at hf ⊢
     exact (Presheaf.isLocallySurjective_iff_whisker_forget _ f.hom).mpr hf
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: (LightCondensed.forget R).PreservesEpimorphisms
+  签名: (LightCondensed.forget R).保持Epimorphisms
   定义体: by
     rw [← Sheaf.isLocallySurjective_iff_epi'] at hf ⊢
     exact (Presheaf.isLocallySurjective_iff_whisker_forget _ f.hom).mp hf
@@ -189,7 +189,7 @@ obtain ⟨T, π, hπ, x, hx⟩ := this S (coherentTopology LightProfinite).yoned
 
 中文:
 引理 factorsThru_lightProfinite_epi_of_epi
-  结论: [Epi f]
+  结论: [满态射 f]
   证明: by
   have : Epi ((LightCondensed.forget _).map f) := inferInstance
   rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite] at this
@@ -239,7 +239,7 @@ lemma epi_π_app_zero_of_epi
 
 中文:
 引理 epi_π_app_zero_of_epi
-  结论: Epi (c.π.app ⟨0⟩)
+  结论: 满态射 (c.π.app ⟨0⟩)
   证明: by
   apply Functor.epi_of_epi_map (forget R)
   change Epi (((forget R).mapCone c).π.app ⟨0⟩)
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (Limits.Pi.map f)
+  签名: 满态射 (Limits.依赖函数类型.map f)
   定义体: epi_π_app_zero_of_epi R (isLimit f) (fun n => by
     simp only [Nat.succ_eq_add_one, Functor.ofOpSequence_obj, homOfLE_leOfHom,
       Functor.ofOpSequence_map_homOfLE_succ]
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: (lim (J := Discrete 自然数) (C := LightCondMod R)).PreservesEpimorphisms
+  签名: (lim (J := 离散 自然数) (C := LightCondMod R)).保持Epimorphisms
   定义体: by
     have : lim.map f = (Pi.isoLimit _).inv ≫ Limits.Pi.map (f.app ⟨·⟩) ≫ (Pi.isoLimit _).hom := by
       apply limit.hom_ext

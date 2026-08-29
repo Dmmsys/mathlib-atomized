@@ -97,8 +97,8 @@ theorem AlgHom.toRingHom_toRatAlgHom
   proof: AlgHom.ext fun _x => rfl
 
 中文:
-定理 AlgHom.toRingHom_toRatAlgHom
-  条件: (f : R ->ₐ[Rat] S)
+定理 代数态射.toRingHom_toRatAlgHom
+  条件: (f : R ->ₐ[有理数] S)
   结论: (f : R ->+* S).toRatAlgHom = f
   证明: AlgHom.ext fun _x => rfl
 
@@ -120,8 +120,8 @@ definition RingHom.equivRatAlgHom
   invFun := AlgHom.toRingHom
 
 中文:
-定义 RingHom.equivRatAlgHom
-  签名: : (R ->+* S) ≃ (R ->ₐ[Rat] S) where
+定义 环态射.equivRatAlgHom
+  签名: : (R ->+* S) ≃ (R ->ₐ[有理数] S) where
   定义体: RingHom.toRatAlgHom
   invFun := AlgHom.toRingHom
 
@@ -251,8 +251,8 @@ theorem AlgEquiv.toRatAlgEquiv_toRingEquiv
   proof: rfl
 
 中文:
-定理 AlgEquiv.toRatAlgEquiv_toRingEquiv
-  条件: (f : R ≃ₐ[Rat] S)
+定理 代数等价.toRatAlgEquiv_toRingEquiv
+  条件: (f : R ≃ₐ[有理数] S)
   结论: (f : R ≃+* S).toRatAlgEquiv = f
   证明: rfl
 -/
@@ -272,8 +272,8 @@ definition RingEquiv.equivRatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
 中文:
-定义 RingEquiv.equivRatAlgEquiv
-  签名: : (R ≃+* S) ≃ (R ≃ₐ[Rat] S) where
+定义 环等价.equivRatAlgEquiv
+  签名: : (R ≃+* S) ≃ (R ≃ₐ[有理数] S) where
   定义体: RingEquiv.toRatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
@@ -291,7 +291,7 @@ lemma RingEquiv.toRatAlgEquiv_injective
   proof: (RingEquiv.equivRatAlgEquiv R S).injective
 
 中文:
-引理 RingEquiv.toRatAlgEquiv_injective
+引理 环等价.toRatAlgEquiv_injective
   证明: (RingEquiv.equivRatAlgEquiv R S).injective
 
 Depends on / 依赖: RingEquiv, RingEquiv.equivRatAlgEquiv, equivRatAlgEquiv, injective

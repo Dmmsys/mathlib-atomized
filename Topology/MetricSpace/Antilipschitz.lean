@@ -41,7 +41,7 @@ definition AntilipschitzWith
 
 中文:
 定义 AntilipschitzWith
-  签名: [PseudoEMetricSpace α] [PseudoEMetricSpace β] (K : 实数>=0) (f : α -> β)
+  签名: [PseudoEMetric空间 α] [PseudoEMetric空间 β] (K : 实数>=0) (f : α -> β)
   定义体: forall x y, edist x y <= K * edist (f x) (f y)
 -/
 def AntilipschitzWith [PseudoEMetricSpace α] [PseudoEMetricSpace β] (K : Real>=0) (f : α -> β) :=
@@ -57,7 +57,7 @@ lemma AntilipschitzWith.edist_lt_top
 
 中文:
 引理 AntilipschitzWith.edist_lt_top
-  结论: [PseudoEMetricSpace α] [PseudoMetricSpace β]
+  结论: [PseudoEMetric空间 α] [伪度量空间 β]
   证明: (h x y).trans_lt ENNReal.mul_lt_top ENNReal.coe_lt_top (edist_lt_top _ _)
 -/
 protected lemma AntilipschitzWith.edist_lt_top [PseudoEMetricSpace α] [PseudoMetricSpace β]
@@ -74,7 +74,7 @@ theorem AntilipschitzWith.edist_ne_top
 
 中文:
 定理 AntilipschitzWith.edist_ne_top
-  结论: [PseudoEMetricSpace α] [PseudoMetricSpace β] {K : 实数>=0}
+  结论: [PseudoEMetric空间 α] [伪度量空间 β] {K : 实数>=0}
   证明: (h.edist_lt_top x y).ne
 
 Depends on / 依赖: edist_lt_top, h.edist_lt_top
@@ -231,7 +231,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: {α : 类型} {β : 类型} [EMetricSpace α] [PseudoEMetricSpace β]
+  结论: {α : 类型} {β : 类型} [广义度量空间 α] [PseudoEMetric空间 β]
   证明: fun x y h => by
   simpa only [h, edist_self, mul_zero, edist_le_zero] using hf x y
 -/
@@ -273,7 +273,7 @@ theorem ediam_preimage_le
 
 中文:
 定理 ediam_preimage_le
-  条件: (hf : AntilipschitzWith K f) (s : Set β)
+  条件: (hf : AntilipschitzWith K f) (s : 集合 β)
   证明: ediam_le fun x hx y hy => by grw [hf x y, edist_le_ediam_of_mem (mem_preimage.1 hx) hy]
 
 Depends on / 依赖: ediam_le, edist_le_ediam_of_mem, mem_preimage
@@ -292,7 +292,7 @@ theorem le_mul_ediam_image
 
 中文:
 定理 le_mul_ediam_image
-  条件: (hf : AntilipschitzWith K f) (s : Set α)
+  条件: (hf : AntilipschitzWith K f) (s : 集合 α)
   证明: (ediam_mono (subset_preimage_image _ _)).trans (hf.ediam_preimage_le (f '' s))
 
 Depends on / 依赖: ediam_mono, ediam_preimage_le, hf.ediam_preimage_le, subset_preimage_image
@@ -359,7 +359,7 @@ theorem domRestrict
 
 中文:
 定理 domRestrict
-  条件: (hf : AntilipschitzWith K f) (s : Set α)
+  条件: (hf : AntilipschitzWith K f) (s : 集合 α)
   证明: fun x y => hf x y
 
 @[deprecated (since := "2026-07-19")] alias restrict := domRestrict
@@ -379,7 +379,7 @@ theorem codRestrict
 
 中文:
 定理 codRestrict
-  条件: (hf : AntilipschitzWith K f) {s : Set β} (hs : 对任意 x, f x in s)
+  条件: (hf : AntilipschitzWith K f) {s : 集合 β} (hs : 对任意 x, f x in s)
   证明: fun x y => hf x y
 -/
 theorem codRestrict (hf : AntilipschitzWith K f) {s : Set β} (hs : forall x, f x in s) :
@@ -397,7 +397,7 @@ theorem to_rightInvOn'
 
 中文:
 定理 to_rightInvOn'
-  结论: {s : Set α} (hf : AntilipschitzWith K (s.domRestrict f)) {g : β -> α}
+  结论: {s : 集合 α} (hf : AntilipschitzWith K (s.domRestrict f)) {g : β -> α}
   证明: fun x y => by
   simpa only [domRestrict_apply, g_inv x.mem, g_inv y.mem, Subtype.edist_mk_mk]
     using! hf ⟨g x, g_maps x.mem⟩ ⟨g y, g_maps y.mem⟩
@@ -420,7 +420,7 @@ theorem to_rightInvOn
 
 中文:
 定理 to_rightInvOn
-  条件: (hf : AntilipschitzWith K f) {g : β -> α} {t : Set β} (h : RightInvOn g f t)
+  条件: (hf : AntilipschitzWith K f) {g : β -> α} {t : 集合 β} (h : RightInvOn g f t)
   证明: (hf.domRestrict univ).to_rightInvOn' (mapsTo_univ g t) h
 
 Depends on / 依赖: domRestrict, hf.domRestrict, mapsTo_univ, to_rightInvOn
@@ -441,7 +441,7 @@ theorem to_rightInverse
 
 中文:
 定理 to_rightInverse
-  条件: (hf : AntilipschitzWith K f) {g : β -> α} (hg : Function.RightInverse g f)
+  条件: (hf : AntilipschitzWith K f) {g : β -> α} (hg : 函数.右逆 g f)
   证明: by
   intro x y
   have := hf (g x) (g y)
@@ -471,7 +471,7 @@ theorem comap_uniformity_le
 中文:
 定理 comap_uniformity_le
   条件: (hf : AntilipschitzWith K f)
-  结论: (𝓤 β).comap (Prod.map f f) <= 𝓤 α
+  结论: (𝓤 β).comap (积类型.map f f) <= 𝓤 α
   证明: by
   refine ((uniformity_basis_edist.comap _).le_basis_iff uniformity_basis_edist).2 fun ε h₀ => ?_
   refine ⟨(↑K)⁻¹ * ε, ENNReal.mul_pos (ENNReal.inv_ne_zero.2 ENNReal.coe_ne_top) h₀.ne', ?_⟩
@@ -500,7 +500,7 @@ theorem isUniformInducing
 
 中文:
 定理 isUniformInducing
-  条件: (hf : AntilipschitzWith K f) (hfc : UniformContinuous f)
+  条件: (hf : AntilipschitzWith K f) (hfc : 一致连续 f)
   证明: ⟨le_antisymm hf.comap_uniformity_le hfc.le_comap⟩
 
 Depends on / 依赖: comap_uniformity_le, hf.comap_uniformity_le, hfc.le_comap, le_antisymm, le_comap
@@ -519,7 +519,7 @@ lemma isUniformEmbedding
 
 中文:
 引理 isUniformEmbedding
-  结论: {α β : 类型} [EMetricSpace α] [PseudoEMetricSpace β] {K : 实数>=0} {f : α -> β}
+  结论: {α β : 类型} [广义度量空间 α] [PseudoEMetric空间 β] {K : 实数>=0} {f : α -> β}
   证明: ⟨hf.isUniformInducing hfc, hf.injective⟩
 
 Depends on / 依赖: hf.injective, hf.isUniformInducing, injective, isUniformInducing
@@ -567,8 +567,8 @@ theorem isInducing
 
 中文:
 定理 isInducing
-  条件: (hf : AntilipschitzWith K f) (hfc : Continuous f)
-  结论: IsInducing f
+  条件: (hf : AntilipschitzWith K f) (hfc : 连续 f)
+  结论: 是Inducing f
   证明: isInducing_iff_nhds.mpr fun x => le_antisymm (hfc.tendsto x).le_comap hf.comap_nhds_le _
 
 Depends on / 依赖: comap_nhds_le, hf.comap_nhds_le, hfc.tendsto, isInducing_iff_nhds, isInducing_iff_nhds.mpr, le_antisymm, le_comap, tendsto
@@ -586,7 +586,7 @@ lemma isEmbedding
 
 中文:
 引理 isEmbedding
-  结论: {α β : 类型} [EMetricSpace α] [PseudoEMetricSpace β] {K : 实数>=0} {f : α -> β}
+  结论: {α β : 类型} [广义度量空间 α] [PseudoEMetric空间 β] {K : 实数>=0} {f : α -> β}
   证明: .isEmbedding hf.isInducing hfc
 
 Depends on / 依赖: hf.isInducing, isEmbedding, isInducing
@@ -605,7 +605,7 @@ theorem isComplete_range
 
 中文:
 定理 isComplete_range
-  结论: [CompleteSpace α] (hf : AntilipschitzWith K f)
+  结论: [完备空间 α] (hf : AntilipschitzWith K f)
   证明: (hf.isUniformInducing hfc).isComplete_range
 
 Depends on / 依赖: hf.isUniformInducing, isComplete_range, isUniformInducing
@@ -624,7 +624,7 @@ theorem isClosed_range
 
 中文:
 定理 isClosed_range
-  结论: {α β : 类型} [PseudoEMetricSpace α] [EMetricSpace β] [CompleteSpace α]
+  结论: {α β : 类型} [PseudoEMetric空间 α] [广义度量空间 β] [完备空间 α]
   证明: (hf.isComplete_range hfc).isClosed
 
 Depends on / 依赖: hf.isComplete_range, isClosed, isComplete_range
@@ -644,7 +644,7 @@ theorem isClosedEmbedding
 
 中文:
 定理 isClosedEmbedding
-  结论: {α : 类型} {β : 类型} [EMetricSpace α] [EMetricSpace β] {K : 实数>=0}
+  结论: {α : 类型} {β : 类型} [广义度量空间 α] [广义度量空间 β] {K : 实数>=0}
   证明: { (hf.isUniformEmbedding hfc).isEmbedding with isClosed_range := hf.isClosed_range hfc }
 
 Depends on / 依赖: hf.isClosed_range, hf.isUniformEmbedding, isClosed_range, isEmbedding, isUniformEmbedding
@@ -667,7 +667,7 @@ theorem subtype_coe
 
 中文:
 定理 subtype_coe
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: AntilipschitzWith 1 ((↑) : s -> α)
   证明: AntilipschitzWith.id.domRestrict s
 
@@ -691,7 +691,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton α] {K : 实数>=0}
+  条件: [子单例 α] {K : 实数>=0}
   结论: AntilipschitzWith K f
   证明: fun x y => by
   simp only [Subsingleton.elim x y, edist_self, zero_le]
@@ -711,7 +711,7 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  结论: {α β} [EMetricSpace α] [PseudoEMetricSpace β] {f : α -> β}
+  结论: {α β} [广义度量空间 α] [PseudoEMetric空间 β] {f : α -> β}
   证明: ⟨fun x y => edist_le_zero.1 (h x y).trans_eq zero_mul _⟩
 -/
 protected theorem subsingleton {α β} [EMetricSpace α] [PseudoEMetricSpace β] {f : α -> β}
@@ -731,7 +731,7 @@ theorem pos
 
 中文:
 定理 pos
-  结论: {α} [EMetricSpace α] [Nontrivial α] {f : α -> β}
+  结论: {α} [广义度量空间 α] [非平凡 α] {f : α -> β}
   证明: by
   by_contra! h₀
   obtain rfl : K = 0 := by rwa [le_zero_iff] at h₀
@@ -763,7 +763,7 @@ theorem isBounded_preimage
 
 中文:
 定理 isBounded_preimage
-  条件: (hf : AntilipschitzWith K f) {s : Set β} (hs : IsBounded s)
+  条件: (hf : AntilipschitzWith K f) {s : 集合 β} (hs : IsBounded s)
   证明: isBounded_iff_ediam_ne_top.2 ne_top_of_le_ne_top
     (ENNReal.mul_ne_top ENNReal.coe_ne_top hs.ediam_ne_top) (hf.ediam_preimage_le _)
 
@@ -786,7 +786,7 @@ theorem tendsto_cobounded
 中文:
 定理 tendsto_cobounded
   条件: (hf : AntilipschitzWith K f)
-  结论: Tendsto f (cobounded α) (cobounded β)
+  结论: 收敛 f (cobounded α) (cobounded β)
   证明: compl_surjective.forall.2 fun _ => hf.isBounded_preimage
 
 Depends on / 依赖: compl_surjective, compl_surjective.forall, hf.isBounded_preimage, isBounded_preimage
@@ -811,7 +811,7 @@ theorem properSpace
 
 中文:
 定理 properSpace
-  结论: {α : 类型} [MetricSpace α] {K : 实数>=0} {f : α -> β} [命题erSpace α]
+  结论: {α : 类型} [度量空间 α] {K : 实数>=0} {f : α -> β} [真空间 α]
   证明: by
   refine ⟨fun x₀ r => ?_⟩
   let K := f ⁻¹' closedBall x₀ r
@@ -909,7 +909,7 @@ theorem LipschitzWith.to_rightInverse
 
 中文:
 定理 LipschitzWith.to_rightInverse
-  结论: [PseudoEMetricSpace α] [PseudoEMetricSpace β] {K : 实数>=0}
+  结论: [PseudoEMetric空间 α] [PseudoEMetric空间 β] {K : 实数>=0}
   证明: fun x y => by simpa only [hg _] using hf (g x) (g y)
 -/
 theorem LipschitzWith.to_rightInverse [PseudoEMetricSpace α] [PseudoEMetricSpace β] {K : Real>=0}

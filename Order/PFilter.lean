@@ -49,9 +49,9 @@ structure PFilter
 
 中文:
 结构 PFilter
-  参数: (P : 类型) [Preorder P]
+  参数: (P : 类型) [预序 P]
   公理与运算 (1 个):
-    - dual : Ideal Pᵒᵈ
+    - dual : 理想 Pᵒᵈ
 -/
 structure PFilter (P : Type*) [Preorder P] where
   dual : Ideal Pᵒᵈ
@@ -68,7 +68,7 @@ definition IsPFilter
 
 中文:
 定义 IsPFilter
-  签名: [Preorder P] (F : Set P)
+  签名: [预序 P] (F : 集合 P)
   定义体: IsIdeal (OrderDual.ofDual ⁻¹' F)
 
 Depends on / 依赖: IsIdeal, OrderDual, OrderDual.ofDual, ofDual
@@ -86,7 +86,7 @@ theorem IsPFilter.of_def
 
 中文:
 定理 IsPFilter.of_def
-  结论: [Preorder P] {F : Set P} (nonempty : F.Nonempty)
+  结论: [预序 P] {F : 集合 P} (nonempty : F.非空)
   证明: ⟨fun _ _ _ _ => mem_of_le ‹_› ‹_›, nonempty, directed⟩
 
 Depends on / 依赖: directed, mem_of_le, nonempty
@@ -106,7 +106,7 @@ definition IsPFilter.toPFilter
 
 中文:
 定义 IsPFilter.toPFilter
-  签名: [Preorder P] {F : Set P} (h : IsPFilter F)
+  签名: [预序 P] {F : 集合 P} (h : IsPFilter F)
   定义体: ⟨h.toIdeal⟩
 
 Depends on / 依赖: h.toIdeal, toIdeal
@@ -129,8 +129,8 @@ instance [Inhabited
   body: ⟨⟨default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: P] : Inhabited (PFilter P)
+实例 [可居
+  签名: P] : 可居 (PFilter P)
   定义体: ⟨⟨default⟩⟩
 -/
 instance [Inhabited P] : Inhabited (PFilter P) := ⟨⟨default⟩⟩
@@ -146,7 +146,7 @@ coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk Ideal.ext h
 
 中文:
 实例 :
-  签名: SetLike (PFilter P) P
+  签名: 集合状 (PFilter P) P
   定义体: toDual ⁻¹' F.dual.carrier
 coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk Ideal.ext h
 
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (PFilter P)
+  签名: 偏序 (PFilter P)
   定义体: .ofSetLike (PFilter P) P
 
 Depends on / 依赖: PFilter, ofSetLike
@@ -183,7 +183,7 @@ theorem isPFilter
 
 中文:
 定理 isPFilter
-  结论: IsPFilter (F : Set P)
+  结论: IsPFilter (F : 集合 P)
   证明: F.dual.isIdeal
 
 Depends on / 依赖: F.dual.isIdeal, isIdeal
@@ -200,7 +200,7 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  结论: (F : Set P).Nonempty
+  结论: (F : 集合 P).非空
   证明: F.dual.nonempty
 -/
 protected theorem nonempty : (F : Set P).Nonempty := F.dual.nonempty
@@ -215,7 +215,7 @@ theorem directed
 
 中文:
 定理 directed
-  结论: DirectedOn (· >= ·) (F : Set P)
+  结论: DirectedOn (· >= ·) (F : 集合 P)
   证明: F.dual.directed
 
 Depends on / 依赖: F.dual.directed, directed
@@ -256,7 +256,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (h : (s : Set P) = t)
+  条件: (h : (s : 集合 P) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -321,7 +321,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: (x : P) (I : Ideal Pᵒᵈ)
+  条件: (x : P) (I : 理想 Pᵒᵈ)
   结论: x in (⟨I⟩ : PFilter P) ↔ toDual x in I
   证明: Iff.rfl
 
@@ -397,7 +397,7 @@ theorem antitone_principal
 
 中文:
 定理 antitone_principal
-  结论: Antitone (principal : P -> PFilter P)
+  结论: 递减 (principal : P -> PFilter P)
   证明: fun _ _ =>
   principal_le_principal_iff.2
 -/
@@ -436,7 +436,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (PFilter P)
+  签名: 有底序 (PFilter P)
   定义体: ⟨⊥⟩
   bot_le F := (bot_le : ⊥ <= F.dual)
 -/

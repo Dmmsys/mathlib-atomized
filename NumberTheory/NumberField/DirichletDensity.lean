@@ -57,7 +57,7 @@ definition primeIdealZetaSum
 
 中文:
 定义 primeIdealZetaSum
-  签名: (S : Set (HeightOneSpectrum (𝓞 K))) (s : 实数)
+  签名: (S : 集合 (高一谱 (𝓞 K))) (s : 实数)
   定义体: ∑' 𝔭 : S, (Ideal.absNorm 𝔭.1.asIdeal : Real) ^ (-s)
 
 Depends on / 依赖: Ideal.absNorm, absNorm, asIdeal
@@ -115,7 +115,7 @@ theorem primeIdealZetaSum_le_card_of_finite
 
 中文:
 定理 primeIdealZetaSum_le_card_of_finite
-  条件: (hS : S.Finite) {s : 实数} (hs : 0 <= s)
+  条件: (hS : S.有限) {s : 实数} (hs : 0 <= s)
   证明: by
   replace hS := hS.to_subtype
   grw [primeIdealZetaSum_def, Real.rpow_le_one_of_one_le_of_nonpos] <;>

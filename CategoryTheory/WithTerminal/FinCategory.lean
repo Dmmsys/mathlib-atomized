@@ -38,7 +38,7 @@ definition optionEquiv
 
 中文:
 定义 optionEquiv
-  签名: : Option C ≃ WithTerminal C where
+  签名: : 选项类型 C ≃ WithTerminal C where
   定义体: by cases a <;> simp
   right_inv a := by cases a <;> simp
 
@@ -64,7 +64,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: [Fintype C]
+  签名: [有限类型 C]
   定义体: .ofEquiv (Option C) optionEquiv C
 
 Depends on / 依赖: ofEquiv, optionEquiv
@@ -87,7 +87,7 @@ instance instFinCategory
 
 中文:
 实例 instFinCategory
-  签名: [SmallCategory C] [FinCategory C]
+  签名: [小范畴 C] [有限范畴 C]
   定义体: inferInstance
   fintypeHom
   | star, star
@@ -119,7 +119,7 @@ definition optionEquiv
 
 中文:
 定义 optionEquiv
-  签名: : Option C ≃ WithInitial C where
+  签名: : 选项类型 C ≃ WithInitial C where
   定义体: by cases a <;> simp
   right_inv a := by cases a <;> simp
 
@@ -145,7 +145,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: [Fintype C]
+  签名: [有限类型 C]
   定义体: .ofEquiv (Option C) optionEquiv C
 
 Depends on / 依赖: ofEquiv, optionEquiv
@@ -168,7 +168,7 @@ instance instFinCategory
 
 中文:
 实例 instFinCategory
-  签名: [SmallCategory C] [FinCategory C]
+  签名: [小范畴 C] [有限范畴 C]
   定义体: inferInstance
   fintypeHom
   | star, star

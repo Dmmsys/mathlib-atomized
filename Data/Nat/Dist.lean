@@ -412,7 +412,7 @@ theorem dist_eq_max_sub_min
 中文:
 定理 dist_eq_max_sub_min
   条件: {i j : 自然数}
-  结论: dist i j = (max i j) - min i j
+  结论: dist i j = (最大值 i j) - 最小值 i j
   证明: by
   cases le_total i j <;> simp [Nat.dist, *]
 

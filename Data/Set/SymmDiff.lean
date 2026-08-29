@@ -47,7 +47,7 @@ theorem symmDiff_def
 
 中文:
 定理 symmDiff_def
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s ∆ t = s \ t union t \ s
   证明: rfl
 -/
@@ -139,7 +139,7 @@ theorem symmDiff_nonempty
 
 中文:
 定理 symmDiff_nonempty
-  结论: (s ∆ t).Nonempty ↔ s != t
+  结论: (s ∆ t).非空 ↔ s != t
   证明: nonempty_iff_ne_empty.trans symmDiff_eq_empty.not
 
 Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans, symmDiff_eq_empty, symmDiff_eq_empty.not
@@ -158,7 +158,7 @@ theorem inter_symmDiff_distrib_left
 
 中文:
 定理 inter_symmDiff_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter t ∆ u = (s inter t) ∆ (s inter u)
   证明: inf_symmDiff_distrib_left _ _ _
 
@@ -178,7 +178,7 @@ theorem inter_symmDiff_distrib_right
 
 中文:
 定理 inter_symmDiff_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s ∆ t inter u = (s inter u) ∆ (t inter u)
   证明: inf_symmDiff_distrib_right _ _ _
 

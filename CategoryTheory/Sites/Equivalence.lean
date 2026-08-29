@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: e.functor.IsDenseSubsite J (e.inverse.inducedTopology J)
+  签名: e.functor.是DenseSubsite J (e.inverse.inducedTopology J)
   定义体: by
   have : J = e.functor.inducedTopology (e.inverse.inducedTopology J) := by
     ext
@@ -111,7 +111,7 @@ lemma eq_inducedTopology_of_isDenseSubsite
 
 中文:
 引理 eq_inducedTopology_of_isDenseSubsite
-  条件: [e.inverse.IsDenseSubsite K J]
+  条件: [e.inverse.是DenseSubsite K J]
   证明: by
   ext
   rw [mem_inducedTopology_iff_of_isCoverDense]
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: e.functor.IsDenseSubsite J K
+  签名: e.functor.是DenseSubsite J K
   定义体: by
   rw [e.eq_inducedTopology_of_isDenseSubsite J K]
   infer_instance
@@ -229,7 +229,7 @@ definition sheafCongr.functor
 
 中文:
 定义 sheafCongr.functor
-  签名: : Sheaf J A ⥤ Sheaf K A
+  签名: : 层 J A ⥤ 层 K A
   定义体: ObjectProperty.lift _
     (sheafToPresheaf _ _ ⋙ (Functor.whiskeringLeft _ _ _).obj e.inverse.op)
     (e.inverse.op_comp_isSheaf _ _)
@@ -255,7 +255,7 @@ definition sheafCongr.inverse
 
 中文:
 定义 sheafCongr.inverse
-  签名: : Sheaf K A ⥤ Sheaf J A
+  签名: : 层 K A ⥤ 层 J A
   定义体: ObjectProperty.lift _
     (sheafToPresheaf _ _ ⋙ (Functor.whiskeringLeft _ _ _).obj e.functor.op)
     (e.functor.op_comp_isSheaf _ _)
@@ -282,7 +282,7 @@ definition sheafCongr.unitIso
 
 中文:
 定义 sheafCongr.unitIso
-  签名: : 𝟭 (Sheaf J A) ≅ functor J K e A ⋙ inverse J K e A
+  签名: : 𝟭 (层 J A) ≅ functor J K e A ⋙ inverse J K e A
   定义体: NatIso.ofComponents
     (fun F => ObjectProperty.isoMk _ (isoWhiskerRight e.op.unitIso F.obj))
 
@@ -307,7 +307,7 @@ definition sheafCongr.counitIso
 
 中文:
 定义 sheafCongr.counitIso
-  签名: : inverse J K e A ⋙ functor J K e A ≅ 𝟭 (Sheaf _ A)
+  签名: : inverse J K e A ⋙ functor J K e A ≅ 𝟭 (层 _ A)
   定义体: NatIso.ofComponents
     (fun F => ObjectProperty.isoMk _ (isoWhiskerRight e.op.counitIso F.obj))
 
@@ -337,7 +337,7 @@ definition sheafCongr
 
 中文:
 定义 sheafCongr
-  签名: : Sheaf J A ≌ Sheaf K A where
+  签名: : 层 J A ≌ 层 K A where
   定义体: sheafCongr.functor J K e A
   inverse := sheafCongr.inverse J K e A
   unitIso := sheafCongr.unitIso J K e A
@@ -371,7 +371,7 @@ definition transportAndSheafify
 
 中文:
 定义 transportAndSheafify
-  签名: : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A
+  签名: : (Cᵒᵖ ⥤ A) ⥤ 层 J A
   定义体: e.op.congrLeft.functor ⋙ presheafToSheaf _ _ ⋙ (e.sheafCongr J K A).inverse
 
 Depends on / 依赖: congrLeft, e.op.congrLeft.functor, e.sheafCongr, functor, inverse, presheafToSheaf, sheafCongr
@@ -440,7 +440,7 @@ include K e in
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits transportAndSheafify J K e A
+  签名: 保持FiniteLimits transportAndSheafify J K e A
   定义体: comp_preservesLimitsOfShape _ _
 
 include K e in
@@ -461,7 +461,7 @@ theorem hasSheafify
 
 中文:
 定理 hasSheafify
-  结论: HasSheafify J A
+  结论: 有Sheafify J A
   证明: HasSheafify.mk' J A (transportSheafificationAdjunction J K e A)
 
 Depends on / 依赖: HasSheafify, HasSheafify.mk, transportSheafificationAdjunction
@@ -489,7 +489,7 @@ theorem hasSheafCompose
 
 中文:
 定理 hasSheafCompose
-  结论: J.HasSheafCompose F where
+  结论: J.有SheafCompose F where
   证明: by
     have hP' : Presheaf.IsSheaf K (e.inverse.op ⋙ P ⋙ F) := by
       change Presheaf.IsSheaf K ((_ ⋙ _) ⋙ _)
@@ -532,7 +532,7 @@ definition smallSheafify
 
 中文:
 定义 smallSheafify
-  签名: : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A
+  签名: : (Cᵒᵖ ⥤ A) ⥤ 层 J A
   定义体: (equivSmallModel C).transportAndSheafify J
   ((equivSmallModel C).inverse.inducedTopology J) A
 
@@ -574,7 +574,7 @@ lemma hasSheafifyEssentiallySmallSite
 
 中文:
 引理 hasSheafifyEssentiallySmallSite
-  结论: HasSheafify J A
+  结论: 有Sheafify J A
   证明: (equivSmallModel C).hasSheafify J ((equivSmallModel C).inverse.inducedTopology J) A
 
 Depends on / 依赖: equivSmallModel, hasSheafify, inducedTopology, inverse, inverse.inducedTopology
@@ -594,7 +594,7 @@ omit [HasSheafify ((equivSmallModel C).inverse.inducedTopology J) A] in
 
 中文:
 实例 hasSheafComposeEssentiallySmallSite
-  签名: : HasSheafCompose J F
+  签名: : 有SheafCompose J F
   定义体: (equivSmallModel C).hasSheafCompose J ((equivSmallModel C).inverse.inducedTopology J) F
 
 omit [HasSheafify ((equivSmallModel C).inverse.inducedTopology J) A] in
@@ -755,7 +755,7 @@ have := K.W.of_postcomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_i
       K.W.of_precomp (W' := MorphismProperty.isomorp
 
 中文:
-引理 PreservesSheafification.transport
+引理 保持层化.transport
   证明: by
     rw [← J.W_whiskerLeft_iff (G := G) (K := K)] at hf
     have := K.W_of_preservesSheafification F (whiskerLeft G.op f) hf
@@ -794,7 +794,7 @@ lemma WEqualsLocallyBijective.transport
 
 中文:
 引理 WEqualsLocallyBijective.transport
-  条件: (hG : CoverPreserving K J G)
+  条件: (hG : 余verPreserving K J G)
   证明: by
     rw [← W_whiskerLeft_iff J K G f]; rw [← Presheaf.isLocallyInjective_whisker_iff K J G f hG]; rw [← Presheaf.isLocallySurjective_whisker_iff K J G f hG]; rw [W_iff_isLocallyBijective]
 
@@ -843,7 +843,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesSheafification J F
+  签名: 保持层化 J F
   定义体: PreservesSheafification.transport (A := A) J
     ((equivSmallModel C).inverse.inducedTopology J) (equivSmallModel C).inverse B F
 

@@ -39,7 +39,7 @@ instance fintype
 
 中文:
 实例 fintype
-  签名: [Fintype α] (s : Subgroup α) [DecidableRel (leftRel s).r]
+  签名: [有限类型 α] (s : 子群 α) [DecidableRel (leftRel s).r]
   定义体: Quotient.fintype (leftRel s)
 
 @[to_additive]
@@ -64,7 +64,7 @@ instance fintypeQuotientRightRel
 
 中文:
 实例 fintypeQuotientRightRel
-  签名: [Fintype (α ⧸ s)]
+  签名: [有限类型 (α ⧸ s)]
   定义体: .ofEquiv (α ⧸ s) (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.quotientRightRelEquivQuotientLeftRel, ofEquiv, quotientRightRelEquivQuotientLeftRel
@@ -85,7 +85,7 @@ lemma card_quotient_rightRel
 
 中文:
 引理 card_quotient_rightRel
-  条件: [Fintype (α ⧸ s)]
+  条件: [有限类型 (α ⧸ s)]
   证明: Fintype.ofEquiv_card (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv_card, QuotientGroup, QuotientGroup.quotientRightRelEquivQuotientLeftRel, ofEquiv_card, quotientRightRelEquivQuotientLeftRel
@@ -112,7 +112,7 @@ theorem card_eq_card_quotient_mul_card_subgroup
 
 中文:
 定理 card_eq_card_quotient_mul_card_subgroup
-  条件: (s : Subgroup α)
+  条件: (s : 子群 α)
   证明: by
   rw [← Nat.card_prod]; exact Nat.card_congr Subgroup.groupEquivQuotientProdSubgroup
 
@@ -140,7 +140,7 @@ lemma card_mul_eq_card_subgroup_mul_card_quotient
 
 中文:
 引理 card_mul_eq_card_subgroup_mul_card_quotient
-  条件: (s : Subgroup α) (t : Set α)
+  条件: (s : 子群 α) (t : 集合 α)
   证明: by
   rw [← Nat.card_prod]; rw [Nat.card_congr]
   apply Equiv.trans _ (QuotientGroup.preimageMkEquivSubgroupProdSet _ _)
@@ -175,7 +175,7 @@ theorem card_subgroup_dvd_card
 
 中文:
 定理 card_subgroup_dvd_card
-  条件: (s : Subgroup α)
+  条件: (s : 子群 α)
   结论: 自然数.card s ∣ 自然数.card α
   证明: by
   simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_left Nat]
@@ -200,7 +200,7 @@ theorem card_quotient_dvd_card
 
 中文:
 定理 card_quotient_dvd_card
-  条件: (s : Subgroup α)
+  条件: (s : 子群 α)
   结论: 自然数.card (α ⧸ s) ∣ 自然数.card α
   证明: by
   simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_right Nat]
@@ -228,7 +228,7 @@ theorem card_dvd_of_injective
 
 中文:
 定理 card_dvd_of_injective
-  条件: (f : α ->* H) (hf : Function.Injective f)
+  条件: (f : α ->* H) (hf : 函数.单射 f)
   证明: by
   calc
       Nat.card α = Nat.card (f.range : Subgroup H) := Nat.card_congr (Equiv.ofInjective f hf)
@@ -258,7 +258,7 @@ theorem card_dvd_of_le
 
 中文:
 定理 card_dvd_of_le
-  条件: {H K : Subgroup α} (hHK : H <= K)
+  条件: {H K : 子群 α} (hHK : H <= K)
   结论: 自然数.card H ∣ 自然数.card K
   证明: card_dvd_of_injective (inclusion hHK) (inclusion_injective hHK)
 
@@ -282,7 +282,7 @@ theorem card_comap_dvd_of_injective
 
 中文:
 定理 card_comap_dvd_of_injective
-  结论: (K : Subgroup H) (f : α ->* H)
+  结论: (K : 子群 H) (f : α ->* H)
   证明: calc Nat.card (K.comap f) = Nat.card ((K.comap f).map f) :=
       Nat.card_congr (equivMapOfInjective _ _ hf).toEquiv
     _ ∣ Nat.card K := card_dvd_of_le (map_comap_le _ _)

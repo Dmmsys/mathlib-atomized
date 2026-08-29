@@ -24,7 +24,7 @@ instance Multiplicative.isOrderedMonoid
 
 中文:
 实例 Multiplicative.isOrderedMonoid
-  签名: [AddCommMonoid α] [Preorder α] [IsOrderedAddMonoid α]
+  签名: [加法交换幺半群 α] [预序 α] [是OrderedAdd幺半群 α]
   定义体: { mul_le_mul_left := @IsOrderedAddMonoid.add_le_add_left α _ _ _ }
 
 Depends on / 依赖: IsOrderedAddMonoid, IsOrderedAddMonoid.add_le_add_left, add_le_add_left, mul_le_mul_left
@@ -42,8 +42,8 @@ instance Additive.isOrderedAddMonoid
   body: { add_le_add_left := @IsOrderedMonoid.mul_le_mul_left α _ _ _ }
 
 中文:
-实例 Additive.isOrderedAddMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+实例 加性.isOrderedAddMonoid
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: { add_le_add_left := @IsOrderedMonoid.mul_le_mul_left α _ _ _ }
 
 Depends on / 依赖: IsOrderedMonoid, IsOrderedMonoid.mul_le_mul_left, add_le_add_left, mul_le_mul_left
@@ -78,7 +78,7 @@ instance Additive.isOrderedCancelAddMonoid
   body: { le_of_add_le_add_left := @IsOrderedCancelMonoid.le_of_mul_le_mul_left α _ _ _ }
 
 中文:
-实例 Additive.isOrderedCancelAddMonoid
+实例 加性.isOrderedCancelAddMonoid
   定义体: { le_of_add_le_add_left := @IsOrderedCancelMonoid.le_of_mul_le_mul_left α _ _ _ }
 
 Depends on / 依赖: IsOrderedCancelMonoid, IsOrderedCancelMonoid.le_of_mul_le_mul_left, le_of_add_le_add_left, le_of_mul_le_mul_left
@@ -118,7 +118,7 @@ instance Additive.canonicallyOrderedAdd
   le_self_add _ _ := le_self_mul (α := α)
 
 中文:
-实例 Additive.canonicallyOrderedAdd
+实例 加性.canonicallyOrderedAdd
   定义体: le_mul_self (α := α)
   le_self_add _ _ := le_self_mul (α := α)
 

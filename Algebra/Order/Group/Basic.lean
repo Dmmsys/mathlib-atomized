@@ -43,7 +43,7 @@ lemma zpow_right_strictMono
 中文:
 引理 zpow_right_strictMono
   条件: (ha : 1 < a)
-  结论: StrictMono fun n : 整数 => a ^ n
+  结论: 严格递增 fun n : 整数 => a ^ n
   证明: by
   refine strictMono_int_of_lt_succ fun n => ?_
   rw [zpow_add_one]
@@ -76,7 +76,7 @@ lemma zpow_right_strictAnti
 中文:
 引理 zpow_right_strictAnti
   条件: (ha : a < 1)
-  结论: StrictAnti fun n : 整数 => a ^ n
+  结论: 严格递减 fun n : 整数 => a ^ n
   证明: by
   refine strictAnti_int_of_succ_lt fun n => ?_
   rw [zpow_add_one]
@@ -134,7 +134,7 @@ lemma zpow_right_mono
 中文:
 引理 zpow_right_mono
   条件: (ha : 1 <= a)
-  结论: Monotone fun n : 整数 => a ^ n
+  结论: 递增 fun n : 整数 => a ^ n
   证明: by
   refine monotone_int_of_le_succ fun n => ?_
   rw [zpow_add_one]
@@ -261,7 +261,7 @@ lemma zpow_left_strictMono
 中文:
 引理 zpow_left_strictMono
   条件: (hn : 0 < n)
-  结论: StrictMono ((· ^ n) : α -> α)
+  结论: 严格递增 ((· ^ n) : α -> α)
   证明: fun a b hab => by
   rw [← one_lt_div']; rw [← div_zpow]; exact one_lt_zpow (one_lt_div'.2 hab) hn
 
@@ -286,7 +286,7 @@ lemma zpow_left_mono
 中文:
 引理 zpow_left_mono
   条件: (hn : 0 <= n)
-  结论: Monotone ((· ^ n) : α -> α)
+  结论: 递增 ((· ^ n) : α -> α)
   证明: fun a b hab => by
   rw [← one_le_div']; rw [← div_zpow]; exact one_le_zpow (one_le_div'.2 hab) hn
 
@@ -417,8 +417,8 @@ theorem not_isCyclic_of_denselyOrdered
 
 中文:
 定理 not_isCyclic_of_denselyOrdered
-  条件: [DenselyOrdered α] [Nontrivial α]
-  结论: ¬IsCyclic α
+  条件: [稠密序 α] [非平凡 α]
+  结论: ¬是循环 α
   证明: by
   intro h
   rcases exists_zpow_surjective α with ⟨a, ha⟩

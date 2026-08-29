@@ -56,7 +56,7 @@ lemma _root_.Function.semiconj_iff_comp_eq
 protected alias ⟨comp_eq, _⟩ := semiconj_iff_comp_eq
 
 中文:
-引理 _root_.Function.semiconj_iff_comp_eq
+引理 _root_.函数.semiconj_iff_comp_eq
   结论: Semiconj f ga gb ↔ f ∘ ga = gb ∘ f
   证明: funext_iff.symm
 
@@ -186,7 +186,7 @@ theorem inverses_right
 
 中文:
 定理 inverses_right
-  条件: (h : Semiconj f ga gb) (ha : RightInverse ga' ga) (hb : LeftInverse gb' gb)
+  条件: (h : Semiconj f ga gb) (ha : 右逆 ga' ga) (hb : 左逆 gb' gb)
   证明: fun x => by
   rw [← hb (f (ga' x))]; rw [← h.eq]; rw [ha x]
 
@@ -503,7 +503,7 @@ theorem isAssociative_right
 
 中文:
 定理 isAssociative_right
-  条件: [Std.Associative ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f)
+  条件: [Std.结合 ga] (h : Semiconj₂ f ga gb) (h_surj : 满射 f)
   证明: ⟨h_surj.forall₃.2 fun x₁ x₂ x₃ => by simp only [← h.eq, Std.Associative.assoc (op := ga)]⟩
 
 Depends on / 依赖: Associative, Std.Associative.assoc, h.eq, h_surj, h_surj.forall
@@ -522,7 +522,7 @@ theorem isAssociative_left
 
 中文:
 定理 isAssociative_left
-  条件: [Std.Associative gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f)
+  条件: [Std.结合 gb] (h : Semiconj₂ f ga gb) (h_inj : 单射 f)
   证明: ⟨fun x₁ x₂ x₃ => h_inj by simp only [h.eq, Std.Associative.assoc (op := gb)]⟩
 
 Depends on / 依赖: Associative, Std.Associative.assoc, h.eq, h_inj
@@ -541,7 +541,7 @@ theorem isIdempotent_right
 
 中文:
 定理 isIdempotent_right
-  条件: [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f)
+  条件: [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj : 满射 f)
   证明: ⟨h_surj.forall.2 fun x => by simp only [← h.eq, Std.IdempotentOp.idempotent (op := ga)]⟩
 
 Depends on / 依赖: IdempotentOp, Std.IdempotentOp.idempotent, h.eq, h_surj, h_surj.forall, idempotent
@@ -560,7 +560,7 @@ theorem isIdempotent_left
 
 中文:
 定理 isIdempotent_left
-  条件: [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f)
+  条件: [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : 单射 f)
   证明: ⟨fun x => h_inj by rw [h.eq, Std.IdempotentOp.idempotent (op := gb)]⟩
 
 Depends on / 依赖: IdempotentOp, Std.IdempotentOp.idempotent, h.eq, h_inj, idempotent

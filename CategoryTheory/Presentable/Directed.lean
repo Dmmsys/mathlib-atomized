@@ -77,11 +77,11 @@ structure Diagram
     - hP : P.HasCardinalLT κ
 
 中文:
-结构 Diagram
+结构 图表
   参数: where
   公理与运算 (6 个):
-    - W : Morphism命题erty J
-    - P : Object命题erty J
+    - W : MorphismProperty J
+    - P : ObjectProperty J
     - src({i j : J} {f : i ⟶ j}) : W f -> P i
     - tgt({i j : J} {f : i ⟶ j}) : W f -> P j
     - hW : W.HasCardinalLT κ
@@ -115,8 +115,8 @@ structure IsTerminal
     - comm({i j : J} (f : i ⟶ j) (hf : D.W f)) : f ≫ lift (D.tgt hf) = lift (D.src hf)
 
 中文:
-结构 IsTerminal
-  参数: (D : Diagram J κ) (e : J)
+结构 是终止
+  参数: (D : 图表 J κ) (e : J)
   公理与运算 (5 个):
     - prop_id : D.W (𝟙 e)
     - lift({j : J} (hj : D.P j)) : j ⟶ e
@@ -151,7 +151,7 @@ lemma prop
 
 中文:
 引理 prop
-  条件: (h : D.IsTerminal e)
+  条件: (h : D.是终止 e)
   结论: D.P e
   证明: D.src (h.prop_id)
 
@@ -173,7 +173,7 @@ lemma lift_self
 
 中文:
 引理 lift_self
-  条件: (h : D.IsTerminal e)
+  条件: (h : D.是终止 e)
   结论: h.lift h.prop = 𝟙 e
   证明: h.uniq _ h.prop_id
 
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (D.IsTerminal e)
+  签名: 子单例 (D.是终止 e)
   定义体: by
     have : @h₁.lift = @h₂.lift := by
       ext j hj
@@ -274,12 +274,12 @@ structure DiagramWithUniqueTerminal
 
 中文:
 结构 DiagramWithUniqueTerminal
-  参数: extends Diagram J κ
-  继承: Diagram J κ
+  参数: extends 图表 J κ
+  继承: 图表 J κ
   公理与运算 (3 个):
     - top : J
-    - isTerminal : toDiagram.IsTerminal top
-    - uniq_terminal((j : J) (hj : toDiagram.IsTerminal j)) : j = top
+    - isTerminal : toDiagram.是终止 top
+    - uniq_terminal((j : J) (hj : toDiagram.是终止 j)) : j = top
 -/
 structure DiagramWithUniqueTerminal extends Diagram J κ where
   /-- the terminal object -/
@@ -341,7 +341,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (DiagramWithUniqueTerminal J κ)
+  签名: 偏序 (DiagramWithUniqueTerminal J κ)
   定义体: D₁.W <= D₂.W ∧ D₁.P <= D₂.P
   le_refl _ := ⟨by rfl, by rfl⟩
   le_trans _ _ _ h₁ h₂ := ⟨h₁.1.trans h₂.1, h₁.2.trans h₂.2⟩
@@ -479,7 +479,7 @@ definition Diagram.single
  
 
 中文:
-定义 Diagram.single
+定义 图表.single
   签名: (j : J)
   定义体: .ofHoms (fun (_ : Unit) => 𝟙 j)
   P := .ofObj (fun (_ : Unit) => j)
@@ -581,8 +581,8 @@ definition Diagram.iSup
     obtain ⟨i, hi⟩ :
 
 中文:
-定义 Diagram.iSup
-  签名: {ι : 类型} (D : ι -> Diagram J κ) (hι : HasCardinalLT ι κ)
+定义 图表.iSup
+  签名: {ι : 类型} (D : ι -> 图表 J κ) (hι : HasCardinalLT ι κ)
   定义体: ⨆ (i : ι), (D i).W
   P := ⨆ (i : ι), (D i).P
   src hf := by
@@ -631,8 +631,8 @@ definition Diagram.sup
   hP := .s
 
 中文:
-定义 Diagram.sup
-  签名: (D₁ D₂ : Diagram J κ)
+定义 图表.上确界
+  签名: (D₁ D₂ : 图表 J κ)
   定义体: D₁.W ⊔ D₂.W
   P := D₁.P ⊔ D₂.P
   src := by
@@ -749,7 +749,7 @@ definition D₁
 
 中文:
 定义 D₁
-  签名: : Diagram J κ
+  签名: : 图表 J κ
   定义体: (Diagram.iSup (fun i => (D i).toDiagram) hι).sup (.single m)
 
 Depends on / 依赖: Diagram, Diagram.iSup, single, toDiagram
@@ -776,7 +776,7 @@ definition D₂
 
 中文:
 定义 D₂
-  签名: : Diagram J κ where
+  签名: : 图表 J κ where
   定义体: (D₁ D hι m).W ⊔ MorphismProperty.ofHoms
     fun (x : (Σ (i : ι), (Subtype (D i).P))) => (D x.1).isTerminal.lift x.2.2 ≫ u x.1
   P := (D₁ D hι m).P
@@ -878,7 +878,7 @@ lemma isCardinalFiltered
 
 中文:
 引理 isCardinalFiltered
-  结论: IsCardinalFiltered (DiagramWithUniqueTerminal J κ) κ
+  结论: 是CardinalFiltered (DiagramWithUniqueTerminal J κ) κ
   证明: isCardinalFiltered_preorder _ _ (fun ι D hι => by
     rw [← hasCardinalLT_iff_cardinal_mk_lt] at hι
     obtain ⟨m, u, hm₀, hm⟩ := isCardinalFiltered_aux J κ hJ D hι
@@ -958,7 +958,7 @@ definition D₃
 
 中文:
 定义 D₃
-  签名: : Diagram J κ
+  签名: : 图表 J κ
   定义体: D.toDiagram.sup (.single m₁)
 
 Depends on / 依赖: D.toDiagram.sup, single, toDiagram
@@ -988,7 +988,7 @@ definition D₄
 
 中文:
 定义 D₄
-  签名: : Diagram J κ where
+  签名: : 图表 J κ where
   定义体: (D₃ D m₁).W ⊔ .ofHoms φ
   P := (D₃ D m₁).P
   src := by
@@ -1036,7 +1036,7 @@ lemma final_functor
 
 中文:
 引理 final_functor
-  结论: (functor J κ).Final
+  结论: (functor J κ).终
   证明: by
   have := isCardinalFiltered J κ hJ
   have := isFiltered_of_isCardinalFiltered J κ
@@ -1151,8 +1151,8 @@ lemma exists_cardinal_directed
           Cardinal.noM
 
 中文:
-引理 exists_cardinal_directed
-  结论: (J : Type w) [SmallCategory J] (κ : Cardinal.{w})
+引理 存在_cardinal_directed
+  结论: (J : 类型 w) [小范畴 J] (κ : 基数.{w})
   证明: by
   have := isFiltered_of_isCardinalFiltered κ.ord.ToType κ
   obtain ⟨α, _, _, F, _⟩ :=
@@ -1192,7 +1192,7 @@ lemma IsFiltered.exists_directed
   exact ⟨α, _, IsFiltered.isDirectedOrder _, nonempty, F, inferInstance⟩
 
 中文:
-引理 IsFiltered.exists_directed
+引理 是Filtered.存在_directed
   证明: by
   have := (isCardinalFiltered_aleph0_iff.{w} J).2 inferInstance
   obtain ⟨α, _, _, F, _⟩ := IsCardinalFiltered.exists_cardinal_directed J .aleph0

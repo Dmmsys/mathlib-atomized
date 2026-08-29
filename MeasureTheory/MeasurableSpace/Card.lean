@@ -50,7 +50,7 @@ termination_by i
 
 中文:
 定义 generateMeasurableRec
-  签名: (s : Set (Set α)) (i : Ordinal)
+  签名: (s : 集合 (集合 α)) (i : 序数)
   定义体: let S := ⋃ j < i, generateMeasurableRec s j
   s union {∅} union compl '' S union Set.range fun f : Nat -> S => ⋃ n, (f n).1
 termination_by i
@@ -75,7 +75,7 @@ theorem self_subset_generateMeasurableRec
 
 中文:
 定理 self_subset_generateMeasurableRec
-  条件: (s : Set (Set α)) (i : Ordinal)
+  条件: (s : 集合 (集合 α)) (i : 序数)
   证明: by
   unfold generateMeasurableRec
   apply_rules [subset_union_of_subset_left]
@@ -101,7 +101,7 @@ theorem empty_mem_generateMeasurableRec
 
 中文:
 定理 empty_mem_generateMeasurableRec
-  条件: (s : Set (Set α)) (i : Ordinal)
+  条件: (s : 集合 (集合 α)) (i : 序数)
   证明: by
   unfold generateMeasurableRec
   exact mem_union_left _ (mem_union_left _ (mem_union_right _ (mem_singleton ∅)))
@@ -125,7 +125,7 @@ theorem compl_mem_generateMeasurableRec
 
 中文:
 定理 compl_mem_generateMeasurableRec
-  结论: {s : Set (Set α)} {i j : Ordinal} (h : j < i) {t : Set α}
+  结论: {s : 集合 (集合 α)} {i j : 序数} (h : j < i) {t : 集合 α}
   证明: by
   unfold generateMeasurableRec
   exact mem_union_left _ (mem_union_right _ ⟨t, mem_iUnion₂.2 ⟨j, h, ht⟩, rfl⟩)
@@ -149,7 +149,7 @@ theorem iUnion_mem_generateMeasurableRec
 
 中文:
 定理 iUnion_mem_generateMeasurableRec
-  结论: {s : Set (Set α)} {i : Ordinal} {f : 自然数 -> Set α}
+  结论: {s : 集合 (集合 α)} {i : 序数} {f : 自然数 -> 集合 α}
   证明: by
   unfold generateMeasurableRec
   exact mem_union_right _ ⟨fun n => ⟨f n, let ⟨j, hj, hf⟩ := hf n; mem_iUnion₂.2 ⟨j, hj, hf⟩⟩, rfl⟩
@@ -178,8 +178,8 @@ theorem generateMeasurableRec_mono
 
 中文:
 定理 generateMeasurableRec_mono
-  条件: (s : Set (Set α))
-  结论: Monotone (generateMeasurableRec s)
+  条件: (s : 集合 (集合 α))
+  结论: 递增 (generateMeasurableRec s)
   证明: by
   intro i j h x hx
   rcases h.eq_or_lt with (rfl | h)
@@ -217,7 +217,7 @@ theorem generateMeasurableRec_induction
 
 中文:
 定理 generateMeasurableRec_induction
-  结论: {s : Set (Set α)} {i : Ordinal} {t : Set α}
+  结论: {s : 集合 (集合 α)} {i : 序数} {t : 集合 α}
   证明: by
   suffices H : forall k <= i, forall t in generateMeasurableRec s k, p t from H i le_rfl t
   intro k
@@ -271,7 +271,7 @@ theorem generateMeasurableRec_omega_one
 
 中文:
 定理 generateMeasurableRec_omega_one
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: by
   apply (iUnion₂_subset fun i h => generateMeasurableRec_mono s h.le).antisymm'
   intro t ht
@@ -316,7 +316,7 @@ theorem generateMeasurableRec_subset
 
 中文:
 定理 generateMeasurableRec_subset
-  条件: (s : Set (Set α)) (i : Ordinal)
+  条件: (s : 集合 (集合 α)) (i : 序数)
   证明: by
   apply WellFoundedLT.induction i
   exact fun i IH t ht => generateMeasurableRec_induction .basic .empty
@@ -348,7 +348,7 @@ theorem generateMeasurable_eq_rec
 
 中文:
 定理 generateMeasurable_eq_rec
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: by
   apply (generateMeasurableRec_subset s _).antisymm'
   intro t ht
@@ -390,7 +390,7 @@ theorem generateMeasurableRec_of_omega_one_le
 
 中文:
 定理 generateMeasurableRec_of_omega_one_le
-  条件: (s : Set (Set α)) {i : Ordinal.{v}} (hi : ω₁ <= i)
+  条件: (s : 集合 (集合 α)) {i : 序数.{v}} (hi : ω₁ <= i)
   证明: by
   apply (generateMeasurableRec_mono s hi).antisymm'
   rw [← generateMeasurable_eq_rec]
@@ -423,7 +423,7 @@ theorem cardinal_generateMeasurableRec_le
 
 中文:
 定理 cardinal_generateMeasurableRec_le
-  条件: (s : Set (Set α)) (i : Ordinal.{v})
+  条件: (s : 集合 (集合 α)) (i : 序数.{v})
   证明: by
   suffices forall i <= ω₁, #(generateMeasurableRec s i) <= max #s 2 ^ ℵ₀ by
     obtain hi | hi := le_or_gt i ω₁
@@ -483,7 +483,7 @@ theorem cardinal_generateMeasurable_le
 
 中文:
 定理 cardinal_generateMeasurable_le
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: by
   rw [generateMeasurable_eq_rec.{u]; rw [0}]
   exact cardinal_generateMeasurableRec_le s _
@@ -505,7 +505,7 @@ theorem cardinal_measurableSet_le
 
 中文:
 定理 cardinal_measurableSet_le
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: cardinal_generateMeasurable_le s
 
 Depends on / 依赖: cardinal_generateMeasurable_le
@@ -527,7 +527,7 @@ theorem cardinal_generateMeasurable_le_continuum
 
 中文:
 定理 cardinal_generateMeasurable_le_continuum
-  条件: {s : Set (Set α)} (hs : #s <= 𝔠)
+  条件: {s : 集合 (集合 α)} (hs : #s <= 𝔠)
   证明: by
   apply (cardinal_generateMeasurable_le s).trans
   rw [← continuum_power_aleph0]
@@ -551,7 +551,7 @@ theorem cardinal_measurableSet_le_continuum
 
 中文:
 定理 cardinal_measurableSet_le_continuum
-  条件: {s : Set (Set α)}
+  条件: {s : 集合 (集合 α)}
   证明: cardinal_generateMeasurable_le_continuum
 
 Depends on / 依赖: cardinal_generateMeasurable_le_continuum

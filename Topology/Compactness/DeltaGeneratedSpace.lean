@@ -45,7 +45,7 @@ abbreviation DeltaGeneratedSpace
 
 中文:
 缩写 DeltaGeneratedSpace
-  签名: (Y : 类型) [TopologicalSpace Y]
+  签名: (Y : 类型) [拓扑空间 Y]
   定义体: IsGeneratedBy (fun n => Fin n -> Real) Y
 
 Depends on / 依赖: IsGeneratedBy
@@ -67,7 +67,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: : Type _
+  签名: : 类型 _
   定义体: WithGeneratedByTopology (fun n => Fin n -> Real) Y
 
 Depends on / 依赖: WithGeneratedByTopology
@@ -111,7 +111,7 @@ instance [DeltaGeneratedSpace
 
 中文:
 实例 [DeltaGeneratedSpace
-  签名: X] : SequentialSpace X
+  签名: X] : Sequential空间 X
   定义体: by
   rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]
   exact SequentialSpace.iSup (fun n => SequentialSpace.iSup
@@ -145,8 +145,8 @@ alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced
 alias is
 
 中文:
-定义 TopologicalSpace.deltaGenerated
-  签名: (X : 类型) [TopologicalSpace X]
+定义 拓扑空间.deltaGenerated
+  签名: (X : 类型) [拓扑空间 X]
   定义体: ⨆ f : (n : Nat) × C(((Fin n) -> Real), X), coinduced f.2 inferInstance
 
 @[deprecated (since := "2026-04-23")]

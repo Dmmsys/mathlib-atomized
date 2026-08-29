@@ -79,8 +79,8 @@ theorem hasFiniteIntegral_prodMk_left
      
 
 中文:
-定理 hasFiniteIntegral_prodMk_left
-  条件: (a : α) {s : Set (β × γ)} (h2s : (κ otimesₖ η) a s != ∞)
+定理 hasFinite整数egral_prodMk_left
+  条件: (a : α) {s : 集合 (β × γ)} (h2s : (κ otimesₖ η) a s != ∞)
   证明: by
   let t := toMeasurable ((κ otimesₖ η) a) s
   simp_rw [hasFiniteIntegral_iff_enorm, measureReal_def, enorm_eq_ofReal toReal_nonneg]
@@ -120,7 +120,7 @@ theorem integrable_kernel_prodMk_left
 
 中文:
 定理 integrable_kernel_prodMk_left
-  结论: (a : α) {s : Set (β × γ)} (hs : MeasurableSet s)
+  结论: (a : α) {s : 集合 (β × γ)} (hs : 可测集 s)
   证明: by
   constructor
   · exact (measurable_kernel_prodMk_left' hs a).ennreal_toReal.aestronglyMeasurable
@@ -144,8 +144,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_compProd
     filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_compProd
-  结论: [NormedSpace 实数 E]
+定理 _root_.测度论.AEStronglyMeasurable.integral_kernel_compProd
+  结论: [赋范空间 实数 E]
   证明: ⟨fun x => ∫ y, hf.mk f (x, y) ∂η (a, x), hf.stronglyMeasurable_mk.integral_kernel_prod_right'', by
     filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
@@ -168,8 +168,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.compProd_mk_left
     ⟨fun y => hf.mk f (x, y), hf.stronglyMeasurable_mk.comp_measurable measurable_prodMk_left, hx⟩
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.compProd_mk_left
-  结论: {δ : 类型} [TopologicalSpace δ]
+定理 _root_.测度论.AEStronglyMeasurable.compProd_mk_left
+  结论: {δ : 类型} [拓扑空间 δ]
   证明: by
   filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with x hx using
     ⟨fun y => hf.mk f (x, y), hf.stronglyMeasurable_mk.comp_measurable measurable_prodMk_left, hx⟩
@@ -199,7 +199,7 @@ theorem hasFiniteIntegral_compProd_iff
       (h1f.norm.comp_measurable measurable_pro
 
 中文:
-定理 hasFiniteIntegral_compProd_iff
+定理 hasFinite整数egral_compProd_iff
   条件: ⦃f
   结论: β × γ -> E⦄ (h1f : StronglyMeasurable f) :
   证明: by
@@ -246,7 +246,7 @@ theorem hasFiniteIntegral_compProd_iff'
   
 
 中文:
-定理 hasFiniteIntegral_compProd_iff'
+定理 hasFinite整数egral_compProd_iff'
   条件: ⦃f
   结论: β × γ -> E⦄
   证明: by
@@ -312,7 +312,7 @@ theorem _root_.MeasureTheory.Integrable.ae_of_compProd
   proof: ((integrable_compProd_iff hf.aestronglyMeasurable).mp hf).1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.ae_of_compProd
+定理 _root_.测度论.可积.ae_of_compProd
   条件: ⦃f
   结论: β × γ -> E⦄
   证明: ((integrable_compProd_iff hf.aestronglyMeasurable).mp hf).1
@@ -333,7 +333,7 @@ theorem _root_.MeasureTheory.Integrable.integral_norm_compProd
   proof: ((integrable_compProd_iff hf.aestronglyMeasurable).mp hf).2
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_norm_compProd
+定理 _root_.测度论.可积.integral_norm_compProd
   条件: ⦃f
   结论: β × γ -> E⦄
   证明: ((integrable_compProd_iff hf.aestronglyMeasurable).mp hf).2
@@ -358,8 +358,8 @@ integral_nonneg_of_ae
               Eventually.of_forall fun y => (norm_nonneg (f (x, y)) :)).symm
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_compProd
-  结论: [NormedSpace 实数 E]
+定理 _root_.测度论.可积.integral_compProd
+  结论: [赋范空间 实数 E]
   证明: Integrable.mono hf.integral_norm_compProd hf.aestronglyMeasurable.integral_kernel_compProd
     Eventually.of_forall fun x =>
 (norm_integral_le_integral_norm _).trans_eq
@@ -397,7 +397,7 @@ theorem Kernel.integral_fn_integral_add
   simp [integral_add h2f h2g]
 
 中文:
-定理 Kernel.integral_fn_integral_add
+定理 核.integral_fn_integral_add
   条件: ⦃f g
   结论: β × γ -> E⦄ (F : E -> E')
   证明: by
@@ -428,7 +428,7 @@ theorem Kernel.integral_fn_integral_sub
   simp [integral_sub h2f h2g]
 
 中文:
-定理 Kernel.integral_fn_integral_sub
+定理 核.integral_fn_integral_sub
   条件: ⦃f g
   结论: β × γ -> E⦄ (F : E -> E')
   证明: by
@@ -459,7 +459,7 @@ theorem Kernel.lintegral_fn_integral_sub
   simp [integral_sub h2f h2g]
 
 中文:
-定理 Kernel.lintegral_fn_integral_sub
+定理 核.lintegral_fn_integral_sub
   条件: ⦃f g
   结论: β × γ -> E⦄ (F : E -> 实数>=0∞)
   证明: by
@@ -488,9 +488,9 @@ theorem Kernel.integral_integral_add
     integral_add hf.integral_compProd hg.integral_compProd
 
 中文:
-定理 Kernel.integral_integral_add
+定理 核.integral_integral_add
   条件: ⦃f g
-  结论: β × γ -> E⦄ (hf : 整数egrable f ((κ otimesₖ η) a))
+  结论: β × γ -> E⦄ (hf : 可积 f ((κ otimesₖ η) a))
   证明: (Kernel.integral_fn_integral_add id hf hg).trans
     integral_add hf.integral_compProd hg.integral_compProd
 
@@ -513,9 +513,9 @@ theorem Kernel.integral_integral_add'
   proof: Kernel.integral_integral_add hf hg
 
 中文:
-定理 Kernel.integral_integral_add'
+定理 核.integral_integral_add'
   条件: ⦃f g
-  结论: β × γ -> E⦄ (hf : 整数egrable f ((κ otimesₖ η) a))
+  结论: β × γ -> E⦄ (hf : 可积 f ((κ otimesₖ η) a))
   证明: Kernel.integral_integral_add hf hg
 
 Depends on / 依赖: Kernel, Kernel.integral_integral_add, integral_integral_add
@@ -537,9 +537,9 @@ theorem Kernel.integral_integral_sub
     integral_sub hf.integral_compProd hg.integral_compProd
 
 中文:
-定理 Kernel.integral_integral_sub
+定理 核.integral_integral_sub
   条件: ⦃f g
-  结论: β × γ -> E⦄ (hf : 整数egrable f ((κ otimesₖ η) a))
+  结论: β × γ -> E⦄ (hf : 可积 f ((κ otimesₖ η) a))
   证明: (Kernel.integral_fn_integral_sub id hf hg).trans
     integral_sub hf.integral_compProd hg.integral_compProd
 
@@ -562,9 +562,9 @@ theorem Kernel.integral_integral_sub'
   proof: Kernel.integral_integral_sub hf hg
 
 中文:
-定理 Kernel.integral_integral_sub'
+定理 核.integral_integral_sub'
   条件: ⦃f g
-  结论: β × γ -> E⦄ (hf : 整数egrable f ((κ otimesₖ η) a))
+  结论: β × γ -> E⦄ (hf : 可积 f ((κ otimesₖ η) a))
   证明: Kernel.integral_integral_sub hf hg
 
 Depends on / 依赖: Kernel, Kernel.integral_integral_sub, integral_integral_sub
@@ -588,7 +588,7 @@ theorem Kernel.continuous_integral_integral
   simp_rw [← lintegral_fn_integral_sub (‖·‖ₑ) (L1.integrable_coeFn _)
 
 中文:
-定理 Kernel.continuous_integral_integral
+定理 核.continuous_integral_integral
   证明: by
   rw [continuous_iff_continuousAt]; intro g
   refine
@@ -682,8 +682,8 @@ theorem setIntegral_compProd
   · rw [compProd_restrict, Kernel.restrict_apply]; exact hf
 
 中文:
-定理 setIntegral_compProd
-  结论: {f : β × γ -> E} {s : Set β} {t : Set γ} (hs : MeasurableSet s)
+定理 set整数egral_compProd
+  结论: {f : β × γ -> E} {s : 集合 β} {t : 集合 γ} (hs : 可测集 s)
   证明: by
   -- Porting note: `compProd_restrict` needed some explicit arguments
   rw [← Kernel.restrict_apply (κ otimesₖ η) (hs.prod ht)]; rw [← compProd_restrict hs ht]; rw [integral_compProd]
@@ -708,8 +708,8 @@ theorem setIntegral_compProd_univ_right
   simp_rw [setIntegral_compProd hs MeasurableSet.univ hf, Measure.restrict_univ]
 
 中文:
-定理 setIntegral_compProd_univ_right
-  结论: (f : β × γ -> E) {s : Set β} (hs : MeasurableSet s)
+定理 set整数egral_compProd_univ_right
+  结论: (f : β × γ -> E) {s : 集合 β} (hs : 可测集 s)
   证明: by
   simp_rw [setIntegral_compProd hs MeasurableSet.univ hf, Measure.restrict_univ]
 
@@ -730,8 +730,8 @@ theorem setIntegral_compProd_univ_left
   simp_rw [setIntegral_compProd MeasurableSet.univ ht hf, Measure.restrict_univ]
 
 中文:
-定理 setIntegral_compProd_univ_left
-  结论: (f : β × γ -> E) {t : Set γ} (ht : MeasurableSet t)
+定理 set整数egral_compProd_univ_left
+  结论: (f : β × γ -> E) {t : 集合 γ} (ht : 可测集 t)
   证明: by
   simp_rw [setIntegral_compProd MeasurableSet.univ ht hf, Measure.restrict_univ]
 
@@ -758,8 +758,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_comp
     filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_comp
-  结论: [NormedSpace 实数 E]
+定理 _root_.测度论.AEStronglyMeasurable.integral_kernel_comp
+  结论: [赋范空间 实数 E]
   证明: ⟨fun x => ∫ y, hf.mk f y ∂η x, hf.stronglyMeasurable_mk.integral_kernel, by
     filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
@@ -782,8 +782,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp
     ⟨hf.mk f, hf.stronglyMeasurable_mk, hx⟩
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.comp
-  结论: {δ : 类型} [TopologicalSpace δ]
+定理 _root_.测度论.AEStronglyMeasurable.comp
+  结论: {δ : 类型} [拓扑空间 δ]
   证明: by
   filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk] with x hx using
     ⟨hf.mk f, hf.stronglyMeasurable_mk, hx⟩
@@ -811,7 +811,7 @@ theorem hasFiniteIntegral_comp_iff
   have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p ->
 
 中文:
-定理 hasFiniteIntegral_comp_iff
+定理 hasFinite整数egral_comp_iff
   条件: ⦃f
   结论: γ -> E⦄ (hf : StronglyMeasurable f) :
   证明: by
@@ -853,7 +853,7 @@ theorem hasFiniteIntegral_comp_iff'
   · filter_upwards [ae
 
 中文:
-定理 hasFiniteIntegral_comp_iff'
+定理 hasFinite整数egral_comp_iff'
   条件: ⦃f
   结论: γ -> E⦄ (hf : AEStronglyMeasurable f ((η ∘ₖ κ) a)) :
   证明: by
@@ -914,8 +914,8 @@ lemma _root_.MeasureTheory.Measure.integrable_comp_iff
   · simpa [Kernel.comp_apply]
 
 中文:
-引理 _root_.MeasureTheory.Measure.integrable_comp_iff
-  结论: {μ : Measure α} {f : β -> E}
+引理 _root_.测度论.测度.integrable_comp_iff
+  结论: {μ : 测度 α} {f : β -> E}
   证明: by
   rw [Measure.comp_eq_comp_const_apply]; rw [ProbabilityTheory.integrable_comp_iff]
   · simp
@@ -939,9 +939,9 @@ theorem _root_.MeasureTheory.Integrable.ae_of_comp
   proof: ((integrable_comp_iff hf.1).1 hf).1
 
 中文:
-定理 _root_.MeasureTheory.Integrable.ae_of_comp
+定理 _root_.测度论.可积.ae_of_comp
   条件: ⦃f
-  结论: γ -> E⦄ (hf : 整数egrable f ((η ∘ₖ κ) a)) :
+  结论: γ -> E⦄ (hf : 可积 f ((η ∘ₖ κ) a)) :
   证明: ((integrable_comp_iff hf.1).1 hf).1
 
 Depends on / 依赖: integrable_comp_iff
@@ -959,7 +959,7 @@ theorem _root_.MeasureTheory.Integrable.integral_norm_comp
   proof: ((integrable_comp_iff hf.1).1 hf).2
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_norm_comp
+定理 _root_.测度论.可积.integral_norm_comp
   条件: ⦃f
   结论: γ -> E⦄
   证明: ((integrable_comp_iff hf.1).1 hf).2
@@ -982,8 +982,8 @@ theorem _root_.MeasureTheory.Integrable.integral_comp
     (norm_of_nonneg <| integral_nonneg_of_ae <| ae_of_all _ fun _ => norm_nonneg _).symm
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_comp
-  条件: [NormedSpace 实数 E] ⦃f
+定理 _root_.测度论.可积.integral_comp
+  条件: [赋范空间 实数 E] ⦃f
   结论: γ -> E⦄
   证明: Integrable.mono hf.integral_norm_comp hf.1.integral_kernel_comp
     ae_of_all _ fun _ => (norm_integral_le_integral_norm _).trans_eq
@@ -1105,7 +1105,7 @@ theorem integral_integral_add_comp
 中文:
 定理 integral_integral_add_comp
   条件: ⦃f g
-  结论: γ -> E⦄ (hf : 整数egrable f ((η ∘ₖ κ) a))
+  结论: γ -> E⦄ (hf : 可积 f ((η ∘ₖ κ) a))
   证明: (integral_fn_integral_add_comp id hf hg).trans integral_add hf.integral_comp hg.integral_comp
 
 Depends on / 依赖: hf.integral_comp, hg.integral_comp, integral_add, integral_comp, integral_fn_integral_add_comp
@@ -1127,7 +1127,7 @@ theorem integral_integral_add'_comp
 中文:
 定理 integral_integral_add'_comp
   条件: ⦃f g
-  结论: γ -> E⦄ (hf : 整数egrable f ((η ∘ₖ κ) a))
+  结论: γ -> E⦄ (hf : 可积 f ((η ∘ₖ κ) a))
   证明: integral_integral_add_comp hf hg
 
 Depends on / 依赖: integral_integral_add_comp
@@ -1149,7 +1149,7 @@ theorem integral_integral_sub_comp
 中文:
 定理 integral_integral_sub_comp
   条件: ⦃f g
-  结论: γ -> E⦄ (hf : 整数egrable f ((η ∘ₖ κ) a))
+  结论: γ -> E⦄ (hf : 可积 f ((η ∘ₖ κ) a))
   证明: (integral_fn_integral_sub_comp id hf hg).trans integral_sub hf.integral_comp hg.integral_comp
 
 Depends on / 依赖: hf.integral_comp, hg.integral_comp, integral_comp, integral_fn_integral_sub_comp, integral_sub
@@ -1171,7 +1171,7 @@ theorem integral_integral_sub'_comp
 中文:
 定理 integral_integral_sub'_comp
   条件: ⦃f g
-  结论: γ -> E⦄ (hf : 整数egrable f ((η ∘ₖ κ) a))
+  结论: γ -> E⦄ (hf : 可积 f ((η ∘ₖ κ) a))
   证明: integral_integral_sub_comp hf hg
 
 Depends on / 依赖: integral_integral_sub_comp
@@ -1236,7 +1236,7 @@ theorem integral_comp
 
 中文:
 定理 integral_comp
-  结论: 对任意 {f : γ -> E} (_ : 整数egrable f ((η ∘ₖ κ) a)),
+  结论: 对任意 {f : γ -> E} (_ : 可积 f ((η ∘ₖ κ) a)),
   证明: by
   by_cases hE : CompleteSpace E; swap
   · simp [integral, hE]
@@ -1283,8 +1283,8 @@ theorem setIntegral_comp
   · rwa [comp_restrict, restrict_apply]
 
 中文:
-定理 setIntegral_comp
-  结论: {f : γ -> E} {s : Set γ} (hs : MeasurableSet s)
+定理 set整数egral_comp
+  结论: {f : γ -> E} {s : 集合 γ} (hs : 可测集 s)
   证明: by
   rw [← restrict_apply (η ∘ₖ κ) hs]; rw [← comp_restrict hs]; rw [integral_comp]
   · simp_rw [restrict_apply]
@@ -1324,8 +1324,8 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.ae_of_compProd
   simpa using hf.compProd_mk_left
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.ae_of_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ]
+引理 _root_.测度论.AEStronglyMeasurable.ae_of_compProd
+  结论: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   simpa using hf.compProd_mk_left
 
@@ -1349,7 +1349,7 @@ lemma integrable_compProd_iff
 
 中文:
 引理 integrable_compProd_iff
-  结论: [SFinite μ] [IsSFiniteKernel κ] {E : 类型} [NormedAddCommGroup E]
+  结论: [SFinite μ] [是SFiniteKernel κ] {E : 类型} [赋范交换加群 E]
   证明: by
   simp_rw [Measure.compProd, ProbabilityTheory.integrable_compProd_iff hf, Kernel.prodMkLeft_apply,
     Kernel.const_apply]
@@ -1376,7 +1376,7 @@ lemma integral_compProd
 
 中文:
 引理 integral_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ] {E : 类型}
+  结论: [SFinite μ] [是SFiniteKernel κ] {E : 类型}
   证明: by
   rw [Measure.compProd]; rw [ProbabilityTheory.integral_compProd hf]
   simp
@@ -1401,8 +1401,8 @@ lemma setIntegral_compProd
   simp
 
 中文:
-引理 setIntegral_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ] {E : 类型}
+引理 set整数egral_compProd
+  结论: [SFinite μ] [是SFiniteKernel κ] {E : 类型}
   证明: by
   rw [Measure.compProd]; rw [ProbabilityTheory.setIntegral_compProd hs ht hf]
   simp
@@ -1433,7 +1433,7 @@ lemma integrable_compProd_snd_iff
 
 中文:
 引理 integrable_compProd_snd_iff
-  结论: [SFinite μ] [IsSFiniteKernel κ]
+  结论: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   rw [← Measure.snd_compProd]; rw [Measure.snd]; rw [integrable_map_measure _ measurable_snd.aemeasurable]; rw [Function.comp_def]
   rwa [← Measure.snd, Measure.snd_compProd]
@@ -1458,7 +1458,7 @@ lemma ae_integrable_of_integrable_comp
 
 中文:
 引理 ae_integrable_of_integrable_comp
-  条件: (h_int : 整数egrable f (κ ∘ₘ μ))
+  条件: (h_int : 可积 f (κ ∘ₘ μ))
   证明: by
   rw [Measure.comp_eq_comp_const_apply]; rw [integrable_comp_iff h_int.1] at h_int
   exact h_int.1
@@ -1482,7 +1482,7 @@ lemma integrable_integral_norm_of_integrable_comp
 
 中文:
 引理 integrable_integral_norm_of_integrable_comp
-  条件: (h_int : 整数egrable f (κ ∘ₘ μ))
+  条件: (h_int : 可积 f (κ ∘ₘ μ))
   证明: by
   rw [Measure.comp_eq_comp_const_apply]; rw [integrable_comp_iff h_int.1] at h_int
   exact h_int.2

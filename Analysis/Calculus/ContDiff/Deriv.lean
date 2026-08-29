@@ -119,7 +119,7 @@ theorem contDiffOn_succ_iff_deriv_of_isOpen
 
 中文:
 定理 contDiffOn_succ_iff_deriv_of_isOpen
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   rw [contDiffOn_succ_iff_derivWithin hs.uniqueDiffOn]
   exact Iff.rfl.and (Iff.rfl.and (contDiffOn_congr fun _ => derivWithin_of_isOpen hs))
@@ -144,7 +144,7 @@ theorem contDiffOn_infty_iff_deriv_of_isOpen
 
 中文:
 定理 contDiffOn_infty_iff_deriv_of_isOpen
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   rw [show ∞ = ∞ + 1 by rfl]; rw [contDiffOn_succ_iff_deriv_of_isOpen hs]
   simp
@@ -183,7 +183,7 @@ theorem ContDiffOn.deriv_of_isOpen
 
 中文:
 定理 ContDiffOn.deriv_of_isOpen
-  条件: (hf : ContDiffOn 𝕜 n f s) (hs : IsOpen s) (hmn : m + 1 <= n)
+  条件: (hf : ContDiffOn 𝕜 n f s) (hs : 是开集 s) (hmn : m + 1 <= n)
   证明: (hf.derivWithin hs.uniqueDiffOn hmn).congr fun _ hx => (derivWithin_of_isOpen hs hx).symm
 
 Depends on / 依赖: derivWithin, derivWithin_of_isOpen, hf.derivWithin, hs.uniqueDiffOn, uniqueDiffOn
@@ -230,7 +230,7 @@ theorem ContDiffOn.continuousOn_deriv_of_isOpen
 
 中文:
 定理 ContDiffOn.continuousOn_deriv_of_isOpen
-  结论: (h : ContDiffOn 𝕜 n f s) (hs : IsOpen s)
+  结论: (h : ContDiffOn 𝕜 n f s) (hs : 是开集 s)
   证明: by
   rw [show (1 : Nat∞ω) = 0 + 1 from rfl] at hn
   exact ((contDiffOn_succ_iff_deriv_of_isOpen hs).1 (h.of_le hn)).2.2.continuousOn
@@ -350,9 +350,9 @@ theorem ContDiff.continuous_deriv
 @[fun_prop]
 
 中文:
-定理 ContDiff.continuous_deriv
-  条件: (h : ContDiff 𝕜 n f) (hn : 1 <= n)
-  结论: Continuous (deriv f)
+定理 连续可微.continuous_deriv
+  条件: (h : 连续可微 𝕜 n f) (hn : 1 <= n)
+  结论: 连续 (deriv f)
   证明: by
   rw [show (1 : Nat∞ω) = 0 + 1 from rfl] at hn
   exact (contDiff_succ_iff_deriv.mp (h.of_le hn)).2.2.continuous
@@ -378,9 +378,9 @@ theorem ContDiff.continuous_deriv_one
 @[fun_prop]
 
 中文:
-定理 ContDiff.continuous_deriv_one
-  条件: (h : ContDiff 𝕜 1 f)
-  结论: Continuous (deriv f)
+定理 连续可微.continuous_deriv_one
+  条件: (h : 连续可微 𝕜 1 f)
+  结论: 连续 (deriv f)
   证明: ContDiff.continuous_deriv h (le_refl 1)
 
 @[fun_prop]
@@ -404,9 +404,9 @@ theorem ContDiff.differentiable_deriv_two
 @[fun_prop]
 
 中文:
-定理 ContDiff.differentiable_deriv_two
-  条件: (h : ContDiff 𝕜 2 f)
-  结论: Differentiable 𝕜 (deriv f)
+定理 连续可微.differentiable_deriv_two
+  条件: (h : 连续可微 𝕜 2 f)
+  结论: 可微 𝕜 (deriv f)
   证明: by
   unfold deriv; fun_prop
 
@@ -455,9 +455,9 @@ theorem ContDiff.deriv'
 @[fun_prop]
 
 中文:
-定理 ContDiff.deriv'
-  条件: (h : ContDiff 𝕜 (n + 1) f)
-  结论: ContDiff 𝕜 n (deriv f)
+定理 连续可微.deriv'
+  条件: (h : 连续可微 𝕜 (n + 1) f)
+  结论: 连续可微 𝕜 n (deriv f)
   证明: by
   unfold deriv; fun_prop
 
@@ -476,7 +476,7 @@ English:
 theorem ContDiff.iterate_deriv
 
 中文:
-定理 ContDiff.iterate_deriv
+定理 连续可微.iterate_deriv
 -/
 theorem ContDiff.iterate_deriv :
     forall (n : Nat) {f : 𝕜 -> F}, ContDiff 𝕜 ∞ f -> ContDiff 𝕜 ∞ (deriv^[n] f)
@@ -492,7 +492,7 @@ theorem ContDiff.iterate_deriv'
   given: (n : Nat)
 
 中文:
-定理 ContDiff.iterate_deriv'
+定理 连续可微.iterate_deriv'
   条件: (n : 自然数)
 -/
 theorem ContDiff.iterate_deriv' (n : Nat) :

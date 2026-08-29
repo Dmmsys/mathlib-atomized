@@ -38,7 +38,7 @@ class SProd
 
 中文:
 类 SProd
-  参数: (α : 类型u) (β : 类型v) (γ : outParam (Type w))
+  参数: (α : 类型u) (β : 类型v) (γ : outParam (类型 w))
   公理与运算 (1 个):
     - sprod : α -> β -> γ
 -/

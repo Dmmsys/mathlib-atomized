@@ -47,8 +47,8 @@ structure NormedAddGroupHom
     - bound' : exists C, forall v, ‖toFun v‖ <= C * ‖v‖
 
 中文:
-结构 NormedAddGroupHom
-  参数: (V W : 类型) [SeminormedAddCommGroup V]
+结构 赋范加群态射
+  参数: (V W : 类型) [SeminormedAddComm群 V]
   公理与运算 (3 个):
     - toFun : V -> W
     - map_add' : 对任意 v₁ v₂, toFun (v₁ + v₂) = toFun v₁ + toFun v₂
@@ -116,8 +116,8 @@ theorem exists_pos_bound_of_bound
       ⟩
 
 中文:
-定理 exists_pos_bound_of_bound
-  结论: {V W : 类型} [SeminormedAddCommGroup V]
+定理 存在_pos_bound_of_bound
+  结论: {V W : 类型} [SeminormedAddComm群 V]
   证明: ⟨max M 1, lt_of_lt_of_le zero_lt_one (le_max_right _ _), fun x =>
     calc
       ‖f x‖ <= M * ‖x‖ := h x
@@ -171,7 +171,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (NormedAddGroupHom V₁ V₂) V₁ V₂ where
+  签名: : 函数状 (赋范加群态射 V₁ V₂) V₁ V₂ where
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -192,7 +192,7 @@ initialize_simps_projections NormedAddGroupHom (toFun -> apply)
 
 中文:
 实例 toAddMonoidHomClass
-  签名: : AddMonoidHomClass (NormedAddGroupHom V₁ V₂) V₁ V₂ where
+  签名: : 加法幺半群态射类 (赋范加群态射 V₁ V₂) V₁ V₂ where
   定义体: f.map_add'
   map_zero f := (AddMonoidHom.mk' f.toFun f.map_add').map_zero
 
@@ -237,7 +237,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (NormedAddGroupHom V₁ V₂) (V₁ -> V₂) toFun
+  结论: @函数.单射 (赋范加群态射 V₁ V₂) (V₁ -> V₂) toFun
   证明: by
   apply coe_inj
 
@@ -322,7 +322,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f) (h₁) (h₂) (h₃)
-  结论: ⇑(⟨f, h₁, h₂, h₃⟩ : NormedAddGroupHom V₁ V₂) = f
+  结论: ⇑(⟨f, h₁, h₂, h₃⟩ : 赋范加群态射 V₁ V₂) = f
   证明: rfl
 
 @[simp]
@@ -384,7 +384,7 @@ definition toAddMonoidHom
 
 中文:
 定义 toAddMonoidHom
-  签名: (f : NormedAddGroupHom V₁ V₂)
+  签名: (f : 赋范加群态射 V₁ V₂)
   定义体: AddMonoidHom.mk' f f.map_add'
 
 @[simp]
@@ -501,7 +501,7 @@ definition SurjectiveOnWith
 
 中文:
 定义 SurjectiveOnWith
-  签名: (f : NormedAddGroupHom V₁ V₂) (K : AddSubgroup V₂) (C : 实数)
+  签名: (f : 赋范加群态射 V₁ V₂) (K : 加法子群 V₂) (C : 实数)
   定义体: forall h in K, exists g, f g = h ∧ ‖g‖ <= C * ‖h‖
 -/
 def SurjectiveOnWith (f : NormedAddGroupHom V₁ V₂) (K : AddSubgroup V₂) (C : Real) : Prop :=
@@ -523,7 +523,7 @@ theorem SurjectiveOnWith.mono
 
 中文:
 定理 SurjectiveOnWith.mono
-  结论: {f : NormedAddGroupHom V₁ V₂} {K : AddSubgroup V₂} {C C' : 实数}
+  结论: {f : 赋范加群态射 V₁ V₂} {K : 加法子群 V₂} {C C' : 实数}
   证明: by
   intro k k_in
   rcases h k k_in with ⟨g, rfl, hg⟩
@@ -556,8 +556,8 @@ theorem SurjectiveOnWith.exists_pos
     linarith [le_abs_self C]
 
 中文:
-定理 SurjectiveOnWith.exists_pos
-  结论: {f : NormedAddGroupHom V₁ V₂} {K : AddSubgroup V₂} {C : 实数}
+定理 SurjectiveOnWith.存在_pos
+  结论: {f : 赋范加群态射 V₁ V₂} {K : 加法子群 V₂} {C : 实数}
   证明: by
   refine ⟨|C| + 1, ?_, ?_⟩
   · linarith [abs_nonneg C]
@@ -584,7 +584,7 @@ theorem SurjectiveOnWith.surjOn
 
 中文:
 定理 SurjectiveOnWith.surjOn
-  结论: {f : NormedAddGroupHom V₁ V₂} {K : AddSubgroup V₂} {C : 实数}
+  结论: {f : 赋范加群态射 V₁ V₂} {K : 加法子群 V₂} {C : 实数}
   证明: fun x hx =>
   (h x hx).imp fun _a ⟨ha, _⟩ => ⟨Set.mem_univ _, ha⟩
 -/
@@ -605,7 +605,7 @@ definition opNorm
 
 中文:
 定义 opNorm
-  签名: (f : NormedAddGroupHom V₁ V₂)
+  签名: (f : 赋范加群态射 V₁ V₂)
   定义体: sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
 -/
 def opNorm (f : NormedAddGroupHom V₁ V₂) :=
@@ -621,7 +621,7 @@ instance hasOpNorm
 
 中文:
 实例 hasOpNorm
-  签名: : Norm (NormedAddGroupHom V₁ V₂)
+  签名: : 范数 (赋范加群态射 V₁ V₂)
   定义体: ⟨opNorm⟩
 
 Depends on / 依赖: opNorm
@@ -658,7 +658,7 @@ theorem bounds_nonempty
 
 中文:
 定理 bounds_nonempty
-  条件: {f : NormedAddGroupHom V₁ V₂}
+  条件: {f : 赋范加群态射 V₁ V₂}
   证明: let ⟨M, hMp, hMb⟩ := f.bound
   ⟨M, le_of_lt hMp, hMb⟩
 
@@ -679,7 +679,7 @@ theorem bounds_bddBelow
 
 中文:
 定理 bounds_bddBelow
-  条件: {f : NormedAddGroupHom V₁ V₂}
+  条件: {f : 赋范加群态射 V₁ V₂}
   证明: ⟨0, fun _ ⟨hn, _⟩ => hn⟩
 -/
 theorem bounds_bddBelow {f : NormedAddGroupHom V₁ V₂} :
@@ -824,8 +824,8 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  条件: (f : NormedAddGroupHom V₁ V₂)
-  结论: UniformContinuous f
+  条件: (f : 赋范加群态射 V₁ V₂)
+  结论: 一致连续 f
   证明: f.lipschitz.uniformContinuous
 
 @[continuity]
@@ -845,8 +845,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (f : NormedAddGroupHom V₁ V₂)
-  结论: Continuous f
+  条件: (f : 赋范加群态射 V₁ V₂)
+  结论: 连续 f
   证明: f.uniformContinuous.continuous
 -/
 protected theorem continuous (f : NormedAddGroupHom V₁ V₂) : Continuous f :=
@@ -862,7 +862,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass (NormedAddGroupHom V₁ V₂) V₁ V₂
+  签名: 连续映射类 (赋范加群态射 V₁ V₂) V₁ V₂
   定义体: fun f => f.continuous
 
 Depends on / 依赖: continuous, f.continuous
@@ -945,7 +945,7 @@ theorem opNorm_le_of_lipschitz
 
 中文:
 定理 opNorm_le_of_lipschitz
-  条件: {f : NormedAddGroupHom V₁ V₂} {K : 实数>=0} (hf : LipschitzWith K f)
+  条件: {f : 赋范加群态射 V₁ V₂} {K : 实数>=0} (hf : LipschitzWith K f)
   证明: f.opNorm_le_bound K.2 fun x => by simpa only [dist_zero_right, map_zero] using hf.dist_le_mul x 0
 
 Depends on / 依赖: dist_le_mul, dist_zero_right, f.opNorm_le_bound, hf.dist_le_mul, map_zero, opNorm_le_bound
@@ -1045,7 +1045,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (NormedAddGroupHom V₁ V₂)
+  签名: : 加法 (赋范加群态射 V₁ V₂)
   定义体: ⟨fun f g =>
     (f.toAddMonoidHom + g.toAddMonoidHom).mkNormedAddGroupHom (‖f‖ + ‖g‖) fun v =>
       calc
@@ -1101,7 +1101,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: (f g : NormedAddGroupHom V₁ V₂)
+  条件: (f g : 赋范加群态射 V₁ V₂)
   结论: ⇑(f + g) = f + g
   证明: rfl
 
@@ -1121,7 +1121,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: (f g : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (f g : 赋范加群态射 V₁ V₂) (v : V₁)
   证明: rfl
 -/
 theorem add_apply (f g : NormedAddGroupHom V₁ V₂) (v : V₁) :
@@ -1140,7 +1140,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : Zero (NormedAddGroupHom V₁ V₂)
+  签名: : 零 (赋范加群态射 V₁ V₂)
   定义体: ⟨(0 : V₁ ->+ V₂).mkNormedAddGroupHom 0 (by simp)⟩
 
 Depends on / 依赖: mkNormedAddGroupHom
@@ -1158,7 +1158,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (NormedAddGroupHom V₁ V₂)
+  签名: : 可居 (赋范加群态射 V₁ V₂)
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited (NormedAddGroupHom V₁ V₂) :=
@@ -1181,7 +1181,7 @@ theorem opNorm_zero
 
 中文:
 定理 opNorm_zero
-  结论: ‖(0 : NormedAddGroupHom V₁ V₂)‖ = 0
+  结论: ‖(0 : 赋范加群态射 V₁ V₂)‖ = 0
   证明: le_antisymm
     (csInf_le bounds_bddBelow
       ⟨ge_of_eq rfl, fun _ =>
@@ -1222,7 +1222,7 @@ theorem opNorm_zero_iff
 
 中文:
 定理 opNorm_zero_iff
-  结论: {V₁ V₂ : 类型} [NormedAddCommGroup V₁] [NormedAddCommGroup V₂]
+  结论: {V₁ V₂ : 类型} [赋范交换加群 V₁] [赋范交换加群 V₂]
   证明: Iff.intro
     (fun hn =>
       ext fun x =>
@@ -1260,7 +1260,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ⇑(0 : NormedAddGroupHom V₁ V₂) = 0
+  结论: ⇑(0 : 赋范加群态射 V₁ V₂) = 0
   证明: rfl
 
 @[simp]
@@ -1281,7 +1281,7 @@ theorem zero_apply
 中文:
 定理 zero_apply
   条件: (v : V₁)
-  结论: (0 : NormedAddGroupHom V₁ V₂) v = 0
+  结论: (0 : 赋范加群态射 V₁ V₂) v = 0
   证明: rfl
 -/
 theorem zero_apply (v : V₁) : (0 : NormedAddGroupHom V₁ V₂) v = 0 :=
@@ -1306,7 +1306,7 @@ definition id
 
 中文:
 定义 id
-  签名: : NormedAddGroupHom V V
+  签名: : 赋范加群态射 V V
   定义体: (AddMonoidHom.id V).mkNormedAddGroupHom 1 (by simp)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, mkNormedAddGroupHom
@@ -1324,7 +1324,7 @@ theorem norm_id_le
 
 中文:
 定理 norm_id_le
-  结论: ‖(id V : NormedAddGroupHom V V)‖ <= 1
+  结论: ‖(id V : 赋范加群态射 V V)‖ <= 1
   证明: opNorm_le_bound _ zero_le_one fun x => by simp
 
 Depends on / 依赖: opNorm_le_bound, zero_le_one
@@ -1348,7 +1348,7 @@ theorem norm_id
 
 中文:
 定理 norm_id
-  条件: [NontrivialTopology V]
+  条件: [非平凡拓扑 V]
   结论: ‖id V‖ = 1
   证明: le_antisymm (norm_id_le V) by
     let ⟨x, hx⟩ := exists_norm_ne_zero V
@@ -1373,7 +1373,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: (NormedAddGroupHom.id V : V -> V) = _root_.id
+  结论: (赋范加群态射.id V : V -> V) = _root_.id
   证明: rfl
 -/
 theorem coe_id : (NormedAddGroupHom.id V : V -> V) = _root_.id :=
@@ -1394,7 +1394,7 @@ instance neg
 
 中文:
 实例 neg
-  签名: : Neg (NormedAddGroupHom V₁ V₂)
+  签名: : 取负 (赋范加群态射 V₁ V₂)
   定义体: ⟨fun f => (-f.toAddMonoidHom).mkNormedAddGroupHom ‖f‖ fun v => by simp [le_opNorm f v]⟩
 
 @[simp]
@@ -1418,7 +1418,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  条件: (f : NormedAddGroupHom V₁ V₂)
+  条件: (f : 赋范加群态射 V₁ V₂)
   结论: ⇑(-f) = -f
   证明: rfl
 
@@ -1438,7 +1438,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: (f : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (f : 赋范加群态射 V₁ V₂) (v : V₁)
   证明: rfl
 -/
 theorem neg_apply (f : NormedAddGroupHom V₁ V₂) (v : V₁) :
@@ -1457,7 +1457,7 @@ theorem opNorm_neg
 
 中文:
 定理 opNorm_neg
-  条件: (f : NormedAddGroupHom V₁ V₂)
+  条件: (f : 赋范加群态射 V₁ V₂)
   结论: ‖-f‖ = ‖f‖
   证明: by
   simp only [norm_def, coe_neg, norm_neg, Pi.neg_apply]
@@ -1486,7 +1486,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: : Sub (NormedAddGroupHom V₁ V₂)
+  签名: : 减法 (赋范加群态射 V₁ V₂)
   定义体: ⟨fun f g =>
     { f.toAddMonoidHom - g.toAddMonoidHom with
       bound' := by
@@ -1518,7 +1518,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  条件: (f g : NormedAddGroupHom V₁ V₂)
+  条件: (f g : 赋范加群态射 V₁ V₂)
   结论: ⇑(f - g) = f - g
   证明: rfl
 
@@ -1538,7 +1538,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: (f g : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (f g : 赋范加群态射 V₁ V₂) (v : V₁)
   证明: rfl
 -/
 theorem sub_apply (f g : NormedAddGroupHom V₁ V₂) (v : V₁) :
@@ -1571,7 +1571,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: : SMul R (NormedAddGroupHom V₁ V₂) where
+  签名: : 标量乘法 R (赋范加群态射 V₁ V₂) where
   定义体: { toFun := r • ⇑f
       map_add' := (r • f.toAddMonoidHom).map_add'
       bound' :=
@@ -1611,7 +1611,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: (r : R) (f : NormedAddGroupHom V₁ V₂)
+  条件: (r : R) (f : 赋范加群态射 V₁ V₂)
   结论: ⇑(r • f) = r • ⇑f
   证明: rfl
 
@@ -1632,7 +1632,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (r : R) (f : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (r : R) (f : 赋范加群态射 V₁ V₂) (v : V₁)
   结论: (r • f) v = r • f v
   证明: rfl
 -/
@@ -1649,7 +1649,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulCommClass R R' V₂]
+  签名: [标量交换类 R R' V₂]
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -1668,7 +1668,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R R'] [IsScalarTower R R' V₂]
+  签名: [标量乘法 R R'] [标量塔 R R' V₂]
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -1687,7 +1687,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [DistribMulAction Rᵐᵒᵖ V₂] [IsCentralScalar R V₂]
+  签名: [分配乘法作用 Rᵐᵒᵖ V₂] [中心标量 R V₂]
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -1716,7 +1716,7 @@ instance nsmul
 
 中文:
 实例 nsmul
-  签名: : SMul 自然数 (NormedAddGroupHom V₁ V₂) where
+  签名: : 标量乘法 自然数 (赋范加群态射 V₁ V₂) where
   定义体: { toFun := n • ⇑f
       map_add' := (n • f.toAddMonoidHom).map_add'
       bound' :=
@@ -1753,7 +1753,7 @@ theorem coe_nsmul
 
 中文:
 定理 coe_nsmul
-  条件: (r : 自然数) (f : NormedAddGroupHom V₁ V₂)
+  条件: (r : 自然数) (f : 赋范加群态射 V₁ V₂)
   结论: ⇑(r • f) = r • ⇑f
   证明: rfl
 
@@ -1774,7 +1774,7 @@ theorem nsmul_apply
 
 中文:
 定理 nsmul_apply
-  条件: (r : 自然数) (f : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (r : 自然数) (f : 赋范加群态射 V₁ V₂) (v : V₁)
   结论: (r • f) v = r • f v
   证明: rfl
 -/
@@ -1799,7 +1799,7 @@ instance zsmul
 
 中文:
 实例 zsmul
-  签名: : SMul 整数 (NormedAddGroupHom V₁ V₂) where
+  签名: : 标量乘法 整数 (赋范加群态射 V₁ V₂) where
   定义体: { toFun := z • ⇑f
       map_add' := (z • f.toAddMonoidHom).map_add'
       bound' :=
@@ -1836,7 +1836,7 @@ theorem coe_zsmul
 
 中文:
 定理 coe_zsmul
-  条件: (r : 整数) (f : NormedAddGroupHom V₁ V₂)
+  条件: (r : 整数) (f : 赋范加群态射 V₁ V₂)
   结论: ⇑(r • f) = r • ⇑f
   证明: rfl
 
@@ -1857,7 +1857,7 @@ theorem zsmul_apply
 
 中文:
 定理 zsmul_apply
-  条件: (r : 整数) (f : NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: (r : 整数) (f : 赋范加群态射 V₁ V₂) (v : V₁)
   结论: (r • f) v = r • f v
   证明: rfl
 -/
@@ -1878,7 +1878,7 @@ instance toAddCommGroup
 
 中文:
 实例 toAddCommGroup
-  签名: : AddCommGroup (NormedAddGroupHom V₁ V₂)
+  签名: : 加法交换群 (赋范加群态射 V₁ V₂)
   定义体: coe_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     fun _ _ => rfl
 
@@ -1902,7 +1902,7 @@ instance toSeminormedAddCommGroup
 
 中文:
 实例 toSeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (NormedAddGroupHom V₁ V₂)
+  签名: : SeminormedAddComm群 (赋范加群态射 V₁ V₂)
   定义体: AddGroupSeminorm.toSeminormedAddCommGroup
     { toFun := opNorm
       map_zero' := opNorm_zero
@@ -1933,7 +1933,7 @@ instance toNormedAddCommGroup
 
 中文:
 实例 toNormedAddCommGroup
-  签名: {V₁ V₂ : 类型} [NormedAddCommGroup V₁] [NormedAddCommGroup V₂]
+  签名: {V₁ V₂ : 类型} [赋范交换加群 V₁] [赋范交换加群 V₂]
   定义体: AddGroupNorm.toNormedAddCommGroup
     { toFun := opNorm
       map_zero' := opNorm_zero
@@ -1968,7 +1968,7 @@ definition coeAddHom
 
 中文:
 定义 coeAddHom
-  签名: : NormedAddGroupHom V₁ V₂ ->+ V₁ -> V₂ where
+  签名: : 赋范加群态射 V₁ V₂ ->+ V₁ -> V₂ where
   定义体: DFunLike.coe
   map_zero' := coe_zero
   map_add' := coe_add
@@ -1993,7 +1993,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> NormedAddGroupHom V₁ V₂)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 赋范加群态射 V₁ V₂)
   证明: map_sum coeAddHom f s
 
 Depends on / 依赖: coeAddHom, map_sum
@@ -2012,7 +2012,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> NormedAddGroupHom V₁ V₂) (v : V₁)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 赋范加群态射 V₁ V₂) (v : V₁)
   证明: by simp only [coe_sum, Finset.sum_apply]
 
 Depends on / 依赖: Finset, Finset.sum_apply, coe_sum, sum_apply
@@ -2032,7 +2032,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: {R : 类型} [MonoidWithZero R] [DistribMulAction R V₂]
+  签名: {R : 类型} [带零幺半群 R] [分配乘法作用 R V₂]
   定义体: Function.Injective.distribMulAction coeAddHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeAddHom, coe_injective, coe_smul, distribMulAction
@@ -2051,7 +2051,7 @@ instance module
 
 中文:
 实例 module
-  签名: {R : 类型} [Semiring R] [Module R V₂] [PseudoMetricSpace R] [IsBoundedSMul R V₂]
+  签名: {R : 类型} [半环 R] [模 R V₂] [伪度量空间 R] [是BoundedSMul R V₂]
   定义体: Function.Injective.module _ coeAddHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, coeAddHom, coe_injective, coe_smul, module
@@ -2079,7 +2079,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : NormedAddGroupHom V₂ V₃) (f : NormedAddGroupHom V₁ V₂)
+  签名: (g : 赋范加群态射 V₂ V₃) (f : 赋范加群态射 V₁ V₂)
   定义体: (g.toAddMonoidHom.comp f.toAddMonoidHom).mkNormedAddGroupHom (‖g‖ * ‖f‖) fun v =>
     calc
       ‖g (f v)‖ <= ‖g‖ * ‖f v‖ := le_opNorm _ _
@@ -2104,7 +2104,7 @@ theorem norm_comp_le
 
 中文:
 定理 norm_comp_le
-  条件: (g : NormedAddGroupHom V₂ V₃) (f : NormedAddGroupHom V₁ V₂)
+  条件: (g : 赋范加群态射 V₂ V₃) (f : 赋范加群态射 V₁ V₂)
   证明: mkNormedAddGroupHom_norm_le _ (by positivity) _
 
 Depends on / 依赖: mkNormedAddGroupHom_norm_le
@@ -2123,7 +2123,7 @@ theorem norm_comp_le_of_le
 
 中文:
 定理 norm_comp_le_of_le
-  结论: {g : NormedAddGroupHom V₂ V₃} {C₁ C₂ : 实数} (hg : ‖g‖ <= C₂)
+  结论: {g : 赋范加群态射 V₂ V₃} {C₁ C₂ : 实数} (hg : ‖g‖ <= C₂)
   证明: le_trans (norm_comp_le g f) by gcongr; exact le_trans (norm_nonneg _) hg
 
 Depends on / 依赖: le_trans, norm_comp_le, norm_nonneg
@@ -2144,7 +2144,7 @@ theorem norm_comp_le_of_le'
 
 中文:
 定理 norm_comp_le_of_le'
-  结论: {g : NormedAddGroupHom V₂ V₃} (C₁ C₂ C₃ : 实数) (h : C₃ = C₂ * C₁)
+  结论: {g : 赋范加群态射 V₂ V₃} (C₁ C₂ C₃ : 实数) (h : C₃ = C₂ * C₁)
   证明: by
   rw [h]
   exact norm_comp_le_of_le hg hf
@@ -2179,7 +2179,7 @@ definition compHom
 
 中文:
 定义 compHom
-  签名: : NormedAddGroupHom V₂ V₃ ->+ NormedAddGroupHom V₁ V₂ ->+ NormedAddGroupHom V₁ V₃
+  签名: : 赋范加群态射 V₂ V₃ ->+ 赋范加群态射 V₁ V₂ ->+ 赋范加群态射 V₁ V₃
   定义体: AddMonoidHom.mk'
     (fun g =>
       AddMonoidHom.mk' (fun f => g.comp f)
@@ -2227,8 +2227,8 @@ theorem comp_zero
 
 中文:
 定理 comp_zero
-  条件: (f : NormedAddGroupHom V₂ V₃)
-  结论: f.comp (0 : NormedAddGroupHom V₁ V₂) = 0
+  条件: (f : 赋范加群态射 V₂ V₃)
+  结论: f.comp (0 : 赋范加群态射 V₁ V₂) = 0
   证明: by
   ext
   exact map_zero f
@@ -2255,8 +2255,8 @@ theorem zero_comp
 
 中文:
 定理 zero_comp
-  条件: (f : NormedAddGroupHom V₁ V₂)
-  结论: (0 : NormedAddGroupHom V₂ V₃).comp f = 0
+  条件: (f : 赋范加群态射 V₁ V₂)
+  结论: (0 : 赋范加群态射 V₂ V₃).comp f = 0
   证明: by
   ext
   rfl
@@ -2277,7 +2277,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {V₄ : 类型} [SeminormedAddCommGroup V₄] (h : NormedAddGroupHom V₃ V₄)
+  结论: {V₄ : 类型} [SeminormedAddComm群 V₄] (h : 赋范加群态射 V₃ V₄)
   证明: by
   ext
   rfl
@@ -2298,7 +2298,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : NormedAddGroupHom V₁ V₂) (g : NormedAddGroupHom V₂ V₃)
+  条件: (f : 赋范加群态射 V₁ V₂) (g : 赋范加群态射 V₂ V₃)
   证明: rfl
 -/
 theorem coe_comp (f : NormedAddGroupHom V₁ V₂) (g : NormedAddGroupHom V₂ V₃) :
@@ -2326,7 +2326,7 @@ definition incl
 
 中文:
 定义 incl
-  签名: (s : AddSubgroup V)
+  签名: (s : 加法子群 V)
   定义体: (Subtype.val : s -> V)
   map_add' _ _ := AddSubgroup.coe_add _ _ _
   bound' := ⟨1, fun v => by rw [one_mul, AddSubgroup.coe_norm]⟩
@@ -2349,7 +2349,7 @@ theorem norm_incl
 
 中文:
 定理 norm_incl
-  条件: {V' : AddSubgroup V} (x : V')
+  条件: {V' : 加法子群 V} (x : V')
   结论: ‖incl _ x‖ = ‖x‖
   证明: rfl
 -/
@@ -2373,7 +2373,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: : AddSubgroup V₁
+  签名: : 加法子群 V₁
   定义体: f.toAddMonoidHom.ker
 
 Depends on / 依赖: f.toAddMonoidHom.ker, toAddMonoidHom
@@ -2475,7 +2475,7 @@ theorem ker_zero
 
 中文:
 定理 ker_zero
-  结论: (0 : NormedAddGroupHom V₁ V₂).ker = ⊤
+  结论: (0 : 赋范加群态射 V₁ V₂).ker = ⊤
   证明: by
   ext
   simp [mem_ker]
@@ -2496,7 +2496,7 @@ theorem coe_ker
 
 中文:
 定理 coe_ker
-  结论: (f.ker : Set V₁) = (f : V₁ -> V₂) ⁻¹' {0}
+  结论: (f.ker : 集合 V₁) = (f : V₁ -> V₂) ⁻¹' {0}
   证明: rfl
 -/
 theorem coe_ker : (f.ker : Set V₁) = (f : V₁ -> V₂) ⁻¹' {0} :=
@@ -2512,7 +2512,7 @@ theorem isClosed_ker
 
 中文:
 定理 isClosed_ker
-  条件: {V₂ : 类型} [NormedAddCommGroup V₂] (f : NormedAddGroupHom V₁ V₂)
+  条件: {V₂ : 类型} [赋范交换加群 V₂] (f : 赋范加群态射 V₁ V₂)
   证明: f.coe_ker ▸ IsClosed.preimage f.continuous (T1Space.t1 0)
 
 Depends on / 依赖: IsClosed, IsClosed.preimage, T1Space, T1Space.t1, coe_ker, continuous, f.coe_ker, f.continuous, preimage
@@ -2540,7 +2540,7 @@ definition range
 
 中文:
 定义 range
-  签名: : AddSubgroup V₂
+  签名: : 加法子群 V₂
   定义体: f.toAddMonoidHom.range
 
 Depends on / 依赖: f.toAddMonoidHom.range, toAddMonoidHom
@@ -2603,7 +2603,7 @@ theorem comp_range
 
 中文:
 定理 comp_range
-  结论: (g.comp f).range = AddSubgroup.map g.toAddMonoidHom f.range
+  结论: (g.comp f).range = 加法子群.map g.toAddMonoidHom f.range
   证明: by
   unfold range
   rw [AddMonoidHom.map_range]
@@ -2631,7 +2631,7 @@ theorem incl_range
 
 中文:
 定理 incl_range
-  条件: (s : AddSubgroup V₁)
+  条件: (s : 加法子群 V₁)
   结论: (incl s).range = s
   证明: by
   ext x
@@ -2655,7 +2655,7 @@ theorem range_comp_incl_top
 
 中文:
 定理 range_comp_incl_top
-  结论: (f.comp (incl (⊤ : AddSubgroup V₁))).range = f.range
+  结论: (f.comp (incl (⊤ : 加法子群 V₁))).range = f.range
   证明: by
   simp [comp_range, incl_range, ← AddMonoidHom.range_eq_map]; rfl
 
@@ -2678,7 +2678,7 @@ definition NormNoninc
 
 中文:
 定义 NormNoninc
-  签名: (f : NormedAddGroupHom V W)
+  签名: (f : 赋范加群态射 V W)
   定义体: forall v, ‖f v‖ <= ‖v‖
 -/
 def NormNoninc (f : NormedAddGroupHom V W) : Prop :=
@@ -2725,7 +2725,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: (0 : NormedAddGroupHom V₁ V₂).NormNoninc
+  结论: (0 : 赋范加群态射 V₁ V₂).NormNoninc
   证明: fun v => by simp
 -/
 theorem zero : (0 : NormedAddGroupHom V₁ V₂).NormNoninc := fun v => by simp
@@ -2759,7 +2759,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : NormedAddGroupHom V₂ V₃} {f : NormedAddGroupHom V₁ V₂} (hg : g.NormNoninc)
+  结论: {g : 赋范加群态射 V₂ V₃} {f : 赋范加群态射 V₁ V₂} (hg : g.NormNoninc)
   证明: fun v => (hg (f v)).trans (hf v)
 
 @[simp]
@@ -2779,7 +2779,7 @@ theorem neg_iff
 
 中文:
 定理 neg_iff
-  条件: {f : NormedAddGroupHom V₁ V₂}
+  条件: {f : 赋范加群态射 V₁ V₂}
   结论: (-f).NormNoninc ↔ f.NormNoninc
   证明: ⟨fun h x => by simpa using h x, fun h x => (norm_neg (f x)).le.trans (h x)⟩
 
@@ -2803,7 +2803,7 @@ theorem norm_eq_of_isometry
 
 中文:
 定理 norm_eq_of_isometry
-  条件: {f : NormedAddGroupHom V W} (hf : Isometry f) (v : V)
+  条件: {f : 赋范加群态射 V W} (hf : 等距 f) (v : V)
   结论: ‖f v‖ = ‖v‖
   证明: (AddMonoidHomClass.isometry_iff_norm f).mp hf v
 
@@ -2822,7 +2822,7 @@ theorem isometry_id
 
 中文:
 定理 isometry_id
-  结论: @Isometry V V _ _ (id V)
+  结论: @等距 V V _ _ (id V)
   证明: _root_.isometry_id
 
 Depends on / 依赖: _root_, _root_.isometry_id, isometry_id
@@ -2840,7 +2840,7 @@ theorem isometry_comp
 
 中文:
 定理 isometry_comp
-  结论: {g : NormedAddGroupHom V₂ V₃} {f : NormedAddGroupHom V₁ V₂} (hg : Isometry g)
+  结论: {g : 赋范加群态射 V₂ V₃} {f : 赋范加群态射 V₁ V₂} (hg : 等距 g)
   证明: hg.comp hf
 
 Depends on / 依赖: hg.comp
@@ -2861,7 +2861,7 @@ le_of_eq norm_eq_of_isometry hf v
 
 中文:
 定理 normNoninc_of_isometry
-  条件: (hf : Isometry f)
+  条件: (hf : 等距 f)
   结论: f.NormNoninc
   证明: fun v =>
 le_of_eq norm_eq_of_isometry hf v
@@ -2905,7 +2905,7 @@ definition ι
 
 中文:
 定义 ι
-  签名: : NormedAddGroupHom (f.equalizer g) V
+  签名: : 赋范加群态射 (f.equalizer g) V
   定义体: incl _
 -/
 def ι : NormedAddGroupHom (f.equalizer g) V :=
@@ -2962,7 +2962,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ)
+  签名: (φ : 赋范加群态射 V₁ V) (h : f.comp φ = g.comp φ)
   定义体: ⟨φ v,
       show (f - g) (φ v) = 0 by
         rw [NormedAddGroupHom.sub_apply]; rw [sub_eq_zero]; rw [← comp_apply]; rw [h]; rw [comp_apply]⟩
@@ -3003,7 +3003,7 @@ theorem ι_comp_lift
 
 中文:
 定理 ι_comp_lift
-  条件: (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ)
+  条件: (φ : 赋范加群态射 V₁ V) (h : f.comp φ = g.comp φ)
   证明: by
   ext
   rfl
@@ -3051,7 +3051,7 @@ definition map
 
 中文:
 定义 map
-  签名: (φ : NormedAddGroupHom V₁ V₂) (ψ : NormedAddGroupHom W₁ W₂) (hf : ψ.comp f₁ = f₂.comp φ)
+  签名: (φ : 赋范加群态射 V₁ V₂) (ψ : 赋范加群态射 W₁ W₂) (hf : ψ.comp f₁ = f₂.comp φ)
   定义体: lift (φ.comp <| ι _ _) by
     simp only [← comp_assoc, ← hf, ← hg]
     simp only [comp_assoc, comp_ι_eq f₁ g₁]
@@ -3185,7 +3185,7 @@ theorem lift_normNoninc
 
 中文:
 定理 lift_normNoninc
-  条件: (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ) (hφ : φ.NormNoninc)
+  条件: (φ : 赋范加群态射 V₁ V) (h : f.comp φ = g.comp φ) (hφ : φ.NormNoninc)
   证明: hφ
 -/
 theorem lift_normNoninc (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ) (hφ : φ.NormNoninc) :
@@ -3202,7 +3202,7 @@ theorem norm_lift_le
 
 中文:
 定理 norm_lift_le
-  条件: (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ) (C : 实数) (hφ : ‖φ‖ <= C)
+  条件: (φ : 赋范加群态射 V₁ V) (h : f.comp φ = g.comp φ) (C : 实数) (hφ : ‖φ‖ <= C)
   证明: hφ
 -/
 theorem norm_lift_le (φ : NormedAddGroupHom V₁ V) (h : f.comp φ = g.comp φ) (C : Real) (hφ : ‖φ‖ <= C) :

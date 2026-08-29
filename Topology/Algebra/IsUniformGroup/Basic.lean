@@ -58,7 +58,7 @@ theorem isUniformEmbedding_translate_mul
 中文:
 定理 isUniformEmbedding_translate_mul
   条件: (a : α)
-  结论: IsUniformEmbedding fun x : α => x * a
+  结论: 是一致嵌入 fun x : α => x * a
   证明: { comap_uniformity := by
       nth_rw 1 [← uniformity_translate_mul a, comap_map]
       rintro ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
@@ -94,7 +94,7 @@ lemma cauchy_iff_tendsto
 
 中文:
 引理 cauchy_iff_tendsto
-  条件: (𝓕 : Filter G)
+  条件: (𝓕 : 滤子 G)
   证明: by
   simp [Cauchy, uniformity_eq_comap_nhds_one_swapped, ← tendsto_iff_comap]
 
@@ -120,7 +120,7 @@ lemma cauchy_iff_tendsto_swapped
 
 中文:
 引理 cauchy_iff_tendsto_swapped
-  条件: (𝓕 : Filter G)
+  条件: (𝓕 : 滤子 G)
   证明: by
   simp [Cauchy, uniformity_eq_comap_nhds_one, ← tendsto_iff_comap]
 
@@ -146,7 +146,7 @@ lemma cauchy_map_iff_tendsto
 
 中文:
 引理 cauchy_map_iff_tendsto
-  条件: (𝓕 : Filter ι) (f : ι -> G)
+  条件: (𝓕 : 滤子 ι) (f : ι -> G)
   证明: by
   simp [cauchy_map_iff, uniformity_eq_comap_nhds_one_swapped, Function.comp_def]
 
@@ -170,7 +170,7 @@ lemma cauchy_map_iff_tendsto_swapped
 
 中文:
 引理 cauchy_map_iff_tendsto_swapped
-  条件: (𝓕 : Filter ι) (f : ι -> G)
+  条件: (𝓕 : 滤子 ι) (f : ι -> G)
   证明: by
   simp [cauchy_map_iff, uniformity_eq_comap_nhds_one, Function.comp_def]
 
@@ -244,7 +244,7 @@ instance isUniformGroup
 
 中文:
 实例 isUniformGroup
-  签名: (S : Subgroup α)
+  签名: (S : 子群 α)
   定义体: .comap S.subtype
 
 Depends on / 依赖: S.subtype, subtype
@@ -266,7 +266,7 @@ theorem CauchySeq.mul
 
 中文:
 定理 CauchySeq.mul
-  结论: {ι : 类型} [Preorder ι] {u v : ι -> α} (hu : CauchySeq u)
+  结论: {ι : 类型} [预序 ι] {u v : ι -> α} (hu : CauchySeq u)
   证明: uniformContinuous_mul.comp_cauchySeq (hu.prodMk hv)
 
 @[to_additive]
@@ -290,7 +290,7 @@ theorem CauchySeq.mul_const
 
 中文:
 定理 CauchySeq.mul_const
-  条件: {ι : 类型} [Preorder ι] {u : ι -> α} {x : α} (hu : CauchySeq u)
+  条件: {ι : 类型} [预序 ι] {u : ι -> α} {x : α} (hu : CauchySeq u)
   证明: (uniformContinuous_id.mul uniformContinuous_const).comp_cauchySeq hu
 
 @[to_additive]
@@ -314,7 +314,7 @@ theorem CauchySeq.const_mul
 
 中文:
 定理 CauchySeq.const_mul
-  条件: {ι : 类型} [Preorder ι] {u : ι -> α} {x : α} (hu : CauchySeq u)
+  条件: {ι : 类型} [预序 ι] {u : ι -> α} {x : α} (hu : CauchySeq u)
   证明: (uniformContinuous_const.mul uniformContinuous_id).comp_cauchySeq hu
 
 @[to_additive]
@@ -338,7 +338,7 @@ theorem CauchySeq.inv
 
 中文:
 定理 CauchySeq.inv
-  条件: {ι : 类型} [Preorder ι] {u : ι -> α} (h : CauchySeq u)
+  条件: {ι : 类型} [预序 ι] {u : ι -> α} (h : CauchySeq u)
   证明: uniformContinuous_inv.comp_cauchySeq h
 
 @[to_additive]
@@ -363,7 +363,7 @@ theorem totallyBounded_iff_subset_finite_iUnion_nhds_one
 
 中文:
 定理 totallyBounded_iff_subset_finite_iUnion_nhds_one
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: (𝓝 (1 : α)).basis_sets.uniformity_of_nhds_one_inv_mul_swapped.totallyBounded_iff.trans by
     simp [← preimage_smul_inv, preimage]
 
@@ -390,9 +390,9 @@ lemma TotallyBounded.inv
 @[to_additive (attr := simp)]
 
 中文:
-引理 TotallyBounded.inv
-  条件: {s : Set α} (hs : TotallyBounded s)
-  结论: TotallyBounded s⁻¹
+引理 全有界.inv
+  条件: {s : 集合 α} (hs : 全有界 s)
+  结论: 全有界 s⁻¹
   证明: by
   simpa using hs.image uniformContinuous_inv
 
@@ -414,8 +414,8 @@ lemma totallyBounded_inv
 
 中文:
 引理 totallyBounded_inv
-  条件: {s : Set α}
-  结论: TotallyBounded s⁻¹ ↔ TotallyBounded s where
+  条件: {s : 集合 α}
+  结论: 全有界 s⁻¹ ↔ 全有界 s where
   证明: by simpa using hs.inv
   mpr := .inv
 
@@ -901,8 +901,8 @@ instance Subgroup.isClosed_of_discrete
   have : (fun p : G × G => p.2 * p.1⁻¹) ⁻¹' V in 𝓤 G := preimage_mem_co
 
 中文:
-实例 Subgroup.isClosed_of_discrete
-  签名: [T2Space G] {H : Subgroup G} [DiscreteTopology H]
+实例 子群.isClosed_of_discrete
+  签名: [T2空间 G] {H : 子群 G} [离散拓扑 H]
   定义体: by
   have hd : IsDiscrete (H : Set G) := isDiscrete_iff_discreteTopology.mpr ‹_›
   obtain ⟨V, V_in, VH⟩ : exists (V : Set G), V in 𝓝 (1 : G) ∧ V inter (H : Set G) = {1} :=
@@ -938,8 +938,8 @@ lemma Subgroup.tendsto_coe_cofinite_of_discrete
 @[to_additive]
 
 中文:
-引理 Subgroup.tendsto_coe_cofinite_of_discrete
-  结论: [T2Space G] (H : Subgroup G)
+引理 子群.tendsto_coe_cofinite_of_discrete
+  结论: [T2空间 G] (H : 子群 G)
   证明: haveI : DiscreteTopology H := isDiscrete_iff_discreteTopology.mp hH
   IsClosed.tendsto_coe_cofinite_of_isDiscrete isClosed_of_discrete hH
 
@@ -964,8 +964,8 @@ lemma MonoidHom.tendsto_coe_cofinite_of_discrete
   exact (f.range.tendsto_coe_cofinite_of_discrete hf').comp hf.tendsto_cofinite
 
 中文:
-引理 MonoidHom.tendsto_coe_cofinite_of_discrete
-  结论: [T2Space G] {H : 类型} [Group H] {f : H ->* G}
+引理 幺半群态射.tendsto_coe_cofinite_of_discrete
+  结论: [T2空间 G] {H : 类型} [群 H] {f : H ->* G}
   证明: by
   replace hf : Function.Injective f.rangeRestrict := by simpa
   exact (f.range.tendsto_coe_cofinite_of_discrete hf').comp hf.tendsto_cofinite
@@ -1151,7 +1151,7 @@ lemma comap_inv_leftUniformSpace
 
 中文:
 引理 comap_inv_leftUniformSpace
-  结论: (IsTopologicalGroup.leftUniformSpace G).comap (Equiv.inv G)
+  结论: (是拓扑群.leftUniformSpace G).comap (等价.inv G)
   证明: by
   ext : 1
   change comap (fun (x : G × G) => (Equiv.inv G x.1, Equiv.inv G x.2))
@@ -1192,8 +1192,8 @@ definition UniformEquiv.inv
  
 
 中文:
-定义 UniformEquiv.inv
-  签名: : @UniformEquiv G G (IsTopologicalGroup.rightUniformSpace G)
+定义 一致等价.inv
+  签名: : @一致等价 G G (是拓扑群.rightUniformSpace G)
   定义体: by
   have A : @UniformContinuous G G (IsTopologicalGroup.rightUniformSpace G)
       (IsTopologicalGroup.leftUniformSpace G) (Equiv.inv G) := by
@@ -1228,7 +1228,7 @@ lemma IsTopologicalGroup.completeSpace_rightUniformSpace_iff_leftUniformSpace
     (IsTopologicalGroup.leftUniformSpace G) (UniformEquiv.inv G)
 
 中文:
-引理 IsTopologicalGroup.completeSpace_rightUniformSpace_iff_leftUniformSpace
+引理 是拓扑群.completeSpace_rightUniformSpace_iff_leftUniformSpace
   证明: @UniformEquiv.completeSpace_iff G G (IsTopologicalGroup.rightUniformSpace G)
     (IsTopologicalGroup.leftUniformSpace G) (UniformEquiv.inv G)
 
@@ -1262,7 +1262,7 @@ theorem uniformCauchySeqOn_iff
 
 中文:
 定理 uniformCauchySeqOn_iff
-  结论: (F : ι -> α -> G) (p : Filter ι) (s : Set α)
+  结论: (F : ι -> α -> G) (p : 滤子 ι) (s : 集合 α)
   证明: by
   simp only [div_eq_mul_inv]
   exact hu ▸ ⟨fun h u hu => h _ ⟨u, hu, fun _ => id⟩,
@@ -1295,7 +1295,7 @@ theorem tendstoUniformly_iff
 
 中文:
 定理 tendstoUniformly_iff
-  结论: (F : ι -> α -> G) (f : α -> G) (p : Filter ι)
+  结论: (F : ι -> α -> G) (f : α -> G) (p : 滤子 ι)
   证明: by
   simp only [div_eq_mul_inv]
   exact hu ▸ ⟨fun h u hu => h _ ⟨u, hu, fun _ => id⟩,
@@ -1328,7 +1328,7 @@ theorem tendstoUniformlyOn_iff
 
 中文:
 定理 tendstoUniformlyOn_iff
-  结论: (F : ι -> α -> G) (f : α -> G) (p : Filter ι) (s : Set α)
+  结论: (F : ι -> α -> G) (f : α -> G) (p : 滤子 ι) (s : 集合 α)
   证明: by
   simp only [div_eq_mul_inv]
   exact hu ▸ ⟨fun h u hu => h _ ⟨u, hu, fun _ => id⟩,
@@ -1362,7 +1362,7 @@ theorem tendstoLocallyUniformly_iff
 
 中文:
 定理 tendstoLocallyUniformly_iff
-  结论: [TopologicalSpace α] (F : ι -> α -> G) (f : α -> G)
+  结论: [拓扑空间 α] (F : ι -> α -> G) (f : α -> G)
   证明: by
   simp only [div_eq_mul_inv]
   exact hu ▸ ⟨fun h u hu => h _ ⟨u, hu, fun _ => id⟩, fun h _ ⟨u, hu, hv⟩ x =>
@@ -1397,7 +1397,7 @@ theorem tendstoLocallyUniformlyOn_iff
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff
-  结论: [TopologicalSpace α] (F : ι -> α -> G) (f : α -> G)
+  结论: [拓扑空间 α] (F : ι -> α -> G) (f : α -> G)
   证明: by
   simp only [div_eq_mul_inv]
   exact hu ▸ ⟨fun h u hu => h _ ⟨u, hu, fun _ => id⟩, fun h _ ⟨u, hu, hv⟩ x =>
@@ -1445,7 +1445,7 @@ theorem tendsto_div_comap_self
 
 中文:
 定理 tendsto_div_comap_self
-  条件: (de : IsDenseInducing e) (x₀ : α)
+  条件: (de : 是DenseInducing e) (x₀ : α)
   证明: by
   have comm : ((fun x : α × α => x.2 / x.1) ∘ fun t : β × β => (e t.1, e t.2)) =
       e ∘ fun t : β × β => t.2 / t.1 := by
@@ -1634,7 +1634,7 @@ theorem extend_Z_bilin
 
 中文:
 定理 extend_Z_bilin
-  结论: Continuous (extend (de.prodMap df) (fun p : β × δ => φ p.1 p.2))
+  结论: 连续 (extend (de.prodMap df) (fun p : β × δ => φ p.1 p.2))
   证明: by
   refine continuous_extend_of_cauchy _ ?_
   rintro ⟨x₀, y₀⟩
@@ -1713,8 +1713,8 @@ instance QuotientGroup.completeSpace_right'
    
 
 中文:
-实例 QuotientGroup.completeSpace_right'
-  签名: (G : 类型u) [Group G] [TopologicalSpace G]
+实例 商群.completeSpace_right'
+  签名: (G : 类型u) [群 G] [拓扑空间 G]
   定义体: by
   /- Since `G ⧸ N` is a topological group it is a uniform space, and since `G` is first countable
     the uniformities of both `G` and `G ⧸ N` are countably generated. Moreover, we may choose a
@@ -1834,7 +1834,7 @@ instance QuotientGroup.completeSpace_right
   infer_instance
 
 中文:
-实例 QuotientGroup.completeSpace_right
+实例 商群.completeSpace_right
   签名: (G : 类型)
   定义体: by
   have : IsTopologicalGroup.rightUniformSpace G = us := by
@@ -1882,8 +1882,8 @@ instance QuotientGroup.completeSpace_left'
   infer_instance
 
 中文:
-实例 QuotientGroup.completeSpace_left'
-  签名: (G : 类型u) [Group G] [TopologicalSpace G]
+实例 商群.completeSpace_left'
+  签名: (G : 类型u) [群 G] [拓扑空间 G]
   定义体: by
   rw [← IsTopologicalGroup.completeSpace_rightUniformSpace_iff_leftUniformSpace] at hG ⊢
   infer_instance
@@ -1932,7 +1932,7 @@ instance QuotientGroup.completeSpace_left
   infer_instance
 
 中文:
-实例 QuotientGroup.completeSpace_left
+实例 商群.completeSpace_left
   签名: (G : 类型)
   定义体: by
   have : IsTopologicalGroup.leftUniformSpace G = us := by

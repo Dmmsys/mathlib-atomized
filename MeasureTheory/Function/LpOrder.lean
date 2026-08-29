@@ -133,7 +133,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid (Lp E p μ)
+  签名: : 是OrderedAdd幺半群 (Lp E p μ)
   定义体: { add_le_add_left := fun _ _ => add_le_add_left }
 
 Depends on / 依赖: add_le_add_left
@@ -156,7 +156,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: (1 <= p)] [ClosedIciTopology E] : OrderClosedTopology (Lp E p μ) where
+  签名: (1 <= p)] [ClosedIci拓扑 E] : OrderClosed拓扑 (Lp E p μ) where
   定义体: isClosed_le_of_isClosed_nonneg IsSeqClosed.isClosed
       fun f f₀ (hf : forall n, 0 <= f n) h_tendsto => by
     simp only [← coeFn_nonneg] at hf ⊢
@@ -190,7 +190,7 @@ theorem _root_.MeasureTheory.MemLp.sup
     (Filter.Eventually.of_forall fun x => norm_sup_le_add (f x) (g x))
 
 中文:
-定理 _root_.MeasureTheory.MemLp.sup
+定理 _root_.测度论.MemLp.上确界
   条件: {f g : α -> E} (hf : MemLp f p μ) (hg : MemLp g p μ)
   证明: MemLp.mono' (hf.norm.add hg.norm) (hf.1.sup hg.1)
     (Filter.Eventually.of_forall fun x => norm_sup_le_add (f x) (g x))
@@ -212,7 +212,7 @@ theorem _root_.MeasureTheory.MemLp.inf
     (Filter.Eventually.of_forall fun x => norm_inf_le_add (f x) (g x))
 
 中文:
-定理 _root_.MeasureTheory.MemLp.inf
+定理 _root_.测度论.MemLp.下确界
   条件: {f g : α -> E} (hf : MemLp f p μ) (hg : MemLp g p μ)
   证明: MemLp.mono' (hf.norm.add hg.norm) (hf.1.inf hg.1)
     (Filter.Eventually.of_forall fun x => norm_inf_le_add (f x) (g x))
@@ -234,7 +234,7 @@ theorem _root_.MeasureTheory.MemLp.abs
   proof: hf.sup hf.neg
 
 中文:
-定理 _root_.MeasureTheory.MemLp.abs
+定理 _root_.测度论.MemLp.abs
   条件: {f : α -> E} (hf : MemLp f p μ)
   结论: MemLp |f| p μ
   证明: hf.sup hf.neg
@@ -260,7 +260,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice (Lp E p μ)
+  签名: : 格 (Lp E p μ)
   定义体: Subtype.lattice
     (fun f g hf hg => by
       rw [mem_Lp_iff_memLp] at *

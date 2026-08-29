@@ -49,7 +49,7 @@ map f := ModuleCat.ofHom
 
 中文:
 定义 uliftFunctor
-  签名: : ModuleCat.{v} R ⥤ ModuleCat.{max v v'} R where
+  签名: : 模范畴.{v} R ⥤ 模范畴.{最大值 v v'} R where
   定义体: ModuleCat.of R (ULift.{v', v} X)
 map f := ModuleCat.ofHom
     ULift.moduleEquiv.symm.toLinearMap.comp (f.hom.comp ULift.moduleEquiv.toLinearMap)
@@ -74,7 +74,7 @@ definition fullyFaithfulUliftFunctor
 
 中文:
 定义 fullyFaithfulUliftFunctor
-  签名: : (uliftFunctor R).FullyFaithful where
+  签名: : (uliftFunctor R).满忠实 where
   定义体: ModuleCat.ofHom (ULift.moduleEquiv.toLinearMap.comp
     (f.hom.comp ULift.moduleEquiv.symm.toLinearMap))
 
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftFunctor.{v', v} R).Full
+  签名: (uliftFunctor.{v', v} R).满
   定义体: (fullyFaithfulUliftFunctor R).full
 
 Depends on / 依赖: fullyFaithfulUliftFunctor
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftFunctor.{v', v} R).Faithful
+  签名: (uliftFunctor.{v', v} R).忠实
   定义体: (fullyFaithfulUliftFunctor R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulUliftFunctor
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftFunctor R).Additive
+  签名: (uliftFunctor R).加性
 -/
 instance : (uliftFunctor R).Additive where
 
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R)
+  签名: Limits.保持LimitsOfSize.{v, v} (uliftFunctor.{v', v} R)
   定义体: let : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R ⋙ forget _) := by
     change Limits.PreservesLimitsOfSize.{v, v} (forget (ModuleCat R) ⋙
       CategoryTheory.uliftFunctor.{v'})
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFiniteLimits (uliftFunctor.{v', v} R)
+  签名: Limits.保持FiniteLimits (uliftFunctor.{v', v} R)
   定义体: Limits.PreservesLimitsOfSize.preservesFiniteLimits _
 
 Depends on / 依赖: Limits, Limits.PreservesLimitsOfSize.preservesFiniteLimits, PreservesLimitsOfSize, preservesFiniteLimits
@@ -222,7 +222,7 @@ lemma uliftFunctor_map_exact
 
 中文:
 引理 uliftFunctor_map_exact
-  条件: (S : ShortComplex (ModuleCat.{v} R)) (h : S.Exact)
+  条件: (S : 短复形 (模范畴.{v} R)) (h : S.正合)
   证明: by
   rw [CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact]
   dsimp [uliftFunctor]
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFiniteColimits (uliftFunctor.{v', v} R)
+  签名: Limits.保持FiniteColimits (uliftFunctor.{v', v} R)
   定义体: by
   have := ((CategoryTheory.Functor.exact_tfae (uliftFunctor.{v', v} R)).out 1 3).mp
     (uliftFunctor_map_exact R)
@@ -282,7 +282,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] : (uliftFunctor.{v', v} R).PreservesProjectiveObjects where
+  签名: R] : (uliftFunctor.{v', v} R).保持ProjectiveObjects where
   定义体: by
     have := small_lift.{u, v'} R
     dsimp
@@ -307,7 +307,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] : (uliftFunctor.{v', v} R).PreservesInjectiveObjects where
+  签名: R] : (uliftFunctor.{v', v} R).保持InjectiveObjects where
   定义体: (Module.injective_iff_injective_object R _).mp
     (Module.ulift_injective_of_injective R ((Module.injective_iff_injective_object R M).mpr inj))
 
@@ -327,8 +327,8 @@ instance [CommRing
   signature: R] : (uliftFunctor.{v', v} R).Linear R where
 
 中文:
-实例 [CommRing
-  签名: R] : (uliftFunctor.{v', v} R).Linear R where
+实例 [交换环
+  签名: R] : (uliftFunctor.{v', v} R).线性 R where
 -/
 instance [CommRing R] : (uliftFunctor.{v', v} R).Linear R where
 

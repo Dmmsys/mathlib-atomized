@@ -41,7 +41,7 @@ definition subtypeA
 
 中文:
 定义 subtypeA
-  签名: (s : AffineSubspace R P) [Nonempty s]
+  签名: (s : 仿射子空间 R P) [非空 s]
   定义体: s.subtype
   cont := continuous_subtype_val
 
@@ -62,8 +62,8 @@ lemma coe_subtypeA
 
 中文:
 引理 coe_subtypeA
-  条件: (s : AffineSubspace R P) [Nonempty s]
-  结论: ⇑s.subtypeA = Subtype.val
+  条件: (s : 仿射子空间 R P) [非空 s]
+  结论: ⇑s.subtypeA = 子类型.val
   证明: rfl
 -/
 @[simp] lemma coe_subtypeA (s : AffineSubspace R P) [Nonempty s] : ⇑s.subtypeA = Subtype.val :=
@@ -79,7 +79,7 @@ lemma subtypeA_toAffineMap
 
 中文:
 引理 subtypeA_toAffineMap
-  条件: (s : AffineSubspace R P) [Nonempty s]
+  条件: (s : 仿射子空间 R P) [非空 s]
   证明: rfl
 -/
 @[simp] lemma subtypeA_toAffineMap (s : AffineSubspace R P) [Nonempty s] :
@@ -100,7 +100,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
+  签名: {s t : 仿射子空间 R P} [非空 s] [非空 t]
   定义体: .ofEq s t h
   continuous_toFun := by subst h; exact continuous_id
   continuous_invFun := by subst h; exact continuous_id
@@ -124,7 +124,7 @@ theorem coe_ofEq_apply
 
 中文:
 定理 coe_ofEq_apply
-  结论: {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
+  结论: {s t : 仿射子空间 R P} [非空 s] [非空 t]
   证明: AffineEquiv.coe_ofEq_apply s t h x
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.coe_ofEq_apply, coe_ofEq_apply
@@ -153,7 +153,7 @@ definition affineSubspaceMap
 
 中文:
 定义 affineSubspaceMap
-  签名: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s]
+  签名: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P) [非空 s]
   定义体: { e.toAffineEquiv.affineSubspaceMap s with
     continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
       (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
@@ -185,7 +185,7 @@ theorem affineSubspaceMap_apply
 
 中文:
 定理 affineSubspaceMap_apply
-  结论: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s]
+  结论: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P) [非空 s]
   证明: rfl
 
 @[simp]
@@ -204,7 +204,7 @@ theorem affineSubspaceMap_apply_symm_apply
 
 中文:
 定理 affineSubspaceMap_apply_symm_apply
-  结论: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P)
+  结论: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P)
   证明: AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.affineSubspaceMap_apply_symm_apply, affineSubspaceMap_apply_symm_apply, e.toAffineEquiv, toAffineEquiv
@@ -244,7 +244,7 @@ theorem isClosed_direction_iff
 
 中文:
 定理 isClosed_direction_iff
-  条件: [T1Space V] (s : AffineSubspace R P)
+  条件: [T1空间 V] (s : 仿射子空间 R P)
   证明: by
   rcases s.eq_bot_or_nonempty with (rfl | ⟨x, hx⟩); · simp
   rw [← (Homeomorph.vaddConst x).symm.isClosed_image]; rw [AffineSubspace.coe_direction_eq_vsub_set_right hx]

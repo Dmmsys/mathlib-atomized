@@ -60,7 +60,7 @@ map_mul' a b := LinearIsometryEquiv.ext mul_smul a b
 
 中文:
 定义 rotation
-  签名: : Circle ->* Complex ≃ₗᵢ[实数] Complex where
+  签名: : Circle ->* 复形 ≃ₗᵢ[实数] 复形 where
   定义体: { DistribMulAction.toLinearEquiv Real Complex a with
       norm_map' x := show ‖a * x‖ = ‖x‖ by
         rw [norm_mul]; rw [Circle.norm_coe]; rw [one_mul] }
@@ -93,7 +93,7 @@ theorem rotation_apply
 
 中文:
 定理 rotation_apply
-  条件: (a : Circle) (z : Complex)
+  条件: (a : Circle) (z : 复形)
   结论: rotation a z = a * z
   证明: rfl
 
@@ -199,7 +199,7 @@ definition rotationOf
 
 中文:
 定义 rotationOf
-  签名: (e : Complex ≃ₗᵢ[实数] Complex)
+  签名: (e : 复形 ≃ₗᵢ[实数] 复形)
   定义体: ⟨e 1 / ‖e 1‖, by simp [Submonoid.unitSphere]⟩
 
 Depends on / 依赖: Submonoid, Submonoid.unitSphere, unitSphere
@@ -239,7 +239,7 @@ theorem rotation_injective
 
 中文:
 定理 rotation_injective
-  结论: Function.Injective rotation
+  结论: 函数.单射 rotation
   证明: Function.LeftInverse.injective rotationOf_rotation
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, rotationOf_rotation
@@ -258,8 +258,8 @@ theorem LinearIsometry.re_apply_eq_re_of_add_conj_eq
     show (2 : Real) != 0 by simp] using (h₃ z).symm
 
 中文:
-定理 LinearIsometry.re_apply_eq_re_of_add_conj_eq
-  结论: (f : Complex ->ₗᵢ[实数] Complex)
+定理 线性等距.re_apply_eq_re_of_add_conj_eq
+  结论: (f : 复形 ->ₗᵢ[实数] 复形)
   证明: by
   simpa [Complex.ext_iff, add_re, add_im, conj_re, conj_im, ← two_mul,
     show (2 : Real) != 0 by simp] using (h₃ z).symm
@@ -284,8 +284,8 @@ theorem LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re
     h₂, add_left_cancel_iff, mul_self_eq_mul_self_iff] at h₁
 
 中文:
-定理 LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re
-  结论: {f : Complex ->ₗᵢ[实数] Complex}
+定理 线性等距.im_apply_eq_im_or_neg_of_re_apply_eq_re
+  结论: {f : 复形 ->ₗᵢ[实数] 复形}
   证明: by
   have h₁ := f.norm_map z
   simp only [norm_def] at h₁
@@ -313,8 +313,8 @@ theorem LinearIsometry.im_apply_eq_im
   simpa [normSq_eq_norm_sq, Complex.add_conj, LinearIsometry.norm_map] using hsq.symm
 
 中文:
-定理 LinearIsometry.im_apply_eq_im
-  条件: {f : Complex ->ₗᵢ[实数] Complex} (h : f 1 = 1) (z : Complex)
+定理 线性等距.im_apply_eq_im
+  条件: {f : 复形 ->ₗᵢ[实数] 复形} (h : f 1 = 1) (z : 复形)
   证明: by
   have hsq : ‖f z - 1‖ ^ 2 = ‖z - 1‖ ^ 2 := by simpa [h] using f.norm_map (z - 1)
   simp_rw [← normSq_eq_norm_sq, Complex.normSq_sub] at hsq
@@ -340,8 +340,8 @@ theorem LinearIsometry.re_apply_eq_re
   apply LinearIsometry.im_apply_eq_im h
 
 中文:
-定理 LinearIsometry.re_apply_eq_re
-  条件: {f : Complex ->ₗᵢ[实数] Complex} (h : f 1 = 1) (z : Complex)
+定理 线性等距.re_apply_eq_re
+  条件: {f : 复形 ->ₗᵢ[实数] 复形} (h : f 1 = 1) (z : 复形)
   结论: (f z).re = z.re
   证明: by
   apply LinearIsometry.re_apply_eq_re_of_add_conj_eq
@@ -369,7 +369,7 @@ theorem linear_isometry_complex_aux
 
 中文:
 定理 linear_isometry_complex_aux
-  条件: {f : Complex ≃ₗᵢ[实数] Complex} (h : f 1 = 1)
+  条件: {f : 复形 ≃ₗᵢ[实数] 复形} (h : f 1 = 1)
   证明: by
   have h0 : f I = I ∨ f I = -I := by
     simp only [Complex.ext_iff, ← and_or_left, neg_re, I_re, neg_im, neg_zero]
@@ -413,7 +413,7 @@ theorem linear_isometry_complex
 
 中文:
 定理 linear_isometry_complex
-  条件: (f : Complex ≃ₗᵢ[实数] Complex)
+  条件: (f : 复形 ≃ₗᵢ[实数] 复形)
   证明: by
   let a : Circle := ⟨f 1, by simp [Submonoid.unitSphere, f.norm_map]⟩
   use a
@@ -484,7 +484,7 @@ theorem det_rotation
 中文:
 定理 det_rotation
   条件: (a : Circle)
-  结论: LinearMap.det ((rotation a).toLinearEquiv : Complex ->ₗ[实数] Complex) = 1
+  结论: 线性映射.det ((rotation a).toLinearEquiv : 复形 ->ₗ[实数] 复形) = 1
   证明: by
   rw [← LinearMap.det_toMatrix basisOneI]; rw [toMatrix_rotation]; rw [Matrix.det_fin_two]
   simp [← normSq_apply]
@@ -510,7 +510,7 @@ theorem linearEquiv_det_rotation
 中文:
 定理 linearEquiv_det_rotation
   条件: (a : Circle)
-  结论: LinearEquiv.det (rotation a).toLinearEquiv = 1
+  结论: 线性等价.det (rotation a).toLinearEquiv = 1
   证明: by
   rw [← Units.val_inj]; rw [LinearEquiv.coe_det]; rw [det_rotation]; rw [Units.val_one]
 

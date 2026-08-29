@@ -58,7 +58,7 @@ theorem LinearIndepOn.algebraMap_comp_iff
 
 中文:
 定理 LinearIndepOn.algebraMap_comp_iff
-  条件: {ι : 类型} {v : ι -> S} {s : Set ι}
+  条件: {ι : 类型} {v : ι -> S} {s : 集合 ι}
   证明: LinearIndependent.algebraMap_comp_iff
 
 @[simp]
@@ -80,7 +80,7 @@ theorem LinearIndepOn.id_image_algebraMap_iff
 
 中文:
 定理 LinearIndepOn.id_image_algebraMap_iff
-  条件: {s : Set S}
+  条件: {s : 集合 S}
   证明: (linearIndepOn_iff_image (by simp)).symm.trans LinearIndepOn.algebraMap_comp_iff
 
 Depends on / 依赖: LinearIndepOn, LinearIndepOn.algebraMap_comp_iff, algebraMap_comp_iff, linearIndepOn_iff_image, symm.trans

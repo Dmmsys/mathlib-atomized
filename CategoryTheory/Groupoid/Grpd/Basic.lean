@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Grpd
+  签名: 可居 Grpd
   定义体: ⟨Bundled.of (SingleObj PUnit)⟩
 
 Depends on / 依赖: Bundled, Bundled.of, SingleObj
@@ -119,7 +119,7 @@ definition of
 
 中文:
 定义 of
-  签名: (C : 类型u) [Groupoid.{v} C]
+  签名: (C : 类型u) [群胚.{v} C]
   定义体: Bundled.of C
 
 @[simp]
@@ -141,7 +141,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (C : 类型u) [Groupoid C]
+  条件: (C : 类型u) [群胚 C]
   结论: (of C : 类型u) = C
   证明: rfl
 -/
@@ -163,7 +163,7 @@ instance category
 
 中文:
 实例 category
-  签名: : LargeCategory.{max v u} Grpd.{v, u} where
+  签名: : 大范畴.{最大值 v u} Grpd.{v, u} where
   定义体: C ⥤ D
   id C := 𝟭 C
   comp F G := F ⋙ G
@@ -233,7 +233,7 @@ instance forgetToCat_full
 
 中文:
 实例 forgetToCat_full
-  签名: : forgetToCat.Full where map_surjective f
+  签名: : forgetToCat.满 where map_surjective f
   定义体: ⟨f.toFunctor, rfl⟩
 
 Depends on / 依赖: HasTerminal, f.toFunctor, hasTerminal, toFunctor
@@ -250,7 +250,7 @@ instance forgetToCat_faithful
 
 中文:
 实例 forgetToCat_faithful
-  签名: : forgetToCat.Faithful where
+  签名: : forgetToCat.忠实 where
   定义体: congrArg (Cat.Hom.toFunctor)
 
 Depends on / 依赖: Cat.Hom.toFunctor, toFunctor

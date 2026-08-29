@@ -51,7 +51,7 @@ definition IsRegular
   body: aᶜᶜ = a
 
 中文:
-定义 IsRegular
+定义 是正则
   签名: (a : α)
   定义体: aᶜᶜ = a
 -/
@@ -67,8 +67,8 @@ theorem IsRegular.eq
   proof: id
 
 中文:
-定理 IsRegular.eq
-  结论: IsRegular a -> aᶜᶜ = a
+定理 是正则.eq
+  结论: 是正则 a -> aᶜᶜ = a
   证明: id
 -/
 protected theorem IsRegular.eq : IsRegular a -> aᶜᶜ = a :=
@@ -84,7 +84,7 @@ instance IsRegular.decidablePred
   ‹DecidableEq α› _ _
 
 中文:
-实例 IsRegular.decidablePred
+实例 是正则.decidablePred
   签名: [DecidableEq α]
   定义体: fun _ =>
   ‹DecidableEq α› _ _
@@ -108,7 +108,7 @@ theorem isRegular_bot
 
 中文:
 定理 isRegular_bot
-  结论: IsRegular (⊥ : α)
+  结论: 是正则 (⊥ : α)
   证明: by rw [IsRegular, compl_bot, compl_top]
 
 Depends on / 依赖: IsRegular, compl_bot, compl_top
@@ -125,7 +125,7 @@ theorem isRegular_top
 
 中文:
 定理 isRegular_top
-  结论: IsRegular (⊤ : α)
+  结论: 是正则 (⊤ : α)
   证明: by rw [IsRegular, compl_top, compl_bot]
 
 Depends on / 依赖: IsRegular, compl_bot, compl_top
@@ -143,9 +143,9 @@ theorem IsRegular.inf
   rw [IsRegular]; rw [compl_compl_inf_distrib]; rw [ha.eq]; rw [hb.eq]
 
 中文:
-定理 IsRegular.inf
-  条件: (ha : IsRegular a) (hb : IsRegular b)
-  结论: IsRegular (a ⊓ b)
+定理 是正则.下确界
+  条件: (ha : 是正则 a) (hb : 是正则 b)
+  结论: 是正则 (a ⊓ b)
   证明: by
   rw [IsRegular]; rw [compl_compl_inf_distrib]; rw [ha.eq]; rw [hb.eq]
 -/
@@ -163,9 +163,9 @@ theorem IsRegular.himp
   rw [IsRegular]; rw [compl_compl_himp_distrib]; rw [ha.eq]; rw [hb.eq]
 
 中文:
-定理 IsRegular.himp
-  条件: (ha : IsRegular a) (hb : IsRegular b)
-  结论: IsRegular (a ⇨ b)
+定理 是正则.himp
+  条件: (ha : 是正则 a) (hb : 是正则 b)
+  结论: 是正则 (a ⇨ b)
   证明: by
   rw [IsRegular]; rw [compl_compl_himp_distrib]; rw [ha.eq]; rw [hb.eq]
 
@@ -186,7 +186,7 @@ theorem isRegular_compl
 中文:
 定理 isRegular_compl
   条件: (a : α)
-  结论: IsRegular aᶜ
+  结论: 是正则 aᶜ
   证明: compl_compl_compl _
 
 Depends on / 依赖: compl_compl_compl
@@ -203,8 +203,8 @@ theorem IsRegular.disjoint_compl_left_iff
   proof: by rw [← le_compl_iff_disjoint_left, ha.eq]
 
 中文:
-定理 IsRegular.disjoint_compl_left_iff
-  条件: (ha : IsRegular a)
+定理 是正则.disjoint_compl_left_iff
+  条件: (ha : 是正则 a)
   证明: by rw [← le_compl_iff_disjoint_left, ha.eq]
 -/
 protected theorem IsRegular.disjoint_compl_left_iff (ha : IsRegular a) :
@@ -219,8 +219,8 @@ theorem IsRegular.disjoint_compl_right_iff
   proof: by rw [← le_compl_iff_disjoint_right, hb.eq]
 
 中文:
-定理 IsRegular.disjoint_compl_right_iff
-  条件: (hb : IsRegular b)
+定理 是正则.disjoint_compl_right_iff
+  条件: (hb : 是正则 b)
   证明: by rw [← le_compl_iff_disjoint_right, hb.eq]
 -/
 protected theorem IsRegular.disjoint_compl_right_iff (hb : IsRegular b) :
@@ -242,8 +242,8 @@ codisjoint_iff.2 by rw [← (h a), compl_sup, inf_compl_eq_bot, compl_bot]⟩
       eq_of_forall_le_iff fun _ => le_himp_iff.tran
 
 中文:
-缩写 _root_.BooleanAlgebra.ofRegular
-  签名: (h : 对任意 a : α, IsRegular (a ⊔ aᶜ))
+缩写 _root_.布尔代数.ofRegular
+  签名: (h : 对任意 a : α, 是正则 (a ⊔ aᶜ))
   定义体: have : forall a : α, IsCompl a aᶜ := fun a =>
     ⟨disjoint_compl_right,
 codisjoint_iff.2 by rw [← (h a), compl_sup, inf_compl_eq_bot, compl_bot]⟩
@@ -276,8 +276,8 @@ definition Regular
   body: { a : α // IsRegular a }
 
 中文:
-定义 Regular
-  签名: : Type _
+定义 正则
+  签名: : 类型 _
   定义体: { a : α // IsRegular a }
 
 Depends on / 依赖: IsRegular
@@ -299,7 +299,7 @@ definition val
 
 中文:
 定义 val
-  签名: : Regular α -> α
+  签名: : 正则 α -> α
   定义体: Subtype.val
 -/
 @[coe] def val : Regular α -> α :=
@@ -315,7 +315,7 @@ theorem prop
 
 中文:
 定理 prop
-  结论: 对任意 a : Regular α, IsRegular a.val
+  结论: 对任意 a : 正则 α, 是正则 a.val
   证明: Subtype.prop
 
 Depends on / 依赖: Subtype, Subtype.prop
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (Regular α) α
+  签名: CoeOut (正则 α) α
   定义体: ⟨Regular.val⟩
 
 Depends on / 依赖: Regular, Regular.val
@@ -351,7 +351,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Regular α -> α)
+  结论: 单射 ((↑) : 正则 α -> α)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -373,7 +373,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {a b : Regular α}
+  条件: {a b : 正则 α}
   结论: (a : α) = b ↔ a = b
   证明: Subtype.coe_inj
 
@@ -392,7 +392,7 @@ instance top
 
 中文:
 实例 top
-  签名: : Top (Regular α)
+  签名: : 顶元素 (正则 α)
   定义体: ⟨⟨⊤, isRegular_top⟩⟩
 
 Depends on / 依赖: isRegular_top
@@ -410,7 +410,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : Bot (Regular α)
+  签名: : 底元素 (正则 α)
   定义体: ⟨⟨⊥, isRegular_bot⟩⟩
 
 Depends on / 依赖: isRegular_bot
@@ -427,8 +427,8 @@ instance inf
   body: ⟨fun a b => ⟨a ⊓ b, a.2.inf b.2⟩⟩
 
 中文:
-实例 inf
-  签名: : Min (Regular α)
+实例 下确界
+  签名: : 最小值 (正则 α)
   定义体: ⟨fun a b => ⟨a ⊓ b, a.2.inf b.2⟩⟩
 -/
 instance inf : Min (Regular α) :=
@@ -444,7 +444,7 @@ instance himp
 
 中文:
 实例 himp
-  签名: : HImp (Regular α)
+  签名: : HImp (正则 α)
   定义体: ⟨fun a b => ⟨a ⇨ b, a.2.himp b.2⟩⟩
 -/
 instance himp : HImp (Regular α) :=
@@ -462,7 +462,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (Regular α)
+  签名: 补集 (正则 α)
   定义体: ⟨fun a => ⟨aᶜ, isRegular_compl _⟩⟩
 
 @[simp, norm_cast]
@@ -485,7 +485,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Regular α) : α) = ⊤
+  结论: ((⊤ : 正则 α) : α) = ⊤
   证明: rfl
 
 @[simp, norm_cast]
@@ -506,7 +506,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Regular α) : α) = ⊥
+  结论: ((⊥ : 正则 α) : α) = ⊥
   证明: rfl
 
 @[simp, norm_cast]
@@ -528,7 +528,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (a b : Regular α)
+  条件: (a b : 正则 α)
   结论: (↑(a ⊓ b) : α) = (a : α) ⊓ b
   证明: rfl
 
@@ -551,7 +551,7 @@ theorem coe_himp
 
 中文:
 定理 coe_himp
-  条件: (a b : Regular α)
+  条件: (a b : 正则 α)
   结论: (↑(a ⇨ b) : α) = (a : α) ⇨ b
   证明: rfl
 
@@ -572,7 +572,7 @@ theorem coe_compl
 
 中文:
 定理 coe_compl
-  条件: (a : Regular α)
+  条件: (a : 正则 α)
   结论: (↑aᶜ : α) = (a : α)ᶜ
   证明: rfl
 -/
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Regular α)
+  签名: 可居 (正则 α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Regular α) :=
@@ -605,7 +605,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Regular α)
+  签名: 偏序 (正则 α)
   定义体: PartialOrder.lift _ coe_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, coe_injective
@@ -625,7 +625,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: : BoundedOrder (Regular α)
+  签名: : 有界序 (正则 α)
   定义体: BoundedOrder.lift ((↑) : Regular α -> α) (fun _ _ => id) coe_top coe_bot
 
 @[simp, norm_cast]
@@ -649,7 +649,7 @@ theorem coe_le_coe
 
 中文:
 定理 coe_le_coe
-  条件: {a b : Regular α}
+  条件: {a b : 正则 α}
   结论: (a : α) <= b ↔ a <= b
   证明: Iff.rfl
 
@@ -672,7 +672,7 @@ theorem coe_lt_coe
 
 中文:
 定理 coe_lt_coe
-  条件: {a b : Regular α}
+  条件: {a b : 正则 α}
   结论: (a : α) < b ↔ a < b
   证明: Iff.rfl
 
@@ -694,7 +694,7 @@ coe_le_coe.1 compl_le_compl compl_le_compl h⟩
 
 中文:
 定义 toRegular
-  签名: : α ->o Regular α
+  签名: : α ->o 正则 α
   定义体: ⟨fun a => ⟨aᶜᶜ, isRegular_compl _⟩, fun _ _ h =>
 coe_le_coe.1 compl_le_compl compl_le_compl h⟩
 
@@ -741,7 +741,7 @@ theorem toRegular_coe
 
 中文:
 定理 toRegular_coe
-  条件: (a : Regular α)
+  条件: (a : 正则 α)
   结论: toRegular (a : α) = a
   证明: coe_injective a.2
 
@@ -765,7 +765,7 @@ choice_eq _ ha := coe_injective le_compl_compl.antisymm ha
 
 中文:
 定义 gi
-  签名: : GaloisInsertion toRegular ((↑) : Regular α -> α) where
+  签名: : Galois嵌入 toRegular ((↑) : 正则 α -> α) where
   定义体: ⟨a, ha.antisymm le_compl_compl⟩
   gc _ b :=
 coe_le_coe.symm.trans
@@ -795,7 +795,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: : Lattice (Regular α)
+  签名: : 格 (正则 α)
   定义体: gi.liftLattice
 
 @[simp, norm_cast]
@@ -817,7 +817,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (a b : Regular α)
+  条件: (a b : 正则 α)
   结论: (↑(a ⊔ b) : α) = ((a : α) ⊔ b)ᶜᶜ
   证明: rfl
 -/
@@ -842,7 +842,7 @@ inf_compl_le_bot := fun _ => coe_le_coe.1 disjoint_iff_inf_le.1 disjoint_compl_r
 
 中文:
 实例 :
-  签名: 布尔eanAlgebra (Regular α)
+  签名: 布尔代数 (正则 α)
   定义体: { Regular.lattice, Regular.boundedOrder, Regular.himp,
     Regular.instCompl with
     le_sup_inf := fun a b c =>
@@ -887,7 +887,7 @@ theorem coe_sdiff
 
 中文:
 定理 coe_sdiff
-  条件: (a b : Regular α)
+  条件: (a b : 正则 α)
   结论: (↑(a \ b) : α) = (a : α) ⊓ bᶜ
   证明: rfl
 -/
@@ -910,7 +910,7 @@ theorem isRegular_of_boolean
 
 中文:
 定理 isRegular_of_boolean
-  结论: 对任意 a : α, IsRegular a
+  结论: 对任意 a : α, 是正则 a
   证明: compl_compl
 
 Depends on / 依赖: compl_compl
@@ -929,8 +929,8 @@ theorem isRegular_of_decidable
 
 中文:
 定理 isRegular_of_decidable
-  条件: (p : 命题) [Decidable p]
-  结论: IsRegular p
+  条件: (p : 命题) [可判定 p]
+  结论: 是正则 p
   证明: propext Decidable.not_not
 
 Depends on / 依赖: Decidable, Decidable.not_not, not_not, propext

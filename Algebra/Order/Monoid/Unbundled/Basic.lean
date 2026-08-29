@@ -50,7 +50,7 @@ instance Nat.instMulLeftMono
   body: fun _ _ _ h => mul_le_mul_left _ h
 
 中文:
-实例 Nat.instMulLeftMono
+实例 自然数.instMulLeftMono
   签名: : MulLeftMono 自然数 where
   定义体: fun _ _ _ h => mul_le_mul_left _ h
 
@@ -72,7 +72,7 @@ instance Int.instAddLeftMono
   body: fun _ _ _ h => Int.add_le_add_left h _
 
 中文:
-实例 Int.instAddLeftMono
+实例 整数.instAddLeftMono
   签名: : AddLeftMono 整数 where
   定义体: fun _ _ _ h => Int.add_le_add_left h _
 
@@ -410,7 +410,7 @@ lemma mul_right_mono
 中文:
 引理 mul_right_mono
   条件: [MulLeftMono α] {a : α}
-  结论: Monotone (a * ·)
+  结论: 递增 (a * ·)
   证明: fun _ _ h => mul_le_mul_right h _
 
 @[to_additive]
@@ -435,7 +435,7 @@ lemma mul_left_mono
 中文:
 引理 mul_left_mono
   条件: [MulRightMono α] {a : α}
-  结论: Monotone (· * a)
+  结论: 递增 (· * a)
   证明: fun _ _ h => mul_le_mul_left h _
 
 @[to_additive]
@@ -460,7 +460,7 @@ lemma mul_right_strictMono
 中文:
 引理 mul_right_strictMono
   条件: [MulLeftStrictMono α] {a : α}
-  结论: StrictMono (a * ·)
+  结论: 严格递增 (a * ·)
   证明: fun _ _ h => mul_lt_mul_right h _
 
 @[to_additive]
@@ -483,7 +483,7 @@ lemma mul_left_strictMono
 中文:
 引理 mul_left_strictMono
   条件: [MulRightStrictMono α] {a : α}
-  结论: StrictMono (· * a)
+  结论: 严格递增 (· * a)
   证明: fun _ _ h => mul_lt_mul_left h _
 
 Depends on / 依赖: mul_lt_mul_left
@@ -894,7 +894,7 @@ alias mul_left_cancel'' := mul_left_cancel
 
 中文:
 实例 [MulLeftReflectLE
-  签名: α] : IsLeftCancelMul α where
+  签名: α] : 左乘消去 α where
   定义体: (le_of_mul_le_mul_left' h.le).antisymm (le_of_mul_le_mul_left' h.ge)
 
 @[deprecated (since := "2026-03-14")]
@@ -930,7 +930,7 @@ alias mul_right_cancel'' := mul_right_cancel
 
 中文:
 实例 [MulRightReflectLE
-  签名: α] : IsRightCancelMul α where
+  签名: α] : 右乘消去 α where
   定义体: (le_of_mul_le_mul_right' h.le).antisymm (le_of_mul_le_mul_right' h.ge)
 
 @[deprecated (since := "2026-03-14")]
@@ -1304,7 +1304,7 @@ theorem MulLeftStrictMono.toIsLeftCancelMul
 中文:
 定理 MulLeftStrictMono.toIsLeftCancelMul
   条件: [MulLeftStrictMono α]
-  结论: IsLeftCancelMul α where
+  结论: 左乘消去 α where
   证明: mul_right_strictMono.injective h
 
 Depends on / 依赖: injective, mul_right_strictMono, mul_right_strictMono.injective
@@ -1326,7 +1326,7 @@ theorem MulRightStrictMono.toIsRightCancelMul
 中文:
 定理 MulRightStrictMono.toIsRightCancelMul
   条件: [MulRightStrictMono α]
-  结论: IsRightCancelMul α where
+  结论: 右乘消去 α where
   证明: mul_left_strictMono.injective h
 
 Depends on / 依赖: injective, mul_left_strictMono, mul_left_strictMono.injective
@@ -1353,7 +1353,7 @@ mul_le_mul' (le_max_right _ _) le_max_right _ _
 
 中文:
 定理 max_mul_mul_le_max_mul_max'
-  结论: max (a * b) (c * d) <= max a c * max b d
+  结论: 最大值 (a * b) (c * d) <= 最大值 a c * 最大值 b d
   证明: max_le (mul_le_mul' (le_max_left _ _) <| le_max_left _ _)
 mul_le_mul' (le_max_right _ _) le_max_right _ _
 
@@ -1377,7 +1377,7 @@ mul_le_mul' (min_le_right _ _) min_le_right _ _
 
 中文:
 定理 min_mul_min_le_min_mul_mul'
-  结论: min a c * min b d <= min (a * b) (c * d)
+  结论: 最小值 a c * 最小值 b d <= 最小值 (a * b) (c * d)
   证明: le_min (mul_le_mul' (min_le_left _ _) <| min_le_left _ _)
 mul_le_mul' (min_le_right _ _) min_le_right _ _
 
@@ -2543,7 +2543,7 @@ theorem Left.one_lt_mul_of_right
 
 中文:
 定理 Left.one_lt_mul_of_right
-  结论: [IsBotOneClass α] [MulLeftStrictMono α] {b : α}
+  结论: [是BotOne类 α] [MulLeftStrictMono α] {b : α}
   证明: Left.one_lt_mul_of_le_of_lt one_le hb
 
 Depends on / 依赖: Left.one_lt_mul_of_le_of_lt, one_le, one_lt_mul_of_le_of_lt
@@ -2594,7 +2594,7 @@ theorem Left.one_lt_mul_of_left
 
 中文:
 定理 Left.one_lt_mul_of_left
-  结论: [IsBotOneClass α] [MulLeftMono α] {a : α}
+  结论: [是BotOne类 α] [MulLeftMono α] {a : α}
   证明: Left.one_lt_mul_of_lt_of_le ha one_le
 
 @[to_additive add_pos_of_left] alias one_lt_mul_of_left := Left.one_lt_mul_of_left
@@ -3161,7 +3161,7 @@ theorem Right.one_lt_mul_of_left
 
 中文:
 定理 Right.one_lt_mul_of_left
-  结论: [IsBotOneClass α] [MulRightStrictMono α] {a : α}
+  结论: [是BotOne类 α] [MulRightStrictMono α] {a : α}
   证明: Right.one_lt_mul_of_lt_of_le ha one_le
 
 Depends on / 依赖: Right.one_lt_mul_of_lt_of_le, one_le, one_lt_mul_of_lt_of_le
@@ -3212,7 +3212,7 @@ theorem Right.one_lt_mul_of_right
 
 中文:
 定理 Right.one_lt_mul_of_right
-  结论: [IsBotOneClass α] [MulRightMono α] {b : α}
+  结论: [是BotOne类 α] [MulRightMono α] {b : α}
   证明: Right.one_lt_mul_of_le_of_lt one_le hb
 
 @[to_additive add_pos_of_right] alias one_lt_mul_of_right := Right.one_lt_mul_of_right
@@ -3712,7 +3712,7 @@ theorem exists_square_le
     rwa [mul_one]
 
 中文:
-定理 exists_square_le
+定理 存在_square_le
   条件: [MulLeftStrictMono α] (a : α)
   结论: 存在 b : α, b * b <= a
   证明: by
@@ -3808,9 +3808,9 @@ theorem Monotone.const_mul'
 @[to_additive const_add]
 
 中文:
-定理 Monotone.const_mul'
-  条件: [MulLeftMono α] (hf : Monotone f) (a : α)
-  结论: Monotone fun x => a * f x
+定理 递增.const_mul'
+  条件: [MulLeftMono α] (hf : 递增 f) (a : α)
+  结论: 递增 fun x => a * f x
   证明: mul_right_mono.comp hf
 
 @[to_additive const_add]
@@ -3856,9 +3856,9 @@ theorem Antitone.const_mul'
 @[to_additive const_add]
 
 中文:
-定理 Antitone.const_mul'
-  条件: [MulLeftMono α] (hf : Antitone f) (a : α)
-  结论: Antitone fun x => a * f x
+定理 递减.const_mul'
+  条件: [MulLeftMono α] (hf : 递减 f) (a : α)
+  结论: 递减 fun x => a * f x
   证明: mul_right_mono.comp_antitone hf
 
 @[to_additive const_add]
@@ -3903,8 +3903,8 @@ theorem Monotone.mul_const'
 @[to_additive add_const]
 
 中文:
-定理 Monotone.mul_const'
-  条件: [MulRightMono α] (hf : Monotone f) (a : α)
+定理 递增.mul_const'
+  条件: [MulRightMono α] (hf : 递增 f) (a : α)
   证明: mul_left_mono.comp hf
 
 @[to_additive add_const]
@@ -3950,9 +3950,9 @@ theorem Antitone.mul_const'
 @[to_additive add_const]
 
 中文:
-定理 Antitone.mul_const'
-  条件: [MulRightMono α] (hf : Antitone f) (a : α)
-  结论: Antitone fun x => f x * a
+定理 递减.mul_const'
+  条件: [MulRightMono α] (hf : 递减 f) (a : α)
+  结论: 递减 fun x => f x * a
   证明: mul_left_mono.comp_antitone hf
 
 @[to_additive add_const]
@@ -3992,7 +3992,7 @@ theorem Monotone.mul'
   proof: fun _ _ h => mul_le_mul' (hf h) (hg h)
 
 中文:
-定理 Monotone.mul'
+定理 递增.mul'
   结论: [MulLeftMono α]
   证明: fun _ _ h => mul_le_mul' (hf h) (hg h)
 
@@ -4035,7 +4035,7 @@ theorem Antitone.mul'
   proof: fun _ _ h => mul_le_mul' (hf h) (hg h)
 
 中文:
-定理 Antitone.mul'
+定理 递减.mul'
   结论: [MulLeftMono α]
   证明: fun _ _ h => mul_le_mul' (hf h) (hg h)
 
@@ -4084,9 +4084,9 @@ theorem StrictMono.const_mul'
 @[to_additive const_add]
 
 中文:
-定理 StrictMono.const_mul'
-  条件: (hf : StrictMono f) (c : α)
-  结论: StrictMono fun x => c * f x
+定理 严格递增.const_mul'
+  条件: (hf : 严格递增 f) (c : α)
+  结论: 严格递增 fun x => c * f x
   证明: fun _ _ ab => mul_lt_mul_right (hf ab) c
 
 @[to_additive const_add]
@@ -4133,9 +4133,9 @@ theorem StrictAnti.const_mul'
 @[to_additive const_add]
 
 中文:
-定理 StrictAnti.const_mul'
-  条件: (hf : StrictAnti f) (c : α)
-  结论: StrictAnti fun x => c * f x
+定理 严格递减.const_mul'
+  条件: (hf : 严格递减 f) (c : α)
+  结论: 严格递减 fun x => c * f x
   证明: fun _ _ ab => mul_lt_mul_right (hf ab) c
 
 @[to_additive const_add]
@@ -4184,9 +4184,9 @@ theorem StrictMono.mul_const'
 @[to_additive add_const]
 
 中文:
-定理 StrictMono.mul_const'
-  条件: (hf : StrictMono f) (c : α)
-  结论: StrictMono fun x => f x * c
+定理 严格递增.mul_const'
+  条件: (hf : 严格递增 f) (c : α)
+  结论: 严格递增 fun x => f x * c
   证明: fun _ _ ab => mul_lt_mul_left (hf ab) c
 
 @[to_additive add_const]
@@ -4233,9 +4233,9 @@ theorem StrictAnti.mul_const'
 @[to_additive add_const]
 
 中文:
-定理 StrictAnti.mul_const'
-  条件: (hf : StrictAnti f) (c : α)
-  结论: StrictAnti fun x => f x * c
+定理 严格递减.mul_const'
+  条件: (hf : 严格递减 f) (c : α)
+  结论: 严格递减 fun x => f x * c
   证明: fun _ _ ab => mul_lt_mul_left (hf ab) c
 
 @[to_additive add_const]
@@ -4279,7 +4279,7 @@ theorem StrictMono.mul'
   mul_lt_mul_of_lt_of_lt (hf ab) (hg ab)
 
 中文:
-定理 StrictMono.mul'
+定理 严格递增.mul'
   结论: [MulLeftStrictMono α]
   证明: fun _ _ ab =>
   mul_lt_mul_of_lt_of_lt (hf ab) (hg ab)
@@ -4322,7 +4322,7 @@ theorem StrictAnti.mul'
   proof: fun _ _ ab => mul_lt_mul_of_lt_of_lt (hf ab) (hg ab)
 
 中文:
-定理 StrictAnti.mul'
+定理 严格递减.mul'
   结论: [MulLeftStrictMono α]
   证明: fun _ _ ab => mul_lt_mul_of_lt_of_lt (hf ab) (hg ab)
 
@@ -4367,7 +4367,7 @@ theorem Monotone.mul_strictMono'
   proof: fun _ _ h => mul_lt_mul_of_le_of_lt (hf h.le) (hg h)
 
 中文:
-定理 Monotone.mul_strictMono'
+定理 递增.mul_strictMono'
   结论: [MulLeftStrictMono α]
   证明: fun _ _ h => mul_lt_mul_of_le_of_lt (hf h.le) (hg h)
 
@@ -4414,7 +4414,7 @@ theorem Antitone.mul_strictAnti'
   proof: fun _ _ h => mul_lt_mul_of_le_of_lt (hf h.le) (hg h)
 
 中文:
-定理 Antitone.mul_strictAnti'
+定理 递减.mul_strictAnti'
   结论: [MulLeftStrictMono α]
   证明: fun _ _ h => mul_lt_mul_of_le_of_lt (hf h.le) (hg h)
 
@@ -4464,8 +4464,8 @@ theorem StrictMono.mul_monotone'
   proof: fun _ _ h => mul_lt_mul_of_lt_of_le (hf h) (hg h.le)
 
 中文:
-定理 StrictMono.mul_monotone'
-  条件: (hf : StrictMono f) (hg : Monotone g)
+定理 严格递增.mul_monotone'
+  条件: (hf : 严格递增 f) (hg : 递增 g)
   证明: fun _ _ h => mul_lt_mul_of_lt_of_le (hf h) (hg h.le)
 
 Depends on / 依赖: h.le, mul_lt_mul_of_lt_of_le
@@ -4508,8 +4508,8 @@ theorem StrictAnti.mul_antitone'
   proof: fun _ _ h => mul_lt_mul_of_lt_of_le (hf h) (hg h.le)
 
 中文:
-定理 StrictAnti.mul_antitone'
-  条件: (hf : StrictAnti f) (hg : Antitone g)
+定理 严格递减.mul_antitone'
+  条件: (hf : 严格递减 f) (hg : 递减 g)
   证明: fun _ _ h => mul_lt_mul_of_lt_of_le (hf h) (hg h.le)
 
 Depends on / 依赖: h.le, mul_lt_mul_of_lt_of_le
@@ -4557,7 +4557,7 @@ theorem cmp_mul_left'
 
 中文:
 定理 cmp_mul_left'
-  结论: {α : 类型} [Mul α] [LinearOrder α] [MulLeftStrictMono α]
+  结论: {α : 类型} [乘法 α] [线性序 α] [MulLeftStrictMono α]
   证明: (strictMono_id.const_mul' a).cmp_map_eq b c
 
 @[to_additive (attr := simp) cmp_add_right]
@@ -4580,7 +4580,7 @@ theorem cmp_mul_right'
 
 中文:
 定理 cmp_mul_right'
-  结论: {α : 类型} [Mul α] [LinearOrder α]
+  结论: {α : 类型} [乘法 α] [线性序 α]
   证明: (strictMono_id.mul_const' c).cmp_map_eq a b
 
 Depends on / 依赖: cmp_map_eq, mul_const, strictMono_id, strictMono_id.mul_const
@@ -4614,7 +4614,7 @@ definition MulLECancellable
 
 中文:
 定义 MulLECancellable
-  签名: [Mul α] [LE α] (a : α)
+  签名: [乘法 α] [LE α] (a : α)
   定义体: forall ⦃b c⦄, a * b <= a * c -> b <= c
 
 @[to_additive]
@@ -4635,7 +4635,7 @@ theorem Contravariant.MulLECancellable
 
 中文:
 定理 Contravariant.MulLECancellable
-  结论: [Mul α] [LE α] [MulLeftReflectLE α]
+  结论: [乘法 α] [LE α] [MulLeftReflectLE α]
   证明: fun _ _ => le_of_mul_le_mul_left'
 
 @[to_additive (attr := simp)]
@@ -4660,7 +4660,7 @@ theorem mulLECancellable_one
 
 中文:
 定理 mulLECancellable_one
-  条件: [MulOneClass α] [LE α]
+  条件: [MulOne类 α] [LE α]
   结论: MulLECancellable (1 : α)
   证明: fun a b => by
   simpa only [one_mul] using id
@@ -4684,8 +4684,8 @@ theorem Injective
 @[to_additive]
 
 中文:
-定理 Injective
-  条件: [Mul α] [PartialOrder α] {a : α} (ha : MulLECancellable a)
+定理 单射
+  条件: [乘法 α] [偏序 α] {a : α} (ha : MulLECancellable a)
   证明: fun _ _ h => le_antisymm (ha h.le) (ha h.ge)
 
 @[to_additive]
@@ -4707,7 +4707,7 @@ theorem isLeftRegular
 
 中文:
 定理 isLeftRegular
-  结论: [Mul α] [PartialOrder α] {a : α}
+  结论: [乘法 α] [偏序 α] {a : α}
   证明: ha.Injective
 
 @[to_additive]
@@ -4729,7 +4729,7 @@ theorem inj
 
 中文:
 定理 inj
-  条件: [Mul α] [PartialOrder α] {a b c : α} (ha : MulLECancellable a)
+  条件: [乘法 α] [偏序 α] {a b c : α} (ha : MulLECancellable a)
   证明: ha.Injective.eq_iff
 
 @[to_additive]
@@ -4751,7 +4751,7 @@ theorem injective_left
 
 中文:
 定理 injective_left
-  结论: [Mul α] [IsMulCommutative α] [PartialOrder α] {a : α}
+  结论: [乘法 α] [是MulCommutative α] [偏序 α] {a : α}
   证明: fun b c h => ha.Injective by dsimp; rwa [mul_comm' a, mul_comm' a]
 
 @[to_additive]
@@ -4771,7 +4771,7 @@ theorem inj_left
 
 中文:
 定理 inj_left
-  结论: [Mul α] [IsMulCommutative α] [PartialOrder α] {a b c : α}
+  结论: [乘法 α] [是MulCommutative α] [偏序 α] {a b c : α}
   证明: hc.injective_left.eq_iff
 -/
 protected theorem inj_left [Mul α] [IsMulCommutative α] [PartialOrder α] {a b c : α}
@@ -4793,7 +4793,7 @@ theorem mul_le_mul_iff_left
 
 中文:
 定理 mul_le_mul_iff_left
-  结论: [Mul α] [MulLeftMono α] {a b c : α}
+  结论: [乘法 α] [MulLeftMono α] {a b c : α}
   证明: ⟨fun h => ha h, fun h => mul_le_mul_right h a⟩
 
 @[to_additive]
@@ -4816,7 +4816,7 @@ theorem mul_le_mul_iff_right
 
 中文:
 定理 mul_le_mul_iff_right
-  结论: [Mul α] [IsMulCommutative α] [MulLeftMono α] {a b c : α}
+  结论: [乘法 α] [是MulCommutative α] [MulLeftMono α] {a b c : α}
   证明: by
   rw [mul_comm' b]; rw [mul_comm' c]; rw [ha.mul_le_mul_iff_left]
 
@@ -4839,7 +4839,7 @@ theorem le_mul_iff_one_le_right
 
 中文:
 定理 le_mul_iff_one_le_right
-  结论: [MulOneClass α] [MulLeftMono α]
+  结论: [MulOne类 α] [MulLeftMono α]
   证明: Iff.trans (by rw [mul_one]) ha.mul_le_mul_iff_left
 
 @[to_additive]
@@ -4862,7 +4862,7 @@ theorem mul_le_iff_le_one_right
 
 中文:
 定理 mul_le_iff_le_one_right
-  结论: [MulOneClass α] [MulLeftMono α]
+  结论: [MulOne类 α] [MulLeftMono α]
   证明: Iff.trans (by rw [mul_one]) ha.mul_le_mul_iff_left
 
 @[to_additive]
@@ -4886,7 +4886,7 @@ theorem le_mul_iff_one_le_left
 
 中文:
 定理 le_mul_iff_one_le_left
-  结论: [MulOneClass α] [IsMulCommutative α] [MulLeftMono α]
+  结论: [MulOne类 α] [是MulCommutative α] [MulLeftMono α]
   证明: by
   rw [mul_comm']; rw [ha.le_mul_iff_one_le_right]
 
@@ -4908,7 +4908,7 @@ theorem mul_le_iff_le_one_left
 
 中文:
 定理 mul_le_iff_le_one_left
-  结论: [MulOneClass α] [IsMulCommutative α] [MulLeftMono α]
+  结论: [MulOne类 α] [是MulCommutative α] [MulLeftMono α]
   证明: by
   rw [mul_comm']; rw [ha.mul_le_iff_le_one_right]
 -/
@@ -4926,7 +4926,7 @@ lemma mul
 
 中文:
 引理 mul
-  结论: [Semigroup α] {a b : α} (ha : MulLECancellable a)
+  结论: [半群 α] {a b : α} (ha : MulLECancellable a)
   证明: fun c d hcd => hb ha by rwa [← mul_assoc, ← mul_assoc]
 -/
 @[to_additive] lemma mul [Semigroup α] {a b : α} (ha : MulLECancellable a)
@@ -4943,7 +4943,7 @@ lemma of_mul_right
 
 中文:
 引理 of_mul_right
-  结论: [Semigroup α] [MulLeftMono α] {a b : α}
+  结论: [半群 α] [MulLeftMono α] {a b : α}
   证明: fun c d hcd => h by rw [mul_assoc, mul_assoc]; exact mul_le_mul_right hcd _
 -/
 @[to_additive] lemma of_mul_right [Semigroup α] [MulLeftMono α] {a b : α}
@@ -4960,7 +4960,7 @@ lemma of_mul_left
 
 中文:
 引理 of_mul_left
-  结论: [CommSemigroup α] [MulLeftMono α] {a b : α}
+  结论: [交换半群 α] [MulLeftMono α] {a b : α}
   证明: (mul_comm a b ▸ h).of_mul_right
 -/
 @[to_additive] lemma of_mul_left [CommSemigroup α] [MulLeftMono α] {a b : α}
@@ -4979,7 +4979,7 @@ lemma mulLECancellable_mul
 
 中文:
 引理 mulLECancellable_mul
-  条件: [LE α] [CommSemigroup α] [MulLeftMono α] {a b : α}
+  条件: [LE α] [交换半群 α] [MulLeftMono α] {a b : α}
   证明: ⟨fun h => ⟨h.of_mul_left, h.of_mul_right⟩, fun h => h.1.mul h.2⟩
 
 Depends on / 依赖: h.of_mul_left, h.of_mul_right, of_mul_left, of_mul_right

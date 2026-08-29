@@ -49,11 +49,11 @@ structure CompletelyPositiveMap
     - map_cstarMatrix_nonneg'((k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map toLinearMap
 
 中文:
-结构 CompletelyPositiveMap
-  参数: (A₁ : 类型) (A₂ : 类型) [NonUnitalCStarAlgebra A₁]
-  继承: A₁ ->ₗ[Complex] A₂
+结构 余mpletelyPositive映射
+  参数: (A₁ : 类型) (A₂ : 类型) [非幺CStar代数 A₁]
+  继承: A₁ ->ₗ[复形] A₂
   公理与运算 (1 个):
-    - map_cstarMatrix_nonneg'((k : 自然数) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map toLinearMap
+    - map_cstarMatrix_nonneg'((k : 自然数) (M : CStarMatrix (有限集 k) (有限集 k) A₁) (hM : 0 <= M)) : 0 <= M.map toLinearMap
 -/
 structure CompletelyPositiveMap (A₁ : Type*) (A₂ : Type*) [NonUnitalCStarAlgebra A₁]
     [NonUnitalCStarAlgebra A₂] [PartialOrder A₁] [PartialOrder A₂] [StarOrderedRing A₁]
@@ -71,10 +71,10 @@ class CompletelyPositiveMapClass
     - map_cstarMatrix_nonneg'((φ : F) (k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map φ
 
 中文:
-类 CompletelyPositiveMapClass
+类 余mpletelyPositive映射类
   参数: (F : 类型) (A₁ : 类型) (A₂ : 类型)
   公理与运算 (1 个):
-    - map_cstarMatrix_nonneg'((φ : F) (k : 自然数) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map φ
+    - map_cstarMatrix_nonneg'((φ : F) (k : 自然数) (M : CStarMatrix (有限集 k) (有限集 k) A₁) (hM : 0 <= M)) : 0 <= M.map φ
 -/
 class CompletelyPositiveMapClass (F : Type*) (A₁ : Type*) (A₂ : Type*)
     [NonUnitalCStarAlgebra A₁] [NonUnitalCStarAlgebra A₂] [PartialOrder A₁]
@@ -105,7 +105,7 @@ definition toCompletelyPositiveLinearMap
 
 中文:
 定义 toCompletelyPositiveLinearMap
-  签名: [CompletelyPositiveMapClass F A₁ A₂] (f : F)
+  签名: [余mpletelyPositive映射类 F A₁ A₂] (f : F)
   定义体: { (f : A₁ ->ₗ[Complex] A₂) with
     map_cstarMatrix_nonneg' := CompletelyPositiveMapClass.map_cstarMatrix_nonneg' f }
 
@@ -125,7 +125,7 @@ instance instCoeToCompletelyPositiveMap
 
 中文:
 实例 instCoeToCompletelyPositiveMap
-  签名: [CompletelyPositiveMapClass F A₁ A₂]
+  签名: [余mpletelyPositive映射类 F A₁ A₂]
   定义体: toCompletelyPositiveLinearMap f
 
 Depends on / 依赖: toCompletelyPositiveLinearMap
@@ -147,7 +147,7 @@ simpa using! map_nonneg (toOneByOne (Fin 1) Complex A₂).symm
 h φ 1 _ map_nonneg (toOneByOne (Fin 1) Complex A₁) ha
 
 中文:
-引理 _root_.OrderHomClass.of_map_cstarMatrix_nonneg
+引理 _root_.序态射类.of_map_cstarMatrix_nonneg
   证明: .of_addMonoidHom by
   intro φ a ha
 simpa using! map_nonneg (toOneByOne (Fin 1) Complex A₂).symm
@@ -171,8 +171,8 @@ instance [CompletelyPositiveMapClass
   body: .of_map_cstarMatrix_nonneg CompletelyPositiveMapClass.map_cstarMatrix_nonneg'
 
 中文:
-实例 [CompletelyPositiveMapClass
-  签名: F A₁ A₂] : OrderHomClass F A₁ A₂
+实例 [余mpletelyPositive映射类
+  签名: F A₁ A₂] : 序态射类 F A₁ A₂
   定义体: .of_map_cstarMatrix_nonneg CompletelyPositiveMapClass.map_cstarMatrix_nonneg'
 
 Depends on / 依赖: CompletelyPositiveMapClass, CompletelyPositiveMapClass.map_cstarMatrix_nonneg, map_cstarMatrix_nonneg, of_map_cstarMatrix_nonneg
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A₁ ->CP A₂) A₁ A₂
+  签名: 函数状 (A₁ ->CP A₂) A₁ A₂
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (A₁ ->CP A₂) Complex A₁ A₂
+  签名: 线性映射类 (A₁ ->CP A₂) 复形 A₁ A₂
   定义体: map_add f.toLinearMap
   map_smulₛₗ f := map_smulₛₗ f.toLinearMap
 
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompletelyPositiveMapClass (A₁ ->CP A₂) A₁ A₂
+  签名: 余mpletelyPositive映射类 (A₁ ->CP A₂) A₁ A₂
   定义体: f.map_cstarMatrix_nonneg'
 
 Depends on / 依赖: f.map_cstarMatrix_nonneg, map_cstarMatrix_nonneg
@@ -279,7 +279,7 @@ lemma map_cstarMatrix_nonneg
 
 中文:
 引理 map_cstarMatrix_nonneg
-  结论: {n : 类型} [Fintype n] (φ : A₁ ->CP A₂) (M : CStarMatrix n n A₁)
+  结论: {n : 类型} [有限类型 n] (φ : A₁ ->CP A₂) (M : CStarMatrix n n A₁)
   证明: by
   let k := Fintype.card n
   let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
@@ -320,7 +320,7 @@ instance instCompletelyPositiveMapClass
 
 中文:
 实例 instCompletelyPositiveMapClass
-  签名: : CompletelyPositiveMapClass F A₁ A₂ where
+  签名: : 余mpletelyPositive映射类 F A₁ A₂ where
   定义体: by
     change 0 <= (mapₙₐ (φ : A₁ ->⋆ₙₐ[Complex] A₂)) M
     exact map_nonneg _ hM

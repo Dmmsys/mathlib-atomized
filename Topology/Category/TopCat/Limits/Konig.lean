@@ -60,7 +60,7 @@ abbreviation FiniteDiagramArrow
 
 中文:
 缩写 FiniteDiagramArrow
-  签名: {J : 类型u} [SmallCategory J] (G : Finset J)
+  签名: {J : 类型u} [小范畴 J] (G : 有限集 J)
   定义体: Σ' (X Y : J) (_ : X in G) (_ : Y in G), X ⟶ Y
 -/
 private abbrev FiniteDiagramArrow {J : Type u} [SmallCategory J] (G : Finset J) :=
@@ -77,7 +77,7 @@ abbreviation FiniteDiagram
 
 中文:
 缩写 FiniteDiagram
-  签名: (J : 类型u) [SmallCategory J]
+  签名: (J : 类型u) [小范畴 J]
   定义体: Σ G : Finset J, Finset (FiniteDiagramArrow G)
 -/
 private abbrev FiniteDiagram (J : Type u) [SmallCategory J] :=
@@ -95,7 +95,7 @@ definition partialSections
 
 中文:
 定义 partialSections
-  签名: {J : 类型u} [SmallCategory J] (F : J ⥤ TopCat.{v}) {G : Finset J}
+  签名: {J : 类型u} [小范畴 J] (F : J ⥤ 顶元素范畴.{v}) {G : 有限集 J}
   定义体: {u | forall {f : FiniteDiagramArrow G} (_ : f in H), F.map f.2.2.2.2 (u f.1) = u f.2.1}
 
 Depends on / 依赖: F.map, FiniteDiagramArrow
@@ -124,7 +124,7 @@ theorem partialSections.nonempty
 
 中文:
 定理 partialSections.nonempty
-  结论: [IsCofilteredOrEmpty J] [h : 对任意 j : J, Nonempty (F.obj j)]
+  结论: [是余filteredOrEmpty J] [h : 对任意 j : J, 非空 (F.obj j)]
   证明: by
   classical
   cases isEmpty_or_nonempty J
@@ -221,7 +221,7 @@ theorem partialSections.closed
 
 中文:
 定理 partialSections.closed
-  结论: [对任意 j : J, T2Space (F.obj j)] {G : Finset J}
+  结论: [对任意 j : J, T2空间 (F.obj j)] {G : 有限集 J}
   证明: by
   have :
     partialSections F H =
@@ -265,7 +265,7 @@ theorem nonempty_limitCone_of_compact_t2_cofiltered_system
 
 中文:
 定理 nonempty_limitCone_of_compact_t2_cofiltered_system
-  结论: (F : J ⥤ TopCat.{max v u})
+  结论: (F : J ⥤ 顶元素范畴.{最大值 v u})
   证明: by
   classical
   obtain ⟨u, hu⟩ :=

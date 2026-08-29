@@ -45,8 +45,8 @@ lemma Irreducible.coe_ne_zero
   proof: fun h => hx.1 by simpa using hx.2 (a := x) (b := x) (by ext; simp [h])
 
 中文:
-引理 Irreducible.coe_ne_zero
-  结论: {M₀ S : 类型} [MonoidWithZero M₀] [SetLike S M₀]
+引理 不可约.coe_ne_zero
+  结论: {M₀ S : 类型} [带零幺半群 M₀] [集合状 S M₀]
   证明: fun h => hx.1 by simpa using hx.2 (a := x) (b := x) (by ext; simp [h])
 -/
 lemma Irreducible.coe_ne_zero {M₀ S : Type*} [MonoidWithZero M₀] [SetLike S M₀]
@@ -70,7 +70,7 @@ mul_mem' {x y} hx hy := fun z hz => hy _ hx _ (mul_assoc x y z ▸ hz)
 
 中文:
 定义 nonZeroDivisorsLeft
-  签名: : Submonoid M₀ where
+  签名: : 子幺半群 M₀ where
   定义体: {x | forall y, x * y = 0 -> y = 0}
   one_mem' := by simp
 mul_mem' {x y} hx hy := fun z hz => hy _ hx _ (mul_assoc x y z ▸ hz)
@@ -131,7 +131,7 @@ definition nonZeroDivisorsRight
 
 中文:
 定义 nonZeroDivisorsRight
-  签名: : Submonoid M₀ where
+  签名: : 子幺半群 M₀ where
   定义体: {x | forall y, y * x = 0 -> y = 0}
   one_mem' := by simp
   mul_mem' := fun {x y} hx hy z hz => hx _ (hy _ ((mul_assoc z x y).symm ▸ hz))
@@ -189,7 +189,7 @@ lemma nonZeroDivisorsLeft_eq_right
 
 中文:
 引理 nonZeroDivisorsLeft_eq_right
-  条件: (M₀ : 类型) [CommMonoidWithZero M₀]
+  条件: (M₀ : 类型) [带零交换幺半群 M₀]
   证明: by
   ext x; simp [mul_comm x]
 
@@ -214,7 +214,7 @@ lemma coe_nonZeroDivisorsLeft_eq
 
 中文:
 引理 coe_nonZeroDivisorsLeft_eq
-  条件: [NoZeroDivisors M₀] [Nontrivial M₀]
+  条件: [无零因子 M₀] [非平凡 M₀]
   证明: by
   ext x
   simp only [SetLike.mem_coe, mem_nonZeroDivisorsLeft_iff, mul_eq_zero, Set.mem_ofPred_eq]
@@ -246,7 +246,7 @@ lemma coe_nonZeroDivisorsRight_eq
 
 中文:
 引理 coe_nonZeroDivisorsRight_eq
-  条件: [NoZeroDivisors M₀] [Nontrivial M₀]
+  条件: [无零因子 M₀] [非平凡 M₀]
   证明: by
   ext x
   simp only [SetLike.mem_coe, mem_nonZeroDivisorsRight_iff, mul_eq_zero, forall_eq_or_imp, true_and,
@@ -276,7 +276,7 @@ definition nonZeroDivisors
 
 中文:
 定义 nonZeroDivisors
-  签名: (M₀ : 类型) [MonoidWithZero M₀]
+  签名: (M₀ : 类型) [带零幺半群 M₀]
   定义体: nonZeroDivisorsLeft M₀ ⊓ nonZeroDivisorsRight M₀
 
 Depends on / 依赖: nonZeroDivisorsLeft, nonZeroDivisorsRight
@@ -299,7 +299,7 @@ mul_mem' {r₁ r₂} h₁ h₂ m H := h₂ _ h₁ _ mul_smul r₁ r₂ m ▸ H
 
 中文:
 定义 nonZeroSMulDivisors
-  签名: (M₀ : 类型) [MonoidWithZero M₀] (M : 类型) [Zero M] [MulAction M₀ M]
+  签名: (M₀ : 类型) [带零幺半群 M₀] (M : 类型) [零 M] [乘法作用 M₀ M]
   定义体: { r | forall m : M, r • m = 0 -> m = 0}
   one_mem' m h := (one_smul M₀ m) ▸ h
 mul_mem' {r₁ r₂} h₁ h₂ m H := h₂ _ h₁ _ mul_smul r₁ r₂ m ▸ H
@@ -476,8 +476,8 @@ lemma IsUnit.mem_nonZeroDivisors
   proof: ⟨fun _ => hx.mul_right_eq_zero.mp, fun _ => hx.mul_left_eq_zero.mp⟩
 
 中文:
-引理 IsUnit.mem_nonZeroDivisors
-  条件: (hx : IsUnit x)
+引理 是单位.mem_nonZeroDivisors
+  条件: (hx : 是单位 x)
   结论: x in M₀⁰
   证明: ⟨fun _ => hx.mul_right_eq_zero.mp, fun _ => hx.mul_left_eq_zero.mp⟩
 
@@ -499,7 +499,7 @@ lemma isUnit_le_nonZeroDivisors
 
 中文:
 引理 isUnit_le_nonZeroDivisors
-  结论: IsUnit.submonoid M₀ <= M₀⁰
+  结论: 是单位.submonoid M₀ <= M₀⁰
   证明: fun _ => (·.mem_nonZeroDivisors)
 
 @[deprecated "Use `Submonoid.mul_mem _ hx hy` instead." (since := "2026-01-07")]
@@ -682,8 +682,8 @@ instance [IsLeftCancelMulZero
       simpa only [Subtype.ext_iff, Submonoid.coe_mul] using h)
 
 中文:
-实例 [IsLeftCancelMulZero
-  签名: M₀] : LeftCancelMonoid M₀⁰ where
+实例 [是左消去MulZero
+  签名: M₀] : 左消去幺半群 M₀⁰ where
   定义体: Subtype.ext
     mul_left_cancel₀ (nonZeroDivisors.coe_ne_zero z) (by
       simpa only [Subtype.ext_iff, Submonoid.coe_mul] using h)
@@ -706,8 +706,8 @@ instance [IsRightCancelMulZero
       simpa only [Subtype.ext_iff, Submonoid.coe_mul] using h)
 
 中文:
-实例 [IsRightCancelMulZero
-  签名: M₀] : RightCancelMonoid M₀⁰ where
+实例 [是右消去MulZero
+  签名: M₀] : 右消去幺半群 M₀⁰ where
   定义体: Subtype.ext
     mul_right_cancel₀ (nonZeroDivisors.coe_ne_zero z) (by
       simpa only [Subtype.ext_iff, Submonoid.coe_mul] using h)
@@ -798,7 +798,7 @@ lemma mem_nonZeroDivisors_iff_ne_zero
 
 中文:
 引理 mem_nonZeroDivisors_iff_ne_zero
-  条件: [Nontrivial M₀]
+  条件: [非平凡 M₀]
   结论: x in M₀⁰ ↔ x != 0
   证明: ⟨nonZeroDivisors.ne_zero, mem_nonZeroDivisors_of_ne_zero⟩
 -/
@@ -816,7 +816,7 @@ mem_nonZeroDivisors_of_ne_zero by rintro rfl; exact hS hx
 
 中文:
 定理 le_nonZeroDivisors_of_noZeroDivisors
-  条件: {S : Submonoid M₀} (hS : (0 : M₀) ∉ S)
+  条件: {S : 子幺半群 M₀} (hS : (0 : M₀) ∉ S)
   证明: fun _ hx =>
 mem_nonZeroDivisors_of_ne_zero by rintro rfl; exact hS hx
 -/
@@ -836,7 +836,7 @@ theorem powers_le_nonZeroDivisors_of_noZeroDivisors
 中文:
 定理 powers_le_nonZeroDivisors_of_noZeroDivisors
   条件: (hx : x != 0)
-  结论: Submonoid.powers x <= M₀⁰
+  结论: 子幺半群.powers x <= M₀⁰
   证明: le_nonZeroDivisors_of_noZeroDivisors fun h => hx (h.recOn fun _ => eq_zero_of_pow_eq_zero)
 
 Depends on / 依赖: eq_zero_of_pow_eq_zero, h.recOn, le_nonZeroDivisors_of_noZeroDivisors
@@ -892,8 +892,8 @@ lemma IsRegular.mem_nonZeroDivisors
   proof: ⟨h.1.mem_nonZeroDivisorsLeft, h.2.mem_nonZeroDivisorsRight⟩
 
 中文:
-引理 IsRegular.mem_nonZeroDivisors
-  条件: (h : IsRegular r)
+引理 是正则.mem_nonZeroDivisors
+  条件: (h : 是正则 r)
   结论: r in M₀⁰
   证明: ⟨h.1.mem_nonZeroDivisorsLeft, h.2.mem_nonZeroDivisorsRight⟩
 
@@ -910,7 +910,7 @@ lemma noZeroDivisors_iff_forall_mem_nonZeroDivisorsLeft
   proof: noZeroDivisors_iff_right_eq_zero_of_mul
 
 中文:
-引理 noZeroDivisors_iff_forall_mem_nonZeroDivisorsLeft
+引理 noZeroDivisors_iff_对任意_mem_nonZeroDivisorsLeft
   证明: noZeroDivisors_iff_right_eq_zero_of_mul
 
 Depends on / 依赖: noZeroDivisors_iff_right_eq_zero_of_mul
@@ -927,7 +927,7 @@ lemma noZeroDivisors_iff_forall_mem_nonZeroDivisorsRight
   proof: noZeroDivisors_iff_left_eq_zero_of_mul
 
 中文:
-引理 noZeroDivisors_iff_forall_mem_nonZeroDivisorsRight
+引理 noZeroDivisors_iff_对任意_mem_nonZeroDivisorsRight
   证明: noZeroDivisors_iff_left_eq_zero_of_mul
 
 Depends on / 依赖: noZeroDivisors_iff_left_eq_zero_of_mul
@@ -944,7 +944,7 @@ lemma noZeroDivisors_iff_forall_mem_nonZeroDivisors
   proof: noZeroDivisors_iff_eq_zero_of_mul
 
 中文:
-引理 noZeroDivisors_iff_forall_mem_nonZeroDivisors
+引理 noZeroDivisors_iff_对任意_mem_nonZeroDivisors
   证明: noZeroDivisors_iff_eq_zero_of_mul
 
 Depends on / 依赖: noZeroDivisors_iff_eq_zero_of_mul
@@ -963,7 +963,7 @@ lemma IsSMulRegular.mem_nonZeroSMulDivisors
 
 中文:
 引理 IsSMulRegular.mem_nonZeroSMulDivisors
-  结论: {M : 类型} [Zero M] [MulActionWithZero M₀ M] {m₀ : M₀}
+  结论: {M : 类型} [零 M] [带零乘法作用 M₀ M] {m₀ : M₀}
   证明: fun _ => h.right_eq_zero_of_smul
 
 Depends on / 依赖: h.right_eq_zero_of_smul, right_eq_zero_of_smul
@@ -982,7 +982,7 @@ lemma isSMulRegular_iff_mem_nonZeroSMulDivisors
 
 中文:
 引理 isSMulRegular_iff_mem_nonZeroSMulDivisors
-  结论: {M : 类型} [AddGroup M] [DistribMulAction M₀ M]
+  结论: {M : 类型} [加法群 M] [分配乘法作用 M₀ M]
   证明: isSMulRegular_iff_right_eq_zero_of_smul
 
 Depends on / 依赖: isSMulRegular_iff_right_eq_zero_of_smul
@@ -1005,7 +1005,7 @@ theorem map_ne_zero_of_mem_nonZeroDivisors
 
 中文:
 定理 map_ne_zero_of_mem_nonZeroDivisors
-  结论: [Nontrivial M₀] [ZeroHomClass F M₀ M₀'] (g : F)
+  结论: [非平凡 M₀] [保零态射类 F M₀ M₀'] (g : F)
   证明: fun h0 =>
   one_ne_zero (h.2 1 ((one_mul x).symm ▸ hg (h0.trans (map_zero g).symm)))
 -/
@@ -1024,7 +1024,7 @@ theorem map_mem_nonZeroDivisors
 
 中文:
 定理 map_mem_nonZeroDivisors
-  结论: [Nontrivial M₀] [NoZeroDivisors M₀'] [ZeroHomClass F M₀ M₀'] (g : F)
+  结论: [非平凡 M₀] [无零因子 M₀'] [保零态射类 F M₀ M₀'] (g : F)
   证明: ⟨fun _ => eq_zero_of_ne_zero_of_mul_left_eq_zero (map_ne_zero_of_mem_nonZeroDivisors g hg h),
     fun _ => eq_zero_of_ne_zero_of_mul_right_eq_zero (map_ne_zero_of_mem_nonZeroDivisors g hg h)⟩
 
@@ -1050,8 +1050,8 @@ theorem MulEquivClass.map_nonZeroDivisors
     map_eq_zero_iff _ h.symm.injective]
 
 中文:
-定理 MulEquivClass.map_nonZeroDivisors
-  结论: {M₀ S F : 类型} [MonoidWithZero M₀] [MonoidWithZero S]
+定理 乘法等价类.map_nonZeroDivisors
+  结论: {M₀ S F : 类型} [带零幺半群 M₀] [带零幺半群 S]
   证明: by
   let h : M₀ ≃* S := h
   change Submonoid.map h _ = _
@@ -1087,7 +1087,7 @@ exact zero_notMem_nonZeroDivisors hS .mp hx0 ▸ hx map_eq_zero_iff f hf
 
 中文:
 定理 map_le_nonZeroDivisors_of_injective
-  结论: [NoZeroDivisors M₀'] [MonoidWithZeroHomClass F M₀ M₀']
+  结论: [无零因子 M₀'] [带零幺半群态射类 F M₀ M₀']
   证明: by
   cases subsingleton_or_nontrivial M₀
   · simp [Subsingleton.elim S ⊥]
@@ -1115,7 +1115,7 @@ theorem nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
 
 中文:
 定理 nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
-  结论: [NoZeroDivisors M₀']
+  结论: [无零因子 M₀']
   证明: Submonoid.le_comap_of_map_le _ (map_le_nonZeroDivisors_of_injective _ hf le_rfl)
 
 Depends on / 依赖: Submonoid, Submonoid.le_comap_of_map_le, le_comap_of_map_le, le_rfl, map_le_nonZeroDivisors_of_injective
@@ -1135,7 +1135,7 @@ fun y hy => hf map_zero f ▸ hx.2 (f y) (map_mul f y x ▸ map_zero f ▸ congr
 
 中文:
 定理 mem_nonZeroDivisors_of_injective
-  结论: [MonoidWithZeroHomClass F M₀ M₀'] {f : F}
+  结论: [带零幺半群态射类 F M₀ M₀'] {f : F}
   证明: ⟨fun y hy => hf map_zero f ▸ hx.1 (f y) (map_mul f x y ▸ map_zero f ▸ congrArg f hy),
 fun y hy => hf map_zero f ▸ hx.2 (f y) (map_mul f y x ▸ map_zero f ▸ congrArg f hy)⟩
 
@@ -1156,7 +1156,7 @@ theorem comap_nonZeroDivisors_le_of_injective
 
 中文:
 定理 comap_nonZeroDivisors_le_of_injective
-  结论: [MonoidWithZeroHomClass F M₀ M₀'] {f : F}
+  结论: [带零幺半群态射类 F M₀ M₀'] {f : F}
   证明: fun _ ha => mem_nonZeroDivisors_of_injective hf (Submonoid.mem_comap.mp ha)
 
 Depends on / 依赖: Submonoid, Submonoid.mem_comap.mp, mem_comap, mem_nonZeroDivisors_of_injective
@@ -1281,7 +1281,7 @@ lemma notMem_nonZeroDivisors_iff_left
 
 中文:
 引理 notMem_nonZeroDivisors_iff_left
-  结论: r ∉ M₀⁰ ↔ {s | r * s = 0 ∧ s != 0}.Nonempty
+  结论: r ∉ M₀⁰ ↔ {s | r * s = 0 ∧ s != 0}.非空
   证明: by
   simp [mem_nonZeroDivisors_iff_left, Set.nonempty_def]
 
@@ -1301,7 +1301,7 @@ lemma notMem_nonZeroDivisors_iff_right
 
 中文:
 引理 notMem_nonZeroDivisors_iff_right
-  结论: r ∉ M₀⁰ ↔ {s | s * r = 0 ∧ s != 0}.Nonempty
+  结论: r ∉ M₀⁰ ↔ {s | s * r = 0 ∧ s != 0}.非空
   证明: by
   simp [mem_nonZeroDivisors_iff_right, Set.nonempty_def]
 
@@ -1479,7 +1479,7 @@ lemma isUnit_of_mem_nonZeroDivisors
 中文:
 引理 isUnit_of_mem_nonZeroDivisors
   条件: (hx : x in nonZeroDivisors G₀)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: (nonZeroDivisorsEquivUnits ⟨x, hx⟩).isUnit
 
 Depends on / 依赖: isUnit, nonZeroDivisorsEquivUnits

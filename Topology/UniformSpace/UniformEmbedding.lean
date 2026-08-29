@@ -89,7 +89,7 @@ lemma Filter.HasBasis.isUniformInducing_iff
   simp [isUniformInducing_iff', h.uniformContinuous_iff h', (h'.comap _).le_basis_iff h, subset_def]
 
 中文:
-引理 Filter.HasBasis.isUniformInducing_iff
+引理 滤子.有基.isUniformInducing_iff
   结论: {ι ι'} {p : ι -> 命题} {p' : ι' -> 命题} {s s'}
   证明: by
   simp [isUniformInducing_iff', h.uniformContinuous_iff h', (h'.comap _).le_basis_iff h, subset_def]
@@ -110,7 +110,7 @@ theorem IsUniformInducing.mk'
   proof: ⟨by simp [eq_comm, Filter.ext_iff, subset_def, h]⟩
 
 中文:
-定理 IsUniformInducing.mk'
+定理 是UniformInducing.mk'
   结论: {f : α -> β}
   证明: ⟨by simp [eq_comm, Filter.ext_iff, subset_def, h]⟩
 
@@ -129,8 +129,8 @@ theorem IsUniformInducing.id
   proof: ⟨by rw [← Prod.map_def, Prod.map_id, comap_id]⟩
 
 中文:
-定理 IsUniformInducing.id
-  结论: IsUniformInducing (@id α)
+定理 是UniformInducing.id
+  结论: 是UniformInducing (@id α)
   证明: ⟨by rw [← Prod.map_def, Prod.map_id, comap_id]⟩
 
 Depends on / 依赖: Prod.map_def, Prod.map_id, comap_id, map_def, map_id
@@ -147,8 +147,8 @@ theorem IsUniformInducing.comp
   proof: ⟨by rw [← hf.1, ← hg.1, comap_comap]; rfl⟩
 
 中文:
-定理 IsUniformInducing.comp
-  结论: {g : β -> γ} (hg : IsUniformInducing g) {f : α -> β}
+定理 是UniformInducing.comp
+  结论: {g : β -> γ} (hg : 是UniformInducing g) {f : α -> β}
   证明: ⟨by rw [← hf.1, ← hg.1, comap_comap]; rfl⟩
 
 Depends on / 依赖: comap_comap
@@ -168,8 +168,8 @@ theorem IsUniformInducing.of_comp_iff
   rw [isUniformInducing_iff]; rw [← hg.comap_uniformity]; rw [comap_comap]; rw [← h.comap_uniformity]; rw [Function.comp_def]; rw [Function.comp_def]
 
 中文:
-定理 IsUniformInducing.of_comp_iff
-  条件: {g : β -> γ} (hg : IsUniformInducing g) {f : α -> β}
+定理 是UniformInducing.of_comp_iff
+  条件: {g : β -> γ} (hg : 是UniformInducing g) {f : α -> β}
   证明: by
   refine ⟨fun h => ?_, hg.comp⟩
   rw [isUniformInducing_iff]; rw [← hg.comap_uniformity]; rw [comap_comap]; rw [← h.comap_uniformity]; rw [Function.comp_def]; rw [Function.comp_def]
@@ -190,8 +190,8 @@ theorem IsUniformInducing.basis_uniformity
   proof: hf.1 ▸ H.comap _
 
 中文:
-定理 IsUniformInducing.basis_uniformity
-  结论: {f : α -> β} (hf : IsUniformInducing f) {ι : Sort*}
+定理 是UniformInducing.basis_uniformity
+  结论: {f : α -> β} (hf : 是UniformInducing f) {ι : 类型层*}
   证明: hf.1 ▸ H.comap _
 
 Depends on / 依赖: H.comap
@@ -211,8 +211,8 @@ theorem IsUniformInducing.cauchy_map_iff
   simp only [Cauchy, map_neBot_iff, prod_map_map_eq, map_le_iff_le_comap, ← hf.comap_uniformity]
 
 中文:
-定理 IsUniformInducing.cauchy_map_iff
-  条件: {f : α -> β} (hf : IsUniformInducing f) {F : Filter α}
+定理 是UniformInducing.cauchy_map_iff
+  条件: {f : α -> β} (hf : 是UniformInducing f) {F : 滤子 α}
   证明: by
   simp only [Cauchy, map_neBot_iff, prod_map_map_eq, map_le_iff_le_comap, ← hf.comap_uniformity]
 
@@ -234,8 +234,8 @@ theorem IsUniformInducing.of_comp
   exact comap_mono hg.le_comap
 
 中文:
-定理 IsUniformInducing.of_comp
-  结论: {f : α -> β} {g : β -> γ} (hf : UniformContinuous f)
+定理 是UniformInducing.of_comp
+  结论: {f : α -> β} {g : β -> γ} (hf : 一致连续 f)
   证明: by
   refine ⟨le_antisymm ?_ hf.le_comap⟩
   rw [← hgf.1]; rw [← Prod.map_def]; rw [← Prod.map_def]; rw [← Prod.map_comp_map f f g g]; rw [← comap_comap]
@@ -258,8 +258,8 @@ theorem IsUniformInducing.uniformContinuous
   proof: (isUniformInducing_iff'.1 hf).1
 
 中文:
-定理 IsUniformInducing.uniformContinuous
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+定理 是UniformInducing.uniformContinuous
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: (isUniformInducing_iff'.1 hf).1
 
 Depends on / 依赖: isUniformInducing_iff
@@ -281,8 +281,8 @@ theorem IsUniformInducing.uniformContinuous_iff
 alias IsUniformInducing.isUniformInducing_comp_iff := IsUniformInducing.of_comp_iff
 
 中文:
-定理 IsUniformInducing.uniformContinuous_iff
-  条件: {f : α -> β} {g : β -> γ} (hg : IsUniformInducing g)
+定理 是UniformInducing.uniformContinuous_iff
+  条件: {f : α -> β} {g : β -> γ} (hg : 是UniformInducing g)
   证明: by
   dsimp only [UniformContinuous, Tendsto]
   simp only [← hg.comap_uniformity, ← map_le_iff_le_comap, Filter.map_map, Function.comp_def]
@@ -311,8 +311,8 @@ theorem IsUniformInducing.uniformContinuousOn_iff
   rw [← hg.comap_uniformity]; rw [← map_le_iff_le_comap]; rw [Filter.map_map]; rw [comp_def]; rw [comp_def]
 
 中文:
-定理 IsUniformInducing.uniformContinuousOn_iff
-  结论: {f : α -> β} {g : β -> γ} {S : Set α}
+定理 是UniformInducing.uniformContinuousOn_iff
+  结论: {f : α -> β} {g : β -> γ} {S : 集合 α}
   证明: by
   dsimp only [UniformContinuousOn, Tendsto]
   rw [← hg.comap_uniformity]; rw [← map_le_iff_le_comap]; rw [Filter.map_map]; rw [comp_def]; rw [comp_def]
@@ -337,9 +337,9 @@ theorem IsUniformInducing.isInducing
   exact .induced f
 
 中文:
-定理 IsUniformInducing.isInducing
-  条件: {f : α -> β} (h : IsUniformInducing f)
-  结论: IsInducing f
+定理 是UniformInducing.isInducing
+  条件: {f : α -> β} (h : 是UniformInducing f)
+  结论: 是Inducing f
   证明: by
   obtain rfl := h.comap_uniformSpace
   exact .induced f
@@ -359,8 +359,8 @@ theorem IsUniformInducing.prod
   proof: ⟨by simp [Function.comp_def, uniformity_prod, ← h₁.1, ← h₂.1, comap_inf, comap_comap]⟩
 
 中文:
-定理 IsUniformInducing.prod
-  结论: {α' : 类型} {β' : 类型} [UniformSpace α'] [UniformSpace β']
+定理 是UniformInducing.乘积
+  结论: {α' : 类型} {β' : 类型} [一致空间 α'] [一致空间 β']
   证明: ⟨by simp [Function.comp_def, uniformity_prod, ← h₁.1, ← h₂.1, comap_inf, comap_comap]⟩
 
 Depends on / 依赖: Function, Function.comp_def, comap_comap, comap_inf, comp_def, uniformity_prod
@@ -380,8 +380,8 @@ lemma IsUniformInducing.isDenseInducing
   dense := hd
 
 中文:
-引理 IsUniformInducing.isDenseInducing
-  条件: (h : IsUniformInducing f) (hd : DenseRange f)
+引理 是UniformInducing.isDenseInducing
+  条件: (h : 是UniformInducing f) (hd : DenseRange f)
   证明: h.isInducing
   dense := hd
 
@@ -418,8 +418,8 @@ theorem IsUniformInducing.injective
   proof: h.isInducing.injective
 
 中文:
-定理 IsUniformInducing.injective
-  条件: [T0Space α] {f : α -> β} (h : IsUniformInducing f)
+定理 是UniformInducing.injective
+  条件: [T0空间 α] {f : α -> β} (h : 是UniformInducing f)
   证明: h.isInducing.injective
 -/
 protected theorem IsUniformInducing.injective [T0Space α] {f : α -> β} (h : IsUniformInducing f) :
@@ -459,7 +459,7 @@ theorem Filter.HasBasis.isUniformEmbedding_iff'
   rw [isUniformEmbedding_iff]; rw [and_comm]; rw [h.isUniformInducing_iff h']
 
 中文:
-定理 Filter.HasBasis.isUniformEmbedding_iff'
+定理 滤子.有基.isUniformEmbedding_iff'
   结论: {ι ι'} {p : ι -> 命题} {p' : ι' -> 命题} {s s'}
   证明: by
   rw [isUniformEmbedding_iff]; rw [and_comm]; rw [h.isUniformInducing_iff h']
@@ -483,7 +483,7 @@ theorem Filter.HasBasis.isUniformEmbedding_iff
   simp only [h.isUniformEmbedding_iff' h', h.uniformContinuous_iff h']
 
 中文:
-定理 Filter.HasBasis.isUniformEmbedding_iff
+定理 滤子.有基.isUniformEmbedding_iff
   结论: {ι ι'} {p : ι -> 命题} {p' : ι' -> 命题} {s s'}
   证明: by
   simp only [h.isUniformEmbedding_iff' h', h.uniformContinuous_iff h']
@@ -529,7 +529,7 @@ theorem isUniformEmbedding_set_inclusion
 
 中文:
 定理 isUniformEmbedding_set_inclusion
-  条件: {s t : Set α} (hst : s subseteq t)
+  条件: {s t : 集合 α} (hst : s subseteq t)
   证明: by rw [uniformity_subtype, uniformity_subtype, comap_comap]; rfl
   injective := inclusion_injective hst
 
@@ -550,8 +550,8 @@ theorem IsUniformEmbedding.comp
   injective := hg.injective.comp hf.injective
 
 中文:
-定理 IsUniformEmbedding.comp
-  结论: {g : β -> γ} (hg : IsUniformEmbedding g) {f : α -> β}
+定理 是一致嵌入.comp
+  结论: {g : β -> γ} (hg : 是一致嵌入 g) {f : α -> β}
   证明: hg.isUniformInducing.comp hf.isUniformInducing
   injective := hg.injective.comp hf.injective
 
@@ -572,8 +572,8 @@ theorem IsUniformEmbedding.of_comp_iff
   simp_rw [isUniformEmbedding_iff, hg.isUniformInducing.of_comp_iff, hg.injective.of_comp_iff f]
 
 中文:
-定理 IsUniformEmbedding.of_comp_iff
-  条件: {g : β -> γ} (hg : IsUniformEmbedding g) {f : α -> β}
+定理 是一致嵌入.of_comp_iff
+  条件: {g : β -> γ} (hg : 是一致嵌入 g) {f : α -> β}
   证明: by
   simp_rw [isUniformEmbedding_iff, hg.isUniformInducing.of_comp_iff, hg.injective.of_comp_iff f]
 
@@ -592,8 +592,8 @@ theorem IsUniformEmbedding.of_comp
   proof: ⟨.of_comp hf hg hgf.isUniformInducing, .of_comp hgf.injective⟩
 
 中文:
-定理 IsUniformEmbedding.of_comp
-  结论: {f : α -> β} {g : β -> γ} (hf : UniformContinuous f)
+定理 是一致嵌入.of_comp
+  结论: {f : α -> β} {g : β -> γ} (hf : 一致连续 f)
   证明: ⟨.of_comp hf hg hgf.isUniformInducing, .of_comp hgf.injective⟩
 
 Depends on / 依赖: hgf.injective, hgf.isUniformInducing, injective, isUniformInducing, of_comp
@@ -611,8 +611,8 @@ theorem Equiv.isUniformEmbedding
   proof: isUniformEmbedding_iff'.2 ⟨f.injective, h₁, by rwa [← Equiv.prodCongr_apply, ← map_equiv_symm]⟩
 
 中文:
-定理 Equiv.isUniformEmbedding
-  结论: {α β : 类型} [UniformSpace α] [UniformSpace β] (f : α ≃ β)
+定理 等价.isUniformEmbedding
+  结论: {α β : 类型} [一致空间 α] [一致空间 β] (f : α ≃ β)
   证明: isUniformEmbedding_iff'.2 ⟨f.injective, h₁, by rwa [← Equiv.prodCongr_apply, ← map_equiv_symm]⟩
 
 Depends on / 依赖: Equiv.prodCongr_apply, f.injective, injective, isUniformEmbedding_iff, map_equiv_symm, prodCongr_apply
@@ -634,7 +634,7 @@ theorem isUniformEmbedding_inl
 
 中文:
 定理 isUniformEmbedding_inl
-  结论: IsUniformEmbedding (Sum.inl : α -> α oplus β)
+  结论: 是一致嵌入 (和.inl : α -> α oplus β)
   证明: isUniformEmbedding_iff'.2 ⟨Sum.inl_injective, uniformContinuous_inl, fun s hs =>
     ⟨Prod.map Sum.inl Sum.inl '' s union range (Prod.map Sum.inr Sum.inr),
       union_mem_sup (image_mem_map hs) range_mem_map,
@@ -661,7 +661,7 @@ theorem isUniformEmbedding_inr
 
 中文:
 定理 isUniformEmbedding_inr
-  结论: IsUniformEmbedding (Sum.inr : β -> α oplus β)
+  结论: 是一致嵌入 (和.inr : β -> α oplus β)
   证明: isUniformEmbedding_iff'.2 ⟨Sum.inr_injective, uniformContinuous_inr, fun s hs =>
     ⟨range (Prod.map Sum.inl Sum.inl) union Prod.map Sum.inr Sum.inr '' s,
       union_mem_sup range_mem_map (image_mem_map hs),
@@ -684,8 +684,8 @@ theorem IsUniformInducing.isUniformEmbedding
   proof: ⟨hf, hf.isInducing.injective⟩
 
 中文:
-定理 IsUniformInducing.isUniformEmbedding
-  结论: [T0Space α] {f : α -> β}
+定理 是UniformInducing.isUniformEmbedding
+  结论: [T0空间 α] {f : α -> β}
   证明: ⟨hf, hf.isInducing.injective⟩
 -/
 protected theorem IsUniformInducing.isUniformEmbedding [T0Space α] {f : α -> β}
@@ -702,7 +702,7 @@ theorem isUniformEmbedding_iff_isUniformInducing
 
 中文:
 定理 isUniformEmbedding_iff_isUniformInducing
-  条件: [T0Space α] {f : α -> β}
+  条件: [T0空间 α] {f : α -> β}
   证明: ⟨IsUniformEmbedding.isUniformInducing, IsUniformInducing.isUniformEmbedding⟩
 
 Depends on / 依赖: IsUniformEmbedding, IsUniformEmbedding.isUniformInducing, IsUniformInducing, IsUniformInducing.isUniformEmbedding, isUniformEmbedding, isUniformInducing
@@ -727,7 +727,7 @@ theorem comap_uniformity_of_spaced_out
 
 中文:
 定理 comap_uniformity_of_spaced_out
-  结论: {α} {f : α -> β} {s : Set (β × β)} (hs : s in 𝓤 β)
+  结论: {α} {f : α -> β} {s : 集合 (β × β)} (hs : s in 𝓤 β)
   证明: by
   refine le_antisymm ?_ (@refl_le_uniformity α (UniformSpace.comap f _))
   calc
@@ -759,7 +759,7 @@ theorem isUniformEmbedding_of_spaced_out
 
 中文:
 定理 isUniformEmbedding_of_spaced_out
-  结论: {α} {f : α -> β} {s : Set (β × β)} (hs : s in 𝓤 β)
+  结论: {α} {f : α -> β} {s : 集合 (β × β)} (hs : s in 𝓤 β)
   证明: by
   let _ : UniformSpace α := ⊥; have := discreteTopology_bot α
   exact IsUniformInducing.isUniformEmbedding ⟨comap_uniformity_of_spaced_out hs hf⟩
@@ -781,8 +781,8 @@ lemma IsUniformEmbedding.isEmbedding
   injective := h.injective
 
 中文:
-引理 IsUniformEmbedding.isEmbedding
-  条件: {f : α -> β} (h : IsUniformEmbedding f)
+引理 是一致嵌入.isEmbedding
+  条件: {f : α -> β} (h : 是一致嵌入 f)
   证明: h.toIsUniformInducing.isInducing
   injective := h.injective
 -/
@@ -800,8 +800,8 @@ theorem IsUniformEmbedding.isDenseEmbedding
   proof: { h.isEmbedding with dense := hd }
 
 中文:
-定理 IsUniformEmbedding.isDenseEmbedding
-  结论: {f : α -> β} (h : IsUniformEmbedding f)
+定理 是一致嵌入.isDenseEmbedding
+  结论: {f : α -> β} (h : 是一致嵌入 f)
   证明: { h.isEmbedding with dense := hd }
 
 Depends on / 依赖: h.isEmbedding, isEmbedding
@@ -824,7 +824,7 @@ theorem isClosedEmbedding_of_spaced_out
 
 中文:
 定理 isClosedEmbedding_of_spaced_out
-  结论: {α} [TopologicalSpace α] [DiscreteTopology α]
+  结论: {α} [拓扑空间 α] [离散拓扑 α]
   证明: by
   rcases @DiscreteTopology.eq_bot α _ _ with rfl; let _ : UniformSpace α := ⊥
   exact
@@ -855,7 +855,7 @@ theorem closure_image_mem_nhds_of_isUniformInducing
 
 中文:
 定理 closure_image_mem_nhds_of_isUniformInducing
-  结论: {s : Set (α × α)} {e : α -> β} (b : β)
+  结论: {s : 集合 (α × α)} {e : α -> β} (b : β)
   证明: by
   obtain ⟨U, ⟨hU, hUo, hsymm⟩, hs⟩ :
     exists U, (U in 𝓤 β ∧ IsOpen U ∧ SetRel.IsSymm U) ∧ Prod.map e e ⁻¹' U subseteq s := by
@@ -891,7 +891,7 @@ theorem isUniformEmbedding_subtypeEmb
 
 中文:
 定理 isUniformEmbedding_subtypeEmb
-  结论: (p : α -> 命题) {e : α -> β} (ue : IsUniformEmbedding e)
+  结论: (p : α -> 命题) {e : α -> β} (ue : 是一致嵌入 e)
   证明: { comap_uniformity := by
       simp [comap_comap, Function.comp_def, IsDenseEmbedding.subtypeEmb, uniformity_subtype,
         ue.comap_uniformity.symm]
@@ -916,8 +916,8 @@ theorem IsUniformEmbedding.prod
   injective := h₁.injective.prodMap h₂.injective
 
 中文:
-定理 IsUniformEmbedding.prod
-  结论: {α' : 类型} {β' : 类型} [UniformSpace α'] [UniformSpace β']
+定理 是一致嵌入.乘积
+  结论: {α' : 类型} {β' : 类型} [一致空间 α'] [一致空间 β']
   证明: h₁.isUniformInducing.prod h₂.isUniformInducing
   injective := h₁.injective.prodMap h₂.injective
 
@@ -943,7 +943,7 @@ theorem isComplete_image_iff
 
 中文:
 定理 isComplete_image_iff
-  条件: {m : α -> β} {s : Set α} (hm : IsUniformInducing m)
+  条件: {m : α -> β} {s : 集合 α} (hm : 是UniformInducing m)
   证明: by
 .filter_map_Iic have fact1 : SurjOn (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := surjOn_image ..
 .filter_map_Iic have fact2 : MapsTo (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := mapsTo_image ..
@@ -968,8 +968,8 @@ theorem IsUniformInducing.isComplete_iff
   proof: isComplete_image_iff hf
 
 中文:
-定理 IsUniformInducing.isComplete_iff
-  条件: {f : α -> β} {s : Set α} (hf : IsUniformInducing f)
+定理 是UniformInducing.isComplete_iff
+  条件: {f : α -> β} {s : 集合 α} (hf : 是UniformInducing f)
   证明: isComplete_image_iff hf
 
 Depends on / 依赖: isComplete_image_iff
@@ -986,8 +986,8 @@ theorem IsUniformEmbedding.isComplete_iff
   proof: hf.isUniformInducing.isComplete_iff
 
 中文:
-定理 IsUniformEmbedding.isComplete_iff
-  条件: {f : α -> β} {s : Set α} (hf : IsUniformEmbedding f)
+定理 是一致嵌入.isComplete_iff
+  条件: {f : α -> β} {s : 集合 α} (hf : 是一致嵌入 f)
   证明: hf.isUniformInducing.isComplete_iff
 
 Depends on / 依赖: hf.isUniformInducing.isComplete_iff, isComplete_iff, isUniformInducing
@@ -1006,8 +1006,8 @@ theorem Subtype.isComplete_iff
 alias ⟨isComplete_of_complete_image, _⟩ := isComplete_image_iff
 
 中文:
-定理 Subtype.isComplete_iff
-  条件: {p : α -> 命题} {s : Set { x // p x }}
+定理 子类型.isComplete_iff
+  条件: {p : α -> 命题} {s : 集合 { x // p x }}
   证明: isUniformEmbedding_subtype_val.isComplete_iff.symm
 
 alias ⟨isComplete_of_complete_image, _⟩ := isComplete_image_iff
@@ -1033,7 +1033,7 @@ alias ⟨_, IsUniformInducing.completeSpace⟩ := completeSpace_iff_isComplete_r
 
 中文:
 定理 completeSpace_iff_isComplete_range
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: by
   rw [completeSpace_iff_isComplete_univ]; rw [← isComplete_image_iff hf]; rw [image_univ]
 
@@ -1056,8 +1056,8 @@ lemma IsUniformInducing.isComplete_range
   proof: (completeSpace_iff_isComplete_range hf).1 ‹_›
 
 中文:
-引理 IsUniformInducing.isComplete_range
-  条件: [CompleteSpace α] (hf : IsUniformInducing f)
+引理 是UniformInducing.isComplete_range
+  条件: [完备空间 α] (hf : 是UniformInducing f)
   证明: (completeSpace_iff_isComplete_range hf).1 ‹_›
 
 Depends on / 依赖: completeSpace_iff_isComplete_range
@@ -1076,8 +1076,8 @@ theorem IsUniformInducing.completeSpace_congr
   rw [completeSpace_iff_isComplete_range hf]; rw [hsurj.range_eq]; rw [completeSpace_iff_isComplete_univ]
 
 中文:
-定理 IsUniformInducing.completeSpace_congr
-  结论: {f : α -> β} (hf : IsUniformInducing f)
+定理 是UniformInducing.completeSpace_congr
+  结论: {f : α -> β} (hf : 是UniformInducing f)
   证明: by
   rw [completeSpace_iff_isComplete_range hf]; rw [hsurj.range_eq]; rw [completeSpace_iff_isComplete_univ]
 
@@ -1114,7 +1114,7 @@ instance SeparationQuotient.instCompleteSpace
 
 中文:
 实例 SeparationQuotient.instCompleteSpace
-  签名: [CompleteSpace α]
+  签名: [完备空间 α]
   定义体: completeSpace_iff.2 ‹_›
 
 Depends on / 依赖: completeSpace_iff
@@ -1133,7 +1133,7 @@ theorem completeSpace_congr
 
 中文:
 定理 completeSpace_congr
-  条件: {e : α ≃ β} (he : IsUniformEmbedding e)
+  条件: {e : α ≃ β} (he : 是一致嵌入 e)
   证明: he.completeSpace_congr e.surjective
 
 Depends on / 依赖: completeSpace_congr, e.surjective, he.completeSpace_congr, surjective
@@ -1156,8 +1156,8 @@ alias ⟨_, IsComplete.completeSpace_coe⟩ := completeSpace_coe_iff_isComplete
 
 中文:
 定理 completeSpace_coe_iff_isComplete
-  条件: {s : Set α}
-  结论: CompleteSpace s ↔ IsComplete s
+  条件: {s : 集合 α}
+  结论: 完备空间 s ↔ 是完备 s
   证明: by
   rw [completeSpace_iff_isComplete_range isUniformEmbedding_subtype_val.isUniformInducing]; rw [Subtype.range_coe]
 
@@ -1179,8 +1179,8 @@ instance IsClosed.completeSpace_coe
   body: hs.isComplete.completeSpace_coe
 
 中文:
-实例 IsClosed.completeSpace_coe
-  签名: [CompleteSpace α] {s : Set α} [hs : IsClosed s]
+实例 是闭集.completeSpace_coe
+  签名: [完备空间 α] {s : 集合 α} [hs : 是闭集 s]
   定义体: hs.isComplete.completeSpace_coe
 
 Depends on / 依赖: completeSpace_coe, hs.isComplete.completeSpace_coe, isComplete
@@ -1198,7 +1198,7 @@ theorem completeSpace_ulift_iff
 
 中文:
 定理 completeSpace_ulift_iff
-  结论: CompleteSpace (ULift α) ↔ CompleteSpace α
+  结论: 完备空间 (类型层提升 α) ↔ 完备空间 α
   证明: IsUniformInducing.completeSpace_congr ⟨rfl⟩ ULift.down_surjective
 
 Depends on / 依赖: IsUniformInducing, IsUniformInducing.completeSpace_congr, ULift.down_surjective, completeSpace_congr, down_surjective
@@ -1215,8 +1215,8 @@ instance ULift.instCompleteSpace
   body: completeSpace_ulift_iff.2 ‹_›
 
 中文:
-实例 ULift.instCompleteSpace
-  签名: [CompleteSpace α]
+实例 类型层提升.instCompleteSpace
+  签名: [完备空间 α]
   定义体: completeSpace_ulift_iff.2 ‹_›
 
 Depends on / 依赖: completeSpace_ulift_iff
@@ -1238,7 +1238,7 @@ theorem completeSpace_extension
 
 中文:
 定理 completeSpace_extension
-  结论: {m : β -> α} (hm : IsUniformInducing m) (dense : DenseRange m)
+  结论: {m : β -> α} (hm : 是UniformInducing m) (dense : DenseRange m)
   证明: ⟨fun {f : Filter α} (hf : Cauchy f) =>
     let p : Set (α × α) -> Set α -> Set α := fun s t => { y : α | exists x : α, x in t ∧ (x, y) in s }
     let g := (𝓤 α).lift fun s => f.lift' (p s)
@@ -1310,8 +1310,8 @@ lemma Filter.totallyBounded_map_iff
   simp_rw
 
 中文:
-引理 Filter.totallyBounded_map_iff
-  条件: {f : α -> β} {F : Filter α} (hf : IsUniformInducing f)
+引理 滤子.totallyBounded_map_iff
+  条件: {f : α -> β} {F : 滤子 α} (hf : 是UniformInducing f)
   证明: by
   refine ⟨fun hs => ?_, fun h => h.map hf.uniformContinuous⟩
   simp_rw [(hf.basis_uniformity (basis_sets _)).filter_totallyBounded_iff]
@@ -1345,7 +1345,7 @@ lemma totallyBounded_image_iff
 
 中文:
 引理 totallyBounded_image_iff
-  条件: {f : α -> β} {s : Set α} (hf : IsUniformInducing f)
+  条件: {f : α -> β} {s : 集合 α} (hf : 是UniformInducing f)
   证明: by
   simp_rw [← totallyBounded_principal_iff, ← map_principal, totallyBounded_map_iff hf]
 
@@ -1365,7 +1365,7 @@ theorem totallyBounded_preimage
 
 中文:
 定理 totallyBounded_preimage
-  结论: {f : α -> β} {s : Set β} (hf : IsUniformInducing f)
+  结论: {f : α -> β} {s : 集合 β} (hf : 是UniformInducing f)
   证明: (totallyBounded_image_iff hf).1 hs.subset image_preimage_subset ..
 
 Depends on / 依赖: hs.subset, image_preimage_subset, subset, totallyBounded_image_iff
@@ -1383,8 +1383,8 @@ theorem Filter.totallyBounded_comap
   proof: (totallyBounded_map_iff hf).1 hF.mono map_comap_le
 
 中文:
-定理 Filter.totallyBounded_comap
-  结论: {f : α -> β} {F : Filter β} (hf : IsUniformInducing f)
+定理 滤子.totallyBounded_comap
+  结论: {f : α -> β} {F : 滤子 β} (hf : 是UniformInducing f)
   证明: (totallyBounded_map_iff hf).1 hF.mono map_comap_le
 
 Depends on / 依赖: hF.mono, map_comap_le, totallyBounded_map_iff
@@ -1405,8 +1405,8 @@ instance CompleteSpace.sum
     isUniformEmbedding_inr.isUniformInducing.isComplete_range
 
 中文:
-实例 CompleteSpace.sum
-  签名: [CompleteSpace α] [CompleteSpace β]
+实例 完备空间.求和
+  签名: [完备空间 α] [完备空间 β]
   定义体: by
   rw [completeSpace_iff_isComplete_univ]; rw [← range_inl_union_range_inr]
   exact isUniformEmbedding_inl.isUniformInducing.isComplete_range.union
@@ -1431,7 +1431,7 @@ theorem IsUniformEmbedding.discreteUniformity
     hf.injective.eq_iff]
 
 中文:
-定理 IsUniformEmbedding.discreteUniformity
+定理 是一致嵌入.discreteUniformity
   结论: [DiscreteUniformity β] {f : α -> β}
   证明: by
   simp_rw [discreteUniformity_iff_eq_principal_setRelId, ← hf.comap_uniformity,
@@ -1459,7 +1459,7 @@ theorem isUniformEmbedding_comap
 
 中文:
 定理 isUniformEmbedding_comap
-  结论: {α : 类型} {β : 类型} {f : α -> β} [u : UniformSpace β]
+  结论: {α : 类型} {β : 类型} {f : α -> β} [u : 一致空间 β]
   证明: @IsUniformEmbedding.mk _ _ (UniformSpace.comap f u) _ _
     (@IsUniformInducing.mk _ _ (UniformSpace.comap f u) _ _ rfl) hf
 
@@ -1482,8 +1482,8 @@ definition Topology.IsEmbedding.comapUniformSpace
   body: (u.comap f).replaceTopology h.eq_induced
 
 中文:
-定义 Topology.IsEmbedding.comapUniformSpace
-  签名: {α β} [TopologicalSpace α] [u : UniformSpace β]
+定义 拓扑.是嵌入.comapUniformSpace
+  签名: {α β} [拓扑空间 α] [u : 一致空间 β]
   定义体: (u.comap f).replaceTopology h.eq_induced
 
 Depends on / 依赖: eq_induced, h.eq_induced, replaceTopology, u.comap
@@ -1503,8 +1503,8 @@ theorem Embedding.to_isUniformEmbedding
     injective := h.injective }
 
 中文:
-定理 Embedding.to_isUniformEmbedding
-  结论: {α β} [TopologicalSpace α] [u : UniformSpace β] (f : α -> β)
+定理 嵌入.to_isUniformEmbedding
+  结论: {α β} [拓扑空间 α] [u : 一致空间 β] (f : α -> β)
   证明: let _ := h.comapUniformSpace f
   { comap_uniformity := rfl
     injective := h.injective }
@@ -1541,9 +1541,9 @@ theorem uniformly_extend_exists
   CompleteSpace.complete this
 
 中文:
-定理 uniformly_extend_exists
-  条件: [CompleteSpace γ] (a : α)
-  结论: 存在 c, Tendsto f (comap e (𝓝 a)) (𝓝 c)
+定理 uniformly_extend_存在
+  条件: [完备空间 γ] (a : α)
+  结论: 存在 c, 收敛 f (comap e (𝓝 a)) (𝓝 c)
   证明: let de := h_e.isDenseInducing h_dense
   have : Cauchy (𝓝 a) := cauchy_nhds
   have : Cauchy (comap e (𝓝 a)) :=
@@ -1577,7 +1577,7 @@ theorem uniform_extend_subtype
 
 中文:
 定理 uniform_extend_subtype
-  结论: [CompleteSpace γ] {p : α -> 命题} {e : α -> β} {f : α -> γ} {b : β}
+  结论: [完备空间 γ] {p : α -> 命题} {e : α -> β} {f : α -> γ} {b : β}
   证明: by
   have de : IsDenseEmbedding e := he.isDenseEmbedding hd
   have de' : IsDenseEmbedding (IsDenseEmbedding.subtypeEmb p e) := de.subtype p
@@ -1621,8 +1621,8 @@ include h_f in
 
 中文:
 定理 uniformly_extend_spec
-  条件: [CompleteSpace γ] (a : α)
-  结论: Tendsto f (comap e (𝓝 a)) (𝓝 (ψ a))
+  条件: [完备空间 γ] (a : α)
+  结论: 收敛 f (comap e (𝓝 a)) (𝓝 (ψ a))
   证明: by
   simpa only [IsDenseInducing.extend] using
     tendsto_nhds_limUnder (uniformly_extend_exists h_e ‹_› h_f _)
@@ -1653,8 +1653,8 @@ theorem uniformContinuous_uniformly_extend
 
 中文:
 定理 uniformContinuous_uniformly_extend
-  条件: [CompleteSpace γ]
-  结论: UniformContinuous ψ
+  条件: [完备空间 γ]
+  结论: 一致连续 ψ
   证明: fun d hd =>
   let ⟨s, hs, hs_comp⟩ := comp3_mem_uniformity hd
   have h_pnt : forall {a m}, m in 𝓝 a -> exists c in f '' e ⁻¹' m, (c, ψ a) in s ∧ (ψ a, c) in s :=
@@ -1723,7 +1723,7 @@ theorem uniformly_extend_unique
 
 中文:
 定理 uniformly_extend_unique
-  条件: {g : α -> γ} (hg : 对任意 b, g (e b) = f b) (hc : Continuous g)
+  条件: {g : α -> γ} (hg : 对任意 b, g (e b) = f b) (hc : 连续 g)
   结论: ψ = g
   证明: IsDenseInducing.extend_unique _ hg hc
 
@@ -1750,7 +1750,7 @@ theorem isUniformInducing_val
 
 中文:
 定理 isUniformInducing_val
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: ⟨uniformity_setCoe⟩
 
 @[simp]
@@ -1791,8 +1791,8 @@ theorem UniformContinuous.rangeFactorization
 @[simp]
 
 中文:
-定理 UniformContinuous.rangeFactorization
-  条件: {f : α -> β} (hf : UniformContinuous f)
+定理 一致连续.rangeFactorization
+  条件: {f : α -> β} (hf : 一致连续 f)
   证明: uniformContinuous_rangeFactorization_iff.mpr hf
 
 @[simp]
@@ -1832,8 +1832,8 @@ theorem IsUniformInducing.rangeFactorization
   proof: isUniformInducing_rangeFactorization_iff.2 hf
 
 中文:
-定理 IsUniformInducing.rangeFactorization
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+定理 是UniformInducing.rangeFactorization
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: isUniformInducing_rangeFactorization_iff.2 hf
 
 Depends on / 依赖: isUniformInducing_rangeFactorization_iff
@@ -1855,8 +1855,8 @@ theorem extend_exists
   proof: uniformly_extend_exists (isUniformInducing_val s) hs.denseRange_val hf a
 
 中文:
-定理 extend_exists
-  条件: [CompleteSpace β] (hs : Dense s) (hf : UniformContinuous f) (a : α)
+定理 extend_存在
+  条件: [完备空间 β] (hs : 稠密 s) (hf : 一致连续 f) (a : α)
   证明: uniformly_extend_exists (isUniformInducing_val s) hs.denseRange_val hf a
 
 Depends on / 依赖: denseRange_val, hs.denseRange_val, isUniformInducing_val, uniformly_extend_exists
@@ -1875,7 +1875,7 @@ theorem extend_spec
 
 中文:
 定理 extend_spec
-  条件: [CompleteSpace β] (hs : Dense s) (hf : UniformContinuous f) (a : α)
+  条件: [完备空间 β] (hs : 稠密 s) (hf : 一致连续 f) (a : α)
   证明: uniformly_extend_spec (isUniformInducing_val s) hs.denseRange_val hf a
 
 Depends on / 依赖: denseRange_val, hs.denseRange_val, isUniformInducing_val, uniformly_extend_spec
@@ -1894,7 +1894,7 @@ theorem uniformContinuous_extend
 
 中文:
 定理 uniformContinuous_extend
-  条件: [CompleteSpace β] (hs : Dense s) (hf : UniformContinuous f)
+  条件: [完备空间 β] (hs : 稠密 s) (hf : 一致连续 f)
   证明: uniformContinuous_uniformly_extend (isUniformInducing_val s) hs.denseRange_val hf
 
 Depends on / 依赖: denseRange_val, hs.denseRange_val, isUniformInducing_val, uniformContinuous_uniformly_extend
@@ -1915,7 +1915,7 @@ theorem extend_of_ind
 
 中文:
 定理 extend_of_ind
-  条件: (hs : Dense s) (hf : UniformContinuous f) (x : s)
+  条件: (hs : 稠密 s) (hf : 一致连续 f) (x : s)
   证明: IsDenseInducing.extend_eq_at _ hf.continuous.continuousAt
 
 Depends on / 依赖: IsDenseInducing, IsDenseInducing.extend_eq_at, continuous, continuousAt, extend_eq_at, hf.continuous.continuousAt
@@ -1941,8 +1941,8 @@ lemma IsDenseInducing.isUniformInducing_extend
     (isUniformEmbedding_set_inclusion 
 
 中文:
-引理 IsDenseInducing.isUniformInducing_extend
-  结论: {γ : 类型} [UniformSpace γ]
+引理 是DenseInducing.isUniformInducing_extend
+  结论: {γ : 类型} [一致空间 γ]
   证明: by
   let sf := SeparationQuotient.mk ∘ f
   have : CompleteSpace (closure (range sf)) :=

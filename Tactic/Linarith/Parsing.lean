@@ -51,8 +51,8 @@ definition List.findDefeq
     failure
 
 中文:
-定义 List.findDefeq
-  签名: {v : Type} (red : TransparencyMode) (m : List (Expr × v)) (e : Expr)
+定义 列表.findDefeq
+  签名: {v : 类型} (red : TransparencyMode) (m : 列表 (Expr × v)) (e : Expr)
   定义体: do
   if let some (_, n) ← m.findM? fun ⟨e', _⟩ => withTransparency red (isDefEq e e') then
     return n
@@ -90,7 +90,7 @@ abbreviation Monom
 
 中文:
 缩写 Monom
-  签名: : Type
+  签名: : 类型
   定义体: TreeMap Nat Nat
 
 Depends on / 依赖: TreeMap
@@ -126,7 +126,7 @@ definition Monom.lt
 
 中文:
 定义 Monom.lt
-  签名: : Monom -> Monom -> 布尔
+  签名: : Monom -> Monom -> 布尔值
   定义体: fun a b =>
     ((a.keys : List Nat) < b.keys) ||
       (((a.keys : List Nat) = b.keys) && ((a.values : List Nat) < b.values))
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord Monom
+  签名: 序 Monom
   定义体: if x.lt y then .lt else if x == y then .eq else .gt
 
 Depends on / 依赖: x.lt
@@ -165,8 +165,8 @@ abbreviation Sum
   body: TreeMap Monom Int
 
 中文:
-缩写 Sum
-  签名: : Type
+缩写 和
+  签名: : 类型
   定义体: TreeMap Monom Int
 
 Depends on / 依赖: TreeMap
@@ -182,8 +182,8 @@ definition Sum.one
   body: TreeMap.empty.insert Monom.one 1
 
 中文:
-定义 Sum.one
-  签名: : Sum
+定义 和.one
+  签名: : 和
   定义体: TreeMap.empty.insert Monom.one 1
 
 Depends on / 依赖: Monom.one, TreeMap, TreeMap.empty.insert, insert
@@ -199,8 +199,8 @@ definition Sum.scaleByMonom
   body: s.foldr (fun m' coeff sm => sm.insert (m + m') coeff) TreeMap.empty
 
 中文:
-定义 Sum.scaleByMonom
-  签名: (s : Sum) (m : Monom)
+定义 和.scaleByMonom
+  签名: (s : 和) (m : Monom)
   定义体: s.foldr (fun m' coeff sm => sm.insert (m + m') coeff) TreeMap.empty
 
 Depends on / 依赖: TreeMap, TreeMap.empty, insert, s.foldr, sm.insert
@@ -218,8 +218,8 @@ definition Sum.mul
     TreeMap.empty
 
 中文:
-定义 Sum.mul
-  签名: (s1 s2 : Sum)
+定义 和.mul
+  签名: (s1 s2 : 和)
   定义体: s1.foldr (fun mn coeff sm => sm + ((s2.scaleByMonom mn).map (fun _ v => v * coeff)))
     TreeMap.empty
 
@@ -243,8 +243,8 @@ definition Sum.pow
 .mul s a.mul a
 
 中文:
-定义 Sum.pow
-  签名: (s : Sum)
+定义 和.pow
+  签名: (s : 和)
   定义体: n >>> 1
     let a := s.pow m
     if n &&& 1 = 0 then
@@ -466,7 +466,7 @@ definition elimMonom
 
 中文:
 定义 elimMonom
-  签名: (s : Sum) (m : TreeMap Monom 自然数)
+  签名: (s : 和) (m : TreeMap Monom 自然数)
   定义体: s.foldr (fun mn coeff ⟨map, out⟩ =>
     match map[mn]? with
     | some n => ⟨map, out.insert n coeff⟩
@@ -550,7 +550,7 @@ definition linearFormsAndMaxVar
 
 中文:
 定义 linearFormsAndMaxVar
-  签名: (red : TransparencyMode) (pfs : List Expr)
+  签名: (red : TransparencyMode) (pfs : 列表 Expr)
   定义体: do
   let pftps ← (pfs.mapM inferType)
   let (l, _, map) ← toCompFold red [] pftps TreeMap.empty

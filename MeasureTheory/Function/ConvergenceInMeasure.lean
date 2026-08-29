@@ -61,7 +61,7 @@ definition TendstoInMeasure
 
 中文:
 定义 TendstoInMeasure
-  签名: [EDist E] {_ : MeasurableSpace α} (μ : Measure α) (f : ι -> α -> E)
+  签名: [EDist E] {_ : 可测空间 α} (μ : 测度 α) (f : ι -> α -> E)
   定义体: forall ε, 0 < ε -> Tendsto (fun i => μ { x | ε <= edist (f i x) (g x) }) l (𝓝 0)
 
 Depends on / 依赖: Tendsto
@@ -89,7 +89,7 @@ lemma tendstoInMeasure_of_ne_top
 
 中文:
 引理 tendstoInMeasure_of_ne_top
-  结论: [EDist E] {f : ι -> α -> E} {l : Filter ι} {g : α -> E}
+  结论: [EDist E] {f : ι -> α -> E} {l : 滤子 ι} {g : α -> E}
   证明: by
   intro ε hε
   by_cases hε_top : ε = ∞
@@ -128,7 +128,7 @@ theorem tendstoInMeasure_iff_enorm
 
 中文:
 定理 tendstoInMeasure_iff_enorm
-  结论: [SeminormedAddCommGroup E] {l : Filter ι} {f : ι -> α -> E}
+  结论: [SeminormedAddComm群 E] {l : 滤子 ι} {f : ι -> α -> E}
   证明: by
   simp_rw [← edist_eq_enorm_sub]
   exact ⟨fun h ε hε hε_top => h ε hε, tendstoInMeasure_of_ne_top⟩
@@ -154,8 +154,8 @@ theorem tendstoInMeasure_iff_measureReal_enorm
   simp_rw [measureReal_def, ENNReal.tendsto_toReal_zero_iff (fun _ => measure_ne_top _ _)]
 
 中文:
-定理 tendstoInMeasure_iff_measureReal_enorm
-  结论: [SeminormedAddCommGroup E] [IsFiniteMeasure μ]
+定理 tendstoInMeasure_iff_measure实数_enorm
+  结论: [SeminormedAddComm群 E] [是有限测度 μ]
   证明: by
   rw [tendstoInMeasure_iff_enorm]
   congr! with ε hε hε_top
@@ -186,7 +186,7 @@ lemma tendstoInMeasure_iff_dist
 
 中文:
 引理 tendstoInMeasure_iff_dist
-  条件: [PseudoMetricSpace E] {f : ι -> α -> E} {l : Filter ι} {g : α -> E}
+  条件: [伪度量空间 E] {f : ι -> α -> E} {l : 滤子 ι} {g : α -> E}
   证明: by
   refine ⟨fun h ε hε => ?_, fun h => ?_⟩
   · convert! h (ENNReal.ofReal ε) (ENNReal.ofReal_pos.mpr hε) with i a
@@ -218,8 +218,8 @@ lemma tendstoInMeasure_iff_measureReal_dist
   simp_rw [measureReal_def, ENNReal.tendsto_toReal_zero_iff (fun _ => measure_ne_top _ _)]
 
 中文:
-引理 tendstoInMeasure_iff_measureReal_dist
-  结论: [PseudoMetricSpace E] [IsFiniteMeasure μ]
+引理 tendstoInMeasure_iff_measure实数_dist
+  结论: [伪度量空间 E] [是有限测度 μ]
   证明: by
   rw [tendstoInMeasure_iff_dist]
   congr! with ε hε hε_top
@@ -246,7 +246,7 @@ theorem tendstoInMeasure_iff_norm
 
 中文:
 定理 tendstoInMeasure_iff_norm
-  结论: [SeminormedAddCommGroup E] {l : Filter ι} {f : ι -> α -> E}
+  结论: [SeminormedAddComm群 E] {l : 滤子 ι} {f : ι -> α -> E}
   证明: by
   simp_rw [tendstoInMeasure_iff_dist, dist_eq_norm_sub]
 
@@ -270,8 +270,8 @@ lemma tendstoInMeasure_iff_measureReal_norm
   simp_rw [measureReal_def, ENNReal.tendsto_toReal_zero_iff (fun _ => measure_ne_top _ _)]
 
 中文:
-引理 tendstoInMeasure_iff_measureReal_norm
-  结论: [SeminormedAddCommGroup E] [IsFiniteMeasure μ]
+引理 tendstoInMeasure_iff_measure实数_norm
+  结论: [SeminormedAddComm群 E] [是有限测度 μ]
   证明: by
   rw [tendstoInMeasure_iff_norm]
   congr! with ε hε hε_top
@@ -301,8 +301,8 @@ theorem tendstoInMeasure_iff_tendsto_toNNReal
         ENNReal.toNNReal ∘ (fun i => (μ { x | ε <= edist (f i x) 
 
 中文:
-定理 tendstoInMeasure_iff_tendsto_toNNReal
-  结论: [EDist E] [IsFiniteMeasure μ]
+定理 tendstoInMeasure_iff_tendsto_toNN实数
+  结论: [EDist E] [是有限测度 μ]
   证明: by
   have hfin ε i : μ { x | ε <= edist (f i x) (g x) } != ⊤ :=
     measure_ne_top μ {x | ε <= edist (f i x) (g x)}
@@ -340,7 +340,7 @@ lemma mono
 
 中文:
 引理 mono
-  条件: {v : Filter ι} (huv : v <= l) (hg : TendstoInMeasure μ f l g)
+  条件: {v : 滤子 ι} (huv : v <= l) (hg : TendstoInMeasure μ f l g)
   证明: fun ε hε => (hg ε hε).mono_left huv
 
 Depends on / 依赖: mono_left
@@ -358,7 +358,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: {v : Filter κ} {ns : κ -> ι} (hg : TendstoInMeasure μ f l g)
+  结论: {v : 滤子 κ} {ns : κ -> ι} (hg : TendstoInMeasure μ f l g)
   证明: fun ε hε => (hg ε hε).comp hns
 -/
 lemma comp {v : Filter κ} {ns : κ -> ι} (hg : TendstoInMeasure μ f l g)
@@ -378,7 +378,7 @@ theorem indicator
 
 中文:
 定理 indicator
-  结论: {F : 类型} [PseudoEMetricSpace F] [Zero F] {f : ι -> α -> F} {g : α -> F}
+  结论: {F : 类型} [PseudoEMetric空间 F] [零 F] {f : ι -> α -> F} {g : α -> F}
   证明: by
   refine fun ε hε => tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (hg ε hε) ?_ ?_
   · intro; simp
@@ -517,7 +517,7 @@ theorem tendstoInMeasure_of_tendsto_ae_of_measurable_edist
 
 中文:
 定理 tendstoInMeasure_of_tendsto_ae_of_measurable_edist
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   refine fun ε hε => ENNReal.tendsto_atTop_zero.mpr fun δ hδ => ?_
   by_cases hδi : δ = ∞
@@ -563,7 +563,7 @@ theorem tendstoInMeasure_of_tendsto_ae
 
 中文:
 定理 tendstoInMeasure_of_tendsto_ae
-  结论: [IsFiniteMeasure μ] (hf : 对任意 n, AEStronglyMeasurable (f n) μ)
+  结论: [是有限测度 μ] (hf : 对任意 n, AEStronglyMeasurable (f n) μ)
   证明: by
   have hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _ hf hfg
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
@@ -598,7 +598,7 @@ theorem exists_nat_measure_lt_two_inv
   exact hfg ((2 : Real>=0∞)⁻¹ ^ n) (pos_iff_ne_zero.mpr <| pow_ne_zero _ <| by simp)
 
 中文:
-定理 exists_nat_measure_lt_two_inv
+定理 存在_nat_measure_lt_two_inv
   条件: (hfg : TendstoInMeasure μ f atTop g) (n : 自然数)
   证明: by
   specialize hfg ((2⁻¹ : Real>=0∞) ^ n) (ENNReal.pow_pos (by simp) _)
@@ -743,7 +743,7 @@ theorem TendstoInMeasure.exists_seq_tendsto_ae
     On the other hand, as `s` is precisel
 
 中文:
-定理 TendstoInMeasure.exists_seq_tendsto_ae
+定理 TendstoInMeasure.存在_seq_tendsto_ae
   条件: (hfg : TendstoInMeasure μ f atTop g)
   证明: by
   /- Since `f` tends to `g` in measure, it has a subsequence `k ↦ f (ns k)` such that
@@ -810,8 +810,8 @@ theorem TendstoInMeasure.exists_seq_tendstoInMeasure_atTop
   exact ⟨ns, h_tendsto_ns, fun ε hε => (hfg ε hε).comp h_tendsto_ns⟩
 
 中文:
-定理 TendstoInMeasure.exists_seq_tendstoInMeasure_atTop
-  结论: {u : Filter ι} [NeBot u]
+定理 TendstoInMeasure.存在_seq_tendstoInMeasure_atTop
+  结论: {u : 滤子 ι} [NeBot u]
   证明: by
   obtain ⟨ns, h_tendsto_ns⟩ : exists ns : Nat -> ι, Tendsto ns atTop u := exists_seq_tendsto u
   exact ⟨ns, h_tendsto_ns, fun ε hε => (hfg ε hε).comp h_tendsto_ns⟩
@@ -836,8 +836,8 @@ theorem TendstoInMeasure.exists_seq_tendsto_ae'
   exact ⟨ms ∘ ns, hms1.comp hns1.tendsto_atTop, hns2⟩
 
 中文:
-定理 TendstoInMeasure.exists_seq_tendsto_ae'
-  结论: {u : Filter ι} [NeBot u] [IsCountablyGenerated u]
+定理 TendstoInMeasure.存在_seq_tendsto_ae'
+  结论: {u : 滤子 ι} [NeBot u] [是余untablyGenerated u]
   证明: by
   obtain ⟨ms, hms1, hms2⟩ := hfg.exists_seq_tendstoInMeasure_atTop
   obtain ⟨ns, hns1, hns2⟩ := hms2.exists_seq_tendsto_ae
@@ -866,8 +866,8 @@ theorem exists_seq_tendstoInMeasure_atTop_iff
       forall n, δ <= (μ {x | ε <= edis
 
 中文:
-定理 exists_seq_tendstoInMeasure_atTop_iff
-  结论: [IsFiniteMeasure μ]
+定理 存在_seq_tendstoInMeasure_atTop_iff
+  结论: [是有限测度 μ]
   证明: by
   refine ⟨fun hfg _ hns => (hfg.comp hns.tendsto_atTop).exists_seq_tendsto_ae, fun h1 => ?_⟩
   rw [tendstoInMeasure_iff_tendsto_toNNReal]
@@ -910,7 +910,7 @@ lemma eLpNorm_le_of_tendstoInMeasure
 
 中文:
 引理 eLpNorm_le_of_tendstoInMeasure
-  结论: {ι : 类型} [SeminormedAddGroup E]
+  结论: {ι : 类型} [半赋范加群 E]
   证明: by
   obtain ⟨l, hl⟩ := h_tendsto.exists_seq_tendsto_ae'
   exact Lp.eLpNorm_le_of_ae_tendsto (hl.1.eventually bound) (fun n => hf (l n)) hl.2
@@ -940,7 +940,7 @@ theorem tendstoInMeasure_ae_unique
 
 中文:
 定理 tendstoInMeasure_ae_unique
-  结论: [EMetricSpace E] {g h : α -> E} {f : ι -> α -> E} {u : Filter ι}
+  结论: [广义度量空间 E] {g h : α -> E} {f : ι -> α -> E} {u : 滤子 ι}
   证明: by
   obtain ⟨ns, h1, h1'⟩ := hg.exists_seq_tendsto_ae'
   obtain ⟨ns', h2, h2'⟩ := (hh.comp h1).exists_seq_tendsto_ae'
@@ -975,7 +975,7 @@ theorem TendstoInMeasure.aestronglyMeasurable
 
 中文:
 定理 TendstoInMeasure.aestronglyMeasurable
-  结论: {u : Filter ι} [NeBot u] [IsCountablyGenerated u]
+  结论: {u : 滤子 ι} [NeBot u] [是余untablyGenerated u]
   证明: by
   obtain ⟨ns, -, hns⟩ := h_tendsto.exists_seq_tendsto_ae'
   exact aestronglyMeasurable_of_tendsto_ae atTop (fun n => hf (ns n)) hns
@@ -1002,7 +1002,7 @@ theorem TendstoInMeasure.aemeasurable
 
 中文:
 定理 TendstoInMeasure.aemeasurable
-  结论: {u : Filter ι} [NeBot u] [IsCountablyGenerated u]
+  结论: {u : 滤子 ι} [NeBot u] [是余untablyGenerated u]
   证明: by
   obtain ⟨ns, -, hns⟩ := h_tendsto.exists_seq_tendsto_ae'
   exact aemeasurable_of_tendsto_metrizable_ae atTop (fun n => hf (ns n)) hns
@@ -1038,7 +1038,7 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
-  结论: [SeminormedAddCommGroup E]
+  结论: [SeminormedAddComm群 E]
   证明: by
   refine tendstoInMeasure_of_ne_top fun ε hε hε_top => ?_
   replace hfg := ENNReal.Tendsto.const_mul (a := 1 / ε ^ p.toReal)
@@ -1085,7 +1085,7 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top
-  结论: [SeminormedAddCommGroup E]
+  结论: [SeminormedAddComm群 E]
   证明: by
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
   refine tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
@@ -1123,7 +1123,7 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_top
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_top
-  结论: {E} [SeminormedAddCommGroup E] {f : ι -> α -> E}
+  结论: {E} [SeminormedAddComm群 E] {f : ι -> α -> E}
   证明: by
   refine tendstoInMeasure_of_ne_top fun δ hδ hδ_top => ?_
   simp only [eLpNorm_exponent_top, eLpNormEssSup] at hfg
@@ -1165,7 +1165,7 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm
-  结论: [NormedAddCommGroup E]
+  结论: [赋范交换加群 E]
   证明: by
   by_cases hp_ne_top : p = ∞
   · subst hp_ne_top
@@ -1195,7 +1195,7 @@ theorem tendstoInMeasure_of_tendsto_Lp
 
 中文:
 定理 tendstoInMeasure_of_tendsto_Lp
-  结论: [NormedAddCommGroup E] [hp : Fact (1 <= p)]
+  结论: [赋范交换加群 E] [hp : Fact (1 <= p)]
   证明: tendstoInMeasure_of_tendsto_eLpNorm (zero_lt_one.trans_le hp.elim).ne.symm
     (fun _ => Lp.aestronglyMeasurable _) (Lp.aestronglyMeasurable _)
     ((Lp.tendsto_Lp_iff_tendsto_eLpNorm' _ _).mp hfg)

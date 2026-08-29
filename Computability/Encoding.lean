@@ -51,8 +51,8 @@ structure Encoding
 结构 Encoding
   参数: (α : 类型u) (Γ : 类型v)
   公理与运算 (3 个):
-    - encode : α -> List Γ
-    - decode : List Γ -> Option α
+    - encode : α -> 列表 Γ
+    - decode : 列表 Γ -> 选项类型 α
     - decode_encode : 对任意 x, decode (encode x) = some x
 
 Depends on / 依赖: eq_of_forall_ge_iff, forall_comm
@@ -81,7 +81,7 @@ theorem Encoding.encode_injective
 中文:
 定理 Encoding.encode_injective
   条件: {α Γ} (e : Encoding α Γ)
-  结论: Function.Injective e.encode
+  结论: 函数.单射 e.encode
   证明: by
   refine fun _ _ h => Option.some_injective _ ?_
   rw [← e.decode_encode]; rw [← e.decode_encode]; rw [h]
@@ -108,7 +108,7 @@ inductive Γ'
 归纳类型 Γ'
   构造子 (5 个):
     - blank: 
-    - bit: (b : 布尔)
+    - bit: (b : 布尔值)
     - bra: 
     - ket: 
     - comma: 
@@ -131,7 +131,7 @@ instance inhabitedΓ'
 
 中文:
 实例 inhabitedΓ'
-  签名: : Inhabited Γ'
+  签名: : 可居 Γ'
   定义体: ⟨Γ'.blank⟩
 -/
 instance inhabitedΓ' : Inhabited Γ' :=
@@ -146,8 +146,8 @@ definition inclusionBoolΓ'
   body: Γ'.bit
 
 中文:
-定义 inclusionBoolΓ'
-  签名: : 布尔 -> Γ'
+定义 inclusion布尔Γ'
+  签名: : 布尔值 -> Γ'
   定义体: Γ'.bit
 -/
 def inclusionBoolΓ' : Bool -> Γ' :=
@@ -161,8 +161,8 @@ definition sectionΓ'Bool
   signature: : Γ' -> Bool
 
 中文:
-定义 sectionΓ'Bool
-  签名: : Γ' -> 布尔
+定义 sectionΓ'布尔值
+  签名: : Γ' -> 布尔值
 -/
 def sectionΓ'Bool : Γ' -> Bool
   | Γ'.bit b => b
@@ -180,9 +180,9 @@ theorem sectionΓ'Bool_inclusionBoolΓ'
   cases b <;> rfl
 
 中文:
-定理 sectionΓ'Bool_inclusionBoolΓ'
+定理 sectionΓ'布尔_inclusion布尔Γ'
   条件: {b}
-  结论: sectionΓ'布尔 (inclusion布尔Γ' b) = b
+  结论: sectionΓ'布尔值 (inclusion布尔Γ' b) = b
   证明: by
   cases b <;> rfl
 -/
@@ -198,8 +198,8 @@ theorem inclusionBoolΓ'_injective
   proof: Function.HasLeftInverse.injective ⟨_, (fun _ => sectionΓ'Bool_inclusionBoolΓ')⟩
 
 中文:
-定理 inclusionBoolΓ'_injective
-  结论: Function.Injective inclusion布尔Γ'
+定理 inclusion布尔Γ'_injective
+  结论: 函数.单射 inclusion布尔Γ'
   证明: Function.HasLeftInverse.injective ⟨_, (fun _ => sectionΓ'Bool_inclusionBoolΓ')⟩
 -/
 theorem inclusionBoolΓ'_injective : Function.Injective inclusionBoolΓ' :=
@@ -214,7 +214,7 @@ definition encodePosNum
 
 中文:
 定义 encodePosNum
-  签名: : PosNum -> List 布尔
+  签名: : PosNum -> 列表 布尔值
 -/
 def encodePosNum : PosNum -> List Bool
   | PosNum.one => [true]
@@ -230,7 +230,7 @@ definition encodeNum
 
 中文:
 定义 encodeNum
-  签名: : Num -> List 布尔
+  签名: : Num -> 列表 布尔值
 -/
 def encodeNum : Num -> List Bool
   | Num.zero => []
@@ -245,7 +245,7 @@ definition encodeNat
   body: encodeNum n
 
 中文:
-定义 encodeNat
+定义 encode自然数
   签名: (n : 自然数)
   定义体: encodeNum n
 
@@ -263,7 +263,7 @@ definition decodePosNum
 
 中文:
 定义 decodePosNum
-  签名: : List 布尔 -> PosNum
+  签名: : 列表 布尔值 -> PosNum
 -/
 def decodePosNum : List Bool -> PosNum
   | false :: l => PosNum.bit0 (decodePosNum l)
@@ -280,7 +280,7 @@ definition decodeNum
 
 中文:
 定义 decodeNum
-  签名: : List 布尔 -> Num
+  签名: : 列表 布尔值 -> Num
   定义体: fun l => ite (l = []) Num.zero decodePosNum l
 
 Depends on / 依赖: Num.zero, decodePosNum
@@ -296,8 +296,8 @@ definition decodeNat
   body: fun l => decodeNum l
 
 中文:
-定义 decodeNat
-  签名: : List 布尔 -> 自然数
+定义 decode自然数
+  签名: : 列表 布尔值 -> 自然数
   定义体: fun l => decodeNum l
 
 Depends on / 依赖: decodeNum
@@ -406,7 +406,7 @@ theorem decode_encodeNat
   exact congr_arg ((↑) : Num -> Nat) (decode_encodeNum n)
 
 中文:
-定理 decode_encodeNat
+定理 decode_encode自然数
   条件: (n)
   结论: decode自然数 (encode自然数 n) = n
   证明: by
@@ -428,8 +428,8 @@ definition encodingNatBool
   decode_encode n := congr_arg _ (decode_encodeNat n)
 
 中文:
-定义 encodingNatBool
-  签名: : Encoding 自然数 布尔 where
+定义 encoding自然数布尔
+  签名: : Encoding 自然数 布尔值 where
   定义体: encodeNat
   decode n := some (decodeNat n)
   decode_encode n := congr_arg _ (decode_encodeNat n)
@@ -452,7 +452,7 @@ definition encodingNatΓ'
 decode_encode x := congr_arg _ by simp [Function.comp_def]
 
 中文:
-定义 encodingNatΓ'
+定义 encoding自然数Γ'
   签名: : Encoding 自然数 Γ' where
   定义体: List.map inclusionBoolΓ' (encodeNat x)
   decode x := some (decodeNat (List.map sectionΓ'Bool x))
@@ -473,8 +473,8 @@ definition unaryEncodeNat
   signature: : Nat -> List Bool
 
 中文:
-定义 unaryEncodeNat
-  签名: : 自然数 -> List 布尔
+定义 unaryEncode自然数
+  签名: : 自然数 -> 列表 布尔值
 -/
 def unaryEncodeNat : Nat -> List Bool
   | 0 => []
@@ -489,8 +489,8 @@ definition unaryDecodeNat
   body: List.length
 
 中文:
-定义 unaryDecodeNat
-  签名: : List 布尔 -> 自然数
+定义 unaryDecode自然数
+  签名: : 列表 布尔值 -> 自然数
   定义体: List.length
 
 Depends on / 依赖: List.length, length
@@ -527,8 +527,8 @@ definition unaryEncodingNat
   decode_encode n := congr_arg _ (unary_decode_encode_nat n)
 
 中文:
-定义 unaryEncodingNat
-  签名: : Encoding 自然数 布尔 where
+定义 unaryEncoding自然数
+  签名: : Encoding 自然数 布尔值 where
   定义体: unaryEncodeNat
   decode n := some (unaryDecodeNat n)
   decode_encode n := congr_arg _ (unary_decode_encode_nat n)
@@ -549,8 +549,8 @@ definition encodeBool
   body: pure
 
 中文:
-定义 encodeBool
-  签名: : 布尔 -> List 布尔
+定义 encode布尔
+  签名: : 布尔值 -> 列表 布尔值
   定义体: pure
 -/
 def encodeBool : Bool -> List Bool := pure
@@ -563,8 +563,8 @@ definition decodeBool
   signature: : List Bool -> Bool
 
 中文:
-定义 decodeBool
-  签名: : List 布尔 -> 布尔
+定义 decode布尔
+  签名: : 列表 布尔值 -> 布尔值
 -/
 def decodeBool : List Bool -> Bool
   | b :: _ => b
@@ -580,8 +580,8 @@ theorem decode_encodeBool
   proof: rfl
 
 中文:
-定理 decode_encodeBool
-  条件: (b : 布尔)
+定理 decode_encode布尔
+  条件: (b : 布尔值)
   结论: decode布尔 (encode布尔 b) = b
   证明: rfl
 -/
@@ -598,8 +598,8 @@ definition encodingBoolBool
   decode_encode x := congr_arg _ (decode_encodeBool x)
 
 中文:
-定义 encodingBoolBool
-  签名: : Encoding 布尔 布尔 where
+定义 encoding布尔布尔
+  签名: : Encoding 布尔值 布尔值 where
   定义体: encodeBool
   decode x := some (decodeBool x)
   decode_encode x := congr_arg _ (decode_encodeBool x)
@@ -621,7 +621,7 @@ instance inhabitedEncoding
 
 中文:
 实例 inhabitedEncoding
-  签名: : Inhabited (Encoding 布尔 布尔)
+  签名: : 可居 (Encoding 布尔值 布尔值)
   定义体: ⟨encodingBoolBool⟩
 
 Depends on / 依赖: encodingBoolBool
@@ -659,7 +659,7 @@ theorem Encoding.card_le_aleph0
 
 中文:
 定理 Encoding.card_le_aleph0
-  条件: {α Γ} (e : Encoding α Γ) [Countable Γ]
+  条件: {α Γ} (e : Encoding α Γ) [可数 Γ]
   证明: haveI : Countable α := e.encode_injective.countable
   Cardinal.mk_le_aleph0
 
@@ -682,7 +682,7 @@ definition encodingList
 
 中文:
 定义 encodingList
-  签名: (α : Type)
+  签名: (α : 类型)
   定义体: id
   decode := Option.some
   decode_encode _ := rfl
@@ -736,7 +736,7 @@ definition FinEncoding
 
 中文:
 定义 FinEncoding
-  签名: (α : 类型u) {Γ : 类型v} [Fintype Γ]
+  签名: (α : 类型u) {Γ : 类型v} [有限类型 Γ]
   定义体: Encoding α Γ
 
 Depends on / 依赖: Encoding
@@ -774,7 +774,7 @@ definition FinEncoding.ΓFin
 
 中文:
 定义 FinEncoding.ΓFin
-  签名: {α : 类型u} {Γ : 类型v} [h : Fintype Γ]
+  签名: {α : 类型u} {Γ : 类型v} [h : 有限类型 Γ]
   定义体: h
 -/
 def FinEncoding.ΓFin {α : Type u} {Γ : Type v} [h : Fintype Γ]
@@ -793,7 +793,7 @@ definition FinEncoding.toEncoding
 
 中文:
 定义 FinEncoding.toEncoding
-  签名: {α : 类型u} {Γ : 类型v} [Fintype Γ]
+  签名: {α : 类型u} {Γ : 类型v} [有限类型 Γ]
   定义体: e
 -/
 def FinEncoding.toEncoding {α : Type u} {Γ : Type v} [Fintype Γ]
@@ -809,7 +809,7 @@ abbreviation finEncodingNatBool
   body: encodingNatBool
 
 中文:
-缩写 finEncodingNatBool
+缩写 finEncoding自然数布尔
   定义体: encodingNatBool
 
 Depends on / 依赖: encodingNatBool
@@ -826,7 +826,7 @@ abbreviation finEncodingNatΓ'
   body: encodingNatΓ'
 
 中文:
-缩写 finEncodingNatΓ'
+缩写 finEncoding自然数Γ'
   定义体: encodingNatΓ'
 -/
 abbrev finEncodingNatΓ' := encodingNatΓ'
@@ -841,7 +841,7 @@ abbreviation unaryFinEncodingNat
   body: unaryEncodingNat
 
 中文:
-缩写 unaryFinEncodingNat
+缩写 unaryFinEncoding自然数
   定义体: unaryEncodingNat
 
 Depends on / 依赖: unaryEncodingNat
@@ -858,7 +858,7 @@ abbreviation finEncodingBoolBool
   body: encodingBoolBool
 
 中文:
-缩写 finEncodingBoolBool
+缩写 finEncoding布尔布尔
   定义体: encodingBoolBool
 
 Depends on / 依赖: encodingBoolBool
@@ -878,7 +878,7 @@ definition finEncodingList
 
 中文:
 定义 finEncodingList
-  签名: (α : Type) [Fintype α]
+  签名: (α : 类型) [有限类型 α]
   定义体: encodingList α
 
 Depends on / 依赖: encodingList
@@ -898,7 +898,7 @@ definition finEncodingPair
 
 中文:
 定义 finEncodingPair
-  签名: {α β Γ₁ Γ₂ : 类型} [Fintype Γ₁] [Fintype Γ₂]
+  签名: {α β Γ₁ Γ₂ : 类型} [有限类型 Γ₁] [有限类型 Γ₂]
   定义体: encodingProd ea eb
 
 Depends on / 依赖: encodingProd
@@ -920,7 +920,7 @@ theorem FinEncoding.card_le_aleph0
 
 中文:
 定理 FinEncoding.card_le_aleph0
-  条件: {α Γ} [Countable Γ] (e : Encoding α Γ)
+  条件: {α Γ} [可数 Γ] (e : Encoding α Γ)
   结论: #α <= ℵ₀
   证明: e.card_le_aleph0
 

@@ -54,7 +54,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra R (A × B) where
+  签名: : 代数 R (A × B) where
   定义体: RingHom.prod (algebraMap R A) (algebraMap R B)
   commutes' := by
     rintro r ⟨a, b⟩
@@ -199,7 +199,7 @@ definition prod
         commutes, Prod.algebraMap_apply] }
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : A ->ₐ[R] B) (g : A ->ₐ[R] C)
   定义体: { f.toRingHom.prod g.toRingHom with
     commutes' := fun r => by
@@ -228,7 +228,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : A ->ₐ[R] B) (g : A ->ₐ[R] C)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -251,7 +251,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : A ->ₐ[R] B) (g : A ->ₐ[R] C)
-  结论: (fst R B C).comp (prod f g) = f
+  结论: (fst R B C).comp (乘积 f g) = f
   证明: by ext; rfl
 
 @[simp]
@@ -273,7 +273,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : A ->ₐ[R] B) (g : A ->ₐ[R] C)
-  结论: (snd R B C).comp (prod f g) = g
+  结论: (snd R B C).comp (乘积 f g) = g
   证明: by ext; rfl
 
 @[simp]
@@ -291,7 +291,7 @@ theorem prod_fst_snd
 
 中文:
 定理 prod_fst_snd
-  结论: prod (fst R A B) (snd R A B) = AlgHom.id R _
+  结论: 乘积 (fst R A B) (snd R A B) = 代数态射.id R _
   证明: rfl
 -/
 theorem prod_fst_snd : prod (fst R A B) (snd R A B) = AlgHom.id R _ := rfl
@@ -306,7 +306,7 @@ theorem prod_comp
 
 中文:
 定理 prod_comp
-  结论: {C' : 类型} [Semiring C'] [Algebra R C']
+  结论: {C' : 类型} [半环 C'] [代数 R C']
   证明: rfl
 -/
 theorem prod_comp {C' : Type*} [Semiring C'] [Algebra R C']
@@ -346,7 +346,7 @@ definition prodMap
 
 中文:
 定义 prodMap
-  签名: {D : 类型} [Semiring D] [Algebra R D] (f : A ->ₐ[R] B) (g : C ->ₐ[R] D)
+  签名: {D : 类型} [半环 D] [代数 R D] (f : A ->ₐ[R] B) (g : C ->ₐ[R] D)
   定义体: { toRingHom := f.toRingHom.prodMap g.toRingHom
     commutes' := fun r => by simp [commutes] }
 
@@ -400,7 +400,7 @@ lemma prodCongr_apply
 中文:
 引理 prodCongr_apply
   条件: (x : S × T)
-  结论: prodCongr l r x = Equiv.prodCongr l r x
+  结论: prodCongr l r x = 等价.prodCongr l r x
   证明: rfl
 -/
 lemma prodCongr_apply (x : S × T) : prodCongr l r x = Equiv.prodCongr l r x := rfl
@@ -441,7 +441,7 @@ definition prodUnique
 
 中文:
 定义 prodUnique
-  签名: [Unique B]
+  签名: [唯一 B]
   定义体: Prod.fst
   invFun x := (x, 0)
   __ := (RingEquiv.prodZeroRing A B).symm
@@ -472,7 +472,7 @@ definition uniqueProd
 
 中文:
 定义 uniqueProd
-  签名: [Unique B]
+  签名: [唯一 B]
   定义体: Prod.snd
   invFun x := (0, x)
   __ := (RingEquiv.zeroRingProd A B).symm

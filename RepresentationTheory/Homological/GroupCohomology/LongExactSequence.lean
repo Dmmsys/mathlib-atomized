@@ -223,7 +223,7 @@ theorem epi_δ_of_isZero
 
 中文:
 定理 epi_δ_of_isZero
-  条件: (n : 自然数) (h : IsZero (groupCohomology X.X₂ (n + 1)))
+  条件: (n : 自然数) (h : 是零 (groupCohomology X.X₂ (n + 1)))
   证明: SnakeInput.epi_δ _ h
 
 Depends on / 依赖: SnakeInput, SnakeInput.epi_
@@ -241,7 +241,7 @@ theorem mono_δ_of_isZero
 
 中文:
 定理 mono_δ_of_isZero
-  条件: (n : 自然数) (h : IsZero (groupCohomology X.X₂ n))
+  条件: (n : 自然数) (h : 是零 (groupCohomology X.X₂ n))
   证明: SnakeInput.mono_δ _ h
 
 Depends on / 依赖: SnakeInput, SnakeInput.mono_
@@ -259,7 +259,7 @@ theorem isIso_δ_of_isZero
 
 中文:
 定理 isIso_δ_of_isZero
-  结论: (n : 自然数) (h : IsZero (groupCohomology X.X₂ n))
+  结论: (n : 自然数) (h : 是零 (groupCohomology X.X₂ n))
   证明: SnakeInput.isIso_δ _ h hs
 
 Depends on / 依赖: SnakeInput, SnakeInput.isIso_
@@ -281,7 +281,7 @@ abbreviation cocyclesMkOfCompEqD
 
 中文:
 缩写 cocyclesMkOfCompEqD
-  签名: {i j : 自然数} {y : (Fin i -> G) -> X.X₂}
+  签名: {i j : 自然数} {y : (有限集 i -> G) -> X.X₂}
   定义体: cocyclesMk x by simpa [CochainComplex.of.d] using!
     ((map_cochainsFunctor_shortExact hX).d_eq_zero_of_f_eq_d_apply i j y x
       (by simpa using! hx) (j + 1))
@@ -499,7 +499,7 @@ theorem δ_naturality
 
 中文:
 定理 δ_naturality
-  结论: {X1 X2 : ShortComplex (Rep k G)} (hX1 : X1.ShortExact)
+  结论: {X1 X2 : 短复形 (Rep k G)} (hX1 : X1.短正合)
   证明: HomologicalComplex.HomologySequence.δ_naturality
     ((cochainsFunctor k G).mapShortComplex.map F)
     (map_cochainsFunctor_shortExact hX1) (map_cochainsFunctor_shortExact hX2) i j hij

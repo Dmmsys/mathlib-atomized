@@ -54,7 +54,7 @@ definition EdgeDisjointTriangles
 
 中文:
 定义 EdgeDisjointTriangles
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: (G.cliqueSet 3).Pairwise fun x y => (x inter y : Set α).Subsingleton
 
 Depends on / 依赖: G.cliqueSet, Pairwise, Subsingleton, cliqueSet
@@ -72,7 +72,7 @@ definition LocallyLinear
 
 中文:
 定义 LocallyLinear
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: G.EdgeDisjointTriangles ∧ forall ⦃x y⦄, G.Adj x y -> exists s, G.IsNClique 3 s ∧ x in s ∧ y in s
 
 Depends on / 依赖: EdgeDisjointTriangles, G.Adj, G.EdgeDisjointTriangles, G.IsNClique, IsNClique
@@ -116,7 +116,7 @@ lemma edgeDisjointTriangles_bot
 
 中文:
 引理 edgeDisjointTriangles_bot
-  结论: (⊥ : SimpleGraph α).EdgeDisjointTriangles
+  结论: (⊥ : 简单图 α).EdgeDisjointTriangles
   证明: by
   simp [EdgeDisjointTriangles]
 -/
@@ -133,7 +133,7 @@ lemma locallyLinear_bot
 
 中文:
 引理 locallyLinear_bot
-  结论: (⊥ : SimpleGraph α).LocallyLinear
+  结论: (⊥ : 简单图 α).LocallyLinear
   证明: by simp [LocallyLinear]
 -/
 @[simp] lemma locallyLinear_bot : (⊥ : SimpleGraph α).LocallyLinear := by simp [LocallyLinear]
@@ -220,7 +220,7 @@ lemma locallyLinear_comap
 
 中文:
 引理 locallyLinear_comap
-  条件: {G : SimpleGraph β} {e : α ≃ β}
+  条件: {G : 简单图 β} {e : α ≃ β}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · rw [← comap_map_eq e.symm.toEmbedding G, comap_symm, map_symm]
@@ -321,7 +321,7 @@ instance EdgeDisjointTriangles.instDecidable
 
 中文:
 实例 EdgeDisjointTriangles.instDecidable
-  签名: : Decidable G.EdgeDisjointTriangles
+  签名: : 可判定 G.EdgeDisjointTriangles
   定义体: decidable_of_iff ((G.cliqueFinset 3 : Set (Finset α)).Pairwise fun x y => (#(x inter y) <= 1)) by
     simp only [coe_cliqueFinset, EdgeDisjointTriangles, Finset.card_le_one, ← coe_inter]; rfl
 
@@ -341,7 +341,7 @@ instance LocallyLinear.instDecidable
 
 中文:
 实例 LocallyLinear.instDecidable
-  签名: : Decidable G.LocallyLinear
+  签名: : 可判定 G.LocallyLinear
   定义体: inferInstanceAs (Decidable (_ ∧ _))
 
 Depends on / 依赖: Decidable
@@ -539,7 +539,7 @@ lemma farFromTriangleFree_of_disjoint_triangles_aux
 
 中文:
 引理 farFromTriangleFree_of_disjoint_triangles_aux
-  结论: {tris : Finset (Finset α)}
+  结论: {tris : 有限集 (有限集 α)}
   证明: by
   rw [← card_sdiff_of_subset (edgeFinset_mono hHG)]; rw [← card_attach]
   by_contra! hG
@@ -590,7 +590,7 @@ lemma farFromTriangleFree_of_disjoint_triangles
 
 中文:
 引理 farFromTriangleFree_of_disjoint_triangles
-  结论: (tris : Finset (Finset α))
+  结论: (tris : 有限集 (有限集 α))
   证明: by
   rw [farFromTriangleFree_iff]
   intro H _ hG hH

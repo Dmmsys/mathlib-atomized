@@ -57,7 +57,7 @@ definition delabCheckingCanonical
 
 中文:
 定义 delabCheckingCanonical
-  签名: : DelabM (布尔 × Term)
+  签名: : DelabM (布尔值 × 项)
   定义体: do
   let inst ← getExpr
   if ← isCanonicalInstance inst then
@@ -86,7 +86,7 @@ definition delabUnary
 
 中文:
 定义 delabUnary
-  签名: (arity arg : 自然数) (mkStx : Term -> Delab)
+  签名: (arity arg : 自然数) (mkStx : 项 -> Delab)
   定义体: whenPPOption Lean.getPPNotation whenNotPPOption getPPExplicit withOverApp arity do
     let (false, instD) ← withNaryArg arg delabCheckingCanonical | failure
     mkStx instD
@@ -112,7 +112,7 @@ definition delabBinary
 
 中文:
 定义 delabBinary
-  签名: (arity arg₁ arg₂ : 自然数) (mkStx : Term -> Term -> DelabM Term)
+  签名: (arity arg₁ arg₂ : 自然数) (mkStx : 项 -> 项 -> DelabM 项)
   定义体: whenPPOption Lean.getPPNotation whenNotPPOption getPPExplicit withOverApp arity do
     let (canonα?, instDα) ← withNaryArg arg₁ delabCheckingCanonical
     let (canonβ?, instDβ) ← withNaryArg arg₂ delabCheckingCanonical

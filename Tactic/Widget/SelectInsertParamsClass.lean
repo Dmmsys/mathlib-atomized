@@ -34,13 +34,13 @@ class SelectInsertParamsClass
     - replaceRange : α -> Lsp.Range
 
 中文:
-类 SelectInsertParamsClass
-  参数: (α : Type)
+类 SelectInsertParams类
+  参数: (α : 类型)
   公理与运算 (4 个):
     - pos : α -> Lsp.Position
-    - goals : α -> Array Widget.整数eractiveGoal
-    - selectedLocations : α -> Array SubExpr.GoalsLocation
-    - replaceRange : α -> Lsp.Range
+    - goals : α -> 数组 Widget.整数eractiveGoal
+    - selectedLocations : α -> 数组 SubExpr.GoalsLocation
+    - replaceRange : α -> Lsp.值域
 -/
 class SelectInsertParamsClass (α : Type) where
   /-- Cursor position in the file at which the widget is being displayed. -/
@@ -93,7 +93,7 @@ definition mkSelectInsertParamsInstanceHandler
 
 中文:
 定义 mkSelectInsertParamsInstanceHandler
-  签名: (declNames : Array Name)
+  签名: (declNames : 数组 Name)
   定义体: do
   if (← declNames.allM isInductive) then
     for declName in declNames do

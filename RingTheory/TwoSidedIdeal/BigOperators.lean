@@ -33,7 +33,7 @@ lemma listSum_mem
 
 中文:
 引理 listSum_mem
-  条件: {ι : 类型} (l : List ι) (f : ι -> R) (hl : 对任意 x in l, f x in I)
+  条件: {ι : 类型} (l : 列表 ι) (f : ι -> R) (hl : 对任意 x in l, f x in I)
   证明: by
   rw [mem_iff]; rw [← List.sum_map_zero]
   exact I.ringCon.listSum l hl
@@ -81,7 +81,7 @@ lemma finsetSum_mem
 
 中文:
 引理 finsetSum_mem
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R) (hs : 对任意 x in s, f x in I)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R) (hs : 对任意 x in s, f x in I)
   证明: by
   rw [mem_iff]; rw [← Finset.sum_const_zero]
   exact I.ringCon.finsetSum s hs
@@ -103,7 +103,7 @@ lemma finsuppSum_mem
 
 中文:
 引理 finsuppSum_mem
-  结论: {ι : 类型} {β : 类型} [Zero β]
+  结论: {ι : 类型} {β : 类型} [零 β]
   证明: finsetSum_mem _ _ _ h
 
 Depends on / 依赖: finsetSum_mem
@@ -159,7 +159,7 @@ lemma listProd_mem
 
 中文:
 引理 listProd_mem
-  条件: {ι : 类型} (l : List ι) (f : ι -> R) (hl : 存在 x in l, f x in I)
+  条件: {ι : 类型} (l : 列表 ι) (f : ι -> R) (hl : 存在 x in l, f x in I)
   证明: by
   induction l with
   | nil => simp only [List.not_mem_nil, false_and, exists_false] at hl
@@ -223,7 +223,7 @@ lemma finsetProd_mem
 
 中文:
 引理 finsetProd_mem
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R) (hs : 存在 x in s, f x in I)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R) (hs : 存在 x in s, f x in I)
   证明: by
   rcases s
   simpa using multiSetProd_mem (hs := hs)
@@ -245,7 +245,7 @@ lemma finsuppProd_mem
 
 中文:
 引理 finsuppProd_mem
-  结论: {ι : 类型} {β : 类型} [Zero β]
+  结论: {ι : 类型} {β : 类型} [零 β]
   证明: finsetProd_mem _ _ _ H
 
 Depends on / 依赖: finsetProd_mem

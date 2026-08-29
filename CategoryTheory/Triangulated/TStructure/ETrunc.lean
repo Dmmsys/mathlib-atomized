@@ -460,7 +460,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (t.eTruncLTι ⊤)
+  签名: 是同构 (t.eTruncLTι ⊤)
   定义体: by
   dsimp [eTruncLTι]
   infer_instance
@@ -620,7 +620,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (t.eTruncGEπ ⊥)
+  签名: 是同构 (t.eTruncGEπ ⊥)
   定义体: by
   dsimp [eTruncGEπ]
   infer_instance
@@ -890,7 +890,7 @@ lemma isZero_eTruncLT_obj_obj
 
 中文:
 引理 isZero_eTruncLT_obj_obj
-  条件: (X : C) (n : 整数) [t.IsGE X n] (j : E整数) (hj : j <= n)
+  条件: (X : C) (n : 整数) [t.是GE X n] (j : E整数) (hj : j <= n)
   证明: by
   induction j using WithBotTop.rec with
   | bot => simp
@@ -927,7 +927,7 @@ lemma isZero_eTruncGE_obj_obj
 
 中文:
 引理 isZero_eTruncGE_obj_obj
-  条件: (X : C) (n : 整数) [t.IsLE X n] (j : E整数) (hj : n < j)
+  条件: (X : C) (n : 整数) [t.是LE X n] (j : E整数) (hj : n < j)
   证明: by
   induction j using WithBotTop.rec with
   | bot => simp at hj
@@ -1436,7 +1436,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (t.eTruncLTGELTSelfToLTGE a b)
+  签名: 是同构 (t.eTruncLTGELTSelfToLTGE a b)
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X
@@ -1488,7 +1488,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (t.eTruncLTGELTSelfToGELT a b)
+  签名: 是同构 (t.eTruncLTGELTSelfToGELT a b)
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X

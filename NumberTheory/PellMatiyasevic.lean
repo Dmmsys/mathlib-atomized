@@ -1195,7 +1195,7 @@ theorem strictMono_y
 
 中文:
 定理 strictMono_y
-  结论: StrictMono (yn a1)
+  结论: 严格递增 (yn a1)
   证明: Or.elim (lt_or_eq_of_le <| Nat.le_of_succ_le_succ h) (fun hl => le_of_lt <| strictMono_y hl)
         fun e => by rw [e]
     simp only [yn_succ, gt_iff_lt]; refine lt_of_le_of_lt ?_ (Nat.lt_add_of_pos_left <| x_pos a1 n)
@@ -1229,7 +1229,7 @@ theorem strictMono_x
 
 中文:
 定理 strictMono_x
-  结论: StrictMono (xn a1)
+  结论: 严格递增 (xn a1)
   证明: Or.elim (lt_or_eq_of_le <| Nat.le_of_succ_le_succ h) (fun hl => le_of_lt <| strictMono_x hl)
         fun e => by rw [e]
     simp only [xn_succ, gt_iff_lt]

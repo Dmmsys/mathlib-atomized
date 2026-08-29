@@ -52,10 +52,10 @@ class Projective
     - factors : forall {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], exists f', f' ≫ e = f
 
 中文:
-类 Projective
+类 投射
   参数: (P : C)
   公理与运算 (1 个):
-    - factors : 对任意 {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], 存在 f', f' ≫ e = f
+    - factors : 对任意 {E X : C} (f : P ⟶ X) (e : E ⟶ X) [满态射 e], 存在 f', f' ≫ e = f
 -/
 class Projective (P : C) : Prop where
   factors : forall {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], exists f', f' ≫ e = f
@@ -71,7 +71,7 @@ abbreviation isProjective
 
 中文:
 缩写 isProjective
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: Projective
 
 Depends on / 依赖: Projective
@@ -88,9 +88,9 @@ lemma Limits.IsZero.projective
   proof: ⟨h.to_ _, h.eq_of_src _ _⟩
 
 中文:
-引理 Limits.IsZero.projective
-  条件: {X : C} (h : IsZero X)
-  结论: Projective X where
+引理 Limits.是零.projective
+  条件: {X : C} (h : 是零 X)
+  结论: 投射 X where
   证明: ⟨h.to_ _, h.eq_of_src _ _⟩
 
 Depends on / 依赖: eq_of_src, h.eq_of_src, h.to_
@@ -113,13 +113,13 @@ structure ProjectivePresentation
     - [epi : Epi f]
 
 中文:
-结构 ProjectivePresentation
+结构 投射呈现
   参数: (X : C)
   公理与运算 (4 个):
     - p : C
-    - [projective : Projective p]
+    - [projective : 投射 p]
     - f : p ⟶ X
-    - [epi : Epi f]
+    - [epi : 满态射 f]
 -/
 structure ProjectivePresentation (X : C) where
   /-- The projective object `p` of this presentation -/
@@ -143,10 +143,10 @@ class EnoughProjectives
     - presentation : forall X : C, Nonempty (ProjectivePresentation X)
 
 中文:
-类 EnoughProjectives
+类 有足够投射
   参数: : 命题 where
   公理与运算 (1 个):
-    - presentation : 对任意 X : C, Nonempty (ProjectivePresentation X)
+    - presentation : 对任意 X : C, 非空 (投射呈现 X)
 -/
 class EnoughProjectives : Prop where
   presentation : forall X : C, Nonempty (ProjectivePresentation X)
@@ -169,7 +169,7 @@ definition factorThru
 
 中文:
 定义 factorThru
-  签名: {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e]
+  签名: {P X E : C} [投射 P] (f : P ⟶ X) (e : E ⟶ X) [满态射 e]
   定义体: (Projective.factors f e).choose
 
 @[reassoc (attr := simp)]
@@ -190,7 +190,7 @@ theorem factorThru_comp
 
 中文:
 定理 factorThru_comp
-  条件: {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e]
+  条件: {P X E : C} [投射 P] (f : P ⟶ X) (e : E ⟶ X) [满态射 e]
   证明: (Projective.factors f e).choose_spec
 
 Depends on / 依赖: Projective, Projective.factors, choose_spec, factors
@@ -213,7 +213,7 @@ instance zero_projective
 
 中文:
 实例 zero_projective
-  签名: [HasZeroObject C]
+  签名: [有ZeroObject C]
   定义体: (isZero_zero C).projective
 
 Depends on / 依赖: isZero_zero, projective
@@ -235,8 +235,8 @@ theorem of_iso
 
 中文:
 定理 of_iso
-  条件: {P Q : C} (i : P ≅ Q) (_ : Projective P)
-  结论: Projective Q where
+  条件: {P Q : C} (i : P ≅ Q) (_ : 投射 P)
+  结论: 投射 Q where
   证明: let ⟨f', hf'⟩ := Projective.factors (i.hom ≫ f) e
     ⟨i.inv ≫ f', by simp [hf']⟩
 
@@ -259,7 +259,7 @@ theorem iso_iff
 中文:
 定理 iso_iff
   条件: {P Q : C} (i : P ≅ Q)
-  结论: Projective P ↔ Projective Q
+  结论: 投射 P ↔ 投射 Q
   证明: ⟨of_iso i, of_iso i.symm⟩
 
 Depends on / 依赖: i.symm, of_iso
@@ -282,8 +282,8 @@ instance Type.enoughProjectives
   body: ⟨⟨X, 𝟙 X⟩⟩
 
 中文:
-实例 Type.enoughProjectives
-  签名: : EnoughProjectives (类型u) where
+实例 类型.enoughProjectives
+  签名: : 有足够投射 (类型u) where
   定义体: ⟨⟨X, 𝟙 X⟩⟩
 -/
 instance Type.enoughProjectives : EnoughProjectives (Type u) where
@@ -454,7 +454,7 @@ instance :
 
 中文:
 实例 :
-  签名: Projective (syzygies f)
+  签名: 投射 (syzygies f)
   定义体: inferInstanceAs (Projective (over _))
 
 Depends on / 依赖: Projective
@@ -504,7 +504,7 @@ theorem map_projective
 
 中文:
 定理 map_projective
-  条件: (adj : F ⊣ G) [G.PreservesEpimorphisms] (P : C) (hP : Projective P)
+  条件: (adj : F ⊣ G) [G.保持Epimorphisms] (P : C) (hP : 投射 P)
   证明: by
     rcases hP.factors (adj.unit.app P ≫ G.map f) (G.map g) with ⟨f', hf'⟩
     use F.map f' ≫ adj.counit.app _
@@ -535,7 +535,7 @@ theorem projective_of_map_projective
 
 中文:
 定理 projective_of_map_projective
-  结论: (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C)
+  结论: (adj : F ⊣ G) [F.满] [F.忠实] (P : C)
   证明: by
     have := Adjunction.leftAdjoint_preservesColimits.{0, 0} adj
     rcases (@hP).1 (F.map f) (F.map g) with ⟨f', hf'⟩
@@ -565,7 +565,7 @@ definition mapProjectivePresentation
 
 中文:
 定义 mapProjectivePresentation
-  签名: (adj : F ⊣ G) [G.PreservesEpimorphisms] (X : C)
+  签名: (adj : F ⊣ G) [G.保持Epimorphisms] (X : C)
   定义体: F.obj Y.p
   projective := adj.map_projective _ Y.projective
   f := F.map Y.f
@@ -598,7 +598,7 @@ theorem projective_of_map_projective
 
 中文:
 定理 projective_of_map_projective
-  结论: [F.Full] [F.Faithful]
+  结论: [F.满] [F.忠实]
   证明: by
     obtain ⟨h, fac⟩ := hP.factors (F.map g) (F.map f)
     exact ⟨F.preimage h, F.map_injective (by simp [fac])⟩
@@ -629,7 +629,7 @@ theorem map_projective_iff
 中文:
 定理 map_projective_iff
   条件: (P : C)
-  结论: Projective (F.functor.obj P) ↔ Projective P
+  结论: 投射 (F.functor.obj P) ↔ 投射 P
   证明: ⟨F.toAdjunction.projective_of_map_projective P, F.toAdjunction.map_projective P⟩
 
 Depends on / 依赖: F.toAdjunction.map_projective, F.toAdjunction.projective_of_map_projective, map_projective, projective_of_map_projective, toAdjunction
@@ -683,7 +683,7 @@ theorem enoughProjectives_iff
 中文:
 定理 enoughProjectives_iff
   条件: (F : C ≌ D)
-  结论: EnoughProjectives C ↔ EnoughProjectives D
+  结论: 有足够投射 C ↔ 有足够投射 D
   证明: by
   constructor
   all_goals intro H; constructor; intro X; constructor
@@ -718,9 +718,9 @@ lemma Retract.projective
   simp [hg]
 
 中文:
-引理 Retract.projective
-  条件: {X Y : C} (h : Retract X Y) [p : Projective Y]
-  结论: Projective X
+引理 收缩.projective
+  条件: {X Y : C} (h : 收缩 X Y) [p : 投射 Y]
+  结论: 投射 X
   证明: by
   refine Projective.mk (fun {A B} f e _ => ?_)
   rcases p.factors (h.r ≫ f) e with ⟨g, hg⟩

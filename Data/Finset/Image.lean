@@ -62,7 +62,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α ↪ β) (s : Finset α)
+  签名: (f : α ↪ β) (s : 有限集 α)
   定义体: ⟨s.1.map f, s.2.map f.2⟩
 
 @[simp]
@@ -84,7 +84,7 @@ theorem map_val
 
 中文:
 定理 map_val
-  条件: (f : α ↪ β) (s : Finset α)
+  条件: (f : α ↪ β) (s : 有限集 α)
   结论: (map f s).1 = s.1.map f
   证明: rfl
 
@@ -106,7 +106,7 @@ theorem map_empty
 中文:
 定理 map_empty
   条件: (f : α ↪ β)
-  结论: (∅ : Finset α).map f = ∅
+  结论: (∅ : 有限集 α).map f = ∅
   证明: rfl
 -/
 theorem map_empty (f : α ↪ β) : (∅ : Finset α).map f = ∅ :=
@@ -180,7 +180,7 @@ theorem mem_map'
 
 中文:
 定理 mem_map'
-  条件: (f : α ↪ β) {a} {s : Finset α}
+  条件: (f : α ↪ β) {a} {s : 有限集 α}
   结论: f a in s.map f ↔ a in s
   证明: mem_map_of_injective f.2
 
@@ -202,7 +202,7 @@ theorem mem_map_mk
 
 中文:
 定理 mem_map_mk
-  条件: (f : α -> β) {a : α} {s : Finset α} (hf : Function.Injective f)
+  条件: (f : α -> β) {a : α} {s : 有限集 α} (hf : 函数.单射 f)
   证明: Finset.mem_map' _
 
 Depends on / 依赖: Finset, Finset.mem_map, mem_map
@@ -222,7 +222,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: (f : α ↪ β) {a} {s : Finset α}
+  条件: (f : α ↪ β) {a} {s : 有限集 α}
   结论: a in s -> f a in s.map f
   证明: (mem_map' _).2
 
@@ -240,8 +240,8 @@ theorem forall_mem_map
   proof: by grind
 
 中文:
-定理 forall_mem_map
-  条件: {f : α ↪ β} {s : Finset α} {p : 对任意 a, a in s.map f -> 命题}
+定理 对任意_mem_map
+  条件: {f : α ↪ β} {s : 有限集 α} {p : 对任意 a, a in s.map f -> 命题}
   证明: by grind
 -/
 theorem forall_mem_map {f : α ↪ β} {s : Finset α} {p : forall a, a in s.map f -> Prop} :
@@ -260,7 +260,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : α ↪ β) (s : Finset α) (x : s)
+  条件: (f : α ↪ β) (s : 有限集 α) (x : s)
   结论: f x in s.map f
   证明: mem_map_of_mem f x.prop
 
@@ -283,8 +283,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (f : α ↪ β) (s : Finset α)
-  结论: (s.map f : Set β) = f '' s
+  条件: (f : α ↪ β) (s : 有限集 α)
+  结论: (s.map f : 集合 β) = f '' s
   证明: by grind
 -/
 theorem coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) = f '' s := by grind
@@ -301,8 +301,8 @@ theorem coe_map_subset_range
 
 中文:
 定理 coe_map_subset_range
-  条件: (f : α ↪ β) (s : Finset α)
-  结论: (s.map f : Set β) subseteq Set.range f
+  条件: (f : α ↪ β) (s : 有限集 α)
+  结论: (s.map f : 集合 β) subseteq 集合.range f
   证明: by
   grind
 -/
@@ -320,7 +320,7 @@ theorem map_perm
 
 中文:
 定理 map_perm
-  条件: {σ : Equiv.Perm α} (hs : { a | σ a != a } subseteq s)
+  条件: {σ : 等价.置换 α} (hs : { a | σ a != a } subseteq s)
   结论: s.map (σ : α ↪ α) = s
   证明: coe_injective (coe_map _ _).trans Set.image_perm hs
 
@@ -365,7 +365,7 @@ theorem map_refl
 
 中文:
 定理 map_refl
-  结论: s.map (Embedding.refl _) = s
+  结论: s.map (嵌入.refl _) = s
   证明: ext fun _ => by simpa only [mem_map, exists_prop] using! exists_eq_right
 
 @[simp]
@@ -388,7 +388,7 @@ theorem map_cast_heq
 
 中文:
 定理 map_cast_heq
-  条件: {α β} (h : α = β) (s : Finset α)
+  条件: {α β} (h : α = β) (s : 有限集 α)
   证明: by
   subst h
   simp
@@ -409,7 +409,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (f : α ↪ β) (g : β ↪ γ) (s : Finset α)
+  条件: (f : α ↪ β) (g : β ↪ γ) (s : 有限集 α)
   结论: (s.map f).map g = s.map (f.trans g)
   证明: eq_of_veq by simp only [map_val, Multiset.map_map]; rfl
 
@@ -449,7 +449,7 @@ theorem _root_.Function.Semiconj.finset_map
   map_comm h
 
 中文:
-定理 _root_.Function.Semiconj.finset_map
+定理 _root_.函数.Semiconj.finset_map
   结论: {f : α ↪ β} {ga : α ↪ α} {gb : β ↪ β}
   证明: fun _ =>
   map_comm h
@@ -469,8 +469,8 @@ theorem _root_.Function.Commute.finset_map
 @[simp, gcongr]
 
 中文:
-定理 _root_.Function.Commute.finset_map
-  条件: {f g : α ↪ α} (h : Function.Commute f g)
+定理 _root_.函数.Commute.finset_map
+  条件: {f g : α ↪ α} (h : 函数.Commute f g)
   证明: Function.Semiconj.finset_map h
 
 @[simp, gcongr]
@@ -494,7 +494,7 @@ theorem map_subset_map
 
 中文:
 定理 map_subset_map
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁.map f subseteq s₂.map f ↔ s₁ subseteq s₂
   证明: ⟨fun h _ xs => (mem_map' _).1 h (mem_map' f).2 xs,
    fun h => by simp [subset_def, Multiset.map_subset_map h]⟩
@@ -521,7 +521,7 @@ theorem subset_map_symm
 
 中文:
 定理 subset_map_symm
-  条件: {t : Finset β} {f : α ≃ β}
+  条件: {t : 有限集 β} {f : α ≃ β}
   结论: s subseteq t.map f.symm ↔ s.map f subseteq t
   证明: by
   constructor <;> intro h x hx
@@ -551,7 +551,7 @@ theorem map_symm_subset
 
 中文:
 定理 map_symm_subset
-  条件: {t : Finset β} {f : α ≃ β}
+  条件: {t : 有限集 β} {f : α ≃ β}
   结论: t.map f.symm subseteq s ↔ t subseteq s.map f
   证明: by
   simp only [← subset_map_symm, Equiv.symm_symm]
@@ -595,7 +595,7 @@ theorem map_inj
 
 中文:
 定理 map_inj
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁.map f = s₂.map f ↔ s₁ = s₂
   证明: (mapEmbedding f).injective.eq_iff
 
@@ -618,7 +618,7 @@ theorem map_injective
 中文:
 定理 map_injective
   条件: (f : α ↪ β)
-  结论: Injective (map f)
+  结论: 单射 (map f)
   证明: (mapEmbedding f).injective
 
 @[simp, gcongr]
@@ -642,7 +642,7 @@ theorem map_ssubset_map
 
 中文:
 定理 map_ssubset_map
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s.map f ⊂ t.map f ↔ s ⊂ t
   证明: (mapEmbedding f).lt_iff_lt
 
@@ -699,7 +699,7 @@ lemma map_filter'
 
 中文:
 引理 map_filter'
-  结论: (p : α -> 命题) [DecidablePred p] (f : α ↪ β) (s : Finset α)
+  结论: (p : α -> 命题) [DecidablePred p] (f : α ↪ β) (s : 有限集 α)
   证明: by
   simp [filter_map]
 
@@ -721,7 +721,7 @@ lemma filter_attach'
 
 中文:
 引理 filter_attach'
-  条件: [DecidableEq α] (s : Finset α) (p : s -> 命题) [DecidablePred p]
+  条件: [DecidableEq α] (s : 有限集 α) (p : s -> 命题) [DecidablePred p]
   证明: eq_of_veq Multiset.filter_attach' _ _
 
 Depends on / 依赖: Multiset, Multiset.filter_attach, eq_of_veq, filter_attach
@@ -742,7 +742,7 @@ lemma filter_attach
 
 中文:
 引理 filter_attach
-  条件: (p : α -> 命题) [DecidablePred p] (s : Finset α)
+  条件: (p : α -> 命题) [DecidablePred p] (s : 有限集 α)
   证明: eq_of_veq Multiset.filter_attach _ _
 
 Depends on / 依赖: Multiset, Multiset.filter_attach, eq_of_veq, filter_attach
@@ -788,7 +788,7 @@ theorem disjoint_map
 
 中文:
 定理 disjoint_map
-  条件: {s t : Finset α} (f : α ↪ β)
+  条件: {s t : 有限集 α} (f : α ↪ β)
   证明: mod_cast Set.disjoint_image_iff f.injective (s := s) (t := t)
 
 Depends on / 依赖: Set.disjoint_image_iff, disjoint_image_iff, f.injective, injective, mod_cast
@@ -807,7 +807,7 @@ theorem map_disjUnion
 
 中文:
 定理 map_disjUnion
-  条件: {f : α ↪ β} (s₁ s₂ : Finset α) (h) (h' := (disjoint_map _).mpr h)
+  条件: {f : α ↪ β} (s₁ s₂ : 有限集 α) (h) (h' := (disjoint_map _).mpr h)
   证明: eq_of_veq Multiset.map_add _ _ _
 
 Depends on / 依赖: disjoint_map
@@ -826,7 +826,7 @@ theorem map_disjUnion'
 
 中文:
 定理 map_disjUnion'
-  条件: {f : α ↪ β} (s₁ s₂ : Finset α) (h') (h := (disjoint_map _).mp h')
+  条件: {f : α ↪ β} (s₁ s₂ : 有限集 α) (h') (h := (disjoint_map _).mp h')
   证明: map_disjUnion _ _ _
 
 Depends on / 依赖: disjoint_map
@@ -845,7 +845,7 @@ theorem map_union
 
 中文:
 定理 map_union
-  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : Finset α)
+  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : 有限集 α)
   证明: mod_cast Set.image_union f s₁ s₂
 
 Depends on / 依赖: Set.image_union, image_union, mod_cast
@@ -864,7 +864,7 @@ theorem map_inter
 
 中文:
 定理 map_inter
-  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : Finset α)
+  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : 有限集 α)
   证明: mod_cast Set.image_inter f.injective (s := s₁) (t := s₂)
 
 Depends on / 依赖: Set.image_inter, f.injective, image_inter, injective, mod_cast
@@ -885,7 +885,7 @@ theorem map_sdiff
 
 中文:
 定理 map_sdiff
-  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : Finset α)
+  条件: [DecidableEq α] [DecidableEq β] {f : α ↪ β} (s₁ s₂ : 有限集 α)
   证明: mod_cast Set.image_sdiff f.injective (s := s₁) (t := s₂)
 
 @[simp]
@@ -935,7 +935,7 @@ theorem map_insert
 
 中文:
 定理 map_insert
-  条件: [DecidableEq α] [DecidableEq β] (f : α ↪ β) (a : α) (s : Finset α)
+  条件: [DecidableEq α] [DecidableEq β] (f : α ↪ β) (a : α) (s : 有限集 α)
   证明: by
   simp only [insert_eq, map_union, map_singleton]
 
@@ -960,7 +960,7 @@ theorem map_cons
 
 中文:
 定理 map_cons
-  条件: (f : α ↪ β) (a : α) (s : Finset α) (ha : a ∉ s)
+  条件: (f : α ↪ β) (a : α) (s : 有限集 α) (ha : a ∉ s)
   证明: eq_of_veq Multiset.map_cons f a s.val
 
 @[simp]
@@ -1031,7 +1031,7 @@ protected alias ⟨_, Nonempty.map⟩ := map_nonempty
 
 中文:
 定理 map_nonempty
-  结论: (s.map f).Nonempty ↔ s.Nonempty
+  结论: (s.map f).非空 ↔ s.非空
   证明: mod_cast Set.image_nonempty (f := f) (s := s)
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -1058,7 +1058,7 @@ theorem map_nontrivial
 
 中文:
 定理 map_nontrivial
-  结论: (s.map f).Nontrivial ↔ s.Nontrivial
+  结论: (s.map f).非平凡 ↔ s.非平凡
   证明: mod_cast Set.image_nontrivial f.injective (s := s)
 
 Depends on / 依赖: Set.image_nontrivial, f.injective, image_nontrivial, injective, mod_cast
@@ -1077,8 +1077,8 @@ theorem attach_map_val
 
 中文:
 定理 attach_map_val
-  条件: {s : Finset α}
-  结论: s.attach.map (Embedding.subtype _) = s
+  条件: {s : 有限集 α}
+  结论: s.attach.map (嵌入.subtype _) = s
   证明: eq_of_veq by rw [map_val, attach_val]; exact Multiset.attach_map_val _
 
 Depends on / 依赖: Multiset, Multiset.attach_map_val, attach_map_val, attach_val, eq_of_veq, map_val
@@ -1155,8 +1155,8 @@ definition image
 @[simp]
 
 中文:
-定义 image
-  签名: (f : α -> β) (s : Finset α)
+定义 像
+  签名: (f : α -> β) (s : 有限集 α)
   定义体: (s.1.map f).toFinset
 
 @[simp]
@@ -1180,8 +1180,8 @@ theorem image_val
 
 中文:
 定理 image_val
-  条件: (f : α -> β) (s : Finset α)
-  结论: (image f s).1 = (s.1.map f).dedup
+  条件: (f : α -> β) (s : 有限集 α)
+  结论: (像 f s).1 = (s.1.map f).dedup
   证明: rfl
 
 @[simp]
@@ -1202,7 +1202,7 @@ theorem image_empty
 中文:
 定理 image_empty
   条件: (f : α -> β)
-  结论: (∅ : Finset α).image f = ∅
+  结论: (∅ : 有限集 α).像 f = ∅
   证明: rfl
 -/
 theorem image_empty (f : α -> β) : (∅ : Finset α).image f = ∅ :=
@@ -1222,7 +1222,7 @@ theorem mem_image
 
 中文:
 定理 mem_image
-  结论: b in s.image f ↔ 存在 a in s, f a = b
+  结论: b in s.像 f ↔ 存在 a in s, f a = b
   证明: by
   simp only [mem_def, image_val, mem_dedup, Multiset.mem_map]
 
@@ -1243,7 +1243,7 @@ theorem mem_image_of_mem
 中文:
 定理 mem_image_of_mem
   条件: (f : α -> β) {a} (h : a in s)
-  结论: f a in s.image f
+  结论: f a in s.像 f
   证明: mem_image.2 ⟨_, h, rfl⟩
 
 Depends on / 依赖: mem_image
@@ -1261,9 +1261,9 @@ lemma forall_mem_image
   proof: by simp
 
 中文:
-引理 forall_mem_image
+引理 对任意_mem_image
   条件: {p : β -> 命题}
-  结论: (对任意 y in s.image f, p y) ↔ 对任意 ⦃x⦄, x in s -> p (f x)
+  结论: (对任意 y in s.像 f, p y) ↔ 对任意 ⦃x⦄, x in s -> p (f x)
   证明: by simp
 -/
 lemma forall_mem_image {p : β -> Prop} : (forall y in s.image f, p y) ↔ forall ⦃x⦄, x in s -> p (f x) := by simp
@@ -1277,9 +1277,9 @@ lemma exists_mem_image
   proof: by simp
 
 中文:
-引理 exists_mem_image
+引理 存在_mem_image
   条件: {p : β -> 命题}
-  结论: (存在 y in s.image f, p y) ↔ 存在 x in s, p (f x)
+  结论: (存在 y in s.像 f, p y) ↔ 存在 x in s, p (f x)
   证明: by simp
 -/
 lemma exists_mem_image {p : β -> Prop} : (exists y in s.image f, p y) ↔ exists x in s, p (f x) := by simp
@@ -1295,8 +1295,8 @@ theorem map_eq_image
 
 中文:
 定理 map_eq_image
-  条件: (f : α ↪ β) (s : Finset α)
-  结论: s.map f = s.image f
+  条件: (f : α ↪ β) (s : 有限集 α)
+  结论: s.map f = s.像 f
   证明: eq_of_veq (s.map f).2.dedup.symm
 
 Depends on / 依赖: dedup.symm, eq_of_veq, s.map
@@ -1316,7 +1316,7 @@ theorem mem_image_const
 
 中文:
 定理 mem_image_const
-  结论: c in s.image (const α b) ↔ s.Nonempty ∧ b = c
+  结论: c in s.像 (const α b) ↔ s.非空 ∧ b = c
   证明: by
   grind
 -/
@@ -1333,7 +1333,7 @@ theorem mem_image_const_self
 
 中文:
 定理 mem_image_const_self
-  结论: b in s.image (const α b) ↔ s.Nonempty
+  结论: b in s.像 (const α b) ↔ s.非空
   证明: mem_image_const.trans and_iff_left rfl
 
 Depends on / 依赖: and_iff_left, mem_image_const, mem_image_const.trans
@@ -1384,8 +1384,8 @@ theorem image_congr
 
 中文:
 定理 image_congr
-  条件: (h : (s : Set α).EqOn f g)
-  结论: Finset.image f s = Finset.image g s
+  条件: (h : (s : 集合 α).EqOn f g)
+  结论: 有限集.像 f s = 有限集.像 g s
   证明: by
   ext
   simp_rw [mem_image, ← bex_def]
@@ -1411,8 +1411,8 @@ theorem _root_.Function.Injective.mem_finset_image
 @[simp, norm_cast]
 
 中文:
-定理 _root_.Function.Injective.mem_finset_image
-  条件: (hf : Injective f)
+定理 _root_.函数.单射.mem_finset_image
+  条件: (hf : 单射 f)
   证明: by
   grind
 
@@ -1437,7 +1437,7 @@ theorem coe_image
 
 中文:
 定理 coe_image
-  结论: ↑(s.image f) = f '' ↑s
+  结论: ↑(s.像 f) = f '' ↑s
   证明: Set.ext by simp only [mem_coe, mem_image, Set.mem_image, implies_true]
 
 @[simp]
@@ -1460,7 +1460,7 @@ lemma image_nonempty
 
 中文:
 引理 image_nonempty
-  结论: (s.image f).Nonempty ↔ s.Nonempty
+  结论: (s.像 f).非空 ↔ s.非空
   证明: mod_cast Set.image_nonempty (f := f) (s := (s : Set α))
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -1483,9 +1483,9 @@ theorem Nonempty.image
 alias ⟨Nonempty.of_image, _⟩ := image_nonempty
 
 中文:
-定理 Nonempty.image
-  条件: (h : s.Nonempty) (f : α -> β)
-  结论: (s.image f).Nonempty
+定理 非空.像
+  条件: (h : s.非空) (f : α -> β)
+  结论: (s.像 f).非空
   证明: image_nonempty.2 h
 
 alias ⟨Nonempty.of_image, _⟩ := image_nonempty
@@ -1508,8 +1508,8 @@ theorem nontrivial_of_image
 
 中文:
 定理 nontrivial_of_image
-  条件: (h : (s.image f).Nontrivial)
-  结论: s.Nontrivial
+  条件: (h : (s.像 f).非平凡)
+  结论: s.非平凡
   证明: by
   simp only [Finset.Nontrivial, coe_image] at h ⊢
   exact Set.nontrivial_of_image _ _ h
@@ -1531,8 +1531,8 @@ theorem Nontrivial.image_of_injOn
   exact ⟨f x, mem_image_of_mem _ hx, f y, mem_image_of_mem _ hy, (hxy <| hf hx hy ·)⟩
 
 中文:
-定理 Nontrivial.image_of_injOn
-  条件: (hs : s.Nontrivial) (hf : Set.InjOn f s)
+定理 非平凡.image_of_injOn
+  条件: (hs : s.非平凡) (hf : 集合.单射限制 f s)
   证明: by
   obtain ⟨x, hx, y, hy, hxy⟩ := hs
   exact ⟨f x, mem_image_of_mem _ hx, f y, mem_image_of_mem _ hy, (hxy <| hf hx hy ·)⟩
@@ -1552,7 +1552,7 @@ theorem image_nontrivial_iff_of_injOn
 
 中文:
 定理 image_nontrivial_iff_of_injOn
-  条件: (hf : Set.InjOn f s)
+  条件: (hf : 集合.单射限制 f s)
   证明: ⟨nontrivial_of_image, (·.image_of_injOn hf)⟩
 
 Depends on / 依赖: image_of_injOn, nontrivial_of_image
@@ -1593,8 +1593,8 @@ theorem image_val_of_injOn
 
 中文:
 定理 image_val_of_injOn
-  条件: (H : Set.InjOn f s)
-  结论: (image f s).1 = s.1.map f
+  条件: (H : 集合.单射限制 f s)
+  结论: (像 f s).1 = s.1.map f
   证明: (s.2.map_on H).dedup
 
 @[simp]
@@ -1619,7 +1619,7 @@ theorem image_id
 中文:
 定理 image_id
   条件: [DecidableEq α]
-  结论: s.image id = s
+  结论: s.像 id = s
   证明: ext fun _ => by simp only [mem_image, id, exists_eq_right]
 
 @[simp]
@@ -1642,7 +1642,7 @@ theorem image_id'
 中文:
 定理 image_id'
   条件: [DecidableEq α]
-  结论: (s.image fun x => x) = s
+  结论: (s.像 fun x => x) = s
   证明: image_id
 
 Depends on / 依赖: image_id
@@ -1662,7 +1662,7 @@ theorem image_image
 中文:
 定理 image_image
   条件: [DecidableEq γ] {g : β -> γ}
-  结论: (s.image f).image g = s.image (g ∘ f)
+  结论: (s.像 f).像 g = s.像 (g ∘ f)
   证明: eq_of_veq by simp only [image_val, dedup_map_dedup_eq, Multiset.map_map]
 
 Depends on / 依赖: Multiset, Multiset.map_map, dedup_map_dedup_eq, eq_of_veq, image_val, map_map
@@ -1682,7 +1682,7 @@ theorem image_comp
 中文:
 定理 image_comp
   条件: [DecidableEq γ] {g : β -> γ}
-  结论: s.image (g ∘ f) = (s.image f).image g
+  结论: s.像 (g ∘ f) = (s.像 f).像 g
   证明: image_image.symm
 
 Depends on / 依赖: image_image, image_image.symm
@@ -1755,7 +1755,7 @@ theorem _root_.Function.Semiconj.finset_image
   image_comm h
 
 中文:
-定理 _root_.Function.Semiconj.finset_image
+定理 _root_.函数.Semiconj.finset_image
   结论: [DecidableEq α] {f : α -> β} {ga : α -> α} {gb : β -> β}
   证明: fun _ =>
   image_comm h
@@ -1775,7 +1775,7 @@ theorem _root_.Function.Commute.finset_image
 @[gcongr]
 
 中文:
-定理 _root_.Function.Commute.finset_image
+定理 _root_.函数.Commute.finset_image
   结论: [DecidableEq α] {f g : α -> α}
   证明: Function.Semiconj.finset_image h
 
@@ -1800,8 +1800,8 @@ theorem image_subset_image
 
 中文:
 定理 image_subset_image
-  条件: {s₁ s₂ : Finset α} (h : s₁ subseteq s₂)
-  结论: s₁.image f subseteq s₂.image f
+  条件: {s₁ s₂ : 有限集 α} (h : s₁ subseteq s₂)
+  结论: s₁.像 f subseteq s₂.像 f
   证明: by
   simp only [subset_def, image_val, subset_dedup', dedup_subset', Multiset.map_subset_map h]
 
@@ -1822,7 +1822,7 @@ theorem image_subset_iff
 
 中文:
 定理 image_subset_iff
-  结论: s.image f subseteq t ↔ 对任意 x in s, f x in t
+  结论: s.像 f subseteq t ↔ 对任意 x in s, f x in t
   证明: calc
     s.image f subseteq t ↔ f '' ↑s subseteq ↑t := by norm_cast
     _ ↔ _ := Set.image_subset_iff
@@ -1847,7 +1847,7 @@ alias ⟨_root_.Set.MapsTo.finsetImage_subset, _⟩ := mapsTo_iff_image_subset
 
 中文:
 引理 mapsTo_iff_image_subset
-  结论: Set.MapsTo f s t ↔ s.image f subseteq t
+  结论: 集合.映射到 f s t ↔ s.像 f subseteq t
   证明: by
   simp [Set.MapsTo, image_subset_iff]
 
@@ -1874,7 +1874,7 @@ alias ⟨_root_.Set.SurjOn.subset_finsetImage, _⟩ := surjOn_iff_subset_image
 
 中文:
 引理 surjOn_iff_subset_image
-  结论: Set.SurjOn f s t ↔ t subseteq s.image f
+  结论: 集合.满射限制 f s t ↔ t subseteq s.像 f
   证明: by
   simp only [Set.SurjOn]
   norm_cast
@@ -1902,7 +1902,7 @@ alias ⟨_root_.Set.SurjOn.finsetImage_eq_of_mapsTo, _⟩ := image_eq_iff_surjOn
 
 中文:
 引理 image_eq_iff_surjOn_mapsTo
-  结论: s.image f = t ↔ Set.SurjOn f s t ∧ Set.MapsTo f s t
+  结论: s.像 f = t ↔ 集合.满射限制 f s t ∧ 集合.映射到 f s t
   证明: by
   grind [mapsTo_iff_image_subset, surjOn_iff_subset_image]
 
@@ -1927,7 +1927,7 @@ theorem image_mono
 中文:
 定理 image_mono
   条件: (f : α -> β)
-  结论: Monotone (Finset.image f)
+  结论: 递增 (有限集.像 f)
   证明: fun _ _ => image_subset_image
 
 Depends on / 依赖: image_subset_image
@@ -1946,8 +1946,8 @@ lemma image_injective
 
 中文:
 引理 image_injective
-  条件: (hf : Injective f)
-  结论: Injective (image f)
+  条件: (hf : 单射 f)
+  结论: 单射 (像 f)
   证明: by
   simpa only [funext (map_eq_image _)] using! map_injective ⟨f, hf⟩
 
@@ -1967,8 +1967,8 @@ lemma image_inj
 
 中文:
 引理 image_inj
-  条件: {t : Finset α} (hf : Injective f)
-  结论: s.image f = t.image f ↔ s = t
+  条件: {t : 有限集 α} (hf : 单射 f)
+  结论: s.像 f = t.像 f ↔ s = t
   证明: (image_injective hf).eq_iff
 
 Depends on / 依赖: eq_iff, image_injective
@@ -1986,7 +1986,7 @@ theorem image_subset_image_iff
 
 中文:
 定理 image_subset_image_iff
-  条件: {t : Finset α} (hf : Injective f)
+  条件: {t : 有限集 α} (hf : 单射 f)
   证明: mod_cast Set.image_subset_image_iff hf (s := s) (t := t)
 
 Depends on / 依赖: Set.image_subset_image_iff, image_subset_image_iff, mod_cast
@@ -2006,7 +2006,7 @@ theorem image_subset_image_iff_of_injOn
 
 中文:
 定理 image_subset_image_iff_of_injOn
-  结论: {s₁ s₂ : Finset α} (ht : (s : Set α).InjOn f)
+  结论: {s₁ s₂ : 有限集 α} (ht : (s : 集合 α).单射限制 f)
   证明: by
   exact_mod_cast ht.image_subset_image_iff (mod_cast h₁) (mod_cast h₂)
 
@@ -2027,7 +2027,7 @@ theorem image_eq_image_iff_of_injOn
 
 中文:
 定理 image_eq_image_iff_of_injOn
-  结论: {s₁ s₂ : Finset α} (ht : (s : Set α).InjOn f)
+  结论: {s₁ s₂ : 有限集 α} (ht : (s : 集合 α).单射限制 f)
   证明: by
   exact_mod_cast ht.image_eq_image_iff (mod_cast h₁) (mod_cast h₂)
 
@@ -2049,8 +2049,8 @@ lemma image_ssubset_image
 
 中文:
 引理 image_ssubset_image
-  条件: {t : Finset α} (hf : Injective f)
-  结论: s.image f ⊂ t.image f ↔ s ⊂ t
+  条件: {t : 有限集 α} (hf : 单射 f)
+  结论: s.像 f ⊂ t.像 f ↔ s ⊂ t
   证明: by
   exact lt_iff_lt_of_le_iff_le' (image_subset_image_iff hf) (image_subset_image_iff hf)
 
@@ -2071,7 +2071,7 @@ theorem coe_image_subset_range
 
 中文:
 定理 coe_image_subset_range
-  结论: ↑(s.image f) subseteq Set.range f
+  结论: ↑(s.像 f) subseteq 集合.range f
   证明: calc
     ↑(s.image f) = f '' ↑s := coe_image
     _ subseteq Set.range f := Set.image_subset_range f ↑s
@@ -2112,7 +2112,7 @@ theorem fiber_nonempty_iff_mem_image
 中文:
 定理 fiber_nonempty_iff_mem_image
   条件: {y : β}
-  结论: (s.filter (f · = y)).Nonempty ↔ y in s.image f
+  结论: (s.filter (f · = y)).非空 ↔ y in s.像 f
   证明: by
   simp [Finset.Nonempty]
 
@@ -2131,7 +2131,7 @@ theorem image_union
 
 中文:
 定理 image_union
-  条件: [DecidableEq α] {f : α -> β} (s₁ s₂ : Finset α)
+  条件: [DecidableEq α] {f : α -> β} (s₁ s₂ : 有限集 α)
   证明: mod_cast Set.image_union f s₁ s₂
 
 Depends on / 依赖: Set.image_union, image_union, mod_cast
@@ -2150,7 +2150,7 @@ theorem image_inter_subset
 
 中文:
 定理 image_inter_subset
-  条件: [DecidableEq α] (f : α -> β) (s t : Finset α)
+  条件: [DecidableEq α] (f : α -> β) (s t : 有限集 α)
   证明: (image_mono f).map_inf_le s t
 
 Depends on / 依赖: image_mono, map_inf_le
@@ -2171,7 +2171,7 @@ exact Set.image_inter_on fun a ha b hb => hf (Or.inr ha) Or.inl hb
 
 中文:
 定理 image_inter_of_injOn
-  结论: [DecidableEq α] {f : α -> β} (s t : Finset α)
+  结论: [DecidableEq α] {f : α -> β} (s t : 有限集 α)
   证明: coe_injective by
     push_cast
 exact Set.image_inter_on fun a ha b hb => hf (Or.inr ha) Or.inl hb
@@ -2196,7 +2196,7 @@ theorem image_inter
 
 中文:
 定理 image_inter
-  条件: [DecidableEq α] (s₁ s₂ : Finset α) (hf : Injective f)
+  条件: [DecidableEq α] (s₁ s₂ : 有限集 α) (hf : 单射 f)
   证明: image_inter_of_injOn _ _ hf.injOn
 
 @[simp]
@@ -2222,7 +2222,7 @@ theorem image_singleton
 中文:
 定理 image_singleton
   条件: (f : α -> β) (a : α)
-  结论: image f {a} = {f a}
+  结论: 像 f {a} = {f a}
   证明: by grind
 
 @[simp]
@@ -2240,7 +2240,7 @@ theorem image_insert
 
 中文:
 定理 image_insert
-  条件: [DecidableEq α] (f : α -> β) (a : α) (s : Finset α)
+  条件: [DecidableEq α] (f : α -> β) (a : α) (s : 有限集 α)
   证明: by grind
 -/
 theorem image_insert [DecidableEq α] (f : α -> β) (a : α) (s : Finset α) :
@@ -2258,7 +2258,7 @@ theorem erase_image_subset_image_erase
 
 中文:
 定理 erase_image_subset_image_erase
-  条件: [DecidableEq α] (f : α -> β) (s : Finset α) (a : α)
+  条件: [DecidableEq α] (f : α -> β) (s : 有限集 α) (a : α)
   证明: by grind
 
 @[simp]
@@ -2279,7 +2279,7 @@ theorem image_erase
 
 中文:
 定理 image_erase
-  条件: [DecidableEq α] {f : α -> β} (hf : Injective f) (s : Finset α) (a : α)
+  条件: [DecidableEq α] {f : α -> β} (hf : 单射 f) (s : 有限集 α) (a : α)
   证明: by grind
 
 @[simp]
@@ -2300,7 +2300,7 @@ theorem image_eq_empty
 
 中文:
 定理 image_eq_empty
-  结论: s.image f = ∅ ↔ s = ∅
+  结论: s.像 f = ∅ ↔ s = ∅
   证明: mod_cast Set.image_eq_empty (f := f) (s := s)
 
 @[simp]
@@ -2320,7 +2320,7 @@ theorem empty_eq_image
 
 中文:
 定理 empty_eq_image
-  结论: ∅ = s.image f ↔ s = ∅
+  结论: ∅ = s.像 f ↔ s = ∅
   证明: by rw [eq_comm, image_eq_empty]
 
 Depends on / 依赖: eq_comm, image_eq_empty
@@ -2337,7 +2337,7 @@ theorem image_sdiff
 
 中文:
 定理 image_sdiff
-  条件: [DecidableEq α] {f : α -> β} (s t : Finset α) (hf : Injective f)
+  条件: [DecidableEq α] {f : α -> β} (s t : 有限集 α) (hf : 单射 f)
   证明: mod_cast Set.image_sdiff hf s t
 
 Depends on / 依赖: Set.image_sdiff, image_sdiff, mod_cast
@@ -2356,7 +2356,7 @@ lemma image_sdiff_of_injOn
 
 中文:
 引理 image_sdiff_of_injOn
-  条件: [DecidableEq α] {t : Finset α} (hf : Set.InjOn f s) (hts : t subseteq s)
+  条件: [DecidableEq α] {t : 有限集 α} (hf : 集合.单射限制 f s) (hts : t subseteq s)
   证明: mod_cast Set.image_sdiff_of_injOn hf coe_subset.2 hts
 
 Depends on / 依赖: Set.image_sdiff_of_injOn, coe_subset, image_sdiff_of_injOn, mod_cast
@@ -2376,7 +2376,7 @@ ne_of_apply_ne f h.forall_ne_finset (mem_image_of_mem _ ha) (mem_image_of_mem _ 
 
 中文:
 定理 _root_.Disjoint.of_image_finset
-  结论: {s t : Finset α} {f : α -> β}
+  结论: {s t : 有限集 α} {f : α -> β}
   证明: disjoint_iff_ne.2 fun _ ha _ hb =>
 ne_of_apply_ne f h.forall_ne_finset (mem_image_of_mem _ ha) (mem_image_of_mem _ hb)
 
@@ -2483,8 +2483,8 @@ theorem attach_image_val
 
 中文:
 定理 attach_image_val
-  条件: [DecidableEq α] {s : Finset α}
-  结论: s.attach.image Subtype.val = s
+  条件: [DecidableEq α] {s : 有限集 α}
+  结论: s.attach.像 子类型.val = s
   证明: eq_of_veq by rw [image_val, attach_val, Multiset.attach_map_val, dedup_eq_self]
 
 Depends on / 依赖: Multiset, Multiset.attach_map_val, attach_map_val, attach_val, dedup_eq_self, eq_of_veq, image_val
@@ -2506,7 +2506,7 @@ lemma attach_cons
 
 中文:
 引理 attach_cons
-  条件: (a : α) (s : Finset α) (ha)
+  条件: (a : α) (s : 有限集 α) (ha)
   证明: by ext ⟨x, hx⟩; simpa using hx
 
 @[simp]
@@ -2530,7 +2530,7 @@ theorem attach_insert
 
 中文:
 定理 attach_insert
-  条件: [DecidableEq α] (s : Finset α) (a : α)
+  条件: [DecidableEq α] (s : 有限集 α) (a : α)
   证明: by ext ⟨x, hx⟩; simpa using hx
 
 @[simp]
@@ -2551,7 +2551,7 @@ theorem disjoint_image
 
 中文:
 定理 disjoint_image
-  条件: {s t : Finset α} {f : α -> β} (hf : Injective f)
+  条件: {s t : 有限集 α} {f : α -> β} (hf : 单射 f)
   证明: mod_cast Set.disjoint_image_iff hf (s := s) (t := t)
 
 Depends on / 依赖: Set.disjoint_image_iff, disjoint_image_iff, mod_cast
@@ -2573,8 +2573,8 @@ theorem image_const
 
 中文:
 定理 image_const
-  条件: {s : Finset α} (h : s.Nonempty) (b : β)
-  结论: (s.image fun _ => b) = singleton b
+  条件: {s : 有限集 α} (h : s.非空) (b : β)
+  结论: (s.像 fun _ => b) = singleton b
   证明: mod_cast Set.Nonempty.image_const (coe_nonempty.2 h) b
 
 @[simp]
@@ -2597,7 +2597,7 @@ theorem map_erase
 
 中文:
 定理 map_erase
-  条件: [DecidableEq α] (f : α ↪ β) (s : Finset α) (a : α)
+  条件: [DecidableEq α] (f : α ↪ β) (s : 有限集 α) (a : α)
   证明: by
   simp_rw [map_eq_image]
   exact s.image_erase f.2 a
@@ -2653,7 +2653,7 @@ definition filterMap
 
 中文:
 定义 filterMap
-  签名: (f : α -> Option β) (s : Finset α)
+  签名: (f : α -> 选项类型 β) (s : 有限集 α)
   定义体: ⟨s.val.filterMap f, s.nodup.filterMap f f_inj⟩
 
 Depends on / 依赖: f_inj, filterMap, s.nodup.filterMap, s.val.filterMap
@@ -2698,7 +2698,7 @@ theorem filterMap_empty
 
 中文:
 定理 filterMap_empty
-  结论: (∅ : Finset α).filterMap f f_inj = ∅
+  结论: (∅ : 有限集 α).filterMap f f_inj = ∅
   证明: rfl
 
 @[simp, grind =]
@@ -2743,7 +2743,7 @@ theorem coe_filterMap
 
 中文:
 定理 coe_filterMap
-  结论: (s.filterMap f f_inj : Set β) = {b | 存在 a in s, f a = some b}
+  结论: (s.filterMap f f_inj : 集合 β) = {b | 存在 a in s, f a = some b}
   证明: Set.ext (by simp only [mem_coe, mem_filterMap, Set.mem_ofPred_eq, implies_true])
 
 @[simp]
@@ -2798,7 +2798,7 @@ theorem _root_.List.toFinset_filterMap
   simp [← Finset.coe_inj]
 
 中文:
-定理 _root_.List.toFinset_filterMap
+定理 _root_.列表.toFinset_filterMap
   结论: [DecidableEq α] [DecidableEq β]
   证明: by
   simp [← Finset.coe_inj]
@@ -2829,7 +2829,7 @@ fun _ _ H => Subtype.ext Subtype.mk.inj H⟩
 
 中文:
 定义 subtype
-  签名: {α} (p : α -> 命题) [DecidablePred p] (s : Finset α)
+  签名: {α} (p : α -> 命题) [DecidablePred p] (s : 有限集 α)
   定义体: (s.filter p).attach.map
     ⟨fun x => ⟨x.1, by simpa using (Finset.mem_filter.1 x.2).2⟩,
 fun _ _ H => Subtype.ext Subtype.mk.inj H⟩
@@ -2850,7 +2850,7 @@ theorem mem_subtype
 
 中文:
 定理 mem_subtype
-  条件: {p : α -> 命题} [DecidablePred p] {s : Finset α}
+  条件: {p : α -> 命题} [DecidablePred p] {s : 有限集 α}
 -/
 theorem mem_subtype {p : α -> Prop} [DecidablePred p] {s : Finset α} :
     forall {a : Subtype p}, a in s.subtype p ↔ (a : α) in s
@@ -2868,7 +2868,7 @@ theorem subtype_eq_empty
 
 中文:
 定理 subtype_eq_empty
-  条件: {p : α -> 命题} [DecidablePred p] {s : Finset α}
+  条件: {p : α -> 命题} [DecidablePred p] {s : 有限集 α}
   证明: by simp [Finset.ext_iff, Subtype.forall]
 
 @[gcongr, mono]
@@ -2891,7 +2891,7 @@ theorem subtype_mono
 中文:
 定理 subtype_mono
   条件: {p : α -> 命题} [DecidablePred p]
-  结论: Monotone (Finset.subtype p)
+  结论: 递增 (有限集.subtype p)
   证明: fun _ _ h _ hx => mem_subtype.2 h mem_subtype.1 hx
 
 Depends on / 依赖: mem_subtype
@@ -2914,7 +2914,7 @@ theorem subtype_map
 
 中文:
 定理 subtype_map
-  条件: (p : α -> 命题) [DecidablePred p] {s : Finset α}
+  条件: (p : α -> 命题) [DecidablePred p] {s : 有限集 α}
   证明: by
   ext x
   simp [@and_comm _ (_ = _), @and_comm (p x) (x in s)]
@@ -2938,7 +2938,7 @@ theorem subtype_map_of_mem
 
 中文:
 定理 subtype_map_of_mem
-  条件: {p : α -> 命题} [DecidablePred p] {s : Finset α} (h : 对任意 x in s, p x)
+  条件: {p : α -> 命题} [DecidablePred p] {s : 有限集 α} (h : 对任意 x in s, p x)
   证明: ext by simpa [subtype_map] using h
 
 @[simp]
@@ -2960,7 +2960,7 @@ theorem subtype_mem_eq_attach
 
 中文:
 定理 subtype_mem_eq_attach
-  条件: (s : Finset α) [DecidablePred (· in s)]
+  条件: (s : 有限集 α) [DecidablePred (· in s)]
   证明: by
   ext; simp
 -/
@@ -2980,7 +2980,7 @@ theorem property_of_mem_map_subtype
 
 中文:
 定理 property_of_mem_map_subtype
-  结论: {p : α -> 命题} (s : Finset { x // p x }) {a : α}
+  结论: {p : α -> 命题} (s : 有限集 { x // p x }) {a : α}
   证明: by
   rcases mem_map.1 h with ⟨x, _, rfl⟩
   exact x.2
@@ -3002,7 +3002,7 @@ theorem notMem_map_subtype_of_not_property
 
 中文:
 定理 notMem_map_subtype_of_not_property
-  结论: {p : α -> 命题} (s : Finset { x // p x }) {a : α}
+  结论: {p : α -> 命题} (s : 有限集 { x // p x }) {a : α}
   证明: mt s.property_of_mem_map_subtype h
 
 Depends on / 依赖: property_of_mem_map_subtype, s.property_of_mem_map_subtype
@@ -3025,8 +3025,8 @@ theorem map_subtype_subset
 
 中文:
 定理 map_subtype_subset
-  条件: {t : Set α} (s : Finset t)
-  结论: ↑(s.map (Embedding.subtype _)) subseteq t
+  条件: {t : 集合 α} (s : 有限集 t)
+  结论: ↑(s.map (嵌入.subtype _)) subseteq t
   证明: by
   intro a ha
   rw [mem_coe] at ha
@@ -3058,7 +3058,7 @@ theorem subset_set_image_iff
 
 中文:
 定理 subset_set_image_iff
-  条件: [DecidableEq β] {s : Set α} {t : Finset β} {f : α -> β}
+  条件: [DecidableEq β] {s : 集合 α} {t : 有限集 β} {f : α -> β}
   证明: by
   constructor
   · intro h
@@ -3091,7 +3091,7 @@ theorem subset_image_iff
 
 中文:
 定理 subset_image_iff
-  条件: [DecidableEq β] {s : Finset α} {t : Finset β} {f : α -> β}
+  条件: [DecidableEq β] {s : 有限集 α} {t : 有限集 β} {f : α -> β}
   证明: by
   simp only [← coe_subset, coe_image, subset_set_image_iff]
 
@@ -3111,7 +3111,7 @@ theorem subset_univ_image_iff
 
 中文:
 定理 subset_univ_image_iff
-  条件: [Fintype α] [DecidableEq β] {t : Finset β} {f : α -> β}
+  条件: [有限类型 α] [DecidableEq β] {t : 有限集 β} {f : α -> β}
   证明: by simp [subset_image_iff]
 
 Depends on / 依赖: subset_image_iff
@@ -3137,7 +3137,7 @@ theorem range_sdiff_zero
 中文:
 定理 range_sdiff_zero
   条件: {n : 自然数}
-  结论: range (n + 1) \ {0} = (range n).image 自然数.succ
+  结论: range (n + 1) \ {0} = (range n).像 自然数.succ
   证明: by
   induction n with
   | zero => simp
@@ -3222,7 +3222,7 @@ theorem finsetCongr_apply
 
 中文:
 定理 finsetCongr_apply
-  条件: (e : α ≃ β) (s : Finset α)
+  条件: (e : α ≃ β) (s : 有限集 α)
   结论: e.finsetCongr s = s.map e.toEmbedding
   证明: rfl
 
@@ -3246,7 +3246,7 @@ theorem finsetCongr_refl
 
 中文:
 定理 finsetCongr_refl
-  结论: (Equiv.refl α).finsetCongr = Equiv.refl _
+  结论: (等价.refl α).finsetCongr = 等价.refl _
   证明: by
   ext
   simp

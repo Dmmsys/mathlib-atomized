@@ -48,7 +48,7 @@ class QuasiCompactCover
 类 QuasiCompactCover
   参数: (𝒰 : PreZeroHypercover.{v} S)
   公理与运算 (1 个):
-    - isCompactOpenCovered_of_isAffineOpen({U : S.Opens} (hU : IsAffineOpen U)) : IsCompactOpenCovered (𝒰.f ·) (U : Set S)
+    - isCompactOpenCovered_of_isAffineOpen({U : S.Opens} (hU : 是仿射开集 U)) : IsCompactOpenCovered (𝒰.f ·) (U : 集合 S)
 -/
 class QuasiCompactCover (𝒰 : PreZeroHypercover.{v} S) : Prop where
   isCompactOpenCovered_of_isAffineOpen {U : S.Opens} (hU : IsAffineOpen U) :
@@ -65,8 +65,8 @@ lemma IsAffineOpen.isCompactOpenCovered
   proof: QuasiCompactCover.isCompactOpenCovered_of_isAffineOpen hU
 
 中文:
-引理 IsAffineOpen.isCompactOpenCovered
-  条件: [QuasiCompactCover 𝒰] {U : S.Opens} (hU : IsAffineOpen U)
+引理 是仿射开集.isCompactOpenCovered
+  条件: [QuasiCompactCover 𝒰] {U : S.Opens} (hU : 是仿射开集 U)
   证明: QuasiCompactCover.isCompactOpenCovered_of_isAffineOpen hU
 
 Depends on / 依赖: QuasiCompactCover, QuasiCompactCover.isCompactOpenCovered_of_isAffineOpen, isCompactOpenCovered_of_isAffineOpen
@@ -120,7 +120,7 @@ lemma exists_isAffineOpen_of_isCompact
   exact ⟨n, a, V, ha, heq⟩
 
 中文:
-引理 exists_isAffineOpen_of_isCompact
+引理 存在_isAffineOpen_of_isCompact
   结论: [QuasiCompactCover 𝒰] {U : S.Opens}
   证明: by
   obtain ⟨n, a, V, ha, heq⟩ := (isCompactOpenCovered_of_isCompact 𝒰 hU).exists_mem_of_isBasis
@@ -153,7 +153,7 @@ lemma of_isOpenMap
 
 中文:
 引理 of_isOpenMap
-  条件: {𝒰 : S.Cover K} [Scheme.JointlySurjective K] (h : 对任意 i, IsOpenMap (𝒰.f i))
+  条件: {𝒰 : S.Cover K} [概形.JointlySurjective K] (h : 对任意 i, 是开映射 (𝒰.f i))
   证明: .of_isOpenMap
     (fun i => (𝒰.f i).continuous) h (fun x _ => ⟨𝒰.idx x, 𝒰.covers x⟩) U.2 hU.isCompact
 
@@ -184,7 +184,7 @@ lemma of_hom
 
 中文:
 引理 of_hom
-  条件: {𝒱 : PreZeroHypercover.{w'} S} (f : 𝒱.Hom 𝒰) [QuasiCompactCover 𝒱]
+  条件: {𝒱 : PreZeroHypercover.{w'} S} (f : 𝒱.态射 𝒰) [QuasiCompactCover 𝒱]
   证明: by
   refine ⟨fun {U} hU => ?_⟩
   exact .of_comp (a := f.s₀) (𝒱.f ·) (f.h₀ ·)
@@ -305,7 +305,7 @@ instance of_finite
 
 中文:
 实例 of_finite
-  签名: {𝒰 : S.Cover K} [Scheme.JointlySurjective K]
+  签名: {𝒰 : S.Cover K} [概形.JointlySurjective K]
   定义体: by
     refine .of_finite_of_isSpectralMap (fun i => (𝒰.f i).isSpectralMap) ?_ U.2 hU.isCompact
     exact (fun x _ => ⟨𝒰.idx x, 𝒰.covers x⟩)
@@ -330,7 +330,7 @@ instance [IsAffine
   .of_finite
 
 中文:
-实例 [IsAffine
+实例 [是仿射
   签名: S] {P
   定义体: haveI : Finite 𝒰.cover.I₀ := ‹_›
   .of_finite
@@ -353,7 +353,7 @@ instance [IsEmpty
     simp [eq_bot_iff]
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: S] : QuasiCompactCover 𝒰 where
   定义体: by
     convert! IsCompactOpenCovered.empty
@@ -379,7 +379,7 @@ instance homCover
 
 中文:
 实例 homCover
-  签名: {X S : Scheme.{u}} (f : X ⟶ S) (hf : P f) [Surjective f]
+  签名: {X S : 概形.{u}} (f : X ⟶ S) (hf : P f) [满射 f]
   定义体: have _ (i) : AlgebraicGeometry.QuasiCompact ((f.cover hf).f i) := ‹_›
   .of_finite
 
@@ -402,7 +402,7 @@ instance singleton
 
 中文:
 实例 singleton
-  签名: {X : Scheme.{u}} (f : X ⟶ S) [Surjective f]
+  签名: {X : 概形.{u}} (f : X ⟶ S) [满射 f]
   定义体: homCover (P := ⊤) f trivial
 
 @[stacks 022D "(1)"]
@@ -440,8 +440,8 @@ lemma exists_hom
     Set.mem_image, SetLike.mem_coe, forall
 
 中文:
-引理 exists_hom
-  结论: {S : Scheme.{u}} (𝒰 : S.Cover (Scheme.precoverage P))
+引理 存在_hom
+  结论: {S : 概形.{u}} (𝒰 : S.Cover (概形.precoverage P))
   证明: by
   obtain ⟨n, f, V, hV, h⟩ := QuasiCompactCover.exists_isAffineOpen_of_isCompact 𝒰.1
     (show IsCompact (⊤ : TopologicalSpace.Opens S).carrier from isCompact_univ)
@@ -489,7 +489,7 @@ definition ulift
 
 中文:
 定义 ulift
-  签名: {S : Scheme.{u}} (𝒰 : PreZeroHypercover.{w} S) [QuasiCompactCover 𝒰]
+  签名: {S : 概形.{u}} (𝒰 : PreZeroHypercover.{w} S) [QuasiCompactCover 𝒰]
   定义体: 𝒰.restrictIndex
       fun i : (Σ U : S.affineOpens, Fin (exists_isAffineOpen_of_isCompact 𝒰 U.2.isCompact).choose) =>
     (exists_isAffineOpen_of_isCompact 𝒰 i.1.2.isCompact).choose_spec.choose i.2
@@ -512,7 +512,7 @@ definition uliftHom
 
 中文:
 定义 uliftHom
-  签名: {S : Scheme.{u}} (𝒰 : PreZeroHypercover S) [QuasiCompactCover 𝒰]
+  签名: {S : 概形.{u}} (𝒰 : PreZeroHypercover S) [QuasiCompactCover 𝒰]
   定义体: 𝒰.restrictIndexHom _
 
 Depends on / 依赖: restrictIndexHom
@@ -546,7 +546,7 @@ definition quasiCompactCover
 
 中文:
 定义 quasiCompactCover
-  签名: (S : Scheme.{u})
+  签名: (S : 概形.{u})
   定义体: QuasiCompactCover
 
 @[simp]
@@ -567,7 +567,7 @@ lemma quasiCompactCover_iff
 
 中文:
 引理 quasiCompactCover_iff
-  条件: (S : Scheme.{u}) (𝒰 : PreZeroHypercover.{v} S)
+  条件: (S : 概形.{u}) (𝒰 : PreZeroHypercover.{v} S)
   证明: .rfl
 -/
 lemma quasiCompactCover_iff (S : Scheme.{u}) (𝒰 : PreZeroHypercover.{v} S) :
@@ -583,7 +583,7 @@ instance isClosedUnderIsomorphisms_quasiCompactCover
 
 中文:
 实例 isClosedUnderIsomorphisms_quasiCompactCover
-  签名: (S : Scheme.{u})
+  签名: (S : 概形.{u})
   定义体: .of_hom e.hom
 
 Depends on / 依赖: e.hom, of_hom

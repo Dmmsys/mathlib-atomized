@@ -33,7 +33,7 @@ lemma mul_right_mem_add_closure
 
 中文:
 引理 mul_right_mem_add_closure
-  条件: (ha : a in closure (S : Set R)) (hb : b in S)
+  条件: (ha : a in closure (S : 集合 R)) (hb : b in S)
   证明: by
   induction ha using closure_induction with
   | mem r hr => exact mem_closure.mpr fun y hy => hy (mul_mem hr hb)
@@ -63,7 +63,7 @@ lemma mul_mem_add_closure
 
 中文:
 引理 mul_mem_add_closure
-  结论: (ha : a in closure (S : Set R))
+  结论: (ha : a in closure (S : 集合 R))
   证明: by
   induction hb using closure_induction with
   | mem r hr => exact MulMemClass.mul_right_mem_add_closure ha hr
@@ -89,7 +89,7 @@ lemma mul_left_mem_add_closure
 
 中文:
 引理 mul_left_mem_add_closure
-  条件: (ha : a in S) (hb : b in closure (S : Set R))
+  条件: (ha : a in S) (hb : b in closure (S : 集合 R))
   证明: mul_mem_add_closure (mem_closure.mpr fun _sT hT => hT ha) hb
 
 Depends on / 依赖: mem_closure, mem_closure.mpr, mul_mem_add_closure

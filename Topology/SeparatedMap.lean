@@ -55,9 +55,9 @@ lemma Topology.IsEmbedding.toPullbackDiag
       Filter.comap_id']
 
 中文:
-引理 Topology.IsEmbedding.toPullbackDiag
+引理 拓扑.是嵌入.toPullbackDiag
   条件: (f : X -> Y)
-  结论: IsEmbedding (toPullbackDiag f)
+  结论: 是嵌入 (toPullbackDiag f)
   证明: .mk' _ (injective_toPullbackDiag f) fun x => by
     simp [nhds_induced, Filter.comap_comap, nhds_prod_eq, Filter.comap_prod, Function.comp_def,
       Filter.comap_id']
@@ -78,7 +78,7 @@ lemma Continuous.mapPullback
     apply_rules [continuous_fst, continuous_snd, continuous_subtype_val, Continuous.comp]
 
 中文:
-引理 Continuous.mapPullback
+引理 连续.mapPullback
   结论: {X₁ X₂ Y₁ Y₂ Z₁ Z₂}
   证明: by
   refine continuous_induced_rng.mpr (.prodMk ?_ ?_) <;>
@@ -126,7 +126,7 @@ lemma t2space_iff_isSeparatedMap
 中文:
 引理 t2space_iff_isSeparatedMap
   条件: (y : Y)
-  结论: T2Space X ↔ IsSeparatedMap fun _ : X => y
+  结论: T2空间 X ↔ IsSeparatedMap fun _ : X => y
   证明: ⟨fun ⟨t2⟩ _ _ _ hne => t2 hne, fun sep => ⟨fun x₁ x₂ hne => sep x₁ x₂ rfl hne⟩⟩
 -/
 lemma t2space_iff_isSeparatedMap (y : Y) : T2Space X ↔ IsSeparatedMap fun _ : X => y :=
@@ -142,8 +142,8 @@ lemma T2Space.isSeparatedMap
   proof: fun _ _ _ => t2_separation
 
 中文:
-引理 T2Space.isSeparatedMap
-  条件: [T2Space X] (f : X -> Y)
+引理 T2空间.isSeparatedMap
+  条件: [T2空间 X] (f : X -> Y)
   结论: IsSeparatedMap f
   证明: fun _ _ _ => t2_separation
 
@@ -161,8 +161,8 @@ lemma Function.Injective.isSeparatedMap
   proof: fun _ _ he hne => (hne (inj he)).elim
 
 中文:
-引理 Function.Injective.isSeparatedMap
-  条件: {f : X -> Y} (inj : f.Injective)
+引理 函数.单射.isSeparatedMap
+  条件: {f : X -> Y} (inj : f.单射)
   结论: IsSeparatedMap f
   证明: fun _ _ he hne => (hne (inj he)).elim
 -/
@@ -384,7 +384,7 @@ definition IsLocallyInjective
   body: forall x : X, exists U, IsOpen U ∧ x in U ∧ U.InjOn f
 
 中文:
-定义 IsLocallyInjective
+定义 是LocallyInjective
   签名: (f : X -> Y)
   定义体: forall x : X, exists U, IsOpen U ∧ x in U ∧ U.InjOn f
 
@@ -401,8 +401,8 @@ lemma Function.Injective.IsLocallyInjective
   proof: fun _ => ⟨_, isOpen_univ, trivial, fun _ _ _ _ => @inj _ _⟩
 
 中文:
-引理 Function.Injective.IsLocallyInjective
-  条件: {f : X -> Y} (inj : f.Injective)
+引理 函数.单射.是LocallyInjective
+  条件: {f : X -> Y} (inj : f.单射)
   证明: fun _ => ⟨_, isOpen_univ, trivial, fun _ _ _ _ => @inj _ _⟩
 
 Depends on / 依赖: isOpen_univ
@@ -568,8 +568,8 @@ theorem IsLocallyInjective.comp_left
   proof: fun x => let ⟨U, hU, hx, inj⟩ := hf x; ⟨U, hU, hx, hg.comp_injOn inj⟩
 
 中文:
-定理 IsLocallyInjective.comp_left
-  结论: {A} {f : X -> Y} (hf : IsLocallyInjective f) {g : Y -> A}
+定理 是LocallyInjective.comp_left
+  结论: {A} {f : X -> Y} (hf : 是LocallyInjective f) {g : Y -> A}
   证明: fun x => let ⟨U, hU, hx, inj⟩ := hf x; ⟨U, hU, hx, hg.comp_injOn inj⟩
 
 Depends on / 依赖: comp_injOn, hg.comp_injOn
@@ -590,8 +590,8 @@ theorem IsLocallyInjective.comp_right
   apply hf.preimage (cont.mapPullback cont)
 
 中文:
-定理 IsLocallyInjective.comp_right
-  结论: {f : X -> Y} (hf : IsLocallyInjective f) {g : A -> X}
+定理 是LocallyInjective.comp_right
+  结论: {f : X -> Y} (hf : 是LocallyInjective f) {g : A -> X}
   证明: by
   rw [isLocallyInjective_iff_isOpen_diagonal] at hf ⊢
   rw [← hg.preimage_pullbackDiagonal]
@@ -642,8 +642,8 @@ theorem IsLocallyInjective.isOpen_eqLocus
   (isLocallyInjective_iff_isOpen_diagonal.mp inj).preimage (by fun_prop : Continuous g)
 
 中文:
-定理 IsLocallyInjective.isOpen_eqLocus
-  条件: (inj : IsLocallyInjective f) (he : f ∘ g₁ = f ∘ g₂)
+定理 是LocallyInjective.isOpen_eqLocus
+  条件: (inj : 是LocallyInjective f) (he : f ∘ g₁ = f ∘ g₂)
   证明: let g : A -> f.Pullback f := fun a => ⟨⟨g₁ a, g₂ a⟩, congr_fun he a⟩
   (isLocallyInjective_iff_isOpen_diagonal.mp inj).preimage (by fun_prop : Continuous g)
 
@@ -700,7 +700,7 @@ theorem eqOn_of_comp_eqOn
 
 中文:
 定理 eqOn_of_comp_eqOn
-  结论: (hs : IsPreconnected s) (h₁ : ContinuousOn g₁ s) (h₂ : ContinuousOn g₂ s)
+  结论: (hs : 是预连通 s) (h₁ : ContinuousOn g₁ s) (h₂ : ContinuousOn g₂ s)
   证明: by
   rw [← Set.domRestrict_eq_domRestrict_iff] at he ⊢
   rw [continuousOn_iff_continuous_domRestrict] at h₁ h₂
@@ -726,7 +726,7 @@ theorem const_of_comp
 
 中文:
 定理 const_of_comp
-  结论: [PreconnectedSpace A] (cont : Continuous g)
+  结论: [预连通空间 A] (cont : 连续 g)
   证明: congr_fun (sep.eq_of_comp_eq inj cont continuous_const (funext fun a => he a a') a' rfl) a
 
 Depends on / 依赖: congr_fun, continuous_const, eq_of_comp_eq, sep.eq_of_comp_eq
@@ -746,7 +746,7 @@ theorem constOn_of_comp
 
 中文:
 定理 constOn_of_comp
-  结论: (hs : IsPreconnected s) (cont : ContinuousOn g s)
+  结论: (hs : 是预连通 s) (cont : ContinuousOn g s)
   证明: sep.eqOn_of_comp_eqOn inj hs cont continuous_const.continuousOn
     (fun a ha => he a ha a' ha') ha' rfl ha
 

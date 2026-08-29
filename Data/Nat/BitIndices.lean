@@ -347,7 +347,7 @@ theorem bitIndices_sum_map_two_pow
 
 中文:
 定理 bitIndices_sum_map_two_pow
-  条件: {L : List 自然数} (hL : List.SortedLT L)
+  条件: {L : 列表 自然数} (hL : 列表.SortedLT L)
   证明: by
   cases L with | nil => simp | cons a L =>
   obtain ⟨haL, hL⟩ := pairwise_cons.1 hL.pairwise

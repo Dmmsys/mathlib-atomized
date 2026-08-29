@@ -45,7 +45,7 @@ definition upperClosure
 
 中文:
 定义 upperClosure
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ⟨{ x | exists a in s, a <= x }, fun _ _ hle h => h.imp fun _x hx => ⟨hx.1, hx.2.trans hle⟩⟩
 
 @[to_dual (attr := simp)]
@@ -91,8 +91,8 @@ theorem coe_upperClosure
 
 中文:
 定理 coe_upperClosure
-  条件: (s : Set α)
-  结论: ↑(upperClosure s) = ⋃ a in s, Ici a
+  条件: (s : 集合 α)
+  结论: ↑(upperClosure s) = ⋃ a in s, 左闭右无界区间 a
   证明: by
   ext
   simp
@@ -162,7 +162,7 @@ theorem upperClosure_min
 
 中文:
 定理 upperClosure_min
-  条件: (h : s subseteq t) (ht : IsUpperSet t)
+  条件: (h : s subseteq t) (ht : 是上集 t)
   结论: ↑(upperClosure s) subseteq t
   证明: fun _a ⟨_b, hb, hba⟩ => ht hba h hb
 
@@ -184,8 +184,8 @@ theorem IsUpperSet.upperClosure
 @[to_dual (attr := simp)]
 
 中文:
-定理 IsUpperSet.upperClosure
-  条件: (hs : IsUpperSet s)
+定理 是上集.upperClosure
+  条件: (hs : 是上集 s)
   结论: ↑(upperClosure s) = s
   证明: (upperClosure_min Subset.rfl hs).antisymm subset_upperClosure
 
@@ -207,9 +207,9 @@ theorem UpperSet.upperClosure
 @[to_dual (attr := simp)]
 
 中文:
-定理 UpperSet.upperClosure
-  条件: (s : UpperSet α)
-  结论: upperClosure (s : Set α) = s
+定理 上集.upperClosure
+  条件: (s : 上集 α)
+  结论: upperClosure (s : 集合 α) = s
   证明: SetLike.coe_injective s.2.upperClosure
 
 @[to_dual (attr := simp)]
@@ -267,9 +267,9 @@ theorem UpperSet.iInf_Ici
 @[to_dual (attr := simp) le_upperClosure]
 
 中文:
-定理 UpperSet.iInf_Ici
-  条件: (s : Set α)
-  结论: ⨅ a in s, UpperSet.Ici a = upperClosure s
+定理 上集.iInf_Ici
+  条件: (s : 集合 α)
+  结论: ⨅ a in s, 上集.左闭右无界区间 a = upperClosure s
   证明: by
   ext
   simp
@@ -293,7 +293,7 @@ lemma lowerClosure_le
 
 中文:
 引理 lowerClosure_le
-  条件: {t : LowerSet α}
+  条件: {t : 下集 α}
   结论: lowerClosure s <= t ↔ s subseteq t
   证明: ⟨fun h => subset_lowerClosure.trans LowerSet.coe_subset_coe.2 h,
     fun h => lowerClosure_min h t.lower⟩
@@ -378,7 +378,7 @@ choice_eq _s hs := SetLike.coe_injective subset_lowerClosure.antisymm hs
 
 中文:
 定义 giLowerClosureCoe
-  签名: : GaloisInsertion (lowerClosure : Set α -> LowerSet α) (↑) where
+  签名: : Galois嵌入 (lowerClosure : 集合 α -> 下集 α) (↑) where
   定义体: ⟨s, fun a _b hba ha => hs ⟨a, ha, hba⟩⟩
   gc := gc_lowerClosure_coe
   le_l_u _ := subset_lowerClosure
@@ -400,7 +400,7 @@ theorem upperClosure_anti
 
 中文:
 定理 upperClosure_anti
-  结论: Antitone (upperClosure : Set α -> UpperSet α)
+  结论: 递减 (upperClosure : 集合 α -> 上集 α)
   证明: gc_upperClosure_coe.monotone_l
 
 Depends on / 依赖: gc_upperClosure_coe, gc_upperClosure_coe.monotone_l, monotone_l
@@ -420,7 +420,7 @@ theorem lowerClosure_mono
 
 中文:
 定理 lowerClosure_mono
-  结论: Monotone (lowerClosure : Set α -> LowerSet α)
+  结论: 递增 (lowerClosure : 集合 α -> 下集 α)
   证明: gc_lowerClosure_coe.monotone_l
 
 @[to_dual (attr := simp)]
@@ -468,7 +468,7 @@ theorem upperClosure_empty
 
 中文:
 定理 upperClosure_empty
-  结论: upperClosure (∅ : Set α) = ⊤
+  结论: upperClosure (∅ : 集合 α) = ⊤
   证明: upperClosure_eq_top_iff.mpr rfl
 
 @[to_dual (attr := simp)]
@@ -495,7 +495,7 @@ theorem upperClosure_singleton
 中文:
 定理 upperClosure_singleton
   条件: (a : α)
-  结论: upperClosure ({a} : Set α) = UpperSet.Ici a
+  结论: upperClosure ({a} : 集合 α) = 上集.左闭右无界区间 a
   证明: by
   ext
   simp
@@ -517,7 +517,7 @@ theorem upperClosure_univ
 
 中文:
 定理 upperClosure_univ
-  结论: upperClosure (univ : Set α) = ⊥
+  结论: upperClosure (univ : 集合 α) = ⊥
   证明: bot_unique subset_upperClosure
 
 Depends on / 依赖: bot_unique, subset_upperClosure
@@ -538,7 +538,7 @@ theorem upperClosure_union
 
 中文:
 定理 upperClosure_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: upperClosure (s union t) = upperClosure s ⊓ upperClosure t
   证明: (@gc_upperClosure_coe α _).l_sup
 
@@ -561,7 +561,7 @@ theorem lowerClosure_union
 
 中文:
 定理 lowerClosure_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: lowerClosure (s union t) = lowerClosure s ⊔ lowerClosure t
   证明: (@gc_lowerClosure_coe α _).l_sup
 
@@ -583,7 +583,7 @@ theorem upperClosure_iUnion
 
 中文:
 定理 upperClosure_iUnion
-  条件: (f : ι -> Set α)
+  条件: (f : ι -> 集合 α)
   结论: upperClosure (⋃ i, f i) = ⨅ i, upperClosure (f i)
   证明: (@gc_upperClosure_coe α _).l_iSup
 
@@ -608,7 +608,7 @@ theorem lowerClosure_iUnion
 
 中文:
 定理 lowerClosure_iUnion
-  条件: (f : ι -> Set α)
+  条件: (f : ι -> 集合 α)
   结论: lowerClosure (⋃ i, f i) = ⨆ i, lowerClosure (f i)
   证明: (@gc_lowerClosure_coe α _).l_iSup
 
@@ -632,7 +632,7 @@ theorem upperClosure_sUnion
 
 中文:
 定理 upperClosure_sUnion
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: upperClosure (⋃₀ S) = ⨅ s in S, upperClosure s
   证明: by
   simp_rw [sUnion_eq_biUnion, upperClosure_iUnion]
@@ -652,8 +652,8 @@ theorem Set.OrdConnected.upperClosure_inter_lowerClosure
     fun _a ⟨⟨_b, hb, hba⟩, _c, hc, hac⟩ => h.out hb hc ⟨hba, hac⟩
 
 中文:
-定理 Set.OrdConnected.upperClosure_inter_lowerClosure
-  条件: (h : s.OrdConnected)
+定理 集合.序连通.upperClosure_inter_lowerClosure
+  条件: (h : s.序连通)
   证明: (subset_inter subset_upperClosure subset_lowerClosure).antisymm'
     fun _a ⟨⟨_b, hb, hba⟩, _c, hc, hac⟩ => h.out hb hc ⟨hba, hac⟩
 
@@ -707,7 +707,7 @@ theorem lowerBounds_upperClosure
 
 中文:
 定理 lowerBounds_upperClosure
-  结论: lowerBounds (upperClosure s : Set α) = lowerBounds s
+  结论: lowerBounds (upperClosure s : 集合 α) = lowerBounds s
   证明: (lowerBounds_mono_set subset_upperClosure).antisymm
     fun _a ha _b ⟨_c, hc, hcb⟩ => (ha hc).trans hcb
 
@@ -736,7 +736,7 @@ protected alias ⟨BddBelow.of_upperClosure, BddBelow.upperClosure⟩ := bddBelo
 
 中文:
 定理 bddBelow_upperClosure
-  结论: BddBelow (upperClosure s : Set α) ↔ BddBelow s
+  结论: BddBelow (upperClosure s : 集合 α) ↔ BddBelow s
   证明: by
   simp_rw [BddBelow, lowerBounds_upperClosure]
 
@@ -768,8 +768,8 @@ exact fun h a b hb hba ha => h hb ht hba ha
 @[to_dual (attr := simp) disjoint_lowerClosure_right]
 
 中文:
-引理 IsLowerSet.disjoint_upperClosure_left
-  条件: (ht : IsLowerSet t)
+引理 是下集.disjoint_upperClosure_left
+  条件: (ht : 是下集 t)
   证明: by
   refine ⟨Disjoint.mono_left subset_upperClosure, ?_⟩
   simp only [disjoint_left, SetLike.mem_coe, mem_upperClosure, forall_exists_index, and_imp]
@@ -798,8 +798,8 @@ lemma IsLowerSet.disjoint_upperClosure_right
 @[to_dual (attr := simp)]
 
 中文:
-引理 IsLowerSet.disjoint_upperClosure_right
-  条件: (hs : IsLowerSet s)
+引理 是下集.disjoint_upperClosure_right
+  条件: (hs : 是下集 s)
   证明: by
   simpa only [disjoint_comm] using hs.disjoint_upperClosure_left
 
@@ -906,7 +906,7 @@ lemma upperClosure_eq_bot
 
 中文:
 引理 upperClosure_eq_bot
-  条件: {s : Set α} (hs : ¬ BddBelow s)
+  条件: {s : 集合 α} (hs : ¬ BddBelow s)
   结论: upperClosure s = ⊥
   证明: le_bot_iff.mp fun x _ => ⟨_, (not_bddBelow_iff.mp hs x).choose_spec.imp id le_of_lt⟩
 
@@ -929,7 +929,7 @@ lemma upperClosure_eq_bot_iff
 
 中文:
 引理 upperClosure_eq_bot_iff
-  条件: [NoMinOrder α] {s : Set α}
+  条件: [NoMin序 α] {s : 集合 α}
   结论: upperClosure s = ⊥ ↔ ¬ BddBelow s
   证明: ⟨fun h₁ h₂ => by simpa [h₁] using bddBelow_upperClosure.mpr h₂, upperClosure_eq_bot⟩
 
@@ -958,7 +958,7 @@ definition sdiff
 
 中文:
 定义 sdiff
-  签名: (s : UpperSet α) (t : Set α)
+  签名: (s : 上集 α) (t : 集合 α)
   定义体: s \ lowerClosure t
   upper' := s.upper.sdiff_of_isLowerSet (lowerClosure t).lower
 
@@ -983,7 +983,7 @@ definition erase
 
 中文:
 定义 erase
-  签名: (s : UpperSet α) (a : α)
+  签名: (s : 上集 α) (a : α)
   定义体: s \ LowerSet.Iic a
   upper' := s.upper.sdiff_of_isLowerSet (LowerSet.Iic a).lower
 
@@ -1009,8 +1009,8 @@ lemma coe_sdiff
 
 中文:
 引理 coe_sdiff
-  条件: (s : UpperSet α) (t : Set α)
-  结论: s.sdiff t = (s : Set α) \ lowerClosure t
+  条件: (s : 上集 α) (t : 集合 α)
+  结论: s.sdiff t = (s : 集合 α) \ lowerClosure t
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -1031,8 +1031,8 @@ lemma coe_erase
 
 中文:
 引理 coe_erase
-  条件: (s : UpperSet α) (a : α)
-  结论: s.erase a = (s : Set α) \ LowerSet.Iic a
+  条件: (s : 上集 α) (a : α)
+  结论: s.erase a = (s : 集合 α) \ 下集.左无界右闭区间 a
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1052,7 +1052,7 @@ lemma sdiff_singleton
 
 中文:
 引理 sdiff_singleton
-  条件: (s : UpperSet α) (a : α)
+  条件: (s : 上集 α) (a : α)
   结论: s.sdiff {a} = s.erase a
   证明: by
   simp [sdiff, erase]
@@ -1197,7 +1197,7 @@ lemma sdiff_idem
 
 中文:
 引理 sdiff_idem
-  条件: (s : UpperSet α) (t : Set α)
+  条件: (s : 上集 α) (t : 集合 α)
   结论: (s.sdiff t).sdiff t = s.sdiff t
   证明: SetLike.coe_injective sdiff_idem
 
@@ -1220,7 +1220,7 @@ lemma erase_idem
 
 中文:
 引理 erase_idem
-  条件: (s : UpperSet α) (a : α)
+  条件: (s : 上集 α) (a : α)
   结论: (s.erase a).erase a = s.erase a
   证明: SetLike.coe_injective sdiff_idem
 
@@ -1311,7 +1311,7 @@ lemma erase_inf_Ici
 中文:
 引理 erase_inf_Ici
   条件: (ha : a in s) (has : 对任意 b in s, b <= a -> b = a)
-  结论: s.erase a ⊓ Ici a = s
+  结论: s.erase a ⊓ 左闭右无界区间 a = s
   证明: by
   rw [← upperClosure_singleton]; rw [← sdiff_singleton]; rw [sdiff_inf_upperClosure] <;> simpa
 
@@ -1336,7 +1336,7 @@ lemma Ici_inf_erase
 中文:
 引理 Ici_inf_erase
   条件: (ha : a in s) (has : 对任意 b in s, b <= a -> b = a)
-  结论: Ici a ⊓ s.erase a = s
+  结论: 左闭右无界区间 a ⊓ s.erase a = s
   证明: by
   rw [inf_comm]; rw [erase_inf_Ici ha has]
 

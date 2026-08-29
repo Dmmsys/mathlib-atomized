@@ -28,8 +28,8 @@ structure VAddCon
 
 中文:
 结构 VAddCon
-  参数: [VAdd S M]
-  继承: Setoid M
+  参数: [向量加法 S M]
+  继承: 集合等价关系 M
   公理与运算 (1 个):
     - vadd((s : S) {x y}) : r x y -> r (s +ᵥ x) (s +ᵥ y)
 -/
@@ -49,8 +49,8 @@ structure SMulCon
 
 中文:
 结构 SMulCon
-  参数: [SMul S M]
-  继承: Setoid M
+  参数: [标量乘法 S M]
+  继承: 集合等价关系 M
   公理与运算 (1 个):
     - smul((s : S) {x y}) : r x y -> r (s • x) (s • y)
 -/
@@ -69,8 +69,8 @@ structure ModuleCon
 
 中文:
 结构 ModuleCon
-  参数: [Add M] [SMul S M]
-  继承: AddCon M, SMulCon S M
+  参数: [加法 M] [标量乘法 S M]
+  继承: 加法Con M, SMulCon S M
   (无附加公理)
 -/
 structure ModuleCon [Add M] [SMul S M] extends AddCon M, SMulCon S M
@@ -93,8 +93,8 @@ definition Quotient
   body: Quotient c.toSetoid
 
 中文:
-定义 Quotient
-  签名: [SMul S M] (c : SMulCon S M)
+定义 商
+  签名: [标量乘法 S M] (c : SMulCon S M)
   定义体: Quotient c.toSetoid
 -/
 protected def Quotient [SMul S M] (c : SMulCon S M) : Type _ := Quotient c.toSetoid
@@ -108,7 +108,7 @@ instance [SMul
   body: Quotient.map (s • ·) (@c.smul s)
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: S M] (c
   定义体: Quotient.map (s • ·) (@c.smul s)
 -/
@@ -124,8 +124,8 @@ instance [SMul
   body: ⟦0⟧
 
 中文:
-实例 [SMul
-  签名: S M] [Zero M] (c
+实例 [标量乘法
+  签名: S M] [零 M] (c
   定义体: ⟦0⟧
 -/
 instance [SMul S M] [Zero M] (c : SMulCon S M) : Zero c.Quotient where
@@ -140,8 +140,8 @@ instance [Zero
   body: congr_arg _ (smul_zero s)
 
 中文:
-实例 [Zero
-  签名: M] [SMulZeroClass S M] (c
+实例 [零
+  签名: M] [SMulZero类 S M] (c
   定义体: congr_arg _ (smul_zero s)
 
 Depends on / 依赖: congr_arg, smul_zero
@@ -158,8 +158,8 @@ instance [Zero
   body: fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ => rfl
 
 中文:
-实例 [Zero
-  签名: S] [Zero M] [SMulWithZero S M] (c
+实例 [零
+  签名: S] [零 M] [带零标量乘法 S M] (c
   定义体: fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ => rfl
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.smulWithZero, fast_instance, smulWithZero
@@ -176,8 +176,8 @@ instance [Monoid
   body: fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: S] [MulAction S M] (c
+实例 [幺半群
+  签名: S] [乘法作用 S M] (c
   定义体: fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ => rfl
 -/
 @[to_additive] instance [Monoid S] [MulAction S M] (c : SMulCon S M) : MulAction S c.Quotient :=
@@ -242,8 +242,8 @@ definition Quotient
   body: Quotient c.toSetoid
 
 中文:
-定义 Quotient
-  签名: [Add M] [SMul S M] (c : ModuleCon S M)
+定义 商
+  签名: [加法 M] [标量乘法 S M] (c : ModuleCon S M)
   定义体: Quotient c.toSetoid
 -/
 protected def Quotient [Add M] [SMul S M] (c : ModuleCon S M) : Type _ := Quotient c.toSetoid
@@ -257,8 +257,8 @@ instance [SMul
   body: inferInstanceAs (SMul S c.toSMulCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [Add M] (c
+实例 [标量乘法
+  签名: S M] [加法 M] (c
   定义体: inferInstanceAs (SMul S c.toSMulCon.Quotient)
 
 Depends on / 依赖: Quotient, c.toSMulCon.Quotient, toSMulCon
@@ -275,8 +275,8 @@ instance [SMul
   body: ⟦0⟧
 
 中文:
-实例 [SMul
-  签名: S M] [Zero M] [Add M] (c
+实例 [标量乘法
+  签名: S M] [零 M] [加法 M] (c
   定义体: ⟦0⟧
 -/
 instance [SMul S M] [Zero M] [Add M] (c : ModuleCon S M) : Zero c.Quotient where
@@ -291,8 +291,8 @@ instance [SMul
   body: inferInstanceAs (Add c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [Add M] (c
+实例 [标量乘法
+  签名: S M] [加法 M] (c
   定义体: inferInstanceAs (Add c.toAddCon.Quotient)
 
 Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
@@ -309,8 +309,8 @@ instance [SMul
   body: inferInstanceAs (AddZeroClass c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddZeroClass M] (c
+实例 [标量乘法
+  签名: S M] [加法零类 M] (c
   定义体: inferInstanceAs (AddZeroClass c.toAddCon.Quotient)
 
 Depends on / 依赖: AddZeroClass, Quotient, c.toAddCon.Quotient, toAddCon
@@ -327,8 +327,8 @@ instance [SMul
   body: inferInstanceAs (AddCommMagma c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddCommMagma M] (c
+实例 [标量乘法
+  签名: S M] [加法交换原群 M] (c
   定义体: inferInstanceAs (AddCommMagma c.toAddCon.Quotient)
 
 Depends on / 依赖: AddCommMagma, Quotient, c.toAddCon.Quotient, toAddCon
@@ -345,8 +345,8 @@ instance [SMul
   body: inferInstanceAs (AddSemigroup c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddSemigroup M] (c
+实例 [标量乘法
+  签名: S M] [加法半群 M] (c
   定义体: inferInstanceAs (AddSemigroup c.toAddCon.Quotient)
 
 Depends on / 依赖: AddSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -363,8 +363,8 @@ instance [SMul
   body: inferInstanceAs (AddCommSemigroup c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddCommSemigroup M] (c
+实例 [标量乘法
+  签名: S M] [加法交换半群 M] (c
   定义体: inferInstanceAs (AddCommSemigroup c.toAddCon.Quotient)
 
 Depends on / 依赖: AddCommSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -381,8 +381,8 @@ instance [SMul
   body: inferInstanceAs (AddMonoid c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddMonoid M] (c
+实例 [标量乘法
+  签名: S M] [加法幺半群 M] (c
   定义体: inferInstanceAs (AddMonoid c.toAddCon.Quotient)
 
 Depends on / 依赖: AddMonoid, Quotient, c.toAddCon.Quotient, toAddCon
@@ -399,8 +399,8 @@ instance [SMul
   body: inferInstanceAs (AddCommMonoid c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddCommMonoid M] (c
+实例 [标量乘法
+  签名: S M] [加法交换幺半群 M] (c
   定义体: inferInstanceAs (AddCommMonoid c.toAddCon.Quotient)
 
 Depends on / 依赖: AddCommMonoid, Quotient, c.toAddCon.Quotient, toAddCon
@@ -417,8 +417,8 @@ instance [SMul
   body: inferInstanceAs (AddGroup c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddGroup M] (c
+实例 [标量乘法
+  签名: S M] [加法群 M] (c
   定义体: inferInstanceAs (AddGroup c.toAddCon.Quotient)
 
 Depends on / 依赖: AddGroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -435,8 +435,8 @@ instance [SMul
   body: inferInstanceAs (AddCommGroup c.toAddCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: S M] [AddCommGroup M] (c
+实例 [标量乘法
+  签名: S M] [加法交换群 M] (c
   定义体: inferInstanceAs (AddCommGroup c.toAddCon.Quotient)
 
 Depends on / 依赖: AddCommGroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -453,8 +453,8 @@ instance [Zero
   body: inferInstanceAs (SMulZeroClass S c.toSMulCon.Quotient)
 
 中文:
-实例 [Zero
-  签名: M] [Add M] [SMulZeroClass S M] (c
+实例 [零
+  签名: M] [加法 M] [SMulZero类 S M] (c
   定义体: inferInstanceAs (SMulZeroClass S c.toSMulCon.Quotient)
 
 Depends on / 依赖: Quotient, SMulZeroClass, c.toSMulCon.Quotient, toSMulCon
@@ -471,8 +471,8 @@ instance [Zero
   body: inferInstanceAs (SMulWithZero S c.toSMulCon.Quotient)
 
 中文:
-实例 [Zero
-  签名: S] [Zero M] [Add M] [SMulWithZero S M] (c
+实例 [零
+  签名: S] [零 M] [加法 M] [带零标量乘法 S M] (c
   定义体: inferInstanceAs (SMulWithZero S c.toSMulCon.Quotient)
 
 Depends on / 依赖: Quotient, SMulWithZero, c.toSMulCon.Quotient, toSMulCon
@@ -490,8 +490,8 @@ instance [Monoid
   body: inferInstanceAs (MulAction S c.toSMulCon.Quotient)
 
 中文:
-实例 [Monoid
-  签名: S] [Add M] [MulAction S M] (c
+实例 [幺半群
+  签名: S] [加法 M] [乘法作用 S M] (c
   定义体: inferInstanceAs (MulAction S c.toSMulCon.Quotient)
 
 Depends on / 依赖: MulAction, Quotient, c.toSMulCon.Quotient, toSMulCon
@@ -508,8 +508,8 @@ instance [AddZeroClass
   body: fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ => rfl
 
 中文:
-实例 [AddZeroClass
-  签名: M] [DistribSMul S M] (c
+实例 [加法零类
+  签名: M] [分配标量乘法 S M] (c
   定义体: fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ => rfl
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.distribSMul, c.mk, distribSMul, fast_instance
@@ -527,8 +527,8 @@ instance [Monoid
   Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: S] [AddMonoid M] [DistribMulAction S M] (c
+实例 [幺半群
+  签名: S] [加法幺半群 M] [分配乘法作用 S M] (c
   定义体: fast_instance%
   Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ => rfl
 
@@ -547,8 +547,8 @@ instance [Semiring
   body: fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ => rfl
 
 中文:
-实例 [Semiring
-  签名: S] [AddCommMonoid M] [Module S M] (c
+实例 [半环
+  签名: S] [加法交换幺半群 M] [模 S M] (c
   定义体: fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ => rfl
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.module, c.mk, fast_instance, module
@@ -575,7 +575,7 @@ definition SMulCon.ker
 
 中文:
 定义 SMulCon.ker
-  签名: [SMul R M] [SMul S N] {φ : R -> S} (f : M ->ₑ[φ] N)
+  签名: [标量乘法 R M] [标量乘法 S N] {φ : R -> S} (f : M ->ₑ[φ] N)
   定义体: Setoid.ker f
   smul r _ _ h := by rw [Setoid.ker_def] at h ⊢; simp_rw [map_smulₛₗ, h]
 
@@ -596,7 +596,7 @@ definition ModuleCon.ker
 
 中文:
 定义 ModuleCon.ker
-  签名: [Monoid R] [Monoid S] [AddMonoid M] [AddMonoid N] [DistribMulAction R M]
+  签名: [幺半群 R] [幺半群 S] [加法幺半群 M] [加法幺半群 N] [分配乘法作用 R M]
   定义体: SMulCon.ker f.toMulActionHom
   __ := AddCon.ker f
 
@@ -618,7 +618,7 @@ definition ModuleCon.quotientKerEquivOfSurjective
 
 中文:
 定义 ModuleCon.quotientKerEquivOfSurjective
-  签名: [Semiring S] [AddCommMonoid M]
+  签名: [半环 S] [加法交换幺半群 M]
   定义体: AddCon.quotientKerEquivOfSurjective f.toAddMonoidHom hf
   map_smul' s := by rintro ⟨⟩; apply map_smul f
 

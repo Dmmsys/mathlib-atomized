@@ -236,7 +236,7 @@ instance Pi.rootableBy
   root_cancel _x hn := funext fun _i => RootableBy.root_cancel _ hn
 
 中文:
-实例 Pi.rootableBy
+实例 依赖函数类型.rootableBy
   签名: : RootableBy (对任意 i, B i) β where
   定义体: RootableBy.root (x i) n
   root_zero _x := funext fun _i => RootableBy.root_zero _
@@ -268,7 +268,7 @@ instance Prod.rootableBy
   root_cancel _p hn := Prod.ext (RootableBy.root_cancel _ hn) (RootableBy.root_cancel _ hn)
 
 中文:
-实例 Prod.rootableBy
+实例 积类型.rootableBy
   签名: : RootableBy (B × B') β where
   定义体: (RootableBy.root p.1 n, RootableBy.root p.2 n)
   root_zero _p := Prod.ext (RootableBy.root_zero _) (RootableBy.root_zero _)
@@ -297,7 +297,7 @@ root_zero x := ULift.ext _ _ RootableBy.root_zero x.down
 root_cancel _ h := ULift.ext _ _ RootableBy.root_cancel _ h
 
 中文:
-实例 ULift.instRootableBy
+实例 类型层提升.instRootableBy
   签名: [RootableBy A α]
   定义体: ULift.up RootableBy.root x.down a
 root_zero x := ULift.ext _ _ RootableBy.root_zero x.down
@@ -353,7 +353,7 @@ definition divisibleByIntOfSMulTopEqTop
     exact h1.choose_spec.2
 
 中文:
-定义 divisibleByIntOfSMulTopEqTop
+定义 divisibleBy整数OfSMulTopEqTop
   定义体: if hn : n = 0 then 0 else (show a in n • (⊤ : AddSubgroup A) by rw [H hn]; trivial).choose
   div_zero _ := dif_pos rfl
   div_cancel a hn := by
@@ -408,7 +408,7 @@ definition rootableByIntOfRootableByNat
     · simp [RootableBy.r
 
 中文:
-定义 rootableByIntOfRootableByNat
+定义 rootableBy整数OfRootableBy自然数
   签名: [RootableBy A 自然数]
   定义体: match z with
     | (n : Nat) => RootableBy.root a n
@@ -451,7 +451,7 @@ definition rootableByNatOfRootableByInt
     simpa
 
 中文:
-定义 rootableByNatOfRootableByInt
+定义 rootableBy自然数OfRootableBy整数
   签名: [RootableBy A 整数]
   定义体: RootableBy.root a (n : Int)
   root_zero a := RootableBy.root_zero a
@@ -494,8 +494,8 @@ definition Function.Surjective.rootableBy
       (by rw [← hpow (RootableBy.root y n) n, RootableBy.root_cancel _ hn, hy] : _ ^ n = x)⟩
 
 中文:
-定义 Function.Surjective.rootableBy
-  签名: (hf : Function.Surjective f)
+定义 函数.满射.rootableBy
+  签名: (hf : 函数.满射 f)
   定义体: rootableByOfPowLeftSurj _ _ fun {n} hn x =>
     let ⟨y, hy⟩ := hf x
 ⟨f RootableBy.root y n,
@@ -527,7 +527,7 @@ instance QuotientGroup.rootableBy
   body: QuotientGroup.mk_surjective.rootableBy _ fun _ _ => rfl
 
 中文:
-实例 QuotientGroup.rootableBy
+实例 商群.rootableBy
   签名: [RootableBy A 自然数]
   定义体: QuotientGroup.mk_surjective.rootableBy _ fun _ _ => rfl
 

@@ -56,7 +56,7 @@ lemma characteristic_sub_characteristic_inv
 
 中文:
 引理 characteristic_sub_characteristic_inv
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   calc characteristic f ⊤ - characteristic f⁻¹ ⊤
   _ = proximity f ⊤ - proximity f⁻¹ ⊤ - (logCounting f⁻¹ ⊤ - logCounting f ⊤) := by
@@ -134,7 +134,7 @@ lemma characteristic_sub_characteristic_inv_at_zero
 
 中文:
 引理 characteristic_sub_characteristic_inv_at_zero
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   calc characteristic f ⊤ 0 - characteristic f⁻¹ ⊤ 0
   _ = (characteristic f ⊤ - characteristic f⁻¹ ⊤) 0 := by simp
@@ -166,7 +166,7 @@ theorem characteristic_sub_characteristic_inv_le
 
 中文:
 定理 characteristic_sub_characteristic_inv_le
-  条件: (hf : Meromorphic f)
+  条件: (hf : 亚纯 f)
   证明: by
   by_cases h : R = 0
   · simp [h, characteristic_sub_characteristic_inv_at_zero hf]
@@ -192,7 +192,7 @@ theorem isBigO_characteristic_sub_characteristic_inv
 
 中文:
 定理 isBigO_characteristic_sub_characteristic_inv
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: isBigO_of_le' (c := max |log ‖f 0‖| |log ‖meromorphicTrailingCoeffAt f 0‖|) _
     (fun R => by simpa using characteristic_sub_characteristic_inv_le h (R := R))
 
@@ -231,7 +231,7 @@ theorem abs_characteristic_sub_characteristic_shift_le
 
 中文:
 定理 abs_characteristic_sub_characteristic_shift_le
-  条件: {r : 实数} (h : Meromorphic f)
+  条件: {r : 实数} (h : 亚纯 f)
   证明: by
   have h₁f : CircleIntegrable (fun x => log⁺ ‖f x‖) 0 r :=
     h.meromorphicOn.circleIntegrable_posLog_norm
@@ -277,7 +277,7 @@ theorem isBigO_characteristic_sub_characteristic_shift
 
 中文:
 定理 isBigO_characteristic_sub_characteristic_shift
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: isBigO_of_le' (c := log⁺ ‖a₀‖ + log 2) _
     (fun R => by simpa using abs_characteristic_sub_characteristic_shift_le h)
 

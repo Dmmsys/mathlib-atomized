@@ -38,9 +38,9 @@ theorem Subsingleton.aemeasurable
 @[nontriviality, fun_prop]
 
 中文:
-定理 Subsingleton.aemeasurable
-  条件: [Subsingleton α]
-  结论: AEMeasurable f μ
+定理 子单例.aemeasurable
+  条件: [子单例 α]
+  结论: 几乎处处可测 f μ
   证明: Subsingleton.measurable.aemeasurable
 
 @[nontriviality, fun_prop]
@@ -64,8 +64,8 @@ theorem aemeasurable_of_subsingleton_codomain
 
 中文:
 定理 aemeasurable_of_subsingleton_codomain
-  条件: [Subsingleton β]
-  结论: AEMeasurable f μ
+  条件: [子单例 β]
+  结论: 几乎处处可测 f μ
   证明: (measurable_of_subsingleton_codomain f).aemeasurable
 
 @[simp, fun_prop]
@@ -88,7 +88,7 @@ theorem aemeasurable_zero_measure
 
 中文:
 定理 aemeasurable_zero_measure
-  结论: AEMeasurable f (0 : Measure α)
+  结论: 几乎处处可测 f (0 : 测度 α)
   证明: by
   nontriviality α; inhabit α
   exact ⟨fun _ => f default, measurable_const, rfl⟩
@@ -109,7 +109,7 @@ theorem aemeasurable_id''
 
 中文:
 定理 aemeasurable_id''
-  条件: (μ : Measure α) {m : MeasurableSpace α} (hm : m <= m0)
+  条件: (μ : 测度 α) {m : 可测空间 α} (hm : m <= m0)
   证明: @Measurable.aemeasurable α α m0 m id μ (measurable_id'' hm)
 
 Depends on / 依赖: Measurable, Measurable.aemeasurable, aemeasurable, measurable_id
@@ -130,7 +130,7 @@ lemma aemeasurable_of_map_neZero
 
 中文:
 引理 aemeasurable_of_map_neZero
-  结论: {μ : Measure α}
+  结论: {μ : 测度 α}
   证明: by
   by_contra h'
   simp [h'] at h
@@ -154,8 +154,8 @@ lemma mono_ac
 
 中文:
 引理 mono_ac
-  条件: (hf : AEMeasurable f ν) (hμν : μ ≪ ν)
-  结论: AEMeasurable f μ
+  条件: (hf : 几乎处处可测 f ν) (hμν : μ ≪ ν)
+  结论: 几乎处处可测 f μ
   证明: ⟨hf.mk f, hf.measurable_mk, hμν.ae_le hf.ae_eq_mk⟩
 
 Depends on / 依赖: ae_eq_mk, ae_le, hf.ae_eq_mk, hf.measurable_mk, hf.mk, measurable_mk
@@ -174,8 +174,8 @@ theorem mono_measure
 
 中文:
 定理 mono_measure
-  条件: (h : AEMeasurable f μ) (h' : ν <= μ)
-  结论: AEMeasurable f ν
+  条件: (h : 几乎处处可测 f μ) (h' : ν <= μ)
+  结论: 几乎处处可测 f ν
   证明: mono_ac h h'.absolutelyContinuous
 
 Depends on / 依赖: absolutelyContinuous, mono_ac
@@ -195,7 +195,7 @@ theorem mono_set
 
 中文:
 定理 mono_set
-  条件: {s t} (h : s subseteq t) (ht : AEMeasurable f (μ.restrict t))
+  条件: {s t} (h : s subseteq t) (ht : 几乎处处可测 f (μ.restrict t))
   证明: ht.mono_measure (restrict_mono h le_rfl)
 
 @[fun_prop]
@@ -218,8 +218,8 @@ theorem mono'
 
 中文:
 定理 mono'
-  条件: (h : AEMeasurable f μ) (h' : ν ≪ μ)
-  结论: AEMeasurable f ν
+  条件: (h : 几乎处处可测 f μ) (h' : ν ≪ μ)
+  结论: 几乎处处可测 f ν
   证明: ⟨h.mk f, h.measurable_mk, h' h.ae_eq_mk⟩
 -/
 protected theorem mono' (h : AEMeasurable f μ) (h' : ν ≪ μ) : AEMeasurable f ν :=
@@ -235,7 +235,7 @@ theorem ae_mem_imp_eq_mk
 
 中文:
 定理 ae_mem_imp_eq_mk
-  条件: {s} (h : AEMeasurable f (μ.restrict s))
+  条件: {s} (h : 几乎处处可测 f (μ.restrict s))
   证明: ae_imp_of_ae_restrict h.ae_eq_mk
 
 Depends on / 依赖: ae_eq_mk, ae_imp_of_ae_restrict, h.ae_eq_mk
@@ -257,7 +257,7 @@ theorem ae_inf_principal_eq_mk
 
 中文:
 定理 ae_inf_principal_eq_mk
-  条件: {s} (h : AEMeasurable f (μ.restrict s))
+  条件: {s} (h : 几乎处处可测 f (μ.restrict s))
   结论: f =ᶠ[ae μ ⊓ 𝓟 s] h.mk f
   证明: le_ae_restrict h.ae_eq_mk
 
@@ -289,7 +289,7 @@ theorem sum_measure
 
 中文:
 定理 sum_measure
-  条件: [Countable ι] {μ : ι -> Measure α} (h : 对任意 i, AEMeasurable f (μ i))
+  条件: [可数 ι] {μ : ι -> 测度 α} (h : 对任意 i, 几乎处处可测 f (μ i))
   证明: by
   classical
   nontriviality β
@@ -356,7 +356,7 @@ theorem _root_.aemeasurable_sum_measure_iff
 
 中文:
 定理 _root_.aemeasurable_sum_measure_iff
-  条件: [Countable ι] {μ : ι -> Measure α}
+  条件: [可数 ι] {μ : ι -> 测度 α}
   证明: ⟨fun h _ => h.mono_measure (le_sum _ _), sum_measure⟩
 
 @[simp]
@@ -405,7 +405,7 @@ theorem add_measure
 
 中文:
 定理 add_measure
-  条件: {f : α -> β} (hμ : AEMeasurable f μ) (hν : AEMeasurable f ν)
+  条件: {f : α -> β} (hμ : 几乎处处可测 f μ) (hν : 几乎处处可测 f ν)
   证明: aemeasurable_add_measure_iff.2 ⟨hμ, hν⟩
 
 Depends on / 依赖: aemeasurable_add_measure_iff
@@ -428,7 +428,7 @@ theorem map_add₀
 
 中文:
 定理 map_add₀
-  结论: {μ ν : Measure α} {f : α -> β}
+  结论: {μ ν : 测度 α} {f : α -> β}
   证明: by
   ext
   simp [*]
@@ -454,7 +454,7 @@ theorem iUnion
 
 中文:
 定理 iUnion
-  结论: [Countable ι] {s : ι -> Set α}
+  结论: [可数 ι] {s : ι -> 集合 α}
   证明: (sum_measure h).mono_measure restrict_iUnion_le
 
 @[simp]
@@ -476,7 +476,7 @@ theorem _root_.aemeasurable_iUnion_iff
 
 中文:
 定理 _root_.aemeasurable_iUnion_iff
-  条件: [Countable ι] {s : ι -> Set α}
+  条件: [可数 ι] {s : ι -> 集合 α}
   证明: ⟨fun h _ => h.mono_measure restrict_mono (subset_iUnion _ _) le_rfl, AEMeasurable.iUnion⟩
 
 @[simp]
@@ -501,7 +501,7 @@ theorem _root_.aemeasurable_union_iff
 
 中文:
 定理 _root_.aemeasurable_union_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: by
   simp only [union_eq_iUnion, aemeasurable_iUnion_iff, Bool.forall_bool, cond, and_comm]
 
@@ -525,7 +525,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ⟨h.mk f, h.measurable_mk, ae_smul_measure h.ae_eq_mk c⟩
 
 Depends on / 依赖: ae_eq_mk, ae_smul_measure, h.ae_eq_mk, h.measurable_mk, h.mk, measurable_mk
@@ -547,7 +547,7 @@ theorem comp_aemeasurable
 
 中文:
 定理 comp_aemeasurable
-  结论: {f : α -> δ} {g : δ -> β} (hg : AEMeasurable g (μ.map f))
+  结论: {f : α -> δ} {g : δ -> β} (hg : 几乎处处可测 g (μ.map f))
   证明: ⟨hg.mk g ∘ hf.mk f, hg.measurable_mk.comp hf.measurable_mk,
     (ae_eq_comp hf hg.ae_eq_mk).trans (hf.ae_eq_mk.fun_comp (mk g hg))⟩
 
@@ -571,7 +571,7 @@ theorem comp_aemeasurable'
 
 中文:
 定理 comp_aemeasurable'
-  结论: {f : α -> δ} {g : δ -> β} (hg : AEMeasurable g (μ.map f))
+  结论: {f : α -> δ} {g : δ -> β} (hg : 几乎处处可测 g (μ.map f))
   证明: comp_aemeasurable hg hf
 
 Depends on / 依赖: comp_aemeasurable
@@ -591,7 +591,7 @@ theorem comp_measurable
 
 中文:
 定理 comp_measurable
-  结论: {f : α -> δ} {g : δ -> β} (hg : AEMeasurable g (μ.map f))
+  结论: {f : α -> δ} {g : δ -> β} (hg : 几乎处处可测 g (μ.map f))
   证明: hg.comp_aemeasurable hf.aemeasurable
 
 @[fun_prop]
@@ -613,7 +613,7 @@ theorem comp_quasiMeasurePreserving
 
 中文:
 定理 comp_quasiMeasurePreserving
-  结论: {ν : Measure δ} {f : α -> δ} {g : δ -> β} (hg : AEMeasurable g ν)
+  结论: {ν : 测度 δ} {f : α -> δ} {g : δ -> β} (hg : 几乎处处可测 g ν)
   证明: (hg.mono' hf.absolutelyContinuous).comp_measurable hf.measurable
 
 Depends on / 依赖: absolutelyContinuous, comp_measurable, hf.absolutelyContinuous, hf.measurable, hg.mono, measurable
@@ -636,7 +636,7 @@ theorem map_map_of_aemeasurable
 
 中文:
 定理 map_map_of_aemeasurable
-  结论: {g : β -> γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ))
+  结论: {g : β -> γ} {f : α -> β} (hg : 几乎处处可测 g (测度.map f μ))
   证明: by
   ext1 s hs
   rw [map_apply_of_aemeasurable hg hs]; rw [map_apply₀ hf (hg.nullMeasurable hs)]; rw [map_apply_of_aemeasurable (hg.comp_aemeasurable hf) hs]; rw [preimage_comp]
@@ -663,7 +663,7 @@ theorem fst
 
 中文:
 定理 fst
-  条件: {f : α -> β × γ} (hf : AEMeasurable f μ)
+  条件: {f : α -> β × γ} (hf : 几乎处处可测 f μ)
   证明: measurable_fst.comp_aemeasurable hf
 
 @[fun_prop]
@@ -685,7 +685,7 @@ theorem snd
 
 中文:
 定理 snd
-  条件: {f : α -> β × γ} (hf : AEMeasurable f μ)
+  条件: {f : α -> β × γ} (hf : 几乎处处可测 f μ)
   证明: measurable_snd.comp_aemeasurable hf
 
 @[fun_prop]
@@ -706,7 +706,7 @@ theorem prodMk
 
 中文:
 定理 prodMk
-  条件: {f : α -> β} {g : α -> γ} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+  条件: {f : α -> β} {g : α -> γ} (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: ⟨fun a => (hf.mk f a, hg.mk g a), hf.measurable_mk.prodMk hg.measurable_mk,
     hf.ae_eq_mk.prodMk hg.ae_eq_mk⟩
 
@@ -753,8 +753,8 @@ theorem exists_ae_eq_range_subset
     by_cases
 
 中文:
-定理 exists_ae_eq_range_subset
-  结论: (H : AEMeasurable f μ) {t : Set β} (ht : 对任意ᵐ x ∂μ, f x in t)
+定理 存在_ae_eq_range_subset
+  结论: (H : 几乎处处可测 f μ) {t : 集合 β} (ht : 对任意ᵐ x ∂μ, f x in t)
   证明: by
   classical
   let s : Set α := toMeasurable μ { x | f x = H.mk f x ∧ f x in t }ᶜ
@@ -802,8 +802,8 @@ theorem exists_measurable_nonneg
   exact ⟨G, hG_meas, fun x => hG_mem (mem_range_self x), hG_ae_eq⟩
 
 中文:
-定理 exists_measurable_nonneg
-  结论: {β} [Preorder β] [Zero β] {mβ : MeasurableSpace β} {f : α -> β}
+定理 存在_measurable_nonneg
+  结论: {β} [预序 β] [零 β] {mβ : 可测空间 β} {f : α -> β}
   证明: by
   obtain ⟨G, hG_meas, hG_mem, hG_ae_eq⟩ := hf.exists_ae_eq_range_subset f_nn ⟨0, le_rfl⟩
   exact ⟨G, hG_meas, fun x => hG_mem (mem_range_self x), hG_ae_eq⟩
@@ -830,7 +830,7 @@ theorem subtype_mk
 
 中文:
 定理 subtype_mk
-  条件: (h : AEMeasurable f μ) {s : Set β} {hfs : 对任意 x, f x in s}
+  条件: (h : 几乎处处可测 f μ) {s : 集合 β} {hfs : 对任意 x, f x in s}
   证明: by
   nontriviality α; inhabit α
   obtain ⟨g, g_meas, hg, fg⟩ : exists g : α -> β, Measurable g ∧ range g subseteq s ∧ f =ᵐ[μ] g :=
@@ -868,7 +868,7 @@ theorem aemeasurable_const'
 中文:
 定理 aemeasurable_const'
   条件: (h : 对任意ᵐ (x) (y) ∂μ, f x = f y)
-  结论: AEMeasurable f μ
+  结论: 几乎处处可测 f μ
   证明: by
   rcases eq_or_ne μ 0 with (rfl | hμ)
   · exact aemeasurable_zero_measure
@@ -897,7 +897,7 @@ theorem aemeasurable_uIoc_iff
 
 中文:
 定理 aemeasurable_uIoc_iff
-  条件: [LinearOrder α] {f : α -> β} {a b : α}
+  条件: [线性序 α] {f : α -> β} {a b : α}
   证明: by
   rw [uIoc_eq_union]; rw [aemeasurable_union_iff]
 
@@ -919,8 +919,8 @@ theorem aemeasurable_iff_measurable
 
 中文:
 定理 aemeasurable_iff_measurable
-  条件: [μ.IsComplete]
-  结论: AEMeasurable f μ ↔ Measurable f
+  条件: [μ.是完备]
+  结论: 几乎处处可测 f μ ↔ 可测 f
   证明: ⟨fun h => h.nullMeasurable.measurable_of_complete, fun h => h.aemeasurable⟩
 
 Depends on / 依赖: aemeasurable, h.aemeasurable, h.nullMeasurable.measurable_of_complete, measurable_of_complete, nullMeasurable
@@ -941,8 +941,8 @@ theorem MeasurableEmbedding.aemeasurable_map_iff
   exact ⟨g₂, hgm₂, hf.ae_map_iff.2 heq⟩
 
 中文:
-定理 MeasurableEmbedding.aemeasurable_map_iff
-  条件: {g : β -> γ} (hf : MeasurableEmbedding f)
+定理 可测嵌入.aemeasurable_map_iff
+  条件: {g : β -> γ} (hf : 可测嵌入 f)
   证明: by
   refine ⟨fun H => H.comp_measurable hf.measurable, ?_⟩
   rintro ⟨g₁, hgm₁, heq⟩
@@ -971,8 +971,8 @@ theorem MeasurableEmbedding.aemeasurable_comp_iff
   exact hg.measurable_rangeSplitting.comp_aemeasurable H.subtype_mk
 
 中文:
-定理 MeasurableEmbedding.aemeasurable_comp_iff
-  结论: {g : β -> γ} (hg : MeasurableEmbedding g)
+定理 可测嵌入.aemeasurable_comp_iff
+  结论: {g : β -> γ} (hg : 可测嵌入 g)
   证明: by
   refine ⟨fun H => ?_, hg.measurable.comp_aemeasurable⟩
   suffices AEMeasurable ((rangeSplitting g ∘ rangeFactorization g) ∘ f) μ by
@@ -1001,7 +1001,7 @@ theorem aemeasurable_restrict_iff_comap_subtype
 
 中文:
 定理 aemeasurable_restrict_iff_comap_subtype
-  结论: {s : Set α} (hs : MeasurableSet s) {μ : Measure α}
+  结论: {s : 集合 α} (hs : 可测集 s) {μ : 测度 α}
   证明: by
   rw [← map_comap_subtype_coe hs]; rw [(MeasurableEmbedding.subtype_coe hs).aemeasurable_map_iff]
 
@@ -1027,8 +1027,8 @@ theorem aemeasurable_one
 
 中文:
 定理 aemeasurable_one
-  条件: [One β]
-  结论: AEMeasurable (fun _ : α => (1 : β)) μ
+  条件: [幺 β]
+  结论: 几乎处处可测 (fun _ : α => (1 : β)) μ
   证明: measurable_one.aemeasurable
 
 @[simp]
@@ -1071,7 +1071,7 @@ theorem aemeasurable_of_aemeasurable_trim
 
 中文:
 定理 aemeasurable_of_aemeasurable_trim
-  结论: {α} {m m0 : MeasurableSpace α} {μ : Measure α}
+  结论: {α} {m m0 : 可测空间 α} {μ : 测度 α}
   证明: ⟨hf.mk f, Measurable.mono hf.measurable_mk hm le_rfl, ae_eq_of_ae_eq_trim hf.ae_eq_mk⟩
 
 Depends on / 依赖: Measurable, Measurable.mono, ae_eq_mk, ae_eq_of_ae_eq_trim, hf.ae_eq_mk, hf.measurable_mk, hf.mk, le_rfl, measurable_mk
@@ -1090,7 +1090,7 @@ theorem aemeasurable_restrict_of_measurable_subtype
 
 中文:
 定理 aemeasurable_restrict_of_measurable_subtype
-  结论: {s : Set α} (hs : MeasurableSet s)
+  结论: {s : 集合 α} (hs : 可测集 s)
   证明: (aemeasurable_restrict_iff_comap_subtype hs).2 hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, aemeasurable_restrict_iff_comap_subtype, hf.aemeasurable
@@ -1131,9 +1131,9 @@ theorem AEMeasurable.restrict
   proof: ⟨AEMeasurable.mk f hfm, hfm.measurable_mk, ae_restrict_of_ae hfm.ae_eq_mk⟩
 
 中文:
-定理 AEMeasurable.restrict
-  条件: (hfm : AEMeasurable f μ) {s}
-  结论: AEMeasurable f (μ.restrict s)
+定理 几乎处处可测.restrict
+  条件: (hfm : 几乎处处可测 f μ) {s}
+  结论: 几乎处处可测 f (μ.restrict s)
   证明: ⟨AEMeasurable.mk f hfm, hfm.measurable_mk, ae_restrict_of_ae hfm.ae_eq_mk⟩
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mk, ae_eq_mk, ae_restrict_of_ae, hfm.ae_eq_mk, hfm.measurable_mk, measurable_mk
@@ -1156,8 +1156,8 @@ theorem aemeasurable_Ioi_of_forall_Ioc
   rw [Ioi_eq_iUnion]; rw [
 
 中文:
-定理 aemeasurable_Ioi_of_forall_Ioc
-  结论: {β} {mβ : MeasurableSpace β} [LinearOrder α]
+定理 aemeasurable_Ioi_of_对任意_Ioc
+  结论: {β} {mβ : 可测空间 β} [线性序 α]
   证明: by
   have : Nonempty α := ⟨x⟩
   obtain ⟨u, hu_tendsto⟩ := exists_seq_tendsto (atTop : Filter α)
@@ -1205,7 +1205,7 @@ theorem aemeasurable_indicator_iff
 
 中文:
 定理 aemeasurable_indicator_iff
-  条件: {s} (hs : MeasurableSet s)
+  条件: {s} (hs : 可测集 s)
   证明: by
   constructor
   · intro h
@@ -1272,7 +1272,7 @@ lemma aemeasurable_indicator_const_iff
 
 中文:
 引理 aemeasurable_indicator_const_iff
-  条件: {s} [MeasurableSingletonClass β] (b : β) [NeZero b]
+  条件: {s} [MeasurableSingleton类 β] (b : β) [NeZero b]
   证明: by
   classical
   constructor <;> intro h
@@ -1304,8 +1304,8 @@ theorem AEMeasurable.indicator
   proof: (aemeasurable_indicator_iff hs).mpr hfm.restrict
 
 中文:
-定理 AEMeasurable.indicator
-  条件: (hfm : AEMeasurable f μ) {s} (hs : MeasurableSet s)
+定理 几乎处处可测.indicator
+  条件: (hfm : 几乎处处可测 f μ) {s} (hs : 可测集 s)
   证明: (aemeasurable_indicator_iff hs).mpr hfm.restrict
 
 Depends on / 依赖: aemeasurable_indicator_iff, hfm.restrict, restrict
@@ -1323,8 +1323,8 @@ theorem AEMeasurable.indicator₀
   proof: (aemeasurable_indicator_iff₀ hs).mpr hfm.restrict
 
 中文:
-定理 AEMeasurable.indicator₀
-  条件: (hfm : AEMeasurable f μ) {s} (hs : NullMeasurableSet s μ)
+定理 几乎处处可测.indicator₀
+  条件: (hfm : 几乎处处可测 f μ) {s} (hs : NullMeasurableSet s μ)
   证明: (aemeasurable_indicator_iff₀ hs).mpr hfm.restrict
 
 Depends on / 依赖: hfm.restrict, restrict
@@ -1350,8 +1350,8 @@ theorem MeasureTheory.Measure.restrict_map_of_aemeasurable
       (Measure.map_congr (ae_restr
 
 中文:
-定理 MeasureTheory.Measure.restrict_map_of_aemeasurable
-  结论: {f : α -> δ} (hf : AEMeasurable f μ)
+定理 测度论.测度.restrict_map_of_aemeasurable
+  结论: {f : α -> δ} (hf : 几乎处处可测 f μ)
   证明: calc
     (μ.map f).restrict s = (μ.map (hf.mk f)).restrict s := by
       congr 1
@@ -1387,7 +1387,7 @@ theorem MeasureTheory.Measure.map_mono_of_aemeasurable
   proof: le_iff.2 fun s hs => by simpa [hf, hs, hf.mono_measure h] using h (f ⁻¹' s)
 
 中文:
-定理 MeasureTheory.Measure.map_mono_of_aemeasurable
+定理 测度论.测度.map_mono_of_aemeasurable
   结论: {f : α -> δ} (h : μ <= ν)
   证明: le_iff.2 fun s hs => by simpa [hf, hs, hf.mono_measure h] using h (f ⁻¹' s)
 
@@ -1413,7 +1413,7 @@ lemma MeasureTheory.NullMeasurable.aemeasurable
   ha
 
 中文:
-引理 MeasureTheory.NullMeasurable.aemeasurable
+引理 测度论.NullMeasurable.aemeasurable
   结论: {f : α -> β}
   证明: by
   classical
@@ -1466,8 +1466,8 @@ lemma MeasureTheory.NullMeasurable.aemeasurable_of_aerange
       h.measu
 
 中文:
-引理 MeasureTheory.NullMeasurable.aemeasurable_of_aerange
-  结论: {f : α -> β} {t : Set β}
+引理 测度论.NullMeasurable.aemeasurable_of_aerange
+  结论: {f : α -> β} {t : 集合 β}
   证明: by
   rcases eq_empty_or_nonempty t with rfl | hne
   · obtain rfl : μ = 0 := by simpa using hft
@@ -1511,7 +1511,7 @@ lemma map_sum
 
 中文:
 引理 map_sum
-  条件: {ι : 类型} {m : ι -> Measure α} {f : α -> β} (hf : AEMeasurable f (Measure.sum m))
+  条件: {ι : 类型} {m : ι -> 测度 α} {f : α -> β} (hf : 几乎处处可测 f (测度.求和 m))
   证明: by
   ext s hs
   rw [map_apply_of_aemeasurable hf hs]; rw [sum_apply₀ _ (hf.nullMeasurable hs)]; rw [sum_apply _ hs]
@@ -1539,7 +1539,7 @@ lemma map_finset_sum
 
 中文:
 引理 map_finset_sum
-  结论: {ι β : 类型} {mβ : MeasurableSpace β} {m : ι -> Measure α}
+  结论: {ι β : 类型} {mβ : 可测空间 β} {m : ι -> 测度 α}
   证明: by
   rw [← sum_coe_finset]; rw [← sum_coe_finset]; rw [Measure.map_sum]
   rwa [sum_coe_finset]
@@ -1562,7 +1562,7 @@ lemma map_finset_sum'
 
 中文:
 引理 map_finset_sum'
-  结论: {ι β : 类型} [Fintype ι] {mβ : MeasurableSpace β} {m : ι -> Measure α}
+  结论: {ι β : 类型} [有限类型 ι] {mβ : 可测空间 β} {m : ι -> 测度 α}
   证明: map_finset_sum hf
 
 Depends on / 依赖: map_finset_sum

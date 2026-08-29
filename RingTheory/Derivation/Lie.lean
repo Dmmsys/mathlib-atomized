@@ -48,7 +48,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bracket (Derivation R A A) (Derivation R A A)
+  签名: Bracket (导子 R A A) (导子 R A A)
   定义体: ⟨fun D1 D2 =>
     mk' ⁅(D1 : Module.End R A), (D2 : Module.End R A)⁆ fun a b => by
       simp only [Ring.lie_def, map_add, smul_eq_mul, Module.End.mul_apply, leibniz,
@@ -77,7 +77,7 @@ theorem commutator_coe_linear_map
 
 中文:
 定理 commutator_coe_linear_map
-  结论: ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R A), (D2 : Module.End R A)⁆
+  结论: ↑⁅D1, D2⁆ = ⁅(D1 : 模.End R A), (D2 : 模.End R A)⁆
   证明: rfl
 -/
 theorem commutator_coe_linear_map : ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R A), (D2 : Module.End R A)⁆ :=
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (Derivation R A A)
+  签名: Lie环 (导子 R A A)
   定义体: by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_add d e f := by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_self d := by ext a; simp only [commutator_apply]; ring_nf; simp
@@ -138,7 +138,7 @@ instance instLieAlgebra
 
 中文:
 实例 instLieAlgebra
-  签名: : LieAlgebra R (Derivation R A A)
+  签名: : Lie代数 R (导子 R A A)
   定义体: { Derivation.instModule with
     lie_smul := fun r d e => by
       ext a; simp only [commutator_apply, map_smul, smul_sub, smul_apply] }
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRingModule (Derivation R A A) A
+  签名: Lie环模 (导子 R A A) A
   定义体: X a
   add_lie _ _ m := add_apply m
   lie_add _ _ _ := Derivation.map_add _ _ _
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule R (Derivation R A A) A
+  签名: Lie模 R (导子 R A A) A
   定义体: rfl
   lie_smul _ _ _ := Derivation.map_smul_of_tower _ _ _
 
@@ -210,7 +210,7 @@ lemma bracket_eq_fun
 
 中文:
 引理 bracket_eq_fun
-  条件: (X : Derivation R A A) (a : A)
+  条件: (X : 导子 R A A) (a : A)
   结论: ⁅X, a⁆ = X a
   证明: rfl
 -/
@@ -239,7 +239,7 @@ definition couple
 
 中文:
 定义 couple
-  签名: : LieSubalgebra R (Derivation R A' A' × Derivation R A A) where
+  签名: : Lie子代数 R (导子 R A' A' × 导子 R A A) where
   定义体: { x | x.fst.compAlgebraMapL R A A' A' = (Algebra.ofId A A').toLinearMap.compDer x.snd }
   add_mem' := by simp_all
   zero_mem' := by simp
@@ -277,7 +277,7 @@ lemma mem
 
 中文:
 引理 mem
-  条件: (x : (Derivation R A' A') × (Derivation R A A))
+  条件: (x : (导子 R A' A') × (导子 R A A))
   证明: by
   constructor
   · intro hx; ext a; exact congrArg (· a) hx
@@ -299,7 +299,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (x : Derivation R A' A') (y : Derivation R A A)
+  签名: (x : 导子 R A' A') (y : 导子 R A A)
   定义体: ⟨(x, y), (Compatible.mem _).mpr h⟩
 
 Depends on / 依赖: Compatible, Compatible.mem, Inhabited, y.Type
@@ -318,7 +318,7 @@ lemma mk_left
 
 中文:
 引理 mk_left
-  结论: (x : Derivation R A' A') (y : Derivation R A A)
+  结论: (x : 导子 R A' A') (y : 导子 R A A)
   证明: rfl
 -/
 lemma mk_left (x : Derivation R A' A') (y : Derivation R A A)
@@ -334,7 +334,7 @@ lemma mk_right
 
 中文:
 引理 mk_right
-  结论: (x : Derivation R A' A') (y : Derivation R A A)
+  结论: (x : 导子 R A' A') (y : 导子 R A A)
   证明: rfl
 -/
 lemma mk_right (x : Derivation R A' A') (y : Derivation R A A)

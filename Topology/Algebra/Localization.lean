@@ -39,7 +39,7 @@ definition Localization.ringTopology
 
 中文:
 定义 Localization.ringTopology
-  签名: : RingTopology (Localization M)
+  签名: : 环拓扑 (Localization M)
   定义体: RingTopology.coinduced (Localization.monoidOf M).toFun
 
 Depends on / 依赖: Localization, Localization.monoidOf, RingTopology, RingTopology.coinduced, coinduced, monoidOf
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Localization M)
+  签名: 拓扑空间 (Localization M)
   定义体: Localization.ringTopology.toTopologicalSpace
 
 Depends on / 依赖: Localization, Localization.ringTopology.toTopologicalSpace, ringTopology, toTopologicalSpace
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalRing (Localization M)
+  签名: 是拓扑环 (Localization M)
   定义体: Localization.ringTopology.toIsTopologicalRing
 
 Depends on / 依赖: Localization, Localization.ringTopology.toIsTopologicalRing, ringTopology, toIsTopologicalRing

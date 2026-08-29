@@ -44,8 +44,8 @@ theorem IsWeaklyRegular.of_flat_of_isBaseChange
 have hg : IsBaseChange S
 
 中文:
-定理 IsWeaklyRegular.of_flat_of_isBaseChange
-  结论: [Flat R S] {f : M ->ₗ[R] N} (hf : IsBaseChange S f)
+定理 是WeaklyRegular.of_flat_of_isBaseChange
+  结论: [平坦 R S] {f : M ->ₗ[R] N} (hf : IsBaseChange S f)
   证明: by
   induction rs generalizing M N with
   | nil => simp
@@ -79,8 +79,8 @@ theorem IsWeaklyRegular.of_flat
   proof: reg.of_flat_of_isBaseChange (IsBaseChange.linearMap R S)
 
 中文:
-定理 IsWeaklyRegular.of_flat
-  条件: [Flat R S] {rs : List R} (reg : IsWeaklyRegular R rs)
+定理 是WeaklyRegular.of_flat
+  条件: [平坦 R S] {rs : 列表 R} (reg : 是WeaklyRegular R rs)
   证明: reg.of_flat_of_isBaseChange (IsBaseChange.linearMap R S)
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.linearMap, linearMap, of_flat_of_isBaseChange, reg.of_flat_of_isBaseChange
@@ -103,8 +103,8 @@ theorem IsWeaklyRegular.of_isLocalizedModule
 include T in
 
 中文:
-定理 IsWeaklyRegular.of_isLocalizedModule
-  结论: (f : M ->ₗ[R] N) [IsLocalizedModule T f]
+定理 是WeaklyRegular.of_isLocalizedModule
+  结论: (f : M ->ₗ[R] N) [是Localized模 T f]
   证明: have : Flat R S := IsLocalization.flat S T
   reg.of_flat_of_isBaseChange (IsLocalizedModule.isBaseChange T S f)
 
@@ -127,8 +127,8 @@ theorem IsWeaklyRegular.of_isLocalization
   proof: reg.of_isLocalizedModule S T (Algebra.linearMap R S)
 
 中文:
-定理 IsWeaklyRegular.of_isLocalization
-  条件: {rs : List R} (reg : IsWeaklyRegular R rs)
+定理 是WeaklyRegular.of_isLocalization
+  条件: {rs : 列表 R} (reg : 是WeaklyRegular R rs)
   证明: reg.of_isLocalizedModule S T (Algebra.linearMap R S)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, linearMap, of_isLocalizedModule, reg.of_isLocalizedModule
@@ -152,7 +152,7 @@ refine (IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal (fun _ 
   simpa only [← eq, IsLocalization.AtPrime.to_
 
 中文:
-定理 IsWeaklyRegular.isRegular_of_isLocalizedModule_of_mem
+定理 是WeaklyRegular.isRegular_of_isLocalizedModule_of_mem
   证明: by
   have : IsLocalRing S := IsLocalization.AtPrime.isLocalRing S p
 refine (IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal (fun _ hr => ?_)).mpr
@@ -181,7 +181,7 @@ theorem IsWeaklyRegular.isRegular_of_isLocalization_of_mem
   reg.isRegular_of_isLocalizedModule_of_mem S p (Algebra.linearMap R S) mem
 
 中文:
-定理 IsWeaklyRegular.isRegular_of_isLocalization_of_mem
+定理 是WeaklyRegular.isRegular_of_isLocalization_of_mem
   证明: have : Nontrivial S := IsLocalization.AtPrime.nontrivial S p
   reg.isRegular_of_isLocalizedModule_of_mem S p (Algebra.linearMap R S) mem
 
@@ -207,7 +207,7 @@ theorem IsRegular.of_faithfullyFlat_of_isBaseChange
   exact ((hf.map_smul_top_ne_top_iff_of_faithfullyFlat R M _).mpr reg.2.symm).symm
 
 中文:
-定理 IsRegular.of_faithfullyFlat_of_isBaseChange
+定理 是正则.of_faithfullyFlat_of_isBaseChange
   结论: {f : M ->ₗ[R] N} (hf : IsBaseChange S f)
   证明: by
   refine ⟨reg.1.of_flat_of_isBaseChange hf, ?_⟩
@@ -231,8 +231,8 @@ theorem IsRegular.of_faithfullyFlat
   proof: reg.of_faithfullyFlat_of_isBaseChange (IsBaseChange.linearMap R S)
 
 中文:
-定理 IsRegular.of_faithfullyFlat
-  条件: {rs : List R} (reg : IsRegular R rs)
+定理 是正则.of_faithfullyFlat
+  条件: {rs : 列表 R} (reg : 是正则 R rs)
   证明: reg.of_faithfullyFlat_of_isBaseChange (IsBaseChange.linearMap R S)
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.linearMap, linearMap, of_faithfullyFlat_of_isBaseChange, reg.of_faithfullyFlat_of_isBaseChange

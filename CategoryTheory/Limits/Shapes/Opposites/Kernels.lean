@@ -49,7 +49,7 @@ definition CokernelCofork.IsColimit.ofπOp
       (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimi
 
 中文:
-定义 CokernelCofork.IsColimit.ofπOp
+定义 余核余叉.是余极限.ofπOp
   签名: {X Y Q : C} (p : Y ⟶ Q) {f : X ⟶ Y}
   定义体: KernelFork.IsLimit.ofι _ _
     (fun x hx => (h.desc (CokernelCofork.ofπ x.unop (Quiver.Hom.op_inj hx))).op)
@@ -82,7 +82,7 @@ definition CokernelCofork.IsColimit.ofπUnop
       (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.
 
 中文:
-定义 CokernelCofork.IsColimit.ofπUnop
+定义 余核余叉.是余极限.ofπUnop
   签名: {X Y Q : Cᵒᵖ} (p : Y ⟶ Q) {f : X ⟶ Y}
   定义体: KernelFork.IsLimit.ofι _ _
     (fun x hx => (h.desc (CokernelCofork.ofπ x.op (Quiver.Hom.unop_inj hx))).unop)
@@ -115,7 +115,7 @@ definition KernelFork.IsLimit.ofιOp
       simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] 
 
 中文:
-定义 KernelFork.IsLimit.ofιOp
+定义 核叉.是极限.ofιOp
   签名: {K X Y : C} (i : K ⟶ X) {f : X ⟶ Y}
   定义体: CokernelCofork.IsColimit.ofπ _ _
     (fun x hx => (h.lift (KernelFork.ofι x.unop (Quiver.Hom.op_inj hx))).op)
@@ -149,7 +149,7 @@ definition KernelFork.IsLimit.ofιUnop
       simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] us
 
 中文:
-定义 KernelFork.IsLimit.ofιUnop
+定义 核叉.是极限.ofιUnop
   签名: {K X Y : Cᵒᵖ} (i : K ⟶ X) {f : X ⟶ Y}
   定义体: CokernelCofork.IsColimit.ofπ _ _
     (fun x hx => (h.lift (KernelFork.ofι x.op (Quiver.Hom.unop_inj hx))).unop)

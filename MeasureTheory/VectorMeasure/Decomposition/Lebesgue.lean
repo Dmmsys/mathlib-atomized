@@ -69,11 +69,11 @@ class HaveLebesgueDecomposition
     - negPart : s.toJordanDecomposition.negPart.HaveLebesgueDecomposition μ
 
 中文:
-类 HaveLebesgueDecomposition
-  参数: (s : SignedMeasure α) (μ : Measure α)
+类 有Lebesgue分解
+  参数: (s : 符号测度 α) (μ : 测度 α)
   公理与运算 (2 个):
-    - posPart : s.toJordanDecomposition.posPart.HaveLebesgueDecomposition μ
-    - negPart : s.toJordanDecomposition.negPart.HaveLebesgueDecomposition μ
+    - posPart : s.toJordanDecomposition.posPart.有Lebesgue分解 μ
+    - negPart : s.toJordanDecomposition.negPart.有Lebesgue分解 μ
 -/
 class HaveLebesgueDecomposition (s : SignedMeasure α) (μ : Measure α) : Prop where
   posPart : s.toJordanDecomposition.posPart.HaveLebesgueDecomposition μ
@@ -93,7 +93,7 @@ theorem not_haveLebesgueDecomposition_iff
 
 中文:
 定理 not_haveLebesgueDecomposition_iff
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: ⟨fun h => not_or_of_imp fun hp hn => h ⟨hp, hn⟩, fun h hl => (not_and_or.2 h) ⟨hl.1, hl.2⟩⟩
 
 Depends on / 依赖: not_and_or, not_or_of_imp
@@ -126,7 +126,7 @@ instance haveLebesgueDecomposition_neg
 
 中文:
 实例 haveLebesgueDecomposition_neg
-  签名: (s : SignedMeasure α) (μ : Measure α)
+  签名: (s : 符号测度 α) (μ : 测度 α)
   定义体: by
     rw [toJordanDecomposition_neg]; rw [JordanDecomposition.neg_posPart]
     infer_instance
@@ -160,7 +160,7 @@ instance haveLebesgueDecomposition_smul
 
 中文:
 实例 haveLebesgueDecomposition_smul
-  签名: (s : SignedMeasure α) (μ : Measure α)
+  签名: (s : 符号测度 α) (μ : 测度 α)
   定义体: by
     rw [toJordanDecomposition_smul]; rw [JordanDecomposition.smul_posPart]
     infer_instance
@@ -198,7 +198,7 @@ instance haveLebesgueDecomposition_smul_real
 
 中文:
 实例 haveLebesgueDecomposition_smul_real
-  签名: (s : SignedMeasure α) (μ : Measure α)
+  签名: (s : 符号测度 α) (μ : 测度 α)
   定义体: by
   by_cases! hr : 0 <= r
   · lift r to Real>=0 using hr
@@ -236,7 +236,7 @@ definition singularPart
 
 中文:
 定义 singularPart
-  签名: (s : SignedMeasure α) (μ : Measure α)
+  签名: (s : 符号测度 α) (μ : 测度 α)
   定义体: (s.toJordanDecomposition.posPart.singularPart μ).toSignedMeasure -
     (s.toJordanDecomposition.negPart.singularPart μ).toSignedMeasure
 
@@ -258,7 +258,7 @@ theorem singularPart_mutuallySingular
 
 中文:
 定理 singularPart_mutuallySingular
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: (s.toJordanDecomposition.mutuallySingular.singularPart μ).mono le_rfl (singularPart_le _ _)
 
 Depends on / 依赖: le_rfl, mutuallySingular, s.toJordanDecomposition.mutuallySingular.singularPart, singularPart, singularPart_le, toJordanDecomposition
@@ -284,7 +284,7 @@ theorem singularPart_totalVariation
 
 中文:
 定理 singularPart_totalVariation
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: by
   have :
     (s.singularPart μ).toJordanDecomposition =
@@ -326,7 +326,7 @@ definition rnDeriv
 
 中文:
 定义 rnDeriv
-  签名: (s : SignedMeasure α) (μ : Measure α)
+  签名: (s : 符号测度 α) (μ : 测度 α)
   定义体: fun x =>
   (s.toJordanDecomposition.posPart.rnDeriv μ x).toReal -
     (s.toJordanDecomposition.negPart.rnDeriv μ x).toReal
@@ -347,7 +347,7 @@ theorem rnDeriv_def
 
 中文:
 定理 rnDeriv_def
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   结论: rnDeriv s μ = fun x =>
   证明: rfl
 -/
@@ -372,8 +372,8 @@ theorem measurable_rnDeriv
 
 中文:
 定理 measurable_rnDeriv
-  条件: (s : SignedMeasure α) (μ : Measure α)
-  结论: Measurable (rnDeriv s μ)
+  条件: (s : 符号测度 α) (μ : 测度 α)
+  结论: 可测 (rnDeriv s μ)
   证明: by
   rw [rnDeriv_def]
   fun_prop
@@ -400,8 +400,8 @@ theorem integrable_rnDeriv
 
 中文:
 定理 integrable_rnDeriv
-  条件: (s : SignedMeasure α) (μ : Measure α)
-  结论: 整数egrable (rnDeriv s μ) μ
+  条件: (s : 符号测度 α) (μ : 测度 α)
+  结论: 可积 (rnDeriv s μ) μ
   证明: by
   refine Integrable.sub ?_ ?_ <;>
     · constructor
@@ -434,7 +434,7 @@ theorem singularPart_add_withDensity_rnDeriv_eq
 
 中文:
 定理 singularPart_add_withDensity_rnDeriv_eq
-  条件: [s.HaveLebesgueDecomposition μ]
+  条件: [s.有Lebesgue分解 μ]
   证明: by
   conv_rhs =>
     rw [← toSignedMeasure_toJordanDecomposition s]; rw [JordanDecomposition.toSignedMeasure]
@@ -476,7 +476,7 @@ theorem jordanDecomposition_add_withDensity_mutuallySingular
 
 中文:
 定理 jordanDecomposition_add_withDensity_mutuallySingular
-  结论: {f : α -> 实数} (hf : Measurable f)
+  结论: {f : α -> 实数} (hf : 可测 f)
   证明: by
   rw [mutuallySingular_ennreal_iff]; rw [totalVariation_mutuallySingular_iff]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure] at htμ
   exact
@@ -513,7 +513,7 @@ theorem toJordanDecomposition_eq_of_eq_add_withDensity
 
 中文:
 定理 toJordanDecomposition_eq_of_eq_add_withDensity
-  结论: {f : α -> 实数} (hf : Measurable f)
+  结论: {f : α -> 实数} (hf : 可测 f)
   证明: by
   have := isFiniteMeasure_withDensity_ofReal hfi.2
   have := isFiniteMeasure_withDensity_ofReal hfi.neg.2
@@ -557,7 +557,7 @@ theorem haveLebesgueDecomposition_mk'
 
 中文:
 定理 haveLebesgueDecomposition_mk'
-  结论: (μ : Measure α) {f : α -> 实数} (hf : Measurable f)
+  结论: (μ : 测度 α) {f : α -> 实数} (hf : 可测 f)
   证明: by
   have htμ' := htμ
   rw [mutuallySingular_ennreal_iff] at htμ
@@ -599,7 +599,7 @@ theorem haveLebesgueDecomposition_mk
 
 中文:
 定理 haveLebesgueDecomposition_mk
-  结论: (μ : Measure α) {f : α -> 实数} (hf : Measurable f)
+  结论: (μ : 测度 α) {f : α -> 实数} (hf : 可测 f)
   证明: by
   by_cases hfi : Integrable f μ
   · exact haveLebesgueDecomposition_mk' μ hf hfi htμ hadd
@@ -633,7 +633,7 @@ theorem eq_singularPart'
 
 中文:
 定理 eq_singularPart'
-  结论: (t : SignedMeasure α) {f : α -> 实数} (hf : Measurable f)
+  结论: (t : 符号测度 α) {f : α -> 实数} (hf : 可测 f)
   证明: by
   have htμ' := htμ
   rw [mutuallySingular_ennreal_iff]; rw [totalVariation_mutuallySingular_iff]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure] at htμ
@@ -671,7 +671,7 @@ theorem eq_singularPart
 
 中文:
 定理 eq_singularPart
-  结论: (t : SignedMeasure α) (f : α -> 实数) (htμ : t ⟂ᵥ μ.toENN实数VectorMeasure)
+  结论: (t : 符号测度 α) (f : α -> 实数) (htμ : t ⟂ᵥ μ.toENN实数VectorMeasure)
   证明: by
   by_cases hfi : Integrable f μ
   · refine eq_singularPart' t hfi.1.measurable_mk (hfi.congr hfi.1.ae_eq_mk) htμ ?_
@@ -705,8 +705,8 @@ theorem singularPart_zero
 
 中文:
 定理 singularPart_zero
-  条件: (μ : Measure α)
-  结论: (0 : SignedMeasure α).singularPart μ = 0
+  条件: (μ : 测度 α)
+  结论: (0 : 符号测度 α).singularPart μ = 0
   证明: by
   refine (eq_singularPart 0 0 VectorMeasure.MutuallySingular.zero_left ?_).symm
   rw [zero_add]; rw [withDensityᵥ_zero]
@@ -728,7 +728,7 @@ theorem singularPart_neg
 
 中文:
 定理 singularPart_neg
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: by
   simp [singularPart, toJordanDecomposition_neg]
 
@@ -755,7 +755,7 @@ theorem singularPart_smul_nnreal
 
 中文:
 定理 singularPart_smul_nnreal
-  条件: (s : SignedMeasure α) (μ : Measure α) (r : 实数>=0)
+  条件: (s : 符号测度 α) (μ : 测度 α) (r : 实数>=0)
   证明: by
   rw [singularPart]; rw [singularPart]; rw [smul_sub]; rw [← toSignedMeasure_smul]; rw [← toSignedMeasure_smul]
   conv_lhs =>
@@ -810,7 +810,7 @@ theorem singularPart_add
 
 中文:
 定理 singularPart_add
-  结论: (s t : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ]
+  结论: (s t : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ]
   证明: by
   refine
     (eq_singularPart _ (s.rnDeriv μ + t.rnDeriv μ)
@@ -840,7 +840,7 @@ theorem singularPart_sub
 
 中文:
 定理 singularPart_sub
-  结论: (s t : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ]
+  结论: (s t : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ]
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [singularPart_add]; rw [singularPart_neg]
 
@@ -867,7 +867,7 @@ theorem eq_rnDeriv
 
 中文:
 定理 eq_rnDeriv
-  结论: (t : SignedMeasure α) (f : α -> 实数) (hfi : 整数egrable f μ)
+  结论: (t : 符号测度 α) (f : α -> 实数) (hfi : 可积 f μ)
   证明: by
   set f' := hfi.1.mk f
   have hadd' : s = t + μ.withDensityᵥ f' := by
@@ -902,7 +902,7 @@ theorem rnDeriv_neg
 
 中文:
 定理 rnDeriv_neg
-  条件: (s : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ]
+  条件: (s : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ]
   证明: by
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) (integrable_rnDeriv _ _).neg ?_
@@ -930,7 +930,7 @@ theorem rnDeriv_smul
 
 中文:
 定理 rnDeriv_smul
-  条件: (s : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ] (r : 实数)
+  条件: (s : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ] (r : 实数)
   证明: by
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
@@ -960,7 +960,7 @@ theorem rnDeriv_add
 
 中文:
 定理 rnDeriv_add
-  结论: (s t : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ]
+  结论: (s t : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ]
   证明: by
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
@@ -990,7 +990,7 @@ theorem rnDeriv_sub
 
 中文:
 定理 rnDeriv_sub
-  结论: (s t : SignedMeasure α) (μ : Measure α) [s.HaveLebesgueDecomposition μ]
+  结论: (s t : 符号测度 α) (μ : 测度 α) [s.有Lebesgue分解 μ]
   证明: by
   rw [sub_eq_add_neg] at hst
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]
@@ -1020,11 +1020,11 @@ class HaveLebesgueDecomposition
     - imPart : c.im.HaveLebesgueDecomposition μ
 
 中文:
-类 HaveLebesgueDecomposition
-  参数: (c : ComplexMeasure α) (μ : Measure α)
+类 有Lebesgue分解
+  参数: (c : 复测度 α) (μ : 测度 α)
   公理与运算 (2 个):
-    - rePart : c.re.HaveLebesgueDecomposition μ
-    - imPart : c.im.HaveLebesgueDecomposition μ
+    - rePart : c.re.有Lebesgue分解 μ
+    - imPart : c.im.有Lebesgue分解 μ
 -/
 class HaveLebesgueDecomposition (c : ComplexMeasure α) (μ : Measure α) : Prop where
   rePart : c.re.HaveLebesgueDecomposition μ
@@ -1044,7 +1044,7 @@ definition singularPart
 
 中文:
 定义 singularPart
-  签名: (c : ComplexMeasure α) (μ : Measure α)
+  签名: (c : 复测度 α) (μ : 测度 α)
   定义体: (c.re.singularPart μ).toComplexMeasure (c.im.singularPart μ)
 
 Depends on / 依赖: c.im.singularPart, c.re.singularPart, singularPart, toComplexMeasure
@@ -1063,7 +1063,7 @@ definition rnDeriv
 
 中文:
 定义 rnDeriv
-  签名: (c : ComplexMeasure α) (μ : Measure α)
+  签名: (c : 复测度 α) (μ : 测度 α)
   定义体: fun x =>
   ⟨c.re.rnDeriv μ x, c.im.rnDeriv μ x⟩
 -/
@@ -1087,8 +1087,8 @@ theorem integrable_rnDeriv
 
 中文:
 定理 integrable_rnDeriv
-  条件: (c : ComplexMeasure α) (μ : Measure α)
-  结论: 整数egrable (c.rnDeriv μ) μ
+  条件: (c : 复测度 α) (μ : 测度 α)
+  结论: 可积 (c.rnDeriv μ) μ
   证明: by
   rw [← memLp_one_iff_integrable]; rw [← memLp_re_im_iff]
   exact
@@ -1119,7 +1119,7 @@ theorem singularPart_add_withDensity_rnDeriv_eq
 
 中文:
 定理 singularPart_add_withDensity_rnDeriv_eq
-  条件: [c.HaveLebesgueDecomposition μ]
+  条件: [c.有Lebesgue分解 μ]
   证明: by
   conv_rhs => rw [← c.toComplexMeasure_to_signedMeasure]
   ext i hi : 1

@@ -55,7 +55,7 @@ definition IsZeckendorfRep
 
 中文:
 定义 IsZeckendorfRep
-  签名: (l : List 自然数)
+  签名: (l : 列表 自然数)
   定义体: (l ++ [0]).IsChain (fun a b => b + 2 <= a)
 
 @[simp]
@@ -173,7 +173,7 @@ lemma greatestFib_mono
 
 中文:
 引理 greatestFib_mono
-  结论: Monotone greatestFib
+  结论: 递增 greatestFib
   证明: fun _a _b hab => findGreatest_mono (fun _k => hab.trans') by gcongr
 
 Depends on / 依赖: findGreatest_mono, hab.trans
@@ -359,7 +359,7 @@ definition zeckendorf
 
 中文:
 定义 zeckendorf
-  签名: : 自然数 -> List 自然数
+  签名: : 自然数 -> 列表 自然数
   定义体: greatestFib m
     a :: zeckendorf (m - fib a)
 
@@ -472,7 +472,7 @@ lemma zeckendorf_sum_fib
 
 中文:
 引理 zeckendorf_sum_fib
-  结论: 对任意 {l}, IsZeckendorfRep l -> zeckendorf (l.map fib).sum = l
+  结论: 对任意 {l}, IsZeckendorfRep l -> zeckendorf (l.map fib).求和 = l
   证明: hl
     simp only [IsZeckendorfRep, cons_append, isChain_iff_pairwise, pairwise_cons, mem_append,
       mem_singleton, or_imp, forall_and, forall_eq, zero_add] at hl
@@ -510,7 +510,7 @@ lemma sum_zeckendorf_fib
 中文:
 引理 sum_zeckendorf_fib
   条件: (n : 自然数)
-  结论: (n.zeckendorf.map fib).sum = n
+  结论: (n.zeckendorf.map fib).求和 = n
   证明: by
   induction n using zeckendorf.induct <;> simp_all [fib_greatestFib_le]
 -/

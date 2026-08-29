@@ -44,7 +44,7 @@ lemma expect_eq_ite
 
 中文:
 引理 expect_eq_ite
-  条件: (ψ : AddChar G R)
+  条件: (ψ : 加法特征 G R)
   结论: 𝔼 a, ψ a = if ψ = 0 then 1 else 0
   证明: by
   simp [Fintype.expect_eq_sum_div_card, sum_eq_ite, ite_div]
@@ -108,7 +108,7 @@ lemma wInner_cWeight_self
 
 中文:
 引理 wInner_cWeight_self
-  条件: (ψ : AddChar G R)
+  条件: (ψ : 加法特征 G R)
   结论: ⟪(ψ : G -> R), ψ⟫ₙ_[R] = 1
   证明: by
   simp [wInner_cWeight_eq_expect, ψ.norm_apply]
@@ -142,7 +142,7 @@ lemma wInner_cWeight_eq_boole
 
 中文:
 引理 wInner_cWeight_eq_boole
-  条件: [Fintype G] (ψ₁ ψ₂ : AddChar G R)
+  条件: [有限类型 G] (ψ₁ ψ₂ : 加法特征 G R)
   证明: by
   split_ifs with h
   · rw [h, wInner_cWeight_self]
@@ -172,7 +172,7 @@ lemma wInner_cWeight_eq_zero_iff_ne
 
 中文:
 引理 wInner_cWeight_eq_zero_iff_ne
-  条件: [Fintype G]
+  条件: [有限类型 G]
   结论: ⟪(ψ₁ : G -> R), ψ₂⟫ₙ_[R] = 0 ↔ ψ₁ != ψ₂
   证明: by
   rw [wInner_cWeight_eq_boole]; rw [one_ne_zero.ite_eq_right_iff]
@@ -194,7 +194,7 @@ lemma wInner_cWeight_eq_one_iff_eq
 
 中文:
 引理 wInner_cWeight_eq_one_iff_eq
-  条件: [Fintype G]
+  条件: [有限类型 G]
   结论: ⟪(ψ₁ : G -> R), ψ₂⟫ₙ_[R] = 1 ↔ ψ₁ = ψ₂
   证明: by
   rw [wInner_cWeight_eq_boole]; rw [one_ne_zero.ite_eq_left_iff]
@@ -220,8 +220,8 @@ lemma linearIndependent
 
 中文:
 引理 linearIndependent
-  条件: [Finite G]
-  结论: LinearIndependent R ((⇑) : AddChar G R -> G -> R)
+  条件: [有限 G]
+  结论: LinearIndependent R ((⇑) : 加法特征 G R -> G -> R)
   证明: by
   cases nonempty_fintype G
   exact linearIndependent_of_ne_zero_of_wInner_cWeight_eq_zero coe_ne_zero
@@ -242,7 +242,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: [Finite G]
+  签名: [有限 G]
   定义体: @Fintype.ofFinite _ (AddChar.linearIndependent G R).finite
 
 Depends on / 依赖: AddChar, AddChar.linearIndependent, Fintype, Fintype.ofFinite, finite, linearIndependent, ofFinite
@@ -263,8 +263,8 @@ lemma card_addChar_le
 
 中文:
 引理 card_addChar_le
-  条件: [Fintype G]
-  结论: card (AddChar G R) <= card G
+  条件: [有限类型 G]
+  结论: card (加法特征 G R) <= card G
   证明: by
   simpa only [Module.finrank_fintype_fun_eq_card] using
     (AddChar.linearIndependent G R).fintype_card_le_finrank

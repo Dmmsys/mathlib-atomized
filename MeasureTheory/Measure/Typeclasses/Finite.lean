@@ -42,8 +42,8 @@ class IsFiniteMeasure
     - measure_univ_lt_top : μ univ < ∞
 
 中文:
-类 IsFiniteMeasure
-  参数: (μ : Measure α)
+类 是有限测度
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
     - measure_univ_lt_top : μ univ < ∞
 -/
@@ -60,7 +60,7 @@ lemma not_isFiniteMeasure_iff
 
 中文:
 引理 not_isFiniteMeasure_iff
-  结论: ¬IsFiniteMeasure μ ↔ μ univ = ∞
+  结论: ¬是有限测度 μ ↔ μ univ = ∞
   证明: by simp [isFiniteMeasure_iff]
 
 Depends on / 依赖: isFiniteMeasure_iff
@@ -78,7 +78,7 @@ lemma isFiniteMeasure_restrict
 
 中文:
 引理 isFiniteMeasure_restrict
-  结论: IsFiniteMeasure (μ.restrict s) ↔ μ s != ∞
+  结论: 是有限测度 (μ.restrict s) ↔ μ s != ∞
   证明: by
   simp [isFiniteMeasure_iff, lt_top_iff_ne_top]
 
@@ -99,7 +99,7 @@ instance Restrict.isFiniteMeasure
 
 中文:
 实例 Restrict.isFiniteMeasure
-  签名: (μ : Measure α) [hs : Fact (μ s < ∞)]
+  签名: (μ : 测度 α) [hs : Fact (μ s < ∞)]
   定义体: ⟨by simpa using hs.elim⟩
 
 @[simp]
@@ -122,7 +122,7 @@ theorem measure_lt_top
 
 中文:
 定理 measure_lt_top
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (s : Set α)
+  条件: (μ : 测度 α) [是有限测度 μ] (s : 集合 α)
   结论: μ s < ∞
   证明: (measure_mono (subset_univ s)).trans_lt IsFiniteMeasure.measure_univ_lt_top
 
@@ -143,7 +143,7 @@ instance isFiniteMeasureRestrict
 
 中文:
 实例 isFiniteMeasureRestrict
-  签名: (μ : Measure α) (s : Set α) [h : IsFiniteMeasure μ]
+  签名: (μ : 测度 α) (s : 集合 α) [h : 是有限测度 μ]
   定义体: ⟨by simp⟩
 
 @[simp, aesop (rule_sets := [finiteness]) safe apply]
@@ -163,7 +163,7 @@ theorem measure_ne_top
 
 中文:
 定理 measure_ne_top
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (s : Set α)
+  条件: (μ : 测度 α) [是有限测度 μ] (s : 集合 α)
   结论: μ s != ∞
   证明: ne_of_lt (measure_lt_top μ s)
 
@@ -187,7 +187,7 @@ theorem measure_compl_le_add_of_le_add
 
 中文:
 定理 measure_compl_le_add_of_le_add
-  结论: [IsFiniteMeasure μ] (hs : MeasurableSet s)
+  结论: [是有限测度 μ] (hs : 可测集 s)
   证明: by
   rw [measure_compl ht (by finiteness)]; rw [measure_compl hs (by finiteness)]; rw [tsub_le_iff_right]
   calc
@@ -216,7 +216,7 @@ theorem measure_compl_le_add_iff
 
 中文:
 定理 measure_compl_le_add_iff
-  结论: [IsFiniteMeasure μ] (hs : MeasurableSet s) (ht : MeasurableSet t)
+  结论: [是有限测度 μ] (hs : 可测集 s) (ht : 可测集 t)
   证明: ⟨fun h => compl_compl s ▸ compl_compl t ▸ measure_compl_le_add_of_le_add hs.compl ht.compl h,
     measure_compl_le_add_of_le_add ht hs⟩
 
@@ -240,7 +240,7 @@ theorem cofinite_eq_bot_iff
 
 中文:
 定理 cofinite_eq_bot_iff
-  结论: μ.cofinite = ⊥ ↔ IsFiniteMeasure μ
+  结论: μ.cofinite = ⊥ ↔ 是有限测度 μ
   证明: by
   simp [← empty_mem_iff_bot, μ.mem_cofinite, isFiniteMeasure_iff]
 
@@ -263,7 +263,7 @@ theorem cofinite_eq_bot
 
 中文:
 定理 cofinite_eq_bot
-  条件: [IsFiniteMeasure μ]
+  条件: [是有限测度 μ]
   结论: μ.cofinite = ⊥
   证明: cofinite_eq_bot_iff.2 ‹_›
 
@@ -282,8 +282,8 @@ definition measureUnivNNReal
 @[simp]
 
 中文:
-定义 measureUnivNNReal
-  签名: (μ : Measure α)
+定义 measureUnivNN实数
+  签名: (μ : 测度 α)
   定义体: (μ univ).toNNReal
 
 @[simp]
@@ -303,8 +303,8 @@ theorem coe_measureUnivNNReal
   proof: ENNReal.coe_toNNReal (by finiteness)
 
 中文:
-定理 coe_measureUnivNNReal
-  条件: (μ : Measure α) [IsFiniteMeasure μ]
+定理 coe_measureUnivNN实数
+  条件: (μ : 测度 α) [是有限测度 μ]
   证明: ENNReal.coe_toNNReal (by finiteness)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, ENNReal, ENNReal.coe_toNNReal, Preord, coe_toNNReal, finiteness
@@ -323,7 +323,7 @@ instance isFiniteMeasureZero
 
 中文:
 实例 isFiniteMeasureZero
-  签名: : IsFiniteMeasure (0 : Measure α)
+  签名: : 是有限测度 (0 : 测度 α)
   定义体: ⟨by simp⟩
 -/
 instance isFiniteMeasureZero : IsFiniteMeasure (0 : Measure α) :=
@@ -343,8 +343,8 @@ theorem measureUnivNNReal_zero
   proof: rfl
 
 中文:
-定理 measureUnivNNReal_zero
-  结论: measureUnivNN实数 (0 : Measure α) = 0
+定理 measureUnivNN实数_zero
+  结论: measureUnivNN实数 (0 : 测度 α) = 0
   证明: rfl
 
 Depends on / 依赖: f.hom
@@ -364,7 +364,7 @@ instance isFiniteMeasureAdd
 
 中文:
 实例 isFiniteMeasureAdd
-  签名: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  签名: [是有限测度 μ] [是有限测度 ν]
   定义体: by
     rw [Measure.coe_add]; rw [Pi.add_apply]; rw [ENNReal.add_lt_top]
     exact ⟨measure_lt_top _ _, measure_lt_top _ _⟩
@@ -385,8 +385,8 @@ instance isFiniteMeasureSMulNNReal
   body: ENNReal.mul_lt_top ENNReal.coe_lt_top (measure_lt_top _ _)
 
 中文:
-实例 isFiniteMeasureSMulNNReal
-  签名: [IsFiniteMeasure μ] {r : 实数>=0}
+实例 isFiniteMeasureSMulNN实数
+  签名: [是有限测度 μ] {r : 实数>=0}
   定义体: ENNReal.mul_lt_top ENNReal.coe_lt_top (measure_lt_top _ _)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, ENNReal.mul_lt_top, coe_lt_top, measure_lt_top, mul_lt_top
@@ -405,8 +405,8 @@ instance IsFiniteMeasure.average
     exact ENNReal.div_self_le_one.trans_lt ENNReal.one_lt_top
 
 中文:
-实例 IsFiniteMeasure.average
-  签名: : IsFiniteMeasure ((μ univ)⁻¹ • μ) where
+实例 是有限测度.average
+  签名: : 是有限测度 ((μ univ)⁻¹ • μ) where
   定义体: by
     rw [Measure.smul_apply]; rw [smul_eq_mul]; rw [← ENNReal.div_eq_inv_mul]
     exact ENNReal.div_self_le_one.trans_lt ENNReal.one_lt_top
@@ -429,8 +429,8 @@ instance isFiniteMeasureSMulOfNNRealTower
   infer_instance
 
 中文:
-实例 isFiniteMeasureSMulOfNNRealTower
-  签名: {R} [SMul R 实数>=0] [SMul R 实数>=0∞] [IsScalarTower R 实数>=0 实数>=0∞]
+实例 isFiniteMeasureSMulOfNN实数Tower
+  签名: {R} [标量乘法 R 实数>=0] [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0 实数>=0∞]
   定义体: by
   rw [← smul_one_smul Real>=0 r μ]
   infer_instance
@@ -455,8 +455,8 @@ theorem isFiniteMeasure_of_le
 
 中文:
 定理 isFiniteMeasure_of_le
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (h : ν <= μ)
-  结论: IsFiniteMeasure ν
+  条件: (μ : 测度 α) [是有限测度 μ] (h : ν <= μ)
+  结论: 是有限测度 ν
   证明: { measure_univ_lt_top := (h Set.univ).trans_lt (measure_lt_top _ _) }
 
 @[instance]
@@ -482,8 +482,8 @@ theorem Measure.isFiniteMeasure_map
     exact MeasureTheory.isFiniteMeasureZero
 
 中文:
-定理 Measure.isFiniteMeasure_map
-  结论: {m : MeasurableSpace α} (μ : Measure α) [IsFiniteMeasure μ]
+定理 测度.isFiniteMeasure_map
+  结论: {m : 可测空间 α} (μ : 测度 α) [是有限测度 μ]
   证明: by
   by_cases hf : AEMeasurable f μ
   · constructor
@@ -514,8 +514,8 @@ theorem Measure.isFiniteMeasure_of_map
     exact IsFiniteMeasure.measure_univ_lt_top
 
 中文:
-定理 Measure.isFiniteMeasure_of_map
-  结论: {μ : Measure α} {f : α -> β}
+定理 测度.isFiniteMeasure_of_map
+  结论: {μ : 测度 α} {f : α -> β}
   证明: by
     rw [← Set.preimage_univ (f := f)]; rw [← map_apply_of_aemeasurable hf .univ]
     exact IsFiniteMeasure.measure_univ_lt_top
@@ -537,8 +537,8 @@ theorem Measure.isFiniteMeasure_map_iff
   proof: ⟨fun _ => isFiniteMeasure_of_map hf, fun _ => isFiniteMeasure_map μ f⟩
 
 中文:
-定理 Measure.isFiniteMeasure_map_iff
-  结论: {μ : Measure α} {f : α -> β}
+定理 测度.isFiniteMeasure_map_iff
+  结论: {μ : 测度 α} {f : α -> β}
   证明: ⟨fun _ => isFiniteMeasure_of_map hf, fun _ => isFiniteMeasure_map μ f⟩
 
 Depends on / 依赖: isFiniteMeasure_map, isFiniteMeasure_of_map
@@ -559,7 +559,7 @@ instance IsFiniteMeasure_comap
 
 中文:
 实例 IsFiniteMeasure_comap
-  签名: (f : β -> α) [IsFiniteMeasure μ]
+  签名: (f : β -> α) [是有限测度 μ]
   定义体: (Measure.comap_apply_le _ _ nullMeasurableSet_univ).trans_lt (measure_lt_top _ _)
 
 @[simp]
@@ -583,8 +583,8 @@ theorem measureUnivNNReal_eq_zero
   norm_cast
 
 中文:
-定理 measureUnivNNReal_eq_zero
-  条件: [IsFiniteMeasure μ]
+定理 measureUnivNN实数_eq_zero
+  条件: [是有限测度 μ]
   结论: measureUnivNN实数 μ = 0 ↔ μ = 0
   证明: by
   rw [← MeasureTheory.Measure.measure_univ_eq_zero]; rw [← coe_measureUnivNNReal]
@@ -608,8 +608,8 @@ theorem measureUnivNNReal_pos
   simpa [measureUnivNNReal_eq_zero, Nat.le_zero] using hμ
 
 中文:
-定理 measureUnivNNReal_pos
-  条件: [IsFiniteMeasure μ] (hμ : μ != 0)
+定理 measureUnivNN实数_pos
+  条件: [是有限测度 μ] (hμ : μ != 0)
   结论: 0 < measureUnivNN实数 μ
   证明: by
   contrapose! hμ
@@ -631,8 +631,8 @@ theorem Measure.le_of_add_le_add_left
   proof: fun S => ENNReal.le_of_add_le_add_left (MeasureTheory.measure_ne_top μ S) (A2 S)
 
 中文:
-定理 Measure.le_of_add_le_add_left
-  条件: [IsFiniteMeasure μ] (A2 : μ + ν₁ <= μ + ν₂)
+定理 测度.le_of_add_le_add_left
+  条件: [是有限测度 μ] (A2 : μ + ν₁ <= μ + ν₂)
   结论: ν₁ <= ν₂
   证明: fun S => ENNReal.le_of_add_le_add_left (MeasureTheory.measure_ne_top μ S) (A2 S)
 
@@ -655,8 +655,8 @@ lemma Measure.eq_of_le_of_measure_univ_eq
 .not_ge h_univ.symm.le exact ENNReal
 
 中文:
-引理 Measure.eq_of_le_of_measure_univ_eq
-  结论: [IsFiniteMeasure μ]
+引理 测度.eq_of_le_of_measure_univ_eq
+  结论: [是有限测度 μ]
   证明: by
   refine le_antisymm hμν (le_intro fun s hs _ => ?_)
   by_contra! h_lt
@@ -686,8 +686,8 @@ theorem summable_measure_toReal
   exact ne_of_lt (measure_lt_top _ _)
 
 中文:
-定理 summable_measure_toReal
-  结论: [hμ : IsFiniteMeasure μ] {f : 自然数 -> Set α}
+定理 summable_measure_to实数
+  结论: [hμ : 是有限测度 μ] {f : 自然数 -> 集合 α}
   证明: by
   apply ENNReal.summable_toReal
   rw [← MeasureTheory.measure_iUnion hf₂ hf₁]
@@ -712,7 +712,7 @@ theorem ae_eq_univ_iff_measure_eq
 
 中文:
 定理 ae_eq_univ_iff_measure_eq
-  条件: [IsFiniteMeasure μ] (hs : NullMeasurableSet s μ)
+  条件: [是有限测度 μ] (hs : NullMeasurableSet s μ)
   证明: ⟨measure_congr, fun h => ae_eq_of_subset_of_measure_ge (subset_univ _) h.ge hs (by finiteness)⟩
 
 Depends on / 依赖: ae_eq_of_subset_of_measure_ge, finiteness, h.ge, measure_congr, subset_univ
@@ -732,7 +732,7 @@ theorem ae_iff_measure_eq
 
 中文:
 定理 ae_iff_measure_eq
-  结论: [IsFiniteMeasure μ] {p : α -> 命题}
+  结论: [是有限测度 μ] {p : α -> 命题}
   证明: by
   rw [← ae_eq_univ_iff_measure_eq hp]; rw [eventuallyEq_univ]; rw [eventually_iff]
 
@@ -752,7 +752,7 @@ theorem ae_mem_iff_measure_eq
 
 中文:
 定理 ae_mem_iff_measure_eq
-  条件: [IsFiniteMeasure μ] {s : Set α} (hs : NullMeasurableSet s μ)
+  条件: [是有限测度 μ] {s : 集合 α} (hs : NullMeasurableSet s μ)
   证明: ae_iff_measure_eq hs
 
 Depends on / 依赖: ae_iff_measure_eq
@@ -821,7 +821,7 @@ theorem abs_measureReal_sub_le_measureReal_symmDiff'
     rw [this]; rw [measure_sym
 
 中文:
-定理 abs_measureReal_sub_le_measureReal_symmDiff'
+定理 abs_measure实数_sub_le_measure实数_symmDiff'
   证明: by
   simp only [Measure.real]
   have hst : μ (s \ t) != ∞ := (measure_lt_top_of_subset sdiff_subset hs').ne
@@ -852,8 +852,8 @@ theorem abs_measureReal_sub_le_measureReal_symmDiff
   proof: abs_measureReal_sub_le_measureReal_symmDiff' hs ht (by finiteness) (by finiteness)
 
 中文:
-定理 abs_measureReal_sub_le_measureReal_symmDiff
-  结论: [IsFiniteMeasure μ]
+定理 abs_measure实数_sub_le_measure实数_symmDiff
+  结论: [是有限测度 μ]
   证明: abs_measureReal_sub_le_measureReal_symmDiff' hs ht (by finiteness) (by finiteness)
 
 Depends on / 依赖: abs_measureReal_sub_le_measureReal_symmDiff, finiteness
@@ -877,7 +877,7 @@ instance [Finite
     simp [measure_lt_top]
 
 中文:
-实例 [Finite
+实例 [有限
   签名: ι] {μ
   定义体: by
     cases nonempty_fintype ι
@@ -908,7 +908,7 @@ theorem ite_ae_eq_of_measure_zero
 
 中文:
 定理 ite_ae_eq_of_measure_zero
-  结论: {γ} (f : α -> γ) (g : α -> γ) (s : Set α) [DecidablePred (· in s)]
+  结论: {γ} (f : α -> γ) (g : α -> γ) (s : 集合 α) [DecidablePred (· in s)]
   证明: by
   have h_ss : sᶜ subseteq { a : α | ite (a in s) (f a) (g a) = g a } := fun x hx => by
     simp [(Set.mem_compl_iff _ _).mp hx]
@@ -973,7 +973,7 @@ definition FiniteAtFilter
 
 中文:
 定义 FiniteAtFilter
-  签名: {_m0 : MeasurableSpace α} (μ : Measure α) (f : Filter α)
+  签名: {_m0 : 可测空间 α} (μ : 测度 α) (f : 滤子 α)
   定义体: exists s in f, μ s < ∞
 -/
 def FiniteAtFilter {_m0 : MeasurableSpace α} (μ : Measure α) (f : Filter α) : Prop :=
@@ -989,7 +989,7 @@ theorem finiteAtFilter_of_finite
 
 中文:
 定理 finiteAtFilter_of_finite
-  结论: {_m0 : MeasurableSpace α} (μ : Measure α) [IsFiniteMeasure μ]
+  结论: {_m0 : 可测空间 α} (μ : 测度 α) [是有限测度 μ]
   证明: ⟨univ, univ_mem, measure_lt_top μ univ⟩
 
 Depends on / 依赖: measure_lt_top, univ_mem
@@ -1007,8 +1007,8 @@ theorem FiniteAtFilter.exists_mem_basis
   proof: (hf.exists_iff fun {_s _t} hst ht => (measure_mono hst).trans_lt ht).1 hμ
 
 中文:
-定理 FiniteAtFilter.exists_mem_basis
-  结论: {f : Filter α} (hμ : FiniteAtFilter μ f) {p : ι -> 命题}
+定理 FiniteAtFilter.存在_mem_basis
+  结论: {f : 滤子 α} (hμ : FiniteAtFilter μ f) {p : ι -> 命题}
   证明: (hf.exists_iff fun {_s _t} hst ht => (measure_mono hst).trans_lt ht).1 hμ
 
 Depends on / 依赖: exists_iff, hf.exists_iff, measure_mono, trans_lt
@@ -1028,7 +1028,7 @@ theorem finiteAtBot
 
 中文:
 定理 finiteAtBot
-  条件: {m0 : MeasurableSpace α} (μ : Measure α)
+  条件: {m0 : 可测空间 α} (μ : 测度 α)
   结论: μ.FiniteAtFilter ⊥
   证明: ⟨∅, mem_bot, by simp only [measure_empty, zero_lt_top]⟩
 
@@ -1051,9 +1051,9 @@ structure FiniteSpanningSetsIn
 
 中文:
 结构 FiniteSpanningSetsIn
-  参数: {m0 : MeasurableSpace α} (μ : Measure α) (C : Set (Set α))
+  参数: {m0 : 可测空间 α} (μ : 测度 α) (C : 集合 (集合 α))
   公理与运算 (4 个):
-    - set : 自然数 -> Set α
+    - set : 自然数 -> 集合 α
     - set_mem : 对任意 i, set i in C
     - finite : 对任意 i, μ (set i) < ∞
     - spanning : ⋃ i, set i = univ
@@ -1077,8 +1077,8 @@ class IsLocallyFiniteMeasure
     - finiteAtNhds : forall x, μ.FiniteAtFilter (𝓝 x)
 
 中文:
-类 IsLocallyFiniteMeasure
-  参数: [TopologicalSpace α] (μ : Measure α)
+类 是局部有限测度
+  参数: [拓扑空间 α] (μ : 测度 α)
   公理与运算 (1 个):
     - finiteAtNhds : 对任意 x, μ.FiniteAtFilter (𝓝 x)
 -/
@@ -1099,8 +1099,8 @@ theorem Measure.finiteAt_nhds
   proof: IsLocallyFiniteMeasure.finiteAtNhds x
 
 中文:
-定理 Measure.finiteAt_nhds
-  结论: [TopologicalSpace α] (μ : Measure α) [IsLocallyFiniteMeasure μ]
+定理 测度.finiteAt_nhds
+  结论: [拓扑空间 α] (μ : 测度 α) [是局部有限测度 μ]
   证明: IsLocallyFiniteMeasure.finiteAtNhds x
 
 Depends on / 依赖: IsLocallyFiniteMeasure, IsLocallyFiniteMeasure.finiteAtNhds, finiteAtNhds
@@ -1120,8 +1120,8 @@ theorem Measure.smul_finite
   exact MeasureTheory.isFiniteMeasureSMulNNReal
 
 中文:
-定理 Measure.smul_finite
-  条件: (μ : Measure α) [IsFiniteMeasure μ] {c : 实数>=0∞} (hc : c != ∞)
+定理 测度.smul_finite
+  条件: (μ : 测度 α) [是有限测度 μ] {c : 实数>=0∞} (hc : c != ∞)
   证明: by
   lift c to Real>=0 using hc
   exact MeasureTheory.isFiniteMeasureSMulNNReal
@@ -1143,8 +1143,8 @@ theorem Measure.exists_isOpen_measure_lt_top
   simpa only [and_assoc] using (μ.finiteAt_nhds x).exists_mem_basis (nhds_basis_opens x)
 
 中文:
-定理 Measure.exists_isOpen_measure_lt_top
-  结论: [TopologicalSpace α] (μ : Measure α)
+定理 测度.存在_isOpen_measure_lt_top
+  结论: [拓扑空间 α] (μ : 测度 α)
   证明: by
   simpa only [and_assoc] using (μ.finiteAt_nhds x).exists_mem_basis (nhds_basis_opens x)
 
@@ -1168,8 +1168,8 @@ instance isLocallyFiniteMeasureSMulNNReal
   simp
 
 中文:
-实例 isLocallyFiniteMeasureSMulNNReal
-  签名: [TopologicalSpace α] (μ : Measure α)
+实例 isLocallyFiniteMeasureSMulNN实数
+  签名: [拓扑空间 α] (μ : 测度 α)
   定义体: by
   refine ⟨fun x => ?_⟩
   rcases μ.exists_isOpen_measure_lt_top x with ⟨o, xo, o_open, μo⟩
@@ -1201,8 +1201,8 @@ theorem Measure.isTopologicalBasis_isOpen_lt_top
   exact measure_mono inter_subset_left
 
 中文:
-定理 Measure.isTopologicalBasis_isOpen_lt_top
-  结论: [TopologicalSpace α]
+定理 测度.isTopologicalBasis_isOpen_lt_top
+  结论: [拓扑空间 α]
   证明: by
   refine TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds (fun s hs => hs.1) ?_
   intro x s xs hs
@@ -1230,7 +1230,7 @@ instance [TopologicalSpace
     exact ⟨t, ht, lt_of_le_of_lt (restrict_apply_le s t) hmus⟩
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: α] (μ
   定义体: by
     obtain ⟨t, ht, hmus⟩ := hμ.finiteAtNhds x
@@ -1254,10 +1254,10 @@ class IsFiniteMeasureOnCompacts
     - lt_top_of_isCompact : forall ⦃K : Set α⦄, IsCompact K -> μ K < ∞
 
 中文:
-类 IsFiniteMeasureOnCompacts
-  参数: [TopologicalSpace α] (μ : Measure α)
+类 紧集上有限测度
+  参数: [拓扑空间 α] (μ : 测度 α)
   公理与运算 (1 个):
-    - lt_top_of_isCompact : 对任意 ⦃K : Set α⦄, IsCompact K -> μ K < ∞
+    - lt_top_of_isCompact : 对任意 ⦃K : 集合 α⦄, 是紧集 K -> μ K < ∞
 -/
 class IsFiniteMeasureOnCompacts [TopologicalSpace α] (μ : Measure α) : Prop where
   protected lt_top_of_isCompact : forall ⦃K : Set α⦄, IsCompact K -> μ K < ∞
@@ -1271,8 +1271,8 @@ theorem _root_.IsCompact.measure_lt_top
   proof: IsFiniteMeasureOnCompacts.lt_top_of_isCompact hK
 
 中文:
-定理 _root_.IsCompact.measure_lt_top
-  结论: [TopologicalSpace α] {μ : Measure α}
+定理 _root_.是紧集.measure_lt_top
+  结论: [拓扑空间 α] {μ : 测度 α}
   证明: IsFiniteMeasureOnCompacts.lt_top_of_isCompact hK
 
 Depends on / 依赖: IsFiniteMeasureOnCompacts, IsFiniteMeasureOnCompacts.lt_top_of_isCompact, lt_top_of_isCompact
@@ -1290,8 +1290,8 @@ theorem _root_.IsCompact.measure_ne_top
   proof: hK.measure_lt_top.ne
 
 中文:
-定理 _root_.IsCompact.measure_ne_top
-  结论: [TopologicalSpace α] {μ : Measure α}
+定理 _root_.是紧集.measure_ne_top
+  结论: [拓扑空间 α] {μ : 测度 α}
   证明: hK.measure_lt_top.ne
 
 Depends on / 依赖: SupBotHom, hK.measure_lt_top.ne, measure_lt_top
@@ -1311,8 +1311,8 @@ theorem _root_.Bornology.IsBounded.measure_lt_top
     _ < ∞ := (Metric.isCompact_of_isClosed_isBounded isClosed_closure hs.closure).measure_lt_top
 
 中文:
-定理 _root_.Bornology.IsBounded.measure_lt_top
-  结论: [PseudoMetricSpace α] [命题erSpace α]
+定理 _root_.有界结构.IsBounded.measure_lt_top
+  结论: [伪度量空间 α] [真空间 α]
   证明: calc
     μ s <= μ (closure s) := measure_mono subset_closure
     _ < ∞ := (Metric.isCompact_of_isClosed_isBounded isClosed_closure hs.closure).measure_lt_top
@@ -1338,7 +1338,7 @@ theorem measure_closedBall_lt_top
 
 中文:
 定理 measure_closedBall_lt_top
-  结论: [PseudoMetricSpace α] [命题erSpace α] {μ : Measure α}
+  结论: [伪度量空间 α] [真空间 α] {μ : 测度 α}
   证明: Metric.isBounded_closedBall.measure_lt_top
 
 @[aesop (rule_sets := [finiteness]) safe apply]
@@ -1360,7 +1360,7 @@ theorem measure_ball_ne_top
 
 中文:
 定理 measure_ball_ne_top
-  结论: [PseudoMetricSpace α] [命题erSpace α] {μ : Measure α}
+  结论: [伪度量空间 α] [真空间 α] {μ : 测度 α}
   证明: Metric.isBounded_ball.measure_lt_top.ne
 
 Depends on / 依赖: Metric, Metric.isBounded_ball.measure_lt_top.ne, isBounded_ball, measure_lt_top
@@ -1379,7 +1379,7 @@ theorem measure_ball_lt_top
 
 中文:
 定理 measure_ball_lt_top
-  结论: [PseudoMetricSpace α] [命题erSpace α] {μ : Measure α}
+  结论: [伪度量空间 α] [真空间 α] {μ : 测度 α}
   证明: by finiteness
 
 Depends on / 依赖: finiteness
@@ -1396,8 +1396,8 @@ theorem IsFiniteMeasureOnCompacts.smul
   proof: ⟨fun _K hK => ENNReal.mul_lt_top hc.lt_top hK.measure_lt_top⟩
 
 中文:
-定理 IsFiniteMeasureOnCompacts.smul
-  结论: [TopologicalSpace α] (μ : Measure α)
+定理 紧集上有限测度.smul
+  结论: [拓扑空间 α] (μ : 测度 α)
   证明: ⟨fun _K hK => ENNReal.mul_lt_top hc.lt_top hK.measure_lt_top⟩
 -/
 protected theorem IsFiniteMeasureOnCompacts.smul [TopologicalSpace α] (μ : Measure α)
@@ -1413,8 +1413,8 @@ instance IsFiniteMeasureOnCompacts.smul_nnreal
   body: IsFiniteMeasureOnCompacts.smul μ coe_ne_top
 
 中文:
-实例 IsFiniteMeasureOnCompacts.smul_nnreal
-  签名: [TopologicalSpace α] (μ : Measure α)
+实例 紧集上有限测度.smul_nnreal
+  签名: [拓扑空间 α] (μ : 测度 α)
   定义体: IsFiniteMeasureOnCompacts.smul μ coe_ne_top
 
 Depends on / 依赖: IsFiniteMeasureOnCompacts, IsFiniteMeasureOnCompacts.smul, coe_ne_top
@@ -1433,7 +1433,7 @@ instance instIsFiniteMeasureOnCompactsRestrict
 
 中文:
 实例 instIsFiniteMeasureOnCompactsRestrict
-  签名: [TopologicalSpace α] {μ : Measure α}
+  签名: [拓扑空间 α] {μ : 测度 α}
   定义体: ⟨fun _k hk => (restrict_apply_le _ _).trans_lt hk.measure_lt_top⟩
 
 Depends on / 依赖: hk.measure_lt_top, measure_lt_top, restrict_apply_le, trans_lt
@@ -1454,8 +1454,8 @@ theorem IsFiniteMeasureOnCompacts.comap'
     exact IsFiniteMeasureOnCompacts.lt_top_of_isCompact (hK.image f_cont)
 
 中文:
-定理 IsFiniteMeasureOnCompacts.comap'
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+定理 紧集上有限测度.comap'
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
     rw [f_me.comap_apply]
     exact IsFiniteMeasureOnCompacts.lt_top_of_isCompact (hK.image f_cont)
@@ -1490,8 +1490,8 @@ theorem exists_pos_measure_of_cover
   exact measure_iUnion_null fun i => nonpos_iff_eq_zero.1 (H i)
 
 中文:
-定理 exists_pos_measure_of_cover
-  结论: [Countable ι] {U : ι -> Set α} (hU : ⋃ i, U i = univ)
+定理 存在_pos_measure_of_cover
+  结论: [可数 ι] {U : ι -> 集合 α} (hU : ⋃ i, U i = univ)
   证明: by
   contrapose! hμ with H
   rw [← measure_univ_eq_zero]; rw [← hU]
@@ -1514,8 +1514,8 @@ theorem exists_pos_preimage_ball
   proof: exists_pos_measure_of_cover (by rw [← preimage_iUnion, Metric.iUnion_ball_nat, preimage_univ]) hμ
 
 中文:
-定理 exists_pos_preimage_ball
-  条件: [PseudoMetricSpace δ] (f : α -> δ) (x : δ) (hμ : μ != 0)
+定理 存在_pos_preimage_ball
+  条件: [伪度量空间 δ] (f : α -> δ) (x : δ) (hμ : μ != 0)
   证明: exists_pos_measure_of_cover (by rw [← preimage_iUnion, Metric.iUnion_ball_nat, preimage_univ]) hμ
 
 Depends on / 依赖: LinearOrder, LinearOrder.toCircularOrder, Metric, Metric.iUnion_ball_nat, exists_pos_measure_of_cover, iUnion_ball_nat, preimage_iUnion, preimage_univ, toCircularOrder
@@ -1533,8 +1533,8 @@ theorem exists_pos_ball
   proof: exists_pos_preimage_ball id x hμ
 
 中文:
-定理 exists_pos_ball
-  条件: [PseudoMetricSpace α] (x : α) (hμ : μ != 0)
+定理 存在_pos_ball
+  条件: [伪度量空间 α] (x : α) (hμ : μ != 0)
   证明: exists_pos_preimage_ball id x hμ
 
 Depends on / 依赖: exists_pos_preimage_ball
@@ -1557,8 +1557,8 @@ theorem exists_ne_forall_mem_nhds_pos_measure_preimage
   have : m univ != 0 := ne_bot_of_le_ne_bot (h default) (measure_mo
 
 中文:
-定理 exists_ne_forall_mem_nhds_pos_measure_preimage
-  结论: {β} [TopologicalSpace β] [T1Space β]
+定理 存在_ne_对任意_mem_nhds_pos_measure_preimage
+  结论: {β} [拓扑空间 β] [T1空间 β]
   证明: by
   -- We use an `OuterMeasure` so that the proof works without `Measurable f`
   set m : OuterMeasure β := OuterMeasure.map f μ.toOuterMeasure
@@ -1599,7 +1599,7 @@ theorem ext_on_measurableSpace_of_generate_finite
 
 中文:
 定理 ext_on_measurableSpace_of_generate_finite
-  结论: {α} (m₀ : MeasurableSpace α) {μ ν : Measure α}
+  结论: {α} (m₀ : 可测空间 α) {μ ν : 测度 α}
   证明: by
   have : IsFiniteMeasure ν := by
     constructor
@@ -1640,7 +1640,7 @@ theorem ext_of_generate_finite
 
 中文:
 定理 ext_of_generate_finite
-  结论: (C : Set (Set α)) (hA : m0 = generateFrom C) (hC : IsPiSystem C)
+  结论: (C : 集合 (集合 α)) (hA : m0 = generateFrom C) (hC : IsPiSystem C)
   证明: Measure.ext fun _s hs =>
     ext_on_measurableSpace_of_generate_finite m0 C hμν le_rfl hA hC h_univ hs
 
@@ -1871,7 +1871,7 @@ theorem finiteAt_nhdsWithin
 
 中文:
 定理 finiteAt_nhdsWithin
-  结论: [TopologicalSpace α] {_m0 : MeasurableSpace α} (μ : Measure α)
+  结论: [拓扑空间 α] {_m0 : 可测空间 α} (μ : 测度 α)
   证明: (finiteAt_nhds μ x).inf_of_left
 
 @[simp]
@@ -1912,7 +1912,7 @@ theorem isLocallyFiniteMeasure_of_le
 
 中文:
 定理 isLocallyFiniteMeasure_of_le
-  结论: [TopologicalSpace α] {_m : MeasurableSpace α} {μ ν : Measure α}
+  结论: [拓扑空间 α] {_m : 可测空间 α} {μ ν : 测度 α}
   证明: let F := H.finiteAtNhds
   ⟨fun x => (F x).measure_mono h⟩
 
@@ -1949,8 +1949,8 @@ theorem exists_open_superset_measure_lt_top'
 (measure_union_le _ _).trans_lt EN
 
 中文:
-定理 exists_open_superset_measure_lt_top'
-  结论: (h : IsCompact s)
+定理 存在_open_superset_measure_lt_top'
+  结论: (h : 是紧集 s)
   证明: by
   refine IsCompact.induction_on h ?_ ?_ ?_ ?_
   · use ∅
@@ -1988,8 +1988,8 @@ theorem exists_open_superset_measure_lt_top
   proof: h.exists_open_superset_measure_lt_top' fun x _ => μ.finiteAt_nhds x
 
 中文:
-定理 exists_open_superset_measure_lt_top
-  结论: (h : IsCompact s) (μ : Measure α)
+定理 存在_open_superset_measure_lt_top
+  结论: (h : 是紧集 s) (μ : 测度 α)
   证明: h.exists_open_superset_measure_lt_top' fun x _ => μ.finiteAt_nhds x
 
 Depends on / 依赖: exists_open_superset_measure_lt_top, finiteAt_nhds, h.exists_open_superset_measure_lt_top
@@ -2009,7 +2009,7 @@ theorem measure_lt_top_of_nhdsWithin
 
 中文:
 定理 measure_lt_top_of_nhdsWithin
-  条件: (h : IsCompact s) (hμ : 对任意 x in s, μ.FiniteAtFilter (𝓝[s] x))
+  条件: (h : 是紧集 s) (hμ : 对任意 x in s, μ.FiniteAtFilter (𝓝[s] x))
   证明: IsCompact.induction_on h (by simp) (fun _ _ hst ht => (measure_mono hst).trans_lt ht)
     (fun s t hs ht => (measure_union_le s t).trans_lt (ENNReal.add_lt_top.2 ⟨hs, ht⟩)) hμ
 
@@ -2031,7 +2031,7 @@ theorem measure_zero_of_nhdsWithin
 
 中文:
 定理 measure_zero_of_nhdsWithin
-  条件: (hs : IsCompact s)
+  条件: (hs : 是紧集 s)
   证明: by
   simpa only [← compl_mem_ae_iff] using hs.compl_mem_sets_of_nhdsWithin
 
@@ -2062,7 +2062,7 @@ theorem isFiniteMeasure_iff_isFiniteMeasureOnCompacts_of_compactSpace
 
 中文:
 定理 isFiniteMeasure_iff_isFiniteMeasureOnCompacts_of_compactSpace
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   constructor <;> intros
   · infer_instance
@@ -2090,7 +2090,7 @@ definition MeasureTheory.Measure.finiteSpanningSetsInCompact
   spanning := iUnion_compactCovering α
 
 中文:
-定义 MeasureTheory.Measure.finiteSpanningSetsInCompact
+定义 测度论.测度.finiteSpanningSetsInCompact
   定义体: compactCovering α
   set_mem := isCompact_compactCovering α
   finite n := (isCompact_compactCovering α n).measure_lt_top
@@ -2122,7 +2122,7 @@ definition MeasureTheory.Measure.finiteSpanningSetsInOpen
   spanni
 
 中文:
-定义 MeasureTheory.Measure.finiteSpanningSetsInOpen
+定义 测度论.测度.finiteSpanningSetsInOpen
   定义体: ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose
   set_mem n :=
     ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.2.1
@@ -2203,7 +2203,7 @@ theorem measure_Icc_lt_top
 
 中文:
 定理 measure_Icc_lt_top
-  结论: μ (Icc a b) < ∞
+  结论: μ (闭区间 a b) < ∞
   证明: isCompact_Icc.measure_lt_top
 
 Depends on / 依赖: isCompact_Icc, isCompact_Icc.measure_lt_top, measure_lt_top
@@ -2221,7 +2221,7 @@ theorem measure_Ico_lt_top
 
 中文:
 定理 measure_Ico_lt_top
-  结论: μ (Ico a b) < ∞
+  结论: μ (左闭右开区间 a b) < ∞
   证明: (measure_mono Ico_subset_Icc_self).trans_lt measure_Icc_lt_top
 
 Depends on / 依赖: Ico_subset_Icc_self, measure_Icc_lt_top, measure_mono, trans_lt
@@ -2239,7 +2239,7 @@ theorem measure_Ioc_lt_top
 
 中文:
 定理 measure_Ioc_lt_top
-  结论: μ (Ioc a b) < ∞
+  结论: μ (左开右闭区间 a b) < ∞
   证明: (measure_mono Ioc_subset_Icc_self).trans_lt measure_Icc_lt_top
 
 Depends on / 依赖: Ioc_subset_Icc_self, measure_Icc_lt_top, measure_mono, trans_lt
@@ -2257,7 +2257,7 @@ theorem measure_Ioo_lt_top
 
 中文:
 定理 measure_Ioo_lt_top
-  结论: μ (Ioo a b) < ∞
+  结论: μ (开区间 a b) < ∞
   证明: (measure_mono Ioo_subset_Icc_self).trans_lt measure_Icc_lt_top
 
 Depends on / 依赖: Ioo_subset_Icc_self, measure_Icc_lt_top, measure_mono, trans_lt

@@ -147,10 +147,10 @@ class PreservesEffectiveEpis
     - preserves : forall {X Y : C} (f : X ⟶ Y) [EffectiveEpi f], EffectiveEpi (F.map f)
 
 中文:
-类 PreservesEffectiveEpis
+类 保持EffectiveEpis
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [EffectiveEpi f], EffectiveEpi (F.map f)
+    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [有效满态射 f], 有效满态射 (F.map f)
 -/
 class PreservesEffectiveEpis (F : C ⥤ D) : Prop where
   /--
@@ -169,7 +169,7 @@ instance map_effectiveEpi
 
 中文:
 实例 map_effectiveEpi
-  签名: (F : C ⥤ D) [F.PreservesEffectiveEpis] {X Y : C} (f : X ⟶ Y)
+  签名: (F : C ⥤ D) [F.保持EffectiveEpis] {X Y : C} (f : X ⟶ Y)
   定义体: PreservesEffectiveEpis.preserves f
 
 Depends on / 依赖: PreservesEffectiveEpis, PreservesEffectiveEpis.preserves, preserves
@@ -189,7 +189,7 @@ instance [IsRegularEpiCategory
     apply IsRegularEpiCategory.regularEpiOfEpi
 
 中文:
-实例 [IsRegularEpiCategory
+实例 [是正则满态射范畴
   签名: D] (F
   定义体: by
     rw [← isRegularEpi_iff_effectiveEpi]
@@ -227,7 +227,7 @@ definition regularEpiOfPreserves
 
 中文:
 定义 regularEpiOfPreserves
-  签名: {C D : 类型} [Category* C] [Category* D] {X Y : C}
+  签名: {C D : 类型} [范畴* C] [范畴* D] {X Y : C}
   定义体: F.obj c.pt
   left := F.map c.fst
   right := F.map c.snd
@@ -264,7 +264,7 @@ class PreservesEffectiveEpiFamilies
     - preserves : forall {α : Type u} {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) [EffectiveEpiFamily X π], EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a))
 
 中文:
-类 PreservesEffectiveEpiFamilies
+类 保持EffectiveEpiFamilies
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
     - preserves : 对任意 {α : 类型u} {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) [EffectiveEpiFamily X π], EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a))
@@ -287,7 +287,7 @@ instance map_effectiveEpiFamily
 
 中文:
 实例 map_effectiveEpiFamily
-  签名: (F : C ⥤ D) [PreservesEffectiveEpiFamilies.{u} F]
+  签名: (F : C ⥤ D) [保持EffectiveEpiFamilies.{u} F]
   定义体: PreservesEffectiveEpiFamilies.preserves X π
 
 Depends on / 依赖: PreservesEffectiveEpiFamilies, PreservesEffectiveEpiFamilies.preserves, preserves
@@ -307,10 +307,10 @@ class PreservesFiniteEffectiveEpiFamilies
     - preserves : forall {α : Type} [Finite α] {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) [EffectiveEpiFamily X π], EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a))
 
 中文:
-类 PreservesFiniteEffectiveEpiFamilies
+类 保持FiniteEffectiveEpiFamilies
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 {α : Type} [Finite α] {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) [EffectiveEpiFamily X π], EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a))
+    - preserves : 对任意 {α : 类型} [有限 α] {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) [EffectiveEpiFamily X π], EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a))
 -/
 class PreservesFiniteEffectiveEpiFamilies (F : C ⥤ D) : Prop where
   /--
@@ -331,7 +331,7 @@ instance map_finite_effectiveEpiFamily
 
 中文:
 实例 map_finite_effectiveEpiFamily
-  签名: (F : C ⥤ D) [F.PreservesFiniteEffectiveEpiFamilies]
+  签名: (F : C ⥤ D) [F.保持FiniteEffectiveEpiFamilies]
   定义体: PreservesFiniteEffectiveEpiFamilies.preserves X π
 
 Depends on / 依赖: PreservesFiniteEffectiveEpiFamilies, PreservesFiniteEffectiveEpiFamilies.preserves, preserves
@@ -391,7 +391,7 @@ class ReflectsEffectiveEpis
 类 ReflectsEffectiveEpis
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), EffectiveEpi (F.map f) -> EffectiveEpi f
+    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), 有效满态射 (F.map f) -> 有效满态射 f
 -/
 class ReflectsEffectiveEpis (F : C ⥤ D) : Prop where
   /--
@@ -477,7 +477,7 @@ class ReflectsFiniteEffectiveEpiFamilies
 类 ReflectsFiniteEffectiveEpiFamilies
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 {α : Type} [Finite α] {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)), EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a)) -> EffectiveEpiFamily X π
+    - reflects : 对任意 {α : 类型} [有限 α] {B : C} (X : α -> C) (π : (a : α) -> (X a ⟶ B)), EffectiveEpiFamily (fun a => F.obj (X a)) (fun a => F.map (π a)) -> EffectiveEpiFamily X π
 -/
 class ReflectsFiniteEffectiveEpiFamilies (F : C ⥤ D) : Prop where
   /--

@@ -48,8 +48,8 @@ structure Isometry
     - map_app'((m m' : M₁)) : B₂ (toFun m) (toFun m') = B₁ m m'
 
 中文:
-结构 Isometry
-  参数: (B₁ : LinearMap.BilinForm R M₁) (B₂ : LinearMap.BilinForm R M₂)
+结构 等距
+  参数: (B₁ : 线性映射.BilinForm R M₁) (B₂ : 线性映射.BilinForm R M₂)
   继承: M₁ ->ₗ[R] M₂
   公理与运算 (1 个):
     - map_app'((m m' : M₁)) : B₂ (toFun m) (toFun m') = B₁ m m'
@@ -78,7 +78,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (B₁ ->bᵢ B₂) M₁ M₂ where
+  签名: : 函数状 (B₁ ->bᵢ B₂) M₁ M₂ where
   定义体: f.toLinearMap
   coe_injective f g h := by cases f; cases g; congr; exact DFunLike.coe_injective h
 
@@ -99,7 +99,7 @@ instance instLinearMapClass
 
 中文:
 实例 instLinearMapClass
-  签名: : LinearMapClass (B₁ ->bᵢ B₂) R M₁ M₂ where
+  签名: : 线性映射类 (B₁ ->bᵢ B₂) R M₁ M₂ where
   定义体: f.toLinearMap.map_add
   map_smulₛₗ f := f.toLinearMap.map_smul
 
@@ -233,7 +233,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : LinearMap.BilinForm R M)
+  签名: (B : 线性映射.BilinForm R M)
   定义体: LinearMap.id
   map_app' _ _ := rfl
 
@@ -258,7 +258,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {B₁ B₂ : LinearMap.BilinForm R M₁} (h : B₁ = B₂)
+  签名: {B₁ B₂ : 线性映射.BilinForm R M₁} (h : B₁ = B₂)
   定义体: LinearMap.id
   map_app' _ _ := h ▸ rfl
 
@@ -282,7 +282,7 @@ theorem ofEq_rfl
 
 中文:
 定理 ofEq_rfl
-  条件: {B : LinearMap.BilinForm R M₁}
+  条件: {B : 线性映射.BilinForm R M₁}
   结论: ofEq (rfl : B = B) = .id B
   证明: rfl
 -/
@@ -407,7 +407,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero ((0 : LinearMap.BilinForm R M₁) ->bᵢ B₂)
+  签名: 零 ((0 : 线性映射.BilinForm R M₁) ->bᵢ B₂)
   定义体: { (0 : M₁ ->ₗ[R] M₂) with map_app' := fun _ _ => map_zero _ }
 
 Depends on / 依赖: map_app, map_zero
@@ -428,7 +428,7 @@ instance hasZeroOfSubsingleton
 
 中文:
 实例 hasZeroOfSubsingleton
-  签名: [Subsingleton M₁]
+  签名: [子单例 M₁]
   定义体: { (0 : M₁ ->ₗ[R] M₂) with
     map_app' := fun x y => by
       rw [Subsingleton.elim x 0]; rw [Subsingleton.elim y 0]
@@ -452,8 +452,8 @@ instance [Subsingleton
   body: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
 
 中文:
-实例 [Subsingleton
-  签名: M₂] : Subsingleton (B₁ ->bᵢ B₂)
+实例 [子单例
+  签名: M₂] : 子单例 (B₁ ->bᵢ B₂)
   定义体: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim

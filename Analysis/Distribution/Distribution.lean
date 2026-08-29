@@ -161,7 +161,7 @@ abbreviation Distribution
   body: 𝓓^{n}(Ω, Real) ->L_c[Real] F
 
 中文:
-缩写 Distribution
+缩写 分布
   定义体: 𝓓^{n}(Ω, Real) ->L_c[Real] F
 -/
 abbrev Distribution := 𝓓^{n}(Ω, Real) ->L_c[Real] F
@@ -544,7 +544,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousLineDeriv E 𝓓'(Ω, F) 𝓓'(Ω, F)
+  签名: 余ntinuousLineDeriv E 𝓓'(Ω, F) 𝓓'(Ω, F)
   定义体: (lineDerivCLM v).continuous
 
 Depends on / 依赖: continuous, lineDerivCLM

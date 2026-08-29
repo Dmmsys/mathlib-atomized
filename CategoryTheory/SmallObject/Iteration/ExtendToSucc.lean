@@ -48,7 +48,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: (i : Set.Iic (Order.succ j))
+  签名: (i : 集合.左无界右闭区间 (Order.succ j))
   定义体: if hij : i.1 <= j then F.obj ⟨i.1, hij⟩ else X
 
 Depends on / 依赖: F.obj
@@ -66,7 +66,7 @@ lemma obj_eq
 
 中文:
 引理 obj_eq
-  条件: (i : Set.Iic j)
+  条件: (i : 集合.左无界右闭区间 j)
   证明: dif_pos i.2
 
 Depends on / 依赖: Set.fintypeSubset, dif_pos, fintypeSubset, neighborSet_subset_verts
@@ -86,7 +86,7 @@ include hj in
 
 中文:
 定义 objIso
-  签名: (i : Set.Iic j)
+  签名: (i : 集合.左无界右闭区间 j)
   定义体: eqToIso (obj_eq _ _ _)
 
 include hj in
@@ -326,7 +326,7 @@ definition extendToSucc
 
 中文:
 定义 extendToSucc
-  签名: : Set.Iic (Order.succ j) ⥤ C where
+  签名: : 集合.左无界右闭区间 (Order.succ j) ⥤ C where
   定义体: obj F X
   map {i₁ i₂} f := map hj F τ i₁ i₂ (leOfHom f) i₂.2
   map_id _ := extendToSucc.map_id _ F τ _ _

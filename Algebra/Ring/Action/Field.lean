@@ -31,7 +31,7 @@ theorem smul_inv''
 
 中文:
 定理 smul_inv''
-  条件: [MulSemiringAction M F] (x : M) (m : F)
+  条件: [MulSemiring作用 M F] (x : M) (m : F)
   结论: x • m⁻¹ = (x • m)⁻¹
   证明: map_inv₀ (MulSemiringAction.toRingHom M F x) _
 

@@ -109,7 +109,7 @@ lemma exists_vectorMeasure_le_measureAux
   · exact ⟨0, by simp
 
 中文:
-引理 exists_vectorMeasure_le_measureAux
+引理 存在_vectorMeasure_le_measureAux
   条件: (hf : BoundedVariationOn f univ)
   证明: by
   /- We will apply the general extension theorem

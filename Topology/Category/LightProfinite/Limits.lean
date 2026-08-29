@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitPullbacks
+  签名: 有ExplicitPullbacks
   定义体: {
     hasProp := ⟨show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance,
       show SecondCountableTopology {_xy : _ | _} from inferInstance⟩ }
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitFiniteCoproducts.{w, u}
+  签名: 有ExplicitFiniteCoproducts.{w, u}
   定义体: { hasProp :=
     ⟨show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance,
       show SecondCountableTopology (Σ (_a : _), _) from inferInstance⟩ }
@@ -82,7 +82,7 @@ abbreviation isTerminalPUnit
 
 中文:
 缩写 isTerminalPUnit
-  签名: : IsTerminal (LightProfinite.of PUnit.{u + 1})
+  签名: : 是终止 (LightProfinite.of 命题单元.{u + 1})
   定义体: CompHausLike.isTerminalPUnit
 
 Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit

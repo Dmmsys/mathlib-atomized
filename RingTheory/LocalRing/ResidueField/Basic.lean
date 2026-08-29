@@ -41,7 +41,7 @@ lemma residue_def
 中文:
 引理 residue_def
   条件: (x)
-  结论: residue R x = Ideal.Quotient.mk (maximalIdeal R) x
+  结论: residue R x = 理想.商.mk (maximalIdeal R) x
   证明: rfl
 -/
 lemma residue_def (x) : residue R x = Ideal.Quotient.mk (maximalIdeal R) x := rfl
@@ -58,7 +58,7 @@ lemma ker_residue
 
 中文:
 引理 ker_residue
-  结论: RingHom.ker (residue R) = maximalIdeal R
+  结论: 环态射.ker (residue R) = maximalIdeal R
   证明: Ideal.mk_ker
 
 @[simp]
@@ -104,7 +104,7 @@ lemma residue_ne_zero_iff_isUnit
 中文:
 引理 residue_ne_zero_iff_isUnit
   条件: (x : R)
-  结论: residue R x != 0 ↔ IsUnit x
+  结论: residue R x != 0 ↔ 是单位 x
   证明: by
   simp
 -/
@@ -140,7 +140,7 @@ instance ResidueField.algebra
 
 中文:
 实例 ResidueField.algebra
-  签名: {R₀} [CommRing R₀] [Algebra R₀ R]
+  签名: {R₀} [交换环 R₀] [代数 R₀ R]
   定义体: inferInstanceAs Algebra R₀ (_ ⧸ _)
 
 Depends on / 依赖: Algebra
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (IsLocalRing.residue R)
+  签名: 是Local态射 (是局部环.residue R)
   定义体: ⟨fun _ ha =>
     Classical.not_not.mp (Ideal.Quotient.eq_zero_iff_mem.not.mp (isUnit_iff_ne_zero.mp ha))⟩
 
@@ -219,7 +219,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {R S : 类型} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S) [IsLocalHom f]
+  签名: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S) [是Local态射 f]
   定义体: Ideal.Quotient.lift _ f fun a ha =>
     by_contradiction fun h => ha (isUnit_of_map_unit f a (isUnit_iff_ne_zero.mpr h))
 
@@ -242,7 +242,7 @@ theorem lift_comp_residue
 
 中文:
 定理 lift_comp_residue
-  结论: {R S : 类型} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
+  结论: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S)
   证明: RingHom.ext fun _ => rfl
 
 @[simp]
@@ -264,7 +264,7 @@ theorem lift_residue_apply
 
 中文:
 定理 lift_residue_apply
-  结论: {R S : 类型} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
+  结论: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S)
   证明: rfl
 -/
 theorem lift_residue_apply {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
@@ -285,7 +285,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : R ->+* S) [IsLocalHom f]
+  签名: (f : R ->+* S) [是Local态射 f]
   定义体: Ideal.Quotient.lift (maximalIdeal R) ((Ideal.Quotient.mk _).comp f) fun a ha => by
     unfold ResidueField
     rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]
@@ -329,7 +329,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: (f : T ->+* R) (g : R ->+* S) [IsLocalHom f] [IsLocalHom g]
+  条件: (f : T ->+* R) (g : R ->+* S) [是Local态射 f] [是Local态射 g]
   证明: Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
 
 Depends on / 依赖: Ideal.Quotient.ringHom_ext, Quotient, RingHom, RingHom.ext, ringHom_ext
@@ -351,7 +351,7 @@ theorem map_comp_residue
 
 中文:
 定理 map_comp_residue
-  条件: (f : R ->+* S) [IsLocalHom f]
+  条件: (f : R ->+* S) [是Local态射 f]
   证明: rfl
 
 @[simp]
@@ -371,7 +371,7 @@ theorem map_residue
 
 中文:
 定理 map_residue
-  条件: (f : R ->+* S) [IsLocalHom f] (r : R)
+  条件: (f : R ->+* S) [是Local态射 f] (r : R)
   证明: rfl
 -/
 theorem map_residue (f : R ->+* S) [IsLocalHom f] (r : R) :
@@ -392,7 +392,7 @@ theorem map_id_apply
 中文:
 定理 map_id_apply
   条件: (x : ResidueField R)
-  结论: map (RingHom.id R) x = x
+  结论: map (环态射.id R) x = x
   证明: DFunLike.congr_fun map_id x
 
 @[simp]
@@ -413,7 +413,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [IsLocalHom f]
+  结论: (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [是Local态射 f]
   证明: DFunLike.congr_fun (map_comp f g).symm x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp
@@ -518,7 +518,7 @@ theorem mapEquiv_refl
 
 中文:
 定理 mapEquiv_refl
-  结论: mapEquiv (RingEquiv.refl R) = RingEquiv.refl _
+  结论: mapEquiv (环等价.refl R) = 环等价.refl _
   证明: RingEquiv.toRingHom_injective map_id
 
 Depends on / 依赖: RingEquiv, RingEquiv.toRingHom_injective, map_id, toRingHom_injective
@@ -541,7 +541,7 @@ definition mapAut
 
 中文:
 定义 mapAut
-  签名: : RingAut R ->* RingAut (IsLocalRing.ResidueField R) where
+  签名: : RingAut R ->* RingAut (是局部环.ResidueField R) where
   定义体: mapEquiv
   map_mul' e₁ e₂ := mapEquiv_trans e₂ e₁
   map_one' := mapEquiv_refl
@@ -567,7 +567,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (ResidueField R) (ResidueField S)
+  签名: 模 (ResidueField R) (ResidueField S)
   定义体: inferInstanceAs Module (R ⧸ maximalIdeal R) (S ⧸ maximalIdeal S)
 
 Depends on / 依赖: Module, maximalIdeal
@@ -585,7 +585,7 @@ instance finite_of_module_finite
 
 中文:
 实例 finite_of_module_finite
-  签名: [Module.Finite R S]
+  签名: [模.有限 R S]
   定义体: .of_restrictScalars_finite R _ _
 
 Depends on / 依赖: of_restrictScalars_finite
@@ -604,7 +604,7 @@ lemma finite_of_finite
 
 中文:
 引理 finite_of_finite
-  条件: [Module.Finite R S] (hfin : Finite (ResidueField R))
+  条件: [模.有限 R S] (hfin : 有限 (ResidueField R))
   证明: Module.finite_of_finite (ResidueField R)
 
 Depends on / 依赖: Module, Module.finite_of_finite, ResidueField, finite_of_finite
@@ -633,7 +633,7 @@ definition mapAlgHom
 
 中文:
 定义 mapAlgHom
-  签名: (e : S ->ₐ[R] T) [IsLocalHom e]
+  签名: (e : S ->ₐ[R] T) [是Local态射 e]
   定义体: map e
   commutes' x := by
     simp [IsScalarTower.algebraMap_apply R S (ResidueField S),
@@ -659,7 +659,7 @@ theorem mapAlgHom_residue
 
 中文:
 定理 mapAlgHom_residue
-  条件: (e : S ->ₐ[R] T) [IsLocalHom e] (x : S)
+  条件: (e : S ->ₐ[R] T) [是Local态射 e] (x : S)
   证明: rfl
 -/
 theorem mapAlgHom_residue (e : S ->ₐ[R] T) [IsLocalHom e] (x : S) :
@@ -723,7 +723,7 @@ definition mapAlgHom'
 
 中文:
 定义 mapAlgHom'
-  签名: (e : S ->ₐ[R] T) [IsLocalHom e]
+  签名: (e : S ->ₐ[R] T) [是Local态射 e]
   定义体: (mapAlgHom e).extendScalarsOfSurjective residue_surjective
 
 @[simp]
@@ -745,7 +745,7 @@ theorem mapAlgHom'_residue
 
 中文:
 定理 mapAlgHom'_residue
-  条件: [IsLocalRing R] (e : S ->ₐ[R] T) [IsLocalHom e] (x : S)
+  条件: [是局部环 R] (e : S ->ₐ[R] T) [是Local态射 e] (x : S)
   证明: rfl
 
 Depends on / 依赖: ContinuousConstSMul, TopologicalSpace
@@ -788,7 +788,7 @@ theorem mapAlgEquiv'_residue
 
 中文:
 定理 mapAlgEquiv'_residue
-  条件: [IsLocalRing R] (e : S ≃ₐ[R] T) (x : S)
+  条件: [是局部环 R] (e : S ≃ₐ[R] T) (x : S)
   证明: rfl
 
 Depends on / 依赖: isProperMap_smul, prodMap

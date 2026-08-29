@@ -46,7 +46,7 @@ definition toArithmeticFunction
 
 中文:
 定义 toArithmeticFunction
-  签名: {R : 类型} [Zero R] (f : 自然数 -> R)
+  签名: {R : 类型} [零 R] (f : 自然数 -> R)
   定义体: if n = 0 then 0 else f n
   map_zero' := rfl
 -/
@@ -67,7 +67,7 @@ lemma toArithmeticFunction_congr
 
 中文:
 引理 toArithmeticFunction_congr
-  结论: {R : 类型} [Zero R] {f f' : 自然数 -> R}
+  结论: {R : 类型} [零 R] {f f' : 自然数 -> R}
   证明: by
   ext
   simp_all [toArithmeticFunction]
@@ -96,7 +96,7 @@ lemma ArithmeticFunction.toArithmeticFunction_eq_self
 
 中文:
 引理 ArithmeticFunction.toArithmeticFunction_eq_self
-  结论: {R : 类型} [Zero R]
+  结论: {R : 类型} [零 R]
   证明: by
   ext n
   simp +contextual [toArithmeticFunction]
@@ -122,7 +122,7 @@ scoped[LSeries.notation] infixl:70 " ⍟ " => LSeries.convolution
 
 中文:
 定义 LSeries.convolution
-  签名: {R : 类型} [Semiring R] (f g : 自然数 -> R)
+  签名: {R : 类型} [半环 R] (f g : 自然数 -> R)
   定义体: ⇑(toArithmeticFunction f * toArithmeticFunction g)
 
 @[inherit_doc]
@@ -147,7 +147,7 @@ lemma LSeries.convolution_congr
 
 中文:
 引理 LSeries.convolution_congr
-  结论: {R : 类型} [Semiring R] {f f' g g' : 自然数 -> R}
+  结论: {R : 类型} [半环 R] {f f' g g' : 自然数 -> R}
   证明: by
   simp [convolution, toArithmeticFunction_congr hf, toArithmeticFunction_congr hg]
 
@@ -169,7 +169,7 @@ lemma ArithmeticFunction.coe_mul
 
 中文:
 引理 ArithmeticFunction.coe_mul
-  条件: {R : 类型} [Semiring R] (f g : ArithmeticFunction R)
+  条件: {R : 类型} [半环 R] (f g : ArithmeticFunction R)
   证明: by
   simp [convolution]
 
@@ -197,7 +197,7 @@ lemma convolution_def
 
 中文:
 引理 convolution_def
-  条件: {R : 类型} [Semiring R] (f g : 自然数 -> R)
+  条件: {R : 类型} [半环 R] (f g : 自然数 -> R)
   证明: by
   ext n
   simpa [convolution, toArithmeticFunction] using
@@ -226,7 +226,7 @@ lemma convolution_map_zero
 
 中文:
 引理 convolution_map_zero
-  条件: {R : 类型} [Semiring R] (f g : 自然数 -> R)
+  条件: {R : 类型} [半环 R] (f g : 自然数 -> R)
   结论: (f ⍟ g) 0 = 0
   证明: by
   simp [convolution_def]
@@ -258,7 +258,7 @@ lemma term_convolution
 
 中文:
 引理 term_convolution
-  条件: (f g : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f g : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp
@@ -297,7 +297,7 @@ lemma term_convolution'
 
 中文:
 引理 term_convolution'
-  条件: (f g : 自然数 -> Complex) (s : Complex)
+  条件: (f g : 自然数 -> 复形) (s : 复形)
   证明: by
   ext n
   rcases eq_or_ne n 0 with rfl | hn
@@ -344,7 +344,7 @@ lemma LSeriesHasSum.convolution
 
 中文:
 引理 LSeriesHasSum.convolution
-  结论: {f g : 自然数 -> Complex} {s a b : Complex} (hf : LSeriesHasSum f s a)
+  结论: {f g : 自然数 -> 复形} {s a b : 复形} (hf : LSeriesHasSum f s a)
   证明: by
   have hsum := summable_mul_of_summable_norm hf.summable.norm hg.summable.norm
   -- NB: this `simpa` is quite slow if un-squeezed
@@ -369,7 +369,7 @@ lemma LSeries_convolution'
 
 中文:
 引理 LSeries_convolution'
-  结论: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s)
+  结论: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s)
   证明: (LSeriesHasSum.convolution hf.LSeriesHasSum hg.LSeriesHasSum).LSeries_eq
 
 Depends on / 依赖: LSeriesHasSum, LSeriesHasSum.convolution, LSeries_eq, convolution, hf.LSeriesHasSum, hg.LSeriesHasSum
@@ -390,7 +390,7 @@ lemma LSeries_convolution
 
 中文:
 引理 LSeries_convolution
-  结论: {f g : 自然数 -> Complex} {s : Complex}
+  结论: {f g : 自然数 -> 复形} {s : 复形}
   证明: LSeries_convolution' (LSeriesSummable_of_abscissaOfAbsConv_lt_re hf)
     (LSeriesSummable_of_abscissaOfAbsConv_lt_re hg)
 
@@ -412,7 +412,7 @@ lemma LSeriesSummable.convolution
 
 中文:
 引理 LSeriesSummable.convolution
-  结论: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s)
+  结论: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s)
   证明: (LSeriesHasSum.convolution hf.LSeriesHasSum hg.LSeriesHasSum).LSeriesSummable
 
 Depends on / 依赖: LSeriesHasSum, LSeriesHasSum.convolution, LSeriesSummable, convolution, hf.LSeriesHasSum, hg.LSeriesHasSum
@@ -432,7 +432,7 @@ lemma LSeries.abscissaOfAbsConv_convolution_le
 
 中文:
 引理 LSeries.abscissaOfAbsConv_convolution_le
-  条件: (f g : 自然数 -> Complex)
+  条件: (f g : 自然数 -> 复形)
   证明: abscissaOfAbsConv_binop_le LSeriesSummable.convolution f g
 
 Depends on / 依赖: LSeriesSummable, LSeriesSummable.convolution, abscissaOfAbsConv_binop_le, convolution
@@ -457,7 +457,7 @@ lemma LSeriesHasSum_mul
 
 中文:
 引理 LSeriesHasSum_mul
-  结论: {f g : ArithmeticFunction Complex} {s a b : Complex} (hf : LSeriesHasSum ↗f s a)
+  结论: {f g : ArithmeticFunction 复形} {s a b : 复形} (hf : LSeriesHasSum ↗f s a)
   证明: coe_mul f g ▸ hf.convolution hg
 
 Depends on / 依赖: coe_mul, convolution, hf.convolution
@@ -477,7 +477,7 @@ lemma LSeries_mul'
 
 中文:
 引理 LSeries_mul'
-  结论: {f g : ArithmeticFunction Complex} {s : Complex} (hf : LSeriesSummable ↗f s)
+  结论: {f g : ArithmeticFunction 复形} {s : 复形} (hf : LSeriesSummable ↗f s)
   证明: coe_mul f g ▸ LSeries_convolution' hf hg
 
 Depends on / 依赖: LSeries_convolution, coe_mul
@@ -497,7 +497,7 @@ lemma LSeries_mul
 
 中文:
 引理 LSeries_mul
-  结论: {f g : ArithmeticFunction Complex} {s : Complex}
+  结论: {f g : ArithmeticFunction 复形} {s : 复形}
   证明: coe_mul f g ▸ LSeries_convolution hf hg
 
 Depends on / 依赖: LSeries_convolution, coe_mul
@@ -517,7 +517,7 @@ lemma LSeriesSummable_mul
 
 中文:
 引理 LSeriesSummable_mul
-  结论: {f g : ArithmeticFunction Complex} {s : Complex} (hf : LSeriesSummable ↗f s)
+  结论: {f g : ArithmeticFunction 复形} {s : 复形} (hf : LSeriesSummable ↗f s)
   证明: coe_mul f g ▸ hf.convolution hg
 
 Depends on / 依赖: coe_mul, convolution, hf.convolution

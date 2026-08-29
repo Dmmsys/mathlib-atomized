@@ -76,7 +76,7 @@ lemma parallelComp_of_not_isSFiniteKernel_left
 
 中文:
 引理 parallelComp_of_not_isSFiniteKernel_left
-  条件: (η : Kernel γ δ) (h : ¬ IsSFiniteKernel κ)
+  条件: (η : 核 γ δ) (h : ¬ 是SFiniteKernel κ)
   证明: by
   rw [parallelComp]; rw [dif_neg (not_and_of_not_left _ h)]
 
@@ -100,7 +100,7 @@ lemma parallelComp_of_not_isSFiniteKernel_right
 
 中文:
 引理 parallelComp_of_not_isSFiniteKernel_right
-  条件: (κ : Kernel α β) (h : ¬ IsSFiniteKernel η)
+  条件: (κ : 核 α β) (h : ¬ 是SFiniteKernel η)
   证明: by
   rw [parallelComp]; rw [dif_neg (not_and_of_not_right _ h)]
 
@@ -121,7 +121,7 @@ lemma parallelComp_apply
 
 中文:
 引理 parallelComp_apply
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [parallelComp]; rw [dif_pos ⟨inferInstance]; rw [inferInstance⟩]; rw [coe_mk]
 
@@ -143,7 +143,7 @@ lemma parallelComp_apply'
 
 中文:
 引理 parallelComp_apply'
-  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  结论: [是SFiniteKernel κ] [是SFiniteKernel η]
   证明: by
   rw [parallelComp_apply]; rw [Measure.prod_apply hs]
 
@@ -167,7 +167,7 @@ lemma parallelComp_apply_prod
 
 中文:
 引理 parallelComp_apply_prod
-  条件: [IsSFiniteKernel κ] [IsSFiniteKernel η] (s : Set β) (t : Set δ)
+  条件: [是SFiniteKernel κ] [是SFiniteKernel η] (s : 集合 β) (t : 集合 δ)
   证明: by
   rw [parallelComp_apply]; rw [Measure.prod_prod]
 
@@ -194,7 +194,7 @@ lemma parallelComp_apply_univ
 
 中文:
 引理 parallelComp_apply_univ
-  条件: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  条件: [是SFiniteKernel κ] [是SFiniteKernel η]
   证明: by
   rw [parallelComp_apply]; rw [Measure.prod_apply .univ]; rw [mul_comm]
   simp
@@ -225,8 +225,8 @@ lemma parallelComp_zero_left
 
 中文:
 引理 parallelComp_zero_left
-  条件: (η : Kernel γ δ)
-  结论: (0 : Kernel α β) ∥ₖ η = 0
+  条件: (η : 核 γ δ)
+  结论: (0 : 核 α β) ∥ₖ η = 0
   证明: by
   by_cases h : IsSFiniteKernel η
   · ext; simp [parallelComp_apply]
@@ -258,8 +258,8 @@ lemma parallelComp_zero_right
 
 中文:
 引理 parallelComp_zero_right
-  条件: (κ : Kernel α β)
-  结论: κ ∥ₖ (0 : Kernel γ δ) = 0
+  条件: (κ : 核 α β)
+  结论: κ ∥ₖ (0 : 核 γ δ) = 0
   证明: by
   by_cases h : IsSFiniteKernel κ
   · ext; simp [parallelComp_apply]
@@ -332,7 +332,7 @@ lemma lintegral_parallelComp
 
 中文:
 引理 lintegral_parallelComp
-  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  结论: [是SFiniteKernel κ] [是SFiniteKernel η]
   证明: by
   rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ hg.aemeasurable]
 
@@ -354,7 +354,7 @@ lemma lintegral_parallelComp_symm
 
 中文:
 引理 lintegral_parallelComp_symm
-  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  结论: [是SFiniteKernel κ] [是SFiniteKernel η]
   证明: by
   rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod_symm _ hg.aemeasurable]
 
@@ -379,7 +379,7 @@ lemma parallelComp_sum_left
 
 中文:
 引理 parallelComp_sum_left
-  结论: {ι : 类型} [Countable ι] (κ : ι -> Kernel α β)
+  结论: {ι : 类型} [可数 ι] (κ : ι -> 核 α β)
   证明: by
   by_cases h : IsSFiniteKernel η
   swap; · simp [h]
@@ -410,7 +410,7 @@ lemma parallelComp_sum_right
 
 中文:
 引理 parallelComp_sum_right
-  结论: {ι : 类型} [Countable ι] (κ : Kernel α β)
+  结论: {ι : 类型} [可数 ι] (κ : 核 α β)
   证明: by
   by_cases h : IsSFiniteKernel κ
   swap; · simp [h]
@@ -436,8 +436,8 @@ instance [IsMarkovKernel
   body: ⟨fun x => ⟨by simp [parallelComp_apply_univ]⟩⟩
 
 中文:
-实例 [IsMarkovKernel
-  签名: κ] [IsMarkovKernel η] : IsMarkovKernel (κ ∥ₖ η)
+实例 [是MarkovKernel
+  签名: κ] [是MarkovKernel η] : 是MarkovKernel (κ ∥ₖ η)
   定义体: ⟨fun x => ⟨by simp [parallelComp_apply_univ]⟩⟩
 
 Depends on / 依赖: parallelComp_apply_univ
@@ -456,8 +456,8 @@ instance [IsZeroOrMarkovKernel
   all_goals simpa using by infer_instance
 
 中文:
-实例 [IsZeroOrMarkovKernel
-  签名: κ] [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ∥ₖ η)
+实例 [是ZeroOrMarkovKernel
+  签名: κ] [是ZeroOrMarkovKernel η] : 是ZeroOrMarkovKernel (κ ∥ₖ η)
   定义体: by
   obtain rfl | _ := eq_zero_or_isMarkovKernel κ <;> obtain rfl | _ := eq_zero_or_isMarkovKernel η
   all_goals simpa using by infer_instance
@@ -484,8 +484,8 @@ instance [IsFiniteKernel
     · exact measure_le_bo
 
 中文:
-实例 [IsFiniteKernel
-  签名: κ] [IsFiniteKernel η] : IsFiniteKernel (κ ∥ₖ η)
+实例 [是FiniteKernel
+  签名: κ] [是FiniteKernel η] : 是FiniteKernel (κ ∥ₖ η)
   定义体: by
   refine ⟨⟨κ.bound * η.bound, ENNReal.mul_lt_top κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
   calc (κ ∥ₖ η) a Set.univ
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSFiniteKernel (κ ∥ₖ η)
+  签名: 是SFiniteKernel (κ ∥ₖ η)
   定义体: by
   by_cases h : IsSFiniteKernel κ
   swap

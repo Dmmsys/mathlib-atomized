@@ -92,7 +92,7 @@ deriving IsAddHaarMeasure
 
 中文:
 定义 haarAddCircle
-  签名: : Measure (AddCircle T)
+  签名: : 测度 (AddCircle T)
   定义体: addHaarMeasure ⊤
 deriving IsAddHaarMeasure
 
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure (@haarAddCircle T _)
+  签名: 是概率测度 (@haarAddCircle T _)
   定义体: IsProbabilityMeasure.mk addHaarMeasure_self
 
 Depends on / 依赖: IsProbabilityMeasure, IsProbabilityMeasure.mk, addHaarMeasure_self
@@ -146,7 +146,7 @@ lemma integral_haarAddCircle
 
 中文:
 引理 integral_haarAddCircle
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measure]; rw [ENNReal.toReal_ofReal hT.out.le]; rw [inv_smul_smul₀ hT.out.ne']
 
@@ -177,7 +177,7 @@ alia
 
 中文:
 引理 memLp_haarAddCircle_iff
-  条件: [hT : Fact (0 < T)] {f : AddCircle T -> Complex} {p : 实数>=0∞}
+  条件: [hT : Fact (0 < T)] {f : AddCircle T -> 复形} {p : 实数>=0∞}
   证明: by
   rw [AddCircle.volume_eq_smul_haarAddCircle]
   have hT' := hT.out
@@ -331,7 +331,7 @@ theorem fourier_zero'
 
 中文:
 定理 fourier_zero'
-  结论: @toCircle T 0 = (1 : Complex)
+  结论: @toCircle T 0 = (1 : 复形)
   证明: by
   simp
 -/
@@ -570,7 +570,7 @@ definition fourierSubalgebra
 
 中文:
 定义 fourierSubalgebra
-  签名: : StarSubalgebra Complex C(AddCircle T, Complex) where
+  签名: : 对合子代数 复形 C(AddCircle T, 复形) where
   定义体: Algebra.adjoin Complex (range fourier)
   star_mem' := by
     change Algebra.adjoin Complex (range (fourier (T := T))) <=
@@ -708,7 +708,7 @@ theorem span_fourier_closure_eq_top
 
 中文:
 定理 span_fourier_closure_eq_top
-  结论: (span Complex (range <| @fourier T)).topologicalClosure = ⊤
+  结论: (span 复形 (range <| @fourier T)).topologicalClosure = ⊤
   证明: by
   rw [← fourierSubalgebra_coe]
   exact congr_arg (Subalgebra.toSubmodule <| StarSubalgebra.toSubalgebra ·)
@@ -817,7 +817,7 @@ theorem orthonormal_fourier
 
 中文:
 定理 orthonormal_fourier
-  结论: Orthonormal Complex (@fourierLp T _ 2 _)
+  结论: Orthonormal 复形 (@fourierLp T _ 2 _)
   证明: by
   rw [orthonormal_iff_ite]
   intro i j
@@ -887,7 +887,7 @@ theorem fourierCoeff_eq_intervalIntegral
   rw [fourierCoeff]; rw [AddCircle.intervalIntegral_preimage T a (fun z => _ • _)]; rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measu
 
 中文:
-定理 fourierCoeff_eq_intervalIntegral
+定理 fourierCoeff_eq_interval整数egral
   条件: (f : AddCircle T -> E) (n : 整数) (a : 实数)
   证明: by
   have : forall x : Real, @fourier T (-n) x • f x = (fun z : AddCircle T => @fourier T (-n) z • f z) x := by
@@ -917,7 +917,7 @@ theorem MeasureTheory.Integrable.fourier_smul
     rw [fourier_apply]; rw [Circle.norm_coe]
 
 中文:
-定理 MeasureTheory.Integrable.fourier_smul
+定理 测度论.可积.fourier_smul
   结论: {f : AddCircle T -> E}
   证明: by
   apply hf.bdd_smul 1
@@ -947,7 +947,7 @@ theorem fourierCoeff.add
 
 中文:
 定理 fourierCoeff.add
-  结论: {f g : AddCircle T -> E} (hf : 整数egrable f haarAddCircle)
+  结论: {f g : AddCircle T -> E} (hf : 可积 f haarAddCircle)
   证明: by
   ext x
   simpa [fourierCoeff, -fourier_apply] using integral_add (hf.fourier_smul _) (hg.fourier_smul _)
@@ -975,8 +975,8 @@ theorem fourierCoeff.sum
       rw [s.sum_insert ha]; rw [s.sum_insert ha]; rw [fourierCoeff.add hf₁ (integrable_finsetSum' s hf₂)]; rw [iha hf₂]
 
 中文:
-定理 fourierCoeff.sum
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> AddCircle T -> E)
+定理 fourierCoeff.求和
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> AddCircle T -> E)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1010,7 +1010,7 @@ theorem fourierCoeff.const_smul
 
 中文:
 定理 fourierCoeff.const_smul
-  条件: (f : AddCircle T -> E) (c : Complex) (n : 整数)
+  条件: (f : AddCircle T -> E) (c : 复形) (n : 整数)
   证明: by
   simp_rw [fourierCoeff, Pi.smul_apply, ← smul_assoc, smul_eq_mul, mul_comm, ← smul_eq_mul,
     smul_assoc, integral_smul]
@@ -1032,7 +1032,7 @@ theorem fourierCoeff.const_mul
 
 中文:
 定理 fourierCoeff.const_mul
-  条件: (f : AddCircle T -> Complex) (c : Complex) (n : 整数)
+  条件: (f : AddCircle T -> 复形) (c : 复形) (n : 整数)
   证明: fourierCoeff.const_smul f c n
 
 Depends on / 依赖: const_smul, fourierCoeff, fourierCoeff.const_smul
@@ -1131,7 +1131,7 @@ theorem fourierCoeffOn.const_smul
 
 中文:
 定理 fourierCoeffOn.const_smul
-  条件: {a b : 实数} (f : 实数 -> E) (c : Complex) (n : 整数) (hab : a < b)
+  条件: {a b : 实数} (f : 实数 -> E) (c : 复形) (n : 整数) (hab : a < b)
   证明: by
   have := Fact.mk (by linarith : 0 < b - a)
   apply fourierCoeff.const_smul
@@ -1153,7 +1153,7 @@ theorem fourierCoeffOn.const_mul
 
 中文:
 定理 fourierCoeffOn.const_mul
-  条件: {a b : 实数} (f : 实数 -> Complex) (c : Complex) (n : 整数) (hab : a < b)
+  条件: {a b : 实数} (f : 实数 -> 复形) (c : 复形) (n : 整数) (hab : a < b)
   证明: fourierCoeffOn.const_smul _ _ _ _
 
 Depends on / 依赖: const_smul, fourierCoeffOn, fourierCoeffOn.const_smul
@@ -1217,7 +1217,7 @@ theorem fourierCoeff_liftIoc_eq
 
 中文:
 定理 fourierCoeff_liftIoc_eq
-  条件: {a : 实数} (f : 实数 -> Complex) (n : 整数)
+  条件: {a : 实数} (f : 实数 -> 复形) (n : 整数)
   证明: by
   rw [fourierCoeffOn_eq_integral]; rw [fourierCoeff_eq_intervalIntegral]; rw [add_sub_cancel_left a T]
   · congr 1
@@ -1250,7 +1250,7 @@ theorem fourierCoeff_liftIco_eq
 
 中文:
 定理 fourierCoeff_liftIco_eq
-  条件: {a : 实数} (f : 实数 -> Complex) (n : 整数)
+  条件: {a : 实数} (f : 实数 -> 复形) (n : 整数)
   证明: by
   rw [fourierCoeffOn_eq_integral]; rw [fourierCoeff_eq_intervalIntegral _ _ a]; rw [add_sub_cancel_left a T]
   congr 1
@@ -1281,7 +1281,7 @@ definition fourierBasis
 
 中文:
 定义 fourierBasis
-  签名: : HilbertBasis 整数 Complex (Lp Complex 2 <| @haarAddCircle T hT)
+  签名: : Hilbert基 整数 复形 (Lp 复形 2 <| @haarAddCircle T hT)
   定义体: HilbertBasis.mk orthonormal_fourier (span_fourierLp_closure_eq_top (by simp)).ge
 
 Depends on / 依赖: HilbertBasis, HilbertBasis.mk, orthonormal_fourier, span_fourierLp_closure_eq_top
@@ -1325,7 +1325,7 @@ theorem fourierBasis_repr
 
 中文:
 定理 fourierBasis_repr
-  条件: (f : Lp Complex 2 <| @haarAddCircle T hT) (i : 整数)
+  条件: (f : Lp 复形 2 <| @haarAddCircle T hT) (i : 整数)
   证明: by
   trans ∫ t : AddCircle T, conj ((@fourierLp T hT 2 _ i : AddCircle T -> Complex) t) * f t ∂haarAddCircle
   · rw [fourierBasis.repr_apply_apply f i, MeasureTheory.L2.inner_def, coe_fourierBasis]
@@ -1356,7 +1356,7 @@ theorem hasSum_fourier_series_L2
 
 中文:
 定理 hasSum_fourier_series_L2
-  条件: (f : Lp Complex 2 <| @haarAddCircle T hT)
+  条件: (f : Lp 复形 2 <| @haarAddCircle T hT)
   证明: by
   simp_rw [← fourierBasis_repr]; rw [← coe_fourierBasis]
   exact HilbertBasis.hasSum_repr fourierBasis f
@@ -1384,7 +1384,7 @@ theorem hasSum_sq_fourierCoeff
 
 中文:
 定理 hasSum_sq_fourierCoeff
-  条件: (f : Lp Complex 2 <| @haarAddCircle T hT)
+  条件: (f : Lp 复形 2 <| @haarAddCircle T hT)
   证明: by
   simp_rw [← fourierBasis_repr]
   have H₁ : HasSum (fun i => ‖fourierBasis.repr f i‖ ^ 2) (‖fourierBasis.repr f‖ ^ 2) := by
@@ -1418,7 +1418,7 @@ theorem tsum_sq_fourierCoeff
 
 中文:
 定理 tsum_sq_fourierCoeff
-  条件: (f : Lp Complex 2 <| @haarAddCircle T hT)
+  条件: (f : Lp 复形 2 <| @haarAddCircle T hT)
   证明: (hasSum_sq_fourierCoeff _).tsum_eq
 
 Depends on / 依赖: hasSum_sq_fourierCoeff, tsum_eq
@@ -1723,7 +1723,7 @@ theorem fourierCoeffOn_of_hasDeriv_right
 
 中文:
 定理 fourierCoeffOn_of_hasDeriv_right
-  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> Complex}
+  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> 复形}
   证明: by
   rw [← ofReal_sub]
   have hT : Fact (0 < b - a) := ⟨by linarith⟩
@@ -1771,7 +1771,7 @@ theorem fourierCoeffOn_of_hasDerivAt_Ioo
 
 中文:
 定理 fourierCoeffOn_of_hasDerivAt_Ioo
-  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> Complex}
+  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> 复形}
   证明: fourierCoeffOn_of_hasDeriv_right hab hn hf (fun x hx => hff' x hx |>.hasDerivWithinAt) hf'
 
 Depends on / 依赖: fourierCoeffOn_of_hasDeriv_right, hasDerivWithinAt
@@ -1798,7 +1798,7 @@ theorem fourierCoeffOn_of_hasDerivAt
 
 中文:
 定理 fourierCoeffOn_of_hasDerivAt
-  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> Complex} {n : 整数} (hn : n != 0)
+  结论: {a b : 实数} (hab : a < b) {f f' : 实数 -> 复形} {n : 整数} (hn : n != 0)
   证明: fourierCoeffOn_of_hasDerivAt_Ioo hab hn
     (fun x hx => hf x hx |>.continuousAt.continuousWithinAt)
     (fun x hx => hf x <| mem_Icc_of_Ioo hx)

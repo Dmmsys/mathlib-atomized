@@ -39,11 +39,11 @@ inductive Partrec'
 
 中文:
 归纳类型 Partrec'
-  参数: : 对任意 {n}, (List.Vector 自然数 n ->. 自然数) -> 命题
+  参数: : 对任意 {n}, (列表.Vector 自然数 n ->. 自然数) -> 命题
   构造子 (3 个):
     - prim: {n f} : @Primrec' n f -> @Partrec' n f
-    - comp: {m n f} (g : Fin n -> List.Vector 自然数 m ->. 自然数) : Partrec' f -> (对任意 i, Partrec' (g i)) -> Partrec' fun v => (List.Vector.mOfFn fun i => g i v) >>= f
-    - rfind: {n} {f : List.Vector 自然数 (n + 1) -> 自然数} : @Partrec' (n + 1) f -> Partrec' fun v => rfind fun n => some (f (n ::ᵥ v) = 0)
+    - comp: {m n f} (g : 有限集 n -> 列表.Vector 自然数 m ->. 自然数) : Partrec' f -> (对任意 i, Partrec' (g i)) -> Partrec' fun v => (列表.Vector.mOfFn fun i => g i v) >>= f
+    - rfind: {n} {f : 列表.Vector 自然数 (n + 1) -> 自然数} : @Partrec' (n + 1) f -> Partrec' fun v => rfind fun n => some (f (n ::ᵥ v) = 0)
 -/
 inductive Partrec' : forall {n}, (List.Vector Nat n ->. Nat) -> Prop
   | prim {n f} : @Primrec' n f -> @Partrec' n f
@@ -113,7 +113,7 @@ theorem of_eq
 
 中文:
 定理 of_eq
-  条件: {n} {f g : List.Vector 自然数 n ->. 自然数} (hf : Partrec' f) (H : 对任意 i, f i = g i)
+  条件: {n} {f g : 列表.Vector 自然数 n ->. 自然数} (hf : Partrec' f) (H : 对任意 i, f i = g i)
   证明: (funext H : f = g) ▸ hf
 -/
 theorem of_eq {n} {f g : List.Vector Nat n ->. Nat} (hf : Partrec' f) (H : forall i, f i = g i) :
@@ -131,7 +131,7 @@ theorem of_prim
 
 中文:
 定理 of_prim
-  条件: {n} {f : List.Vector 自然数 n -> 自然数} (hf : Primrec f)
+  条件: {n} {f : 列表.Vector 自然数 n -> 自然数} (hf : Primrec f)
   结论: @Partrec' n f
   证明: prim (Nat.Primrec'.of_prim hf)
 
@@ -222,7 +222,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {n f} {g : List.Vector 自然数 (n + 1) -> 自然数} (hf : @Partrec' n f)
+  结论: {n f} {g : 列表.Vector 自然数 (n + 1) -> 自然数} (hf : @Partrec' n f)
   证明: by
   simpa [(Part.bind_some_eq_map _ _).symm] using hf.bind hg
 -/
@@ -242,7 +242,7 @@ nonrec theorem Vec.prim {n m f} (hf : @Nat.Primrec'.Vec n m f) : Vec f := fun i 
 
 中文:
 定义 Vec
-  签名: {n m} (f : List.Vector 自然数 n -> List.Vector 自然数 m)
+  签名: {n m} (f : 列表.Vector 自然数 n -> 列表.Vector 自然数 m)
   定义体: forall i, Partrec' fun v => (f v).get i
 
 nonrec theorem Vec.prim {n m f} (hf : @Nat.Primrec'.Vec n m f) : Vec f := fun i => prim hf i
@@ -282,7 +282,7 @@ theorem cons
 
 中文:
 定理 cons
-  结论: {n m} {f : List.Vector 自然数 n -> 自然数} {g} (hf : @Partrec' n f)
+  结论: {n m} {f : 列表.Vector 自然数 n -> 自然数} {g} (hf : @Partrec' n f)
   证明: fun i =>
   Fin.cases (by simpa using! hf) (fun i => by simp only [hg i, get_cons_succ]) i
 -/
@@ -342,7 +342,7 @@ theorem comp₁
 
 中文:
 定理 comp₁
-  结论: {n} (f : 自然数 ->. 自然数) {g : List.Vector 自然数 n -> 自然数} (hf : @Partrec' 1 fun v => f v.head)
+  结论: {n} (f : 自然数 ->. 自然数) {g : 列表.Vector 自然数 n -> 自然数} (hf : @Partrec' 1 fun v => f v.head)
   证明: by
   simpa using hf.comp' (Partrec'.cons hg Partrec'.nil)
 
@@ -368,7 +368,7 @@ theorem rfindOpt
 
 中文:
 定理 rfindOpt
-  条件: {n} {f : List.Vector 自然数 (n + 1) -> 自然数} (hf : @Partrec' (n + 1) f)
+  条件: {n} {f : 列表.Vector 自然数 (n + 1) -> 自然数} (hf : @Partrec' (n + 1) f)
   证明: ((rfind <|
         (of_prim (Primrec.nat_sub.comp (_root_.Primrec.const 1) Primrec.vector_head)).comp₁
           (fun n => Part.some (1 - n)) hf).bind
@@ -540,7 +540,7 @@ of_part vector_get.comp h (const i)⟩
 中文:
 定理 vec_iff
   条件: {m n f}
-  结论: @Vec m n f ↔ Computable f
+  结论: @Vec m n f ↔ 可计算 f
   证明: ⟨fun h => by simpa only [ofFn_get] using vector_ofFn fun i => to_part (h i), fun h i =>
 of_part vector_get.comp h (const i)⟩
 

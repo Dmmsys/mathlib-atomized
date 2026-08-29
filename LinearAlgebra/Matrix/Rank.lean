@@ -70,7 +70,7 @@ definition cRank
 
 中文:
 定义 cRank
-  签名: (A : Matrix m n R)
+  签名: (A : 矩阵 m n R)
   定义体: Module.rank R span R range A.col
 
 @[simp]
@@ -91,7 +91,7 @@ theorem cRank_subsingleton
 
 中文:
 定理 cRank_subsingleton
-  条件: [Subsingleton R] (A : Matrix m n R)
+  条件: [子单例 R] (A : 矩阵 m n R)
   结论: A.cRank = 1
   证明: rank_subsingleton _ _
 
@@ -109,8 +109,8 @@ lemma cRank_toNat_eq_finrank
   proof: rfl
 
 中文:
-引理 cRank_toNat_eq_finrank
-  条件: (A : Matrix m n R)
+引理 cRank_to自然数_eq_finrank
+  条件: (A : 矩阵 m n R)
   证明: rfl
 -/
 lemma cRank_toNat_eq_finrank (A : Matrix m n R) :
@@ -132,7 +132,7 @@ Submodule.rank_mono span_mono by rintro _ ⟨x, rfl⟩; exact ⟨c x, rfl⟩
 
 中文:
 引理 lift_cRank_submatrix_le
-  条件: (A : Matrix m n R) (r : m₀ -> m) (c : n₀ -> n)
+  条件: (A : 矩阵 m n R) (r : m₀ -> m) (c : n₀ -> n)
   证明: by
   have h : ((A.submatrix r id).submatrix id c).cRank <= (A.submatrix r id).cRank :=
 Submodule.rank_mono span_mono by rintro _ ⟨x, rfl⟩; exact ⟨c x, rfl⟩
@@ -167,7 +167,7 @@ lemma cRank_submatrix_le
 
 中文:
 引理 cRank_submatrix_le
-  条件: {m m₀ : 类型um} (A : Matrix m n R) (r : m₀ -> m) (c : n₀ -> n)
+  条件: {m m₀ : 类型um} (A : 矩阵 m n R) (r : m₀ -> m) (c : n₀ -> n)
   证明: by
   simpa using lift_cRank_submatrix_le A r c
 
@@ -187,7 +187,7 @@ lemma cRank_le_card_height
 
 中文:
 引理 cRank_le_card_height
-  条件: [StrongRankCondition R] [Fintype m] (A : Matrix m n R)
+  条件: [StrongRankCondition R] [有限类型 m] (A : 矩阵 m n R)
   证明: (Submodule.rank_le (span R (range Aᵀ))).trans by rw [rank_fun']
 
 Depends on / 依赖: Submodule, Submodule.rank_le, rank_fun, rank_le
@@ -207,7 +207,7 @@ lemma cRank_le_card_width
 
 中文:
 引理 cRank_le_card_width
-  条件: [StrongRankCondition R] [Fintype n] (A : Matrix m n R)
+  条件: [StrongRankCondition R] [有限类型 n] (A : 矩阵 m n R)
   证明: (rank_span_le ..).trans
     by simpa [col_eq_transpose] using Cardinal.mk_range_le_lift (f := A.col)
 
@@ -230,7 +230,7 @@ definition eRank
 
 中文:
 定义 eRank
-  签名: (A : Matrix m n R)
+  签名: (A : 矩阵 m n R)
   定义体: A.cRank.toENat
 
 @[simp]
@@ -252,7 +252,7 @@ theorem eRank_subsingleton
 
 中文:
 定理 eRank_subsingleton
-  条件: [Subsingleton R] (A : Matrix m n R)
+  条件: [子单例 R] (A : 矩阵 m n R)
   结论: A.eRank = 1
   证明: by
   simp [eRank]
@@ -269,8 +269,8 @@ lemma eRank_toNat_eq_finrank
   proof: toNat_toENat ..
 
 中文:
-引理 eRank_toNat_eq_finrank
-  条件: (A : Matrix m n R)
+引理 eRank_to自然数_eq_finrank
+  条件: (A : 矩阵 m n R)
   证明: toNat_toENat ..
 
 Depends on / 依赖: toNat_toENat
@@ -290,7 +290,7 @@ simpa using! OrderHom.mono (β := Nat∞) Cardinal.toENat lift_cRank_submatrix_l
 
 中文:
 引理 eRank_submatrix_le
-  条件: (A : Matrix m n R) (r : m₀ -> m) (c : n₀ -> n)
+  条件: (A : 矩阵 m n R) (r : m₀ -> m) (c : n₀ -> n)
   证明: by
 simpa using! OrderHom.mono (β := Nat∞) Cardinal.toENat lift_cRank_submatrix_le A r c
 
@@ -316,7 +316,7 @@ lemma eRank_le_card_width
 
 中文:
 引理 eRank_le_card_width
-  条件: [StrongRankCondition R] (A : Matrix m n R)
+  条件: [StrongRankCondition R] (A : 矩阵 m n R)
   结论: A.eRank <= E自然数.card n
   证明: by
   wlog hfin : Finite n
@@ -350,7 +350,7 @@ lemma eRank_le_card_height
 
 中文:
 引理 eRank_le_card_height
-  条件: [StrongRankCondition R] (A : Matrix m n R)
+  条件: [StrongRankCondition R] (A : 矩阵 m n R)
   结论: A.eRank <= E自然数.card m
   证明: by
   wlog hfin : Finite m
@@ -384,7 +384,7 @@ definition rank
 
 中文:
 定义 rank
-  签名: [CommSemiring R] (A : Matrix m n R)
+  签名: [交换半环 R] (A : 矩阵 m n R)
   定义体: finrank R LinearMap.range A.mulVecLin
 
 @[simp]
@@ -406,7 +406,7 @@ theorem rank_subsingleton
 
 中文:
 定理 rank_subsingleton
-  条件: [CommSemiring R] [Subsingleton R] (A : Matrix m n R)
+  条件: [交换半环 R] [子单例 R] (A : 矩阵 m n R)
   结论: A.rank = 1
   证明: finrank_subsingleton
 
@@ -431,7 +431,7 @@ theorem cRank_one
 
 中文:
 定理 cRank_one
-  条件: [Semiring R] [Nontrivial R] [DecidableEq m] [StrongRankCondition R]
+  条件: [半环 R] [非平凡 R] [DecidableEq m] [StrongRankCondition R]
   证明: by
   have h : LinearIndependent R (1 : Matrix m m R).col := by
     convert! Pi.linearIndependent_single_one m R
@@ -460,7 +460,7 @@ theorem eRank_one
 
 中文:
 定理 eRank_one
-  条件: [Semiring R] [Nontrivial R] [DecidableEq m] [StrongRankCondition R]
+  条件: [半环 R] [非平凡 R] [DecidableEq m] [StrongRankCondition R]
   证明: by
   rw [eRank]; rw [cRank_one]; rw [toENat_lift]; rw [ENat.card]
 
@@ -484,7 +484,7 @@ theorem rank_one
 
 中文:
 定理 rank_one
-  条件: [CommSemiring R] [DecidableEq n] [StrongRankCondition R]
+  条件: [交换半环 R] [DecidableEq n] [StrongRankCondition R]
   证明: by
   rw [rank]; rw [mulVecLin_one]; rw [LinearMap.range_id]; rw [finrank_top]; rw [finrank_pi]
 
@@ -511,8 +511,8 @@ theorem rank_zero
 
 中文:
 定理 rank_zero
-  条件: [CommSemiring R] [Nontrivial R]
-  结论: rank (0 : Matrix m n R) = 0
+  条件: [交换半环 R] [非平凡 R]
+  结论: rank (0 : 矩阵 m n R) = 0
   证明: by
   rw [rank]; rw [mulVecLin_zero]; rw [LinearMap.range_zero]; rw [finrank_bot]
 
@@ -540,8 +540,8 @@ theorem cRank_zero
 
 中文:
 定理 cRank_zero
-  条件: {m n : 类型} [Semiring R] [Nontrivial R]
-  结论: cRank (0 : Matrix m n R) = 0
+  条件: {m n : 类型} [半环 R] [非平凡 R]
+  结论: cRank (0 : 矩阵 m n R) = 0
   证明: by
   obtain hn | hn := isEmpty_or_nonempty n
   · rw [cRank, range_eq_empty, span_empty, rank_bot]
@@ -569,8 +569,8 @@ theorem eRank_zero
 
 中文:
 定理 eRank_zero
-  条件: {m n : 类型} [Semiring R] [Nontrivial R]
-  结论: eRank (0 : Matrix m n R) = 0
+  条件: {m n : 类型} [半环 R] [非平凡 R]
+  结论: eRank (0 : 矩阵 m n R) = 0
   证明: by
   simp [eRank]
 -/
@@ -587,7 +587,7 @@ theorem rank_le_card_width
 
 中文:
 定理 rank_le_card_width
-  条件: [CommSemiring R] [StrongRankCondition R] (A : Matrix m n R)
+  条件: [交换半环 R] [StrongRankCondition R] (A : 矩阵 m n R)
   证明: A.mulVecLin.finrank_range_le.trans_eq finrank_pi R
 
 Depends on / 依赖: A.mulVecLin.finrank_range_le.trans_eq, finrank_pi, finrank_range_le, mulVecLin, trans_eq
@@ -606,7 +606,7 @@ theorem rank_le_width
 
 中文:
 定理 rank_le_width
-  结论: [CommSemiring R] [StrongRankCondition R] {m n : 自然数}
+  结论: [交换半环 R] [StrongRankCondition R] {m n : 自然数}
   证明: A.rank_le_card_width.trans (Fintype.card_fin n).le
 
 Depends on / 依赖: A.rank_le_card_width.trans, Fintype, Fintype.card_fin, card_fin, rank_le_card_width
@@ -628,7 +628,7 @@ theorem rank_mul_le_left
 
 中文:
 定理 rank_mul_le_left
-  结论: [CommSemiring R] [StrongRankCondition R] (A : Matrix m n R)
+  结论: [交换半环 R] [StrongRankCondition R] (A : 矩阵 m n R)
   证明: by
   nontriviality R
   rw [rank]; rw [rank]; rw [mulVecLin_mul]
@@ -656,7 +656,7 @@ theorem rank_mul_le_right
 
 中文:
 定理 rank_mul_le_right
-  结论: [CommSemiring R] [StrongRankCondition R] (A : Matrix m n R)
+  结论: [交换半环 R] [StrongRankCondition R] (A : 矩阵 m n R)
   证明: by
   nontriviality R
   rw [rank]; rw [rank]; rw [mulVecLin_mul]
@@ -682,7 +682,7 @@ theorem rank_mul_le
 
 中文:
 定理 rank_mul_le
-  条件: [CommSemiring R] [StrongRankCondition R] (A : Matrix m n R) (B : Matrix n o R)
+  条件: [交换半环 R] [StrongRankCondition R] (A : 矩阵 m n R) (B : 矩阵 n o R)
   证明: le_min (rank_mul_le_left _ _) (rank_mul_le_right _ _)
 
 Depends on / 依赖: le_min, rank_mul_le_left, rank_mul_le_right
@@ -705,7 +705,7 @@ theorem rank_vecMulVec_le
 
 中文:
 定理 rank_vecMulVec_le
-  条件: [CommSemiring R] [StrongRankCondition R] (w : m -> R) (v : n -> R)
+  条件: [交换半环 R] [StrongRankCondition R] (w : m -> R) (v : n -> R)
   证明: by
   rw [Matrix.vecMulVec_eq Unit]
   refine le_trans (rank_mul_le_left _ _) ?_
@@ -734,7 +734,7 @@ theorem rank_unit
 
 中文:
 定理 rank_unit
-  条件: [DecidableEq n] [CommSemiring R] [StrongRankCondition R] (A : (Matrix n n R)ˣ)
+  条件: [DecidableEq n] [交换半环 R] [StrongRankCondition R] (A : (矩阵 n n R)ˣ)
   证明: by
   apply le_antisymm (rank_le_card_width (A : Matrix n n R)) _
   have := rank_mul_le_left (A : Matrix n n R) (↑A⁻¹ : Matrix n n R)
@@ -760,7 +760,7 @@ theorem rank_of_isUnit
 
 中文:
 定理 rank_of_isUnit
-  结论: [DecidableEq n] [CommSemiring R] [StrongRankCondition R] (A : Matrix n n R)
+  结论: [DecidableEq n] [交换半环 R] [StrongRankCondition R] (A : 矩阵 n n R)
   证明: by
   obtain ⟨A, rfl⟩ := h
   exact rank_unit A
@@ -783,7 +783,7 @@ theorem rank_of_det_mem_nonZeroDivisors
 
 中文:
 定理 rank_of_det_mem_nonZeroDivisors
-  结论: {R : 类型} [CommRing R] [Nontrivial R]
+  结论: {R : 类型} [交换环 R] [非平凡 R]
   证明: by
   rw [rank]; rw [LinearMap.finrank_range_of_inj (mulVec_injective_of_det_mem_nonZeroDivisors hA)]; rw [Module.finrank_eq_card_basis (Pi.basisFun R m)]
 
@@ -804,7 +804,7 @@ theorem rank_of_det_ne_zero
 
 中文:
 定理 rank_of_det_ne_zero
-  结论: {R : 类型} [CommRing R] [IsDomain R] [Fintype m] [DecidableEq m]
+  结论: {R : 类型} [交换环 R] [是整环 R] [有限类型 m] [DecidableEq m]
   证明: rank_of_det_mem_nonZeroDivisors (mem_nonZeroDivisors_of_ne_zero h)
 
 Depends on / 依赖: mem_nonZeroDivisors_of_ne_zero, rank_of_det_mem_nonZeroDivisors
@@ -828,7 +828,7 @@ lemma rank_smul_of_mem_nonZeroDivisors
 
 中文:
 引理 rank_smul_of_mem_nonZeroDivisors
-  结论: {R : 类型} [CommRing R] {c : R} (B : Matrix m n R)
+  结论: {R : 类型} [交换环 R] {c : R} (B : 矩阵 m n R)
   证明: by
   have hc' : IsSMulRegular R c := isSMulRegular_iff_mem_nonZeroSMulDivisors.mpr hc.1
   have hreg : IsSMulRegular (m -> R) c := IsSMulRegular.pi fun _ => hc'
@@ -863,7 +863,7 @@ lemma rank_mul_eq_left_of_det_mem_nonZeroDivisors
 
 中文:
 引理 rank_mul_eq_left_of_det_mem_nonZeroDivisors
-  结论: {R : 类型} [CommRing R] [DecidableEq n]
+  结论: {R : 类型} [交换环 R] [DecidableEq n]
   证明: by
   nontriviality R
   refine le_antisymm (rank_mul_le_left B A) ?_
@@ -895,7 +895,7 @@ lemma rank_mul_eq_left_of_det_ne_zero
 
 中文:
 引理 rank_mul_eq_left_of_det_ne_zero
-  结论: {R : 类型} [CommRing R] [IsDomain R] [DecidableEq n]
+  结论: {R : 类型} [交换环 R] [是整环 R] [DecidableEq n]
   证明: rank_mul_eq_left_of_det_mem_nonZeroDivisors A B (mem_nonZeroDivisors_of_ne_zero h)
 
 Depends on / 依赖: mem_nonZeroDivisors_of_ne_zero, rank_mul_eq_left_of_det_mem_nonZeroDivisors
@@ -916,7 +916,7 @@ lemma rank_mul_eq_left_of_isUnit_det
 
 中文:
 引理 rank_mul_eq_left_of_isUnit_det
-  结论: {R : 类型} [CommRing R] [DecidableEq n] (A : Matrix n n R)
+  结论: {R : 类型} [交换环 R] [DecidableEq n] (A : 矩阵 n n R)
   证明: rank_mul_eq_left_of_det_mem_nonZeroDivisors A B hA.mem_nonZeroDivisors
 
 Depends on / 依赖: hA.mem_nonZeroDivisors, mem_nonZeroDivisors, rank_mul_eq_left_of_det_mem_nonZeroDivisors
@@ -937,7 +937,7 @@ lemma rank_mul_eq_right_of_det_mem_nonZeroDivisors
 
 中文:
 引理 rank_mul_eq_right_of_det_mem_nonZeroDivisors
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: by
   rw [rank]; rw [rank]; rw [mulVecLin_mul]; rw [LinearMap.range_comp]; rw [← (Submodule.equivMapOfInjective A.mulVecLin
       (mulVec_injective_of_det_mem_nonZeroDivisors hA) _).finrank_eq]
@@ -960,7 +960,7 @@ lemma rank_mul_eq_right_of_det_ne_zero
 
 中文:
 引理 rank_mul_eq_right_of_det_ne_zero
-  结论: {R : 类型} [CommRing R] [IsDomain R]
+  结论: {R : 类型} [交换环 R] [是整环 R]
   证明: rank_mul_eq_right_of_det_mem_nonZeroDivisors A B (mem_nonZeroDivisors_of_ne_zero h)
 
 Depends on / 依赖: mem_nonZeroDivisors_of_ne_zero, rank_mul_eq_right_of_det_mem_nonZeroDivisors
@@ -982,7 +982,7 @@ lemma rank_mul_eq_right_of_isUnit_det
 
 中文:
 引理 rank_mul_eq_right_of_isUnit_det
-  结论: {R : 类型} [CommRing R] [Fintype m] [DecidableEq m]
+  结论: {R : 类型} [交换环 R] [有限类型 m] [DecidableEq m]
   证明: rank_mul_eq_right_of_det_mem_nonZeroDivisors A B hA.mem_nonZeroDivisors
 
 Depends on / 依赖: hA.mem_nonZeroDivisors, mem_nonZeroDivisors, rank_mul_eq_right_of_det_mem_nonZeroDivisors
@@ -1003,7 +1003,7 @@ lemma rank_mul_eq_right_of_isLowerTriangular
 
 中文:
 引理 rank_mul_eq_right_of_isLowerTriangular
-  结论: {R : 类型} [CommRing R] [IsDomain R]
+  结论: {R : 类型} [交换环 R] [是整环 R]
   证明: by
   have hdet : A.det != 0 := by simpa [det_of_isLowerTriangular A hA, Finset.prod_ne_zero_iff]
   exact rank_mul_eq_right_of_det_ne_zero A B hdet
@@ -1028,7 +1028,7 @@ lemma rank_mul_eq_right_of_isUpperTriangular
 
 中文:
 引理 rank_mul_eq_right_of_isUpperTriangular
-  结论: {R : 类型} [CommRing R] [IsDomain R]
+  结论: {R : 类型} [交换环 R] [是整环 R]
   证明: by
   have hdet : A.det != 0 := by simpa [det_of_isUpperTriangular hA, Finset.prod_ne_zero_iff]
   exact rank_mul_eq_right_of_det_ne_zero A B hdet
@@ -1057,7 +1057,7 @@ theorem rank_submatrix_le
 
 中文:
 定理 rank_submatrix_le
-  结论: [CommSemiring R] [StrongRankCondition R] [Fintype n₀] (A : Matrix m n R)
+  结论: [交换半环 R] [StrongRankCondition R] [有限类型 n₀] (A : 矩阵 m n R)
   证明: by
   nontriviality R
   have := Module.Finite.span_of_finite R (Set.finite_range (A.submatrix r id).col)
@@ -1098,7 +1098,7 @@ theorem rank_reindex
 
 中文:
 定理 rank_reindex
-  条件: [Fintype n₀] [CommSemiring R] (em : m ≃ m₀) (en : n ≃ n₀) (A : Matrix m n R)
+  条件: [有限类型 n₀] [交换半环 R] (em : m ≃ m₀) (en : n ≃ n₀) (A : 矩阵 m n R)
   证明: by
   rw [rank]; rw [rank]; rw [mulVecLin_reindex]; rw [LinearMap.range_comp]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [LinearEquiv.finrank_map_eq]
 
@@ -1124,7 +1124,7 @@ theorem rank_submatrix
 
 中文:
 定理 rank_submatrix
-  结论: [Fintype n₀] [CommSemiring R] (A : Matrix m n R) (em : m₀ ≃ m)
+  结论: [有限类型 n₀] [交换半环 R] (A : 矩阵 m n R) (em : m₀ ≃ m)
   证明: by
   simpa only [reindex_apply] using! rank_reindex em.symm en.symm A
 
@@ -1148,7 +1148,7 @@ theorem lift_cRank_submatrix
 
 中文:
 定理 lift_cRank_submatrix
-  结论: {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m₀ ≃ m)
+  结论: {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m₀ ≃ m)
   证明: (A.lift_cRank_submatrix_le em en).antisymm
  by simpa using ((A.reindex em.symm en.symm).lift_cRank_submatrix_le em.symm en.symm)
 
@@ -1172,7 +1172,7 @@ theorem cRank_submatrix
 
 中文:
 定理 cRank_submatrix
-  结论: {m₀ : 类型um} {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m₀ ≃ m)
+  结论: {m₀ : 类型um} {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m₀ ≃ m)
   证明: by
   simpa [-lift_cRank_submatrix] using A.lift_cRank_submatrix em en
 
@@ -1192,7 +1192,7 @@ theorem lift_cRank_reindex
 
 中文:
 定理 lift_cRank_reindex
-  结论: {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m ≃ m₀)
+  结论: {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m ≃ m₀)
   证明: lift_cRank_submatrix ..
 
 Depends on / 依赖: lift_cRank_submatrix
@@ -1213,7 +1213,7 @@ theorem cRank_reindex
 
 中文:
 定理 cRank_reindex
-  结论: {m₀ : 类型um} {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m ≃ m₀)
+  结论: {m₀ : 类型um} {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m ≃ m₀)
   证明: cRank_submatrix ..
 
 @[simp]
@@ -1236,7 +1236,7 @@ simpa [-lift_cRank_submatrix] using! congr_arg Cardinal.toENat A.lift_cRank_subm
 
 中文:
 定理 eRank_submatrix
-  条件: {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m₀ ≃ m) (en : n₀ ≃ n)
+  条件: {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m₀ ≃ m) (en : n₀ ≃ n)
   证明: by
 simpa [-lift_cRank_submatrix] using! congr_arg Cardinal.toENat A.lift_cRank_submatrix em en
 
@@ -1256,7 +1256,7 @@ theorem eRank_reindex
 
 中文:
 定理 eRank_reindex
-  结论: {m₀ : 类型um} {n : 类型un} [Semiring R] (A : Matrix m n R) (em : m ≃ m₀)
+  结论: {m₀ : 类型um} {n : 类型un} [半环 R] (A : 矩阵 m n R) (em : m ≃ m₀)
   证明: eRank_submatrix ..
 
 Depends on / 依赖: eRank_submatrix
@@ -1282,7 +1282,7 @@ theorem rank_eq_finrank_range_toLin
 
 中文:
 定理 rank_eq_finrank_range_toLin
-  结论: [Finite m] [DecidableEq n] {M₁ M₂ : 类型} [CommSemiring R]
+  结论: [有限 m] [DecidableEq n] {M₁ M₂ : 类型} [交换半环 R]
   证明: by
   cases nonempty_fintype m
   let e₁ := (Pi.basisFun R m).equiv v₁ (Equiv.refl _)
@@ -1323,7 +1323,7 @@ theorem rank_le_card_height
 
 中文:
 定理 rank_le_card_height
-  结论: [Fintype m] [CommSemiring R] [StrongRankCondition R]
+  结论: [有限类型 m] [交换半环 R] [StrongRankCondition R]
   证明: (Submodule.finrank_le _).trans (finrank_pi R).le
 
 Depends on / 依赖: Submodule, Submodule.finrank_le, finrank_le, finrank_pi
@@ -1349,7 +1349,7 @@ theorem rank_le_card_of_support_subset
 
 中文:
 定理 rank_le_card_of_support_subset
-  结论: [CommSemiring R] [StrongRankCondition R] (A : Matrix m n R)
+  结论: [交换半环 R] [StrongRankCondition R] (A : 矩阵 m n R)
   证明: by
   rw [Function.support_subset_iff'] at hz
   classical
@@ -1389,7 +1389,7 @@ theorem rank_le_height
 
 中文:
 定理 rank_le_height
-  结论: [CommSemiring R] [StrongRankCondition R] {m n : 自然数}
+  结论: [交换半环 R] [StrongRankCondition R] {m n : 自然数}
   证明: A.rank_le_card_height.trans (Fintype.card_fin m).le
 
 Depends on / 依赖: A.rank_le_card_height.trans, Fintype, Fintype.card_fin, card_fin, rank_le_card_height
@@ -1410,7 +1410,7 @@ theorem rank_eq_finrank_span_cols
 
 中文:
 定理 rank_eq_finrank_span_cols
-  条件: [CommSemiring R] (A : Matrix m n R)
+  条件: [交换半环 R] (A : 矩阵 m n R)
   证明: by rw [rank, Matrix.range_mulVecLin]
 
 @[simp]
@@ -1434,8 +1434,8 @@ theorem cRank_toNat_eq_rank
 @[simp]
 
 中文:
-定理 cRank_toNat_eq_rank
-  条件: [CommSemiring R] (A : Matrix m n R)
+定理 cRank_to自然数_eq_rank
+  条件: [交换半环 R] (A : 矩阵 m n R)
   结论: A.cRank.to自然数 = A.rank
   证明: by
   rw [cRank_toNat_eq_finrank]; rw [← rank_eq_finrank_span_cols]
@@ -1459,8 +1459,8 @@ theorem eRank_toNat_eq_rank
   rw [eRank_toNat_eq_finrank]; rw [← rank_eq_finrank_span_cols]
 
 中文:
-定理 eRank_toNat_eq_rank
-  条件: [CommSemiring R] (A : Matrix m n R)
+定理 eRank_to自然数_eq_rank
+  条件: [交换半环 R] (A : 矩阵 m n R)
   结论: A.eRank.to自然数 = A.rank
   证明: by
   rw [eRank_toNat_eq_finrank]; rw [← rank_eq_finrank_span_cols]
@@ -1485,7 +1485,7 @@ theorem rank_diagonal
 
 中文:
 定理 rank_diagonal
-  条件: [Fintype m] [DecidableEq m] [DecidableEq R] (w : m -> R)
+  条件: [有限类型 m] [DecidableEq m] [DecidableEq R] (w : m -> R)
   证明: by
   rw [Matrix.rank]; rw [← Matrix.toLin'_apply']; rw [Module.finrank]; rw [← LinearMap.rank]; rw [LinearMap.rank_diagonal]; rw [Cardinal.toNat_natCast]
 
@@ -1510,8 +1510,8 @@ theorem exists_rank_normal_form
   set V := diagonal E * (L.reverse.map (toMatrix ∘ .inv)).pro
 
 中文:
-定理 exists_rank_normal_form
-  条件: [Fintype m] [DecidableEq m] (M : Matrix m m R)
+定理 存在_rank_normal_form
+  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 m m R)
   证明: by
   classical
   obtain ⟨L, L', D, hM0⟩ := Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M
@@ -1651,7 +1651,7 @@ theorem ker_mulVecLin_conjTranspose_mul_self
 
 中文:
 定理 ker_mulVecLin_conjTranspose_mul_self
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   证明: by
   ext x
   simp only [LinearMap.mem_ker, mulVecLin_apply, conjTranspose_mul_self_mulVec_eq_zero]
@@ -1681,7 +1681,7 @@ theorem rank_conjTranspose_mul_self
 
 中文:
 定理 rank_conjTranspose_mul_self
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: (Aᴴ * A).rank = A.rank
   证明: by
   dsimp only [rank]
@@ -1722,7 +1722,7 @@ congr_arg _ conjTranspose_conjTranspose _)
 
 中文:
 定理 rank_conjTranspose
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: Aᴴ.rank = A.rank
   证明: le_antisymm
     (((rank_conjTranspose_mul_self _).symm.trans_le <| rank_mul_le_left _ _).trans_eq <|
@@ -1753,7 +1753,7 @@ theorem rank_self_mul_conjTranspose
 
 中文:
 定理 rank_self_mul_conjTranspose
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: (A * Aᴴ).rank = A.rank
   证明: by
   simpa only [rank_conjTranspose, conjTranspose_conjTranspose] using
@@ -1789,7 +1789,7 @@ theorem ker_mulVecLin_transpose_mul_self
 
 中文:
 定理 ker_mulVecLin_transpose_mul_self
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   证明: by
   ext x
   simp only [LinearMap.mem_ker, mulVecLin_apply, ← mulVec_mulVec]
@@ -1831,7 +1831,7 @@ theorem rank_transpose_mul_self
 
 中文:
 定理 rank_transpose_mul_self
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: (Aᵀ * A).rank = A.rank
   证明: by
   dsimp only [rank]
@@ -1871,7 +1871,7 @@ theorem rank_transpose
 
 中文:
 定理 rank_transpose
-  条件: [Field R] [Fintype m] (A : Matrix m n R)
+  条件: [域 R] [有限类型 m] (A : 矩阵 m n R)
   结论: Aᵀ.rank = A.rank
   证明: by
   classical
@@ -1897,7 +1897,7 @@ theorem rank_self_mul_transpose
 
 中文:
 定理 rank_self_mul_transpose
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   simpa only [rank_transpose, transpose_transpose] using rank_transpose_mul_self Aᵀ
 
@@ -1920,7 +1920,7 @@ theorem rank_eq_finrank_span_row
 
 中文:
 定理 rank_eq_finrank_span_row
-  条件: [Field R] [Finite m] (A : Matrix m n R)
+  条件: [域 R] [有限 m] (A : 矩阵 m n R)
   证明: by
   cases nonempty_fintype m
   rw [← rank_transpose]; rw [rank_eq_finrank_span_cols]; rw [col_transpose]
@@ -1943,7 +1943,7 @@ theorem _root_.LinearIndependent.rank_matrix
 
 中文:
 定理 _root_.LinearIndependent.rank_matrix
-  结论: [Field R] [Fintype m]
+  结论: [域 R] [有限类型 m]
   证明: by
   rw [M.rank_eq_finrank_span_row]; rw [linearIndependent_iff_card_eq_finrank_span.mp h]; rw [Set.finrank]
 
@@ -1968,7 +1968,7 @@ lemma rank_add_rank_le_card_of_mul_eq_zero
 
 中文:
 引理 rank_add_rank_le_card_of_mul_eq_zero
-  结论: [Field R] [Finite l] [Fintype m]
+  结论: [域 R] [有限 l] [有限类型 m]
   证明: by
   classical
   let el : Basis l R (l -> R) := Pi.basisFun R l
@@ -2007,8 +2007,8 @@ theorem Matrix.rank_vecMulVec.{u}
   rw [rank_fun']; rw [Fintype.card_ofSubsingleton]; rw [Nat.cast_one]
 
 中文:
-定理 Matrix.rank_vecMulVec.{u}
-  结论: {K m n : 类型u} [CommRing K] [Fintype n]
+定理 矩阵.rank_vecMulVec.{u}
+  结论: {K m n : 类型u} [交换环 K] [有限类型 n]
   证明: by
   nontriviality K
   rw [Matrix.vecMulVec_eq (Fin 1)]; rw [Matrix.toLin'_mul]

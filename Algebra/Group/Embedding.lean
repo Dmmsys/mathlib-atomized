@@ -35,7 +35,7 @@ definition mulLeftEmbedding
 
 中文:
 定义 mulLeftEmbedding
-  签名: [Mul G] [IsLeftCancelMul G] (g : G)
+  签名: [乘法 G] [左乘消去 G] (g : G)
   定义体: g * h
   inj' := mul_right_injective g
 -/
@@ -60,7 +60,7 @@ definition mulRightEmbedding
 
 中文:
 定义 mulRightEmbedding
-  签名: [Mul G] [IsRightCancelMul G] (g : G)
+  签名: [乘法 G] [右乘消去 G] (g : G)
   定义体: h * g
   inj' := mul_left_injective g
 
@@ -83,7 +83,7 @@ theorem mulLeftEmbedding_eq_mulRightEmbedding
 
 中文:
 定理 mulLeftEmbedding_eq_mulRightEmbedding
-  条件: [CommMagma G] [IsCancelMul G] (g : G)
+  条件: [交换原群 G] [是消去乘法 G] (g : G)
   证明: by
   ext
   exact mul_comm _ _

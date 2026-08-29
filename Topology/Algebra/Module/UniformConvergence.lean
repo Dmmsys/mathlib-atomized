@@ -120,7 +120,7 @@ lemma UniformOnFun.continuousSMul_induced_of_image_bounded
 
 中文:
 引理 UniformOnFun.continuousSMul_induced_of_image_bounded
-  结论: (φ : hom) (hφ : IsInducing (ofFun 𝔖 ∘ φ))
+  结论: (φ : hom) (hφ : 是Inducing (ofFun 𝔖 ∘ φ))
   证明: by
   obtain rfl := hφ.eq_induced; clear hφ
   simp +instances only [induced_iInf, UniformOnFun.topologicalSpace_eq, induced_compose]
@@ -156,7 +156,7 @@ theorem UniformOnFun.continuousSMul_submodule_of_image_bounded
 
 中文:
 定理 UniformOnFun.continuousSMul_submodule_of_image_bounded
-  结论: (H : Submodule 𝕜 (α ->ᵤ[𝔖] E))
+  结论: (H : 子模 𝕜 (α ->ᵤ[𝔖] E))
   证明: UniformOnFun.continuousSMul_induced_of_image_bounded 𝕜 α E H
     (LinearMap.id.domRestrict H : H ->ₗ[𝕜] α -> E) IsInducing.subtypeVal fun ⟨u, hu⟩ => h u hu
 

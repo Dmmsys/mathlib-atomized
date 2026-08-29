@@ -118,7 +118,7 @@ theorem card_functions_sum_skolem₁_le
 
 中文:
 定理 card_functions_sum_skolem₁_le
-  结论: #(Σ n, (L.sum L.skolem₁).Functions n) <= max ℵ₀ L.card
+  结论: #(Σ n, (L.求和 L.skolem₁).函数 n) <= 最大值 ℵ₀ L.card
   证明: by
   rw [card_functions_sum_skolem₁]
   trans #(Σ n, L.BoundedFormula Empty n)
@@ -151,7 +151,7 @@ instance skolem₁Structure
 
 中文:
 实例 skolem₁Structure
-  签名: : L.skolem₁.Structure M
+  签名: : L.skolem₁.结构 M
   定义体: ⟨fun {_} φ x => Classical.epsilon fun a => φ.Realize default (Fin.snoc x a : _ -> M), fun {_} r =>
     Empty.elim r⟩
 
@@ -179,7 +179,7 @@ theorem skolem₁_reduct_isElementary
 
 中文:
 定理 skolem₁_reduct_isElementary
-  条件: (S : (L.sum L.skolem₁).Substructure M)
+  条件: (S : (L.求和 L.skolem₁).子结构 M)
   证明: by
   apply (LHom.sumInl.substructureReduct S).isElementary_of_exists
   intro n φ x a h
@@ -211,7 +211,7 @@ definition elementarySkolem₁Reduct
 
 中文:
 定义 elementarySkolem₁Reduct
-  签名: (S : (L.sum L.skolem₁).Substructure M)
+  签名: (S : (L.求和 L.skolem₁).子结构 M)
   定义体: ⟨LHom.sumInl.substructureReduct S, S.skolem₁_reduct_isElementary⟩
 
 Depends on / 依赖: LHom.sumInl.substructureReduct, S.skolem, substructureReduct, sumInl
@@ -230,7 +230,7 @@ theorem coeSort_elementarySkolem₁Reduct
 
 中文:
 定理 coeSort_elementarySkolem₁Reduct
-  条件: (S : (L.sum L.skolem₁).Substructure M)
+  条件: (S : (L.求和 L.skolem₁).子结构 M)
   证明: rfl
 -/
 theorem coeSort_elementarySkolem₁Reduct (S : (L.sum L.skolem₁).Substructure M) :
@@ -256,7 +256,7 @@ instance Substructure.elementarySkolem₁Reduct.instSmall
 omit [Nonempty M]
 
 中文:
-实例 Substructure.elementarySkolem₁Reduct.instSmall
+实例 子结构.elementarySkolem₁Reduct.instSmall
   签名: :
   定义体: by
   rw [coeSort_elementarySkolem₁Reduct]
@@ -284,8 +284,8 @@ theorem exists_small_elementarySubstructure
     (fun _ => ⟨Substructure.elementarySkolem₁Reduct ⊥, inferInstance⟩)
 
 中文:
-定理 exists_small_elementarySubstructure
-  结论: 存在 S : L.ElementarySubstructure M, Small.{max u v} S
+定理 存在_small_elementarySubstructure
+  结论: 存在 S : L.ElementarySubstructure M, Small.{最大值 u v} S
   证明: (isEmpty_or_nonempty M).elim
     (fun _ => ⟨⊤, Countable.toSmall _⟩)
     (fun _ => ⟨Substructure.elementarySkolem₁Reduct ⊥, inferInstance⟩)
@@ -315,8 +315,8 @@ theorem exists_elementarySubstructure_card_eq
     ⟨elementarySkolem₁Reduct 
 
 中文:
-定理 exists_elementarySubstructure_card_eq
-  结论: (s : Set M) (κ : Cardinal.{w'}) (h1 : ℵ₀ <= κ)
+定理 存在_elementarySubstructure_card_eq
+  结论: (s : 集合 M) (κ : 基数.{w'}) (h1 : ℵ₀ <= κ)
   证明: by
   obtain ⟨s', hs'⟩ := Cardinal.le_mk_iff_exists_set.1 h4
   rw [← aleph0_le_lift.{_]; rw [w}] at h1

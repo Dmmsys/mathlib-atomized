@@ -77,7 +77,7 @@ definition mlieBracketWithin
 
 中文:
 定义 mlieBracketWithin
-  签名: (V W : Π (x : M), TangentSpace I x) (s : Set M) (x₀ : M)
+  签名: (V W : Π (x : M), TangentSpace I x) (s : 集合 M) (x₀ : M)
   定义体: mpullback I 𝓘(𝕜, E) (extChartAt I x₀)
     (lieBracketWithin 𝕜
       (mpullbackWithin 𝓘(𝕜, E) I (extChartAt I x₀).symm V (range I))
@@ -163,7 +163,7 @@ lemma mlieBracketWithin_eq_lieBracketWithin
 
 中文:
 引理 mlieBracketWithin_eq_lieBracketWithin
-  条件: {V W : Π (x : E), TangentSpace 𝓘(𝕜, E) x} {s : Set E}
+  条件: {V W : Π (x : E), TangentSpace 𝓘(𝕜, E) x} {s : 集合 E}
   证明: by
   ext x
   simp [mlieBracketWithin_apply]
@@ -565,7 +565,7 @@ theorem mlieBracketWithin_of_isOpen
 
 中文:
 定理 mlieBracketWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   证明: mlieBracketWithin_of_mem_nhds (hs.mem_nhds hx)
 
 Depends on / 依赖: hs.mem_nhds, mem_nhds, mlieBracketWithin_of_mem_nhds
@@ -628,7 +628,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq
   apply Filter.EventuallyEq.lieBracket
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField_eq
   证明: by
   simp only [mlieBracketWithin_apply]
   congr 1
@@ -676,7 +676,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq_of_mem
     hW (mem_of_mem_nhdsWithin hx hW :)
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq_of_mem
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField_eq_of_mem
   证明: hV.mlieBracketWithin_vectorField_eq (mem_of_mem_nhdsWithin hx hV :)
     hW (mem_of_mem_nhdsWithin hx hW :)
 
@@ -704,7 +704,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField'
     exact hW
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField'
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField'
   证明: by
   filter_upwards [hV, hW, eventually_eventually_nhdsWithin.2 hV,
     eventually_eventually_nhdsWithin.2 hW] with y hVy hWy hVy' hWy'
@@ -738,7 +738,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField
   proof: hV.mlieBracketWithin_vectorField' hW Subset.rfl
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField
   证明: hV.mlieBracketWithin_vectorField' hW Subset.rfl
 -/
 protected theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField
@@ -756,7 +756,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_of_insert
     (hV.mlieBracketWithin_vectorField' hW (subset_insert x s))
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_of_insert
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField_of_insert
   证明: by
   apply mem_of_mem_nhdsWithin (mem_insert x s)
     (hV.mlieBracketWithin_vectorField' hW (subset_insert x s))
@@ -776,7 +776,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq_nhds
     (hW.filter_mono nhdsWithin_le_nhds) hW.self_of_nhds
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracketWithin_vectorField_eq_nhds
+定理 _root_.滤子.EventuallyEq.mlieBracketWithin_vectorField_eq_nhds
   证明: (hV.filter_mono nhdsWithin_le_nhds).mlieBracketWithin_vectorField_eq hV.self_of_nhds
     (hW.filter_mono nhdsWithin_le_nhds) hW.self_of_nhds
 
@@ -837,7 +837,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracket_vectorField_eq
   rw [← mlieBracketWithin_univ]; rw [← mlieBracketWithin_univ]; rw [hV.mlieBracketWithin_vectorField_eq_nhds hW]
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracket_vectorField_eq
+定理 _root_.滤子.EventuallyEq.mlieBracket_vectorField_eq
   证明: by
   rw [← mlieBracketWithin_univ]; rw [← mlieBracketWithin_univ]; rw [hV.mlieBracketWithin_vectorField_eq_nhds hW]
 
@@ -858,7 +858,7 @@ theorem _root_.Filter.EventuallyEq.mlieBracket_vectorField
   exact hVy.mlieBracket_vectorField_eq hWy
 
 中文:
-定理 _root_.Filter.EventuallyEq.mlieBracket_vectorField
+定理 _root_.滤子.EventuallyEq.mlieBracket_vectorField
   证明: by
   filter_upwards [hV.eventuallyEq_nhds, hW.eventuallyEq_nhds] with y hVy hWy
   exact hVy.mlieBracket_vectorField_eq hWy
@@ -1478,7 +1478,7 @@ lemma mpullbackWithin_mlieBracketWithin_aux
 
 中文:
 引理 mpullbackWithin_mlieBracketWithin_aux
-  结论: [CompleteSpace E']
+  结论: [完备空间 E']
   证明: by
   have A : (extChartAt I x₀).symm (extChartAt I x₀ x₀) = x₀ := by simp
   have A' : x₀ = (extChartAt I x₀).symm (extChartAt I x₀ x₀) := by simp
@@ -2031,7 +2031,7 @@ lemma _root_.ContDiff.mlieBracket_vectorField
   exact hU.mlieBracketWithin_vectorField hV uniqueMDiffOn_univ hmn
 
 中文:
-引理 _root_.ContDiff.mlieBracket_vectorField
+引理 _root_.连续可微.mlieBracket_vectorField
   结论: {m n : 自然数∞}
   证明: by
   simp only [← contMDiffOn_univ] at hU hV ⊢

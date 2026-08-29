@@ -40,10 +40,10 @@ class IsStablyFree
     - private(exist_free_prod') : exists (N : Type u) (_ : AddCommGroup N) (_ : Module R N) (_ : Module.Finite R N) (_ : Free R N), Free R (M × N)
 
 中文:
-类 IsStablyFree
-  参数: (R : 类型u) [Ring R] (M : 类型) [AddCommGroup M] [Module R M]
+类 是StablyFree
+  参数: (R : 类型u) [环 R] (M : 类型) [加法交换群 M] [模 R M]
   公理与运算 (1 个):
-    - private(exist_free_prod') : 存在 (N : 类型u) (_ : AddCommGroup N) (_ : Module R N) (_ : Module.Finite R N) (_ : Free R N), Free R (M × N)
+    - private(exist_free_prod') : 存在 (N : 类型u) (_ : 加法交换群 N) (_ : 模 R N) (_ : 模.有限 R N) (_ : 自由 R N), 自由 R (M × N)
 -/
 class IsStablyFree (R : Type u) [Ring R] (M : Type*) [AddCommGroup M] [Module R M] : Prop where
   private exist_free_prod' : exists (N : Type u) (_ : AddCommGroup N) (_ : Module R N)
@@ -61,8 +61,8 @@ theorem IsStablyFree.exist_free_prod
   proof: IsStablyFree.exist_free_prod'
 
 中文:
-定理 IsStablyFree.exist_free_prod
-  条件: [IsStablyFree R M]
+定理 是StablyFree.exist_free_prod
+  条件: [是StablyFree R M]
   证明: IsStablyFree.exist_free_prod'
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.exist_free_prod, exist_free_prod
@@ -85,9 +85,9 @@ theorem IsStablyFree.equiv
   exact ⟨P, hPc, hPm, hPfin, hPfree, Free.of_equiv (e.prodCongr (LinearEquiv.refl R P))⟩
 
 中文:
-定理 IsStablyFree.equiv
-  条件: (e : M ≃ₗ[R] N) [IsStablyFree R M]
-  结论: IsStablyFree R N
+定理 是StablyFree.equiv
+  条件: (e : M ≃ₗ[R] N) [是StablyFree R M]
+  结论: 是StablyFree R N
   证明: by
   obtain ⟨P, hPc, hPm, hPfin, hPfree, _⟩ := IsStablyFree.exist_free_prod R M
   exact ⟨P, hPc, hPm, hPfin, hPfree, Free.of_equiv (e.prodCongr (LinearEquiv.refl R P))⟩
@@ -109,9 +109,9 @@ theorem IsStablyFree.equiv_iff
   proof: ⟨fun h => h.equiv e, fun h => h.equiv e.symm⟩
 
 中文:
-定理 IsStablyFree.equiv_iff
+定理 是StablyFree.equiv_iff
   条件: (e : M ≃ₗ[R] N)
-  结论: IsStablyFree R M ↔ IsStablyFree R N
+  结论: 是StablyFree R M ↔ 是StablyFree R N
   证明: ⟨fun h => h.equiv e, fun h => h.equiv e.symm⟩
 
 Depends on / 依赖: e.symm, h.equiv
@@ -128,8 +128,8 @@ instance IsStablyFree.ulift
   body: IsStablyFree.equiv ULift.moduleEquiv.symm
 
 中文:
-实例 IsStablyFree.ulift
-  签名: [IsStablyFree R M]
+实例 是StablyFree.ulift
+  签名: [是StablyFree R M]
   定义体: IsStablyFree.equiv ULift.moduleEquiv.symm
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, ULift.moduleEquiv.symm, moduleEquiv
@@ -147,9 +147,9 @@ theorem IsStablyFree.of_ulift
   proof: IsStablyFree.equiv ULift.moduleEquiv
 
 中文:
-定理 IsStablyFree.of_ulift
-  条件: [IsStablyFree R (ULift.{w} M)]
-  结论: IsStablyFree R M
+定理 是StablyFree.of_ulift
+  条件: [是StablyFree R (类型层提升.{w} M)]
+  结论: 是StablyFree R M
   证明: IsStablyFree.equiv ULift.moduleEquiv
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, ULift.moduleEquiv, moduleEquiv
@@ -166,8 +166,8 @@ instance IsStablyFree.shrink
   body: IsStablyFree.equiv (Shrink.linearEquiv R M).symm
 
 中文:
-实例 IsStablyFree.shrink
-  签名: [Small.{w, v} M] [IsStablyFree R M]
+实例 是StablyFree.shrink
+  签名: [Small.{w, v} M] [是StablyFree R M]
   定义体: IsStablyFree.equiv (Shrink.linearEquiv R M).symm
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, Shrink, Shrink.linearEquiv, linearEquiv
@@ -184,8 +184,8 @@ theorem IsStablyFree.of_shrink
   proof: IsStablyFree.equiv (Shrink.linearEquiv R M)
 
 中文:
-定理 IsStablyFree.of_shrink
-  条件: [Small.{w, v} M] [IsStablyFree R (Shrink.{w} M)]
+定理 是StablyFree.of_shrink
+  条件: [Small.{w, v} M] [是StablyFree R (Shrink.{w} M)]
   证明: IsStablyFree.equiv (Shrink.linearEquiv R M)
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, Shrink, Shrink.linearEquiv, linearEquiv
@@ -203,8 +203,8 @@ instance [Free
   body: ⟨PUnit, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance⟩
 
 中文:
-实例 [Free
-  签名: R M] : IsStablyFree R M
+实例 [自由
+  签名: R M] : 是StablyFree R M
   定义体: ⟨PUnit, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance⟩
 -/
 instance [Free R M] : IsStablyFree R M :=
@@ -222,8 +222,8 @@ theorem IsStablyFree.of_free_prod
     Free.of_equiv eN, Free.of_equiv ((LinearEquiv.refl R M).prodCongr eN)⟩
 
 中文:
-定理 IsStablyFree.of_free_prod
-  条件: [Module.Finite R N] [Free R N] [Free R (M × N)]
+定理 是StablyFree.of_free_prod
+  条件: [模.有限 R N] [自由 R N] [自由 R (M × N)]
   证明: have : Small.{u} N := Module.Finite.small.{u} R N
   let +nondep eN : N ≃ₗ[R] Shrink.{u} N := (Shrink.linearEquiv R N).symm
   ⟨Shrink.{u} N, inferInstance, inferInstance, Module.Finite.equiv eN,
@@ -248,8 +248,8 @@ theorem IsStablyFree.of_free_prod'
   .of_free_prod R M N
 
 中文:
-定理 IsStablyFree.of_free_prod'
-  条件: [Module.Finite R N] [Free R N] [Free R (N × M)]
+定理 是StablyFree.of_free_prod'
+  条件: [模.有限 R N] [自由 R N] [自由 R (N × M)]
   证明: have : Free R (M × N) := Free.of_equiv (LinearEquiv.prodComm R N M)
   .of_free_prod R M N
 

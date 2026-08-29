@@ -38,7 +38,7 @@ deriving NormedAddCommGroup, Inhabited
 
 中文:
 定义 Angle
-  签名: : Type
+  签名: : 类型
   定义体: AddCircle (2 * π)
 deriving NormedAddCommGroup, Inhabited
 
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: CircularOrder 实数.Angle
+  签名: Circular序 实数.Angle
   定义体: fast_instance% QuotientAddGroup.circularOrder (hp' := ⟨by simp [pi_pos]⟩)
 
 @[continuity, fun_prop]
@@ -117,7 +117,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : 实数 -> Angle)
+  结论: 连续 ((↑) : 实数 -> Angle)
   证明: continuous_quotient_mk'
 
 Depends on / 依赖: continuous_quotient_mk
@@ -1162,7 +1162,7 @@ theorem continuous_sin
 
 中文:
 定理 continuous_sin
-  结论: Continuous sin
+  结论: 连续 sin
   证明: Real.continuous_sin.quotient_liftOn' _
 
 Depends on / 依赖: Real.continuous_sin.quotient_liftOn, continuous_sin, quotient_liftOn
@@ -1226,7 +1226,7 @@ theorem continuous_cos
 
 中文:
 定理 continuous_cos
-  结论: Continuous cos
+  结论: 连续 cos
   证明: Real.continuous_cos.quotient_liftOn' _
 
 Depends on / 依赖: Real.continuous_cos.quotient_liftOn, continuous_cos, quotient_liftOn
@@ -1466,7 +1466,7 @@ theorem sin_antiperiodic
 
 中文:
 定理 sin_antiperiodic
-  结论: Function.Antiperiodic sin (π : Angle)
+  结论: 函数.Antiperiodic sin (π : Angle)
   证明: by
   intro θ
   induction θ using Real.Angle.induction_on
@@ -1611,7 +1611,7 @@ theorem cos_antiperiodic
 
 中文:
 定理 cos_antiperiodic
-  结论: Function.Antiperiodic cos (π : Angle)
+  结论: 函数.Antiperiodic cos (π : Angle)
   证明: by
   intro θ
   induction θ using Real.Angle.induction_on
@@ -2135,7 +2135,7 @@ definition toReal
   body: (toIocMod_periodic two_pi_pos (-π)).lift θ
 
 中文:
-定义 toReal
+定义 to实数
   签名: (θ : Angle)
   定义体: (toIocMod_periodic two_pi_pos (-π)).lift θ
 
@@ -2154,7 +2154,7 @@ theorem toReal_coe
   proof: rfl
 
 中文:
-定理 toReal_coe
+定理 to实数_coe
   条件: (θ : 实数)
   结论: (θ : Angle).to实数 = toIocMod two_pi_pos (-π) θ
   证明: rfl
@@ -2175,7 +2175,7 @@ theorem toReal_coe_eq_self_iff
   rfl
 
 中文:
-定理 toReal_coe_eq_self_iff
+定理 to实数_coe_eq_self_iff
   条件: {θ : 实数}
   结论: (θ : Angle).to实数 = θ ↔ -π < θ ∧ θ <= π
   证明: by
@@ -2203,9 +2203,9 @@ theorem toReal_coe_eq_self_iff_mem_Ioc
 @[grind inj]
 
 中文:
-定理 toReal_coe_eq_self_iff_mem_Ioc
+定理 to实数_coe_eq_self_iff_mem_Ioc
   条件: {θ : 实数}
-  结论: (θ : Angle).to实数 = θ ↔ θ in Set.Ioc (-π) π
+  结论: (θ : Angle).to实数 = θ ↔ θ in 集合.左开右闭区间 (-π) π
   证明: by
   rw [toReal_coe_eq_self_iff]; rw [← Set.mem_Ioc]
 
@@ -2233,8 +2233,8 @@ theorem toReal_injective
 @[simp]
 
 中文:
-定理 toReal_injective
-  结论: Function.Injective to实数
+定理 to实数_injective
+  结论: 函数.单射 to实数
   证明: by
   intro θ ψ h
   induction θ using Real.Angle.induction_on
@@ -2266,7 +2266,7 @@ theorem toReal_inj
 @[simp, grind =]
 
 中文:
-定理 toReal_inj
+定理 to实数_inj
   条件: {θ ψ : Angle}
   结论: θ.to实数 = ψ.to实数 ↔ θ = ψ
   证明: toReal_injective.eq_iff
@@ -2291,7 +2291,7 @@ theorem coe_toReal
   exact coe_toIocMod _ _
 
 中文:
-定理 coe_toReal
+定理 coe_to实数
   条件: (θ : Angle)
   结论: (θ.to实数 : Angle) = θ
   证明: by
@@ -2316,7 +2316,7 @@ theorem neg_pi_lt_toReal
   exact left_lt_toIocMod _ _ _
 
 中文:
-定理 neg_pi_lt_toReal
+定理 neg_pi_lt_to实数
   条件: (θ : Angle)
   结论: -π < θ.to实数
   证明: by
@@ -2342,7 +2342,7 @@ theorem toReal_le_pi
   ring
 
 中文:
-定理 toReal_le_pi
+定理 to实数_le_pi
   条件: (θ : Angle)
   结论: θ.to实数 <= π
   证明: by
@@ -2367,7 +2367,7 @@ theorem abs_toReal_le_pi
   proof: abs_le.2 ⟨(neg_pi_lt_toReal _).le, toReal_le_pi _⟩
 
 中文:
-定理 abs_toReal_le_pi
+定理 abs_to实数_le_pi
   条件: (θ : Angle)
   结论: |θ.to实数| <= π
   证明: abs_le.2 ⟨(neg_pi_lt_toReal _).le, toReal_le_pi _⟩
@@ -2389,9 +2389,9 @@ theorem toReal_mem_Ioc
 @[simp]
 
 中文:
-定理 toReal_mem_Ioc
+定理 to实数_mem_Ioc
   条件: (θ : Angle)
-  结论: θ.to实数 in Set.Ioc (-π) π
+  结论: θ.to实数 in 集合.左开右闭区间 (-π) π
   证明: ⟨neg_pi_lt_toReal _, toReal_le_pi _⟩
 
 @[simp]
@@ -2417,7 +2417,7 @@ theorem toIocMod_toReal
 @[simp, grind =]
 
 中文:
-定理 toIocMod_toReal
+定理 toIocMod_to实数
   条件: (θ : Angle)
   结论: toIocMod two_pi_pos (-π) θ.to实数 = θ.to实数
   证明: by
@@ -2448,7 +2448,7 @@ theorem toReal_zero
 @[simp]
 
 中文:
-定理 toReal_zero
+定理 to实数_zero
   结论: (0 : Angle).to实数 = 0
   证明: by
   rw [← coe_zero]; rw [toReal_coe_eq_self_iff]
@@ -2477,7 +2477,7 @@ theorem toReal_eq_zero_iff
 @[simp, grind =]
 
 中文:
-定理 toReal_eq_zero_iff
+定理 to实数_eq_zero_iff
   条件: {θ : Angle}
   结论: θ.to实数 = 0 ↔ θ = 0
   证明: by
@@ -2506,7 +2506,7 @@ theorem toReal_pi
 @[simp]
 
 中文:
-定理 toReal_pi
+定理 to实数_pi
   结论: (π : Angle).to实数 = π
   证明: by
   rw [toReal_coe_eq_self_iff]
@@ -2531,7 +2531,7 @@ theorem toReal_eq_pi_iff
   proof: by rw [← toReal_inj, toReal_pi]
 
 中文:
-定理 toReal_eq_pi_iff
+定理 to实数_eq_pi_iff
   条件: {θ : Angle}
   结论: θ.to实数 = π ↔ θ = π
   证明: by rw [← toReal_inj, toReal_pi]
@@ -2558,7 +2558,7 @@ lemma toReal_neg_eq_neg_toReal_iff
     exact ⟨(toReal_le_pi θ).lt_of_ne h', by linarith [neg_pi_lt_toReal θ]⟩
 
 中文:
-引理 toReal_neg_eq_neg_toReal_iff
+引理 to实数_neg_eq_neg_to实数_iff
   条件: {θ : Angle}
   结论: (-θ).to实数 = -(θ.to实数) ↔ θ != π
   证明: by
@@ -2596,7 +2596,7 @@ lemma abs_toReal_neg
   · simp [toReal_neg_eq_neg_toReal_iff.2 h]
 
 中文:
-引理 abs_toReal_neg
+引理 abs_to实数_neg
   条件: (θ : Angle)
   结论: |(-θ).to实数| = |θ.to实数|
   证明: by
@@ -2648,7 +2648,7 @@ theorem toReal_pi_div_two
 @[simp]
 
 中文:
-定理 toReal_pi_div_two
+定理 to实数_pi_div_two
   结论: ((π / 2 : 实数) : Angle).to实数 = π / 2
   证明: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
 
@@ -2673,7 +2673,7 @@ theorem toReal_eq_pi_div_two_iff
 @[simp, grind =]
 
 中文:
-定理 toReal_eq_pi_div_two_iff
+定理 to实数_eq_pi_div_two_iff
   条件: {θ : Angle}
   结论: θ.to实数 = π / 2 ↔ θ = (π / 2 : 实数)
   证明: by
@@ -2698,7 +2698,7 @@ theorem toReal_neg_pi_div_two
 @[simp]
 
 中文:
-定理 toReal_neg_pi_div_two
+定理 to实数_neg_pi_div_two
   结论: ((-π / 2 : 实数) : Angle).to实数 = -π / 2
   证明: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
 
@@ -2721,7 +2721,7 @@ theorem toReal_eq_neg_pi_div_two_iff
   rw [← toReal_inj]; rw [toReal_neg_pi_div_two]
 
 中文:
-定理 toReal_eq_neg_pi_div_two_iff
+定理 to实数_eq_neg_pi_div_two_iff
   条件: {θ : Angle}
   结论: θ.to实数 = -π / 2 ↔ θ = (-π / 2 : 实数)
   证明: by
@@ -2790,7 +2790,7 @@ theorem abs_toReal_coe_eq_self_iff
       abs_eq_self.2 h.1⟩
 
 中文:
-定理 abs_toReal_coe_eq_self_iff
+定理 abs_to实数_coe_eq_self_iff
   条件: {θ : 实数}
   结论: |(θ : Angle).to实数| = θ ↔ 0 <= θ ∧ θ <= π
   证明: ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h =>
@@ -2818,7 +2818,7 @@ theorem abs_toReal_neg_coe_eq_self_iff
       ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq
 
 中文:
-定理 abs_toReal_neg_coe_eq_self_iff
+定理 abs_to实数_neg_coe_eq_self_iff
   条件: {θ : 实数}
   结论: |(-θ : Angle).to实数| = θ ↔ 0 <= θ ∧ θ <= π
   证明: by
@@ -2845,7 +2845,7 @@ theorem abs_toReal_eq_pi_div_two_iff
   rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le)]; rw [← neg_div]; rw [toReal_eq_pi_div_two_iff]; rw [toReal_eq_neg_pi_div_two_iff]
 
 中文:
-定理 abs_toReal_eq_pi_div_two_iff
+定理 abs_to实数_eq_pi_div_two_iff
   条件: {θ : Angle}
   证明: by
   rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le)]; rw [← neg_div]; rw [toReal_eq_pi_div_two_iff]; rw [toReal_eq_neg_pi_div_two_iff]
@@ -2868,7 +2868,7 @@ theorem nsmul_toReal_eq_mul
   rw [← coe_nsmul]; rw [nsmul_eq_mul]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]; rw [div_lt_iff₀' h']; rw [le_div_iff₀' h']
 
 中文:
-定理 nsmul_toReal_eq_mul
+定理 nsmul_to实数_eq_mul
   条件: {n : 自然数} (h : n != 0) {θ : Angle}
   证明: by
   nth_rw 1 [← coe_toReal θ]
@@ -2892,7 +2892,7 @@ theorem two_nsmul_toReal_eq_two_mul
   proof: mod_cast nsmul_toReal_eq_mul two_ne_zero
 
 中文:
-定理 two_nsmul_toReal_eq_two_mul
+定理 two_nsmul_to实数_eq_two_mul
   条件: {θ : Angle}
   证明: mod_cast nsmul_toReal_eq_mul two_ne_zero
 
@@ -2912,7 +2912,7 @@ theorem two_zsmul_toReal_eq_two_mul
   rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul]
 
 中文:
-定理 two_zsmul_toReal_eq_two_mul
+定理 two_zsmul_to实数_eq_two_mul
   条件: {θ : Angle}
   证明: by
   rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul]
@@ -2935,7 +2935,7 @@ theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
   exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarit
 
 中文:
-定理 toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
+定理 to实数_coe_eq_self_sub_two_mul_int_mul_pi_iff
   条件: {θ : 实数} {k : 整数}
   证明: by
   rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
@@ -2960,7 +2960,7 @@ theorem toReal_coe_eq_self_sub_two_pi_iff
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ 1 <;> norm_num
 
 中文:
-定理 toReal_coe_eq_self_sub_two_pi_iff
+定理 to实数_coe_eq_self_sub_two_pi_iff
   条件: {θ : 实数}
   证明: by
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ 1 <;> norm_num
@@ -2981,7 +2981,7 @@ theorem toReal_coe_eq_self_add_two_pi_iff
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ (-1) using 2 <;> norm_num
 
 中文:
-定理 toReal_coe_eq_self_add_two_pi_iff
+定理 to实数_coe_eq_self_add_two_pi_iff
   条件: {θ : 实数}
   证明: by
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ (-1) using 2 <;> norm_num
@@ -3006,7 +3006,7 @@ theorem two_nsmul_toReal_eq_two_mul_sub_two_pi
       ⟨(div_lt_iff₀' (zero_lt_two' Real)).1 h, by linarith [pi_pos, toReal_le_pi θ]⟩⟩
 
 中文:
-定理 two_nsmul_toReal_eq_two_mul_sub_two_pi
+定理 two_nsmul_to实数_eq_two_mul_sub_two_pi
   条件: {θ : Angle}
   证明: by
   nth_rw 1 [← coe_toReal θ]
@@ -3035,7 +3035,7 @@ theorem two_zsmul_toReal_eq_two_mul_sub_two_pi
   rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_sub_two_pi]
 
 中文:
-定理 two_zsmul_toReal_eq_two_mul_sub_two_pi
+定理 two_zsmul_to实数_eq_two_mul_sub_two_pi
   条件: {θ : Angle}
   证明: by
   rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_sub_two_pi]
@@ -3060,7 +3060,7 @@ theorem two_nsmul_toReal_eq_two_mul_add_two_pi
       ⟨by linarith [pi_pos, neg_pi_lt_toReal θ], (le_div_iff₀' (zero_lt_two' Real)).1 h⟩⟩
 
 中文:
-定理 two_nsmul_toReal_eq_two_mul_add_two_pi
+定理 two_nsmul_to实数_eq_two_mul_add_two_pi
   条件: {θ : Angle}
   证明: by
   nth_rw 1 [← coe_toReal θ]
@@ -3091,7 +3091,7 @@ theorem two_zsmul_toReal_eq_two_mul_add_two_pi
 @[simp, grind =]
 
 中文:
-定理 two_zsmul_toReal_eq_two_mul_add_two_pi
+定理 two_zsmul_to实数_eq_two_mul_add_two_pi
   条件: {θ : Angle}
   证明: by
   rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_add_two_pi]
@@ -3118,7 +3118,7 @@ theorem sin_toReal
 @[simp, grind =]
 
 中文:
-定理 sin_toReal
+定理 sin_to实数
   条件: (θ : Angle)
   结论: 实数.sin θ.to实数 = sin θ
   证明: by
@@ -3143,7 +3143,7 @@ theorem cos_toReal
   conv_rhs => rw [← coe_toReal θ, cos_coe]
 
 中文:
-定理 cos_toReal
+定理 cos_to实数
   条件: (θ : Angle)
   结论: 实数.cos θ.to实数 = cos θ
   证明: by
@@ -3168,7 +3168,7 @@ theorem cos_nonneg_iff_abs_toReal_le_pi_div_two
   grind [cos_neg_of_pi_div_two_lt_of_lt, cos_nonneg_of_mem_Icc]
 
 中文:
-定理 cos_nonneg_iff_abs_toReal_le_pi_div_two
+定理 cos_nonneg_iff_abs_to实数_le_pi_div_two
   条件: {θ : Angle}
   结论: 0 <= cos θ ↔ |θ.to实数| <= π / 2
   证明: by
@@ -3200,7 +3200,7 @@ theorem cos_pos_iff_abs_toReal_lt_pi_div_two
   rw [@eq_comm Real 0]; rw [abs_toReal_eq_pi_div_two_iff]; rw [cos_eq_zero_iff]
 
 中文:
-定理 cos_pos_iff_abs_toReal_lt_pi_div_two
+定理 cos_pos_iff_abs_to实数_lt_pi_div_two
   条件: {θ : Angle}
   结论: 0 < cos θ ↔ |θ.to实数| < π / 2
   证明: by
@@ -3232,7 +3232,7 @@ lemma two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
   grind
 
 中文:
-引理 two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
+引理 two_nsmul_eq_iff_eq_of_abs_to实数_lt_pi_div_two
   结论: {θ ψ : Angle} (hθ : |θ.to实数| < π / 2)
   证明: by
   suffices θ != ψ + π by simp [this, two_nsmul_eq_iff]
@@ -3259,7 +3259,7 @@ lemma two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
   simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two hθ hψ]
 
 中文:
-引理 two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
+引理 two_zsmul_eq_iff_eq_of_abs_to实数_lt_pi_div_two
   结论: {θ ψ : Angle} (hθ : |θ.to实数| < π / 2)
   证明: by
   simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two hθ hψ]
@@ -3281,7 +3281,7 @@ theorem cos_neg_iff_pi_div_two_lt_abs_toReal
   contrapose!; exact cos_nonneg_iff_abs_toReal_le_pi_div_two
 
 中文:
-定理 cos_neg_iff_pi_div_two_lt_abs_toReal
+定理 cos_neg_iff_pi_div_two_lt_abs_to实数
   条件: {θ : Angle}
   结论: cos θ < 0 ↔ π / 2 < |θ.to实数|
   证明: by
@@ -3456,7 +3456,7 @@ theorem tan_periodic
 
 中文:
 定理 tan_periodic
-  结论: Function.Periodic tan (π : Angle)
+  结论: 函数.周期 tan (π : Angle)
   证明: by
   intro θ
   induction θ using Real.Angle.induction_on
@@ -3535,7 +3535,7 @@ theorem tan_toReal
   conv_rhs => rw [← coe_toReal θ, tan_coe]
 
 中文:
-定理 tan_toReal
+定理 tan_to实数
   条件: (θ : Angle)
   结论: 实数.tan θ.to实数 = tan θ
   证明: by
@@ -3766,7 +3766,7 @@ theorem sign_antiperiodic
 
 中文:
 定理 sign_antiperiodic
-  结论: Function.Antiperiodic sign (π : Angle)
+  结论: 函数.Antiperiodic sign (π : Angle)
   证明: fun θ => by
   rw [sign]; rw [sign]; rw [sin_add_pi]; rw [Left.sign_neg]
 
@@ -3940,7 +3940,7 @@ theorem toReal_neg_iff_sign_neg
   grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
 
 中文:
-定理 toReal_neg_iff_sign_neg
+定理 to实数_neg_iff_sign_neg
   条件: {θ : Angle}
   结论: θ.to实数 < 0 ↔ θ.sign = -1
   证明: by
@@ -3967,7 +3967,7 @@ theorem toReal_nonneg_iff_sign_nonneg
 @[simp]
 
 中文:
-定理 toReal_nonneg_iff_sign_nonneg
+定理 to实数_nonneg_iff_sign_nonneg
   条件: {θ : Angle}
   结论: 0 <= θ.to实数 ↔ 0 <= θ.sign
   证明: by
@@ -3999,7 +3999,7 @@ theorem sign_toReal
         (sin_pos_of_pos_of_lt_pi ht ((toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)))]
 
 中文:
-定理 sign_toReal
+定理 sign_to实数
   条件: {θ : Angle} (h : θ != π)
   结论: SignType.sign θ.to实数 = θ.sign
   证明: by
@@ -4033,7 +4033,7 @@ lemma toReal_mem_Ioo_iff_sign_pos
     exact fun _ => (toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)
 
 中文:
-引理 toReal_mem_Ioo_iff_sign_pos
+引理 to实数_mem_Ioo_iff_sign_pos
   条件: {θ : Angle}
   证明: by
   rcases eq_or_ne θ π with rfl | h
@@ -4061,7 +4061,7 @@ theorem coe_abs_toReal_of_sign_nonneg
   rw [abs_eq_self.2 (toReal_nonneg_iff_sign_nonneg.2 h)]; rw [coe_toReal]
 
 中文:
-定理 coe_abs_toReal_of_sign_nonneg
+定理 coe_abs_to实数_of_sign_nonneg
   条件: {θ : Angle} (h : 0 <= θ.sign)
   结论: ↑|θ.to实数| = θ
   证明: by
@@ -4087,7 +4087,7 @@ theorem neg_coe_abs_toReal_of_sign_nonpos
     rcases h with (rfl | rfl) <;> simp [abs_of_pos Real.pi_pos]
 
 中文:
-定理 neg_coe_abs_toReal_of_sign_nonpos
+定理 neg_coe_abs_to实数_of_sign_nonpos
   条件: {θ : Angle} (h : θ.sign <= 0)
   结论: -↑|θ.to实数| = θ
   证明: by
@@ -4116,7 +4116,7 @@ theorem eq_iff_sign_eq_and_abs_toReal_eq
   grind [toReal_neg_iff_sign_neg]
 
 中文:
-定理 eq_iff_sign_eq_and_abs_toReal_eq
+定理 eq_iff_sign_eq_and_abs_to实数_eq
   条件: {θ ψ : Angle}
   证明: by
   grind [toReal_neg_iff_sign_neg]
@@ -4138,7 +4138,7 @@ theorem eq_iff_abs_toReal_eq_of_sign_eq
 @[simp]
 
 中文:
-定理 eq_iff_abs_toReal_eq_of_sign_eq
+定理 eq_iff_abs_to实数_eq_of_sign_eq
   条件: {θ ψ : Angle} (h : θ.sign = ψ.sign)
   证明: by simpa [h] using @eq_iff_sign_eq_and_abs_toReal_eq θ ψ
 
@@ -4483,7 +4483,7 @@ lemma abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
   rcases angle_eq_iff_t
 
 中文:
-引理 abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
+引理 abs_to实数_add_abs_to实数_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
   结论: {θ ψ : Angle}
   证明: by
   rcases two_nsmul_eq_zero_iff.mp h with h | h
@@ -4521,7 +4521,7 @@ lemma abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
   exact abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq h hs h0
 
 中文:
-引理 abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
+引理 abs_to实数_add_abs_to实数_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
   结论: {θ ψ : Angle}
   证明: by
   rw [two_zsmul]; rw [← two_nsmul] at h
@@ -4547,7 +4547,7 @@ lemma toReal_add_of_sign_pos_sign_neg
   grind [toReal_mem_Ioc, toReal_neg_iff_sign_neg, toReal_mem_Ioo_iff_sign_pos]
 
 中文:
-引理 toReal_add_of_sign_pos_sign_neg
+引理 to实数_add_of_sign_pos_sign_neg
   结论: {θ ψ : Angle}
   证明: by
   suffices ((θ.toReal + ψ.toReal : Real) : Angle).toReal = θ.toReal + ψ.toReal by simpa using this
@@ -4573,7 +4573,7 @@ lemma toReal_add_of_sign_eq_neg_sign
   all_goals grind [neg_neg, add_comm, toReal_add_of_sign_pos_sign_neg]
 
 中文:
-引理 toReal_add_of_sign_eq_neg_sign
+引理 to实数_add_of_sign_eq_neg_sign
   结论: {θ ψ : Angle} (hψ : θ != π ∨ ψ != π)
   证明: by
   obtain (h | h | h) := ψ.sign.trichotomy
@@ -4600,7 +4600,7 @@ lemma toReal_add_eq_toReal_add_toReal
     have := toReal_add_of_sign_eq_neg_sign (.inr <| by sim
 
 中文:
-引理 toReal_add_eq_toReal_add_toReal
+引理 to实数_add_eq_to实数_add_to实数
   结论: {θ ψ : Angle} (hθ : θ != π) (hψ : ψ != π)
   证明: by
   obtain (hs | hs) := hs
@@ -4635,7 +4635,7 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux
     grind [sign_eq_zero_iff, t
 
 中文:
-引理 abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux
+引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数_aux
   结论: {θ ψ : Angle}
   证明: by
   rw [← toReal_mem_Ioo_iff_sign_pos] at hθs hψs
@@ -4676,7 +4676,7 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal
     convert! abs_toReal_add_eq_two_pi_sub_abs_toR
 
 中文:
-引理 abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal
+引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数
   结论: {θ ψ : Angle} (hs : θ.sign = ψ.sign)
   证明: by
   obtain h | h | h := θ.sign.trichotomy
@@ -4731,7 +4731,7 @@ theorem _root_.ContinuousOn.angle_sign_comp
 
 中文:
 定理 _root_.ContinuousOn.angle_sign_comp
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> Angle}
+  结论: {α : 类型} [拓扑空间 α] {f : α -> Angle}
   证明: by
   refine (continuousOn_of_forall_continuousAt fun θ hθ => ?_).comp hf (Set.mapsTo_image f s)
   obtain ⟨z, hz, rfl⟩ := hθ
@@ -4757,7 +4757,7 @@ theorem sign_eq_of_continuousOn
 
 中文:
 定理 sign_eq_of_continuousOn
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> Angle} {s : Set α}
+  结论: {α : 类型} [拓扑空间 α] {f : α -> Angle} {s : 集合 α}
   证明: (hc.image _ (hf.angle_sign_comp hs)).isPreconnected.subsingleton (Set.mem_image_of_mem _ hy)
     (Set.mem_image_of_mem _ hx)
 

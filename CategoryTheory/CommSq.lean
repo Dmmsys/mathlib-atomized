@@ -56,7 +56,7 @@ structure CommSq
     - w : f ≫ h = g ≫ i  [default: by cat_disch]
 
 中文:
-结构 CommSq
+结构 交换Sq
   参数: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
   公理与运算 (1 个):
     - w : f ≫ h = g ≫ i  [默认: by cat_disch]
@@ -85,7 +85,7 @@ lemma w'
 
 中文:
 引理 w'
-  条件: (self : CommSq f g h i)
+  条件: (self : 交换Sq f g h i)
   结论: g ≫ i = f ≫ h
   证明: self.w.symm
 
@@ -108,7 +108,7 @@ lemma mk'
 中文:
 引理 mk'
   条件: (w : g ≫ i = f ≫ h := by cat_disch)
-  结论: CommSq f g h i
+  结论: 交换Sq f g h i
   证明: ⟨w.symm⟩
 
 Depends on / 依赖: CommSq, cat_disch, w.symm
@@ -130,8 +130,8 @@ theorem flip
 
 中文:
 定理 flip
-  条件: (p : CommSq f g h i)
-  结论: CommSq g f i h
+  条件: (p : 交换Sq f g h i)
+  结论: 交换Sq g f i h
   证明: ⟨p.w.symm⟩
 
 Depends on / 依赖: p.w.symm
@@ -150,8 +150,8 @@ theorem of_arrow
 
 中文:
 定理 of_arrow
-  条件: {f g : Arrow C} (h : f ⟶ g)
-  结论: CommSq f.hom h.left h.right g.hom
+  条件: {f g : 箭头 C} (h : f ⟶ g)
+  结论: 交换Sq f.hom h.left h.right g.hom
   证明: ⟨h.w.symm⟩
 
 Depends on / 依赖: h.w.symm
@@ -172,8 +172,8 @@ theorem op
 
 中文:
 定理 op
-  条件: (p : CommSq f g h i)
-  结论: CommSq i.op h.op g.op f.op
+  条件: (p : 交换Sq f g h i)
+  结论: 交换Sq i.op h.op g.op f.op
   证明: ⟨by simp only [← op_comp, p.w]⟩
 
 Depends on / 依赖: op_comp
@@ -195,7 +195,7 @@ theorem unop
 
 中文:
 定理 unop
-  条件: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i)
+  条件: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : 交换Sq f g h i)
   证明: ⟨by simp only [← unop_comp, p.w]⟩
 
 @[to_dual none]
@@ -219,7 +219,7 @@ theorem vert_inv
 
 中文:
 定理 vert_inv
-  条件: {g : W ≅ Y} {h : X ≅ Z} (p : CommSq f g.hom h.hom i)
+  条件: {g : W ≅ Y} {h : X ≅ Z} (p : 交换Sq f g.hom h.hom i)
   证明: ⟨by rw [Iso.comp_inv_eq, Category.assoc, Iso.eq_inv_comp, p.w]⟩
 
 @[to_dual none]
@@ -241,7 +241,7 @@ theorem horiz_inv
 
 中文:
 定理 horiz_inv
-  条件: {f : W ≅ X} {i : Y ≅ Z} (p : CommSq f.hom g h i.hom)
+  条件: {f : W ≅ X} {i : Y ≅ Z} (p : 交换Sq f.hom g h i.hom)
   证明: flip (vert_inv (flip p))
 
 Depends on / 依赖: vert_inv
@@ -338,7 +338,7 @@ theorem eq_of_mono
 
 中文:
 定理 eq_of_mono
-  条件: {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [Mono i] (sq : CommSq f g i i)
+  条件: {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [单态射 i] (sq : 交换Sq f g i i)
   结论: f = g
   证明: (cancel_mono i).1 sq.w
 
@@ -361,7 +361,7 @@ theorem eq_of_epi
 
 中文:
 定理 eq_of_epi
-  条件: {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [Epi f] (sq : CommSq f f h i)
+  条件: {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [满态射 f] (sq : 交换Sq f f h i)
   结论: h = i
   证明: (cancel_epi f).1 sq.w
 
@@ -391,8 +391,8 @@ theorem map_commSq
 
 中文:
 定理 map_commSq
-  条件: (s : CommSq f g h i)
-  结论: CommSq (F.map f) (F.map g) (F.map h) (F.map i)
+  条件: (s : 交换Sq f g h i)
+  结论: 交换Sq (F.map f) (F.map g) (F.map h) (F.map i)
   证明: ⟨by simpa using congr_arg (fun k : W ⟶ Z => F.map k) s.w⟩
 
 Depends on / 依赖: F.map, congr_arg
@@ -437,7 +437,7 @@ structure LiftStruct
 
 中文:
 结构 LiftStruct
-  参数: (sq : CommSq f i p g)
+  参数: (sq : 交换Sq f i p g)
   公理与运算 (3 个):
     - l : B ⟶ X
     - fac_left : i ≫ l = f  [默认: by cat_disch]
@@ -474,7 +474,7 @@ definition op
 
 中文:
 定义 op
-  签名: {sq : CommSq f i p g} (l : LiftStruct sq)
+  签名: {sq : 交换Sq f i p g} (l : LiftStruct sq)
   定义体: l.l.op
   fac_left := by rw [← op_comp, l.fac_right]
   fac_right := by rw [← op_comp, l.fac_left]
@@ -501,7 +501,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq : CommSq f i p g}
+  签名: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq : 交换Sq f i p g}
   定义体: l.l.unop
   fac_left := by rw [← unop_comp, l.fac_right]
   fac_right := by rw [← unop_comp, l.fac_left]
@@ -530,7 +530,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: (sq : CommSq f i p g)
+  签名: (sq : 交换Sq f i p g)
   定义体: op
   invFun := unop
   left_inv := by cat_disch
@@ -587,7 +587,7 @@ instance subsingleton_liftStruct_of_epi
 
 中文:
 实例 subsingleton_liftStruct_of_epi
-  签名: (sq : CommSq f i p g) [Epi i]
+  签名: (sq : 交换Sq f i p g) [满态射 i]
   定义体: ⟨fun l₁ l₂ => by
     ext
     rw [← cancel_epi i]
@@ -616,10 +616,10 @@ class HasLift
     - exists_lift : Nonempty sq.LiftStruct
 
 中文:
-类 HasLift
+类 有Lift
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_lift : Nonempty sq.LiftStruct
+    - exists_lift : 非空 sq.LiftStruct
 -/
 class HasLift : Prop where
   /-- Square has a `LiftStruct`. -/
@@ -643,7 +643,7 @@ theorem mk'
 中文:
 定理 mk'
   条件: (l : sq.LiftStruct)
-  结论: HasLift sq
+  结论: 有Lift sq
   证明: ⟨Nonempty.intro l⟩
 
 @[to_dual self]
@@ -668,7 +668,7 @@ theorem iff
 
 中文:
 定理 iff
-  结论: HasLift sq ↔ Nonempty sq.LiftStruct
+  结论: 有Lift sq ↔ 非空 sq.LiftStruct
   证明: by
   constructor
   exacts [fun h => h.exists_lift, fun h => mk h]
@@ -696,7 +696,7 @@ theorem iff_op
 
 中文:
 定理 iff_op
-  结论: HasLift sq ↔ HasLift sq.op
+  结论: 有Lift sq ↔ 有Lift sq.op
   证明: by
   rw [iff]; rw [iff]
   exact Nonempty.congr (LiftStruct.opEquiv sq).toFun (LiftStruct.opEquiv sq).invFun
@@ -751,7 +751,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [hsq : HasLift sq]
+  签名: [hsq : 有Lift sq]
   定义体: hsq.exists_lift.some.l
 
 @[to_dual (attr := reassoc (attr := simp)) fac_right]
@@ -773,7 +773,7 @@ theorem fac_left
 
 中文:
 定理 fac_left
-  条件: [hsq : HasLift sq]
+  条件: [hsq : 有Lift sq]
   结论: i ≫ sq.lift = f
   证明: hsq.exists_lift.some.fac_left
 

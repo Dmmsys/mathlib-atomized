@@ -43,7 +43,7 @@ theorem measurable_exp
 
 中文:
 定理 measurable_exp
-  结论: Measurable exp
+  结论: 可测 exp
   证明: continuous_exp.measurable
 
 Depends on / 依赖: continuous_exp, continuous_exp.measurable, measurable
@@ -62,7 +62,7 @@ Continuous.measurable continuousOn_iff_continuous_domRestrict.1 continuousOn_log
 
 中文:
 定理 measurable_log
-  结论: Measurable log
+  结论: 可测 log
   证明: measurable_of_measurable_on_compl_singleton 0
 Continuous.measurable continuousOn_iff_continuous_domRestrict.1 continuousOn_log
 
@@ -85,7 +85,7 @@ lemma measurable_of_measurable_exp
 
 中文:
 引理 measurable_of_measurable_exp
-  条件: (hf : Measurable (fun x => exp (f x)))
+  条件: (hf : 可测 (fun x => exp (f x)))
   证明: by
   have : f = fun x => log (exp (f x)) := by ext; rw [log_exp]
   rw [this]
@@ -112,7 +112,7 @@ lemma aemeasurable_of_aemeasurable_exp
 
 中文:
 引理 aemeasurable_of_aemeasurable_exp
-  条件: (hf : AEMeasurable (fun x => exp (f x)) μ)
+  条件: (hf : 几乎处处可测 (fun x => exp (f x)) μ)
   证明: by
   have : f = fun x => log (exp (f x)) := by ext; rw [log_exp]
   rw [this]
@@ -161,7 +161,7 @@ theorem measurable_sin
 
 中文:
 定理 measurable_sin
-  结论: Measurable sin
+  结论: 可测 sin
   证明: continuous_sin.measurable
 
 Depends on / 依赖: continuous_sin, continuous_sin.measurable, measurable
@@ -179,7 +179,7 @@ theorem measurable_cos
 
 中文:
 定理 measurable_cos
-  结论: Measurable cos
+  结论: 可测 cos
   证明: continuous_cos.measurable
 
 Depends on / 依赖: continuous_cos, continuous_cos.measurable, measurable
@@ -197,7 +197,7 @@ theorem measurable_sinh
 
 中文:
 定理 measurable_sinh
-  结论: Measurable sinh
+  结论: 可测 sinh
   证明: continuous_sinh.measurable
 
 Depends on / 依赖: continuous_sinh, continuous_sinh.measurable, measurable
@@ -217,7 +217,7 @@ theorem measurable_cosh
 
 中文:
 定理 measurable_cosh
-  结论: Measurable cosh
+  结论: 可测 cosh
   证明: continuous_cosh.measurable
 
 @[fun_prop]
@@ -240,7 +240,7 @@ theorem measurable_arcsin
 
 中文:
 定理 measurable_arcsin
-  结论: Measurable arcsin
+  结论: 可测 arcsin
   证明: continuous_arcsin.measurable
 
 @[fun_prop]
@@ -261,7 +261,7 @@ theorem measurable_arccos
 
 中文:
 定理 measurable_arccos
-  结论: Measurable arccos
+  结论: 可测 arccos
   证明: continuous_arccos.measurable
 
 Depends on / 依赖: continuous_arccos, continuous_arccos.measurable, measurable
@@ -286,7 +286,7 @@ theorem measurable_re
 
 中文:
 定理 measurable_re
-  结论: Measurable re
+  结论: 可测 re
   证明: continuous_re.measurable
 
 @[fun_prop]
@@ -307,7 +307,7 @@ theorem measurable_im
 
 中文:
 定理 measurable_im
-  结论: Measurable im
+  结论: 可测 im
   证明: continuous_im.measurable
 
 Depends on / 依赖: continuous_im, continuous_im.measurable, measurable
@@ -324,8 +324,8 @@ theorem measurable_ofReal
   proof: continuous_ofReal.measurable
 
 中文:
-定理 measurable_ofReal
-  结论: Measurable ((↑) : 实数 -> Complex)
+定理 measurable_of实数
+  结论: 可测 ((↑) : 实数 -> 复形)
   证明: continuous_ofReal.measurable
 
 Depends on / 依赖: continuous_ofReal, continuous_ofReal.measurable, measurable
@@ -343,7 +343,7 @@ theorem measurable_exp
 
 中文:
 定理 measurable_exp
-  结论: Measurable exp
+  结论: 可测 exp
   证明: continuous_exp.measurable
 
 Depends on / 依赖: continuous_exp, continuous_exp.measurable, measurable
@@ -361,7 +361,7 @@ theorem measurable_sin
 
 中文:
 定理 measurable_sin
-  结论: Measurable sin
+  结论: 可测 sin
   证明: continuous_sin.measurable
 
 Depends on / 依赖: continuous_sin, continuous_sin.measurable, measurable
@@ -379,7 +379,7 @@ theorem measurable_cos
 
 中文:
 定理 measurable_cos
-  结论: Measurable cos
+  结论: 可测 cos
   证明: continuous_cos.measurable
 
 Depends on / 依赖: continuous_cos, continuous_cos.measurable, measurable
@@ -397,7 +397,7 @@ theorem measurable_sinh
 
 中文:
 定理 measurable_sinh
-  结论: Measurable sinh
+  结论: 可测 sinh
   证明: continuous_sinh.measurable
 
 Depends on / 依赖: continuous_sinh, continuous_sinh.measurable, measurable
@@ -415,7 +415,7 @@ theorem measurable_cosh
 
 中文:
 定理 measurable_cosh
-  结论: Measurable cosh
+  结论: 可测 cosh
   证明: continuous_cosh.measurable
 
 Depends on / 依赖: continuous_cosh, continuous_cosh.measurable, measurable
@@ -434,7 +434,7 @@ theorem measurable_arg
 
 中文:
 定理 measurable_arg
-  结论: Measurable arg
+  结论: 可测 arg
   证明: Measurable.ite (by measurability) (by fun_prop)
     Measurable.ite (by measurability) (by fun_prop) (by fun_prop)
 
@@ -455,7 +455,7 @@ theorem measurable_log
 
 中文:
 定理 measurable_log
-  结论: Measurable log
+  结论: 可测 log
   证明: (measurable_ofReal.comp <| Real.measurable_log.comp measurable_norm).add
     (measurable_ofReal.comp measurable_arg).mul_const I
 
@@ -486,8 +486,8 @@ theorem Measurable.exp
 @[fun_prop]
 
 中文:
-定理 Measurable.exp
-  结论: Measurable fun x => 实数.exp (f x)
+定理 可测.exp
+  结论: 可测 fun x => 实数.exp (f x)
   证明: Real.measurable_exp.comp hf
 
 @[fun_prop]
@@ -507,8 +507,8 @@ theorem Measurable.log
 @[fun_prop]
 
 中文:
-定理 Measurable.log
-  结论: Measurable fun x => log (f x)
+定理 可测.log
+  结论: 可测 fun x => log (f x)
   证明: measurable_log.comp hf
 
 @[fun_prop]
@@ -528,8 +528,8 @@ theorem Measurable.cos
 @[fun_prop]
 
 中文:
-定理 Measurable.cos
-  结论: Measurable fun x => cos (f x)
+定理 可测.cos
+  结论: 可测 fun x => cos (f x)
   证明: measurable_cos.comp hf
 
 @[fun_prop]
@@ -548,8 +548,8 @@ theorem Measurable.sin
 @[fun_prop]
 
 中文:
-定理 Measurable.sin
-  结论: Measurable fun x => sin (f x)
+定理 可测.sin
+  结论: 可测 fun x => sin (f x)
   证明: measurable_sin.comp hf
 
 @[fun_prop]
@@ -568,8 +568,8 @@ theorem Measurable.cosh
 @[fun_prop]
 
 中文:
-定理 Measurable.cosh
-  结论: Measurable fun x => cosh (f x)
+定理 可测.cosh
+  结论: 可测 fun x => cosh (f x)
   证明: measurable_cosh.comp hf
 
 @[fun_prop]
@@ -588,8 +588,8 @@ theorem Measurable.sinh
 @[fun_prop]
 
 中文:
-定理 Measurable.sinh
-  结论: Measurable fun x => sinh (f x)
+定理 可测.sinh
+  结论: 可测 fun x => sinh (f x)
   证明: measurable_sinh.comp hf
 
 @[fun_prop]
@@ -606,8 +606,8 @@ theorem Measurable.sqrt
   proof: continuous_sqrt.measurable.comp hf
 
 中文:
-定理 Measurable.sqrt
-  结论: Measurable fun x => √(f x)
+定理 可测.sqrt
+  结论: 可测 fun x => √(f x)
   证明: continuous_sqrt.measurable.comp hf
 -/
 protected theorem Measurable.sqrt : Measurable fun x => √(f x) := continuous_sqrt.measurable.comp hf
@@ -633,8 +633,8 @@ lemma AEMeasurable.exp
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.exp
-  结论: AEMeasurable (fun x => exp (f x)) μ
+引理 几乎处处可测.exp
+  结论: 几乎处处可测 (fun x => exp (f x)) μ
   证明: measurable_exp.comp_aemeasurable hf
 
 @[fun_prop]
@@ -654,8 +654,8 @@ lemma AEMeasurable.log
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.log
-  结论: AEMeasurable (fun x => log (f x)) μ
+引理 几乎处处可测.log
+  结论: 几乎处处可测 (fun x => log (f x)) μ
   证明: measurable_log.comp_aemeasurable hf
 
 @[fun_prop]
@@ -675,8 +675,8 @@ lemma AEMeasurable.cos
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.cos
-  结论: AEMeasurable (fun x => cos (f x)) μ
+引理 几乎处处可测.cos
+  结论: 几乎处处可测 (fun x => cos (f x)) μ
   证明: measurable_cos.comp_aemeasurable hf
 
 @[fun_prop]
@@ -696,8 +696,8 @@ lemma AEMeasurable.sin
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.sin
-  结论: AEMeasurable (fun x => sin (f x)) μ
+引理 几乎处处可测.sin
+  结论: 几乎处处可测 (fun x => sin (f x)) μ
   证明: measurable_sin.comp_aemeasurable hf
 
 @[fun_prop]
@@ -717,8 +717,8 @@ lemma AEMeasurable.cosh
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.cosh
-  结论: AEMeasurable (fun x => cosh (f x)) μ
+引理 几乎处处可测.cosh
+  结论: 几乎处处可测 (fun x => cosh (f x)) μ
   证明: measurable_cosh.comp_aemeasurable hf
 
 @[fun_prop]
@@ -738,8 +738,8 @@ lemma AEMeasurable.sinh
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.sinh
-  结论: AEMeasurable (fun x => sinh (f x)) μ
+引理 几乎处处可测.sinh
+  结论: 几乎处处可测 (fun x => sinh (f x)) μ
   证明: measurable_sinh.comp_aemeasurable hf
 
 @[fun_prop]
@@ -757,8 +757,8 @@ lemma AEMeasurable.sqrt
   proof: continuous_sqrt.measurable.comp_aemeasurable hf
 
 中文:
-引理 AEMeasurable.sqrt
-  结论: AEMeasurable (fun x => √(f x)) μ
+引理 几乎处处可测.sqrt
+  结论: 几乎处处可测 (fun x => √(f x)) μ
   证明: continuous_sqrt.measurable.comp_aemeasurable hf
 -/
 protected lemma AEMeasurable.sqrt : AEMeasurable (fun x => √(f x)) μ :=
@@ -785,8 +785,8 @@ theorem Measurable.cexp
 @[fun_prop]
 
 中文:
-定理 Measurable.cexp
-  结论: Measurable fun x => Complex.exp (f x)
+定理 可测.cexp
+  结论: 可测 fun x => 复形.exp (f x)
   证明: Complex.measurable_exp.comp hf
 
 @[fun_prop]
@@ -806,8 +806,8 @@ theorem Measurable.ccos
 @[fun_prop]
 
 中文:
-定理 Measurable.ccos
-  结论: Measurable fun x => Complex.cos (f x)
+定理 可测.ccos
+  结论: 可测 fun x => 复形.cos (f x)
   证明: Complex.measurable_cos.comp hf
 
 @[fun_prop]
@@ -827,8 +827,8 @@ theorem Measurable.csin
 @[fun_prop]
 
 中文:
-定理 Measurable.csin
-  结论: Measurable fun x => Complex.sin (f x)
+定理 可测.csin
+  结论: 可测 fun x => 复形.sin (f x)
   证明: Complex.measurable_sin.comp hf
 
 @[fun_prop]
@@ -848,8 +848,8 @@ theorem Measurable.ccosh
 @[fun_prop]
 
 中文:
-定理 Measurable.ccosh
-  结论: Measurable fun x => Complex.cosh (f x)
+定理 可测.ccosh
+  结论: 可测 fun x => 复形.cosh (f x)
   证明: Complex.measurable_cosh.comp hf
 
 @[fun_prop]
@@ -869,8 +869,8 @@ theorem Measurable.csinh
 @[fun_prop]
 
 中文:
-定理 Measurable.csinh
-  结论: Measurable fun x => Complex.sinh (f x)
+定理 可测.csinh
+  结论: 可测 fun x => 复形.sinh (f x)
   证明: Complex.measurable_sinh.comp hf
 
 @[fun_prop]
@@ -890,8 +890,8 @@ theorem Measurable.carg
 @[fun_prop]
 
 中文:
-定理 Measurable.carg
-  结论: Measurable fun x => arg (f x)
+定理 可测.carg
+  结论: 可测 fun x => arg (f x)
   证明: measurable_arg.comp hf
 
 @[fun_prop]
@@ -909,8 +909,8 @@ theorem Measurable.clog
   proof: measurable_log.comp hf
 
 中文:
-定理 Measurable.clog
-  结论: Measurable fun x => Complex.log (f x)
+定理 可测.clog
+  结论: 可测 fun x => 复形.log (f x)
   证明: measurable_log.comp hf
 -/
 protected theorem Measurable.clog : Measurable fun x => Complex.log (f x) :=
@@ -937,8 +937,8 @@ lemma AEMeasurable.cexp
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.cexp
-  结论: AEMeasurable (fun x => exp (f x)) μ
+引理 几乎处处可测.cexp
+  结论: 几乎处处可测 (fun x => exp (f x)) μ
   证明: measurable_exp.comp_aemeasurable hf
 
 @[fun_prop]
@@ -958,8 +958,8 @@ lemma AEMeasurable.ccos
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.ccos
-  结论: AEMeasurable (fun x => cos (f x)) μ
+引理 几乎处处可测.ccos
+  结论: 几乎处处可测 (fun x => cos (f x)) μ
   证明: measurable_cos.comp_aemeasurable hf
 
 @[fun_prop]
@@ -979,8 +979,8 @@ lemma AEMeasurable.csin
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.csin
-  结论: AEMeasurable (fun x => sin (f x)) μ
+引理 几乎处处可测.csin
+  结论: 几乎处处可测 (fun x => sin (f x)) μ
   证明: measurable_sin.comp_aemeasurable hf
 
 @[fun_prop]
@@ -1000,8 +1000,8 @@ lemma AEMeasurable.ccosh
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.ccosh
-  结论: AEMeasurable (fun x => cosh (f x)) μ
+引理 几乎处处可测.ccosh
+  结论: 几乎处处可测 (fun x => cosh (f x)) μ
   证明: measurable_cosh.comp_aemeasurable hf
 
 @[fun_prop]
@@ -1021,8 +1021,8 @@ lemma AEMeasurable.csinh
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.csinh
-  结论: AEMeasurable (fun x => sinh (f x)) μ
+引理 几乎处处可测.csinh
+  结论: 几乎处处可测 (fun x => sinh (f x)) μ
   证明: measurable_sinh.comp_aemeasurable hf
 
 @[fun_prop]
@@ -1042,8 +1042,8 @@ lemma AEMeasurable.carg
 @[fun_prop]
 
 中文:
-引理 AEMeasurable.carg
-  结论: AEMeasurable (fun x => arg (f x)) μ
+引理 几乎处处可测.carg
+  结论: 几乎处处可测 (fun x => arg (f x)) μ
   证明: measurable_arg.comp_aemeasurable hf
 
 @[fun_prop]
@@ -1061,8 +1061,8 @@ lemma AEMeasurable.clog
   proof: measurable_log.comp_aemeasurable hf
 
 中文:
-引理 AEMeasurable.clog
-  结论: AEMeasurable (fun x => log (f x)) μ
+引理 几乎处处可测.clog
+  结论: 几乎处处可测 (fun x => log (f x)) μ
   证明: measurable_log.comp_aemeasurable hf
 -/
 protected lemma AEMeasurable.clog : AEMeasurable (fun x => log (f x)) μ :=
@@ -1082,8 +1082,8 @@ theorem Measurable.complex_ofReal
 @[fun_prop]
 
 中文:
-定理 Measurable.complex_ofReal
-  结论: {α : 类型} {m : MeasurableSpace α} {f : α -> 实数}
+定理 可测.complex_of实数
+  结论: {α : 类型} {m : 可测空间 α} {f : α -> 实数}
   证明: by fun_prop
 
 @[fun_prop]
@@ -1103,8 +1103,8 @@ theorem AEMeasurable.complex_ofReal
   fun_prop
 
 中文:
-定理 AEMeasurable.complex_ofReal
-  结论: {α : 类型} {m : MeasurableSpace α} {μ : Measure α}
+定理 几乎处处可测.complex_of实数
+  结论: {α : 类型} {m : 可测空间 α} {μ : 测度 α}
   证明: by
   fun_prop
 -/
@@ -1125,8 +1125,8 @@ instance Complex.hasMeasurablePow
     (Measurable.ite (by measurability) measurable_one measurable_zero) (by fun_prop)⟩
 
 中文:
-实例 Complex.hasMeasurablePow
-  签名: : MeasurablePow Complex Complex
+实例 复形.hasMeasurablePow
+  签名: : MeasurablePow 复形 复形
   定义体: ⟨Measurable.ite (by measurability)
     (Measurable.ite (by measurability) measurable_one measurable_zero) (by fun_prop)⟩
 
@@ -1145,7 +1145,7 @@ instance Real.hasMeasurablePow
   body: ⟨Complex.measurable_re.comp by fun_prop⟩
 
 中文:
-实例 Real.hasMeasurablePow
+实例 实数.hasMeasurablePow
   签名: : MeasurablePow 实数 实数
   定义体: ⟨Complex.measurable_re.comp by fun_prop⟩
 
@@ -1162,7 +1162,7 @@ instance NNReal.hasMeasurablePow
   body: ⟨Measurable.subtype_mk (by fun_prop)⟩
 
 中文:
-实例 NNReal.hasMeasurablePow
+实例 非负实数.hasMeasurablePow
   签名: : MeasurablePow 实数>=0 实数
   定义体: ⟨Measurable.subtype_mk (by fun_prop)⟩
 
@@ -1185,7 +1185,7 @@ instance ENNReal.hasMeasurablePow
     exact Measurable.ite (
 
 中文:
-实例 ENNReal.hasMeasurablePow
+实例 广义非负实数.hasMeasurablePow
   签名: : MeasurablePow 实数>=0∞ 实数
   定义体: by
   refine ⟨ENNReal.measurable_of_measurable_nnreal_prod ?_ ?_⟩

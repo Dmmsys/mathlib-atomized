@@ -69,7 +69,7 @@ definition firstNonImport?
 
 中文:
 定义 firstNonImport?
-  签名: : Syntax -> Option Syntax
+  签名: : Syntax -> 选项类型 Syntax
 -/
 def firstNonImport? : Syntax -> Option Syntax
   | .node _ ``Lean.Parser.Module.module #[_header, .node _ `null args] => args[0]?
@@ -405,7 +405,7 @@ definition broadImportsCheck
 
 中文:
 定义 broadImportsCheck
-  签名: (imports : Array Syntax) (mainModule : Name)
+  签名: (imports : 数组 Syntax) (mainModule : Name)
   定义体: do
   for i in imports do
     match i.getId with
@@ -519,7 +519,7 @@ definition duplicateImportsCheck
 
 中文:
 定义 duplicateImportsCheck
-  签名: (imports : Array Syntax)
+  签名: (imports : 数组 Syntax)
   定义体: do
   let mut importsSoFar := #[]
   for imp in imports do

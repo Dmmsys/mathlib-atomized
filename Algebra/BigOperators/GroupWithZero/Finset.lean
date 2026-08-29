@@ -110,7 +110,7 @@ lemma support_prod_subset
 
 中文:
 引理 support_prod_subset
-  条件: (s : Finset ι) (f : ι -> κ -> M₀)
+  条件: (s : 有限集 ι) (f : ι -> κ -> M₀)
   证明: fun _ hx => Set.mem_iInter₂.2 fun _ hi H => hx prod_eq_zero hi H
 
 Depends on / 依赖: Set.mem_iInter, prod_eq_zero
@@ -129,8 +129,8 @@ lemma _root_.Set.indicator_pi_one_apply
   classical simp [Set.indicator, prod_boole]
 
 中文:
-引理 _root_.Set.indicator_pi_one_apply
-  条件: (s : Finset ι) (t : 对任意 i, Set (α i)) (f : 对任意 i, α i)
+引理 _root_.集合.indicator_pi_one_apply
+  条件: (s : 有限集 ι) (t : 对任意 i, 集合 (α i)) (f : 对任意 i, α i)
   证明: by
   classical simp [Set.indicator, prod_boole]
 -/
@@ -202,7 +202,7 @@ lemma support_prod
 
 中文:
 引理 support_prod
-  条件: (s : Finset ι) (f : ι -> κ -> M₀)
+  条件: (s : 有限集 ι) (f : ι -> κ -> M₀)
   证明: Set.ext fun x => by simp [support, prod_eq_zero_iff]
 
 Depends on / 依赖: Set.ext, prod_eq_zero_iff, support
@@ -266,8 +266,8 @@ lemma Units.mk0_prod
   induction s using Finset.cons_induction_on <;> simp [*]
 
 中文:
-引理 Units.mk0_prod
-  条件: [CommGroupWithZero G₀] (s : Finset ι) (f : ι -> G₀) (h)
+引理 单位群.mk0_prod
+  条件: [带零交换群 G₀] (s : 有限集 ι) (f : ι -> G₀) (h)
   证明: by
   induction s using Finset.cons_induction_on <;> simp [*]
 

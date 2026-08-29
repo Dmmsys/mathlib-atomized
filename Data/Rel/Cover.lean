@@ -42,7 +42,7 @@ definition IsCover
 
 中文:
 定义 IsCover
-  签名: (U : SetRel X X) (s N : Set X)
+  签名: (U : SetRel X X) (s N : 集合 X)
   定义体: forall ⦃x⦄, x in s -> exists y in N, x ~[U] y
 -/
 def IsCover (U : SetRel X X) (s N : Set X) : Prop := forall ⦃x⦄, x in s -> exists y in N, x ~[U] y
@@ -100,7 +100,7 @@ lemma IsCover.refl
 
 中文:
 引理 IsCover.refl
-  条件: (U : SetRel X X) [U.IsRefl] (s : Set X)
+  条件: (U : SetRel X X) [U.IsRefl] (s : 集合 X)
   结论: IsCover U s s
   证明: fun a ha => ⟨a, ha, U.rfl⟩
 -/
@@ -118,7 +118,7 @@ lemma IsCover.rfl
 
 中文:
 引理 IsCover.rfl
-  条件: {U : SetRel X X} [U.IsRefl] {s : Set X}
+  条件: {U : SetRel X X} [U.IsRefl] {s : 集合 X}
   结论: IsCover U s s
   证明: refl U s
 
@@ -137,7 +137,7 @@ lemma isCover_univ
 
 中文:
 引理 isCover_univ
-  结论: IsCover univ s N ↔ (s.Nonempty -> N.Nonempty)
+  结论: IsCover univ s N ↔ (s.非空 -> N.非空)
   证明: by
   simp [IsCover, Set.Nonempty]
 -/
@@ -234,7 +234,7 @@ simpa [U.rfl] using h _ hN.2 (y := insert x N) ⟨by simp [insert_subset_iff, hx
 
 中文:
 引理 IsCover.of_maximal_isSeparated
-  结论: [U.IsRefl] [U.IsSymm]
+  结论: [U.IsRefl] [U.是Symm]
   证明: by
   rintro x hx
   by_contra! h

@@ -58,7 +58,7 @@ theorem isOpen_imageOfDf
 
 中文:
 定理 isOpen_imageOfDf
-  结论: IsOpen (imageOfDf f)
+  结论: 是开集 (imageOfDf f)
   证明: by
   rw [imageOfDf]; rw [ofPred_exists fun i (x : PrimeSpectrum R) => coeff f i ∉ x.asIdeal]
   exact isOpen_iUnion fun i => isOpen_basicOpen
@@ -79,7 +79,7 @@ theorem comap_C_mem_imageOfDf
 
 中文:
 定理 comap_C_mem_imageOfDf
-  结论: {I : PrimeSpectrum R[X]}
+  结论: {I : 素谱 R[X]}
   证明: exists_C_coeff_notMem (mem_compl_zeroLocus_iff_notMem.mp H)
 
 Depends on / 依赖: exists_C_coeff_notMem, mem_compl_zeroLocus_iff_notMem, mem_compl_zeroLocus_iff_notMem.mp
@@ -146,7 +146,7 @@ theorem isOpenMap_comap_C
 
 中文:
 定理 isOpenMap_comap_C
-  结论: IsOpenMap (PrimeSpectrum.comap (C : R ->+* R[X]))
+  结论: 是开映射 (素谱.comap (C : R ->+* R[X]))
   证明: by
   rintro U ⟨s, z⟩
   rw [← compl_compl U]; rw [← z]; rw [← iUnion_of_singleton_coe s]; rw [zeroLocus_iUnion]; rw [compl_iInter]; rw [image_iUnion]

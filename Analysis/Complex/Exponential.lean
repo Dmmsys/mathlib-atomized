@@ -48,7 +48,7 @@ theorem isCauSeq_norm_exp
 
 中文:
 定理 isCauSeq_norm_exp
-  条件: (z : Complex)
+  条件: (z : 复形)
   证明: let ⟨n, hn⟩ := exists_nat_gt ‖z‖
   have hn0 : (0 : Real) < n := lt_of_le_of_lt (norm_nonneg _) hn
   IsCauSeq.series_ratio_test n (‖z‖ / n) (div_nonneg (norm_nonneg _) (le_of_lt hn0))
@@ -80,7 +80,7 @@ theorem isCauSeq_exp
 
 中文:
 定理 isCauSeq_exp
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: IsCauSeq (‖·‖) fun n => ∑ m in range n, z ^ m / m.factorial
   证明: (isCauSeq_norm_exp z).of_abv
 
@@ -102,7 +102,7 @@ definition exp'
 
 中文:
 定义 exp'
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: ⟨fun n => ∑ m in range n, z ^ m / m.factorial, isCauSeq_exp z⟩
 
 Depends on / 依赖: factorial, isCauSeq_exp, m.factorial
@@ -260,7 +260,7 @@ definition expMonoidHom
 
 中文:
 定义 expMonoidHom
-  签名: : MonoidHom (Multiplicative Complex) Complex
+  签名: : 幺半群态射 (Multiplicative 复形) 复形
   定义体: { toFun := fun z => exp z.toAdd,
     map_one' := by simp,
     map_mul' := by simp [exp_add] }
@@ -283,8 +283,8 @@ theorem exp_list_sum
 
 中文:
 定理 exp_list_sum
-  条件: (l : List Complex)
-  结论: exp l.sum = (l.map exp).prod
+  条件: (l : 列表 复形)
+  结论: exp l.求和 = (l.map exp).乘积
   证明: map_list_prod (M := Multiplicative Complex) expMonoidHom l
 
 Depends on / 依赖: Multiplicative, expMonoidHom, map_list_prod
@@ -303,8 +303,8 @@ theorem exp_multiset_sum
 
 中文:
 定理 exp_multiset_sum
-  条件: (s : Multiset Complex)
-  结论: exp s.sum = (s.map exp).prod
+  条件: (s : Multiset 复形)
+  结论: exp s.求和 = (s.map exp).乘积
   证明: @MonoidHom.map_multiset_prod (Multiplicative Complex) Complex _ _ expMonoidHom s
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_multiset_prod, Multiplicative, expMonoidHom, map_multiset_prod
@@ -322,7 +322,7 @@ theorem exp_sum
 
 中文:
 定理 exp_sum
-  条件: {α : 类型} (s : Finset α) (f : α -> Complex)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 复形)
   证明: map_prod (M := Multiplicative Complex) expMonoidHom f s
 
 Depends on / 依赖: Multiplicative, expMonoidHom, map_prod
@@ -342,7 +342,7 @@ lemma exp_nsmul
 
 中文:
 引理 exp_nsmul
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: exp (n • x) = exp x ^ n
   证明: @MonoidHom.map_pow (Multiplicative Complex) Complex _ _ expMonoidHom _ _
 
@@ -364,7 +364,7 @@ lemma exp_nsmul'
 
 中文:
 引理 exp_nsmul'
-  条件: (x a p : Complex) (n : 自然数)
+  条件: (x a p : 复形) (n : 自然数)
   结论: exp (a * n * x / p) = exp (a * x / p) ^ n
   证明: by
   rw [← Complex.exp_nsmul]
@@ -386,7 +386,7 @@ theorem exp_nat_mul
 
 中文:
 定理 exp_nat_mul
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: 对任意 n : 自然数, exp (n * x) = exp x ^ n
 -/
 theorem exp_nat_mul (x : Complex) : forall n : Nat, exp (n * x) = exp x ^ n
@@ -468,8 +468,8 @@ theorem exp_int_mul
 
 中文:
 定理 exp_int_mul
-  条件: (z : Complex) (n : 整数)
-  结论: Complex.exp (n * z) = Complex.exp z ^ n
+  条件: (z : 复形) (n : 整数)
+  结论: 复形.exp (n * z) = 复形.exp z ^ n
   证明: by
   cases n
   · simp [exp_nat_mul]
@@ -540,9 +540,9 @@ theorem ofReal_exp_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_exp_ofReal_re
+定理 of实数_exp_of实数_re
   条件: (x : 实数)
-  结论: ((exp x).re : Complex) = exp x
+  结论: ((exp x).re : 复形) = exp x
   证明: conj_eq_iff_re.1 by rw [← exp_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -565,9 +565,9 @@ theorem ofReal_exp
 @[simp]
 
 中文:
-定理 ofReal_exp
+定理 of实数_exp
   条件: (x : 实数)
-  结论: (实数.exp x : Complex) = exp x
+  结论: (实数.exp x : 复形) = exp x
   证明: ofReal_exp_ofReal_re _
 
 @[simp]
@@ -588,7 +588,7 @@ theorem exp_ofReal_im
   proof: by rw [← ofReal_exp_ofReal_re, ofReal_im]
 
 中文:
-定理 exp_ofReal_im
+定理 exp_of实数_im
   条件: (x : 实数)
   结论: (exp x).im = 0
   证明: by rw [← ofReal_exp_ofReal_re, ofReal_im]
@@ -607,7 +607,7 @@ theorem exp_ofReal_re
   proof: rfl
 
 中文:
-定理 exp_ofReal_re
+定理 exp_of实数_re
   条件: (x : 实数)
   结论: (exp x).re = 实数.exp x
   证明: rfl
@@ -661,7 +661,7 @@ definition expMonoidHom
 
 中文:
 定义 expMonoidHom
-  签名: : MonoidHom (Multiplicative 实数) 实数
+  签名: : 幺半群态射 (Multiplicative 实数) 实数
   定义体: { toFun := fun x => exp x.toAdd,
     map_one' := by simp,
     map_mul' := by simp [exp_add] }
@@ -684,8 +684,8 @@ theorem exp_list_sum
 
 中文:
 定理 exp_list_sum
-  条件: (l : List 实数)
-  结论: exp l.sum = (l.map exp).prod
+  条件: (l : 列表 实数)
+  结论: exp l.求和 = (l.map exp).乘积
   证明: map_list_prod (M := Multiplicative Real) expMonoidHom l
 
 Depends on / 依赖: Multiplicative, expMonoidHom, map_list_prod
@@ -705,7 +705,7 @@ theorem exp_multiset_sum
 中文:
 定理 exp_multiset_sum
   条件: (s : Multiset 实数)
-  结论: exp s.sum = (s.map exp).prod
+  结论: exp s.求和 = (s.map exp).乘积
   证明: @MonoidHom.map_multiset_prod (Multiplicative Real) Real _ _ expMonoidHom s
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_multiset_prod, Multiplicative, expMonoidHom, map_multiset_prod
@@ -723,7 +723,7 @@ theorem exp_sum
 
 中文:
 定理 exp_sum
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   证明: map_prod (M := Multiplicative Real) expMonoidHom f s
 
 Depends on / 依赖: Multiplicative, expMonoidHom, map_prod
@@ -1089,7 +1089,7 @@ theorem exp_strictMono
 
 中文:
 定理 exp_strictMono
-  结论: StrictMono exp
+  结论: 严格递增 exp
   证明: fun x y h => by
   rw [← sub_add_cancel y x]; rw [Real.exp_add]
   exact (lt_mul_iff_one_lt_left (exp_pos _)).2
@@ -1117,7 +1117,7 @@ theorem exp_monotone
 
 中文:
 定理 exp_monotone
-  结论: Monotone exp
+  结论: 递增 exp
   证明: exp_strictMono.monotone
 
 @[bound] -- temporary lemma for the `bound` tactic
@@ -1209,7 +1209,7 @@ theorem exp_injective
 
 中文:
 定理 exp_injective
-  结论: Function.Injective exp
+  结论: 函数.单射 exp
   证明: exp_strictMono.injective
 
 @[simp]
@@ -1386,7 +1386,7 @@ theorem sum_div_factorial_le
 
 中文:
 定理 sum_div_factorial_le
-  结论: {α : 类型} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [域 α] [线性序 α] [是StrictOrdered环 α]
   证明: calc
     (∑ m in range j with n <= m, (1 / m.factorial : α)) =
         ∑ m in range (j - n), (1 / ((m + n).factorial : α)) := by
@@ -1435,7 +1435,7 @@ theorem exp_bound
 
 中文:
 定理 exp_bound
-  条件: {x : Complex} (hx : ‖x‖ <= 1) {n : 自然数} (hn : 0 < n)
+  条件: {x : 复形} (hx : ‖x‖ <= 1) {n : 自然数} (hn : 0 < n)
   证明: by
   rw [← lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [exp]; rw [sub_eq_add_neg]; rw [← lim_neg]; rw [lim_add]; rw [← lim_norm]
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
@@ -1488,7 +1488,7 @@ theorem exp_bound'
 
 中文:
 定理 exp_bound'
-  条件: {x : Complex} {n : 自然数} (hx : ‖x‖ / n.succ <= 1 / 2)
+  条件: {x : 复形} {n : 自然数} (hx : ‖x‖ / n.succ <= 1 / 2)
   证明: by
   rw [← lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [exp]; rw [sub_eq_add_neg]; rw [← lim_neg]; rw [lim_add]; rw [← lim_norm]
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
@@ -1545,7 +1545,7 @@ theorem norm_exp_sub_one_le
 
 中文:
 定理 norm_exp_sub_one_le
-  条件: {x : Complex} (hx : ‖x‖ <= 1)
+  条件: {x : 复形} (hx : ‖x‖ <= 1)
   结论: ‖exp x - 1‖ <= 2 * ‖x‖
   证明: calc
     ‖exp x - 1‖ = ‖exp x - ∑ m in range 1, x ^ m / m.factorial‖ := by simp
@@ -1578,7 +1578,7 @@ theorem norm_exp_sub_one_sub_id_le
 
 中文:
 定理 norm_exp_sub_one_sub_id_le
-  条件: {x : Complex} (hx : ‖x‖ <= 1)
+  条件: {x : 复形} (hx : ‖x‖ <= 1)
   结论: ‖exp x - 1 - x‖ <= ‖x‖ ^ 2
   证明: calc
     ‖exp x - 1 - x‖ = ‖exp x - ∑ m in range 2, x ^ m / m.factorial‖ := by
@@ -1611,7 +1611,7 @@ theorem _root_.Real.norm_exp_sub_one_sub_id_le
   _ = ‖x‖ ^ 2 := by simp
 
 中文:
-定理 _root_.Real.norm_exp_sub_one_sub_id_le
+定理 _root_.实数.norm_exp_sub_one_sub_id_le
   条件: {x : 实数} (hx : ‖x‖ <= 1)
   证明: calc
   _ = ‖((Real.exp x - 1 - x) : Complex)‖ := by exact_mod_cast Complex.norm_real _
@@ -1640,7 +1640,7 @@ lemma norm_exp_sub_sum_le_exp_norm_sub_sum
 
 中文:
 引理 norm_exp_sub_sum_le_exp_norm_sub_sum
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   证明: by
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
@@ -1677,7 +1677,7 @@ lemma norm_exp_le_exp_norm
 
 中文:
 引理 norm_exp_le_exp_norm
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: ‖exp x‖ <= 实数.exp ‖x‖
   证明: by
   convert norm_exp_sub_sum_le_exp_norm_sub_sum x 0 <;> simp
@@ -1700,7 +1700,7 @@ lemma norm_exp_sub_sum_le_norm_mul_exp
 
 中文:
 引理 norm_exp_sub_sum_le_norm_mul_exp
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   证明: by
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
@@ -2454,7 +2454,7 @@ theorem prod_one_add_le_exp_sum
 
 中文:
 定理 prod_one_add_le_exp_sum
-  结论: {ι : 类型} (s : Finset ι) {f : ι -> 实数}
+  结论: {ι : 类型} (s : 有限集 ι) {f : ι -> 实数}
   证明: (Finset.prod_le_prod (fun i _ => add_nonneg zero_le_one (hf i))
     fun i _ => (add_comm 1 (f i)).le.trans (add_one_le_exp _)).trans
     (exp_sum s f).symm.le
@@ -2499,7 +2499,7 @@ theorem norm_exp_ofReal
   exact Complex.norm_of_nonneg (le_of_lt (Real.exp_pos _))
 
 中文:
-定理 norm_exp_ofReal
+定理 norm_exp_of实数
   条件: (x : 实数)
   结论: ‖exp x‖ = 实数.exp x
   证明: by

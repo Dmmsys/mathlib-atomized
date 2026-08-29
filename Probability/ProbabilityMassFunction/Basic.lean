@@ -74,7 +74,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (PMF α) α 实数>=0∞ where
+  签名: : 函数状 (PMF α) α 实数>=0∞ where
   定义体: p.1 a
   coe_injective _ _ h := Subtype.ext h
 
@@ -181,7 +181,7 @@ theorem tsum_coe_indicator_ne_top
 
 中文:
 定理 tsum_coe_indicator_ne_top
-  条件: (p : PMF α) (s : Set α)
+  条件: (p : PMF α) (s : 集合 α)
   结论: ∑' a, s.indicator p a != ∞
   证明: ne_of_lt (lt_of_le_of_lt
     (ENNReal.tsum_le_tsum (fun _ => Set.indicator_apply_le fun _ => le_rfl))
@@ -278,7 +278,7 @@ theorem support_nonempty
 中文:
 定理 support_nonempty
   条件: (p : PMF α)
-  结论: p.support.Nonempty
+  结论: p.support.非空
   证明: Function.support_nonempty_iff.2 p.coe_ne_zero
 
 @[simp]
@@ -301,7 +301,7 @@ theorem support_countable
 中文:
 定理 support_countable
   条件: (p : PMF α)
-  结论: p.support.Countable
+  结论: p.support.可数
   证明: Summable.countable_support_ennreal (tsum_coe_ne_top p)
 
 Depends on / 依赖: Summable, Summable.countable_support_ennreal, countable_support_ennreal, tsum_coe_ne_top
@@ -562,7 +562,7 @@ theorem toOuterMeasure_apply_finset
 
 中文:
 定理 toOuterMeasure_apply_finset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: p.toOuterMeasure s = ∑ x in s, p x
   证明: by
   refine (toOuterMeasure_apply p s).trans ((tsum_eq_sum (s := s) ?_).trans ?_)
@@ -617,7 +617,7 @@ theorem toOuterMeasure_injective
 
 中文:
 定理 toOuterMeasure_injective
-  结论: (toOuterMeasure : PMF α -> OuterMeasure α).Injective
+  结论: (toOuterMeasure : PMF α -> 外测度 α).单射
   证明: fun p q h => PMF.ext fun x => (p.toOuterMeasure_apply_singleton x).symm.trans
     ((congr_fun (congr_arg _ h) _).trans <| q.toOuterMeasure_apply_singleton x)
 
@@ -739,7 +739,7 @@ theorem toOuterMeasure_mono
 
 中文:
 定理 toOuterMeasure_mono
-  条件: {s t : Set α} (h : s inter p.support subseteq t)
+  条件: {s t : 集合 α} (h : s inter p.support subseteq t)
   证明: le_trans (le_of_eq (toOuterMeasure_apply_inter_support p s).symm) (p.toOuterMeasure.mono h)
 
 Depends on / 依赖: le_of_eq, le_trans, p.toOuterMeasure.mono, toOuterMeasure, toOuterMeasure_apply_inter_support
@@ -761,7 +761,7 @@ theorem toOuterMeasure_apply_eq_of_inter_support_eq
 
 中文:
 定理 toOuterMeasure_apply_eq_of_inter_support_eq
-  结论: {s t : Set α}
+  结论: {s t : 集合 α}
   证明: le_antisymm (p.toOuterMeasure_mono (h.symm ▸ Set.inter_subset_left))
     (p.toOuterMeasure_mono (h ▸ Set.inter_subset_left))
 
@@ -786,7 +786,7 @@ theorem toOuterMeasure_apply_fintype
 
 中文:
 定理 toOuterMeasure_apply_fintype
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: p.toOuterMeasure s = ∑ x, s.indicator p x
   证明: (p.toOuterMeasure_apply s).trans (tsum_eq_sum fun x h => absurd (Finset.mem_univ x) h)
 
@@ -809,7 +809,7 @@ definition toMeasure
 
 中文:
 定义 toMeasure
-  签名: [MeasurableSpace α] (p : PMF α)
+  签名: [可测空间 α] (p : PMF α)
   定义体: p.toOuterMeasure.toMeasure (p.toOuterMeasure_caratheodory.symm ▸ le_top)
 
 Depends on / 依赖: le_top, p.toOuterMeasure.toMeasure, p.toOuterMeasure_caratheodory.symm, toMeasure, toOuterMeasure, toOuterMeasure_caratheodory
@@ -830,7 +830,7 @@ theorem toOuterMeasure_apply_le_toMeasure_apply
 
 中文:
 定理 toOuterMeasure_apply_le_toMeasure_apply
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: p.toOuterMeasure s <= p.toMeasure s
   证明: le_toMeasure_apply p.toOuterMeasure _ s
 
@@ -849,7 +849,7 @@ theorem toMeasure_apply_eq_toOuterMeasure_apply
 
 中文:
 定理 toMeasure_apply_eq_toOuterMeasure_apply
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: toMeasure_apply p.toOuterMeasure _ hs
 
 Depends on / 依赖: p.toOuterMeasure, toMeasure_apply, toOuterMeasure
@@ -869,7 +869,7 @@ theorem toMeasure_apply
 
 中文:
 定理 toMeasure_apply
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: p.toMeasure s = ∑' x, s.indicator p x
   证明: (p.toMeasure_apply_eq_toOuterMeasure_apply hs).trans (p.toOuterMeasure_apply s)
 
@@ -889,7 +889,7 @@ theorem toMeasure_apply_singleton
 
 中文:
 定理 toMeasure_apply_singleton
-  条件: (a : α) (h : MeasurableSet ({a} : Set α))
+  条件: (a : α) (h : 可测集 ({a} : 集合 α))
   证明: by
   simp [p.toMeasure_apply_eq_toOuterMeasure_apply h, toOuterMeasure_apply_singleton]
 
@@ -910,7 +910,7 @@ theorem toMeasure_apply_eq_zero_iff
 
 中文:
 定理 toMeasure_apply_eq_zero_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [p.toMeasure_apply_eq_toOuterMeasure_apply hs]; rw [toOuterMeasure_apply_eq_zero_iff]
 
@@ -931,7 +931,7 @@ theorem toMeasure_apply_eq_one_iff
 
 中文:
 定理 toMeasure_apply_eq_one_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: p.toMeasure s = 1 ↔ p.support subseteq s
   证明: (p.toMeasure_apply_eq_toOuterMeasure_apply hs).symm ▸ p.toOuterMeasure_apply_eq_one_iff s
 
@@ -954,7 +954,7 @@ theorem toMeasure_mono
 
 中文:
 定理 toMeasure_mono
-  结论: {t : Set α} (hs : MeasurableSet s)
+  结论: {t : 集合 α} (hs : 可测集 s)
   证明: by
   rw [p.toMeasure_apply_eq_toOuterMeasure_apply hs]
   exact (p.toOuterMeasure_mono h).trans (p.toOuterMeasure_apply_le_toMeasure_apply t)
@@ -981,7 +981,7 @@ theorem toMeasure_apply_inter_support
 
 中文:
 定理 toMeasure_apply_inter_support
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: (measure_mono s.inter_subset_left).antisymm (p.toMeasure_mono hs (refl _))
 
 @[simp]
@@ -1028,7 +1028,7 @@ theorem toMeasure_apply_eq_of_inter_support_eq
 
 中文:
 定理 toMeasure_apply_eq_of_inter_support_eq
-  结论: {t : Set α} (hs : MeasurableSet s)
+  结论: {t : 集合 α} (hs : 可测集 s)
   证明: by
   simpa only [p.toMeasure_apply_eq_toOuterMeasure_apply, hs, ht] using
     p.toOuterMeasure_apply_eq_of_inter_support_eq h
@@ -1059,7 +1059,7 @@ theorem toMeasure_injective
 
 中文:
 定理 toMeasure_injective
-  结论: (toMeasure : PMF α -> Measure α).Injective
+  结论: (toMeasure : PMF α -> 测度 α).单射
   证明: by
   intro p q h
   ext x
@@ -1110,7 +1110,7 @@ theorem toMeasure_apply_eq_toOuterMeasure
 
 中文:
 定理 toMeasure_apply_eq_toOuterMeasure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: p.toMeasure s = p.toOuterMeasure s
   证明: by
   have hs := (p.support_countable.mono s.inter_subset_right).measurableSet
@@ -1136,7 +1136,7 @@ theorem toMeasure_apply_finset
 
 中文:
 定理 toMeasure_apply_finset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: p.toMeasure s = ∑ x in s, p x
   证明: (p.toMeasure_apply_eq_toOuterMeasure s).trans (p.toOuterMeasure_apply_finset s)
 
@@ -1158,7 +1158,7 @@ theorem toMeasure_apply_eq_tsum
 
 中文:
 定理 toMeasure_apply_eq_tsum
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: p.toMeasure s = ∑' x, s.indicator p x
   证明: (p.toMeasure_apply_eq_toOuterMeasure s).trans (p.toOuterMeasure_apply s)
 
@@ -1181,7 +1181,7 @@ theorem toMeasure_apply_fintype
 
 中文:
 定理 toMeasure_apply_fintype
-  条件: (s : Set α) [Fintype α]
+  条件: (s : 集合 α) [有限类型 α]
   结论: p.toMeasure s = ∑ x, s.indicator p x
   证明: (p.toMeasure_apply_eq_toOuterMeasure s).trans (p.toOuterMeasure_apply_fintype s)
 
@@ -1218,7 +1218,7 @@ definition toPMF
 
 中文:
 定义 toPMF
-  签名: [Countable α] [MeasurableSpace α] [MeasurableSingletonClass α] (μ : Measure α)
+  签名: [可数 α] [可测空间 α] [MeasurableSingleton类 α] (μ : 测度 α)
   定义体: ⟨fun x => μ ({x} : Set α),
     ENNReal.summable.hasSum_iff.2
       (_root_.trans
@@ -1306,7 +1306,7 @@ instance toMeasure.isProbabilityMeasure
 
 中文:
 实例 toMeasure.isProbabilityMeasure
-  签名: [MeasurableSpace α] (p : PMF α)
+  签名: [可测空间 α] (p : PMF α)
   定义体: ⟨by
     simpa only [MeasurableSet.univ, toMeasure_apply_eq_toOuterMeasure_apply, Set.indicator_univ,
       toOuterMeasure_apply, ENNReal.coe_eq_one] using tsum_coe p⟩
@@ -1353,7 +1353,7 @@ theorem toMeasure_eq_iff_eq_toPMF
 
 中文:
 定理 toMeasure_eq_iff_eq_toPMF
-  条件: (μ : Measure α) [IsProbabilityMeasure μ]
+  条件: (μ : 测度 α) [是概率测度 μ]
   证明: by rw [← toMeasure_inj, Measure.toPMF_toMeasure]
 
 Depends on / 依赖: Measure, Measure.toPMF_toMeasure, toMeasure_inj, toPMF_toMeasure
@@ -1371,7 +1371,7 @@ theorem toPMF_eq_iff_toMeasure_eq
 
 中文:
 定理 toPMF_eq_iff_toMeasure_eq
-  条件: (μ : Measure α) [IsProbabilityMeasure μ]
+  条件: (μ : 测度 α) [是概率测度 μ]
   证明: by rw [← toMeasure_inj, Measure.toPMF_toMeasure]
 
 Depends on / 依赖: Measure, Measure.toPMF_toMeasure, toMeasure_inj, toPMF_toMeasure

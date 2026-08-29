@@ -46,7 +46,7 @@ abbreviation SimplexAlgorithmM
 
 中文:
 缩写 SimplexAlgorithmM
-  签名: (matType : 自然数 -> 自然数 -> Type) [UsableInSimplexAlgorithm matType]
+  签名: (matType : 自然数 -> 自然数 -> 类型) [UsableInSimplexAlgorithm matType]
   定义体: ExceptT SimplexAlgorithmException StateT (Tableau matType) Lean.CoreM
 
 Depends on / 依赖: ExceptT, Lean.CoreM, SimplexAlgorithmException, StateT, Tableau, matType
@@ -125,7 +125,7 @@ definition checkSuccess
 
 中文:
 定义 checkSuccess
-  签名: : SimplexAlgorithmM matType 布尔
+  签名: : SimplexAlgorithmM matType 布尔值
   定义体: do
   let lastIdx := (← get).free.size - 1
   return (← get).mat[(0, lastIdx)]! > 0 &&
@@ -260,7 +260,7 @@ definition runSimplexAlgorithm
 
 中文:
 定义 runSimplexAlgorithm
-  签名: : SimplexAlgorithmM matType Unit
+  签名: : SimplexAlgorithmM matType 单元
   定义体: do
   while !(← checkSuccess) do
     Lean.Core.checkSystem decl_name%.toString

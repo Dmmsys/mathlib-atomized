@@ -43,8 +43,8 @@ lemma Module.Flat.ker_lTensor_eq
   exact Module.Flat.lTensor_exact M (LinearMap.exact_subtype_ker_map f)
 
 中文:
-引理 Module.Flat.ker_lTensor_eq
-  条件: [Module.Flat R M]
+引理 模.平坦.ker_lTensor_eq
+  条件: [模.平坦 R M]
   证明: by
   rw [← LinearMap.exact_iff]
   exact Module.Flat.lTensor_exact M (LinearMap.exact_subtype_ker_map f)
@@ -68,8 +68,8 @@ lemma Module.Flat.eqLocus_lTensor_eq
   rw [← map_sub]; rw [ker_lTensor_eq]
 
 中文:
-引理 Module.Flat.eqLocus_lTensor_eq
-  条件: [Module.Flat R M]
+引理 模.平坦.eqLocus_lTensor_eq
+  条件: [模.平坦 R M]
   证明: by
   rw [LinearMap.eqLocus_eq_ker_sub]; rw [LinearMap.eqLocus_eq_ker_sub]
   rw [← map_sub]; rw [ker_lTensor_eq]
@@ -100,7 +100,7 @@ definition LinearMap.tensorEqLocusBil
     simp [smul_tmul']
 
 中文:
-定义 LinearMap.tensorEqLocusBil
+定义 线性映射.tensorEqLocusBil
   签名: :
   定义体: { toFun := fun a => ⟨m otimesₜ a, by simp [show f a = g a from a.property]⟩
       map_add' := fun x y => by simp [tmul_add]
@@ -142,7 +142,7 @@ definition LinearMap.tensorKerBil
   map_smul' r x := by ext y; simp [smul_tmul']
 
 中文:
-定义 LinearMap.tensorKerBil
+定义 线性映射.tensorKerBil
   签名: :
   定义体: { toFun := fun a => ⟨m otimesₜ a, by simp⟩
       map_add' := fun x y => by simp [tmul_add]
@@ -170,8 +170,8 @@ definition LinearMap.tensorEqLocus
   body: AlgebraTensorModule.lift (tensorEqLocusBil S M f g)
 
 中文:
-定义 LinearMap.tensorEqLocus
-  签名: : M otimes[R] (LinearMap.eqLocus f g) ->ₗ[S]
+定义 线性映射.tensorEqLocus
+  签名: : M otimes[R] (线性映射.eqLocus f g) ->ₗ[S]
   定义体: AlgebraTensorModule.lift (tensorEqLocusBil S M f g)
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, tensorEqLocusBil
@@ -191,8 +191,8 @@ definition LinearMap.tensorKer
 @[simp]
 
 中文:
-定义 LinearMap.tensorKer
-  签名: : M otimes[R] (LinearMap.ker f) ->ₗ[S]
+定义 线性映射.tensorKer
+  签名: : M otimes[R] (线性映射.ker f) ->ₗ[S]
   定义体: AlgebraTensorModule.lift (f.tensorKerBil S M)
 
 @[simp]
@@ -215,8 +215,8 @@ lemma LinearMap.tensorKer_tmul
 @[simp]
 
 中文:
-引理 LinearMap.tensorKer_tmul
-  条件: (m : M) (x : LinearMap.ker f)
+引理 线性映射.tensorKer_tmul
+  条件: (m : M) (x : 线性映射.ker f)
   证明: rfl
 
 @[simp]
@@ -238,8 +238,8 @@ lemma LinearMap.tensorKer_coe
 @[simp]
 
 中文:
-引理 LinearMap.tensorKer_coe
-  条件: (x : M otimes[R] (LinearMap.ker f))
+引理 线性映射.tensorKer_coe
+  条件: (x : M otimes[R] (线性映射.ker f))
   证明: by
   induction x <;> simp_all
 
@@ -261,8 +261,8 @@ lemma LinearMap.tensorEqLocus_tmul
 @[simp]
 
 中文:
-引理 LinearMap.tensorEqLocus_tmul
-  条件: (m : M) (x : LinearMap.eqLocus f g)
+引理 线性映射.tensorEqLocus_tmul
+  条件: (m : M) (x : 线性映射.eqLocus f g)
   证明: rfl
 
 @[simp]
@@ -282,8 +282,8 @@ lemma LinearMap.tensorEqLocus_coe
   induction x <;> simp_all
 
 中文:
-引理 LinearMap.tensorEqLocus_coe
-  条件: (x : M otimes[R] (LinearMap.eqLocus f g))
+引理 线性映射.tensorEqLocus_coe
+  条件: (x : M otimes[R] (线性映射.eqLocus f g))
   证明: by
   induction x <;> simp_all
 -/
@@ -303,8 +303,8 @@ definition LinearMap.tensorKerInv
       (ker f).injective_subtype) (by simp [Module.Flat.ker_lTensor_eq])
 
 中文:
-定义 LinearMap.tensorKerInv
-  签名: [Module.Flat R M]
+定义 线性映射.tensorKerInv
+  签名: [模.平坦 R M]
   定义体: LinearMap.codRestrictOfInjective (LinearMap.ker (AlgebraTensorModule.lTensor S M f)).subtype
     (AlgebraTensorModule.lTensor S M (ker f).subtype)
     (Module.Flat.lTensor_preserves_injective_linearMap (ker f).subtype
@@ -332,8 +332,8 @@ lemma LinearMap.lTensor_ker_subtype_tensorKerInv
   simp [LinearMap.tensorKerInv]
 
 中文:
-引理 LinearMap.lTensor_ker_subtype_tensorKerInv
-  结论: [Module.Flat R M]
+引理 线性映射.lTensor_ker_subtype_tensorKerInv
+  结论: [模.平坦 R M]
   证明: by
   rw [← AlgebraTensorModule.coe_lTensor (A := S)]
   simp [LinearMap.tensorKerInv]
@@ -358,8 +358,8 @@ definition LinearMap.tensorEqLocusInv
       (eqLocus f g).
 
 中文:
-定义 LinearMap.tensorEqLocusInv
-  签名: [Module.Flat R M]
+定义 线性映射.tensorEqLocusInv
+  签名: [模.平坦 R M]
   定义体: LinearMap.codRestrictOfInjective
     (LinearMap.eqLocus (AlgebraTensorModule.lTensor S M f)
       (AlgebraTensorModule.lTensor S M g)).subtype
@@ -392,8 +392,8 @@ lemma LinearMap.lTensor_eqLocus_subtype_tensorEqLocusInv
   simp [LinearMap.tensorEqLocusInv]
 
 中文:
-引理 LinearMap.lTensor_eqLocus_subtype_tensorEqLocusInv
-  结论: [Module.Flat R M]
+引理 线性映射.lTensor_eqLocus_subtype_tensorEqLocusInv
+  结论: [模.平坦 R M]
   证明: by
   rw [← AlgebraTensorModule.coe_lTensor (A := S)]
   simp [LinearMap.tensorEqLocusInv]
@@ -421,8 +421,8 @@ definition LinearMap.tensorKerEquiv
 @[simp]
 
 中文:
-定义 LinearMap.tensorKerEquiv
-  签名: [Module.Flat R M]
+定义 线性映射.tensorKerEquiv
+  签名: [模.平坦 R M]
   定义体: LinearEquiv.ofLinearMap (LinearMap.tensorKer S M f) (LinearMap.tensorKerInv S M f)
     (by ext x; simp)
     (by
@@ -457,8 +457,8 @@ lemma LinearMap.tensorKerEquiv_apply
 @[simp]
 
 中文:
-引理 LinearMap.tensorKerEquiv_apply
-  条件: [Module.Flat R M] (x : M otimes[R] ker f)
+引理 线性映射.tensorKerEquiv_apply
+  条件: [模.平坦 R M] (x : M otimes[R] ker f)
   证明: rfl
 
 @[simp]
@@ -477,8 +477,8 @@ lemma LinearMap.lTensor_ker_subtype_tensorKerEquiv_symm
   proof: lTensor_ker_subtype_tensorKerInv S M f x
 
 中文:
-引理 LinearMap.lTensor_ker_subtype_tensorKerEquiv_symm
-  结论: [Module.Flat R M]
+引理 线性映射.lTensor_ker_subtype_tensorKerEquiv_symm
+  结论: [模.平坦 R M]
   证明: lTensor_ker_subtype_tensorKerInv S M f x
 
 Depends on / 依赖: lTensor_ker_subtype_tensorKerInv
@@ -505,8 +505,8 @@ definition LinearMap.tensorEqLocusEquiv
 @[simp]
 
 中文:
-定义 LinearMap.tensorEqLocusEquiv
-  签名: [Module.Flat R M]
+定义 线性映射.tensorEqLocusEquiv
+  签名: [模.平坦 R M]
   定义体: LinearEquiv.ofLinearMap (LinearMap.tensorEqLocus S M f g) (LinearMap.tensorEqLocusInv S M f g)
     (by ext; simp)
     (by
@@ -543,8 +543,8 @@ lemma LinearMap.tensorEqLocusEquiv_apply
 @[simp]
 
 中文:
-引理 LinearMap.tensorEqLocusEquiv_apply
-  条件: [Module.Flat R M] (x : M otimes[R] LinearMap.eqLocus f g)
+引理 线性映射.tensorEqLocusEquiv_apply
+  条件: [模.平坦 R M] (x : M otimes[R] 线性映射.eqLocus f g)
   证明: rfl
 
 @[simp]
@@ -563,8 +563,8 @@ lemma LinearMap.lTensor_eqLocus_subtype_tensoreqLocusEquiv_symm
   proof: lTensor_eqLocus_subtype_tensorEqLocusInv S M f g x
 
 中文:
-引理 LinearMap.lTensor_eqLocus_subtype_tensoreqLocusEquiv_symm
-  结论: [Module.Flat R M]
+引理 线性映射.lTensor_eqLocus_subtype_tensoreqLocusEquiv_symm
+  结论: [模.平坦 R M]
   证明: lTensor_eqLocus_subtype_tensorEqLocusInv S M f g x
 
 Depends on / 依赖: lTensor_eqLocus_subtype_tensorEqLocusInv
@@ -585,8 +585,8 @@ lemma LinearMap.lTensor_injective_of_exact_of_flat
   proof: by
 
 中文:
-引理 LinearMap.lTensor_injective_of_exact_of_flat
-  结论: [Module.Flat R P]
+引理 线性映射.lTensor_injective_of_exact_of_flat
+  结论: [模.平坦 R P]
   证明: by
 -/
 lemma LinearMap.lTensor_injective_of_exact_of_flat [Module.Flat R P]
@@ -638,8 +638,8 @@ definition LinearMap.kerLTensorEquivOfSurjective
 @[simp]
 
 中文:
-定义 LinearMap.kerLTensorEquivOfSurjective
-  签名: [Module.Flat R P]
+定义 线性映射.kerLTensorEquivOfSurjective
+  签名: [模.平坦 R P]
   定义体: by
   refine .ofEq _ _ ?_ ≪≫ₗ (LinearEquiv.ofInjective _ (LinearMap.lTensor_injective_of_exact_of_flat
     f hf _ (LinearMap.ker f).subtype_injective (LinearMap.exact_subtype_ker_map _) _)).symm
@@ -666,8 +666,8 @@ lemma LinearMap.tensorKerEquivOfSurjective_symm_tmul
   proof: rfl
 
 中文:
-引理 LinearMap.tensorKerEquivOfSurjective_symm_tmul
-  结论: [Module.Flat R P]
+引理 线性映射.tensorKerEquivOfSurjective_symm_tmul
+  结论: [模.平坦 R P]
   证明: rfl
 -/
 lemma LinearMap.tensorKerEquivOfSurjective_symm_tmul [Module.Flat R P]
@@ -695,7 +695,7 @@ private local instance : AddHomClass (A ->ₐ[R] B) A B := inferInstance
 @[simp]
 
 中文:
-定义 AlgHom.tensorEqualizerAux
+定义 代数态射.tensorEqualizerAux
   签名: :
   定义体: LinearMap.tensorEqLocus S T (f : A ->ₗ[R] B) (g : A ->ₗ[R] B)
 
@@ -727,8 +727,8 @@ lemma AlgHom.coe_tensorEqualizerAux
   | add x y hx hy => simp [hx, hy]
 
 中文:
-引理 AlgHom.coe_tensorEqualizerAux
-  条件: (x : T otimes[R] AlgHom.equalizer f g)
+引理 代数态射.coe_tensorEqualizerAux
+  条件: (x : T otimes[R] 代数态射.equalizer f g)
   证明: by
   induction x with
   | zero => rfl
@@ -755,8 +755,8 @@ lemma AlgHom.tensorEqualizerAux_mul
   simp
 
 中文:
-引理 AlgHom.tensorEqualizerAux_mul
-  条件: (x y : T otimes[R] AlgHom.equalizer f g)
+引理 代数态射.tensorEqualizerAux_mul
+  条件: (x y : T otimes[R] 代数态射.equalizer f g)
   证明: by
   apply Subtype.ext
   rw [AlgHom.coe_tensorEqualizerAux]
@@ -784,7 +784,7 @@ definition AlgHom.tensorEqualizer
 @[simp]
 
 中文:
-定义 AlgHom.tensorEqualizer
+定义 代数态射.tensorEqualizer
   签名: :
   定义体: AlgHom.ofLinearMap (AlgHom.tensorEqualizerAux S T f g)
     rfl (AlgHom.tensorEqualizerAux_mul S T f g)
@@ -810,8 +810,8 @@ lemma AlgHom.coe_tensorEqualizer
   proof: AlgHom.coe_tensorEqualizerAux S T f g x
 
 中文:
-引理 AlgHom.coe_tensorEqualizer
-  条件: (x : T otimes[R] AlgHom.equalizer f g)
+引理 代数态射.coe_tensorEqualizer
+  条件: (x : T otimes[R] 代数态射.equalizer f g)
   证明: AlgHom.coe_tensorEqualizerAux S T f g x
 
 Depends on / 依赖: AlgHom, AlgHom.coe_tensorEqualizerAux, coe_tensorEqualizerAux
@@ -833,8 +833,8 @@ definition AlgHom.tensorEqualizerEquiv
 @[simp]
 
 中文:
-定义 AlgHom.tensorEqualizerEquiv
-  签名: [Module.Flat R T]
+定义 代数态射.tensorEqualizerEquiv
+  签名: [模.平坦 R T]
   定义体: AlgEquiv.ofLinearEquiv (LinearMap.tensorEqLocusEquiv S T f.toLinearMap g.toLinearMap)
     rfl (AlgHom.tensorEqualizerAux_mul S T f g)
 
@@ -859,8 +859,8 @@ lemma AlgHom.tensorEqualizerEquiv_apply
   proof: rfl
 
 中文:
-引理 AlgHom.tensorEqualizerEquiv_apply
-  结论: [Module.Flat R T]
+引理 代数态射.tensorEqualizerEquiv_apply
+  结论: [模.平坦 R T]
   证明: rfl
 -/
 lemma AlgHom.tensorEqualizerEquiv_apply [Module.Flat R T]
@@ -883,7 +883,7 @@ definition Algebra.kerTensorProductMapIdToAlgHomEquiv
   let e₃ : (RingHom.ker φ) ≃ₗ[R] A otimes[R] (RingHom.ker (alg
 
 中文:
-定义 Algebra.kerTensorProductMapIdToAlgHomEquiv
+定义 代数.kerTensorProductMapIdToAlgHomEquiv
   定义体: by
   let φ : A otimes[R] S ->ₐ[A] A otimes[R] T :=
     Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
@@ -942,8 +942,8 @@ lemma Algebra.kerTensorProductMapIdToAlgHomEquiv_symm_apply
   proof: rfl
 
 中文:
-引理 Algebra.kerTensorProductMapIdToAlgHomEquiv_symm_apply
-  结论: [Module.Flat R T]
+引理 代数.kerTensorProductMapIdToAlgHomEquiv_symm_apply
+  结论: [模.平坦 R T]
   证明: rfl
 -/
 lemma Algebra.kerTensorProductMapIdToAlgHomEquiv_symm_apply [Module.Flat R T]
@@ -968,7 +968,7 @@ definition HasStableEqualizers
 
 中文:
 定义 HasStableEqualizers
-  签名: (P : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题)
+  签名: (P : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题)
   定义体: forall {R S A B : Type u} [CommRing R] [CommRing S] [CommRing A] [CommRing B]
     [Algebra R A] [Algebra R S] [Algebra R B]
     (f g : A ->ₐ[R] B), P (algebraMap R A) -> P (algebraMap R B) ->

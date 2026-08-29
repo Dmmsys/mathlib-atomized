@@ -43,8 +43,8 @@ lemma norm_eq_max_natAbs
 
 中文:
 引理 norm_eq_max_natAbs
-  条件: (x : Fin 2 -> 整数)
-  结论: ‖x‖ = max (x 0).natAbs (x 1).natAbs
+  条件: (x : 有限集 2 -> 整数)
+  结论: ‖x‖ = 最大值 (x 0).natAbs (x 1).natAbs
   证明: by
   rw [← coe_nnnorm]; rw [← NNReal.coe_natCast]; rw [NNReal.coe_inj]; rw [Nat.cast_max]
   refine eq_of_forall_ge_iff fun c => ?_
@@ -385,7 +385,7 @@ exact (le_mul_of_one_le_left (sq_nonneg _) hc).trans le_add_of_nonneg_left (sq_n
 中文:
 引理 auxbound1
   条件: {c : 实数} (d : 实数) (hc : 1 <= c ^ 2)
-  结论: r z <= ‖c * (z : Complex) + d‖
+  结论: r z <= ‖c * (z : 复形) + d‖
   证明: by
   rcases z with ⟨z, hz⟩
   have H1 : z.im <= √((c * z.re + d) ^ 2 + (c * z).im ^ 2) := by
@@ -419,7 +419,7 @@ lemma auxbound2
 中文:
 引理 auxbound2
   条件: (c : 实数) {d : 实数} (hd : 1 <= d ^ 2)
-  结论: r z <= ‖c * (z : Complex) + d‖
+  结论: r z <= ‖c * (z : 复形) + d‖
   证明: by
   have H1 : √(r1 z) <= √((c * z.re + d) ^ 2 + (c * z.im) ^ 2) :=
     (Real.sqrt_le_sqrt_iff (by positivity)).mpr (r1_aux_bound _ _ hd)
@@ -448,7 +448,7 @@ lemma div_max_sq_ge_one
 
 中文:
 引理 div_max_sq_ge_one
-  条件: (x : Fin 2 -> 整数) (hx : x != 0)
+  条件: (x : 有限集 2 -> 整数) (hx : x != 0)
   证明: by
   refine (max_choice (x 0).natAbs (x 1).natAbs).imp (fun H0 => ?_) (fun H1 => ?_)
   · have : x 0 != 0 := by
@@ -486,8 +486,8 @@ lemma r_mul_max_le
 
 中文:
 引理 r_mul_max_le
-  条件: {x : Fin 2 -> 整数} (hx : x != 0)
-  结论: r z * ‖x‖ <= ‖x 0 * (z : Complex) + x 1‖
+  条件: {x : 有限集 2 -> 整数} (hx : x != 0)
+  结论: r z * ‖x‖ <= ‖x 0 * (z : 复形) + x 1‖
   证明: by
   have hn0 : ‖x‖ != 0 := by rwa [norm_ne_zero_iff]
   have h11 : x 0 * (z : Complex) + x 1 = (x 0 / ‖x‖ * z + x 1 / ‖x‖) * ‖x‖ := by
@@ -523,7 +523,7 @@ lemma summand_bound
 
 中文:
 引理 summand_bound
-  条件: {k : 实数} (hk : 0 <= k) (x : Fin 2 -> 整数)
+  条件: {k : 实数} (hk : 0 <= k) (x : 有限集 2 -> 整数)
   证明: by
   by_cases hx : x = 0
   · simp only [hx, Pi.zero_apply, Int.cast_zero, zero_mul, add_zero, norm_zero]
@@ -560,7 +560,7 @@ lemma summand_bound_of_mem_verticalStrip
 
 中文:
 引理 summand_bound_of_mem_verticalStrip
-  结论: {k : 实数} (hk : 0 <= k) (x : Fin 2 -> 整数)
+  结论: {k : 实数} (hk : 0 <= k) (x : 有限集 2 -> 整数)
   证明: by
   refine (summand_bound z hk x).trans (mul_le_mul_of_nonneg_right ?_ (by positivity))
   exact Real.rpow_le_rpow_of_nonpos (r_pos _) (r_lower_bound_on_verticalStrip z hB hz)
@@ -589,7 +589,7 @@ lemma linear_isTheta_right_add
 
 中文:
 引理 linear_isTheta_right_add
-  条件: (c e : 整数) (z : Complex)
+  条件: (c e : 整数) (z : 复形)
   证明: by
   apply IsTheta.add_isLittleO <;>
   [refine Asymptotics.IsLittleO.add_isTheta ?_ (Int.cast_complex_isTheta_cast_real); skip] <;>
@@ -620,7 +620,7 @@ lemma linear_isTheta_left
 
 中文:
 引理 linear_isTheta_left
-  条件: (d : 整数) {z : Complex} (hz : z != 0)
+  条件: (d : 整数) {z : 复形} (hz : z != 0)
   证明: by
   apply IsTheta.add_isLittleO
   · simp_rw [mul_comm]
@@ -648,7 +648,7 @@ lemma linear_inv_isBigO_right_add
 
 中文:
 引理 linear_inv_isBigO_right_add
-  条件: (c e : 整数) (z : Complex)
+  条件: (c e : 整数) (z : 复形)
   证明: (linear_isTheta_right_add c e z).inv.isBigO
 
 Depends on / 依赖: inv.isBigO, isBigO, linear_isTheta_right_add
@@ -668,7 +668,7 @@ lemma linear_inv_isBigO_right
 
 中文:
 引理 linear_inv_isBigO_right
-  条件: (c : 整数) (z : Complex)
+  条件: (c : 整数) (z : 复形)
   证明: by
   grind [add_zero, (linear_isTheta_right_add c 0 z).inv.isBigO]
 
@@ -688,7 +688,7 @@ lemma linear_inv_isBigO_left
 
 中文:
 引理 linear_inv_isBigO_left
-  条件: (d : 整数) {z : Complex} (hz : z != 0)
+  条件: (d : 整数) {z : 复形} (hz : z != 0)
   证明: (linear_isTheta_left d hz).inv.isBigO
 
 Depends on / 依赖: inv.isBigO, isBigO, linear_isTheta_left
@@ -710,7 +710,7 @@ lemma tendsto_zero_inv_linear
 
 中文:
 引理 tendsto_zero_inv_linear
-  条件: (z : Complex) (b : 整数)
+  条件: (z : 复形) (b : 整数)
   证明: by
   apply IsBigO.trans_tendsto ?_ tendsto_inv_atTop_nhds_zero_nat (F'' := Real)
   have := (isBigO_sup.mp (Int.cofinite_eq ▸ linear_inv_isBigO_right b z)).2
@@ -735,7 +735,7 @@ lemma tendsto_zero_inv_linear_sub
 
 中文:
 引理 tendsto_zero_inv_linear_sub
-  条件: (z : Complex) (b : 整数)
+  条件: (z : 复形) (b : 整数)
   证明: by
   grind [neg_zero, (tendsto_zero_inv_linear z (-b)).neg]
 
@@ -797,7 +797,7 @@ lemma summable_inv_of_isBigO_rpow_inv
 
 中文:
 引理 summable_inv_of_isBigO_rpow_inv
-  结论: {α : 类型} [NormedField α] [CompleteSpace α]
+  结论: {α : 类型} [赋范域 α] [完备空间 α]
   证明: summable_of_isBigO
     ((Real.summable_abs_int_rpow hab).congr fun b => Real.rpow_neg (abs_nonneg ↑b) a) hf
 
@@ -824,7 +824,7 @@ lemma linear_right_summable
 
 中文:
 引理 linear_right_summable
-  条件: (z : Complex) (c : 整数) {k : 整数} (hk : 2 <= k)
+  条件: (z : 复形) (c : 整数) {k : 整数} (hk : 2 <= k)
   证明: by
   apply summable_inv_of_isBigO_rpow_inv (a := k) (by norm_cast)
   lift k to Nat using by lia
@@ -854,7 +854,7 @@ lemma linear_left_summable
 
 中文:
 引理 linear_left_summable
-  条件: {z : Complex} (hz : z != 0) (d : 整数) {k : 整数} (hk : 2 <= k)
+  条件: {z : 复形} (hz : z != 0) (d : 整数) {k : 整数} (hk : 2 <= k)
   证明: by
   apply summable_inv_of_isBigO_rpow_inv (a := k) (by norm_cast)
   lift k to Nat using (by lia)
@@ -883,7 +883,7 @@ lemma summable_linear_sub_mul_linear_add
 
 中文:
 引理 summable_linear_sub_mul_linear_add
-  条件: (z : Complex) (c₁ c₂ : 整数)
+  条件: (z : 复形) (c₁ c₂ : 整数)
   证明: by
   apply summable_inv_of_isBigO_rpow_inv (a := 2) (by norm_cast)
   simpa [pow_two] using! (linear_inv_isBigO_right c₂ z).mul
@@ -910,7 +910,7 @@ lemma summable_linear_right_add_one_mul_linear_right
 
 中文:
 引理 summable_linear_right_add_one_mul_linear_right
-  条件: (z : Complex) (c₁ c₂ : 整数)
+  条件: (z : 复形) (c₁ c₂ : 整数)
   证明: by
   apply summable_inv_of_isBigO_rpow_inv (a := 2) (by norm_cast)
   simpa [pow_two] using (linear_inv_isBigO_right c₂ z).mul
@@ -937,7 +937,7 @@ lemma summable_linear_left_mul_linear_left
 
 中文:
 引理 summable_linear_left_mul_linear_left
-  条件: {z : Complex} (hz : z != 0) (c₁ c₂ : 整数)
+  条件: {z : 复形} (hz : z != 0) (c₁ c₂ : 整数)
   证明: by
   apply summable_inv_of_isBigO_rpow_inv (a := 2) (by norm_cast)
   simp only [Real.rpow_two, abs_mul_abs_self, pow_two]
@@ -1067,7 +1067,7 @@ lemma summable_of_isBigO_rpow_norm
 
 中文:
 引理 summable_of_isBigO_rpow_norm
-  结论: {E : 类型} [NormedAddCommGroup E] [CompleteSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [完备空间 E]
   证明: summable_of_isBigO
     ((summable_one_div_norm_rpow hab).congr fun b => Real.rpow_neg (norm_nonneg b) a) hf
 

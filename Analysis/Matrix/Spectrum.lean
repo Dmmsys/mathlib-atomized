@@ -44,7 +44,7 @@ lemma finite_real_spectrum
 中文:
 引理 finite_real_spectrum
   条件: [DecidableEq n]
-  结论: (spectrum 实数 A).Finite
+  结论: (spectrum 实数 A).有限
   证明: by
   rw [← spectrum.preimage_algebraMap 𝕜]
   exact A.finite_spectrum.preimage (FaithfulSMul.algebraMap_injective Real 𝕜).injOn
@@ -65,7 +65,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: n] : Finite (spectrum 实数 A)
+  签名: n] : 有限 (spectrum 实数 A)
   定义体: A.finite_real_spectrum
 
 Depends on / 依赖: A.finite_real_spectrum, finite_real_spectrum
@@ -82,7 +82,7 @@ theorem spectrum_toLpLin
 
 中文:
 定理 spectrum_toLpLin
-  条件: [DecidableEq n] (p : ENN实数)
+  条件: [DecidableEq n] (p : 广义非负实数)
   证明: AlgEquiv.spectrum_eq (Matrix.toLinAlgEquiv (PiLp.basisFun p 𝕜 n)) _
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.spectrum_eq, Matrix, Matrix.toLinAlgEquiv, PiLp.basisFun, basisFun, spectrum_eq, toLinAlgEquiv
@@ -130,7 +130,7 @@ definition eigenvalues₀
 
 中文:
 定义 eigenvalues₀
-  签名: : Fin (Fintype.card n) -> 实数
+  签名: : 有限集 (有限类型.card n) -> 实数
   定义体: (isSymmetric_toEuclideanLin_iff.mpr hA).eigenvalues finrank_euclideanSpace
 
 Depends on / 依赖: eigenvalues, finrank_euclideanSpace, isSymmetric_toEuclideanLin_iff, isSymmetric_toEuclideanLin_iff.mpr
@@ -148,7 +148,7 @@ lemma eigenvalues₀_antitone
 
 中文:
 引理 eigenvalues₀_antitone
-  结论: Antitone hA.eigenvalues₀
+  结论: 递减 hA.eigenvalues₀
   证明: LinearMap.IsSymmetric.eigenvalues_antitone ..
 
 Depends on / 依赖: IsSymmetric, LinearMap, LinearMap.IsSymmetric.eigenvalues_antitone, eigenvalues_antitone
@@ -185,7 +185,7 @@ definition eigenvectorBasis
 
 中文:
 定义 eigenvectorBasis
-  签名: : OrthonormalBasis n 𝕜 (EuclideanSpace 𝕜 n)
+  签名: : 正交标准基 n 𝕜 (EuclideanSpace 𝕜 n)
   定义体: ((isSymmetric_toEuclideanLin_iff.mpr hA).eigenvectorBasis finrank_euclideanSpace).reindex
     (Fintype.equivOfCardEq (Fintype.card_fin _))
 
@@ -288,7 +288,7 @@ lemma eigenvectorUnitary_coe
 
 中文:
 引理 eigenvectorUnitary_coe
-  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [Fintype n]
+  结论: {𝕜 : 类型} [RCLike 𝕜] {n : 类型} [有限类型 n]
   证明: rfl
 
 @[simp]
@@ -700,7 +700,7 @@ lemma rank_eq_card_non_zero_eigs
 
 中文:
 引理 rank_eq_card_non_zero_eigs
-  结论: A.rank = Fintype.card {i // hA.eigenvalues i != 0}
+  结论: A.rank = 有限类型.card {i // hA.eigenvalues i != 0}
   证明: by
   rw [rank_eq_rank_diagonal hA]; rw [Matrix.rank_diagonal]
 
@@ -794,7 +794,7 @@ lemma exists_eigenvector_of_ne_zero
 exact ⟨_, _, hi,
 
 中文:
-引理 exists_eigenvector_of_ne_zero
+引理 存在_eigenvector_of_ne_zero
   条件: (hA : IsHermitian A) (h_ne : A != 0)
   证明: by
   classical

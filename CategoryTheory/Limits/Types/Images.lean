@@ -36,7 +36,7 @@ definition Image
   body: Set.range f
 
 中文:
-定义 Image
+定义 像
   签名: : 类型u
   定义体: Set.range f
 
@@ -54,8 +54,8 @@ instance [Inhabited
   body: ⟨f default, ⟨_, rfl⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Image f) where default
+实例 [可居
+  签名: α] : 可居 (像 f) where default
   定义体: ⟨f default, ⟨_, rfl⟩⟩
 -/
 instance [Inhabited α] : Inhabited (Image f) where default := ⟨f default, ⟨_, rfl⟩⟩
@@ -69,8 +69,8 @@ definition Image.ι
   body: ↾(Subtype.val)
 
 中文:
-定义 Image.ι
-  签名: : Image f ⟶ β
+定义 像.ι
+  签名: : 像 f ⟶ β
   定义体: ↾(Subtype.val)
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (Image.ι f)
+  签名: 单态射 (像.ι f)
   定义体: (mono_iff_injective _).2 Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, mono_iff_injective, val_injective
@@ -107,8 +107,8 @@ definition Image.lift
   body: ↾fun x => F'.e (Classical.indefiniteDescription _ x.2).1
 
 中文:
-定义 Image.lift
-  签名: (F' : MonoFactorisation f)
+定义 像.lift
+  签名: (F' : 单态射分解 f)
   定义体: ↾fun x => F'.e (Classical.indefiniteDescription _ x.2).1
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
@@ -130,9 +130,9 @@ theorem Image.lift_fac
   rfl
 
 中文:
-定理 Image.lift_fac
-  条件: (F' : MonoFactorisation f)
-  结论: Image.lift F' ≫ F'.m = Image.ι f
+定理 像.lift_fac
+  条件: (F' : 单态射分解 f)
+  结论: 像.lift F' ≫ F'.m = 像.ι f
   证明: by
   ext x
   change (F'.e ≫ F'.m) _ = _
@@ -161,7 +161,7 @@ definition monoFactorisation
 
 中文:
 定义 monoFactorisation
-  签名: : MonoFactorisation f where
+  签名: : 单态射分解 f where
   定义体: Image f
   m := Image.ι f
   e := ↾(Set.rangeFactorization f)
@@ -182,7 +182,7 @@ definition isImage
 
 中文:
 定义 isImage
-  签名: : IsImage (monoFactorisation f) where
+  签名: : 是像 (monoFactorisation f) where
   定义体: Image.lift
   lift_fac := Image.lift_fac
 
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasImage f
+  签名: 有像 f
   定义体: HasImage.mk ⟨_, isImage f⟩
 
 Depends on / 依赖: HasImage, HasImage.mk, isImage
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasImages (类型u)
+  签名: 有Images (类型u)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasImageMaps (类型u)
+  签名: 有ImageMaps (类型u)
   定义体: HasImageMap.transport st (monoFactorisation f.hom) (isImage g.hom)
       (↾fun x => ⟨st.right x.val, ⟨st.left (Classical.choose x.2), by
         rw [elementwise_of% st.w]
@@ -268,7 +268,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def limitOfSurjectionsSurjective.preimage
+  签名: def limitOfSurjectionsSurjective.原像
 
 Depends on / 依赖: Equiv.addCommGroup, addCommGroup, fast_instance, opEquiv
 -/

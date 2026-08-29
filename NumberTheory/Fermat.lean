@@ -101,7 +101,7 @@ theorem fermatNumber_strictMono
 
 中文:
 定理 fermatNumber_strictMono
-  结论: StrictMono fermatNumber
+  结论: 严格递增 fermatNumber
   证明: by
   intro m n
   simp only [fermatNumber, add_lt_add_iff_right, Nat.pow_lt_pow_iff_right (one_lt_two : 1 < 2),
@@ -124,7 +124,7 @@ lemma fermatNumber_mono
 
 中文:
 引理 fermatNumber_mono
-  结论: Monotone fermatNumber
+  结论: 递增 fermatNumber
   证明: fermatNumber_strictMono.monotone
 
 Depends on / 依赖: fermatNumber_strictMono, fermatNumber_strictMono.monotone, monotone
@@ -140,7 +140,7 @@ lemma fermatNumber_injective
 
 中文:
 引理 fermatNumber_injective
-  结论: Injective fermatNumber
+  结论: 单射 fermatNumber
   证明: fermatNumber_strictMono.injective
 
 Depends on / 依赖: fermatNumber_strictMono, fermatNumber_strictMono.injective, injective
@@ -372,7 +372,7 @@ theorem Int.fermatNumber_eq_fermatNumber_sq_sub_two_mul_fermatNumber_sub_one_sq
   simp only [fermatNumber, push_cast, add_tsub_cancel_right]
 
 中文:
-定理 Int.fermatNumber_eq_fermatNumber_sq_sub_two_mul_fermatNumber_sub_one_sq
+定理 整数.fermatNumber_eq_fermatNumber_sq_sub_two_mul_fermatNumber_sub_one_sq
   条件: (n : 自然数)
   证明: by
   rw [Nat.fermatNumber_eq_fermatNumber_sq_sub_two_mul_fermatNumber_sub_one_sq]; rw [Nat.cast_sub two_mul_fermatNumber_sub_one_sq_le_fermatNumber_sq n]
@@ -461,7 +461,7 @@ theorem pow_of_pow_add_prime
 
 中文:
 定理 pow_of_pow_add_prime
-  条件: {a n : 自然数} (ha : 1 < a) (hn : n != 0) (hP : (a ^ n + 1).Prime)
+  条件: {a n : 自然数} (ha : 1 < a) (hn : n != 0) (hP : (a ^ n + 1).素)
   证明: by
   obtain ⟨k, m, hm, rfl⟩ := exists_eq_two_pow_mul_odd hn
   rw [pow_mul] at hP
@@ -565,7 +565,7 @@ lemma fermat_primeFactors_one_lt
 
 中文:
 引理 fermat_primeFactors_one_lt
-  结论: (n p : 自然数) (hn : 1 < n) (hp : p.Prime)
+  结论: (n p : 自然数) (hn : 1 < n) (hp : p.素)
   证明: by
   have : Fact p.Prime := Fact.mk hp
   have hp2 : p != 2 := by
@@ -618,7 +618,7 @@ theorem prime_of_pow_sub_one_prime
 
 中文:
 定理 prime_of_pow_sub_one_prime
-  条件: {a n : 自然数} (hn1 : n != 1) (hP : (a ^ n - 1).Prime)
+  条件: {a n : 自然数} (hn1 : n != 1) (hP : (a ^ n - 1).素)
   证明: by
   have han1 : 1 < a ^ n := tsub_pos_iff_lt.mp hP.pos
   have hn0 : n != 0 := fun h => (h ▸ han1).ne' rfl

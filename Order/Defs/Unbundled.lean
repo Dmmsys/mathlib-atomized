@@ -35,7 +35,7 @@ abbreviation IsIrrefl
 
 中文:
 缩写 IsIrrefl
-  签名: (α : Sort*) (r : α -> α -> 命题)
+  签名: (α : 类型层*) (r : α -> α -> 命题)
   定义体: Std.Irrefl r
 
 Depends on / 依赖: Irrefl, Std.Irrefl
@@ -54,7 +54,7 @@ abbreviation IsRefl
 
 中文:
 缩写 IsRefl
-  签名: (α : Sort*) (r : α -> α -> 命题)
+  签名: (α : 类型层*) (r : α -> α -> 命题)
   定义体: Std.Refl r
 
 Depends on / 依赖: Std.Refl
@@ -74,7 +74,7 @@ abbreviation IsAsymm
 
 中文:
 缩写 IsAsymm
-  签名: (α : Sort*) (r : α -> α -> 命题)
+  签名: (α : 类型层*) (r : α -> α -> 命题)
   定义体: Std.Asymm r
 
 Depends on / 依赖: Std.Asymm
@@ -93,7 +93,7 @@ abbreviation IsAntisymm
 
 中文:
 缩写 IsAntisymm
-  签名: (α : Sort*) (r : α -> α -> 命题)
+  签名: (α : 类型层*) (r : α -> α -> 命题)
   定义体: Std.Antisymm r
 
 Depends on / 依赖: Antisymm, Std.Antisymm
@@ -110,8 +110,8 @@ class IsTrans
     - trans : forall a b c, r a b -> r b c -> r a c
 
 中文:
-类 IsTrans
-  参数: (α : Sort*) (r : α -> α -> 命题)
+类 是Trans
+  参数: (α : 类型层*) (r : α -> α -> 命题)
   公理与运算 (1 个):
     - trans : 对任意 a b c, r a b -> r b c -> r a c
 -/
@@ -136,8 +136,8 @@ abbreviation IsTotal
   body: Std.Total r
 
 中文:
-缩写 IsTotal
-  签名: (α : Sort*) (r : α -> α -> 命题)
+缩写 是全序
+  签名: (α : 类型层*) (r : α -> α -> 命题)
   定义体: Std.Total r
 
 Depends on / 依赖: Std.Total
@@ -154,9 +154,9 @@ class IsPreorder
   (no additional axioms)
 
 中文:
-类 IsPreorder
-  参数: (α : Sort*) (r : α -> α -> 命题)
-  继承: Std.Refl r, IsTrans α r
+类 是预序
+  参数: (α : 类型层*) (r : α -> α -> 命题)
+  继承: Std.Refl r, 是Trans α r
   (无附加公理)
 -/
 class IsPreorder (α : Sort*) (r : α -> α -> Prop) : Prop extends Std.Refl r, IsTrans α r
@@ -171,9 +171,9 @@ class IsPartialOrder
   (no additional axioms)
 
 中文:
-类 IsPartialOrder
-  参数: (α : Sort*) (r : α -> α -> 命题)
-  继承: IsPreorder α r, Std.Antisymm r
+类 是偏序
+  参数: (α : 类型层*) (r : α -> α -> 命题)
+  继承: 是预序 α r, Std.反对称 r
   (无附加公理)
 -/
 class IsPartialOrder (α : Sort*) (r : α -> α -> Prop) : Prop extends IsPreorder α r, Std.Antisymm r
@@ -188,9 +188,9 @@ class IsLinearOrder
   (no additional axioms)
 
 中文:
-类 IsLinearOrder
-  参数: (α : Sort*) (r : α -> α -> 命题)
-  继承: IsPartialOrder α r, Std.Total r
+类 是线性序
+  参数: (α : 类型层*) (r : α -> α -> 命题)
+  继承: 是偏序 α r, Std.全 r
   (无附加公理)
 -/
 class IsLinearOrder (α : Sort*) (r : α -> α -> Prop) : Prop extends IsPartialOrder α r, Std.Total r
@@ -205,9 +205,9 @@ class IsEquiv
   (no additional axioms)
 
 中文:
-类 IsEquiv
-  参数: (α : Sort*) (r : α -> α -> 命题)
-  继承: IsPreorder α r, Std.Symm r
+类 Is等价
+  参数: (α : 类型层*) (r : α -> α -> 命题)
+  继承: 是预序 α r, Std.Symm r
   (无附加公理)
 -/
 class IsEquiv (α : Sort*) (r : α -> α -> Prop) : Prop extends IsPreorder α r, Std.Symm r
@@ -222,9 +222,9 @@ class IsStrictOrder
   (no additional axioms)
 
 中文:
-类 IsStrictOrder
-  参数: (α : Sort*) (r : α -> α -> 命题)
-  继承: Std.Irrefl r, IsTrans α r
+类 是Strict序
+  参数: (α : 类型层*) (r : α -> α -> 命题)
+  继承: Std.Irrefl r, 是Trans α r
   (无附加公理)
 -/
 class IsStrictOrder (α : Sort*) (r : α -> α -> Prop) : Prop extends Std.Irrefl r, IsTrans α r
@@ -240,9 +240,9 @@ class IsStrictWeakOrder
     - incomp_trans : forall a b c, ¬lt a b ∧ ¬lt b a -> ¬lt b c ∧ ¬lt c b -> ¬lt a c ∧ ¬lt c a
 
 中文:
-类 IsStrictWeakOrder
-  参数: (α : Sort*) (lt : α -> α -> 命题)
-  继承: IsStrictOrder α lt
+类 是StrictWeak序
+  参数: (α : 类型层*) (lt : α -> α -> 命题)
+  继承: 是Strict序 α lt
   公理与运算 (1 个):
     - incomp_trans : 对任意 a b c, ¬lt a b ∧ ¬lt b a -> ¬lt b c ∧ ¬lt c b -> ¬lt a c ∧ ¬lt c a
 -/
@@ -262,7 +262,7 @@ abbreviation IsTrichotomous
 
 中文:
 缩写 IsTrichotomous
-  签名: (α : Sort*) (lt : α -> α -> 命题)
+  签名: (α : 类型层*) (lt : α -> α -> 命题)
   定义体: Std.Trichotomous lt
 
 Depends on / 依赖: Std.Trichotomous, Trichotomous
@@ -279,9 +279,9 @@ class IsStrictTotalOrder
   (no additional axioms)
 
 中文:
-类 IsStrictTotalOrder
-  参数: (α : Sort*) (lt : α -> α -> 命题)
-  继承: Std.Trichotomous lt, IsStrictOrder α lt
+类 是StrictTotal序
+  参数: (α : 类型层*) (lt : α -> α -> 命题)
+  继承: Std.三歧 lt, 是Strict序 α lt
   (无附加公理)
 -/
 class IsStrictTotalOrder (α : Sort*) (lt : α -> α -> Prop) : Prop
@@ -297,9 +297,9 @@ theorem Equivalence.of_isEquiv
   proof: Std.Refl.refl; symm := Std.Symm.symm _ _; trans := IsTrans.trans _ _ _
 
 中文:
-定理 Equivalence.of_isEquiv
-  条件: {α : Sort*} (lt : α -> α -> 命题) [IsEquiv α lt]
-  结论: Equivalence lt where
+定理 等价.of_isEquiv
+  条件: {α : 类型层*} (lt : α -> α -> 命题) [Is等价 α lt]
+  结论: 等价 lt where
   证明: Std.Refl.refl; symm := Std.Symm.symm _ _; trans := IsTrans.trans _ _ _
 
 Depends on / 依赖: IsTrans, IsTrans.trans, Std.Refl.refl, Std.Symm.symm
@@ -316,8 +316,8 @@ theorem IsEquiv.of_equivalence
   proof: h.refl; symm _ _ := h.symm; trans _ _ _ := h.trans
 
 中文:
-定理 IsEquiv.of_equivalence
-  条件: {α : Sort*} {lt : α -> α -> 命题} (h : Equivalence lt)
+定理 Is等价.of_equivalence
+  条件: {α : 类型层*} {lt : α -> α -> 命题} (h : 等价 lt)
   证明: h.refl; symm _ _ := h.symm; trans _ _ _ := h.trans
 
 Depends on / 依赖: h.refl, h.symm, h.trans
@@ -337,8 +337,8 @@ theorem equivalence_iff_isEquiv
 
 中文:
 定理 equivalence_iff_isEquiv
-  条件: {α : Sort*} (lt : α -> α -> 命题)
-  结论: Equivalence lt ↔ IsEquiv α lt
+  条件: {α : 类型层*} (lt : α -> α -> 命题)
+  结论: 等价 lt ↔ Is等价 α lt
   证明: ⟨.of_equivalence, fun _ => .of_isEquiv lt⟩
 
 Depends on / 依赖: of_equivalence, of_isEquiv
@@ -358,7 +358,7 @@ instance eq_isEquiv
 
 中文:
 实例 eq_isEquiv
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: @Eq.symm _
   trans := @Eq.trans _
   refl := Eq.refl
@@ -385,7 +385,7 @@ instance iff_isEquiv
 
 中文:
 实例 iff_isEquiv
-  签名: : IsEquiv 命题 Iff where
+  签名: : Is等价 命题 当且仅当 where
   定义体: @Iff.symm
   trans := @Iff.trans
   refl := @Iff.refl
@@ -451,7 +451,7 @@ lemma trans
 
 中文:
 引理 trans
-  条件: [IsTrans α r]
+  条件: [是Trans α r]
   结论: a ≺ b -> b ≺ c -> a ≺ c
   证明: IsTrans.trans _ _ _
 
@@ -487,7 +487,7 @@ lemma antisymm
 
 中文:
 引理 antisymm
-  条件: [Std.Antisymm r]
+  条件: [Std.反对称 r]
   结论: a ≺ b -> b ≺ a -> a = b
   证明: Std.Antisymm.antisymm _ _
 
@@ -524,7 +524,7 @@ lemma trichotomous
 
 中文:
 引理 trichotomous
-  条件: [Std.Trichotomous r]
+  条件: [Std.三歧 r]
   结论: 对任意 a b : α, a ≺ b ∨ a = b ∨ b ≺ a
   证明: fun _ _ => Std.Trichotomous.rel_or_eq_or_rel_swap
 
@@ -578,8 +578,8 @@ lemma isTrans_def
 
 中文:
 引理 isTrans_def
-  条件: {α : Sort*} {r : α -> α -> 命题}
-  结论: IsTrans α r ↔ 对任意 ⦃a b c⦄, r a b -> r b c -> r a c
+  条件: {α : 类型层*} {r : α -> α -> 命题}
+  结论: 是Trans α r ↔ 对任意 ⦃a b c⦄, r a b -> r b c -> r a c
   证明: ⟨(·.trans), .mk⟩
 -/
 lemma isTrans_def {α : Sort*} {r : α -> α -> Prop} : IsTrans α r ↔ forall ⦃a b c⦄, r a b -> r b c -> r a c :=
@@ -611,7 +611,7 @@ lemma antisymm_def
 
 中文:
 引理 antisymm_def
-  结论: Std.Antisymm r ↔ 对任意 ⦃a b⦄, r a b -> r b a -> a = b
+  结论: Std.反对称 r ↔ 对任意 ⦃a b⦄, r a b -> r b a -> a = b
   证明: ⟨(·.antisymm), .mk⟩
 
 Depends on / 依赖: antisymm
@@ -645,7 +645,7 @@ lemma total_def
 
 中文:
 引理 total_def
-  结论: Std.Total r ↔ 对任意 ⦃a b⦄, r a b ∨ r b a
+  结论: Std.全 r ↔ 对任意 ⦃a b⦄, r a b ∨ r b a
   证明: ⟨(·.total), .mk⟩
 -/
 lemma total_def : Std.Total r ↔ forall ⦃a b⦄, r a b ∨ r b a :=
@@ -661,7 +661,7 @@ lemma trichotomous_def
 
 中文:
 引理 trichotomous_def
-  结论: Std.Trichotomous r ↔ 对任意 ⦃a b⦄, ¬r a b -> ¬r b a -> a = b
+  结论: Std.三歧 r ↔ 对任意 ⦃a b⦄, ¬r a b -> ¬r b a -> a = b
   证明: ⟨(·.trichotomous), .mk⟩
 
 Depends on / 依赖: trichotomous
@@ -717,8 +717,8 @@ instance IsTrans.decide
   body: fun a b c => by simpa using trans a b c
 
 中文:
-实例 IsTrans.decide
-  签名: [DecidableRel r] [IsTrans α r]
+实例 是Trans.decide
+  签名: [DecidableRel r] [是Trans α r]
   定义体: fun a b c => by simpa using trans a b c
 -/
 instance IsTrans.decide [DecidableRel r] [IsTrans α r] :
@@ -751,8 +751,8 @@ instance Std.Antisymm.decide
   body: antisymm (r := r) _ _ (by simpa using h₁) (by simpa using h₂)
 
 中文:
-实例 Std.Antisymm.decide
-  签名: [DecidableRel r] [Std.Antisymm r]
+实例 Std.反对称.decide
+  签名: [DecidableRel r] [Std.反对称 r]
   定义体: antisymm (r := r) _ _ (by simpa using h₁) (by simpa using h₂)
 
 Depends on / 依赖: antisymm
@@ -787,8 +787,8 @@ instance Std.Total.decide
   body: fun a b => by simpa using total a b
 
 中文:
-实例 Std.Total.decide
-  签名: [DecidableRel r] [Std.Total r]
+实例 Std.全.decide
+  签名: [DecidableRel r] [Std.全 r]
   定义体: fun a b => by simpa using total a b
 -/
 instance Std.Total.decide [DecidableRel r] [Std.Total r] :
@@ -804,8 +804,8 @@ instance Std.Trichotomous.decide
   body: by simpa using trichotomous a b
 
 中文:
-实例 Std.Trichotomous.decide
-  签名: [DecidableRel r] [Std.Trichotomous r]
+实例 Std.三歧.decide
+  签名: [DecidableRel r] [Std.三歧 r]
   定义体: by simpa using trichotomous a b
 
 Depends on / 依赖: trichotomous
@@ -859,7 +859,7 @@ lemma trans_of
 
 中文:
 引理 trans_of
-  条件: [IsTrans α r]
+  条件: [是Trans α r]
   结论: a ≺ b -> b ≺ c -> a ≺ c
   证明: _root_.trans
 -/
@@ -915,7 +915,7 @@ lemma total_of
 
 中文:
 引理 total_of
-  条件: [Std.Total r] (a b : α)
+  条件: [Std.全 r] (a b : α)
   结论: a ≺ b ∨ b ≺ a
   证明: Std.Total.total _ _
 
@@ -937,7 +937,7 @@ lemma trichotomous_of
 
 中文:
 引理 trichotomous_of
-  条件: [Std.Trichotomous r]
+  条件: [Std.三歧 r]
   结论: 对任意 a b : α, a ≺ b ∨ a = b ∨ b ≺ a
   证明: trichotomous
 
@@ -957,7 +957,7 @@ definition Reflexive
   body: forall x, x ≺ x
 
 中文:
-定义 Reflexive
+定义 自反
   定义体: forall x, x ≺ x
 -/
 def Reflexive := forall x, x ≺ x
@@ -972,7 +972,7 @@ definition Symmetric
   body: forall ⦃x y⦄, x ≺ y -> y ≺ x
 
 中文:
-定义 Symmetric
+定义 对称
   定义体: forall ⦃x y⦄, x ≺ y -> y ≺ x
 -/
 def Symmetric := forall ⦃x y⦄, x ≺ y -> y ≺ x
@@ -987,7 +987,7 @@ definition Transitive
   body: forall ⦃x y z⦄, x ≺ y -> y ≺ z -> x ≺ z
 
 中文:
-定义 Transitive
+定义 传递
   定义体: forall ⦃x y z⦄, x ≺ y -> y ≺ z -> x ≺ z
 -/
 def Transitive := forall ⦃x y z⦄, x ≺ y -> y ≺ z -> x ≺ z
@@ -1032,7 +1032,7 @@ definition Total
   body: forall x y, x ≺ y ∨ y ≺ x
 
 中文:
-定义 Total
+定义 全
   定义体: forall x y, x ≺ y ∨ y ≺ x
 -/
 def Total := forall x y, x ≺ y ∨ y ≺ x
@@ -1049,8 +1049,8 @@ theorem Equivalence.stdRefl
 @[deprecated (since := "2026-03-27")] alias Equivalence.reflexive := Equivalence.stdRefl
 
 中文:
-定理 Equivalence.stdRefl
-  条件: (h : Equivalence r)
+定理 等价.stdRefl
+  条件: (h : 等价 r)
   结论: Std.Refl r where
   证明: h.refl
 
@@ -1075,8 +1075,8 @@ theorem Equivalence.stdSymm
 @[deprecated (since := "2026-06-10")] alias Equivalence.symmetric := Equivalence.stdSymm
 
 中文:
-定理 Equivalence.stdSymm
-  条件: (h : Equivalence r)
+定理 等价.stdSymm
+  条件: (h : 等价 r)
   结论: Std.Symm r where
   证明: h.symm
 
@@ -1101,9 +1101,9 @@ theorem Equivalence.isTrans
 @[deprecated (since := "2026-02-20")] alias Equivalence.transitive := Equivalence.isTrans
 
 中文:
-定理 Equivalence.isTrans
-  条件: (h : Equivalence r)
-  结论: IsTrans α r
+定理 等价.isTrans
+  条件: (h : 等价 r)
+  结论: 是Trans α r
   证明: ⟨fun _ _ _ => h.trans⟩
 
 @[deprecated (since := "2026-02-20")] alias Equivalence.transitive := Equivalence.isTrans
@@ -1128,9 +1128,9 @@ theorem Equivalence.isEquiv
   {}
 
 中文:
-定理 Equivalence.isEquiv
-  条件: (h : Equivalence r)
-  结论: IsEquiv α r
+定理 等价.isEquiv
+  条件: (h : 等价 r)
+  结论: Is等价 α r
   证明: have := h.stdRefl
   have := h.stdSymm
   have := h.isTrans
@@ -1158,7 +1158,7 @@ instance InvImage.isTrans
 
 中文:
 实例 InvImage.isTrans
-  签名: [IsTrans β r]
+  签名: [是Trans β r]
   定义体: ⟨fun _ _ _ => trans_of r⟩
 
 @[deprecated (since := "2026-02-20")] alias InvImage.trans := InvImage.isTrans
@@ -1217,7 +1217,7 @@ definition Minimal
 @[to_dual]
 
 中文:
-定义 Minimal
+定义 极小
   签名: (P : α -> 命题) (x : α)
   定义体: P x ∧ forall ⦃y⦄, P y -> y <= x -> x <= y
 
@@ -1238,8 +1238,8 @@ lemma Minimal.prop
 @[to_dual le_of_ge] -- TODO: improve this naming
 
 中文:
-引理 Minimal.prop
-  条件: (h : Minimal P x)
+引理 极小.prop
+  条件: (h : 极小 P x)
   结论: P x
   证明: h.1
 
@@ -1259,8 +1259,8 @@ lemma Minimal.le_of_le
   proof: h.2 hy hle
 
 中文:
-引理 Minimal.le_of_le
-  条件: (h : Minimal P x) (hy : P y) (hle : y <= x)
+引理 极小.le_of_le
+  条件: (h : 极小 P x) (hy : P y) (hle : y <= x)
   结论: x <= y
   证明: h.2 hy hle
 -/
@@ -1353,8 +1353,8 @@ definition IsUpperSet
 @[inherit_doc IsUpperSet]
 
 中文:
-定义 IsUpperSet
-  签名: {α : 类型} [LE α] (s : Set α)
+定义 是上集
+  签名: {α : 类型} [LE α] (s : 集合 α)
   定义体: forall ⦃a b : α⦄, a <= b -> a in s -> b in s
 
 @[inherit_doc IsUpperSet]
@@ -1374,11 +1374,11 @@ structure UpperSet
     - upper' : IsUpperSet carrier
 
 中文:
-结构 UpperSet
+结构 上集
   参数: (α : 类型) [LE α]
   公理与运算 (2 个):
-    - carrier : Set α
-    - upper' : IsUpperSet carrier
+    - carrier : 集合 α
+    - upper' : 是上集 carrier
 -/
 structure UpperSet (α : Type*) [LE α] where
   /-- The carrier of an `UpperSet`. -/
@@ -1400,11 +1400,11 @@ structure LowerSet
     - lower' : IsLowerSet carrier
 
 中文:
-结构 LowerSet
+结构 下集
   参数: (α : 类型) [LE α]
   公理与运算 (2 个):
-    - carrier : Set α
-    - lower' : IsLowerSet carrier
+    - carrier : 集合 α
+    - lower' : 是下集 carrier
 -/
 structure LowerSet (α : Type*) [LE α] where
   /-- The carrier of a `LowerSet`. -/
@@ -1430,7 +1430,7 @@ definition IsRelUpperSet
 
 中文:
 定义 IsRelUpperSet
-  签名: {α : 类型} [LE α] (s : Set α) (P : α -> 命题)
+  签名: {α : 类型} [LE α] (s : 集合 α) (P : α -> 命题)
   定义体: forall ⦃a : α⦄, a in s -> P a ∧ forall ⦃b : α⦄, a <= b -> P b -> b in s
 
 @[inherit_doc IsRelUpperSet]
@@ -1450,10 +1450,10 @@ structure RelUpperSet
     - isRelUpperSet' : IsRelUpperSet carrier P
 
 中文:
-结构 RelUpperSet
+结构 关系上集
   参数: {α : 类型} [LE α] (P : α -> 命题)
   公理与运算 (2 个):
-    - carrier : Set α
+    - carrier : 集合 α
     - isRelUpperSet' : IsRelUpperSet carrier P
 -/
 structure RelUpperSet {α : Type*} [LE α] (P : α -> Prop) where
@@ -1478,10 +1478,10 @@ structure RelLowerSet
     - isRelLowerSet' : IsRelLowerSet carrier P
 
 中文:
-结构 RelLowerSet
+结构 关系下集
   参数: {α : 类型} [LE α] (P : α -> 命题)
   公理与运算 (2 个):
-    - carrier : Set α
+    - carrier : 集合 α
     - isRelLowerSet' : IsRelLowerSet carrier P
 -/
 structure RelLowerSet {α : Type*} [LE α] (P : α -> Prop) where
@@ -1541,7 +1541,7 @@ theorem antisymm'
 
 中文:
 定理 antisymm'
-  条件: [Std.Antisymm r] {a b : α}
+  条件: [Std.反对称 r] {a b : α}
   结论: r a b -> r b a -> b = a
   证明: fun h h' => antisymm h' h
 
@@ -1562,7 +1562,7 @@ theorem antisymm_iff
 
 中文:
 定理 antisymm_iff
-  条件: [Std.Refl r] [Std.Antisymm r] {a b : α}
+  条件: [Std.Refl r] [Std.反对称 r] {a b : α}
   结论: r a b ∧ r b a ↔ a = b
   证明: ⟨fun h => antisymm h.1 h.2, by
     rintro rfl
@@ -1590,7 +1590,7 @@ theorem antisymm_of
 
 中文:
 定理 antisymm_of
-  条件: (r : α -> α -> 命题) [Std.Antisymm r] {a b : α}
+  条件: (r : α -> α -> 命题) [Std.反对称 r] {a b : α}
   结论: r a b -> r b a -> a = b
   证明: antisymm
 
@@ -1614,7 +1614,7 @@ theorem antisymm_of'
 
 中文:
 定理 antisymm_of'
-  条件: (r : α -> α -> 命题) [Std.Antisymm r] {a b : α}
+  条件: (r : α -> α -> 命题) [Std.反对称 r] {a b : α}
   结论: r a b -> r b a -> b = a
   证明: antisymm'
 
@@ -1656,7 +1656,7 @@ theorem Std.Asymm.antisymm
 中文:
 定理 Std.Asymm.antisymm
   条件: (r : α -> α -> 命题) [Std.Asymm r]
-  结论: Std.Antisymm r
+  结论: Std.反对称 r
   证明: inferInstance
 
 @[deprecated (since := "2026-01-05")] protected alias IsAsymm.isAntisymm := Std.Asymm.antisymm
@@ -1707,9 +1707,9 @@ theorem Std.Total.trichotomous
 @[deprecated (since := "2026-01-24")] alias Std.Total.isTrichotomous := Std.Total.trichotomous
 
 中文:
-定理 Std.Total.trichotomous
-  条件: (r : α -> α -> 命题) [Std.Total r]
-  结论: Std.Trichotomous r
+定理 Std.全.trichotomous
+  条件: (r : α -> α -> 命题) [Std.全 r]
+  结论: Std.三歧 r
   证明: inferInstance
 
 @[deprecated (since := "2026-01-24")] alias Std.Total.isTrichotomous := Std.Total.trichotomous
@@ -1766,7 +1766,7 @@ theorem not_rel_of_subsingleton
 
 中文:
 定理 not_rel_of_subsingleton
-  条件: (r : α -> α -> 命题) [Std.Irrefl r] [Subsingleton α] (x y)
+  条件: (r : α -> α -> 命题) [Std.Irrefl r] [子单例 α] (x y)
   结论: ¬r x y
   证明: Subsingleton.elim x y ▸ irrefl x
 
@@ -1788,7 +1788,7 @@ theorem rel_of_subsingleton
 
 中文:
 定理 rel_of_subsingleton
-  条件: (r : α -> α -> 命题) [Std.Refl r] [Subsingleton α] (x y)
+  条件: (r : α -> α -> 命题) [Std.Refl r] [子单例 α] (x y)
   结论: r x y
   证明: Subsingleton.elim x y ▸ refl x
 
@@ -1812,7 +1812,7 @@ theorem empty_relation_apply
 中文:
 定理 empty_relation_apply
   条件: (a b : α)
-  结论: emptyRelation a b ↔ False
+  结论: emptyRelation a b ↔ 假
   证明: Iff.rfl
 
 Depends on / 依赖: HenselianLocalRing, HenselianLocalRing.is_henselian, Ideal.Quotient.eq_zero_iff_mem, Ideal.jacobson, Iff.rfl, IsLocalRing, IsLocalRing.mem_maximalIdeal, Quotient, contrapose, eq_maximalIdeal, eq_zero_iff_mem, is_henselian, jacobson, le_sInf_iff, mem_maximalIdeal, mem_nonunits_iff, not_isUnit_zero
@@ -1849,7 +1849,7 @@ theorem rel_congr_left
 
 中文:
 定理 rel_congr_left
-  条件: [Std.Symm r] [IsTrans α r] {a b c : α} (h : r a b)
+  条件: [Std.Symm r] [是Trans α r] {a b c : α} (h : r a b)
   结论: r a c ↔ r b c
   证明: ⟨trans_of r (symm_of r h), trans_of r h⟩
 
@@ -1869,7 +1869,7 @@ theorem rel_congr_right
 
 中文:
 定理 rel_congr_right
-  条件: [Std.Symm r] [IsTrans α r] {a b c : α} (h : r b c)
+  条件: [Std.Symm r] [是Trans α r] {a b c : α} (h : r b c)
   结论: r a b ↔ r a c
   证明: ⟨(trans_of r · h), (trans_of r · (symm_of r h))⟩
 
@@ -1889,7 +1889,7 @@ theorem rel_congr
 
 中文:
 定理 rel_congr
-  条件: [Std.Symm r] [IsTrans α r] {a b c d : α} (h₁ : r a b) (h₂ : r c d)
+  条件: [Std.Symm r] [是Trans α r] {a b c d : α} (h₁ : r a b) (h₂ : r c d)
   证明: by
   rw [rel_congr_left h₁]; rw [rel_congr_right h₂]
 
@@ -1913,7 +1913,7 @@ theorem trans_trichotomous_left
 
 中文:
 定理 trans_trichotomous_left
-  结论: [IsTrans α r] [Std.Trichotomous r] {a b c : α}
+  结论: [是Trans α r] [Std.三歧 r] {a b c : α}
   证明: by
   rcases trichotomous_of r a b with (h₃ | rfl | h₃)
   · exact _root_.trans h₃ h₂
@@ -1945,7 +1945,7 @@ theorem trans_trichotomous_right
 
 中文:
 定理 trans_trichotomous_right
-  结论: [IsTrans α r] [Std.Trichotomous r] {a b c : α}
+  结论: [是Trans α r] [Std.三歧 r] {a b c : α}
   证明: by
   rcases trichotomous_of r b c with (h₃ | rfl | h₃)
   · exact _root_.trans h₁ h₃
@@ -1975,8 +1975,8 @@ theorem transitive_of_trans
 
 中文:
 定理 transitive_of_trans
-  条件: (r : α -> α -> 命题) [IsTrans α r]
-  结论: Transitive r
+  条件: (r : α -> α -> 命题) [是Trans α r]
+  结论: 传递 r
   证明: IsTrans.trans
 
 Depends on / 依赖: IsTrans, IsTrans.trans
@@ -1994,7 +1994,7 @@ theorem extensional_of_trichotomous_of_irrefl
 
 中文:
 定理 extensional_of_trichotomous_of_irrefl
-  结论: (r : α -> α -> 命题) [Std.Trichotomous r] [Std.Irrefl r]
+  结论: (r : α -> α -> 命题) [Std.三歧 r] [Std.Irrefl r]
   证明: ((@trichotomous _ r _ a b).resolve_left <| mt (H _).2 <| irrefl a).resolve_right mt (H _).1
  irrefl b
 

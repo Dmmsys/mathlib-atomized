@@ -42,8 +42,8 @@ definition Subgroup.subgroupOfContinuousMulEquivOfLe
       fun t => and_congr_right fun _ => ⟨fun aux g hgh => aux g (hHK hgh) hgh, by grin
 
 中文:
-定义 Subgroup.subgroupOfContinuousMulEquivOfLe
-  签名: {H K : Subgroup G} (hHK : H <= K)
+定义 子群.subgroupOfContinuousMulEquivOfLe
+  签名: {H K : 子群 G} (hHK : H <= K)
   定义体: (subgroupOfEquivOfLe hHK).toContinuousMulEquiv (by
     simp only [subgroupOfEquivOfLe, Topology.IsInducing.subtypeVal.isOpen_iff,
       exists_exists_and_eq_and]
@@ -71,7 +71,7 @@ lemma Subgroup.subgroupOfContinuousMulEquivOfLe_symm_apply
 @[to_additive (attr := simp)]
 
 中文:
-引理 Subgroup.subgroupOfContinuousMulEquivOfLe_symm_apply
+引理 子群.subgroupOfContinuousMulEquivOfLe_symm_apply
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -92,8 +92,8 @@ lemma Subgroup.subgroupOfContinuousMulEquivOfLe_toMulEquiv
   rfl
 
 中文:
-引理 Subgroup.subgroupOfContinuousMulEquivOfLe_toMulEquiv
-  条件: {H K : Subgroup G} (hHK : H <= K)
+引理 子群.subgroupOfContinuousMulEquivOfLe_toMulEquiv
+  条件: {H K : 子群 G} (hHK : H <= K)
   证明: by
   rfl
 -/
@@ -119,8 +119,8 @@ lemma Subgroup.discreteTopology_iff_of_finiteIndex
   exact H.isOpen_of
 
 中文:
-引理 Subgroup.discreteTopology_iff_of_finiteIndex
-  条件: {H : Subgroup G} [H.FiniteIndex]
+引理 子群.discreteTopology_iff_of_finiteIndex
+  条件: {H : 子群 G} [H.FiniteIndex]
   证明: by
   refine ⟨fun hH => ?_, fun hG => inferInstance⟩
   suffices IsOpen (H : Set G) by
@@ -150,8 +150,8 @@ lemma Subgroup.discreteTopology_iff_of_isFiniteRelIndex
 @[to_additive]
 
 中文:
-引理 Subgroup.discreteTopology_iff_of_isFiniteRelIndex
-  结论: {H K : Subgroup G} (hHK : H <= K)
+引理 子群.discreteTopology_iff_of_isFiniteRelIndex
+  结论: {H K : 子群 G} (hHK : H <= K)
   证明: by
   have : (H.subgroupOf K).FiniteIndex := IsFiniteRelIndex.to_finiteIndex_subgroupOf
   rw [← (subgroupOfContinuousMulEquivOfLe hHK).discreteTopology_iff]; rw [discreteTopology_iff_of_finiteIndex]
@@ -178,7 +178,7 @@ lemma Subgroup.Commensurable.discreteTopology_iff
     haveI : IsFiniteRelIndex (H ⊓ K) K := ⟨Subgroup.inf_relInde
 
 中文:
-引理 Subgroup.Commensurable.discreteTopology_iff
+引理 子群.Commensurable.discreteTopology_iff
   证明: calc DiscreteTopology H ↔ DiscreteTopology ↑(H ⊓ K) :=
     haveI : IsFiniteRelIndex (H ⊓ K) H := ⟨Subgroup.inf_relIndex_left H K ▸ h.2⟩
     (Subgroup.discreteTopology_iff_of_isFiniteRelIndex inf_le_left).symm

@@ -41,7 +41,7 @@ abbreviation Functor.IsFinitelyAccessible
   body: IsCardinalAccessible.{w} F ℵ₀
 
 中文:
-缩写 Functor.IsFinitelyAccessible
+缩写 函子.IsFinitelyAccessible
   签名: (F : C ⥤ D)
   定义体: IsCardinalAccessible.{w} F ℵ₀
 
@@ -61,7 +61,7 @@ lemma Functor.IsFinitelyAccessible_iff_preservesFilteredColimitsOfSize
     exact H
 
 中文:
-引理 Functor.IsFinitelyAccessible_iff_preservesFilteredColimitsOfSize
+引理 函子.IsFinitelyAccessible_iff_preservesFilteredColimitsOfSize
   条件: {F : C ⥤ D}
   证明: by
   refine ⟨fun ⟨H⟩ => ⟨?_⟩, fun ⟨H⟩ => ⟨?_⟩⟩ <;>
@@ -85,7 +85,7 @@ lemma Functor.isFinitelyAccessible_iff_preservesFilteredColimits
   proof: IsFinitelyAccessible_iff_preservesFilteredColimitsOfSize
 
 中文:
-引理 Functor.isFinitelyAccessible_iff_preservesFilteredColimits
+引理 函子.isFinitelyAccessible_iff_preservesFilteredColimits
   条件: {F : C ⥤ D}
   证明: IsFinitelyAccessible_iff_preservesFilteredColimitsOfSize
 
@@ -124,7 +124,7 @@ definition ObjectProperty.isFinitelyPresentable
 
 中文:
 定义 ObjectProperty.isFinitelyPresentable
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => IsFinitelyPresentable.{w} X
 
 Depends on / 依赖: IsFinitelyPresentable
@@ -157,7 +157,7 @@ definition MorphismProperty.isFinitelyPresentable
 
 中文:
 定义 MorphismProperty.isFinitelyPresentable
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => ObjectProperty.isFinitelyPresentable.{w} _ (CategoryTheory.Under.mk f)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Under.mk, ObjectProperty, ObjectProperty.isFinitelyPresentable, isFinitelyPresentable
@@ -221,8 +221,8 @@ lemma IsFinitelyPresentable.exists_hom_of_isColimit
   proof: Types.jointly_surjective_of_isColimit (isColimitOfPreserves (coyoneda.obj (op X)) hc) f
 
 中文:
-引理 IsFinitelyPresentable.exists_hom_of_isColimit
-  结论: {J : Type w} [SmallCategory J] [IsFiltered J]
+引理 IsFinitelyPresentable.存在_hom_of_isColimit
+  结论: {J : 类型 w} [小范畴 J] [是Filtered J]
   证明: Types.jointly_surjective_of_isColimit (isColimitOfPreserves (coyoneda.obj (op X)) hc) f
 
 Depends on / 依赖: Types.jointly_surjective_of_isColimit, coyoneda, coyoneda.obj, isColimitOfPreserves, jointly_surjective_of_isColimit
@@ -242,8 +242,8 @@ lemma IsFinitelyPresentable.exists_eq_of_isColimit
   proof: (Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (coyoneda.obj (op X)) hc)).mp h
 
 中文:
-引理 IsFinitelyPresentable.exists_eq_of_isColimit
-  结论: {J : Type w} [SmallCategory J] [IsFiltered J]
+引理 IsFinitelyPresentable.存在_eq_of_isColimit
+  结论: {J : 类型 w} [小范畴 J] [是Filtered J]
   证明: (Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (coyoneda.obj (op X)) hc)).mp h
 
 Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, coyoneda, coyoneda.obj, isColimitOfPreserves, isColimit_eq_iff
@@ -266,7 +266,7 @@ lemma IsFinitelyPresentable.exists_hom_of_isColimit_under
   use j, q.right, Under.w q, congr($(hq).right)
 
 中文:
-引理 IsFinitelyPresentable.exists_hom_of_isColimit_under
+引理 IsFinitelyPresentable.存在_hom_of_isColimit_under
   证明: by
   have : Nonempty J := IsFiltered.nonempty
   let hc' := Under.isColimitLiftCocone D s c (p ≫ f) h hc

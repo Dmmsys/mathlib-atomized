@@ -121,7 +121,7 @@ let type ← whnfR ← instantiateMVars ← inferType inst.fvar
 
 中文:
 定义 findSomeLocalInstanceOf?
-  签名: (c : Name) {α} (p : Expr -> Expr -> MetaM (Option α))
+  签名: (c : Name) {α} (p : Expr -> Expr -> MetaM (选项类型 α))
   定义体: do
   (← getLocalInstances).findSomeM? fun inst => do
     if inst.className == c then
@@ -151,7 +151,7 @@ let type ← whnfR ← instantiateMVars decl.type
 
 中文:
 定义 findSomeLocalHyp?
-  签名: {α} (p : Expr -> Expr -> MetaM (Option α))
+  签名: {α} (p : Expr -> Expr -> MetaM (选项类型 α))
   定义体: do
   (← getLCtx).findDeclRevM? fun decl => do
     if decl.isImplementationDetail then return none
@@ -385,7 +385,7 @@ structure FindModelResult
   参数: where
   公理与运算 (2 个):
     - model : Expr
-    - normedSpaceInfo? : Option NormedSpaceInfo  [默认: none]
+    - normedSpaceInfo? : 选项类型 NormedSpaceInfo  [默认: none]
 -/
 structure FindModelResult where
   /-- Expression describing the model with corners found. -/
@@ -978,7 +978,7 @@ let etype ← whnf ← instantiateMVars ← inferType e
 
 中文:
 定义 findModels
-  签名: (e : Expr) (es : Option Expr)
+  签名: (e : Expr) (es : 选项类型 Expr)
   定义体: do
 let etype ← whnf ← instantiateMVars ← inferType e
   match etype with

@@ -46,7 +46,7 @@ lemma toMatrix_directSum_collectedBasis_eq_blockDiagonal'
 
 中文:
 引理 toMatrix_directSum_collectedBasis_eq_blockDiagonal'
-  结论: {R M₁ M₂ : 类型} [CommSemiring R]
+  结论: {R M₁ M₂ : 类型} [交换半环 R]
   证明: by
   ext ⟨i, _⟩ ⟨j, _⟩
   simp only [toMatrix_apply, Matrix.blockDiagonal'_apply]
@@ -128,7 +128,7 @@ lemma trace_eq_sum_trace_restrict
 
 中文:
 引理 trace_eq_sum_trace_restrict
-  结论: (h : Is整数ernal N) [Fintype ι]
+  结论: (h : Is整数ernal N) [有限类型 ι]
   证明: by
   let b : (i : ι) -> Basis _ R (N i) := fun i => Module.Free.chooseBasis R (N i)
   simp_rw [trace_eq_matrix_trace R (h.collectedBasis b),
@@ -159,7 +159,7 @@ lemma trace_eq_sum_trace_restrict'
 
 中文:
 引理 trace_eq_sum_trace_restrict'
-  结论: (h : Is整数ernal N) (hN : {i | N i != ⊥}.Finite)
+  结论: (h : Is整数ernal N) (hN : {i | N i != ⊥}.有限)
   证明: by
   let _ : Fintype {i // N i != ⊥} := hN.fintype
   let _ : Fintype {i | N i != ⊥} := hN.fintype
@@ -192,7 +192,7 @@ lemma trace_eq_zero_of_mapsTo_ne
 
 中文:
 引理 trace_eq_zero_of_mapsTo_ne
-  结论: (h : Is整数ernal N) [IsNoetherian R M]
+  结论: (h : Is整数ernal N) [是Noether R M]
   证明: by
   have hN : {i | N i != ⊥}.Finite := WellFoundedGT.finite_ne_bot_of_iSupIndep
     h.submodule_iSupIndep
@@ -285,7 +285,7 @@ simpa only [Submodule.map_iSup] using iSup₂_mono fun i _ => hf i
 
 中文:
 引理 mapsTo_biSup_of_mapsTo
-  结论: {ι : 类型} {N : ι -> Submodule R M}
+  结论: {ι : 类型} {N : ι -> 子模 R M}
   证明: by
   replace hf : forall i, (N i).map f <= N i := fun i => Submodule.map_le_iff_le_comap.mpr (hf i)
   suffices (⨆ i in s, N i).map f <= ⨆ i in s, N i from Submodule.map_le_iff_le_comap.mp this

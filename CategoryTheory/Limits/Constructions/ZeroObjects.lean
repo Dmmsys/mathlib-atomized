@@ -123,7 +123,7 @@ theorem zeroProdIso_hom
 中文:
 定理 zeroProdIso_hom
   条件: (X : C)
-  结论: (zeroProdIso X).hom = prod.snd
+  结论: (zeroProdIso X).hom = 乘积.snd
   证明: rfl
 -/
 theorem zeroProdIso_hom (X : C) : (zeroProdIso X).hom = prod.snd :=
@@ -145,7 +145,7 @@ theorem zeroProdIso_inv_snd
 中文:
 定理 zeroProdIso_inv_snd
   条件: (X : C)
-  结论: (zeroProdIso X).inv ≫ prod.snd = 𝟙 X
+  结论: (zeroProdIso X).inv ≫ 乘积.snd = 𝟙 X
   证明: by
   dsimp [zeroProdIso, binaryFanZeroLeft]
   simp
@@ -249,7 +249,7 @@ theorem prodZeroIso_hom
 中文:
 定理 prodZeroIso_hom
   条件: (X : C)
-  结论: (prodZeroIso X).hom = prod.fst
+  结论: (prodZeroIso X).hom = 乘积.fst
   证明: rfl
 -/
 theorem prodZeroIso_hom (X : C) : (prodZeroIso X).hom = prod.fst :=
@@ -271,7 +271,7 @@ theorem prodZeroIso_iso_inv_snd
 中文:
 定理 prodZeroIso_iso_inv_snd
   条件: (X : C)
-  结论: (prodZeroIso X).inv ≫ prod.fst = 𝟙 X
+  结论: (prodZeroIso X).inv ≫ 乘积.fst = 𝟙 X
   证明: by
   dsimp [prodZeroIso, binaryFanZeroRight]
   simp

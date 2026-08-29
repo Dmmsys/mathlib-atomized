@@ -111,7 +111,7 @@ lemma continuous_cfcₙAux
 
 中文:
 引理 continuous_cfcₙAux
-  结论: Continuous (cfcₙAux hp₁ a ha)
+  结论: 连续 (cfcₙAux hp₁ a ha)
   证明: (cfcHom_continuous (hp₁.mpr ha)).comp
 (ContinuousMap.continuous_precomp _).comp
     ContinuousMapZero.isEmbedding_toContinuousMap.continuous
@@ -134,7 +134,7 @@ lemma cfcₙAux_injective
 
 中文:
 引理 cfcₙAux_injective
-  结论: Function.Injective (cfcₙAux hp₁ a ha)
+  结论: 函数.单射 (cfcₙAux hp₁ a ha)
   证明: (cfcHom_injective (hp₁.mpr ha)).comp
     .comp (Equiv.injective _) ContinuousMapZero.isEmbedding_toContinuousMap.injective
 
@@ -160,7 +160,7 @@ lemma spec_cfcₙAux
 中文:
 引理 spec_cfcₙAux
   条件: (f : C(σₙ 𝕜 a, 𝕜)₀)
-  结论: σ 𝕜 (cfcₙAux hp₁ a ha f) = Set.range f
+  结论: σ 𝕜 (cfcₙAux hp₁ a ha f) = 集合.range f
   证明: by
   rw [cfcₙAux]; rw [NonUnitalStarAlgHom.comp_assoc]; rw [NonUnitalStarAlgHom.comp_apply]
   simp only [NonUnitalStarAlgHom.comp_apply, NonUnitalStarAlgHom.coe_coe]
@@ -191,7 +191,7 @@ lemma isClosedEmbedding_cfcₙAux
 
 中文:
 引理 isClosedEmbedding_cfcₙAux
-  结论: IsClosedEmbedding (cfcₙAux hp₁ a ha)
+  结论: 是闭嵌入 (cfcₙAux hp₁ a ha)
   证明: by
   simp only [cfcₙAux, NonUnitalStarAlgHom.coe_comp]
   refine ((cfcHom_isClosedEmbedding (hp₁.mpr ha)).comp ?_).comp
@@ -459,7 +459,7 @@ lemma QuasispectrumRestricts.isSelfAdjoint
 
 中文:
 引理 QuasispectrumRestricts.isSelfAdjoint
-  结论: (a : A) (ha : QuasispectrumRestricts a Complex.reCLM)
+  结论: (a : A) (ha : QuasispectrumRestricts a 复形.reCLM)
   证明: isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts.mpr ⟨‹_›, ha⟩
 
 Depends on / 依赖: isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts, isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts.mpr
@@ -563,7 +563,7 @@ lemma IsSelfAdjoint.spectrum_nonempty
 
 中文:
 引理 IsSelfAdjoint.spectrum_nonempty
-  结论: {A : 类型} [Ring A] [StarRing A]
+  结论: {A : 类型} [环 A] [对合环 A]
   证明: ContinuousFunctionalCalculus.spectrum_nonempty a ha
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.spectrum_nonempty, spectrum_nonempty
@@ -597,8 +597,8 @@ lemma CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
     nth_rw 2 [← 
 
 中文:
-引理 CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
-  结论: {A : 类型} [NonUnitalRing A]
+引理 CFC.存在_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
+  结论: {A : 类型} [非幺环 A]
   证明: by
   use cfcₙ (√·) a, cfcₙ_predicate (√·) a
   constructor
@@ -757,8 +757,8 @@ lemma NNReal.spectrum_nonempty
   proof: ContinuousFunctionalCalculus.spectrum_nonempty a ha
 
 中文:
-引理 NNReal.spectrum_nonempty
-  结论: {A : 类型} [Ring A] [StarRing A] [LE A]
+引理 非负实数.spectrum_nonempty
+  结论: {A : 类型} [环 A] [对合环 A] [LE A]
   证明: ContinuousFunctionalCalculus.spectrum_nonempty a ha
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.spectrum_nonempty, spectrum_nonempty
@@ -894,7 +894,7 @@ lemma cfc_complex_eq_real
 
 中文:
 引理 cfc_complex_eq_real
-  结论: {f : Complex -> Complex} (a : A) (hf_real : 对任意 x in spectrum Complex a, star (f x) = f x)
+  结论: {f : 复形 -> 复形} (a : A) (hf_real : 对任意 x in spectrum 复形 a, star (f x) = f x)
   证明: by
   rw [cfc_real_eq_complex ..]
   refine cfc_congr fun x hx => ?_
@@ -980,7 +980,7 @@ lemma cfcₙ_complex_eq_real
 
 中文:
 引理 cfcₙ_complex_eq_real
-  结论: {f : Complex -> Complex} (a : A) (hf_real : 对任意 x in σₙ Complex a, star (f x) = f x)
+  结论: {f : 复形 -> 复形} (a : A) (hf_real : 对任意 x in σₙ 复形 a, star (f x) = f x)
   证明: by
   rw [cfcₙ_real_eq_complex ..]
   refine cfcₙ_congr fun x hx => ?_

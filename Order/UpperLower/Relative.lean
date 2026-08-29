@@ -71,8 +71,8 @@ lemma IsUpperSet.isRelUpperSet_sep
   proof: fun _ h => ⟨h.2, fun _ ht hp => ⟨hs ht h.1, hp⟩⟩
 
 中文:
-引理 IsUpperSet.isRelUpperSet_sep
-  条件: (hs : IsUpperSet s)
+引理 是上集.isRelUpperSet_sep
+  条件: (hs : 是上集 s)
   结论: IsRelUpperSet {x in s | P x} P
   证明: fun _ h => ⟨h.2, fun _ ht hp => ⟨hs ht h.1, hp⟩⟩
 
@@ -91,8 +91,8 @@ lemma IsLowerSet.isRelLowerSet_sep
   proof: fun _ h => ⟨h.2, fun _ ht hp => ⟨hs ht h.1, hp⟩⟩
 
 中文:
-引理 IsLowerSet.isRelLowerSet_sep
-  条件: (hs : IsLowerSet s)
+引理 是下集.isRelLowerSet_sep
+  条件: (hs : 是下集 s)
   结论: IsRelLowerSet {x in s | P x} P
   证明: fun _ h => ⟨h.2, fun _ ht hp => ⟨hs ht h.1, hp⟩⟩
 -/
@@ -109,7 +109,7 @@ lemma IsRelLowerSet.mono_isLowerSet
 
 中文:
 引理 IsRelLowerSet.mono_isLowerSet
-  条件: (ht : IsRelLowerSet t P) (hs : IsLowerSet s) (hst : s subseteq t)
+  条件: (ht : IsRelLowerSet t P) (hs : 是下集 s) (hst : s subseteq t)
   证明: fun _ h => ⟨(ht (hst h)).1, fun _ ht _ => hs ht h⟩
 -/
 lemma IsRelLowerSet.mono_isLowerSet (ht : IsRelLowerSet t P) (hs : IsLowerSet s) (hst : s subseteq t) :
@@ -126,7 +126,7 @@ lemma IsRelUpperSet.mono_isUpperSet
 
 中文:
 引理 IsRelUpperSet.mono_isUpperSet
-  条件: (ht : IsRelUpperSet t P) (hs : IsUpperSet s) (hst : s subseteq t)
+  条件: (ht : IsRelUpperSet t P) (hs : 是上集 s) (hst : s subseteq t)
   证明: fun _ h => ⟨(ht (hst h)).1, fun _ ht _ => hs ht h⟩
 -/
 lemma IsRelUpperSet.mono_isUpperSet (ht : IsRelUpperSet t P) (hs : IsUpperSet s) (hst : s subseteq t) :
@@ -207,7 +207,7 @@ lemma isRelUpperSet_empty
 
 中文:
 引理 isRelUpperSet_empty
-  结论: IsRelUpperSet (∅ : Set α) P
+  结论: IsRelUpperSet (∅ : 集合 α) P
   证明: fun _ => False.elim
 -/
 @[simp] lemma isRelUpperSet_empty : IsRelUpperSet (∅ : Set α) P := fun _ => False.elim
@@ -221,7 +221,7 @@ lemma isRelLowerSet_empty
 
 中文:
 引理 isRelLowerSet_empty
-  结论: IsRelLowerSet (∅ : Set α) P
+  结论: IsRelLowerSet (∅ : 集合 α) P
   证明: fun _ => False.elim
 -/
 @[simp] lemma isRelLowerSet_empty : IsRelLowerSet (∅ : Set α) P := fun _ => False.elim
@@ -363,8 +363,8 @@ lemma IsRelUpperSet.sUnion
   ⟨(hS s ms mb).1, fun _ x y => ⟨s, ms, (hS s ms mb).2 x y⟩⟩
 
 中文:
-引理 IsRelUpperSet.sUnion
-  条件: {S : Set (Set α)} (hS : 对任意 s in S, IsRelUpperSet s P)
+引理 IsRelUpperSet.集合并集
+  条件: {S : 集合 (集合 α)} (hS : 对任意 s in S, IsRelUpperSet s P)
   证明: fun _ ⟨s, ms, mb⟩ =>
   ⟨(hS s ms mb).1, fun _ x y => ⟨s, ms, (hS s ms mb).2 x y⟩⟩
 -/
@@ -382,8 +382,8 @@ lemma IsRelLowerSet.sUnion
   ⟨(hS s ms mb).1, fun _ x y => ⟨s, ms, (hS s ms mb).2 x y⟩⟩
 
 中文:
-引理 IsRelLowerSet.sUnion
-  条件: {S : Set (Set α)} (hS : 对任意 s in S, IsRelLowerSet s P)
+引理 IsRelLowerSet.集合并集
+  条件: {S : 集合 (集合 α)} (hS : 对任意 s in S, IsRelLowerSet s P)
   证明: fun _ ⟨s, ms, mb⟩ =>
   ⟨(hS s ms mb).1, fun _ x y => ⟨s, ms, (hS s ms mb).2 x y⟩⟩
 -/
@@ -401,7 +401,7 @@ lemma IsRelUpperSet.iUnion
 
 中文:
 引理 IsRelUpperSet.iUnion
-  条件: {f : ι -> Set α} (hf : 对任意 i, IsRelUpperSet (f i) P)
+  条件: {f : ι -> 集合 α} (hf : 对任意 i, IsRelUpperSet (f i) P)
   证明: .sUnion (forall_mem_range.2 hf)
 -/
 protected lemma IsRelUpperSet.iUnion {f : ι -> Set α} (hf : forall i, IsRelUpperSet (f i) P) :
@@ -418,7 +418,7 @@ lemma IsRelLowerSet.iUnion
 
 中文:
 引理 IsRelLowerSet.iUnion
-  条件: {f : ι -> Set α} (hf : 对任意 i, IsRelLowerSet (f i) P)
+  条件: {f : ι -> 集合 α} (hf : 对任意 i, IsRelLowerSet (f i) P)
   证明: .sUnion (forall_mem_range.2 hf)
 -/
 protected lemma IsRelLowerSet.iUnion {f : ι -> Set α} (hf : forall i, IsRelLowerSet (f i) P) :
@@ -435,7 +435,7 @@ lemma IsRelUpperSet.iUnion₂
 
 中文:
 引理 IsRelUpperSet.iUnion₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsRelUpperSet (f i j) P)
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, IsRelUpperSet (f i j) P)
   证明: .iUnion fun i => .iUnion (hf i)
 -/
 protected lemma IsRelUpperSet.iUnion₂ {f : forall i, κ i -> Set α} (hf : forall i j, IsRelUpperSet (f i j) P) :
@@ -452,7 +452,7 @@ lemma IsRelLowerSet.iUnion₂
 
 中文:
 引理 IsRelLowerSet.iUnion₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsRelLowerSet (f i j) P)
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, IsRelLowerSet (f i j) P)
   证明: .iUnion fun i => .iUnion (hf i)
 -/
 protected lemma IsRelLowerSet.iUnion₂ {f : forall i, κ i -> Set α} (hf : forall i j, IsRelLowerSet (f i j) P) :
@@ -469,7 +469,7 @@ lemma IsRelUpperSet.sInter
   refine ⟨(hf s₀ ms₀ (mb s₀ ms₀)).1, fun _ x y s ms => (hf s ms (mb s ms)).2 x y⟩
 
 中文:
-引理 IsRelUpperSet.sInter
+引理 IsRelUpperSet.集合交集
   证明: fun b mb => by
   obtain ⟨s₀, ms₀⟩ := hS
   refine ⟨(hf s₀ ms₀ (mb s₀ ms₀)).1, fun _ x y s ms => (hf s ms (mb s ms)).2 x y⟩
@@ -490,7 +490,7 @@ lemma IsRelLowerSet.sInter
   refine ⟨(hf s₀ ms₀ (mb s₀ ms₀)).1, fun _ x y s ms => (hf s ms (mb s ms)).2 x y⟩
 
 中文:
-引理 IsRelLowerSet.sInter
+引理 IsRelLowerSet.集合交集
   证明: fun b mb => by
   obtain ⟨s₀, ms₀⟩ := hS
   refine ⟨(hf s₀ ms₀ (mb s₀ ms₀)).1, fun _ x y s ms => (hf s ms (mb s ms)).2 x y⟩
@@ -509,7 +509,7 @@ lemma IsRelUpperSet.iInter
   proof: .sInter (range_nonempty f) (forall_mem_range.2 hf)
 
 中文:
-引理 IsRelUpperSet.iInter
+引理 IsRelUpperSet.i整数er
   证明: .sInter (range_nonempty f) (forall_mem_range.2 hf)
 -/
 protected lemma IsRelUpperSet.iInter
@@ -524,7 +524,7 @@ lemma IsRelLowerSet.iInter
   proof: .sInter (range_nonempty f) (forall_mem_range.2 hf)
 
 中文:
-引理 IsRelLowerSet.iInter
+引理 IsRelLowerSet.i整数er
   证明: .sInter (range_nonempty f) (forall_mem_range.2 hf)
 -/
 protected lemma IsRelLowerSet.iInter
@@ -540,8 +540,8 @@ lemma IsRelUpperSet.iInter₂
   proof: .iInter fun i => .iInter (hf i)
 
 中文:
-引理 IsRelUpperSet.iInter₂
-  结论: [Nonempty ι] [对任意 i, Nonempty (κ i)]
+引理 IsRelUpperSet.i整数er₂
+  结论: [非空 ι] [对任意 i, 非空 (κ i)]
   证明: .iInter fun i => .iInter (hf i)
 -/
 protected lemma IsRelUpperSet.iInter₂ [Nonempty ι] [forall i, Nonempty (κ i)]
@@ -558,8 +558,8 @@ lemma IsRelLowerSet.iInter₂
   proof: .iInter fun i => .iInter (hf i)
 
 中文:
-引理 IsRelLowerSet.iInter₂
-  结论: [Nonempty ι] [对任意 i, Nonempty (κ i)]
+引理 IsRelLowerSet.i整数er₂
+  结论: [非空 ι] [对任意 i, 非空 (κ i)]
   证明: .iInter fun i => .iInter (hf i)
 -/
 protected lemma IsRelLowerSet.iInter₂ [Nonempty ι] [forall i, Nonempty (κ i)]
@@ -582,7 +582,7 @@ lemma isUpperSet_subtype_iff_isRelUpperSet
 
 中文:
 引理 isUpperSet_subtype_iff_isRelUpperSet
-  条件: {s : Set { x // P x }}
+  条件: {s : 集合 { x // P x }}
   证明: by
   refine ⟨fun h a x => ?_, fun h a b x y => ?_⟩
   · obtain ⟨a, ma, rfl⟩ := x
@@ -615,7 +615,7 @@ lemma isLowerSet_subtype_iff_isRelLowerSet
 
 中文:
 引理 isLowerSet_subtype_iff_isRelLowerSet
-  条件: {s : Set { x // P x }}
+  条件: {s : 集合 { x // P x }}
   证明: by
   refine ⟨fun h a x => ?_, fun h a b x y => ?_⟩
   · obtain ⟨a, ma, rfl⟩ := x
@@ -644,7 +644,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (RelUpperSet P) α
+  签名: 集合状 (关系上集 P) α
   定义体: RelUpperSet.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -664,7 +664,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (RelUpperSet P)
+  签名: 偏序 (关系上集 P)
   定义体: .ofSetLike (RelUpperSet P) α
 
 Depends on / 依赖: RelUpperSet, ofSetLike
@@ -682,7 +682,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (RelLowerSet P) α
+  签名: 集合状 (关系下集 P) α
   定义体: RelLowerSet.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -702,8 +702,8 @@ lemma RelUpperSet.isRelUpperSet
   proof: u.isRelUpperSet'
 
 中文:
-引理 RelUpperSet.isRelUpperSet
-  条件: (u : RelUpperSet P)
+引理 关系上集.isRelUpperSet
+  条件: (u : 关系上集 P)
   结论: IsRelUpperSet u P
   证明: u.isRelUpperSet'
 
@@ -720,8 +720,8 @@ lemma RelLowerSet.isRelLowerSet
   proof: l.isRelLowerSet'
 
 中文:
-引理 RelLowerSet.isRelLowerSet
-  条件: (l : RelLowerSet P)
+引理 关系下集.isRelLowerSet
+  条件: (l : 关系下集 P)
   结论: IsRelLowerSet l P
   证明: l.isRelLowerSet'
 
@@ -747,7 +747,7 @@ lemma isRelUpperSet_Icc_le
 
 中文:
 引理 isRelUpperSet_Icc_le
-  结论: IsRelUpperSet (Icc a c) (· <= c)
+  结论: IsRelUpperSet (闭区间 a c) (· <= c)
   证明: fun _ b => by
   simp_all only [mem_Icc, and_true, true_and]
   exact fun _ x _ => b.1.trans x
@@ -770,7 +770,7 @@ lemma isRelLowerSet_Icc_ge
 
 中文:
 引理 isRelLowerSet_Icc_ge
-  结论: IsRelLowerSet (Icc c a) (c <= ·)
+  结论: IsRelLowerSet (闭区间 c a) (c <= ·)
   证明: fun _ b => by
   simp_all only [mem_Icc, true_and]
   exact fun _ x _ => x.trans b.2

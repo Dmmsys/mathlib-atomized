@@ -46,7 +46,7 @@ using le_mul_of_one_le_left (norm_nonneg _)
         one_le_z
 
 中文:
-引理 exists_one_half_le_im_and_norm_le
+引理 存在_one_half_le_im_and_norm_le
   条件: (hk : k <= 0) (f : F) (τ : ℍ)
   证明: let ⟨γ, hγ, hdenom⟩ := exists_one_half_le_im_smul_and_norm_denom_le τ
   ⟨γ • τ, hγ, by
@@ -82,7 +82,7 @@ lemma wt_eq_zero_of_eq_const
 
 中文:
 引理 wt_eq_zero_of_eq_const
-  条件: {f : F} {c : Complex} (hf : ⇑f = Function.const _ c)
+  条件: {f : F} {c : 复形} (hf : ⇑f = 函数.const _ c)
   证明: by
   have : SlashInvariantFormClass F Γ(1) k := Gamma_one_coe_eq_SL ▸ ‹_›
   have hI := slash_action_eqn_SL'' f (mem_Gamma_one S) I
@@ -117,7 +117,7 @@ theorem slash_action_generators_SL2Z
 
 中文:
 定理 slash_action_generators_SL2Z
-  结论: {f : ℍ -> Complex} {k : 整数}
+  结论: {f : ℍ -> 复形} {k : 整数}
   证明: by
   intro γ
   have h𝒮ℒ : 𝒮ℒ = Subgroup.closure ({↑S, ↑T} : Set (GL (Fin 2) Real)) := by
@@ -267,7 +267,7 @@ lemma levelOne_weight_zero_const
 
 中文:
 引理 levelOne_weight_zero_const
-  条件: [ModularFormClass F 𝒮ℒ 0] (f : F)
+  条件: [模形式类 F 𝒮ℒ 0] (f : F)
   证明: ⟨_, levelOne_nonpos_wt_const le_rfl f⟩
 
 Depends on / 依赖: le_rfl, levelOne_nonpos_wt_const
@@ -290,8 +290,8 @@ lemma ModularForm.levelOne_weight_zero_rank_one
   aesop
 
 中文:
-引理 ModularForm.levelOne_weight_zero_rank_one
-  结论: Module.rank Complex (ModularForm 𝒮ℒ 0) = 1
+引理 模形式.levelOne_weight_zero_rank_one
+  结论: 模.rank 复形 (模形式 𝒮ℒ 0) = 1
   证明: by
   refine rank_eq_one (const 1) (by simp [DFunLike.ne_iff]) fun g => ?_
   obtain ⟨c', hc'⟩ := levelOne_weight_zero_const g
@@ -315,7 +315,7 @@ lemma ModularForm.levelOne_neg_weight_rank_zero
   simpa [← FunLike.coe_zero_iff] using levelOne_neg_weight_eq_zero hk f
 
 中文:
-引理 ModularForm.levelOne_neg_weight_rank_zero
+引理 模形式.levelOne_neg_weight_rank_zero
   条件: (hk : k < 0)
   证明: by
   refine rank_eq_zero_iff.mpr fun f => ⟨_, one_ne_zero, ?_⟩

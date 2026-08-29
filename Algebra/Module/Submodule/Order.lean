@@ -30,7 +30,7 @@ instance toIsOrderedAddMonoid
 
 中文:
 实例 toIsOrderedAddMonoid
-  签名: [AddCommMonoid M] [PartialOrder M] [IsOrderedAddMonoid M]
+  签名: [加法交换幺半群 M] [偏序 M] [是OrderedAdd幺半群 M]
   定义体: Function.Injective.isOrderedAddMonoid Subtype.val (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedAddMonoid, Injective, Subtype, Subtype.val, isOrderedAddMonoid
@@ -50,7 +50,7 @@ instance toIsOrderedCancelAddMonoid
 
 中文:
 实例 toIsOrderedCancelAddMonoid
-  签名: [AddCommMonoid M] [PartialOrder M]
+  签名: [加法交换幺半群 M] [偏序 M]
   定义体: Function.Injective.isOrderedCancelAddMonoid Subtype.val (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedCancelAddMonoid, Injective, Subtype, Subtype.val, isOrderedCancelAddMonoid

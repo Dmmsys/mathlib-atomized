@@ -55,7 +55,7 @@ definition liftToFinsetObj
 
 中文:
 定义 liftToFinsetObj
-  签名: (F : Discrete α ⥤ C)
+  签名: (F : 离散 α ⥤ C)
   定义体: ∐ fun x : s => F.obj x
   map {_ Y} h := Sigma.desc fun y =>
     Sigma.ι (fun (x : { x // x in Y }) => F.obj x) ⟨y, h.down.down y.2⟩
@@ -90,7 +90,7 @@ definition liftToFinsetColimitCocone
 
 中文:
 定义 liftToFinsetColimitCocone
-  签名: [HasColimitsOfShape (Finset (Discrete α)) C]
+  签名: [有形状余极限 (有限集 (离散 α)) C]
   定义体: { pt := colimit (liftToFinsetObj F)
       ι :=
         Discrete.natTrans fun j =>
@@ -144,7 +144,7 @@ definition liftToFinset
 
 中文:
 定义 liftToFinset
-  签名: : (Discrete α ⥤ C) ⥤ (Finset (Discrete α) ⥤ C) where
+  签名: : (离散 α ⥤ C) ⥤ (有限集 (离散 α) ⥤ C) where
   定义体: liftToFinsetObj
   map := fun β => { app := fun _ => Sigma.map (fun x => β.app x.val) }
 
@@ -196,7 +196,7 @@ definition isColimitFiniteSubproductsCocone
 
 中文:
 定义 isColimitFiniteSubproductsCocone
-  签名: (f : α -> C) [HasColimitsOfShape (Finset (Discrete α)) C]
+  签名: (f : α -> C) [有形状余极限 (有限集 (离散 α)) C]
   定义体: IsColimit.ofIsoColimit (colimit.isColimit _)
     (Cocone.ext (IsColimit.coconePointUniqueUpToIso
       (liftToFinsetColimitCocone (Discrete.functor f)).isColimit (colimit.isColimit _) :) (by
@@ -237,7 +237,7 @@ theorem hasCoproducts_of_finite_and_filtered
 
 中文:
 定理 hasCoproducts_of_finite_and_filtered
-  结论: [HasFiniteCoproducts C]
+  结论: [有FiniteCoproducts C]
   证明: fun α => by
   exact ⟨fun F => HasColimit.mk (liftToFinsetColimitCocone F)⟩
 
@@ -258,7 +258,7 @@ theorem has_colimits_of_finite_and_filtered
 
 中文:
 定理 has_colimits_of_finite_and_filtered
-  结论: [HasFiniteColimits C]
+  结论: [有有限余极限 C]
   证明: have : HasCoproducts.{w} C := hasCoproducts_of_finite_and_filtered
   has_colimits_of_hasCoequalizers_and_coproducts
 
@@ -280,7 +280,7 @@ theorem hasProducts_of_finite_and_cofiltered
 
 中文:
 定理 hasProducts_of_finite_and_cofiltered
-  结论: [HasFiniteProducts C]
+  结论: [有FiniteProducts C]
   证明: have : HasCoproducts.{w} Cᵒᵖ := hasCoproducts_of_finite_and_filtered
   hasProducts_of_opposite
 
@@ -302,7 +302,7 @@ theorem has_limits_of_finite_and_cofiltered
 
 中文:
 定理 has_limits_of_finite_and_cofiltered
-  结论: [HasFiniteLimits C]
+  结论: [有有限极限 C]
   证明: have : HasProducts.{w} C := hasProducts_of_finite_and_cofiltered
   has_limits_of_hasEqualizers_and_products
 
@@ -334,7 +334,7 @@ theorem liftToFinsetColimIso_aux
 
 中文:
 定理 liftToFinsetColimIso_aux
-  条件: (F : Discrete α ⥤ C) {J : Finset (Discrete α)} (j : J)
+  条件: (F : 离散 α ⥤ C) {J : 有限集 (离散 α)} (j : J)
   证明: by
   simp [colimit.isoColimitCocone, IsColimit.coconePointUniqueUpToIso]
 
@@ -402,7 +402,7 @@ definition liftToFinsetEvaluationIso
 
 中文:
 定义 liftToFinsetEvaluationIso
-  签名: [HasFiniteCoproducts C] (I : Finset (Discrete α))
+  签名: [有FiniteCoproducts C] (I : 有限集 (离散 α))
   定义体: NatIso.ofComponents (fun _ => HasColimit.isoOfNatIso (Discrete.natIso fun _ => Iso.refl _))
     fun _ => by dsimp; ext; simp
 
@@ -436,7 +436,7 @@ definition liftToFinsetObj
 
 中文:
 定义 liftToFinsetObj
-  签名: (F : Discrete α ⥤ C)
+  签名: (F : 离散 α ⥤ C)
   定义体: ∏ᶜ (fun x : s.unop => F.obj x)
   map {Y _} h := Pi.lift fun y =>
     Pi.π (fun (x : { x // x in Y.unop }) => F.obj x) ⟨y, h.unop.down.down y.2⟩
@@ -471,7 +471,7 @@ definition liftToFinsetLimitCone
 
 中文:
 定义 liftToFinsetLimitCone
-  签名: [HasLimitsOfShape (Finset (Discrete α))ᵒᵖ C]
+  签名: [有形状极限 (有限集 (离散 α))ᵒᵖ C]
   定义体: { pt := limit (liftToFinsetObj F)
       π := Discrete.natTrans fun j =>
         limit.π (liftToFinsetObj F) ⟨{j}⟩ ≫ Pi.π _ (⟨j, by simp⟩ : ({j} : Finset (Discrete α))) }
@@ -547,7 +547,7 @@ definition isLimitFiniteSubproductsCone
 
 中文:
 定义 isLimitFiniteSubproductsCone
-  签名: (f : α -> C) [HasLimitsOfShape (Finset (Discrete α))ᵒᵖ C]
+  签名: (f : α -> C) [有形状极限 (有限集 (离散 α))ᵒᵖ C]
   定义体: IsLimit.ofIsoLimit (limit.isLimit _)
     (Cone.ext (IsLimit.conePointUniqueUpToIso
       (liftToFinsetLimitCone (Discrete.functor f)).isLimit (limit.isLimit _) :) (by
@@ -590,7 +590,7 @@ definition liftToFinset
 
 中文:
 定义 liftToFinset
-  签名: : (Discrete α ⥤ C) ⥤ ((Finset (Discrete α))ᵒᵖ ⥤ C) where
+  签名: : (离散 α ⥤ C) ⥤ ((有限集 (离散 α))ᵒᵖ ⥤ C) where
   定义体: liftToFinsetObj
   map := fun β => { app := fun _ => Pi.map (fun x => β.app x.val) }
 
@@ -617,7 +617,7 @@ definition liftToFinsetLimIso
 
 中文:
 定义 liftToFinsetLimIso
-  签名: [HasLimitsOfShape (Finset (Discrete α))ᵒᵖ C]
+  签名: [有形状极限 (有限集 (离散 α))ᵒᵖ C]
   定义体: NatIso.ofComponents
     (fun F => Iso.symm <| limit.isoLimitCone (liftToFinsetLimitCone F))
     (fun β => by
@@ -649,7 +649,7 @@ definition liftToFinsetEvaluationIso
 
 中文:
 定义 liftToFinsetEvaluationIso
-  签名: (I : Finset (Discrete α))
+  签名: (I : 有限集 (离散 α))
   定义体: NatIso.ofComponents (fun _ => HasLimit.isoOfNatIso (Discrete.natIso fun _ => Iso.refl _))
     fun _ => by dsimp; ext; simp [Pi.map]
 

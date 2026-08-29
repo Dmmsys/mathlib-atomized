@@ -297,7 +297,7 @@ lemma isLocalization
 
 中文:
 引理 isLocalization
-  条件: [F.Full] [F.Faithful]
+  条件: [F.满] [F.忠实]
   证明: by
   let W := ((MorphismProperty.isomorphisms C₂).inverseImage G)
   have hG : W.IsInvertedBy G := fun _ _ _ hf => hf
@@ -339,7 +339,7 @@ lemma isLocalization'
 
 中文:
 引理 isLocalization'
-  条件: [G.Full] [G.Faithful]
+  条件: [G.满] [G.忠实]
   证明: by
   rw [← Functor.IsLocalization.op_iff]; rw [MorphismProperty.op_inverseImage]; rw [MorphismProperty.op_isomorphisms]
   exact adj.op.isLocalization

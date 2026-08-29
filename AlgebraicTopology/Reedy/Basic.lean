@@ -49,12 +49,12 @@ structure ReedyStructure
 
 中文:
 结构 ReedyStructure
-  参数: {C : 类型} [Category* C] (W₁ W₂ : Morphism命题erty C)
+  参数: {C : 类型} [范畴* C] (W₁ W₂ : MorphismProperty C)
   公理与运算 (4 个):
     - deg : C -> α
     - lt₁({X Y : C} (f : X ⟶ Y) (hf : W₁ f) (hf' : ¬ identities C f)) : deg Y < deg X
     - lt₂({X Y : C} (f : X ⟶ Y) (hf : W₂ f) (hf' : ¬ identities C f)) : deg X < deg Y
-    - nonempty_unique({X Y : C} (f : X ⟶ Y)) : Nonempty (Unique (W₁.MapFactorizationData W₂ f))
+    - nonempty_unique({X Y : C} (f : X ⟶ Y)) : 非空 (唯一 (W₁.MapFactorizationData W₂ f))
 -/
 structure ReedyStructure {C : Type*} [Category* C] (W₁ W₂ : MorphismProperty C)
     [W₁.IsMultiplicative] [W₂.IsMultiplicative]
@@ -400,7 +400,7 @@ lemma exists_fac
     (r.mapFactorizationData f).fac, rfl⟩
 
 中文:
-引理 exists_fac
+引理 存在_fac
   条件: {X Y : C} (f : X ⟶ Y)
   证明: ⟨_, _, _, (r.mapFactorizationData f).hi, (r.mapFactorizationData f).hp,
     (r.mapFactorizationData f).fac, rfl⟩

@@ -51,7 +51,7 @@ lemma isDetpBalanced_iff_sub_mul_det_eq_zero
 
 中文:
 引理 isDetpBalanced_iff_sub_mul_det_eq_zero
-  条件: {R : 类型} [CommRing R] {A : Matrix n n R} {a b : R}
+  条件: {R : 类型} [交换环 R] {A : 矩阵 n n R} {a b : R}
   证明: by
   grind [IsDetpBalanced, det_eq_detp_sub_detp]
 
@@ -73,7 +73,7 @@ exact ⟨fun h x eq => h x 0 (by simpa), fun h a b eq => sub_eq_zero.mp h _ (by 
 
 中文:
 引理 nonsingular_iff_det_mem_nonZeroDivisors
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: by
   simp_rw [Nonsingular, isDetpBalanced_iff_sub_mul_det_eq_zero, mem_nonZeroDivisors_iff_right]
 exact ⟨fun h x eq => h x 0 (by simpa), fun h a b eq => sub_eq_zero.mp h _ (by simpa)⟩
@@ -96,7 +96,7 @@ lemma nonsingular_iff_det_ne_zero
 
 中文:
 引理 nonsingular_iff_det_ne_zero
-  结论: {R : 类型} [CommRing R] [IsDomain R]
+  结论: {R : 类型} [交换环 R] [是整环 R]
   证明: by
   rw [nonsingular_iff_det_mem_nonZeroDivisors]; rw [mem_nonZeroDivisors_iff_ne_zero]
 
@@ -121,9 +121,9 @@ refine Nat.decreasingInduction' (n := Fintype.card n) (fun r _ _ ih f g => ?_) (
     bal.submatrix_of_ca
 
 中文:
-定理 Nonsingular.of_linearIndependent_col
+定理 非奇异.of_linearIndependent_col
   条件: (ind : LinearIndependent R A.col)
-  结论: A.Nonsingular
+  结论: A.非奇异
   证明: by
   intro a b bal
   let P (r : Nat) : Prop := forall f g : Fin r -> n, (A.submatrix f g).IsDetpBalanced a b
@@ -168,9 +168,9 @@ theorem Nonsingular.of_linearIndependent_row
   simpa using Nonsingular.of_linearIndependent_col (A := Aᵀ) ind
 
 中文:
-定理 Nonsingular.of_linearIndependent_row
+定理 非奇异.of_linearIndependent_row
   条件: (ind : LinearIndependent R A.row)
-  结论: A.Nonsingular
+  结论: A.非奇异
   证明: by
   simpa using Nonsingular.of_linearIndependent_col (A := Aᵀ) ind
 
@@ -189,9 +189,9 @@ theorem Nonsingular.of_leftRegular
   proof: .of_linearIndependent_col (by rwa [← mulVec_injective_iff, ← isLeftRegular_iff_mulVec_injective])
 
 中文:
-定理 Nonsingular.of_leftRegular
+定理 非奇异.of_leftRegular
   条件: (h : IsLeftRegular A)
-  结论: A.Nonsingular
+  结论: A.非奇异
   证明: .of_linearIndependent_col (by rwa [← mulVec_injective_iff, ← isLeftRegular_iff_mulVec_injective])
 
 Depends on / 依赖: isLeftRegular_iff_mulVec_injective, mulVec_injective_iff, of_linearIndependent_col
@@ -209,9 +209,9 @@ theorem Nonsingular.of_rightRegular
   proof: .of_linearIndependent_row (by rwa [← vecMul_injective_iff, ← isRightRegular_iff_vecMul_injective])
 
 中文:
-定理 Nonsingular.of_rightRegular
+定理 非奇异.of_rightRegular
   条件: (h : IsRightRegular A)
-  结论: A.Nonsingular
+  结论: A.非奇异
   证明: .of_linearIndependent_row (by rwa [← vecMul_injective_iff, ← isRightRegular_iff_vecMul_injective])
 
 Depends on / 依赖: isRightRegular_iff_vecMul_injective, of_linearIndependent_row, vecMul_injective_iff
@@ -235,8 +235,8 @@ theorem Nonsingular.linearIndependent_col
       obtain (h | h) := eq_or_ne k i <;> simp [adjp_mul_apply_eq, add_comm, adjp_mul_ap
 
 中文:
-定理 Nonsingular.linearIndependent_col
-  条件: (hA : A.Nonsingular)
+定理 非奇异.linearIndependent_col
+  条件: (hA : A.非奇异)
   结论: LinearIndependent R A.col
   证明: mulVec_injective_iff.mp fun x y eq => funext fun k => hA _ _ show _ = _ by
     have h v : ((A.adjp 1 * A + A.detp (-1) • 1) *ᵥ v) k =
@@ -264,8 +264,8 @@ theorem Nonsingular.linearIndependent_row
   proof: hA.transpose.linearIndependent_col
 
 中文:
-定理 Nonsingular.linearIndependent_row
-  条件: (hA : A.Nonsingular)
+定理 非奇异.linearIndependent_row
+  条件: (hA : A.非奇异)
   结论: LinearIndependent R A.row
   证明: hA.transpose.linearIndependent_col
 
@@ -284,7 +284,7 @@ theorem linearIndependent_col_iff
 
 中文:
 定理 linearIndependent_col_iff
-  结论: LinearIndependent R A.col ↔ A.Nonsingular
+  结论: LinearIndependent R A.col ↔ A.非奇异
   证明: ⟨.of_linearIndependent_col, (·.linearIndependent_col)⟩
 
 Depends on / 依赖: linearIndependent_col, of_linearIndependent_col
@@ -302,7 +302,7 @@ theorem linearIndependent_row_iff
 
 中文:
 定理 linearIndependent_row_iff
-  结论: LinearIndependent R A.row ↔ A.Nonsingular
+  结论: LinearIndependent R A.row ↔ A.非奇异
   证明: ⟨.of_linearIndependent_row, (·.linearIndependent_row)⟩
 
 Depends on / 依赖: linearIndependent_row, of_linearIndependent_row
@@ -321,7 +321,7 @@ theorem isLeftRegular_iff_nonsingular
 
 中文:
 定理 isLeftRegular_iff_nonsingular
-  结论: IsLeftRegular A ↔ A.Nonsingular
+  结论: IsLeftRegular A ↔ A.非奇异
   证明: by
   rw [isLeftRegular_iff_mulVec_injective]; rw [mulVec_injective_iff]; rw [linearIndependent_col_iff]
 
@@ -341,7 +341,7 @@ theorem isRightRegular_iff_nonsingular
 
 中文:
 定理 isRightRegular_iff_nonsingular
-  结论: IsRightRegular A ↔ A.Nonsingular
+  结论: IsRightRegular A ↔ A.非奇异
   证明: by
   rw [isRightRegular_iff_vecMul_injective]; rw [vecMul_injective_iff]; rw [linearIndependent_row_iff]
 
@@ -361,8 +361,8 @@ lemma Nonsingular.mul
   exact hA.mul hB
 
 中文:
-引理 Nonsingular.mul
-  条件: {B : Matrix n n R} (hA : A.Nonsingular) (hB : B.Nonsingular)
+引理 非奇异.mul
+  条件: {B : 矩阵 n n R} (hA : A.非奇异) (hB : B.非奇异)
   证明: by
   rw [← isLeftRegular_iff_nonsingular] at *
   exact hA.mul hB
@@ -386,7 +386,7 @@ isLeftRegular_iff_nonsingular.mp .of_mul isLeftRegular_iff_nonsingular.mpr h⟩
 
 中文:
 引理 nonsingular_mul_iff
-  条件: {A B : Matrix n n R}
+  条件: {A B : 矩阵 n n R}
   证明: ⟨isRightRegular_iff_nonsingular.mp .of_mul isRightRegular_iff_nonsingular.mpr h,
 isLeftRegular_iff_nonsingular.mp .of_mul isLeftRegular_iff_nonsingular.mpr h⟩
   mpr h := h.1.mul h.2
@@ -408,9 +408,9 @@ lemma Nonsingular.pow
   statement: forall k, (A ^ k).Nonsingular
 
 中文:
-引理 Nonsingular.pow
-  条件: (hA : A.Nonsingular)
-  结论: 对任意 k, (A ^ k).Nonsingular
+引理 非奇异.pow
+  条件: (hA : A.非奇异)
+  结论: 对任意 k, (A ^ k).非奇异
 -/
 lemma Nonsingular.pow (hA : A.Nonsingular) : forall k, (A ^ k).Nonsingular
   | 0 => by simp
@@ -454,7 +454,7 @@ theorem linearIndependent_col_iff_row
 
 中文:
 定理 linearIndependent_col_iff_row
-  条件: [Finite n]
+  条件: [有限 n]
   证明: by
   have := Fintype.ofFinite
   classical rw [linearIndependent_col_iff, linearIndependent_row_iff]

@@ -47,7 +47,7 @@ abbreviation DirichletCharacter
 
 中文:
 缩写 DirichletCharacter
-  签名: (R : 类型) [CommMonoidWithZero R] (n : 自然数)
+  签名: (R : 类型) [带零交换幺半群 R] (n : 自然数)
   定义体: MulChar (ZMod n) R
 
 Depends on / 依赖: MulChar
@@ -71,7 +71,7 @@ lemma toUnitHom_eq_char'
 
 中文:
 引理 toUnitHom_eq_char'
-  条件: {a : ZMod n} (ha : IsUnit a)
+  条件: {a : ZMod n} (ha : 是单位 a)
   结论: χ a = χ.toUnitHom ha.unit
   证明: by simp
 -/
@@ -123,7 +123,7 @@ lemma apply_ne_zero_iff
 
 中文:
 引理 apply_ne_zero_iff
-  条件: [Nontrivial R] (a : 整数)
+  条件: [非平凡 R] (a : 整数)
   结论: χ a != 0 ↔ IsCoprime a n
   证明: by
   rw [MulChar.apply_ne_zero_iff]; rw [ZMod.coe_int_isUnit_iff_isCoprime]; rw [isCoprime_comm]
@@ -145,7 +145,7 @@ lemma apply_eq_zero_iff
 
 中文:
 引理 apply_eq_zero_iff
-  条件: [Nontrivial R] (a : 整数)
+  条件: [非平凡 R] (a : 整数)
   结论: χ a = 0 ↔ ¬ IsCoprime a n
   证明: by
   rw [← (apply_ne_zero_iff χ a).not]; rw [ne_eq]; rw [not_not]
@@ -355,7 +355,7 @@ lemma changeLevel_eq_cast_of_dvd
 
 中文:
 引理 changeLevel_eq_cast_of_dvd
-  条件: {m : 自然数} (hm : n ∣ m) (a : Units (ZMod m))
+  条件: {m : 自然数} (hm : n ∣ m) (a : 单位群 (ZMod m))
   证明: by
   simp [changeLevel_def, ZMod.unitsMap_val]
 
@@ -493,7 +493,7 @@ lemma existsUnique
   exact ⟨χ₂, rfl, fun χ₃ hχ₃ => (changeLevel_injective hd hχ₃).symm⟩
 
 中文:
-引理 existsUnique
+引理 存在Unique
   条件: {d : 自然数} [NeZero n] (h : FactorsThrough χ d)
   证明: by
   rcases h with ⟨hd, χ₂, rfl⟩
@@ -706,7 +706,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (DirichletCharacter R 1)
+  签名: 子单例 (DirichletCharacter R 1)
   定义体: by
   refine subsingleton_iff.mpr (fun χ χ' => ?_)
   simp [level_one]
@@ -727,7 +727,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (DirichletCharacter R 1)
+  签名: 唯一 (DirichletCharacter R 1)
   定义体: Unique.mk' (DirichletCharacter R 1)
 
 Depends on / 依赖: DirichletCharacter, Unique, Unique.mk
@@ -813,7 +813,7 @@ definition conductorSet
 
 中文:
 定义 conductorSet
-  签名: : Set 自然数
+  签名: : 集合 自然数
   定义体: {d : Nat | FactorsThrough χ d}
 
 Depends on / 依赖: FactorsThrough
@@ -1124,7 +1124,7 @@ definition IsPrimitive
   body: conductor χ = n
 
 中文:
-定义 IsPrimitive
+定义 是Primitive
   签名: : 命题
   定义体: conductor χ = n
 
@@ -1142,7 +1142,7 @@ lemma isPrimitive_def
 
 中文:
 引理 isPrimitive_def
-  结论: IsPrimitive χ ↔ conductor χ = n
+  结论: 是Primitive χ ↔ conductor χ = n
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1159,7 +1159,7 @@ lemma isPrimitive_one_level_one
 
 中文:
 引理 isPrimitive_one_level_one
-  结论: IsPrimitive (1 : DirichletCharacter R 1)
+  结论: 是Primitive (1 : DirichletCharacter R 1)
   证明: Nat.dvd_one.mp (conductor_dvd_level _)
 
 Depends on / 依赖: Nat.dvd_one.mp, conductor_dvd_level, dvd_one
@@ -1177,7 +1177,7 @@ lemma isPrimitive_one_level_zero
 
 中文:
 引理 isPrimitive_one_level_zero
-  结论: IsPrimitive (1 : DirichletCharacter R 0)
+  结论: 是Primitive (1 : DirichletCharacter R 0)
   证明: conductor_eq_zero_iff_level_eq_zero.mpr rfl
 
 Depends on / 依赖: conductor_eq_zero_iff_level_eq_zero, conductor_eq_zero_iff_level_eq_zero.mpr
@@ -1260,7 +1260,7 @@ conductor_le_conductor_mem_conductorSet conductor_mem_conductorSet χ
 
 中文:
 引理 primitiveCharacter_isPrimitive
-  结论: IsPrimitive (χ.primitiveCharacter)
+  结论: 是Primitive (χ.primitiveCharacter)
   证明: by
   by_cases h : χ.conductor = 0
   · rw [isPrimitive_def]
@@ -1452,7 +1452,7 @@ theorem primitiveCharacter_changeLevel_apply
 
 中文:
 定理 primitiveCharacter_changeLevel_apply
-  结论: [Nontrivial R] {m : 自然数} [NeZero m] (hm : n ∣ m)
+  结论: [非平凡 R] {m : 自然数} [NeZero m] (hm : n ∣ m)
   证明: by
   by_cases ha : IsCoprime a χ.conductor
   · suffices changeLevel (dvd_of_eq <| conductor_changeLevel ..)
@@ -1737,7 +1737,7 @@ definition annihilator
 
 中文:
 定义 annihilator
-  签名: (H : Set (ZMod n)ˣ)
+  签名: (H : 集合 (ZMod n)ˣ)
   定义体: (MulChar.domRestrictHom ((Submonoid.closure H).map (Units.coeHom (ZMod n))) _).ker
 
 Depends on / 依赖: MulChar, MulChar.domRestrictHom, Submonoid, Submonoid.closure, Units.coeHom, closure, coeHom, domRestrictHom
@@ -1762,7 +1762,7 @@ theorem mem_annihilator_iff_mem_closure
 
 中文:
 定理 mem_annihilator_iff_mem_closure
-  条件: {H : Set (ZMod n)ˣ} {χ : DirichletCharacter R n}
+  条件: {H : 集合 (ZMod n)ˣ} {χ : DirichletCharacter R n}
   证明: by
   simp only [annihilator, MonoidHom.mem_ker, MulChar.domRestrictHom_apply,
     MulChar.domRestrict_eq_one_iff]
@@ -1799,7 +1799,7 @@ theorem mem_annihilator_iff
 
 中文:
 定理 mem_annihilator_iff
-  条件: {H : Set (ZMod n)ˣ} {χ : DirichletCharacter R n}
+  条件: {H : 集合 (ZMod n)ˣ} {χ : DirichletCharacter R n}
   证明: by
   rw [mem_annihilator_iff_mem_closure]
   refine ⟨fun h a ha => h a (Submonoid.subset_closure ha), fun h x hx => ?_⟩
@@ -1830,7 +1830,7 @@ definition subgroupOfPrimitiveMapToOne
 
 中文:
 定义 subgroupOfPrimitiveMapToOne
-  签名: [NeZero n] (p : 自然数) [hp : Fact p.Prime]
+  签名: [NeZero n] (p : 自然数) [hp : Fact p.素]
   定义体: (annihilator R (n := n / p ^ n.factorization p)
     {ZMod.unitOfCoprime p (Nat.coprime_ordCompl hp.out (NeZero.ne n))}).map
       (changeLevel (Nat.ordCompl_dvd n p))
@@ -1861,7 +1861,7 @@ theorem mem_subgroupOfPrimitiveMapToOne_iff
 
 中文:
 定理 mem_subgroupOfPrimitiveMapToOne_iff
-  条件: [NeZero n] [Nontrivial R] (p : 自然数) [hp : Fact p.Prime]
+  条件: [NeZero n] [非平凡 R] (p : 自然数) [hp : Fact p.素]
   证明: by
   have : NeZero (n / p ^ n.factorization p) := ⟨(Nat.ordCompl_pos p (NeZero.ne n)).ne'⟩
   have hcop := Nat.coprime_ordCompl hp.out (NeZero.ne n)
@@ -1945,7 +1945,7 @@ lemma even_or_odd
 
 中文:
 引理 even_or_odd
-  条件: [NoZeroDivisors S]
+  条件: [无零因子 S]
   结论: ψ.Even ∨ ψ.Odd
   证明: by
   suffices ψ (-1) ^ 2 = 1 by convert! sq_eq_one_iff.mp this
@@ -2140,7 +2140,7 @@ lemma Even.to_fun
 中文:
 引理 Even.to_fun
   条件: {χ : DirichletCharacter S m} (hχ : Even χ)
-  结论: Function.Even χ
+  结论: 函数.Even χ
   证明: fun _ => by rw [← neg_one_mul, map_mul, hχ, one_mul]
 
 Depends on / 依赖: map_mul, neg_one_mul, one_mul
@@ -2160,7 +2160,7 @@ lemma Odd.to_fun
 中文:
 引理 Odd.to_fun
   条件: {χ : DirichletCharacter S m} (hχ : Odd χ)
-  结论: Function.Odd χ
+  结论: 函数.Odd χ
   证明: fun _ => by rw [← neg_one_mul, map_mul, hχ, neg_one_mul]
 
 Depends on / 依赖: map_mul, neg_one_mul

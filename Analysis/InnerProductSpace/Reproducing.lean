@@ -55,7 +55,7 @@ class RKHS
   参数: (𝕜 : outParam 类型) (H : 类型) (X V : outParam 类型) [RCLike 𝕜]
   公理与运算 (2 个):
     - coeCLM((𝕜)) : H ->L[𝕜] X -> V
-    - coeCLM_injective : Function.Injective (coeCLM : H -> X -> V)
+    - coeCLM_injective : 函数.单射 (coeCLM : H -> X -> V)
 -/
 class RKHS (𝕜 : outParam Type*) (H : Type*) (X V : outParam Type*) [RCLike 𝕜]
     [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
@@ -86,7 +86,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike H X V where
+  签名: : 函数状 H X V where
   定义体: coeCLM 𝕜 f
   coe_injective := coeCLM_injective
 
@@ -277,7 +277,7 @@ lemma continuous_eval
 中文:
 引理 continuous_eval
   条件: (x : X)
-  结论: Continuous (fun (f : H) => f x)
+  结论: 连续 (fun (f : H) => f x)
   证明: by
   simp_rw [← coeCLM_apply]
   fun_prop
@@ -317,7 +317,7 @@ definition kernel
 
 中文:
 定义 kernel
-  签名: : Matrix X X (V ->L[𝕜] V)
+  签名: : 矩阵 X X (V ->L[𝕜] V)
   定义体: .of fun x y => (kerFun H x).adjoint ∘L kerFun H y
 
 Depends on / 依赖: adjoint, kerFun
@@ -596,7 +596,7 @@ theorem tendstoUniformlyOn_of_norm_kerFun_le
 
 中文:
 定理 tendstoUniformlyOn_of_norm_kerFun_le
-  结论: {C : 实数} {s : Set X}
+  结论: {C : 实数} {s : 集合 X}
   证明: by
   rw [Metric.tendstoUniformlyOn_iff]
   intro ε hε
@@ -786,7 +786,7 @@ theorem posSemidef_tfae
 
 中文:
 定理 posSemidef_tfae
-  结论: List.TFAE [K.PosSemidef, K.IsHermitian ∧ 对任意 (f : X × V ->₀ 𝕜),
+  结论: 列表.TFAE [K.PosSemidef, K.IsHermitian ∧ 对任意 (f : X × V ->₀ 𝕜),
   证明: by
   have {h p1 p2 p3 : Prop} (htfae : h -> List.TFAE [p1, p2, p3]) :
       List.TFAE [h ∧ p1, h ∧ p2, h ∧ p3] := by
@@ -843,7 +843,7 @@ abbreviation H₀
 
 中文:
 缩写 H₀
-  签名: (K : Matrix X X (V ->L[𝕜] V))
+  签名: (K : 矩阵 X X (V ->L[𝕜] V))
   定义体: X × V ->₀ 𝕜
 -/
 abbrev H₀ (K : Matrix X X (V ->L[𝕜] V)) := X × V ->₀ 𝕜
@@ -868,7 +868,7 @@ instance instPreInnerProductSpaceCoreH₀
 
 中文:
 实例 instPreInnerProductSpaceCoreH₀
-  签名: : PreInnerProductSpace.Core 𝕜 (H₀ K) where
+  签名: : PreInnerProduct空间.核 𝕜 (H₀ K) where
   定义体: f.sum fun ⟨y, u⟩ z => g.sum fun ⟨x, v⟩ w => star z * w * ⟪K x y u, v⟫_𝕜
   conj_inner_symm f g := by
     rw [Finsupp.sum_comm]
@@ -907,7 +907,7 @@ instance instSeminormedAddCommGroupH₀
 
 中文:
 实例 instSeminormedAddCommGroupH₀
-  签名: : SeminormedAddCommGroup (H₀ K)
+  签名: : SeminormedAddComm群 (H₀ K)
   定义体: InnerProductSpace.Core.toSeminormedAddCommGroup (𝕜 := 𝕜)
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toSeminormedAddCommGroup, toSeminormedAddCommGroup
@@ -925,7 +925,7 @@ instance instInnerProductSpaceH₀
 
 中文:
 实例 instInnerProductSpaceH₀
-  签名: : InnerProductSpace 𝕜 (H₀ K)
+  签名: : 内积空间 𝕜 (H₀ K)
   定义体: .ofCore _
 
 Depends on / 依赖: ofCore

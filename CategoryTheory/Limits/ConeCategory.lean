@@ -49,8 +49,8 @@ definition Cone.toStructuredArrow
   map f := StructuredArrow.homMk f
 
 中文:
-定义 Cone.toStructuredArrow
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.toStructuredArrow
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: StructuredArrow.mk (c.π.app j)
   map f := StructuredArrow.homMk f
 
@@ -74,7 +74,7 @@ definition limit.toStructuredArrow
 
 中文:
 定义 limit.toStructuredArrow
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: StructuredArrow.mk (limit.π F j)
   map f := StructuredArrow.homMk f
 
@@ -94,8 +94,8 @@ definition Cone.toStructuredArrowIsoToStructuredArrow
   body: Iso.refl _
 
 中文:
-定义 Cone.toStructuredArrowIsoToStructuredArrow
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.toStructuredArrowIsoToStructuredArrow
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -114,7 +114,7 @@ definition _root_.CategoryTheory.Functor.toStructuredArrowIsoToStructuredArrow
   body: Iso.refl _
 
 中文:
-定义 _root_.CategoryTheory.Functor.toStructuredArrowIsoToStructuredArrow
+定义 _root_.范畴论.函子.toStructuredArrowIsoToStructuredArrow
   签名: (G : J ⥤ K) (X : C)
   定义体: Iso.refl _
 
@@ -141,8 +141,8 @@ definition Cone.toStructuredArrowCompProj
 @[simp]
 
 中文:
-定义 Cone.toStructuredArrowCompProj
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.toStructuredArrowCompProj
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: Iso.refl _
 
 @[simp]
@@ -163,8 +163,8 @@ lemma Cone.toStructuredArrow_comp_proj
   proof: rfl
 
 中文:
-引理 Cone.toStructuredArrow_comp_proj
-  条件: {F : J ⥤ C} (c : Cone F)
+引理 锥.toStructuredArrow_comp_proj
+  条件: {F : J ⥤ C} (c : 锥 F)
   证明: rfl
 -/
 lemma Cone.toStructuredArrow_comp_proj {F : J ⥤ C} (c : Cone F) :
@@ -186,8 +186,8 @@ definition Cone.toStructuredArrowCompToUnderCompForget
 @[simp]
 
 中文:
-定义 Cone.toStructuredArrowCompToUnderCompForget
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.toStructuredArrowCompToUnderCompForget
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: Iso.refl _
 
 @[simp]
@@ -208,8 +208,8 @@ lemma Cone.toStructuredArrow_comp_toUnder_comp_forget
   proof: rfl
 
 中文:
-引理 Cone.toStructuredArrow_comp_toUnder_comp_forget
-  条件: {F : J ⥤ C} (c : Cone F)
+引理 锥.toStructuredArrow_comp_toUnder_comp_forget
+  条件: {F : J ⥤ C} (c : 锥 F)
   证明: rfl
 -/
 lemma Cone.toStructuredArrow_comp_toUnder_comp_forget {F : J ⥤ C} (c : Cone F) :
@@ -230,8 +230,8 @@ definition Cone.toUnder
   π := { app := fun j => Under.homMk (c.π.app j) (by simp) }
 
 中文:
-定义 Cone.toUnder
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.toUnder
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: Under.mk (𝟙 c.pt)
   π := { app := fun j => Under.homMk (c.π.app j) (by simp) }
 
@@ -255,7 +255,7 @@ definition limit.toUnder
 
 中文:
 定义 limit.toUnder
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: Under.mk (𝟙 (limit F))
   π := { app := fun j => Under.homMk (limit.π F j) (by simp) }
 
@@ -278,8 +278,8 @@ definition Cone.mapConeToUnder
   body: Iso.refl _
 
 中文:
-定义 Cone.mapConeToUnder
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.mapConeToUnder
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -300,8 +300,8 @@ definition Cone.fromStructuredArrow
   π := { app := fun j => (G.obj j).hom }
 
 中文:
-定义 Cone.fromStructuredArrow
-  签名: (F : C ⥤ D) {X : D} (G : J ⥤ StructuredArrow X F)
+定义 锥.fromStructuredArrow
+  签名: (F : C ⥤ D) {X : D} (G : J ⥤ 结构化箭头 X F)
   定义体: X
   π := { app := fun j => (G.obj j).hom }
 -/
@@ -326,8 +326,8 @@ definition Cone.toStructuredArrowCone
   π := { app := fun j => StructuredArrow.homMk (c.π.app j) rfl }
 
 中文:
-定义 Cone.toStructuredArrowCone
-  签名: {K : J ⥤ C} (c : Cone K) (F : C ⥤ D) {X : D} (f : X ⟶ F.obj c.pt)
+定义 锥.toStructuredArrowCone
+  签名: {K : J ⥤ C} (c : 锥 K) (F : C ⥤ D) {X : D} (f : X ⟶ F.obj c.pt)
   定义体: StructuredArrow.mk f
   π := { app := fun j => StructuredArrow.homMk (c.π.app j) rfl }
 
@@ -352,7 +352,7 @@ definition Cone.toCostructuredArrow
   map f := CostructuredArrow.homMk f.hom
 
 中文:
-定义 Cone.toCostructuredArrow
+定义 锥.toCostructuredArrow
   签名: (F : J ⥤ C)
   定义体: CostructuredArrow.mk c.π
   map f := CostructuredArrow.homMk f.hom
@@ -381,7 +381,7 @@ definition Cone.fromCostructuredArrow
         simp }
 
 中文:
-定义 Cone.fromCostructuredArrow
+定义 锥.fromCostructuredArrow
   签名: (F : J ⥤ C)
   定义体: ⟨c.left, c.hom⟩
   map f :=
@@ -417,7 +417,7 @@ definition Cone.equivCostructuredArrow
   counitIso := NatIso.ofComponents fun _ => (CostructuredArrow.eta _).symm
 
 中文:
-定义 Cone.equivCostructuredArrow
+定义 锥.equivCostructuredArrow
   签名: (F : J ⥤ C)
   定义体: Cone.toCostructuredArrow F
   inverse := Cone.fromCostructuredArrow F
@@ -445,8 +445,8 @@ definition Cone.isLimitEquivIsTerminal
       right_inv := by cat_disch }
 
 中文:
-定义 Cone.isLimitEquivIsTerminal
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 锥.isLimitEquivIsTerminal
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: IsLimit.isoUniqueConeMorphism.toEquiv.trans
     { toFun := fun _ => IsTerminal.ofUnique _
       invFun := fun h s => ⟨⟨IsTerminal.from h s⟩, fun a => IsTerminal.hom_ext h a _⟩
@@ -476,7 +476,7 @@ theorem hasLimit_iff_hasTerminal_cone
 中文:
 定理 hasLimit_iff_hasTerminal_cone
   条件: (F : J ⥤ C)
-  结论: HasLimit F ↔ HasTerminal (Cone F)
+  结论: 有极限 F ↔ 有终止 (锥 F)
   证明: ⟨fun _ => (Cone.isLimitEquivIsTerminal _ (limit.isLimit F)).hasTerminal, fun h =>
     haveI : HasTerminal (Cone F) := h
     ⟨⟨⟨⊤_ _, (Cone.isLimitEquivIsTerminal _).symm terminalIsTerminal⟩⟩⟩⟩
@@ -531,8 +531,8 @@ theorem IsLimit.liftConeMorphism_eq_isTerminal_from
   proof: rfl
 
 中文:
-定理 IsLimit.liftConeMorphism_eq_isTerminal_from
-  结论: {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
+定理 是极限.liftConeMorphism_eq_isTerminal_from
+  结论: {F : J ⥤ C} {c : 锥 F} (hc : 是极限 c)
   证明: rfl
 -/
 theorem IsLimit.liftConeMorphism_eq_isTerminal_from {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
@@ -548,8 +548,8 @@ theorem IsTerminal.from_eq_liftConeMorphism
   proof: (IsLimit.liftConeMorphism_eq_isTerminal_from (c.isLimitEquivIsTerminal.symm hc) s).symm
 
 中文:
-定理 IsTerminal.from_eq_liftConeMorphism
-  结论: {F : J ⥤ C} {c : Cone F} (hc : IsTerminal c)
+定理 是终止.from_eq_liftConeMorphism
+  结论: {F : J ⥤ C} {c : 锥 F} (hc : 是终止 c)
   证明: (IsLimit.liftConeMorphism_eq_isTerminal_from (c.isLimitEquivIsTerminal.symm hc) s).symm
 
 Depends on / 依赖: IsLimit, IsLimit.liftConeMorphism_eq_isTerminal_from, c.isLimitEquivIsTerminal.symm, isLimitEquivIsTerminal, liftConeMorphism_eq_isTerminal_from
@@ -568,8 +568,8 @@ definition IsLimit.ofPreservesConeTerminal
   body: (Cone.isLimitEquivIsTerminal _).symm (Cone.isLimitEquivIsTerminal _ hc).isTerminalObj _ _
 
 中文:
-定义 IsLimit.ofPreservesConeTerminal
-  签名: {F : J ⥤ C} {F' : K ⥤ D} (G : Cone F ⥤ Cone F')
+定义 是极限.ofPreservesConeTerminal
+  签名: {F : J ⥤ C} {F' : K ⥤ D} (G : 锥 F ⥤ 锥 F')
   定义体: (Cone.isLimitEquivIsTerminal _).symm (Cone.isLimitEquivIsTerminal _ hc).isTerminalObj _ _
 
 Depends on / 依赖: Cone.isLimitEquivIsTerminal, isLimitEquivIsTerminal, isTerminalObj
@@ -587,8 +587,8 @@ definition IsLimit.ofReflectsConeTerminal
   body: (Cone.isLimitEquivIsTerminal _).symm (Cone.isLimitEquivIsTerminal _ hc).isTerminalOfObj _ _
 
 中文:
-定义 IsLimit.ofReflectsConeTerminal
-  签名: {F : J ⥤ C} {F' : K ⥤ D} (G : Cone F ⥤ Cone F')
+定义 是极限.ofReflectsConeTerminal
+  签名: {F : J ⥤ C} {F' : K ⥤ D} (G : 锥 F ⥤ 锥 F')
   定义体: (Cone.isLimitEquivIsTerminal _).symm (Cone.isLimitEquivIsTerminal _ hc).isTerminalOfObj _ _
 
 Depends on / 依赖: Cone.isLimitEquivIsTerminal, isLimitEquivIsTerminal, isTerminalOfObj
@@ -610,8 +610,8 @@ definition Cocone.toCostructuredArrow
   map f := CostructuredArrow.homMk f
 
 中文:
-定义 Cocone.toCostructuredArrow
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.toCostructuredArrow
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: CostructuredArrow.mk (c.ι.app j)
   map f := CostructuredArrow.homMk f
 
@@ -635,7 +635,7 @@ definition colimit.toCostructuredArrow
 
 中文:
 定义 colimit.toCostructuredArrow
-  签名: (F : J ⥤ C) [HasColimit F]
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: CostructuredArrow.mk (colimit.ι F j)
   map f := CostructuredArrow.homMk f
 
@@ -656,8 +656,8 @@ definition Cocone.toCostructuredArrowIsoToCostructuredArrow
   body: Iso.refl _
 
 中文:
-定义 Cocone.toCostructuredArrowIsoToCostructuredArrow
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.toCostructuredArrowIsoToCostructuredArrow
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -677,7 +677,7 @@ definition _root_.CategoryTheory.Functor.toCostructuredArrowIsoToCostructuredArr
   body: Iso.refl _
 
 中文:
-定义 _root_.CategoryTheory.Functor.toCostructuredArrowIsoToCostructuredArrow
+定义 _root_.范畴论.函子.toCostructuredArrowIsoToCostructuredArrow
   签名: (G : J ⥤ K)
   定义体: Iso.refl _
 
@@ -703,8 +703,8 @@ definition Cocone.toCostructuredArrowCompProj
   body: Iso.refl _
 
 中文:
-定义 Cocone.toCostructuredArrowCompProj
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.toCostructuredArrowCompProj
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -724,8 +724,8 @@ lemma Cocone.toCostructuredArrow_comp_proj
   proof: rfl
 
 中文:
-引理 Cocone.toCostructuredArrow_comp_proj
-  条件: {F : J ⥤ C} (c : Cocone F)
+引理 余锥.toCostructuredArrow_comp_proj
+  条件: {F : J ⥤ C} (c : 余锥 F)
   证明: rfl
 -/
 lemma Cocone.toCostructuredArrow_comp_proj {F : J ⥤ C} (c : Cocone F) :
@@ -746,8 +746,8 @@ definition Cocone.toCostructuredArrowCompToOverCompForget
   body: Iso.refl _
 
 中文:
-定义 Cocone.toCostructuredArrowCompToOverCompForget
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.toCostructuredArrowCompToOverCompForget
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -767,8 +767,8 @@ lemma Cocone.toCostructuredArrow_comp_toOver_comp_forget
   proof: rfl
 
 中文:
-引理 Cocone.toCostructuredArrow_comp_toOver_comp_forget
-  条件: {F : J ⥤ C} (c : Cocone F)
+引理 余锥.toCostructuredArrow_comp_toOver_comp_forget
+  条件: {F : J ⥤ C} (c : 余锥 F)
   证明: rfl
 -/
 lemma Cocone.toCostructuredArrow_comp_toOver_comp_forget {F : J ⥤ C} (c : Cocone F) :
@@ -789,8 +789,8 @@ definition Cocone.toOver
   ι := { app := fun j => Over.homMk (c.ι.app j) (by simp) }
 
 中文:
-定义 Cocone.toOver
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.toOver
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: Over.mk (𝟙 c.pt)
   ι := { app := fun j => Over.homMk (c.ι.app j) (by simp) }
 
@@ -817,7 +817,7 @@ definition colimit.toOver
 
 中文:
 定义 colimit.toOver
-  签名: (F : J ⥤ C) [HasColimit F]
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: Over.mk (𝟙 (colimit F))
   ι := { app := fun j => Over.homMk (colimit.ι F j) (by simp) }
 
@@ -840,8 +840,8 @@ definition Cocone.mapCoconeToOver
   body: Iso.refl _
 
 中文:
-定义 Cocone.mapCoconeToOver
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.mapCoconeToOver
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -863,7 +863,7 @@ definition Cocone.fromCostructuredArrow
   ι := { app := fun j => (G.obj j).hom }
 
 中文:
-定义 Cocone.fromCostructuredArrow
+定义 余锥.fromCostructuredArrow
   签名: (F : C ⥤ D) {X : D} (G : J ⥤ CostructuredArrow F X)
   定义体: X
   ι := { app := fun j => (G.obj j).hom }
@@ -888,8 +888,8 @@ definition Cocone.toCostructuredArrowCocone
   ι := { app := fun j => CostructuredArrow.homMk (c.ι.app j) rfl }
 
 中文:
-定义 Cocone.toCostructuredArrowCocone
-  签名: {K : J ⥤ C} (c : Cocone K) (F : C ⥤ D) {X : D}
+定义 余锥.toCostructuredArrowCocone
+  签名: {K : J ⥤ C} (c : 余锥 K) (F : C ⥤ D) {X : D}
   定义体: CostructuredArrow.mk f
   ι := { app := fun j => CostructuredArrow.homMk (c.ι.app j) rfl }
 
@@ -915,7 +915,7 @@ definition Cocone.toStructuredArrow
   map f := StructuredArrow.homMk f.hom
 
 中文:
-定义 Cocone.toStructuredArrow
+定义 余锥.toStructuredArrow
   签名: (F : J ⥤ C)
   定义体: StructuredArrow.mk c.ι
   map f := StructuredArrow.homMk f.hom
@@ -942,7 +942,7 @@ definition Cocone.fromStructuredArrow
       w j := by simp [dsimp% congr_app f.w j] }
 
 中文:
-定义 Cocone.fromStructuredArrow
+定义 余锥.fromStructuredArrow
   签名: (F : J ⥤ C)
   定义体: ⟨c.right, c.hom⟩
   map f :=
@@ -974,7 +974,7 @@ definition Cocone.equivStructuredArrow
   counitIso := NatIso.ofComponents fun _ => (StructuredArrow.eta _).symm
 
 中文:
-定义 Cocone.equivStructuredArrow
+定义 余锥.equivStructuredArrow
   签名: (F : J ⥤ C)
   定义体: Cocone.toStructuredArrow F
   inverse := Cocone.fromStructuredArrow F
@@ -1002,8 +1002,8 @@ definition Cocone.isColimitEquivIsInitial
       right_inv := by cat_disch }
 
 中文:
-定义 Cocone.isColimitEquivIsInitial
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 余锥.isColimitEquivIsInitial
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: IsColimit.isoUniqueCoconeMorphism.toEquiv.trans
     { toFun := fun _ => IsInitial.ofUnique _
       invFun := fun h s => ⟨⟨IsInitial.to h s⟩, fun a => IsInitial.hom_ext h a _⟩
@@ -1033,7 +1033,7 @@ theorem hasColimit_iff_hasInitial_cocone
 中文:
 定理 hasColimit_iff_hasInitial_cocone
   条件: (F : J ⥤ C)
-  结论: HasColimit F ↔ HasInitial (Cocone F)
+  结论: 有余极限 F ↔ HasInitial (余锥 F)
   证明: ⟨fun _ => (Cocone.isColimitEquivIsInitial _ (colimit.isColimit F)).hasInitial, fun h =>
     haveI : HasInitial (Cocone F) := h
     ⟨⟨⟨⊥_ _, (Cocone.isColimitEquivIsInitial _).symm initialIsInitial⟩⟩⟩⟩
@@ -1088,8 +1088,8 @@ theorem IsColimit.descCoconeMorphism_eq_isInitial_to
   proof: rfl
 
 中文:
-定理 IsColimit.descCoconeMorphism_eq_isInitial_to
-  结论: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
+定理 是余极限.descCoconeMorphism_eq_isInitial_to
+  结论: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
   证明: rfl
 -/
 theorem IsColimit.descCoconeMorphism_eq_isInitial_to {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
@@ -1107,7 +1107,7 @@ theorem IsInitial.to_eq_descCoconeMorphism
 
 中文:
 定理 IsInitial.to_eq_descCoconeMorphism
-  结论: {F : J ⥤ C} {c : Cocone F} (hc : IsInitial c)
+  结论: {F : J ⥤ C} {c : 余锥 F} (hc : IsInitial c)
   证明: (IsColimit.descCoconeMorphism_eq_isInitial_to (c.isColimitEquivIsInitial.symm hc) s).symm
 
 Depends on / 依赖: IsColimit, IsColimit.descCoconeMorphism_eq_isInitial_to, c.isColimitEquivIsInitial.symm, descCoconeMorphism_eq_isInitial_to, isColimitEquivIsInitial
@@ -1126,7 +1126,7 @@ definition IsColimit.ofPreservesCoconeInitial
   body: (Cocone.isColimitEquivIsInitial _).symm (Cocone.isColimitEquivIsInitial _ hc).isInitialObj _ _
 
 中文:
-定义 IsColimit.ofPreservesCoconeInitial
+定义 是余极限.ofPreservesCoconeInitial
   签名: {F : J ⥤ C} {F' : K ⥤ D}
   定义体: (Cocone.isColimitEquivIsInitial _).symm (Cocone.isColimitEquivIsInitial _ hc).isInitialObj _ _
 
@@ -1148,7 +1148,7 @@ definition IsColimit.ofReflectsCoconeInitial
     (Cocone.isColimitEquivIsInitial _ hc).isInitialOfObj _ _
 
 中文:
-定义 IsColimit.ofReflectsCoconeInitial
+定义 是余极限.ofReflectsCoconeInitial
   签名: {F : J ⥤ C} {F' : K ⥤ D}
   定义体: (Cocone.isColimitEquivIsInitial _).symm
     (Cocone.isColimitEquivIsInitial _ hc).isInitialOfObj _ _

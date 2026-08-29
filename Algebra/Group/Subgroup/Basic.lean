@@ -132,8 +132,8 @@ definition prod
 @[to_additive (attr := norm_cast) coe_prod]
 
 中文:
-定义 prod
-  签名: (H : Subgroup G) (K : Subgroup N)
+定义 乘积
+  签名: (H : 子群 G) (K : 子群 N)
   定义体: { Submonoid.prod H.toSubmonoid K.toSubmonoid with
     inv_mem' := fun hx => ⟨H.inv_mem' hx.1, K.inv_mem' hx.2⟩ }
 
@@ -158,7 +158,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (H : Subgroup G) (K : Subgroup N)
+  条件: (H : 子群 G) (K : 子群 N)
   证明: rfl
 
 @[to_additive mem_prod]
@@ -179,8 +179,8 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {H : Subgroup G} {K : Subgroup N} {p : G × N}
-  结论: p in H.prod K ↔ p.1 in H ∧ p.2 in K
+  条件: {H : 子群 G} {K : 子群 N} {p : G × N}
+  结论: p in H.乘积 K ↔ p.1 in H ∧ p.2 in K
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -202,7 +202,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  结论: ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) (@prod G _ N _) (@prod G _ N _)
+  结论: ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) (@乘积 G _ N _) (@乘积 G _ N _)
   证明: fun _s _s' hs _t _t' ht => Set.prod_mono hs ht
 
 @[to_additive prod_mono_right]
@@ -226,8 +226,8 @@ theorem prod_mono_right
 
 中文:
 定理 prod_mono_right
-  条件: (K : Subgroup G)
-  结论: Monotone fun t : Subgroup N => K.prod t
+  条件: (K : 子群 G)
+  结论: 递增 fun t : 子群 N => K.乘积 t
   证明: prod_mono (le_refl K)
 
 @[to_additive prod_mono_left]
@@ -252,8 +252,8 @@ theorem prod_mono_left
 
 中文:
 定理 prod_mono_left
-  条件: (H : Subgroup N)
-  结论: Monotone fun K : Subgroup G => K.prod H
+  条件: (H : 子群 N)
+  结论: 递增 fun K : 子群 G => K.乘积 H
   证明: fun _ _ hs =>
   prod_mono hs (le_refl H)
 
@@ -276,8 +276,8 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  条件: (K : Subgroup G)
-  结论: K.prod (⊤ : Subgroup N) = K.comap (MonoidHom.fst G N)
+  条件: (K : 子群 G)
+  结论: K.乘积 (⊤ : 子群 N) = K.comap (幺半群态射.fst G N)
   证明: ext fun x => by simp [mem_prod, MonoidHom.coe_fst]
 
 @[to_additive top_prod]
@@ -301,8 +301,8 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  条件: (H : Subgroup N)
-  结论: (⊤ : Subgroup G).prod H = H.comap (MonoidHom.snd G N)
+  条件: (H : 子群 N)
+  结论: (⊤ : 子群 G).乘积 H = H.comap (幺半群态射.snd G N)
   证明: ext fun x => by simp [mem_prod, MonoidHom.coe_snd]
 
 @[to_additive (attr := simp) top_prod_top]
@@ -325,7 +325,7 @@ theorem top_prod_top
 
 中文:
 定理 top_prod_top
-  结论: (⊤ : Subgroup G).prod (⊤ : Subgroup N) = ⊤
+  结论: (⊤ : 子群 G).乘积 (⊤ : 子群 N) = ⊤
   证明: (top_prod _).trans comap_top _
 
 @[to_additive (attr := simp) bot_prod_bot]
@@ -348,7 +348,7 @@ theorem bot_prod_bot
 
 中文:
 定理 bot_prod_bot
-  结论: (⊥ : Subgroup G).prod (⊥ : Subgroup N) = ⊥
+  结论: (⊥ : 子群 G).乘积 (⊥ : 子群 N) = ⊥
   证明: SetLike.coe_injective by simp [coe_prod]
 
 @[to_additive le_prod_iff]
@@ -372,7 +372,7 @@ theorem le_prod_iff
 
 中文:
 定理 le_prod_iff
-  条件: {H : Subgroup G} {K : Subgroup N} {J : Subgroup (G × N)}
+  条件: {H : 子群 G} {K : 子群 N} {J : 子群 (G × N)}
   证明: by
   simpa only [← Subgroup.toSubmonoid_le] using! Submonoid.le_prod_iff
 
@@ -398,7 +398,7 @@ theorem prod_le_iff
 
 中文:
 定理 prod_le_iff
-  条件: {H : Subgroup G} {K : Subgroup N} {J : Subgroup (G × N)}
+  条件: {H : 子群 G} {K : 子群 N} {J : 子群 (G × N)}
   证明: by
   simpa only [← Subgroup.toSubmonoid_le] using! Submonoid.prod_le_iff
 
@@ -425,8 +425,8 @@ theorem prod_eq_bot_iff
 
 中文:
 定理 prod_eq_bot_iff
-  条件: {H : Subgroup G} {K : Subgroup N}
-  结论: H.prod K = ⊥ ↔ H = ⊥ ∧ K = ⊥
+  条件: {H : 子群 G} {K : 子群 N}
+  结论: H.乘积 K = ⊥ ↔ H = ⊥ ∧ K = ⊥
   证明: by
   simpa only [← Subgroup.toSubmonoid_inj] using! Submonoid.prod_eq_bot_iff
 
@@ -452,7 +452,7 @@ map_le_iff_le_comap.2 .2 fun _y hy => subset_closure ⟨hs, hy⟩⟩) closure_le
 
 中文:
 定理 closure_prod
-  条件: {s : Set G} {t : Set N} (hs : 1 in s) (ht : 1 in t)
+  条件: {s : 集合 G} {t : 集合 N} (hs : 1 in s) (ht : 1 in t)
   证明: le_antisymm
     (closure_le _ |>.2 <| Set.prod_subset_prod_iff.2 <| .inl ⟨subset_closure, subset_closure⟩)
     (prod_le_iff.2 ⟨
@@ -483,7 +483,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (H : Subgroup G) (K : Subgroup N)
+  签名: (H : 子群 G) (K : 子群 N)
   定义体: { Equiv.Set.prod (H : Set G) (K : Set N) with map_mul' := fun _ _ => rfl }
 
 Depends on / 依赖: Equiv.Set.prod, map_mul
@@ -517,7 +517,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (I : Set η) (H : 对任意 i, Subgroup (f i))
+  签名: (I : 集合 η) (H : 对任意 i, 子群 (f i))
   定义体: { Submonoid.pi I fun i => (H i).toSubmonoid with
     inv_mem' := fun hp i hI => (H i).inv_mem (hp i hI) }
 
@@ -542,7 +542,7 @@ theorem coe_pi
 
 中文:
 定理 coe_pi
-  条件: (I : Set η) (H : 对任意 i, Subgroup (f i))
+  条件: (I : 集合 η) (H : 对任意 i, 子群 (f i))
   证明: rfl
 
 @[to_additive]
@@ -564,7 +564,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: (I : Set η) {H : 对任意 i, Subgroup (f i)} {p : 对任意 i, f i}
+  条件: (I : 集合 η) {H : 对任意 i, 子群 (f i)} {p : 对任意 i, f i}
   证明: Iff.rfl
 
 @[to_additive]
@@ -589,8 +589,8 @@ theorem pi_top
 
 中文:
 定理 pi_top
-  条件: (I : Set η)
-  结论: (pi I fun i => (⊤ : Subgroup (f i))) = ⊤
+  条件: (I : 集合 η)
+  结论: (pi I fun i => (⊤ : 子群 (f i))) = ⊤
   证明: ext fun x => by simp [mem_pi]
 
 @[to_additive]
@@ -614,7 +614,7 @@ theorem pi_empty
 
 中文:
 定理 pi_empty
-  条件: (H : 对任意 i, Subgroup (f i))
+  条件: (H : 对任意 i, 子群 (f i))
   结论: pi ∅ H = ⊤
   证明: ext fun x => by simp [mem_pi]
 
@@ -638,7 +638,7 @@ theorem pi_bot
 
 中文:
 定理 pi_bot
-  结论: (pi Set.univ fun i => (⊥ : Subgroup (f i))) = ⊥
+  结论: (pi 集合.univ fun i => (⊥ : 子群 (f i))) = ⊥
   证明: ext fun x => by simp [mem_pi, funext_iff]
 
 @[to_additive]
@@ -661,7 +661,7 @@ theorem le_pi_iff
 
 中文:
 定理 le_pi_iff
-  条件: {I : Set η} {H : 对任意 i, Subgroup (f i)} {J : Subgroup (对任意 i, f i)}
+  条件: {I : 集合 η} {H : 对任意 i, 子群 (f i)} {J : 子群 (对任意 i, f i)}
   证明: Set.subset_pi_iff
 
 @[to_additive (attr := simp)]
@@ -685,7 +685,7 @@ theorem mulSingle_mem_pi
 
 中文:
 定理 mulSingle_mem_pi
-  条件: [DecidableEq η] {I : Set η} {H : 对任意 i, Subgroup (f i)} (i : η) (x : f i)
+  条件: [DecidableEq η] {I : 集合 η} {H : 对任意 i, 子群 (f i)} (i : η) (x : f i)
   证明: Set.update_mem_pi_iff_of_mem (one_mem (pi I H))
 
 @[to_additive]
@@ -710,8 +710,8 @@ theorem pi_eq_bot_iff
 
 中文:
 定理 pi_eq_bot_iff
-  条件: (H : 对任意 i, Subgroup (f i))
-  结论: pi Set.univ H = ⊥ ↔ 对任意 i, H i = ⊥
+  条件: (H : 对任意 i, 子群 (f i))
+  结论: pi 集合.univ H = ⊥ ↔ 对任意 i, H i = ⊥
   证明: by
   simp_rw [SetLike.ext'_iff]
   exact Set.univ_pi_eq_singleton_iff
@@ -738,7 +738,7 @@ instance instIsMulTorsionFree
 
 中文:
 实例 instIsMulTorsionFree
-  签名: [IsMulTorsionFree G]
+  签名: [是MulTorsionFree G]
   定义体: by
     have := pow_left_injective hn (M := G) (a₁ := a) (a₂ := b)
     dsimp at *
@@ -770,7 +770,7 @@ structure Characteristic
     - fixed : forall ϕ : G ≃* G, H.comap ϕ.toMonoidHom = H
 
 中文:
-结构 Characteristic
+结构 特征
   参数: : 命题 where
   公理与运算 (1 个):
     - fixed : 对任意 ϕ : G ≃* G, H.comap ϕ.toMonoidHom = H
@@ -800,7 +800,7 @@ structure Characteristic
     - fixed : forall ϕ : A ≃+ A, H.comap ϕ.toAddMonoidHom = H
 
 中文:
-结构 Characteristic
+结构 特征
   参数: : 命题 where
   公理与运算 (1 个):
     - fixed : 对任意 ϕ : A ≃+ A, H.comap ϕ.toAddMonoidHom = H
@@ -832,7 +832,7 @@ instance normal_top
 
 中文:
 实例 normal_top
-  签名: : (⊤ : Subgroup G).Normal where
+  签名: : (⊤ : 子群 G).正规 where
   定义体: a
 -/
 instance normal_top : (⊤ : Subgroup G).Normal where
@@ -850,7 +850,7 @@ instance normal_bot
 
 中文:
 实例 normal_bot
-  签名: : (⊥ : Subgroup G).Normal where
+  签名: : (⊥ : 子群 G).正规 where
   定义体: by simp
 -/
 instance normal_bot : (⊥ : Subgroup G).Normal where
@@ -871,7 +871,7 @@ theorem characteristic_iff_comap_eq
 
 中文:
 定理 characteristic_iff_comap_eq
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H.comap ϕ.toMonoidHom = H
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H.comap ϕ.toMonoidHom = H
   证明: ⟨Characteristic.fixed, Characteristic.mk⟩
 
 @[to_additive]
@@ -896,7 +896,7 @@ theorem characteristic_iff_comap_le
 
 中文:
 定理 characteristic_iff_comap_le
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H.comap ϕ.toMonoidHom <= H
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H.comap ϕ.toMonoidHom <= H
   证明: characteristic_iff_comap_eq.trans
     ⟨fun h ϕ => le_of_eq (h ϕ), fun h ϕ =>
       le_antisymm (h ϕ) fun g hg => h ϕ.symm ((congr_arg (· in H) (ϕ.symm_apply_apply g)).mpr hg)⟩
@@ -925,7 +925,7 @@ theorem characteristic_iff_le_comap
 
 中文:
 定理 characteristic_iff_le_comap
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H <= H.comap ϕ.toMonoidHom
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H <= H.comap ϕ.toMonoidHom
   证明: characteristic_iff_comap_eq.trans
     ⟨fun h ϕ => ge_of_eq (h ϕ), fun h ϕ =>
       le_antisymm (fun g hg => (congr_arg (· in H) (ϕ.symm_apply_apply g)).mp (h ϕ.symm hg)) (h ϕ)⟩
@@ -954,7 +954,7 @@ theorem characteristic_iff_map_eq
 
 中文:
 定理 characteristic_iff_map_eq
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H.map ϕ.toMonoidHom = H
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H.map ϕ.toMonoidHom = H
   证明: by
   simp_rw [map_equiv_eq_comap_symm']
   exact characteristic_iff_comap_eq.trans ⟨fun h ϕ => h ϕ.symm, fun h ϕ => h ϕ.symm⟩
@@ -982,7 +982,7 @@ theorem characteristic_iff_map_le
 
 中文:
 定理 characteristic_iff_map_le
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H.map ϕ.toMonoidHom <= H
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H.map ϕ.toMonoidHom <= H
   证明: by
   simp_rw [map_equiv_eq_comap_symm']
   exact characteristic_iff_comap_le.trans ⟨fun h ϕ => h ϕ.symm, fun h ϕ => h ϕ.symm⟩
@@ -1010,7 +1010,7 @@ theorem characteristic_iff_le_map
 
 中文:
 定理 characteristic_iff_le_map
-  结论: H.Characteristic ↔ 对任意 ϕ : G ≃* G, H <= H.map ϕ.toMonoidHom
+  结论: H.特征 ↔ 对任意 ϕ : G ≃* G, H <= H.map ϕ.toMonoidHom
   证明: by
   simp_rw [map_equiv_eq_comap_symm']
   exact characteristic_iff_le_comap.trans ⟨fun h ϕ => h ϕ.symm, fun h ϕ => h ϕ.symm⟩
@@ -1036,7 +1036,7 @@ instance botCharacteristic
 
 中文:
 实例 botCharacteristic
-  签名: : Characteristic (⊥ : Subgroup G)
+  签名: : 特征 (⊥ : 子群 G)
   定义体: characteristic_iff_le_map.mpr fun _ϕ => bot_le
 
 @[to_additive]
@@ -1059,7 +1059,7 @@ instance topCharacteristic
 
 中文:
 实例 topCharacteristic
-  签名: : Characteristic (⊤ : Subgroup G)
+  签名: : 特征 (⊤ : 子群 G)
   定义体: characteristic_iff_map_le.mpr fun _ϕ => le_top
 
 @[to_additive]
@@ -1083,7 +1083,7 @@ instance characteristic_sup
 
 中文:
 实例 characteristic_sup
-  签名: [H.Characteristic] [K.Characteristic]
+  签名: [H.特征] [K.特征]
   定义体: by
   simp_all [characteristic_iff_map_eq, map_sup]
 
@@ -1109,7 +1109,7 @@ instance characteristic_iSup
 
 中文:
 实例 characteristic_iSup
-  签名: {ι : Sort*} {H : ι -> Subgroup G} [对任意 i, (H i).Characteristic]
+  签名: {ι : 类型层*} {H : ι -> 子群 G} [对任意 i, (H i).特征]
   定义体: by
   simp_all [characteristic_iff_map_eq, map_iSup]
 
@@ -1135,7 +1135,7 @@ theorem characteristic_biSup
 
 中文:
 定理 characteristic_biSup
-  结论: {ι : 类型} {s : Set ι} {H : ι -> Subgroup G}
+  结论: {ι : 类型} {s : 集合 ι} {H : ι -> 子群 G}
   证明: by
   simp [← iSup_subtype'', characteristic_iSup, h]
 
@@ -1161,7 +1161,7 @@ theorem characteristic_sSup
 
 中文:
 定理 characteristic_sSup
-  条件: {Hs : Set (Subgroup G)} (h : 对任意 H in Hs, H.Characteristic)
+  条件: {Hs : 集合 (子群 G)} (h : 对任意 H in Hs, H.特征)
   证明: by
   simp [sSup_eq_iSup', characteristic_iSup, h]
 
@@ -1187,7 +1187,7 @@ instance characteristic_inf
 
 中文:
 实例 characteristic_inf
-  签名: [H.Characteristic] [K.Characteristic]
+  签名: [H.特征] [K.特征]
   定义体: by
   simp_all [characteristic_iff_comap_eq, comap_inf]
 
@@ -1213,7 +1213,7 @@ instance characteristic_iInf
 
 中文:
 实例 characteristic_iInf
-  签名: {ι : Sort*} {H : ι -> Subgroup G} [对任意 i, (H i).Characteristic]
+  签名: {ι : 类型层*} {H : ι -> 子群 G} [对任意 i, (H i).特征]
   定义体: by
   simp_all [characteristic_iff_comap_eq, comap_iInf]
 
@@ -1239,7 +1239,7 @@ theorem characteristic_biInf
 
 中文:
 定理 characteristic_biInf
-  结论: {ι : 类型} {s : Set ι} {H : ι -> Subgroup G}
+  结论: {ι : 类型} {s : 集合 ι} {H : ι -> 子群 G}
   证明: by
   simp [← iInf_subtype'', characteristic_iInf, h]
 
@@ -1263,7 +1263,7 @@ theorem characteristic_sInf
 
 中文:
 定理 characteristic_sInf
-  条件: {Hs : Set (Subgroup G)} (h : 对任意 H in Hs, H.Characteristic)
+  条件: {Hs : 集合 (子群 G)} (h : 对任意 H in Hs, H.特征)
   证明: by
   simp [sInf_eq_iInf', characteristic_iInf, h]
 
@@ -1292,7 +1292,7 @@ definition _root_.MulAut.characteristic
 
 中文:
 定义 _root_.MulAut.characteristic
-  签名: (H : Subgroup G) [H.Characteristic]
+  签名: (H : 子群 G) [H.特征]
   定义体: { toFun := fun h => ⟨φ h, characteristic_iff_le_comap.mp inferInstance φ h.2⟩
       invFun := fun h => ⟨φ.symm h, characteristic_iff_le_comap.mp inferInstance φ.symm h.2⟩
       left_inv h := Subtype.ext (φ.symm_apply_apply h)
@@ -1329,7 +1329,7 @@ have := congr_arg (map H.subtype) characteristic_iff_map_eq.1 hK (MulAut.charact
 
 中文:
 实例 characteristic_of_characteristic_of_characteristic
-  签名: [H.Characteristic]
+  签名: [H.特征]
   定义体: by
   refine characteristic_iff_map_eq.2 fun φ => ?_
 have := congr_arg (map H.subtype) characteristic_iff_map_eq.1 hK (MulAut.characteristic H φ)
@@ -1360,7 +1360,7 @@ theorem normalizer_empty
 
 中文:
 定理 normalizer_empty
-  结论: normalizer (∅ : Set G) = ⊤
+  结论: normalizer (∅ : 集合 G) = ⊤
   证明: ext fun _ => ⟨fun _ => trivial, fun _ _ => .rfl⟩
 
 @[to_additive]
@@ -1382,8 +1382,8 @@ theorem _root_.CommGroup.normalizer_eq_top
 @[to_additive]
 
 中文:
-定理 _root_.CommGroup.normalizer_eq_top
-  条件: {G : 类型} [CommGroup G] (s : Set G)
+定理 _root_.交换群.normalizer_eq_top
+  条件: {G : 类型} [交换群 G] (s : 集合 G)
   证明: by
   ext
   simp [mem_set_normalizer_iff]
@@ -1413,7 +1413,7 @@ theorem mem_normalizer_iff_conj_image_eq
 
 中文:
 定理 mem_normalizer_iff_conj_image_eq
-  条件: {s : Set G} {g : G}
+  条件: {s : 集合 G} {g : G}
   证明: by
   simp_rw [mem_set_normalizer_iff'', Set.ext_iff, Set.mem_image, MulAut.conj_apply]
   refine forall_congr' fun h => ?_
@@ -1446,7 +1446,7 @@ alias _root_.AddSubgroup.mem_normalizer_iff_conj_image_eq :=
 
 中文:
 定理 mem_normalizer_iff_map_conj_eq
-  条件: {H : Subgroup G} {g : G}
+  条件: {H : 子群 G} {g : G}
   证明: .trans mem_normalizer_iff_conj_image_eq (.symm SetLike.ext'_iff)
 
 @[deprecated (since := "2026-05-12")]
@@ -1480,7 +1480,7 @@ theorem normalizer_le_normalizer_closure
 
 中文:
 定理 normalizer_le_normalizer_closure
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: normalizer s <= normalizer (closure s)
   证明: by
   intro g hg
@@ -1509,7 +1509,7 @@ theorem normalizer_eq_top_iff
 
 中文:
 定理 normalizer_eq_top_iff
-  结论: normalizer (H : Set G) = ⊤ ↔ H.Normal
+  结论: normalizer (H : 集合 G) = ⊤ ↔ H.正规
   证明: eq_top_iff.trans
     ⟨fun h => ⟨fun a ha b => (h (mem_top b) a).mp ha⟩, fun h a _ha b =>
       ⟨fun hb => h.conj_mem b hb a, fun hb => inv_mul_cancel_left a b ▸ h.mem_comm_iff.mp hb⟩⟩
@@ -1536,8 +1536,8 @@ theorem normalizer_eq_top
 
 中文:
 定理 normalizer_eq_top
-  条件: [h : H.Normal]
-  结论: normalizer (H : Set G) = ⊤
+  条件: [h : H.正规]
+  结论: normalizer (H : 集合 G) = ⊤
   证明: normalizer_eq_top_iff.mpr h
 
 @[to_additive]
@@ -1559,7 +1559,7 @@ theorem normal_iff_map_conj_eq
 
 中文:
 定理 normal_iff_map_conj_eq
-  结论: H.Normal ↔ 对任意 g : G, H.map (MulAut.conj g) = H
+  结论: H.正规 ↔ 对任意 g : G, H.map (MulAut.conj g) = H
   证明: by
   simp_rw [← normalizer_eq_top_iff, Subgroup.eq_top_iff', mem_normalizer_iff_map_conj_eq]
 
@@ -1582,8 +1582,8 @@ theorem Normal.map_conj_eq
 @[to_additive]
 
 中文:
-定理 Normal.map_conj_eq
-  条件: [H.Normal] (g : G)
+定理 正规.map_conj_eq
+  条件: [H.正规] (g : G)
   结论: H.map (MulAut.conj g) = H
   证明: normal_iff_map_conj_eq.mp ‹_› g
 
@@ -1609,7 +1609,7 @@ theorem le_set_normalizer_iff
 
 中文:
 定理 le_set_normalizer_iff
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   证明: by
 .mp hg, fun hH h hh k => ⟨fun hk => hH h hh k hk, fun hk => ?_⟩⟩ refine ⟨fun hH h hh g hg => hH hh g
   simpa [mul_assoc] using hH h⁻¹ (inv_mem hh) _ hk
@@ -1667,7 +1667,7 @@ apply le_antisymm by simpa using! hH h hh
 
 中文:
 定理 le_normalizer_closure_iff
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   证明: by
 .mp mem_closure_of_mem hg, fun hH h hh => ?_⟩ refine ⟨fun hH h hh g hg => hH hh g
   rw [mem_normalizer_iff_map_conj_eq]; rw [MonoidHom.map_closure]
@@ -1804,7 +1804,7 @@ theorem subgroupOf_normalizer_eq
 
 中文:
 定理 subgroupOf_normalizer_eq
-  条件: {H N : Subgroup G} (h : H <= N)
+  条件: {H N : 子群 G} (h : H <= N)
   证明: comap_normalizer_eq_of_le_range (h.trans_eq N.range_subtype.symm)
 
 @[to_additive]
@@ -1881,7 +1881,7 @@ theorem maximal_normal_subgroupOf_normalizer
 
 中文:
 定理 maximal_normal_subgroupOf_normalizer
-  结论: Maximal (H.subgroupOf · |>.Normal) (normalizer H)
+  结论: 极大 (H.subgroupOf · |>.正规) (normalizer H)
   证明: ⟨inferInstance,
     fun _ hnormal hle => (normal_subgroupOf_iff_le_normalizer <| le_normalizer.trans hle).mp hnormal⟩
 
@@ -1906,7 +1906,7 @@ theorem le_normalizer_of_normal_subgroupOf
 
 中文:
 定理 le_normalizer_of_normal_subgroupOf
-  条件: [hK : (H.subgroupOf K).Normal] (HK : H <= K)
+  条件: [hK : (H.subgroupOf K).正规] (HK : H <= K)
   证明: (normal_subgroupOf_iff_le_normalizer HK).mp hK
 
 @[to_additive]
@@ -1931,8 +1931,8 @@ theorem subset_normalizer_of_normal
 
 中文:
 定理 subset_normalizer_of_normal
-  条件: {S : Set G} [hH : H.Normal]
-  结论: S subseteq normalizer (H : Set G)
+  条件: {S : 集合 G} [hH : H.正规]
+  结论: S subseteq normalizer (H : 集合 G)
   证明: (@normalizer_eq_top _ _ H hH) ▸ le_top
 
 @[to_additive]
@@ -1956,7 +1956,7 @@ theorem le_normalizer_of_normal
 
 中文:
 定理 le_normalizer_of_normal
-  条件: [H.Normal]
+  条件: [H.正规]
   结论: K <= normalizer H
   证明: subset_normalizer_of_normal
 
@@ -2000,7 +2000,7 @@ theorem iInf_normalizer_le_normalizer_iInf
 
 中文:
 定理 iInf_normalizer_le_normalizer_iInf
-  条件: {ι : Sort*} (H : ι -> Subgroup G)
+  条件: {ι : 类型层*} (H : ι -> 子群 G)
   证明: by
   grind [le_normalizer_iff, mem_iInf, mem_normalizer_iff]
 
@@ -2076,7 +2076,7 @@ definition conjugatesOfSet
 
 中文:
 定义 conjugatesOfSet
-  签名: (s : Set G)
+  签名: (s : 集合 G)
   定义体: ⋃ a in s, conjugatesOf a
 
 @[to_additive]
@@ -2153,7 +2153,7 @@ theorem conjugatesOfSet_mono
 
 中文:
 定理 conjugatesOfSet_mono
-  条件: {s t : Set G} (h : s subseteq t)
+  条件: {s t : 集合 G} (h : s subseteq t)
   结论: conjugatesOfSet s subseteq conjugatesOfSet t
   证明: Set.biUnion_subset_biUnion_left h
 
@@ -2180,7 +2180,7 @@ theorem conjugates_subset_normal
 
 中文:
 定理 conjugates_subset_normal
-  条件: {N : Subgroup G} [tn : N.Normal] {a : G} (h : a in N)
+  条件: {N : 子群 G} [tn : N.正规] {a : G} (h : a in N)
   证明: by
   rintro a hc
   obtain ⟨c, rfl⟩ := isConj_iff.1 hc
@@ -2207,7 +2207,7 @@ theorem conjugatesOfSet_subset
 
 中文:
 定理 conjugatesOfSet_subset
-  条件: {s : Set G} {N : Subgroup G} [N.Normal] (h : s subseteq N)
+  条件: {s : 集合 G} {N : 子群 G} [N.正规] (h : s subseteq N)
   证明: Set.iUnion₂_subset fun _x H => conjugates_subset_normal (h H)
 
 Depends on / 依赖: Set.iUnion, conjugates_subset_normal
@@ -2256,7 +2256,7 @@ theorem conjugatesOfSet_union
 
 中文:
 定理 conjugatesOfSet_union
-  条件: {G : 类型} [Group G] (s t : Set G)
+  条件: {G : 类型} [群 G] (s t : 集合 G)
   证明: by
   simp_rw [conjugatesOfSet, Set.biUnion_union]
 
@@ -2290,7 +2290,7 @@ definition normalClosure
 
 中文:
 定义 normalClosure
-  签名: (s : Set G)
+  签名: (s : 集合 G)
   定义体: closure (conjugatesOfSet s)
 
 @[to_additive]
@@ -2359,7 +2359,7 @@ theorem le_normalClosure
 
 中文:
 定理 le_normalClosure
-  条件: {H : Subgroup G}
+  条件: {H : 子群 G}
   结论: H <= normalClosure ↑H
   证明: fun _ h =>
   subset_normalClosure h
@@ -2387,7 +2387,7 @@ instance normalClosure_normal
 
 中文:
 实例 normalClosure_normal
-  签名: : (normalClosure s).Normal
+  签名: : (normalClosure s).正规
   定义体: ⟨fun n h g => by
     refine Subgroup.closure_induction (fun x hx => ?_) ?_ (fun x y _ _ ihx ihy => ?_)
       (fun x _ ihx => ?_) h
@@ -2433,7 +2433,7 @@ theorem normalClosure_le_normal
 
 中文:
 定理 normalClosure_le_normal
-  条件: {N : Subgroup G} [N.Normal] (h : s subseteq N)
+  条件: {N : 子群 G} [N.正规] (h : s subseteq N)
   结论: normalClosure s <= N
   证明: by
   intro a w
@@ -2469,7 +2469,7 @@ theorem normalClosure_subset_iff
 
 中文:
 定理 normalClosure_subset_iff
-  条件: {N : Subgroup G} [N.Normal]
+  条件: {N : 子群 G} [N.正规]
   结论: s subseteq N ↔ normalClosure s <= N
   证明: ⟨normalClosure_le_normal, Set.Subset.trans subset_normalClosure⟩
 
@@ -2519,7 +2519,7 @@ theorem normalClosure_mono
 
 中文:
 定理 normalClosure_mono
-  条件: {s t : Set G} (h : s subseteq t)
+  条件: {s t : 集合 G} (h : s subseteq t)
   结论: normalClosure s <= normalClosure t
   证明: normalClosure_le_normal (Set.Subset.trans h subset_normalClosure)
 
@@ -2572,7 +2572,7 @@ theorem normalClosure_eq_self
 
 中文:
 定理 normalClosure_eq_self
-  条件: (H : Subgroup G) [H.Normal]
+  条件: (H : 子群 G) [H.正规]
   结论: normalClosure ↑H = H
   证明: le_antisymm (normalClosure_le_normal rfl.subset) le_normalClosure
 
@@ -2621,7 +2621,7 @@ theorem closure_le_normalClosure
 
 中文:
 定理 closure_le_normalClosure
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   结论: closure s <= normalClosure s
   证明: by
   simp only [subset_normalClosure, closure_le]
@@ -2644,7 +2644,7 @@ theorem normalClosure_closure_eq_normalClosure
 
 中文:
 定理 normalClosure_closure_eq_normalClosure
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   证明: le_antisymm (normalClosure_le_normal closure_le_normalClosure) (normalClosure_mono subset_closure)
 
 Depends on / 依赖: closure_le_normalClosure, le_antisymm, normalClosure_le_normal, normalClosure_mono, subset_closure
@@ -2666,7 +2666,7 @@ lemma normalClosure_empty
 
 中文:
 引理 normalClosure_empty
-  结论: normalClosure (∅ : Set G) = (⊥ : Subgroup G)
+  结论: normalClosure (∅ : 集合 G) = (⊥ : 子群 G)
   证明: by
   rw [← normalClosure_closure_eq_normalClosure]; rw [closure_empty]; rw [normalClosure_eq_self]
 
@@ -2688,7 +2688,7 @@ theorem normalClosure_union
 
 中文:
 定理 normalClosure_union
-  条件: {G : 类型} [Group G] (s t : Set G)
+  条件: {G : 类型} [群 G] (s t : 集合 G)
   证明: by
   simp_rw [normalClosure, Group.conjugatesOfSet_union, closure_union]
 
@@ -2717,7 +2717,7 @@ definition normalCore
 
 中文:
 定义 normalCore
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: { a : G | forall b : G, b * a * b⁻¹ in H }
   one_mem' a := by rw [mul_one, mul_inv_cancel]; exact H.one_mem
   inv_mem' {_} h b := (congr_arg (· in H) conj_inv).mp (H.inv_mem (h b))
@@ -2747,7 +2747,7 @@ theorem normalCore_le
 
 中文:
 定理 normalCore_le
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: H.normalCore <= H
   证明: fun a h => by
   rw [← mul_one a]; rw [← inv_one]; rw [← one_mul a]
@@ -2775,7 +2775,7 @@ instance normalCore_normal
 
 中文:
 实例 normalCore_normal
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: ⟨fun a h b c => by
     rw [mul_assoc]; rw [mul_assoc]; rw [← mul_inv_rev]; rw [← mul_assoc]; rw [← mul_assoc]; exact h (c * b)⟩
 
@@ -2800,7 +2800,7 @@ theorem normal_le_normalCore
 
 中文:
 定理 normal_le_normalCore
-  条件: {H : Subgroup G} {N : Subgroup G} [hN : N.Normal]
+  条件: {H : 子群 G} {N : 子群 G} [hN : N.正规]
   证明: ⟨ge_trans H.normalCore_le, fun h_le n hn g => h_le (hN.conj_mem n hn g)⟩
 
 @[to_additive]
@@ -2825,7 +2825,7 @@ theorem normalCore_mono
 
 中文:
 定理 normalCore_mono
-  条件: {H K : Subgroup G} (h : H <= K)
+  条件: {H K : 子群 G} (h : H <= K)
   结论: H.normalCore <= K.normalCore
   证明: normal_le_normalCore.mpr (H.normalCore_le.trans h)
 
@@ -2852,7 +2852,7 @@ theorem normalCore_eq_iSup
 
 中文:
 定理 normalCore_eq_iSup
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: le_antisymm
     (le_iSup_of_le H.normalCore
       (le_iSup_of_le H.normalCore_normal (le_iSup_of_le H.normalCore_le le_rfl)))
@@ -2883,7 +2883,7 @@ theorem normalCore_eq_self
 
 中文:
 定理 normalCore_eq_self
-  条件: (H : Subgroup G) [H.Normal]
+  条件: (H : 子群 G) [H.正规]
   结论: H.normalCore = H
   证明: le_antisymm H.normalCore_le (normal_le_normalCore.mpr le_rfl)
 
@@ -2908,7 +2908,7 @@ theorem normalCore_idempotent
 
 中文:
 定理 normalCore_idempotent
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: H.normalCore.normalCore = H.normalCore
   证明: H.normalCore.normalCore_eq_self
 
@@ -2936,7 +2936,7 @@ theorem normalCore_eq_iInf_map_conj
 
 中文:
 定理 normalCore_eq_iInf_map_conj
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   have : (⨅ g : G, H.map (MulAut.conj g) : Subgroup G).Normal := by
     refine normal_iff_map_conj_eq.mpr fun g => ?_
@@ -2973,7 +2973,7 @@ theorem normalCore_eq_iInf_comap_conj
 
 中文:
 定理 normalCore_eq_iInf_comap_conj
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   rw [← (Equiv.inv G).iInf_comp]; rw [normalCore_eq_iInf_map_conj]
   simp [MulAut.inv_def, map_equiv_eq_comap_symm]
@@ -3010,7 +3010,7 @@ theorem prodMap_comap_prod
 
 中文:
 定理 prodMap_comap_prod
-  结论: {G' : 类型} {N' : 类型} [Group G'] [Group N'] (f : G ->* N)
+  结论: {G' : 类型} {N' : 类型} [群 G'] [群 N'] (f : G ->* N)
   证明: SetLike.coe_injective Set.preimage_prod_map_prod f g _ _
 
 @[to_additive ker_prodMap]
@@ -3036,7 +3036,7 @@ theorem ker_prodMap
 
 中文:
 定理 ker_prodMap
-  条件: {G' : 类型} {N' : 类型} [Group G'] [Group N'] (f : G ->* N) (g : G' ->* N')
+  条件: {G' : 类型} {N' : 类型} [群 G'] [群 N'] (f : G ->* N) (g : G' ->* N')
   证明: by
   rw [← comap_bot]; rw [← comap_bot]; rw [← comap_bot]; rw [← prodMap_comap_prod]; rw [bot_prod_bot]
 
@@ -3061,7 +3061,7 @@ lemma ker_fst
 
 中文:
 引理 ker_fst
-  结论: ker (fst G G') = .prod ⊥ ⊤
+  结论: ker (fst G G') = .乘积 ⊥ ⊤
   证明: SetLike.ext fun _ => (iff_of_eq (and_true _)).symm
 
 @[to_additive (attr := simp)]
@@ -3081,7 +3081,7 @@ lemma ker_snd
 
 中文:
 引理 ker_snd
-  结论: ker (snd G G') = .prod ⊤ ⊥
+  结论: ker (snd G G') = .乘积 ⊤ ⊥
   证明: SetLike.ext fun _ => (iff_of_eq (true_and _)).symm
 
 Depends on / 依赖: MulOneClass, SetLike, SetLike.ext, iff_of_eq, toMulOneClass, true_and
@@ -3101,7 +3101,7 @@ lemma range_prodMap
 
 中文:
 引理 range_prodMap
-  条件: {G' N' : 类型} [Group G'] [Group N'] (f : G ->* N) (g : G' ->* N')
+  条件: {G' N' : 类型} [群 G'] [群 N'] (f : G ->* N) (g : G' ->* N')
   证明: SetLike.coe_injective Set.range_prodMap
 
 Depends on / 依赖: Set.range_prodMap, SetLike, SetLike.coe_injective, Subtype, Subtype.ext, coe_injective, congr_arg, mul_eq_one_symm, range_prodMap
@@ -3128,8 +3128,8 @@ theorem Normal.map
   exact le_normalizer_map _
 
 中文:
-定理 Normal.map
-  条件: {H : Subgroup G} (h : H.Normal) (f : G ->* N) (hf : Function.Surjective f)
+定理 正规.map
+  条件: {H : 子群 G} (h : H.正规) (f : G ->* N) (hf : 函数.满射 f)
   证明: by
   rw [← normalizer_eq_top_iff]; rw [← top_le_iff]; rw [← f.range_eq_top_of_surjective hf]; rw [f.range_eq_map]; rw [← H.normalizer_eq_top]
   exact le_normalizer_map _
@@ -3164,7 +3164,7 @@ theorem comap_normalizer_eq_of_surjective
 
 中文:
 定理 comap_normalizer_eq_of_surjective
-  结论: (H : Subgroup G) {f : N ->* G}
+  结论: (H : 子群 G) {f : N ->* G}
   证明: comap_normalizer_eq_of_le_range fun x _ => hf x
 
 Depends on / 依赖: CommMonoid, SetLike, comap_normalizer_eq_of_le_range, toCommMonoid
@@ -3192,7 +3192,7 @@ theorem map_equiv_normalizer_eq
 
 中文:
 定理 map_equiv_normalizer_eq
-  条件: (H : Subgroup G) (f : G ≃* N)
+  条件: (H : 子群 G) (f : G ≃* N)
   证明: by
   ext x
   simp only [mem_normalizer_iff, mem_map_equiv]
@@ -3225,7 +3225,7 @@ theorem map_normalizer_eq_of_bijective
 
 中文:
 定理 map_normalizer_eq_of_bijective
-  条件: (H : Subgroup G) {f : G ->* N} (hf : Function.Bijective f)
+  条件: (H : 子群 G) {f : G ->* N} (hf : 函数.双射 f)
   证明: map_equiv_normalizer_eq H (MulEquiv.ofBijective f hf)
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofBijective, map_equiv_normalizer_eq, ofBijective
@@ -3260,7 +3260,7 @@ definition liftOfRightInverseAux
 
 中文:
 定义 liftOfRightInverseAux
-  签名: (hf : Function.RightInverse f_inv f) (g : G₁ ->* G₃) (hg : f.ker <= g.ker)
+  签名: (hf : 函数.右逆 f_inv f) (g : G₁ ->* G₃) (hg : f.ker <= g.ker)
   定义体: g (f_inv b)
   map_one' := hg (hf 1)
   map_mul' := by
@@ -3300,7 +3300,7 @@ theorem liftOfRightInverseAux_comp_apply
 
 中文:
 定理 liftOfRightInverseAux_comp_apply
-  结论: (hf : Function.RightInverse f_inv f) (g : G₁ ->* G₃)
+  结论: (hf : 函数.右逆 f_inv f) (g : G₁ ->* G₃)
   证明: by
   dsimp [liftOfRightInverseAux]
   rw [← mul_inv_eq_one]; rw [← g.map_inv]; rw [← g.map_mul]; rw [← g.mem_ker]
@@ -3368,7 +3368,7 @@ invFun φ := ⟨φ.comp f, fun x hx => mem_ker.mpr by simp [mem_ker.mp hx]⟩
 
 中文:
 定义 liftOfRightInverse
-  签名: (hf : Function.RightInverse f_inv f)
+  签名: (hf : 函数.右逆 f_inv f)
   定义体: f.liftOfRightInverseAux f_inv hf g.1 g.2
 invFun φ := ⟨φ.comp f, fun x hx => mem_ker.mpr by simp [mem_ker.mp hx]⟩
   left_inv g := by
@@ -3408,7 +3408,7 @@ abbreviation liftOfSurjective
 
 中文:
 缩写 liftOfSurjective
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: f.liftOfRightInverse (Function.surjInv hf) (Function.rightInverse_surjInv hf)
 
 @[to_additive (attr := simp)]
@@ -3432,7 +3432,7 @@ theorem liftOfRightInverse_comp_apply
 
 中文:
 定理 liftOfRightInverse_comp_apply
-  结论: (hf : Function.RightInverse f_inv f)
+  结论: (hf : 函数.右逆 f_inv f)
   证明: f.liftOfRightInverseAux_comp_apply f_inv hf g.1 g.2 x
 
 @[to_additive (attr := simp)]
@@ -3457,7 +3457,7 @@ theorem liftOfRightInverse_comp
 
 中文:
 定理 liftOfRightInverse_comp
-  结论: (hf : Function.RightInverse f_inv f)
+  结论: (hf : 函数.右逆 f_inv f)
   证明: MonoidHom.ext f.liftOfRightInverse_comp_apply f_inv hf g
 
 @[to_additive]
@@ -3481,7 +3481,7 @@ theorem eq_liftOfRightInverse
 
 中文:
 定理 eq_liftOfRightInverse
-  结论: (hf : Function.RightInverse f_inv f) (g : G₁ ->* G₃)
+  结论: (hf : 函数.右逆 f_inv f) (g : G₁ ->* G₃)
   证明: by
   simp_rw [← hh]
   exact ((f.liftOfRightInverse f_inv hf).apply_symm_apply _).symm
@@ -3514,9 +3514,9 @@ theorem Normal.comap
 @[to_additive]
 
 中文:
-定理 Normal.comap
-  条件: {H : Subgroup N} (hH : H.Normal) (f : G ->* N)
-  结论: (H.comap f).Normal
+定理 正规.comap
+  条件: {H : 子群 N} (hH : H.正规) (f : G ->* N)
+  结论: (H.comap f).正规
   证明: ⟨fun _ => by simp +contextual [Subgroup.mem_comap, hH.conj_mem]⟩
 
 @[to_additive]
@@ -3544,8 +3544,8 @@ theorem Normal.subgroupOf
 @[to_additive]
 
 中文:
-定理 Normal.subgroupOf
-  条件: {H : Subgroup G} (hH : H.Normal) (K : Subgroup G)
+定理 正规.subgroupOf
+  条件: {H : 子群 G} (hH : H.正规) (K : 子群 G)
   证明: hH.comap _
 
 @[to_additive]
@@ -3576,7 +3576,7 @@ theorem comap_normalClosure_image_ge
 
 中文:
 定理 comap_normalClosure_image_ge
-  条件: (s : Set G) (f : G ->* N)
+  条件: (s : 集合 G) (f : G ->* N)
   证明: by
   simp [normalClosure_le_normal, ← Set.image_subset_iff, subset_normalClosure]
 
@@ -3602,7 +3602,7 @@ theorem map_normalClosure_le
 
 中文:
 定理 map_normalClosure_le
-  条件: (s : Set G) (f : G ->* N)
+  条件: (s : 集合 G) (f : G ->* N)
   证明: by
   simp [map_le_iff_le_comap, comap_normalClosure_image_ge]
 
@@ -3631,7 +3631,7 @@ theorem map_normalClosure
 
 中文:
 定理 map_normalClosure
-  条件: (s : Set G) (f : G ->* N) (hf : Surjective f)
+  条件: (s : 集合 G) (f : G ->* N) (hf : 满射 f)
   证明: by
   have : Normal (map f (normalClosure s)) := Normal.map inferInstance f hf
   apply le_antisymm
@@ -3662,7 +3662,7 @@ theorem comap_normalClosure
 
 中文:
 定理 comap_normalClosure
-  条件: (s : Set N) (f : G ≃* N)
+  条件: (s : 集合 N) (f : G ≃* N)
   证明: by
   have := f.toEquiv.image_symm_eq_preimage s
   simp_all [comap_equiv_eq_map_symm, map_normalClosure s (f.symm : N ->* G) f.symm.surjective]
@@ -3683,8 +3683,8 @@ lemma Normal.of_map_injective
   proof: L.comap_map_eq_self_of_injective hφ ▸ n.comap φ
 
 中文:
-引理 Normal.of_map_injective
-  结论: {G H : 类型} [Group G] [Group H] {φ : G ->* H}
+引理 正规.of_map_injective
+  结论: {G H : 类型} [群 G] [群 H] {φ : G ->* H}
   证明: L.comap_map_eq_self_of_injective hφ ▸ n.comap φ
 
 Depends on / 依赖: L.comap_map_eq_self_of_injective, comap_map_eq_self_of_injective, n.comap
@@ -3702,8 +3702,8 @@ theorem Normal.of_map_subtype
   proof: n.of_map_injective K.subtype_injective
 
 中文:
-定理 Normal.of_map_subtype
-  结论: {K : Subgroup G} {L : Subgroup K}
+定理 正规.of_map_subtype
+  结论: {K : 子群 G} {L : 子群 K}
   证明: n.of_map_injective K.subtype_injective
 
 Depends on / 依赖: K.subtype_injective, n.of_map_injective, of_map_injective, subtype_injective
@@ -3723,7 +3723,7 @@ theorem normal_comap_iff_of_surjective
 
 中文:
 定理 normal_comap_iff_of_surjective
-  条件: {f : G ->* N} (hf : Function.Surjective f) {H : Subgroup N}
+  条件: {f : G ->* N} (hf : 函数.满射 f) {H : 子群 N}
   证明: by
   rw [← normalizer_eq_top_iff]; rw [← comap_normalizer_eq_of_surjective H hf]; rw [← comap_top f]; rw [(comap_injective hf).eq_iff]; rw [normalizer_eq_top_iff]
 
@@ -3743,8 +3743,8 @@ theorem _root_.MulEquiv.normal_map_iff
   rw [map_equiv_eq_comap_symm]; rw [normal_comap_iff_of_surjective f.symm.surjective]
 
 中文:
-定理 _root_.MulEquiv.normal_map_iff
-  条件: {f : G ≃* G'} {H : Subgroup G}
+定理 _root_.乘法等价.normal_map_iff
+  条件: {f : G ≃* G'} {H : 子群 G}
   证明: by
   rw [map_equiv_eq_comap_symm]; rw [normal_comap_iff_of_surjective f.symm.surjective]
 
@@ -3770,7 +3770,7 @@ theorem normal_subgroupOf_iff
 
 中文:
 定理 normal_subgroupOf_iff
-  条件: {H K : Subgroup G} (hHK : H <= K)
+  条件: {H K : 子群 G} (hHK : H <= K)
   证明: ⟨fun hN h k hH hK => hN.conj_mem ⟨h, hHK hH⟩ hH ⟨k, hK⟩, fun hN =>
     { conj_mem := fun h hm k => hN h.1 k.1 hm k.2 }⟩
 
@@ -3799,7 +3799,7 @@ instance prod_subgroupOf_prod_normal
 
 中文:
 实例 prod_subgroupOf_prod_normal
-  签名: {H₁ K₁ : Subgroup G} {H₂ K₂ : Subgroup N}
+  签名: {H₁ K₁ : 子群 G} {H₂ K₂ : 子群 N}
   定义体: ⟨h₁.conj_mem ⟨(n : G × N).fst, (mem_prod.mp n.2).1⟩ hgHK.1
         ⟨(g : G × N).fst, (mem_prod.mp g.2).1⟩,
       h₂.conj_mem ⟨(n : G × N).snd, (mem_prod.mp n.2).2⟩ hgHK.2
@@ -3832,7 +3832,7 @@ instance prod_normal
 
 中文:
 实例 prod_normal
-  签名: (H : Subgroup G) (K : Subgroup N) [hH : H.Normal] [hK : K.Normal]
+  签名: (H : 子群 G) (K : 子群 N) [hH : H.正规] [hK : K.正规]
   定义体: ⟨hH.conj_mem n.fst (Subgroup.mem_prod.mp hg).1 g.fst,
       hK.conj_mem n.snd (Subgroup.mem_prod.mp hg).2 g.snd⟩
 
@@ -3862,7 +3862,7 @@ theorem inf_subgroupOf_inf_normal_of_right
 
 中文:
 定理 inf_subgroupOf_inf_normal_of_right
-  结论: (A B' B : Subgroup G)
+  结论: (A B' B : 子群 G)
   证明: by
   rw [normal_subgroupOf_iff_le_normalizer_inf] at hN ⊢
   rw [inf_inf_inf_comm]; rw [inf_idem]
@@ -3894,7 +3894,7 @@ theorem inf_subgroupOf_inf_normal_of_left
 
 中文:
 定理 inf_subgroupOf_inf_normal_of_left
-  结论: {A' A : Subgroup G} (B : Subgroup G)
+  结论: {A' A : 子群 G} (B : 子群 G)
   证明: by
   rw [normal_subgroupOf_iff_le_normalizer_inf] at hN ⊢
   rw [inf_inf_inf_comm]; rw [inf_idem]
@@ -3923,7 +3923,7 @@ instance normal_inf_normal
 
 中文:
 实例 normal_inf_normal
-  签名: (H K : Subgroup G) [hH : H.Normal] [hK : K.Normal]
+  签名: (H K : 子群 G) [hH : H.正规] [hK : K.正规]
   定义体: ⟨fun n hmem g => ⟨hH.conj_mem n hmem.1 g, hK.conj_mem n hmem.2 g⟩⟩
 
 @[to_additive]
@@ -3951,7 +3951,7 @@ theorem normal_iInf_normal
 
 中文:
 定理 normal_iInf_normal
-  结论: {ι : Sort*} {a : ι -> Subgroup G}
+  结论: {ι : 类型层*} {a : ι -> 子群 G}
   证明: by
   constructor
   intro g g_in_iInf h
@@ -3984,7 +3984,7 @@ theorem SubgroupNormal.mem_comm
 
 中文:
 定理 SubgroupNormal.mem_comm
-  结论: {H K : Subgroup G} (hK : H <= K) [hN : (H.subgroupOf K).Normal]
+  结论: {H K : 子群 G} (hK : H <= K) [hN : (H.subgroupOf K).正规]
   证明: by
   have := (normal_subgroupOf_iff hK).mp hN (a * b) b h hb
   rwa [mul_assoc, mul_assoc, mul_inv_cancel, mul_one] at this
@@ -4017,7 +4017,7 @@ theorem commute_of_normal_of_disjoint
 
 中文:
 定理 commute_of_normal_of_disjoint
-  结论: (H₁ H₂ : Subgroup G) (hH₁ : H₁.Normal) (hH₂ : H₂.Normal)
+  结论: (H₁ H₂ : 子群 G) (hH₁ : H₁.正规) (hH₂ : H₂.正规)
   证明: by
   suffices x * y * x⁻¹ * y⁻¹ = 1 by
     change x * y = y * x
@@ -4060,7 +4060,7 @@ theorem normal_subgroupOf_of_le_normalizer
 
 中文:
 定理 normal_subgroupOf_of_le_normalizer
-  结论: {H N : Subgroup G}
+  结论: {H N : 子群 G}
   证明: by
   rw [normal_subgroupOf_iff_le_normalizer_inf]
   exact (le_inf hLE H.le_normalizer).trans inf_normalizer_le_normalizer_inf
@@ -4087,7 +4087,7 @@ theorem normal_subgroupOf_sup_of_le_normalizer
 
 中文:
 定理 normal_subgroupOf_sup_of_le_normalizer
-  结论: {H N : Subgroup G}
+  结论: {H N : 子群 G}
   证明: by
   rw [normal_subgroupOf_iff_le_normalizer le_sup_right]
   exact sup_le hLE le_normalizer
@@ -4112,7 +4112,7 @@ instance normal_subgroupOf_closure_normalizer
 
 中文:
 实例 normal_subgroupOf_closure_normalizer
-  签名: (s : Set G)
+  签名: (s : 集合 G)
   定义体: normal_subgroupOf_of_le_normalizer normalizer_le_normalizer_closure s
 
 Depends on / 依赖: normal_subgroupOf_of_le_normalizer, normalizer_le_normalizer_closure
@@ -4146,7 +4146,7 @@ theorem normalClosure_eq_top_of
 
 中文:
 定理 normalClosure_eq_top_of
-  结论: {N : Subgroup G} [hn : N.Normal] {g g' : G} {hg : g in N}
+  结论: {N : 子群 G} [hn : N.正规] {g g' : G} {hg : g in N}
   证明: by
   obtain ⟨c, rfl⟩ := isConj_iff.1 hc
   have h : forall x : N, (MulAut.conj c) x in N := by
@@ -4196,7 +4196,7 @@ definition noncenter
 
 中文:
 定义 noncenter
-  签名: (G : 类型) [Monoid G]
+  签名: (G : 类型) [幺半群 G]
   定义体: {x | x.carrier.Nontrivial}
 
 Depends on / 依赖: Nontrivial, carrier, x.carrier.Nontrivial
@@ -4214,7 +4214,7 @@ lemma mem_noncenter
 
 中文:
 引理 mem_noncenter
-  条件: {G} [Monoid G] (g : ConjClasses G)
+  条件: {G} [幺半群 G] (g : ConjClasses G)
   证明: Iff.rfl
 -/
 @[simp] lemma mem_noncenter {G} [Monoid G] (g : ConjClasses G) :
@@ -4240,7 +4240,7 @@ definition inertia
 
 中文:
 定义 inertia
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: { σ | forall x, σ • x - x in I }
   mul_mem' {a b} ha hb x := by simpa [mul_smul] using add_mem (ha (b • x)) (hb x)
   one_mem' := by simp [zero_mem]
@@ -4284,7 +4284,7 @@ lemma subgroupOf_inertia
 
 中文:
 引理 subgroupOf_inertia
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: (I.inertia G).subgroupOf H = I.inertia H
   证明: rfl
 -/
@@ -4303,7 +4303,7 @@ lemma coe_mem_inertia
 
 中文:
 引理 coe_mem_inertia
-  条件: {H : Subgroup G} {σ : H}
+  条件: {H : 子群 G} {σ : H}
   结论: ↑σ in I.inertia G ↔ σ in I.inertia H
   证明: .rfl
 -/
@@ -4323,7 +4323,7 @@ lemma inertia_map_subtype
 
 中文:
 引理 inertia_map_subtype
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: (I.inertia H).map H.subtype = I.inertia G ⊓ H
   证明: by
   rw [← AddSubgroup.subgroupOf_inertia]; rw [Subgroup.subgroupOf_map_subtype]

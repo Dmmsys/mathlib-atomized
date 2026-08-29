@@ -60,7 +60,7 @@ class IsCocartesian
     - universal_property({b' : 𝒳} (φ' : a ⟶ b') [IsHomLift p f φ']) : exists! χ : b ⟶ b', IsHomLift p (𝟙 S) χ ∧ φ ≫ χ = φ'
 
 中文:
-类 IsCocartesian
+类 是余cartesian
   参数: : 命题 where
   公理与运算 (2 个):
     - [toIsHomLift : IsHomLift p f φ]
@@ -93,7 +93,7 @@ class IsStronglyCocartesian
     - universal_property'({b' : 𝒳} (g : S ⟶ p.obj b') (φ' : a ⟶ b') [IsHomLift p (f ≫ g) φ']) : exists! χ : b ⟶ b', IsHomLift p g χ ∧ φ ≫ χ = φ'
 
 中文:
-类 IsStronglyCocartesian
+类 是StronglyCocartesian
   参数: : 命题 where
   公理与运算 (2 个):
     - [toIsHomLift : IsHomLift p f φ]
@@ -143,7 +143,7 @@ instance map_isHomLift
 
 中文:
 实例 map_isHomLift
-  签名: : IsHomLift p (𝟙 S) (IsCocartesian.map p f φ φ')
+  签名: : IsHomLift p (𝟙 S) (是余cartesian.map p f φ φ')
   定义体: (Classical.choose_spec <| IsCocartesian.universal_property (p := p) (f := f) (φ := φ) φ').1.1
 
 @[reassoc (attr := simp)]
@@ -164,7 +164,7 @@ lemma fac
 
 中文:
 引理 fac
-  结论: φ ≫ IsCocartesian.map p f φ φ' = φ'
+  结论: φ ≫ 是余cartesian.map p f φ φ' = φ'
   证明: (Classical.choose_spec <| IsCocartesian.universal_property (p := p) (f := f) (φ := φ) φ').1.2
 
 Depends on / 依赖: Classical, Classical.choose_spec, IsCocartesian, IsCocartesian.universal_property, choose_spec, universal_property
@@ -209,7 +209,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (φ : a ⟶ b) [IsCocartesian p f φ] {b' : 𝒳} (ψ ψ' : b ⟶ b')
+  结论: (φ : a ⟶ b) [是余cartesian p f φ] {b' : 𝒳} (ψ ψ' : b ⟶ b')
   证明: by
   rw [map_uniq p f φ (φ ≫ ψ) ψ rfl]; rw [map_uniq p f φ (φ ≫ ψ) ψ' h.symm]
 
@@ -233,7 +233,7 @@ lemma map_self
 
 中文:
 引理 map_self
-  结论: IsCocartesian.map p f φ φ = 𝟙 b
+  结论: 是余cartesian.map p f φ φ = 𝟙 b
   证明: by
   subst_hom_lift p f φ; symm
   apply map_uniq
@@ -265,7 +265,7 @@ definition codomainUniqueUpToIso
 
 中文:
 定义 codomainUniqueUpToIso
-  签名: {b' : 𝒳} (φ' : a ⟶ b') [IsCocartesian p f φ']
+  签名: {b' : 𝒳} (φ' : a ⟶ b') [是余cartesian p f φ']
   定义体: IsCocartesian.map p f φ φ'
   inv := IsCocartesian.map p f φ' φ
   hom_inv_id := by
@@ -414,7 +414,7 @@ instance isCocartesian_of_isStronglyCocartesian
 
 中文:
 实例 isCocartesian_of_isStronglyCocartesian
-  签名: : p.IsCocartesian f φ where
+  签名: : p.是余cartesian f φ where
   定义体: fun φ' => universal_property p f φ (𝟙 S) f (comp_id f).symm φ'
 
 Depends on / 依赖: comp_id, universal_property
@@ -522,7 +522,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (φ : a ⟶ b) [IsStronglyCocartesian p f φ] {S' : 𝒮} {b' : 𝒳} (g : S ⟶ S')
+  结论: (φ : a ⟶ b) [是StronglyCocartesian p f φ] {S' : 𝒮} {b' : 𝒳} (g : S ⟶ S')
   证明: by
   rw [map_uniq p f φ (g := g) rfl (φ ≫ ψ) ψ rfl]; rw [map_uniq p f φ (g := g) rfl (φ ≫ ψ) ψ' h.symm]
 
@@ -637,7 +637,7 @@ use map p g ψ (f' := g ≫ h) rfl map p f φ (assoc f g h) τ
 
 中文:
 实例 comp
-  签名: [IsStronglyCocartesian p f φ] [IsStronglyCocartesian p g ψ]
+  签名: [是StronglyCocartesian p f φ] [是StronglyCocartesian p g ψ]
   定义体: by
     intro c' h τ hτ
 use map p g ψ (f' := g ≫ h) rfl map p f φ (assoc f g h) τ
@@ -678,7 +678,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: [IsStronglyCocartesian p f φ] [IsStronglyCocartesian p (f ≫ g) (φ ≫ ψ)]
+  结论: [是StronglyCocartesian p f φ] [是StronglyCocartesian p (f ≫ g) (φ ≫ ψ)]
   证明: by
     intro c' h τ hτ
     /- We get a morphism `π : c ⟶ c'` such that `(φ ≫ ψ) ≫ π = φ ≫ τ` from the universal property
@@ -749,7 +749,7 @@ instance of_isIso
 
 中文:
 实例 of_isIso
-  签名: (φ : a ⟶ b) [IsHomLift p f φ] [IsIso φ]
+  签名: (φ : a ⟶ b) [IsHomLift p f φ] [是同构 φ]
   定义体: @IsStronglyCocartesian.of_iso _ _ _ _ p _ _ _ _ f (asIso φ) (by aesop)
 
 Depends on / 依赖: IsStronglyCocartesian, IsStronglyCocartesian.of_iso, of_iso
@@ -774,8 +774,8 @@ lemma isIso_of_base_isIso
 
 中文:
 引理 isIso_of_base_isIso
-  条件: (φ : a ⟶ b) [IsStronglyCocartesian p f φ] [IsIso f]
-  结论: IsIso φ
+  条件: (φ : a ⟶ b) [是StronglyCocartesian p f φ] [是同构 f]
+  结论: 是同构 φ
   证明: by
   subst_hom_lift p f φ; clear a b R S
   -- Let `φ'` be the morphism induced by applying universal property to `𝟙 a` lying over `f ≫ f⁻¹`.

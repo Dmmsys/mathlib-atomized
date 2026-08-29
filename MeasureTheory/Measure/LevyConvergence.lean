@@ -55,7 +55,7 @@ lemma isTightMeasureSet_of_tendsto_charFun
 
 中文:
 引理 isTightMeasureSet_of_tendsto_charFun
-  结论: {μ : 自然数 -> Measure E} [对任意 i, IsProbabilityMeasure (μ i)]
+  结论: {μ : 自然数 -> 测度 E} [对任意 i, 是概率测度 (μ i)]
   证明: by
   -- it suffices to show that a limsup tends to 0
   refine isTightMeasureSet_range_of_tendsto_limsup_measureReal_inner_of_norm_eq_one Real
@@ -183,7 +183,7 @@ lemma ProbabilityMeasure.tendsto_of_tight_of_separatesPoints
   obtain ⟨μ
 
 中文:
-引理 ProbabilityMeasure.tendsto_of_tight_of_separatesPoints
+引理 概率测度.tendsto_of_tight_of_separatesPoints
   结论: (𝕜 : 类型) [RCLike 𝕜]
   证明: by
   let := TopologicalSpace.upgradeIsCompletelyMetrizable E
@@ -239,8 +239,8 @@ lemma ProbabilityMeasure.tendsto_charPoly_of_tendsto_charFun
       rw [in
 
 中文:
-引理 ProbabilityMeasure.tendsto_charPoly_of_tendsto_charFun
-  结论: {μ : ι -> ProbabilityMeasure E}
+引理 概率测度.tendsto_charPoly_of_tendsto_charFun
+  结论: {μ : ι -> 概率测度 E}
   证明: by
   rw [mem_charPoly] at hg
   obtain ⟨w, hw⟩ := hg
@@ -287,7 +287,7 @@ lemma ProbabilityMeasure.tendsto_of_tendsto_charFun
   · refine separatesPoints_charPoly 
 
 中文:
-引理 ProbabilityMeasure.tendsto_of_tendsto_charFun
+引理 概率测度.tendsto_of_tendsto_charFun
   证明: by
   have h_tight : IsTightMeasureSet (𝓧 := E) {μ n | n} :=
     isTightMeasureSet_of_tendsto_charFun (by fun_prop) h
@@ -320,7 +320,7 @@ theorem ProbabilityMeasure.tendsto_iff_tendsto_charFun
   exact h (innerProbChar t)
 
 中文:
-定理 ProbabilityMeasure.tendsto_iff_tendsto_charFun
+定理 概率测度.tendsto_iff_tendsto_charFun
   证明: by
   refine ⟨fun h t => ?_, tendsto_of_tendsto_charFun⟩
   rw [ProbabilityMeasure.tendsto_iff_forall_integral_rclike_tendsto Complex] at h

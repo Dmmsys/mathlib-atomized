@@ -43,9 +43,9 @@ structure ValuationSubring
     - mem_or_inv_mem' : forall x : K, x in carrier ∨ x⁻¹ in carrier
 
 中文:
-结构 ValuationSubring
-  参数: extends Subring K
-  继承: Subring K
+结构 赋值子环
+  参数: extends 子环 K
+  继承: 子环 K
   公理与运算 (1 个):
     - mem_or_inv_mem' : 对任意 x : K, x in carrier ∨ x⁻¹ in carrier
 -/
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (ValuationSubring K) K
+  签名: 集合状 (赋值子环 K) K
   定义体: A.toSubring
   coe_injective := by
     intro ⟨_, _⟩ ⟨_, _⟩ h
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ValuationSubring K)
+  签名: 偏序 (赋值子环 K)
   定义体: .ofSetLike (ValuationSubring K) K
 
 Depends on / 依赖: ValuationSubring, ofSetLike
@@ -163,7 +163,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (A B : ValuationSubring K) (h : 对任意 x, x in A ↔ x in B)
+  条件: (A B : 赋值子环 K) (h : 对任意 x, x in A ↔ x in B)
   结论: A = B
   证明: SetLike.ext h
 
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubringClass (ValuationSubring K) K
+  签名: 子环类 (赋值子环 K) K
   定义体: zero_mem
   add_mem {_} a b := add_mem _ a b
   one_mem := one_mem
@@ -321,7 +321,7 @@ theorem toSubring_injective
 
 中文:
 定理 toSubring_injective
-  结论: Function.Injective (toSubring : ValuationSubring K -> Subring K)
+  结论: 函数.单射 (toSubring : 赋值子环 K -> 子环 K)
   证明: fun x y h => by cases x; cases y; congr
 -/
 theorem toSubring_injective : Function.Injective (toSubring : ValuationSubring K -> Subring K) :=
@@ -337,7 +337,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing A
+  签名: 交换环 A
   定义体: inferInstanceAs CommRing A.toSubring
 
 Depends on / 依赖: A.toSubring, CommRing, toSubring
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain A
+  签名: 是整环 A
   定义体: inferInstanceAs IsDomain A.toSubring
 
 Depends on / 依赖: A.toSubring, IsDomain, toSubring
@@ -373,7 +373,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (ValuationSubring K)
+  签名: 顶元素 (赋值子环 K)
   定义体: Top.mk { (⊤ : Subring K) with mem_or_inv_mem' := fun _ => Or.inl trivial }
 
 @[simp]
@@ -396,7 +396,7 @@ theorem toSubring_top
 
 中文:
 定理 toSubring_top
-  结论: (⊤ : ValuationSubring K).toSubring = ⊤
+  结论: (⊤ : 赋值子环 K).toSubring = ⊤
   证明: rfl
 
 @[simp]
@@ -416,7 +416,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : K)
-  结论: x in (⊤ : ValuationSubring K)
+  结论: x in (⊤ : 赋值子环 K)
   证明: trivial
 -/
 theorem mem_top (x : K) : x in (⊤ : ValuationSubring K) :=
@@ -451,7 +451,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (⊤ : ValuationSubring K)
+  签名: 域 (⊤ : 赋值子环 K)
   定义体: inferInstanceAs (Field (⊤ : Subfield K))
 
 @[simp, norm_cast]
@@ -473,7 +473,7 @@ theorem top_coe_div
 
 中文:
 定理 top_coe_div
-  条件: (x y : (⊤ : ValuationSubring K))
+  条件: (x y : (⊤ : 赋值子环 K))
   证明: rfl
 
 @[simp, norm_cast]
@@ -493,7 +493,7 @@ theorem top_coe_inv
 
 中文:
 定理 top_coe_inv
-  条件: (x : (⊤ : ValuationSubring K))
+  条件: (x : (⊤ : 赋值子环 K))
   证明: rfl
 -/
 theorem top_coe_inv (x : (⊤ : ValuationSubring K)) :
@@ -510,7 +510,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (ValuationSubring K)
+  签名: 有顶序 (赋值子环 K)
   定义体: le_top
 
 Depends on / 依赖: le_top
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ValuationSubring K)
+  签名: 可居 (赋值子环 K)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (ValuationSubring K) :=
@@ -559,7 +559,7 @@ instance :
 
 中文:
 实例 :
-  签名: ValuationRing A
+  签名: 赋值环 A
   定义体: by
     by_cases h : (b : K) = 0
     · use 0
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A K
+  签名: 代数 A K
   定义体: inferInstance
 -/
 instance : Algebra A K := inferInstance
@@ -628,7 +628,7 @@ instance isLocalRing
 
 中文:
 实例 isLocalRing
-  签名: : IsLocalRing A
+  签名: : 是局部环 A
   定义体: inferInstance
 
 @[simp]
@@ -720,7 +720,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation K A.ValueGroup
+  签名: : 赋值 K A.ValueGroup
   定义体: ValuationRing.valuation A K
 
 Depends on / 依赖: ValuationRing, ValuationRing.valuation, valuation
@@ -738,7 +738,7 @@ instance inhabitedValueGroup
 
 中文:
 实例 inhabitedValueGroup
-  签名: : Inhabited A.ValueGroup
+  签名: : 可居 A.ValueGroup
   定义体: ⟨A.valuation 0⟩
 
 Depends on / 依赖: A.valuation, valuation
@@ -865,7 +865,7 @@ theorem valuation_surjective
 
 中文:
 定理 valuation_surjective
-  结论: Function.Surjective A.valuation
+  结论: 函数.满射 A.valuation
   证明: Quot.mk_surjective
 
 @[simp]
@@ -918,7 +918,7 @@ theorem valuation_eq_one_iff
 中文:
 定理 valuation_eq_one_iff
   条件: (a : A)
-  结论: IsUnit a ↔ A.valuation a = 1 where
+  结论: 是单位 a ↔ A.valuation a = 1 where
   证明: A.valuation_unit h.unit
   mpr h := by
     have ha : (a : K) != 0 := by
@@ -955,7 +955,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  结论: A = ⊤ ↔ ¬ A.valuation.IsNontrivial
+  结论: A = ⊤ ↔ ¬ A.valuation.是非平凡
   证明: by
   simp [Valuation.IsNontrivial_iff_exists_one_lt, SetLike.ext_iff]
 
@@ -999,7 +999,7 @@ theorem valuation_lt_one_iff
 中文:
 定理 valuation_lt_one_iff
   条件: (a : A)
-  结论: a in IsLocalRing.maximalIdeal A ↔ A.valuation a < 1
+  结论: a in 是局部环.maximalIdeal A ↔ A.valuation a < 1
   证明: by
   rw [IsLocalRing.mem_maximalIdeal]
   dsimp [nonunits]; rw [valuation_eq_one_iff]
@@ -1024,7 +1024,7 @@ definition ofSubring
 
 中文:
 定义 ofSubring
-  签名: (R : Subring K) (hR : 对任意 x : K, x in R ∨ x⁻¹ in R)
+  签名: (R : 子环 K) (hR : 对任意 x : K, x in R ∨ x⁻¹ in R)
   定义体: { R with mem_or_inv_mem' := hR }
 
 @[simp]
@@ -1045,7 +1045,7 @@ theorem mem_ofSubring
 
 中文:
 定理 mem_ofSubring
-  条件: (R : Subring K) (hR : 对任意 x : K, x in R ∨ x⁻¹ in R) (x : K)
+  条件: (R : 子环 K) (hR : 对任意 x : K, x in R ∨ x⁻¹ in R) (x : K)
   证明: Iff.refl _
 
 Depends on / 依赖: Iff.refl
@@ -1064,7 +1064,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: (R : ValuationSubring K) (S : Subring K) (h : R.toSubring <= S)
+  签名: (R : 赋值子环 K) (S : 子环 K) (h : R.toSubring <= S)
   定义体: { S with mem_or_inv_mem' := fun x => (R.mem_or_inv_mem x).imp (@h x) (@h _) }
 
 Depends on / 依赖: R.mem_or_inv_mem, mem_or_inv_mem
@@ -1087,7 +1087,7 @@ sup := fun R S => ofLE R (R.toSubring ⊔ S.toSubring) le_sup_left
 
 中文:
 实例 :
-  签名: SemilatticeSup (ValuationSubring K)
+  签名: SemilatticeSup (赋值子环 K)
   定义体: { (inferInstance : PartialOrder (ValuationSubring K)) with
 sup := fun R S => ofLE R (R.toSubring ⊔ S.toSubring) le_sup_left
     le_sup_left := fun R S _ hx => (le_sup_left : R.toSubring <= R.toSubring ⊔ S.toSubring) hx
@@ -1112,7 +1112,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: (R S : ValuationSubring K) (h : R <= S)
+  签名: (R S : 赋值子环 K) (h : R <= S)
   定义体: Subring.inclusion h
 
 Depends on / 依赖: Subring, Subring.inclusion, inclusion
@@ -1132,7 +1132,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (R : ValuationSubring K)
+  签名: (R : 赋值子环 K)
   定义体: Subring.subtype R.toSubring
 
 @[simp]
@@ -1153,7 +1153,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: {R : ValuationSubring K} (x : R)
+  条件: {R : 赋值子环 K} (x : R)
   证明: rfl
 -/
 lemma subtype_apply {R : ValuationSubring K} (x : R) :
@@ -1171,7 +1171,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (R : ValuationSubring K)
+  条件: (R : 赋值子环 K)
   证明: R.toSubring.subtype_injective
 
 @[simp]
@@ -1194,8 +1194,8 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  条件: (R : ValuationSubring K)
-  结论: ⇑(subtype R) = Subtype.val
+  条件: (R : 赋值子环 K)
+  结论: ⇑(subtype R) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype (R : ValuationSubring K) : ⇑(subtype R) = Subtype.val :=
@@ -1216,7 +1216,7 @@ definition mapOfLE
 
 中文:
 定义 mapOfLE
-  签名: (R S : ValuationSubring K) (h : R <= S)
+  签名: (R S : 赋值子环 K) (h : R <= S)
   定义体: Quotient.map' id fun _ _ ⟨u, hu⟩ => ⟨Units.map (R.inclusion S h).toMonoidHom u, hu⟩
   map_zero' := rfl
   map_one' := rfl
@@ -1247,8 +1247,8 @@ theorem monotone_mapOfLE
 
 中文:
 定理 monotone_mapOfLE
-  条件: (R S : ValuationSubring K) (h : R <= S)
-  结论: Monotone (R.mapOfLE S h)
+  条件: (R S : 赋值子环 K) (h : R <= S)
+  结论: 递增 (R.mapOfLE S h)
   证明: by
   rintro ⟨⟩ ⟨⟩ ⟨a, ha⟩; exact ⟨R.inclusion S h a, ha⟩
 
@@ -1272,7 +1272,7 @@ theorem mapOfLE_comp_valuation
 
 中文:
 定理 mapOfLE_comp_valuation
-  条件: (R S : ValuationSubring K) (h : R <= S)
+  条件: (R S : 赋值子环 K) (h : R <= S)
   证明: by ext; rfl
 
 @[simp]
@@ -1291,7 +1291,7 @@ theorem mapOfLE_valuation_apply
 
 中文:
 定理 mapOfLE_valuation_apply
-  条件: (R S : ValuationSubring K) (h : R <= S) (x : K)
+  条件: (R S : 赋值子环 K) (h : R <= S) (x : K)
   证明: rfl
 -/
 theorem mapOfLE_valuation_apply (R S : ValuationSubring K) (h : R <= S) (x : K) :
@@ -1307,7 +1307,7 @@ definition idealOfLE
 
 中文:
 定义 idealOfLE
-  签名: (R S : ValuationSubring K) (h : R <= S)
+  签名: (R S : 赋值子环 K) (h : R <= S)
   定义体: (IsLocalRing.maximalIdeal S).comap (R.inclusion S h)
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, R.inclusion, inclusion, maximalIdeal
@@ -1327,7 +1327,7 @@ theorem idealOfLE_self
 
 中文:
 定理 idealOfLE_self
-  结论: A.idealOfLE A (refl _) = IsLocalRing.maximalIdeal A
+  结论: A.idealOfLE A (refl _) = 是局部环.maximalIdeal A
   证明: rfl
 
 @[simp]
@@ -1368,7 +1368,7 @@ instance prime_idealOfLE
 
 中文:
 实例 prime_idealOfLE
-  签名: (R S : ValuationSubring K) (h : R <= S)
+  签名: (R S : 赋值子环 K) (h : R <= S)
   定义体: (IsLocalRing.maximalIdeal S).comap_isPrime _
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, comap_isPrime, maximalIdeal
@@ -1389,7 +1389,7 @@ fun a ha => Subalgebra.mem_toSubring.mpr
 
 中文:
 定义 ofPrime
-  签名: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  签名: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   定义体: ofLE A (Localization.subalgebra.ofField K _ P.primeCompl_le_nonZeroDivisors).toSubring
 fun a ha => Subalgebra.mem_toSubring.mpr
       Subalgebra.algebraMap_mem
@@ -1413,7 +1413,7 @@ instance ofPrimeAlgebra
 
 中文:
 实例 ofPrimeAlgebra
-  签名: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  签名: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   定义体: inferInstanceAs Algebra A (Localization.subalgebra.ofField K _ P.primeCompl_le_nonZeroDivisors)
 
 Depends on / 依赖: Algebra, Localization, Localization.subalgebra.ofField, P.primeCompl_le_nonZeroDivisors, ofField, primeCompl_le_nonZeroDivisors, subalgebra
@@ -1435,7 +1435,7 @@ instance ofPrime_scalar_tower
 
 中文:
 实例 ofPrime_scalar_tower
-  签名: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  签名: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   定义体: SMulZeroClass.toSMul
     IsScalarTower A (A.ofPrime P) K :=
   IsScalarTower.subalgebra' A K K
@@ -1460,7 +1460,7 @@ instance ofPrime_localization
 
 中文:
 实例 ofPrime_localization
-  签名: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  签名: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   定义体: Localization.subalgebra.isLocalization_ofField K P.primeCompl
     P.primeCompl_le_nonZeroDivisors
 
@@ -1482,7 +1482,7 @@ theorem le_ofPrime
 
 中文:
 定理 le_ofPrime
-  条件: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  条件: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   结论: A <= ofPrime A P
   证明: fun a ha => Subalgebra.mem_toSubring.mpr Subalgebra.algebraMap_mem _ (⟨a, ha⟩ : A)
 
@@ -1504,7 +1504,7 @@ theorem ofPrime_valuation_eq_one_iff_mem_primeCompl
 
 中文:
 定理 ofPrime_valuation_eq_one_iff_mem_primeCompl
-  结论: (A : ValuationSubring K) (P : Ideal A)
+  结论: (A : 赋值子环 K) (P : 理想 A)
   证明: by
   rw [← IsLocalization.AtPrime.isUnit_to_map_iff (A.ofPrime P) P x]; rw [valuation_eq_one_iff]; rfl
 
@@ -1532,7 +1532,7 @@ theorem idealOfLE_ofPrime
 
 中文:
 定理 idealOfLE_ofPrime
-  条件: (A : ValuationSubring K) (P : Ideal A) [P.IsPrime]
+  条件: (A : 赋值子环 K) (P : 理想 A) [P.是素]
   证明: by
   refine Ideal.ext (fun x => ?_)
   apply IsLocalization.AtPrime.to_map_mem_maximal_iff
@@ -1564,7 +1564,7 @@ theorem ofPrime_idealOfLE
 
 中文:
 定理 ofPrime_idealOfLE
-  条件: (R S : ValuationSubring K) (h : R <= S)
+  条件: (R S : 赋值子环 K) (h : R <= S)
   证明: by
   ext x; constructor
   · rintro ⟨a, r, hr, rfl⟩; apply mul_mem; · exact h a.2
@@ -1628,7 +1628,7 @@ theorem ofPrime_top
 
 中文:
 定理 ofPrime_top
-  结论: A.ofPrime (IsLocalRing.maximalIdeal A) = A
+  结论: A.ofPrime (是局部环.maximalIdeal A) = A
   证明: by simp [← idealOfLE_self]
 
 Depends on / 依赖: IsCountablyGenerated, idealOfLE_self, instIsCountablyGeneratedUniformity
@@ -1645,7 +1645,7 @@ theorem ofPrime_le_of_le
 
 中文:
 定理 ofPrime_le_of_le
-  条件: (P Q : Ideal A) [P.IsPrime] [Q.IsPrime] (h : P <= Q)
+  条件: (P Q : 理想 A) [P.是素] [Q.是素] (h : P <= Q)
   证明: fun _x ⟨a, s, hs, he⟩ => ⟨a, s, fun c => hs (h c), he⟩
 -/
 theorem ofPrime_le_of_le (P Q : Ideal A) [P.IsPrime] [Q.IsPrime] (h : P <= Q) :
@@ -1666,7 +1666,7 @@ theorem idealOfLE_le_of_le
 
 中文:
 定理 idealOfLE_le_of_le
-  条件: (R S : ValuationSubring K) (hR : A <= R) (hS : A <= S) (h : R <= S)
+  条件: (R S : 赋值子环 K) (hR : A <= R) (hS : A <= S) (h : R <= S)
   证明: fun x hx =>
   (valuation_lt_one_iff R _).2
     (by
@@ -1697,7 +1697,7 @@ definition primeSpectrumEquiv
 
 中文:
 定义 primeSpectrumEquiv
-  签名: : PrimeSpectrum A ≃ {S // A <= S} where
+  签名: : 素谱 A ≃ {S // A <= S} where
   定义体: ⟨ofPrime A P.asIdeal, le_ofPrime _ _⟩
   invFun S := ⟨idealOfLE _ S S.2, inferInstance⟩
   left_inv P := by ext1; simp
@@ -1731,7 +1731,7 @@ definition primeSpectrumOrderEquiv
 
 中文:
 定义 primeSpectrumOrderEquiv
-  签名: : (PrimeSpectrum A)ᵒᵈ ≃o {S // A <= S}
+  签名: : (素谱 A)ᵒᵈ ≃o {S // A <= S}
   定义体: { OrderDual.ofDual.trans (primeSpectrumEquiv A) with
     map_rel_iff' {a b} :=
 ⟨a.rec fun a => b.rec fun b h => by
@@ -1767,7 +1767,7 @@ instance le_total_ideal
 
 中文:
 实例 le_total_ideal
-  签名: : @Std.Total {S // A <= S} (· <= ·)
+  签名: : @Std.全 {S // A <= S} (· <= ·)
   定义体: by
   classical
   let _ : @Std.Total (PrimeSpectrum A) (· <= ·) := ⟨fun ⟨x, _⟩ ⟨y, _⟩ => LE.total.total x y⟩
@@ -1793,7 +1793,7 @@ instance linearOrderOverring
 
 中文:
 实例 linearOrderOverring
-  签名: : LinearOrder {S // A <= S} where
+  签名: : 线性序 {S // A <= S} where
   定义体: (le_total_ideal A).1
   max_def a b := congr_fun₂ sup_eq_maxDefault a b
   toDecidableLE := _
@@ -1936,7 +1936,7 @@ definition valuationSubring
 
 中文:
 定义 valuationSubring
-  签名: : ValuationSubring K
+  签名: : 赋值子环 K
   定义体: { v.integer with
     mem_or_inv_mem' := by
       intro x
@@ -2023,7 +2023,7 @@ theorem isEquiv_valuation_valuationSubring
 
 中文:
 定理 isEquiv_valuation_valuationSubring
-  结论: v.IsEquiv v.valuationSubring.valuation
+  结论: v.Is等价 v.valuationSubring.valuation
   证明: by
   rw [isEquiv_iff_val_le_one]
   intro x
@@ -2090,7 +2090,7 @@ theorem valuationSubring_eq_top_iff
 
 中文:
 定理 valuationSubring_eq_top_iff
-  结论: v.valuationSubring = ⊤ ↔ ¬ v.IsNontrivial
+  结论: v.valuationSubring = ⊤ ↔ ¬ v.是非平凡
   证明: by
   simp [ValuationSubring.eq_top_iff]
 
@@ -2159,7 +2159,7 @@ definition unitGroup
 
 中文:
 定义 unitGroup
-  签名: : Subgroup Kˣ
+  签名: : 子群 Kˣ
   定义体: (A.valuation.toMonoidWithZeroHom.toMonoidHom.comp (Units.coeHom K)).ker
 
 @[simp]
@@ -2282,7 +2282,7 @@ theorem unitGroup_le_unitGroup
 
 中文:
 定理 unitGroup_le_unitGroup
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   结论: A.unitGroup <= B.unitGroup ↔ A <= B
   证明: by
   constructor
@@ -2324,7 +2324,7 @@ theorem unitGroup_injective
 
 中文:
 定理 unitGroup_injective
-  结论: Function.Injective (unitGroup : ValuationSubring K -> Subgroup _)
+  结论: 函数.单射 (unitGroup : 赋值子环 K -> 子群 _)
   证明: fun A B h => by simpa only [le_antisymm_iff, unitGroup_le_unitGroup] using h
 
 Depends on / 依赖: le_antisymm_iff, unitGroup_le_unitGroup
@@ -2343,7 +2343,7 @@ theorem eq_iff_unitGroup
 
 中文:
 定理 eq_iff_unitGroup
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   结论: A = B ↔ A.unitGroup = B.unitGroup
   证明: unitGroup_injective.eq_iff.symm
 
@@ -2364,7 +2364,7 @@ definition unitGroupOrderEmbedding
 
 中文:
 定义 unitGroupOrderEmbedding
-  签名: : ValuationSubring K ↪o Subgroup Kˣ where
+  签名: : 赋值子环 K ↪o 子群 Kˣ where
   定义体: A.unitGroup
   inj' := unitGroup_injective
   map_rel_iff' {_A _B} := unitGroup_le_unitGroup
@@ -2386,7 +2386,7 @@ theorem unitGroup_strictMono
 
 中文:
 定理 unitGroup_strictMono
-  结论: StrictMono (unitGroup : ValuationSubring K -> Subgroup _)
+  结论: 严格递增 (unitGroup : 赋值子环 K -> 子群 _)
   证明: unitGroupOrderEmbedding.strictMono
 
 Depends on / 依赖: strictMono, unitGroupOrderEmbedding, unitGroupOrderEmbedding.strictMono
@@ -2413,7 +2413,7 @@ definition nonunits
 
 中文:
 定义 nonunits
-  签名: : NonUnitalSubring K where
+  签名: : NonUnital子环 K where
   定义体: {x | A.valuation x < 1}
   mul_mem' ha hb := (mul_lt_mul'' (Set.mem_ofPred.mp ha) (Set.mem_ofPred.mp hb)
     zero_le zero_le).trans_eq <| mul_one _
@@ -2519,7 +2519,7 @@ theorem nonunits_le_nonunits
 
 中文:
 定理 nonunits_le_nonunits
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   结论: B.nonunits <= A.nonunits ↔ A <= B
   证明: by
   constructor
@@ -2569,7 +2569,7 @@ theorem nonunits_inj
 
 中文:
 定理 nonunits_inj
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   结论: A.nonunits = B.nonunits ↔ A = B
   证明: nonunits_injective.eq_iff
 
@@ -2590,7 +2590,7 @@ definition nonunitsOrderEmbedding
 
 中文:
 定义 nonunitsOrderEmbedding
-  签名: : ValuationSubring K ↪o (NonUnitalSubring K)ᵒᵈ where
+  签名: : 赋值子环 K ↪o (NonUnital子环 K)ᵒᵈ where
   定义体: A.nonunits
   inj' := nonunits_injective
   map_rel_iff' {_A _B} := nonunits_le_nonunits
@@ -2616,7 +2616,7 @@ theorem coe_mem_nonunits_iff
 中文:
 定理 coe_mem_nonunits_iff
   条件: {a : A}
-  结论: (a : K) in A.nonunits ↔ a in IsLocalRing.maximalIdeal A
+  结论: (a : K) in A.nonunits ↔ a in 是局部环.maximalIdeal A
   证明: (valuation_lt_one_iff _ _).symm
 
 Depends on / 依赖: valuation_lt_one_iff
@@ -2652,7 +2652,7 @@ theorem nonunits_subset
 
 中文:
 定理 nonunits_subset
-  结论: (A.nonunits : Set K) subseteq A
+  结论: (A.nonunits : 集合 K) subseteq A
   证明: nonunits_le
 
 Depends on / 依赖: nonunits_le
@@ -2670,7 +2670,7 @@ theorem mem_nonunits_iff_exists_mem_maximalIdeal
     coe_mem_nonunits_iff.mpr h⟩
 
 中文:
-定理 mem_nonunits_iff_exists_mem_maximalIdeal
+定理 mem_nonunits_iff_存在_mem_maximalIdeal
   条件: {a : K}
   证明: ⟨fun h => ⟨nonunits_subset h, coe_mem_nonunits_iff.mp h⟩, fun ⟨_, h⟩ =>
     coe_mem_nonunits_iff.mpr h⟩
@@ -2696,7 +2696,7 @@ theorem image_maximalIdeal
 
 中文:
 定理 image_maximalIdeal
-  结论: ((↑) : A -> K) '' IsLocalRing.maximalIdeal A = A.nonunits
+  结论: ((↑) : A -> K) '' 是局部环.maximalIdeal A = A.nonunits
   证明: by
   ext a
   simp only [Set.mem_image, SetLike.mem_coe, mem_nonunits_iff_exists_mem_maximalIdeal]
@@ -2730,7 +2730,7 @@ definition principalUnitGroup
 
 中文:
 定义 principalUnitGroup
-  签名: : Subgroup Kˣ where
+  签名: : 子群 Kˣ where
   定义体: {x | A.valuation (x - 1) < 1}
   mul_mem' := by
     intro a b ha hb
@@ -2814,7 +2814,7 @@ theorem principalUnitGroup_le_principalUnitGroup
 
 中文:
 定理 principalUnitGroup_le_principalUnitGroup
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   证明: by
   constructor
   · intro h x hx
@@ -2869,7 +2869,7 @@ theorem eq_iff_principalUnitGroup
 
 中文:
 定理 eq_iff_principalUnitGroup
-  条件: {A B : ValuationSubring K}
+  条件: {A B : 赋值子环 K}
   证明: principalUnitGroup_injective.eq_iff.symm
 
 Depends on / 依赖: eq_iff, principalUnitGroup_injective, principalUnitGroup_injective.eq_iff.symm
@@ -2890,7 +2890,7 @@ definition principalUnitGroupOrderEmbedding
 
 中文:
 定义 principalUnitGroupOrderEmbedding
-  签名: : ValuationSubring K ↪o (Subgroup Kˣ)ᵒᵈ where
+  签名: : 赋值子环 K ↪o (子群 Kˣ)ᵒᵈ where
   定义体: A.principalUnitGroup
   inj' := principalUnitGroup_injective
   map_rel_iff' {_A _B} := principalUnitGroup_le_principalUnitGroup
@@ -3005,7 +3005,7 @@ theorem principalUnitGroup_symm_apply
 
 中文:
 定理 principalUnitGroup_symm_apply
-  条件: (a : (Units.map (IsLocalRing.residue A).toMonoidHom).ker)
+  条件: (a : (单位群.map (是局部环.residue A).toMonoidHom).ker)
   证明: rfl
 -/
 theorem principalUnitGroup_symm_apply (a : (Units.map (IsLocalRing.residue A).toMonoidHom).ker) :
@@ -3024,7 +3024,7 @@ definition unitGroupToResidueFieldUnits
 
 中文:
 定义 unitGroupToResidueFieldUnits
-  签名: : A.unitGroup ->* (IsLocalRing.ResidueField A)ˣ
+  签名: : A.unitGroup ->* (是局部环.ResidueField A)ˣ
   定义体: MonoidHom.comp (Units.map <| (Ideal.Quotient.mk _).toMonoidHom) A.unitGroupMulEquiv.toMonoidHom
 
 @[simp]
@@ -3198,7 +3198,7 @@ Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul
 
 中文:
 定义 pointwiseHasSMul
-  签名: : SMul G (ValuationSubring K) where
+  签名: : 标量乘法 G (赋值子环 K) where
   定义体: -- TODO: if we add `ValuationSubring.map` at a later date, we should use it here
     { g • S.toSubring with
       mem_or_inv_mem' := fun x =>
@@ -3232,8 +3232,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (g : G) (S : ValuationSubring K)
-  结论: ↑(g • S) = g • (S : Set K)
+  条件: (g : G) (S : 赋值子环 K)
+  结论: ↑(g • S) = g • (S : 集合 K)
   证明: rfl
 
 @[simp]
@@ -3251,7 +3251,7 @@ theorem pointwise_smul_toSubring
 
 中文:
 定理 pointwise_smul_toSubring
-  条件: (g : G) (S : ValuationSubring K)
+  条件: (g : G) (S : 赋值子环 K)
   证明: rfl
 -/
 theorem pointwise_smul_toSubring (g : G) (S : ValuationSubring K) :
@@ -3275,7 +3275,7 @@ scoped[Pointwise] attribute [instance] ValuationSubring.pointwiseMulAction
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction G (ValuationSubring K)
+  签名: : 乘法作用 G (赋值子环 K)
   定义体: toSubring_injective.mulAction toSubring pointwise_smul_toSubring
 
 scoped[Pointwise] attribute [instance] ValuationSubring.pointwiseMulAction
@@ -3300,7 +3300,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (g : G) (x : K) (S : ValuationSubring K)
+  条件: (g : G) (x : K) (S : 赋值子环 K)
   结论: x in S -> g • x in g • S
   证明: (Set.smul_mem_smul_set : _ -> _ in g • (S : Set K))
 
@@ -3319,7 +3319,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass G (ValuationSubring K) HSMul.hSMul LE.le
+  签名: 协变类 G (赋值子环 K) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ _ => Set.image_mono⟩
 
 Depends on / 依赖: Set.image_mono, image_mono
@@ -3336,8 +3336,8 @@ theorem mem_smul_pointwise_iff_exists
   proof: (Set.mem_smul_set : x in g • (S : Set K) ↔ _)
 
 中文:
-定理 mem_smul_pointwise_iff_exists
-  条件: (g : G) (x : K) (S : ValuationSubring K)
+定理 mem_smul_pointwise_iff_存在
+  条件: (g : G) (x : K) (S : 赋值子环 K)
   证明: (Set.mem_smul_set : x in g • (S : Set K) ↔ _)
 
 Depends on / 依赖: Set.mem_smul_set, mem_smul_set
@@ -3358,7 +3358,7 @@ instance pointwise_central_scalar
 
 中文:
 实例 pointwise_central_scalar
-  签名: [MulSemiringAction Gᵐᵒᵖ K] [IsCentralScalar G K]
+  签名: [MulSemiring作用 Gᵐᵒᵖ K] [中心标量 G K]
   定义体: ⟨fun g S => toSubring_injective op_smul_eq_smul g S.toSubring⟩
 
 @[simp]
@@ -3380,7 +3380,7 @@ theorem smul_mem_pointwise_smul_iff
 
 中文:
 定理 smul_mem_pointwise_smul_iff
-  条件: {g : G} {S : ValuationSubring K} {x : K}
+  条件: {g : G} {S : 赋值子环 K} {x : K}
   证明: Set.smul_mem_smul_set_iff
 
 Depends on / 依赖: Set.smul_mem_smul_set_iff, smul_mem_smul_set_iff
@@ -3398,7 +3398,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {g : G} {S : ValuationSubring K} {x : K}
+  条件: {g : G} {S : 赋值子环 K} {x : K}
   证明: Set.mem_smul_set_iff_inv_smul_mem
 
 Depends on / 依赖: Set.mem_smul_set_iff_inv_smul_mem, mem_smul_set_iff_inv_smul_mem
@@ -3418,7 +3418,7 @@ theorem mem_inv_pointwise_smul_iff
 
 中文:
 定理 mem_inv_pointwise_smul_iff
-  条件: {g : G} {S : ValuationSubring K} {x : K}
+  条件: {g : G} {S : 赋值子环 K} {x : K}
   证明: Set.mem_inv_smul_set_iff
 
 @[simp]
@@ -3439,7 +3439,7 @@ theorem pointwise_smul_le_pointwise_smul_iff
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {g : G} {S T : ValuationSubring K}
+  条件: {g : G} {S T : 赋值子环 K}
   证明: Set.smul_set_subset_smul_set_iff
 
 Depends on / 依赖: Set.smul_set_subset_smul_set_iff, smul_set_subset_smul_set_iff
@@ -3458,7 +3458,7 @@ theorem pointwise_smul_subset_iff
 
 中文:
 定理 pointwise_smul_subset_iff
-  条件: {g : G} {S T : ValuationSubring K}
+  条件: {g : G} {S T : 赋值子环 K}
   结论: g • S <= T ↔ S <= g⁻¹ • T
   证明: Set.smul_set_subset_iff_subset_inv_smul_set
 
@@ -3478,7 +3478,7 @@ theorem subset_pointwise_smul_iff
 
 中文:
 定理 subset_pointwise_smul_iff
-  条件: {g : G} {S T : ValuationSubring K}
+  条件: {g : G} {S T : 赋值子环 K}
   结论: S <= g • T ↔ g⁻¹ • S <= T
   证明: Set.subset_smul_set_iff
 
@@ -3505,7 +3505,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (A : ValuationSubring L) (f : K ->+* L)
+  签名: (A : 赋值子环 L) (f : K ->+* L)
   定义体: { A.toSubring.comap f with mem_or_inv_mem' := fun k => by simp [ValuationSubring.mem_or_inv_mem] }
 
 @[simp]
@@ -3529,8 +3529,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (A : ValuationSubring L) (f : K ->+* L)
-  结论: (A.comap f : Set K) = f ⁻¹' A
+  条件: (A : 赋值子环 L) (f : K ->+* L)
+  结论: (A.comap f : 集合 K) = f ⁻¹' A
   证明: rfl
 
 @[simp]
@@ -3551,7 +3551,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {A : ValuationSubring L} {f : K ->+* L} {x : K}
+  条件: {A : 赋值子环 L} {f : K ->+* L} {x : K}
   结论: x in A.comap f ↔ f x in A
   证明: Iff.rfl
 
@@ -3570,7 +3570,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (A : ValuationSubring J) (g : L ->+* J) (f : K ->+* L)
+  条件: (A : 赋值子环 J) (g : L ->+* J) (f : K ->+* L)
   证明: rfl
 
 Depends on / 依赖: EMetricSpace, EMetricSpace.induced, ULift.down, ULift.down_injective, down_injective, induced

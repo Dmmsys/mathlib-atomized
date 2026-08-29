@@ -51,7 +51,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (G : Graph α β) (E₀ : Set β)
+  签名: (G : 图 α β) (E₀ : 集合 β)
   定义体: V(G)
   edgeSet := E(G) inter E₀
   IsLink e x y := e in E₀ ∧ G.IsLink e x y
@@ -84,7 +84,7 @@ lemma restrict_le
 
 中文:
 引理 restrict_le
-  条件: {E₀ : Set β}
+  条件: {E₀ : 集合 β}
   结论: G.restrict E₀ <= G where
   证明: le_rfl
   isLink_mono := by simp
@@ -112,7 +112,7 @@ lemma restrict_eq_self_iff
 
 中文:
 引理 restrict_eq_self_iff
-  条件: (G : Graph α β) (E₀ : Set β)
+  条件: (G : 图 α β) (E₀ : 集合 β)
   结论: G.restrict E₀ = G ↔ E(G) subseteq E₀
   证明: ⟨fun h => by simpa using h.ge.edgeSet_mono,
     fun h => (Compatible.of_le restrict_le).ext (by simp) (by simpa)⟩
@@ -139,7 +139,7 @@ lemma restrict_self
 
 中文:
 引理 restrict_self
-  条件: (G : Graph α β)
+  条件: (G : 图 α β)
   结论: G.restrict E(G) = G
   证明: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl (by simp)
 
@@ -164,7 +164,7 @@ lemma restrict_edgeSet_inter
 
 中文:
 引理 restrict_edgeSet_inter
-  条件: (G : Graph α β) (F : Set β)
+  条件: (G : 图 α β) (F : 集合 β)
   结论: G.restrict (E(G) inter F) = G.restrict F
   证明: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext (by simp) (by simp)
 
@@ -189,7 +189,7 @@ lemma restrict_inter_edgeSet
 
 中文:
 引理 restrict_inter_edgeSet
-  条件: (G : Graph α β) (F : Set β)
+  条件: (G : 图 α β) (F : 集合 β)
   证明: by
   rw [inter_comm]; rw [restrict_edgeSet_inter]
 
@@ -218,7 +218,7 @@ lemma restrict_mono_left
 
 中文:
 引理 restrict_mono_left
-  条件: (h : H <= G) (F : Set β)
+  条件: (h : H <= G) (F : 集合 β)
   结论: H.restrict F <= G.restrict F
   证明: by
   refine (Compatible.of_le_le (G := G) (restrict_le.trans h) (by simp)).le_iff.mpr ⟨?_, ?_⟩
@@ -249,7 +249,7 @@ lemma restrict_mono_right
 
 中文:
 引理 restrict_mono_right
-  条件: (G : Graph α β) (hss : F₀ subseteq F)
+  条件: (G : 图 α β) (hss : F₀ subseteq F)
   结论: G.restrict F₀ <= G.restrict F where
   证明: subset_rfl
   isLink_mono _ _ _ := fun h => ⟨hss h.1, h.2⟩
@@ -326,7 +326,7 @@ lemma restrict_restrict
 
 中文:
 引理 restrict_restrict
-  条件: (G : Graph α β) (F₁ F₂ : Set β)
+  条件: (G : 图 α β) (F₁ F₂ : 集合 β)
   证明: by
   refine (Compatible.of_le_le (G := G) (restrict_le.trans (by simp)) (by simp)).ext (by simp) ?_
   simp only [edgeSet_restrict]
@@ -359,7 +359,7 @@ definition deleteEdges
 
 中文:
 定义 deleteEdges
-  签名: (G : Graph α β) (F : Set β)
+  签名: (G : 图 α β) (F : 集合 β)
   定义体: (G.restrict (E(G) \ F)).copy (edgeSet := E(G) \ F)
   (IsLink := fun e x y => G.IsLink e x y ∧ e ∉ F) rfl (by simp)
   (fun e x y => by
@@ -393,7 +393,7 @@ alias restrict_edgeSet_diff_eq_deleteEdges := restrict_edgeSet_sdiff_eq_deleteEd
 
 中文:
 引理 restrict_edgeSet_sdiff_eq_deleteEdges
-  条件: (G : Graph α β) (F : Set β)
+  条件: (G : 图 α β) (F : 集合 β)
   证明: copy_eq ..
 
 @[deprecated (since := "2026-06-03")]
@@ -442,7 +442,7 @@ lemma restrict_eq_deleteEdges
 
 中文:
 引理 restrict_eq_deleteEdges
-  条件: (G : Graph α β) (F : Set β)
+  条件: (G : 图 α β) (F : 集合 β)
   证明: (Compatible.of_le_le restrict_le deleteEdges_le).ext rfl (by simp)
 
 @[simp, grind =]
@@ -495,7 +495,7 @@ lemma deleteEdges_mono_left
 
 中文:
 引理 deleteEdges_mono_left
-  条件: (h : H <= G) (F : Set β)
+  条件: (h : H <= G) (F : 集合 β)
   结论: H.deleteEdges F <= G.deleteEdges F
   证明: by
   simp_rw [← restrict_edgeSet_sdiff_eq_deleteEdges]
@@ -581,7 +581,7 @@ lemma deleteEdges_deleteEdges
 
 中文:
 引理 deleteEdges_deleteEdges
-  条件: (G : Graph α β) (F₁ F₂ : Set β)
+  条件: (G : 图 α β) (F₁ F₂ : 集合 β)
   证明: by
   simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
     edgeSet_restrict, restrict_restrict, compl_union]
@@ -613,7 +613,7 @@ definition induce
 
 中文:
 定义 induce
-  签名: (G : Graph α β) (X : Set α)
+  签名: (G : 图 α β) (X : 集合 α)
   定义体: X
   IsLink e x y := G.IsLink e x y ∧ x in X ∧ y in X
   isLink_symm := by simp +contextual [symm_def, G.isLink_comm]
@@ -676,7 +676,7 @@ lemma edgeSet_induce
 
 中文:
 引理 edgeSet_induce
-  条件: (G : Graph α β) (X : Set α)
+  条件: (G : 图 α β) (X : 集合 α)
   证明: rfl
 
 @[simp, grind =]
@@ -700,7 +700,7 @@ refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl Set.ext fun e 
 
 中文:
 引理 induce_vertexSet
-  条件: (G : Graph α β)
+  条件: (G : 图 α β)
   结论: G.induce V(G) = G
   证明: by
 refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl Set.ext fun e =>
@@ -728,7 +728,7 @@ definition deleteVerts
 
 中文:
 定义 deleteVerts
-  签名: (G : Graph α β) (X : Set α)
+  签名: (G : 图 α β) (X : 集合 α)
   定义体: G.induce (V(G) \ X)
 
 @[simp, grind =]
@@ -753,7 +753,7 @@ lemma vertexSet_deleteVerts
 
 中文:
 引理 vertexSet_deleteVerts
-  条件: (G : Graph α β) (X : Set α)
+  条件: (G : 图 α β) (X : 集合 α)
   结论: V(G.deleteVerts X) = V(G) \ X
   证明: by
   unfold deleteVerts
@@ -782,7 +782,7 @@ lemma deleteVerts_isLink
 
 中文:
 引理 deleteVerts_isLink
-  条件: (G : Graph α β) (X : Set α)
+  条件: (G : 图 α β) (X : 集合 α)
   证明: by
   simp only [deleteVerts, induce_isLink, mem_sdiff, and_congr_right_iff]
   exact fun h => by simp [h.left_mem, h.right_mem]
@@ -810,7 +810,7 @@ lemma edgeSet_deleteVerts
 
 中文:
 引理 edgeSet_deleteVerts
-  条件: (G : Graph α β) (X : Set α)
+  条件: (G : 图 α β) (X : 集合 α)
   证明: by
   simp [edgeSet_eq_setOfPred_exists_isLink]
 
@@ -835,8 +835,8 @@ lemma deleteVerts_empty
 
 中文:
 引理 deleteVerts_empty
-  条件: (G : Graph α β)
-  结论: G.deleteVerts (∅ : Set α) = G
+  条件: (G : 图 α β)
+  结论: G.deleteVerts (∅ : 集合 α) = G
   证明: by
   simp [deleteVerts]
 

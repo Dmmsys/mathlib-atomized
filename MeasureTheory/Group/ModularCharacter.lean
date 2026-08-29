@@ -83,7 +83,7 @@ lemma modularCharacterFun_eq_haarScalarFactor
 
 中文:
 引理 modularCharacterFun_eq_haarScalarFactor
-  结论: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  结论: [可测空间 G] [Borel空间 G] (μ : 测度 G)
   证明: by
   let ν := MeasureTheory.Measure.haar (G := G)
   obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
@@ -148,7 +148,7 @@ lemma map_right_mul_eq_modularCharacterFun_smul
 
 中文:
 引理 map_right_mul_eq_modularCharacterFun_smul
-  结论: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  结论: [可测空间 G] [Borel空间 G] (μ : 测度 G)
   证明: by
   rw [modularCharacterFun_eq_haarScalarFactor μ _]
   exact isMulLeftInvariant_eq_smul_of_innerRegular _ μ

@@ -84,7 +84,7 @@ theorem centroidWeights_eq_const
 
 中文:
 定理 centroidWeights_eq_const
-  结论: s.centroidWeights k = Function.const ι (#s : k)⁻¹
+  结论: s.centroidWeights k = 函数.const ι (#s : k)⁻¹
   证明: rfl
 -/
 theorem centroidWeights_eq_const : s.centroidWeights k = Function.const ι (#s : k)⁻¹ :=
@@ -118,7 +118,7 @@ theorem sum_centroidWeights_eq_one_of_card_ne_zero
 
 中文:
 定理 sum_centroidWeights_eq_one_of_card_ne_zero
-  条件: [CharZero k] (h : #s != 0)
+  条件: [特征零 k] (h : #s != 0)
   证明: by
   simp_all
 -/
@@ -136,7 +136,7 @@ theorem sum_centroidWeights_eq_one_of_nonempty
 
 中文:
 定理 sum_centroidWeights_eq_one_of_nonempty
-  条件: [CharZero k] (h : s.Nonempty)
+  条件: [特征零 k] (h : s.非空)
   证明: s.sum_centroidWeights_eq_one_of_card_ne_zero k (ne_of_gt (card_pos.2 h))
 
 Depends on / 依赖: card_pos, ne_of_gt, s.sum_centroidWeights_eq_one_of_card_ne_zero, sum_centroidWeights_eq_one_of_card_ne_zero
@@ -155,7 +155,7 @@ theorem sum_centroidWeights_eq_one_of_card_eq_add_one
 
 中文:
 定理 sum_centroidWeights_eq_one_of_card_eq_add_one
-  条件: [CharZero k] {n : 自然数} (h : #s = n + 1)
+  条件: [特征零 k] {n : 自然数} (h : #s = n + 1)
   证明: s.sum_centroidWeights_eq_one_of_card_ne_zero k (h.symm ▸ Nat.succ_ne_zero n)
 
 Depends on / 依赖: Nat.succ_ne_zero, h.symm, s.sum_centroidWeights_eq_one_of_card_ne_zero, succ_ne_zero, sum_centroidWeights_eq_one_of_card_ne_zero
@@ -215,7 +215,7 @@ theorem centroid_univ
 
 中文:
 定理 centroid_univ
-  条件: (s : Finset P)
+  条件: (s : 有限集 P)
   结论: univ.centroid k ((↑) : s -> P) = s.centroid k id
   证明: by
   rw [centroid]; rw [centroid]; rw [← s.attach_affineCombination_coe]
@@ -246,7 +246,7 @@ theorem centroid_singleton
 中文:
 定理 centroid_singleton
   条件: (p : ι -> P) (i : ι)
-  结论: ({i} : Finset ι).centroid k p = p i
+  结论: ({i} : 有限集 ι).centroid k p = p i
   证明: by
   simp [centroid_def, affineCombination_apply]
 
@@ -272,7 +272,7 @@ theorem centroid_pair
 
 中文:
 定理 centroid_pair
-  条件: [DecidableEq ι] [Invertible (2 : k)] (p : ι -> P) (i₁ i₂ : ι)
+  条件: [DecidableEq ι] [可逆 (2 : k)] (p : ι -> P) (i₁ i₂ : ι)
   证明: by
   by_cases h : i₁ = i₂
   · simp [h]
@@ -307,7 +307,7 @@ theorem centroid_pair_fin
 
 中文:
 定理 centroid_pair_fin
-  条件: [Invertible (2 : k)] (p : Fin 2 -> P)
+  条件: [可逆 (2 : k)] (p : 有限集 2 -> P)
   证明: by
   rw [univ_fin2]
   convert! centroid_pair k p 0 1
@@ -383,7 +383,7 @@ theorem sum_centroidWeightsIndicator
 
 中文:
 定理 sum_centroidWeightsIndicator
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: sum_indicator_subset _ (subset_univ _)
 
 Depends on / 依赖: subset_univ, sum_indicator_subset
@@ -404,7 +404,7 @@ theorem sum_centroidWeightsIndicator_eq_one_of_card_ne_zero
 
 中文:
 定理 sum_centroidWeightsIndicator_eq_one_of_card_ne_zero
-  结论: [CharZero k] [Fintype ι]
+  结论: [特征零 k] [有限类型 ι]
   证明: by
   rw [sum_centroidWeightsIndicator]
   exact s.sum_centroidWeights_eq_one_of_card_ne_zero k h
@@ -428,7 +428,7 @@ theorem sum_centroidWeightsIndicator_eq_one_of_nonempty
 
 中文:
 定理 sum_centroidWeightsIndicator_eq_one_of_nonempty
-  条件: [CharZero k] [Fintype ι] (h : s.Nonempty)
+  条件: [特征零 k] [有限类型 ι] (h : s.非空)
   证明: by
   rw [sum_centroidWeightsIndicator]
   exact s.sum_centroidWeights_eq_one_of_nonempty k h
@@ -452,7 +452,7 @@ theorem sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one
 
 中文:
 定理 sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one
-  结论: [CharZero k] [Fintype ι] {n : 自然数}
+  结论: [特征零 k] [有限类型 ι] {n : 自然数}
   证明: by
   rw [sum_centroidWeightsIndicator]
   exact s.sum_centroidWeights_eq_one_of_card_eq_add_one k h
@@ -474,7 +474,7 @@ theorem centroid_eq_affineCombination_fintype
 
 中文:
 定理 centroid_eq_affineCombination_fintype
-  条件: [Fintype ι] (p : ι -> P)
+  条件: [有限类型 ι] (p : ι -> P)
   证明: affineCombination_indicator_subset _ _ (subset_univ _)
 
 Depends on / 依赖: affineCombination_indicator_subset, subset_univ
@@ -573,7 +573,7 @@ theorem centroid_vsub_const
 
 中文:
 定理 centroid_vsub_const
-  条件: [CharZero k] {p : ι -> P} {p₀ : P} (hs : s.Nonempty)
+  条件: [特征零 k] {p : ι -> P} {p₀ : P} (hs : s.非空)
   证明: by
   have h := s.sum_centroidWeights_eq_one_of_nonempty k hs
   simp only [centroid_def]
@@ -606,7 +606,7 @@ theorem centroid_mem_affineSpan_of_cast_card_ne_zero
 
 中文:
 定理 centroid_mem_affineSpan_of_cast_card_ne_zero
-  结论: {s : Finset ι} (p : ι -> P)
+  结论: {s : 有限集 ι} (p : ι -> P)
   证明: affineCombination_mem_affineSpan (s.sum_centroidWeights_eq_one_of_cast_card_ne_zero h) p
 
 Depends on / 依赖: affineCombination_mem_affineSpan, s.sum_centroidWeights_eq_one_of_cast_card_ne_zero, sum_centroidWeights_eq_one_of_cast_card_ne_zero
@@ -627,7 +627,7 @@ theorem centroid_mem_affineSpan_of_card_ne_zero
 
 中文:
 定理 centroid_mem_affineSpan_of_card_ne_zero
-  结论: [CharZero k] {s : Finset ι} (p : ι -> P)
+  结论: [特征零 k] {s : 有限集 ι} (p : ι -> P)
   证明: affineCombination_mem_affineSpan (s.sum_centroidWeights_eq_one_of_card_ne_zero k h) p
 
 Depends on / 依赖: affineCombination_mem_affineSpan, s.sum_centroidWeights_eq_one_of_card_ne_zero, sum_centroidWeights_eq_one_of_card_ne_zero
@@ -646,7 +646,7 @@ theorem centroid_mem_affineSpan_of_nonempty
 
 中文:
 定理 centroid_mem_affineSpan_of_nonempty
-  结论: [CharZero k] {s : Finset ι} (p : ι -> P)
+  结论: [特征零 k] {s : 有限集 ι} (p : ι -> P)
   证明: affineCombination_mem_affineSpan (s.sum_centroidWeights_eq_one_of_nonempty k h) p
 
 Depends on / 依赖: affineCombination_mem_affineSpan, s.sum_centroidWeights_eq_one_of_nonempty, sum_centroidWeights_eq_one_of_nonempty
@@ -665,7 +665,7 @@ theorem centroid_mem_affineSpan_of_card_eq_add_one
 
 中文:
 定理 centroid_mem_affineSpan_of_card_eq_add_one
-  结论: [CharZero k] {s : Finset ι} (p : ι -> P) {n : 自然数}
+  结论: [特征零 k] {s : 有限集 ι} (p : ι -> P) {n : 自然数}
   证明: affineCombination_mem_affineSpan (s.sum_centroidWeights_eq_one_of_card_eq_add_one k h) p
 
 Depends on / 依赖: affineCombination_mem_affineSpan, s.sum_centroidWeights_eq_one_of_card_eq_add_one, sum_centroidWeights_eq_one_of_card_eq_add_one

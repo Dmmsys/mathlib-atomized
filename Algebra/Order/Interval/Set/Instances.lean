@@ -68,7 +68,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (Icc (0 : R) 1) where zero
+  签名: : 零 (闭区间 (0 : R) 1) where zero
   定义体: ⟨0, left_mem_Icc.2 zero_le_one⟩
 
 Depends on / 依赖: left_mem_Icc, zero_le_one
@@ -85,7 +85,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (Icc (0 : R) 1) where one
+  签名: : 幺 (闭区间 (0 : R) 1) where one
   定义体: ⟨1, right_mem_Icc.2 zero_le_one⟩
 
 Depends on / 依赖: right_mem_Icc, zero_le_one
@@ -104,7 +104,7 @@ instance instZeroLEOneClass
 
 中文:
 实例 instZeroLEOneClass
-  签名: : ZeroLEOneClass (Icc (0 : R) 1)
+  签名: : ZeroLEOne类 (闭区间 (0 : R) 1)
   定义体: ⟨Subtype.coe_le_coe.mp zero_le_one⟩
 
 @[simp, norm_cast]
@@ -126,7 +126,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ↑(0 : Icc (0 : R) 1) = (0 : R)
+  结论: ↑(0 : 闭区间 (0 : R) 1) = (0 : R)
   证明: rfl
 
 @[simp, norm_cast]
@@ -147,7 +147,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : Icc (0 : R) 1) = (1 : R)
+  结论: ↑(1 : 闭区间 (0 : R) 1) = (1 : R)
   证明: rfl
 
 @[simp, grind =]
@@ -169,8 +169,8 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  条件: (h : (0 : R) in Icc (0 : R) 1)
-  结论: (⟨0, h⟩ : Icc (0 : R) 1) = 0
+  条件: (h : (0 : R) in 闭区间 (0 : R) 1)
+  结论: (⟨0, h⟩ : 闭区间 (0 : R) 1) = 0
   证明: rfl
 
 @[simp, grind =]
@@ -192,8 +192,8 @@ theorem mk_one
 
 中文:
 定理 mk_one
-  条件: (h : (1 : R) in Icc (0 : R) 1)
-  结论: (⟨1, h⟩ : Icc (0 : R) 1) = 1
+  条件: (h : (1 : R) in 闭区间 (0 : R) 1)
+  结论: (⟨1, h⟩ : 闭区间 (0 : R) 1) = 1
   证明: rfl
 
 @[simp, norm_cast]
@@ -215,7 +215,7 @@ theorem coe_eq_zero
 
 中文:
 定理 coe_eq_zero
-  条件: {x : Icc (0 : R) 1}
+  条件: {x : 闭区间 (0 : R) 1}
   结论: (x : R) = 0 ↔ x = 0
   证明: by
   symm
@@ -240,7 +240,7 @@ theorem coe_ne_zero
 
 中文:
 定理 coe_ne_zero
-  条件: {x : Icc (0 : R) 1}
+  条件: {x : 闭区间 (0 : R) 1}
   结论: (x : R) != 0 ↔ x != 0
   证明: not_iff_not.mpr coe_eq_zero
 
@@ -265,7 +265,7 @@ theorem coe_eq_one
 
 中文:
 定理 coe_eq_one
-  条件: {x : Icc (0 : R) 1}
+  条件: {x : 闭区间 (0 : R) 1}
   结论: (x : R) = 1 ↔ x = 1
   证明: by
   symm
@@ -290,7 +290,7 @@ omit [IsOrderedRing R] in
 
 中文:
 定理 coe_ne_one
-  条件: {x : Icc (0 : R) 1}
+  条件: {x : 闭区间 (0 : R) 1}
   结论: (x : R) != 1 ↔ x != 1
   证明: not_iff_not.mpr coe_eq_one
 
@@ -315,7 +315,7 @@ omit [IsOrderedRing R] in
 
 中文:
 定理 coe_nonneg
-  条件: (x : Icc (0 : R) 1)
+  条件: (x : 闭区间 (0 : R) 1)
   结论: 0 <= (x : R)
   证明: x.2.1
 
@@ -336,7 +336,7 @@ theorem coe_le_one
 
 中文:
 定理 coe_le_one
-  条件: (x : Icc (0 : R) 1)
+  条件: (x : 闭区间 (0 : R) 1)
   结论: (x : R) <= 1
   证明: x.2.2
 -/
@@ -354,7 +354,7 @@ theorem nonneg
 
 中文:
 定理 nonneg
-  条件: {t : Icc (0 : R) 1}
+  条件: {t : 闭区间 (0 : R) 1}
   结论: 0 <= t
   证明: t.2.1
 -/
@@ -372,7 +372,7 @@ theorem le_one
 
 中文:
 定理 le_one
-  条件: {t : Icc (0 : R) 1}
+  条件: {t : 闭区间 (0 : R) 1}
   结论: t <= 1
   证明: t.2.2
 -/
@@ -389,7 +389,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Icc (0 : R) 1) where
+  签名: : 乘法 (闭区间 (0 : R) 1) where
   定义体: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_le_one₀ p.2.2 q.2.1 q.2.2⟩⟩
 
 Depends on / 依赖: mul_nonneg
@@ -409,7 +409,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow (Icc (0 : R) 1) 自然数 where
+  签名: : 幂 (闭区间 (0 : R) 1) 自然数 where
   定义体: ⟨p.1 ^ n, ⟨pow_nonneg p.2.1 n, pow_le_one₀ p.2.1 p.2.2⟩⟩
 
 @[simp, norm_cast]
@@ -433,7 +433,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (x y : Icc (0 : R) 1)
+  条件: (x y : 闭区间 (0 : R) 1)
   结论: ↑(x * y) = (x * y : R)
   证明: rfl
 
@@ -454,7 +454,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: (x : Icc (0 : R) 1) (n : 自然数)
+  条件: (x : 闭区间 (0 : R) 1) (n : 自然数)
   结论: ↑(x ^ n) = ((x : R) ^ n)
   证明: rfl
 -/
@@ -472,7 +472,7 @@ theorem mul_le_left
 
 中文:
 定理 mul_le_left
-  条件: {x y : Icc (0 : R) 1}
+  条件: {x y : 闭区间 (0 : R) 1}
   结论: x * y <= x
   证明: (mul_le_mul_of_nonneg_left y.2.2 x.2.1).trans_eq (mul_one _)
 
@@ -492,7 +492,7 @@ theorem mul_le_right
 
 中文:
 定理 mul_le_right
-  条件: {x y : Icc (0 : R) 1}
+  条件: {x y : 闭区间 (0 : R) 1}
   结论: x * y <= y
   证明: (mul_le_mul_of_nonneg_right x.2.2 y.2.1).trans_eq (one_mul _)
 
@@ -512,7 +512,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: : MonoidWithZero (Icc (0 : R) 1)
+  签名: : 带零幺半群 (闭区间 (0 : R) 1)
   定义体: fast_instance%
   Subtype.coe_injective.monoidWithZero _ coe_zero coe_one coe_mul coe_pow
 
@@ -532,7 +532,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: {R : 类型} [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
+  签名: {R : 类型} [交换半环 R] [偏序 R] [是Ordered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commMonoidWithZero _ coe_zero coe_one coe_mul coe_pow
 
@@ -553,7 +553,7 @@ instance instIsCancelMulZero
 
 中文:
 实例 instIsCancelMulZero
-  签名: {R : 类型} [Ring R] [PartialOrder R] [IsOrderedRing R]
+  签名: {R : 类型} [环 R] [偏序 R] [是Ordered环 R]
   定义体: @Function.Injective.isCancelMulZero _ R _ _ _ _ _ Subtype.coe_injective coe_zero coe_mul
     NoZeroDivisors.toIsCancelMulZero
 
@@ -580,7 +580,7 @@ definition coeMonoidWithZeroHom
 
 中文:
 定义 coeMonoidWithZeroHom
-  签名: : (Icc (0 : R) 1) ->*₀ R where
+  签名: : (闭区间 (0 : R) 1) ->*₀ R where
   定义体: (↑)
   map_mul' := coe_mul
   map_one' := rfl
@@ -607,8 +607,8 @@ theorem one_sub_mem
 
 中文:
 定理 one_sub_mem
-  条件: {t : β} (ht : t in Icc (0 : β) 1)
-  结论: 1 - t in Icc (0 : β) 1
+  条件: {t : β} (ht : t in 闭区间 (0 : β) 1)
+  结论: 1 - t in 闭区间 (0 : β) 1
   证明: by
   rw [mem_Icc] at *
   exact ⟨sub_nonneg.2 ht.2, (sub_le_self_iff _).2 ht.1⟩
@@ -631,7 +631,7 @@ theorem mem_iff_one_sub_mem
 中文:
 定理 mem_iff_one_sub_mem
   条件: {t : β}
-  结论: t in Icc (0 : β) 1 ↔ 1 - t in Icc (0 : β) 1
+  结论: t in 闭区间 (0 : β) 1 ↔ 1 - t in 闭区间 (0 : β) 1
   证明: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
 
 Depends on / 依赖: one_sub_mem, sub_sub_cancel
@@ -650,7 +650,7 @@ theorem one_sub_nonneg
 
 中文:
 定理 one_sub_nonneg
-  条件: (x : Icc (0 : β) 1)
+  条件: (x : 闭区间 (0 : β) 1)
   结论: 0 <= 1 - (x : β)
   证明: by simpa using x.2.2
 -/
@@ -667,7 +667,7 @@ theorem one_sub_le_one
 
 中文:
 定理 one_sub_le_one
-  条件: (x : Icc (0 : β) 1)
+  条件: (x : 闭区间 (0 : β) 1)
   结论: 1 - (x : β) <= 1
   证明: by simpa using x.2.1
 -/
@@ -692,7 +692,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: ⟨0, by simp⟩
 
 @[simp, norm_cast]
@@ -713,8 +713,8 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  条件: [Nontrivial R]
-  结论: ↑(0 : Ico (0 : R) 1) = (0 : R)
+  条件: [非平凡 R]
+  结论: ↑(0 : 左闭右开区间 (0 : R) 1) = (0 : R)
   证明: rfl
 
 @[simp, grind =]
@@ -736,8 +736,8 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  条件: [Nontrivial R] (h : (0 : R) in Ico (0 : R) 1)
-  结论: (⟨0, h⟩ : Ico (0 : R) 1) = 0
+  条件: [非平凡 R] (h : (0 : R) in 左闭右开区间 (0 : R) 1)
+  结论: (⟨0, h⟩ : 左闭右开区间 (0 : R) 1) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -759,7 +759,7 @@ theorem coe_eq_zero
 
 中文:
 定理 coe_eq_zero
-  条件: [Nontrivial R] {x : Ico (0 : R) 1}
+  条件: [非平凡 R] {x : 左闭右开区间 (0 : R) 1}
   结论: (x : R) = 0 ↔ x = 0
   证明: by
   symm
@@ -784,7 +784,7 @@ omit [IsOrderedRing R] in
 
 中文:
 定理 coe_ne_zero
-  条件: [Nontrivial R] {x : Ico (0 : R) 1}
+  条件: [非平凡 R] {x : 左闭右开区间 (0 : R) 1}
   结论: (x : R) != 0 ↔ x != 0
   证明: not_iff_not.mpr coe_eq_zero
 
@@ -809,7 +809,7 @@ omit [IsOrderedRing R] in
 
 中文:
 定理 coe_nonneg
-  条件: (x : Ico (0 : R) 1)
+  条件: (x : 左闭右开区间 (0 : R) 1)
   结论: 0 <= (x : R)
   证明: x.2.1
 
@@ -830,7 +830,7 @@ theorem coe_lt_one
 
 中文:
 定理 coe_lt_one
-  条件: (x : Ico (0 : R) 1)
+  条件: (x : 左闭右开区间 (0 : R) 1)
   结论: (x : R) < 1
   证明: x.2.2
 -/
@@ -848,7 +848,7 @@ theorem nonneg
 
 中文:
 定理 nonneg
-  条件: [Nontrivial R] {t : Ico (0 : R) 1}
+  条件: [非平凡 R] {t : 左闭右开区间 (0 : R) 1}
   结论: 0 <= t
   证明: t.2.1
 -/
@@ -867,7 +867,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Ico (0 : R) 1) where
+  签名: : 乘法 (左闭右开区间 (0 : R) 1) where
   定义体: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1 q.2.2⟩⟩
 
 @[simp, norm_cast]
@@ -890,7 +890,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (x y : Ico (0 : R) 1)
+  条件: (x y : 左闭右开区间 (0 : R) 1)
   结论: ↑(x * y) = (x * y : R)
   证明: rfl
 -/
@@ -908,7 +908,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: : Semigroup (Ico (0 : R) 1)
+  签名: : 半群 (左闭右开区间 (0 : R) 1)
   定义体: fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
 
@@ -928,7 +928,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: {R : 类型} [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
+  签名: {R : 类型} [交换半环 R] [偏序 R] [是Ordered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commSemigroup _ coe_mul
 
@@ -951,7 +951,7 @@ definition coeMulHom
 
 中文:
 定义 coeMulHom
-  签名: : (Ico (0 : R) 1) ->ₙ* R where
+  签名: : (左闭右开区间 (0 : R) 1) ->ₙ* R where
   定义体: (↑)
   map_mul' := coe_mul
 -/
@@ -982,7 +982,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (Ioc (0 : R) 1) where one
+  签名: : 幺 (左开右闭区间 (0 : R) 1) where one
   定义体: ⟨1, ⟨zero_lt_one, le_refl 1⟩⟩
 
 @[simp, norm_cast]
@@ -1004,7 +1004,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : Ioc (0 : R) 1) = (1 : R)
+  结论: ↑(1 : 左开右闭区间 (0 : R) 1) = (1 : R)
   证明: rfl
 
 @[simp, grind =]
@@ -1026,8 +1026,8 @@ theorem mk_one
 
 中文:
 定理 mk_one
-  条件: (h : (1 : R) in Ioc (0 : R) 1)
-  结论: (⟨1, h⟩ : Ioc (0 : R) 1) = 1
+  条件: (h : (1 : R) in 左开右闭区间 (0 : R) 1)
+  结论: (⟨1, h⟩ : 左开右闭区间 (0 : R) 1) = 1
   证明: rfl
 
 @[simp, norm_cast]
@@ -1049,7 +1049,7 @@ theorem coe_eq_one
 
 中文:
 定理 coe_eq_one
-  条件: {x : Ioc (0 : R) 1}
+  条件: {x : 左开右闭区间 (0 : R) 1}
   结论: (x : R) = 1 ↔ x = 1
   证明: by
   symm
@@ -1074,7 +1074,7 @@ omit [IsStrictOrderedRing R] in
 
 中文:
 定理 coe_ne_one
-  条件: {x : Ioc (0 : R) 1}
+  条件: {x : 左开右闭区间 (0 : R) 1}
   结论: (x : R) != 1 ↔ x != 1
   证明: not_iff_not.mpr coe_eq_one
 
@@ -1099,7 +1099,7 @@ omit [IsStrictOrderedRing R] in
 
 中文:
 定理 coe_pos
-  条件: (x : Ioc (0 : R) 1)
+  条件: (x : 左开右闭区间 (0 : R) 1)
   结论: 0 < (x : R)
   证明: x.2.1
 
@@ -1120,7 +1120,7 @@ theorem coe_le_one
 
 中文:
 定理 coe_le_one
-  条件: (x : Ioc (0 : R) 1)
+  条件: (x : 左开右闭区间 (0 : R) 1)
   结论: (x : R) <= 1
   证明: x.2.2
 -/
@@ -1138,7 +1138,7 @@ theorem le_one
 
 中文:
 定理 le_one
-  条件: {t : Ioc (0 : R) 1}
+  条件: {t : 左开右闭区间 (0 : R) 1}
   结论: t <= 1
   证明: t.2.2
 -/
@@ -1155,7 +1155,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Ioc (0 : R) 1) where
+  签名: : 乘法 (左开右闭区间 (0 : R) 1) where
   定义体: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_le_one₀ p.2.2 (le_of_lt q.2.1) q.2.2⟩⟩
 
 Depends on / 依赖: le_of_lt, mul_pos
@@ -1175,7 +1175,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow (Ioc (0 : R) 1) 自然数 where
+  签名: : 幂 (左开右闭区间 (0 : R) 1) 自然数 where
   定义体: ⟨p.1 ^ n, ⟨pow_pos p.2.1 n, pow_le_one₀ (le_of_lt p.2.1) p.2.2⟩⟩
 
 @[simp, norm_cast]
@@ -1199,7 +1199,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (x y : Ioc (0 : R) 1)
+  条件: (x y : 左开右闭区间 (0 : R) 1)
   结论: ↑(x * y) = (x * y : R)
   证明: rfl
 
@@ -1220,7 +1220,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: (x : Ioc (0 : R) 1) (n : 自然数)
+  条件: (x : 左开右闭区间 (0 : R) 1) (n : 自然数)
   结论: ↑(x ^ n) = ((x : R) ^ n)
   证明: rfl
 -/
@@ -1238,7 +1238,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: : Semigroup (Ioc (0 : R) 1)
+  签名: : 半群 (左开右闭区间 (0 : R) 1)
   定义体: fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
 
@@ -1258,7 +1258,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (Ioc (0 : R) 1)
+  签名: : 幺半群 (左开右闭区间 (0 : R) 1)
   定义体: fast_instance%
   Subtype.coe_injective.monoid _ coe_one coe_mul coe_pow
 
@@ -1278,7 +1278,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: {R : 类型} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commSemigroup _ coe_mul
 
@@ -1299,7 +1299,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: {R : 类型} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
@@ -1323,7 +1323,7 @@ Subtype.ext mul_right_cancel₀ b.prop.1.ne' (congr_arg Subtype.val h :) }
 
 中文:
 实例 instCancelMonoid
-  签名: {R : 类型} [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: {R : 类型} [环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: { Set.Ioc.instMonoid with
     mul_left_cancel := fun a _ _ h =>
 Subtype.ext mul_left_cancel₀ a.prop.1.ne' (congr_arg Subtype.val h :)
@@ -1350,7 +1350,7 @@ instance instCancelCommMonoid
 
 中文:
 实例 instCancelCommMonoid
-  签名: {R : 类型} [CommRing R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: {R : 类型} [交换环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: { Set.Ioc.instCommMonoid, Set.Ioc.instCancelMonoid with }
 
 Depends on / 依赖: Set.Ioc.instCancelMonoid, Set.Ioc.instCommMonoid, instCancelMonoid, instCommMonoid
@@ -1374,7 +1374,7 @@ definition coeMonoidHom
 
 中文:
 定义 coeMonoidHom
-  签名: : (Ioc (0 : R) 1) ->* R where
+  签名: : (左开右闭区间 (0 : R) 1) ->* R where
   定义体: (↑)
   map_mul' := coe_mul
   map_one' := rfl
@@ -1405,7 +1405,7 @@ omit [IsStrictOrderedRing R] in
 
 中文:
 定理 pos
-  条件: (x : Ioo (0 : R) 1)
+  条件: (x : 开区间 (0 : R) 1)
   结论: 0 < (x : R)
   证明: x.2.1
 
@@ -1426,7 +1426,7 @@ theorem lt_one
 
 中文:
 定理 lt_one
-  条件: (x : Ioo (0 : R) 1)
+  条件: (x : 开区间 (0 : R) 1)
   结论: (x : R) < 1
   证明: x.2.2
 -/
@@ -1445,7 +1445,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Ioo (0 : R) 1) where
+  签名: : 乘法 (开区间 (0 : R) 1) where
   定义体: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1.le q.2.2⟩⟩
 
 @[simp, norm_cast]
@@ -1468,7 +1468,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (x y : Ioo (0 : R) 1)
+  条件: (x y : 开区间 (0 : R) 1)
   结论: ↑(x * y) = (x * y : R)
   证明: rfl
 -/
@@ -1486,7 +1486,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: : Semigroup (Ioo (0 : R) 1)
+  签名: : 半群 (开区间 (0 : R) 1)
   定义体: fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
 
@@ -1506,7 +1506,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: {R : 类型} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commSemigroup _ coe_mul
 
@@ -1529,7 +1529,7 @@ definition coeMulHom
 
 中文:
 定义 coeMulHom
-  签名: : (Ioo (0 : R) 1) ->ₙ* R where
+  签名: : (开区间 (0 : R) 1) ->ₙ* R where
   定义体: (↑)
   map_mul' := coe_mul
 -/
@@ -1551,8 +1551,8 @@ theorem one_sub_mem
 
 中文:
 定理 one_sub_mem
-  条件: {t : β} (ht : t in Ioo (0 : β) 1)
-  结论: 1 - t in Ioo (0 : β) 1
+  条件: {t : β} (ht : t in 开区间 (0 : β) 1)
+  结论: 1 - t in 开区间 (0 : β) 1
   证明: by
   simp_all only [mem_Ioo, sub_pos, sub_lt_self_iff, and_self]
 
@@ -1573,7 +1573,7 @@ theorem mem_iff_one_sub_mem
 中文:
 定理 mem_iff_one_sub_mem
   条件: {t : β}
-  结论: t in Ioo (0 : β) 1 ↔ 1 - t in Ioo (0 : β) 1
+  结论: t in 开区间 (0 : β) 1 ↔ 1 - t in 开区间 (0 : β) 1
   证明: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
 
 Depends on / 依赖: one_sub_mem, sub_sub_cancel
@@ -1592,7 +1592,7 @@ theorem one_minus_pos
 
 中文:
 定理 one_minus_pos
-  条件: (x : Ioo (0 : β) 1)
+  条件: (x : 开区间 (0 : β) 1)
   结论: 0 < 1 - (x : β)
   证明: by simpa using x.2.2
 -/
@@ -1609,7 +1609,7 @@ theorem one_minus_lt_one
 
 中文:
 定理 one_minus_lt_one
-  条件: (x : Ioo (0 : β) 1)
+  条件: (x : 开区间 (0 : β) 1)
   结论: 1 - (x : β) < 1
   证明: by simpa using x.2.1
 -/

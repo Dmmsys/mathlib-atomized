@@ -49,10 +49,10 @@ class Flat
     - flat_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Flat
 
 中文:
-类 Flat
+类 平坦
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - flat_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Flat
+    - flat_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.平坦
 
 Depends on / 依赖: Flat.flat_appLE, flat_appLE
 -/
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @Flat RingHom.Flat
+  签名: 有RingHomProperty @平坦 环态射.平坦
   定义体: RingHom.Flat.propertyIsLocal
   eq_affineLocally' := by
     ext X Y f
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @Flat
+  签名: MorphismProperty.是StableUnderComposition @平坦
   定义体: HasRingHomProperty.stableUnderComposition RingHom.Flat.stableUnderComposition
 
 @[simp]
@@ -132,8 +132,8 @@ lemma SpecMap_iff
 
 中文:
 引理 SpecMap_iff
-  条件: {R S : CommRingCat.{u}} {f : R ⟶ S}
-  结论: Flat (Spec.map f) ↔ f.hom.Flat
+  条件: {R S : 交换环范畴.{u}} {f : R ⟶ S}
+  结论: 平坦 (Spec.map f) ↔ f.hom.平坦
   证明: HasRingHomProperty.Spec_iff
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.Spec_iff, Spec_iff
@@ -151,7 +151,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: MorphismProperty.comp_mem _ f g hf hg
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.Respects @Flat @IsOpenImmersion
+  签名: MorphismProperty.Respects @平坦 @是开浸入
   定义体: inferInstance
 -/
 instance : MorphismProperty.Respects @Flat @IsOpenImmersion where
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @Flat
+  签名: MorphismProperty.是Multiplicative @平坦
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @Flat where
@@ -203,7 +203,7 @@ instance isStableUnderBaseChange
 
 中文:
 实例 isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @Flat
+  签名: : MorphismProperty.是StableUnderBaseChange @平坦
   定义体: HasRingHomProperty.isStableUnderBaseChange RingHom.Flat.isStableUnderBaseChange
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, RingHom, RingHom.Flat.isStableUnderBaseChange, isStableUnderBaseChange
@@ -237,8 +237,8 @@ lemma of_stalkMap
 
 中文:
 引理 of_stalkMap
-  条件: (H : 对任意 x, (f.stalkMap x).hom.Flat)
-  结论: Flat f
+  条件: (H : 对任意 x, (f.stalkMap x).hom.平坦)
+  结论: 平坦 f
   证明: HasRingHomProperty.of_stalkMap RingHom.Flat.ofLocalizationPrime H
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.of_stalkMap, RingHom, RingHom.Flat.ofLocalizationPrime, ofLocalizationPrime, of_stalkMap
@@ -258,8 +258,8 @@ lemma stalkMap
 
 中文:
 引理 stalkMap
-  条件: [Flat f] (x : X)
-  结论: (f.stalkMap x).hom.Flat
+  条件: [平坦 f] (x : X)
+  结论: (f.stalkMap x).hom.平坦
   证明: HasRingHomProperty.stalkMap (P := @Flat)
     (fun f hf J hJ => hf.localRingHom J (J.comap f) rfl) ‹_› x
 
@@ -279,7 +279,7 @@ lemma iff_flat_stalkMap
 
 中文:
 引理 iff_flat_stalkMap
-  结论: Flat f ↔ 对任意 x, (f.stalkMap x).hom.Flat
+  结论: 平坦 f ↔ 对任意 x, (f.stalkMap x).hom.平坦
   证明: ⟨fun _ => stalkMap f, fun H => of_stalkMap f H⟩
 
 Depends on / 依赖: of_stalkMap, stalkMap
@@ -319,7 +319,7 @@ lemma isQuotientMap_of_surjective
 
 中文:
 引理 isQuotientMap_of_surjective
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Flat f] [QuasiCompact f]
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [平坦 f] [拟紧 f]
   证明: by
   rw [Topology.isQuotientMap_iff]
   refine ⟨.of_isOpen_preimage_iff_isOpen fun s =>
@@ -380,8 +380,8 @@ lemma epi_of_flat_of_surjective
 
 中文:
 引理 epi_of_flat_of_surjective
-  条件: (f : X ⟶ Y) [Flat f] [Surjective f]
-  结论: Epi f
+  条件: (f : X ⟶ Y) [平坦 f] [满射 f]
+  结论: 满态射 f
   证明: by
   apply CategoryTheory.Functor.epi_of_epi_map (Scheme.forgetToLocallyRingedSpace)
   apply CategoryTheory.Functor.epi_of_epi_map (LocallyRingedSpace.forgetToSheafedSpace)
@@ -416,7 +416,7 @@ lemma flat_and_surjective_iff_faithfullyFlat_of_isAffine
 
 中文:
 引理 flat_and_surjective_iff_faithfullyFlat_of_isAffine
-  条件: [IsAffine X] [IsAffine Y]
+  条件: [是仿射 X] [是仿射 Y]
   证明: by
   rw [RingHom.FaithfullyFlat.iff_flat_and_comap_surjective]; rw [MorphismProperty.arrow_mk_iso_iff @Surjective (arrowIsoSpecΓOfIsAffine f)]; rw [MorphismProperty.arrow_mk_iso_iff @Flat (arrowIsoSpecΓOfIsAffine f)]; rw [← HasRingHomProperty.Spec_iff (P := @Flat)]; rw [surjective_iff]
   rfl
@@ -439,8 +439,8 @@ lemma Scheme.Hom.flat_appTop
   proof: HasRingHomProperty.appTop (P := @Flat) _ inferInstance
 
 中文:
-引理 Scheme.Hom.flat_appTop
-  条件: [IsAffine X] [IsAffine Y] [Flat f]
+引理 概形.态射.flat_appTop
+  条件: [是仿射 X] [是仿射 Y] [平坦 f]
   证明: HasRingHomProperty.appTop (P := @Flat) _ inferInstance
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.appTop, appTop
@@ -461,7 +461,7 @@ lemma flat_and_surjective_SpecMap_iff
 
 中文:
 引理 flat_and_surjective_SpecMap_iff
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: by
   rw [HasRingHomProperty.Spec_iff (P := @Flat)]; rw [RingHom.FaithfullyFlat.iff_flat_and_comap_surjective]; rw [surjective_iff]
   rfl
@@ -577,7 +577,7 @@ lemma isIso_pushoutSection_of_isAffineOpen
 
 中文:
 引理 isIso_pushoutSection_of_isAffineOpen
-  结论: (hUS : IsAffineOpen US) (hUT : IsAffineOpen UT)
+  结论: (hUS : 是仿射开集 US) (hUT : 是仿射开集 UT)
   证明: by
   refine (isIso_pushoutSection_iff ..).mpr (IsPullback.of_map_of_faithful Scheme.Spec ?_).unop
   have : IsAffine _ := hUS
@@ -623,7 +623,7 @@ lemma mono_pushoutSection_of_iSup_eq
 
 中文:
 引理 mono_pushoutSection_of_iSup_eq
-  结论: {ι : 类型} [Finite ι] (VX : ι -> X.Opens) (hVU : iSup VX = UX)
+  结论: {ι : 类型} [有限 ι] (VX : ι -> X.Opens) (hVU : iSup VX = UX)
   证明: by
   /-
   We shall show that `Γ(T, Uₜ) ⊗[Γ(S, Uₛ)] Γ(X, U) ⟶ Γ(X ×ₛ T, pr₁ ⁻¹ U ∩ pr₂ ⁻¹ Uₜ)` is
@@ -864,7 +864,7 @@ lemma mono_pushoutSection_of_isCompact_of_flat_right
 
 中文:
 引理 mono_pushoutSection_of_isCompact_of_flat_right
-  结论: [Flat f]
+  结论: [平坦 f]
   证明: by
   obtain ⟨I, hI, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hUX
   have := hI.to_subtype
@@ -894,7 +894,7 @@ lemma mono_pushoutSection_of_isCompact_of_flat_left
 
 中文:
 引理 mono_pushoutSection_of_isCompact_of_flat_left
-  结论: [Flat iX]
+  结论: [平坦 iX]
   证明: by
   suffices Mono (pushoutSection H.flip hUSX hUST (hUY.trans (inf_comm _ _))) by
     rw [← mono_comp_iff_of_isIso (pushoutSymmetry _ _).hom]; convert! this; cat_disch
@@ -922,7 +922,7 @@ lemma isIso_pushoutSection_of_isQuasiSeparated_of_flat_right
 
 中文:
 引理 isIso_pushoutSection_of_isQuasiSeparated_of_flat_right
-  结论: [Flat f]
+  结论: [平坦 f]
   证明: by
   obtain ⟨I, hI, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hUX
   have hIUX (i : I) : i.1 <= UX := by rw [e]; intro i; aesop
@@ -959,7 +959,7 @@ lemma isIso_pushoutSection_of_isQuasiSeparated_of_flat_left
 
 中文:
 引理 isIso_pushoutSection_of_isQuasiSeparated_of_flat_left
-  结论: [Flat iX]
+  结论: [平坦 iX]
   证明: by
   suffices IsIso (pushoutSection H.flip hUSX hUST (hUY.trans (inf_comm _ _))) by
     rw [← isIso_comp_left_iff (pushoutSymmetry _ _).hom]; convert! this; cat_disch
@@ -989,7 +989,7 @@ lemma mono_pushoutSection_of_isCompact_of_flat_left_of_ringHomFlat
 
 中文:
 引理 mono_pushoutSection_of_isCompact_of_flat_left_of_ringHomFlat
-  结论: [Flat iX]
+  结论: [平坦 iX]
   证明: by
   obtain ⟨I, hI, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hUX
   have := hI.to_subtype
@@ -1019,7 +1019,7 @@ lemma mono_pushoutSection_of_isCompact_of_flat_right_of_ringHomFlat
 
 中文:
 引理 mono_pushoutSection_of_isCompact_of_flat_right_of_ringHomFlat
-  结论: [Flat f]
+  结论: [平坦 f]
   证明: by
   suffices Mono (pushoutSection H.flip hUSX hUST (hUY.trans (inf_comm _ _))) by
     rw [← mono_comp_iff_of_isIso (pushoutSymmetry _ _).hom]; convert! this; cat_disch
@@ -1049,7 +1049,7 @@ lemma isIso_pushoutSection_of_isCompact_of_flat_right_of_ringHomFlat
 
 中文:
 引理 isIso_pushoutSection_of_isCompact_of_flat_right_of_ringHomFlat
-  结论: [Flat f]
+  结论: [平坦 f]
   证明: by
   suffices IsIso (pushoutSection H.flip hUSX hUST (hUY.trans (inf_comm _ _))) by
     rw [← isIso_comp_left_iff (pushoutSymmetry _ _).hom]; convert! this; cat_disch

@@ -57,8 +57,8 @@ theorem Module.Basis.finite_ofVectorSpaceIndex_of_rank_lt_aleph0
   proof: Set.finite_def.2 (Basis.ofVectorSpace K V).nonempty_fintype_index_of_rank_lt_aleph0 h
 
 中文:
-定理 Module.Basis.finite_ofVectorSpaceIndex_of_rank_lt_aleph0
-  条件: (h : Module.rank K V < ℵ₀)
+定理 模.基.finite_ofVectorSpaceIndex_of_rank_lt_aleph0
+  条件: (h : 模.rank K V < ℵ₀)
   证明: Set.finite_def.2 (Basis.ofVectorSpace K V).nonempty_fintype_index_of_rank_lt_aleph0 h
 
 Depends on / 依赖: Basis.ofVectorSpace, Set.finite_def, finite_def, nonempty_fintype_index_of_rank_lt_aleph0, ofVectorSpace
@@ -79,7 +79,7 @@ theorem rank_quotient_add_rank_of_divisionRing
 
 中文:
 定理 rank_quotient_add_rank_of_divisionRing
-  条件: (p : Submodule K V)
+  条件: (p : 子模 K V)
   证明: by
   let ⟨f⟩ := quotient_prod_linearEquiv p
   exact rank_prod'.symm.trans f.rank_eq
@@ -104,8 +104,8 @@ instance DivisionRing.hasRankNullity
     rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective b.injective]; rw [Module.Free.rank_eq_card_chooseBa
 
 中文:
-实例 DivisionRing.hasRankNullity
-  签名: : HasRankNullity.{u₀} K where
+实例 除环.hasRankNullity
+  签名: : 有RankNullity.{u₀} K where
   定义体: rank_quotient_add_rank_of_divisionRing
   exists_set_linearIndependent V _ _ := by
     let b := Module.Free.chooseBasis K V

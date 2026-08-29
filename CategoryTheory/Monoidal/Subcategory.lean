@@ -50,8 +50,8 @@ class TensorLE
     - prop_tensor((X₁ X₂ : C) (h₁ : P₁ X₁) (h₂ : P₂ X₂)) : Q (X₁ otimes X₂)
 
 中文:
-类 TensorLE
-  参数: (P₁ P₂ Q : Object命题erty C)
+类 张量偏序
+  参数: (P₁ P₂ Q : ObjectProperty C)
   公理与运算 (1 个):
     - prop_tensor((X₁ X₂ : C) (h₁ : P₁ X₁) (h₂ : P₂ X₂)) : Q (X₁ otimes X₂)
 -/
@@ -68,7 +68,7 @@ lemma prop_tensor
 
 中文:
 引理 prop_tensor
-  结论: {P₁ P₂ Q : Object命题erty C} [TensorLE P₁ P₂ Q]
+  结论: {P₁ P₂ Q : ObjectProperty C} [张量偏序 P₁ P₂ Q]
   证明: TensorLE.prop_tensor _ _ h₁ h₂
 
 Depends on / 依赖: TensorLE, TensorLE.prop_tensor, prop_tensor
@@ -87,8 +87,8 @@ class ContainsUnit
     - prop_unit : P (𝟙_ C)
 
 中文:
-类 ContainsUnit
-  参数: (P : Object命题erty C)
+类 余ntainsUnit
+  参数: (P : ObjectProperty C)
   公理与运算 (1 个):
     - prop_unit : P (𝟙_ C)
 -/
@@ -106,7 +106,7 @@ lemma prop_unit
 
 中文:
 引理 prop_unit
-  条件: (P : Object命题erty C) [ContainsUnit P]
+  条件: (P : ObjectProperty C) [余ntainsUnit P]
   结论: P (𝟙_ C)
   证明: ContainsUnit.prop_unit
 
@@ -124,8 +124,8 @@ class IsMonoidal
   (no additional axioms)
 
 中文:
-类 IsMonoidal
-  参数: (P : Object命题erty C)
+类 是幺半群
+  参数: (P : ObjectProperty C)
   (无附加公理)
 -/
 class IsMonoidal (P : ObjectProperty C) : Prop extends
@@ -141,8 +141,8 @@ class IsMonoidalClosed
     - prop_ihom((X Y : C)) : P X -> P Y -> P ((ihom X).obj Y)  [default: by cat_disch]
 
 中文:
-类 IsMonoidalClosed
-  参数: (P : Object命题erty C) [MonoidalClosed C]
+类 是幺半群闭
+  参数: (P : ObjectProperty C) [幺半群闭 C]
   公理与运算 (1 个):
     - prop_ihom((X Y : C)) : P X -> P Y -> P ((ihom X).obj Y)  [默认: by cat_disch]
 
@@ -161,7 +161,7 @@ lemma prop_ihom
 
 中文:
 引理 prop_ihom
-  结论: (P : Object命题erty C) [MonoidalClosed C] [P.IsMonoidalClosed]
+  结论: (P : ObjectProperty C) [幺半群闭 C] [P.是幺半群闭]
   证明: IsMonoidalClosed.prop_ihom _ _ hX hY
 
 Depends on / 依赖: IsMonoidalClosed, IsMonoidalClosed.prop_ihom, prop_ihom
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategoryStruct P.FullSubcategory
+  签名: 幺半群范畴结构 P.满子范畴
   定义体: ⟨X.1 otimes Y.1, prop_tensor X.2 Y.2⟩
   whiskerLeft X _ _ f := ObjectProperty.homMk (X.1 ◁ f.hom)
   whiskerRight f Y := ObjectProperty.homMk (f.hom ▷ Y.1)
@@ -222,7 +222,7 @@ instance fullMonoidalSubcategory
 
 中文:
 实例 fullMonoidalSubcategory
-  签名: : MonoidalCategory (FullSubcategory P)
+  签名: : 幺半群范畴 (满子范畴 P)
   定义体: Monoidal.induced P.ι
     { μIso _ _ := Iso.refl _
       εIso := Iso.refl _ }
@@ -246,7 +246,7 @@ instance monoidalι
 
 中文:
 实例 monoidalι
-  签名: : P.ι.Monoidal
+  签名: : P.ι.幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -299,7 +299,7 @@ lemma ι_μ
 
 中文:
 引理 ι_μ
-  条件: (X Y : FullSubcategory P)
+  条件: (X Y : 满子范畴 P)
   结论: μ P.ι X Y = 𝟙 _
   证明: rfl
 -/
@@ -315,7 +315,7 @@ lemma ι_δ
 
 中文:
 引理 ι_δ
-  条件: (X Y : FullSubcategory P)
+  条件: (X Y : 满子范畴 P)
   结论: δ P.ι X Y = 𝟙 _
   证明: rfl
 -/
@@ -334,8 +334,8 @@ instance [MonoidalPreadditive
   body: monoidalPreadditive_of_faithful P.ι
 
 中文:
-实例 [MonoidalPreadditive
-  签名: C] : MonoidalPreadditive P.FullSubcategory
+实例 [幺半群预加性
+  签名: C] : 幺半群预加性 P.满子范畴
   定义体: monoidalPreadditive_of_faithful P.ι
 
 Depends on / 依赖: monoidalPreadditive_of_faithful
@@ -354,8 +354,8 @@ instance [MonoidalPreadditive
   body: .ofFaithful R P.ι
 
 中文:
-实例 [MonoidalPreadditive
-  签名: C] [MonoidalLinear R C] : MonoidalLinear R P.FullSubcategory
+实例 [幺半群预加性
+  签名: C] [幺半群线性 R C] : 幺半群线性 R P.满子范畴
   定义体: .ofFaithful R P.ι
 
 Depends on / 依赖: ofFaithful
@@ -383,7 +383,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ιOfLE h).Monoidal
+  签名: (ιOfLE h).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -434,7 +434,7 @@ lemma ιOfLE_μ
 
 中文:
 引理 ιOfLE_μ
-  条件: (X Y : P.FullSubcategory)
+  条件: (X Y : P.满子范畴)
   结论: μ (ιOfLE h) X Y = 𝟙 _
   证明: rfl
 -/
@@ -450,7 +450,7 @@ lemma ιOfLE_δ
 
 中文:
 引理 ιOfLE_δ
-  条件: (X Y : FullSubcategory P)
+  条件: (X Y : 满子范畴 P)
   结论: δ (ιOfLE h) X Y = 𝟙 _
   证明: rfl
 -/
@@ -472,7 +472,7 @@ instance fullBraidedSubcategory
 
 中文:
 实例 fullBraidedSubcategory
-  签名: : BraidedCategory (FullSubcategory P)
+  签名: : 辫范畴 (满子范畴 P)
   定义体: .ofFaithful P.ι fun X Y => P.isoMk (β_ X.1 Y.1)
 
 Depends on / 依赖: P.isoMk, ofFaithful
@@ -489,7 +489,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.ι.Braided
+  签名: P.ι.辫
 -/
 instance : P.ι.Braided where
 
@@ -518,7 +518,7 @@ instance fullSymmetricSubcategory
 
 中文:
 实例 fullSymmetricSubcategory
-  签名: : SymmetricCategory P.FullSubcategory
+  签名: : 对称范畴 P.满子范畴
   定义体: .ofFaithful P.ι
 
 Depends on / 依赖: ofFaithful
@@ -549,7 +549,7 @@ instance fullMonoidalClosedSubcategory
 
 中文:
 实例 fullMonoidalClosedSubcategory
-  签名: : MonoidalClosed (FullSubcategory P) where
+  签名: : 幺半群闭 (满子范畴 P) where
   定义体: { rightAdj := P.lift (P.ι ⋙ ihom X.1) (fun Y => P.prop_ihom X.2 Y.2)
       adj :=
         { unit := { app Y := ObjectProperty.homMk ((ihom.coev X.1).app Y.1) }
@@ -579,7 +579,7 @@ theorem ihom_obj
 
 中文:
 定理 ihom_obj
-  条件: (X Y : P.FullSubcategory)
+  条件: (X Y : P.满子范畴)
   证明: rfl
 
 @[simp]
@@ -599,7 +599,7 @@ theorem ihom_map_hom
 
 中文:
 定理 ihom_map_hom
-  结论: (X : P.FullSubcategory) {Y Z : P.FullSubcategory}
+  结论: (X : P.满子范畴) {Y Z : P.满子范畴}
   证明: rfl
 -/
 theorem ihom_map_hom (X : P.FullSubcategory) {Y Z : P.FullSubcategory}

@@ -39,11 +39,11 @@ structure CompactlyGenerated
     - [is_compactly_generated : UCompactlyGeneratedSpace.{u} toTop]
 
 中文:
-结构 CompactlyGenerated
+结构 余mpactlyGenerated
   参数: where
   公理与运算 (2 个):
-    - toTop : TopCat.{w}
-    - [is_compactly_generated : UCompactlyGeneratedSpace.{u} toTop]
+    - toTop : 顶元素范畴.{w}
+    - [is_compactly_generated : UCompactlyGenerated空间.{u} toTop]
 -/
 structure CompactlyGenerated where
   /-- The underlying topological space of an object of `CompactlyGenerated`. -/
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CompactlyGenerated.{u, w}
+  签名: 可居 余mpactlyGenerated.{u, w}
   定义体: ⟨{ toTop := TopCat.of (ULift (Fin 37)) }⟩
 
 Depends on / 依赖: TopCat, TopCat.of
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CompactlyGenerated 类型
+  签名: CoeSort 余mpactlyGenerated 类型
   定义体: ⟨fun X => X.toTop⟩
 
 Depends on / 依赖: X.toTop
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{w, w + 1} CompactlyGenerated.{u, w}
+  签名: 范畴.{w, w + 1} 余mpactlyGenerated.{u, w}
   定义体: inferInstanceAs Category (InducedCategory _ toTop)
 
 Depends on / 依赖: Category, InducedCategory
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{w} CompactlyGenerated.{u, w} (C(·, ·))
+  签名: 余ncrete范畴.{w} 余mpactlyGenerated.{u, w} (C(·, ·))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory
@@ -140,7 +140,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: : CompactlyGenerated.{u, w} where
+  签名: : 余mpactlyGenerated.{u, w} where
   定义体: TopCat.of X
   is_compactly_generated := ‹_›
 
@@ -185,7 +185,7 @@ definition compactlyGeneratedToTop
 
 中文:
 定义 compactlyGeneratedToTop
-  签名: : CompactlyGenerated.{u, w} ⥤ TopCat.{w}
+  签名: : 余mpactlyGenerated.{u, w} ⥤ 顶元素范畴.{w}
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor
@@ -203,7 +203,7 @@ definition fullyFaithfulCompactlyGeneratedToTop
 
 中文:
 定义 fullyFaithfulCompactlyGeneratedToTop
-  签名: : compactlyGeneratedToTop.{u, w}.FullyFaithful
+  签名: : compactlyGeneratedToTop.{u, w}.满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: compactlyGeneratedToTop.{u, w}.Full
+  签名: compactlyGeneratedToTop.{u, w}.满
   定义体: fullyFaithfulCompactlyGeneratedToTop.full
 
 Depends on / 依赖: fullyFaithfulCompactlyGeneratedToTop, fullyFaithfulCompactlyGeneratedToTop.full
@@ -238,7 +238,7 @@ instance :
 
 中文:
 实例 :
-  签名: compactlyGeneratedToTop.{u, w}.Faithful
+  签名: compactlyGeneratedToTop.{u, w}.忠实
   定义体: fullyFaithfulCompactlyGeneratedToTop.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulCompactlyGeneratedToTop, fullyFaithfulCompactlyGeneratedToTop.faithful
@@ -264,7 +264,7 @@ definition isoOfHomeo
 
 中文:
 定义 isoOfHomeo
-  签名: {X Y : CompactlyGenerated.{u, w}} (f : X ≃ₜ Y)
+  签名: {X Y : 余mpactlyGenerated.{u, w}} (f : X ≃ₜ Y)
   定义体: ofHom ⟨f, f.continuous⟩
   inv := ofHom ⟨f.symm, f.symm.continuous⟩
   hom_inv_id := by
@@ -303,7 +303,7 @@ definition homeoOfIso
 
 中文:
 定义 homeoOfIso
-  签名: {X Y : CompactlyGenerated.{u, w}} (f : X ≅ Y)
+  签名: {X Y : 余mpactlyGenerated.{u, w}} (f : X ≅ Y)
   定义体: f.hom
   invFun := f.inv
   left_inv := f.hom_inv_id_apply
@@ -335,7 +335,7 @@ definition isoEquivHomeo
 
 中文:
 定义 isoEquivHomeo
-  签名: {X Y : CompactlyGenerated.{u, w}}
+  签名: {X Y : 余mpactlyGenerated.{u, w}}
   定义体: homeoOfIso
   invFun := isoOfHomeo
 

@@ -52,8 +52,8 @@ theorem iInter_inv
 @[to_additive (attr := simp)]
 
 中文:
-定理 iInter_inv
-  条件: (s : ι -> Set α)
+定理 i整数er_inv
+  条件: (s : ι -> 集合 α)
   结论: (⋂ i, s i)⁻¹ = ⋂ i, (s i)⁻¹
   证明: preimage_iInter
 
@@ -77,8 +77,8 @@ theorem sInter_inv
 @[to_additive (attr := simp)]
 
 中文:
-定理 sInter_inv
-  条件: (S : Set (Set α))
+定理 s整数er_inv
+  条件: (S : 集合 (集合 α))
   结论: (⋂₀ S)⁻¹ = ⋂ s in S, s⁻¹
   证明: preimage_sInter
 
@@ -103,7 +103,7 @@ theorem iUnion_inv
 
 中文:
 定理 iUnion_inv
-  条件: (s : ι -> Set α)
+  条件: (s : ι -> 集合 α)
   结论: (⋃ i, s i)⁻¹ = ⋃ i, (s i)⁻¹
   证明: preimage_iUnion
 
@@ -126,7 +126,7 @@ theorem sUnion_inv
 
 中文:
 定理 sUnion_inv
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: (⋃₀ S)⁻¹ = ⋃ s in S, s⁻¹
   证明: preimage_sUnion
 
@@ -202,7 +202,7 @@ theorem iUnion_mul
 
 中文:
 定理 iUnion_mul
-  条件: (s : ι -> Set α) (t : Set α)
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (⋃ i, s i) * t = ⋃ i, s i * t
   证明: image2_iUnion_left ..
 
@@ -227,7 +227,7 @@ theorem mul_iUnion
 
 中文:
 定理 mul_iUnion
-  条件: (s : Set α) (t : ι -> Set α)
+  条件: (s : 集合 α) (t : ι -> 集合 α)
   结论: (s * ⋃ i, t i) = ⋃ i, s * t i
   证明: image2_iUnion_right ..
 
@@ -252,7 +252,7 @@ theorem sUnion_mul
 
 中文:
 定理 sUnion_mul
-  条件: (S : Set (Set α)) (t : Set α)
+  条件: (S : 集合 (集合 α)) (t : 集合 α)
   结论: ⋃₀ S * t = ⋃ s in S, s * t
   证明: image2_sUnion_left ..
 
@@ -277,7 +277,7 @@ theorem mul_sUnion
 
 中文:
 定理 mul_sUnion
-  条件: (s : Set α) (T : Set (Set α))
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   结论: s * ⋃₀ T = ⋃ t in T, s * t
   证明: image2_sUnion_right ..
 
@@ -301,7 +301,7 @@ theorem iUnion₂_mul
 
 中文:
 定理 iUnion₂_mul
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: image2_iUnion₂_left ..
 
 @[to_additive]
@@ -323,7 +323,7 @@ theorem mul_iUnion₂
 
 中文:
 定理 mul_iUnion₂
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: image2_iUnion₂_right ..
 
 @[to_additive]
@@ -345,8 +345,8 @@ theorem iInter_mul_subset
 @[to_additive]
 
 中文:
-定理 iInter_mul_subset
-  条件: (s : ι -> Set α) (t : Set α)
+定理 i整数er_mul_subset
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (⋂ i, s i) * t subseteq ⋂ i, s i * t
   证明: Set.image2_iInter_subset_left ..
 
@@ -370,8 +370,8 @@ theorem mul_iInter_subset
 @[to_additive]
 
 中文:
-定理 mul_iInter_subset
-  条件: (s : Set α) (t : ι -> Set α)
+定理 mul_i整数er_subset
+  条件: (s : 集合 α) (t : ι -> 集合 α)
   结论: (s * ⋂ i, t i) subseteq ⋂ i, s * t i
   证明: image2_iInter_subset_right ..
 
@@ -394,8 +394,8 @@ lemma mul_sInter_subset
 @[to_additive]
 
 中文:
-引理 mul_sInter_subset
-  条件: (s : Set α) (T : Set (Set α))
+引理 mul_s整数er_subset
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   证明: image2_sInter_right_subset s T (fun a b => a * b)
 
 @[to_additive]
@@ -417,8 +417,8 @@ lemma sInter_mul_subset
 @[to_additive]
 
 中文:
-引理 sInter_mul_subset
-  条件: (S : Set (Set α)) (t : Set α)
+引理 s整数er_mul_subset
+  条件: (S : 集合 (集合 α)) (t : 集合 α)
   证明: image2_sInter_left_subset S t (fun a b => a * b)
 
 @[to_additive]
@@ -440,8 +440,8 @@ theorem iInter₂_mul_subset
 @[to_additive]
 
 中文:
-定理 iInter₂_mul_subset
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+定理 i整数er₂_mul_subset
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: image2_iInter₂_subset_left ..
 
 @[to_additive]
@@ -460,8 +460,8 @@ theorem mul_iInter₂_subset
   proof: image2_iInter₂_subset_right ..
 
 中文:
-定理 mul_iInter₂_subset
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+定理 mul_i整数er₂_subset
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: image2_iInter₂_subset_right ..
 -/
 theorem mul_iInter₂_subset (s : Set α) (t : forall i, κ i -> Set α) :
@@ -537,7 +537,7 @@ theorem iUnion_div
 
 中文:
 定理 iUnion_div
-  条件: (s : ι -> Set α) (t : Set α)
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (⋃ i, s i) / t = ⋃ i, s i / t
   证明: image2_iUnion_left ..
 
@@ -562,7 +562,7 @@ theorem div_iUnion
 
 中文:
 定理 div_iUnion
-  条件: (s : Set α) (t : ι -> Set α)
+  条件: (s : 集合 α) (t : ι -> 集合 α)
   结论: (s / ⋃ i, t i) = ⋃ i, s / t i
   证明: image2_iUnion_right ..
 
@@ -587,7 +587,7 @@ theorem sUnion_div
 
 中文:
 定理 sUnion_div
-  条件: (S : Set (Set α)) (t : Set α)
+  条件: (S : 集合 (集合 α)) (t : 集合 α)
   结论: ⋃₀ S / t = ⋃ s in S, s / t
   证明: image2_sUnion_left ..
 
@@ -612,7 +612,7 @@ theorem div_sUnion
 
 中文:
 定理 div_sUnion
-  条件: (s : Set α) (T : Set (Set α))
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   结论: s / ⋃₀ T = ⋃ t in T, s / t
   证明: image2_sUnion_right ..
 
@@ -636,7 +636,7 @@ theorem iUnion₂_div
 
 中文:
 定理 iUnion₂_div
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: image2_iUnion₂_left ..
 
 @[to_additive]
@@ -658,7 +658,7 @@ theorem div_iUnion₂
 
 中文:
 定理 div_iUnion₂
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: image2_iUnion₂_right ..
 
 @[to_additive]
@@ -680,8 +680,8 @@ theorem iInter_div_subset
 @[to_additive]
 
 中文:
-定理 iInter_div_subset
-  条件: (s : ι -> Set α) (t : Set α)
+定理 i整数er_div_subset
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (⋂ i, s i) / t subseteq ⋂ i, s i / t
   证明: image2_iInter_subset_left ..
 
@@ -705,8 +705,8 @@ theorem div_iInter_subset
 @[to_additive]
 
 中文:
-定理 div_iInter_subset
-  条件: (s : Set α) (t : ι -> Set α)
+定理 div_i整数er_subset
+  条件: (s : 集合 α) (t : ι -> 集合 α)
   结论: (s / ⋂ i, t i) subseteq ⋂ i, s / t i
   证明: image2_iInter_subset_right ..
 
@@ -730,8 +730,8 @@ theorem sInter_div_subset
 @[to_additive]
 
 中文:
-定理 sInter_div_subset
-  条件: (S : Set (Set α)) (t : Set α)
+定理 s整数er_div_subset
+  条件: (S : 集合 (集合 α)) (t : 集合 α)
   结论: ⋂₀ S / t subseteq ⋂ s in S, s / t
   证明: image2_sInter_subset_left ..
 
@@ -755,8 +755,8 @@ theorem div_sInter_subset
 @[to_additive]
 
 中文:
-定理 div_sInter_subset
-  条件: (s : Set α) (T : Set (Set α))
+定理 div_s整数er_subset
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   结论: s / ⋂₀ T subseteq ⋂ t in T, s / t
   证明: image2_sInter_subset_right ..
 
@@ -779,8 +779,8 @@ theorem iInter₂_div_subset
 @[to_additive]
 
 中文:
-定理 iInter₂_div_subset
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+定理 i整数er₂_div_subset
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: image2_iInter₂_subset_left ..
 
 @[to_additive]
@@ -799,8 +799,8 @@ theorem div_iInter₂_subset
   proof: image2_iInter₂_subset_right ..
 
 中文:
-定理 div_iInter₂_subset
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+定理 div_i整数er₂_subset
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: image2_iInter₂_subset_right ..
 -/
 theorem div_iInter₂_subset (s : Set α) (t : forall i, κ i -> Set α) :
@@ -871,7 +871,7 @@ lemma iUnion_smul
 
 中文:
 引理 iUnion_smul
-  条件: (s : ι -> Set α) (t : Set β)
+  条件: (s : ι -> 集合 α) (t : 集合 β)
   结论: (⋃ i, s i) • t = ⋃ i, s i • t
   证明: image2_iUnion_left ..
 
@@ -896,7 +896,7 @@ lemma smul_iUnion
 
 中文:
 引理 smul_iUnion
-  条件: (s : Set α) (t : ι -> Set β)
+  条件: (s : 集合 α) (t : ι -> 集合 β)
   结论: (s • ⋃ i, t i) = ⋃ i, s • t i
   证明: image2_iUnion_right ..
 
@@ -921,7 +921,7 @@ lemma sUnion_smul
 
 中文:
 引理 sUnion_smul
-  条件: (S : Set (Set α)) (t : Set β)
+  条件: (S : 集合 (集合 α)) (t : 集合 β)
   结论: ⋃₀ S • t = ⋃ s in S, s • t
   证明: image2_sUnion_left ..
 
@@ -946,7 +946,7 @@ lemma smul_sUnion
 
 中文:
 引理 smul_sUnion
-  条件: (s : Set α) (T : Set (Set β))
+  条件: (s : 集合 α) (T : 集合 (集合 β))
   结论: s • ⋃₀ T = ⋃ t in T, s • t
   证明: image2_sUnion_right ..
 
@@ -970,7 +970,7 @@ lemma iUnion₂_smul
 
 中文:
 引理 iUnion₂_smul
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set β)
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 β)
   证明: image2_iUnion₂_left ..
 
 @[to_additive]
@@ -991,7 +991,7 @@ lemma smul_iUnion₂
 
 中文:
 引理 smul_iUnion₂
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set β)
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 β)
   证明: image2_iUnion₂_right ..
 
 @[to_additive]
@@ -1012,8 +1012,8 @@ lemma iInter_smul_subset
 @[to_additive]
 
 中文:
-引理 iInter_smul_subset
-  条件: (s : ι -> Set α) (t : Set β)
+引理 i整数er_smul_subset
+  条件: (s : ι -> 集合 α) (t : 集合 β)
   结论: (⋂ i, s i) • t subseteq ⋂ i, s i • t
   证明: image2_iInter_subset_left ..
 
@@ -1037,8 +1037,8 @@ lemma smul_iInter_subset
 @[to_additive]
 
 中文:
-引理 smul_iInter_subset
-  条件: (s : Set α) (t : ι -> Set β)
+引理 smul_i整数er_subset
+  条件: (s : 集合 α) (t : ι -> 集合 β)
   结论: (s • ⋂ i, t i) subseteq ⋂ i, s • t i
   证明: image2_iInter_subset_right ..
 
@@ -1062,8 +1062,8 @@ lemma sInter_smul_subset
 @[to_additive]
 
 中文:
-引理 sInter_smul_subset
-  条件: (S : Set (Set α)) (t : Set β)
+引理 s整数er_smul_subset
+  条件: (S : 集合 (集合 α)) (t : 集合 β)
   结论: ⋂₀ S • t subseteq ⋂ s in S, s • t
   证明: image2_sInter_left_subset S t (fun a x => a • x)
 
@@ -1087,8 +1087,8 @@ lemma smul_sInter_subset
 @[to_additive]
 
 中文:
-引理 smul_sInter_subset
-  条件: (s : Set α) (T : Set (Set β))
+引理 smul_s整数er_subset
+  条件: (s : 集合 α) (T : 集合 (集合 β))
   结论: s • ⋂₀ T subseteq ⋂ t in T, s • t
   证明: image2_sInter_right_subset s T (fun a x => a • x)
 
@@ -1111,8 +1111,8 @@ lemma iInter₂_smul_subset
 @[to_additive]
 
 中文:
-引理 iInter₂_smul_subset
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set β)
+引理 i整数er₂_smul_subset
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 β)
   证明: image2_iInter₂_subset_left ..
 
 @[to_additive]
@@ -1132,8 +1132,8 @@ lemma smul_iInter₂_subset
 @[to_additive (attr := simp)]
 
 中文:
-引理 smul_iInter₂_subset
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set β)
+引理 smul_i整数er₂_subset
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 β)
   证明: image2_iInter₂_subset_right ..
 
 @[to_additive (attr := simp)]
@@ -1153,7 +1153,7 @@ lemma iUnion_smul_set
 
 中文:
 引理 iUnion_smul_set
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   结论: ⋃ a in s, a • t = s • t
   证明: iUnion_image_left _
 
@@ -1180,7 +1180,7 @@ lemma smul_set_iUnion
 
 中文:
 引理 smul_set_iUnion
-  条件: (a : α) (s : ι -> Set β)
+  条件: (a : α) (s : ι -> 集合 β)
   结论: a • ⋃ i, s i = ⋃ i, a • s i
   证明: image_iUnion
 
@@ -1204,7 +1204,7 @@ lemma smul_set_iUnion₂
 
 中文:
 引理 smul_set_iUnion₂
-  条件: (a : α) (s : 对任意 i, κ i -> Set β)
+  条件: (a : α) (s : 对任意 i, κ i -> 集合 β)
   证明: image_iUnion₂ ..
 
 @[to_additive]
@@ -1227,7 +1227,7 @@ lemma smul_set_sUnion
 
 中文:
 引理 smul_set_sUnion
-  条件: (a : α) (S : Set (Set β))
+  条件: (a : α) (S : 集合 (集合 β))
   结论: a • ⋃₀ S = ⋃ s in S, a • s
   证明: by
   rw [sUnion_eq_biUnion]; rw [smul_set_iUnion₂]
@@ -1252,8 +1252,8 @@ lemma smul_set_iInter_subset
 @[to_additive]
 
 中文:
-引理 smul_set_iInter_subset
-  条件: (a : α) (t : ι -> Set β)
+引理 smul_set_i整数er_subset
+  条件: (a : α) (t : ι -> 集合 β)
   结论: a • ⋂ i, t i subseteq ⋂ i, a • t i
   证明: image_iInter_subset ..
 
@@ -1276,8 +1276,8 @@ lemma smul_set_sInter_subset
 @[to_additive]
 
 中文:
-引理 smul_set_sInter_subset
-  条件: (a : α) (S : Set (Set β))
+引理 smul_set_s整数er_subset
+  条件: (a : α) (S : 集合 (集合 β))
   证明: image_sInter_subset ..
 
 @[to_additive]
@@ -1297,8 +1297,8 @@ lemma smul_set_iInter₂_subset
   proof: image_iInter₂_subset ..
 
 中文:
-引理 smul_set_iInter₂_subset
-  条件: (a : α) (t : 对任意 i, κ i -> Set β)
+引理 smul_set_i整数er₂_subset
+  条件: (a : α) (t : 对任意 i, κ i -> 集合 β)
   证明: image_iInter₂_subset ..
 -/
 lemma smul_set_iInter₂_subset (a : α) (t : forall i, κ i -> Set β) :
@@ -1355,7 +1355,7 @@ lemma iUnion_vsub
 
 中文:
 引理 iUnion_vsub
-  条件: (s : ι -> Set β) (t : Set β)
+  条件: (s : ι -> 集合 β) (t : 集合 β)
   结论: (⋃ i, s i) -ᵥ t = ⋃ i, s i -ᵥ t
   证明: image2_iUnion_left ..
 
@@ -1375,7 +1375,7 @@ lemma vsub_iUnion
 
 中文:
 引理 vsub_iUnion
-  条件: (s : Set β) (t : ι -> Set β)
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (s -ᵥ ⋃ i, t i) = ⋃ i, s -ᵥ t i
   证明: image2_iUnion_right ..
 
@@ -1395,7 +1395,7 @@ lemma sUnion_vsub
 
 中文:
 引理 sUnion_vsub
-  条件: (S : Set (Set β)) (t : Set β)
+  条件: (S : 集合 (集合 β)) (t : 集合 β)
   结论: ⋃₀ S -ᵥ t = ⋃ s in S, s -ᵥ t
   证明: image2_sUnion_left ..
 
@@ -1415,7 +1415,7 @@ lemma vsub_sUnion
 
 中文:
 引理 vsub_sUnion
-  条件: (s : Set β) (T : Set (Set β))
+  条件: (s : 集合 β) (T : 集合 (集合 β))
   结论: s -ᵥ ⋃₀ T = ⋃ t in T, s -ᵥ t
   证明: image2_sUnion_right ..
 
@@ -1434,7 +1434,7 @@ lemma iUnion₂_vsub
 
 中文:
 引理 iUnion₂_vsub
-  条件: (s : 对任意 i, κ i -> Set β) (t : Set β)
+  条件: (s : 对任意 i, κ i -> 集合 β) (t : 集合 β)
   证明: image2_iUnion₂_left ..
 -/
 lemma iUnion₂_vsub (s : forall i, κ i -> Set β) (t : Set β) :
@@ -1450,7 +1450,7 @@ lemma vsub_iUnion₂
 
 中文:
 引理 vsub_iUnion₂
-  条件: (s : Set β) (t : 对任意 i, κ i -> Set β)
+  条件: (s : 集合 β) (t : 对任意 i, κ i -> 集合 β)
   证明: image2_iUnion₂_right ..
 -/
 lemma vsub_iUnion₂ (s : Set β) (t : forall i, κ i -> Set β) :
@@ -1466,8 +1466,8 @@ lemma iInter_vsub_subset
   proof: image2_iInter_subset_left ..
 
 中文:
-引理 iInter_vsub_subset
-  条件: (s : ι -> Set β) (t : Set β)
+引理 i整数er_vsub_subset
+  条件: (s : ι -> 集合 β) (t : 集合 β)
   结论: (⋂ i, s i) -ᵥ t subseteq ⋂ i, s i -ᵥ t
   证明: image2_iInter_subset_left ..
 
@@ -1486,8 +1486,8 @@ lemma vsub_iInter_subset
   proof: image2_iInter_subset_right ..
 
 中文:
-引理 vsub_iInter_subset
-  条件: (s : Set β) (t : ι -> Set β)
+引理 vsub_i整数er_subset
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (s -ᵥ ⋂ i, t i) subseteq ⋂ i, s -ᵥ t i
   证明: image2_iInter_subset_right ..
 
@@ -1506,8 +1506,8 @@ lemma sInter_vsub_subset
   proof: image2_sInter_subset_left ..
 
 中文:
-引理 sInter_vsub_subset
-  条件: (S : Set (Set β)) (t : Set β)
+引理 s整数er_vsub_subset
+  条件: (S : 集合 (集合 β)) (t : 集合 β)
   结论: ⋂₀ S -ᵥ t subseteq ⋂ s in S, s -ᵥ t
   证明: image2_sInter_subset_left ..
 
@@ -1526,8 +1526,8 @@ lemma vsub_sInter_subset
   proof: image2_sInter_subset_right ..
 
 中文:
-引理 vsub_sInter_subset
-  条件: (s : Set β) (T : Set (Set β))
+引理 vsub_s整数er_subset
+  条件: (s : 集合 β) (T : 集合 (集合 β))
   结论: s -ᵥ ⋂₀ T subseteq ⋂ t in T, s -ᵥ t
   证明: image2_sInter_subset_right ..
 
@@ -1545,8 +1545,8 @@ lemma iInter₂_vsub_subset
   proof: image2_iInter₂_subset_left ..
 
 中文:
-引理 iInter₂_vsub_subset
-  条件: (s : 对任意 i, κ i -> Set β) (t : Set β)
+引理 i整数er₂_vsub_subset
+  条件: (s : 对任意 i, κ i -> 集合 β) (t : 集合 β)
   证明: image2_iInter₂_subset_left ..
 -/
 lemma iInter₂_vsub_subset (s : forall i, κ i -> Set β) (t : Set β) :
@@ -1561,8 +1561,8 @@ lemma vsub_iInter₂_subset
   proof: image2_iInter₂_subset_right ..
 
 中文:
-引理 vsub_iInter₂_subset
-  条件: (s : Set β) (t : 对任意 i, κ i -> Set β)
+引理 vsub_i整数er₂_subset
+  条件: (s : 集合 β) (t : 对任意 i, κ i -> 集合 β)
   证明: image2_iInter₂_subset_right ..
 -/
 lemma vsub_iInter₂_subset (s : Set β) (t : forall i, κ i -> Set β) :

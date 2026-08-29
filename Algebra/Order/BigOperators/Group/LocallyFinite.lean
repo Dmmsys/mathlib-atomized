@@ -46,7 +46,7 @@ lemma mul_prod_Ico_eq_prod_Icc
 中文:
 引理 mul_prod_Ico_eq_prod_Icc
   条件: (h : a <= b)
-  结论: f b * ∏ x in Ico a b, f x = ∏ x in Icc a b, f x
+  结论: f b * ∏ x in 左闭右开区间 a b, f x = ∏ x in 闭区间 a b, f x
   证明: by
   rw [Icc_eq_cons_Ico h]; rw [prod_cons]
 
@@ -73,7 +73,7 @@ lemma prod_Ico_mul_eq_prod_Icc
 中文:
 引理 prod_Ico_mul_eq_prod_Icc
   条件: (h : a <= b)
-  结论: (∏ x in Ico a b, f x) * f b = ∏ x in Icc a b, f x
+  结论: (∏ x in 左闭右开区间 a b, f x) * f b = ∏ x in 闭区间 a b, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Ico_eq_prod_Icc h]
 
@@ -100,7 +100,7 @@ lemma mul_prod_Ioc_eq_prod_Icc
 中文:
 引理 mul_prod_Ioc_eq_prod_Icc
   条件: (h : a <= b)
-  结论: f a * ∏ x in Ioc a b, f x = ∏ x in Icc a b, f x
+  结论: f a * ∏ x in 左开右闭区间 a b, f x = ∏ x in 闭区间 a b, f x
   证明: by
   rw [Icc_eq_cons_Ioc h]; rw [prod_cons]
 
@@ -127,7 +127,7 @@ lemma prod_Ioc_mul_eq_prod_Icc
 中文:
 引理 prod_Ioc_mul_eq_prod_Icc
   条件: (h : a <= b)
-  结论: (∏ x in Ioc a b, f x) * f a = ∏ x in Icc a b, f x
+  结论: (∏ x in 左开右闭区间 a b, f x) * f a = ∏ x in 闭区间 a b, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Ioc_eq_prod_Icc h]
 
@@ -154,7 +154,7 @@ lemma mul_prod_Ioo_eq_prod_Ico
 中文:
 引理 mul_prod_Ioo_eq_prod_Ico
   条件: (h : a < b)
-  结论: f a * ∏ x in Ioo a b, f x = ∏ x in Ico a b, f x
+  结论: f a * ∏ x in 开区间 a b, f x = ∏ x in 左闭右开区间 a b, f x
   证明: by
   rw [Ico_eq_cons_Ioo h]; rw [prod_cons]
 
@@ -181,7 +181,7 @@ lemma prod_Ioo_mul_eq_prod_Ico
 中文:
 引理 prod_Ioo_mul_eq_prod_Ico
   条件: (h : a < b)
-  结论: (∏ x in Ioo a b, f x) * f a = ∏ x in Ico a b, f x
+  结论: (∏ x in 开区间 a b, f x) * f a = ∏ x in 左闭右开区间 a b, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Ioo_eq_prod_Ico h]
 
@@ -208,7 +208,7 @@ lemma mul_prod_Ioo_eq_prod_Ioc
 中文:
 引理 mul_prod_Ioo_eq_prod_Ioc
   条件: (h : a < b)
-  结论: f b * ∏ x in Ioo a b, f x = ∏ x in Ioc a b, f x
+  结论: f b * ∏ x in 开区间 a b, f x = ∏ x in 左开右闭区间 a b, f x
   证明: by
   rw [Ioc_eq_cons_Ioo h]; rw [prod_cons]
 
@@ -233,7 +233,7 @@ lemma prod_Ioo_mul_eq_prod_Ioc
 中文:
 引理 prod_Ioo_mul_eq_prod_Ioc
   条件: (h : a < b)
-  结论: (∏ x in Ioo a b, f x) * f b = ∏ x in Ioc a b, f x
+  结论: (∏ x in 开区间 a b, f x) * f b = ∏ x in 左开右闭区间 a b, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Ioo_eq_prod_Ioc h]
 
@@ -290,7 +290,7 @@ lemma mul_prod_Ioi_eq_prod_Ici
 中文:
 引理 mul_prod_Ioi_eq_prod_Ici
   条件: (a : α)
-  结论: f a * ∏ x in Ioi a, f x = ∏ x in Ici a, f x
+  结论: f a * ∏ x in 左开右无界区间 a, f x = ∏ x in 左闭右无界区间 a, f x
   证明: by
   rw [Ici_eq_cons_Ioi]; rw [prod_cons]
 
@@ -315,7 +315,7 @@ lemma prod_Ioi_mul_eq_prod_Ici
 中文:
 引理 prod_Ioi_mul_eq_prod_Ici
   条件: (a : α)
-  结论: (∏ x in Ioi a, f x) * f a = ∏ x in Ici a, f x
+  结论: (∏ x in 左开右无界区间 a, f x) * f a = ∏ x in 左闭右无界区间 a, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Ioi_eq_prod_Ici]
 
@@ -345,7 +345,7 @@ lemma mul_prod_Iio_eq_prod_Iic
 中文:
 引理 mul_prod_Iio_eq_prod_Iic
   条件: (a : α)
-  结论: f a * ∏ x in Iio a, f x = ∏ x in Iic a, f x
+  结论: f a * ∏ x in 左无界右开区间 a, f x = ∏ x in 左无界右闭区间 a, f x
   证明: by
   rw [Iic_eq_cons_Iio]; rw [prod_cons]
 
@@ -370,7 +370,7 @@ lemma prod_Iio_mul_eq_prod_Iic
 中文:
 引理 prod_Iio_mul_eq_prod_Iic
   条件: (a : α)
-  结论: (∏ x in Iio a, f x) * f a = ∏ x in Iic a, f x
+  结论: (∏ x in 左无界右开区间 a, f x) * f a = ∏ x in 左无界右闭区间 a, f x
   证明: by
   rw [mul_comm]; rw [mul_prod_Iio_eq_prod_Iic]
 
@@ -430,7 +430,7 @@ lemma prod_Iio_add_one_comm
 
 中文:
 引理 prod_Iio_add_one_comm
-  结论: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  结论: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: by
   simp [Iio_add_one_eq_Iic, ← Iio_insert, Finset.prod_insert]
 
@@ -456,7 +456,7 @@ lemma prod_Iio_add_one
 
 中文:
 引理 prod_Iio_add_one
-  结论: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  结论: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: by
   simp_rw [prod_Iio_add_one_comm, mul_comm]
 
@@ -483,7 +483,7 @@ lemma prod_Iic_add_one_comm
 
 中文:
 引理 prod_Iic_add_one_comm
-  结论: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  结论: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: by
   simp only [← Iio_insert, mem_Iio, lt_self_iff_false, not_false_eq_true, prod_insert,
     prod_Iio_add_one_comm]
@@ -509,7 +509,7 @@ lemma prod_Iic_add_one
 
 中文:
 引理 prod_Iic_add_one
-  结论: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  结论: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: by
   simp_rw [prod_Iic_add_one_comm, mul_comm]
 

@@ -36,7 +36,7 @@ structure UpperHalfPlane
 结构 UpperHalfPlane
   参数: where
   公理与运算 (2 个):
-    - coe : Complex
+    - coe : 复形
     - coe_im_pos : 0 < coe.im
 -/
 structure UpperHalfPlane where
@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut ℍ Complex
+  签名: CoeOut ℍ 复形
   定义体: ⟨UpperHalfPlane.coe⟩
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.coe
@@ -115,7 +115,7 @@ lemma ρ_sq
 
 中文:
 引理 ρ_sq
-  结论: (ρ : Complex) ^ 2 = -ρ - 1
+  结论: (ρ : 复形) ^ 2 = -ρ - 1
   证明: by
   simp [Complex.ext_iff, pow_two, ρ]
   grind
@@ -136,7 +136,7 @@ lemma norm_ρ
 
 中文:
 引理 norm_ρ
-  结论: ‖(ρ : Complex)‖ = 1
+  结论: ‖(ρ : 复形)‖ = 1
   证明: by norm_num [norm_def, normSq, ← pow_two, ρ, div_pow]
 
 Depends on / 依赖: div_pow, normSq, norm_def, pow_two
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ℍ
+  签名: 可居 ℍ
   定义体: ⟨.I⟩
 -/
 instance : Inhabited ℍ := ⟨.I⟩
@@ -172,7 +172,7 @@ theorem coe_inj
 中文:
 定理 coe_inj
   条件: {a b : ℍ}
-  结论: (a : Complex) = b ↔ a = b
+  结论: (a : 复形) = b ↔ a = b
   证明: UpperHalfPlane.ext_iff.symm
 
 @[deprecated (since := "2026-01-31")] alias ext_iff' := coe_inj
@@ -191,7 +191,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective UpperHalfPlane.coe
+  结论: 函数.单射 UpperHalfPlane.coe
   证明: fun _ _ => UpperHalfPlane.ext
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.ext
@@ -208,7 +208,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift Complex ℍ ((↑) : ℍ -> Complex) fun z => 0 < z.im where
+  签名: : CanLift 复形 ℍ ((↑) : ℍ -> 复形) fun z => 0 < z.im where
   定义体: ⟨⟨z, hz⟩, rfl⟩
 -/
 instance canLift : CanLift Complex ℍ ((↑) : ℍ -> Complex) fun z => 0 < z.im where
@@ -224,7 +224,7 @@ theorem «forall»
   proof: ⟨fun h z hz => h ⟨z, hz⟩, fun h z => h z.1 z.2⟩
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {P : ℍ -> 命题}
   结论: (对任意 z, P z) ↔ 对任意 z hz, P ⟨z, hz⟩
   证明: ⟨fun h z hz => h ⟨z, hz⟩, fun h z => h z.1 z.2⟩
@@ -242,7 +242,7 @@ theorem «exists»
   proof: ⟨fun ⟨⟨z, hz⟩, hP⟩ => ⟨z, hz, hP⟩, fun ⟨z, hz, hP⟩ => ⟨⟨z, hz⟩, hP⟩⟩
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {P : ℍ -> 命题}
   结论: (存在 z, P z) ↔ 存在 z hz, P ⟨z, hz⟩
   证明: ⟨fun ⟨⟨z, hz⟩, hP⟩ => ⟨z, hz, hP⟩, fun ⟨z, hz, hP⟩ => ⟨⟨z, hz⟩, hP⟩⟩
@@ -330,7 +330,7 @@ theorem coe_im
 中文:
 定理 coe_im
   条件: (z : ℍ)
-  结论: (z : Complex).im = z.im
+  结论: (z : 复形).im = z.im
   证明: rfl
 
 @[simp]
@@ -353,7 +353,7 @@ theorem coe_re
 中文:
 定理 coe_re
   条件: (z : ℍ)
-  结论: (z : Complex).re = z.re
+  结论: (z : 复形).re = z.re
   证明: rfl
 
 @[simp]
@@ -375,7 +375,7 @@ theorem mk_re
 
 中文:
 定理 mk_re
-  条件: (z : Complex) (h : 0 < z.im)
+  条件: (z : 复形) (h : 0 < z.im)
   结论: (mk z h).re = z.re
   证明: rfl
 
@@ -396,7 +396,7 @@ theorem mk_im
 
 中文:
 定理 mk_im
-  条件: (z : Complex) (h : 0 < z.im)
+  条件: (z : 复形) (h : 0 < z.im)
   结论: (mk z h).im = z.im
   证明: rfl
 -/
@@ -416,8 +416,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (z : Complex) (h : 0 < z.im)
-  结论: (mk z h : Complex) = z
+  条件: (z : 复形) (h : 0 < z.im)
+  结论: (mk z h : 复形) = z
   证明: rfl
 
 @[simp]
@@ -439,7 +439,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (z : ℍ) (h : 0 < (z : Complex).im := z.2)
+  条件: (z : ℍ) (h : 0 < (z : 复形).im := z.2)
   结论: mk z h = z
   证明: rfl
 
@@ -505,7 +505,7 @@ lemma coe_I
 
 中文:
 引理 coe_I
-  结论: I = Complex.I
+  结论: I = 复形.I
   证明: rfl
 
 @[deprecated coe_mk (since := "2026-01-29")]
@@ -523,7 +523,7 @@ lemma coe_mk_subtype
 
 中文:
 引理 coe_mk_subtype
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   证明: rfl
 -/
 lemma coe_mk_subtype {z : Complex} (hz : 0 < z.im) :
@@ -542,7 +542,7 @@ theorem re_add_im
 中文:
 定理 re_add_im
   条件: (z : ℍ)
-  结论: (z.re + z.im * Complex.I : Complex) = z
+  结论: (z.re + z.im * 复形.I : 复形) = z
   证明: Complex.re_add_im z
 
 Depends on / 依赖: Complex.re_add_im, re_add_im
@@ -601,7 +601,7 @@ theorem ne_zero
 中文:
 定理 ne_zero
   条件: (z : ℍ)
-  结论: (z : Complex) != 0
+  结论: (z : 复形) != 0
   证明: mt (congr_arg Complex.im) z.im_ne_zero
 
 Depends on / 依赖: Complex.im, congr_arg, im_ne_zero, z.im_ne_zero
@@ -622,7 +622,7 @@ lemma mem_slitPlane
 中文:
 引理 mem_slitPlane
   条件: (z : ℍ)
-  结论: (z : Complex) in Complex.slitPlane
+  结论: (z : 复形) in 复形.slitPlane
   证明: by
   simp [Complex.slitPlane, im_ne_zero z]
 
@@ -644,7 +644,7 @@ lemma eq_of_re_of_norm
 
 中文:
 引理 eq_of_re_of_norm
-  条件: {τ τ' : ℍ} (hre : τ.re = τ'.re) (hnorm : ‖(τ : Complex)‖ = ‖(τ' : Complex)‖)
+  条件: {τ τ' : ℍ} (hre : τ.re = τ'.re) (hnorm : ‖(τ : 复形)‖ = ‖(τ' : 复形)‖)
   证明: by
   apply_fun (· ^ 2) at hnorm
   simpa [UpperHalfPlane.ext_iff, Complex.ext_iff, hre, Complex.normSq, Complex.sq_norm,
@@ -701,7 +701,7 @@ theorem normSq_pos
 中文:
 定理 normSq_pos
   条件: (z : ℍ)
-  结论: 0 < Complex.normSq (z : Complex)
+  结论: 0 < 复形.normSq (z : 复形)
   证明: by
   rw [Complex.normSq_pos]; exact z.ne_zero
 
@@ -722,7 +722,7 @@ theorem normSq_ne_zero
 中文:
 定理 normSq_ne_zero
   条件: (z : ℍ)
-  结论: Complex.normSq (z : Complex) != 0
+  结论: 复形.normSq (z : 复形) != 0
   证明: (normSq_pos z).ne'
 
 Depends on / 依赖: normSq_pos
@@ -743,7 +743,7 @@ theorem im_inv_neg_coe_pos
 中文:
 定理 im_inv_neg_coe_pos
   条件: (z : ℍ)
-  结论: 0 < (-z : Complex)⁻¹.im
+  结论: 0 < (-z : 复形)⁻¹.im
   证明: by
   simpa [neg_div] using div_pos z.im_pos (normSq_pos z)
 
@@ -766,7 +766,7 @@ lemma im_pnat_div_pos
 中文:
 引理 im_pnat_div_pos
   条件: (n : 自然数) [NeZero n] (z : ℍ)
-  结论: 0 < (-(n : Complex) / z).im
+  结论: 0 < (-(n : 复形) / z).im
   证明: by
   suffices 0 < n * z.im / Complex.normSq z by simpa [Complex.div_im, neg_div]
   positivity [NeZero.ne n, z.normSq_pos]
@@ -787,9 +787,9 @@ lemma ne_ofReal
   proof: ne_of_apply_ne Complex.im by simp [im_ne_zero]
 
 中文:
-引理 ne_ofReal
+引理 ne_of实数
   条件: (z : ℍ) (x : 实数)
-  结论: (z : Complex) != x
+  结论: (z : 复形) != x
   证明: ne_of_apply_ne Complex.im by simp [im_ne_zero]
 
 Depends on / 依赖: Complex.im, im_ne_zero, ne_of_apply_ne
@@ -811,7 +811,7 @@ lemma ne_intCast
 中文:
 引理 ne_intCast
   条件: (z : ℍ) (n : 整数)
-  结论: (z : Complex) != n
+  结论: (z : 复形) != n
   证明: mod_cast ne_ofReal z n
 
 @[deprecated (since := "2026-01-29")] alias ne_int := ne_intCast
@@ -836,7 +836,7 @@ lemma ne_natCast
 中文:
 引理 ne_natCast
   条件: (z : ℍ) (n : 自然数)
-  结论: (z : Complex) != n
+  结论: (z : 复形) != n
   证明: mod_cast ne_intCast z n
 
 @[deprecated (since := "2026-01-29")] alias ne_nat := ne_natCast
@@ -860,8 +860,8 @@ one_smul _ := UpperHalfPlane.ext one_smul _ _
 mul_smul x y z := UpperHalfPlane.ext mul_smul (x : Real) y (z : Complex)
 
 中文:
-实例 posRealAction
-  签名: : MulAction {x : 实数 // 0 < x} ℍ where
+实例 pos实数Action
+  签名: : 乘法作用 {x : 实数 // 0 < x} ℍ where
   定义体: mk ((x : Real) • (z : Complex)) by simpa using mul_pos x.2 z.im_pos
 one_smul _ := UpperHalfPlane.ext one_smul _ _
 mul_smul x y z := UpperHalfPlane.ext mul_smul (x : Real) y (z : Complex)
@@ -888,7 +888,7 @@ theorem coe_pos_real_smul
 
 中文:
 定理 coe_pos_real_smul
-  结论: ↑(x • z) = (x : 实数) • (z : Complex)
+  结论: ↑(x • z) = (x : 实数) • (z : 复形)
   证明: rfl
 
 @[simp]
@@ -978,7 +978,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddAction 实数 ℍ
+  签名: 加法作用 实数 ℍ
   定义体: mk (x + z) by simpa using z.im_pos
   zero_vadd _ := by simp [HVAdd.hVAdd]
   add_vadd x y z := by simp [HVAdd.hVAdd, add_assoc]
@@ -1005,7 +1005,7 @@ theorem coe_vadd
 
 中文:
 定理 coe_vadd
-  结论: ↑(x +ᵥ z) = (x + z : Complex)
+  结论: ↑(x +ᵥ z) = (x + z : 复形)
   证明: rfl
 
 @[simp]
@@ -1091,7 +1091,7 @@ theorem vadd_left_injective
 中文:
 定理 vadd_left_injective
   条件: (z : ℍ)
-  结论: Function.Injective fun x : 实数 => x +ᵥ z
+  结论: 函数.单射 fun x : 实数 => x +ᵥ z
   证明: by
   simp [Function.Injective]
 -/
@@ -1108,7 +1108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Infinite ℍ
+  签名: 无限 ℍ
   定义体: .of_injective _ UpperHalfPlane.vadd_left_injective I
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.vadd_left_injective, of_injective, vadd_left_injective
@@ -1126,7 +1126,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial ℍ
+  签名: 非平凡 ℍ
   定义体: inferInstance
 -/
 instance : Nontrivial ℍ := inferInstance
@@ -1168,7 +1168,7 @@ lemma isOpen_upperHalfPlaneSet
 
 中文:
 引理 isOpen_upperHalfPlaneSet
-  结论: IsOpen ℍₒ
+  结论: 是开集 ℍₒ
   证明: isOpen_lt continuous_const Complex.continuous_im
 
 @[simp]
@@ -1189,7 +1189,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  结论: Set.range UpperHalfPlane.coe = ℍₒ
+  结论: 集合.range UpperHalfPlane.coe = ℍₒ
   证明: by
   ext; simp [UpperHalfPlane.exists]
 

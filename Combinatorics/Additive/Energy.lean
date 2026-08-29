@@ -65,7 +65,7 @@ definition mulEnergy
 
 中文:
 定义 mulEnergy
-  签名: (s t : Finset α)
+  签名: (s t : 有限集 α)
   定义体: #{x in ((s ×ˢ s) ×ˢ t ×ˢ t) | x.1.1 * x.2.1 = x.1.2 * x.2.2}
 -/
 def mulEnergy (s t : Finset α) : Nat :=
@@ -195,7 +195,7 @@ lemma mulEnergy_pos
 
 中文:
 引理 mulEnergy_pos
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   结论: 0 < Eₘ[s, t]
   证明: (mul_pos hs.card_pos ht.card_pos).trans_le le_mulEnergy
 -/
@@ -213,7 +213,7 @@ lemma mulEnergy_self_pos
 
 中文:
 引理 mulEnergy_self_pos
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: 0 < Eₘ[s]
   证明: mulEnergy_pos hs hs
 -/
@@ -265,7 +265,7 @@ lemma mulEnergy_pos_iff
 
 中文:
 引理 mulEnergy_pos_iff
-  结论: 0 < Eₘ[s, t] ↔ s.Nonempty ∧ t.Nonempty where
+  结论: 0 < Eₘ[s, t] ↔ s.非空 ∧ t.非空 where
   证明: by by_contra! +distrib rfl | rfl <;> simp at h
   mpr h := mulEnergy_pos h.1 h.2
 -/
@@ -302,7 +302,7 @@ lemma mulEnergy_self_pos_iff
 
 中文:
 引理 mulEnergy_self_pos_iff
-  结论: 0 < Eₘ[s] ↔ s.Nonempty
+  结论: 0 < Eₘ[s] ↔ s.非空
   证明: by
   rw [mulEnergy_pos_iff]; rw [and_self_iff]
 -/
@@ -337,7 +337,7 @@ lemma mulEnergy_eq_card_filter
 
 中文:
 引理 mulEnergy_eq_card_filter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: card_equiv (.prodProdProdComm _ _ _ _) (by simp [and_and_and_comm])
 -/
 @[to_additive] lemma mulEnergy_eq_card_filter (s t : Finset α) :
@@ -361,7 +361,7 @@ lemma mulEnergy_eq_sum_sq'
 
 中文:
 引理 mulEnergy_eq_sum_sq'
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by
   simp_rw [mulEnergy_eq_card_filter, sq, ← card_product]
   rw [← card_disjiUnion]
@@ -393,7 +393,7 @@ exact Fintype.sum_subset by aesop (add simp [filter_eq_empty_iff, mul_mem_mul])
 
 中文:
 引理 mulEnergy_eq_sum_sq
-  条件: [Fintype α] (s t : Finset α)
+  条件: [有限类型 α] (s t : 有限集 α)
   证明: by
   rw [mulEnergy_eq_sum_sq']
 exact Fintype.sum_subset by aesop (add simp [filter_eq_empty_iff, mul_mem_mul])
@@ -422,7 +422,7 @@ lemma card_sq_le_card_mul_mulEnergy
 
 中文:
 引理 card_sq_le_card_mul_mulEnergy
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   证明: by
   calc
     _ = (∑ c in u, #{xy in s ×ˢ t | xy.1 * xy.2 = c}) ^ 2 := by
@@ -458,7 +458,7 @@ lemma le_card_mul_mul_mulEnergy
 
 中文:
 引理 le_card_mul_mul_mulEnergy
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: calc
     _ = #{xy in s ×ˢ t | xy.1 * xy.2 in s * t} ^ 2 := by
       rw [filter_eq_self.2]; rw [card_product]; rw [mul_pow]; aesop (add unsafe mul_mem_mul)
@@ -492,7 +492,7 @@ lemma mulEnergy_comm
 
 中文:
 引理 mulEnergy_comm
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: Eₘ[s, t] = Eₘ[t, s]
   证明: by
   rw [mulEnergy]; rw [← Finset.card_map (Equiv.prodComm _ _).toEmbedding]; rw [map_filter]
@@ -524,7 +524,7 @@ lemma mulEnergy_univ_left
 
 中文:
 引理 mulEnergy_univ_left
-  结论: Eₘ[univ, t] = Fintype.card α * t.card ^ 2
+  结论: Eₘ[univ, t] = 有限类型.card α * t.card ^ 2
   证明: by
   simp only [mulEnergy, univ_product_univ, Fintype.card, sq, ← card_product]
   let f : α × α × α -> (α × α) × α × α := fun x => ((x.1 * x.2.2, x.1 * x.2.1), x.2)
@@ -562,7 +562,7 @@ lemma mulEnergy_univ_right
 
 中文:
 引理 mulEnergy_univ_right
-  结论: Eₘ[s, univ] = Fintype.card α * s.card ^ 2
+  结论: Eₘ[s, univ] = 有限类型.card α * s.card ^ 2
   证明: by
   rw [mulEnergy_comm]; rw [mulEnergy_univ_left]
 

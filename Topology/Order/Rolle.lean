@@ -48,8 +48,8 @@ theorem exists_Ioo_extr_on_Icc
   obtain ⟨C, Cmem, Cge⟩ : exists C in Icc a b, forall x in Icc a b, f
 
 中文:
-定理 exists_Ioo_extr_on_Icc
-  条件: (hab : a < b) (hfc : ContinuousOn f (Icc a b)) (hfI : f a = f b)
+定理 存在_Ioo_extr_on_Icc
+  条件: (hab : a < b) (hfc : ContinuousOn f (闭区间 a b)) (hfI : f a = f b)
   证明: by
   have ne : (Icc a b).Nonempty := nonempty_Icc.2 (le_of_lt hab)
   -- Consider absolute min and max points
@@ -89,8 +89,8 @@ theorem exists_isLocalExtr_Ioo
 ⟨c, cmem, hc.isLocalExtr Icc_mem_nhds cmem.1 cmem.2⟩
 
 中文:
-定理 exists_isLocalExtr_Ioo
-  条件: (hab : a < b) (hfc : ContinuousOn f (Icc a b)) (hfI : f a = f b)
+定理 存在_isLocalExtr_Ioo
+  条件: (hab : a < b) (hfc : ContinuousOn f (闭区间 a b)) (hfI : f a = f b)
   证明: let ⟨c, cmem, hc⟩ := exists_Ioo_extr_on_Icc hab hfc hfI
 ⟨c, cmem, hc.isLocalExtr Icc_mem_nhds cmem.1 cmem.2⟩
 
@@ -114,8 +114,8 @@ lemma exists_isExtrOn_Ioo_of_tendsto
       ((eq_lim_at_left_extendFrom_Ioo hab ha).tra
 
 中文:
-引理 exists_isExtrOn_Ioo_of_tendsto
-  结论: (hab : a < b) (hfc : ContinuousOn f (Ioo a b))
+引理 存在_isExtrOn_Ioo_of_tendsto
+  结论: (hab : a < b) (hfc : ContinuousOn f (开区间 a b))
   证明: by
   have h : EqOn (extendFrom (Ioo a b) f) f (Ioo a b) := extendFrom_extends hfc
   obtain ⟨c, hc, hfc⟩ : exists c in Ioo a b, IsExtrOn (extendFrom (Ioo a b) f) (Icc a b) c :=
@@ -143,8 +143,8 @@ lemma exists_isLocalExtr_Ioo_of_tendsto
 ⟨c, cmem, hc.isLocalExtr Ioo_mem_nhds cmem.1 cmem.2⟩
 
 中文:
-引理 exists_isLocalExtr_Ioo_of_tendsto
-  结论: (hab : a < b) (hfc : ContinuousOn f (Ioo a b))
+引理 存在_isLocalExtr_Ioo_of_tendsto
+  结论: (hab : a < b) (hfc : ContinuousOn f (开区间 a b))
   证明: let ⟨c, cmem, hc⟩ := exists_isExtrOn_Ioo_of_tendsto hab hfc ha hb
 ⟨c, cmem, hc.isLocalExtr Ioo_mem_nhds cmem.1 cmem.2⟩
 
@@ -165,7 +165,7 @@ theorem exists_uIoo_isExtrOn_uIcc
   proof: exists_Ioo_extr_on_Icc (by simp [hab.symm]) hfc (by grind)
 
 中文:
-定理 exists_uIoo_isExtrOn_uIcc
+定理 存在_uIoo_isExtrOn_uIcc
   结论: (hab : a != b) (hfc : ContinuousOn f (uIcc a b))
   证明: exists_Ioo_extr_on_Icc (by simp [hab.symm]) hfc (by grind)
 
@@ -185,7 +185,7 @@ theorem exists_isLocalExtr_uIoo
   proof: exists_isLocalExtr_Ioo (by simp [hab.symm]) hfc (by grind)
 
 中文:
-定理 exists_isLocalExtr_uIoo
+定理 存在_isLocalExtr_uIoo
   条件: (hab : a != b) (hfc : ContinuousOn f (uIcc a b)) (hfI : f a = f b)
   证明: exists_isLocalExtr_Ioo (by simp [hab.symm]) hfc (by grind)
 
@@ -208,7 +208,7 @@ lemma exists_isExtrOn_uIoo_of_tendsto
       ((eq_lim_at_left_extendFrom_uIoo 
 
 中文:
-引理 exists_isExtrOn_uIoo_of_tendsto
+引理 存在_isExtrOn_uIoo_of_tendsto
   结论: (hab : a != b) (hfc : ContinuousOn f (uIoo a b))
   证明: by
   have h : EqOn (extendFrom (uIoo a b) f) f (uIoo a b) := extendFrom_extends hfc
@@ -237,7 +237,7 @@ lemma exists_isLocalExtr_uIoo_of_tendsto
 ⟨c, cmem, hc.isLocalExtr Ioo_mem_nhds cmem.1 cmem.2⟩
 
 中文:
-引理 exists_isLocalExtr_uIoo_of_tendsto
+引理 存在_isLocalExtr_uIoo_of_tendsto
   结论: (hab : a != b) (hfc : ContinuousOn f (uIoo a b))
   证明: let ⟨c, cmem, hc⟩ := exists_isExtrOn_uIoo_of_tendsto hab hfc ha hb
 ⟨c, cmem, hc.isLocalExtr Ioo_mem_nhds cmem.1 cmem.2⟩

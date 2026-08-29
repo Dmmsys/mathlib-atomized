@@ -40,7 +40,7 @@ theorem ofDigits_eq_sum_mapIdx_aux
 
 中文:
 定理 ofDigits_eq_sum_mapIdx_aux
-  条件: (b : 自然数) (l : List 自然数)
+  条件: (b : 自然数) (l : 列表 自然数)
   证明: by
   suffices
     l.zipWith (fun a i : Nat => a * b ^ (i + 1)) (List.range l.length) =
@@ -74,7 +74,7 @@ theorem ofDigits_eq_sum_mapIdx
 
 中文:
 定理 ofDigits_eq_sum_mapIdx
-  条件: (b : 自然数) (L : List 自然数)
+  条件: (b : 自然数) (L : 列表 自然数)
   证明: by
   rw [List.mapIdx_eq_zipIdx_map]; rw [List.zipIdx_eq_zip_range']; rw [List.map_zip_eq_zipWith]; rw [ofDigits_eq_foldr]; rw [← List.range_eq_range']
   induction L with
@@ -405,7 +405,7 @@ theorem pow_length_le_mul_ofDigits
 
 中文:
 定理 pow_length_le_mul_ofDigits
-  条件: {b : 自然数} {l : List 自然数} (hl : l != []) (hl2 : l.getLast hl != 0)
+  条件: {b : 自然数} {l : 列表 自然数} (hl : l != []) (hl2 : l.getLast hl != 0)
   证明: by
   rw [← List.dropLast_append_getLast hl]
   simp only [List.length_append, List.length, zero_add, List.length_dropLast, ofDigits_append,
@@ -650,7 +650,7 @@ theorem dvd_ofDigits_sub_ofDigits
 
 中文:
 定理 dvd_ofDigits_sub_ofDigits
-  结论: {α : 类型} [CommRing α] {a b k : α} (h : k ∣ a - b)
+  结论: {α : 类型} [交换环 α] {a b k : α} (h : k ∣ a - b)
   证明: by
   induction L with
   | nil => change k ∣ 0 - 0; simp
@@ -685,7 +685,7 @@ theorem ofDigits_modEq'
 
 中文:
 定理 ofDigits_modEq'
-  条件: (b b' : 自然数) (k : 自然数) (h : b ≡ b' [MOD k]) (L : List 自然数)
+  条件: (b b' : 自然数) (k : 自然数) (h : b ≡ b' [MOD k]) (L : 列表 自然数)
   证明: by
   induction L with
   | nil => rfl
@@ -718,7 +718,7 @@ theorem ofDigits_modEq
 
 中文:
 定理 ofDigits_modEq
-  条件: (b k : 自然数) (L : List 自然数)
+  条件: (b k : 自然数) (L : 列表 自然数)
   结论: ofDigits b L ≡ ofDigits (b % k) L [MOD k]
   证明: ofDigits_modEq' b (b % k) k (b.mod_modEq k).symm L
 
@@ -738,7 +738,7 @@ theorem ofDigits_mod
 
 中文:
 定理 ofDigits_mod
-  条件: (b k : 自然数) (L : List 自然数)
+  条件: (b k : 自然数) (L : 列表 自然数)
   结论: ofDigits b L % k = ofDigits (b % k) L % k
   证明: ofDigits_modEq b k L
 
@@ -759,7 +759,7 @@ theorem ofDigits_mod_eq_head!
 
 中文:
 定理 ofDigits_mod_eq_head!
-  条件: (b : 自然数) (l : List 自然数)
+  条件: (b : 自然数) (l : 列表 自然数)
   结论: ofDigits b l % b = l.head! % b
   证明: by
   induction l <;> simp [Nat.ofDigits]
@@ -829,7 +829,7 @@ theorem ofDigits_zmodeq'
 
 中文:
 定理 ofDigits_zmodeq'
-  条件: (b b' : 整数) (k : 自然数) (h : b ≡ b' [ZMOD k]) (L : List 自然数)
+  条件: (b b' : 整数) (k : 自然数) (h : b ≡ b' [ZMOD k]) (L : 列表 自然数)
   证明: by
   induction L with
   | nil => rfl
@@ -862,7 +862,7 @@ theorem ofDigits_zmodeq
 
 中文:
 定理 ofDigits_zmodeq
-  条件: (b : 整数) (k : 自然数) (L : List 自然数)
+  条件: (b : 整数) (k : 自然数) (L : 列表 自然数)
   结论: ofDigits b L ≡ ofDigits (b % k) L [ZMOD k]
   证明: ofDigits_zmodeq' b (b % k) k (b.mod_modEq ↑k).symm L
 
@@ -882,7 +882,7 @@ theorem ofDigits_zmod
 
 中文:
 定理 ofDigits_zmod
-  条件: (b : 整数) (k : 自然数) (L : List 自然数)
+  条件: (b : 整数) (k : 自然数) (L : 列表 自然数)
   结论: ofDigits b L % k = ofDigits (b % k) L % k
   证明: ofDigits_zmodeq b k L
 
@@ -910,7 +910,7 @@ theorem modEq_digits_sum
 中文:
 定理 modEq_digits_sum
   条件: (b b' : 自然数) (h : b' % b = 1) (n : 自然数)
-  结论: n ≡ (digits b' n).sum [MOD b]
+  结论: n ≡ (digits b' n).求和 [MOD b]
   证明: by
   rw [← ofDigits_one]
   conv =>
@@ -1252,7 +1252,7 @@ theorem sum_digits_ofDigits_eq_sum
 
 中文:
 定理 sum_digits_ofDigits_eq_sum
-  结论: {b : 自然数} (hb : 1 < b) {l : 自然数} {L : List 自然数}
+  结论: {b : 自然数} (hb : 1 < b) {l : 自然数} {L : 列表 自然数}
   证明: by
   nth_rewrite 2 [← (setInvOn_digitsAppend_ofDigits hb l).1 hL]
   rw [digitsAppend]; rw [List.sum_append_nat]; rw [List.sum_replicate]; rw [nsmul_zero]; rw [add_zero]
@@ -1311,7 +1311,7 @@ theorem mem_fixedLengthDigits_iff
 
 中文:
 定理 mem_fixedLengthDigits_iff
-  条件: {b : 自然数} (hb : 1 < b) {l : 自然数} {L : List 自然数}
+  条件: {b : 自然数} (hb : 1 < b) {l : 自然数} {L : 列表 自然数}
   证明: by
   simp [fixedLengthDigits]
 
@@ -1333,7 +1333,7 @@ theorem _root_.Nat.bijOn_ofDigits'
   ext; simp
 
 中文:
-定理 _root_.Nat.bijOn_ofDigits'
+定理 _root_.自然数.bijOn_ofDigits'
   条件: {b : 自然数} (hb : 1 < b) (l : 自然数)
   证明: by
   rw [fixedLengthDigits]; rw [Set.coe_toFinset]
@@ -1362,7 +1362,7 @@ theorem _root_.Nat.bijOn_digitsAppend'
 @[simp]
 
 中文:
-定理 _root_.Nat.bijOn_digitsAppend'
+定理 _root_.自然数.bijOn_digitsAppend'
   条件: {b : 自然数} (hb : 1 < b) (l : 自然数)
   证明: by
   rw [fixedLengthDigits]; rw [Set.coe_toFinset]
@@ -1490,7 +1490,7 @@ theorem ne_empty_of_mem_consFixedLengthDigits
 
 中文:
 定理 ne_empty_of_mem_consFixedLengthDigits
-  结论: {b : 自然数} (hb : 1 < b) {l d : 自然数} {L : List 自然数}
+  结论: {b : 自然数} (hb : 1 < b) {l d : 自然数} {L : 列表 自然数}
   证明: by
   obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hL
   exact cons_ne_nil d _
@@ -1514,7 +1514,7 @@ theorem consFixedLengthDigits_head
 
 中文:
 定理 consFixedLengthDigits_head
-  结论: {b : 自然数} (hb : 1 < b) {l d : 自然数} {L : List 自然数}
+  结论: {b : 自然数} (hb : 1 < b) {l d : 自然数} {L : 列表 自然数}
   证明: by
   obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hL
   rw [head_cons]
@@ -1543,7 +1543,7 @@ theorem cons_mem_fixedLengthDigits_succ
 
 中文:
 定理 cons_mem_fixedLengthDigits_succ
-  结论: {b : 自然数} (hb : 1 < b) (l d : 自然数) (hd : d < b) {L : List 自然数}
+  结论: {b : 自然数} (hb : 1 < b) (l d : 自然数) (hd : d < b) {L : 列表 自然数}
   证明: by
   refine (mem_fixedLengthDigits_iff hb).mpr ⟨?_, ?_⟩
   · simpa using ((mem_fixedLengthDigits_iff hb).mp hL).1
@@ -1696,7 +1696,7 @@ theorem Nat.sum_sum_digits_eq
   rw [sum_digits_ofDigits_eq_sum hb ((List.mem_fixedLengthDigits_iff hb).mp hL)]
 
 中文:
-定理 Nat.sum_sum_digits_eq
+定理 自然数.sum_sum_digits_eq
   条件: {b : 自然数} (hb : 1 < b) (l : 自然数)
   证明: by
   rw [← List.sum_fixedLengthDigits_sum hb]

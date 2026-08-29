@@ -46,7 +46,7 @@ deriving Inhabited
 
 中文:
 定义 Hyperreal
-  签名: : Type
+  签名: : 类型
   定义体: Germ (hyperfilter Nat : Filter Nat) Real
 deriving Inhabited
 
@@ -70,7 +70,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field 实数*
+  签名: 域 实数*
   定义体: inferInstanceAs (Field (Germ _ _))
 -/
 instance : Field Real* :=
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder 实数*
+  签名: 线性序 实数*
   定义体: inferInstanceAs (LinearOrder (Germ _ _))
 
 Depends on / 依赖: LinearOrder
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictOrderedRing 实数*
+  签名: 是StrictOrdered环 实数*
   定义体: inferInstanceAs (IsStrictOrderedRing (Germ _ _))
 
 Depends on / 依赖: IsStrictOrderedRing
@@ -121,7 +121,7 @@ definition ofReal
   body: const
 
 中文:
-定义 ofReal
+定义 of实数
   签名: : 实数 -> 实数*
   定义体: const
 -/
@@ -416,7 +416,7 @@ theorem coe_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 coe_ofNat
+定理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
@@ -635,7 +635,7 @@ theorem coe_max
 中文:
 定理 coe_max
   条件: (x y : 实数)
-  结论: ((max x y : 实数) : 实数*) = max ↑x ↑y
+  结论: ((最大值 x y : 实数) : 实数*) = 最大值 ↑x ↑y
   证明: Germ.const_max _ _
 
 @[simp, norm_cast]
@@ -658,7 +658,7 @@ theorem coe_min
 中文:
 定理 coe_min
   条件: (x y : 实数)
-  结论: ((min x y : 实数) : 实数*) = min ↑x ↑y
+  结论: ((最小值 x y : 实数) : 实数*) = 最小值 ↑x ↑y
   证明: Germ.const_min _ _
 
 Depends on / 依赖: Germ.const_min, const_min
@@ -803,7 +803,7 @@ theorem ofSeq_surjective
 
 中文:
 定理 ofSeq_surjective
-  结论: Function.Surjective ofSeq
+  结论: 函数.满射 ofSeq
   证明: Quot.exists_rep
 
 Depends on / 依赖: Quot.exists_rep, exists_rep
@@ -1204,7 +1204,7 @@ theorem tendsto_ofSeq
 
 中文:
 定理 tendsto_ofSeq
-  条件: {f : 自然数 -> 实数} {lb : Filter 实数}
+  条件: {f : 自然数 -> 实数} {lb : 滤子 实数}
   证明: .rfl
 -/
 theorem tendsto_ofSeq {f : Nat -> Real} {lb : Filter Real} :
@@ -1278,7 +1278,7 @@ theorem tendsto_iff_forall
     exact (
 
 中文:
-定理 tendsto_iff_forall
+定理 tendsto_iff_对任意
   条件: {x : 实数*} {r : 实数}
   证明: by
   rcases ofSeq_surjective x with ⟨f, rfl⟩
@@ -1319,7 +1319,7 @@ theorem archimedeanClassMk_nonneg_of_tendsto
 
 中文:
 定理 archimedeanClassMk_nonneg_of_tendsto
-  条件: {x : 实数*} {r : 实数} (hx : x.Tendsto (𝓝 r))
+  条件: {x : 实数*} {r : 实数} (hx : x.收敛 (𝓝 r))
   证明: by
   rw [tendsto_iff_forall] at hx
   obtain ⟨s, hs⟩ := exists_lt r
@@ -1348,7 +1348,7 @@ theorem stdPart_of_tendsto
 
 中文:
 定理 stdPart_of_tendsto
-  条件: {x : 实数*} {r : 实数} (hx : x.Tendsto (𝓝 r))
+  条件: {x : 实数*} {r : 实数} (hx : x.收敛 (𝓝 r))
   结论: stdPart x = r
   证明: by
   rw [tendsto_iff_forall] at hx
@@ -1375,7 +1375,7 @@ theorem archimedeanClassMk_pos_of_tendsto
 
 中文:
 定理 archimedeanClassMk_pos_of_tendsto
-  条件: {x : 实数*} (hx : x.Tendsto (𝓝 0))
+  条件: {x : 实数*} (hx : x.收敛 (𝓝 0))
   结论: 0 < mk x
   证明: by
   apply (archimedeanClassMk_nonneg_of_tendsto hx).lt_of_ne'
@@ -1475,7 +1475,7 @@ ofSeq_lt_ofSeq.2 (hf.eventually <| gt_mem_nhds hr).filter_mono Nat.hyperfilter_l
 
 中文:
 定理 lt_of_tendsto_zero_of_pos
-  条件: {f : 自然数 -> 实数} (hf : Tendsto f atTop (𝓝 0))
+  条件: {f : 自然数 -> 实数} (hf : 收敛 f atTop (𝓝 0))
   证明: fun hr =>
 ofSeq_lt_ofSeq.2 (hf.eventually <| gt_mem_nhds hr).filter_mono Nat.hyperfilter_le_atTop
 
@@ -1500,7 +1500,7 @@ theorem neg_lt_of_tendsto_zero_of_pos
 
 中文:
 定理 neg_lt_of_tendsto_zero_of_pos
-  条件: {f : 自然数 -> 实数} (hf : Tendsto f atTop (𝓝 0))
+  条件: {f : 自然数 -> 实数} (hf : 收敛 f atTop (𝓝 0))
   证明: fun hr =>
   have hg := hf.neg
   neg_lt_of_neg_lt (by rw [neg_zero] at hg; exact lt_of_tendsto_zero_of_pos hg hr)
@@ -1524,7 +1524,7 @@ theorem gt_of_tendsto_zero_of_neg
 
 中文:
 定理 gt_of_tendsto_zero_of_neg
-  条件: {f : 自然数 -> 实数} (hf : Tendsto f atTop (𝓝 0))
+  条件: {f : 自然数 -> 实数} (hf : 收敛 f atTop (𝓝 0))
   证明: fun {r} hr => by
   rw [← neg_neg r]; rw [coe_neg]; exact neg_lt_of_tendsto_zero_of_pos hf (neg_pos.mpr hr)
 
@@ -1548,7 +1548,7 @@ exact ofSeq_lt_ofSeq.2 hx.eventually_mem (Ioi_mem_atTop r)
 
 中文:
 定理 lt_of_tendsto_atTop
-  条件: {x : 实数*} (r : 实数) (hx : x.Tendsto atTop)
+  条件: {x : 实数*} (r : 实数) (hx : x.收敛 atTop)
   结论: r < x
   证明: by
   rcases ofSeq_surjective x with ⟨f, rfl⟩
@@ -1576,7 +1576,7 @@ exact ofSeq_lt_ofSeq.2 hx.eventually_mem (Iio_mem_atBot r)
 
 中文:
 定理 lt_of_tendsto_atBot
-  条件: {x : 实数*} (r : 实数) (hx : x.Tendsto atBot)
+  条件: {x : 实数*} (r : 实数) (hx : x.收敛 atBot)
   结论: x < r
   证明: by
   rcases ofSeq_surjective x with ⟨f, rfl⟩
@@ -1604,7 +1604,7 @@ theorem archimedeanClassMk_neg_of_tendsto_atTop
 
 中文:
 定理 archimedeanClassMk_neg_of_tendsto_atTop
-  条件: {x : 实数*} (hx : x.Tendsto atTop)
+  条件: {x : 实数*} (hx : x.收敛 atTop)
   结论: mk x < 0
   证明: by
   have : 0 < x := lt_of_tendsto_atTop 0 hx
@@ -1632,7 +1632,7 @@ theorem archimedeanClassMk_neg_of_tendsto_atBot
 
 中文:
 定理 archimedeanClassMk_neg_of_tendsto_atBot
-  条件: {x : 实数*} (hx : x.Tendsto atBot)
+  条件: {x : 实数*} (hx : x.收敛 atBot)
   结论: mk x < 0
   证明: by
   have : x < 0 := lt_of_tendsto_atBot 0 hx
@@ -1663,7 +1663,7 @@ exact fun r => ofSeq_le_ofSeq.1
 中文:
 定理 tendsto_atTop_iff
   条件: {x : 实数*}
-  结论: x.Tendsto atTop ↔ 0 < x ∧ mk x < 0 where
+  结论: x.收敛 atTop ↔ 0 < x ∧ mk x < 0 where
   证明: ⟨lt_of_tendsto_atTop 0 h, archimedeanClassMk_neg_of_tendsto_atTop h⟩
   mpr h := by
     rcases ofSeq_surjective x with ⟨f, rfl⟩
@@ -1698,7 +1698,7 @@ exact fun r => ofSeq_le_ofSeq.1
 中文:
 定理 tendsto_atBot_iff
   条件: {x : 实数*}
-  结论: x.Tendsto atBot ↔ x < 0 ∧ mk x < 0 where
+  结论: x.收敛 atBot ↔ x < 0 ∧ mk x < 0 where
   证明: ⟨lt_of_tendsto_atBot 0 h, archimedeanClassMk_neg_of_tendsto_atBot h⟩
   mpr h := by
     rcases ofSeq_surjective x with ⟨f, rfl⟩
@@ -2032,7 +2032,7 @@ definition Infinite
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
 
 中文:
-定义 Infinite
+定义 无限
   签名: (x : 实数*)
   定义体: InfinitePos x ∨ InfiniteNeg x
 
@@ -2060,7 +2060,7 @@ theorem infinite_iff
 中文:
 定理 infinite_iff
   条件: {x : 实数*}
-  结论: Infinite x ↔ mk x < 0
+  结论: 无限 x ↔ mk x < 0
   证明: by
   rw [Infinite]; rw [infinitePos_iff]; rw [infiniteNeg_iff]
   aesop
@@ -2117,7 +2117,7 @@ theorem isSt_iff_tendsto
 中文:
 定理 isSt_iff_tendsto
   条件: {x : 实数*} {r : 实数}
-  结论: IsSt x r ↔ x.Tendsto (𝓝 r)
+  结论: IsSt x r ↔ x.收敛 (𝓝 r)
   证明: by
   rcases ofSeq_surjective x with ⟨f, rfl⟩
   exact isSt_ofSeq_iff_tendsto
@@ -2144,7 +2144,7 @@ theorem isSt_of_tendsto
 
 中文:
 定理 isSt_of_tendsto
-  条件: {f : 自然数 -> 实数} {r : 实数} (hf : Tendsto f atTop (𝓝 r))
+  条件: {f : 自然数 -> 实数} {r : 实数} (hf : 收敛 f atTop (𝓝 r))
   结论: IsSt (ofSeq f) r
   证明: isSt_ofSeq_iff_tendsto.2 hf.mono_left Nat.hyperfilter_le_atTop
 
@@ -2273,7 +2273,7 @@ theorem IsSt.not_infinite
 中文:
 定理 IsSt.not_infinite
   条件: {x : 实数*} {r : 实数} (h : IsSt x r)
-  结论: ¬Infinite x
+  结论: ¬无限 x
   证明: fun hi =>
   hi.elim (fun hp => lt_asymm (h 1 one_pos).2 (hp (r + 1))) fun hn =>
     lt_asymm (h 1 one_pos).1 (hn (r - 1))
@@ -2298,9 +2298,9 @@ theorem not_infinite_of_exists_st
 @[deprecated stdPart_eq_zero (since := "2026-01-05")]
 
 中文:
-定理 not_infinite_of_exists_st
+定理 not_infinite_of_存在_st
   条件: {x : 实数*}
-  结论: (存在 r : 实数, IsSt x r) -> ¬Infinite x
+  结论: (存在 r : 实数, IsSt x r) -> ¬无限 x
   证明: fun ⟨_r, hr⟩ =>
   hr.not_infinite
 
@@ -2322,8 +2322,8 @@ theorem Infinite.st_eq
 @[deprecated stdPart_eq_sSup (since := "2026-01-05")]
 
 中文:
-定理 Infinite.st_eq
-  条件: {x : 实数*} (hi : Infinite x)
+定理 无限.st_eq
+  条件: {x : 实数*} (hi : 无限 x)
   结论: st x = 0
   证明: dif_neg fun ⟨_r, hr⟩ => hr.not_infinite hi
 
@@ -2351,7 +2351,7 @@ theorem isSt_sSup
 
 中文:
 定理 isSt_sSup
-  条件: {x : 实数*} (hni : ¬Infinite x)
+  条件: {x : 实数*} (hni : ¬无限 x)
   结论: IsSt x (sSup { y : 实数 | (y : 实数*) < x })
   证明: by
   rw [infinite_iff]; rw [not_lt] at hni
@@ -2380,8 +2380,8 @@ theorem exists_st_of_not_infinite
 @[deprecated stdPart_eq_sSup (since := "2026-01-05")]
 
 中文:
-定理 exists_st_of_not_infinite
-  条件: {x : 实数*} (hni : ¬Infinite x)
+定理 存在_st_of_not_infinite
+  条件: {x : 实数*} (hni : ¬无限 x)
   结论: 存在 r : 实数, IsSt x r
   证明: ⟨sSup { y : Real | (y : Real*) < x }, isSt_sSup hni⟩
 
@@ -2435,9 +2435,9 @@ theorem exists_st_iff_not_infinite
 @[deprecated "`IsSt` is deprecated" (since := "2026-01-05")]
 
 中文:
-定理 exists_st_iff_not_infinite
+定理 存在_st_iff_not_infinite
   条件: {x : 实数*}
-  结论: (存在 r : 实数, IsSt x r) ↔ ¬Infinite x
+  结论: (存在 r : 实数, IsSt x r) ↔ ¬无限 x
   证明: ⟨not_infinite_of_exists_st, exists_st_of_not_infinite⟩
 
 @[deprecated "`IsSt` is deprecated" (since := "2026-01-05")]
@@ -2460,9 +2460,9 @@ theorem infinite_iff_not_exists_st
 @[deprecated "`IsSt` is deprecated" (since := "2026-01-05")]
 
 中文:
-定理 infinite_iff_not_exists_st
+定理 infinite_iff_not_存在_st
   条件: {x : 实数*}
-  结论: Infinite x ↔ ¬存在 r : 实数, IsSt x r
+  结论: 无限 x ↔ ¬存在 r : 实数, IsSt x r
   证明: iff_not_comm.mp exists_st_iff_not_infinite
 
 @[deprecated "`IsSt` is deprecated" (since := "2026-01-05")]
@@ -2512,7 +2512,7 @@ theorem isSt_st_of_exists_st
 @[deprecated "`IsSt` is deprecated" (since := "2026-01-05")]
 
 中文:
-定理 isSt_st_of_exists_st
+定理 isSt_st_of_存在_st
   条件: {x : 实数*} (hx : 存在 r : 实数, IsSt x r)
   结论: IsSt x (st x)
   证明: let ⟨_r, hr⟩ := hx; hr.isSt_st
@@ -2538,7 +2538,7 @@ theorem isSt_st'
 
 中文:
 定理 isSt_st'
-  条件: {x : 实数*} (hx : ¬Infinite x)
+  条件: {x : 实数*} (hx : ¬无限 x)
   结论: IsSt x (st x)
   证明: (isSt_sSup hx).isSt_st
 
@@ -2954,7 +2954,7 @@ theorem st_le_of_le
 
 中文:
 定理 st_le_of_le
-  条件: {x y : 实数*} (hix : ¬Infinite x) (hiy : ¬Infinite y)
+  条件: {x y : 实数*} (hix : ¬无限 x) (hiy : ¬无限 y)
   结论: x <= y -> st x <= st y
   证明: (isSt_st' hix).le (isSt_st' hiy)
 
@@ -2979,7 +2979,7 @@ theorem lt_of_st_lt
 
 中文:
 定理 lt_of_st_lt
-  条件: {x y : 实数*} (hix : ¬Infinite x) (hiy : ¬Infinite y)
+  条件: {x y : 实数*} (hix : ¬无限 x) (hiy : ¬无限 y)
   结论: st x < st y -> x < y
   证明: (isSt_st' hix).lt (isSt_st' hiy)
 
@@ -3095,8 +3095,8 @@ theorem Infinite.ne_zero
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
 
 中文:
-定理 Infinite.ne_zero
-  条件: {x : 实数*} (hI : Infinite x)
+定理 无限.ne_zero
+  条件: {x : 实数*} (hI : 无限 x)
   结论: x != 0
   证明: hI.elim (fun hip => hip.pos.ne') fun hin => hin.lt_zero.ne
 
@@ -3120,7 +3120,7 @@ theorem not_infinite_zero
 
 中文:
 定理 not_infinite_zero
-  结论: ¬Infinite 0
+  结论: ¬无限 0
   证明: fun hI => hI.ne_zero rfl
 
 @[deprecated "`InfinitePos` and `InfiniteNeg` are deprecated" (since := "2026-01-05")]
@@ -3298,7 +3298,7 @@ nonrec theorem Infinitesimal.not_infinite {x : Real*} (h : Infinitesimal x) : ¬
 中文:
 定理 infinite_neg
   条件: {x : 实数*}
-  结论: Infinite (-x) ↔ Infinite x
+  结论: 无限 (-x) ↔ 无限 x
   证明: or_comm.trans infiniteNeg_neg.or infinitePos_neg
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3330,8 +3330,8 @@ theorem Infinite.not_infinitesimal
 @[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 中文:
-定理 Infinite.not_infinitesimal
-  条件: {x : 实数*} (h : Infinite x)
+定理 无限.not_infinitesimal
+  条件: {x : 实数*} (h : 无限 x)
   结论: ¬Infinitesimal x
   证明: fun h' =>
   h'.not_infinite h
@@ -3407,7 +3407,7 @@ theorem infinitePos_iff_infinite_and_pos
 中文:
 定理 infinitePos_iff_infinite_and_pos
   条件: {x : 实数*}
-  结论: InfinitePos x ↔ Infinite x ∧ 0 < x
+  结论: InfinitePos x ↔ 无限 x ∧ 0 < x
   证明: ⟨fun hip => ⟨Or.inl hip, hip 0⟩, fun ⟨hi, hp⟩ =>
     hi.casesOn id fun hin => False.elim (not_lt_of_gt hp (hin 0))⟩
 
@@ -3435,7 +3435,7 @@ theorem infiniteNeg_iff_infinite_and_neg
 中文:
 定理 infiniteNeg_iff_infinite_and_neg
   条件: {x : 实数*}
-  结论: InfiniteNeg x ↔ Infinite x ∧ x < 0
+  结论: InfiniteNeg x ↔ 无限 x ∧ x < 0
   证明: ⟨fun hip => ⟨Or.inr hip, hip 0⟩, fun ⟨hi, hp⟩ =>
     hi.casesOn (fun hin => False.elim (not_lt_of_gt hp (hin 0))) fun hip => hip⟩
 
@@ -3462,7 +3462,7 @@ theorem infinitePos_iff_infinite_of_nonneg
 中文:
 定理 infinitePos_iff_infinite_of_nonneg
   条件: {x : 实数*} (hp : 0 <= x)
-  结论: InfinitePos x ↔ Infinite x
+  结论: InfinitePos x ↔ 无限 x
   证明: .symm or_iff_left fun h => h.lt_zero.not_ge hp
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3487,7 +3487,7 @@ theorem infinitePos_iff_infinite_of_pos
 中文:
 定理 infinitePos_iff_infinite_of_pos
   条件: {x : 实数*} (hp : 0 < x)
-  结论: InfinitePos x ↔ Infinite x
+  结论: InfinitePos x ↔ 无限 x
   证明: infinitePos_iff_infinite_of_nonneg hp.le
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3512,7 +3512,7 @@ theorem infiniteNeg_iff_infinite_of_neg
 中文:
 定理 infiniteNeg_iff_infinite_of_neg
   条件: {x : 实数*} (hn : x < 0)
-  结论: InfiniteNeg x ↔ Infinite x
+  结论: InfiniteNeg x ↔ 无限 x
   证明: .symm or_iff_right fun h => h.pos.not_gt hn
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3537,7 +3537,7 @@ theorem infinitePos_abs_iff_infinite_abs
 中文:
 定理 infinitePos_abs_iff_infinite_abs
   条件: {x : 实数*}
-  结论: InfinitePos |x| ↔ Infinite |x|
+  结论: InfinitePos |x| ↔ 无限 |x|
   证明: infinitePos_iff_infinite_of_nonneg (abs_nonneg _)
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3563,7 +3563,7 @@ theorem infinite_abs_iff
 中文:
 定理 infinite_abs_iff
   条件: {x : 实数*}
-  结论: Infinite |x| ↔ Infinite x
+  结论: 无限 |x| ↔ 无限 x
   证明: by
   cases le_total 0 x <;> simp [*, abs_of_nonneg, abs_of_nonpos, infinite_neg]
 
@@ -3589,7 +3589,7 @@ theorem infinitePos_abs_iff_infinite
 中文:
 定理 infinitePos_abs_iff_infinite
   条件: {x : 实数*}
-  结论: InfinitePos |x| ↔ Infinite x
+  结论: InfinitePos |x| ↔ 无限 x
   证明: infinitePos_abs_iff_infinite_abs.trans infinite_abs_iff
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3615,7 +3615,7 @@ theorem infinite_iff_abs_lt_abs
 中文:
 定理 infinite_iff_abs_lt_abs
   条件: {x : 实数*}
-  结论: Infinite x ↔ 对任意 r : 实数, (|r| : 实数*) < |x|
+  结论: 无限 x ↔ 对任意 r : 实数, (|r| : 实数*) < |x|
   证明: infinitePos_abs_iff_infinite.symm.trans ⟨fun hI r => coe_abs r ▸ hI |r|, fun hR r =>
     (le_abs_self _).trans_lt (hR r)⟩
 
@@ -3859,7 +3859,7 @@ theorem infinitePos_of_tendsto_top
 
 中文:
 定理 infinitePos_of_tendsto_top
-  条件: {f : 自然数 -> 实数} (hf : Tendsto f atTop atTop)
+  条件: {f : 自然数 -> 实数} (hf : 收敛 f atTop atTop)
   证明: by
   replace hf := hf.mono_left Nat.hyperfilter_le_atTop
   rw [infinitePos_iff]
@@ -3891,7 +3891,7 @@ theorem infiniteNeg_of_tendsto_bot
 
 中文:
 定理 infiniteNeg_of_tendsto_bot
-  条件: {f : 自然数 -> 实数} (hf : Tendsto f atTop atBot)
+  条件: {f : 自然数 -> 实数} (hf : 收敛 f atTop atBot)
   证明: by
   replace hf := hf.mono_left Nat.hyperfilter_le_atTop
   rw [infiniteNeg_iff]
@@ -3922,7 +3922,7 @@ theorem not_infinite_neg
 中文:
 定理 not_infinite_neg
   条件: {x : 实数*}
-  结论: ¬Infinite x -> ¬Infinite (-x)
+  结论: ¬无限 x -> ¬无限 (-x)
   证明: mt infinite_neg.mp
 
 @[deprecated "`Infinite` is deprecated" (since := "2026-01-05")]
@@ -3947,8 +3947,8 @@ not_infinite_of_exists_st ⟨r + s, hr.add hs⟩
 
 中文:
 定理 not_infinite_add
-  条件: {x y : 实数*} (hx : ¬Infinite x) (hy : ¬Infinite y)
-  结论: ¬Infinite (x + y)
+  条件: {x y : 实数*} (hx : ¬无限 x) (hy : ¬无限 y)
+  结论: ¬无限 (x + y)
   证明: have ⟨r, hr⟩ := exists_st_of_not_infinite hx
   have ⟨s, hs⟩ := exists_st_of_not_infinite hy
 not_infinite_of_exists_st ⟨r + s, hr.add hs⟩
@@ -3978,7 +3978,7 @@ theorem not_infinite_iff_exist_lt_gt
 中文:
 定理 not_infinite_iff_exist_lt_gt
   条件: {x : 实数*}
-  结论: ¬Infinite x ↔ 存在 r s : 实数, (r : 实数*) < x ∧ x < s
+  结论: ¬无限 x ↔ 存在 r s : 实数, (r : 实数*) < x ∧ x < s
   证明: ⟨fun hni => let ⟨r, hr⟩ := exists_st_of_not_infinite hni; ⟨r - 1, r + 1, hr 1 one_pos⟩,
     fun ⟨r, s, hr, hs⟩ hi => hi.elim (fun hp => (hp s).not_gt hs) (fun hn => (hn r).not_gt hr)⟩
 
@@ -4007,7 +4007,7 @@ exact ⟨r - 1, r + 1, coe_lt_coe.2 sub_one_lt r, coe_lt_coe.2 lt_add_one r⟩
 中文:
 定理 not_infinite_real
   条件: (r : 实数)
-  结论: ¬Infinite r
+  结论: ¬无限 r
   证明: by
   rw [not_infinite_iff_exist_lt_gt]
 exact ⟨r - 1, r + 1, coe_lt_coe.2 sub_one_lt r, coe_lt_coe.2 lt_add_one r⟩
@@ -4032,9 +4032,9 @@ theorem Infinite.ne_real
 not_infinite_real r @Eq.subst _ Infinite _ _ hr hi
 
 中文:
-定理 Infinite.ne_real
+定理 无限.ne_real
   条件: {x : 实数*}
-  结论: Infinite x -> 对任意 r : 实数, x != r
+  结论: 无限 x -> 对任意 r : 实数, x != r
   证明: fun hi r hr =>
 not_infinite_real r @Eq.subst _ Infinite _ _ hr hi
 
@@ -4088,8 +4088,8 @@ theorem not_infinite_mul
 
 中文:
 定理 not_infinite_mul
-  条件: {x y : 实数*} (hx : ¬Infinite x) (hy : ¬Infinite y)
-  结论: ¬Infinite (x * y)
+  条件: {x y : 实数*} (hx : ¬无限 x) (hy : ¬无限 y)
+  结论: ¬无限 (x * y)
   证明: have ⟨_r, hr⟩ := exists_st_of_not_infinite hx
   have ⟨_s, hs⟩ := exists_st_of_not_infinite hy
   (hr.mul hs).not_infinite
@@ -4117,7 +4117,7 @@ theorem st_add
 
 中文:
 定理 st_add
-  条件: {x y : 实数*} (hx : ¬Infinite x) (hy : ¬Infinite y)
+  条件: {x y : 实数*} (hx : ¬无限 x) (hy : ¬无限 y)
   结论: st (x + y) = st x + st y
   证明: (isSt_st' (not_infinite_add hx hy)).unique ((isSt_st' hx).add (isSt_st' hy))
 
@@ -4176,7 +4176,7 @@ theorem st_mul
 
 中文:
 定理 st_mul
-  条件: {x y : 实数*} (hx : ¬Infinite x) (hy : ¬Infinite y)
+  条件: {x y : 实数*} (hx : ¬无限 x) (hy : ¬无限 y)
   结论: st (x * y) = st x * st y
   证明: have hx' := isSt_st' hx
   have hy' := isSt_st' hy
@@ -4462,7 +4462,7 @@ theorem infinitesimal_of_tendsto_zero
 
 中文:
 定理 infinitesimal_of_tendsto_zero
-  条件: {f : 自然数 -> 实数} (h : Tendsto f atTop (𝓝 0))
+  条件: {f : 自然数 -> 实数} (h : 收敛 f atTop (𝓝 0))
   证明: isSt_of_tendsto h
 
 @[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
@@ -4565,7 +4565,7 @@ theorem infinitesimal_sub_st
 
 中文:
 定理 infinitesimal_sub_st
-  条件: {x : 实数*} (hx : ¬Infinite x)
+  条件: {x : 实数*} (hx : ¬无限 x)
   结论: Infinitesimal (x - ↑(st x))
   证明: (isSt_st' hx).infinitesimal_sub
 
@@ -4648,7 +4648,7 @@ theorem infinitesimal_inv_of_infinite
 中文:
 定理 infinitesimal_inv_of_infinite
   条件: {x : 实数*}
-  结论: Infinite x -> Infinitesimal x⁻¹
+  结论: 无限 x -> Infinitesimal x⁻¹
   证明: fun hi =>
   Or.casesOn hi (fun hip => (infinitePos_iff_infinitesimal_inv_pos.mp hip).1) fun hin =>
     (infiniteNeg_iff_infinitesimal_inv_neg.mp hin).1
@@ -4706,7 +4706,7 @@ theorem infinite_iff_infinitesimal_inv
 中文:
 定理 infinite_iff_infinitesimal_inv
   条件: {x : 实数*} (h0 : x != 0)
-  结论: Infinite x ↔ Infinitesimal x⁻¹
+  结论: 无限 x ↔ Infinitesimal x⁻¹
   证明: ⟨infinitesimal_inv_of_infinite, infinite_of_infinitesimal_inv h0⟩
 
 @[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
@@ -4779,7 +4779,7 @@ theorem infinitesimal_iff_infinite_inv
 中文:
 定理 infinitesimal_iff_infinite_inv
   条件: {x : 实数*} (h : x != 0)
-  结论: Infinitesimal x ↔ Infinite x⁻¹
+  结论: Infinitesimal x ↔ 无限 x⁻¹
   证明: Iff.trans (by rw [inv_inv]) (infinite_iff_infinitesimal_inv (inv_ne_zero h)).symm
 
 @[deprecated stdPart_inv (since := "2026-01-05")]
@@ -4877,7 +4877,7 @@ theorem infinite_omega
 
 中文:
 定理 infinite_omega
-  结论: Infinite ω
+  结论: 无限 ω
   证明: (infinite_iff_infinitesimal_inv omega_ne_zero).mpr infinitesimal_epsilon
 
 @[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
@@ -5278,9 +5278,9 @@ theorem Infinite.mul
   infinite_mul_of_infinite_not_infinitesimal hx hy.not_infinitesimal
 
 中文:
-定理 Infinite.mul
+定理 无限.mul
   条件: {x y : 实数*}
-  结论: Infinite x -> Infinite y -> Infinite (x * y)
+  结论: 无限 x -> 无限 y -> 无限 (x * y)
   证明: fun hx hy =>
   infinite_mul_of_infinite_not_infinitesimal hx hy.not_infinitesimal
 -/

@@ -47,8 +47,8 @@ theorem IsLocalization.flat
   have : N.subtype.lTensor S = S
 
 中文:
-定理 IsLocalization.flat
-  结论: Module.Flat R S
+定理 是Localization.flat
+  结论: 模.平坦 R S
   证明: by
   refine Module.Flat.iff_lTensor_injectiveₛ.mpr fun P _ _ N => ?_
   have h := ((range N.subtype).isLocalizedModule S p (TensorProduct.mk R S P 1)).isBaseChange _ S
@@ -76,7 +76,7 @@ instance Localization.flat
 
 中文:
 实例 Localization.flat
-  签名: [Module.Flat R S] (p : Submonoid S)
+  签名: [模.平坦 R S] (p : 子幺半群 S)
   定义体: have : Module.Flat S (Localization p) := IsLocalization.flat _ p
   .trans R S _
 
@@ -101,7 +101,7 @@ theorem flat_iff_of_isLocalization
 
 中文:
 定理 flat_iff_of_isLocalization
-  结论: Flat S M ↔ Flat R M
+  结论: 平坦 S M ↔ 平坦 R M
   证明: have := isLocalizedModule_id p M S
   have := IsLocalization.flat S p
   ⟨fun _ => .trans R S M, fun _ => .of_isLocalizedModule S p .id⟩
@@ -138,7 +138,7 @@ theorem flat_of_isLocalized_maximal
 
 中文:
 定理 flat_of_isLocalized_maximal
-  条件: (H : 对任意 (P : Ideal S) [P.IsMaximal], Flat R (Mₚ P))
+  条件: (H : 对任意 (P : 理想 S) [P.是极大], 平坦 R (Mₚ P))
   证明: by
   simp_rw [Flat.iff_lTensor_injectiveₛ] at H ⊢
   simp_rw [← AlgebraTensorModule.coe_lTensor (A := S)]
@@ -203,7 +203,7 @@ theorem flat_of_isLocalized_span
 
 中文:
 定理 flat_of_isLocalized_span
-  条件: (H : 对任意 r : s, Module.Flat R (Mₛ r))
+  条件: (H : 对任意 r : s, 模.平坦 R (Mₛ r))
   证明: by
   simp_rw [Flat.iff_lTensor_injectiveₛ] at H ⊢
   simp_rw [← AlgebraTensorModule.coe_lTensor (A := S)]
@@ -256,7 +256,7 @@ instance [Module.Flat
   exact Module.Flat.trans A B (Localization.AtPrime P)
 
 中文:
-实例 [Module.Flat
+实例 [模.平坦
   签名: A B] (p
   定义体: by
   rw [Module.flat_iff_of_isLocalization (Localization.AtPrime p) p.primeCompl]
@@ -287,7 +287,7 @@ include p in
 
 中文:
 定理 IsSMulRegular.of_isLocalizedModule
-  结论: {K : 类型} [AddCommMonoid K] [Module R K]
+  结论: {K : 类型} [加法交换幺半群 K] [模 R K]
   证明: have : Module.Flat R S := IsLocalization.flat S p
   reg.of_flat_of_isBaseChange (IsLocalizedModule.isBaseChange p S f)
 

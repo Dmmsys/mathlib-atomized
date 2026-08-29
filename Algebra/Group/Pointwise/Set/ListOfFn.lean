@@ -39,7 +39,7 @@ theorem mem_prod_list_ofFn
 
 中文:
 定理 mem_prod_list_ofFn
-  条件: {a : α} {s : Fin n -> Set α}
+  条件: {a : α} {s : 有限集 n -> 集合 α}
   证明: by
   induction n generalizing a with
   | zero => simp_rw [List.ofFn_zero, List.prod_nil, Fin.exists_fin_zero_pi, eq_comm, Set.mem_one]
@@ -75,7 +75,7 @@ theorem mem_list_prod
 
 中文:
 定理 mem_list_prod
-  条件: {l : List (Set α)} {a : α}
+  条件: {l : 列表 (集合 α)} {a : α}
   证明: by
   induction l using List.ofFnRec with | _ n f
   simp only [mem_prod_list_ofFn, List.exists_iff_exists_tuple, List.map_ofFn, List.ofFn_inj',

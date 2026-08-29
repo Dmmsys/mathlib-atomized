@@ -178,7 +178,7 @@ lemma zero₁
 
 中文:
 引理 zero₁
-  条件: (j j' : J) (h : ¬ c.Rel j' j)
+  条件: (j j' : J) (h : ¬ c.关系 j' j)
   证明: by
   ext i₁ i₂ h'
   dsimp [hom₁]
@@ -221,7 +221,7 @@ lemma comm₁_aux
 
 中文:
 引理 comm₁_aux
-  结论: {i₁ i₁' : I₁} (hi₁ : c₁.Rel i₁ i₁') {i₂ i₂' : I₂} (hi₂ : c₂.Rel i₂ i₂') (j : J)
+  结论: {i₁ i₁' : I₁} (hi₁ : c₁.关系 i₁ i₁') {i₂ i₂' : I₂} (hi₂ : c₂.关系 i₂ i₂') (j : J)
   证明: by
   have hj' : ComplexShape.π c₁ c₂ c ⟨i₁, i₂'⟩ = j := by
     rw [← hj]; rw [← ComplexShape.next_π₂ c₁ c i₁ hi₂]; rw [ComplexShape.next_π₁ c₂ c hi₁ i₂]

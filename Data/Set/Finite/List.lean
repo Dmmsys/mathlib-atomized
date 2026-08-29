@@ -36,7 +36,7 @@ lemma finite_length_eq
 
 中文:
 引理 finite_length_eq
-  结论: {l : List α | l.length = n}.Finite
+  结论: {l : 列表 α | l.length = n}.有限
   证明: List.Vector.finite
 
 Depends on / 依赖: List.Vector.finite, Vector, finite
@@ -54,7 +54,7 @@ lemma finite_length_lt
 
 中文:
 引理 finite_length_lt
-  结论: {l : List α | l.length < n}.Finite
+  结论: {l : 列表 α | l.length < n}.有限
   证明: by
   convert! (Finset.range n).finite_toSet.biUnion fun i _ => finite_length_eq α i; ext; simp
 
@@ -74,7 +74,7 @@ lemma finite_length_le
 
 中文:
 引理 finite_length_le
-  结论: {l : List α | l.length <= n}.Finite
+  结论: {l : 列表 α | l.length <= n}.有限
   证明: by
   simpa [Nat.lt_succ_iff] using finite_length_lt α (n + 1)
 

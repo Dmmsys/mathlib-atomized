@@ -42,8 +42,8 @@ theorem map_principal
 
 中文:
 定理 map_principal
-  条件: {s : Set α} {f : α -> β}
-  结论: map f (𝓟 s) = 𝓟 (Set.image f s)
+  条件: {s : 集合 α} {f : α -> β}
+  结论: map f (𝓟 s) = 𝓟 (集合.像 f s)
   证明: Filter.ext fun _ => image_subset_iff.symm
 
 Depends on / 依赖: Filter, Filter.ext, image_subset_iff, image_subset_iff.symm
@@ -220,7 +220,7 @@ theorem image_mem_map_iff
 
 中文:
 定理 image_mem_map_iff
-  条件: (hf : Injective m)
+  条件: (hf : 单射 m)
   结论: m '' s in map m f ↔ s in f
   证明: ⟨fun h => by rwa [← preimage_image_eq s hf], image_mem_map⟩
 
@@ -264,7 +264,7 @@ theorem mem_map_iff_exists_image
 @[simp]
 
 中文:
-定理 mem_map_iff_exists_image
+定理 mem_map_iff_存在_image
   结论: t in map m f ↔ 存在 s in f, m '' s subseteq t
   证明: ⟨fun ht => ⟨m ⁻¹' t, ht, image_preimage_subset _ _⟩, fun ⟨_, hs, ht⟩ =>
     mem_of_superset (image_mem_map hs) ht⟩
@@ -290,7 +290,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: Filter.map id f = f
+  结论: 滤子.map id f = f
   证明: filter_eq rfl
 
 @[simp]
@@ -313,7 +313,7 @@ theorem map_id'
 
 中文:
 定理 map_id'
-  结论: Filter.map (fun x => x) f = f
+  结论: 滤子.map (fun x => x) f = f
   证明: map_id
 
 @[simp]
@@ -336,7 +336,7 @@ theorem map_compose
 
 中文:
 定理 map_compose
-  结论: Filter.map m' ∘ Filter.map m = Filter.map (m' ∘ m)
+  结论: 滤子.map m' ∘ 滤子.map m = 滤子.map (m' ∘ m)
   证明: funext fun _ => filter_eq rfl
 
 @[simp]
@@ -357,7 +357,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: Filter.map m' (Filter.map m f) = Filter.map (m' ∘ m) f
+  结论: 滤子.map m' (滤子.map m f) = 滤子.map (m' ∘ m) f
   证明: congr_fun Filter.map_compose f
 
 Depends on / 依赖: Filter, Filter.map_compose, congr_fun, map_compose
@@ -376,7 +376,7 @@ theorem map_congr
 
 中文:
 定理 map_congr
-  条件: {m₁ m₂ : α -> β} {f : Filter α} (h : m₁ =ᶠ[f] m₂)
+  条件: {m₁ m₂ : α -> β} {f : 滤子 α} (h : m₁ =ᶠ[f] m₂)
   结论: map m₁ f = map m₂ f
   证明: Filter.ext' fun _ => eventually_congr (h.mono fun _ hx => hx ▸ Iff.rfl)
 
@@ -445,7 +445,7 @@ lemma mem_comap_prodMk
 
 中文:
 引理 mem_comap_prodMk
-  条件: {x : α} {s : Set β} {F : Filter (α × β)}
+  条件: {x : α} {s : 集合 β} {F : 滤子 (α × β)}
   证明: by
   simp_rw [mem_comap', Prod.ext_iff, and_imp, @forall_comm β (_ = _), forall_eq, eq_comm]
 
@@ -553,7 +553,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor (Filter : 类型u -> 类型u)
+  签名: Lawful函子 (滤子 : 类型u -> 类型u)
   定义体: map_id
   comp_map _ _ _ := map_map.symm
   map_const := rfl
@@ -579,7 +579,7 @@ theorem pure_sets
 中文:
 定理 pure_sets
   条件: (a : α)
-  结论: (pure a : Filter α).sets = { s | a in s }
+  结论: (pure a : 滤子 α).sets = { s | a in s }
   证明: rfl
 
 @[simp]
@@ -678,7 +678,7 @@ theorem biSup_pure_eq_principal
 
 中文:
 定理 biSup_pure_eq_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ⨆ a in s, pure a = 𝓟 s
   证明: Filter.ext fun s => by simp [Set.subset_def]
 
@@ -703,7 +703,7 @@ theorem iSup_pure_eq_top
 
 中文:
 定理 iSup_pure_eq_top
-  结论: ⨆ a, pure a = (⊤ : Filter α)
+  结论: ⨆ a, pure a = (⊤ : 滤子 α)
   证明: by
   rw [← principal_univ]; rw [← biSup_pure_eq_principal]; rw [iSup_univ]
 
@@ -745,7 +745,7 @@ theorem pure_le_principal
 
 中文:
 定理 pure_le_principal
-  条件: {s : Set α} (a : α)
+  条件: {s : 集合 α} (a : α)
   结论: pure a <= 𝓟 s ↔ a in s
   证明: by
   simp
@@ -766,7 +766,7 @@ theorem join_pure
 
 中文:
 定理 join_pure
-  条件: (f : Filter α)
+  条件: (f : 滤子 α)
   结论: join (pure f) = f
   证明: rfl
 
@@ -787,7 +787,7 @@ theorem pure_bind
 
 中文:
 定理 pure_bind
-  条件: (a : α) (m : α -> Filter β)
+  条件: (a : α) (m : α -> 滤子 β)
   结论: bind (pure a) m = m a
   证明: by
   simp only [bind, map_pure, join_pure]
@@ -807,7 +807,7 @@ theorem map_bind
 
 中文:
 定理 map_bind
-  条件: {α β} (m : β -> γ) (f : Filter α) (g : α -> Filter β)
+  条件: {α β} (m : β -> γ) (f : 滤子 α) (g : α -> 滤子 β)
   证明: rfl
 -/
 theorem map_bind {α β} (m : β -> γ) (f : Filter α) (g : α -> Filter β) :
@@ -824,7 +824,7 @@ theorem bind_map
 
 中文:
 定理 bind_map
-  条件: {α β} (m : α -> β) (f : Filter α) (g : β -> Filter γ)
+  条件: {α β} (m : α -> β) (f : 滤子 α) (g : β -> 滤子 γ)
   证明: rfl
 -/
 theorem bind_map {α β} (m : α -> β) (f : Filter α) (g : β -> Filter γ) :
@@ -853,7 +853,7 @@ definition monad
 
 中文:
 定义 monad
-  签名: : Monad Filter where map
+  签名: : 单子 滤子 where map
   定义体: @Filter.map
 -/
 protected def monad : Monad Filter where map := @Filter.map
@@ -878,7 +878,7 @@ theorem lawfulMonad
 
 中文:
 定理 lawfulMonad
-  结论: LawfulMonad Filter where
+  结论: 合法单子 滤子 where
   证明: rfl
   id_map _ := rfl
   seqLeft_eq _ _ := rfl
@@ -916,7 +916,7 @@ instance :
 
 中文:
 实例 :
-  签名: Alternative Filter
+  签名: Alternative 滤子
   定义体: fun x y => x.seq (y ())
   failure := ⊥
   orElse x y := x ⊔ y ()
@@ -944,7 +944,7 @@ theorem map_def
 
 中文:
 定理 map_def
-  条件: {α β} (m : α -> β) (f : Filter α)
+  条件: {α β} (m : α -> β) (f : 滤子 α)
   结论: m < > f = map m f
   证明: rfl
 
@@ -965,7 +965,7 @@ theorem bind_def
 
 中文:
 定理 bind_def
-  条件: {α β} (f : Filter α) (m : α -> Filter β)
+  条件: {α β} (f : 滤子 α) (m : α -> 滤子 β)
   结论: f >>= m = bind f m
   证明: rfl
 -/
@@ -1047,7 +1047,7 @@ lemma EventuallyEq.comp_comap
 
 中文:
 引理 EventuallyEq.comp_comap
-  结论: {F : Filter β} {f g : β -> γ} (h : α -> β)
+  结论: {F : 滤子 β} {f g : β -> γ} (h : α -> β)
   证明: hfg.comap _
 
 Depends on / 依赖: hfg.comap
@@ -1201,7 +1201,7 @@ theorem map_comm
 
 中文:
 定理 map_comm
-  条件: (H : ψ ∘ φ = ρ ∘ θ) (F : Filter α)
+  条件: (H : ψ ∘ φ = ρ ∘ θ) (F : 滤子 α)
   证明: by
   rw [Filter.map_map]; rw [H]; rw [← Filter.map_map]
 
@@ -1222,7 +1222,7 @@ theorem comap_comm
 
 中文:
 定理 comap_comm
-  条件: (H : ψ ∘ φ = ρ ∘ θ) (G : Filter δ)
+  条件: (H : ψ ∘ φ = ρ ∘ θ) (G : 滤子 δ)
   证明: by
   rw [Filter.comap_comap]; rw [H]; rw [← Filter.comap_comap]
 
@@ -1243,7 +1243,7 @@ theorem _root_.Function.Semiconj.filter_map
   proof: map_comm h.comp_eq
 
 中文:
-定理 _root_.Function.Semiconj.filter_map
+定理 _root_.函数.Semiconj.filter_map
   结论: {f : α -> β} {ga : α -> α} {gb : β -> β}
   证明: map_comm h.comp_eq
 
@@ -1262,8 +1262,8 @@ theorem _root_.Function.Commute.filter_map
   proof: h.semiconj.filter_map
 
 中文:
-定理 _root_.Function.Commute.filter_map
-  条件: {f g : α -> α} (h : Function.Commute f g)
+定理 _root_.函数.Commute.filter_map
+  条件: {f g : α -> α} (h : 函数.Commute f g)
   证明: h.semiconj.filter_map
 
 Depends on / 依赖: filter_map, h.semiconj.filter_map, semiconj
@@ -1281,7 +1281,7 @@ theorem _root_.Function.Semiconj.filter_comap
   proof: comap_comm h.comp_eq.symm
 
 中文:
-定理 _root_.Function.Semiconj.filter_comap
+定理 _root_.函数.Semiconj.filter_comap
   结论: {f : α -> β} {ga : α -> α} {gb : β -> β}
   证明: comap_comm h.comp_eq.symm
 
@@ -1300,8 +1300,8 @@ theorem _root_.Function.Commute.filter_comap
   proof: h.semiconj.filter_comap
 
 中文:
-定理 _root_.Function.Commute.filter_comap
-  条件: {f g : α -> α} (h : Function.Commute f g)
+定理 _root_.函数.Commute.filter_comap
+  条件: {f g : α -> α} (h : 函数.Commute f g)
   证明: h.semiconj.filter_comap
 
 Depends on / 依赖: filter_comap, h.semiconj.filter_comap, semiconj
@@ -1324,8 +1324,8 @@ theorem _root_.Function.LeftInverse.filter_map
   rw [map_map]; rw [hfg.comp_eq_id]; rw [map_id]
 
 中文:
-定理 _root_.Function.LeftInverse.filter_map
-  条件: {f : α -> β} {g : β -> α} (hfg : LeftInverse g f)
+定理 _root_.函数.左逆.filter_map
+  条件: {f : α -> β} {g : β -> α} (hfg : 左逆 g f)
   证明: fun F => by
   rw [map_map]; rw [hfg.comp_eq_id]; rw [map_id]
 
@@ -1351,8 +1351,8 @@ nonrec theorem _root_.Function.RightInverse.filter_map {f : α -> β} {g : β ->
 nonrec theorem _root_.Function.RightInverse.filter_comap {f : α -> β} 
 
 中文:
-定理 _root_.Function.LeftInverse.filter_comap
-  条件: {f : α -> β} {g : β -> α} (hfg : LeftInverse g f)
+定理 _root_.函数.左逆.filter_comap
+  条件: {f : α -> β} {g : β -> α} (hfg : 左逆 g f)
   证明: fun F => by
   rw [comap_comap]; rw [hfg.comp_eq_id]; rw [comap_id]
 
@@ -1390,7 +1390,7 @@ nonrec theorem _root_.Set.RightInvOn.filter_map_Iic {f : α -> β} {g : β -> α
     (hfg : RightInvOn g f t) : RightInvOn (map
 
 中文:
-定理 _root_.Set.LeftInvOn.filter_map_Iic
+定理 _root_.集合.LeftInvOn.filter_map_Iic
   条件: {f : α -> β} {g : β -> α} (hfg : LeftInvOn g f s)
   证明: fun F (hF : F <= 𝓟 s) => by
   have : (g ∘ f) =ᶠ[𝓟 s] id := by simpa only [eventuallyEq_principal] using! hfg
@@ -1431,7 +1431,7 @@ definition kernMap
 
 中文:
 定义 kernMap
-  签名: (m : α -> β) (f : Filter α)
+  签名: (m : α -> β) (f : 滤子 α)
   定义体: (kernImage m) '' f.sets
   univ_sets := ⟨univ, f.univ_sets, by simp [kernImage_eq_compl]⟩
   sets_of_superset := by
@@ -1467,7 +1467,7 @@ theorem mem_kernMap
 
 中文:
 定理 mem_kernMap
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: s in kernMap m f ↔ 存在 t in f, kernImage m t = s
   证明: Iff.rfl
 
@@ -1490,7 +1490,7 @@ theorem mem_kernMap_iff_compl
 
 中文:
 定理 mem_kernMap_iff_compl
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: s in kernMap m f ↔ 存在 t, tᶜ in f ∧ m '' t = sᶜ
   证明: by
   rw [mem_kernMap]; rw [compl_surjective.exists]
@@ -1516,7 +1516,7 @@ theorem compl_mem_kernMap
 
 中文:
 定理 compl_mem_kernMap
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: sᶜ in kernMap m f ↔ 存在 t, tᶜ in f ∧ m '' t = s
   证明: by
   simp_rw [mem_kernMap_iff_compl, compl_compl]
@@ -1579,7 +1579,7 @@ theorem kernMap_principal
 
 中文:
 定理 kernMap_principal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: kernMap m (𝓟 s) = 𝓟 (kernImage m s)
   证明: by
   refine eq_of_forall_le_iff (fun g => ?_)
@@ -1606,7 +1606,7 @@ theorem comap_principal
 
 中文:
 定理 comap_principal
-  条件: {t : Set β}
+  条件: {t : 集合 β}
   结论: comap m (𝓟 t) = 𝓟 (m ⁻¹' t)
   证明: Filter.ext fun _ => ⟨fun ⟨_u, hu, b⟩ => (preimage_mono hu).trans b,
     fun h => ⟨t, Subset.rfl, h⟩⟩
@@ -1630,7 +1630,7 @@ theorem principal_subtype
 
 中文:
 定理 principal_subtype
-  条件: {α : 类型} (s : Set α) (t : Set s)
+  条件: {α : 类型} (s : 集合 α) (t : 集合 s)
   证明: by
   rw [comap_principal]; rw [preimage_image_eq _ Subtype.coe_injective]
 
@@ -1720,7 +1720,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  结论: Monotone (map m)
+  结论: 递增 (map m)
   证明: (gc_map_comap m).monotone_l
 
 @[gcongr, mono]
@@ -1741,7 +1741,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  结论: Monotone (comap m)
+  结论: 递增 (comap m)
   证明: (gc_map_comap m).monotone_u
 
 Depends on / 依赖: gc_map_comap, monotone_u
@@ -1797,7 +1797,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {f : ι -> Filter α}
+  条件: {f : ι -> 滤子 α}
   结论: map m (⨆ i, f i) = ⨆ i, map m (f i)
   证明: (gc_map_comap m).l_iSup
 
@@ -1877,7 +1877,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {f : ι -> Filter β}
+  条件: {f : ι -> 滤子 β}
   结论: comap m (⨅ i, f i) = ⨅ i, comap m (f i)
   证明: (gc_map_comap m).u_iInf
 
@@ -1899,7 +1899,7 @@ theorem le_comap_top
 
 中文:
 定理 le_comap_top
-  条件: (f : α -> β) (l : Filter α)
+  条件: (f : α -> β) (l : 滤子 α)
   结论: l <= comap f ⊤
   证明: by
   rw [comap_top]
@@ -2052,7 +2052,7 @@ theorem comap_iSup
 
 中文:
 定理 comap_iSup
-  条件: {ι} {f : ι -> Filter β} {m : α -> β}
+  条件: {ι} {f : ι -> 滤子 β} {m : α -> β}
   结论: comap m (iSup f) = ⨆ i, comap m (f i)
   证明: (gc_comap_kernMap m).l_iSup
 
@@ -2073,7 +2073,7 @@ theorem comap_sSup
 
 中文:
 定理 comap_sSup
-  条件: {s : Set (Filter β)} {m : α -> β}
+  条件: {s : 集合 (滤子 β)} {m : α -> β}
   结论: comap m (sSup s) = ⨆ f in s, comap m f
   证明: by
   simp only [sSup_eq_iSup, comap_iSup]
@@ -2119,7 +2119,7 @@ theorem map_comap
 
 中文:
 定理 map_comap
-  条件: (f : Filter β) (m : α -> β)
+  条件: (f : 滤子 β) (m : α -> β)
   结论: (f.comap m).map m = f ⊓ 𝓟 (range m)
   证明: by
   refine le_antisymm (le_inf map_comap_le <| le_principal_iff.2 range_mem_map) ?_
@@ -2148,7 +2148,7 @@ theorem map_comap_setCoe_val
 
 中文:
 定理 map_comap_setCoe_val
-  条件: (f : Filter β) (s : Set β)
+  条件: (f : 滤子 β) (s : 集合 β)
   证明: by
   rw [map_comap]; rw [Subtype.range_val]
 
@@ -2170,7 +2170,7 @@ theorem map_comap_of_mem
 
 中文:
 定理 map_comap_of_mem
-  条件: {f : Filter β} {m : α -> β} (hf : range m in f)
+  条件: {f : 滤子 β} {m : α -> β} (hf : range m in f)
   结论: (f.comap m).map m = f
   证明: by
   rw [map_comap]; rw [inf_eq_left.2 (le_principal_iff.2 hf)]
@@ -2209,7 +2209,7 @@ theorem comap_le_comap_iff
 
 中文:
 定理 comap_le_comap_iff
-  条件: {f g : Filter β} {m : α -> β} (hf : range m in f)
+  条件: {f g : 滤子 β} {m : α -> β} (hf : range m in f)
   证明: ⟨fun h => map_comap_of_mem hf ▸ (map_mono h).trans map_comap_le, fun h => comap_mono h⟩
 
 Depends on / 依赖: comap_mono, map_comap_le, map_comap_of_mem, map_mono
@@ -2228,7 +2228,7 @@ theorem map_comap_of_surjective
 
 中文:
 定理 map_comap_of_surjective
-  条件: {f : α -> β} (hf : Surjective f) (l : Filter β)
+  条件: {f : α -> β} (hf : 满射 f) (l : 滤子 β)
   证明: map_comap_of_mem by simp only [hf.range_eq, univ_mem]
 
 Depends on / 依赖: hf.range_eq, map_comap_of_mem, range_eq, univ_mem
@@ -2248,8 +2248,8 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  条件: {f : α -> β} (hf : Surjective f)
-  结论: Injective (comap f)
+  条件: {f : α -> β} (hf : 满射 f)
+  结论: 单射 (comap f)
   证明: LeftInverse.injective map_comap_of_surjective hf
 
 Depends on / 依赖: LeftInverse, LeftInverse.injective, injective, map_comap_of_surjective
@@ -2267,8 +2267,8 @@ theorem _root_.Function.Surjective.filter_map_top
   proof: (congr_arg _ comap_top).symm.trans map_comap_of_surjective hf ⊤
 
 中文:
-定理 _root_.Function.Surjective.filter_map_top
-  条件: {f : α -> β} (hf : Surjective f)
+定理 _root_.函数.满射.filter_map_top
+  条件: {f : α -> β} (hf : 满射 f)
   结论: map f ⊤ = ⊤
   证明: (congr_arg _ comap_top).symm.trans map_comap_of_surjective hf ⊤
 
@@ -2287,7 +2287,7 @@ theorem subtype_coe_map_comap
 
 中文:
 定理 subtype_coe_map_comap
-  条件: (s : Set α) (f : Filter α)
+  条件: (s : 集合 α) (f : 滤子 α)
   证明: by rw [map_comap, Subtype.range_coe]
 
 Depends on / 依赖: Subtype, Subtype.range_coe, map_comap, range_coe
@@ -2307,7 +2307,7 @@ theorem image_mem_of_mem_comap
 
 中文:
 定理 image_mem_of_mem_comap
-  结论: {f : Filter α} {c : β -> α} (h : range c in f) {W : Set β}
+  结论: {f : 滤子 α} {c : β -> α} (h : range c in f) {W : 集合 β}
   证明: by
   rw [← map_comap_of_mem h]
   exact image_mem_map W_in
@@ -2329,7 +2329,7 @@ theorem image_coe_mem_of_mem_comap
 
 中文:
 定理 image_coe_mem_of_mem_comap
-  结论: {f : Filter α} {U : Set α} (h : U in f) {W : Set U}
+  结论: {f : 滤子 α} {U : 集合 α} (h : U in f) {W : 集合 U}
   证明: image_mem_of_mem_comap (by simp [h]) W_in
 
 Depends on / 依赖: W_in, image_mem_of_mem_comap
@@ -2353,7 +2353,7 @@ mem_of_superset (preimage_mem_comap <| image_mem_map hs) by
 
 中文:
 定理 comap_map
-  条件: {f : Filter α} {m : α -> β} (h : Injective m)
+  条件: {f : 滤子 α} {m : α -> β} (h : 单射 m)
   结论: comap m (map m f) = f
   证明: le_antisymm
     (fun s hs =>
@@ -2381,7 +2381,7 @@ theorem mem_comap_iff
 
 中文:
 定理 mem_comap_iff
-  结论: {f : Filter β} {m : α -> β} (inj : Injective m) (large : Set.range m in f)
+  结论: {f : 滤子 β} {m : α -> β} (inj : 单射 m) (large : 集合.range m in f)
   证明: by
   rw [← image_mem_map_iff inj]; rw [map_comap_of_mem large]
 
@@ -2405,7 +2405,7 @@ mp_mem h₁
 
 中文:
 定理 map_le_map_iff_of_injOn
-  结论: {l₁ l₂ : Filter α} {f : α -> β} {s : Set α} (h₁ : s in l₁)
+  结论: {l₁ l₂ : 滤子 α} {f : α -> β} {s : 集合 α} (h₁ : s in l₁)
   证明: ⟨fun h _t ht =>
 mp_mem h₁
       mem_of_superset (h <| image_mem_map (inter_mem h₂ ht)) fun _y ⟨_x, ⟨hxs, hxt⟩, hxy⟩ hys =>
@@ -2432,7 +2432,7 @@ theorem map_le_map_iff
 
 中文:
 定理 map_le_map_iff
-  条件: {f g : Filter α} {m : α -> β} (hm : Injective m)
+  条件: {f g : 滤子 α} {m : α -> β} (hm : 单射 m)
   证明: by rw [map_le_iff_le_comap, comap_map hm]
 
 Depends on / 依赖: comap_map, map_le_iff_le_comap
@@ -2452,7 +2452,7 @@ theorem map_eq_map_iff_of_injOn
 
 中文:
 定理 map_eq_map_iff_of_injOn
-  结论: {f g : Filter α} {m : α -> β} {s : Set α} (hsf : s in f) (hsg : s in g)
+  结论: {f g : 滤子 α} {m : α -> β} {s : 集合 α} (hsf : s in f) (hsg : s in g)
   证明: by
   simp only [le_antisymm_iff, map_le_map_iff_of_injOn hsf hsg hm,
     map_le_map_iff_of_injOn hsg hsf hm]
@@ -2475,7 +2475,7 @@ theorem map_inj
 
 中文:
 定理 map_inj
-  条件: {f g : Filter α} {m : α -> β} (hm : Injective m)
+  条件: {f g : 滤子 α} {m : α -> β} (hm : 单射 m)
   结论: map m f = map m g ↔ f = g
   证明: map_eq_map_iff_of_injOn univ_mem univ_mem hm.injOn
 
@@ -2496,8 +2496,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {m : α -> β} (hm : Injective m)
-  结论: Injective (map m)
+  条件: {m : α -> β} (hm : 单射 m)
+  结论: 单射 (map m)
   证明: fun _ _ =>
   (map_inj hm).1
 -/
@@ -2517,7 +2517,7 @@ theorem comap_neBot_iff
 
 中文:
 定理 comap_neBot_iff
-  条件: {f : Filter β} {m : α -> β}
+  条件: {f : 滤子 β} {m : α -> β}
   结论: NeBot (comap m f) ↔ 对任意 t in f, 存在 a, m a in t
   证明: by
   simp only [← forall_mem_nonempty_iff_neBot, mem_comap, forall_exists_index, and_imp]
@@ -2540,7 +2540,7 @@ theorem comap_neBot
 
 中文:
 定理 comap_neBot
-  条件: {f : Filter β} {m : α -> β} (hm : 对任意 t in f, 存在 a, m a in t)
+  条件: {f : 滤子 β} {m : α -> β} (hm : 对任意 t in f, 存在 a, m a in t)
   结论: NeBot (comap m f)
   证明: comap_neBot_iff.mpr hm
 
@@ -2560,7 +2560,7 @@ theorem comap_neBot_iff_frequently
 
 中文:
 定理 comap_neBot_iff_frequently
-  条件: {f : Filter β} {m : α -> β}
+  条件: {f : 滤子 β} {m : α -> β}
   证明: by
   simp only [comap_neBot_iff, frequently_iff, mem_range, @and_comm (_ in _), exists_exists_eq_and]
 
@@ -2580,7 +2580,7 @@ theorem comap_neBot_iff_compl_range
 
 中文:
 定理 comap_neBot_iff_compl_range
-  条件: {f : Filter β} {m : α -> β}
+  条件: {f : 滤子 β} {m : α -> β}
   证明: comap_neBot_iff_frequently
 
 Depends on / 依赖: comap_neBot_iff_frequently
@@ -2600,7 +2600,7 @@ theorem comap_eq_bot_iff_compl_range
 
 中文:
 定理 comap_eq_bot_iff_compl_range
-  条件: {f : Filter β} {m : α -> β}
+  条件: {f : 滤子 β} {m : α -> β}
   结论: comap m f = ⊥ ↔ (range m)ᶜ in f
   证明: not_iff_not.mp neBot_iff.symm.trans comap_neBot_iff_compl_range
 
@@ -2620,7 +2620,7 @@ theorem comap_surjective_eq_bot
 
 中文:
 定理 comap_surjective_eq_bot
-  条件: {f : Filter β} {m : α -> β} (hm : Surjective m)
+  条件: {f : 滤子 β} {m : α -> β} (hm : 满射 m)
   证明: by
   rw [comap_eq_bot_iff_compl_range]; rw [hm.range_eq]; rw [compl_univ]; rw [empty_mem_iff_bot]
 
@@ -2641,7 +2641,7 @@ theorem disjoint_comap_iff
 
 中文:
 定理 disjoint_comap_iff
-  条件: (h : Surjective m)
+  条件: (h : 满射 m)
   证明: by
   rw [disjoint_iff]; rw [disjoint_iff]; rw [← comap_inf]; rw [comap_surjective_eq_bot h]
 
@@ -2661,7 +2661,7 @@ theorem NeBot.comap_of_range_mem
 
 中文:
 定理 NeBot.comap_of_range_mem
-  条件: {f : Filter β} {m : α -> β} (_ : NeBot f) (hm : range m in f)
+  条件: {f : 滤子 β} {m : α -> β} (_ : NeBot f) (hm : range m in f)
   证明: comap_neBot_iff_frequently.2 Eventually.frequently hm
 
 Depends on / 依赖: Eventually, Eventually.frequently, comap_neBot_iff_frequently, frequently
@@ -2803,7 +2803,7 @@ theorem comap_sumElim_eq
 
 中文:
 定理 comap_sumElim_eq
-  条件: (l : Filter γ) (m₁ : α -> γ) (m₂ : β -> γ)
+  条件: (l : 滤子 γ) (m₁ : α -> γ) (m₂ : β -> γ)
   证明: by
   ext s
   simp_rw [mem_sup, mem_map, mem_comap_iff_compl]
@@ -2828,7 +2828,7 @@ theorem map_comap_inl_sup_map_comap_inr
 
 中文:
 定理 map_comap_inl_sup_map_comap_inr
-  条件: (l : Filter (α oplus β))
+  条件: (l : 滤子 (α oplus β))
   证明: by
   rw [← comap_sumElim_eq]; rw [Sum.elim_inl_inr]; rw [comap_id]
 
@@ -2850,7 +2850,7 @@ theorem map_sumElim_eq
 
 中文:
 定理 map_sumElim_eq
-  条件: (l : Filter (α oplus β)) (m₁ : α -> γ) (m₂ : β -> γ)
+  条件: (l : 滤子 (α oplus β)) (m₁ : α -> γ) (m₂ : β -> γ)
   证明: by
   rw [← map_comap_inl_sup_map_comap_inr l]
   simp [map_sup, map_map, comap_sup, (gc_map_comap _).u_l_u_eq_u]
@@ -2880,7 +2880,7 @@ theorem comap_fst_neBot_iff
 
 中文:
 定理 comap_fst_neBot_iff
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   证明: by
   cases isEmpty_or_nonempty β
   · rw [filter_eq_bot_of_isEmpty (f.comap _), ← not_iff_not]; simp [*]
@@ -2909,7 +2909,7 @@ theorem comap_fst_neBot
 
 中文:
 定理 comap_fst_neBot
-  条件: [Nonempty β] {f : Filter α} [NeBot f]
+  条件: [非空 β] {f : 滤子 α} [NeBot f]
   证明: comap_fst_neBot_iff.2 ⟨‹_›, ‹_›⟩
 
 @[simp]
@@ -2936,7 +2936,7 @@ theorem comap_snd_neBot_iff
 
 中文:
 定理 comap_snd_neBot_iff
-  条件: {f : Filter β}
+  条件: {f : 滤子 β}
   证明: by
   rcases isEmpty_or_nonempty α with hα | hα
   · rw [filter_eq_bot_of_isEmpty (f.comap _), ← not_iff_not]; simp
@@ -2963,7 +2963,7 @@ theorem comap_snd_neBot
 
 中文:
 定理 comap_snd_neBot
-  条件: [Nonempty α] {f : Filter β} [NeBot f]
+  条件: [非空 α] {f : 滤子 β} [NeBot f]
   证明: comap_snd_neBot_iff.2 ⟨‹_›, ‹_›⟩
 
 Depends on / 依赖: comap_snd_neBot_iff
@@ -2989,7 +2989,7 @@ theorem comap_eval_neBot_iff'
 
 中文:
 定理 comap_eval_neBot_iff'
-  条件: {ι : 类型} {α : ι -> 类型} {i : ι} {f : Filter (α i)}
+  条件: {ι : 类型} {α : ι -> 类型} {i : ι} {f : 滤子 (α i)}
   证明: by
   rcases isEmpty_or_nonempty (forall j, α j) with H | H
   · rw [filter_eq_bot_of_isEmpty (f.comap _), ← not_iff_not]
@@ -3022,7 +3022,7 @@ theorem comap_eval_neBot_iff
 
 中文:
 定理 comap_eval_neBot_iff
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 j, Nonempty (α j)] {i : ι}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 j, 非空 (α j)] {i : ι}
   证明: by simp [comap_eval_neBot_iff', *]
 
 @[instance]
@@ -3043,7 +3043,7 @@ theorem comap_eval_neBot
 
 中文:
 定理 comap_eval_neBot
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 j, Nonempty (α j)] (i : ι)
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 j, 非空 (α j)] (i : ι)
   证明: comap_eval_neBot_iff.2 ‹_›
 
 Depends on / 依赖: comap_eval_neBot_iff
@@ -3062,7 +3062,7 @@ theorem comap_coe_neBot_of_le_principal
 
 中文:
 定理 comap_coe_neBot_of_le_principal
-  条件: {s : Set γ} {l : Filter γ} [h : NeBot l] (h' : l <= 𝓟 s)
+  条件: {s : 集合 γ} {l : 滤子 γ} [h : NeBot l] (h' : l <= 𝓟 s)
   证明: h.comap_of_range_mem (@Subtype.range_coe γ s).symm ▸ h' (mem_principal_self s)
 
 Depends on / 依赖: Subtype, Subtype.range_coe, comap_of_range_mem, h.comap_of_range_mem, mem_principal_self, range_coe
@@ -3081,7 +3081,7 @@ theorem NeBot.comap_of_surj
 
 中文:
 定理 NeBot.comap_of_surj
-  条件: {f : Filter β} {m : α -> β} (hf : NeBot f) (hm : Surjective m)
+  条件: {f : 滤子 β} {m : α -> β} (hf : NeBot f) (hm : 满射 m)
   证明: hf.comap_of_range_mem univ_mem' hm
 
 Depends on / 依赖: comap_of_range_mem, hf.comap_of_range_mem, univ_mem
@@ -3102,7 +3102,7 @@ theorem NeBot.comap_of_image_mem
 
 中文:
 定理 NeBot.comap_of_image_mem
-  结论: {f : Filter β} {m : α -> β} (hf : NeBot f) {s : Set α}
+  结论: {f : 滤子 β} {m : α -> β} (hf : NeBot f) {s : 集合 α}
   证明: hf.comap_of_range_mem mem_of_superset hs (image_subset_range _ _)
 
 @[simp]
@@ -3172,7 +3172,7 @@ theorem map_neBot_iff
 
 中文:
 定理 map_neBot_iff
-  条件: (f : α -> β) {F : Filter α}
+  条件: (f : α -> β) {F : 滤子 α}
   结论: NeBot (map f F) ↔ NeBot F
   证明: by
   simp only [neBot_iff, Ne, map_eq_bot_iff]
@@ -3256,8 +3256,8 @@ theorem sInter_comap_sets
     simpa 
 
 中文:
-定理 sInter_comap_sets
-  条件: (f : α -> β) (F : Filter β)
+定理 s整数er_comap_sets
+  条件: (f : α -> β) (F : 滤子 β)
   结论: ⋂₀ (comap f F).sets = ⋂ U in F, f ⁻¹' U
   证明: by
   ext x
@@ -3297,7 +3297,7 @@ theorem map_iInf_le
 
 中文:
 定理 map_iInf_le
-  条件: {f : ι -> Filter α} {m : α -> β}
+  条件: {f : ι -> 滤子 α} {m : α -> β}
   结论: map m (iInf f) <= ⨅ i, map m (f i)
   证明: le_iInf fun _ => map_mono iInf_le _ _
 
@@ -3320,7 +3320,7 @@ iInf_le_of_le i by simpa only [le_principal_iff, mem_map]
 
 中文:
 定理 map_iInf_eq
-  条件: {f : ι -> Filter α} {m : α -> β} (hf : Directed (· >= ·) f) [Nonempty ι]
+  条件: {f : ι -> 滤子 α} {m : α -> β} (hf : Directed (· >= ·) f) [非空 ι]
   证明: map_iInf_le.antisymm fun s (hs : m ⁻¹' s in iInf f) =>
     let ⟨i, hi⟩ := (mem_iInf_of_directed hf _).1 hs
     have : ⨅ i, map m (f i) <= 𝓟 s :=
@@ -3350,7 +3350,7 @@ theorem map_biInf_eq
 
 中文:
 定理 map_biInf_eq
-  结论: {ι : Type w} {f : ι -> Filter α} {m : α -> β} {p : ι -> 命题}
+  结论: {ι : 类型 w} {f : ι -> 滤子 α} {m : α -> β} {p : ι -> 命题}
   证明: by
   have := nonempty_subtype.2 ne
   simp only [iInf_subtype']
@@ -3376,7 +3376,7 @@ theorem map_inf_le
 
 中文:
 定理 map_inf_le
-  条件: {f g : Filter α} {m : α -> β}
+  条件: {f g : 滤子 α} {m : α -> β}
   结论: map m (f ⊓ g) <= map m f ⊓ map m g
   证明: (@map_mono _ _ m).map_inf_le f g
 
@@ -3399,7 +3399,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: {f g : Filter α} {m : α -> β} (h : Injective m)
+  条件: {f g : 滤子 α} {m : α -> β} (h : 单射 m)
   证明: by
   refine map_inf_le.antisymm ?_
   rintro t ⟨s₁, hs₁, s₂, hs₂, ht : m ⁻¹' t = s₁ inter s₂⟩
@@ -3428,7 +3428,7 @@ theorem map_inf'
 
 中文:
 定理 map_inf'
-  结论: {f g : Filter α} {m : α -> β} {t : Set α} (htf : t in f) (htg : t in g)
+  结论: {f g : 滤子 α} {m : α -> β} {t : 集合 α} (htf : t in f) (htg : t in g)
   证明: by
   lift f to Filter t using htf; lift g to Filter t using htg
   replace h : Injective (m ∘ ((↑) : t -> α)) := h.injective
@@ -3452,7 +3452,7 @@ lemma disjoint_of_map
 
 中文:
 引理 disjoint_of_map
-  结论: {α β : 类型} {F G : Filter α} {f : α -> β}
+  结论: {α β : 类型} {F G : 滤子 α} {f : α -> β}
   证明: disjoint_iff.mpr map_eq_bot_iff.mp le_bot_iff.mp trans map_inf_le (disjoint_iff.mp h)
 
 Depends on / 依赖: disjoint_iff, disjoint_iff.mp, disjoint_iff.mpr, le_bot_iff, le_bot_iff.mp, map_eq_bot_iff, map_eq_bot_iff.mp, map_inf_le, of_finite
@@ -3472,7 +3472,7 @@ theorem disjoint_map
 
 中文:
 定理 disjoint_map
-  条件: {m : α -> β} (hm : Injective m) {f₁ f₂ : Filter α}
+  条件: {m : α -> β} (hm : 单射 m) {f₁ f₂ : 滤子 α}
   证明: by
   simp only [disjoint_iff, ← map_inf hm, map_eq_bot_iff]
 
@@ -3494,7 +3494,7 @@ theorem map_equiv_symm
 
 中文:
 定理 map_equiv_symm
-  条件: (e : α ≃ β) (f : Filter β)
+  条件: (e : α ≃ β) (f : 滤子 β)
   结论: map e.symm f = comap e f
   证明: map_injective e.injective by
     rw [map_map]; rw [e.self_comp_symm]; rw [map_id]; rw [map_comap_of_surjective e.surjective]
@@ -3515,7 +3515,7 @@ theorem map_eq_comap_of_inverse
 
 中文:
 定理 map_eq_comap_of_inverse
-  结论: {f : Filter α} {m : α -> β} {n : β -> α} (h₁ : m ∘ n = id)
+  结论: {f : 滤子 α} {m : α -> β} {n : β -> α} (h₁ : m ∘ n = id)
   证明: map_equiv_symm ⟨n, m, congr_fun h₁, congr_fun h₂⟩ f
 
 Depends on / 依赖: congr_fun, map_equiv_symm
@@ -3535,7 +3535,7 @@ theorem comap_equiv_symm
 
 中文:
 定理 comap_equiv_symm
-  条件: (e : α ≃ β) (f : Filter α)
+  条件: (e : α ≃ β) (f : 滤子 α)
   结论: comap e.symm f = map e f
   证明: (map_eq_comap_of_inverse e.self_comp_symm e.symm_comp_self).symm
 
@@ -3555,8 +3555,8 @@ theorem map_swap_eq_comap_swap
 
 中文:
 定理 map_swap_eq_comap_swap
-  条件: {f : Filter (α × β)}
-  结论: map Prod.swap f = comap Prod.swap f
+  条件: {f : 滤子 (α × β)}
+  结论: map 积类型.swap f = comap 积类型.swap f
   证明: map_eq_comap_of_inverse Prod.swap_swap_eq Prod.swap_swap_eq
 
 Depends on / 依赖: Prod.swap_swap_eq, map_eq_comap_of_inverse, swap_swap_eq
@@ -3574,7 +3574,7 @@ theorem map_swap4_eq_comap
 
 中文:
 定理 map_swap4_eq_comap
-  条件: {f : Filter ((α × β) × γ × δ)}
+  条件: {f : 滤子 ((α × β) × γ × δ)}
   证明: map_eq_comap_of_inverse (funext fun ⟨⟨_, _⟩, ⟨_, _⟩⟩ => rfl) (funext fun ⟨⟨_, _⟩, ⟨_, _⟩⟩ => rfl)
 
 Depends on / 依赖: map_eq_comap_of_inverse
@@ -3595,7 +3595,7 @@ theorem le_map
 
 中文:
 定理 le_map
-  条件: {f : Filter α} {m : α -> β} {g : Filter β} (h : 对任意 s in f, m '' s in g)
+  条件: {f : 滤子 α} {m : α -> β} {g : 滤子 β} (h : 对任意 s in f, m '' s in g)
   结论: g <= f.map m
   证明: fun _ hs => mem_of_superset (h _ hs) image_preimage_subset _ _
 
@@ -3615,7 +3615,7 @@ theorem le_map_iff
 
 中文:
 定理 le_map_iff
-  条件: {f : Filter α} {m : α -> β} {g : Filter β}
+  条件: {f : 滤子 α} {m : α -> β} {g : 滤子 β}
   结论: g <= f.map m ↔ 对任意 s in f, m '' s in g
   证明: ⟨fun h _ hs => h (image_mem_map hs), le_map⟩
 
@@ -3642,7 +3642,7 @@ theorem push_pull
 
 中文:
 定理 push_pull
-  条件: (f : α -> β) (F : Filter α) (G : Filter β)
+  条件: (f : α -> β) (F : 滤子 α) (G : 滤子 β)
   证明: by
   apply le_antisymm
   · calc
@@ -3677,7 +3677,7 @@ theorem push_pull'
 
 中文:
 定理 push_pull'
-  条件: (f : α -> β) (F : Filter α) (G : Filter β)
+  条件: (f : α -> β) (F : 滤子 α) (G : 滤子 β)
   证明: by simp only [Filter.push_pull, inf_comm]
 -/
 protected theorem push_pull' (f : α -> β) (F : Filter α) (G : Filter β) :
@@ -3694,7 +3694,7 @@ theorem disjoint_comap_iff_map
 
 中文:
 定理 disjoint_comap_iff_map
-  条件: {f : α -> β} {F : Filter α} {G : Filter β}
+  条件: {f : α -> β} {F : 滤子 α} {G : 滤子 β}
   证明: by
   simp only [disjoint_iff, ← Filter.push_pull, map_eq_bot_iff]
 
@@ -3715,7 +3715,7 @@ theorem disjoint_comap_iff_map'
 
 中文:
 定理 disjoint_comap_iff_map'
-  条件: {f : α -> β} {F : Filter α} {G : Filter β}
+  条件: {f : α -> β} {F : 滤子 α} {G : 滤子 β}
   证明: by
   simp only [disjoint_iff, ← Filter.push_pull', map_eq_bot_iff]
 
@@ -3736,7 +3736,7 @@ theorem neBot_inf_comap_iff_map
 
 中文:
 定理 neBot_inf_comap_iff_map
-  条件: {f : α -> β} {F : Filter α} {G : Filter β}
+  条件: {f : α -> β} {F : 滤子 α} {G : 滤子 β}
   证明: by
   rw [← map_neBot_iff]; rw [Filter.push_pull]
 
@@ -3757,7 +3757,7 @@ theorem neBot_inf_comap_iff_map'
 
 中文:
 定理 neBot_inf_comap_iff_map'
-  条件: {f : α -> β} {F : Filter α} {G : Filter β}
+  条件: {f : α -> β} {F : 滤子 α} {G : 滤子 β}
   证明: by
   rw [← map_neBot_iff]; rw [Filter.push_pull']
 
@@ -3779,7 +3779,7 @@ theorem comap_inf_principal_neBot_of_image_mem
 
 中文:
 定理 comap_inf_principal_neBot_of_image_mem
-  结论: {f : Filter β} {m : α -> β} (hf : NeBot f) {s : Set α}
+  结论: {f : 滤子 β} {m : α -> β} (hf : NeBot f) {s : 集合 α}
   证明: by
   rw [neBot_inf_comap_iff_map']; rw [map_principal]; rw [← frequently_mem_iff_neBot]
   exact Eventually.frequently hs
@@ -3802,7 +3802,7 @@ theorem principal_eq_map_coe_top
 
 中文:
 定理 principal_eq_map_coe_top
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 𝓟 s = map ((↑) : s -> α) ⊤
   证明: by simp
 -/
@@ -3819,7 +3819,7 @@ theorem inf_principal_eq_bot_iff_comap
 
 中文:
 定理 inf_principal_eq_bot_iff_comap
-  条件: {F : Filter α} {s : Set α}
+  条件: {F : 滤子 α} {s : 集合 α}
   证明: by
   rw [principal_eq_map_coe_top s]; rw [← Filter.push_pull']; rw [inf_top_eq]; rw [map_eq_bot_iff]
 
@@ -3841,7 +3841,7 @@ lemma map_generate_le_generate_preimage_preimage
 
 中文:
 引理 map_generate_le_generate_preimage_preimage
-  条件: (U : Set (Set β)) (f : β -> α)
+  条件: (U : 集合 (集合 β)) (f : β -> α)
   证明: by
   rw [le_generate_iff]
   exact fun u hu => mem_generate_of_mem hu
@@ -3865,7 +3865,7 @@ lemma generate_image_preimage_le_comap
 
 中文:
 引理 generate_image_preimage_le_comap
-  条件: (U : Set (Set α)) (f : β -> α)
+  条件: (U : 集合 (集合 α)) (f : β -> α)
   证明: by
   rw [← map_le_iff_le_comap]; rw [le_generate_iff]
   exact fun u hu => mem_generate_of_mem ⟨u, hu, rfl⟩
@@ -3891,7 +3891,7 @@ theorem singleton_mem_pure
 中文:
 定理 singleton_mem_pure
   条件: {a : α}
-  结论: {a} in (pure a : Filter α)
+  结论: {a} in (pure a : 滤子 α)
   证明: mem_singleton a
 
 Depends on / 依赖: mem_singleton
@@ -3910,7 +3910,7 @@ theorem pure_injective
 
 中文:
 定理 pure_injective
-  结论: Injective (pure : α -> Filter α)
+  结论: 单射 (pure : α -> 滤子 α)
   证明: fun a _ hab =>
   (Filter.ext_iff.1 hab { x | a = x }).1 rfl
 -/
@@ -3952,7 +3952,7 @@ theorem le_pure_iff
 
 中文:
 定理 le_pure_iff
-  条件: {f : Filter α} {a : α}
+  条件: {f : 滤子 α} {a : α}
   结论: f <= pure a ↔ {a} in f
   证明: by
   rw [← principal_singleton]; rw [le_principal_iff]
@@ -3972,7 +3972,7 @@ theorem mem_seq_def
 
 中文:
 定理 mem_seq_def
-  条件: {f : Filter (α -> β)} {g : Filter α} {s : Set β}
+  条件: {f : 滤子 (α -> β)} {g : 滤子 α} {s : 集合 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3992,7 +3992,7 @@ theorem mem_seq_iff
 
 中文:
 定理 mem_seq_iff
-  条件: {f : Filter (α -> β)} {g : Filter α} {s : Set β}
+  条件: {f : 滤子 (α -> β)} {g : 滤子 α} {s : 集合 β}
   证明: by
   simp only [mem_seq_def, seq_subset]
 
@@ -4014,7 +4014,7 @@ theorem mem_map_seq_iff
 
 中文:
 定理 mem_map_seq_iff
-  条件: {f : Filter α} {g : Filter β} {m : α -> β -> γ} {s : Set γ}
+  条件: {f : 滤子 α} {g : 滤子 β} {m : α -> β -> γ} {s : 集合 γ}
   证明: Iff.intro (fun ⟨t, ht, s, hs, hts⟩ => ⟨s, m ⁻¹' t, hs, ht, fun _ => hts _⟩)
     fun ⟨t, s, ht, hs, hts⟩ =>
     ⟨m '' s, image_mem_map hs, t, ht, fun _ ⟨_, has, Eq⟩ => Eq ▸ hts _ has⟩
@@ -4037,7 +4037,7 @@ theorem seq_mem_seq
 
 中文:
 定理 seq_mem_seq
-  结论: {f : Filter (α -> β)} {g : Filter α} {s : Set (α -> β)} {t : Set α} (hs : s in f)
+  结论: {f : 滤子 (α -> β)} {g : 滤子 α} {s : 集合 (α -> β)} {t : 集合 α} (hs : s in f)
   证明: ⟨s, hs, t, ht, fun f hf a ha => ⟨f, hf, a, ha, rfl⟩⟩
 -/
 theorem seq_mem_seq {f : Filter (α -> β)} {g : Filter α} {s : Set (α -> β)} {t : Set α} (hs : s in f)
@@ -4057,7 +4057,7 @@ theorem le_seq
 
 中文:
 定理 le_seq
-  结论: {f : Filter (α -> β)} {g : Filter α} {h : Filter β}
+  结论: {f : 滤子 (α -> β)} {g : 滤子 α} {h : 滤子 β}
   证明: fun _ ⟨_, ht, _, hu, hs⟩ =>
   mem_of_superset (hh _ ht _ hu) fun _ ⟨_, hm, _, ha, eq⟩ => eq ▸ hs _ hm _ ha
 
@@ -4080,7 +4080,7 @@ theorem seq_mono
 
 中文:
 定理 seq_mono
-  条件: {f₁ f₂ : Filter (α -> β)} {g₁ g₂ : Filter α} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
+  条件: {f₁ f₂ : 滤子 (α -> β)} {g₁ g₂ : 滤子 α} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
   证明: le_seq fun _ hs _ ht => seq_mem_seq (hf hs) (hg ht)
 
 @[simp]
@@ -4112,7 +4112,7 @@ theorem pure_seq_eq_map
 
 中文:
 定理 pure_seq_eq_map
-  条件: (g : α -> β) (f : Filter α)
+  条件: (g : α -> β) (f : 滤子 α)
   结论: seq (pure g) f = f.map g
   证明: by
   refine le_antisymm (le_map fun s hs => ?_) (le_seq fun s hs t ht => ?_)
@@ -4156,7 +4156,7 @@ theorem seq_pure
 
 中文:
 定理 seq_pure
-  条件: (f : Filter (α -> β)) (a : α)
+  条件: (f : 滤子 (α -> β)) (a : α)
   结论: seq f (pure a) = map (fun g : α -> β => g a) f
   证明: by
   refine le_antisymm (le_map fun s hs => ?_) (le_seq fun s hs t ht => ?_)
@@ -4196,7 +4196,7 @@ theorem seq_assoc
 
 中文:
 定理 seq_assoc
-  条件: (x : Filter α) (g : Filter (α -> β)) (h : Filter (β -> γ))
+  条件: (x : 滤子 α) (g : 滤子 (α -> β)) (h : 滤子 (β -> γ))
   证明: by
   refine le_antisymm (le_seq fun s hs t ht => ?_) (le_seq fun s hs t ht => ?_)
   · rcases mem_seq_iff.1 hs with ⟨u, hu, v, hv, hs⟩
@@ -4238,7 +4238,7 @@ theorem prod_map_seq_comm
 
 中文:
 定理 prod_map_seq_comm
-  条件: (f : Filter α) (g : Filter β)
+  条件: (f : 滤子 α) (g : 滤子 β)
   证明: by
   refine le_antisymm (le_seq fun s hs t ht => ?_) (le_seq fun s hs t ht => ?_)
   · rcases mem_map_iff_exists_image.1 hs with ⟨u, hu, hs⟩
@@ -4272,7 +4272,7 @@ theorem seq_eq_filter_seq
 
 中文:
 定理 seq_eq_filter_seq
-  条件: {α β : 类型u} (f : Filter (α -> β)) (g : Filter α)
+  条件: {α β : 类型u} (f : 滤子 (α -> β)) (g : 滤子 α)
   证明: rfl
 -/
 theorem seq_eq_filter_seq {α β : Type u} (f : Filter (α -> β)) (g : Filter α) :
@@ -4294,7 +4294,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulApplicative (Filter : 类型u -> 类型u)
+  签名: 合法适用 (滤子 : 类型u -> 类型u)
   定义体: map_pure
   seqLeft_eq _ _ := rfl
   seqRight_eq _ _ := rfl
@@ -4322,7 +4322,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommApplicative (Filter : 类型u -> 类型u)
+  签名: 交换适用 (滤子 : 类型u -> 类型u)
   定义体: ⟨fun f g => prod_map_seq_comm f g⟩
 
 Depends on / 依赖: prod_map_seq_comm
@@ -4350,7 +4350,7 @@ theorem eventually_bind
 
 中文:
 定理 eventually_bind
-  条件: {f : Filter α} {m : α -> Filter β} {p : β -> 命题}
+  条件: {f : 滤子 α} {m : α -> 滤子 β} {p : β -> 命题}
   证明: Iff.rfl
 
 @[simp]
@@ -4376,7 +4376,7 @@ theorem frequently_bind
 
 中文:
 定理 frequently_bind
-  条件: {f : Filter α} {m : α -> Filter β} {p : β -> 命题}
+  条件: {f : 滤子 α} {m : α -> 滤子 β} {p : β -> 命题}
   证明: by
   rw [← not_iff_not]
   simp only [not_frequently, eventually_bind]
@@ -4403,7 +4403,7 @@ theorem eventuallyEq_bind
 
 中文:
 定理 eventuallyEq_bind
-  条件: {f : Filter α} {m : α -> Filter β} {g₁ g₂ : β -> γ}
+  条件: {f : 滤子 α} {m : α -> 滤子 β} {g₁ g₂ : β -> γ}
   证明: Iff.rfl
 
 @[simp]
@@ -4425,7 +4425,7 @@ theorem eventuallyLE_bind
 
 中文:
 定理 eventuallyLE_bind
-  条件: [LE γ] {f : Filter α} {m : α -> Filter β} {g₁ g₂ : β -> γ}
+  条件: [LE γ] {f : 滤子 α} {m : α -> 滤子 β} {g₁ g₂ : β -> γ}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4446,7 +4446,7 @@ theorem mem_bind'
 
 中文:
 定理 mem_bind'
-  条件: {s : Set β} {f : Filter α} {m : α -> Filter β}
+  条件: {s : 集合 β} {f : 滤子 α} {m : α -> 滤子 β}
   证明: Iff.rfl
 
 @[simp]
@@ -4471,7 +4471,7 @@ theorem mem_bind
 
 中文:
 定理 mem_bind
-  条件: {s : Set β} {f : Filter α} {m : α -> Filter β}
+  条件: {s : 集合 β} {f : 滤子 α} {m : α -> 滤子 β}
   证明: calc
     s in bind f m ↔ { a | s in m a } in f := Iff.rfl
     _ ↔ exists t in f, t subseteq { a | s in m a } := exists_mem_subset_iff.symm
@@ -4498,7 +4498,7 @@ theorem bind_le
 
 中文:
 定理 bind_le
-  条件: {f : Filter α} {g : α -> Filter β} {l : Filter β} (h : 对任意ᶠ x in f, g x <= l)
+  条件: {f : 滤子 α} {g : α -> 滤子 β} {l : 滤子 β} (h : 对任意ᶠ x in f, g x <= l)
   证明: join_le eventually_map.2 h
 
 @[gcongr, mono]
@@ -4523,7 +4523,7 @@ theorem bind_mono
 
 中文:
 定理 bind_mono
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : α -> Filter β} (hf : f₁ <= f₂) (hg : g₁ <=ᶠ[f₁] g₂)
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : α -> 滤子 β} (hf : f₁ <= f₂) (hg : g₁ <=ᶠ[f₁] g₂)
   证明: by
   refine le_trans (fun s hs => ?_) (join_mono <| map_mono hf)
   simp only [mem_join, mem_bind', mem_map] at hs ⊢
@@ -4547,7 +4547,7 @@ theorem bind_inf_principal
 
 中文:
 定理 bind_inf_principal
-  条件: {f : Filter α} {g : α -> Filter β} {s : Set β}
+  条件: {f : 滤子 α} {g : α -> 滤子 β} {s : 集合 β}
   证明: Filter.ext fun s => by simp only [mem_bind, mem_inf_principal]
 
 Depends on / 依赖: Filter, Filter.ext, mem_bind, mem_inf_principal
@@ -4567,7 +4567,7 @@ theorem sup_bind
 
 中文:
 定理 sup_bind
-  条件: {f g : Filter α} {h : α -> Filter β}
+  条件: {f g : 滤子 α} {h : α -> 滤子 β}
   结论: bind (f ⊔ g) h = bind f h ⊔ bind g h
   证明: rfl
 -/
@@ -4585,7 +4585,7 @@ theorem principal_bind
 
 中文:
 定理 principal_bind
-  条件: {s : Set α} {f : α -> Filter β}
+  条件: {s : 集合 α} {f : α -> 滤子 β}
   结论: bind (𝓟 s) f = ⨆ x in s, f x
   证明: show join (map f (𝓟 s)) = ⨆ x in s, f x by
     simp only [sSup_image, join_principal_eq_sSup, map_principal]
@@ -4620,7 +4620,7 @@ theorem Filter.map_surjOn_Iic_iff_le_map
     exact this.surjOn fun H _ => mem_Iic.mpr 
 
 中文:
-定理 Filter.map_surjOn_Iic_iff_le_map
+定理 滤子.map_surjOn_Iic_iff_le_map
   条件: {m : α -> β}
   证明: by
   refine ⟨fun hm => ?_, fun hm => ?_⟩
@@ -4653,8 +4653,8 @@ theorem Filter.map_surjOn_Iic_iff_surjOn
 alias ⟨_, Set.SurjOn.filter_map_Iic⟩ := Filter.map_surjOn_Iic_iff_surjOn
 
 中文:
-定理 Filter.map_surjOn_Iic_iff_surjOn
-  条件: {s : Set α} {t : Set β} {m : α -> β}
+定理 滤子.map_surjOn_Iic_iff_surjOn
+  条件: {s : 集合 α} {t : 集合 β} {m : α -> β}
   证明: by
   rw [map_surjOn_Iic_iff_le_map]; rw [map_principal]; rw [principal_mono]; rw [SurjOn]
 
@@ -4683,8 +4683,8 @@ theorem Filter.filter_injOn_Iic_iff_injOn
 alia
 
 中文:
-定理 Filter.filter_injOn_Iic_iff_injOn
-  条件: {s : Set α} {m : α -> β}
+定理 滤子.filter_injOn_Iic_iff_injOn
+  条件: {s : 集合 α} {m : α -> β}
   证明: by
   refine ⟨fun hm x hx y hy hxy => ?_, fun hm F hF G hG => ?_⟩
   · rwa [← pure_injective.eq_iff, ← map_pure, ← map_pure, hm.eq_iff, pure_injective.eq_iff]

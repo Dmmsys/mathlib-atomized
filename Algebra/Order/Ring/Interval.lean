@@ -31,7 +31,7 @@ lemma IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo
   grind [Int.lt_iff_add_one_le]
 
 中文:
-引理 IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo
+引理 是StrictOrdered环.int_mem_Icc_of_mul_mem_Ioo
   证明: by
   simp only [Set.mem_Ioo, mul_lt_mul_iff_right₀ hr, Int.cast_lt] at h
   grind [Int.lt_iff_add_one_le]
@@ -53,7 +53,7 @@ lemma IsStrictOrderedRing.int_eq_of_mul_mem_Ioo
   simpa using int_mem_Icc_of_mul_mem_Ioo hr h
 
 中文:
-引理 IsStrictOrderedRing.int_eq_of_mul_mem_Ioo
+引理 是StrictOrdered环.int_eq_of_mul_mem_Ioo
   证明: by
   simpa using int_mem_Icc_of_mul_mem_Ioo hr h
 

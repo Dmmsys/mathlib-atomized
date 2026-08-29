@@ -44,7 +44,7 @@ theorem isInternal_prime_power_torsion_of_is_torsion_by_ideal
     rw [← Finset.inf_eq_iInf]; rw [IsDedekindDomain.inf_pow_eq_prod_of_prime]; rw [← Fins
 
 中文:
-定理 isInternal_prime_power_torsion_of_is_torsion_by_ideal
+定理 is整数ernal_prime_power_torsion_of_is_torsion_by_ideal
   证明: by
   let P := factors I
   have prime_of_mem := fun p (hp : p in P.toFinset) =>
@@ -90,8 +90,8 @@ theorem isInternal_prime_power_torsion
   obtain ⟨x, H, hx⟩ := hI; exact ⟨x, H, nonZeroDivisors.ne_zero hx⟩
 
 中文:
-定理 isInternal_prime_power_torsion
-  结论: [Module.Finite R M]
+定理 is整数ernal_prime_power_torsion
+  结论: [模.有限 R M]
   证明: by
   have hM' := Module.isTorsionBySet_annihilator_top R M
   have hI := Submodule.annihilator_top_inter_nonZeroDivisors hM
@@ -122,8 +122,8 @@ theorem exists_isInternal_prime_power_torsion
     isInternal_prime_power_torsion hM⟩
 
 中文:
-定理 exists_isInternal_prime_power_torsion
-  条件: [Module.Finite R M] (hM : Module.IsTorsion R M)
+定理 存在_is整数ernal_prime_power_torsion
+  条件: [模.有限 R M] (hM : 模.是挠 R M)
   证明: by
   exact ⟨_, _, fun p hp => prime_of_factor p (Multiset.mem_toFinset.mp hp), _,
     isInternal_prime_power_torsion hM⟩

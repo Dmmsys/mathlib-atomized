@@ -33,12 +33,12 @@ structure PartOrd
     - [str : PartialOrder carrier]
 
 中文:
-结构 PartOrd
+结构 偏序
   参数: where
   公理与运算 (3 个):
     - of : :
     - (carrier : 类型)
-    - [str : PartialOrder carrier]
+    - [str : 偏序 carrier]
 -/
 structure PartOrd where
   /-- Construct a bundled `PartOrd` from the underlying type and typeclass. -/
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort PartOrd (Type _)
+  签名: CoeSort 偏序 (类型 _)
   定义体: ⟨PartOrd.carrier⟩
 
 Depends on / 依赖: PartOrd, PartOrd.carrier, carrier
@@ -86,8 +86,8 @@ structure Hom
     - hom' : X ->o Y
 
 中文:
-结构 Hom
-  参数: (X Y : PartOrd.{u})
+结构 态射
+  参数: (X Y : 偏序.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : X ->o Y
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category PartOrd.{u}
+  签名: 范畴 偏序.{u}
   定义体: Hom X Y
   id _ := ⟨OrderHom.id⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory PartOrd (· ->o ·)
+  签名: 余ncrete范畴 偏序 (· ->o ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -153,8 +153,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := PartOrd) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : PartOrd.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 偏序.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := PartOrd) f
 -/
 abbrev Hom.hom {X Y : PartOrd.{u}} (f : Hom X Y) :=
@@ -170,7 +170,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y)
+  签名: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y)
   定义体: ConcreteCategory.ofHom (C := PartOrd) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, PartOrd
@@ -190,8 +190,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : PartOrd.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 偏序.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -213,7 +213,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : PartOrd}
+  条件: {X : 偏序}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 -/
@@ -234,7 +234,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : PartOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 偏序} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -258,7 +258,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : PartOrd} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 偏序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -281,8 +281,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [PartialOrder X]
-  结论: (PartOrd.of X : 类型u) = X
+  条件: (X : 类型u) [偏序 X]
+  结论: (偏序.of X : 类型u) = X
   证明: rfl
 
 @[simp]
@@ -301,8 +301,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : PartOrd}
-  结论: (𝟙 X : X ⟶ X).hom = OrderHom.id
+  条件: {X : 偏序}
+  结论: (𝟙 X : X ⟶ X).hom = 序态射.id
   证明: rfl
 -/
 lemma hom_id {X : PartOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id := rfl
@@ -319,7 +319,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : PartOrd) (x : X)
+  条件: (X : 偏序) (x : X)
   证明: by simp
 
 @[simp]
@@ -338,7 +338,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 偏序} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -356,7 +356,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 偏序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -378,7 +378,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : PartOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 偏序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -403,7 +403,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y)
+  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -426,8 +426,8 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : PartOrd} (f : X ⟶ Y)
-  结论: ofHom (Hom.hom f) = f
+  条件: {X Y : 偏序} (f : X ⟶ Y)
+  结论: ofHom (态射.hom f) = f
   证明: rfl
 
 @[simp]
@@ -448,8 +448,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [PartialOrder X]
-  结论: ofHom OrderHom.id = 𝟙 (of X)
+  条件: {X : 类型u} [偏序 X]
+  结论: ofHom 序态射.id = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -467,7 +467,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
+  结论: {X Y Z : 类型u} [偏序 X] [偏序 Y] [偏序 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
@@ -485,7 +485,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) (x : X)
+  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) (x : X) :
@@ -503,7 +503,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : PartOrd} (e : X ≅ Y) (x : X)
+  条件: {X Y : 偏序} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -523,7 +523,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : PartOrd} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 偏序} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -542,7 +542,7 @@ instance hasForgetToPreord
 
 中文:
 实例 hasForgetToPreord
-  签名: : HasForget₂ PartOrd Preord where
+  签名: : 有Forget₂ 偏序 预序 where
   定义体: .of X
   forget₂.map f := Preord.ofHom f.hom
 -/
@@ -562,8 +562,8 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : PartOrd.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 偏序.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -584,7 +584,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : PartOrd ⥤ PartOrd where
+  签名: : 偏序 ⥤ 偏序 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.dual
 -/
@@ -607,7 +607,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : PartOrd ≌ PartOrd where
+  签名: : 偏序 ≌ 偏序 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
@@ -633,7 +633,7 @@ definition uliftFunctor
 
 中文:
 定义 uliftFunctor
-  签名: : PartOrd.{u} ⥤ PartOrd.{max u v} where
+  签名: : 偏序.{u} ⥤ 偏序.{最大值 u v} where
   定义体: .of (ULift.{v} X)
   map f := PartOrd.ofHom ⟨fun x => ULift.up (f (ULift.down x)),
     fun x y hxy => f.hom.monotone hxy⟩
@@ -680,7 +680,7 @@ definition preordToPartOrd
 
 中文:
 定义 preordToPartOrd
-  签名: : Preord.{u} ⥤ PartOrd where
+  签名: : 预序.{u} ⥤ 偏序 where
   定义体: .of (Antisymmetrization X (· <= ·))
   map f := PartOrd.ofHom f.hom.antisymmetrization
   map_id X := by

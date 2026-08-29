@@ -41,7 +41,7 @@ theorem cast_zero
 
 中文:
 定理 cast_zero
-  条件: [Zero α] [One α] [Add α] [Neg α]
+  条件: [零 α] [幺 α] [加法 α] [取负 α]
   结论: ((0 : ZNum) : α) = 0
   证明: rfl
 
@@ -64,7 +64,7 @@ theorem cast_zero'
 
 中文:
 定理 cast_zero'
-  条件: [Zero α] [One α] [Add α] [Neg α]
+  条件: [零 α] [幺 α] [加法 α] [取负 α]
   结论: (ZNum.zero : α) = 0
   证明: rfl
 
@@ -87,7 +87,7 @@ theorem cast_one
 
 中文:
 定理 cast_one
-  条件: [Zero α] [One α] [Add α] [Neg α]
+  条件: [零 α] [幺 α] [加法 α] [取负 α]
   结论: ((1 : ZNum) : α) = 1
   证明: rfl
 
@@ -110,7 +110,7 @@ theorem cast_pos
 
 中文:
 定理 cast_pos
-  条件: [Zero α] [One α] [Add α] [Neg α] (n : PosNum)
+  条件: [零 α] [幺 α] [加法 α] [取负 α] (n : PosNum)
   结论: (pos n : α) = n
   证明: rfl
 
@@ -133,7 +133,7 @@ theorem cast_neg
 
 中文:
 定理 cast_neg
-  条件: [Zero α] [One α] [Add α] [Neg α] (n : PosNum)
+  条件: [零 α] [幺 α] [加法 α] [取负 α] (n : PosNum)
   结论: (neg n : α) = -n
   证明: rfl
 
@@ -153,7 +153,7 @@ theorem cast_zneg
 
 中文:
 定理 cast_zneg
-  条件: [SubtractionMonoid α] [One α]
+  条件: [Subtraction幺半群 α] [幺 α]
   结论: 对任意 n, ((-n : ZNum) : α) = -n
 -/
 theorem cast_zneg [SubtractionMonoid α] [One α] : forall n, ((-n : ZNum) : α) = -n
@@ -360,7 +360,7 @@ theorem cast_to_int
 
 中文:
 定理 cast_to_int
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 n : ZNum, ((n : 整数) : α) = n
 -/
 theorem cast_to_int [AddGroupWithOne α] : forall n : ZNum, ((n : Int) : α) = n
@@ -413,7 +413,7 @@ theorem cast_bit0
 
 中文:
 定理 cast_bit0
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 n : ZNum, (n.bit0 : α) = (n : α) + n
 
 Depends on / 依赖: CharP.exists, IsAlgClosed, PerfectField, PerfectRing, PerfectRing.toPerfectField, exacts, ofCharZero, perfectField, toPerfectField
@@ -445,7 +445,7 @@ theorem cast_bit1
 
 中文:
 定理 cast_bit1
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 n : ZNum, (n.bit1 : α) = ((n : α) + n) + 1
   证明: (succ'_pred' p).symm.trans (congr_arg Num.succ' e)
     · conv at ep => change p = 1
@@ -493,7 +493,7 @@ theorem cast_bitm1
 
 中文:
 定理 cast_bitm1
-  条件: [AddGroupWithOne α] (n : ZNum)
+  条件: [加法带幺群 α] (n : ZNum)
   结论: (n.bitm1 : α) = (n : α) + n - 1
   证明: by
   conv =>
@@ -619,7 +619,7 @@ theorem cast_sub'
 
 中文:
 定理 cast_sub'
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 m n : PosNum, (sub' m n : α) = m - n
   证明: by simp [add_left_comm]
     simpa [sub_eq_add_neg] using this
@@ -719,7 +719,7 @@ theorem cast_sub'
 
 中文:
 定理 cast_sub'
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 m n : Num, (sub' m n : α) = m - n
 -/
 theorem cast_sub' [AddGroupWithOne α] : forall m n : Num, (sub' m n : α) = m - n
@@ -783,7 +783,7 @@ theorem succ_ofInt'
   statement: forall n, ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
 
 中文:
-定理 succ_ofInt'
+定理 succ_of整数'
   结论: 对任意 n, ZNum.of整数' (n + 1) = ZNum.of整数' n + 1
 -/
 theorem succ_ofInt' : forall n, ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
@@ -808,7 +808,7 @@ theorem ofInt'_toZNum
   statement: forall n : Nat, toZNum n = ZNum.ofInt' n
 
 中文:
-定理 ofInt'_toZNum
+定理 of整数'_toZNum
   结论: 对任意 n : 自然数, toZNum n = ZNum.of整数' n
 -/
 theorem ofInt'_toZNum : forall n : Nat, toZNum n = ZNum.ofInt' n
@@ -842,7 +842,7 @@ theorem ofZNum'_toNat
   statement: forall n : ZNum, (↑) < > ofZNum' n = Int.toNat? n
 
 中文:
-定理 ofZNum'_toNat
+定理 ofZNum'_to自然数
   结论: 对任意 n : ZNum, (↑) < > ofZNum' n = 整数.to自然数? n
 -/
 theorem ofZNum'_toNat : forall n : ZNum, (↑) < > ofZNum' n = Int.toNat? n
@@ -860,7 +860,7 @@ theorem ofZNum_toNat
   statement: forall n : ZNum, (ofZNum n : Nat) = Int.toNat n
 
 中文:
-定理 ofZNum_toNat
+定理 ofZNum_to自然数
   结论: 对任意 n : ZNum, (ofZNum n : 自然数) = 整数.to自然数 n
 -/
 theorem ofZNum_toNat : forall n : ZNum, (ofZNum n : Nat) = Int.toNat n
@@ -885,7 +885,7 @@ theorem cast_ofZNum
 
 中文:
 定理 cast_ofZNum
-  条件: [AddMonoidWithOne α] (n : ZNum)
+  条件: [加法带幺幺半群 α] (n : ZNum)
   结论: (ofZNum n : α) = 整数.to自然数 n
   证明: by
   rw [← cast_to_nat]; rw [ofZNum_toNat]
@@ -945,7 +945,7 @@ theorem cast_add
 
 中文:
 定理 cast_add
-  条件: [AddGroupWithOne α]
+  条件: [加法带幺群 α]
   结论: 对任意 m n, ((m + n : ZNum) : α) = m + n
   证明: by
       rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_neg]; rw [← Int.cast_add (-a)]
@@ -984,7 +984,7 @@ theorem cast_succ
 
 中文:
 定理 cast_succ
-  条件: [AddGroupWithOne α] (n)
+  条件: [加法带幺群 α] (n)
   结论: ((succ n : ZNum) : α) = n + 1
   证明: by
   rw [← add_one]; rw [cast_add]; rw [cast_one]
@@ -1028,7 +1028,7 @@ theorem cast_mul
 
 中文:
 定理 cast_mul
-  条件: [NonAssocRing α] (m n)
+  条件: [非结合环 α] (m n)
   结论: ((m * n : ZNum) : α) = m * n
   证明: by
   rw [← cast_to_int]; rw [mul_to_int]; rw [Int.cast_mul]; rw [cast_to_int]; rw [cast_to_int]
@@ -1046,7 +1046,7 @@ theorem ofInt'_neg
   statement: forall n : Int, ofInt' (-n) = -ofInt' n
 
 中文:
-定理 ofInt'_neg
+定理 of整数'_neg
   结论: 对任意 n : 整数, of整数' (-n) = -of整数' n
 -/
 theorem ofInt'_neg : forall n : Int, ofInt' (-n) = -ofInt' n
@@ -1204,7 +1204,7 @@ theorem cast_lt
 
 中文:
 定理 cast_lt
-  条件: [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum}
+  条件: [环 α] [偏序 α] [是StrictOrdered环 α] {m n : ZNum}
   证明: by
   rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_lt]; rw [lt_to_int]
 
@@ -1230,7 +1230,7 @@ theorem cast_le
 
 中文:
 定理 cast_le
-  条件: [Ring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : ZNum}
+  条件: [环 α] [线性序 α] [是StrictOrdered环 α] {m n : ZNum}
   证明: by
   rw [← not_lt]; exact not_congr cast_lt
 
@@ -1254,7 +1254,7 @@ theorem cast_inj
 
 中文:
 定理 cast_inj
-  条件: [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum}
+  条件: [环 α] [偏序 α] [是StrictOrdered环 α] {m n : ZNum}
   证明: by
   rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_inj (α := α)]; rw [to_int_inj]
 
@@ -1314,7 +1314,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder ZNum where
+  签名: : 线性序 ZNum where
   定义体: by
     intro a b
     transfer_rw
@@ -1373,7 +1373,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid ZNum where
+  签名: : 加法幺半群 ZNum where
   定义体: by transfer
   zero_add := zero_add
   add_zero := add_zero
@@ -1400,7 +1400,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup ZNum
+  签名: : 加法交换群 ZNum
   定义体: { ZNum.addMonoid with
     add_comm := by transfer
     zsmul := zsmulRec
@@ -1429,7 +1429,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne ZNum
+  签名: : 加法带幺幺半群 ZNum
   定义体: { ZNum.addMonoid with
     natCast := fun n => ZNum.ofInt' n
     natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
@@ -1488,7 +1488,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing ZNum
+  签名: : 交换环 ZNum
   定义体: { ZNum.addCommGroup, ZNum.addMonoidWithOne with
     mul_assoc a b c := by transfer
     zero_mul := by transfer
@@ -1529,7 +1529,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: : Nontrivial ZNum
+  签名: : 非平凡 ZNum
   定义体: { exists_pair_ne := ⟨0, 1, by decide⟩ }
 
 Depends on / 依赖: exists_pair_ne
@@ -1547,7 +1547,7 @@ instance zeroLEOneClass
 
 中文:
 实例 zeroLEOneClass
-  签名: : ZeroLEOneClass ZNum
+  签名: : ZeroLEOne类 ZNum
   定义体: { zero_le_one := by decide }
 
 Depends on / 依赖: zero_le_one
@@ -1565,7 +1565,7 @@ instance isOrderedAddMonoid
 
 中文:
 实例 isOrderedAddMonoid
-  签名: : IsOrderedAddMonoid ZNum where
+  签名: : 是OrderedAdd幺半群 ZNum where
   定义体: by revert h; transfer_rw; intro h; gcongr
 
 Depends on / 依赖: revert, transfer_rw
@@ -1587,7 +1587,7 @@ instance isStrictOrderedRing
 
 中文:
 实例 isStrictOrderedRing
-  签名: : IsStrictOrderedRing ZNum
+  签名: : 是StrictOrdered环 ZNum
   定义体: .of_mul_pos fun a b => by
     transfer_rw
     apply mul_pos
@@ -1616,7 +1616,7 @@ theorem cast_sub
 
 中文:
 定理 cast_sub
-  条件: [AddCommGroupWithOne α] (m n)
+  条件: [加法交换带幺群 α] (m n)
   结论: ((m - n : ZNum) : α) = m - n
   证明: by
   simp [sub_eq_neg_add]
@@ -1654,7 +1654,7 @@ theorem ofInt'_eq
   statement: forall n : Int, ZNum.ofInt' n = n
 
 中文:
-定理 ofInt'_eq
+定理 of整数'_eq
   结论: 对任意 n : 整数, ZNum.of整数' n = n
 -/
 theorem ofInt'_eq : forall n : Int, ZNum.ofInt' n = n
@@ -1767,7 +1767,7 @@ theorem of_intCast
 
 中文:
 定理 of_intCast
-  条件: [AddGroupWithOne α] (n : 整数)
+  条件: [加法带幺群 α] (n : 整数)
   结论: ((n : ZNum) : α) = n
   证明: by
   rw [← cast_to_int]; rw [to_of_int]
@@ -1794,7 +1794,7 @@ theorem of_natCast
 
 中文:
 定理 of_natCast
-  条件: [AddGroupWithOne α] (n : 自然数)
+  条件: [加法带幺群 α] (n : 自然数)
   结论: ((n : ZNum) : α) = n
   证明: by
   rw [← Int.cast_natCast]; rw [of_intCast]; rw [Int.cast_natCast]
@@ -2130,7 +2130,7 @@ theorem gcd_to_nat
 
 中文:
 定理 gcd_to_nat
-  结论: 对任意 a b, (gcd a b : 自然数) = 自然数.gcd a b
+  结论: 对任意 a b, (最大公约数 a b : 自然数) = 自然数.最大公约数 a b
   证明: by
   have : forall a b : Num, (a * b).natSize <= a.natSize + b.natSize := by
     intros
@@ -2300,7 +2300,7 @@ theorem gcd_to_nat
 中文:
 定理 gcd_to_nat
   条件: (a b)
-  结论: (gcd a b : 自然数) = 整数.gcd a b
+  结论: (最大公约数 a b : 自然数) = 整数.最大公约数 a b
   证明: (Num.gcd_to_nat _ _).trans by simp only [abs_to_nat]; rfl
 
 Depends on / 依赖: Num.gcd_to_nat, abs_to_nat, gcd_to_nat

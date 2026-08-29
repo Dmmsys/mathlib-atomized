@@ -26,8 +26,8 @@ instance [MeasurableSpace
   body: Quotient.instMeasurableSpace
 
 中文:
-实例 [MeasurableSpace
-  签名: M] : MeasurableSpace (M ⧸ p)
+实例 [可测空间
+  签名: M] : 可测空间 (M ⧸ p)
   定义体: Quotient.instMeasurableSpace
 
 Depends on / 依赖: Quotient, Quotient.instMeasurableSpace, instMeasurableSpace
@@ -42,8 +42,8 @@ instance [MeasurableSpace
   body: Quotient.instDiscreteMeasurableSpace
 
 中文:
-实例 [MeasurableSpace
-  签名: M] [DiscreteMeasurableSpace M] : DiscreteMeasurableSpace (M ⧸ p)
+实例 [可测空间
+  签名: M] [DiscreteMeasurable空间 M] : DiscreteMeasurable空间 (M ⧸ p)
   定义体: Quotient.instDiscreteMeasurableSpace
 
 Depends on / 依赖: Quotient, Quotient.instDiscreteMeasurableSpace, instDiscreteMeasurableSpace

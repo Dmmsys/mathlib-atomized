@@ -45,8 +45,8 @@ lemma Smooth.of_smooth_fiberToSpecResidueField
     · exact isPullback_fiberToSpecResidueField_of_isPull
 
 中文:
-引理 Smooth.of_smooth_fiberToSpecResidueField
-  结论: [LocallyOfFinitePresentation f] [Flat f]
+引理 光滑.of_smooth_fiberToSpecResidueField
+  结论: [局部有限呈现 f] [平坦 f]
   证明: by
   wlog h : exists R, Y = Spec R
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @Smooth) Y.affineCover]

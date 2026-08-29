@@ -31,7 +31,7 @@ definition Equiv.Perm.decomposeFin
 @[simp]
 
 中文:
-定义 Equiv.Perm.decomposeFin
+定义 等价.置换.decomposeFin
   签名: {n : 自然数}
   定义体: ((Equiv.permCongr <| finSuccEquiv n).trans Equiv.Perm.decomposeOption).trans
     (Equiv.prodCongr (finSuccEquiv n).symm (Equiv.refl _))
@@ -57,8 +57,8 @@ theorem Equiv.Perm.decomposeFin_symm_of_refl
 @[simp]
 
 中文:
-定理 Equiv.Perm.decomposeFin_symm_of_refl
-  条件: {n : 自然数} (p : Fin (n + 1))
+定理 等价.置换.decomposeFin_symm_of_refl
+  条件: {n : 自然数} (p : 有限集 (n + 1))
   证明: by
   simp [Equiv.Perm.decomposeFin, Equiv.permCongr_def, pull_end]
 
@@ -82,8 +82,8 @@ theorem Equiv.Perm.decomposeFin_symm_of_one
 @[simp]
 
 中文:
-定理 Equiv.Perm.decomposeFin_symm_of_one
-  条件: {n : 自然数} (p : Fin (n + 1))
+定理 等价.置换.decomposeFin_symm_of_one
+  条件: {n : 自然数} (p : 有限集 (n + 1))
   证明: Equiv.Perm.decomposeFin_symm_of_refl p
 
 @[simp]
@@ -106,8 +106,8 @@ theorem Equiv.Perm.decomposeFin_symm_apply_zero
 @[simp]
 
 中文:
-定理 Equiv.Perm.decomposeFin_symm_apply_zero
-  条件: {n : 自然数} (p : Fin (n + 1)) (e : Perm (Fin n))
+定理 等价.置换.decomposeFin_symm_apply_zero
+  条件: {n : 自然数} (p : 有限集 (n + 1)) (e : 置换 (有限集 n))
   证明: by simp [Equiv.Perm.decomposeFin]
 
 @[simp]
@@ -135,8 +135,8 @@ theorem Equiv.Perm.decomposeFin_symm_apply_succ
 @[simp]
 
 中文:
-定理 Equiv.Perm.decomposeFin_symm_apply_succ
-  结论: {n : 自然数} (e : Perm (Fin n)) (p : Fin (n + 1))
+定理 等价.置换.decomposeFin_symm_apply_succ
+  结论: {n : 自然数} (e : 置换 (有限集 n)) (p : 有限集 (n + 1))
   证明: by
   refine Fin.cases ?_ ?_ p
   · simp [Equiv.Perm.decomposeFin]
@@ -171,8 +171,8 @@ theorem Equiv.Perm.decomposeFin_symm_apply_one
 @[simp]
 
 中文:
-定理 Equiv.Perm.decomposeFin_symm_apply_one
-  条件: {n : 自然数} (e : Perm (Fin (n + 1))) (p : Fin (n + 2))
+定理 等价.置换.decomposeFin_symm_apply_one
+  条件: {n : 自然数} (e : 置换 (有限集 (n + 1))) (p : 有限集 (n + 2))
   证明: by
   rw [← Fin.succ_zero_eq_one]; rw [Equiv.Perm.decomposeFin_symm_apply_succ e p 0]
 
@@ -195,8 +195,8 @@ theorem Equiv.Perm.decomposeFin.symm_sign
   refine Fin.cases ?_ ?_ p <;> simp [Equiv.Perm.decomposeFin]
 
 中文:
-定理 Equiv.Perm.decomposeFin.symm_sign
-  条件: {n : 自然数} (p : Fin (n + 1)) (e : Perm (Fin n))
+定理 等价.置换.decomposeFin.symm_sign
+  条件: {n : 自然数} (p : 有限集 (n + 1)) (e : 置换 (有限集 n))
   证明: by
   refine Fin.cases ?_ ?_ p <;> simp [Equiv.Perm.decomposeFin]
 
@@ -215,7 +215,7 @@ theorem Finset.univ_perm_fin_succ
   proof: (Finset.univ_map_equiv_to_embedding _).symm
 
 中文:
-定理 Finset.univ_perm_fin_succ
+定理 有限集.univ_perm_fin_succ
   条件: {n : 自然数}
   证明: (Finset.univ_map_equiv_to_embedding _).symm
 
@@ -304,7 +304,7 @@ theorem sign_finRotate
 中文:
 定理 sign_finRotate
   条件: (n : 自然数)
-  结论: Perm.sign (finRotate n) = (-1) ^ (n - 1)
+  结论: 置换.sign (finRotate n) = (-1) ^ (n - 1)
   证明: by
   cases n with
   | zero => simp
@@ -344,7 +344,7 @@ theorem support_finRotate
 中文:
 定理 support_finRotate
   条件: {n : 自然数}
-  结论: support (finRotate (n + 2)) = Finset.univ
+  结论: support (finRotate (n + 2)) = 有限集.univ
   证明: by
   ext
   simp
@@ -367,7 +367,7 @@ theorem support_finRotate_of_le
 中文:
 定理 support_finRotate_of_le
   条件: {n : 自然数} (h : 2 <= n)
-  结论: support (finRotate n) = Finset.univ
+  结论: support (finRotate n) = 有限集.univ
   证明: by
   obtain ⟨m, rfl⟩ := exists_add_of_le h
   rw [add_comm]; rw [support_finRotate]
@@ -399,7 +399,7 @@ theorem isCycle_finRotate
 中文:
 定理 isCycle_finRotate
   条件: {n : 自然数}
-  结论: IsCycle (finRotate (n + 2))
+  结论: 是环 (finRotate (n + 2))
   证明: by
   refine ⟨0, by simp, fun x hx' => ⟨x, ?_⟩⟩
   clear hx'
@@ -442,7 +442,7 @@ theorem isCycle_finRotate_of_le
 中文:
 定理 isCycle_finRotate_of_le
   条件: {n : 自然数} (h : 2 <= n)
-  结论: IsCycle (finRotate n)
+  结论: 是环 (finRotate n)
   证明: by
   obtain ⟨m, rfl⟩ := exists_add_of_le h
   rw [add_comm]
@@ -519,7 +519,7 @@ definition cycleRange
 
 中文:
 定义 cycleRange
-  签名: {n : 自然数} (i : Fin n)
+  签名: {n : 自然数} (i : 有限集 n)
   定义体: (finRotate (i + 1)).extendDomain (castLEEmb (by lia)).toEquivRange
 
 Depends on / 依赖: castLEEmb, extendDomain, finRotate, toEquivRange
@@ -725,7 +725,7 @@ theorem cycleRange_self
 
 中文:
 定理 cycleRange_self
-  条件: [NeZero n] (i : Fin n)
+  条件: [NeZero n] (i : 有限集 n)
   结论: cycleRange i i = 0
   证明: cycleRange_of_eq rfl
 
@@ -750,7 +750,7 @@ theorem cycleRange_apply
 
 中文:
 定理 cycleRange_apply
-  条件: [NeZero n] (i j : Fin n)
+  条件: [NeZero n] (i j : 有限集 n)
   证明: by
   split_ifs with h₁ h₂
   · exact cycleRange_of_lt h₁
@@ -787,7 +787,7 @@ theorem cycleRange_zero
 中文:
 定理 cycleRange_zero
   条件: (n : 自然数) [NeZero n]
-  结论: cycleRange (0 : Fin n) = 1
+  结论: cycleRange (0 : 有限集 n) = 1
   证明: by
   ext j
   rcases (Fin.zero_le j).eq_or_lt with rfl | hj
@@ -874,8 +874,8 @@ theorem sign_cycleRange
 
 中文:
 定理 sign_cycleRange
-  条件: (i : Fin n)
-  结论: Perm.sign (cycleRange i) = (-1) ^ (i : 自然数)
+  条件: (i : 有限集 n)
+  结论: 置换.sign (cycleRange i) = (-1) ^ (i : 自然数)
   证明: by
   simp [cycleRange]
 
@@ -904,7 +904,7 @@ theorem succAbove_cycleRange
 
 中文:
 定理 succAbove_cycleRange
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: by
   cases n
   · rcases j with ⟨_, ⟨⟩⟩
@@ -953,7 +953,7 @@ theorem cycleRange_succAbove
 
 中文:
 定理 cycleRange_succAbove
-  条件: (i : Fin (n + 1)) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: by
   rcases lt_or_ge (castSucc j) i with h | h
   · rw [Fin.succAbove_of_castSucc_lt _ _ h, Fin.cycleRange_of_lt h, Fin.coeSucc_eq_succ]
@@ -983,7 +983,7 @@ theorem cycleRange_symm_zero
 
 中文:
 定理 cycleRange_symm_zero
-  条件: [NeZero n] (i : Fin n)
+  条件: [NeZero n] (i : 有限集 n)
   结论: i.cycleRange.symm 0 = i
   证明: i.cycleRange.injective (by simp)
 
@@ -1007,7 +1007,7 @@ theorem cycleRange_symm_succ
 
 中文:
 定理 cycleRange_symm_succ
-  条件: (i : Fin (n + 1)) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: i.cycleRange.injective (by simp)
 
 @[simp]
@@ -1032,7 +1032,7 @@ theorem insertNth_apply_cycleRange_symm
 
 中文:
 定理 insertNth_apply_cycleRange_symm
-  结论: {α : 类型} (p : Fin (n + 1)) (a : α) (x : Fin n -> α)
+  结论: {α : 类型} (p : 有限集 (n + 1)) (a : α) (x : 有限集 n -> α)
   证明: by
   cases j using Fin.cases <;> simp
 
@@ -1058,7 +1058,7 @@ theorem insertNth_comp_cycleRange_symm
 
 中文:
 定理 insertNth_comp_cycleRange_symm
-  条件: {α : 类型} (p : Fin (n + 1)) (a : α) (x : Fin n -> α)
+  条件: {α : 类型} (p : 有限集 (n + 1)) (a : α) (x : 有限集 n -> α)
   证明: by
   ext j
   simp
@@ -1111,7 +1111,7 @@ theorem cons_apply_cycleRange
 
 中文:
 定理 cons_apply_cycleRange
-  条件: {α : 类型} (a : α) (x : Fin n -> α) (p j : Fin (n + 1))
+  条件: {α : 类型} (a : α) (x : 有限集 n -> α) (p j : 有限集 (n + 1))
   证明: by
   rw [← insertNth_apply_cycleRange_symm]; rw [Equiv.symm_apply_apply]
 
@@ -1135,7 +1135,7 @@ theorem cons_comp_cycleRange
 
 中文:
 定理 cons_comp_cycleRange
-  条件: {α : 类型} (a : α) (x : Fin n -> α) (p : Fin (n + 1))
+  条件: {α : 类型} (a : α) (x : 有限集 n -> α) (p : 有限集 (n + 1))
   证明: by
   ext; simp
 -/
@@ -1159,7 +1159,7 @@ theorem isCycle_cycleRange
 中文:
 定理 isCycle_cycleRange
   条件: [NeZero n] (h0 : i != 0)
-  结论: IsCycle (cycleRange i)
+  结论: 是环 (cycleRange i)
   证明: by
   obtain ⟨i, hi⟩ := i
   cases i
@@ -1218,7 +1218,7 @@ theorem isThreeCycle_cycleRange_two
 
 中文:
 定理 isThreeCycle_cycleRange_two
-  结论: IsThreeCycle (cycleRange 2 : Perm (Fin (n + 3)))
+  结论: IsThreeCycle (cycleRange 2 : 置换 (有限集 (n + 3)))
   证明: by
   rw [IsThreeCycle]; rw [cycleType_cycleRange two_ne_zero]
   simp
@@ -1265,7 +1265,7 @@ definition cycleIcc
 
 中文:
 定义 cycleIcc
-  签名: (i j : Fin n)
+  签名: (i j : 有限集 n)
   定义体: if hij : i <= j then (cycleRange ((j - i).castLT
   (sub_val_lt_sub hij))).extendDomain (natAdd_castLEEmb (Nat.sub_le n i)).toEquivRange else 1
 
@@ -1290,7 +1290,7 @@ lemma cycleIcc_def_le
 
 中文:
 引理 cycleIcc_def_le
-  条件: {i j : Fin n} (hij : i <= j)
+  条件: {i j : 有限集 n} (hij : i <= j)
   结论: cycleIcc i j =
   证明: by simp [cycleIcc, hij]
 
@@ -1629,7 +1629,7 @@ theorem sign_cycleIcc_of_le
 中文:
 定理 sign_cycleIcc_of_le
   条件: (hij : i <= j)
-  结论: Perm.sign (cycleIcc i j) = (-1) ^ (j - i : 自然数)
+  结论: 置换.sign (cycleIcc i j) = (-1) ^ (j - i : 自然数)
   证明: by
   simp [hij, sub_val_of_le hij]
 
@@ -1649,7 +1649,7 @@ theorem sign_cycleIcc_of_eq
 
 中文:
 定理 sign_cycleIcc_of_eq
-  结论: Perm.sign (cycleIcc i i) = 1
+  结论: 置换.sign (cycleIcc i i) = 1
   证明: by
   rw [sign_cycleIcc_of_le (Fin.ge_of_eq rfl)]; rw [tsub_self]; rw [pow_zero]
 
@@ -1673,7 +1673,7 @@ theorem sign_cycleIcc_of_ge
 中文:
 定理 sign_cycleIcc_of_ge
   条件: (hij : i <= j)
-  结论: Perm.sign (cycleIcc j i) = 1
+  结论: 置换.sign (cycleIcc j i) = 1
   证明: by
   rcases Fin.lt_or_eq_of_le hij with hij | hij
   · simp [Fin.not_le.mpr hij]
@@ -1700,7 +1700,7 @@ theorem isCycle_cycleIcc
 中文:
 定理 isCycle_cycleIcc
   条件: (hij : i < j)
-  结论: (cycleIcc i j).IsCycle
+  结论: (cycleIcc i j).是环
   证明: by
   simpa [le_of_lt hij] using Equiv.Perm.IsCycle.extendDomain
     (natAdd_castLEEmb _).toEquivRange (isCycle_cycleRange (castLT_sub_nezero hij))
@@ -1748,7 +1748,7 @@ theorem cycleType_cycleIcc_of_ge
 中文:
 定理 cycleType_cycleIcc_of_ge
   条件: (hij : i <= j) [NeZero n]
-  结论: Perm.cycleType (cycleIcc j i) = ∅
+  结论: 置换.cycleType (cycleIcc j i) = ∅
   证明: by
   simpa using cycleIcc_ge hij
 
@@ -1773,7 +1773,7 @@ theorem cycleIcc_zero_eq_cycleRange
 
 中文:
 定理 cycleIcc_zero_eq_cycleRange
-  条件: (i : Fin n) [NeZero n]
+  条件: (i : 有限集 n) [NeZero n]
   结论: cycleIcc 0 i = cycleRange i
   证明: by
   ext x
@@ -1803,7 +1803,7 @@ theorem cycleIcc_comp_succAbove
 
 中文:
 定理 cycleIcc_comp_succAbove
-  条件: {n : 自然数} (i j : Fin (n + 1)) (hij : i <= j)
+  条件: {n : 自然数} (i j : 有限集 (n + 1)) (hij : i <= j)
   证明: by
   grind [cycleIcc_of_lt, succAbove_of_castSucc_lt, cycleIcc_of_ge_of_lt,
     succAbove_of_le_castSucc, coeSucc_eq_succ, cycleIcc_of_gt]
@@ -1922,8 +1922,8 @@ theorem Equiv.Perm.sign_eq_prod_prod_Iio
   rw [Equi
 
 中文:
-定理 Equiv.Perm.sign_eq_prod_prod_Iio
-  条件: (σ : Equiv.Perm (Fin n))
+定理 等价.置换.sign_eq_prod_prod_Iio
+  条件: (σ : 等价.置换 (有限集 n))
   证明: by
   suffices h : σ.sign = σ.signAux by
     rw [h]; rw [Finset.prod_sigma']; rw [Equiv.Perm.signAux]
@@ -1956,8 +1956,8 @@ theorem Equiv.Perm.sign_eq_prod_prod_Ioi
   apply Finset.prod_comm' (by simp)
 
 中文:
-定理 Equiv.Perm.sign_eq_prod_prod_Ioi
-  条件: (σ : Equiv.Perm (Fin n))
+定理 等价.置换.sign_eq_prod_prod_Ioi
+  条件: (σ : 等价.置换 (有限集 n))
   证明: by
   rw [σ.sign_eq_prod_prod_Iio]
   apply Finset.prod_comm' (by simp)
@@ -1984,8 +1984,8 @@ theorem Equiv.Perm.prod_Iio_comp_eq_sign_mul_prod
     su
 
 中文:
-定理 Equiv.Perm.prod_Iio_comp_eq_sign_mul_prod
-  结论: {R : 类型} [CommRing R]
+定理 等价.置换.prod_Iio_comp_eq_sign_mul_prod
+  结论: {R : 类型} [交换环 R]
   证明: by
   simp_rw [← σ.sign_inv, σ⁻¹.sign_eq_prod_prod_Iio, Finset.prod_sigma', Units.coe_prod,
     Int.cast_prod, ← Finset.prod_mul_distrib]
@@ -2032,8 +2032,8 @@ theorem Equiv.Perm.prod_Ioi_comp_eq_sign_mul_prod
   apply Finset.prod_comm' (by simp)
 
 中文:
-定理 Equiv.Perm.prod_Ioi_comp_eq_sign_mul_prod
-  结论: {R : 类型} [CommRing R]
+定理 等价.置换.prod_Ioi_comp_eq_sign_mul_prod
+  结论: {R : 类型} [交换环 R]
   证明: by
   convert! σ.prod_Iio_comp_eq_sign_mul_prod hf using 1
   · apply Finset.prod_comm' (by simp)

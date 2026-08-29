@@ -65,7 +65,7 @@ theorem map_insertNth
 
 中文:
 定理 map_insertNth
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (p : Fin (n + 1)) (x : E) (v : Fin n -> E)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (p : 有限集 (n + 1)) (x : E) (v : 有限集 n -> E)
   证明: f.toAlternatingMap.map_insertNth p x v
 
 Depends on / 依赖: f.toAlternatingMap.map_insertNth, map_insertNth, toAlternatingMap
@@ -84,7 +84,7 @@ theorem neg_one_pow_smul_map_insertNth
 
 中文:
 定理 neg_one_pow_smul_map_insertNth
-  结论: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (p : Fin (n + 1)) (x : E)
+  结论: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (p : 有限集 (n + 1)) (x : E)
   证明: f.toAlternatingMap.neg_one_pow_smul_map_insertNth p x v
 
 Depends on / 依赖: f.toAlternatingMap.neg_one_pow_smul_map_insertNth, neg_one_pow_smul_map_insertNth, toAlternatingMap
@@ -103,7 +103,7 @@ theorem neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
 
 中文:
 定理 neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
-  结论: (f : E [⋀^Fin n]->L[𝕜] F)
+  结论: (f : E [⋀^有限集 n]->L[𝕜] F)
   证明: f.toAlternatingMap.neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq hvij hij
 
 Depends on / 依赖: f.toAlternatingMap.neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq, neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq, toAlternatingMap
@@ -145,7 +145,7 @@ lemma alternatizeUncurryFinCLM.aux_apply
 
 中文:
 引理 alternatizeUncurryFinCLM.aux_apply
-  结论: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  结论: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   证明: by
   simp [aux, AlternatingMap.alternatizeUncurryFin_apply]
 -/
@@ -231,7 +231,7 @@ definition alternatizeUncurryFin
 
 中文:
 定义 alternatizeUncurryFin
-  签名: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  签名: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   定义体: alternatizeUncurryFinCLM 𝕜 E F f
 
 @[simp]
@@ -253,7 +253,7 @@ lemma alternatizeUncurryFinCLM_apply
 
 中文:
 引理 alternatizeUncurryFinCLM_apply
-  条件: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  条件: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   证明: rfl
 -/
 lemma alternatizeUncurryFinCLM_apply (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F) :
@@ -270,7 +270,7 @@ lemma norm_alternatizeUncurryFin_le
 
 中文:
 引理 norm_alternatizeUncurryFin_le
-  条件: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  条件: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   证明: (alternatizeUncurryFinCLM 𝕜 E F).le_of_opNorm_le norm_alternatizeUncurryFinCLM_le f
 
 Depends on / 依赖: alternatizeUncurryFinCLM, le_of_opNorm_le, norm_alternatizeUncurryFinCLM_le
@@ -291,7 +291,7 @@ theorem alternatizeUncurryFin_apply
 
 中文:
 定理 alternatizeUncurryFin_apply
-  条件: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F) (v : Fin (n + 1) -> E)
+  条件: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F) (v : 有限集 (n + 1) -> E)
   证明: by
   rw [alternatizeUncurryFin]; rw [alternatizeUncurryFinCLM]
   apply alternatizeUncurryFinCLM.aux_apply
@@ -317,7 +317,7 @@ lemma toAlternatingMap_alternatizeUncurryFin
 
 中文:
 引理 toAlternatingMap_alternatizeUncurryFin
-  条件: (f : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  条件: (f : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   证明: by
   ext
   simp [alternatizeUncurryFin_apply, AlternatingMap.alternatizeUncurryFin_apply]
@@ -345,7 +345,7 @@ theorem alternatizeUncurryFin_add
 
 中文:
 定理 alternatizeUncurryFin_add
-  条件: (f g : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F)
+  条件: (f g : E ->L[𝕜] E [⋀^有限集 n]->L[𝕜] F)
   证明: map_add (alternatizeUncurryFinCLM 𝕜 E F) f g
 
 @[simp]
@@ -371,7 +371,7 @@ lemma alternatizeUncurryFin_curryLeft
 
 中文:
 引理 alternatizeUncurryFin_curryLeft
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   证明: by
   ext v
   simp [alternatizeUncurryFin_apply, ← map_insertNth]
@@ -398,7 +398,7 @@ theorem alternatizeUncurryFin_smul
 
 中文:
 定理 alternatizeUncurryFin_smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S F]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S F]
   证明: by
   ext v
   simp [alternatizeUncurryFin_apply, smul_comm _ c, Finset.smul_sum]
@@ -509,7 +509,7 @@ theorem fderivCompContinuousLinearMap_eq_alternatizeUncurryFin
 
 中文:
 定理 fderivCompContinuousLinearMap_eq_alternatizeUncurryFin
-  结论: (f : F [⋀^Fin (n + 1)]->L[𝕜] G)
+  结论: (f : F [⋀^有限集 (n + 1)]->L[𝕜] G)
   证明: by
   ext dg v
   have (i j : Fin (n + 1)) :
@@ -547,7 +547,7 @@ theorem alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero
 
 中文:
 定理 alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero
-  结论: (f : F [⋀^Fin n]->L[𝕜] G)
+  结论: (f : F [⋀^有限集 n]->L[𝕜] G)
   证明: by
   cases n with
   | zero =>

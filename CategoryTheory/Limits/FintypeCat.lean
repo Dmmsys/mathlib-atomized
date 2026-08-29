@@ -47,7 +47,7 @@ instance finiteLimitOfFiniteDiagram
 
 中文:
 实例 finiteLimitOfFiniteDiagram
-  签名: {J : Type} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型} [小范畴 J] [有限范畴 J]
   定义体: by
   have : Fintype (sections K) := Fintype.ofFinite (sections K)
   exact Fintype.ofEquiv (sections K) (Types.limitEquivSections K).symm
@@ -70,7 +70,7 @@ instance inclusionCreatesFiniteLimits
 
 中文:
 实例 inclusionCreatesFiniteLimits
-  签名: {J : Type} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型} [小范畴 J] [有限范畴 J]
   定义体: createsLimitOfFullyFaithfulOfIso
     (FintypeCat.of <| limit <| K ⋙ FintypeCat.incl) (Iso.refl _)
 
@@ -99,7 +99,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: : HasFiniteLimits FintypeCat.{u} where
+  签名: : 有有限极限 FintypeCat.{u} where
   定义体: inferInstance
 -/
 instance hasFiniteLimits : HasFiniteLimits FintypeCat.{u} where
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (forget FintypeCat)
+  签名: 保持FiniteLimits (forget FintypeCat)
   定义体: FintypeCat.inclusion_preservesFiniteLimits
 
 Depends on / 依赖: FintypeCat, FintypeCat.inclusion_preservesFiniteLimits, cancel_mono, comp_smul, congr_arg, inclusion_preservesFiniteLimits, smul_comp, smul_smul
@@ -158,7 +158,7 @@ definition productEquiv
 
 中文:
 定义 productEquiv
-  签名: {ι : 类型} [Finite ι] (X : ι -> FintypeCat.{u})
+  签名: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
   定义体: have : Fintype ι := Fintype.ofFinite _
   haveI : Small.{u} ι :=
     ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
@@ -196,7 +196,7 @@ lemma productEquiv_apply
 
 中文:
 引理 productEquiv_apply
-  结论: {ι : 类型} [Finite ι] (X : ι -> FintypeCat.{u})
+  结论: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
   证明: by
   simpa [productEquiv, equivEquivIso, equivIsoIso, Iso.toEquiv] using!
     piComparison_comp_π_apply FintypeCat.incl X i x
@@ -222,7 +222,7 @@ lemma productEquiv_symm_comp_π_apply
 
 中文:
 引理 productEquiv_symm_comp_π_apply
-  结论: {ι : 类型} [Finite ι] (X : ι -> FintypeCat.{u})
+  结论: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
   证明: by
   rw [← productEquiv_apply]; rw [Equiv.apply_symm_apply]
 
@@ -242,7 +242,7 @@ instance nonempty_pi_of_nonempty
 
 中文:
 实例 nonempty_pi_of_nonempty
-  签名: {ι : 类型} [Finite ι] (X : ι -> FintypeCat.{u})
+  签名: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
   定义体: (Equiv.nonempty_congr <| productEquiv X).mpr inferInstance
 
 Depends on / 依赖: Equiv.nonempty_congr, nonempty_congr, productEquiv
@@ -261,7 +261,7 @@ instance finite_colimitType
 
 中文:
 实例 finite_colimitType
-  签名: {J : 类型} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型} [小范畴 J] [有限范畴 J]
   定义体: Quot.finite _
 
 Depends on / 依赖: Quot.finite, finite
@@ -280,7 +280,7 @@ lemma finite_of_isColimit
 
 中文:
 引理 finite_of_isColimit
-  结论: {J : 类型} [SmallCategory J] [FinCategory J]
+  结论: {J : 类型} [小范畴 J] [有限范畴 J]
   证明: Finite.of_equiv _ ((Types.isColimit_iff_coconeTypesIsColimit c).1 ⟨hc⟩).equiv
 
 Depends on / 依赖: Finite, Finite.of_equiv, Types.isColimit_iff_coconeTypesIsColimit, isColimit_iff_coconeTypesIsColimit, of_equiv
@@ -302,7 +302,7 @@ instance finiteColimitOfFiniteDiagram
 
 中文:
 实例 finiteColimitOfFiniteDiagram
-  签名: {J : Type} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型} [小范畴 J] [有限范畴 J]
   定义体: by
   have : Finite (colimit K) := finite_of_isColimit (colimit.isColimit K)
   apply Fintype.ofFinite
@@ -325,7 +325,7 @@ instance inclusionCreatesFiniteColimits
 
 中文:
 实例 inclusionCreatesFiniteColimits
-  签名: {J : Type} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型} [小范畴 J] [有限范畴 J]
   定义体: createsColimitOfFullyFaithfulOfIso
     (FintypeCat.of <| colimit <| K ⋙ FintypeCat.incl) (Iso.refl _)
 
@@ -354,7 +354,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: : HasFiniteColimits FintypeCat.{u} where
+  签名: : 有有限余极限 FintypeCat.{u} where
   定义体: inferInstance
 -/
 instance hasFiniteColimits : HasFiniteColimits FintypeCat.{u} where
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (forget FintypeCat)
+  签名: 保持FiniteColimits (forget FintypeCat)
   定义体: FintypeCat.inclusion_preservesFiniteColimits
 
 Depends on / 依赖: FintypeCat, FintypeCat.inclusion_preservesFiniteColimits, inclusion_preservesFiniteColimits
@@ -409,7 +409,7 @@ lemma jointly_surjective
 
 中文:
 引理 jointly_surjective
-  结论: {J : 类型} [SmallCategory J] [FinCategory J]
+  结论: {J : 类型} [小范畴 J] [有限范畴 J]
   证明: let hs := isColimitOfPreserves FintypeCat.incl.{u} h
   Types.jointly_surjective (F ⋙ FintypeCat.incl) hs x
 

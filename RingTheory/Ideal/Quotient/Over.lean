@@ -27,7 +27,7 @@ lemma Ideal.ncard_primesOver_lt_of_not_le
   · rintro ⟨q, ⟨_, _⟩, rfl⟩; exa
 
 中文:
-引理 Ideal.ncard_primesOver_lt_of_not_le
+引理 理想.ncard_primesOver_lt_of_not_le
   证明: by
   rw [← Set.ncard_image_of_injective _ (Ideal.comap_injective_of_surjective _ Hf)]
   refine Set.ncard_lt_ncard (Set.ssubset_iff_exists.mpr ⟨?_, P', ⟨‹_›, ‹_›⟩, ?_⟩) H
@@ -56,7 +56,7 @@ lemma Ideal.ncard_primesOver_quotient_singleton_lt_of_notMem
   proof: Ideal.ncard_primesOver_lt_of_not_le _ (Ideal.Quotient.mkₐ_surjective R _) _ P' (by simpa) H
 
 中文:
-引理 Ideal.ncard_primesOver_quotient_singleton_lt_of_notMem
+引理 理想.ncard_primesOver_quotient_singleton_lt_of_notMem
   证明: Ideal.ncard_primesOver_lt_of_not_le _ (Ideal.Quotient.mkₐ_surjective R _) _ P' (by simpa) H
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.ncard_primesOver_lt_of_not_le, Quotient, ncard_primesOver_lt_of_not_le

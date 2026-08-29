@@ -67,7 +67,7 @@ theorem autToPow_injective
 
 中文:
 定理 autToPow_injective
-  结论: Function.Injective hμ.autToPow K
+  结论: 函数.单射 hμ.autToPow K
   证明: by
   intro f g hfg
   have : f.toAlgHom = g.toAlgHom := by
@@ -113,7 +113,7 @@ definition autEquivPow
 
 中文:
 定义 autEquivPow
-  签名: (h : Irreducible (cyclotomic n K))
+  签名: (h : 不可约 (cyclotomic n K))
   定义体: let hζ := zeta_spec n K L
   let hμ t := hζ.pow_of_coprime _ (ZMod.val_coe_unit_coprime t)
   { (zeta_spec n K L).autToPow K with

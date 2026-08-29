@@ -39,7 +39,7 @@ theorem card_embedding_eq_of_unique
 
 中文:
 定理 card_embedding_eq_of_unique
-  条件: {α β : 类型} [Unique α] [Fintype β] [Fintype (α ↪ β)]
+  条件: {α β : 类型} [唯一 α] [有限类型 β] [有限类型 (α ↪ β)]
   证明: card_congr Equiv.uniqueEmbeddingEquivResult
 
 Depends on / 依赖: Equiv.uniqueEmbeddingEquivResult, card_congr, uniqueEmbeddingEquivResult
@@ -67,7 +67,7 @@ theorem card_embedding_eq
 
 中文:
 定理 card_embedding_eq
-  条件: {α β : 类型} [Fintype α] [Fintype β] [emb : Fintype (α ↪ β)]
+  条件: {α β : 类型} [有限类型 α] [有限类型 β] [emb : 有限类型 (α ↪ β)]
   证明: by
   rw [Subsingleton.elim emb Embedding.fintype]
   refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
@@ -101,7 +101,7 @@ theorem card_embedding_eq_of_infinite
 
 中文:
 定理 card_embedding_eq_of_infinite
-  条件: {α β : 类型} [Infinite α] [Finite β] [Fintype (α ↪ β)]
+  条件: {α β : 类型} [无限 α] [有限 β] [有限类型 (α ↪ β)]
   证明: card_eq_zero
 
 Depends on / 依赖: card_eq_zero

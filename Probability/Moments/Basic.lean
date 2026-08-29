@@ -61,7 +61,7 @@ definition moment
 
 中文:
 定义 moment
-  签名: (X : Ω -> 实数) (p : 自然数) (μ : Measure Ω)
+  签名: (X : Ω -> 实数) (p : 自然数) (μ : 测度 Ω)
   定义体: μ[X ^ p]
 
 Depends on / 依赖: Submodule, Submodule.nontrivial_iff_ne_bot.mpr, bot_lt_isotypicComponents, nontrivial_iff_ne_bot
@@ -79,7 +79,7 @@ lemma moment_def
 
 中文:
 引理 moment_def
-  条件: (X : Ω -> 实数) (p : 自然数) (μ : Measure Ω)
+  条件: (X : Ω -> 实数) (p : 自然数) (μ : 测度 Ω)
   证明: rfl
 -/
 lemma moment_def (X : Ω -> Real) (p : Nat) (μ : Measure Ω) :
@@ -97,7 +97,7 @@ definition centralMoment
 
 中文:
 定义 centralMoment
-  签名: (X : Ω -> 实数) (p : 自然数) (μ : Measure Ω)
+  签名: (X : Ω -> 实数) (p : 自然数) (μ : 测度 Ω)
   定义体: μ[(X - fun (_ : Ω) => μ[X]) ^ p]
 
 @[simp]
@@ -150,7 +150,7 @@ lemma moment_zero_measure
 
 中文:
 引理 moment_zero_measure
-  结论: moment X p (0 : Measure Ω) = 0
+  结论: moment X p (0 : 测度 Ω) = 0
   证明: by simp [moment]
 
 @[simp]
@@ -197,7 +197,7 @@ lemma moment_one
 
 中文:
 引理 moment_one
-  条件: (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (X : Ω -> 实数) (μ : 测度 Ω)
   证明: by simp [moment]
 
 @[simp]
@@ -219,7 +219,7 @@ lemma centralMoment_zero_measure
 
 中文:
 引理 centralMoment_zero_measure
-  结论: centralMoment X p (0 : Measure Ω) = 0
+  结论: centralMoment X p (0 : 测度 Ω) = 0
   证明: by
   simp [centralMoment]
 
@@ -243,7 +243,7 @@ theorem centralMoment_one'
 
 中文:
 定理 centralMoment_one'
-  条件: [IsFiniteMeasure μ] (h_int : 整数egrable X μ)
+  条件: [是有限测度 μ] (h_int : 可积 X μ)
   证明: by
   simp only [centralMoment, Pi.sub_apply, pow_one]
   rw [integral_sub h_int (integrable_const _)]
@@ -279,7 +279,7 @@ theorem centralMoment_one
 
 中文:
 定理 centralMoment_one
-  条件: [IsZeroOrProbabilityMeasure μ]
+  条件: [是ZeroOrProbabilityMeasure μ]
   结论: centralMoment X 1 μ = 0
   证明: by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
@@ -318,7 +318,7 @@ lemma centralMoment_two_eq_variance
 
 中文:
 引理 centralMoment_two_eq_variance
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   结论: centralMoment X 2 μ = variance X μ
   证明: (variance_eq_integral hX).symm
 
@@ -368,7 +368,7 @@ definition mgf
 
 中文:
 定义 mgf
-  签名: (X : Ω -> 实数) (μ : Measure Ω) (t : 实数)
+  签名: (X : Ω -> 实数) (μ : 测度 Ω) (t : 实数)
   定义体: μ[fun ω => exp (t * X ω)]
 -/
 def mgf (X : Ω -> Real) (μ : Measure Ω) (t : Real) : Real :=
@@ -386,7 +386,7 @@ definition cgf
 
 中文:
 定义 cgf
-  签名: (X : Ω -> 实数) (μ : Measure Ω) (t : 实数)
+  签名: (X : Ω -> 实数) (μ : 测度 Ω) (t : 实数)
   定义体: log (mgf X μ t)
 
 @[simp]
@@ -408,7 +408,7 @@ theorem mgf_zero_fun
 
 中文:
 定理 mgf_zero_fun
-  结论: mgf 0 μ t = μ.real Set.univ
+  结论: mgf 0 μ t = μ.real 集合.univ
   证明: by
   simp only [mgf, Pi.zero_apply, mul_zero, exp_zero, integral_const, smul_eq_mul, mul_one]
 
@@ -432,7 +432,7 @@ theorem cgf_zero_fun
 
 中文:
 定理 cgf_zero_fun
-  结论: cgf 0 μ t = log (μ.real Set.univ)
+  结论: cgf 0 μ t = log (μ.real 集合.univ)
   证明: by simp only [cgf, mgf_zero_fun]
 
 @[simp]
@@ -454,7 +454,7 @@ theorem mgf_zero_measure
 
 中文:
 定理 mgf_zero_measure
-  结论: mgf X (0 : Measure Ω) = 0
+  结论: mgf X (0 : 测度 Ω) = 0
   证明: by ext; simp [mgf]
 
 @[simp]
@@ -474,7 +474,7 @@ theorem cgf_zero_measure
 
 中文:
 定理 cgf_zero_measure
-  结论: cgf X (0 : Measure Ω) = 0
+  结论: cgf X (0 : 测度 Ω) = 0
   证明: by ext; simp [cgf]
 
 @[simp]
@@ -495,7 +495,7 @@ theorem mgf_const'
 中文:
 定理 mgf_const'
   条件: (c : 实数)
-  结论: mgf (fun _ => c) μ t = μ.real Set.univ * exp (t * c)
+  结论: mgf (fun _ => c) μ t = μ.real 集合.univ * exp (t * c)
   证明: by
   simp only [mgf, integral_const, smul_eq_mul]
 
@@ -518,7 +518,7 @@ theorem mgf_const
 
 中文:
 定理 mgf_const
-  条件: (c : 实数) [IsProbabilityMeasure μ]
+  条件: (c : 实数) [是概率测度 μ]
   结论: mgf (fun _ => c) μ t = exp (t * c)
   证明: by
   simp
@@ -546,7 +546,7 @@ theorem cgf_const'
 
 中文:
 定理 cgf_const'
-  条件: [IsFiniteMeasure μ] (hμ : μ != 0) (c : 实数)
+  条件: [是有限测度 μ] (hμ : μ != 0) (c : 实数)
   证明: by
   simp only [cgf, mgf_const']
   rw [log_mul _ (exp_pos _).ne']
@@ -581,7 +581,7 @@ theorem cgf_const
 
 中文:
 定理 cgf_const
-  条件: [IsProbabilityMeasure μ] (c : 实数)
+  条件: [是概率测度 μ] (c : 实数)
   结论: cgf (fun _ => c) μ t = t * c
   证明: by
   simp only [cgf, mgf_const, log_exp]
@@ -605,7 +605,7 @@ theorem mgf_zero'
 
 中文:
 定理 mgf_zero'
-  结论: mgf X μ 0 = μ.real Set.univ
+  结论: mgf X μ 0 = μ.real 集合.univ
   证明: by
   simp only [mgf, zero_mul, exp_zero, integral_const, smul_eq_mul, mul_one]
 
@@ -626,7 +626,7 @@ theorem mgf_zero
 
 中文:
 定理 mgf_zero
-  条件: [IsProbabilityMeasure μ]
+  条件: [是概率测度 μ]
   结论: mgf X μ 0 = 1
   证明: by
   simp [mgf_zero']
@@ -648,7 +648,7 @@ theorem cgf_zero'
 
 中文:
 定理 cgf_zero'
-  结论: cgf X μ 0 = log (μ.real Set.univ)
+  结论: cgf X μ 0 = log (μ.real 集合.univ)
   证明: by simp only [cgf, mgf_zero']
 
 @[simp]
@@ -670,7 +670,7 @@ theorem cgf_zero
 
 中文:
 定理 cgf_zero
-  条件: [IsZeroOrProbabilityMeasure μ]
+  条件: [是ZeroOrProbabilityMeasure μ]
   结论: cgf X μ 0 = 0
   证明: by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h <;> simp [cgf_zero']
@@ -692,7 +692,7 @@ theorem mgf_undef
 
 中文:
 定理 mgf_undef
-  条件: (hX : ¬整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: (hX : ¬可积 (fun ω => exp (t * X ω)) μ)
   结论: mgf X μ t = 0
   证明: by
   simp only [mgf, integral_undef hX]
@@ -714,7 +714,7 @@ theorem cgf_undef
 
 中文:
 定理 cgf_undef
-  条件: (hX : ¬整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: (hX : ¬可积 (fun ω => exp (t * X ω)) μ)
   结论: cgf X μ t = 0
   证明: by
   simp only [cgf, mgf_undef hX, log_zero]
@@ -759,7 +759,7 @@ theorem mgf_pos'
 
 中文:
 定理 mgf_pos'
-  条件: (hμ : μ != 0) (h_int_X : 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: (hμ : μ != 0) (h_int_X : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   simp_rw [mgf]
   have : ∫ x : Ω, exp (t * X x) ∂μ = ∫ x : Ω in Set.univ, exp (t * X x) ∂μ := by
@@ -799,7 +799,7 @@ theorem mgf_pos
 
 中文:
 定理 mgf_pos
-  条件: [IsProbabilityMeasure μ] (h_int_X : 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: [是概率测度 μ] (h_int_X : 可积 (fun ω => exp (t * X ω)) μ)
   证明: mgf_pos' (IsProbabilityMeasure.ne_zero μ) h_int_X
 
 Depends on / 依赖: IsProbabilityMeasure, IsProbabilityMeasure.ne_zero, h_int_X, mgf_pos, ne_zero
@@ -845,7 +845,7 @@ lemma exp_cgf
 
 中文:
 引理 exp_cgf
-  条件: [hμ : NeZero μ] (hX : 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: [hμ : NeZero μ] (hX : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by rw [cgf, exp_log (mgf_pos' hμ.out hX)]
 
 Depends on / 依赖: exp_log, mgf_pos
@@ -864,7 +864,7 @@ lemma mgf_map
 
 中文:
 引理 mgf_map
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ : Measure Ω'} {Y : Ω' -> Ω} {X : Ω -> 实数}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ : 测度 Ω'} {Y : Ω' -> Ω} {X : Ω -> 实数}
   证明: by
   simp_rw [mgf, integral_map hY hX, Function.comp_apply]
 
@@ -889,7 +889,7 @@ lemma mgf_id_map
 
 中文:
 引理 mgf_id_map
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   结论: mgf id (μ.map X) = mgf X μ
   证明: by
   ext t
@@ -934,7 +934,7 @@ lemma mgf_congr_identDistrib
 
 中文:
 引理 mgf_congr_identDistrib
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ' : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ' : 测度 Ω'}
   证明: by
   rw [← mgf_id_map h.aemeasurable_fst]; rw [← mgf_id_map h.aemeasurable_snd]; rw [h.map_eq]
 
@@ -1084,7 +1084,7 @@ lemma mgf_add_measure
 
 中文:
 引理 mgf_add_measure
-  结论: {ν : Measure Ω}
+  结论: {ν : 测度 Ω}
   证明: by
   rw [mgf]; rw [integral_add_measure hμ hν]; rw [mgf]; rw [mgf]
 
@@ -1106,7 +1106,7 @@ lemma mgf_sum_measure
 
 中文:
 引理 mgf_sum_measure
-  结论: {ι : 类型} {μ : ι -> Measure Ω}
+  结论: {ι : 类型} {μ : ι -> 测度 Ω}
   证明: by
   simp_rw [mgf, integral_sum_measure hμ]
 
@@ -1371,7 +1371,7 @@ theorem aestronglyMeasurable_exp_mul_sum
 
 中文:
 定理 aestronglyMeasurable_exp_mul_sum
-  结论: {X : ι -> Ω -> 实数} {s : Finset ι}
+  结论: {X : ι -> Ω -> 实数} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1442,7 +1442,7 @@ theorem iIndepFun.integrable_exp_mul_sum
 
 中文:
 定理 iIndepFun.integrable_exp_mul_sum
-  结论: [IsFiniteMeasure μ] {X : ι -> Ω -> 实数}
+  结论: [是有限测度 μ] {X : ι -> Ω -> 实数}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1682,7 +1682,7 @@ theorem measure_ge_le_exp_mul_mgf
 
 中文:
 定理 measure_ge_le_exp_mul_mgf
-  结论: [IsFiniteMeasure μ] (ε : 实数) (ht : 0 <= t)
+  结论: [是有限测度 μ] (ε : 实数) (ht : 0 <= t)
   证明: by
   rcases ht.eq_or_lt with ht_zero_eq | ht_pos
   · rw [ht_zero_eq.symm]
@@ -1731,7 +1731,7 @@ theorem measure_le_le_exp_mul_mgf
 
 中文:
 定理 measure_le_le_exp_mul_mgf
-  结论: [IsFiniteMeasure μ] (ε : 实数) (ht : t <= 0)
+  结论: [是有限测度 μ] (ε : 实数) (ht : t <= 0)
   证明: by
   rw [← neg_neg t]; rw [← mgf_neg]; rw [neg_neg]; rw [← neg_mul_neg (-t)]
   refine Eq.trans_le ?_ (measure_ge_le_exp_mul_mgf (-ε) (neg_nonneg.mpr ht) ?_)
@@ -1763,7 +1763,7 @@ theorem measure_ge_le_exp_cgf
 
 中文:
 定理 measure_ge_le_exp_cgf
-  结论: [IsFiniteMeasure μ] (ε : 实数) (ht : 0 <= t)
+  结论: [是有限测度 μ] (ε : 实数) (ht : 0 <= t)
   证明: by
   refine (measure_ge_le_exp_mul_mgf ε ht h_int).trans ?_
   rw [exp_add]
@@ -1791,7 +1791,7 @@ theorem measure_le_le_exp_cgf
 
 中文:
 定理 measure_le_le_exp_cgf
-  结论: [IsFiniteMeasure μ] (ε : 实数) (ht : t <= 0)
+  结论: [是有限测度 μ] (ε : 实数) (ht : t <= 0)
   证明: by
   refine (measure_le_le_exp_mul_mgf ε ht h_int).trans ?_
   rw [exp_add]
@@ -1844,7 +1844,7 @@ lemma mgf_dirac'
 
 中文:
 引理 mgf_dirac'
-  条件: [MeasurableSingletonClass Ω] {ω : Ω}
+  条件: [MeasurableSingleton类 Ω] {ω : Ω}
   证明: by
   rw [mgf]; rw [integral_dirac]
 
@@ -1866,7 +1866,7 @@ lemma aemeasurable_exp_mul
 
 中文:
 引理 aemeasurable_exp_mul
-  条件: {X : Ω -> 实数} (t : 实数) (hX : AEMeasurable X μ)
+  条件: {X : Ω -> 实数} (t : 实数) (hX : 几乎处处可测 X μ)
   证明: (measurable_exp.comp_aemeasurable (hX.const_mul t)).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, comp_aemeasurable, const_mul, hX.const_mul, measurable_exp, measurable_exp.comp_aemeasurable
@@ -1888,7 +1888,7 @@ lemma integrable_exp_mul_of_le
 
 中文:
 引理 integrable_exp_mul_of_le
-  结论: [IsFiniteMeasure μ] {X : Ω -> 实数} (t b : 实数) (ht : 0 <= t)
+  结论: [是有限测度 μ] {X : Ω -> 实数} (t b : 实数) (ht : 0 <= t)
   证明: by
   refine .of_mem_Icc 0 (rexp (t * b)) (measurable_exp.comp_aemeasurable (hX.const_mul t)) ?_
   filter_upwards [hb] with ω hb
@@ -1919,7 +1919,7 @@ lemma integrable_exp_mul_of_mem_Icc
 
 中文:
 引理 integrable_exp_mul_of_mem_Icc
-  结论: [IsFiniteMeasure μ] {X : Ω -> 实数} {a b t : 实数}
+  结论: [是有限测度 μ] {X : Ω -> 实数} {a b t : 实数}
   证明: by
   apply Integrable.of_mem_Icc (exp (min (a * t) (b * t))) (exp (max (a * t) (b * t)))
   · exact (measurable_exp.comp_aemeasurable (hm.const_mul t))
@@ -1961,7 +1961,7 @@ lemma integral_comp_id_comm'
 
 中文:
 引理 integral_comp_id_comm'
-  条件: (h : 整数egrable id μ) (L : E ->L[𝕜] F)
+  条件: (h : 可积 id μ) (L : E ->L[𝕜] F)
   证明: by
   change ∫ x, L (id x) ∂μ = _
   rw [L.integral_comp_comm h]
@@ -1983,7 +1983,7 @@ lemma integral_comp_id_comm
 
 中文:
 引理 integral_comp_id_comm
-  条件: (h : 整数egrable id μ) (L : E ->L[𝕜] F)
+  条件: (h : 可积 id μ) (L : E ->L[𝕜] F)
   证明: L.integral_comp_id_comm' h
 
 Depends on / 依赖: L.integral_comp_id_comm, integral_comp_id_comm
@@ -2006,7 +2006,7 @@ lemma integral_id_map
 
 中文:
 引理 integral_id_map
-  条件: (h : 整数egrable id μ) (L : E ->L[𝕜] F)
+  条件: (h : 可积 id μ) (L : E ->L[𝕜] F)
   证明: by
   rw [integral_map (by fun_prop) (by fun_prop)]
   simp [L.integral_comp_id_comm h]

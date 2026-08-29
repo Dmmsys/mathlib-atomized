@@ -51,7 +51,7 @@ instance instInhabitedSigma
 
 中文:
 实例 instInhabitedSigma
-  签名: [Inhabited α] [Inhabited (β default)]
+  签名: [可居 α] [可居 (β default)]
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance instInhabitedSigma [Inhabited α] [Inhabited (β default)] : Inhabited (Sigma β) :=
@@ -110,7 +110,7 @@ theorem eta
 
 中文:
 定理 eta
-  结论: 对任意 x : Σ a, β a, Sigma.mk x.1 x.2 = x
+  结论: 对任意 x : Σ a, β a, 依赖和类型.mk x.1 x.2 = x
 -/
 theorem eta : forall x : Σ a, β a, Sigma.mk x.1 x.2 = x
   | ⟨_, _⟩ => rfl
@@ -144,8 +144,8 @@ theorem _root_.Function.eq_of_sigmaMk_comp
   simpa [funext_iff] using h
 
 中文:
-定理 _root_.Function.eq_of_sigmaMk_comp
-  结论: {γ : 类型} [Nonempty γ]
+定理 _root_.函数.eq_of_sigmaMk_comp
+  结论: {γ : 类型} [非空 γ]
   证明: by
   rcases ‹Nonempty γ› with ⟨i⟩
   obtain rfl : a = b := congr_arg Sigma.fst (congr_fun h i)
@@ -190,7 +190,7 @@ theorem «forall»
 @[simp]
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : (Σ a, β a) -> 命题}
   结论: (对任意 x, p x) ↔ 对任意 a b, p ⟨a, b⟩
   证明: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
@@ -211,7 +211,7 @@ theorem «exists»
   proof: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : (Σ a, β a) -> 命题}
   结论: (存在 x, p x) ↔ 存在 a b, p ⟨a, b⟩
   证明: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
@@ -229,7 +229,7 @@ lemma exists'
   proof: (Sigma.exists (p := fun x => p x.1 x.2)).symm
 
 中文:
-引理 exists'
+引理 存在'
   条件: {p : 对任意 a, β a -> 命题}
   结论: (存在 a b, p a b) ↔ 存在 x : Σ a, β a, p x.1 x.2
   证明: (Sigma.exists (p := fun x => p x.1 x.2)).symm
@@ -249,7 +249,7 @@ lemma forall'
   proof: (Sigma.forall (p := fun x => p x.1 x.2)).symm
 
 中文:
-引理 forall'
+引理 对任意'
   条件: {p : 对任意 a, β a -> 命题}
   结论: (对任意 a b, p a b) ↔ 对任意 x : Σ a, β a, p x.1 x.2
   证明: (Sigma.forall (p := fun x => p x.1 x.2)).symm
@@ -270,7 +270,7 @@ theorem _root_.sigma_mk_injective
 中文:
 定理 _root_.sigma_mk_injective
   条件: {i : α}
-  结论: Injective (@Sigma.mk α β i)
+  结论: 单射 (@依赖和类型.mk α β i)
 -/
 theorem _root_.sigma_mk_injective {i : α} : Injective (@Sigma.mk α β i)
   | _, _, rfl => rfl
@@ -287,8 +287,8 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  条件: [h : 对任意 a, Nonempty (β a)]
-  结论: Surjective (fst : (Σ a, β a) -> α)
+  条件: [h : 对任意 a, 非空 (β a)]
+  结论: 满射 (fst : (Σ a, β a) -> α)
   证明: fun a =>
   let ⟨b⟩ := h a; ⟨⟨a, b⟩, rfl⟩
 -/
@@ -305,7 +305,7 @@ theorem fst_surjective_iff
 
 中文:
 定理 fst_surjective_iff
-  结论: Surjective (fst : (Σ a, β a) -> α) ↔ 对任意 a, Nonempty (β a)
+  结论: 满射 (fst : (Σ a, β a) -> α) ↔ 对任意 a, 非空 (β a)
   证明: ⟨fun h a => let ⟨x, hx⟩ := h a; hx ▸ ⟨x.2⟩, @fst_surjective _ _⟩
 
 Depends on / 依赖: fst_surjective
@@ -326,8 +326,8 @@ exact congr_arg (mk a₁) Subsingleton.elim _ _
 
 中文:
 定理 fst_injective
-  条件: [h : 对任意 a, Subsingleton (β a)]
-  结论: Injective (fst : (Σ a, β a) -> α)
+  条件: [h : 对任意 a, 子单例 (β a)]
+  结论: 单射 (fst : (Σ a, β a) -> α)
   证明: by
   rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ (rfl : a₁ = a₂)
 exact congr_arg (mk a₁) Subsingleton.elim _ _
@@ -348,7 +348,7 @@ theorem fst_injective_iff
 
 中文:
 定理 fst_injective_iff
-  结论: Injective (fst : (Σ a, β a) -> α) ↔ 对任意 a, Subsingleton (β a)
+  结论: 单射 (fst : (Σ a, β a) -> α) ↔ 对任意 a, 子单例 (β a)
   证明: ⟨fun h _ => ⟨fun _ _ => sigma_mk_injective h rfl⟩, @fst_injective _ _⟩
 
 Depends on / 依赖: fst_injective, sigma_mk_injective
@@ -366,7 +366,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f₁ : α₁ -> α₂) (f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)) (x : Sigma β₁)
+  签名: (f₁ : α₁ -> α₂) (f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)) (x : 依赖和类型 β₁)
   定义体: ⟨f₁ x.1, f₂ x.1 x.2⟩
 -/
 def map (f₁ : α₁ -> α₂) (f₂ : forall a, β₁ a -> β₂ (f₁ a)) (x : Sigma β₁) : Sigma β₂ :=
@@ -400,7 +400,7 @@ theorem Function.Injective.sigma_map
     rfl
 
 中文:
-定理 Function.Injective.sigma_map
+定理 函数.单射.sigma_map
   结论: {f₁ : α₁ -> α₂} {f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)}
   证明: h₁ (Sigma.mk.inj_iff.mp h).1
     obtain rfl : x = y := h₂ i (sigma_mk_injective h)
@@ -425,7 +425,7 @@ theorem Function.Injective.of_sigma_map
 sigma_mk_injective @h ⟨a, x⟩ ⟨a, y⟩ (Sigma.ext rfl (heq_of_eq hxy))
 
 中文:
-定理 Function.Injective.of_sigma_map
+定理 函数.单射.of_sigma_map
   结论: {f₁ : α₁ -> α₂} {f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)}
   证明: fun x y hxy =>
 sigma_mk_injective @h ⟨a, x⟩ ⟨a, y⟩ (Sigma.ext rfl (heq_of_eq hxy))
@@ -443,7 +443,7 @@ theorem Function.Injective.sigma_map_iff
   proof: ⟨fun h => h.of_sigma_map, h₁.sigma_map⟩
 
 中文:
-定理 Function.Injective.sigma_map_iff
+定理 函数.单射.sigma_map_iff
   结论: {f₁ : α₁ -> α₂} {f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)}
   证明: ⟨fun h => h.of_sigma_map, h₁.sigma_map⟩
 
@@ -464,7 +464,7 @@ theorem Function.Surjective.sigma_map
   exact fun i => (h₂ _).forall.2 fun x => ⟨⟨i, x⟩, rfl⟩
 
 中文:
-定理 Function.Surjective.sigma_map
+定理 函数.满射.sigma_map
   结论: {f₁ : α₁ -> α₂} {f₂ : 对任意 a, β₁ a -> β₂ (f₁ a)}
   证明: by
   simp only [Surjective, Sigma.forall, h₁.forall]
@@ -486,8 +486,8 @@ definition Sigma.curry
   body: f ⟨x, y⟩
 
 中文:
-定义 Sigma.curry
-  签名: {γ : 对任意 a, β a -> 类型} (f : 对任意 x : Sigma β, γ x.1 x.2) (x : α) (y : β x)
+定义 依赖和类型.curry
+  签名: {γ : 对任意 a, β a -> 类型} (f : 对任意 x : 依赖和类型 β, γ x.1 x.2) (x : α) (y : β x)
   定义体: f ⟨x, y⟩
 -/
 def Sigma.curry {γ : forall a, β a -> Type*} (f : forall x : Sigma β, γ x.1 x.2) (x : α) (y : β x) : γ x y :=
@@ -504,8 +504,8 @@ definition Sigma.uncurry
 @[simp]
 
 中文:
-定义 Sigma.uncurry
-  签名: {γ : 对任意 a, β a -> 类型} (f : 对任意 (x) (y : β x), γ x y) (x : Sigma β)
+定义 依赖和类型.uncurry
+  签名: {γ : 对任意 a, β a -> 类型} (f : 对任意 (x) (y : β x), γ x y) (x : 依赖和类型 β)
   定义体: f x.1 x.2
 
 @[simp]
@@ -525,8 +525,8 @@ theorem Sigma.uncurry_curry
 @[simp]
 
 中文:
-定理 Sigma.uncurry_curry
-  条件: {γ : 对任意 a, β a -> 类型} (f : 对任意 x : Sigma β, γ x.1 x.2)
+定理 依赖和类型.uncurry_curry
+  条件: {γ : 对任意 a, β a -> 类型} (f : 对任意 x : 依赖和类型 β, γ x.1 x.2)
   证明: funext fun ⟨_, _⟩ => rfl
 
 @[simp]
@@ -545,7 +545,7 @@ theorem Sigma.curry_uncurry
   proof: rfl
 
 中文:
-定理 Sigma.curry_uncurry
+定理 依赖和类型.curry_uncurry
   条件: {γ : 对任意 a, β a -> 类型} (f : 对任意 (x) (y : β x), γ x y)
   证明: rfl
 -/
@@ -571,7 +571,7 @@ theorem Sigma.curry_update
     · exact ha.symm
 
 中文:
-定理 Sigma.curry_update
+定理 依赖和类型.curry_update
   结论: {γ : 对任意 a, β a -> 类型} [DecidableEq α] [对任意 a, DecidableEq (β a)]
   证明: by
   obtain ⟨ia, ib⟩ := i
@@ -611,7 +611,7 @@ definition Prod.toSigma
 @[simp]
 
 中文:
-定义 Prod.toSigma
+定义 积类型.toSigma
   签名: {α β} (p : α × β)
   定义体: ⟨p.1, p.2⟩
 
@@ -633,9 +633,9 @@ theorem Prod.fst_comp_toSigma
 @[simp]
 
 中文:
-定理 Prod.fst_comp_toSigma
+定理 积类型.fst_comp_toSigma
   条件: {α β}
-  结论: Sigma.fst ∘ @Prod.toSigma α β = Prod.fst
+  结论: 依赖和类型.fst ∘ @积类型.toSigma α β = 积类型.fst
   证明: rfl
 
 @[simp]
@@ -656,9 +656,9 @@ theorem Prod.fst_toSigma
 @[simp]
 
 中文:
-定理 Prod.fst_toSigma
+定理 积类型.fst_toSigma
   条件: {α β} (x : α × β)
-  结论: (Prod.toSigma x).fst = x.fst
+  结论: (积类型.toSigma x).fst = x.fst
   证明: rfl
 
 @[simp]
@@ -679,9 +679,9 @@ theorem Prod.snd_toSigma
 @[simp]
 
 中文:
-定理 Prod.snd_toSigma
+定理 积类型.snd_toSigma
   条件: {α β} (x : α × β)
-  结论: (Prod.toSigma x).snd = x.snd
+  结论: (积类型.toSigma x).snd = x.snd
   证明: rfl
 
 @[simp]
@@ -700,7 +700,7 @@ theorem Prod.toSigma_mk
   proof: rfl
 
 中文:
-定理 Prod.toSigma_mk
+定理 积类型.toSigma_mk
   条件: {α β} (x : α) (y : β)
   结论: (x, y).toSigma = ⟨x, y⟩
   证明: rfl
@@ -722,9 +722,9 @@ theorem Prod.toSigma_injective
 @[simp]
 
 中文:
-定理 Prod.toSigma_injective
+定理 积类型.toSigma_injective
   条件: {α β}
-  结论: Function.Injective (α := α × β) Prod.toSigma
+  结论: 函数.单射 (α := α × β) 积类型.toSigma
   证明: by
   rintro ⟨a, b⟩ ⟨c, d⟩ h
   simp_all
@@ -748,7 +748,7 @@ theorem Prod.toSigma_inj
   proof: Prod.toSigma_injective.eq_iff
 
 中文:
-定理 Prod.toSigma_inj
+定理 积类型.toSigma_inj
   条件: {α β} {x y : α × β}
   结论: x.toSigma = y.toSigma ↔ x = y
   证明: Prod.toSigma_injective.eq_iff
@@ -776,7 +776,7 @@ definition elim
 
 中文:
 定义 elim
-  签名: {γ} (f : 对任意 a, β a -> γ) (a : PSigma β)
+  签名: {γ} (f : 对任意 a, β a -> γ) (a : 命题和类型 β)
   定义体: PSigma.casesOn a f
 
 @[simp]
@@ -799,7 +799,7 @@ theorem elim_val
 中文:
 定理 elim_val
   条件: {γ} (f : 对任意 a, β a -> γ) (a b)
-  结论: PSigma.elim f ⟨a, b⟩ = f a b
+  结论: 命题和类型.elim f ⟨a, b⟩ = f a b
   证明: rfl
 -/
 theorem elim_val {γ} (f : forall a, β a -> γ) (a b) : PSigma.elim f ⟨a, b⟩ = f a b :=
@@ -814,8 +814,8 @@ instance [Inhabited
   body: ⟨⟨default, default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: α] [Inhabited (β default)] : Inhabited (PSigma β)
+实例 [可居
+  签名: α] [可居 (β default)] : 可居 (命题和类型 β)
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance [Inhabited α] [Inhabited (β default)] : Inhabited (PSigma β) :=
@@ -877,7 +877,7 @@ theorem «forall»
   proof: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : (Σ' a, β a) -> 命题}
   结论: (对任意 x, p x) ↔ 对任意 a b, p ⟨a, b⟩
   证明: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
@@ -895,7 +895,7 @@ lemma «exists»
   proof: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : (Σ' a, β a) -> 命题}
   结论: (存在 x, p x) ↔ 存在 a b, p ⟨a, b⟩
   证明: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
@@ -914,7 +914,7 @@ theorem subtype_ext
 
 中文:
 定理 subtype_ext
-  条件: {β : Sort*} {p : α -> β -> 命题}
+  条件: {β : 类型层*} {p : α -> β -> 命题}
 -/
 theorem subtype_ext {β : Sort*} {p : α -> β -> Prop} :
     forall {x₀ x₁ : Σ' a, Subtype (p a)}, x₀.fst = x₁.fst -> (x₀.snd : β) = x₁.snd -> x₀ = x₁

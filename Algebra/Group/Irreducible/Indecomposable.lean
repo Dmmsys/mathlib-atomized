@@ -39,7 +39,7 @@ definition IsMulIndecomposable
 
 中文:
 定义 IsMulIndecomposable
-  签名: (v : ι -> M) (s : Set ι) (i : ι)
+  签名: (v : ι -> M) (s : 集合 ι) (i : ι)
   定义体: i in s ∧ forallᵉ (j in s) (k in s), v i = v j * v k -> v j = 1 ∨ v k = 1
 
 @[to_additive]
@@ -61,7 +61,7 @@ lemma IsMulIndecomposable.subset
 
 中文:
 引理 IsMulIndecomposable.subset
-  条件: (v : ι -> M) (s : Set ι)
+  条件: (v : ι -> M) (s : 集合 ι)
   证明: by
   aesop
 
@@ -82,7 +82,7 @@ lemma isMulIndecomposable_id_univ
 
 中文:
 引理 isMulIndecomposable_id_univ
-  条件: [Subsingleton Mˣ] {x : M} (hx : x != 1)
+  条件: [子单例 Mˣ] {x : M} (hx : x != 1)
   证明: ⟨fun h => ⟨by simpa, by simpa using h⟩, fun h => by simpa using h.isUnit_or_isUnit⟩
 
 Depends on / 依赖: h.isUnit_or_isUnit, isUnit_or_isUnit
@@ -108,7 +108,7 @@ definition IsMulIndecomposable.baseOf
 
 中文:
 定义 IsMulIndecomposable.baseOf
-  签名: [Monoid S] (v : ι -> M) (f : M ->* S)
+  签名: [幺半群 S] (v : ι -> M) (f : M ->* S)
   定义体: {j | IsMulIndecomposable v {i | 1 < f (v i)} j}
 
 @[to_additive]
@@ -131,7 +131,7 @@ lemma IsMulIndecomposable.baseOf_subset_one_lt
 
 中文:
 引理 IsMulIndecomposable.baseOf_subset_one_lt
-  条件: [Monoid S] (v : ι -> M) (f : M ->* S)
+  条件: [幺半群 S] (v : ι -> M) (f : M ->* S)
   证明: IsMulIndecomposable.subset _ _
 
 @[to_additive]
@@ -213,8 +213,8 @@ lemma Submonoid.closure_image_isMulIndecomposable_baseOf
   let s : Set ι := {j | 1 < f (v j) ∧ v j ∉ closure (v 
 
 中文:
-引理 Submonoid.closure_image_isMulIndecomposable_baseOf
-  结论: [Finite ι]
+引理 子幺半群.closure_image_isMulIndecomposable_baseOf
+  结论: [有限 ι]
   证明: by
   refine le_antisymm (closure_mono (image_mono <| IsMulIndecomposable.baseOf_subset_one_lt v f))
     (closure_le.mpr ?_)
@@ -265,8 +265,8 @@ lemma Subgroup.closure_image_isMulIndecomposable_baseOf
   refine ⟨le_trans ?_ (le_closure_toSubmonoid (v '
 
 中文:
-引理 Subgroup.closure_image_isMulIndecomposable_baseOf
-  结论: [Finite ι] [InvolutiveInv ι]
+引理 子群.closure_image_isMulIndecomposable_baseOf
+  结论: [有限 ι] [InvolutiveInv ι]
   证明: by
   rw [← image_univ]
   refine le_antisymm (closure_mono (image_mono <| by simp)) ((closure_le _).mpr ?_)
@@ -362,7 +362,7 @@ lemma pairwise_div_notMem_range'
 
 中文:
 引理 pairwise_div_notMem_range'
-  结论: [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+  结论: [InvolutiveInv ι] [交换群 S] [是Ordered幺半群 S]
   证明: by
   have hv_one : forall i, v i != 1 := fun i => by contrapose! hf; exact ⟨i, by simp [hf]⟩
   apply pairwise_div_notMem_range v hv_one hv_inv s {i | 1 < f (v i)} hst fun i => ?_
@@ -392,7 +392,7 @@ lemma pairwise_baseOf_div_notMem
 
 中文:
 引理 pairwise_baseOf_div_notMem
-  结论: [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+  结论: [InvolutiveInv ι] [交换群 S] [是Ordered幺半群 S]
   证明: pairwise_div_notMem_range' v hv_inv f hf (baseOf v f) (.refl _)
 
 Depends on / 依赖: baseOf, hv_inv, pairwise_div_notMem_range
@@ -421,7 +421,7 @@ lemma mem_or_inv_mem_closure_baseOf
 
 中文:
 引理 mem_or_inv_mem_closure_baseOf
-  结论: [Finite ι] [InvolutiveInv ι] [CommGroup S] [IsOrderedMonoid S]
+  结论: [有限 ι] [InvolutiveInv ι] [交换群 S] [是Ordered幺半群 S]
   证明: by
   rw [Submonoid.closure_image_isMulIndecomposable_baseOf v f]
   rcases lt_or_gt_of_ne hi with hj | hj
@@ -463,8 +463,8 @@ refine ⟨fun hi => ?_, fun hi => subset_closure mem_image_of_mem v hi⟩
   
 
 中文:
-引理 Submonoid.mem_closure_image_one_lt_iff
-  结论: [CommMonoid S] [IsOrderedCancelMonoid S]
+引理 子幺半群.mem_closure_image_one_lt_iff
+  结论: [交换幺半群 S] [是OrderedCancel幺半群 S]
   证明: by
 refine ⟨fun hi => ?_, fun hi => subset_closure mem_image_of_mem v hi⟩
   suffices v i = 1 ∨ 1 < f (v i) from this.resolve_left hv_one
@@ -502,7 +502,7 @@ lemma Submonoid.apply_ne_one_of_mem_or_inv_mem_closure
   refine closure_induc
 
 中文:
-引理 Submonoid.apply_ne_one_of_mem_or_inv_mem_closure
+引理 子幺半群.apply_ne_one_of_mem_or_inv_mem_closure
   证明: by
   wlog hi : v i in closure (v '' s)
   · rcases hsp with hi' | hi'; · contradiction

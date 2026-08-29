@@ -82,14 +82,14 @@ class NonPreadditiveAbelian
 
 中文:
 类 NonPreadditiveAbelian
-  参数: extends HasZeroMorphisms C, IsNormalMonoCategory C,
-  继承: HasZeroMorphisms C, IsNormalMonoCategory C, 
+  参数: extends 有ZeroMorphisms C, 是正规单态射范畴 C,
+  继承: 有ZeroMorphisms C, 是正规单态射范畴 C, 
   公理与运算 (5 个):
-    - [has_zero_object : HasZeroObject C]
-    - [has_kernels : HasKernels C]
-    - [has_cokernels : HasCokernels C]
-    - [has_finite_products : HasFiniteProducts C]
-    - [has_finite_coproducts : HasFiniteCoproducts C]
+    - [has_zero_object : 有ZeroObject C]
+    - [has_kernels : 有Kernels C]
+    - [has_cokernels : 有余kernels C]
+    - [has_finite_products : 有FiniteProducts C]
+    - [has_finite_coproducts : 有FiniteCoproducts C]
 -/
 class NonPreadditiveAbelian extends HasZeroMorphisms C, IsNormalMonoCategory C,
     IsNormalEpiCategory C where
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (Abelian.factorThruImage f)
+  签名: 满态射 (交换.factorThruImage f)
   定义体: let I := Abelian.image f
   let p := Abelian.factorThruImage f
   let i := kernel.ι (cokernel.π f)
@@ -196,7 +196,7 @@ instance isIso_factorThruImage
 
 中文:
 实例 isIso_factorThruImage
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: isIso_of_mono_of_epi Abelian.factorThruImage f
 
 Depends on / 依赖: Abelian, Abelian.factorThruImage, factorThruImage, isIso_of_mono_of_epi
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (Abelian.factorThruCoimage f)
+  签名: 单态射 (交换.factorThruCoimage f)
   定义体: let I := Abelian.coimage f
   let i := Abelian.factorThruCoimage f
   let p := cokernel.π (kernel.ι f)
@@ -273,7 +273,7 @@ instance isIso_factorThruCoimage
 
 中文:
 实例 isIso_factorThruCoimage
-  签名: [Epi f]
+  签名: [满态射 f]
   定义体: isIso_of_mono_of_epi _
 
 Depends on / 依赖: isIso_of_mono_of_epi
@@ -301,7 +301,7 @@ definition epiIsCokernelOfKernel
 
 中文:
 定义 epiIsCokernelOfKernel
-  签名: [Epi f] (s : Fork f 0) (h : IsLimit s)
+  签名: [满态射 f] (s : 叉 f 0) (h : 是极限 s)
   定义体: IsCokernel.cokernelIso _ _
     (cokernel.ofIsoComp _ _ (Limits.IsLimit.conePointUniqueUpToIso (limit.isLimit _) h)
       (ConeMorphism.w (Limits.IsLimit.uniqueUpToIso (limit.isLimit _) h).hom _))
@@ -330,7 +330,7 @@ definition monoIsKernelOfCokernel
 
 中文:
 定义 monoIsKernelOfCokernel
-  签名: [Mono f] (s : Cofork f 0) (h : IsColimit s)
+  签名: [单态射 f] (s : 余叉 f 0) (h : 是余极限 s)
   定义体: IsKernel.isoKernel _ _
     (kernel.ofCompIso _ _ (Limits.IsColimit.coconePointUniqueUpToIso h (colimit.isColimit _))
       (CoconeMorphism.w (Limits.IsColimit.uniqueUpToIso h <| colimit.isColimit _).hom _))
@@ -560,7 +560,7 @@ theorem lift_σ
 中文:
 定理 lift_σ
   条件: {X : C}
-  结论: prod.lift (𝟙 X) 0 ≫ σ = 𝟙 X
+  结论: 乘积.lift (𝟙 X) 0 ≫ σ = 𝟙 X
   证明: by rw [← Category.assoc, IsIso.hom_inv_id]
 
 @[reassoc]
@@ -624,7 +624,7 @@ theorem σ_comp
 中文:
 定理 σ_comp
   条件: {X Y : C} (f : X ⟶ Y)
-  结论: σ ≫ f = Limits.prod.map f f ≫ σ
+  结论: σ ≫ f = Limits.乘积.map f f ≫ σ
   证明: by
   obtain ⟨g, hg⟩ :=
     CokernelCofork.IsColimit.desc' isColimitσ (Limits.prod.map f f ≫ σ) (by
@@ -726,7 +726,7 @@ theorem sub_def
 中文:
 定理 sub_def
   条件: {X Y : C} (a b : X ⟶ Y)
-  结论: a - b = prod.lift a b ≫ σ
+  结论: a - b = 乘积.lift a b ≫ σ
   证明: rfl
 -/
 theorem sub_def {X Y : C} (a b : X ⟶ Y) : a - b = prod.lift a b ≫ σ := rfl
@@ -1251,7 +1251,7 @@ definition preadditive
 
 中文:
 定义 preadditive
-  签名: : Preadditive C where
+  签名: : 预加性 C where
   定义体: { add_assoc := add_assoc
       zero_add := neg_neg
       add_zero := add_zero

@@ -74,15 +74,15 @@ structure MonomialOrder
     - wellFoundedLT_syn : WellFoundedLT syn  [default: by infer_instance]
 
 中文:
-结构 MonomialOrder
+结构 单项式序
   参数: (σ : 类型)
   公理与运算 (7 个):
     - syn : 类型
-    - addCommMonoidSyn : AddCommMonoid syn  [默认: by infer_instance]
-    - linearOrderSyn : LinearOrder syn  [默认: by infer_instance]
-    - isOrderedAddMonoid_syn : IsOrderedAddMonoid syn  [默认: by infer_instance]
+    - addCommMonoidSyn : 加法交换幺半群 syn  [默认: by infer_instance]
+    - linearOrderSyn : 线性序 syn  [默认: by infer_instance]
+    - isOrderedAddMonoid_syn : 是OrderedAdd幺半群 syn  [默认: by infer_instance]
     - toSyn : (σ ->₀ 自然数) ≃+ syn
-    - toSyn_monotone : Monotone toSyn
+    - toSyn_monotone : 递增 toSyn
     - wellFoundedLT_syn : WellFoundedLT syn  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCancelCommMonoid m.syn
+  签名: 加法消去交换幺半群 m.syn
   定义体: m.toSyn.symm.injective.isLeftCancelAdd _ (map_add _)
 
 Depends on / 依赖: injective, isLeftCancelAdd, m.toSyn.symm.injective.isLeftCancelAdd, map_add
@@ -146,7 +146,7 @@ instance isOrderedCancelAddMonoid_syn
 
 中文:
 实例 isOrderedCancelAddMonoid_syn
-  签名: : IsOrderedCancelAddMonoid m.syn
+  签名: : 是OrderedCancelAdd幺半群 m.syn
   定义体: IsOrderedAddMonoid.toIsOrderedCancelAddMonoid'
 
 @[deprecated (since := "2026-07-07")] alias iocam := MonomialOrder.isOrderedCancelAddMonoid_syn
@@ -214,7 +214,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (m.syn) where
+  签名: : 有底序 (m.syn) where
   定义体: 0
   bot_le a := by
     have := m.le_add_right 0 (m.toSyn.symm a)
@@ -336,7 +336,7 @@ lemma toSyn_strictMono
 
 中文:
 引理 toSyn_strictMono
-  结论: StrictMono (m.toSyn)
+  结论: 严格递增 (m.toSyn)
   证明: by
   apply m.toSyn_monotone.strictMono_of_injective m.toSyn.injective
 
@@ -585,7 +585,7 @@ definition MonomialOrder.lex
   toSyn_monotone := Finsupp.toLex_monotone
 
 中文:
-定义 MonomialOrder.lex
+定义 单项式序.lex
   签名: [WellFoundedGT σ]
   定义体: Lex (σ ->₀ Nat)
   toSyn :=
@@ -610,7 +610,7 @@ theorem MonomialOrder.lex_le_iff
   proof: Iff.rfl
 
 中文:
-定理 MonomialOrder.lex_le_iff
+定理 单项式序.lex_le_iff
   条件: [WellFoundedGT σ] {c d : σ ->₀ 自然数}
   证明: Iff.rfl
 
@@ -628,7 +628,7 @@ theorem MonomialOrder.lex_lt_iff
   proof: Iff.rfl
 
 中文:
-定理 MonomialOrder.lex_lt_iff
+定理 单项式序.lex_lt_iff
   条件: [WellFoundedGT σ] {c d : σ ->₀ 自然数}
   证明: Iff.rfl
 
@@ -647,8 +647,8 @@ theorem MonomialOrder.lex_lt_iff_of_unique
   simp only [MonomialOrder.lex_lt_iff, Finsupp.Lex.lt_iff_of_unique, ofLex_toLex]
 
 中文:
-定理 MonomialOrder.lex_lt_iff_of_unique
-  条件: [Unique σ] {c d : σ ->₀ 自然数}
+定理 单项式序.lex_lt_iff_of_unique
+  条件: [唯一 σ] {c d : σ ->₀ 自然数}
   证明: by
   simp only [MonomialOrder.lex_lt_iff, Finsupp.Lex.lt_iff_of_unique, ofLex_toLex]
 
@@ -668,8 +668,8 @@ theorem MonomialOrder.lex_le_iff_of_unique
   simp only [MonomialOrder.lex_le_iff, Finsupp.Lex.le_iff_of_unique, ofLex_toLex]
 
 中文:
-定理 MonomialOrder.lex_le_iff_of_unique
-  条件: [Unique σ] {c d : σ ->₀ 自然数}
+定理 单项式序.lex_le_iff_of_unique
+  条件: [唯一 σ] {c d : σ ->₀ 自然数}
   证明: by
   simp only [MonomialOrder.lex_le_iff, Finsupp.Lex.le_iff_of_unique, ofLex_toLex]
 

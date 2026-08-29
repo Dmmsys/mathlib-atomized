@@ -75,11 +75,11 @@ class IsCMField
     - [is_quadratic : IsQuadraticExtension (maximalRealSubfield K) K]
 
 中文:
-类 IsCMField
-  参数: (K : 类型) [Field K] [CharZero K]
+类 是CMField
+  参数: (K : 类型) [域 K] [特征零 K]
   公理与运算 (2 个):
-    - [to_isTotallyComplex : IsTotallyComplex K]
-    - [is_quadratic : IsQuadraticExtension (maximal实数Subfield K) K]
+    - [to_isTotallyComplex : 是TotallyComplex K]
+    - [is_quadratic : 是QuadraticExtension (maximal实数Subfield K) K]
 -/
 class IsCMField (K : Type*) [Field K] [CharZero K] : Prop where
   [to_isTotallyComplex : IsTotallyComplex K]
@@ -103,7 +103,7 @@ instance isQuadraticExtension
 
 中文:
 实例 isQuadraticExtension
-  签名: : IsQuadraticExtension K⁺ K
+  签名: : 是QuadraticExtension K⁺ K
   定义体: IsCMField.is_quadratic
 
 Depends on / 依赖: IsCMField, IsCMField.is_quadratic, is_quadratic
@@ -121,7 +121,7 @@ instance isTotallyComplex
 
 中文:
 实例 isTotallyComplex
-  签名: : IsTotallyComplex K
+  签名: : 是TotallyComplex K
   定义体: IsCMField.to_isTotallyComplex
 
 Depends on / 依赖: IsCMField, IsCMField.to_isTotallyComplex, to_isTotallyComplex
@@ -140,7 +140,7 @@ theorem card_infinitePlace_eq_card_infinitePlace
 
 中文:
 定理 card_infinitePlace_eq_card_infinitePlace
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← I
 
@@ -164,7 +164,7 @@ definition equivInfinitePlace
 
 中文:
 定义 equivInfinitePlace
-  签名: [NumberField K]
+  签名: [数域 K]
   定义体: Equiv.ofBijective (fun w => w.comap (algebraMap K⁺ K))
     (Fintype.bijective_iff_surjective_and_card _).mpr
       ⟨comap_surjective, (card_infinitePlace_eq_card_infinitePlace K).symm⟩
@@ -191,7 +191,7 @@ theorem equivInfinitePlace_apply
 
 中文:
 定理 equivInfinitePlace_apply
-  条件: [NumberField K] (w : InfinitePlace K)
+  条件: [数域 K] (w : InfinitePlace K)
   证明: rfl
 
 @[simp]
@@ -211,7 +211,7 @@ theorem equivInfinitePlace_symm_apply
 
 中文:
 定理 equivInfinitePlace_symm_apply
-  条件: [NumberField K] (w : InfinitePlace K⁺) (x : K⁺)
+  条件: [数域 K] (w : InfinitePlace K⁺) (x : K⁺)
   证明: by
   rw [← comap_apply]; rw [← equivInfinitePlace_apply]; rw [Equiv.apply_symm_apply]
 
@@ -232,7 +232,7 @@ theorem units_rank_eq_units_rank
 
 中文:
 定理 units_rank_eq_units_rank
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   rw [Units.rank]; rw [Units.rank]; rw [card_infinitePlace_eq_card_infinitePlace K]
 
@@ -254,8 +254,8 @@ theorem exists_isConj
     isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
 
 中文:
-定理 exists_isConj
-  条件: [Algebra.IsAlgebraic Rat K] (φ : K ->+* Complex)
+定理 存在_isConj
+  条件: [代数.是代数 有理数 K] (φ : K ->+* 复形)
   证明: exists_isConj_of_isRamified
     isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
 
@@ -282,7 +282,7 @@ theorem isConj_eq_isConj
 
 中文:
 定理 isConj_eq_isConj
-  结论: {φ ψ : K ->+* Complex} {σ τ : K ≃ₐ[K⁺] K}
+  结论: {φ ψ : K ->+* 复形} {σ τ : K ≃ₐ[K⁺] K}
   证明: by
   have : Nat.card (K ≃ₐ[K⁺] K) = 2 :=
     (IsQuadraticExtension.finrank_eq_two K⁺ K) ▸ IsGalois.card_aut_eq_finrank K⁺ K
@@ -338,7 +338,7 @@ theorem isConj_complexConj
 
 中文:
 定理 isConj_complexConj
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   结论: IsConj φ (complexConj K)
   证明: by
   obtain ⟨σ, hσ⟩ := exists_isConj _ φ
@@ -368,7 +368,7 @@ theorem complexEmbedding_complexConj
 
 中文:
 定理 complexEmbedding_complexConj
-  条件: (φ : K ->+* Complex) (x : K)
+  条件: (φ : K ->+* 复形) (x : K)
   证明: by
   rw [IsConj.eq (isConj_complexConj K φ)]; rw [RCLike.star_def]
 
@@ -568,7 +568,7 @@ theorem RingOfIntegers.complexConj_eq_self_iff
     rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw 
 
 中文:
-定理 RingOfIntegers.complexConj_eq_self_iff
+定理 RingOf整数egers.complexConj_eq_self_iff
   条件: (x : 𝓞 K)
   证明: by
   rw [complexConj_eq_self_iff]
@@ -606,7 +606,7 @@ theorem Units.complexConj_eq_self_iff
   
 
 中文:
-定理 Units.complexConj_eq_self_iff
+定理 单位群.complexConj_eq_self_iff
   条件: (u : (𝓞 K)ˣ)
   证明: by
   rw [RingOfIntegers.complexConj_eq_self_iff]; rw [Units.coe_coe]
@@ -640,7 +640,7 @@ instance starRing
 
 中文:
 实例 starRing
-  签名: : StarRing K where
+  签名: : 对合环 K where
   定义体: complexConj K
   star_involutive _ := complexConj_apply_apply _ _
   star_mul _ _ := by rw [map_mul, mul_comm]
@@ -665,7 +665,7 @@ abbreviation ringOfIntegersComplexConj
 @[simp]
 
 中文:
-缩写 ringOfIntegersComplexConj
+缩写 ringOf整数egersComplexConj
   签名: : (𝓞 K) ≃ₐ[𝓞 K⁺] (𝓞 K)
   定义体: RingOfIntegers.mapAlgEquiv (complexConj K)
 
@@ -686,7 +686,7 @@ theorem coe_ringOfIntegersComplexConj
   proof: rfl
 
 中文:
-定理 coe_ringOfIntegersComplexConj
+定理 coe_ringOf整数egersComplexConj
   条件: (x : 𝓞 K)
   证明: rfl
 -/
@@ -709,7 +709,7 @@ theorem ringOfIntegersComplexConj_eq_self_iff
     simp
 
 中文:
-定理 ringOfIntegersComplexConj_eq_self_iff
+定理 ringOf整数egersComplexConj_eq_self_iff
   条件: (x : 𝓞 K)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
@@ -748,7 +748,7 @@ abbreviation unitsComplexConj
 
 中文:
 缩写 unitsComplexConj
-  签名: [Algebra.Is整数egral Rat K]
+  签名: [代数.是整 有理数 K]
   定义体: Units.mapEquiv RingOfIntegers.mapRingEquiv (complexConj K).toRingEquiv
 
 Depends on / 依赖: RingOfIntegers, RingOfIntegers.mapRingEquiv, Units.mapEquiv, complexConj, mapEquiv, mapRingEquiv, toRingEquiv
@@ -768,7 +768,7 @@ omit [IsCMField K] [CharZero K] in
 
 中文:
 定义 realUnits
-  签名: : Subgroup (𝓞 K)ˣ
+  签名: : 子群 (𝓞 K)ˣ
   定义体: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom).range
 
 omit [IsCMField K] [CharZero K] in
@@ -813,7 +813,7 @@ theorem unitsComplexConj_eq_self_iff
 
 中文:
 定理 unitsComplexConj_eq_self_iff
-  条件: [Algebra.Is整数egral Rat K] (u : (𝓞 K)ˣ)
+  条件: [代数.是整 有理数 K] (u : (𝓞 K)ˣ)
   证明: by
   simp_rw [Units.ext_iff, mem_realUnits_iff, RingOfIntegers.ext_iff, Units.coe_mapEquiv,
     RingEquiv.coe_toMulEquiv, RingOfIntegers.mapRingEquiv_apply,
@@ -1054,7 +1054,7 @@ abbreviation indexRealUnits
   body: (realUnits K ⊔ torsion K).index
 
 中文:
-缩写 indexRealUnits
+缩写 index实数Units
   签名: : 自然数
   定义体: (realUnits K ⊔ torsion K).index
 
@@ -1075,7 +1075,7 @@ theorem indexRealUnits_mul_eq
     exact even_iff_two_dvd.mp (even_torsionOrder K)
 
 中文:
-定理 indexRealUnits_mul_eq
+定理 index实数Units_mul_eq
   证明: by
   rw [indexRealUnits]; rw [sup_comm]
   convert! (Subgroup.index_map (torsion K) (unitsMulComplexConjInv K)).symm
@@ -1105,7 +1105,7 @@ obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp index_unitsMulComplexConj
 · exact Or.inl by rwa [h₂, Nat.mul_eq_right two_ne_zero] at h₁
 
 中文:
-定理 indexRealUnits_eq_one_or_two
+定理 index实数Units_eq_one_or_two
   证明: by
   have h₁ := indexRealUnits_mul_eq K
 obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp index_unitsMulComplexConjInv_range_dvd K
@@ -1136,7 +1136,7 @@ theorem indexRealUnits_eq_two_iff
     · rwa [h, mul
 
 中文:
-定理 indexRealUnits_eq_two_iff
+定理 index实数Units_eq_two_iff
   证明: by
   suffices (exists u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤) ↔
       (unitsMulComplexConjInv K).range.index = 1 by
@@ -1177,7 +1177,7 @@ definition realFundSystem
 
 中文:
 定义 realFundSystem
-  签名: (i : Fin (rank K))
+  签名: (i : 有限集 (rank K))
   定义体: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom)
     (fundSystem K⁺ (finCongr (units_rank_eq_units_rank K).symm i))
 
@@ -1266,7 +1266,7 @@ theorem regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv
     (realFundSystem K)]; rw [regOfFamily_realFunSystem]; rw [inv_div]; rw [← mul_div_assoc]; rw [mul_div_mul_comm]; rw [div_self (by positivity)]; rw [one_mul]
 
 中文:
-定理 regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv
+定理 regulator_div_regulator_eq_two_pow_mul_index实数Units_inv
   证明: by
   rw [indexRealUnits]; rw [← closure_realFundSystem_sup_torsion]; rw [← regOfFamily_div_regulator
     (realFundSystem K)]; rw [regOfFamily_realFunSystem]; rw [inv_div]; rw [← mul_div_assoc]; rw [mul_div_mul_comm]; rw [div_self (by positivity)]; rw [one_mul]
@@ -1304,8 +1304,8 @@ theorem eq_maximalRealSubfield
     have := ((IntermediateField.i
 
 中文:
-定理 eq_maximalRealSubfield
-  条件: (E : Subfield K) [IsTotally实数 E] [IsQuadraticExtension E K]
+定理 eq_maximal实数Subfield
+  条件: (E : 子域 K) [是Totally实数 E] [是QuadraticExtension E K]
   证明: by
   refine le_antisymm (IsTotallyReal.le_maximalRealSubfield E) ?_
   by_contra! h
@@ -1349,7 +1349,7 @@ definition equivMaximalRealSubfield
         (IsQuadraticExtension.finrank_eq_two F K) ▸ Alg
 
 中文:
-定义 equivMaximalRealSubfield
+定义 equivMaximal实数Subfield
   签名: :
   定义体: (algebraMap F K).rangeRestrictFieldEquiv.trans (RingEquiv.subfieldCongr (by
     have := IsTotallyReal.ofRingEquiv (algebraMap F K).rangeRestrictFieldEquiv
@@ -1381,7 +1381,7 @@ theorem equivMaximalRealSubfield_apply
 @[simp]
 
 中文:
-定理 equivMaximalRealSubfield_apply
+定理 equivMaximal实数Subfield_apply
   条件: (x : F)
   证明: rfl
 
@@ -1401,7 +1401,7 @@ theorem algebraMap_equivMaximalRealSubfield_symm_apply
   simpa using! (equivMaximalRealSubfield_apply F K ((equivMaximalRealSubfield F K).symm x)).symm
 
 中文:
-定理 algebraMap_equivMaximalRealSubfield_symm_apply
+定理 algebraMap_equivMaximal实数Subfield_symm_apply
   条件: (x : maximal实数Subfield K)
   证明: by
   simpa using! (equivMaximalRealSubfield_apply F K ((equivMaximalRealSubfield F K).symm x)).symm
@@ -1456,8 +1456,8 @@ exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isR
   have : Finite (S
 
 中文:
-定理 of_forall_isConj
-  结论: [IsGalois Rat K] {σ : Gal(K/Rat)}
+定理 of_对任意_isConj
+  结论: [是Galois 有理数 K] {σ : Gal(K/有理数)}
   证明: by
   let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
   have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
@@ -1502,7 +1502,7 @@ exists_isConj_of_isRamified
 
 中文:
 实例 of_isAbelianGalois
-  签名: [IsAbelianGalois Rat K]
+  签名: [是AbelianGalois 有理数 K]
   定义体: by
   let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
   obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
@@ -1547,7 +1547,7 @@ theorem isCMField
 
 中文:
 定理 isCMField
-  条件: {S : Set 自然数} (hS : 存在 n in S, 2 < n) [IsCyclotomicExtension S Rat K]
+  条件: {S : 集合 自然数} (hS : 存在 n in S, 2 < n) [是CyclotomicExtension S 有理数 K]
   证明: by
   have : Algebra.IsIntegral Rat K := integral S Rat K
   obtain ⟨n, hn₁, hn₂⟩ := hS
@@ -1580,8 +1580,8 @@ instance [IsCyclotomicExtension
   body: isCMField K (S := ⊤) ⟨3, trivial, Nat.lt_succ_self 2⟩
 
 中文:
-实例 [IsCyclotomicExtension
-  签名: ⊤ Rat K] :
+实例 [是CyclotomicExtension
+  签名: ⊤ 有理数 K] :
   定义体: isCMField K (S := ⊤) ⟨3, trivial, Nat.lt_succ_self 2⟩
 
 Depends on / 依赖: Nat.lt_succ_self, isCMField, lt_succ_self

@@ -39,8 +39,8 @@ definition Valuation.extendToLocalization
       obtain ⟨a, b, s, rfl, rfl⟩ : exists
 
 中文:
-定义 Valuation.extendToLocalization
-  签名: : Valuation B Γ
+定义 赋值.extendToLocalization
+  签名: : 赋值 B Γ
   定义体: let f := IsLocalization.toLocalizationMap S B
   let h : forall s : S, IsUnit (v.1.toMonoidHom s) := fun s => isUnit_iff_ne_zero.2 (hS s.2)
   { f.lift h with
@@ -84,7 +84,7 @@ theorem Valuation.extendToLocalization_mk'
 @[simp]
 
 中文:
-定理 Valuation.extendToLocalization_mk'
+定理 赋值.extendToLocalization_mk'
   条件: (x : A) (y : S)
   证明: (Submonoid.LocalizationMap.lift_mk' _ _ _ _).trans (by simp [IsUnit.coe_liftRight])
 
@@ -107,7 +107,7 @@ theorem Valuation.extendToLocalization_apply_map_apply
   proof: Submonoid.LocalizationMap.lift_eq _ _ a
 
 中文:
-定理 Valuation.extendToLocalization_apply_map_apply
+定理 赋值.extendToLocalization_apply_map_apply
   条件: (a : A)
   证明: Submonoid.LocalizationMap.lift_eq _ _ a
 

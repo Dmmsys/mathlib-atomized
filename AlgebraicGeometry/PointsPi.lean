@@ -41,7 +41,7 @@ lemma Ideal.span_eq_top_of_span_image_evalRingHom
   simpa [Finsupp.sum_fint
 
 中文:
-引理 Ideal.span_eq_top_of_span_image_evalRingHom
+引理 理想.span_eq_top_of_span_image_evalRingHom
   证明: by
   simp only [Ideal.eq_top_iff_one, ← Subtype.range_val (s := s), ← Set.range_comp,
     Finsupp.mem_ideal_span_range_iff_exists_finsupp] at hs' ⊢
@@ -124,7 +124,7 @@ lemma eq_bot_of_comp_quotientMk_eq_sigmaSpec
 
 中文:
 引理 eq_bot_of_comp_quotientMk_eq_sigmaSpec
-  结论: (I : Ideal (Π i, R i))
+  结论: (I : 理想 (Π i, R i))
   证明: by
   refine le_bot_iff.mp fun x hx => ?_
   ext i
@@ -158,7 +158,7 @@ lemma isIso_of_comp_eq_sigmaSpec
 
 中文:
 引理 isIso_of_comp_eq_sigmaSpec
-  结论: {V : Scheme}
+  结论: {V : 概形}
   证明: by
   have : g.coborderRange = ⊤ := by
     apply eq_top_of_sigmaSpec_subset_of_isCompact (hVU := subset_coborder)
@@ -227,8 +227,8 @@ lemma pointsPi_injective
 
 中文:
 引理 pointsPi_injective
-  条件: [QuasiSeparatedSpace X]
-  结论: Function.Injective (pointsPi R X)
+  条件: [拟分离空间 X]
+  结论: 函数.单射 (pointsPi R X)
   证明: by
   rintro f g e
   have := isIso_of_comp_eq_sigmaSpec R (V := equalizer f g)
@@ -262,8 +262,8 @@ lemma pointsPi_surjective_of_isAffine
 
 中文:
 引理 pointsPi_surjective_of_isAffine
-  条件: [IsAffine X]
-  结论: Function.Surjective (pointsPi R X)
+  条件: [是仿射 X]
+  结论: 函数.满射 (pointsPi R X)
   证明: by
   rintro f
   refine ⟨Spec.map (CommRingCat.ofHom
@@ -298,7 +298,7 @@ lemma pointsPi_surjective
 
 中文:
 引理 pointsPi_surjective
-  条件: [CompactSpace X] [对任意 i, IsLocalRing (R i)]
+  条件: [紧空间 X] [对任意 i, 是局部环 (R i)]
   证明: by
   intro f
   let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover

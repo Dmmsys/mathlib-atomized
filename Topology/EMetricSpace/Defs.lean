@@ -48,7 +48,7 @@ theorem uniformity_dist_of_mem_uniformity
 
 中文:
 定理 uniformity_dist_of_mem_uniformity
-  结论: [LT β] {U : Filter (α × α)} (z : β)
+  结论: [LT β] {U : 滤子 (α × α)} (z : β)
   证明: HasBasis.eq_biInf ⟨fun s => by simp only [H, subset_def, Prod.forall, mem_ofPred]⟩
 
 Depends on / 依赖: HasBasis, HasBasis.eq_biInf, Prod.forall, eq_biInf, mem_ofPred, subset_def
@@ -162,7 +162,7 @@ definition uniformSpaceOfEDistOfHasBasis
 
 中文:
 定义 uniformSpaceOfEDistOfHasBasis
-  签名: [TopologicalSpace α]
+  签名: [拓扑空间 α]
   定义体: .ofFunOfHasBasis edist edist_self edist_comm edist_triangle (fun ε ε0 =>
     ⟨ε / 2, ENNReal.half_pos ε0.ne', fun _ h₁ _ h₂ =>
       (ENNReal.add_lt_add h₁ h₂).trans_eq (ENNReal.add_halves _)⟩) basis
@@ -193,14 +193,14 @@ class PseudoEMetricSpace
     - uniformity_edist : 𝓤 α = ⨅ ε > 0, 𝓟 { p : α × α | edist p.1 p.2 < ε }  [default: by rfl]
 
 中文:
-类 PseudoEMetricSpace
+类 PseudoEMetric空间
   参数: (α : 类型u)
   继承: EDist α
   公理与运算 (5 个):
     - edist_self : 对任意 x : α, edist x x = 0
     - edist_comm : 对任意 x y : α, edist x y = edist y x
     - edist_triangle : 对任意 x y z : α, edist x z <= edist x y + edist y z
-    - toUniformSpace : UniformSpace α  [默认: uniformSpaceOfEDist edist edist_self edist_comm edist_triang]
+    - toUniformSpace : 一致空间 α  [默认: uniformSpaceOfEDist edist edist_self edist_comm edist_triang]
     - uniformity_edist : 𝓤 α = ⨅ ε > 0, 𝓟 { p : α × α | edist p.1 p.2 < ε }  [默认: by rfl]
 
 Depends on / 依赖: edist_comm, edist_self, edist_triangle, uniformSpaceOfEDist
@@ -232,8 +232,8 @@ theorem PseudoEMetricSpace.ext
   exact UniformSpace.ext (((show ed = ed' from h) ▸ hU).trans hU'.symm)
 
 中文:
-定理 PseudoEMetricSpace.ext
-  结论: {α : 类型} {m m' : PseudoEMetricSpace α}
+定理 PseudoEMetric空间.ext
+  结论: {α : 类型} {m m' : PseudoEMetric空间 α}
   证明: by
   obtain ⟨_, _, _, U, hU⟩ := m; rename EDist α => ed
   obtain ⟨_, _, _, U', hU'⟩ := m'; rename EDist α => ed'
@@ -463,7 +463,7 @@ theorem mem_uniformity_edist
 
 中文:
 定理 mem_uniformity_edist
-  条件: {s : Set (α × α)}
+  条件: {s : 集合 (α × α)}
   证明: uniformity_basis_edist.mem_uniformity_iff
 
 Depends on / 依赖: mem_uniformity_iff, uniformity_basis_edist, uniformity_basis_edist.mem_uniformity_iff
@@ -485,7 +485,7 @@ abbreviation PseudoEMetricSpace.ofEDist
   uniformity_edist := by rfl
 
 中文:
-缩写 PseudoEMetricSpace.ofEDist
+缩写 PseudoEMetric空间.ofEDist
   定义体: edist
   edist_self := edist_self
   edist_comm := edist_comm
@@ -793,7 +793,7 @@ theorem uniformContinuousOn_iff
 
 中文:
 定理 uniformContinuousOn_iff
-  条件: [PseudoEMetricSpace β] {f : α -> β} {s : Set α}
+  条件: [PseudoEMetric空间 β] {f : α -> β} {s : 集合 α}
   证明: uniformity_basis_edist.uniformContinuousOn_iff uniformity_basis_edist
 
 Depends on / 依赖: uniformContinuousOn_iff, uniformity_basis_edist, uniformity_basis_edist.uniformContinuousOn_iff
@@ -813,7 +813,7 @@ theorem uniformContinuous_iff
 
 中文:
 定理 uniformContinuous_iff
-  条件: [PseudoEMetricSpace β] {f : α -> β}
+  条件: [PseudoEMetric空间 β] {f : α -> β}
   证明: uniformity_basis_edist.uniformContinuous_iff uniformity_basis_edist
 
 Depends on / 依赖: uniformContinuous_iff, uniformity_basis_edist, uniformity_basis_edist.uniformContinuous_iff
@@ -840,8 +840,8 @@ abbreviation PseudoEMetricSpace.replaceUniformity
   uniformity_edist := H.trans (@PseudoEMetricSpace.uniformity_edist α _)
 
 中文:
-缩写 PseudoEMetricSpace.replaceUniformity
-  签名: {α} [U : UniformSpace α] (m : PseudoEMetricSpace α)
+缩写 PseudoEMetric空间.replaceUniformity
+  签名: {α} [U : 一致空间 α] (m : PseudoEMetric空间 α)
   定义体: @edist _ m.toEDist
   edist_self := edist_self
   edist_comm := edist_comm
@@ -874,8 +874,8 @@ abbreviation PseudoEMetricSpace.induced
   uniformity_edist := (uniformity_basis_edist.comap (Prod.map f f)).eq_biInf
 
 中文:
-缩写 PseudoEMetricSpace.induced
-  签名: {α β} (f : α -> β) (m : PseudoEMetricSpace β)
+缩写 PseudoEMetric空间.induced
+  签名: {α β} (f : α -> β) (m : PseudoEMetric空间 β)
   定义体: edist (f x) (f y)
   edist_self _ := edist_self _
   edist_comm _ _ := edist_comm _ _
@@ -906,8 +906,8 @@ theorem Subtype.edist_eq
   proof: rfl
 
 中文:
-定理 Subtype.edist_eq
-  条件: {p : α -> 命题} (x y : Subtype p)
+定理 子类型.edist_eq
+  条件: {p : α -> 命题} (x y : 子类型 p)
   结论: edist x y = edist (x : α) y
   证明: rfl
 -/
@@ -925,7 +925,7 @@ theorem Subtype.edist_mk_mk
   proof: rfl
 
 中文:
-定理 Subtype.edist_mk_mk
+定理 子类型.edist_mk_mk
   条件: {p : α -> 命题} {x y : α} (hx : p x) (hy : p y)
   证明: rfl
 -/
@@ -950,8 +950,8 @@ definition PseudoEMetricSpace.ofEDistOfTopology
 alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDis
 
 中文:
-定义 PseudoEMetricSpace.ofEDistOfTopology
-  签名: {α : 类型} [TopologicalSpace α]
+定义 PseudoEMetric空间.ofEDistOfTopology
+  签名: {α : 类型} [拓扑空间 α]
   定义体: d
   edist_self := h_self
   edist_comm := h_comm
@@ -1039,7 +1039,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (ULift α)
+  签名: PseudoEMetric空间 (类型层提升 α)
   定义体: PseudoEMetricSpace.induced ULift.down ‹_›
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.induced, ULift.down, induced
@@ -1058,8 +1058,8 @@ theorem ULift.edist_eq
 @[simp]
 
 中文:
-定理 ULift.edist_eq
-  条件: (x y : ULift α)
+定理 类型层提升.edist_eq
+  条件: (x y : 类型层提升 α)
   结论: edist x y = edist x.down y.down
   证明: rfl
 
@@ -1078,9 +1078,9 @@ theorem ULift.edist_up_up
   proof: rfl
 
 中文:
-定理 ULift.edist_up_up
+定理 类型层提升.edist_up_up
   条件: (x y : α)
-  结论: edist (ULift.up x) (ULift.up y) = edist x y
+  结论: edist (类型层提升.up x) (类型层提升.up y) = edist x y
   证明: rfl
 -/
 theorem ULift.edist_up_up (x y : α) : edist (ULift.up x) (ULift.up y) = edist x y := rfl
@@ -1101,8 +1101,8 @@ instance Prod.pseudoEMetricSpaceMax
       (le_trans (edist_triangle _ _ _) (add_le_add (le_max_right _ _) (le_max_right
 
 中文:
-实例 Prod.pseudoEMetricSpaceMax
-  签名: [PseudoEMetricSpace β]
+实例 积类型.pseudoEMetricSpaceMax
+  签名: [PseudoEMetric空间 β]
   定义体: edist x.1 y.1 ⊔ edist x.2 y.2
   edist_self x := by simp
   edist_comm x y := by simp [edist_comm]
@@ -1131,8 +1131,8 @@ theorem Prod.edist_eq
   proof: rfl
 
 中文:
-定理 Prod.edist_eq
-  条件: [PseudoEMetricSpace β] (x y : α × β)
+定理 积类型.edist_eq
+  条件: [PseudoEMetric空间 β] (x y : α × β)
   证明: rfl
 -/
 theorem Prod.edist_eq [PseudoEMetricSpace β] (x y : α × β) :
@@ -1473,7 +1473,7 @@ theorem exists_eball_subset_eball
   exact (add_tsub_cancel_of_le (mem_eball.mp h).le).le
 
 中文:
-定理 exists_eball_subset_eball
+定理 存在_eball_subset_eball
   条件: (h : y in eball x ε)
   结论: 存在 ε' > 0, eball y ε' subseteq eball x ε
   证明: by
@@ -1525,7 +1525,7 @@ alias ordConnected_setOf_closedEBall_subset := ordConnected_setOfPred_closedEBal
 
 中文:
 定理 ordConnected_setOfPred_closedEBall_subset
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   证明: ⟨fun _ _ _ h₁ _ h₂ => (closedEBall_subset_closedEBall h₂.2).trans h₁⟩
 
 @[deprecated (since := "2026-07-09")]
@@ -1553,7 +1553,7 @@ alias ordConnected_setOf_eball_subset := ordConnected_setOfPred_eball_subset
 
 中文:
 定理 ordConnected_setOfPred_eball_subset
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   证明: ⟨fun _ _ _ h₁ _ h₂ => (eball_subset_eball h₂.2).trans h₁⟩
 
 @[deprecated (since := "2026-07-09")]
@@ -1586,7 +1586,7 @@ definition edistLtTopSetoid
 
 中文:
 定义 edistLtTopSetoid
-  签名: : Setoid α where
+  签名: : 集合等价关系 α where
   定义体: edist x y < ⊤
   iseqv :=
     { refl x := by rw [edist_self]; exact ENNReal.coe_lt_top
@@ -1630,7 +1630,7 @@ theorem nhds_basis_eball
 
 中文:
 定理 nhds_basis_eball
-  结论: (𝓝 x).HasBasis (fun ε : 实数>=0∞ => 0 < ε) (eball x)
+  结论: (𝓝 x).有基 (fun ε : 实数>=0∞ => 0 < ε) (eball x)
   证明: nhds_basis_uniformity uniformity_basis_edist
 
 Depends on / 依赖: nhds_basis_uniformity, uniformity_basis_edist
@@ -1648,7 +1648,7 @@ theorem nhdsWithin_basis_eball
 
 中文:
 定理 nhdsWithin_basis_eball
-  结论: (𝓝[s] x).HasBasis (fun ε : 实数>=0∞ => 0 < ε) fun ε => eball x ε inter s
+  结论: (𝓝[s] x).有基 (fun ε : 实数>=0∞ => 0 < ε) fun ε => eball x ε inter s
   证明: nhdsWithin_hasBasis nhds_basis_eball s
 
 Depends on / 依赖: nhdsWithin_hasBasis, nhds_basis_eball
@@ -1666,7 +1666,7 @@ theorem nhds_basis_closedEBall
 
 中文:
 定理 nhds_basis_closedEBall
-  结论: (𝓝 x).HasBasis (fun ε : 实数>=0∞ => 0 < ε) (closedEBall x)
+  结论: (𝓝 x).有基 (fun ε : 实数>=0∞ => 0 < ε) (closedEBall x)
   证明: nhds_basis_uniformity uniformity_basis_edist_le
 
 Depends on / 依赖: nhds_basis_uniformity, uniformity_basis_edist_le
@@ -1763,7 +1763,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  结论: IsOpen s ↔ 对任意 x in s, 存在 ε > 0, eball x ε subseteq s
+  结论: 是开集 s ↔ 对任意 x in s, 存在 ε > 0, eball x ε subseteq s
   证明: by
   simp [isOpen_iff_nhds, mem_nhds_iff]
 
@@ -1801,7 +1801,7 @@ lemma dense_iff
 
 中文:
 引理 dense_iff
-  结论: Dense s ↔ 对任意 (x : α), 对任意 r > 0, (eball x r inter s).Nonempty
+  结论: 稠密 s ↔ 对任意 (x : α), 对任意 r > 0, (eball x r inter s).非空
   证明: forall_congr' fun x => by
     simp only [mem_closure_iff, Set.Nonempty, mem_inter_iff, and_comm, mem_eball']
 
@@ -1821,7 +1821,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {f : Filter β} {u : β -> α} {a : α}
+  条件: {f : 滤子 β} {u : β -> α} {a : α}
   证明: nhds_basis_eball.tendsto_right_iff
 
 Depends on / 依赖: nhds_basis_eball, nhds_basis_eball.tendsto_right_iff, tendsto_right_iff
@@ -1841,7 +1841,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α} {a : α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α} {a : α}
   证明: (atTop_basis.tendsto_iff nhds_basis_eball).trans by
     simp only [true_and, mem_Ici, mem_eball]
 
@@ -1868,7 +1868,7 @@ theorem tendsto_nhdsWithin_nhdsWithin
 
 中文:
 定理 tendsto_nhdsWithin_nhdsWithin
-  条件: {t : Set β} {a b}
+  条件: {t : 集合 β} {a b}
   证明: (nhdsWithin_basis_eball.tendsto_iff nhdsWithin_basis_eball).trans
     forall₂_congr fun ε _ => exists_congr fun δ => and_congr_right fun _ =>
       forall_congr' fun x => by simp; tauto
@@ -2111,7 +2111,7 @@ theorem isOpen_eball
 
 中文:
 定理 isOpen_eball
-  结论: IsOpen (eball x ε)
+  结论: 是开集 (eball x ε)
   证明: EMetric.isOpen_iff.2 fun _ => exists_eball_subset_eball
 -/
 @[simp] theorem isOpen_eball : IsOpen (eball x ε) :=
@@ -2129,7 +2129,7 @@ theorem isClosed_eball_top
 
 中文:
 定理 isClosed_eball_top
-  结论: IsClosed (eball x ⊤)
+  结论: 是闭集 (eball x ⊤)
   证明: isOpen_compl_iff.1 EMetric.isOpen_iff.2 fun _y hy =>
     ⟨⊤, ENNReal.coe_lt_top, fun _z hzy hzx =>
       hy (edistLtTopSetoid.trans (edistLtTopSetoid.symm hzy) hzx)⟩
@@ -2191,7 +2191,7 @@ theorem eball_prod_same
 
 中文:
 定理 eball_prod_same
-  条件: [PseudoEMetricSpace β] (x : α) (y : β) (r : 实数>=0∞)
+  条件: [PseudoEMetric空间 β] (x : α) (y : β) (r : 实数>=0∞)
   证明: ext fun z => by simp [Prod.edist_eq]
 
 Depends on / 依赖: Prod.edist_eq, edist_eq
@@ -2210,7 +2210,7 @@ theorem closedEBall_prod_same
 
 中文:
 定理 closedEBall_prod_same
-  条件: [PseudoEMetricSpace β] (x : α) (y : β) (r : 实数>=0∞)
+  条件: [PseudoEMetric空间 β] (x : α) (y : β) (r : 实数>=0∞)
   证明: ext fun z => by simp [Prod.edist_eq]
 
 Depends on / 依赖: Prod.edist_eq, edist_eq
@@ -2420,9 +2420,9 @@ class EMetricSpace
     - eq_of_edist_eq_zero : forall {x y : α}, edist x y = 0 -> x = y
 
 中文:
-类 EMetricSpace
+类 广义度量空间
   参数: (α : 类型u)
-  继承: PseudoEMetricSpace α
+  继承: PseudoEMetric空间 α
   公理与运算 (1 个):
     - eq_of_edist_eq_zero : 对任意 {x y : α}, edist x y = 0 -> x = y
 -/
@@ -2443,7 +2443,7 @@ theorem EMetricSpace.ext
   assumption
 
 中文:
-定理 EMetricSpace.ext
+定理 广义度量空间.ext
   证明: by
   cases m
   cases m'
@@ -2589,7 +2589,7 @@ theorem eq_of_forall_edist_le
   proof: eq_of_edist_eq_zero (eq_of_le_of_forall_lt_imp_le_of_dense bot_le h)
 
 中文:
-定理 eq_of_forall_edist_le
+定理 eq_of_对任意_edist_le
   条件: {x y : γ} (h : 对任意 ε > 0, edist x y <= ε)
   结论: x = y
   证明: eq_of_edist_eq_zero (eq_of_le_of_forall_lt_imp_le_of_dense bot_le h)
@@ -2614,8 +2614,8 @@ abbreviation EMetricSpace.replaceUniformity
   uniformity_edist := H.trans (@PseudoEMetricSpace.uniformity_edist γ _)
 
 中文:
-缩写 EMetricSpace.replaceUniformity
-  签名: {γ} [U : UniformSpace γ] (m : EMetricSpace γ)
+缩写 广义度量空间.replaceUniformity
+  签名: {γ} [U : 一致空间 γ] (m : 广义度量空间 γ)
   定义体: @edist _ m.toEDist
   edist_self := edist_self
   eq_of_edist_eq_zero := @eq_of_edist_eq_zero _ _
@@ -2651,8 +2651,8 @@ abbreviation EMetricSpace.replaceTopology
   uniformity_edist := PseudoEMetricSpace.uniformity_edist
 
 中文:
-缩写 EMetricSpace.replaceTopology
-  签名: {γ} [T : TopologicalSpace γ] (m : EMetricSpace γ)
+缩写 广义度量空间.replaceTopology
+  签名: {γ} [T : 拓扑空间 γ] (m : 广义度量空间 γ)
   定义体: @edist _ m.toEDist
   edist_self := edist_self
   eq_of_edist_eq_zero := @eq_of_edist_eq_zero _ _
@@ -2683,8 +2683,8 @@ abbreviation EMetricSpace.induced
     eq_of_edist_eq_zero := fun h => hf (edist_eq_zero.1 h) }
 
 中文:
-缩写 EMetricSpace.induced
-  签名: {γ β} (f : γ -> β) (hf : Function.Injective f) (m : EMetricSpace β)
+缩写 广义度量空间.induced
+  签名: {γ β} (f : γ -> β) (hf : 函数.单射 f) (m : 广义度量空间 β)
   定义体: { PseudoEMetricSpace.induced f m.toPseudoEMetricSpace with
     eq_of_edist_eq_zero := fun h => hf (edist_eq_zero.1 h) }
 
@@ -2748,7 +2748,7 @@ instance :
 
 中文:
 实例 :
-  签名: EDist (Additive X)
+  签名: EDist (加性 X)
   定义体: ‹EDist X›
 -/
 instance : EDist (Additive X) := ‹EDist X›
@@ -2831,7 +2831,7 @@ theorem edist_toMul
 
 中文:
 定理 edist_toMul
-  条件: (a b : Additive X)
+  条件: (a b : 加性 X)
   结论: edist a.toMul b.toMul = edist a b
   证明: rfl
 
@@ -2870,8 +2870,8 @@ instance [PseudoEMetricSpace
   body: ‹PseudoEMetricSpace X›
 
 中文:
-实例 [PseudoEMetricSpace
-  签名: X] : PseudoEMetricSpace (Additive X)
+实例 [PseudoEMetric空间
+  签名: X] : PseudoEMetric空间 (加性 X)
   定义体: ‹PseudoEMetricSpace X›
 -/
 instance [PseudoEMetricSpace X] : PseudoEMetricSpace (Additive X) := ‹PseudoEMetricSpace X›
@@ -2884,8 +2884,8 @@ instance [PseudoEMetricSpace
   body: ‹PseudoEMetricSpace X›
 
 中文:
-实例 [PseudoEMetricSpace
-  签名: X] : PseudoEMetricSpace (Multiplicative X)
+实例 [PseudoEMetric空间
+  签名: X] : PseudoEMetric空间 (Multiplicative X)
   定义体: ‹PseudoEMetricSpace X›
 
 Depends on / 依赖: PseudoEMetricSpace
@@ -2900,8 +2900,8 @@ instance [EMetricSpace
   body: ‹EMetricSpace X›
 
 中文:
-实例 [EMetricSpace
-  签名: X] : EMetricSpace (Additive X)
+实例 [广义度量空间
+  签名: X] : 广义度量空间 (加性 X)
   定义体: ‹EMetricSpace X›
 
 Depends on / 依赖: EMetricSpace
@@ -2916,8 +2916,8 @@ instance [EMetricSpace
   body: ‹EMetricSpace X›
 
 中文:
-实例 [EMetricSpace
-  签名: X] : EMetricSpace (Multiplicative X)
+实例 [广义度量空间
+  签名: X] : 广义度量空间 (Multiplicative X)
   定义体: ‹EMetricSpace X›
 
 Depends on / 依赖: EMetricSpace
@@ -3016,14 +3016,14 @@ class WeakPseudoEMetricSpace
     - topology_eq_on_restrict : forall (x : α) (r : Real>=0∞), IsOpen ((Metric.eball x ⊤) ↓inter (Metric.eball x r))
 
 中文:
-类 WeakPseudoEMetricSpace
+类 WeakPseudoEMetric空间
   继承: EDist α
   公理与运算 (5 个):
     - edist_self : 对任意 x : α, edist x x = 0
     - edist_comm : 对任意 x y : α, edist x y = edist y x
     - edist_triangle : 对任意 x y z : α, edist x z <= edist x y + edist y z
     - topology_le : (uniformSpaceOfEDist edist edist_self edist_comm edist_triangle).toTopologicalSpace <= τ
-    - topology_eq_on_restrict : 对任意 (x : α) (r : 实数>=0∞), IsOpen ((Metric.eball x ⊤) ↓inter (Metric.eball x r))
+    - topology_eq_on_restrict : 对任意 (x : α) (r : 实数>=0∞), 是开集 ((Metric.eball x ⊤) ↓inter (Metric.eball x r))
 -/
 class WeakPseudoEMetricSpace
     (α : Type u) [τ : TopologicalSpace α] : Type u extends EDist α where
@@ -3048,7 +3048,7 @@ theorem WeakPseudoEMetricSpace.ext
   cases m; cases m'; congr
 
 中文:
-定理 WeakPseudoEMetricSpace.ext
+定理 WeakPseudoEMetric空间.ext
   证明: by
   cases m; cases m'; congr
 -/
@@ -3070,8 +3070,8 @@ instance PseudoEMetricSpace.toWeakPseudoEMetricSpace
   topology_eq_on_restrict _ _ := Metric.isOpen_eball.preimage_val
 
 中文:
-实例 PseudoEMetricSpace.toWeakPseudoEMetricSpace
-  签名: (α : 类型u) [inst : PseudoEMetricSpace α]
+实例 PseudoEMetric空间.toWeakPseudoEMetricSpace
+  签名: (α : 类型u) [inst : PseudoEMetric空间 α]
   定义体: edist_self
   edist_comm := edist_comm
   edist_triangle := edist_triangle
@@ -3103,8 +3103,8 @@ abbreviation WeakPseudoEMetricSpace.IsInducing
       (fun x => edist_self (f x)) (fun x y
 
 中文:
-缩写 WeakPseudoEMetricSpace.IsInducing
-  签名: {α β : 类型} [e : TopologicalSpace α]
+缩写 WeakPseudoEMetric空间.是Inducing
+  签名: {α β : 类型} [e : 拓扑空间 α]
   定义体: fun x y => edist (f x) (f y)
   edist_self x := edist_self (f x)
   edist_comm x y := edist_comm (f x) (f y)
@@ -3153,8 +3153,8 @@ class WeakEMetricSpace
     - eq_of_edist_eq_zero : forall {x y : α}, edist x y = 0 -> x = y
 
 中文:
-类 WeakEMetricSpace
-  继承: WeakPseudoEMetricSpace α
+类 WeakEMetric空间
+  继承: WeakPseudoEMetric空间 α
   公理与运算 (1 个):
     - eq_of_edist_eq_zero : 对任意 {x y : α}, edist x y = 0 -> x = y
 -/
@@ -3177,8 +3177,8 @@ theorem WeakEMetricSpace.ext
   assumption
 
 中文:
-定理 WeakEMetricSpace.ext
-  结论: {α : 类型} [TopologicalSpace α] {m m' : WeakEMetricSpace α}
+定理 WeakEMetric空间.ext
+  结论: {α : 类型} [拓扑空间 α] {m m' : WeakEMetric空间 α}
   证明: by
   cases m
   cases m'
@@ -3203,8 +3203,8 @@ instance EMetricSpace.toWeakEMetricSpace
   body: eq_of_edist_eq_zero
 
 中文:
-实例 EMetricSpace.toWeakEMetricSpace
-  签名: (α : 类型u) [EMetricSpace α]
+实例 广义度量空间.toWeakEMetricSpace
+  签名: (α : 类型u) [广义度量空间 α]
   定义体: eq_of_edist_eq_zero
 
 Depends on / 依赖: eq_of_edist_eq_zero
@@ -3223,7 +3223,7 @@ abbreviation WeakEMetricSpace.induced
     eq_of_edist_eq_zero := fun h => hf (m.eq_of_edist_eq_zero h) }
 
 中文:
-缩写 WeakEMetricSpace.induced
+缩写 WeakEMetric空间.induced
   定义体: letI := TopologicalSpace.induced f n
   { WeakPseudoEMetricSpace.IsInducing (f := f) {eq_induced := rfl} m.toWeakPseudoEMetricSpace with
     eq_of_edist_eq_zero := fun h => hf (m.eq_of_edist_eq_zero h) }
@@ -3254,8 +3254,8 @@ instance [TopologicalSpace
   body: ‹WeakPseudoEMetricSpace X›
 
 中文:
-实例 [TopologicalSpace
-  签名: X] [WeakPseudoEMetricSpace X] : WeakPseudoEMetricSpace Xᵒᵈ
+实例 [拓扑空间
+  签名: X] [WeakPseudoEMetric空间 X] : WeakPseudoEMetric空间 Xᵒᵈ
   定义体: ‹WeakPseudoEMetricSpace X›
 
 Depends on / 依赖: WeakPseudoEMetricSpace
@@ -3271,8 +3271,8 @@ instance [TopologicalSpace
   body: ‹WeakEMetricSpace X›
 
 中文:
-实例 [TopologicalSpace
-  签名: X] [WeakEMetricSpace X] : WeakEMetricSpace Xᵒᵈ
+实例 [拓扑空间
+  签名: X] [WeakEMetric空间 X] : WeakEMetric空间 Xᵒᵈ
   定义体: ‹WeakEMetricSpace X›
 
 Depends on / 依赖: WeakEMetricSpace
@@ -3288,8 +3288,8 @@ instance [PseudoEMetricSpace
   body: ‹PseudoEMetricSpace X›
 
 中文:
-实例 [PseudoEMetricSpace
-  签名: X] : PseudoEMetricSpace Xᵒᵈ
+实例 [PseudoEMetric空间
+  签名: X] : PseudoEMetric空间 Xᵒᵈ
   定义体: ‹PseudoEMetricSpace X›
 
 Depends on / 依赖: PseudoEMetricSpace
@@ -3305,8 +3305,8 @@ instance [EMetricSpace
   body: ‹EMetricSpace X›
 
 中文:
-实例 [EMetricSpace
-  签名: X] : EMetricSpace Xᵒᵈ
+实例 [广义度量空间
+  签名: X] : 广义度量空间 Xᵒᵈ
   定义体: ‹EMetricSpace X›
 -/
 instance [EMetricSpace X] : EMetricSpace Xᵒᵈ :=

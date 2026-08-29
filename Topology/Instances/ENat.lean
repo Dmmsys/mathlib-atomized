@@ -32,7 +32,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 自然数∞
+  签名: 拓扑空间 自然数∞
   定义体: Preorder.topology Nat∞
 
 Depends on / 依赖: Preorder, Preorder.topology, topology
@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology 自然数∞
+  签名: Order拓扑 自然数∞
   定义体: ⟨rfl⟩
 -/
 instance : OrderTopology Nat∞ := ⟨rfl⟩
@@ -64,7 +64,7 @@ theorem range_natCast
 
 中文:
 定理 range_natCast
-  结论: range ((↑) : 自然数 -> 自然数∞) = Iio ⊤
+  结论: range ((↑) : 自然数 -> 自然数∞) = 左无界右开区间 ⊤
   证明: WithTop.range_coe
 -/
 @[simp] theorem range_natCast : range ((↑) : Nat -> Nat∞) = Iio ⊤ :=
@@ -80,7 +80,7 @@ theorem isEmbedding_natCast
 
 中文:
 定理 isEmbedding_natCast
-  结论: IsEmbedding ((↑) : 自然数 -> 自然数∞)
+  结论: 是嵌入 ((↑) : 自然数 -> 自然数∞)
   证明: Nat.strictMono_cast.isEmbedding_of_ordConnected range_natCast ▸ ordConnected_Iio
 
 Depends on / 依赖: Nat.strictMono_cast.isEmbedding_of_ordConnected, isEmbedding_of_ordConnected, ordConnected_Iio, range_natCast, strictMono_cast
@@ -98,7 +98,7 @@ theorem isOpenEmbedding_natCast
 
 中文:
 定理 isOpenEmbedding_natCast
-  结论: IsOpenEmbedding ((↑) : 自然数 -> 自然数∞)
+  结论: 是开嵌入 ((↑) : 自然数 -> 自然数∞)
   证明: ⟨isEmbedding_natCast, range_natCast ▸ isOpen_Iio⟩
 
 Depends on / 依赖: isEmbedding_natCast, isOpen_Iio, range_natCast
@@ -169,7 +169,7 @@ theorem isOpen_singleton
 中文:
 定理 isOpen_singleton
   条件: {x : 自然数∞} (hx : x != ⊤)
-  结论: IsOpen {x}
+  结论: 是开集 {x}
   证明: by
   rw [isOpen_singleton_iff_nhds_eq_pure]; rw [ENat.nhds_eq_pure hx]
 
@@ -190,7 +190,7 @@ theorem mem_nhds_iff
 
 中文:
 定理 mem_nhds_iff
-  条件: {x : 自然数∞} {s : Set 自然数∞} (hx : x != ⊤)
+  条件: {x : 自然数∞} {s : 集合 自然数∞} (hx : x != ⊤)
   结论: s in 𝓝 x ↔ x in s
   证明: by
   simp [hx]
@@ -209,7 +209,7 @@ theorem mem_nhds_natCast_iff
 
 中文:
 定理 mem_nhds_natCast_iff
-  条件: (n : 自然数) {s : Set 自然数∞}
+  条件: (n : 自然数) {s : 集合 自然数∞}
   结论: s in 𝓝 (n : 自然数∞) ↔ (n : 自然数∞) in s
   证明: mem_nhds_iff (natCast_ne_top _)
 
@@ -230,7 +230,7 @@ theorem tendsto_nhds_top_iff_natCast_lt
 
 中文:
 定理 tendsto_nhds_top_iff_natCast_lt
-  条件: {α : 类型} {l : Filter α} {f : α -> 自然数∞}
+  条件: {α : 类型} {l : 滤子 α} {f : α -> 自然数∞}
   证明: by
   simp_rw [nhds_top_order, lt_top_iff_ne_top, tendsto_iInf, tendsto_principal, ENat.forall_ne_top,
     mem_Ioi]
@@ -255,7 +255,7 @@ theorem tendsto_natCast_nhds_top
 
 中文:
 定理 tendsto_natCast_nhds_top
-  结论: Tendsto 自然数.cast atTop (𝓝 (⊤ : 自然数∞))
+  结论: 收敛 自然数.cast atTop (𝓝 (⊤ : 自然数∞))
   证明: by
   rw [tendsto_nhds_top_iff_natCast_lt]
   intro n
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousAdd 自然数∞
+  签名: 连续加法 自然数∞
   定义体: by
   refine ⟨continuous_iff_continuousAt.mpr fun (a, b) => ?_⟩
   match a, b with
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul 自然数∞
+  签名: 连续乘法 自然数∞
   定义体: have key (a : Nat∞) : ContinuousAt (· * ·).uncurry (a, ⊤) := by
       rcases eq_zero_or_pos a with rfl | ha
       · simp [ContinuousAt, nhds_prod_eq]
@@ -353,7 +353,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalSemiring 自然数∞
+  签名: 是TopologicalSemiring 自然数∞
   定义体: inferInstance
   toContinuousMul := inferInstance
 -/
@@ -410,8 +410,8 @@ theorem Filter.Tendsto.enatSub
   proof: (ENat.continuousAt_sub h).tendsto.comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.enatSub
-  结论: {α : 类型} {l : Filter α} {f g : α -> 自然数∞} {a b : 自然数∞}
+定理 滤子.收敛.enatSub
+  结论: {α : 类型} {l : 滤子 α} {f g : α -> 自然数∞} {a b : 自然数∞}
   证明: (ENat.continuousAt_sub h).tendsto.comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: ENat.continuousAt_sub, continuousAt_sub, hf.prodMk_nhds, prodMk_nhds, tendsto, tendsto.comp

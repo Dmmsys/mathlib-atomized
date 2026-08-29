@@ -45,10 +45,10 @@ class IsZGroup
     - isZGroup : forall p : Nat, p.Prime -> forall P : Sylow p G, IsCyclic P
 
 中文:
-类 IsZGroup
+类 是Z群
   参数: : 命题 where
   公理与运算 (1 个):
-    - isZGroup : 对任意 p : 自然数, p.Prime -> 对任意 P : Sylow p G, IsCyclic P
+    - isZGroup : 对任意 p : 自然数, p.素 -> 对任意 P : Sylow p G, 是循环 P
 -/
 @[mk_iff] class IsZGroup : Prop where
   isZGroup : forall p : Nat, p.Prime -> forall P : Sylow p G, IsCyclic P
@@ -66,8 +66,8 @@ instance [IsCyclic
   body: ⟨inferInstance⟩
 
 中文:
-实例 [IsCyclic
-  签名: G] : IsZGroup G
+实例 [是循环
+  签名: G] : 是Z群 G
   定义体: ⟨inferInstance⟩
 -/
 instance [IsCyclic G] : IsZGroup G :=
@@ -82,7 +82,7 @@ instance [IsZGroup
   body: isZGroup p Fact.out P
 
 中文:
-实例 [IsZGroup
+实例 [是Z群
   签名: G] {p
   定义体: isZGroup p Fact.out P
 
@@ -102,8 +102,8 @@ theorem _root_.IsPGroup.isCyclic_of_isZGroup
   exact Subgroup.isCyclic_of_le hQ
 
 中文:
-定理 _root_.IsPGroup.isCyclic_of_isZGroup
-  结论: [IsZGroup G] {p : 自然数} [Fact p.Prime]
+定理 _root_.是p群.isCyclic_of_isZGroup
+  结论: [是Z群 G] {p : 自然数} [Fact p.素]
   证明: by
   obtain ⟨Q, hQ⟩ := hP.exists_le_sylow
   exact Subgroup.isCyclic_of_le hQ
@@ -132,7 +132,7 @@ theorem of_squarefree
 中文:
 定理 of_squarefree
   条件: (hG : Squarefree (自然数.card G))
-  结论: IsZGroup G
+  结论: 是Z群 G
   证明: by
   have : Finite G := Nat.finite_of_card_ne_zero hG.ne_zero
   refine ⟨fun p hp P => ?_⟩
@@ -167,8 +167,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: [hG' : IsZGroup G'] (hf : Function.Injective f)
-  结论: IsZGroup G
+  条件: [hG' : 是Z群 G'] (hf : 函数.单射 f)
+  结论: 是Z群 G
   证明: by
   rw [isZGroup_iff] at hG' ⊢
   intro p hp P
@@ -198,7 +198,7 @@ instance [IsZGroup
   body: of_injective H.subtype_injective
 
 中文:
-实例 [IsZGroup
+实例 [是Z群
   签名: G] (H
   定义体: of_injective H.subtype_injective
 
@@ -223,8 +223,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: [Finite G] [hG : IsZGroup G] (hf : Function.Surjective f)
-  结论: IsZGroup G'
+  条件: [有限 G] [hG : 是Z群 G] (hf : 函数.满射 f)
+  结论: 是Z群 G'
   证明: by
   rw [isZGroup_iff] at hG ⊢
   intro p hp P
@@ -252,8 +252,8 @@ instance [Finite
   body: of_surjective (QuotientGroup.mk'_surjective H)
 
 中文:
-实例 [Finite
-  签名: G] [IsZGroup G] (H
+实例 [有限
+  签名: G] [是Z群 G] (H
   定义体: of_surjective (QuotientGroup.mk'_surjective H)
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, _surjective, of_surjective
@@ -283,7 +283,7 @@ theorem commutator_lt
 
 中文:
 定理 commutator_lt
-  条件: [Finite G] [IsZGroup G] [Nontrivial G]
+  条件: [有限 G] [是Z群 G] [非平凡 G]
   结论: commutator G < ⊤
   证明: by
   let p := (Nat.card G).minFac
@@ -323,8 +323,8 @@ instance [Finite
   exact commutator_lt H
 
 中文:
-实例 [Finite
-  签名: G] [IsZGroup G] : Group.IsSolvable G
+实例 [有限
+  签名: G] [是Z群 G] : 群.是可解 G
   定义体: by
   rw [Group.isSolvable_iff_commutator_lt]
   intro H h
@@ -363,8 +363,8 @@ theorem exponent_eq_card
 
 中文:
 定理 exponent_eq_card
-  条件: [Finite G] [IsZGroup G]
-  结论: Monoid.exponent G = 自然数.card G
+  条件: [有限 G] [是Z群 G]
+  结论: 幺半群.exponent G = 自然数.card G
   证明: by
   refine dvd_antisymm Group.exponent_dvd_nat_card ?_
   rw [← Nat.factorization_prime_le_iff_dvd Nat.card_pos.ne' Monoid.exponent_ne_zero_of_finite]
@@ -400,8 +400,8 @@ instance [Finite
   
 
 中文:
-实例 [Finite
-  签名: G] [IsZGroup G] [hG
+实例 [有限
+  签名: G] [是Z群 G] [hG
   定义体: by
   have (p : { x // x in (Nat.card G).primeFactors }) : Fact p.1.Prime :=
     ⟨Nat.prime_of_mem_primeFactors p.2⟩
@@ -431,7 +431,7 @@ instance isCyclic_abelianization
 
 中文:
 实例 isCyclic_abelianization
-  签名: [Finite G] [IsZGroup G]
+  签名: [有限 G] [是Z群 G]
   定义体: let _ : IsZGroup (Abelianization G) := inferInstanceAs (IsZGroup (G ⧸ commutator G))
   inferInstance
 
@@ -464,8 +464,8 @@ theorem isCyclic_commutator
 
 中文:
 定理 isCyclic_commutator
-  条件: [Finite G] [IsZGroup G]
-  结论: IsCyclic (commutator G)
+  条件: [有限 G] [是Z群 G]
+  结论: 是循环 (commutator G)
   证明: by
   rw [commutator_def]
   induction (⊤ : Subgroup G) using WellFoundedLT.induction with | ind H hH
@@ -532,7 +532,7 @@ theorem smul_mul_inv_trivial_or_surjective
 
 中文:
 定理 smul_mul_inv_trivial_or_surjective
-  结论: [IsCyclic G] (hG : IsPGroup p G)
+  结论: [是循环 G] (hG : 是p群 p G)
   证明: by
   by_cases hc : Nat.card G = 0
   · rw [hc, Nat.coprime_zero_left, Nat.card_eq_one_iff_unique] at hGK
@@ -582,7 +582,7 @@ theorem commutator_eq_bot_or_commutator_eq_self
 
 中文:
 定理 commutator_eq_bot_or_commutator_eq_self
-  结论: {P K : Subgroup G} [IsCyclic P]
+  结论: {P K : 子群 G} [是循环 P]
   证明: by
   let _ := MulDistribMulAction.compHom P (P.normalizerMonoidHom.comp (Subgroup.inclusion hKP))
   refine (smul_mul_inv_trivial_or_surjective hP hPK).imp (fun h => ?_) fun h => ?_
@@ -622,7 +622,7 @@ theorem commutator_eq_bot_or_commutator_eq_self
 
 中文:
 定理 commutator_eq_bot_or_commutator_eq_self
-  结论: [P.Normal] {K : Subgroup G}
+  结论: [P.正规] {K : 子群 G}
   证明: P.2.commutator_eq_bot_or_commutator_eq_self (P.normalizer_eq_top ▸ le_top)
     (h.index_eq_card ▸ P.card_coprime_index)
 
@@ -648,8 +648,8 @@ theorem le_center_or_le_commutator
 
 中文:
 定理 le_center_or_le_commutator
-  条件: [P.Normal]
-  结论: P <= Subgroup.center G ∨ P <= commutator G
+  条件: [P.正规]
+  结论: P <= 子群.center G ∨ P <= commutator G
   证明: by
   obtain ⟨K, hK⟩ := Subgroup.exists_left_complement'_of_coprime P.card_coprime_index
   refine (commutator_eq_bot_or_commutator_eq_self P hK).imp (fun h => ?_) (fun h => ?_)
@@ -757,8 +757,8 @@ theorem IsZGroup.coprime_commutator_index
   exact Sylow.not_dvd_card_commutator_or_not_dvd_index_commutator default
 
 中文:
-定理 IsZGroup.coprime_commutator_index
-  条件: [Finite G] [IsZGroup G]
+定理 是Z群.coprime_commutator_index
+  条件: [有限 G] [是Z群 G]
   证明: by
   suffices h : forall p, p.Prime -> (¬ p ∣ Nat.card (commutator G) ∨ ¬ p ∣ (commutator G).index) by
     contrapose! h
@@ -798,7 +798,7 @@ theorem isZGroup_of_coprime
 
 中文:
 定理 isZGroup_of_coprime
-  结论: [Finite G] [IsZGroup G] [IsZGroup G'']
+  结论: [有限 G] [是Z群 G] [是Z群 G'']
   证明: by
   refine ⟨fun p hp P => ?_⟩
   have := Fact.mk hp
@@ -842,8 +842,8 @@ theorem isZGroup_iff_exists_mulEquiv
       isCyclic_of_surjective _ h
 
 中文:
-定理 isZGroup_iff_exists_mulEquiv
-  条件: [Finite G]
+定理 isZGroup_iff_存在_mulEquiv
+  条件: [有限 G]
   证明: by
   refine ⟨fun hG => ?_, ?_⟩
   · obtain ⟨H, hH⟩ := Subgroup.exists_right_complement'_of_coprime hG.coprime_commutator_index

@@ -38,7 +38,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (ModuleCat.{v} R) Ab).PreservesHomology
+  签名: (forget₂ (模范畴.{v} R) Ab).保持同调
 -/
 noncomputable instance : (forget₂ (ModuleCat.{v} R) Ab).PreservesHomology where
 
@@ -55,7 +55,7 @@ definition moduleCatMk
 
 中文:
 定义 moduleCatMk
-  签名: {X₁ X₂ X₃ : 类型v} [AddCommGroup X₁] [AddCommGroup X₂] [AddCommGroup X₃]
+  签名: {X₁ X₂ X₃ : 类型v} [加法交换群 X₁] [加法交换群 X₂] [加法交换群 X₃]
   定义体: ShortComplex.mk (ModuleCat.ofHom f) (ModuleCat.ofHom g) (ModuleCat.hom_ext hfg)
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, ModuleCat.ofHom, ShortComplex, ShortComplex.mk, hom_ext
@@ -161,8 +161,8 @@ lemma Exact.moduleCat_range_eq_ker
   simpa only [moduleCat_exact_iff_range_eq_ker] using hS
 
 中文:
-引理 Exact.moduleCat_range_eq_ker
-  条件: (hS : S.Exact)
+引理 正合.moduleCat_range_eq_ker
+  条件: (hS : S.正合)
   证明: by
   simpa only [moduleCat_exact_iff_range_eq_ker] using hS
 
@@ -181,8 +181,8 @@ lemma ShortExact.moduleCat_injective_f
   proof: hS.injective_f
 
 中文:
-引理 ShortExact.moduleCat_injective_f
-  条件: (hS : S.ShortExact)
+引理 短正合.moduleCat_injective_f
+  条件: (hS : S.短正合)
   证明: hS.injective_f
 
 Depends on / 依赖: hS.injective_f, injective_f
@@ -200,8 +200,8 @@ lemma ShortExact.moduleCat_surjective_g
   proof: hS.surjective_g
 
 中文:
-引理 ShortExact.moduleCat_surjective_g
-  条件: (hS : S.ShortExact)
+引理 短正合.moduleCat_surjective_g
+  条件: (hS : S.短正合)
   证明: hS.surjective_g
 
 Depends on / 依赖: hS.surjective_g, surjective_g
@@ -222,7 +222,7 @@ lemma ShortExact.moduleCat_exact_iff_function_exact
   tauto
 
 中文:
-引理 ShortExact.moduleCat_exact_iff_function_exact
+引理 短正合.moduleCat_exact_iff_function_exact
   证明: by
   rw [moduleCat_exact_iff_range_eq_ker]; rw [LinearMap.exact_iff]
   tauto
@@ -247,7 +247,7 @@ definition moduleCatMkOfKerLERange
 
 中文:
 定义 moduleCatMkOfKerLERange
-  签名: {X₁ X₂ X₃ : ModuleCat.{v} R} (f : X₁ ⟶ X₂) (g : X₂ ⟶ X₃)
+  签名: {X₁ X₂ X₃ : 模范畴.{v} R} (f : X₁ ⟶ X₂) (g : X₂ ⟶ X₃)
   定义体: ShortComplex.mk f g (by aesop)
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk
@@ -266,8 +266,8 @@ lemma Exact.moduleCat_of_range_eq_ker
   simpa only [moduleCat_exact_iff_range_eq_ker] using! hfg
 
 中文:
-引理 Exact.moduleCat_of_range_eq_ker
-  结论: {X₁ X₂ X₃ : ModuleCat.{v} R}
+引理 正合.moduleCat_of_range_eq_ker
+  结论: {X₁ X₂ X₃ : 模范畴.{v} R}
   证明: by
   simpa only [moduleCat_exact_iff_range_eq_ker] using! hfg
 
@@ -288,7 +288,7 @@ abbreviation moduleCatToCycles
 
 中文:
 缩写 moduleCatToCycles
-  签名: : S.X₁ ->ₗ[R] LinearMap.ker S.g.hom
+  签名: : S.X₁ ->ₗ[R] 线性映射.ker S.g.hom
   定义体: S.f.hom.codRestrict _ S.moduleCat_zero_apply
 
 Depends on / 依赖: S.f.hom.codRestrict, S.moduleCat_zero_apply, codRestrict, moduleCat_zero_apply
@@ -371,7 +371,7 @@ lemma moduleCatLeftHomologyData_descH_hom
 
 中文:
 引理 moduleCatLeftHomologyData_descH_hom
-  结论: {M : ModuleCat R}
+  结论: {M : 模范畴 R}
   证明: rfl
 
 @[simp]
@@ -393,7 +393,7 @@ lemma moduleCatLeftHomologyData_liftK_hom
 
 中文:
 引理 moduleCatLeftHomologyData_liftK_hom
-  条件: {M : ModuleCat R} (φ : M ⟶ S.X₂) (h : φ ≫ S.g = 0)
+  条件: {M : 模范畴 R} (φ : M ⟶ S.X₂) (h : φ ≫ S.g = 0)
   证明: rfl
 -/
 lemma moduleCatLeftHomologyData_liftK_hom {M : ModuleCat R} (φ : M ⟶ S.X₂) (h : φ ≫ S.g = 0) :
@@ -685,7 +685,7 @@ abbreviation LinearMap.shortComplexKer
   zero := by ext; simp
 
 中文:
-缩写 LinearMap.shortComplexKer
+缩写 线性映射.shortComplexKer
   签名: (f : M ->ₗ[R] N)
   定义体: ModuleCat.ofHom.{v} (LinearMap.ker f).subtype
   g := ModuleCat.ofHom.{v} f
@@ -710,8 +710,8 @@ theorem LinearMap.shortExact_shortComplexKer
   epi_g := (ModuleCat.epi_iff_surjective _).mpr h
 
 中文:
-定理 LinearMap.shortExact_shortComplexKer
-  条件: {f : M ->ₗ[R] N} (h : Function.Surjective f)
+定理 线性映射.shortExact_shortComplexKer
+  条件: {f : M ->ₗ[R] N} (h : 函数.满射 f)
   证明: (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mpr
     fun _ => by simp [shortComplexKer]
   mono_f := (ModuleCat.mono_iff_injective _).mpr (LinearMap.ker f).injective_subtype
@@ -738,7 +738,7 @@ abbreviation ModuleCat.shortComplexOfCompEqZero
   g := ModuleCat.ofHom g
 
 中文:
-缩写 ModuleCat.shortComplexOfCompEqZero
+缩写 模范畴.shortComplexOfCompEqZero
   签名: (f : M ->ₗ[R] N) (g : N ->ₗ[R] L) (eq0 : g.comp f = 0)
   定义体: ModuleCat.ofHom f
   g := ModuleCat.ofHom g
@@ -759,8 +759,8 @@ lemma ModuleCat.shortComplex_exact
   proof: (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mpr exac
 
 中文:
-引理 ModuleCat.shortComplex_exact
-  结论: (S : ShortComplex (ModuleCat.{v} R))
+引理 模范畴.shortComplex_exact
+  结论: (S : 短复形 (模范畴.{v} R))
   证明: (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mpr exac
 
 Depends on / 依赖: ShortComplex, ShortComplex.ShortExact.moduleCat_exact_iff_function_exact, ShortExact, moduleCat_exact_iff_function_exact
@@ -780,8 +780,8 @@ lemma ModuleCat.shortComplex_shortExact
   epi_g := (ModuleCat.epi_iff_surjective _).mpr surj
 
 中文:
-引理 ModuleCat.shortComplex_shortExact
-  结论: (S : ShortComplex (ModuleCat.{v} R))
+引理 模范畴.shortComplex_shortExact
+  结论: (S : 短复形 (模范畴.{v} R))
   证明: (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mpr exac
   mono_f := (ModuleCat.mono_iff_injective _).mpr inj
   epi_g := (ModuleCat.epi_iff_surjective _).mpr surj
@@ -812,7 +812,7 @@ abbreviation ModuleCat.shortComplexOfConj
       simpa using LinearMap.congr_fun eq0 (eM x))
 
 中文:
-缩写 ModuleCat.shortComplexOfConj
+缩写 模范畴.shortComplexOfConj
   签名: (eq0 : g ∘ₗ f = 0)
   定义体: ModuleCat.shortComplexOfCompEqZero ((eN.symm.comp f).comp eM.toLinearMap)
     (eL.symm.comp (g.comp eN.toLinearMap)) (by
@@ -841,8 +841,8 @@ lemma exact_conj_of_exact
 
 中文:
 引理 exact_conj_of_exact
-  条件: (exact : Function.Exact f g)
-  结论: Function.Exact
+  条件: (exact : 函数.正合 f g)
+  结论: 函数.正合
   证明: by
   rwa [LinearEquiv.precomp_exact_iff_exact, LinearEquiv.postcomp_exact_iff_exact,
     LinearEquiv.conj_symm_exact_iff_exact]
@@ -861,8 +861,8 @@ lemma ModuleCat.shortComplexOfConj_exact
   proof: ModuleCat.shortComplex_exact _ (exact_conj_of_exact eM eN eL f g exact)
 
 中文:
-引理 ModuleCat.shortComplexOfConj_exact
-  条件: (exact : Function.Exact f g)
+引理 模范畴.shortComplexOfConj_exact
+  条件: (exact : 函数.正合 f g)
   证明: ModuleCat.shortComplex_exact _ (exact_conj_of_exact eM eN eL f g exact)
 
 Depends on / 依赖: ModuleCat, ModuleCat.shortComplex_exact, exact_conj_of_exact, shortComplex_exact
@@ -882,8 +882,8 @@ lemma ModuleCat.shortComplexOfConj_shortExact
   all_goals simpa
 
 中文:
-引理 ModuleCat.shortComplexOfConj_shortExact
-  结论: (exact : Function.Exact f g)
+引理 模范畴.shortComplexOfConj_shortExact
+  结论: (exact : 函数.正合 f g)
   证明: by
   refine ModuleCat.shortComplex_shortExact _ (exact_conj_of_exact eM eN eL f g exact) ?_ ?_
   all_goals simpa

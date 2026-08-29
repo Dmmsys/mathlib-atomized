@@ -51,7 +51,7 @@ definition GradedObject
 
 中文:
 定义 GradedObject
-  签名: (β : Type w) (C : 类型u)
+  签名: (β : 类型 w) (C : 类型u)
   定义体: β -> C
 -/
 def GradedObject (β : Type w) (C : Type u) : Type max w u :=
@@ -68,7 +68,7 @@ instance inhabitedGradedObject
 
 中文:
 实例 inhabitedGradedObject
-  签名: (β : Type w) (C : 类型u) [Inhabited C]
+  签名: (β : 类型 w) (C : 类型u) [可居 C]
   定义体: ⟨fun _ => Inhabited.default⟩
 
 Depends on / 依赖: Inhabited, Inhabited.default
@@ -92,7 +92,7 @@ abbreviation GradedObjectWithShift
 
 中文:
 缩写 GradedObjectWithShift
-  签名: {β : Type w} [AddCommGroup β] (_ : β) (C : 类型u)
+  签名: {β : 类型 w} [加法交换群 β] (_ : β) (C : 类型u)
   定义体: GradedObject β C
 
 Depends on / 依赖: GradedObject
@@ -117,7 +117,7 @@ instance categoryOfGradedObjects
 
 中文:
 实例 categoryOfGradedObjects
-  签名: (β : Type w)
+  签名: (β : 类型 w)
   定义体: CategoryTheory.pi fun _ => C
 
 @[ext]
@@ -164,7 +164,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: {β : Type w} (b : β)
+  签名: {β : 类型 w} (b : β)
   定义体: X b
   map f := f b
 -/
@@ -214,7 +214,7 @@ lemma isIso_of_isIso_apply
 
 中文:
 引理 isIso_of_isIso_apply
-  条件: (f : X ⟶ Y) [hf : 对任意 i, IsIso (f i)]
+  条件: (f : X ⟶ Y) [hf : 对任意 i, 是同构 (f i)]
   证明: by
   change IsIso (isoMk X Y (fun i => asIso (f i))).hom
   infer_instance
@@ -238,7 +238,7 @@ instance isIso_apply_of_isIso
 
 中文:
 实例 isIso_apply_of_isIso
-  签名: (f : X ⟶ Y) [IsIso f] (i : β)
+  签名: (f : X ⟶ Y) [是同构 f] (i : β)
   定义体: by
   change IsIso ((eval i).map f)
   infer_instance
@@ -473,7 +473,7 @@ definition comapEq
 
 中文:
 定义 comapEq
-  签名: {β γ : Type w} {f g : β -> γ} (h : f = g)
+  签名: {β γ : 类型 w} {f g : β -> γ} (h : f = g)
   定义体: { app := fun X b => eqToHom (by dsimp; simp only [h]) }
   inv := { app := fun X b => eqToHom (by dsimp; simp only [h]) }
 
@@ -493,7 +493,7 @@ theorem comapEq_symm
 
 中文:
 定理 comapEq_symm
-  条件: {β γ : Type w} {f g : β -> γ} (h : f = g)
+  条件: {β γ : 类型 w} {f g : β -> γ} (h : f = g)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -512,7 +512,7 @@ theorem comapEq_trans
 
 中文:
 定理 comapEq_trans
-  条件: {β γ : Type w} {f g h : β -> γ} (k : f = g) (l : g = h)
+  条件: {β γ : 类型 w} {f g h : β -> γ} (k : f = g) (l : g = h)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -532,7 +532,7 @@ theorem eqToHom_apply
 
 中文:
 定理 eqToHom_apply
-  条件: {β : Type w} {X Y : β -> C} (h : X = Y) (b : β)
+  条件: {β : 类型 w} {X Y : β -> C} (h : X = Y) (b : β)
   证明: by
   subst h
   rfl
@@ -562,7 +562,7 @@ definition comapEquiv
 
 中文:
 定义 comapEquiv
-  签名: {β γ : Type w} (e : β ≃ γ)
+  签名: {β γ : 类型 w} (e : β ≃ γ)
   定义体: comap C (e.symm : γ -> β)
   inverse := comap C (e : β -> γ)
   counitIso :=
@@ -598,7 +598,7 @@ instance hasShift
 
 中文:
 实例 hasShift
-  签名: {β : 类型} [AddCommGroup β] (s : β)
+  签名: {β : 类型} [加法交换群 β] (s : β)
   定义体: hasShiftMk _ _
     { F := fun n => comap C fun b : β => b + n • s
       zero := comapEq C (by cat_disch) ≪≫ Pi.comapId β fun _ => C
@@ -626,7 +626,7 @@ theorem shiftFunctor_obj_apply
 
 中文:
 定理 shiftFunctor_obj_apply
-  条件: {β : 类型} [AddCommGroup β] (s : β) (X : β -> C) (t : β) (n : 整数)
+  条件: {β : 类型} [加法交换群 β] (s : β) (X : β -> C) (t : β) (n : 整数)
   证明: rfl
 -/
 theorem shiftFunctor_obj_apply {β : Type*} [AddCommGroup β] (s : β) (X : β -> C) (t : β) (n : Int) :
@@ -645,7 +645,7 @@ theorem shiftFunctor_map_apply
 
 中文:
 定理 shiftFunctor_map_apply
-  结论: {β : 类型} [AddCommGroup β] (s : β)
+  结论: {β : 类型} [加法交换群 β] (s : β)
   证明: rfl
 -/
 theorem shiftFunctor_map_apply {β : Type*} [AddCommGroup β] (s : β)
@@ -664,7 +664,7 @@ instance [HasZeroMorphisms
 @[simp]
 
 中文:
-实例 [HasZeroMorphisms
+实例 [有ZeroMorphisms
   签名: C] (β
   定义体: ⟨fun _ => 0⟩
 
@@ -684,7 +684,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [HasZeroMorphisms C] (β : Type w) (X Y : GradedObject β C) (b : β)
+  条件: [有ZeroMorphisms C] (β : 类型 w) (X Y : GradedObject β C) (b : β)
   证明: rfl
 -/
 theorem zero_apply [HasZeroMorphisms C] (β : Type w) (X Y : GradedObject β C) (b : β) :
@@ -701,7 +701,7 @@ instance hasZeroMorphisms
 
 中文:
 实例 hasZeroMorphisms
-  签名: [HasZeroMorphisms C] (β : Type w)
+  签名: [有ZeroMorphisms C] (β : 类型 w)
 -/
 instance hasZeroMorphisms [HasZeroMorphisms C] (β : Type w) :
     HasZeroMorphisms.{max w v} (GradedObject β C) where
@@ -722,7 +722,7 @@ instance hasZeroObject
 
 中文:
 实例 hasZeroObject
-  签名: [HasZeroObject C] [HasZeroMorphisms C] (β : Type w)
+  签名: [有ZeroObject C] [有ZeroMorphisms C] (β : 类型 w)
   定义体: by
   refine ⟨⟨fun _ => 0, fun X => ⟨⟨⟨fun b => 0⟩, fun f => ?_⟩⟩, fun X =>
     ⟨⟨⟨fun b => 0⟩, fun f => ?_⟩⟩⟩⟩ <;> cat_disch
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: (total β C).Faithful
+  签名: (total β C).忠实
   定义体: by
     ext i
     replace w := Sigma.ι (fun i : β => X i) i ≫= w
@@ -1080,7 +1080,7 @@ lemma hasMap
 
 中文:
 引理 hasMap
-  条件: (c : 对任意 j, CofanMapObjFun X p j) (hc : 对任意 j, IsColimit (c j))
+  条件: (c : 对任意 j, CofanMapObjFun X p j) (hc : 对任意 j, 是余极限 (c j))
   证明: fun j => ⟨_, hc j⟩
 -/
 lemma hasMap (c : forall j, CofanMapObjFun X p j) (hc : forall j, IsColimit (c j)) :
@@ -1318,7 +1318,7 @@ definition map
 
 中文:
 定义 map
-  签名: [对任意 (j : J), HasColimitsOfShape (Discrete (p ⁻¹' {j})) C]
+  签名: [对任意 (j : J), 有形状余极限 (离散 (p ⁻¹' {j})) C]
   定义体: X.mapObj p
   map φ := mapMap φ p
 

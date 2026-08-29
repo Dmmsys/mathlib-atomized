@@ -77,7 +77,7 @@ definition NullMeasurableSpace
 
 中文:
 定义 NullMeasurableSpace
-  签名: (α : 类型) [MeasurableSpace α]
+  签名: (α : 类型) [可测空间 α]
   定义体: α
 
 Depends on / 依赖: volume_tac
@@ -100,7 +100,7 @@ instance NullMeasurableSpace.instInhabited
 
 中文:
 实例 NullMeasurableSpace.instInhabited
-  签名: [h : Inhabited α]
+  签名: [h : 可居 α]
   定义体: h
 -/
 instance NullMeasurableSpace.instInhabited [h : Inhabited α] :
@@ -117,7 +117,7 @@ instance NullMeasurableSpace.instSubsingleton
 
 中文:
 实例 NullMeasurableSpace.instSubsingleton
-  签名: [h : Subsingleton α]
+  签名: [h : 子单例 α]
   定义体: h
 -/
 instance NullMeasurableSpace.instSubsingleton [h : Subsingleton α] :
@@ -134,7 +134,7 @@ instance NullMeasurableSpace.instMeasurableSpace
 
 中文:
 实例 NullMeasurableSpace.instMeasurableSpace
-  签名: : MeasurableSpace (NullMeasurableSpace α μ)
+  签名: : 可测空间 (NullMeasurableSpace α μ)
   定义体: fast_instance% @eventuallyMeasurableSpace α inferInstance (ae μ) _
 
 Depends on / 依赖: eventuallyMeasurableSpace, fast_instance
@@ -154,7 +154,7 @@ definition NullMeasurableSet
 
 中文:
 定义 NullMeasurableSet
-  签名: [MeasurableSpace α] (s : Set α)
+  签名: [可测空间 α] (s : 集合 α)
   定义体: @MeasurableSet (NullMeasurableSpace α μ) _ s
 
 @[simp, aesop unsafe (rule_sets := [Measurable])]
@@ -176,8 +176,8 @@ theorem _root_.MeasurableSet.nullMeasurableSet
   proof: h.eventuallyMeasurableSet
 
 中文:
-定理 _root_.MeasurableSet.nullMeasurableSet
-  条件: (h : MeasurableSet s)
+定理 _root_.可测集.nullMeasurableSet
+  条件: (h : 可测集 s)
   结论: NullMeasurableSet s μ
   证明: h.eventuallyMeasurableSet
 
@@ -195,8 +195,8 @@ theorem _root_.MeasureTheory.nullMeasurableSet_iff_eventuallyMeasurableSet
   proof: Iff.rfl
 
 中文:
-定理 _root_.MeasureTheory.nullMeasurableSet_iff_eventuallyMeasurableSet
-  条件: (s : Set α)
+定理 _root_.测度论.nullMeasurableSet_iff_eventuallyMeasurableSet
+  条件: (s : 集合 α)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -342,7 +342,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: NullMeasurableSet s μ
   证明: Subsingleton.measurableSet
 
@@ -389,7 +389,7 @@ theorem iUnion
 
 中文:
 定理 iUnion
-  结论: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+  结论: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: MeasurableSet.iUnion h
 
 Depends on / 依赖: Finite, Finite.to_isCoatomic, OrderTop, PartialOrder, to_isCoatomic
@@ -408,7 +408,7 @@ theorem biUnion
 
 中文:
 定理 biUnion
-  结论: {f : ι -> Set α} {s : Set ι} (hs : s.Countable)
+  结论: {f : ι -> 集合 α} {s : 集合 ι} (hs : s.可数)
   证明: MeasurableSet.biUnion hs h
 
 Depends on / 依赖: Finite, Finite.to_isAtomic, OrderBot, PartialOrder, to_isAtomic
@@ -430,8 +430,8 @@ theorem sUnion
 @[measurability]
 
 中文:
-定理 sUnion
-  条件: {s : Set (Set α)} (hs : s.Countable) (h : 对任意 t in s, NullMeasurableSet t μ)
+定理 集合并集
+  条件: {s : 集合 (集合 α)} (hs : s.可数) (h : 对任意 t in s, NullMeasurableSet t μ)
   证明: by
   rw [sUnion_eq_biUnion]
   exact MeasurableSet.biUnion hs h
@@ -453,8 +453,8 @@ theorem iInter
   proof: MeasurableSet.iInter h
 
 中文:
-定理 iInter
-  结论: {ι : Sort*} [Countable ι] {f : ι -> Set α}
+定理 i整数er
+  结论: {ι : 类型层*} [可数 ι] {f : ι -> 集合 α}
   证明: MeasurableSet.iInter h
 -/
 protected theorem iInter {ι : Sort*} [Countable ι] {f : ι -> Set α}
@@ -470,8 +470,8 @@ theorem biInter
   proof: MeasurableSet.biInter hs h
 
 中文:
-定理 biInter
-  结论: {f : β -> Set α} {s : Set β} (hs : s.Countable)
+定理 bi整数er
+  结论: {f : β -> 集合 α} {s : 集合 β} (hs : s.可数)
   证明: MeasurableSet.biInter hs h
 -/
 protected theorem biInter {f : β -> Set α} {s : Set β} (hs : s.Countable)
@@ -489,8 +489,8 @@ theorem sInter
 @[simp]
 
 中文:
-定理 sInter
-  条件: {s : Set (Set α)} (hs : s.Countable) (h : 对任意 t in s, NullMeasurableSet t μ)
+定理 集合交集
+  条件: {s : 集合 (集合 α)} (hs : s.可数) (h : 对任意 t in s, NullMeasurableSet t μ)
   证明: MeasurableSet.sInter hs h
 
 @[simp]
@@ -595,7 +595,7 @@ theorem symmDiff
 
 中文:
 定理 symmDiff
-  结论: {s₁ s₂ : Set α} (h₁ : NullMeasurableSet s₁ μ)
+  结论: {s₁ s₂ : 集合 α} (h₁ : NullMeasurableSet s₁ μ)
   证明: (h₁.diff h₂).union (h₂.diff h₁)
 
 @[simp]
@@ -617,7 +617,7 @@ theorem disjointed
 
 中文:
 定理 disjointed
-  条件: {f : 自然数 -> Set α} (h : 对任意 i, NullMeasurableSet (f i) μ) (n)
+  条件: {f : 自然数 -> 集合 α} (h : 对任意 i, NullMeasurableSet (f i) μ) (n)
   证明: MeasurableSet.disjointed h n
 -/
 protected theorem disjointed {f : Nat -> Set α} (h : forall i, NullMeasurableSet (f i) μ) (n) :
@@ -652,7 +652,7 @@ instance instMeasurableSingletonClass
 
 中文:
 实例 instMeasurableSingletonClass
-  签名: [MeasurableSingletonClass α]
+  签名: [MeasurableSingleton类 α]
   定义体: eventuallyMeasurableSingleton (m := m0)
 
 Depends on / 依赖: eventuallyMeasurableSingleton
@@ -671,7 +671,7 @@ theorem insert
 
 中文:
 定理 insert
-  结论: [MeasurableSingletonClass (NullMeasurableSpace α μ)]
+  结论: [MeasurableSingleton类 (NullMeasurableSpace α μ)]
   证明: MeasurableSet.insert hs a
 -/
 protected theorem insert [MeasurableSingletonClass (NullMeasurableSpace α μ)]
@@ -692,7 +692,7 @@ theorem exists_measurable_superset_ae_eq
     simpa only [union_empty] using
 
 中文:
-定理 exists_measurable_superset_ae_eq
+定理 存在_measurable_superset_ae_eq
   条件: (h : NullMeasurableSet s μ)
   证明: by
   rcases h with ⟨t, htm, hst⟩
@@ -766,7 +766,7 @@ theorem exists_measurable_subset_ae_eq
     (measurableSet_toMeasurable _ _).compl, compl_toMeasurable_compl_ae_eq h⟩
 
 中文:
-定理 exists_measurable_subset_ae_eq
+定理 存在_measurable_subset_ae_eq
   条件: (h : NullMeasurableSet s μ)
   证明: ⟨(toMeasurable μ sᶜ)ᶜ, compl_subset_comm.2 subset_toMeasurable _ _,
     (measurableSet_toMeasurable _ _).compl, compl_toMeasurable_compl_ae_eq h⟩
@@ -798,8 +798,8 @@ theorem exists_subordinate_pairwise_disjoint
       (ht_eq _).symm.trans (sdiff_null_ae_eq_self (hu₀ i)).symm
 
 中文:
-定理 exists_subordinate_pairwise_disjoint
-  结论: [Countable ι] {s : ι -> Set α}
+定理 存在_subordinate_pairwise_disjoint
+  结论: [可数 ι] {s : ι -> 集合 α}
   证明: by
   choose t ht_sub htm ht_eq using fun i => exists_measurable_subset_ae_eq (h i)
   rcases exists_null_pairwise_disjoint_sdiff hd with ⟨u, hum, hu₀, hud⟩
@@ -836,7 +836,7 @@ theorem measure_iUnion
 
 中文:
 定理 measure_iUnion
-  结论: {m0 : MeasurableSpace α} {μ : Measure α} [Countable ι] {f : ι -> Set α}
+  结论: {m0 : 可测空间 α} {μ : 测度 α} [可数 ι] {f : ι -> 集合 α}
   证明: by
   rw [measure_eq_extend (MeasurableSet.iUnion h)]; rw [extend_iUnion MeasurableSet.empty _ MeasurableSet.iUnion _ hn h]
   · simp [measure_eq_extend, h]
@@ -868,7 +868,7 @@ theorem measure_iUnion₀
 
 中文:
 定理 measure_iUnion₀
-  结论: [Countable ι] {f : ι -> Set α} (hd : Pairwise (AEDisjoint μ on f))
+  结论: [可数 ι] {f : ι -> 集合 α} (hd : 两两 (AEDisjoint μ on f))
   证明: by
   rcases exists_subordinate_pairwise_disjoint h hd with ⟨t, _ht_sub, ht_eq, htm, htd⟩
   calc
@@ -926,7 +926,7 @@ theorem measure_inter_add_sdiff₀
 
 中文:
 定理 measure_inter_add_sdiff₀
-  条件: (s : Set α) (ht : NullMeasurableSet t μ)
+  条件: (s : 集合 α) (ht : NullMeasurableSet t μ)
   证明: by
   refine le_antisymm ?_ (measure_le_inter_add_sdiff _ _ _)
   rcases exists_measurable_superset μ s with ⟨s', hsub, hs'm, hs'⟩
@@ -991,7 +991,7 @@ theorem measure_union_add_inter₀
 
 中文:
 定理 measure_union_add_inter₀
-  条件: (s : Set α) (ht : NullMeasurableSet t μ)
+  条件: (s : 集合 α) (ht : NullMeasurableSet t μ)
   证明: by
   rw [← measure_inter_add_sdiff₀ (s union t) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [←
     measure_inter_add_sdiff₀ s ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
@@ -1014,7 +1014,7 @@ theorem measure_union_add_inter₀'
 
 中文:
 定理 measure_union_add_inter₀'
-  条件: (hs : NullMeasurableSet s μ) (t : Set α)
+  条件: (hs : NullMeasurableSet s μ) (t : 集合 α)
   证明: by
   rw [union_comm]; rw [inter_comm]; rw [measure_union_add_inter₀ t hs]; rw [add_comm]
 
@@ -1070,7 +1070,7 @@ theorem measure_add_measure_compl₀
 
 中文:
 定理 measure_add_measure_compl₀
-  条件: {s : Set α} (hs : NullMeasurableSet s μ)
+  条件: {s : 集合 α} (hs : NullMeasurableSet s μ)
   证明: by rw [← measure_union₀' hs aedisjoint_compl_right, union_compl_self]
 
 Depends on / 依赖: aedisjoint_compl_right, union_compl_self
@@ -1091,7 +1091,7 @@ simpa [hs] using measure_add_measure_compl₀ .of_compl .of_null hs
 中文:
 引理 measure_of_measure_compl_eq_zero
   条件: (hs : μ sᶜ = 0)
-  结论: μ s = μ Set.univ
+  结论: μ s = μ 集合.univ
   证明: by
 simpa [hs] using measure_add_measure_compl₀ .of_compl .of_null hs
 
@@ -1139,7 +1139,7 @@ theorem nullMeasurableSet_insert
 
 中文:
 定理 nullMeasurableSet_insert
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   证明: measurableSet_insert
 
 Depends on / 依赖: measurableSet_insert
@@ -1178,8 +1178,8 @@ theorem _root_.Set.Finite.nullMeasurableSet
   proof: Finite.measurableSet hs
 
 中文:
-定理 _root_.Set.Finite.nullMeasurableSet
-  条件: (hs : s.Finite)
+定理 _root_.集合.有限.nullMeasurableSet
+  条件: (hs : s.有限)
   结论: NullMeasurableSet s μ
   证明: Finite.measurableSet hs
 -/
@@ -1197,8 +1197,8 @@ theorem _root_.Finset.nullMeasurableSet
   apply Finset.measurableSet
 
 中文:
-定理 _root_.Finset.nullMeasurableSet
-  条件: (s : Finset α)
+定理 _root_.有限集.nullMeasurableSet
+  条件: (s : 有限集 α)
   结论: NullMeasurableSet (↑s) μ
   证明: by
   apply Finset.measurableSet
@@ -1217,8 +1217,8 @@ theorem _root_.Set.Finite.nullMeasurableSet_biUnion
   proof: Finite.measurableSet_biUnion hs h
 
 中文:
-定理 _root_.Set.Finite.nullMeasurableSet_biUnion
-  结论: {f : ι -> Set α} {s : Set ι} (hs : s.Finite)
+定理 _root_.集合.有限.nullMeasurableSet_biUnion
+  结论: {f : ι -> 集合 α} {s : 集合 ι} (hs : s.有限)
   证明: Finite.measurableSet_biUnion hs h
 
 Depends on / 依赖: Finite, Finite.measurableSet_biUnion, measurableSet_biUnion
@@ -1236,8 +1236,8 @@ theorem _root_.Finset.nullMeasurableSet_biUnion
   proof: Finset.measurableSet_biUnion s h
 
 中文:
-定理 _root_.Finset.nullMeasurableSet_biUnion
-  结论: {f : ι -> Set α} (s : Finset ι)
+定理 _root_.有限集.nullMeasurableSet_biUnion
+  结论: {f : ι -> 集合 α} (s : 有限集 ι)
   证明: Finset.measurableSet_biUnion s h
 
 Depends on / 依赖: Finset, Finset.measurableSet_biUnion, measurableSet_biUnion
@@ -1255,8 +1255,8 @@ theorem _root_.Set.Finite.nullMeasurableSet_sUnion
   proof: Finite.measurableSet_sUnion hs h
 
 中文:
-定理 _root_.Set.Finite.nullMeasurableSet_sUnion
-  结论: {s : Set (Set α)} (hs : s.Finite)
+定理 _root_.集合.有限.nullMeasurableSet_sUnion
+  结论: {s : 集合 (集合 α)} (hs : s.有限)
   证明: Finite.measurableSet_sUnion hs h
 
 Depends on / 依赖: Finite, Finite.measurableSet_sUnion, measurableSet_sUnion
@@ -1274,8 +1274,8 @@ theorem _root_.Set.Finite.nullMeasurableSet_biInter
   proof: Finite.measurableSet_biInter hs h
 
 中文:
-定理 _root_.Set.Finite.nullMeasurableSet_biInter
-  结论: {f : ι -> Set α} {s : Set ι} (hs : s.Finite)
+定理 _root_.集合.有限.nullMeasurableSet_bi整数er
+  结论: {f : ι -> 集合 α} {s : 集合 ι} (hs : s.有限)
   证明: Finite.measurableSet_biInter hs h
 
 Depends on / 依赖: Finite, Finite.measurableSet_biInter, measurableSet_biInter
@@ -1293,8 +1293,8 @@ theorem _root_.Finset.nullMeasurableSet_biInter
   proof: s.finite_toSet.nullMeasurableSet_biInter h
 
 中文:
-定理 _root_.Finset.nullMeasurableSet_biInter
-  结论: {f : ι -> Set α} (s : Finset ι)
+定理 _root_.有限集.nullMeasurableSet_bi整数er
+  结论: {f : ι -> 集合 α} (s : 有限集 ι)
   证明: s.finite_toSet.nullMeasurableSet_biInter h
 
 Depends on / 依赖: finite_toSet, nullMeasurableSet_biInter, s.finite_toSet.nullMeasurableSet_biInter
@@ -1312,8 +1312,8 @@ theorem _root_.Set.Finite.nullMeasurableSet_sInter
   proof: NullMeasurableSet.sInter (Finite.countable hs) h
 
 中文:
-定理 _root_.Set.Finite.nullMeasurableSet_sInter
-  结论: {s : Set (Set α)} (hs : s.Finite)
+定理 _root_.集合.有限.nullMeasurableSet_s整数er
+  结论: {s : 集合 (集合 α)} (hs : s.有限)
   证明: NullMeasurableSet.sInter (Finite.countable hs) h
 
 Depends on / 依赖: Finite, Finite.countable, NullMeasurableSet, NullMeasurableSet.sInter, countable, sInter
@@ -1354,7 +1354,7 @@ lemma measure_preimage_fst_singleton_eq_tsum
 
 中文:
 引理 measure_preimage_fst_singleton_eq_tsum
-  条件: [Countable β] (μ : Measure (α × β)) (x : α)
+  条件: [可数 β] (μ : 测度 (α × β)) (x : α)
   证明: by
   rw [← measure_iUnion (by simp [Pairwise]) fun _ => .singleton _, iUnion_singleton_eq_range,
     preimage_fst_singleton_eq_range]
@@ -1378,7 +1378,7 @@ lemma measure_preimage_snd_singleton_eq_tsum
 
 中文:
 引理 measure_preimage_snd_singleton_eq_tsum
-  条件: [Countable α] (μ : Measure (α × β)) (y : β)
+  条件: [可数 α] (μ : 测度 (α × β)) (y : β)
   证明: by
   have : Prod.snd ⁻¹' {y} = ⋃ x : α, {(x, y)} := by ext y; simp [Prod.ext_iff, eq_comm]
   rw [this]; rw [measure_iUnion] <;> simp [Pairwise]
@@ -1401,7 +1401,7 @@ lemma measure_preimage_fst_singleton_eq_sum
 
 中文:
 引理 measure_preimage_fst_singleton_eq_sum
-  条件: [Fintype β] (μ : Measure (α × β)) (x : α)
+  条件: [有限类型 β] (μ : 测度 (α × β)) (x : α)
   证明: by
   rw [measure_preimage_fst_singleton_eq_tsum μ x]; rw [tsum_fintype]
 
@@ -1422,7 +1422,7 @@ lemma measure_preimage_snd_singleton_eq_sum
 
 中文:
 引理 measure_preimage_snd_singleton_eq_sum
-  条件: [Fintype α] (μ : Measure (α × β)) (y : β)
+  条件: [有限类型 α] (μ : 测度 (α × β)) (y : β)
   证明: by
   rw [measure_preimage_snd_singleton_eq_tsum μ y]; rw [tsum_fintype]
 
@@ -1448,7 +1448,7 @@ definition NullMeasurable
 
 中文:
 定义 NullMeasurable
-  签名: (f : α -> β) (μ : Measure α := by volume_tac)
+  签名: (f : α -> β) (μ : 测度 α := by volume_tac)
   定义体: forall ⦃s : Set β⦄, MeasurableSet s -> NullMeasurableSet (f ⁻¹' s) μ
 
 Depends on / 依赖: MeasurableSet, NullMeasurableSet, volume_tac
@@ -1465,7 +1465,7 @@ theorem _root_.MeasureTheory.nullMeasurable_iff_eventuallyMeasurable
   proof: by rfl
 
 中文:
-定理 _root_.MeasureTheory.nullMeasurable_iff_eventuallyMeasurable
+定理 _root_.测度论.nullMeasurable_iff_eventuallyMeasurable
   条件: (f : α -> β)
   证明: by rfl
 -/
@@ -1482,8 +1482,8 @@ theorem _root_.Measurable.nullMeasurable
   proof: h.eventuallyMeasurable
 
 中文:
-定理 _root_.Measurable.nullMeasurable
-  条件: (h : Measurable f)
+定理 _root_.可测.nullMeasurable
+  条件: (h : 可测 f)
   结论: NullMeasurable f μ
   证明: h.eventuallyMeasurable
 -/
@@ -1518,8 +1518,8 @@ theorem Measurable.comp_nullMeasurable
   exact hg.comp_eventuallyMeasurable hf
 
 中文:
-定理 Measurable.comp_nullMeasurable
-  条件: {g : β -> γ} (hg : Measurable g) (hf : NullMeasurable f μ)
+定理 可测.comp_nullMeasurable
+  条件: {g : β -> γ} (hg : 可测 g) (hf : NullMeasurable f μ)
   证明: by
   rw [nullMeasurable_iff_eventuallyMeasurable]
   exact hg.comp_eventuallyMeasurable hf
@@ -1569,10 +1569,10 @@ class Measure.IsComplete
     - out' : forall s, μ s = 0 -> MeasurableSet s
 
 中文:
-类 Measure.IsComplete
-  参数: {_ : MeasurableSpace α} (μ : Measure α)
+类 测度.是完备
+  参数: {_ : 可测空间 α} (μ : 测度 α)
   公理与运算 (1 个):
-    - out' : 对任意 s, μ s = 0 -> MeasurableSet s
+    - out' : 对任意 s, μ s = 0 -> 可测集 s
 -/
 class Measure.IsComplete {_ : MeasurableSpace α} (μ : Measure α) : Prop where
   out' : forall s, μ s = 0 -> MeasurableSet s
@@ -1588,8 +1588,8 @@ theorem Measure.isComplete_iff
   proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
 中文:
-定理 Measure.isComplete_iff
-  结论: μ.IsComplete ↔ 对任意 s, μ s = 0 -> MeasurableSet s
+定理 测度.isComplete_iff
+  结论: μ.是完备 ↔ 对任意 s, μ s = 0 -> 可测集 s
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem Measure.isComplete_iff : μ.IsComplete ↔ forall s, μ s = 0 -> MeasurableSet s :=
@@ -1605,9 +1605,9 @@ theorem Measure.IsComplete.out
   proof: h.1
 
 中文:
-定理 Measure.IsComplete.out
-  条件: (h : μ.IsComplete)
-  结论: 对任意 s, μ s = 0 -> MeasurableSet s
+定理 测度.是完备.out
+  条件: (h : μ.是完备)
+  结论: 对任意 s, μ s = 0 -> 可测集 s
   证明: h.1
 -/
 theorem Measure.IsComplete.out (h : μ.IsComplete) : forall s, μ s = 0 -> MeasurableSet s :=
@@ -1624,8 +1624,8 @@ theorem measurableSet_of_null
 
 中文:
 定理 measurableSet_of_null
-  条件: [μ.IsComplete] (hs : μ s = 0)
-  结论: MeasurableSet s
+  条件: [μ.是完备] (hs : μ s = 0)
+  结论: 可测集 s
   证明: MeasureTheory.Measure.IsComplete.out' s hs
 
 Depends on / 依赖: IsComplete, Measure, MeasureTheory, MeasureTheory.Measure.IsComplete.out
@@ -1646,7 +1646,7 @@ theorem NullMeasurableSet.measurable_of_complete
 
 中文:
 定理 NullMeasurableSet.measurable_of_complete
-  条件: (hs : NullMeasurableSet s μ) [μ.IsComplete]
+  条件: (hs : NullMeasurableSet s μ) [μ.是完备]
   证明: sdiff_sdiff_cancel_left (subset_toMeasurable μ s) ▸
     (measurableSet_toMeasurable _ _).diff
       (measurableSet_of_null (ae_le_set.1 <|
@@ -1671,7 +1671,7 @@ theorem NullMeasurable.measurable_of_complete
 
 中文:
 定理 NullMeasurable.measurable_of_complete
-  结论: [μ.IsComplete] {_m1 : MeasurableSpace β} {f : α -> β}
+  结论: [μ.是完备] {_m1 : 可测空间 β} {f : α -> β}
   证明: fun _s hs => (hf hs).measurable_of_complete
 
 Depends on / 依赖: measurable_of_complete
@@ -1688,8 +1688,8 @@ theorem _root_.Measurable.congr_ae
   proof: NullMeasurable.measurable_of_complete (NullMeasurable.congr hf.nullMeasurable hfg)
 
 中文:
-定理 _root_.Measurable.congr_ae
-  结论: {α β} [MeasurableSpace α] [MeasurableSpace β] {μ : Measure α}
+定理 _root_.可测.congr_ae
+  结论: {α β} [可测空间 α] [可测空间 β] {μ : 测度 α}
   证明: NullMeasurable.measurable_of_complete (NullMeasurable.congr hf.nullMeasurable hfg)
 
 Depends on / 依赖: NullMeasurable, NullMeasurable.congr, NullMeasurable.measurable_of_complete, hf.nullMeasurable, measurable_of_complete, nullMeasurable
@@ -1714,7 +1714,7 @@ definition completion
 
 中文:
 定义 completion
-  签名: {_ : MeasurableSpace α} (μ : Measure α)
+  签名: {_ : 可测空间 α} (μ : 测度 α)
   定义体: μ.toOuterMeasure
   m_iUnion _ hs hd := measure_iUnion₀ (hd.mono fun _ _ h => h.aedisjoint) hs
   trim_le := by
@@ -1743,7 +1743,7 @@ instance completion.isComplete
 
 中文:
 实例 completion.isComplete
-  签名: {_m : MeasurableSpace α} (μ : Measure α)
+  签名: {_m : 可测空间 α} (μ : 测度 α)
   定义体: ⟨fun _z hz => NullMeasurableSet.of_null hz⟩
 
 @[simp]
@@ -1765,7 +1765,7 @@ theorem coe_completion
 
 中文:
 定理 coe_completion
-  条件: {_ : MeasurableSpace α} (μ : Measure α)
+  条件: {_ : 可测空间 α} (μ : 测度 α)
   结论: ⇑μ.completion = μ
   证明: rfl
 -/
@@ -1784,7 +1784,7 @@ theorem completion_apply
 
 中文:
 定理 completion_apply
-  条件: {_ : MeasurableSpace α} (μ : Measure α) (s : Set α)
+  条件: {_ : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   证明: rfl
 
 @[simp]
@@ -1805,7 +1805,7 @@ theorem ae_completion
 
 中文:
 定理 ae_completion
-  条件: {_ : MeasurableSpace α} (μ : Measure α)
+  条件: {_ : 可测空间 α} (μ : 测度 α)
   结论: ae μ.completion = ae μ
   证明: rfl
 -/

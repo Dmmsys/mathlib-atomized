@@ -28,7 +28,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation (WithTop 自然数)
+  签名: 良基关系 (WithTop 自然数)
   定义体: (· < ·)
   wf := IsWellFounded.wf
 -/
@@ -46,7 +46,7 @@ theorem Nat.cast_withTop
   proof: rfl
 
 中文:
-定理 Nat.cast_withTop
+定理 自然数.cast_withTop
   条件: (n : 自然数)
   结论: 自然数.cast n = WithTop.some n
   证明: rfl
@@ -64,7 +64,7 @@ theorem Nat.cast_withBot
   proof: rfl
 
 中文:
-定理 Nat.cast_withBot
+定理 自然数.cast_withBot
   条件: (n : 自然数)
   结论: 自然数.cast n = WithBot.some n
   证明: rfl

@@ -71,7 +71,7 @@ definition assumptionDischarge
 
 中文:
 定义 assumptionDischarge
-  签名: : Expr -> MetaM (Option Expr)
+  签名: : Expr -> MetaM (选项类型 Expr)
   定义体: fun e => do tacticToDischarge (← `(tactic| with_reducible assumption)) e
 -/
 private def assumptionDischarge : Expr -> MetaM (Option Expr) :=

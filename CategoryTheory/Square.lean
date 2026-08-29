@@ -109,7 +109,7 @@ lemma commSq
 中文:
 引理 commSq
   条件: (sq : Square C)
-  结论: CommSq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where
+  结论: 交换Sq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where
   证明: sq.fac
 
 Depends on / 依赖: sq.fac
@@ -137,7 +137,7 @@ structure Hom
     - comm₃₄ : sq₁.f₃₄ ≫ τ₄ = τ₃ ≫ sq₂.f₃₄  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (sq₁ sq₂ : Square C)
   公理与运算 (8 个):
     - τ₁ : sq₁.X₁ ⟶ sq₂.X₁
@@ -211,7 +211,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {sq₁ sq₂ sq₃ : Square C} (f : Hom sq₁ sq₂) (g : Hom sq₂ sq₃)
+  签名: {sq₁ sq₂ sq₃ : Square C} (f : 态射 sq₁ sq₂) (g : 态射 sq₂ sq₃)
   定义体: f.τ₁ ≫ g.τ₁
   τ₂ := f.τ₂ ≫ g.τ₂
   τ₃ := f.τ₃ ≫ g.τ₃
@@ -240,7 +240,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (Square C) where
+  签名: : 范畴 (Square C) where
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -451,7 +451,7 @@ definition toArrowArrowFunctor
 
 中文:
 定义 toArrowArrowFunctor
-  签名: : Square C ⥤ Arrow (Arrow C) where
+  签名: : Square C ⥤ 箭头 (箭头 C) where
   定义体: Arrow.mk (Arrow.homMk _ _ sq.fac : Arrow.mk sq.f₁₃ ⟶ Arrow.mk sq.f₂₄)
   map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₃.symm)
     (Arrow.homMk _ _ φ.comm₂₄.symm)
@@ -486,7 +486,7 @@ definition fromArrowArrowFunctor
 
 中文:
 定义 fromArrowArrowFunctor
-  签名: : Arrow (Arrow C) ⥤ Square C where
+  签名: : 箭头 (箭头 C) ⥤ Square C where
   定义体: { fac := f.hom.w, .. }
   map φ :=
     { τ₁ := φ.left.left
@@ -531,7 +531,7 @@ definition arrowArrowEquivalence
 
 中文:
 定义 arrowArrowEquivalence
-  签名: : Square C ≌ Arrow (Arrow C) where
+  签名: : Square C ≌ 箭头 (箭头 C) where
   定义体: toArrowArrowFunctor
   inverse := fromArrowArrowFunctor
   unitIso := Iso.refl _
@@ -563,7 +563,7 @@ definition toArrowArrowFunctor'
 
 中文:
 定义 toArrowArrowFunctor'
-  签名: : Square C ⥤ Arrow (Arrow C) where
+  签名: : Square C ⥤ 箭头 (箭头 C) where
   定义体: Arrow.mk (Arrow.homMk _ _ sq.fac.symm : Arrow.mk sq.f₁₂ ⟶ Arrow.mk sq.f₃₄)
   map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₂.symm)
     (Arrow.homMk _ _ φ.comm₃₄.symm)
@@ -598,7 +598,7 @@ definition fromArrowArrowFunctor'
 
 中文:
 定义 fromArrowArrowFunctor'
-  签名: : Arrow (Arrow C) ⥤ Square C where
+  签名: : 箭头 (箭头 C) ⥤ Square C where
   定义体: { fac := f.hom.w.symm, .. }
   map φ :=
     { τ₁ := φ.left.left
@@ -643,7 +643,7 @@ definition arrowArrowEquivalence'
 
 中文:
 定义 arrowArrowEquivalence'
-  签名: : Square C ≌ Arrow (Arrow C) where
+  签名: : Square C ≌ 箭头 (箭头 C) where
   定义体: toArrowArrowFunctor'
   inverse := fromArrowArrowFunctor'
   unitIso := Iso.refl _
@@ -1035,7 +1035,7 @@ definition NatTrans.mapSquare
       τ₄ := τ.app _ }
 
 中文:
-定义 NatTrans.mapSquare
+定义 自然变换.mapSquare
   签名: {F G : C ⥤ D} (τ : F ⟶ G)
   定义体: { τ₁ := τ.app _
       τ₂ := τ.app _

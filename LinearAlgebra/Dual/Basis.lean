@@ -58,7 +58,7 @@ definition toDual
 
 中文:
 定义 toDual
-  签名: : M ->ₗ[R] Module.Dual R M
+  签名: : M ->ₗ[R] 模.对偶 R M
   定义体: b.constr Nat fun v => b.constr Nat fun w => if w = v then (1 : R) else 0
 
 Depends on / 依赖: b.constr, constr
@@ -286,7 +286,7 @@ theorem toDual_eq_equivFun
 
 中文:
 定理 toDual_eq_equivFun
-  条件: [Finite ι] (m : M) (i : ι)
+  条件: [有限 ι] (m : M) (i : ι)
   结论: b.toDual m (b i) = b.equivFun m i
   证明: by
   rw [b.equivFun_apply]; rw [toDual_eq_repr]
@@ -307,7 +307,7 @@ theorem toDual_injective
 
 中文:
 定理 toDual_injective
-  结论: Injective b.toDual
+  结论: 单射 b.toDual
   证明: fun x y h => b.ext_elem_iff.mpr fun i => by
   simp_rw [← toDual_eq_repr]; exact DFunLike.congr_fun h _
 
@@ -346,7 +346,7 @@ theorem toDual_ker
 
 中文:
 定理 toDual_ker
-  结论: LinearMap.ker b.toDual = ⊥
+  结论: 线性映射.ker b.toDual = ⊥
   证明: ker_eq_bot'.mpr b.toDual_inj
 
 Depends on / 依赖: b.toDual_inj, ker_eq_bot, toDual_inj
@@ -369,8 +369,8 @@ omit [DecidableEq ι] in
 
 中文:
 定理 toDual_range
-  条件: [Finite ι]
-  结论: LinearMap.range b.toDual = ⊤
+  条件: [有限 ι]
+  结论: 线性映射.range b.toDual = ⊤
   证明: eq_top_iff'.2 fun f => ⟨Finsupp.linearCombination R b
     Finsupp.equivFunOnFinite.symm fun i => f (b i), b.ext fun i => by simp⟩
 
@@ -398,7 +398,7 @@ theorem sum_dual_apply_smul_coord
 
 中文:
 定理 sum_dual_apply_smul_coord
-  条件: [Fintype ι] (f : Module.Dual R M)
+  条件: [有限类型 ι] (f : 模.对偶 R M)
   证明: by
   ext m
   simp_rw [LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul, mul_comm (f _), ← smul_eq_mul,
@@ -426,7 +426,7 @@ definition toDualEquiv
 
 中文:
 定义 toDualEquiv
-  签名: : M ≃ₗ[R] Dual R M
+  签名: : M ≃ₗ[R] 对偶 R M
   定义体: .ofBijective b.toDual ⟨b.toDual_injective, range_eq_top.mp b.toDual_range⟩
 
 Depends on / 依赖: b.toDual, b.toDual_injective, b.toDual_range, ofBijective, range_eq_top, range_eq_top.mp, toDual, toDual_injective, toDual_range
@@ -464,7 +464,7 @@ definition dualBasis
 
 中文:
 定义 dualBasis
-  签名: : Basis ι R (Dual R M)
+  签名: : 基 ι R (对偶 R M)
   定义体: b.map b.toDualEquiv
 
 Depends on / 依赖: b.map, b.toDualEquiv, toDualEquiv
@@ -547,7 +547,7 @@ theorem dualBasis_repr
 
 中文:
 定理 dualBasis_repr
-  条件: (l : Dual R M) (i : ι)
+  条件: (l : 对偶 R M) (i : ι)
   结论: b.dualBasis.repr l i = l (b i)
   证明: by
   rw [← linearCombination_dualBasis b]; rw [Basis.linearCombination_repr b.dualBasis l]
@@ -620,7 +620,7 @@ theorem toDual_toDual
 
 中文:
 定理 toDual_toDual
-  结论: b.dualBasis.toDual.comp b.toDual = Dual.eval R M
+  结论: b.dualBasis.toDual.comp b.toDual = 对偶.eval R M
   证明: by
   refine b.ext fun i => b.dualBasis.ext fun j => ?_
   rw [LinearMap.comp_apply]; rw [toDual_apply_left]; rw [coe_toDual_self]; rw [← coe_dualBasis]; rw [Dual.eval_apply]; rw [Basis.repr_self]; rw [Finsupp.single_apply]; rw [dualBasis_apply_self]
@@ -643,7 +643,7 @@ theorem dualBasis_equivFun
 
 中文:
 定理 dualBasis_equivFun
-  条件: [Finite ι] (l : Dual R M) (i : ι)
+  条件: [有限 ι] (l : 对偶 R M) (i : ι)
   证明: by rw [Basis.equivFun_apply, dualBasis_repr]
 
 Depends on / 依赖: Basis.equivFun_apply, dualBasis_repr, equivFun_apply
@@ -665,8 +665,8 @@ theorem eval_injective
 
 中文:
 定理 eval_injective
-  条件: {ι : 类型} (b : Basis ι R M)
-  结论: Function.Injective (Dual.eval R M)
+  条件: {ι : 类型} (b : 基 ι R M)
+  结论: 函数.单射 (对偶.eval R M)
   证明: by
   intro m m' eq
   simp_rw [LinearMap.ext_iff, Dual.eval_apply] at eq
@@ -690,8 +690,8 @@ theorem eval_ker
 
 中文:
 定理 eval_ker
-  条件: {ι : 类型} (b : Basis ι R M)
-  结论: LinearMap.ker (Dual.eval R M) = ⊥
+  条件: {ι : 类型} (b : 基 ι R M)
+  结论: 线性映射.ker (对偶.eval R M) = ⊥
   证明: ker_eq_bot_of_injective (eval_injective b)
 
 Depends on / 依赖: eval_injective, ker_eq_bot_of_injective
@@ -712,7 +712,7 @@ theorem eval_range
 
 中文:
 定理 eval_range
-  条件: {ι : 类型} [Finite ι] (b : Basis ι R M)
+  条件: {ι : 类型} [有限 ι] (b : 基 ι R M)
   证明: by
   classical
     cases nonempty_fintype ι
@@ -737,7 +737,7 @@ lemma dualBasis_coord_toDualEquiv_apply
 
 中文:
 引理 dualBasis_coord_toDualEquiv_apply
-  条件: [Finite ι] (i : ι) (f : M)
+  条件: [有限 ι] (i : ι) (f : M)
   证明: by
   simp [-toDualEquiv_apply, Basis.dualBasis]
 
@@ -760,7 +760,7 @@ omit [DecidableEq ι]
 
 中文:
 引理 coord_toDualEquiv_symm_apply
-  条件: [Finite ι] (i : ι) (f : Module.Dual R M)
+  条件: [有限 ι] (i : ι) (f : 模.对偶 R M)
   证明: by
   simp [Basis.dualBasis]
 
@@ -788,7 +788,7 @@ theorem linearCombination_coord
 
 中文:
 定理 linearCombination_coord
-  条件: [Finite ι] (b : Basis ι R M) (f : ι ->₀ R) (i : ι)
+  条件: [有限 ι] (b : 基 ι R M) (f : ι ->₀ R) (i : ι)
   证明: by
   have := Classical.decEq ι
   rw [← coe_dualBasis]; rw [linearCombination_dualBasis]
@@ -830,13 +830,13 @@ structure Module.DualBases
     - finite : forall m : M, {i | ε i m != 0}.Finite  [default: by use_finite_instance]
 
 中文:
-结构 Module.DualBases
-  参数: (e : ι -> M) (ε : ι -> Dual R M)
+结构 模.DualBases
+  参数: (e : ι -> M) (ε : ι -> 对偶 R M)
   公理与运算 (4 个):
     - eval_same : 对任意 i, ε i (e i) = 1
-    - eval_of_ne : Pairwise fun i j => ε i (e j) = 0
+    - eval_of_ne : 两两 fun i j => ε i (e j) = 0
     - total : 对任意 {m₁ m₂ : M}, (对任意 i, ε i m₁ = ε i m₂) -> m₁ = m₂
-    - finite : 对任意 m : M, {i | ε i m != 0}.Finite  [默认: by use_finite_instance]
+    - finite : 对任意 m : M, {i | ε i m != 0}.有限  [默认: by use_finite_instance]
 
 Depends on / 依赖: ENNReal, ENNReal.one_rpow, _le_eLpNorm, _mul_rpow_measure_univ, eLpNorm, hp0_lt, measure_univ, mul_one, one_rpow, use_finite_instance
 -/
@@ -933,7 +933,7 @@ theorem lc_def
 中文:
 定理 lc_def
   条件: (e : ι -> M) (l : ι ->₀ R)
-  结论: lc e l = Finsupp.linearCombination R e l
+  结论: lc e l = 有限支撑.linearCombination R e l
   证明: rfl
 -/
 theorem lc_def (e : ι -> M) (l : ι ->₀ R) : lc e l = Finsupp.linearCombination R e l :=
@@ -1053,7 +1053,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Basis ι R M
+  签名: : 基 ι R M
   定义体: Basis.ofRepr
     { toFun := coeffs h
       invFun := lc e
@@ -1133,7 +1133,7 @@ theorem mem_of_mem_span
 
 中文:
 定理 mem_of_mem_span
-  条件: {H : Set ι} {x : M} (hmem : x in Submodule.span R (e '' H))
+  条件: {H : 集合 ι} {x : M} (hmem : x in 子模.span R (e '' H))
   证明: by
   intro i hi
   rcases (Finsupp.mem_span_image_iff_linearCombination _).mp hmem with ⟨l, supp_l, rfl⟩
@@ -1160,7 +1160,7 @@ theorem coe_dualBasis
 
 中文:
 定理 coe_dualBasis
-  条件: [DecidableEq ι] [Finite ι]
+  条件: [DecidableEq ι] [有限 ι]
   结论: ⇑h.basis.dualBasis = ε
   证明: funext fun i => h.basis.ext fun j => by simp
 

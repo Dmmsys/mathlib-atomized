@@ -54,8 +54,8 @@ inductive Expanded
 中文:
 归纳类型 Expanded
   构造子 (2 个):
-    - proof: (rel : Ineq) (pf : Syntax.Term)
-    - const: (c : Syntax.Term)
+    - proof: (rel : Ineq) (pf : Syntax.项)
+    - const: (c : Syntax.项)
 -/
 inductive Expanded
   /-- A proof of `a = b`, `a ≤ b`, or `a < b` (according to the value of `Ineq`). -/
@@ -82,7 +82,7 @@ let e₂ ← withSynthesizeLight Term.elabTerm c ty
 
 中文:
 定义 rescale
-  签名: (lems : Ineq.WithStrictness -> Name) (ty : Option Expr) (p c : Term)
+  签名: (lems : Ineq.WithStrictness -> Name) (ty : 选项类型 Expr) (p c : 项)
   定义体: mkIdent lems .eq
 .proof eq < > ``($i $p $c)
   | le => do
@@ -131,7 +131,7 @@ let i := mkIdent Ineq.addRelRelData rel₁ rel₂
 
 中文:
 定义 expandLinearCombo
-  签名: (ty : Option Expr) (stx : Syntax.Term)
+  签名: (ty : 选项类型 Expr) (stx : Syntax.项)
   定义体: withRef stx do
   match stx with
   | `(($e)) => expandLinearCombo ty e

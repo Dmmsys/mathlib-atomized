@@ -147,7 +147,7 @@ theorem mk_factors_iff
 
 中文:
 定理 mk_factors_iff
-  条件: {X Y Z : C} (f : Y ⟶ X) [Mono f] (g : Z ⟶ X)
+  条件: {X Y Z : C} (f : Y ⟶ X) [单态射 f] (g : Z ⟶ X)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -167,7 +167,7 @@ theorem mk_factors_self
 
 中文:
 定理 mk_factors_self
-  条件: (f : X ⟶ Y) [Mono f]
+  条件: (f : X ⟶ Y) [单态射 f]
   结论: (mk f).Factors f
   证明: ⟨𝟙 _, by simp⟩
 -/
@@ -272,7 +272,7 @@ theorem factors_zero
 
 中文:
 定理 factors_zero
-  条件: [HasZeroMorphisms C] {X Y : C} {P : Subobject Y}
+  条件: [有ZeroMorphisms C] {X Y : C} {P : Subobject Y}
   结论: P.Factors (0 : X ⟶ Y)
   证明: (factors_iff _ _).mpr ⟨0, by simp⟩
 
@@ -395,7 +395,7 @@ theorem factorThru_mk_self
 
 中文:
 定理 factorThru_mk_self
-  条件: (f : X ⟶ Y) [Mono f]
+  条件: (f : X ⟶ Y) [单态射 f]
   证明: by
   ext
   simp
@@ -452,7 +452,7 @@ theorem factorThru_eq_zero
 
 中文:
 定理 factorThru_eq_zero
-  结论: [HasZeroMorphisms C] {X Y : C} {P : Subobject Y} {f : X ⟶ Y}
+  结论: [有ZeroMorphisms C] {X Y : C} {P : Subobject Y} {f : X ⟶ Y}
   证明: by
   fconstructor
   · intro w
@@ -513,7 +513,7 @@ theorem factorThru_zero
 
 中文:
 定理 factorThru_zero
-  结论: [HasZeroMorphisms C] {X Y : C} {P : Subobject Y}
+  结论: [有ZeroMorphisms C] {X Y : C} {P : Subobject Y}
   证明: by simp
 -/
 theorem factorThru_zero [HasZeroMorphisms C] {X Y : C} {P : Subobject Y}

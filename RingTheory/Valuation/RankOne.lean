@@ -55,11 +55,11 @@ class RankLeOne
     - strictMono' : StrictMono hom'
 
 中文:
-类 RankLeOne
-  参数: (v : Valuation R Γ₀)
+类 秩不超过一
+  参数: (v : 赋值 R Γ₀)
   公理与运算 (2 个):
     - hom'((v)) : ValueGroup₀ (.ofClass v) ->*₀ 实数>=0
-    - strictMono' : StrictMono hom'
+    - strictMono' : 严格递增 hom'
 -/
 class RankLeOne (v : Valuation R Γ₀) where
   /-- The inclusion morphism from `Γ₀` to `ℝ≥0`. -/
@@ -76,9 +76,9 @@ class RankOne
   (no additional axioms)
 
 中文:
-类 RankOne
-  参数: (v : Valuation R Γ₀)
-  继承: RankLeOne v, Valuation.IsNontrivial v
+类 秩一
+  参数: (v : 赋值 R Γ₀)
+  继承: 秩不超过一 v, 赋值.是非平凡 v
   (无附加公理)
 -/
 class RankOne (v : Valuation R Γ₀) extends RankLeOne v, Valuation.IsNontrivial v
@@ -103,7 +103,7 @@ lemma nonempty_rankOne_iff_mulArchimedean
 
 中文:
 引理 nonempty_rankOne_iff_mulArchimedean
-  条件: {v : Valuation R Γ₀} [v.IsNontrivial]
+  条件: {v : 赋值 R Γ₀} [v.是非平凡]
   证明: by
   constructor
   · intro h
@@ -177,7 +177,7 @@ lemma strictMono
 
 中文:
 引理 strictMono
-  结论: StrictMono (hom v)
+  结论: 严格递增 (hom v)
   证明: hv.strictMono'
 
 Depends on / 依赖: hv.strictMono, strictMono
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNontrivial v
+  签名: 是非平凡 v
   定义体: RankOne.nontrivial v
 
 Depends on / 依赖: RankOne, RankOne.nontrivial, nontrivial
@@ -325,7 +325,7 @@ instance isNontrivial_restrict
 
 中文:
 实例 isNontrivial_restrict
-  签名: : (v.restrict).IsNontrivial where
+  签名: : (v.restrict).是非平凡 where
   定义体: by
     obtain ⟨x, ⟨hx0, hx1⟩⟩ := IsNontrivial.exists_val_nontrivial (v := v)
     exact ⟨x, by simp [hx0], by simpa⟩
@@ -352,7 +352,7 @@ instance restrict_RankOne
 
 中文:
 实例 restrict_RankOne
-  签名: : RankOne (v.restrict) where
+  签名: : 秩一 (v.restrict) where
   定义体: (RankOne.hom v).comp embedding
   strictMono' := (strictMono v).comp embedding_strictMono
 
@@ -397,9 +397,9 @@ theorem exists_val_lt
   · simp only [restrict₀_apply, MonoidWithZeroHom.coe_ofClass, restrict_def, m
 
 中文:
-定理 exists_val_lt
+定理 存在_val_lt
   条件: {γ : 实数>=0} (hγ : γ != 0)
-  结论: 存在 x != 0, RankOne.hom v (v.restrict x) < γ
+  结论: 存在 x != 0, 秩一.hom v (v.restrict x) < γ
   证明: by
   have hγ_pos : 0 < γ := pos_iff_ne_zero.mpr hγ
   obtain ⟨x, h⟩ := NNReal.exists_lt_of_strictMono (RankOne.strictMono v.restrict) hγ_pos
@@ -447,7 +447,7 @@ definition rankOne_of_exists
     exact hx' (H' x ((ne_zero_iff v).mpr hx))
 
 中文:
-定义 rankOne_of_exists
+定义 rankOne_of_存在
   签名: (H : 存在 x != 0, v x != 1)
   定义体: by
     by_contra! H'
@@ -483,7 +483,7 @@ definition rankOne_of_nontrivial
 
 中文:
 定义 rankOne_of_nontrivial
-  签名: (H : Nontrivial (ValueGroup₀ (.ofClass v))ˣ)
+  签名: (H : 非平凡 (ValueGroup₀ (.ofClass v))ˣ)
   定义体: by
     by_contra! H'
     rw [nontrivial_iff_exists_ne 1] at H
@@ -527,8 +527,8 @@ theorem exists_val_lt
   exact fun H => (rankOne_of_nontrivial v H).exists_val_lt
 
 中文:
-定理 exists_val_lt
-  条件: {K : 类型} [DivisionRing K] (v : Valuation K Γ₀) [RankLeOne v]
+定理 存在_val_lt
+  条件: {K : 类型} [除环 K] (v : 赋值 K Γ₀) [秩不超过一 v]
   证明: by
   simp only [ne_eq, or_iff_not_imp_left, not_subsingleton_iff_nontrivial]
   exact fun H => (rankOne_of_nontrivial v H).exists_val_lt
@@ -564,8 +564,8 @@ definition Valuation.RankOne.ofRankLeOneStruct
   strictMono' := e.strictMono.comp embedding_strictMono
 
 中文:
-定义 Valuation.RankOne.ofRankLeOneStruct
-  签名: [ValuativeRel.IsNontrivial R] (e : RankLeOneStruct R)
+定义 赋值.秩一.ofRankLeOneStruct
+  签名: [ValuativeRel.是非平凡 R] (e : RankLeOneStruct R)
   定义体: e.emb.comp embedding
   strictMono' := e.strictMono.comp embedding_strictMono
 
@@ -585,8 +585,8 @@ instance [IsNontrivial
   body: Valuation.RankOne.ofRankLeOneStruct IsRankLeOne.nonempty.some
 
 中文:
-实例 [IsNontrivial
-  签名: R] [IsRankLeOne R] :
+实例 [是非平凡
+  签名: R] [是秩不超过一 R] :
   定义体: Valuation.RankOne.ofRankLeOneStruct IsRankLeOne.nonempty.some
 
 Depends on / 依赖: IsRankLeOne, IsRankLeOne.nonempty.some, RankOne, Valuation, Valuation.RankOne.ofRankLeOneStruct, nonempty, ofRankLeOneStruct
@@ -605,8 +605,8 @@ definition Valuation.RankOne.rankLeOneStruct
   strictMono := e.strictMono.comp (ValueGroupWithZero.embed_strictMono (valuation R))
 
 中文:
-定义 Valuation.RankOne.rankLeOneStruct
-  签名: (e : Valuation.RankOne (valuation R))
+定义 赋值.秩一.rankLeOneStruct
+  签名: (e : 赋值.秩一 (valuation R))
   定义体: e.hom.comp (ValuativeRel.ValueGroupWithZero.embed (v := valuation R))
   strictMono := e.strictMono.comp (ValueGroupWithZero.embed_strictMono (valuation R))
 
@@ -627,7 +627,7 @@ lemma ValuativeRel.isRankLeOne_of_rankOne
 
 中文:
 引理 ValuativeRel.isRankLeOne_of_rankOne
-  条件: [h : (valuation R).RankOne]
+  条件: [h : (valuation R).秩一]
   证明: ⟨⟨h.rankLeOneStruct⟩⟩
 
 Depends on / 依赖: h.rankLeOneStruct, rankLeOneStruct
@@ -645,7 +645,7 @@ lemma ValuativeRel.isNontrivial_of_rankOne
 
 中文:
 引理 ValuativeRel.isNontrivial_of_rankOne
-  条件: [h : (valuation R).RankOne]
+  条件: [h : (valuation R).秩一]
   证明: (isNontrivial_iff_isNontrivial _).mpr h.toIsNontrivial
 
 Depends on / 依赖: h.toIsNontrivial, isNontrivial_iff_isNontrivial, toIsNontrivial
@@ -720,7 +720,7 @@ lemma ValuativeRel.IsRankLeOne.of_compatible_mulArchimedean
     (embedding_strictMono.comp (ValueGroupWithZero.embed_strictMono v))
 
 中文:
-引理 ValuativeRel.IsRankLeOne.of_compatible_mulArchimedean
+引理 ValuativeRel.是秩不超过一.of_compatible_mulArchimedean
   结论: [MulArchimedean Γ₀]
   证明: by
   rw [isRankLeOne_iff_mulArchimedean]

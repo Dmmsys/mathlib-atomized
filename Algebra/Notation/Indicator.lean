@@ -62,7 +62,7 @@ definition mulIndicator
 
 中文:
 定义 mulIndicator
-  签名: (s : Set α) (f : α -> M) (x : α)
+  签名: (s : 集合 α) (f : α -> M) (x : α)
   定义体: haveI := Classical.decPred (· in s)
   if x in s then f x else 1
 
@@ -114,7 +114,7 @@ lemma mulIndicator_apply
 
 中文:
 引理 mulIndicator_apply
-  条件: (s : Set α) (f : α -> M) (a : α) [Decidable (a in s)]
+  条件: (s : 集合 α) (f : α -> M) (a : α) [可判定 (a in s)]
   证明: by
   unfold mulIndicator
   congr
@@ -192,7 +192,7 @@ lemma mulIndicator_eq_one_or_self
 
 中文:
 引理 mulIndicator_eq_one_or_self
-  条件: (s : Set α) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (f : α -> M) (a : α)
   证明: by
   by_cases h : a in s
   · exact Or.inr (mulIndicator_of_mem h f)
@@ -538,7 +538,7 @@ lemma mulIndicator_range_comp
 
 中文:
 引理 mulIndicator_range_comp
-  条件: {ι : Sort*} (f : ι -> α) (g : α -> M)
+  条件: {ι : 类型层*} (f : ι -> α) (g : α -> M)
   证明: letI := Classical.decPred (· in range f)
   piecewise_range_comp _ _ _
 
@@ -602,7 +602,7 @@ lemma mulIndicator_eq_mulIndicator
 
 中文:
 引理 mulIndicator_eq_mulIndicator
-  结论: {t : Set β} {g : β -> M} {b : β}
+  结论: {t : 集合 β} {g : β -> M} {b : β}
   证明: by
   by_cases a in s <;> simp_all
 
@@ -626,7 +626,7 @@ lemma mulIndicator_const_eq_mulIndicator_const
 
 中文:
 引理 mulIndicator_const_eq_mulIndicator_const
-  条件: {t : Set β} {b : β} {c : M} (h : a in s ↔ b in t)
+  条件: {t : 集合 β} {b : β} {c : M} (h : a in s ↔ b in t)
   证明: mulIndicator_eq_mulIndicator h rfl
 
 @[to_additive (attr := simp)]
@@ -652,7 +652,7 @@ lemma mulIndicator_univ
 中文:
 引理 mulIndicator_univ
   条件: (f : α -> M)
-  结论: mulIndicator (univ : Set α) f = f
+  结论: mulIndicator (univ : 集合 α) f = f
   证明: mulIndicator_eq_self.2 subset_univ _
 
 @[to_additive (attr := simp)]
@@ -677,7 +677,7 @@ lemma mulIndicator_empty
 中文:
 引理 mulIndicator_empty
   条件: (f : α -> M)
-  结论: mulIndicator (∅ : Set α) f = fun _ => 1
+  结论: mulIndicator (∅ : 集合 α) f = fun _ => 1
   证明: mulIndicator_eq_one.2 disjoint_empty _
 
 @[to_additive]
@@ -700,7 +700,7 @@ lemma mulIndicator_empty'
 中文:
 引理 mulIndicator_empty'
   条件: (f : α -> M)
-  结论: mulIndicator (∅ : Set α) f = 1
+  结论: mulIndicator (∅ : 集合 α) f = 1
   证明: mulIndicator_empty f
 
 Depends on / 依赖: mulIndicator_empty
@@ -724,7 +724,7 @@ lemma mulIndicator_one
 
 中文:
 引理 mulIndicator_one
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (mulIndicator s fun _ => (1 : M)) = fun _ => (1 : M)
   证明: mulIndicator_eq_one.2 by simp only [mulSupport_fun_one, empty_disjoint]
 
@@ -747,7 +747,7 @@ lemma mulIndicator_one'
 
 中文:
 引理 mulIndicator_one'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s.mulIndicator (1 : α -> M) = 1
   证明: mulIndicator_one M s
 
@@ -773,7 +773,7 @@ lemma mulIndicator_mulIndicator
 
 中文:
 引理 mulIndicator_mulIndicator
-  条件: (s t : Set α) (f : α -> M)
+  条件: (s t : 集合 α) (f : α -> M)
   证明: funext fun x => by
     simp only [mulIndicator]
     split_ifs <;> simp_all +contextual
@@ -802,7 +802,7 @@ lemma mulIndicator_inter_mulSupport
 
 中文:
 引理 mulIndicator_inter_mulSupport
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   证明: by
   rw [← mulIndicator_mulIndicator]; rw [mulIndicator_mulSupport]
 
@@ -829,7 +829,7 @@ lemma comp_mulIndicator
 
 中文:
 引理 comp_mulIndicator
-  条件: (h : M -> β) (f : α -> M) {s : Set α} {x : α} [DecidablePred (· in s)]
+  条件: (h : M -> β) (f : α -> M) {s : 集合 α} {x : α} [DecidablePred (· in s)]
   证明: by
   let := Classical.decPred (· in s)
   convert! s.apply_piecewise f (const α 1) (fun _ => h) (x := x) using 2
@@ -857,7 +857,7 @@ lemma mulIndicator_comp_right
 
 中文:
 引理 mulIndicator_comp_right
-  条件: {s : Set α} (f : β -> α) {g : α -> M} {x : β}
+  条件: {s : 集合 α} (f : β -> α) {g : α -> M} {x : β}
   证明: by
   tauto
 
@@ -881,7 +881,7 @@ lemma mulIndicator_image
 
 中文:
 引理 mulIndicator_image
-  条件: {s : Set α} {f : β -> M} {g : α -> β} (hg : Injective g) {x : α}
+  条件: {s : 集合 α} {f : β -> M} {g : α -> β} (hg : 单射 g) {x : α}
   证明: by
   rw [← mulIndicator_comp_right]; rw [preimage_image_eq _ hg]
 
@@ -985,7 +985,7 @@ lemma mulIndicator_preimage
 
 中文:
 引理 mulIndicator_preimage
-  条件: (s : Set α) (f : α -> M) (B : Set M)
+  条件: (s : 集合 α) (f : α -> M) (B : 集合 M)
   证明: letI := Classical.decPred (· in s)
   piecewise_preimage s f 1 B
 
@@ -1014,7 +1014,7 @@ lemma mulIndicator_one_preimage
 
 中文:
 引理 mulIndicator_one_preimage
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   classical
   rw [mulIndicator_one']; rw [Pi.one_def]; rw [Set.preimage_const]
@@ -1045,7 +1045,7 @@ lemma mulIndicator_const_preimage_eq_union
 
 中文:
 引理 mulIndicator_const_preimage_eq_union
-  结论: (U : Set α) (s : Set M) (a : M) [Decidable (a in s)]
+  结论: (U : 集合 α) (s : 集合 M) (a : M) [可判定 (a in s)]
   证明: by
   rw [mulIndicator_preimage]; rw [Pi.one_def]; rw [Set.preimage_const]; rw [preimage_const]
   split_ifs <;> simp [← compl_eq_univ_sdiff]
@@ -1076,7 +1076,7 @@ lemma mulIndicator_const_preimage
 
 中文:
 引理 mulIndicator_const_preimage
-  条件: (U : Set α) (s : Set M) (a : M)
+  条件: (U : 集合 α) (s : 集合 M) (a : M)
   证明: by
   classical
     rw [mulIndicator_const_preimage_eq_union]
@@ -1106,7 +1106,7 @@ lemma mulIndicator_preimage_of_notMem
 
 中文:
 引理 mulIndicator_preimage_of_notMem
-  条件: (s : Set α) (f : α -> M) {t : Set M} (ht : (1 : M) ∉ t)
+  条件: (s : 集合 α) (f : α -> M) {t : 集合 M} (ht : (1 : M) ∉ t)
   证明: by
   simp [mulIndicator_preimage, Pi.one_def, Set.preimage_const_of_notMem ht]
 
@@ -1133,7 +1133,7 @@ lemma mem_range_mulIndicator
 
 中文:
 引理 mem_range_mulIndicator
-  条件: {r : M} {s : Set α} {f : α -> M}
+  条件: {r : M} {s : 集合 α} {f : α -> M}
   证明: by
   simp [mulIndicator, ite_eq_iff, exists_or, eq_univ_iff_forall, and_comm, or_comm,
     @eq_comm _ r 1]
@@ -1185,7 +1185,7 @@ lemma indicator_one_preimage
 
 中文:
 引理 indicator_one_preimage
-  条件: [Zero M] (U : Set α) (s : Set M)
+  条件: [零 M] (U : 集合 α) (s : 集合 M)
   证明: indicator_const_preimage _ _ 1
 
 Depends on / 依赖: indicator_const_preimage

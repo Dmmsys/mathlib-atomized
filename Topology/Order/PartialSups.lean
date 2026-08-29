@@ -39,7 +39,7 @@ lemma partialSups
 
 中文:
 引理 partialSups
-  条件: (hf : 对任意 k <= n, Tendsto (f k) l (𝓝 (g k)))
+  条件: (hf : 对任意 k <= n, 收敛 (f k) l (𝓝 (g k)))
   证明: by
   simp only [partialSups_eq_sup'_range]
   refine finset_sup'_nhds _ ?_
@@ -62,7 +62,7 @@ lemma partialSups_apply
 
 中文:
 引理 partialSups_apply
-  条件: (hf : 对任意 k <= n, Tendsto (f k) l (𝓝 (g k)))
+  条件: (hf : 对任意 k <= n, 收敛 (f k) l (𝓝 (g k)))
   证明: by
   simpa only [← Pi.partialSups_apply] using Tendsto.partialSups hf
 -/
@@ -194,8 +194,8 @@ lemma Continuous.partialSups_apply
     (hf k hk).continuousAt
 
 中文:
-引理 Continuous.partialSups_apply
-  条件: (hf : 对任意 k <= n, Continuous (f k))
+引理 连续.partialSups_apply
+  条件: (hf : 对任意 k <= n, 连续 (f k))
   证明: continuous_iff_continuousAt.2 fun _ => ContinuousAt.partialSups_apply fun k hk =>
     (hf k hk).continuousAt
 -/
@@ -213,8 +213,8 @@ lemma Continuous.partialSups
   proof: continuous_iff_continuousAt.2 fun _ => ContinuousAt.partialSups fun k hk => (hf k hk).continuousAt
 
 中文:
-引理 Continuous.partialSups
-  条件: (hf : 对任意 k <= n, Continuous (f k))
+引理 连续.partialSups
+  条件: (hf : 对任意 k <= n, 连续 (f k))
   证明: continuous_iff_continuousAt.2 fun _ => ContinuousAt.partialSups fun k hk => (hf k hk).continuousAt
 -/
 protected lemma Continuous.partialSups (hf : forall k <= n, Continuous (f k)) :

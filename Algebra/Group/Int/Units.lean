@@ -65,7 +65,7 @@ lemma natAbs_of_isUnit
 
 中文:
 引理 natAbs_of_isUnit
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: natAbs u = 1
   证明: units_natAbs hu.unit
 -/
@@ -83,7 +83,7 @@ lemma isUnit_eq_one_or
 
 中文:
 引理 isUnit_eq_one_or
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: u = 1 ∨ u = -1
   证明: by
   simpa only [natAbs_of_isUnit hu] using! natAbs_eq u
@@ -105,7 +105,7 @@ lemma isUnit_ne_iff_eq_neg
 
 中文:
 引理 isUnit_ne_iff_eq_neg
-  条件: (hu : IsUnit u) (hv : IsUnit v)
+  条件: (hu : 是单位 u) (hv : 是单位 v)
   结论: u != v ↔ u = -v
   证明: by
   obtain rfl | rfl := isUnit_eq_one_or hu <;> obtain rfl | rfl := isUnit_eq_one_or hv <;> decide
@@ -126,7 +126,7 @@ lemma isUnit_eq_or_eq_neg
 
 中文:
 引理 isUnit_eq_or_eq_neg
-  条件: (hu : IsUnit u) (hv : IsUnit v)
+  条件: (hu : 是单位 u) (hv : 是单位 v)
   结论: u = v ∨ u = -v
   证明: or_iff_not_imp_left.2 (isUnit_ne_iff_eq_neg hu hv).1
 
@@ -149,7 +149,7 @@ lemma isUnit_iff
 
 中文:
 引理 isUnit_iff
-  结论: IsUnit u ↔ u = 1 ∨ u = -1
+  结论: 是单位 u ↔ u = 1 ∨ u = -1
   证明: by
   refine ⟨fun h => isUnit_eq_one_or h, fun h => ?_⟩
   rcases h with (rfl | rfl)
@@ -323,7 +323,7 @@ alias ⟨IsUnit.natAbs_eq, _⟩ := isUnit_iff_natAbs_eq
 
 中文:
 引理 isUnit_iff_natAbs_eq
-  结论: IsUnit u ↔ u.natAbs = 1
+  结论: 是单位 u ↔ u.natAbs = 1
   证明: by simp [natAbs_eq_iff, isUnit_iff]
 
 alias ⟨IsUnit.natAbs_eq, _⟩ := isUnit_iff_natAbs_eq
@@ -347,9 +347,9 @@ lemma ofNat_isUnit
   proof: by simp [isUnit_iff_natAbs_eq]
 
 中文:
-引理 ofNat_isUnit
+引理 of自然数_isUnit
   条件: {n : 自然数}
-  结论: IsUnit (n : 整数) ↔ IsUnit n
+  结论: 是单位 (n : 整数) ↔ 是单位 n
   证明: by simp [isUnit_iff_natAbs_eq]
 
 Depends on / 依赖: isUnit_iff_natAbs_eq
@@ -367,7 +367,7 @@ lemma isUnit_mul_self
 
 中文:
 引理 isUnit_mul_self
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: u * u = 1
   证明: (isUnit_eq_one_or hu).elim (fun h => h.symm ▸ rfl) fun h => h.symm ▸ rfl
 
@@ -388,7 +388,7 @@ lemma isUnit_add_isUnit_eq_isUnit_add_isUnit
 
 中文:
 引理 isUnit_add_isUnit_eq_isUnit_add_isUnit
-  结论: {a b c d : 整数} (ha : IsUnit a) (hb : IsUnit b)
+  结论: {a b c d : 整数} (ha : 是单位 a) (hb : 是单位 b)
   证明: by
   rw [isUnit_iff] at ha hb hc hd
   lia

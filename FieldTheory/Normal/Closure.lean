@@ -48,7 +48,7 @@ class IsNormalClosure
     - adjoin_rootSet : ⨆ x : K, adjoin F ((minpoly F x).rootSet L) = ⊤
 
 中文:
-类 IsNormalClosure
+类 是正规闭包
   参数: : 命题 where
   公理与运算 (2 个):
     - splits((x : K)) : ((minpoly F x).map (algebraMap F L)).Splits
@@ -71,8 +71,8 @@ definition IntermediateField.normalClosure
   body: ⨆ f : K ->ₐ[F] L, f.fieldRange
 
 中文:
-定义 IntermediateField.normalClosure
-  签名: : 整数ermediateField F L
+定义 中间域.normalClosure
+  签名: : 中间域 F L
   定义体: ⨆ f : K ->ₐ[F] L, f.fieldRange
 
 Depends on / 依赖: f.fieldRange, fieldRange
@@ -109,9 +109,9 @@ lemma IsNormalClosure.normal
     fun _ => Normal.of_isSplittingField (hFEp := adjoin_rootSet_isSplittingField <| h.splits _)))
 
 中文:
-引理 IsNormalClosure.normal
-  条件: [h : IsNormalClosure F K L]
-  结论: Normal F L
+引理 是正规闭包.normal
+  条件: [h : 是正规闭包 F K L]
+  结论: 正规 F L
   证明: Normal.of_algEquiv topEquiv (h := h.adjoin_rootSet ▸ IntermediateField.normal_iSup (h :=
     fun _ => Normal.of_isSplittingField (hFEp := adjoin_rootSet_isSplittingField <| h.splits _)))
 
@@ -131,7 +131,7 @@ lemma normalClosure_le_iff
 
 中文:
 引理 normalClosure_le_iff
-  条件: {K' : 整数ermediateField F L}
+  条件: {K' : 中间域 F L}
   证明: iSup_le_iff
 
 Depends on / 依赖: iSup_le_iff
@@ -150,7 +150,7 @@ lemma AlgHom.fieldRange_le_normalClosure
   proof: le_iSup AlgHom.fieldRange f
 
 中文:
-引理 AlgHom.fieldRange_le_normalClosure
+引理 代数态射.fieldRange_le_normalClosure
   条件: (f : K ->ₐ[F] L)
   结论: f.fieldRange <= normalClosure F K L
   证明: le_iSup AlgHom.fieldRange f
@@ -230,7 +230,7 @@ lemma isNormalClosure_iff
 
 中文:
 引理 isNormalClosure_iff
-  结论: IsNormalClosure F K L ↔
+  结论: 是正规闭包 F K L ↔
   证明: by
   refine ⟨fun ⟨splits, h⟩ => ⟨splits, ?_⟩, fun ⟨splits, h⟩ => ⟨splits, ?_⟩⟩ <;>
     simpa only [normalClosure_eq_iSup_adjoin_of_splits splits] using h
@@ -261,7 +261,7 @@ SetLike.coe_subset_coe.mpr by apply le_iSup _ x)
 
 中文:
 引理 isNormalClosure_normalClosure
-  结论: IsNormalClosure F K (normalClosure F K L)
+  结论: 是正规闭包 F K (normalClosure F K L)
   证明: by
   rw [isNormalClosure_iff]; constructor
   · rw [normalClosure_eq_iSup_adjoin_of_splits splits]
@@ -301,8 +301,8 @@ refine Nonempty.some nonempty_algHom_of_adjoin_splits
   · exact (splits y).of_dvd (map
 
 中文:
-定义 IsNormalClosure.lift
-  签名: [h : IsNormalClosure F K L] {L'} [Field L'] [Algebra F L']
+定义 是正规闭包.lift
+  签名: [h : 是正规闭包 F K L] {L'} [域 L'] [代数 F L']
   定义体: by
   have := h.adjoin_rootSet; rw [← gc.l_iSup] at this
 refine Nonempty.some nonempty_algHom_of_adjoin_splits
@@ -337,8 +337,8 @@ AlgEquiv.ofBijective _ And.left
       (IsNormalClosure.lift fun _ : K => h.splits _)
 
 中文:
-定义 IsNormalClosure.equiv
-  签名: {L'} [Field L'] [Algebra F L']
+定义 是正规闭包.equiv
+  签名: {L'} [域 L'] [代数 F L']
   定义体: have := h.normal
 AlgEquiv.ofBijective _ And.left
     Normal.toIsAlgebraic.algHom_bijective₂
@@ -371,7 +371,7 @@ instance isNormalClosure_normalClosure
 
 中文:
 实例 isNormalClosure_normalClosure
-  签名: [ne : Nonempty (K ->ₐ[F] L)] [h : Normal F L]
+  签名: [ne : 非空 (K ->ₐ[F] L)] [h : 正规 F L]
   定义体: by
   have ⟨φ⟩ := ne
   apply (h.toIsAlgebraic.of_injective φ φ.injective).isNormalClosure_normalClosure
@@ -402,7 +402,7 @@ theorem normalClosure_eq_iSup_adjoin'
 
 中文:
 定理 normalClosure_eq_iSup_adjoin'
-  条件: [ne : Nonempty (K ->ₐ[F] L)] [h : Normal F L]
+  条件: [ne : 非空 (K ->ₐ[F] L)] [h : 正规 F L]
   证明: by
   have ⟨φ⟩ := ne
   refine h.toIsAlgebraic.of_injective φ φ.injective
@@ -430,7 +430,7 @@ theorem normalClosure_eq_iSup_adjoin
 
 中文:
 定理 normalClosure_eq_iSup_adjoin
-  条件: [Algebra K L] [IsScalarTower F K L] [Normal F L]
+  条件: [代数 K L] [标量塔 F K L] [正规 F L]
   证明: normalClosure_eq_iSup_adjoin' (ne := ⟨IsScalarTower.toAlgHom F K L⟩)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, normalClosure_eq_iSup_adjoin, toAlgHom
@@ -482,7 +482,7 @@ instance normal
 
 中文:
 实例 normal
-  签名: [h : Normal F L]
+  签名: [h : 正规 F L]
   定义体: by
   obtain _ | φ := isEmpty_or_nonempty (K ->ₐ[F] L)
   · rw [normalClosure, iSup_of_empty]; exact Normal.of_algEquiv (botEquiv F L).symm
@@ -511,7 +511,7 @@ instance is_finiteDimensional
 
 中文:
 实例 is_finiteDimensional
-  签名: [FiniteDimensional F K]
+  签名: [有限维 F K]
   定义体: by
   have : forall f : K ->ₐ[F] L, FiniteDimensional F f.fieldRange := fun f =>
     f.toLinearMap.finiteDimensional_range
@@ -539,7 +539,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra K (normalClosure F K L)
+  签名: : 代数 K (normalClosure F K L)
   定义体: inferInstanceAs Algebra K
     { ⨆ f : K ->ₐ[F] L, f.fieldRange with
       algebraMap_mem' := fun r => (toAlgHom F K L).fieldRange_le_normalClosure ⟨r, rfl⟩ }
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower F K (normalClosure F K L)
+  签名: 标量塔 F K (normalClosure F K L)
   定义体: by
   apply of_algebraMap_eq'
   ext x
@@ -587,7 +587,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower K (normalClosure F K L) L
+  签名: 标量塔 K (normalClosure F K L) L
   定义体: of_algebraMap_eq' rfl
 
 Depends on / 依赖: of_algebraMap_eq
@@ -631,8 +631,8 @@ Nonempty.some by
       refine ⟨isAlgebraic_iff_isIntegral.mp (isAlgebraic_of_mem_root
 
 中文:
-定义 Algebra.IsAlgebraic.algHomEmbeddingOfSplits
-  签名: [Algebra.IsAlgebraic F K]
+定义 代数.是代数.algHomEmbeddingOfSplits
+  签名: [代数.是代数 F K]
   定义体: let φ : ↑(⨆ x : K, IntermediateField.adjoin F ((minpoly F x).rootSet L')) ->ₐ[F] L :=
 Nonempty.some by
       rw [← gc.l_iSup]
@@ -695,7 +695,7 @@ lemma normalClosure_of_normal
 
 中文:
 引理 normalClosure_of_normal
-  条件: [Normal F K]
+  条件: [正规 F K]
   结论: normalClosure F K L = K
   证明: by
   simp only [normalClosure_def, AlgHom.fieldRange_of_normal, iSup_const]
@@ -804,7 +804,7 @@ definition normalClosureOperator
 
 中文:
 定义 normalClosureOperator
-  签名: : ClosureOperator (整数ermediateField F L) where
+  签名: : 闭包算子 (中间域 F L) where
   定义体: normalClosure F K L
   monotone' K K' := normalClosure_mono K K'
   le_closure' := le_normalClosure
@@ -830,7 +830,7 @@ lemma normal_iff_normalClosure_eq
 
 中文:
 引理 normal_iff_normalClosure_eq
-  结论: Normal F K ↔ normalClosure F K L = K
+  结论: 正规 F K ↔ normalClosure F K L = K
   证明: ⟨@normalClosure_of_normal (K := K), fun h => h ▸ normalClosure.normal F K L⟩
 
 Depends on / 依赖: normal, normalClosure, normalClosure.normal, normalClosure_of_normal
@@ -848,7 +848,7 @@ lemma normal_iff_normalClosure_le
 
 中文:
 引理 normal_iff_normalClosure_le
-  结论: Normal F K ↔ normalClosure F K L <= K
+  结论: 正规 F K ↔ normalClosure F K L <= K
   证明: normal_iff_normalClosure_eq.trans (le_normalClosure K).ge_iff_eq'.symm
 
 Depends on / 依赖: ge_iff_eq, le_normalClosure, normal_iff_normalClosure_eq, normal_iff_normalClosure_eq.trans
@@ -866,8 +866,8 @@ lemma normal_iff_forall_fieldRange_le
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def]; rw [iSup_le_iff]
 
 中文:
-引理 normal_iff_forall_fieldRange_le
-  结论: Normal F K ↔ 对任意 σ : K ->ₐ[F] L, σ.fieldRange <= K
+引理 normal_iff_对任意_fieldRange_le
+  结论: 正规 F K ↔ 对任意 σ : K ->ₐ[F] L, σ.fieldRange <= K
   证明: by
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def]; rw [iSup_le_iff]
 
@@ -886,8 +886,8 @@ lemma normal_iff_forall_map_le
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def']; rw [iSup_le_iff]
 
 中文:
-引理 normal_iff_forall_map_le
-  结论: Normal F K ↔ 对任意 σ : L ->ₐ[F] L, K.map σ <= K
+引理 normal_iff_对任意_map_le
+  结论: 正规 F K ↔ 对任意 σ : L ->ₐ[F] L, K.map σ <= K
   证明: by
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def']; rw [iSup_le_iff]
 
@@ -906,8 +906,8 @@ lemma normal_iff_forall_map_le'
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def'']; rw [iSup_le_iff]
 
 中文:
-引理 normal_iff_forall_map_le'
-  结论: Normal F K ↔ 对任意 σ : Gal(L/F), K.map ↑σ <= K
+引理 normal_iff_对任意_map_le'
+  结论: 正规 F K ↔ 对任意 σ : Gal(L/F), K.map ↑σ <= K
   证明: by
   rw [normal_iff_normalClosure_le]; rw [normalClosure_def'']; rw [iSup_le_iff]
 
@@ -928,8 +928,8 @@ lemma normal_iff_forall_fieldRange_eq
   proof: ⟨@AlgHom.fieldRange_of_normal (E := K), normal_iff_forall_fieldRange_le.2 ∘ fun h σ => (h σ).le⟩
 
 中文:
-引理 normal_iff_forall_fieldRange_eq
-  结论: Normal F K ↔ 对任意 σ : K ->ₐ[F] L, σ.fieldRange = K
+引理 normal_iff_对任意_fieldRange_eq
+  结论: 正规 F K ↔ 对任意 σ : K ->ₐ[F] L, σ.fieldRange = K
   证明: ⟨@AlgHom.fieldRange_of_normal (E := K), normal_iff_forall_fieldRange_le.2 ∘ fun h σ => (h σ).le⟩
 
 Depends on / 依赖: AlgHom, AlgHom.fieldRange_of_normal, fieldRange_of_normal, normal_iff_forall_fieldRange_le
@@ -947,8 +947,8 @@ lemma normal_iff_forall_map_eq
   (normal_iff_forall_fieldRange_eq.1 h _), fun h => normal_iff_forall_map_le.2 (fun σ => (h σ).le)⟩
 
 中文:
-引理 normal_iff_forall_map_eq
-  结论: Normal F K ↔ 对任意 σ : L ->ₐ[F] L, K.map σ = K
+引理 normal_iff_对任意_map_eq
+  结论: 正规 F K ↔ 对任意 σ : L ->ₐ[F] L, K.map σ = K
   证明: ⟨fun h σ => (K.fieldRange_val ▸ AlgHom.map_fieldRange K.val σ).trans
   (normal_iff_forall_fieldRange_eq.1 h _), fun h => normal_iff_forall_map_le.2 (fun σ => (h σ).le)⟩
 
@@ -969,8 +969,8 @@ lemma normal_iff_forall_map_eq'
 @[simp]
 
 中文:
-引理 normal_iff_forall_map_eq'
-  结论: Normal F K ↔ 对任意 σ : Gal(L/F), K.map ↑σ = K
+引理 normal_iff_对任意_map_eq'
+  结论: 正规 F K ↔ 对任意 σ : Gal(L/F), K.map ↑σ = K
   证明: ⟨fun h σ => normal_iff_forall_map_eq.1 h σ, fun h => normal_iff_forall_map_le'.2 (fun σ => (h σ).le)⟩
 
 @[simp]
@@ -997,7 +997,7 @@ lemma normalClosure_map_eq
 
 中文:
 引理 normalClosure_map_eq
-  条件: (K : 整数ermediateField F L) (σ : L ->ₐ[F] L)
+  条件: (K : 中间域 F L) (σ : L ->ₐ[F] L)
   证明: by
   have (σ : Gal(L/F)) : normalClosure F (K.map (σ : L ->ₐ[F] L)) L = normalClosure F K L := by
     simp_rw [normalClosure_def'', map_map]
@@ -1031,7 +1031,7 @@ theorem normalClosure_le_iff_of_normal
 
 中文:
 定理 normalClosure_le_iff_of_normal
-  条件: {K₁ K₂ : 整数ermediateField F L} [Normal F K₂]
+  条件: {K₁ K₂ : 中间域 F L} [正规 F K₂]
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [normalClosure_le_iff] at h

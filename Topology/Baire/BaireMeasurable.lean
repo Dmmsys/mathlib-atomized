@@ -58,7 +58,7 @@ theorem coborder_mem_residual
 
 中文:
 定理 coborder_mem_residual
-  条件: {s : Set α} (hs : IsLocallyClosed s)
+  条件: {s : 集合 α} (hs : IsLocallyClosed s)
   结论: coborder s in residual α
   证明: residual_of_dense_open hs.isOpen_coborder dense_coborder
 
@@ -82,7 +82,7 @@ theorem closure_residualEq
 
 中文:
 定理 closure_residualEq
-  条件: {s : Set α} (hs : IsLocallyClosed s)
+  条件: {s : 集合 α} (hs : IsLocallyClosed s)
   结论: closure s =ᵇ s
   证明: by
   rw [Filter.eventuallyEq_set]
@@ -108,7 +108,7 @@ definition BaireMeasurableSet
 
 中文:
 定义 BaireMeasurableSet
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: @MeasurableSet _ (eventuallyMeasurableSpace (borel _) (residual _)) s
 
 Depends on / 依赖: MeasurableSet, eventuallyMeasurableSpace, residual
@@ -151,8 +151,8 @@ theorem _root_.MeasurableSet.baireMeasurableSet
   exact h.eventuallyMeasurableSet
 
 中文:
-定理 _root_.MeasurableSet.baireMeasurableSet
-  结论: [MeasurableSpace α] [BorelSpace α]
+定理 _root_.可测集.baireMeasurableSet
+  结论: [可测空间 α] [Borel空间 α]
   证明: by
   borelize α
   exact h.eventuallyMeasurableSet
@@ -176,8 +176,8 @@ theorem _root_.IsOpen.baireMeasurableSet
   exact h.measurableSet.baireMeasurableSet
 
 中文:
-定理 _root_.IsOpen.baireMeasurableSet
-  条件: (h : IsOpen s)
+定理 _root_.是开集.baireMeasurableSet
+  条件: (h : 是开集 s)
   结论: BaireMeasurableSet s
   证明: by
   borelize α
@@ -257,7 +257,7 @@ theorem iUnion
 
 中文:
 定理 iUnion
-  结论: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+  结论: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: MeasurableSet.iUnion h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, iUnion
@@ -276,7 +276,7 @@ theorem biUnion
 
 中文:
 定理 biUnion
-  结论: {ι : 类型} {s : ι -> Set α} {t : Set ι} (ht : t.Countable)
+  结论: {ι : 类型} {s : ι -> 集合 α} {t : 集合 ι} (ht : t.可数)
   证明: MeasurableSet.biUnion ht h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.biUnion, biUnion
@@ -294,8 +294,8 @@ theorem sUnion
   proof: MeasurableSet.sUnion hs h
 
 中文:
-定理 sUnion
-  结论: {s : Set (Set α)} (hs : s.Countable)
+定理 集合并集
+  结论: {s : 集合 (集合 α)} (hs : s.可数)
   证明: MeasurableSet.sUnion hs h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.sUnion, sUnion
@@ -313,8 +313,8 @@ theorem iInter
   proof: MeasurableSet.iInter h
 
 中文:
-定理 iInter
-  结论: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+定理 i整数er
+  结论: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: MeasurableSet.iInter h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iInter, iInter
@@ -332,8 +332,8 @@ theorem biInter
   proof: MeasurableSet.biInter ht h
 
 中文:
-定理 biInter
-  结论: {ι : 类型} {s : ι -> Set α} {t : Set ι} (ht : t.Countable)
+定理 bi整数er
+  结论: {ι : 类型} {s : ι -> 集合 α} {t : 集合 ι} (ht : t.可数)
   证明: MeasurableSet.biInter ht h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.biInter, biInter
@@ -351,8 +351,8 @@ theorem sInter
   proof: MeasurableSet.sInter hs h
 
 中文:
-定理 sInter
-  结论: {s : Set (Set α)} (hs : s.Countable)
+定理 集合交集
+  结论: {s : 集合 (集合 α)} (hs : s.可数)
   证明: MeasurableSet.sInter hs h
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.sInter, sInter
@@ -459,8 +459,8 @@ exact .compl hsU.trans .symm closure_residualEq Uo.isLocallyClosed
    
 
 中文:
-定理 MeasurableSet.residualEq_isOpen
-  条件: [MeasurableSpace α] [BorelSpace α] (h : MeasurableSet s)
+定理 可测集.residualEq_isOpen
+  条件: [可测空间 α] [Borel空间 α] (h : 可测集 s)
   证明: by
   induction s, h using MeasurableSet.induction_on_open with
   | isOpen U hU => exact ⟨U, hU, .rfl⟩
@@ -551,7 +551,7 @@ theorem tendsto_residual_of_isOpenMap
 
 中文:
 定理 tendsto_residual_of_isOpenMap
-  条件: (hc : Continuous f) (ho : IsOpenMap f)
+  条件: (hc : 连续 f) (ho : 是开映射 f)
   证明: by
   apply le_countableGenerate_iff_of_countableInterFilter.mpr
   rintro t ⟨ht, htd⟩
@@ -575,7 +575,7 @@ theorem IsMeagre.preimage_of_isOpenMap
 
 中文:
 定理 IsMeagre.preimage_of_isOpenMap
-  结论: (hc : Continuous f) (ho : IsOpenMap f)
+  结论: (hc : 连续 f) (ho : 是开映射 f)
   证明: tendsto_residual_of_isOpenMap hc ho h
 
 Depends on / 依赖: tendsto_residual_of_isOpenMap
@@ -597,8 +597,8 @@ refine ⟨f ⁻¹' u, ?_, hsu.filter_mono tendsto_residual_of_isOpenMap hc ho⟩
   exact hc.measurable hu
 
 中文:
-定理 BaireMeasurableSet.preimage
-  结论: (hc : Continuous f) (ho : IsOpenMap f)
+定理 BaireMeasurableSet.原像
+  结论: (hc : 连续 f) (ho : 是开映射 f)
   证明: by
   rcases h with ⟨u, hu, hsu⟩
 refine ⟨f ⁻¹' u, ?_, hsu.filter_mono tendsto_residual_of_isOpenMap hc ho⟩
@@ -627,7 +627,7 @@ theorem Homeomorph.residual_map_eq
   exact tendsto_residual_of_isOpenMap h.symm.continuous h.symm.isOpenMap
 
 中文:
-定理 Homeomorph.residual_map_eq
+定理 同胚.residual_map_eq
   条件: (h : α ≃ₜ β)
   结论: (residual α).map h = residual β
   证明: by

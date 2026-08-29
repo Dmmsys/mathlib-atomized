@@ -42,11 +42,11 @@ structure PrimeSpectrum
     - isPrime : asIdeal.IsPrime
 
 中文:
-结构 PrimeSpectrum
-  参数: (R : 类型) [CommSemiring R]
+结构 素谱
+  参数: (R : 类型) [交换半环 R]
   公理与运算 (2 个):
-    - asIdeal : Ideal R
-    - isPrime : asIdeal.IsPrime
+    - asIdeal : 理想 R
+    - isPrime : asIdeal.是素
 -/
 structure PrimeSpectrum (R : Type*) [CommSemiring R] where
   asIdeal : Ideal R
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (PrimeSpectrum R) (Ideal R)
+  签名: Coe (素谱 R) (理想 R)
   定义体: P.asIdeal
 
 Depends on / 依赖: P.asIdeal, asIdeal
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (PrimeSpectrum R)
+  签名: 偏序 (素谱 R)
   定义体: PartialOrder.lift asIdeal (@PrimeSpectrum.ext _ _)
 
 @[simp]
@@ -120,7 +120,7 @@ theorem asIdeal_le_asIdeal
 
 中文:
 定理 asIdeal_le_asIdeal
-  条件: (x y : PrimeSpectrum R)
+  条件: (x y : 素谱 R)
   结论: x.asIdeal <= y.asIdeal ↔ x <= y
   证明: Iff.rfl
 
@@ -143,7 +143,7 @@ theorem asIdeal_lt_asIdeal
 
 中文:
 定理 asIdeal_lt_asIdeal
-  条件: (x y : PrimeSpectrum R)
+  条件: (x y : 素谱 R)
   结论: x.asIdeal < y.asIdeal ↔ x < y
   证明: Iff.rfl
 
@@ -167,7 +167,7 @@ definition equivSubtype
 
 中文:
 定义 equivSubtype
-  签名: : PrimeSpectrum R ≃o {I : Ideal R // I.IsPrime} where
+  签名: : 素谱 R ≃o {I : 理想 R // I.是素} where
   定义体: ⟨I.asIdeal, I.2⟩
   invFun I := ⟨I, I.2⟩
   map_rel_iff' := .rfl

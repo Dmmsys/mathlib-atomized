@@ -88,8 +88,8 @@ theorem _root_.Function.Surjective.isBezout
   · rw [Ideal.map_span, Set.image_singleton]
 
 中文:
-定理 _root_.Function.Surjective.isBezout
-  结论: {S : 类型v} [CommRing S] (f : R ->+* S)
+定理 _root_.函数.满射.isBezout
+  结论: {S : 类型v} [交换环 S] (f : R ->+* S)
   证明: by
   rw [iff_span_pair_isPrincipal]
   intro x y
@@ -133,7 +133,7 @@ theorem TFAE
 
 中文:
 定理 TFAE
-  条件: [IsBezout R] [IsDomain R]
+  条件: [是Bezout R] [是整环 R]
   证明: by
   tfae_have 1 -> 2
   | _ => inferInstance

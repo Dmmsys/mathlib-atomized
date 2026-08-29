@@ -97,7 +97,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (α : 类型) {β : 类型} (bs : Set β)
+  签名: (α : 类型) {β : 类型} (bs : 集合 β)
   定义体: (f : α ↪ β).codRestrict bs f.prop
   invFun f := ⟨f.trans (Function.Embedding.subtype _), fun a => (f a).prop⟩
 
@@ -185,7 +185,7 @@ definition uniqueEmbeddingEquivResult
 
 中文:
 定义 uniqueEmbeddingEquivResult
-  签名: {α β : 类型} [Unique α]
+  签名: {α β : 类型} [唯一 α]
   定义体: f default
   invFun x := ⟨fun _ => x, fun _ _ _ => Subsingleton.elim _ _⟩
   left_inv _ := by

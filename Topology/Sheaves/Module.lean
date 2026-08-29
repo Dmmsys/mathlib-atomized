@@ -69,7 +69,7 @@ definition sheafOfModulesEquivOverUnit
 
 中文:
 定义 sheafOfModulesEquivOverUnit
-  签名: (R : X.Sheaf RingCat.{u})
+  签名: (R : X.层 环范畴.{u})
   定义体: .refl _
 -/
 def sheafOfModulesEquivOverUnit (R : X.Sheaf RingCat.{u}) :
@@ -87,7 +87,7 @@ definition sheafOfModulesEquivOverInverseUnit
 
 中文:
 定义 sheafOfModulesEquivOverInverseUnit
-  签名: (R : X.Sheaf RingCat.{u})
+  签名: (R : X.层 环范畴.{u})
   定义体: (U.sheafOfModulesEquivOver R).inverse.mapIso (U.sheafOfModulesEquivOverUnit R).symm ≪≫
     ((U.sheafOfModulesEquivOver R).unitIso.app _).symm
 

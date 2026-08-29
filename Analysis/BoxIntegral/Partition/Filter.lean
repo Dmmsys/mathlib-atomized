@@ -194,12 +194,12 @@ structure IntegrationParams
     - (bDistortion : Bool)
 
 中文:
-结构 IntegrationParams
-  参数: : Type where
+结构 整数egrationParams
+  参数: : 类型 where
   公理与运算 (3 个):
-    - (bRiemann : 布尔)
-    - (bHenstock : 布尔)
-    - (bDistortion : 布尔)
+    - (bRiemann : 布尔值)
+    - (bHenstock : 布尔值)
+    - (bDistortion : 布尔值)
 
 Depends on / 依赖: bDistortion, bHenstock
 -/
@@ -233,7 +233,7 @@ definition equivProd
 
 中文:
 定义 equivProd
-  签名: : 整数egrationParams ≃ 布尔 × 布尔ᵒᵈ × 布尔ᵒᵈ where
+  签名: : 整数egrationParams ≃ 布尔值 × 布尔ᵒᵈ × 布尔ᵒᵈ where
   定义体: ⟨l.1, OrderDual.toDual l.2, OrderDual.toDual l.3⟩
   invFun l := ⟨l.1, OrderDual.ofDual l.2.1, OrderDual.ofDual l.2.2⟩
 
@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder 整数egrationParams
+  签名: 偏序 整数egrationParams
   定义体: PartialOrder.lift equivProd equivProd.injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, equivProd, equivProd.injective, injective
@@ -271,7 +271,7 @@ definition isoProd
 
 中文:
 定义 isoProd
-  签名: : 整数egrationParams ≃o 布尔 × 布尔ᵒᵈ × 布尔ᵒᵈ
+  签名: : 整数egrationParams ≃o 布尔值 × 布尔ᵒᵈ × 布尔ᵒᵈ
   定义体: ⟨equivProd, Iff.rfl⟩
 
 Depends on / 依赖: Iff.rfl, equivProd
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder 整数egrationParams
+  签名: 有界序 整数egrationParams
   定义体: isoProd.symm.toGaloisInsertion.liftBoundedOrder
 
 Depends on / 依赖: isoProd, isoProd.symm.toGaloisInsertion.liftBoundedOrder, liftBoundedOrder, toGaloisInsertion
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 整数egrationParams
+  签名: 可居 整数egrationParams
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited IntegrationParams :=
@@ -480,12 +480,12 @@ structure MemBaseSet
 
 中文:
 结构 MemBaseSet
-  参数: (l : 整数egrationParams) (I : Box ι) (c : 实数>=0) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  参数: (l : 整数egrationParams) (I : Box ι) (c : 实数>=0) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   公理与运算 (4 个):
     - isSubordinate : π.IsSubordinate r
     - isHenstock : l.bHenstock -> π.IsHenstock
     - distortion_le : l.bDistortion -> π.distortion <= c
-    - exists_compl : l.bDistortion -> 存在 π' : Prepartition I, π'.iUnion = ↑I \ π.iUnion ∧ π'.distortion <= c
+    - exists_compl : l.bDistortion -> 存在 π' : 预分拆 I, π'.iUnion = ↑I \ π.iUnion ∧ π'.distortion <= c
 -/
 structure MemBaseSet (l : IntegrationParams) (I : Box ι) (c : Real>=0) (r : (ι -> Real) -> Ioi (0 : Real))
     (π : TaggedPrepartition I) : Prop where
@@ -505,7 +505,7 @@ definition RCond
 
 中文:
 定义 RCond
-  签名: {ι : 类型} (l : 整数egrationParams) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  签名: {ι : 类型} (l : 整数egrationParams) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   定义体: l.bRiemann -> forall x, r x = r 0
 
 Depends on / 依赖: bRiemann, l.bRiemann
@@ -560,7 +560,7 @@ definition toFilterDistortioniUnion
 
 中文:
 定义 toFilterDistortioniUnion
-  签名: (l : 整数egrationParams) (I : Box ι) (c : 实数>=0) (π₀ : Prepartition I)
+  签名: (l : 整数egrationParams) (I : Box ι) (c : 实数>=0) (π₀ : 预分拆 I)
   定义体: l.toFilterDistortion I c ⊓ 𝓟 { π | π.iUnion = π₀.iUnion }
 
 Depends on / 依赖: iUnion, l.toFilterDistortion, toFilterDistortion
@@ -578,7 +578,7 @@ definition toFilteriUnion
 
 中文:
 定义 toFilteriUnion
-  签名: (I : Box ι) (π₀ : Prepartition I)
+  签名: (I : Box ι) (π₀ : 预分拆 I)
   定义体: ⨆ c : Real>=0, l.toFilterDistortioniUnion I c π₀
 
 Depends on / 依赖: l.toFilterDistortioniUnion, toFilterDistortioniUnion
@@ -615,7 +615,7 @@ theorem toFilter_inf_iUnion_eq
 
 中文:
 定理 toFilter_inf_iUnion_eq
-  条件: (l : 整数egrationParams) (I : Box ι) (π₀ : Prepartition I)
+  条件: (l : 整数egrationParams) (I : Box ι) (π₀ : 预分拆 I)
   证明: (iSup_inf_principal _ _).symm
 
 Depends on / 依赖: iSup_inf_principal
@@ -689,7 +689,7 @@ theorem MemBaseSet.exists_common_compl
   · exact ⟨π₁.toPrepartition.co
 
 中文:
-定理 MemBaseSet.exists_common_compl
+定理 MemBaseSet.存在_common_compl
   证明: by
   wlog hc : c₁ <= c₂ with H
   · simpa [hU, _root_.and_comm] using
@@ -810,7 +810,7 @@ theorem biUnionTagged_memBaseSet
 
 中文:
 定理 biUnionTagged_memBaseSet
-  结论: {π : Prepartition I} {πi : 对任意 J, TaggedPrepartition J}
+  结论: {π : 预分拆 I} {πi : 对任意 J, 标记预分拆 J}
   证明: by
   refine ⟨TaggedPrepartition.isSubordinate_biUnionTagged.2 fun J hJ => (h J hJ).1,
     fun hH => TaggedPrepartition.isHenstock_biUnionTagged.2 fun J hJ => (h J hJ).2 hH,
@@ -849,7 +849,7 @@ nonrec theorem RCond.min {ι : Type*} {r₁ r₂ : (ι -> Real) -> Ioi (0 : Real
 
 中文:
 定理 RCond.mono
-  条件: {ι : 类型} {r : (ι -> 实数) -> Ioi (0 : 实数)} (h : l₁ <= l₂) (hr : l₂.RCond r)
+  条件: {ι : 类型} {r : (ι -> 实数) -> 左开右无界区间 (0 : 实数)} (h : l₁ <= l₂) (hr : l₂.RCond r)
   证明: fun hR => hr (le_iff_imp.1 h.1 hR)
 
 nonrec theorem RCond.min {ι : Type*} {r₁ r₂ : (ι -> Real) -> Ioi (0 : Real)} (h₁ : l.RCond r₁)
@@ -953,7 +953,7 @@ theorem toFilteriUnion_congr
 
 中文:
 定理 toFilteriUnion_congr
-  结论: (I : Box ι) (l : 整数egrationParams) {π₁ π₂ : Prepartition I}
+  结论: (I : Box ι) (l : 整数egrationParams) {π₁ π₂ : 预分拆 I}
   证明: by
   simp only [toFilteriUnion, toFilterDistortioniUnion, h]
 
@@ -1027,7 +1027,7 @@ theorem hasBasis_toFilteriUnion
 
 中文:
 定理 hasBasis_toFilteriUnion
-  条件: (l : 整数egrationParams) (I : Box ι) (π₀ : Prepartition I)
+  条件: (l : 整数egrationParams) (I : Box ι) (π₀ : 预分拆 I)
   证明: by
   have := fun c => l.hasBasis_toFilterDistortioniUnion I c π₀
   simpa only [ofPred_and, ofPred_exists] using! hasBasis_iSup this
@@ -1142,8 +1142,8 @@ theorem exists_memBaseSet_le_iUnion_eq
   exact Prepartition.compl_congr hU ▸ π.toPrepartition.iUnion_compl
 
 中文:
-定理 exists_memBaseSet_le_iUnion_eq
-  结论: (l : 整数egrationParams) (π₀ : Prepartition I)
+定理 存在_memBaseSet_le_iUnion_eq
+  结论: (l : 整数egrationParams) (π₀ : 预分拆 I)
   证明: by
   rcases π₀.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r with ⟨π, hle, hH, hr, hd, hU⟩
   refine ⟨π, ⟨hr, fun _ => hH, fun _ => hd.trans_le hc₁, fun _ => ⟨π₀.compl, ?_, hc₂⟩⟩, ⟨hle, hU⟩⟩
@@ -1170,7 +1170,7 @@ theorem exists_memBaseSet_isPartition
   simpa [isPartition_iff_iUnion_eq] using l.exists_memBaseSet_le_iUnion_eq ⊤ hc hc' r
 
 中文:
-定理 exists_memBaseSet_isPartition
+定理 存在_memBaseSet_isPartition
   结论: (l : 整数egrationParams) (I : Box ι) (hc : I.distortion <= c)
   证明: by
   rw [← Prepartition.distortion_top] at hc
@@ -1196,7 +1196,7 @@ theorem toFilterDistortioniUnion_neBot
 
 中文:
 定理 toFilterDistortioniUnion_neBot
-  结论: (l : 整数egrationParams) (I : Box ι) (π₀ : Prepartition I)
+  结论: (l : 整数egrationParams) (I : Box ι) (π₀ : 预分拆 I)
   证明: ((l.hasBasis_toFilterDistortion I _).inf_principal _).neBot_iff.2
     fun {r} _ => (l.exists_memBaseSet_le_iUnion_eq π₀ hc₁ hc₂ r).imp fun _ hπ => ⟨hπ.1, hπ.2.2⟩
 
@@ -1218,7 +1218,7 @@ instance toFilterDistortioniUnion_neBot'
 
 中文:
 实例 toFilterDistortioniUnion_neBot'
-  签名: (l : 整数egrationParams) (I : Box ι) (π₀ : Prepartition I)
+  签名: (l : 整数egrationParams) (I : Box ι) (π₀ : 预分拆 I)
   定义体: l.toFilterDistortioniUnion_neBot I π₀ (le_max_left _ _) (le_max_right _ _)
 
 Depends on / 依赖: l.toFilterDistortioniUnion_neBot, le_max_left, le_max_right, toFilterDistortioniUnion_neBot
@@ -1277,7 +1277,7 @@ instance toFilteriUnion_neBot
 
 中文:
 实例 toFilteriUnion_neBot
-  签名: (l : 整数egrationParams) (I : Box ι) (π₀ : Prepartition I)
+  签名: (l : 整数egrationParams) (I : Box ι) (π₀ : 预分拆 I)
   定义体: (l.toFilterDistortioniUnion_neBot' I π₀).mono
     le_iSup (fun c => l.toFilterDistortioniUnion I c π₀) _
 

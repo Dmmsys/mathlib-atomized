@@ -36,8 +36,8 @@ theorem IsCompact.nhdsKer_iff
 protected alias ⟨IsCompact.of_nhdsKer, IsCompact.nhdsKer⟩ := IsCompact.nhdsKer_iff
 
 中文:
-定理 IsCompact.nhdsKer_iff
-  结论: IsCompact (nhdsKer s) ↔ IsCompact s
+定理 是紧集.nhdsKer_iff
+  结论: 是紧集 (nhdsKer s) ↔ 是紧集 s
   证明: by
   simp only [isCompact_iff_finite_subcover]
   peel with ι U hUo

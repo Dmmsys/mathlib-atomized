@@ -389,7 +389,7 @@ theorem compl₂_id
 中文:
 定理 compl₂_id
   条件: (h : M ->ₛₗ[σ₁₅] N ->ₛₗ[σ₂₃] P)
-  结论: h.compl₂ LinearMap.id = h
+  结论: h.compl₂ 线性映射.id = h
   证明: by
   ext
   rw [compl₂_apply]; rw [id_coe]; rw [_root_.id]
@@ -410,7 +410,7 @@ theorem compl₂_comp
 
 中文:
 定理 compl₂_comp
-  结论: {R₆ Q' : 类型} [Semiring R₆] [AddCommMonoid Q'] [Module R₆ Q']
+  结论: {R₆ Q' : 类型} [半环 R₆] [加法交换幺半群 Q'] [模 R₆ Q']
   证明: rfl
 -/
 theorem compl₂_comp {R₆ Q' : Type*} [Semiring R₆] [AddCommMonoid Q'] [Module R₆ Q']
@@ -488,7 +488,7 @@ lemma lcomp_injective_of_surjective
 
 中文:
 引理 lcomp_injective_of_surjective
-  条件: (g : M ->ₗ[R] M₂) (surj : Function.Surjective g)
+  条件: (g : M ->ₗ[R] M₂) (surj : 函数.满射 g)
   证明: surj.injective_linearMapComp_right
 
 Depends on / 依赖: injective_linearMapComp_right, surj.injective_linearMapComp_right
@@ -668,7 +668,7 @@ theorem map_sum₂
 
 中文:
 定理 map_sum₂
-  条件: {ι : 类型} (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (t : Finset ι) (x : ι -> M) (y)
+  条件: {ι : 类型} (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (t : 有限集 ι) (x : ι -> M) (y)
   证明: _root_.map_sum (flip f y) _ _
 
 Depends on / 依赖: _root_, _root_.map_sum, map_sum
@@ -690,7 +690,7 @@ definition domRestrict₂
 
 中文:
 定义 domRestrict₂
-  签名: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (q : Submodule S N)
+  签名: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (q : 子模 S N)
   定义体: (f m).domRestrict q
   map_add' m₁ m₂ := LinearMap.ext fun _ => by simp only [map_add, domRestrict_apply, add_apply]
   map_smul' c m :=
@@ -714,7 +714,7 @@ theorem domRestrict₂_apply
 
 中文:
 定理 domRestrict₂_apply
-  条件: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (q : Submodule S N) (x : M) (y : q)
+  条件: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (q : 子模 S N) (x : M) (y : q)
   证明: rfl
 -/
 theorem domRestrict₂_apply (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (q : Submodule S N) (x : M) (y : q) :
@@ -730,7 +730,7 @@ definition domRestrict₁₂
 
 中文:
 定义 domRestrict₁₂
-  签名: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (p : Submodule R M) (q : Submodule S N)
+  签名: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (p : 子模 R M) (q : 子模 S N)
   定义体: (f.domRestrict p).domRestrict₂ q
 
 Depends on / 依赖: domRestrict, f.domRestrict
@@ -749,7 +749,7 @@ theorem domRestrict₁₂_apply
 
 中文:
 定理 domRestrict₁₂_apply
-  结论: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (p : Submodule R M) (q : Submodule S N)
+  结论: (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (p : 子模 R M) (q : 子模 S N)
   证明: rfl
 -/
 theorem domRestrict₁₂_apply (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (p : Submodule R M) (q : Submodule S N)
@@ -814,7 +814,7 @@ theorem restrictScalars₁₂_injective
 
 中文:
 定理 restrictScalars₁₂_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun _ _ h => ext₂ (congr_fun₂ h :)
 
 @[simp]
@@ -860,7 +860,7 @@ definition lflip
 
 中文:
 定义 lflip
-  签名: {R₀ : 类型} [Semiring R₀] [Module R₀ P] [SMulCommClass S₂ R₀ P] [SMulCommClass R₂ R₀ P]
+  签名: {R₀ : 类型} [半环 R₀] [模 R₀ P] [标量交换类 S₂ R₀ P] [标量交换类 R₂ R₀ P]
   定义体: flip
   invFun := flip
   map_add' _ _ := rfl
@@ -908,7 +908,7 @@ theorem lflip_apply
 
 中文:
 定理 lflip_apply
-  结论: {R₀ : 类型} [Semiring R₀] [Module R₀ P] [SMulCommClass S₂ R₀ P]
+  结论: {R₀ : 类型} [半环 R₀] [模 R₀ P] [标量交换类 S₂ R₀ P]
   证明: rfl
 
 Depends on / 依赖: f.flip
@@ -985,7 +985,7 @@ definition compl₁₂
 
 中文:
 定义 compl₁₂
-  签名: [SMulCommClass R₂ R₁ Pₗ]
+  签名: [标量交换类 R₂ R₁ Pₗ]
   定义体: (f.comp g).compl₂ g'
 
 @[simp]
@@ -1010,7 +1010,7 @@ theorem compl₁₂_apply
 
 中文:
 定理 compl₁₂_apply
-  结论: [SMulCommClass R₂ R₁ Pₗ]
+  结论: [标量交换类 R₂ R₁ Pₗ]
   证明: rfl
 
 @[simp]
@@ -1032,7 +1032,7 @@ theorem compl₁₂_id_id
 
 中文:
 定理 compl₁₂_id_id
-  条件: [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ)
+  条件: [标量交换类 R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ)
   证明: by
   ext
   simp_rw [compl₁₂_apply, id_coe, _root_.id]
@@ -1054,7 +1054,7 @@ theorem compl₁₂_comp_left
 
 中文:
 定理 compl₁₂_comp_left
-  结论: [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
+  结论: [标量交换类 R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
   证明: rfl
 -/
 theorem compl₁₂_comp_left [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
@@ -1070,7 +1070,7 @@ theorem compl₁₂_comp_right
 
 中文:
 定理 compl₁₂_comp_right
-  结论: [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
+  结论: [标量交换类 R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
   证明: rfl
 -/
 theorem compl₁₂_comp_right [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
@@ -1087,7 +1087,7 @@ theorem compl₁₂_comp_comp
 
 中文:
 定理 compl₁₂_comp_comp
-  结论: [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
+  结论: [标量交换类 R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
   证明: rfl
 -/
 theorem compl₁₂_comp_comp [SMulCommClass R₂ R₁ Pₗ] (f : Mₗ ->ₗ[R₁] N ->ₗ[R₂] Pₗ) (g : Qₗ ->ₗ[R₁] Mₗ)
@@ -1114,7 +1114,7 @@ omit [Module R M] in
 
 中文:
 定理 compl₁₂_inj
-  结论: [SMulCommClass R₂ R₁ Pₗ]
+  结论: [标量交换类 R₂ R₁ Pₗ]
   证明: by
   constructor <;> intro h
   · -- B₁.comp l r = B₂.comp l r → B₁ = B₂
@@ -1158,7 +1158,7 @@ omit [Module R M] in
 
 中文:
 定义 compr₂
-  签名: [Module R A] [Module A M] [Module A Qₗ]
+  签名: [模 R A] [模 A M] [模 A Qₗ]
   定义体: g.restrictScalars R ∘ₗ (f x)
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -1190,7 +1190,7 @@ omit [Module R M] in
 
 中文:
 定理 compr₂_apply
-  结论: [Module R A] [Module A M] [Module A Qₗ]
+  结论: [模 R A] [模 A M] [模 A Qₗ]
   证明: rfl
 
 omit [Module R M] in
@@ -1215,7 +1215,7 @@ omit [Module R M] in
 
 中文:
 定理 compr₂_id
-  条件: [Module R A] [Module A M] [IsScalarTower R A Pₗ] (f : M ->ₗ[A] Nₗ ->ₗ[R] Pₗ)
+  条件: [模 R A] [模 A M] [标量塔 R A Pₗ] (f : M ->ₗ[A] Nₗ ->ₗ[R] Pₗ)
   证明: rfl
 
 omit [Module R M] in
@@ -1234,7 +1234,7 @@ theorem compr₂_comp
 
 中文:
 定理 compr₂_comp
-  结论: {Tₗ : 类型} [AddCommMonoid Tₗ] [Module R Tₗ] [Module A Tₗ] [Module R A]
+  结论: {Tₗ : 类型} [加法交换幺半群 Tₗ] [模 R Tₗ] [模 A Tₗ] [模 R A]
   证明: rfl
 -/
 theorem compr₂_comp {Tₗ : Type*} [AddCommMonoid Tₗ] [Module R Tₗ] [Module A Tₗ] [Module R A]
@@ -1253,7 +1253,7 @@ theorem injective_compr₂_of_injective
 
 中文:
 定理 injective_compr₂_of_injective
-  结论: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ->ₗ[R] Qₗ) (hf : Injective f)
+  结论: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ->ₗ[R] Qₗ) (hf : 单射 f)
   证明: hg.injective_linearMapComp_left.comp hf
 
 Depends on / 依赖: hg.injective_linearMapComp_left.comp, injective_linearMapComp_left
@@ -1271,7 +1271,7 @@ theorem surjective_compr₂_of_exists_rightInverse
   proof: (surjective_comp_left_of_exists_rightInverse hg).comp hf
 
 中文:
-定理 surjective_compr₂_of_exists_rightInverse
+定理 surjective_compr₂_of_存在_rightInverse
   结论: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ->ₗ[R] Qₗ)
   证明: (surjective_comp_left_of_exists_rightInverse hg).comp hf
 
@@ -1291,7 +1291,7 @@ theorem surjective_compr₂_of_equiv
 
 中文:
 定理 surjective_compr₂_of_equiv
-  条件: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ≃ₗ[R] Qₗ) (hf : Surjective f)
+  条件: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ≃ₗ[R] Qₗ) (hf : 满射 f)
   证明: surjective_compr₂_of_exists_rightInverse f g.toLinearMap hf ⟨g.symm, by simp⟩
 
 Depends on / 依赖: g.symm, g.toLinearMap, toLinearMap
@@ -1311,7 +1311,7 @@ theorem bijective_compr₂_of_equiv
 
 中文:
 定理 bijective_compr₂_of_equiv
-  条件: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ≃ₗ[R] Qₗ) (hf : Bijective f)
+  条件: (f : M ->ₗ[R] Nₗ ->ₗ[R] Pₗ) (g : Pₗ ≃ₗ[R] Qₗ) (hf : 双射 f)
   证明: ⟨injective_compr₂_of_injective f g.toLinearMap hf.1 g.bijective.1,
   surjective_compr₂_of_equiv f g hf.2⟩
 
@@ -1461,7 +1461,7 @@ theorem compr₂ₛₗ_id
 中文:
 定理 compr₂ₛₗ_id
   条件: (f : M ->ₛₗ[σ₁₃] N ->ₛₗ[σ₂₃] P)
-  结论: f.compr₂ₛₗ LinearMap.id = f
+  结论: f.compr₂ₛₗ 线性映射.id = f
   证明: rfl
 -/
 theorem compr₂ₛₗ_id (f : M ->ₛₗ[σ₁₃] N ->ₛₗ[σ₂₃] P) : f.compr₂ₛₗ LinearMap.id = f := rfl
@@ -1476,7 +1476,7 @@ theorem compr₂ₛₗ_comp
 
 中文:
 定理 compr₂ₛₗ_comp
-  结论: {Q' R₅ : 类型} [CommSemiring R₅] [AddCommMonoid Q'] [Module R₅ Q']
+  结论: {Q' R₅ : 类型} [交换半环 R₅] [加法交换幺半群 Q'] [模 R₅ Q']
   证明: rfl
 -/
 theorem compr₂ₛₗ_comp {Q' R₅ : Type*} [CommSemiring R₅] [AddCommMonoid Q'] [Module R₅ Q']
@@ -1513,7 +1513,7 @@ theorem surjective_compr₂ₛₗ_of_exists_rightInverse
   proof: (surjective_comp_left_of_exists_rightInverse hg).comp hf
 
 中文:
-定理 surjective_compr₂ₛₗ_of_exists_rightInverse
+定理 surjective_compr₂ₛₗ_of_存在_rightInverse
   结论: [RingHomInvPair σ₃₄ σ₄₃]
   证明: (surjective_comp_left_of_exists_rightInverse hg).comp hf
 
@@ -1650,7 +1650,7 @@ abbreviation BilinMap
 
 中文:
 缩写 BilinMap
-  签名: : Type _
+  签名: : 类型 _
   定义体: M ->ₗ[R] M ->ₗ[R] Nₗ
 -/
 protected abbrev BilinMap : Type _ := M ->ₗ[R] M ->ₗ[R] Nₗ
@@ -1668,7 +1668,7 @@ abbreviation BilinForm
 
 中文:
 缩写 BilinForm
-  签名: : Type _
+  签名: : 类型 _
   定义体: LinearMap.BilinMap R M R
 -/
 protected abbrev BilinForm : Type _ := LinearMap.BilinMap R M R
@@ -1693,7 +1693,7 @@ theorem lsmul_injective
 
 中文:
 定理 lsmul_injective
-  条件: [IsTorsionFree R M] {x : R} (hx : x != 0)
+  条件: [是无挠 R M] {x : R} (hx : x != 0)
   证明: smul_right_injective _ hx
 
 Depends on / 依赖: smul_right_injective
@@ -1712,7 +1712,7 @@ theorem ker_lsmul
 
 中文:
 定理 ker_lsmul
-  条件: [IsTorsionFree R M] {a : R} (ha : a != 0)
+  条件: [是无挠 R M] {a : R} (ha : a != 0)
   证明: LinearMap.ker_eq_bot_of_injective (LinearMap.lsmul_injective ha)
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot_of_injective, LinearMap.lsmul_injective, ker_eq_bot_of_injective, lsmul_injective
@@ -1977,7 +1977,7 @@ structure IsBilinearMap
     - smul_right : forall (c : R) (x : E) (y : F), f x (c • y) = c • f x y
 
 中文:
-结构 IsBilinearMap
+结构 是双线性映射
   参数: (f : E -> F -> G)
   公理与运算 (4 个):
     - add_left : 对任意 (x₁ x₂ : E) (y : F), f (x₁ + x₂) y = f x₁ y + f x₂ y
@@ -2001,8 +2001,8 @@ definition IsBilinearMap.toLinearMap
   body: LinearMap.mk₂ _ f hf.add_left hf.smul_left hf.add_right hf.smul_right
 
 中文:
-定义 IsBilinearMap.toLinearMap
-  签名: {f : E -> F -> G} (hf : IsBilinearMap R f)
+定义 是双线性映射.toLinearMap
+  签名: {f : E -> F -> G} (hf : 是双线性映射 R f)
   定义体: LinearMap.mk₂ _ f hf.add_left hf.smul_left hf.add_right hf.smul_right
 
 Depends on / 依赖: LinearMap, LinearMap.mk, add_left, add_right, hf.add_left, hf.add_right, hf.smul_left, hf.smul_right, smul_left, smul_right

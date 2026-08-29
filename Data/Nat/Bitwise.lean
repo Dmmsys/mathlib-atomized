@@ -173,7 +173,7 @@ theorem binaryRec_of_ne_zero
 
 中文:
 定理 binaryRec_of_ne_zero
-  结论: {C : 自然数 -> Sort*} (z : C 0) (f : 对任意 b n, C n -> C (bit b n)) {n}
+  结论: {C : 自然数 -> 类型层*} (z : C 0) (f : 对任意 b n, C n -> C (bit b n)) {n}
   证明: by
   rw [binaryRec]; rw [dif_neg h]; rw [eqRec_eq_cast]; rw [eqRec_eq_cast]; rfl
 
@@ -202,7 +202,7 @@ lemma bitwise_bit
 
 中文:
 引理 bitwise_bit
-  条件: {f : 布尔 -> 布尔 -> 布尔} (h : f false false = false := by rfl) (a m b n)
+  条件: {f : 布尔值 -> 布尔值 -> 布尔值} (h : f false false = false := by rfl) (a m b n)
   证明: by
   conv_lhs => unfold bitwise
   simp only [bit, Bool.cond_eq_ite]
@@ -428,7 +428,7 @@ lemma bitwise_bit'
 
 中文:
 引理 bitwise_bit'
-  结论: {f : 布尔 -> 布尔 -> 布尔} (a : 布尔) (m : 自然数) (b : 布尔) (n : 自然数)
+  结论: {f : 布尔值 -> 布尔值 -> 布尔值} (a : 布尔值) (m : 自然数) (b : 布尔值) (n : 自然数)
   证明: by
   conv_lhs => unfold bitwise
   rw [← bit_ne_zero_iff] at ham hbn
@@ -464,7 +464,7 @@ lemma bitwise_eq_binaryRec
 
 中文:
 引理 bitwise_eq_binaryRec
-  条件: (f : 布尔 -> 布尔 -> 布尔)
+  条件: (f : 布尔值 -> 布尔值 -> 布尔值)
   证明: by
   funext x y
   induction x using binaryRec' generalizing y with
@@ -604,7 +604,7 @@ theorem exists_most_significant_bit
     obtain ⟨j', rfl⟩ := exists_eq_succ_of_
 
 中文:
-定理 exists_most_significant_bit
+定理 存在_most_significant_bit
   条件: {n : 自然数} (h : n != 0)
   证明: by
   induction n using Nat.binaryRec with | zero => exact False.elim (h rfl) | bit b n hn => ?_
@@ -710,7 +710,7 @@ theorem bitwise_swap
 
 中文:
 定理 bitwise_swap
-  条件: {f : 布尔 -> 布尔 -> 布尔}
+  条件: {f : 布尔值 -> 布尔值 -> 布尔值}
   证明: by
   funext m n
   simp only [Function.swap]
@@ -747,7 +747,7 @@ bitwise f = bitwise (swap f) := congr_arg _ funext fun _ => funext hf _
 
 中文:
 定理 bitwise_comm
-  条件: {f : 布尔 -> 布尔 -> 布尔} (hf : 对任意 b b', f b b' = f b' b) (n m : 自然数)
+  条件: {f : 布尔值 -> 布尔值 -> 布尔值} (hf : 对任意 b b', f b b' = f b' b) (n m : 自然数)
   证明: suffices bitwise f = swap (bitwise f) by conv_lhs => rw [this]
   calc
 bitwise f = bitwise (swap f) := congr_arg _ funext fun _ => funext hf _
@@ -1161,7 +1161,7 @@ theorem xor_range
 中文:
 定理 xor_range
   条件: (n : 自然数)
-  结论: (List.range (n + 1)).foldl (· ^^^ ·) 0 =
+  结论: (列表.range (n + 1)).foldl (· ^^^ ·) 0 =
   证明: by
   induction n with
   | zero => simp

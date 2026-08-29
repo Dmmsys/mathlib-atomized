@@ -83,12 +83,12 @@ structure AddContent
     - sUnion'((I : Finset (Set α)) (_h_ss : ↑I subseteq C) (_h_dis : PairwiseDisjoint (I : Set (Set α)) id) (_h_mem : ⋃₀ ↑I in C)) : toFun (⋃₀ I) = ∑ u in I, toFun u
 
 中文:
-结构 AddContent
-  参数: (C : Set (Set α))
+结构 加法内容
+  参数: (C : 集合 (集合 α))
   公理与运算 (3 个):
-    - toFun : Set α -> G
+    - toFun : 集合 α -> G
     - empty' : toFun ∅ = 0
-    - sUnion'((I : Finset (Set α)) (_h_ss : ↑I subseteq C) (_h_dis : PairwiseDisjoint (I : Set (Set α)) id) (_h_mem : ⋃₀ ↑I in C)) : toFun (⋃₀ I) = ∑ u in I, toFun u
+    - sUnion'((I : 有限集 (集合 α)) (_h_ss : ↑I subseteq C) (_h_dis : PairwiseDisjoint (I : 集合 (集合 α)) id) (_h_mem : ⋃₀ ↑I in C)) : toFun (⋃₀ I) = ∑ u in I, toFun u
 -/
 structure AddContent (C : Set (Set α)) where
   /-- The value of the content on a set. -/
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AddContent G C)
+  签名: 可居 (加法内容 G C)
   定义体: ⟨{toFun := fun _ => 0
     empty' := by simp
     sUnion' := by simp }⟩
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (AddContent G C) (Set α) G
+  签名: 函数状 (加法内容 G C) (集合 α) G
   定义体: m.toFun s
   coe_injective m m' _ := by
     cases m
@@ -164,7 +164,7 @@ lemma AddContent.ext
   proof: DFunLike.ext _ _ h
 
 中文:
-引理 AddContent.ext
+引理 加法内容.ext
   条件: (h : 对任意 s, m s = m' s)
   结论: m = m'
   证明: DFunLike.ext _ _ h
@@ -225,7 +225,7 @@ lemma addContent_biUnion
 
 中文:
 引理 addContent_biUnion
-  结论: {ι : 类型} {a : Finset ι} {f : ι -> Set α} (hf : 对任意 i in a, f i in C)
+  结论: {ι : 类型} {a : 有限集 ι} {f : ι -> 集合 α} (hf : 对任意 i in a, f i in C)
   证明: by
   have A : ⋃ i in a, f i = ⋃₀ (a.image f) := by simp
   rw [A]; rw [addContent_sUnion]; rotate_left
@@ -265,7 +265,7 @@ lemma addContent_iUnion
 
 中文:
 引理 addContent_iUnion
-  结论: {ι : 类型} [Fintype ι] {f : ι -> Set α} (hf : 对任意 i, f i in C)
+  结论: {ι : 类型} [有限类型 ι] {f : ι -> 集合 α} (hf : 对任意 i, f i in C)
   证明: by
   convert! addContent_biUnion (a := Finset.univ) (f := f) (m := m) ?_ ?_ ?_ using 1
   · simp
@@ -336,8 +336,8 @@ definition AddContent.IsSigmaSubadditive
   body: forall ⦃f : Nat -> Set α⦄ (_hf : forall i, f i in C) (_hf_Union : (⋃ i, f i) in C), m (⋃ i, f i) <= ∑' i, m (f i)
 
 中文:
-定义 AddContent.IsSigmaSubadditive
-  签名: (m : AddContent 实数>=0∞ C)
+定义 加法内容.IsSigmaSubadditive
+  签名: (m : 加法内容 实数>=0∞ C)
   定义体: forall ⦃f : Nat -> Set α⦄ (_hf : forall i, f i in C) (_hf_Union : (⋃ i, f i) in C), m (⋃ i, f i) <= ∑' i, m (f i)
 
 Depends on / 依赖: _hf_Union
@@ -365,7 +365,7 @@ lemma addContent_eq_add_disjointOfDiffUnion_of_subset
 
 中文:
 引理 addContent_eq_add_disjointOfDiffUnion_of_subset
-  结论: (hC : IsSetSemiring C)
+  结论: (hC : 是SetSemiring C)
   证明: by
   conv_lhs => rw [← hC.sUnion_union_disjointOfDiffUnion_of_subset hs hI hI_ss]
   rw [addContent_sUnion]
@@ -410,7 +410,7 @@ theorem eq_add_disjointOfDiff_of_subset
 
 中文:
 定理 eq_add_disjointOfDiff_of_subset
-  结论: (hC : IsSetSemiring C)
+  结论: (hC : 是SetSemiring C)
   证明: by
   conv_lhs => rw [← hC.sUnion_insert_disjointOfDiff ht hs hst]
   rw [← coe_insert]; rw [addContent_sUnion]
@@ -454,7 +454,7 @@ theorem sum_addContent_eq_of_sUnion_eq
 
 中文:
 定理 sum_addContent_eq_of_sUnion_eq
-  结论: (hC : IsSetSemiring C) (J J' : Finset (Set α))
+  结论: (hC : 是SetSemiring C) (J J' : 有限集 (集合 α))
   证明: by
   calc ∑ s in J, m s
   _ = ∑ s in J, (∑ t in J', m (s inter t)) := by
@@ -509,7 +509,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def AddContent.supClosureFun (m : AddContent G C) (s : Set α)
+  签名: def 加法内容.supClosureFun (m : 加法内容 G C) (s : 集合 α)
   定义体: if h : exists (J : Finset (Set α)), ↑J subseteq C ∧ (PairwiseDisjoint (J : Set (Set α)) id) ∧ s = ⋃₀ ↑J
     then ∑ s in h.choose, m s
   else 0
@@ -534,8 +534,8 @@ lemma AddContent.supClosureFun_apply
   exact h.choose_spec.
 
 中文:
-引理 AddContent.supClosureFun_apply
-  结论: (hC : IsSetSemiring C)
+引理 加法内容.supClosureFun_apply
+  结论: (hC : 是SetSemiring C)
   证明: by
   have h : exists (J : Finset (Set α)), ↑J subseteq C ∧ (PairwiseDisjoint (J : Set (Set α)) id) ∧ s = ⋃₀ ↑J :=
     ⟨J, hJ, h'J, hs⟩
@@ -567,8 +567,8 @@ lemma AddContent.supClosureFun_apply_of_mem
   simp [this]
 
 中文:
-引理 AddContent.supClosureFun_apply_of_mem
-  结论: (hC : IsSetSemiring C)
+引理 加法内容.supClosureFun_apply_of_mem
+  结论: (hC : 是SetSemiring C)
   证明: by
   have : m.supClosureFun s = ∑ t in {s}, m t :=
     m.supClosureFun_apply hC (by simp [hs]) (by simp) (by simp)
@@ -595,8 +595,8 @@ definition AddContent.supClosure
     rw [← sSup_e
 
 中文:
-定义 AddContent.supClosure
-  签名: (m : AddContent G C) (hC : IsSetSemiring C)
+定义 加法内容.supClosure
+  签名: (m : 加法内容 G C) (hC : 是SetSemiring C)
   定义体: m.supClosureFun
   empty' := by rw [m.supClosureFun_apply_of_mem hC hC.empty_mem, addContent_empty]
   sUnion' I hI h'I hh'I := by
@@ -626,8 +626,8 @@ lemma AddContent.supClosure_apply
   proof: m.supClosureFun_apply hC hJ h'J hs
 
 中文:
-引理 AddContent.supClosure_apply
-  结论: (hC : IsSetSemiring C)
+引理 加法内容.supClosure_apply
+  结论: (hC : 是SetSemiring C)
   证明: m.supClosureFun_apply hC hJ h'J hs
 
 Depends on / 依赖: m.supClosureFun_apply, supClosureFun_apply
@@ -650,8 +650,8 @@ lemma AddContent.supClosure_apply_finpartition
   simp
 
 中文:
-引理 AddContent.supClosure_apply_finpartition
-  结论: (hC : IsSetSemiring C)
+引理 加法内容.supClosure_apply_finpartition
+  结论: (hC : 是SetSemiring C)
   证明: by
   rw [m.supClosure_apply _ hJ J.disjoint]
   nth_rewrite 1 [← J.sup_parts, Finset.sup_set_eq_biUnion, sUnion_eq_biUnion]
@@ -675,8 +675,8 @@ lemma AddContent.supClosure_apply_of_mem
   proof: m.supClosureFun_apply_of_mem hC hs
 
 中文:
-引理 AddContent.supClosure_apply_of_mem
-  结论: (hC : IsSetSemiring C)
+引理 加法内容.supClosure_apply_of_mem
+  结论: (hC : 是SetSemiring C)
   证明: m.supClosureFun_apply_of_mem hC hs
 
 Depends on / 依赖: m.supClosureFun_apply_of_mem, supClosureFun_apply_of_mem
@@ -700,7 +700,7 @@ lemma sum_addContent_le_of_subset
 
 中文:
 引理 sum_addContent_le_of_subset
-  结论: (hC : IsSetSemiring C)
+  结论: (hC : 是SetSemiring C)
   证明: by
   rw [addContent_eq_add_disjointOfDiffUnion_of_subset hC ht h_ss hJt h_dis]
   exact le_add_right le_rfl
@@ -729,7 +729,7 @@ lemma addContent_mono
 
 中文:
 引理 addContent_mono
-  结论: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: by
   have h := sum_addContent_le_of_subset (m := m) hC (I := {s}) ?_ ?_ ht ?_
   · simpa only [sum_singleton] using h
@@ -763,7 +763,7 @@ lemma addContent_le_sum_of_subset_sUnion
 
 中文:
 引理 addContent_le_sum_of_subset_sUnion
-  结论: {m : AddContent G C} (hC : IsSetSemiring C)
+  结论: {m : 加法内容 G C} (hC : 是SetSemiring C)
   证明: by
   simp_rw +singlePass [← sSup_eq_sUnion, sSup_eq_iSup', SetLike.coe_sort_coe,
     ← J.equivFin.symm.iSup_comp, iSup_eq_iUnion, ← iUnion_disjointed] at htJ
@@ -803,7 +803,7 @@ lemma addContent_sUnion_le_sum
 
 中文:
 引理 addContent_sUnion_le_sum
-  结论: {m : AddContent G C} (hC : IsSetSemiring C)
+  结论: {m : 加法内容 G C} (hC : 是SetSemiring C)
   证明: addContent_le_sum_of_subset_sUnion hC h_ss h_mem subset_rfl
 
 Depends on / 依赖: addContent_le_sum_of_subset_sUnion, h_mem, h_ss, subset_rfl
@@ -828,7 +828,7 @@ theorem addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le
 
 中文:
 定理 addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le
-  结论: {m : AddContent 实数>=0∞ C}
+  结论: {m : 加法内容 实数>=0∞ C}
   证明: by
   refine le_antisymm (m_subadd f hf hf_Union hf_disj) ?_
   refine ENNReal.summable.tsum_le_of_sum_le fun I => ?_
@@ -875,7 +875,7 @@ theorem addContent_iUnion_eq_tsum_of_disjoint_of_IsSigmaSubadditive
 
 中文:
 定理 addContent_iUnion_eq_tsum_of_disjoint_of_IsSigmaSubadditive
-  结论: {m : AddContent 实数>=0∞ C}
+  结论: {m : 加法内容 实数>=0∞ C}
   证明: addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le hC
     (fun _ hf hf_Union _ => m_subadd hf hf_Union) f hf hf_Union hf_disj
 
@@ -906,8 +906,8 @@ definition AddContent.onIocAux
     then f h.choose.2 - f h.choose.1 else 0
 
 中文:
-定义 AddContent.onIocAux
-  签名: (f : α -> G) (s : Set α)
+定义 加法内容.onIocAux
+  签名: (f : α -> G) (s : 集合 α)
   定义体: if h : exists (p : α × α), p.1 <= p.2 ∧ s = Set.Ioc p.1 p.2
     then f h.choose.2 - f h.choose.1 else 0
 
@@ -933,7 +933,7 @@ lemma AddContent.onIocAux_apply
   · grind [Set.Ioc_eq_e
 
 中文:
-引理 AddContent.onIocAux_apply
+引理 加法内容.onIocAux_apply
   条件: {f : α -> G} {u v : α} (h : u <= v)
   证明: by
   have h' : exists (p : α × α), p.1 <= p.2 ∧ Ioc u v = Ioc p.1 p.2 := ⟨(u, v), h, rfl⟩
@@ -970,7 +970,7 @@ lemma AddContent.onIocAux_empty
   grind [Set.Ioc_eq_empty_iff]
 
 中文:
-引理 AddContent.onIocAux_empty
+引理 加法内容.onIocAux_empty
   条件: (f : α -> G)
   证明: by
   classical
@@ -999,7 +999,7 @@ definition AddContent.onIoc
     `f v - f u`. Informally, `(u, v]` 
 
 中文:
-定义 AddContent.onIoc
+定义 加法内容.onIoc
   签名: (f : α -> G)
   定义体: AddContent.onIocAux f
   empty' := AddContent.onIocAux_empty f
@@ -1079,7 +1079,7 @@ lemma AddContent.onIoc_apply
   proof: AddContent.onIocAux_apply h
 
 中文:
-引理 AddContent.onIoc_apply
+引理 加法内容.onIoc_apply
   条件: {f : α -> G} {u v : α} (h : u <= v)
   证明: AddContent.onIocAux_apply h
 
@@ -1113,8 +1113,8 @@ definition AddContent.extend
     exa
 
 中文:
-定义 AddContent.extend
-  签名: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+定义 加法内容.extend
+  签名: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   定义体: extend (fun x (_ : x in C) => m x)
   empty' := by rw [extend_eq, addContent_empty]; exact hC.empty_mem
   sUnion' I h_ss h_dis h_mem := by
@@ -1147,8 +1147,8 @@ theorem AddContent.extend_eq_extend
   proof: rfl
 
 中文:
-定理 AddContent.extend_eq_extend
-  条件: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+定理 加法内容.extend_eq_extend
+  条件: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: rfl
 -/
 protected theorem AddContent.extend_eq_extend (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C) :
@@ -1164,8 +1164,8 @@ theorem AddContent.extend_eq
   rwa [m.extend_eq_extend, extend_eq]
 
 中文:
-定理 AddContent.extend_eq
-  条件: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C) (hs : s in C)
+定理 加法内容.extend_eq
+  条件: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C) (hs : s in C)
   证明: by
   rwa [m.extend_eq_extend, extend_eq]
 -/
@@ -1182,7 +1182,7 @@ theorem AddContent.extend_eq_top
   rwa [m.extend_eq_extend, extend_eq_top]
 
 中文:
-定理 AddContent.extend_eq_top
+定理 加法内容.extend_eq_top
   证明: by
   rwa [m.extend_eq_extend, extend_eq_top]
 -/
@@ -1205,7 +1205,7 @@ lemma addContent_union
 
 中文:
 引理 addContent_union
-  结论: (hC : IsSetRing C) (hs : s in C) (ht : t in C)
+  结论: (hC : 是集合环 C) (hs : s in C) (ht : t in C)
   证明: addContent_union' hs ht (hC.union_mem hs ht) h_dis
 
 Depends on / 依赖: addContent_union, hC.union_mem, h_dis, union_mem
@@ -1233,7 +1233,7 @@ lemma addContent_biUnion_eq
 
 中文:
 引理 addContent_biUnion_eq
-  结论: {ι : 类型} (hC : IsSetRing C) {s : ι -> Set α}
+  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
   证明: by
   classical
   induction S using Finset.induction with
@@ -1278,7 +1278,7 @@ lemma addContent_accumulate
 
 中文:
 引理 addContent_accumulate
-  结论: (m : AddContent G C) (hC : IsSetRing C)
+  结论: (m : 加法内容 G C) (hC : 是集合环 C)
   证明: by
   induction n with
   | zero => simp
@@ -1316,8 +1316,8 @@ definition IsSetRing.addContent_of_union
       rw 
 
 中文:
-定义 IsSetRing.addContent_of_union
-  签名: (m : Set α -> G) (hC : IsSetRing C) (m_empty : m ∅ = 0)
+定义 是集合环.addContent_of_union
+  签名: (m : 集合 α -> G) (hC : 是集合环 C) (m_empty : m ∅ = 0)
   定义体: m
   empty' := m_empty
   sUnion' I h_ss h_dis h_mem := by
@@ -1364,7 +1364,7 @@ lemma addContent_union_le
 
 中文:
 引理 addContent_union_le
-  条件: (hC : IsSetRing C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是集合环 C) (hs : s in C) (ht : t in C)
   证明: by
   rw [← union_sdiff_self]; rw [addContent_union hC hs (hC.sdiff_mem ht hs)]
   · exact add_le_add_right (addContent_mono hC.isSetSemiring (hC.sdiff_mem ht hs) ht sdiff_subset) _
@@ -1396,7 +1396,7 @@ lemma addContent_biUnion_le
 
 中文:
 引理 addContent_biUnion_le
-  结论: {ι : 类型} (hC : IsSetRing C) {s : ι -> Set α}
+  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
   证明: by
   classical
   induction S using Finset.induction with
@@ -1437,7 +1437,7 @@ lemma le_addContent_sdiff
 
 中文:
 引理 le_addContent_sdiff
-  条件: (m : AddContent 实数>=0∞ C) (hC : IsSetRing C) (hs : s in C) (ht : t in C)
+  条件: (m : 加法内容 实数>=0∞ C) (hC : 是集合环 C) (hs : s in C) (ht : t in C)
   证明: by
   conv_lhs => rw [← inter_union_sdiff s t]
   rw [addContent_union hC (hC.inter_mem hs ht) (hC.sdiff_mem hs ht) disjoint_inf_sdiff]; rw [add_comm]
@@ -1473,7 +1473,7 @@ lemma addContent_sdiff_of_ne_top
 
 中文:
 引理 addContent_sdiff_of_ne_top
-  结论: (m : AddContent 实数>=0∞ C) (hC : IsSetRing C)
+  结论: (m : 加法内容 实数>=0∞ C) (hC : 是集合环 C)
   证明: by
   have h_union : m (t union s \ t) = m t + m (s \ t) :=
     addContent_union hC ht (hC.sdiff_mem hs ht) disjoint_sdiff_self_right
@@ -1510,7 +1510,7 @@ theorem addContent_iUnion_eq_sum_of_tendsto_zero
 
 中文:
 定理 addContent_iUnion_eq_sum_of_tendsto_zero
-  结论: (hC : IsSetRing C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是集合环 C) (m : 加法内容 实数>=0∞ C)
   证明: by
   -- We use the continuity of `m` at `∅` on the sequence `n ↦ (⋃ i, f i) \ (Set.accumulate f n)`
   let s : Nat -> Set α := fun n => (⋃ i, f i) \ Set.accumulate f n
@@ -1601,7 +1601,7 @@ theorem isSigmaSubadditive_of_addContent_iUnion_eq_tsum
 
 中文:
 定理 isSigmaSubadditive_of_addContent_iUnion_eq_tsum
-  结论: {m : AddContent 实数>=0∞ C} (hC : IsSetRing C)
+  结论: {m : 加法内容 实数>=0∞ C} (hC : 是集合环 C)
   证明: by
   intro f hf hf_Union
   have h_tendsto : Tendsto (fun n => m (partialSups f n)) atTop (𝓝 (m (⋃ i, f i))) := by

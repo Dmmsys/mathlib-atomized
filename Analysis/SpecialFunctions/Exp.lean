@@ -51,7 +51,7 @@ theorem exp_bound_sq
 
 中文:
 定理 exp_bound_sq
-  条件: (x z : Complex) (hz : ‖z‖ <= 1)
+  条件: (x z : 复形) (hz : ‖z‖ <= 1)
   证明: calc
     ‖exp (x + z) - exp x - z * exp x‖ = ‖exp x * (exp z - 1 - z)‖ := by
       congr
@@ -91,7 +91,7 @@ theorem locally_lipschitz_exp
 
 中文:
 定理 locally_lipschitz_exp
-  结论: {r : 实数} (hr_nonneg : 0 <= r) (hr_le : r <= 1) (x y : Complex)
+  结论: {r : 实数} (hr_nonneg : 0 <= r) (hr_le : r <= 1) (x y : 复形)
   证明: by
   have hy_eq : y = x + (y - x) := by abel
   have hyx_sq_le : ‖y - x‖ ^ 2 <= r * ‖y - x‖ := by
@@ -136,7 +136,7 @@ theorem continuous_exp
 
 中文:
 定理 continuous_exp
-  结论: Continuous exp
+  结论: 连续 exp
   证明: continuous_iff_continuousAt.mpr fun x =>
     continuousAt_of_locally_lipschitz zero_lt_one (2 * ‖exp x‖)
       (fun y => by
@@ -161,7 +161,7 @@ theorem continuousOn_exp
 
 中文:
 定理 continuousOn_exp
-  条件: {s : Set Complex}
+  条件: {s : 集合 复形}
   结论: ContinuousOn exp s
   证明: continuous_exp.continuousOn
 
@@ -243,8 +243,8 @@ theorem Filter.Tendsto.cexp
   proof: (continuous_exp.tendsto _).comp hf
 
 中文:
-定理 Filter.Tendsto.cexp
-  条件: {l : Filter α} {f : α -> Complex} {z : Complex} (hf : Tendsto f l (𝓝 z))
+定理 滤子.收敛.cexp
+  条件: {l : 滤子 α} {f : α -> 复形} {z : 复形} (hf : 收敛 f l (𝓝 z))
   证明: (continuous_exp.tendsto _).comp hf
 
 Depends on / 依赖: continuous_exp, continuous_exp.tendsto, tendsto
@@ -341,9 +341,9 @@ theorem Continuous.cexp
   proof: continuous_iff_continuousAt.2 fun _ => h.continuousAt.cexp
 
 中文:
-定理 Continuous.cexp
-  条件: (h : Continuous f)
-  结论: Continuous fun y => exp (f y)
+定理 连续.cexp
+  条件: (h : 连续 f)
+  结论: 连续 fun y => exp (f y)
   证明: continuous_iff_continuousAt.2 fun _ => h.continuousAt.cexp
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, h.continuousAt.cexp
@@ -369,7 +369,7 @@ lemma UniformContinuousOn.cexp
 中文:
 引理 UniformContinuousOn.cexp
   条件: (a : 实数)
-  结论: UniformContinuousOn exp {x : Complex | x.re <= a}
+  结论: UniformContinuousOn exp {x : 复形 | x.re <= a}
   证明: by
   have : Continuous (cexp - 1) := Continuous.sub (by fun_prop) continuous_one
   rw [Metric.uniformContinuousOn_iff]; rw [Metric.continuous_iff'] at *
@@ -419,7 +419,7 @@ theorem continuous_exp
 
 中文:
 定理 continuous_exp
-  结论: Continuous exp
+  结论: 连续 exp
   证明: by
   unfold Real.exp; fun_prop
 
@@ -439,7 +439,7 @@ theorem continuousOn_exp
 
 中文:
 定理 continuousOn_exp
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: ContinuousOn exp s
   证明: by fun_prop
 
@@ -513,8 +513,8 @@ theorem Filter.Tendsto.rexp
   proof: (continuous_exp.tendsto _).comp hf
 
 中文:
-定理 Filter.Tendsto.rexp
-  条件: {l : Filter α} {f : α -> 实数} {z : 实数} (hf : Tendsto f l (𝓝 z))
+定理 滤子.收敛.rexp
+  条件: {l : 滤子 α} {f : α -> 实数} {z : 实数} (hf : 收敛 f l (𝓝 z))
   证明: (continuous_exp.tendsto _).comp hf
 
 Depends on / 依赖: continuous_exp, continuous_exp.tendsto, tendsto
@@ -606,9 +606,9 @@ theorem Continuous.rexp
   proof: continuous_iff_continuousAt.2 fun _ => h.continuousAt.rexp
 
 中文:
-定理 Continuous.rexp
-  条件: (h : Continuous f)
-  结论: Continuous fun y => exp (f y)
+定理 连续.rexp
+  条件: (h : 连续 f)
+  结论: 连续 fun y => exp (f y)
   证明: continuous_iff_continuousAt.2 fun _ => h.continuousAt.rexp
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, h.continuousAt.rexp
@@ -657,7 +657,7 @@ theorem tendsto_exp_atTop
 
 中文:
 定理 tendsto_exp_atTop
-  结论: Tendsto exp atTop atTop
+  结论: 收敛 exp atTop atTop
   证明: by
   have A : Tendsto (fun x : Real => x + 1) atTop atTop :=
     tendsto_atTop_add_const_right atTop 1 tendsto_id
@@ -710,7 +710,7 @@ theorem tendsto_exp_neg_atTop_nhds_zero
 
 中文:
 定理 tendsto_exp_neg_atTop_nhds_zero
-  结论: Tendsto (fun x => exp (-x)) atTop (𝓝 0)
+  结论: 收敛 (fun x => exp (-x)) atTop (𝓝 0)
   证明: (tendsto_inv_atTop_zero.comp tendsto_exp_atTop).congr fun x => (exp_neg x).symm
 
 Depends on / 依赖: exp_neg, tendsto_exp_atTop, tendsto_inv_atTop_zero, tendsto_inv_atTop_zero.comp
@@ -730,7 +730,7 @@ theorem tendsto_exp_nhds_zero_nhds_one
 
 中文:
 定理 tendsto_exp_nhds_zero_nhds_one
-  结论: Tendsto exp (𝓝 0) (𝓝 1)
+  结论: 收敛 exp (𝓝 0) (𝓝 1)
   证明: by
   convert! continuous_exp.tendsto 0
   simp
@@ -752,7 +752,7 @@ congr_arg exp neg_neg x
 
 中文:
 定理 tendsto_exp_atBot
-  结论: Tendsto exp atBot (𝓝 0)
+  结论: 收敛 exp atBot (𝓝 0)
   证明: (tendsto_exp_neg_atTop_nhds_zero.comp tendsto_neg_atBot_atTop).congr fun x =>
 congr_arg exp neg_neg x
 
@@ -774,7 +774,7 @@ theorem tendsto_exp_atBot_nhdsGT
 
 中文:
 定理 tendsto_exp_atBot_nhdsGT
-  结论: Tendsto exp atBot (𝓝[>] 0)
+  结论: 收敛 exp atBot (𝓝[>] 0)
   证明: tendsto_inf.2 ⟨tendsto_exp_atBot, tendsto_principal.2 Eventually.of_forall exp_pos⟩
 
 @[simp]
@@ -797,7 +797,7 @@ theorem isBoundedUnder_ge_exp_comp
 
 中文:
 定理 isBoundedUnder_ge_exp_comp
-  条件: (l : Filter α) (f : α -> 实数)
+  条件: (l : 滤子 α) (f : α -> 实数)
   证明: isBoundedUnder_of ⟨0, fun _ => (exp_pos _).le⟩
 
 @[simp]
@@ -845,7 +845,7 @@ theorem tendsto_exp_div_pow_atTop
 中文:
 定理 tendsto_exp_div_pow_atTop
   条件: (n : 自然数)
-  结论: Tendsto (fun x => exp x / x ^ n) atTop atTop
+  结论: 收敛 (fun x => exp x / x ^ n) atTop atTop
   证明: by
   refine (atTop_basis_Ioi.tendsto_iff (atTop_basis' 1)).2 fun C hC₁ => ?_
   have hC₀ : 0 < C := zero_lt_one.trans_le hC₁
@@ -997,7 +997,7 @@ definition expOrderIso
 
 中文:
 定义 expOrderIso
-  签名: : 实数 ≃o Ioi (0 : 实数)
+  签名: : 实数 ≃o 左开右无界区间 (0 : 实数)
   定义体: StrictMono.orderIsoOfSurjective _
 (exp_strictMono.codRestrict fun x => Set.mem_Ioi.mpr (exp_pos x))
     (continuous_exp.subtype_mk _).surjective
@@ -1073,7 +1073,7 @@ theorem range_exp
 
 中文:
 定理 range_exp
-  结论: range exp = Set.Ioi 0
+  结论: range exp = 集合.左开右无界区间 0
   证明: by
   rw [← coe_comp_expOrderIso]; rw [range_comp]; rw [expOrderIso.range_eq]; rw [image_univ]; rw [Subtype.range_coe]
 
@@ -1100,7 +1100,7 @@ theorem image_exp_Ioi
 中文:
 定理 image_exp_Ioi
   条件: (a : 实数)
-  结论: exp '' Ioi a = Ioi (exp a)
+  结论: exp '' 左开右无界区间 a = 左开右无界区间 (exp a)
   证明: continuous_exp.continuousOn.image_Ioi_of_strictMonoOn (exp_strictMono.strictMonoOn _)
     tendsto_exp_atTop
 
@@ -1128,7 +1128,7 @@ theorem image_exp_Ici
 中文:
 定理 image_exp_Ici
   条件: (a : 实数)
-  结论: exp '' Ici a = Ici (exp a)
+  结论: exp '' 左闭右无界区间 a = 左闭右无界区间 (exp a)
   证明: continuous_exp.continuousOn.image_Ici_of_monotoneOn (exp_strictMono.monotone.monotoneOn _)
     tendsto_exp_atTop
 
@@ -1155,7 +1155,7 @@ theorem image_exp_Icc
 中文:
 定理 image_exp_Icc
   条件: (a b : 实数)
-  结论: exp '' Icc a b = Icc (exp a) (exp b)
+  结论: exp '' 闭区间 a b = 闭区间 (exp a) (exp b)
   证明: continuous_exp.image_Icc_of_strictMono exp_strictMono
 
 @[simp]
@@ -1180,7 +1180,7 @@ theorem image_exp_Ico
 中文:
 定理 image_exp_Ico
   条件: (a b : 实数)
-  结论: exp '' Ico a b = Ico (exp a) (exp b)
+  结论: exp '' 左闭右开区间 a b = 左闭右开区间 (exp a) (exp b)
   证明: continuous_exp.image_Ico_of_strictMono exp_strictMono
 
 @[simp]
@@ -1205,7 +1205,7 @@ theorem image_exp_Ioc
 中文:
 定理 image_exp_Ioc
   条件: (a b : 实数)
-  结论: exp '' Ioc a b = Ioc (exp a) (exp b)
+  结论: exp '' 左开右闭区间 a b = 左开右闭区间 (exp a) (exp b)
   证明: continuous_exp.image_Ioc_of_strictMono exp_strictMono
 
 @[simp]
@@ -1230,7 +1230,7 @@ theorem image_exp_Ioo
 中文:
 定理 image_exp_Ioo
   条件: (a b : 实数)
-  结论: exp '' Ioo a b = Ioo (exp a) (exp b)
+  结论: exp '' 开区间 a b = 开区间 (exp a) (exp b)
   证明: continuous_exp.image_Ioo_of_strictMono exp_strictMono
 
 @[simp]
@@ -1281,7 +1281,7 @@ theorem image_exp_Iio
 中文:
 定理 image_exp_Iio
   条件: (a : 实数)
-  结论: exp '' Iio a = Ioo 0 (exp a)
+  结论: exp '' 左无界右开区间 a = 开区间 0 (exp a)
   证明: by
   rw [← coe_comp_expOrderIso]; rw [image_comp]; rw [expOrderIso.image_Iio]; rw [image_subtype_val_Ioi_Iio]; rw [Function.comp_apply]
 
@@ -1308,7 +1308,7 @@ theorem image_exp_Iic
 中文:
 定理 image_exp_Iic
   条件: (a : 实数)
-  结论: exp '' Iic a = Ioc 0 (exp a)
+  结论: exp '' 左无界右闭区间 a = 左开右闭区间 0 (exp a)
   证明: by
   rw [← coe_comp_expOrderIso]; rw [image_comp]; rw [expOrderIso.image_Iic]; rw [image_subtype_val_Ioi_Iic]; rw [Function.comp_apply]
 
@@ -1552,7 +1552,7 @@ theorem isOpenEmbedding_exp
 
 中文:
 定理 isOpenEmbedding_exp
-  结论: IsOpenEmbedding exp
+  结论: 是开嵌入 exp
   证明: isOpen_Ioi.isOpenEmbedding_subtypeVal.comp expOrderIso.toHomeomorph.isOpenEmbedding
 
 @[simp]
@@ -1925,7 +1925,7 @@ lemma HasSum.rexp
 中文:
 引理 HasSum.rexp
   条件: {ι} {f : ι -> 实数} {a : 实数} (h : HasSum f a)
-  结论: HasProd (rexp ∘ f) (rexp a)
+  结论: 有积类型 (rexp ∘ f) (rexp a)
   证明: Tendsto.congr (fun s => exp_sum s f) Tendsto.rexp h
 
 Depends on / 依赖: Tendsto, Tendsto.congr, Tendsto.rexp, exp_sum
@@ -1951,7 +1951,7 @@ theorem comap_exp_cobounded
 
 中文:
 定理 comap_exp_cobounded
-  结论: comap exp (cobounded Complex) = comap re atTop
+  结论: comap exp (cobounded 复形) = comap re atTop
   证明: calc
     comap exp (cobounded Complex) = comap re (comap Real.exp atTop) := by
       simp only [← comap_norm_atTop, comap_comap, comp_def, norm_exp]
@@ -2033,7 +2033,7 @@ theorem tendsto_exp_nhds_zero_iff
 
 中文:
 定理 tendsto_exp_nhds_zero_iff
-  条件: {α : 类型} {l : Filter α} {f : α -> Complex}
+  条件: {α : 类型} {l : 滤子 α} {f : α -> 复形}
   证明: by
   simp_rw [← comp_apply (f := exp), ← tendsto_comap_iff, comap_exp_nhds_zero, tendsto_comap_iff]
   rfl
@@ -2055,7 +2055,7 @@ theorem tendsto_exp_comap_re_atTop
 
 中文:
 定理 tendsto_exp_comap_re_atTop
-  结论: Tendsto exp (comap re atTop) (cobounded Complex)
+  结论: 收敛 exp (comap re atTop) (cobounded 复形)
   证明: comap_exp_cobounded ▸ tendsto_comap
 
 Depends on / 依赖: comap_exp_cobounded, tendsto_comap
@@ -2073,7 +2073,7 @@ theorem tendsto_exp_comap_re_atBot
 
 中文:
 定理 tendsto_exp_comap_re_atBot
-  结论: Tendsto exp (comap re atBot) (𝓝 0)
+  结论: 收敛 exp (comap re atBot) (𝓝 0)
   证明: comap_exp_nhds_zero ▸ tendsto_comap
 
 Depends on / 依赖: comap_exp_nhds_zero, tendsto_comap
@@ -2091,7 +2091,7 @@ theorem tendsto_exp_comap_re_atBot_nhdsNE
 
 中文:
 定理 tendsto_exp_comap_re_atBot_nhdsNE
-  结论: Tendsto exp (comap re atBot) (𝓝[!=] 0)
+  结论: 收敛 exp (comap re atBot) (𝓝[!=] 0)
   证明: comap_exp_nhdsNE ▸ tendsto_comap
 
 Depends on / 依赖: comap_exp_nhdsNE, tendsto_comap
@@ -2113,8 +2113,8 @@ lemma HasSum.cexp
 
 中文:
 引理 HasSum.cexp
-  条件: {ι : 类型} {f : ι -> Complex} {a : Complex} (h : HasSum f a)
-  结论: HasProd (cexp ∘ f) (cexp a)
+  条件: {ι : 类型} {f : ι -> 复形} {a : 复形} (h : HasSum f a)
+  结论: 有积类型 (cexp ∘ f) (cexp a)
   证明: Filter.Tendsto.congr (fun s => exp_sum s f) Filter.Tendsto.cexp h
 
 Depends on / 依赖: Filter, Filter.Tendsto.cexp, Filter.Tendsto.congr, Tendsto, exp_sum

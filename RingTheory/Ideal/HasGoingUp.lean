@@ -43,9 +43,9 @@ class Algebra.HasGoingUp
     - exists_ideal_ge_liesOver_of_lt({q : Ideal R} [q.IsPrime] (P : Ideal S) [P.IsPrime]) : P.under R < q -> exists Q, P <= Q ∧ Q.IsPrime ∧ Q.LiesOver q
 
 中文:
-类 Algebra.HasGoingUp
+类 代数.有GoingUp
   公理与运算 (1 个):
-    - exists_ideal_ge_liesOver_of_lt({q : Ideal R} [q.IsPrime] (P : Ideal S) [P.IsPrime]) : P.under R < q -> 存在 Q, P <= Q ∧ Q.IsPrime ∧ Q.LiesOver q
+    - exists_ideal_ge_liesOver_of_lt({q : 理想 R} [q.是素] (P : 理想 S) [P.是素]) : P.under R < q -> 存在 Q, P <= Q ∧ Q.是素 ∧ Q.LiesOver q
 -/
 class Algebra.HasGoingUp
     (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] : Prop where
@@ -69,8 +69,8 @@ lemma exists_ideal_ge_liesOver_of_le
     exact Algebra.HasGoingUp.exists_ideal_ge_liesOver_of_lt P (lt_of_le_of_ne hle h)
 
 中文:
-引理 exists_ideal_ge_liesOver_of_le
-  结论: [Algebra.HasGoingUp R S]
+引理 存在_ideal_ge_liesOver_of_le
+  结论: [代数.有GoingUp R S]
   证明: by
   rcases eq_or_ne p q with rfl | h
   · use P
@@ -101,8 +101,8 @@ lemma exists_ideal_gt_liesOver_of_lt
   simp [P.over_def p, P.over_def q] at hpq
 
 中文:
-引理 exists_ideal_gt_liesOver_of_lt
-  结论: [Algebra.HasGoingUp R S]
+引理 存在_ideal_gt_liesOver_of_lt
+  结论: [代数.有GoingUp R S]
   证明: by
   obtain ⟨Q, hPQ, hQ, hQq⟩ := P.exists_ideal_ge_liesOver_of_le (p := p) (q := q) hpq.le
   refine ⟨Q, lt_of_le_of_ne hPQ fun h => ?_, hQ, hQq⟩
@@ -136,8 +136,8 @@ lemma exists_ltSeries_of_hasGoingUp
     obtain ⟨Q, PQlt, hQ, Qlo⟩ :
 
 中文:
-引理 exists_ltSeries_of_hasGoingUp
-  结论: [Algebra.HasGoingUp R S]
+引理 存在_ltSeries_of_hasGoingUp
+  结论: [代数.有GoingUp R S]
   证明: by
   induction l using RelSeries.inductionOn generalizing P with
   | singleton q =>
@@ -242,7 +242,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: (T : 类型) [CommRing T] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
+  结论: (T : 类型) [交换环 T] [代数 R T] [代数 S T] [标量塔 R S T]
   证明: by
   rw [iff_specializingMap_primeSpectrumComap]; rw [IsScalarTower.algebraMap_eq R S T]
   simp only [PrimeSpectrum.comap_comp]
@@ -273,8 +273,8 @@ instance of_isIntegral
     ⟨Q, hPQ, hQ, ⟨hQq.symm⟩⟩
 
 中文:
-实例 of_isIntegral
-  签名: [Algebra.Is整数egral R S]
+实例 of_is整数egral
+  签名: [代数.是整 R S]
   定义体: let ⟨Q, hPQ, hQ, hQq⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isPrime q P hPq.le
     ⟨Q, hPQ, hQ, ⟨hQq.symm⟩⟩
 

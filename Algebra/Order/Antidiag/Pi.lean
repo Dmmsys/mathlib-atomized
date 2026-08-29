@@ -145,7 +145,7 @@ lemma mem_finAntidiagonal
 
 中文:
 引理 mem_finAntidiagonal
-  条件: {d : 自然数} {f : Fin d -> μ}
+  条件: {d : 自然数} {f : 有限集 d -> μ}
   证明: (finAntidiagonal.aux d n).prop f
 -/
 @[simp] lemma mem_finAntidiagonal {d : Nat} {f : Fin d -> μ} :
@@ -178,7 +178,7 @@ definition piAntidiag
 
 中文:
 定义 piAntidiag
-  签名: (s : Finset ι) (n : μ)
+  签名: (s : 有限集 ι) (n : μ)
   定义体: by
   refine (Fintype.truncEquivFinOfCardEq <| Fintype.card_coe s).lift
     (fun e => (finAntidiagonal s.card n).map ⟨fun f i => if hi : i in s then f (e ⟨i, hi⟩) else 0, ?_⟩)
@@ -225,7 +225,7 @@ lemma mem_piAntidiag
 
 中文:
 引理 mem_piAntidiag
-  结论: f in piAntidiag s n ↔ s.sum f = n ∧ 对任意 i, f i != 0 -> i in s
+  结论: f in piAntidiag s n ↔ s.求和 f = n ∧ 对任意 i, f i != 0 -> i in s
   证明: by
   rw [piAntidiag]
   induction Fintype.truncEquivFinOfCardEq (Fintype.card_coe s) using Trunc.ind with | _ e
@@ -259,7 +259,7 @@ lemma piAntidiag_empty_zero
 
 中文:
 引理 piAntidiag_empty_zero
-  结论: piAntidiag (∅ : Finset ι) (0 : μ) = {0}
+  结论: piAntidiag (∅ : 有限集 ι) (0 : μ) = {0}
   证明: by
   ext; simp [funext_iff]
 -/
@@ -278,7 +278,7 @@ lemma piAntidiag_empty_of_ne_zero
 中文:
 引理 piAntidiag_empty_of_ne_zero
   条件: (hn : n != 0)
-  结论: piAntidiag (∅ : Finset ι) n = ∅
+  结论: piAntidiag (∅ : 有限集 ι) n = ∅
   证明: eq_empty_of_forall_notMem (by simp [hn.symm])
 -/
 @[simp] lemma piAntidiag_empty_of_ne_zero (hn : n != 0) : piAntidiag (∅ : Finset ι) n = ∅ :=
@@ -297,7 +297,7 @@ lemma piAntidiag_empty
 中文:
 引理 piAntidiag_empty
   条件: (n : μ)
-  结论: piAntidiag (∅ : Finset ι) n = if n = 0 then {0} else ∅
+  结论: piAntidiag (∅ : 有限集 ι) n = if n = 0 then {0} else ∅
   证明: by
   split_ifs with hn <;> simp [*]
 
@@ -462,7 +462,7 @@ lemma piAntidiag_zero
 
 中文:
 引理 piAntidiag_zero
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: piAntidiag s (0 : μ) = {0}
   证明: by
   ext; simp [funext_iff, not_imp_comm, ← forall_and]
@@ -519,7 +519,7 @@ lemma nsmul_piAntidiag
 
 中文:
 引理 nsmul_piAntidiag
-  条件: [DecidableEq (ι -> 自然数)] (s : Finset ι) (m : 自然数) {n : 自然数} (hn : n != 0)
+  条件: [DecidableEq (ι -> 自然数)] (s : 有限集 ι) (m : 自然数) {n : 自然数} (hn : n != 0)
   证明: by
   ext f
   refine mem_smul_finset.trans ?_
@@ -564,7 +564,7 @@ lemma map_nsmul_piAntidiag
 
 中文:
 引理 map_nsmul_piAntidiag
-  条件: (s : Finset ι) (m : 自然数) {n : 自然数} (hn : n != 0)
+  条件: (s : 有限集 ι) (m : 自然数) {n : 自然数} (hn : n != 0)
   证明: by
   classical rw [map_eq_image]; exact nsmul_piAntidiag _ _ hn
 
@@ -586,7 +586,7 @@ lemma nsmul_piAntidiag_univ
 
 中文:
 引理 nsmul_piAntidiag_univ
-  条件: [Fintype ι] (m : 自然数) {n : 自然数} (hn : n != 0)
+  条件: [有限类型 ι] (m : 自然数) {n : 自然数} (hn : n != 0)
   证明: by
   simpa using nsmul_piAntidiag (univ : Finset ι) m hn
 
@@ -607,7 +607,7 @@ lemma map_nsmul_piAntidiag_univ
 
 中文:
 引理 map_nsmul_piAntidiag_univ
-  条件: [Fintype ι] (m : 自然数) {n : 自然数} (hn : n != 0)
+  条件: [有限类型 ι] (m : 自然数) {n : 自然数} (hn : n != 0)
   证明: by
   simpa using map_nsmul_piAntidiag (univ : Finset ι) m hn
 
@@ -638,7 +638,7 @@ lemma map_sym_eq_piAntidiag
 
 中文:
 引理 map_sym_eq_piAntidiag
-  条件: [DecidableEq ι] (s : Finset ι) (n : 自然数)
+  条件: [DecidableEq ι] (s : 有限集 ι) (n : 自然数)
   证明: by
   ext f
   simp only [Sym.val_eq_coe, mem_map, mem_sym_iff, Embedding.coeFn_mk, funext_iff, Sym.exists,

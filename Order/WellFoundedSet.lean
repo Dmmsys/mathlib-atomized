@@ -72,7 +72,7 @@ definition WellFoundedOn
 
 中文:
 定义 WellFoundedOn
-  签名: (s : Set α) (r : α -> α -> 命题)
+  签名: (s : 集合 α) (r : α -> α -> 命题)
   定义体: WellFounded (Subrel r (· in s))
 
 @[simp]
@@ -164,7 +164,7 @@ theorem wellFoundedOn_univ
 
 中文:
 定理 wellFoundedOn_univ
-  结论: (univ : Set α).WellFoundedOn r ↔ WellFounded r
+  结论: (univ : 集合 α).WellFoundedOn r ↔ 良基 r
   证明: by
   simp [wellFoundedOn_iff]
 
@@ -184,8 +184,8 @@ theorem _root_.WellFounded.wellFoundedOn
 @[simp]
 
 中文:
-定理 _root_.WellFounded.wellFoundedOn
-  结论: WellFounded r -> s.WellFoundedOn r
+定理 _root_.良基.wellFoundedOn
+  结论: 良基 r -> s.WellFoundedOn r
   证明: InvImage.wf _
 
 @[simp]
@@ -215,7 +215,7 @@ theorem wellFoundedOn_range
 
 中文:
 定理 wellFoundedOn_range
-  结论: (range f).WellFoundedOn r ↔ WellFounded (r on f)
+  结论: (range f).WellFoundedOn r ↔ 良基 (r on f)
   证明: by
   let f' : β -> range f := fun c => ⟨f c, c, rfl⟩
   refine ⟨fun h => (InvImage.wf f' h).mono fun c c' => id, fun h => ⟨?_⟩⟩
@@ -251,7 +251,7 @@ theorem wellFoundedOn_image
 
 中文:
 定理 wellFoundedOn_image
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: (f '' s).WellFoundedOn r ↔ s.WellFoundedOn (r on f)
   证明: by
   rw [image_eq_range]; exact wellFoundedOn_range
@@ -418,8 +418,8 @@ instance IsStrictOrder.subset
   toIsTrans := ⟨fun _ _ _ ab bc => ⟨trans_of r ab.1 bc.1, ab.2.1, bc.2.2⟩⟩
 
 中文:
-实例 IsStrictOrder.subset
-  签名: : IsStrictOrder α fun a b : α => r a b ∧ a in s ∧ b in s where
+实例 是Strict序.subset
+  签名: : 是Strict序 α fun a b : α => r a b ∧ a in s ∧ b in s where
   定义体: ⟨fun a con => irrefl_of r a con.1⟩
   toIsTrans := ⟨fun _ _ _ ab bc => ⟨trans_of r ab.1 bc.1, ab.2.1, bc.2.2⟩⟩
 
@@ -549,7 +549,7 @@ definition IsWF
 
 中文:
 定义 IsWF
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: WellFoundedOn s (· < ·)
 
 @[simp]
@@ -570,7 +570,7 @@ theorem isWF_empty
 
 中文:
 定理 isWF_empty
-  结论: IsWF (∅ : Set α)
+  结论: IsWF (∅ : 集合 α)
   证明: wellFounded_of_isEmpty _
 
 Depends on / 依赖: wellFounded_of_isEmpty
@@ -608,7 +608,7 @@ theorem isWF_univ_iff
 
 中文:
 定理 isWF_univ_iff
-  结论: IsWF (univ : Set α) ↔ WellFoundedLT α
+  结论: IsWF (univ : 集合 α) ↔ WellFoundedLT α
   证明: by
   simp [IsWF, wellFoundedOn_iff, isWellFounded_iff]
 
@@ -628,7 +628,7 @@ theorem IsWF.of_wellFoundedLT
 
 中文:
 定理 IsWF.of_wellFoundedLT
-  条件: [h : WellFoundedLT α] (s : Set α)
+  条件: [h : WellFoundedLT α] (s : 集合 α)
   结论: s.IsWF
   证明: (Set.isWF_univ_iff.2 h).mono s.subset_univ
 
@@ -700,7 +700,7 @@ definition PartiallyWellOrderedOn
 
 中文:
 定义 PartiallyWellOrderedOn
-  签名: (s : Set α) (r : α -> α -> 命题)
+  签名: (s : 集合 α) (r : α -> α -> 命题)
   定义体: WellQuasiOrdered (Subrel r (· in s))
 
 Depends on / 依赖: Subrel, WellQuasiOrdered
@@ -721,7 +721,7 @@ theorem PartiallyWellOrderedOn.exists_lt
   proof: hs fun n => ⟨_, hf n⟩
 
 中文:
-定理 PartiallyWellOrderedOn.exists_lt
+定理 PartiallyWellOrderedOn.存在_lt
   结论: (hs : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
   证明: hs fun n => ⟨_, hf n⟩
 -/
@@ -738,7 +738,7 @@ theorem partiallyWellOrderedOn_iff_exists_lt
   proof: ⟨PartiallyWellOrderedOn.exists_lt, fun hf f => hf _ fun n => (f n).2⟩
 
 中文:
-定理 partiallyWellOrderedOn_iff_exists_lt
+定理 partiallyWellOrderedOn_iff_存在_lt
   结论: s.PartiallyWellOrderedOn r ↔
   证明: ⟨PartiallyWellOrderedOn.exists_lt, fun hf f => hf _ fun n => (f n).2⟩
 
@@ -797,7 +797,7 @@ theorem partiallyWellOrderedOn_of_wellQuasiOrdered
 
 中文:
 定理 partiallyWellOrderedOn_of_wellQuasiOrdered
-  条件: (h : WellQuasiOrdered r) (s : Set α)
+  条件: (h : WellQuasiOrdered r) (s : 集合 α)
   证明: (partiallyWellOrderedOn_univ_iff.mpr h).mono s.subset_univ
 
 @[simp]
@@ -967,8 +967,8 @@ theorem Finite.partiallyWellOrderedOn
   proof: hs.to_subtype.wellQuasiOrdered _
 
 中文:
-定理 Finite.partiallyWellOrderedOn
-  条件: (hs : s.Finite)
+定理 有限.partiallyWellOrderedOn
+  条件: (hs : s.有限)
   结论: s.PartiallyWellOrderedOn r
   证明: hs.to_subtype.wellQuasiOrdered _
 -/
@@ -1036,8 +1036,8 @@ theorem Subsingleton.partiallyWellOrderedOn
 @[simp]
 
 中文:
-定理 Subsingleton.partiallyWellOrderedOn
-  条件: (hs : s.Subsingleton)
+定理 子单例.partiallyWellOrderedOn
+  条件: (hs : s.子单例)
   结论: PartiallyWellOrderedOn s r
   证明: hs.finite.partiallyWellOrderedOn
 
@@ -1151,7 +1151,7 @@ theorem PartiallyWellOrderedOn.exists_monotone_subseq
   proof: WellQuasiOrdered.exists_monotone_subseq h fun n => ⟨_, hf n⟩
 
 中文:
-定理 PartiallyWellOrderedOn.exists_monotone_subseq
+定理 PartiallyWellOrderedOn.存在_monotone_subseq
   结论: (h : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
   证明: WellQuasiOrdered.exists_monotone_subseq h fun n => ⟨_, hf n⟩
 
@@ -1172,7 +1172,7 @@ theorem partiallyWellOrderedOn_iff_exists_monotone_subseq
   exact fun H f => H _ fun n => (f n).2
 
 中文:
-定理 partiallyWellOrderedOn_iff_exists_monotone_subseq
+定理 partiallyWellOrderedOn_iff_存在_monotone_subseq
   证明: by
   use PartiallyWellOrderedOn.exists_monotone_subseq
   rw [PartiallyWellOrderedOn]; rw [wellQuasiOrdered_iff_exists_monotone_subseq]
@@ -1201,8 +1201,8 @@ theorem PartiallyWellOrderedOn.prod
   exact ⟨g₁ m, g₁ n, g₁.strictMono hlt, h₁ _ _ hlt.le, hle⟩
 
 中文:
-定理 PartiallyWellOrderedOn.prod
-  结论: {t : Set β} (hs : PartiallyWellOrderedOn s r)
+定理 PartiallyWellOrderedOn.乘积
+  结论: {t : 集合 β} (hs : PartiallyWellOrderedOn s r)
   证明: by
   rw [partiallyWellOrderedOn_iff_exists_lt]
   intro f hf
@@ -1234,7 +1234,7 @@ theorem PartiallyWellOrderedOn.pi
 
 中文:
 定理 PartiallyWellOrderedOn.pi
-  结论: {α : ι -> 类型} [Finite ι] {r : 对任意 i, α i -> α i -> 命题}
+  结论: {α : ι -> 类型} [有限 ι] {r : 对任意 i, α i -> α i -> 命题}
   证明: by
   have := Fintype.ofFinite ι
   have : IsPreorder (forall i, α i) (fun a b : forall i, α i => forall i, r i (a i) (b i)) :=
@@ -1309,7 +1309,7 @@ nonrec theorem IsPWO.exists_monotone_subseq (h : s.IsPWO) {f : Nat -> α} (hf : 
 
 中文:
 定义 IsPWO
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: PartiallyWellOrderedOn s (· <= ·)
 
 nonrec theorem IsPWO.mono (ht : t.IsPWO) : s subseteq t -> s.IsPWO := ht.mono
@@ -1339,7 +1339,7 @@ theorem isPWO_univ_iff
 
 中文:
 定理 isPWO_univ_iff
-  结论: (univ : Set α).IsPWO ↔ WellQuasiOrderedLE α
+  结论: (univ : 集合 α).IsPWO ↔ 良拟序 α
   证明: partiallyWellOrderedOn_univ_iff.trans (wellQuasiOrderedLE_def _).symm
 
 Depends on / 依赖: partiallyWellOrderedOn_univ_iff, partiallyWellOrderedOn_univ_iff.trans, wellQuasiOrderedLE_def
@@ -1358,7 +1358,7 @@ theorem isPWO_of_wellQuasiOrderedLE
 
 中文:
 定理 isPWO_of_wellQuasiOrderedLE
-  条件: [h : WellQuasiOrderedLE α] (s : Set α)
+  条件: [h : 良拟序 α] (s : 集合 α)
   结论: s.IsPWO
   证明: partiallyWellOrderedOn_of_wellQuasiOrdered h.wqo s
 
@@ -1375,7 +1375,7 @@ theorem isPWO_iff_exists_monotone_subseq
   proof: partiallyWellOrderedOn_iff_exists_monotone_subseq
 
 中文:
-定理 isPWO_iff_exists_monotone_subseq
+定理 isPWO_iff_存在_monotone_subseq
   证明: partiallyWellOrderedOn_iff_exists_monotone_subseq
 
 Depends on / 依赖: partiallyWellOrderedOn_iff_exists_monotone_subseq
@@ -1423,7 +1423,7 @@ theorem IsPWO.pi
 
 中文:
 定理 IsPWO.pi
-  结论: {α : ι -> 类型} [Finite ι] [对任意 i, Preorder (α i)] {s : 对任意 i, Set (α i)}
+  结论: {α : ι -> 类型} [有限 ι] [对任意 i, 预序 (α i)] {s : 对任意 i, 集合 (α i)}
   证明: PartiallyWellOrderedOn.pi hs
 
 Depends on / 依赖: PartiallyWellOrderedOn, PartiallyWellOrderedOn.pi
@@ -1467,7 +1467,7 @@ protected nonrec theorem IsPWO.union (hs : IsPWO s) (ht : IsPWO t) : IsPWO (s un
 
 中文:
 定理 IsPWO.image_of_monotone
-  条件: (hs : s.IsPWO) {f : α -> β} (hf : Monotone f)
+  条件: (hs : s.IsPWO) {f : α -> β} (hf : 递增 f)
   结论: IsPWO (f '' s)
   证明: hs.image_of_monotone_on (hf.monotoneOn _)
 
@@ -1513,8 +1513,8 @@ theorem Finite.isPWO
   proof: hs.partiallyWellOrderedOn
 
 中文:
-定理 Finite.isPWO
-  条件: (hs : s.Finite)
+定理 有限.isPWO
+  条件: (hs : s.有限)
   结论: IsPWO s
   证明: hs.partiallyWellOrderedOn
 -/
@@ -1531,7 +1531,7 @@ theorem isPWO_of_finite
 
 中文:
 定理 isPWO_of_finite
-  条件: [Finite α]
+  条件: [有限 α]
   结论: s.IsPWO
   证明: s.toFinite.isPWO
 -/
@@ -1549,7 +1549,7 @@ theorem isPWO_singleton
 中文:
 定理 isPWO_singleton
   条件: (a : α)
-  结论: IsPWO ({a} : Set α)
+  结论: IsPWO ({a} : 集合 α)
   证明: (finite_singleton a).isPWO
 -/
 @[simp] theorem isPWO_singleton (a : α) : IsPWO ({a} : Set α) := (finite_singleton a).isPWO
@@ -1564,7 +1564,7 @@ theorem isPWO_empty
 
 中文:
 定理 isPWO_empty
-  结论: IsPWO (∅ : Set α)
+  结论: IsPWO (∅ : 集合 α)
   证明: finite_empty.isPWO
 -/
 @[simp] theorem isPWO_empty : IsPWO (∅ : Set α) := finite_empty.isPWO
@@ -1581,8 +1581,8 @@ theorem Subsingleton.isPWO
 @[simp]
 
 中文:
-定理 Subsingleton.isPWO
-  条件: (hs : s.Subsingleton)
+定理 子单例.isPWO
+  条件: (hs : s.子单例)
   结论: IsPWO s
   证明: hs.finite.isPWO
 
@@ -1641,8 +1641,8 @@ theorem Finite.isWF
   proof: hs.isPWO.isWF
 
 中文:
-定理 Finite.isWF
-  条件: (hs : s.Finite)
+定理 有限.isWF
+  条件: (hs : s.有限)
   结论: IsWF s
   证明: hs.isPWO.isWF
 -/
@@ -1660,7 +1660,7 @@ theorem isWF_singleton
 中文:
 定理 isWF_singleton
   条件: {a : α}
-  结论: IsWF ({a} : Set α)
+  结论: IsWF ({a} : 集合 α)
   证明: (finite_singleton a).isWF
 -/
 @[simp] theorem isWF_singleton {a : α} : IsWF ({a} : Set α) := (finite_singleton a).isWF
@@ -1677,8 +1677,8 @@ theorem Subsingleton.isWF
 @[simp]
 
 中文:
-定理 Subsingleton.isWF
-  条件: (hs : s.Subsingleton)
+定理 子单例.isWF
+  条件: (hs : s.子单例)
   结论: IsWF s
   证明: hs.isPWO.isWF
 
@@ -1743,7 +1743,7 @@ theorem IsPWO.exists_le_minimal
 
 
 中文:
-定理 IsPWO.exists_le_minimal
+定理 IsPWO.存在_le_minimal
   条件: {a} (hs : s.IsPWO) (ha : a in s)
   证明: by
   let t : Set s := {x | x <= a}
@@ -1778,8 +1778,8 @@ theorem IsPWO.exists_minimal
   exact ⟨b, hb⟩
 
 中文:
-定理 IsPWO.exists_minimal
-  条件: (h : s.IsPWO) (hs : s.Nonempty)
+定理 IsPWO.存在_minimal
+  条件: (h : s.IsPWO) (hs : s.非空)
   证明: by
   rcases hs with ⟨a, ha⟩
   obtain ⟨b, _, hb⟩ := h.exists_le_minimal ha
@@ -1805,8 +1805,8 @@ theorem IsPWO.exists_minimalFor
   exact ⟨a, ha, fun b hb => h.2 (mem_image_of_mem _ hb)⟩
 
 中文:
-定理 IsPWO.exists_minimalFor
-  条件: (f : ι -> α) (s : Set ι) (h : (f '' s).IsPWO) (hs : s.Nonempty)
+定理 IsPWO.存在_minimalFor
+  条件: (f : ι -> α) (s : 集合 ι) (h : (f '' s).IsPWO) (hs : s.非空)
   证明: by
   obtain ⟨_, h⟩ := h.exists_minimal (hs.image _)
   obtain ⟨a, ha, rfl⟩ := h.1
@@ -1839,8 +1839,8 @@ theorem Finite.wellFoundedOn
 @[simp]
 
 中文:
-定理 Finite.wellFoundedOn
-  条件: (hs : s.Finite)
+定理 有限.wellFoundedOn
+  条件: (hs : s.有限)
   结论: s.WellFoundedOn r
   证明: letI := partialOrderOfSO r
   hs.isWF
@@ -1862,7 +1862,7 @@ theorem wellFoundedOn_singleton
 
 中文:
 定理 wellFoundedOn_singleton
-  结论: WellFoundedOn ({a} : Set α) r
+  结论: WellFoundedOn ({a} : 集合 α) r
   证明: (finite_singleton a).wellFoundedOn
 
 Depends on / 依赖: finite_singleton, wellFoundedOn
@@ -1882,8 +1882,8 @@ theorem Subsingleton.wellFoundedOn
 @[simp]
 
 中文:
-定理 Subsingleton.wellFoundedOn
-  条件: (hs : s.Subsingleton)
+定理 子单例.wellFoundedOn
+  条件: (hs : s.子单例)
   结论: s.WellFoundedOn r
   证明: hs.finite.wellFoundedOn
 
@@ -2014,8 +2014,8 @@ theorem WellFoundedOn.exists_minimal
   ⟨m, m.property, fun y hy => hm.right (y := ⟨y, hy⟩) trivial⟩
 
 中文:
-定理 WellFoundedOn.exists_minimal
-  结论: {α : 类型} [Preorder α] {s : Set α}
+定理 WellFoundedOn.存在_minimal
+  结论: {α : 类型} [预序 α] {s : 集合 α}
   证明: have ⟨m, hm⟩ := WellFoundedLT.exists_minimal ⟨h⟩ univ nonempty.elim (⟨⟨·, ·⟩, trivial⟩)
   ⟨m, m.property, fun y hy => hm.right (y := ⟨y, hy⟩) trivial⟩
 
@@ -2072,7 +2072,7 @@ lemma IsPWO.of_linearOrder
 
 中文:
 引理 IsPWO.of_linearOrder
-  条件: [WellFoundedLT α] (s : Set α)
+  条件: [WellFoundedLT α] (s : 集合 α)
   结论: s.IsPWO
   证明: (IsWF.of_wellFoundedLT s).isPWO
 
@@ -2102,7 +2102,7 @@ theorem partiallyWellOrderedOn
 
 中文:
 定理 partiallyWellOrderedOn
-  条件: [Std.Refl r] (s : Finset α)
+  条件: [Std.Refl r] (s : 有限集 α)
   证明: s.finite_toSet.partiallyWellOrderedOn
 
 @[simp]
@@ -2127,8 +2127,8 @@ theorem isPWO
 
 中文:
 定理 isPWO
-  条件: [Preorder α] (s : Finset α)
-  结论: Set.IsPWO (↑s : Set α)
+  条件: [预序 α] (s : 有限集 α)
+  结论: 集合.IsPWO (↑s : 集合 α)
   证明: s.partiallyWellOrderedOn
 
 @[simp]
@@ -2152,8 +2152,8 @@ theorem isWF
 
 中文:
 定理 isWF
-  条件: [Preorder α] (s : Finset α)
-  结论: Set.IsWF (↑s : Set α)
+  条件: [预序 α] (s : 有限集 α)
+  结论: 集合.IsWF (↑s : 集合 α)
   证明: s.finite_toSet.isWF
 
 @[simp]
@@ -2173,7 +2173,7 @@ theorem wellFoundedOn
 
 中文:
 定理 wellFoundedOn
-  条件: [IsStrictOrder α r] (s : Finset α)
+  条件: [是Strict序 α r] (s : 有限集 α)
   证明: letI := partialOrderOfSO r
   s.isWF
 
@@ -2194,7 +2194,7 @@ theorem wellFoundedOn_sup
 
 中文:
 定理 wellFoundedOn_sup
-  条件: [IsStrictOrder α r] (s : Finset ι) {f : ι -> Set α}
+  条件: [是Strict序 α r] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: Finset.cons_induction_on s (by simp) fun a s ha hs => by simp [-sup_set_eq_biUnion, hs]
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, coeff_trunc, cons_induction_on, sup_set_eq_biUnion
@@ -2213,7 +2213,7 @@ theorem partiallyWellOrderedOn_sup
 
 中文:
 定理 partiallyWellOrderedOn_sup
-  条件: (s : Finset ι) {f : ι -> Set α}
+  条件: (s : 有限集 ι) {f : ι -> 集合 α}
   证明: Finset.cons_induction_on s (by simp) fun a s ha hs => by simp [-sup_set_eq_biUnion, hs]
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, cons_induction_on, sup_set_eq_biUnion, truncFinset_map
@@ -2232,7 +2232,7 @@ theorem isWF_sup
 
 中文:
 定理 isWF_sup
-  条件: [Preorder α] (s : Finset ι) {f : ι -> Set α}
+  条件: [预序 α] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: s.wellFoundedOn_sup
 
 Depends on / 依赖: s.wellFoundedOn_sup, wellFoundedOn_sup
@@ -2253,7 +2253,7 @@ theorem isPWO_sup
 
 中文:
 定理 isPWO_sup
-  条件: [Preorder α] (s : Finset ι) {f : ι -> Set α}
+  条件: [预序 α] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: s.partiallyWellOrderedOn_sup
 
 @[simp]
@@ -2278,7 +2278,7 @@ theorem wellFoundedOn_bUnion
 
 中文:
 定理 wellFoundedOn_bUnion
-  条件: [IsStrictOrder α r] (s : Finset ι) {f : ι -> Set α}
+  条件: [是Strict序 α r] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: by
   simpa only [Finset.sup_eq_iSup] using! s.wellFoundedOn_sup
 
@@ -2304,7 +2304,7 @@ theorem partiallyWellOrderedOn_bUnion
 
 中文:
 定理 partiallyWellOrderedOn_bUnion
-  条件: (s : Finset ι) {f : ι -> Set α}
+  条件: (s : 有限集 ι) {f : ι -> 集合 α}
   证明: by
   simpa only [Finset.sup_eq_iSup] using! s.partiallyWellOrderedOn_sup
 
@@ -2329,7 +2329,7 @@ theorem isWF_bUnion
 
 中文:
 定理 isWF_bUnion
-  条件: [Preorder α] (s : Finset ι) {f : ι -> Set α}
+  条件: [预序 α] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: s.wellFoundedOn_bUnion
 
 @[simp]
@@ -2351,7 +2351,7 @@ theorem isPWO_bUnion
 
 中文:
 定理 isPWO_bUnion
-  条件: [Preorder α] (s : Finset ι) {f : ι -> Set α}
+  条件: [预序 α] (s : 有限集 ι) {f : ι -> 集合 α}
   证明: s.partiallyWellOrderedOn_bUnion
 
 Depends on / 依赖: partiallyWellOrderedOn_bUnion, s.partiallyWellOrderedOn_bUnion
@@ -2386,8 +2386,8 @@ nonrec theorem IsWF.not_lt_min (hs : IsWF s) (hn : s.Nonempty) (ha : a in s) : �
 
 中文:
 定理 IsWF.min_mem
-  条件: (hs : IsWF s) (hn : s.Nonempty)
-  结论: hs.min hn in s
+  条件: (hs : IsWF s) (hn : s.非空)
+  结论: hs.最小值 hn in s
   证明: (WellFounded.min hs univ (nonempty_iff_univ_nonempty.1 hn.to_subtype)).2
 
 nonrec theorem IsWF.not_lt_min (hs : IsWF s) (hn : s.Nonempty) (ha : a in s) : ¬a < hs.min hn :=
@@ -2413,7 +2413,7 @@ theorem IsWF.min_of_subset_not_lt_min
 
 中文:
 定理 IsWF.min_of_subset_not_lt_min
-  结论: {hs : s.IsWF} {hsn : s.Nonempty} {ht : t.IsWF}
+  结论: {hs : s.IsWF} {hsn : s.非空} {ht : t.IsWF}
   证明: ht.not_lt_min htn (hst (min_mem hs hsn))
 
 @[simp]
@@ -2435,7 +2435,7 @@ theorem isWF_min_singleton
 
 中文:
 定理 isWF_min_singleton
-  条件: (a) {hs : IsWF ({a} : Set α)} {hn : ({a} : Set α).Nonempty}
+  条件: (a) {hs : IsWF ({a} : 集合 α)} {hn : ({a} : 集合 α).非空}
   证明: eq_of_mem_singleton (IsWF.min_mem hs hn)
 
 Depends on / 依赖: IsWF.min_mem, eq_of_mem_singleton, min_mem
@@ -2516,8 +2516,8 @@ theorem IsWF.min_le
 
 中文:
 定理 IsWF.min_le
-  条件: (hs : s.IsWF) (hn : s.Nonempty) (ha : a in s)
-  结论: hs.min hn <= a
+  条件: (hs : s.IsWF) (hn : s.非空) (ha : a in s)
+  结论: hs.最小值 hn <= a
   证明: le_of_not_gt (hs.not_lt_min hn ha)
 
 Depends on / 依赖: hs.not_lt_min, le_of_not_gt, not_lt_min
@@ -2536,8 +2536,8 @@ theorem IsWF.le_min_iff
 
 中文:
 定理 IsWF.le_min_iff
-  条件: (hs : s.IsWF) (hn : s.Nonempty)
-  结论: a <= hs.min hn ↔ 对任意 b, b in s -> a <= b
+  条件: (hs : s.IsWF) (hn : s.非空)
+  结论: a <= hs.最小值 hn ↔ 对任意 b, b in s -> a <= b
   证明: ⟨fun ha _b hb => le_trans ha (hs.min_le hn hb), fun h => h _ (hs.min_mem _)⟩
 
 Depends on / 依赖: hs.min_le, hs.min_mem, le_trans, min_le, min_mem
@@ -2555,7 +2555,7 @@ theorem IsWF.min_le_min_of_subset
 
 中文:
 定理 IsWF.min_le_min_of_subset
-  结论: {hs : s.IsWF} {hsn : s.Nonempty} {ht : t.IsWF} {htn : t.Nonempty}
+  结论: {hs : s.IsWF} {hsn : s.非空} {ht : t.IsWF} {htn : t.非空}
   证明: (IsWF.le_min_iff _ _).2 fun _b hb => ht.min_le htn (hst hb)
 
 Depends on / 依赖: IsWF.le_min_iff, ht.min_le, le_min_iff, min_le
@@ -2579,7 +2579,7 @@ theorem IsWF.min_union
 
 中文:
 定理 IsWF.min_union
-  条件: (hs : s.IsWF) (hsn : s.Nonempty) (ht : t.IsWF) (htn : t.Nonempty)
+  条件: (hs : s.IsWF) (hsn : s.非空) (ht : t.IsWF) (htn : t.非空)
   证明: by
   refine le_antisymm (le_min (IsWF.min_le_min_of_subset subset_union_left)
     (IsWF.min_le_min_of_subset subset_union_right)) ?_
@@ -2701,7 +2701,7 @@ theorem bddAbove_preimage
 
 中文:
 定理 bddAbove_preimage
-  结论: {s : Set α} (hs : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
+  结论: {s : 集合 α} (hs : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
   证明: by
   contrapose! hf
   rw [not_bddAbove_iff] at hf
@@ -2736,8 +2736,8 @@ theorem exists_notMem_of_gt
   simpa [not_bddAbove_iff, and_comm]
 
 中文:
-定理 exists_notMem_of_gt
-  结论: {s : Set α} (hs : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
+定理 存在_notMem_of_gt
+  结论: {s : 集合 α} (hs : s.PartiallyWellOrderedOn r) {f : 自然数 -> α}
   证明: by
   have := hs.bddAbove_preimage hf
   contrapose! this
@@ -2764,7 +2764,7 @@ definition IsBadSeq
 
 中文:
 定义 IsBadSeq
-  签名: (r : α -> α -> 命题) (s : Set α) (f : 自然数 -> α)
+  签名: (r : α -> α -> 命题) (s : 集合 α) (f : 自然数 -> α)
   定义体: (forall n, f n in s) ∧ forall m n : Nat, m < n -> ¬r (f m) (f n)
 -/
 def IsBadSeq (r : α -> α -> Prop) (s : Set α) (f : Nat -> α) : Prop :=
@@ -2781,8 +2781,8 @@ theorem iff_forall_not_isBadSeq
   exact forall_congr' fun f => by simp [IsBadSeq]
 
 中文:
-定理 iff_forall_not_isBadSeq
-  条件: (r : α -> α -> 命题) (s : Set α)
+定理 iff_对任意_not_isBadSeq
+  条件: (r : α -> α -> 命题) (s : 集合 α)
   证明: by
   rw [partiallyWellOrderedOn_iff_exists_lt]
   exact forall_congr' fun f => by simp [IsBadSeq]
@@ -2804,7 +2804,7 @@ definition IsMinBadSeq
 
 中文:
 定义 IsMinBadSeq
-  签名: (r : α -> α -> 命题) (rk : α -> 自然数) (s : Set α) (n : 自然数) (f : 自然数 -> α)
+  签名: (r : α -> α -> 命题) (rk : α -> 自然数) (s : 集合 α) (n : 自然数) (f : 自然数 -> α)
   定义体: forall g : Nat -> α, (forall m : Nat, m < n -> f m = g m) -> rk (g n) < rk (f n) -> ¬IsBadSeq r s g
 
 Depends on / 依赖: IsBadSeq
@@ -2827,7 +2827,7 @@ definition minBadSeqOfBadSeq
 
 中文:
 定义 minBadSeqOfBadSeq
-  签名: (r : α -> α -> 命题) (rk : α -> 自然数) (s : Set α) (n : 自然数) (f : 自然数 -> α)
+  签名: (r : α -> α -> 命题) (rk : α -> 自然数) (s : 集合 α) (n : 自然数) (f : 自然数 -> α)
   定义体: by
   classical
     have h : exists (k : Nat) (g : Nat -> α), (forall m, m < n -> f m = g m) ∧ IsBadSeq r s g ∧ rk (g n) = k :=
@@ -2862,8 +2862,8 @@ theorem exists_min_bad_of_exists_bad
     · exact ⟨(minBadSeqOfBadSeq r rk 
 
 中文:
-定理 exists_min_bad_of_exists_bad
-  条件: (r : α -> α -> 命题) (rk : α -> 自然数) (s : Set α)
+定理 存在_min_bad_of_存在_bad
+  条件: (r : α -> α -> 命题) (rk : α -> 自然数) (s : 集合 α)
   证明: by
   rintro ⟨f0, hf0 : IsBadSeq r s f0⟩
   let fs : forall n : Nat, { f : Nat -> α // IsBadSeq r s f ∧ IsMinBadSeq r rk s n f } := by
@@ -2910,8 +2910,8 @@ theorem iff_not_exists_isMinBadSeq
     exact ⟨f, hf1⟩
 
 中文:
-定理 iff_not_exists_isMinBadSeq
-  条件: (rk : α -> 自然数) {s : Set α}
+定理 iff_not_存在_isMinBadSeq
+  条件: (rk : α -> 自然数) {s : 集合 α}
   证明: by
   rw [iff_forall_not_isBadSeq]; rw [← not_exists]; rw [not_congr]
   constructor
@@ -2946,7 +2946,7 @@ theorem partiallyWellOrderedOn_sublistForall₂
 
 中文:
 定理 partiallyWellOrderedOn_sublistForall₂
-  结论: (r : α -> α -> 命题) [IsPreorder α r]
+  结论: (r : α -> α -> 命题) [是预序 α r]
   证明: by
   rcases isEmpty_or_nonempty α
   · exact subsingleton_of_subsingleton.partiallyWellOrderedOn
@@ -3010,7 +3010,7 @@ theorem subsetProdLex
 
 中文:
 定理 subsetProdLex
-  结论: [PartialOrder α] [Preorder β] {s : Set (α ×ₗ β)}
+  结论: [偏序 α] [预序 β] {s : 集合 (α ×ₗ β)}
   证明: by
   rw [IsPWO]; rw [partiallyWellOrderedOn_iff_exists_lt]
   intro f hf
@@ -3062,7 +3062,7 @@ theorem imageProdLex
 
 中文:
 定理 imageProdLex
-  结论: [Preorder α] [Preorder β] {s : Set (α ×ₗ β)}
+  结论: [预序 α] [预序 β] {s : 集合 (α ×ₗ β)}
   证明: IsPWO.image_of_monotone hαβ Prod.Lex.monotone_fst
 
 Depends on / 依赖: IsPWO.image_of_monotone, Prod.Lex.monotone_fst, image_of_monotone, monotone_fst
@@ -3089,7 +3089,7 @@ theorem fiberProdLex
 
 中文:
 定理 fiberProdLex
-  结论: [Preorder α] [Preorder β] {s : Set (α ×ₗ β)}
+  结论: [预序 α] [预序 β] {s : 集合 (α ×ₗ β)}
   证明: by
   let f : α ×ₗ β -> β := fun x => (ofLex x).2
   have h : {y | toLex (a, y) in s} = f '' (s inter (fun x => (ofLex x).1) ⁻¹' {a}) := by
@@ -3126,7 +3126,7 @@ theorem ProdLex_iff
 
 中文:
 定理 ProdLex_iff
-  条件: [PartialOrder α] [Preorder β] {s : Set (α ×ₗ β)}
+  条件: [偏序 α] [预序 β] {s : 集合 (α ×ₗ β)}
   证明: ⟨fun h => ⟨imageProdLex h, fiberProdLex h⟩, fun h => subsetProdLex h.1 h.2⟩
 
 Depends on / 依赖: fiberProdLex, imageProdLex, subsetProdLex
@@ -3156,8 +3156,8 @@ theorem WellFounded.prod_lex_of_wellFoundedOn_fiber
     convert! PSigma.Lex.right (⟨_, c', rfl⟩ : ra
 
 中文:
-定理 WellFounded.prod_lex_of_wellFoundedOn_fiber
-  结论: (hα : WellFounded (rα on f))
+定理 良基.prod_lex_of_wellFoundedOn_fiber
+  结论: (hα : 良基 (rα on f))
   证明: by
   refine ((psigma_lex (wellFoundedOn_range.2 hα) fun a => hβ a).onFun
     (f := fun c => ⟨⟨_, c, rfl⟩, c, rfl⟩)).mono fun c c' h => ?_
@@ -3189,7 +3189,7 @@ theorem Set.WellFoundedOn.prod_lex_of_wellFoundedOn_fiber
     fun a => ((hβ a).onFun (f := fun x => ⟨x, x.1.2, x.2⟩)).mono (fun _ _ h => ‹_›)
 
 中文:
-定理 Set.WellFoundedOn.prod_lex_of_wellFoundedOn_fiber
+定理 集合.WellFoundedOn.prod_lex_of_wellFoundedOn_fiber
   结论: (hα : s.WellFoundedOn (rα on f))
   证明: WellFounded.prod_lex_of_wellFoundedOn_fiber hα
     fun a => ((hβ a).onFun (f := fun x => ⟨x, x.1.2, x.2⟩)).mono (fun _ _ h => ‹_›)
@@ -3223,8 +3223,8 @@ theorem WellFounded.sigma_lex_of_wellFoundedOn_fiber
     convert! PSigma.Lex.right (⟨_, c', r
 
 中文:
-定理 WellFounded.sigma_lex_of_wellFoundedOn_fiber
-  结论: (hι : WellFounded (rι on f))
+定理 良基.sigma_lex_of_wellFoundedOn_fiber
+  结论: (hι : 良基 (rι on f))
   证明: by
   refine ((psigma_lex (wellFoundedOn_range.2 hι) fun a => hπ a).onFun
     (f := fun c => ⟨⟨_, c, rfl⟩, c, rfl⟩)).mono fun c c' h => ?_
@@ -3262,7 +3262,7 @@ theorem Set.WellFoundedOn.sigma_lex_of_wellFoundedOn_fiber
       fun i => ((hπ i).onFun (f := fun x => ⟨x, x.1.2, x.2⟩)).mono (fun b c h => ‹_›)
 
 中文:
-定理 Set.WellFoundedOn.sigma_lex_of_wellFoundedOn_fiber
+定理 集合.WellFoundedOn.sigma_lex_of_wellFoundedOn_fiber
   结论: (hι : s.WellFoundedOn (rι on f))
   证明: by
   change WellFounded (Sigma.Lex rι rπ on fun c : s => ⟨f c, g (f c) c⟩)

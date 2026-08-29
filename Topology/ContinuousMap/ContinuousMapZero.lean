@@ -37,8 +37,8 @@ structure ContinuousMapZero
     - map_zero' : toContinuousMap 0 = 0
 
 中文:
-结构 ContinuousMapZero
-  参数: (X R : 类型) [Zero X] [Zero R] [TopologicalSpace X]
+结构 余ntinuousMapZero
+  参数: (X R : 类型) [零 X] [零 R] [拓扑空间 X]
   继承: C(X, R)
   公理与运算 (1 个):
     - map_zero' : toContinuousMap 0 = 0
@@ -68,7 +68,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike C(X, R)₀ X R where
+  签名: : 函数状 C(X, R)₀ X R where
   定义体: f.toFun
   coe_injective _ _ h := congr(⟨⟨$(h), _⟩, _⟩)
 
@@ -88,7 +88,7 @@ instance instContinuousMapClass
 
 中文:
 实例 instContinuousMapClass
-  签名: : ContinuousMapClass C(X, R)₀ X R where
+  签名: : 连续映射类 C(X, R)₀ X R where
   定义体: f.continuous
 
 Depends on / 依赖: continuous, f.continuous
@@ -106,7 +106,7 @@ instance instZeroHomClass
 
 中文:
 实例 instZeroHomClass
-  签名: : ZeroHomClass C(X, R)₀ X R where
+  签名: : 保零态射类 C(X, R)₀ X R where
   定义体: f.map_zero'
 
 Depends on / 依赖: f.map_zero, map_zero
@@ -131,8 +131,8 @@ scoped[ContinuousMapZero] attribute [instance] Set.zeroOfFactMem
 @[ext]
 
 中文:
-定义 _root_.Set.zeroOfFactMem
-  签名: {X : 类型} [Zero X] (s : Set X) [Fact (0 in s)]
+定义 _root_.集合.zeroOfFactMem
+  签名: {X : 类型} [零 X] (s : 集合 X) [Fact (0 in s)]
   定义体: ⟨0, Fact.out⟩
 
 scoped[ContinuousMapZero] attribute [instance] Set.zeroOfFactMem
@@ -199,7 +199,7 @@ lemma toContinuousMap_injective
 
 中文:
 引理 toContinuousMap_injective
-  结论: Injective ((↑) : C(X, R)₀ -> C(X, R))
+  结论: 单射 ((↑) : C(X, R)₀ -> C(X, R))
   证明: fun _ _ h => congr(.mk $(h) _)
 -/
 lemma toContinuousMap_injective : Injective ((↑) : C(X, R)₀ -> C(X, R)) :=
@@ -275,7 +275,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: [PartialOrder R]
+  签名: [偏序 R]
   定义体: fast_instance%
   .lift _ DFunLike.coe_injective
 
@@ -295,7 +295,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: [PartialOrder R] (f g : C(X, R)₀)
+  条件: [偏序 R] (f g : C(X, R)₀)
   结论: f <= g ↔ 对任意 x, f x <= g x
   证明: Iff.rfl
 
@@ -314,7 +314,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace C(X, R)₀
+  签名: : 拓扑空间 C(X, R)₀
   定义体: fast_instance%
   TopologicalSpace.induced ((↑) : C(X, R)₀ -> C(X, R)) inferInstance
 -/
@@ -332,7 +332,7 @@ lemma isEmbedding_toContinuousMap
 
 中文:
 引理 isEmbedding_toContinuousMap
-  结论: IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where
+  结论: 是嵌入 ((↑) : C(X, R)₀ -> C(X, R)) where
   证明: rfl
   injective _ _ h := ext fun x => congr($(h) x)
 -/
@@ -349,8 +349,8 @@ instance [T0Space
   body: isEmbedding_toContinuousMap.t0Space
 
 中文:
-实例 [T0Space
-  签名: R] : T0Space C(X, R)₀
+实例 [T0空间
+  签名: R] : T0空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.t0Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t0Space, t0Space
@@ -365,8 +365,8 @@ instance [R0Space
   body: isEmbedding_toContinuousMap.r0Space
 
 中文:
-实例 [R0Space
-  签名: R] : R0Space C(X, R)₀
+实例 [R0空间
+  签名: R] : R0空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.r0Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.r0Space, r0Space
@@ -381,8 +381,8 @@ instance [T1Space
   body: isEmbedding_toContinuousMap.t1Space
 
 中文:
-实例 [T1Space
-  签名: R] : T1Space C(X, R)₀
+实例 [T1空间
+  签名: R] : T1空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.t1Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t1Space, t1Space
@@ -397,8 +397,8 @@ instance [R1Space
   body: isEmbedding_toContinuousMap.r1Space
 
 中文:
-实例 [R1Space
-  签名: R] : R1Space C(X, R)₀
+实例 [R1空间
+  签名: R] : R1空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.r1Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.r1Space, r1Space
@@ -413,8 +413,8 @@ instance [T2Space
   body: isEmbedding_toContinuousMap.t2Space
 
 中文:
-实例 [T2Space
-  签名: R] : T2Space C(X, R)₀
+实例 [T2空间
+  签名: R] : T2空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.t2Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t2Space, t2Space
@@ -429,8 +429,8 @@ instance [RegularSpace
   body: isEmbedding_toContinuousMap.regularSpace
 
 中文:
-实例 [RegularSpace
-  签名: R] : RegularSpace C(X, R)₀
+实例 [正则空间
+  签名: R] : 正则空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.regularSpace
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.regularSpace, regularSpace
@@ -445,8 +445,8 @@ instance [T3Space
   body: isEmbedding_toContinuousMap.t3Space
 
 中文:
-实例 [T3Space
-  签名: R] : T3Space C(X, R)₀
+实例 [T3空间
+  签名: R] : T3空间 C(X, R)₀
   定义体: isEmbedding_toContinuousMap.t3Space
 
 Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t3Space, t3Space
@@ -463,7 +463,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: : ContinuousEvalConst C(X, R)₀ X R
+  签名: : 余ntinuousEvalConst C(X, R)₀ X R
   定义体: .of_continuous_forget isEmbedding_toContinuousMap.continuous
 
 Depends on / 依赖: continuous, isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.continuous, of_continuous_forget
@@ -504,7 +504,7 @@ exact isClosed_singleton.preimage continuous_eval_const 0
 
 中文:
 引理 isClosedEmbedding_toContinuousMap
-  条件: [T1Space R]
+  条件: [T1空间 R]
   证明: isEmbedding_toContinuousMap
   isClosed_range := by
     rw [range_toContinuousMap]
@@ -539,7 +539,7 @@ lemma continuous_precomp
 中文:
 引理 continuous_precomp
   条件: (f : C(X, Y)₀)
-  结论: Continuous fun g : C(Y, R)₀ => g.comp f
+  结论: 连续 fun g : C(Y, R)₀ => g.comp f
   证明: by
   rw [continuous_induced_rng]
   change Continuous fun g : C(Y, R)₀ => (g : C(Y, R)).comp (f : C(X, Y))
@@ -568,7 +568,7 @@ theorem postcomp_injective
 
 中文:
 定理 postcomp_injective
-  条件: (g : C(Y, R)₀) (hg : Injective g)
+  条件: (g : C(Y, R)₀) (hg : 单射 g)
   证明: fun _ _ h => ext fun x => hg congr($h x)
 
 @[fun_prop]
@@ -593,7 +593,7 @@ theorem continuous_postcomp
 中文:
 定理 continuous_postcomp
   条件: (g : C(Y, R)₀)
-  结论: Continuous (g.comp : C(X, Y)₀ -> C(X, R)₀)
+  结论: 连续 (g.comp : C(X, Y)₀ -> C(X, R)₀)
   证明: by
   rw [ContinuousMapZero.isEmbedding_toContinuousMap.continuous_iff]
 .comp exact g.toContinuousMap.continuous_postcomp
@@ -620,7 +620,7 @@ definition id
 
 中文:
 定义 id
-  签名: (s : Set R) [Fact (0 in s)]
+  签名: (s : 集合 R) [Fact (0 in s)]
   定义体: ⟨.restrict s (.id R), rfl⟩
 
 @[simp]
@@ -639,7 +639,7 @@ lemma toContinuousMap_id
 
 中文:
 引理 toContinuousMap_id
-  条件: {s : Set R} [Fact (0 in s)]
+  条件: {s : 集合 R} [Fact (0 in s)]
   证明: rfl
 -/
 lemma toContinuousMap_id {s : Set R} [Fact (0 in s)] :
@@ -664,7 +664,7 @@ definition mkD
 
 中文:
 定义 mkD
-  签名: [Zero X] (f : X -> R) (default : C(X, R)₀)
+  签名: [零 X] (f : X -> R) (default : C(X, R)₀)
   定义体: if h : Continuous f ∧ f 0 = 0 then ⟨⟨_, h.1⟩, h.2⟩ else default
 
 Depends on / 依赖: Continuous
@@ -683,7 +683,7 @@ lemma mkD_of_continuous
 
 中文:
 引理 mkD_of_continuous
-  条件: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0)
+  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : 连续 f) (hf₀ : f 0 = 0)
   证明: by
   simp only [mkD, And.intro hf hf₀, true_and, ↓reduceDIte]
 
@@ -704,7 +704,7 @@ lemma mkD_of_not_continuous
 
 中文:
 引理 mkD_of_not_continuous
-  条件: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ Continuous f)
+  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ 连续 f)
   证明: by
   simp only [mkD, not_and_of_not_left _ hf, ↓reduceDIte]
 
@@ -725,7 +725,7 @@ lemma mkD_of_not_zero
 
 中文:
 引理 mkD_of_not_zero
-  条件: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0)
+  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0)
   证明: by
   simp only [mkD, not_and_of_not_right _ hf, ↓reduceDIte]
 
@@ -746,7 +746,7 @@ lemma mkD_apply_of_continuous
 
 中文:
 引理 mkD_apply_of_continuous
-  结论: [Zero X] {f : X -> R} {g : C(X, R)₀} {x : X}
+  结论: [零 X] {f : X -> R} {g : C(X, R)₀} {x : X}
   证明: by
   rw [mkD_of_continuous hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]
 
@@ -767,7 +767,7 @@ lemma mkD_of_continuousOn
 
 中文:
 引理 mkD_of_continuousOn
-  结论: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
+  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀}
   证明: mkD_of_continuous hf.domRestrict hf₀
 
 Depends on / 依赖: domRestrict, hf.domRestrict, mkD_of_continuous
@@ -789,7 +789,7 @@ lemma mkD_of_not_continuousOn
 
 中文:
 引理 mkD_of_not_continuousOn
-  结论: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
+  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀}
   证明: by
   rw [continuousOn_iff_continuous_domRestrict] at hf
   exact mkD_of_not_continuous hf
@@ -814,7 +814,7 @@ lemma mkD_apply_of_continuousOn
 
 中文:
 引理 mkD_apply_of_continuousOn
-  结论: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀} {x : s}
+  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀} {x : s}
   证明: by
   rw [mkD_of_continuousOn hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]; rw [domRestrict_apply]
 
@@ -840,7 +840,7 @@ lemma mkD_eq_mkD_of_map_zero
 
 中文:
 引理 mkD_eq_mkD_of_map_zero
-  条件: [Zero X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 = 0)
+  条件: [零 X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 = 0)
   证明: by
   ext
   by_cases f_cont : Continuous f <;>
@@ -867,7 +867,7 @@ lemma mkD_eq_self
 
 中文:
 引理 mkD_eq_self
-  条件: [Zero X] {f g : C(X, R)₀}
+  条件: [零 X] {f g : C(X, R)₀}
   结论: mkD f g = f
   证明: mkD_of_continuous f.continuous (map_zero f)
 
@@ -893,7 +893,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero R]
+  签名: [零 R]
   定义体: ⟨0, rfl⟩
 -/
 instance instZero [Zero R] : Zero C(X, R)₀ where
@@ -910,7 +910,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  条件: [Zero R]
+  条件: [零 R]
   结论: ⇑(0 : C(X, R)₀) = 0
   证明: rfl
 -/
@@ -926,7 +926,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [AddZeroClass R] [ContinuousAdd R]
+  签名: [加法零类 R] [连续加法 R]
   定义体: ⟨f + g, by simp⟩
 -/
 instance instAdd [AddZeroClass R] [ContinuousAdd R] : Add C(X, R)₀ where
@@ -943,7 +943,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: [AddZeroClass R] [ContinuousAdd R] (f g : C(X, R)₀)
+  条件: [加法零类 R] [连续加法 R] (f g : C(X, R)₀)
   结论: ⇑(f + g) = f + g
   证明: rfl
 -/
@@ -959,7 +959,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [NegZeroClass R] [ContinuousNeg R]
+  签名: [NegZero类 R] [连续取负 R]
   定义体: ⟨- f, by simp⟩
 -/
 instance instNeg [NegZeroClass R] [ContinuousNeg R] : Neg C(X, R)₀ where
@@ -976,7 +976,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: [NegZeroClass R] [ContinuousNeg R] (f : C(X, R)₀)
+  条件: [NegZero类 R] [连续取负 R] (f : C(X, R)₀)
   结论: ⇑(-f) = -f
   证明: rfl
 -/
@@ -992,7 +992,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [SubNegZeroMonoid R] [ContinuousSub R]
+  签名: [SubNegZero幺半群 R] [余ntinuousSub R]
   定义体: ⟨f - g, by simp⟩
 -/
 instance instSub [SubNegZeroMonoid R] [ContinuousSub R] : Sub C(X, R)₀ where
@@ -1008,7 +1008,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: [SubNegZeroMonoid R] [ContinuousSub R] (f g : C(X, R)₀)
+  条件: [SubNegZero幺半群 R] [余ntinuousSub R] (f g : C(X, R)₀)
   证明: rfl
 -/
 @[simp] lemma coe_sub [SubNegZeroMonoid R] [ContinuousSub R] (f g : C(X, R)₀) :
@@ -1024,7 +1024,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [MulZeroClass R] [ContinuousMul R]
+  签名: [乘零类 R] [连续乘法 R]
   定义体: ⟨f * g, by simp⟩
 -/
 instance instMul [MulZeroClass R] [ContinuousMul R] : Mul C(X, R)₀ where
@@ -1041,7 +1041,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: [MulZeroClass R] [ContinuousMul R] (f g : C(X, R)₀)
+  条件: [乘零类 R] [连续乘法 R] (f g : C(X, R)₀)
   结论: ⇑(f * g) = f * g
   证明: rfl
 -/
@@ -1057,7 +1057,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {M : 类型} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
+  签名: {M : 类型} [零 R] [SMulZero类 M R] [连续常数标量乘法 M R]
   定义体: ⟨m • f, by simp⟩
 -/
 instance instSMul {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R] :
@@ -1074,7 +1074,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  结论: {M : 类型} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
+  结论: {M : 类型} [零 R] [SMulZero类 M R] [连续常数标量乘法 M R]
   证明: rfl
 -/
 @[simp] lemma coe_smul {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
@@ -1094,7 +1094,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid C(X, R)₀
+  签名: : 加法交换幺半群 C(X, R)₀
   定义体: fast_instance% toContinuousMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: addCommMonoid, fast_instance, toContinuousMap_injective, toContinuousMap_injective.addCommMonoid
@@ -1113,7 +1113,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {M : 类型} [Semiring M] [Module M R] [ContinuousConstSMul M R]
+  签名: {M : 类型} [半环 M] [模 M R] [连续常数标量乘法 M R]
   定义体: fast_instance% toContinuousMap_injective.module M
     { toFun := _, map_add' := fun _ _ => rfl, map_zero' := rfl } (fun _ _ => rfl)
 
@@ -1134,7 +1134,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: {M N : 类型} [SMulZeroClass M R] [ContinuousConstSMul M R]
+  签名: {M N : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
   定义体: ext fun _ => smul_comm ..
 
 Depends on / 依赖: smul_comm
@@ -1154,7 +1154,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: {M N : 类型} [SMulZeroClass M R] [ContinuousConstSMul M R]
+  签名: {M N : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
   定义体: ext fun _ => smul_assoc ..
 
 Depends on / 依赖: smul_assoc
@@ -1181,7 +1181,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup C(X, R)₀
+  签名: : 加法交换群 C(X, R)₀
   定义体: fast_instance% toContinuousMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1208,7 +1208,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: : NonUnitalCommSemiring C(X, R)₀
+  签名: : 非幺交换半环 C(X, R)₀
   定义体: fast_instance% toContinuousMap_injective.nonUnitalCommSemiring
     _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1228,7 +1228,7 @@ instance instSMulCommClass'
 
 中文:
 实例 instSMulCommClass'
-  签名: {M : 类型} [SMulZeroClass M R] [SMulCommClass M R R]
+  签名: {M : 类型} [SMulZero类 M R] [标量交换类 M R R]
   定义体: ext fun x => smul_comm m (f x) (g x)
 
 Depends on / 依赖: smul_comm
@@ -1247,7 +1247,7 @@ instance instIsScalarTower'
 
 中文:
 实例 instIsScalarTower'
-  签名: {M : 类型} [SMulZeroClass M R] [IsScalarTower M R R]
+  签名: {M : 类型} [SMulZero类 M R] [标量塔 M R R]
   定义体: ext fun x => smul_assoc m (f x) (g x)
 
 Depends on / 依赖: smul_assoc
@@ -1269,7 +1269,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: [StarRing R] [ContinuousStar R]
+  签名: [对合环 R] [余ntinuousStar R]
   定义体: ⟨star f, by simp⟩
   star_involutive _ := ext fun _ => star_star _
   star_mul _ _ := ext fun _ => star_mul ..
@@ -1291,7 +1291,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: [StarRing R] {M : 类型} [SMulZeroClass M R] [ContinuousConstSMul M R]
+  签名: [对合环 R] {M : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
   定义体: ext fun x => star_smul r (f x)
 
 Depends on / 依赖: star_smul
@@ -1311,7 +1311,7 @@ lemma coe_star
 
 中文:
 引理 coe_star
-  条件: [StarRing R] [ContinuousStar R] (f : C(X, R)₀)
+  条件: [对合环 R] [余ntinuousStar R] (f : C(X, R)₀)
   结论: ⇑(star f) = star ⇑f
   证明: rfl
 -/
@@ -1326,8 +1326,8 @@ instance [StarRing
   body: DFunLike.ext _ _ fun _ => star_trivial _
 
 中文:
-实例 [StarRing
-  签名: R] [ContinuousStar R] [TrivialStar R] : TrivialStar C(X, R)₀ where
+实例 [对合环
+  签名: R] [余ntinuousStar R] [TrivialStar R] : TrivialStar C(X, R)₀ where
   定义体: DFunLike.ext _ _ fun _ => star_trivial _
 
 Depends on / 依赖: DFunLike, DFunLike.ext, star_trivial
@@ -1368,7 +1368,7 @@ definition toContinuousMapHom
 
 中文:
 定义 toContinuousMapHom
-  签名: [StarRing R] [ContinuousStar R]
+  签名: [对合环 R] [余ntinuousStar R]
   定义体: f
   map_smul' _ _ := rfl
   map_zero' := rfl
@@ -1394,7 +1394,7 @@ lemma coe_toContinuousMapHom
 
 中文:
 引理 coe_toContinuousMapHom
-  条件: [StarRing R] [ContinuousStar R]
+  条件: [对合环 R] [余ntinuousStar R]
   证明: rfl
 -/
 @[simp] lemma coe_toContinuousMapHom [StarRing R] [ContinuousStar R] :
@@ -1415,7 +1415,7 @@ definition toContinuousMapCLM
 
 中文:
 定义 toContinuousMapCLM
-  签名: (M : 类型) [Semiring M] [Module M R] [ContinuousConstSMul M R]
+  签名: (M : 类型) [半环 M] [模 M R] [连续常数标量乘法 M R]
   定义体: f
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1438,7 +1438,7 @@ definition evalCLM
 
 中文:
 定义 evalCLM
-  签名: (𝕜 : 类型) [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R] (x : X)
+  签名: (𝕜 : 类型) [半环 𝕜] [模 𝕜 R] [连续常数标量乘法 𝕜 R] (x : X)
   定义体: (ContinuousMap.evalCLM 𝕜 x).comp (toContinuousMapCLM 𝕜)
 
 @[simp]
@@ -1460,7 +1460,7 @@ lemma evalCLM_apply
 
 中文:
 引理 evalCLM_apply
-  结论: {𝕜 : 类型} [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R]
+  结论: {𝕜 : 类型} [半环 𝕜] [模 𝕜 R] [连续常数标量乘法 𝕜 R]
   证明: rfl
 -/
 lemma evalCLM_apply {𝕜 : Type*} [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R]
@@ -1520,7 +1520,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  结论: {ι : 类型} (s : Finset ι)
+  结论: {ι : 类型} (s : 有限集 ι)
   证明: map_sum coeFnAddMonoidHom f s
 -/
 @[simp] lemma coe_sum {ι : Type*} (s : Finset ι)
@@ -1545,7 +1545,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: : NonUnitalCommRing C(X, R)₀
+  签名: : 非幺交换环 C(X, R)₀
   定义体: fast_instance% toContinuousMap_injective.nonUnitalCommRing _ rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1567,7 +1567,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg C(X, R)₀
+  签名: 连续取负 C(X, R)₀
   定义体: by
     rw [continuous_induced_rng]
     exact continuous_neg.comp continuous_induced_dom
@@ -1598,7 +1598,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace C(X, R)₀
+  签名: : 一致空间 C(X, R)₀
   定义体: fast_instance% .comap toContinuousMap inferInstance
 -/
 protected instance instUniformSpace : UniformSpace C(X, R)₀ :=
@@ -1632,8 +1632,8 @@ instance [T1Space
 .mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
 
 中文:
-实例 [T1Space
-  签名: R] [CompleteSpace C(X, R)] : CompleteSpace C(X, R)₀
+实例 [T1空间
+  签名: R] [完备空间 C(X, R)] : 完备空间 C(X, R)₀
   定义体: completeSpace_iff_isComplete_range isUniformEmbedding_toContinuousMap.isUniformInducing
 .mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
 
@@ -1655,7 +1655,7 @@ lemma isUniformEmbedding_comp
 
 中文:
 引理 isUniformEmbedding_comp
-  结论: {Y : 类型} [UniformSpace Y] [Zero Y] (g : C(Y, R)₀)
+  结论: {Y : 类型} [一致空间 Y] [零 Y] (g : C(Y, R)₀)
   证明: isUniformEmbedding_toContinuousMap.of_comp_iff.mp
 .comp ContinuousMap.isUniformEmbedding_comp g.toContinuousMap hg
       isUniformEmbedding_toContinuousMap
@@ -1682,8 +1682,8 @@ uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_
 .comp ContinuousMap.uniformCont
 
 中文:
-定义 _root_.UniformEquiv.arrowCongrLeft₀
-  签名: {Y : 类型} [TopologicalSpace Y] [Zero Y] (f : X ≃ₜ Y)
+定义 _root_.一致等价.arrowCongrLeft₀
+  签名: {Y : 类型} [拓扑空间 Y] [零 Y] (f : X ≃ₜ Y)
   定义体: g.comp ⟨f.symm, (f.eq_symm_apply.eq ▸ hf).symm⟩
   invFun g := g.comp ⟨f, hf⟩
 left_inv g := ext fun _ => congrArg g f.left_inv _
@@ -1773,7 +1773,7 @@ map_smul' r f := ext by simp
 
 中文:
 定义 nonUnitalStarAlgHom_postcomp
-  签名: (φ : R ->⋆ₙₐ[M] S) (hφ : Continuous φ)
+  签名: (φ : R ->⋆ₙₐ[M] S) (hφ : 连续 φ)
   定义体: .comp ⟨⟨φ, hφ⟩, by simp⟩
 map_zero' := ext by simp
 map_add' _ _ := ext by simp
@@ -1805,8 +1805,8 @@ instance [MetricSpace
   body: ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace _
 
 中文:
-实例 [MetricSpace
-  签名: R] [Zero R] : MetricSpace C(α, R)₀
+实例 [度量空间
+  签名: R] [零 R] : 度量空间 C(α, R)₀
   定义体: ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace _
 
 Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace, comapMetricSpace, isUniformEmbedding_toContinuousMap
@@ -1824,7 +1824,7 @@ lemma isometry_toContinuousMap
 
 中文:
 引理 isometry_toContinuousMap
-  条件: [MetricSpace R] [Zero R]
+  条件: [度量空间 R] [零 R]
   证明: fun _ _ => rfl
 -/
 lemma isometry_toContinuousMap [MetricSpace R] [Zero R] :
@@ -1840,8 +1840,8 @@ instance [NormedAddCommGroup
   body: ‖(f : C(α, R))‖
 
 中文:
-实例 [NormedAddCommGroup
-  签名: R] : Norm C(α, R)₀ where
+实例 [赋范交换加群
+  签名: R] : 范数 C(α, R)₀ where
   定义体: ‖(f : C(α, R))‖
 -/
 noncomputable instance [NormedAddCommGroup R] : Norm C(α, R)₀ where
@@ -1858,7 +1858,7 @@ lemma norm_def
 
 中文:
 引理 norm_def
-  条件: [NormedAddCommGroup R] (f : C(α, R)₀)
+  条件: [赋范交换加群 R] (f : C(α, R)₀)
   结论: ‖f‖ = ‖(f : C(α, R))‖
   证明: rfl
 -/
@@ -1874,8 +1874,8 @@ instance [NormedAddCommGroup
   body: NormedAddGroup.dist_eq (f : C(α, R)) g
 
 中文:
-实例 [NormedAddCommGroup
-  签名: R] : NormedAddCommGroup C(α, R)₀ where
+实例 [赋范交换加群
+  签名: R] : 赋范交换加群 C(α, R)₀ where
   定义体: NormedAddGroup.dist_eq (f : C(α, R)) g
 
 Depends on / 依赖: NormedAddGroup, NormedAddGroup.dist_eq, dist_eq
@@ -1894,8 +1894,8 @@ instance [NormedCommRing
   mul_comm f g := mul_comm f g
 
 中文:
-实例 [NormedCommRing
-  签名: R] : NonUnitalNormedCommRing C(α, R)₀ where
+实例 [NormedComm环
+  签名: R] : 非幺NormedComm环 C(α, R)₀ where
   定义体: NormedAddGroup.dist_eq (f : C(α, R)) g
   norm_mul_le f g := norm_mul_le (f : C(α, R)) g
   mul_comm f g := mul_comm f g
@@ -1916,8 +1916,8 @@ instance [NormedField
   body: norm_smul_le r (f : C(α, R))
 
 中文:
-实例 [NormedField
-  签名: 𝕜] [NormedCommRing R] [NormedAlgebra 𝕜 R] :
+实例 [赋范域
+  签名: 𝕜] [NormedComm环 R] [赋范代数 𝕜 R] :
   定义体: norm_smul_le r (f : C(α, R))
 
 Depends on / 依赖: norm_smul_le
@@ -1935,8 +1935,8 @@ instance [NormedCommRing
   body: CStarRing.norm_mul_self_le (f : C(α, R))
 
 中文:
-实例 [NormedCommRing
-  签名: R] [StarRing R] [CStarRing R] : CStarRing C(α, R)₀ where
+实例 [NormedComm环
+  签名: R] [对合环 R] [CStar环 R] : CStar环 C(α, R)₀ where
   定义体: CStarRing.norm_mul_self_le (f : C(α, R))
 
 Depends on / 依赖: CStarRing, CStarRing.norm_mul_self_le, norm_mul_self_le

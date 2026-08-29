@@ -37,9 +37,9 @@ class DescendsAlong
 
 中文:
 类 DescendsAlong
-  参数: (P Q : Morphism命题erty C)
+  参数: (P Q : MorphismProperty C)
   公理与运算 (1 个):
-    - of_isPullback({A X Y Z : C} {fst : A ⟶ X} {snd : A ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}) : IsPullback fst snd f g -> Q f -> P fst -> P g
+    - of_isPullback({A X Y Z : C} {fst : A ⟶ X} {snd : A ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}) : 是拉回 fst snd f g -> Q f -> P fst -> P g
 
 Depends on / 依赖: F.IsTriangulated, IsTriangulated, PreservesZeroMorphisms
 -/
@@ -61,7 +61,7 @@ lemma of_isPullback_of_descendsAlong
 
 中文:
 引理 of_isPullback_of_descendsAlong
-  结论: [P.DescendsAlong Q] (h : IsPullback fst snd f g)
+  结论: [P.DescendsAlong Q] (h : 是拉回 fst snd f g)
   证明: DescendsAlong.of_isPullback h hf hfst
 
 Depends on / 依赖: DescendsAlong, DescendsAlong.of_isPullback, of_isPullback
@@ -80,7 +80,7 @@ lemma iff_of_isPullback
 
 中文:
 引理 iff_of_isPullback
-  结论: [P.IsStableUnderBaseChange] [P.DescendsAlong Q] (h : IsPullback fst snd f g)
+  结论: [P.是StableUnderBaseChange] [P.DescendsAlong Q] (h : 是拉回 fst snd f g)
   证明: ⟨fun hfst => of_isPullback_of_descendsAlong h hf hfst, fun hf => P.of_isPullback h.flip hf⟩
 
 Depends on / 依赖: Additive, F.Additive, F.IsTriangulated, IsTriangulated, P.of_isPullback, h.flip, of_isPullback, of_isPullback_of_descendsAlong
@@ -118,7 +118,7 @@ lemma pullback_fst_iff
 
 中文:
 引理 pullback_fst_iff
-  结论: [P.IsStableUnderBaseChange] [P.DescendsAlong Q] [HasPullback f g]
+  结论: [P.是StableUnderBaseChange] [P.DescendsAlong Q] [HasPullback f g]
   证明: iff_of_isPullback (.of_hasPullback f g) hf
 
 Depends on / 依赖: iff_of_isPullback, of_hasPullback
@@ -156,7 +156,7 @@ lemma pullback_snd_iff
 
 中文:
 引理 pullback_snd_iff
-  结论: [P.IsStableUnderBaseChange] [P.DescendsAlong Q] [HasPullback f g]
+  结论: [P.是StableUnderBaseChange] [P.DescendsAlong Q] [HasPullback f g]
   证明: iff_of_isPullback (IsPullback.of_hasPullback f g).flip hg
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, iff_of_isPullback, of_hasPullback
@@ -175,7 +175,7 @@ instance DescendsAlong.top
 
 中文:
 实例 DescendsAlong.top
-  签名: : (⊤ : Morphism命题erty C).DescendsAlong Q where
+  签名: : (⊤ : MorphismProperty C).DescendsAlong Q where
   定义体: trivial
 -/
 instance DescendsAlong.top : (⊤ : MorphismProperty C).DescendsAlong Q where
@@ -190,7 +190,7 @@ instance DescendsAlong.inf
   body: ⟨DescendsAlong.of_isPullback h hg hfst.1, DescendsAlong.of_isPullback h hg hfst.2⟩
 
 中文:
-实例 DescendsAlong.inf
+实例 DescendsAlong.下确界
   签名: [P.DescendsAlong Q] [W.DescendsAlong Q]
   定义体: ⟨DescendsAlong.of_isPullback h hg hfst.1, DescendsAlong.of_isPullback h hg hfst.2⟩
 
@@ -262,8 +262,8 @@ instance [Q.IsStableUnderBaseChange]
     exact RespectsRight.postcomp _ hf _ hfst
 
 中文:
-实例 [Q.IsStableUnderBaseChange]
-  签名: [P.HasOfPrecomp命题erty Q] [P.RespectsRight Q]
+实例 [Q.是StableUnderBaseChange]
+  签名: [P.有OfPrecompProperty Q] [P.RespectsRight Q]
   定义体: by
     apply P.of_precomp (W' := Q) _ _ (Q.of_isPullback h hf)
     rw [← h.1.1]
@@ -296,7 +296,7 @@ instance [HasPullbacks
 
 
 中文:
-实例 [HasPullbacks
+实例 [有Pullbacks
   签名: C] (P Q
   定义体: by
   apply DescendsAlong.mk'
@@ -348,7 +348,7 @@ lemma eq_of_isomorphisms_descendsAlong
 
 中文:
 引理 eq_of_isomorphisms_descendsAlong
-  结论: [(Morphism命题erty.isomorphisms C).DescendsAlong P]
+  结论: [(MorphismProperty.isomorphisms C).DescendsAlong P]
   证明: by
   suffices IsIso (equalizer.ι f g) from Limits.eq_of_epi_equalizer
   change MorphismProperty.isomorphisms C _
@@ -418,10 +418,10 @@ class CodescendsAlong
     - of_isPushout({Z X Y A : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ A} {inr : Y ⟶ A}) : IsPushout f g inl inr -> Q f -> P inl -> P g
 
 中文:
-类 CodescendsAlong
-  参数: (P Q : Morphism命题erty C)
+类 余descendsAlong
+  参数: (P Q : MorphismProperty C)
   公理与运算 (1 个):
-    - of_isPushout({Z X Y A : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ A} {inr : Y ⟶ A}) : IsPushout f g inl inr -> Q f -> P inl -> P g
+    - of_isPushout({Z X Y A : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ A} {inr : Y ⟶ A}) : 是推出 f g inl inr -> Q f -> P inl -> P g
 -/
 class CodescendsAlong (P Q : MorphismProperty C) : Prop where
   of_isPushout {Z X Y A : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ A} {inr : Y ⟶ A} :
@@ -441,7 +441,7 @@ lemma of_isPushout_of_codescendsAlong
 
 中文:
 引理 of_isPushout_of_codescendsAlong
-  结论: [P.CodescendsAlong Q] (h : IsPushout f g inl inr)
+  结论: [P.余descendsAlong Q] (h : 是推出 f g inl inr)
   证明: CodescendsAlong.of_isPushout h hf hinl
 
 Depends on / 依赖: CodescendsAlong, CodescendsAlong.of_isPushout, of_isPushout
@@ -460,7 +460,7 @@ lemma iff_of_isPushout
 
 中文:
 引理 iff_of_isPushout
-  结论: [P.IsStableUnderCobaseChange] [P.CodescendsAlong Q]
+  结论: [P.是StableUnderCobaseChange] [P.余descendsAlong Q]
   证明: ⟨fun hinl => of_isPushout_of_codescendsAlong h hg hinl, fun hf => P.of_isPushout h hf⟩
 
 Depends on / 依赖: P.of_isPushout, of_isPushout, of_isPushout_of_codescendsAlong
@@ -479,7 +479,7 @@ lemma of_pushout_inl_of_codescendsAlong
 
 中文:
 引理 of_pushout_inl_of_codescendsAlong
-  结论: [P.CodescendsAlong Q] [HasPushout f g] (hf : Q f)
+  结论: [P.余descendsAlong Q] [HasPushout f g] (hf : Q f)
   证明: of_isPushout_of_codescendsAlong (.of_hasPushout f g) hf hinl
 
 Depends on / 依赖: of_hasPushout, of_isPushout_of_codescendsAlong
@@ -498,7 +498,7 @@ lemma pushout_inl_iff
 
 中文:
 引理 pushout_inl_iff
-  结论: [P.IsStableUnderCobaseChange] [P.CodescendsAlong Q] [HasPushout f g]
+  结论: [P.是StableUnderCobaseChange] [P.余descendsAlong Q] [HasPushout f g]
   证明: iff_of_isPushout (.of_hasPushout f g) hf
 
 Depends on / 依赖: iff_of_isPushout, of_hasPushout
@@ -517,7 +517,7 @@ lemma of_pushout_inr_of_descendsAlong
 
 中文:
 引理 of_pushout_inr_of_descendsAlong
-  结论: [P.CodescendsAlong Q] [HasPushout f g] (hg : Q g)
+  结论: [P.余descendsAlong Q] [HasPushout f g] (hg : Q g)
   证明: of_isPushout_of_codescendsAlong (IsPushout.of_hasPushout f g).flip hg hinr
 
 Depends on / 依赖: IsPushout, IsPushout.of_hasPushout, of_hasPushout, of_isPushout_of_codescendsAlong
@@ -536,7 +536,7 @@ lemma pushout_inr_iff
 
 中文:
 引理 pushout_inr_iff
-  结论: [P.IsStableUnderCobaseChange] [P.CodescendsAlong Q] [HasPushout f g]
+  结论: [P.是StableUnderCobaseChange] [P.余descendsAlong Q] [HasPushout f g]
   证明: iff_of_isPushout (IsPushout.of_hasPushout f g).flip hg
 
 Depends on / 依赖: IsPushout, IsPushout.of_hasPushout, iff_of_isPushout, of_hasPushout
@@ -555,9 +555,9 @@ lemma CodescendsAlong.of_le
   proof: CodescendsAlong.of_isPushout h (hle _ hg) hinl
 
 中文:
-引理 CodescendsAlong.of_le
-  条件: [P.CodescendsAlong Q] (hle : W <= Q)
-  结论: P.CodescendsAlong W where
+引理 余descendsAlong.of_le
+  条件: [P.余descendsAlong Q] (hle : W <= Q)
+  结论: P.余descendsAlong W where
   证明: CodescendsAlong.of_isPushout h (hle _ hg) hinl
 
 Depends on / 依赖: CodescendsAlong, CodescendsAlong.of_isPushout, of_isPushout
@@ -574,8 +574,8 @@ instance CodescendsAlong.top
   body: trivial
 
 中文:
-实例 CodescendsAlong.top
-  签名: : (⊤ : Morphism命题erty C).CodescendsAlong Q where
+实例 余descendsAlong.top
+  签名: : (⊤ : MorphismProperty C).余descendsAlong Q where
   定义体: trivial
 -/
 instance CodescendsAlong.top : (⊤ : MorphismProperty C).CodescendsAlong Q where
@@ -590,8 +590,8 @@ instance CodescendsAlong.inf
   body: ⟨CodescendsAlong.of_isPushout h hg hfst.1, CodescendsAlong.of_isPushout h hg hfst.2⟩
 
 中文:
-实例 CodescendsAlong.inf
-  签名: [P.CodescendsAlong Q] [W.CodescendsAlong Q]
+实例 余descendsAlong.下确界
+  签名: [P.余descendsAlong Q] [W.余descendsAlong Q]
   定义体: ⟨CodescendsAlong.of_isPushout h hg hfst.1, CodescendsAlong.of_isPushout h hg hfst.2⟩
 
 Depends on / 依赖: CodescendsAlong, CodescendsAlong.of_isPushout, of_isPushout
@@ -613,7 +613,7 @@ lemma CodescendsAlong.mk'
     rwa [← P.cancel_right_of_respectsIso _ h.isoPushout.inv, h.inl_isoPushout_inv]
 
 中文:
-引理 CodescendsAlong.mk'
+引理 余descendsAlong.mk'
   结论: [P.RespectsIso]
   证明: by
     have : HasPushout f g := h.hasPushout
@@ -642,8 +642,8 @@ instance [Q.IsStableUnderCobaseChange]
     exact RespectsLeft.precomp _ hf _ hinl
 
 中文:
-实例 [Q.IsStableUnderCobaseChange]
-  签名: [P.HasOfPostcomp命题erty Q] [P.RespectsLeft Q]
+实例 [Q.是StableUnderCobaseChange]
+  签名: [P.有OfPostcompProperty Q] [P.RespectsLeft Q]
   定义体: by
     apply P.of_postcomp (W' := Q) g inr (Q.of_isPushout h.flip hf)
     rw [← h.1.1]

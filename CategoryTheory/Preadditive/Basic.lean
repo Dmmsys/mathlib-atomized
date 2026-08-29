@@ -72,10 +72,10 @@ class Preadditive
     - comp_add : forall (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g'  [default: by cat_disch]
 
 中文:
-类 Preadditive
+类 预加性
   参数: where
   公理与运算 (3 个):
-    - homGroup : 对任意 P Q : C, AddCommGroup (P ⟶ Q)  [默认: by infer_instance]
+    - homGroup : 对任意 P Q : C, 加法交换群 (P ⟶ Q)  [默认: by infer_instance]
     - add_comp : 对任意 (P Q R : C) (f f' : P ⟶ Q) (g : Q ⟶ R), (f + f') ≫ g = f ≫ g + f' ≫ g  [默认: by cat_disch]
     - comp_add : 对任意 (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g'  [默认: by cat_disch]
 
@@ -131,7 +131,7 @@ instance inducedCategory
 
 中文:
 实例 inducedCategory
-  签名: : Preadditive.{v} (InducedCategory C F) where
+  签名: : 预加性.{v} (InducedCategory C F) where
   定义体: InducedCategory.homEquiv.addCommGroup
   add_comp _ _ _ _ _ _ := by ext; apply add_comp
   comp_add _ _ _ _ _ _ := by ext; apply comp_add
@@ -156,7 +156,7 @@ definition _root_.CategoryTheory.InducedCategory.homAddEquiv
   map_add' := by aesop_cat
 
 中文:
-定义 _root_.CategoryTheory.InducedCategory.homAddEquiv
+定义 _root_.范畴论.InducedCategory.homAddEquiv
   定义体: InducedCategory.homEquiv
   map_add' := by aesop_cat
 
@@ -185,7 +185,7 @@ instance fullSubcategory
 
 中文:
 实例 fullSubcategory
-  签名: (Z : Object命题erty C)
+  签名: (Z : ObjectProperty C)
   定义体: {
       -- Note: Add zero field explicitly for a better transparency of definitional properties
       zero := Z.homMk 0
@@ -456,7 +456,7 @@ theorem comp_sum
 
 中文:
 定理 comp_sum
-  条件: {P Q R : C} {J : 类型} (s : Finset J) (f : P ⟶ Q) (g : J -> (Q ⟶ R))
+  条件: {P Q R : C} {J : 类型} (s : 有限集 J) (f : P ⟶ Q) (g : J -> (Q ⟶ R))
   证明: map_sum (leftComp R f) _ _
 
 @[reassoc]
@@ -480,7 +480,7 @@ theorem sum_comp
 
 中文:
 定理 sum_comp
-  条件: {P Q R : C} {J : 类型} (s : Finset J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R)
+  条件: {P Q R : C} {J : 类型} (s : 有限集 J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R)
   证明: map_sum (rightComp P g) _ _
 
 @[reassoc]
@@ -504,7 +504,7 @@ theorem sum_comp'
 
 中文:
 定理 sum_comp'
-  结论: {P Q R S : C} {J : 类型} (s : Finset J) (f : J -> (P ⟶ Q)) (g : J -> (Q ⟶ R))
+  结论: {P Q R S : C} {J : 类型} (s : 有限集 J) (f : J -> (P ⟶ Q)) (g : J -> (Q ⟶ R))
   证明: by
   simp only [← Category.assoc]
   apply sum_comp
@@ -616,7 +616,7 @@ theorem mono_of_kernel_zero
 
 中文:
 定理 mono_of_kernel_zero
-  结论: {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
+  结论: {X Y : C} {f : X ⟶ Y} [有极限 (parallelPair f 0)]
   证明: mono_of_cancel_zero f fun g h => by rw [← kernel.lift_ι f g h, w, Limits.comp_zero]
 
 Depends on / 依赖: Limits, Limits.comp_zero, comp_zero, kernel, kernel.lift_, mono_of_cancel_zero
@@ -637,7 +637,7 @@ lemma mono_of_isZero_kernel'
 
 中文:
 引理 mono_of_isZero_kernel'
-  结论: {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c)
+  结论: {X Y : C} {f : X ⟶ Y} (c : 核叉 f) (hc : 是极限 c)
   证明: mono_of_cancel_zero _ (fun g hg => by
   obtain ⟨a, ha⟩ := KernelFork.IsLimit.lift' hc _ hg
   rw [← ha]; rw [h.eq_of_tgt a 0]; rw [Limits.zero_comp])
@@ -659,7 +659,7 @@ lemma mono_iff_isZero_kernel'
 
 中文:
 引理 mono_iff_isZero_kernel'
-  条件: {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c)
+  条件: {X Y : C} {f : X ⟶ Y} (c : 核叉 f) (hc : 是极限 c)
   证明: ⟨fun _ => KernelFork.IsLimit.isZero_of_mono hc, mono_of_isZero_kernel' c hc⟩
 
 Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.isZero_of_mono, isZero_of_mono, mono_of_isZero_kernel
@@ -678,7 +678,7 @@ lemma mono_of_isZero_kernel
 
 中文:
 引理 mono_of_isZero_kernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : IsZero (kernel f))
+  条件: {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : 是零 (kernel f))
   证明: mono_of_isZero_kernel' _ (kernelIsKernel _) h
 
 Depends on / 依赖: kernelIsKernel, mono_of_isZero_kernel
@@ -757,7 +757,7 @@ theorem epi_of_cokernel_zero
 
 中文:
 定理 epi_of_cokernel_zero
-  结论: {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
+  结论: {X Y : C} {f : X ⟶ Y} [有余极限 (parallelPair f 0)]
   证明: epi_of_cancel_zero f fun g h => by rw [← cokernel.π_desc f g h, w, Limits.zero_comp]
 
 Depends on / 依赖: Limits, Limits.zero_comp, cokernel, epi_of_cancel_zero, zero_comp
@@ -778,7 +778,7 @@ lemma epi_of_isZero_cokernel'
 
 中文:
 引理 epi_of_isZero_cokernel'
-  结论: {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c)
+  结论: {X Y : C} {f : X ⟶ Y} (c : 余核余叉 f) (hc : 是余极限 c)
   证明: epi_of_cancel_zero _ (fun g hg => by
   obtain ⟨a, ha⟩ := CokernelCofork.IsColimit.desc' hc _ hg
   rw [← ha]; rw [h.eq_of_src a 0]; rw [Limits.comp_zero])
@@ -800,7 +800,7 @@ lemma epi_iff_isZero_cokernel'
 
 中文:
 引理 epi_iff_isZero_cokernel'
-  条件: {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c)
+  条件: {X Y : C} {f : X ⟶ Y} (c : 余核余叉 f) (hc : 是余极限 c)
   证明: ⟨fun _ => CokernelCofork.IsColimit.isZero_of_epi hc, epi_of_isZero_cokernel' c hc⟩
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.isZero_of_epi, IsColimit, epi_of_isZero_cokernel, isZero_of_epi
@@ -819,7 +819,7 @@ lemma epi_of_isZero_cokernel
 
 中文:
 引理 epi_of_isZero_cokernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : IsZero (cokernel f))
+  条件: {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : 是零 (cokernel f))
   证明: epi_of_isZero_cokernel' _ (cokernelIsCokernel _) h
 
 Depends on / 依赖: cokernelIsCokernel, epi_of_isZero_cokernel
@@ -864,7 +864,7 @@ theorem comp_left_eq_zero
 
 中文:
 定理 comp_left_eq_zero
-  条件: [IsIso f]
+  条件: [是同构 f]
   结论: f ≫ g = 0 ↔ g = 0
   证明: by
   rw [← IsIso.eq_inv_comp]; rw [Limits.comp_zero]
@@ -889,7 +889,7 @@ theorem comp_right_eq_zero
 
 中文:
 定理 comp_right_eq_zero
-  条件: [IsIso g]
+  条件: [是同构 g]
   结论: f ≫ g = 0 ↔ f = 0
   证明: by
   rw [← IsIso.eq_comp_inv]; rw [Limits.zero_comp]
@@ -915,7 +915,7 @@ theorem mono_of_kernel_iso_zero
 
 中文:
 定理 mono_of_kernel_iso_zero
-  结论: {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
+  结论: {X Y : C} {f : X ⟶ Y} [有极限 (parallelPair f 0)]
   证明: mono_of_kernel_zero (zero_of_source_iso_zero _ w)
 
 Depends on / 依赖: mono_of_kernel_zero, zero_of_source_iso_zero
@@ -934,7 +934,7 @@ theorem epi_of_cokernel_iso_zero
 
 中文:
 定理 epi_of_cokernel_iso_zero
-  结论: {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
+  结论: {X Y : C} {f : X ⟶ Y} [有余极限 (parallelPair f 0)]
   证明: epi_of_cokernel_zero (zero_of_target_iso_zero _ w)
 
 Depends on / 依赖: epi_of_cokernel_zero, zero_of_target_iso_zero
@@ -967,7 +967,7 @@ definition forkOfKernelFork
 
 中文:
 定义 forkOfKernelFork
-  签名: (c : KernelFork (f - g))
+  签名: (c : 核叉 (f - g))
   定义体: Fork.ofι c.ι by rw [← sub_eq_zero, ← comp_sub, c.condition]
 
 @[simp]
@@ -989,7 +989,7 @@ theorem forkOfKernelFork_ι
 
 中文:
 定理 forkOfKernelFork_ι
-  条件: (c : KernelFork (f - g))
+  条件: (c : 核叉 (f - g))
   结论: (forkOfKernelFork c).ι = c.ι
   证明: rfl
 -/
@@ -1008,7 +1008,7 @@ definition kernelForkOfFork
 
 中文:
 定义 kernelForkOfFork
-  签名: (c : Fork f g)
+  签名: (c : 叉 f g)
   定义体: Fork.ofι c.ι by rw [comp_sub, comp_zero, sub_eq_zero, c.condition]
 
 @[simp]
@@ -1032,7 +1032,7 @@ theorem kernelForkOfFork_ι
 
 中文:
 定理 kernelForkOfFork_ι
-  条件: (c : Fork f g)
+  条件: (c : 叉 f g)
   结论: (kernelForkOfFork c).ι = c.ι
   证明: rfl
 
@@ -1073,7 +1073,7 @@ definition isLimitForkOfKernelFork
 
 中文:
 定义 isLimitForkOfKernelFork
-  签名: {c : KernelFork (f - g)} (i : IsLimit c)
+  签名: {c : 核叉 (f - g)} (i : 是极限 c)
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨i.lift (kernelForkOfFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
 
@@ -1097,7 +1097,7 @@ theorem isLimitForkOfKernelFork_lift
 
 中文:
 定理 isLimitForkOfKernelFork_lift
-  条件: {c : KernelFork (f - g)} (i : IsLimit c) (s : Fork f g)
+  条件: {c : 核叉 (f - g)} (i : 是极限 c) (s : 叉 f g)
   证明: rfl
 -/
 theorem isLimitForkOfKernelFork_lift {c : KernelFork (f - g)} (i : IsLimit c) (s : Fork f g) :
@@ -1116,7 +1116,7 @@ definition isLimitKernelForkOfFork
 
 中文:
 定义 isLimitKernelForkOfFork
-  签名: {c : Fork f g} (i : IsLimit c)
+  签名: {c : 叉 f g} (i : 是极限 c)
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨i.lift (forkOfKernelFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
 
@@ -1196,7 +1196,7 @@ definition coforkOfCokernelCofork
 
 中文:
 定义 coforkOfCokernelCofork
-  签名: (c : CokernelCofork (f - g))
+  签名: (c : 余核余叉 (f - g))
   定义体: Cofork.ofπ c.π by rw [← sub_eq_zero, ← sub_comp, c.condition]
 
 @[simp]
@@ -1217,7 +1217,7 @@ theorem coforkOfCokernelCofork_π
 
 中文:
 定理 coforkOfCokernelCofork_π
-  条件: (c : CokernelCofork (f - g))
+  条件: (c : 余核余叉 (f - g))
   证明: rfl
 -/
 theorem coforkOfCokernelCofork_π (c : CokernelCofork (f - g)) :
@@ -1236,7 +1236,7 @@ definition cokernelCoforkOfCofork
 
 中文:
 定义 cokernelCoforkOfCofork
-  签名: (c : Cofork f g)
+  签名: (c : 余叉 f g)
   定义体: Cofork.ofπ c.π by rw [sub_comp, zero_comp, sub_eq_zero, c.condition]
 
 @[simp]
@@ -1260,7 +1260,7 @@ theorem cokernelCoforkOfCofork_π
 
 中文:
 定理 cokernelCoforkOfCofork_π
-  条件: (c : Cofork f g)
+  条件: (c : 余叉 f g)
   结论: (cokernelCoforkOfCofork c).π = c.π
   证明: rfl
 
@@ -1302,7 +1302,7 @@ definition isColimitCoforkOfCokernelCofork
 
 中文:
 定义 isColimitCoforkOfCokernelCofork
-  签名: {c : CokernelCofork (f - g)} (i : IsColimit c)
+  签名: {c : 余核余叉 (f - g)} (i : 是余极限 c)
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨i.desc (cokernelCoforkOfCofork s), i.fac _ _, fun h => by
       apply Cofork.IsColimit.hom_ext i; cat_disch⟩
@@ -1328,7 +1328,7 @@ theorem isColimitCoforkOfCokernelCofork_desc
 
 中文:
 定理 isColimitCoforkOfCokernelCofork_desc
-  结论: {c : CokernelCofork (f - g)} (i : IsColimit c)
+  结论: {c : 余核余叉 (f - g)} (i : 是余极限 c)
   证明: rfl
 -/
 theorem isColimitCoforkOfCokernelCofork_desc {c : CokernelCofork (f - g)} (i : IsColimit c)
@@ -1349,7 +1349,7 @@ definition isColimitCokernelCoforkOfCofork
 
 中文:
 定义 isColimitCokernelCoforkOfCofork
-  签名: {c : Cofork f g} (i : IsColimit c)
+  签名: {c : 余叉 f g} (i : 是余极限 c)
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨i.desc (coforkOfCokernelCofork s), i.fac _ _, fun h => by
       apply Cofork.IsColimit.hom_ext i; cat_disch⟩
@@ -1429,7 +1429,7 @@ theorem hasEqualizers_of_hasKernels
 
 中文:
 定理 hasEqualizers_of_hasKernels
-  条件: [HasKernels C]
+  条件: [有Kernels C]
   结论: HasEqualizers C
   证明: @hasEqualizers_of_hasLimit_parallelPair _ _ fun {_} {_} f g => hasEqualizer_of_hasKernel f g
 
@@ -1450,7 +1450,7 @@ theorem hasCoequalizers_of_hasCokernels
 
 中文:
 定理 hasCoequalizers_of_hasCokernels
-  条件: [HasCokernels C]
+  条件: [有余kernels C]
   结论: HasCoequalizers C
   证明: @hasCoequalizers_of_hasColimit_parallelPair _ _ fun {_} {_} f g =>
     hasCoequalizer_of_hasCokernel f g
@@ -1482,7 +1482,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (Units 整数) (X ≅ Y)
+  签名: 标量乘法 (单位群 整数) (X ≅ Y)
   定义体: { hom := (a : Int) • e.hom
       inv := ((a⁻¹ : Units Int) : Int) • e.inv
       hom_inv_id := by
@@ -1515,7 +1515,7 @@ lemma smul_iso_hom
 
 中文:
 引理 smul_iso_hom
-  条件: (a : Units 整数) (e : X ≅ Y)
+  条件: (a : 单位群 整数) (e : X ≅ Y)
   结论: (a • e).hom = a • e.hom
   证明: rfl
 
@@ -1535,7 +1535,7 @@ lemma smul_iso_inv
 
 中文:
 引理 smul_iso_inv
-  条件: (a : Units 整数) (e : X ≅ Y)
+  条件: (a : 单位群 整数) (e : X ≅ Y)
   结论: (a • e).inv = a⁻¹ • e.inv
   证明: rfl
 -/
@@ -1554,7 +1554,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (X ≅ Y)
+  签名: 取负 (X ≅ Y)
   定义体: { hom := -e.hom
       inv := -e.inv }
 

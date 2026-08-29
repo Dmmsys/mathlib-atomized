@@ -399,7 +399,7 @@ theorem norm_cexp_neg_mul_sq
 
 中文:
 定理 norm_cexp_neg_mul_sq
-  条件: (b : Complex) (x : 实数)
+  条件: (b : 复形) (x : 实数)
   证明: by
   rw [norm_exp]; rw [← ofReal_pow]; rw [mul_comm (-b) _]; rw [re_ofReal_mul]; rw [neg_re]; rw [mul_comm]
 
@@ -423,7 +423,7 @@ theorem integrable_cexp_neg_mul_sq
 
 中文:
 定理 integrable_cexp_neg_mul_sq
-  条件: {b : Complex} (hb : 0 < b.re)
+  条件: {b : 复形} (hb : 0 < b.re)
   证明: by
   refine ⟨by fun_prop, ?_⟩
   rw [← hasFiniteIntegral_norm_iff]
@@ -455,7 +455,7 @@ theorem integrable_mul_cexp_neg_mul_sq
 
 中文:
 定理 integrable_mul_cexp_neg_mul_sq
-  条件: {b : Complex} (hb : 0 < b.re)
+  条件: {b : 复形} (hb : 0 < b.re)
   证明: by
   refine ⟨(continuous_ofReal.mul (Complex.continuous_exp.comp ?_)).aestronglyMeasurable, ?_⟩
   · fun_prop
@@ -492,7 +492,7 @@ theorem integral_mul_cexp_neg_mul_sq
 
 中文:
 定理 integral_mul_cexp_neg_mul_sq
-  条件: {b : Complex} (hb : 0 < b.re)
+  条件: {b : 复形} (hb : 0 < b.re)
   证明: by
   have hb' : b != 0 := by contrapose! hb; rw [hb, zero_re]
   have A : forall x : Complex, HasDerivAt (fun x => -(2 * b)⁻¹ * cexp (-b * x ^ 2))
@@ -539,7 +539,7 @@ theorem integral_gaussian_sq_complex
 
 中文:
 定理 integral_gaussian_sq_complex
-  条件: {b : Complex} (hb : 0 < b.re)
+  条件: {b : 复形} (hb : 0 < b.re)
   证明: by
   /- We compute `(∫ exp (-b x^2))^2` as an integral over `ℝ^2`, and then make a polar change
   of coordinates. We are left with `∫ r * exp (-b r^2)`, which has been computed in
@@ -631,7 +631,7 @@ theorem continuousAt_gaussian_integral
 
 中文:
 定理 continuousAt_gaussian_integral
-  条件: (b : Complex) (hb : 0 < re b)
+  条件: (b : 复形) (hb : 0 < re b)
   证明: by
   let f : Complex -> Real -> Complex := fun (c : Complex) (x : Real) => cexp (-c * (x : Complex) ^ 2)
   obtain ⟨d, hd, hd'⟩ := exists_between hb
@@ -669,7 +669,7 @@ theorem integral_gaussian_complex
 
 中文:
 定理 integral_gaussian_complex
-  条件: {b : Complex} (hb : 0 < re b)
+  条件: {b : 复形} (hb : 0 < re b)
   证明: by
   have nv : forall {b : Complex}, 0 < re b -> b != 0 := by intro b hb; contrapose! hb; rw [hb]; simp
   apply
@@ -736,7 +736,7 @@ theorem integral_gaussian_complex_Ioi
 
 中文:
 定理 integral_gaussian_complex_Ioi
-  条件: {b : Complex} (hb : 0 < re b)
+  条件: {b : 复形} (hb : 0 < re b)
   证明: by
   let f : Real -> Complex := fun x => cexp (-b * (x : Complex) ^ 2)
   have full_integral := integral_gaussian_complex hb
@@ -815,7 +815,7 @@ theorem Real.Gamma_one_half_eq
     have : (x ^ (2 : Real)) ^ (1 /
 
 中文:
-定理 Real.Gamma_one_half_eq
+定理 实数.Gamma_one_half_eq
   结论: 实数.Gamma (1 / 2) = √π
   证明: by
   rw [Gamma_eq_integral one_half_pos]; rw [← integral_comp_rpow_Ioi_of_pos zero_lt_two]
@@ -852,8 +852,8 @@ theorem Complex.Gamma_one_half_eq
   · rw [sqrt_eq_rpow, ofReal_cpow pi_pos.le, ofReal_div, ofReal_ofNat, ofReal_one]
 
 中文:
-定理 Complex.Gamma_one_half_eq
-  结论: Complex.Gamma (1 / 2) = (π : Complex) ^ (1 / 2 : Complex)
+定理 复形.Gamma_one_half_eq
+  结论: 复形.Gamma (1 / 2) = (π : 复形) ^ (1 / 2 : 复形)
   证明: by
   convert! congr_arg ((↑) : Real -> Complex) Real.Gamma_one_half_eq
   · simpa only [one_div, ofReal_inv, ofReal_ofNat] using Gamma_ofReal (1 / 2)
@@ -882,7 +882,7 @@ lemma Real.Gamma_nat_add_one_add_half
     ring
 
 中文:
-引理 Real.Gamma_nat_add_one_add_half
+引理 实数.Gamma_nat_add_one_add_half
   条件: (k : 自然数)
   证明: by
   induction k with
@@ -916,7 +916,7 @@ lemma Real.Gamma_nat_add_half
   | succ k => simpa [-one_div, mul_add] using Gamma_nat_add_one_add_half k
 
 中文:
-引理 Real.Gamma_nat_add_half
+引理 实数.Gamma_nat_add_half
   条件: (k : 自然数)
   证明: by
   cases k with

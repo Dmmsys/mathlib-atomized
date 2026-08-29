@@ -2568,7 +2568,7 @@ theorem le_of_forall_one_lt_lt_mul
 @[to_additive]
 
 中文:
-定理 le_of_forall_one_lt_lt_mul
+定理 le_of_对任意_one_lt_lt_mul
   条件: (h : 对任意 ε : α, 1 < ε -> a < b * ε)
   结论: a <= b
   证明: le_of_not_gt fun h₁ => lt_irrefl a (by simpa using h _ (lt_inv_mul_iff_lt.mpr h₁))
@@ -2590,7 +2590,7 @@ theorem le_iff_forall_one_lt_lt_mul
   proof: ⟨fun h _ => lt_mul_of_le_of_one_lt h, le_of_forall_one_lt_lt_mul⟩
 
 中文:
-定理 le_iff_forall_one_lt_lt_mul
+定理 le_iff_对任意_one_lt_lt_mul
   结论: a <= b ↔ 对任意 ε, 1 < ε -> a < b * ε
   证明: ⟨fun h _ => lt_mul_of_le_of_one_lt h, le_of_forall_one_lt_lt_mul⟩
 
@@ -2648,7 +2648,7 @@ theorem div_le_div_flip
 
 中文:
 定理 div_le_div_flip
-  结论: {α : 类型} [CommGroup α] [LinearOrder α]
+  结论: {α : 类型} [交换群 α] [线性序 α]
   证明: by
   rw [div_eq_mul_inv b]; rw [mul_comm]
   exact div_le_inv_mul_iff
@@ -2683,9 +2683,9 @@ theorem Monotone.inv
 @[to_additive]
 
 中文:
-定理 Monotone.inv
-  条件: (hf : Monotone f)
-  结论: Antitone fun x => (f x)⁻¹
+定理 递增.inv
+  条件: (hf : 递增 f)
+  结论: 递减 fun x => (f x)⁻¹
   证明: fun _ _ hxy =>
   inv_le_inv_iff.2 (hf hxy)
 
@@ -2708,9 +2708,9 @@ theorem Antitone.inv
 @[to_additive]
 
 中文:
-定理 Antitone.inv
-  条件: (hf : Antitone f)
-  结论: Monotone fun x => (f x)⁻¹
+定理 递减.inv
+  条件: (hf : 递减 f)
+  结论: 递增 fun x => (f x)⁻¹
   证明: fun _ _ hxy =>
   inv_le_inv_iff.2 (hf hxy)
 
@@ -2786,9 +2786,9 @@ theorem StrictMono.inv
 @[to_additive]
 
 中文:
-定理 StrictMono.inv
-  条件: (hf : StrictMono f)
-  结论: StrictAnti fun x => (f x)⁻¹
+定理 严格递增.inv
+  条件: (hf : 严格递增 f)
+  结论: 严格递减 fun x => (f x)⁻¹
   证明: fun _ _ hxy =>
   inv_lt_inv_iff.2 (hf hxy)
 
@@ -2811,9 +2811,9 @@ theorem StrictAnti.inv
 @[to_additive]
 
 中文:
-定理 StrictAnti.inv
-  条件: (hf : StrictAnti f)
-  结论: StrictMono fun x => (f x)⁻¹
+定理 严格递减.inv
+  条件: (hf : 严格递减 f)
+  结论: 严格递增 fun x => (f x)⁻¹
   证明: fun _ _ hxy =>
   inv_lt_inv_iff.2 (hf hxy)
 

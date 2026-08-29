@@ -48,8 +48,8 @@ class HVAdd
     - hVAdd : α -> β -> γ
 
 中文:
-类 HVAdd
-  参数: (α : 类型u) (β : 类型v) (γ : outParam (Type w))
+类 异质向量加法
+  参数: (α : 类型u) (β : 类型v) (γ : outParam (类型 w))
   公理与运算 (1 个):
     - hVAdd : α -> β -> γ
 -/
@@ -73,7 +73,7 @@ class VAdd
     - vadd : G -> P -> P
 
 中文:
-类 VAdd
+类 向量加法
   参数: (G : 类型u) (P : 类型v)
   公理与运算 (1 个):
     - vadd : G -> P -> P
@@ -93,7 +93,7 @@ class VSub
     - vsub : P -> P -> G
 
 中文:
-类 VSub
+类 向量减法
   参数: (G : outParam 类型) (P : 类型)
   公理与运算 (1 个):
     - vsub : P -> P -> G
@@ -154,7 +154,7 @@ class Star
     - star : R -> R
 
 中文:
-类 Star
+类 对合
   参数: (R : 类型u)
   公理与运算 (1 个):
     - star : R -> R
@@ -320,7 +320,7 @@ lemma neg_ite
 
 中文:
 引理 neg_ite
-  条件: {α : 类型} (P : 命题) [Decidable P] [Neg α] (b : α) (c : α)
+  条件: {α : 类型} (P : 命题) [可判定 P] [取负 α] (b : α) (c : α)
   证明: by split <;> rfl
 -/
 lemma neg_ite {α : Type*} (P : Prop) [Decidable P] [Neg α] (b : α) (c : α) :
@@ -479,8 +479,8 @@ theorem Subsingleton.eq_one
   proof: Subsingleton.elim _ _
 
 中文:
-定理 Subsingleton.eq_one
-  条件: [One α] [Subsingleton α] (a : α)
+定理 子单例.eq_one
+  条件: [幺 α] [子单例 α] (a : α)
   结论: a = 1
   证明: Subsingleton.elim _ _
 

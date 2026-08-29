@@ -57,9 +57,9 @@ class SMulZeroClass
     - smul_zero : forall a : M, a • (0 : A) = 0
 
 中文:
-类 SMulZeroClass
-  参数: (M A : 类型) [Zero A]
-  继承: SMul M A
+类 SMulZero类
+  参数: (M A : 类型) [零 A]
+  继承: 标量乘法 M A
   公理与运算 (1 个):
     - smul_zero : 对任意 a : M, a • (0 : A) = 0
 
@@ -104,7 +104,7 @@ lemma smul_ite_zero
 
 中文:
 引理 smul_ite_zero
-  条件: (p : 命题) [Decidable p] (a : M) (b : A)
+  条件: (p : 命题) [可判定 p] (a : M) (b : A)
   证明: by split_ifs <;> simp
 
 Depends on / 依赖: split_ifs
@@ -158,8 +158,8 @@ abbreviation Function.Injective.smulZeroClass
   body: hf by simp only [smul, map_zero, smul_zero]
 
 中文:
-缩写 Function.Injective.smulZeroClass
-  签名: [Zero B] [SMul M B] (f : ZeroHom B A)
+缩写 函数.单射.smulZeroClass
+  签名: [零 B] [标量乘法 M B] (f : 保零态射 B A)
   定义体: hf by simp only [smul, map_zero, smul_zero]
 -/
 protected abbrev Function.Injective.smulZeroClass [Zero B] [SMul M B] (f : ZeroHom B A)
@@ -176,8 +176,8 @@ abbreviation ZeroHom.smulZeroClass
   body: by rw [← map_zero f, ← smul, smul_zero]
 
 中文:
-缩写 ZeroHom.smulZeroClass
-  签名: [Zero B] [SMul M B] (f : ZeroHom A B)
+缩写 保零态射.smulZeroClass
+  签名: [零 B] [标量乘法 M B] (f : 保零态射 A B)
   定义体: by rw [← map_zero f, ← smul, smul_zero]
 -/
 protected abbrev ZeroHom.smulZeroClass [Zero B] [SMul M B] (f : ZeroHom A B)
@@ -194,8 +194,8 @@ abbreviation Function.Surjective.smulZeroClassLeft
   body: hf.forall.mpr fun c => by rw [hsmul, smul_zero]
 
 中文:
-缩写 Function.Surjective.smulZeroClassLeft
-  签名: {R S M : 类型} [Zero M] [SMulZeroClass R M]
+缩写 函数.满射.smulZeroClassLeft
+  签名: {R S M : 类型} [零 M] [SMulZero类 R M]
   定义体: hf.forall.mpr fun c => by rw [hsmul, smul_zero]
 
 Depends on / 依赖: hf.forall.mpr, smul_zero
@@ -218,7 +218,7 @@ abbreviation SMulZeroClass.compFun
   smul_zero x := smul_zero (f x)
 
 中文:
-缩写 SMulZeroClass.compFun
+缩写 SMulZero类.compFun
   签名: (f : N -> M)
   定义体: SMul.comp.smul f
   smul_zero x := smul_zero (f x)
@@ -242,7 +242,7 @@ definition SMulZeroClass.toZeroHom
   map_zero' := smul_zero x
 
 中文:
-定义 SMulZeroClass.toZeroHom
+定义 SMulZero类.toZeroHom
   签名: (x : M)
   定义体: (x • ·)
   map_zero' := smul_zero x
@@ -268,9 +268,9 @@ class SMulWithZero
     - zero_smul : forall m : A, (0 : M₀) • m = 0
 
 中文:
-类 SMulWithZero
-  参数: [Zero M₀] [Zero A]
-  继承: SMulZeroClass M₀ A
+类 带零标量乘法
+  参数: [零 M₀] [零 A]
+  继承: SMulZero类 M₀ A
   公理与运算 (1 个):
     - zero_smul : 对任意 m : A, (0 : M₀) • m = 0
 
@@ -296,8 +296,8 @@ instance MulZeroClass.toOppositeSMulWithZero
   zero_smul := mul_zero
 
 中文:
-实例 MulZeroClass.toOppositeSMulWithZero
-  签名: [MulZeroClass M₀]
+实例 乘零类.toOppositeSMulWithZero
+  签名: [乘零类 M₀]
   定义体: zero_mul _
   zero_smul := mul_zero
 
@@ -380,8 +380,8 @@ abbreviation Function.Injective.smulWithZero
 smul_zero a := hf by simp [smul]
 
 中文:
-缩写 Function.Injective.smulWithZero
-  签名: (f : ZeroHom A' A) (hf : Injective f)
+缩写 函数.单射.smulWithZero
+  签名: (f : 保零态射 A' A) (hf : 单射 f)
   定义体: hf by simp [smul]
 smul_zero a := hf by simp [smul]
 -/
@@ -403,8 +403,8 @@ abbreviation Function.Surjective.smulWithZero
   smul_zero c := by rw [← f.map_zero, ← smul, smul_zero]
 
 中文:
-缩写 Function.Surjective.smulWithZero
-  签名: (f : ZeroHom A A') (hf : Surjective f)
+缩写 函数.满射.smulWithZero
+  签名: (f : 保零态射 A A') (hf : 满射 f)
   定义体: by
     rcases hf m with ⟨x, rfl⟩
     simp [← smul]
@@ -432,8 +432,8 @@ definition SMulWithZero.compHom
   zero_smul m := by change (f 0) • m = 0; rw [map_zero, zero_smul]
 
 中文:
-定义 SMulWithZero.compHom
-  签名: (f : ZeroHom M₀' M₀)
+定义 带零标量乘法.compHom
+  签名: (f : 保零态射 M₀' M₀)
   定义体: (f · • ·)
   smul_zero m := smul_zero (f m)
   zero_smul m := by change (f 0) • m = 0; rw [map_zero, zero_smul]
@@ -455,8 +455,8 @@ instance AddMonoid.natSMulWithZero
   zero_smul := zero_nsmul
 
 中文:
-实例 AddMonoid.natSMulWithZero
-  签名: [AddMonoid A]
+实例 加法幺半群.natSMulWithZero
+  签名: [加法幺半群 A]
   定义体: _root_.nsmul_zero
   zero_smul := zero_nsmul
 
@@ -476,8 +476,8 @@ instance AddGroup.intSMulWithZero
   zero_smul := zero_zsmul
 
 中文:
-实例 AddGroup.intSMulWithZero
-  签名: [AddGroup A]
+实例 加法群.intSMulWithZero
+  签名: [加法群 A]
   定义体: zsmul_zero
   zero_smul := zero_zsmul
 
@@ -502,9 +502,9 @@ class MulActionWithZero
     - zero_smul : forall m : A, (0 : M₀) • m = 0
 
 中文:
-类 MulActionWithZero
-  参数: extends MulAction M₀ A
-  继承: MulAction M₀ A
+类 带零乘法作用
+  参数: extends 乘法作用 M₀ A
+  继承: 乘法作用 M₀ A
   公理与运算 (2 个):
     - smul_zero : 对任意 r : M₀, r • (0 : A) = 0
     - zero_smul : 对任意 m : A, (0 : M₀) • m = 0
@@ -535,8 +535,8 @@ instance MonoidWithZero.toOppositeMulActionWithZero
   body: { MulZeroClass.toOppositeSMulWithZero M₀, Monoid.toOppositeMulAction with }
 
 中文:
-实例 MonoidWithZero.toOppositeMulActionWithZero
-  签名: : MulActionWithZero M₀ᵐᵒᵖ M₀
+实例 带零幺半群.toOppositeMulActionWithZero
+  签名: : 带零乘法作用 M₀ᵐᵒᵖ M₀
   定义体: { MulZeroClass.toOppositeSMulWithZero M₀, Monoid.toOppositeMulAction with }
 
 Depends on / 依赖: Monoid, Monoid.toOppositeMulAction, MulZeroClass, MulZeroClass.toOppositeSMulWithZero, toOppositeMulAction, toOppositeSMulWithZero
@@ -554,8 +554,8 @@ lemma MulActionWithZero.subsingleton
     rw [← one_smul M₀ x]; rw [← one_smul M₀ y]; rw [Subsingleton.elim (1 : M₀) 0]; rw [zero_smul]; rw [zero_smul]
 
 中文:
-引理 MulActionWithZero.subsingleton
-  条件: [MulActionWithZero M₀ A] [Subsingleton M₀]
+引理 带零乘法作用.subsingleton
+  条件: [带零乘法作用 M₀ A] [子单例 M₀]
   证明: by
     rw [← one_smul M₀ x]; rw [← one_smul M₀ y]; rw [Subsingleton.elim (1 : M₀) 0]; rw [zero_smul]; rw [zero_smul]
 -/
@@ -573,7 +573,7 @@ lemma MulActionWithZero.nontrivial
 not_subsingleton A MulActionWithZero.subsingleton M₀ A
 
 中文:
-引理 MulActionWithZero.nontrivial
+引理 带零乘法作用.nontrivial
   证明: (subsingleton_or_nontrivial M₀).resolve_left fun _ =>
 not_subsingleton A MulActionWithZero.subsingleton M₀ A
 -/
@@ -633,7 +633,7 @@ lemma Pi.single_apply_smul
   rw [single_apply]; rw [ite_smul]; rw [one_smul]; rw [zero_smul]; rw [single_apply]
 
 中文:
-引理 Pi.single_apply_smul
+引理 依赖函数类型.single_apply_smul
   条件: {ι : 类型} [DecidableEq ι] (x : A) (i j : ι)
   证明: by
   rw [single_apply]; rw [ite_smul]; rw [one_smul]; rw [zero_smul]; rw [single_apply]
@@ -654,8 +654,8 @@ abbreviation Function.Injective.mulActionWithZero
   body: { hf.mulAction f smul, hf.smulWithZero f smul with }
 
 中文:
-缩写 Function.Injective.mulActionWithZero
-  签名: (f : ZeroHom A' A) (hf : Injective f)
+缩写 函数.单射.mulActionWithZero
+  签名: (f : 保零态射 A' A) (hf : 单射 f)
   定义体: { hf.mulAction f smul, hf.smulWithZero f smul with }
 -/
 protected abbrev Function.Injective.mulActionWithZero (f : ZeroHom A' A) (hf : Injective f)
@@ -672,8 +672,8 @@ abbreviation Function.Surjective.mulActionWithZero
   body: { hf.mulAction f smul, hf.smulWithZero f smul with }
 
 中文:
-缩写 Function.Surjective.mulActionWithZero
-  签名: (f : ZeroHom A A') (hf : Surjective f)
+缩写 函数.满射.mulActionWithZero
+  签名: (f : 保零态射 A A') (hf : 满射 f)
   定义体: { hf.mulAction f smul, hf.smulWithZero f smul with }
 -/
 protected abbrev Function.Surjective.mulActionWithZero (f : ZeroHom A A') (hf : Surjective f)
@@ -695,7 +695,7 @@ definition MulActionWithZero.compHom
   one_smul m := by change f 1 • m = m; simp
 
 中文:
-定义 MulActionWithZero.compHom
+定义 带零乘法作用.compHom
   签名: (f : M₀' ->*₀ M₀)
   定义体: SMulWithZero.compHom A f.toZeroHom
   mul_smul r s m := by change f (r * s) • m = f r • f s • m; simp [mul_smul]
@@ -769,9 +769,9 @@ class DistribSMul
     - smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
 
 中文:
-类 DistribSMul
-  参数: (M A : 类型) [AddZeroClass A]
-  继承: SMulZeroClass M A
+类 分配标量乘法
+  参数: (M A : 类型) [加法零类 A]
+  继承: SMulZero类 M A
   公理与运算 (1 个):
     - smul_add : 对任意 (a : M) (x y : A), a • (x + y) = a • x + a • y
 -/
@@ -813,8 +813,8 @@ abbreviation Function.Injective.distribSMul
 smul_add := fun c x y => hf by simp only [smul, map_add, smul_add] }
 
 中文:
-缩写 Function.Injective.distribSMul
-  签名: [AddZeroClass B] [SMul M B] (f : B ->+ A)
+缩写 函数.单射.distribSMul
+  签名: [加法零类 B] [标量乘法 M B] (f : B ->+ A)
   定义体: { hf.smulZeroClass f.toZeroHom smul with
 smul_add := fun c x y => hf by simp only [smul, map_add, smul_add] }
 -/
@@ -836,8 +836,8 @@ abbreviation Function.Surjective.distribSMul
       simp only [smul_add, ← smul, ← map_add] }
 
 中文:
-缩写 Function.Surjective.distribSMul
-  签名: [AddZeroClass B] [SMul M B] (f : A ->+ B)
+缩写 函数.满射.distribSMul
+  签名: [加法零类 B] [标量乘法 M B] (f : A ->+ B)
   定义体: { f.toZeroHom.smulZeroClass smul with
     smul_add := fun c x y => by
       rcases hf x with ⟨x, rfl⟩
@@ -862,8 +862,8 @@ abbreviation Function.Surjective.distribSMulLeft
     smul_add := hf.forall.mpr fun c x y => by simp only [hsmul, smul_add] }
 
 中文:
-缩写 Function.Surjective.distribSMulLeft
-  签名: {R S M : 类型} [AddZeroClass M] [DistribSMul R M]
+缩写 函数.满射.distribSMulLeft
+  签名: {R S M : 类型} [加法零类 M] [分配标量乘法 R M]
   定义体: { hf.smulZeroClassLeft f hsmul with
     smul_add := hf.forall.mpr fun c x y => by simp only [hsmul, smul_add] }
 
@@ -887,7 +887,7 @@ abbreviation DistribSMul.compFun
     smul_add := fun x => smul_add (f x) }
 
 中文:
-缩写 DistribSMul.compFun
+缩写 分配标量乘法.compFun
   签名: (f : N -> M)
   定义体: { SMulZeroClass.compFun A f with
     smul_add := fun x => smul_add (f x) }
@@ -909,7 +909,7 @@ definition DistribSMul.toAddMonoidHom
   body: { SMulZeroClass.toZeroHom A x with toFun := (x • ·), map_add' := smul_add x }
 
 中文:
-定义 DistribSMul.toAddMonoidHom
+定义 分配标量乘法.toAddMonoidHom
   签名: (x : M)
   定义体: { SMulZeroClass.toZeroHom A x with toFun := (x • ·), map_add' := smul_add x }
 
@@ -927,8 +927,8 @@ instance AddMonoid.nat_smulCommClass
   body: ((DistribSMul.toAddMonoidHom A x).map_nsmul n y).symm
 
 中文:
-实例 AddMonoid.nat_smulCommClass
-  签名: {M A : 类型} [AddMonoid A] [DistribSMul M A]
+实例 加法幺半群.nat_smulCommClass
+  签名: {M A : 类型} [加法幺半群 A] [分配标量乘法 M A]
   定义体: ((DistribSMul.toAddMonoidHom A x).map_nsmul n y).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_nsmul, toAddMonoidHom
@@ -947,8 +947,8 @@ instance AddMonoid.nat_smulCommClass'
   body: .symm _ _ _
 
 中文:
-实例 AddMonoid.nat_smulCommClass'
-  签名: {M A : 类型} [AddMonoid A] [DistribSMul M A]
+实例 加法幺半群.nat_smulCommClass'
+  签名: {M A : 类型} [加法幺半群 A] [分配标量乘法 M A]
   定义体: .symm _ _ _
 -/
 instance AddMonoid.nat_smulCommClass' {M A : Type*} [AddMonoid A] [DistribSMul M A] :
@@ -981,9 +981,9 @@ class DistribMulAction
     - smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
 
 中文:
-类 DistribMulAction
-  参数: (M A : 类型) [Monoid M] [AddMonoid A]
-  继承: MulAction M A
+类 分配乘法作用
+  参数: (M A : 类型) [幺半群 M] [加法幺半群 A]
+  继承: 乘法作用 M A
   公理与运算 (2 个):
     - smul_zero : 对任意 a : M, a • (0 : A) = 0
     - smul_add : 对任意 (a : M) (x y : A), a • (x + y) = a • x + a • y
@@ -1018,8 +1018,8 @@ abbreviation Function.Injective.distribMulAction
   body: { hf.distribSMul f smul, hf.mulAction f smul with }
 
 中文:
-缩写 Function.Injective.distribMulAction
-  签名: [AddMonoid B] [SMul M B] (f : B ->+ A)
+缩写 函数.单射.distribMulAction
+  签名: [加法幺半群 B] [标量乘法 M B] (f : B ->+ A)
   定义体: { hf.distribSMul f smul, hf.mulAction f smul with }
 -/
 protected abbrev Function.Injective.distribMulAction [AddMonoid B] [SMul M B] (f : B ->+ A)
@@ -1035,8 +1035,8 @@ abbreviation Function.Surjective.distribMulAction
   body: { hf.distribSMul f smul, hf.mulAction f smul with }
 
 中文:
-缩写 Function.Surjective.distribMulAction
-  签名: [AddMonoid B] [SMul M B] (f : A ->+ B)
+缩写 函数.满射.distribMulAction
+  签名: [加法幺半群 B] [标量乘法 M B] (f : A ->+ B)
   定义体: { hf.distribSMul f smul, hf.mulAction f smul with }
 -/
 protected abbrev Function.Surjective.distribMulAction [AddMonoid B] [SMul M B] (f : A ->+ B)
@@ -1056,7 +1056,7 @@ definition DistribMulAction.toAddMonoidHom
   body: DistribSMul.toAddMonoidHom A x
 
 中文:
-定义 DistribMulAction.toAddMonoidHom
+定义 分配乘法作用.toAddMonoidHom
   签名: (x : M)
   定义体: DistribSMul.toAddMonoidHom A x
 
@@ -1080,7 +1080,7 @@ map_one' := AddMonoidHom.ext one_smul M
 map_mul' x y := AddMonoidHom.ext mul_smul x y
 
 中文:
-定义 DistribMulAction.toAddMonoidEnd
+定义 分配乘法作用.toAddMonoidEnd
   签名: :
   定义体: DistribSMul.toAddMonoidHom A
 map_one' := AddMonoidHom.ext one_smul M
@@ -1109,8 +1109,8 @@ instance AddGroup.int_smulCommClass
   body: ((DistribSMul.toAddMonoidHom A x).map_zsmul n y).symm
 
 中文:
-实例 AddGroup.int_smulCommClass
-  签名: : SMulCommClass 整数 M A where
+实例 加法群.int_smulCommClass
+  签名: : 标量交换类 整数 M A where
   定义体: ((DistribSMul.toAddMonoidHom A x).map_zsmul n y).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_zsmul, toAddMonoidHom
@@ -1130,8 +1130,8 @@ instance AddGroup.int_smulCommClass'
 @[simp]
 
 中文:
-实例 AddGroup.int_smulCommClass'
-  签名: : SMulCommClass M 整数 A
+实例 加法群.int_smulCommClass'
+  签名: : 标量交换类 M 整数 A
   定义体: SMulCommClass.symm _ _ _
 
 @[simp]
@@ -1246,7 +1246,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulZeroClass α β
+  签名: SMulZero类 α β
   定义体: not_imp_comm.mp mul_inv_cancel₀ by
     rw [← smul_one g]; rw [← inv_smul_eq_iff]; rw [smul_mul']; rw [inv_smul_smul]; rw [zero_mul]
     exact zero_ne_one

@@ -65,7 +65,7 @@ theorem map_insertNth
 
 中文:
 定理 map_insertNth
-  条件: (f : M [⋀^Fin (n + 1)]->ₗ[R] N) (p : Fin (n + 1)) (x : M) (v : Fin n -> M)
+  条件: (f : M [⋀^有限集 (n + 1)]->ₗ[R] N) (p : 有限集 (n + 1)) (x : M) (v : 有限集 n -> M)
   证明: by
   rw [← cons_comp_cycleRange]; rw [map_perm]; rw [Matrix.vecCons]
   simp [Units.smul_def]
@@ -89,7 +89,7 @@ theorem neg_one_pow_smul_map_insertNth
 
 中文:
 定理 neg_one_pow_smul_map_insertNth
-  结论: (f : M [⋀^Fin (n + 1)]->ₗ[R] N) (p : Fin (n + 1)) (x : M)
+  结论: (f : M [⋀^有限集 (n + 1)]->ₗ[R] N) (p : 有限集 (n + 1)) (x : M)
   证明: by
   rw [map_insertNth]; rw [smul_smul]; rw [← pow_add]; rw [Even.neg_one_pow]; rw [one_smul]
   use p
@@ -115,7 +115,7 @@ theorem neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
 
 中文:
 定理 neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
-  结论: (f : M [⋀^Fin n]->ₗ[R] N)
+  结论: (f : M [⋀^有限集 n]->ₗ[R] N)
   证明: by
   rcases exists_succAbove_eq hij with ⟨i, rfl⟩
   obtain ⟨m, rfl⟩ : exists m, m + 1 = n := by simp [i.pos]
@@ -146,7 +146,7 @@ definition alternatizeUncurryFin
 
 中文:
 定义 alternatizeUncurryFin
-  签名: (f : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N)
+  签名: (f : M ->ₗ[R] M [⋀^有限集 n]->ₗ[R] N)
   定义体: ∑ p : Fin (n + 1), (-1) ^ (p : Nat) • LinearMap.uncurryMid p (toMultilinearMapLM ∘ₗ f)
   map_eq_zero_of_eq' := by
     intro v i j hvij hij
@@ -185,7 +185,7 @@ theorem alternatizeUncurryFin_apply
 
 中文:
 定理 alternatizeUncurryFin_apply
-  条件: (f : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N) (v : Fin (n + 1) -> M)
+  条件: (f : M ->ₗ[R] M [⋀^有限集 n]->ₗ[R] N) (v : 有限集 (n + 1) -> M)
   证明: by
   simp [alternatizeUncurryFin]
 
@@ -212,7 +212,7 @@ theorem alternatizeUncurryFin_add
 
 中文:
 定理 alternatizeUncurryFin_add
-  条件: (f g : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N)
+  条件: (f g : M ->ₗ[R] M [⋀^有限集 n]->ₗ[R] N)
   证明: by
   ext
   simp [alternatizeUncurryFin_apply, Finset.sum_add_distrib]
@@ -239,7 +239,7 @@ lemma alternatizeUncurryFin_curryLeft
 
 中文:
 引理 alternatizeUncurryFin_curryLeft
-  条件: (f : M [⋀^Fin (n + 1)]->ₗ[R] N)
+  条件: (f : M [⋀^有限集 (n + 1)]->ₗ[R] N)
   证明: by
   ext v
   simp [alternatizeUncurryFin_apply, ← map_insertNth]
@@ -266,7 +266,7 @@ theorem alternatizeUncurryFin_smul
 
 中文:
 定理 alternatizeUncurryFin_smul
-  条件: (c : S) (f : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N)
+  条件: (c : S) (f : M ->ₗ[R] M [⋀^有限集 n]->ₗ[R] N)
   证明: by
   ext v
   simp [alternatizeUncurryFin_apply, smul_comm _ c, Finset.smul_sum]
@@ -292,7 +292,7 @@ definition alternatizeUncurryFinLM
 
 中文:
 定义 alternatizeUncurryFinLM
-  签名: : (M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N) ->ₗ[R] M [⋀^Fin (n + 1)]->ₗ[R] N where
+  签名: : (M ->ₗ[R] M [⋀^有限集 n]->ₗ[R] N) ->ₗ[R] M [⋀^有限集 (n + 1)]->ₗ[R] N where
   定义体: alternatizeUncurryFin
   map_add' := alternatizeUncurryFin_add
   map_smul' := alternatizeUncurryFin_smul

@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompletelyNormalSpace 命题
+  签名: 余mpletelyNormal空间 命题
   定义体: inferInstance
 -/
 instance : CompletelyNormalSpace Prop :=

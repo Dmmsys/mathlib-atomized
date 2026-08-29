@@ -128,7 +128,7 @@ lemma rieszMeasure_le_of_eq_one
 
 中文:
 引理 rieszMeasure_le_of_eq_one
-  结论: {f : C_c(X, 实数)} (hf : 对任意 x, 0 <= f x) {K : Set X}
+  结论: {f : C_c(X, 实数)} (hf : 对任意 x, 0 <= f x) {K : 集合 X}
   证明: by
   rw [← Compacts.coe_mk K hK]; rw [rieszMeasure]; rw [Content.measure_eq_content_of_regular _ (contentRegular_rieszContent (toNNRealLinear Λ))]
   apply ENNReal.coe_le_iff.mpr
@@ -240,8 +240,8 @@ have hε' := ne_of_gt Real.toNNReal_pos.mpr hε
     suffices forall x in V₂.carrie
 
 中文:
-引理 exists_open_approx
-  结论: (f : C_c(X, 实数)) {ε : 实数} (hε : 0 < ε) (E : Set X) {μ : Content X}
+引理 存在_open_approx
+  结论: (f : C_c(X, 实数)) {ε : 实数} (hε : 0 < ε) (E : 集合 X) {μ : 内容 X}
   证明: by
 have hε' := ne_of_gt Real.toNNReal_pos.mpr hε
   obtain ⟨V₁ : Opens X, hV₁⟩ := Content.outerMeasure_exists_open μ hμ hε'
@@ -285,7 +285,7 @@ lemma exists_nat_large
   have B := A.comp tendsto_na
 
 中文:
-引理 exists_nat_large
+引理 存在_nat_large
   条件: (a' b' : 实数) {ε : 实数} (hε : 0 < ε)
   结论: 存在 (N : 自然数), 0 < N ∧
   证明: by
@@ -540,7 +540,7 @@ instance regular_rieszMeasure
 
 中文:
 实例 regular_rieszMeasure
-  签名: : (rieszMeasure Λ).Regular
+  签名: : (rieszMeasure Λ).正则
   定义体: (rieszContent _).regular
 
 Depends on / 依赖: regular, rieszContent
@@ -573,7 +573,7 @@ lemma measure_le_of_isCompact_of_integral
 
 中文:
 引理 measure_le_of_isCompact_of_integral
-  结论: [ν.OuterRegular]
+  结论: [ν.外正则]
   证明: by
   refine ENNReal.le_of_forall_pos_le_add fun ε hε hν => ?_
   have hνK : ν K != ⊤ := hν.ne
@@ -638,7 +638,7 @@ theorem _root_.MeasureTheory.Measure.ext_of_integral_eq_on_compactlySupported
   · exact measure_le_of_
 
 中文:
-定理 _root_.MeasureTheory.Measure.ext_of_integral_eq_on_compactlySupported
+定理 _root_.测度论.测度.ext_of_integral_eq_on_compactlySupported
   证明: by
   apply Measure.OuterRegular.ext_isOpen
   apply Measure.InnerRegularWRT.eq_of_innerRegularWRT_of_forall_eq Measure.Regular.innerRegular
@@ -672,7 +672,7 @@ theorem integralPositiveLinearMap_inj
 
 中文:
 定理 integralPositiveLinearMap_inj
-  条件: [μ.Regular] [ν.Regular]
+  条件: [μ.正则] [ν.正则]
   证明: Measure.ext_of_integral_eq_on_compactlySupported fun f => congr($hμν f)
   mpr _ := by congr
 
@@ -698,7 +698,7 @@ theorem rieszMeasure_integralPositiveLinearMap
 
 中文:
 定理 rieszMeasure_integralPositiveLinearMap
-  条件: [μ.Regular]
+  条件: [μ.正则]
   证明: Measure.ext_of_integral_eq_on_compactlySupported (by simp)
 
 @[simp]
@@ -743,7 +743,7 @@ instance [CompactSpace
   _ < ⊤ := by simp
 
 中文:
-实例 [CompactSpace
+实例 [紧空间
   签名: X] (Λ
   定义体: by
   constructor
@@ -778,8 +778,8 @@ lemma _root_.MeasureTheory.Measure.exists_regular_eq_of_compactSpace
   refine ⟨RealRMK.rieszMeasure Λ, by infer_instance, b
 
 中文:
-引理 _root_.MeasureTheory.Measure.exists_regular_eq_of_compactSpace
-  结论: [CompactSpace X]
+引理 _root_.测度论.测度.存在_regular_eq_of_compactSpace
+  结论: [紧空间 X]
   证明: by
   let Λ : C_c(X, Real) ->ₚ[Real] Real :=
   { toFun g := ∫ x, g x ∂μ
@@ -818,7 +818,7 @@ lemma _root_.MeasureTheory.Measure.exists_innerRegular_eq_of_isCompact
     exact Measure.exists_regular_eq_
 
 中文:
-引理 _root_.MeasureTheory.Measure.exists_innerRegular_eq_of_isCompact
+引理 _root_.测度论.测度.存在_innerRegular_eq_of_isCompact
   证明: by
   let μ' : Measure K := μ.comap Subtype.val
   obtain ⟨ν', ν'_reg, ν'_fin, hν'⟩ : exists (ν : Measure K), ν.Regular ∧ IsFiniteMeasure ν ∧

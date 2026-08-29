@@ -30,7 +30,7 @@ definition reverseRec
 
 中文:
 定义 reverseRec
-  签名: {motive : List α -> Sort*} (nil : motive [])
+  签名: {motive : 列表 α -> 类型层*} (nil : motive [])
 -/
 def reverseRec {motive : List α -> Sort*} (nil : motive [])
     (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : forall l, motive l
@@ -52,7 +52,7 @@ theorem reverseRec_nil
 
 中文:
 定理 reverseRec_nil
-  结论: {motive : List α -> Sort*} (nil : motive [])
+  结论: {motive : 列表 α -> 类型层*} (nil : motive [])
   证明: by grind [reverseRec]
 
 @[simp]
@@ -75,7 +75,7 @@ theorem reverseRec_concat
 
 中文:
 定理 reverseRec_concat
-  结论: {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
+  结论: {motive : 列表 α -> 类型层*} (x : α) (xs : 列表 α) (nil : motive [])
   证明: by
   grind [reverseRec, cases List]
 
@@ -99,7 +99,7 @@ abbreviation reverseRecOn
 
 中文:
 缩写 reverseRecOn
-  签名: {motive : List α -> Sort*} (l : List α) (nil : motive [])
+  签名: {motive : 列表 α -> 类型层*} (l : 列表 α) (nil : motive [])
   定义体: reverseRec nil append_singleton l
 
 Depends on / 依赖: append_singleton, reverseRec
@@ -118,7 +118,7 @@ theorem reverseRecOn_nil
 
 中文:
 定理 reverseRecOn_nil
-  结论: {motive : List α -> Sort*} (nil : motive [])
+  结论: {motive : 列表 α -> 类型层*} (nil : motive [])
   证明: by simp
 -/
 theorem reverseRecOn_nil {motive : List α -> Sort*} (nil : motive [])
@@ -135,7 +135,7 @@ theorem reverseRecOn_concat
 
 中文:
 定理 reverseRecOn_concat
-  结论: {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
+  结论: {motive : 列表 α -> 类型层*} (x : α) (xs : 列表 α) (nil : motive [])
   证明: by simp
 -/
 theorem reverseRecOn_concat {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
@@ -157,7 +157,7 @@ definition bidirectionalRec
 
 中文:
 定义 bidirectionalRec
-  签名: {motive : List α -> Sort*} (nil : motive []) (singleton : 对任意 a : α, motive [a])
+  签名: {motive : 列表 α -> 类型层*} (nil : motive []) (singleton : 对任意 a : α, motive [a])
 -/
 def bidirectionalRec {motive : List α -> Sort*} (nil : motive []) (singleton : forall a : α, motive [a])
     (cons_append : forall (a : α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))) :
@@ -184,7 +184,7 @@ theorem bidirectionalRec_nil
 
 中文:
 定理 bidirectionalRec_nil
-  结论: {motive : List α -> Sort*}
+  结论: {motive : 列表 α -> 类型层*}
   证明: by grind [bidirectionalRec]
 
 
@@ -212,7 +212,7 @@ theorem bidirectionalRec_singleton
 
 中文:
 定理 bidirectionalRec_singleton
-  结论: {motive : List α -> Sort*}
+  结论: {motive : 列表 α -> 类型层*}
   证明: by
   grind [bidirectionalRec]
 
@@ -238,7 +238,7 @@ theorem bidirectionalRec_cons_append
 
 中文:
 定理 bidirectionalRec_cons_append
-  结论: {motive : List α -> Sort*}
+  结论: {motive : 列表 α -> 类型层*}
   证明: by
   grind [bidirectionalRec, cases List]
 
@@ -264,7 +264,7 @@ abbreviation bidirectionalRecOn
 
 中文:
 缩写 bidirectionalRecOn
-  签名: {C : List α -> Sort*} (l : List α) (H0 : C []) (H1 : 对任意 a : α, C [a])
+  签名: {C : 列表 α -> 类型层*} (l : 列表 α) (H0 : C []) (H1 : 对任意 a : α, C [a])
   定义体: bidirectionalRec H0 H1 Hn l
 
 Depends on / 依赖: bidirectionalRec
@@ -293,7 +293,7 @@ definition recNeNil
 
 中文:
 定义 recNeNil
-  签名: {motive : (l : List α) -> l != [] -> Sort*}
+  签名: {motive : (l : 列表 α) -> l != [] -> 类型层*}
   定义体: match l with
   | [x] => singleton x
   | x :: y :: xs =>
@@ -325,7 +325,7 @@ theorem recNeNil_singleton
 
 中文:
 定理 recNeNil_singleton
-  结论: {motive : (l : List α) -> l != [] -> Sort*} (x : α)
+  结论: {motive : (l : 列表 α) -> l != [] -> 类型层*} (x : α)
   证明: rfl
 
 @[simp]
@@ -347,7 +347,7 @@ theorem recNeNil_cons
 
 中文:
 定理 recNeNil_cons
-  结论: {motive : (l : List α) -> l != [] -> Sort*} (x : α) (xs : List α) (h : xs != [])
+  结论: {motive : (l : 列表 α) -> l != [] -> 类型层*} (x : α) (xs : 列表 α) (h : xs != [])
   证明: match xs with
   | _ :: _ => rfl
 -/
@@ -375,7 +375,7 @@ abbreviation recOnNeNil
 
 中文:
 缩写 recOnNeNil
-  签名: {motive : (l : List α) -> l != [] -> Sort*} (l : List α) (h : l != [])
+  签名: {motive : (l : 列表 α) -> l != [] -> 类型层*} (l : 列表 α) (h : l != [])
   定义体: recNeNil singleton cons l h
 
 Depends on / 依赖: recNeNil, singleton
@@ -407,7 +407,7 @@ definition twoStepInduction
 
 中文:
 定义 twoStepInduction
-  签名: {motive : (l : List α) -> Sort*} (nil : motive [])
+  签名: {motive : (l : 列表 α) -> 类型层*} (nil : motive [])
   定义体: match l with
   | [] => nil
   | [x] => singleton x
@@ -442,7 +442,7 @@ theorem twoStepInduction_nil
 
 中文:
 定理 twoStepInduction_nil
-  结论: {motive : (l : List α) -> Sort*} (nil : motive [])
+  结论: {motive : (l : 列表 α) -> 类型层*} (nil : motive [])
   证明: twoStepInduction.eq_1 ..
 
 @[simp]
@@ -467,7 +467,7 @@ theorem twoStepInduction_singleton
 
 中文:
 定理 twoStepInduction_singleton
-  结论: {motive : (l : List α) -> Sort*} (x : α) (nil : motive [])
+  结论: {motive : (l : 列表 α) -> 类型层*} (x : α) (nil : motive [])
   证明: twoStepInduction.eq_2 ..
 
 @[simp]
@@ -490,7 +490,7 @@ theorem twoStepInduction_cons_cons
 
 中文:
 定理 twoStepInduction_cons_cons
-  结论: {motive : (l : List α) -> Sort*} (x y : α) (xs : List α)
+  结论: {motive : (l : 列表 α) -> 类型层*} (x y : α) (xs : 列表 α)
   证明: twoStepInduction.eq_3 ..
 
 Depends on / 依赖: eq_3, twoStepInduction, twoStepInduction.eq_3

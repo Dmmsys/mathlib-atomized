@@ -78,7 +78,7 @@ definition abToCycles
 
 中文:
 定义 abToCycles
-  签名: : S.X₁ ->+ AddMonoidHom.ker S.g.hom
+  签名: : S.X₁ ->+ 加法幺半群态射.ker S.g.hom
   定义体: AddMonoidHom.mk' (fun x => ⟨S.f x, S.ab_zero_apply x⟩) (by aesop)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, S.ab_zero_apply, ab_zero_apply
@@ -147,7 +147,7 @@ lemma abLeftHomologyData_f'
 
 中文:
 引理 abLeftHomologyData_f'
-  结论: S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.abToCycles
+  结论: S.abLeftHomologyData.f' = 加法交换群范畴.ofHom S.abToCycles
   证明: rfl
 -/
 lemma abLeftHomologyData_f' : S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.abToCycles := rfl
@@ -162,7 +162,7 @@ definition abCyclesIso
 
 中文:
 定义 abCyclesIso
-  签名: : S.cycles ≅ AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
+  签名: : S.cycles ≅ 加法交换群范畴.of (加法幺半群态射.ker S.g.hom)
   定义体: S.abLeftHomologyData.cyclesIso
 
 Depends on / 依赖: S.abLeftHomologyData.cyclesIso, abLeftHomologyData, cyclesIso
@@ -189,7 +189,7 @@ lemma abCyclesIso_inv_apply_iCycles
 
 中文:
 引理 abCyclesIso_inv_apply_iCycles
-  条件: (x : AddMonoidHom.ker S.g.hom)
+  条件: (x : 加法幺半群态射.ker S.g.hom)
   证明: by
   dsimp only [abCyclesIso]
   rw [← ConcreteCategory.comp_apply]; rw [S.abLeftHomologyData.cyclesIso_inv_comp_iCycles]
@@ -340,7 +340,7 @@ lemma ab_exact_iff_ker_le_range
 
 中文:
 引理 ab_exact_iff_ker_le_range
-  结论: S.Exact ↔ S.g.hom.ker <= S.f.hom.range
+  结论: S.正合 ↔ S.g.hom.ker <= S.f.hom.range
   证明: S.ab_exact_iff
 
 Depends on / 依赖: S.ab_exact_iff, ab_exact_iff
@@ -368,7 +368,7 @@ alias ⟨Exact.ab_range_eq_ker, _⟩ := ab_exact_iff_range_eq_ker
 
 中文:
 引理 ab_exact_iff_range_eq_ker
-  结论: S.Exact ↔ S.f.hom.range = S.g.hom.ker
+  结论: S.正合 ↔ S.f.hom.range = S.g.hom.ker
   证明: by
   rw [ab_exact_iff_ker_le_range]
   constructor
@@ -411,8 +411,8 @@ lemma Exact.ab_finite
   exact .of_addSubgroup_quotient (H := S.f.hom.range)
 
 中文:
-引理 Exact.ab_finite
-  条件: {S : ShortComplex Ab.{u}} (hS : S.Exact) [Finite S.X₁] [Finite S.X₃]
+引理 正合.ab_finite
+  条件: {S : 短复形 Ab.{u}} (hS : S.正合) [有限 S.X₁] [有限 S.X₃]
   证明: by
   have : Finite S.f.hom.range := Set.finite_range _
   have : Finite (S.X₂ ⧸ S.f.hom.range) := by
@@ -439,8 +439,8 @@ lemma ShortExact.ab_injective_f
   proof: (AddCommGrpCat.mono_iff_injective _).1 hS.mono_f
 
 中文:
-引理 ShortExact.ab_injective_f
-  条件: (hS : S.ShortExact)
+引理 短正合.ab_injective_f
+  条件: (hS : S.短正合)
   证明: (AddCommGrpCat.mono_iff_injective _).1 hS.mono_f
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, hS.mono_f, mono_f, mono_iff_injective
@@ -458,8 +458,8 @@ lemma ShortExact.ab_surjective_g
   proof: (AddCommGrpCat.epi_iff_surjective _).1 hS.epi_g
 
 中文:
-引理 ShortExact.ab_surjective_g
-  条件: (hS : S.ShortExact)
+引理 短正合.ab_surjective_g
+  条件: (hS : S.短正合)
   证明: (AddCommGrpCat.epi_iff_surjective _).1 hS.epi_g
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.epi_iff_surjective, epi_g, epi_iff_surjective, hS.epi_g
@@ -478,8 +478,8 @@ lemma ShortExact.ab_finite_iff
   mpr | ⟨_, _⟩ => hS.exact.ab_finite
 
 中文:
-引理 ShortExact.ab_finite_iff
-  条件: {S : ShortComplex Ab.{u}} (hS : S.ShortExact)
+引理 短正合.ab_finite_iff
+  条件: {S : 短复形 Ab.{u}} (hS : S.短正合)
   证明: ⟨.of_injective _ hS.ab_injective_f, .of_surjective _ hS.ab_surjective_g⟩
   mpr | ⟨_, _⟩ => hS.exact.ab_finite
 

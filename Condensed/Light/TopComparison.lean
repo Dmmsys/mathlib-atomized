@@ -31,8 +31,8 @@ abbreviation TopCat.toLightCondSet
   body: toSheafCompHausLike.{u} _ X (fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
 
 中文:
-缩写 TopCat.toLightCondSet
-  签名: (X : TopCat.{u})
+缩写 顶元素范畴.toLightCondSet
+  签名: (X : 顶元素范畴.{u})
   定义体: toSheafCompHausLike.{u} _ X (fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
 
 Depends on / 依赖: LightProfinite, LightProfinite.effectiveEpi_iff_surjective, effectiveEpi_iff_surjective, toSheafCompHausLike
@@ -50,7 +50,7 @@ abbreviation topCatToLightCondSet
 
 中文:
 缩写 topCatToLightCondSet
-  签名: : TopCat.{u} ⥤ LightCondSet.{u}
+  签名: : 顶元素范畴.{u} ⥤ LightCondSet.{u}
   定义体: topCatToSheafCompHausLike.{u} _ (fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
 
 Depends on / 依赖: LightProfinite, LightProfinite.effectiveEpi_iff_surjective, effectiveEpi_iff_surjective, topCatToSheafCompHausLike

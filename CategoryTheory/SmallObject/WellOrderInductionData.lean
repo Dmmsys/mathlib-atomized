@@ -58,8 +58,8 @@ structure WellOrderInductionData
   公理与运算 (4 个):
     - succ((j : J) (hj : ¬IsMax j) (x : F.obj (op j))) : F.obj (op (Order.succ j))
     - map_succ((j : J) (hj : ¬IsMax j) (x : F.obj (op j))) : F.map (homOfLE (Order.le_succ j)).op (succ j hj x) = x
-    - lift((j : J) (hj : Order.IsSuccLimit j) (x : ((OrderHom.Subtype.val (· in Set.Iio j)).monotone.functor.op ⋙ F).sections)) : F.obj (op j)
-    - map_lift((j : J) (hj : Order.IsSuccLimit j) (x : ((OrderHom.Subtype.val (· in Set.Iio j)).monotone.functor.op ⋙ F).sections) (i : J) (hi : i < j)) : F.map (homOfLE hi.le).op (lift j hj x) = x.val (op ⟨i, hi⟩)
+    - lift((j : J) (hj : Order.是SuccLimit j) (x : ((序态射.子类型.val (· in 集合.左无界右开区间 j)).monotone.functor.op ⋙ F).sections)) : F.obj (op j)
+    - map_lift((j : J) (hj : Order.是SuccLimit j) (x : ((序态射.子类型.val (· in 集合.左无界右开区间 j)).monotone.functor.op ⋙ F).sections) (i : J) (hi : i < j)) : F.map (homOfLE hi.le).op (lift j hj x) = x.val (op ⟨i, hi⟩)
 -/
 structure WellOrderInductionData where
   /-- A section `F.obj (op j) → F.obj (op (Order.succ j))` to the restriction
@@ -126,13 +126,13 @@ structure Extension
     - map_limit((i : J) (hi : Order.IsSuccLimit i) (hij : i <= j)) : F.map (homOfLE hij).op val = d.lift i hi { val := fun ⟨⟨k, hk⟩⟩ => F.map (homOfLE (hk.le.trans hij)).op val property := fun f => by dsimp rw [← comp_apply]; rw [← map_comp] rfl }
 
 中文:
-结构 Extension
+结构 扩张
   参数: (val₀ : F.obj (op ⊥)) (j : J)
   公理与运算 (4 个):
     - val : F.obj (op j)
     - map_zero : F.map (homOfLE bot_le).op val = val₀
     - map_succ((i : J) (hi : i < j)) : F.map (homOfLE (Order.succ_le_of_lt hi)).op val = d.succ i (not_isMax_iff.2 ⟨_, hi⟩) (F.map (homOfLE hi.le).op val)
-    - map_limit((i : J) (hi : Order.IsSuccLimit i) (hij : i <= j)) : F.map (homOfLE hij).op val = d.lift i hi { val := fun ⟨⟨k, hk⟩⟩ => F.map (homOfLE (hk.le.trans hij)).op val property := fun f => by dsimp rw [← comp_apply]; rw [← map_comp] rfl }
+    - map_limit((i : J) (hi : Order.是SuccLimit i) (hij : i <= j)) : F.map (homOfLE hij).op val = d.lift i hi { val := fun ⟨⟨k, hk⟩⟩ => F.map (homOfLE (hk.le.trans hij)).op val property := fun f => by dsimp rw [← comp_apply]; rw [← map_comp] rfl }
 
 Depends on / 依赖: F.map, hk.le.trans, homOfLE
 -/
@@ -173,7 +173,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: {j : J} (e : d.Extension val₀ j) {i : J} (hij : i <= j)
+  签名: {j : J} (e : d.扩张 val₀ j) {i : J} (hij : i <= j)
   定义体: F.map (homOfLE hij).op e.val
   map_zero := by
     rw [← comp_apply]; rw [← map_comp]
@@ -213,7 +213,7 @@ lemma val_injective
 
 中文:
 引理 val_injective
-  条件: {j : J} {e e' : d.Extension val₀ j} (h : e.val = e'.val)
+  条件: {j : J} {e e' : d.扩张 val₀ j} (h : e.val = e'.val)
   结论: e = e'
   证明: by
   cases e
@@ -329,7 +329,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: : d.Extension val₀ ⊥ where
+  签名: : d.扩张 val₀ ⊥ where
   定义体: val₀
   map_zero := by simp
   map_succ i hi := by simp at hi
@@ -363,7 +363,7 @@ definition succ
 
 中文:
 定义 succ
-  签名: {j : J} (e : d.Extension val₀ j) (hj : ¬IsMax j)
+  签名: {j : J} (e : d.扩张 val₀ j) (hj : ¬IsMax j)
   定义体: d.succ j hj e.val
   map_zero := by
     simp only [← e.map_zero]
@@ -425,7 +425,7 @@ definition limit
 
 中文:
 定义 limit
-  签名: (j : J) (hj : Order.IsSuccLimit j)
+  签名: (j : J) (hj : Order.是SuccLimit j)
   定义体: d.lift j hj
     { val := fun ⟨i, hi⟩ => (e i hi).val
       property := fun f => by dsimp; apply compatibility }

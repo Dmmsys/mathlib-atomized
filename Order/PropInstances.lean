@@ -34,8 +34,8 @@ instance Prop.instDistribLattice
   le_sup_inf := fun _ _ _ => or_and_left.2
 
 中文:
-实例 Prop.instDistribLattice
-  签名: : DistribLattice 命题 where
+实例 命题.instDistribLattice
+  签名: : Distrib格 命题 where
   定义体: Or
   le_sup_left := @Or.inl
   le_sup_right := @Or.inr
@@ -73,8 +73,8 @@ instance Prop.instBoundedOrder
 @[simp]
 
 中文:
-实例 Prop.instBoundedOrder
-  签名: : BoundedOrder 命题 where
+实例 命题.instBoundedOrder
+  签名: : 有界序 命题 where
   定义体: True
   le_top _ _ := True.intro
   bot := False
@@ -102,8 +102,8 @@ theorem Prop.bot_eq_false
 @[simp]
 
 中文:
-定理 Prop.bot_eq_false
-  结论: (⊥ : 命题) = False
+定理 命题.bot_eq_false
+  结论: (⊥ : 命题) = 假
   证明: rfl
 
 @[simp]
@@ -123,8 +123,8 @@ theorem Prop.top_eq_true
   proof: rfl
 
 中文:
-定理 Prop.top_eq_true
-  结论: (⊤ : 命题) = True
+定理 命题.top_eq_true
+  结论: (⊤ : 命题) = 真
   证明: rfl
 
 Depends on / 依赖: _self, toLocalizationMap
@@ -141,8 +141,8 @@ instance Prop.le_total
   body: ⟨fun p q => by by_cases h : q <;> simp [h]⟩
 
 中文:
-实例 Prop.le_total
-  签名: : @Std.Total 命题 (· <= ·)
+实例 命题.le_total
+  签名: : @Std.全 命题 (· <= ·)
   定义体: ⟨fun p q => by by_cases h : q <;> simp [h]⟩
 
 Depends on / 依赖: _self, toLocalizationMap
@@ -163,8 +163,8 @@ instance Prop.linearOrder
 @[simp]
 
 中文:
-实例 Prop.linearOrder
-  签名: : LinearOrder 命题
+实例 命题.linearOrder
+  签名: : 线性序 命题
   定义体: by
   classical
   exact Lattice.toLinearOrder Prop
@@ -238,7 +238,7 @@ theorem disjoint_iff
 
 中文:
 定理 disjoint_iff
-  条件: [对任意 i, OrderBot (α' i)] {f g : 对任意 i, α' i}
+  条件: [对任意 i, 有底序 (α' i)] {f g : 对任意 i, α' i}
   证明: by
   classical
   constructor
@@ -270,7 +270,7 @@ theorem codisjoint_iff
 
 中文:
 定理 codisjoint_iff
-  条件: [对任意 i, OrderTop (α' i)] {f g : 对任意 i, α' i}
+  条件: [对任意 i, 有顶序 (α' i)] {f g : 对任意 i, α' i}
   证明: @disjoint_iff _ (fun i => (α' i)ᵒᵈ) _ _ _ _
 
 Depends on / 依赖: _mul_cancel_right, disjoint_iff, toLocalizationMap
@@ -290,7 +290,7 @@ theorem isCompl_iff
 
 中文:
 定理 isCompl_iff
-  条件: [对任意 i, BoundedOrder (α' i)] {f g : 对任意 i, α' i}
+  条件: [对任意 i, 有界序 (α' i)] {f g : 对任意 i, α' i}
   证明: by
   simp_rw [_root_.isCompl_iff, disjoint_iff, codisjoint_iff, forall_and]
 
@@ -320,7 +320,7 @@ theorem eq_top_iff_refl_of_subsingleton
 
 中文:
 定理 eq_top_iff_refl_of_subsingleton
-  条件: [Subsingleton α] {r : α -> α -> 命题}
+  条件: [子单例 α] {r : α -> α -> 命题}
   结论: r = ⊤ ↔ Std.Refl r
   证明: ⟨fun h => ⟨by simp [h]⟩, fun _ => funext₂ by simp [rel_of_subsingleton]⟩
 
@@ -342,7 +342,7 @@ theorem eq_bot_iff_irrefl_of_subsingleton
 
 中文:
 定理 eq_bot_iff_irrefl_of_subsingleton
-  条件: [Subsingleton α] {r : α -> α -> 命题}
+  条件: [子单例 α] {r : α -> α -> 命题}
   证明: ⟨fun h => ⟨by simp [h]⟩, fun _ => funext₂ by simp [not_rel_of_subsingleton]⟩
 
 Depends on / 依赖: not_rel_of_subsingleton
@@ -366,7 +366,7 @@ theorem Prop.disjoint_iff
 @[simp]
 
 中文:
-定理 Prop.disjoint_iff
+定理 命题.disjoint_iff
   条件: {P Q : 命题}
   结论: Disjoint P Q ↔ ¬(P ∧ Q)
   证明: disjoint_iff_inf_le
@@ -391,7 +391,7 @@ theorem Prop.codisjoint_iff
 @[simp]
 
 中文:
-定理 Prop.codisjoint_iff
+定理 命题.codisjoint_iff
   条件: {P Q : 命题}
   结论: Codisjoint P Q ↔ P ∨ Q
   证明: codisjoint_iff_le_sup.trans forall_const True
@@ -416,9 +416,9 @@ theorem Prop.isCompl_iff
   by_cases P <;> by_cases Q <;> simp [*]
 
 中文:
-定理 Prop.isCompl_iff
+定理 命题.isCompl_iff
   条件: {P Q : 命题}
-  结论: IsCompl P Q ↔ ¬(P ↔ Q)
+  结论: 是补集 P Q ↔ ¬(P ↔ Q)
   证明: by
   rw [_root_.isCompl_iff]; rw [Prop.disjoint_iff]; rw [Prop.codisjoint_iff]; rw [not_iff]
   by_cases P <;> by_cases Q <;> simp [*]
@@ -443,7 +443,7 @@ instance Prop.decidablePredBot
   body: fun _ => instDecidableFalse
 
 中文:
-实例 Prop.decidablePredBot
+实例 命题.decidablePredBot
   签名: : DecidablePred (⊥ : α -> 命题)
   定义体: fun _ => instDecidableFalse
 
@@ -460,7 +460,7 @@ instance Prop.decidablePredTop
   body: fun _ => instDecidableTrue
 
 中文:
-实例 Prop.decidablePredTop
+实例 命题.decidablePredTop
   签名: : DecidablePred (⊤ : α -> 命题)
   定义体: fun _ => instDecidableTrue
 
@@ -477,7 +477,7 @@ instance Prop.decidableRelBot
   body: fun _ _ => instDecidableFalse
 
 中文:
-实例 Prop.decidableRelBot
+实例 命题.decidableRelBot
   签名: : DecidableRel (⊥ : α -> α -> 命题)
   定义体: fun _ _ => instDecidableFalse
 
@@ -494,7 +494,7 @@ instance Prop.decidableRelTop
   body: fun _ _ => instDecidableTrue
 
 中文:
-实例 Prop.decidableRelTop
+实例 命题.decidableRelTop
   签名: : DecidableRel (⊤ : α -> α -> 命题)
   定义体: fun _ _ => instDecidableTrue
 

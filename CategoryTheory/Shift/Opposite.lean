@@ -117,7 +117,7 @@ definition OppositeShift
 
 中文:
 定义 OppositeShift
-  签名: (A : 类型) [AddMonoid A] [HasShift C A]
+  签名: (A : 类型) [加法幺半群 A] [有Shift C A]
   定义体: Cᵒᵖ
 -/
 def OppositeShift (A : Type*) [AddMonoid A] [HasShift C A] := Cᵒᵖ
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (OppositeShift C A)
+  签名: 范畴 (OppositeShift C A)
   定义体: inferInstanceAs (Category Cᵒᵖ)
 
 Depends on / 依赖: Category
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (OppositeShift C A) A
+  签名: 有Shift (OppositeShift C A) A
   定义体: hasShiftMk Cᵒᵖ A (HasShift.mkShiftCoreOp C A)
 
 Depends on / 依赖: HasShift, HasShift.mkShiftCoreOp, hasShiftMk, mkShiftCoreOp
@@ -169,8 +169,8 @@ instance [HasZeroObject
   infer_instance
 
 中文:
-实例 [HasZeroObject
-  签名: C] : HasZeroObject (OppositeShift C A)
+实例 [有ZeroObject
+  签名: C] : 有ZeroObject (OppositeShift C A)
   定义体: by
   dsimp only [OppositeShift]
   infer_instance
@@ -190,8 +190,8 @@ instance [Preadditive
   body: inferInstanceAs (Preadditive Cᵒᵖ)
 
 中文:
-实例 [Preadditive
-  签名: C] : Preadditive (OppositeShift C A)
+实例 [预加性
+  签名: C] : 预加性 (OppositeShift C A)
   定义体: inferInstanceAs (Preadditive Cᵒᵖ)
 
 Depends on / 依赖: Preadditive
@@ -210,7 +210,7 @@ instance [Preadditive
   infer_instance
 
 中文:
-实例 [Preadditive
+实例 [预加性
   签名: C] (n
   定义体: by
   change (shiftFunctor C n).op.Additive
@@ -416,7 +416,7 @@ instance commShiftOp
 
 中文:
 实例 commShiftOp
-  签名: [CommShift F A]
+  签名: [交换Shift F A]
   定义体: (NatIso.op (F.commShiftIso a)).symm
   commShiftIso_zero := by
     rw [commShiftIso_zero]
@@ -456,7 +456,7 @@ lemma commShiftOp_iso_eq
 
 中文:
 引理 commShiftOp_iso_eq
-  条件: [CommShift F A] (a : A)
+  条件: [交换Shift F A] (a : A)
   证明: rfl
 -/
 lemma commShiftOp_iso_eq [CommShift F A] (a : A) :
@@ -533,7 +533,7 @@ instance commShift_op
 
 中文:
 实例 commShift_op
-  签名: (τ : F ⟶ G) [自然数Trans.CommShift τ A]
+  签名: (τ : F ⟶ G) [自然变换.交换Shift τ A]
   定义体: by
     ext
     rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift (OppositeShift.natIsoId C A).hom A
+  签名: 自然变换.交换Shift (OppositeShift.natIsoId C A).hom A
   定义体: by
     ext
     dsimp [OppositeShift.natIsoId, Functor.commShiftOp_iso_eq]
@@ -643,8 +643,8 @@ instance [F.CommShift
     rfl
 
 中文:
-实例 [F.CommShift
-  签名: A] [G.CommShift A] :
+实例 [F.交换Shift
+  签名: A] [G.交换Shift A] :
   定义体: by
     ext
     dsimp [OppositeShift.natIsoComp, Functor.commShiftOp_iso_eq]
@@ -727,7 +727,7 @@ instance commShift_op
 
 中文:
 实例 commShift_op
-  签名: [F.CommShift A] [G.CommShift A] [adj.CommShift A]
+  签名: [F.交换Shift A] [G.交换Shift A] [adj.交换Shift A]
   定义体: by dsimp [OppositeShift.adjunction]; infer_instance
   commShift_counit := by dsimp [OppositeShift.adjunction]; infer_instance
 

@@ -46,7 +46,7 @@ definition Equifibered
 
 中文:
 定义 Equifibered
-  签名: : Morphism命题erty (J ⥤ C)
+  签名: : MorphismProperty (J ⥤ C)
   定义体: fun {F G} α => forall ⦃i j : J⦄ (f : i ⟶ j), IsPullback (F.map f) (α.app i) (α.app j) (G.map f)
 
 Depends on / 依赖: F.map, G.map, IsPullback
@@ -67,7 +67,7 @@ theorem Equifibered.of_isIso
 
 中文:
 定理 Equifibered.of_isIso
-  条件: {F G : J ⥤ C} (α : F ⟶ G) [IsIso α]
+  条件: {F G : J ⥤ C} (α : F ⟶ G) [是同构 α]
   结论: Equifibered α
   证明: fun _ _ f => IsPullback.of_vert_isIso ⟨naturality _ f⟩
 
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Equifibered (J := J) (C := C)).IsMultiplicative
+  签名: (Equifibered (J := J) (C := C)).是Multiplicative
   定义体: .of_isIso _
   comp_mem _ _ := .comp
 
@@ -194,7 +194,7 @@ alias _root_.CategoryTheory.mapPair_equifibered := Equifibered.of_discrete
 
 中文:
 定理 Equifibered.of_discrete
-  条件: {F G : Discrete ι ⥤ C} (α : F ⟶ G)
+  条件: {F G : 离散 ι ⥤ C} (α : F ⟶ G)
   结论: Equifibered α
   证明: by
   rintro ⟨i⟩ ⟨j⟩ ⟨⟨rfl : i = j⟩⟩
@@ -228,7 +228,7 @@ definition Coequifibered
 
 中文:
 定义 Coequifibered
-  签名: : Morphism命题erty (J ⥤ C)
+  签名: : MorphismProperty (J ⥤ C)
   定义体: fun {F G} α => forall ⦃i j : J⦄ (f : i ⟶ j), IsPushout (F.map f) (α.app i) (α.app j) (G.map f)
 
 Depends on / 依赖: F.map, G.map, IsPushout
@@ -249,7 +249,7 @@ theorem Coequifibered.of_isIso
 
 中文:
 定理 Coequifibered.of_isIso
-  条件: {F G : J ⥤ C} (α : F ⟶ G) [IsIso α]
+  条件: {F G : J ⥤ C} (α : F ⟶ G) [是同构 α]
   结论: Coequifibered α
   证明: fun _ _ f => .of_vert_isIso ⟨naturality _ f⟩
 
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Coequifibered (J := J) (C := C)).IsMultiplicative
+  签名: (Coequifibered (J := J) (C := C)).是Multiplicative
   定义体: .of_isIso _
   comp_mem _ _ := .comp
 
@@ -370,7 +370,7 @@ theorem Coequifibered.of_discrete
 
 中文:
 定理 Coequifibered.of_discrete
-  结论: {ι : 类型} {F G : Discrete ι ⥤ C}
+  结论: {ι : 类型} {F G : 离散 ι ⥤ C}
   证明: by
   rintro ⟨i⟩ ⟨j⟩ ⟨⟨rfl : i = j⟩⟩
   simp only [Discrete.functor_map_id]

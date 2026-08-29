@@ -47,7 +47,7 @@ definition bracketedBinderType
 
 中文:
 定义 bracketedBinderType
-  签名: : Syntax -> Option Term
+  签名: : Syntax -> 选项类型 项
 -/
 def bracketedBinderType : Syntax -> Option Term
   | `(bracketedBinderF|($_* $[: $ty?]? $(_annot?)?)) => ty?
@@ -320,7 +320,7 @@ definition completeBinders
 
 中文:
 定义 completeBinders
-  签名: (maxSteps : 自然数) (checkRedundant : 布尔)
+  签名: (maxSteps : 自然数) (checkRedundant : 布尔值)
   定义体: completeBinders' maxSteps maxSteps checkRedundant binders #[] 0
 
 Depends on / 依赖: binders, checkRedundant, completeBinders, maxSteps

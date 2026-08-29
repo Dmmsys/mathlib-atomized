@@ -69,9 +69,9 @@ inductive strictColimitsOfShape
 
 中文:
 归纳类型 strictColimitsOfShape
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (1 个):
-    - colimit: (F : J ⥤ C) [HasColimit F] (hF : 对任意 j, P (F.obj j)) : strictColimitsOfShape (colimit F)
+    - colimit: (F : J ⥤ C) [有余极限 F] (hF : 对任意 j, P (F.obj j)) : strictColimitsOfShape (colimit F)
 -/
 inductive strictColimitsOfShape : ObjectProperty C
   | colimit (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j)) :
@@ -92,7 +92,7 @@ lemma strictColimitsOfShape_monotone
 
 中文:
 引理 strictColimitsOfShape_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: by
   rintro _ ⟨F, hF⟩
   exact ⟨F, fun j => h _ (hF j)⟩
@@ -118,7 +118,7 @@ lemma strictColimitsOfShape_bot
 
 中文:
 引理 strictColimitsOfShape_bot
-  条件: [Nonempty J]
+  条件: [非空 J]
   证明: by
   rw [eq_bot_iff]
   rintro _ ⟨_, h⟩
@@ -143,9 +143,9 @@ structure ColimitOfShape
     - prop_diag_obj((j : J)) : P (diag.obj j)
 
 中文:
-结构 ColimitOfShape
+结构 余limitOfShape
   参数: (X : C)
-  继承: ColimitPresentation J X
+  继承: 余limitPresentation J X
   公理与运算 (1 个):
     - prop_diag_obj((j : J)) : P (diag.obj j)
 
@@ -173,7 +173,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: (F : J ⥤ C) [HasColimit F] (hF : 对任意 j, P (F.obj j))
+  签名: (F : J ⥤ C) [有余极限 F] (hF : 对任意 j, P (F.obj j))
   定义体: .colimit F
   prop_diag_obj := hF
 
@@ -198,7 +198,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: {X : C} (h : P.ColimitOfShape J X) {Y : C} (e : X ≅ Y)
+  签名: {X : C} (h : P.余limitOfShape J X) {Y : C} (e : X ≅ Y)
   定义体: .ofIso h.toColimitPresentation e
   prop_diag_obj := h.prop_diag_obj
 
@@ -223,7 +223,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: {X : C} (h : P.ColimitOfShape J X) {Q : Object命题erty C} (hPQ : P <= Q)
+  签名: {X : C} (h : P.余limitOfShape J X) {Q : ObjectProperty C} (hPQ : P <= Q)
   定义体: h.toColimitPresentation
   prop_diag_obj j := hPQ _ (h.prop_diag_obj j)
 
@@ -247,7 +247,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: {X : C} (h : P.ColimitOfShape J X) (G : J' ⥤ J) [G.Final]
+  签名: {X : C} (h : P.余limitOfShape J X) (G : J' ⥤ J) [G.终]
   定义体: h.toColimitPresentation.reindex G
   prop_diag_obj _ := h.prop_diag_obj _
 
@@ -296,7 +296,7 @@ definition colimitsOfShape
 
 中文:
 定义 colimitsOfShape
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => Nonempty (P.ColimitOfShape J X)
 
 Depends on / 依赖: ColimitOfShape, Nonempty, P.ColimitOfShape, t.isIso_truncLE_map_truncLE
@@ -314,8 +314,8 @@ lemma ColimitOfShape.colimitsOfShape
   proof: ⟨h⟩
 
 中文:
-引理 ColimitOfShape.colimitsOfShape
-  条件: {X : C} (h : P.ColimitOfShape J X)
+引理 余limitOfShape.colimitsOfShape
+  条件: {X : C} (h : P.余limitOfShape J X)
   证明: ⟨h⟩
 -/
 lemma ColimitOfShape.colimitsOfShape {X : C} (h : P.ColimitOfShape J X) :
@@ -363,8 +363,8 @@ lemma colimitsOfShape_bot
 
 中文:
 引理 colimitsOfShape_bot
-  条件: [Nonempty J]
-  结论: colimitsOfShape (⊥ : Object命题erty C) J = ⊥
+  条件: [非空 J]
+  结论: colimitsOfShape (⊥ : ObjectProperty C) J = ⊥
   证明: by
   rw [eq_bot_iff]
   rintro X ⟨⟨_, h⟩⟩
@@ -389,7 +389,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.colimitsOfShape J).IsClosedUnderIsomorphisms
+  签名: (P.colimitsOfShape J).在同构下封闭
   定义体: by rintro _ _ e ⟨h⟩; exact ⟨h.ofIso e⟩
 
 @[simp]
@@ -452,7 +452,7 @@ lemma colimitsOfShape_monotone
 
 中文:
 引理 colimitsOfShape_monotone
-  条件: {Q : Object命题erty C} (hPQ : P <= Q)
+  条件: {Q : ObjectProperty C} (hPQ : P <= Q)
   证明: by
   intro X ⟨h⟩
   exact ⟨h.ofLE hPQ⟩
@@ -547,8 +547,8 @@ class IsClosedUnderColimitsOfShape
     - colimitsOfShape_le((P J)) : P.colimitsOfShape J <= P
 
 中文:
-类 IsClosedUnderColimitsOfShape
-  参数: (P : Object命题erty C) (J : 类型u') [Category.{v'} J]
+类 是ClosedUnderColimitsOfShape
+  参数: (P : ObjectProperty C) (J : 类型u') [范畴.{v'} J]
   公理与运算 (1 个):
     - colimitsOfShape_le((P J)) : P.colimitsOfShape J <= P
 -/
@@ -568,8 +568,8 @@ lemma IsClosedUnderColimitsOfShape.mk'
     exact monotone_isoClosure h
 
 中文:
-引理 IsClosedUnderColimitsOfShape.mk'
-  结论: [P.IsClosedUnderIsomorphisms]
+引理 是ClosedUnderColimitsOfShape.mk'
+  结论: [P.在同构下封闭]
   证明: by
     conv_rhs => rw [← P.isoClosure_eq_self]
     rw [← isoClosure_strictColimitsOfShape]
@@ -594,8 +594,8 @@ instance [Nonempty
   body: by rw [colimitsOfShape_bot]
 
 中文:
-实例 [Nonempty
-  签名: J] : IsClosedUnderColimitsOfShape (⊥
+实例 [非空
+  签名: J] : 是ClosedUnderColimitsOfShape (⊥
   定义体: by rw [colimitsOfShape_bot]
 
 Depends on / 依赖: colimitsOfShape_bot
@@ -613,7 +613,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderColimitsOfShape (⊤ : Object命题erty C) J
+  签名: 是ClosedUnderColimitsOfShape (⊤ : ObjectProperty C) J
   定义体: by trivial
 -/
 instance : IsClosedUnderColimitsOfShape (⊤ : ObjectProperty C) J where
@@ -636,8 +636,8 @@ lemma ColimitOfShape.prop
   proof: P.colimitsOfShape_le J _ ⟨h⟩
 
 中文:
-引理 ColimitOfShape.prop
-  条件: {X : C} (h : P.ColimitOfShape J X)
+引理 余limitOfShape.prop
+  条件: {X : C} (h : P.余limitOfShape J X)
   结论: P X
   证明: P.colimitsOfShape_le J _ ⟨h⟩
 
@@ -656,7 +656,7 @@ lemma prop_of_isColimit
 
 中文:
 引理 prop_of_isColimit
-  结论: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
+  结论: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
   证明: P.colimitsOfShape_le J _ ⟨{ diag := _, ι := _, isColimit := hc, prop_diag_obj := hF }⟩
 
 Depends on / 依赖: P.colimitsOfShape_le, colimitsOfShape_le, isColimit, prop_diag_obj
@@ -675,7 +675,7 @@ lemma prop_colimit
 
 中文:
 引理 prop_colimit
-  条件: (F : J ⥤ C) [HasColimit F] (hF : 对任意 (j : J), P (F.obj j))
+  条件: (F : J ⥤ C) [有余极限 F] (hF : 对任意 (j : J), P (F.obj j))
   证明: P.prop_of_isColimit (colimit.isColimit F) hF
 
 Depends on / 依赖: P.prop_of_isColimit, colimit, colimit.isColimit, isColimit, prop_of_isColimit
@@ -697,7 +697,7 @@ lemma colimitsOfShape_le_of_final
 
 中文:
 引理 colimitsOfShape_le_of_final
-  条件: (G : J ⥤ J') [G.Final]
+  条件: (G : J ⥤ J') [G.终]
   证明: fun _h ⟨h⟩ => ⟨h.reindex G⟩
 
 Depends on / 依赖: h.reindex, reindex
@@ -763,7 +763,7 @@ lemma IsClosedUnderColimitsOfShape.of_equivalence
   rwa [← P.isClosedUnderColimitsOfShape_iff_of_equivalence e]
 
 中文:
-引理 IsClosedUnderColimitsOfShape.of_equivalence
+引理 是ClosedUnderColimitsOfShape.of_equivalence
   结论: (e : J ≌ J')
   证明: by
   rwa [← P.isClosedUnderColimitsOfShape_iff_of_equivalence e]
@@ -783,7 +783,7 @@ instance IsClosedUnderColimitsOfShape.inverseImage
   body: ⟨fun _ ⟨c, H⟩ => ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
 
 中文:
-实例 IsClosedUnderColimitsOfShape.inverseImage
+实例 是ClosedUnderColimitsOfShape.inverseImage
   定义体: ⟨fun _ ⟨c, H⟩ => ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
 
 Depends on / 依赖: ColimitOfShape, ColimitOfShape.prop, c.map
@@ -809,7 +809,7 @@ lemma isClosedUnderColimitsOfShape_inverseImage_iff
 
 中文:
 引理 isClosedUnderColimitsOfShape_inverseImage_iff
-  结论: (P : Object命题erty D)
+  结论: (P : ObjectProperty D)
   证明: by
   refine ⟨fun H => ?_, fun _ => inferInstance⟩
   convert!
@@ -1059,7 +1059,7 @@ instance [P.IsClosedUnderColimitsOfShape
   rwa [← isClosedUnderColimitsOfShape_iff_op]
 
 中文:
-实例 [P.IsClosedUnderColimitsOfShape
+实例 [P.是ClosedUnderColimitsOfShape
   签名: J] :
   定义体: by
   rwa [← isClosedUnderColimitsOfShape_iff_op]
@@ -1080,7 +1080,7 @@ instance [P.IsClosedUnderLimitsOfShape
   rwa [← isClosedUnderLimitsOfShape_iff_op]
 
 中文:
-实例 [P.IsClosedUnderLimitsOfShape
+实例 [P.是ClosedUnderLimitsOfShape
   签名: J] :
   定义体: by
   rwa [← isClosedUnderLimitsOfShape_iff_op]
@@ -1101,7 +1101,7 @@ instance [P.IsClosedUnderColimitsOfShape
   rwa [← isClosedUnderColimitsOfShape_op_iff_op]
 
 中文:
-实例 [P.IsClosedUnderColimitsOfShape
+实例 [P.是ClosedUnderColimitsOfShape
   签名: Jᵒᵖ] :
   定义体: by
   rwa [← isClosedUnderColimitsOfShape_op_iff_op]
@@ -1122,7 +1122,7 @@ instance [P.IsClosedUnderLimitsOfShape
   rwa [← isClosedUnderLimitsOfShape_op_iff_op]
 
 中文:
-实例 [P.IsClosedUnderLimitsOfShape
+实例 [P.是ClosedUnderLimitsOfShape
   签名: Jᵒᵖ] :
   定义体: by
   rwa [← isClosedUnderLimitsOfShape_op_iff_op]
@@ -1219,7 +1219,7 @@ instance [Q.IsClosedUnderColimitsOfShape
   rwa [← isClosedUnderColimitsOfShape_iff_unop]
 
 中文:
-实例 [Q.IsClosedUnderColimitsOfShape
+实例 [Q.是ClosedUnderColimitsOfShape
   签名: J] :
   定义体: by
   rwa [← isClosedUnderColimitsOfShape_iff_unop]
@@ -1240,7 +1240,7 @@ instance [Q.IsClosedUnderLimitsOfShape
   rwa [← isClosedUnderLimitsOfShape_iff_unop]
 
 中文:
-实例 [Q.IsClosedUnderLimitsOfShape
+实例 [Q.是ClosedUnderLimitsOfShape
   签名: J] :
   定义体: by
   rwa [← isClosedUnderLimitsOfShape_iff_unop]
@@ -1261,7 +1261,7 @@ instance [Q.IsClosedUnderColimitsOfShape
   rwa [← isClosedUnderColimitsOfShape_op_iff_unop]
 
 中文:
-实例 [Q.IsClosedUnderColimitsOfShape
+实例 [Q.是ClosedUnderColimitsOfShape
   签名: Jᵒᵖ] :
   定义体: by
   rwa [← isClosedUnderColimitsOfShape_op_iff_unop]
@@ -1282,7 +1282,7 @@ instance [Q.IsClosedUnderLimitsOfShape
   rwa [← isClosedUnderLimitsOfShape_op_iff_unop]
 
 中文:
-实例 [Q.IsClosedUnderLimitsOfShape
+实例 [Q.是ClosedUnderLimitsOfShape
   签名: Jᵒᵖ] :
   定义体: by
   rwa [← isClosedUnderLimitsOfShape_op_iff_unop]
@@ -1310,7 +1310,7 @@ instance [P.IsClosedUnderColimitsOfShape
     exact P.prop_of_isColimit hc (by rintro (_ | _)
 
 中文:
-实例 [P.IsClosedUnderColimitsOfShape
+实例 [P.是ClosedUnderColimitsOfShape
   签名: WalkingParallelPair] :
   定义体: by
     let c : Cofork (h.r ≫ h.i) (𝟙 Y) := Cofork.ofπ h.r (by simp)
@@ -1343,7 +1343,7 @@ lemma limitsOfShape_isEmpty_iff
 
 中文:
 引理 limitsOfShape_isEmpty_iff
-  条件: [IsEmpty J] (X : C)
+  条件: [是空 J] (X : C)
   证明: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isLimitEquivIsTerminalOfIsEmpty _ _ q, fun ⟨h⟩ =>
     ⟨⟨(Functor.const _).obj X, 𝟙 _, (isLimitEquivIsTerminalOfIsEmpty _ _).symm h⟩, by simp⟩⟩
 
@@ -1365,7 +1365,7 @@ lemma colimitsOfShape_isEmpty_iff
 
 中文:
 引理 colimitsOfShape_isEmpty_iff
-  条件: [IsEmpty J] (X : C)
+  条件: [是空 J] (X : C)
   证明: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isColimitEquivIsInitialOfIsEmpty _ _ q, fun ⟨h⟩ =>
     ⟨⟨(Functor.const _).obj X, 𝟙 _, (isColimitEquivIsInitialOfIsEmpty _ _).symm h⟩, by simp⟩⟩
 

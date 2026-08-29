@@ -86,7 +86,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike C^n⟮I, M; I', M'⟯ M M' where
+  签名: : 函数状 C^n⟮I, M; I', M'⟯ M M' where
   定义体: Subtype.val
   coe_injective := Subtype.coe_injective
 
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass C^n⟮I, M; I', M'⟯ M M'
+  签名: 连续映射类 C^n⟮I, M; I', M'⟯ M M'
   定义体: f.contMDiff.continuous
 
 Depends on / 依赖: contMDiff, continuous, f.contMDiff.continuous
@@ -251,8 +251,8 @@ instance [Inhabited
   body: ⟨⟨fun _ => default, contMDiff_const⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: M'] : Inhabited C^n⟮I, M; I', M'⟯
+实例 [可居
+  签名: M'] : 可居 C^n⟮I, M; I', M'⟯
   定义体: ⟨⟨fun _ => default, contMDiff_const⟩⟩
 
 Depends on / 依赖: contMDiff_const
@@ -288,7 +288,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: : C^n⟮I.prod I', M × M'; I, M⟯
+  签名: : C^n⟮I.乘积 I', M × M'; I, M⟯
   定义体: ⟨Prod.fst, contMDiff_fst⟩
 
 Depends on / 依赖: Prod.fst, contMDiff_fst
@@ -306,7 +306,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: : C^n⟮I.prod I', M × M'; I', M'⟯
+  签名: : C^n⟮I.乘积 I', M × M'; I', M'⟯
   定义体: ⟨Prod.snd, contMDiff_snd⟩
 
 Depends on / 依赖: Prod.snd, contMDiff_snd
@@ -343,7 +343,7 @@ instance ContinuousLinearMap.hasCoeToContMDiffMap
   body: ⟨fun f => ⟨f, f.contMDiff⟩⟩
 
 中文:
-实例 ContinuousLinearMap.hasCoeToContMDiffMap
+实例 连续线性映射.hasCoeToContMDiffMap
   签名: :
   定义体: ⟨fun f => ⟨f, f.contMDiff⟩⟩
 

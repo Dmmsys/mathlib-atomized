@@ -64,8 +64,8 @@ theorem exists_countable_upperSemicontinuous_isGLB
   
 
 中文:
-定理 exists_countable_upperSemicontinuous_isGLB
-  结论: {s : X -> E} {𝓕 : Set (X -> E)}
+定理 存在_countable_upperSemicontinuous_isGLB
+  结论: {s : X -> E} {𝓕 : 集合 (X -> E)}
   证明: by
   simp_rw [isGLB_pi] at *
   rcases exists_countable_dense E with ⟨D, D_count, D_dense⟩
@@ -114,8 +114,8 @@ theorem exists_countable_lowerSemicontinuous_isLUB
   proof: exists_countable_upperSemicontinuous_isGLB (E := Eᵒᵈ) h𝓕_cont h𝓕
 
 中文:
-定理 exists_countable_lowerSemicontinuous_isLUB
-  结论: {s : X -> E} {𝓕 : Set (X -> E)}
+定理 存在_countable_lowerSemicontinuous_isLUB
+  结论: {s : X -> E} {𝓕 : 集合 (X -> E)}
   证明: exists_countable_upperSemicontinuous_isGLB (E := Eᵒᵈ) h𝓕_cont h𝓕
 
 Depends on / 依赖: exists_countable_upperSemicontinuous_isGLB

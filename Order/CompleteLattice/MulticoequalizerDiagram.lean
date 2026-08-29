@@ -143,7 +143,7 @@ lemma commSq
 
 中文:
 引理 commSq
-  结论: CommSq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
+  结论: 交换Sq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
   证明: ⟨rfl⟩
 -/
 lemma commSq : CommSq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
@@ -202,7 +202,7 @@ definition multispanIndex
 
 中文:
 定义 multispanIndex
-  签名: : MultispanIndex (.prod ι) T where
+  签名: : MultispanIndex (.乘积 ι) T where
   定义体: fun ⟨i, j⟩ => v i j
   right := u
   fst _ := homOfLE (by grind)
@@ -254,8 +254,8 @@ lemma Lattice.BicartSq.multicoequalizerDiagram
   eq_inf i j := by grind
 
 中文:
-引理 Lattice.BicartSq.multicoequalizerDiagram
-  结论: {T : 类型u} [CompleteLattice T]
+引理 格.BicartSq.multicoequalizerDiagram
+  结论: {T : 类型u} [完备格 T]
   证明: by rw [← sq.sup_eq, sup_comm, sup_eq_iSup]
   eq_inf i j := by grind
 -/

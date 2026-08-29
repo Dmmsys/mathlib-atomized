@@ -54,7 +54,7 @@ theorem induction_on_pi_of_choice
 
 中文:
 定理 induction_on_pi_of_choice
-  结论: (r : 对任意 i, α i -> Finset (α i) -> 命题)
+  结论: (r : 对任意 i, α i -> 有限集 (α i) -> 命题)
   证明: by
   cases nonempty_fintype ι
   induction hs : univ.sigma f using Finset.strongInductionOn generalizing f with | _ s ihs
@@ -107,7 +107,7 @@ theorem induction_on_pi
 
 中文:
 定理 induction_on_pi
-  结论: {p : (对任意 i, Finset (α i)) -> 命题} (f : 对任意 i, Finset (α i)) (h0 : p fun _ => ∅)
+  结论: {p : (对任意 i, 有限集 (α i)) -> 命题} (f : 对任意 i, 有限集 (α i)) (h0 : p fun _ => ∅)
   证明: induction_on_pi_of_choice (fun _ x s => x ∉ s) (fun _ s ⟨x, hx⟩ => ⟨x, hx, notMem_erase x s⟩) f
     h0 step
 
@@ -130,7 +130,7 @@ theorem induction_on_pi_max
 
 中文:
 定理 induction_on_pi_max
-  结论: [对任意 i, LinearOrder (α i)] {p : (对任意 i, Finset (α i)) -> 命题}
+  结论: [对任意 i, 线性序 (α i)] {p : (对任意 i, 有限集 (α i)) -> 命题}
   证明: induction_on_pi_of_choice (fun _ x s => forall y in s, y < x)
     (fun _ s hs => ⟨s.max' hs, s.max'_mem hs, fun _ => s.lt_max'_of_mem_erase_max' _⟩) f h0 step
 
@@ -155,7 +155,7 @@ theorem induction_on_pi_min
 
 中文:
 定理 induction_on_pi_min
-  结论: [对任意 i, LinearOrder (α i)] {p : (对任意 i, Finset (α i)) -> 命题}
+  结论: [对任意 i, 线性序 (α i)] {p : (对任意 i, 有限集 (α i)) -> 命题}
   证明: induction_on_pi_max (α := fun i => (α i)ᵒᵈ) _ h0 step
 
 Depends on / 依赖: induction_on_pi_max

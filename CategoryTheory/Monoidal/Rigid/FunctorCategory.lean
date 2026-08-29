@@ -45,7 +45,7 @@ instance functorHasRightDual
 
 中文:
 实例 functorHasRightDual
-  签名: [RightRigidCategory D] (F : C ⥤ D)
+  签名: [RightRigid范畴 D] (F : C ⥤ D)
   定义体: { obj := fun X => (F.obj X)ᘁ
       map := fun f => (F.map (inv f))ᘁ
       map_comp := fun f g => by simp [comp_rightAdjointMate] }
@@ -84,7 +84,7 @@ instance rightRigidFunctorCategory
 
 中文:
 实例 rightRigidFunctorCategory
-  签名: [RightRigidCategory D]
+  签名: [RightRigid范畴 D]
 -/
 instance rightRigidFunctorCategory [RightRigidCategory D] : RightRigidCategory (C ⥤ D) where
 
@@ -105,7 +105,7 @@ instance functorHasLeftDual
 
 中文:
 实例 functorHasLeftDual
-  签名: [LeftRigidCategory D] (F : C ⥤ D)
+  签名: [LeftRigid范畴 D] (F : C ⥤ D)
   定义体: { obj := fun X => ᘁ(F.obj X)
       map := fun f => ᘁ(F.map (inv f))
       map_comp := fun f g => by simp [comp_leftAdjointMate] }
@@ -141,7 +141,7 @@ instance leftRigidFunctorCategory
 
 中文:
 实例 leftRigidFunctorCategory
-  签名: [LeftRigidCategory D]
+  签名: [LeftRigid范畴 D]
 -/
 instance leftRigidFunctorCategory [LeftRigidCategory D] : LeftRigidCategory (C ⥤ D) where
 
@@ -154,7 +154,7 @@ instance rigidFunctorCategory
 
 中文:
 实例 rigidFunctorCategory
-  签名: [RigidCategory D]
+  签名: [Rigid范畴 D]
 -/
 instance rigidFunctorCategory [RigidCategory D] : RigidCategory (C ⥤ D) where
 

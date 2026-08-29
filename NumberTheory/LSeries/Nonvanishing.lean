@@ -80,7 +80,7 @@ definition zetaMul
 
 中文:
 定义 zetaMul
-  签名: (χ : DirichletCharacter Complex N)
+  签名: (χ : DirichletCharacter 复形 N)
   定义体: .zeta * toArithmeticFunction (χ ·)
 
 Depends on / 依赖: toArithmeticFunction
@@ -99,8 +99,8 @@ lemma isMultiplicative_zetaMul
 
 中文:
 引理 isMultiplicative_zetaMul
-  条件: (χ : DirichletCharacter Complex N)
-  结论: χ.zetaMul.IsMultiplicative
+  条件: (χ : DirichletCharacter 复形 N)
+  结论: χ.zetaMul.是Multiplicative
   证明: isMultiplicative_zeta.natCast.mul isMultiplicative_toArithmeticFunction χ
 
 Depends on / 依赖: isMultiplicative_toArithmeticFunction, isMultiplicative_zeta, isMultiplicative_zeta.natCast.mul, natCast
@@ -122,7 +122,7 @@ refine ArithmeticFunction.LSeriesSummable_mul (LSeriesSummable_zeta_iff.mpr hs)
 
 中文:
 引理 LSeriesSummable_zetaMul
-  条件: (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < s.re)
+  条件: (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < s.re)
   证明: by
 refine ArithmeticFunction.LSeriesSummable_mul (LSeriesSummable_zeta_iff.mpr hs)
     LSeriesSummable_of_bounded_of_one_lt_re (m := 1) (fun n hn => ?_) hs
@@ -154,7 +154,7 @@ lemma zetaMul_prime_pow_nonneg
 
 中文:
 引理 zetaMul_prime_pow_nonneg
-  结论: {χ : DirichletCharacter Complex N} (hχ : χ ^ 2 = 1) {p : 自然数}
+  结论: {χ : DirichletCharacter 复形 N} (hχ : χ ^ 2 = 1) {p : 自然数}
   证明: by
   simp only [zetaMul, toArithmeticFunction, coe_zeta_mul_apply, coe_mk,
     Nat.sum_divisors_prime_pow hp, pow_eq_zero_iff', hp.ne_zero, ne_eq, false_and, ↓reduceIte,
@@ -194,7 +194,7 @@ lemma zetaMul_nonneg
 
 中文:
 引理 zetaMul_nonneg
-  条件: {χ : DirichletCharacter Complex N} (hχ : χ ^ 2 = 1) (n : 自然数)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : χ ^ 2 = 1) (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp only [ArithmeticFunction.map_zero, le_refl]
@@ -238,10 +238,10 @@ structure BadChar
 结构 BadChar
   参数: (N : 自然数) [NeZero N]
   公理与运算 (4 个):
-    - χ : DirichletCharacter Complex N
+    - χ : DirichletCharacter 复形 N
     - χ_ne : χ != 1
     - χ_sq : χ ^ 2 = 1
-    - hχ : χ.LFunction 1 = 0
+    - hχ : χ.L函数 1 = 0
 -/
 private structure BadChar (N : Nat) [NeZero N] where
   /-- The character we want to show cannot exist. -/
@@ -289,7 +289,7 @@ lemma F_differentiableAt_of_ne
 
 中文:
 引理 F_differentiableAt_of_ne
-  条件: (B : BadChar N) {s : Complex} (hs : s != 1)
+  条件: (B : BadChar N) {s : 复形} (hs : s != 1)
   证明: by
   apply DifferentiableAt.congr_of_eventuallyEq
 · exact (differentiableAt_riemannZeta hs).mul differentiableAt_LFunction B.χ s (.inl hs)
@@ -316,7 +316,7 @@ lemma F_eq_LSeries
 
 中文:
 引理 F_eq_LSeries
-  条件: (B : BadChar N) {s : Complex} (hs : 1 < s.re)
+  条件: (B : BadChar N) {s : 复形} (hs : 1 < s.re)
   证明: by
   rw [F]; rw [zetaMul]; rw [← coe_mul]; rw [LSeries_convolution']
   · have hs' : s != 1 := fun h => by simp only [h, one_re, lt_self_iff_false] at hs
@@ -356,7 +356,7 @@ lemma F_differentiable
 中文:
 引理 F_differentiable
   条件: (B : BadChar N)
-  结论: Differentiable Complex B.F
+  结论: 可微 复形 B.F
   证明: by
   intro s
   rcases ne_or_eq s 1 with hs | rfl
@@ -433,7 +433,7 @@ theorem LFunction_apply_one_ne_zero_of_quadratic
 
 中文:
 定理 LFunction_apply_one_ne_zero_of_quadratic
-  结论: {χ : DirichletCharacter Complex N}
+  结论: {χ : DirichletCharacter 复形 N}
   证明: by
   intro hL
   -- construct a "bad character" and put together a contradiction.
@@ -478,7 +478,7 @@ lemma re_log_comb_nonneg'
 
 中文:
 引理 re_log_comb_nonneg'
-  条件: {a : 实数} (ha₀ : 0 <= a) (ha₁ : a < 1) {z : Complex} (hz : ‖z‖ = 1)
+  条件: {a : 实数} (ha₀ : 0 <= a) (ha₁ : a < 1) {z : 复形} (hz : ‖z‖ = 1)
   证明: by
   have hac₀ : ‖(a : Complex)‖ < 1 := by
     simp only [Complex.norm_of_nonneg ha₀, ha₁]
@@ -569,7 +569,7 @@ lemma summable_neg_log_one_sub_mul_prime_cpow
 
 中文:
 引理 summable_neg_log_one_sub_mul_prime_cpow
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   证明: by
   have (p : Nat.Primes) : ‖χ p * (p : Complex) ^ (-s)‖ <= (p : Real) ^ (-s).re := by
     simpa only [norm_mul, norm_natCast_cpow_of_re_ne_zero _ <| re_neg_ne_zero_of_one_lt_re hs]
@@ -882,7 +882,7 @@ theorem LFunction_ne_zero_of_re_eq_one
 
 中文:
 定理 LFunction_ne_zero_of_re_eq_one
-  条件: {s : Complex} (hs : s.re = 1) (hχs : χ != 1 ∨ s != 1)
+  条件: {s : 复形} (hs : s.re = 1) (hχs : χ != 1 ∨ s != 1)
   证明: by
   by_cases h : χ ^ 2 = 1 ∧ s = 1
 · exact h.2 ▸ LFunction_apply_one_ne_zero_of_quadratic h.1 hχs.neg_resolve_right h.2
@@ -916,7 +916,7 @@ theorem LFunction_ne_zero_of_one_le_re
 中文:
 定理 LFunction_ne_zero_of_one_le_re
   条件: ⦃s
-  结论: Complex⦄ (hχs : χ != 1 ∨ s != 1) (hs : 1 <= s.re) :
+  结论: 复形⦄ (hχs : χ != 1 ∨ s != 1) (hs : 1 <= s.re) :
   证明: hs.eq_or_lt.casesOn (fun hs => LFunction_ne_zero_of_re_eq_one χ hs.symm hχs)
     fun hs => LFunction_eq_LSeries χ hs ▸ LSeries_ne_zero_of_one_lt_re χ hs
 
@@ -941,7 +941,7 @@ theorem LFunction_apply_one_ne_zero
 中文:
 定理 LFunction_apply_one_ne_zero
   条件: (hχ : χ != 1)
-  结论: LFunction χ 1 != 0
+  结论: L函数 χ 1 != 0
   证明: LFunction_ne_zero_of_one_le_re χ (.inl hχ) one_re ▸ le_rfl
 
 Depends on / 依赖: LFunction_ne_zero_of_one_le_re, le_rfl, one_re
@@ -964,7 +964,7 @@ lemma _root_.riemannZeta_ne_zero_of_one_le_re
 中文:
 引理 _root_.riemannZeta_ne_zero_of_one_le_re
   条件: ⦃s
-  结论: Complex⦄ (hs : 1 <= s.re) :
+  结论: 复形⦄ (hs : 1 <= s.re) :
   证明: by
   rcases eq_or_ne s 1 with rfl | hs₀
   · exact riemannZeta_one_ne_zero

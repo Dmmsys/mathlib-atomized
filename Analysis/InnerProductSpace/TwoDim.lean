@@ -358,7 +358,7 @@ theorem areaForm_map
 
 中文:
 定理 areaForm_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: by
   have : φ.symm ∘ ![x, y] = ![φ.symm x, φ.symm y] := by
     ext i
@@ -934,7 +934,7 @@ theorem rightAngleRotation_map
 
 中文:
 定理 rightAngleRotation_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: by
   apply ext_inner_right Real
   intro y
@@ -1003,7 +1003,7 @@ theorem rightAngleRotation_map'
 
 中文:
 定理 rightAngleRotation_map'
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: LinearIsometryEquiv.ext o.rightAngleRotation_map φ
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.ext, o.rightAngleRotation_map, rightAngleRotation_map
@@ -1294,7 +1294,7 @@ definition kahler
 
 中文:
 定义 kahler
-  签名: : E ->ₗ[实数] E ->ₗ[实数] Complex
+  签名: : E ->ₗ[实数] E ->ₗ[实数] 复形
   定义体: LinearMap.llcomp Real E Real Complex Complex.ofRealCLM ∘ₗ innerₛₗ Real +
     LinearMap.llcomp Real E Real Complex ((LinearMap.lsmul Real Complex).flip Complex.I) ∘ₗ ω
 
@@ -1316,7 +1316,7 @@ theorem kahler_apply_apply
 中文:
 定理 kahler_apply_apply
   条件: (x y : E)
-  结论: o.kahler x y = ⟪x, y⟫ + ω x y • Complex.I
+  结论: o.kahler x y = ⟪x, y⟫ + ω x y • 复形.I
   证明: rfl
 -/
 theorem kahler_apply_apply (x y : E) : o.kahler x y = ⟪x, y⟫ + ω x y • Complex.I :=
@@ -1568,7 +1568,7 @@ theorem normSq_kahler
 中文:
 定理 normSq_kahler
   条件: (x y : E)
-  结论: Complex.normSq (o.kahler x y) = ‖x‖ ^ 2 * ‖y‖ ^ 2
+  结论: 复形.normSq (o.kahler x y) = ‖x‖ ^ 2 * ‖y‖ ^ 2
   证明: by
   simpa [kahler_apply_apply, Complex.normSq, sq] using o.inner_sq_add_areaForm_sq x y
 
@@ -1737,7 +1737,7 @@ theorem kahler_map
 
 中文:
 定理 kahler_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: by
   simp [kahler_apply_apply, areaForm_map]
 
@@ -1793,8 +1793,8 @@ theorem areaForm
 
 中文:
 定理 areaForm
-  条件: (w z : Complex)
-  结论: Complex.orientation.areaForm w z = (conj w * z).im
+  条件: (w z : 复形)
+  结论: 复形.orientation.areaForm w z = (conj w * z).im
   证明: by
   let o := Complex.orientation
   simp only [o, o.areaForm_to_volumeForm,
@@ -1829,7 +1829,7 @@ theorem rightAngleRotation
 
 中文:
 定理 rightAngleRotation
-  条件: (z : Complex)
+  条件: (z : 复形)
   证明: by
   apply ext_inner_right Real
   intro w
@@ -1863,8 +1863,8 @@ theorem kahler
 
 中文:
 定理 kahler
-  条件: (w z : Complex)
-  结论: Complex.orientation.kahler w z = z * conj w
+  条件: (w z : 复形)
+  结论: 复形.orientation.kahler w z = z * conj w
   证明: by
   rw [Orientation.kahler_apply_apply]
   apply Complex.ext <;> simp [mul_comm]
@@ -1895,7 +1895,7 @@ theorem areaForm_map_complex
 
 中文:
 定理 areaForm_map_complex
-  结论: (f : E ≃ₗᵢ[实数] Complex)
+  结论: (f : E ≃ₗᵢ[实数] 复形)
   证明: by
   rw [← Complex.areaForm]; rw [← hf]; rw [areaForm_map]
   iterate 2 rw [LinearIsometryEquiv.symm_apply_apply]
@@ -1919,7 +1919,7 @@ theorem rightAngleRotation_map_complex
 
 中文:
 定理 rightAngleRotation_map_complex
-  结论: (f : E ≃ₗᵢ[实数] Complex)
+  结论: (f : E ≃ₗᵢ[实数] 复形)
   证明: by
   rw [← Complex.rightAngleRotation]; rw [← hf]; rw [rightAngleRotation_map]; rw [LinearIsometryEquiv.symm_apply_apply]
 
@@ -1942,7 +1942,7 @@ theorem kahler_map_complex
 
 中文:
 定理 kahler_map_complex
-  结论: (f : E ≃ₗᵢ[实数] Complex)
+  结论: (f : E ≃ₗᵢ[实数] 复形)
   证明: by
   rw [← Complex.kahler]; rw [← hf]; rw [kahler_map]
   iterate 2 rw [LinearIsometryEquiv.symm_apply_apply]

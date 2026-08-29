@@ -47,7 +47,7 @@ definition Ideal.fiberIsoOfBijectiveResidueField
 (P
 
 中文:
-定义 Ideal.fiberIsoOfBijectiveResidueField
+定义 理想.fiberIsoOfBijectiveResidueField
   定义体: let := Localization.AtPrime.algebraOfLiesOver p q
   let e : q.Fiber (R' otimes[R] S) ≃ₐ[p.ResidueField] p.Fiber S :=
     ((Algebra.TensorProduct.cancelBaseChange _ _ q.ResidueField _ _).restrictScalars _).trans
@@ -81,7 +81,7 @@ lemma Ideal.comap_fiberIsoOfBijectiveResidueField_symm
 @[simp]
 
 中文:
-引理 Ideal.comap_fiberIsoOfBijectiveResidueField_symm
+引理 理想.comap_fiberIsoOfBijectiveResidueField_symm
   证明: by
   ext x
   simp [Ideal.fiberIsoOfBijectiveResidueField,
@@ -113,7 +113,7 @@ lemma Ideal.comap_fiberIsoOfBijectiveResidueField_apply
     (Ideal.fiberIsoOfBijectiveResidueField H Q)).symm
 
 中文:
-引理 Ideal.comap_fiberIsoOfBijectiveResidueField_apply
+引理 理想.comap_fiberIsoOfBijectiveResidueField_apply
   证明: by
   simpa using! (Ideal.comap_fiberIsoOfBijectiveResidueField_symm H
     (Ideal.fiberIsoOfBijectiveResidueField H Q)).symm
@@ -138,7 +138,7 @@ lemma Ideal.eq_of_comap_eq_comap_of_bijective_residueFieldMap
   (S := S) H).injective (a₁ := ⟨P₁, ‹_›, ‹_›⟩) (a₂ := ⟨P₂, ‹_›, ‹_›⟩) (by ext1; simpa))
 
 中文:
-引理 Ideal.eq_of_comap_eq_comap_of_bijective_residueFieldMap
+引理 理想.eq_of_comap_eq_comap_of_bijective_residueFieldMap
   证明: by
   refine congr_arg Subtype.val ((Ideal.fiberIsoOfBijectiveResidueField
   (S := S) H).injective (a₁ := ⟨P₁, ‹_›, ‹_›⟩) (a₂ := ⟨P₂, ‹_›, ‹_›⟩) (by ext1; simpa))
@@ -182,7 +182,7 @@ lemma Localization.exists_finite_awayMapₐ_of_surjective_awayMapₐ
 .exists_subset_of_mem_open (a := ⟨p, ‹_›⟩) (ou := this.isOpen_c
 
 中文:
-引理 Localization.exists_finite_awayMapₐ_of_surjective_awayMapₐ
+引理 Localization.存在_finite_awayMapₐ_of_surjective_awayMapₐ
   证明: by
   have := PrimeSpectrum.isClosedMap_comap_of_isIntegral (algebraMap R S)
     (algebraMap_isIntegral_iff.mpr ‹_›) _ (PrimeSpectrum.isClosed_zeroLocus {g})
@@ -256,7 +256,7 @@ lemma Algebra.exists_notMem_and_isIntegral_forall_mem_of_ne_of_liesOver
   obtain ⟨s₃, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (.powers s₂)
 
 中文:
-引理 Algebra.exists_notMem_and_isIntegral_forall_mem_of_ne_of_liesOver
+引理 代数.存在_notMem_and_is整数egral_对任意_mem_of_ne_of_liesOver
   证明: by
   obtain ⟨s₁, hs₁q, hs₁⟩ := Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver (R := R) p q
   obtain ⟨s₂, hs₂q, hs₂⟩ := Algebra.ZariskisMainProperty.of_finiteType (R := R) q
@@ -329,7 +329,7 @@ lemma Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq_aux
         f.map (algebraMap _ _) = X ^ (m + 1) * 
 
 中文:
-引理 Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq_aux
+引理 代数.存在_etale_isIdempotentElem_对任意_liesOver_eq_aux
   证明: by
   obtain ⟨s, hsq, hRs, hs, hs₀⟩ := exists_notMem_and_isIntegral_forall_mem_of_ne_of_liesOver p q
   obtain ⟨m, f, b, hfm, hbm, hab, hfab, hf⟩ : exists (m : Nat) (f : R[X])
@@ -442,7 +442,7 @@ lemma Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq_aux₂
     (Loca
 
 中文:
-引理 Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq_aux₂
+引理 代数.存在_etale_isIdempotentElem_对任意_liesOver_eq_aux₂
   证明: by
   have : Algebra.IsIntegral R' (Localization.Away e₀) :=
     .of_surjective (IsScalarTower.toAlgHom R' (R' otimes[R] (R'')) _)
@@ -545,7 +545,7 @@ lemma Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq
   obtain ⟨f, hfP, hf⟩ := exists_etale_isIdempotentElem_forall_lies
 
 中文:
-引理 Algebra.exists_etale_isIdempotentElem_forall_liesOver_eq
+引理 代数.存在_etale_isIdempotentElem_对任意_liesOver_eq
   证明: by
   obtain ⟨R', _, _, _, P, _, _, e, he, e₀, he₀, he₀e, P', _, _, hP'q, heP', hpP, H', H⟩ :=
     exists_etale_isIdempotentElem_forall_liesOver_eq_aux p q
@@ -637,7 +637,7 @@ theorem Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq_au
     rw [← @AlgHom.coe_restrictScalars' R R']; rw [← A
 
 中文:
-定理 Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq_aux
+定理 代数.存在_etale_completeOrthogonalIdempotents_对任意_liesOver_eq_aux
   证明: by
   let φ := Algebra.TensorProduct.map (Algebra.ofId R' R'') (AlgHom.id R S)
   have : Q.LiesOver p := .trans _ P _
@@ -729,7 +729,7 @@ lemma Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq'
       (PrimeSpectrum.primesOverOrderIsoFiber R 
 
 中文:
-引理 Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq'
+引理 代数.存在_etale_completeOrthogonalIdempotents_对任意_liesOver_eq'
   证明: by
   induction h : (p.primesOver S).ncard using Nat.strong_induction_on generalizing R S with
   | h n IH =>
@@ -842,7 +842,7 @@ lemma Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq
   refine ⟨R', _, _, ‹_›, 
 
 中文:
-引理 Algebra.exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq
+引理 代数.存在_etale_completeOrthogonalIdempotents_对任意_liesOver_eq
   证明: by
   have ⟨R', _, _, _, P, _, _, n, e, he, P', _, _, hP, hP', H⟩ :=
     exists_etale_completeOrthogonalIdempotents_forall_liesOver_eq' (S := ULift.{u} S) p

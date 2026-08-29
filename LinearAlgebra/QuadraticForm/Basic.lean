@@ -188,7 +188,7 @@ theorem polar_smul
 
 中文:
 定理 polar_smul
-  条件: [Monoid S] [DistribMulAction S N] (f : M -> N) (s : S) (x y : M)
+  条件: [幺半群 S] [分配乘法作用 S N] (f : M -> N) (s : S) (x y : M)
   证明: by simp only [polar, Pi.smul_apply, smul_sub]
 
 Depends on / 依赖: Pi.smul_apply, smul_apply, smul_sub
@@ -260,7 +260,7 @@ theorem polar_comp
 
 中文:
 定理 polar_comp
-  结论: {F : 类型} [AddCommGroup S] [FunLike F N S] [AddMonoidHomClass F N S]
+  结论: {F : 类型} [加法交换群 S] [函数状 F N S] [加法幺半群态射类 F N S]
   证明: by
   simp only [polar, Function.comp_apply, map_sub]
 
@@ -327,8 +327,8 @@ structure QuadraticMap
     - exists_companion' : exists B : BilinMap R M N, forall x y, toFun (x + y) = toFun x + toFun y + B x y
 
 中文:
-结构 QuadraticMap
-  参数: (R : 类型u) (M : 类型v) (N : Type w) [CommSemiring R] [AddCommMonoid M]
+结构 二次映射
+  参数: (R : 类型u) (M : 类型v) (N : 类型 w) [交换半环 R] [加法交换幺半群 M]
   公理与运算 (3 个):
     - toFun : M -> N
     - toFun_smul : 对任意 (a : R) (x : M), toFun (a • x) = (a * a) • toFun x
@@ -357,7 +357,7 @@ abbreviation QuadraticForm
 
 中文:
 缩写 QuadraticForm
-  签名: : Type _
+  签名: : 类型 _
   定义体: QuadraticMap R M R
 
 Depends on / 依赖: QuadraticMap
@@ -384,7 +384,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (QuadraticMap R M N) M N where
+  签名: : 函数状 (二次映射 R M N) M N where
   定义体: toFun
   coe_injective x y h := by cases x; cases y; congr
 -/
@@ -493,7 +493,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
+  签名: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
   定义体: Q'
   toFun_smul := h.symm ▸ Q.toFun_smul
   exists_companion' := h.symm ▸ Q.exists_companion'
@@ -517,7 +517,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
+  条件: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
   结论: ⇑(Q.copy Q' h) = Q'
   证明: rfl
 -/
@@ -535,7 +535,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
+  条件: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
   结论: Q.copy Q' h = Q
   证明: DFunLike.ext' h
 
@@ -578,7 +578,7 @@ theorem exists_companion
   proof: Q.exists_companion'
 
 中文:
-定理 exists_companion
+定理 存在_companion
   结论: 存在 B : BilinMap R M N, 对任意 x y, Q (x + y) = Q x + Q y + B x y
   证明: Q.exists_companion'
 
@@ -671,7 +671,7 @@ instance zeroHomClass
 
 中文:
 实例 zeroHomClass
-  签名: : ZeroHomClass (QuadraticMap R M N) M N
+  签名: : 保零态射类 (二次映射 R M N) M N
   定义体: { QuadraticMap.instFunLike (R := R) (M := M) (N := N) with map_zero := QuadraticMap.map_zero }
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.instFunLike, QuadraticMap.map_zero, instFunLike, map_zero
@@ -690,7 +690,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: [CommSemiring S] [Algebra S R] [SMul S M] [IsScalarTower S R M]
+  结论: [交换半环 S] [代数 S R] [标量乘法 S M] [标量塔 S R M]
   证明: by
   rw [← IsScalarTower.algebraMap_smul R a x]; rw [Q.map_smul]; rw [← map_mul]; rw [algebraMap_smul]
 
@@ -714,7 +714,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (Q : QuadraticMap R M N) (V : Submodule R M)
+  签名: (Q : 二次映射 R M N) (V : 子模 R M)
   定义体: Q v
   toFun_smul a v := Q.toFun_smul a v.val
   exists_companion' := match Q.exists_companion with
@@ -1106,7 +1106,7 @@ lemma polarSym2_map_smul
 
 中文:
 引理 polarSym2_map_smul
-  条件: {ι} (Q : QuadraticMap R M N) (g : ι -> M) (l : ι -> R) (p : Sym2 ι)
+  条件: {ι} (Q : 二次映射 R M N) (g : ι -> M) (l : ι -> R) (p : Sym2 ι)
   证明: by
   obtain ⟨_, _⟩ := p; simp [← smul_assoc, mul_comm]
 
@@ -1221,7 +1221,7 @@ theorem choose_exists_companion
     rw [polarBilin_apply_apply]; rw [polar]; rw [Q.exists_companion.choose_spec]; rw [sub_sub]; rw [add_sub_cancel_left]
 
 中文:
-定理 choose_exists_companion
+定理 choose_存在_companion
   结论: Q.存在_companion.choose = polarBilin Q
   证明: LinearMap.ext₂ fun x y => by
     rw [polarBilin_apply_apply]; rw [polar]; rw [Q.exists_companion.choose_spec]; rw [sub_sub]; rw [add_sub_cancel_left]
@@ -1248,7 +1248,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M)
+  条件: {ι} [DecidableEq ι] (Q : 二次映射 R M N) (s : 有限集 ι) (f : ι -> M)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1289,7 +1289,7 @@ theorem map_sum'
 
 中文:
 定理 map_sum'
-  条件: {ι} (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M)
+  条件: {ι} (Q : 二次映射 R M N) (s : 有限集 ι) (f : ι -> M)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1337,7 +1337,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (QuadraticMap R M N)
+  签名: 标量乘法 S (二次映射 R M N)
   定义体: ⟨fun a Q =>
     { toFun := a • ⇑Q
       toFun_smul := fun b x => by
@@ -1373,7 +1373,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply S (QuadraticMap R M N) M N
+  签名: 是SMulApply S (二次映射 R M N) M N
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coeFn_smul := FunLike.coe_smul
@@ -1396,8 +1396,8 @@ instance [SMulCommClass
   body: FunLike.smulCommClass
 
 中文:
-实例 [SMulCommClass
-  签名: S T N] : SMulCommClass S T (QuadraticMap R M N)
+实例 [标量交换类
+  签名: S T N] : 标量交换类 S T (二次映射 R M N)
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -1414,8 +1414,8 @@ instance [SMul
   body: FunLike.isScalarTower
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T N] : IsScalarTower S T (QuadraticMap R M N)
+实例 [标量乘法
+  签名: S T] [标量塔 S T N] : 标量塔 S T (二次映射 R M N)
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -1437,7 +1437,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (QuadraticMap R M N)
+  签名: 零 (二次映射 R M N)
   定义体: ⟨{ toFun := fun _ => 0
       toFun_smul := fun a _ => by simp only [smul_zero]
       exists_companion' := ⟨0, fun _ _ => by simp only [add_zero, LinearMap.zero_apply]⟩ }⟩
@@ -1463,7 +1463,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (QuadraticMap R M N) M N
+  签名: 是ZeroApply (二次映射 R M N) M N
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coeFn_zero := FunLike.coe_zero
@@ -1487,7 +1487,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (QuadraticMap R M N)
+  签名: 可居 (二次映射 R M N)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (QuadraticMap R M N) :=
@@ -1510,7 +1510,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (QuadraticMap R M N)
+  签名: 加法 (二次映射 R M N)
   定义体: ⟨fun Q Q' =>
     { toFun := Q + Q'
       toFun_smul := fun a x => by simp only [Pi.add_apply, smul_add, QuadraticMap.map_smul]
@@ -1546,7 +1546,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (QuadraticMap R M N) M N
+  签名: 是加法Apply (二次映射 R M N) M N
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coeFn_add := FunLike.coe_add
@@ -1574,7 +1574,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (QuadraticMap R M N)
+  签名: 加法交换幺半群 (二次映射 R M N)
   定义体: fast_instance% FunLike.addCommMonoid
 
 @[deprecated (since := "2026-07-27")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
@@ -1630,8 +1630,8 @@ instance [Monoid
   body: fast_instance% FunLike.distribMulAction
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S N] [SMulCommClass S R N] :
+实例 [幺半群
+  签名: S] [分配乘法作用 S N] [标量交换类 S R N] :
   定义体: fast_instance% FunLike.distribMulAction
 
 Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
@@ -1648,8 +1648,8 @@ instance [Semiring
   body: fast_instance% FunLike.module
 
 中文:
-实例 [Semiring
-  签名: S] [Module S N] [SMulCommClass S R N] :
+实例 [半环
+  签名: S] [模 S N] [标量交换类 S R N] :
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -1678,7 +1678,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (QuadraticMap R M N)
+  签名: 取负 (二次映射 R M N)
   定义体: ⟨fun Q =>
     { toFun := -Q
       toFun_smul := fun a x => by simp only [Pi.neg_apply, Q.map_smul, smul_neg]
@@ -1710,7 +1710,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (QuadraticMap R M N) M N
+  签名: 是NegApply (二次映射 R M N) M N
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coeFn_neg := FunLike.coe_neg
@@ -1734,7 +1734,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (QuadraticMap R M N)
+  签名: 减法 (二次映射 R M N)
   定义体: ⟨fun Q Q' => (Q + -Q').copy (Q - Q') (sub_eq_add_neg _ _)⟩
 
 Depends on / 依赖: sub_eq_add_neg
@@ -1756,7 +1756,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (QuadraticMap R M N) M N
+  签名: 是SubApply (二次映射 R M N) M N
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coeFn_sub := FunLike.coe_sub
@@ -1780,7 +1780,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (QuadraticMap R M N)
+  签名: 加法交换群 (二次映射 R M N)
   定义体: fast_instance% FunLike.addCommGroup
 
 Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
@@ -1814,7 +1814,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (Q : QuadraticMap R M N)
+  签名: (Q : 二次映射 R M N)
   定义体: Q x
   toFun_smul a x := by
     simp [map_smul_of_tower]
@@ -1855,7 +1855,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (Q : QuadraticMap R N P) (f : M ->ₗ[R] N)
+  签名: (Q : 二次映射 R N P) (f : M ->ₗ[R] N)
   定义体: Q (f x)
   toFun_smul a x := by simp only [Q.map_smul, map_smul]
   exists_companion' :=
@@ -1883,7 +1883,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) (x : M)
+  条件: (Q : 二次映射 R N P) (f : M ->ₗ[R] N) (x : M)
   结论: (Q.comp f) x = Q (f x)
   证明: rfl
 -/
@@ -1905,8 +1905,8 @@ definition _root_.LinearMap.compQuadraticMap
     ⟨B.compr₂ f, fun x y => by simp only [h, map_add, LinearMap.compr₂_apply]⟩
 
 中文:
-定义 _root_.LinearMap.compQuadraticMap
-  签名: (f : N ->ₗ[R] P) (Q : QuadraticMap R M N)
+定义 _root_.线性映射.compQuadraticMap
+  签名: (f : N ->ₗ[R] P) (Q : 二次映射 R M N)
   定义体: f (Q x)
   toFun_smul b x := by simp only [Q.map_smul, map_smul]
   exists_companion' :=
@@ -1932,8 +1932,8 @@ definition _root_.LinearMap.compQuadraticMap'
   body: _root_.LinearMap.compQuadraticMap f Q.restrictScalars
 
 中文:
-定义 _root_.LinearMap.compQuadraticMap'
-  签名: [CommSemiring S] [Algebra S R] [Module S N] [Module S M]
+定义 _root_.线性映射.compQuadraticMap'
+  签名: [交换半环 S] [代数 S R] [模 S N] [模 S M]
   定义体: _root_.LinearMap.compQuadraticMap f Q.restrictScalars
 
 Depends on / 依赖: LinearMap, Q.restrictScalars, _root_, _root_.LinearMap.compQuadraticMap, compQuadraticMap, restrictScalars
@@ -1964,7 +1964,7 @@ definition _root_.LinearEquiv.congrQuadraticMap
 @[simp]
 
 中文:
-定义 _root_.LinearEquiv.congrQuadraticMap
+定义 _root_.线性等价.congrQuadraticMap
   签名: (e : N ≃ₗ[R] P)
   定义体: e.compQuadraticMap Q
   invFun Q := e.symm.compQuadraticMap Q
@@ -1997,7 +1997,7 @@ theorem _root_.LinearEquiv.congrQuadraticMap_refl
 @[simp]
 
 中文:
-定理 _root_.LinearEquiv.congrQuadraticMap_refl
+定理 _root_.线性等价.congrQuadraticMap_refl
   证明: rfl
 
 @[simp]
@@ -2015,7 +2015,7 @@ theorem _root_.LinearEquiv.congrQuadraticMap_symm
   proof: rfl
 
 中文:
-定理 _root_.LinearEquiv.congrQuadraticMap_symm
+定理 _root_.线性等价.congrQuadraticMap_symm
   条件: (e : N ≃ₗ[R] P)
   证明: rfl
 
@@ -2165,7 +2165,7 @@ definition sq
 
 中文:
 定义 sq
-  签名: : QuadraticMap R A A
+  签名: : 二次映射 R A A
   定义体: linMulLin LinearMap.id LinearMap.id
 
 Depends on / 依赖: LinearMap, LinearMap.id, linMulLin
@@ -2363,7 +2363,7 @@ theorem toQuadraticMap_smul
 
 中文:
 定理 toQuadraticMap_smul
-  结论: [Monoid S] [DistribMulAction S N] [SMulCommClass S R N]
+  结论: [幺半群 S] [分配乘法作用 S N] [标量交换类 S R N]
   证明: rfl
 -/
 theorem toQuadraticMap_smul [Monoid S] [DistribMulAction S N] [SMulCommClass S R N]
@@ -2389,7 +2389,7 @@ definition toQuadraticMapAddMonoidHom
 
 中文:
 定义 toQuadraticMapAddMonoidHom
-  签名: : (BilinMap R M N) ->+ QuadraticMap R M N where
+  签名: : (BilinMap R M N) ->+ 二次映射 R M N where
   定义体: toQuadraticMap
   map_zero' := toQuadraticMap_zero _ _
   map_add' := toQuadraticMap_add
@@ -2415,7 +2415,7 @@ definition toQuadraticMapLinearMap
 
 中文:
 定义 toQuadraticMapLinearMap
-  签名: [Semiring S] [Module S N] [SMulCommClass S R N] [SMulCommClass R S N]
+  签名: [半环 S] [模 S N] [标量交换类 S R N] [标量交换类 R S N]
   定义体: toQuadraticMap
   map_smul' := toQuadraticMap_smul
   map_add' := toQuadraticMap_add
@@ -2443,7 +2443,7 @@ theorem toQuadraticMap_list_sum
 
 中文:
 定理 toQuadraticMap_list_sum
-  条件: (B : List (BilinMap R M N))
+  条件: (B : 列表 (BilinMap R M N))
   证明: map_list_sum (toQuadraticMapAddMonoidHom R M) B
 
 @[simp]
@@ -2491,7 +2491,7 @@ theorem toQuadraticMap_sum
 
 中文:
 定理 toQuadraticMap_sum
-  条件: {ι : 类型} (s : Finset ι) (B : ι -> (BilinMap R M N))
+  条件: {ι : 类型} (s : 有限集 ι) (B : ι -> (BilinMap R M N))
   证明: map_sum (toQuadraticMapAddMonoidHom R M) B s
 
 @[simp]
@@ -2622,8 +2622,8 @@ theorem _root_.QuadraticMap.toQuadraticMap_polarBilin
   proof: QuadraticMap.ext fun x => (polar_self _ x).trans by simp
 
 中文:
-定理 _root_.QuadraticMap.toQuadraticMap_polarBilin
-  条件: (Q : QuadraticMap R M N)
+定理 _root_.二次映射.toQuadraticMap_polarBilin
+  条件: (Q : 二次映射 R M N)
   证明: QuadraticMap.ext fun x => (polar_self _ x).trans by simp
 -/
 @[simp] theorem _root_.QuadraticMap.toQuadraticMap_polarBilin (Q : QuadraticMap R M N) :
@@ -2644,8 +2644,8 @@ theorem _root_.QuadraticMap.polarBilin_injective
   exact congrArg toQuadraticMap h₁₂
 
 中文:
-定理 _root_.QuadraticMap.polarBilin_injective
-  条件: (h : IsUnit (2 : R))
+定理 _root_.二次映射.polarBilin_injective
+  条件: (h : 是单位 (2 : R))
   证明: by
   intro Q₁ Q₂ h₁₂
   apply h.smul_left_cancel.mp
@@ -2676,8 +2676,8 @@ theorem _root_.QuadraticMap.polarBilin_comp
   proof: LinearMap.ext₂ fun x y => by simp [polar]
 
 中文:
-定理 _root_.QuadraticMap.polarBilin_comp
-  条件: (Q : QuadraticMap R N' N) (f : M ->ₗ[R] N')
+定理 _root_.二次映射.polarBilin_comp
+  条件: (Q : 二次映射 R N' N) (f : M ->ₗ[R] N')
   证明: LinearMap.ext₂ fun x y => by simp [polar]
 
 Depends on / 依赖: LinearMap, LinearMap.ext
@@ -2700,8 +2700,8 @@ theorem _root_.LinearMap.compQuadraticMap_polar
   simp [polar]
 
 中文:
-定理 _root_.LinearMap.compQuadraticMap_polar
-  结论: [CommSemiring S] [Algebra S R] [Module S N]
+定理 _root_.线性映射.compQuadraticMap_polar
+  结论: [交换半环 S] [代数 S R] [模 S N]
   证明: by
   simp [polar]
 -/
@@ -2723,8 +2723,8 @@ theorem _root_.LinearMap.compQuadraticMap_polarBilin
   rw [polarBilin_apply_apply]; rw [compr₂_apply]; rw [polarBilin_apply_apply]; rw [LinearMap.compQuadraticMap_polar]
 
 中文:
-定理 _root_.LinearMap.compQuadraticMap_polarBilin
-  条件: (f : N ->ₗ[R] N') (Q : QuadraticMap R M N)
+定理 _root_.线性映射.compQuadraticMap_polarBilin
+  条件: (f : N ->ₗ[R] N') (Q : 二次映射 R M N)
   证明: by
   ext
   rw [polarBilin_apply_apply]; rw [compr₂_apply]; rw [polarBilin_apply_apply]; rw [LinearMap.compQuadraticMap_polar]
@@ -2768,8 +2768,8 @@ instance [Invertible
    
 
 中文:
-实例 [Invertible
-  签名: (2 : R)] : Invertible (2
+实例 [可逆
+  签名: (2 : R)] : 可逆 (2
   定义体: (⟨⅟2, Set.invOf_mem_center (Set.ofNat_mem_center _ _)⟩ : Submonoid.center R) •
     (1 : Module.End R M)
   invOf_mul_self := by
@@ -2808,7 +2808,7 @@ lemma half_moduleEnd_apply_eq_half_smul
 
 中文:
 引理 half_moduleEnd_apply_eq_half_smul
-  条件: [Invertible (2 : R)] (x : M)
+  条件: [可逆 (2 : R)] (x : M)
   证明: rfl
 -/
 lemma half_moduleEnd_apply_eq_half_smul [Invertible (2 : R)] (x : M) :
@@ -2838,7 +2838,7 @@ definition associatedHom
 
 中文:
 定义 associatedHom
-  签名: : QuadraticMap R M N ->ₗ[S] (BilinMap R M N) where
+  签名: : 二次映射 R M N ->ₗ[S] (BilinMap R M N) where
   定义体: ⅟(2 : Module.End R N) • polarBilin Q
   map_add' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_add]
   map_smul' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_smul]
@@ -2904,7 +2904,7 @@ theorem associated_isSymm
 
 中文:
 定理 associated_isSymm
-  条件: (Q : QuadraticMap R M N) (x y : M)
+  条件: (Q : 二次映射 R M N) (x y : M)
   证明: by
   simp only [associated_apply, sub_eq_add_neg, add_assoc, add_comm, add_left_comm]
 
@@ -2924,7 +2924,7 @@ theorem _root_.QuadraticForm.associated_isSymm
 
 中文:
 定理 _root_.QuadraticForm.associated_isSymm
-  条件: (Q : QuadraticForm R M) [Invertible (2 : R)]
+  条件: (Q : QuadraticForm R M) [可逆 (2 : R)]
   证明: ⟨QuadraticMap.associated_isSymm S Q⟩
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.associated_isSymm, associated_isSymm
@@ -2976,7 +2976,7 @@ theorem associated_comp
 
 中文:
 定理 associated_comp
-  条件: {N' : 类型} [AddCommGroup N'] [Module R N'] (f : N' ->ₗ[R] M)
+  条件: {N' : 类型} [加法交换群 N'] [模 R N'] (f : N' ->ₗ[R] M)
   证明: by
   ext
   simp only [associated_apply, comp_apply, map_add, LinearMap.compl₁₂_apply]
@@ -3130,7 +3130,7 @@ abbreviation associated'
 
 中文:
 缩写 associated'
-  签名: : QuadraticMap R M N ->ₗ[整数] BilinMap R M N
+  签名: : 二次映射 R M N ->ₗ[整数] BilinMap R M N
   定义体: associatedHom Int
 
 Depends on / 依赖: associatedHom
@@ -3148,7 +3148,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: [Invertible (2 : R)]
+  签名: [可逆 (2 : R)]
   定义体: fun ⟨hB⟩ => ⟨B.toQuadraticMap, associated_left_inverse _ hB⟩
 
 Depends on / 依赖: B.toQuadraticMap, associated_left_inverse, toQuadraticMap
@@ -3189,8 +3189,8 @@ theorem exists_quadraticMap_ne_zero
   rw [(QuadraticMap.ext h : Q = 0)]; rw [map_zero]
 
 中文:
-定理 exists_quadraticMap_ne_zero
-  结论: {Q : QuadraticMap R M N}
+定理 存在_quadraticMap_ne_zero
+  结论: {Q : 二次映射 R M N}
   证明: by
   rw [← not_forall]
   intro h
@@ -3227,7 +3227,7 @@ abbreviation associated
 
 中文:
 缩写 associated
-  签名: : QuadraticMap R M N ->ₗ[R] BilinMap R M N
+  签名: : 二次映射 R M N ->ₗ[R] BilinMap R M N
   定义体: associatedHom R
 
 Depends on / 依赖: associatedHom
@@ -3269,7 +3269,7 @@ theorem associated_linMulLin
 
 中文:
 定理 associated_linMulLin
-  条件: [Invertible (2 : R)] (f g : M ->ₗ[R] R)
+  条件: [可逆 (2 : R)] (f g : M ->ₗ[R] R)
   证明: by
   ext
   simp only [associated_apply, linMulLin_apply, map_add, smul_add, LinearMap.add_apply,
@@ -3306,7 +3306,7 @@ lemma associated_sq
 
 中文:
 引理 associated_sq
-  条件: [Invertible (2 : R)]
+  条件: [可逆 (2 : R)]
   结论: associated (R := R) sq = mul R R
   证明: by
   rw [sq]; rw [associated_linMulLin]
@@ -3340,7 +3340,7 @@ definition IsOrtho
 
 中文:
 定义 IsOrtho
-  签名: (Q : QuadraticMap R M N) (x y : M)
+  签名: (Q : 二次映射 R M N) (x y : M)
   定义体: Q (x + y) = Q x + Q y
 -/
 def IsOrtho (Q : QuadraticMap R M N) (x y : M) : Prop :=
@@ -3357,7 +3357,7 @@ theorem isOrtho_def
 
 中文:
 定理 isOrtho_def
-  条件: {Q : QuadraticMap R M N} {x y : M}
+  条件: {Q : 二次映射 R M N} {x y : M}
   结论: Q.IsOrtho x y ↔ Q (x + y) = Q x + Q y
   证明: Iff.rfl
 
@@ -3378,7 +3378,7 @@ theorem IsOrtho.all
 中文:
 定理 IsOrtho.all
   条件: (x y : M)
-  结论: IsOrtho (0 : QuadraticMap R M N) x y
+  结论: IsOrtho (0 : 二次映射 R M N) x y
   证明: (zero_add _).symm
 
 Depends on / 依赖: zero_add
@@ -3433,7 +3433,7 @@ theorem ne_zero_of_not_isOrtho_self
 
 中文:
 定理 ne_zero_of_not_isOrtho_self
-  条件: {Q : QuadraticMap R M N} (x : M) (hx₁ : ¬Q.IsOrtho x x)
+  条件: {Q : 二次映射 R M N} (x : M) (hx₁ : ¬Q.IsOrtho x x)
   证明: fun hx₂ => hx₁ (hx₂.symm ▸ .zero_left _)
 
 Depends on / 依赖: zero_left
@@ -3480,8 +3480,8 @@ theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho
   rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [
 
 中文:
-定理 _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho
-  结论: [IsCancelAdd R]
+定理 _root_.线性映射.BilinForm.toQuadraticMap_isOrtho
+  结论: [是消去加法 R]
   证明: by
   let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
   simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
@@ -3562,7 +3562,7 @@ theorem associated_isOrtho
 
 中文:
 定理 associated_isOrtho
-  条件: [Invertible (2 : R)] {x y : M}
+  条件: [可逆 (2 : R)] {x y : M}
   证明: by
   simp_rw [isOrtho_def, associated_apply, invOf_smul_eq_iff, smul_zero, sub_sub, sub_eq_zero]
 
@@ -3592,7 +3592,7 @@ definition Anisotropic
 
 中文:
 定义 Anisotropic
-  签名: (Q : QuadraticMap R M N)
+  签名: (Q : 二次映射 R M N)
   定义体: forall x, Q x = 0 -> x = 0
 -/
 def Anisotropic (Q : QuadraticMap R M N) : Prop :=
@@ -3608,8 +3608,8 @@ theorem not_anisotropic_iff_exists
   simp only [Anisotropic, not_forall, exists_prop, and_comm]
 
 中文:
-定理 not_anisotropic_iff_exists
-  条件: (Q : QuadraticMap R M N)
+定理 not_anisotropic_iff_存在
+  条件: (Q : 二次映射 R M N)
   证明: by
   simp only [Anisotropic, not_forall, exists_prop, and_comm]
 
@@ -3629,7 +3629,7 @@ theorem Anisotropic.eq_zero_iff
 
 中文:
 定理 Anisotropic.eq_zero_iff
-  条件: {Q : QuadraticMap R M N} (h : Anisotropic Q) {x : M}
+  条件: {Q : 二次映射 R M N} (h : Anisotropic Q) {x : M}
   证明: ⟨h x, fun h => h.symm ▸ map_zero Q⟩
 
 Depends on / 依赖: h.symm, map_zero
@@ -3656,7 +3656,7 @@ theorem separatingLeft_of_anisotropic
 
 中文:
 定理 separatingLeft_of_anisotropic
-  结论: [Invertible (2 : R)] (Q : QuadraticMap R M R)
+  结论: [可逆 (2 : R)] (Q : 二次映射 R M R)
   证明: fun x hx => hB _ by
   rw [← hx x]
   exact (associated_eq_self_apply _ _ x).symm
@@ -3690,7 +3690,7 @@ definition PosDef
 
 中文:
 定义 PosDef
-  签名: (Q₂ : QuadraticMap R₂ M N)
+  签名: (Q₂ : 二次映射 R₂ M N)
   定义体: forall x, x != 0 -> 0 < Q₂ x
 -/
 def PosDef (Q₂ : QuadraticMap R₂ M N) : Prop :=
@@ -3707,7 +3707,7 @@ theorem PosDef.smul
 
 中文:
 定理 PosDef.smul
-  结论: {R} [CommSemiring R] [PartialOrder R]
+  结论: {R} [交换半环 R] [偏序 R]
   证明: fun x hx => smul_pos a_pos (h x hx)
 
 Depends on / 依赖: a_pos, smul_pos
@@ -3730,7 +3730,7 @@ theorem PosDef.nonneg
 
 中文:
 定理 PosDef.nonneg
-  条件: {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) (x : M)
+  条件: {Q : 二次映射 R₂ M N} (hQ : PosDef Q) (x : M)
   结论: 0 <= Q x
   证明: (eq_or_ne x 0).elim (fun h => h.symm ▸ (map_zero Q).symm.le) fun h => (hQ _ h).le
 
@@ -3754,7 +3754,7 @@ lt_irrefl (0 : N) by
 
 中文:
 定理 PosDef.anisotropic
-  条件: {Q : QuadraticMap R₂ M N} (hQ : Q.PosDef)
+  条件: {Q : 二次映射 R₂ M N} (hQ : Q.PosDef)
   结论: Q.Anisotropic
   证明: fun x hQx => by_contradiction fun hx =>
 lt_irrefl (0 : N) by
@@ -3784,7 +3784,7 @@ theorem PosDef.le_zero_iff
 
 中文:
 定理 PosDef.le_zero_iff
-  条件: {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) {x : M}
+  条件: {Q : 二次映射 R₂ M N} (hQ : PosDef Q) {x : M}
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
   have : Q x = 0 := le_antisymm h (hQ.nonneg x)
@@ -3808,7 +3808,7 @@ theorem posDef_of_nonneg
 
 中文:
 定理 posDef_of_nonneg
-  条件: {Q : QuadraticMap R₂ M N} (h : 对任意 x, 0 <= Q x) (h0 : Q.Anisotropic)
+  条件: {Q : 二次映射 R₂ M N} (h : 对任意 x, 0 <= Q x) (h0 : Q.Anisotropic)
   证明: fun x hx => lt_of_le_of_ne (h x) (Ne.symm fun hQx => hx <| h0 _ hQx)
 
 Depends on / 依赖: Ne.symm, lt_of_le_of_ne
@@ -3828,7 +3828,7 @@ theorem posDef_iff_nonneg
 
 中文:
 定理 posDef_iff_nonneg
-  条件: {Q : QuadraticMap R₂ M N}
+  条件: {Q : 二次映射 R₂ M N}
   结论: PosDef Q ↔ (对任意 x, 0 <= Q x) ∧ Q.Anisotropic
   证明: ⟨fun h => ⟨h.nonneg, h.anisotropic⟩, fun ⟨n, a⟩ => posDef_of_nonneg n a⟩
 
@@ -3867,7 +3867,7 @@ theorem linMulLinSelfPosDef
 
 中文:
 定理 linMulLinSelfPosDef
-  结论: {R} [CommSemiring R] [Module R M]
+  结论: {R} [交换半环 R] [模 R M]
   证明: fun _x hx => mul_self_pos.2 fun h => hx LinearMap.ker_eq_bot'.mp hf _ h
 -/
 theorem linMulLinSelfPosDef {R} [CommSemiring R] [Module R M]
@@ -3905,8 +3905,8 @@ definition Matrix.toQuadraticForm'
 @[deprecated (since := "2026-05-15")] alias Matrix.toQuadraticMap' := Matrix.toQuadraticForm'
 
 中文:
-定义 Matrix.toQuadraticForm'
-  签名: (M : Matrix n n R)
+定义 矩阵.toQuadraticForm'
+  签名: (M : 矩阵 n n R)
   定义体: LinearMap.BilinMap.toQuadraticMap (Matrix.toLinearMap₂' R M)
 
 @[deprecated (since := "2026-05-15")] alias Matrix.toQuadraticMap' := Matrix.toQuadraticForm'
@@ -3975,7 +3975,7 @@ theorem isSymm_toMatrix'
 中文:
 定理 isSymm_toMatrix'
   条件: (Q : QuadraticForm R (n -> R))
-  结论: Q.toMatrix'.IsSymm
+  结论: Q.toMatrix'.是Symm
   证明: by
   ext i j
   rw [toMatrix']; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [← QuadraticMap.associated_isSymm]
@@ -4046,7 +4046,7 @@ definition toMatrix
 
 中文:
 定义 toMatrix
-  签名: : Matrix n n R
+  签名: : 矩阵 n n R
   定义体: LinearMap.toMatrix₂ b b (Q.associated)
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, Q.associated, associated
@@ -4113,7 +4113,7 @@ theorem isSymm_toMatrix
 中文:
 定理 isSymm_toMatrix
   条件: (Q : QuadraticForm R N)
-  结论: (Q.toMatrix b).IsSymm
+  结论: (Q.toMatrix b).是Symm
   证明: by
   ext i j
   rw [toMatrix]; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂_apply]; rw [LinearMap.toMatrix₂_apply]; rw [← QuadraticMap.associated_isSymm]
@@ -4139,7 +4139,7 @@ theorem toMatrix_comp
 
 中文:
 定理 toMatrix_comp
-  条件: (b' : Basis m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P)
+  条件: (b' : 基 m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P)
   证明: by
   simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂_compl₁₂ b' b', toMatrix]
 
@@ -4189,7 +4189,7 @@ theorem discr'_smul
 中文:
 定理 discr'_smul
   条件: (a : R)
-  结论: (a • Q).discr' = a ^ Fintype.card n * Q.discr'
+  结论: (a • Q).discr' = a ^ 有限类型.card n * Q.discr'
   证明: by
   simp [discr', toMatrix'_smul]
 -/
@@ -4271,7 +4271,7 @@ theorem discr_smul
 中文:
 定理 discr_smul
   条件: (a : R)
-  结论: (a • Q).discr b = a ^ Fintype.card n * (Q.discr b)
+  结论: (a • Q).discr b = a ^ 有限类型.card n * (Q.discr b)
   证明: by
   simp [discr, toMatrix_smul]
 
@@ -4291,7 +4291,7 @@ theorem discr_comp
 
 中文:
 定理 discr_comp
-  结论: [AddCommGroup P] [Module R P] (b' : Basis n R P) (Q : QuadraticForm R P)
+  结论: [加法交换群 P] [模 R P] (b' : 基 n R P) (Q : QuadraticForm R P)
   证明: by
   simp [mul_left_comm, toMatrix_comp b b', mul_comm, discr]
 
@@ -4374,8 +4374,8 @@ theorem exists_bilinForm_self_ne_zero
   exact ⟨x, fun h => hx (Q.associated_eq_self_apply Nat x ▸ h)⟩
 
 中文:
-定理 exists_bilinForm_self_ne_zero
-  结论: [htwo : Invertible (2 : R)] {B : BilinForm R M}
+定理 存在_bilinForm_self_ne_zero
+  结论: [htwo : 可逆 (2 : R)] {B : BilinForm R M}
   证明: by
   lift B to QuadraticForm R M using hB₂ with Q
   obtain ⟨x, hx⟩ := QuadraticMap.exists_quadraticMap_ne_zero hB₁
@@ -4409,8 +4409,8 @@ theorem exists_orthogonal_basis
   -- either the bilinear form is trivial or we can pick a non-n
 
 中文:
-定理 exists_orthogonal_basis
-  结论: [hK : Invertible (2 : K)] {B : LinearMap.BilinForm K V}
+定理 存在_orthogonal_basis
+  结论: [hK : 可逆 (2 : K)] {B : 线性映射.BilinForm K V}
   证明: by
   suffices forall d, finrank K V = d -> exists v : Basis (Fin d) K V, B.IsOrthoᵢ v by exact this _ rfl
   intro d hd
@@ -4487,7 +4487,7 @@ definition basisRepr
 
 中文:
 定义 basisRepr
-  签名: [Finite ι] (Q : QuadraticMap R M N) (v : Basis ι R M)
+  签名: [有限 ι] (Q : 二次映射 R M N) (v : 基 ι R M)
   定义体: Q.comp v.equivFun.symm
 
 @[simp]
@@ -4511,7 +4511,7 @@ theorem basisRepr_apply
 
 中文:
 定理 basisRepr_apply
-  条件: [Fintype ι] {v : Basis ι R M} (Q : QuadraticMap R M N) (w : ι -> R)
+  条件: [有限类型 ι] {v : 基 ι R M} (Q : 二次映射 R M N) (w : ι -> R)
   证明: by
   rw [← v.equivFun_symm_apply]
   rfl
@@ -4539,7 +4539,7 @@ definition weightedSumSquares
 
 中文:
 定义 weightedSumSquares
-  签名: [Monoid S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι -> S)
+  签名: [幺半群 S] [分配乘法作用 S R] [标量交换类 S R R] (w : ι -> S)
   定义体: ∑ i : ι, w i • (proj (R := R) (n := ι) i i)
 -/
 def weightedSumSquares [Monoid S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι -> S) :
@@ -4559,7 +4559,7 @@ theorem weightedSumSquares_apply
 
 中文:
 定理 weightedSumSquares_apply
-  结论: [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
+  结论: [幺半群 S] [分配乘法作用 S R] [标量交换类 S R R]
   证明: sum_apply _ _ _
 
 Depends on / 依赖: sum_apply
@@ -4584,7 +4584,7 @@ theorem basisRepr_eq_of_iIsOrtho
 
 中文:
 定理 basisRepr_eq_of_iIsOrtho
-  结论: {R M} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M} [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   ext w
   rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]

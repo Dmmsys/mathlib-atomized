@@ -29,7 +29,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousStar 实数
+  签名: 余ntinuousStar 实数
   定义体: ⟨continuous_id⟩
 
 Depends on / 依赖: continuous_id
@@ -48,7 +48,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousStar 实数>=0
+  签名: 余ntinuousStar 实数>=0
   定义体: continuous_id
 
 Depends on / 依赖: continuous_id

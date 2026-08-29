@@ -46,7 +46,7 @@ definition lists
 
 中文:
 定义 lists
-  签名: : Multiset α -> Multiset (List α)
+  签名: : Multiset α -> Multiset (列表 α)
   定义体: fun s =>
   Quotient.liftOn s (fun l => l.permutations) fun l l' (h : l ~ l') => by
     refine coe_eq_coe.mpr ?_
@@ -73,7 +73,7 @@ theorem lists_coe
 
 中文:
 定理 lists_coe
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: lists (l : Multiset α) = l.permutations
   证明: rfl
 
@@ -100,7 +100,7 @@ theorem lists_nodup_finset
 
 中文:
 定理 lists_nodup_finset
-  条件: (l : Finset α)
+  条件: (l : 有限集 α)
   结论: (lists (l.val)).Nodup
   证明: by
   have h_nodup : l.val.Nodup := l.nodup
@@ -132,7 +132,7 @@ theorem mem_lists_iff
 
 中文:
 定理 mem_lists_iff
-  条件: (s : Multiset α) (l : List α)
+  条件: (s : Multiset α) (l : 列表 α)
   结论: l in lists s ↔ s = ⟦l⟧
   证明: by
   induction s using Quotient.inductionOn
@@ -161,7 +161,7 @@ instance fintypeNodupList
 
 中文:
 实例 fintypeNodupList
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: by
   refine Fintype.subtype ?_ ?_
   · let univSubsets := ((Finset.univ : Finset α).powerset.1 : (Multiset (Finset α)))

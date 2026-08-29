@@ -38,7 +38,7 @@ theorem AddMonoid.End.natCast_def
   proof: rfl
 
 中文:
-定理 AddMonoid.End.natCast_def
+定理 加法幺半群.End.natCast_def
   条件: (n : 自然数)
   证明: rfl
 -/
@@ -65,8 +65,8 @@ definition Module.toAddMonoidEnd
       AddMonoidHom.ext fun r => by simp [(AddMonoidHom.add_apply), add_smul] }
 
 中文:
-定义 Module.toAddMonoidEnd
-  签名: : R ->+* AddMonoid.End M
+定义 模.toAddMonoidEnd
+  签名: : R ->+* 加法幺半群.End M
   定义体: { DistribMulAction.toAddMonoidEnd R M with
     map_zero' := AddMonoidHom.ext fun r => by simp
     map_add' x y :=
@@ -129,7 +129,7 @@ lemma IsAddUnit.smul_left
 
 中文:
 引理 IsAddUnit.smul_left
-  条件: [DistribSMul S M] (hx : IsAddUnit x) (s : S)
+  条件: [分配标量乘法 S M] (hx : IsAddUnit x) (s : S)
   证明: hx.map (DistribSMul.toAddMonoidHom M s)
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, hx.map, toAddMonoidHom
@@ -175,7 +175,7 @@ theorem AddMonoid.End.intCast_def
   proof: rfl
 
 中文:
-定理 AddMonoid.End.intCast_def
+定理 加法幺半群.End.intCast_def
   条件: (z : 整数)
   证明: rfl
 -/

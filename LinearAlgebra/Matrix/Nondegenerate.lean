@@ -77,8 +77,8 @@ structure Nondegenerate
     - separatingRight : SeparatingRight M
 
 中文:
-结构 Nondegenerate
-  参数: (M : Matrix m n R)
+结构 非退化
+  参数: (M : 矩阵 m n R)
   公理与运算 (2 个):
     - separatingLeft : SeparatingLeft M
     - separatingRight : SeparatingRight M
@@ -105,7 +105,7 @@ lemma separatingRight_def
 
 中文:
 引理 separatingRight_def
-  条件: [Fintype m] [Fintype n]
+  条件: [有限类型 m] [有限类型 n]
   证明: by
   refine forall_congr' fun w => ⟨fun hM hw => hM ?_, fun hM hw => hM ?_⟩ <;>
   convert! hw
@@ -129,7 +129,7 @@ lemma separatingLeft_def
 
 中文:
 引理 separatingLeft_def
-  条件: [Fintype m] [Fintype n]
+  条件: [有限类型 m] [有限类型 n]
   证明: by
   refine forall_congr' fun v => ⟨fun hM hv => hM ?_, fun hM hv => hM ?_⟩ <;>
   convert! hv
@@ -152,7 +152,7 @@ lemma nondegenerate_def
 
 中文:
 引理 nondegenerate_def
-  条件: [Fintype m] [Fintype n]
+  条件: [有限类型 m] [有限类型 n]
   证明: by
   rw [nondegenerate_iff]; rw [separatingLeft_def]; rw [separatingRight_def]
 
@@ -177,8 +177,8 @@ refine ⟨fun h v hv => h v fun w => ?_, fun h w hw => h w funext fun i => ?_⟩
 · classical simpa using! hw Pi.single i 1
 
 中文:
-定理 separatingLeft_iff_forall_vecMul_eq_zero
-  条件: [Fintype m] [Finite n]
+定理 separatingLeft_iff_对任意_vecMul_eq_zero
+  条件: [有限类型 m] [有限 n]
   证明: by
   have := Fintype.ofFinite n
   rw [separatingLeft_def]
@@ -210,8 +210,8 @@ refine ⟨fun h v hv => h v fun w => ?_, fun h w hw => h w funext fun i => ?_⟩
 · classical simpa using hw Pi.single i 1
 
 中文:
-定理 separatingRight_iff_forall_mulVec_eq_zero
-  条件: [Finite m] [Fintype n]
+定理 separatingRight_iff_对任意_mulVec_eq_zero
+  条件: [有限 m] [有限类型 n]
   证明: by
   have := Fintype.ofFinite m
   rw [separatingRight_def]
@@ -239,7 +239,7 @@ theorem SeparatingLeft.eq_zero_of_vecMul_eq_zero
 
 中文:
 定理 SeparatingLeft.eq_zero_of_vecMul_eq_zero
-  结论: [Fintype m] [Finite n] (hM : M.SeparatingLeft)
+  结论: [有限类型 m] [有限 n] (hM : M.SeparatingLeft)
   证明: separatingLeft_iff_forall_vecMul_eq_zero.mp hM v hv
 
 Depends on / 依赖: separatingLeft_iff_forall_vecMul_eq_zero, separatingLeft_iff_forall_vecMul_eq_zero.mp
@@ -258,7 +258,7 @@ theorem SeparatingRight.eq_zero_of_mulVec_eq_zero
 
 中文:
 定理 SeparatingRight.eq_zero_of_mulVec_eq_zero
-  结论: [Finite m] [Fintype n] (hM : M.SeparatingRight)
+  结论: [有限 m] [有限类型 n] (hM : M.SeparatingRight)
   证明: separatingRight_iff_forall_mulVec_eq_zero.mp hM v hv
 
 Depends on / 依赖: separatingRight_iff_forall_mulVec_eq_zero, separatingRight_iff_forall_mulVec_eq_zero.mp
@@ -279,8 +279,8 @@ theorem nondegenerate_iff_forall_vecMul_and_mulVec_eq_zero
 @[simp]
 
 中文:
-定理 nondegenerate_iff_forall_vecMul_and_mulVec_eq_zero
-  条件: [Fintype m] [Fintype n]
+定理 nondegenerate_iff_对任意_vecMul_and_mulVec_eq_zero
+  条件: [有限类型 m] [有限类型 n]
   证明: by
   rw [nondegenerate_iff]; rw [separatingLeft_iff_forall_vecMul_eq_zero]; rw [separatingRight_iff_forall_mulVec_eq_zero]
 
@@ -310,7 +310,7 @@ alias ⟨_, SeparatingRight.separatingLeft_transpose⟩ := separatingLeft_transp
 
 中文:
 定理 separatingLeft_transpose_iff
-  条件: [Finite m] [Finite n]
+  条件: [有限 m] [有限 n]
   证明: by
   have := Fintype.ofFinite m
   have := Fintype.ofFinite n
@@ -348,7 +348,7 @@ alias ⟨_, SeparatingLeft.separatingRight_transpose⟩ := separatingRight_trans
 
 中文:
 定理 separatingRight_transpose_iff
-  条件: [Finite m] [Finite n]
+  条件: [有限 m] [有限 n]
   证明: by
   have := Fintype.ofFinite m
   have := Fintype.ofFinite n
@@ -383,8 +383,8 @@ alias ⟨_, Nondegenerate.transpose⟩ := nondegenerate_transpose_iff
 
 中文:
 定理 nondegenerate_transpose_iff
-  条件: [Finite m] [Finite n]
-  结论: Mᵀ.Nondegenerate ↔ M.Nondegenerate
+  条件: [有限 m] [有限 n]
+  结论: Mᵀ.非退化 ↔ M.非退化
   证明: by
   simp [nondegenerate_iff, and_comm]
 
@@ -408,8 +408,8 @@ theorem Nondegenerate.eq_zero_of_ortho
   proof: (nondegenerate_def.mp hM).1 v hv
 
 中文:
-定理 Nondegenerate.eq_zero_of_ortho
-  结论: (hM : Nondegenerate M) {v : m -> R}
+定理 非退化.eq_zero_of_ortho
+  结论: (hM : 非退化 M) {v : m -> R}
   证明: (nondegenerate_def.mp hM).1 v hv
 
 Depends on / 依赖: nondegenerate_def, nondegenerate_def.mp
@@ -427,8 +427,8 @@ theorem Nondegenerate.exists_not_ortho_of_ne_zero
   proof: not_forall.mp (mt hM.eq_zero_of_ortho hv)
 
 中文:
-定理 Nondegenerate.exists_not_ortho_of_ne_zero
-  结论: (hM : Nondegenerate M)
+定理 非退化.存在_not_ortho_of_ne_zero
+  结论: (hM : 非退化 M)
   证明: not_forall.mp (mt hM.eq_zero_of_ortho hv)
 
 Depends on / 依赖: eq_zero_of_ortho, hM.eq_zero_of_ortho, not_forall, not_forall.mp
@@ -446,8 +446,8 @@ theorem Nondegenerate.eq_zero_of_ortho'
   proof: (nondegenerate_def.mp hM).2 w hw
 
 中文:
-定理 Nondegenerate.eq_zero_of_ortho'
-  结论: (hM : Nondegenerate M) {w : n -> R}
+定理 非退化.eq_zero_of_ortho'
+  结论: (hM : 非退化 M) {w : n -> R}
   证明: (nondegenerate_def.mp hM).2 w hw
 
 Depends on / 依赖: nondegenerate_def, nondegenerate_def.mp
@@ -465,8 +465,8 @@ theorem Nondegenerate.exists_not_ortho_of_ne_zero'
   proof: not_forall.mp (mt hM.eq_zero_of_ortho' hw)
 
 中文:
-定理 Nondegenerate.exists_not_ortho_of_ne_zero'
-  条件: (hM : Nondegenerate M) {w : n -> R} (hw : w != 0)
+定理 非退化.存在_not_ortho_of_ne_zero'
+  条件: (hM : 非退化 M) {w : n -> R} (hw : w != 0)
   证明: not_forall.mp (mt hM.eq_zero_of_ortho' hw)
 
 Depends on / 依赖: eq_zero_of_ortho, hM.eq_zero_of_ortho, not_forall, not_forall.mp
@@ -516,9 +516,9 @@ theorem Nondegenerate.of_det_mem_nonZeroDivisors
 separatingRight := separatingLeft_transpose_iff.mp .of_det_mem_nonZeroDivisors by simpa
 
 中文:
-定理 Nondegenerate.of_det_mem_nonZeroDivisors
+定理 非退化.of_det_mem_nonZeroDivisors
   条件: (hM : M.det in R⁰)
-  结论: M.Nondegenerate where
+  结论: M.非退化 where
   证明: .of_det_mem_nonZeroDivisors hM
 separatingRight := separatingLeft_transpose_iff.mp .of_det_mem_nonZeroDivisors by simpa
 
@@ -539,8 +539,8 @@ theorem nondegenerate_of_det_ne_zero
 
 中文:
 定理 nondegenerate_of_det_ne_zero
-  条件: [NoZeroDivisors R] (hM : M.det != 0)
-  结论: M.Nondegenerate
+  条件: [无零因子 R] (hM : M.det != 0)
+  结论: M.非退化
   证明: .of_det_mem_nonZeroDivisors mem_nonZeroDivisors_of_ne_zero hM
 
 Depends on / 依赖: mem_nonZeroDivisors_of_ne_zero, of_det_mem_nonZeroDivisors
@@ -577,7 +577,7 @@ theorem eq_zero_of_vecMul_eq_zero
 
 中文:
 定理 eq_zero_of_vecMul_eq_zero
-  结论: [NoZeroDivisors R] (hM : M.det != 0) {v : m -> R}
+  结论: [无零因子 R] (hM : M.det != 0) {v : m -> R}
   证明: .separatingLeft.eq_zero_of_vecMul_eq_zero hv nondegenerate_of_det_ne_zero hM
 
 Depends on / 依赖: eq_zero_of_vecMul_eq_zero, nondegenerate_of_det_ne_zero, separatingLeft, separatingLeft.eq_zero_of_vecMul_eq_zero
@@ -615,7 +615,7 @@ theorem eq_zero_of_mulVec_eq_zero
 
 中文:
 定理 eq_zero_of_mulVec_eq_zero
-  结论: [NoZeroDivisors R] (hM : M.det != 0) {v : m -> R}
+  结论: [无零因子 R] (hM : M.det != 0) {v : m -> R}
   证明: .separatingRight.eq_zero_of_mulVec_eq_zero hv nondegenerate_of_det_ne_zero hM
 
 Depends on / 依赖: eq_zero_of_mulVec_eq_zero, nondegenerate_of_det_ne_zero, separatingRight, separatingRight.eq_zero_of_mulVec_eq_zero
@@ -656,7 +656,7 @@ theorem mulVec_injective_of_det_ne_zero
 
 中文:
 定理 mulVec_injective_of_det_ne_zero
-  条件: [NoZeroDivisors R] (hM : M.det != 0)
+  条件: [无零因子 R] (hM : M.det != 0)
   证明: mulVec_injective_of_det_mem_nonZeroDivisors (mem_nonZeroDivisors_of_ne_zero hM)
 
 Depends on / 依赖: mem_nonZeroDivisors_of_ne_zero, mulVec_injective_of_det_mem_nonZeroDivisors

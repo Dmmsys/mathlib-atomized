@@ -47,10 +47,10 @@ class IsWellOrderContinuous
     - nonempty_isColimit((m : J) (hm : Order.IsSuccLimit m)) : Nonempty (IsColimit ((Set.principalSegIio m).cocone F))
 
 中文:
-类 IsWellOrderContinuous
+类 是WellOrderContinuous
   参数: (F : J ⥤ C)
   公理与运算 (1 个):
-    - nonempty_isColimit((m : J) (hm : Order.IsSuccLimit m)) : Nonempty (IsColimit ((Set.principalSegIio m).cocone F))
+    - nonempty_isColimit((m : J) (hm : Order.是SuccLimit m)) : 非空 (是余极限 ((集合.principalSegIio m).cocone F))
 -/
 class IsWellOrderContinuous (F : J ⥤ C) : Prop where
   nonempty_isColimit (m : J) (hm : Order.IsSuccLimit m) :
@@ -66,7 +66,7 @@ definition isColimitOfIsWellOrderContinuous
 
 中文:
 定义 isColimitOfIsWellOrderContinuous
-  签名: (F : J ⥤ C) [F.IsWellOrderContinuous]
+  签名: (F : J ⥤ C) [F.是WellOrderContinuous]
   定义体: (IsWellOrderContinuous.nonempty_isColimit m hm).some
 
 Depends on / 依赖: IsWellOrderContinuous, IsWellOrderContinuous.nonempty_isColimit, nonempty_isColimit
@@ -87,7 +87,7 @@ definition isColimitOfIsWellOrderContinuous'
 
 中文:
 定义 isColimitOfIsWellOrderContinuous'
-  签名: (F : J ⥤ C) [F.IsWellOrderContinuous]
+  签名: (F : J ⥤ C) [F.是WellOrderContinuous]
   定义体: (F.isColimitOfIsWellOrderContinuous f.top hα).whiskerEquivalence
     f.orderIsoIio.equivalence
 
@@ -118,7 +118,7 @@ lemma isWellOrderContinuous_of_iso
 
 中文:
 引理 isWellOrderContinuous_of_iso
-  条件: {F G : J ⥤ C} (e : F ≅ G) [F.IsWellOrderContinuous]
+  条件: {F G : J ⥤ C} (e : F ≅ G) [F.是WellOrderContinuous]
   证明: ⟨(IsColimit.precomposeHomEquiv (isoWhiskerLeft _ e) _).1
       (IsColimit.ofIsoColimit (F.isColimitOfIsWellOrderContinuous m hm)
         (Cocone.ext (e.app _)))⟩
@@ -160,7 +160,7 @@ instance IsWellOrderContinuous.restriction_setIci
       · refin
 
 中文:
-实例 IsWellOrderContinuous.restriction_setIci
+实例 是WellOrderContinuous.restriction_setIci
   定义体: ⟨by
     let f : Set.Iio m -> Set.Iio m.1 := fun ⟨⟨a, ha⟩, ha'⟩ => ⟨a, ha'⟩
     have hf : Monotone f := fun _ _ h => h

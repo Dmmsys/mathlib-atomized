@@ -81,7 +81,7 @@ lemma BilinForm.ext_iff_basis
 
 中文:
 引理 BilinForm.ext_iff_basis
-  条件: {B B' : LinearMap.BilinForm Rₗ Mₗ}
+  条件: {B B' : 线性映射.BilinForm Rₗ Mₗ}
   证明: LinearMap.ext_iff_basis b₁' b₁'
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff_basis, ext_iff_basis

@@ -31,7 +31,7 @@ lemma Module.finite_of_surjective_of_ker_le_nilradical
     obtain ⟨n, hn : _ = ⊥⟩ := hf₃.isNilpotent
 
 中文:
-引理 Module.finite_of_surjective_of_ker_le_nilradical
+引理 模.finite_of_surjective_of_ker_le_nilradical
   证明: by
   have : Module.Finite R (S ⧸ RingHom.ker f) :=
     let e := Ideal.quotientKerAlgEquivOfSurjective hf₁

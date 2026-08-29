@@ -45,7 +45,7 @@ theorem range_eq_univ
 
 中文:
 定理 range_eq_univ
-  条件: {α : 类型} {β : 类型} {E : 类型} [EquivLike E α β] (e : E)
+  条件: {α : 类型} {β : 类型} {E : 类型} [等价状 E α β] (e : E)
   证明: eq_univ_of_forall (EquivLike.toEquiv e).surjective
 
 Depends on / 依赖: EquivLike, EquivLike.toEquiv, eq_univ_of_forall, surjective, toEquiv
@@ -90,7 +90,7 @@ lemma image_symm_eq_preimage
 
 中文:
 引理 image_symm_eq_preimage
-  条件: (e : α ≃ β) (s : Set β)
+  条件: (e : α ≃ β) (s : 集合 β)
   结论: e.symm '' s = e ⁻¹' s
   证明: by
   ext; exact mem_image_iff_of_inverse e.right_inv e.left_inv
@@ -113,7 +113,7 @@ lemma image_eq_preimage_symm
 
 中文:
 引理 image_eq_preimage_symm
-  条件: (e : α ≃ β) (s : Set α)
+  条件: (e : α ≃ β) (s : 集合 α)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.symm.image_symm_eq_preimage _
 
@@ -134,8 +134,8 @@ theorem _root_.Set.mem_image_equiv
   proof: Set.ext_iff.mp (image_eq_preimage_symm ..) x
 
 中文:
-定理 _root_.Set.mem_image_equiv
-  条件: {α β} {S : Set α} {f : α ≃ β} {x : β}
+定理 _root_.集合.mem_image_equiv
+  条件: {α β} {S : 集合 α} {f : α ≃ β} {x : β}
   证明: Set.ext_iff.mp (image_eq_preimage_symm ..) x
 
 Depends on / 依赖: Set.ext_iff.mp, ext_iff, image_eq_preimage_symm
@@ -156,7 +156,7 @@ theorem symm_image_subset
 
 中文:
 定理 symm_image_subset
-  条件: {α β} (e : α ≃ β) (s : Set α) (t : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 α) (t : 集合 β)
   证明: by rw [image_subset_iff, image_eq_preimage_symm]
 -/
 protected theorem symm_image_subset {α β} (e : α ≃ β) (s : Set α) (t : Set β) :
@@ -178,7 +178,7 @@ theorem subset_symm_image
 
 中文:
 定理 subset_symm_image
-  条件: {α β} (e : α ≃ β) (s : Set α) (t : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 α) (t : 集合 β)
   证明: calc
     s subseteq e.symm '' t ↔ e.symm.symm '' s subseteq t := by rw [e.symm.symm_image_subset]
     _ ↔ e '' s subseteq t := by rw [e.symm_symm]
@@ -203,7 +203,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: {α β} (e : α ≃ β) (s : Set α)
+  条件: {α β} (e : α ≃ β) (s : 集合 α)
   结论: e.symm '' e '' s = s
   证明: e.leftInverse_symm.image_image s
 
@@ -224,7 +224,7 @@ theorem eq_image_iff_symm_image_eq
 
 中文:
 定理 eq_image_iff_symm_image_eq
-  条件: {α β} (e : α ≃ β) (s : Set α) (t : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 α) (t : 集合 β)
   证明: (e.symm.injective.image_injective.eq_iff' (e.symm_image_image s)).symm
 
 @[simp]
@@ -249,7 +249,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: {α β} (e : α ≃ β) (s : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 β)
   结论: e '' e.symm '' s = s
   证明: e.symm.symm_image_image s
 
@@ -274,7 +274,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  条件: {α β} (e : α ≃ β) (s : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 β)
   结论: e '' e ⁻¹' s = s
   证明: e.surjective.image_preimage s
 
@@ -297,7 +297,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: {α β} (e : α ≃ β) (s : Set α)
+  条件: {α β} (e : α ≃ β) (s : 集合 α)
   结论: e ⁻¹' e '' s = s
   证明: e.injective.preimage_image s
 
@@ -319,7 +319,7 @@ theorem image_compl
 
 中文:
 定理 image_compl
-  条件: {α β} (f : Equiv α β) (s : Set α)
+  条件: {α β} (f : 等价 α β) (s : 集合 α)
   结论: f '' sᶜ = (f '' s)ᶜ
   证明: image_compl_eq f.bijective
 
@@ -342,7 +342,7 @@ theorem symm_preimage_preimage
 
 中文:
 定理 symm_preimage_preimage
-  条件: {α β} (e : α ≃ β) (s : Set β)
+  条件: {α β} (e : α ≃ β) (s : 集合 β)
   结论: e.symm ⁻¹' e ⁻¹' s = s
   证明: e.rightInverse_symm.preimage_preimage s
 
@@ -365,7 +365,7 @@ theorem preimage_symm_preimage
 
 中文:
 定理 preimage_symm_preimage
-  条件: {α β} (e : α ≃ β) (s : Set α)
+  条件: {α β} (e : α ≃ β) (s : 集合 α)
   结论: e ⁻¹' e.symm ⁻¹' s = s
   证明: e.leftInverse_symm.preimage_preimage s
 
@@ -385,7 +385,7 @@ theorem preimage_subset
 
 中文:
 定理 preimage_subset
-  条件: {α β} (e : α ≃ β) (s t : Set β)
+  条件: {α β} (e : α ≃ β) (s t : 集合 β)
   结论: e ⁻¹' s subseteq e ⁻¹' t ↔ s subseteq t
   证明: e.surjective.preimage_subset_preimage_iff
 
@@ -407,7 +407,7 @@ theorem image_subset
 
 中文:
 定理 image_subset
-  条件: {α β} (e : α ≃ β) (s t : Set α)
+  条件: {α β} (e : α ≃ β) (s t : 集合 α)
   结论: e '' s subseteq e '' t ↔ s subseteq t
   证明: image_subset_image_iff e.injective
 
@@ -430,7 +430,7 @@ theorem image_eq_iff_eq
 
 中文:
 定理 image_eq_iff_eq
-  条件: {α β} (e : α ≃ β) (s t : Set α)
+  条件: {α β} (e : α ≃ β) (s t : 集合 α)
   结论: e '' s = e '' t ↔ s = t
   证明: image_eq_image e.injective
 
@@ -528,7 +528,7 @@ theorem prod_assoc_preimage
 
 中文:
 定理 prod_assoc_preimage
-  条件: {α β γ} {s : Set α} {t : Set β} {u : Set γ}
+  条件: {α β γ} {s : 集合 α} {t : 集合 β} {u : 集合 γ}
   证明: by
   ext
   simp [and_assoc]
@@ -555,7 +555,7 @@ theorem prod_assoc_symm_preimage
 
 中文:
 定理 prod_assoc_symm_preimage
-  条件: {α β γ} {s : Set α} {t : Set β} {u : Set γ}
+  条件: {α β γ} {s : 集合 α} {t : 集合 β} {u : 集合 γ}
   证明: by
   ext
   simp [and_assoc]
@@ -580,7 +580,7 @@ theorem prod_assoc_image
 
 中文:
 定理 prod_assoc_image
-  条件: {α β γ} {s : Set α} {t : Set β} {u : Set γ}
+  条件: {α β γ} {s : 集合 α} {t : 集合 β} {u : 集合 γ}
   证明: by
   simpa only [Equiv.image_eq_preimage_symm] using prod_assoc_symm_preimage
 
@@ -601,7 +601,7 @@ theorem prod_assoc_symm_image
 
 中文:
 定理 prod_assoc_symm_image
-  条件: {α β γ} {s : Set α} {t : Set β} {u : Set γ}
+  条件: {α β γ} {s : 集合 α} {t : 集合 β} {u : 集合 γ}
   证明: by
   simpa only [Equiv.image_eq_preimage_symm] using! prod_assoc_preimage
 
@@ -622,7 +622,7 @@ definition setProdEquivSigma
 
 中文:
 定义 setProdEquivSigma
-  签名: {α β : 类型} (s : Set (α × β))
+  签名: {α β : 类型} (s : 集合 (α × β))
   定义体: ⟨x.1.1, x.1.2, by simp⟩
   invFun x := ⟨(x.1, x.2.1), x.2.2⟩
 -/
@@ -643,7 +643,7 @@ definition setCongr
 
 中文:
 定义 setCongr
-  签名: {α : 类型} {s t : Set α} (h : s = t)
+  签名: {α : 类型} {s t : 集合 α} (h : s = t)
   定义体: subtypeEquivProp h ▸ rfl
 
 Depends on / 依赖: subtypeEquivProp
@@ -671,8 +671,8 @@ definition image
   right_inv y := by simp
 
 中文:
-定义 image
-  签名: {α β : 类型} (e : α ≃ β) (s : Set α)
+定义 像
+  签名: {α β : 类型} (e : α ≃ β) (s : 集合 α)
   定义体: ⟨e x.1, by simp⟩
   invFun y :=
     ⟨e.symm y.1, by
@@ -706,8 +706,8 @@ lemma image_monotone
 
 中文:
 引理 image_monotone
-  条件: (hs : Monotone e)
-  结论: Monotone (e.image s)
+  条件: (hs : 递增 e)
+  结论: 递增 (e.像 s)
   证明: hs.comp (Subtype.mono_coe _)
 
 Depends on / 依赖: Subtype, Subtype.mono_coe, hs.comp, mono_coe
@@ -726,8 +726,8 @@ lemma image_antitone
 
 中文:
 引理 image_antitone
-  条件: (hs : Antitone e)
-  结论: Antitone (e.image s)
+  条件: (hs : 递减 e)
+  结论: 递减 (e.像 s)
   证明: hs.comp_monotone (Subtype.mono_coe _)
 
 Depends on / 依赖: Subtype, Subtype.mono_coe, comp_monotone, hs.comp_monotone, mono_coe
@@ -746,8 +746,8 @@ lemma image_strictMono
 
 中文:
 引理 image_strictMono
-  条件: (hs : StrictMono e)
-  结论: StrictMono (e.image s)
+  条件: (hs : 严格递增 e)
+  结论: 严格递增 (e.像 s)
   证明: hs.comp (Subtype.strictMono_coe _)
 
 Depends on / 依赖: Subtype, Subtype.strictMono_coe, hs.comp, strictMono_coe
@@ -766,8 +766,8 @@ lemma image_strictAnti
 
 中文:
 引理 image_strictAnti
-  条件: (hs : StrictAnti e)
-  结论: StrictAnti (e.image s)
+  条件: (hs : 严格递减 e)
+  结论: 严格递减 (e.像 s)
   证明: hs.comp_strictMono (Subtype.strictMono_coe _)
 
 Depends on / 依赖: Subtype, Subtype.strictMono_coe, comp_strictMono, hs.comp_strictMono, strictMono_coe
@@ -846,7 +846,7 @@ definition union'
 
 中文:
 定义 union'
-  签名: {α} {s t : Set α} (p : α -> 命题) [DecidablePred p] (hs : 对任意 x in s, p x)
+  签名: {α} {s t : 集合 α} (p : α -> 命题) [DecidablePred p] (hs : 对任意 x in s, p x)
   定义体: if hp : p x then Sum.inl ⟨_, x.2.resolve_right fun xt => ht _ xt hp⟩
     else Sum.inr ⟨_, x.2.resolve_left fun xs => hp (hs _ xs)⟩
   invFun o :=
@@ -879,7 +879,7 @@ definition union
 
 中文:
 定义 union
-  签名: {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
+  签名: {α} {s t : 集合 α} [DecidablePred fun x => x in s] (H : Disjoint s t)
   定义体: Set.union' (fun x => x in s) (fun _ => id) fun _ xt xs => Set.disjoint_left.mp H xs xt
 -/
 protected def union {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t) :
@@ -896,7 +896,7 @@ theorem union_apply_left
 
 中文:
 定理 union_apply_left
-  结论: {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
+  结论: {α} {s t : 集合 α} [DecidablePred fun x => x in s] (H : Disjoint s t)
   证明: dif_pos ha
 
 Depends on / 依赖: dif_pos
@@ -917,7 +917,7 @@ theorem union_apply_right
 
 中文:
 定理 union_apply_right
-  结论: {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
+  结论: {α} {s t : 集合 α} [DecidablePred fun x => x in s] (H : Disjoint s t)
   证明: dif_neg fun h => Set.disjoint_left.mp H h ha
 
 @[simp]
@@ -941,7 +941,7 @@ theorem union_symm_apply_left
 
 中文:
 定理 union_symm_apply_left
-  结论: {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
+  结论: {α} {s t : 集合 α} [DecidablePred fun x => x in s] (H : Disjoint s t)
   证明: rfl
 
 @[simp]
@@ -961,7 +961,7 @@ theorem union_symm_apply_right
 
 中文:
 定理 union_symm_apply_right
-  结论: {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
+  结论: {α} {s t : 集合 α} [DecidablePred fun x => x in s] (H : Disjoint s t)
   证明: rfl
 -/
 theorem union_symm_apply_right {α} {s t : Set α} [DecidablePred fun x => x in s] (H : Disjoint s t)
@@ -999,8 +999,8 @@ lemma _root_.Equiv.strictMono_setCongr
   proof: fun _ _ => id
 
 中文:
-引理 _root_.Equiv.strictMono_setCongr
-  条件: {α : 类型} [Preorder α] {S T : Set α} (h : S = T)
+引理 _root_.等价.strictMono_setCongr
+  条件: {α : 类型} [预序 α] {S T : 集合 α} (h : S = T)
   证明: fun _ _ => id
 -/
 lemma _root_.Equiv.strictMono_setCongr {α : Type*} [Preorder α] {S T : Set α} (h : S = T) :
@@ -1024,7 +1024,7 @@ _ ≃ s oplus ({a} : Set α) := Equiv.Set.union by simpa
 
 中文:
 定义 insert
-  签名: {α} {s : Set.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
+  签名: {α} {s : 集合.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
   定义体: calc
     (insert a s : Set α) ≃ ↥(s union {a}) := Equiv.setCongr (by simp)
 _ ≃ s oplus ({a} : Set α) := Equiv.Set.union by simpa
@@ -1052,7 +1052,7 @@ theorem insert_symm_apply_inl
 
 中文:
 定理 insert_symm_apply_inl
-  结论: {α} {s : Set.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
+  结论: {α} {s : 集合.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
   证明: rfl
 
 @[simp]
@@ -1074,7 +1074,7 @@ theorem insert_symm_apply_inr
 
 中文:
 定理 insert_symm_apply_inr
-  结论: {α} {s : Set.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
+  结论: {α} {s : 集合.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
   证明: rfl
 
 @[simp]
@@ -1096,7 +1096,7 @@ theorem insert_apply_left
 
 中文:
 定理 insert_apply_left
-  条件: {α} {s : Set.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
+  条件: {α} {s : 集合.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s)
   证明: (Equiv.Set.insert H).eq_symm_apply.1 rfl
 
 @[simp]
@@ -1118,7 +1118,7 @@ theorem insert_apply_right
 
 中文:
 定理 insert_apply_right
-  条件: {α} {s : Set.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s) (b : s)
+  条件: {α} {s : 集合.{u} α} [DecidablePred (· in s)] {a : α} (H : a ∉ s) (b : s)
   证明: (Equiv.Set.insert H).eq_symm_apply.1 rfl
 
 Depends on / 依赖: Equiv.Set.insert, eq_symm_apply, insert
@@ -1139,7 +1139,7 @@ definition sumCompl
 
 中文:
 定义 sumCompl
-  签名: {α} (s : Set α) [DecidablePred (· in s)]
+  签名: {α} (s : 集合 α) [DecidablePred (· in s)]
   定义体: Equiv.sumCompl (· in s)
 
 @[simp]
@@ -1160,7 +1160,7 @@ theorem sumCompl_apply_inl
 
 中文:
 定理 sumCompl_apply_inl
-  条件: {α : 类型u} (s : Set α) [DecidablePred (· in s)] (x : s)
+  条件: {α : 类型u} (s : 集合 α) [DecidablePred (· in s)] (x : s)
   证明: rfl
 
 @[simp]
@@ -1180,7 +1180,7 @@ theorem sumCompl_apply_inr
 
 中文:
 定理 sumCompl_apply_inr
-  条件: {α : 类型u} (s : Set α) [DecidablePred (· in s)] (x : (sᶜ : Set α))
+  条件: {α : 类型u} (s : 集合 α) [DecidablePred (· in s)] (x : (sᶜ : 集合 α))
   证明: rfl
 -/
 theorem sumCompl_apply_inr {α : Type u} (s : Set α) [DecidablePred (· in s)] (x : (sᶜ : Set α)) :
@@ -1197,7 +1197,7 @@ theorem sumCompl_symm_apply_of_mem
 
 中文:
 定理 sumCompl_symm_apply_of_mem
-  结论: {α : 类型u} {s : Set α} [DecidablePred (· in s)] {x : α}
+  结论: {α : 类型u} {s : 集合 α} [DecidablePred (· in s)] {x : α}
   证明: sumCompl_symm_apply_of_pos hx
 
 Depends on / 依赖: sumCompl_symm_apply_of_pos
@@ -1218,7 +1218,7 @@ theorem sumCompl_symm_apply_of_notMem
 
 中文:
 定理 sumCompl_symm_apply_of_notMem
-  结论: {α : 类型u} {s : Set α} [DecidablePred (· in s)] {x : α}
+  结论: {α : 类型u} {s : 集合 α} [DecidablePred (· in s)] {x : α}
   证明: sumCompl_symm_apply_of_neg hx
 
 @[simp]
@@ -1242,7 +1242,7 @@ theorem sumCompl_symm_apply
 
 中文:
 定理 sumCompl_symm_apply
-  条件: {α : 类型} {s : Set α} [DecidablePred (· in s)] (x : s)
+  条件: {α : 类型} {s : 集合 α} [DecidablePred (· in s)] (x : s)
   证明: sumCompl_symm_apply_pos x
 
 @[simp]
@@ -1264,7 +1264,7 @@ theorem sumCompl_symm_apply_compl
 
 中文:
 定理 sumCompl_symm_apply_compl
-  结论: {α : 类型} {s : Set α} [DecidablePred (· in s)]
+  结论: {α : 类型} {s : 集合 α} [DecidablePred (· in s)]
   证明: sumCompl_symm_apply_neg x
 
 Depends on / 依赖: sumCompl_symm_apply_neg
@@ -1288,7 +1288,7 @@ definition sumDiffSubset
 
 中文:
 定义 sumDiffSubset
-  签名: {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)]
+  签名: {α} {s t : 集合 α} (h : s subseteq t) [DecidablePred (· in s)]
   定义体: calc
     s oplus (t \ s : Set α) ≃ (s union t \ s : Set α) :=
       (Equiv.Set.union disjoint_sdiff_self_right).symm
@@ -1316,7 +1316,7 @@ theorem sumDiffSubset_apply_inl
 
 中文:
 定理 sumDiffSubset_apply_inl
-  条件: {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)] (x : s)
+  条件: {α} {s t : 集合 α} (h : s subseteq t) [DecidablePred (· in s)] (x : s)
   证明: rfl
 
 @[simp]
@@ -1336,7 +1336,7 @@ theorem sumDiffSubset_apply_inr
 
 中文:
 定理 sumDiffSubset_apply_inr
-  结论: {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)]
+  结论: {α} {s t : 集合 α} (h : s subseteq t) [DecidablePred (· in s)]
   证明: rfl
 -/
 theorem sumDiffSubset_apply_inr {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)]
@@ -1355,7 +1355,7 @@ theorem sumDiffSubset_symm_apply_of_mem
 
 中文:
 定理 sumDiffSubset_symm_apply_of_mem
-  结论: {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)]
+  结论: {α} {s t : 集合 α} (h : s subseteq t) [DecidablePred (· in s)]
   证明: by
   apply (Equiv.Set.sumDiffSubset h).injective
   simp only [apply_symm_apply, sumDiffSubset_apply_inl, Set.inclusion_mk]
@@ -1379,7 +1379,7 @@ theorem sumDiffSubset_symm_apply_of_notMem
 
 中文:
 定理 sumDiffSubset_symm_apply_of_notMem
-  结论: {α} {s t : Set α} (h : s subseteq t) [DecidablePred (· in s)]
+  结论: {α} {s t : 集合 α} (h : s subseteq t) [DecidablePred (· in s)]
   证明: by
   apply (Equiv.Set.sumDiffSubset h).injective
   simp only [apply_symm_apply, sumDiffSubset_apply_inr]
@@ -1405,8 +1405,8 @@ definition unionSumInter
     _ ≃ s oplus ((t \ s : Se
 
 中文:
-定义 unionSumInter
-  签名: {α : 类型u} (s t : Set α) [DecidablePred (· in s)]
+定义 unionSum整数er
+  签名: {α : 类型u} (s t : 集合 α) [DecidablePred (· in s)]
   定义体: calc
     (s union t : Set α) oplus (s inter t : Set α)
       ≃ (s union t \ s : Set α) oplus (s inter t : Set α) := by rw [union_sdiff_self]
@@ -1451,7 +1451,7 @@ Iff.symm
 
 中文:
 定义 compl
-  签名: {α : 类型u} {β : 类型v} {s : Set α} {t : Set β} [DecidablePred (· in s)]
+  签名: {α : 类型u} {β : 类型v} {s : 集合 α} {t : 集合 β} [DecidablePred (· in s)]
   定义体: subtypeEquiv e fun _ =>
 not_congr
 Iff.symm
@@ -1505,8 +1505,8 @@ definition prod
   body: @subtypeProdEquivProd α β (· in s) (· in t)
 
 中文:
-定义 prod
-  签名: {α β} (s : Set α) (t : Set β)
+定义 乘积
+  签名: {α β} (s : 集合 α) (t : 集合 β)
   定义体: @subtypeProdEquivProd α β (· in s) (· in t)
 -/
 protected def prod {α β} (s : Set α) (t : Set β) : ↥(s ×ˢ t) ≃ s × t :=
@@ -1525,7 +1525,7 @@ definition univPi
 
 中文:
 定义 univPi
-  签名: {α : 类型} {β : α -> 类型} (s : 对任意 a, Set (β a))
+  签名: {α : 类型} {β : α -> 类型} (s : 对任意 a, 集合 (β a))
   定义体: ⟨(f : forall a, β a) a, f.2 a (mem_univ a)⟩
   invFun f := ⟨fun a => f a, fun a _ => (f a).2⟩
 -/
@@ -1549,7 +1549,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def imageOfInjOn {α β} (f : α -> β) (s : Set α) (H : InjOn f s)
+  签名: def imageOfInjOn {α β} (f : α -> β) (s : 集合 α) (H : 单射限制 f s)
   定义体: ⟨fun p => ⟨f p, mem_image_of_mem f p.2⟩, fun p =>
     ⟨Classical.choose p.2, (Classical.choose_spec p.2).1⟩, fun ⟨_, h⟩ =>
     Subtype.ext
@@ -1580,7 +1580,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def image {α β} (f : α -> β) (s : Set α) (H : Injective f)
+  签名: def 像 {α β} (f : α -> β) (s : 集合 α) (H : 单射 f)
   定义体: Equiv.Set.imageOfInjOn f s H.injOn
 
 @[simp]
@@ -1599,7 +1599,7 @@ theorem image_symm_apply
 
 中文:
 定理 image_symm_apply
-  结论: {α β} (f : α -> β) (s : Set α) (H : Injective f) (x : α)
+  结论: {α β} (f : α -> β) (s : 集合 α) (H : 单射 f) (x : α)
   证明: (Equiv.symm_apply_eq _).2 rfl
 -/
 protected theorem image_symm_apply {α β} (f : α -> β) (s : Set α) (H : Injective f) (x : α)
@@ -1619,7 +1619,7 @@ theorem image_symm_preimage
 
 中文:
 定理 image_symm_preimage
-  条件: {α β} {f : α -> β} (hf : Injective f) (u s : Set α)
+  条件: {α β} {f : α -> β} (hf : 单射 f) (u s : 集合 α)
   证明: by
   ext ⟨b, a, has, rfl⟩
   simp [hf.eq_iff]
@@ -1659,7 +1659,7 @@ definition sep
 
 中文:
 定义 sep
-  签名: {α : 类型u} (s : Set α) (t : α -> 命题)
+  签名: {α : 类型u} (s : 集合 α) (t : α -> 命题)
   定义体: (Equiv.subtypeSubtypeEquivSubtypeInter (· in s) t).symm
 -/
 protected def sep {α : Type u} (s : Set α) (t : α -> Prop) :
@@ -1679,7 +1679,7 @@ definition powerset
 
 中文:
 定义 powerset
-  签名: {α} (S : Set α)
+  签名: {α} (S : 集合 α)
   定义体: fun x : 𝒫 S => Subtype.val ⁻¹' (x : Set α)
   invFun := fun x : Set S => ⟨Subtype.val '' x, by rintro _ ⟨a : S, _, rfl⟩; exact a.2⟩
   left_inv x := by ext y; exact ⟨fun ⟨⟨_, _⟩, h, rfl⟩ => h, fun h => ⟨⟨_, x.2 h⟩, h, rfl⟩⟩
@@ -1713,7 +1713,7 @@ definition rangeSplittingImageEquiv
 
 中文:
 定义 rangeSplittingImageEquiv
-  签名: {α β : 类型} (f : α -> β) (s : Set (range f))
+  签名: {α β : 类型} (f : α -> β) (s : 集合 (range f))
   定义体: ⟨⟨f x, by simp⟩, by
       rcases x with ⟨x, ⟨y, ⟨m, rfl⟩⟩⟩
       simpa [apply_rangeSplitting f] using m⟩
@@ -1847,7 +1847,7 @@ Subtype.ext show f (f_inv ⟨a⟩ b) = b from Eq.trans (congr_arg f <| ha ▸ hf
 
 中文:
 定义 ofLeftInverse
-  签名: {α β : Sort _} (f : α -> β) (f_inv : Nonempty α -> β -> α)
+  签名: {α β : 类型层 _} (f : α -> β) (f_inv : 非空 α -> β -> α)
   定义体: ⟨f a, a, rfl⟩
   invFun b := f_inv b.2.nonempty b
   left_inv a := hf ⟨a⟩ a
@@ -1873,7 +1873,7 @@ abbreviation ofLeftInverse'
 
 中文:
 缩写 ofLeftInverse'
-  签名: {α β : Sort _} (f : α -> β) (f_inv : β -> α) (hf : LeftInverse f_inv f)
+  签名: {α β : 类型层 _} (f : α -> β) (f_inv : β -> α) (hf : 左逆 f_inv f)
   定义体: ofLeftInverse f (fun _ => f_inv) fun _ => hf
 
 Depends on / 依赖: f_inv, ofLeftInverse
@@ -1894,7 +1894,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: {α β} (f : α -> β) (hf : Injective f)
+  签名: {α β} (f : α -> β) (hf : 单射 f)
   定义体: Equiv.ofLeftInverse f (fun _ => Function.invFun f) fun _ => Function.leftInverse_invFun hf
 
 Depends on / 依赖: Equiv.ofLeftInverse, Function, Function.invFun, Function.leftInverse_invFun, invFun, leftInverse_invFun, ofLeftInverse
@@ -1914,7 +1914,7 @@ theorem apply_ofInjective_symm
 
 中文:
 定理 apply_ofInjective_symm
-  条件: {α β} {f : α -> β} (hf : Injective f) (b : range f)
+  条件: {α β} {f : α -> β} (hf : 单射 f) (b : range f)
   证明: Subtype.ext_iff.1 (ofInjective f hf).apply_symm_apply b
 
 @[simp]
@@ -1938,7 +1938,7 @@ theorem ofInjective_symm_apply
 
 中文:
 定理 ofInjective_symm_apply
-  条件: {α β} {f : α -> β} (hf : Injective f) (a : α)
+  条件: {α β} {f : α -> β} (hf : 单射 f) (a : α)
   证明: by
   apply (ofInjective f hf).injective
   simp
@@ -1965,7 +1965,7 @@ theorem coe_ofInjective_symm
 
 中文:
 定理 coe_ofInjective_symm
-  条件: {α β} {f : α -> β} (hf : Injective f)
+  条件: {α β} {f : α -> β} (hf : 单射 f)
   证明: by
   ext ⟨y, x, rfl⟩
   apply hf
@@ -1992,7 +1992,7 @@ theorem self_comp_ofInjective_symm
 
 中文:
 定理 self_comp_ofInjective_symm
-  条件: {α β} {f : α -> β} (hf : Injective f)
+  条件: {α β} {f : α -> β} (hf : 单射 f)
   证明: funext fun x => apply_ofInjective_symm hf x
 
 Depends on / 依赖: apply_ofInjective_symm
@@ -2013,7 +2013,7 @@ theorem ofLeftInverse_eq_ofInjective
 
 中文:
 定理 ofLeftInverse_eq_ofInjective
-  结论: {α β : 类型} (f : α -> β) (f_inv : Nonempty α -> β -> α)
+  结论: {α β : 类型} (f : α -> β) (f_inv : 非空 α -> β -> α)
   证明: by
   ext
   simp
@@ -2057,8 +2057,8 @@ theorem set_forall_iff
   proof: e.injective.preimage_surjective.forall
 
 中文:
-定理 set_forall_iff
-  条件: {α β} (e : α ≃ β) {p : Set α -> 命题}
+定理 set_对任意_iff
+  条件: {α β} (e : α ≃ β) {p : 集合 α -> 命题}
   证明: e.injective.preimage_surjective.forall
 -/
 protected theorem set_forall_iff {α β} (e : α ≃ β) {p : Set α -> Prop} :
@@ -2173,8 +2173,8 @@ definition Set.BijOn.equiv
   body: Equiv.ofBijective _ h.bijective
 
 中文:
-定义 Set.BijOn.equiv
-  签名: {α : 类型} {β : 类型} {s : Set α} {t : Set β} (f : α -> β)
+定义 集合.双射限制.equiv
+  签名: {α : 类型} {β : 类型} {s : 集合 α} {t : 集合 β} (f : α -> β)
   定义体: Equiv.ofBijective _ h.bijective
 
 Depends on / 依赖: Equiv.ofBijective, bijective, h.bijective, ofBijective
@@ -2233,9 +2233,9 @@ theorem Equiv.swap_bijOn_self
   grind [Equiv.bijOn]
 
 中文:
-定理 Equiv.swap_bijOn_self
+定理 等价.swap_bijOn_self
   条件: (hs : a in s ↔ b in s)
-  结论: BijOn (Equiv.swap a b) s s
+  结论: 双射限制 (等价.swap a b) s s
   证明: by
   grind [Equiv.bijOn]
 
@@ -2254,7 +2254,7 @@ theorem Equiv.swap_bijOn_exchange
   grind [Equiv.bijOn]
 
 中文:
-定理 Equiv.swap_bijOn_exchange
+定理 等价.swap_bijOn_exchange
   条件: (ha : a in s) (hb : b ∉ s)
   证明: by
   grind [Equiv.bijOn]

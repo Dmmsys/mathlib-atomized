@@ -42,10 +42,10 @@ class PreservesWellOrderContinuousOfShape
     - preservesColimitsOfShape((j : J) (hj : Order.IsSuccLimit j)) : PreservesColimitsOfShape (Set.Iio j) G  [default: by infer_instance]
 
 中文:
-类 PreservesWellOrderContinuousOfShape
+类 保持WellOrderContinuousOfShape
   参数: (G : C ⥤ D)
   公理与运算 (1 个):
-    - preservesColimitsOfShape((j : J) (hj : Order.IsSuccLimit j)) : PreservesColimitsOfShape (Set.Iio j) G  [默认: by infer_instance]
+    - preservesColimitsOfShape((j : J) (hj : Order.是SuccLimit j)) : 保持形状余极限 (集合.左无界右开区间 j) G  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -102,7 +102,7 @@ instance [HasIterationOfShape
     infer_instance
 
 中文:
-实例 [HasIterationOfShape
+实例 [有IterationOfShape
   签名: J C] (K
   定义体: by
     have := hasColimitsOfShape_of_isSuccLimit C j hj
@@ -127,7 +127,7 @@ instance [HasIterationOfShape
     infer_instance
 
 中文:
-实例 [HasIterationOfShape
+实例 [有IterationOfShape
   签名: J C] :
   定义体: by
     have := hasColimitsOfShape_of_isSuccLimit C j hj
@@ -152,7 +152,7 @@ instance [HasIterationOfShape
     infer_instance
 
 中文:
-实例 [HasIterationOfShape
+实例 [有IterationOfShape
   签名: J C] :
   定义体: by
     have := hasColimitsOfShape_of_isSuccLimit C j hj

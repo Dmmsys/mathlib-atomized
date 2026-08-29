@@ -35,7 +35,7 @@ abbreviation normedField
 
 中文:
 缩写 normedField
-  签名: [NormedField β] (e : α ≃ β)
+  签名: [赋范域 β] (e : α ≃ β)
   定义体: letI := e.field
   .induced α β e.ringEquiv e.injective
 -/

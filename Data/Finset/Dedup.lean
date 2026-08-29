@@ -46,7 +46,7 @@ theorem dedup_eq_self
 
 中文:
 定理 dedup_eq_self
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   结论: dedup s.1 = s.1
   证明: s.2.dedup
 -/
@@ -114,7 +114,7 @@ theorem toFinset_eq
 中文:
 定理 toFinset_eq
   条件: {s : Multiset α} (n : Nodup s)
-  结论: Finset.mk s n = s.toFinset
+  结论: 有限集.mk s n = s.toFinset
   证明: Finset.val_inj.1 n.dedup.symm
 
 Depends on / 依赖: Finset, Finset.val_inj, n.dedup.symm, val_inj
@@ -260,7 +260,7 @@ instance isWellFounded_ssubset
 
 中文:
 实例 isWellFounded_ssubset
-  签名: : IsWellFounded (Multiset β) (· ⊂ ·)
+  签名: : 是良基 (Multiset β) (· ⊂ ·)
   定义体: by
   classical
   exact Subrelation.isWellFounded (InvImage _ toFinset) toFinset_ssubset.2
@@ -289,7 +289,7 @@ theorem val_toFinset
 
 中文:
 定理 val_toFinset
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   结论: s.val.toFinset = s
   证明: by
   ext
@@ -312,7 +312,7 @@ theorem val_le_iff_val_subset
 
 中文:
 定理 val_le_iff_val_subset
-  条件: {a : Finset α} {b : Multiset α}
+  条件: {a : 有限集 α} {b : Multiset α}
   结论: a.val <= b ↔ a.val subseteq b
   证明: Multiset.le_iff_subset a.nodup
 
@@ -340,7 +340,7 @@ definition toFinset
 
 中文:
 定义 toFinset
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: Multiset.toFinset l
 
 @[simp]
@@ -364,7 +364,7 @@ theorem toFinset_val
 
 中文:
 定理 toFinset_val
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l.toFinset.1 = (l.dedup : Multiset α)
   证明: rfl
 
@@ -385,7 +385,7 @@ theorem toFinset_coe
 
 中文:
 定理 toFinset_coe
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (l : Multiset α).toFinset = l.toFinset
   证明: rfl
 -/
@@ -406,7 +406,7 @@ theorem toFinset_eq
 中文:
 定理 toFinset_eq
   条件: (n : Nodup l)
-  结论: @Finset.mk α l n = l.toFinset
+  结论: @有限集.mk α l n = l.toFinset
   证明: Multiset.toFinset_eq by rwa [Multiset.coe_nodup]
 
 @[simp]
@@ -451,8 +451,8 @@ theorem coe_toFinset
 
 中文:
 定理 coe_toFinset
-  条件: (l : List α)
-  结论: (l.toFinset : Set α) = { a | a in l }
+  条件: (l : 列表 α)
+  结论: (l.toFinset : 集合 α) = { a | a in l }
   证明: Set.ext fun _ => List.mem_toFinset
 
 Depends on / 依赖: List.mem_toFinset, Set.ext, mem_toFinset
@@ -472,7 +472,7 @@ theorem toFinset_surj_on
 
 中文:
 定理 toFinset_surj_on
-  结论: Set.SurjOn toFinset { l : List α | l.Nodup } Set.univ
+  结论: 集合.满射限制 toFinset { l : 列表 α | l.Nodup } 集合.univ
   证明: by
   rintro ⟨⟨l⟩, hl⟩ _
   exact ⟨l, hl, (toFinset_eq hl).symm⟩
@@ -495,7 +495,7 @@ theorem toFinset_surjective
 
 中文:
 定理 toFinset_surjective
-  结论: Surjective (toFinset : List α -> Finset α)
+  结论: 满射 (toFinset : 列表 α -> 有限集 α)
   证明: fun s =>
   let ⟨l, _, hls⟩ := toFinset_surj_on (Set.mem_univ s)
   ⟨l, hls⟩
@@ -536,7 +536,7 @@ theorem toFinset.ext_iff
 
 中文:
 定理 toFinset.ext_iff
-  条件: {a b : List α}
+  条件: {a b : 列表 α}
   结论: a.toFinset = b.toFinset ↔ 对任意 x, x in a ↔ x in b
   证明: by
   simp only [Finset.ext_iff, mem_toFinset]
@@ -575,7 +575,7 @@ theorem toFinset_eq_of_perm
 
 中文:
 定理 toFinset_eq_of_perm
-  条件: (l l' : List α) (h : l ~ l')
+  条件: (l l' : 列表 α) (h : l ~ l')
   结论: l.toFinset = l'.toFinset
   证明: toFinset_eq_iff_perm_dedup.mpr h.dedup
 
@@ -624,7 +624,7 @@ theorem toFinset_reverse
 
 中文:
 定理 toFinset_reverse
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: toFinset l.reverse = l.toFinset
   证明: toFinset_eq_of_perm _ _ (reverse_perm l)
 
@@ -649,7 +649,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: s.1.toList
 
 Depends on / 依赖: toList
@@ -672,7 +672,7 @@ theorem nodup_toList
 
 中文:
 定理 nodup_toList
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.toList.Nodup
   证明: by
   rw [toList]; rw [← Multiset.coe_nodup]; rw [Multiset.coe_toList]
@@ -700,7 +700,7 @@ theorem mem_toList
 
 中文:
 定理 mem_toList
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: a in s.toList ↔ a in s
   证明: Multiset.mem_toList
 
@@ -725,7 +725,7 @@ theorem coe_toList
 
 中文:
 定理 coe_toList
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.toList : Multiset α) = s.val
   证明: s.val.coe_toList
 
@@ -750,7 +750,7 @@ theorem toList_toFinset
 
 中文:
 定理 toList_toFinset
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   结论: s.toList.toFinset = s
   证明: by
   ext
@@ -771,8 +771,8 @@ theorem _root_.List.toFinset_toList
   rw [toList_toFinset]
 
 中文:
-定理 _root_.List.toFinset_toList
-  条件: [DecidableEq α] {s : List α} (hs : s.Nodup)
+定理 _root_.列表.toFinset_toList
+  条件: [DecidableEq α] {s : 列表 α} (hs : s.Nodup)
   证明: by
   apply List.perm_of_nodup_nodup_toFinset_eq (nodup_toList _) hs
   rw [toList_toFinset]
@@ -795,8 +795,8 @@ theorem exists_list_nodup_eq
 @[simp]
 
 中文:
-定理 exists_list_nodup_eq
-  条件: [DecidableEq α] (s : Finset α)
+定理 存在_list_nodup_eq
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: ⟨s.toList, s.nodup_toList, s.toList_toFinset⟩
 
 @[simp]
@@ -820,8 +820,8 @@ mpr h := .of_eq congrArg Finset.toList h
 
 中文:
 定理 perm_toList
-  条件: {f₁ f₂ : Finset α}
-  结论: f₁.toList.Perm f₂.toList ↔ f₁ = f₂ where
+  条件: {f₁ f₂ : 有限集 α}
+  结论: f₁.toList.置换 f₂.toList ↔ f₁ = f₂ where
   证明: Finset.ext fun x => by simp [← Finset.mem_toList, h.mem_iff]
 mpr h := .of_eq congrArg Finset.toList h
 -/

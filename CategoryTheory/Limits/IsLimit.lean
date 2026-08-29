@@ -59,12 +59,12 @@ structure IsLimit
     - uniq : forall (s : Cone F) (m : s.pt ⟶ t.pt) (_ : forall j : J, m ≫ t.π.app j = s.π.app j), m = lift s  [default: by cat_disch]
 
 中文:
-结构 IsLimit
-  参数: (t : Cone F)
+结构 是极限
+  参数: (t : 锥 F)
   公理与运算 (3 个):
-    - lift : 对任意 s : Cone F, s.pt ⟶ t.pt
-    - fac : 对任意 (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j  [默认: by cat_disch]
-    - uniq : 对任意 (s : Cone F) (m : s.pt ⟶ t.pt) (_ : 对任意 j : J, m ≫ t.π.app j = s.π.app j), m = lift s  [默认: by cat_disch]
+    - lift : 对任意 s : 锥 F, s.pt ⟶ t.pt
+    - fac : 对任意 (s : 锥 F) (j : J), lift s ≫ t.π.app j = s.π.app j  [默认: by cat_disch]
+    - uniq : 对任意 (s : 锥 F) (m : s.pt ⟶ t.pt) (_ : 对任意 j : J, m ≫ t.π.app j = s.π.app j), m = lift s  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -92,12 +92,12 @@ structure IsColimit
     - uniq : dsimp% forall (s : Cocone F) (m : t.pt ⟶ s.pt) (_ : forall j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s  [default: by cat_disch]
 
 中文:
-结构 IsColimit
-  参数: (t : Cocone F)
+结构 是余极限
+  参数: (t : 余锥 F)
   公理与运算 (3 个):
-    - desc : 对任意 s : Cocone F, t.pt ⟶ s.pt
-    - fac : 对任意 (s : Cocone F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j  [默认: by cat_disch]
-    - uniq : dsimp% 对任意 (s : Cocone F) (m : t.pt ⟶ s.pt) (_ : 对任意 j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s  [默认: by cat_disch]
+    - desc : 对任意 s : 余锥 F, t.pt ⟶ s.pt
+    - fac : 对任意 (s : 余锥 F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j  [默认: by cat_disch]
+    - uniq : dsimp% 对任意 (s : 余锥 F) (m : t.pt ⟶ s.pt) (_ : 对任意 j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -128,7 +128,7 @@ instance subsingleton
 
 中文:
 实例 subsingleton
-  签名: {t : Cone F}
+  签名: {t : 锥 F}
   定义体: ⟨by intro P Q; cases P; cases Q; congr; cat_disch⟩
 
 Depends on / 依赖: cat_disch
@@ -153,7 +153,7 @@ definition map
 
 中文:
 定义 map
-  签名: {F G : J ⥤ C} (s : Cone F) {t : Cone G} (P : IsLimit t) (α : F ⟶ G)
+  签名: {F G : J ⥤ C} (s : 锥 F) {t : 锥 G} (P : 是极限 t) (α : F ⟶ G)
   定义体: P.lift ((Cone.postcompose α).obj s)
 
 @[to_dual (attr := reassoc (attr := simp)) (reorder := c hd d) ι_map]
@@ -176,7 +176,7 @@ theorem map_π
 
 中文:
 定理 map_π
-  条件: {F G : J ⥤ C} (c : Cone F) {d : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J)
+  条件: {F G : J ⥤ C} (c : 锥 F) {d : 锥 G} (hd : 是极限 d) (α : F ⟶ G) (j : J)
   证明: fac _ _ _
 
 @[to_dual (attr := simp)]
@@ -197,7 +197,7 @@ theorem lift_self
 
 中文:
 定理 lift_self
-  条件: {c : Cone F} (t : IsLimit c)
+  条件: {c : 锥 F} (t : 是极限 c)
   结论: t.lift c = 𝟙 c.pt
   证明: (t.uniq _ _ fun _ => id_comp _).symm
 
@@ -222,7 +222,7 @@ definition liftConeMorphism
 
 中文:
 定义 liftConeMorphism
-  签名: {t : Cone F} (h : IsLimit t) (s : Cone F)
+  签名: {t : 锥 F} (h : 是极限 t) (s : 锥 F)
   定义体: h.lift s
 
 @[to_dual]
@@ -245,7 +245,7 @@ theorem uniq_cone_morphism
 
 中文:
 定理 uniq_cone_morphism
-  条件: {s t : Cone F} (h : IsLimit t) {f f' : s ⟶ t}
+  条件: {s t : 锥 F} (h : 是极限 t) {f f' : s ⟶ t}
   结论: f = f'
   证明: have : forall {g : s ⟶ t}, g = h.liftConeMorphism s := by
     intro g; apply ConeMorphism.ext; exact h.uniq _ _ g.w
@@ -269,8 +269,8 @@ theorem existsUnique
   proof: ⟨h.lift s, h.fac s, h.uniq s⟩
 
 中文:
-定理 existsUnique
-  条件: {t : Cone F} (h : IsLimit t) (s : Cone F)
+定理 存在Unique
+  条件: {t : 锥 F} (h : 是极限 t) (s : 锥 F)
   证明: ⟨h.lift s, h.fac s, h.uniq s⟩
 
 Depends on / 依赖: h.fac, h.lift, h.uniq
@@ -293,7 +293,7 @@ definition ofExistsUnique
 
 中文:
 定义 ofExistsUnique
-  签名: {t : Cone F}
+  签名: {t : 锥 F}
   定义体: by
   choose s hs hs' using ht
   exact ⟨s, hs, hs'⟩
@@ -325,7 +325,7 @@ definition mkConeMorphism
 
 中文:
 定义 mkConeMorphism
-  签名: {t : Cone F} (lift : 对任意 s : Cone F, s ⟶ t)
+  签名: {t : 锥 F} (lift : 对任意 s : 锥 F, s ⟶ t)
   定义体: (lift s).hom
   uniq s m w :=
     have : ConeMorphism.mk m w = lift s := by apply uniq
@@ -354,7 +354,7 @@ definition uniqueUpToIso
 
 中文:
 定义 uniqueUpToIso
-  签名: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
+  签名: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
   定义体: Q.liftConeMorphism s
   inv := P.liftConeMorphism t
   hom_inv_id := P.uniq_cone_morphism
@@ -384,8 +384,8 @@ theorem hom_isIso
 
 中文:
 定理 hom_isIso
-  条件: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (f : s ⟶ t)
-  结论: IsIso f
+  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (f : s ⟶ t)
+  结论: 是同构 f
   证明: ⟨⟨P.liftConeMorphism t, ⟨P.uniq_cone_morphism, Q.uniq_cone_morphism⟩⟩⟩
 
 Depends on / 依赖: Localization, Localization.inverts, P.liftConeMorphism, P.uniq_cone_morphism, Q.uniq_cone_morphism, inverts, liftConeMorphism, uniq_cone_morphism, z.hs
@@ -407,7 +407,7 @@ definition conePointUniqueUpToIso
 
 中文:
 定义 conePointUniqueUpToIso
-  签名: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
+  签名: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
   定义体: (Cone.forget F).mapIso (uniqueUpToIso P Q)
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
@@ -430,7 +430,7 @@ theorem conePointUniqueUpToIso_hom_comp
 
 中文:
 定理 conePointUniqueUpToIso_hom_comp
-  条件: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J)
+  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (j : J)
   证明: (uniqueUpToIso P Q).hom.w _
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
@@ -454,7 +454,7 @@ theorem conePointUniqueUpToIso_inv_comp
 
 中文:
 定理 conePointUniqueUpToIso_inv_comp
-  条件: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J)
+  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (j : J)
   证明: (uniqueUpToIso P Q).inv.w _
 
 @[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_inv_desc]
@@ -478,7 +478,7 @@ theorem lift_comp_conePointUniqueUpToIso_hom
 
 中文:
 定理 lift_comp_conePointUniqueUpToIso_hom
-  条件: {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
+  条件: {r s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
   证明: Q.uniq _ _ (by simp)
 
 @[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_hom_desc]
@@ -500,7 +500,7 @@ theorem lift_comp_conePointUniqueUpToIso_inv
 
 中文:
 定理 lift_comp_conePointUniqueUpToIso_inv
-  条件: {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
+  条件: {r s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
   证明: P.uniq _ _ (by simp)
 
 Depends on / 依赖: P.uniq
@@ -525,7 +525,7 @@ definition ofIsoLimit
 
 中文:
 定义 ofIsoLimit
-  签名: {r t : Cone F} (P : IsLimit r) (i : r ≅ t)
+  签名: {r t : 锥 F} (P : 是极限 r) (i : r ≅ t)
   定义体: IsLimit.mkConeMorphism (fun s => P.liftConeMorphism s ≫ i.hom) fun s m => by
     rw [← i.comp_inv_eq]; apply P.uniq_cone_morphism
 
@@ -548,7 +548,7 @@ theorem ofIsoLimit_lift
 
 中文:
 定理 ofIsoLimit_lift
-  条件: {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s)
+  条件: {r t : 锥 F} (P : 是极限 r) (i : r ≅ t) (s)
   证明: rfl
 -/
 theorem ofIsoLimit_lift {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s) :
@@ -572,7 +572,7 @@ definition equivIsoLimit
 
 中文:
 定义 equivIsoLimit
-  签名: {r t : Cone F} (i : r ≅ t)
+  签名: {r t : 锥 F} (i : r ≅ t)
   定义体: h.ofIsoLimit i
   invFun h := h.ofIsoLimit i.symm
   left_inv := by cat_disch
@@ -601,7 +601,7 @@ theorem equivIsoLimit_apply
 
 中文:
 定理 equivIsoLimit_apply
-  条件: {r t : Cone F} (i : r ≅ t) (P : IsLimit r)
+  条件: {r t : 锥 F} (i : r ≅ t) (P : 是极限 r)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -621,7 +621,7 @@ theorem equivIsoLimit_symm_apply
 
 中文:
 定理 equivIsoLimit_symm_apply
-  条件: {r t : Cone F} (i : r ≅ t) (P : IsLimit t)
+  条件: {r t : 锥 F} (i : r ≅ t) (P : 是极限 t)
   证明: rfl
 -/
 theorem equivIsoLimit_symm_apply {r t : Cone F} (i : r ≅ t) (P : IsLimit t) :
@@ -649,7 +649,7 @@ definition ofPointIso
 
 中文:
 定义 ofPointIso
-  签名: {r t : Cone F} (P : IsLimit r) [i : IsIso (P.lift t)]
+  签名: {r t : 锥 F} (P : 是极限 r) [i : 是同构 (P.lift t)]
   定义体: ofIsoLimit P (by
     haveI : IsIso (P.liftConeMorphism t).hom := i
     haveI : IsIso (P.liftConeMorphism t) := Cone.cone_iso_of_hom_iso _
@@ -678,7 +678,7 @@ theorem hom_lift
 
 中文:
 定理 hom_lift
-  条件: (h : IsLimit t) {W : C} (m : W ⟶ t.pt)
+  条件: (h : 是极限 t) {W : C} (m : W ⟶ t.pt)
   证明: h.uniq { pt := W, π := { app := fun b => m ≫ t.π.app b } } m fun _ => rfl
 -/
 theorem hom_lift (h : IsLimit t) {W : C} (m : W ⟶ t.pt) :
@@ -702,7 +702,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: (h : IsLimit t) {W : C} {f f' : W ⟶ t.pt}
+  结论: (h : 是极限 t) {W : C} {f f' : W ⟶ t.pt}
   证明: by
   rw [h.hom_lift f]; rw [h.hom_lift f']; congr; exact funext w
 
@@ -726,7 +726,7 @@ lemma nonempty_isLimit_iff_isIso_lift
 
 中文:
 引理 nonempty_isLimit_iff_isIso_lift
-  条件: {s t : Cone F} (hs : IsLimit s)
+  条件: {s t : 锥 F} (hs : 是极限 s)
   证明: ⟨fun ⟨ht⟩ => ⟨ht.lift s, ht.hom_ext (by simp), hs.hom_ext (by simp)⟩, fun h => ⟨hs.ofPointIso⟩⟩
 
 Depends on / 依赖: hom_ext, hs.hom_ext, hs.ofPointIso, ht.hom_ext, ht.lift, ofPointIso
@@ -753,7 +753,7 @@ definition ofRightAdjoint
 
 中文:
 定义 ofRightAdjoint
-  签名: {D : 类型u₄} [Category.{v₄} D] {G : K ⥤ D} {left : Cone F ⥤ Cone G}
+  签名: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} {left : 锥 F ⥤ 锥 G}
   定义体: mkConeMorphism (fun s => adj.homEquiv s c (t.liftConeMorphism _))
     fun _ _ => (Adjunction.eq_homEquiv_apply _ _ _).2 t.uniq_cone_morphism
 
@@ -778,7 +778,7 @@ definition ofConeEquiv
 
 中文:
 定义 ofConeEquiv
-  签名: {D : 类型u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F) {c : Cone G}
+  签名: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} (h : 锥 G ≌ 锥 F) {c : 锥 G}
   定义体: ofIsoLimit (ofRightAdjoint h.toAdjunction P) (h.unitIso.symm.app c)
   invFun := ofRightAdjoint h.symm.toAdjunction
   left_inv := by cat_disch
@@ -812,8 +812,8 @@ definition _root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv
 @[to_dual (attr := simp)]
 
 中文:
-定义 _root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv
-  签名: {D : 类型u₄} [Category.{v₄} D]
+定义 _root_.范畴论.Limits.是余极限.ofCoconeEquiv
+  签名: {D : 类型u₄} [范畴.{v₄} D]
   定义体: IsColimit.ofIsoColimit (IsColimit.ofLeftAdjoint h.symm.toAdjunction P)
     (h.unitIso.symm.app c)
   invFun := IsColimit.ofLeftAdjoint h.toAdjunction
@@ -846,7 +846,7 @@ theorem ofConeEquiv_apply_lift
 
 中文:
 定理 ofConeEquiv_apply_lift
-  结论: {D : 类型u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F)
+  结论: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} (h : 锥 G ≌ 锥 F)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -873,7 +873,7 @@ alias ofConeEquiv_symm_apply_desc := ofConeEquiv_symm_apply_lift
 
 中文:
 定理 ofConeEquiv_symm_apply_lift
-  结论: {D : 类型u₄} [Category.{v₄} D] {G : K ⥤ D}
+  结论: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D}
   证明: rfl
 
 @[deprecated (since := "2026-06-21")] alias ofConeEquiv_apply_desc := ofConeEquiv_apply_lift
@@ -907,7 +907,7 @@ definition postcomposeHomEquiv
 
 中文:
 定义 postcomposeHomEquiv
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F)
+  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F)
   定义体: ofConeEquiv (Cone.postcomposeEquivalence α)
 
 Depends on / 依赖: Cone.postcomposeEquivalence, ofConeEquiv, postcomposeEquivalence
@@ -933,7 +933,7 @@ definition postcomposeInvEquiv
 
 中文:
 定义 postcomposeInvEquiv
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : Cone G)
+  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 G)
   定义体: postcomposeHomEquiv α.symm c
 
 Depends on / 依赖: postcomposeHomEquiv
@@ -958,8 +958,8 @@ definition equivOfNatIsoOfIso
   body: (postcomposeHomEquiv α _).symm.trans (equivIsoLimit w)
 
 中文:
-定义 equivOfNatIsoOfIso
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) (d : Cone G)
+定义 equivOf自然数IsoOfIso
+  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F) (d : 锥 G)
   定义体: (postcomposeHomEquiv α _).symm.trans (equivIsoLimit w)
 
 Depends on / 依赖: equivIsoLimit, postcomposeHomEquiv, symm.trans
@@ -988,8 +988,8 @@ definition conePointsIsoOfNatIso
   inv_hom_id := Q.hom_ext (by simp)
 
 中文:
-定义 conePointsIsoOfNatIso
-  签名: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s) (Q : IsLimit t)
+定义 conePointsIsoOf自然数Iso
+  签名: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s) (Q : 是极限 t)
   定义体: Q.map s w.hom
   inv := P.map t w.inv
   hom_inv_id := P.hom_ext (by simp)
@@ -1021,8 +1021,8 @@ theorem conePointsIsoOfNatIso_hom_comp
 #adaptation_note
 
 中文:
-定理 conePointsIsoOfNatIso_hom_comp
-  结论: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
+定理 conePointsIsoOf自然数Iso_hom_comp
+  结论: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s)
   证明: by simp
 
 #adaptation_note
@@ -1045,8 +1045,8 @@ theorem conePointsIsoOfNatIso_inv_comp
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_inv_desc]
 
 中文:
-定理 conePointsIsoOfNatIso_inv_comp
-  结论: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
+定理 conePointsIsoOf自然数Iso_inv_comp
+  结论: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s)
   证明: by simp
 
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_inv_desc]
@@ -1067,8 +1067,8 @@ theorem lift_comp_conePointsIsoOfNatIso_hom
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_hom_desc]
 
 中文:
-定理 lift_comp_conePointsIsoOfNatIso_hom
-  结论: {F G : J ⥤ C} {r s : Cone F} {t : Cone G}
+定理 lift_comp_conePointsIsoOf自然数Iso_hom
+  结论: {F G : J ⥤ C} {r s : 锥 F} {t : 锥 G}
   证明: Q.hom_ext (by simp)
 
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_hom_desc]
@@ -1090,8 +1090,8 @@ theorem lift_comp_conePointsIsoOfNatIso_inv
   proof: P.hom_ext (by simp)
 
 中文:
-定理 lift_comp_conePointsIsoOfNatIso_inv
-  结论: {F G : J ⥤ C} {r s : Cone G} {t : Cone F}
+定理 lift_comp_conePointsIsoOf自然数Iso_inv
+  结论: {F G : J ⥤ C} {r s : 锥 G} {t : 锥 F}
   证明: P.hom_ext (by simp)
 
 Depends on / 依赖: P.hom_ext, hom_ext
@@ -1115,7 +1115,7 @@ definition whiskerEquivalence
 
 中文:
 定义 whiskerEquivalence
-  签名: {s : Cone F} (P : IsLimit s) (e : K ≌ J)
+  签名: {s : 锥 F} (P : 是极限 s) (e : K ≌ J)
   定义体: ofRightAdjoint (Cone.whiskeringEquivalence e).symm.toAdjunction P
 
 Depends on / 依赖: Cone.whiskeringEquivalence, ofRightAdjoint, symm.toAdjunction, toAdjunction, whiskeringEquivalence
@@ -1134,8 +1134,8 @@ definition _root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence
   body: IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).toAdjunction P
 
 中文:
-定义 _root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence
-  签名: {s : Cocone F}
+定义 _root_.范畴论.Limits.是余极限.whiskerEquivalence
+  签名: {s : 余锥 F}
   定义体: IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).toAdjunction P
 
 Depends on / 依赖: Cocone, Cocone.whiskeringEquivalence, IsColimit, IsColimit.ofLeftAdjoint, ofLeftAdjoint, toAdjunction, whiskeringEquivalence
@@ -1155,7 +1155,7 @@ definition ofWhiskerEquivalence
 
 中文:
 定义 ofWhiskerEquivalence
-  签名: {s : Cone F} (e : K ≌ J) (P : IsLimit (s.whisker e.functor))
+  签名: {s : 锥 F} (e : K ≌ J) (P : 是极限 (s.whisker e.functor))
   定义体: equivIsoLimit ((Cone.whiskeringEquivalence e).unitIso.app s).symm
     (ofRightAdjoint (Cone.whiskeringEquivalence e).toAdjunction P)
 
@@ -1177,8 +1177,8 @@ definition _root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence
     (IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).symm.toAdjunction P)
 
 中文:
-定义 _root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence
-  签名: {s : Cocone F} (e : K ≌ J)
+定义 _root_.范畴论.Limits.是余极限.ofWhiskerEquivalence
+  签名: {s : 余锥 F} (e : K ≌ J)
   定义体: IsColimit.equivIsoColimit ((Cocone.whiskeringEquivalence e).unitIso.app s).symm
     (IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).symm.toAdjunction P)
 
@@ -1202,7 +1202,7 @@ definition whiskerEquivalenceEquiv
 
 中文:
 定义 whiskerEquivalenceEquiv
-  签名: {s : Cone F} (e : K ≌ J)
+  签名: {s : 锥 F} (e : K ≌ J)
   定义体: ⟨fun h => h.whiskerEquivalence e, ofWhiskerEquivalence e, by cat_disch, by cat_disch⟩
 
 Depends on / 依赖: cat_disch, h.whiskerEquivalence, ofWhiskerEquivalence, whiskerEquivalence
@@ -1222,7 +1222,7 @@ definition extendIso
 
 中文:
 定义 extendIso
-  签名: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit s)
+  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i] (hs : 是极限 s)
   定义体: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i))
 
 Depends on / 依赖: Cone.extendIso, IsLimit, IsLimit.ofIsoLimit, extendIso, ofIsoLimit
@@ -1243,7 +1243,7 @@ definition ofExtendIso
 
 中文:
 定义 ofExtendIso
-  签名: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit (s.extend i))
+  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i] (hs : 是极限 (s.extend i))
   定义体: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i)).symm
 
 Depends on / 依赖: Cone.extendIso, IsLimit, IsLimit.ofIsoLimit, extendIso, ofIsoLimit
@@ -1264,7 +1264,7 @@ definition extendIsoEquiv
 
 中文:
 定义 extendIsoEquiv
-  签名: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i]
+  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i]
   定义体: equivOfSubsingletonOfSubsingleton (extendIso i) (ofExtendIso i)
 
 Depends on / 依赖: equivOfSubsingletonOfSubsingleton, extendIso, ofExtendIso
@@ -1310,7 +1310,7 @@ definition conePointsIsoOfEquivalence
 
 中文:
 定义 conePointsIsoOfEquivalence
-  签名: {F : J ⥤ C} {s : Cone F} {G : K ⥤ C} {t : Cone G} (P : IsLimit s)
+  签名: {F : J ⥤ C} {s : 锥 F} {G : K ⥤ C} {t : 锥 G} (P : 是极限 s)
   定义体: let w' : e.inverse ⋙ F ≅ G := (isoWhiskerLeft e.inverse w).symm ≪≫ invFunIdAssoc e G
   { hom := Q.lift ((Cone.equivalenceOfReindexing e.symm w').functor.obj s)
     inv := P.lift ((Cone.equivalenceOfReindexing e w).functor.obj t)
@@ -1362,7 +1362,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: (h : IsLimit t) {W : C}
+  签名: (h : 是极限 t) {W : C}
   定义体: (t.extend f).π
   invFun π := h.lift (Cone.mk _ π)
   left_inv f := h.hom_ext (by simp)
@@ -1392,7 +1392,7 @@ lemma homEquiv_symm_π_app
 
 中文:
 引理 homEquiv_symm_π_app
-  结论: (h : IsLimit t) {W : C}
+  结论: (h : 是极限 t) {W : C}
   证明: by
   simp [homEquiv]
 
@@ -1416,7 +1416,7 @@ lemma homEquiv_symm_naturality
 
 中文:
 引理 homEquiv_symm_naturality
-  结论: (h : IsLimit t) {W W' : C}
+  结论: (h : 是极限 t) {W W' : C}
   证明: h.homEquiv.injective (by aesop)
 
 Depends on / 依赖: h.homEquiv.injective, homEquiv, injective, symm_add
@@ -1441,7 +1441,7 @@ definition homIso
 
 中文:
 定义 homIso
-  签名: (h : IsLimit t) (W : C)
+  签名: (h : 是极限 t) (W : C)
   定义体: Equiv.toIso (Equiv.ulift.trans h.homEquiv)
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.trans, L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, Limits, Limits.zero_comp, add_zero, cancel_mono, exists_leftFraction, h.homEquiv, homEquiv, map_comp, map_comp_map_s, zero_comp
@@ -1461,7 +1461,7 @@ theorem homIso_hom
 
 中文:
 定理 homIso_hom
-  条件: (h : IsLimit t) {W : C}
+  条件: (h : 是极限 t) {W : C}
   证明: rfl
 -/
 theorem homIso_hom (h : IsLimit t) {W : C} :
@@ -1480,7 +1480,7 @@ definition natIso
 
 中文:
 定义 natIso
-  签名: (h : IsLimit t)
+  签名: (h : 是极限 t)
   定义体: by
   refine NatIso.ofComponents (fun W => IsLimit.homIso h (unop W))
 
@@ -1504,7 +1504,7 @@ definition homIso'
 
 中文:
 定义 homIso'
-  签名: (h : IsLimit t) (W : C)
+  签名: (h : 是极限 t) (W : C)
   定义体: h.homIso W ≪≫
     { hom := ↾fun π =>
         ⟨fun j => π.app j, fun f => by convert! ← (π.naturality f).symm; apply id_comp⟩
@@ -1546,7 +1546,7 @@ definition ofFaithful
 
 中文:
 定义 ofFaithful
-  签名: {t : Cone F} {D : 类型u₄} [Category.{v₄} D] (G : C ⥤ D) [G.Faithful]
+  签名: {t : 锥 F} {D : 类型u₄} [范畴.{v₄} D] (G : C ⥤ D) [G.忠实]
   定义体: { lift
     fac := fun s j => by apply G.map_injective; rw [G.map_comp, h]; apply ht.fac
     uniq := fun s m w => by
@@ -1587,7 +1587,7 @@ definition mapConeEquiv
 
 中文:
 定义 mapConeEquiv
-  签名: {D : 类型u₄} [Category.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h : F ≅ G) {c : Cone K}
+  签名: {D : 类型u₄} [范畴.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h : F ≅ G) {c : 锥 K}
   定义体: by
   apply postcomposeInvEquiv (isoWhiskerLeft K h :) (mapCone G c) _
   apply t.ofIsoLimit (postcomposeWhiskerLeftMapCone h.symm c).symm
@@ -1615,7 +1615,7 @@ definition isoUniqueConeMorphism
 
 中文:
 定义 isoUniqueConeMorphism
-  签名: {t : Cone F}
+  签名: {t : 锥 F}
   定义体: ↾fun h s =>
     { default := h.liftConeMorphism s
       uniq := fun _ => h.uniq_cone_morphism }
@@ -1672,7 +1672,7 @@ definition homOfCone
 
 中文:
 定义 homOfCone
-  签名: (s : Cone F)
+  签名: (s : 锥 F)
   定义体: h.homEquiv.symm s.π
 
 @[simp]
@@ -1701,7 +1701,7 @@ theorem coneOfHom_homOfCone
 
 中文:
 定理 coneOfHom_homOfCone
-  条件: (s : Cone F)
+  条件: (s : 锥 F)
   结论: coneOfHom h (homOfCone h s) = s
   证明: by
   dsimp [coneOfHom, homOfCone]
@@ -1757,7 +1757,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: coneOfHom h (𝟙 X)
 
 Depends on / 依赖: coneOfHom
@@ -1810,7 +1810,7 @@ theorem cone_fac
 
 中文:
 定理 cone_fac
-  条件: (s : Cone F)
+  条件: (s : 锥 F)
   结论: (limitCone h).extend (homOfCone h s) = s
   证明: by
   rw [← coneOfHom_homOfCone h s]
@@ -1852,7 +1852,7 @@ definition ofRepresentableBy
 
 中文:
 定义 ofRepresentableBy
-  签名: {X : C} (h : F.cones.RepresentableBy X)
+  签名: {X : C} (h : F.cones.可表示 X)
   定义体: homOfCone h s
   fac s j := by
     have h := cone_fac h s
@@ -1897,7 +1897,7 @@ homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
 
 中文:
 定义 representableBy
-  签名: (hc : IsLimit t)
+  签名: (hc : 是极限 t)
   定义体: hc.homEquiv
 homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
 
@@ -1929,7 +1929,7 @@ theorem homIso_hom
 
 中文:
 定理 homIso_hom
-  条件: (h : IsColimit t) {W : C}
+  条件: (h : 是余极限 t) {W : C}
   证明: rfl
 -/
 theorem homIso_hom (h : IsColimit t) {W : C} :
@@ -1947,7 +1947,7 @@ definition natIso
 
 中文:
 定义 natIso
-  签名: (h : IsColimit t)
+  签名: (h : 是余极限 t)
   定义体: NatIso.ofComponents (IsColimit.homIso h)
 
 Depends on / 依赖: IsColimit, IsColimit.homIso, NatIso, NatIso.ofComponents, homIso, ofComponents
@@ -1970,7 +1970,7 @@ definition homIso'
 
 中文:
 定义 homIso'
-  签名: (h : IsColimit t) (W : C)
+  签名: (h : 是余极限 t) (W : C)
   定义体: h.homIso W ≪≫
     { hom := ↾fun ι =>
         ⟨fun j => ι.app j, fun {j} {j'} f => by convert! ← ι.naturality f; apply comp_id⟩
@@ -2006,7 +2006,7 @@ definition isoUniqueCoconeMorphism
 
 中文:
 定义 isoUniqueCoconeMorphism
-  签名: {t : Cocone F}
+  签名: {t : 余锥 F}
   定义体: ↾fun h s =>
     { default := h.descCoconeMorphism s
       uniq := fun _ => h.uniq_cocone_morphism }
@@ -2061,7 +2061,7 @@ definition homOfCocone
 
 中文:
 定义 homOfCocone
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
   定义体: h.homEquiv.symm s.ι
 
 @[simp]
@@ -2090,7 +2090,7 @@ theorem coconeOfHom_homOfCocone
 
 中文:
 定理 coconeOfHom_homOfCocone
-  条件: (s : Cocone F)
+  条件: (s : 余锥 F)
   结论: coconeOfHom h (homOfCocone h s) = s
   证明: by
   dsimp [coconeOfHom, homOfCocone]
@@ -2146,7 +2146,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F
+  签名: : 余锥 F
   定义体: coconeOfHom h (𝟙 X)
 
 Depends on / 依赖: coconeOfHom
@@ -2199,7 +2199,7 @@ theorem cocone_fac
 
 中文:
 定理 cocone_fac
-  条件: (s : Cocone F)
+  条件: (s : 余锥 F)
   结论: (colimitCocone h).extend (homOfCocone h s) = s
   证明: by
   rw [← coconeOfHom_homOfCocone h s]
@@ -2241,7 +2241,7 @@ definition ofCorepresentableBy
 
 中文:
 定义 ofCorepresentableBy
-  签名: {X : C} (h : F.cocones.CorepresentableBy X)
+  签名: {X : C} (h : F.cocones.余representableBy X)
   定义体: homOfCocone h s
   fac s j := by
     have h := cocone_fac h s
@@ -2287,7 +2287,7 @@ homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
 
 中文:
 定义 corepresentableBy
-  签名: (hc : IsColimit t)
+  签名: (hc : 是余极限 t)
   定义体: hc.homEquiv
 homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
 

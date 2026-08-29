@@ -51,7 +51,7 @@ instance matrix
 
 中文:
 实例 matrix
-  签名: (ι : 类型) [Fintype ι] [DecidableEq ι]
+  签名: (ι : 类型) [有限类型 ι] [DecidableEq ι]
   定义体: subalgebraCenter_eq_scalarAlgHom_map.trans_le
 .trans_eq map_bot _ Subalgebra.map_mono out
 

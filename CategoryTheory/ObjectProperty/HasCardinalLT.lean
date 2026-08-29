@@ -36,7 +36,7 @@ abbreviation HasCardinalLT
 
 中文:
 缩写 HasCardinalLT
-  签名: (P : Object命题erty C) (κ : Cardinal.{w})
+  签名: (P : ObjectProperty C) (κ : 基数.{w})
   定义体: _root_.HasCardinalLT (Subtype P) κ
 -/
 protected abbrev HasCardinalLT (P : ObjectProperty C) (κ : Cardinal.{w}) :=
@@ -85,7 +85,7 @@ lemma HasCardinalLT.sup
   proof: hasCardinalLT_union hκ h₁ h₂
 
 中文:
-引理 HasCardinalLT.sup
+引理 HasCardinalLT.上确界
   证明: hasCardinalLT_union hκ h₁ h₂
 -/
 lemma HasCardinalLT.sup

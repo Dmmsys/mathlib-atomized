@@ -65,7 +65,7 @@ definition DirectLimit
 
 中文:
 定义 DirectLimit
-  签名: : Type _
+  签名: : 类型 _
   定义体: FreeCommRing (Σ i, G i) ⧸
     Ideal.span
       { a |
@@ -111,7 +111,7 @@ theorem quotientMk_of
 中文:
 定理 quotientMk_of
   条件: (i x)
-  结论: Ideal.Quotient.mk _ (.of ⟨i, x⟩) = of G f i x
+  结论: 理想.商.mk _ (.of ⟨i, x⟩) = of G f i x
   证明: rfl
 -/
 theorem quotientMk_of (i x) : Ideal.Quotient.mk _ (.of ⟨i, x⟩) = of G f i x :=
@@ -148,8 +148,8 @@ theorem exists_of
   · exact ⟨k, f i k hik x + f j k hjk y, by rw [map_add, of
 
 中文:
-定理 exists_of
-  条件: [Nonempty ι] [IsDirectedOrder ι] (z : DirectLimit G f)
+定理 存在_of
+  条件: [非空 ι] [IsDirectedOrder ι] (z : DirectLimit G f)
   证明: by
   obtain ⟨z, rfl⟩ := Ideal.Quotient.mk_surjective z
   refine z.induction_on ⟨Classical.arbitrary ι, -1, by simp; rfl⟩ (fun ⟨i, x⟩ => ⟨i, x, rfl⟩) ?_ ?_
@@ -202,7 +202,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: [Nonempty ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
+  结论: [非空 ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
   证明: let ⟨i, x, hx⟩ := exists_of z
   hx ▸ ih i x
 
@@ -369,7 +369,7 @@ lemma lift_injective
 
 中文:
 引理 lift_injective
-  结论: [Nonempty ι] [IsDirectedOrder ι]
+  结论: [非空 ι] [IsDirectedOrder ι]
   证明: by
   simp_rw [injective_iff_map_eq_zero] at injective ⊢
   intro z hz
@@ -408,7 +408,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: [Nonempty ι]
+  签名: [非空 ι]
   定义体: .ofRingHom (lift _ _ _ (Ring.of _ _) fun _ _ _ _ => .symm <| eq_of_le ..)
     (Ring.lift _ _ _ (of _ _) fun _ _ _ _ => of_f ..)
     (by ext; simp)
@@ -439,7 +439,7 @@ theorem ringEquiv_of
 
 中文:
 定理 ringEquiv_of
-  条件: [Nonempty ι] {i g}
+  条件: [非空 ι] {i g}
   结论: ringEquiv G f' (of _ _ i g) = ⟦⟨i, g⟩⟧
   证明: by
   simp [ringEquiv]
@@ -463,7 +463,7 @@ theorem ringEquiv_symm_mk
 
 中文:
 定理 ringEquiv_symm_mk
-  条件: [Nonempty ι] {g}
+  条件: [非空 ι] {g}
   结论: (ringEquiv G f').symm ⟦g⟧ = of _ _ g.1 g.2
   证明: rfl
 -/
@@ -772,8 +772,8 @@ theorem exists_inv
         (Ring.DirectLimit.of _ _ _).map_one]⟩
 
 中文:
-定理 exists_inv
-  条件: {p : Ring.DirectLimit G f}
+定理 存在_inv
+  条件: {p : 环.DirectLimit G f}
   结论: p != 0 -> 存在 y, p * y = 1
   证明: Ring.DirectLimit.induction_on p fun i x H =>
     ⟨Ring.DirectLimit.of G f i x⁻¹, by
@@ -802,7 +802,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (p : Ring.DirectLimit G f)
+  签名: (p : 环.DirectLimit G f)
   定义体: if H : p = 0 then 0 else Classical.choose (DirectLimit.exists_inv G f H)
 
 Depends on / 依赖: Classical, Classical.choose, DirectLimit, DirectLimit.exists_inv, exists_inv
@@ -822,7 +822,7 @@ theorem mul_inv_cancel
 
 中文:
 定理 mul_inv_cancel
-  条件: {p : Ring.DirectLimit G f} (hp : p != 0)
+  条件: {p : 环.DirectLimit G f} (hp : p != 0)
   结论: p * inv G f p = 1
   证明: by
   rw [inv]; rw [dif_neg hp]; rw [Classical.choose_spec (DirectLimit.exists_inv G f hp)]
@@ -842,7 +842,7 @@ theorem inv_mul_cancel
 
 中文:
 定理 inv_mul_cancel
-  条件: {p : Ring.DirectLimit G f} (hp : p != 0)
+  条件: {p : 环.DirectLimit G f} (hp : p != 0)
   结论: inv G f p * p = 1
   证明: by
   rw [_root_.mul_comm]; rw [DirectLimit.mul_inv_cancel G f hp]

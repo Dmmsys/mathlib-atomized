@@ -50,7 +50,7 @@ lemma iteratedDeriv_alternating
 
 中文:
 引理 iteratedDeriv_alternating
-  结论: {a : 自然数 -> Complex} (hn : 0 <= a) {x : 实数}
+  结论: {a : 自然数 -> 复形} (hn : 0 <= a) {x : 实数}
   证明: by
   rw [LSeries_iteratedDeriv _ h]; rw [LSeries]; rw [← mul_assoc]; rw [← pow_add]; rw [Even.neg_one_pow ⟨n]; rw [rfl⟩]; rw [one_mul]
   refine tsum_nonneg fun k => ?_
@@ -91,7 +91,7 @@ exact LSeriesSummable_of_abscissaOfAbsConv_lt_re by simpa only [ofReal_re] using
 
 中文:
 引理 positive
-  条件: {a : 自然数 -> Complex} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {x : 实数} (hx : abscissaOfAbsConv a < x)
+  条件: {a : 自然数 -> 复形} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {x : 实数} (hx : abscissaOfAbsConv a < x)
   证明: by
   rw [LSeries]
 refine Summable.tsum_pos ?_ (fun n => term_nonneg (ha₀ n) x) 1 term_pos one_ne_zero ha₁ x
@@ -120,7 +120,7 @@ have hxy' : abscissaOfAbsConv a < max x y + 1 := hx.trans_lt mod_cast hxy
 
 中文:
 引理 positive_of_differentiable_of_eqOn
-  结论: {a : 自然数 -> Complex} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {f : Complex -> Complex}
+  结论: {a : 自然数 -> 复形} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {f : 复形 -> 复形}
   证明: by
   have hxy : x < max x y + 1 := (le_max_left x y).trans_lt (lt_add_one _)
 have hxy' : abscissaOfAbsConv a < max x y + 1 := hx.trans_lt mod_cast hxy
@@ -160,7 +160,7 @@ lemma iteratedDeriv_LSeries_alternating
 
 中文:
 引理 iteratedDeriv_LSeries_alternating
-  结论: (a : ArithmeticFunction Complex) (hn : 对任意 n, 0 <= a n) {x : 实数}
+  结论: (a : ArithmeticFunction 复形) (hn : 对任意 n, 0 <= a n) {x : 实数}
   证明: LSeries.iteratedDeriv_alternating hn h n
 
 Depends on / 依赖: LSeries, LSeries.iteratedDeriv_alternating, iteratedDeriv_alternating
@@ -180,7 +180,7 @@ lemma LSeries_positive
 
 中文:
 引理 LSeries_positive
-  结论: {a : 自然数 -> Complex} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {x : 实数}
+  结论: {a : 自然数 -> 复形} (ha₀ : 0 <= a) (ha₁ : 0 < a 1) {x : 实数}
   证明: LSeries.positive ha₀ ha₁ hx
 
 Depends on / 依赖: LSeries, LSeries.positive, positive
@@ -200,7 +200,7 @@ lemma LSeries_positive_of_differentiable_of_eqOn
 
 中文:
 引理 LSeries_positive_of_differentiable_of_eqOn
-  结论: {a : ArithmeticFunction Complex} (ha₀ : 0 <= (a ·))
+  结论: {a : ArithmeticFunction 复形} (ha₀ : 0 <= (a ·))
   证明: LSeries.positive_of_differentiable_of_eqOn ha₀ ha₁ hf hx hf' y
 
 Depends on / 依赖: LSeries, LSeries.positive_of_differentiable_of_eqOn, positive_of_differentiable_of_eqOn

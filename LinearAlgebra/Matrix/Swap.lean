@@ -110,7 +110,7 @@ theorem isSymm_swap
 中文:
 定理 isSymm_swap
   条件: (i j : n)
-  结论: (swap R i j).IsSymm
+  结论: (swap R i j).是Symm
   证明: transpose_swap i j
 
 @[simp]
@@ -132,7 +132,7 @@ lemma conjTranspose_swap
 
 中文:
 引理 conjTranspose_swap
-  条件: {R : 类型} [NonAssocSemiring R] [StarRing R] (i j : n)
+  条件: {R : 类型} [非结合半环 R] [对合环 R] (i j : n)
   证明: by
   simp [swap]
 -/
@@ -157,7 +157,7 @@ lemma map_swap
 
 中文:
 引理 map_swap
-  条件: {S : 类型} [NonAssocSemiring S] (f : R ->+* S) (i j : n)
+  条件: {S : 类型} [非结合半环 S] (f : R ->+* S) (i j : n)
   证明: by
   simp [swap]
 -/
@@ -274,7 +274,7 @@ lemma swap_mul_apply_left
 
 中文:
 引理 swap_mul_apply_left
-  条件: (i j : n) (a : m) (g : Matrix n m R)
+  条件: (i j : n) (a : m) (g : 矩阵 n m R)
   证明: by
   simp [swap, PEquiv.toMatrix_toPEquiv_mul]
 
@@ -297,7 +297,7 @@ lemma swap_mul_apply_right
 
 中文:
 引理 swap_mul_apply_right
-  条件: (i j : n) (a : m) (g : Matrix n m R)
+  条件: (i j : n) (a : m) (g : 矩阵 n m R)
   证明: by
   rw [swap_comm]; rw [swap_mul_apply_left]
 
@@ -318,7 +318,7 @@ lemma swap_mul_of_ne
 
 中文:
 引理 swap_mul_of_ne
-  条件: {i j a : n} {b : m} (hai : a != i) (haj : a != j) (g : Matrix n m R)
+  条件: {i j a : n} {b : m} (hai : a != i) (haj : a != j) (g : 矩阵 n m R)
   证明: by
   simp [swap, PEquiv.toMatrix_toPEquiv_mul, Equiv.swap_apply_of_ne_of_ne hai haj]
 
@@ -341,7 +341,7 @@ lemma mul_swap_apply_left
 
 中文:
 引理 mul_swap_apply_left
-  条件: (i j : n) (a : m) (g : Matrix m n R)
+  条件: (i j : n) (a : m) (g : 矩阵 m n R)
   证明: by
   simp [swap, PEquiv.mul_toMatrix_toPEquiv]
 
@@ -364,7 +364,7 @@ lemma mul_swap_apply_right
 
 中文:
 引理 mul_swap_apply_right
-  条件: (i j : n) (a : m) (g : Matrix m n R)
+  条件: (i j : n) (a : m) (g : 矩阵 m n R)
   证明: by
   rw [swap_comm]; rw [mul_swap_apply_left]
 
@@ -385,7 +385,7 @@ lemma mul_swap_of_ne
 
 中文:
 引理 mul_swap_of_ne
-  条件: {i j b : n} {a : m} (hbi : b != i) (hbj : b != j) (g : Matrix m n R)
+  条件: {i j b : n} {a : m} (hbi : b != i) (hbj : b != j) (g : 矩阵 m n R)
   证明: by
   simp [swap, PEquiv.mul_toMatrix_toPEquiv, Equiv.swap_apply_of_ne_of_ne hbi hbj]
 

@@ -60,7 +60,7 @@ theorem map_continuousWithinAt
 
 中文:
 定理 map_continuousWithinAt
-  条件: (f : F) (s : Set α) (a : α)
+  条件: (f : F) (s : 集合 α) (a : α)
   结论: ContinuousWithinAt f s a
   证明: (map_continuous f).continuousWithinAt
 
@@ -163,7 +163,7 @@ lemma coe_equivFnOfDiscrete
 
 中文:
 引理 coe_equivFnOfDiscrete
-  结论: ⇑equivFnOfDiscrete = (DFunLike.coe : C(α, β) -> α -> β)
+  结论: ⇑equivFnOfDiscrete = (依赖函数状.coe : C(α, β) -> α -> β)
   证明: rfl
 -/
 @[simp] lemma coe_equivFnOfDiscrete : ⇑equivFnOfDiscrete = (DFunLike.coe : C(α, β) -> α -> β) := rfl
@@ -220,7 +220,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(ContinuousMap.id α) = id
+  结论: ⇑(连续映射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(ContinuousMap.id α) = id :=
@@ -259,7 +259,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (b : β)
-  结论: ⇑(const α b) = Function.const α b
+  结论: ⇑(const α b) = 函数.const α b
   证明: rfl
 -/
 theorem coe_const (b : β) : ⇑(const α b) = Function.const α b :=
@@ -294,8 +294,8 @@ instance [Inhabited
   body: ⟨const α default⟩
 
 中文:
-实例 [Inhabited
-  签名: β] : Inhabited C(α, β)
+实例 [可居
+  签名: β] : 可居 C(α, β)
   定义体: ⟨const α default⟩
 -/
 instance [Inhabited β] : Inhabited C(α, β) :=
@@ -318,7 +318,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: ContinuousMap.id α a = a
+  结论: 连续映射.id α a = a
   证明: rfl
 
 @[simp]
@@ -450,7 +450,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : C(α, β))
-  结论: (ContinuousMap.id _).comp f = f
+  结论: (连续映射.id _).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -473,7 +473,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : C(α, β))
-  结论: f.comp (ContinuousMap.id _) = f
+  结论: f.comp (连续映射.id _) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -540,7 +540,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : Surjective g)
+  条件: {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : 满射 g)
   证明: ⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, congr_arg (ContinuousMap.comp · g)⟩
 
 @[simp]
@@ -562,7 +562,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : Injective f)
+  条件: {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : 单射 f)
   证明: ⟨fun h => ext fun a => hf by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -581,8 +581,8 @@ instance [Nonempty
 ⟨const _ b₁, const _ b₂, fun h => hb DFunLike.congr_fun h Classical.arbitrary α⟩⟩
 
 中文:
-实例 [Nonempty
-  签名: α] [Nontrivial β] : Nontrivial C(α, β)
+实例 [非空
+  签名: α] [非平凡 β] : 非平凡 C(α, β)
   定义体: ⟨let ⟨b₁, b₂, hb⟩ := exists_pair_ne β
 ⟨const _ b₁, const _ b₂, fun h => hb DFunLike.congr_fun h Classical.arbitrary α⟩⟩
 
@@ -607,7 +607,7 @@ definition _root_.Homeomorph.continuousMapCongr
   right_inv _ := by aesop
 
 中文:
-定义 _root_.Homeomorph.continuousMapCongr
+定义 _root_.同胚.continuousMapCongr
   签名: {X₁ X₂ Y₁ Y₂ : 类型}
   定义体: ContinuousMap.comp ⟨_, e'.continuous⟩ (f.comp ⟨_, e.symm.continuous⟩)
   invFun g := ContinuousMap.comp ⟨_, e'.symm.continuous⟩ (g.comp ⟨_, e.continuous⟩)
@@ -1017,7 +1017,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (f : C(α, β)) (s : Set α) (x : s)
+  条件: (f : C(α, β)) (s : 集合 α) (x : s)
   结论: f.restrict s x = f x
   证明: rfl
 
@@ -1037,7 +1037,7 @@ theorem restrict_apply_mk
 
 中文:
 定理 restrict_apply_mk
-  条件: (f : C(α, β)) (s : Set α) (x : α) (hx : x in s)
+  条件: (f : C(α, β)) (s : 集合 α) (x : α) (hx : x in s)
   证明: rfl
 -/
 theorem restrict_apply_mk (f : C(α, β)) (s : Set α) (x : α) (hx : x in s) :
@@ -1056,7 +1056,7 @@ Set.domRestrict_eq_domRestrict_iff.1 congr_arg DFunLike.coe h
 
 中文:
 定理 injective_restrict
-  条件: [T2Space β] {s : Set α} (hs : Dense s)
+  条件: [T2空间 β] {s : 集合 α} (hs : 稠密 s)
   证明: fun f g h =>
 DFunLike.ext' (map_continuous f).ext_on hs (map_continuous g)
 Set.domRestrict_eq_domRestrict_iff.1 congr_arg DFunLike.coe h
@@ -1079,7 +1079,7 @@ definition restrictPreimage
 
 中文:
 定义 restrictPreimage
-  签名: (f : C(α, β)) (s : Set β)
+  签名: (f : C(α, β)) (s : 集合 β)
   定义体: ⟨s.restrictPreimage f, continuous_iff_continuousAt.mpr fun _ =>
     (map_continuousAt f _).restrictPreimage⟩
 
@@ -1125,7 +1125,7 @@ lemma mkD_of_continuous
 
 中文:
 引理 mkD_of_continuous
-  条件: {f : α -> β} {g : C(α, β)} (hf : Continuous f)
+  条件: {f : α -> β} {g : C(α, β)} (hf : 连续 f)
   证明: by
   simp only [mkD, hf, ↓reduceDIte]
 
@@ -1146,7 +1146,7 @@ lemma mkD_of_not_continuous
 
 中文:
 引理 mkD_of_not_continuous
-  条件: {f : α -> β} {g : C(α, β)} (hf : ¬ Continuous f)
+  条件: {f : α -> β} {g : C(α, β)} (hf : ¬ 连续 f)
   证明: by
   simp only [mkD, hf, ↓reduceDIte]
 
@@ -1167,7 +1167,7 @@ lemma mkD_apply_of_continuous
 
 中文:
 引理 mkD_apply_of_continuous
-  条件: {f : α -> β} {g : C(α, β)} {x : α} (hf : Continuous f)
+  条件: {f : α -> β} {g : C(α, β)} {x : α} (hf : 连续 f)
   证明: by
   rw [mkD_of_continuous hf]; rw [coe_mk]
 
@@ -1187,7 +1187,7 @@ lemma mkD_of_continuousOn
 
 中文:
 引理 mkD_of_continuousOn
-  结论: {s : Set α} {f : α -> β} {g : C(s, β)}
+  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)}
   证明: mkD_of_continuous hf.domRestrict
 
 Depends on / 依赖: domRestrict, hf.domRestrict, mkD_of_continuous
@@ -1208,7 +1208,7 @@ lemma mkD_of_not_continuousOn
 
 中文:
 引理 mkD_of_not_continuousOn
-  结论: {s : Set α} {f : α -> β} {g : C(s, β)}
+  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)}
   证明: by
   rw [continuousOn_iff_continuous_domRestrict] at hf
   exact mkD_of_not_continuous hf
@@ -1231,7 +1231,7 @@ lemma mkD_apply_of_continuousOn
 
 中文:
 引理 mkD_apply_of_continuousOn
-  结论: {s : Set α} {f : α -> β} {g : C(s, β)} {x : s}
+  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)} {x : s}
   证明: by rw [mkD_of_continuousOn hf, coe_mk, Set.domRestrict_apply]
 
 Depends on / 依赖: Set.domRestrict_apply, coe_mk, domRestrict_apply, mkD_of_continuousOn
@@ -1403,7 +1403,7 @@ theorem liftCover_coe'
 
 中文:
 定理 liftCover_coe'
-  条件: {s : Set α} {hs : s in A} (x : s)
+  条件: {s : 集合 α} {hs : s in A} (x : s)
   结论: liftCover' A F hF hA x = F s hs x
   证明: let x' : ((↑) : A -> Set α) ⟨s, hs⟩ := x
   by delta liftCover'; exact ContinuousMap.liftCover_coe x'
@@ -1427,7 +1427,7 @@ theorem liftCover_restrict'
 
 中文:
 定理 liftCover_restrict'
-  条件: {s : Set α} {hs : s in A}
+  条件: {s : 集合 α} {hs : s in A}
   证明: ext liftCover_coe' (hF := hF) (hA := hA)
 
 Depends on / 依赖: liftCover_coe
@@ -1448,7 +1448,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {s t : Set α} (h : s subseteq t)
+  签名: {s t : 集合 α} (h : s subseteq t)
   定义体: Set.inclusion h
   continuous_toFun := continuous_inclusion h
 
@@ -1478,8 +1478,8 @@ definition Function.RightInverse.homeomorph
   continuous_invFun := continuous_quotient_mk'.comp (map_continuous f')
 
 中文:
-定义 Function.RightInverse.homeomorph
-  签名: {f' : C(Y, X)} (hf : Function.RightInverse f' f)
+定义 函数.右逆.homeomorph
+  签名: {f' : C(Y, X)} (hf : 函数.右逆 f' f)
   定义体: Setoid.quotientKerEquivOfRightInverse _ _ hf
   continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr (map_continuous f)
   continuous_invFun := continuous_quotient_mk'.comp (map_continuous f')
@@ -1516,7 +1516,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: (hf : IsQuotientMap f)
+  签名: (hf : 是商映射 f)
   定义体: Setoid.quotientKerEquivOfSurjective _ hf.surjective
   continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr hf.continuous
   continuous_invFun := by
@@ -1620,7 +1620,7 @@ definition liftEquiv
 
 中文:
 定义 liftEquiv
-  签名: : { g : C(X, Z) // Function.FactorsThrough g f} ≃ C(Y, Z) where
+  签名: : { g : C(X, Z) // 函数.FactorsThrough g f} ≃ C(Y, Z) where
   定义体: hf.lift g g.prop
   invFun g := ⟨g.comp f, fun _ _ h => by simp only [ContinuousMap.comp_apply]; rw [h]⟩
   left_inv := by intro; simp
@@ -1660,7 +1660,7 @@ instance instContinuousMapClass
 
 中文:
 实例 instContinuousMapClass
-  签名: : ContinuousMapClass (α ≃ₜ β) α β where
+  签名: : 连续映射类 (α ≃ₜ β) α β where
   定义体: f.continuous_toFun
 
 @[simp]
@@ -1683,7 +1683,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: (Homeomorph.refl α : C(α, α)) = ContinuousMap.id α
+  结论: (同胚.refl α : C(α, α)) = 连续映射.id α
   证明: rfl
 
 @[simp]

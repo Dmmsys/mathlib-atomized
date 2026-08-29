@@ -42,7 +42,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field Rat where
+  签名: : 域 有理数 where
   定义体: commRing
   __ := commGroupWithZero
   nnqsmul := _
@@ -77,7 +77,7 @@ instance instDivisionRing
 
 中文:
 实例 instDivisionRing
-  签名: : DivisionRing Rat
+  签名: : 除环 有理数
   定义体: inferInstance
 -/
 instance instDivisionRing : DivisionRing Rat := inferInstance
@@ -95,7 +95,7 @@ lemma inv_nonneg
 
 中文:
 引理 inv_nonneg
-  条件: {a : Rat} (ha : 0 <= a)
+  条件: {a : 有理数} (ha : 0 <= a)
   结论: 0 <= a⁻¹
   证明: by
   rw [inv_def]
@@ -116,7 +116,7 @@ lemma div_nonneg
 
 中文:
 引理 div_nonneg
-  条件: {a b : Rat} (ha : 0 <= a) (hb : 0 <= b)
+  条件: {a b : 有理数} (ha : 0 <= a) (hb : 0 <= b)
   结论: 0 <= a / b
   证明: mul_nonneg ha (Rat.inv_nonneg hb)
 -/
@@ -137,7 +137,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv Rat>=0 where
+  签名: : 取逆 有理数>=0 where
   定义体: ⟨x⁻¹, Rat.inv_nonneg x.2⟩
 
 Depends on / 依赖: Rat.inv_nonneg, inv_nonneg
@@ -155,7 +155,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: : Div Rat>=0 where
+  签名: : 除法 有理数>=0 where
   定义体: ⟨x / y, Rat.div_nonneg x.2 y.2⟩
 
 Depends on / 依赖: Rat.div_nonneg, div_nonneg
@@ -173,7 +173,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: : Pow Rat>=0 整数 where
+  签名: : 幂 有理数>=0 整数 where
   定义体: ⟨x ^ n, Rat.zpow_nonneg x.2⟩
 
 Depends on / 依赖: Rat.zpow_nonneg, zpow_nonneg
@@ -192,8 +192,8 @@ lemma coe_inv
 
 中文:
 引理 coe_inv
-  条件: (q : Rat>=0)
-  结论: ((q⁻¹ : Rat>=0) : Rat) = (q : Rat)⁻¹
+  条件: (q : 有理数>=0)
+  结论: ((q⁻¹ : 有理数>=0) : 有理数) = (q : 有理数)⁻¹
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inv (q : Rat>=0) : ((q⁻¹ : Rat>=0) : Rat) = (q : Rat)⁻¹ := rfl
@@ -208,8 +208,8 @@ lemma coe_div
 
 中文:
 引理 coe_div
-  条件: (p q : Rat>=0)
-  结论: ((p / q : Rat>=0) : Rat) = p / q
+  条件: (p q : 有理数>=0)
+  结论: ((p / q : 有理数>=0) : 有理数) = p / q
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_div (p q : Rat>=0) : ((p / q : Rat>=0) : Rat) = p / q := rfl
@@ -224,8 +224,8 @@ lemma coe_zpow
 
 中文:
 引理 coe_zpow
-  条件: (p : Rat>=0) (n : 整数)
-  结论: ((p ^ n : Rat>=0) : Rat) = p ^ n
+  条件: (p : 有理数>=0) (n : 整数)
+  结论: ((p ^ n : 有理数>=0) : 有理数) = p ^ n
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zpow (p : Rat>=0) (n : Int) : ((p ^ n : Rat>=0) : Rat) = p ^ n := rfl
@@ -241,7 +241,7 @@ lemma inv_def
 
 中文:
 引理 inv_def
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q⁻¹ = div自然数 q.den q.num
   证明: by ext; simp [Rat.inv_def, num_coe, den_coe]
 
@@ -260,7 +260,7 @@ lemma div_def
 
 中文:
 引理 div_def
-  条件: (p q : Rat>=0)
+  条件: (p q : 有理数>=0)
   结论: p / q = div自然数 (p.num * q.den) (p.den * q.num)
   证明: by
   ext; simp [Rat.div_def', num_coe, den_coe]
@@ -282,7 +282,7 @@ theorem divNat_eq_div
   simp [Rat.mkRat_eq_div]
 
 中文:
-定理 divNat_eq_div
+定理 div自然数_eq_div
   条件: (a b : 自然数)
   结论: div自然数 a b = a / b
   证明: by
@@ -309,7 +309,7 @@ lemma num_inv_of_ne_zero
 
 中文:
 引理 num_inv_of_ne_zero
-  条件: {q : Rat>=0} (hq : q != 0)
+  条件: {q : 有理数>=0} (hq : q != 0)
   结论: q⁻¹.num = q.den
   证明: by
   rw [inv_def]; rw [divNat]; rw [num]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]; rw [Int.natAbs_natCast]
@@ -337,7 +337,7 @@ lemma den_inv_of_ne_zero
 
 中文:
 引理 den_inv_of_ne_zero
-  条件: {q : Rat>=0} (hq : q != 0)
+  条件: {q : 有理数>=0} (hq : q != 0)
   结论: q⁻¹.den = q.num
   证明: by
   rw [inv_def]; rw [divNat]; rw [den]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]
@@ -366,8 +366,8 @@ lemma num_div_den
 
 中文:
 引理 num_div_den
-  条件: (q : Rat>=0)
-  结论: (q.num : Rat>=0) / q.den = q
+  条件: (q : 有理数>=0)
+  结论: (q.num : 有理数>=0) / q.den = q
   证明: by
   ext1
   rw [coe_div]; rw [coe_natCast]; rw [coe_natCast]; rw [num]; rw [← Int.cast_natCast]
@@ -398,7 +398,7 @@ instance instSemifield
 
 中文:
 实例 instSemifield
-  签名: : Semifield Rat>=0 where
+  签名: : 半域 有理数>=0 where
   定义体: by ext; simp
   mul_inv_cancel q h := by ext; simp [h]
   nnratCast_def q := q.num_div_den.symm
@@ -441,8 +441,8 @@ theorem NNRatCast.ofScientific_eq_ite
     congr
 
 中文:
-定理 NNRatCast.ofScientific_eq_ite
-  条件: {K} [NNRatCast K] (m : 自然数) (b : 布尔) (d : 自然数)
+定理 非负有理数嵌入.ofScientific_eq_ite
+  条件: {K} [非负有理数嵌入 K] (m : 自然数) (b : 布尔值) (d : 自然数)
   证明: by
   rw [NNRatCast.toOfScientific_def]
   split_ifs

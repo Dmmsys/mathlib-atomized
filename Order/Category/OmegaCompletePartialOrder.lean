@@ -46,11 +46,11 @@ structure ωCPO
 
 中文:
 结构 ωCPO
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : OmegaCompletePartialOrder carrier]
+    - [str : OmegaCompletePartial序 carrier]
 -/
 structure ωCPO : Type (u + 1) where
   /-- Construct a bundled ωCPO from the underlying type and typeclass. -/
@@ -94,7 +94,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [OmegaCompletePartialOrder α]
+  条件: (α : 类型) [OmegaCompletePartial序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} ωCPO
+  签名: 大范畴.{u} ωCPO
   定义体: ContinuousHom X Y
   id X := ContinuousHom.id
   comp f g := g.comp f
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory ωCPO (ContinuousHom · ·)
+  签名: 余ncrete范畴 ωCPO (连续态射 · ·)
   定义体: f
   ofHom f := f
 -/
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ωCPO
+  签名: 可居 ωCPO
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited ωCPO :=
@@ -237,7 +237,7 @@ instance omegaCompletePartialOrderEqualizer
 
 中文:
 实例 omegaCompletePartialOrderEqualizer
-  签名: {α β : 类型} [OmegaCompletePartialOrder α]
+  签名: {α β : 类型} [OmegaCompletePartial序 α]
   定义体: OmegaCompletePartialOrder.subtype _ fun c hc => by
     rw [f.continuous]; rw [g.continuous]
     congr 1
@@ -267,7 +267,7 @@ definition equalizerι
 
 中文:
 定义 equalizerι
-  签名: {α β : 类型} [OmegaCompletePartialOrder α] [OmegaCompletePartialOrder β]
+  签名: {α β : 类型} [OmegaCompletePartial序 α] [OmegaCompletePartial序 β]
   定义体: .mk (OrderHom.Subtype.val _) fun _ => rfl
 
 Depends on / 依赖: OrderHom, OrderHom.Subtype.val, Subtype
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits ωCPO.{v}
+  签名: 有极限 ωCPO.{v}
   定义体: has_limits_of_hasEqualizers_and_products
 
 Depends on / 依赖: has_limits_of_hasEqualizers_and_products

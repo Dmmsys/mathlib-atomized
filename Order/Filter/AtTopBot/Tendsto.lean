@@ -38,7 +38,7 @@ theorem not_tendsto_const_atTop
 
 中文:
 定理 not_tendsto_const_atTop
-  条件: [Preorder α] [NoTopOrder α] (x : α) (l : Filter β) [l.NeBot]
+  条件: [预序 α] [无顶序 α] (x : α) (l : 滤子 β) [l.NeBot]
   证明: tendsto_const_pure.not_tendsto (disjoint_pure_atTop x)
 
 @[to_dual eventually_lt_atBot]
@@ -61,8 +61,8 @@ theorem Tendsto.eventually_gt_atTop
 @[to_dual eventually_le_atBot]
 
 中文:
-定理 Tendsto.eventually_gt_atTop
-  结论: [Preorder β] [NoTopOrder β] {f : α -> β} {l : Filter α}
+定理 收敛.eventually_gt_atTop
+  结论: [预序 β] [无顶序 β] {f : α -> β} {l : 滤子 α}
   证明: hf.eventually (eventually_gt_atTop c)
 
 @[to_dual eventually_le_atBot]
@@ -83,8 +83,8 @@ theorem Tendsto.eventually_ge_atTop
 @[to_dual]
 
 中文:
-定理 Tendsto.eventually_ge_atTop
-  结论: [Preorder β] {f : α -> β} {l : Filter α}
+定理 收敛.eventually_ge_atTop
+  结论: [预序 β] {f : α -> β} {l : 滤子 α}
   证明: hf.eventually (eventually_ge_atTop c)
 
 @[to_dual]
@@ -103,8 +103,8 @@ theorem Tendsto.eventually_ne_atTop
   proof: hf.eventually (eventually_ne_atTop c)
 
 中文:
-定理 Tendsto.eventually_ne_atTop
-  结论: [Preorder β] [NoTopOrder β] {f : α -> β} {l : Filter α}
+定理 收敛.eventually_ne_atTop
+  结论: [预序 β] [无顶序 β] {f : α -> β} {l : 滤子 α}
   证明: hf.eventually (eventually_ne_atTop c)
 -/
 protected theorem Tendsto.eventually_ne_atTop [Preorder β] [NoTopOrder β] {f : α -> β} {l : Filter α}
@@ -122,8 +122,8 @@ theorem Tendsto.eventually_ne_atTop'
 @[to_dual OrderBot.atBot_eq]
 
 中文:
-定理 Tendsto.eventually_ne_atTop'
-  结论: [Preorder β] [NoTopOrder β] {f : α -> β}
+定理 收敛.eventually_ne_atTop'
+  结论: [预序 β] [无顶序 β] {f : α -> β}
   证明: (hf.eventually_ne_atTop (f c)).mono fun _ => ne_of_apply_ne f
 
 @[to_dual OrderBot.atBot_eq]
@@ -146,9 +146,9 @@ theorem OrderTop.atTop_eq
 @[to_dual]
 
 中文:
-定理 OrderTop.atTop_eq
-  条件: (α) [PartialOrder α] [OrderTop α]
-  结论: (atTop : Filter α) = pure ⊤
+定理 有顶序.atTop_eq
+  条件: (α) [偏序 α] [有顶序 α]
+  结论: (atTop : 滤子 α) = pure ⊤
   证明: by
   rw [isTop_top.atTop_eq]; rw [Ici_top]; rw [principal_singleton]
 
@@ -172,7 +172,7 @@ theorem tendsto_atTop_pure
 
 中文:
 定理 tendsto_atTop_pure
-  条件: [PartialOrder α] [OrderTop α] (f : α -> β)
+  条件: [偏序 α] [有顶序 α] (f : α -> β)
   证明: (OrderTop.atTop_eq α).symm ▸ tendsto_pure_pure _ _
 
 @[to_dual]
@@ -197,7 +197,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  条件: [Preorder β] {m : α -> β} {f : Filter α}
+  条件: [预序 β] {m : α -> β} {f : 滤子 α}
   证明: by
   simp only [atTop, tendsto_iInf, tendsto_principal, mem_Ici]
 
@@ -223,7 +223,7 @@ theorem tendsto_atTop_mono'
 
 中文:
 定理 tendsto_atTop_mono'
-  条件: [Preorder β] (l : Filter α) ⦃f₁ f₂
+  条件: [预序 β] (l : 滤子 α) ⦃f₁ f₂
   结论: α -> β⦄ (h : f₁ <=ᶠ[l] f₂)
   证明: tendsto_atTop.2 fun b => by filter_upwards [tendsto_atTop.1 h₁ b, h] with x using le_trans
 
@@ -246,7 +246,7 @@ theorem tendsto_atTop_mono
 
 中文:
 定理 tendsto_atTop_mono
-  条件: [Preorder β] {l : Filter α} {f g : α -> β} (h : 对任意 n, f n <= g n)
+  条件: [预序 β] {l : 滤子 α} {f g : α -> β} (h : 对任意 n, f n <= g n)
   证明: tendsto_atTop_mono' l Eventually.of_forall h
 
 Depends on / 依赖: Eventually, Eventually.of_forall, of_forall, tendsto_atTop_mono
@@ -270,9 +270,9 @@ theorem _root_.StrictMono.tendsto_atTop
   proof: tendsto_atTop_mono h.id_le tendsto_id
 
 中文:
-定理 _root_.StrictMono.tendsto_atTop
-  条件: {φ : 自然数 -> 自然数} (h : StrictMono φ)
-  结论: Tendsto φ atTop atTop
+定理 _root_.严格递增.tendsto_atTop
+  条件: {φ : 自然数 -> 自然数} (h : 严格递增 φ)
+  结论: 收敛 φ atTop atTop
   证明: tendsto_atTop_mono h.id_le tendsto_id
 
 Depends on / 依赖: h.id_le, id_le, tendsto_atTop_mono, tendsto_id
@@ -305,8 +305,8 @@ theorem _root_.Monotone.upperBounds_range_comp_tendsto_atTop
 exact (hf ha).trans hc mem_range_self _
 
 中文:
-定理 _root_.Monotone.upperBounds_range_comp_tendsto_atTop
-  结论: [Preorder β] [Preorder γ]
+定理 _root_.递增.upperBounds_range_comp_tendsto_atTop
+  结论: [预序 β] [预序 γ]
   证明: by
   refine Subset.antisymm ?_ (upperBounds_mono_set <| range_comp_subset_range _ _)
   rintro c hc _ ⟨b, rfl⟩
@@ -341,8 +341,8 @@ theorem _root_.Antitone.lowerBounds_range_comp_tendsto_atTop
 @[to_dual]
 
 中文:
-定理 _root_.Antitone.lowerBounds_range_comp_tendsto_atTop
-  结论: [Preorder β] [Preorder γ]
+定理 _root_.递减.lowerBounds_range_comp_tendsto_atTop
+  结论: [预序 β] [预序 γ]
   证明: hf.dual_left.lowerBounds_range_comp_tendsto_atBot hg
 
 @[to_dual]
@@ -370,7 +370,7 @@ tendsto_principal.2
 
 中文:
 定理 tendsto_atTop_atTop_of_monotone
-  结论: [Preorder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  结论: [预序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: tendsto_iInf.2 fun b =>
 tendsto_principal.2
       let ⟨a, ha⟩ := h b
@@ -403,7 +403,7 @@ alias _root_.Monotone.tendsto_atTop_atTop := tendsto_atTop_atTop_of_monotone
 
 中文:
 定理 tendsto_atTop_atBot_of_antitone
-  结论: [Preorder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  结论: [预序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: @tendsto_atTop_atTop_of_monotone _ βᵒᵈ _ _ _ hf h
 
 @[to_dual]
@@ -434,7 +434,7 @@ le_principal_iff.2 mem_comap.2 ⟨Ici (e b), mem_atTop _, fun _ => (hm _ _).1⟩
 
 中文:
 定理 comap_embedding_atTop
-  结论: [Preorder β] [Preorder γ] {e : β -> γ}
+  结论: [预序 β] [预序 γ] {e : β -> γ}
   证明: le_antisymm
     (le_iInf fun b =>
 le_principal_iff.2 mem_comap.2 ⟨Ici (e b), mem_atTop _, fun _ => (hm _ _).1⟩)
@@ -463,7 +463,7 @@ theorem tendsto_atTop_embedding
 
 中文:
 定理 tendsto_atTop_embedding
-  结论: [Preorder β] [Preorder γ] {f : α -> β} {e : β -> γ} {l : Filter α}
+  结论: [预序 β] [预序 γ] {f : α -> β} {e : β -> γ} {l : 滤子 α}
   证明: by
   rw [← comap_embedding_atTop hm hu]; rw [tendsto_comap_iff]
 
@@ -493,7 +493,7 @@ theorem tendsto_atTop_atTop_of_monotone'
 
 中文:
 定理 tendsto_atTop_atTop_of_monotone'
-  结论: [Preorder ι] [LinearOrder α] {u : ι -> α} (h : Monotone u)
+  结论: [预序 ι] [线性序 α] {u : ι -> α} (h : 递增 u)
   证明: by
   apply h.tendsto_atTop_atTop
   intro b
@@ -526,7 +526,7 @@ theorem tendsto_atTop_of_monotone_of_filter
 
 中文:
 定理 tendsto_atTop_of_monotone_of_filter
-  结论: [Preorder ι] [Preorder α] {l : Filter ι} {u : ι -> α}
+  结论: [预序 ι] [预序 α] {l : 滤子 ι} {u : ι -> α}
   证明: h.tendsto_atTop_atTop fun b => (hu.eventually (mem_atTop b)).exists
 
 @[to_dual]
@@ -548,7 +548,7 @@ theorem tendsto_atTop_of_monotone_of_subseq
 
 中文:
 定理 tendsto_atTop_of_monotone_of_subseq
-  结论: [Preorder ι] [Preorder α] {u : ι -> α} {φ : ι' -> ι}
+  结论: [预序 ι] [预序 α] {u : ι -> α} {φ : ι' -> ι}
   证明: tendsto_atTop_of_monotone_of_filter h (tendsto_map' H)
 
 Depends on / 依赖: tendsto_atTop_of_monotone_of_filter, tendsto_map

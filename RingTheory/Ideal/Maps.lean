@@ -48,7 +48,7 @@ definition map
 
 中文:
 定义 map
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: span (f '' I)
 -/
 def map (I : Ideal R) : Ideal S :=
@@ -70,7 +70,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: [RingHomClass F R S] (I : Ideal S)
+  签名: [环态射类 F R S] (I : 理想 S)
   定义体: f ⁻¹' I
   add_mem' {x y} hx hy := by
     simp only [Set.mem_preimage, SetLike.mem_coe, map_add f] at hx hy ⊢
@@ -101,8 +101,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: [RingHomClass F R S] (I : Ideal S)
-  结论: (comap f I : Set R) = f ⁻¹' I
+  条件: [环态射类 F R S] (I : 理想 S)
+  结论: (comap f I : 集合 R) = f ⁻¹' I
   证明: rfl
 -/
 theorem coe_comap [RingHomClass F R S] (I : Ideal S) : (comap f I : Set R) = f ⁻¹' I := rfl
@@ -118,7 +118,7 @@ lemma comap_coe
 
 中文:
 引理 comap_coe
-  条件: [RingHomClass F R S] (I : Ideal S)
+  条件: [环态射类 F R S] (I : 理想 S)
   结论: I.comap (f : R ->+* S) = I.comap f
   证明: rfl
 -/
@@ -135,7 +135,7 @@ lemma map_coe
 
 中文:
 引理 map_coe
-  条件: [RingHomClass F R S] (I : Ideal R)
+  条件: [环态射类 F R S] (I : 理想 R)
   结论: I.map (f : R ->+* S) = I.map f
   证明: rfl
 -/
@@ -175,7 +175,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: (f : F) {I : Ideal R} {x : R} (h : x in I)
+  条件: (f : F) {I : 理想 R} {x : R} (h : x in I)
   结论: f x in map f I
   证明: subset_span ⟨x, h, rfl⟩
 
@@ -195,7 +195,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : F) (I : Ideal R) (x : I)
+  条件: (f : F) (I : 理想 R) (x : I)
   结论: f x in I.map f
   证明: mem_map_of_mem f x.2
 
@@ -217,7 +217,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: [RingHomClass F R S]
+  条件: [环态射类 F R S]
   结论: map f I <= K ↔ I <= comap f K
   证明: span_le.trans Set.image_subset_iff
 
@@ -242,7 +242,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: [RingHomClass F R S] {x}
+  条件: [环态射类 F R S] {x}
   结论: x in comap f K ↔ f x in K
   证明: Iff.rfl
 
@@ -265,7 +265,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  条件: [RingHomClass F R S] (h : K <= L)
+  条件: [环态射类 F R S] (h : K <= L)
   结论: comap f K <= comap f L
   证明: Set.preimage_mono fun _ hx => h hx
 
@@ -287,7 +287,7 @@ theorem comap_ne_top
 
 中文:
 定理 comap_ne_top
-  条件: [RingHomClass F R S] (hK : K != ⊤)
+  条件: [环态射类 F R S] (hK : K != ⊤)
   结论: comap f K != ⊤
   证明: (ne_top_iff_one _).2 by rw [mem_comap, map_one]; exact (ne_top_iff_one _).1 hK
 
@@ -307,8 +307,8 @@ lemma exists_ideal_comap_le_prime
   ⟨Q, hIQ, hQ, fun r hp' => of_not_not fun hp => Set.disjoint_left.mp disj hp' ⟨_, hp, rfl⟩⟩
 
 中文:
-引理 exists_ideal_comap_le_prime
-  结论: {S} [CommSemiring S] [FunLike F R S] [RingHomClass F R S]
+引理 存在_ideal_comap_le_prime
+  结论: {S} [交换半环 S] [函数状 F R S] [环态射类 F R S]
   证明: have ⟨Q, hQ, hIQ, disj⟩ := I.exists_le_prime_disjoint (P.primeCompl.map f)
     Set.disjoint_left.mpr fun _ => by rintro hI ⟨r, hp, rfl⟩; exact hp (le hI)
   ⟨Q, hIQ, hQ, fun r hp' => of_not_not fun hp => Set.disjoint_left.mp disj hp' ⟨_, hp, rfl⟩⟩
@@ -338,7 +338,7 @@ theorem map_le_comap_of_inv_on
 
 中文:
 定理 map_le_comap_of_inv_on
-  结论: [RingHomClass G S R] (g : G) (I : Ideal R)
+  结论: [环态射类 G S R] (g : G) (I : 理想 R)
   证明: by
   refine Ideal.span_le.2 ?_
   rintro x ⟨x, hx, rfl⟩
@@ -365,7 +365,7 @@ theorem comap_le_map_of_inv_on
 
 中文:
 定理 comap_le_map_of_inv_on
-  结论: [RingHomClass F R S] (g : G) (I : Ideal S)
+  结论: [环态射类 F R S] (g : G) (I : 理想 S)
   证明: fun x (hx : f x in I) => hf hx ▸ Ideal.mem_map_of_mem g hx
 
 Depends on / 依赖: Ideal.mem_map_of_mem, mem_map_of_mem
@@ -385,7 +385,7 @@ theorem map_le_comap_of_inverse
 
 中文:
 定理 map_le_comap_of_inverse
-  结论: [RingHomClass G S R] (g : G) (I : Ideal R)
+  结论: [环态射类 G S R] (g : G) (I : 理想 R)
   证明: map_le_comap_of_inv_on _ _ _ h.leftInvOn _
 
 Depends on / 依赖: h.leftInvOn, leftInvOn, map_le_comap_of_inv_on
@@ -408,7 +408,7 @@ theorem eq_bot_of_comap_eq_bot'
 
 中文:
 定理 eq_bot_of_comap_eq_bot'
-  结论: {f : R ->+* S} (hf : Function.Surjective f)
+  结论: {f : R ->+* S} (hf : 函数.满射 f)
   证明: by
   ext x
   obtain ⟨y, hy⟩ := hf x
@@ -438,7 +438,7 @@ theorem comap_le_map_of_inverse
 
 中文:
 定理 comap_le_map_of_inverse
-  条件: (g : G) (I : Ideal S) (h : Function.LeftInverse g f)
+  条件: (g : G) (I : 理想 S) (h : 函数.左逆 g f)
   证明: comap_le_map_of_inv_on _ _ _ h.leftInvOn _
 
 Depends on / 依赖: comap_le_map_of_inv_on, h.leftInvOn, leftInvOn
@@ -456,8 +456,8 @@ instance IsPrime.comap
   body: ⟨comap_ne_top _ hK.1, fun {x y} => by simp only [mem_comap, map_mul]; apply hK.2⟩
 
 中文:
-实例 IsPrime.comap
-  签名: [hK : K.IsPrime]
+实例 是素.comap
+  签名: [hK : K.是素]
   定义体: ⟨comap_ne_top _ hK.1, fun {x y} => by simp only [mem_comap, map_mul]; apply hK.2⟩
 
 Depends on / 依赖: comap_ne_top, map_mul, mem_comap
@@ -498,7 +498,7 @@ theorem gc_map_comap
 
 中文:
 定理 gc_map_comap
-  结论: GaloisConnection (Ideal.map f) (Ideal.comap f)
+  结论: GaloisConnection (理想.map f) (理想.comap f)
   证明: fun _ _ =>
   Ideal.map_le_iff_le_comap
 
@@ -520,7 +520,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: I.comap (RingHom.id R) = I
+  结论: I.comap (环态射.id R) = I
   证明: Ideal.ext fun _ => Iff.rfl
 
 @[simp]
@@ -543,7 +543,7 @@ lemma comap_idₐ
 
 中文:
 引理 comap_idₐ
-  条件: {R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S] (I : Ideal S)
+  条件: {R S : 类型} [交换半环 R] [半环 S] [代数 R S] (I : 理想 S)
   证明: I.comap_id
 
 @[simp]
@@ -567,7 +567,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: I.map (RingHom.id R) = I
+  结论: I.map (环态射.id R) = I
   证明: (gc_map_comap (RingHom.id R)).l_unique GaloisConnection.id comap_id
 
 @[simp]
@@ -588,7 +588,7 @@ lemma map_idₐ
 
 中文:
 引理 map_idₐ
-  条件: {R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S] (I : Ideal S)
+  条件: {R S : 类型} [交换半环 R] [半环 S] [代数 R S] (I : 理想 S)
   证明: I.map_id
 
 Depends on / 依赖: I.map_id, map_id
@@ -607,7 +607,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: {T : 类型} [Semiring T] {I : Ideal T} (f : R ->+* S) (g : S ->+* T)
+  条件: {T : 类型} [半环 T] {I : 理想 T} (f : R ->+* S) (g : S ->+* T)
   证明: rfl
 -/
 theorem comap_comap {T : Type*} [Semiring T] {I : Ideal T} (f : R ->+* S) (g : S ->+* T) :
@@ -624,7 +624,7 @@ lemma comap_comapₐ
 
 中文:
 引理 comap_comapₐ
-  结论: {R A B C : 类型} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B]
+  结论: {R A B C : 类型} [交换半环 R] [半环 A] [代数 R A] [半环 B]
   证明: I.comap_comap f.toRingHom g.toRingHom
 
 Depends on / 依赖: I.comap_comap, comap_comap, f.toRingHom, g.toRingHom, toRingHom
@@ -645,7 +645,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {T : 类型} [Semiring T] {I : Ideal R} (f : R ->+* S) (g : S ->+* T)
+  条件: {T : 类型} [半环 T] {I : 理想 R} (f : R ->+* S) (g : S ->+* T)
   证明: ((gc_map_comap f).compose (gc_map_comap g)).l_unique (gc_map_comap (g.comp f)) fun _ =>
     comap_comap _ _
 
@@ -666,7 +666,7 @@ lemma map_mapₐ
 
 中文:
 引理 map_mapₐ
-  结论: {R A B C : 类型} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B]
+  结论: {R A B C : 类型} [交换半环 R] [半环 A] [代数 R A] [半环 B]
   证明: I.map_map f.toRingHom g.toRingHom
 
 Depends on / 依赖: I.map_map, f.toRingHom, g.toRingHom, map_map, toRingHom
@@ -691,7 +691,7 @@ theorem map_span
 
 中文:
 定理 map_span
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: map f (span s) = span (f '' s)
   证明: by
   refine (Submodule.span_eq_of_le _ ?_ ?_).symm
@@ -798,7 +798,7 @@ theorem comap_top
 
 中文:
 定理 comap_top
-  结论: (⊤ : Ideal S).comap f = ⊤
+  结论: (⊤ : 理想 S).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 @[simp]
@@ -823,7 +823,7 @@ theorem comap_eq_top_iff
 
 中文:
 定理 comap_eq_top_iff
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   结论: I.comap f = ⊤ ↔ I = ⊤
   证明: ⟨fun h => I.eq_top_iff_one.mpr (map_one f ▸ mem_comap.mp ((I.comap f).eq_top_iff_one.mp h)),
     fun h => by rw [h, comap_top]⟩
@@ -847,7 +847,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  结论: (⊥ : Ideal R).map f = ⊥
+  结论: (⊥ : 理想 R).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 Depends on / 依赖: gc_map_comap, l_bot
@@ -966,7 +966,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: (K : ι -> Ideal R)
+  条件: (K : ι -> 理想 R)
   结论: (iSup K).map f = ⨆ i, (K i).map f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).l_iSup
 
@@ -986,7 +986,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: (K : ι -> Ideal S)
+  条件: (K : ι -> 理想 S)
   结论: (iInf K).comap f = ⨅ i, (K i).comap f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).u_iInf
 
@@ -1006,7 +1006,7 @@ theorem comap_finsetInf
 
 中文:
 定理 comap_finsetInf
-  条件: {ι : 类型} (s : Finset ι) (K : ι -> Ideal S)
+  条件: {ι : 类型} (s : 有限集 ι) (K : ι -> 理想 S)
   证明: by
   simp [Finset.inf_eq_iInf, comap_iInf]
 
@@ -1027,8 +1027,8 @@ theorem map_sSup
 
 中文:
 定理 map_sSup
-  条件: (s : Set (Ideal R))
-  结论: (sSup s).map f = ⨆ I in s, (I : Ideal R).map f
+  条件: (s : 集合 (理想 R))
+  结论: (sSup s).map f = ⨆ I in s, (I : 理想 R).map f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).l_sSup
 
 Depends on / 依赖: GaloisConnection, gc_map_comap, l_sSup
@@ -1047,8 +1047,8 @@ theorem comap_sInf
 
 中文:
 定理 comap_sInf
-  条件: (s : Set (Ideal S))
-  结论: (sInf s).comap f = ⨅ I in s, (I : Ideal S).comap f
+  条件: (s : 集合 (理想 S))
+  结论: (sInf s).comap f = ⨅ I in s, (I : 理想 S).comap f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).u_sInf
 
 Depends on / 依赖: GaloisConnection, gc_map_comap, u_sInf
@@ -1067,7 +1067,7 @@ theorem comap_sInf'
 
 中文:
 定理 comap_sInf'
-  条件: (s : Set (Ideal S))
+  条件: (s : 集合 (理想 S))
   结论: (sInf s).comap f = ⨅ I in comap f '' s, I
   证明: _root_.trans (comap_sInf f s) (by rw [iInf_image])
 
@@ -1087,8 +1087,8 @@ theorem comap_isPrime
 
 中文:
 定理 comap_isPrime
-  条件: [H : IsPrime K]
-  结论: IsPrime (comap f K)
+  条件: [H : 是素 K]
+  结论: 是素 (comap f K)
   证明: H.comap f
 
 Depends on / 依赖: H.comap
@@ -1171,7 +1171,7 @@ theorem smul_restrictScalars
 
 中文:
 定理 smul_restrictScalars
-  结论: {R S M} [CommSemiring R] [CommSemiring S]
+  结论: {R S M} [交换半环 R] [交换半环 S]
   证明: by
   simp_rw [map, Submodule.span_smul_eq, ← Submodule.coe_set_smul,
     Submodule.set_smul_eq_iSup, ← element_smul_restrictScalars, iSup_image]
@@ -1203,7 +1203,7 @@ congrArg _ Eq.trans (Ideal.smul_eq_mul _ _) (Ideal.mul_top _)
 
 中文:
 定理 smul_top_eq_map
-  结论: {R S : 类型} [CommSemiring R] [CommSemiring S] [Algebra R S]
+  结论: {R S : 类型} [交换半环 R] [交换半环 S] [代数 R S]
   证明: Eq.trans (smul_restrictScalars I (⊤ : Ideal S)).symm
 congrArg _ Eq.trans (Ideal.smul_eq_mul _ _) (Ideal.mul_top _)
 
@@ -1227,7 +1227,7 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  结论: {R S : 类型} [Semiring R] [Semiring S] [Module R S]
+  结论: {R S : 类型} [半环 R] [半环 S] [模 R S]
   证明: rfl
 -/
 theorem coe_restrictScalars {R S : Type*} [Semiring R] [Semiring S] [Module R S]
@@ -1247,7 +1247,7 @@ theorem restrictScalars_mul
 
 中文:
 定理 restrictScalars_mul
-  结论: {R S : 类型} [Semiring R] [Semiring S] [Module R S]
+  结论: {R S : 类型} [半环 R] [半环 S] [模 R S]
   证明: rfl
 -/
 theorem restrictScalars_mul {R S : Type*} [Semiring R] [Semiring S] [Module R S]
@@ -1277,7 +1277,7 @@ theorem map_comap_of_surjective
 
 中文:
 定理 map_comap_of_surjective
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: map f (comap f I) = I
   证明: le_antisymm (map_le_iff_le_comap.2 le_rfl) fun s hsi =>
     let ⟨r, hfrs⟩ := hf s
@@ -1301,7 +1301,7 @@ definition giMapComap
 
 中文:
 定义 giMapComap
-  签名: : GaloisInsertion (map f) (comap f)
+  签名: : Galois嵌入 (map f) (comap f)
   定义体: GaloisInsertion.monotoneIntro (gc_map_comap f).monotone_u (gc_map_comap f).monotone_l
     (fun _ => le_comap_map) (map_comap_of_surjective _ hf)
 
@@ -1321,7 +1321,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  结论: Surjective (map f)
+  结论: 满射 (map f)
   证明: (giMapComap f hf).l_surjective
 
 Depends on / 依赖: giMapComap, l_surjective
@@ -1339,7 +1339,7 @@ theorem comap_injective_of_surjective
 
 中文:
 定理 comap_injective_of_surjective
-  结论: Injective (comap f)
+  结论: 单射 (comap f)
   证明: (giMapComap f hf).u_injective
 
 Depends on / 依赖: giMapComap, u_injective
@@ -1358,7 +1358,7 @@ theorem map_sup_comap_of_surjective
 
 中文:
 定理 map_sup_comap_of_surjective
-  条件: (I J : Ideal S)
+  条件: (I J : 理想 S)
   结论: (I.comap f ⊔ J.comap f).map f = I ⊔ J
   证明: (giMapComap f hf).l_sup_u _ _
 
@@ -1378,7 +1378,7 @@ theorem map_iSup_comap_of_surjective
 
 中文:
 定理 map_iSup_comap_of_surjective
-  条件: (K : ι -> Ideal S)
+  条件: (K : ι -> 理想 S)
   结论: (⨆ i, (K i).comap f).map f = iSup K
   证明: (giMapComap f hf).l_iSup_u _
 
@@ -1398,7 +1398,7 @@ theorem map_inf_comap_of_surjective
 
 中文:
 定理 map_inf_comap_of_surjective
-  条件: (I J : Ideal S)
+  条件: (I J : 理想 S)
   结论: (I.comap f ⊓ J.comap f).map f = I ⊓ J
   证明: (giMapComap f hf).l_inf_u _ _
 
@@ -1418,7 +1418,7 @@ theorem map_iInf_comap_of_surjective
 
 中文:
 定理 map_iInf_comap_of_surjective
-  条件: (K : ι -> Ideal S)
+  条件: (K : ι -> 理想 S)
   结论: (⨅ i, (K i).comap f).map f = iInf K
   证明: (giMapComap f hf).l_iInf_u _
 
@@ -1443,7 +1443,7 @@ theorem mem_image_of_mem_map_of_surjective
 
 中文:
 定理 mem_image_of_mem_map_of_surjective
-  条件: {I : Ideal R} {y} (H : y in map f I)
+  条件: {I : 理想 R} {y} (H : y in map f I)
   结论: y in f '' I
   证明: Submodule.span_induction (hx := H) (fun _ => id) ⟨0, I.zero_mem, map_zero f⟩
     (fun _ _ _ _ ⟨x1, hx1i, hxy1⟩ ⟨x2, hx2i, hxy2⟩ =>
@@ -1474,7 +1474,7 @@ theorem mem_map_iff_of_surjective
 
 中文:
 定理 mem_map_iff_of_surjective
-  条件: {I : Ideal R} {y}
+  条件: {I : 理想 R} {y}
   结论: y in map f I ↔ 存在 x, x in I ∧ f x = y
   证明: ⟨fun h => (Set.mem_image _ _ _).2 (mem_image_of_mem_map_of_surjective f hf h), fun ⟨_, hx⟩ =>
     hx.right ▸ mem_map_of_mem f hx.left⟩
@@ -1515,7 +1515,7 @@ theorem map_comap_eq_self_of_equiv
 
 中文:
 定理 map_comap_eq_self_of_equiv
-  结论: {E : 类型} [EquivLike E R S] [RingEquivClass E R S] (e : E)
+  结论: {E : 类型} [等价状 E R S] [环等价类 E R S] (e : E)
   证明: I.map_comap_of_surjective e (EquivLike.surjective e)
 
 Depends on / 依赖: EquivLike, EquivLike.surjective, I.map_comap_of_surjective, map_comap_of_surjective, surjective
@@ -1534,7 +1534,7 @@ theorem map_eq_submodule_map
 
 中文:
 定理 map_eq_submodule_map
-  条件: (f : R ->+* S) [h : RingHomSurjective f] (I : Ideal R)
+  条件: (f : R ->+* S) [h : RingHomSurjective f] (I : 理想 R)
   证明: Submodule.ext fun _ => mem_map_iff_of_surjective f h.1
 
 Depends on / 依赖: Submodule, Submodule.ext, mem_map_iff_of_surjective
@@ -1570,8 +1570,8 @@ theorem IsMaximal.comap_piEvalRingHom
   obtain rfl | ne := eq_
 
 中文:
-定理 IsMaximal.comap_piEvalRingHom
-  结论: {ι : 类型} {R : ι -> 类型} [对任意 i, Semiring (R i)]
+定理 是极大.comap_piEvalRingHom
+  结论: {ι : 类型} {R : ι -> 类型} [对任意 i, 半环 (R i)]
   证明: by
   refine isMaximal_iff.mpr ⟨I.ne_top_iff_one.mp h.ne_top, fun J x le hxI hxJ => ?_⟩
   have ⟨r, y, hy, eq⟩ := h.exists_inv hxI
@@ -1608,7 +1608,7 @@ theorem comap_le_comap_iff_of_surjective
 
 中文:
 定理 comap_le_comap_iff_of_surjective
-  条件: (hf : Function.Surjective f) (I J : Ideal S)
+  条件: (hf : 函数.满射 f) (I J : 理想 S)
   证明: ⟨fun h => (map_comap_of_surjective f hf I).symm.le.trans (map_le_of_le_comap h), fun h =>
     le_comap_of_map_le ((map_comap_of_surjective f hf I).le.trans h)⟩
 
@@ -1633,7 +1633,7 @@ definition orderEmbeddingOfSurjective
 
 中文:
 定义 orderEmbeddingOfSurjective
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: comap f
   inj' _ _ eq := SetLike.ext' (Set.preimage_injective.mpr hf <| SetLike.ext'_iff.mp eq)
   map_rel_iff' := comap_le_comap_iff_of_surjective _ hf ..
@@ -1654,7 +1654,7 @@ theorem map_eq_top_or_isMaximal_of_surjective
 
 中文:
 定理 map_eq_top_or_isMaximal_of_surjective
-  结论: (hf : Function.Surjective f) {I : Ideal R}
+  结论: (hf : 函数.满射 f) {I : 理想 R}
   证明: or_iff_not_imp_left.2 fun ne_top => ⟨⟨ne_top, fun _J hJ => comap_injective_of_surjective f hf
     H.1.2 _ (le_comap_map.trans_lt <| (orderEmbeddingOfSurjective f hf).strictMono hJ)⟩⟩
 
@@ -1688,7 +1688,7 @@ theorem map_evalRingHom_pi
 
 中文:
 定理 map_evalRingHom_pi
-  条件: {I : Π i, Ideal (R i)} (i : ι)
+  条件: {I : Π i, 理想 (R i)} (i : ι)
   证明: by
   ext r
   rw [mem_map_iff_of_surjective (Pi.evalRingHom R i) (Function.surjective_eval _)]
@@ -1728,7 +1728,7 @@ definition piOrderIso
 
 中文:
 定义 piOrderIso
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: .symm
   { toFun := pi
     invFun I i := I.map (Pi.evalRingHom R i)
@@ -1764,8 +1764,8 @@ instance [Finite
       (Submodule.IsPrincipal.span_singleton_generator _).symm)).trans pi_span⟩
 
 中文:
-实例 [Finite
-  签名: ι] [对任意 i, IsPrincipalIdealRing (R i)] : IsPrincipalIdealRing (Π i, R i) where
+实例 [有限
+  签名: ι] [对任意 i, 是主理想环 (R i)] : 是主理想环 (Π i, R i) where
   定义体: by
     rw [← piOrderIso.symm_apply_apply I]
     exact ⟨_, congr(pi $(funext fun i =>
@@ -1797,7 +1797,7 @@ theorem comap_bot_le_of_injective
 
 中文:
 定理 comap_bot_le_of_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   结论: comap f ⊥ <= I
   证明: by
   refine le_trans (fun x hx => ?_) bot_le
@@ -1822,8 +1822,8 @@ theorem comap_bot_of_injective
 
 中文:
 定理 comap_bot_of_injective
-  条件: (hf : Function.Injective f)
-  结论: Ideal.comap f ⊥ = ⊥
+  条件: (hf : 函数.单射 f)
+  结论: 理想.comap f ⊥ = ⊥
   证明: le_bot_iff.mp (Ideal.comap_bot_le_of_injective f hf)
 
 Depends on / 依赖: Ideal.comap_bot_le_of_injective, comap_bot_le_of_injective, le_bot_iff, le_bot_iff.mp
@@ -1846,7 +1846,7 @@ theorem map_of_equiv
 
 中文:
 定理 map_of_equiv
-  条件: {I : Ideal R} (f : R ≃+* S)
+  条件: {I : 理想 R} (f : R ≃+* S)
   证明: by
   rw [← RingEquiv.toRingHom_eq_coe]; rw [← RingEquiv.toRingHom_eq_coe]; rw [map_map]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.symm_comp]; rw [map_id]
 
@@ -1870,7 +1870,7 @@ theorem comap_of_equiv
 
 中文:
 定理 comap_of_equiv
-  条件: {I : Ideal R} (f : R ≃+* S)
+  条件: {I : 理想 R} (f : R ≃+* S)
   证明: by
   rw [← RingEquiv.toRingHom_eq_coe]; rw [← RingEquiv.toRingHom_eq_coe]; rw [comap_comap]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.symm_comp]; rw [comap_id]
 
@@ -1892,7 +1892,7 @@ theorem map_comap_of_equiv
 
 中文:
 定理 map_comap_of_equiv
-  条件: {I : Ideal R} (f : R ≃+* S)
+  条件: {I : 理想 R} (f : R ≃+* S)
   结论: I.map (f : R ->+* S) = I.comap f.symm
   证明: le_antisymm (Ideal.map_le_comap_of_inverse _ _ _ (Equiv.left_inv' _))
     (Ideal.comap_le_map_of_inverse _ _ _ (Equiv.right_inv' _))
@@ -1916,7 +1916,7 @@ theorem comap_symm
 
 中文:
 定理 comap_symm
-  条件: {I : Ideal R} (f : R ≃+* S)
+  条件: {I : 理想 R} (f : R ≃+* S)
   结论: I.comap f.symm = I.map f
   证明: (map_comap_of_equiv f).symm
 
@@ -1940,7 +1940,7 @@ theorem map_symm
 
 中文:
 定理 map_symm
-  条件: {I : Ideal S} (f : R ≃+* S)
+  条件: {I : 理想 S} (f : R ≃+* S)
   结论: I.map f.symm = I.comap f
   证明: map_comap_of_equiv (RingEquiv.symm f)
 
@@ -1965,7 +1965,7 @@ theorem symm_apply_mem_of_equiv_iff
 
 中文:
 定理 symm_apply_mem_of_equiv_iff
-  条件: {I : Ideal R} {f : R ≃+* S} {y : S}
+  条件: {I : 理想 R} {f : R ≃+* S} {y : S}
   证明: by
   rw [← comap_symm]; rw [mem_comap]
 
@@ -1989,7 +1989,7 @@ theorem apply_mem_of_equiv_iff
 
 中文:
 定理 apply_mem_of_equiv_iff
-  条件: {I : Ideal R} {f : R ≃+* S} {x : R}
+  条件: {I : 理想 R} {f : R ≃+* S} {x : R}
   证明: by
   rw [← comap_symm]; rw [Ideal.mem_comap]; rw [f.symm_apply_apply]
 
@@ -2015,7 +2015,7 @@ theorem mem_map_of_equiv
 
 中文:
 定理 mem_map_of_equiv
-  结论: {E : 类型} [EquivLike E R S] [RingEquivClass E R S] (e : E)
+  结论: {E : 类型} [等价状 E R S] [环等价类 E R S] (e : E)
   证明: by
   constructor
   · intro h
@@ -2047,7 +2047,7 @@ lemma map_primeCompl_comap_of_surjective
 
 中文:
 引理 map_primeCompl_comap_of_surjective
-  条件: (hf : Function.Surjective f) (p : Ideal S) [p.IsPrime]
+  条件: (hf : 函数.满射 f) (p : 理想 S) [p.是素]
   证明: by
   rw [SetLike.ext_iff]; rw [hf.forall]
   grind [Submonoid.mem_map, mem_primeCompl_iff, mem_comap]
@@ -2068,8 +2068,8 @@ lemma _root_.RingEquiv.map_primeCompl_comap_eq
   proof: p.map_primeCompl_comap_of_surjective e e.surjective
 
 中文:
-引理 _root_.RingEquiv.map_primeCompl_comap_eq
-  条件: (e : R ≃+* S) (p : Ideal S) [p.IsPrime]
+引理 _root_.环等价.map_primeCompl_comap_eq
+  条件: (e : R ≃+* S) (p : 理想 S) [p.是素]
   证明: p.map_primeCompl_comap_of_surjective e e.surjective
 
 Depends on / 依赖: e.surjective, map_primeCompl_comap_of_surjective, p.map_primeCompl_comap_of_surjective, surjective
@@ -2103,7 +2103,7 @@ definition relIsoOfBijective
 
 中文:
 定义 relIsoOfBijective
-  签名: : Ideal S ≃o Ideal R where
+  签名: : 理想 S ≃o 理想 R where
   定义体: comap f
   invFun := map f
   left_inv := map_comap_of_surjective _ hf.2
@@ -2198,7 +2198,7 @@ theorem isMaximal_map_iff_of_bijective
 
 中文:
 定理 isMaximal_map_iff_of_bijective
-  结论: IsMaximal (map f I) ↔ IsMaximal I
+  结论: 是极大 (map f I) ↔ 是极大 I
   证明: by
   simpa only [isMaximal_def] using! (relIsoOfBijective _ hf).symm.isCoatom_iff _
 
@@ -2221,7 +2221,7 @@ alias ⟨_, IsMaximal.comap_bijective⟩ := isMaximal_comap_iff_of_bijective
 
 中文:
 定理 isMaximal_comap_iff_of_bijective
-  结论: IsMaximal (comap f K) ↔ IsMaximal K
+  结论: 是极大 (comap f K) ↔ 是极大 K
   证明: by
   simpa only [isMaximal_def] using! (relIsoOfBijective _ hf).isCoatom_iff _
 
@@ -2246,7 +2246,7 @@ instance map_isMaximal_of_equiv
 
 中文:
 实例 map_isMaximal_of_equiv
-  签名: {E : 类型} [EquivLike E R S] [RingEquivClass E R S] (e : E)
+  签名: {E : 类型} [等价状 E R S] [环等价类 E R S] (e : E)
   定义体: hp.map_bijective e (EquivLike.bijective e)
 
 Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, hp.map_bijective, map_bijective
@@ -2265,7 +2265,7 @@ instance comap_isMaximal_of_equiv
 
 中文:
 实例 comap_isMaximal_of_equiv
-  签名: {E : 类型} [EquivLike E R S] [RingEquivClass E R S] (e : E)
+  签名: {E : 类型} [等价状 E R S] [环等价类 E R S] (e : E)
   定义体: hp.comap_bijective e (EquivLike.bijective e)
 
 Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, comap_bijective, hp.comap_bijective
@@ -2285,7 +2285,7 @@ theorem isMaximal_iff_of_bijective
 
 中文:
 定理 isMaximal_iff_of_bijective
-  结论: (⊥ : Ideal R).IsMaximal ↔ (⊥ : Ideal S).IsMaximal
+  结论: (⊥ : 理想 R).是极大 ↔ (⊥ : 理想 S).是极大
   证明: ⟨fun h => map_bot (f := f) ▸ h.map_bijective f hf, fun h => have e := RingEquiv.ofBijective f hf
     map_bot (f := e.symm) ▸ h.map_bijective _ e.symm.bijective⟩
 
@@ -2322,7 +2322,7 @@ theorem comap_map_of_surjective
 
 中文:
 定理 comap_map_of_surjective
-  条件: (hf : Function.Surjective f) (I : Ideal R)
+  条件: (hf : 函数.满射 f) (I : 理想 R)
   证明: le_antisymm
     (fun r h =>
       let ⟨s, hsi, hfsr⟩ := mem_image_of_mem_map_of_surjective f hf h
@@ -2359,7 +2359,7 @@ theorem coheight_comap_of_surjective
 
 中文:
 定理 coheight_comap_of_surjective
-  条件: (hf : Function.Surjective f) (I : Ideal S)
+  条件: (hf : 函数.满射 f) (I : 理想 S)
   证明: by
   let φ := orderEmbeddingOfSurjective f hf
   refine (Order.coheight_eq_of_strictMono φ φ.strictMono (fun J K h => ⟨K.map f, ?_, ?_⟩) I).symm
@@ -2397,7 +2397,7 @@ Subtype.ext
 
 中文:
 定义 relIsoOfSurjective
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: ⟨comap f J, comap_mono bot_le⟩
   invFun I := map f I.1
   left_inv J := map_comap_of_surjective f hf J
@@ -2440,7 +2440,7 @@ theorem comap_isMaximal_of_surjective
 
 中文:
 定理 comap_isMaximal_of_surjective
-  条件: (hf : Function.Surjective f) {K : Ideal S} [H : IsMaximal K]
+  条件: (hf : 函数.满射 f) {K : 理想 S} [H : 是极大 K]
   证明: by
   refine ⟨⟨comap_ne_top _ H.1.1, fun J hJ => ?_⟩⟩
   suffices map f J = ⊤ by
@@ -2494,7 +2494,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  结论: {R} [Semiring R] [FunLike F R S] [RingHomClass F R S]
+  结论: {R} [半环 R] [函数状 F R S] [环态射类 F R S]
   证明: le_antisymm
     (map_le_iff_le_comap.2 <|
       mul_le.2 fun r hri s hsj =>
@@ -2531,7 +2531,7 @@ definition mapHom
 
 中文:
 定义 mapHom
-  签名: : Ideal R ->+* Ideal S where
+  签名: : 理想 R ->+* 理想 S where
   定义体: map f
   map_mul' := Ideal.map_mul f
   map_one' := by simp only [one_eq_top, Ideal.map_top f]
@@ -2708,7 +2708,7 @@ lemma disjoint_map_primeCompl_iff_comap_le
 
 中文:
 引理 disjoint_map_primeCompl_iff_comap_le
-  结论: {S : 类型} [Semiring S] {f : R ->+* S}
+  结论: {S : 类型} [半环 S] {f : R ->+* S}
   证明: (@Set.disjoint_image_right _ _ f p.primeCompl I).trans disjoint_compl_right_iff
 
 Depends on / 依赖: Set.disjoint_image_right, disjoint_compl_right_iff, disjoint_image_right, p.primeCompl, primeCompl
@@ -2735,7 +2735,7 @@ lemma comap_map_eq_self_iff_of_isPrime
 
 中文:
 引理 comap_map_eq_self_iff_of_isPrime
-  结论: {S : 类型} [CommSemiring S] {f : R ->+* S}
+  结论: {S : 类型} [交换半环 S] {f : R ->+* S}
   证明: by
   refine ⟨fun hp => ?_, ?_⟩
   · obtain ⟨q, hq₁, hq₂, hq₃⟩ := Ideal.exists_le_prime_disjoint _ _
@@ -2768,7 +2768,7 @@ theorem comap_map_eq_self_of_isMaximal
 
 中文:
 定理 comap_map_eq_self_of_isMaximal
-  结论: (f : R ->+* S) {p : Ideal R} [hP' : p.IsMaximal]
+  结论: (f : R ->+* S) {p : 理想 R} [hP' : p.是极大]
   证明: (IsCoatom.le_iff_eq hP'.out (comap_ne_top _ hP)).mp le_comap_map
 
 Depends on / 依赖: IsCoatom, IsCoatom.le_iff_eq, comap_ne_top, le_comap_map, le_iff_eq
@@ -2803,7 +2803,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: : Ideal R
+  签名: : 理想 R
   定义体: Ideal.comap f ⊥
 
 Depends on / 依赖: Ideal.comap
@@ -2841,7 +2841,7 @@ theorem ker_eq
 
 中文:
 定理 ker_eq
-  结论: (ker f : Set R) = Set.preimage f {0}
+  结论: (ker f : 集合 R) = 集合.原像 f {0}
   证明: rfl
 -/
 theorem ker_eq : (ker f : Set R) = Set.preimage f {0} :=
@@ -2859,7 +2859,7 @@ theorem ker_eq_comap_bot
 中文:
 定理 ker_eq_comap_bot
   条件: (f : F)
-  结论: ker f = Ideal.comap f ⊥
+  结论: ker f = 理想.comap f ⊥
   证明: rfl
 -/
 theorem ker_eq_comap_bot (f : F) : ker f = Ideal.comap f ⊥ :=
@@ -2900,7 +2900,7 @@ theorem one_notMem_ker
 
 中文:
 定理 one_notMem_ker
-  条件: [Nontrivial S] (f : F)
+  条件: [非平凡 S] (f : F)
   结论: (1 : R) ∉ ker f
   证明: by
   rw [mem_ker]; rw [map_one]
@@ -2923,7 +2923,7 @@ theorem ker_ne_top
 
 中文:
 定理 ker_ne_top
-  条件: [Nontrivial S] (f : F)
+  条件: [非平凡 S] (f : F)
   结论: ker f != ⊤
   证明: (Ideal.ne_top_iff_one _).mpr one_notMem_ker f
 
@@ -2943,7 +2943,7 @@ lemma ker_eq_top_of_subsingleton
 
 中文:
 引理 ker_eq_top_of_subsingleton
-  条件: [Subsingleton S] (f : F)
+  条件: [子单例 S] (f : F)
   结论: ker f = ⊤
   证明: eq_top_iff.mpr fun _ _ => Subsingleton.elim _ _
 
@@ -2965,8 +2965,8 @@ lemma _root_.Pi.ker_ringHom
 @[simp]
 
 中文:
-引理 _root_.Pi.ker_ringHom
-  结论: {ι : 类型} {R : ι -> 类型} [对任意 i, Semiring (R i)]
+引理 _root_.依赖函数类型.ker_ringHom
+  结论: {ι : 类型} {R : ι -> 类型} [对任意 i, 半环 (R i)]
   证明: by
   ext x
   simp [mem_ker, funext_iff]
@@ -3057,7 +3057,7 @@ theorem ker_equiv
 
 中文:
 定理 ker_equiv
-  条件: {F' : 类型} [EquivLike F' R S] [RingEquivClass F' R S] (f : F')
+  条件: {F' : 类型} [等价状 F' R S] [环等价类 F' R S] (f : F')
   证明: by
   ext; simp
 -/
@@ -3104,7 +3104,7 @@ theorem injective_iff_ker_eq_bot
 
 中文:
 定理 injective_iff_ker_eq_bot
-  结论: Function.Injective f ↔ ker f = ⊥
+  结论: 函数.单射 f ↔ ker f = ⊥
   证明: by
   rw [SetLike.ext'_iff]; rw [ker_eq]; rw [Set.ext_iff]
   exact injective_iff_map_eq_zero' f
@@ -3146,7 +3146,7 @@ lemma ker_comp_of_injective
 
 中文:
 引理 ker_comp_of_injective
-  条件: [Semiring T] (g : T ->+* R) {f : R ->+* S} (hf : Function.Injective f)
+  条件: [半环 T] (g : T ->+* R) {f : R ->+* S} (hf : 函数.单射 f)
   证明: by
   rw [← RingHom.comap_ker]; rw [(injective_iff_ker_eq_bot f).mp hf]; rw [RingHom.ker]
 
@@ -3165,8 +3165,8 @@ theorem _root_.AlgHom.ker_coe_equiv
   proof: RingHom.ker_coe_equiv (e.toRingEquiv)
 
 中文:
-定理 _root_.AlgHom.ker_coe_equiv
-  结论: {R A B : 类型} [CommSemiring R] [Semiring A]
+定理 _root_.代数态射.ker_coe_equiv
+  结论: {R A B : 类型} [交换半环 R] [半环 A]
   证明: RingHom.ker_coe_equiv (e.toRingEquiv)
 -/
 @[simp] theorem _root_.AlgHom.ker_coe_equiv {R A B : Type*} [CommSemiring R] [Semiring A]
@@ -3236,7 +3236,7 @@ theorem ker_isPrime
 
 中文:
 定理 ker_isPrime
-  结论: {F : 类型} [Semiring R] [Semiring S] [IsDomain S]
+  结论: {F : 类型} [半环 R] [半环 S] [是整环 S]
   证明: inferInstanceAs (Ideal.comap f ⊥).IsPrime
 
 Depends on / 依赖: Ideal.comap, IsPrime
@@ -3257,7 +3257,7 @@ theorem ker_isMaximal_of_surjective
 
 中文:
 定理 ker_isMaximal_of_surjective
-  结论: {R K F : 类型} [Ring R] [DivisionRing K]
+  结论: {R K F : 类型} [环 R] [除环 K]
   证明: have := Ideal.bot_isMaximal (K := K)
   Ideal.comap_isMaximal_of_surjective _ hf
 
@@ -3288,8 +3288,8 @@ definition Module.annihilator
   body: RingHom.ker (Module.toAddMonoidEnd R M)
 
 中文:
-定义 Module.annihilator
-  签名: : Ideal R
+定义 模.annihilator
+  签名: : 理想 R
   定义体: RingHom.ker (Module.toAddMonoidEnd R M)
 
 Depends on / 依赖: Module, Module.toAddMonoidEnd, RingHom, RingHom.ker, toAddMonoidEnd
@@ -3306,9 +3306,9 @@ theorem Module.mem_annihilator
   proof: ⟨fun h => (congr($h ·)), (AddMonoidHom.ext ·)⟩
 
 中文:
-定理 Module.mem_annihilator
+定理 模.mem_annihilator
   条件: {r}
-  结论: r in Module.annihilator R M ↔ 对任意 m : M, r • m = 0
+  结论: r in 模.annihilator R M ↔ 对任意 m : M, r • m = 0
   证明: ⟨fun h => (congr($h ·)), (AddMonoidHom.ext ·)⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext
@@ -3326,8 +3326,8 @@ lemma Module.mem_annihilator_iff_lsmul_eq_zero
   simp [Module.mem_annihilator, LinearMap.ext_iff]
 
 中文:
-引理 Module.mem_annihilator_iff_lsmul_eq_zero
-  结论: {R : 类型} [CommSemiring R]
+引理 模.mem_annihilator_iff_lsmul_eq_zero
+  结论: {R : 类型} [交换半环 R]
   证明: by
   simp [Module.mem_annihilator, LinearMap.ext_iff]
 
@@ -3350,8 +3350,8 @@ theorem LinearMap.annihilator_le_of_injective
   rw [Module.mem_annihilator] at h ⊢; exact fun m => hf (by rw [map_smul, h, f.map_zero])
 
 中文:
-定理 LinearMap.annihilator_le_of_injective
-  条件: (f : M ->ₗ[R] M') (hf : Function.Injective f)
+定理 线性映射.annihilator_le_of_injective
+  条件: (f : M ->ₗ[R] M') (hf : 函数.单射 f)
   证明: fun x h => by
   rw [Module.mem_annihilator] at h ⊢; exact fun m => hf (by rw [map_smul, h, f.map_zero])
 
@@ -3373,7 +3373,7 @@ theorem LinearMap.annihilator_le_of_surjective
   rw [← map_smul]; rw [h]; rw [f.map_zero]
 
 中文:
-定理 LinearMap.annihilator_le_of_surjective
+定理 线性映射.annihilator_le_of_surjective
   结论: (f : M ->ₗ[R] M')
   证明: fun x h => by
   rw [Module.mem_annihilator] at h ⊢
@@ -3397,7 +3397,7 @@ theorem LinearEquiv.annihilator_eq
   proof: (e.annihilator_le_of_surjective e.surjective).antisymm (e.annihilator_le_of_injective e.injective)
 
 中文:
-定理 LinearEquiv.annihilator_eq
+定理 线性等价.annihilator_eq
   条件: (e : M ≃ₗ[R] M')
   证明: (e.annihilator_le_of_surjective e.surjective).antisymm (e.annihilator_le_of_injective e.injective)
 
@@ -3418,8 +3418,8 @@ theorem Module.comap_annihilator
   simp [mem_annihilator]
 
 中文:
-定理 Module.comap_annihilator
-  结论: {R₀} [CommSemiring R₀] [Module R₀ M]
+定理 模.comap_annihilator
+  结论: {R₀} [交换半环 R₀] [模 R₀ M]
   证明: by
   ext x
   simp [mem_annihilator]
@@ -3447,8 +3447,8 @@ lemma Module.annihilator_eq_bot
   · exact @H a 0 (by simp [Module.mem_annihilator.mp ha])
 
 中文:
-引理 Module.annihilator_eq_bot
-  条件: {R M} [Ring R] [AddCommGroup M] [Module R M]
+引理 模.annihilator_eq_bot
+  条件: {R M} [环 R] [加法交换群 M] [模 R M]
   证明: by
   rw [← le_bot_iff]
   refine ⟨fun H => ⟨fun {r s} H' => ?_⟩, fun ⟨H⟩ {a} ha => ?_⟩
@@ -3480,8 +3480,8 @@ theorem Module.annihilator_eq_top_iff
     fun _ => top_le_iff.mp fun _ _ => mem_annihilator.mpr fun _ => Subsingleton.elim _ _⟩
 
 中文:
-定理 Module.annihilator_eq_top_iff
-  结论: annihilator R M = ⊤ ↔ Subsingleton M
+定理 模.annihilator_eq_top_iff
+  结论: annihilator R M = ⊤ ↔ 子单例 M
   证明: ⟨fun h => ⟨fun m m' => by
       rw [← one_smul R m]; rw [← one_smul R m']
       simp_rw [mem_annihilator.mp (h ▸ Submodule.mem_top)]⟩,
@@ -3507,7 +3507,7 @@ theorem Module.annihilator_prod
     Prod.forall, Prod.smul_mk, Prod.mk_eq_zero, forall_and_left, ← forall_and_right]
 
 中文:
-定理 Module.annihilator_prod
+定理 模.annihilator_prod
   结论: annihilator R (M × M') = annihilator R M ⊓ annihilator R M'
   证明: by
   ext
@@ -3535,8 +3535,8 @@ theorem Module.annihilator_finsupp
   · intro m; ext i; exact h _
 
 中文:
-定理 Module.annihilator_finsupp
-  条件: {ι : 类型} [Nonempty ι]
+定理 模.annihilator_finsupp
+  条件: {ι : 类型} [非空 ι]
   证明: by
   ext r; simp_rw [mem_annihilator]
   constructor <;> intro h
@@ -3572,7 +3572,7 @@ theorem Module.annihilator_dfinsupp
   · intro m; ext i; exact h i _
 
 中文:
-定理 Module.annihilator_dfinsupp
+定理 模.annihilator_dfinsupp
   结论: annihilator R (Π₀ i, M i) = ⨅ i, annihilator R (M i)
   证明: by
   ext r; simp only [mem_annihilator, Ideal.mem_iInf]
@@ -3604,7 +3604,7 @@ theorem Module.annihilator_pi
   · intro m; ext i; exact h i _
 
 中文:
-定理 Module.annihilator_pi
+定理 模.annihilator_pi
   结论: annihilator R (Π i, M i) = ⨅ i, annihilator R (M i)
   证明: by
   ext r; simp only [mem_annihilator, Ideal.mem_iInf]
@@ -3636,7 +3636,7 @@ abbreviation annihilator
 
 中文:
 缩写 annihilator
-  签名: (N : Submodule R M)
+  签名: (N : 子模 R M)
   定义体: Module.annihilator R N
 
 Depends on / 依赖: Module, Module.annihilator, annihilator
@@ -3654,7 +3654,7 @@ theorem annihilator_top
 
 中文:
 定理 annihilator_top
-  结论: (⊤ : Submodule R M).annihilator = Module.annihilator R M
+  结论: (⊤ : 子模 R M).annihilator = 模.annihilator R M
   证明: topEquiv.annihilator_eq
 
 Depends on / 依赖: annihilator_eq, topEquiv, topEquiv.annihilator_eq
@@ -3696,7 +3696,7 @@ theorem annihilator_bot
 
 中文:
 定理 annihilator_bot
-  结论: (⊥ : Submodule R M).annihilator = ⊤
+  结论: (⊥ : 子模 R M).annihilator = ⊤
   证明: top_le_iff.mp fun _ _ => mem_annihilator.mpr fun _ => by rintro rfl; rw [smul_zero]
 
 Depends on / 依赖: mem_annihilator, mem_annihilator.mpr, smul_zero, top_le_iff, top_le_iff.mp
@@ -3757,7 +3757,7 @@ theorem annihilator_iSup
 
 中文:
 定理 annihilator_iSup
-  条件: (ι : Sort w) (f : ι -> Submodule R M)
+  条件: (ι : 类型层 w) (f : ι -> 子模 R M)
   证明: le_antisymm (le_iInf fun _ => annihilator_mono <| le_iSup _ _) fun r H =>
     mem_annihilator.2 fun n hn => iSup_induction f (motive := (r • · = 0)) hn
       (fun i => mem_annihilator.1 <| (mem_iInf _).mp H i) (smul_zero _)
@@ -3783,7 +3783,7 @@ theorem annihilator_sup
 
 中文:
 定理 annihilator_sup
-  条件: (N P : Submodule R M)
+  条件: (N P : 子模 R M)
   证明: by
   rw [← sSup_pair]; rw [sSup_eq_iSup]; rw [iSup_subtype']; rw [annihilator_iSup]; rw [← iInf_pair]; rw [iInf_subtype']
 
@@ -3807,7 +3807,7 @@ theorem le_annihilator_iff
 
 中文:
 定理 le_annihilator_iff
-  条件: {N : Submodule R M} {I : Ideal R}
+  条件: {N : 子模 R M} {I : 理想 R}
   结论: I <= annihilator N ↔ I • N = ⊥
   证明: by
   simp_rw [← le_bot_iff, smul_le, SetLike.le_def, mem_annihilator]; rfl
@@ -3833,7 +3833,7 @@ theorem annihilator_smul
 
 中文:
 定理 annihilator_smul
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   结论: annihilator N • N = ⊥
   证明: eq_bot_iff.2 (smul_le.2 fun _ => mem_annihilator.1)
 
@@ -3856,7 +3856,7 @@ theorem annihilator_mul
 
 中文:
 定理 annihilator_mul
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: annihilator I * I = ⊥
   证明: annihilator_smul I
 
@@ -3885,7 +3885,7 @@ theorem mem_annihilator'
 中文:
 定理 mem_annihilator'
   条件: {r}
-  结论: r in N.annihilator ↔ N <= comap (r • (LinearMap.id : M ->ₗ[R] M)) ⊥
+  结论: r in N.annihilator ↔ N <= comap (r • (线性映射.id : M ->ₗ[R] M)) ⊥
   证明: mem_annihilator.trans ⟨fun H n hn => (mem_bot R).2 H n hn, fun H _ hn => (mem_bot R).1 H hn⟩
 
 Depends on / 依赖: mem_annihilator, mem_annihilator.trans, mem_bot
@@ -3914,7 +3914,7 @@ theorem mem_annihilator_span
 
 中文:
 定理 mem_annihilator_span
-  条件: (s : Set M) (r : R)
+  条件: (s : 集合 M) (r : R)
   证明: by
   rw [Submodule.mem_annihilator]
   constructor
@@ -3976,7 +3976,7 @@ theorem annihilator_span
 
 中文:
 定理 annihilator_span
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   ext; simp [mem_annihilator_span]
 
@@ -4024,7 +4024,7 @@ theorem mul_annihilator
 
 中文:
 定理 mul_annihilator
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: I * annihilator I = ⊥
   证明: by rw [mul_comm, annihilator_mul]
 
@@ -4086,8 +4086,8 @@ theorem map_eq_bot_iff_le_ker
 
 中文:
 定理 map_eq_bot_iff_le_ker
-  条件: {I : Ideal R} (f : F)
-  结论: I.map f = ⊥ ↔ I <= RingHom.ker f
+  条件: {I : 理想 R} (f : F)
+  结论: I.map f = ⊥ ↔ I <= 环态射.ker f
   证明: by
   rw [RingHom.ker]; rw [eq_bot_iff]; rw [map_le_iff_le_comap]
 
@@ -4108,8 +4108,8 @@ theorem ker_le_comap
 
 中文:
 定理 ker_le_comap
-  条件: {K : Ideal S} (f : F)
-  结论: RingHom.ker f <= comap f K
+  条件: {K : 理想 S} (f : F)
+  结论: 环态射.ker f <= comap f K
   证明: fun _ hx =>
   mem_comap.2 (RingHom.mem_ker.1 hx ▸ K.zero_mem)
 -/
@@ -4129,7 +4129,7 @@ instance map_isPrime_of_equiv
 
 中文:
 实例 map_isPrime_of_equiv
-  签名: {F' : 类型} [EquivLike F' R S] [RingEquivClass F' R S]
+  签名: {F' : 类型} [等价状 F' R S] [环等价类 F' R S]
   定义体: by
   have h : I.map f = I.map ((RingEquivClass.toRingEquiv f : R ≃+* S) : R ->+* S) := rfl
   rw [h]; rw [map_comap_of_equiv (RingEquivClass.toRingEquiv f : R ≃+* S)]
@@ -4154,7 +4154,7 @@ theorem map_eq_bot_iff_of_injective
 
 中文:
 定理 map_eq_bot_iff_of_injective
-  条件: {I : Ideal R} {f : F} (hf : Function.Injective f)
+  条件: {I : 理想 R} {f : F} (hf : 函数.单射 f)
   证明: by
   simp [map, ← map_zero f, -map_zero, hf.eq_iff, I.eq_bot_iff]
 
@@ -4178,7 +4178,7 @@ lemma map_pointwise_smul
 
 中文:
 引理 map_pointwise_smul
-  结论: {R S : 类型} [CommSemiring R] [CommSemiring S]
+  结论: {R S : 类型} [交换半环 R] [交换半环 S]
   证明: by
   rw [← Submodule.ideal_span_singleton_smul]; rw [smul_eq_mul]; rw [Ideal.map_mul]; rw [Ideal.map_span]; rw [Set.image_singleton]; rw [← smul_eq_mul]; rw [Submodule.ideal_span_singleton_smul]
 
@@ -4203,7 +4203,7 @@ lemma comap_map_of_surjective'
 
 中文:
 引理 comap_map_of_surjective'
-  条件: (f : F) (hf : Function.Surjective f) (I : Ideal R)
+  条件: (f : F) (hf : 函数.满射 f) (I : 理想 R)
   证明: comap_map_of_surjective f hf I
 
 Depends on / 依赖: comap_map_of_surjective
@@ -4229,7 +4229,7 @@ theorem map_sInf
 
 中文:
 定理 map_sInf
-  条件: {A : Set (Ideal R)} {f : F} (hf : Function.Surjective f)
+  条件: {A : 集合 (理想 R)} {f : F} (hf : 函数.满射 f)
   证明: by
   refine fun h => le_antisymm (le_sInf ?_) ?_
   · intro j hj y hy
@@ -4277,7 +4277,7 @@ theorem map_isPrime_of_surjective
 
 中文:
 定理 map_isPrime_of_surjective
-  结论: {f : F} (hf : Function.Surjective f) {I : Ideal R} [H : IsPrime I]
+  结论: {f : F} (hf : 函数.满射 f) {I : 理想 R} [H : 是素 I]
   证明: by
   refine ⟨fun h => H.ne_top (eq_top_iff.2 ?_), fun {x y} => ?_⟩
   · replace h := congr_arg (comap f) h
@@ -4317,8 +4317,8 @@ lemma IsMaximal.map_of_surjective_of_ker_le
   exact IsMaximal.ne_top ‹_› h
 
 中文:
-引理 IsMaximal.map_of_surjective_of_ker_le
-  结论: {f : F} (hf : Function.Surjective f) {m : Ideal R}
+引理 是极大.map_of_surjective_of_ker_le
+  结论: {f : F} (hf : 函数.满射 f) {m : 理想 R}
   证明: by
 .resolve_left fun h => ?_ refine m.map_eq_top_or_isMaximal_of_surjective f hf ‹_›
   apply congr_arg (comap f) at h
@@ -4350,7 +4350,7 @@ theorem map_ne_bot_of_ne_bot
 
 中文:
 定理 map_ne_bot_of_ne_bot
-  结论: {R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S]
+  结论: {R S : 类型} [交换半环 R] [半环 S] [代数 R S]
   证明: (map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S)).mp.mt h
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, map_eq_bot_iff_of_injective, mp.mt
@@ -4370,7 +4370,7 @@ theorem map_eq_iff_sup_ker_eq_of_surjective
 
 中文:
 定理 map_eq_iff_sup_ker_eq_of_surjective
-  结论: {I J : Ideal R} (f : R ->+* S)
+  结论: {I J : 理想 R} (f : R ->+* S)
   证明: by
   rw [← (comap_injective_of_surjective f hf).eq_iff]; rw [comap_map_of_surjective f hf]; rw [comap_map_of_surjective f hf]; rw [RingHom.ker_eq_comap_bot]
 
@@ -4399,7 +4399,7 @@ theorem map_radical_of_surjective
 
 中文:
 定理 map_radical_of_surjective
-  结论: {f : R ->+* S} (hf : Function.Surjective f) {I : Ideal R}
+  结论: {f : R ->+* S} (hf : 函数.满射 f) {I : 理想 R}
   证明: by
   rw [radical_eq_sInf]; rw [radical_eq_sInf]
   have : forall J in {J : Ideal R | I <= J ∧ J.IsPrime}, RingHom.ker f <= J := fun J hJ => h.trans hJ.left
@@ -4452,7 +4452,7 @@ definition liftOfRightInverseAux
 
 中文:
 定义 liftOfRightInverseAux
-  签名: (hf : Function.RightInverse f_inv f) (g : A ->+* C)
+  签名: (hf : 函数.右逆 f_inv f) (g : A ->+* C)
   定义体: { AddMonoidHom.liftOfRightInverse f.toAddMonoidHom f_inv hf ⟨g.toAddMonoidHom, hg⟩ with
     toFun := fun b => g (f_inv b)
     map_one' := by
@@ -4490,7 +4490,7 @@ theorem liftOfRightInverseAux_comp_apply
 
 中文:
 定理 liftOfRightInverseAux_comp_apply
-  结论: (hf : Function.RightInverse f_inv f) (g : A ->+* C)
+  结论: (hf : 函数.右逆 f_inv f) (g : A ->+* C)
   证明: f.toAddMonoidHom.liftOfRightInverse_comp_apply f_inv hf ⟨g.toAddMonoidHom, hg⟩ a
 
 Depends on / 依赖: f.toAddMonoidHom.liftOfRightInverse_comp_apply, f_inv, g.toAddMonoidHom, liftOfRightInverse_comp_apply, toAddMonoidHom
@@ -4517,7 +4517,7 @@ invFun φ := ⟨φ.comp f, fun x hx => mem_ker.mpr by simp [mem_ker.mp hx]⟩
 
 中文:
 定义 liftOfRightInverse
-  签名: (hf : Function.RightInverse f_inv f)
+  签名: (hf : 函数.右逆 f_inv f)
   定义体: f.liftOfRightInverseAux f_inv hf g.1 g.2
 invFun φ := ⟨φ.comp f, fun x hx => mem_ker.mpr by simp [mem_ker.mp hx]⟩
   left_inv g := by
@@ -4553,7 +4553,7 @@ abbreviation liftOfSurjective
 
 中文:
 缩写 liftOfSurjective
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: f.liftOfRightInverse (Function.surjInv hf) (Function.rightInverse_surjInv hf)
 
 Depends on / 依赖: Function, Function.rightInverse_surjInv, Function.surjInv, f.liftOfRightInverse, liftOfRightInverse, rightInverse_surjInv, surjInv
@@ -4572,7 +4572,7 @@ theorem liftOfRightInverse_comp_apply
 
 中文:
 定理 liftOfRightInverse_comp_apply
-  结论: (hf : Function.RightInverse f_inv f)
+  结论: (hf : 函数.右逆 f_inv f)
   证明: f.liftOfRightInverseAux_comp_apply f_inv hf g.1 g.2 x
 
 Depends on / 依赖: f.liftOfRightInverseAux_comp_apply, f_inv, liftOfRightInverseAux_comp_apply
@@ -4592,7 +4592,7 @@ theorem liftOfRightInverse_comp
 
 中文:
 定理 liftOfRightInverse_comp
-  结论: (hf : Function.RightInverse f_inv f)
+  结论: (hf : 函数.右逆 f_inv f)
   证明: RingHom.ext f.liftOfRightInverse_comp_apply f_inv hf g
 
 Depends on / 依赖: RingHom, RingHom.ext, f.liftOfRightInverse_comp_apply, f_inv, liftOfRightInverse_comp_apply
@@ -4614,7 +4614,7 @@ theorem eq_liftOfRightInverse
 
 中文:
 定理 eq_liftOfRightInverse
-  结论: (hf : Function.RightInverse f_inv f) (g : A ->+* C)
+  结论: (hf : 函数.右逆 f_inv f) (g : A ->+* C)
   证明: by
   simp_rw [← hh]
   exact ((f.liftOfRightInverse f_inv hf).apply_symm_apply _).symm
@@ -4637,7 +4637,7 @@ theorem liftOfSurjective_comp_apply
 
 中文:
 定理 liftOfSurjective_comp_apply
-  结论: (hf : Function.Surjective f)
+  结论: (hf : 函数.满射 f)
   证明: RingHom.liftOfRightInverse_comp_apply f _ _ g x
 
 Depends on / 依赖: RingHom, RingHom.liftOfRightInverse_comp_apply, liftOfRightInverse_comp_apply
@@ -4657,7 +4657,7 @@ theorem liftOfSurjective_comp
 
 中文:
 定理 liftOfSurjective_comp
-  结论: (hf : Function.Surjective f)
+  结论: (hf : 函数.满射 f)
   证明: RingHom.liftOfRightInverse_comp f _ _ g
 
 Depends on / 依赖: RingHom, RingHom.liftOfRightInverse_comp, liftOfRightInverse_comp
@@ -4677,7 +4677,7 @@ theorem eq_liftOfSurjective
 
 中文:
 定理 eq_liftOfSurjective
-  结论: (hf : Function.Surjective f) (g : A ->+* C)
+  结论: (hf : 函数.满射 f) (g : A ->+* C)
   证明: RingHom.eq_liftOfRightInverse f _ _ g _ _ hh
 
 Depends on / 依赖: RingHom, RingHom.eq_liftOfRightInverse, eq_liftOfRightInverse
@@ -4708,8 +4708,8 @@ definition RingEquiv.idealComapOrderIso
 @[simp]
 
 中文:
-定义 RingEquiv.idealComapOrderIso
-  签名: {R S : 类型} [Semiring R] [Semiring S] (e : R ≃+* S)
+定义 环等价.idealComapOrderIso
+  签名: {R S : 类型} [半环 R] [半环 S] (e : R ≃+* S)
   定义体: I.comap e
   invFun I := I.map e
   left_inv I := I.map_comap_of_surjective _ e.surjective
@@ -4739,7 +4739,7 @@ lemma RingEquiv.idealComapOrderIso_symm_apply
   proof: rfl
 
 中文:
-引理 RingEquiv.idealComapOrderIso_symm_apply
+引理 环等价.idealComapOrderIso_symm_apply
   证明: rfl
 -/
 lemma RingEquiv.idealComapOrderIso_symm_apply
@@ -4762,7 +4762,7 @@ lemma ker_coe
 
 中文:
 引理 ker_coe
-  结论: RingHom.ker f = RingHom.ker (f : A ->+* B)
+  结论: 环态射.ker f = 环态射.ker (f : A ->+* B)
   证明: rfl
 -/
 lemma ker_coe : RingHom.ker f = RingHom.ker (f : A ->+* B) := rfl
@@ -4777,7 +4777,7 @@ lemma coe_ideal_map
 
 中文:
 引理 coe_ideal_map
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: rfl
 -/
 lemma coe_ideal_map (I : Ideal A) :
@@ -4793,7 +4793,7 @@ lemma comap_ker
 
 中文:
 引理 comap_ker
-  条件: {C : 类型} [Semiring C] [Algebra R C] (f : B ->ₐ[R] C) (g : A ->ₐ[R] B)
+  条件: {C : 类型} [半环 C] [代数 R C] (f : B ->ₐ[R] C) (g : A ->ₐ[R] B)
   证明: RingHom.comap_ker f.toRingHom g.toRingHom
 
 Depends on / 依赖: RingHom, RingHom.comap_ker, comap_ker, f.toRingHom, g.toRingHom, toRingHom
@@ -4823,7 +4823,7 @@ definition idealMap
 
 中文:
 定义 idealMap
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: (Algebra.linearMap R S).restrict (q := (I.map (algebraMap R S)).restrictScalars R)
     (fun _ => Ideal.mem_map_of_mem _)
 
@@ -4848,7 +4848,7 @@ lemma idealMap_mul
 
 中文:
 引理 idealMap_mul
-  条件: (I : Ideal R) (x y : I)
+  条件: (I : 理想 R) (x y : I)
   证明: by
   ext
   simp
@@ -4871,8 +4871,8 @@ theorem FaithfulSMul.ker_algebraMap_eq_bot
   ext; simp
 
 中文:
-定理 FaithfulSMul.ker_algebraMap_eq_bot
-  结论: (R A : 类型) [CommSemiring R] [Semiring A]
+定理 忠实标量乘法.ker_algebraMap_eq_bot
+  结论: (R A : 类型) [交换半环 R] [半环 A]
   证明: by
   ext; simp
 -/
@@ -4904,7 +4904,7 @@ lemma RingHom.ker_evalRingHom
   simp [mul_add, sub_mul, one_mul, ← Pi.single_mul_left, hx]
 
 中文:
-引理 RingHom.ker_evalRingHom
+引理 环态射.ker_evalRingHom
   结论: {ι : 类型} [DecidableEq ι] (R : ι -> 类型)
   证明: by
   refine le_antisymm (fun x hx => ?_) (by simp [Ideal.span_le])
@@ -4938,8 +4938,8 @@ lemma Ideal.exists_of_comap_eq_ker_sup
   simpa [← hx', ← hyz, ← RingHom.mem_ker] using hy
 
 中文:
-引理 Ideal.exists_of_comap_eq_ker_sup
-  结论: {A B : 类型} [Ring A] [Ring B] (f : A ->+* B)
+引理 理想.存在_of_comap_eq_ker_sup
+  结论: {A B : 类型} [环 A] [环 B] (f : A ->+* B)
   证明: by
   rcases surj x with ⟨x', hx'⟩
   rw [← hx']; rw [← Ideal.mem_comap]; rw [eq] at hx
@@ -4971,8 +4971,8 @@ lemma Ideal.eq_map_of_comap_eq_ker_sup
   simpa [← hy] using Ideal.mem_map_of_mem _ mem
 
 中文:
-引理 Ideal.eq_map_of_comap_eq_ker_sup
-  结论: {A B : 类型} [CommRing A] [CommRing B] (f : A ->+* B)
+引理 理想.eq_map_of_comap_eq_ker_sup
+  结论: {A B : 类型} [交换环 A] [交换环 B] (f : A ->+* B)
   证明: by
   refine le_antisymm (fun x hx => ?_)
     (Ideal.map_le_iff_le_comap.mpr (le_of_le_of_eq le_sup_right eq.symm))

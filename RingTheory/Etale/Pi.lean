@@ -40,7 +40,7 @@ theorem pi_iff
 
 中文:
 定理 pi_iff
-  条件: [Finite I]
+  条件: [有限 I]
   证明: by
   simp_rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth, forall_and]
   rw [FormallyUnramified.pi_iff A]; rw [FormallySmooth.pi_iff A]
@@ -61,8 +61,8 @@ instance [Finite
   body: .of_formallyUnramified_and_formallySmooth
 
 中文:
-实例 [Finite
-  签名: I] [对任意 i, FormallyEtale R (A i)] : FormallyEtale R (Π i, A i)
+实例 [有限
+  签名: I] [对任意 i, 形式平展 R (A i)] : 形式平展 R (Π i, A i)
   定义体: .of_formallyUnramified_and_formallySmooth
 
 Depends on / 依赖: of_formallyUnramified_and_formallySmooth
@@ -78,8 +78,8 @@ instance [Finite
   signature: I] [forall i, Etale R (A i)] : Etale R (Π i, A i) where
 
 中文:
-实例 [Finite
-  签名: I] [对任意 i, Etale R (A i)] : Etale R (Π i, A i) where
+实例 [有限
+  签名: I] [对任意 i, 平展 R (A i)] : 平展 R (Π i, A i) where
 -/
 instance [Finite I] [forall i, Etale R (A i)] : Etale R (Π i, A i) where
 

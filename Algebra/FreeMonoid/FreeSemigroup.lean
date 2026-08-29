@@ -53,7 +53,7 @@ definition toFreeMonoid
 
 中文:
 定义 toFreeMonoid
-  签名: : FreeSemigroup α ->ₙ* FreeMonoid α
+  签名: : 自由半群 α ->ₙ* 自由幺半群 α
   定义体: lift FreeMonoid.of
 
 @[to_additive (attr := simp, grind =)]
@@ -101,7 +101,7 @@ lemma toFreeMonoid_mk_eq_cons
 
 中文:
 引理 toFreeMonoid_mk_eq_cons
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   证明: by
   suffices forall x : FreeMonoid α, (xs.map FreeMonoid.of).foldl (· * ·) x = x * ofList xs by
     simpa [← List.foldl_map, lift_mk_eq_foldl, toFreeMonoid, lift] using this (FreeMonoid.of x)
@@ -133,7 +133,7 @@ lemma toFreeMonoid_injective
 
 中文:
 引理 toFreeMonoid_injective
-  结论: Function.Injective (@toFreeMonoid α)
+  结论: 函数.单射 (@toFreeMonoid α)
   证明: by
   rintro ⟨x, xs⟩ ⟨y, ys⟩ h
   simp only [toFreeMonoid_mk_eq_cons, Equiv.apply_eq_iff_eq] at h
@@ -163,7 +163,7 @@ lemma toFreeMonoid_ne_one
 
 中文:
 引理 toFreeMonoid_ne_one
-  条件: (x : FreeSemigroup α)
+  条件: (x : 自由半群 α)
   结论: toFreeMonoid x != 1
   证明: by
   induction x with simp
@@ -190,7 +190,7 @@ lemma eq_one_or_toFreeMonoid
 
 中文:
 引理 eq_one_or_toFreeMonoid
-  条件: (x : FreeMonoid α)
+  条件: (x : 自由幺半群 α)
   结论: x = 1 ∨ 存在 y, toFreeMonoid y = x
   证明: x.inductionOn' (by simp) by
     rintro b _ (rfl | ⟨y, rfl⟩)
@@ -219,7 +219,7 @@ lemma range_toFreeMonoid
 
 中文:
 引理 range_toFreeMonoid
-  结论: Set.range (@toFreeMonoid α) = {1}ᶜ
+  结论: 集合.range (@toFreeMonoid α) = {1}ᶜ
   证明: by
   ext x; grind [eq_one_or_toFreeMonoid x]
 
@@ -253,8 +253,8 @@ definition FreeMonoid.equivWithOneFreeSemigroup
   map_mul' := by simp
 
 中文:
-定义 FreeMonoid.equivWithOneFreeSemigroup
-  签名: : FreeMonoid α ≃* WithOne (FreeSemigroup α) where
+定义 自由幺半群.equivWithOneFreeSemigroup
+  签名: : 自由幺半群 α ≃* WithOne (自由半群 α) where
   定义体: lift fun x => ↑(FreeSemigroup.of x)
   invFun := WithOne.lift toFreeMonoid
   left_inv x := by induction x with simp [*]

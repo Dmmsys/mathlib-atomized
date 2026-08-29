@@ -127,7 +127,7 @@ definition adjointDomain
 
 中文:
 定义 adjointDomain
-  签名: : Submodule 𝕜 F where
+  签名: : 子模 𝕜 F where
   定义体: {y | Continuous ((innerₛₗ 𝕜 y).comp T.toFun)}
   zero_mem' := by
     rw [Set.mem_ofPred_eq]; rw [LinearMap.map_zero]; rw [LinearMap.zero_comp]
@@ -215,7 +215,7 @@ theorem adjointDomainMkCLMExtend_apply
 
 中文:
 定理 adjointDomainMkCLMExtend_apply
-  结论: (hT : Dense (T.domain : Set E)) (y : T.adjointDomain)
+  结论: (hT : 稠密 (T.domain : 集合 E)) (y : T.adjointDomain)
   证明: ContinuousLinearMap.extend_eq _ hT.denseRange_val
     isUniformEmbedding_subtype_val.isUniformInducing _
 
@@ -353,7 +353,7 @@ theorem mem_adjoint_domain_iff
 中文:
 定理 mem_adjoint_domain_iff
   条件: (y : F)
-  结论: y in T†.domain ↔ Continuous ((innerₛₗ 𝕜 y).comp T.toFun)
+  结论: y in T†.domain ↔ 连续 ((innerₛₗ 𝕜 y).comp T.toFun)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -377,7 +377,7 @@ theorem mem_adjoint_domain_of_exists
   exact funext fun x => (hw x).symm
 
 中文:
-定理 mem_adjoint_domain_of_exists
+定理 mem_adjoint_domain_of_存在
   条件: (y : F) (h : 存在 w : E, 对任意 x : T.domain, ⟪w, x⟫ = ⟪y, T x⟫)
   证明: by
   obtain ⟨w, hw⟩ := h
@@ -411,7 +411,7 @@ theorem adjoint_apply_of_not_dense
 
 中文:
 定理 adjoint_apply_of_not_dense
-  条件: (hT : ¬Dense (T.domain : Set E)) (y : T†.domain)
+  条件: (hT : ¬稠密 (T.domain : 集合 E)) (y : T†.domain)
   结论: T† y = 0
   证明: by
   classical
@@ -564,7 +564,7 @@ theorem toPMap_adjoint_eq_adjoint_toPMap_of_dense
 
 中文:
 定理 toPMap_adjoint_eq_adjoint_toPMap_of_dense
-  条件: (hp : Dense (p : Set E))
+  条件: (hp : 稠密 (p : 集合 E))
   证明: by
   ext x y hxy
   · simp only [LinearMap.toPMap_domain, Submodule.mem_top, iff_true,
@@ -602,7 +602,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: : Star (E ->ₗ.[𝕜] E) where
+  签名: : 对合 (E ->ₗ.[𝕜] E) where
   定义体: fun A => A.adjoint
 
 Depends on / 依赖: A.adjoint, adjoint
@@ -651,7 +651,7 @@ theorem _root_.IsSelfAdjoint.dense_domain
 中文:
 定理 _root_.IsSelfAdjoint.dense_domain
   条件: (hA : IsSelfAdjoint A)
-  结论: Dense (A.domain : Set E)
+  结论: 稠密 (A.domain : 集合 E)
   证明: by
   by_contra h
   rw [isSelfAdjoint_def] at hA
@@ -705,7 +705,7 @@ definition adjoint
 
 中文:
 定义 adjoint
-  签名: (g : Submodule 𝕜 (E × F))
+  签名: (g : 子模 𝕜 (E × F))
   定义体: (g.map ((LinearEquiv.skewSwap 𝕜 F E).symm.trans
     (WithLp.linearEquiv 2 𝕜 (F × E)).symm).toLinearMap).orthogonal.map
       (WithLp.linearEquiv 2 𝕜 (F × E) : WithLp 2 (F × E) ->ₗ[𝕜] F × E)
@@ -735,7 +735,7 @@ theorem mem_adjoint_iff
 
 中文:
 定理 mem_adjoint_iff
-  条件: (g : Submodule 𝕜 (E × F)) (x : F × E)
+  条件: (g : 子模 𝕜 (E × F)) (x : F × E)
   证明: by
   simp only [Submodule.adjoint, mem_map, mem_orthogonal, LinearEquiv.coe_coe,
     LinearEquiv.trans_apply, LinearEquiv.skewSwap_symm_apply, coe_symm_linearEquiv, Prod.exists,
@@ -781,8 +781,8 @@ theorem _root_.LinearPMap.adjoint_graph_eq_graph_adjoint
   · intro
 
 中文:
-定理 _root_.LinearPMap.adjoint_graph_eq_graph_adjoint
-  条件: (hT : Dense (T.domain : Set E))
+定理 _root_.LinearP映射.adjoint_graph_eq_graph_adjoint
+  条件: (hT : 稠密 (T.domain : 集合 E))
   证明: by
   ext x
   simp only [mem_graph_iff, Subtype.exists, exists_and_left, exists_eq_left, mem_adjoint_iff,
@@ -830,8 +830,8 @@ theorem _root_.LinearPMap.graph_adjoint_toLinearPMap_eq_adjoint
     inner_zero_right, zero_sub, neg_eq_zero, forall_exists_index, forall_appl
 
 中文:
-定理 _root_.LinearPMap.graph_adjoint_toLinearPMap_eq_adjoint
-  条件: (hT : Dense (T.domain : Set E))
+定理 _root_.LinearP映射.graph_adjoint_toLinearPMap_eq_adjoint
+  条件: (hT : 稠密 (T.domain : 集合 E))
   证明: by
   apply eq_of_eq_graph
   rw [adjoint_graph_eq_graph_adjoint hT]
@@ -875,7 +875,7 @@ theorem adjoint_isClosed
 
 中文:
 定理 adjoint_isClosed
-  条件: (hT : Dense (T.domain : Set E))
+  条件: (hT : 稠密 (T.domain : 集合 E))
   证明: by
   rw [IsClosed]; rw [adjoint_graph_eq_graph_adjoint hT]; rw [Submodule.adjoint]
   simp only [Submodule.map_coe]
@@ -905,7 +905,7 @@ theorem _root_.IsSelfAdjoint.isClosed
 中文:
 定理 _root_.IsSelfAdjoint.isClosed
   条件: {A : E ->ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
-  结论: A.IsClosed
+  结论: A.是闭集
   证明: by
   rw [← isSelfAdjoint_def.mp hA]
   exact adjoint_isClosed hA.dense_domain

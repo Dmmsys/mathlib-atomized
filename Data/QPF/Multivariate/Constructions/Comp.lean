@@ -35,7 +35,7 @@ definition Comp
   body: F fun i : Fin2 n => G i v
 
 中文:
-定义 Comp
+定义 复合
   签名: (v : TypeVec.{u} m)
   定义体: F fun i : Fin2 n => G i v
 -/
@@ -58,7 +58,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : Inhabited (F fun i : Fin2 n => G i α)] : Inhabited (Comp F G α)
+  签名: : 可居 (F fun i : Fin2 n => G i α)] : 可居 (复合 F G α)
   定义体: I
 -/
 instance [I : Inhabited (F fun i : Fin2 n => G i α)] : Inhabited (Comp F G α) := I
@@ -90,7 +90,7 @@ definition get
 
 中文:
 定义 get
-  签名: (x : Comp F G α)
+  签名: (x : 复合 F G α)
   定义体: x
 
 @[simp]
@@ -111,8 +111,8 @@ theorem mk_get
 
 中文:
 定理 mk_get
-  条件: (x : Comp F G α)
-  结论: Comp.mk (Comp.get x) = x
+  条件: (x : 复合 F G α)
+  结论: 复合.mk (复合.get x) = x
   证明: rfl
 
 @[simp]
@@ -132,7 +132,7 @@ theorem get_mk
 中文:
 定理 get_mk
   条件: (x : F fun i => G i α)
-  结论: Comp.get (Comp.mk x) = x
+  结论: 复合.get (复合.mk x) = x
   证明: rfl
 -/
 protected theorem get_mk (x : F fun i => G i α) : Comp.get (Comp.mk x) = x := rfl
@@ -165,7 +165,7 @@ definition map
 
 中文:
 定义 map
-  签名: : (Comp F G) α -> (Comp F G) β
+  签名: : (复合 F G) α -> (复合 F G) β
   定义体: (map fun _i => map f : (F fun i => G i α) -> F fun i => G i β)
 -/
 protected def map : (Comp F G) α -> (Comp F G) β :=
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: MvFunctor (Comp F G)
+  签名: Mv函子 (复合 F G)
   定义体: Comp.map f
 
 Depends on / 依赖: Comp.map
@@ -214,7 +214,7 @@ theorem get_map
 
 中文:
 定理 get_map
-  条件: (x : Comp F G α)
+  条件: (x : 复合 F G α)
   证明: rfl
 -/
 theorem get_map (x : Comp F G α) :
@@ -239,7 +239,7 @@ instance [MvQPF
 
 中文:
 实例 [MvQPF
-  签名: F] [对任意 i, MvQPF <| G i] : MvQPF (Comp F G) where
+  签名: F] [对任意 i, MvQPF <| G i] : MvQPF (复合 F G) where
   定义体: MvPFunctor.comp (P F) fun i => P G i
   abs := Comp.mk ∘ (map fun _ => abs) ∘ abs ∘ MvPFunctor.comp.get
   repr {α} := MvPFunctor.comp.mk ∘ repr ∘

@@ -36,7 +36,7 @@ lemma _root_.Cardinal.mk_mul_le
   rw [← image2_mul]; exact Cardinal.mk_image2_le
 
 中文:
-引理 _root_.Cardinal.mk_mul_le
+引理 _root_.基数.mk_mul_le
   结论: #(s * t) <= #s * #t
   证明: by
   rw [← image2_mul]; exact Cardinal.mk_image2_le
@@ -100,8 +100,8 @@ lemma _root_.Cardinal.mk_inv
 @[to_additive (attr := simp)]
 
 中文:
-引理 _root_.Cardinal.mk_inv
-  条件: (s : Set G)
+引理 _root_.基数.mk_inv
+  条件: (s : 集合 G)
   结论: #↥(s⁻¹) = #s
   证明: by
   rw [← image_inv_eq_inv]; rw [Cardinal.mk_image_eq_of_injOn _ _ inv_injective.injOn]
@@ -128,7 +128,7 @@ lemma encard_inv
 
 中文:
 引理 encard_inv
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: s⁻¹.encard = s.encard
   证明: by
   simp [← toENat_cardinalMk]
@@ -154,7 +154,7 @@ lemma ncard_inv
 
 中文:
 引理 ncard_inv
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: s⁻¹.ncard = s.ncard
   证明: by simp [ncard]
 
@@ -174,7 +174,7 @@ lemma natCard_inv
 
 中文:
 引理 natCard_inv
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: 自然数.card ↥(s⁻¹) = 自然数.card s
   证明: by simp
 -/
@@ -196,7 +196,7 @@ lemma _root_.Cardinal.mk_div_le
   rw [← image2_div]; exact Cardinal.mk_image2_le
 
 中文:
-引理 _root_.Cardinal.mk_div_le
+引理 _root_.基数.mk_div_le
   结论: #(s / t) <= #s * #t
   证明: by
   rw [← image2_div]; exact Cardinal.mk_image2_le
@@ -247,8 +247,8 @@ lemma _root_.Cardinal.mk_smul_set
 @[to_additive (attr := simp)]
 
 中文:
-引理 _root_.Cardinal.mk_smul_set
-  条件: (a : G) (s : Set α)
+引理 _root_.基数.mk_smul_set
+  条件: (a : G) (s : 集合 α)
   结论: #↥(a • s) = #s
   证明: Cardinal.mk_image_eq_of_injOn _ _ (MulAction.injective a).injOn
 
@@ -274,7 +274,7 @@ lemma encard_smul_set
 
 中文:
 引理 encard_smul_set
-  条件: (a : G) (s : Set α)
+  条件: (a : G) (s : 集合 α)
   结论: (a • s).encard = s.encard
   证明: by
   simp [← toENat_cardinalMk]
@@ -300,7 +300,7 @@ lemma ncard_smul_set
 
 中文:
 引理 ncard_smul_set
-  条件: (a : G) (s : Set α)
+  条件: (a : G) (s : 集合 α)
   结论: (a • s).ncard = s.ncard
   证明: by simp [ncard]
 
@@ -321,7 +321,7 @@ lemma natCard_smul_set
 
 中文:
 引理 natCard_smul_set
-  条件: (a : G) (s : Set α)
+  条件: (a : G) (s : 集合 α)
   结论: 自然数.card ↥(a • s) = 自然数.card s
   证明: by
   simp

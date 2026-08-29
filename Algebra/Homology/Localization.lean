@@ -48,7 +48,7 @@ lemma HomologicalComplex.homologyFunctor_inverts_quasiIso
   infer_instance
 
 中文:
-引理 HomologicalComplex.homologyFunctor_inverts_quasiIso
+引理 同调复形.homologyFunctor_inverts_quasiIso
   条件: (i : ι)
   证明: fun _ _ _ hf => by
   rw [mem_quasiIso_iff] at hf
@@ -162,7 +162,7 @@ lemma isIso_Q_map_iff_mem_quasiIso
 
 中文:
 引理 isIso_Q_map_iff_mem_quasiIso
-  条件: {K L : HomologicalComplex C c} (f : K ⟶ L)
+  条件: {K L : 同调复形 C c} (f : K ⟶ L)
   证明: by
   constructor
   · intro h
@@ -236,7 +236,7 @@ definition quasiIso
 
 中文:
 定义 quasiIso
-  签名: : Morphism命题erty (HomotopyCategory C c)
+  签名: : MorphismProperty (HomotopyCategory C c)
   定义体: fun _ _ f => forall (i : ι), IsIso ((homologyFunctor C c i).map f)
 
 Depends on / 依赖: homologyFunctor
@@ -280,7 +280,7 @@ lemma quotient_map_mem_quasiIso_iff
 
 中文:
 引理 quotient_map_mem_quasiIso_iff
-  条件: {K L : HomologicalComplex C c} (f : K ⟶ L)
+  条件: {K L : 同调复形 C c} (f : K ⟶ L)
   证明: by
   have eq := fun (i : ι) => NatIso.isIso_map_iff (homologyFunctorFactors C c i) f
   dsimp at eq
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso C c).IsMultiplicative
+  签名: (quasiIso C c).是Multiplicative
   定义体: by
     rw [mem_quasiIso_iff]
     infer_instance
@@ -435,10 +435,10 @@ class ComplexShape.QFactorsThroughHomotopy
     - areEqualizedByLocalization({K L : HomologicalComplex C c} {f g : K ⟶ L} (h : Homotopy f g)) : AreEqualizedByLocalization (HomologicalComplex.quasiIso C c) f g
 
 中文:
-类 ComplexShape.QFactorsThroughHomotopy
-  参数: {ι : 类型} (c : ComplexShape ι)
+类 余mplexShape.QFactorsThroughHomotopy
+  参数: {ι : 类型} (c : 余mplexShape ι)
   公理与运算 (1 个):
-    - areEqualizedByLocalization({K L : HomologicalComplex C c} {f g : K ⟶ L} (h : Homotopy f g)) : AreEqualizedByLocalization (HomologicalComplex.quasiIso C c) f g
+    - areEqualizedByLocalization({K L : 同调复形 C c} {f g : K ⟶ L} (h : 同伦 f g)) : AreEqualizedByLocalization (同调复形.quasiIso C c) f g
 -/
 class ComplexShape.QFactorsThroughHomotopy {ι : Type*} (c : ComplexShape ι)
     (C : Type*) [Category* C] [Preadditive C]
@@ -461,7 +461,7 @@ lemma Q_map_eq_of_homotopy
 
 中文:
 引理 Q_map_eq_of_homotopy
-  条件: {K L : HomologicalComplex C c} {f g : K ⟶ L} (h : Homotopy f g)
+  条件: {K L : 同调复形 C c} {f g : K ⟶ L} (h : 同伦 f g)
   证明: (ComplexShape.QFactorsThroughHomotopy.areEqualizedByLocalization h).map_eq Q
 
 Depends on / 依赖: ComplexShape, ComplexShape.QFactorsThroughHomotopy.areEqualizedByLocalization, QFactorsThroughHomotopy, areEqualizedByLocalization, map_eq
@@ -556,7 +556,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.quotient C c ⋙ Qh).IsLocalization
+  签名: (HomotopyCategory.quotient C c ⋙ Qh).是Localization
   定义体: Functor.IsLocalization.of_iso _ (quotientCompQhIso C c).symm
 
 Depends on / 依赖: Functor, Functor.IsLocalization.of_iso, IsLocalization, of_iso, quotientCompQhIso
@@ -655,7 +655,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomologicalComplexUpToQuasiIso.Qh.IsLocalization (HomotopyCategory.quasiIso C c)
+  签名: HomologicalComplexUpToQuasiIso.Qh.是Localization (HomotopyCategory.quasiIso C c)
   定义体: Functor.IsLocalization.of_comp (HomotopyCategory.quotient C c)
     Qh (HomologicalComplex.homotopyEquivalences C c)
     (HomotopyCategory.quasiIso C c) (HomologicalComplex.quasiIso C c)
@@ -698,8 +698,8 @@ definition ComplexShape.strictUniversalPropertyFixedTargetQuotient
   uniq _ _ h := Quotient.lift
 
 中文:
-定义 ComplexShape.strictUniversalPropertyFixedTargetQuotient
-  签名: (E : 类型) [Category* E]
+定义 余mplexShape.strictUniversalPropertyFixedTargetQuotient
+  签名: (E : 类型) [范畴* E]
   定义体: HomotopyCategory.quotient_inverts_homotopyEquivalences C c
   lift F hF := CategoryTheory.Quotient.lift _ F (by
     intro K L f g ⟨h⟩
@@ -731,7 +731,7 @@ lemma ComplexShape.quotient_isLocalization
   all_goals apply c.strictUniversalPropertyFixedTargetQuotient hc
 
 中文:
-引理 ComplexShape.quotient_isLocalization
+引理 余mplexShape.quotient_isLocalization
   证明: by
   apply Functor.IsLocalization.mk'
   all_goals apply c.strictUniversalPropertyFixedTargetQuotient hc
@@ -757,8 +757,8 @@ lemma ComplexShape.QFactorsThroughHomotopy_of_exists_prev
         (homotopyEquivalences_le_quasiIso C _))
 
 中文:
-引理 ComplexShape.QFactorsThroughHomotopy_of_exists_prev
-  条件: [CategoryWithHomology C]
+引理 余mplexShape.QFactorsThroughHomotopy_of_存在_prev
+  条件: [带同调范畴 C]
   证明: by
     exact h.map_eq_of_inverts_homotopyEquivalences hc _
       (MorphismProperty.IsInvertedBy.of_le _ _ _
@@ -792,7 +792,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.quotient C (ComplexShape.down ι)).IsLocalization
+  签名: (HomotopyCategory.quotient C (余mplexShape.down ι)).是Localization
   定义体: (ComplexShape.down ι).quotient_isLocalization (fun _ => ⟨_, rfl⟩) C
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, quotient_isLocalization
@@ -818,7 +818,7 @@ example [(HomologicalComplex.quasiIso C (ComplexShape.down ι)).HasLocalization]
 
 中文:
 实例 :
-  签名: (ComplexShape.down ι).QFactorsThroughHomotopy C
+  签名: (余mplexShape.down ι).QFactorsThroughHomotopy C
   定义体: (ComplexShape.down ι).QFactorsThroughHomotopy_of_exists_prev (fun _ => ⟨_, rfl⟩) C
 
 example [(HomologicalComplex.quasiIso C (ComplexShape.down ι)).HasLocalization] :
@@ -857,7 +857,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.quotient C (ComplexShape.up 整数)).IsLocalization
+  签名: (HomotopyCategory.quotient C (余mplexShape.up 整数)).是Localization
   定义体: (ComplexShape.up Int).quotient_isLocalization (fun n => ⟨n - 1, by simp⟩) C
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, quotient_isLocalization
@@ -878,7 +878,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ComplexShape.up 整数).QFactorsThroughHomotopy C
+  签名: (余mplexShape.up 整数).QFactorsThroughHomotopy C
   定义体: (ComplexShape.up Int).QFactorsThroughHomotopy_of_exists_prev (fun n => ⟨n - 1, by simp⟩) C
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, QFactorsThroughHomotopy_of_exists_prev
@@ -1102,7 +1102,7 @@ lemma mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
 
 中文:
 引理 mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
-  条件: (K : HomologicalComplex C c)
+  条件: (K : 同调复形 C c)
   证明: by
   dsimp [mapHomologicalComplexUpToQuasiIsoFactorsh]
   rw [Localization.liftNatTrans_app]

@@ -121,7 +121,7 @@ lemma strictConcaveOn_sqrt
 
 中文:
 引理 strictConcaveOn_sqrt
-  结论: StrictConcaveOn 实数>=0 univ NN实数.sqrt
+  结论: StrictConcaveOn 实数>=0 univ 非负实数.sqrt
   证明: by
   have : NNReal.sqrt = fun x : Real>=0 => x ^ (1 / (2 : Real)) := by
     ext x; exact mod_cast NNReal.sqrt_eq_rpow x
@@ -228,7 +228,7 @@ lemma strictConcaveOn_sqrt
 
 中文:
 引理 strictConcaveOn_sqrt
-  结论: StrictConcaveOn 实数 (Set.Ici 0) (√· : 实数 -> 实数)
+  结论: StrictConcaveOn 实数 (集合.左闭右无界区间 0) (√· : 实数 -> 实数)
   证明: by
   rw [funext Real.sqrt_eq_rpow]
   exact strictConcaveOn_rpow (by positivity) (by linarith)

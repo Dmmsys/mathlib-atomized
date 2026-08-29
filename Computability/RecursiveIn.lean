@@ -72,7 +72,7 @@ inductive RecursiveIn
 
 中文:
 归纳类型 RecursiveIn
-  参数: (O : Set (自然数 ->. 自然数))
+  参数: (O : 集合 (自然数 ->. 自然数))
   构造子 (9 个):
     - zero: 自然数.RecursiveIn O fun _ => 0
     - succ: 自然数.RecursiveIn O 自然数.succ
@@ -116,7 +116,7 @@ definition RecursiveIn
 
 中文:
 定义 RecursiveIn
-  签名: {α σ} [Primcodable α] [Primcodable σ] (O : Set (自然数 ->. 自然数)) (f : α ->. σ)
+  签名: {α σ} [Primcodable α] [Primcodable σ] (O : 集合 (自然数 ->. 自然数)) (f : α ->. σ)
   定义体: Nat.RecursiveIn O fun n => Part.bind (decode (α := α) n) fun a => (f a).map encode
 
 Depends on / 依赖: Nat.RecursiveIn, Part.bind, RecursiveIn, decode, encode
@@ -175,7 +175,7 @@ definition ComputableIn
 
 中文:
 定义 ComputableIn
-  签名: {α σ} [Primcodable α] [Primcodable σ] (O : Set (自然数 ->. 自然数)) (f : α -> σ)
+  签名: {α σ} [Primcodable α] [Primcodable σ] (O : 集合 (自然数 ->. 自然数)) (f : α -> σ)
   定义体: RecursiveIn O (fun a => Part.some (f a))
 
 Depends on / 依赖: Part.some, RecursiveIn
@@ -337,7 +337,7 @@ lemma Nat.Partrec.recursiveIn
   | rfind _ ih => exact .rfind ih
 
 中文:
-引理 Nat.Partrec.recursiveIn
+引理 自然数.Partrec.recursiveIn
   条件: {f : 自然数 ->. 自然数} {O} (pF : 自然数.Partrec f)
   证明: by
   induction pF with
@@ -384,7 +384,7 @@ theorem Nat.Primrec.recursiveIn
   proof: Nat.Partrec.recursiveIn (Nat.Partrec.of_primrec hf)
 
 中文:
-定理 Nat.Primrec.recursiveIn
+定理 自然数.Primrec.recursiveIn
   条件: {O} {f : 自然数 -> 自然数} (hf : 自然数.Primrec f)
   证明: Nat.Partrec.recursiveIn (Nat.Partrec.of_primrec hf)
 
@@ -403,7 +403,7 @@ theorem Computable.computableIn
   proof: hf.partrec.recursiveIn
 
 中文:
-定理 Computable.computableIn
+定理 可计算.computableIn
   结论: [Primcodable α] [Primcodable β] {f : α -> β} {O}
   证明: hf.partrec.recursiveIn
 
@@ -680,7 +680,7 @@ theorem partrec_iff_forall_recursiveIn_singleton
   proof: ⟨fun hf _ => hf.recursiveIn, fun hf => (hf (fun _ => .none)).partrec_of_const⟩
 
 中文:
-定理 partrec_iff_forall_recursiveIn_singleton
+定理 partrec_iff_对任意_recursiveIn_singleton
   证明: ⟨fun hf _ => hf.recursiveIn, fun hf => (hf (fun _ => .none)).partrec_of_const⟩
 
 Depends on / 依赖: hf.recursiveIn, partrec_of_const, recursiveIn
@@ -735,7 +735,7 @@ theorem fst
 
 中文:
 定理 fst
-  结论: ComputableIn O (@Prod.fst α β)
+  结论: ComputableIn O (@积类型.fst α β)
   证明: Primrec.fst.computableIn
 -/
 protected theorem fst : ComputableIn O (@Prod.fst α β) :=
@@ -751,7 +751,7 @@ theorem snd
 
 中文:
 定理 snd
-  结论: ComputableIn O (@Prod.snd α β)
+  结论: ComputableIn O (@积类型.snd α β)
   证明: Primrec.snd.computableIn
 -/
 protected theorem snd : ComputableIn O (@Prod.snd α β) :=
@@ -799,7 +799,7 @@ theorem sumInl
 
 中文:
 定理 sumInl
-  结论: ComputableIn O (@Sum.inl α β)
+  结论: ComputableIn O (@和.inl α β)
   证明: Primrec.sumInl.computableIn
 -/
 protected theorem sumInl : ComputableIn O (@Sum.inl α β) :=
@@ -815,7 +815,7 @@ theorem sumInr
 
 中文:
 定理 sumInr
-  结论: ComputableIn O (@Sum.inr α β)
+  结论: ComputableIn O (@和.inr α β)
   证明: Primrec.sumInr.computableIn
 -/
 protected theorem sumInr : ComputableIn O (@Sum.inr α β) :=

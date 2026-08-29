@@ -102,7 +102,7 @@ definition squashSeq
 
 中文:
 定义 squashSeq
-  签名: (s : Stream'.Seq <| Pair K) (n : 自然数)
+  签名: (s : Stream'.序列 <| 对 K) (n : 自然数)
   定义体: match Prod.mk (s.get? n) (s.get? (n + 1)) with
   | ⟨some gp_n, some gp_succ_n⟩ =>
     Stream'.Seq.nats.zipWith
@@ -158,7 +158,7 @@ theorem squashSeq_nth_of_not_terminated
 
 中文:
 定理 squashSeq_nth_of_not_terminated
-  结论: {gp_n gp_succ_n : Pair K} (s_nth_eq : s.get? n = some gp_n)
+  结论: {gp_n gp_succ_n : 对 K} (s_nth_eq : s.get? n = some gp_n)
   证明: by
   simp [*, squashSeq]
 
@@ -500,7 +500,7 @@ theorem succ_nth_conv_eq_squashGCF_nth_conv
 
 中文:
 定理 succ_nth_conv_eq_squashGCF_nth_conv
-  结论: [Field K]
+  结论: [域 K]
   证明: by
   rcases Decidable.em (g.TerminatedAt n) with terminatedAt_n | not_terminatedAt_n
   · have : squashGCF g n = g := squashGCF_eq_self_of_terminated terminatedAt_n
@@ -589,7 +589,7 @@ theorem convs_eq_convs'
 
 中文:
 定理 convs_eq_convs'
-  结论: [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+  结论: [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: by
   induction n generalizing g with
   | zero => simp
@@ -670,7 +670,7 @@ theorem convs_eq_convs'
 
 中文:
 定理 convs_eq_convs'
-  结论: [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+  结论: [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: by
   ext n
   apply GenContFract.convs_eq_convs'

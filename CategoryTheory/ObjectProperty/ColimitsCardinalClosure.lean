@@ -41,7 +41,7 @@ definition colimitsCardinalClosure
 
 中文:
 定义 colimitsCardinalClosure
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: P.colimitsClosure (SmallCategoryCardinalLT.categoryFamily κ)
 
 Depends on / 依赖: P.colimitsClosure, SmallCategoryCardinalLT, SmallCategoryCardinalLT.categoryFamily, categoryFamily, colimitsClosure
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.colimitsCardinalClosure κ).IsClosedUnderIsomorphisms
+  签名: (P.colimitsCardinalClosure κ).在同构下封闭
   定义体: by
   dsimp [colimitsCardinalClosure]
   infer_instance
@@ -158,7 +158,7 @@ lemma colimitsCardinalClosure_le
 
 中文:
 引理 colimitsCardinalClosure_le
-  结论: {Q : Object命题erty C} [Q.IsClosedUnderIsomorphisms]
+  结论: {Q : ObjectProperty C} [Q.在同构下封闭]
   证明: by
   have (i : SmallCategoryCardinalLT κ) := hQ _ i.hasCardinalLT
   exact colimitsClosure_le h
@@ -192,7 +192,7 @@ instance isStableUnderRetracts_colimitsCardinalClosure
 
 中文:
 实例 isStableUnderRetracts_colimitsCardinalClosure
-  签名: [Fact κ.IsRegular]
+  签名: [Fact κ.是正则]
   定义体: by
   have := P.isClosedUnderColimitsOfShape_colimitsCardinalClosure κ
     WalkingParallelPair (HasCardinalLT.of_le (by

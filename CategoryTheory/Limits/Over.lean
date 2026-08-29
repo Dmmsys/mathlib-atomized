@@ -46,7 +46,7 @@ instance hasColimit_of_hasColimit_comp_forget
 
 中文:
 实例 hasColimit_of_hasColimit_comp_forget
-  签名: (F : J ⥤ Over X) [i : HasColimit (F ⋙ forget X)]
+  签名: (F : J ⥤ Over X) [i : 有余极限 (F ⋙ forget X)]
   定义体: CostructuredArrow.hasColimit (i₁ := i)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.hasColimit, hasColimit
@@ -63,8 +63,8 @@ instance [HasColimitsOfShape
   signature: J C] : HasColimitsOfShape J (Over X) where
 
 中文:
-实例 [HasColimitsOfShape
-  签名: J C] : HasColimitsOfShape J (Over X) where
+实例 [有形状余极限
+  签名: J C] : 有形状余极限 J (Over X) where
 -/
 instance [HasColimitsOfShape J C] : HasColimitsOfShape J (Over X) where
 
@@ -77,8 +77,8 @@ instance [HasFiniteColimits
   body: inferInstance
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] : HasFiniteColimits (Over X) where
+实例 [有有限余极限
+  签名: C] : 有有限余极限 (Over X) where
   定义体: inferInstance
 -/
 instance [HasFiniteColimits C] : HasFiniteColimits (Over X) where
@@ -93,8 +93,8 @@ instance [HasColimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimits
-  签名: C] : HasColimits (Over X)
+实例 [有余极限
+  签名: C] : 有余极限 (Over X)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasColimits C] : HasColimits (Over X) :=
@@ -109,8 +109,8 @@ instance [HasFiniteCoproducts
   body: inferInstance
 
 中文:
-实例 [HasFiniteCoproducts
-  签名: C] : HasFiniteCoproducts (Over X) where
+实例 [有FiniteCoproducts
+  签名: C] : 有FiniteCoproducts (Over X) where
   定义体: inferInstance
 -/
 instance [HasFiniteCoproducts C] : HasFiniteCoproducts (Over X) where
@@ -153,8 +153,8 @@ theorem epi_left_of_epi
 
 中文:
 定理 epi_left_of_epi
-  条件: [HasPushouts C] {f g : Over X} (h : f ⟶ g) [Epi h]
-  结论: Epi h.left
+  条件: [有Pushouts C] {f g : Over X} (h : f ⟶ g) [满态射 h]
+  结论: 满态射 h.left
   证明: CostructuredArrow.epi_left_of_epi _
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.epi_left_of_epi, epi_left_of_epi
@@ -173,8 +173,8 @@ theorem epi_iff_epi_left
 
 中文:
 定理 epi_iff_epi_left
-  条件: [HasPushouts C] {f g : Over X} (h : f ⟶ g)
-  结论: Epi h ↔ Epi h.left
+  条件: [有Pushouts C] {f g : Over X} (h : f ⟶ g)
+  结论: 满态射 h ↔ 满态射 h.left
   证明: CostructuredArrow.epi_iff_epi_left _
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.epi_iff_epi_left, epi_iff_epi_left
@@ -211,7 +211,7 @@ instance preservesColimitsOfSize_map
 
 中文:
 实例 preservesColimitsOfSize_map
-  签名: [HasColimitsOfSize.{w, w'} C] {Y : C} (f : X ⟶ Y)
+  签名: [有余limitsOfSize.{w, w'} C] {Y : C} (f : X ⟶ Y)
   定义体: preservesColimits_of_reflects_of_preserves (map f) (forget Y)
 
 Depends on / 依赖: forget, preservesColimits_of_reflects_of_preserves
@@ -230,7 +230,7 @@ definition isColimitToOver
 
 中文:
 定义 isColimitToOver
-  签名: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
+  签名: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
   定义体: isColimitOfReflects (forget c.pt) IsColimit.equivIsoColimit c.mapCoconeToOver.symm hc
 
 Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, c.mapCoconeToOver.symm, c.pt, equivIsoColimit, forget, isColimitOfReflects, mapCoconeToOver
@@ -247,8 +247,8 @@ definition _root_.CategoryTheory.Limits.colimit.isColimitToOver
   body: Over.isColimitToOver (colimit.isColimit F)
 
 中文:
-定义 _root_.CategoryTheory.Limits.colimit.isColimitToOver
-  签名: (F : J ⥤ C) [HasColimit F]
+定义 _root_.范畴论.Limits.colimit.isColimitToOver
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: Over.isColimitToOver (colimit.isColimit F)
 
 Depends on / 依赖: Over.isColimitToOver, colimit, colimit.isColimit, isColimit, isColimitToOver
@@ -270,7 +270,7 @@ definition liftCocone
 
 中文:
 定义 liftCocone
-  签名: {F : J ⥤ C} (c : Cocone F) {X : C} (f : c.pt ⟶ X)
+  签名: {F : J ⥤ C} (c : 余锥 F) {X : C} (f : c.pt ⟶ X)
   定义体: Over.mk f
   ι.app j := Over.homMk (c.ι.app j)
 -/
@@ -289,7 +289,7 @@ definition isColimitLiftCocone
 
 中文:
 定义 isColimitLiftCocone
-  签名: {F : J ⥤ C} (c : Cocone F) {X : C} (f : c.pt ⟶ X)
+  签名: {F : J ⥤ C} (c : 余锥 F) {X : C} (f : c.pt ⟶ X)
   定义体: isColimitOfReflects (Over.forget _) hc
 
 Depends on / 依赖: Over.forget, forget, isColimitOfReflects
@@ -312,7 +312,7 @@ instance hasLimit_of_hasLimit_comp_forget
 
 中文:
 实例 hasLimit_of_hasLimit_comp_forget
-  签名: (F : J ⥤ Under X) [i : HasLimit (F ⋙ forget X)]
+  签名: (F : J ⥤ Under X) [i : 有极限 (F ⋙ forget X)]
   定义体: StructuredArrow.hasLimit (i₁ := i)
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.hasLimit, hasLimit
@@ -329,8 +329,8 @@ instance [HasLimitsOfShape
   signature: J C] : HasLimitsOfShape J (Under X) where
 
 中文:
-实例 [HasLimitsOfShape
-  签名: J C] : HasLimitsOfShape J (Under X) where
+实例 [有形状极限
+  签名: J C] : 有形状极限 J (Under X) where
 -/
 instance [HasLimitsOfShape J C] : HasLimitsOfShape J (Under X) where
 
@@ -343,8 +343,8 @@ instance [HasLimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasLimits
-  签名: C] : HasLimits (Under X)
+实例 [有极限
+  签名: C] : 有极限 (Under X)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasLimits C] : HasLimits (Under X) :=
@@ -362,8 +362,8 @@ theorem mono_right_of_mono
 
 中文:
 定理 mono_right_of_mono
-  条件: [HasPullbacks C] {f g : Under X} (h : f ⟶ g) [Mono h]
-  结论: Mono h.right
+  条件: [有Pullbacks C] {f g : Under X} (h : f ⟶ g) [单态射 h]
+  结论: 单态射 h.right
   证明: StructuredArrow.mono_right_of_mono _
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mono_right_of_mono, mono_right_of_mono
@@ -382,8 +382,8 @@ theorem mono_iff_mono_right
 
 中文:
 定理 mono_iff_mono_right
-  条件: [HasPullbacks C] {f g : Under X} (h : f ⟶ g)
-  结论: Mono h ↔ Mono h.right
+  条件: [有Pullbacks C] {f g : Under X} (h : f ⟶ g)
+  结论: 单态射 h ↔ 单态射 h.right
   证明: StructuredArrow.mono_iff_mono_right _
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mono_iff_mono_right, mono_iff_mono_right
@@ -445,7 +445,7 @@ instance preservesLimitsOfSize_map
 
 中文:
 实例 preservesLimitsOfSize_map
-  签名: [HasLimitsOfSize.{w, w'} C] {Y : C} (f : X ⟶ Y)
+  签名: [有LimitsOfSize.{w, w'} C] {Y : C} (f : X ⟶ Y)
   定义体: preservesLimits_of_reflects_of_preserves (map f) (forget X)
 
 Depends on / 依赖: forget, preservesLimits_of_reflects_of_preserves
@@ -464,7 +464,7 @@ definition isLimitToUnder
 
 中文:
 定义 isLimitToUnder
-  签名: {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
+  签名: {F : J ⥤ C} {c : 锥 F} (hc : 是极限 c)
   定义体: isLimitOfReflects (forget c.pt) (IsLimit.equivIsoLimit c.mapConeToUnder.symm hc)
 
 Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, c.mapConeToUnder.symm, c.pt, equivIsoLimit, forget, isLimitOfReflects, mapConeToUnder
@@ -481,8 +481,8 @@ definition _root_.CategoryTheory.Limits.limit.isLimitToOver
   body: Under.isLimitToUnder (limit.isLimit F)
 
 中文:
-定义 _root_.CategoryTheory.Limits.limit.isLimitToOver
-  签名: (F : J ⥤ C) [HasLimit F]
+定义 _root_.范畴论.Limits.limit.isLimitToOver
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: Under.isLimitToUnder (limit.isLimit F)
 
 Depends on / 依赖: Under.isLimitToUnder, isLimit, isLimitToUnder, limit.isLimit
@@ -504,7 +504,7 @@ definition liftCone
 
 中文:
 定义 liftCone
-  签名: {F : J ⥤ C} (c : Cone F) {X : C} (f : X ⟶ c.pt)
+  签名: {F : J ⥤ C} (c : 锥 F) {X : C} (f : X ⟶ c.pt)
   定义体: Under.mk f
   π.app j := Under.homMk (c.π.app j)
 -/
@@ -523,7 +523,7 @@ definition isLimitLiftCone
 
 中文:
 定义 isLimitLiftCone
-  签名: {F : J ⥤ C} (c : Cone F) {X : C}
+  签名: {F : J ⥤ C} (c : 锥 F) {X : C}
   定义体: isLimitOfReflects (Under.forget _) hc
 
 Depends on / 依赖: Under.forget, forget, isLimitOfReflects

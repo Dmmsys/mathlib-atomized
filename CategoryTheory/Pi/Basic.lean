@@ -40,7 +40,7 @@ instance pi
 
 中文:
 实例 pi
-  签名: : Category.{max w₀ v₁} (对任意 i, C i) where
+  签名: : 范畴.{最大值 w₀ v₁} (对任意 i, C i) where
   定义体: forall i, X i ⟶ Y i
   id X i := 𝟙 (X i)
   comp f g i := f i ≫ g i
@@ -279,7 +279,7 @@ instance sumElimCategory
 
 中文:
 实例 sumElimCategory
-  签名: : 对任意 s : I oplus J, Category.{v₁} (Sum.elim C D s)
+  签名: : 对任意 s : I oplus J, 范畴.{v₁} (和.elim C D s)
 -/
 instance sumElimCategory : forall s : I oplus J, Category.{v₁} (Sum.elim C D s)
 | Sum.inl i => inferInstanceAs Category (C i)
@@ -311,8 +311,8 @@ definition sum
         | .inr 
 
 中文:
-定义 sum
-  签名: : (对任意 i, C i) ⥤ (对任意 j, D j) ⥤ 对任意 s : I oplus J, Sum.elim C D s where
+定义 求和
+  签名: : (对任意 i, C i) ⥤ (对任意 j, D j) ⥤ 对任意 s : I oplus J, 和.elim C D s where
   定义体: { obj := fun Y s =>
         match s with
         | .inl i => X i
@@ -412,7 +412,7 @@ theorem isoApp_refl
 中文:
 定理 isoApp_refl
   条件: (X : 对任意 i, C i) (i : I)
-  结论: isoApp (Iso.refl X) i = Iso.refl (X i)
+  结论: isoApp (同构.refl X) i = 同构.refl (X i)
   证明: rfl
 
 @[simp]
@@ -524,7 +524,7 @@ definition pi'CompEval
 
 中文:
 定义 pi'CompEval
-  签名: {A : 类型} [Category* A] (F : 对任意 i, A ⥤ C i) (i : I)
+  签名: {A : 类型} [范畴* A] (F : 对任意 i, A ⥤ C i) (i : I)
   定义体: Iso.refl _
 -/
 def pi'CompEval {A : Type*} [Category* A] (F : forall i, A ⥤ C i) (i : I) :
@@ -573,7 +573,7 @@ theorem pi'_eval
 中文:
 定理 pi'_eval
   条件: (f : 对任意 i, A ⥤ C i) (i : I)
-  结论: pi' f ⋙ Pi.eval C i = f i
+  结论: pi' f ⋙ 依赖函数类型.eval C i = f i
   证明: rfl
 -/
 theorem pi'_eval (f : forall i, A ⥤ C i) (i : I) : pi' f ⋙ Pi.eval C i = f i :=
@@ -600,7 +600,7 @@ theorem pi_ext
 
 中文:
 定理 pi_ext
-  条件: (f f' : A ⥤ 对任意 i, C i) (h : 对任意 i, f ⋙ (Pi.eval C i) = f' ⋙ (Pi.eval C i))
+  条件: (f f' : A ⥤ 对任意 i, C i) (h : 对任意 i, f ⋙ (依赖函数类型.eval C i) = f' ⋙ (依赖函数类型.eval C i))
   证明: by
   apply Functor.ext; rotate_left
   · intro X
@@ -675,7 +675,7 @@ definition pi'
 
 中文:
 定义 pi'
-  签名: {E : 类型} [Category* E] {F G : E ⥤ 对任意 i, C i}
+  签名: {E : 类型} [范畴* E] {F G : E ⥤ 对任意 i, C i}
   定义体: fun X i => (τ i).app X
   naturality _ _ f := by
     ext i
@@ -737,7 +737,7 @@ definition pi'
 
 中文:
 定义 pi'
-  签名: {E : 类型} [Category* E] {F G : E ⥤ 对任意 i, C i}
+  签名: {E : 类型} [范畴* E] {F G : E ⥤ 对任意 i, C i}
   定义体: NatTrans.pi' (fun i => (e i).hom)
   inv := NatTrans.pi' (fun i => (e i).inv)
 
@@ -796,7 +796,7 @@ definition Pi.eqToEquivalence
   body: by subst h; rfl
 
 中文:
-定义 Pi.eqToEquivalence
+定义 依赖函数类型.eqToEquivalence
   签名: {i j : I} (h : i = j)
   定义体: by subst h; rfl
 -/
@@ -814,7 +814,7 @@ definition Pi.evalCompEqToEquivalenceFunctor
   body: eqToIso (by subst h; rfl)
 
 中文:
-定义 Pi.evalCompEqToEquivalenceFunctor
+定义 依赖函数类型.evalCompEqToEquivalenceFunctor
   签名: {i j : I} (h : i = j)
   定义体: eqToIso (by subst h; rfl)
 
@@ -836,7 +836,7 @@ definition Pi.eqToEquivalenceFunctorIso
   body: eqToIso (by subst h; rfl)
 
 中文:
-定义 Pi.eqToEquivalenceFunctorIso
+定义 依赖函数类型.eqToEquivalenceFunctorIso
   签名: (f : J -> I) {i' j' : J} (h : i' = j')
   定义体: eqToIso (by subst h; rfl)
 
@@ -867,7 +867,7 @@ definition Pi.equivalenceOfEquiv
     isoWhiskerLeft _ 
 
 中文:
-定义 Pi.equivalenceOfEquiv
+定义 依赖函数类型.equivalenceOfEquiv
   签名: (e : J ≃ I)
   定义体: pi' (fun i => Pi.eval _ (e.symm i) ⋙
     (Pi.eqToEquivalence C (by simp)).functor)
@@ -913,8 +913,8 @@ definition Pi.optionEquivalence
     | some _ => Iso.refl 
 
 中文:
-定义 Pi.optionEquivalence
-  签名: (C' : Option J -> 类型u₁) [对任意 i, Category.{v₁} (C' i)]
+定义 依赖函数类型.optionEquivalence
+  签名: (C' : 选项类型 J -> 类型u₁) [对任意 i, 范畴.{v₁} (C' i)]
   定义体: Functor.prod' (Pi.eval C' none)
     (Functor.pi' (fun i => (Pi.eval _ (some i))))
   inverse := Functor.pi' (fun i => match i with

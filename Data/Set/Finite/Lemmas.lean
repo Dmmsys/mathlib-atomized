@@ -45,8 +45,8 @@ theorem Finite.fin_embedding
     simp only [Finset.coe_sort_coe, Equiv.asEmbedding_range, Finite.coe_toFinset, ofPred_mem_eq]⟩
 
 中文:
-定理 Finite.fin_embedding
-  条件: {s : Set α} (h : s.Finite)
+定理 有限.fin_embedding
+  条件: {s : 集合 α} (h : s.有限)
   证明: ⟨_, (Fintype.equivFin (h.toFinset : Set α)).symm.asEmbedding, by
     simp only [Finset.coe_sort_coe, Equiv.asEmbedding_range, Finite.coe_toFinset, ofPred_mem_eq]⟩
 
@@ -67,8 +67,8 @@ theorem Finite.fin_param
   ⟨n, f, f.injective, hf⟩
 
 中文:
-定理 Finite.fin_param
-  条件: {s : Set α} (h : s.Finite)
+定理 有限.fin_param
+  条件: {s : 集合 α} (h : s.有限)
   证明: let ⟨n, f, hf⟩ := h.fin_embedding
   ⟨n, f, f.injective, hf⟩
 
@@ -93,8 +93,8 @@ theorem Finite.induction_to
   refine Finite.to_wellFoundedGT.wf.inductio
 
 中文:
-定理 Finite.induction_to
-  结论: {C : Set α -> 命题} {S : Set α} (h : S.Finite)
+定理 有限.induction_to
+  结论: {C : 集合 α -> 命题} {S : 集合 α} (h : S.有限)
   证明: by
   have : Finite S := Finite.to_subtype h
   have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
@@ -124,8 +124,8 @@ theorem Finite.induction_to_univ
   proof: finite_univ.induction_to S0 (subset_univ S0) H0 (by simpa [ssubset_univ_iff])
 
 中文:
-定理 Finite.induction_to_univ
-  结论: [Finite α] {C : Set α -> 命题} (S0 : Set α)
+定理 有限.induction_to_univ
+  结论: [有限 α] {C : 集合 α -> 命题} (S0 : 集合 α)
   证明: finite_univ.induction_to S0 (subset_univ S0) H0 (by simpa [ssubset_univ_iff])
 
 Depends on / 依赖: finite_univ, finite_univ.induction_to, induction_to, ssubset_univ_iff, subset_univ
@@ -146,7 +146,7 @@ theorem sUnion_finite_eq_univ
 中文:
 定理 sUnion_finite_eq_univ
   条件: {X : 类型}
-  结论: ⋃₀ {(s : Set X) | Set.Finite s} = Set.univ
+  结论: ⋃₀ {(s : 集合 X) | 集合.有限 s} = 集合.univ
   证明: sUnion_eq_univ_iff.mpr fun x => ⟨{x}, finite_singleton x, rfl⟩
 
 Depends on / 依赖: finite_singleton, sUnion_eq_univ_iff, sUnion_eq_univ_iff.mpr
@@ -167,8 +167,8 @@ theorem exists_min_image
   given: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
 
 中文:
-定理 exists_min_image
-  条件: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
+定理 存在_min_image
+  条件: [线性序 β] (s : 集合 α) (f : α -> β) (h1 : s.有限)
 -/
 theorem exists_min_image [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite) :
     s.Nonempty -> exists a in s, forall b in s, f a <= f b
@@ -184,8 +184,8 @@ theorem exists_max_image
   given: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
 
 中文:
-定理 exists_max_image
-  条件: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
+定理 存在_max_image
+  条件: [线性序 β] (s : 集合 α) (f : α -> β) (h1 : s.有限)
 -/
 theorem exists_max_image [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite) :
     s.Nonempty -> exists a in s, forall b in s, f b <= f a
@@ -206,8 +206,8 @@ theorem exists_lower_bound_image
     exact ⟨x₀, fun x hx => hx₀ x hx⟩
 
 中文:
-定理 exists_lower_bound_image
-  结论: [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
+定理 存在_lower_bound_image
+  结论: [非空 α] [线性序 β] (s : 集合 α) (f : α -> β)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · exact ‹Nonempty α›.elim fun a => ⟨a, fun _ => False.elim⟩
@@ -232,8 +232,8 @@ theorem exists_upper_bound_image
   proof: exists_lower_bound_image (β := βᵒᵈ) s f h
 
 中文:
-定理 exists_upper_bound_image
-  结论: [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
+定理 存在_upper_bound_image
+  结论: [非空 α] [线性序 β] (s : 集合 α) (f : α -> β)
   证明: exists_lower_bound_image (β := βᵒᵈ) s f h
 
 Depends on / 依赖: exists_lower_bound_image

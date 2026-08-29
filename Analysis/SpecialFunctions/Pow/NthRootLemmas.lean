@@ -243,7 +243,7 @@ theorem nthRoot.always_exists
   | succ k => simpa using Nat.find_min H hc.le
 
 中文:
-定理 nthRoot.always_exists
+定理 nthRoot.always_存在
   条件: (n a : 自然数)
   证明: by
   have H : exists c, a < (c + 1) ^ (n + 1) := ⟨a, Nat.le_self_pow (by positivity) (a + 1)⟩
@@ -545,7 +545,7 @@ theorem exists_pow_eq_iff'
   · grind
 
 中文:
-定理 exists_pow_eq_iff'
+定理 存在_pow_eq_iff'
   条件: (hn : n != 0)
   结论: (存在 x, x ^ n = a) ↔ (nthRoot n a) ^ n = a
   证明: by
@@ -571,7 +571,7 @@ theorem exists_pow_eq_iff
   rcases eq_or_ne n 0 with rfl | _ <;> grind [exists_pow_eq_iff']
 
 中文:
-定理 exists_pow_eq_iff
+定理 存在_pow_eq_iff
   证明: by
   rcases eq_or_ne n 0 with rfl | _ <;> grind [exists_pow_eq_iff']
 
@@ -591,7 +591,7 @@ instance instDecidableExistsPowEq
 
 中文:
 实例 instDecidableExistsPowEq
-  签名: : Decidable (存在 x, x ^ n = a)
+  签名: : 可判定 (存在 x, x ^ n = a)
   定义体: decidable_of_iff' _ exists_pow_eq_iff
 
 Depends on / 依赖: decidable_of_iff, exists_pow_eq_iff

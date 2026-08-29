@@ -194,7 +194,7 @@ lemma iterateFrobenius_zero
 
 中文:
 引理 iterateFrobenius_zero
-  结论: iterateFrobenius R p 0 = RingHom.id R
+  结论: iterateFrobenius R p 0 = 环态射.id R
   证明: RingHom.ext (iterateFrobenius_zero_apply R p)
 
 Depends on / 依赖: RingHom, RingHom.ext, iterateFrobenius_zero_apply
@@ -286,7 +286,7 @@ lemma MonoidHom.map_frobenius
   proof: map_pow f x p
 
 中文:
-引理 MonoidHom.map_frobenius
+引理 幺半群态射.map_frobenius
   结论: f (frobenius R p x) = frobenius S p (f x)
   证明: map_pow f x p
 
@@ -302,7 +302,7 @@ lemma RingHom.map_frobenius
   proof: map_pow g x p
 
 中文:
-引理 RingHom.map_frobenius
+引理 环态射.map_frobenius
   结论: g (frobenius R p x) = frobenius S p (g x)
   证明: map_pow g x p
 
@@ -319,7 +319,7 @@ lemma MonoidHom.map_iterate_frobenius
   proof: Function.Semiconj.iterate_right (f.map_frobenius p) n x
 
 中文:
-引理 MonoidHom.map_iterate_frobenius
+引理 幺半群态射.map_iterate_frobenius
   条件: (n : 自然数)
   证明: Function.Semiconj.iterate_right (f.map_frobenius p) n x
 
@@ -339,7 +339,7 @@ lemma MonoidHom.map_iterateFrobenius
   simp [iterateFrobenius_def]
 
 中文:
-引理 MonoidHom.map_iterateFrobenius
+引理 幺半群态射.map_iterateFrobenius
   条件: (n : 自然数)
   证明: by
   simp [iterateFrobenius_def]
@@ -359,7 +359,7 @@ lemma RingHom.map_iterate_frobenius
   proof: g.toMonoidHom.map_iterate_frobenius p x n
 
 中文:
-引理 RingHom.map_iterate_frobenius
+引理 环态射.map_iterate_frobenius
   条件: (n : 自然数)
   证明: g.toMonoidHom.map_iterate_frobenius p x n
 
@@ -378,7 +378,7 @@ lemma RingHom.map_iterateFrobenius
   proof: g.toMonoidHom.map_iterateFrobenius p x n
 
 中文:
-引理 RingHom.map_iterateFrobenius
+引理 环态射.map_iterateFrobenius
   条件: (n : 自然数)
   证明: g.toMonoidHom.map_iterateFrobenius p x n
 
@@ -397,7 +397,7 @@ lemma MonoidHom.iterate_map_frobenius
   proof: iterate_map_pow f _ _ _
 
 中文:
-引理 MonoidHom.iterate_map_frobenius
+引理 幺半群态射.iterate_map_frobenius
   条件: (f : R ->* R) (p : 自然数) [ExpChar R p] (n : 自然数)
   证明: iterate_map_pow f _ _ _
 
@@ -416,7 +416,7 @@ lemma RingHom.iterate_map_frobenius
   proof: iterate_map_pow f _ _ _
 
 中文:
-引理 RingHom.iterate_map_frobenius
+引理 环态射.iterate_map_frobenius
   条件: (f : R ->+* R) (p : 自然数) [ExpChar R p] (n : 自然数)
   证明: iterate_map_pow f _ _ _
 
@@ -434,7 +434,7 @@ lemma RingHom.frobenius_comm
   proof: ext map_frobenius g p
 
 中文:
-引理 RingHom.frobenius_comm
+引理 环态射.frobenius_comm
   结论: g.comp (frobenius R p) = (frobenius S p).comp g
   证明: ext map_frobenius g p
 
@@ -452,7 +452,7 @@ lemma RingHom.iterateFrobenius_comm
   proof: ext fun x => map_iterateFrobenius g p x n
 
 中文:
-引理 RingHom.iterateFrobenius_comm
+引理 环态射.iterateFrobenius_comm
   条件: (n : 自然数)
   证明: ext fun x => map_iterateFrobenius g p x n
 
@@ -486,8 +486,8 @@ theorem LinearMap.frobenius_def
   proof: rfl
 
 中文:
-定理 LinearMap.frobenius_def
-  条件: [Algebra R S] (x : S)
+定理 线性映射.frobenius_def
+  条件: [代数 R S] (x : S)
   结论: frobenius R S p x = x ^ p
   证明: rfl
 -/
@@ -502,8 +502,8 @@ theorem LinearMap.iterateFrobenius_def
   proof: rfl
 
 中文:
-定理 LinearMap.iterateFrobenius_def
-  条件: [Algebra R S] (n : 自然数) (x : S)
+定理 线性映射.iterateFrobenius_def
+  条件: [代数 R S] (n : 自然数) (x : S)
   证明: rfl
 
 Depends on / 依赖: AddGroup, ColimitType, ColimitType.AddGroup, Quotient, Quotient.mk

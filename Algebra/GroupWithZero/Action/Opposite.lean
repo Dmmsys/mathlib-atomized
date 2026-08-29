@@ -52,7 +52,7 @@ instance instSMulZeroClass
 
 中文:
 实例 instSMulZeroClass
-  签名: [AddMonoid α] [SMulZeroClass M α]
+  签名: [加法幺半群 α] [SMulZero类 M α]
   定义体: unop_injective smul_zero _
 
 Depends on / 依赖: smul_zero, unop_injective
@@ -70,7 +70,7 @@ instance instSMulWithZero
 
 中文:
 实例 instSMulWithZero
-  签名: [MonoidWithZero M] [AddMonoid α] [SMulWithZero M α]
+  签名: [带零幺半群 M] [加法幺半群 α] [带零标量乘法 M α]
   定义体: unop_injective zero_smul _ _
 
 Depends on / 依赖: unop_injective, zero_smul
@@ -90,7 +90,7 @@ zero_smul _ := unop_injective zero_smul _ _
 
 中文:
 实例 instMulActionWithZero
-  签名: [MonoidWithZero M] [AddMonoid α] [MulActionWithZero M α]
+  签名: [带零幺半群 M] [加法幺半群 α] [带零乘法作用 M α]
   定义体: unop_injective smul_zero _
 zero_smul _ := unop_injective zero_smul _ _
 
@@ -112,7 +112,7 @@ smul_zero _ := unop_injective smul_zero _
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid M] [AddMonoid α] [DistribMulAction M α]
+  签名: [幺半群 M] [加法幺半群 α] [分配乘法作用 M α]
   定义体: unop_injective smul_add _ _ _
 smul_zero _ := unop_injective smul_zero _
 
@@ -134,7 +134,7 @@ smul_one _ := unop_injective smul_one _
 
 中文:
 实例 instMulDistribMulAction
-  签名: [Monoid M] [Monoid α] [MulDistribMulAction M α]
+  签名: [幺半群 M] [幺半群 α] [MulDistribMul作用 M α]
   定义体: unop_injective smul_mul' _ _ _
 smul_one _ := unop_injective smul_one _
 
@@ -169,8 +169,8 @@ instance IsLeftCancelMulZero.toFaithfulSMul_opposite
 · exact unop_injective mul_left_cancel₀ one_ne_zero (h 1)
 
 中文:
-实例 IsLeftCancelMulZero.toFaithfulSMul_opposite
-  签名: [MonoidWithZero α] [IsLeftCancelMulZero α]
+实例 是左消去MulZero.toFaithfulSMul_opposite
+  签名: [带零幺半群 α] [是左消去MulZero α]
   定义体: by
     cases subsingleton_or_nontrivial α
     · exact Subsingleton.elim ..

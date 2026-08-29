@@ -61,8 +61,8 @@ instance [HasFiniteProducts
   body: inferInstance
 
 中文:
-实例 [HasFiniteProducts
-  签名: C] : HasFiniteProducts (InjectiveObject C) where
+实例 [有FiniteProducts
+  签名: C] : 有FiniteProducts (InjectiveObject C) where
   定义体: inferInstance
 -/
 instance [HasFiniteProducts C] : HasFiniteProducts (InjectiveObject C) where
@@ -77,8 +77,8 @@ instance [Preadditive
   body: HasFiniteBiproducts.of_hasFiniteProducts
 
 中文:
-实例 [Preadditive
-  签名: C] [HasFiniteProducts C] : HasFiniteBiproducts (InjectiveObject C)
+实例 [预加性
+  签名: C] [有FiniteProducts C] : 有FiniteBiproducts (InjectiveObject C)
   定义体: HasFiniteBiproducts.of_hasFiniteProducts
 
 Depends on / 依赖: HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, of_hasFiniteProducts
@@ -95,8 +95,8 @@ instance [Preadditive
   body: HasBinaryBiproducts.of_hasBinaryProducts
 
 中文:
-实例 [Preadditive
-  签名: C] [HasBinaryBiproducts C] : HasBinaryBiproducts (InjectiveObject C)
+实例 [预加性
+  签名: C] [有BinaryBiproducts C] : 有BinaryBiproducts (InjectiveObject C)
   定义体: HasBinaryBiproducts.of_hasBinaryProducts
 
 Depends on / 依赖: HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryProducts, of_hasBinaryProducts
@@ -113,8 +113,8 @@ instance [HasZeroMorphisms
   body: ⟨0, by simp [IsZero.iff_id_eq_zero], Injective.zero_injective⟩
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] [HasZeroObject C] : (isInjective C).ContainsZero where
+实例 [有ZeroMorphisms
+  签名: C] [有ZeroObject C] : (isInjective C).余ntainsZero where
   定义体: ⟨0, by simp [IsZero.iff_id_eq_zero], Injective.zero_injective⟩
 
 Depends on / 依赖: Injective, Injective.zero_injective, IsZero, IsZero.iff_id_eq_zero, iff_id_eq_zero, zero_injective

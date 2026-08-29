@@ -51,8 +51,8 @@ class MulSemiringAction
     - smul_mul : forall (g : M) (x y : R), g • (x * y) = g • x * g • y
 
 中文:
-类 MulSemiringAction
-  参数: (M : 类型u) (R : 类型v) [Monoid M] [Semiring R]
+类 MulSemiring作用
+  参数: (M : 类型u) (R : 类型v) [幺半群 M] [半环 R]
   公理与运算 (2 个):
     - smul_one : 对任意 g : M, (g • (1 : R) : R) = 1
     - smul_mul : 对任意 (g : M) (x y : R), g • (x * y) = g • x * g • y
@@ -86,8 +86,8 @@ definition MulSemiringAction.toRingHom
   body: { MulDistribMulAction.toMonoidHom R x, DistribSMul.toAddMonoidHom R x with }
 
 中文:
-定义 MulSemiringAction.toRingHom
-  签名: [MulSemiringAction M R] (x : M)
+定义 MulSemiring作用.toRingHom
+  签名: [MulSemiring作用 M R] (x : M)
   定义体: { MulDistribMulAction.toMonoidHom R x, DistribSMul.toAddMonoidHom R x with }
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, MulDistribMulAction, MulDistribMulAction.toMonoidHom, toAddMonoidHom, toMonoidHom
@@ -106,7 +106,7 @@ theorem toRingHom_injective
 
 中文:
 定理 toRingHom_injective
-  条件: [MulSemiringAction M R] [FaithfulSMul M R]
+  条件: [MulSemiring作用 M R] [忠实标量乘法 M R]
   证明: fun _ _ h =>
   eq_of_smul_eq_smul fun r => RingHom.ext_iff.1 h r
 -/
@@ -131,8 +131,8 @@ instance RingHom.applyMulSemiringAction
 @[simp]
 
 中文:
-实例 RingHom.applyMulSemiringAction
-  签名: : MulSemiringAction (R ->+* R) R where
+实例 环态射.applyMulSemiringAction
+  签名: : MulSemiring作用 (R ->+* R) R where
   定义体: (· <| ·)
   smul_one := map_one
   smul_mul := map_mul
@@ -163,7 +163,7 @@ theorem RingHom.smul_def
   proof: rfl
 
 中文:
-定理 RingHom.smul_def
+定理 环态射.smul_def
   条件: (f : R ->+* R) (a : R)
   结论: f • a = f a
   证明: rfl
@@ -180,8 +180,8 @@ instance RingHom.applyFaithfulSMul
   body: ⟨fun {_ _} h => RingHom.ext h⟩
 
 中文:
-实例 RingHom.applyFaithfulSMul
-  签名: : FaithfulSMul (R ->+* R) R
+实例 环态射.applyFaithfulSMul
+  签名: : 忠实标量乘法 (R ->+* R) R
   定义体: ⟨fun {_ _} h => RingHom.ext h⟩
 
 Depends on / 依赖: RingHom, RingHom.ext
@@ -202,8 +202,8 @@ abbreviation MulSemiringAction.compHom
   body: { DistribMulAction.compHom R f, MulDistribMulAction.compHom R f with }
 
 中文:
-缩写 MulSemiringAction.compHom
-  签名: (f : N ->* M) [MulSemiringAction M R]
+缩写 MulSemiring作用.compHom
+  签名: (f : N ->* M) [MulSemiring作用 M R]
   定义体: { DistribMulAction.compHom R f, MulDistribMulAction.compHom R f with }
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, MulDistribMulAction, MulDistribMulAction.compHom, compHom

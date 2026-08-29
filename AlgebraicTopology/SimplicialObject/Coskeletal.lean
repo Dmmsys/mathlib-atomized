@@ -82,10 +82,10 @@ class IsCoskeletal
     - isRightKanExtension : IsRightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
 
 中文:
-类 IsCoskeletal
+类 是余skeletal
   参数: : 命题 where
   公理与运算 (1 个):
-    - isRightKanExtension : IsRightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
+    - isRightKanExtension : 是RightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
 -/
 class IsCoskeletal : Prop where
   isRightKanExtension : IsRightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
@@ -107,8 +107,8 @@ definition IsCoskeletal.isUniversalOfIsRightKanExtension
   apply Functor.isUniversalOfIsRightKanExtension
 
 中文:
-定义 IsCoskeletal.isUniversalOfIsRightKanExtension
-  签名: [X.IsCoskeletal n]
+定义 是余skeletal.isUniversalOfIsRightKanExtension
+  签名: [X.是余skeletal n]
   定义体: by
   apply Functor.isUniversalOfIsRightKanExtension
 
@@ -131,7 +131,7 @@ theorem isCoskeletal_iff_isIso
 
 中文:
 定理 isCoskeletal_iff_isIso
-  结论: X.IsCoskeletal n ↔ IsIso ((coskAdj n).unit.app X)
+  结论: X.是余skeletal n ↔ 是同构 ((coskAdj n).unit.app X)
   证明: by
   rw [isCoskeletal_iff]
   exact isRightKanExtension_iff_isIso ((coskAdj n).unit.app X)
@@ -155,8 +155,8 @@ instance [X.IsCoskeletal
   infer_instance
 
 中文:
-实例 [X.IsCoskeletal
-  签名: n] : IsIso ((coskAdj n).unit.app X)
+实例 [X.是余skeletal
+  签名: n] : 是同构 ((coskAdj n).unit.app X)
   定义体: by
   rw [← isCoskeletal_iff_isIso]
   infer_instance
@@ -180,7 +180,7 @@ definition isoCoskOfIsCoskeletal
 
 中文:
 定义 isoCoskOfIsCoskeletal
-  签名: [X.IsCoskeletal n]
+  签名: [X.是余skeletal n]
   定义体: asIso ((coskAdj n).unit.app X)
 
 Depends on / 依赖: coskAdj, unit.app

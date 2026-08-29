@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (StrongTrans F F)
+  签名: 可居 (StrongTrans F F)
   定义体: ⟨id F⟩
 -/
 instance : Inhabited (StrongTrans F F) :=

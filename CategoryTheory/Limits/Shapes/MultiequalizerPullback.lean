@@ -150,7 +150,7 @@ lemma isPushout
 
 中文:
 引理 isPushout
-  条件: (hc : IsColimit c)
+  条件: (hc : 是余极限 c)
   证明: c.condition _
   isColimit' := ⟨PushoutCocone.IsColimit.mk _
     (fun s => hc.desc (isPushout.multicofork h h' s))

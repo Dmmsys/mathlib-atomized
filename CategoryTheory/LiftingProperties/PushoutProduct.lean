@@ -47,7 +47,7 @@ lemma hasLiftingProperty_iff
 
 中文:
 引理 hasLiftingProperty_iff
-  结论: [HasPushouts C] [HasPullbacks C]
+  结论: [有Pushouts C] [有Pullbacks C]
   证明: ParametrizedAdjunction.hasLiftingProperty_iff MonoidalClosed.internalHomAdjunction₂
     (PushoutObjObj.ofHasPushout ..) (PullbackObjObj.ofHasPullback ..)
 
@@ -71,7 +71,7 @@ lemma hasLiftingProperty_iff'
 
 中文:
 引理 hasLiftingProperty_iff'
-  结论: [HasPushouts C] [HasPullbacks C]
+  结论: [有Pushouts C] [有Pullbacks C]
   证明: by
   rw [← hasLiftingProperty_iff]
   exact HasLiftingProperty.iff_of_arrow_iso_left (braiding _ _) _
@@ -95,7 +95,7 @@ lemma hasLiftingProperty_mk_iff
 
 中文:
 引理 hasLiftingProperty_mk_iff
-  结论: [HasPushouts C] [HasPullbacks C]
+  结论: [有Pushouts C] [有Pullbacks C]
   证明: ParametrizedAdjunction.hasLiftingProperty_iff MonoidalClosed.internalHomAdjunction₂
     (PushoutObjObj.ofHasPushout ..) (PullbackObjObj.ofHasPullback ..)
 
@@ -120,7 +120,7 @@ lemma hasLiftingProperty_mk_iff'
 
 中文:
 引理 hasLiftingProperty_mk_iff'
-  结论: [HasPushouts C] [HasPullbacks C]
+  结论: [有Pushouts C] [有Pullbacks C]
   证明: by
   rw [← hasLiftingProperty_mk_iff]
   exact HasLiftingProperty.iff_of_arrow_iso_left (braiding _ _) h
@@ -149,7 +149,7 @@ lemma hasLiftingProperty_mk_isInitial_iff
 
 中文:
 引理 hasLiftingProperty_mk_isInitial_iff
-  结论: [HasPushouts C]
+  结论: [有Pushouts C]
   证明: by
   dsimp
   have := HasLiftingProperty.iff_of_arrow_iso_left (isInitialIso' g i (W := B)) h
@@ -181,7 +181,7 @@ lemma hasLiftingProperty_mk_isInitial_iff'
 
 中文:
 引理 hasLiftingProperty_mk_isInitial_iff'
-  结论: [HasPushouts C]
+  结论: [有Pushouts C]
   证明: by
   rw [← hasLiftingProperty_mk_isInitial_iff i]
   exact HasLiftingProperty.iff_of_arrow_iso_left (braiding _ _) h
@@ -209,7 +209,7 @@ lemma hasLiftingProperty_mk_isTerminal_iff
 
 中文:
 引理 hasLiftingProperty_mk_isTerminal_iff
-  结论: [HasPushouts C] [HasPullbacks C]
+  结论: [有Pushouts C] [有Pullbacks C]
   证明: by
   rw [hasLiftingProperty_mk_iff]
   exact HasLiftingProperty.iff_of_arrow_iso_right g (PullbackHom.isTerminalIso _ t)
@@ -239,7 +239,7 @@ lemma hasLiftingProperty_mk_isInitial_isTerminal_iff
 
 中文:
 引理 hasLiftingProperty_mk_isInitial_isTerminal_iff
-  结论: [HasPushouts C]
+  结论: [有Pushouts C]
   证明: by
   rw [hasLiftingProperty_mk_isInitial_iff]
   exact HasLiftingProperty.iff_of_arrow_iso_right g
@@ -273,7 +273,7 @@ lemma hasLiftingProperty_mk_isInitial_isTerminal_iff'
 
 中文:
 引理 hasLiftingProperty_mk_isInitial_isTerminal_iff'
-  结论: [HasPushouts C]
+  结论: [有Pushouts C]
   证明: by
   rw [hasLiftingProperty_mk_isInitial_iff']
   exact HasLiftingProperty.iff_of_arrow_iso_right f

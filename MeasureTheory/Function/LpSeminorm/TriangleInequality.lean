@@ -214,7 +214,7 @@ theorem exists_Lp_half
   
 
 中文:
-定理 exists_Lp_half
+定理 存在_Lp_half
   条件: (p : 实数>=0∞) {δ : 实数>=0∞} (hδ : δ != 0)
   证明: by
   have :
@@ -338,7 +338,7 @@ theorem eLpNorm'_sum_le
 
 中文:
 定理 eLpNorm'_sum_le
-  结论: [ContinuousAdd ε'] {ι} {f : ι -> α -> ε'} {s : Finset ι}
+  结论: [连续加法 ε'] {ι} {f : ι -> α -> ε'} {s : 有限集 ι}
   证明: Finset.le_sum_of_subadditive_on_pred (fun f : α -> ε' => eLpNorm' f q μ)
     (fun f => AEStronglyMeasurable f μ) (eLpNorm'_zero (zero_lt_one.trans_le hq1)).le
     (fun _f _g hf hg => eLpNorm'_add_le hf hg hq1) (fun _f _g hf hg => hf.add hg) _ hfs
@@ -363,7 +363,7 @@ theorem eLpNorm_sum_le
 
 中文:
 定理 eLpNorm_sum_le
-  结论: [ContinuousAdd ε'] {ι} {f : ι -> α -> ε'} {s : Finset ι}
+  结论: [连续加法 ε'] {ι} {f : ι -> α -> ε'} {s : 有限集 ι}
   证明: Finset.le_sum_of_subadditive_on_pred (fun f : α -> ε' => eLpNorm f p μ)
     (fun f => AEStronglyMeasurable f μ) eLpNorm_zero.le
     (fun _f _g hf hg => eLpNorm_add_le hf hg hp1)
@@ -392,7 +392,7 @@ theorem MemLp.add
 
 中文:
 定理 MemLp.add
-  条件: [ContinuousAdd ε] (hf : MemLp f p μ) (hg : MemLp g p μ)
+  条件: [连续加法 ε] (hf : MemLp f p μ) (hg : MemLp g p μ)
   结论: MemLp (f + g) p μ
   证明: ⟨AEStronglyMeasurable.add hf.1 hg.1, eLpNorm_add_lt_top hf hg⟩
 
@@ -445,7 +445,7 @@ theorem memLp_finsetSum
 
 中文:
 定理 memLp_finsetSum
-  结论: [ContinuousAdd ε']
+  结论: [连续加法 ε']
   证明: by
   have : DecidableEq ι := Classical.decEq _
   revert hf
@@ -487,7 +487,7 @@ theorem memLp_finsetSum'
 
 中文:
 定理 memLp_finsetSum'
-  结论: [ContinuousAdd ε']
+  结论: [连续加法 ε']
   证明: by
   convert! memLp_finsetSum s hf using 1
   ext x

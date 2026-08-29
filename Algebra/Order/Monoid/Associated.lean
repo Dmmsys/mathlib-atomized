@@ -30,7 +30,7 @@ instance instIsOrderedMonoid
 
 中文:
 实例 instIsOrderedMonoid
-  签名: : IsOrderedMonoid (Associates M) where
+  签名: : 是Ordered幺半群 (Associates M) where
   定义体: by rintro a _ ⟨d, rfl⟩ c; exact ⟨d, mul_right_comm ..⟩
 
 Depends on / 依赖: mul_right_comm
@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedMul (Associates M)
+  签名: 典范有序乘法 (Associates M)
   定义体: h
   le_mul_self _ b := ⟨b, mul_comm ..⟩
   le_self_mul _ b := ⟨b, rfl⟩

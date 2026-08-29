@@ -69,7 +69,7 @@ abbreviation ofSubmodule
 
 中文:
 缩写 ofSubmodule
-  签名: (S : Submodule R E)
+  签名: (S : 子模 R E)
   定义体: S.restrictScalars _
 -/
 @[coe] abbrev ofSubmodule (S : Submodule R E) : PointedCone R E := S.restrictScalars _
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Submodule R E) (PointedCone R E)
+  签名: Coe (子模 R E) (PointedCone R E)
   定义体: ⟨ofSubmodule⟩
 
 Depends on / 依赖: ofSubmodule
@@ -102,8 +102,8 @@ lemma coe_ofSubmodule
 
 中文:
 引理 coe_ofSubmodule
-  条件: (S : Submodule R E)
-  结论: (ofSubmodule S : Set E) = S
+  条件: (S : 子模 R E)
+  结论: (ofSubmodule S : 集合 E) = S
   证明: rfl
 -/
 @[simp] lemma coe_ofSubmodule (S : Submodule R E) : (ofSubmodule S : Set E) = S := rfl
@@ -119,7 +119,7 @@ lemma mem_ofSubmodule_iff
 
 中文:
 引理 mem_ofSubmodule_iff
-  条件: {S : Submodule R E} {x : E}
+  条件: {S : 子模 R E} {x : E}
   结论: x in (S : PointedCone R E) ↔ x in S
   证明: .rfl
 -/
@@ -136,7 +136,7 @@ lemma ofSubmodule_inj
 
 中文:
 引理 ofSubmodule_inj
-  条件: {S T : Submodule R E}
+  条件: {S T : 子模 R E}
   结论: ofSubmodule S = ofSubmodule T ↔ S = T
   证明: restrictScalars_inj ..
 
@@ -156,7 +156,7 @@ lemma ofSubmodule_le_ofSubmodule
 
 中文:
 引理 ofSubmodule_le_ofSubmodule
-  条件: {S T : Submodule R E}
+  条件: {S T : 子模 R E}
   结论: ofSubmodule S <= ofSubmodule T ↔ S <= T
   证明: .rfl
 -/
@@ -174,7 +174,7 @@ lemma ofSubmodule_lt_ofSubmodule
 
 中文:
 引理 ofSubmodule_lt_ofSubmodule
-  条件: {S T : Submodule R E}
+  条件: {S T : 子模 R E}
   结论: ofSubmodule S < ofSubmodule T ↔ S < T
   证明: .rfl
 -/
@@ -191,7 +191,7 @@ abbreviation ofSubmoduleEmbedding
 
 中文:
 缩写 ofSubmoduleEmbedding
-  签名: : Submodule R E ↪o PointedCone R E
+  签名: : 子模 R E ↪o PointedCone R E
   定义体: restrictScalarsEmbedding ..
 
 Depends on / 依赖: restrictScalarsEmbedding
@@ -209,7 +209,7 @@ abbreviation ofSubmoduleLatticeHom
 
 中文:
 缩写 ofSubmoduleLatticeHom
-  签名: : CompleteLatticeHom (Submodule R E) (PointedCone R E)
+  签名: : 完备格态射 (子模 R E) (PointedCone R E)
   定义体: restrictScalarsLatticeHom ..
 
 Depends on / 依赖: restrictScalarsLatticeHom
@@ -228,7 +228,7 @@ lemma ofSubmodule_inf
 
 中文:
 引理 ofSubmodule_inf
-  条件: (S T : Submodule R E)
+  条件: (S T : 子模 R E)
   结论: S ⊓ T = (S ⊓ T : PointedCone R E)
   证明: restrictScalars_inf _ _ _
 
@@ -248,7 +248,7 @@ lemma ofSubmodule_sup
 
 中文:
 引理 ofSubmodule_sup
-  条件: (S T : Submodule R E)
+  条件: (S T : 子模 R E)
   结论: S ⊔ T = (S ⊔ T : PointedCone R E)
   证明: restrictScalars_sup _ _ _
 
@@ -268,7 +268,7 @@ lemma ofSubmodule_sInf
 
 中文:
 引理 ofSubmodule_sInf
-  条件: (s : Set (Submodule R E))
+  条件: (s : 集合 (子模 R E))
   结论: sInf s = sInf (ofSubmodule '' s)
   证明: ofSubmoduleLatticeHom.map_sInf' s
 
@@ -289,7 +289,7 @@ lemma ofSubmodule_iInf
 
 中文:
 引理 ofSubmodule_iInf
-  条件: (s : Set (Submodule R E))
+  条件: (s : 集合 (子模 R E))
   结论: ⨅ S in s, S = ⨅ S in s, (S : PointedCone R E)
   证明: by
   rw [← sInf_eq_iInf]; rw [ofSubmodule_sInf]; rw [sInf_eq_iInf]; rw [iInf_image]
@@ -310,7 +310,7 @@ lemma ofSubmodule_sSup
 
 中文:
 引理 ofSubmodule_sSup
-  条件: (s : Set (Submodule R E))
+  条件: (s : 集合 (子模 R E))
   结论: sSup s = sSup (ofSubmodule '' s)
   证明: ofSubmoduleLatticeHom.map_sSup' s
 
@@ -331,7 +331,7 @@ lemma ofSubmodule_iSup
 
 中文:
 引理 ofSubmodule_iSup
-  条件: (s : Set (Submodule R E))
+  条件: (s : 集合 (子模 R E))
   结论: ⨆ S in s, S = ⨆ S in s, (S : PointedCone R E)
   证明: by
   rw [← sSup_eq_iSup]; rw [ofSubmodule_sSup]; rw [sSup_eq_iSup]; rw [iSup_image]
@@ -355,7 +355,7 @@ lemma neg_ofSubmodule
 
 中文:
 引理 neg_ofSubmodule
-  条件: (S : Submodule R E)
+  条件: (S : 子模 R E)
   结论: -(ofSubmodule S) = ofSubmodule (-S)
   证明: neg_restrictScalars S
 
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (PointedCone R E) (ConvexCone R E)
+  签名: Coe (PointedCone R E) (余nvexCone R E)
   定义体: toConvexCone
 
 Depends on / 依赖: toConvexCone
@@ -424,7 +424,7 @@ theorem toConvexCone_injective
 
 中文:
 定理 toConvexCone_injective
-  结论: Injective ((↑) : PointedCone R E -> ConvexCone R E)
+  结论: 单射 ((↑) : PointedCone R E -> 余nvexCone R E)
   证明: fun _ _ => by simp [toConvexCone]
 
 Depends on / 依赖: toConvexCone
@@ -447,7 +447,7 @@ theorem pointed_toConvexCone
 中文:
 定理 pointed_toConvexCone
   条件: (C : PointedCone R E)
-  结论: (C : ConvexCone R E).Pointed
+  结论: (C : 余nvexCone R E).Pointed
   证明: by
   simp [toConvexCone, ConvexCone.Pointed]
 
@@ -504,7 +504,7 @@ nonrec lemma smul_mem (C : PointedCone R E) (hr : 0 <= r) (hx : x in C) : r • 
 中文:
 引理 convex
   条件: (C : PointedCone R E)
-  结论: Convex R (C : Set E)
+  结论: 凸 R (C : 集合 E)
   证明: C.toConvexCone.convex
 
 @[aesop 90% (rule_sets := [SetLike])]
@@ -529,7 +529,7 @@ lemma smul_mem_iff
 
 中文:
 引理 smul_mem_iff
-  结论: {𝕜 M : 类型} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜 M : 类型} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: ⟨fun h => inv_smul_smul₀ hc.ne' x ▸ C.smul_mem (inv_pos.2 hc).le h, C.smul_mem hc.le⟩
 
 Depends on / 依赖: C.smul_mem, hc.le, hc.ne, inv_pos, smul_mem
@@ -558,8 +558,8 @@ definition _root_.ConvexCone.toPointedCone
       · convert! hpo
 
 中文:
-定义 _root_.ConvexCone.toPointedCone
-  签名: (C : ConvexCone R E) (hC : C.Pointed)
+定义 _root_.余nvexCone.toPointedCone
+  签名: (C : 余nvexCone R E) (hC : C.Pointed)
   定义体: C
   add_mem' hx hy := C.add_mem hx hy
   zero_mem' := hC
@@ -600,8 +600,8 @@ lemma _root_.ConvexCone.mem_toPointedCone
 @[simp, norm_cast]
 
 中文:
-引理 _root_.ConvexCone.mem_toPointedCone
-  条件: {C : ConvexCone R E} (hC : C.Pointed) (x : E)
+引理 _root_.余nvexCone.mem_toPointedCone
+  条件: {C : 余nvexCone R E} (hC : C.Pointed) (x : E)
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -624,8 +624,8 @@ lemma _root_.ConvexCone.coe_toPointedCone
 @[simp]
 
 中文:
-引理 _root_.ConvexCone.coe_toPointedCone
-  条件: (C : ConvexCone R E) (hC : C.Pointed)
+引理 _root_.余nvexCone.coe_toPointedCone
+  条件: (C : 余nvexCone R E) (hC : C.Pointed)
   证明: rfl
 
 @[simp]
@@ -644,8 +644,8 @@ lemma _root_.ConvexCone.toPointedCone_top
   proof: rfl
 
 中文:
-引理 _root_.ConvexCone.toPointedCone_top
-  结论: (⊤ : ConvexCone R E).toPointedCone trivial = ⊤
+引理 _root_.余nvexCone.toPointedCone_top
+  结论: (⊤ : 余nvexCone R E).toPointedCone trivial = ⊤
   证明: rfl
 -/
 lemma _root_.ConvexCone.toPointedCone_top : (⊤ : ConvexCone R E).toPointedCone trivial = ⊤ := rfl
@@ -660,7 +660,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (ConvexCone R E) (PointedCone R E) (↑) ConvexCone.Pointed
+  签名: CanLift (余nvexCone R E) (PointedCone R E) (↑) 余nvexCone.Pointed
   定义体: ⟨C.toPointedCone hC, rfl⟩
 
 Depends on / 依赖: C.toPointedCone, toPointedCone
@@ -688,7 +688,7 @@ definition ofConeComb
 
 中文:
 定义 ofConeComb
-  签名: (C : Set E) (nonempty : C.Nonempty)
+  签名: (C : 集合 E) (nonempty : C.非空)
   定义体: .ofLinearComb C nonempty fun x hx y hy ⟨a, ha⟩ ⟨b, hb⟩ => coneComb x hx y hy a ha b hb
 
 Depends on / 依赖: coneComb, nonempty, ofLinearComb
@@ -709,7 +709,7 @@ abbreviation hull
 
 中文:
 缩写 hull
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: span R>=0 s
 -/
 abbrev hull (s : Set E) : PointedCone R E := span R>=0 s
@@ -728,7 +728,7 @@ alias subset_span := subset_hull
 
 中文:
 引理 subset_hull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: s subseteq PointedCone.hull R s
   证明: subset_span
 
@@ -754,7 +754,7 @@ lemma hull_le_span
 
 中文:
 引理 hull_le_span
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: hull R s <= span R s
   证明: span_le_restrictScalars R>=0 R s
 
@@ -781,7 +781,7 @@ lemma mem_hull_set
 
 中文:
 引理 mem_hull_set
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: x in hull R s ↔
   证明: by
   rw [mem_span_set]
@@ -887,7 +887,7 @@ theorem coe_map
 中文:
 定理 coe_map
   条件: (C : PointedCone R E) (f : E ->ₗ[R] F)
-  结论: (C.map f : Set F) = f '' C
+  结论: (C.map f : 集合 F) = f '' C
   证明: rfl
 
 @[simp]
@@ -952,7 +952,7 @@ theorem map_id
 中文:
 定理 map_id
   条件: (C : PointedCone R E)
-  结论: C.map LinearMap.id = C
+  结论: C.map 线性映射.id = C
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -997,7 +997,7 @@ theorem coe_comap
 中文:
 定理 coe_comap
   条件: (f : E ->ₗ[R] F) (C : PointedCone R F)
-  结论: (C.comap f : Set E) = f ⁻¹' C
+  结论: (C.comap f : 集合 E) = f ⁻¹' C
   证明: rfl
 
 @[simp]
@@ -1018,7 +1018,7 @@ theorem comap_id
 中文:
 定理 comap_id
   条件: (C : PointedCone R E)
-  结论: C.comap LinearMap.id = C
+  结论: C.comap 线性映射.id = C
   证明: rfl
 -/
 theorem comap_id (C : PointedCone R E) : C.comap LinearMap.id = C :=
@@ -1138,7 +1138,7 @@ theorem toConvexCone_positive
 
 中文:
 定理 toConvexCone_positive
-  结论: ↑(positive R E) = ConvexCone.positive R E
+  结论: ↑(positive R E) = 余nvexCone.positive R E
   证明: rfl
 -/
 theorem toConvexCone_positive : ↑(positive R E) = ConvexCone.positive R E :=
@@ -1355,7 +1355,7 @@ theorem lineal_eq_sSup
 中文:
 定理 lineal_eq_sSup
   条件: (C : PointedCone R E)
-  结论: C.lineal = sSup {S : Submodule R E | S <= C}
+  结论: C.lineal = sSup {S : 子模 R E | S <= C}
   证明: by
   simp_rw [gc_ofSubmodule_lineal.le_iff_le, Set.Iic_def, csSup_Iic]
 

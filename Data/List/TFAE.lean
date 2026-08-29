@@ -32,7 +32,7 @@ definition TFAE
 
 中文:
 定义 TFAE
-  签名: (l : List 命题)
+  签名: (l : 列表 命题)
   定义体: forall x in l, forall y in l, x ↔ y
 -/
 def TFAE (l : List Prop) : Prop :=
@@ -98,7 +98,7 @@ theorem tfae_cons_of_mem
 
 中文:
 定理 tfae_cons_of_mem
-  条件: {a b} {l : List 命题} (h : b in l)
+  条件: {a b} {l : 列表 命题} (h : b in l)
   结论: TFAE (a :: l) ↔ (a ↔ b) ∧ TFAE l
   证明: ⟨fun H => ⟨H a (by simp) b (Mem.tail a h),
     fun _ hp _ hq => H _ (Mem.tail a hp) _ (Mem.tail a hq)⟩,
@@ -134,7 +134,7 @@ theorem tfae_cons_cons
 
 中文:
 定理 tfae_cons_cons
-  条件: {a b} {l : List 命题}
+  条件: {a b} {l : 列表 命题}
   结论: TFAE (a :: b :: l) ↔ (a ↔ b) ∧ TFAE (b :: l)
   证明: tfae_cons_of_mem (Mem.head _)
 
@@ -158,7 +158,7 @@ theorem tfae_cons_self
 
 中文:
 定理 tfae_cons_self
-  条件: {a} {l : List 命题}
+  条件: {a} {l : 列表 命题}
   结论: TFAE (a :: a :: l) ↔ TFAE (a :: l)
   证明: by
   simp [tfae_cons_cons]
@@ -178,8 +178,8 @@ theorem tfae_of_forall
   proof: fun _a₁ h₁ _a₂ h₂ => (h _ h₁).trans (h _ h₂).symm
 
 中文:
-定理 tfae_of_forall
-  条件: (b : 命题) (l : List 命题) (h : 对任意 a in l, a ↔ b)
+定理 tfae_of_对任意
+  条件: (b : 命题) (l : 列表 命题) (h : 对任意 a in l, a ↔ b)
   结论: TFAE l
   证明: fun _a₁ h₁ _a₂ h₂ => (h _ h₁).trans (h _ h₂).symm
 -/
@@ -203,7 +203,7 @@ theorem tfae_of_cycle
 
 中文:
 定理 tfae_of_cycle
-  结论: {a b} {l : List 命题} (h_chain : List.IsChain (· -> ·) (a :: b :: l))
+  结论: {a b} {l : 列表 命题} (h_chain : 列表.IsChain (· -> ·) (a :: b :: l))
   证明: by
   induction l generalizing a b with
   | nil => simp_all [tfae_cons_cons, iff_def]
@@ -259,8 +259,8 @@ theorem forall_tfae
     (p₂ a) (mem_map_of_mem hp₂)
 
 中文:
-定理 forall_tfae
-  条件: {α : 类型} (l : List (α -> 命题)) (H : 对任意 a : α, (l.map (fun p => p a)).TFAE)
+定理 对任意_tfae
+  条件: {α : 类型} (l : 列表 (α -> 命题)) (H : 对任意 a : α, (l.map (fun p => p a)).TFAE)
   证明: by
   simp only [TFAE, List.forall_mem_map]
   intro p₁ hp₁ p₂ hp₂
@@ -289,8 +289,8 @@ theorem exists_tfae
     (p₂ a) (mem_map_of_mem hp₂)
 
 中文:
-定理 exists_tfae
-  条件: {α : 类型} (l : List (α -> 命题)) (H : 对任意 a : α, (l.map (fun p => p a)).TFAE)
+定理 存在_tfae
+  条件: {α : 类型} (l : 列表 (α -> 命题)) (H : 对任意 a : α, (l.map (fun p => p a)).TFAE)
   证明: by
   simp only [TFAE, List.forall_mem_map]
   intro p₁ hp₁ p₂ hp₂
@@ -322,8 +322,8 @@ alias ⟨_, TFAE.not⟩ := tfae_not_iff
 
 中文:
 定理 tfae_not_iff
-  条件: {l : List 命题}
-  结论: TFAE (l.map Not) ↔ TFAE l
+  条件: {l : 列表 命题}
+  结论: TFAE (l.map 非) ↔ TFAE l
   证明: by
   classical
   simp only [TFAE, mem_map, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,

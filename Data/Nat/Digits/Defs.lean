@@ -46,7 +46,7 @@ definition digitsAux0
 
 中文:
 定义 digitsAux0
-  签名: : 自然数 -> List 自然数
+  签名: : 自然数 -> 列表 自然数
 -/
 def digitsAux0 : Nat -> List Nat
   | 0 => []
@@ -141,7 +141,7 @@ definition digits
 
 中文:
 定义 digits
-  签名: : 自然数 -> 自然数 -> List 自然数
+  签名: : 自然数 -> 自然数 -> 列表 自然数
 -/
 def digits : Nat -> Nat -> List Nat
   | 0 => digitsAux0
@@ -238,7 +238,7 @@ theorem digits_one
 中文:
 定理 digits_one
   条件: (n : 自然数)
-  结论: digits 1 n = List.replicate n 1
+  结论: digits 1 n = 列表.replicate n 1
   证明: rfl
 -/
 theorem digits_one (n : Nat) : digits 1 n = List.replicate n 1 :=
@@ -411,7 +411,7 @@ definition ofDigits
 
 中文:
 定义 ofDigits
-  签名: {α : 类型} [Semiring α] (b : α)
+  签名: {α : 类型} [半环 α] (b : α)
 -/
 def ofDigits {α : Type*} [Semiring α] (b : α) : List Nat -> α
   | [] => 0
@@ -432,7 +432,7 @@ theorem ofDigits_eq_foldr
 
 中文:
 定理 ofDigits_eq_foldr
-  条件: {α : 类型} [Semiring α] (b : α) (L : List 自然数)
+  条件: {α : 类型} [半环 α] (b : α) (L : 列表 自然数)
   证明: by
   induction L with
   | nil => rfl
@@ -505,7 +505,7 @@ theorem ofDigits_one_cons
 
 中文:
 定理 ofDigits_one_cons
-  条件: {α : 类型} [Semiring α] (h : 自然数) (L : List 自然数)
+  条件: {α : 类型} [半环 α] (h : 自然数) (L : 列表 自然数)
   证明: by simp [ofDigits]
 
 Depends on / 依赖: ofDigits
@@ -523,7 +523,7 @@ theorem ofDigits_cons
 
 中文:
 定理 ofDigits_cons
-  条件: {b hd} {tl : List 自然数}
+  条件: {b hd} {tl : 列表 自然数}
   证明: rfl
 -/
 theorem ofDigits_cons {b hd} {tl : List Nat} :
@@ -546,7 +546,7 @@ theorem ofDigits_append
 
 中文:
 定理 ofDigits_append
-  条件: {b : 自然数} {l1 l2 : List 自然数}
+  条件: {b : 自然数} {l1 l2 : 列表 自然数}
   证明: by
   induction l1 with
   | nil => simp [ofDigits]
@@ -580,7 +580,7 @@ theorem ofDigits_append_zero
 
 中文:
 定理 ofDigits_append_zero
-  条件: {b : 自然数} (l : List 自然数)
+  条件: {b : 自然数} (l : 列表 自然数)
   证明: by
   rw [ofDigits_append]; rw [ofDigits_singleton]; rw [mul_zero]; rw [add_zero]
 
@@ -610,7 +610,7 @@ theorem ofDigits_replicate_zero
 中文:
 定理 ofDigits_replicate_zero
   条件: {b k : 自然数}
-  结论: ofDigits b (List.replicate k 0) = 0
+  结论: ofDigits b (列表.replicate k 0) = 0
   证明: by
   induction k with
   | zero => rfl
@@ -638,7 +638,7 @@ theorem ofDigits_append_replicate_zero
 
 中文:
 定理 ofDigits_append_replicate_zero
-  条件: {b k : 自然数} (l : List 自然数)
+  条件: {b k : 自然数} (l : 列表 自然数)
   证明: by
   rw [ofDigits_append]
   simp
@@ -663,7 +663,7 @@ theorem ofDigits_reverse_cons
 
 中文:
 定理 ofDigits_reverse_cons
-  条件: {b : 自然数} (l : List 自然数) (d : 自然数)
+  条件: {b : 自然数} (l : 列表 自然数) (d : 自然数)
   证明: by
   simp only [List.reverse_cons]
   rw [ofDigits_append]
@@ -690,7 +690,7 @@ theorem ofDigits_reverse_zero_cons
 
 中文:
 定理 ofDigits_reverse_zero_cons
-  条件: {b : 自然数} (l : List 自然数)
+  条件: {b : 自然数} (l : 列表 自然数)
   证明: by
   simp only [List.reverse_cons, ofDigits_append_zero]
 
@@ -716,7 +716,7 @@ theorem coe_ofDigits
 
 中文:
 定理 coe_ofDigits
-  条件: (α : 类型) [Semiring α] (b : 自然数) (L : List 自然数)
+  条件: (α : 类型) [半环 α] (b : 自然数) (L : 列表 自然数)
   证明: by
   induction L with
   | nil => simp [ofDigits]
@@ -771,7 +771,7 @@ theorem digits_ofDigits
 
 中文:
 定理 digits_ofDigits
-  结论: (b : 自然数) (h : 1 < b) (L : List 自然数) (w₁ : 对任意 l in L, l < b)
+  结论: (b : 自然数) (h : 1 < b) (L : 列表 自然数) (w₁ : 对任意 l in L, l < b)
   证明: by
   induction L with
   | nil => simp
@@ -889,8 +889,8 @@ theorem ofDigits_one
 
 中文:
 定理 ofDigits_one
-  条件: (L : List 自然数)
-  结论: ofDigits 1 L = L.sum
+  条件: (L : 列表 自然数)
+  结论: ofDigits 1 L = L.求和
   证明: by
   induction L with
   | nil => rfl
@@ -1028,7 +1028,7 @@ theorem digits.injective
 中文:
 定理 digits.injective
   条件: (b : 自然数)
-  结论: Function.Injective b.digits
+  结论: 函数.单射 b.digits
   证明: Function.LeftInverse.injective (ofDigits_digits b)
 
 @[simp]
@@ -1074,7 +1074,7 @@ theorem mul_ofDigits
 
 中文:
 定理 mul_ofDigits
-  条件: (n : 自然数) {b : 自然数} {l : List 自然数}
+  条件: (n : 自然数) {b : 自然数} {l : 列表 自然数}
   证明: by
   induction l with
   | nil => rfl
@@ -1110,7 +1110,7 @@ lemma ofDigits_inj_of_len_eq
 
 中文:
 引理 ofDigits_inj_of_len_eq
-  结论: {b : 自然数} (hb : 1 < b) {L1 L2 : List 自然数}
+  结论: {b : 自然数} (hb : 1 < b) {L1 L2 : 列表 自然数}
   证明: by
   induction L1 generalizing L2 with
   | nil =>
@@ -1161,7 +1161,7 @@ theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
 
 中文:
 定理 ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
-  结论: {b : 自然数} {l1 l2 : List 自然数}
+  结论: {b : 自然数} {l1 l2 : 列表 自然数}
   证明: by
   induction l1 generalizing l2 with
   | nil => simp_all [eq_comm, List.length_eq_zero_iff, ofDigits]
@@ -1279,7 +1279,7 @@ theorem ofDigits_lt_base_pow_length'
 
 中文:
 定理 ofDigits_lt_base_pow_length'
-  条件: {b : 自然数} {l : List 自然数} (hl : 对任意 x in l, x < b + 2)
+  条件: {b : 自然数} {l : 列表 自然数} (hl : 对任意 x in l, x < b + 2)
   证明: by
   induction l with
   | nil => simp [ofDigits]
@@ -1313,7 +1313,7 @@ theorem ofDigits_lt_base_pow_length
 
 中文:
 定理 ofDigits_lt_base_pow_length
-  条件: {b : 自然数} {l : List 自然数} (hb : 1 < b) (hl : 对任意 x in l, x < b)
+  条件: {b : 自然数} {l : 列表 自然数} (hb : 1 < b) (hl : 对任意 x in l, x < b)
   证明: by
   rcases b with (_ | _ | b) <;> simp_all [ofDigits_lt_base_pow_length']
 
@@ -1466,7 +1466,7 @@ theorem ofDigits_monotone
 
 中文:
 定理 ofDigits_monotone
-  条件: {p q : 自然数} (L : List 自然数) (h : p <= q)
+  条件: {p q : 自然数} (L : 列表 自然数) (h : p <= q)
   结论: ofDigits p L <= ofDigits q L
   证明: by
   induction L with
@@ -1495,8 +1495,8 @@ theorem sum_le_ofDigits
 
 中文:
 定理 sum_le_ofDigits
-  条件: {p : 自然数} (L : List 自然数) (h : 1 <= p)
-  结论: L.sum <= ofDigits p L
+  条件: {p : 自然数} (L : 列表 自然数) (h : 1 <= p)
+  结论: L.求和 <= ofDigits p L
   证明: (ofDigits_one L).symm ▸ ofDigits_monotone L h
 
 Depends on / 依赖: ofDigits_monotone, ofDigits_one
@@ -1524,7 +1524,7 @@ theorem digit_sum_le
 中文:
 定理 digit_sum_le
   条件: (p n : 自然数)
-  结论: List.sum (digits p n) <= n
+  结论: 列表.求和 (digits p n) <= n
   证明: by
   induction n with
   | zero => exact digits_zero _ ▸ Nat.le_refl (List.sum [])
@@ -1563,7 +1563,7 @@ lemma ofDigits_div_eq_ofDigits_tail
 
 中文:
 引理 ofDigits_div_eq_ofDigits_tail
-  结论: {p : 自然数} (hpos : 0 < p) (digits : List 自然数)
+  结论: {p : 自然数} (hpos : 0 < p) (digits : 列表 自然数)
   证明: by
   induction digits with
   | nil => simp [ofDigits]
@@ -1777,7 +1777,7 @@ lemma toDigitsCore_lens_eq
 中文:
 引理 toDigitsCore_lens_eq
   条件: (b f : 自然数)
-  结论: 对任意 (n : 自然数) (c : Char) (tl : List Char),
+  结论: 对任意 (n : 自然数) (c : Char) (tl : 列表 Char),
   证明: by
   induction f with (intro n c tl; simp only [Nat.toDigitsCore, List.length])
   | succ f ih =>

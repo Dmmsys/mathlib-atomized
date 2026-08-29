@@ -59,8 +59,8 @@ lemma coe_mul_coe
 
 中文:
 引理 coe_mul_coe
-  条件: [SetLike S M] [SubmonoidClass S M] (H : S)
-  结论: H * H = (H : Set M)
+  条件: [集合状 S M] [子幺半群类 S M] (H : S)
+  结论: H * H = (H : 集合 M)
   证明: by
   aesop (add simp mem_mul)
 
@@ -83,8 +83,8 @@ lemma Set.subtype_smul_set
 @[to_additive (attr := simp)]
 
 中文:
-引理 Set.subtype_smul_set
-  条件: {S α β : 类型} [SMul α β] [SetLike S α] {s : S} (x : s) (t : Set β)
+引理 集合.subtype_smul_set
+  条件: {S α β : 类型} [标量乘法 α β] [集合状 S α] {s : S} (x : s) (t : 集合 β)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -103,7 +103,7 @@ lemma coe_set_pow
 
 中文:
 引理 coe_set_pow
-  条件: [SetLike S M] [SubmonoidClass S M]
+  条件: [集合状 S M] [子幺半群类 S M]
 -/
 lemma coe_set_pow [SetLike S M] [SubmonoidClass S M] :
     forall {n} (_ : n != 0) (H : S), (H ^ n : Set M) = H
@@ -131,7 +131,7 @@ theorem mul_subset
 
 中文:
 定理 mul_subset
-  条件: {S : Submonoid M} (hs : s subseteq S) (ht : t subseteq S)
+  条件: {S : 子幺半群 M} (hs : s subseteq S) (ht : t subseteq S)
   结论: s * t subseteq S
   证明: mul_subset_iff.2 fun _x hx _y hy => mul_mem (hs hx) (ht hy)
 
@@ -157,7 +157,7 @@ lemma pow_subset
 
 中文:
 引理 pow_subset
-  条件: {S : Submonoid M} {n : 自然数} (hs : s subseteq S)
+  条件: {S : 子幺半群 M} {n : 自然数} (hs : s subseteq S)
   结论: s ^ n subseteq S
   证明: by
   induction n <;> simp [pow_succ, *]
@@ -184,7 +184,7 @@ theorem mul_subset_closure
 中文:
 定理 mul_subset_closure
   条件: (hs : s subseteq u) (ht : t subseteq u)
-  结论: s * t subseteq Submonoid.closure u
+  结论: s * t subseteq 子幺半群.closure u
   证明: mul_subset (Subset.trans hs Submonoid.subset_closure) (Subset.trans ht Submonoid.subset_closure)
 
 @[to_additive]
@@ -209,8 +209,8 @@ theorem coe_mul_self_eq
 
 中文:
 定理 coe_mul_self_eq
-  条件: (s : Submonoid M)
-  结论: (s : Set M) * s = s
+  条件: (s : 子幺半群 M)
+  结论: (s : 集合 M) * s = s
   证明: by
   simp
 
@@ -233,7 +233,7 @@ theorem closure_mul_le
 
 中文:
 定理 closure_mul_le
-  条件: (S T : Set M)
+  条件: (S T : 集合 M)
   结论: closure (S * T) <= closure S ⊔ closure T
   证明: sInf_le fun _x ⟨_s, hs, _t, ht, hx⟩ => hx ▸
     (closure S ⊔ closure T).mul_mem (SetLike.le_def.mp le_sup_left <| subset_closure hs)
@@ -339,8 +339,8 @@ theorem sup_eq_closure_mul
 
 中文:
 定理 sup_eq_closure_mul
-  条件: (H K : Submonoid M)
-  结论: H ⊔ K = closure ((H : Set M) * (K : Set M))
+  条件: (H K : 子幺半群 M)
+  结论: H ⊔ K = closure ((H : 集合 M) * (K : 集合 M))
   证明: le_antisymm
     (sup_le (fun h hh => subset_closure ⟨h, hh, 1, K.one_mem, mul_one h⟩) fun k hk =>
       subset_closure ⟨1, H.one_mem, k, hk, one_mul k⟩)
@@ -371,7 +371,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: {N : 类型} [CommMonoid N] (H K : Submonoid N)
+  条件: {N : 类型} [交换幺半群 N] (H K : 子幺半群 N)
   证明: by
   ext x
   simp [mem_sup, Set.mem_mul]
@@ -403,7 +403,7 @@ theorem pow_smul_mem_closure_smul
 
 中文:
 定理 pow_smul_mem_closure_smul
-  结论: {N : 类型} [CommMonoid N] [MulAction M N] [IsScalarTower M N N]
+  结论: {N : 类型} [交换幺半群 N] [乘法作用 M N] [标量塔 M N N]
   证明: by
   induction hx using closure_induction with
   | mem x hx => exact ⟨1, subset_closure ⟨_, hx, by rw [pow_one]⟩⟩
@@ -447,7 +447,7 @@ scoped[Pointwise] attribute [instance] Submonoid.inv AddSubmonoid.neg
 
 中文:
 定义 inv
-  签名: : Inv (Submonoid G) where
+  签名: : 取逆 (子幺半群 G) where
   定义体: { carrier := (S : Set G)⁻¹
       mul_mem' := fun ha hb => by rw [mem_inv, mul_inv_rev]; exact mul_mem hb ha
 one_mem' := mem_inv.2 by rw [inv_one]; exact S.one_mem' }
@@ -478,8 +478,8 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: (S : Submonoid G)
-  结论: ↑S⁻¹ = (S : Set G)⁻¹
+  条件: (S : 子幺半群 G)
+  结论: ↑S⁻¹ = (S : 集合 G)⁻¹
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -499,7 +499,7 @@ theorem mem_inv
 
 中文:
 定理 mem_inv
-  条件: {g : G} {S : Submonoid G}
+  条件: {g : G} {S : 子幺半群 G}
   结论: g in S⁻¹ ↔ g⁻¹ in S
   证明: Iff.rfl
 
@@ -524,7 +524,7 @@ scoped[Pointwise] attribute [instance] Submonoid.involutiveInv AddSubmonoid.invo
 
 中文:
 定义 involutiveInv
-  签名: : InvolutiveInv (Submonoid G)
+  签名: : InvolutiveInv (子幺半群 G)
   定义体: SetLike.coe_injective.involutiveInv _ fun _ => rfl
 
 scoped[Pointwise] attribute [instance] Submonoid.involutiveInv AddSubmonoid.involutiveNeg
@@ -552,7 +552,7 @@ theorem inv_le_inv
 
 中文:
 定理 inv_le_inv
-  条件: (S T : Submonoid G)
+  条件: (S T : 子幺半群 G)
   结论: S⁻¹ <= T⁻¹ ↔ S <= T
   证明: SetLike.coe_subset_coe.symm.trans Set.inv_subset_inv
 
@@ -575,7 +575,7 @@ theorem inv_le
 
 中文:
 定理 inv_le
-  条件: (S T : Submonoid G)
+  条件: (S T : 子幺半群 G)
   结论: S⁻¹ <= T ↔ S <= T⁻¹
   证明: SetLike.coe_subset_coe.symm.trans Set.inv_subset
 
@@ -600,7 +600,7 @@ definition invOrderIso
 
 中文:
 定义 invOrderIso
-  签名: : Submonoid G ≃o Submonoid G where
+  签名: : 子幺半群 G ≃o 子幺半群 G where
   定义体: Equiv.inv _
   map_rel_iff' := inv_le_inv _ _
 
@@ -631,7 +631,7 @@ theorem closure_inv
 
 中文:
 定理 closure_inv
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure s⁻¹ = (closure s)⁻¹
   证明: by
   apply le_antisymm
@@ -666,7 +666,7 @@ lemma mem_closure_inv
 
 中文:
 引理 mem_closure_inv
-  条件: (s : Set G) (x : G)
+  条件: (s : 集合 G) (x : G)
   结论: x in closure s⁻¹ ↔ x⁻¹ in closure s
   证明: by
   rw [closure_inv]; rw [mem_inv]
@@ -692,7 +692,7 @@ theorem inv_inf
 
 中文:
 定理 inv_inf
-  条件: (S T : Submonoid G)
+  条件: (S T : 子幺半群 G)
   结论: (S ⊓ T)⁻¹ = S⁻¹ ⊓ T⁻¹
   证明: SetLike.coe_injective Set.inter_inv
 
@@ -717,7 +717,7 @@ theorem inv_sup
 
 中文:
 定理 inv_sup
-  条件: (S T : Submonoid G)
+  条件: (S T : 子幺半群 G)
   结论: (S ⊔ T)⁻¹ = S⁻¹ ⊔ T⁻¹
   证明: (invOrderIso : Submonoid G ≃o Submonoid G).map_sup S T
 
@@ -741,7 +741,7 @@ theorem inv_bot
 
 中文:
 定理 inv_bot
-  结论: (⊥ : Submonoid G)⁻¹ = ⊥
+  结论: (⊥ : 子幺半群 G)⁻¹ = ⊥
   证明: SetLike.coe_injective (Set.inv_singleton 1).trans congr_arg _ inv_one
 
 @[to_additive (attr := simp)]
@@ -764,7 +764,7 @@ theorem inv_top
 
 中文:
 定理 inv_top
-  结论: (⊤ : Submonoid G)⁻¹ = ⊤
+  结论: (⊤ : 子幺半群 G)⁻¹ = ⊤
   证明: SetLike.coe_injective Set.inv_univ
 
 @[to_additive (attr := simp)]
@@ -788,7 +788,7 @@ theorem inv_iInf
 
 中文:
 定理 inv_iInf
-  条件: {ι : Sort*} (S : ι -> Submonoid G)
+  条件: {ι : 类型层*} (S : ι -> 子幺半群 G)
   结论: (⨅ i, S i)⁻¹ = ⨅ i, (S i)⁻¹
   证明: (invOrderIso : Submonoid G ≃o Submonoid G).map_iInf _
 
@@ -811,7 +811,7 @@ theorem inv_iSup
 
 中文:
 定理 inv_iSup
-  条件: {ι : Sort*} (S : ι -> Submonoid G)
+  条件: {ι : 类型层*} (S : ι -> 子幺半群 G)
   结论: (⨆ i, S i)⁻¹ = ⨆ i, (S i)⁻¹
   证明: (invOrderIso : Submonoid G ≃o Submonoid G).map_iSup _
 
@@ -851,7 +851,7 @@ scoped[Pointwise] attribute [instance] Submonoid.po
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction α (Submonoid M) where
+  签名: : 乘法作用 α (子幺半群 M) where
   定义体: S.map (MulDistribMulAction.toMonoidEnd _ M a)
   one_smul S := by
     change S.map _ = S
@@ -885,8 +885,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (a : α) (S : Submonoid M)
-  结论: ↑(a • S) = a • (S : Set M)
+  条件: (a : α) (S : 子幺半群 M)
+  结论: ↑(a • S) = a • (S : 集合 M)
   证明: rfl
 -/
 theorem coe_pointwise_smul (a : α) (S : Submonoid M) : ↑(a • S) = a • (S : Set M) :=
@@ -903,7 +903,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : M) (a : α) (S : Submonoid M)
+  条件: (m : M) (a : α) (S : 子幺半群 M)
   结论: m in S -> a • m in a • S
   证明: (Set.smul_mem_smul_set : _ -> _ in a • (S : Set M))
 
@@ -922,7 +922,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass α (Submonoid M) HSMul.hSMul LE.le
+  签名: 协变类 α (子幺半群 M) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => image_mono⟩
 
 Depends on / 依赖: image_mono
@@ -941,8 +941,8 @@ theorem mem_smul_pointwise_iff_exists
 @[simp]
 
 中文:
-定理 mem_smul_pointwise_iff_exists
-  条件: (m : M) (a : α) (S : Submonoid M)
+定理 mem_smul_pointwise_iff_存在
+  条件: (m : M) (a : α) (S : 子幺半群 M)
   证明: (Set.mem_smul_set : m in a • (S : Set M) ↔ _)
 
 @[simp]
@@ -966,7 +966,7 @@ theorem smul_bot
 中文:
 定理 smul_bot
   条件: (a : α)
-  结论: a • (⊥ : Submonoid M) = ⊥
+  结论: a • (⊥ : 子幺半群 M) = ⊥
   证明: map_bot _
 
 Depends on / 依赖: map_bot
@@ -985,7 +985,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (a : α) (S T : Submonoid M)
+  条件: (a : α) (S T : 子幺半群 M)
   结论: a • (S ⊔ T) = a • S ⊔ a • T
   证明: map_sup _ _ _
 
@@ -1005,7 +1005,7 @@ theorem smul_closure
 
 中文:
 定理 smul_closure
-  条件: (a : α) (s : Set M)
+  条件: (a : α) (s : 集合 M)
   结论: a • closure s = closure (a • s)
   证明: MonoidHom.map_mclosure _ _
 
@@ -1026,7 +1026,7 @@ scoped[Pointwise] attribute [instance] Submonoid.pointwise_isCentralScalar
 
 中文:
 引理 pointwise_isCentralScalar
-  条件: [MulDistribMulAction αᵐᵒᵖ M] [IsCentralScalar α M]
+  条件: [MulDistribMul作用 αᵐᵒᵖ M] [中心标量 α M]
   证明: ⟨fun _ S => (congr_arg fun f : Monoid.End M => S.map f) MonoidHom.ext op_smul_eq_smul _⟩
 
 scoped[Pointwise] attribute [instance] Submonoid.pointwise_isCentralScalar
@@ -1057,7 +1057,7 @@ theorem smul_mem_pointwise_smul_iff
 
 中文:
 定理 smul_mem_pointwise_smul_iff
-  条件: {a : α} {S : Submonoid M} {x : M}
+  条件: {a : α} {S : 子幺半群 M} {x : M}
   结论: a • x in a • S ↔ x in S
   证明: smul_mem_smul_set_iff
 
@@ -1076,7 +1076,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : α} {S : Submonoid M} {x : M}
+  条件: {a : α} {S : 子幺半群 M} {x : M}
   证明: mem_smul_set_iff_inv_smul_mem
 
 Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
@@ -1098,7 +1098,7 @@ theorem mem_inv_pointwise_smul_iff
 
 中文:
 定理 mem_inv_pointwise_smul_iff
-  条件: {a : α} {S : Submonoid M} {x : M}
+  条件: {a : α} {S : 子幺半群 M} {x : M}
   结论: x in a⁻¹ • S ↔ a • x in S
   证明: mem_inv_smul_set_iff
 
@@ -1121,7 +1121,7 @@ theorem pointwise_smul_le_pointwise_smul_iff
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : α} {S T : Submonoid M}
+  条件: {a : α} {S T : 子幺半群 M}
   结论: a • S <= a • T ↔ S <= T
   证明: smul_set_subset_smul_set_iff
 
@@ -1141,7 +1141,7 @@ theorem pointwise_smul_subset_iff
 
 中文:
 定理 pointwise_smul_subset_iff
-  条件: {a : α} {S T : Submonoid M}
+  条件: {a : α} {S T : 子幺半群 M}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: smul_set_subset_iff_subset_inv_smul_set
 
@@ -1161,7 +1161,7 @@ theorem subset_pointwise_smul_iff
 
 中文:
 定理 subset_pointwise_smul_iff
-  条件: {a : α} {S T : Submonoid M}
+  条件: {a : α} {S T : 子幺半群 M}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: subset_smul_set_iff
 

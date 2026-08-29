@@ -59,7 +59,7 @@ theorem exists_roots_norm_sub_lt_of_norm_coeff_sub_lt
     b
 
 中文:
-定理 exists_roots_norm_sub_lt_of_norm_coeff_sub_lt
+定理 存在_roots_norm_sub_lt_of_norm_coeff_sub_lt
   结论: (hε : 0 < ε) {a : K} (ha : f.eval a = 0)
   证明: by
   -- Let `a` be a root of `f`. To show there exists a root `b` of `g` such that `‖a - b‖` is small,
@@ -142,7 +142,7 @@ theorem exists_aroots_norm_sub_lt_of_norm_coeff_sub_lt
   simpa using h2
 
 中文:
-定理 exists_aroots_norm_sub_lt_of_norm_coeff_sub_lt
+定理 存在_aroots_norm_sub_lt_of_norm_coeff_sub_lt
   结论: (hε : 0 < ε) {a : L} (ha : f.aeval a = 0)
   证明: by
   obtain ⟨b, h1, h2⟩ := exists_roots_norm_sub_lt_of_norm_coeff_sub_lt hε
@@ -185,7 +185,7 @@ theorem exists_monic_and_natDegree_eq_and_norm_map_algebraMap_coeff_sub_lt
   have hdeg : (C 
 
 中文:
-定理 exists_monic_and_natDegree_eq_and_norm_map_algebraMap_coeff_sub_lt
+定理 存在_monic_and_natDegree_eq_and_norm_map_algebraMap_coeff_sub_lt
   证明: by
   by_cases h : f.natDegree = 0
   · use 1

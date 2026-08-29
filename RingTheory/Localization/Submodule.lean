@@ -43,7 +43,7 @@ definition coeSubmodule
 
 中文:
 定义 coeSubmodule
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: Submodule.map (Algebra.linearMap R S) I
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Submodule, Submodule.map, linearMap
@@ -61,7 +61,7 @@ theorem mem_coeSubmodule
 
 中文:
 定理 mem_coeSubmodule
-  条件: (I : Ideal R) {x : S}
+  条件: (I : 理想 R) {x : S}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -83,7 +83,7 @@ theorem coeSubmodule_mono
 
 中文:
 定理 coeSubmodule_mono
-  条件: {I J : Ideal R} (h : I <= J)
+  条件: {I J : 理想 R} (h : I <= J)
   结论: coeSubmodule S I <= coeSubmodule S J
   证明: Submodule.map_mono h
 
@@ -108,7 +108,7 @@ theorem coeSubmodule_bot
 
 中文:
 定理 coeSubmodule_bot
-  结论: coeSubmodule S (⊥ : Ideal R) = ⊥
+  结论: coeSubmodule S (⊥ : 理想 R) = ⊥
   证明: by
   rw [coeSubmodule]; rw [Submodule.map_bot]
 
@@ -133,7 +133,7 @@ theorem coeSubmodule_top
 
 中文:
 定理 coeSubmodule_top
-  结论: coeSubmodule S (⊤ : Ideal R) = 1
+  结论: coeSubmodule S (⊤ : 理想 R) = 1
   证明: by
   rw [coeSubmodule]; rw [Submodule.map_top]; rw [Submodule.one_eq_range]
 
@@ -157,7 +157,7 @@ theorem coeSubmodule_sup
 
 中文:
 定理 coeSubmodule_sup
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: Submodule.map_sup _ _ _
 
 @[simp]
@@ -179,7 +179,7 @@ theorem coeSubmodule_mul
 
 中文:
 定理 coeSubmodule_mul
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: Submodule.map_mul _ _ (Algebra.ofId R S)
 
 Depends on / 依赖: Algebra, Algebra.ofId, Submodule, Submodule.map_mul, map_mul
@@ -200,7 +200,7 @@ theorem coeSubmodule_fg
 
 中文:
 定理 coeSubmodule_fg
-  条件: (hS : Function.Injective (algebraMap R S)) (I : Ideal R)
+  条件: (hS : 函数.单射 (algebraMap R S)) (I : 理想 R)
   证明: ⟨Submodule.fg_of_fg_map_injective _ hS, Submodule.FG.map _⟩
 
 @[simp]
@@ -224,7 +224,7 @@ theorem coeSubmodule_span
 
 中文:
 定理 coeSubmodule_span
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   rw [IsLocalization.coeSubmodule]; rw [Ideal.span]; rw [Submodule.map_span]
   rfl
@@ -273,8 +273,8 @@ theorem isNoetherianRing
 
 中文:
 定理 isNoetherianRing
-  条件: (h : IsNoetherianRing R)
-  结论: IsNoetherianRing S
+  条件: (h : 是Noether环 R)
+  结论: 是Noether环 S
   证明: by
   rw [isNoetherianRing_iff]; rw [isNoetherian_iff] at h ⊢
   exact OrderEmbedding.wellFounded (IsLocalization.orderEmbedding M S).dual h
@@ -299,7 +299,7 @@ lemma _root_.Algebra.EssFiniteType.isNoetherianRing
     (Algebra.FiniteType.isNoetherianRing R _)
 
 中文:
-引理 _root_.Algebra.EssFiniteType.isNoetherianRing
+引理 _root_.代数.EssFiniteType.isNoetherianRing
   证明: by
   exact IsLocalization.isNoetherianRing (Algebra.EssFiniteType.submonoid R S) _
     (Algebra.FiniteType.isNoetherianRing R _)
@@ -331,7 +331,7 @@ theorem coeSubmodule_le_coeSubmodule
 
 中文:
 定理 coeSubmodule_le_coeSubmodule
-  条件: (h : M <= nonZeroDivisors R) {I J : Ideal R}
+  条件: (h : M <= nonZeroDivisors R) {I J : 理想 R}
   证明: -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify the value of `f` here:
   Submodule.map_le_map_iff_of_injective (f := Algebra.linearMap R S) (IsLocalization.injective _ h)
     _ _
@@ -400,7 +400,7 @@ theorem coeSubmodule_isPrincipal
 
 中文:
 定理 coeSubmodule_isPrincipal
-  条件: {I : Ideal R} (h : M <= nonZeroDivisors R)
+  条件: {I : 理想 R} (h : M <= nonZeroDivisors R)
   证明: by
   constructor <;> rintro ⟨⟨x, hx⟩⟩
   · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
@@ -441,7 +441,7 @@ theorem mem_span_iff
 
 中文:
 定理 mem_span_iff
-  结论: {N : 类型} [AddCommMonoid N] [Module R N] [Module S N] [IsScalarTower R S N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N] [模 S N] [标量塔 R S N]
   证明: by
   constructor
   · intro h
@@ -496,7 +496,7 @@ theorem mem_span_map
 
 中文:
 定理 mem_span_map
-  条件: {x : S} {a : Set R}
+  条件: {x : S} {a : 集合 R}
   证明: by
   refine (mem_span_iff M).trans ?_
   constructor
@@ -546,7 +546,7 @@ theorem coeSubmodule_le_coeSubmodule
 
 中文:
 定理 coeSubmodule_le_coeSubmodule
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   证明: IsLocalization.coeSubmodule_le_coeSubmodule le_rfl
 
 @[gcongr, mono]
@@ -568,7 +568,7 @@ theorem coeSubmodule_strictMono
 
 中文:
 定理 coeSubmodule_strictMono
-  结论: StrictMono (coeSubmodule K : Ideal R -> Submodule R K)
+  结论: 严格递增 (coeSubmodule K : 理想 R -> 子模 R K)
   证明: strictMono_of_le_iff_le fun _ _ => coeSubmodule_le_coeSubmodule.symm
 
 Depends on / 依赖: coeSubmodule_le_coeSubmodule, coeSubmodule_le_coeSubmodule.symm, strictMono_of_le_iff_le
@@ -590,7 +590,7 @@ theorem coeSubmodule_injective
 
 中文:
 定理 coeSubmodule_injective
-  结论: Function.Injective (coeSubmodule K : Ideal R -> Submodule R K)
+  结论: 函数.单射 (coeSubmodule K : 理想 R -> 子模 R K)
   证明: .of_eq_imp_le fun hl => coeSubmodule_le_coeSubmodule.mp hl.le
 
 @[simp]
@@ -612,8 +612,8 @@ theorem coeSubmodule_isPrincipal
 
 中文:
 定理 coeSubmodule_isPrincipal
-  条件: {I : Ideal R}
-  结论: (coeSubmodule K I).IsPrincipal ↔ I.IsPrincipal
+  条件: {I : 理想 R}
+  结论: (coeSubmodule K I).是Principal ↔ I.是Principal
   证明: IsLocalization.coeSubmodule_isPrincipal _ le_rfl
 
 Depends on / 依赖: IsLocalization, IsLocalization.coeSubmodule_isPrincipal, coeSubmodule_isPrincipal, le_rfl

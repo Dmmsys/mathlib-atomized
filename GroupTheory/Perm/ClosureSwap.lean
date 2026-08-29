@@ -45,7 +45,7 @@ theorem finite_compl_fixedBy_closure_iff
 
 中文:
 定理 finite_compl_fixedBy_closure_iff
-  条件: {S : Set G}
+  条件: {S : 集合 G}
   证明: ⟨fun h g hg => h g (subset_closure hg), fun h g hg => by
     refine closure_induction h (by simp) (fun g g' _ _ hg hg' => (hg.union hg').subset ?_)
       (by simp) hg
@@ -77,8 +77,8 @@ theorem exists_smul_notMem_of_subset_orbit_closure
   simp_rw [SetLike.mem_coe, mem_stabili
 
 中文:
-定理 exists_smul_notMem_of_subset_orbit_closure
-  结论: (S : Set G) (T : Set α) {a : α}
+定理 存在_smul_notMem_of_subset_orbit_closure
+  结论: (S : 集合 G) (T : 集合 α) {a : α}
   证明: by
   have key0 : ¬ closure S <= stabilizer G T := by
     have ⟨b, hb⟩ := nonempty
@@ -119,7 +119,7 @@ theorem finite_compl_fixedBy_swap
 中文:
 定理 finite_compl_fixedBy_swap
   条件: {x y : α}
-  结论: (fixedBy α (swap x y))ᶜ.Finite
+  结论: (fixedBy α (swap x y))ᶜ.有限
   证明: Set.Finite.subset (s := {x, y}) (by simp)
     (compl_subset_comm.mp fun z h => by apply swap_apply_of_ne_of_ne <;> rintro rfl <;> simp at h)
 
@@ -140,8 +140,8 @@ theorem Equiv.Perm.IsSwap.finite_compl_fixedBy
   exact finite_compl_fixedBy_swap
 
 中文:
-定理 Equiv.Perm.IsSwap.finite_compl_fixedBy
-  条件: {σ : Perm α} (h : σ.IsSwap)
+定理 等价.置换.IsSwap.finite_compl_fixedBy
+  条件: {σ : 置换 α} (h : σ.IsSwap)
   证明: by
   obtain ⟨x, y, -, rfl⟩ := h
   exact finite_compl_fixedBy_swap
@@ -169,8 +169,8 @@ theorem SubmonoidClass.swap_mem_trans
   exact mul_mem (mul_mem hbc hab) hbc
 
 中文:
-定理 SubmonoidClass.swap_mem_trans
-  结论: {a b c : α} {C} [SetLike C (Perm α)]
+定理 子幺半群类.swap_mem_trans
+  结论: {a b c : α} {C} [集合状 C (置换 α)]
   证明: by
   obtain rfl | hab' := eq_or_ne a b
   · exact hbc
@@ -208,7 +208,7 @@ theorem swap_mem_closure_isSwap
 
 中文:
 定理 swap_mem_closure_isSwap
-  条件: {S : Set (Perm α)} (hS : 对任意 f in S, f.IsSwap) {x y : α}
+  条件: {S : 集合 (置换 α)} (hS : 对任意 f in S, f.IsSwap) {x y : α}
   证明: by
   refine ⟨fun h => ⟨⟨swap x y, h⟩, swap_apply_right x y⟩, fun hf => ?_⟩
   by_contra h
@@ -251,7 +251,7 @@ theorem mem_closure_isSwap
 
 中文:
 定理 mem_closure_isSwap
-  条件: {S : Set (Perm α)} (hS : 对任意 f in S, f.IsSwap) {f : Perm α}
+  条件: {S : 集合 (置换 α)} (hS : 对任意 f in S, f.IsSwap) {f : 置换 α}
   证明: by
   refine ⟨fun hf => ⟨?_, fun x => mem_orbit_iff.mpr ⟨⟨f, hf⟩, rfl⟩⟩, ?_⟩
   · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
@@ -301,7 +301,7 @@ theorem mem_closure_isSwap'
 
 中文:
 定理 mem_closure_isSwap'
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   证明: by
   refine (mem_closure_isSwap fun _ => id).trans
     (and_iff_left fun x => ⟨⟨swap x (f x), ?_⟩, swap_apply_left x (f x)⟩)
@@ -332,7 +332,7 @@ theorem closure_of_isSwap_of_isPretransitive
 
 中文:
 定理 closure_of_isSwap_of_isPretransitive
-  结论: [Finite α] {S : Set (Perm α)} (hS : 对任意 σ in S, σ.IsSwap)
+  结论: [有限 α] {S : 集合 (置换 α)} (hS : 对任意 σ in S, σ.IsSwap)
   证明: by
   simp [eq_top_iff', mem_closure_isSwap hS, orbit_eq_univ, Set.toFinite]
 
@@ -358,7 +358,7 @@ theorem surjective_of_isSwap_of_isPretransitive'
 
 中文:
 定理 surjective_of_isSwap_of_isPretransitive'
-  结论: [Finite α] (S : Set G)
+  结论: [有限 α] (S : 集合 G)
   证明: by
   have h : closure ((toPermHom G α '' S) \ {1}) = (toPermHom G α).range := by
     rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
@@ -390,7 +390,7 @@ theorem surjective_of_isSwap_of_isPretransitive
 
 中文:
 定理 surjective_of_isSwap_of_isPretransitive
-  结论: [Finite α] (S : Set G)
+  结论: [有限 α] (S : 集合 G)
   证明: surjective_of_isSwap_of_isPretransitive' S (fun σ hσ => Or.inr (hS1 σ hσ)) hS2
 
 Depends on / 依赖: Or.inr, surjective_of_isSwap_of_isPretransitive

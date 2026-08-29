@@ -64,7 +64,7 @@ inductive ElimStatus
 归纳类型 ElimStatus
   构造子 (2 个):
     - success: 
-    - failure: (ts : List Expr)
+    - failure: (ts : 列表 Expr)
 -/
 inductive ElimStatus
   | success
@@ -121,7 +121,7 @@ structure ChooseArg
   公理与运算 (3 个):
     - ref : Syntax
     - name : Name
-    - expectedType? : Option Term
+    - expectedType? : 选项类型 项
 
 Depends on / 依赖: Batteries, Batteries.ExtendedBinder.extBinderParenthesized, ExtendedBinder, binderIdent, extBinderParenthesized
 -/
@@ -199,7 +199,7 @@ definition choose1
 
 中文:
 定义 choose1
-  签名: (g : MVarId) (nondep : 布尔) (h : Option Expr) (data : Name)
+  签名: (g : MVarId) (nondep : 布尔值) (h : 选项类型 Expr) (data : Name)
   定义体: do
   let (g, h) ← match h with
   | some e => pure (g, e)
@@ -296,7 +296,7 @@ definition choose1WithInfo
 
 中文:
 定义 choose1WithInfo
-  签名: (g : MVarId) (nondep : 布尔) (h : Option Expr) (arg : ChooseArg)
+  签名: (g : MVarId) (nondep : 布尔值) (h : 选项类型 Expr) (arg : ChooseArg)
   定义体: do
   let (status, fvar, g) ← choose1 g nondep h arg.name
   let g ← g.withContext do
@@ -340,7 +340,7 @@ definition elabChoose
 
 中文:
 定义 elabChoose
-  签名: (nondep : 布尔) (h : Option Expr)
+  签名: (nondep : 布尔值) (h : 选项类型 Expr)
   定义体: m!"choose!: failed to synthesize any nonempty instances"
       for ty in tys do
         msg := msg ++ m!"{(← mkFreshExprMVar ty).mvarId!}"

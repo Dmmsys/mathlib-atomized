@@ -239,7 +239,7 @@ lemma tendsto_antidiagonal
 
 中文:
 引理 tendsto_antidiagonal
-  结论: {M S : 类型} [AddMonoid M] [Finset.HasAntidiagonal M] [NormedRing S]
+  结论: {M S : 类型} [加法幺半群 M] [有限集.有Antidiagonal M] [赋范环 S]
   证明: by
   wlog hC' : 0 <= C generalizing C
   · rw [tendsto_zero_iff_norm_tendsto_zero]
@@ -280,7 +280,7 @@ lemma isRestricted.mul
 
 中文:
 引理 isRestricted.mul
-  结论: [IsUltrametricDist R] (c : σ -> 实数) {f g : MvPowerSeries σ R}
+  结论: [是UltrametricDist R] (c : σ -> 实数) {f g : MvPowerSeries σ R}
   证明: by
   classical
   rw [← isRestricted_abs_iff]; rw [IsRestricted] at *

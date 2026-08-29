@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (CondensedMod.{u} R)
+  签名: 交换 (CondensedMod.{u} R)
   定义体: sheafIsAbelian
 
 Depends on / 依赖: sheafIsAbelian

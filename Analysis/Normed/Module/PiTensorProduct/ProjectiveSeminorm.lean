@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm (⨂[𝕜] i, E i)
+  签名: 范数 (⨂[𝕜] i, E i)
   定义体: ⟨fun x => iInf (fun (p : lifts x) => projectiveSeminormAux p.val)⟩
 
 Depends on / 依赖: p.val, projectiveSeminormAux
@@ -305,7 +305,7 @@ definition projectiveSeminorm
 
 中文:
 定义 projectiveSeminorm
-  签名: : Seminorm 𝕜 (⨂[𝕜] i, E i)
+  签名: : 半范数 𝕜 (⨂[𝕜] i, E i)
   定义体: .ofSMulLE
     norm projectiveSeminorm_zero projectiveSeminorm_add_le projectiveSeminorm_smul_le
 
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeminormedAddCommGroup (⨂[𝕜] i, E i)
+  签名: SeminormedAddComm群 (⨂[𝕜] i, E i)
   定义体: fast_instance% AddGroupSeminorm.toSeminormedAddCommGroup projectiveSeminorm.toAddGroupSeminorm
 
 Depends on / 依赖: AddGroupSeminorm, AddGroupSeminorm.toSeminormedAddCommGroup, fast_instance, projectiveSeminorm, projectiveSeminorm.toAddGroupSeminorm, toAddGroupSeminorm, toSeminormedAddCommGroup
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedSpace 𝕜 (⨂[𝕜] i, E i)
+  签名: 赋范空间 𝕜 (⨂[𝕜] i, E i)
   定义体: ⟨projectiveSeminorm_smul_le⟩
 
 @[deprecated norm_def (since := "2026-06-10")]
@@ -422,7 +422,7 @@ theorem norm_eval_le_projectiveSeminorm
 
 中文:
 定理 norm_eval_le_projectiveSeminorm
-  结论: {G : 类型} [SeminormedAddCommGroup G]
+  结论: {G : 类型} [SeminormedAddComm群 G]
   证明: by
   rw [norm_def]; rw [mul_comm]; rw [Real.iInf_mul_of_nonneg (norm_nonneg _)]
   refine le_ciInf fun ⟨p, hp⟩ => ?_
@@ -468,7 +468,7 @@ definition liftEquiv
 
 中文:
 定义 liftEquiv
-  签名: : ContinuousMultilinearMap 𝕜 E F ≃ₗ[𝕜] (⨂[𝕜] i, E i) ->L[𝕜] F where
+  签名: : 连续多重线性映射 𝕜 E F ≃ₗ[𝕜] (⨂[𝕜] i, E i) ->L[𝕜] F where
   定义体: LinearMap.mkContinuous (lift f.toMultilinearMap) ‖f‖ fun x =>
     norm_eval_le_projectiveSeminorm f x
   map_add' f g := by ext; simp
@@ -504,7 +504,7 @@ definition liftIsometry
 
 中文:
 定义 liftIsometry
-  签名: : ContinuousMultilinearMap 𝕜 E F ≃ₗᵢ[𝕜] (⨂[𝕜] i, E i) ->L[𝕜] F
+  签名: : 连续多重线性映射 𝕜 E F ≃ₗᵢ[𝕜] (⨂[𝕜] i, E i) ->L[𝕜] F
   定义体: LinearIsometryEquiv.ofBounds (liftEquiv 𝕜 E F)
   (fun f => LinearMap.mkContinuous_norm_le _ (norm_nonneg f) (norm_eval_le_projectiveSeminorm f))
   (fun f => by
@@ -534,7 +534,7 @@ theorem liftIsometry_apply_apply
 
 中文:
 定理 liftIsometry_apply_apply
-  条件: (f : ContinuousMultilinearMap 𝕜 E F) (x : ⨂[𝕜] i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E F) (x : ⨂[𝕜] i, E i)
   证明: by
   simp [LinearIsometryEquiv.ofBounds, liftIsometry]
 
@@ -559,7 +559,7 @@ definition tprodL
 
 中文:
 定义 tprodL
-  签名: : ContinuousMultilinearMap 𝕜 E (⨂[𝕜] i, E i)
+  签名: : 连续多重线性映射 𝕜 E (⨂[𝕜] i, E i)
   定义体: (liftIsometry 𝕜 E _).symm (ContinuousLinearMap.id 𝕜 _)
 
 @[simp]
@@ -720,7 +720,7 @@ definition mapLIncl
 
 中文:
 定义 mapLIncl
-  签名: (p : Π i, Submodule 𝕜 (E i))
+  签名: (p : Π i, 子模 𝕜 (E i))
   定义体: mapL fun (i : ι) => (p i).subtypeL
 
 Depends on / 依赖: subtypeL
@@ -765,7 +765,7 @@ theorem liftIsometry_comp_mapL
 
 中文:
 定理 liftIsometry_comp_mapL
-  条件: (h : ContinuousMultilinearMap 𝕜 E' F)
+  条件: (h : 连续多重线性映射 𝕜 E' F)
   证明: by
   apply ContinuousLinearMap.coe_injective
   ext; simp
@@ -794,7 +794,7 @@ theorem mapL_id
 
 中文:
 定理 mapL_id
-  结论: mapL (fun i => ContinuousLinearMap.id 𝕜 (E i)) = ContinuousLinearMap.id _ _
+  结论: mapL (fun i => 连续线性映射.id 𝕜 (E i)) = 连续线性映射.id _ _
   证明: by
   apply ContinuousLinearMap.coe_injective
   ext; simp
@@ -1013,7 +1013,7 @@ definition mapLMultilinear
 
 中文:
 定义 mapLMultilinear
-  签名: : ContinuousMultilinearMap 𝕜 (fun (i : ι) => E i ->L[𝕜] E' i)
+  签名: : 连续多重线性映射 𝕜 (fun (i : ι) => E i ->L[𝕜] E' i)
   定义体: MultilinearMap.mkContinuous
   { toFun := mapL
     map_update_smul' := fun _ _ _ _ => PiTensorProduct.mapL_smul _ _ _ _

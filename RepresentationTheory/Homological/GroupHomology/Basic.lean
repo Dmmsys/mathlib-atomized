@@ -94,8 +94,8 @@ abbreviation HomologicalComplex.coinvariantsTensorObj
   body: (((Rep.coinvariantsTensor k G).obj A).mapHomologicalComplex _).obj P
 
 中文:
-缩写 HomologicalComplex.coinvariantsTensorObj
-  签名: {α : 类型} [AddRightCancelSemigroup α] [One α]
+缩写 同调复形.coinvariantsTensorObj
+  签名: {α : 类型} [加法右消去半群 α] [幺 α]
   定义体: (((Rep.coinvariantsTensor k G).obj A).mapHomologicalComplex _).obj P
 
 Depends on / 依赖: Rep.coinvariantsTensor, coinvariantsTensor, mapHomologicalComplex
@@ -142,7 +142,7 @@ abbreviation torIso
 
 中文:
 缩写 torIso
-  签名: (A : Rep k G) {B : Rep k G} (P : ProjectiveResolution B) (n : 自然数)
+  签名: (A : Rep k G) {B : Rep k G} (P : 投射消解 B) (n : 自然数)
   定义体: P.isoLeftDerivedObj _ n
 
 Depends on / 依赖: P.isoLeftDerivedObj, isoLeftDerivedObj
@@ -161,7 +161,7 @@ lemma isZero_Tor_succ_of_projective
 
 中文:
 引理 isZero_Tor_succ_of_projective
-  条件: (X Y : Rep k G) [Projective Y] (n : 自然数)
+  条件: (X Y : Rep k G) [投射 Y] (n : 自然数)
   证明: Functor.isZero_leftDerived_obj_projective_succ ..
 
 Depends on / 依赖: Functor, Functor.isZero_leftDerived_obj_projective_succ, isZero_leftDerived_obj_projective_succ
@@ -193,7 +193,7 @@ definition d
 
 中文:
 定义 d
-  签名: : ModuleCat.of k ((Fin (n + 1) -> G) ->₀ A) ⟶ ModuleCat.of k ((Fin n -> G) ->₀ A)
+  签名: : 模范畴.of k ((有限集 (n + 1) -> G) ->₀ A) ⟶ 模范畴.of k ((有限集 n -> G) ->₀ A)
   定义体: ModuleCat.ofHom lsum (R := k) k fun g => lsingle (fun i => g i.succ) ∘ₗ A.ρ (g 0)⁻¹ +
     Finset.univ.sum fun j : Fin (n + 1) =>
       (-1 : k) ^ ((j : Nat) + 1) • lsingle (Fin.contractNth j (· * ·) g)
@@ -218,7 +218,7 @@ theorem d_single
 
 中文:
 定理 d_single
-  条件: (n : 自然数) (g : Fin (n + 1) -> G) (a : A)
+  条件: (n : 自然数) (g : 有限集 (n + 1) -> G) (a : A)
   证明: by
   simp [d]
 -/
@@ -312,7 +312,7 @@ theorem inhomogeneousChains.ext
 
 中文:
 定理 inhomogeneousChains.ext
-  结论: {M : ModuleCat k} {x y : (inhomogeneousChains A).X n ⟶ M}
+  结论: {M : 模范畴 k} {x y : (inhomogeneousChains A).X n ⟶ M}
   证明: ModuleCat.hom_ext lhom_ext' fun g => ModuleCat.hom_ext_iff.1 (h g)
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, ModuleCat.hom_ext_iff, hom_ext, hom_ext_iff, lhom_ext
@@ -426,7 +426,7 @@ abbreviation cyclesMk
 
 中文:
 缩写 cyclesMk
-  签名: (m n : 自然数) (h : (ComplexShape.down 自然数).next m = n) (f : (Fin m -> G) ->₀ A)
+  签名: (m n : 自然数) (h : (余mplexShape.down 自然数).next m = n) (f : (有限集 m -> G) ->₀ A)
   定义体: (inhomogeneousChains A).cyclesMk f n h hf
 
 Depends on / 依赖: cyclesMk, inhomogeneousChains
@@ -465,7 +465,7 @@ theorem iCycles_mk
 
 中文:
 定理 iCycles_mk
-  结论: {m n : 自然数} (h : (ComplexShape.down 自然数).next m = n) (f : (Fin m -> G) ->₀ A)
+  结论: {m n : 自然数} (h : (余mplexShape.down 自然数).next m = n) (f : (有限集 m -> G) ->₀ A)
   证明: by
   exact (inhomogeneousChains A).i_cyclesMk f n h hf
 
@@ -617,7 +617,7 @@ lemma isZero_groupHomology_succ_of_subsingleton
 
 中文:
 引理 isZero_groupHomology_succ_of_subsingleton
-  条件: [Subsingleton G] (n : 自然数)
+  条件: [子单例 G] (n : 自然数)
   证明: (isZero_Tor_succ_of_projective A (Rep.trivial k G k) n).of_iso groupHomologyIsoTor _ _
 
 Depends on / 依赖: Rep.trivial, groupHomologyIsoTor, isZero_Tor_succ_of_projective, of_iso

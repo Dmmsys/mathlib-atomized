@@ -50,7 +50,7 @@ definition IsInvertedBy₂
 
 中文:
 定义 IsInvertedBy₂
-  签名: (W₁ : Morphism命题erty C₁) (W₂ : Morphism命题erty C₂)
+  签名: (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
   定义体: (W₁.prod W₂).IsInvertedBy (uncurry.obj F)
 
 Depends on / 依赖: IsInvertedBy, uncurry, uncurry.obj
@@ -78,7 +78,7 @@ class Lifting₂
 
 中文:
 类 Lifting₂
-  参数: (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (W₁ : Morphism命题erty C₁) (W₂ : Morphism命题erty C₂)
+  参数: (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
   公理与运算 (1 个):
     - iso((L₁ L₂ W₁ W₂ F F')) : (((whiskeringLeft₂ E).obj L₁).obj L₂).obj F' ≅ F
 -/
@@ -315,7 +315,7 @@ instance Lifting₂.compRight
 
 中文:
 实例 Lifting₂.compRight
-  签名: {E' : 类型} [Category* E'] (G : E ⥤ E')
+  签名: {E' : 类型} [范畴* E'] (G : E ⥤ E')
   定义体: ⟨isoWhiskerRight (iso L₁ L₂ W₁ W₂ F F') ((whiskeringRight _ _ _).obj G)⟩
 
 Depends on / 依赖: isoWhiskerRight, whiskeringRight
@@ -348,7 +348,7 @@ definition lift₂NatTrans
       (uncurry.obj F₂) (uncurry.obj F₁') (uncurry.obj F₂') (uncurry.map τ))
 
 中文:
-定义 lift₂NatTrans
+定义 lift₂自然数Trans
   签名: (τ : F₁ ⟶ F₂)
   定义体: fullyFaithfulUncurry.preimage
     (liftNatTrans (L₁.prod L₂) (W₁.prod W₂) (uncurry.obj F₁)
@@ -376,7 +376,7 @@ theorem lift₂NatTrans_app_app
   exact liftNatTrans_app _ _ _ _ (uncurry.obj F₁') (uncurry.obj F₂') (uncurry.map τ) ⟨X₁, X₂⟩
 
 中文:
-定理 lift₂NatTrans_app_app
+定理 lift₂自然数Trans_app_app
   条件: (τ : F₁ ⟶ F₂) (X₁ : C₁) (X₂ : C₂)
   证明: by
   dsimp [lift₂NatTrans, fullyFaithfulUncurry, Equivalence.fullyFaithfulFunctor]
@@ -433,7 +433,7 @@ definition lift₂NatIso
   inv_hom_id := natTrans₂_ext L₁ L₂ W₁ W₂ (by simp)
 
 中文:
-定义 lift₂NatIso
+定义 lift₂自然数Iso
   签名: (e : F₁ ≅ F₂)
   定义体: lift₂NatTrans L₁ L₂ W₁ W₂ F₁ F₂ F₁' F₂' e.hom
   inv := lift₂NatTrans L₁ L₂ W₁ W₂ F₂ F₁ F₂' F₁' e.inv

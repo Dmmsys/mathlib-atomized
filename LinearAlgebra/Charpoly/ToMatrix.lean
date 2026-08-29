@@ -60,7 +60,7 @@ theorem charpoly_toMatrix
 
 中文:
 定理 charpoly_toMatrix
-  条件: {ι : Type w} [DecidableEq ι] [Fintype ι] (b : Basis ι R M)
+  条件: {ι : 类型 w} [DecidableEq ι] [有限类型 ι] (b : 基 ι R M)
   证明: by
   nontriviality R
   unfold LinearMap.charpoly
@@ -144,8 +144,8 @@ lemma LinearEquiv.charpoly_conj
   simp [LinearMap.toMatrix]
 
 中文:
-引理 LinearEquiv.charpoly_conj
-  条件: (e : M₁ ≃ₗ[R] M₂) (φ : Module.End R M₁)
+引理 线性等价.charpoly_conj
+  条件: (e : M₁ ≃ₗ[R] M₂) (φ : 模.End R M₁)
   证明: by
   let b := chooseBasis R M₁
   rw [← LinearMap.charpoly_toMatrix φ b]; rw [← LinearMap.charpoly_toMatrix (e.conj φ) (b.map e)]
@@ -181,7 +181,7 @@ theorem charpoly_toLin
 
 中文:
 定理 charpoly_toLin
-  条件: (A : Matrix n n R) (b : Basis n R M)
+  条件: (A : 矩阵 n n R) (b : 基 n R M)
   证明: by
   simp [← LinearMap.charpoly_toMatrix (A.toLin b b) b]
 
@@ -208,7 +208,7 @@ theorem charpoly_toLin'
 
 中文:
 定理 charpoly_toLin'
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   结论: A.toLin'.charpoly = A.charpoly
   证明: by
   rw [← Matrix.toLin_eq_toLin']; rw [charpoly_toLin]
@@ -232,7 +232,7 @@ theorem charpoly_mulVecLin
 
 中文:
 定理 charpoly_mulVecLin
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   结论: A.mulVecLin.charpoly = A.charpoly
   证明: charpoly_toLin' A
 

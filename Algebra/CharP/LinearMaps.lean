@@ -54,7 +54,7 @@ theorem charP_end
 
 中文:
 定理 charP_end
-  结论: {p : 自然数} [hchar : CharP R p]
+  结论: {p : 自然数} [hchar : 特征p R p]
   证明: by
     have exact : (n : M ->ₗ[R] M) = (n : R) • 1 := by
       simp only [Nat.cast_smul_eq_nsmul, nsmul_eq_mul, mul_one]

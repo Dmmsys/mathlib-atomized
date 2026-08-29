@@ -37,7 +37,7 @@ instance mulZeroClass
 
 中文:
 实例 mulZeroClass
-  签名: : MulZeroClass (对任意 i, α i) where
+  签名: : 乘零类 (对任意 i, α i) where
   定义体: by intros; ext; exact zero_mul _
   mul_zero := by intros; ext; exact mul_zero _
 
@@ -62,7 +62,7 @@ definition _root_.MulHom.single
   map_mul' := Pi.single_op₂ (fun _ => (· * ·)) (fun _ => zero_mul _) _
 
 中文:
-定义 _root_.MulHom.single
+定义 _root_.乘法半群态射.single
   签名: (i : ι)
   定义体: Pi.single i
   map_mul' := Pi.single_op₂ (fun _ => (· * ·)) (fun _ => zero_mul _) _
@@ -184,7 +184,7 @@ instance mulZeroOneClass
 
 中文:
 实例 mulZeroOneClass
-  签名: [对任意 i, MulZeroOneClass (α i)]
+  签名: [对任意 i, 乘零幺类 (α i)]
   定义体: mulZeroClass
   __ := mulOneClass
 
@@ -205,7 +205,7 @@ instance monoidWithZero
 
 中文:
 实例 monoidWithZero
-  签名: [对任意 i, MonoidWithZero (α i)]
+  签名: [对任意 i, 带零幺半群 (α i)]
   定义体: monoid
   __ := mulZeroClass
 
@@ -226,7 +226,7 @@ instance commMonoidWithZero
 
 中文:
 实例 commMonoidWithZero
-  签名: [对任意 i, CommMonoidWithZero (α i)]
+  签名: [对任意 i, 带零交换幺半群 (α i)]
   定义体: monoidWithZero
   __ := commMonoid
 
@@ -247,7 +247,7 @@ instance semigroupWithZero
 
 中文:
 实例 semigroupWithZero
-  签名: [对任意 i, SemigroupWithZero (α i)]
+  签名: [对任意 i, 带零半群 (α i)]
   定义体: semigroup
   __ := mulZeroClass
 

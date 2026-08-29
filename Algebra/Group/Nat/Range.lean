@@ -33,7 +33,7 @@ theorem disjoint_range_addLeftEmbedding
 
 中文:
 定理 disjoint_range_addLeftEmbedding
-  条件: (a : 自然数) (s : Finset 自然数)
+  条件: (a : 自然数) (s : 有限集 自然数)
   证明: by
   simp_rw [disjoint_left, mem_map, mem_range, addLeftEmbedding_apply]
   rintro _ h ⟨l, -, rfl⟩
@@ -59,7 +59,7 @@ theorem disjoint_range_addRightEmbedding
 
 中文:
 定理 disjoint_range_addRightEmbedding
-  条件: (a : 自然数) (s : Finset 自然数)
+  条件: (a : 自然数) (s : 有限集 自然数)
   证明: by
   rw [← addLeftEmbedding_eq_addRightEmbedding]
   apply disjoint_range_addLeftEmbedding

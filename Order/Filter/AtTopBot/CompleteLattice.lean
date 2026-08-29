@@ -38,9 +38,9 @@ theorem Subsingleton.atTop_eq
 @[nontriviality]
 
 中文:
-定理 Subsingleton.atTop_eq
-  条件: (α) [Subsingleton α] [Preorder α]
-  结论: (atTop : Filter α) = ⊤
+定理 子单例.atTop_eq
+  条件: (α) [子单例 α] [预序 α]
+  结论: (atTop : 滤子 α) = ⊤
   证明: by
   refine top_unique fun s hs x => ?_
   rw [atTop]; rw [ciInf_subsingleton x]; rw [mem_principal] at hs
@@ -66,9 +66,9 @@ theorem Subsingleton.atBot_eq
   proof: @Subsingleton.atTop_eq αᵒᵈ _ _
 
 中文:
-定理 Subsingleton.atBot_eq
-  条件: (α) [Subsingleton α] [Preorder α]
-  结论: (atBot : Filter α) = ⊤
+定理 子单例.atBot_eq
+  条件: (α) [子单例 α] [预序 α]
+  结论: (atBot : 滤子 α) = ⊤
   证明: @Subsingleton.atTop_eq αᵒᵈ _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.atTop_eq, atTop_eq
@@ -89,8 +89,8 @@ theorem _root_.Monotone.ciSup_comp_tendsto_atTop
   exacts [hb, hb.mono <| range_comp_subset_range _ _]
 
 中文:
-定理 _root_.Monotone.ciSup_comp_tendsto_atTop
-  结论: [Preorder β] [ConditionallyCompleteLattice γ]
+定理 _root_.递增.ciSup_comp_tendsto_atTop
+  结论: [预序 β] [条件完备格 γ]
   证明: by
   have : Nonempty α := nonempty_of_neBot l
   have : Nonempty β := .map g ‹_›
@@ -116,8 +116,8 @@ theorem _root_.Monotone.ciInf_comp_tendsto_atBot
   proof: hf.dual.ciSup_comp_tendsto_atTop hb hg
 
 中文:
-定理 _root_.Monotone.ciInf_comp_tendsto_atBot
-  结论: [Preorder β] [ConditionallyCompleteLattice γ]
+定理 _root_.递增.ciInf_comp_tendsto_atBot
+  结论: [预序 β] [条件完备格 γ]
   证明: hf.dual.ciSup_comp_tendsto_atTop hb hg
 
 Depends on / 依赖: ciSup_comp_tendsto_atTop, hf.dual.ciSup_comp_tendsto_atTop
@@ -136,8 +136,8 @@ theorem _root_.Antitone.ciSup_comp_tendsto_atBot
   proof: hf.dual_left.ciSup_comp_tendsto_atTop hb hg
 
 中文:
-定理 _root_.Antitone.ciSup_comp_tendsto_atBot
-  结论: [Preorder β] [ConditionallyCompleteLattice γ]
+定理 _root_.递减.ciSup_comp_tendsto_atBot
+  结论: [预序 β] [条件完备格 γ]
   证明: hf.dual_left.ciSup_comp_tendsto_atTop hb hg
 
 Depends on / 依赖: ciSup_comp_tendsto_atTop, dual_left, hf.dual_left.ciSup_comp_tendsto_atTop
@@ -156,8 +156,8 @@ theorem _root_.Antitone.ciInf_comp_tendsto_atTop
   proof: hf.dual.ciSup_comp_tendsto_atBot hb hg
 
 中文:
-定理 _root_.Antitone.ciInf_comp_tendsto_atTop
-  结论: [Preorder β] [ConditionallyCompleteLattice γ]
+定理 _root_.递减.ciInf_comp_tendsto_atTop
+  结论: [预序 β] [条件完备格 γ]
   证明: hf.dual.ciSup_comp_tendsto_atBot hb hg
 
 Depends on / 依赖: ciSup_comp_tendsto_atBot, hf.dual.ciSup_comp_tendsto_atBot
@@ -181,8 +181,8 @@ theorem _root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder
     rwa [BddAbove, ← Function.comp_def f g, hf.upperBounds_range_comp_tendsto_atTop hg]
 
 中文:
-定理 _root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder
-  结论: [Preorder β]
+定理 _root_.递增.ciSup_comp_tendsto_atTop_of_linearOrder
+  结论: [预序 β]
   证明: by
   if hb : BddAbove (range f) then
     exact hf.ciSup_comp_tendsto_atTop hb hg
@@ -210,8 +210,8 @@ theorem _root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder
   proof: hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
 中文:
-定理 _root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder
-  结论: [Preorder β]
+定理 _root_.递增.ciInf_comp_tendsto_atBot_of_linearOrder
+  结论: [预序 β]
   证明: hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
 Depends on / 依赖: ciSup_comp_tendsto_atTop_of_linearOrder, hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder
@@ -230,8 +230,8 @@ theorem _root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder
   proof: hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder hg
 
 中文:
-定理 _root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder
-  结论: [Preorder β]
+定理 _root_.递减.ciInf_comp_tendsto_atTop_of_linearOrder
+  结论: [预序 β]
   证明: hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder hg
 
 Depends on / 依赖: ciInf_comp_tendsto_atBot_of_linearOrder, dual_left, hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder
@@ -250,8 +250,8 @@ theorem _root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder
   proof: hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
 中文:
-定理 _root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder
-  结论: [Preorder β]
+定理 _root_.递减.ciSup_comp_tendsto_atBot_of_linearOrder
+  结论: [预序 β]
   证明: hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
 Depends on / 依赖: ciSup_comp_tendsto_atTop_of_linearOrder, dual_left, hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder
@@ -269,7 +269,7 @@ theorem _root_.Monotone.iSup_comp_tendsto_atTop
   proof: hf.ciSup_comp_tendsto_atTop (OrderTop.bddAbove _) hg
 
 中文:
-定理 _root_.Monotone.iSup_comp_tendsto_atTop
+定理 _root_.递增.iSup_comp_tendsto_atTop
   证明: hf.ciSup_comp_tendsto_atTop (OrderTop.bddAbove _) hg
 
 Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, ciSup_comp_tendsto_atTop, hf.ciSup_comp_tendsto_atTop
@@ -288,7 +288,7 @@ theorem _root_.Monotone.iInf_comp_tendsto_atBot
   proof: hf.ciInf_comp_tendsto_atBot (OrderBot.bddBelow _) hg
 
 中文:
-定理 _root_.Monotone.iInf_comp_tendsto_atBot
+定理 _root_.递增.iInf_comp_tendsto_atBot
   证明: hf.ciInf_comp_tendsto_atBot (OrderBot.bddBelow _) hg
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, ciInf_comp_tendsto_atBot, hf.ciInf_comp_tendsto_atBot
@@ -307,7 +307,7 @@ theorem _root_.Antitone.iSup_comp_tendsto_atBot
   proof: hf.ciSup_comp_tendsto_atBot (OrderTop.bddAbove _) hg
 
 中文:
-定理 _root_.Antitone.iSup_comp_tendsto_atBot
+定理 _root_.递减.iSup_comp_tendsto_atBot
   证明: hf.ciSup_comp_tendsto_atBot (OrderTop.bddAbove _) hg
 
 Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, ciSup_comp_tendsto_atBot, hf.ciSup_comp_tendsto_atBot
@@ -326,7 +326,7 @@ theorem _root_.Antitone.iInf_comp_tendsto_atTop
   proof: hf.ciInf_comp_tendsto_atTop (OrderBot.bddBelow _) hg
 
 中文:
-定理 _root_.Antitone.iInf_comp_tendsto_atTop
+定理 _root_.递减.iInf_comp_tendsto_atTop
   证明: hf.ciInf_comp_tendsto_atTop (OrderBot.bddBelow _) hg
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, ciInf_comp_tendsto_atTop, hf.ciInf_comp_tendsto_atTop
@@ -346,8 +346,8 @@ theorem _root_.Monotone.iUnion_comp_tendsto_atTop
   proof: hs.iSup_comp_tendsto_atTop hf
 
 中文:
-定理 _root_.Monotone.iUnion_comp_tendsto_atTop
-  结论: [Preorder β] {l : Filter α} [l.NeBot]
+定理 _root_.递增.iUnion_comp_tendsto_atTop
+  结论: [预序 β] {l : 滤子 α} [l.NeBot]
   证明: hs.iSup_comp_tendsto_atTop hf
 
 Depends on / 依赖: hs.iSup_comp_tendsto_atTop, iSup_comp_tendsto_atTop
@@ -366,8 +366,8 @@ theorem _root_.Monotone.iInter_comp_tendsto_atBot
   proof: hs.iInf_comp_tendsto_atBot hf
 
 中文:
-定理 _root_.Monotone.iInter_comp_tendsto_atBot
-  结论: [Preorder β] {l : Filter α} [l.NeBot]
+定理 _root_.递增.i整数er_comp_tendsto_atBot
+  结论: [预序 β] {l : 滤子 α} [l.NeBot]
   证明: hs.iInf_comp_tendsto_atBot hf
 
 Depends on / 依赖: hs.iInf_comp_tendsto_atBot, iInf_comp_tendsto_atBot
@@ -386,8 +386,8 @@ theorem _root_.Antitone.iInter_comp_tendsto_atTop
   proof: hs.iInf_comp_tendsto_atTop hf
 
 中文:
-定理 _root_.Antitone.iInter_comp_tendsto_atTop
-  结论: [Preorder β] {l : Filter α} [l.NeBot]
+定理 _root_.递减.i整数er_comp_tendsto_atTop
+  结论: [预序 β] {l : 滤子 α} [l.NeBot]
   证明: hs.iInf_comp_tendsto_atTop hf
 
 Depends on / 依赖: hs.iInf_comp_tendsto_atTop, iInf_comp_tendsto_atTop
@@ -406,8 +406,8 @@ theorem _root_.Antitone.iUnion_comp_tendsto_atBot
   proof: hs.iSup_comp_tendsto_atBot hf
 
 中文:
-定理 _root_.Antitone.iUnion_comp_tendsto_atBot
-  结论: [Preorder β] {l : Filter α} [l.NeBot]
+定理 _root_.递减.iUnion_comp_tendsto_atBot
+  结论: [预序 β] {l : 滤子 α} [l.NeBot]
   证明: hs.iSup_comp_tendsto_atBot hf
 
 Depends on / 依赖: hs.iSup_comp_tendsto_atBot, iSup_comp_tendsto_atBot

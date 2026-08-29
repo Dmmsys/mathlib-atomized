@@ -60,7 +60,7 @@ definition fourierTransformₗᵢ
 
 中文:
 定义 fourierTransformₗᵢ
-  签名: : (Lp (α := E) F 2) ≃ₗᵢ[Complex] (Lp (α := E) F 2)
+  签名: : (Lp (α := E) F 2) ≃ₗᵢ[复形] (Lp (α := E) F 2)
   定义体: (fourierEquiv Complex 𝓢(E, F)).extendOfIsometry
     (toLpCLM Complex (E := E) F 2 volume) (toLpCLM Complex (E := E) F 2 volume)
     -- Not explicitly stating the measure as being the volume causes time-outs in the proofs below
@@ -83,7 +83,7 @@ instance instFourierTransform
 
 中文:
 实例 instFourierTransform
-  签名: : FourierTransform (Lp (α := E) F 2) (Lp (α := E) F 2) where
+  签名: : Fourier变换 (Lp (α := E) F 2) (Lp (α := E) F 2) where
   定义体: fourierTransformₗᵢ E F
 -/
 instance instFourierTransform : FourierTransform (Lp (α := E) F 2) (Lp (α := E) F 2) where
@@ -115,7 +115,7 @@ instance instFourierSMul
 
 中文:
 实例 instFourierSMul
-  签名: : FourierSMul Complex (Lp (α := E) F 2) (Lp (α := E) F 2) where
+  签名: : FourierSMul 复形 (Lp (α := E) F 2) (Lp (α := E) F 2) where
   定义体: (fourierTransformₗᵢ E F).map_smul
 -/
 instance instFourierSMul : FourierSMul Complex (Lp (α := E) F 2) (Lp (α := E) F 2) where
@@ -131,7 +131,7 @@ instance instContinuousFourier
 
 中文:
 实例 instContinuousFourier
-  签名: : ContinuousFourier (Lp (α := E) F 2) (Lp (α := E) F 2) where
+  签名: : 余ntinuousFourier (Lp (α := E) F 2) (Lp (α := E) F 2) where
   定义体: (fourierTransformₗᵢ E F).continuous
 -/
 instance instContinuousFourier : ContinuousFourier (Lp (α := E) F 2) (Lp (α := E) F 2) where
@@ -179,7 +179,7 @@ instance instFourierInvSMul
 
 中文:
 实例 instFourierInvSMul
-  签名: : FourierInvSMul Complex (Lp (α := E) F 2) (Lp (α := E) F 2) where
+  签名: : FourierInvSMul 复形 (Lp (α := E) F 2) (Lp (α := E) F 2) where
   定义体: (fourierTransformₗᵢ E F).symm.map_smul
 -/
 instance instFourierInvSMul : FourierInvSMul Complex (Lp (α := E) F 2) (Lp (α := E) F 2) where
@@ -195,7 +195,7 @@ instance instContinuousFourierInv
 
 中文:
 实例 instContinuousFourierInv
-  签名: : ContinuousFourierInv (Lp (α := E) F 2) (Lp (α := E) F 2) where
+  签名: : 余ntinuousFourierInv (Lp (α := E) F 2) (Lp (α := E) F 2) where
   定义体: (fourierTransformₗᵢ E F).symm.continuous
 -/
 instance instContinuousFourierInv : ContinuousFourierInv (Lp (α := E) F 2) (Lp (α := E) F 2) where
@@ -297,7 +297,7 @@ theorem SchwartzMap.toLp_fourier_eq
 @[simp]
 
 中文:
-定理 SchwartzMap.toLp_fourier_eq
+定理 Schwartz映射.toLp_fourier_eq
   条件: (f : 𝓢(E, F))
   结论: 𝓕 (f.toLp 2) = (𝓕 f).toLp 2
   证明: by
@@ -338,7 +338,7 @@ theorem SchwartzMap.toLp_fourierInv_eq
   simp
 
 中文:
-定理 SchwartzMap.toLp_fourierInv_eq
+定理 Schwartz映射.toLp_fourierInv_eq
   条件: (f : 𝓢(E, F))
   结论: 𝓕⁻ (f.toLp 2) = (𝓕⁻ f).toLp 2
   证明: by

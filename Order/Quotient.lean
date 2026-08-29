@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Quotient s)
+  签名: LE (商 s)
   定义体: Quotient.lift₂ (Relation.TransGen fun x y => x <= y ∨ x ≈ y) by
     refine fun x₁ x₂ y₁ y₂ hx hy => propext ⟨?_, ?_⟩ <;> intro h
 · exact .trans (.single <| .inr (symm hx)) .trans h (.single <| .inr hy)
@@ -87,7 +87,7 @@ exact .single .inr (refl x)
 
 中文:
 实例 :
-  签名: @Std.Refl (Quotient s) (· <= ·)
+  签名: @Std.Refl (商 s) (· <= ·)
   定义体: by
     induction x using Quotient.inductionOn with | h x
 exact .single .inr (refl x)
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans (Quotient s) (· <= ·)
+  签名: 是Trans (商 s) (· <= ·)
   定义体: by
     induction x using Quotient.inductionOn with | h x
     induction y using Quotient.inductionOn with | h y
@@ -143,8 +143,8 @@ instance [@Std.Total
 · exact .inr .single .inl h
 
 中文:
-实例 [@Std.Total
-  签名: α (· <= ·)] : @Std.Total (Quotient s) (· <= ·) where
+实例 [@Std.全
+  签名: α (· <= ·)] : @Std.全 (商 s) (· <= ·) where
   定义体: by
     induction x using Quotient.inductionOn with | h x
     induction y using Quotient.inductionOn with | h y
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (Quotient s)
+  签名: 预序 (商 s)
   定义体: refl
   le_trans _ _ _ := _root_.trans
 -/
@@ -196,7 +196,7 @@ theorem mk_monotone
 
 中文:
 定理 mk_monotone
-  结论: Monotone (Quotient.mk s)
+  结论: 递增 (商.mk s)
   证明: fun _ _ h => .single (.inl h)
 
 Depends on / 依赖: single
@@ -224,7 +224,7 @@ theorem lift_monotone
 
 中文:
 定理 lift_monotone
-  结论: {α β : 类型} [Preorder α] {s : Setoid α} [Preorder β]
+  结论: {α β : 类型} [预序 α] {s : 集合等价关系 α} [预序 β]
   证明: by
   intro x y h
   induction x using Quotient.inductionOn with | h x
@@ -278,7 +278,7 @@ apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_�
 中文:
 定理 mk_le_mk
   条件: {x y : α}
-  结论: Quotient.mk s x <= Quotient.mk s y ↔ x <= y ∨ x ≈ y
+  结论: 商.mk s x <= 商.mk s y ↔ x <= y ∨ x ≈ y
   证明: by
   rw [← propext_iff]
   revert x y
@@ -367,7 +367,7 @@ theorem mk_lt_mk
 中文:
 定理 mk_lt_mk
   条件: {x y : α}
-  结论: Quotient.mk s x < Quotient.mk s y ↔ x < y ∧ ¬ x ≈ y
+  结论: 商.mk s x < 商.mk s y ↔ x < y ∧ ¬ x ≈ y
   证明: by
   classical
   contrapose! +distrib
@@ -391,7 +391,7 @@ theorem lt_of_mk_lt_mk
 
 中文:
 定理 lt_of_mk_lt_mk
-  条件: {x y : α} (h : Quotient.mk s x < Quotient.mk s y)
+  条件: {x y : α} (h : 商.mk s x < 商.mk s y)
   结论: x < y
   证明: (mk_lt_mk.1 h).1
 

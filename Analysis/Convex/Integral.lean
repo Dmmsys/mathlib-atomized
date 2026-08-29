@@ -67,8 +67,8 @@ theorem Convex.integral_mem
     exact ⟨f x
 
 中文:
-定理 Convex.integral_mem
-  结论: [IsProbabilityMeasure μ] (hs : Convex 实数 s) (hsc : IsClosed s)
+定理 凸.integral_mem
+  结论: [是概率测度 μ] (hs : 凸 实数 s) (hsc : 是闭集 s)
   证明: by
   borelize E
   rcases hfi.aestronglyMeasurable with ⟨g, hgm, hfg⟩
@@ -116,8 +116,8 @@ theorem Convex.average_mem
   proof: hs.integral_mem hsc (ae_mono' smul_absolutelyContinuous hfs) hfi.to_average
 
 中文:
-定理 Convex.average_mem
-  结论: [IsFiniteMeasure μ] [NeZero μ] (hs : Convex 实数 s) (hsc : IsClosed s)
+定理 凸.average_mem
+  结论: [是有限测度 μ] [NeZero μ] (hs : 凸 实数 s) (hsc : 是闭集 s)
   证明: hs.integral_mem hsc (ae_mono' smul_absolutelyContinuous hfs) hfi.to_average
 
 Depends on / 依赖: ae_mono, hfi.to_average, hs.integral_mem, integral_mem, smul_absolutelyContinuous, to_average
@@ -137,8 +137,8 @@ theorem Convex.set_average_mem
   hs.average_mem hsc hfs hfi
 
 中文:
-定理 Convex.set_average_mem
-  结论: (hs : Convex 实数 s) (hsc : IsClosed s) (h0 : μ t != 0) (ht : μ t != ∞)
+定理 凸.set_average_mem
+  结论: (hs : 凸 实数 s) (hsc : 是闭集 s) (h0 : μ t != 0) (ht : μ t != ∞)
   证明: have := Fact.mk ht.lt_top
   have := NeZero.mk h0
   hs.average_mem hsc hfs hfi
@@ -160,8 +160,8 @@ theorem Convex.set_average_mem_closure
   proof: hs.closure.set_average_mem isClosed_closure h0 ht (hfs.mono fun _ hx => subset_closure hx) hfi
 
 中文:
-定理 Convex.set_average_mem_closure
-  结论: (hs : Convex 实数 s) (h0 : μ t != 0) (ht : μ t != ∞)
+定理 凸.set_average_mem_closure
+  结论: (hs : 凸 实数 s) (h0 : μ t != 0) (ht : μ t != ∞)
   证明: hs.closure.set_average_mem isClosed_closure h0 ht (hfs.mono fun _ hx => subset_closure hx) hfi
 
 Depends on / 依赖: closure, hfs.mono, hs.closure.set_average_mem, isClosed_closure, set_average_mem, subset_closure
@@ -185,7 +185,7 @@ theorem ConvexOn.average_mem_epigraph
 
 中文:
 定理 ConvexOn.average_mem_epigraph
-  结论: [IsFiniteMeasure μ] [NeZero μ] (hg : ConvexOn 实数 s g)
+  结论: [是有限测度 μ] [NeZero μ] (hg : ConvexOn 实数 s g)
   证明: by
   have ht_mem : forallᵐ x ∂μ, (f x, g (f x)) in {p : E × Real | p.1 in s ∧ g p.1 <= p.2} :=
     hfs.mono fun x hx => ⟨hx, le_rfl⟩
@@ -215,7 +215,7 @@ theorem ConcaveOn.average_mem_hypograph
 
 中文:
 定理 ConcaveOn.average_mem_hypograph
-  结论: [IsFiniteMeasure μ] [NeZero μ] (hg : ConcaveOn 实数 s g)
+  结论: [是有限测度 μ] [NeZero μ] (hg : ConcaveOn 实数 s g)
   证明: by
   simpa only [mem_ofPred_eq, Pi.neg_apply, average_neg, neg_le_neg_iff] using
     hg.neg.average_mem_epigraph hgc.neg hsc hfs hfi hgi.neg
@@ -239,7 +239,7 @@ theorem ConvexOn.map_average_le
 
 中文:
 定理 ConvexOn.map_average_le
-  结论: [IsFiniteMeasure μ] [NeZero μ]
+  结论: [是有限测度 μ] [NeZero μ]
   证明: (hg.average_mem_epigraph hgc hsc hfs hfi hgi).2
 
 Depends on / 依赖: average_mem_epigraph, hg.average_mem_epigraph
@@ -260,7 +260,7 @@ theorem ConcaveOn.le_map_average
 
 中文:
 定理 ConcaveOn.le_map_average
-  结论: [IsFiniteMeasure μ] [NeZero μ]
+  结论: [是有限测度 μ] [NeZero μ]
   证明: (hg.average_mem_hypograph hgc hsc hfs hfi hgi).2
 
 Depends on / 依赖: average_mem_hypograph, hg.average_mem_hypograph
@@ -377,7 +377,7 @@ theorem ConvexOn.map_integral_le
 
 中文:
 定理 ConvexOn.map_integral_le
-  结论: [IsProbabilityMeasure μ] (hg : ConvexOn 实数 s g)
+  结论: [是概率测度 μ] (hg : ConvexOn 实数 s g)
   证明: by
   simpa only [average_eq_integral] using hg.map_average_le hgc hsc hfs hfi hgi
 
@@ -399,7 +399,7 @@ theorem ConcaveOn.le_map_integral
 
 中文:
 定理 ConcaveOn.le_map_integral
-  结论: [IsProbabilityMeasure μ] (hg : ConcaveOn 实数 s g)
+  结论: [是概率测度 μ] (hg : ConcaveOn 实数 s g)
   证明: by
   simpa only [average_eq_integral] using hg.le_map_average hgc hsc hfs hfi hgi
 
@@ -429,8 +429,8 @@ theorem ae_eq_const_or_exists_average_ne_compl
   · rw [restrict_eq_zero.2 h₀, integral_zero_measure, measureReal_de
 
 中文:
-定理 ae_eq_const_or_exists_average_ne_compl
-  条件: [IsFiniteMeasure μ] (hfi : 整数egrable f μ)
+定理 ae_eq_const_or_存在_average_ne_compl
+  条件: [是有限测度 μ] (hfi : 可积 f μ)
   证明: by
   refine or_iff_not_imp_right.mpr fun H => ?_; push Not at H
   refine hfi.ae_eq_of_forall_setIntegral_eq _ _ (integrable_const _) fun t ht ht' => ?_; clear ht'
@@ -471,8 +471,8 @@ theorem Convex.average_mem_interior_of_set
       (hs.set_average_me
 
 中文:
-定理 Convex.average_mem_interior_of_set
-  结论: [IsFiniteMeasure μ] (hs : Convex 实数 s) (h0 : μ t != 0)
+定理 凸.average_mem_interior_of_set
+  结论: [是有限测度 μ] (hs : 凸 实数 s) (h0 : μ t != 0)
   证明: by
   rw [← measure_toMeasurable] at h0; rw [← restrict_toMeasurable (by finiteness)] at ht
   by_cases h0' : μ (toMeasurable μ t)ᶜ = 0
@@ -510,8 +510,8 @@ theorem StrictConvex.ae_eq_const_or_average_mem_interior
     hs.openSegment_subset (
 
 中文:
-定理 StrictConvex.ae_eq_const_or_average_mem_interior
-  结论: [IsFiniteMeasure μ] (hs : StrictConvex 实数 s)
+定理 严格凸.ae_eq_const_or_average_mem_interior
+  结论: [是有限测度 μ] (hs : 严格凸 实数 s)
   证明: by
   have : forall {t}, μ t != 0 -> (⨍ x in t, f x ∂μ) in s := fun ht =>
     hs.convex.set_average_mem hsc ht (by finiteness) (ae_restrict_of_ae hfs) hfi.integrableOn
@@ -548,7 +548,7 @@ theorem StrictConvexOn.ae_eq_const_or_map_average_lt
 
 中文:
 定理 StrictConvexOn.ae_eq_const_or_map_average_lt
-  结论: [IsFiniteMeasure μ] (hg : StrictConvexOn 实数 s g)
+  结论: [是有限测度 μ] (hg : StrictConvexOn 实数 s g)
   证明: by
   have : forall {t}, μ t != 0 -> (⨍ x in t, f x ∂μ) in s ∧ g (⨍ x in t, f x ∂μ) <= ⨍ x in t, g (f x) ∂μ :=
     fun ht =>
@@ -593,7 +593,7 @@ theorem StrictConcaveOn.ae_eq_const_or_lt_map_average
 
 中文:
 定理 StrictConcaveOn.ae_eq_const_or_lt_map_average
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   simpa only [Pi.neg_apply, average_neg, neg_lt_neg_iff] using
     hg.neg.ae_eq_const_or_map_average_lt hgc.neg hsc hfs hfi hgi.neg
@@ -624,7 +624,7 @@ theorem ae_eq_const_or_norm_average_lt_of_norm_le_const
 
 中文:
 定理 ae_eq_const_or_norm_average_lt_of_norm_le_const
-  结论: [StrictConvexSpace 实数 E]
+  结论: [严格凸空间 实数 E]
   证明: by
   rcases le_or_gt C 0 with hC0 | hC0
   · have : f =ᵐ[μ] 0 := h_le.mono fun x hx => norm_le_zero_iff.1 (hx.trans hC0)
@@ -667,7 +667,7 @@ theorem ae_eq_const_or_norm_integral_lt_of_norm_le_const
 
 中文:
 定理 ae_eq_const_or_norm_integral_lt_of_norm_le_const
-  结论: [StrictConvexSpace 实数 E] [IsFiniteMeasure μ]
+  结论: [严格凸空间 实数 E] [是有限测度 μ]
   证明: by
   rcases eq_or_ne μ 0 with h₀ | h₀; · simp [h₀, EventuallyEq]
   have hμ : 0 < μ.real univ := by
@@ -699,8 +699,8 @@ theorem ae_eq_const_or_norm_setIntegral_lt_of_norm_le_const
   exact ae_eq_const_or_norm_integral_lt_of_norm_le_const h_le
 
 中文:
-定理 ae_eq_const_or_norm_setIntegral_lt_of_norm_le_const
-  结论: [StrictConvexSpace 实数 E] (ht : μ t != ∞)
+定理 ae_eq_const_or_norm_set整数egral_lt_of_norm_le_const
+  结论: [严格凸空间 实数 E] (ht : μ t != ∞)
   证明: by
   have := Fact.mk ht.lt_top
   rw [← measureReal_restrict_apply_univ]

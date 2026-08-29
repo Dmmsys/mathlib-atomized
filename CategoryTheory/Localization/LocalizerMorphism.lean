@@ -50,7 +50,7 @@ structure LocalizerMorphism
     - map : W₁ <= W₂.inverseImage functor
 
 中文:
-结构 LocalizerMorphism
+结构 Localizer态射
   参数: where
   公理与运算 (2 个):
     - functor : C₁ ⥤ C₂
@@ -101,7 +101,7 @@ definition id
 
 中文:
 定义 id
-  签名: : LocalizerMorphism W₁ W₁ where
+  签名: : Localizer态射 W₁ W₁ where
   定义体: 𝟭 C₁
   map _ _ _ hf := hf
 -/
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: (id W₁).functor.IsEquivalence
+  签名: (id W₁).functor.是等价
   定义体: inferInstanceAs (𝟭 C₁).IsEquivalence
 
 Depends on / 依赖: IsEquivalence
@@ -142,7 +142,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (Φ : LocalizerMorphism W₁ W₂) (Ψ : LocalizerMorphism W₂ W₃)
+  签名: (Φ : Localizer态射 W₁ W₂) (Ψ : Localizer态射 W₂ W₃)
   定义体: Φ.functor ⋙ Ψ.functor
   map _ _ _ hf := Ψ.map _ (Φ.map _ hf)
 
@@ -166,7 +166,7 @@ abbreviation op
 
 中文:
 缩写 op
-  签名: : LocalizerMorphism W₁.op W₂.op where
+  签名: : Localizer态射 W₁.op W₂.op where
   定义体: Φ.functor.op
   map _ _ _ hf := Φ.map _ hf
 
@@ -279,8 +279,8 @@ lemma isEquivalence_imp
 
 中文:
 引理 isEquivalence_imp
-  条件: [G.IsEquivalence]
-  结论: G'.IsEquivalence
+  条件: [G.是等价]
+  结论: G'.是等价
   证明: let E₁ := Localization.uniq L₁ L₁' W₁
   let E₂ := Localization.uniq L₂ L₂' W₂
   let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
@@ -319,7 +319,7 @@ lemma isEquivalence_iff
 
 中文:
 引理 isEquivalence_iff
-  结论: G.IsEquivalence ↔ G'.IsEquivalence
+  结论: G.是等价 ↔ G'.是等价
   证明: ⟨fun _ => Φ.isEquivalence_imp L₁ L₂ G L₁' L₂' G',
     fun _ => Φ.isEquivalence_imp L₁' L₂' G' L₁ L₂ G⟩
 
@@ -345,7 +345,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def fullyFaithfulImp (hG : G.FullyFaithful)
+  签名: def fullyFaithfulImp (hG : G.满忠实)
   定义体: let E₁ := Localization.uniq L₁ L₁' W₁
   let E₂ := Localization.uniq L₂ L₂' W₂
   let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
@@ -382,7 +382,7 @@ lemma nonempty_fullyFaithful_iff
 
 中文:
 引理 nonempty_fullyFaithful_iff
-  结论: Nonempty G.FullyFaithful ↔ Nonempty G'.FullyFaithful
+  结论: 非空 G.满忠实 ↔ 非空 G'.满忠实
   证明: ⟨fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁ L₂ G L₁' L₂' G' h⟩,
     fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁' L₂' G' L₁ L₂ G h⟩⟩
 
@@ -404,10 +404,10 @@ class IsLocalizedEquivalence
     - isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).IsEquivalence
 
 中文:
-类 IsLocalizedEquivalence
+类 是LocalizedEquivalence
   参数: : 命题 where
   公理与运算 (1 个):
-    - isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).IsEquivalence
+    - isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).是等价
 -/
 class IsLocalizedEquivalence : Prop where
   /-- the induced functor on the constructed localized categories is an equivalence -/
@@ -424,8 +424,8 @@ lemma IsLocalizedEquivalence.mk'
     exact inferInstance
 
 中文:
-引理 IsLocalizedEquivalence.mk'
-  条件: [CatCommSq Φ.functor L₁ L₂ G] [G.IsEquivalence]
+引理 是LocalizedEquivalence.mk'
+  条件: [CatCommSq Φ.functor L₁ L₂ G] [G.是等价]
   证明: by
     rw [Φ.isEquivalence_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
     exact inferInstance
@@ -450,7 +450,7 @@ lemma isEquivalence
 
 中文:
 引理 isEquivalence
-  条件: [h : Φ.IsLocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G]
+  条件: [h : Φ.是LocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G]
   证明: (by
   rw [Φ.isEquivalence_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
   exact h.isEquivalence)
@@ -476,8 +476,8 @@ instance [Φ.IsLocalizedEquivalence]
   exact IsLocalizedEquivalence.mk' Φ.op W₁.Q.op W₂.Q.op G.op
 
 中文:
-实例 [Φ.IsLocalizedEquivalence]
-  签名: : Φ.op.IsLocalizedEquivalence
+实例 [Φ.是LocalizedEquivalence]
+  签名: : Φ.op.是LocalizedEquivalence
   定义体: by
   let G := Φ.localizedFunctor W₁.Q W₂.Q
   let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
@@ -504,7 +504,7 @@ instance localizedFunctor_isEquivalence
 
 中文:
 实例 localizedFunctor_isEquivalence
-  签名: [Φ.IsLocalizedEquivalence]
+  签名: [Φ.是LocalizedEquivalence]
   定义体: Φ.isEquivalence L₁ L₂ _
 
 Depends on / 依赖: isEquivalence
@@ -524,7 +524,7 @@ lemma IsLocalizedEquivalence.of_isLocalization_of_isLocalization
   exact IsLocalizedEquivalence.mk' Φ (Φ.functor ⋙ L₂) L₂ (𝟭 D₂)
 
 中文:
-引理 IsLocalizedEquivalence.of_isLocalization_of_isLocalization
+引理 是LocalizedEquivalence.of_isLocalization_of_isLocalization
   证明: by
   have : CatCommSq Φ.functor (Φ.functor ⋙ L₂) L₂ (𝟭 D₂) :=
     CatCommSq.mk (rightUnitor _).symm
@@ -552,8 +552,8 @@ lemma IsLocalizedEquivalence.of_equivalence
       ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).sy
 
 中文:
-引理 IsLocalizedEquivalence.of_equivalence
-  结论: [Φ.functor.IsEquivalence]
+引理 是LocalizedEquivalence.of_equivalence
+  结论: [Φ.functor.是等价]
   证明: by
   have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
     refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
@@ -583,8 +583,8 @@ instance IsLocalizedEquivalence.isLocalization
   body: Functor.IsLocalization.of_iso _ ((Φ.catCommSq W₁.Q L₂).iso).symm
 
 中文:
-实例 IsLocalizedEquivalence.isLocalization
-  签名: [Φ.IsLocalizedEquivalence]
+实例 是LocalizedEquivalence.isLocalization
+  签名: [Φ.是LocalizedEquivalence]
   定义体: Functor.IsLocalization.of_iso _ ((Φ.catCommSq W₁.Q L₂).iso).symm
 
 Depends on / 依赖: Functor, Functor.IsLocalization.of_iso, IsLocalization, catCommSq, of_iso
@@ -610,7 +610,7 @@ lemma isLocalizedEquivalence_of_unit_of_unit
 
 中文:
 引理 isLocalizedEquivalence_of_unit_of_unit
-  结论: (Ψ : LocalizerMorphism W₂ W₁)
+  结论: (Ψ : Localizer态射 W₂ W₁)
   证明: by
     have : IsIso (whiskerRight ε₁ W₁.Q) := by
       rw [NatTrans.isIso_iff_isIso_app]
@@ -656,7 +656,7 @@ instance IsLocalizedEquivalence.id
   of_isLocalization_of_isLocalization _ W₁.Q
 
 中文:
-实例 IsLocalizedEquivalence.id
+实例 是LocalizedEquivalence.id
   签名: :
   定义体: have : ((LocalizerMorphism.id W₁).functor ⋙ W₁.Q).IsLocalization W₁ :=
     Functor.IsLocalization.of_iso _ (Functor.leftUnitor _).symm
@@ -681,8 +681,8 @@ instance IsLocalizedEquivalence.comp
   of_isLocalization_of_isLocalization _ W₃.Q
 
 中文:
-实例 IsLocalizedEquivalence.comp
-  签名: [Φ.IsLocalizedEquivalence]
+实例 是LocalizedEquivalence.comp
+  签名: [Φ.是LocalizedEquivalence]
   定义体: have : ((Φ.comp Ψ).functor ⋙ W₃.Q).IsLocalization W₁ :=
     Functor.IsLocalization.of_iso _ (Functor.associator _ _ _).symm
   of_isLocalization_of_isLocalization _ W₃.Q
@@ -707,10 +707,10 @@ class IsLocalizedFullyFaithful
     - nonempty_fullyFaithful : Nonempty (Φ.localizedFunctor W₁.Q W₂.Q).FullyFaithful
 
 中文:
-类 IsLocalizedFullyFaithful
+类 是LocalizedFullyFaithful
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_fullyFaithful : Nonempty (Φ.localizedFunctor W₁.Q W₂.Q).FullyFaithful
+    - nonempty_fullyFaithful : 非空 (Φ.localizedFunctor W₁.Q W₂.Q).满忠实
 -/
 class IsLocalizedFullyFaithful : Prop where
   /-- the induced functor on the constructed localized categories is fully faithful -/
@@ -727,8 +727,8 @@ lemma IsLocalizedFullyFaithful.mk'
     exact ⟨hG⟩
 
 中文:
-引理 IsLocalizedFullyFaithful.mk'
-  条件: [CatCommSq Φ.functor L₁ L₂ G] (hG : G.FullyFaithful)
+引理 是LocalizedFullyFaithful.mk'
+  条件: [CatCommSq Φ.functor L₁ L₂ G] (hG : G.满忠实)
   证明: by
     rw [Φ.nonempty_fullyFaithful_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
     exact ⟨hG⟩
@@ -750,8 +750,8 @@ instance [Φ.IsLocalizedEquivalence]
   body: ⟨Functor.FullyFaithful.ofFullyFaithful _⟩
 
 中文:
-实例 [Φ.IsLocalizedEquivalence]
-  签名: : Φ.IsLocalizedFullyFaithful where
+实例 [Φ.是LocalizedEquivalence]
+  签名: : Φ.是LocalizedFullyFaithful where
   定义体: ⟨Functor.FullyFaithful.ofFullyFaithful _⟩
 
 Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, ofFullyFaithful
@@ -791,7 +791,7 @@ lemma faithful
 
 中文:
 引理 faithful
-  条件: [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
+  条件: [Φ.是LocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
   证明: (Φ.fullyFaithful L₁ L₂ G).faithful
 
 Depends on / 依赖: faithful, fullyFaithful
@@ -810,7 +810,7 @@ lemma full
 
 中文:
 引理 full
-  条件: [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
+  条件: [Φ.是LocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
   证明: (Φ.fullyFaithful L₁ L₂ G).full
 
 Depends on / 依赖: fullyFaithful, isoZero, shiftFunctorZero
@@ -829,7 +829,7 @@ definition fullyFaithfulLocalizedFunctor
 
 中文:
 定义 fullyFaithfulLocalizedFunctor
-  签名: [Φ.IsLocalizedFullyFaithful]
+  签名: [Φ.是LocalizedFullyFaithful]
   定义体: Φ.fullyFaithful L₁ L₂ _
 -/
 @[no_expose] noncomputable def fullyFaithfulLocalizedFunctor [Φ.IsLocalizedFullyFaithful] :
@@ -845,8 +845,8 @@ instance [Φ.IsLocalizedFullyFaithful]
   body: Φ.full L₁ L₂ _
 
 中文:
-实例 [Φ.IsLocalizedFullyFaithful]
-  签名: : (Φ.localizedFunctor L₁ L₂).Full
+实例 [Φ.是LocalizedFullyFaithful]
+  签名: : (Φ.localizedFunctor L₁ L₂).满
   定义体: Φ.full L₁ L₂ _
 -/
 instance [Φ.IsLocalizedFullyFaithful] : (Φ.localizedFunctor L₁ L₂).Full :=
@@ -861,8 +861,8 @@ instance [Φ.IsLocalizedFullyFaithful]
   body: Φ.faithful L₁ L₂ _
 
 中文:
-实例 [Φ.IsLocalizedFullyFaithful]
-  签名: : (Φ.localizedFunctor L₁ L₂).Faithful
+实例 [Φ.是LocalizedFullyFaithful]
+  签名: : (Φ.localizedFunctor L₁ L₂).忠实
   定义体: Φ.faithful L₁ L₂ _
 
 Depends on / 依赖: faithful
@@ -884,8 +884,8 @@ instance [Φ.IsLocalizedFullyFaithful]
     (Φ.fullyFaithful W₁.Q W₂.Q G).op
 
 中文:
-实例 [Φ.IsLocalizedFullyFaithful]
-  签名: : Φ.op.IsLocalizedFullyFaithful
+实例 [Φ.是LocalizedFullyFaithful]
+  签名: : Φ.op.是LocalizedFullyFaithful
   定义体: by
   let G := Φ.localizedFunctor W₁.Q W₂.Q
   let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
@@ -963,7 +963,7 @@ instance IsLocalizedFullyFaithful.comp
       (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.
 
 中文:
-实例 IsLocalizedFullyFaithful.comp
+实例 是LocalizedFullyFaithful.comp
   定义体: letI : CatCommSq (Φ.comp Ψ).functor W₁.Q W₃.Q
       (Φ.localizedFunctor W₁.Q W₂.Q ⋙ Ψ.localizedFunctor W₂.Q W₃.Q) :=
     CatCommSq.hComp _ _ _ W₂.Q _ _ _
@@ -995,7 +995,7 @@ abbreviation arrow
 
 中文:
 缩写 arrow
-  签名: : LocalizerMorphism W₁.arrow W₂.arrow where
+  签名: : Localizer态射 W₁.arrow W₂.arrow where
   定义体: Φ.functor.mapArrow
   map _ _ _ hf := ⟨Φ.map _ hf.1, Φ.map _ hf.2⟩
 
@@ -1015,8 +1015,8 @@ class IsInduced
     - inverseImage_eq((Φ)) : W₂.inverseImage Φ.functor = W₁
 
 中文:
-类 IsInduced
-  参数: (Φ : LocalizerMorphism W₁ W₂)
+类 是Induced
+  参数: (Φ : Localizer态射 W₁ W₂)
   公理与运算 (1 个):
     - inverseImage_eq((Φ)) : W₂.inverseImage Φ.functor = W₁
 -/
@@ -1035,8 +1035,8 @@ instance [Φ.IsInduced]
     simp [← Φ.inverseImage_eq]
 
 中文:
-实例 [Φ.IsInduced]
-  签名: : Φ.op.IsInduced where
+实例 [Φ.是Induced]
+  签名: : Φ.op.是Induced where
   定义体: by
     simp [← Φ.inverseImage_eq]
 
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: (id W₁).IsInduced
+  签名: (id W₁).是Induced
   定义体: rfl
 -/
 instance : (id W₁).IsInduced where
@@ -1078,8 +1078,8 @@ instance [Φ.IsInduced]
     rfl
 
 中文:
-实例 [Φ.IsInduced]
-  签名: : Φ.arrow.IsInduced where
+实例 [Φ.是Induced]
+  签名: : Φ.arrow.是Induced where
   定义体: by
     simp only [← Φ.inverseImage_eq]
     rfl
@@ -1119,7 +1119,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : LocalizerMorphism W₂ W₁ where
+  签名: : Localizer态射 W₂ W₁ where
   定义体: Φ.functor.inv
   map := by
     simp only [← Φ.inverseImage_eq]
@@ -1152,7 +1152,7 @@ instance :
 
 中文:
 实例 :
-  签名: Φ.inv.functor.IsEquivalence
+  签名: Φ.inv.functor.是等价
   定义体: by
   dsimp
   infer_instance
@@ -1182,7 +1182,7 @@ instance :
 
 中文:
 实例 :
-  签名: Φ.inv.IsInduced
+  签名: Φ.inv.是Induced
   定义体: by
     ext X Y f
     simp only [← Φ.inverseImage_eq]

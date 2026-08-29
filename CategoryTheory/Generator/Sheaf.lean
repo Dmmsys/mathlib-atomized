@@ -60,7 +60,7 @@ definition freeYonedaHomEquiv
 
 中文:
 定义 freeYonedaHomEquiv
-  签名: {X : C} {M : A} {F : Sheaf J A}
+  签名: {X : C} {M : A} {F : 层 J A}
   定义体: ((sheafificationAdjunction J A).homEquiv _ _).trans Presheaf.freeYonedaHomEquiv
 
 Depends on / 依赖: Presheaf, Presheaf.freeYonedaHomEquiv, freeYonedaHomEquiv, homEquiv, sheafificationAdjunction
@@ -86,7 +86,7 @@ lemma isSeparating
 
 中文:
 引理 isSeparating
-  条件: {ι : Type w} {S : ι -> A} (hS : Object命题erty.IsSeparating (.ofObj S))
+  条件: {ι : 类型 w} {S : ι -> A} (hS : ObjectProperty.IsSeparating (.ofObj S))
   证明: by
   intro F G f g hfg
   refine (sheafToPresheaf J A).map_injective (Presheaf.isSeparating C hS _ _ ?_)
@@ -117,7 +117,7 @@ lemma isSeparator
 
 中文:
 引理 isSeparator
-  结论: {ι : Type w} {S : ι -> A} (hS : Object命题erty.IsSeparating (.ofObj S))
+  结论: {ι : 类型 w} {S : ι -> A} (hS : ObjectProperty.IsSeparating (.ofObj S))
   证明: (isSeparating J hS).isSeparator_coproduct
 
 Depends on / 依赖: isSeparating, isSeparator_coproduct
@@ -139,7 +139,7 @@ instance hasSeparator
 
 中文:
 实例 hasSeparator
-  签名: [HasSeparator A] [Preadditive A] [HasCoproducts.{u} A]
+  签名: [有Separator A] [预加性 A] [HasCoproducts.{u} A]
   定义体: ⟨_, isSeparator J (S := fun (_ : Unit) => separator A)
       (by simpa using! isSeparator_separator A)⟩
 

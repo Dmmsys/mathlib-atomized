@@ -51,9 +51,9 @@ lemma LieModule.nontrivial_of_isIrreducible
     simpa using aux m 0
 
 中文:
-引理 LieModule.nontrivial_of_isIrreducible
-  条件: [LieModule.IsIrreducible R L M]
-  结论: Nontrivial M where
+引理 Lie模.nontrivial_of_isIrreducible
+  条件: [Lie模.是不可约 R L M]
+  结论: 非平凡 M where
   证明: by
     have aux : (⊥ : LieSubmodule R L M) != ⊤ := bot_ne_top
     contrapose! aux
@@ -85,8 +85,8 @@ theorem HasTrivialRadical.eq_bot_of_isSolvable
   proof: sSup_eq_bot.mp radical_eq_bot _ hI
 
 中文:
-定理 HasTrivialRadical.eq_bot_of_isSolvable
-  结论: [HasTrivialRadical R L]
+定理 有TrivialRadical.eq_bot_of_isSolvable
+  结论: [有TrivialRadical R L]
   证明: sSup_eq_bot.mp radical_eq_bot _ hI
 
 Depends on / 依赖: radical_eq_bot, sSup_eq_bot, sSup_eq_bot.mp
@@ -106,8 +106,8 @@ instance [HasTrivialRadical
   exact HasTrivialRadical.eq_bot_of_isSolvable _
 
 中文:
-实例 [HasTrivialRadical
-  签名: R L] : LieModule.IsFaithful R L L
+实例 [有TrivialRadical
+  签名: R L] : Lie模.是忠实 R L L
   定义体: by
   rw [isFaithful_self_iff]
   exact HasTrivialRadical.eq_bot_of_isSolvable _
@@ -129,7 +129,7 @@ theorem hasTrivialRadical_of_no_solvable_ideals
 
 中文:
 定理 hasTrivialRadical_of_no_solvable_ideals
-  条件: (h : 对任意 I : LieIdeal R L, IsSolvable I -> I = ⊥)
+  条件: (h : 对任意 I : LieIdeal R L, 是可解 I -> I = ⊥)
   证明: ⟨sSup_eq_bot.mpr h⟩
 
 Depends on / 依赖: sSup_eq_bot, sSup_eq_bot.mpr
@@ -207,7 +207,7 @@ include R in
 
 中文:
 实例 :
-  签名: LieModule.IsIrreducible R L L
+  签名: Lie模.是不可约 R L L
   定义体: by
   suffices Nontrivial (LieIdeal R L) from ⟨IsSimple.eq_bot_or_eq_top⟩
   rw [LieSubmodule.nontrivial_iff]; rw [← not_subsingleton_iff_nontrivial]
@@ -240,7 +240,7 @@ lemma nontrivial
 
 中文:
 引理 nontrivial
-  结论: Nontrivial L
+  结论: 非平凡 L
   证明: by
   have := IsSimple.non_abelian R (L := L)
   contrapose! this
@@ -322,7 +322,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTrivialRadical R L
+  签名: 有TrivialRadical R L
   定义体: by
   rw [hasTrivialRadical_iff_no_abelian_ideals]
   intro I hI
@@ -377,7 +377,7 @@ lemma not_isSimple_of_subsingleton
 
 中文:
 引理 not_isSimple_of_subsingleton
-  条件: [Subsingleton L]
+  条件: [子单例 L]
   证明: fun contra => contra.non_abelian inferInstance
 
 Depends on / 依赖: contra, contra.non_abelian, non_abelian
@@ -413,7 +413,7 @@ lemma isSimple_of_isAtom
 中文:
 引理 isSimple_of_isAtom
   条件: (I : LieIdeal R L) (hI : IsAtom I)
-  结论: IsSimple R I where
+  结论: 是单 R I where
   证明: IsSemisimple.non_abelian_of_isAtom I hI
   eq_bot_or_eq_top := by
     -- Suppose that `J` is an ideal of `I`.
@@ -521,7 +521,7 @@ lemma finitelyAtomistic
 
 中文:
 引理 finitelyAtomistic
-  结论: 对任意 s : Finset (LieIdeal R L), ↑s subseteq {I : LieIdeal R L | IsAtom I} ->
+  结论: 对任意 s : 有限集 (LieIdeal R L), ↑s subseteq {I : LieIdeal R L | IsAtom I} ->
   证明: by
   intro s hs I hI
   let S := {I : LieIdeal R L | IsAtom I}
@@ -663,7 +663,7 @@ theorem subsingleton_of_hasTrivialRadical_lie_abelian
 
 中文:
 定理 subsingleton_of_hasTrivialRadical_lie_abelian
-  条件: [HasTrivialRadical R L] [h : IsLieAbelian L]
+  条件: [有TrivialRadical R L] [h : IsLieAbelian L]
   证明: by
   rw [isLieAbelian_iff_center_eq_top R L]; rw [center_eq_bot] at h
   exact (LieSubmodule.subsingleton_iff R L L).mp (subsingleton_of_bot_eq_top h)
@@ -686,7 +686,7 @@ theorem abelian_radical_of_hasTrivialRadical
 
 中文:
 定理 abelian_radical_of_hasTrivialRadical
-  条件: [HasTrivialRadical R L]
+  条件: [有TrivialRadical R L]
   证明: by
   rw [HasTrivialRadical.radical_eq_bot]; exact LieIdeal.isLieAbelian_of_trivial ..
 
@@ -711,7 +711,7 @@ theorem abelian_radical_iff_solvable_is_abelian
 
 中文:
 定理 abelian_radical_iff_solvable_is_abelian
-  条件: [IsNoetherian R L]
+  条件: [是Noether R L]
   证明: by
   constructor
   · rintro h₁ I h₂
@@ -742,7 +742,7 @@ theorem ad_ker_eq_bot_of_hasTrivialRadical
 
 中文:
 定理 ad_ker_eq_bot_of_hasTrivialRadical
-  条件: [HasTrivialRadical R L]
+  条件: [有TrivialRadical R L]
   结论: (ad R L).ker = ⊥
   证明: by simp
 -/

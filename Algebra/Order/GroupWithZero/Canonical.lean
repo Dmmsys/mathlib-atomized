@@ -47,9 +47,9 @@ class LinearOrderedCommMonoidWithZero
   (no additional axioms)
 
 中文:
-类 LinearOrderedCommMonoidWithZero
+类 带零LinearOrderedComm幺半群
   参数: (α : 类型)
-  继承: CommMonoidWithZero α, LinearOrder α, 
+  继承: 带零交换幺半群 α, 线性序 α, 
   (无附加公理)
 -/
 class LinearOrderedCommMonoidWithZero (α : Type*) extends CommMonoidWithZero α, LinearOrder α,
@@ -65,9 +65,9 @@ class LinearOrderedCommGroupWithZero
   (no additional axioms)
 
 中文:
-类 LinearOrderedCommGroupWithZero
+类 带零LinearOrderedComm群
   参数: (α : 类型)
-  继承: LinearOrderedCommMonoidWithZero α, 
+  继承: 带零LinearOrderedComm幺半群 α, 
   (无附加公理)
 -/
 class LinearOrderedCommGroupWithZero (α : Type*) extends LinearOrderedCommMonoidWithZero α,
@@ -112,8 +112,8 @@ isBot_zero _ := le.1 zero ▸ zero_le
 bot_le _ := le.1 bot ▸ bot_le
 
 中文:
-缩写 Function.Injective.linearOrderedCommMonoidWithZero
-  签名: {β : 类型} [Zero β] [Bot β] [One β]
+缩写 函数.单射.linearOrderedCommMonoidWithZero
+  签名: {β : 类型} [零 β] [底元素 β] [幺 β]
   定义体: hf.linearOrder f le lt hinf hsup compare
   __ := hf.commMonoidWithZero f zero one mul npow
   __ := Function.Injective.posMulStrictMono f zero mul lt
@@ -227,7 +227,7 @@ theorem Units.zero_lt
   proof: u.ne_zero.pos
 
 中文:
-定理 Units.zero_lt
+定理 单位群.zero_lt
   条件: (u : αˣ)
   结论: (0 : α) < u
   证明: u.ne_zero.pos
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommGroupWithTop (Additive αᵒᵈ)
+  签名: LinearOrderedAddComm群带顶 (加性 αᵒᵈ)
   定义体: by simp
   neg_top := by ext; simp [bot_eq_zero]
   add_neg_cancel_of_ne_top := by
@@ -363,7 +363,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommGroupWithTop (Additive α)ᵒᵈ
+  签名: LinearOrderedAddComm群带顶 (加性 α)ᵒᵈ
   定义体: by simp
   neg_top := by ext; simp; simp [bot_eq_zero]
   add_neg_cancel_of_ne_top := by
@@ -437,8 +437,8 @@ instance [DenselyOrdered
   tauto
 
 中文:
-实例 [DenselyOrdered
-  签名: α] : Nontrivial αˣ
+实例 [稠密序
+  签名: α] : 非平凡 αˣ
   定义体: by
   have := denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units (α := α)
   tauto
@@ -462,8 +462,8 @@ instance [DenselyOrdered
   tauto
 
 中文:
-实例 [DenselyOrdered
-  签名: α] : DenselyOrdered αˣ
+实例 [稠密序
+  签名: α] : 稠密序 αˣ
   定义体: by
   have := denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units (α := α)
   tauto
@@ -487,8 +487,8 @@ lemma denselyOrdered_units_iff
 
 中文:
 引理 denselyOrdered_units_iff
-  条件: [Nontrivial αˣ]
-  结论: DenselyOrdered αˣ ↔ DenselyOrdered α
+  条件: [非平凡 αˣ]
+  结论: 稠密序 αˣ ↔ 稠密序 α
   证明: by
   have := denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units (α := α)
   tauto
@@ -552,7 +552,7 @@ theorem ofDual_toAdd_zero
 
 中文:
 定理 ofDual_toAdd_zero
-  条件: [LinearOrderedAddCommMonoidWithTop α]
+  条件: [LinearOrderedAddComm幺半群带顶 α]
   证明: rfl
 -/
 theorem ofDual_toAdd_zero [LinearOrderedAddCommMonoidWithTop α] :
@@ -568,7 +568,7 @@ instance [LinearOrderedAddCommGroupWithTop
   mul_inv_cancel := LinearOrderedAddCommGroupWithTop.add_neg_cancel_of_ne_top (α := α)
 
 中文:
-实例 [LinearOrderedAddCommGroupWithTop
+实例 [LinearOrderedAddComm群带顶
   签名: α] :
   定义体: LinearOrderedAddCommGroupWithTop.neg_top (α := α)
   mul_inv_cancel := LinearOrderedAddCommGroupWithTop.add_neg_cancel_of_ne_top (α := α)
@@ -596,7 +596,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (WithZero α)
+  签名: : 底元素 (WithZero α)
   定义体: ⟨none⟩
 
 @[simp← ]
@@ -688,7 +688,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (WithZero α)
+  签名: : 有底序 (WithZero α)
   定义体: inferInstanceAs OrderBot (WithBot α)
 
 Depends on / 依赖: OrderBot, WithBot
@@ -705,7 +705,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [OrderTop α]
+  签名: [有顶序 α]
   定义体: inferInstanceAs BoundedOrder (WithBot α)
 
 Depends on / 依赖: BoundedOrder, WithBot
@@ -725,7 +725,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBotZeroClass (WithZero α)
+  签名: 是BotZero类 (WithZero α)
   定义体: bot_le
 
 @[deprecated _root_.zero_le (since := "2026-05-06")]
@@ -868,7 +868,7 @@ lemma one_le_coe
 
 中文:
 引理 one_le_coe
-  条件: [One α]
+  条件: [幺 α]
   结论: 1 <= (a : WithZero α) ↔ 1 <= a
   证明: coe_le_coe
 -/
@@ -884,7 +884,7 @@ lemma coe_le_one
 
 中文:
 引理 coe_le_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (a : WithZero α) <= 1 ↔ a <= 1
   证明: coe_le_coe
 -/
@@ -944,7 +944,7 @@ lemma lt_iff_exists
   proof: WithBot.lt_iff_exists
 
 中文:
-引理 lt_iff_exists
+引理 lt_iff_存在
   结论: x < y ↔ 存在 b : α, y = ↑b ∧ 对任意 a : α, x = ↑a -> a < b
   证明: WithBot.lt_iff_exists
 
@@ -1008,7 +1008,7 @@ lemma lt_iff_exists_coe
   proof: WithBot.lt_iff_exists_coe
 
 中文:
-引理 lt_iff_exists_coe
+引理 lt_iff_存在_coe
   结论: x < y ↔ 存在 b : α, y = b ∧ x < b
   证明: WithBot.lt_iff_exists_coe
 
@@ -1096,7 +1096,7 @@ lemma one_lt_coe
 
 中文:
 引理 one_lt_coe
-  条件: [One α]
+  条件: [幺 α]
   结论: 1 < (a : WithZero α) ↔ 1 < a
   证明: coe_lt_coe
 -/
@@ -1112,7 +1112,7 @@ lemma coe_lt_one
 
 中文:
 引理 coe_lt_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (a : WithZero α) < 1 ↔ a < 1
   证明: coe_lt_coe
 -/
@@ -1134,7 +1134,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (WithZero α)
+  签名: : 预序 (WithZero α)
   定义体: inferInstanceAs Preorder (WithBot α)
 
 Depends on / 依赖: Preorder, WithBot
@@ -1157,7 +1157,7 @@ instance instMulLeftMono
 
 中文:
 实例 instMulLeftMono
-  签名: [Mul α] [MulLeftMono α]
+  签名: [乘法 α] [MulLeftMono α]
   定义体: by
   refine ⟨fun a b c hbc => ?_⟩
   induction a; · exact zero_le
@@ -1198,7 +1198,7 @@ lemma addLeftMono
 
 中文:
 引理 addLeftMono
-  结论: [AddZeroClass α] [AddLeftMono α]
+  结论: [加法零类 α] [AddLeftMono α]
   证明: by
   refine ⟨fun a b c hbc => ?_⟩
   induction a
@@ -1244,7 +1244,7 @@ instance instExistsAddOfLE
 
 中文:
 实例 instExistsAddOfLE
-  签名: [Add α] [ExistsAddOfLE α]
+  签名: [加法 α] [ExistsAddOfLE α]
   定义体: by
     induction a
     · simp
@@ -1276,7 +1276,7 @@ lemma map'_mono
 
 中文:
 引理 map'_mono
-  条件: [MulOneClass α] [MulOneClass β] {f : α ->* β} (hf : Monotone f)
+  条件: [MulOne类 α] [MulOne类 β] {f : α ->* β} (hf : 递增 f)
   证明: by simpa [Monotone, WithZero.forall]
 -/
 lemma map'_mono [MulOneClass α] [MulOneClass β] {f : α ->* β} (hf : Monotone f) :
@@ -1292,7 +1292,7 @@ lemma map'_strictMono
 
 中文:
 引理 map'_strictMono
-  条件: [MulOneClass α] [MulOneClass β] {f : α ->* β} (hf : StrictMono f)
+  条件: [MulOne类 α] [MulOne类 β] {f : α ->* β} (hf : 严格递增 f)
   证明: by simpa [StrictMono, WithZero.forall]
 -/
 lemma map'_strictMono [MulOneClass α] [MulOneClass β] {f : α ->* β} (hf : StrictMono f) :
@@ -1310,8 +1310,8 @@ theorem exists_ne_zero_and_lt
   exact ⟨z, WithZero.coe_ne_zero, hlt⟩
 
 中文:
-定理 exists_ne_zero_and_lt
-  条件: [NoMinOrder α] (hx : x != 0)
+定理 存在_ne_zero_and_lt
+  条件: [NoMin序 α] (hx : x != 0)
   证明: by
   obtain ⟨z, hlt⟩ := exists_lt (WithZero.unzero hx)
   rw [← WithZero.coe_lt_coe]; rw [WithZero.coe_unzero hx] at hlt
@@ -1481,7 +1481,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (WithZero α)
+  签名: : 偏序 (WithZero α)
   定义体: inferInstanceAs PartialOrder (WithBot α)
 
 Depends on / 依赖: PartialOrder, WithBot
@@ -1507,7 +1507,7 @@ instance instMulLeftReflectLT
 
 中文:
 实例 instMulLeftReflectLT
-  签名: [Mul α] [MulLeftReflectLT α]
+  签名: [乘法 α] [MulLeftReflectLT α]
   定义体: by
   refine ⟨fun a b c h => ?_⟩
   have := h.ne_zero
@@ -1636,7 +1636,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [Lattice α]
+  签名: [格 α]
 -/
 instance instLattice [Lattice α] : Lattice (WithZero α) where
 
@@ -1669,7 +1669,7 @@ instance decidableLE
 
 中文:
 实例 decidableLE
-  签名: [Preorder α] [DecidableLE α]
+  签名: [预序 α] [DecidableLE α]
 -/
 instance decidableLE [Preorder α] [DecidableLE α] : DecidableLE (WithZero α)
 | 0, _ => isTrue by simp
@@ -1685,7 +1685,7 @@ instance decidableLT
 
 中文:
 实例 decidableLT
-  签名: [Preorder α] [DecidableLT α]
+  签名: [预序 α] [DecidableLT α]
 -/
 instance decidableLT [Preorder α] [DecidableLT α] : DecidableLT (WithZero α)
 | _, 0 => isFalse by simp
@@ -1702,7 +1702,7 @@ instance total_le
 
 中文:
 实例 total_le
-  签名: [Preorder α] [@Std.Total α (· <= ·)]
+  签名: [预序 α] [@Std.全 α (· <= ·)]
   定义体: by cases x <;> cases y <;> simp; simpa using Std.Total.total ..
 
 Depends on / 依赖: Std.Total.total
@@ -1723,7 +1723,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder (WithZero α)
+  签名: : 线性序 (WithZero α)
   定义体: Lattice.toLinearOrder _
 
 Depends on / 依赖: Lattice, Lattice.toLinearOrder, toLinearOrder
@@ -1741,7 +1741,7 @@ lemma le_max_iff
 
 中文:
 引理 le_max_iff
-  结论: (a : WithZero α) <= max (b : WithZero α) c ↔ a <= max b c
+  结论: (a : WithZero α) <= 最大值 (b : WithZero α) c ↔ a <= 最大值 b c
   证明: by
   simp only [WithZero.coe_le_coe, le_max_iff]
 -/
@@ -1759,7 +1759,7 @@ lemma min_le_iff
 
 中文:
 引理 min_le_iff
-  结论: min (a : WithZero α) b <= c ↔ min a b <= c
+  结论: 最小值 (a : WithZero α) b <= c ↔ 最小值 a b <= c
   证明: by
   simp only [WithZero.coe_le_coe, min_le_iff]
 -/
@@ -1775,7 +1775,7 @@ theorem exists_ne_zero_and_le_and_le
   proof: ⟨x ⊓ y, by simp [min_eq_iff, hx, hy], by simp, by simp⟩
 
 中文:
-定理 exists_ne_zero_and_le_and_le
+定理 存在_ne_zero_and_le_and_le
   条件: (hx : x != 0) (hy : y != 0)
   证明: ⟨x ⊓ y, by simp [min_eq_iff, hx, hy], by simp, by simp⟩
 
@@ -1798,8 +1798,8 @@ theorem exists_ne_zero_and_lt_and_lt
   constructor <;> exact lt_of_lt_of_le hlt ‹z' <= _›
 
 中文:
-定理 exists_ne_zero_and_lt_and_lt
-  条件: [NoMinOrder α] (hx : x != 0) (hy : y != 0)
+定理 存在_ne_zero_and_lt_and_lt
+  条件: [NoMin序 α] (hx : x != 0) (hy : y != 0)
   证明: by
   obtain ⟨z', hnz', hzx, hzy⟩ := exists_ne_zero_and_le_and_le hx hy
   obtain ⟨z, hnz, hlt⟩ := exists_ne_zero_and_lt hnz'
@@ -1827,7 +1827,7 @@ instance isOrderedMonoid
 
 中文:
 实例 isOrderedMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: mul_le_mul_left
 
 Depends on / 依赖: mul_le_mul_left
@@ -1856,7 +1856,7 @@ lemma isOrderedAddMonoid
 
 中文:
 引理 isOrderedAddMonoid
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: by
   have := WithZero.addLeftMono zero_le
   exact ⟨fun _ _ => add_le_add_left, by simpa [add_comm] using fun _ _ => add_le_add_left⟩
@@ -1876,7 +1876,7 @@ instance instCanonicallyOrderedAdd
 
 中文:
 实例 instCanonicallyOrderedAdd
-  签名: [AddZeroClass α] [Preorder α] [CanonicallyOrderedAdd α]
+  签名: [加法零类 α] [预序 α] [典范有序加法 α]
 -/
 instance instCanonicallyOrderedAdd [AddZeroClass α] [Preorder α] [CanonicallyOrderedAdd α] :
     CanonicallyOrderedAdd (WithZero α) where
@@ -1902,7 +1902,7 @@ instance instLinearOrderedCommMonoidWithZero
 
 中文:
 实例 instLinearOrderedCommMonoidWithZero
-  签名: [CommMonoid α] [LinearOrder α]
+  签名: [交换幺半群 α] [线性序 α]
   定义体: zero_le
   mul_lt_mul_of_pos_left
   | (a : α), _, 0, (c : α), _ => by simp [← WithZero.coe_mul]
@@ -1926,7 +1926,7 @@ instance instLinearOrderedCommGroupWithZero
 
 中文:
 实例 instLinearOrderedCommGroupWithZero
-  签名: [CommGroup α] [LinearOrder α] [IsOrderedMonoid α]
+  签名: [交换群 α] [线性序 α] [是Ordered幺半群 α]
 -/
 instance instLinearOrderedCommGroupWithZero [CommGroup α] [LinearOrder α] [IsOrderedMonoid α] :
     LinearOrderedCommGroupWithZero (WithZero α) where
@@ -1942,7 +1942,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedCommGroupWithZero 整数ᵐ⁰
+  签名: 带零LinearOrderedComm群 整数ᵐ⁰
   定义体: inferInstance
 -/
 instance : LinearOrderedCommGroupWithZero Intᵐ⁰ := inferInstance
@@ -2295,7 +2295,7 @@ lemma exists_exp_neg_natCast_lt
   exact Int.self_le_toNat _
 
 中文:
-引理 exists_exp_neg_natCast_lt
+引理 存在_exp_neg_natCast_lt
   条件: {x : 整数ᵐ⁰} (hx : x != 0)
   证明: by
   obtain ⟨y, hnz, hyx⟩ := WithZero.exists_ne_zero_and_lt hx
@@ -2326,7 +2326,7 @@ lemma exists_exp_neg_natCast_lt_and_lt
   grind
 
 中文:
-引理 exists_exp_neg_natCast_lt_and_lt
+引理 存在_exp_neg_natCast_lt_and_lt
   条件: {x y : 整数ᵐ⁰} (hx : x != 0) (hy : y != 0)
   证明: by
   obtain ⟨z, hz, hzx, hzy⟩ := WithZero.exists_ne_zero_and_le_and_le hx hy

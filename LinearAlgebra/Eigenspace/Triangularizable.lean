@@ -62,8 +62,8 @@ theorem exists_hasEigenvalue_of_genEigenspace_eq_top
   simp [HasUnifEigenvalue, ← not_forall, ← iSup_eq_bot, hf]
 
 中文:
-定理 exists_hasEigenvalue_of_genEigenspace_eq_top
-  结论: [Nontrivial M] {f : End R M} (k : 自然数∞)
+定理 存在_hasEigenvalue_of_genEigenspace_eq_top
+  结论: [非平凡 M] {f : End R M} (k : 自然数∞)
   证明: by
   suffices exists μ, f.HasUnifEigenvalue μ k by
     peel this with μ hμ
@@ -92,8 +92,8 @@ theorem exists_eigenvalue
   exact spectrum.nonempty_of_isAlgClosed_of_finiteDimensional K f
 
 中文:
-定理 exists_eigenvalue
-  条件: [IsAlgClosed K] [FiniteDimensional K V] [Nontrivial V] (f : End K V)
+定理 存在_eigenvalue
+  条件: [是代数闭 K] [有限维 K V] [非平凡 V] (f : End K V)
   证明: by
   simp_rw [hasEigenvalue_iff_mem_spectrum]
   exact spectrum.nonempty_of_isAlgClosed_of_finiteDimensional K f
@@ -114,8 +114,8 @@ instance [IsAlgClosed
   body: ⟨⟨f.exists_eigenvalue.choose, f.exists_eigenvalue.choose_spec⟩⟩
 
 中文:
-实例 [IsAlgClosed
-  签名: K] [FiniteDimensional K V] [Nontrivial V] (f
+实例 [是代数闭
+  签名: K] [有限维 K V] [非平凡 V] (f
   定义体: ⟨⟨f.exists_eigenvalue.choose, f.exists_eigenvalue.choose_spec⟩⟩
 
 Depends on / 依赖: choose_spec, exists_eigenvalue, f.exists_eigenvalue.choose, f.exists_eigenvalue.choose_spec
@@ -141,7 +141,7 @@ theorem iSup_maxGenEigenspace_eq_top
 
 中文:
 定理 iSup_maxGenEigenspace_eq_top
-  条件: [IsAlgClosed K] [FiniteDimensional K V] (f : End K V)
+  条件: [是代数闭 K] [有限维 K V] (f : End K V)
   证明: by
   -- We prove the claim by strong induction on the dimension of the vector space.
   suffices forall n, finrank K V = n -> ⨆ (μ : K), f.maxGenEigenspace μ = ⊤ by exact this _ rfl
@@ -237,7 +237,7 @@ theorem inf_iSup_genEigenspace
 
 中文:
 定理 inf_iSup_genEigenspace
-  条件: [FiniteDimensional K V] (h : 对任意 x in p, f x in p) (k : 自然数∞)
+  条件: [有限维 K V] (h : 对任意 x in p, f x in p) (k : 自然数∞)
   证明: by
   refine le_antisymm (fun m hm => ?_)
     (le_inf_iff.mpr ⟨iSup_le fun μ => inf_le_left, iSup_mono fun μ => inf_le_right⟩)
@@ -339,7 +339,7 @@ theorem eq_iSup_inf_genEigenspace
 
 中文:
 定理 eq_iSup_inf_genEigenspace
-  结论: [FiniteDimensional K V] (k : 自然数∞)
+  结论: [有限维 K V] (k : 自然数∞)
   证明: by
   rw [← inf_iSup_genEigenspace h]; rw [h']; rw [inf_top_eq]
 
@@ -364,7 +364,7 @@ theorem Module.End.genEigenspace_restrict_eq_top
     ← Submodule.map_iSup, Submodule.comap_map_eq_of_injecti
 
 中文:
-定理 Module.End.genEigenspace_restrict_eq_top
+定理 模.End.genEigenspace_restrict_eq_top
   证明: by
   have := congr_arg (Submodule.comap p.subtype) (Submodule.eq_iSup_inf_genEigenspace k h h')
   have h_inj : Function.Injective p.subtype := Subtype.coe_injective

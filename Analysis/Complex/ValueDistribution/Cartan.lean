@@ -57,7 +57,7 @@ lemma log_trailingCoeff_eq_zero_on_unitSphere
 
 中文:
 引理 log_trailingCoeff_eq_zero_on_unitSphere
-  结论: {a : Complex} (h : 0 < meromorphicOrderAt f 0)
+  结论: {a : 复形} (h : 0 < meromorphicOrderAt f 0)
   证明: by
   simp_rw [sub_eq_neg_add]
   rw [(meromorphicAt_of_meromorphicOrderAt_ne_zero
@@ -131,7 +131,7 @@ theorem circleIntegrable_log_meromorphicTrailingCoeffAt
   · refine (circleIntegrable
 
 中文:
-定理 circleIntegrable_log_meromorphicTrailingCoeffAt
+定理 circle整数egrable_log_meromorphicTrailingCoeffAt
   证明: by
   by_cases h: ¬MeromorphicAt f 0
   · have {a : Complex} : ¬MeromorphicAt (fun x => f x - a) 0 := by
@@ -300,8 +300,8 @@ theorem circleIntegrable_logCounting
     (logCounting_add_log
 
 中文:
-定理 circleIntegrable_logCounting
-  条件: (h : Meromorphic f)
+定理 circle整数egrable_logCounting
+  条件: (h : 亚纯 f)
   证明: by
   by_cases hR : R = 0
   · simp [hR, ValueDistribution.logCounting_eval_zero]
@@ -341,7 +341,7 @@ theorem characteristic_top_eq_circleAverage_add_circleAverage
 
 中文:
 定理 characteristic_top_eq_circleAverage_add_circleAverage
-  条件: (h : Meromorphic f) (hR : R != 0)
+  条件: (h : 亚纯 f) (hR : R != 0)
   证明: calc
   characteristic f ⊤ R
       = circleAverage (fun a => circleAverage (log ‖f · - a‖) 0 R + logCounting f ⊤ R) 0 1 := by
@@ -397,7 +397,7 @@ theorem characteristic_top_eq_circleAverage_add_const
 
 中文:
 定理 characteristic_top_eq_circleAverage_add_const
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: ⟨circleAverage (fun a => log ‖meromorphicTrailingCoeffAt (f · - a) 0‖) 0 1,
     fun _ hr => characteristic_top_eq_circleAverage_add_circleAverage h hr⟩
 
@@ -426,7 +426,7 @@ theorem characteristic_monotoneOn
 
 中文:
 定理 characteristic_monotoneOn
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   intro a ha b hb hab
   rw [characteristic_top_eq_circleAverage_add_circleAverage h ha.ne']; rw [characteristic_top_eq_circleAverage_add_circleAverage h hb.ne']

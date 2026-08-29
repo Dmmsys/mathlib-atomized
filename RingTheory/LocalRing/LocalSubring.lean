@@ -34,7 +34,7 @@ instance [Nontrivial
     (fun ⟨_, a, ha, e⟩ => ⟨⟨a, ha⟩, Subtype.ext e⟩)
 
 中文:
-实例 [Nontrivial
+实例 [非平凡
   签名: S] (f
   定义体: .of_surjective' (f.restrict s _ (fun _ => Set.mem_image_of_mem f))
     (fun ⟨_, a, ha, e⟩ => ⟨⟨a, ha⟩, Subtype.ext e⟩)
@@ -55,7 +55,7 @@ instance isLocalRing_top
 
 中文:
 实例 isLocalRing_top
-  签名: [IsLocalRing R]
+  签名: [是局部环 R]
   定义体: Subring.topEquiv.symm.isLocalRing
 
 Depends on / 依赖: Subring, Subring.topEquiv.symm.isLocalRing, isLocalRing, topEquiv
@@ -77,11 +77,11 @@ structure LocalSubring
     - [isLocalRing : IsLocalRing toSubring]
 
 中文:
-结构 LocalSubring
+结构 Local子环
   参数: where
   公理与运算 (2 个):
-    - toSubring : Subring R
-    - [isLocalRing : IsLocalRing toSubring]
+    - toSubring : 子环 R
+    - [isLocalRing : 是局部环 toSubring]
 
 Depends on / 依赖: mul_comm
 -/
@@ -105,7 +105,7 @@ lemma toSubring_injective
 
 中文:
 引理 toSubring_injective
-  结论: Function.Injective (toSubring (R := R))
+  结论: 函数.单射 (toSubring (R := R))
   证明: by
   rintro ⟨a, b⟩ ⟨c, d⟩ rfl; rfl
 
@@ -124,7 +124,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : LocalSubring R) (s : Set R) (hs : s = ↑S.toSubring)
+  签名: (S : Local子环 R) (s : 集合 R) (hs : s = ↑S.toSubring)
   定义体: LocalSubring.mk (S.toSubring.copy s hs) (isLocalRing := hs ▸ S.2)
 -/
 protected def copy (S : LocalSubring R) (s : Set R) (hs : s = ↑S.toSubring) : LocalSubring R :=
@@ -142,7 +142,7 @@ definition map
 
 中文:
 定义 map
-  签名: [Nontrivial S] (f : R ->+* S) (s : LocalSubring R)
+  签名: [非平凡 S] (f : R ->+* S) (s : Local子环 R)
   定义体: mk (s.1.map f)
 -/
 def map [Nontrivial S] (f : R ->+* S) (s : LocalSubring R) : LocalSubring S :=
@@ -160,7 +160,7 @@ definition range
 
 中文:
 定义 range
-  签名: [IsLocalRing R] [Nontrivial S] (f : R ->+* S)
+  签名: [是局部环 R] [非平凡 S] (f : R ->+* S)
   定义体: .copy (map f (mk ⊤)) f.range (by ext x; exact congr(x in $(Set.image_univ.symm)))
 
 Depends on / 依赖: Set.image_univ.symm, f.range, image_univ
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (LocalSubring R)
+  签名: 偏序 (Local子环 R)
   定义体: exists h : A.1 <= B.1, IsLocalHom (Subring.inclusion h)
   le_refl a := ⟨le_rfl, ⟨fun _ => id⟩⟩
   le_trans A B C h₁ h₂ := ⟨h₁.1.trans h₂.1, @RingHom.isLocalHom_comp _ _ _ _ _ _ _ _ h₂.2 h₁.2⟩
@@ -210,7 +210,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: {A B : LocalSubring R}
+  条件: {A B : Local子环 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -228,7 +228,7 @@ lemma toSubring_mono
 
 中文:
 引理 toSubring_mono
-  结论: Monotone (toSubring (R := R))
+  结论: 递增 (toSubring (R := R))
   证明: fun _ _ e => e.1
 -/
 lemma toSubring_mono : Monotone (toSubring (R := R)) :=
@@ -253,7 +253,7 @@ definition ofPrime
 
 中文:
 定义 ofPrime
-  签名: (A : Subring K) (P : Ideal A) [P.IsPrime]
+  签名: (A : 子环 K) (P : 理想 A) [P.是素]
   定义体: range (IsLocalization.lift (M := P.primeCompl) (S := Localization.AtPrime P)
     (g := A.subtype) (by simp [Ideal.primeCompl, not_imp_not]))
 
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A (ofPrime A P).toSubring
+  签名: 代数 A (ofPrime A P).toSubring
   定义体: (Subring.inclusion (le_ofPrime A P)).toAlgebra
 
 Depends on / 依赖: Subring, Subring.inclusion, inclusion, le_ofPrime, toAlgebra
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower A (ofPrime A P).toSubring K
+  签名: 标量塔 A (ofPrime A P).toSubring K
   定义体: .of_algebraMap_eq (fun _ => rfl)
 
 Depends on / 依赖: of_algebraMap_eq
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization.AtPrime (ofPrime A P).toSubring P
+  签名: 是Localization.AtPrime (ofPrime A P).toSubring P
   定义体: IsLocalization.isLocalization_of_algEquiv _ (ofPrimeEquiv A P)
 
 Depends on / 依赖: IsLocalization, IsLocalization.isLocalization_of_algEquiv, isLocalization_of_algEquiv, ofPrimeEquiv

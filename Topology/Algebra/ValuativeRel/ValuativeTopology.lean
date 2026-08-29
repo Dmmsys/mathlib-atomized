@@ -57,8 +57,8 @@ lemma Valuation.exists_setOfPred_restrict_le_iff
 alias Valuation.exists_setOf_restrict_le_iff := Valuation.exists_setOfPred_restrict_le_iff
 
 中文:
-引理 Valuation.exists_setOfPred_restrict_le_iff
-  结论: {Γ₀ : 类型} [LinearOrderedCommGroupWithZero Γ₀]
+引理 赋值.存在_setOfPred_restrict_le_iff
+  结论: {Γ₀ : 类型} [带零LinearOrderedComm群 Γ₀]
   证明: by
   refine ⟨fun ⟨r, hr⟩ => ⟨r.mapEquiv (orderMonoidIso v).symm, ?_⟩,
     fun ⟨r, hr⟩ => ⟨r.mapEquiv (orderMonoidIso v), ?_⟩⟩
@@ -90,10 +90,10 @@ class IsValuativeTopology
     - mem_nhds_iff({s : Set R} {x : R}) : s in 𝓝 (x : R) ↔ exists γ : (ValueGroupWithZero R)ˣ, (x + ·) '' { z | valuation _ z < γ } subseteq s
 
 中文:
-类 IsValuativeTopology
-  参数: [TopologicalSpace R]
+类 是赋值拓扑
+  参数: [拓扑空间 R]
   公理与运算 (1 个):
-    - mem_nhds_iff({s : Set R} {x : R}) : s in 𝓝 (x : R) ↔ 存在 γ : (ValueGroupWithZero R)ˣ, (x + ·) '' { z | valuation _ z < γ } subseteq s
+    - mem_nhds_iff({s : 集合 R} {x : R}) : s in 𝓝 (x : R) ↔ 存在 γ : (ValueGroupWithZero R)ˣ, (x + ·) '' { z | valuation _ z < γ } subseteq s
 -/
 class IsValuativeTopology [TopologicalSpace R] where
   mem_nhds_iff {s : Set R} {x : R} : s in 𝓝 (x : R) ↔
@@ -117,7 +117,7 @@ instance nonarchimedeanRing
 
 中文:
 实例 nonarchimedeanRing
-  签名: : NonarchimedeanRing R
+  签名: : Nonarchimedean环 R
   定义体: (valuation R).subgroups_basis.nonarchimedean
 
 Depends on / 依赖: nonarchimedean, subgroups_basis, subgroups_basis.nonarchimedean, valuation
@@ -138,7 +138,7 @@ instance isValuativeTopology
 
 中文:
 实例 isValuativeTopology
-  签名: : IsValuativeTopology R where
+  签名: : 是赋值拓扑 R where
   定义体: by
     rw [Filter.hasBasis_iff.mp ((valuation R).subgroups_basis.hasBasis_nhds x) s]
     simp [neg_add_eq_sub, ← (valuation R).exists_setOfPred_restrict_le_iff,
@@ -189,7 +189,7 @@ theorem of_mem_nhds_iff_vle
 
 中文:
 定理 of_mem_nhds_iff_vle
-  结论: (H : 对任意 {s : Set R} {x : R}, s in 𝓝 x ↔
+  结论: (H : 对任意 {s : 集合 R} {x : R}, s in 𝓝 x ↔
   证明: by
   constructor
   refine fun {s x} => ⟨fun h_mem => ?_, fun ⟨γ, hγ⟩ =>
@@ -224,7 +224,7 @@ theorem of_mem_nhds_zero_iff_vle
 
 中文:
 定理 of_mem_nhds_zero_iff_vle
-  结论: [IsTopologicalAddGroup R]
+  结论: [是拓扑加群 R]
   证明: by
   apply of_mem_nhds_iff_vle v (fun {s x} => ?_)
   rw [← vadd_mem_nhds_vadd_iff (g := -x)]
@@ -258,7 +258,7 @@ lemma mem_nhds_iff'
 
 中文:
 引理 mem_nhds_iff'
-  条件: {s : Set R} {x : R}
+  条件: {s : 集合 R} {x : R}
   证明: by
   convert! mem_nhds_iff (s := s) using 4
   simp [neg_add_eq_sub]
@@ -281,7 +281,7 @@ lemma mem_nhds_zero_iff
 
 中文:
 引理 mem_nhds_zero_iff
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   simp [mem_nhds_iff']
 
@@ -401,7 +401,7 @@ lemma mem_nhds_iff
 
 中文:
 引理 mem_nhds_iff
-  条件: {s : Set R} {x : R}
+  条件: {s : 集合 R} {x : R}
   结论: s in 𝓝 x ↔
   证明: by
   convert! IsValuativeTopology.mem_nhds_iff (s := s) using 4
@@ -428,7 +428,7 @@ alias is_topological_valuation := mem_nhds_zero_iff
 
 中文:
 引理 mem_nhds_zero_iff
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: s in 𝓝 0 ↔
   证明: by
   simp [v.mem_nhds_iff]
@@ -565,7 +565,7 @@ theorem hasBasis_uniformity
 
 中文:
 定理 hasBasis_uniformity
-  结论: (𝓤 R).HasBasis (fun _ => True)
+  结论: (𝓤 R).有基 (fun _ => 真)
   证明: by
   rw [uniformity_eq_comap_nhds_zero]
   exact v.hasBasis_nhds_zero.comap _
@@ -624,7 +624,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {F : Filter R}
+  条件: {F : 滤子 R}
   结论: Cauchy F ↔
   证明: by
   rw [v.toUniformSpace_eq]; rw [AddGroupFilterBasis.cauchy_iff]
@@ -706,7 +706,7 @@ lemma discreteTopology_of_forall_map_eq_one
 
 
 中文:
-引理 discreteTopology_of_forall_map_eq_one
+引理 discreteTopology_of_对任意_map_eq_one
   条件: (h : 对任意 x : R, x != 0 -> v x = 1)
   证明: by
   simp only [discreteTopology_iff_isOpen_singleton_zero, isOpen_iff_mem_nhds, mem_singleton_iff,
@@ -738,8 +738,8 @@ lemma discreteTopology_of_forall_lt
   proof: v.discreteTopology_of_forall_map_eq_one (by simpa using v.map_eq_one_of_forall_lt hr h)
 
 中文:
-引理 discreteTopology_of_forall_lt
-  结论: [MulArchimedean Γ₀] (v : Valuation K Γ₀)
+引理 discreteTopology_of_对任意_lt
+  结论: [MulArchimedean Γ₀] (v : 赋值 K Γ₀)
   证明: v.discreteTopology_of_forall_map_eq_one (by simpa using v.map_eq_one_of_forall_lt hr h)
 
 Depends on / 依赖: discreteTopology_of_forall_map_eq_one, map_eq_one_of_forall_lt, v.discreteTopology_of_forall_map_eq_one, v.map_eq_one_of_forall_lt
@@ -773,7 +773,7 @@ theorem isOpen_ball
 中文:
 定理 isOpen_ball
   条件: (r : ValueGroup₀ (.ofClass v))
-  结论: IsOpen {x | v.restrict x < r}
+  结论: 是开集 {x | v.restrict x < r}
   证明: by
   rw [isOpen_iff_mem_nhds]
   rcases eq_or_ne r 0 with rfl | hr
@@ -1033,7 +1033,7 @@ theorem isOpen_integer
 
 中文:
 定理 isOpen_integer
-  结论: IsOpen (v.integer : Set R)
+  结论: 是开集 (v.integer : 集合 R)
   证明: by
   simp only [integer, Subring.coe_set_mk, Subsemiring.coe_set_mk, Submonoid.coe_set_mk,
     Subsemigroup.coe_set_mk, ← v.restrict_le_one_iff]
@@ -1059,7 +1059,7 @@ theorem isClosed_integer
 
 中文:
 定理 isClosed_integer
-  结论: IsClosed (v.integer : Set R)
+  结论: 是闭集 (v.integer : 集合 R)
   证明: by
   simp only [integer, Subring.coe_set_mk, Subsemiring.coe_set_mk, Submonoid.coe_set_mk,
     Subsemigroup.coe_set_mk, ← v.restrict_le_one_iff]
@@ -1082,7 +1082,7 @@ theorem isClopen_integer
 
 中文:
 定理 isClopen_integer
-  结论: IsClopen (v.integer : Set R)
+  结论: IsClopen (v.integer : 集合 R)
   证明: ⟨isClosed_integer, isOpen_integer⟩
 
 Depends on / 依赖: isClosed_integer, isOpen_integer
@@ -1104,7 +1104,7 @@ theorem isOpen_valuationSubring
 
 中文:
 定理 isOpen_valuationSubring
-  条件: (v : Valuation K Γ₀) [v.Compatible]
+  条件: (v : 赋值 K Γ₀) [v.余mpatible]
   证明: isOpen_integer
 
 Depends on / 依赖: isOpen_integer
@@ -1123,7 +1123,7 @@ theorem isClosed_valuationSubring
 
 中文:
 定理 isClosed_valuationSubring
-  条件: (v : Valuation K Γ₀) [v.Compatible]
+  条件: (v : 赋值 K Γ₀) [v.余mpatible]
   证明: isClosed_integer
 
 Depends on / 依赖: isClosed_integer
@@ -1142,7 +1142,7 @@ theorem isClopen_valuationSubring
 
 中文:
 定理 isClopen_valuationSubring
-  条件: (v : Valuation K Γ₀) [v.Compatible]
+  条件: (v : 赋值 K Γ₀) [v.余mpatible]
   证明: isClopen_integer
 
 Depends on / 依赖: isClopen_integer

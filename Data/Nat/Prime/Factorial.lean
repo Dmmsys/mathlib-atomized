@@ -28,8 +28,8 @@ theorem Prime.dvd_factorial
   statement: forall {n p : Nat} (_ : Prime p), p ∣ n ! ↔ p <= n
 
 中文:
-定理 Prime.dvd_factorial
-  结论: 对任意 {n p : 自然数} (_ : Prime p), p ∣ n ! ↔ p <= n
+定理 素.dvd_factorial
+  结论: 对任意 {n p : 自然数} (_ : 素 p), p ∣ n ! ↔ p <= n
 -/
 theorem Prime.dvd_factorial : forall {n p : Nat} (_ : Prime p), p ∣ n ! ↔ p <= n
   | 0, _, hp => iff_of_false hp.not_dvd_one (not_le_of_gt hp.pos)
@@ -85,8 +85,8 @@ lemma Prime.coprime_factorial_of_lt
   rwa [hp.coprime_iff_not_dvd, hp.dvd_factorial, not_le]
 
 中文:
-引理 Prime.coprime_factorial_of_lt
-  条件: {p n : 自然数} (hp : p.Prime) (hn : n < p)
+引理 素.coprime_factorial_of_lt
+  条件: {p n : 自然数} (hp : p.素) (hn : n < p)
   证明: by
   rwa [hp.coprime_iff_not_dvd, hp.dvd_factorial, not_le]
 
@@ -108,8 +108,8 @@ lemma Prime.coprime_descFactorial_of_lt_of_le
   simp [Nat.factorial_dvd_factorial]
 
 中文:
-引理 Prime.coprime_descFactorial_of_lt_of_le
-  条件: {p n k : 自然数} (hp : p.Prime) (hn : n < p) (hk : k <= n)
+引理 素.coprime_descFactorial_of_lt_of_le
+  条件: {p n k : 自然数} (hp : p.素) (hn : n < p) (hk : k <= n)
   证明: by
   rw [Nat.descFactorial_eq_div hk]
   refine (hp.coprime_factorial_of_lt hn).coprime_div_right ?_

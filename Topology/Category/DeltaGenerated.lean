@@ -57,8 +57,8 @@ abbreviation TopCat.toDeltaGenerated
   body: TopCat.toGeneratedByTopCat
 
 中文:
-缩写 TopCat.toDeltaGenerated
-  签名: : TopCat.{u} ⥤ DeltaGenerated.{u}
+缩写 顶元素范畴.toDeltaGenerated
+  签名: : 顶元素范畴.{u} ⥤ DeltaGenerated.{u}
   定义体: TopCat.toGeneratedByTopCat
 
 Depends on / 依赖: TopCat, TopCat.toGeneratedByTopCat, toGeneratedByTopCat
@@ -78,7 +78,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型u) [TopologicalSpace X] [DeltaGeneratedSpace X]
+  签名: (X : 类型u) [拓扑空间 X] [DeltaGeneratedSpace X]
   定义体: GeneratedByTopCat.of X
 
 Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.of
@@ -96,7 +96,7 @@ abbreviation deltaGeneratedToTop
 
 中文:
 缩写 deltaGeneratedToTop
-  签名: : DeltaGenerated.{u} ⥤ TopCat.{u}
+  签名: : DeltaGenerated.{u} ⥤ 顶元素范畴.{u}
   定义体: GeneratedByTopCat.toTopCat
 
 Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.toTopCat, toTopCat
@@ -116,7 +116,7 @@ abbreviation fullyFaithfulDeltaGeneratedToTop
 
 中文:
 缩写 fullyFaithfulDeltaGeneratedToTop
-  签名: : deltaGeneratedToTop.{u}.FullyFaithful
+  签名: : deltaGeneratedToTop.{u}.满忠实
   定义体: GeneratedByTopCat.fullyFaithfulToTopCat _
 
 @[deprecated (since := "2026-04-23")] alias topToDeltaGenerated := TopCat.toDeltaGenerated
@@ -138,7 +138,7 @@ abbreviation coreflectorAdjunction
 
 中文:
 缩写 coreflectorAdjunction
-  签名: : deltaGeneratedToTop ⊣ TopCat.toDeltaGenerated
+  签名: : deltaGeneratedToTop ⊣ 顶元素范畴.toDeltaGenerated
   定义体: GeneratedByTopCat.adj
 
 Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.adj

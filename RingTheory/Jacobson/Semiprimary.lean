@@ -33,9 +33,9 @@ theorem IsSimpleModule.jacobson_eq_bot
   proof: le_bot_iff.mp sInf_le isCoatom_bot
 
 中文:
-定理 IsSimpleModule.jacobson_eq_bot
-  条件: [IsSimpleModule R M]
-  结论: Module.jacobson R M = ⊥
+定理 是单模.jacobson_eq_bot
+  条件: [是单模 R M]
+  结论: 模.jacobson R M = ⊥
   证明: le_bot_iff.mp sInf_le isCoatom_bot
 
 Depends on / 依赖: isCoatom_bot, le_bot_iff, le_bot_iff.mp, sInf_le
@@ -55,8 +55,8 @@ theorem IsSemisimpleModule.jacobson_eq_bot
     (Module.jacobson_pi_eq_bot _
 
 中文:
-定理 IsSemisimpleModule.jacobson_eq_bot
-  条件: [IsSemisimpleModule R M]
+定理 是半单模.jacobson_eq_bot
+  条件: [是半单模 R M]
   证明: have ⟨s, e, simple⟩ := isSemisimpleModule_iff_exists_linearEquiv_dfinsupp.mp ‹_›
   let f : M ->ₗ[R] forall m : s, m.1 := (LinearMap.pi DFinsupp.lapply).comp e.toLinearMap
   Module.jacobson_eq_bot_of_injective f (DFinsupp.injective_pi_lapply (R := R).comp e.injective)
@@ -83,7 +83,7 @@ theorem IsSemisimpleRing.jacobson_eq_bot
 中文:
 定理 IsSemisimpleRing.jacobson_eq_bot
   条件: [IsSemisimpleRing R]
-  结论: Ring.jacobson R = ⊥
+  结论: 环.jacobson R = ⊥
   证明: IsSemisimpleModule.jacobson_eq_bot R R
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.jacobson_eq_bot, jacobson_eq_bot
@@ -100,8 +100,8 @@ theorem IsSemisimpleModule.jacobson_le_ker
   proof: (Module.le_comap_jacobson f).trans by simp_rw [jacobson_eq_bot, LinearMap.ker, le_rfl]
 
 中文:
-定理 IsSemisimpleModule.jacobson_le_ker
-  条件: [IsSemisimpleModule R₂ M₂] (f : M ->ₛₗ[τ₁₂] M₂)
+定理 是半单模.jacobson_le_ker
+  条件: [是半单模 R₂ M₂] (f : M ->ₛₗ[τ₁₂] M₂)
   证明: (Module.le_comap_jacobson f).trans by simp_rw [jacobson_eq_bot, LinearMap.ker, le_rfl]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, Module, Module.le_comap_jacobson, jacobson_eq_bot, le_comap_jacobson, le_rfl, simp_rw
@@ -121,8 +121,8 @@ theorem IsSemisimpleModule.jacobson_le_annihilator
     rwa [jacobson_eq_bot] at this
 
 中文:
-定理 IsSemisimpleModule.jacobson_le_annihilator
-  条件: [IsSemisimpleModule R M]
+定理 是半单模.jacobson_le_annihilator
+  条件: [是半单模 R M]
   证明: fun r hr => Module.mem_annihilator.mpr fun m => by
     have := Module.le_comap_jacobson (LinearMap.toSpanSingleton R M m) hr
     rwa [jacobson_eq_bot] at this
@@ -150,11 +150,11 @@ class IsSemiprimaryRing
     - isNilpotent : IsNilpotent (Ring.jacobson R)
 
 中文:
-类 IsSemiprimaryRing
+类 是Semiprimary环
   参数: : 命题 where
   公理与运算 (2 个):
-    - isSemisimpleRing : IsSemisimpleRing (R ⧸ Ring.jacobson R)
-    - isNilpotent : IsNilpotent (Ring.jacobson R)
+    - isSemisimpleRing : IsSemisimpleRing (R ⧸ 环.jacobson R)
+    - isNilpotent : 是幂零 (环.jacobson R)
 -/
 @[mk_iff] class IsSemiprimaryRing : Prop where
   isSemisimpleRing : IsSemisimpleRing (R ⧸ Ring.jacobson R)

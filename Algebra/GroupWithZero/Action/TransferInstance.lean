@@ -39,7 +39,7 @@ abbreviation smulZeroClass
 
 中文:
 缩写 smulZeroClass
-  签名: (e : A ≃ B) [Zero B] [SMulZeroClass M B]
+  签名: (e : A ≃ B) [零 B] [SMulZero类 M B]
   定义体: e.zero
     SMulZeroClass M A := by
   letI := e.zero
@@ -74,7 +74,7 @@ abbreviation smulWithZero
 
 中文:
 缩写 smulWithZero
-  签名: (e : A ≃ B) [Zero M₀] [Zero B] [SMulWithZero M₀ B]
+  签名: (e : A ≃ B) [零 M₀] [零 B] [带零标量乘法 M₀ B]
   定义体: e.zero
     SMulWithZero M₀ A := by
   letI := e.zero
@@ -106,7 +106,7 @@ abbreviation mulActionWithZero
 
 中文:
 缩写 mulActionWithZero
-  签名: (e : A ≃ B) [MonoidWithZero M₀] [Zero B]
+  签名: (e : A ≃ B) [带零幺半群 M₀] [零 B]
   定义体: e.zero
     MulActionWithZero M₀ A := by
   letI := e.zero
@@ -136,7 +136,7 @@ abbreviation distribSMul
 
 中文:
 缩写 distribSMul
-  签名: (e : A ≃ B) [AddZeroClass B] [DistribSMul M B]
+  签名: (e : A ≃ B) [加法零类 B] [分配标量乘法 M B]
   定义体: e.addZeroClass
     DistribSMul M A := by
   letI := e.addZeroClass
@@ -168,7 +168,7 @@ abbreviation distribMulAction
 
 中文:
 缩写 distribMulAction
-  签名: (e : A ≃ B) [Monoid M] [AddMonoid B] [DistribMulAction M B]
+  签名: (e : A ≃ B) [幺半群 M] [加法幺半群 B] [分配乘法作用 M B]
   定义体: e.addMonoid
     DistribMulAction M A := by
   letI := e.addMonoid

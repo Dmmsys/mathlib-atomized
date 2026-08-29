@@ -37,8 +37,8 @@ class Archimedean
     - arch : forall (x : R) {y : R}, 0 < y -> exists n : Nat, x <= n • y
 
 中文:
-类 Archimedean
-  参数: (R) [AddCommMonoid R] [PartialOrder R]
+类 阿基米德
+  参数: (R) [加法交换幺半群 R] [偏序 R]
   公理与运算 (1 个):
     - arch : 对任意 (x : R) {y : R}, 0 < y -> 存在 n : 自然数, x <= n • y
 -/
@@ -61,7 +61,7 @@ class MulArchimedean
 
 中文:
 类 MulArchimedean
-  参数: (R) [CommMonoid R] [PartialOrder R]
+  参数: (R) [交换幺半群 R] [偏序 R]
   公理与运算 (1 个):
     - arch : 对任意 (x : R) {y : R}, 1 < y -> 存在 n : 自然数, x <= y ^ n
 -/
@@ -85,7 +85,7 @@ theorem exists_lt_pow
 ⟨k + 1, hk.trans_lt pow_lt_pow_right' ha k.lt_succ_self⟩
 
 中文:
-定理 exists_lt_pow
+定理 存在_lt_pow
   条件: {a : R} (ha : 1 < a) (b : R)
   结论: 存在 n : 自然数, b < a ^ n
   证明: let ⟨k, hk⟩ := MulArchimedean.arch b ha
@@ -113,7 +113,7 @@ theorem exists_pow_lt
   proof: (exists_lt_pow (one_lt_inv'.mpr ha) b⁻¹).imp by simp
 
 中文:
-定理 exists_pow_lt
+定理 存在_pow_lt
   条件: {a : R} (ha : a < 1) (b : R)
   结论: 存在 n : 自然数, a ^ n < b
   证明: (exists_lt_pow (one_lt_inv'.mpr ha) b⁻¹).imp by simp
@@ -140,7 +140,7 @@ theorem exists_nat_ge
   exact (Archimedean.arch x one_pos).imp fun n h => by rwa [← nsmul_one]
 
 中文:
-定理 exists_nat_ge
+定理 存在_nat_ge
   条件: (x : R)
   结论: 存在 n : 自然数, x <= n
   证明: by
@@ -168,7 +168,7 @@ theorem exists_nat_gt
   proof: (exists_lt_nsmul zero_lt_one x).imp fun n hn => by rwa [← nsmul_one]
 
 中文:
-定理 exists_nat_gt
+定理 存在_nat_gt
   条件: (x : R)
   结论: 存在 n : 自然数, x < n
   证明: (exists_lt_nsmul zero_lt_one x).imp fun n hn => by rwa [← nsmul_one]
@@ -193,7 +193,7 @@ theorem exists_int_ge
   proof: let ⟨n, h⟩ := exists_nat_ge x; ⟨n, mod_cast h⟩
 
 中文:
-定理 exists_int_ge
+定理 存在_int_ge
   条件: (x : R)
   结论: 存在 n : 整数, x <= n
   证明: let ⟨n, h⟩ := exists_nat_ge x; ⟨n, mod_cast h⟩
@@ -212,7 +212,7 @@ theorem exists_int_le
   proof: let ⟨n, h⟩ := exists_int_ge (-x); ⟨-n, by simpa [neg_le] using h⟩
 
 中文:
-定理 exists_int_le
+定理 存在_int_le
   条件: (x : R)
   结论: 存在 n : 整数, n <= x
   证明: let ⟨n, h⟩ := exists_int_ge (-x); ⟨-n, by simpa [neg_le] using h⟩
@@ -238,7 +238,7 @@ theorem exists_int_gt
   ⟨n, by rwa [Int.cast_natCast]⟩
 
 中文:
-定理 exists_int_gt
+定理 存在_int_gt
   条件: (x : R)
   结论: 存在 n : 整数, x < n
   证明: let ⟨n, h⟩ := exists_nat_gt x
@@ -261,7 +261,7 @@ theorem exists_int_lt
   ⟨-n, by rw [Int.cast_neg]; exact neg_lt.1 h⟩
 
 中文:
-定理 exists_int_lt
+定理 存在_int_lt
   条件: (x : R)
   结论: 存在 n : 整数, (n : R) < x
   证明: let ⟨n, h⟩ := exists_int_gt (-x)

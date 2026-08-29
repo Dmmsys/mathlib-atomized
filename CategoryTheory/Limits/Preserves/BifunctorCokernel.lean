@@ -119,8 +119,8 @@ lemma exists_desc
     have 
 
 中文:
-引理 exists_desc
-  条件: (s : CokernelCofork (coprod.desc ((F.map f₁).app Y₂) ((F.obj Y₁).map f₂)))
+引理 存在_desc
+  条件: (s : 余核余叉 (coprod.desc ((F.map f₁).app Y₂) ((F.obj Y₁).map f₂)))
   证明: by
   obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' (mapIsColimit _ hc₁ (F.flip.obj Y₂)) s.π (by
     have := coprod.inl ≫= s.condition

@@ -228,7 +228,7 @@ theorem irreducible_of_eisenstein_criterion
 
 中文:
 定理 irreducible_of_eisenstein_criterion
-  结论: {f : R[X]} {P : Ideal R} (hP : P.IsPrime)
+  结论: {f : R[X]} {P : 理想 R} (hP : P.是素)
   证明: by
   apply generalizedEisenstein (K := FractionRing (R ⧸ P)) (q := X) (p := f.natDegree)
     (by simp [map_X, irreducible_X]) monic_X hu

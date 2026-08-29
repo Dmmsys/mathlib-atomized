@@ -125,8 +125,8 @@ definition IsUnit.subInvSMul
   inv_val := by rw [smul_mul_assoc, ← mul_smul_comm, smul_sub, smul_inv_smul, h.val_inv_mul]
 
 中文:
-定义 IsUnit.subInvSMul
-  签名: {r : Rˣ} {s : R} {a : A} (h : IsUnit <| r • ↑ₐ s - a)
+定义 是单位.subInvSMul
+  签名: {r : Rˣ} {s : R} {a : A} (h : 是单位 <| r • ↑ₐ s - a)
   定义体: ↑ₐ s - r⁻¹ • a
   inv := r • ↑h.unit⁻¹
   val_inv := by rw [mul_smul_comm, ← smul_mul_assoc, smul_sub, smul_inv_smul, h.mul_val_inv]
@@ -165,7 +165,7 @@ theorem mem_iff
 中文:
 定理 mem_iff
   条件: {r : R} {a : A}
-  结论: r in σ a ↔ ¬IsUnit (↑ₐ r - a)
+  结论: r in σ a ↔ ¬是单位 (↑ₐ r - a)
   证明: Iff.rfl
 
 @[simp]
@@ -206,7 +206,7 @@ theorem mem_spectrum_iff_resolvent_zero
 
 中文:
 定理 mem_spectrum_iff_resolvent_zero
-  条件: [Nontrivial A] {r : R} {a : A}
+  条件: [非平凡 A] {r : R} {a : A}
   证明: by
   refine ⟨resolvent_zero_of_mem_spectrum, fun hr => ?_⟩
   simpa [mem_iff, Ring.not_isUnit_iff_inverse_eq_zero]
@@ -231,7 +231,7 @@ theorem notMem_iff
 中文:
 定理 notMem_iff
   条件: {r : R} {a : A}
-  结论: r ∉ σ a ↔ IsUnit (↑ₐ r - a)
+  结论: r ∉ σ a ↔ 是单位 (↑ₐ r - a)
   证明: by
   simp [mem_iff]
 
@@ -257,7 +257,7 @@ alias ⟨not_isUnit_of_zero_mem, zero_mem⟩ := spectrum.zero_mem_iff
 中文:
 定理 zero_mem_iff
   条件: {a : A}
-  结论: (0 : R) in σ a ↔ ¬IsUnit a
+  结论: (0 : R) in σ a ↔ ¬是单位 a
   证明: by
   rw [mem_iff]; rw [map_zero]; rw [zero_sub]; rw [IsUnit.neg_iff]
 
@@ -287,7 +287,7 @@ alias ⟨isUnit_of_zero_notMem, zero_notMem⟩ := spectrum.zero_notMem_iff
 中文:
 定理 zero_notMem_iff
   条件: {a : A}
-  结论: (0 : R) ∉ σ a ↔ IsUnit a
+  结论: (0 : R) ∉ σ a ↔ 是单位 a
   证明: by
   rw [zero_mem_iff]; rw [Classical.not_not]
 
@@ -313,7 +313,7 @@ lemma _root_.Units.zero_notMem_spectrum
   proof: spectrum.zero_notMem R a.isUnit
 
 中文:
-引理 _root_.Units.zero_notMem_spectrum
+引理 _root_.单位群.zero_notMem_spectrum
   条件: (a : Aˣ)
   结论: 0 ∉ spectrum R (a : A)
   证明: spectrum.zero_notMem R a.isUnit
@@ -334,7 +334,7 @@ lemma subset_singleton_zero_compl
 
 中文:
 引理 subset_singleton_zero_compl
-  条件: {a : A} (ha : IsUnit a)
+  条件: {a : A} (ha : 是单位 a)
   结论: spectrum R a subseteq {0}ᶜ
   证明: Set.subset_compl_singleton_iff.mpr spectrum.zero_notMem R ha
 
@@ -378,7 +378,7 @@ theorem mem_resolventSet_iff
 中文:
 定理 mem_resolventSet_iff
   条件: {r : R} {a : A}
-  结论: r in resolventSet R a ↔ IsUnit (↑ₐ r - a)
+  结论: r in resolventSet R a ↔ 是单位 (↑ₐ r - a)
   证明: Iff.rfl
 
 @[simp]
@@ -404,7 +404,7 @@ protected alias ⟨of_algebraMap_mem, algebraMap_mem⟩ := spectrum.algebraMap_m
 
 中文:
 定理 algebraMap_mem_iff
-  结论: (S : 类型) {R A : 类型} [CommSemiring R] [CommSemiring S]
+  结论: (S : 类型) {R A : 类型} [交换半环 R] [交换半环 S]
   证明: by
   simp only [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one, smul_assoc, one_smul]
 
@@ -434,7 +434,7 @@ theorem preimage_algebraMap
 
 中文:
 定理 preimage_algebraMap
-  结论: (S : 类型) {R A : 类型} [CommSemiring R] [CommSemiring S]
+  结论: (S : 类型) {R A : 类型} [交换半环 R] [交换半环 S]
   证明: Set.ext fun _ => spectrum.algebraMap_mem_iff _
 
 @[simp]
@@ -461,8 +461,8 @@ theorem resolventSet_of_subsingleton
 
 中文:
 定理 resolventSet_of_subsingleton
-  条件: [Subsingleton A] (a : A)
-  结论: resolventSet R a = Set.univ
+  条件: [子单例 A] (a : A)
+  结论: resolventSet R a = 集合.univ
   证明: by
   simp_rw [resolventSet, Subsingleton.elim (algebraMap R A _ - a) 1, isUnit_one, Set.ofPred_true]
 
@@ -486,7 +486,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton A] (a : A)
+  条件: [子单例 A] (a : A)
   结论: spectrum R a = ∅
   证明: by
   rw [spectrum]; rw [resolventSet_of_subsingleton]; rw [Set.compl_univ]
@@ -621,7 +621,7 @@ theorem isUnit_resolvent
 中文:
 定理 isUnit_resolvent
   条件: {r : R} {a : A}
-  结论: r in resolventSet R a ↔ IsUnit (resolvent a r)
+  结论: r in resolventSet R a ↔ 是单位 (resolvent a r)
   证明: isUnit_ringInverse.symm
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.to_smulCommClass, SMulCommClass, isUnit_ringInverse, isUnit_ringInverse.symm, to_smulCommClass
@@ -1009,7 +1009,7 @@ theorem subset_subalgebra
 
 中文:
 定理 subset_subalgebra
-  结论: {S R A : 类型} [CommSemiring R] [Ring A] [Algebra R A]
+  结论: {S R A : 类型} [交换半环 R] [环 A] [代数 R A]
   证明: Set.compl_subset_compl.mpr fun _ => IsUnit.map (SubalgebraClass.val s)
 
 Depends on / 依赖: IsUnit, IsUnit.map, Set.compl_subset_compl.mpr, SubalgebraClass, SubalgebraClass.val, compl_subset_compl
@@ -1266,7 +1266,7 @@ theorem zero_eq
 
 中文:
 定理 zero_eq
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   结论: σ (0 : A) = {0}
   证明: by
   refine Set.Subset.antisymm ?_ (by simp [Algebra.algebraMap_eq_smul_one, mem_iff])
@@ -1301,7 +1301,7 @@ theorem scalar_eq
 
 中文:
 定理 scalar_eq
-  条件: [Nontrivial A] (k : 𝕜)
+  条件: [非平凡 A] (k : 𝕜)
   结论: σ (↑ₐ k) = {k}
   证明: by
   rw [← add_zero (↑ₐ k)]; rw [← singleton_add_eq]; rw [zero_eq]; rw [Set.singleton_add_singleton]; rw [add_zero]
@@ -1327,7 +1327,7 @@ theorem one_eq
 
 中文:
 定理 one_eq
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   结论: σ (1 : A) = {1}
   证明: calc
     σ (1 : A) = σ (↑ₐ 1) := by rw [Algebra.algebraMap_eq_smul_one, one_smul]
@@ -1353,7 +1353,7 @@ theorem smul_eq_smul
 
 中文:
 定理 smul_eq_smul
-  条件: [Nontrivial A] (k : 𝕜) (a : A) (ha : (σ a).Nonempty)
+  条件: [非平凡 A] (k : 𝕜) (a : A) (ha : (σ a).非空)
   证明: by
   rcases eq_or_ne k 0 with (rfl | h)
   · simpa [ha, zero_smul_set] using (show {(0 : 𝕜)} = (0 : Set 𝕜) from rfl)
@@ -1507,7 +1507,7 @@ theorem apply_mem_spectrum
 
 中文:
 定理 apply_mem_spectrum
-  条件: [Nontrivial R] (φ : F) (a : A)
+  条件: [非平凡 R] (φ : F) (a : A)
   结论: φ a in σ a
   证明: by
   have h : ↑ₐ (φ a) - a in RingHom.ker (φ : A ->+* R) := by
@@ -1541,8 +1541,8 @@ theorem AlgEquiv.spectrum_eq
       AlgHom.spectrum_apply_subset (AlgEquivClass.toAlgEquiv f : A ≃ₐ[R] B).symm (f a)
 
 中文:
-定理 AlgEquiv.spectrum_eq
-  结论: {F R A B : 类型} [CommSemiring R] [Ring A] [Ring B] [Algebra R A]
+定理 代数等价.spectrum_eq
+  结论: {F R A B : 类型} [交换半环 R] [环 A] [环 B] [代数 R A]
   证明: Set.Subset.antisymm (AlgHom.spectrum_apply_subset _ _) by
     simpa only [AlgEquiv.coe_toAlgHom, AlgEquiv.coe_coe_symm_apply_coe_apply] using
       AlgHom.spectrum_apply_subset (AlgEquivClass.toAlgEquiv f : A ≃ₐ[R] B).symm (f a)

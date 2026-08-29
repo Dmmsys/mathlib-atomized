@@ -57,7 +57,7 @@ scop
 
 中文:
 定义 pointwiseDistribMulAction
-  签名: : DistribMulAction M (Ideal R) where
+  签名: : 分配乘法作用 M (理想 R) where
   定义体: Ideal.map (MulSemiringAction.toRingHom _ _ a)
   one_smul I :=
 .trans I.map_id congr_arg (I.map ·) (RingHom.ext <| one_smul M)
@@ -98,7 +98,7 @@ scoped[Pointwise] attribute [instance] Ideal.pointwiseMulSemiringAction
 
 中文:
 定义 pointwiseMulSemiringAction
-  签名: {R : 类型} [CommRing R] [MulSemiringAction M R]
+  签名: {R : 类型} [交换环 R] [MulSemiring作用 M R]
   定义体: by simp only [Ideal.one_eq_top]; exact Ideal.map_top _
   smul_mul a I J := Ideal.map_mul (MulSemiringAction.toRingHom _ _ a) I J
 
@@ -121,7 +121,7 @@ theorem pointwise_smul_def
 
 中文:
 定理 pointwise_smul_def
-  条件: {a : M} (S : Ideal R)
+  条件: {a : M} (S : 理想 R)
   证明: rfl
 -/
 theorem pointwise_smul_def {a : M} (S : Ideal R) :
@@ -141,8 +141,8 @@ instance [SMul
     simp
 
 中文:
-实例 [SMul
-  签名: M N] [IsScalarTower M N R] : IsScalarTower M N (Ideal R) where
+实例 [标量乘法
+  签名: M N] [标量塔 M N R] : 标量塔 M N (理想 R) where
   定义体: by
     simp_rw [pointwise_smul_def, map_map]
     congr
@@ -171,7 +171,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : M) (r : R) (S : Ideal R)
+  条件: (m : M) (r : R) (S : 理想 R)
   结论: r in S -> m • r in m • S
   证明: fun h => subset_span Set.smul_mem_smul_set h
 
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass M (Ideal R) HSMul.hSMul LE.le
+  签名: 协变类 M (理想 R) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => map_mono⟩
 
 Depends on / 依赖: map_mono
@@ -213,7 +213,7 @@ theorem smul_bot
 中文:
 定理 smul_bot
   条件: (a : M)
-  结论: a • (⊥ : Ideal R) = ⊥
+  结论: a • (⊥ : 理想 R) = ⊥
   证明: map_bot
 
 Depends on / 依赖: map_bot
@@ -232,7 +232,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (a : M) (S T : Ideal R)
+  条件: (a : M) (S T : 理想 R)
   结论: a • (S ⊔ T) = a • S ⊔ a • T
   证明: map_sup _ _ _
 
@@ -252,7 +252,7 @@ theorem smul_closure
 
 中文:
 定理 smul_closure
-  条件: (a : M) (s : Set R)
+  条件: (a : M) (s : 集合 R)
   结论: a • span s = span (a • s)
   证明: Ideal.map_span _ _
 
@@ -273,7 +273,7 @@ instance pointwise_central_scalar
 
 中文:
 实例 pointwise_central_scalar
-  签名: [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R]
+  签名: [MulSemiring作用 Mᵐᵒᵖ R] [中心标量 M R]
   定义体: ⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
 
 @[simp]
@@ -299,7 +299,7 @@ exact Ideal.mem_map_iff_of_surjective _ by exact ha
 
 中文:
 定理 pointwise_smul_toAddSubmonoid
-  结论: (a : M) (S : Ideal R)
+  结论: (a : M) (S : 理想 R)
   证明: by
   ext
 exact Ideal.mem_map_iff_of_surjective _ by exact ha
@@ -327,7 +327,7 @@ exact Ideal.mem_map_iff_of_surjective _ by exact ha
 
 中文:
 定理 pointwise_smul_toAddSubgroup
-  结论: {R : 类型} [Ring R] [MulSemiringAction M R]
+  结论: {R : 类型} [环 R] [MulSemiring作用 M R]
   证明: by
   ext
 exact Ideal.mem_map_iff_of_surjective _ by exact ha
@@ -363,7 +363,7 @@ theorem pointwise_smul_eq_comap
 
 中文:
 定理 pointwise_smul_eq_comap
-  条件: {a : M} (S : Ideal R)
+  条件: {a : M} (S : 理想 R)
   证明: by
   ext
   simp [pointwise_smul_def]
@@ -391,7 +391,7 @@ theorem smul_mem_pointwise_smul_iff
 
 中文:
 定理 smul_mem_pointwise_smul_iff
-  条件: {a : M} {S : Ideal R} {x : R}
+  条件: {a : M} {S : 理想 R} {x : R}
   结论: a • x in a • S ↔ x in S
   证明: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h, smul_mem_pointwise_smul _ _ _⟩
 
@@ -411,7 +411,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : M} {S : Ideal R} {x : R}
+  条件: {a : M} {S : 理想 R} {x : R}
   证明: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h,
     fun h => by simpa using smul_mem_pointwise_smul a _ _ h⟩
 
@@ -436,7 +436,7 @@ theorem mem_inv_pointwise_smul_iff
 
 中文:
 定理 mem_inv_pointwise_smul_iff
-  条件: {a : M} {S : Ideal R} {x : R}
+  条件: {a : M} {S : 理想 R} {x : R}
   结论: x in a⁻¹ • S ↔ a • x in S
   证明: by
   rw [mem_pointwise_smul_iff_inv_smul_mem]; rw [inv_inv]
@@ -460,7 +460,7 @@ theorem pointwise_smul_le_pointwise_smul_iff
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : M} {S T : Ideal R}
+  条件: {a : M} {S T : 理想 R}
   结论: a • S <= a • T ↔ S <= T
   证明: ⟨fun h => by simpa using smul_mono_right a⁻¹ h, fun h => smul_mono_right a h⟩
 
@@ -481,7 +481,7 @@ theorem pointwise_smul_subset_iff
 
 中文:
 定理 pointwise_smul_subset_iff
-  条件: {a : M} {S T : Ideal R}
+  条件: {a : M} {S T : 理想 R}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: by
   rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
@@ -503,7 +503,7 @@ theorem subset_pointwise_smul_iff
 
 中文:
 定理 subset_pointwise_smul_iff
-  条件: {a : M} {S T : Ideal R}
+  条件: {a : M} {S T : 理想 R}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: by
   rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
@@ -526,8 +526,8 @@ instance IsPrime.smul
 @[simp]
 
 中文:
-实例 IsPrime.smul
-  签名: {I : Ideal R} [H : I.IsPrime] (g : M)
+实例 是素.smul
+  签名: {I : 理想 R} [H : I.是素] (g : M)
   定义体: by
   rw [I.pointwise_smul_eq_comap]
   apply H.comap
@@ -551,9 +551,9 @@ theorem IsPrime.smul_iff
   proof: ⟨fun H => inv_smul_smul g I ▸ H.smul g⁻¹, fun H => H.smul g⟩
 
 中文:
-定理 IsPrime.smul_iff
-  条件: {I : Ideal R} (g : M)
-  结论: (g • I).IsPrime ↔ I.IsPrime
+定理 是素.smul_iff
+  条件: {I : 理想 R} (g : M)
+  结论: (g • I).是素 ↔ I.是素
   证明: ⟨fun H => inv_smul_smul g I ▸ H.smul g⁻¹, fun H => H.smul g⟩
 
 Depends on / 依赖: H.smul, inv_smul_smul
@@ -573,7 +573,7 @@ theorem inertia_le_stabilizer
 
 中文:
 定理 inertia_le_stabilizer
-  条件: {R : 类型} [Ring R] (P : Ideal R) [MulSemiringAction M R]
+  条件: {R : 类型} [环 R] (P : 理想 R) [MulSemiring作用 M R]
   证明: by
   refine fun σ hσ => SetLike.ext fun x => ?_
   rw [Ideal.mem_pointwise_smul_iff_inv_smul_mem]; rw [← P.add_mem_iff_left (a := x) ((inv_mem hσ) x)]; rw [add_sub_cancel]
@@ -607,7 +607,7 @@ definition stabilizerEquiv
 
 中文:
 定义 stabilizerEquiv
-  签名: (I : Ideal R) (e : M ≃* N) (he : 对任意 (m : M) (x : R), (e m) • x = m • x)
+  签名: (I : 理想 R) (e : M ≃* N) (he : 对任意 (m : M) (x : R), (e m) • x = m • x)
   定义体: Equiv.subtypeEquiv e fun _ => by
     simp [Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ← map_inv, he]
   map_mul' _ _ := by simp
@@ -636,7 +636,7 @@ theorem stabilizerEquiv_apply_smul
 
 中文:
 定理 stabilizerEquiv_apply_smul
-  结论: (I : Ideal R) (e : M ≃* N)
+  结论: (I : 理想 R) (e : M ≃* N)
   证明: by
   simp [stabilizerEquiv, MulAction.subgroup_smul_def, ← he m x]
 
@@ -661,7 +661,7 @@ theorem stabilizerEquiv_symm_apply_smul
 
 中文:
 定理 stabilizerEquiv_symm_apply_smul
-  结论: (I : Ideal R) (e : M ≃* N)
+  结论: (I : 理想 R) (e : M ≃* N)
   证明: by
   rw [← (stabilizerEquiv I e he).apply_symm_apply n]; rw [stabilizerEquiv_apply_smul]; rw [(stabilizerEquiv I e he).apply_symm_apply]
 
@@ -685,7 +685,7 @@ definition inertiaEquiv
 
 中文:
 定义 inertiaEquiv
-  签名: {R : 类型} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R] (I : Ideal R)
+  签名: {R : 类型} [环 R] [MulSemiring作用 M R] [MulSemiring作用 N R] (I : 理想 R)
   定义体: Equiv.subtypeEquiv e fun _ => by simp [he]
   map_mul' := by simp
 
@@ -713,7 +713,7 @@ theorem inertiaEquiv_apply_smul
 
 中文:
 定理 inertiaEquiv_apply_smul
-  结论: {R : 类型} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R]
+  结论: {R : 类型} [环 R] [MulSemiring作用 M R] [MulSemiring作用 N R]
   证明: by
   simp [inertiaEquiv, MulAction.subgroup_smul_def, ← he m x]
 
@@ -739,7 +739,7 @@ theorem inertiaEquiv_symm_apply_smul
 
 中文:
 定理 inertiaEquiv_symm_apply_smul
-  结论: {R : 类型} [Ring R] [MulSemiringAction M R]
+  结论: {R : 类型} [环 R] [MulSemiring作用 M R]
   证明: by
   rw [← (inertiaEquiv I e he).apply_symm_apply n]; rw [inertiaEquiv_apply_smul]; rw [(inertiaEquiv I e he).apply_symm_apply]
 

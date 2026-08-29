@@ -39,8 +39,8 @@ theorem PreconnectedSpace.trivial_of_discrete
   exact hxy (mem_univ x)
 
 中文:
-定理 PreconnectedSpace.trivial_of_discrete
-  条件: [PreconnectedSpace X] [DiscreteTopology X]
+定理 预连通空间.trivial_of_discrete
+  条件: [预连通空间 X] [离散拓扑 X]
   证明: by
   by_contra! ⟨x, y, hxy⟩
   rw [Ne]; rw [← mem_singleton_iff]; rw [(isClopen_discrete _).eq_univ <| singleton_nonempty y] at hxy
@@ -66,8 +66,8 @@ theorem IsPreconnected.infinite_of_nontrivial
   exact @PreconnectedSpace.trivial_of_discrete _ _ (Subtype.preconnectedSpace h) _
 
 中文:
-定理 IsPreconnected.infinite_of_nontrivial
-  结论: [T1Space X] {s : Set X} (h : IsPreconnected s)
+定理 是预连通.infinite_of_nontrivial
+  结论: [T1空间 X] {s : 集合 X} (h : 是预连通 s)
   证明: by
   refine mt (fun hf => (subsingleton_coe s).mp ?_) (not_subsingleton_iff.mpr hs)
   have := @Finite.instDiscreteTopology s _ _ hf.to_subtype
@@ -91,9 +91,9 @@ theorem PreconnectedSpace.infinite
   proof: infinite_univ_iff.mp isPreconnected_univ.infinite_of_nontrivial nontrivial_univ
 
 中文:
-定理 PreconnectedSpace.infinite
-  条件: [PreconnectedSpace X] [Nontrivial X] [T1Space X]
-  结论: Infinite X
+定理 预连通空间.infinite
+  条件: [预连通空间 X] [非平凡 X] [T1空间 X]
+  结论: 无限 X
   证明: infinite_univ_iff.mp isPreconnected_univ.infinite_of_nontrivial nontrivial_univ
 
 Depends on / 依赖: infinite_of_nontrivial, infinite_univ_iff, infinite_univ_iff.mp, isPreconnected_univ, isPreconnected_univ.infinite_of_nontrivial, nontrivial_univ

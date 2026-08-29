@@ -58,11 +58,11 @@ class StrongEpi
     - llp : forall ⦃X Y : C⦄ (z : X ⟶ Y) [Mono z], HasLiftingProperty f z
 
 中文:
-类 StrongEpi
+类 强满态射
   参数: (f : P ⟶ Q)
   公理与运算 (2 个):
-    - epi : Epi f
-    - llp : 对任意 ⦃X Y : C⦄ (z : X ⟶ Y) [Mono z], HasLifting命题erty f z
+    - epi : 满态射 f
+    - llp : 对任意 ⦃X Y : C⦄ (z : X ⟶ Y) [单态射 z], 有LiftingProperty f z
 -/
 class StrongEpi (f : P ⟶ Q) : Prop where
   /-- The epimorphism condition on `f` -/
@@ -84,11 +84,11 @@ class StrongMono
     - rlp : forall ⦃X Y : C⦄ (z : X ⟶ Y) [Epi z], HasLiftingProperty z f
 
 中文:
-类 StrongMono
+类 强单态射
   参数: (f : P ⟶ Q)
   公理与运算 (2 个):
-    - mono : Mono f
-    - rlp : 对任意 ⦃X Y : C⦄ (z : X ⟶ Y) [Epi z], HasLifting命题erty z f
+    - mono : 单态射 f
+    - rlp : 对任意 ⦃X Y : C⦄ (z : X ⟶ Y) [满态射 z], 有LiftingProperty z f
 -/
 class StrongMono (f : P ⟶ Q) : Prop where
   /-- The monomorphism condition on `f` -/
@@ -107,8 +107,8 @@ theorem StrongEpi.mk'
   llp {X Y} z hz := ⟨fun {u v} sq => hf X Y z hz u v sq⟩
 
 中文:
-定理 StrongEpi.mk'
-  结论: {f : P ⟶ Q} [Epi f]
+定理 强满态射.mk'
+  结论: {f : P ⟶ Q} [满态射 f]
   证明: inferInstance
   llp {X Y} z hz := ⟨fun {u v} sq => hf X Y z hz u v sq⟩
 -/
@@ -139,7 +139,7 @@ instance strongEpi_comp
 
 中文:
 实例 strongEpi_comp
-  签名: [StrongEpi f] [StrongEpi g]
+  签名: [强满态射 f] [强满态射 g]
   定义体: { epi := epi_comp _ _
     llp := by
       intros
@@ -175,8 +175,8 @@ theorem strongEpi_of_strongEpi
 
 中文:
 定理 strongEpi_of_strongEpi
-  条件: [StrongEpi (f ≫ g)]
-  结论: StrongEpi g
+  条件: [强满态射 (f ≫ g)]
+  结论: 强满态射 g
   证明: { epi := epi_of_epi f g
     llp := fun {X Y} z _ => by
       constructor
@@ -224,7 +224,7 @@ theorem StrongEpi.of_arrow_iso
 @[to_dual]
 
 中文:
-定理 StrongEpi.of_arrow_iso
+定理 强满态射.of_arrow_iso
   结论: {A B A' B' : C} {f : A ⟶ B} {g : A' ⟶ B'}
   证明: by
     rw [Arrow.iso_w' e]
@@ -258,7 +258,7 @@ theorem StrongEpi.iff_of_arrow_iso
   exacts [StrongEpi.of_arrow_iso e, StrongEpi.of_arrow_iso e.symm]
 
 中文:
-定理 StrongEpi.iff_of_arrow_iso
+定理 强满态射.iff_of_arrow_iso
   结论: {A B A' B' : C} {f : A ⟶ B} {g : A' ⟶ B'}
   证明: by
   constructor <;> intro
@@ -286,8 +286,8 @@ theorem isIso_of_mono_of_strongEpi
 
 中文:
 定理 isIso_of_mono_of_strongEpi
-  条件: (f : P ⟶ Q) [Mono f] [StrongEpi f]
-  结论: IsIso f
+  条件: (f : P ⟶ Q) [单态射 f] [强满态射 f]
+  结论: 是同构 f
   证明: ⟨⟨(CommSq.mk (show 𝟙 P ≫ f = f ≫ 𝟙 Q by simp)).lift, by simp⟩⟩
 
 Depends on / 依赖: CommSq, CommSq.mk
@@ -309,10 +309,10 @@ class StrongEpiCategory
     - strongEpi_of_epi : forall {X Y : C} (f : X ⟶ Y) [Epi f], StrongEpi f
 
 中文:
-类 StrongEpiCategory
+类 强满态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - strongEpi_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [Epi f], StrongEpi f
+    - strongEpi_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 强满态射 f
 -/
 class StrongEpiCategory : Prop where
   /-- A strong epi category is a category in which every epimorphism is strong. -/
@@ -330,10 +330,10 @@ class StrongMonoCategory
     - strongMono_of_mono : forall {X Y : C} (f : X ⟶ Y) [Mono f], StrongMono f
 
 中文:
-类 StrongMonoCategory
+类 强单态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - strongMono_of_mono : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f], StrongMono f
+    - strongMono_of_mono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 强单态射 f
 -/
 class StrongMonoCategory : Prop where
   /-- A strong mono category is a category in which every monomorphism is strong. -/
@@ -353,8 +353,8 @@ theorem strongEpi_of_epi
 
 中文:
 定理 strongEpi_of_epi
-  条件: [StrongEpiCategory C] (f : P ⟶ Q) [Epi f]
-  结论: StrongEpi f
+  条件: [强满态射范畴 C] (f : P ⟶ Q) [满态射 f]
+  结论: 强满态射 f
   证明: StrongEpiCategory.strongEpi_of_epi _
 
 Depends on / 依赖: StrongEpiCategory, StrongEpiCategory.strongEpi_of_epi, strongEpi_of_epi

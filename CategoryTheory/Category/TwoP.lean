@@ -41,7 +41,7 @@ structure TwoP
 
 中文:
 结构 TwoP
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - X : 类型u
     - toTwoPointing : TwoPointing X
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited TwoP
+  签名: 可居 TwoP
   定义体: ⟨of TwoPointing.bool⟩
 
 Depends on / 依赖: TwoPointing, TwoPointing.bool
@@ -183,7 +183,7 @@ instance largeCategory
 
 中文:
 实例 largeCategory
-  签名: : LargeCategory TwoP
+  签名: : 大范畴 TwoP
   定义体: inferInstanceAs Category (InducedCategory _ toBipointed)
 
 Depends on / 依赖: Category, InducedCategory, toBipointed
@@ -202,7 +202,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory TwoP
+  签名: : 余ncrete范畴 TwoP
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toBipointed) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory, toBipointed
@@ -224,7 +224,7 @@ instance hasForgetToBipointed
 
 中文:
 实例 hasForgetToBipointed
-  签名: : HasForget₂ TwoP Bipointed
+  签名: : 有Forget₂ TwoP Bipointed
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toBipointed) _
 
 @[ext]

@@ -46,8 +46,8 @@ theorem IsLowerSet.nonMemberSubfamily
   exact And.imp (h hts) (mt <| @hts _)
 
 中文:
-定理 IsLowerSet.nonMemberSubfamily
-  条件: (h : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.nonMemberSubfamily
+  条件: (h : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: fun s t hts => by
   simp_rw [mem_coe, mem_nonMemberSubfamily]
   exact And.imp (h hts) (mt <| @hts _)
@@ -71,8 +71,8 @@ theorem IsLowerSet.memberSubfamily
   exact And.imp (h <| insert_subset_insert _ hts) (mt <| @hts _)
 
 中文:
-定理 IsLowerSet.memberSubfamily
-  条件: (h : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.memberSubfamily
+  条件: (h : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: by
   rintro s t hts
   simp_rw [mem_coe, mem_memberSubfamily]
@@ -97,8 +97,8 @@ theorem IsLowerSet.memberSubfamily_subset_nonMemberSubfamily
   exact And.imp_left (h <| subset_insert _ _)
 
 中文:
-定理 IsLowerSet.memberSubfamily_subset_nonMemberSubfamily
-  条件: (h : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.memberSubfamily_subset_nonMemberSubfamily
+  条件: (h : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: fun s => by
   rw [mem_memberSubfamily]; rw [mem_nonMemberSubfamily]
   exact And.imp_left (h <| subset_insert _ _)
@@ -127,8 +127,8 @@ theorem IsLowerSet.le_card_inter_finset'
   
 
 中文:
-定理 IsLowerSet.le_card_inter_finset'
-  结论: (h𝒜 : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.le_card_inter_finset'
+  结论: (h𝒜 : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: by
   induction s using Finset.induction generalizing 𝒜 ℬ with
   | empty =>
@@ -185,8 +185,8 @@ theorem IsLowerSet.le_card_inter_finset
   proof: h𝒜.le_card_inter_finset' hℬ (fun _ _ => subset_univ _) fun _ _ => subset_univ _
 
 中文:
-定理 IsLowerSet.le_card_inter_finset
-  结论: (h𝒜 : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.le_card_inter_finset
+  结论: (h𝒜 : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: h𝒜.le_card_inter_finset' hℬ (fun _ _ => subset_univ _) fun _ _ => subset_univ _
 
 Depends on / 依赖: le_card_inter_finset, subset_univ
@@ -209,8 +209,8 @@ theorem IsUpperSet.card_inter_le_finset
     _root_.inf_comm] at this
 
 中文:
-定理 IsUpperSet.card_inter_le_finset
-  结论: (h𝒜 : IsUpperSet (𝒜 : Set (Finset α)))
+定理 是上集.card_inter_le_finset
+  结论: (h𝒜 : 是上集 (𝒜 : 集合 (有限集 α)))
   证明: by
   rw [← isLowerSet_compl]; rw [← coe_compl] at h𝒜
   have := h𝒜.le_card_inter_finset hℬ
@@ -240,8 +240,8 @@ theorem IsLowerSet.card_inter_le_finset
   exact hℬ.card_inter_le_finset h𝒜
 
 中文:
-定理 IsLowerSet.card_inter_le_finset
-  结论: (h𝒜 : IsLowerSet (𝒜 : Set (Finset α)))
+定理 是下集.card_inter_le_finset
+  结论: (h𝒜 : 是下集 (𝒜 : 集合 (有限集 α)))
   证明: by
   rw [inter_comm]; rw [mul_comm #𝒜]
   exact hℬ.card_inter_le_finset h𝒜
@@ -269,8 +269,8 @@ theorem IsUpperSet.le_card_inter_finset
   · grw [inter
 
 中文:
-定理 IsUpperSet.le_card_inter_finset
-  结论: (h𝒜 : IsUpperSet (𝒜 : Set (Finset α)))
+定理 是上集.le_card_inter_finset
+  结论: (h𝒜 : 是上集 (𝒜 : 集合 (有限集 α)))
   证明: by
   rw [← isLowerSet_compl]; rw [← coe_compl] at h𝒜
   have := h𝒜.card_inter_le_finset hℬ

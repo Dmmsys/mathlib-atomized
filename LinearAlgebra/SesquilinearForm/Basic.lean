@@ -445,7 +445,7 @@ theorem domRestrict
 
 中文:
 定理 domRestrict
-  条件: (p : Submodule R₁ M₁)
+  条件: (p : 子模 R₁ M₁)
   结论: (B.domRestrict₁₂ p p).IsRefl
   证明: fun _ _ => by
   simp_rw [domRestrict₁₂_apply]
@@ -515,8 +515,8 @@ theorem ker_flip_eq_bot
 
 中文:
 定理 ker_flip_eq_bot
-  条件: (H : B.IsRefl) (h : LinearMap.ker B = ⊥)
-  结论: LinearMap.ker B.flip = ⊥
+  条件: (H : B.IsRefl) (h : 线性映射.ker B = ⊥)
+  结论: 线性映射.ker B.flip = ⊥
   证明: by
   rwa [H.ker_flip]
 
@@ -566,7 +566,7 @@ structure IsSymm
     - eq : forall x y, I (B x y) = B y x
 
 中文:
-结构 IsSymm
+结构 是Symm
   参数: (B : M ->ₛₗ[I] M ->ₗ[R] R)
   公理与运算 (1 个):
     - eq : 对任意 x y, I (B x y) = B y x
@@ -586,7 +586,7 @@ theorem isSymm_def
 中文:
 定理 isSymm_def
   条件: {B : M ->ₛₗ[I] M ->ₗ[R] R}
-  结论: B.IsSymm ↔ 对任意 x y, I (B x y) = B y x
+  结论: B.是Symm ↔ 对任意 x y, I (B x y) = B y x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 theorem isSymm_def {B : M ->ₛₗ[I] M ->ₗ[R] R} : B.IsSymm ↔ forall x y, I (B x y) = B y x :=
@@ -607,7 +607,7 @@ theorem isRefl
 
 中文:
 定理 isRefl
-  条件: (H : B.IsSymm)
+  条件: (H : B.是Symm)
   结论: B.IsRefl
   证明: fun x y H1 => by
   rw [← H.eq]
@@ -633,7 +633,7 @@ alias ortho_comm := eq_iff
 
 中文:
 定理 eq_iff
-  条件: (H : B.IsSymm) {x y}
+  条件: (H : B.是Symm) {x y}
   结论: B x y = 0 ↔ B y x = 0
   证明: H.isRefl.eq_iff
 
@@ -660,8 +660,8 @@ theorem domRestrict
 
 中文:
 定理 domRestrict
-  条件: (H : B.IsSymm) (p : Submodule R M)
-  结论: (B.domRestrict₁₂ p p).IsSymm where
+  条件: (H : B.是Symm) (p : 子模 R M)
+  结论: (B.domRestrict₁₂ p p).是Symm where
   证明: by
     simp_rw [domRestrict₁₂_apply]
     exact H.eq _ _
@@ -686,7 +686,7 @@ theorem isSymm_zero
 
 中文:
 定理 isSymm_zero
-  结论: (0 : M ->ₛₗ[I] M ->ₗ[R] R).IsSymm
+  结论: (0 : M ->ₛₗ[I] M ->ₗ[R] R).是Symm
   证明: ⟨fun _ _ => map_zero _⟩
 
 Depends on / 依赖: map_zero
@@ -702,8 +702,8 @@ lemma IsSymm.add
   proof: by simp [hB.eq, hC.eq]
 
 中文:
-引理 IsSymm.add
-  条件: {C : M ->ₛₗ[I] M ->ₗ[R] R} (hB : B.IsSymm) (hC : C.IsSymm)
+引理 是Symm.add
+  条件: {C : M ->ₛₗ[I] M ->ₗ[R] R} (hB : B.是Symm) (hC : C.是Symm)
   证明: by simp [hB.eq, hC.eq]
 -/
 protected lemma IsSymm.add {C : M ->ₛₗ[I] M ->ₗ[R] R} (hB : B.IsSymm) (hC : C.IsSymm) :
@@ -721,7 +721,7 @@ theorem BilinMap.isSymm_iff_eq_flip
 
 中文:
 定理 BilinMap.isSymm_iff_eq_flip
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: by
   simp [LinearMap.ext_iff₂]
 
@@ -742,8 +742,8 @@ theorem isSymm_iff_eq_flip
 
 中文:
 定理 isSymm_iff_eq_flip
-  条件: {B : LinearMap.BilinForm R M}
-  结论: B.IsSymm ↔ B = B.flip
+  条件: {B : 线性映射.BilinForm R M}
+  结论: B.是Symm ↔ B = B.flip
   证明: isSymm_def.trans BilinMap.isSymm_iff_eq_flip
 
 Depends on / 依赖: BilinMap, BilinMap.isSymm_iff_eq_flip, isSymm_def, isSymm_def.trans, isSymm_iff_eq_flip
@@ -769,7 +769,7 @@ structure IsNonneg
     - nonneg : forall x, 0 <= B x x
 
 中文:
-结构 IsNonneg
+结构 是Nonneg
   参数: [LE R] (B : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R)
   公理与运算 (1 个):
     - nonneg : 对任意 x, 0 <= B x x
@@ -791,7 +791,7 @@ lemma isNonneg_def
 中文:
 引理 isNonneg_def
   条件: [LE R] {B : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R}
-  结论: B.IsNonneg ↔ 对任意 x, 0 <= B x x
+  结论: B.是Nonneg ↔ 对任意 x, 0 <= B x x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 
 @[simp]
@@ -811,8 +811,8 @@ lemma isNonneg_zero
 
 中文:
 引理 isNonneg_zero
-  条件: [Preorder R]
-  结论: IsNonneg (0 : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R)
+  条件: [预序 R]
+  结论: 是Nonneg (0 : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R)
   证明: ⟨fun _ => le_rfl⟩
 
 Depends on / 依赖: le_rfl
@@ -828,8 +828,8 @@ lemma IsNonneg.add
   proof: add_nonneg (hB.nonneg x) (hC.nonneg x)
 
 中文:
-引理 IsNonneg.add
-  结论: [Preorder R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R}
+引理 是Nonneg.add
+  结论: [预序 R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R}
   证明: add_nonneg (hB.nonneg x) (hC.nonneg x)
 -/
 protected lemma IsNonneg.add [Preorder R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R}
@@ -845,8 +845,8 @@ lemma IsNonneg.smul
   proof: mul_nonneg hc (hB.nonneg x)
 
 中文:
-引理 IsNonneg.smul
-  结论: [Preorder R] [PosMulMono R] {B : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R} {c : R}
+引理 是Nonneg.smul
+  结论: [预序 R] [正乘递增 R] {B : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R} {c : R}
   证明: mul_nonneg hc (hB.nonneg x)
 -/
 protected lemma IsNonneg.smul [Preorder R] [PosMulMono R] {B : M ->ₛₗ[I₁] M ->ₛₗ[I₂] R} {c : R}
@@ -862,7 +862,7 @@ structure IsPosSemidef
   (no additional axioms)
 
 中文:
-结构 IsPosSemidef
+结构 是PosSemidef
   参数: [LE R] (B : M ->ₛₗ[I₁] M ->ₗ[R] R)
   (无附加公理)
 -/
@@ -884,7 +884,7 @@ lemma isPosSemidef_def
 中文:
 引理 isPosSemidef_def
   条件: [LE R] {B : M ->ₛₗ[I₁] M ->ₗ[R] R}
-  结论: B.IsPosSemidef ↔ B.IsSymm ∧ B.IsNonneg
+  结论: B.是PosSemidef ↔ B.是Symm ∧ B.是Nonneg
   证明: ⟨fun h => ⟨h.isSymm, h.isNonneg⟩, fun ⟨h₁, h₂⟩ => ⟨h₁, h₂⟩⟩
 
 @[simp]
@@ -907,8 +907,8 @@ lemma isPosSemidef_zero
 
 中文:
 引理 isPosSemidef_zero
-  条件: [Preorder R]
-  结论: IsPosSemidef (0 : M ->ₛₗ[I₁] M ->ₗ[R] R) where
+  条件: [预序 R]
+  结论: 是PosSemidef (0 : M ->ₛₗ[I₁] M ->ₗ[R] R) where
   证明: isSymm_zero
   isNonneg := isNonneg_zero
 
@@ -927,8 +927,8 @@ lemma IsPosSemidef.add
   proof: isPosSemidef_def.2 ⟨hB.isSymm.add hC.isSymm, hB.isNonneg.add hC.isNonneg⟩
 
 中文:
-引理 IsPosSemidef.add
-  结论: [Preorder R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₗ[R] R}
+引理 是PosSemidef.add
+  结论: [预序 R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₗ[R] R}
   证明: isPosSemidef_def.2 ⟨hB.isSymm.add hC.isSymm, hB.isNonneg.add hC.isNonneg⟩
 -/
 protected lemma IsPosSemidef.add [Preorder R] [AddLeftMono R] {B C : M ->ₛₗ[I₁] M ->ₗ[R] R}
@@ -999,7 +999,7 @@ theorem IsAlt.eq_of_add_add_eq_zero
 
 中文:
 定理 IsAlt.eq_of_add_add_eq_zero
-  条件: [IsCancelAdd M] {a b c : M₁} (hAdd : a + b + c = 0)
+  条件: [是消去加法 M] {a b c : M₁} (hAdd : a + b + c = 0)
   证明: by
   have : B a a + B a b + B a c = B a c + B b c + B c c := by
     simp_rw [← map_add, ← map_add₂, hAdd, map_zero, LinearMap.zero_apply]
@@ -1131,7 +1131,7 @@ theorem isAlt_iff_eq_neg_flip
 
 中文:
 定理 isAlt_iff_eq_neg_flip
-  条件: [NoZeroDivisors R] [CharZero R] {B : M₁ ->ₛₗ[I] M₁ ->ₛₗ[I] R}
+  条件: [无零因子 R] [特征零 R] {B : M₁ ->ₛₗ[I] M₁ ->ₛₗ[I] R}
   证明: by
   constructor <;> intro h
   · ext
@@ -1278,7 +1278,7 @@ theorem isAdjointPair_one
 
 中文:
 定理 isAdjointPair_one
-  结论: IsAdjointPair B B (1 : Module.End R M) (1 : Module.End R M)
+  结论: IsAdjointPair B B (1 : 模.End R M) (1 : 模.End R M)
   证明: isAdjointPair_id
 
 Depends on / 依赖: isAdjointPair_id
@@ -1340,7 +1340,7 @@ theorem IsAdjointPair.mul
 
 中文:
 定理 IsAdjointPair.mul
-  结论: {f g f' g' : Module.End R M} (h : IsAdjointPair B B f g)
+  结论: {f g f' g' : 模.End R M} (h : IsAdjointPair B B f g)
   证明: h'.comp h
 -/
 theorem IsAdjointPair.mul {f g f' g' : Module.End R M} (h : IsAdjointPair B B f g)
@@ -1433,7 +1433,7 @@ lemma _root_.LinearEquiv.isAdjointPair_symm_iff
   proof: ⟨fun hf x y => by simpa using hf x (f y), fun hf x y => by simpa using hf x (f.symm y)⟩
 
 中文:
-引理 _root_.LinearEquiv.isAdjointPair_symm_iff
+引理 _root_.线性等价.isAdjointPair_symm_iff
   条件: {f : M ≃ M}
   证明: ⟨fun hf x y => by simpa using hf x (f y), fun hf x y => by simpa using hf x (f.symm y)⟩
 
@@ -1458,8 +1458,8 @@ lemma isOrthogonal_of_forall_apply_same
   simp only [add_assoc, add_right_inj] a
 
 中文:
-引理 isOrthogonal_of_forall_apply_same
-  结论: {F : 类型} [FunLike F M M] [LinearMapClass F R M M]
+引理 isOrthogonal_of_对任意_apply_same
+  结论: {F : 类型} [函数状 F M M] [线性映射类 F R M M]
   证明: by
   intro x y
   suffices 2 * B (f x) (f y) = 2 * B x y from h this
@@ -1553,7 +1553,7 @@ definition isPairSelfAdjointSubmodule
 
 中文:
 定义 isPairSelfAdjointSubmodule
-  签名: : Submodule R (Module.End R M) where
+  签名: : 子模 R (模.End R M) where
   定义体: { f | IsPairSelfAdjoint B F f }
   zero_mem' := isAdjointPair_zero
   add_mem' hf hg := hf.add hg
@@ -1630,7 +1630,7 @@ theorem mem_isPairSelfAdjointSubmodule
 
 中文:
 定理 mem_isPairSelfAdjointSubmodule
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1655,7 +1655,7 @@ theorem isPairSelfAdjoint_equiv
 
 中文:
 定理 isPairSelfAdjoint_equiv
-  条件: (e : M₁ ≃ₗ[R] M) (f : Module.End R M)
+  条件: (e : M₁ ≃ₗ[R] M) (f : 模.End R M)
   证明: by
   have hₗ :
     (F.compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M)).comp (e.symm.conj f) =
@@ -1718,7 +1718,7 @@ theorem mem_selfAdjointSubmodule
 
 中文:
 定理 mem_selfAdjointSubmodule
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   证明: Iff.rfl
 
 @[simp]
@@ -1742,7 +1742,7 @@ theorem mem_skewAdjointSubmodule
 
 中文:
 定理 mem_skewAdjointSubmodule
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   证明: by
   rw [isSkewAdjoint_iff_neg_self_adjoint]
   exact Iff.rfl
@@ -1798,7 +1798,7 @@ theorem not_separatingLeft_zero
 
 中文:
 定理 not_separatingLeft_zero
-  条件: [Nontrivial M₁]
+  条件: [非平凡 M₁]
   结论: ¬(0 : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M).SeparatingLeft
   证明: let ⟨m, hm⟩ := exists_ne (0 : M₁)
   fun h => hm (h m fun _n => rfl)
@@ -1821,7 +1821,7 @@ theorem SeparatingLeft.ne_zero
 
 中文:
 定理 SeparatingLeft.ne_zero
-  结论: [Nontrivial M₁] {B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M}
+  结论: [非平凡 M₁] {B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M}
   证明: fun h0 => not_separatingLeft_zero M₁ M₂ I₁ I₂ h0 ▸ h
 
 Depends on / 依赖: not_separatingLeft_zero
@@ -1854,7 +1854,7 @@ definition Nondegenerate
   body: SeparatingLeft B ∧ SeparatingRight B
 
 中文:
-定义 Nondegenerate
+定义 非退化
   签名: (B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M)
   定义体: SeparatingLeft B ∧ SeparatingRight B
 
@@ -1939,8 +1939,8 @@ theorem Nondegenerate.congr
 @[simp]
 
 中文:
-定理 Nondegenerate.congr
-  条件: (h : B.Nondegenerate)
+定理 非退化.congr
+  条件: (h : B.非退化)
   证明: ⟨h.1.congr e₁ e₂, h.2.congr e₁ e₂⟩
 
 @[simp]
@@ -1996,7 +1996,7 @@ theorem separatingRight_congr_iff
 
 中文:
 定理 separatingRight_congr_iff
-  结论: (e₁.arrowCongr (e₂.arrowCongr (LinearEquiv.refl R M))
+  结论: (e₁.arrowCongr (e₂.arrowCongr (线性等价.refl R M))
   证明: separatingLeft_congr_iff (B := B.flip) e₂ e₁
 
 @[simp]
@@ -2088,7 +2088,7 @@ theorem flip_nondegenerate
 中文:
 定理 flip_nondegenerate
   条件: {B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M}
-  结论: B.flip.Nondegenerate ↔ B.Nondegenerate
+  结论: B.flip.非退化 ↔ B.非退化
   证明: Iff.trans and_comm (and_congr flip_separatingRight flip_separatingLeft)
 
 Depends on / 依赖: Iff.trans, and_comm, and_congr, flip_separatingLeft, flip_separatingRight
@@ -2274,7 +2274,7 @@ lemma disjoint_ker_of_nondegenerate_restrict
 
 中文:
 引理 disjoint_ker_of_nondegenerate_restrict
-  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} {W : Submodule R M}
+  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} {W : 子模 R M}
   证明: by
   refine Submodule.disjoint_def.mpr fun x hx hx' => ?_
   let x' : W := ⟨x, hx⟩
@@ -2314,8 +2314,8 @@ lemma IsSymm.nondegenerate_restrict_of_isCompl_ker
   repl
 
 中文:
-引理 IsSymm.nondegenerate_restrict_of_isCompl_ker
-  结论: {B : M ->ₗ[R] M ->ₗ[R] R} (hB : B.IsSymm)
+引理 是Symm.nondegenerate_restrict_of_isCompl_ker
+  结论: {B : M ->ₗ[R] M ->ₗ[R] R} (hB : B.是Symm)
   证明: by
   have hB' : (B.domRestrict₁₂ W W).IsRefl := fun x y => hB.isRefl (W.subtype x) (W.subtype y)
   rw [LinearMap.IsRefl.nondegenerate_iff_separatingLeft hB']
@@ -2368,7 +2368,7 @@ theorem IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft
 
 中文:
 定理 IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   intro ho
   refine v.ne_zero i (hB (v i) fun m => ?_)
@@ -2408,7 +2408,7 @@ theorem IsOrthoᵢ.not_isOrtho_basis_self_of_separatingRight
 
 中文:
 定理 IsOrthoᵢ.not_isOrtho_basis_self_of_separatingRight
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [isOrthoᵢ_flip] at h
   exact h.not_isOrtho_basis_self_of_separatingLeft (flip_separatingLeft.mpr hB) i
@@ -2442,7 +2442,7 @@ theorem IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self
 
 中文:
 定理 IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self
-  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : Basis n R M)
+  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : 基 n R M)
   证明: by
   intro m hB
   obtain ⟨vi, rfl⟩ := v.repr.symm.surjective m
@@ -2492,7 +2492,7 @@ lemma IsOrthoᵢ.separatingRight_iff_not_isOrtho_basis_self
 
 中文:
 引理 IsOrthoᵢ.separatingRight_iff_not_isOrtho_basis_self
-  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : Basis n R M)
+  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : 基 n R M)
   证明: by
   rw [isOrthoᵢ_flip] at hO
   rw [← flip_separatingLeft]
@@ -2519,7 +2519,7 @@ theorem IsOrthoᵢ.nondegenerate_of_not_isOrtho_basis_self
 
 中文:
 定理 IsOrthoᵢ.nondegenerate_of_not_isOrtho_basis_self
-  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : Basis n R M)
+  结论: {B : M ->ₗ[R] M ->ₗ[R] M₁} (v : 基 n R M)
   证明: ⟨IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self v hO h,
     IsOrthoᵢ.separatingRight_iff_not_isOrtho_basis_self v hO h⟩
 
@@ -2550,7 +2550,7 @@ lemma apply_smul_sub_smul_sub_eq
 
 中文:
 引理 apply_smul_sub_smul_sub_eq
-  结论: [CommRing R] [AddCommGroup M] [Module R M]
+  结论: [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   simp only [map_sub, map_smul, sub_apply, smul_apply, smul_eq_mul, mul_sub,
     mul_comm (B x y) (B x x), mul_left_comm (B x y) (B x x)]
@@ -2586,7 +2586,7 @@ lemma apply_mul_apply_le_of_forall_zero_le
   · replace hx : B x x = 0 :=
 
 中文:
-引理 apply_mul_apply_le_of_forall_zero_le
+引理 apply_mul_apply_le_of_对任意_zero_le
   条件: (hs : 对任意 x, 0 <= B x x) (x y : M)
   证明: by
   have aux (x y : M) : 0 <= (B x x) * ((B x x) * (B y y) - (B x y) * (B y x)) := by
@@ -2628,7 +2628,7 @@ lemma apply_sq_le_of_symm
 
 中文:
 引理 apply_sq_le_of_symm
-  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.IsSymm) (x y : M)
+  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.是Symm) (x y : M)
   证明: by
   rw [show (B x y) ^ 2 = (B x y) * (B y x) by rw [sq]; rw [← hB.eq]; rw [RingHom.id_apply]]
   exact apply_mul_apply_le_of_forall_zero_le B hs x y
@@ -2702,7 +2702,7 @@ exact eq_zero_of_pow_eq_zero le_antisymm this (sq_nonneg (B x y))
 
 中文:
 引理 apply_apply_same_eq_zero_iff
-  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.IsSymm) {x : M}
+  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.是Symm) {x : M}
   证明: by
   rw [LinearMap.mem_ker]
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
@@ -2735,7 +2735,7 @@ lemma nondegenerate_iff
 
 中文:
 引理 nondegenerate_iff
-  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.IsSymm)
+  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.是Symm)
   证明: by
   simp_rw [hB.isRefl.nondegenerate_iff_separatingLeft, separatingLeft_iff_ker_eq_bot,
     Submodule.eq_bot_iff, B.apply_apply_same_eq_zero_iff hs hB, mem_ker]
@@ -2762,7 +2762,7 @@ lemma nondegenerate_iff'
 
 中文:
 引理 nondegenerate_iff'
-  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.IsSymm)
+  条件: (hs : 对任意 x, 0 <= B x x) (hB : B.是Symm)
   证明: by
   rw [B.nondegenerate_iff hs hB]
   contrapose!
@@ -2792,7 +2792,7 @@ lemma nondegenerate_restrict_iff_disjoint_ker
 
 中文:
 引理 nondegenerate_restrict_iff_disjoint_ker
-  结论: (hs : 对任意 x, 0 <= B x x) (hB : B.IsSymm)
+  结论: (hs : 对任意 x, 0 <= B x x) (hB : B.是Symm)
   证明: by
   refine ⟨disjoint_ker_of_nondegenerate_restrict, fun hW => ?_⟩
   have hB' : (B.domRestrict₁₂ W W).IsRefl := fun x y => hB.isRefl (W.subtype x) (W.subtype y)
@@ -2891,7 +2891,7 @@ lemma apply_sq_lt_iff_linearIndependent_of_symm
 
 中文:
 引理 apply_sq_lt_iff_linearIndependent_of_symm
-  结论: (hp : 对任意 x, x != 0 -> 0 < B x x) (hB : B.IsSymm)
+  结论: (hp : 对任意 x, x != 0 -> 0 < B x x) (hB : B.是Symm)
   证明: by
   rw [show B x y ^ 2 = B x y * B y x by rw [sq]; rw [← hB.eq]; rw [RingHom.id_apply]]
   exact apply_mul_apply_lt_iff_linearIndependent B hp x y

@@ -31,7 +31,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (a : PLift α)
+  签名: (f : α -> β) (a : 命题层提升 α)
   定义体: PLift.up (f a.down)
 
 @[simp]
@@ -52,7 +52,7 @@ theorem map_up
 中文:
 定理 map_up
   条件: (f : α -> β) (a : α)
-  结论: (PLift.up a).map f = PLift.up (f a)
+  结论: (命题层提升.up a).map f = 命题层提升.up (f a)
   证明: rfl
 -/
 theorem map_up (f : α -> β) (a : α) : (PLift.up a).map f = PLift.up (f a) :=
@@ -70,7 +70,7 @@ definition pure
 
 中文:
 定义 pure
-  签名: : α -> PLift α
+  签名: : α -> 命题层提升 α
   定义体: up
 -/
 protected def pure : α -> PLift α :=
@@ -88,7 +88,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: (f : PLift (α -> β)) (x : Unit -> PLift α)
+  签名: (f : 命题层提升 (α -> β)) (x : 单元 -> 命题层提升 α)
   定义体: PLift.up (f.down (x ()).down)
 
 @[simp]
@@ -109,7 +109,7 @@ theorem seq_up
 中文:
 定理 seq_up
   条件: (f : α -> β) (x : α)
-  结论: (PLift.up f).seq (fun _ => PLift.up x) = PLift.up (f x)
+  结论: (命题层提升.up f).seq (fun _ => 命题层提升.up x) = 命题层提升.up (f x)
   证明: rfl
 -/
 theorem seq_up (f : α -> β) (x : α) : (PLift.up f).seq (fun _ => PLift.up x) = PLift.up (f x) :=
@@ -127,7 +127,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (a : PLift α) (f : α -> PLift β)
+  签名: (a : 命题层提升 α) (f : α -> 命题层提升 β)
   定义体: f a.down
 
 @[simp]
@@ -147,8 +147,8 @@ theorem bind_up
 
 中文:
 定理 bind_up
-  条件: (a : α) (f : α -> PLift β)
-  结论: (PLift.up a).bind f = f a
+  条件: (a : α) (f : α -> 命题层提升 β)
+  结论: (命题层提升.up a).bind f = f a
   证明: rfl
 -/
 theorem bind_up (a : α) (f : α -> PLift β) : (PLift.up a).bind f = f a :=
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad PLift
+  签名: 单子 命题层提升
   定义体: @PLift.map
   pure := @PLift.pure
   seq := @PLift.seq
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor PLift
+  签名: Lawful函子 命题层提升
   定义体: @fun _ ⟨_⟩ => rfl
   comp_map := @fun _ _ _ _ _ ⟨_⟩ => rfl
   map_const := @fun _ _ => rfl
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulApplicative PLift
+  签名: 合法适用 命题层提升
   定义体: @fun _ _ _ _ => rfl
   seqRight_eq := @fun _ _ _ _ => rfl
   pure_seq := @fun _ _ _ ⟨_⟩ => rfl
@@ -249,7 +249,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad PLift
+  签名: 合法单子 命题层提升
   定义体: @fun _ _ _ ⟨_⟩ => rfl
   bind_map := @fun _ _ ⟨_⟩ ⟨_⟩ => rfl
   pure_bind := @fun _ _ _ _ => rfl
@@ -274,7 +274,7 @@ theorem rec.constant
 
 中文:
 定理 rec.constant
-  条件: {α : Sort u} {β : 类型v} (b : β)
+  条件: {α : 类型层 u} {β : 类型v} (b : β)
   证明: rfl
 -/
 theorem rec.constant {α : Sort u} {β : Type v} (b : β) :
@@ -298,7 +298,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (a : ULift.{u'} α)
+  签名: (f : α -> β) (a : 类型层提升.{u'} α)
   定义体: ULift.up.{v'} (f a.down)
 
 @[simp]
@@ -318,7 +318,7 @@ theorem map_up
 中文:
 定理 map_up
   条件: (f : α -> β) (a : α)
-  结论: (ULift.up.{u'} a).map f = ULift.up.{v'} (f a)
+  结论: (类型层提升.up.{u'} a).map f = 类型层提升.up.{v'} (f a)
   证明: rfl
 -/
 theorem map_up (f : α -> β) (a : α) : (ULift.up.{u'} a).map f = ULift.up.{v'} (f a) := rfl
@@ -335,7 +335,7 @@ definition pure
 
 中文:
 定义 pure
-  签名: : α -> ULift α
+  签名: : α -> 类型层提升 α
   定义体: up
 -/
 protected def pure : α -> ULift α :=
@@ -353,7 +353,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: {α β} (f : ULift (α -> β)) (x : Unit -> ULift α)
+  签名: {α β} (f : 类型层提升 (α -> β)) (x : 单元 -> 类型层提升 α)
   定义体: ULift.up.{u} (f.down (x ()).down)
 
 @[simp]
@@ -374,7 +374,7 @@ theorem seq_up
 中文:
 定理 seq_up
   条件: (f : α -> β) (x : α)
-  结论: (ULift.up f).seq (fun _ => ULift.up x) = ULift.up (f x)
+  结论: (类型层提升.up f).seq (fun _ => 类型层提升.up x) = 类型层提升.up (f x)
   证明: rfl
 -/
 theorem seq_up (f : α -> β) (x : α) : (ULift.up f).seq (fun _ => ULift.up x) = ULift.up (f x) :=
@@ -392,7 +392,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (a : ULift α) (f : α -> ULift β)
+  签名: (a : 类型层提升 α) (f : α -> 类型层提升 β)
   定义体: f a.down
 
 @[simp]
@@ -412,8 +412,8 @@ theorem bind_up
 
 中文:
 定理 bind_up
-  条件: (a : α) (f : α -> ULift β)
-  结论: (ULift.up a).bind f = f a
+  条件: (a : α) (f : α -> 类型层提升 β)
+  结论: (类型层提升.up a).bind f = f a
   证明: rfl
 -/
 theorem bind_up (a : α) (f : α -> ULift β) : (ULift.up a).bind f = f a :=
@@ -432,7 +432,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad ULift
+  签名: 单子 类型层提升
   定义体: @ULift.map
   pure := @ULift.pure
   seq := @ULift.seq
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor ULift
+  签名: Lawful函子 类型层提升
   定义体: @fun _ ⟨_⟩ => rfl
   comp_map := @fun _ _ _ _ _ ⟨_⟩ => rfl
   map_const := @fun _ _ => rfl
@@ -483,7 +483,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulApplicative ULift
+  签名: 合法适用 类型层提升
   定义体: @fun _ _ _ _ => rfl
   seqRight_eq := @fun _ _ _ _ => rfl
   pure_seq := @fun _ _ _ ⟨_⟩ => rfl
@@ -514,7 +514,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad ULift
+  签名: 合法单子 类型层提升
   定义体: @fun _ _ _ ⟨_⟩ => rfl
   bind_map := @fun _ _ ⟨_⟩ ⟨_⟩ => rfl
   pure_bind := @fun _ _ _ _ => rfl
@@ -539,7 +539,7 @@ theorem rec.constant
 
 中文:
 定理 rec.constant
-  条件: {α : 类型u} {β : Sort v} (b : β)
+  条件: {α : 类型u} {β : 类型层 v} (b : β)
   证明: rfl
 -/
 theorem rec.constant {α : Type u} {β : Sort v} (b : β) :

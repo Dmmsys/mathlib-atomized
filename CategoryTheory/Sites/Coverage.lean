@@ -182,7 +182,7 @@ lemma le_of_factorsThru_sieve
 
 中文:
 引理 le_of_factorsThru_sieve
-  条件: {X : C} (S : Presieve X) (T : Sieve X) (h : S.FactorsThru T)
+  条件: {X : C} (S : Presieve X) (T : 筛 X) (h : S.FactorsThru T)
   证明: by
   rintro Y f hf
   obtain ⟨W, i, e, h1, rfl⟩ := h hf
@@ -296,7 +296,7 @@ structure Coverage
     - pullback : forall ⦃X Y : C⦄ (f : Y ⟶ X) (S : Presieve X) (_ : S in coverings X), exists (T : Presieve Y), T in coverings Y ∧ T.FactorsThruAlong S f
 
 中文:
-结构 Coverage
+结构 余verage
   参数: extends Precoverage C
   继承: Precoverage C
   公理与运算 (1 个):
@@ -320,7 +320,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Coverage C) (fun _ => (X : C) -> Set (Presieve X))
+  签名: CoeFun (余verage C) (fun _ => (X : C) -> 集合 (Presieve X))
   定义体: J.coverings
 
 Depends on / 依赖: J.coverings, coverings
@@ -345,8 +345,8 @@ definition GrothendieckTopology.toCoverage
     exact J.pullback_stable _ hS
 
 中文:
-定义 GrothendieckTopology.toCoverage
-  签名: (J : GrothendieckTopology C)
+定义 Grothendieck拓扑.toCoverage
+  签名: (J : Grothendieck拓扑 C)
   定义体: { S | Sieve.generate S in J X }
   pullback := by
     intro X Y f S (hS : Sieve.generate S in J X)
@@ -375,7 +375,7 @@ lemma GrothendieckTopology.mem_toCoverage_iff
   proof: Iff.rfl
 
 中文:
-引理 GrothendieckTopology.mem_toCoverage_iff
+引理 Grothendieck拓扑.mem_toCoverage_iff
   结论: {X : C} {S : Presieve X}
   证明: Iff.rfl
 
@@ -400,11 +400,11 @@ inductive Saturate
 
 中文:
 归纳类型 Saturate
-  参数: (K : Coverage C)
+  参数: (K : 余verage C)
   构造子 (3 个):
-    - of: (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (Sieve.generate S)
+    - of: (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (筛.generate S)
     - top: (X : C) : Saturate K X ⊤
-    - transitive: (X : C) (R S : Sieve X) : Saturate K X R -> (对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> Saturate K Y (S.pullback f)) -> Saturate K X S
+    - transitive: (X : C) (R S : 筛 X) : Saturate K X R -> (对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> Saturate K Y (S.pullback f)) -> Saturate K X S
 -/
 inductive Saturate (K : Coverage C) : (X : C) -> Sieve X -> Prop where
   | of (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (Sieve.generate S)
@@ -429,7 +429,7 @@ lemma eq_top_pullback
 
 中文:
 引理 eq_top_pullback
-  条件: {X Y : C} {S T : Sieve X} (h : S <= T) (f : Y ⟶ X) (hf : S f)
+  条件: {X Y : C} {S T : 筛 X} (h : S <= T) (f : Y ⟶ X) (hf : S f)
   证明: by
   ext Z g
   simp only [Sieve.pullback_apply, Sieve.top_apply, iff_true]
@@ -464,7 +464,7 @@ lemma saturate_of_superset
 
 中文:
 引理 saturate_of_superset
-  结论: (K : Coverage C) {X : C} {S T : Sieve X} (h : S <= T)
+  结论: (K : 余verage C) {X : C} {S T : 筛 X} (h : S <= T)
   证明: by
   apply Saturate.transitive _ _ _ hS
   intro Y g hg
@@ -503,7 +503,7 @@ lemma Saturate.pullback
 
 中文:
 引理 Saturate.pullback
-  结论: (K : Coverage C) {X Y : C} (f : Y ⟶ X) {S : Sieve X}
+  结论: (K : 余verage C) {X Y : C} (f : Y ⟶ X) {S : 筛 X}
   证明: by
   induction h with
   | of X S hS =>
@@ -546,7 +546,7 @@ lemma saturate_iff_saturate_toPrecoverage
 
 中文:
 引理 saturate_iff_saturate_toPrecoverage
-  条件: (K : Coverage C) {X : C} {S : Sieve X}
+  条件: (K : 余verage C) {X : C} {S : 筛 X}
   证明: by
   constructor <;> intro hS
   · induction hS <;> grind [Precoverage.Saturate]
@@ -572,7 +572,7 @@ definition toGrothendieck
 
 中文:
 定义 toGrothendieck
-  签名: (K : Coverage C)
+  签名: (K : 余verage C)
   定义体: K.toPrecoverage.toGrothendieck.copy (fun X => Set.ofPred (K.Saturate X)) by
     ext
     exact K.saturate_iff_saturate_toPrecoverage.symm
@@ -594,7 +594,7 @@ lemma mem_toGrothendieck
 
 中文:
 引理 mem_toGrothendieck
-  条件: {K : Coverage C} {X : C} {S : Sieve X}
+  条件: {K : 余verage C} {X : C} {S : 筛 X}
   证明: .rfl
 -/
 lemma mem_toGrothendieck {K : Coverage C} {X : C} {S : Sieve X} :
@@ -614,7 +614,7 @@ le_antisymm _ _ h1 h2 := Coverage.ext funext
 
 中文:
 实例 :
-  签名: PartialOrder (Coverage C)
+  签名: 偏序 (余verage C)
   定义体: A.coverings <= B.coverings
   le_refl _ _ := le_refl _
   le_trans _ _ _ h1 h2 X := le_trans (h1 X) (h2 X)
@@ -652,7 +652,7 @@ exact H _ Saturate.of _ _ hS
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (toGrothendieck (C := C)) (GrothendieckTopology.toCoverage (C := C)) where
+  签名: : Galois嵌入 (toGrothendieck (C := C)) (Grothendieck拓扑.toCoverage (C := C)) where
   定义体: toGrothendieck K
   choice_eq := fun _ _ => rfl
   le_l_u J X S hS := by
@@ -707,7 +707,7 @@ theorem toGrothendieck_eq_sInf
 
 中文:
 定理 toGrothendieck_eq_sInf
-  条件: (K : Coverage C)
+  条件: (K : 余verage C)
   结论: toGrothendieck K =
   证明: by
   apply le_antisymm
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (Coverage C)
+  签名: SemilatticeSup (余verage C)
   定义体: { coverings := fun B => x B union y B
     pullback := by
       rintro X Y f S (hx | hy)
@@ -792,7 +792,7 @@ lemma sup_covering
 
 中文:
 引理 sup_covering
-  条件: (x y : Coverage C) (B : C)
+  条件: (x y : 余verage C) (B : C)
   证明: rfl
 -/
 lemma sup_covering (x y : Coverage C) (B : C) :
@@ -809,7 +809,7 @@ theorem mem_toGrothendieck_sieves_of_superset
 
 中文:
 定理 mem_toGrothendieck_sieves_of_superset
-  结论: (K : Coverage C) {X : C} {S : Sieve X}
+  结论: (K : 余verage C) {X : C} {S : 筛 X}
   证明: K.saturate_of_superset ((Sieve.generate_le_iff _ _).mpr h) (Coverage.Saturate.of X _ hR)
 
 Depends on / 依赖: Coverage, Coverage.Saturate.of, K.saturate_of_superset, Saturate, Sieve.generate_le_iff, generate_le_iff, saturate_of_superset
@@ -833,7 +833,7 @@ definition Pretopology.toCoverage
 
 中文:
 定义 Pretopology.toCoverage
-  签名: [HasPullbacks C] (J : Pretopology C)
+  签名: [有Pullbacks C] (J : Pretopology C)
   定义体: J
   pullback _ _ f R hR := ⟨R.pullbackArrows f, J.pullbacks _ _ hR, .pullbackArrows f R⟩
 
@@ -854,7 +854,7 @@ lemma Pretopology.mem_toCoverage
 
 中文:
 引理 Pretopology.mem_toCoverage
-  条件: [HasPullbacks C] (J : Pretopology C) {X : C} (S : Presieve X)
+  条件: [有Pullbacks C] (J : Pretopology C) {X : C} (S : Presieve X)
   证明: .rfl
 -/
 lemma Pretopology.mem_toCoverage [HasPullbacks C] (J : Pretopology C) {X : C} (S : Presieve X) :
@@ -877,7 +877,7 @@ lemma Pretopology.toGrothendieck_toCoverage
 
 中文:
 引理 Pretopology.toGrothendieck_toCoverage
-  条件: [HasPullbacks C] (J : Pretopology C)
+  条件: [有Pullbacks C] (J : Pretopology C)
   证明: by
   ext T S
   rw [mem_toGrothendieck]; rw [Coverage.mem_toGrothendieck]
@@ -923,7 +923,7 @@ definition Precoverage.toCoverage
 
 中文:
 定义 Precoverage.toCoverage
-  签名: (J : Precoverage C) [J.HasPullbacks] [J.IsStableUnderBaseChange]
+  签名: (J : Precoverage C) [J.有Pullbacks] [J.是StableUnderBaseChange]
   定义体: J
   pullback X Y f S hS := by
     have : S.HasPullbacks f := J.hasPullbacks_of_mem _ hS
@@ -948,7 +948,7 @@ lemma Precoverage.toCoverage_le_toCoverage
 
 中文:
 引理 Precoverage.toCoverage_le_toCoverage
-  结论: {J : Precoverage C} [J.HasPullbacks]
+  结论: {J : Precoverage C} [J.有Pullbacks]
   证明: rfl
 -/
 lemma Precoverage.toCoverage_le_toCoverage {J : Precoverage C} [J.HasPullbacks]
@@ -968,7 +968,7 @@ lemma Precoverage.toGrothendieck_toCoverage
 
 中文:
 引理 Precoverage.toGrothendieck_toCoverage
-  结论: {J : Precoverage C} [J.HasPullbacks]
+  结论: {J : Precoverage C} [J.有Pullbacks]
   证明: by
   grind [toGrothendieck_eq_sInf, Coverage.toGrothendieck_eq_sInf,
     Precoverage.toCoverage_le_toCoverage]
@@ -991,8 +991,8 @@ lemma Coverage.toGrothendieck_toPrecoverage
   rw [Coverage.toGrothendieck]; rw [GrothendieckTopology.copy_eq]
 
 中文:
-引理 Coverage.toGrothendieck_toPrecoverage
-  条件: (J : Coverage C)
+引理 余verage.toGrothendieck_toPrecoverage
+  条件: (J : 余verage C)
   证明: by
   rw [Coverage.toGrothendieck]; rw [GrothendieckTopology.copy_eq]
 
@@ -1023,7 +1023,7 @@ theorem isSheaf_coverage
 
 中文:
 定理 isSheaf_coverage
-  条件: (K : Coverage C) (P : Cᵒᵖ ⥤ 类型)
+  条件: (K : 余verage C) (P : Cᵒᵖ ⥤ 类型)
   证明: by
   rw [← toGrothendieck_toPrecoverage]; rw [Precoverage.isSheaf_toGrothendieck_iff]
   constructor
@@ -1070,7 +1070,7 @@ theorem isSheaf_sup
 
 中文:
 定理 isSheaf_sup
-  条件: (K L : Coverage C) (P : Cᵒᵖ ⥤ 类型)
+  条件: (K L : 余verage C) (P : Cᵒᵖ ⥤ 类型)
   证明: by
   refine ⟨fun h => ⟨Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_left) h,
       Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_right) h⟩, fun h => ?_⟩
@@ -1175,7 +1175,7 @@ theorem isSheaf_iff_isLimit_coverage
 
 中文:
 定理 isSheaf_iff_isLimit_coverage
-  条件: (K : Coverage C) (P : Cᵒᵖ ⥤ D)
+  条件: (K : 余verage C) (P : Cᵒᵖ ⥤ D)
   证明: by
   simp only [Presheaf.IsSheaf, Presieve.isSheaf_coverage, isLimit_iff_isSheafFor,
     ← Presieve.isSheafFor_iff_generate]
@@ -1203,7 +1203,7 @@ theorem isSheaf_sup
 
 中文:
 定理 isSheaf_sup
-  条件: (K L : Coverage C) (P : Cᵒᵖ ⥤ D)
+  条件: (K L : 余verage C) (P : Cᵒᵖ ⥤ D)
   证明: ⟨fun h => ⟨fun E => ((Presieve.isSheaf_sup K L _).mp (h E)).1, fun E =>
     ((Presieve.isSheaf_sup K L _).mp (h E)).2⟩,
       fun ⟨h₁, h₂⟩ E => (Presieve.isSheaf_sup K L _).mpr ⟨h₁ E, h₂ E⟩⟩

@@ -60,13 +60,13 @@ structure ModuleCat
     - [isModule : Module R carrier]
 
 中文:
-结构 ModuleCat
+结构 模范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [isAddCommGroup : AddCommGroup carrier]
-    - [isModule : Module R carrier]
+    - [isAddCommGroup : 加法交换群 carrier]
+    - [isModule : 模 R carrier]
 -/
 structure ModuleCat where
   private mk ::
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (ModuleCat.{v} R) (类型v)
+  签名: CoeSort (模范畴.{v} R) (类型v)
   定义体: ⟨ModuleCat.carrier⟩
 
 Depends on / 依赖: ModuleCat, ModuleCat.carrier, carrier
@@ -113,7 +113,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [AddCommGroup X] [Module R X]
+  签名: (X : 类型v) [加法交换群 X] [模 R X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type v) [AddCommGroup X] [Module R X] : ModuleCat.{v} R :=
@@ -130,7 +130,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [Ring X] [Module R X]
+  条件: (X : 类型v) [环 X] [模 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -156,8 +156,8 @@ structure Hom
     - hom' : M ->ₗ[R] N
 
 中文:
-结构 Hom
-  参数: (M N : ModuleCat.{v} R)
+结构 态射
+  参数: (M N : 模范畴.{v} R)
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : M ->ₗ[R] N
@@ -183,7 +183,7 @@ instance moduleCategory
 
 中文:
 实例 moduleCategory
-  签名: : Category.{v, max (v + 1) u} (ModuleCat.{v} R) where
+  签名: : 范畴.{v, 最大值 (v + 1) u} (模范畴.{v} R) where
   定义体: Hom M N
   id _ := ⟨LinearMap.id⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (ModuleCat.{v} R) (· ->ₗ[R] ·)
+  签名: 余ncrete范畴 (模范畴.{v} R) (· ->ₗ[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -229,8 +229,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := ModuleCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: {A B : ModuleCat.{v} R} (f : Hom A B)
+缩写 态射.hom
+  签名: {A B : 模范畴.{v} R} (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := ModuleCat R) f
 -/
 abbrev Hom.hom {A B : ModuleCat.{v} R} (f : Hom A B) :=
@@ -246,7 +246,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
+  签名: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y] [模 R Y]
   定义体: ConcreteCategory.ofHom (C := ModuleCat R) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, ModuleCat
@@ -266,8 +266,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : ModuleCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : 模范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -293,8 +293,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {M : ModuleCat.{v} R}
-  结论: (𝟙 M : M ⟶ M).hom = LinearMap.id
+  条件: {M : 模范畴.{v} R}
+  结论: (𝟙 M : M ⟶ M).hom = 线性映射.id
   证明: rfl
 -/
 lemma hom_id {M : ModuleCat.{v} R} : (𝟙 M : M ⟶ M).hom = LinearMap.id := rfl
@@ -311,7 +311,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (M : ModuleCat.{v} R) (x : M)
+  条件: (M : 模范畴.{v} R) (x : M)
   证明: by simp
 
 @[simp]
@@ -330,7 +330,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O)
+  条件: {M N O : 模范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O)
   证明: rfl
 -/
 lemma hom_comp {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) :
@@ -348,7 +348,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
+  条件: {M N O : 模范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
   证明: by simp
 
 @[ext]
@@ -368,7 +368,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
+  条件: {M N : 模范畴.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -388,7 +388,7 @@ lemma hom_bijective
 
 中文:
 引理 hom_bijective
-  条件: {M N : ModuleCat.{v} R}
+  条件: {M N : 模范畴.{v} R}
   证明: by cases f; cases g; simpa using! h
   right f := ⟨⟨f⟩, rfl⟩
 -/
@@ -407,7 +407,7 @@ lemma hom_injective
 
 中文:
 引理 hom_injective
-  条件: {M N : ModuleCat.{v} R}
+  条件: {M N : 模范畴.{v} R}
   证明: hom_bijective.injective
 
 Depends on / 依赖: hom_bijective, hom_bijective.injective, injective
@@ -428,7 +428,7 @@ lemma hom_surjective
 
 中文:
 引理 hom_surjective
-  条件: {M N : ModuleCat.{v} R}
+  条件: {M N : 模范畴.{v} R}
   证明: hom_bijective.surjective
 
 @[simp]
@@ -452,7 +452,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {X Y : 类型v} [AddCommGroup X] [Module R X] [AddCommGroup Y]
+  结论: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y]
   证明: rfl
 
 @[simp]
@@ -473,7 +473,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {M N : ModuleCat.{v} R} (f : M ⟶ N)
+  条件: {M N : 模范畴.{v} R} (f : M ⟶ N)
   证明: rfl
 
 @[simp]
@@ -495,8 +495,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型v} [AddCommGroup M] [Module R M]
-  结论: ofHom LinearMap.id = 𝟙 (of R M)
+  条件: {M : 类型v} [加法交换群 M] [模 R M]
+  结论: ofHom 线性映射.id = 𝟙 (of R M)
   证明: rfl
 
 @[simp]
@@ -514,7 +514,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N O : 类型v} [AddCommGroup M] [AddCommGroup N] [AddCommGroup O] [Module R M]
+  结论: {M N O : 类型v} [加法交换群 M] [加法交换群 N] [加法交换群 O] [模 R M]
   证明: rfl
 -/
 lemma ofHom_comp {M N O : Type v} [AddCommGroup M] [AddCommGroup N] [AddCommGroup O] [Module R M]
@@ -532,7 +532,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {M N : 类型v} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
+  结论: {M N : 类型v} [加法交换群 M] [加法交换群 N] [模 R M] [模 R N]
   证明: rfl
 -/
 lemma ofHom_apply {M N : Type v} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
@@ -550,7 +550,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {M N : ModuleCat.{v} R} (e : M ≅ N) (x : M)
+  条件: {M N : 模范畴.{v} R} (e : M ≅ N) (x : M)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -570,7 +570,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {M N : ModuleCat.{v} R} (e : M ≅ N) (x : N)
+  条件: {M N : 模范畴.{v} R} (e : M ≅ N) (x : N)
   结论: e.hom (e.inv x) = x
   证明: by
   simp
@@ -591,7 +591,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: {M N : ModuleCat.{v} R}
+  签名: {M N : 模范畴.{v} R}
   定义体: Hom.hom
   invFun := ofHom
 
@@ -619,7 +619,7 @@ definition equivalenceSemimoduleCat
 
 中文:
 定义 equivalenceSemimoduleCat
-  签名: : ModuleCat.{v} R ≌ SemimoduleCat.{v} R where
+  签名: : 模范畴.{v} R ≌ Semimodule范畴.{v} R where
   定义体: { obj M := .of R M
     map f := SemimoduleCat.ofHom f.hom' }
   inverse := letI := Module.addCommMonoidToAddCommGroup
@@ -655,8 +655,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: {M : ModuleCat.{v} R}
-  结论: (forget (ModuleCat.{v} R)).obj M = M
+  条件: {M : 模范畴.{v} R}
+  结论: (forget (模范畴.{v} R)).obj M = M
   证明: rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-02")]
@@ -674,7 +674,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {M N : ModuleCat.{v} R} (f : M ⟶ N)
+  条件: {M N : 模范畴.{v} R} (f : M ⟶ N)
   证明: rfl
 -/
 lemma forget_map {M N : ModuleCat.{v} R} (f : M ⟶ N) :
@@ -694,7 +694,7 @@ instance hasForgetToAddCommGroup
 
 中文:
 实例 hasForgetToAddCommGroup
-  签名: : HasForget₂ (ModuleCat R) AddCommGrpCat where
+  签名: : 有Forget₂ (模范畴 R) 加法交换群范畴 where
   定义体: { obj := fun M => AddCommGrpCat.of M
       map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
 
@@ -718,7 +718,7 @@ theorem forget₂_obj
 
 中文:
 定理 forget₂_obj
-  条件: (X : ModuleCat R)
+  条件: (X : 模范畴 R)
   证明: rfl
 -/
 theorem forget₂_obj (X : ModuleCat R) :
@@ -737,7 +737,7 @@ theorem forget₂_obj_moduleCat_of
 
 中文:
 定理 forget₂_obj_moduleCat_of
-  条件: (X : 类型v) [AddCommGroup X] [Module R X]
+  条件: (X : 类型v) [加法交换群 X] [模 R X]
   证明: rfl
 
 @[simp]
@@ -759,7 +759,7 @@ theorem forget₂_map
 
 中文:
 定理 forget₂_map
-  条件: (X Y : ModuleCat R) (f : X ⟶ Y)
+  条件: (X Y : 模范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_map (X Y : ModuleCat R) (f : X ⟶ Y) :
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ModuleCat R)
+  签名: 可居 (模范畴 R)
   定义体: ⟨of R PUnit⟩
 
 Depends on / 依赖: f.hom
@@ -795,7 +795,7 @@ theorem of_coe
 
 中文:
 定理 of_coe
-  条件: (X : ModuleCat R)
+  条件: (X : 模范畴 R)
   结论: of R X = X
   证明: rfl
 -/
@@ -820,8 +820,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (M : ModuleCat R) [Subsingleton M]
-  结论: IsZero M where
+  条件: (M : 模范畴 R) [子单例 M]
+  结论: 是零 M where
   证明: ⟨⟨⟨ofHom (0 : M ->ₗ[R] X)⟩, fun f => by
     ext x
     rw [Subsingleton.elim x (0 : M)]
@@ -851,7 +851,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject (ModuleCat.{v} R)
+  签名: 有ZeroObject (模范畴.{v} R)
   定义体: ⟨⟨of R PUnit, isZero_of_subsingleton _⟩⟩
 
 Depends on / 依赖: isZero_of_subsingleton
@@ -885,8 +885,8 @@ definition LinearEquiv.toModuleIso
   inv_hom_id := by ext; apply e.right_inv
 
 中文:
-定义 LinearEquiv.toModuleIso
-  签名: {g₁ : AddCommGroup X₁} {g₂ : AddCommGroup X₂} {m₁ : Module R X₁}
+定义 线性等价.toModuleIso
+  签名: {g₁ : 加法交换群 X₁} {g₂ : 加法交换群 X₂} {m₁ : 模 R X₁}
   定义体: ofHom (e : X₁ ->ₗ[R] X₂)
   inv := ofHom (e.symm : X₂ ->ₗ[R] X₁)
   hom_inv_id := by ext; apply e.left_inv
@@ -985,7 +985,7 @@ definition linearEquivIsoModuleIso
 
 中文:
 定义 linearEquivIsoModuleIso
-  签名: {X Y : 类型u} [AddCommGroup X] [AddCommGroup Y] [Module R X]
+  签名: {X Y : 类型u} [加法交换群 X] [加法交换群 Y] [模 R X]
   定义体: ↾fun e => e.toModuleIso
   inv := ↾fun i => i.toLinearEquiv
 
@@ -1016,7 +1016,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M ⟶ N)
+  签名: 加法 (M ⟶ N)
   定义体: ⟨f.hom + g.hom⟩
 
 Depends on / 依赖: f.hom, g.hom
@@ -1053,7 +1053,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ⟶ N)
+  签名: 零 (M ⟶ N)
   定义体: ⟨0⟩
 -/
 instance : Zero (M ⟶ N) where
@@ -1086,7 +1086,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (M ⟶ N)
+  签名: 标量乘法 自然数 (M ⟶ N)
   定义体: ⟨n • f.hom⟩
 
 Depends on / 依赖: f.hom
@@ -1123,7 +1123,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M ⟶ N)
+  签名: 取负 (M ⟶ N)
   定义体: ⟨-f.hom⟩
 
 Depends on / 依赖: f.hom
@@ -1160,7 +1160,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M ⟶ N)
+  签名: 减法 (M ⟶ N)
   定义体: ⟨f.hom - g.hom⟩
 
 Depends on / 依赖: f.hom, g.hom
@@ -1197,7 +1197,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (M ⟶ N)
+  签名: 标量乘法 整数 (M ⟶ N)
   定义体: ⟨n • f.hom⟩
 
 Depends on / 依赖: f.hom
@@ -1233,7 +1233,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (M ⟶ N)
+  签名: 加法交换群 (M ⟶ N)
   定义体: Function.Injective.addCommGroup (Hom.hom) hom_injective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1254,7 +1254,7 @@ lemma hom_sum
 
 中文:
 引理 hom_sum
-  条件: {ι : 类型} (f : ι -> (M ⟶ N)) (s : Finset ι)
+  条件: {ι : 类型} (f : ι -> (M ⟶ N)) (s : 有限集 ι)
   证明: map_sum ({ toFun := ModuleCat.Hom.hom, map_zero' := ModuleCat.hom_zero, map_add' := hom_add } :
     (M ⟶ N) ->+ (M ->ₗ[R] N)) _ _
 -/
@@ -1272,7 +1272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (ModuleCat.{v} R)
+  签名: 预加性 (模范畴.{v} R)
 -/
 instance : Preadditive (ModuleCat.{v} R) where
 
@@ -1327,8 +1327,8 @@ theorem subsingleton_of_isZero
 
 中文:
 定理 subsingleton_of_isZero
-  条件: (h : IsZero M)
-  结论: Subsingleton M
+  条件: (h : 是零 M)
+  结论: 子单例 M
   证明: by
   refine subsingleton_of_forall_eq 0 (fun x => ?_)
   rw [← LinearMap.id_apply (R := R) x]; rw [← ModuleCat.hom_id]
@@ -1354,7 +1354,7 @@ lemma isZero_iff_subsingleton
 
 中文:
 引理 isZero_iff_subsingleton
-  结论: IsZero M ↔ Subsingleton M where
+  结论: 是零 M ↔ 子单例 M where
   证明: subsingleton_of_isZero
   mpr _ := isZero_of_subsingleton M
 
@@ -1379,7 +1379,7 @@ lemma isZero_of_iff_subsingleton
 
 中文:
 引理 isZero_of_iff_subsingleton
-  条件: {M : 类型} [AddCommGroup M] [Module R M]
+  条件: {M : 类型} [加法交换群 M] [模 R M]
   证明: isZero_iff_subsingleton
 
 @[simp]
@@ -1402,7 +1402,7 @@ lemma ofHom_zero
 
 中文:
 引理 ofHom_zero
-  结论: {M N : 类型v} [AddCommGroup M] [Module R M]
+  结论: {M N : 类型v} [加法交换群 M] [模 R M]
   证明: rfl
 
 @[simp]
@@ -1421,7 +1421,7 @@ lemma ofHom_add
 
 中文:
 引理 ofHom_add
-  结论: {M N : 类型v} [AddCommGroup M] [Module R M]
+  结论: {M N : 类型v} [加法交换群 M] [模 R M]
   证明: rfl
 -/
 lemma ofHom_add {M N : Type v} [AddCommGroup M] [Module R M]
@@ -1446,7 +1446,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (M ⟶ N)
+  签名: 标量乘法 S (M ⟶ N)
   定义体: ⟨c • f.hom⟩
 
 Depends on / 依赖: f.hom
@@ -1489,8 +1489,8 @@ instance Hom.instModule
     (fun _ _ => rfl)
 
 中文:
-实例 Hom.instModule
-  签名: : Module S (M ⟶ N)
+实例 态射.instModule
+  签名: : 模 S (M ⟶ N)
   定义体: Function.Injective.module S
     { toFun := Hom.hom, map_zero' := hom_zero, map_add' := hom_add }
     hom_injective
@@ -1574,7 +1574,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear S (ModuleCat.{v} S)
+  签名: 线性 S (模范畴.{v} S)
   定义体: ModuleCat.Algebra.instLinear
 
 Depends on / 依赖: Algebra, ModuleCat, ModuleCat.Algebra.instLinear, instLinear
@@ -1591,7 +1591,7 @@ lemma lsmul_eq_smul_id
 
 中文:
 引理 lsmul_eq_smul_id
-  条件: (M : ModuleCat.{v} S) (s : S)
+  条件: (M : 模范畴.{v} S) (s : S)
   证明: rfl
 -/
 lemma lsmul_eq_smul_id (M : ModuleCat.{v} S) (s : S) :
@@ -1610,7 +1610,7 @@ theorem Iso.homCongr_eq_arrowCongr
   proof: rfl
 
 中文:
-定理 Iso.homCongr_eq_arrowCongr
+定理 同构.homCongr_eq_arrowCongr
   条件: (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y)
   证明: rfl
 -/
@@ -1629,7 +1629,7 @@ theorem Iso.conj_eq_conj
   proof: rfl
 
 中文:
-定理 Iso.conj_eq_conj
+定理 同构.conj_eq_conj
   条件: (i : X ≅ X') (f : End X)
   证明: rfl
 -/
@@ -1685,7 +1685,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: : R ->+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where
+  签名: : R ->+* End ((forget₂ (模范畴 R) 加法交换群范畴).obj M) where
   定义体: AddCommGrpCat.ofHom
     { toFun := fun (m : M) => r • m
       map_zero' := by rw [smul_zero]
@@ -1718,7 +1718,7 @@ lemma smul_naturality
 
 中文:
 引理 smul_naturality
-  条件: {M N : ModuleCat.{v} R} (f : M ⟶ N) (r : R)
+  条件: {M N : 模范畴.{v} R} (f : M ⟶ N) (r : R)
   证明: by
   ext x
   exact (f.hom.map_smul r x).symm
@@ -1749,8 +1749,8 @@ definition smulNatTrans
   map_add' _ _ := by cat_disch
 
 中文:
-定义 smulNatTrans
-  签名: : R ->+* End (forget₂ (ModuleCat R) AddCommGrpCat) where
+定义 smul自然数Trans
+  签名: : R ->+* End (forget₂ (模范畴 R) 加法交换群范畴) where
   定义体: { app := fun M => M.smul r
       naturality := fun _ _ _ => smul_naturality _ r }
   map_one' := by cat_disch
@@ -1782,7 +1782,7 @@ definition mkOfSMul'
 
 中文:
 定义 mkOfSMul'
-  签名: {A : AddCommGrpCat} (_ : R ->+* End A)
+  签名: {A : 加法交换群范畴} (_ : R ->+* End A)
   定义体: A
 -/
 def mkOfSMul' {A : AddCommGrpCat} (_ : R ->+* End A) := A
@@ -1801,7 +1801,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (mkOfSMul' φ)
+  签名: 加法交换群 (mkOfSMul' φ)
   定义体: inferInstanceAs AddCommGroup A
 
 Depends on / 依赖: AddCommGroup
@@ -1821,7 +1821,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (mkOfSMul' φ)
+  签名: 标量乘法 R (mkOfSMul' φ)
   定义体: ⟨fun r (x : A) => (show A ⟶ A from φ r) x⟩
 
 @[simp]
@@ -1861,7 +1861,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (mkOfSMul' φ)
+  签名: 模 R (mkOfSMul' φ)
   定义体: map_zero (N := A) _
   smul_add _ _ _ := map_add (N := A) _ _ _
   one_smul := by simp
@@ -1978,7 +1978,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
+  签名: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
   定义体: LinearEquiv.toModuleIso
     { __ := φ.addCommGroupIsoToAddEquiv
       map_smul' r x := congr($(hφ r) x).symm }
@@ -2007,7 +2007,7 @@ lemma isoMk_hom
 
 中文:
 引理 isoMk_hom
-  结论: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
+  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
   证明: rfl
 
 @[simp]
@@ -2030,7 +2030,7 @@ lemma isoMk_inv
 
 中文:
 引理 isoMk_inv
-  结论: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
+  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
   证明: rfl
 
 @[simp]
@@ -2053,7 +2053,7 @@ lemma isoMk_symm
 
 中文:
 引理 isoMk_symm
-  结论: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
+  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
   证明: rfl
 -/
 lemma isoMk_symm (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
@@ -2075,7 +2075,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget (ModuleCat.{v} R)).ReflectsIsomorphisms
+  签名: (forget (模范畴.{v} R)).反映同构
   定义体: (inferInstance : IsIso ((LinearEquiv.mk f.hom
       (asIso ((forget (ModuleCat R)).map f)).toEquiv.invFun
       (Equiv.left_inv _) (Equiv.right_inv _)).toModuleIso).hom)
@@ -2102,7 +2102,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}).ReflectsIsomorphisms
+  签名: (forget₂ (模范畴.{v} R) 加法交换群范畴.{v}).反映同构
   定义体: by
     have : IsIso ((forget _).map f) := by
       change IsIso ((forget _).map ((forget₂ _ AddCommGrpCat).map f))
@@ -2138,7 +2138,7 @@ definition ofHom₂
 
 中文:
 定义 ofHom₂
-  签名: {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
+  签名: {M N P : 模范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
   定义体: ofHom homLinearEquiv.symm.toLinearMap ∘ₗ f
 
 Depends on / 依赖: homLinearEquiv, homLinearEquiv.symm.toLinearMap, toLinearMap
@@ -2158,8 +2158,8 @@ definition Hom.hom₂
   body: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
 
 中文:
-定义 Hom.hom₂
-  签名: {M N P : ModuleCat.{u} R} (f : M ⟶ (of R (N ⟶ P)))
+定义 态射.hom₂
+  签名: {M N P : 模范畴.{u} R} (f : M ⟶ (of R (N ⟶ P)))
   定义体: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
 
 Depends on / 依赖: homLinearEquiv, homLinearEquiv.toLinearMap, toLinearMap
@@ -2176,8 +2176,8 @@ lemma Hom.hom₂_ofHom₂
   proof: rfl
 
 中文:
-引理 Hom.hom₂_ofHom₂
-  条件: {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
+引理 态射.hom₂_ofHom₂
+  条件: {M N P : 模范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
   证明: rfl
 -/
 @[simp] lemma Hom.hom₂_ofHom₂ {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) :
@@ -2193,7 +2193,7 @@ lemma ofHom₂_hom₂
 
 中文:
 引理 ofHom₂_hom₂
-  条件: {M N P : ModuleCat.{u} R} (f : M ⟶ of R (N ⟶ P))
+  条件: {M N P : 模范畴.{u} R} (f : M ⟶ of R (N ⟶ P))
   证明: rfl
 -/
 @[simp] lemma ofHom₂_hom₂ {M N P : ModuleCat.{u} R} (f : M ⟶ of R (N ⟶ P)) :
@@ -2212,7 +2212,7 @@ theorem LinearMap.comp_id_moduleCat
   proof: by simp
 
 中文:
-定理 LinearMap.comp_id_moduleCat
+定理 线性映射.comp_id_moduleCat
   证明: by simp
 -/
 @[simp] theorem LinearMap.comp_id_moduleCat
@@ -2227,7 +2227,7 @@ theorem LinearMap.id_moduleCat_comp
   proof: by simp
 
 中文:
-定理 LinearMap.id_moduleCat_comp
+定理 线性映射.id_moduleCat_comp
   证明: by simp
 -/
 @[simp] theorem LinearMap.id_moduleCat_comp

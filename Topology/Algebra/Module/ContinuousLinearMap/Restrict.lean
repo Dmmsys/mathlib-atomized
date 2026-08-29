@@ -55,7 +55,7 @@ definition subtypeL
 
 中文:
 定义 subtypeL
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: p.subtype
 
 @[simp, norm_cast]
@@ -79,7 +79,7 @@ theorem toLinearMap_subtypeL
 
 中文:
 定理 toLinearMap_subtypeL
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: (p.subtypeL : p ->ₗ[R] M) = p.subtype
   证明: rfl
 
@@ -102,7 +102,7 @@ alias coe_subtypeL' := coe_subtypeL
 
 中文:
 定理 coe_subtypeL
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: ⇑p.subtypeL = p.subtype
   证明: rfl
 
@@ -125,7 +125,7 @@ theorem subtypeL_apply
 
 中文:
 定理 subtypeL_apply
-  条件: (p : Submodule R M) (x : p)
+  条件: (p : 子模 R M) (x : p)
   结论: p.subtypeL x = x
   证明: by simp
 -/
@@ -142,8 +142,8 @@ theorem isEmbedding_subtype
 
 中文:
 定理 isEmbedding_subtype
-  条件: (p : Submodule R M)
-  结论: Topology.IsEmbedding p.subtype
+  条件: (p : 子模 R M)
+  结论: 拓扑.是嵌入 p.subtype
   证明: .subtypeVal
 
 Depends on / 依赖: subtypeVal
@@ -160,8 +160,8 @@ theorem isEmbedding_subtypeL
 
 中文:
 定理 isEmbedding_subtypeL
-  条件: (p : Submodule R M)
-  结论: Topology.IsEmbedding p.subtypeL
+  条件: (p : 子模 R M)
+  结论: 拓扑.是嵌入 p.subtypeL
   证明: .subtypeVal
 
 Depends on / 依赖: subtypeVal
@@ -178,7 +178,7 @@ theorem isClosedEmbedding_subtype
 
 中文:
 定理 isClosedEmbedding_subtype
-  条件: (p : Submodule R M) (hp : IsClosed (p : Set M))
+  条件: (p : 子模 R M) (hp : 是闭集 (p : 集合 M))
   证明: .subtypeVal hp
 
 Depends on / 依赖: subtypeVal
@@ -197,7 +197,7 @@ theorem isClosedEmbedding_subtypeL
 
 中文:
 定理 isClosedEmbedding_subtypeL
-  条件: (p : Submodule R M) (hp : IsClosed (p : Set M))
+  条件: (p : 子模 R M) (hp : 是闭集 (p : 集合 M))
   证明: .subtypeVal hp
 
 @[deprecated range_subtype (since := "2026-05-06")]
@@ -221,7 +221,7 @@ theorem range_subtypeL
 
 中文:
 定理 range_subtypeL
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: (p.subtypeL : p ->ₗ[R] M).range = p
   证明: Submodule.range_subtype _
 
@@ -244,7 +244,7 @@ theorem ker_subtypeL
 
 中文:
 定理 ker_subtypeL
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: (p.subtypeL : p ->ₗ[R] M).ker = ⊥
   证明: Submodule.ker_subtype _
 
@@ -283,7 +283,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₁ M₁)
+  签名: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₁ M₁)
   定义体: f ∘SL p.subtypeL
 
 @[simp]
@@ -304,7 +304,7 @@ theorem toLinearMap_domRestrict
 
 中文:
 定理 toLinearMap_domRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₁ M₁)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₁ M₁)
   证明: rfl
 -/
 theorem toLinearMap_domRestrict (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₁ M₁) :
@@ -321,7 +321,7 @@ lemma coe_domRestrict
 
 中文:
 引理 coe_domRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₁ M₁)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₁ M₁)
   证明: rfl
 -/
 lemma coe_domRestrict (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₁ M₁) :
@@ -341,7 +341,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p)
+  签名: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p)
   定义体: f.continuous.subtype_mk _
   toLinearMap := (f : M₁ ->ₛₗ[σ₁₂] M₂).codRestrict p h
 
@@ -365,7 +365,7 @@ theorem toLinearMap_codRestrict
 
 中文:
 定理 toLinearMap_codRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p)
   证明: rfl
 -/
 theorem toLinearMap_codRestrict (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : forall x, f x in p) :
@@ -384,7 +384,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p)
   证明: rfl
 
 @[simp]
@@ -404,7 +404,7 @@ theorem coe_codRestrict_apply
 
 中文:
 定理 coe_codRestrict_apply
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p) (x)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p) (x)
   证明: rfl
 -/
 theorem coe_codRestrict_apply (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : forall x, f x in p) (x) :
@@ -423,7 +423,7 @@ theorem ker_codRestrict
 
 中文:
 定理 ker_codRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p)
   证明: f.toLinearMap.ker_codRestrict p h
 
 @[simp]
@@ -447,7 +447,7 @@ theorem subtypeL_comp_codRestrict
 
 中文:
 定理 subtypeL_comp_codRestrict
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : 对任意 x, f x in p)
+  条件: (f : M₁ ->SL[σ₁₂] M₂) (p : 子模 R₂ M₂) (h : 对任意 x, f x in p)
   证明: rfl
 
 @[simp]
@@ -542,7 +542,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : M₁ ->SL[σ₁₂] M₂) {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
+  签名: (f : M₁ ->SL[σ₁₂] M₂) {p : 子模 R₁ M₁} {q : 子模 R₂ M₂}
   定义体: (f.domRestrict p).codRestrict q SetLike.forall.2 h
 
 @[simp, norm_cast]
@@ -566,7 +566,7 @@ theorem toLinearMap_restrict
 
 中文:
 定理 toLinearMap_restrict
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁} {q : 子模 R₂ M₂}
   证明: rfl
 
 @[simp]
@@ -587,7 +587,7 @@ theorem coe_restrict_apply
 
 中文:
 定理 coe_restrict_apply
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem coe_restrict_apply {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
@@ -604,7 +604,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem restrict_apply {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
@@ -622,7 +622,7 @@ lemma restrict_comp
 
 中文:
 引理 restrict_comp
-  结论: {p : Submodule R₁ M₁} {p₂ : Submodule R₂ M₂} {p₃ : Submodule R₃ M₃}
+  结论: {p : 子模 R₁ M₁} {p₂ : 子模 R₂ M₂} {p₃ : 子模 R₃ M₃}
   证明: rfl
 
 Depends on / 依赖: hg.comp
@@ -643,7 +643,7 @@ theorem subtypeL_comp_restrict
 
 中文:
 定理 subtypeL_comp_restrict
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem subtypeL_comp_restrict {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁} {q : Submodule R₂ M₂}
@@ -660,7 +660,7 @@ theorem restrict_eq_codRestrict_domRestrict
 
 中文:
 定理 restrict_eq_codRestrict_domRestrict
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁}
   证明: rfl
 -/
 theorem restrict_eq_codRestrict_domRestrict {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁}
@@ -678,7 +678,7 @@ theorem restrict_eq_domRestrict_codRestrict
 
 中文:
 定理 restrict_eq_domRestrict_codRestrict
-  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁}
+  结论: {f : M₁ ->SL[σ₁₂] M₂} {p : 子模 R₁ M₁}
   证明: rfl
 -/
 theorem restrict_eq_domRestrict_codRestrict {f : M₁ ->SL[σ₁₂] M₂} {p : Submodule R₁ M₁}
@@ -708,7 +708,7 @@ definition projKerOfRightInverse
 
 中文:
 定义 projKerOfRightInverse
-  签名: [IsTopologicalAddGroup M₁] (f₁ : M₁ ->SL[σ₁₂] M₂) (f₂ : M₂ ->SL[σ₂₁] M₁)
+  签名: [是拓扑加群 M₁] (f₁ : M₁ ->SL[σ₁₂] M₂) (f₂ : M₂ ->SL[σ₂₁] M₁)
   定义体: (.id R₁ M₁ - f₂ ∘SL f₁).codRestrict (LinearMap.ker f₁.toLinearMap) fun x => by simp [h (f₁ x)]
 
 @[simp]
@@ -732,7 +732,7 @@ theorem coe_projKerOfRightInverse_apply
 
 中文:
 定理 coe_projKerOfRightInverse_apply
-  结论: [IsTopologicalAddGroup M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
+  结论: [是拓扑加群 M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
   证明: rfl
 
 @[simp]
@@ -757,7 +757,7 @@ theorem projKerOfRightInverse_apply_idem
 
 中文:
 定理 projKerOfRightInverse_apply_idem
-  结论: [IsTopologicalAddGroup M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
+  结论: [是拓扑加群 M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
   证明: by
   ext1
   simp
@@ -781,7 +781,7 @@ theorem projKerOfRightInverse_comp_inv
 
 中文:
 定理 projKerOfRightInverse_comp_inv
-  结论: [IsTopologicalAddGroup M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
+  结论: [是拓扑加群 M₁] (f₁ : M₁ ->SL[σ₁₂] M₂)
   证明: Subtype.ext_iff.2 by simp [h y]
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff

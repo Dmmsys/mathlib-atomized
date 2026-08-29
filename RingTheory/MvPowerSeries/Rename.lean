@@ -489,7 +489,7 @@ theorem rename_id
 
 中文:
 定理 rename_id
-  结论: rename id = AlgHom.id R (MvPowerSeries σ R)
+  结论: rename id = 代数态射.id R (MvPowerSeries σ R)
   证明: by
   ext _ y
   simpa [coeff_rename] using Finset.sum_eq_single y (by simp) (by simp)
@@ -560,7 +560,7 @@ theorem rename_injective
 中文:
 定理 rename_injective
   条件: (e : σ ↪ τ)
-  结论: Function.Injective (rename (R := R) e)
+  结论: 函数.单射 (rename (R := R) e)
   证明: by
   intro _ _ h; ext x
   simpa using MvPowerSeries.ext_iff.mp h (embDomain e x)
@@ -626,7 +626,7 @@ theorem rename_coe
 
 中文:
 定理 rename_coe
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: rename f (p : MvPowerSeries σ R) = p.rename f
   证明: by
   induction p using MvPolynomial.induction_on with
@@ -689,7 +689,7 @@ theorem renameEquiv_refl
 
 中文:
 定理 renameEquiv_refl
-  结论: renameEquiv R (Equiv.refl σ) = AlgEquiv.refl
+  结论: renameEquiv R (等价.refl σ) = 代数等价.refl
   证明: AlgEquiv.ext (by simp)
 
 @[simp]
@@ -1017,7 +1017,7 @@ theorem killCompl_X_eq_zero
 
 中文:
 定理 killCompl_X_eq_zero
-  条件: {t : τ} (h : t ∉ Set.range e)
+  条件: {t : τ} (h : t ∉ 集合.range e)
   证明: by
   replace h : single t 1 ∉ Set.range (embDomain e) := by
     rwa [mem_range_embDomain_iff, support_single _ (by simp), Finset.coe_singleton,
@@ -1046,7 +1046,7 @@ theorem killCompl_comp_rename
 
 中文:
 定理 killCompl_comp_rename
-  结论: (killCompl e).comp (rename e) = AlgHom.id R _
+  结论: (killCompl e).comp (rename e) = 代数态射.id R _
   证明: by
   ext; simp [coeff_killCompl]
 
@@ -1117,8 +1117,8 @@ lemma HasSubst.X_comp
       contrapose; intro _ _; classical simp_all [coeff_X])
 
 中文:
-引理 HasSubst.X_comp
-  结论: HasSubst (X ∘ f : σ -> MvPowerSeries τ R) where
+引理 有Subst.X_comp
+  结论: 有Subst (X ∘ f : σ -> MvPowerSeries τ R) where
   证明: by simp
   coeff_zero d := Set.Finite.subset (d.support.finite_toSet.biUnion'
     (fun i _ => TendstoCofinite.finite_preimage_singleton f i)) (fun x => by

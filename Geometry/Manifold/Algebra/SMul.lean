@@ -47,8 +47,8 @@ class ContMDiffVAdd
     - contMDiff_vadd : CMDiff n fun p : G × M => p.1 +ᵥ p.2
 
 中文:
-类 ContMDiffVAdd
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
+类 余ntMDiffVAdd
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
   公理与运算 (1 个):
     - contMDiff_vadd : CMDiff n fun p : G × M => p.1 +ᵥ p.2
 -/
@@ -79,8 +79,8 @@ class ContMDiffSMul
     - contMDiff_smul : CMDiff n fun p : G × M => p.1 • p.2
 
 中文:
-类 ContMDiffSMul
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
+类 余ntMDiffSMul
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
   公理与运算 (1 个):
     - contMDiff_smul : CMDiff n fun p : G × M => p.1 • p.2
 -/
@@ -117,8 +117,8 @@ theorem ContMDiffSMul.of_le
 @[to_additive]
 
 中文:
-定理 ContMDiffSMul.of_le
-  结论: [SMul G M] {n m : 自然数∞ω} (h : n <= m)
+定理 余ntMDiffSMul.of_le
+  结论: [标量乘法 G M] {n m : 自然数∞ω} (h : n <= m)
   证明: ⟨contMDiff_smul.of_le h⟩
 
 @[to_additive]
@@ -138,7 +138,7 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: G M] {n
   定义体: .of_le ENat.LEInfty.out
 
@@ -162,7 +162,7 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: G M] {n
   定义体: .of_le le_top
 
@@ -185,8 +185,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: G M] [ContinuousSMul G M] : ContMDiffSMul I I' 0 G M
+实例 [标量乘法
+  签名: G M] [连续标量乘法 G M] : 余ntMDiffSMul I I' 0 G M
   定义体: ⟨contMDiff_zero_iff.2 continuous_smul⟩
 
 @[to_additive]
@@ -206,8 +206,8 @@ instance [SMul
   body: .of_le one_le_two
 
 中文:
-实例 [SMul
-  签名: G M] [ContMDiffSMul I I' 2 G M] : ContMDiffSMul I I' 1 G M
+实例 [标量乘法
+  签名: G M] [余ntMDiffSMul I I' 2 G M] : 余ntMDiffSMul I I' 1 G M
   定义体: .of_le one_le_two
 
 Depends on / 依赖: of_le, one_le_two
@@ -228,8 +228,8 @@ lemma ContMDiffSMul.continuousSMul
   proof: ⟨(contMDiff_smul (I := I) (I' := I') (n := n)).continuous⟩
 
 中文:
-引理 ContMDiffSMul.continuousSMul
-  条件: [SMul G M] (n : 自然数∞ω) [ContMDiffSMul I I' n G M]
+引理 余ntMDiffSMul.continuousSMul
+  条件: [标量乘法 G M] (n : 自然数∞ω) [余ntMDiffSMul I I' n G M]
   证明: ⟨(contMDiff_smul (I := I) (I' := I') (n := n)).continuous⟩
 
 Depends on / 依赖: contMDiff_smul, continuous
@@ -247,8 +247,8 @@ instance ContMDiffMul.contMDiffSMul
   body: contMDiff_mul
 
 中文:
-实例 ContMDiffMul.contMDiffSMul
-  签名: [Mul G] {n : 自然数∞ω} [ContMDiffMul I n G]
+实例 余ntMDiffMul.contMDiffSMul
+  签名: [乘法 G] {n : 自然数∞ω} [余ntMDiffMul I n G]
   定义体: contMDiff_mul
 
 Depends on / 依赖: contMDiff_mul
@@ -350,8 +350,8 @@ theorem ContMDiffSMul.contMDiff_const_smul
   proof: contMDiff_const.smul (I := I) contMDiff_id
 
 中文:
-定理 ContMDiffSMul.contMDiff_const_smul
-  条件: {n : 自然数∞ω} [ContMDiffSMul I I' n G M] (g : G)
+定理 余ntMDiffSMul.contMDiff_const_smul
+  条件: {n : 自然数∞ω} [余ntMDiffSMul I I' n G M] (g : G)
   证明: contMDiff_const.smul (I := I) contMDiff_id
 
 Depends on / 依赖: contMDiff_const, contMDiff_const.smul, contMDiff_id
@@ -373,8 +373,8 @@ instance Prod.contMDiffSMul
 contMDiff_fst.smul contMDiff_snd.comp contMDiff_snd
 
 中文:
-实例 Prod.contMDiffSMul
-  签名: [SMul G M] [SMul G N] {n : 自然数∞ω} [ContMDiffSMul I I' n G M]
+实例 积类型.contMDiffSMul
+  签名: [标量乘法 G M] [标量乘法 G N] {n : 自然数∞ω} [余ntMDiffSMul I I' n G M]
   定义体: (contMDiff_fst.smul <| contMDiff_fst.comp contMDiff_snd).prodMk
 contMDiff_fst.smul contMDiff_snd.comp contMDiff_snd
 
@@ -396,8 +396,8 @@ lemma IsScalarTower.contMDiffSMul
     exact (contMDiff_fst.smul contMDiff_const).smul (I := I'') contMDiff_snd
 
 中文:
-引理 IsScalarTower.contMDiffSMul
-  结论: (G' : 类型) [TopologicalSpace G'] [ChartedSpace H'' G']
+引理 标量塔.contMDiffSMul
+  结论: (G' : 类型) [拓扑空间 G'] [Charted空间 H'' G']
   证明: by
     suffices CMDiff n (fun p : G × M => (p.1 • (1 : G')) • p.2) by simpa
     exact (contMDiff_fst.smul contMDiff_const).smul (I := I'') contMDiff_snd
@@ -426,8 +426,8 @@ theorem MulAction.contMDiffSMul_compHom
   exact ⟨(hf.comp contMDiff_fst).smul contMDiff_snd⟩
 
 中文:
-定理 MulAction.contMDiffSMul_compHom
-  结论: [Monoid G] [MulAction G M] {n : 自然数∞ω}
+定理 乘法作用.contMDiffSMul_compHom
+  结论: [幺半群 G] [乘法作用 G M] {n : 自然数∞ω}
   证明: MulAction.compHom _ f
     ContMDiffSMul I'' I' n G' M := by
   let _ : MulAction G' M := MulAction.compHom _ f
@@ -483,7 +483,7 @@ definition Diffeomorph.smul
 @[to_additive (attr := simp)]
 
 中文:
-定义 Diffeomorph.smul
+定义 微分同胚.smul
   签名: : M ≃ₘ^n⟮I', I'⟯ M where
   定义体: MulAction.toPerm g
   contMDiff_toFun := ContMDiffSMul.contMDiff_const_smul (I := I) g
@@ -511,7 +511,7 @@ lemma Diffeomorph.smul_toHomeomorph
 @[to_additive (attr := simp)]
 
 中文:
-引理 Diffeomorph.smul_toHomeomorph
+引理 微分同胚.smul_toHomeomorph
   证明: ContMDiffSMul.continuousSMul (I := I) (I' := I') n
     (Diffeomorph.smul I I' n g).toHomeomorph = Homeomorph.smul (α := M) g :=
   rfl
@@ -538,9 +538,9 @@ lemma Diffeomorph.smul_apply
 @[to_additive (attr := simp)]
 
 中文:
-引理 Diffeomorph.smul_apply
+引理 微分同胚.smul_apply
   条件: (x : M)
-  结论: Diffeomorph.smul I I' n g x = g • x
+  结论: 微分同胚.smul I I' n g x = g • x
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -560,9 +560,9 @@ lemma Diffeomorph.smul_symm_apply
 @[to_additive]
 
 中文:
-引理 Diffeomorph.smul_symm_apply
+引理 微分同胚.smul_symm_apply
   条件: (x : M)
-  结论: (Diffeomorph.smul I I' n g).symm x = g⁻¹ • x
+  结论: (微分同胚.smul I I' n g).symm x = g⁻¹ • x
   证明: rfl
 
 @[to_additive]
@@ -578,7 +578,7 @@ lemma Diffeomorph.smul_symm
   proof: Diffeomorph.ext fun _ => rfl
 
 中文:
-引理 Diffeomorph.smul_symm
+引理 微分同胚.smul_symm
   证明: Diffeomorph.ext fun _ => rfl
 
 Depends on / 依赖: Diffeomorph, Diffeomorph.ext

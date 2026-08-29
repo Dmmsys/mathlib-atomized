@@ -364,7 +364,7 @@ lemma zpow'_ofNat
   exact_mod_cast hn
 
 中文:
-引理 zpow'_ofNat
+引理 zpow'_of自然数
   条件: (a : α) {n : 自然数} (hn : n != 0)
   结论: zpow' a n = a ^ n
   证明: by
@@ -394,7 +394,7 @@ lemma mul_zpow'
 
 中文:
 引理 mul_zpow'
-  条件: [CommGroupWithZero α] (n : 整数) (a b : α)
+  条件: [带零交换群 α] (n : 整数) (a b : α)
   证明: by
   by_cases ha : a = 0
   · simp [ha]
@@ -423,7 +423,7 @@ theorem list_prod_zpow'
 
 中文:
 定理 list_prod_zpow'
-  条件: [CommGroupWithZero α] {r : 整数} {l : List α}
+  条件: [带零交换群 α] {r : 整数} {l : 列表 α}
   证明: let fr : α ->* α := ⟨⟨fun b => zpow' b r, one_zpow' r⟩, (mul_zpow' r)⟩
   map_list_prod fr l
 
@@ -448,7 +448,7 @@ theorem subst_add
 
 中文:
 定理 subst_add
-  结论: {M : 类型} [Semiring M] {x₁ x₂ X₁ X₂ Y y a : M}
+  结论: {M : 类型} [半环 M] {x₁ x₂ X₁ X₂ Y y a : M}
   证明: by
   subst h₁ h₂ H_atom hy
   simp [mul_add]
@@ -473,7 +473,7 @@ theorem subst_sub
 
 中文:
 定理 subst_sub
-  结论: {M : 类型} [Ring M] {x₁ x₂ X₁ X₂ Y y a : M}
+  结论: {M : 类型} [环 M] {x₁ x₂ X₁ X₂ Y y a : M}
   证明: by
   subst h₁ h₂ H_atom hy
   simp [mul_sub]
@@ -497,7 +497,7 @@ theorem eq_div_of_eq_one_of_subst
 
 中文:
 定理 eq_div_of_eq_one_of_subst
-  结论: {M : 类型} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1)
+  结论: {M : 类型} [DivInvOne幺半群 M] {l l_n n : M} (h : l = l_n / 1)
   证明: by
   rw [h]; rw [hn]; rw [div_one]
 
@@ -519,7 +519,7 @@ theorem eq_div_of_eq_one_of_subst'
 
 中文:
 定理 eq_div_of_eq_one_of_subst'
-  结论: {M : 类型} [DivInvOneMonoid M] {l l_d d : M} (h : l = 1 / l_d)
+  结论: {M : 类型} [DivInvOne幺半群 M] {l l_d d : M} (h : l = 1 / l_d)
   证明: by
   rw [h]; rw [hn]; rw [one_div]
 
@@ -541,7 +541,7 @@ theorem eq_div_of_subst
 
 中文:
 定理 eq_div_of_subst
-  结论: {M : 类型} [Div M] {l l_n l_d n d : M} (h : l = l_n / l_d) (hn : l_n = n)
+  结论: {M : 类型} [除法 M] {l l_n l_d n d : M} (h : l = l_n / l_d) (hn : l_n = n)
   证明: by
   rw [h]; rw [hn]; rw [hd]
 -/
@@ -561,7 +561,7 @@ theorem eq_mul_of_eq_eq_eq_mul
 
 中文:
 定理 eq_mul_of_eq_eq_eq_mul
-  结论: {M : 类型} [Mul M] {a b c D e f : M}
+  结论: {M : 类型} [乘法 M] {a b c D e f : M}
   证明: by
   rw [h₁]; rw [h₂]; rw [h₃]; rw [h₄]
 -/
@@ -582,7 +582,7 @@ theorem eq_eq_cancel_eq
 
 中文:
 定理 eq_eq_cancel_eq
-  结论: {M : 类型} [MonoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M}
+  结论: {M : 类型} [带零幺半群 M] [是左消去MulZero M] {e₁ e₂ f₁ f₂ L : M}
   证明: by
   subst H₁ H₂
   rw [mul_right_inj' HL]
@@ -608,7 +608,7 @@ theorem le_eq_cancel_le
 
 中文:
 定理 le_eq_cancel_le
-  结论: {M : 类型} [MonoidWithZero M] [PartialOrder M] [PosMulMono M]
+  结论: {M : 类型} [带零幺半群 M] [偏序 M] [正乘递增 M]
   证明: by
   subst H₁ H₂
   apply Iff.eq
@@ -637,7 +637,7 @@ theorem lt_eq_cancel_lt
 
 中文:
 定理 lt_eq_cancel_lt
-  结论: {M : 类型} [MonoidWithZero M] [PartialOrder M] [PosMulStrictMono M]
+  结论: {M : 类型} [带零幺半群 M] [偏序 M] [正乘严格递增 M]
   证明: by
   subst H₁ H₂
   apply Iff.eq
@@ -712,7 +712,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: [GroupWithZero M] (l : NF M)
+  签名: [带零群 M] (l : NF M)
   定义体: (l.map (fun (⟨r, x⟩ : Int × M) => zpow' x r)).prod
 
 Depends on / 依赖: l.map
@@ -733,7 +733,7 @@ theorem eval_cons
 
 中文:
 定理 eval_cons
-  条件: [CommGroupWithZero M] (p : 整数 × M) (l : NF M)
+  条件: [带零交换群 M] (p : 整数 × M) (l : NF M)
   证明: by
   unfold eval cons
   simp [mul_comm]
@@ -756,7 +756,7 @@ theorem cons_ne_zero
 
 中文:
 定理 cons_ne_zero
-  条件: [GroupWithZero M] (r : 整数) {x : M} (hx : x != 0) {l : NF M} (hl : l.eval != 0)
+  条件: [带零群 M] (r : 整数) {x : M} (hx : x != 0) {l : NF M} (hl : l.eval != 0)
   证明: by
   unfold eval cons
   apply mul_ne_zero ?_ hl
@@ -785,7 +785,7 @@ theorem cons_pos
 
 中文:
 定理 cons_pos
-  结论: [GroupWithZero M] [PartialOrder M] [PosMulStrictMono M] [PosMulReflectLT M]
+  结论: [带零群 M] [偏序 M] [正乘严格递增 M] [正乘反映严格偏序 M]
   证明: by
   unfold eval cons
   apply mul_pos ?_ hl
@@ -815,7 +815,7 @@ theorem atom_eq_eval
 
 中文:
 定理 atom_eq_eval
-  条件: [GroupWithZero M] (x : M)
+  条件: [带零群 M] (x : M)
   结论: x = NF.eval [(1, x)]
   证明: by simp [eval]
 -/
@@ -833,7 +833,7 @@ theorem one_eq_eval
 
 中文:
 定理 one_eq_eval
-  条件: [GroupWithZero M]
+  条件: [带零群 M]
   结论: (1:M) = NF.eval (M := M) []
   证明: (rfl)
 -/
@@ -851,7 +851,7 @@ theorem mul_eq_eval₁
 
 中文:
 定理 mul_eq_eval₁
-  结论: [CommGroupWithZero M] (a₁ : 整数 × M) {a₂ : 整数 × M} {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] (a₁ : 整数 × M) {a₂ : 整数 × M} {l₁ l₂ l : NF M}
   证明: by
   simp only [eval_cons, ← h]
   ac_rfl
@@ -876,7 +876,7 @@ theorem mul_eq_eval₂
 
 中文:
 定理 mul_eq_eval₂
-  结论: [CommGroupWithZero M] (r₁ r₂ : 整数) (x : M) {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] (r₁ r₂ : 整数) (x : M) {l₁ l₂ l : NF M}
   证明: by
   simp only [eval_cons, ← h, zpow'_add]
   ac_rfl
@@ -901,7 +901,7 @@ theorem mul_eq_eval₃
 
 中文:
 定理 mul_eq_eval₃
-  结论: [CommGroupWithZero M] {a₁ : 整数 × M} (a₂ : 整数 × M) {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] {a₁ : 整数 × M} (a₂ : 整数 × M) {l₁ l₂ l : NF M}
   证明: by
   simp only [eval_cons, ← h]
   ac_rfl
@@ -925,7 +925,7 @@ theorem mul_eq_eval
 
 中文:
 定理 mul_eq_eval
-  结论: [GroupWithZero M] {l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval)
+  结论: [带零群 M] {l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval)
   证明: by
   rw [hx₁]; rw [hx₂]; rw [h]
 -/
@@ -946,7 +946,7 @@ theorem div_eq_eval₁
 
 中文:
 定理 div_eq_eval₁
-  结论: [CommGroupWithZero M] (a₁ : 整数 × M) {a₂ : 整数 × M} {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] (a₁ : 整数 × M) {a₂ : 整数 × M} {l₁ l₂ l : NF M}
   证明: by
   simp only [eval_cons, ← h, div_eq_mul_inv]
   ac_rfl
@@ -971,7 +971,7 @@ theorem div_eq_eval₂
 
 中文:
 定理 div_eq_eval₂
-  结论: [CommGroupWithZero M] (r₁ r₂ : 整数) (x : M) {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] (r₁ r₂ : 整数) (x : M) {l₁ l₂ l : NF M}
   证明: by
   simp only [← h, eval_cons, div_eq_mul_inv, mul_inv, ← zpow'_neg, sub_eq_add_neg, zpow'_add]
   ac_rfl
@@ -995,7 +995,7 @@ theorem div_eq_eval₃
 
 中文:
 定理 div_eq_eval₃
-  结论: [CommGroupWithZero M] {a₁ : 整数 × M} (a₂ : 整数 × M) {l₁ l₂ l : NF M}
+  结论: [带零交换群 M] {a₁ : 整数 × M} (a₂ : 整数 × M) {l₁ l₂ l : NF M}
   证明: by
   simp only [eval_cons, ← h, zpow'_neg, div_eq_mul_inv, mul_inv, mul_assoc]
 
@@ -1017,7 +1017,7 @@ theorem div_eq_eval
 
 中文:
 定理 div_eq_eval
-  结论: [GroupWithZero M] {l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval)
+  结论: [带零群 M] {l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval)
   证明: by
   rw [hx₁]; rw [hx₂]; rw [h]
 -/
@@ -1037,7 +1037,7 @@ theorem eval_mul_eval_cons
 
 中文:
 定理 eval_mul_eval_cons
-  结论: [CommGroupWithZero M] (n : 整数) (e : M) {L l l' : NF M}
+  结论: [带零交换群 M] (n : 整数) (e : M) {L l l' : NF M}
   证明: by
   rw [eval_cons]; rw [eval_cons]; rw [← h]; rw [mul_assoc]
 
@@ -1059,7 +1059,7 @@ theorem eval_mul_eval_cons_zero
 
 中文:
 定理 eval_mul_eval_cons_zero
-  结论: [CommGroupWithZero M] {e : M} {L l l' l₀ : NF M}
+  结论: [带零交换群 M] {e : M} {L l l' l₀ : NF M}
   证明: by
   rw [← eval_mul_eval_cons 0 e h]; rw [h']
 
@@ -1082,7 +1082,7 @@ theorem eval_cons_mul_eval
 
 中文:
 定理 eval_cons_mul_eval
-  结论: [CommGroupWithZero M] (n : 整数) (e : M) {L l l' : NF M}
+  结论: [带零交换群 M] (n : 整数) (e : M) {L l l' : NF M}
   证明: by
   rw [eval_cons]; rw [eval_cons]; rw [← h]
   ac_rfl
@@ -1107,7 +1107,7 @@ theorem eval_cons_mul_eval_cons_neg
 
 中文:
 定理 eval_cons_mul_eval_cons_neg
-  结论: [CommGroupWithZero M] (n : 整数) {e : M} (he : e != 0)
+  结论: [带零交换群 M] (n : 整数) {e : M} (he : e != 0)
   证明: by
   rw [mul_eq_eval₂ n (-n) e h]
   simp [zpow'_zero_of_ne_zero he]
@@ -1132,7 +1132,7 @@ theorem cons_eq_div_of_eq_div
 
 中文:
 定理 cons_eq_div_of_eq_div
-  结论: [CommGroupWithZero M] (n : 整数) (e : M) {t t_n t_d : NF M}
+  结论: [带零交换群 M] (n : 整数) (e : M) {t t_n t_d : NF M}
   证明: by
   simp only [eval_cons, h, div_eq_mul_inv]
   ac_rfl
@@ -1157,7 +1157,7 @@ theorem cons_eq_div_of_eq_div'
 
 中文:
 定理 cons_eq_div_of_eq_div'
-  结论: [CommGroupWithZero M] (n : 整数) (e : M) {t t_n t_d : NF M}
+  结论: [带零交换群 M] (n : 整数) (e : M) {t t_n t_d : NF M}
   证明: by
   simp only [eval_cons, h, zpow'_neg, div_eq_mul_inv, mul_inv]
   ac_rfl
@@ -1182,7 +1182,7 @@ theorem cons_zero_eq_div_of_eq_div
 
 中文:
 定理 cons_zero_eq_div_of_eq_div
-  结论: [CommGroupWithZero M] (e : M) {t t_n t_d : NF M}
+  结论: [带零交换群 M] (e : M) {t t_n t_d : NF M}
   证明: by
   simp only [eval_cons, h, div_eq_mul_inv, mul_inv, ← zpow'_neg, ← add_neg_cancel (1:Int), zpow'_add]
   ac_rfl
@@ -1205,7 +1205,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (NF M)
+  签名: 取逆 (NF M)
   定义体: l.map fun (a, x) => (-a, x)
 
 Depends on / 依赖: l.map
@@ -1229,7 +1229,7 @@ theorem eval_inv
 
 中文:
 定理 eval_inv
-  条件: [CommGroupWithZero M] (l : NF M)
+  条件: [带零交换群 M] (l : NF M)
   结论: (l⁻¹).eval = l.eval⁻¹
   证明: by
   simp +instances only [NF.eval, List.map_map, NF.instInv, List.prod_inv]
@@ -1257,7 +1257,7 @@ theorem one_div_eq_eval
 
 中文:
 定理 one_div_eq_eval
-  条件: [CommGroupWithZero M] (l : NF M)
+  条件: [带零交换群 M] (l : NF M)
   结论: 1 / l.eval = (l⁻¹).eval
   证明: by
   simp [eval_inv]
@@ -1278,7 +1278,7 @@ theorem inv_eq_eval
 
 中文:
 定理 inv_eq_eval
-  条件: [CommGroupWithZero M] {l : NF M} {x : M} (h : x = l.eval)
+  条件: [带零交换群 M] {l : NF M} {x : M} (h : x = l.eval)
   证明: by
   rw [h]; rw [eval_inv]
 
@@ -1298,7 +1298,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (NF M) 整数
+  签名: 幂 (NF M) 整数
   定义体: l.map fun (a, x) => (r * a, x)
 
 Depends on / 依赖: l.map
@@ -1339,7 +1339,7 @@ theorem eval_zpow'
 
 中文:
 定理 eval_zpow'
-  条件: [CommGroupWithZero M] (l : NF M) (r : 整数)
+  条件: [带零交换群 M] (l : NF M) (r : 整数)
   证明: by
   unfold NF.eval at ⊢
   simp only [zpow_apply, list_prod_zpow', map_map]
@@ -1368,7 +1368,7 @@ theorem zpow_eq_eval
 
 中文:
 定理 zpow_eq_eval
-  结论: [CommGroupWithZero M] {l : NF M} {r : 整数} (hr : r != 0) {x : M}
+  结论: [带零交换群 M] {l : NF M} {r : 整数} (hr : r != 0) {x : M}
   证明: by
   rw [← zpow'_of_ne_zero_right x r hr]; rw [eval_zpow']; rw [hx]
 
@@ -1389,7 +1389,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (NF M) 自然数
+  签名: 幂 (NF M) 自然数
   定义体: l.map fun (a, x) => (r * a, x)
 
 Depends on / 依赖: l.map
@@ -1426,7 +1426,7 @@ theorem eval_pow
 
 中文:
 定理 eval_pow
-  条件: [CommGroupWithZero M] (l : NF M) (r : 自然数)
+  条件: [带零交换群 M] (l : NF M) (r : 自然数)
   结论: (l ^ r).eval = zpow' l.eval r
   证明: eval_zpow' l r
 
@@ -1447,7 +1447,7 @@ theorem pow_eq_eval
 
 中文:
 定理 pow_eq_eval
-  结论: [CommGroupWithZero M] {l : NF M} {r : 自然数} (hr : r != 0) {x : M}
+  结论: [带零交换群 M] {l : NF M} {r : 自然数} (hr : r != 0) {x : M}
   证明: by
   rw [eval_pow]; rw [hx]
   rw [zpow'_ofNat _ hr]
@@ -1471,7 +1471,7 @@ theorem eval_cons_of_pow_eq_zero
 
 中文:
 定理 eval_cons_of_pow_eq_zero
-  结论: [CommGroupWithZero M] {r : 整数} (hr : r = 0) {x : M} (hx : x != 0)
+  结论: [带零交换群 M] {r : 整数} (hr : r = 0) {x : M} (hx : x != 0)
   证明: by
   simp [hr, zpow'_zero_of_ne_zero hx]
 
@@ -1493,7 +1493,7 @@ theorem eval_cons_eq_eval_of_eq_of_eq
 
 中文:
 定理 eval_cons_eq_eval_of_eq_of_eq
-  结论: [CommGroupWithZero M] (r : 整数) (x : M) {t t' l' : NF M}
+  结论: [带零交换群 M] (r : 整数) (x : M) {t t' l' : NF M}
   证明: by
   rw [← h']; rw [eval_cons]; rw [eval_cons]; rw [h]
 
@@ -1529,7 +1529,7 @@ inductive Sign
   参数: (M : Q(类型v))
   构造子 (2 个):
     - plus: 
-    - minus: (iM : Q(Field $M))
+    - minus: (iM : Q(域 $M))
 -/
 inductive Sign (M : Q(Type v))
   | plus
@@ -1565,7 +1565,7 @@ definition Sign.mulRight
 
 中文:
 定义 Sign.mulRight
-  签名: (iM : Q(CommGroupWithZero $M)) (c y : Q($M)) (g : Sign M)
+  签名: (iM : Q(带零交换群 $M)) (c y : Q($M)) (g : Sign M)
   定义体: do
   match (dependent := true) g with
   | .plus => pure q(rfl)
@@ -1601,7 +1601,7 @@ definition Sign.mul
 
 中文:
 定义 Sign.mul
-  签名: (iM : Q(CommGroupWithZero $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M)
+  签名: (iM : Q(带零交换群 $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M)
   定义体: do
   match (dependent := true) g₁, g₂ with
   | .plus, .plus => pure ⟨.plus, q(rfl)⟩
@@ -1643,7 +1643,7 @@ definition Sign.inv
 
 中文:
 定义 Sign.inv
-  签名: (iM : Q(CommGroupWithZero $M)) (y : Q($M)) (g : Sign M)
+  签名: (iM : Q(带零交换群 $M)) (y : Q($M)) (g : Sign M)
   定义体: do
   match (dependent := true) g with
   | .plus => pure q(rfl)
@@ -1679,7 +1679,7 @@ definition Sign.div
 
 中文:
 定义 Sign.div
-  签名: (iM : Q(CommGroupWithZero $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M)
+  签名: (iM : Q(带零交换群 $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M)
   定义体: do
   match (dependent := true) g₁, g₂ with
   | .plus, .plus => pure ⟨.plus, q(rfl)⟩
@@ -1721,7 +1721,7 @@ definition Sign.neg
 
 中文:
 定义 Sign.neg
-  签名: (iM : Q(Field $M)) (y : Q($M)) (g : Sign M)
+  签名: (iM : Q(域 $M)) (y : Q($M)) (g : Sign M)
   定义体: do
   match (dependent := true) g with
   | .plus => pure ⟨.minus iM, q(rfl)⟩
@@ -1757,7 +1757,7 @@ definition Sign.pow
 
 中文:
 定义 Sign.pow
-  签名: (iM : Q(CommGroupWithZero $M)) (y : Q($M)) (g : Sign M) (s : 自然数)
+  签名: (iM : Q(带零交换群 $M)) (y : Q($M)) (g : Sign M) (s : 自然数)
   定义体: do
   match (dependent := true) g with
   | .plus => pure ⟨.plus, q(rfl)⟩
@@ -1803,7 +1803,7 @@ definition Sign.zpow
 
 中文:
 定义 Sign.zpow
-  签名: (iM : Q(CommGroupWithZero $M)) (y : Q($M)) (g : Sign M) (s : 整数)
+  签名: (iM : Q(带零交换群 $M)) (y : Q($M)) (g : Sign M) (s : 整数)
   定义体: do
   match (dependent := true) g with
   | .plus => pure ⟨.plus, q(rfl)⟩
@@ -1866,7 +1866,7 @@ definition Sign.mkEqMul
 
 中文:
 定义 Sign.mkEqMul
-  签名: (iM : Q(CommGroupWithZero $M)) {a b C d e : Q($M)} {g : Sign M}
+  签名: (iM : Q(带零交换群 $M)) {a b C d e : Q($M)} {g : Sign M}
   定义体: do
     let pf₂' : Q($(g.expr b) = $(g.expr q($C * $d))) := g.congr pf₂
     let pf' ← Sign.mulRight iM C d g

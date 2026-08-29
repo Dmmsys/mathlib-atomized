@@ -61,7 +61,7 @@ lemma Algebra.IsInvariant.isIntegral_of_profinite
   exact this.map (FixedPoints.subal
 
 中文:
-引理 Algebra.IsInvariant.isIntegral_of_profinite
+引理 代数.是不变.is整数egral_of_profinite
   证明: by
   constructor
   intro x
@@ -97,7 +97,7 @@ lemma Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite
       have h : B' N'.1.1 <= B' N.1.1 := fun x hx n => 
 
 中文:
-引理 Algebra.IsInvariant.exists_smul_of_under_eq_of_profinite
+引理 代数.是不变.存在_smul_of_under_eq_of_profinite
   证明: by
   let B' := FixedPoints.subalgebra A B
   let F : OpenNormalSubgroup G ⥤ Type _ :=
@@ -172,7 +172,7 @@ lemma Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor_aux
     ← 
 
 中文:
-引理 Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor_aux
+引理 理想.商.stabilizerHomSurjectiveAuxFunctor_aux
   证明: by
   change _ = _
   have h : FixedPoints.subalgebra A B N'.1.1 <= FixedPoints.subalgebra A B N.1.1 :=
@@ -212,7 +212,7 @@ definition Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor
       (Q.under B') P (G ⧸ N.1.1) σ').toAlgHom = σ.t
 
 中文:
-定义 Ideal.Quotient.stabilizerHomSurjectiveAuxFunctor
+定义 理想.商.stabilizerHomSurjectiveAuxFunctor
   定义体: letI B' := FixedPoints.subalgebra A B N.1.1
     letI f : (B' ⧸ Q.under B') ->ₐ[A ⧸ P] B ⧸ Q :=
     { toRingHom := Ideal.quotientMap _ B'.subtype le_rfl,
@@ -281,7 +281,7 @@ theorem Ideal.Quotient.stabilizerHom_surjective_of_profinite
     ⟨fun N => (s N).1.1, (fun {N N'} f => congr($(hs f).
 
 中文:
-定理 Ideal.Quotient.stabilizerHom_surjective_of_profinite
+定理 理想.商.stabilizerHom_surjective_of_profinite
   证明: by
   intro σ
   let B' := FixedPoints.subalgebra A B

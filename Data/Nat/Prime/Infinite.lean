@@ -44,9 +44,9 @@ have f1 : n ! + 1 != 1 := ne_of_gt succ_lt_succ factorial_pos _
       have h₂ : p ∣ 1 := (Nat.dvd_add_iff_right h₁).2 (minFac_dvd
 
 中文:
-定理 exists_infinite_primes
+定理 存在_infinite_primes
   条件: (n : 自然数)
-  结论: 存在 p, n <= p ∧ Prime p
+  结论: 存在 p, n <= p ∧ 素 p
   证明: let p := minFac (n ! + 1)
 have f1 : n ! + 1 != 1 := ne_of_gt succ_lt_succ factorial_pos _
   have pp : Prime p := minFac_prime f1
@@ -84,7 +84,7 @@ theorem not_bddAbove_setOfPred_prime
 
 中文:
 定理 not_bddAbove_setOfPred_prime
-  结论: ¬BddAbove { p | Prime p }
+  结论: ¬BddAbove { p | 素 p }
   证明: by
   rw [not_bddAbove_iff]
   intro n

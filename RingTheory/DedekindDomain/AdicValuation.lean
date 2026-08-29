@@ -345,7 +345,7 @@ definition intValuation
 
 中文:
 定义 intValuation
-  签名: : Valuation R 整数ᵐ⁰ where
+  签名: : 赋值 R 整数ᵐ⁰ where
   定义体: v.intValuationDef
   map_zero' := intValuation.map_zero' v
   map_one' := intValuation.map_one' v
@@ -371,7 +371,7 @@ theorem intValuation_apply
 
 中文:
 定理 intValuation_apply
-  条件: {r : R} (v : IsDedekindDomain.HeightOneSpectrum R)
+  条件: {r : R} (v : 是Dedekind整环.高一谱 R)
   证明: rfl
 -/
 theorem intValuation_apply {r : R} (v : IsDedekindDomain.HeightOneSpectrum R) :
@@ -746,7 +746,7 @@ theorem intValuation_exists_uniformizer
   obtain ⟨π, mem, notMem⟩ := SetLike.exists_of_lt 
 
 中文:
-定理 intValuation_exists_uniformizer
+定理 intValuation_存在_uniformizer
   证明: by
   have hv : Irreducible (Associates.mk v.asIdeal) := v.associates_irreducible
   have hlt : v.asIdeal ^ 2 < v.asIdeal := by
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: v.intValuation.IsNontrivial
+  签名: v.intValuation.是非平凡
   定义体: have ⟨π, hπ⟩ := v.intValuation_exists_uniformizer
   ⟨π, by aesop⟩
 
@@ -816,7 +816,7 @@ theorem intValuation_uniformizer
 
 中文:
 定理 intValuation_uniformizer
-  条件: (π : v.intValuation.Uniformizer)
+  条件: (π : v.intValuation.一致化子)
   证明: by
   simpa [Valuation.IsUniformizer.val π.valuation_gt_one, Units.ext_iff]
     using Valuation.IsRankOneDiscrete.generator_eq_exp_neg_one_of_mem_range
@@ -844,7 +844,7 @@ theorem intValuation_singleton
 
 中文:
 定理 intValuation_singleton
-  条件: {r : R} (hr : r != 0) (hv : v.asIdeal = Ideal.span {r})
+  条件: {r : R} (hr : r != 0) (hv : v.asIdeal = 理想.span {r})
   证明: by
   rw [v.intValuation_if_neg hr]; rw [← hv]; rw [Associates.count_self]; rw [Int.ofNat_one]
   exact v.associates_irreducible
@@ -872,7 +872,7 @@ exact le_antisymm (v.intValuation_le_one x) by
 
 中文:
 定理 intValuation_eq_one_iff
-  条件: {v : HeightOneSpectrum R} {x : R}
+  条件: {v : 高一谱 R} {x : R}
   证明: by
   refine ⟨fun h => by simp [← (intValuation_lt_one_iff_mem _ _).not, h], fun h => ?_⟩
 exact le_antisymm (v.intValuation_le_one x) by
@@ -903,7 +903,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: (v : HeightOneSpectrum R)
+  签名: (v : 高一谱 R)
   定义体: v.intValuation.extendToLocalization
     (fun r hr => Set.mem_compl <| v.intValuation_ne_zero' ⟨r, hr⟩) K
 
@@ -1132,7 +1132,7 @@ theorem valuation_exists_uniformizer'
   grind [valuation_of_algebraMap]
 
 中文:
-定理 valuation_exists_uniformizer'
+定理 valuation_存在_uniformizer'
   证明: by
   have ⟨π, hπ⟩ := intValuation_exists_uniformizer v
   use π
@@ -1157,7 +1157,7 @@ theorem valuation_exists_uniformizer
   use (algebraMap _ _ r)
 
 中文:
-定理 valuation_exists_uniformizer
+定理 valuation_存在_uniformizer
   结论: 存在 π : K,
   证明: by
   obtain ⟨r, hr⟩ := v.valuation_exists_uniformizer' K
@@ -1181,7 +1181,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valuation.IsNontrivial (v.valuation K)
+  签名: 赋值.是非平凡 (v.valuation K)
   定义体: have ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
   ⟨π, by aesop⟩
 
@@ -1236,7 +1236,7 @@ theorem valuation_uniformizer_ne_zero
 
 中文:
 定理 valuation_uniformizer_ne_zero
-  结论: Classical.choose (v.valuation_存在_uniformizer K) != 0
+  结论: 经典.choose (v.valuation_存在_uniformizer K) != 0
   证明: haveI hu := Classical.choose_spec (v.valuation_exists_uniformizer K)
   (Valuation.ne_zero_iff _).mp (ne_of_eq_of_ne hu WithZero.coe_ne_zero)
 
@@ -1311,7 +1311,7 @@ theorem eq_of_valuation_isEquiv_valuation
 
 中文:
 定理 eq_of_valuation_isEquiv_valuation
-  结论: {p q : HeightOneSpectrum R}
+  结论: {p q : 高一谱 R}
   证明: by
   simp_all [Valuation.isEquiv_iff_val_lt_one, HeightOneSpectrum.ext_iff, Ideal.ext_iff,
     ← valuation_lt_one_iff_mem (K := K)]
@@ -1349,7 +1349,7 @@ definition valuationSubringAtPrime
 
 中文:
 定义 valuationSubringAtPrime
-  签名: : ValuationSubring K
+  签名: : 赋值子环 K
   定义体: .ofSubring (subalgebra.ofField K _ v.asIdeal.primeCompl_le_nonZeroDivisors).toSubring fun x =>
     by simpa [IsLocalization.IsInteger] using ValuationRing.isInteger_or_isInteger
         (subalgebra.ofField K _ v.asIdeal.primeCompl_le_nonZeroDivisors) x
@@ -1415,7 +1415,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (valuationSubringAtPrime K v)
+  签名: 代数 R (valuationSubringAtPrime K v)
   定义体: (subalgebra.ofField K _ v.asIdeal.primeCompl_le_nonZeroDivisors).algebra'
 
 Depends on / 依赖: algebra, asIdeal, ofField, primeCompl_le_nonZeroDivisors, subalgebra, subalgebra.ofField, v.asIdeal.primeCompl_le_nonZeroDivisors
@@ -1433,7 +1433,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (valuationSubringAtPrime K v) K
+  签名: 标量塔 R (valuationSubringAtPrime K v) K
   定义体: IsScalarTower.of_algebraMap_eq (fun _ => rfl)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -1452,7 +1452,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDedekindDomain (valuationSubringAtPrime K v)
+  签名: 是Dedekind整环 (valuationSubringAtPrime K v)
   定义体: IsLocalization.AtPrime.isDedekindDomain R v.asIdeal
     (subalgebra.ofField K _ v.asIdeal.primeCompl_le_nonZeroDivisors)
 
@@ -1472,7 +1472,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring.KrullDimLE 1 (valuationSubringAtPrime K v)
+  签名: 环.Krull维数不超过 1 (valuationSubringAtPrime K v)
   定义体: Ring.KrullDimLE.mk₁' (fun _ a _ => IsPrime.to_maximal_ideal a)
 
 Depends on / 依赖: IsPrime, IsPrime.to_maximal_ideal, KrullDimLE, Ring.KrullDimLE.mk, to_maximal_ideal
@@ -1490,7 +1490,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (v.asIdeal.primeCompl) (valuationSubringAtPrime K v)
+  签名: 是Localization (v.asIdeal.primeCompl) (valuationSubringAtPrime K v)
   定义体: Localization.subalgebra.isLocalization_ofField K (v.asIdeal.primeCompl) _
 
 Depends on / 依赖: Localization, Localization.subalgebra.isLocalization_ofField, asIdeal, isLocalization_ofField, primeCompl, subalgebra, v.asIdeal.primeCompl
@@ -1534,7 +1534,7 @@ lemma exists_primeCompl_mul_eq_or_mul_eq
   <;> obtain ⟨⟨n, d⟩, hnd⟩ := IsLocalization.su
 
 中文:
-引理 exists_primeCompl_mul_eq_or_mul_eq
+引理 存在_primeCompl_mul_eq_or_mul_eq
   条件: (x : K)
   证明: by
   -- It's already known that the localization of `R` at `v` is a (discrete) valuation ring, so
@@ -1570,7 +1570,7 @@ theorem exists_primeCompl_mul_eq_of_integer
     rw [← (v.intValuation_eq_one_iff_mem_primeCompl d).mpr d.prop]
 
 中文:
-定理 exists_primeCompl_mul_eq_of_integer
+定理 存在_primeCompl_mul_eq_of_integer
   条件: (x : K) (hv : v.valuation K x <= 1)
   证明: by
   obtain ⟨n, d, (hnd | hnd)⟩ := exists_primeCompl_mul_eq_or_mul_eq v x
@@ -1608,7 +1608,7 @@ theorem exists_intValuation_mul_sub_lt
     -- Otherwise, find `n : ℕ` suc
 
 中文:
-定理 exists_intValuation_mul_sub_lt
+定理 存在_intValuation_mul_sub_lt
   结论: {a b : R} (hv : v.intValuation b <= v.intValuation a)
   证明: by
   -- If `a = 0`, then `b = 0`, so we can take `y = 0`.
@@ -1659,7 +1659,7 @@ theorem exists_valuation_sub_lt_of_integer
   -- Get `a` such that `v (n - a * d) < 
 
 中文:
-定理 exists_valuation_sub_lt_of_integer
+定理 存在_valuation_sub_lt_of_integer
   结论: {x : K} (hv : v.valuation K x <= 1)
   证明: by
   -- Write `x = n / d`, with `v d = 1`.
@@ -1701,7 +1701,7 @@ definition adicValued
 
 中文:
 定义 adicValued
-  签名: : Valued K 整数ᵐ⁰
+  签名: : 赋值 K 整数ᵐ⁰
   定义体: Valued.mk' (v.valuation K)
 
 Depends on / 依赖: Valued, Valued.mk, v.valuation, valuation
@@ -1766,7 +1766,7 @@ structure adicCompletion
   参数: where
   公理与运算 (2 个):
     - ofCompletion : :
-    - toCompletion : (v.valuation K).Completion
+    - toCompletion : (v.valuation K).完备化
 -/
 structure adicCompletion where
   /-- Wrap an element of the underlying completion `(v.valuation K).Completion` into
@@ -1794,7 +1794,7 @@ definition equivCompletion
 
 中文:
 定义 equivCompletion
-  签名: : adicCompletion K v ≃ (v.valuation K).Completion where
+  签名: : adicCompletion K v ≃ (v.valuation K).完备化 where
   定义体: toCompletion
   invFun := ofCompletion
   left_inv _ := rfl
@@ -1818,7 +1818,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (adicCompletion K v)
+  签名: 域 (adicCompletion K v)
   定义体: fast_instance% (equivCompletion K v).field
 
 Depends on / 依赖: equivCompletion, fast_instance
@@ -1839,7 +1839,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : adicCompletion K v ≃+* (v.valuation K).Completion where
+  签名: : adicCompletion K v ≃+* (v.valuation K).完备化 where
   定义体: equivCompletion K v
   map_mul' _ _ := rfl
   map_add' _ _ := rfl
@@ -1861,7 +1861,7 @@ lemma toCompletion_ofCompletion
 
 中文:
 引理 toCompletion_ofCompletion
-  条件: (x : (v.valuation K).Completion)
+  条件: (x : (v.valuation K).完备化)
   证明: rfl
 -/
 @[simp] lemma toCompletion_ofCompletion (x : (v.valuation K).Completion) :
@@ -1951,7 +1951,7 @@ theorem toCompletion_surjective
 
 中文:
 定理 toCompletion_surjective
-  结论: Function.Surjective (toCompletion (K := K) (v := v))
+  结论: 函数.满射 (toCompletion (K := K) (v := v))
   证明: (equivCompletion K v).surjective
 -/
 theorem toCompletion_surjective : Function.Surjective (toCompletion (K := K) (v := v)) :=
@@ -1967,7 +1967,7 @@ theorem ofCompletion_surjective
 
 中文:
 定理 ofCompletion_surjective
-  结论: Function.Surjective (ofCompletion (K := K) (v := v))
+  结论: 函数.满射 (ofCompletion (K := K) (v := v))
   证明: (equivCompletion K v).symm.surjective
 -/
 theorem ofCompletion_surjective : Function.Surjective (ofCompletion (K := K) (v := v)) :=
@@ -1983,7 +1983,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (adicCompletion K v)
+  签名: 一致空间 (adicCompletion K v)
   定义体: .comap toCompletion inferInstance
 
 Depends on / 依赖: toCompletion
@@ -2014,7 +2014,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformAddGroup (adicCompletion K v)
+  签名: 是UniformAdd群 (adicCompletion K v)
   定义体: IsUniformInducing.isUniformAddGroup (equiv K v).toRingHom (isUniformInducing_toCompletion K v)
 
 Depends on / 依赖: IsUniformInducing, IsUniformInducing.isUniformAddGroup, isUniformAddGroup, isUniformInducing_toCompletion, toRingHom
@@ -2032,7 +2032,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation (adicCompletion K v) 整数ᵐ⁰
+  签名: : 赋值 (adicCompletion K v) 整数ᵐ⁰
   定义体: Valued.v.comap (equiv K v).toRingHom
 
 Depends on / 依赖: Valued, Valued.v.comap, toRingHom
@@ -2229,7 +2229,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valued (adicCompletion K v) 整数ᵐ⁰
+  签名: 赋值 (adicCompletion K v) 整数ᵐ⁰
   定义体: valuation K v
   is_topological_valuation s := by
     rw [(isUniformInducing_toCompletion K v).isInducing.nhds_eq_comap 0]; rw [toCompletion_zero]; rw [Filter.mem_comap]
@@ -2267,7 +2267,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace (adicCompletion K v)
+  签名: 完备空间 (adicCompletion K v)
   定义体: ((isUniformInducing_toCompletion K v).completeSpace_congr (toCompletion_surjective K v)).mpr
     inferInstance
 
@@ -2357,7 +2357,7 @@ theorem valued_ofCompletion
 
 中文:
 定理 valued_ofCompletion
-  条件: (y : (v.valuation K).Completion)
+  条件: (y : (v.valuation K).完备化)
   证明: rfl
 -/
 @[simp] theorem valued_ofCompletion (y : (v.valuation K).Completion) :
@@ -2486,7 +2486,7 @@ definition uniformEquiv
 
 中文:
 定义 uniformEquiv
-  签名: : adicCompletion K v ≃ᵤ (v.valuation K).Completion where
+  签名: : adicCompletion K v ≃ᵤ (v.valuation K).完备化 where
   定义体: equivCompletion K v
   uniformContinuous_toFun := uniformContinuous_comap
   uniformContinuous_invFun :=
@@ -2510,7 +2510,7 @@ theorem continuous_toCompletion
 
 中文:
 定理 continuous_toCompletion
-  结论: Continuous (toCompletion (K := K) (v := v))
+  结论: 连续 (toCompletion (K := K) (v := v))
   证明: (uniformEquiv K v).continuous
 -/
 theorem continuous_toCompletion : Continuous (toCompletion (K := K) (v := v)) :=
@@ -2526,7 +2526,7 @@ theorem continuous_ofCompletion
 
 中文:
 定理 continuous_ofCompletion
-  结论: Continuous (ofCompletion (K := K) (v := v))
+  结论: 连续 (ofCompletion (K := K) (v := v))
   证明: (uniformEquiv K v).symm.continuous
 -/
 theorem continuous_ofCompletion : Continuous (ofCompletion (K := K) (v := v)) :=
@@ -2542,7 +2542,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space (adicCompletion K v)
+  签名: T0空间 (adicCompletion K v)
   定义体: (uniformEquiv K v).toHomeomorph.isEmbedding.t0Space
 
 Depends on / 依赖: isEmbedding, t0Space, toHomeomorph, toHomeomorph.isEmbedding.t0Space, uniformEquiv
@@ -2593,7 +2593,7 @@ lemma adicCompletion_valueGroup_eq
 
 中文:
 引理 adicCompletion_valueGroup_eq
-  结论: MonoidWithZeroHom.valueGroup (.ofClass (Valued.v
+  结论: 带零幺半群态射.valueGroup (.ofClass (赋值.v
   证明: by
   ext n
   simp only [MonoidWithZeroHom.mem_valueGroup_iff_of_comm, ne_eq, MonoidWithZeroHom.coe_ofClass]
@@ -2624,8 +2624,8 @@ definition adicCompletionIntegers
   body: Valued.v.valuationSubring
 
 中文:
-定义 adicCompletionIntegers
-  签名: : ValuationSubring (v.adicCompletion K)
+定义 adicCompletion整数egers
+  签名: : 赋值子环 (v.adicCompletion K)
   定义体: Valued.v.valuationSubring
 
 Depends on / 依赖: Valued, Valued.v.valuationSubring, valuationSubring
@@ -2643,7 +2643,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (adicCompletion整数egers K v)
+  签名: 可居 (adicCompletion整数egers K v)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (adicCompletionIntegers K v) :=
@@ -2660,7 +2660,7 @@ theorem mem_adicCompletionIntegers
   proof: Iff.rfl
 
 中文:
-定理 mem_adicCompletionIntegers
+定理 mem_adicCompletion整数egers
   条件: {x : v.adicCompletion K}
   证明: Iff.rfl
 
@@ -2681,7 +2681,7 @@ theorem notMem_adicCompletionIntegers
   exact not_le
 
 中文:
-定理 notMem_adicCompletionIntegers
+定理 notMem_adicCompletion整数egers
   条件: {x : v.adicCompletion K}
   证明: by
   rw [not_congr <| mem_adicCompletionIntegers R K v]
@@ -2748,7 +2748,7 @@ instance instAlgebraCompletion
 
 中文:
 实例 instAlgebraCompletion
-  签名: : Algebra S ((v.valuation K).Completion) where
+  签名: : 代数 S ((v.valuation K).完备化) where
   定义体: Completion.instSMul _ _
   algebraMap := Completion.coeRingHom.comp (algebraMap S (WithVal (v.valuation K)))
   commutes' r x := by
@@ -2786,7 +2786,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra S (v.adicCompletion K)
+  签名: 代数 S (v.adicCompletion K)
   定义体: fast_instance% (adicCompletion.equivCompletion K v).algebra S
 
 Depends on / 依赖: adicCompletion, adicCompletion.equivCompletion, algebra, equivCompletion, fast_instance
@@ -2947,7 +2947,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (v.adicCompletion整数egers K)
+  签名: 代数 R (v.adicCompletion整数egers K)
   定义体: ⟨r • (x : v.adicCompletion K), by
       rw [Algebra.smul_def]
       refine ValuationSubring.mul_mem _ _ _ ?_ x.2
@@ -2996,7 +2996,7 @@ lemma algebraMap_adicCompletionIntegers_apply
   rfl
 
 中文:
-引理 algebraMap_adicCompletionIntegers_apply
+引理 algebraMap_adicCompletion整数egers_apply
   条件: (r : R)
   证明: by
   rfl
@@ -3018,8 +3018,8 @@ instance [FaithfulSMul
   simp
 
 中文:
-实例 [FaithfulSMul
-  签名: R K] : FaithfulSMul R (v.adicCompletion整数egers K)
+实例 [忠实标量乘法
+  签名: R K] : 忠实标量乘法 R (v.adicCompletion整数egers K)
   定义体: by
   rw [faithfulSMul_iff_algebraMap_injective]
   intro x y
@@ -3100,7 +3100,7 @@ lemma coe_mem_adicCompletionIntegers
 @[simp]
 
 中文:
-引理 coe_mem_adicCompletionIntegers
+引理 coe_mem_adicCompletion整数egers
   条件: (r : R)
   证明: by
   rw [mem_adicCompletionIntegers]; rw [valuedAdicCompletion_eq_valuation]
@@ -3125,7 +3125,7 @@ theorem coe_smul_adicCompletionIntegers
   proof: rfl
 
 中文:
-定理 coe_smul_adicCompletionIntegers
+定理 coe_smul_adicCompletion整数egers
   条件: (r : R) (x : v.adicCompletion整数egers K)
   证明: rfl
 -/
@@ -3143,7 +3143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.IsTorsionFree R (v.adicCompletion整数egers K)
+  签名: 模.是无挠 R (v.adicCompletion整数egers K)
   定义体: .of_smul_eq_zero by simp
 
 Depends on / 依赖: of_smul_eq_zero
@@ -3192,8 +3192,8 @@ lemma adicCompletion.mul_nonZeroDivisor_mem_adicCompletionIntegers
       simp
 
 中文:
-引理 adicCompletion.mul_nonZeroDivisor_mem_adicCompletionIntegers
-  结论: (v : HeightOneSpectrum R)
+引理 adicCompletion.mul_nonZeroDivisor_mem_adicCompletion整数egers
+  结论: (v : 高一谱 R)
   证明: by
   by_cases ha : a in v.adicCompletionIntegers K
   · use 1
@@ -3233,7 +3233,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul (v.adicCompletion整数egers K) (v.adicCompletion K)
+  签名: 忠实标量乘法 (v.adicCompletion整数egers K) (v.adicCompletion K)
   定义体: Subsemiring.faithfulSMul _
 
 Depends on / 依赖: Subsemiring, Subsemiring.faithfulSMul, faithfulSMul
@@ -3251,7 +3251,7 @@ theorem adicCompletionIntegers.integers
   exists_of_le_one := by simp [mem_adicCompletionIntegers]
 
 中文:
-定理 adicCompletionIntegers.integers
+定理 adicCompletion整数egers.integers
   证明: FaithfulSMul.algebraMap_injective _ _
   map_le_one := by simp [mem_adicCompletionIntegers]
   exists_of_le_one := by simp [mem_adicCompletionIntegers]
@@ -3276,7 +3276,7 @@ theorem adicCompletionIntegers.isUnit_iff_valued_eq_one
   simp [Valuation.Integers.isUnit_iff_valuation_eq_one (integers K v)]
 
 中文:
-定理 adicCompletionIntegers.isUnit_iff_valued_eq_one
+定理 adicCompletion整数egers.isUnit_iff_valued_eq_one
   条件: {a : v.adicCompletion整数egers K}
   证明: by
   simp [Valuation.Integers.isUnit_iff_valuation_eq_one (integers K v)]
@@ -3299,7 +3299,7 @@ theorem adicCompletionIntegers.mem_units_iff_valued_eq_one
   convert! isUnit_iff_valued_eq_one.1 (Submonoid.unitsEquivIsUnitSubmonoid _ ⟨_, h⟩).2
 
 中文:
-定理 adicCompletionIntegers.mem_units_iff_valued_eq_one
+定理 adicCompletion整数egers.mem_units_iff_valued_eq_one
   条件: {a : (v.adicCompletion K)ˣ}
   证明: by
   refine ⟨fun h => ?_, fun h =>
@@ -3383,7 +3383,7 @@ definition intAdicAbv
 
 中文:
 定义 intAdicAbv
-  签名: : AbsoluteValue R 实数 where
+  签名: : 绝对值 R 实数 where
   定义体: v.intAdicAbvDef hb r
   map_mul' _ _ := by simp [intAdicAbvDef]
   nonneg' _ := zero_le_coe
@@ -3546,7 +3546,7 @@ definition adicAbv
 
 中文:
 定义 adicAbv
-  签名: : AbsoluteValue K 实数 where
+  签名: : 绝对值 K 实数 where
   定义体: v.adicAbvDef hb x
   map_mul' _ _ := by simp [adicAbvDef]
   nonneg' _ := zero_le_coe
@@ -3716,7 +3716,7 @@ theorem valuation_le_one_iff_den
 
 中文:
 定理 valuation_le_one_iff_den
-  条件: {𝔭 : HeightOneSpectrum R} {x : Rat}
+  条件: {𝔭 : 高一谱 R} {x : 有理数}
   证明: by
   have : CharZero R := ⟨.of_comp (f := algebraMap R Rat) (by simpa using Nat.cast_injective)⟩
   have : (x.den : R) != 0 := by simp

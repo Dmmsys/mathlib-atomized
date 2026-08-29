@@ -40,7 +40,7 @@ definition op
 
 中文:
 定义 op
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: MulOpposite.unop ⁻¹' (H : Set G)
   one_mem' := H.one_mem
   mul_mem' ha hb := H.mul_mem hb ha
@@ -66,7 +66,7 @@ theorem mem_op
 
 中文:
 定理 mem_op
-  条件: {x : Gᵐᵒᵖ} {S : Subgroup G}
+  条件: {x : Gᵐᵒᵖ} {S : 子群 G}
   结论: x in S.op ↔ x.unop in S
   证明: Iff.rfl
 
@@ -84,7 +84,7 @@ lemma op_toSubmonoid
 
 中文:
 引理 op_toSubmonoid
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma op_toSubmonoid (H : Subgroup G) :
@@ -102,7 +102,7 @@ lemma op_toSubsemigroup
 
 中文:
 引理 op_toSubsemigroup
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   dsimp
 -/
@@ -128,7 +128,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (H : Subgroup Gᵐᵒᵖ)
+  签名: (H : 子群 Gᵐᵒᵖ)
   定义体: MulOpposite.op ⁻¹' (H : Set Gᵐᵒᵖ)
   one_mem' := H.one_mem
   mul_mem' := fun ha hb => H.mul_mem hb ha
@@ -154,7 +154,7 @@ theorem mem_unop
 
 中文:
 定理 mem_unop
-  条件: {x : G} {S : Subgroup Gᵐᵒᵖ}
+  条件: {x : G} {S : 子群 Gᵐᵒᵖ}
   结论: x in S.unop ↔ MulOpposite.op x in S
   证明: Iff.rfl
 
@@ -172,7 +172,7 @@ lemma unop_toSubmonoid
 
 中文:
 引理 unop_toSubmonoid
-  条件: (H : Subgroup Gᵐᵒᵖ)
+  条件: (H : 子群 Gᵐᵒᵖ)
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma unop_toSubmonoid (H : Subgroup Gᵐᵒᵖ) :
@@ -192,7 +192,7 @@ lemma unop_toSubsemigroup
 
 中文:
 引理 unop_toSubsemigroup
-  条件: (H : Subgroup Gᵐᵒᵖ)
+  条件: (H : 子群 Gᵐᵒᵖ)
   证明: by
   dsimp
 
@@ -216,7 +216,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (S : Subgroup G)
+  条件: (S : 子群 G)
   结论: S.op.unop = S
   证明: rfl
 
@@ -236,7 +236,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (S : Subgroup Gᵐᵒᵖ)
+  条件: (S : 子群 Gᵐᵒᵖ)
   结论: S.unop.op = S
   证明: rfl
 -/
@@ -258,7 +258,7 @@ theorem op_le_iff
 
 中文:
 定理 op_le_iff
-  条件: {S₁ : Subgroup G} {S₂ : Subgroup Gᵐᵒᵖ}
+  条件: {S₁ : 子群 G} {S₂ : 子群 Gᵐᵒᵖ}
   结论: S₁.op <= S₂ ↔ S₁ <= S₂.unop
   证明: MulOpposite.op_surjective.forall
 
@@ -283,7 +283,7 @@ theorem le_op_iff
 
 中文:
 定理 le_op_iff
-  条件: {S₁ : Subgroup Gᵐᵒᵖ} {S₂ : Subgroup G}
+  条件: {S₁ : 子群 Gᵐᵒᵖ} {S₂ : 子群 G}
   结论: S₁ <= S₂.op ↔ S₁.unop <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -308,7 +308,7 @@ theorem op_le_op_iff
 
 中文:
 定理 op_le_op_iff
-  条件: {S₁ S₂ : Subgroup G}
+  条件: {S₁ S₂ : 子群 G}
   结论: S₁.op <= S₂.op ↔ S₁ <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -331,7 +331,7 @@ theorem unop_le_unop_iff
 
 中文:
 定理 unop_le_unop_iff
-  条件: {S₁ S₂ : Subgroup Gᵐᵒᵖ}
+  条件: {S₁ S₂ : 子群 Gᵐᵒᵖ}
   结论: S₁.unop <= S₂.unop ↔ S₁ <= S₂
   证明: MulOpposite.unop_surjective.forall
 
@@ -359,7 +359,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Subgroup G ≃o Subgroup Gᵐᵒᵖ where
+  签名: : 子群 G ≃o 子群 Gᵐᵒᵖ where
   定义体: Subgroup.op
   invFun := Subgroup.unop
   left_inv := unop_op
@@ -390,7 +390,7 @@ theorem op_injective
 
 中文:
 定理 op_injective
-  结论: (@Subgroup.op G _).Injective
+  结论: (@子群.op G _).单射
   证明: opEquiv.injective
 
 @[to_additive]
@@ -412,7 +412,7 @@ theorem unop_injective
 
 中文:
 定理 unop_injective
-  结论: (@Subgroup.unop G _).Injective
+  结论: (@子群.unop G _).单射
   证明: opEquiv.symm.injective
 
 @[to_additive (attr := simp)]
@@ -435,7 +435,7 @@ theorem op_inj
 
 中文:
 定理 op_inj
-  条件: {S T : Subgroup G}
+  条件: {S T : 子群 G}
   结论: S.op = T.op ↔ S = T
   证明: opEquiv.eq_iff_eq
 
@@ -457,7 +457,7 @@ theorem unop_inj
 
 中文:
 定理 unop_inj
-  条件: {S T : Subgroup Gᵐᵒᵖ}
+  条件: {S T : 子群 Gᵐᵒᵖ}
   结论: S.unop = T.unop ↔ S = T
   证明: opEquiv.symm.eq_iff_eq
 
@@ -479,7 +479,7 @@ definition equivOp
 
 中文:
 定义 equivOp
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: MulOpposite.opEquiv.subtypeEquiv fun _ => Iff.rfl
 
 @[to_additive]
@@ -506,8 +506,8 @@ theorem op_normalizer
 
 中文:
 定理 op_normalizer
-  条件: (H : Subgroup G)
-  结论: (normalizer H : Subgroup G).op = normalizer H.op
+  条件: (H : 子群 G)
+  结论: (normalizer H : 子群 G).op = normalizer H.op
   证明: by
   ext x
   rw [mem_op]; rw [mem_normalizer_iff']; rw [mem_normalizer_iff']
@@ -534,7 +534,7 @@ theorem unop_normalizer
 
 中文:
 定理 unop_normalizer
-  条件: (H : Subgroup Gᵐᵒᵖ)
+  条件: (H : 子群 Gᵐᵒᵖ)
   证明: by
   rw [← op_inj]; rw [op_unop]; rw [op_normalizer]; rw [op_unop]
 

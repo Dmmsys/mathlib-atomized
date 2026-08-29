@@ -271,7 +271,7 @@ lemma quasiIso_descShortComplex
 
 中文:
 引理 quasiIso_descShortComplex
-  结论: QuasiIso (descShortComplex S) where
+  结论: 拟同构 (descShortComplex S) where
   证明: by
     rw [quasiIsoAt_iff_isIso_homologyMap]
     let φ : ((homologyFunctor C (up Int) 0).homologySequenceComposableArrows₅
@@ -329,7 +329,7 @@ lemma descShortComplex_naturality
 
 中文:
 引理 descShortComplex_naturality
-  条件: {S₁ S₂ : ShortComplex (CochainComplex C 整数)} (f : S₁ ⟶ S₂)
+  条件: {S₁ S₂ : 短复形 (上链复形 C 整数)} (f : S₁ ⟶ S₂)
   证明: by
   ext n
   apply ext_from _ (n + 1) n rfl
@@ -365,7 +365,7 @@ lemma mapHomologicalComplexIso_hom_descShortComplex
 
 中文:
 引理 mapHomologicalComplexIso_hom_descShortComplex
-  结论: (F : C ⥤ D) [F.Additive]
+  结论: (F : C ⥤ D) [F.加性]
   证明: by
   symm
   ext n

@@ -52,8 +52,8 @@ abbreviation CommSq.cokernelCofork
   body: CokernelCofork.ofπ (biprod.desc inl inr) (by simp [sq.w])
 
 中文:
-缩写 CommSq.cokernelCofork
-  签名: (sq : CommSq f g inl inr)
+缩写 交换Sq.cokernelCofork
+  签名: (sq : 交换Sq f g inl inr)
   定义体: CokernelCofork.ofπ (biprod.desc inl inr) (by simp [sq.w])
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.of, biprod, biprod.desc, sq.w
@@ -75,8 +75,8 @@ definition CommSq.shortComplex
   zero := by simp [sq.w]
 
 中文:
-定义 CommSq.shortComplex
-  签名: (sq : CommSq f g inl inr)
+定义 交换Sq.shortComplex
+  签名: (sq : 交换Sq f g inl inr)
   定义体: biprod.lift f (-g)
   g := biprod.desc inl inr
   zero := by simp [sq.w]
@@ -107,8 +107,8 @@ definition CommSq.isColimitEquivIsColimitCokernelCofork
    
 
 中文:
-定义 CommSq.isColimitEquivIsColimitCokernelCofork
-  签名: (sq : CommSq f g inl inr)
+定义 交换Sq.isColimitEquivIsColimitCokernelCofork
+  签名: (sq : 交换Sq f g inl inr)
   定义体: Cofork.IsColimit.mk _
       (fun s => PushoutCocone.IsColimit.desc h
         (biprod.inl ≫ s.π) (biprod.inr ≫ s.π) (by
@@ -177,8 +177,8 @@ definition IsPushout.isColimitCokernelCofork
   body: h.isColimitEquivIsColimitCokernelCofork h.isColimit
 
 中文:
-定义 IsPushout.isColimitCokernelCofork
-  签名: (h : IsPushout f g inl inr)
+定义 是推出.isColimitCokernelCofork
+  签名: (h : 是推出 f g inl inr)
   定义体: h.isColimitEquivIsColimitCokernelCofork h.isColimit
 
 Depends on / 依赖: h.isColimit, h.isColimitEquivIsColimitCokernelCofork, isColimit, isColimitEquivIsColimitCokernelCofork
@@ -200,8 +200,8 @@ lemma IsPushout.epi_shortComplex_g
   exact Cofork.IsColimit.hom_ext h.isColimitCokernelCofork (by simpa using hb)
 
 中文:
-引理 IsPushout.epi_shortComplex_g
-  条件: (h : IsPushout f g inl inr)
+引理 是推出.epi_shortComplex_g
+  条件: (h : 是推出 f g inl inr)
   证明: by
   rw [Preadditive.epi_iff_cancel_zero]
   intro _ b hb
@@ -230,8 +230,8 @@ abbreviation CommSq.kernelFork
   body: KernelFork.ofι (biprod.lift fst snd) (by simp [sq.w])
 
 中文:
-缩写 CommSq.kernelFork
-  签名: (sq : CommSq fst snd f g)
+缩写 交换Sq.kernelFork
+  签名: (sq : 交换Sq fst snd f g)
   定义体: KernelFork.ofι (biprod.lift fst snd) (by simp [sq.w])
 
 Depends on / 依赖: KernelFork, KernelFork.of, biprod, biprod.lift, sq.w
@@ -254,8 +254,8 @@ definition CommSq.shortComplex'
   zero := by simp [sq.w]
 
 中文:
-定义 CommSq.shortComplex'
-  签名: (sq : CommSq fst snd f g)
+定义 交换Sq.shortComplex'
+  签名: (sq : 交换Sq fst snd f g)
   定义体: biprod.lift fst snd
   g := biprod.desc f (-g)
   zero := by simp [sq.w]
@@ -286,8 +286,8 @@ definition CommSq.isLimitEquivIsLimitKernelFork
         · simp
 
 中文:
-定义 CommSq.isLimitEquivIsLimitKernelFork
-  签名: (sq : CommSq fst snd f g)
+定义 交换Sq.isLimitEquivIsLimitKernelFork
+  签名: (sq : 交换Sq fst snd f g)
   定义体: Fork.IsLimit.mk _
       (fun s => PullbackCone.IsLimit.lift h
         (s.ι ≫ biprod.fst) (s.ι ≫ biprod.snd) (by
@@ -354,8 +354,8 @@ definition IsPullback.isLimitKernelFork
   body: h.isLimitEquivIsLimitKernelFork h.isLimit
 
 中文:
-定义 IsPullback.isLimitKernelFork
-  签名: (h : IsPullback fst snd f g)
+定义 是拉回.isLimitKernelFork
+  签名: (h : 是拉回 fst snd f g)
   定义体: h.isLimitEquivIsLimitKernelFork h.isLimit
 
 Depends on / 依赖: h.isLimit, h.isLimitEquivIsLimitKernelFork, isLimit, isLimitEquivIsLimitKernelFork
@@ -377,8 +377,8 @@ lemma IsPullback.mono_shortComplex'_f
   exact Fork.IsLimit.hom_ext h.isLimitKernelFork (by simpa using hb)
 
 中文:
-引理 IsPullback.mono_shortComplex'_f
-  条件: (h : IsPullback fst snd f g)
+引理 是拉回.mono_shortComplex'_f
+  条件: (h : 是拉回 fst snd f g)
   证明: by
   rw [Preadditive.mono_iff_cancel_zero]
   intro _ b hb

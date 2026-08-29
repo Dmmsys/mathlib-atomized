@@ -46,7 +46,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul M (SeparationQuotient X) where
+  签名: : 标量乘法 M (SeparationQuotient X) where
   定义体: Quotient.map' (c • ·) fun _ _ h => h.const_smul c
 
 @[to_additive (attr := simp)]
@@ -92,7 +92,7 @@ continuous_mk.comp continuous_const_smul c
 
 中文:
 实例 instContinuousConstSMul
-  签名: : ContinuousConstSMul M (SeparationQuotient X) where
+  签名: : 连续常数标量乘法 M (SeparationQuotient X) where
   定义体: isQuotientMap_mk.continuous_iff.2
 continuous_mk.comp continuous_const_smul c
 
@@ -118,7 +118,7 @@ instance instIsPretransitiveSMul
 
 中文:
 实例 instIsPretransitiveSMul
-  签名: [MulAction.IsPretransitive M X]
+  签名: [乘法作用.是Pretransitive M X]
   定义体: surjective_mk.forall₂.2 fun x y =>
     (MulAction.exists_smul_eq M x y).imp fun _ => congr_arg mk
 
@@ -142,7 +142,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul Mᵐᵒᵖ X] [IsCentralScalar M X]
+  签名: [标量乘法 Mᵐᵒᵖ X] [中心标量 M X]
   定义体: surjective_mk.forall.2 (congr_arg mk <| op_smul_eq_smul a ·)
 
 Depends on / 依赖: congr_arg, op_smul_eq_smul, surjective_mk, surjective_mk.forall
@@ -166,7 +166,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [ContinuousConstSMul N X] [SMulCommClass M N X]
+  签名: [连续常数标量乘法 N X] [标量交换类 M N X]
   定义体: surjective_mk.smulCommClass mk_smul mk_smul
 
 @[to_additive]
@@ -188,7 +188,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul M N] [ContinuousConstSMul N X] [IsScalarTower M N X]
+  签名: [标量乘法 M N] [连续常数标量乘法 N X] [标量塔 M N X]
   定义体: surjective_mk.forall.2 fun x => congr_arg mk smul_assoc a b x
 
 Depends on / 依赖: congr_arg, smul_assoc, surjective_mk, surjective_mk.forall
@@ -211,7 +211,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: {M X : 类型} [SMul M X] [TopologicalSpace M] [TopologicalSpace X]
+  签名: {M X : 类型} [标量乘法 M X] [拓扑空间 M] [拓扑空间 X]
   定义体: by
     rw [(IsOpenQuotientMap.id.prodMap isOpenQuotientMap_mk).isQuotientMap.continuous_iff]
     exact continuous_mk.comp continuous_smul
@@ -236,7 +236,7 @@ instance instSMulZeroClass
 
 中文:
 实例 instSMulZeroClass
-  签名: {M X : 类型} [Zero X] [SMulZeroClass M X] [TopologicalSpace X]
+  签名: {M X : 类型} [零 X] [SMulZero类 M X] [拓扑空间 X]
   定义体: ZeroHom.smulZeroClass ⟨mk, mk_zero⟩ mk_smul
 
 @[to_additive]
@@ -258,7 +258,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: {M X : 类型} [Monoid M] [MulAction M X] [TopologicalSpace X]
+  签名: {M X : 类型} [幺半群 M] [乘法作用 M X] [拓扑空间 X]
   定义体: surjective_mk.mulAction mk mk_smul
 
 Depends on / 依赖: mk_smul, mulAction, surjective_mk, surjective_mk.mulAction
@@ -284,7 +284,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul M] [ContinuousMul M]
+  签名: [乘法 M] [连续乘法 M]
   定义体: Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ => Inseparable.mul h₁ h₂
 
 @[to_additive (attr := simp)]
@@ -308,7 +308,7 @@ theorem mk_mul
 
 中文:
 定理 mk_mul
-  条件: [Mul M] [ContinuousMul M] (a b : M)
+  条件: [乘法 M] [连续乘法 M] (a b : M)
   结论: mk (a * b) = mk a * mk b
   证明: rfl
 
@@ -329,7 +329,7 @@ instance instContinuousMul
 
 中文:
 实例 instContinuousMul
-  签名: [Mul M] [ContinuousMul M]
+  签名: [乘法 M] [连续乘法 M]
   定义体: isQuotientMap_prodMap_mk.continuous_iff.2 continuous_mk.comp continuous_mul
 
 @[to_additive]
@@ -352,7 +352,7 @@ instance instCommMagma
 
 中文:
 实例 instCommMagma
-  签名: [CommMagma M] [ContinuousMul M]
+  签名: [交换原群 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.commMagma mk mk_mul
 
 @[to_additive]
@@ -375,7 +375,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: [Semigroup M] [ContinuousMul M]
+  签名: [半群 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.semigroup mk mk_mul
 
 @[to_additive]
@@ -398,7 +398,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup M] [ContinuousMul M]
+  签名: [交换半群 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.commSemigroup mk mk_mul
 
 @[to_additive]
@@ -420,7 +420,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass M] [ContinuousMul M]
+  签名: [MulOne类 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.mulOneClass mk mk_one mk_mul
 
 Depends on / 依赖: fast_instance, mk_mul, mk_one, mulOneClass, surjective_mk, surjective_mk.mulOneClass
@@ -443,7 +443,7 @@ definition mkMonoidHom
 
 中文:
 定义 mkMonoidHom
-  签名: [MulOneClass M] [ContinuousMul M]
+  签名: [MulOne类 M] [连续乘法 M]
   定义体: mk
   map_mul' := mk_mul
   map_one' := mk_one
@@ -470,7 +470,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: [Monoid M] [ContinuousMul M]
+  签名: [幺半群 M] [连续乘法 M]
   定义体: Quotient.map' (s₁ := inseparableSetoid M) (· ^ n) (fun _ _ h => Inseparable.pow h n) x
 
 @[to_additive, simp] -- `mk_nsmul` is not a `simp` lemma because we have `mk_smul`
@@ -494,7 +494,7 @@ theorem mk_pow
 
 中文:
 定理 mk_pow
-  条件: [Monoid M] [ContinuousMul M] (x : M) (n : 自然数)
+  条件: [幺半群 M] [连续乘法 M] (x : M) (n : 自然数)
   结论: mk (x ^ n) = (mk x) ^ n
   证明: rfl
 
@@ -515,7 +515,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid M] [ContinuousMul M]
+  签名: [幺半群 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.monoid mk mk_one mk_mul mk_pow
 
 @[to_additive]
@@ -536,7 +536,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid M] [ContinuousMul M]
+  签名: [交换幺半群 M] [连续乘法 M]
   定义体: fast_instance% surjective_mk.commMonoid mk mk_one mk_mul mk_pow
 
 Depends on / 依赖: commMonoid, fast_instance, mk_mul, mk_one, mk_pow, surjective_mk, surjective_mk.commMonoid
@@ -563,7 +563,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv G] [ContinuousInv G]
+  签名: [取逆 G] [连续取逆 G]
   定义体: Quotient.map' (·⁻¹) fun _ _ => Inseparable.inv
 
 @[to_additive (attr := simp)]
@@ -587,7 +587,7 @@ theorem mk_inv
 
 中文:
 定理 mk_inv
-  条件: [Inv G] [ContinuousInv G] (x : G)
+  条件: [取逆 G] [连续取逆 G] (x : G)
   结论: mk x⁻¹ = (mk x)⁻¹
   证明: rfl
 
@@ -608,7 +608,7 @@ instance instContinuousInv
 
 中文:
 实例 instContinuousInv
-  签名: [Inv G] [ContinuousInv G]
+  签名: [取逆 G] [连续取逆 G]
   定义体: isQuotientMap_mk.continuous_iff.2 continuous_mk.comp continuous_inv
 
 @[to_additive]
@@ -631,7 +631,7 @@ instance instInvolutiveInv
 
 中文:
 实例 instInvolutiveInv
-  签名: [InvolutiveInv G] [ContinuousInv G]
+  签名: [InvolutiveInv G] [连续取逆 G]
   定义体: surjective_mk.involutiveInv mk mk_inv
 
 @[to_additive]
@@ -655,7 +655,7 @@ instance instInvOneClass
 
 中文:
 实例 instInvOneClass
-  签名: [InvOneClass G] [ContinuousInv G]
+  签名: [InvOne类 G] [连续取逆 G]
   定义体: congr_arg mk inv_one
 
 @[to_additive]
@@ -679,7 +679,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: [Div G] [ContinuousDiv G]
+  签名: [除法 G] [余ntinuousDiv G]
   定义体: Quotient.map₂ (· / ·) fun _ _ h₁ _ _ h₂ => (Inseparable.prod h₁ h₂).map continuous_div'
 
 @[to_additive (attr := simp)]
@@ -703,7 +703,7 @@ theorem mk_div
 
 中文:
 定理 mk_div
-  条件: [Div G] [ContinuousDiv G] (x y : G)
+  条件: [除法 G] [余ntinuousDiv G] (x y : G)
   结论: mk (x / y) = mk x / mk y
   证明: rfl
 
@@ -722,7 +722,7 @@ instance instContinuousDiv
 
 中文:
 实例 instContinuousDiv
-  签名: [Div G] [ContinuousDiv G]
+  签名: [除法 G] [余ntinuousDiv G]
   定义体: isQuotientMap_prodMap_mk.continuous_iff.2 continuous_mk.comp continuous_div'
 
 Depends on / 依赖: continuous_div, continuous_iff, continuous_mk, continuous_mk.comp, isQuotientMap_prodMap_mk, isQuotientMap_prodMap_mk.continuous_iff
@@ -742,7 +742,7 @@ instance instZSMul
 
 中文:
 实例 instZSMul
-  签名: [AddGroup G] [IsTopologicalAddGroup G]
+  签名: [加法群 G] [是拓扑加群 G]
   定义体: inferInstance
 
 @[to_additive existing]
@@ -763,7 +763,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: [Group G] [IsTopologicalGroup G]
+  签名: [群 G] [是拓扑群 G]
   定义体: Quotient.map' (s₁ := inseparableSetoid G) (· ^ n) (fun _ _ h => Inseparable.zpow h n) x
 
 @[to_additive, simp] -- `mk_zsmul` is not a `simp` lemma because we have `mk_smul`
@@ -787,7 +787,7 @@ theorem mk_zpow
 
 中文:
 定理 mk_zpow
-  条件: [Group G] [IsTopologicalGroup G] (x : G) (n : 整数)
+  条件: [群 G] [是拓扑群 G] (x : G) (n : 整数)
   结论: mk (x ^ n) = (mk x) ^ n
   证明: rfl
 
@@ -808,7 +808,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group G] [IsTopologicalGroup G]
+  签名: [群 G] [是拓扑群 G]
   定义体: fast_instance% surjective_mk.group mk mk_one mk_mul mk_inv mk_div mk_pow mk_zpow
 
 @[to_additive]
@@ -831,7 +831,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup G] [IsTopologicalGroup G]
+  签名: [交换群 G] [是拓扑群 G]
   定义体: fast_instance% surjective_mk.commGroup mk mk_one mk_mul mk_inv mk_div mk_pow mk_zpow
 
 @[to_additive]
@@ -851,7 +851,7 @@ instance instIsTopologicalGroup
 
 中文:
 实例 instIsTopologicalGroup
-  签名: [Group G] [IsTopologicalGroup G]
+  签名: [群 G] [是拓扑群 G]
 -/
 instance instIsTopologicalGroup [Group G] [IsTopologicalGroup G] :
     IsTopologicalGroup (SeparationQuotient G) where
@@ -873,7 +873,7 @@ instance instIsUniformGroup
 
 中文:
 实例 instIsUniformGroup
-  签名: {G : 类型} [Group G] [UniformSpace G] [IsUniformGroup G]
+  签名: {G : 类型} [群 G] [一致空间 G] [是一致群 G]
   定义体: by
     rw [uniformContinuous_dom₂]
     exact uniformContinuous_mk.comp uniformContinuous_div
@@ -902,7 +902,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass M₀] [ContinuousMul M₀]
+  签名: [乘零类 M₀] [连续乘法 M₀]
   定义体: fast_instance% surjective_mk.mulZeroClass mk mk_zero mk_mul
 
 Depends on / 依赖: fast_instance, mk_mul, mk_zero, mulZeroClass, surjective_mk, surjective_mk.mulZeroClass
@@ -921,7 +921,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero M₀] [ContinuousMul M₀]
+  签名: [带零半群 M₀] [连续乘法 M₀]
   定义体: fast_instance% surjective_mk.semigroupWithZero mk mk_zero mk_mul
 
 Depends on / 依赖: fast_instance, mk_mul, mk_zero, semigroupWithZero, surjective_mk, surjective_mk.semigroupWithZero
@@ -940,7 +940,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass M₀] [ContinuousMul M₀]
+  签名: [乘零幺类 M₀] [连续乘法 M₀]
   定义体: fast_instance% surjective_mk.mulZeroOneClass mk mk_zero mk_one mk_mul
 
 Depends on / 依赖: fast_instance, mk_mul, mk_one, mk_zero, mulZeroOneClass, surjective_mk, surjective_mk.mulZeroOneClass
@@ -959,7 +959,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [MonoidWithZero M₀] [ContinuousMul M₀]
+  签名: [带零幺半群 M₀] [连续乘法 M₀]
   定义体: fast_instance% surjective_mk.monoidWithZero mk mk_zero mk_one mk_mul mk_pow
 
 Depends on / 依赖: fast_instance, mk_mul, mk_one, mk_pow, mk_zero, monoidWithZero, surjective_mk, surjective_mk.monoidWithZero
@@ -978,7 +978,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: [CommMonoidWithZero M₀] [ContinuousMul M₀]
+  签名: [带零交换幺半群 M₀] [连续乘法 M₀]
   定义体: fast_instance% surjective_mk.commMonoidWithZero mk mk_zero mk_one mk_mul mk_pow
 
 Depends on / 依赖: commMonoidWithZero, fast_instance, mk_mul, mk_one, mk_pow, mk_zero, surjective_mk, surjective_mk.commMonoidWithZero
@@ -1003,7 +1003,7 @@ instance instDistrib
 
 中文:
 实例 instDistrib
-  签名: [Distrib R] [ContinuousMul R] [ContinuousAdd R]
+  签名: [Distrib R] [连续乘法 R] [连续加法 R]
   定义体: fast_instance% surjective_mk.distrib mk mk_add mk_mul
 
 Depends on / 依赖: distrib, fast_instance, mk_add, mk_mul, surjective_mk, surjective_mk.distrib
@@ -1022,7 +1022,7 @@ instance instLeftDistribClass
 
 中文:
 实例 instLeftDistribClass
-  签名: [Mul R] [Add R] [LeftDistribClass R]
+  签名: [乘法 R] [加法 R] [LeftDistrib类 R]
   定义体: surjective_mk.leftDistribClass mk mk_add mk_mul
 
 Depends on / 依赖: leftDistribClass, mk_add, mk_mul, surjective_mk, surjective_mk.leftDistribClass
@@ -1042,7 +1042,7 @@ instance instRightDistribClass
 
 中文:
 实例 instRightDistribClass
-  签名: [Mul R] [Add R] [RightDistribClass R]
+  签名: [乘法 R] [加法 R] [RightDistrib类 R]
   定义体: surjective_mk.rightDistribClass mk mk_add mk_mul
 
 Depends on / 依赖: mk_add, mk_mul, rightDistribClass, surjective_mk, surjective_mk.rightDistribClass
@@ -1062,7 +1062,7 @@ instance instNonUnitalnonAssocSemiring
 
 中文:
 实例 instNonUnitalnonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
   定义体: fast_instance% surjective_mk.nonUnitalNonAssocSemiring mk mk_zero mk_add mk_mul mk_smul
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_smul, mk_zero, nonUnitalNonAssocSemiring, surjective_mk, surjective_mk.nonUnitalNonAssocSemiring
@@ -1080,7 +1080,7 @@ instance instIsTopologicalSemiring
 
 中文:
 实例 instIsTopologicalSemiring
-  签名: [NonUnitalNonAssocSemiring R] [IsTopologicalSemiring R]
+  签名: [非幺非结合半环 R] [是TopologicalSemiring R]
 -/
 instance instIsTopologicalSemiring [NonUnitalNonAssocSemiring R] [IsTopologicalSemiring R] :
     IsTopologicalSemiring (SeparationQuotient R) where
@@ -1095,7 +1095,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring R] [IsTopologicalSemiring R]
+  签名: [非幺半环 R] [是TopologicalSemiring R]
   定义体: fast_instance% surjective_mk.nonUnitalSemiring mk mk_zero mk_add mk_mul mk_smul
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_smul, mk_zero, nonUnitalSemiring, surjective_mk, surjective_mk.nonUnitalSemiring
@@ -1115,8 +1115,8 @@ instance instNatCast
 @[simp, norm_cast]
 
 中文:
-实例 instNatCast
-  签名: [自然数Cast R]
+实例 inst自然数Cast
+  签名: [自然数嵌入 R]
   定义体: mk n
 
 @[simp, norm_cast]
@@ -1138,7 +1138,7 @@ theorem mk_natCast
 
 中文:
 定理 mk_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: mk (n : R) = n
   证明: rfl
 
@@ -1156,8 +1156,8 @@ theorem mk_ofNat
   proof: rfl
 
 中文:
-定理 mk_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 mk_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
 theorem mk_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
@@ -1175,8 +1175,8 @@ instance instIntCast
 @[simp, norm_cast]
 
 中文:
-实例 instIntCast
-  签名: [整数Cast R]
+实例 inst整数Cast
+  签名: [整数嵌入 R]
   定义体: mk n
 
 @[simp, norm_cast]
@@ -1196,7 +1196,7 @@ theorem mk_intCast
 
 中文:
 定理 mk_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: mk (n : R) = n
   证明: rfl
 -/
@@ -1212,7 +1212,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring R] [IsTopologicalSemiring R]
+  签名: [非结合半环 R] [是TopologicalSemiring R]
   定义体: fast_instance% surjective_mk.nonAssocSemiring mk mk_zero mk_one mk_add mk_mul mk_smul mk_natCast
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_natCast, mk_one, mk_smul, mk_zero, nonAssocSemiring, surjective_mk, surjective_mk.nonAssocSemiring
@@ -1232,7 +1232,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R] [IsTopologicalRing R]
+  签名: [非幺非结合环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.nonUnitalNonAssocRing mk mk_zero mk_add mk_mul mk_neg mk_sub
     mk_smul mk_smul
 
@@ -1252,7 +1252,7 @@ instance instIsTopologicalRing
 
 中文:
 实例 instIsTopologicalRing
-  签名: [NonUnitalNonAssocRing R] [IsTopologicalRing R]
+  签名: [非幺非结合环 R] [是拓扑环 R]
 -/
 instance instIsTopologicalRing [NonUnitalNonAssocRing R] [IsTopologicalRing R] :
     IsTopologicalRing (SeparationQuotient R) where
@@ -1267,7 +1267,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing R] [IsTopologicalRing R]
+  签名: [非幺环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.nonUnitalRing mk mk_zero mk_add mk_mul mk_neg mk_sub mk_smul mk_smul
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_neg, mk_smul, mk_sub, mk_zero, nonUnitalRing, surjective_mk, surjective_mk.nonUnitalRing
@@ -1287,7 +1287,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [NonAssocRing R] [IsTopologicalRing R]
+  签名: [非结合环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.nonAssocRing mk mk_zero mk_one mk_add mk_mul mk_neg mk_sub
     mk_smul mk_smul mk_natCast mk_intCast
 
@@ -1308,7 +1308,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring R] [IsTopologicalSemiring R]
+  签名: [半环 R] [是TopologicalSemiring R]
   定义体: fast_instance% surjective_mk.semiring mk mk_zero mk_one mk_add mk_mul mk_smul mk_pow mk_natCast
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_natCast, mk_one, mk_pow, mk_smul, mk_zero, semiring, surjective_mk, surjective_mk.semiring
@@ -1328,7 +1328,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring R] [IsTopologicalRing R]
+  签名: [环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.ring mk mk_zero mk_one mk_add mk_mul mk_neg mk_sub mk_smul
     mk_smul mk_pow mk_natCast mk_intCast
 
@@ -1349,7 +1349,7 @@ instance instNonUnitalNonAssocCommSemiring
 
 中文:
 实例 instNonUnitalNonAssocCommSemiring
-  签名: [NonUnitalNonAssocCommSemiring R]
+  签名: [非幺非结合交换半环 R]
   定义体: fast_instance% surjective_mk.nonUnitalNonAssocCommSemiring mk mk_zero mk_add mk_mul mk_smul
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_smul, mk_zero, nonUnitalNonAssocCommSemiring, surjective_mk, surjective_mk.nonUnitalNonAssocCommSemiring
@@ -1369,7 +1369,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R] [IsTopologicalSemiring R]
+  签名: [非幺交换半环 R] [是TopologicalSemiring R]
   定义体: fast_instance% surjective_mk.nonUnitalCommSemiring mk mk_zero mk_add mk_mul mk_smul
 
 Depends on / 依赖: fast_instance, mk_add, mk_mul, mk_smul, mk_zero, nonUnitalCommSemiring, surjective_mk, surjective_mk.nonUnitalCommSemiring
@@ -1389,7 +1389,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R] [IsTopologicalSemiring R]
+  签名: [交换半环 R] [是TopologicalSemiring R]
   定义体: fast_instance% surjective_mk.commSemiring mk mk_zero mk_one mk_add mk_mul mk_smul
     mk_pow mk_natCast
 
@@ -1410,7 +1410,7 @@ instance instHasDistribNeg
 
 中文:
 实例 instHasDistribNeg
-  签名: [Mul R] [HasDistribNeg R] [ContinuousMul R] [ContinuousNeg R]
+  签名: [乘法 R] [有DistribNeg R] [连续乘法 R] [连续取负 R]
   定义体: fast_instance% surjective_mk.hasDistribNeg mk mk_neg mk_mul
 
 Depends on / 依赖: fast_instance, hasDistribNeg, mk_mul, mk_neg, surjective_mk, surjective_mk.hasDistribNeg
@@ -1430,7 +1430,7 @@ instance instNonUnitalNonAssocCommRing
 
 中文:
 实例 instNonUnitalNonAssocCommRing
-  签名: [NonUnitalNonAssocCommRing R] [IsTopologicalRing R]
+  签名: [非幺非结合交换环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.nonUnitalNonAssocCommRing mk mk_zero mk_add mk_mul mk_neg mk_sub
     mk_smul mk_smul
 
@@ -1452,7 +1452,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing R] [IsTopologicalRing R]
+  签名: [非幺交换环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.nonUnitalCommRing mk mk_zero mk_add mk_mul mk_neg mk_sub
     mk_smul mk_smul
 
@@ -1474,7 +1474,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R] [IsTopologicalRing R]
+  签名: [交换环 R] [是拓扑环 R]
   定义体: fast_instance% surjective_mk.commRing mk mk_zero mk_one mk_add mk_mul mk_neg mk_sub
     mk_smul mk_smul mk_pow mk_natCast mk_intCast
 
@@ -1498,7 +1498,7 @@ definition mkRingHom
 
 中文:
 定义 mkRingHom
-  签名: [NonAssocSemiring R] [IsTopologicalSemiring R]
+  签名: [非结合半环 R] [是TopologicalSemiring R]
   定义体: mk
   map_one' := mk_one; map_zero' := mk_zero; map_add' := mk_add; map_mul' := mk_mul
 -/
@@ -1522,7 +1522,7 @@ instance instDistribSMul
 
 中文:
 实例 instDistribSMul
-  签名: [AddZeroClass A] [DistribSMul M A]
+  签名: [加法零类 A] [分配标量乘法 M A]
   定义体: fast_instance% surjective_mk.distribSMul mkAddMonoidHom mk_smul
 
 Depends on / 依赖: distribSMul, fast_instance, mkAddMonoidHom, mk_smul, surjective_mk, surjective_mk.distribSMul
@@ -1542,7 +1542,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid M] [AddMonoid A] [DistribMulAction M A]
+  签名: [幺半群 M] [加法幺半群 A] [分配乘法作用 M A]
   定义体: fast_instance% surjective_mk.distribMulAction mkAddMonoidHom mk_smul
 
 Depends on / 依赖: distribMulAction, fast_instance, mkAddMonoidHom, mk_smul, surjective_mk, surjective_mk.distribMulAction
@@ -1562,7 +1562,7 @@ instance instMulDistribMulAction
 
 中文:
 实例 instMulDistribMulAction
-  签名: [Monoid M] [Monoid A] [MulDistribMulAction M A]
+  签名: [幺半群 M] [幺半群 A] [MulDistribMul作用 M A]
   定义体: fast_instance% surjective_mk.mulDistribMulAction mkMonoidHom mk_smul
 
 Depends on / 依赖: fast_instance, mkMonoidHom, mk_smul, mulDistribMulAction, surjective_mk, surjective_mk.mulDistribMulAction
@@ -1591,7 +1591,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module R (SeparationQuotient M)
+  签名: : 模 R (SeparationQuotient M)
   定义体: fast_instance% surjective_mk.module R mkAddMonoidHom mk_smul
 
 Depends on / 依赖: fast_instance, mkAddMonoidHom, mk_smul, module, surjective_mk, surjective_mk.module
@@ -1644,7 +1644,7 @@ map_smul' {r} := Quotient.ind map_smulₛₗ f r
 
 中文:
 定义 liftCLM
-  签名: {σ : R ->+* S} (f : M ->SL[σ] N) (hf : 对任意 x y, Inseparable x y -> f x = f y)
+  签名: {σ : R ->+* S} (f : M ->SL[σ] N) (hf : 对任意 x y, 不可分 x y -> f x = f y)
   定义体: SeparationQuotient.lift f hf
 map_add' := Quotient.ind₂ map_add f
 map_smul' {r} := Quotient.ind map_smulₛₗ f r
@@ -1672,7 +1672,7 @@ theorem liftCLM_mk
 
 中文:
 定理 liftCLM_mk
-  结论: {σ : R ->+* S} (f : M ->SL[σ] N) (hf : 对任意 x y, Inseparable x y -> f x = f y)
+  结论: {σ : R ->+* S} (f : M ->SL[σ] N) (hf : 对任意 x y, 不可分 x y -> f x = f y)
   证明: rfl
 -/
 theorem liftCLM_mk {σ : R ->+* S} (f : M ->SL[σ] N) (hf : forall x y, Inseparable x y -> f x = f y)
@@ -1698,7 +1698,7 @@ smul_def' r := Quotient.ind fun a => congrArg _ Algebra.smul_def r a
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R (SeparationQuotient A) where
+  签名: : 代数 R (SeparationQuotient A) where
   定义体: mkRingHom.comp (algebraMap R A)
 commutes' r := Quotient.ind fun a => congrArg _ Algebra.commutes r a
 smul_def' r := Quotient.ind fun a => congrArg _ Algebra.smul_def r a

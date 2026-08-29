@@ -153,7 +153,7 @@ theorem involute_act_ι_mem_range_ι
 
 中文:
 定理 involute_act_ι_mem_range_ι
-  结论: [Invertible (2 : R)]
+  结论: [可逆 (2 : R)]
   证明: by
   unfold lipschitzGroup at hx
   induction hx using Subgroup.closure_induction'' generalizing b with
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (pinGroup Q)
+  签名: 对合 (pinGroup Q)
   定义体: ⟨star x, star_mem x.prop⟩
 
 @[simp, norm_cast]
@@ -711,7 +711,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (pinGroup Q)
+  签名: 群 (pinGroup Q)
   定义体: star
   inv_mul_cancel := star_mul_self
 -/
@@ -750,7 +750,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (pinGroup Q)
+  签名: 可居 (pinGroup Q)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (pinGroup Q) :=
@@ -784,7 +784,7 @@ theorem star_eq_inv'
 
 中文:
 定理 star_eq_inv'
-  结论: (star : pinGroup Q -> pinGroup Q) = Inv.inv
+  结论: (star : pinGroup Q -> pinGroup Q) = 取逆.inv
   证明: rfl
 -/
 theorem star_eq_inv' : (star : pinGroup Q -> pinGroup Q) = Inv.inv :=
@@ -826,7 +826,7 @@ theorem toUnits_injective
 
 中文:
 定理 toUnits_injective
-  结论: Function.Injective (toUnits : pinGroup Q -> (CliffordAlgebra Q)ˣ)
+  结论: 函数.单射 (toUnits : pinGroup Q -> (CliffordAlgebra Q)ˣ)
   证明: fun _x _y h => Subtype.ext Units.ext_iff.mp h
 
 Depends on / 依赖: Subtype, Subtype.ext, Units.ext_iff.mp, ext_iff
@@ -1167,7 +1167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (spinGroup Q)
+  签名: 对合 (spinGroup Q)
   定义体: ⟨star x, star_mem x.prop⟩
 
 @[simp, norm_cast]
@@ -1297,7 +1297,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (spinGroup Q)
+  签名: 群 (spinGroup Q)
   定义体: star
   inv_mul_cancel := star_mul_self
 -/
@@ -1336,7 +1336,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (spinGroup Q)
+  签名: 可居 (spinGroup Q)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (spinGroup Q) :=
@@ -1370,7 +1370,7 @@ theorem star_eq_inv'
 
 中文:
 定理 star_eq_inv'
-  结论: (star : spinGroup Q -> spinGroup Q) = Inv.inv
+  结论: (star : spinGroup Q -> spinGroup Q) = 取逆.inv
   证明: rfl
 -/
 theorem star_eq_inv' : (star : spinGroup Q -> spinGroup Q) = Inv.inv :=
@@ -1412,7 +1412,7 @@ theorem toUnits_injective
 
 中文:
 定理 toUnits_injective
-  结论: Function.Injective (toUnits : spinGroup Q -> (CliffordAlgebra Q)ˣ)
+  结论: 函数.单射 (toUnits : spinGroup Q -> (CliffordAlgebra Q)ˣ)
   证明: fun _x _y h => Subtype.ext Units.ext_iff.mp h
 
 Depends on / 依赖: Subtype, Subtype.ext, Units.ext_iff.mp, ext_iff

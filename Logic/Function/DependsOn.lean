@@ -65,7 +65,7 @@ definition DependsOn
 
 中文:
 定义 DependsOn
-  签名: (f : (Π i, α i) -> β) (s : Set ι)
+  签名: (f : (Π i, α i) -> β) (s : 集合 ι)
   定义体: forall ⦃x y⦄, (forall i in s, x i = y i) -> f x = f y
 -/
 def DependsOn (f : (Π i, α i) -> β) (s : Set ι) : Prop :=
@@ -83,7 +83,7 @@ lemma dependsOn_iff_factorsThrough
 
 中文:
 引理 dependsOn_iff_factorsThrough
-  条件: {f : (Π i, α i) -> β} {s : Set ι}
+  条件: {f : (Π i, α i) -> β} {s : 集合 ι}
   证明: by
   rw [DependsOn]; rw [FactorsThrough]
   simp [funext_iff]
@@ -105,8 +105,8 @@ lemma dependsOn_iff_exists_comp
   rw [dependsOn_iff_factorsThrough]; rw [factorsThrough_iff]
 
 中文:
-引理 dependsOn_iff_exists_comp
-  条件: [Nonempty β] {f : (Π i, α i) -> β} {s : Set ι}
+引理 dependsOn_iff_存在_comp
+  条件: [非空 β] {f : (Π i, α i) -> β} {s : 集合 ι}
   证明: by
   rw [dependsOn_iff_factorsThrough]; rw [factorsThrough_iff]
 
@@ -166,7 +166,7 @@ lemma DependsOn.mono
 
 中文:
 引理 DependsOn.mono
-  条件: {s t : Set ι} (hst : s subseteq t) (hf : DependsOn f s)
+  条件: {s t : 集合 ι} (hst : s subseteq t) (hf : DependsOn f s)
   结论: DependsOn f t
   证明: fun _ _ h => hf fun i hi => h i (hst hi)
 -/
@@ -202,8 +202,8 @@ lemma Set.dependsOn_domRestrict
 @[deprecated (since := "2026-07-19")] alias Set.dependsOn_restrict := Set.dependsOn_domRestrict
 
 中文:
-引理 Set.dependsOn_domRestrict
-  条件: (s : Set ι)
+引理 集合.dependsOn_domRestrict
+  条件: (s : 集合 ι)
   结论: DependsOn (s.domRestrict (π := α)) s
   证明: fun _ _ h => funext fun i => h i.1 i.2
 

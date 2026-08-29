@@ -62,7 +62,7 @@ definition spectralRadius
 
 中文:
 定义 spectralRadius
-  签名: (𝕜 : 类型) {A : 类型} [NormedField 𝕜] [Ring A] [Algebra 𝕜 A]
+  签名: (𝕜 : 类型) {A : 类型} [赋范域 𝕜] [环 A] [代数 𝕜 A]
   定义体: ⨆ k in spectrum 𝕜 a, ‖k‖₊
 
 Depends on / 依赖: spectrum
@@ -103,7 +103,7 @@ theorem SpectralRadius.of_subsingleton
 
 中文:
 定理 SpectralRadius.of_subsingleton
-  条件: [Subsingleton A] (a : A)
+  条件: [子单例 A] (a : A)
   证明: by
   simp [spectralRadius]
 
@@ -155,7 +155,7 @@ theorem spectralRadius_one
 
 中文:
 定理 spectralRadius_one
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   证明: by
   simp [spectralRadius]
 
@@ -227,7 +227,7 @@ lemma spectralRadius_pow_le'
 
 中文:
 引理 spectralRadius_pow_le'
-  条件: [Nontrivial A] (a : A) (n : 自然数)
+  条件: [非平凡 A] (a : A) (n : 自然数)
   证明: by
   cases n
   · simp
@@ -259,7 +259,7 @@ theorem isOpen_resolventSet
 中文:
 定理 isOpen_resolventSet
   条件: (a : A)
-  结论: IsOpen (ρ a)
+  结论: 是开集 (ρ a)
   证明: Units.isOpen.preimage (by fun_prop)
 
 @[simp]
@@ -282,7 +282,7 @@ theorem isClosed
 中文:
 定理 isClosed
   条件: (a : A)
-  结论: IsClosed (σ a)
+  结论: 是闭集 (σ a)
   证明: (isOpen_resolventSet a).isClosed_compl
 -/
 protected theorem isClosed (a : A) : IsClosed (σ a) :=
@@ -338,7 +338,7 @@ theorem mem_resolventSet_of_norm_lt
 
 中文:
 定理 mem_resolventSet_of_norm_lt
-  条件: [NormOneClass A] {a : A} {k : 𝕜} (h : ‖a‖ < ‖k‖)
+  条件: [NormOne类 A] {a : A} {k : 𝕜} (h : ‖a‖ < ‖k‖)
   结论: k in ρ a
   证明: mem_resolventSet_of_norm_lt_mul (by rwa [norm_one, mul_one])
 
@@ -378,7 +378,7 @@ theorem norm_le_norm_of_mem
 
 中文:
 定理 norm_le_norm_of_mem
-  条件: [NormOneClass A] {a : A} {k : 𝕜} (hk : k in σ a)
+  条件: [NormOne类 A] {a : A} {k : 𝕜} (hk : k in σ a)
   结论: ‖k‖ <= ‖a‖
   证明: le_of_not_gt mt mem_resolventSet_of_norm_lt hk
 
@@ -420,7 +420,7 @@ theorem subset_closedBall_norm
 
 中文:
 定理 subset_closedBall_norm
-  条件: [NormOneClass A] (a : A)
+  条件: [NormOne类 A] (a : A)
   结论: σ a subseteq Metric.closedBall (0 : 𝕜) ‖a‖
   证明: fun k hk => by simp [norm_le_norm_of_mem hk]
 
@@ -446,7 +446,7 @@ theorem isBounded
 中文:
 定理 isBounded
   条件: (a : A)
-  结论: Bornology.IsBounded (σ a)
+  结论: 有界结构.IsBounded (σ a)
   证明: Metric.isBounded_closedBall.subset (subset_closedBall_norm_mul a)
 
 @[simp]
@@ -470,8 +470,8 @@ grind_pattern spectrum.isCompact => IsCompact (spectrum 𝕜 a)
 
 中文:
 定理 isCompact
-  条件: [命题erSpace 𝕜] (a : A)
-  结论: IsCompact (σ a)
+  条件: [真空间 𝕜] (a : A)
+  结论: 是紧集 (σ a)
   证明: Metric.isCompact_of_isClosed_isBounded (spectrum.isClosed a) (isBounded a)
 
 grind_pattern spectrum.isCompact => IsCompact (spectrum 𝕜 a)
@@ -491,7 +491,7 @@ instance instCompactSpace
 
 中文:
 实例 instCompactSpace
-  签名: [命题erSpace 𝕜] (a : A)
+  签名: [真空间 𝕜] (a : A)
   定义体: isCompact_iff_compactSpace.mp spectrum.isCompact a
 
 Depends on / 依赖: isCompact, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, spectrum, spectrum.isCompact
@@ -513,8 +513,8 @@ exact isClosed_nonneg.isClosedEmbedding_subtypeVal.isCompact_preimage by assumpt
 @[simp]
 
 中文:
-实例 instCompactSpaceNNReal
-  签名: {A : 类型} [NormedRing A] [NormedAlgebra 实数 A]
+实例 instCompactSpaceNN实数
+  签名: {A : 类型} [赋范环 A] [赋范代数 实数 A]
   定义体: by
   rw [← isCompact_iff_compactSpace] at *
   rw [← preimage_algebraMap Real]
@@ -545,7 +545,7 @@ grind_pattern isCompact_nnreal => IsCompact (spectrum Real>=0 a)
 
 中文:
 定理 isCompact_nnreal
-  结论: {A : 类型} [NormedRing A] [NormedAlgebra 实数 A]
+  结论: {A : 类型} [赋范环 A] [赋范代数 实数 A]
   证明: by
   rw [isCompact_iff_compactSpace]
   infer_instance
@@ -583,7 +583,7 @@ grind_pattern quasispectrum.isCompact => IsCompact (quasispectrum 𝕜 a)
 中文:
 定理 _root_.quasispectrum.isCompact
   条件: (a : B)
-  结论: IsCompact (quasispectrum 𝕜 a)
+  结论: 是紧集 (quasispectrum 𝕜 a)
   证明: by
   rw [Unitization.quasispectrum_eq_spectrum_inr' 𝕜 𝕜]; rw [← AlgEquiv.spectrum_eq (WithLp.unitizationAlgEquiv 𝕜).symm (a : Unitization 𝕜 B)]
   exact spectrum.isCompact _
@@ -632,8 +632,8 @@ omit [CompleteSpace B] in
 @[simp]
 
 中文:
-实例 _root_.quasispectrum.instCompactSpaceNNReal
-  签名: [NormedSpace 实数 B] [IsScalarTower 实数 B B]
+实例 _root_.quasispectrum.instCompactSpaceNN实数
+  签名: [赋范空间 实数 B] [标量塔 实数 B B]
   定义体: by
   rw [← isCompact_iff_compactSpace] at *
   rw [← quasispectrum.preimage_algebraMap Real]
@@ -667,7 +667,7 @@ grind_pattern quasispectrum.isCompact_nnreal => IsCompact (quasispectrum Real>=0
 
 中文:
 定理 _root_.quasispectrum.isCompact_nnreal
-  结论: [NormedSpace 实数 B] [IsScalarTower 实数 B B]
+  结论: [赋范空间 实数 B] [标量塔 实数 B B]
   证明: by
   rw [isCompact_iff_compactSpace]
   infer_instance
@@ -749,7 +749,7 @@ theorem spectralRadius_le_nnnorm
 
 中文:
 定理 spectralRadius_le_nnnorm
-  条件: [NormOneClass A] (a : A)
+  条件: [NormOne类 A] (a : A)
   结论: spectralRadius 𝕜 a <= ‖a‖₊
   证明: by
   refine iSup₂_le fun k hk => ?_
@@ -772,8 +772,8 @@ theorem exists_nnnorm_eq_spectralRadius_of_nonempty
   exact ⟨k, hk, le_antisymm (le_iSup₂ (α := Real>=0∞) k hk) (iSup₂_le <| mod_cast h)⟩
 
 中文:
-定理 exists_nnnorm_eq_spectralRadius_of_nonempty
-  条件: [命题erSpace 𝕜] {a : A} (ha : (σ a).Nonempty)
+定理 存在_nnnorm_eq_spectralRadius_of_nonempty
+  条件: [真空间 𝕜] {a : A} (ha : (σ a).非空)
   证明: by
   obtain ⟨k, hk, h⟩ := (spectrum.isCompact a).exists_isMaxOn ha continuous_nnnorm.continuousOn
   exact ⟨k, hk, le_antisymm (le_iSup₂ (α := Real>=0∞) k hk) (iSup₂_le <| mod_cast h)⟩
@@ -795,8 +795,8 @@ theorem spectralRadius_lt_of_forall_lt_of_nonempty
     continuous_enorm.continuousOn (r : Real>=0∞)).mpr (by simpa using hr)
 
 中文:
-定理 spectralRadius_lt_of_forall_lt_of_nonempty
-  结论: [命题erSpace 𝕜] {a : A} (ha : (σ a).Nonempty)
+定理 spectralRadius_lt_of_对任意_lt_of_nonempty
+  结论: [真空间 𝕜] {a : A} (ha : (σ a).非空)
   证明: sSup_image.symm.trans_lt ((spectrum.isCompact a).sSup_lt_iff_of_continuous ha
     continuous_enorm.continuousOn (r : Real>=0∞)).mpr (by simpa using hr)
 
@@ -926,7 +926,7 @@ theorem eventually_isUnit_resolvent
 中文:
 定理 eventually_isUnit_resolvent
   条件: (a : A)
-  结论: 对任意ᶠ z in cobounded 𝕜, IsUnit (resolvent a z)
+  结论: 对任意ᶠ z in cobounded 𝕜, 是单位 (resolvent a z)
   证明: by
   rw [atTop_basis_Ioi.cobounded_of_norm.eventually_iff]
   exact ⟨‖a‖ * ‖(1 : A)‖, trivial, fun _ => isUnit_resolvent.mp ∘ mem_resolventSet_of_norm_lt_mul⟩
@@ -954,7 +954,7 @@ theorem resolvent_isBigO_inv
 中文:
 定理 resolvent_isBigO_inv
   条件: (a : A)
-  结论: resolvent a =O[cobounded 𝕜] Inv.inv
+  结论: resolvent a =O[cobounded 𝕜] 取逆.inv
   证明: have h : (fun z => resolvent (z⁻¹ • a) (1 : 𝕜)) =O[cobounded 𝕜] (fun _ => (1 : Real)) := by
     simpa [Function.comp_def, resolvent] using
       (NormedRing.inverse_one_sub_norm (R := A)).comp_tendsto
@@ -989,7 +989,7 @@ theorem resolvent_tendsto_cobounded
 中文:
 定理 resolvent_tendsto_cobounded
   条件: (a : A)
-  结论: Tendsto (resolvent a) (cobounded 𝕜) (𝓝 0)
+  结论: 收敛 (resolvent a) (cobounded 𝕜) (𝓝 0)
   证明: .trans_tendsto tendsto_inv₀_cobounded resolvent_isBigO_inv a
 
 Depends on / 依赖: resolvent_isBigO_inv, trans_tendsto
@@ -1025,7 +1025,7 @@ theorem hasFPowerSeriesOnBall_inverse_one_sub_smul
 
 中文:
 定理 hasFPowerSeriesOnBall_inverse_one_sub_smul
-  条件: [HasSummableGeomSeries A] (a : A)
+  条件: [有SummableGeomSeries A] (a : A)
   证明: { r_le := by
       refine le_of_forall_nnreal_lt fun r hr =>
         le_radius_of_bound_nnreal _ (max 1 ‖(1 : A)‖₊) fun n => ?_
@@ -1123,7 +1123,7 @@ theorem exp_mem_exp
 
 中文:
 定理 exp_mem_exp
-  结论: [RCLike 𝕜] [NormedRing A] [NormedAlgebra 𝕜 A] [CompleteSpace A]
+  结论: [RCLike 𝕜] [赋范环 A] [赋范代数 𝕜 A] [完备空间 A]
   证明: by
   let +nondep : NormedAlgebra Rat A := .restrictScalars Rat 𝕜 A
   have hexpmul : exp a = exp (a - ↑ₐ z) * ↑ₐ (exp z) := by
@@ -1227,7 +1227,7 @@ theorem norm_apply_le_self_mul_norm_one
 
 中文:
 定理 norm_apply_le_self_mul_norm_one
-  条件: [FunLike F A 𝕜] [AlgHomClass F 𝕜 A 𝕜] (f : F) (a : A)
+  条件: [函数状 F A 𝕜] [代数态射类 F 𝕜 A 𝕜] (f : F) (a : A)
   证明: spectrum.norm_le_norm_mul_of_mem (apply_mem_spectrum f _)
 
 Depends on / 依赖: apply_mem_spectrum, norm_le_norm_mul_of_mem, spectrum, spectrum.norm_le_norm_mul_of_mem
@@ -1246,7 +1246,7 @@ theorem norm_apply_le_self
 
 中文:
 定理 norm_apply_le_self
-  结论: [NormOneClass A] [FunLike F A 𝕜] [AlgHomClass F 𝕜 A 𝕜]
+  结论: [NormOne类 A] [函数状 F A 𝕜] [代数态射类 F 𝕜 A 𝕜]
   证明: spectrum.norm_le_norm_of_mem (apply_mem_spectrum f _)
 
 Depends on / 依赖: apply_mem_spectrum, norm_le_norm_of_mem, spectrum, spectrum.norm_le_norm_of_mem
@@ -1276,7 +1276,7 @@ theorem toContinuousLinearMap_norm
 
 中文:
 定理 toContinuousLinearMap_norm
-  条件: [NormOneClass A] (φ : A ->ₐ[𝕜] 𝕜)
+  条件: [NormOne类 A] (φ : A ->ₐ[𝕜] 𝕜)
   证明: ContinuousLinearMap.opNorm_eq_of_bounds zero_le_one
     (fun a => (one_mul ‖a‖).symm ▸ spectrum.norm_le_norm_of_mem (apply_mem_spectrum φ _))
     fun _ _ h => by simpa only [coe_toContinuousLinearMap, map_one, norm_one, mul_one] using h 1
@@ -1408,8 +1408,8 @@ continuousAt_subtype_val.tendsto.comp map_mono hla
     refine ⟨⟨a, ⟨(↑ha.unit⁻¹ : A), mem⟩, ?
 
 中文:
-引理 _root_.Subalgebra.isUnit_of_isUnit_val_of_eventually
-  结论: {l : Filter S} {a : S}
+引理 _root_.子代数.isUnit_of_isUnit_val_of_eventually
+  结论: {l : 滤子 S} {a : S}
   证明: by
   have hla₂ : Tendsto Ring.inverse (map (val S) l) (𝓝 (↑ha.unit⁻¹ : A)) := by
     rw [← Ring.inverse_unit]
@@ -1456,7 +1456,7 @@ lemma _root_.Subalgebra.frontier_spectrum
   rw [me
 
 中文:
-引理 _root_.Subalgebra.frontier_spectrum
+引理 _root_.子代数.frontier_spectrum
   结论: frontier (σ 𝕜 x) subseteq σ 𝕜 (x : A)
   证明: by
   have : CompleteSpace S := hS.completeSpace_coe
@@ -1501,7 +1501,7 @@ lemma Subalgebra.frontier_subset_frontier
   grw [inter_subset_right, spectrum.subset_subalgebra]
 
 中文:
-引理 Subalgebra.frontier_subset_frontier
+引理 子代数.frontier_subset_frontier
   证明: by
   rw [frontier_eq_closure_inter_closure (s := σ 𝕜 (x : A))]; rw [(spectrum.isClosed (x : A)).closure_eq]
   apply subset_inter (frontier_spectrum S x)
@@ -1532,7 +1532,7 @@ lemma Subalgebra.spectrum_sUnion_connectedComponentIn
   
 
 中文:
-引理 Subalgebra.spectrum_sUnion_connectedComponentIn
+引理 子代数.spectrum_sUnion_connectedComponentIn
   证明: by
   suffices IsClopen ((σ 𝕜 (x : A))ᶜ ↓inter (σ 𝕜 x \ σ 𝕜 (x : A))) by
     rw [← this.biUnion_connectedComponentIn (sdiff_subset_compl _ _)]; rw [union_sdiff_cancel (spectrum.subset_subalgebra x)]
@@ -1571,7 +1571,7 @@ lemma Subalgebra.spectrum_isBounded_connectedComponentIn
     rw [spectrum_sUnion
 
 中文:
-引理 Subalgebra.spectrum_isBounded_connectedComponentIn
+引理 子代数.spectrum_isBounded_connectedComponentIn
   条件: {z : 𝕜} (hz : z in σ 𝕜 x)
   证明: by
   by_cases hz' : z in σ 𝕜 (x : A)
@@ -1612,8 +1612,8 @@ have := (spectrum.isBounded (x : A)).union
     h.connectedComponentIn hz'
 
 中文:
-引理 Subalgebra.spectrum_eq_of_isPreconnected_compl
-  条件: (h : IsPreconnected (σ 𝕜 (x : A))ᶜ)
+引理 子代数.spectrum_eq_of_isPreconnected_compl
+  条件: (h : 是预连通 (σ 𝕜 (x : A))ᶜ)
   证明: by
   suffices σ 𝕜 x \ σ 𝕜 (x : A) = ∅ by
     rw [spectrum_sUnion_connectedComponentIn]; rw [this]
@@ -1658,7 +1658,7 @@ lemma spectralRadius_eq
 
 中文:
 引理 spectralRadius_eq
-  结论: {𝕜₁ 𝕜₂ A : 类型} [NormedField 𝕜₁] [NormedField 𝕜₂]
+  结论: {𝕜₁ 𝕜₂ A : 类型} [赋范域 𝕜₁] [赋范域 𝕜₂]
   证明: by
   rw [spectralRadius]; rw [spectralRadius]
 .nnnorm_map_of_map_zero (map_zero _) have := algebraMap_isometry 𝕜₁ 𝕜₂
@@ -1701,7 +1701,7 @@ lemma nnreal_iff_spectralRadius_le
 
 中文:
 引理 nnreal_iff_spectralRadius_le
-  条件: [Algebra 实数 A] {a : A} {t : 实数>=0} (ht : spectralRadius 实数 a <= t)
+  条件: [代数 实数 A] {a : A} {t : 实数>=0} (ht : spectralRadius 实数 a <= t)
   证明: by
   have : spectrum Real a subseteq Set.Icc (-t) t := by
     intro x hx
@@ -1747,8 +1747,8 @@ lemma _root_.NNReal.spectralRadius_mem_spectrum
   simpa
 
 中文:
-引理 _root_.NNReal.spectralRadius_mem_spectrum
-  结论: {A : 类型} [NormedRing A] [NormedAlgebra 实数 A]
+引理 _root_.非负实数.spectralRadius_mem_spectrum
+  结论: {A : 类型} [赋范环 A] [赋范代数 实数 A]
   证明: by
   obtain ⟨x, hx₁, hx₂⟩ := spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ha
   rw [← hx₂]; rw [ENNReal.toNNReal_coe]; rw [← spectrum.algebraMap_mem_iff Real]; rw [NNReal.algebraMap_eq_coe]
@@ -1777,8 +1777,8 @@ lemma _root_.Real.spectralRadius_mem_spectrum
   proof: NNReal.spectralRadius_mem_spectrum ha ha'
 
 中文:
-引理 _root_.Real.spectralRadius_mem_spectrum
-  结论: {A : 类型} [NormedRing A] [NormedAlgebra 实数 A]
+引理 _root_.实数.spectralRadius_mem_spectrum
+  结论: {A : 类型} [赋范环 A] [赋范代数 实数 A]
   证明: NNReal.spectralRadius_mem_spectrum ha ha'
 
 Depends on / 依赖: NNReal, NNReal.spectralRadius_mem_spectrum, spectralRadius_mem_spectrum
@@ -1801,8 +1801,8 @@ lemma _root_.Real.spectralRadius_mem_spectrum_or
 .imp (fun h => by rwa [h]) (fun h => by simpa [h]) exact abs_choice x
 
 中文:
-引理 _root_.Real.spectralRadius_mem_spectrum_or
-  结论: {A : 类型} [NormedRing A] [NormedAlgebra 实数 A]
+引理 _root_.实数.spectralRadius_mem_spectrum_or
+  结论: {A : 类型} [赋范环 A] [赋范代数 实数 A]
   证明: by
   obtain ⟨x, hx₁, hx₂⟩ := spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ha
   simp only [← hx₂, ENNReal.coe_toReal, coe_nnnorm, Real.norm_eq_abs]
@@ -1836,7 +1836,7 @@ lemma compactSpace
 
 中文:
 引理 compactSpace
-  结论: {R S A : 类型} [Semifield R] [Field S] [NonUnitalRing A]
+  结论: {R S A : 类型} [半域 R] [域 S] [非幺环 A]
   证明: by
   rw [← isCompact_iff_compactSpace] at h_cpct ⊢
   exact h.image ▸ h_cpct.image (map_continuous f)
@@ -1875,7 +1875,7 @@ lemma upperHemicontinuous_spectrum
 
 中文:
 引理 upperHemicontinuous_spectrum
-  结论: [NormedField 𝕜] [命题erSpace 𝕜]
+  结论: [赋范域 𝕜] [真空间 𝕜]
   证明: by
   /- It suffices to use the sequential characterization of upper hemicontinuity.
   Suppose that `a : ℕ → A` converges to `a₀`, `x : ℕ → 𝕜` converges to `x₀`, and for all `n`,
@@ -1920,7 +1920,7 @@ theorem upperHemicontinuous_spectrum_nnreal
 
 中文:
 定理 upperHemicontinuous_spectrum_nnreal
-  条件: [NormedRing A] [NormedAlgebra 实数 A] [CompleteSpace A]
+  条件: [赋范环 A] [赋范代数 实数 A] [完备空间 A]
   证明: by
   obtain ⟨⟨h₁, -⟩, h₂⟩ : IsClosedEmbedding ((↑) : Real>=0 -> Real) := NNReal.isClosedEmbedding_coe
 .isInducing_comp h₁ h₂ exact upperHemicontinuous_spectrum Real A
@@ -1949,7 +1949,7 @@ theorem upperHemicontinuous_quasispectrum
 
 中文:
 定理 upperHemicontinuous_quasispectrum
-  结论: [NontriviallyNormedField 𝕜] [命题erSpace 𝕜]
+  结论: [NontriviallyNormedField 𝕜] [真空间 𝕜]
   证明: by
   convert!
 .comp upperHemicontinuous_spectrum 𝕜 (WithLp 1 (Unitization 𝕜 A))
@@ -1984,7 +1984,7 @@ theorem upperHemicontinuous_quasispectrum_nnreal
 
 中文:
 定理 upperHemicontinuous_quasispectrum_nnreal
-  结论: [NonUnitalNormedRing A]
+  结论: [非幺赋范环 A]
   证明: by
   obtain ⟨⟨h₁, -⟩, h₂⟩ := NNReal.isClosedEmbedding_coe
   simpa [← NNReal.algebraMap_eq_coe] using

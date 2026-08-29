@@ -49,7 +49,7 @@ definition IsHermitian
 
 中文:
 定义 IsHermitian
-  签名: (A : Matrix n n α)
+  签名: (A : 矩阵 n n α)
   定义体: Aᴴ = A
 -/
 def IsHermitian (A : Matrix n n α) : Prop := Aᴴ = A
@@ -68,7 +68,7 @@ theorem IsHermitian.eq
 
 中文:
 定理 IsHermitian.eq
-  条件: {A : Matrix n n α} (h : A.IsHermitian)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian)
   结论: Aᴴ = A
   证明: h
 -/
@@ -87,7 +87,7 @@ protected alias ⟨IsHermitian.isSelfAdjoint, _root_.IsSelfAdjoint.isHermitian�
 
 中文:
 定理 isHermitian_iff_isSelfAdjoint
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   证明: Iff.rfl
 
 protected alias ⟨IsHermitian.isSelfAdjoint, _root_.IsSelfAdjoint.isHermitian⟩ :=
@@ -132,7 +132,7 @@ theorem IsHermitian.ext
 
 中文:
 定理 IsHermitian.ext
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: (对任意 i j, star (A j i) = A i j) -> A.IsHermitian
   证明: by
   intro h; ext i j; exact h i j
@@ -151,7 +151,7 @@ theorem IsHermitian.apply
 
 中文:
 定理 IsHermitian.apply
-  条件: {A : Matrix n n α} (h : A.IsHermitian) (i j : n)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian) (i j : n)
   结论: star (A j i) = A i j
   证明: congr_fun (congr_fun h _) _
 
@@ -171,7 +171,7 @@ theorem IsHermitian.ext_iff
 
 中文:
 定理 IsHermitian.ext_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: A.IsHermitian ↔ 对任意 i j, star (A j i) = A i j
   证明: ⟨IsHermitian.apply, IsHermitian.ext⟩
 
@@ -193,7 +193,7 @@ lemma isHermitian_iff_isSymm
 
 中文:
 引理 isHermitian_iff_isSymm
-  条件: [TrivialStar α] {A : Matrix n n α}
+  条件: [TrivialStar α] {A : 矩阵 n n α}
   证明: by
   simp [IsHermitian.ext_iff, IsSymm.ext_iff]
 
@@ -217,7 +217,7 @@ theorem IsHermitian.map
 
 中文:
 定理 IsHermitian.map
-  结论: {A : Matrix n n α} (h : A.IsHermitian) (f : α -> β)
+  结论: {A : 矩阵 n n α} (h : A.IsHermitian) (f : α -> β)
   证明: by
   rw [IsHermitian]; rw [← conjTranspose_map f hf]; rw [h.eq]
 
@@ -243,7 +243,7 @@ theorem isHermitian_map_iff
 
 中文:
 定理 isHermitian_map_iff
-  结论: {A : Matrix n n α} {f : α -> β} (hf : Function.Semiconj f star star)
+  结论: {A : 矩阵 n n α} {f : α -> β} (hf : 函数.Semiconj f star star)
   证明: by
   rw [IsHermitian]; rw [IsHermitian]; rw [← conjTranspose_map f hf]; rw [map_injective hinj |>.eq_iff]
 
@@ -267,7 +267,7 @@ theorem IsHermitian.of_subsingleton
 
 中文:
 定理 IsHermitian.of_subsingleton
-  条件: {A : Matrix n n α} [Subsingleton α]
+  条件: {A : 矩阵 n n α} [子单例 α]
   结论: A.IsHermitian
   证明: .ext fun _ _ => Subsingleton.elim ..
 
@@ -291,7 +291,7 @@ theorem IsHermitian.transpose
 
 中文:
 定理 IsHermitian.transpose
-  条件: {A : Matrix n n α} (h : A.IsHermitian)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian)
   结论: Aᵀ.IsHermitian
   证明: by
   rw [IsHermitian]; rw [conjTranspose]; rw [transpose_map]
@@ -317,7 +317,7 @@ theorem isHermitian_transpose_iff
 
 中文:
 定理 isHermitian_transpose_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: Aᵀ.IsHermitian ↔ A.IsHermitian
   证明: ⟨by intro h; rw [← transpose_transpose A]; exact IsHermitian.transpose h, IsHermitian.transpose⟩
 
@@ -339,7 +339,7 @@ theorem IsHermitian.conjTranspose
 
 中文:
 定理 IsHermitian.conjTranspose
-  条件: {A : Matrix n n α} (h : A.IsHermitian)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian)
   结论: Aᴴ.IsHermitian
   证明: h.transpose.map _ fun _ => rfl
 
@@ -363,7 +363,7 @@ theorem IsHermitian.submatrix
 
 中文:
 定理 IsHermitian.submatrix
-  条件: {A : Matrix n n α} (h : A.IsHermitian) (f : m -> n)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian) (f : m -> n)
   证明: (conjTranspose_submatrix _ _ _).trans (h.symm ▸ rfl)
 
 @[simp]
@@ -384,7 +384,7 @@ theorem isHermitian_submatrix_equiv
 
 中文:
 定理 isHermitian_submatrix_equiv
-  条件: {A : Matrix n n α} (e : m ≃ n)
+  条件: {A : 矩阵 n n α} (e : m ≃ n)
   证明: ⟨fun h => by simpa using h.submatrix e.symm, fun h => h.submatrix _⟩
 
 Depends on / 依赖: e.symm, h.submatrix, submatrix
@@ -405,7 +405,7 @@ theorem IsHermitian.reindex
 
 中文:
 定理 IsHermitian.reindex
-  条件: {A : Matrix n n α} (h : A.IsHermitian) (f : n ≃ m)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian) (f : n ≃ m)
   证明: by
   rw [reindex_apply]
   apply submatrix h
@@ -429,7 +429,7 @@ theorem isHermitian_reindex_iff
 
 中文:
 定理 isHermitian_reindex_iff
-  条件: {A : Matrix n n α} (f : n ≃ m)
+  条件: {A : 矩阵 n n α} (f : n ≃ m)
   证明: by
   refine ⟨fun h => ?_, (·.reindex f)⟩
   simpa using h.reindex f.symm
@@ -451,7 +451,7 @@ theorem conjTranspose_comp
 
 中文:
 定理 conjTranspose_comp
-  条件: {I J K L : 类型} (M : Matrix I J (Matrix K L α))
+  条件: {I J K L : 类型} (M : 矩阵 I J (矩阵 K L α))
   证明: rfl
 -/
 theorem conjTranspose_comp {I J K L : Type*} (M : Matrix I J (Matrix K L α)) :
@@ -468,7 +468,7 @@ theorem conjTranspose_comp'
 
 中文:
 定理 conjTranspose_comp'
-  条件: {I J K : 类型} (M : Matrix I J (Matrix K K α))
+  条件: {I J K : 类型} (M : 矩阵 I J (矩阵 K K α))
   证明: rfl
 -/
 theorem conjTranspose_comp' {I J K : Type*} (M : Matrix I J (Matrix K K α)) :
@@ -486,7 +486,7 @@ theorem isHermitian_comp_iff
 
 中文:
 定理 isHermitian_comp_iff
-  条件: {A : Matrix m m (Matrix n n α)}
+  条件: {A : 矩阵 m m (矩阵 n n α)}
   证明: by
   rw [IsHermitian]; rw [IsHermitian]; rw [conjTranspose_comp']; rw [comp .. |>.injective.eq_iff]
 
@@ -507,8 +507,8 @@ theorem isHermitian_comp_iff_forall
   grind
 
 中文:
-定理 isHermitian_comp_iff_forall
-  条件: {A : Matrix m m (Matrix n n α)}
+定理 isHermitian_comp_iff_对任意
+  条件: {A : 矩阵 m m (矩阵 n n α)}
   证明: by
   simp [IsHermitian.ext_iff]
   grind
@@ -538,7 +538,7 @@ theorem isHermitian_conjTranspose_iff
 
 中文:
 定理 isHermitian_conjTranspose_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: Aᴴ.IsHermitian ↔ A.IsHermitian
   证明: IsSelfAdjoint.star_iff
 
@@ -560,7 +560,7 @@ theorem IsHermitian.fromBlocks
 
 中文:
 定理 IsHermitian.fromBlocks
-  结论: {A : Matrix m m α} {B : Matrix m n α} {C : Matrix n m α}
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α} {C : 矩阵 n m α}
   证明: by
   have hCB : Cᴴ = B := by rw [← hBC, conjTranspose_conjTranspose]
   unfold Matrix.IsHermitian
@@ -588,7 +588,7 @@ theorem isHermitian_fromBlocks_iff
 
 中文:
 定理 isHermitian_fromBlocks_iff
-  结论: {A : Matrix m m α} {B : Matrix m n α} {C : Matrix n m α}
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α} {C : 矩阵 n m α}
   证明: ⟨fun h =>
     ⟨congr_arg toBlocks₁₁ h, congr_arg toBlocks₂₁ h, congr_arg toBlocks₁₂ h,
       congr_arg toBlocks₂₂ h⟩,
@@ -617,7 +617,7 @@ theorem IsHermitian.hadamard
 
 中文:
 定理 IsHermitian.hadamard
-  结论: [CommMonoid α] [StarMul α] {A B : Matrix n n α}
+  结论: [交换幺半群 α] [StarMul α] {A B : 矩阵 n n α}
   证明: by
   rw [IsHermitian]; rw [conjTranspose_hadamard]; rw [hB.eq]; rw [hA.eq]; rw [hadamard_comm]
 
@@ -706,7 +706,7 @@ theorem isHermitian_blockDiagonal_iff
 
 中文:
 定理 isHermitian_blockDiagonal_iff
-  条件: [DecidableEq n] {M : n -> Matrix m m α}
+  条件: [DecidableEq n] {M : n -> 矩阵 m m α}
   证明: by
   simpa [IsHermitian] using isHermitian_blockDiagonal'_iff
 
@@ -752,7 +752,7 @@ theorem isHermitian_zero
 
 中文:
 定理 isHermitian_zero
-  结论: (0 : Matrix n n α).IsHermitian
+  结论: (0 : 矩阵 n n α).IsHermitian
   证明: IsSelfAdjoint.zero _
 
 @[simp]
@@ -773,7 +773,7 @@ theorem IsHermitian.add
 
 中文:
 定理 IsHermitian.add
-  条件: {A B : Matrix n n α} (hA : A.IsHermitian) (hB : B.IsHermitian)
+  条件: {A B : 矩阵 n n α} (hA : A.IsHermitian) (hB : B.IsHermitian)
   证明: IsSelfAdjoint.add hA hB
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.add
@@ -799,7 +799,7 @@ theorem isHermitian_add_transpose_self
 
 中文:
 定理 isHermitian_add_transpose_self
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: (A + Aᴴ).IsHermitian
   证明: IsSelfAdjoint.add_star_self A
 
@@ -819,7 +819,7 @@ theorem isHermitian_transpose_add_self
 
 中文:
 定理 isHermitian_transpose_add_self
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: (Aᴴ + A).IsHermitian
   证明: IsSelfAdjoint.star_add_self A
 
@@ -848,7 +848,7 @@ theorem IsHermitian.neg
 
 中文:
 定理 IsHermitian.neg
-  条件: {A : Matrix n n α} (h : A.IsHermitian)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian)
   结论: (-A).IsHermitian
   证明: IsSelfAdjoint.neg h
 
@@ -876,7 +876,7 @@ theorem isHermitian_neg_iff
 
 中文:
 定理 isHermitian_neg_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: (-A).IsHermitian ↔ A.IsHermitian
   证明: by
   refine ⟨fun h => ?_, (·.neg)⟩
@@ -903,7 +903,7 @@ theorem IsHermitian.sub
 
 中文:
 定理 IsHermitian.sub
-  条件: {A B : Matrix n n α} (hA : A.IsHermitian) (hB : B.IsHermitian)
+  条件: {A B : 矩阵 n n α} (hA : A.IsHermitian) (hB : B.IsHermitian)
   证明: IsSelfAdjoint.sub hA hB
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.sub
@@ -929,7 +929,7 @@ theorem IsHermitian.smul
 
 中文:
 定理 IsHermitian.smul
-  条件: {A : Matrix n n α} (h : A.IsHermitian) {k : R} (hk : IsSelfAdjoint k)
+  条件: {A : 矩阵 n n α} (h : A.IsHermitian) {k : R} (hk : IsSelfAdjoint k)
   证明: by
   rw [IsHermitian]; rw [conjTranspose_smul]; rw [hk.star_eq]; rw [h.eq]
 
@@ -957,7 +957,7 @@ theorem IsHermitian.of_smul
 
 中文:
 定理 IsHermitian.of_smul
-  结论: {A : Matrix n n α} {k : R} [Invertible k] (h : (k • A).IsHermitian)
+  结论: {A : 矩阵 n n α} {k : R} [可逆 k] (h : (k • A).IsHermitian)
   证明: by
   rw [IsHermitian]; rw [conjTranspose_smul]; rw [hk.star_eq] at h
   simpa using! congr(⅟k • $h)
@@ -983,7 +983,7 @@ theorem IsHermitian.of_smul'
 
 中文:
 定理 IsHermitian.of_smul'
-  结论: {A : Matrix n n α} {k : R} [Invertible k] (h : (k • A).IsHermitian)
+  结论: {A : 矩阵 n n α} {k : R} [可逆 k] (h : (k • A).IsHermitian)
   证明: by
   rw [← invOf_smul_smul k A]
   exact h.smul hk
@@ -1008,7 +1008,7 @@ theorem isHermitian_smul_iff
 
 中文:
 定理 isHermitian_smul_iff
-  条件: {A : Matrix n n α} {k : R} [Invertible k] (hk : IsSelfAdjoint k)
+  条件: {A : 矩阵 n n α} {k : R} [可逆 k] (hk : IsSelfAdjoint k)
   证明: ⟨(·.of_smul hk), (·.smul hk)⟩
 
 Depends on / 依赖: of_smul
@@ -1033,7 +1033,7 @@ theorem isHermitian_mul_conjTranspose_self
 
 中文:
 定理 isHermitian_mul_conjTranspose_self
-  条件: [Fintype n] (A : Matrix m n α)
+  条件: [有限类型 n] (A : 矩阵 m n α)
   证明: by rw [IsHermitian, conjTranspose_mul, conjTranspose_conjTranspose]
 
 Depends on / 依赖: IsHermitian, conjTranspose_conjTranspose, conjTranspose_mul
@@ -1052,7 +1052,7 @@ theorem isHermitian_conjTranspose_mul_self
 
 中文:
 定理 isHermitian_conjTranspose_mul_self
-  条件: [Fintype m] (A : Matrix m n α)
+  条件: [有限类型 m] (A : 矩阵 m n α)
   证明: by
   rw [IsHermitian]; rw [conjTranspose_mul]; rw [conjTranspose_conjTranspose]
 
@@ -1073,7 +1073,7 @@ theorem isHermitian_conjTranspose_mul_mul
 
 中文:
 定理 isHermitian_conjTranspose_mul_mul
-  结论: [Fintype m] {A : Matrix m m α} (B : Matrix m n α)
+  结论: [有限类型 m] {A : 矩阵 m m α} (B : 矩阵 m n α)
   证明: by
   simp only [IsHermitian, conjTranspose_mul, conjTranspose_conjTranspose, hA.eq, Matrix.mul_assoc]
 
@@ -1094,7 +1094,7 @@ theorem isHermitian_mul_mul_conjTranspose
 
 中文:
 定理 isHermitian_mul_mul_conjTranspose
-  结论: [Fintype m] {A : Matrix m m α} (B : Matrix n m α)
+  结论: [有限类型 m] {A : 矩阵 m m α} (B : 矩阵 n m α)
   证明: by
   simp only [IsHermitian, conjTranspose_mul, conjTranspose_conjTranspose, hA.eq, Matrix.mul_assoc]
 
@@ -1114,7 +1114,7 @@ lemma IsHermitian.commute_iff
 
 中文:
 引理 IsHermitian.commute_iff
-  结论: [Fintype n] {A B : Matrix n n α}
+  结论: [有限类型 n] {A B : 矩阵 n n α}
   证明: hA.isSelfAdjoint.commute_iff hB.isSelfAdjoint
 
 Depends on / 依赖: commute_iff, hA.isSelfAdjoint.commute_iff, hB.isSelfAdjoint, isSelfAdjoint
@@ -1144,7 +1144,7 @@ theorem isHermitian_one
 中文:
 定理 isHermitian_one
   条件: [DecidableEq n]
-  结论: (1 : Matrix n n α).IsHermitian
+  结论: (1 : 矩阵 n n α).IsHermitian
   证明: conjTranspose_one
 
 Depends on / 依赖: conjTranspose_one
@@ -1171,7 +1171,7 @@ theorem isHermitian_natCast
 中文:
 定理 isHermitian_natCast
   条件: [DecidableEq n] (d : 自然数)
-  结论: (d : Matrix n n α).IsHermitian
+  结论: (d : 矩阵 n n α).IsHermitian
   证明: conjTranspose_natCast _
 
 Depends on / 依赖: conjTranspose_natCast
@@ -1189,7 +1189,7 @@ theorem IsHermitian.pow
 
 中文:
 定理 IsHermitian.pow
-  条件: [Fintype n] [DecidableEq n] {A : Matrix n n α} (h : A.IsHermitian) (k : 自然数)
+  条件: [有限类型 n] [DecidableEq n] {A : 矩阵 n n α} (h : A.IsHermitian) (k : 自然数)
   证明: IsSelfAdjoint.pow h _
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.pow
@@ -1215,7 +1215,7 @@ theorem isHermitian_intCast
 中文:
 定理 isHermitian_intCast
   条件: [DecidableEq n] (d : 整数)
-  结论: (d : Matrix n n α).IsHermitian
+  结论: (d : 矩阵 n n α).IsHermitian
   证明: conjTranspose_intCast _
 
 Depends on / 依赖: conjTranspose_intCast
@@ -1241,7 +1241,7 @@ theorem IsHermitian.inv
 
 中文:
 定理 IsHermitian.inv
-  条件: [Fintype m] [DecidableEq m] {A : Matrix m m α} (hA : A.IsHermitian)
+  条件: [有限类型 m] [DecidableEq m] {A : 矩阵 m m α} (hA : A.IsHermitian)
   证明: by simp [IsHermitian, conjTranspose_nonsing_inv, hA.eq]
 
 @[simp]
@@ -1262,7 +1262,7 @@ theorem isHermitian_inv
 
 中文:
 定理 isHermitian_inv
-  条件: [Fintype m] [DecidableEq m] (A : Matrix m m α) [Invertible A]
+  条件: [有限类型 m] [DecidableEq m] (A : 矩阵 m m α) [可逆 A]
   证明: ⟨fun h => by rw [← inv_inv_of_invertible A]; exact IsHermitian.inv h, IsHermitian.inv⟩
 
 Depends on / 依赖: IsHermitian, IsHermitian.inv, inv_inv_of_invertible
@@ -1281,7 +1281,7 @@ theorem IsHermitian.adjugate
 
 中文:
 定理 IsHermitian.adjugate
-  条件: [Fintype m] [DecidableEq m] {A : Matrix m m α} (hA : A.IsHermitian)
+  条件: [有限类型 m] [DecidableEq m] {A : 矩阵 m m α} (hA : A.IsHermitian)
   证明: by simp [IsHermitian, adjugate_conjTranspose, hA.eq]
 
 Depends on / 依赖: IsHermitian, adjugate_conjTranspose, hA.eq
@@ -1300,7 +1300,7 @@ theorem IsHermitian.zpow
 
 中文:
 定理 IsHermitian.zpow
-  结论: [Fintype m] [DecidableEq m] {A : Matrix m m α} (h : A.IsHermitian)
+  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m α} (h : A.IsHermitian)
   证明: by
   rw [IsHermitian]; rw [conjTranspose_zpow]; rw [h]
 
@@ -1330,7 +1330,7 @@ theorem schur_complement_eq₁₁
 
 中文:
 定理 schur_complement_eq₁₁
-  结论: [Fintype m] [DecidableEq m] [Fintype n] {A : Matrix m m α}
+  结论: [有限类型 m] [DecidableEq m] [有限类型 n] {A : 矩阵 m m α}
   证明: by
   simp [Function.star_sumElim, vecMul_fromBlocks, add_vecMul,
     dotProduct_mulVec, vecMul_sub, Matrix.mul_assoc, hA.eq,
@@ -1364,7 +1364,7 @@ theorem schur_complement_eq₂₂
 
 中文:
 定理 schur_complement_eq₂₂
-  结论: [Fintype m] [Fintype n] [DecidableEq n] (A : Matrix m m α)
+  结论: [有限类型 m] [有限类型 n] [DecidableEq n] (A : 矩阵 m m α)
   证明: by
   simp [Function.star_sumElim, vecMul_fromBlocks, add_vecMul,
     dotProduct_mulVec, vecMul_sub, Matrix.mul_assoc, hD.eq,
@@ -1400,7 +1400,7 @@ theorem fromBlocks₁₁
 
 中文:
 定理 fromBlocks₁₁
-  结论: [Fintype m] [DecidableEq m] {A : Matrix m m α} (B : Matrix m n α)
+  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m α} (B : 矩阵 m n α)
   证明: by
   have hBAB : (Bᴴ * A⁻¹ * B).IsHermitian := isHermitian_conjTranspose_mul_mul _ hA.inv
   rw [isHermitian_fromBlocks_iff]
@@ -1429,7 +1429,7 @@ theorem fromBlocks₂₂
 
 中文:
 定理 fromBlocks₂₂
-  结论: [Fintype n] [DecidableEq n] (A : Matrix m m α) (B : Matrix m n α)
+  结论: [有限类型 n] [DecidableEq n] (A : 矩阵 m m α) (B : 矩阵 m n α)
   证明: by
   rw [← isHermitian_submatrix_equiv (Equiv.sumComm n m)]; rw [Equiv.sumComm_apply]; rw [fromBlocks_submatrix_sum_swap_sum_swap]
   convert! IsHermitian.fromBlocks₁₁ _ _ hD <;> simp

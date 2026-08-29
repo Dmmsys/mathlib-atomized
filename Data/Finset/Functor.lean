@@ -47,7 +47,7 @@ instance functor
 
 中文:
 实例 functor
-  签名: : Functor Finset where map f s
+  签名: : 函子 有限集 where map f s
   定义体: s.image f
 -/
 protected instance functor : Functor Finset where map f s := s.image f
@@ -66,7 +66,7 @@ instance lawfulFunctor
 
 中文:
 实例 lawfulFunctor
-  签名: : LawfulFunctor Finset where
+  签名: : Lawful函子 有限集 where
   定义体: image_id
   comp_map _ _ _ := image_image.symm
   map_const {α} {β} := by simp only [Functor.mapConst, Functor.map]
@@ -92,8 +92,8 @@ theorem fmap_def
 
 中文:
 定理 fmap_def
-  条件: {s : Finset α} (f : α -> β)
-  结论: f < > s = s.image f
+  条件: {s : 有限集 α} (f : α -> β)
+  结论: f < > s = s.像 f
   证明: rfl
 -/
 theorem fmap_def {s : Finset α} (f : α -> β) : f < > s = s.image f := rfl
@@ -114,7 +114,7 @@ instance pure
 
 中文:
 实例 pure
-  签名: : Pure Finset
+  签名: : Pure 有限集
   定义体: ⟨fun x => {x}⟩
 
 @[simp]
@@ -135,7 +135,7 @@ theorem pure_def
 中文:
 定理 pure_def
   条件: {α}
-  结论: (pure : α -> Finset α) = singleton
+  结论: (pure : α -> 有限集 α) = singleton
   证明: rfl
 -/
 theorem pure_def {α} : (pure : α -> Finset α) = singleton := rfl
@@ -162,7 +162,7 @@ instance applicative
 
 中文:
 实例 applicative
-  签名: : Applicative Finset
+  签名: : 适用 有限集
   定义体: { Finset.functor, Finset.pure with
     seq := fun t s => t.sup fun f => (s ()).image f
     seqLeft := fun s t => if t () = ∅ then ∅ else s
@@ -190,8 +190,8 @@ theorem seq_def
 
 中文:
 定理 seq_def
-  条件: (s : Finset α) (t : Finset (α -> β))
-  结论: t <*> s = t.sup fun f => s.image f
+  条件: (s : 有限集 α) (t : 有限集 (α -> β))
+  结论: t <*> s = t.上确界 fun f => s.像 f
   证明: rfl
 
 @[simp]
@@ -213,7 +213,7 @@ theorem seqLeft_def
 
 中文:
 定理 seqLeft_def
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: s <* t = if t = ∅ then ∅ else s
   证明: rfl
 
@@ -234,7 +234,7 @@ theorem seqRight_def
 
 中文:
 定理 seqRight_def
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: s *> t = if s = ∅ then ∅ else t
   证明: rfl
 -/
@@ -253,7 +253,7 @@ theorem image₂_def
 
 中文:
 定理 image₂_def
-  条件: {α β γ : 类型u} (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  条件: {α β γ : 类型u} (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: by
   ext
   simp [mem_sup]
@@ -283,7 +283,7 @@ instance lawfulApplicative
 
 中文:
 实例 lawfulApplicative
-  签名: : LawfulApplicative Finset
+  签名: : 合法适用 有限集
   定义体: { Finset.lawfulFunctor with
     seqLeft_eq := fun s t => by
       rw [seq_def]; rw [fmap_def]; rw [seqLeft_def]
@@ -351,7 +351,7 @@ instance commApplicative
 
 中文:
 实例 commApplicative
-  签名: : CommApplicative Finset
+  签名: : 交换适用 有限集
   定义体: { Finset.lawfulApplicative with
     commutative_prod := fun s t => by
       simp_rw [seq_def, fmap_def, sup_image, sup_eq_biUnion]
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad Finset
+  签名: 单子 有限集
   定义体: { Finset.applicative with bind := sup }
 
 @[simp]
@@ -413,7 +413,7 @@ theorem bind_def
 中文:
 定理 bind_def
   条件: {α β}
-  结论: (· >>= ·) = sup (α := Finset α) (β := β)
+  结论: (· >>= ·) = 上确界 (α := 有限集 α) (β := β)
   证明: rfl
 
 Depends on / 依赖: Finset
@@ -435,7 +435,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad Finset
+  签名: 合法单子 有限集
   定义体: { Finset.lawfulApplicative with
     bind_pure_comp := fun _ _ => sup_singleton_apply _ _
     bind_map := fun _ _ => rfl
@@ -471,7 +471,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlternativeMonad Finset
+  签名: AlternativeMonad 有限集
   定义体: s union t ()
   failure := ∅
 -/
@@ -494,7 +494,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulAlternative Finset
+  签名: LawfulAlternative 有限集
   定义体: Finset.image_empty _
   failure_seq _ := Finset.sup_empty
   orElse_failure _ := Finset.union_empty _
@@ -534,7 +534,7 @@ definition traverse
 
 中文:
 定义 traverse
-  签名: [DecidableEq β] (f : α -> F β) (s : Finset α)
+  签名: [DecidableEq β] (f : α -> F β) (s : 有限集 α)
   定义体: Multiset.toFinset < > Multiset.traverse f s.1
 
 @[simp]
@@ -558,7 +558,7 @@ theorem id_traverse
 
 中文:
 定理 id_traverse
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   结论: traverse (pure : α -> Id α) s = pure s
   证明: by
   rw [traverse]; rw [Multiset.id_traverse]
@@ -626,7 +626,7 @@ theorem map_traverse
 
 中文:
 定理 map_traverse
-  条件: (g : α -> G β) (h : β -> γ) (s : Finset α)
+  条件: (g : α -> G β) (h : β -> γ) (s : 有限集 α)
   证明: by
   unfold traverse
   simp only [Functor.map_map, fmap_def, map_comp_coe_apply, Multiset.fmap_def, ←

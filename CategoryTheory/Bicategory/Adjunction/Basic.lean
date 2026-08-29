@@ -140,7 +140,7 @@ structure Adjunction
     - right_triangle : rightZigzag unit counit = (ρ_ _).hom ≫ (fun_ _).inv  [default: by cat_disch]
 
 中文:
-结构 Adjunction
+结构 伴随
   参数: (f : a ⟶ b) (g : b ⟶ a)
   公理与运算 (4 个):
     - unit : 𝟙 a ⟶ f ≫ g
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Adjunction (𝟙 a) (𝟙 a))
+  签名: 可居 (伴随 (𝟙 a) (𝟙 a))
   定义体: ⟨id a⟩
 -/
 instance : Inhabited (Adjunction (𝟙 a) (𝟙 a)) :=
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (leftZigzag η.hom ε.hom)
+  签名: 是同构 (leftZigzag η.hom ε.hom)
   定义体: inferInstanceAs IsIso (leftZigzagIso η ε).hom
 
 Depends on / 依赖: leftZigzagIso
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (rightZigzag η.hom ε.hom)
+  签名: 是同构 (rightZigzag η.hom ε.hom)
   定义体: inferInstanceAs IsIso (rightZigzagIso η ε).hom
 
 Depends on / 依赖: rightZigzagIso
@@ -700,7 +700,7 @@ structure Equivalence
     - left_triangle : leftZigzagIso unit counit = fun_ hom ≪≫ (ρ_ hom).symm  [default: by cat_disch]
 
 中文:
-结构 Equivalence
+结构 等价
   参数: (a b : B)
   公理与运算 (5 个):
     - hom : a ⟶ b
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Equivalence a a)
+  签名: 可居 (等价 a a)
   定义体: ⟨id a⟩
 -/
 instance : Inhabited (Equivalence a a) := ⟨id a⟩
@@ -862,7 +862,7 @@ structure RightAdjoint
     - adj : left ⊣ right
 
 中文:
-结构 RightAdjoint
+结构 右伴随
   参数: (left : a ⟶ b)
   公理与运算 (2 个):
     - right : b ⟶ a
@@ -883,7 +883,7 @@ class IsLeftAdjoint
   (no additional axioms)
 
 中文:
-类 IsLeftAdjoint
+类 是左伴随
   参数: (left : a ⟶ b)
   (无附加公理)
 -/
@@ -900,9 +900,9 @@ theorem IsLeftAdjoint.mk
   proof: ⟨⟨g, adj⟩⟩
 
 中文:
-定理 IsLeftAdjoint.mk
+定理 是左伴随.mk
   条件: (adj : f ⊣ g)
-  结论: IsLeftAdjoint f
+  结论: 是左伴随 f
   证明: ⟨⟨g, adj⟩⟩
 -/
 theorem IsLeftAdjoint.mk (adj : f ⊣ g) : IsLeftAdjoint f :=
@@ -918,7 +918,7 @@ definition getRightAdjoint
 
 中文:
 定义 getRightAdjoint
-  签名: (f : a ⟶ b) [IsLeftAdjoint f]
+  签名: (f : a ⟶ b) [是左伴随 f]
   定义体: Classical.choice IsLeftAdjoint.nonempty
 
 Depends on / 依赖: Classical, Classical.choice, IsLeftAdjoint, IsLeftAdjoint.nonempty, choice, nonempty
@@ -936,7 +936,7 @@ definition rightAdjoint
 
 中文:
 定义 rightAdjoint
-  签名: (f : a ⟶ b) [IsLeftAdjoint f]
+  签名: (f : a ⟶ b) [是左伴随 f]
   定义体: (getRightAdjoint f).right
 
 Depends on / 依赖: getRightAdjoint
@@ -953,8 +953,8 @@ definition Adjunction.ofIsLeftAdjoint
   body: (getRightAdjoint f).adj
 
 中文:
-定义 Adjunction.ofIsLeftAdjoint
-  签名: (f : a ⟶ b) [IsLeftAdjoint f]
+定义 伴随.ofIsLeftAdjoint
+  签名: (f : a ⟶ b) [是左伴随 f]
   定义体: (getRightAdjoint f).adj
 
 Depends on / 依赖: guitartExact_of_isEquivalence_of_isIso
@@ -973,7 +973,7 @@ structure LeftAdjoint
     - adj : left ⊣ right
 
 中文:
-结构 LeftAdjoint
+结构 左伴随
   参数: (right : b ⟶ a)
   公理与运算 (2 个):
     - left : a ⟶ b
@@ -994,7 +994,7 @@ class IsRightAdjoint
   (no additional axioms)
 
 中文:
-类 IsRightAdjoint
+类 是右伴随
   参数: (right : b ⟶ a)
   (无附加公理)
 -/
@@ -1011,9 +1011,9 @@ theorem IsRightAdjoint.mk
   proof: ⟨⟨f, adj⟩⟩
 
 中文:
-定理 IsRightAdjoint.mk
+定理 是右伴随.mk
   条件: (adj : f ⊣ g)
-  结论: IsRightAdjoint g
+  结论: 是右伴随 g
   证明: ⟨⟨f, adj⟩⟩
 -/
 theorem IsRightAdjoint.mk (adj : f ⊣ g) : IsRightAdjoint g :=
@@ -1029,7 +1029,7 @@ definition getLeftAdjoint
 
 中文:
 定义 getLeftAdjoint
-  签名: (f : b ⟶ a) [IsRightAdjoint f]
+  签名: (f : b ⟶ a) [是右伴随 f]
   定义体: Classical.choice IsRightAdjoint.nonempty
 
 Depends on / 依赖: Classical, Classical.choice, IsRightAdjoint, IsRightAdjoint.nonempty, choice, nonempty
@@ -1047,7 +1047,7 @@ definition leftAdjoint
 
 中文:
 定义 leftAdjoint
-  签名: (f : b ⟶ a) [IsRightAdjoint f]
+  签名: (f : b ⟶ a) [是右伴随 f]
   定义体: (getLeftAdjoint f).left
 
 Depends on / 依赖: getLeftAdjoint
@@ -1064,8 +1064,8 @@ definition Adjunction.ofIsRightAdjoint
   body: (getLeftAdjoint f).adj
 
 中文:
-定义 Adjunction.ofIsRightAdjoint
-  签名: (f : b ⟶ a) [IsRightAdjoint f]
+定义 伴随.ofIsRightAdjoint
+  签名: (f : b ⟶ a) [是右伴随 f]
   定义体: (getLeftAdjoint f).adj
 
 Depends on / 依赖: getLeftAdjoint

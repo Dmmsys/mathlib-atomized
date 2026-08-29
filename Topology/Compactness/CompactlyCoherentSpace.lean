@@ -61,10 +61,10 @@ class CompactlyCoherentSpace
     - isCoherentWith : IsCoherentWith (X := X) {K | IsCompact K}
 
 中文:
-类 CompactlyCoherentSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 余mpactlyCoherent空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isCoherentWith : IsCoherentWith (X := X) {K | IsCompact K}
+    - isCoherentWith : 是余herentWith (X := X) {K | 是紧集 K}
 
 Depends on / 依赖: IsCompact
 -/
@@ -88,7 +88,7 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: [CompactlyCoherentSpace X] {A : Set X}
+  条件: [余mpactlyCoherent空间 X] {A : 集合 X}
   证明: IsCoherentWith.isOpen_iff isCoherentWith
 
 Depends on / 依赖: IsCoherentWith, IsCoherentWith.isOpen_iff, isCoherentWith, isOpen_iff
@@ -107,7 +107,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  条件: [CompactlyCoherentSpace X] (A : Set X)
+  条件: [余mpactlyCoherent空间 X] (A : 集合 X)
   证明: IsCoherentWith.isClosed_iff isCoherentWith
 
 Depends on / 依赖: IsCoherentWith, IsCoherentWith.isClosed_iff, isClosed_iff, isCoherentWith
@@ -126,7 +126,7 @@ lemma of_isOpen
 
 中文:
 引理 of_isOpen
-  条件: (h : 对任意 (A : Set X), (对任意 K, IsCompact K -> IsOpen (K ↓inter A)) -> IsOpen A)
+  条件: (h : 对任意 (A : 集合 X), (对任意 K, 是紧集 K -> 是开集 (K ↓inter A)) -> 是开集 A)
   证明: { isOpen_of_forall_induced := h }
 
 Depends on / 依赖: isOpen_of_forall_induced
@@ -145,7 +145,7 @@ lemma of_isClosed
 
 中文:
 引理 of_isClosed
-  条件: (h : 对任意 (A : Set X), (对任意 K, IsCompact K -> IsClosed (K ↓inter A)) -> IsClosed A)
+  条件: (h : 对任意 (A : 集合 X), (对任意 K, 是紧集 K -> 是闭集 (K ↓inter A)) -> 是闭集 A)
   证明: IsCoherentWith.of_isClosed h
 
 Depends on / 依赖: IsCoherentWith, IsCoherentWith.of_isClosed, of_isClosed
@@ -164,7 +164,7 @@ instance of_weaklyLocallyCompactSpace
 
 中文:
 实例 of_weaklyLocallyCompactSpace
-  签名: [WeaklyLocallyCompactSpace X]
+  签名: [WeaklyLocallyCompact空间 X]
   定义体: IsCoherentWith.of_nhds exists_compact_mem_nhds
 
 Depends on / 依赖: IsCoherentWith, IsCoherentWith.of_nhds, exists_compact_mem_nhds, of_nhds
@@ -182,7 +182,7 @@ instance of_sequentialSpace
 
 中文:
 实例 of_sequentialSpace
-  签名: [SequentialSpace X]
+  签名: [Sequential空间 X]
   定义体: IsCoherentWith.of_seq fun _u _x hux => hux.isCompact_insert_range
 
 Depends on / 依赖: IsCoherentWith, IsCoherentWith.of_seq, hux.isCompact_insert_range, isCompact_insert_range, of_seq
@@ -203,8 +203,8 @@ lemma isOpen_iff_forall_compactSpace
   exact hs K Subtype.val continuous_subtype_val
 
 中文:
-引理 isOpen_iff_forall_compactSpace
-  条件: [CompactlyCoherentSpace X] (s : Set X)
+引理 isOpen_iff_对任意_compactSpace
+  条件: [余mpactlyCoherent空间 X] (s : 集合 X)
   证明: by
 .mpr ?_⟩ refine ⟨fun hs _ _ _ _ hf => hs.preimage hf, fun hs => isOpen_iff
   intro K hK
@@ -235,8 +235,8 @@ lemma of_isOpen_forall_compactSpace
   rwa [← preimage_comp] at this
 
 中文:
-引理 of_isOpen_forall_compactSpace
-  结论: (h : 对任意 (s : Set X), (对任意 (K : 类型u) [TopologicalSpace K],
+引理 of_isOpen_对任意_compactSpace
+  结论: (h : 对任意 (s : 集合 X), (对任意 (K : 类型u) [拓扑空间 K],
   证明: by
   refine of_isOpen fun A hA => h A fun K _ _ f hf => ?_
   specialize hA (range f) (isCompact_range hf)
@@ -367,8 +367,8 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: {A : Set (𝐤X)}
-  结论: IsOpen A ↔
+  条件: {A : 集合 (𝐤X)}
+  结论: 是开集 A ↔
   证明: by
   simp_rw [isOpen_coinduced, isOpen_iSup_iff]
   rfl
@@ -391,7 +391,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  条件: {A : Set (𝐤X)}
+  条件: {A : 集合 (𝐤X)}
   证明: by
   simp_rw [isClosed_coinduced, isClosed_iSup_iff, ← isClosed_coinduced]
 
@@ -441,7 +441,7 @@ lemma continuous_mk_symm
 
 中文:
 引理 continuous_mk_symm
-  结论: Continuous (CompactCoherentification.mk X).symm
+  结论: 连续 (CompactCoherentification.mk X).symm
   证明: by
   rw [continuous_dom_iff]
   exact fun _ _ => continuousOn_id
@@ -462,7 +462,7 @@ lemma continuous_dom_of_continuous
 
 中文:
 引理 continuous_dom_of_continuous
-  条件: {f : X -> Y} (hf : Continuous f)
+  条件: {f : X -> Y} (hf : 连续 f)
   证明: hf.comp continuous_mk_symm
 
 Depends on / 依赖: continuous_mk_symm, hf.comp
@@ -485,7 +485,7 @@ lemma isOpenMap_mk
 
 中文:
 引理 isOpenMap_mk
-  结论: IsOpenMap (CompactCoherentification.mk X)
+  结论: 是开映射 (CompactCoherentification.mk X)
   证明: by
   intro A hA
   rw [isOpen_iff]; rw [Equiv.preimage_image]
@@ -512,7 +512,7 @@ lemma continuousOn_isCompact_mk
 
 中文:
 引理 continuousOn_isCompact_mk
-  条件: {K : Set X} (hK : IsCompact K)
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   rw [continuousOn_iff_continuous_domRestrict]
   exact ⟨fun U hU => isOpen_iff.mp hU K hK⟩
@@ -536,7 +536,7 @@ lemma continuousOn_rng_of_isCompact
 
 中文:
 引理 continuousOn_rng_of_isCompact
-  结论: {f : X -> 𝐤Y} {K : Set X}
+  结论: {f : X -> 𝐤Y} {K : 集合 X}
   证明: by
   refine ⟨fun H => continuous_mk_symm.comp_continuousOn H, fun H => ?_⟩
 .comp H (mapsTo_image f K) exact continuousOn_isCompact_mk (hK.image_of_continuousOn H)
@@ -561,7 +561,7 @@ lemma continuous_mk
 
 中文:
 引理 continuous_mk
-  条件: [CompactlyCoherentSpace X]
+  条件: [余mpactlyCoherent空间 X]
   证明: by
   rw [CompactlyCoherentSpace.isCoherentWith.continuous_iff]
   exact fun K hK => continuousOn_isCompact_mk hK
@@ -584,7 +584,7 @@ lemma continuous_rng_of_compactSpace
 
 中文:
 引理 continuous_rng_of_compactSpace
-  条件: {f : X -> 𝐤Y} [CompactSpace X]
+  条件: {f : X -> 𝐤Y} [紧空间 X]
   证明: by
   rw [← continuousOn_univ]; rw [continuousOn_rng_of_isCompact isCompact_univ]; rw [continuousOn_univ]
 
@@ -632,7 +632,7 @@ lemma continuous_map_of_continuous
 
 中文:
 引理 continuous_map_of_continuous
-  条件: {f : X -> Y} (hf : Continuous f)
+  条件: {f : X -> Y} (hf : 连续 f)
   证明: by
   apply continuous_map_of_continuousOn
   intros
@@ -657,7 +657,7 @@ lemma continuous_mk_comp_iff_of_compactSpace
 
 中文:
 引理 continuous_mk_comp_iff_of_compactSpace
-  条件: [CompactSpace X] {f : X -> Y}
+  条件: [紧空间 X] {f : X -> Y}
   证明: by
   rw [continuous_rng_of_compactSpace]; rw [← Function.comp_assoc]; rw [Equiv.symm_comp_self]; rw [Function.id_comp]
 
@@ -680,7 +680,7 @@ lemma continuousOn_mk_comp_iff_of_Compact
 
 中文:
 引理 continuousOn_mk_comp_iff_of_Compact
-  条件: {A : Set X} (hA : IsCompact A) {f : X -> Y}
+  条件: {A : 集合 X} (hA : 是紧集 A) {f : X -> Y}
   证明: by
   simp_rw [continuousOn_iff_continuous_domRestrict]
   let := isCompact_iff_compactSpace.1 hA
@@ -709,7 +709,7 @@ exact Equiv.image_preimage _ _ ▸ hK.image_of_continuousOn continuousOn_isCompa
 
 中文:
 引理 isCompact_iff
-  条件: {K : Set (CompactCoherentification X)}
+  条件: {K : 集合 (CompactCoherentification X)}
   证明: by
   constructor
   · intro hK
@@ -738,7 +738,7 @@ lemma isCompact_image_mk_iff
 
 中文:
 引理 isCompact_image_mk_iff
-  条件: {K : Set X}
+  条件: {K : 集合 X}
   证明: by
   rw [isCompact_iff]; rw [Equiv.preimage_image]
 
@@ -762,7 +762,7 @@ instance instCompactlyCoherentSpace
 
 中文:
 实例 instCompactlyCoherentSpace
-  签名: : CompactlyCoherentSpace (𝐤X)
+  签名: : 余mpactlyCoherent空间 (𝐤X)
   定义体: by
   refine .of_isOpen_forall_compactSpace fun U hU => isOpen_iff.mpr fun K hK => ?_
   rw [← preimage_comp]
@@ -789,7 +789,7 @@ definition homeo
 
 中文:
 定义 homeo
-  签名: [CompactlyCoherentSpace X]
+  签名: [余mpactlyCoherent空间 X]
   定义体: CompactCoherentification.mk X
   continuous_toFun := continuous_mk
   continuous_invFun := continuous_mk_symm
@@ -810,7 +810,7 @@ instance t2space
 
 中文:
 实例 t2space
-  签名: [t : T2Space X]
+  签名: [t : T2空间 X]
   定义体: T2Space.of_injective_continuous (f := (CompactCoherentification.mk X).symm)
       (CompactCoherentification.mk X).symm.injective continuous_mk_symm
 

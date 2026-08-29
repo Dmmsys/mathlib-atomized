@@ -39,7 +39,7 @@ definition smulZeroClass
 
 中文:
 定义 smulZeroClass
-  签名: [Zero β] [SMulZeroClass α β]
+  签名: [零 β] [SMulZero类 α β]
   定义体: coe_injective.smulZeroClass ⟨_, coe_zero⟩ coe_smul_finset
 -/
 protected def smulZeroClass [Zero β] [SMulZeroClass α β] : SMulZeroClass α (Finset β) :=
@@ -58,7 +58,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def distribSMul [AddZeroClass β] [DistribSMul α β]
+  签名: def distribSMul [加法零类 β] [分配标量乘法 α β]
   定义体: coe_injective.distribSMul coeAddMonoidHom coe_smul_finset
 -/
 protected noncomputable def distribSMul [AddZeroClass β] [DistribSMul α β] :
@@ -78,7 +78,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def distribMulAction [Monoid α] [AddMonoid β] [DistribMulAction α β]
+  签名: def distribMulAction [幺半群 α] [加法幺半群 β] [分配乘法作用 α β]
   定义体: coe_injective.distribMulAction coeAddMonoidHom coe_smul_finset
 -/
 protected noncomputable def distribMulAction [Monoid α] [AddMonoid β] [DistribMulAction α β] :
@@ -100,7 +100,7 @@ scoped[Pointwise] attribute [instance] Finset.smulZeroClass Finset.distribSMul
 
 中文:
 定义 noncomputable
-  签名: def mulDistribMulAction [Monoid α] [Monoid β] [MulDistribMulAction α β]
+  签名: def mulDistribMulAction [幺半群 α] [幺半群 β] [MulDistribMul作用 α β]
   定义体: coe_injective.mulDistribMulAction coeMonoidHom coe_smul_finset
 
 scoped[Pointwise] attribute [instance] Finset.smulZeroClass Finset.distribSMul
@@ -123,7 +123,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [Zero α] [Mul α] [NoZeroDivisors α] : NoZeroDivisors (Finset α)
+  签名: α] [零 α] [乘法 α] [无零因子 α] : 无零因子 (有限集 α)
   定义体: Function.Injective.noZeroDivisors _ coe_injective coe_zero coe_mul
 
 Depends on / 依赖: Function, Function.Injective.noZeroDivisors, Injective, coe_injective, coe_mul, coe_zero, noZeroDivisors
@@ -145,8 +145,8 @@ lemma smul_zero_subset
 
 中文:
 引理 smul_zero_subset
-  条件: (s : Finset α)
-  结论: s • (0 : Finset β) subseteq 0
+  条件: (s : 有限集 α)
+  结论: s • (0 : 有限集 β) subseteq 0
   证明: by simp [subset_iff, mem_smul]
 
 Depends on / 依赖: mem_smul, subset_iff
@@ -163,9 +163,9 @@ lemma Nonempty.smul_zero
   proof: s.smul_zero_subset.antisymm by simpa [mem_smul] using! hs
 
 中文:
-引理 Nonempty.smul_zero
-  条件: (hs : s.Nonempty)
-  结论: s • (0 : Finset β) = 0
+引理 非空.smul_zero
+  条件: (hs : s.非空)
+  结论: s • (0 : 有限集 β) = 0
   证明: s.smul_zero_subset.antisymm by simpa [mem_smul] using! hs
 
 Depends on / 依赖: antisymm, mem_smul, s.smul_zero_subset.antisymm, smul_zero_subset
@@ -210,8 +210,8 @@ lemma zero_smul_subset
 
 中文:
 引理 zero_smul_subset
-  条件: (t : Finset β)
-  结论: (0 : Finset α) • t subseteq 0
+  条件: (t : 有限集 β)
+  结论: (0 : 有限集 α) • t subseteq 0
   证明: by simp [subset_iff, mem_smul]
 
 Depends on / 依赖: mem_smul, subset_iff
@@ -228,9 +228,9 @@ lemma Nonempty.zero_smul
   proof: t.zero_smul_subset.antisymm by simpa [mem_smul] using! ht
 
 中文:
-引理 Nonempty.zero_smul
-  条件: (ht : t.Nonempty)
-  结论: (0 : Finset α) • t = 0
+引理 非空.zero_smul
+  条件: (ht : t.非空)
+  结论: (0 : 有限集 α) • t = 0
   证明: t.zero_smul_subset.antisymm by simpa [mem_smul] using! ht
 
 Depends on / 依赖: antisymm, mem_smul, t.zero_smul_subset.antisymm, zero_smul_subset
@@ -249,8 +249,8 @@ lemma zero_smul_finset
 
 中文:
 引理 zero_smul_finset
-  条件: {s : Finset β} (h : s.Nonempty)
-  结论: (0 : α) • s = (0 : Finset β)
+  条件: {s : 有限集 β} (h : s.非空)
+  结论: (0 : α) • s = (0 : 有限集 β)
   证明: coe_injective by simpa using @Set.zero_smul_set α _ _ _ _ _ h
 -/
 @[simp] lemma zero_smul_finset {s : Finset β} (h : s.Nonempty) : (0 : α) • s = (0 : Finset β) :=
@@ -267,7 +267,7 @@ lemma zero_smul_finset_subset
 
 中文:
 引理 zero_smul_finset_subset
-  条件: (s : Finset β)
+  条件: (s : 有限集 β)
   结论: (0 : α) • s subseteq 0
   证明: image_subset_iff.2 fun x _ => mem_zero.2 zero_smul α x
 
@@ -379,7 +379,7 @@ theorem pairwiseDisjoint_smul_iff₀
 
 中文:
 定理 pairwiseDisjoint_smul_iff₀
-  条件: {s : Set α} {t : Finset β} (hs : 对任意 a in s, a != 0)
+  条件: {s : 集合 α} {t : 有限集 β} (hs : 对任意 a in s, a != 0)
   证明: by
   simp_rw [← pairwiseDisjoint_coe, coe_smul_finset]
   exact Set.pairwiseDisjoint_image_right_iff (fun a ha => MulAction.injective₀ (hs a ha))
@@ -505,8 +505,8 @@ lemma smul_finset_univ₀
 
 中文:
 引理 smul_finset_univ₀
-  条件: [Fintype β] (ha : a != 0)
-  结论: a • (univ : Finset β) = univ
+  条件: [有限类型 β] (ha : a != 0)
+  结论: a • (univ : 有限集 β) = univ
   证明: coe_injective by push_cast; exact Set.smul_set_univ₀ ha
 
 @[simp]
@@ -529,7 +529,7 @@ lemma smul_finset_eq_univ₀
 
 中文:
 引理 smul_finset_eq_univ₀
-  条件: [Fintype β] (ha : a != 0)
+  条件: [有限类型 β] (ha : a != 0)
   结论: a • s = univ ↔ s = univ
   证明: by
   exact_mod_cast smul_finset_eq_univ (α := Units α) (a := Units.mk0 a ha)
@@ -553,8 +553,8 @@ lemma smul_univ₀
 
 中文:
 引理 smul_univ₀
-  条件: [Fintype β] {s : Finset α} (hs : ¬s subseteq 0)
-  结论: s • (univ : Finset β) = univ
+  条件: [有限类型 β] {s : 有限集 α} (hs : ¬s subseteq 0)
+  结论: s • (univ : 有限集 β) = univ
   证明: coe_injective by
     rw [← coe_subset] at hs
     push_cast at hs ⊢
@@ -581,8 +581,8 @@ lemma smul_univ₀'
 
 中文:
 引理 smul_univ₀'
-  条件: [Fintype β] {s : Finset α} (hs : s.Nontrivial)
-  结论: s • (univ : Finset β) = univ
+  条件: [有限类型 β] {s : 有限集 α} (hs : s.非平凡)
+  结论: s • (univ : 有限集 β) = univ
   证明: coe_injective by push_cast; exact Set.smul_univ₀' hs
 
 @[simp]
@@ -604,7 +604,7 @@ lemma card_smul_finset₀
 
 中文:
 引理 card_smul_finset₀
-  条件: (ha : a != 0) (s : Finset β)
+  条件: (ha : a != 0) (s : 有限集 β)
   结论: (a • s).card = s.card
   证明: card_image_of_injective _ (MulAction.injective₀ ha)
 
@@ -623,7 +623,7 @@ lemma card_dvd_card_smul_right₀
 
 中文:
 引理 card_dvd_card_smul_right₀
-  条件: {s : Finset α} (hs : 对任意 a in s, a != 0)
+  条件: {s : 有限集 α} (hs : 对任意 a in s, a != 0)
   证明: card_dvd_card_image₂_right fun a ha => MulAction.injective₀ (hs a ha)
 
 Depends on / 依赖: MulAction, MulAction.injective
@@ -654,7 +654,7 @@ lemma inv_smul_finset_distrib₀
 
 中文:
 引理 inv_smul_finset_distrib₀
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (a • s)⁻¹ = s⁻¹ <• a⁻¹
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -687,7 +687,7 @@ lemma inv_op_smul_finset_distrib₀
 
 中文:
 引理 inv_op_smul_finset_distrib₀
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (s <• a)⁻¹ = a⁻¹ • s⁻¹
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -726,7 +726,7 @@ lemma smul_finset_neg
 
 中文:
 引理 smul_finset_neg
-  条件: (a : α) (t : Finset β)
+  条件: (a : α) (t : 有限集 β)
   结论: a • -t = -(a • t)
   证明: by
   simp only [← image_smul, ← image_neg_eq_neg, Function.comp_def, image_image, smul_neg]
@@ -751,7 +751,7 @@ lemma smul_neg
 
 中文:
 引理 smul_neg
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: s • -t = -(s • t)
   证明: by
   simp_rw [← image_neg_eq_neg]; exact image_image₂_right_comm smul_neg

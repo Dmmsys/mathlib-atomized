@@ -44,7 +44,7 @@ deriving Nontrivial,
   ZeroLEOneClass, IsOrderedAddMonoid
 
 中文:
-定义 EReal
+定义 E实数
   定义体: WithBot (WithTop Real)
 deriving Nontrivial,
   Zero, One, AddMonoid, AddCommMonoid, AddCommMonoidWithOne, CharZero,
@@ -68,7 +68,7 @@ definition Real.toEReal
   body: WithBot.some ∘ WithTop.some
 
 中文:
-定义 Real.toEReal
+定义 实数.toE实数
   签名: : 实数 -> E实数
   定义体: WithBot.some ∘ WithTop.some
 -/
@@ -103,7 +103,7 @@ theorem coe_strictMono
 
 中文:
 定理 coe_strictMono
-  结论: StrictMono 实数.toE实数
+  结论: 严格递增 实数.toE实数
   证明: WithBot.coe_strictMono.comp WithTop.coe_strictMono
 
 Depends on / 依赖: WithBot, WithBot.coe_strictMono.comp, WithTop, WithTop.coe_strictMono, coe_strictMono
@@ -123,7 +123,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective 实数.toE实数
+  结论: 单射 实数.toE实数
   证明: coe_strictMono.injective
 
 @[simp, norm_cast]
@@ -297,7 +297,7 @@ definition _root_.ENNReal.toEReal
   signature: : Real>=0∞ -> EReal
 
 中文:
-定义 _root_.ENNReal.toEReal
+定义 _root_.广义非负实数.toE实数
   签名: : 实数>=0∞ -> E实数
 -/
 @[coe] def _root_.ENNReal.toEReal : Real>=0∞ -> EReal
@@ -313,7 +313,7 @@ instance hasCoeENNReal
   body: ⟨ENNReal.toEReal⟩
 
 中文:
-实例 hasCoeENNReal
+实例 hasCoeENN实数
   签名: : Coe 实数>=0∞ E实数
   定义体: ⟨ENNReal.toEReal⟩
 
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited E实数
+  签名: 可居 E实数
   定义体: ⟨0⟩
 
 @[simp, norm_cast]
@@ -391,7 +391,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : E实数 -> Sort*}
+  签名: {motive : E实数 -> 类型层*}
 -/
 protected def rec {motive : EReal -> Sort*}
     (bot : motive ⊥) (coe : forall a : Real, motive a) (top : motive ⊤) : forall a : EReal, motive a
@@ -409,7 +409,7 @@ theorem rec_bot
 
 中文:
 定理 rec_bot
-  结论: {motive : E实数 -> Sort*}
+  结论: {motive : E实数 -> 类型层*}
   证明: rfl
 -/
 @[simp] theorem rec_bot {motive : EReal -> Sort*}
@@ -426,7 +426,7 @@ theorem rec_top
 
 中文:
 定理 rec_top
-  结论: {motive : E实数 -> Sort*}
+  结论: {motive : E实数 -> 类型层*}
   证明: rfl
 -/
 @[simp] theorem rec_top {motive : EReal -> Sort*}
@@ -443,7 +443,7 @@ theorem rec_coe
 
 中文:
 定理 rec_coe
-  结论: {motive : E实数 -> Sort*}
+  结论: {motive : E实数 -> 类型层*}
   证明: rfl
 -/
 @[simp] theorem rec_coe {motive : EReal -> Sort*}
@@ -461,7 +461,7 @@ lemma «forall»
   mpr h := EReal.rec h.1 h.2.2 h.2.1
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : E实数 -> 命题}
   结论: (对任意 r, p r) ↔ p ⊥ ∧ p ⊤ ∧ 对任意 r : 实数, p r where
   证明: ⟨h _, h _, fun _ => h _⟩
@@ -482,7 +482,7 @@ lemma «exists»
   mpr := by rintro (h | h | ⟨r, hr⟩) <;> exact ⟨_, ‹_›⟩
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : E实数 -> 命题}
   结论: (存在 r, p r) ↔ p ⊥ ∨ p ⊤ ∨ 存在 r : 实数, p r where
   证明: by rintro ⟨r, hr⟩; cases r <;> aesop
@@ -526,7 +526,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul E实数
+  签名: 乘法 E实数
   定义体: ⟨EReal.mul⟩
 
 @[simp, norm_cast]
@@ -694,7 +694,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulZeroOneClass E实数
+  签名: 乘零幺类 E实数
   定义体: EReal.one_mul
   mul_one := fun x => by rw [EReal.mul_comm, EReal.one_mul]
   zero_mul := EReal.zero_mul
@@ -745,7 +745,7 @@ definition toReal
   signature: : EReal -> Real
 
 中文:
-定义 toReal
+定义 to实数
   签名: : E实数 -> 实数
 -/
 def toReal : EReal -> Real
@@ -765,7 +765,7 @@ theorem toReal_top
 @[simp]
 
 中文:
-定理 toReal_top
+定理 to实数_top
   结论: to实数 ⊤ = 0
   证明: rfl
 
@@ -786,7 +786,7 @@ theorem toReal_bot
 @[simp]
 
 中文:
-定理 toReal_bot
+定理 to实数_bot
   结论: to实数 ⊥ = 0
   证明: rfl
 
@@ -807,7 +807,7 @@ theorem toReal_zero
 @[simp]
 
 中文:
-定理 toReal_zero
+定理 to实数_zero
   结论: to实数 0 = 0
   证明: rfl
 
@@ -828,7 +828,7 @@ theorem toReal_one
 @[simp]
 
 中文:
-定理 toReal_one
+定理 to实数_one
   结论: to实数 1 = 1
   证明: rfl
 
@@ -850,7 +850,7 @@ theorem toReal_coe
 @[simp]
 
 中文:
-定理 toReal_coe
+定理 to实数_coe
   条件: (x : 实数)
   结论: to实数 (x : E实数) = x
   证明: rfl
@@ -1179,7 +1179,7 @@ theorem range_coe_eq_Ioo
 
 中文:
 定理 range_coe_eq_Ioo
-  结论: range 实数.toE实数 = Ioo ⊥ ⊤
+  结论: range 实数.toE实数 = 开区间 ⊥ ⊤
   证明: by
   ext x
   induction x <;> simp
@@ -1425,7 +1425,7 @@ lemma toReal_eq_zero_iff
   cases x <;> norm_num
 
 中文:
-引理 toReal_eq_zero_iff
+引理 to实数_eq_zero_iff
   条件: {x : E实数}
   结论: x.to实数 = 0 ↔ x = 0 ∨ x = ⊤ ∨ x = ⊥
   证明: by
@@ -1445,7 +1445,7 @@ lemma toReal_ne_zero_iff
   simp only [ne_eq, toReal_eq_zero_iff, not_or]
 
 中文:
-引理 toReal_ne_zero_iff
+引理 to实数_ne_zero_iff
   条件: {x : E实数}
   结论: x.to实数 != 0 ↔ x != 0 ∧ x != ⊤ ∧ x != ⊥
   证明: by
@@ -1468,7 +1468,7 @@ lemma toReal_eq_toReal
   simp
 
 中文:
-引理 toReal_eq_toReal
+引理 to实数_eq_to实数
   结论: {x y : E实数} (hx_top : x != ⊤) (hx_bot : x != ⊥)
   证明: by
   lift x to Real using ⟨hx_top, hx_bot⟩
@@ -1498,7 +1498,7 @@ lemma toReal_nonneg
   · simp
 
 中文:
-引理 toReal_nonneg
+引理 to实数_nonneg
   条件: {x : E实数} (hx : 0 <= x)
   结论: 0 <= x.to实数
   证明: by
@@ -1529,7 +1529,7 @@ lemma toReal_nonpos
   · simp
 
 中文:
-引理 toReal_nonpos
+引理 to实数_nonpos
   条件: {x : E实数} (hx : x <= 0)
   结论: x.to实数 <= 0
   证明: by
@@ -1558,7 +1558,7 @@ lemma toReal_pos
   simpa using hx
 
 中文:
-引理 toReal_pos
+引理 to实数_pos
   条件: {x : E实数} (hx : 0 < x) (h'x : x != ⊤)
   结论: 0 < x.to实数
   证明: by
@@ -1581,7 +1581,7 @@ lemma toReal_neg
   simpa using hx
 
 中文:
-引理 toReal_neg
+引理 to实数_neg
   条件: {x : E实数} (hx : x < 0) (h'x : x != ⊥)
   结论: x.to实数 < 0
   证明: by
@@ -1609,8 +1609,8 @@ lemma toReal_image_Ioo_zero_top
     simpa using hx
 
 中文:
-引理 toReal_image_Ioo_zero_top
-  结论: to实数 '' (Ioo 0 ⊤) = Ioi 0
+引理 to实数_image_Ioo_zero_top
+  结论: to实数 '' (开区间 0 ⊤) = 左开右无界区间 0
   证明: by
   ext x
   constructor
@@ -1648,8 +1648,8 @@ lemma toReal_image_Ioo_bot_zero
     simpa using hx
 
 中文:
-引理 toReal_image_Ioo_bot_zero
-  结论: to实数 '' (Ioo ⊥ 0) = Iio 0
+引理 to实数_image_Ioo_bot_zero
+  结论: to实数 '' (开区间 ⊥ 0) = 左无界右开区间 0
   证明: by
   ext x
   constructor
@@ -1682,7 +1682,7 @@ theorem toReal_le_toReal
   simpa using h
 
 中文:
-定理 toReal_le_toReal
+定理 to实数_le_to实数
   条件: {x y : E实数} (h : x <= y) (hx : x != ⊥) (hy : y != ⊤)
   证明: by
   lift x to Real using ⟨ne_top_of_le_ne_top hy h, hx⟩
@@ -1709,7 +1709,7 @@ theorem coe_toReal
   rfl
 
 中文:
-定理 coe_toReal
+定理 coe_to实数
   条件: {x : E实数} (hx : x != ⊤) (h'x : x != ⊥)
   结论: (x.to实数 : E实数) = x
   证明: by
@@ -1733,7 +1733,7 @@ theorem le_coe_toReal
   · simp only [le_refl, coe_toReal h h']
 
 中文:
-定理 le_coe_toReal
+定理 le_coe_to实数
   条件: {x : E实数} (h : x != ⊤)
   结论: x <= x.to实数
   证明: by
@@ -1761,7 +1761,7 @@ theorem coe_toReal_le
   · simp only [le_refl, coe_toReal h' h]
 
 中文:
-定理 coe_toReal_le
+定理 coe_to实数_le
   条件: {x : E实数} (h : x != ⊥)
   结论: ↑x.to实数 <= x
   证明: by
@@ -1792,7 +1792,7 @@ theorem eq_top_iff_forall_lt
     exact ⟨x.toReal, le_coe_toReal h⟩
 
 中文:
-定理 eq_top_iff_forall_lt
+定理 eq_top_iff_对任意_lt
   条件: (x : E实数)
   结论: x = ⊤ ↔ 对任意 y : 实数, (y : E实数) < x
   证明: by
@@ -1829,7 +1829,7 @@ theorem eq_bot_iff_forall_lt
     exact ⟨x.toReal, coe_toReal_le h⟩
 
 中文:
-定理 eq_bot_iff_forall_lt
+定理 eq_bot_iff_对任意_lt
   条件: (x : E实数)
   结论: x = ⊥ ↔ 对任意 y : 实数, x < (y : E实数)
   证明: by
@@ -1868,7 +1868,7 @@ lemma exists_between_coe_real
 @[simp]
 
 中文:
-引理 exists_between_coe_real
+引理 存在_between_coe_real
   条件: {x z : E实数} (h : x < z)
   结论: 存在 y : 实数, x < y ∧ y < z
   证明: by
@@ -1907,7 +1907,7 @@ lemma image_coe_Icc
 中文:
 引理 image_coe_Icc
   条件: (x y : 实数)
-  结论: 实数.toE实数 '' Icc x y = Icc ↑x ↑y
+  结论: 实数.toE实数 '' 闭区间 x y = 闭区间 ↑x ↑y
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Icc]; rw [WithBot.image_coe_Icc]
@@ -1940,7 +1940,7 @@ lemma image_coe_Ico
 中文:
 引理 image_coe_Ico
   条件: (x y : 实数)
-  结论: 实数.toE实数 '' Ico x y = Ico ↑x ↑y
+  结论: 实数.toE实数 '' 左闭右开区间 x y = 左闭右开区间 ↑x ↑y
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Ico]; rw [WithBot.image_coe_Ico]
@@ -1973,7 +1973,7 @@ lemma image_coe_Ici
 中文:
 引理 image_coe_Ici
   条件: (x : 实数)
-  结论: 实数.toE实数 '' Ici x = Ico ↑x ⊤
+  结论: 实数.toE实数 '' 左闭右无界区间 x = 左闭右开区间 ↑x ⊤
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Ici]; rw [WithBot.image_coe_Ico]
@@ -2006,7 +2006,7 @@ lemma image_coe_Ioc
 中文:
 引理 image_coe_Ioc
   条件: (x y : 实数)
-  结论: 实数.toE实数 '' Ioc x y = Ioc ↑x ↑y
+  结论: 实数.toE实数 '' 左开右闭区间 x y = 左开右闭区间 ↑x ↑y
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Ioc]; rw [WithBot.image_coe_Ioc]
@@ -2039,7 +2039,7 @@ lemma image_coe_Ioo
 中文:
 引理 image_coe_Ioo
   条件: (x y : 实数)
-  结论: 实数.toE实数 '' Ioo x y = Ioo ↑x ↑y
+  结论: 实数.toE实数 '' 开区间 x y = 开区间 ↑x ↑y
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Ioo]; rw [WithBot.image_coe_Ioo]
@@ -2072,7 +2072,7 @@ lemma image_coe_Ioi
 中文:
 引理 image_coe_Ioi
   条件: (x : 实数)
-  结论: 实数.toE实数 '' Ioi x = Ioo ↑x ⊤
+  结论: 实数.toE实数 '' 左开右无界区间 x = 开区间 ↑x ⊤
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Ioi]; rw [WithBot.image_coe_Ioo]
@@ -2105,7 +2105,7 @@ lemma image_coe_Iic
 中文:
 引理 image_coe_Iic
   条件: (x : 实数)
-  结论: 实数.toE实数 '' Iic x = Ioc ⊥ ↑x
+  结论: 实数.toE实数 '' 左无界右闭区间 x = 左开右闭区间 ⊥ ↑x
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Iic]; rw [WithBot.image_coe_Iic]
@@ -2138,7 +2138,7 @@ lemma image_coe_Iio
 中文:
 引理 image_coe_Iio
   条件: (x : 实数)
-  结论: 实数.toE实数 '' Iio x = Ioo ⊥ ↑x
+  结论: 实数.toE实数 '' 左无界右开区间 x = 开区间 ⊥ ↑x
   证明: by
   refine (image_comp WithBot.some WithTop.some _).trans ?_
   rw [WithTop.image_coe_Iio]; rw [WithBot.image_coe_Iio]
@@ -2171,7 +2171,7 @@ lemma preimage_coe_Ici
 中文:
 引理 preimage_coe_Ici
   条件: (x : 实数)
-  结论: 实数.toE实数 ⁻¹' Ici x = Ici x
+  结论: 实数.toE实数 ⁻¹' 左闭右无界区间 x = 左闭右无界区间 x
   证明: by
   change (WithBot.some ∘ WithTop.some) ⁻¹' (Ici (WithBot.some (WithTop.some x))) = _
   refine preimage_comp.trans ?_
@@ -2204,7 +2204,7 @@ lemma preimage_coe_Ioi
 中文:
 引理 preimage_coe_Ioi
   条件: (x : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioi x = Ioi x
+  结论: 实数.toE实数 ⁻¹' 左开右无界区间 x = 左开右无界区间 x
   证明: by
   change (WithBot.some ∘ WithTop.some) ⁻¹' (Ioi (WithBot.some (WithTop.some x))) = _
   refine preimage_comp.trans ?_
@@ -2235,7 +2235,7 @@ lemma preimage_coe_Ioi_bot
 
 中文:
 引理 preimage_coe_Ioi_bot
-  结论: 实数.toE实数 ⁻¹' Ioi ⊥ = univ
+  结论: 实数.toE实数 ⁻¹' 左开右无界区间 ⊥ = univ
   证明: by
   change ((WithBot.some ∘ WithTop.some) ⁻¹' (Ioi (⊥ : WithBot (WithTop Real))) : Set Real) = _
   refine preimage_comp.trans ?_
@@ -2268,7 +2268,7 @@ lemma preimage_coe_Iic
 中文:
 引理 preimage_coe_Iic
   条件: (y : 实数)
-  结论: 实数.toE实数 ⁻¹' Iic y = Iic y
+  结论: 实数.toE实数 ⁻¹' 左无界右闭区间 y = 左无界右闭区间 y
   证明: by
   change (WithBot.some ∘ WithTop.some) ⁻¹' (Iic (WithBot.some (WithTop.some y))) = _
   refine preimage_comp.trans ?_
@@ -2301,7 +2301,7 @@ lemma preimage_coe_Iio
 中文:
 引理 preimage_coe_Iio
   条件: (y : 实数)
-  结论: 实数.toE实数 ⁻¹' Iio y = Iio y
+  结论: 实数.toE实数 ⁻¹' 左无界右开区间 y = 左无界右开区间 y
   证明: by
   change (WithBot.some ∘ WithTop.some) ⁻¹' (Iio (WithBot.some (WithTop.some y))) = _
   refine preimage_comp.trans ?_
@@ -2332,7 +2332,7 @@ lemma preimage_coe_Iio_top
 
 中文:
 引理 preimage_coe_Iio_top
-  结论: 实数.toE实数 ⁻¹' Iio ⊤ = univ
+  结论: 实数.toE实数 ⁻¹' 左无界右开区间 ⊤ = univ
   证明: by
   change (WithBot.some ∘ WithTop.some) ⁻¹' (Iio (WithBot.some (⊤ : WithTop Real))) = _
   refine preimage_comp.trans ?_
@@ -2364,7 +2364,7 @@ lemma preimage_coe_Icc
 中文:
 引理 preimage_coe_Icc
   条件: (x y : 实数)
-  结论: 实数.toE实数 ⁻¹' Icc x y = Icc x y
+  结论: 实数.toE实数 ⁻¹' 闭区间 x y = 闭区间 x y
   证明: by
   simp_rw [← Ici_inter_Iic]
   simp
@@ -2394,7 +2394,7 @@ lemma preimage_coe_Ico
 中文:
 引理 preimage_coe_Ico
   条件: (x y : 实数)
-  结论: 实数.toE实数 ⁻¹' Ico x y = Ico x y
+  结论: 实数.toE实数 ⁻¹' 左闭右开区间 x y = 左闭右开区间 x y
   证明: by
   simp_rw [← Ici_inter_Iio]
   simp
@@ -2424,7 +2424,7 @@ lemma preimage_coe_Ioc
 中文:
 引理 preimage_coe_Ioc
   条件: (x y : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioc x y = Ioc x y
+  结论: 实数.toE实数 ⁻¹' 左开右闭区间 x y = 左开右闭区间 x y
   证明: by
   simp_rw [← Ioi_inter_Iic]
   simp
@@ -2454,7 +2454,7 @@ lemma preimage_coe_Ioo
 中文:
 引理 preimage_coe_Ioo
   条件: (x y : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioo x y = Ioo x y
+  结论: 实数.toE实数 ⁻¹' 开区间 x y = 开区间 x y
   证明: by
   simp_rw [← Ioi_inter_Iio]
   simp
@@ -2484,7 +2484,7 @@ lemma preimage_coe_Ico_top
 中文:
 引理 preimage_coe_Ico_top
   条件: (x : 实数)
-  结论: 实数.toE实数 ⁻¹' Ico x ⊤ = Ici x
+  结论: 实数.toE实数 ⁻¹' 左闭右开区间 x ⊤ = 左闭右无界区间 x
   证明: by
   rw [← Ici_inter_Iio]
   simp
@@ -2514,7 +2514,7 @@ lemma preimage_coe_Ioo_top
 中文:
 引理 preimage_coe_Ioo_top
   条件: (x : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioo x ⊤ = Ioi x
+  结论: 实数.toE实数 ⁻¹' 开区间 x ⊤ = 左开右无界区间 x
   证明: by
   rw [← Ioi_inter_Iio]
   simp
@@ -2544,7 +2544,7 @@ lemma preimage_coe_Ioc_bot
 中文:
 引理 preimage_coe_Ioc_bot
   条件: (y : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioc ⊥ y = Iic y
+  结论: 实数.toE实数 ⁻¹' 左开右闭区间 ⊥ y = 左无界右闭区间 y
   证明: by
   rw [← Ioi_inter_Iic]
   simp
@@ -2574,7 +2574,7 @@ lemma preimage_coe_Ioo_bot
 中文:
 引理 preimage_coe_Ioo_bot
   条件: (y : 实数)
-  结论: 实数.toE实数 ⁻¹' Ioo ⊥ y = Iio y
+  结论: 实数.toE实数 ⁻¹' 开区间 ⊥ y = 左无界右开区间 y
   证明: by
   rw [← Ioi_inter_Iio]
   simp
@@ -2600,7 +2600,7 @@ lemma preimage_coe_Ioo_bot_top
 
 中文:
 引理 preimage_coe_Ioo_bot_top
-  结论: 实数.toE实数 ⁻¹' Ioo ⊥ ⊤ = univ
+  结论: 实数.toE实数 ⁻¹' 开区间 ⊥ ⊤ = univ
   证明: by
   rw [← Ioi_inter_Iio]
   simp
@@ -2622,8 +2622,8 @@ theorem toReal_coe_ennreal
   statement: forall {x : Real>=0∞}, toReal (x : EReal) = ENNReal.toReal x
 
 中文:
-定理 toReal_coe_ennreal
-  结论: 对任意 {x : 实数>=0∞}, to实数 (x : E实数) = ENN实数.to实数 x
+定理 to实数_coe_ennreal
+  结论: 对任意 {x : 实数>=0∞}, to实数 (x : E实数) = 广义非负实数.to实数 x
 -/
 theorem toReal_coe_ennreal : forall {x : Real>=0∞}, toReal (x : EReal) = ENNReal.toReal x
   | ⊤ => rfl
@@ -2640,9 +2640,9 @@ theorem coe_ennreal_ofReal
   proof: rfl
 
 中文:
-定理 coe_ennreal_ofReal
+定理 coe_ennreal_of实数
   条件: {x : 实数}
-  结论: (ENN实数.of实数 x : E实数) = max x 0
+  结论: (广义非负实数.of实数 x : E实数) = 最大值 x 0
   证明: rfl
 -/
 theorem coe_ennreal_ofReal {x : Real} : (ENNReal.ofReal x : EReal) = max x 0 :=
@@ -2660,7 +2660,7 @@ lemma coe_ennreal_toReal
   rfl
 
 中文:
-引理 coe_ennreal_toReal
+引理 coe_ennreal_to实数
   条件: {x : 实数>=0∞} (hx : x != ∞)
   结论: (x.to实数 : E实数) = x
   证明: by
@@ -2762,7 +2762,7 @@ theorem coe_ennreal_strictMono
 
 中文:
 定理 coe_ennreal_strictMono
-  结论: StrictMono ((↑) : 实数>=0∞ -> E实数)
+  结论: 严格递增 ((↑) : 实数>=0∞ -> E实数)
   证明: WithTop.strictMono_iff.2 ⟨fun _ _ => EReal.coe_lt_coe_iff.2, fun _ => coe_lt_top _⟩
 
 Depends on / 依赖: EReal.coe_lt_coe_iff, WithTop, WithTop.strictMono_iff, coe_lt_coe_iff, coe_lt_top, strictMono_iff
@@ -2782,7 +2782,7 @@ theorem coe_ennreal_injective
 
 中文:
 定理 coe_ennreal_injective
-  结论: Injective ((↑) : 实数>=0∞ -> E实数)
+  结论: 单射 ((↑) : 实数>=0∞ -> E实数)
   证明: coe_ennreal_strictMono.injective
 
 @[simp]
@@ -3088,7 +3088,7 @@ theorem range_coe_ennreal
 
 中文:
 定理 range_coe_ennreal
-  结论: range ((↑) : 实数>=0∞ -> E实数) = Set.Ici 0
+  结论: range ((↑) : 实数>=0∞ -> E实数) = 集合.左闭右无界区间 0
   证明: Subset.antisymm (range_subset_iff.2 coe_ennreal_nonneg) fun x => match x with
     | ⊥ => fun h => absurd h bot_lt_zero.not_ge
     | ⊤ => fun _ => ⟨⊤, rfl⟩
@@ -3233,7 +3233,7 @@ theorem coe_ennreal_add
 
 中文:
 定理 coe_ennreal_add
-  条件: (x y : ENN实数)
+  条件: (x y : 广义非负实数)
   结论: ((x + y : 实数>=0∞) : E实数) = x + y
   证明: by
   cases x <;> cases y <;> rfl
@@ -3327,7 +3327,7 @@ definition toENNReal
   else ENNReal.ofReal x.toReal
 
 中文:
-定义 toENNReal
+定义 toENN实数
   签名: (x : E实数)
   定义体: if x = ⊤ then ⊤
   else ENNReal.ofReal x.toReal
@@ -3349,7 +3349,7 @@ lemma toENNReal_top
 @[simp]
 
 中文:
-引理 toENNReal_top
+引理 toENN实数_top
   结论: (⊤ : E实数).toENN实数 = ⊤
   证明: rfl
 
@@ -3370,9 +3370,9 @@ lemma toENNReal_of_ne_top
 @[simp]
 
 中文:
-引理 toENNReal_of_ne_top
+引理 toENN实数_of_ne_top
   条件: {x : E实数} (hx : x != ⊤)
-  结论: x.toENN实数 = ENN实数.of实数 x.to实数
+  结论: x.toENN实数 = 广义非负实数.of实数 x.to实数
   证明: if_neg hx
 
 @[simp]
@@ -3396,7 +3396,7 @@ lemma toENNReal_eq_top_iff
   · simp [h, toENNReal]
 
 中文:
-引理 toENNReal_eq_top_iff
+引理 toENN实数_eq_top_iff
   条件: {x : E实数}
   结论: x.toENN实数 = ⊤ ↔ x = ⊤
   证明: by
@@ -3423,7 +3423,7 @@ lemma toENNReal_ne_top_iff
 @[simp]
 
 中文:
-引理 toENNReal_ne_top_iff
+引理 toENN实数_ne_top_iff
   条件: {x : E实数}
   结论: x.toENN实数 != ⊤ ↔ x != ⊤
   证明: toENNReal_eq_top_iff.not
@@ -3448,7 +3448,7 @@ lemma toENNReal_of_nonpos
 · exact zero_ne_top top_le_iff.mp h ▸ hx
 
 中文:
-引理 toENNReal_of_nonpos
+引理 toENN实数_of_nonpos
   条件: {x : E实数} (hx : x <= 0)
   结论: x.toENN实数 = 0
   证明: by
@@ -3472,7 +3472,7 @@ lemma toENNReal_bot
   proof: toENNReal_of_nonpos bot_le
 
 中文:
-引理 toENNReal_bot
+引理 toENN实数_bot
   结论: (⊥ : E实数).toENN实数 = 0
   证明: toENNReal_of_nonpos bot_le
 
@@ -3488,7 +3488,7 @@ lemma toENNReal_zero
   proof: toENNReal_of_nonpos le_rfl
 
 中文:
-引理 toENNReal_zero
+引理 toENN实数_zero
   结论: (0 : E实数).toENN实数 = 0
   证明: toENNReal_of_nonpos le_rfl
 
@@ -3507,7 +3507,7 @@ lemma toENNReal_eq_zero_iff
   induction x <;> simp [toENNReal]
 
 中文:
-引理 toENNReal_eq_zero_iff
+引理 toENN实数_eq_zero_iff
   条件: {x : E实数}
   结论: x.toENN实数 = 0 ↔ x <= 0
   证明: by
@@ -3531,7 +3531,7 @@ lemma toENNReal_ne_zero_iff
 @[simp]
 
 中文:
-引理 toENNReal_ne_zero_iff
+引理 toENN实数_ne_zero_iff
   条件: {x : E实数}
   结论: x.toENN实数 != 0 ↔ 0 < x
   证明: by
@@ -3558,7 +3558,7 @@ lemma toENNReal_pos_iff
 @[simp]
 
 中文:
-引理 toENNReal_pos_iff
+引理 toENN实数_pos_iff
   条件: {x : E实数}
   结论: 0 < x.toENN实数 ↔ 0 < x
   证明: by
@@ -3589,7 +3589,7 @@ lemma coe_toENNReal
   exact coe_toReal h_top fun _ => by simp_all only [le_bot_iff, zero_ne_bot]
 
 中文:
-引理 coe_toENNReal
+引理 coe_toENN实数
   条件: {x : E实数} (hx : 0 <= x)
   结论: (x.toENN实数 : E实数) = x
   证明: by
@@ -3627,9 +3627,9 @@ lemma coe_toENNReal_eq_max
 @[simp]
 
 中文:
-引理 coe_toENNReal_eq_max
+引理 coe_toENN实数_eq_max
   条件: {x : E实数}
-  结论: x.toENN实数 = max 0 x
+  结论: x.toENN实数 = 最大值 0 x
   证明: by
   rcases le_total 0 x with (hx | hx)
   · rw [coe_toENNReal hx, max_eq_right hx]
@@ -3659,7 +3659,7 @@ lemma toENNReal_coe
   simp [h_top]
 
 中文:
-引理 toENNReal_coe
+引理 toENN实数_coe
   条件: {x : 实数>=0∞}
   结论: (x : E实数).toENN实数 = x
   证明: by
@@ -3688,9 +3688,9 @@ lemma real_coe_toENNReal
 @[simp]
 
 中文:
-引理 real_coe_toENNReal
+引理 real_coe_toENN实数
   条件: (x : 实数)
-  结论: (x : E实数).toENN实数 = ENN实数.of实数 x
+  结论: (x : E实数).toENN实数 = 广义非负实数.of实数 x
   证明: rfl
 
 @[simp]
@@ -3711,7 +3711,7 @@ lemma toReal_toENNReal
   · simp [h, toReal_nonneg hx]
 
 中文:
-引理 toReal_toENNReal
+引理 to实数_toENN实数
   条件: {x : E实数} (hx : 0 <= x)
   结论: x.toENN实数.to实数 = x.to实数
   证明: by
@@ -3736,7 +3736,7 @@ lemma toENNReal_eq_toENNReal
   induction x <;> induction y <;> simp_all
 
 中文:
-引理 toENNReal_eq_toENNReal
+引理 toENN实数_eq_toENN实数
   条件: {x y : E实数} (hx : 0 <= x) (hy : 0 <= y)
   证明: by
   induction x <;> induction y <;> simp_all
@@ -3762,7 +3762,7 @@ exact ENNReal.ofReal_le_ofReal EReal.toReal_le_toReal h (coe_ne_bot _) hy_top
   · simp_all
 
 中文:
-引理 toENNReal_le_toENNReal
+引理 toENN实数_le_toENN实数
   条件: {x y : E实数} (h : x <= y)
   结论: x.toENN实数 <= y.toENN实数
   证明: by
@@ -3795,7 +3795,7 @@ lemma toENNReal_lt_toENNReal
 fun h => hxy.ne (toENNReal_eq_toENNReal hx (hx.trans_lt hxy).le).mp h
 
 中文:
-引理 toENNReal_lt_toENNReal
+引理 toENN实数_lt_toENN实数
   条件: {x y : E实数} (hx : 0 <= x) (hxy : x < y)
   证明: lt_of_le_of_ne (toENNReal_le_toENNReal hxy.le)
 fun h => hxy.ne (toENNReal_eq_toENNReal hx (hx.trans_lt hxy).le).mp h
@@ -4005,7 +4005,7 @@ theorem exists_rat_btwn_of_lt
   | ⊥, ⊤, _ => ⟨0, bot_lt_coe _, coe_lt_top _⟩
 
 中文:
-定理 exists_rat_btwn_of_lt
+定理 存在_rat_btwn_of_lt
   证明: exists_rat_gt a
     ⟨b, by simpa using hab, coe_lt_top _⟩
   | ⊥, ⊥, h => (lt_irrefl _ h).elim
@@ -4039,7 +4039,7 @@ theorem lt_iff_exists_rat_btwn
   proof: ⟨fun hab => exists_rat_btwn_of_lt hab, fun ⟨_x, ax, xb⟩ => ax.trans xb⟩
 
 中文:
-定理 lt_iff_exists_rat_btwn
+定理 lt_iff_存在_rat_btwn
   条件: {a b : E实数}
   证明: ⟨fun hab => exists_rat_btwn_of_lt hab, fun ⟨_x, ax, xb⟩ => ax.trans xb⟩
 
@@ -4062,7 +4062,7 @@ theorem lt_iff_exists_real_btwn
     fun ⟨_x, ax, xb⟩ => ax.trans xb⟩
 
 中文:
-定理 lt_iff_exists_real_btwn
+定理 lt_iff_存在_real_btwn
   条件: {a b : E实数}
   结论: a < b ↔ 存在 x : 实数, a < x ∧ (x : E实数) < b
   证明: ⟨fun hab =>
@@ -4093,8 +4093,8 @@ definition neTopBotEquivReal
   right_inv x := by simp
 
 中文:
-定义 neTopBotEquivReal
-  签名: : ({⊥, ⊤}ᶜ : Set E实数) ≃ 实数 where
+定义 neTopBotEquiv实数
+  签名: : ({⊥, ⊤}ᶜ : 集合 E实数) ≃ 实数 where
   定义体: EReal.toReal x
   invFun x := ⟨x, by simp⟩
   left_inv := fun ⟨x, hx⟩ => by

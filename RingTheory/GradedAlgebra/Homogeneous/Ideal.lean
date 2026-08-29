@@ -66,7 +66,7 @@ abbreviation Ideal.IsHomogeneous
   body: Submodule.IsHomogeneous I 𝒜
 
 中文:
-缩写 Ideal.IsHomogeneous
+缩写 理想.IsHomogeneous
   签名: : 命题
   定义体: Submodule.IsHomogeneous I 𝒜
 
@@ -83,8 +83,8 @@ theorem Ideal.IsHomogeneous.mem_iff
   proof: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hI
 
 中文:
-定理 Ideal.IsHomogeneous.mem_iff
-  条件: {I} (hI : Ideal.IsHomogeneous 𝒜 I) {x}
+定理 理想.IsHomogeneous.mem_iff
+  条件: {I} (hI : 理想.IsHomogeneous 𝒜 I) {x}
   证明: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hI
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.IsHomogeneous.mem_iff, IsHomogeneous, mem_iff
@@ -140,7 +140,7 @@ lemma coe_toIdeal
 中文:
 引理 coe_toIdeal
   条件: (I : HomogeneousIdeal 𝒜)
-  结论: (I.toIdeal : Set A) = I
+  结论: (I.toIdeal : 集合 A) = I
   证明: rfl
 -/
 @[simp] lemma coe_toIdeal (I : HomogeneousIdeal 𝒜) : (I.toIdeal : Set A) = I := rfl
@@ -206,7 +206,7 @@ instance HomogeneousIdeal.setLike
 
 中文:
 实例 HomogeneousIdeal.setLike
-  签名: : SetLike (HomogeneousIdeal 𝒜) A
+  签名: : 集合状 (HomogeneousIdeal 𝒜) A
   定义体: HomogeneousSubmodule.setLike 𝒜 𝒜
 
 Depends on / 依赖: HomogeneousSubmodule, HomogeneousSubmodule.setLike, setLike
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (HomogeneousIdeal 𝒜)
+  签名: 偏序 (HomogeneousIdeal 𝒜)
   定义体: .ofSetLike (HomogeneousIdeal 𝒜) A
 
 @[ext]
@@ -316,8 +316,8 @@ definition Ideal.homogeneousCore'
   body: Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) -> A) ⁻¹' I))
 
 中文:
-定义 Ideal.homogeneousCore'
-  签名: (I : Ideal A)
+定义 理想.homogeneousCore'
+  签名: (I : 理想 A)
   定义体: Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) -> A) ⁻¹' I))
 
 Depends on / 依赖: Ideal.span, IsHomogeneousElem, SetLike, SetLike.IsHomogeneousElem, Subtype
@@ -334,8 +334,8 @@ theorem Ideal.homogeneousCore'_mono
   proof: fun _ _ I_le_J => Ideal.span_mono Set.image_mono fun _ => @I_le_J _
 
 中文:
-定理 Ideal.homogeneousCore'_mono
-  结论: Monotone (Ideal.homogeneousCore' 𝒜)
+定理 理想.homogeneousCore'_mono
+  结论: 递增 (理想.homogeneousCore' 𝒜)
   证明: fun _ _ I_le_J => Ideal.span_mono Set.image_mono fun _ => @I_le_J _
 -/
 theorem Ideal.homogeneousCore'_mono : Monotone (Ideal.homogeneousCore' 𝒜) :=
@@ -350,7 +350,7 @@ theorem Ideal.homogeneousCore'_le
   proof: Ideal.span_le.2 image_preimage_subset _ _
 
 中文:
-定理 Ideal.homogeneousCore'_le
+定理 理想.homogeneousCore'_le
   结论: I.homogeneousCore' 𝒜 <= I
   证明: Ideal.span_le.2 image_preimage_subset _ _
 -/
@@ -374,7 +374,7 @@ theorem Ideal.isHomogeneous_iff_forall_subset
   proof: Iff.rfl
 
 中文:
-定理 Ideal.isHomogeneous_iff_forall_subset
+定理 理想.isHomogeneous_iff_对任意_subset
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -391,7 +391,7 @@ theorem Ideal.isHomogeneous_iff_subset_iInter
   proof: subset_iInter_iff.symm
 
 中文:
-定理 Ideal.isHomogeneous_iff_subset_iInter
+定理 理想.isHomogeneous_iff_subset_i整数er
   证明: subset_iInter_iff.symm
 
 Depends on / 依赖: subset_iInter_iff, subset_iInter_iff.symm
@@ -416,7 +416,7 @@ theorem Ideal.mul_homogeneous_element_mem_of_mem
   rw [GradedRing.proj_apply]; rw [Di
 
 中文:
-定理 Ideal.mul_homogeneous_element_mem_of_mem
+定理 理想.mul_homogeneous_element_mem_of_mem
   证明: by
   classical
   rw [← DirectSum.sum_support_decompose 𝒜 r]; rw [Finset.sum_mul]; rw [map_sum]
@@ -460,8 +460,8 @@ theorem Ideal.homogeneous_span
   refine
 
 中文:
-定理 Ideal.homogeneous_span
-  条件: (s : Set A) (h : 对任意 x in s, SetLike.IsHomogeneousElem 𝒜 x)
+定理 理想.homogeneous_span
+  条件: (s : 集合 A) (h : 对任意 x in s, 集合状.IsHomogeneousElem 𝒜 x)
   证明: by
   rintro i r hr
   rw [Ideal.span]; rw [Finsupp.span_eq_range_linearCombination] at hr
@@ -499,7 +499,7 @@ definition Ideal.homogeneousCore
       exact (cast congr(_ in $this) h).1⟩
 
 中文:
-定义 Ideal.homogeneousCore
+定义 理想.homogeneousCore
   签名: : HomogeneousIdeal 𝒜
   定义体: ⟨Ideal.homogeneousCore' 𝒜 I,
     Ideal.homogeneous_span _ _ fun _ h => by
@@ -523,8 +523,8 @@ theorem Ideal.homogeneousCore_mono
   proof: Ideal.homogeneousCore'_mono 𝒜
 
 中文:
-定理 Ideal.homogeneousCore_mono
-  结论: Monotone (Ideal.homogeneousCore 𝒜)
+定理 理想.homogeneousCore_mono
+  结论: 递增 (理想.homogeneousCore 𝒜)
   证明: Ideal.homogeneousCore'_mono 𝒜
 
 Depends on / 依赖: Ideal.homogeneousCore, _mono, homogeneousCore
@@ -541,7 +541,7 @@ theorem Ideal.toIdeal_homogeneousCore_le
   proof: Ideal.homogeneousCore'_le 𝒜 I
 
 中文:
-定理 Ideal.toIdeal_homogeneousCore_le
+定理 理想.toIdeal_homogeneousCore_le
   结论: (I.homogeneousCore 𝒜).toIdeal <= I
   证明: Ideal.homogeneousCore'_le 𝒜 I
 
@@ -561,8 +561,8 @@ theorem Ideal.mem_homogeneousCore_of_homogeneous_of_mem
   proof: Ideal.subset_span ⟨⟨x, h⟩, hmem, rfl⟩
 
 中文:
-定理 Ideal.mem_homogeneousCore_of_homogeneous_of_mem
-  结论: {x : A} (h : SetLike.IsHomogeneousElem 𝒜 x)
+定理 理想.mem_homogeneousCore_of_homogeneous_of_mem
+  结论: {x : A} (h : 集合状.IsHomogeneousElem 𝒜 x)
   证明: Ideal.subset_span ⟨⟨x, h⟩, hmem, rfl⟩
 
 Depends on / 依赖: Ideal.subset_span, subset_span
@@ -587,7 +587,7 @@ theorem Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self
 @[simp]
 
 中文:
-定理 Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self
+定理 理想.IsHomogeneous.toIdeal_homogeneousCore_eq_self
   条件: (h : I.IsHomogeneous 𝒜)
   证明: by
   apply le_antisymm (I.homogeneousCore'_le 𝒜) _
@@ -644,7 +644,7 @@ theorem Ideal.IsHomogeneous.iff_eq
   proof: ⟨fun hI => hI.toIdeal_homogeneousCore_eq_self, fun hI => hI ▸ (Ideal.homogeneousCore 𝒜 I).2⟩
 
 中文:
-定理 Ideal.IsHomogeneous.iff_eq
+定理 理想.IsHomogeneous.iff_eq
   结论: I.IsHomogeneous 𝒜 ↔ (I.homogeneousCore 𝒜).toIdeal = I
   证明: ⟨fun hI => hI.toIdeal_homogeneousCore_eq_self, fun hI => hI ▸ (Ideal.homogeneousCore 𝒜 I).2⟩
 
@@ -663,7 +663,7 @@ theorem Ideal.IsHomogeneous.iff_exists
   exact ((Set.image_preimage.compose (Submodule.gi _ _).gc).exists_eq_l _).symm
 
 中文:
-定理 Ideal.IsHomogeneous.iff_exists
+定理 理想.IsHomogeneous.iff_存在
   证明: by
   rw [Ideal.IsHomogeneous.iff_eq]; rw [eq_comm]
   exact ((Set.image_preimage.compose (Submodule.gi _ _).gc).exists_eq_l _).symm
@@ -705,7 +705,7 @@ theorem bot
 
 中文:
 定理 bot
-  结论: Ideal.IsHomogeneous 𝒜 ⊥
+  结论: 理想.IsHomogeneous 𝒜 ⊥
   证明: fun i r hr => by
   simp only [Ideal.mem_bot] at hr
   rw [hr]; rw [decompose_zero]; rw [zero_apply]
@@ -728,7 +728,7 @@ theorem top
 
 中文:
 定理 top
-  结论: Ideal.IsHomogeneous 𝒜 ⊤
+  结论: 理想.IsHomogeneous 𝒜 ⊤
   证明: fun i r _ => by simp only [Submodule.mem_top]
 
 Depends on / 依赖: Submodule, Submodule.mem_top, mem_top
@@ -746,8 +746,8 @@ theorem inf
   proof: fun _ _ hr => ⟨HI _ hr.1, HJ _ hr.2⟩
 
 中文:
-定理 inf
-  条件: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
+定理 下确界
+  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
   证明: fun _ _ hr => ⟨HI _ hr.1, HJ _ hr.2⟩
 -/
 theorem inf {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) :
@@ -768,8 +768,8 @@ theorem sup
   exact (Submodule.span_union _ _).symm
 
 中文:
-定理 sup
-  条件: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
+定理 上确界
+  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
   证明: by
   rw [iff_exists] at HI HJ ⊢
   obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
@@ -803,7 +803,7 @@ theorem iSup
 
 中文:
 定理 iSup
-  条件: {κ : Sort*} {f : κ -> Ideal A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
+  条件: {κ : 类型层*} {f : κ -> 理想 A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
   证明: by
   simp_rw [iff_exists] at h ⊢
   choose s hs using h
@@ -834,7 +834,7 @@ theorem iInf
 
 中文:
 定理 iInf
-  条件: {κ : Sort*} {f : κ -> Ideal A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
+  条件: {κ : 类型层*} {f : κ -> 理想 A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
   证明: by
   intro i x hx
   simp only [Ideal.mem_iInf] at hx ⊢
@@ -856,7 +856,7 @@ theorem iSup₂
 
 中文:
 定理 iSup₂
-  结论: {κ : Sort*} {κ' : κ -> Sort*} {f : 对任意 i, κ' i -> Ideal A}
+  结论: {κ : 类型层*} {κ' : κ -> 类型层*} {f : 对任意 i, κ' i -> 理想 A}
   证明: IsHomogeneous.iSup fun i => IsHomogeneous.iSup h i
 
 Depends on / 依赖: IsHomogeneous, IsHomogeneous.iSup
@@ -875,7 +875,7 @@ theorem iInf₂
 
 中文:
 定理 iInf₂
-  结论: {κ : Sort*} {κ' : κ -> Sort*} {f : 对任意 i, κ' i -> Ideal A}
+  结论: {κ : 类型层*} {κ' : κ -> 类型层*} {f : 对任意 i, κ' i -> 理想 A}
   证明: IsHomogeneous.iInf fun i => IsHomogeneous.iInf h i
 
 Depends on / 依赖: IsHomogeneous, IsHomogeneous.iInf
@@ -896,7 +896,7 @@ theorem sSup
 
 中文:
 定理 sSup
-  条件: {ℐ : Set (Ideal A)} (h : 对任意 I in ℐ, Ideal.IsHomogeneous 𝒜 I)
+  条件: {ℐ : 集合 (理想 A)} (h : 对任意 I in ℐ, 理想.IsHomogeneous 𝒜 I)
   证明: by
   rw [sSup_eq_iSup]
   exact iSup₂ h
@@ -920,7 +920,7 @@ theorem sInf
 
 中文:
 定理 sInf
-  条件: {ℐ : Set (Ideal A)} (h : 对任意 I in ℐ, Ideal.IsHomogeneous 𝒜 I)
+  条件: {ℐ : 集合 (理想 A)} (h : 对任意 I in ℐ, 理想.IsHomogeneous 𝒜 I)
   证明: by
   rw [sInf_eq_iInf]
   exact iInf₂ h
@@ -948,7 +948,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (HomogeneousIdeal 𝒜)
+  签名: 顶元素 (HomogeneousIdeal 𝒜)
   定义体: ⟨⟨⊤, Ideal.IsHomogeneous.top 𝒜⟩⟩
 
 Depends on / 依赖: Ideal.IsHomogeneous.top, IsHomogeneous
@@ -966,7 +966,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (HomogeneousIdeal 𝒜)
+  签名: 底元素 (HomogeneousIdeal 𝒜)
   定义体: ⟨⟨⊥, Ideal.IsHomogeneous.bot 𝒜⟩⟩
 
 Depends on / 依赖: Ideal.IsHomogeneous.bot, IsHomogeneous
@@ -984,7 +984,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (HomogeneousIdeal 𝒜)
+  签名: 最大值 (HomogeneousIdeal 𝒜)
   定义体: ⟨fun I J => ⟨_, I.isHomogeneous.sup J.isHomogeneous⟩⟩
 
 Depends on / 依赖: I.isHomogeneous.sup, J.isHomogeneous, isHomogeneous
@@ -1002,7 +1002,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (HomogeneousIdeal 𝒜)
+  签名: 最小值 (HomogeneousIdeal 𝒜)
   定义体: ⟨fun I J => ⟨_, I.isHomogeneous.inf J.isHomogeneous⟩⟩
 
 Depends on / 依赖: I.isHomogeneous.inf, J.isHomogeneous, isHomogeneous
@@ -1020,7 +1020,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (HomogeneousIdeal 𝒜)
+  签名: 上确界集 (HomogeneousIdeal 𝒜)
   定义体: ⟨fun S => ⟨⨆ s in S, toIdeal s, Ideal.IsHomogeneous.iSup₂ fun s _ => s.isHomogeneous⟩⟩
 
 Depends on / 依赖: Ideal.IsHomogeneous.iSup, IsHomogeneous, isHomogeneous, s.isHomogeneous, toIdeal
@@ -1040,7 +1040,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (HomogeneousIdeal 𝒜)
+  签名: 下确界集 (HomogeneousIdeal 𝒜)
   定义体: ⟨fun S => ⟨⨅ s in S, toIdeal s, Ideal.IsHomogeneous.iInf₂ fun s _ => s.isHomogeneous⟩⟩
 
 @[simp]
@@ -1063,7 +1063,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : HomogeneousIdeal 𝒜) : Set A) = univ
+  结论: ((⊤ : HomogeneousIdeal 𝒜) : 集合 A) = univ
   证明: rfl
 
 @[simp]
@@ -1084,7 +1084,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : HomogeneousIdeal 𝒜) : Set A) = 0
+  结论: ((⊥ : HomogeneousIdeal 𝒜) : 集合 A) = 0
   证明: rfl
 
 @[simp]
@@ -1107,7 +1107,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (I J : HomogeneousIdeal 𝒜)
-  结论: ↑(I ⊔ J) = (I + J : Set A)
+  结论: ↑(I ⊔ J) = (I + J : 集合 A)
   证明: Submodule.coe_sup _ _
 
 @[simp]
@@ -1132,7 +1132,7 @@ theorem coe_inf
 中文:
 定理 coe_inf
   条件: (I J : HomogeneousIdeal 𝒜)
-  结论: (↑(I ⊓ J) : Set A) = ↑I inter ↑J
+  结论: (↑(I ⊓ J) : 集合 A) = ↑I inter ↑J
   证明: rfl
 
 @[simp]
@@ -1153,7 +1153,7 @@ theorem toIdeal_top
 
 中文:
 定理 toIdeal_top
-  结论: (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : Ideal A)
+  结论: (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : 理想 A)
   证明: rfl
 
 @[simp]
@@ -1174,7 +1174,7 @@ theorem toIdeal_bot
 
 中文:
 定理 toIdeal_bot
-  结论: (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : Ideal A)
+  结论: (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : 理想 A)
   证明: rfl
 
 @[simp]
@@ -1242,7 +1242,7 @@ theorem toIdeal_sSup
 
 中文:
 定理 toIdeal_sSup
-  条件: (ℐ : Set (HomogeneousIdeal 𝒜))
+  条件: (ℐ : 集合 (HomogeneousIdeal 𝒜))
   结论: (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
   证明: rfl
 
@@ -1265,7 +1265,7 @@ theorem toIdeal_sInf
 
 中文:
 定理 toIdeal_sInf
-  条件: (ℐ : Set (HomogeneousIdeal 𝒜))
+  条件: (ℐ : 集合 (HomogeneousIdeal 𝒜))
   结论: (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
   证明: rfl
 
@@ -1288,7 +1288,7 @@ theorem toIdeal_iSup
 
 中文:
 定理 toIdeal_iSup
-  条件: {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜)
+  条件: {κ : 类型层*} (s : κ -> HomogeneousIdeal 𝒜)
   证明: by
   rw [iSup]; rw [toIdeal_sSup]; rw [iSup_range]
 
@@ -1312,7 +1312,7 @@ theorem toIdeal_iInf
 
 中文:
 定理 toIdeal_iInf
-  条件: {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜)
+  条件: {κ : 类型层*} (s : κ -> HomogeneousIdeal 𝒜)
   证明: by
   rw [iInf]; rw [toIdeal_sInf]; rw [iInf_range]
 
@@ -1333,7 +1333,7 @@ theorem toIdeal_iSup₂
 
 中文:
 定理 toIdeal_iSup₂
-  条件: {κ : Sort*} {κ' : κ -> Sort*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
+  条件: {κ : 类型层*} {κ' : κ -> 类型层*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
   证明: by
   simp_rw [toIdeal_iSup]
 
@@ -1356,7 +1356,7 @@ theorem toIdeal_iInf₂
 
 中文:
 定理 toIdeal_iInf₂
-  条件: {κ : Sort*} {κ' : κ -> Sort*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
+  条件: {κ : 类型层*} {κ' : κ -> 类型层*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
   证明: by
   simp_rw [toIdeal_iInf]
 
@@ -1425,7 +1425,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (HomogeneousIdeal 𝒜)
+  签名: : 完备格 (HomogeneousIdeal 𝒜)
   定义体: toIdeal_injective.completeLattice _ .rfl .rfl toIdeal_sup toIdeal_inf toIdeal_sSup toIdeal_sInf
     toIdeal_top toIdeal_bot
 
@@ -1447,7 +1447,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (HomogeneousIdeal 𝒜)
+  签名: 加法 (HomogeneousIdeal 𝒜)
   定义体: ⟨(· ⊔ ·)⟩
 
 @[simp]
@@ -1484,7 +1484,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomogeneousIdeal 𝒜)
+  签名: 可居 (HomogeneousIdeal 𝒜)
   定义体: ⊥
 -/
 instance : Inhabited (HomogeneousIdeal 𝒜) where default := ⊥
@@ -1513,8 +1513,8 @@ theorem Ideal.IsHomogeneous.mul
 exact ⟨s₁ * s₂, congr_arg _ (Set.image_mul (homogeneousSubmonoid 𝒜).subtype).symm⟩
 
 中文:
-定理 Ideal.IsHomogeneous.mul
-  条件: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
+定理 理想.IsHomogeneous.mul
+  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
   证明: by
   rw [Ideal.IsHomogeneous.iff_exists] at HI HJ ⊢
   obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
@@ -1542,7 +1542,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (HomogeneousIdeal 𝒜)
+  签名: 乘法 (HomogeneousIdeal 𝒜)
   定义体: ⟨I.toIdeal * J.toIdeal, I.isHomogeneous.mul J.isHomogeneous⟩
 
 @[simp]
@@ -1599,8 +1599,8 @@ theorem Ideal.homogeneousCore.gc
     fun H => le_trans H (Ideal.homogeneousCore'_le _ _)⟩
 
 中文:
-定理 Ideal.homogeneousCore.gc
-  结论: GaloisConnection toIdeal (Ideal.homogeneousCore 𝒜)
+定理 理想.homogeneousCore.gc
+  结论: GaloisConnection toIdeal (理想.homogeneousCore 𝒜)
   证明: fun I _ =>
   ⟨fun H => I.toIdeal_homogeneousCore_eq_self ▸ Ideal.homogeneousCore_mono 𝒜 H,
     fun H => le_trans H (Ideal.homogeneousCore'_le _ _)⟩
@@ -1621,8 +1621,8 @@ definition Ideal.homogeneousCore.gi
   choice_eq I H := le_antisymm H (I.toIdeal_homogeneousCore_le _)
 
 中文:
-定义 Ideal.homogeneousCore.gi
-  签名: : GaloisCoinsertion toIdeal (Ideal.homogeneousCore 𝒜) where
+定义 理想.homogeneousCore.gi
+  签名: : Galois余嵌入 toIdeal (理想.homogeneousCore 𝒜) where
   定义体: ⟨I, le_antisymm (I.toIdeal_homogeneousCore_le 𝒜) HI ▸ HomogeneousIdeal.isHomogeneous _⟩
   gc := Ideal.homogeneousCore.gc 𝒜
   u_l_le _ := Ideal.homogeneousCore'_le _ _
@@ -1645,7 +1645,7 @@ theorem Ideal.homogeneousCore_eq_sSup
   proof: Eq.symm IsLUB.sSup_eq (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
 
 中文:
-定理 Ideal.homogeneousCore_eq_sSup
+定理 理想.homogeneousCore_eq_sSup
   证明: Eq.symm IsLUB.sSup_eq (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
 
 Depends on / 依赖: Eq.symm, Ideal.homogeneousCore.gc, IsLUB.sSup_eq, homogeneousCore, isGreatest_u, isGreatest_u.isLUB, sSup_eq
@@ -1669,7 +1669,7 @@ theorem Ideal.homogeneousCore'_eq_sSup
   refine ⟨fun hI => ⟨⟨x
 
 中文:
-定理 Ideal.homogeneousCore'_eq_sSup
+定理 理想.homogeneousCore'_eq_sSup
   证明: by
   refine (IsLUB.sSup_eq ?_).symm
   apply IsGreatest.isLUB
@@ -1716,7 +1716,7 @@ definition Ideal.homogeneousHull
     apply SetLike.isHomogeneousElem_coe⟩
 
 中文:
-定义 Ideal.homogeneousHull
+定义 理想.homogeneousHull
   签名: : HomogeneousIdeal 𝒜
   定义体: ⟨Ideal.span { r : A | exists (i : ι) (x : I), (DirectSum.decompose 𝒜 (x : A) i : A) = r }, by
     refine Ideal.homogeneous_span _ _ fun x hx => ?_
@@ -1748,8 +1748,8 @@ theorem Ideal.le_toIdeal_homogeneousHull
   use ⟨r, hr⟩
 
 中文:
-定理 Ideal.le_toIdeal_homogeneousHull
-  结论: I <= (Ideal.homogeneousHull 𝒜 I).toIdeal
+定理 理想.le_toIdeal_homogeneousHull
+  结论: I <= (理想.homogeneousHull 𝒜 I).toIdeal
   证明: by
   intro r hr
   classical
@@ -1784,8 +1784,8 @@ theorem Ideal.homogeneousHull_mono
   exact ⟨hr1, ⟨⟨x, I_le_J hx⟩, rfl⟩⟩
 
 中文:
-定理 Ideal.homogeneousHull_mono
-  结论: Monotone (Ideal.homogeneousHull 𝒜)
+定理 理想.homogeneousHull_mono
+  结论: 递增 (理想.homogeneousHull 𝒜)
   证明: fun I J I_le_J => by
   apply Ideal.span_mono
   rintro r ⟨hr1, ⟨x, hx⟩, rfl⟩
@@ -1815,7 +1815,7 @@ theorem Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self
 @[simp]
 
 中文:
-定理 Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self
+定理 理想.IsHomogeneous.toIdeal_homogeneousHull_eq_self
   条件: (h : I.IsHomogeneous 𝒜)
   证明: by
   apply le_antisymm _ (Ideal.le_toIdeal_homogeneousHull _ _)
@@ -1869,7 +1869,7 @@ theorem Ideal.toIdeal_homogeneousHull_eq_iSup
     exists_prop, SetLike.mem_coe]
 
 中文:
-定理 Ideal.toIdeal_homogeneousHull_eq_iSup
+定理 理想.toIdeal_homogeneousHull_eq_iSup
   证明: by
   rw [← Ideal.span_iUnion]
   apply congr_arg Ideal.span _
@@ -1897,7 +1897,7 @@ theorem Ideal.homogeneousHull_eq_iSup
   rw [Ideal.toIdeal_homogeneousHull_eq_iSup]; rw [toIdeal_iSup]
 
 中文:
-定理 Ideal.homogeneousHull_eq_iSup
+定理 理想.homogeneousHull_eq_iSup
   证明: by
   ext1
   rw [Ideal.toIdeal_homogeneousHull_eq_iSup]; rw [toIdeal_iSup]
@@ -1932,8 +1932,8 @@ theorem Ideal.homogeneousHull.gc
     fun H => J.homogeneousHull_toIdeal_eq_self ▸ Ideal.homogeneousHull_mono 𝒜 H⟩
 
 中文:
-定理 Ideal.homogeneousHull.gc
-  结论: GaloisConnection (Ideal.homogeneousHull 𝒜) toIdeal
+定理 理想.homogeneousHull.gc
+  结论: GaloisConnection (理想.homogeneousHull 𝒜) toIdeal
   证明: fun _ J =>
   ⟨le_trans (Ideal.le_toIdeal_homogeneousHull _ _),
     fun H => J.homogeneousHull_toIdeal_eq_self ▸ Ideal.homogeneousHull_mono 𝒜 H⟩
@@ -1954,8 +1954,8 @@ definition Ideal.homogeneousHull.gi
   choice_eq I H := le_antisymm (I.le_toIdeal_homogeneousHull 𝒜) H
 
 中文:
-定义 Ideal.homogeneousHull.gi
-  签名: : GaloisInsertion (Ideal.homogeneousHull 𝒜) toIdeal where
+定义 理想.homogeneousHull.gi
+  签名: : Galois嵌入 (理想.homogeneousHull 𝒜) toIdeal where
   定义体: ⟨I, le_antisymm H (I.le_toIdeal_homogeneousHull 𝒜) ▸ isHomogeneous _⟩
   gc := Ideal.homogeneousHull.gc 𝒜
   le_l_u _ := Ideal.le_toIdeal_homogeneousHull _ _
@@ -1978,8 +1978,8 @@ theorem Ideal.homogeneousHull_eq_sInf
   proof: Eq.symm IsGLB.sInf_eq (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
 
 中文:
-定理 Ideal.homogeneousHull_eq_sInf
-  条件: (I : Ideal A)
+定理 理想.homogeneousHull_eq_sInf
+  条件: (I : 理想 A)
   证明: Eq.symm IsGLB.sInf_eq (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
 
 Depends on / 依赖: Eq.symm, Ideal.homogeneousHull.gc, IsGLB.sInf_eq, homogeneousHull, isLeast_l, isLeast_l.isGLB, sInf_eq
@@ -2199,7 +2199,7 @@ lemma toAddSubmonoid_irrelevant_le
 
 中文:
 引理 toAddSubmonoid_irrelevant_le
-  条件: {P : AddSubmonoid A}
+  条件: {P : 加法子幺半群 A}
   证明: by
   rw [irrelevant_eq_iSup]; rw [iSup₂_le_iff]
 
@@ -2219,7 +2219,7 @@ lemma toIdeal_irrelevant_le
 
 中文:
 引理 toIdeal_irrelevant_le
-  条件: {I : Ideal A}
+  条件: {I : 理想 A}
   证明: toAddSubmonoid_irrelevant_le _
 
 Depends on / 依赖: toAddSubmonoid_irrelevant_le

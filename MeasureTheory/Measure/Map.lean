@@ -58,7 +58,7 @@ definition liftLinear
 
 中文:
 定义 liftLinear
-  签名: [MeasurableSpace β] (f : OuterMeasure α ->ₗ[实数>=0∞] OuterMeasure β)
+  签名: [可测空间 β] (f : 外测度 α ->ₗ[实数>=0∞] 外测度 β)
   定义体: (f μ.toOuterMeasure).toMeasure (hf μ)
   map_add' μ₁ μ₂ := ext fun s hs => by
     simp only [map_add, coe_add, Pi.add_apply, toMeasure_apply, add_toOuterMeasure,
@@ -91,7 +91,7 @@ lemma liftLinear_apply₀
 
 中文:
 引理 liftLinear_apply₀
-  结论: {f : OuterMeasure α ->ₗ[实数>=0∞] OuterMeasure β} (hf) {s : Set β}
+  结论: {f : 外测度 α ->ₗ[实数>=0∞] 外测度 β} (hf) {s : 集合 β}
   证明: toMeasure_apply₀ _ (hf μ) hs
 
 @[simp]
@@ -111,7 +111,7 @@ theorem liftLinear_apply
 
 中文:
 定理 liftLinear_apply
-  结论: {f : OuterMeasure α ->ₗ[实数>=0∞] OuterMeasure β} (hf) {s : Set β}
+  结论: {f : 外测度 α ->ₗ[实数>=0∞] 外测度 β} (hf) {s : 集合 β}
   证明: toMeasure_apply _ (hf μ) hs
 
 Depends on / 依赖: toMeasure_apply
@@ -130,7 +130,7 @@ theorem le_liftLinear_apply
 
 中文:
 定理 le_liftLinear_apply
-  条件: {f : OuterMeasure α ->ₗ[实数>=0∞] OuterMeasure β} (hf) (s : Set β)
+  条件: {f : 外测度 α ->ₗ[实数>=0∞] 外测度 β} (hf) (s : 集合 β)
   证明: le_toMeasure_apply _ (hf μ) s
 
 Depends on / 依赖: le_toMeasure_apply
@@ -156,7 +156,7 @@ definition mapₗ
 
 中文:
 定义 mapₗ
-  签名: [MeasurableSpace α] [MeasurableSpace β] (f : α -> β)
+  签名: [可测空间 α] [可测空间 β] (f : α -> β)
   定义体: if hf : Measurable f then
     liftLinear (OuterMeasure.map f) fun μ _s hs t =>
       le_toOuterMeasure_caratheodory μ _ (hf hs) (f ⁻¹' t)
@@ -184,7 +184,7 @@ theorem mapₗ_congr
 
 中文:
 定理 mapₗ_congr
-  条件: {f g : α -> β} (hf : Measurable f) (hg : Measurable g) (h : f =ᵐ[μ] g)
+  条件: {f g : α -> β} (hf : 可测 f) (hg : 可测 g) (h : f =ᵐ[μ] g)
   证明: by
   ext1 s hs
   simpa only [mapₗ, hf, hg, hs, dif_pos, liftLinear_apply, OuterMeasure.map_apply]
@@ -216,7 +216,7 @@ theorem mapₗ_mk_apply_of_aemeasurable
 
 中文:
 定理 mapₗ_mk_apply_of_aemeasurable
-  条件: {f : α -> β} (hf : AEMeasurable f μ)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ)
   证明: by simp [map, hf]
 -/
 theorem mapₗ_mk_apply_of_aemeasurable {f : α -> β} (hf : AEMeasurable f μ) :
@@ -236,7 +236,7 @@ theorem mapₗ_apply_of_measurable
 
 中文:
 定理 mapₗ_apply_of_measurable
-  条件: {f : α -> β} (hf : Measurable f) (μ : Measure α)
+  条件: {f : α -> β} (hf : 可测 f) (μ : 测度 α)
   证明: by
   simp only [← mapₗ_mk_apply_of_aemeasurable hf.aemeasurable]
   exact mapₗ_congr hf hf.aemeasurable.measurable_mk hf.aemeasurable.ae_eq_mk
@@ -263,7 +263,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  条件: (μ ν : Measure α) {f : α -> β} (hf : Measurable f)
+  条件: (μ ν : 测度 α) {f : α -> β} (hf : 可测 f)
   证明: by simp [← mapₗ_apply_of_measurable hf]
 
 @[simp]
@@ -287,7 +287,7 @@ theorem map_zero
 中文:
 定理 map_zero
   条件: (f : α -> β)
-  结论: (0 : Measure α).map f = 0
+  结论: (0 : 测度 α).map f = 0
   证明: by
   by_cases hf : AEMeasurable f (0 : Measure α) <;> simp [map, hf]
 
@@ -307,7 +307,7 @@ theorem map_of_not_aemeasurable
 
 中文:
 定理 map_of_not_aemeasurable
-  条件: {f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ)
+  条件: {f : α -> β} {μ : 测度 α} (hf : ¬几乎处处可测 f μ)
   证明: by simp [map, hf]
 -/
 theorem map_of_not_aemeasurable {f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) :
@@ -322,8 +322,8 @@ theorem _root_.AEMeasurable.of_map_ne_zero
   proof: not_imp_comm.1 map_of_not_aemeasurable hf
 
 中文:
-定理 _root_.AEMeasurable.of_map_ne_zero
-  条件: {f : α -> β} {μ : Measure α} (hf : μ.map f != 0)
+定理 _root_.几乎处处可测.of_map_ne_zero
+  条件: {f : α -> β} {μ : 测度 α} (hf : μ.map f != 0)
   证明: not_imp_comm.1 map_of_not_aemeasurable hf
 
 Depends on / 依赖: map_of_not_aemeasurable, not_imp_comm
@@ -349,7 +349,7 @@ theorem map_congr
 中文:
 定理 map_congr
   条件: {f g : α -> β} (h : f =ᵐ[μ] g)
-  结论: Measure.map f μ = Measure.map g μ
+  结论: 测度.map f μ = 测度.map g μ
   证明: by
   by_cases hf : AEMeasurable f μ
   · have hg : AEMeasurable g μ := hf.congr h
@@ -386,7 +386,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: by
   suffices forall c : Real>=0∞, (c • μ).map f = c • μ.map f by simpa using this (c • 1)
   clear c; intro c
@@ -428,7 +428,7 @@ lemma map_apply₀
 
 中文:
 引理 map_apply₀
-  结论: {f : α -> β} (hf : AEMeasurable f μ) {s : Set β}
+  结论: {f : α -> β} (hf : 几乎处处可测 f μ) {s : 集合 β}
   证明: by
   rw [map]; rw [dif_pos hf]; rw [mapₗ]; rw [dif_pos hf.measurable_mk] at hs ⊢
   rw [liftLinear_apply₀ _ hs]; rw [measure_congr (hf.ae_eq_mk.preimage s)]
@@ -457,7 +457,7 @@ theorem map_apply_of_aemeasurable
 
 中文:
 定理 map_apply_of_aemeasurable
-  条件: (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s)
+  条件: (hf : 几乎处处可测 f μ) {s : 集合 β} (hs : 可测集 s)
   证明: map_apply₀ hf hs.nullMeasurableSet
 
 @[simp]
@@ -478,7 +478,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
+  条件: (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
   证明: map_apply_of_aemeasurable hf.aemeasurable hs
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, map_apply_of_aemeasurable
@@ -500,7 +500,7 @@ theorem map_toOuterMeasure
 
 中文:
 定理 map_toOuterMeasure
-  条件: (hf : AEMeasurable f μ)
+  条件: (hf : 几乎处处可测 f μ)
   证明: by
   rw [← trimmed]; rw [OuterMeasure.trim_eq_trim_iff]
   intro s hs
@@ -526,7 +526,7 @@ lemma map_eq_zero_iff
 
 中文:
 引理 map_eq_zero_iff
-  条件: (hf : AEMeasurable f μ)
+  条件: (hf : 几乎处处可测 f μ)
   结论: μ.map f = 0 ↔ μ = 0
   证明: by
   simp_rw [← measure_univ_eq_zero, map_apply_of_aemeasurable hf .univ, preimage_univ]
@@ -546,8 +546,8 @@ lemma mapₗ_eq_zero_iff
 
 中文:
 引理 mapₗ_eq_zero_iff
-  条件: (hf : Measurable f)
-  结论: Measure.mapₗ f μ = 0 ↔ μ = 0
+  条件: (hf : 可测 f)
+  结论: 测度.mapₗ f μ = 0 ↔ μ = 0
   证明: by
   rw [mapₗ_apply_of_measurable hf]; rw [map_eq_zero_iff hf.aemeasurable]
 -/
@@ -601,7 +601,7 @@ lemma map_ne_zero_iff
 
 中文:
 引理 map_ne_zero_iff
-  条件: (hf : AEMeasurable f μ)
+  条件: (hf : 几乎处处可测 f μ)
   结论: μ.map f != 0 ↔ μ != 0
   证明: (map_eq_zero_iff hf).not
 
@@ -621,8 +621,8 @@ lemma mapₗ_ne_zero_iff
 
 中文:
 引理 mapₗ_ne_zero_iff
-  条件: (hf : Measurable f)
-  结论: Measure.mapₗ f μ != 0 ↔ μ != 0
+  条件: (hf : 可测 f)
+  结论: 测度.mapₗ f μ != 0 ↔ μ != 0
   证明: (mapₗ_eq_zero_iff hf).not
 
 @[simp]
@@ -684,7 +684,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {g : β -> γ} {f : α -> β} (hg : Measurable g) (hf : Measurable f)
+  条件: {g : β -> γ} {f : α -> β} (hg : 可测 g) (hf : 可测 f)
   证明: ext fun s hs => by simp [hf, hg, hs, hg hs, hg.comp hf, ← preimage_comp]
 
 @[gcongr, mono]
@@ -707,7 +707,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {f : α -> β} (h : μ <= ν) (hf : Measurable f)
+  条件: {f : α -> β} (h : μ <= ν) (hf : 可测 f)
   结论: μ.map f <= ν.map f
   证明: le_iff.2 fun s hs => by simp [hf.aemeasurable, hs, h _]
 
@@ -731,7 +731,7 @@ theorem le_map_apply
 
 中文:
 定理 le_map_apply
-  条件: {f : α -> β} (hf : AEMeasurable f μ) (s : Set β)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ) (s : 集合 β)
   结论: μ (f ⁻¹' s) <= μ.map f s
   证明: calc
     μ (f ⁻¹' s) <= μ (f ⁻¹' toMeasurable (μ.map f) s) := by gcongr; apply subset_toMeasurable
@@ -758,7 +758,7 @@ theorem le_map_apply_image
 
 中文:
 定理 le_map_apply_image
-  条件: {f : α -> β} (hf : AEMeasurable f μ) (s : Set α)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ) (s : 集合 α)
   证明: (measure_mono (subset_preimage_image f s)).trans (le_map_apply hf _)
 
 Depends on / 依赖: le_map_apply, measure_mono, subset_preimage_image
@@ -777,7 +777,7 @@ theorem preimage_null_of_map_null
 
 中文:
 定理 preimage_null_of_map_null
-  结论: {f : α -> β} (hf : AEMeasurable f μ) {s : Set β}
+  结论: {f : α -> β} (hf : 几乎处处可测 f μ) {s : 集合 β}
   证明: nonpos_iff_eq_zero.mp (le_map_apply hf s).trans_eq hs
 
 Depends on / 依赖: le_map_apply, nonpos_iff_eq_zero, nonpos_iff_eq_zero.mp, trans_eq
@@ -797,8 +797,8 @@ theorem tendsto_ae_map
 
 中文:
 定理 tendsto_ae_map
-  条件: {f : α -> β} (hf : AEMeasurable f μ)
-  结论: Tendsto f (ae μ) (ae (μ.map f))
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ)
+  结论: 收敛 f (ae μ) (ae (μ.map f))
   证明: fun _ hs => preimage_null_of_map_null hf hs
 
 Depends on / 依赖: preimage_null_of_map_null
@@ -821,7 +821,7 @@ theorem mem_ae_map_iff
 
 中文:
 定理 mem_ae_map_iff
-  条件: {f : α -> β} (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ) {s : 集合 β} (hs : 可测集 s)
   证明: by
   simp only [mem_ae_iff, map_apply_of_aemeasurable hf hs.compl, preimage_compl]
 
@@ -841,7 +841,7 @@ theorem mem_ae_of_mem_ae_map
 
 中文:
 定理 mem_ae_of_mem_ae_map
-  结论: {f : α -> β} (hf : AEMeasurable f μ) {s : Set β}
+  结论: {f : α -> β} (hf : 几乎处处可测 f μ) {s : 集合 β}
   证明: (tendsto_ae_map hf).eventually hs
 
 Depends on / 依赖: eventually, tendsto_ae_map
@@ -860,7 +860,7 @@ theorem ae_map_iff
 
 中文:
 定理 ae_map_iff
-  结论: {f : α -> β} (hf : AEMeasurable f μ) {p : β -> 命题}
+  结论: {f : α -> β} (hf : 几乎处处可测 f μ) {p : β -> 命题}
   证明: mem_ae_map_iff hf hp
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.wf.onFun, mem_ae_map_iff
@@ -879,7 +879,7 @@ theorem ae_of_ae_map
 
 中文:
 定理 ae_of_ae_map
-  条件: {f : α -> β} (hf : AEMeasurable f μ) {p : β -> 命题} (h : 对任意ᵐ y ∂μ.map f, p y)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ) {p : β -> 命题} (h : 对任意ᵐ y ∂μ.map f, p y)
   证明: mem_ae_of_mem_ae_map hf h
 
 Depends on / 依赖: mem_ae_of_mem_ae_map
@@ -903,7 +903,7 @@ theorem ae_map_mem_range
 
 中文:
 定理 ae_map_mem_range
-  结论: {m0 : MeasurableSpace α} (f : α -> β) (hf : MeasurableSet (range f))
+  结论: {m0 : 可测空间 α} (f : α -> β) (hf : 可测集 (range f))
   证明: by
   by_cases h : AEMeasurable f μ
   · change range f in ae (μ.map f)
@@ -960,8 +960,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (hf : MeasurableEmbedding f)
-  结论: Function.Injective (Measure.map f)
+  条件: (hf : 可测嵌入 f)
+  结论: 函数.单射 (测度.map f)
   证明: by
   intro μ ν h
   ext s hs
@@ -999,7 +999,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: (f : α ≃ᵐ β) (s : Set β)
+  条件: (f : α ≃ᵐ β) (s : 集合 β)
   结论: μ.map f s = μ (f ⁻¹' s)
   证明: f.measurableEmbedding.map_apply _ _
 
@@ -1073,7 +1073,7 @@ theorem map_measurableEquiv_injective
 中文:
 定理 map_measurableEquiv_injective
   条件: (e : α ≃ᵐ β)
-  结论: Injective (Measure.map e)
+  结论: 单射 (测度.map e)
   证明: by
   intro μ₁ μ₂ hμ
   apply_fun Measure.map e.symm at hμ
@@ -1121,8 +1121,8 @@ theorem map_ae
 
 中文:
 定理 map_ae
-  条件: (f : α ≃ᵐ β) (μ : Measure α)
-  结论: Filter.map f (ae μ) = ae (map f μ)
+  条件: (f : α ≃ᵐ β) (μ : 测度 α)
+  结论: 滤子.map f (ae μ) = ae (map f μ)
   证明: by
   ext s
   simp_rw [mem_map, mem_ae_iff, ← preimage_compl, f.map_apply]

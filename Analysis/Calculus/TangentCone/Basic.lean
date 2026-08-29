@@ -98,8 +98,8 @@ theorem Filter.HasBasis.tangentConeAt_eq_biInter_closure
     image2_smul]
 
 中文:
-定理 Filter.HasBasis.tangentConeAt_eq_biInter_closure
-  结论: {ι} {p : ι -> 命题} {U : ι -> Set E}
+定理 滤子.有基.tangentConeAt_eq_bi整数er_closure
+  结论: {ι} {p : ι -> 命题} {U : ι -> 集合 E}
   证明: by
   ext y
   simp only [tangentConeAt_def, mem_ofPred_eq, mem_iInter₂, ← map₂_smul, ← map_prod_eq_map₂,
@@ -124,7 +124,7 @@ theorem tangentConeAt_eq_biInter_closure
   proof: (basis_sets _).tangentConeAt_eq_biInter_closure
 
 中文:
-定理 tangentConeAt_eq_biInter_closure
+定理 tangentConeAt_eq_bi整数er_closure
   证明: (basis_sets _).tangentConeAt_eq_biInter_closure
 
 Depends on / 依赖: basis_sets, tangentConeAt_eq_biInter_closure
@@ -231,7 +231,7 @@ theorem mem_closure_of_nonempty_tangentConeAt
 
 中文:
 定理 mem_closure_of_nonempty_tangentConeAt
-  条件: (h : (tangentConeAt 𝕜 s x).Nonempty)
+  条件: (h : (tangentConeAt 𝕜 s x).非空)
   证明: by
   rcases h with ⟨y, hy⟩
   rcases exists_fun_of_mem_tangentConeAt hy with ⟨ι, l, hl, -, d, hd, hds, -⟩
@@ -434,7 +434,7 @@ theorem UniqueDiffOn.inter
 
 中文:
 定理 UniqueDiffOn.inter
-  条件: (hs : UniqueDiffOn 𝕜 s) (ht : IsOpen t)
+  条件: (hs : UniqueDiffOn 𝕜 s) (ht : 是开集 t)
   结论: UniqueDiffOn 𝕜 (s inter t)
   证明: fun x hx => (hs x hx.1).inter (IsOpen.mem_nhds ht hx.2)
 
@@ -560,7 +560,7 @@ theorem tangentConeAt_subset_zero
 
 中文:
 定理 tangentConeAt_subset_zero
-  条件: [T2Space E] (hx : ¬AccPt x (𝓟 s))
+  条件: [T2空间 E] (hx : ¬聚点 x (𝓟 s))
   结论: tangentConeAt 𝕜 s x subseteq 0
   证明: by
   intro y hy
@@ -594,8 +594,8 @@ theorem AccPt.of_mem_tangentConeAt_ne_zero
   exact tangentConeAt_subset_zero hy₀ hy
 
 中文:
-定理 AccPt.of_mem_tangentConeAt_ne_zero
-  结论: [T2Space E] {y : E} (hy : y in tangentConeAt 𝕜 s x)
+定理 聚点.of_mem_tangentConeAt_ne_zero
+  结论: [T2空间 E] {y : E} (hy : y in tangentConeAt 𝕜 s x)
   证明: by
   contrapose hy₀
   exact tangentConeAt_subset_zero hy₀ hy
@@ -621,7 +621,7 @@ h.1.mono by gcongr; exact tangentConeAt_subset_zero h'
 
 中文:
 定理 UniqueDiffWithinAt.accPt
-  条件: [T2Space E] [Nontrivial E] (h : UniqueDiffWithinAt 𝕜 s x)
+  条件: [T2空间 E] [非平凡 E] (h : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   by_contra! h'
   have : Dense (Submodule.span 𝕜 (0 : Set E) : Set E) :=
@@ -659,7 +659,7 @@ theorem mem_tangentConeAt_of_add_smul_mem
 
 中文:
 定理 mem_tangentConeAt_of_add_smul_mem
-  结论: {α : 类型} {l : Filter α} [l.NeBot] {c : α -> 𝕜}
+  结论: {α : 类型} {l : 滤子 α} [l.NeBot] {c : α -> 𝕜}
   证明: by
   rw [tendsto_nhdsWithin_iff] at hc₀
   refine mem_tangentConeAt_of_seq l c⁻¹ (c · • y) ?_ hmem ?_
@@ -713,7 +713,7 @@ theorem tangentConeAt_of_mem_nhds
 
 中文:
 定理 tangentConeAt_of_mem_nhds
-  条件: [ContinuousAdd E] (h : s in 𝓝 x)
+  条件: [连续加法 E] (h : s in 𝓝 x)
   结论: tangentConeAt 𝕜 s x = univ
   证明: by
   rw [← s.univ_inter]; rw [tangentConeAt_inter_nhds h]; rw [tangentConeAt_univ]
@@ -746,7 +746,7 @@ theorem uniqueDiffOn_empty
 
 中文:
 定理 uniqueDiffOn_empty
-  结论: UniqueDiffOn 𝕜 (∅ : Set E)
+  结论: UniqueDiffOn 𝕜 (∅ : 集合 E)
   证明: fun _ hx => hx.elim
 
 Depends on / 依赖: hx.elim
@@ -916,7 +916,7 @@ theorem uniqueDiffOn_univ
 
 中文:
 定理 uniqueDiffOn_univ
-  结论: UniqueDiffOn 𝕜 (univ : Set E)
+  结论: UniqueDiffOn 𝕜 (univ : 集合 E)
   证明: fun _ _ => uniqueDiffWithinAt_univ
 
 Depends on / 依赖: uniqueDiffWithinAt_univ
@@ -958,8 +958,8 @@ theorem IsOpen.uniqueDiffWithinAt
   proof: uniqueDiffWithinAt_of_mem_nhds (IsOpen.mem_nhds hs xs)
 
 中文:
-定理 IsOpen.uniqueDiffWithinAt
-  条件: (hs : IsOpen s) (xs : x in s)
+定理 是开集.uniqueDiffWithinAt
+  条件: (hs : 是开集 s) (xs : x in s)
   结论: UniqueDiffWithinAt 𝕜 s x
   证明: uniqueDiffWithinAt_of_mem_nhds (IsOpen.mem_nhds hs xs)
 
@@ -978,8 +978,8 @@ theorem IsOpen.uniqueDiffOn
   proof: fun _ hx => IsOpen.uniqueDiffWithinAt hs hx
 
 中文:
-定理 IsOpen.uniqueDiffOn
-  条件: (hs : IsOpen s)
+定理 是开集.uniqueDiffOn
+  条件: (hs : 是开集 s)
   结论: UniqueDiffOn 𝕜 s
   证明: fun _ hx => IsOpen.uniqueDiffWithinAt hs hx
 

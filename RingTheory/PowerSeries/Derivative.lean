@@ -56,7 +56,7 @@ definition derivative
 
 中文:
 定义 derivative
-  签名: : Derivation R R⟦X⟧ R⟦X⟧
+  签名: : 导子 R R⟦X⟧ R⟦X⟧
   定义体: MvPowerSeries.pderiv R ()
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.pderiv, pderiv
@@ -190,7 +190,7 @@ theorem derivative_coe
 中文:
 定理 derivative_coe
   条件: (f : R[X])
-  结论: d⁄dX R f = Polynomial.derivative f
+  结论: d⁄dX R f = 多项式.derivative f
   证明: by
   ext
   rw [coeff_derivative]; rw [coeff_coe]; rw [coeff_coe]; rw [Polynomial.coeff_derivative]
@@ -312,7 +312,7 @@ theorem derivative.ext
 
 中文:
 定理 derivative.ext
-  结论: [CommRing R] [IsAddTorsionFree R] {f g} (hD : d⁄dX R f = d⁄dX R g)
+  结论: [交换环 R] [是加法无挠 R] {f g} (hD : d⁄dX R f = d⁄dX R g)
   证明: MvPowerSeries.pderiv.ext (fun _ => hD) hc
 
 @[simp]
@@ -336,7 +336,7 @@ theorem derivative_inv
 
 中文:
 定理 derivative_inv
-  条件: [CommRing R] (f : R⟦X⟧ˣ)
+  条件: [交换环 R] (f : R⟦X⟧ˣ)
   证明: MvPowerSeries.pderiv_inv f
 
 @[simp]
@@ -358,7 +358,7 @@ theorem derivative_invOf
 
 中文:
 定理 derivative_invOf
-  条件: [CommRing R] (f : R⟦X⟧) [Invertible f]
+  条件: [交换环 R] (f : R⟦X⟧) [可逆 f]
   证明: MvPowerSeries.pderiv_invOf f
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.pderiv_invOf, pderiv_invOf
@@ -379,7 +379,7 @@ theorem derivative_inv'
 
 中文:
 定理 derivative_inv'
-  条件: [Field R] (f : R⟦X⟧)
+  条件: [域 R] (f : R⟦X⟧)
   结论: d⁄dX R f⁻¹ = -f⁻¹ ^ 2 * d⁄dX R f
   证明: MvPowerSeries.pderiv_inv' f
 -/
@@ -398,7 +398,7 @@ theorem derivative_subst_coe
 
 中文:
 定理 derivative_subst_coe
-  条件: [CommRing R] (p : Polynomial R) {g : R⟦X⟧} (hg : HasSubst g)
+  条件: [交换环 R] (p : 多项式 R) {g : R⟦X⟧} (hg : 有Subst g)
   证明: by
   simp [subst_coe hg, derivative_coe, Derivation.comp_aeval_eq (a := g) (derivative R) p,
     smul_eq_mul]
@@ -424,7 +424,7 @@ theorem derivative_subst
 
 中文:
 定理 derivative_subst
-  条件: [CommRing R] {f g : R⟦X⟧} (hg : HasSubst g)
+  条件: [交换环 R] {f g : R⟦X⟧} (hg : 有Subst g)
   证明: by
   ext n
   obtain ⟨m, hm⟩ := (hg.eventually_coeff_pow_eq_zero (n + 1)).exists_forall_of_atTop

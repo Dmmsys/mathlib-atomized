@@ -44,8 +44,8 @@ lemma tendsto_sup'_antidiagonal_cofinite
 
 中文:
 引理 tendsto_sup'_antidiagonal_cofinite
-  条件: (hf : Tendsto f cofinite F)
-  结论: Tendsto
+  条件: (hf : 收敛 f cofinite F)
+  结论: 收敛
   证明: by
   intro U hU
   refine ((((hf hU).image Prod.fst)).add ((hf hU).image Prod.snd)).subset ?_

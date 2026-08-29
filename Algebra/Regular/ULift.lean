@@ -38,7 +38,7 @@ theorem isLeftRegular_up
 中文:
 定理 isLeftRegular_up
   条件: {a : R}
-  结论: IsLeftRegular (ULift.up.{u} a) ↔ IsLeftRegular a
+  结论: IsLeftRegular (类型层提升.up.{u} a) ↔ IsLeftRegular a
   证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
 
 @[to_additive (attr := simp)]
@@ -63,7 +63,7 @@ theorem isRightRegular_up
 中文:
 定理 isRightRegular_up
   条件: {a : R}
-  结论: IsRightRegular (ULift.up.{u} a) ↔ IsRightRegular a
+  结论: IsRightRegular (类型层提升.up.{u} a) ↔ IsRightRegular a
   证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
 
 @[to_additive (attr := simp)]
@@ -89,7 +89,7 @@ theorem isRegular_up
 中文:
 定理 isRegular_up
   条件: {a : R}
-  结论: IsRegular (ULift.up.{u} a) ↔ IsRegular a
+  结论: 是正则 (类型层提升.up.{u} a) ↔ 是正则 a
   证明: by
   simp [isRegular_iff]
 
@@ -114,7 +114,7 @@ theorem isLeftRegular_down
 
 中文:
 定理 isLeftRegular_down
-  条件: {a : ULift.{u} R}
+  条件: {a : 类型层提升.{u} R}
   结论: IsLeftRegular a.down ↔ IsLeftRegular a
   证明: isLeftRegular_up.symm
 
@@ -139,7 +139,7 @@ theorem isRightRegular_down
 
 中文:
 定理 isRightRegular_down
-  条件: {a : ULift.{u} R}
+  条件: {a : 类型层提升.{u} R}
   结论: IsRightRegular a.down ↔ IsRightRegular a
   证明: isRightRegular_up.symm
 
@@ -162,8 +162,8 @@ theorem isRegular_down
 
 中文:
 定理 isRegular_down
-  条件: {a : ULift.{u} R}
-  结论: IsRegular a.down ↔ IsRegular a
+  条件: {a : 类型层提升.{u} R}
+  结论: 是正则 a.down ↔ 是正则 a
   证明: isRegular_up.symm
 
 Depends on / 依赖: isRegular_up, isRegular_up.symm
@@ -184,7 +184,7 @@ theorem isSMulRegular_iff
 
 中文:
 定理 isSMulRegular_iff
-  条件: [SMul α R] {r : α}
+  条件: [标量乘法 α R] {r : α}
   证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
 
 Depends on / 依赖: Equiv.ulift.symm.comp_injective, Equiv.ulift.symm.injective_comp, comp_injective, injective_comp

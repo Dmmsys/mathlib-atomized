@@ -40,7 +40,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set G)
+  签名: (s : 集合 G)
   定义体: Submonoid.centralizer s
   inv_mem' := Set.inv_mem_centralizer
 
@@ -64,7 +64,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {g : G} {s : Set G}
+  条件: {g : G} {s : 集合 G}
   结论: g in centralizer s ↔ 对任意 h in s, h * g = g * h
   证明: Iff.rfl
 
@@ -86,7 +86,7 @@ theorem mem_centralizer_iff_commutator_eq_one
 
 中文:
 定理 mem_centralizer_iff_commutator_eq_one
-  条件: {g : G} {s : Set G}
+  条件: {g : G} {s : 集合 G}
   证明: by
   simp only [commutatorElement_def, mem_centralizer_iff, mul_inv_eq_iff_eq_mul, one_mul]
 
@@ -112,7 +112,7 @@ theorem mem_centralizer_iff_commutator_eq_one'
 
 中文:
 定理 mem_centralizer_iff_commutator_eq_one'
-  条件: {g : G} {s : Set G}
+  条件: {g : G} {s : 集合 G}
   证明: by
   refine forall₂_congr fun _ _ => ?_
   rw [commutatorElement_def]; rw [mul_inv_eq_iff_eq_mul]; rw [mul_inv_eq_iff_eq_mul]; rw [one_mul]; rw [eq_comm]
@@ -168,7 +168,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer Set.univ = center G
+  结论: centralizer 集合.univ = center G
   证明: SetLike.ext' (Set.centralizer_univ G)
 
 @[to_additive]
@@ -238,7 +238,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: {s t : Set G} (h : s subseteq t)
+  条件: {s t : 集合 G} (h : s subseteq t)
   结论: centralizer t <= centralizer s
   证明: Submonoid.centralizer_le h
 
@@ -263,7 +263,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   结论: centralizer s = ⊤ ↔ s subseteq center G
   证明: SetLike.ext'_iff.trans Set.centralizer_eq_top_iff_subset
 
@@ -287,7 +287,7 @@ theorem centralizer_center
 
 中文:
 定理 centralizer_center
-  结论: centralizer (center G : Set G) = ⊤
+  结论: centralizer (center G : 集合 G) = ⊤
   证明: centralizer_eq_top_iff_subset.mpr le_rfl
 
 @[to_additive]
@@ -312,7 +312,7 @@ theorem map_centralizer_le_centralizer_image
 
 中文:
 定理 map_centralizer_le_centralizer_image
-  条件: (s : Set G) (f : G ->* G')
+  条件: (s : 集合 G) (f : G ->* G')
   证明: by
   rintro - ⟨g, hg, rfl⟩ - ⟨h, hh, rfl⟩
   rw [← map_mul]; rw [← map_mul]; rw [hg h hh]
@@ -341,7 +341,7 @@ instance normal_centralizer
 
 中文:
 实例 normal_centralizer
-  签名: [H.Normal]
+  签名: [H.正规]
   定义体: by
     simpa [-mul_left_inj, -mul_right_inj, mul_assoc]
       using congr(i * $(hg _ <| ‹H.Normal›.conj_mem _ hh i⁻¹) * i⁻¹)
@@ -371,7 +371,7 @@ instance characteristic_centralizer
 
 中文:
 实例 characteristic_centralizer
-  签名: [hH : H.Characteristic]
+  签名: [hH : H.特征]
   定义体: by
   refine Subgroup.characteristic_iff_comap_le.mpr fun ϕ g hg h hh => ϕ.injective ?_
   rw [map_mul]; rw [map_mul]
@@ -399,7 +399,7 @@ fun _ x hx y hy => congrArg Subtype.val mul_comm' ⟨y, hy⟩ ⟨x, hx⟩⟩
 
 中文:
 定理 le_centralizer_iff_isMulCommutative
-  结论: K <= centralizer K ↔ IsMulCommutative K
+  结论: K <= centralizer K ↔ 是MulCommutative K
   证明: ⟨fun h => ⟨⟨fun x y => Subtype.ext h y.2 x x.2⟩⟩,
 fun _ x hx y hy => congrArg Subtype.val mul_comm' ⟨y, hy⟩ ⟨x, hx⟩⟩
 
@@ -423,7 +423,7 @@ theorem le_centralizer
 
 中文:
 定理 le_centralizer
-  条件: [h : IsMulCommutative H]
+  条件: [h : 是MulCommutative H]
   结论: H <= centralizer H
   证明: le_centralizer_iff_isMulCommutative.mpr h
 
@@ -446,7 +446,7 @@ lemma closure_le_centralizer_centralizer
 
 中文:
 引理 closure_le_centralizer_centralizer
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   证明: .mpr Set.subset_centralizer_centralizer closure_le _
 
 @[to_additive]
@@ -472,7 +472,7 @@ theorem centralizer_closure
 
 中文:
 定理 centralizer_closure
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: centralizer (closure s) = centralizer s
   证明: le_antisymm (centralizer_le subset_closure)
     (le_centralizer_iff.mp (closure_le_centralizer_centralizer s))
@@ -500,7 +500,7 @@ theorem centralizer_eq_iInf
 
 中文:
 定理 centralizer_eq_iInf
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: centralizer s = ⨅ g in s, centralizer {g}
   证明: le_antisymm (le_iInf₂ fun g hg => centralizer_le (Set.singleton_subset_iff.mpr hg)) fun x hx => by
     simpa only [mem_iInf, mem_centralizer_singleton_iff, eq_comm (a := x * _)] using! hx
@@ -527,7 +527,7 @@ theorem center_eq_iInf
 
 中文:
 定理 center_eq_iInf
-  条件: {s : Set G} (hs : closure s = ⊤)
+  条件: {s : 集合 G} (hs : closure s = ⊤)
   证明: by
   rw [← centralizer_univ]; rw [← coe_top]; rw [← hs]; rw [centralizer_closure]; rw [centralizer_eq_iInf]
 
@@ -551,7 +551,7 @@ theorem center_eq_infi'
 
 中文:
 定理 center_eq_infi'
-  条件: {s : Set G} (hs : closure s = ⊤)
+  条件: {s : 集合 G} (hs : closure s = ⊤)
   证明: by
   rw [center_eq_iInf hs]; rw [← iInf_subtype'']
 
@@ -576,7 +576,7 @@ theorem isMulCommutative_closure
 
 中文:
 定理 isMulCommutative_closure
-  条件: {k : Set G} (hcomm : 对任意 x in k, 对任意 y in k, x * y = y * x)
+  条件: {k : 集合 G} (hcomm : 对任意 x in k, 对任意 y in k, x * y = y * x)
   证明: have := closure_le_centralizer_centralizer k
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -606,7 +606,7 @@ abbreviation closureCommGroupOfComm
 
 中文:
 缩写 closureCommGroupOfComm
-  签名: {k : Set G} (hcomm : 对任意 x in k, 对任意 y in k, x * y = y * x)
+  签名: {k : 集合 G} (hcomm : 对任意 x in k, 对任意 y in k, x * y = y * x)
   定义体: have := isMulCommutative_closure hcomm
   inferInstance
 
@@ -632,7 +632,7 @@ instance instIsMulCommutative_closure
 
 中文:
 实例 instIsMulCommutative_closure
-  签名: {S : 类型} [SetLike S G] [MulMemClass S G] (s : S)
+  签名: {S : 类型} [集合状 S G] [MulMem类 S G] (s : S)
   定义体: isMulCommutative_closure fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 @[to_additive]
@@ -661,7 +661,7 @@ theorem centralizer_le_normalizer
 
 中文:
 定理 centralizer_le_normalizer
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: centralizer s <= normalizer s
   证明: by
   refine fun g hg h => ⟨fun hh => ?_, fun hh => ?_⟩
@@ -694,7 +694,7 @@ instance normal_subgroupOf_centralizer_normalizer
 
 中文:
 实例 normal_subgroupOf_centralizer_normalizer
-  签名: (s : Set G)
+  签名: (s : 集合 G)
   定义体: by
   refine (Subgroup.normal_subgroupOf_iff <| centralizer_le_normalizer s).mpr fun c n hc hn => ?_
   refine mem_centralizer_iff_commutator_eq_one'.mpr fun g hg => ?_
@@ -764,7 +764,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (normalizer H : Subgroup G) H
+  签名: MulDistribMul作用 (normalizer H : 子群 G) H
   定义体: ⟨g * h * g⁻¹, (g.2 h).mp h.2⟩
   one_smul g := by simp [HSMul.hSMul]
   mul_smul := by simp [HSMul.hSMul, mul_assoc]
@@ -790,7 +790,7 @@ definition normalizerMonoidHom
 
 中文:
 定义 normalizerMonoidHom
-  签名: : normalizer (H : Set G) ->* MulAut H
+  签名: : normalizer (H : 集合 G) ->* MulAut H
   定义体: MulDistribMulAction.toMulAut (normalizer H : Subgroup G) H
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMulAut, Subgroup, normalizer, toMulAut

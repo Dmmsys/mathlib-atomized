@@ -89,7 +89,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (α ->. β)
+  签名: : 可居 (α ->. β)
   定义体: ⟨fun _ => Part.none⟩
 
 Depends on / 依赖: Part.none
@@ -310,7 +310,7 @@ definition equivSubtype
 
 中文:
 定义 equivSubtype
-  签名: : (α ->. β) ≃ Σ p : α -> 命题, Subtype p -> β
+  签名: : (α ->. β) ≃ Σ p : α -> 命题, 子类型 p -> β
   定义体: ⟨fun f => ⟨fun a => (f a).Dom, asSubtype f⟩, fun f x => ⟨f.1 x, fun h => f.2 ⟨x, h⟩⟩, fun _ =>
     funext fun _ => Part.eta _, fun ⟨p, f⟩ => by dsimp; congr⟩
 
@@ -414,7 +414,7 @@ theorem dom_coe
 中文:
 定理 dom_coe
   条件: (f : α -> β)
-  结论: (f : α ->. β).Dom = Set.univ
+  结论: (f : α ->. β).Dom = 集合.univ
   证明: rfl
 -/
 theorem dom_coe (f : α -> β) : (f : α ->. β).Dom = Set.univ :=
@@ -431,7 +431,7 @@ funext fun a => Part.some_injective congr_fun h a
 
 中文:
 定理 lift_injective
-  结论: Injective (PFun.lift : (α -> β) -> α ->. β)
+  结论: 单射 (PFun.lift : (α -> β) -> α ->. β)
   证明: fun _ _ h =>
 funext fun a => Part.some_injective congr_fun h a
 -/
@@ -496,7 +496,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : α ->. β) {p : Set α} (H : p subseteq f.Dom)
+  签名: (f : α ->. β) {p : 集合 α} (H : p subseteq f.Dom)
   定义体: fun x =>
   (f x).restrict (x in p) (@H x)
 -/
@@ -515,7 +515,7 @@ theorem mem_restrict
 
 中文:
 定理 mem_restrict
-  条件: {f : α ->. β} {s : Set α} (h : s subseteq f.Dom) (a : α) (b : β)
+  条件: {f : α ->. β} {s : 集合 α} (h : s subseteq f.Dom) (a : α) (b : β)
   证明: by simp [restrict]
 
 Depends on / 依赖: restrict
@@ -533,7 +533,7 @@ definition res
 
 中文:
 定义 res
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: (PFun.lift f).restrict s.subset_univ
 
 Depends on / 依赖: PFun.lift, restrict, s.subset_univ, subset_univ
@@ -554,7 +554,7 @@ theorem mem_res
 
 中文:
 定理 mem_res
-  条件: (f : α -> β) (s : Set α) (a : α) (b : β)
+  条件: (f : α -> β) (s : 集合 α) (a : α) (b : β)
   结论: b in res f s a ↔ a in s ∧ f a = b
   证明: by
   simp [res, @eq_comm _ b]
@@ -576,7 +576,7 @@ theorem res_univ
 中文:
 定理 res_univ
   条件: (f : α -> β)
-  结论: PFun.res f Set.univ = f
+  结论: PFun.res f 集合.univ = f
   证明: rfl
 -/
 theorem res_univ (f : α -> β) : PFun.res f Set.univ = f :=
@@ -700,7 +700,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad (PFun α) where
+  签名: : 单子 (PFun α) where
   定义体: PFun.pure
   bind := PFun.bind
   map := PFun.map
@@ -726,7 +726,7 @@ instance lawfulMonad
 
 中文:
 实例 lawfulMonad
-  签名: : LawfulMonad (PFun α)
+  签名: : 合法单子 (PFun α)
   定义体: LawfulMonad.mk'
   (bind_pure_comp := fun _ _ => funext fun _ => Part.bind_some_eq_map _ _)
   (id_map := fun f => by funext a; dsimp [Functor.map, PFun.map]; cases f a; rfl)
@@ -752,7 +752,7 @@ theorem pure_defined
 
 中文:
 定理 pure_defined
-  条件: (p : Set α) (x : β)
+  条件: (p : 集合 α) (x : β)
   结论: p subseteq (@PFun.pure α _ x).Dom
   证明: p.subset_univ
 
@@ -772,7 +772,7 @@ theorem bind_defined
 
 中文:
 定理 bind_defined
-  结论: {α β γ} (p : Set α) {f : α ->. β} {g : β -> α ->. γ} (H1 : p subseteq f.Dom)
+  结论: {α β γ} (p : 集合 α) {f : α ->. β} {g : β -> α ->. γ} (H1 : p subseteq f.Dom)
   证明: fun a ha =>
   (⟨H1 ha, H2 _ ha⟩ : a in (f >>= g).Dom)
 -/
@@ -917,7 +917,7 @@ theorem fix_stop
 
 中文:
 定理 fix_stop
-  条件: {f : α ->. β oplus α} {b : β} {a : α} (hb : Sum.inl b in f a)
+  条件: {f : α ->. β oplus α} {b : β} {a : α} (hb : 和.inl b in f a)
   结论: b in f.fix a
   证明: by
   rw [PFun.mem_fix_iff]
@@ -947,7 +947,7 @@ theorem fix_fwd_eq
 
 中文:
 定理 fix_fwd_eq
-  条件: {f : α ->. β oplus α} {a a' : α} (ha' : Sum.inr a' in f a)
+  条件: {f : α ->. β oplus α} {a a' : α} (ha' : 和.inr a' in f a)
   结论: f.fix a = f.fix a'
   证明: by
   ext b; constructor
@@ -979,7 +979,7 @@ theorem fix_fwd
 
 中文:
 定理 fix_fwd
-  条件: {f : α ->. β oplus α} {b : β} {a a' : α} (hb : b in f.fix a) (ha' : Sum.inr a' in f a)
+  条件: {f : α ->. β oplus α} {b : β} {a a' : α} (hb : b in f.fix a) (ha' : 和.inr a' in f a)
   证明: by rwa [← fix_fwd_eq ha']
 
 Depends on / 依赖: fix_fwd_eq
@@ -1005,7 +1005,7 @@ definition fixInduction
 
 中文:
 定义 fixInduction
-  签名: {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
+  签名: {C : α -> 类型层*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
   定义体: by
   have h₂ := (Part.mem_assert_iff.1 h).snd
   generalize_proofs at h₂
@@ -1039,7 +1039,7 @@ theorem fixInduction_spec
 
 中文:
 定理 fixInduction_spec
-  结论: {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
+  结论: {C : α -> 类型层*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
   证明: by
   unfold fixInduction
   generalize_proofs
@@ -1076,7 +1076,7 @@ definition fixInduction'
 
 中文:
 定义 fixInduction'
-  签名: {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a : α}
+  签名: {C : α -> 类型层*} {f : α ->. β oplus α} {b : β} {a : α}
   定义体: by
   refine fixInduction h fun a' h ih => ?_
   rcases e : (f a').get (dom_of_mem_fix h) with b' | a'' <;> replace e : _ in f a' := ⟨_, e⟩
@@ -1113,7 +1113,7 @@ theorem fixInduction'_stop
 
 中文:
 定理 fixInduction'_stop
-  结论: {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
+  结论: {C : α -> 类型层*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
   证明: by
   unfold fixInduction'
   rw [fixInduction_spec]
@@ -1150,7 +1150,7 @@ theorem fixInduction'_fwd
 
 中文:
 定理 fixInduction'_fwd
-  结论: {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a a' : α} (h : b in f.fix a)
+  结论: {C : α -> 类型层*} {f : α ->. β oplus α} {b : β} {a a' : α} (h : b in f.fix a)
   证明: by
   unfold fixInduction'
   rw [fixInduction_spec]
@@ -1184,8 +1184,8 @@ definition image
   body: f.graph'.image s
 
 中文:
-定义 image
-  签名: (s : Set α)
+定义 像
+  签名: (s : 集合 α)
   定义体: f.graph'.image s
 
 Depends on / 依赖: f.graph
@@ -1204,8 +1204,8 @@ theorem image_def
 
 中文:
 定理 image_def
-  条件: (s : Set α)
-  结论: f.image s = { y | 存在 x in s, y in f x }
+  条件: (s : 集合 α)
+  结论: f.像 s = { y | 存在 x in s, y in f x }
   证明: rfl
 -/
 theorem image_def (s : Set α) : f.image s = { y | exists x in s, y in f x } :=
@@ -1222,8 +1222,8 @@ theorem mem_image
 
 中文:
 定理 mem_image
-  条件: (y : β) (s : Set α)
-  结论: y in f.image s ↔ 存在 x in s, y in f x
+  条件: (y : β) (s : 集合 α)
+  结论: y in f.像 s ↔ 存在 x in s, y in f x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1242,8 +1242,8 @@ theorem image_mono
 
 中文:
 定理 image_mono
-  条件: {s t : Set α} (h : s subseteq t)
-  结论: f.image s subseteq f.image t
+  条件: {s t : 集合 α} (h : s subseteq t)
+  结论: f.像 s subseteq f.像 t
   证明: SetRel.image_mono h
 
 Depends on / 依赖: SetRel, SetRel.image_mono, image_mono
@@ -1262,8 +1262,8 @@ theorem image_inter
 
 中文:
 定理 image_inter
-  条件: (s t : Set α)
-  结论: f.image (s inter t) subseteq f.image s inter f.image t
+  条件: (s t : 集合 α)
+  结论: f.像 (s inter t) subseteq f.像 s inter f.像 t
   证明: SetRel.image_inter_subset _
 
 Depends on / 依赖: SetRel, SetRel.image_inter_subset, image_inter_subset
@@ -1282,8 +1282,8 @@ theorem image_union
 
 中文:
 定理 image_union
-  条件: (s t : Set α)
-  结论: f.image (s union t) = f.image s union f.image t
+  条件: (s t : 集合 α)
+  结论: f.像 (s union t) = f.像 s union f.像 t
   证明: SetRel.image_union _ s t
 
 Depends on / 依赖: SetRel, SetRel.image_union, SplittingFieldAux, SplittingFieldAux.adjoin_rootSet, SplittingFieldAux.splits, adjoin_rootSet, image_union, splits
@@ -1300,8 +1300,8 @@ definition preimage
   body: f.graph'.preimage s
 
 中文:
-定义 preimage
-  签名: (s : Set β)
+定义 原像
+  签名: (s : 集合 β)
   定义体: f.graph'.preimage s
 
 Depends on / 依赖: f.graph, preimage
@@ -1321,8 +1321,8 @@ theorem Preimage_def
 
 中文:
 定理 Preimage_def
-  条件: (s : Set β)
-  结论: f.preimage s = { x | 存在 y in s, y in f x }
+  条件: (s : 集合 β)
+  结论: f.原像 s = { x | 存在 y in s, y in f x }
   证明: rfl
 
 @[simp, grind =]
@@ -1342,8 +1342,8 @@ theorem mem_preimage
 
 中文:
 定理 mem_preimage
-  条件: (s : Set β) (x : α)
-  结论: x in f.preimage s ↔ 存在 y in s, y in f x
+  条件: (s : 集合 β) (x : α)
+  结论: x in f.原像 s ↔ 存在 y in s, y in f x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1363,8 +1363,8 @@ theorem preimage_subset_dom
 
 中文:
 定理 preimage_subset_dom
-  条件: (s : Set β)
-  结论: f.preimage s subseteq f.Dom
+  条件: (s : 集合 β)
+  结论: f.原像 s subseteq f.Dom
   证明: fun _ ⟨y, _, fxy⟩ =>
   Part.dom_iff_mem.mpr ⟨y, fxy⟩
 -/
@@ -1382,8 +1382,8 @@ theorem preimage_mono
 
 中文:
 定理 preimage_mono
-  条件: {s t : Set β} (h : s subseteq t)
-  结论: f.preimage s subseteq f.preimage t
+  条件: {s t : 集合 β} (h : s subseteq t)
+  结论: f.原像 s subseteq f.原像 t
   证明: SetRel.preimage_mono h
 
 Depends on / 依赖: SetRel, SetRel.preimage_mono, preimage_mono
@@ -1402,8 +1402,8 @@ theorem preimage_inter
 
 中文:
 定理 preimage_inter
-  条件: (s t : Set β)
-  结论: f.preimage (s inter t) subseteq f.preimage s inter f.preimage t
+  条件: (s t : 集合 β)
+  结论: f.原像 (s inter t) subseteq f.原像 s inter f.原像 t
   证明: SetRel.preimage_inter_subset _
 
 Depends on / 依赖: SetRel, SetRel.preimage_inter_subset, preimage_inter_subset
@@ -1422,8 +1422,8 @@ theorem preimage_union
 
 中文:
 定理 preimage_union
-  条件: (s t : Set β)
-  结论: f.preimage (s union t) = f.preimage s union f.preimage t
+  条件: (s t : 集合 β)
+  结论: f.原像 (s union t) = f.原像 s union f.原像 t
   证明: SetRel.preimage_union _ s t
 
 Depends on / 依赖: SetRel, SetRel.preimage_union, preimage_union
@@ -1441,7 +1441,7 @@ theorem preimage_univ
 
 中文:
 定理 preimage_univ
-  结论: f.preimage Set.univ = f.Dom
+  结论: f.原像 集合.univ = f.Dom
   证明: by ext; simp [mem_preimage, mem_dom]
 
 Depends on / 依赖: mem_dom, mem_preimage
@@ -1459,8 +1459,8 @@ theorem coe_preimage
 
 中文:
 定理 coe_preimage
-  条件: (f : α -> β) (s : Set β)
-  结论: (f : α ->. β).preimage s = f ⁻¹' s
+  条件: (f : α -> β) (s : 集合 β)
+  结论: (f : α ->. β).原像 s = f ⁻¹' s
   证明: by ext; simp
 -/
 theorem coe_preimage (f : α -> β) (s : Set β) : (f : α ->. β).preimage s = f ⁻¹' s := by ext; simp
@@ -1475,7 +1475,7 @@ definition core
 
 中文:
 定义 core
-  签名: (s : Set β)
+  签名: (s : 集合 β)
   定义体: f.graph'.core s
 
 Depends on / 依赖: f.graph
@@ -1496,7 +1496,7 @@ theorem core_def
 
 中文:
 定理 core_def
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: f.core s = { x | 对任意 y, y in f x -> y in s }
   证明: rfl
 
@@ -1517,7 +1517,7 @@ theorem mem_core
 
 中文:
 定理 mem_core
-  条件: (x : α) (s : Set β)
+  条件: (x : α) (s : 集合 β)
   结论: x in f.core s ↔ 对任意 y, y in f x -> y in s
   证明: Iff.rfl
 
@@ -1538,7 +1538,7 @@ theorem compl_dom_subset_core
 
 中文:
 定理 compl_dom_subset_core
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: f.Domᶜ subseteq f.core s
   证明: fun x hx y fxy =>
   absurd ((mem_dom f x).mpr ⟨y, fxy⟩) hx
@@ -1559,7 +1559,7 @@ theorem core_mono
 
 中文:
 定理 core_mono
-  条件: {s t : Set β} (h : s subseteq t)
+  条件: {s t : 集合 β} (h : s subseteq t)
   结论: f.core s subseteq f.core t
   证明: SetRel.core_mono h
 
@@ -1579,7 +1579,7 @@ theorem core_inter
 
 中文:
 定理 core_inter
-  条件: (s t : Set β)
+  条件: (s t : 集合 β)
   结论: f.core (s inter t) = f.core s inter f.core t
   证明: SetRel.core_inter _ s t
 
@@ -1598,7 +1598,7 @@ theorem mem_core_res
 
 中文:
 定理 mem_core_res
-  条件: (f : α -> β) (s : Set α) (t : Set β) (x : α)
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β) (x : α)
   证明: by simp [mem_core, mem_res]
 
 Depends on / 依赖: mem_core, mem_res
@@ -1620,7 +1620,7 @@ theorem core_res
 
 中文:
 定理 core_res
-  条件: (f : α -> β) (s : Set α) (t : Set β)
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β)
   结论: (res f s).core t = sᶜ union f ⁻¹' t
   证明: by
   ext x
@@ -1646,8 +1646,8 @@ theorem core_restrict
 
 中文:
 定理 core_restrict
-  条件: (f : α -> β) (s : Set β)
-  结论: (f : α ->. β).core s = s.preimage f
+  条件: (f : α -> β) (s : 集合 β)
+  结论: (f : α ->. β).core s = s.原像 f
   证明: by
   ext x; simp [core_def]
 
@@ -1669,8 +1669,8 @@ theorem preimage_subset_core
 
 中文:
 定理 preimage_subset_core
-  条件: (f : α ->. β) (s : Set β)
-  结论: f.preimage s subseteq f.core s
+  条件: (f : α ->. β) (s : 集合 β)
+  结论: f.原像 s subseteq f.core s
   证明: fun _ ⟨y, ys, fxy⟩ y' fxy' =>
   have : y = y' := Part.mem_unique fxy fxy'
   this ▸ ys
@@ -1697,8 +1697,8 @@ theorem preimage_eq
 
 中文:
 定理 preimage_eq
-  条件: (f : α ->. β) (s : Set β)
-  结论: f.preimage s = f.core s inter f.Dom
+  条件: (f : α ->. β) (s : 集合 β)
+  结论: f.原像 s = f.core s inter f.Dom
   证明: Set.eq_of_subset_of_subset (Set.subset_inter (f.preimage_subset_core s) (f.preimage_subset_dom s))
     fun x ⟨xcore, xdom⟩ =>
     let y := (f x).get xdom
@@ -1726,8 +1726,8 @@ theorem core_eq
 
 中文:
 定理 core_eq
-  条件: (f : α ->. β) (s : Set β)
-  结论: f.core s = f.preimage s union f.Domᶜ
+  条件: (f : α ->. β) (s : 集合 β)
+  结论: f.core s = f.原像 s union f.Domᶜ
   证明: by
   rw [preimage_eq]; rw [Set.inter_union_distrib_right]; rw [Set.union_comm (Dom f)]; rw [Set.compl_union_self]; rw [Set.inter_univ]; rw [Set.union_eq_self_of_subset_right (f.compl_dom_subset_core s)]
 
@@ -1753,7 +1753,7 @@ theorem preimage_asSubtype
 
 中文:
 定理 preimage_asSubtype
-  条件: (f : α ->. β) (s : Set β)
+  条件: (f : α ->. β) (s : 集合 β)
   证明: by
   ext x
   simp only [Set.mem_preimage, PFun.asSubtype, PFun.mem_preimage]
@@ -1867,7 +1867,7 @@ theorem mem_toSubtype_iff
 
 中文:
 定理 mem_toSubtype_iff
-  条件: {p : β -> 命题} {f : α -> β} {a : α} {b : Subtype p}
+  条件: {p : β -> 命题} {f : α -> β} {a : α} {b : 子类型 p}
   证明: by
   rw [toSubtype_apply]; rw [Part.mem_mk_iff]; rw [exists_subtype_mk_eq_iff]; rw [eq_comm]
 
@@ -2036,7 +2036,7 @@ theorem dom_comp
 中文:
 定理 dom_comp
   条件: (f : β ->. γ) (g : α ->. β)
-  结论: (f.comp g).Dom = g.preimage f.Dom
+  结论: (f.comp g).Dom = g.原像 f.Dom
   证明: by
   ext
   simp
@@ -2063,7 +2063,7 @@ theorem preimage_comp
 
 中文:
 定理 preimage_comp
-  条件: (f : β ->. γ) (g : α ->. β) (s : Set γ)
+  条件: (f : β ->. γ) (g : α ->. β) (s : 集合 γ)
   证明: by
   grind
 

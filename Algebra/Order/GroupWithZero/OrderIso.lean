@@ -164,7 +164,7 @@ lemma mul_inf₀
 
 中文:
 引理 mul_inf₀
-  条件: [SemilatticeInf G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
+  条件: [SemilatticeInf G₀] [正乘反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
   证明: by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
@@ -191,7 +191,7 @@ lemma mul_sup₀
 
 中文:
 引理 mul_sup₀
-  条件: [SemilatticeSup G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
+  条件: [SemilatticeSup G₀] [正乘反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
   证明: by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
@@ -218,7 +218,7 @@ lemma inf_mul₀
 
 中文:
 引理 inf_mul₀
-  条件: [SemilatticeInf G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
+  条件: [SemilatticeInf G₀] [乘正反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
   证明: by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
@@ -245,7 +245,7 @@ lemma sup_mul₀
 
 中文:
 引理 sup_mul₀
-  条件: [SemilatticeSup G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
+  条件: [SemilatticeSup G₀] [乘正反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
   证明: by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp

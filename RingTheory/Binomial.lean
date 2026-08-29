@@ -81,10 +81,10 @@ class BinomialRing
     - factorial_nsmul_multichoose((r : R) (n : Nat)) : n.factorial • multichoose r n = (ascPochhammer Nat n).smeval r
 
 中文:
-类 BinomialRing
-  参数: (R : 类型) [AddCommMonoid R] [Pow R 自然数]
+类 二项环
+  参数: (R : 类型) [加法交换幺半群 R] [幂 R 自然数]
   公理与运算 (3 个):
-    - [toIsAddTorsionFree : IsAddTorsionFree R]
+    - [toIsAddTorsionFree : 是加法无挠 R]
     - multichoose : R -> 自然数 -> R
     - factorial_nsmul_multichoose((r : R) (n : 自然数)) : n.factorial • multichoose r n = (ascPochhammer 自然数 n).smeval r
 -/
@@ -206,7 +206,7 @@ theorem multichoose_zero_right
 
 中文:
 定理 multichoose_zero_right
-  结论: [MulOneClass R] [自然数PowAssoc R]
+  结论: [MulOne类 R] [自然数PowAssoc R]
   证明: by
   rw [multichoose_zero_right']; rw [npow_zero]
 
@@ -253,7 +253,7 @@ theorem multichoose_one_right
 
 中文:
 定理 multichoose_one_right
-  条件: [MulOneClass R] [自然数PowAssoc R] (r : R)
+  条件: [MulOne类 R] [自然数PowAssoc R] (r : R)
   结论: multichoose r 1 = r
   证明: by
   rw [multichoose_one_right']; rw [npow_one]
@@ -435,7 +435,7 @@ lemma map_multichoose
 
 中文:
 引理 map_multichoose
-  结论: {R S F : 类型} [Ring R] [Ring S] [BinomialRing R] [BinomialRing S]
+  结论: {R S F : 类型} [环 R] [环 S] [二项环 R] [二项环 S]
   证明: by
   apply nsmul_right_injective n.factorial_ne_zero
   simp only [← map_nsmul, Ring.factorial_nsmul_multichoose_eq_ascPochhammer,
@@ -479,7 +479,7 @@ theorem ascPochhammer_smeval_cast
 
 中文:
 定理 ascPochhammer_smeval_cast
-  结论: (R : 类型) [Semiring R] {S : 类型} [NonAssocSemiring S]
+  结论: (R : 类型) [半环 R] {S : 类型} [非结合半环 S]
   证明: by
   induction n with
   | zero => simp only [ascPochhammer_zero, smeval_one]
@@ -513,7 +513,7 @@ theorem ascPochhammer_smeval_eq_eval
 
 中文:
 定理 ascPochhammer_smeval_eq_eval
-  条件: [Semiring R] (r : R) (n : 自然数)
+  条件: [半环 R] (r : R) (n : 自然数)
   证明: by
   rw [eval_eq_smeval]; rw [ascPochhammer_smeval_cast R]
 
@@ -650,8 +650,8 @@ instance Nat.instBinomialRing
     rw [smul_eq_mul]; rw [Nat.multichoose_eq r n]; rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [← eval_eq_smeval r (ascPochhammer Nat n)]; rw [ascPochhammer_nat_eq_descFactorial]
 
 中文:
-实例 Nat.instBinomialRing
-  签名: : BinomialRing 自然数 where
+实例 自然数.instBinomialRing
+  签名: : 二项环 自然数 where
   定义体: Nat.multichoose
   factorial_nsmul_multichoose r n := by
     rw [smul_eq_mul]; rw [Nat.multichoose_eq r n]; rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [← eval_eq_smeval r (ascPochhammer Nat n)]; rw [ascPochhammer_nat_eq_descFactorial]
@@ -674,7 +674,7 @@ definition Int.multichoose
   | negSucc n => Int.negOnePow k * Nat.choose (n + 1) k
 
 中文:
-定义 Int.multichoose
+定义 整数.multichoose
   签名: (n : 整数) (k : 自然数)
   定义体: match n with
   | ofNat n => (Nat.choose (n + k - 1) k : Int)
@@ -702,8 +702,8 @@ instance Int.instBinomialRing
       rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [smeval_at_natCast]; rw [← eval_eq_smeva
 
 中文:
-实例 Int.instBinomialRing
-  签名: : BinomialRing 整数 where
+实例 整数.instBinomialRing
+  签名: : 二项环 整数 where
   定义体: Int.multichoose
   factorial_nsmul_multichoose r k := by
     rw [Int.multichoose.eq_def]; rw [nsmul_eq_mul]
@@ -839,7 +839,7 @@ theorem smeval_ascPochhammer_nat_cast
 
 中文:
 定理 smeval_ascPochhammer_nat_cast
-  条件: {R} [NonAssocSemiring R] [Pow R 自然数] [自然数PowAssoc R] (n k : 自然数)
+  条件: {R} [非结合半环 R] [幂 R 自然数] [自然数PowAssoc R] (n k : 自然数)
   证明: by
   rw [smeval_at_natCast (ascPochhammer Nat k) n]
 
@@ -976,8 +976,8 @@ theorem smeval_ascPochhammer_int_ofNat
   given: {R} [NonAssocRing R] [Pow R Nat] [NatPowAssoc R] (r : R)
 
 中文:
-定理 smeval_ascPochhammer_int_ofNat
-  条件: {R} [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R] (r : R)
+定理 smeval_ascPochhammer_int_of自然数
+  条件: {R} [非结合环 R] [幂 R 自然数] [自然数PowAssoc R] (r : R)
 -/
 theorem smeval_ascPochhammer_int_ofNat {R} [NonAssocRing R] [Pow R Nat] [NatPowAssoc R] (r : R) :
     forall n : Nat, smeval (ascPochhammer Int n) r = smeval (ascPochhammer Nat n) r
@@ -1013,7 +1013,7 @@ definition choose
 
 中文:
 定义 choose
-  签名: [AddCommGroupWithOne R] [Pow R 自然数] [BinomialRing R] (r : R) (n : 自然数)
+  签名: [加法交换带幺群 R] [幂 R 自然数] [二项环 R] (r : R) (n : 自然数)
   定义体: multichoose (r - n + 1) n
 
 Depends on / 依赖: multichoose
@@ -1171,7 +1171,7 @@ theorem choose_zero_succ
 
 中文:
 定理 choose_zero_succ
-  结论: (R) [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R] [BinomialRing R]
+  结论: (R) [非结合环 R] [幂 R 自然数] [自然数PowAssoc R] [二项环 R]
   证明: by
   rw [choose]; rw [Nat.cast_succ]; rw [zero_sub]; rw [neg_add]; rw [neg_add_cancel_right]; rw [multichoose_succ_neg_natCast]
 
@@ -1192,7 +1192,7 @@ theorem choose_zero_pos
 
 中文:
 定理 choose_zero_pos
-  结论: (R) [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R] [BinomialRing R]
+  结论: (R) [非结合环 R] [幂 R 自然数] [自然数PowAssoc R] [二项环 R]
   证明: by
   rw [← Nat.succ_pred_eq_of_pos h_pos]; rw [choose_zero_succ]
 
@@ -1217,7 +1217,7 @@ theorem choose_zero_ite
 
 中文:
 定理 choose_zero_ite
-  结论: (R) [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R] [BinomialRing R]
+  结论: (R) [非结合环 R] [幂 R 自然数] [自然数PowAssoc R] [二项环 R]
   证明: by
   split_ifs with hk
   · rw [hk, choose_zero_right]
@@ -1338,7 +1338,7 @@ theorem descPochhammer_succ_succ_smeval
 
 中文:
 定理 descPochhammer_succ_succ_smeval
-  结论: {R} [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R]
+  结论: {R} [非结合环 R] [幂 R 自然数] [自然数PowAssoc R]
   证明: by
   nth_rw 1 [descPochhammer_succ_left]
   rw [descPochhammer_succ_right]; rw [mul_comm (descPochhammer Int k)]
@@ -1442,7 +1442,7 @@ theorem choose_eq_smul
 
 中文:
 定理 choose_eq_smul
-  条件: [Field R] [CharZero R] {a : R} {n : 自然数}
+  条件: [域 R] [特征零 R] {a : R} {n : 自然数}
   证明: by
   rw [Ring.descPochhammer_eq_factorial_smul_choose]; rw [← Nat.cast_smul_eq_nsmul R]; rw [inv_smul_smul₀]
   simpa using Nat.factorial_ne_zero n
@@ -1471,7 +1471,7 @@ theorem descPochhammer_smeval_add
 
 中文:
 定理 descPochhammer_smeval_add
-  条件: [Ring R] {r s : R} (k : 自然数) (h : Commute r s)
+  条件: [环 R] {r s : R} (k : 自然数) (h : Commute r s)
   证明: by
   induction k with
   | zero => simp
@@ -1520,7 +1520,7 @@ theorem add_choose_eq
 
 中文:
 定理 add_choose_eq
-  条件: [Ring R] [BinomialRing R] {r s : R} (k : 自然数) (h : Commute r s)
+  条件: [环 R] [二项环 R] {r s : R} (k : 自然数) (h : Commute r s)
   证明: by
   rw [← nsmul_right_inj (Nat.factorial_ne_zero k)]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_sum]; rw [descPochhammer_smeval_add _ h]
   refine sum_congr rfl ?_
@@ -1549,7 +1549,7 @@ lemma map_choose
 
 中文:
 引理 map_choose
-  结论: {R S F : 类型} [Ring R] [Ring S] [BinomialRing R] [BinomialRing S]
+  结论: {R S F : 类型} [环 R] [环 S] [二项环 R] [二项环 S]
   证明: by
   simpa using! Ring.map_multichoose f (a - n + 1) n
 

@@ -52,7 +52,7 @@ theorem isTheta_refl
 
 中文:
 定理 isTheta_refl
-  条件: (f : α -> E) (l : Filter α)
+  条件: (f : α -> E) (l : 滤子 α)
   结论: f =Θ[l] f
   证明: ⟨isBigO_refl _ _, isBigO_refl _ _⟩
 
@@ -369,7 +369,7 @@ theorem _root_.Filter.EventuallyEq.trans_isTheta
   proof: ⟨hf.trans_isBigO h.1, h.2.trans_eventuallyEq hf.symm⟩
 
 中文:
-定理 _root_.Filter.EventuallyEq.trans_isTheta
+定理 _root_.滤子.EventuallyEq.trans_isTheta
   结论: {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
   证明: ⟨hf.trans_isBigO h.1, h.2.trans_eventuallyEq hf.symm⟩
 
@@ -409,7 +409,7 @@ lemma _root_.Filter.EventuallyEq.isTheta
 @[simp]
 
 中文:
-引理 _root_.Filter.EventuallyEq.isTheta
+引理 _root_.滤子.EventuallyEq.isTheta
   条件: {f g : α -> E} (h : f =ᶠ[l] g)
   结论: f =Θ[l] g
   证明: h.trans_isTheta isTheta_rfl
@@ -685,7 +685,7 @@ theorem IsTheta.sup
 @[simp]
 
 中文:
-定理 IsTheta.sup
+定理 IsTheta.上确界
   条件: (h : f' =Θ[l] g') (h' : f' =Θ[l'] g')
   结论: f' =Θ[l ⊔ l'] g'
   证明: ⟨h.1.sup h'.1, h.2.sup h'.2⟩
@@ -810,7 +810,7 @@ theorem IsTheta.smul
 
 中文:
 定理 IsTheta.smul
-  结论: [NormedSpace 𝕜 E'] [NormedSpace 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
+  结论: [赋范空间 𝕜 E'] [赋范空间 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
   证明: ⟨hf.1.smul hg.1, hf.2.smul hg.2⟩
 -/
 theorem IsTheta.smul [NormedSpace 𝕜 E'] [NormedSpace 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
@@ -845,7 +845,7 @@ theorem IsTheta.listProd
 
 中文:
 定理 IsTheta.listProd
-  结论: {ι : 类型} {L : List ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
+  结论: {ι : 类型} {L : 列表 ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
   证明: ⟨.listProd fun i hi => (h i hi).isBigO, .listProd fun i hi => (h i hi).symm.isBigO⟩
 
 Depends on / 依赖: isBigO, listProd, symm.isBigO
@@ -885,7 +885,7 @@ theorem IsTheta.finsetProd
 
 中文:
 定理 IsTheta.finsetProd
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
   证明: ⟨.finsetProd fun i hi => (h i hi).isBigO, .finsetProd fun i hi => (h i hi).symm.isBigO⟩
 
 Depends on / 依赖: finsetProd, isBigO, symm.isBigO
@@ -1107,7 +1107,7 @@ alias ⟨IsTheta.of_const_smul_left, IsTheta.const_smul_left⟩ := isTheta_const
 
 中文:
 定理 isTheta_const_smul_left
-  条件: [NormedSpace 𝕜 E'] {c : 𝕜} (hc : c != 0)
+  条件: [赋范空间 𝕜 E'] {c : 𝕜} (hc : c != 0)
   证明: and_congr (isBigO_const_smul_left hc) (isBigO_const_smul_right hc)
 
 alias ⟨IsTheta.of_const_smul_left, IsTheta.const_smul_left⟩ := isTheta_const_smul_left
@@ -1132,7 +1132,7 @@ alias ⟨IsTheta.of_const_smul_right, IsTheta.const_smul_right⟩ := isTheta_con
 
 中文:
 定理 isTheta_const_smul_right
-  条件: [NormedSpace 𝕜 F'] {c : 𝕜} (hc : c != 0)
+  条件: [赋范空间 𝕜 F'] {c : 𝕜} (hc : c != 0)
   证明: and_congr (isBigO_const_smul_right hc) (isBigO_const_smul_left hc)
 
 alias ⟨IsTheta.of_const_smul_right, IsTheta.const_smul_right⟩ := isTheta_const_smul_right
@@ -1371,7 +1371,7 @@ theorem IsTheta.comp_fst
 
 中文:
 定理 IsTheta.comp_fst
-  结论: f =Θ[l] g -> (f ∘ Prod.fst) =Θ[l ×ˢ l'] (g ∘ Prod.fst)
+  结论: f =Θ[l] g -> (f ∘ 积类型.fst) =Θ[l ×ˢ l'] (g ∘ 积类型.fst)
   证明: by
   simp only [IsTheta]
   exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_fst l', h₂.comp_fst l'⟩
@@ -1392,7 +1392,7 @@ theorem IsTheta.comp_snd
 
 中文:
 定理 IsTheta.comp_snd
-  结论: f =Θ[l] g -> (f ∘ Prod.snd) =Θ[l' ×ˢ l] (g ∘ Prod.snd)
+  结论: f =Θ[l] g -> (f ∘ 积类型.snd) =Θ[l' ×ˢ l] (g ∘ 积类型.snd)
   证明: by
   simp only [IsTheta]
   exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_snd l', h₂.comp_snd l'⟩

@@ -57,7 +57,7 @@ have to_nnreal_μ : forall s, ((μ s).toNNRe
 
 中文:
 定理 hahn_decomposition
-  条件: (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 μ] [是有限测度 ν]
   证明: by
   let d : Set α -> Real := fun s => ((μ s).toNNReal : Real) - (ν s).toNNReal
   let c : Set Real := d '' { s | MeasurableSet s }
@@ -205,10 +205,10 @@ structure IsHahnDecomposition
     - ge_on_compl : ν.restrict sᶜ <= μ.restrict sᶜ
 
 中文:
-结构 IsHahnDecomposition
-  参数: (μ ν : Measure α) (s : Set α)
+结构 是HahnDecomposition
+  参数: (μ ν : 测度 α) (s : 集合 α)
   公理与运算 (3 个):
-    - measurableSet : MeasurableSet s
+    - measurableSet : 可测集 s
     - le_on : μ.restrict s <= ν.restrict s
     - ge_on_compl : ν.restrict sᶜ <= μ.restrict sᶜ
 -/
@@ -228,8 +228,8 @@ lemma IsHahnDecomposition.compl
   ge_on_compl := by simpa using h.le_on
 
 中文:
-引理 IsHahnDecomposition.compl
-  结论: {μ ν : Measure α} {s : Set α}
+引理 是HahnDecomposition.compl
+  结论: {μ ν : 测度 α} {s : 集合 α}
   证明: h.measurableSet.compl
   le_on := h.ge_on_compl
   ge_on_compl := by simpa using h.le_on
@@ -257,8 +257,8 @@ lemma exists_isHahnDecomposition
     simp [*]
 
 中文:
-引理 exists_isHahnDecomposition
-  条件: (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+引理 存在_isHahnDecomposition
+  条件: (μ ν : 测度 α) [是有限测度 μ] [是有限测度 ν]
   证明: by
   obtain ⟨s, hs, h₁, h₂⟩ := hahn_decomposition ν μ
   refine ⟨s, hs, ?_, ?_⟩

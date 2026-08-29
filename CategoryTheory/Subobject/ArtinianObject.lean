@@ -55,7 +55,7 @@ definition isArtinianObject
 
 中文:
 定义 isArtinianObject
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => WellFoundedLT (Subobject X)
 
 Depends on / 依赖: Subobject, WellFoundedLT
@@ -272,7 +272,7 @@ lemma isArtinianObject_of_isZero
 
 中文:
 引理 isArtinianObject_of_isZero
-  条件: (hX : IsZero X)
+  条件: (hX : 是零 X)
   结论: IsArtinianObject X
   证明: by
   rw [isArtinianObject_iff_antitone_chain_condition]
@@ -299,8 +299,8 @@ instance [HasZeroObject
     exact isArtinianObject_of_isZero (isZero_zero C)⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : (isArtinianObject (C := C)).ContainsZero where
+实例 [有ZeroObject
+  签名: C] : (isArtinianObject (C := C)).余ntainsZero where
   定义体: ⟨0, isZero_zero _, by
     rw [← isArtinianObject.is_iff]
     exact isArtinianObject_of_isZero (isZero_zero C)⟩
@@ -328,7 +328,7 @@ lemma isArtinianObject_of_mono
 
 中文:
 引理 isArtinianObject_of_mono
-  条件: (i : X ⟶ Y) [Mono i] [IsArtinianObject Y]
+  条件: (i : X ⟶ Y) [单态射 i] [IsArtinianObject Y]
   证明: by
   rw [isArtinianObject_iff_antitone_chain_condition]
   intro f
@@ -360,7 +360,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isArtinianObject (C := C)).IsClosedUnderSubobjects
+  签名: (isArtinianObject (C := C)).是ClosedUnderSubobjects
   定义体: by
     rw [← isArtinianObject.is_iff] at hY ⊢
     exact isArtinianObject_of_mono f
@@ -388,8 +388,8 @@ theorem exists_simple_subobject
   exact ⟨Y, (subobject_simple_iff_isAtom _).mpr s.1⟩
 
 中文:
-定理 exists_simple_subobject
-  条件: {X : C} [IsArtinianObject X] (h : ¬IsZero X)
+定理 存在_simple_subobject
+  条件: {X : C} [IsArtinianObject X] (h : ¬是零 X)
   证明: by
   have : Nontrivial (Subobject X) := nontrivial_of_not_isZero h
   obtain ⟨Y, s⟩ := (IsAtomic.eq_bot_or_exists_atom_le (⊤ : Subobject X)).resolve_left top_ne_bot
@@ -413,7 +413,7 @@ definition simpleSubobject
 
 中文:
 定义 simpleSubobject
-  签名: {X : C} [IsArtinianObject X] (h : ¬IsZero X)
+  签名: {X : C} [IsArtinianObject X] (h : ¬是零 X)
   定义体: (exists_simple_subobject h).choose
 
 Depends on / 依赖: exists_simple_subobject
@@ -431,7 +431,7 @@ definition simpleSubobjectArrow
 
 中文:
 定义 simpleSubobjectArrow
-  签名: {X : C} [IsArtinianObject X] (h : ¬IsZero X)
+  签名: {X : C} [IsArtinianObject X] (h : ¬是零 X)
   定义体: (exists_simple_subobject h).choose.arrow
 
 Depends on / 依赖: choose.arrow, exists_simple_subobject
@@ -453,7 +453,7 @@ instance mono_simpleSubobjectArrow
 
 中文:
 实例 mono_simpleSubobjectArrow
-  签名: {X : C} [IsArtinianObject X] (h : ¬IsZero X)
+  签名: {X : C} [IsArtinianObject X] (h : ¬是零 X)
   定义体: by
   dsimp only [simpleSubobjectArrow]
   infer_instance

@@ -225,7 +225,7 @@ lemma ker_fst_of_isClosedImmersion
 
 中文:
 引理 ker_fst_of_isClosedImmersion
-  条件: (i : Z ⟶ Y) (f : X ⟶ Y) [IsClosedImmersion i]
+  条件: (i : Z ⟶ Y) (f : X ⟶ Y) [是闭浸入 i]
   证明: by
   delta IdealSheafData.comap
   rw [← Hom.ker_comp_of_isIso (pullback.map f i f i.imageι (𝟙 _) (i.toImage) (𝟙 _)
@@ -368,7 +368,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  结论: Monotone (map · f)
+  结论: 递增 (map · f)
   证明: (map_gc f).monotone_u
 
 Depends on / 依赖: map_gc, monotone_u
@@ -384,7 +384,7 @@ lemma comap_mono
 
 中文:
 引理 comap_mono
-  结论: Monotone (comap · f)
+  结论: 递增 (comap · f)
   证明: (map_gc f).monotone_l
 
 Depends on / 依赖: map_gc, monotone_l
@@ -625,7 +625,7 @@ lemma _root_.AlgebraicGeometry.Scheme.Hom.ker_comp
   proof: (map_ker f g).symm
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.Hom.ker_comp
+引理 _root_.AlgebraicGeometry.概形.态射.ker_comp
   证明: (map_ker f g).symm
 
 Depends on / 依赖: map_ker
@@ -648,7 +648,7 @@ lemma map_vanishingIdeal
 
 中文:
 引理 map_vanishingIdeal
-  条件: {X Y : Scheme} (f : X ⟶ Y) (Z : TopologicalSpace.Closeds X)
+  条件: {X Y : 概形} (f : X ⟶ Y) (Z : 拓扑空间.Closeds X)
   证明: by
   apply le_antisymm
   · rw [map, ← le_support_iff_le_vanishingIdeal, TopologicalSpace.Closeds.closure_le]
@@ -680,7 +680,7 @@ lemma support_map
 
 中文:
 引理 support_map
-  条件: (I : X.IdealSheafData) (f : X ⟶ Y) [QuasiCompact f]
+  条件: (I : X.IdealSheafData) (f : X ⟶ Y) [拟紧 f]
   证明: by
   ext1
   rw [map]; rw [Scheme.Hom.support_ker]; rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [range_subschemeι]; rw [TopologicalSpace.Closeds.coe_closure]
@@ -707,7 +707,7 @@ lemma ideal_map
 
 中文:
 引理 ideal_map
-  结论: (I : X.IdealSheafData) (f : X ⟶ Y) [QuasiCompact f] (U : Y.affineOpens)
+  结论: (I : X.IdealSheafData) (f : X ⟶ Y) [拟紧 f] (U : Y.affineOpens)
   证明: by
   have : RingHom.ker (I.subschemeObjIso ⟨_, H⟩).inv.hom = ⊥ :=
     RingHom.ker_coe_equiv (I.subschemeObjIso ⟨_, H⟩).symm.commRingCatIsoToRingEquiv

@@ -89,7 +89,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: Function.Injective (of : α -> FreeRing α)
+  结论: 函数.单射 (of : α -> FreeRing α)
   证明: FreeAbelianGroup.of_injective.comp FreeMonoid.of_injective
 
 @[simp]

@@ -40,13 +40,13 @@ structure HopfAlgCat
     - [instHopfAlgebra : HopfAlgebra R carrier]
 
 中文:
-结构 HopfAlgCat
+结构 HopfAlg范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [instRing : Ring carrier]
-    - [instHopfAlgebra : HopfAlgebra R carrier]
+    - [instRing : 环 carrier]
+    - [instHopfAlgebra : Hopf代数 R carrier]
 -/
 structure HopfAlgCat where
   private mk ::
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (HopfAlgCat.{v} R) (类型v)
+  签名: CoeSort (HopfAlg范畴.{v} R) (类型v)
   定义体: ⟨(·.carrier)⟩
 
 Depends on / 依赖: carrier
@@ -97,7 +97,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [Ring X] [HopfAlgebra R X]
+  签名: (X : 类型v) [环 X] [Hopf代数 R X]
   定义体: X
 
 @[simp]
@@ -119,7 +119,7 @@ lemma of_comul
 
 中文:
 引理 of_comul
-  条件: {X : 类型v} [Ring X] [HopfAlgebra R X]
+  条件: {X : 类型v} [环 X] [Hopf代数 R X]
   证明: rfl
 
 @[simp]
@@ -140,7 +140,7 @@ lemma of_counit
 
 中文:
 引理 of_counit
-  条件: {X : 类型v} [Ring X] [HopfAlgebra R X]
+  条件: {X : 类型v} [环 X] [Hopf代数 R X]
   证明: rfl
 
 Depends on / 依赖: Coalgebra, Coalgebra.counit, IsEquivalence, counit, functor, functor.IsEquivalence, restrictScalarsEquivalenceOfRingEquiv
@@ -161,8 +161,8 @@ structure Hom
     - toBialgHom' : V ->ₐc[R] W
 
 中文:
-结构 Hom
-  参数: (V W : HopfAlgCat.{v} R)
+结构 态射
+  参数: (V W : HopfAlg范畴.{v} R)
   公理与运算 (1 个):
     - toBialgHom' : V ->ₐc[R] W
 
@@ -184,7 +184,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (HopfAlgCat.{v} R) where
+  签名: : 范畴 (HopfAlg范畴.{v} R) where
   定义体: Hom X Y
   id X := ⟨BialgHom.id R X⟩
   comp f g := ⟨BialgHom.comp g.toBialgHom' f.toBialgHom'⟩
@@ -205,7 +205,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory (HopfAlgCat.{v} R) (· ->ₐc[R] ·) where
+  签名: : 余ncrete范畴 (HopfAlg范畴.{v} R) (· ->ₐc[R] ·) where
   定义体: f.toBialgHom'
   ofHom f := ⟨f⟩
 
@@ -224,8 +224,8 @@ abbreviation Hom.toBialgHom
   body: ConcreteCategory.hom (C := HopfAlgCat R) f
 
 中文:
-缩写 Hom.toBialgHom
-  签名: {X Y : HopfAlgCat R} (f : Hom X Y)
+缩写 态射.toBialgHom
+  签名: {X Y : HopfAlg范畴 R} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := HopfAlgCat R) f
 -/
 abbrev Hom.toBialgHom {X Y : HopfAlgCat R} (f : Hom X Y) :=
@@ -241,7 +241,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [Ring X] [Ring Y]
+  签名: {X Y : 类型v} [环 X] [环 Y]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -262,8 +262,8 @@ lemma Hom.toBialgHom_injective
 @[ext]
 
 中文:
-引理 Hom.toBialgHom_injective
-  条件: (V W : HopfAlgCat.{v} R)
+引理 态射.toBialgHom_injective
+  条件: (V W : HopfAlg范畴.{v} R)
   证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 @[ext]
@@ -283,7 +283,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : HopfAlgCat.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
+  条件: {X Y : HopfAlg范畴.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
   证明: Hom.ext h
 
 Depends on / 依赖: Hom.ext
@@ -302,7 +302,7 @@ theorem toBialgHom_comp
 
 中文:
 定理 toBialgHom_comp
-  条件: {X Y Z : HopfAlgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : HopfAlg范畴.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 @[simp] theorem toBialgHom_comp {X Y Z : HopfAlgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -319,7 +319,7 @@ theorem toBialgHom_id
 
 中文:
 定理 toBialgHom_id
-  条件: {M : HopfAlgCat.{v} R}
+  条件: {M : HopfAlg范畴.{v} R}
   证明: rfl
 -/
 @[simp] theorem toBialgHom_id {M : HopfAlgCat.{v} R} :
@@ -339,7 +339,7 @@ instance hasForgetToBialgebra
 
 中文:
 实例 hasForgetToBialgebra
-  签名: : HasForget₂ (HopfAlgCat R) (BialgCat R) where
+  签名: : 有Forget₂ (HopfAlg范畴 R) (Bialg范畴 R) where
   定义体: { obj := fun X => BialgCat.of R X
       map := fun {_ _} f => BialgCat.ofHom f.toBialgHom }
 
@@ -365,7 +365,7 @@ theorem forget₂_bialgebra_obj
 
 中文:
 定理 forget₂_bialgebra_obj
-  条件: (X : HopfAlgCat R)
+  条件: (X : HopfAlg范畴 R)
   证明: rfl
 
 @[simp]
@@ -387,7 +387,7 @@ theorem forget₂_bialgebra_map
 
 中文:
 定理 forget₂_bialgebra_map
-  条件: (X Y : HopfAlgCat R) (f : X ⟶ Y)
+  条件: (X Y : HopfAlg范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_bialgebra_map (X Y : HopfAlgCat R) (f : X ⟶ Y) :
@@ -598,7 +598,7 @@ instance HopfAlgCat.forget_reflects_isos
     exact ⟨e.toHopfAlgIso.isIso_hom.1⟩
 
 中文:
-实例 HopfAlgCat.forget_reflects_isos
+实例 HopfAlg范畴.forget_reflects_isos
   签名: :
   定义体: by
     let i := asIso ((forget (HopfAlgCat.{v} R)).map f)

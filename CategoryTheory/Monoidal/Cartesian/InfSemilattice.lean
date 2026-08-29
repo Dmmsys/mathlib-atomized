@@ -48,7 +48,7 @@ lemma tensorObj
 
 中文:
 引理 tensorObj
-  条件: {C : 类型u} [SemilatticeInf C] [OrderTop C] {X Y : C}
+  条件: {C : 类型u} [SemilatticeInf C] [有顶序 C] {X Y : C}
   结论: X otimes Y = X ⊓ Y
   证明: rfl
 -/
@@ -64,7 +64,7 @@ lemma tensorUnit
 
 中文:
 引理 tensorUnit
-  条件: {C : 类型u} [SemilatticeInf C] [OrderTop C]
+  条件: {C : 类型u} [SemilatticeInf C] [有顶序 C]
   证明: rfl
 -/
 lemma tensorUnit {C : Type u} [SemilatticeInf C] [OrderTop C] :

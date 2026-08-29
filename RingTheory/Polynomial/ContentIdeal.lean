@@ -76,7 +76,7 @@ theorem contentIdeal_def
 
 中文:
 定理 contentIdeal_def
-  结论: p.contentIdeal = span (p.coeffs : Set R)
+  结论: p.contentIdeal = span (p.coeffs : 集合 R)
   证明: rfl
 
 @[simp]
@@ -386,7 +386,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_generator_dvd_coeff
   simp [ha]
 
 中文:
-定理 _root_.Submodule.IsPrincipal.contentIdeal_generator_dvd_coeff
+定理 _root_.子模.是Principal.contentIdeal_generator_dvd_coeff
   证明: by
   have := p.coeff_mem_contentIdeal n
   rw [Submodule.IsPrincipal.mem_iff_eq_smul_generator] at this
@@ -412,7 +412,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_generator_dvd
   exact fun i => h_prin.contentIdeal_generator_dvd_coeff i
 
 中文:
-定理 _root_.Submodule.IsPrincipal.contentIdeal_generator_dvd
+定理 _root_.子模.是Principal.contentIdeal_generator_dvd
   证明: by
   rw [C_dvd_iff_dvd_coeff]
   exact fun i => h_prin.contentIdeal_generator_dvd_coeff i
@@ -442,7 +442,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_le_span_iff_dvd
     exact fun h => conte
 
 中文:
-定理 _root_.Submodule.IsPrincipal.contentIdeal_le_span_iff_dvd
+定理 _root_.子模.是Principal.contentIdeal_le_span_iff_dvd
   证明: by
   constructor
   · rw [← p.contentIdeal.span_singleton_generator]
@@ -488,7 +488,7 @@ theorem isPrimitive_of_contentIdeal_eq_top
 中文:
 定理 isPrimitive_of_contentIdeal_eq_top
   条件: (h : p.contentIdeal = ⊤)
-  结论: p.IsPrimitive
+  结论: p.是Primitive
   证明: by
   have h_prin : p.contentIdeal.IsPrincipal := by
     rw [h]
@@ -519,7 +519,7 @@ theorem _root_.Submodule.IsPrincipal.isPrimitive_iff_contentIdeal_eq_top
   simp_all [← Ideal.span_singleton_eq_top]
 
 中文:
-定理 _root_.Submodule.IsPrincipal.isPrimitive_iff_contentIdeal_eq_top
+定理 _root_.子模.是Principal.isPrimitive_iff_contentIdeal_eq_top
   证明: by
   refine ⟨?_, fun h => isPrimitive_of_contentIdeal_eq_top h⟩
   contrapose!
@@ -694,7 +694,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_eq_span_content_of_isPrincipal
   exact fun n _ => h_prin.contentIdeal_generator_dvd_coeff n
 
 中文:
-定理 _root_.Submodule.IsPrincipal.contentIdeal_eq_span_content_of_isPrincipal
+定理 _root_.子模.是Principal.contentIdeal_eq_span_content_of_isPrincipal
   证明: by
   apply le_antisymm contentIdeal_le_span_content
   rw [← p.contentIdeal.span_singleton_generator]; rw [span_singleton_le_span_singleton]; rw [content]; rw [Finset.dvd_gcd_iff]
@@ -724,7 +724,7 @@ theorem isPrimitive_iff_contentIdeal_eq_top
 
 中文:
 定理 isPrimitive_iff_contentIdeal_eq_top
-  结论: p.IsPrimitive ↔ p.contentIdeal = ⊤
+  结论: p.是Primitive ↔ p.contentIdeal = ⊤
   证明: (IsBezout.isPrincipal_of_FG _ p.contentIdeal_FG).isPrimitive_iff_contentIdeal_eq_top
 
 Depends on / 依赖: IsBezout, IsBezout.isPrincipal_of_FG, contentIdeal_FG, isPrimitive_iff_contentIdeal_eq_top, isPrincipal_of_FG, p.contentIdeal_FG

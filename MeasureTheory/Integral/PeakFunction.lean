@@ -122,7 +122,7 @@ theorem tendsto_setIntegral_peak_smul_of_integrableOn_of_tendsto_aux
       apply Tend
 
 中文:
-定理 tendsto_setIntegral_peak_smul_of_integrableOn_of_tendsto_aux
+定理 tendsto_set整数egral_peak_smul_of_integrableOn_of_tendsto_aux
   证明: by
   refine Metric.tendsto_nhds.2 fun ε εpos => ?_
   obtain ⟨δ, hδ, δpos, δone⟩ : exists δ, (δ * ∫ x in s, ‖g x‖ ∂μ) + 2 * δ < ε ∧ 0 < δ ∧ δ < 1 := by
@@ -233,7 +233,7 @@ theorem tendsto_setIntegral_peak_smul_of_integrableOn_of_tendsto
     apply tendsto_setIntegral_peak_smul_of_integrableOn_of_tendsto
 
 中文:
-定理 tendsto_setIntegral_peak_smul_of_integrableOn_of_tendsto
+定理 tendsto_set整数egral_peak_smul_of_integrableOn_of_tendsto
   证明: by
   let h := g - t.indicator (fun _ => a)
   have A : Tendsto (fun i : ι => (∫ x in s, φ i x • h x ∂μ) + (∫ x in t, φ i x ∂μ) • a) l
@@ -330,7 +330,7 @@ theorem tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_measure_n
     sequence converges uniformly to zero on any set `s \ u` away from `x₀`
 
 中文:
-定理 tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_measure_nhdsWithin_pos
+定理 tendsto_set整数egral_pow_smul_of_unique_maximum_of_isCompact_of_measure_nhdsWithin_pos
   证明: by
   /- We apply the general result
     `tendsto_setIntegral_peak_smul_of_integrableOn_of_continuousWithinAt` to the sequence of
@@ -445,7 +445,7 @@ theorem tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_integrabl
     
 
 中文:
-定理 tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_integrableOn
+定理 tendsto_set整数egral_pow_smul_of_unique_maximum_of_isCompact_of_integrableOn
   证明: by
   have : x₀ in s := by rw [← hs.isClosed.closure_eq]; exact closure_mono interior_subset h₀
   apply
@@ -485,7 +485,7 @@ theorem tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_continuou
     (hmg.integrableOn_compact hs) (hmg x₀ this)
 
 中文:
-定理 tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_continuousOn
+定理 tendsto_set整数egral_pow_smul_of_unique_maximum_of_isCompact_of_continuousOn
   证明: haveI : x₀ in s := by rw [← hs.isClosed.closure_eq]; exact closure_mono interior_subset h₀
   tendsto_setIntegral_pow_smul_of_unique_maximum_of_isCompact_of_integrableOn hs hc h'c hnc hnc₀ h₀
     (hmg.integrableOn_compact hs) (hmg x₀ this)

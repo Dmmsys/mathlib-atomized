@@ -60,7 +60,7 @@ structure AffineIsometry
     - norm_map : forall x : V, ‖linear x‖ = ‖x‖
 
 中文:
-结构 AffineIsometry
+结构 仿射等距
   参数: extends P ->ᵃ[𝕜] P₂
   继承: P ->ᵃ[𝕜] P₂
   公理与运算 (1 个):
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (P ->ᵃⁱ[𝕜] P₂) P P₂
+  签名: 函数状 (P ->ᵃⁱ[𝕜] P₂) P P₂
   定义体: f.toFun
   coe_injective f g := by cases f; cases g; simp
 
@@ -177,7 +177,7 @@ theorem toAffineMap_injective
 
 中文:
 定理 toAffineMap_injective
-  结论: Injective (toAffineMap : (P ->ᵃⁱ[𝕜] P₂) -> P ->ᵃ[𝕜] P₂)
+  结论: 单射 (toAffineMap : (P ->ᵃⁱ[𝕜] P₂) -> P ->ᵃ[𝕜] P₂)
   证明: by
   rintro ⟨f, _⟩ ⟨g, _⟩ rfl
   rfl
@@ -198,7 +198,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Injective (P ->ᵃⁱ[𝕜] P₂) (P -> P₂) (↑)
+  结论: @单射 (P ->ᵃⁱ[𝕜] P₂) (P -> P₂) (↑)
   证明: AffineMap.coeFn_injective.comp toAffineMap_injective
 
 @[ext]
@@ -455,7 +455,7 @@ theorem isometry
 
 中文:
 定理 isometry
-  结论: Isometry f
+  结论: 等距 f
   证明: f.edist_map
 -/
 protected theorem isometry : Isometry f :=
@@ -473,7 +473,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective f₁
+  结论: 单射 f₁
   证明: f₁.isometry.injective
 
 @[simp]
@@ -569,7 +569,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: f.isometry.continuous
 -/
 protected theorem continuous : Continuous f :=
@@ -586,7 +586,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: ediam (f '' s) = ediam s
   证明: f.isometry.ediam_image s
 
@@ -605,7 +605,7 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  结论: ediam (range f) = ediam (univ : Set P)
+  结论: ediam (range f) = ediam (univ : 集合 P)
   证明: f.isometry.ediam_range
 
 Depends on / 依赖: ediam_range, f.isometry.ediam_range, isometry
@@ -624,7 +624,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: Metric.diam (f '' s) = Metric.diam s
   证明: f.isometry.diam_image s
 
@@ -643,7 +643,7 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  结论: Metric.diam (range f) = Metric.diam (univ : Set P)
+  结论: Metric.diam (range f) = Metric.diam (univ : 集合 P)
   证明: f.isometry.diam_range
 
 Depends on / 依赖: diam_range, f.isometry.diam_range, isometry
@@ -744,7 +744,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] {g : α -> P}
+  条件: {α : 类型} [拓扑空间 α] {g : α -> P}
   证明: f.isometry.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, f.isometry.comp_continuous_iff, isometry
@@ -811,7 +811,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : P)
-  结论: (AffineIsometry.id : P ->ᵃⁱ[𝕜] P) x = x
+  结论: (仿射等距.id : P ->ᵃⁱ[𝕜] P) x = x
   证明: rfl
 
 @[simp]
@@ -832,7 +832,7 @@ theorem id_toAffineMap
 
 中文:
 定理 id_toAffineMap
-  结论: (id.toAffineMap : P ->ᵃ[𝕜] P) = AffineMap.id 𝕜 P
+  结论: (id.toAffineMap : P ->ᵃ[𝕜] P) = 仿射映射.id 𝕜 P
   证明: rfl
 
 @[simp]
@@ -851,7 +851,7 @@ theorem toContinuousAffineMap_id
 
 中文:
 定理 toContinuousAffineMap_id
-  结论: id.toContinuousAffineMap = ContinuousAffineMap.id 𝕜 P
+  结论: id.toContinuousAffineMap = 余ntinuousAffine映射.id 𝕜 P
   证明: rfl
 -/
 theorem toContinuousAffineMap_id : id.toContinuousAffineMap = ContinuousAffineMap.id 𝕜 P :=
@@ -867,7 +867,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (P ->ᵃⁱ[𝕜] P)
+  签名: 可居 (P ->ᵃⁱ[𝕜] P)
   定义体: ⟨id⟩
 -/
 instance : Inhabited (P ->ᵃⁱ[𝕜] P) :=
@@ -989,7 +989,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (P ->ᵃⁱ[𝕜] P)
+  签名: 幺半群 (P ->ᵃⁱ[𝕜] P)
   定义体: id
   mul := comp
   mul_assoc := comp_assoc
@@ -1059,7 +1059,7 @@ definition subtypeₐᵢ
 
 中文:
 定义 subtypeₐᵢ
-  签名: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  签名: (s : 仿射子空间 𝕜 P) [非空 s]
   定义体: { s.subtype with norm_map := s.direction.subtypeₗᵢ.norm_map }
 
 Depends on / 依赖: direction, norm_map, s.direction.subtype, s.subtype, subtype
@@ -1079,7 +1079,7 @@ theorem subtypeₐᵢ_linear
 
 中文:
 定理 subtypeₐᵢ_linear
-  条件: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  条件: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 
 @[simp]
@@ -1101,7 +1101,7 @@ theorem subtypeₐᵢ_linearIsometry
 
 中文:
 定理 subtypeₐᵢ_linearIsometry
-  条件: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  条件: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem coe_subtypeₐᵢ
 
 中文:
 定理 coe_subtypeₐᵢ
-  条件: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  条件: (s : 仿射子空间 𝕜 P) [非空 s]
   结论: ⇑s.subtypeₐᵢ = s.subtype
   证明: rfl
 
@@ -1146,7 +1146,7 @@ theorem subtypeₐᵢ_toAffineMap
 
 中文:
 定理 subtypeₐᵢ_toAffineMap
-  条件: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  条件: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 
 @[simp]
@@ -1166,7 +1166,7 @@ theorem toContinuousAffineMap_subtypeₐᵢ
 
 中文:
 定理 toContinuousAffineMap_subtypeₐᵢ
-  条件: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  条件: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 -/
 theorem toContinuousAffineMap_subtypeₐᵢ (s : AffineSubspace 𝕜 P) [Nonempty s] :
@@ -1188,7 +1188,7 @@ structure AffineIsometryEquiv
     - norm_map : forall x, ‖linear x‖ = ‖x‖
 
 中文:
-结构 AffineIsometryEquiv
+结构 仿射等距等价
   参数: extends P ≃ᵃ[𝕜] P₂
   继承: P ≃ᵃ[𝕜] P₂
   公理与运算 (1 个):
@@ -1268,7 +1268,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (P ≃ᵃⁱ[𝕜] P₂) P P₂
+  签名: 等价状 (P ≃ᵃⁱ[𝕜] P₂) P P₂
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -1345,7 +1345,7 @@ theorem toAffineEquiv_injective
 
 中文:
 定理 toAffineEquiv_injective
-  结论: Injective (toAffineEquiv : (P ≃ᵃⁱ[𝕜] P₂) -> P ≃ᵃ[𝕜] P₂)
+  结论: 单射 (toAffineEquiv : (P ≃ᵃⁱ[𝕜] P₂) -> P ≃ᵃ[𝕜] P₂)
 -/
 theorem toAffineEquiv_injective : Injective (toAffineEquiv : (P ≃ᵃⁱ[𝕜] P₂) -> P ≃ᵃ[𝕜] P₂)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -1381,7 +1381,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Injective (P ≃ᵃⁱ[𝕜] P₂) (P -> P₂) (fun f => f)
+  结论: @单射 (P ≃ᵃⁱ[𝕜] P₂) (P -> P₂) (fun f => f)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -1619,7 +1619,7 @@ theorem isometry
 
 中文:
 定理 isometry
-  结论: Isometry e
+  结论: 等距 e
   证明: e.toAffineIsometry.isometry
 -/
 protected theorem isometry : Isometry e :=
@@ -1678,7 +1678,7 @@ theorem range_eq_univ
 中文:
 定理 range_eq_univ
   条件: (e : P ≃ᵃⁱ[𝕜] P₂)
-  结论: Set.range e = Set.univ
+  结论: 集合.range e = 集合.univ
   证明: by
   rw [← coe_toIsometryEquiv]
   exact IsometryEquiv.range_eq_univ _
@@ -1738,7 +1738,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous e
+  结论: 连续 e
   证明: e.isometry.continuous
 -/
 protected theorem continuous : Continuous e :=
@@ -1930,7 +1930,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (P ≃ᵃⁱ[𝕜] P)
+  签名: 可居 (P ≃ᵃⁱ[𝕜] P)
   定义体: ⟨refl 𝕜 P⟩
 
 @[simp]
@@ -1972,7 +1972,7 @@ theorem toAffineEquiv_refl
 
 中文:
 定理 toAffineEquiv_refl
-  结论: (refl 𝕜 P).toAffineEquiv = AffineEquiv.refl 𝕜 P
+  结论: (refl 𝕜 P).toAffineEquiv = 仿射等价.refl 𝕜 P
   证明: rfl
 
 @[simp]
@@ -2013,7 +2013,7 @@ theorem toIsometryEquiv_refl
 
 中文:
 定理 toIsometryEquiv_refl
-  结论: (refl 𝕜 P).toIsometryEquiv = IsometryEquiv.refl P
+  结论: (refl 𝕜 P).toIsometryEquiv = 等距等价.refl P
   证明: rfl
 
 @[simp]
@@ -2032,7 +2032,7 @@ theorem toHomeomorph_refl
 
 中文:
 定理 toHomeomorph_refl
-  结论: (refl 𝕜 P).toHomeomorph = Homeomorph.refl P
+  结论: (refl 𝕜 P).toHomeomorph = 同胚.refl P
   证明: rfl
 -/
 theorem toHomeomorph_refl : (refl 𝕜 P).toHomeomorph = Homeomorph.refl P :=
@@ -2178,7 +2178,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Bijective (AffineIsometryEquiv.symm : (P₂ ≃ᵃⁱ[𝕜] P) -> _)
+  结论: 双射 (仿射等距等价.symm : (P₂ ≃ᵃⁱ[𝕜] P) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2536,7 +2536,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: : Group (P ≃ᵃⁱ[𝕜] P) where
+  签名: : 群 (P ≃ᵃⁱ[𝕜] P) where
   定义体: e₂.trans e₁
   one := refl _ _
   inv := symm
@@ -2729,7 +2729,7 @@ theorem bijective
 
 中文:
 定理 bijective
-  结论: Bijective e
+  结论: 双射 e
   证明: e.1.bijective
 -/
 protected theorem bijective : Bijective e :=
@@ -2745,7 +2745,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective e
+  结论: 单射 e
   证明: e.1.injective
 -/
 protected theorem injective : Injective e :=
@@ -2761,7 +2761,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: Surjective e
+  结论: 满射 e
   证明: e.1.surjective
 -/
 protected theorem surjective : Surjective e :=
@@ -2857,7 +2857,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: ediam (e '' s) = ediam s
   证明: e.isometry.ediam_image s
 
@@ -2880,7 +2880,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: Metric.diam (e '' s) = Metric.diam s
   证明: e.isometry.diam_image s
 
@@ -2905,7 +2905,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: {f : α -> P} {s : Set α}
+  条件: {f : α -> P} {s : 集合 α}
   结论: ContinuousOn (e ∘ f) s ↔ ContinuousOn f s
   证明: e.isometry.comp_continuousOn_iff
 
@@ -2929,7 +2929,7 @@ theorem comp_continuous_iff
 中文:
 定理 comp_continuous_iff
   条件: {f : α -> P}
-  结论: Continuous (e ∘ f) ↔ Continuous f
+  结论: 连续 (e ∘ f) ↔ 连续 f
   证明: e.isometry.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, e.isometry.comp_continuous_iff, isometry
@@ -3149,7 +3149,7 @@ theorem coe_vaddConst'
 中文:
 定理 coe_vaddConst'
   条件: (p : P)
-  结论: ↑(AffineEquiv.vaddConst 𝕜 p) = fun v => v +ᵥ p
+  结论: ↑(仿射等价.vaddConst 𝕜 p) = fun v => v +ᵥ p
   证明: rfl
 
 @[simp]
@@ -3350,7 +3350,7 @@ theorem vadd_vsub
 
 中文:
 定理 vadd_vsub
-  结论: {f : P -> P₂} (hf : Isometry f) {p : P} {g : V -> V₂}
+  结论: {f : P -> P₂} (hf : 等距 f) {p : P} {g : V -> V₂}
   证明: by
   convert! (vaddConst 𝕜 (f p)).symm.isometry.comp (hf.comp (vaddConst 𝕜 p).isometry)
   exact funext hg
@@ -3460,7 +3460,7 @@ theorem pointReflection_involutive
 中文:
 定理 pointReflection_involutive
   条件: (x : P)
-  结论: Function.Involutive (pointReflection 𝕜 x)
+  结论: 函数.对合 (pointReflection 𝕜 x)
   证明: Equiv.pointReflection_involutive x
 
 @[simp]
@@ -3570,7 +3570,7 @@ theorem pointReflection_fixed_iff
 
 中文:
 定理 pointReflection_fixed_iff
-  条件: [Invertible (2 : 𝕜)] {x y : P}
+  条件: [可逆 (2 : 𝕜)] {x y : P}
   证明: AffineEquiv.pointReflection_fixed_iff_of_module 𝕜
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection_fixed_iff_of_module, pointReflection_fixed_iff_of_module
@@ -3676,7 +3676,7 @@ map_vadd' := fun p v => Subtype.ext φ.map_vadd p v }
 
 中文:
 定义 equivMapOfInjective
-  签名: (E : AffineSubspace 𝕜 P₁) [Nonempty E] (φ : P₁ ->ᵃ[𝕜] P₂)
+  签名: (E : 仿射子空间 𝕜 P₁) [非空 E] (φ : P₁ ->ᵃ[𝕜] P₂)
   定义体: { Equiv.Set.image _ (E : Set P₁) hφ with
     linear :=
       (E.direction.equivMapOfInjective φ.linear (φ.linear_injective_iff.mpr hφ)).trans
@@ -3705,7 +3705,7 @@ definition isometryEquivMap
 
 中文:
 定义 isometryEquivMap
-  签名: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁') [Nonempty E]
+  签名: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : 仿射子空间 𝕜 P₁') [非空 E]
   定义体: ⟨E.equivMapOfInjective φ.toAffineMap φ.injective, fun _ => φ.norm_map _⟩
 
 @[simp]
@@ -3729,7 +3729,7 @@ theorem isometryEquivMap.apply_symm_apply
 
 中文:
 定理 isometryEquivMap.apply_symm_apply
-  结论: {E : AffineSubspace 𝕜 P₁'} [Nonempty E]
+  结论: {E : 仿射子空间 𝕜 P₁'} [非空 E]
   证明: congr_arg Subtype.val (E.isometryEquivMap φ).apply_symm_apply _
 
 @[simp]
@@ -3753,7 +3753,7 @@ theorem isometryEquivMap.coe_apply
 
 中文:
 定理 isometryEquivMap.coe_apply
-  结论: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁') [Nonempty E]
+  结论: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : 仿射子空间 𝕜 P₁') [非空 E]
   证明: rfl
 
 @[simp]
@@ -3773,7 +3773,7 @@ theorem isometryEquivMap.toAffineMap_eq
 
 中文:
 定理 isometryEquivMap.toAffineMap_eq
-  结论: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁')
+  结论: (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : 仿射子空间 𝕜 P₁')
   证明: rfl
 -/
 theorem isometryEquivMap.toAffineMap_eq (φ : P₁' ->ᵃⁱ[𝕜] P₂) (E : AffineSubspace 𝕜 P₁')

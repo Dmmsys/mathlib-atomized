@@ -47,7 +47,7 @@ theorem exists_fg_le_eq_rTensor_subtype
   
 
 中文:
-定理 exists_fg_le_eq_rTensor_subtype
+定理 存在_fg_le_eq_rTensor_subtype
   条件: (x : N otimes M)
   证明: by
   induction x with
@@ -88,8 +88,8 @@ theorem exists_fg_le_subset_range_rTensor_subtype
   rw [← comp_apply]; rw [← rTensor_comp
 
 中文:
-定理 exists_fg_le_subset_range_rTensor_subtype
-  条件: (s : Set (N otimes[R] M)) (hs : s.Finite)
+定理 存在_fg_le_subset_range_rTensor_subtype
+  条件: (s : 集合 (N otimes[R] M)) (hs : s.有限)
   证明: by
   choose J fg y eq using exists_fg_le_eq_rTensor_subtype (R := R) (M := M) (N := N)
   rw [← Set.finite_coe_iff] at hs
@@ -120,7 +120,7 @@ theorem exists_fg_le_eq_rTensor_inclusion
   rw [← LinearMap.rTensor_comp_apply]; rfl
 
 中文:
-定理 exists_fg_le_eq_rTensor_inclusion
+定理 存在_fg_le_eq_rTensor_inclusion
   条件: (x : I otimes M)
   证明: by
   obtain ⟨J, fg, y, rfl⟩ := exists_fg_le_eq_rTensor_subtype x
@@ -150,8 +150,8 @@ theorem exists_fg_le_subset_range_rTensor_inclusion
   rw [← comp_apply
 
 中文:
-定理 exists_fg_le_subset_range_rTensor_inclusion
-  条件: (s : Set (I otimes[R] M)) (hs : s.Finite)
+定理 存在_fg_le_subset_range_rTensor_inclusion
+  条件: (s : 集合 (I otimes[R] M)) (hs : s.有限)
   证明: by
   choose J fg hle y eq using exists_fg_le_eq_rTensor_inclusion (M := M) (I := I)
   rw [← Set.finite_coe_iff] at hs
@@ -193,8 +193,8 @@ instance Module.Finite.base_change
       rw [Finset.coe_image]; rw [← Submodule.span_span_of_tower R]; rw [Submodule.span_image]; rw [h
 
 中文:
-实例 Module.Finite.base_change
-  签名: [CommSemiring R] [Semiring A] [Algebra R A] [AddCommMonoid M]
+实例 模.有限.base_change
+  签名: [交换半环 R] [半环 A] [代数 R A] [加法交换幺半群 M]
   定义体: by
   classical
     obtain ⟨s, hs⟩ := h.fg_top
@@ -229,8 +229,8 @@ instance Module.Finite.tensorProduct
   body: (TensorProduct.map₂_mk_top_top_eq_top R M N).subst (hM.fg_top.map₂ _ hN.fg_top)
 
 中文:
-实例 Module.Finite.tensorProduct
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M]
+实例 模.有限.tensorProduct
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: (TensorProduct.map₂_mk_top_top_eq_top R M N).subst (hM.fg_top.map₂ _ hN.fg_top)
 
 Depends on / 依赖: TensorProduct, TensorProduct.map, fg_top, hM.fg_top.map, hN.fg_top
@@ -259,7 +259,7 @@ lemma Module.exists_isPrincipal_quotient_of_finite
     have : (Fin.val ⁻¹' Set.Iio x : Set (Fin n)) = Set.univ := by e
 
 中文:
-引理 Module.exists_isPrincipal_quotient_of_finite
+引理 模.存在_isPrincipal_quotient_of_finite
   证明: by
   obtain ⟨n, f, hf⟩ := @Module.Finite.exists_fin R M _ _ _ _
   let s := { m : Nat | Submodule.span R (f '' Fin.val ⁻¹' Set.Iio m) != ⊤ }
@@ -299,7 +299,7 @@ lemma Module.exists_surjective_quotient_of_finite
   refine ⟨_, f.symm.toLinearMap.comp N.mkQ, fun e => ?_, f.symm.surje
 
 中文:
-引理 Module.exists_surjective_quotient_of_finite
+引理 模.存在_surjective_quotient_of_finite
   证明: by
   obtain ⟨N, hN, ⟨x, hx⟩⟩ := Module.exists_isPrincipal_quotient_of_finite R M
   let f := (LinearMap.toSpanSingleton R _ x).quotKerEquivOfSurjective
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (M otimes[R] M)
+  签名: 非平凡 (M otimes[R] M)
   定义体: by
   obtain ⟨I, ϕ, hI, hϕ⟩ := Module.exists_surjective_quotient_of_finite R M
   let ψ : M otimes[R] M ->ₗ[R] R ⧸ I :=
@@ -369,8 +369,8 @@ theorem Subalgebra.finite_sup
   exact Module.Finite.range (Algebra.TensorProduct.productMap E1.val E2.val).toLinearMap
 
 中文:
-定理 Subalgebra.finite_sup
-  结论: {K L : 类型} [CommSemiring K] [CommSemiring L] [Algebra K L]
+定理 子代数.finite_sup
+  结论: {K L : 类型} [交换半环 K] [交换半环 L] [代数 K L]
   证明: by
   rw [← E1.range_val]; rw [← E2.range_val]; rw [← Algebra.TensorProduct.productMap_range]
   exact Module.Finite.range (Algebra.TensorProduct.productMap E1.val E2.val).toLinearMap
@@ -398,7 +398,7 @@ lemma RingHom.Finite.tensorProductMap_id
       (Alg
 
 中文:
-引理 RingHom.Finite.tensorProductMap_id
+引理 环态射.有限.tensorProductMap_id
   证明: by
   let := f.toRingHom.toAlgebra
   have := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
@@ -436,7 +436,7 @@ lemma RingHom.Finite.tensorProductMap
   simp only [AlgHom.toRingHom_eq_coe, RingEquiv.toRingH
 
 中文:
-引理 RingHom.Finite.tensorProductMap
+引理 环态射.有限.tensorProductMap
   证明: by
   convert!
 .comp RingHom.Finite.tensorProductMap_id (T := T') Hf

@@ -49,7 +49,7 @@ definition lcm
 @[simp]
 
 中文:
-定义 lcm
+定义 最小公倍数
   签名: (s : Multiset α)
   定义体: s.fold GCDMonoid.lcm 1
 
@@ -73,7 +73,7 @@ theorem lcm_zero
 
 中文:
 定理 lcm_zero
-  结论: (0 : Multiset α).lcm = 1
+  结论: (0 : Multiset α).最小公倍数 = 1
   证明: fold_zero _ _
 
 @[simp]
@@ -98,7 +98,7 @@ theorem lcm_cons
 中文:
 定理 lcm_cons
   条件: (a : α) (s : Multiset α)
-  结论: (a ::ₘ s).lcm = GCDMonoid.lcm a s.lcm
+  结论: (a ::ₘ s).最小公倍数 = 最大公约数幺半群.最小公倍数 a s.最小公倍数
   证明: fold_cons_left _ _ _ _
 
 @[simp]
@@ -123,7 +123,7 @@ theorem lcm_singleton
 中文:
 定理 lcm_singleton
   条件: {a : α}
-  结论: ({a} : Multiset α).lcm = normalize a
+  结论: ({a} : Multiset α).最小公倍数 = normalize a
   证明: (fold_singleton _ _ _).trans lcm_one_right _
 
 @[simp]
@@ -146,7 +146,7 @@ theorem lcm_add
 中文:
 定理 lcm_add
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ + s₂).lcm = GCDMonoid.lcm s₁.lcm s₂.lcm
+  结论: (s₁ + s₂).最小公倍数 = 最大公约数幺半群.最小公倍数 s₁.最小公倍数 s₂.最小公倍数
   证明: Eq.trans (by simp [lcm]) (fold_add _ _ _ _ _)
 
 Depends on / 依赖: Eq.trans, fold_add
@@ -167,7 +167,7 @@ theorem lcm_dvd
 中文:
 定理 lcm_dvd
   条件: {s : Multiset α} {a : α}
-  结论: s.lcm ∣ a ↔ 对任意 b in s, b ∣ a
+  结论: s.最小公倍数 ∣ a ↔ 对任意 b in s, b ∣ a
   证明: Multiset.induction_on s (by simp)
     (by simp +contextual [or_imp, forall_and, lcm_dvd_iff])
 
@@ -189,7 +189,7 @@ theorem dvd_lcm
 中文:
 定理 dvd_lcm
   条件: {s : Multiset α} {a : α} (h : a in s)
-  结论: a ∣ s.lcm
+  结论: a ∣ s.最小公倍数
   证明: lcm_dvd.1 dvd_rfl _ h
 
 Depends on / 依赖: dvd_rfl, lcm_dvd
@@ -211,7 +211,7 @@ theorem lcm_mono
 中文:
 定理 lcm_mono
   条件: {s₁ s₂ : Multiset α} (h : s₁ subseteq s₂)
-  结论: s₁.lcm ∣ s₂.lcm
+  结论: s₁.最小公倍数 ∣ s₂.最小公倍数
   证明: lcm_dvd.2 fun _ hb => dvd_lcm (h hb)
 
 @[simp]
@@ -240,7 +240,7 @@ nonrec theorem lcm_eq_zero_iff [Nontrivial α] (s : Multiset α) : s.lcm = 0 ↔
 中文:
 定理 normalize_lcm
   条件: (s : Multiset α)
-  结论: normalize s.lcm = s.lcm
+  结论: normalize s.最小公倍数 = s.最小公倍数
   证明: Multiset.induction_on s (by simp) fun a s _ => by simp
 
 @[simp]
@@ -271,8 +271,8 @@ theorem lcm_ne_zero_iff
 
 中文:
 定理 lcm_ne_zero_iff
-  条件: [Nontrivial α] (s : Multiset α)
-  结论: s.lcm != 0 ↔ 0 ∉ s
+  条件: [非平凡 α] (s : Multiset α)
+  结论: s.最小公倍数 != 0 ↔ 0 ∉ s
   证明: not_congr (lcm_eq_zero_iff s)
 
 Depends on / 依赖: lcm_eq_zero_iff, not_congr
@@ -300,7 +300,7 @@ theorem lcm_dedup
 中文:
 定理 lcm_dedup
   条件: (s : Multiset α)
-  结论: (dedup s).lcm = s.lcm
+  结论: (dedup s).最小公倍数 = s.最小公倍数
   证明: Multiset.induction_on s (by simp) fun a s IH => by
     by_cases h : a in s; swap; · simp [IH, h]
     simp only [h, dedup_cons_of_mem, IH, lcm_cons]
@@ -335,7 +335,7 @@ theorem lcm_ndunion
 中文:
 定理 lcm_ndunion
   条件: (s₁ s₂ : Multiset α)
-  结论: (ndunion s₁ s₂).lcm = GCDMonoid.lcm s₁.lcm s₂.lcm
+  结论: (ndunion s₁ s₂).最小公倍数 = 最大公约数幺半群.最小公倍数 s₁.最小公倍数 s₂.最小公倍数
   证明: by
   rw [← lcm_dedup]; rw [dedup_ext.2]; rw [lcm_dedup]; rw [lcm_add]
   simp
@@ -365,7 +365,7 @@ theorem lcm_union
 中文:
 定理 lcm_union
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ union s₂).lcm = GCDMonoid.lcm s₁.lcm s₂.lcm
+  结论: (s₁ union s₂).最小公倍数 = 最大公约数幺半群.最小公倍数 s₁.最小公倍数 s₂.最小公倍数
   证明: by
   rw [← lcm_dedup]; rw [dedup_ext.2]; rw [lcm_dedup]; rw [lcm_add]
   simp
@@ -393,7 +393,7 @@ theorem lcm_ndinsert
 中文:
 定理 lcm_ndinsert
   条件: (a : α) (s : Multiset α)
-  结论: (ndinsert a s).lcm = GCDMonoid.lcm a s.lcm
+  结论: (ndinsert a s).最小公倍数 = 最大公约数幺半群.最小公倍数 a s.最小公倍数
   证明: by
   rw [← lcm_dedup]; rw [dedup_ext.2]; rw [lcm_dedup]; rw [lcm_cons]
   simp
@@ -422,7 +422,7 @@ definition gcd
 @[simp]
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: (s : Multiset α)
   定义体: s.fold GCDMonoid.gcd 0
 
@@ -446,7 +446,7 @@ theorem gcd_zero
 
 中文:
 定理 gcd_zero
-  结论: (0 : Multiset α).gcd = 0
+  结论: (0 : Multiset α).最大公约数 = 0
   证明: fold_zero _ _
 
 @[simp]
@@ -471,7 +471,7 @@ theorem gcd_cons
 中文:
 定理 gcd_cons
   条件: (a : α) (s : Multiset α)
-  结论: (a ::ₘ s).gcd = GCDMonoid.gcd a s.gcd
+  结论: (a ::ₘ s).最大公约数 = 最大公约数幺半群.最大公约数 a s.最大公约数
   证明: fold_cons_left _ _ _ _
 
 @[simp]
@@ -496,7 +496,7 @@ theorem gcd_singleton
 中文:
 定理 gcd_singleton
   条件: {a : α}
-  结论: ({a} : Multiset α).gcd = normalize a
+  结论: ({a} : Multiset α).最大公约数 = normalize a
   证明: (fold_singleton _ _ _).trans gcd_zero_right _
 
 @[simp]
@@ -519,7 +519,7 @@ theorem gcd_add
 中文:
 定理 gcd_add
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ + s₂).gcd = GCDMonoid.gcd s₁.gcd s₂.gcd
+  结论: (s₁ + s₂).最大公约数 = 最大公约数幺半群.最大公约数 s₁.最大公约数 s₂.最大公约数
   证明: Eq.trans (by simp [gcd]) (fold_add _ _ _ _ _)
 
 Depends on / 依赖: Eq.trans, fold_add
@@ -540,7 +540,7 @@ theorem dvd_gcd
 中文:
 定理 dvd_gcd
   条件: {s : Multiset α} {a : α}
-  结论: a ∣ s.gcd ↔ 对任意 b in s, a ∣ b
+  结论: a ∣ s.最大公约数 ↔ 对任意 b in s, a ∣ b
   证明: Multiset.induction_on s (by simp)
     (by simp +contextual [or_imp, forall_and, dvd_gcd_iff])
 
@@ -562,7 +562,7 @@ theorem gcd_dvd
 中文:
 定理 gcd_dvd
   条件: {s : Multiset α} {a : α} (h : a in s)
-  结论: s.gcd ∣ a
+  结论: s.最大公约数 ∣ a
   证明: dvd_gcd.1 dvd_rfl _ h
 
 Depends on / 依赖: dvd_gcd, dvd_rfl
@@ -584,7 +584,7 @@ theorem gcd_mono
 中文:
 定理 gcd_mono
   条件: {s₁ s₂ : Multiset α} (h : s₁ subseteq s₂)
-  结论: s₂.gcd ∣ s₁.gcd
+  结论: s₂.最大公约数 ∣ s₁.最大公约数
   证明: dvd_gcd.2 fun _ hb => gcd_dvd (h hb)
 
 @[simp]
@@ -607,7 +607,7 @@ theorem normalize_gcd
 中文:
 定理 normalize_gcd
   条件: (s : Multiset α)
-  结论: normalize s.gcd = s.gcd
+  结论: normalize s.最大公约数 = s.最大公约数
   证明: Multiset.induction_on s (by simp) fun a s _ => by simp
 
 Depends on / 依赖: Multiset, Multiset.induction_on, induction_on
@@ -636,7 +636,7 @@ theorem gcd_eq_zero_iff
 中文:
 定理 gcd_eq_zero_iff
   条件: (s : Multiset α)
-  结论: s.gcd = 0 ↔ 对任意 x in s, x = 0
+  结论: s.最大公约数 = 0 ↔ 对任意 x in s, x = 0
   证明: by
   constructor
   · intro h x hx
@@ -674,7 +674,7 @@ theorem gcd_ne_zero_iff
 中文:
 定理 gcd_ne_zero_iff
   条件: (s : Multiset α)
-  结论: s.gcd != 0 ↔ 存在 x in s, x != 0
+  结论: s.最大公约数 != 0 ↔ 存在 x in s, x != 0
   证明: by
   simp [gcd_eq_zero_iff]
 
@@ -698,7 +698,7 @@ theorem gcd_map_mul
 
 中文:
 定理 gcd_map_mul
-  结论: {α} [CommMonoidWithZero α] [StrongNormalizedGCDMonoid α]
+  结论: {α} [带零交换幺半群 α] [StrongNormalizedGCD幺半群 α]
   证明: by
   refine s.induction_on ?_ fun b s ih => ?_
   · simp_rw [map_zero, gcd_zero, mul_zero]
@@ -770,7 +770,7 @@ theorem gcd_dedup
 中文:
 定理 gcd_dedup
   条件: (s : Multiset α)
-  结论: (dedup s).gcd = s.gcd
+  结论: (dedup s).最大公约数 = s.最大公约数
   证明: Multiset.induction_on s (by simp) fun a s IH => by
     by_cases h : a in s; swap; · simp [IH, h]
     simp only [h, dedup_cons_of_mem, IH, gcd_cons]
@@ -807,7 +807,7 @@ theorem gcd_ndunion
 中文:
 定理 gcd_ndunion
   条件: (s₁ s₂ : Multiset α)
-  结论: (ndunion s₁ s₂).gcd = GCDMonoid.gcd s₁.gcd s₂.gcd
+  结论: (ndunion s₁ s₂).最大公约数 = 最大公约数幺半群.最大公约数 s₁.最大公约数 s₂.最大公约数
   证明: by
   rw [← gcd_dedup]; rw [dedup_ext.2]; rw [gcd_dedup]; rw [gcd_add]
   simp
@@ -837,7 +837,7 @@ theorem gcd_union
 中文:
 定理 gcd_union
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ union s₂).gcd = GCDMonoid.gcd s₁.gcd s₂.gcd
+  结论: (s₁ union s₂).最大公约数 = 最大公约数幺半群.最大公约数 s₁.最大公约数 s₂.最大公约数
   证明: by
   rw [← gcd_dedup]; rw [dedup_ext.2]; rw [gcd_dedup]; rw [gcd_add]
   simp
@@ -865,7 +865,7 @@ theorem gcd_ndinsert
 中文:
 定理 gcd_ndinsert
   条件: (a : α) (s : Multiset α)
-  结论: (ndinsert a s).gcd = GCDMonoid.gcd a s.gcd
+  结论: (ndinsert a s).最大公约数 = 最大公约数幺半群.最大公约数 a s.最大公约数
   证明: by
   rw [← gcd_dedup]; rw [dedup_ext.2]; rw [gcd_dedup]; rw [gcd_cons]
   simp

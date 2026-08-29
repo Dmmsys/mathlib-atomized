@@ -625,7 +625,7 @@ theorem scaleRoots_aeval_eq_zero
 
 中文:
 定理 scaleRoots_aeval_eq_zero
-  条件: [Algebra R A] {p : R[X]} {a : A} {r : R} (ha : aeval a p = 0)
+  条件: [代数 R A] {p : R[X]} {a : A} {r : R} (ha : aeval a p = 0)
   证明: by
   rw [aeval_def]; rw [scaleRoots_eval₂_mul_of_commute]; rw [← aeval_def]; rw [ha]; rw [mul_zero]
   · apply Algebra.commutes
@@ -683,7 +683,7 @@ theorem scaleRoots_aeval_eq_zero_of_aeval_div_eq_zero
 
 中文:
 定理 scaleRoots_aeval_eq_zero_of_aeval_div_eq_zero
-  结论: [Algebra R K]
+  结论: [代数 R K]
   证明: scaleRoots_eval₂_eq_zero_of_eval₂_div_eq_zero inj hr hs
 
 @[simp]
@@ -802,7 +802,7 @@ lemma mul_scaleRoots_of_noZeroDivisors
 
 中文:
 引理 mul_scaleRoots_of_noZeroDivisors
-  条件: (p q : R[X]) (r : R) [NoZeroDivisors R]
+  条件: (p q : R[X]) (r : R) [无零因子 R]
   证明: by
   by_cases hp : p = 0; · simp [hp]
   by_cases hq : q = 0; · simp [hq]
@@ -870,7 +870,7 @@ lemma pow_scaleRoots_of_isReduced
 
 中文:
 引理 pow_scaleRoots_of_isReduced
-  条件: [IsReduced R] (p : R[X]) (r : R) (n : 自然数)
+  条件: [是既约 R] (p : R[X]) (r : R) (n : 自然数)
   证明: by
   by_cases hp : p = 0
   · simp [hp, zero_pow_eq, apply_ite (scaleRoots · r)]
@@ -943,7 +943,7 @@ lemma scaleRoots_dvd'
 
 中文:
 引理 scaleRoots_dvd'
-  结论: (p q : R[X]) {r : R} (hr : IsUnit r)
+  结论: (p q : R[X]) {r : R} (hr : 是单位 r)
   证明: by
   obtain ⟨a, rfl⟩ := hpq
   rw [← ((hr.pow (natDegree p + natDegree a - natDegree (p * a))).map
@@ -973,7 +973,7 @@ alias _root_.Dvd.dvd.scaleRoots := scaleRoots_dvd
 
 中文:
 引理 scaleRoots_dvd
-  条件: (p q : R[X]) {r : R} [NoZeroDivisors R] (hpq : p ∣ q)
+  条件: (p q : R[X]) {r : R} [无零因子 R] (hpq : p ∣ q)
   证明: by
   obtain ⟨a, rfl⟩ := hpq
   rw [mul_scaleRoots_of_noZeroDivisors]
@@ -1002,7 +1002,7 @@ alias _root_.IsUnit.scaleRoots_dvd_iff := scaleRoots_dvd_iff
 
 中文:
 引理 scaleRoots_dvd_iff
-  条件: (p q : R[X]) {r : R} (hr : IsUnit r)
+  条件: (p q : R[X]) {r : R} (hr : 是单位 r)
   证明: by
   refine ⟨?_ ∘ scaleRoots_dvd' _ _ (hr.unit⁻¹).isUnit, scaleRoots_dvd' p q hr⟩
   simp [← scaleRoots_mul, scaleRoots_one]
@@ -1033,7 +1033,7 @@ lemma isCoprime_scaleRoots
 
 中文:
 引理 isCoprime_scaleRoots
-  条件: (p q : R[X]) (r : R) (hr : IsUnit r) (h : IsCoprime p q)
+  条件: (p q : R[X]) (r : R) (hr : 是单位 r) (h : IsCoprime p q)
   证明: by
   obtain ⟨a, b, e⟩ := h
   let s : R := ↑hr.unit⁻¹
@@ -1130,7 +1130,7 @@ lemma X_sub_C_scaleRoots
 
 中文:
 引理 X_sub_C_scaleRoots
-  条件: [Ring R] (r s : R)
+  条件: [环 R] (r s : R)
   证明: by
   nontriviality R
   ext (_ | _ | i) <;> simp
@@ -1213,7 +1213,7 @@ lemma roots_scaleRoots
 
 中文:
 引理 roots_scaleRoots
-  条件: [IsDomain R] (p : R[X]) {r : R} (hr : IsUnit r)
+  条件: [是整环 R] (p : R[X]) {r : R} (hr : 是单位 r)
   证明: by
   classical
   ext a

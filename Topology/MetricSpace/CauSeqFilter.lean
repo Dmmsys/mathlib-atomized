@@ -42,7 +42,7 @@ theorem CauSeq.tendsto_limit
 
 中文:
 定理 CauSeq.tendsto_limit
-  结论: [NormedRing β] [hn : IsAbsoluteValue (norm : β -> 实数)]
+  结论: [赋范环 β] [hn : 是绝对值 (norm : β -> 实数)]
   证明: tendsto_nhds.mpr
     (by
       intro s os lfs
@@ -191,7 +191,7 @@ theorem isCauSeq_iff_cauchySeq
 
 中文:
 定理 isCauSeq_iff_cauchySeq
-  条件: {α : 类型u} [NormedField α] {u : 自然数 -> α}
+  条件: {α : 类型u} [赋范域 α] {u : 自然数 -> α}
   证明: ⟨fun h => CauSeq.cauchySeq ⟨u, h⟩, fun h => h.isCauSeq⟩
 
 Depends on / 依赖: CauSeq, CauSeq.cauchySeq, cauchySeq, h.isCauSeq, isCauSeq

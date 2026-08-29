@@ -33,7 +33,7 @@ theorem isNNRat_ofScientific_of_true
 
 中文:
 定理 isNNRat_ofScientific_of_true
-  条件: [DivisionSemiring α]
+  条件: [除半环 α]
 -/
 theorem isNNRat_ofScientific_of_true [DivisionSemiring α] :
     {m e : Nat} -> {n : Nat} -> {d : Nat} ->
@@ -50,8 +50,8 @@ theorem isNat_ofScientific_of_false
   statement: {m e nm ne n : Nat} ->
 
 中文:
-定理 isNat_ofScientific_of_false
-  条件: [DivisionSemiring α]
+定理 is自然数_ofScientific_of_false
+  条件: [除半环 α]
   结论: {m e nm ne n : 自然数} ->
 -/
 theorem isNat_ofScientific_of_false [DivisionSemiring α] : {m e nm ne n : Nat} ->

@@ -57,12 +57,12 @@ class Regular
     - regularEpiIsStableUnderBaseChange : MorphismProperty.IsStableUnderBaseChange (.regularEpi C)
 
 中文:
-类 Regular
-  参数: extends HasFiniteLimits C
-  继承: HasFiniteLimits C
+类 正则
+  参数: extends 有有限极限 C
+  继承: 有有限极限 C
   公理与运算 (2 个):
     - hasCoequalizer_of_isKernelPair({X Y Z : C} {f : X ⟶ Y} {g₁ g₂ : Z ⟶ X}) : IsKernelPair f g₁ g₂ -> HasCoequalizer g₁ g₂
-    - regularEpiIsStableUnderBaseChange : Morphism命题erty.IsStableUnderBaseChange (.regularEpi C)
+    - regularEpiIsStableUnderBaseChange : MorphismProperty.是StableUnderBaseChange (.regularEpi C)
 -/
 class Regular extends HasFiniteLimits C where
   hasCoequalizer_of_isKernelPair {X Y Z : C} {f : X ⟶ Y} {g₁ g₂ : Z ⟶ X} :
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (coequalizer.desc f pullback.condition)
+  签名: 单态射 (coequalizer.desc f pullback.condition)
   定义体: by
   -- It suffices to show that the two projections from the kernel pair are equal:
   apply (IsKernelPair.of_hasPullback _).mono_of_eq_fst_snd
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularEpi (strongEpiMonoFactorisation f).e
+  签名: 是正则满态射 (strongEpiMonoFactorisation f).e
   定义体: by
   dsimp [strongEpiMonoFactorisation]
   infer_instance
@@ -249,7 +249,7 @@ instance hasStrongEpiMonoFactorisations
 
 中文:
 实例 hasStrongEpiMonoFactorisations
-  签名: : HasStrongEpiMonoFactorisations C where
+  签名: : 有StrongEpiMonoFactorisations C where
   定义体: ⟨strongEpiMonoFactorisation f⟩
 
 Depends on / 依赖: strongEpiMonoFactorisation
@@ -270,7 +270,7 @@ definition regularEpiOfExtremalEpi
 
 中文:
 定义 regularEpiOfExtremalEpi
-  签名: [h : ExtremalEpi f]
+  签名: [h : 极端满态射 f]
   定义体: have := h.isIso (strongEpiMonoFactorisation f).e (strongEpiMonoFactorisation f).m (by simp)
   RegularEpi.ofArrowIso (Arrow.isoMk (f := .mk (strongEpiMonoFactorisation f).e) (Iso.refl _)
     (asIso (strongEpiMonoFactorisation f).m)) (IsRegularEpi.getStruct _)
@@ -292,7 +292,7 @@ instance isRegularEpi_of_extremalEpi
 
 中文:
 实例 isRegularEpi_of_extremalEpi
-  签名: (f : X ⟶ Y) [ExtremalEpi f]
+  签名: (f : X ⟶ Y) [极端满态射 f]
   定义体: ⟨⟨regularEpiOfExtremalEpi f⟩⟩
 
 Depends on / 依赖: regularEpiOfExtremalEpi
@@ -389,7 +389,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularEpi (frobeniusMorphism f A' B')
+  签名: 是正则满态射 (frobeniusMorphism f A' B')
   定义体: by
   apply regularEpiIsStableUnderBaseChange.of_isPullback (frobeniusMorphism_isPullback f A' B').flip
   have := strongEpi_of_strongEpiMonoFactorisation (strongEpiMonoFactorisation (A'.arrow ≫ f))
@@ -460,7 +460,7 @@ theorem exists_inf_pullback_eq_exists_inf
       (frobeniusStrongEpiMonoFactorisation f A' B').toMonoIsImage)
 
 中文:
-定理 exists_inf_pullback_eq_exists_inf
+定理 存在_inf_pullback_eq_存在_inf
   证明: eq_of_comm
     (IsImage.isoExt (imageFactorisation _ _).isImage
       (frobeniusStrongEpiMonoFactorisation f A' B').toMonoIsImage)

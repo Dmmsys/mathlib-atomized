@@ -74,7 +74,7 @@ This is
 
 中文:
 定理 mul_comm'
-  条件: {α} [CommSemigroup α] (x y : α)
+  条件: {α} [交换半群 α] (x y : α)
   结论: x * y = y * x
   证明: CommSemigroup.mul_comm
 ```
@@ -121,7 +121,7 @@ For `simps` this also ensures that some generated lemmas are added to the additi
 
 中文:
 引理 mul_one'
-  条件: {G : 类型} [Group G] (x : G)
+  条件: {G : 类型} [群 G] (x : G)
   结论: x * 1 = x
   证明: mul_one x
 ```
@@ -390,7 +390,7 @@ definition nameDict
 
 中文:
 定义 nameDict
-  签名: : Std.HashMap String (List String)
+  签名: : Std.HashMap String (列表 String)
   定义体: .ofList [
   ("one", ["Zero"]),
   ("mul", ["Add"]),

@@ -39,7 +39,7 @@ definition Arrow
 to_dual_name_hint Left Right
 
 中文:
-定义 Arrow
+定义 箭头
   定义体: Comma (𝟭 T) (𝟭 T)
 
 to_dual_name_hint Left Right
@@ -59,8 +59,8 @@ definition Arrow.Hom
   body: CommaMorphism f g
 
 中文:
-定义 Arrow.Hom
-  签名: (f g : Arrow T)
+定义 箭头.态射
+  签名: (f g : 箭头 T)
   定义体: CommaMorphism f g
 -/
 protected def Arrow.Hom (f g : Arrow T) := CommaMorphism f g
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Arrow T)
+  签名: 箭图 (箭头 T)
   定义体: Arrow.Hom
 
 Depends on / 依赖: Arrow.Hom
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Arrow T)
+  签名: 范畴 (箭头 T)
   定义体: inferInstanceAs Category (Comma (𝟭 T) (𝟭 T))
 
 Depends on / 依赖: Category
@@ -115,7 +115,7 @@ abbreviation left
 
 中文:
 缩写 left
-  签名: (X : Arrow T)
+  签名: (X : 箭头 T)
   定义体: Comma.left X
 
 Depends on / 依赖: Comma.left
@@ -132,7 +132,7 @@ abbreviation hom
 
 中文:
 缩写 hom
-  签名: (X : Arrow T)
+  签名: (X : 箭头 T)
   定义体: Comma.hom X
 
 Depends on / 依赖: Comma.hom
@@ -152,8 +152,8 @@ abbreviation Hom.left
 @[ext, to_dual self (reorder := X Y, h₁ h₂)]
 
 中文:
-缩写 Hom.left
-  签名: {X Y : Arrow T} (f : X ⟶ Y)
+缩写 态射.left
+  签名: {X Y : 箭头 T} (f : X ⟶ Y)
   定义体: CommaMorphism.left f
 
 @[ext, to_dual self (reorder := X Y, h₁ h₂)]
@@ -175,7 +175,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : Arrow T} (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right)
+  条件: {X Y : 箭头 T} (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right)
   证明: CommaMorphism.ext h₁ h₂
 
 @[to_dual (attr := simp)]
@@ -200,8 +200,8 @@ theorem id_left
 
 中文:
 定理 id_left
-  条件: (f : Arrow T)
-  结论: Arrow.Hom.left (𝟙 f) = 𝟙 f.left
+  条件: (f : 箭头 T)
+  结论: 箭头.态射.left (𝟙 f) = 𝟙 f.left
   证明: rfl
 
 @[to_dual (reorder := f g) (attr := simp, reassoc)]
@@ -220,7 +220,7 @@ theorem comp_left
 
 中文:
 定理 comp_left
-  条件: {X Y Z : Arrow T} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 箭头 T} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_left {X Y Z : Arrow T} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -269,8 +269,8 @@ theorem mk_eq
 
 中文:
 定理 mk_eq
-  条件: (f : Arrow T)
-  结论: Arrow.mk f.hom = f
+  条件: (f : 箭头 T)
+  结论: 箭头.mk f.hom = f
   证明: by
   cases f
   rfl
@@ -294,7 +294,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  条件: (f : Arrow T)
+  条件: (f : 箭头 T)
   证明: ⟨_, _, f.hom, rfl⟩
 
 @[to_dual self]
@@ -347,7 +347,7 @@ theorem mk_inj
 中文:
 定理 mk_inj
   条件: (A B : T) {f g : A ⟶ B}
-  结论: Arrow.mk f = Arrow.mk g ↔ f = g
+  结论: 箭头.mk f = 箭头.mk g ↔ f = g
   证明: (mk_injective A B).eq_iff
 
 @[to_dual self]
@@ -378,7 +378,7 @@ alias Hom.w := w
 
 中文:
 定理 w
-  条件: {f g : Arrow T} (sq : f ⟶ g)
+  条件: {f g : 箭头 T} (sq : f ⟶ g)
   结论: sq.left ≫ g.hom = f.hom ≫ sq.right
   证明: CommaMorphism.w sq
 
@@ -410,7 +410,7 @@ theorem hom.congr_left
 
 中文:
 定理 hom.congr_left
-  条件: {f g : Arrow T} {φ₁ φ₂ : f ⟶ g} (h : φ₁ = φ₂)
+  条件: {f g : 箭头 T} {φ₁ φ₂ : f ⟶ g} (h : φ₁ = φ₂)
   结论: φ₁.left = φ₂.left
   证明: by
   rw [h]
@@ -435,7 +435,7 @@ theorem iso_w
 
 中文:
 定理 iso_w
-  条件: {f g : Arrow T} (e : f ≅ g)
+  条件: {f g : 箭头 T} (e : f ≅ g)
   结论: g.hom = e.inv.left ≫ f.hom ≫ e.hom.right
   证明: by
   simp [← Arrow.comp_right]
@@ -458,7 +458,7 @@ theorem iso_w'
 
 中文:
 定理 iso_w'
-  条件: {W X Y Z : T} {f : W ⟶ X} {g : Y ⟶ Z} (e : Arrow.mk f ≅ Arrow.mk g)
+  条件: {W X Y Z : T} {f : W ⟶ X} {g : Y ⟶ Z} (e : 箭头.mk f ≅ 箭头.mk g)
   证明: iso_w e
 
 Depends on / 依赖: iso_w
@@ -477,7 +477,7 @@ lemma eqToHom_left
 
 中文:
 引理 eqToHom_left
-  条件: {X Y : Arrow T} (h : X = Y)
+  条件: {X Y : 箭头 T} (h : X = Y)
   证明: by subst h; rfl
 -/
 lemma eqToHom_left {X Y : Arrow T} (h : X = Y) :
@@ -493,7 +493,7 @@ lemma eqToHom_right
 
 中文:
 引理 eqToHom_right
-  条件: {X Y : Arrow T} (h : X = Y)
+  条件: {X Y : 箭头 T} (h : X = Y)
   证明: by subst h; rfl
 -/
 lemma eqToHom_right {X Y : Arrow T} (h : X = Y) :
@@ -549,7 +549,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {f g : Arrow T}
+  结论: {f g : 箭头 T}
   证明: (mk_eq_mk_iff _ _).2 (by simp_all)
 
 Depends on / 依赖: mk_eq_mk_iff
@@ -616,7 +616,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {f g : Arrow T} (u : f.left ⟶ g.left) (v : f.right ⟶ g.right)
+  签名: {f g : 箭头 T} (u : f.left ⟶ g.left) (v : f.right ⟶ g.right)
   定义体: u
   right := v
   w := w
@@ -642,7 +642,7 @@ abbreviation homMk''
 
 中文:
 缩写 homMk''
-  签名: {f g : Arrow T} (u : g.right ⟶ f.right) (v : g.left ⟶ f.left)
+  签名: {f g : 箭头 T} (u : g.right ⟶ f.right) (v : g.left ⟶ f.left)
   定义体: homMk v u
 
 Depends on / 依赖: attribute, cat_disch, homMk_left, homMk_right, to_dual
@@ -715,7 +715,7 @@ theorem w_mk_left
 
 中文:
 定理 w_mk_left
-  条件: {X Y : T} {f : X ⟶ Y} {g : Arrow T} (sq : mk f ⟶ g)
+  条件: {X Y : T} {f : X ⟶ Y} {g : 箭头 T} (sq : mk f ⟶ g)
   证明: sq.w
 
 Depends on / 依赖: sq.w
@@ -736,7 +736,7 @@ theorem w_mk_right
 
 中文:
 定理 w_mk_right
-  条件: {f : Arrow T} {X Y : T} {g : X ⟶ Y} (sq : f ⟶ mk g)
+  条件: {f : 箭头 T} {X Y : T} {g : X ⟶ Y} (sq : f ⟶ mk g)
   证明: sq.w
 
 Depends on / 依赖: sq.w
@@ -781,7 +781,7 @@ theorem isIso_of_isIso_left_of_isIso_right
 
 中文:
 定理 isIso_of_isIso_left_of_isIso_right
-  结论: {f g : Arrow T} (ff : f ⟶ g) [IsIso ff.left]
+  结论: {f g : 箭头 T} (ff : f ⟶ g) [是同构 ff.left]
   证明: ⟨homMk (inv ff.left) (inv ff.right), by cat_disch⟩
 
 Depends on / 依赖: cat_disch, ff.left, ff.right
@@ -804,7 +804,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {f g : Arrow T} (l : f.left ≅ g.left) (r : f.right ≅ g.right)
+  签名: {f g : 箭头 T} (l : f.left ≅ g.left) (r : f.right ≅ g.right)
   定义体: Comma.isoMk l r h
 
 Depends on / 依赖: Comma.isoMk, cat_disch
@@ -826,7 +826,7 @@ abbreviation isoMk''
 
 中文:
 缩写 isoMk''
-  签名: {f g : Arrow T} (l : f.right ≅ g.right) (r : f.left ≅ g.left)
+  签名: {f g : 箭头 T} (l : f.right ≅ g.right) (r : f.left ≅ g.left)
   定义体: isoMk r l (by rwa [Iso.comp_inv_eq, Category.assoc, Iso.eq_inv_comp] at h)
 
 Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.eq_inv_comp, attribute, cat_disch, comp_inv_eq, eq_inv_comp, isoMk_hom_left, isoMk_hom_right, isoMk_inv_left, isoMk_inv_right, to_dual
@@ -894,7 +894,7 @@ instance isIso_left
 
 中文:
 实例 isIso_left
-  签名: [IsIso sq]
+  签名: [是同构 sq]
   定义体: ⟨(inv sq).left, by simp [← comp_left]⟩
 
 @[to_dual none]
@@ -919,7 +919,7 @@ lemma isIso_of_isIso'
 
 中文:
 引理 isIso_of_isIso'
-  条件: {f g : Arrow T} (sq : f ⟶ g) [IsIso sq] [IsIso f.hom]
+  条件: {f g : 箭头 T} (sq : f ⟶ g) [是同构 sq] [是同构 f.hom]
   证明: by
   rw [iso_w (asIso sq)]
   infer_instance
@@ -944,7 +944,7 @@ lemma isIso_hom_iff_isIso_hom_of_isIso
 
 中文:
 引理 isIso_hom_iff_isIso_hom_of_isIso
-  条件: {f g : Arrow T} (sq : f ⟶ g) [IsIso sq]
+  条件: {f g : 箭头 T} (sq : f ⟶ g) [是同构 sq]
   证明: ⟨fun _ => isIso_of_isIso' sq, fun _ => isIso_of_isIso' (inv sq)⟩
 
 @[to_dual none]
@@ -968,7 +968,7 @@ lemma isIso_iff_isIso_of_isIso
 
 中文:
 引理 isIso_iff_isIso_of_isIso
-  条件: {W X Y Z : T} {f : W ⟶ X} {g : Y ⟶ Z} (sq : mk f ⟶ mk g) [IsIso sq]
+  条件: {W X Y Z : T} {f : W ⟶ X} {g : Y ⟶ Z} (sq : mk f ⟶ mk g) [是同构 sq]
   证明: isIso_hom_iff_isIso_hom_of_isIso sq
 
 @[to_dual none]
@@ -992,7 +992,7 @@ lemma isIso_hom_iff_isIso_of_isIso
 
 中文:
 引理 isIso_hom_iff_isIso_of_isIso
-  条件: {Y Z : T} {f : Arrow T} {g : Y ⟶ Z} (sq : f ⟶ mk g) [IsIso sq]
+  条件: {Y Z : T} {f : 箭头 T} {g : Y ⟶ Z} (sq : f ⟶ mk g) [是同构 sq]
   证明: isIso_hom_iff_isIso_hom_of_isIso sq
 
 @[to_dual (attr := simp, push ←)]
@@ -1017,7 +1017,7 @@ theorem inv_left
 
 中文:
 定理 inv_left
-  条件: [IsIso sq]
+  条件: [是同构 sq]
   结论: (inv sq).left = inv sq.left
   证明: IsIso.eq_inv_of_hom_inv_id (by simp [← comp_left])
 
@@ -1043,7 +1043,7 @@ theorem left_hom_inv_right
 
 中文:
 定理 left_hom_inv_right
-  条件: [IsIso sq]
+  条件: [是同构 sq]
   结论: sq.left ≫ g.hom ≫ inv sq.right = f.hom
   证明: by
   simp only [← Category.assoc, IsIso.comp_inv_eq, w]
@@ -1068,7 +1068,7 @@ theorem inv_left_hom_right
 
 中文:
 定理 inv_left_hom_right
-  条件: [IsIso sq]
+  条件: [是同构 sq]
   结论: inv sq.left ≫ f.hom ≫ sq.right = g.hom
   证明: by
   simp only [w, IsIso.inv_comp_eq]
@@ -1101,7 +1101,7 @@ instance mono_left
 
 中文:
 实例 mono_left
-  签名: [Mono sq]
+  签名: [单态射 sq]
   定义体: by
     let aux : (Z ⟶ f.left) -> (Arrow.mk (𝟙 Z) ⟶ f) := fun φ =>
       { left := φ
@@ -1196,7 +1196,7 @@ theorem square_to_iso_invert
 
 中文:
 定理 square_to_iso_invert
-  条件: (i : Arrow T) {X Y : T} (p : X ≅ Y) (sq : i ⟶ Arrow.mk p.hom)
+  条件: (i : 箭头 T) {X Y : T} (p : X ≅ Y) (sq : i ⟶ 箭头.mk p.hom)
   证明: by
   simpa only [mk_right, Category.assoc] using! (Iso.comp_inv_eq p).mpr (Arrow.w_mk_right sq).symm
 
@@ -1218,7 +1218,7 @@ theorem square_from_iso_invert
 
 中文:
 定理 square_from_iso_invert
-  条件: {X Y : T} (i : X ≅ Y) (p : Arrow T) (sq : Arrow.mk i.hom ⟶ p)
+  条件: {X Y : T} (i : X ≅ Y) (p : 箭头 T) (sq : 箭头.mk i.hom ⟶ p)
   证明: by
   simp
 -/
@@ -1251,7 +1251,7 @@ definition squareToSnd
 
 中文:
 定义 squareToSnd
-  签名: {X Y Z : C} {i : Arrow C} {f : X ⟶ Y} {g : Y ⟶ Z} (sq : i ⟶ Arrow.mk (f ≫ g))
+  签名: {X Y Z : C} {i : 箭头 C} {f : X ⟶ Y} {g : Y ⟶ Z} (sq : i ⟶ 箭头.mk (f ≫ g))
   定义体: Arrow.homMk (sq.left ≫ f) (sq.right) (by simp [w_mk sq])
 
 Depends on / 依赖: Arrow.homMk, sq.left, sq.right, w_mk
@@ -1272,7 +1272,7 @@ definition leftFunc
 
 中文:
 定义 leftFunc
-  签名: : Arrow C ⥤ C
+  签名: : 箭头 C ⥤ C
   定义体: Comma.fst _ _
 
 Depends on / 依赖: Comma.fst
@@ -1294,7 +1294,7 @@ definition leftToRight
 
 中文:
 定义 leftToRight
-  签名: : (leftFunc : Arrow C ⥤ C) ⟶ rightFunc where app f
+  签名: : (leftFunc : 箭头 C ⥤ C) ⟶ rightFunc where app f
   定义体: f.hom
 
 Depends on / 依赖: f.hom
@@ -1353,7 +1353,7 @@ definition mapArrowFunctor
 
 中文:
 定义 mapArrowFunctor
-  签名: : (C ⥤ D) ⥤ (Arrow C ⥤ Arrow D) where
+  签名: : (C ⥤ D) ⥤ (箭头 C ⥤ 箭头 D) where
   定义体: F.mapArrow
   map {X Y} τ := { app f := Arrow.homMk (τ.app _) (τ.app _) }
 
@@ -1411,7 +1411,7 @@ instance essSurj_mapArrow
 
 中文:
 实例 essSurj_mapArrow
-  签名: (F : C ⥤ D) [F.Full] [F.EssSurj]
+  签名: (F : C ⥤ D) [F.满] [F.本质满射]
   定义体: ⟨Arrow.mk (F.preimage ((F.objObjPreimageIso _).hom ≫ f.hom ≫
       (F.objObjPreimageIso _).inv)),
         ⟨Arrow.isoMk (F.objObjPreimageIso _) (F.objObjPreimageIso _)⟩⟩
@@ -1435,7 +1435,7 @@ instance isEquivalence_mapArrow
 
 中文:
 实例 isEquivalence_mapArrow
-  签名: (F : C ⥤ D) [IsEquivalence F]
+  签名: (F : C ⥤ D) [是等价 F]
   定义体: (mapArrowEquivalence (asEquivalence F)).isEquivalence_functor
 
 Depends on / 依赖: asEquivalence, isEquivalence_functor, mapArrowEquivalence
@@ -1458,7 +1458,7 @@ definition Arrow.isoOfNatIso
   body: Arrow.isoMk (e.app f.left) (e.app f.right)
 
 中文:
-定义 Arrow.isoOfNatIso
+定义 箭头.isoOf自然数Iso
   签名: {F G : C ⥤ D} (e : F ≅ G)
   定义体: Arrow.isoMk (e.app f.left) (e.app f.right)
 
@@ -1482,7 +1482,7 @@ definition Arrow.equivSigma
   invFun x := Arrow.mk x.2.2
 
 中文:
-定义 Arrow.equivSigma
+定义 箭头.equivSigma
   签名: :
   定义体: ⟨_, _, f.hom⟩
   invFun x := Arrow.mk x.2.2
@@ -1508,7 +1508,7 @@ definition Arrow.discreteEquiv
     rfl
 
 中文:
-定义 Arrow.discreteEquiv
+定义 箭头.discreteEquiv
   签名: (S : 类型u)
   定义体: f.left.as
   invFun s := Arrow.mk (𝟙 (Discrete.mk s))
@@ -1542,7 +1542,7 @@ lemma Arrow.functor_ext
     tauto)
 
 中文:
-引理 Arrow.functor_ext
+引理 箭头.functor_ext
   结论: {F G : C ⥤ D} (h : 对任意 ⦃X Y : C⦄ (f : X ⟶ Y),
   证明: Functor.ext (fun X => congr_arg Comma.left (h (𝟙 X))) (fun X Y f => by
     have := h f

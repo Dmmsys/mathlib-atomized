@@ -112,7 +112,7 @@ structure Hom
     - comm((i₁ i₂ : ι)) : D₁.hom i₁ i₂ ≫ (F.map (f i₁).op.toLoc).l.toFunctor.map ((F.map (f i₂).op.toLoc).r.toFunctor.map (hom i₂)) = hom i₁ ≫ D₂.hom i₁ i₂  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (D₁ D₂ : F.DescentDataAsCoalgebra f)
   公理与运算 (2 个):
     - hom((i : ι)) : D₁.obj i ⟶ D₂.obj i
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (F.DescentDataAsCoalgebra f)
+  签名: 范畴 (F.DescentDataAsCoalgebra f)
   定义体: Hom
   id _ := { hom _ := 𝟙 _ }
   comp f g := { hom i := f.hom i ≫ g.hom i }
@@ -292,7 +292,7 @@ definition coalgebraEquivalence
 
 中文:
 定义 coalgebraEquivalence
-  签名: (ι : 类型) [Unique ι] {X S : C} (f : X ⟶ S)
+  签名: (ι : 类型) [唯一 ι] {X S : C} (f : X ⟶ S)
   定义体: { A := D.obj default
       a := D.hom default default }
   functor.map φ := { f := φ.hom default }

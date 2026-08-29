@@ -49,12 +49,12 @@ structure PartialIso
 
 中文:
 结构 PartialIso
-  参数: (X Y : Scheme.{u})
+  参数: (X Y : 概形.{u})
   公理与运算 (5 个):
     - source : X.Opens
-    - dense_source : Dense (source : Set X)
+    - dense_source : 稠密 (source : 集合 X)
     - target : Y.Opens
-    - dense_target : Dense (target : Set Y)
+    - dense_target : 稠密 (target : 集合 Y)
     - iso : source.toScheme ≅ target.toScheme
 
 Depends on / 依赖: LocallyOfFinitePresentation, UniversallyOpen, UniversallyOpen.of_flat, of_flat
@@ -83,7 +83,7 @@ abbreviation IsOver
   body: f.iso.hom ≫ f.target.ι ≫ sY = f.source.ι ≫ sX
 
 中文:
-缩写 IsOver
+缩写 是Over
   签名: (f : X.PartialIso Y)
   定义体: f.iso.hom ≫ f.target.ι ≫ sY = f.source.ι ≫ sX
 
@@ -239,9 +239,9 @@ lemma IsOver.symm
   simpa [IsOver, ← cancel_epi f.iso.hom] using Eq.symm hf
 
 中文:
-引理 IsOver.symm
-  条件: {f : X.PartialIso Y} (hf : f.IsOver sX sY)
-  结论: f.symm.IsOver sY sX
+引理 是Over.symm
+  条件: {f : X.PartialIso Y} (hf : f.是Over sX sY)
+  结论: f.symm.是Over sY sX
   证明: by
   simpa [IsOver, ← cancel_epi f.iso.hom] using Eq.symm hf
 
@@ -295,7 +295,7 @@ lemma IsOver.trans'
   simp [IsOver, ← hf, hg]
 
 中文:
-引理 IsOver.trans'
+引理 是Over.trans'
   结论: {f : X.PartialIso Y} {g : Y.PartialIso Z} {e : f.target = g.source}
   证明: by
   simp [IsOver, ← hf, hg]
@@ -325,7 +325,7 @@ f.iso.hom.denseRange.dense_image f.iso.hom.continuous
 
 中文:
 定义 restrictSource
-  签名: (f : X.PartialIso Y) (U : Opens X) (hU : Dense (U : Set X))
+  签名: (f : X.PartialIso Y) (U : Opens X) (hU : 稠密 (U : 集合 X))
   定义体: U
   dense_source := hU
   target := f.target.ι ''ᵁ f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U
@@ -360,8 +360,8 @@ lemma IsOver.restrictSource
   simp [IsOver, hf]
 
 中文:
-引理 IsOver.restrictSource
-  结论: {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens X)
+引理 是Over.restrictSource
+  结论: {f : X.PartialIso Y} (hf : f.是Over sX sY) (U : Opens X)
   证明: by
   simp [IsOver, hf]
 
@@ -384,7 +384,7 @@ definition restrictTarget
 
 中文:
 定义 restrictTarget
-  签名: (f : X.PartialIso Y) (U : Opens Y) (hU : Dense (U : Set Y))
+  签名: (f : X.PartialIso Y) (U : Opens Y) (hU : 稠密 (U : 集合 Y))
   定义体: (f.symm.restrictSource U hU hU').symm
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, f.symm.restrictSource, pullback_snd, restrictSource
@@ -402,8 +402,8 @@ lemma IsOver.restrictTarget
   proof: (hf.symm.restrictSource U hU hU').symm
 
 中文:
-引理 IsOver.restrictTarget
-  结论: {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens Y)
+引理 是Over.restrictTarget
+  结论: {f : X.PartialIso Y} (hf : f.是Over sX sY) (U : Opens Y)
   证明: (hf.symm.restrictSource U hU hU').symm
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, hf.symm.restrictSource, restrict, restrictSource
@@ -445,8 +445,8 @@ lemma IsOver.trans
   proof: (hf.restrictTarget _ _ _).trans' (hg.restrictSource _ _ _)
 
 中文:
-引理 IsOver.trans
-  结论: {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.IsOver sX sY)
+引理 是Over.trans
+  结论: {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.是Over sX sY)
   证明: (hf.restrictTarget _ _ _).trans' (hg.restrictSource _ _ _)
 
 Depends on / 依赖: hf.restrictTarget, hg.restrictSource, restrictSource, restrictTarget
@@ -542,7 +542,7 @@ definition Birational
 
 中文:
 定义 Birational
-  签名: (X Y : Scheme.{u})
+  签名: (X Y : 概形.{u})
   定义体: Nonempty (PartialIso X Y)
 
 Depends on / 依赖: Nonempty, PartialIso
@@ -561,7 +561,7 @@ definition Birational.partialIso
 
 中文:
 定义 Birational.partialIso
-  签名: {X Y : Scheme.{u}} (h : Birational X Y)
+  签名: {X Y : 概形.{u}} (h : Birational X Y)
   定义体: Classical.choice h
 
 @[refl]
@@ -586,7 +586,7 @@ lemma Birational.refl
 
 中文:
 引理 Birational.refl
-  条件: (X : Scheme.{u})
+  条件: (X : 概形.{u})
   结论: Birational X X
   证明: ⟨.refl X⟩
 
@@ -609,7 +609,7 @@ lemma Birational.symm
 
 中文:
 引理 Birational.symm
-  条件: {X Y : Scheme.{u}} (h : Birational X Y)
+  条件: {X Y : 概形.{u}} (h : Birational X Y)
   结论: Birational Y X
   证明: ⟨h.partialIso.symm⟩
 
@@ -631,7 +631,7 @@ lemma Birational.trans
 
 中文:
 引理 Birational.trans
-  条件: {X Y Z : Scheme.{u}} (h₁ : Birational X Y) (h₂ : Birational Y Z)
+  条件: {X Y Z : 概形.{u}} (h₁ : Birational X Y) (h₂ : Birational Y Z)
   证明: ⟨h₁.partialIso.trans h₂.partialIso⟩
 
 Depends on / 依赖: partialIso, partialIso.trans
@@ -650,7 +650,7 @@ definition BirationalOver
 
 中文:
 定义 BirationalOver
-  签名: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
+  签名: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
   定义体: exists f : PartialIso X Y, f.IsOver sX sY
 
 Depends on / 依赖: IsOver, PartialIso, f.IsOver
@@ -668,7 +668,7 @@ definition BirationalOver.partialIso
 
 中文:
 定义 BirationalOver.partialIso
-  签名: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
+  签名: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
   定义体: h.choose
 
 Depends on / 依赖: h.choose
@@ -687,7 +687,7 @@ lemma BirationalOver.partialIso_isOver
 
 中文:
 引理 BirationalOver.partialIso_isOver
-  结论: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
+  结论: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
   证明: h.choose_spec
 
 Depends on / 依赖: choose_spec, h.choose_spec
@@ -708,7 +708,7 @@ lemma BirationalOver.refl
 
 中文:
 引理 BirationalOver.refl
-  条件: {S X : Scheme.{u}} (sX : X ⟶ S)
+  条件: {S X : 概形.{u}} (sX : X ⟶ S)
   结论: BirationalOver sX sX
   证明: ⟨.refl X, by simp [PartialIso.IsOver]⟩
 
@@ -727,7 +727,7 @@ lemma BirationalOver.symm
 
 中文:
 引理 BirationalOver.symm
-  结论: {S X Y : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S}
+  结论: {S X Y : 概形.{u}} {sX : X ⟶ S} {sY : Y ⟶ S}
   证明: ⟨h.partialIso.symm, h.partialIso_isOver.symm⟩
 
 Depends on / 依赖: h.partialIso.symm, h.partialIso_isOver.symm, partialIso, partialIso_isOver
@@ -746,7 +746,7 @@ lemma BirationalOver.trans
 
 中文:
 引理 BirationalOver.trans
-  结论: {S X Y Z : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
+  结论: {S X Y Z : 概形.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
   证明: ⟨h₁.partialIso.trans h₂.partialIso, h₁.partialIso_isOver.trans h₂.partialIso_isOver⟩
 
 Depends on / 依赖: partialIso, partialIso.trans, partialIso_isOver, partialIso_isOver.trans
@@ -769,8 +769,8 @@ class IsRationalOver
     - exists_birationalOver_affineSpace((sX)) : exists (n : Type u), BirationalOver sX (𝔸(n; S) ↘ S)
 
 中文:
-类 IsRationalOver
-  参数: {S X : Scheme.{u}} (sX : X ⟶ S)
+类 是RationalOver
+  参数: {S X : 概形.{u}} (sX : X ⟶ S)
   公理与运算 (1 个):
     - exists_birationalOver_affineSpace((sX)) : 存在 (n : 类型u), BirationalOver sX (𝔸(n; S) ↘ S)
 -/
@@ -792,7 +792,7 @@ lemma BirationalOver.isRationalOver
 
 中文:
 引理 BirationalOver.isRationalOver
-  结论: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
+  结论: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
   证明: by
   obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sY
   exact ⟨n, h.trans hn⟩
@@ -824,7 +824,7 @@ definition Opens.partialIsoOfDense
 
 中文:
 定义 Opens.partialIsoOfDense
-  签名: (hU : Dense (U : Set X))
+  签名: (hU : 稠密 (U : 集合 X))
   定义体: ⊤
   dense_source := dense_univ
   target := U
@@ -849,7 +849,7 @@ lemma Opens.birational_of_dense
 
 中文:
 引理 Opens.birational_of_dense
-  条件: (hU : Dense (U : Set X))
+  条件: (hU : 稠密 (U : 集合 X))
   结论: Birational U X
   证明: ⟨U.partialIsoOfDense hU⟩
 
@@ -870,7 +870,7 @@ lemma Opens.birationalOver_of_dense
 
 中文:
 引理 Opens.birationalOver_of_dense
-  条件: (hU : Dense (U : Set X))
+  条件: (hU : 稠密 (U : 集合 X))
   结论: BirationalOver (U.ι ≫ sX) sX
   证明: ⟨U.partialIsoOfDense hU, by simp [PartialIso.IsOver]⟩
 
@@ -891,7 +891,7 @@ lemma Opens.isRationalOver_of_dense
 
 中文:
 引理 Opens.isRationalOver_of_dense
-  条件: (hU : Dense (U : Set X)) [IsRationalOver sX]
+  条件: (hU : 稠密 (U : 集合 X)) [是RationalOver sX]
   证明: by
   obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sX
   exact ⟨n, (U.birationalOver_of_dense sX hU).trans hn⟩
@@ -920,8 +920,8 @@ definition Hom.partialIso
   body: (PartialIso.ofIso f.isoOpensRange).trans' (f.opensRange.partialIsoOfDense f.denseRange) rfl
 
 中文:
-定义 Hom.partialIso
-  签名: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f]
+定义 态射.partialIso
+  签名: (f : U ⟶ X) [是开浸入 f] [是Dominant f]
   定义体: (PartialIso.ofIso f.isoOpensRange).trans' (f.opensRange.partialIsoOfDense f.denseRange) rfl
 
 Depends on / 依赖: PartialIso, PartialIso.ofIso, denseRange, f.denseRange, f.isoOpensRange, f.opensRange.partialIsoOfDense, isoOpensRange, opensRange, partialIsoOfDense
@@ -939,8 +939,8 @@ lemma Hom.birational
   proof: ⟨f.partialIso⟩
 
 中文:
-引理 Hom.birational
-  条件: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f]
+引理 态射.birational
+  条件: (f : U ⟶ X) [是开浸入 f] [是Dominant f]
   结论: Birational U X
   证明: ⟨f.partialIso⟩
 
@@ -960,8 +960,8 @@ lemma Hom.birationalOver
   proof: ⟨f.partialIso, by simp [PartialIso.IsOver, hf]⟩
 
 中文:
-引理 Hom.birationalOver
-  结论: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] (sX : X ⟶ S) (sU : U ⟶ S)
+引理 态射.birationalOver
+  结论: (f : U ⟶ X) [是开浸入 f] [是Dominant f] (sX : X ⟶ S) (sU : U ⟶ S)
   证明: ⟨f.partialIso, by simp [PartialIso.IsOver, hf]⟩
 
 Depends on / 依赖: IsOver, PartialIso, PartialIso.IsOver, f.partialIso, partialIso

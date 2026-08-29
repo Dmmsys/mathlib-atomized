@@ -34,8 +34,8 @@ definition Etale
   body: @Algebra.Etale R S _ _ f.toAlgebra
 
 中文:
-定义 Etale
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+定义 平展
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: @Algebra.Etale R S _ _ f.toAlgebra
 
 Depends on / 依赖: Algebra, Algebra.Etale, f.toAlgebra, toAlgebra
@@ -52,8 +52,8 @@ lemma Etale.toAlgebra
   proof: hf
 
 中文:
-引理 Etale.toAlgebra
-  条件: {f : R ->+* S} (hf : Etale f)
+引理 平展.toAlgebra
+  条件: {f : R ->+* S} (hf : 平展 f)
   证明: hf
 -/
 lemma Etale.toAlgebra {f : R ->+* S} (hf : Etale f) :
@@ -73,8 +73,8 @@ lemma etale_algebraMap
 
 中文:
 引理 etale_algebraMap
-  条件: [Algebra R S]
-  结论: (algebraMap R S).Etale ↔ Algebra.Etale R S
+  条件: [代数 R S]
+  结论: (algebraMap R S).平展 ↔ 代数.平展 R S
   证明: by
   rw [RingHom.Etale]; rw [toAlgebra_algebraMap]
 
@@ -97,7 +97,7 @@ lemma etale_iff_formallyUnramified_and_smooth
 
 中文:
 引理 etale_iff_formallyUnramified_and_smooth
-  结论: f.Etale ↔ f.FormallyUnramified ∧ f.Smooth
+  结论: f.平展 ↔ f.形式非分歧 ∧ f.光滑
   证明: by
   algebraize [f]
   simp only [Etale, Smooth, FormallyUnramified]
@@ -122,7 +122,7 @@ lemma Etale.eq_formallyUnramified_and_smooth
   rw [etale_iff_formallyUnramified_and_smooth]
 
 中文:
-引理 Etale.eq_formallyUnramified_and_smooth
+引理 平展.eq_formallyUnramified_and_smooth
   证明: by
   ext
   rw [etale_iff_formallyUnramified_and_smooth]
@@ -146,9 +146,9 @@ lemma Etale.formallyUnramified
   exact hf.1
 
 中文:
-引理 Etale.formallyUnramified
-  条件: (hf : f.Etale)
-  结论: f.FormallyUnramified
+引理 平展.formallyUnramified
+  条件: (hf : f.平展)
+  结论: f.形式非分歧
   证明: by
   rw [etale_iff_formallyUnramified_and_smooth] at hf
   exact hf.1
@@ -171,9 +171,9 @@ lemma Etale.of_bijective
   exact ⟨.of_surjective hf.2, .of_bijective hf⟩
 
 中文:
-引理 Etale.of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
-  结论: f.Etale
+引理 平展.of_bijective
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
+  结论: f.平展
   证明: by
   rw [etale_iff_formallyUnramified_and_smooth]
   exact ⟨.of_surjective hf.2, .of_bijective hf⟩
@@ -193,8 +193,8 @@ lemma Etale.containsIdentities
   proof: fun _ _ => .of_bijective Function.bijective_id
 
 中文:
-引理 Etale.containsIdentities
-  结论: ContainsIdentities Etale
+引理 平展.containsIdentities
+  结论: 余ntainsIdentities 平展
   证明: fun _ _ => .of_bijective Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id, of_bijective
@@ -213,8 +213,8 @@ lemma Etale.isStableUnderBaseChange
   exact FormallyUnramified.isStableUnderBaseChange.and Smooth.isStableUnderBaseChange
 
 中文:
-引理 Etale.isStableUnderBaseChange
-  结论: IsStableUnderBaseChange Etale
+引理 平展.isStableUnderBaseChange
+  结论: 是StableUnderBaseChange 平展
   证明: by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.isStableUnderBaseChange.and Smooth.isStableUnderBaseChange
@@ -236,8 +236,8 @@ lemma Etale.propertyIsLocal
   exact FormallyUnramified.propertyIsLocal.and Smooth.propertyIsLocal
 
 中文:
-引理 Etale.propertyIsLocal
-  结论: 命题ertyIsLocal Etale
+引理 平展.propertyIsLocal
+  结论: PropertyIsLocal 平展
   证明: by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.propertyIsLocal.and Smooth.propertyIsLocal
@@ -257,8 +257,8 @@ lemma Etale.respectsIso
   proof: propertyIsLocal.respectsIso
 
 中文:
-引理 Etale.respectsIso
-  结论: RespectsIso Etale
+引理 平展.respectsIso
+  结论: RespectsIso 平展
   证明: propertyIsLocal.respectsIso
 
 Depends on / 依赖: propertyIsLocal, propertyIsLocal.respectsIso, respectsIso
@@ -275,8 +275,8 @@ lemma Etale.ofLocalizationSpanTarget
   proof: propertyIsLocal.ofLocalizationSpanTarget
 
 中文:
-引理 Etale.ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget Etale
+引理 平展.ofLocalizationSpanTarget
+  结论: OfLocalizationSpanTarget 平展
   证明: propertyIsLocal.ofLocalizationSpanTarget
 
 Depends on / 依赖: ofLocalizationSpanTarget, propertyIsLocal, propertyIsLocal.ofLocalizationSpanTarget
@@ -293,8 +293,8 @@ lemma Etale.ofLocalizationSpan
   proof: propertyIsLocal.ofLocalizationSpan
 
 中文:
-引理 Etale.ofLocalizationSpan
-  结论: OfLocalizationSpan Etale
+引理 平展.ofLocalizationSpan
+  结论: OfLocalizationSpan 平展
   证明: propertyIsLocal.ofLocalizationSpan
 
 Depends on / 依赖: ofLocalizationSpan, propertyIsLocal, propertyIsLocal.ofLocalizationSpan
@@ -313,8 +313,8 @@ lemma Etale.stableUnderComposition
   exact FormallyUnramified.stableUnderComposition.and Smooth.stableUnderComposition
 
 中文:
-引理 Etale.stableUnderComposition
-  结论: StableUnderComposition Etale
+引理 平展.stableUnderComposition
+  结论: StableUnderComposition 平展
   证明: by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.stableUnderComposition.and Smooth.stableUnderComposition
@@ -339,7 +339,7 @@ lemma Etale.iff_flat_and_formallyUnramified
     fun ⟨_, _, _⟩ => .of_formallyUnramif
 
 中文:
-引理 Etale.iff_flat_and_formallyUnramified
+引理 平展.iff_flat_and_formallyUnramified
   条件: {f : R ->+* S}
   证明: by
   algebraize [f]

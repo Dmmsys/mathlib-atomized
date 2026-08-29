@@ -49,7 +49,7 @@ lemma Functor.isCofiltered_elements
       ⟨
 
 中文:
-引理 Functor.isCofiltered_elements
+引理 函子.isCofiltered_elements
   证明: ⟨⊤_ C, (terminalIsTerminal.isTerminalObj F).from PUnit .unit⟩
   cone_objs := by
     rintro ⟨X, x⟩ ⟨Y, y⟩
@@ -102,7 +102,7 @@ definition fromOverSubfunctor
 
 中文:
 定义 fromOverSubfunctor
-  签名: : Subfunctor (Over.forget X ⋙ F) where
+  签名: : 子函子 (Over.forget X ⋙ F) where
   定义体: F.map U.hom ⁻¹' {x}
   map _ _ _ := by simpa [← comp_apply, ← Functor.map_comp]
 
@@ -143,7 +143,7 @@ abbreviation fromOverFunctor
 
 中文:
 缩写 fromOverFunctor
-  签名: : Over X ⥤ Type w
+  签名: : Over X ⥤ 类型 w
   定义体: (fromOverSubfunctor F x).toFunctor
 
 Depends on / 依赖: fromOverSubfunctor, toFunctor
@@ -202,8 +202,8 @@ instance [IsCofiltered
   body: .of_equivalence (fromOverFunctorElementsEquivalence F x).symm
 
 中文:
-实例 [IsCofiltered
-  签名: F.Elements] : IsCofiltered (fromOverFunctor F x).Elements
+实例 [是余filtered
+  签名: F.Elements] : 是余filtered (fromOverFunctor F x).Elements
   定义体: .of_equivalence (fromOverFunctorElementsEquivalence F x).symm
 
 Depends on / 依赖: fromOverFunctorElementsEquivalence, of_equivalence

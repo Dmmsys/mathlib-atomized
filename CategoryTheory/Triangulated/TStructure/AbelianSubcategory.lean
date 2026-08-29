@@ -255,7 +255,7 @@ lemma mono_ιK
 
 中文:
 引理 mono_ιK
-  结论: Mono (ιK f₃ α)
+  结论: 单态射 (ιK f₃ α)
   证明: by
   rw [mono_iff_cancel_zero]
   intro B k hk
@@ -302,7 +302,7 @@ lemma epi_πQ
 
 中文:
 引理 epi_πQ
-  结论: Epi (πQ f₂ β)
+  结论: 满态射 (πQ f₂ β)
   证明: by
   rw [epi_iff_cancel_zero]
   intro B k hk
@@ -343,7 +343,7 @@ lemma exists_lift_ιK
     rw [Functor.map_comp]; rw [Functor.ma
 
 中文:
-引理 exists_lift_ιK
+引理 存在_lift_ιK
   条件: {B : A} (x₁ : B ⟶ X₁) (hx₁ : x₁ ≫ f₁ = 0)
   证明: by
   suffices exists (k' : (ι.obj B)⟦(1 : Int)⟧ ⟶ (ι.obj K)⟦(1 : Int)⟧),
@@ -383,7 +383,7 @@ definition isLimitKernelFork
 
 中文:
 定义 isLimitKernelFork
-  签名: : IsLimit (KernelFork.ofι _ (ιK_mor₁ hT α))
+  签名: : 是极限 (核叉.ofι _ (ιK_mor₁ hT α))
   定义体: KernelFork.IsLimit.ofι _ _ _
     (fun x₁ hx₁ => (exists_lift_ιK hι hT hT' x₁ hx₁).choose_spec)
     (fun x₁ hx₁ m hm => by
@@ -413,7 +413,7 @@ lemma exists_desc_πQ
   exact ⟨ι.preimage k, ι.map_injective (by cat_disch)⟩
 
 中文:
-引理 exists_desc_πQ
+引理 存在_desc_πQ
   条件: {B : A} (x₂ : X₂ ⟶ B) (hx₂ : f₁ ≫ x₂ = 0)
   证明: by
   obtain ⟨x₁, hx₁⟩ := Triangle.yoneda_exact₂ _ hT (ι.map x₂) (by simp [← ι.map_comp, hx₂])
@@ -444,7 +444,7 @@ definition isColimitCokernelCofork
 
 中文:
 定义 isColimitCokernelCofork
-  签名: : IsColimit (CokernelCofork.ofπ _ (mor₁_πQ hT β))
+  签名: : 是余极限 (余核余叉.ofπ _ (mor₁_πQ hT β))
   定义体: CokernelCofork.IsColimit.ofπ _ _ _
     (fun x₂ hx₂ => (exists_desc_πQ hι hT hT' x₂ hx₂).choose_spec)
     (fun x₂ hx₂ m hm => by
@@ -511,7 +511,7 @@ definition admissibleMorphism
 
 中文:
 定义 admissibleMorphism
-  签名: : Morphism命题erty A
+  签名: : MorphismProperty A
   定义体: fun X₁ X₂ f₁ =>
     forall ⦃X₃ : C⦄ (f₂ : ι.obj X₂ ⟶ X₃) (f₃ : X₃ ⟶ (ι.obj X₁)⟦(1 : Int)⟧)
       (_ : Triangle.mk (ι.map f₁) f₂ f₃ in distTriang C),
@@ -707,8 +707,8 @@ lemma exists_distinguished_triangle_of_epi
       rw [comp_id]; rw [comp_
 
 中文:
-引理 exists_distinguished_triangle_of_epi
-  条件: {X₂ X₃ : A} (π : X₂ ⟶ X₃) [Epi π]
+引理 存在_distinguished_triangle_of_epi
+  条件: {X₂ X₃ : A} (π : X₂ ⟶ X₃) [满态射 π]
   证明: by
   obtain ⟨X₁, f₂, f₃, hT⟩ := distinguished_cocone_triangle (ι.map π)
   have : admissibleMorphism ι π := by simp [hA]
@@ -766,7 +766,7 @@ definition abelian
 
 中文:
 定义 abelian
-  签名: [IsTriangulated C]
+  签名: [是三角 C]
   定义体: Abelian.mk' (fun X₁ X₂ f₁ => by
     obtain ⟨X₃, f₂, f₃, hT⟩ := distinguished_cocone_triangle (ι.map f₁)
     have : admissibleMorphism ι f₁ := by simp [hA]

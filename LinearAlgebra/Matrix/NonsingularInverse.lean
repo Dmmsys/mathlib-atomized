@@ -90,7 +90,7 @@ definition invertibleOfDetInvertible
 
 中文:
 定义 invertibleOfDetInvertible
-  签名: [Invertible A.det]
+  签名: [可逆 A.det]
   定义体: ⅟A.det • A.adjugate
   mul_invOf_self := by
     rw [mul_smul_comm]; rw [mul_adjugate]; rw [smul_smul]; rw [invOf_mul_self]; rw [one_smul]
@@ -119,7 +119,7 @@ theorem invOf_eq
 
 中文:
 定理 invOf_eq
-  条件: [Invertible A.det] [Invertible A]
+  条件: [可逆 A.det] [可逆 A]
   结论: ⅟A = ⅟A.det • A.adjugate
   证明: by
   let := invertibleOfDetInvertible A
@@ -195,7 +195,7 @@ definition detInvertibleOfInvertible
 
 中文:
 定义 detInvertibleOfInvertible
-  签名: [Invertible A]
+  签名: [可逆 A]
   定义体: detInvertibleOfLeftInverse A (⅟A) (invOf_mul_self _)
 
 Depends on / 依赖: detInvertibleOfLeftInverse, invOf_mul_self
@@ -216,7 +216,7 @@ theorem det_invOf
 
 中文:
 定理 det_invOf
-  条件: [Invertible A] [Invertible A.det]
+  条件: [可逆 A] [可逆 A.det]
   结论: (⅟A).det = ⅟A.det
   证明: by
   let := detInvertibleOfInvertible A
@@ -244,7 +244,7 @@ definition invertibleEquivDetInvertible
 
 中文:
 定义 invertibleEquivDetInvertible
-  签名: : Invertible A ≃ Invertible A.det where
+  签名: : 可逆 A ≃ 可逆 A.det where
   定义体: @detInvertibleOfInvertible _ _ _ _ _ A
   invFun := @invertibleOfDetInvertible _ _ _ _ _ A
   left_inv _ := Subsingleton.elim _ _
@@ -268,7 +268,7 @@ definition unitOfDetInvertible
 
 中文:
 定义 unitOfDetInvertible
-  签名: [Invertible A.det]
+  签名: [可逆 A.det]
   定义体: @unitOfInvertible _ _ A (invertibleOfDetInvertible A)
 
 Depends on / 依赖: invertibleOfDetInvertible, unitOfInvertible
@@ -289,7 +289,7 @@ theorem isUnit_iff_isUnit_det
 
 中文:
 定理 isUnit_iff_isUnit_det
-  结论: IsUnit A ↔ IsUnit A.det
+  结论: 是单位 A ↔ 是单位 A.det
   证明: by
   simp only [← nonempty_invertible_iff_isUnit, (invertibleEquivDetInvertible A).nonempty_congr]
 
@@ -312,8 +312,8 @@ theorem isUnits_det_units
 
 中文:
 定理 isUnits_det_units
-  条件: (A : (Matrix n n α)ˣ)
-  结论: IsUnit (A : Matrix n n α).det
+  条件: (A : (矩阵 n n α)ˣ)
+  结论: 是单位 (A : 矩阵 n n α).det
   证明: .mp A.isUnit isUnit_iff_isUnit_det _
 
 Depends on / 依赖: A.isUnit, isUnit, isUnit_iff_isUnit_det
@@ -334,8 +334,8 @@ theorem isUnit_det_of_invertible
 
 中文:
 定理 isUnit_det_of_invertible
-  条件: [Invertible A]
-  结论: IsUnit A.det
+  条件: [可逆 A]
+  结论: 是单位 A.det
   证明: @isUnit_of_invertible _ _ _ (detInvertibleOfInvertible A)
 
 Depends on / 依赖: detInvertibleOfInvertible, isUnit_of_invertible
@@ -357,7 +357,7 @@ theorem isUnit_det_of_left_inverse
 中文:
 定理 isUnit_det_of_left_inverse
   条件: (h : B * A = 1)
-  结论: IsUnit A.det
+  结论: 是单位 A.det
   证明: @isUnit_of_invertible _ _ _ (detInvertibleOfLeftInverse _ _ h)
 
 Depends on / 依赖: detInvertibleOfLeftInverse, isUnit_of_invertible
@@ -377,7 +377,7 @@ theorem isUnit_det_of_right_inverse
 中文:
 定理 isUnit_det_of_right_inverse
   条件: (h : A * B = 1)
-  结论: IsUnit A.det
+  结论: 是单位 A.det
   证明: @isUnit_of_invertible _ _ _ (detInvertibleOfRightInverse _ _ h)
 
 Depends on / 依赖: detInvertibleOfRightInverse, isUnit_of_invertible
@@ -396,7 +396,7 @@ theorem det_ne_zero_of_left_inverse
 
 中文:
 定理 det_ne_zero_of_left_inverse
-  条件: [Nontrivial α] (h : B * A = 1)
+  条件: [非平凡 α] (h : B * A = 1)
   结论: A.det != 0
   证明: (isUnit_det_of_left_inverse h).ne_zero
 
@@ -416,7 +416,7 @@ theorem det_ne_zero_of_right_inverse
 
 中文:
 定理 det_ne_zero_of_right_inverse
-  条件: [Nontrivial α] (h : A * B = 1)
+  条件: [非平凡 α] (h : A * B = 1)
   结论: A.det != 0
   证明: (isUnit_det_of_right_inverse h).ne_zero
 
@@ -445,8 +445,8 @@ theorem isUnit_det_transpose
 
 中文:
 定理 isUnit_det_transpose
-  条件: (h : IsUnit A.det)
-  结论: IsUnit Aᵀ.det
+  条件: (h : 是单位 A.det)
+  结论: 是单位 Aᵀ.det
   证明: by
   rw [det_transpose]
   exact h
@@ -470,7 +470,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: : Inv (Matrix n n α)
+  签名: : 取逆 (矩阵 n n α)
   定义体: ⟨fun A => A.det⁻¹ʳ • A.adjugate⟩
 
 Depends on / 依赖: A.adjugate, A.det, adjugate
@@ -489,7 +489,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: A⁻¹ = A.det⁻¹ʳ • A.adjugate
   证明: rfl
 -/
@@ -508,7 +508,7 @@ theorem nonsing_inv_apply_not_isUnit
 
 中文:
 定理 nonsing_inv_apply_not_isUnit
-  条件: (h : ¬IsUnit A.det)
+  条件: (h : ¬是单位 A.det)
   结论: A⁻¹ = 0
   证明: by
   rw [inv_def]; rw [Ring.inverse_non_unit _ h]; rw [zero_smul]
@@ -530,7 +530,7 @@ theorem nonsing_inv_apply
 
 中文:
 定理 nonsing_inv_apply
-  条件: (h : IsUnit A.det)
+  条件: (h : 是单位 A.det)
   结论: A⁻¹ = (↑h.unit⁻¹ : α) • A.adjugate
   证明: by
   rw [inv_def]; rw [← Ring.inverse_unit h.unit]; rw [IsUnit.unit_spec]
@@ -555,7 +555,7 @@ theorem invOf_eq_nonsing_inv
 
 中文:
 定理 invOf_eq_nonsing_inv
-  条件: [Invertible A]
+  条件: [可逆 A]
   结论: ⅟A = A⁻¹
   证明: by
   let := detInvertibleOfInvertible A
@@ -583,8 +583,8 @@ theorem coe_units_inv
 
 中文:
 定理 coe_units_inv
-  条件: (A : (Matrix n n α)ˣ)
-  结论: ↑A⁻¹ = (A⁻¹ : Matrix n n α)
+  条件: (A : (矩阵 n n α)ˣ)
+  结论: ↑A⁻¹ = (A⁻¹ : 矩阵 n n α)
   证明: by
   let := A.invertible
   rw [← invOf_eq_nonsing_inv]; rw [invOf_units]
@@ -659,7 +659,7 @@ theorem conjTranspose_nonsing_inv
 
 中文:
 定理 conjTranspose_nonsing_inv
-  条件: [StarRing α]
+  条件: [对合环 α]
   结论: A⁻¹ᴴ = Aᴴ⁻¹
   证明: by
   rw [inv_def]; rw [inv_def]; rw [conjTranspose_smul]; rw [det_conjTranspose]; rw [adjugate_conjTranspose]; rw [Ring.inverse_star]
@@ -684,7 +684,7 @@ theorem mul_nonsing_inv
 
 中文:
 定理 mul_nonsing_inv
-  条件: (h : IsUnit A.det)
+  条件: (h : 是单位 A.det)
   结论: A * A⁻¹ = 1
   证明: by
   cases (A.isUnit_iff_isUnit_det.mpr h).nonempty_invertible
@@ -711,7 +711,7 @@ theorem nonsing_inv_mul
 
 中文:
 定理 nonsing_inv_mul
-  条件: (h : IsUnit A.det)
+  条件: (h : 是单位 A.det)
   结论: A⁻¹ * A = 1
   证明: by
   cases (A.isUnit_iff_isUnit_det.mpr h).nonempty_invertible
@@ -736,8 +736,8 @@ instance [Invertible
 @[simp]
 
 中文:
-实例 [Invertible
-  签名: A] : Invertible A⁻¹
+实例 [可逆
+  签名: A] : 可逆 A⁻¹
   定义体: by
   rw [← invOf_eq_nonsing_inv]
   infer_instance
@@ -765,7 +765,7 @@ theorem inv_inv_of_invertible
 
 中文:
 定理 inv_inv_of_invertible
-  条件: [Invertible A]
+  条件: [可逆 A]
   结论: A⁻¹⁻¹ = A
   证明: by
   simp only [← invOf_eq_nonsing_inv, invOf_invOf]
@@ -792,7 +792,7 @@ theorem mul_nonsing_inv_cancel_right
 
 中文:
 定理 mul_nonsing_inv_cancel_right
-  条件: (B : Matrix m n α) (h : IsUnit A.det)
+  条件: (B : 矩阵 m n α) (h : 是单位 A.det)
   结论: B * A * A⁻¹ = B
   证明: by
   simp [Matrix.mul_assoc, mul_nonsing_inv A h]
@@ -819,7 +819,7 @@ theorem mul_nonsing_inv_cancel_left
 
 中文:
 定理 mul_nonsing_inv_cancel_left
-  条件: (B : Matrix n m α) (h : IsUnit A.det)
+  条件: (B : 矩阵 n m α) (h : 是单位 A.det)
   结论: A * (A⁻¹ * B) = B
   证明: by
   simp [← Matrix.mul_assoc, mul_nonsing_inv A h]
@@ -846,7 +846,7 @@ theorem nonsing_inv_mul_cancel_right
 
 中文:
 定理 nonsing_inv_mul_cancel_right
-  条件: (B : Matrix m n α) (h : IsUnit A.det)
+  条件: (B : 矩阵 m n α) (h : 是单位 A.det)
   结论: B * A⁻¹ * A = B
   证明: by
   simp [Matrix.mul_assoc, nonsing_inv_mul A h]
@@ -873,7 +873,7 @@ theorem nonsing_inv_mul_cancel_left
 
 中文:
 定理 nonsing_inv_mul_cancel_left
-  条件: (B : Matrix n m α) (h : IsUnit A.det)
+  条件: (B : 矩阵 n m α) (h : 是单位 A.det)
   结论: A⁻¹ * (A * B) = B
   证明: by
   simp [← Matrix.mul_assoc, nonsing_inv_mul A h]
@@ -899,7 +899,7 @@ theorem mul_inv_of_invertible
 
 中文:
 定理 mul_inv_of_invertible
-  条件: [Invertible A]
+  条件: [可逆 A]
   结论: A * A⁻¹ = 1
   证明: mul_nonsing_inv A (isUnit_det_of_invertible A)
 
@@ -924,7 +924,7 @@ theorem inv_mul_of_invertible
 
 中文:
 定理 inv_mul_of_invertible
-  条件: [Invertible A]
+  条件: [可逆 A]
   结论: A⁻¹ * A = 1
   证明: nonsing_inv_mul A (isUnit_det_of_invertible A)
 
@@ -949,7 +949,7 @@ theorem mul_inv_cancel_right_of_invertible
 
 中文:
 定理 mul_inv_cancel_right_of_invertible
-  条件: (B : Matrix m n α) [Invertible A]
+  条件: (B : 矩阵 m n α) [可逆 A]
   结论: B * A * A⁻¹ = B
   证明: mul_nonsing_inv_cancel_right A B (isUnit_det_of_invertible A)
 
@@ -974,7 +974,7 @@ theorem mul_inv_cancel_left_of_invertible
 
 中文:
 定理 mul_inv_cancel_left_of_invertible
-  条件: (B : Matrix n m α) [Invertible A]
+  条件: (B : 矩阵 n m α) [可逆 A]
   结论: A * (A⁻¹ * B) = B
   证明: mul_nonsing_inv_cancel_left A B (isUnit_det_of_invertible A)
 
@@ -999,7 +999,7 @@ theorem inv_mul_cancel_right_of_invertible
 
 中文:
 定理 inv_mul_cancel_right_of_invertible
-  条件: (B : Matrix m n α) [Invertible A]
+  条件: (B : 矩阵 m n α) [可逆 A]
   结论: B * A⁻¹ * A = B
   证明: nonsing_inv_mul_cancel_right A B (isUnit_det_of_invertible A)
 
@@ -1022,7 +1022,7 @@ theorem inv_mul_cancel_left_of_invertible
 
 中文:
 定理 inv_mul_cancel_left_of_invertible
-  条件: (B : Matrix n m α) [Invertible A]
+  条件: (B : 矩阵 n m α) [可逆 A]
   结论: A⁻¹ * (A * B) = B
   证明: nonsing_inv_mul_cancel_left A B (isUnit_det_of_invertible A)
 
@@ -1042,7 +1042,7 @@ theorem inv_mul_eq_iff_eq_mul_of_invertible
 
 中文:
 定理 inv_mul_eq_iff_eq_mul_of_invertible
-  条件: (A : Matrix n n α) [Invertible A] (B C : Matrix n m α)
+  条件: (A : 矩阵 n n α) [可逆 A] (B C : 矩阵 n m α)
   证明: ⟨fun h => by rw [← h, mul_inv_cancel_left_of_invertible],
    fun h => by rw [h, inv_mul_cancel_left_of_invertible]⟩
 
@@ -1064,7 +1064,7 @@ theorem mul_inv_eq_iff_eq_mul_of_invertible
 
 中文:
 定理 mul_inv_eq_iff_eq_mul_of_invertible
-  条件: (A : Matrix n n α) [Invertible A] (B C : Matrix m n α)
+  条件: (A : 矩阵 n n α) [可逆 A] (B C : 矩阵 m n α)
   证明: ⟨fun h => by rw [← h, inv_mul_cancel_right_of_invertible],
    fun h => by rw [h, mul_inv_cancel_right_of_invertible]⟩
 
@@ -1086,7 +1086,7 @@ lemma inv_mulVec_eq_vec
 
 中文:
 引理 inv_mulVec_eq_vec
-  结论: {A : Matrix n n α} [Invertible A]
+  结论: {A : 矩阵 n n α} [可逆 A]
   证明: by
   rw [hM]; rw [Matrix.mulVec_mulVec]; rw [Matrix.inv_mul_of_invertible]; rw [Matrix.one_mulVec]
 
@@ -1106,7 +1106,7 @@ lemma mul_right_injective_of_invertible
 
 中文:
 引理 mul_right_injective_of_invertible
-  条件: [Invertible A]
+  条件: [可逆 A]
   证明: fun _ _ h => by simpa only [inv_mul_cancel_left_of_invertible] using congr_arg (A⁻¹ * ·) h
 
 Depends on / 依赖: congr_arg, inv_mul_cancel_left_of_invertible
@@ -1125,7 +1125,7 @@ lemma mul_left_injective_of_invertible
 
 中文:
 引理 mul_left_injective_of_invertible
-  条件: [Invertible A]
+  条件: [可逆 A]
   证明: fun a x hax => by simpa only [mul_inv_cancel_right_of_invertible] using congr_arg (· * A⁻¹) hax
 
 Depends on / 依赖: congr_arg, mul_inv_cancel_right_of_invertible
@@ -1145,7 +1145,7 @@ lemma mul_right_inj_of_invertible
 
 中文:
 引理 mul_right_inj_of_invertible
-  条件: [Invertible A] {x y : Matrix n m α}
+  条件: [可逆 A] {x y : 矩阵 n m α}
   结论: A * x = A * y ↔ x = y
   证明: (mul_right_injective_of_invertible A).eq_iff
 
@@ -1165,7 +1165,7 @@ lemma mul_left_inj_of_invertible
 
 中文:
 引理 mul_left_inj_of_invertible
-  条件: [Invertible A] {x y : Matrix m n α}
+  条件: [可逆 A] {x y : 矩阵 m n α}
   结论: x * A = y * A ↔ x = y
   证明: (mul_left_injective_of_invertible A).eq_iff
 
@@ -1184,9 +1184,9 @@ lemma IsSymm.inv
   proof: hA.adjugate.smul _
 
 中文:
-引理 IsSymm.inv
-  条件: {A : Matrix n n α} (hA : A.IsSymm)
-  结论: A⁻¹.IsSymm
+引理 是Symm.inv
+  条件: {A : 矩阵 n n α} (hA : A.是Symm)
+  结论: A⁻¹.是Symm
   证明: hA.adjugate.smul _
 
 Depends on / 依赖: adjugate, hA.adjugate.smul
@@ -1210,7 +1210,7 @@ lemma mul_left_injective_of_inv
 
 中文:
 引理 mul_left_injective_of_inv
-  条件: (A : Matrix m n α) (B : Matrix n m α) (h : A * B = 1)
+  条件: (A : 矩阵 m n α) (B : 矩阵 n m α) (h : A * B = 1)
   证明: fun _ _ g => by
   simpa only [Matrix.mul_assoc, Matrix.mul_one, h] using congr_arg (· * B) g
 
@@ -1230,7 +1230,7 @@ lemma mul_right_injective_of_inv
 
 中文:
 引理 mul_right_injective_of_inv
-  条件: (A : Matrix m n α) (B : Matrix n m α) (h : A * B = 1)
+  条件: (A : 矩阵 m n α) (B : 矩阵 n m α) (h : A * B = 1)
   证明: fun _ _ g => by simpa only [← Matrix.mul_assoc, Matrix.one_mul, h] using congr_arg (A * ·) g
 
 Depends on / 依赖: Matrix, Matrix.mul_assoc, Matrix.one_mul, congr_arg, mul_assoc, one_mul
@@ -1261,7 +1261,7 @@ theorem vecMul_surjective_iff_exists_left_inverse
   rfl
 
 中文:
-定理 vecMul_surjective_iff_exists_left_inverse
+定理 vecMul_surjective_iff_存在_left_inverse
   证明: by
   cases nonempty_fintype n
   refine ⟨fun h => ?_, fun ⟨B, hBA⟩ y => ⟨y ᵥ* B, by simp [hBA]⟩⟩
@@ -1296,7 +1296,7 @@ theorem mulVec_surjective_iff_exists_right_inverse
   rfl
 
 中文:
-定理 mulVec_surjective_iff_exists_right_inverse
+定理 mulVec_surjective_iff_存在_right_inverse
   证明: by
   cases nonempty_fintype m
   refine ⟨fun h => ?_, fun ⟨B, hBA⟩ y => ⟨B *ᵥ y, by simp [hBA]⟩⟩
@@ -1332,7 +1332,7 @@ theorem vecMul_surjective_iff_isUnit
 
 中文:
 定理 vecMul_surjective_iff_isUnit
-  条件: {A : Matrix m m R}
+  条件: {A : 矩阵 m m R}
   证明: by
   rw [vecMul_surjective_iff_exists_left_inverse]; rw [isUnit_iff_exists_inv']
 
@@ -1353,7 +1353,7 @@ theorem mulVec_surjective_iff_isUnit
 
 中文:
 定理 mulVec_surjective_iff_isUnit
-  条件: {A : Matrix m m R}
+  条件: {A : 矩阵 m m R}
   证明: by
   rw [mulVec_surjective_iff_exists_right_inverse]; rw [isUnit_iff_exists_inv]
 
@@ -1377,7 +1377,7 @@ theorem vecMul_injective_iff_isUnit
 
 中文:
 定理 vecMul_injective_iff_isUnit
-  条件: {A : Matrix m m K}
+  条件: {A : 矩阵 m m K}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [← vecMul_surjective_iff_isUnit]
@@ -1405,7 +1405,7 @@ theorem mulVec_injective_iff_isUnit
 
 中文:
 定理 mulVec_injective_iff_isUnit
-  条件: {A : Matrix m m K}
+  条件: {A : 矩阵 m m K}
   证明: by
   rw [← isUnit_transpose]; rw [← vecMul_injective_iff_isUnit]
   simp_rw [vecMul_transpose]
@@ -1428,7 +1428,7 @@ theorem linearIndependent_rows_iff_isUnit
 
 中文:
 定理 linearIndependent_rows_iff_isUnit
-  条件: {A : Matrix m m K}
+  条件: {A : 矩阵 m m K}
   证明: by
   rw [← col_transpose]; rw [← mulVec_injective_iff]; rw [← coe_mulVecLin]; rw [mulVecLin_transpose]; rw [← vecMul_injective_iff_isUnit]; rw [coe_vecMulLinear]
 
@@ -1449,7 +1449,7 @@ theorem linearIndependent_cols_iff_isUnit
 
 中文:
 定理 linearIndependent_cols_iff_isUnit
-  条件: {A : Matrix m m K}
+  条件: {A : 矩阵 m m K}
   证明: by
   rw [← row_transpose]; rw [linearIndependent_rows_iff_isUnit]; rw [isUnit_transpose]
 
@@ -1469,7 +1469,7 @@ theorem vecMul_surjective_of_invertible
 
 中文:
 定理 vecMul_surjective_of_invertible
-  条件: (A : Matrix m m R) [Invertible A]
+  条件: (A : 矩阵 m m R) [可逆 A]
   证明: vecMul_surjective_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, vecMul_surjective_iff_isUnit
@@ -1488,7 +1488,7 @@ theorem mulVec_surjective_of_invertible
 
 中文:
 定理 mulVec_surjective_of_invertible
-  条件: (A : Matrix m m R) [Invertible A]
+  条件: (A : 矩阵 m m R) [可逆 A]
   证明: mulVec_surjective_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, mulVec_surjective_iff_isUnit
@@ -1507,7 +1507,7 @@ theorem vecMul_injective_of_invertible
 
 中文:
 定理 vecMul_injective_of_invertible
-  条件: (A : Matrix m m K) [Invertible A]
+  条件: (A : 矩阵 m m K) [可逆 A]
   证明: vecMul_injective_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, vecMul_injective_iff_isUnit
@@ -1526,7 +1526,7 @@ theorem mulVec_injective_of_invertible
 
 中文:
 定理 mulVec_injective_of_invertible
-  条件: (A : Matrix m m K) [Invertible A]
+  条件: (A : 矩阵 m m K) [可逆 A]
   证明: mulVec_injective_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, mulVec_injective_iff_isUnit
@@ -1545,7 +1545,7 @@ theorem linearIndependent_rows_of_invertible
 
 中文:
 定理 linearIndependent_rows_of_invertible
-  条件: (A : Matrix m m K) [Invertible A]
+  条件: (A : 矩阵 m m K) [可逆 A]
   证明: linearIndependent_rows_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, linearIndependent_rows_iff_isUnit
@@ -1564,7 +1564,7 @@ theorem linearIndependent_cols_of_invertible
 
 中文:
 定理 linearIndependent_cols_of_invertible
-  条件: (A : Matrix m m K) [Invertible A]
+  条件: (A : 矩阵 m m K) [可逆 A]
   证明: linearIndependent_cols_iff_isUnit.2 isUnit_of_invertible A
 
 Depends on / 依赖: isUnit_of_invertible, linearIndependent_cols_iff_isUnit
@@ -1618,7 +1618,7 @@ theorem det_nonsing_inv_mul_det
 
 中文:
 定理 det_nonsing_inv_mul_det
-  条件: (h : IsUnit A.det)
+  条件: (h : 是单位 A.det)
   结论: A⁻¹.det * A.det = 1
   证明: by
   rw [← det_mul]; rw [A.nonsing_inv_mul h]; rw [det_one]
@@ -1682,8 +1682,8 @@ theorem isUnit_nonsing_inv_det
 
 中文:
 定理 isUnit_nonsing_inv_det
-  条件: (h : IsUnit A.det)
-  结论: IsUnit A⁻¹.det
+  条件: (h : 是单位 A.det)
+  结论: 是单位 A⁻¹.det
   证明: .of_mul_eq_one _ (A.det_nonsing_inv_mul_det h)
 
 @[simp]
@@ -1709,7 +1709,7 @@ theorem nonsing_inv_nonsing_inv
 
 中文:
 定理 nonsing_inv_nonsing_inv
-  条件: (h : IsUnit A.det)
+  条件: (h : 是单位 A.det)
   结论: A⁻¹⁻¹ = A
   证明: calc
     A⁻¹⁻¹ = 1 * A⁻¹⁻¹ := by rw [Matrix.one_mul]
@@ -1740,8 +1740,8 @@ theorem isUnit_nonsing_inv_det_iff
 
 中文:
 定理 isUnit_nonsing_inv_det_iff
-  条件: {A : Matrix n n α}
-  结论: IsUnit A⁻¹.det ↔ IsUnit A.det
+  条件: {A : 矩阵 n n α}
+  结论: 是单位 A⁻¹.det ↔ 是单位 A.det
   证明: by
   rw [Matrix.det_nonsing_inv]; rw [isUnit_ringInverse]
 
@@ -1765,8 +1765,8 @@ theorem isUnit_nonsing_inv_iff
 
 中文:
 定理 isUnit_nonsing_inv_iff
-  条件: {A : Matrix n n α}
-  结论: IsUnit A⁻¹ ↔ IsUnit A
+  条件: {A : 矩阵 n n α}
+  结论: 是单位 A⁻¹ ↔ 是单位 A
   证明: by
   simp_rw [isUnit_iff_isUnit_det, isUnit_nonsing_inv_det_iff]
 
@@ -1789,7 +1789,7 @@ definition invertibleOfIsUnitDet
 
 中文:
 定义 invertibleOfIsUnitDet
-  签名: (h : IsUnit A.det)
+  签名: (h : 是单位 A.det)
   定义体: ⟨A⁻¹, nonsing_inv_mul A h, mul_nonsing_inv A h⟩
 
 Depends on / 依赖: mul_nonsing_inv, nonsing_inv_mul
@@ -1807,7 +1807,7 @@ definition nonsingInvUnit
 
 中文:
 定义 nonsingInvUnit
-  签名: (h : IsUnit A.det)
+  签名: (h : 是单位 A.det)
   定义体: @unitOfInvertible _ _ _ (invertibleOfIsUnitDet A h)
 
 Depends on / 依赖: invertibleOfIsUnitDet, unitOfInvertible
@@ -1827,7 +1827,7 @@ theorem unitOfDetInvertible_eq_nonsingInvUnit
 
 中文:
 定理 unitOfDetInvertible_eq_nonsingInvUnit
-  条件: [Invertible A.det]
+  条件: [可逆 A.det]
   证明: by
   ext
   rfl
@@ -1967,7 +1967,7 @@ theorem inv_inj
 
 中文:
 定理 inv_inj
-  条件: (h : A⁻¹ = B⁻¹) (h' : IsUnit A.det)
+  条件: (h : A⁻¹ = B⁻¹) (h' : 是单位 A.det)
   结论: A = B
   证明: by
   refine left_inv_eq_left_inv (mul_nonsing_inv _ h') ?_
@@ -2006,7 +2006,7 @@ theorem inv_zero
 
 中文:
 定理 inv_zero
-  结论: (0 : Matrix n n α)⁻¹ = 0
+  结论: (0 : 矩阵 n n α)⁻¹ = 0
   证明: by
   rcases subsingleton_or_nontrivial α with ht | ht
   · simp [eq_iff_true_of_subsingleton]
@@ -2038,7 +2038,7 @@ instance :
 
 中文:
 实例 :
-  签名: InvOneClass (Matrix n n α)
+  签名: InvOne类 (矩阵 n n α)
   定义体: { Matrix.one, Matrix.inv with inv_one := inv_eq_left_inv (by simp) }
 
 Depends on / 依赖: Matrix, Matrix.inv, Matrix.one, inv_eq_left_inv, inv_one
@@ -2057,7 +2057,7 @@ theorem inv_smul
 
 中文:
 定理 inv_smul
-  条件: (k : α) [Invertible k] (h : IsUnit A.det)
+  条件: (k : α) [可逆 k] (h : 是单位 A.det)
   结论: (k • A)⁻¹ = ⅟k • A⁻¹
   证明: inv_eq_left_inv (by simp [h, smul_smul])
 
@@ -2077,7 +2077,7 @@ theorem inv_smul'
 
 中文:
 定理 inv_smul'
-  条件: (k : αˣ) (h : IsUnit A.det)
+  条件: (k : αˣ) (h : 是单位 A.det)
   结论: (k • A)⁻¹ = k⁻¹ • A⁻¹
   证明: inv_eq_left_inv (by simp [h, smul_smul])
 
@@ -2099,7 +2099,7 @@ theorem inv_adjugate
 
 中文:
 定理 inv_adjugate
-  条件: (A : Matrix n n α) (h : IsUnit A.det)
+  条件: (A : 矩阵 n n α) (h : 是单位 A.det)
   结论: (adjugate A)⁻¹ = h.unit⁻¹ • A
   证明: by
   refine inv_eq_left_inv ?_
@@ -2126,7 +2126,7 @@ definition diagonalInvertible
 
 中文:
 定义 diagonalInvertible
-  签名: {α} [NonAssocSemiring α] (v : n -> α) [Invertible v]
+  签名: {α} [非结合半环 α] (v : n -> α) [可逆 v]
   定义体: inferInstanceAs Invertible (diagonalRingHom n α v)
 
 Depends on / 依赖: Invertible, diagonalRingHom
@@ -2147,7 +2147,7 @@ theorem invOf_diagonal_eq
 
 中文:
 定理 invOf_diagonal_eq
-  条件: {α} [Semiring α] (v : n -> α) [Invertible v] [Invertible (diagonal v)]
+  条件: {α} [半环 α] (v : n -> α) [可逆 v] [可逆 (diagonal v)]
   证明: by
   rw [@Invertible.congr _ _ _ _ _ (diagonalInvertible v) rfl]
   rfl
@@ -2177,7 +2177,7 @@ definition invertibleOfDiagonalInvertible
 
 中文:
 定义 invertibleOfDiagonalInvertible
-  签名: (v : n -> α) [Invertible (diagonal v)]
+  签名: (v : n -> α) [可逆 (diagonal v)]
   定义体: diag (⅟(diagonal v))
   invOf_mul_self :=
     funext fun i => by
@@ -2251,7 +2251,7 @@ theorem isUnit_diagonal
 中文:
 定理 isUnit_diagonal
   条件: {v : n -> α}
-  结论: IsUnit (diagonal v) ↔ IsUnit v
+  结论: 是单位 (diagonal v) ↔ 是单位 v
   证明: by
   simp only [← nonempty_invertible_iff_isUnit,
     (diagonalInvertibleEquivInvertible v).nonempty_congr]
@@ -2332,7 +2332,7 @@ theorem inv_subsingleton
 
 中文:
 定理 inv_subsingleton
-  条件: [Subsingleton m] [Fintype m] [DecidableEq m] (A : Matrix m m α)
+  条件: [子单例 m] [有限类型 m] [DecidableEq m] (A : 矩阵 m m α)
   证明: by
   rw [inv_def]; rw [adjugate_subsingleton]; rw [smul_one_eq_diagonal]
   congr! with i
@@ -2368,7 +2368,7 @@ theorem add_mul_mul_inv_eq_sub
 
 中文:
 定理 add_mul_mul_inv_eq_sub
-  条件: (hA : IsUnit A) (hC : IsUnit C) (hAC : IsUnit (C⁻¹ + V * A⁻¹ * U))
+  条件: (hA : 是单位 A) (hC : 是单位 C) (hAC : 是单位 (C⁻¹ + V * A⁻¹ * U))
   证明: by
   obtain ⟨_⟩ := hA.nonempty_invertible
   obtain ⟨_⟩ := hC.nonempty_invertible
@@ -2406,7 +2406,7 @@ theorem add_mul_mul_inv_eq_sub'
 
 中文:
 定理 add_mul_mul_inv_eq_sub'
-  条件: (hA : IsUnit A) (h : IsUnit (C + C * V * A⁻¹ * U * C))
+  条件: (hA : 是单位 A) (h : 是单位 (C + C * V * A⁻¹ * U * C))
   证明: by
   obtain ⟨_⟩ := hA.nonempty_invertible
   obtain ⟨ih⟩ := h.nonempty_invertible
@@ -2443,7 +2443,7 @@ theorem inv_inv_inv
 
 中文:
 定理 inv_inv_inv
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: A⁻¹⁻¹⁻¹ = A⁻¹
   证明: by
   by_cases h : IsUnit A.det
@@ -2468,7 +2468,7 @@ theorem inv_add_inv
 
 中文:
 定理 inv_add_inv
-  条件: {A B : Matrix n n α} (h : IsUnit A ↔ IsUnit B)
+  条件: {A B : 矩阵 n n α} (h : 是单位 A ↔ 是单位 B)
   证明: by
   simpa only [nonsing_inv_eq_ringInverse] using Ring.inverse_add_inverse h
 
@@ -2489,7 +2489,7 @@ theorem inv_sub_inv
 
 中文:
 定理 inv_sub_inv
-  条件: {A B : Matrix n n α} (h : IsUnit A ↔ IsUnit B)
+  条件: {A B : 矩阵 n n α} (h : 是单位 A ↔ 是单位 B)
   证明: by
   simpa only [nonsing_inv_eq_ringInverse] using Ring.inverse_sub_inverse h
 
@@ -2512,7 +2512,7 @@ theorem mul_inv_rev
 
 中文:
 定理 mul_inv_rev
-  条件: (A B : Matrix n n α)
+  条件: (A B : 矩阵 n n α)
   结论: (A * B)⁻¹ = B⁻¹ * A⁻¹
   证明: by
   simp only [inv_def]
@@ -2533,7 +2533,7 @@ theorem list_prod_inv_reverse
 
 中文:
 定理 list_prod_inv_reverse
-  结论: 对任意 l : List (Matrix n n α), l.prod⁻¹ = (l.reverse.map Inv.inv).prod
+  结论: 对任意 l : 列表 (矩阵 n n α), l.乘积⁻¹ = (l.reverse.map 取逆.inv).乘积
 -/
 theorem list_prod_inv_reverse : forall l : List (Matrix n n α), l.prod⁻¹ = (l.reverse.map Inv.inv).prod
   | [] => by rw [List.reverse_nil, List.map_nil, List.prod_nil, inv_one]
@@ -2553,7 +2553,7 @@ theorem det_smul_inv_mulVec_eq_cramer
 
 中文:
 定理 det_smul_inv_mulVec_eq_cramer
-  条件: (A : Matrix n n α) (b : n -> α) (h : IsUnit A.det)
+  条件: (A : 矩阵 n n α) (b : n -> α) (h : 是单位 A.det)
   证明: by
   rw [cramer_eq_adjugate_mulVec]; rw [A.nonsing_inv_apply h]; rw [← smul_mulVec]; rw [smul_smul]; rw [h.mul_val_inv]; rw [one_smul]
 
@@ -2576,7 +2576,7 @@ theorem det_smul_inv_vecMul_eq_cramer_transpose
 
 中文:
 定理 det_smul_inv_vecMul_eq_cramer_transpose
-  条件: (A : Matrix n n α) (b : n -> α) (h : IsUnit A.det)
+  条件: (A : 矩阵 n n α) (b : n -> α) (h : 是单位 A.det)
   证明: by
   rw [← A⁻¹.transpose_transpose]; rw [vecMul_transpose]; rw [transpose_nonsing_inv]; rw [← det_transpose]; rw [Aᵀ.det_smul_inv_mulVec_eq_cramer _ (isUnit_det_transpose A h)]
 
@@ -2611,7 +2611,7 @@ definition submatrixEquivInvertible
 
 中文:
 定义 submatrixEquivInvertible
-  签名: (A : Matrix m m α) (e₁ e₂ : n ≃ m) [Invertible A]
+  签名: (A : 矩阵 m m α) (e₁ e₂ : n ≃ m) [可逆 A]
   定义体: invertibleOfRightInverse _ ((⅟A).submatrix e₂ e₁) by
     rw [Matrix.submatrix_mul_equiv]; rw [mul_invOf_self]; rw [submatrix_one_equiv]
 
@@ -2639,7 +2639,7 @@ definition invertibleOfSubmatrixEquivInvertible
 
 中文:
 定义 invertibleOfSubmatrixEquivInvertible
-  签名: (A : Matrix m m α) (e₁ e₂ : n ≃ m)
+  签名: (A : 矩阵 m m α) (e₁ e₂ : n ≃ m)
   定义体: invertibleOfRightInverse _ ((⅟(A.submatrix e₁ e₂)).submatrix e₂.symm e₁.symm) by
     have : A = (A.submatrix e₁ e₂).submatrix e₁.symm e₂.symm := by simp
     conv in _ * _ =>
@@ -2670,7 +2670,7 @@ theorem invOf_submatrix_equiv_eq
 
 中文:
 定理 invOf_submatrix_equiv_eq
-  结论: (A : Matrix m m α) (e₁ e₂ : n ≃ m) [Invertible A]
+  结论: (A : 矩阵 m m α) (e₁ e₂ : n ≃ m) [可逆 A]
   证明: by
   rw [@Invertible.congr _ _ _ _ _ (submatrixEquivInvertible A e₁ e₂) rfl]
   rfl
@@ -2699,7 +2699,7 @@ definition submatrixEquivInvertibleEquivInvertible
 
 中文:
 定义 submatrixEquivInvertibleEquivInvertible
-  签名: (A : Matrix m m α) (e₁ e₂ : n ≃ m)
+  签名: (A : 矩阵 m m α) (e₁ e₂ : n ≃ m)
   定义体: invertibleOfSubmatrixEquivInvertible A e₁ e₂
   invFun _ := submatrixEquivInvertible A e₁ e₂
   left_inv _ := Subsingleton.elim _ _
@@ -2730,7 +2730,7 @@ theorem isUnit_submatrix_equiv
 
 中文:
 定理 isUnit_submatrix_equiv
-  条件: {A : Matrix m m α} (e₁ e₂ : n ≃ m)
+  条件: {A : 矩阵 m m α} (e₁ e₂ : n ≃ m)
   证明: by
   simp only [← nonempty_invertible_iff_isUnit,
     (submatrixEquivInvertibleEquivInvertible A _ _).nonempty_congr]
@@ -2761,7 +2761,7 @@ theorem inv_submatrix_equiv
 
 中文:
 定理 inv_submatrix_equiv
-  条件: (A : Matrix m m α) (e₁ e₂ : n ≃ m)
+  条件: (A : 矩阵 m m α) (e₁ e₂ : n ≃ m)
   证明: by
   by_cases h : IsUnit A
   · cases h.nonempty_invertible
@@ -2793,7 +2793,7 @@ theorem inv_reindex
 
 中文:
 定理 inv_reindex
-  条件: (e₁ e₂ : n ≃ m) (A : Matrix n n α)
+  条件: (e₁ e₂ : n ≃ m) (A : 矩阵 n n α)
   结论: (reindex e₁ e₂ A)⁻¹ = reindex e₂ e₁ A⁻¹
   证明: inv_submatrix_equiv A e₁.symm e₂.symm
 
@@ -2824,7 +2824,7 @@ theorem inv_kronecker
 
 中文:
 定理 inv_kronecker
-  结论: [Fintype m] [DecidableEq m]
+  结论: [有限类型 m] [DecidableEq m]
   证明: by
   -- handle the special cases where either matrix is not invertible
   by_cases hA : IsUnit A.det
@@ -2878,7 +2878,7 @@ theorem det_conj
 
 中文:
 定理 det_conj
-  条件: {M : Matrix m m α} (h : IsUnit M) (N : Matrix m m α)
+  条件: {M : 矩阵 m m α} (h : 是单位 M) (N : 矩阵 m m α)
   证明: by rw [← h.unit_spec, ← coe_units_inv, det_units_conj]
 
 Depends on / 依赖: coe_units_inv, det_units_conj, h.unit_spec, unit_spec
@@ -2896,7 +2896,7 @@ theorem det_conj'
 
 中文:
 定理 det_conj'
-  条件: {M : Matrix m m α} (h : IsUnit M) (N : Matrix m m α)
+  条件: {M : 矩阵 m m α} (h : 是单位 M) (N : 矩阵 m m α)
   证明: by rw [← h.unit_spec, ← coe_units_inv, det_units_conj']
 
 Depends on / 依赖: coe_units_inv, det_units_conj, h.unit_spec, unit_spec
@@ -2923,7 +2923,7 @@ theorem trace_conj
 
 中文:
 定理 trace_conj
-  条件: {M : Matrix m m α} (h : IsUnit M) (N : Matrix m m α)
+  条件: {M : 矩阵 m m α} (h : 是单位 M) (N : 矩阵 m m α)
   证明: by rw [← h.unit_spec, ← coe_units_inv, trace_units_conj]
 
 Depends on / 依赖: coe_units_inv, h.unit_spec, trace_units_conj, unit_spec
@@ -2941,7 +2941,7 @@ theorem trace_conj'
 
 中文:
 定理 trace_conj'
-  条件: {M : Matrix m m α} (h : IsUnit M) (N : Matrix m m α)
+  条件: {M : 矩阵 m m α} (h : 是单位 M) (N : 矩阵 m m α)
   证明: by rw [← h.unit_spec, ← coe_units_inv, trace_units_conj']
 
 Depends on / 依赖: coe_units_inv, h.unit_spec, trace_units_conj, unit_spec

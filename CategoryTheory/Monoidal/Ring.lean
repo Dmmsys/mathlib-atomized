@@ -54,7 +54,7 @@ lemma mul_add_iff
 
 中文:
 引理 mul_add_iff
-  条件: (R : C) [MonObj R] [AddMonObj R]
+  条件: (R : C) [MonObj R] [加法MonObj R]
   证明: by
   refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
   · have := lift a (lift b c) ≫= h
@@ -103,7 +103,7 @@ lemma add_mul_iff
 
 中文:
 引理 add_mul_iff
-  条件: (R : C) [MonObj R] [AddMonObj R]
+  条件: (R : C) [MonObj R] [加法MonObj R]
   证明: by
   refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
   · have := lift (lift a b) c ≫= h
@@ -151,7 +151,7 @@ class RingObj
 中文:
 类 RingObj
   参数: (R : C)
-  继承: AddGrpObj R, IsCommAddMonObj R, MonObj R
+  继承: 加法GrpObj R, 是交换加法MonObj R, MonObj R
   公理与运算 (2 个):
     - mul_add((R)) : R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ
     - add_mul((R)) : σ ▷ R ≫ μ = lift (fst _ _ ▷ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ
@@ -176,7 +176,7 @@ lemma Hom.mul_add
   rw [← mul_add_iff]; rw [RingObj.mul_add R]
 
 中文:
-引理 Hom.mul_add
+引理 态射.mul_add
   条件: (a b c : X ⟶ R)
   结论: a * (b + c) = a * b + a * c
   证明: by
@@ -201,7 +201,7 @@ lemma Hom.add_mul
   rw [← add_mul_iff]; rw [RingObj.add_mul R]
 
 中文:
-引理 Hom.add_mul
+引理 态射.add_mul
   条件: (a b c : X ⟶ R)
   结论: (a + b) * c = a * c + b * c
   证明: by
@@ -228,7 +228,7 @@ abbreviation Hom.ring
 scoped[CategoryTheory.RingObj] attribute [instance] Hom.ring
 
 中文:
-缩写 Hom.ring
+缩写 态射.ring
   签名: {X : C}
   定义体: Hom.mul_add
   right_distrib := Hom.add_mul
@@ -261,9 +261,9 @@ class CommRingObj
   (no additional axioms)
 
 中文:
-类 CommRingObj
+类 交换RingObj
   参数: (R : C)
-  继承: RingObj R, IsCommMonObj R
+  继承: RingObj R, 是交换MonObj R
   (无附加公理)
 -/
 class CommRingObj (R : C) extends RingObj R, IsCommMonObj R where
@@ -276,8 +276,8 @@ abbreviation Hom.commRing
   signature: {R : C} {X : C} [CommRingObj R]
 
 中文:
-缩写 Hom.commRing
-  签名: {R : C} {X : C} [CommRingObj R]
+缩写 态射.commRing
+  签名: {R : C} {X : C} [交换RingObj R]
 -/
 abbrev Hom.commRing {R : C} {X : C} [CommRingObj R] : CommRing (X ⟶ R) where
 
@@ -293,9 +293,9 @@ class IsRingHom
   (no additional axioms)
 
 中文:
-类 IsRingHom
-  参数: {R₁ R₂ : C} [AddMonObj R₁] [AddMonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
-  继承: IsAddMonHom f, IsMonHom f
+类 是环态射
+  参数: {R₁ R₂ : C} [加法MonObj R₁] [加法MonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
+  继承: 是加法幺半群态射 f, 是幺半群态射 f
   (无附加公理)
 -/
 class IsRingHom {R₁ R₂ : C} [AddMonObj R₁] [AddMonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
@@ -309,8 +309,8 @@ instance IsRingHom.id
   signature: (R : C) [AddMonObj R] [MonObj R]
 
 中文:
-实例 IsRingHom.id
-  签名: (R : C) [AddMonObj R] [MonObj R]
+实例 是环态射.id
+  签名: (R : C) [加法MonObj R] [MonObj R]
 -/
 instance IsRingHom.id (R : C) [AddMonObj R] [MonObj R] : IsRingHom (𝟙 R) where
 
@@ -322,7 +322,7 @@ instance IsRingHom.comp
   signature: {R₁ R₂ R₃ : C}
 
 中文:
-实例 IsRingHom.comp
+实例 是环态射.comp
   签名: {R₁ R₂ R₃ : C}
 
 Depends on / 依赖: initial, initial.to
@@ -345,7 +345,7 @@ structure RingObjCat
     - [ringObj : RingObj X]
 
 中文:
-结构 RingObjCat
+结构 RingObj范畴
   参数: where
   公理与运算 (2 个):
     - X : C
@@ -375,11 +375,11 @@ structure Hom
     - [isRingHom : IsRingHom hom]
 
 中文:
-结构 Hom
-  参数: (R₁ R₂ : RingObjCat C)
+结构 态射
+  参数: (R₁ R₂ : RingObj范畴 C)
   公理与运算 (2 个):
     - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : IsRingHom hom]
+    - [isRingHom : 是环态射 hom]
 -/
 structure Hom (R₁ R₂ : RingObjCat C) where
   /-- The underlying morphism -/
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (RingObjCat C)
+  签名: 范畴 (RingObj范畴 C)
   定义体: Hom R₁ R₂
   id X := { hom := 𝟙 _ }
   comp f g := { hom := f.hom ≫ g.hom }
@@ -427,7 +427,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R₁ R₂ : RingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
+  条件: {R₁ R₂ : RingObj范畴 C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext h
 
@@ -450,7 +450,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : RingObjCat C ⥤ C where
+  签名: : RingObj范畴 C ⥤ C where
   定义体: R.X
   map f := f.hom
 -/
@@ -467,7 +467,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
 -/
 instance : (forget C).Faithful where
 
@@ -486,7 +486,7 @@ definition forget₂Mon
 
 中文:
 定义 forget₂Mon
-  签名: : RingObjCat C ⥤ Mon C where
+  签名: : RingObj范畴 C ⥤ 幺半群 C where
   定义体: .mk R.X
   map f := .mk f.hom
 -/
@@ -509,7 +509,7 @@ definition forget₂AddMon
 
 中文:
 定义 forget₂AddMon
-  签名: : RingObjCat C ⥤ AddMon C where
+  签名: : RingObj范畴 C ⥤ 加法幺半群 C where
   定义体: .mk R.X
   map f := .mk f.hom
 -/
@@ -531,11 +531,11 @@ structure CommRingObjCat
     - [commRingObj : CommRingObj X]
 
 中文:
-结构 CommRingObjCat
+结构 交换RingObj范畴
   参数: where
   公理与运算 (2 个):
     - X : C
-    - [commRingObj : CommRingObj X]
+    - [commRingObj : 交换RingObj X]
 -/
 structure CommRingObjCat where
   /-- The underlying object in the ambient monoidal category -/
@@ -561,11 +561,11 @@ structure Hom
     - [isRingHom : IsRingHom hom]
 
 中文:
-结构 Hom
-  参数: (R₁ R₂ : CommRingObjCat C)
+结构 态射
+  参数: (R₁ R₂ : 交换RingObj范畴 C)
   公理与运算 (2 个):
     - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : IsRingHom hom]
+    - [isRingHom : 是环态射 hom]
 -/
 structure Hom (R₁ R₂ : CommRingObjCat C) where
   /-- The underlying morphism -/
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommRingObjCat C)
+  签名: 范畴 (交换RingObj范畴 C)
   定义体: Hom R₁ R₂
   id X := { hom := 𝟙 _ }
   comp f g := { hom := f.hom ≫ g.hom }
@@ -613,7 +613,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R₁ R₂ : CommRingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
+  条件: {R₁ R₂ : 交换RingObj范畴 C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext h
 
@@ -636,7 +636,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : CommRingObjCat C ⥤ C where
+  签名: : 交换RingObj范畴 C ⥤ C where
   定义体: R.X
   map f := f.hom
 -/
@@ -659,7 +659,7 @@ definition forget₂RingObjCat
 
 中文:
 定义 forget₂RingObjCat
-  签名: : CommRingObjCat C ⥤ RingObjCat C where
+  签名: : 交换RingObj范畴 C ⥤ RingObj范畴 C where
   定义体: .mk R.X
   map f := { hom := f.hom }
 -/
@@ -678,7 +678,7 @@ definition fullyFaithfulForget₂RingObjCat
 
 中文:
 定义 fullyFaithfulForget₂RingObjCat
-  签名: : (forget₂RingObjCat C).FullyFaithful where
+  签名: : (forget₂RingObjCat C).满忠实 where
   定义体: { hom := f.hom, isRingHom := f.isRingHom }
 
 Depends on / 依赖: f.hom, f.isRingHom, isRingHom
@@ -696,7 +696,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂RingObjCat C).Faithful
+  签名: (forget₂RingObjCat C).忠实
   定义体: (fullyFaithfulForget₂RingObjCat C).faithful
 
 Depends on / 依赖: faithful
@@ -714,7 +714,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂RingObjCat C).Full
+  签名: (forget₂RingObjCat C).满
   定义体: (fullyFaithfulForget₂RingObjCat C).full
 -/
 instance : (forget₂RingObjCat C).Full :=
@@ -729,7 +729,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
 -/
 instance : (forget C).Faithful where
 

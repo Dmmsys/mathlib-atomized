@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder X.S
+  签名: 预序 X.S
   定义体: Preorder.lift subcomplex
 
 Depends on / 依赖: Preorder, Preorder.lift, subcomplex

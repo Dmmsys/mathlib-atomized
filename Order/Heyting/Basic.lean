@@ -77,7 +77,7 @@ instance Prod.instHImp
 @[to_dual]
 
 中文:
-实例 Prod.instHImp
+实例 积类型.instHImp
   签名: [HImp α] [HImp β]
   定义体: ⟨fun a b => (a.1 ⇨ b.1, a.2 ⇨ b.2)⟩
 
@@ -98,7 +98,7 @@ instance Prod.instHNot
 @[to_dual (attr := simp)]
 
 中文:
-实例 Prod.instHNot
+实例 积类型.instHNot
   签名: [HNot α] [HNot β]
   定义体: ⟨fun a => (￢a.1, ￢a.2)⟩
 
@@ -206,9 +206,9 @@ class GeneralizedHeytingAlgebra
     - le_himp_iff((a b c : α)) : a <= b ⇨ c ↔ a ⊓ b <= c
 
 中文:
-类 GeneralizedHeytingAlgebra
+类 GeneralizedHeyting代数
   参数: (α : 类型)
-  继承: Lattice α, OrderTop α, HImp α
+  继承: 格 α, 有顶序 α, HImp α
   公理与运算 (1 个):
     - le_himp_iff((a b c : α)) : a <= b ⇨ c ↔ a ⊓ b <= c
 -/
@@ -233,9 +233,9 @@ class GeneralizedCoheytingAlgebra
     - sdiff_le_iff((a b c : α)) : a \ b <= c ↔ a <= b ⊔ c
 
 中文:
-类 GeneralizedCoheytingAlgebra
+类 GeneralizedCoheyting代数
   参数: (α : 类型)
-  继承: Lattice α, OrderBot α, SDiff α
+  继承: 格 α, 有底序 α, 对称差 α
   公理与运算 (1 个):
     - sdiff_le_iff((a b c : α)) : a \ b <= c ↔ a <= b ⊔ c
 -/
@@ -254,9 +254,9 @@ class HeytingAlgebra
     - himp_bot((a : α)) : a ⇨ ⊥ = aᶜ
 
 中文:
-类 HeytingAlgebra
+类 Heyting代数
   参数: (α : 类型)
-  继承: GeneralizedHeytingAlgebra α, OrderBot α, Compl α
+  继承: GeneralizedHeyting代数 α, 有底序 α, 补集 α
   公理与运算 (1 个):
     - himp_bot((a : α)) : a ⇨ ⊥ = aᶜ
 -/
@@ -279,9 +279,9 @@ class CoheytingAlgebra
     - top_sdiff((a : α)) : ⊤ \ a = ￢a
 
 中文:
-类 CoheytingAlgebra
+类 余heyting代数
   参数: (α : 类型)
-  继承: GeneralizedCoheytingAlgebra α, OrderTop α, HNot α
+  继承: GeneralizedCoheyting代数 α, 有顶序 α, HNot α
   公理与运算 (1 个):
     - top_sdiff((a : α)) : ⊤ \ a = ￢a
 -/
@@ -299,9 +299,9 @@ class BiheytingAlgebra
   (no additional axioms)
 
 中文:
-类 BiheytingAlgebra
+类 Biheyting代数
   参数: (α : 类型)
-  继承: HeytingAlgebra α, CoheytingAlgebra α
+  继承: Heyting代数 α, 余heyting代数 α
   (无附加公理)
 -/
 class BiheytingAlgebra (α : Type*) extends HeytingAlgebra α, CoheytingAlgebra α where
@@ -330,8 +330,8 @@ abbreviation HeytingAlgebra.ofHImp
     himp_bot := fun _ => rfl }
 
 中文:
-缩写 HeytingAlgebra.ofHImp
-  签名: [DistribLattice α] [BoundedOrder α] (himp : α -> α -> α)
+缩写 Heyting代数.ofHImp
+  签名: [Distrib格 α] [有界序 α] (himp : α -> α -> α)
   定义体: { ‹DistribLattice α›, ‹BoundedOrder α› with
     himp,
     compl := fun a => himp a ⊥,
@@ -361,8 +361,8 @@ abbreviation HeytingAlgebra.ofCompl
   himp_bot _ := sup_bot_eq _
 
 中文:
-缩写 HeytingAlgebra.ofCompl
-  签名: [DistribLattice α] [BoundedOrder α] (compl : α -> α)
+缩写 Heyting代数.ofCompl
+  签名: [Distrib格 α] [有界序 α] (compl : α -> α)
   定义体: (compl · ⊔ ·)
   compl := compl
   le_himp_iff := le_himp_iff
@@ -389,8 +389,8 @@ abbreviation CoheytingAlgebra.ofSDiff
     top_sdiff := fun _ => rfl }
 
 中文:
-缩写 CoheytingAlgebra.ofSDiff
-  签名: [DistribLattice α] [BoundedOrder α] (sdiff : α -> α -> α)
+缩写 余heyting代数.ofSDiff
+  签名: [Distrib格 α] [有界序 α] (sdiff : α -> α -> α)
   定义体: { ‹DistribLattice α›, ‹BoundedOrder α› with
     sdiff,
     hnot := fun a => sdiff ⊤ a,
@@ -420,8 +420,8 @@ abbreviation CoheytingAlgebra.ofHNot
   top_sdiff _ := top_inf_eq _
 
 中文:
-缩写 CoheytingAlgebra.ofHNot
-  签名: [DistribLattice α] [BoundedOrder α] (hnot : α -> α)
+缩写 余heyting代数.ofHNot
+  签名: [Distrib格 α] [有界序 α] (hnot : α -> α)
   定义体: a ⊓ hnot b
   hnot := hnot
   sdiff_le_iff := sdiff_le_iff
@@ -454,7 +454,7 @@ theorem sdiff_le_iff
 
 中文:
 定理 sdiff_le_iff
-  条件: [GeneralizedCoheytingAlgebra α] {a b c : α}
+  条件: [GeneralizedCoheyting代数 α] {a b c : α}
   结论: a \ b <= c ↔ a <= b ⊔ c
   证明: GeneralizedCoheytingAlgebra.sdiff_le_iff _ _ _
 
@@ -475,7 +475,7 @@ theorem sdiff_le_iff'
 
 中文:
 定理 sdiff_le_iff'
-  条件: [GeneralizedCoheytingAlgebra α] {a b c : α}
+  条件: [GeneralizedCoheyting代数 α] {a b c : α}
   结论: a \ b <= c ↔ a <= c ⊔ b
   证明: by
   rw [sdiff_le_iff]; rw [sup_comm]
@@ -1340,7 +1340,7 @@ instance OrderDual.instGeneralizedCoheytingAlgebra
 
 中文:
 实例 OrderDual.instGeneralizedCoheytingAlgebra
-  签名: : GeneralizedCoheytingAlgebra αᵒᵈ where
+  签名: : GeneralizedCoheyting代数 αᵒᵈ where
   定义体: toDual (ofDual b ⇨ ofDual a)
   sdiff_le_iff a b c := by rw [sup_comm]; exact le_himp_iff
 
@@ -1359,8 +1359,8 @@ instance Prod.instGeneralizedHeytingAlgebra
   body: and_congr le_himp_iff le_himp_iff
 
 中文:
-实例 Prod.instGeneralizedHeytingAlgebra
-  签名: [GeneralizedHeytingAlgebra β]
+实例 积类型.instGeneralizedHeytingAlgebra
+  签名: [GeneralizedHeyting代数 β]
   定义体: and_congr le_himp_iff le_himp_iff
 
 Depends on / 依赖: and_congr, le_himp_iff
@@ -1378,8 +1378,8 @@ instance Pi.instGeneralizedHeytingAlgebra
   body: by simp [le_def]
 
 中文:
-实例 Pi.instGeneralizedHeytingAlgebra
-  签名: {α : ι -> 类型} [对任意 i, GeneralizedHeytingAlgebra (α i)]
+实例 依赖函数类型.instGeneralizedHeytingAlgebra
+  签名: {α : ι -> 类型} [对任意 i, GeneralizedHeyting代数 (α i)]
   定义体: by simp [le_def]
 
 Depends on / 依赖: le_def
@@ -2167,7 +2167,7 @@ instance OrderDual.instGeneralizedHeytingAlgebra
 
 中文:
 实例 OrderDual.instGeneralizedHeytingAlgebra
-  签名: : GeneralizedHeytingAlgebra αᵒᵈ where
+  签名: : GeneralizedHeyting代数 αᵒᵈ where
   定义体: fun a b => toDual (ofDual b \ ofDual a)
   le_himp_iff := fun a b c => by rw [inf_comm]; exact sdiff_le_iff
 
@@ -2191,8 +2191,8 @@ instance Prod.instGeneralizedCoheytingAlgebra
 @[to_dual existing]
 
 中文:
-实例 Prod.instGeneralizedCoheytingAlgebra
-  签名: [GeneralizedCoheytingAlgebra β]
+实例 积类型.instGeneralizedCoheytingAlgebra
+  签名: [GeneralizedCoheyting代数 β]
   定义体: and_congr sdiff_le_iff sdiff_le_iff
 
 @[to_dual existing]
@@ -2213,7 +2213,7 @@ instance Pi.instGeneralizedCoheytingAlgebra
   body: by simp [le_def]
 
 中文:
-实例 Pi.instGeneralizedCoheytingAlgebra
+实例 依赖函数类型.instGeneralizedCoheytingAlgebra
   签名: {α : ι -> 类型}
   定义体: by simp [le_def]
 
@@ -2648,8 +2648,8 @@ theorem IsCompl.compl_eq
 @[to_dual]
 
 中文:
-定理 IsCompl.compl_eq
-  条件: (h : IsCompl a b)
+定理 是补集.compl_eq
+  条件: (h : 是补集 a b)
   结论: aᶜ = b
   证明: h.1.le_compl_left.antisymm' Disjoint.le_of_codisjoint disjoint_compl_left h.2
 
@@ -2673,8 +2673,8 @@ theorem IsCompl.eq_compl
 @[to_dual none]
 
 中文:
-定理 IsCompl.eq_compl
-  条件: (h : IsCompl a b)
+定理 是补集.eq_compl
+  条件: (h : 是补集 a b)
   结论: a = bᶜ
   证明: h.1.le_compl_right.antisymm Disjoint.le_of_codisjoint disjoint_compl_left h.2.symm
 
@@ -2893,7 +2893,7 @@ theorem ne_compl_self
 
 中文:
 定理 ne_compl_self
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: a != aᶜ
   证明: by
   intro h
@@ -2923,7 +2923,7 @@ theorem compl_ne_self
 
 中文:
 定理 compl_ne_self
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: aᶜ != a
   证明: ne_comm.1 ne_compl_self
 
@@ -2949,7 +2949,7 @@ theorem lt_compl_self
 
 中文:
 定理 lt_compl_self
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: a < aᶜ ↔ a = ⊥
   证明: by
   rw [lt_iff_le_and_ne]; simp
@@ -2998,7 +2998,7 @@ le_compl_comm.1 h.trans le_compl_compl
 
 中文:
 定理 compl_anti
-  结论: Antitone (compl : α -> α)
+  结论: 递减 (compl : α -> α)
   证明: fun _ _ h =>
 le_compl_comm.1 h.trans le_compl_compl
 
@@ -3213,7 +3213,7 @@ instance OrderDual.instCoheytingAlgebra
 
 中文:
 实例 OrderDual.instCoheytingAlgebra
-  签名: : CoheytingAlgebra αᵒᵈ where
+  签名: : 余heyting代数 αᵒᵈ where
   定义体: toDual ∘ compl ∘ ofDual
   sdiff a b := toDual (ofDual b ⇨ ofDual a)
   sdiff_le_iff a b c := by rw [sup_comm]; exact le_himp_iff
@@ -3245,7 +3245,7 @@ instance OrderDual.instHeytingAlgebra
 
 中文:
 实例 OrderDual.instHeytingAlgebra
-  签名: {α : 类型u_2} [CoheytingAlgebra α]
+  签名: {α : 类型u_2} [余heyting代数 α]
   定义体: toDual ∘ hnot ∘ ofDual
   himp a b := toDual (ofDual b \ ofDual a)
   le_himp_iff a b c := by rw [inf_comm]; exact sdiff_le_iff
@@ -3357,8 +3357,8 @@ instance Prod.instHeytingAlgebra
   body: Prod.ext_iff.2 ⟨himp_bot a.1, himp_bot a.2⟩
 
 中文:
-实例 Prod.instHeytingAlgebra
-  签名: [HeytingAlgebra β]
+实例 积类型.instHeytingAlgebra
+  签名: [Heyting代数 β]
   定义体: Prod.ext_iff.2 ⟨himp_bot a.1, himp_bot a.2⟩
 
 Depends on / 依赖: Prod.ext_iff, ext_iff, himp_bot
@@ -3375,8 +3375,8 @@ instance Pi.instHeytingAlgebra
   body: funext fun i => himp_bot (f i)
 
 中文:
-实例 Pi.instHeytingAlgebra
-  签名: {α : ι -> 类型} [对任意 i, HeytingAlgebra (α i)]
+实例 依赖函数类型.instHeytingAlgebra
+  签名: {α : ι -> 类型} [对任意 i, Heyting代数 (α i)]
   定义体: funext fun i => himp_bot (f i)
 
 Depends on / 依赖: himp_bot
@@ -3404,8 +3404,8 @@ instance Prod.instCoheytingAlgebra
 @[to_dual existing]
 
 中文:
-实例 Prod.instCoheytingAlgebra
-  签名: [CoheytingAlgebra β]
+实例 积类型.instCoheytingAlgebra
+  签名: [余heyting代数 β]
   定义体: and_congr sdiff_le_iff sdiff_le_iff
   top_sdiff a := Prod.ext_iff.2 ⟨top_sdiff' a.1, top_sdiff' a.2⟩
 
@@ -3427,8 +3427,8 @@ instance Pi.instCoheytingAlgebra
   body: funext fun i => top_sdiff' (f i)
 
 中文:
-实例 Pi.instCoheytingAlgebra
-  签名: {α : ι -> 类型} [对任意 i, CoheytingAlgebra (α i)]
+实例 依赖函数类型.instCoheytingAlgebra
+  签名: {α : ι -> 类型} [对任意 i, 余heyting代数 (α i)]
   定义体: funext fun i => top_sdiff' (f i)
 
 Depends on / 依赖: top_sdiff
@@ -3476,8 +3476,8 @@ instance Prop.instHeytingAlgebra
 @[simp]
 
 中文:
-实例 Prop.instHeytingAlgebra
-  签名: : HeytingAlgebra 命题
+实例 命题.instHeytingAlgebra
+  签名: : Heyting代数 命题
   定义体: { Prop.instDistribLattice, Prop.instBoundedOrder with
     himp := (· -> ·),
     le_himp_iff := fun _ _ _ => and_imp.symm, himp_bot := fun _ => rfl }
@@ -3555,8 +3555,8 @@ abbreviation LinearOrder.toBiheytingAlgebra
     h
 
 中文:
-缩写 LinearOrder.toBiheytingAlgebra
-  签名: [LinearOrder α] [BoundedOrder α]
+缩写 线性序.toBiheytingAlgebra
+  签名: [线性序 α] [有界序 α]
   定义体: { LinearOrder.toLattice, ‹BoundedOrder α› with
     himp := fun a b => if a <= b then ⊤ else b,
     compl := fun a => if a = ⊥ then ⊤ else ⊥,
@@ -3595,7 +3595,7 @@ instance OrderDual.instBiheytingAlgebra
 
 中文:
 实例 OrderDual.instBiheytingAlgebra
-  签名: [BiheytingAlgebra α]
+  签名: [Biheyting代数 α]
   定义体: instHeytingAlgebra
   __ := instCoheytingAlgebra
 
@@ -3615,8 +3615,8 @@ instance Prod.instBiheytingAlgebra
   __ := instCoheytingAlgebra
 
 中文:
-实例 Prod.instBiheytingAlgebra
-  签名: [BiheytingAlgebra α] [BiheytingAlgebra β]
+实例 积类型.instBiheytingAlgebra
+  签名: [Biheyting代数 α] [Biheyting代数 β]
   定义体: instHeytingAlgebra
   __ := instCoheytingAlgebra
 
@@ -3637,8 +3637,8 @@ instance Pi.instBiheytingAlgebra
   __ := instCoheytingAlgebra
 
 中文:
-实例 Pi.instBiheytingAlgebra
-  签名: {α : ι -> 类型} [对任意 i, BiheytingAlgebra (α i)]
+实例 依赖函数类型.instBiheytingAlgebra
+  签名: {α : ι -> 类型} [对任意 i, Biheyting代数 (α i)]
   定义体: instHeytingAlgebra
   __ := instCoheytingAlgebra
 
@@ -3666,8 +3666,8 @@ abbreviation Function.Injective.generalizedHeytingAlgebra
     rw [← le]; rw [← le]; rw [map_himp]; rw [map_inf]; rw [le_himp_iff]
 
 中文:
-缩写 Function.Injective.generalizedHeytingAlgebra
-  签名: [Max α] [Min α]
+缩写 函数.单射.generalizedHeytingAlgebra
+  签名: [最大值 α] [最小值 α]
   定义体: hf.lattice f le lt map_sup map_inf
   le_top a := by
     rw [← le]; rw [map_top]
@@ -3705,8 +3705,8 @@ abbreviation Function.Injective.generalizedCoheytingAlgebra
     rw [← le]; rw [← le]; rw [map_sdiff]; rw [map_sup]; rw [sdiff_le_iff]
 
 中文:
-缩写 Function.Injective.generalizedCoheytingAlgebra
-  签名: [Max α] [Min α]
+缩写 函数.单射.generalizedCoheytingAlgebra
+  签名: [最大值 α] [最小值 α]
   定义体: hf.lattice f le lt map_sup map_inf
   bot_le a := by
     rw [← le]; rw [map_bot]
@@ -3744,8 +3744,8 @@ abbreviation Function.Injective.heytingAlgebra
 himp_bot a := hf by rw [map_himp, map_compl, map_bot, himp_bot]
 
 中文:
-缩写 Function.Injective.heytingAlgebra
-  签名: [Max α] [Min α] [LE α] [LT α] [Top α] [Bot α]
+缩写 函数.单射.heytingAlgebra
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [顶元素 α] [底元素 α]
   定义体: hf.generalizedHeytingAlgebra f le lt map_sup map_inf map_top map_himp
   bot_le a := by
     rw [← le]; rw [map_bot]
@@ -3778,8 +3778,8 @@ abbreviation Function.Injective.biheytingAlgebra
   __ := hf.coheytingAlgebra f le lt map_sup map_inf map_top map_bot map_hnot map_sdiff
 
 中文:
-缩写 Function.Injective.biheytingAlgebra
-  签名: [Max α] [Min α] [LE α] [LT α] [Top α] [Bot α]
+缩写 函数.单射.biheytingAlgebra
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [顶元素 α] [底元素 α]
   定义体: hf.heytingAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_himp
   __ := hf.coheytingAlgebra f le lt map_sup map_inf map_top map_bot map_hnot map_sdiff
 -/
@@ -3813,7 +3813,7 @@ abbreviation generalizedHeytingAlgebra
 
 中文:
 缩写 generalizedHeytingAlgebra
-  签名: [GeneralizedHeytingAlgebra β]
+  签名: [GeneralizedHeyting代数 β]
   定义体: by
   let lattice := e.lattice
   let top := e.top
@@ -3844,7 +3844,7 @@ abbreviation generalizedCoheytingAlgebra
 
 中文:
 缩写 generalizedCoheytingAlgebra
-  签名: [GeneralizedCoheytingAlgebra β]
+  签名: [GeneralizedCoheyting代数 β]
   定义体: by
   let lattice := e.lattice
   let bot := e.bot
@@ -3874,7 +3874,7 @@ abbreviation heytingAlgebra
 
 中文:
 缩写 heytingAlgebra
-  签名: [HeytingAlgebra β]
+  签名: [Heyting代数 β]
   定义体: by
   let generalizedHeytingAlgebra := e.generalizedHeytingAlgebra
   let bot := e.bot
@@ -3901,7 +3901,7 @@ abbreviation coheytingAlgebra
 
 中文:
 缩写 coheytingAlgebra
-  签名: [CoheytingAlgebra β]
+  签名: [余heyting代数 β]
   定义体: by
   let generalizedCoheytingAlgebra := e.generalizedCoheytingAlgebra
   let top := e.top
@@ -3927,7 +3927,7 @@ abbreviation biheytingAlgebra
 
 中文:
 缩写 biheytingAlgebra
-  签名: [BiheytingAlgebra β]
+  签名: [Biheyting代数 β]
   定义体: by
   let heytingAlgebra := e.heytingAlgebra
   let coheytingAlgebra := e.coheytingAlgebra
@@ -3966,7 +3966,7 @@ instance instBiheytingAlgebra
 
 中文:
 实例 instBiheytingAlgebra
-  签名: : BiheytingAlgebra PUnit.{u + 1}
+  签名: : Biheyting代数 命题单元.{u + 1}
   定义体: { PUnit.instLinearOrder.{u} with
     top := unit,
     bot := unit,
@@ -4017,7 +4017,7 @@ theorem top_eq
 
 中文:
 定理 top_eq
-  结论: (⊤ : PUnit) = unit
+  结论: (⊤ : 命题单元) = unit
   证明: rfl
 
 @[to_dual (attr := simp)]

@@ -872,8 +872,8 @@ abbreviation DivisionRing.ofIsUnitOrEqZero
   qsmul_def := fun _ _ => rfl
 
 中文:
-缩写 DivisionRing.ofIsUnitOrEqZero
-  签名: [Ring R] (h : 对任意 a : R, IsUnit a ∨ a = 0)
+缩写 除环.ofIsUnitOrEqZero
+  签名: [环 R] (h : 对任意 a : R, 是单位 a ∨ a = 0)
   定义体: ‹Ring R›
   __ := groupWithZeroOfIsUnitOrEqZero h
   nnqsmul := _
@@ -901,8 +901,8 @@ abbreviation Field.ofIsUnitOrEqZero
   __ := DivisionRing.ofIsUnitOrEqZero h
 
 中文:
-缩写 Field.ofIsUnitOrEqZero
-  签名: [CommRing R] (h : 对任意 a : R, IsUnit a ∨ a = 0)
+缩写 域.ofIsUnitOrEqZero
+  签名: [交换环 R] (h : 对任意 a : R, 是单位 a ∨ a = 0)
   定义体: ‹CommRing R›
   __ := DivisionRing.ofIsUnitOrEqZero h
 
@@ -935,7 +935,7 @@ nnqsmul_def q a := hf by rw [nnqsmul, NNRat.smul_def, mul, nnratCast]
 
 中文:
 缩写 divisionSemiring
-  签名: [DivisionSemiring L] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [除半环 L] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.groupWithZero f zero one mul inv div npow zpow
 nnratCast_def q := hf by rw [nnratCast, NNRat.cast_def, div, natCast, natCast]
@@ -969,7 +969,7 @@ ratCast_def q := hf by rw [ratCast, div, intCast, natCast, Rat.cast_def]
 
 中文:
 缩写 divisionRing
-  签名: [DivisionRing L] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [除环 L] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.groupWithZero f zero one mul inv div npow zpow
   __ := hf.divisionSemiring f zero one add mul inv div nsmul nnqsmul npow zpow natCast nnratCast
@@ -1005,7 +1005,7 @@ abbreviation semifield
 
 中文:
 缩写 semifield
-  签名: [Semifield L] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [半域 L] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.commSemiring f zero one add mul nsmul npow natCast
   __ := hf.commGroupWithZero f zero one mul inv div npow zpow
   __ := hf.divisionSemiring f zero one add mul inv div nsmul nnqsmul npow zpow natCast nnratCast
@@ -1033,7 +1033,7 @@ abbreviation field
 
 中文:
 缩写 field
-  签名: [Field L] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [域 L] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.commRing f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.divisionRing f zero one add mul neg sub inv div nsmul zsmul nnqsmul qsmul npow zpow
     natCast intCast nnratCast ratCast
@@ -1067,8 +1067,8 @@ instance [RatCast
   body: inferInstanceAs RatCast K
 
 中文:
-实例 [RatCast
-  签名: K] : RatCast Kᵒᵈ
+实例 [有理数嵌入
+  签名: K] : 有理数嵌入 Kᵒᵈ
   定义体: inferInstanceAs RatCast K
 
 Depends on / 依赖: RatCast
@@ -1083,8 +1083,8 @@ instance [NNRatCast
   body: inferInstanceAs NNRatCast K
 
 中文:
-实例 [NNRatCast
-  签名: K] : NNRatCast Kᵒᵈ
+实例 [非负有理数嵌入
+  签名: K] : 非负有理数嵌入 Kᵒᵈ
   定义体: inferInstanceAs NNRatCast K
 
 Depends on / 依赖: NNRatCast
@@ -1099,8 +1099,8 @@ instance [DivisionSemiring
   body: inferInstanceAs DivisionSemiring K
 
 中文:
-实例 [DivisionSemiring
-  签名: K] : DivisionSemiring Kᵒᵈ
+实例 [除半环
+  签名: K] : 除半环 Kᵒᵈ
   定义体: inferInstanceAs DivisionSemiring K
 
 Depends on / 依赖: DivisionSemiring
@@ -1115,8 +1115,8 @@ instance [DivisionRing
   body: inferInstanceAs DivisionRing K
 
 中文:
-实例 [DivisionRing
-  签名: K] : DivisionRing Kᵒᵈ
+实例 [除环
+  签名: K] : 除环 Kᵒᵈ
   定义体: inferInstanceAs DivisionRing K
 
 Depends on / 依赖: DivisionRing
@@ -1131,8 +1131,8 @@ instance [Semifield
   body: inferInstanceAs Semifield K
 
 中文:
-实例 [Semifield
-  签名: K] : Semifield Kᵒᵈ
+实例 [半域
+  签名: K] : 半域 Kᵒᵈ
   定义体: inferInstanceAs Semifield K
 
 Depends on / 依赖: Semifield
@@ -1147,8 +1147,8 @@ instance [Field
   body: inferInstanceAs Field K
 
 中文:
-实例 [Field
-  签名: K] : Field Kᵒᵈ
+实例 [域
+  签名: K] : 域 Kᵒᵈ
   定义体: inferInstanceAs Field K
 -/
 instance [Field K] : Field Kᵒᵈ := inferInstanceAs Field K
@@ -1166,7 +1166,7 @@ lemma toDual_ratCast
 
 中文:
 引理 toDual_ratCast
-  条件: [RatCast K] (n : Rat)
+  条件: [有理数嵌入 K] (n : 有理数)
   结论: toDual (n : K) = n
   证明: rfl
 -/
@@ -1183,7 +1183,7 @@ lemma ofDual_ratCast
 
 中文:
 引理 ofDual_ratCast
-  条件: [RatCast K] (n : Rat)
+  条件: [有理数嵌入 K] (n : 有理数)
   结论: (ofDual n : K) = n
   证明: rfl
 -/
@@ -1202,8 +1202,8 @@ instance [RatCast
   body: inferInstanceAs RatCast K
 
 中文:
-实例 [RatCast
-  签名: K] : RatCast (Lex K)
+实例 [有理数嵌入
+  签名: K] : 有理数嵌入 (Lex K)
   定义体: inferInstanceAs RatCast K
 
 Depends on / 依赖: RatCast
@@ -1218,8 +1218,8 @@ instance [DivisionSemiring
   body: inferInstanceAs DivisionSemiring K
 
 中文:
-实例 [DivisionSemiring
-  签名: K] : DivisionSemiring (Lex K)
+实例 [除半环
+  签名: K] : 除半环 (Lex K)
   定义体: inferInstanceAs DivisionSemiring K
 
 Depends on / 依赖: DivisionSemiring
@@ -1234,8 +1234,8 @@ instance [DivisionRing
   body: inferInstanceAs DivisionRing K
 
 中文:
-实例 [DivisionRing
-  签名: K] : DivisionRing (Lex K)
+实例 [除环
+  签名: K] : 除环 (Lex K)
   定义体: inferInstanceAs DivisionRing K
 
 Depends on / 依赖: DivisionRing
@@ -1250,8 +1250,8 @@ instance [Semifield
   body: inferInstanceAs Semifield K
 
 中文:
-实例 [Semifield
-  签名: K] : Semifield (Lex K)
+实例 [半域
+  签名: K] : 半域 (Lex K)
   定义体: inferInstanceAs Semifield K
 
 Depends on / 依赖: Semifield
@@ -1266,8 +1266,8 @@ instance [Field
   body: inferInstanceAs Field K
 
 中文:
-实例 [Field
-  签名: K] : Field (Lex K)
+实例 [域
+  签名: K] : 域 (Lex K)
   定义体: inferInstanceAs Field K
 -/
 instance [Field K] : Field (Lex K) := inferInstanceAs Field K
@@ -1285,7 +1285,7 @@ lemma toLex_ratCast
 
 中文:
 引理 toLex_ratCast
-  条件: [RatCast K] (n : Rat)
+  条件: [有理数嵌入 K] (n : 有理数)
   结论: toLex (n : K) = n
   证明: rfl
 -/
@@ -1302,7 +1302,7 @@ lemma ofLex_ratCast
 
 中文:
 引理 ofLex_ratCast
-  条件: [RatCast K] (n : Rat)
+  条件: [有理数嵌入 K] (n : 有理数)
   结论: (ofLex n : K) = n
   证明: rfl
 -/

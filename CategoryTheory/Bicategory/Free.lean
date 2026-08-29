@@ -71,12 +71,12 @@ inductive Hom
     - comp: {a b c : B} (f : Hom a b) (g : Hom b c) : Hom a c
 
 中文:
-归纳类型 Hom
-  参数: : B -> B -> Type max u v
+归纳类型 态射
+  参数: : B -> B -> 类型 最大值 u v
   构造子 (3 个):
-    - of: {a b : B} (f : a ⟶ b) : Hom a b
-    - id: (a : B) : Hom a a
-    - comp: {a b c : B} (f : Hom a b) (g : Hom b c) : Hom a c
+    - of: {a b : B} (f : a ⟶ b) : 态射 a b
+    - id: (a : B) : 态射 a a
+    - comp: {a b c : B} (f : 态射 a b) (g : 态射 b c) : 态射 a c
 -/
 inductive Hom : B -> B -> Type max u v
   | of {a b : B} (f : a ⟶ b) : Hom a b
@@ -96,7 +96,7 @@ instance quiver
 
 中文:
 实例 quiver
-  签名: : Quiver.{max u v} (FreeBicategory B) where
+  签名: : 箭图.{最大值 u v} (FreeBicategory B) where
   定义体: fun a b : B => Hom a b
 -/
 instance quiver : Quiver.{max u v} (FreeBicategory B) where
@@ -114,7 +114,7 @@ instance categoryStruct
 
 中文:
 实例 categoryStruct
-  签名: : CategoryStruct.{max u v} (FreeBicategory B) where
+  签名: : CategoryStruct.{最大值 u v} (FreeBicategory B) where
   定义体: fun a : B => Hom.id a
   comp := @fun _ _ _ => Hom.comp
 
@@ -144,7 +144,7 @@ inductive Hom₂
 
 中文:
 归纳类型 Hom₂
-  参数: : 对任意 {a b : FreeBicategory B}, (a ⟶ b) -> (a ⟶ b) -> Type max u v
+  参数: : 对任意 {a b : FreeBicategory B}, (a ⟶ b) -> (a ⟶ b) -> 类型 最大值 u v
   构造子 (10 个):
     - id: {a b} (f : a ⟶ b) : Hom₂ f f
     - vcomp: {a b} {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) : Hom₂ f h
@@ -229,34 +229,34 @@ inductive Rel
     - triangle: {a b c} (f : Hom a b) (g : Hom b c) : Rel (α_ f (Hom.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : 对任意 {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> Hom₂ f g -> 命题
   构造子 (25 个):
-    - vcomp_right: {a b} {f g h : Hom a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) : Rel θ₁ θ₂ -> Rel (η ≫ θ₁) (η ≫ θ₂)
-    - vcomp_left: {a b} {f g h : Hom a b} (η₁ η₂ : Hom₂ f g) (θ : Hom₂ g h) : Rel η₁ η₂ -> Rel (η₁ ≫ θ) (η₂ ≫ θ)
-    - id_comp: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (𝟙 f ≫ η) η
-    - comp_id: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (η ≫ 𝟙 g) η
-    - assoc: {a b} {f g h i : Hom a b} (η : Hom₂ f g) (θ : Hom₂ g h) (ι : Hom₂ h i) : Rel ((η ≫ θ) ≫ ι) (η ≫ θ ≫ ι)
-    - whisker_left: {a b c} (f : Hom a b) (g h : Hom b c) (η η' : Hom₂ g h) : Rel η η' -> Rel (f ◁ η) (f ◁ η')
-    - whisker_left_id: {a b c} (f : Hom a b) (g : Hom b c) : Rel (f ◁ 𝟙 g) (𝟙 (f.comp g))
-    - whisker_left_comp: {a b c} (f : Hom a b) {g h i : Hom b c} (η : Hom₂ g h) (θ : Hom₂ h i) : Rel (f ◁ η ≫ θ) ((f ◁ η) ≫ f ◁ θ)
-    - id_whisker_left: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (Hom.id a ◁ η) (fun_ f ≫ η ≫ fun⁻¹_ g)
-    - comp_whisker_left: {a b c d} (f : Hom a b) (g : Hom b c) {h h' : Hom c d} (η : Hom₂ h h') : Rel (f.comp g ◁ η) (α_ f g h ≫ (f ◁ g ◁ η) ≫ α⁻¹_ f g h')
-    - whisker_right: {a b c} (f g : Hom a b) (h : Hom b c) (η η' : Hom₂ f g) : Rel η η' -> Rel (η ▷ h) (η' ▷ h)
-    - id_whisker_right: {a b c} (f : Hom a b) (g : Hom b c) : Rel (𝟙 f ▷ g) (𝟙 (f.comp g))
-    - comp_whisker_right: {a b c} {f g h : Hom a b} (i : Hom b c) (η : Hom₂ f g) (θ : Hom₂ g h) : Rel ((η ≫ θ) ▷ i) ((η ▷ i) ≫ θ ▷ i)
-    - whisker_right_id: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (η ▷ Hom.id b) (ρ_ f ≫ η ≫ ρ⁻¹_ g)
-    - whisker_right_comp: {a b c d} {f f' : Hom a b} (g : Hom b c) (h : Hom c d) (η : Hom₂ f f') : Rel (η ▷ g.comp h) (α⁻¹_ f g h ≫ ((η ▷ g) ▷ h) ≫ α_ f' g h)
-    - whisker_assoc: {a b c d} (f : Hom a b) {g g' : Hom b c} (η : Hom₂ g g') (h : Hom c d) : Rel ((f ◁ η) ▷ h) (α_ f g h ≫ (f ◁ η ▷ h) ≫ α⁻¹_ f g' h)
-    - whisker_exchange: {a b c} {f g : Hom a b} {h i : Hom b c} (η : Hom₂ f g) (θ : Hom₂ h i) : Rel ((f ◁ θ) ≫ η ▷ i) ((η ▷ h) ≫ g ◁ θ)
-    - associator_hom_inv: {a b c d} (f : Hom a b) (g : Hom b c) (h : Hom c d) : Rel (α_ f g h ≫ α⁻¹_ f g h) (𝟙 ((f.comp g).comp h))
-    - associator_inv_hom: {a b c d} (f : Hom a b) (g : Hom b c) (h : Hom c d) : Rel (α⁻¹_ f g h ≫ α_ f g h) (𝟙 (f.comp (g.comp h)))
-    - left_unitor_hom_inv: {a b} (f : Hom a b) : Rel (fun_ f ≫ fun⁻¹_ f) (𝟙 ((Hom.id a).comp f))
-    - left_unitor_inv_hom: {a b} (f : Hom a b) : Rel (fun⁻¹_ f ≫ fun_ f) (𝟙 f)
-    - right_unitor_hom_inv: {a b} (f : Hom a b) : Rel (ρ_ f ≫ ρ⁻¹_ f) (𝟙 (f.comp (Hom.id b)))
-    - right_unitor_inv_hom: {a b} (f : Hom a b) : Rel (ρ⁻¹_ f ≫ ρ_ f) (𝟙 f)
-    - pentagon: {a b c d e} (f : Hom a b) (g : Hom b c) (h : Hom c d) (i : Hom d e) : Rel ((α_ f g h ▷ i) ≫ α_ f (g.comp h) i ≫ f ◁ α_ g h i) (α_ (f.comp g) h i ≫ α_ f g (h.comp i))
-    - triangle: {a b c} (f : Hom a b) (g : Hom b c) : Rel (α_ f (Hom.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
+    - vcomp_right: {a b} {f g h : 态射 a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) : 关系 θ₁ θ₂ -> 关系 (η ≫ θ₁) (η ≫ θ₂)
+    - vcomp_left: {a b} {f g h : 态射 a b} (η₁ η₂ : Hom₂ f g) (θ : Hom₂ g h) : 关系 η₁ η₂ -> 关系 (η₁ ≫ θ) (η₂ ≫ θ)
+    - id_comp: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (𝟙 f ≫ η) η
+    - comp_id: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (η ≫ 𝟙 g) η
+    - assoc: {a b} {f g h i : 态射 a b} (η : Hom₂ f g) (θ : Hom₂ g h) (ι : Hom₂ h i) : 关系 ((η ≫ θ) ≫ ι) (η ≫ θ ≫ ι)
+    - whisker_left: {a b c} (f : 态射 a b) (g h : 态射 b c) (η η' : Hom₂ g h) : 关系 η η' -> 关系 (f ◁ η) (f ◁ η')
+    - whisker_left_id: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (f ◁ 𝟙 g) (𝟙 (f.comp g))
+    - whisker_left_comp: {a b c} (f : 态射 a b) {g h i : 态射 b c} (η : Hom₂ g h) (θ : Hom₂ h i) : 关系 (f ◁ η ≫ θ) ((f ◁ η) ≫ f ◁ θ)
+    - id_whisker_left: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (态射.id a ◁ η) (fun_ f ≫ η ≫ fun⁻¹_ g)
+    - comp_whisker_left: {a b c d} (f : 态射 a b) (g : 态射 b c) {h h' : 态射 c d} (η : Hom₂ h h') : 关系 (f.comp g ◁ η) (α_ f g h ≫ (f ◁ g ◁ η) ≫ α⁻¹_ f g h')
+    - whisker_right: {a b c} (f g : 态射 a b) (h : 态射 b c) (η η' : Hom₂ f g) : 关系 η η' -> 关系 (η ▷ h) (η' ▷ h)
+    - id_whisker_right: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (𝟙 f ▷ g) (𝟙 (f.comp g))
+    - comp_whisker_right: {a b c} {f g h : 态射 a b} (i : 态射 b c) (η : Hom₂ f g) (θ : Hom₂ g h) : 关系 ((η ≫ θ) ▷ i) ((η ▷ i) ≫ θ ▷ i)
+    - whisker_right_id: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (η ▷ 态射.id b) (ρ_ f ≫ η ≫ ρ⁻¹_ g)
+    - whisker_right_comp: {a b c d} {f f' : 态射 a b} (g : 态射 b c) (h : 态射 c d) (η : Hom₂ f f') : 关系 (η ▷ g.comp h) (α⁻¹_ f g h ≫ ((η ▷ g) ▷ h) ≫ α_ f' g h)
+    - whisker_assoc: {a b c d} (f : 态射 a b) {g g' : 态射 b c} (η : Hom₂ g g') (h : 态射 c d) : 关系 ((f ◁ η) ▷ h) (α_ f g h ≫ (f ◁ η ▷ h) ≫ α⁻¹_ f g' h)
+    - whisker_exchange: {a b c} {f g : 态射 a b} {h i : 态射 b c} (η : Hom₂ f g) (θ : Hom₂ h i) : 关系 ((f ◁ θ) ≫ η ▷ i) ((η ▷ h) ≫ g ◁ θ)
+    - associator_hom_inv: {a b c d} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) : 关系 (α_ f g h ≫ α⁻¹_ f g h) (𝟙 ((f.comp g).comp h))
+    - associator_inv_hom: {a b c d} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) : 关系 (α⁻¹_ f g h ≫ α_ f g h) (𝟙 (f.comp (g.comp h)))
+    - left_unitor_hom_inv: {a b} (f : 态射 a b) : 关系 (fun_ f ≫ fun⁻¹_ f) (𝟙 ((态射.id a).comp f))
+    - left_unitor_inv_hom: {a b} (f : 态射 a b) : 关系 (fun⁻¹_ f ≫ fun_ f) (𝟙 f)
+    - right_unitor_hom_inv: {a b} (f : 态射 a b) : 关系 (ρ_ f ≫ ρ⁻¹_ f) (𝟙 (f.comp (态射.id b)))
+    - right_unitor_inv_hom: {a b} (f : 态射 a b) : 关系 (ρ⁻¹_ f ≫ ρ_ f) (𝟙 f)
+    - pentagon: {a b c d e} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) (i : 态射 d e) : 关系 ((α_ f g h ▷ i) ≫ α_ f (g.comp h) i ≫ f ◁ α_ g h i) (α_ (f.comp g) h i ≫ α_ f g (h.comp i))
+    - triangle: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (α_ f (态射.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
 -/
 inductive Rel : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> Hom₂ f g -> Prop
   | vcomp_right {a b} {f g h : Hom a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) :
@@ -363,7 +363,7 @@ instance bicategory
 
 中文:
 实例 bicategory
-  签名: : Bicategory (FreeBicategory B) where
+  签名: : 双范畴 (FreeBicategory B) where
   定义体: @fun (a b : B) => FreeBicategory.homCategory a b
   whiskerLeft := @fun _ _ _ f g h η => Quot.map (Hom₂.whisker_left f) (Rel.whisker_left f g h) η
   whiskerLeft_id := @fun _ _ _ f g => Quot.sound (Rel.whisker_left_id f g)
@@ -522,7 +522,7 @@ theorem id_def
 
 中文:
 定理 id_def
-  结论: Hom.id (B := B) a = 𝟙 a
+  结论: 态射.id (B := B) a = 𝟙 a
   证明: rfl
 -/
 theorem id_def : Hom.id (B := B) a = 𝟙 a :=
@@ -540,7 +540,7 @@ theorem comp_def
 
 中文:
 定理 comp_def
-  结论: Hom.comp f g = f ≫ g
+  结论: 态射.comp f g = f ≫ g
   证明: rfl
 
 @[simp]
@@ -561,7 +561,7 @@ theorem mk_id
 
 中文:
 定理 mk_id
-  结论: Quot.mk _ (Hom₂.id f) = 𝟙 f
+  结论: 商.mk _ (Hom₂.id f) = 𝟙 f
   证明: rfl
 
 @[simp]
@@ -582,7 +582,7 @@ theorem mk_associator_hom
 
 中文:
 定理 mk_associator_hom
-  结论: Quot.mk _ (Hom₂.associator f g h) = (α_ f g h).hom
+  结论: 商.mk _ (Hom₂.associator f g h) = (α_ f g h).hom
   证明: rfl
 
 @[simp]
@@ -603,7 +603,7 @@ theorem mk_associator_inv
 
 中文:
 定理 mk_associator_inv
-  结论: Quot.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv
+  结论: 商.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv
   证明: rfl
 
 @[simp]
@@ -624,7 +624,7 @@ theorem mk_left_unitor_hom
 
 中文:
 定理 mk_left_unitor_hom
-  结论: Quot.mk _ (Hom₂.left_unitor f) = (fun_ f).hom
+  结论: 商.mk _ (Hom₂.left_unitor f) = (fun_ f).hom
   证明: rfl
 
 @[simp]
@@ -645,7 +645,7 @@ theorem mk_left_unitor_inv
 
 中文:
 定理 mk_left_unitor_inv
-  结论: Quot.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv
+  结论: 商.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv
   证明: rfl
 
 @[simp]
@@ -666,7 +666,7 @@ theorem mk_right_unitor_hom
 
 中文:
 定理 mk_right_unitor_hom
-  结论: Quot.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom
+  结论: 商.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom
   证明: rfl
 
 @[simp]
@@ -685,7 +685,7 @@ theorem mk_right_unitor_inv
 
 中文:
 定理 mk_right_unitor_inv
-  结论: Quot.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv
+  结论: 商.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv
   证明: rfl
 -/
 theorem mk_right_unitor_inv : Quot.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv :=
@@ -704,7 +704,7 @@ definition of
 
 中文:
 定义 of
-  签名: : Prefunctor B (FreeBicategory B) where
+  签名: : 预函子 B (FreeBicategory B) where
   定义体: id
   map := @fun _ _ => Hom.of
 -/
@@ -820,7 +820,7 @@ theorem liftHom₂_congr
 
 中文:
 定理 liftHom₂_congr
-  条件: {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : Rel η θ)
+  条件: {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : 关系 η θ)
   证明: by induction H <;> (dsimp [liftHom₂]; cat_disch)
 
 Depends on / 依赖: cat_disch

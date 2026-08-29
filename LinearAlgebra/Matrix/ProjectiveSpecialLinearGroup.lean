@@ -39,7 +39,7 @@ abbreviation ProjectiveSpecialLinearGroup
 
 中文:
 缩写 ProjectiveSpecialLinearGroup
-  签名: : Type _
+  签名: : 类型 _
   定义体: SpecialLinearGroup n R ⧸ Subgroup.center (SpecialLinearGroup n R)
 
 Depends on / 依赖: SpecialLinearGroup, Subgroup, Subgroup.center, center

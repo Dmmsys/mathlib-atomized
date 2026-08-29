@@ -49,7 +49,7 @@ theorem funext_fin
 
 中文:
 定理 funext_fin
-  结论: {n : 自然数} {p : MvPolynomial (Fin n) R}
+  结论: {n : 自然数} {p : 多元多项式 (有限集 n) R}
   证明: by
   induction n with
   | zero =>
@@ -101,7 +101,7 @@ theorem funext_set
 
 中文:
 定理 funext_set
-  条件: (h : 对任意 x in Set.pi .univ s, eval x p = eval x q)
+  条件: (h : 对任意 x in 集合.pi .univ s, eval x p = eval x q)
   证明: by
   suffices forall p, (forall x in Set.pi .univ s, eval x p = 0) -> p = 0 by
     rw [← sub_eq_zero]; rw [this (p - q)]
@@ -141,7 +141,7 @@ theorem funext_set_iff
 
 中文:
 定理 funext_set_iff
-  结论: p = q ↔ (对任意 x in Set.pi .univ s, eval x p = eval x q)
+  结论: p = q ↔ (对任意 x in 集合.pi .univ s, eval x p = eval x q)
   证明: ⟨by rintro rfl _ _; rfl, funext_set s hs⟩
 
 Depends on / 依赖: funext_set
@@ -163,7 +163,7 @@ theorem funext
 
 中文:
 定理 funext
-  结论: {σ : 类型} {p q : MvPolynomial σ R}
+  结论: {σ : 类型} {p q : 多元多项式 σ R}
   证明: funext_set _ (fun _ => Set.infinite_univ) fun _ _ => h _
 
 Depends on / 依赖: Set.infinite_univ, funext_set, infinite_univ
@@ -183,7 +183,7 @@ theorem funext_iff
 
 中文:
 定理 funext_iff
-  条件: {σ : 类型} {p q : MvPolynomial σ R}
+  条件: {σ : 类型} {p q : 多元多项式 σ R}
   证明: ⟨by rintro rfl; simp only [forall_const], funext⟩
 
 Depends on / 依赖: forall_const

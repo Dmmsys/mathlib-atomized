@@ -198,7 +198,7 @@ theorem torsionOf_eq_bot_iff_of_noZeroSMulDivisors
 
 中文:
 定理 torsionOf_eq_bot_iff_of_noZeroSMulDivisors
-  条件: [IsDomain R] [Module.IsTorsionFree R M] (m : M)
+  条件: [是整环 R] [模.是无挠 R M] (m : M)
   证明: by
   refine ⟨fun h contra => ?_, fun h => (Submodule.eq_bot_iff _).mpr fun r hr => ?_⟩
   · rw [contra, torsionOf_zero] at h
@@ -249,7 +249,7 @@ theorem _root_.Module.annihilator_eq_iInf_torsionOf
   simp [Module.mem_annihilator]
 
 中文:
-定理 _root_.Module.annihilator_eq_iInf_torsionOf
+定理 _root_.模.annihilator_eq_iInf_torsionOf
   证明: by
   ext r
   simp [Module.mem_annihilator]
@@ -277,7 +277,7 @@ theorem iSupIndep.linearIndependent'
 
 中文:
 定理 iSupIndep.linearIndependent'
-  结论: {ι R M : 类型} {v : ι -> M} [Ring R]
+  结论: {ι R M : 类型} {v : ι -> M} [环 R]
   证明: by
   refine linearIndependent_iff_eq_zero_of_smul_mem_span.mpr fun i r hi => ?_
   replace hv := iSupIndep_def.mp hv i
@@ -397,7 +397,7 @@ definition torsionBySet
 
 中文:
 定义 torsionBySet
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: sInf (torsionBy R M '' s)
 
 Depends on / 依赖: torsionBy
@@ -424,7 +424,7 @@ definition torsion'
 
 中文:
 定义 torsion'
-  签名: (S : 类型) [CommMonoid S] [DistribMulAction S M] [SMulCommClass S R M]
+  签名: (S : 类型) [交换幺半群 S] [分配乘法作用 S M] [标量交换类 S R M]
   定义体: { x | exists a : S, a • x = 0 }
   add_mem' := by
     intro x y ⟨a,hx⟩ ⟨b,hy⟩
@@ -491,7 +491,7 @@ abbreviation IsTorsionBySet
 
 中文:
 缩写 IsTorsionBySet
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: forall ⦃x : M⦄ ⦃a : s⦄, (a : R) • x = 0
 -/
 abbrev IsTorsionBySet (s : Set R) :=
@@ -506,8 +506,8 @@ abbreviation IsTorsion'
   body: forall ⦃x : M⦄, exists a : S, a • x = 0
 
 中文:
-缩写 IsTorsion'
-  签名: (S : 类型) [SMul S M]
+缩写 是挠'
+  签名: (S : 类型) [标量乘法 S M]
   定义体: forall ⦃x : M⦄, exists a : S, a • x = 0
 -/
 abbrev IsTorsion' (S : Type*) [SMul S M] :=
@@ -521,7 +521,7 @@ abbreviation IsTorsion
   body: forall ⦃x : M⦄, exists a : R⁰, a • x = 0
 
 中文:
-缩写 IsTorsion
+缩写 是挠
   定义体: forall ⦃x : M⦄, exists a : R⁰, a • x = 0
 -/
 abbrev IsTorsion :=
@@ -578,7 +578,7 @@ theorem isTorsionBySet_iff_subset_annihilator
 
 中文:
 定理 isTorsionBySet_iff_subset_annihilator
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   证明: by
   simp_rw [IsTorsionBySet, Set.subset_def, SetLike.mem_coe, mem_annihilator]
   rw [forall_comm]; rw [SetCoe.forall]
@@ -764,7 +764,7 @@ theorem torsionBySet_le_torsionBySet_of_subset
 
 中文:
 定理 torsionBySet_le_torsionBySet_of_subset
-  条件: {s t : Set R} (st : s subseteq t)
+  条件: {s t : 集合 R} (st : s subseteq t)
   证明: sInf_le_sInf fun _ ⟨a, ha, h⟩ => ⟨a, st ha, h⟩
 
 Depends on / 依赖: sInf_le_sInf
@@ -783,7 +783,7 @@ theorem torsionBySet_le_torsionBySet_pow
 
 中文:
 定理 torsionBySet_le_torsionBySet_pow
-  条件: (i j : 自然数) (h : i <= j) (I : Ideal R)
+  条件: (i j : 自然数) (h : i <= j) (I : 理想 R)
   证明: torsionBySet_le_torsionBySet_of_subset (Ideal.pow_le_pow_right h)
 
 Depends on / 依赖: Ideal.pow_le_pow_right, pow_le_pow_right, torsionBySet_le_torsionBySet_of_subset
@@ -942,7 +942,7 @@ theorem torsionBySet_univ
 
 中文:
 定理 torsionBySet_univ
-  结论: torsionBySet R M Set.univ = ⊥
+  结论: torsionBySet R M 集合.univ = ⊥
   证明: by
   rw [eq_bot_iff]; rw [← torsionBy_one]; rw [← torsionBySet_singleton_eq]
   exact torsionBySet_le_torsionBySet_of_subset fun _ _ => trivial
@@ -973,7 +973,7 @@ theorem isTorsionBySet_of_subset
 
 中文:
 定理 isTorsionBySet_of_subset
-  结论: {s t : Set R} (h : s subseteq t)
+  结论: {s t : 集合 R} (h : s subseteq t)
   证明: fun m r => @ht m ⟨r, h r.2⟩
 
 @[simp]
@@ -1204,7 +1204,7 @@ theorem torsionBySet_ideal_isTorsion_of_noZeroDivisors
 
 中文:
 定理 torsionBySet_ideal_isTorsion_of_noZeroDivisors
-  结论: [NoZeroDivisors R] [Nontrivial R]
+  结论: [无零因子 R] [非平凡 R]
   证明: by
   aesop (add norm Submodule.eq_bot_iff)
 
@@ -1375,7 +1375,7 @@ theorem sup_torsionBySet_ideal_eq_torsionBySet_inf
 
 中文:
 定理 sup_torsionBySet_ideal_eq_torsionBySet_inf
-  条件: (P Q : Ideal R) {hc : P ⊔ Q = ⊤}
+  条件: (P Q : 理想 R) {hc : P ⊔ Q = ⊤}
   证明: by
   let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
   have heq := Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf
@@ -1411,7 +1411,7 @@ theorem supIndep_torsionBySet_ideal
 
 中文:
 定理 supIndep_torsionBySet_ideal
-  条件: (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤)
+  条件: (hp : (S : 集合 ι).两两 fun i j => p i ⊔ p j = ⊤)
   证明: fun T hT i hi hiT => by
   rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
   have := GaloisConnection.u_inf
@@ -1444,7 +1444,7 @@ theorem disjoint_torsionBySet_ideal
 
 中文:
 定理 disjoint_torsionBySet_ideal
-  条件: {P Q : Ideal R} (hc : P ⊔ Q = ⊤)
+  条件: {P Q : 理想 R} (hc : P ⊔ Q = ⊤)
   证明: by
   let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
   have heq := Submodule.supIndep_torsionBySet_ideal (p := map) (M := M) (S := ⊤) ?_
@@ -1483,7 +1483,7 @@ theorem iSup_torsionBy_eq_torsionBy_prod
 
 中文:
 定理 iSup_torsionBy_eq_torsionBy_prod
-  条件: (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
+  条件: (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
   证明: by
   rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [←
     Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf]; rw [←
@@ -1523,7 +1523,7 @@ theorem supIndep_torsionBy
 
 中文:
 定理 supIndep_torsionBy
-  条件: (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
+  条件: (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
   证明: by
   convert!
     supIndep_torsionBySet_ideal (M := M) fun i hi j hj ij =>
@@ -1566,8 +1566,8 @@ theorem torsionBySet_isInternal
 apply (iSup_torsionByS
 
 中文:
-定理 torsionBySet_isInternal
-  结论: {p : ι -> Ideal R}
+定理 torsionBySet_is整数ernal
+  结论: {p : ι -> 理想 R}
   证明: DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
     (iSupIndep_comp_coe_iff_supIndep.mpr <| supIndep_torsionBySet_ideal hp)
     (by
@@ -1605,8 +1605,8 @@ theorem torsionBy_isInternal
   exa
 
 中文:
-定理 torsionBy_isInternal
-  结论: {q : ι -> R} (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
+定理 torsionBy_is整数ernal
+  结论: {q : ι -> R} (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
   证明: by
   rw [← Module.isTorsionBySet_span_singleton_iff]; rw [Ideal.submodule_span_eq]; rw [←
     Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf] at hM
@@ -1692,7 +1692,7 @@ theorem IsTorsionBySet.mk_smul
 
 中文:
 定理 IsTorsionBySet.mk_smul
-  条件: [I.IsTwoSided] (hM : IsTorsionBySet R M I) (b : R) (x : M)
+  条件: [I.是TwoSided] (hM : IsTorsionBySet R M I) (b : R) (x : M)
   证明: hM.hasSMul
     Ideal.Quotient.mk I b • x = b • x :=
   rfl
@@ -1719,7 +1719,7 @@ theorem IsTorsionBy.mk_smul
 
 中文:
 定理 IsTorsionBy.mk_smul
-  条件: [(Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r) (b : R) (x : M)
+  条件: [(理想.span {r}).是TwoSided] (hM : IsTorsionBy R M r) (b : R) (x : M)
   证明: hM.hasSMul
     Ideal.Quotient.mk (Ideal.span {r}) b • x = b • x :=
   rfl
@@ -1743,7 +1743,7 @@ definition IsTorsionBySet.module
 
 中文:
 定义 IsTorsionBySet.module
-  签名: [I.IsTwoSided] (hM : IsTorsionBySet R M I)
+  签名: [I.是TwoSided] (hM : IsTorsionBySet R M I)
   定义体: letI := hM.hasSMul; fast_instance% I.mkQ_surjective.moduleLeft _ (IsTorsionBySet.mk_smul hM)
 
 Depends on / 依赖: I.mkQ_surjective.moduleLeft, IsTorsionBySet, IsTorsionBySet.mk_smul, fast_instance, hM.hasSMul, hasSMul, mkQ_surjective, mk_smul, moduleLeft
@@ -1789,7 +1789,7 @@ definition IsTorsionBySet.semilinearMap
 
 中文:
 定义 IsTorsionBySet.semilinearMap
-  签名: [I.IsTwoSided] (hM : IsTorsionBySet R M I)
+  签名: [I.是TwoSided] (hM : IsTorsionBySet R M I)
   定义体: hM.module; M ->ₛₗ[Ideal.Quotient.mk I] M :=
   let _ := hM.module
   { toFun := id
@@ -1818,7 +1818,7 @@ theorem IsTorsionBySet.isSemisimpleModule_iff
 
 中文:
 定理 IsTorsionBySet.isSemisimpleModule_iff
-  结论: [I.IsTwoSided]
+  结论: [I.是TwoSided]
   证明: hM.module
     IsSemisimpleModule (R ⧸ I) M ↔ IsSemisimpleModule R M :=
   letI := hM.module
@@ -1842,7 +1842,7 @@ abbreviation IsTorsionBy.module
 
 中文:
 缩写 IsTorsionBy.module
-  签名: [h : (Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r)
+  签名: [h : (理想.span {r}).是TwoSided] (hM : IsTorsionBy R M r)
   定义体: IsTorsionBySet.module ?_
 
 Depends on / 依赖: IsTorsionBySet, IsTorsionBySet.module, module
@@ -1866,7 +1866,7 @@ definition quotientAnnihilator
 
 中文:
 定义 quotientAnnihilator
-  签名: : Module (R ⧸ Module.annihilator R M) M
+  签名: : 模 (R ⧸ 模.annihilator R M) M
   定义体: (isTorsionBySet_annihilator R M).module
 
 Depends on / 依赖: isTorsionBySet_annihilator, module
@@ -1885,7 +1885,7 @@ theorem isTorsionBy_quotient_iff
 
 中文:
 定理 isTorsionBy_quotient_iff
-  条件: (N : Submodule R M) (r : R)
+  条件: (N : 子模 R M) (r : R)
   证明: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
     Submodule.Quotient.mk_eq_zero N
 
@@ -1906,7 +1906,7 @@ theorem IsTorsionBy.quotient
 
 中文:
 定理 IsTorsionBy.quotient
-  结论: (N : Submodule R M) {r : R}
+  结论: (N : 子模 R M) {r : R}
   证明: (isTorsionBy_quotient_iff N r).mpr fun x => @h x ▸ N.zero_mem
 
 Depends on / 依赖: N.zero_mem, isTorsionBy_quotient_iff, zero_mem
@@ -1927,7 +1927,7 @@ Iff.trans Subtype.forall forall₂_congr fun _ _ =>
 
 中文:
 定理 isTorsionBySet_quotient_iff
-  条件: (N : Submodule R M) (s : Set R)
+  条件: (N : 子模 R M) (s : 集合 R)
   证明: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
 Iff.trans Subtype.forall forall₂_congr fun _ _ =>
       Submodule.Quotient.mk_eq_zero N
@@ -1950,7 +1950,7 @@ theorem IsTorsionBySet.quotient
 
 中文:
 定理 IsTorsionBySet.quotient
-  结论: (N : Submodule R M) {s}
+  结论: (N : 子模 R M) {s}
   证明: (isTorsionBySet_quotient_iff N s).mpr fun x r h' => @h x ⟨r, h'⟩ ▸ N.zero_mem
 
 Depends on / 依赖: N.zero_mem, isTorsionBySet_quotient_iff, zero_mem
@@ -2010,8 +2010,8 @@ instance [I.IsTwoSided]
   body: (isTorsionBySet_quotient_ideal_smul M I).module
 
 中文:
-实例 [I.IsTwoSided]
-  签名: : Module (R ⧸ I) (M ⧸ I • (⊤ : Submodule R M))
+实例 [I.是TwoSided]
+  签名: : 模 (R ⧸ I) (M ⧸ I • (⊤ : 子模 R M))
   定义体: (isTorsionBySet_quotient_ideal_smul M I).module
 
 Depends on / 依赖: isTorsionBySet_quotient_ideal_smul, module
@@ -2028,8 +2028,8 @@ lemma Quotient.mk_smul_mk
   proof: rfl
 
 中文:
-引理 Quotient.mk_smul_mk
-  条件: [I.IsTwoSided] (r : R) (m : M)
+引理 商.mk_smul_mk
+  条件: [I.是TwoSided] (r : R) (m : M)
   证明: rfl
 
 Depends on / 依赖: Submodule
@@ -2076,7 +2076,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (R ⧸ Ideal.span s) (M ⧸ s • (⊤ : Submodule R M))
+  签名: 模 (R ⧸ 理想.span s) (M ⧸ s • (⊤ : 子模 R M))
   定义体: ((isTorsionBySet_iff_is_torsion_by_span s).mp
     (isTorsionBySet_quotient_set_smul M s)).module
 
@@ -2096,7 +2096,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (R ⧸ Ideal.span {r}) (M ⧸ r • (⊤ : Submodule R M))
+  签名: 模 (R ⧸ 理想.span {r}) (M ⧸ r • (⊤ : 子模 R M))
   定义体: (isTorsionBy_quotient_element_smul M r).module
 
 Depends on / 依赖: isTorsionBy_quotient_element_smul, module
@@ -2125,7 +2125,7 @@ theorem torsionBySet.mk_smul
 
 中文:
 定理 torsionBySet.mk_smul
-  条件: (I : Ideal R) (b : R) (x : torsionBySet R M I)
+  条件: (I : 理想 R) (b : R) (x : torsionBySet R M I)
   证明: rfl
 -/
 theorem torsionBySet.mk_smul (I : Ideal R) (b : R) (x : torsionBySet R M I) :
@@ -2317,7 +2317,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (torsion' R M S)
+  签名: 标量乘法 S (torsion' R M S)
   定义体: ⟨fun s x =>
     ⟨s • (x : M), by
       obtain ⟨x, a, h⟩ := x
@@ -2346,7 +2346,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction S (torsion' R M S)
+  签名: 分配乘法作用 S (torsion' R M S)
   定义体: Subtype.coe_injective.distribMulAction (torsion' R M S).subtype.toAddMonoidHom fun (_ : S) _ =>
     rfl
 
@@ -2366,7 +2366,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass S R (torsion' R M S)
+  签名: 标量交换类 S R (torsion' R M S)
   定义体: ⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -2386,7 +2386,7 @@ theorem isTorsion'_iff_torsion'_eq_top
 
 中文:
 定理 isTorsion'_iff_torsion'_eq_top
-  结论: IsTorsion' M S ↔ torsion' R M S = ⊤
+  结论: 是挠' M S ↔ torsion' R M S = ⊤
   证明: ⟨fun h => eq_top_iff.mpr fun _ _ => @h _, fun h x => by
     rw [← @mem_torsion'_iff R]; rw [h]
     trivial⟩
@@ -2410,7 +2410,7 @@ theorem torsion'_isTorsion'
 
 中文:
 定理 torsion'_isTorsion'
-  结论: IsTorsion' (torsion' R M S) S
+  结论: 是挠' (torsion' R M S) S
   证明: fun ⟨_, ⟨a, h⟩⟩ => ⟨a, Subtype.ext h⟩
 
 @[simp]
@@ -2462,7 +2462,7 @@ theorem torsion_isTorsion
 
 中文:
 定理 torsion_isTorsion
-  结论: Module.IsTorsion R (torsion R M)
+  结论: 模.是挠 R (torsion R M)
   证明: torsion'_isTorsion' R⁰
 
 Depends on / 依赖: _isTorsion, torsion
@@ -2487,7 +2487,7 @@ theorem _root_.Module.isTorsionBySet_annihilator_top
   mem_annihilator.mp ha.prop x mem_top
 
 中文:
-定理 _root_.Module.isTorsionBySet_annihilator_top
+定理 _root_.模.isTorsionBySet_annihilator_top
   证明: fun x ha =>
   mem_annihilator.mp ha.prop x mem_top
 -/
@@ -2512,8 +2512,8 @@ theorem _root_.Submodule.annihilator_top_inter_nonZeroDivisors
   rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Su
 
 中文:
-定理 _root_.Submodule.annihilator_top_inter_nonZeroDivisors
-  结论: [Module.Finite R M]
+定理 _root_.子模.annihilator_top_inter_nonZeroDivisors
+  结论: [模.有限 R M]
   证明: by
   obtain ⟨S, hS⟩ := ‹Module.Finite R M›.fg_top
   refine ⟨_, ?_, (∏ x in S, (@hM x).choose : R⁰).prop⟩
@@ -2582,7 +2582,7 @@ lemma torsion_int
 
 中文:
 引理 torsion_int
-  条件: {G} [AddCommGroup G]
+  条件: {G} [加法交换群 G]
   证明: by
   ext x
   refine ((isOfFinAddOrder_iff_zsmul_eq_zero (x := x)).trans ?_).symm
@@ -2613,7 +2613,7 @@ lemma isTorsionFree_iff_torsion_eq_bot
 
 中文:
 引理 isTorsionFree_iff_torsion_eq_bot
-  结论: IsTorsionFree R M ↔ torsion R M = ⊥
+  结论: 是无挠 R M ↔ torsion R M = ⊥
   证明: by
   simp [torsion, torsion', subset_antisymm_iff, exists_ne, isTorsionFree_iff_smul_eq_zero]
   grind
@@ -2676,7 +2676,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [IsDomain R]
+  签名: [是整环 R]
   定义体: isTorsionFree_iff_torsion_eq_bot.mpr torsion_eq_bot
 
 Depends on / 依赖: isTorsionFree_iff_torsion_eq_bot, isTorsionFree_iff_torsion_eq_bot.mpr, torsion_eq_bot
@@ -2752,7 +2752,7 @@ definition pOrder
 
 中文:
 定义 pOrder
-  签名: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
+  签名: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (x : M)
   定义体: Nat.find (isTorsion'_powers_iff p).mp hM x
 
 @[simp]
@@ -2774,7 +2774,7 @@ theorem pow_pOrder_smul
 
 中文:
 定理 pow_pOrder_smul
-  结论: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
+  结论: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (x : M)
   证明: Nat.find_spec (isTorsion'_powers_iff p).mp hM x
 
 Depends on / 依赖: Nat.find_spec, _powers_iff, find_spec, isTorsion
@@ -2802,8 +2802,8 @@ hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
   rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs];
 
 中文:
-定理 exists_isTorsionBy
-  结论: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (d : 自然数) (hd : d != 0)
+定理 存在_isTorsionBy
+  结论: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (d : 自然数) (hd : d != 0)
   证明: by
   let oj := List.argmax (fun i => pOrder hM <| s i) (List.finRange d)
   have hoj : oj.isSome :=
@@ -2853,7 +2853,7 @@ theorem torsionBy_eq_span_singleton
 
 中文:
 定理 torsionBy_eq_span_singleton
-  条件: {R : Type w} [CommRing R] (a b : R) (ha : a in R⁰)
+  条件: {R : 类型 w} [交换环 R] (a b : R) (ha : a in R⁰)
   证明: by
   ext x; rw [mem_torsionBy_iff, Submodule.mem_span_singleton]
   obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
@@ -2895,7 +2895,7 @@ exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
 
 中文:
 定理 isAddTorsion_iff_isTorsion_nat
-  条件: [AddCommMonoid M]
+  条件: [加法交换幺半群 M]
   证明: by
   refine ⟨fun h x => ?_, fun h x => ?_⟩
   · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
@@ -2938,7 +2938,7 @@ theorem isAddTorsion_iff_isTorsion_int
 
 中文:
 定理 isAddTorsion_iff_isTorsion_int
-  条件: [AddCommGroup M]
+  条件: [加法交换群 M]
   证明: by
   refine ⟨fun h x => ?_, fun h x => ?_⟩
   · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
@@ -2986,7 +2986,7 @@ macro_rules | `($A[$n]) => `(torsionBy $A $n)
 
 中文:
 定义 torsionBy
-  签名: : AddSubgroup A
+  签名: : 加法子群 A
   定义体: (Submodule.torsionBy Int A n).toAddSubgroup
 
 @[inherit_doc torsionBy]
@@ -3123,7 +3123,7 @@ definition torsionBy.zmodModule
 
 中文:
 定义 torsionBy.zmodModule
-  签名: : Module (ZMod n) A[n]
+  签名: : 模 (ZMod n) A[n]
   定义体: AddCommGroup.zmodModule torsionBy.nsmul
 
 Depends on / 依赖: AddCommGroup, AddCommGroup.zmodModule, torsionBy, torsionBy.nsmul, zmodModule
@@ -3151,7 +3151,7 @@ lemma infinite_range_add_smul_iff
 
 中文:
 引理 infinite_range_add_smul_iff
-  结论: [Ring R] [IsDomain R] [Infinite R] [AddCommGroup M] [Module R M]
+  结论: [环 R] [是整环 R] [无限 R] [加法交换群 M] [模 R M]
   证明: by
   refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
   rw [add_right_inj] at hrs
@@ -3182,7 +3182,7 @@ lemma infinite_range_add_nsmul_iff
 
 中文:
 引理 infinite_range_add_nsmul_iff
-  条件: [AddCommGroup M] [IsAddTorsionFree M] (x y : M)
+  条件: [加法交换群 M] [是加法无挠 M] (x y : M)
   证明: by
   refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
   rw [add_right_inj]; rw [← natCast_zsmul]; rw [← natCast_zsmul] at hrs

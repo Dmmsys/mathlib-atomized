@@ -50,7 +50,7 @@ definition iIndepFun
 
 中文:
 定义 iIndepFun
-  签名: {β : ι -> 类型} [m : 对任意 x : ι, MeasurableSpace (β x)]
+  签名: {β : ι -> 类型} [m : 对任意 x : ι, 可测空间 (β x)]
   定义体: iIndep (m := fun x => MeasurableSpace.comap (f x) (m x)) κ μ
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap, iIndep, volume_tac
@@ -70,7 +70,7 @@ definition IndepFun
 
 中文:
 定义 IndepFun
-  签名: [mβ : MeasurableSpace β] [mγ : MeasurableSpace γ]
+  签名: [mβ : 可测空间 β] [mγ : 可测空间 γ]
   定义体: Indep (MeasurableSpace.comap f mβ) (MeasurableSpace.comap g mγ) κ μ
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap, volume_tac
@@ -100,7 +100,7 @@ lemma iIndepFun_zero_right
 
 中文:
 引理 iIndepFun_zero_right
-  结论: {β : ι -> 类型} {m : 对任意 x : ι, MeasurableSpace (β x)}
+  结论: {β : ι -> 类型} {m : 对任意 x : ι, 可测空间 (β x)}
   证明: by simp [iIndepFun]
 -/
 @[simp] lemma iIndepFun_zero_right {β : ι -> Type*} {m : forall x : ι, MeasurableSpace (β x)}
@@ -116,7 +116,7 @@ lemma indepFun_zero_right
 
 中文:
 引理 indepFun_zero_right
-  结论: {β} [MeasurableSpace β] [MeasurableSpace γ]
+  结论: {β} [可测空间 β] [可测空间 γ]
   证明: by simp [IndepFun]
 -/
 @[simp] lemma indepFun_zero_right {β} [MeasurableSpace β] [MeasurableSpace γ]
@@ -132,7 +132,7 @@ lemma indepFun_zero_left
 
 中文:
 引理 indepFun_zero_left
-  结论: {β} [MeasurableSpace β] [MeasurableSpace γ]
+  结论: {β} [可测空间 β] [可测空间 γ]
   证明: by simp [IndepFun]
 -/
 @[simp] lemma indepFun_zero_left {β} [MeasurableSpace β] [MeasurableSpace γ]
@@ -150,7 +150,7 @@ alias ⟨iIndepFun.congr, _⟩ := iIndepFun_congr
 
 中文:
 引理 iIndepFun_congr
-  结论: {β : ι -> 类型} {m : 对任意 x : ι, MeasurableSpace (β x)}
+  结论: {β : ι -> 类型} {m : 对任意 x : ι, 可测空间 (β x)}
   证明: iIndep_congr h
 
 alias ⟨iIndepFun.congr, _⟩ := iIndepFun_congr
@@ -177,7 +177,7 @@ alias ⟨IndepFun.congr, _⟩ := indepFun_congr
 
 中文:
 引理 indepFun_congr
-  结论: {β} [MeasurableSpace β] [MeasurableSpace γ]
+  结论: {β} [可测空间 β] [可测空间 γ]
   证明: indep_congr h
 
 alias ⟨IndepFun.congr, _⟩ := indepFun_congr
@@ -204,7 +204,7 @@ lemma iIndepFun.of_subsingleton
 
 中文:
 引理 iIndepFun.of_subsingleton
-  结论: [Subsingleton ι] {β : ι -> 类型} {m : 对任意 i, MeasurableSpace (β i)}
+  结论: [子单例 ι] {β : ι -> 类型} {m : 对任意 i, 可测空间 (β i)}
   证明: by
   simp [iIndepFun]
 -/
@@ -256,7 +256,7 @@ lemma iIndepFun.meas_biInter
   proof: hf.iIndep.meas_biInter hs
 
 中文:
-引理 iIndepFun.meas_biInter
+引理 iIndepFun.meas_bi整数er
   结论: (hf : iIndepFun f κ μ)
   证明: hf.iIndep.meas_biInter hs
 -/
@@ -273,8 +273,8 @@ lemma iIndepFun.meas_iInter
   proof: hf.iIndep.meas_iInter hs
 
 中文:
-引理 iIndepFun.meas_iInter
-  结论: [Fintype ι] (hf : iIndepFun f κ μ)
+引理 iIndepFun.meas_i整数er
+  结论: [有限类型 ι] (hf : iIndepFun f κ μ)
   证明: hf.iIndep.meas_iInter hs
 -/
 lemma iIndepFun.meas_iInter [Fintype ι] (hf : iIndepFun f κ μ)
@@ -291,7 +291,7 @@ lemma IndepFun.meas_inter
 
 中文:
 引理 IndepFun.meas_inter
-  结论: {β} [mβ : MeasurableSpace β] [mγ : MeasurableSpace γ]
+  结论: {β} [mβ : 可测空间 β] [mγ : 可测空间 γ]
   证明: hfg _ _ hs ht
 -/
 lemma IndepFun.meas_inter {β} [mβ : MeasurableSpace β] [mγ : MeasurableSpace γ]
@@ -309,7 +309,7 @@ lemma iIndepFun.precomp
 
 中文:
 引理 iIndepFun.precomp
-  条件: (hg : Function.Injective g) (h : iIndepFun f κ μ)
+  条件: (hg : 函数.单射 g) (h : iIndepFun f κ μ)
   证明: iIndep.precomp hg h
 -/
 lemma iIndepFun.precomp (hg : Function.Injective g) (h : iIndepFun f κ μ) :
@@ -326,7 +326,7 @@ lemma iIndepFun.of_precomp
 
 中文:
 引理 iIndepFun.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndepFun (fun i => f (g i)) κ μ)
+  条件: (hg : 函数.满射 g) (h : iIndepFun (fun i => f (g i)) κ μ)
   证明: iIndep.of_precomp hg h
 -/
 lemma iIndepFun.of_precomp (hg : Function.Surjective g) (h : iIndepFun (fun i => f (g i)) κ μ) :
@@ -343,7 +343,7 @@ lemma iIndepFun_precomp_of_bijective
 
 中文:
 引理 iIndepFun_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: ⟨.of_precomp hg.surjective, .precomp hg.injective⟩
 
 Depends on / 依赖: hg.injective, hg.surjective, injective, of_precomp, precomp, surjective
@@ -364,7 +364,7 @@ theorem iIndepFun.indepFun
 
 中文:
 定理 iIndepFun.indepFun
-  结论: {β : ι -> 类型} {m : 对任意 x, MeasurableSpace (β x)} {f : 对任意 i, Ω -> β i}
+  结论: {β : ι -> 类型} {m : 对任意 x, 可测空间 (β x)} {f : 对任意 i, Ω -> β i}
   证明: hf_Indep.indep hij
 -/
 theorem iIndepFun.indepFun {β : ι -> Type*} {m : forall x, MeasurableSpace (β x)} {f : forall i, Ω -> β i}
@@ -386,7 +386,7 @@ alias ⟨IndepFun.measure_inter_preimage_eq_mul, _⟩ := indepFun_iff_measure_in
 
 中文:
 定理 indepFun_iff_measure_inter_preimage_eq_mul
-  结论: {mβ : MeasurableSpace β}
+  结论: {mβ : 可测空间 β}
   证明: by
   constructor <;> intro h
   · refine fun s t hs ht => h (f ⁻¹' s) (g ⁻¹' t) ⟨s, hs, rfl⟩ ⟨t, ht, rfl⟩
@@ -470,7 +470,7 @@ theorem iIndepFun.congr'
 
 中文:
 定理 iIndepFun.congr'
-  结论: {β : ι -> 类型} {mβ : 对任意 i, MeasurableSpace (β i)}
+  结论: {β : ι -> 类型} {mβ : 对任意 i, 可测空间 (β i)}
   证明: by
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at hf ⊢
   intro S sets hmeas
@@ -516,7 +516,7 @@ theorem iIndepFun_congr'
 
 中文:
 定理 iIndepFun_congr'
-  结论: {β : ι -> 类型} {mβ : 对任意 i, MeasurableSpace (β i)}
+  结论: {β : ι -> 类型} {mβ : 对任意 i, 可测空间 (β i)}
   证明: h'.congr' h
   mpr h' := by
     refine h'.congr' fun i => ?_
@@ -546,7 +546,7 @@ lemma iIndepFun.comp
 
 中文:
 引理 iIndepFun.comp
-  结论: {β γ : ι -> 类型} {mβ : 对任意 i, MeasurableSpace (β i)}
+  结论: {β γ : ι -> 类型} {mβ : 对任意 i, 可测空间 (β i)}
   证明: by
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at h ⊢
   refine fun t s hs => ?_
@@ -582,7 +582,7 @@ lemma iIndepFun.comp₀
 
 中文:
 引理 iIndepFun.comp₀
-  结论: {β γ : ι -> 类型} {mβ : 对任意 i, MeasurableSpace (β i)}
+  结论: {β γ : ι -> 类型} {mβ : 对任意 i, 可测空间 (β i)}
   证明: by
   have h : iIndepFun (fun i => ((hg i).mk (g i)) ∘ f i) κ μ :=
     iIndepFun.comp h (fun i => (hg i).mk (g i)) fun i => (hg i).measurable_mk
@@ -618,7 +618,7 @@ nonrec theorem IndepFun.symm {_ :
 
 中文:
 定理 indepFun_iff_indepSet_preimage
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   refine indepFun_iff_measure_inter_preimage_eq_mul.trans ?_
   constructor <;> intro h s t hs ht <;> specialize h s t hs ht
@@ -658,7 +658,7 @@ theorem IndepFun.congr'
 
 中文:
 定理 IndepFun.congr'
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   rintro _ _ ⟨A, hA, rfl⟩ ⟨B, hB, rfl⟩
   filter_upwards [hf, hg, hfg _ _ ⟨_, hA, rfl⟩ ⟨_, hB, rfl⟩] with a hf' hg' hfg'
@@ -692,7 +692,7 @@ theorem IndepFun.comp
 
 中文:
 定理 IndepFun.comp
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   rintro _ _ ⟨A, hA, rfl⟩ ⟨B, hB, rfl⟩
   apply hfg
@@ -724,7 +724,7 @@ theorem IndepFun.comp₀
 
 中文:
 定理 IndepFun.comp₀
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   have h : IndepFun ((hφ.mk φ) ∘ f) ((hψ.mk ψ) ∘ g) κ μ := by
     refine IndepFun.comp hfg hφ.measurable_mk hψ.measurable_mk
@@ -763,7 +763,7 @@ lemma indepFun_const_left
 
 中文:
 引理 indepFun_const_left
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   rw [IndepFun]; rw [MeasurableSpace.comap_const]
   exact indep_bot_left _
@@ -786,7 +786,7 @@ lemma indepFun_const_right
 
 中文:
 引理 indepFun_const_right
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: (indepFun_const_left c X).symm
 
 Depends on / 依赖: indepFun_const_left
@@ -806,7 +806,7 @@ theorem IndepFun.neg_right
 
 中文:
 定理 IndepFun.neg_right
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β']
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'} [取负 β']
   证明: hfg.comp measurable_id measurable_neg
 -/
 theorem IndepFun.neg_right {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β']
@@ -823,7 +823,7 @@ theorem IndepFun.neg_left
 
 中文:
 定理 IndepFun.neg_left
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β]
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'} [取负 β]
   证明: hfg.comp measurable_neg measurable_id
 -/
 theorem IndepFun.neg_left {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β]
@@ -911,7 +911,7 @@ theorem iIndepFun.indepFun_finset
 
 中文:
 定理 iIndepFun.indepFun_finset
-  结论: (S T : Finset ι) (hST : Disjoint S T)
+  结论: (S T : 有限集 ι) (hST : Disjoint S T)
   证明: by
   rcases eq_or_ne μ 0 with rfl | hμ
   · simp
@@ -1019,7 +1019,7 @@ theorem iIndepFun.indepFun_finset₀
 
 中文:
 定理 iIndepFun.indepFun_finset₀
-  结论: (S T : Finset ι) (hST : Disjoint S T)
+  结论: (S T : 有限集 ι) (hST : Disjoint S T)
   证明: by
   have h : IndepFun (fun a (i : S) => (hf_meas i).mk (f i) a)
       (fun a (i : T) => (hf_meas i).mk (f i) a) κ μ := by
@@ -1708,7 +1708,7 @@ theorem iIndepSet.iIndepFun_indicator
 
 中文:
 定理 iIndepSet.iIndepFun_indicator
-  结论: [Zero β] [One β] {m : MeasurableSpace β} {s : ι -> Set Ω}
+  结论: [零 β] [幺 β] {m : 可测空间 β} {s : ι -> 集合 Ω}
   证明: by
   classical
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul]
@@ -1746,7 +1746,7 @@ lemma Indep.indicator_const_indepFun
 
 中文:
 引理 Indep.indicator_const_indepFun
-  结论: {m : MeasurableSpace Ω} {M 𝓧 : 类型}
+  结论: {m : 可测空间 Ω} {M 𝓧 : 类型}
   证明: indep_of_indep_of_le_left h (measurable_const.indicator hA).comap_le
 
 Depends on / 依赖: comap_le, indep_of_indep_of_le_left, indicator, measurable_const, measurable_const.indicator
@@ -1775,8 +1775,8 @@ lemma iIndepFun.cond_iInter
   have hg i : MeasurableSet[(mα.pro
 
 中文:
-引理 iIndepFun.cond_iInter
-  结论: [Finite ι] (hY : 对任意 i, Measurable (Y i))
+引理 iIndepFun.cond_i整数er
+  结论: [有限 ι] (hY : 对任意 i, 可测 (Y i))
   证明: by
   classical
   cases nonempty_fintype ι

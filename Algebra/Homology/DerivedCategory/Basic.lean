@@ -100,7 +100,7 @@ definition HasDerivedCategory.standard
 
 中文:
 定义 HasDerivedCategory.standard
-  签名: : HasDerivedCategory.{max u v} C
+  签名: : HasDerivedCategory.{最大值 u v} C
   定义体: MorphismProperty.HasLocalization.standard _
 
 Depends on / 依赖: HasLocalization, MorphismProperty, MorphismProperty.HasLocalization.standard, standard
@@ -120,8 +120,8 @@ definition DerivedCategory
 deriving Category
 
 中文:
-定义 DerivedCategory
-  签名: : Type (max u v)
+定义 导出范畴
+  签名: : 类型 (最大值 u v)
   定义体: HomologicalComplexUpToQuasiIso C (ComplexShape.up Int)
 deriving Category
 
@@ -144,7 +144,7 @@ definition Q
 
 中文:
 定义 Q
-  签名: : CochainComplex C 整数 ⥤ DerivedCategory C
+  签名: : 上链复形 C 整数 ⥤ 导出范畴 C
   定义体: HomologicalComplexUpToQuasiIso.Q
 
 Depends on / 依赖: HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.Q
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Q (C := C)).IsLocalization
+  签名: (Q (C := C)).是Localization
   定义体: by
   dsimp only [Q, DerivedCategory]
   infer_instance
@@ -191,7 +191,7 @@ definition Qh
 
 中文:
 定义 Qh
-  签名: : HomotopyCategory C (ComplexShape.up 整数) ⥤ DerivedCategory C
+  签名: : HomotopyCategory C (余mplexShape.up 整数) ⥤ 导出范畴 C
   定义体: HomologicalComplexUpToQuasiIso.Qh
 
 Depends on / 依赖: HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.Qh
@@ -214,7 +214,7 @@ definition quotientCompQhIso
 
 中文:
 定义 quotientCompQhIso
-  签名: : HomotopyCategory.quotient C (ComplexShape.up 整数) ⋙ Qh ≅ Q
+  签名: : HomotopyCategory.quotient C (余mplexShape.up 整数) ⋙ Qh ≅ Q
   定义体: HomologicalComplexUpToQuasiIso.quotientCompQhIso C (ComplexShape.up Int)
 
 #adaptation_note /-- Prior to nightly-2026-05-07, the LHS of these statements was guarded with
@@ -241,7 +241,7 @@ lemma quotientCompQhIso_hom_naturality
 
 中文:
 引理 quotientCompQhIso_hom_naturality
-  条件: {K L : CochainComplex C 整数} (f : K ⟶ L)
+  条件: {K L : 上链复形 C 整数} (f : K ⟶ L)
   证明: (quotientCompQhIso C).hom.naturality f
 
 @[reassoc]
@@ -264,7 +264,7 @@ lemma quotientCompQhIso_inv_naturality
 
 中文:
 引理 quotientCompQhIso_inv_naturality
-  条件: {K L : CochainComplex C 整数} (f : K ⟶ L)
+  条件: {K L : 上链复形 C 整数} (f : K ⟶ L)
   证明: (quotientCompQhIso C).inv.naturality f
 
 Depends on / 依赖: inv.naturality, naturality, quotientCompQhIso
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Qh.IsLocalization (HomotopyCategory.quasiIso C (ComplexShape.up 整数))
+  签名: Qh.是Localization (HomotopyCategory.quasiIso C (余mplexShape.up 整数))
   定义体: by
   dsimp [Qh, DerivedCategory]
   infer_instance
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: Qh.IsLocalization (HomotopyCategory.subcategoryAcyclic C).trW
+  签名: Qh.是Localization (HomotopyCategory.subcategoryAcyclic C).trW
   定义体: by
   rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic]
   infer_instance
@@ -331,7 +331,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (DerivedCategory C)
+  签名: 预加性 (导出范畴 C)
   定义体: Localization.preadditive Qh (HomotopyCategory.subcategoryAcyclic C).trW
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.subcategoryAcyclic, Localization, Localization.preadditive, preadditive, subcategoryAcyclic
@@ -349,7 +349,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).Additive
+  签名: (Qh (C := C)).加性
   定义体: Localization.functor_additive Qh (HomotopyCategory.subcategoryAcyclic C).trW
 
 Depends on / 依赖: Additive
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Q (C := C)).Additive
+  签名: (Q (C := C)).加性
   定义体: Functor.additive_of_iso (quotientCompQhIso C)
 
 Depends on / 依赖: Additive
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject (DerivedCategory C)
+  签名: 有ZeroObject (导出范畴 C)
   定义体: Q.hasZeroObject_of_additive
 
 Depends on / 依赖: Q.hasZeroObject_of_additive, hasZeroObject_of_additive
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (DerivedCategory C) 整数
+  签名: 有Shift (导出范畴 C) 整数
   定义体: HasShift.localized Qh (HomotopyCategory.subcategoryAcyclic C).trW Int
 
 Depends on / 依赖: HasShift, HasShift.localized, HomotopyCategory, HomotopyCategory.subcategoryAcyclic, localized, subcategoryAcyclic
@@ -421,7 +421,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).CommShift 整数
+  签名: (Qh (C := C)).交换Shift 整数
   定义体: Functor.CommShift.localized Qh (HomotopyCategory.subcategoryAcyclic C).trW Int
 
 Depends on / 依赖: CommShift
@@ -439,7 +439,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Q (C := C)).CommShift 整数
+  签名: (Q (C := C)).交换Shift 整数
   定义体: Functor.CommShift.ofIso (quotientCompQhIso C) Int
 
 Depends on / 依赖: CommShift
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift (quotientCompQhIso C).hom 整数
+  签名: 自然变换.交换Shift (quotientCompQhIso C).hom 整数
   定义体: Functor.CommShift.ofIso_compatibility (quotientCompQhIso C) Int
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.ofIso_compatibility, ofIso_compatibility, quotientCompQhIso
@@ -481,7 +481,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pretriangulated (DerivedCategory C)
+  签名: 预三角 (导出范畴 C)
   定义体: Triangulated.Localization.pretriangulated
     Qh (HomotopyCategory.subcategoryAcyclic C).trW
 
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).IsTriangulated
+  签名: (Qh (C := C)).是三角
   定义体: Triangulated.Localization.isTriangulated_functor
     Qh (HomotopyCategory.subcategoryAcyclic C).trW
 
@@ -523,7 +523,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTriangulated (DerivedCategory C)
+  签名: 是三角 (导出范畴 C)
   定义体: Triangulated.Localization.isTriangulated
     Qh (HomotopyCategory.subcategoryAcyclic C).trW
 
@@ -543,7 +543,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).mapArrow.EssSurj
+  签名: (Qh (C := C)).mapArrow.本质满射
   定义体: Localization.essSurj_mapArrow _ (HomotopyCategory.subcategoryAcyclic C).trW
 
 Depends on / 依赖: EssSurj, mapArrow, mapArrow.EssSurj
@@ -569,7 +569,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh : _ ⥤ DerivedCategory C).EssSurj
+  签名: (Qh : _ ⥤ 导出范畴 C).本质满射
   定义体: Localization.essSurj _ (HomotopyCategory.quasiIso _ _)
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quasiIso, Localization, Localization.essSurj, essSurj, quasiIso
@@ -587,7 +587,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Q : _ ⥤ DerivedCategory C).EssSurj
+  签名: (Q : _ ⥤ 导出范畴 C).本质满射
   定义体: Localization.essSurj _ (HomologicalComplex.quasiIso _ _)
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.quasiIso, Localization, Localization.essSurj, essSurj, quasiIso
@@ -613,7 +613,7 @@ lemma mem_distTriang_iff
 
 中文:
 引理 mem_distTriang_iff
-  条件: (T : Triangle (DerivedCategory C))
+  条件: (T : Triangle (导出范畴 C))
   证明: by
   constructor
   · rintro ⟨T', e, ⟨X, Y, f, ⟨e'⟩⟩⟩
@@ -711,7 +711,7 @@ definition singleFunctors
 
 中文:
 定义 singleFunctors
-  签名: : SingleFunctors C (DerivedCategory C) 整数
+  签名: : SingleFunctors C (导出范畴 C) 整数
   定义体: (HomotopyCategory.singleFunctors C).postcomp Qh
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.singleFunctors, postcomp, singleFunctors
@@ -922,7 +922,7 @@ lemma isIso_Q_map_iff_quasiIso
 
 中文:
 引理 isIso_Q_map_iff_quasiIso
-  条件: {K L : CochainComplex C 整数} (φ : K ⟶ L)
+  条件: {K L : 上链复形 C 整数} (φ : K ⟶ L)
   证明: by
   apply HomologicalComplexUpToQuasiIso.isIso_Q_map_iff_mem_quasiIso
 
@@ -942,7 +942,7 @@ lemma Q_map_eq_of_homotopy
 
 中文:
 引理 Q_map_eq_of_homotopy
-  条件: {K L : CochainComplex C 整数} {f g : K ⟶ L} (h : Homotopy f g)
+  条件: {K L : 上链复形 C 整数} {f g : K ⟶ L} (h : 同伦 f g)
   证明: HomologicalComplexUpToQuasiIso.Q_map_eq_of_homotopy h
 
 Depends on / 依赖: HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.Q_map_eq_of_homotopy, Q_map_eq_of_homotopy

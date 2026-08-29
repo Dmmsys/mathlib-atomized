@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (AdjoinPthRoots k)
+  签名: 域 (AdjoinPthRoots k)
   定义体: inferInstanceAs (Field k)
 
 @[no_expose]
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra k (AdjoinPthRoots k)
+  签名: 代数 k (AdjoinPthRoots k)
   定义体: (frobenius k (ringExpChar k)).toAlgebra
 
 Depends on / 依赖: frobenius, ringExpChar, toAlgebra
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPurelyInseparable k (AdjoinPthRoots k)
+  签名: 是纯不可分 k (AdjoinPthRoots k)
   定义体: by
   obtain ⟨p, hp⟩ := ExpChar.exists k
   rw [isPurelyInseparable_iff_pow_mem k p]

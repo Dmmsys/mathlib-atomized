@@ -58,7 +58,7 @@ definition HasIndepIncrements
 
 中文:
 定义 HasIndepIncrements
-  签名: (X : T -> Ω -> E) (P : Measure Ω := by volume_tac)
+  签名: (X : T -> Ω -> E) (P : 测度 Ω := by volume_tac)
   定义体: forall n, forall t : Fin (n + 1) -> T, Monotone t ->
     iIndepFun (fun (i : Fin n) ω => X (t i.succ) ω - X (t i.castSucc) ω) P
 
@@ -178,7 +178,7 @@ lemma HasIndepIncrements.indepFun_sub_sub
 
 中文:
 引理 HasIndepIncrements.indepFun_sub_sub
-  结论: [Sub E] (hX : HasIndepIncrements X P) {r s t : T}
+  结论: [减法 E] (hX : HasIndepIncrements X P) {r s t : T}
   证明: by
   let τ : Nat -> T
     | 0 => r
@@ -209,7 +209,7 @@ lemma HasIndepIncrements.indepFun_eval_sub
 
 中文:
 引理 HasIndepIncrements.indepFun_eval_sub
-  结论: [SubNegZeroMonoid E] (hX : HasIndepIncrements X P)
+  结论: [SubNegZero幺半群 E] (hX : HasIndepIncrements X P)
   证明: by
   refine (hX.indepFun_sub_sub hrs hst).congr ?_ .rfl
   filter_upwards [h] with ω hω using by simp [hω]
@@ -235,7 +235,7 @@ lemma HasIndepIncrements.map'
 
 中文:
 引理 HasIndepIncrements.map'
-  结论: {F G : 类型} [MeasurableSpace G] [FunLike F E G]
+  结论: {F G : 类型} [可测空间 G] [函数状 F E G]
   证明: by
   intro n t ht
   simp_rw [← map_sub]
@@ -259,7 +259,7 @@ lemma HasIndepIncrements.map
 
 中文:
 引理 HasIndepIncrements.map
-  结论: {R F : 类型} [Semiring R] [SeminormedAddCommGroup E]
+  结论: {R F : 类型} [半环 R] [SeminormedAddComm群 E]
   证明: hX.map' L.measurable
 -/
 protected lemma HasIndepIncrements.map {R F : Type*} [Semiring R] [SeminormedAddCommGroup E]
@@ -278,7 +278,7 @@ lemma HasIndepIncrements.smul
 
 中文:
 引理 HasIndepIncrements.smul
-  结论: {R : 类型} [AddGroup E] [DistribSMul R E]
+  结论: {R : 类型} [加法群 E] [分配标量乘法 R E]
   证明: hX.map' (f := DistribSMul.toAddMonoidHom E c) (MeasurableConstSMul.measurable_const_smul c)
 -/
 protected lemma HasIndepIncrements.smul {R : Type*} [AddGroup E] [DistribSMul R E]
@@ -296,7 +296,7 @@ lemma HasIndepIncrements.neg
 
 中文:
 引理 HasIndepIncrements.neg
-  结论: [AddCommGroup E] [MeasurableNeg E]
+  结论: [加法交换群 E] [MeasurableNeg E]
   证明: hX.map' (f := negAddMonoidHom) measurable_neg
 -/
 protected lemma HasIndepIncrements.neg [AddCommGroup E] [MeasurableNeg E]

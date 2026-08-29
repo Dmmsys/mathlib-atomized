@@ -62,7 +62,7 @@ definition spanNorm
 
 中文:
 定义 spanNorm
-  签名: (I : Ideal S)
+  签名: (I : 理想 S)
   定义体: Ideal.map (Algebra.intNorm R S) I
 
 @[simp]
@@ -105,7 +105,7 @@ theorem spanNorm_eq_bot_iff
 
 中文:
 定理 spanNorm_eq_bot_iff
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   结论: spanNorm R I = ⊥ ↔ I = ⊥
   证明: by
   simp only [spanNorm, span_eq_bot, Set.mem_image, SetLike.mem_coe, forall_exists_index, and_imp,
@@ -129,7 +129,7 @@ theorem intNorm_mem_spanNorm
 
 中文:
 定理 intNorm_mem_spanNorm
-  条件: {I : Ideal S} {x : S} (hx : x in I)
+  条件: {I : 理想 S} {x : S} (hx : x in I)
   证明: subset_span (Set.mem_image_of_mem _ hx)
 
 Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem, subset_span
@@ -152,7 +152,7 @@ theorem norm_mem_spanNorm
 
 中文:
 定理 norm_mem_spanNorm
-  条件: [Module.Free R S] {I : Ideal S} (x : S) (hx : x in I)
+  条件: [模.自由 R S] {I : 理想 S} (x : S) (hx : x in I)
   证明: by
   refine subset_span ⟨x, hx, ?_⟩
   rw [Algebra.intNorm_eq_norm]
@@ -220,7 +220,7 @@ theorem spanNorm_top
 
 中文:
 定理 spanNorm_top
-  结论: spanNorm R (⊤ : Ideal S) = ⊤
+  结论: spanNorm R (⊤ : 理想 S) = ⊤
   证明: by
   simp [← Ideal.span_singleton_one]
 
@@ -243,8 +243,8 @@ theorem map_spanIntNorm
 @[gcongr, mono]
 
 中文:
-定理 map_spanIntNorm
-  条件: (I : Ideal S) {T : 类型} [Semiring T] (f : R ->+* T)
+定理 map_span整数Norm
+  条件: (I : 理想 S) {T : 类型} [半环 T] (f : R ->+* T)
   证明: by
   rw [spanNorm]
   nth_rw 2 [map]
@@ -272,7 +272,7 @@ theorem spanNorm_mono
 
 中文:
 定理 spanNorm_mono
-  条件: {I J : Ideal S} (h : I <= J)
+  条件: {I J : 理想 S} (h : I <= J)
   结论: spanNorm R I <= spanNorm R J
   证明: Ideal.span_mono (Set.monotone_image h)
 
@@ -297,8 +297,8 @@ theorem spanIntNorm_localization
       (nonZeroD
 
 中文:
-定理 spanIntNorm_localization
-  结论: (I : Ideal S) (M : Submonoid R) (hM : M <= R⁰)
+定理 span整数Norm_localization
+  结论: (I : 理想 S) (M : 子幺半群 R) (hM : M <= R⁰)
   证明: by
   let K := FractionRing R
   let f : Rₘ ->+* K := IsLocalization.map _ (T := R⁰) (RingHom.id R) hM
@@ -373,7 +373,7 @@ theorem spanNorm_mul_spanNorm_le
 
 中文:
 定理 spanNorm_mul_spanNorm_le
-  条件: (I J : Ideal S)
+  条件: (I J : 理想 S)
   证明: by
   rw [spanNorm]; rw [spanNorm]; rw [spanNorm]
   nth_rw 1 [map]; nth_rw 1 [map]
@@ -410,7 +410,7 @@ theorem spanNorm_mul_of_bot_or_top
 
 中文:
 定理 spanNorm_mul_of_bot_or_top
-  条件: (eq_bot_or_top : 对任意 I : Ideal R, I = ⊥ ∨ I = ⊤) (I J : Ideal S)
+  条件: (eq_bot_or_top : 对任意 I : 理想 R, I = ⊥ ∨ I = ⊤) (I J : 理想 S)
   证明: by
   refine le_antisymm ?_ (spanNorm_mul_spanNorm_le R _ _)
   rcases eq_bot_or_top (spanNorm R I) with hI | hI
@@ -453,7 +453,7 @@ exact mem_comap.mpr mem_of_dvd _ (Algebra.dvd_algebraMap_intNorm_self _ _ x) hx
 
 中文:
 定理 spanNorm_le_comap
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: spanNorm R I <= comap (algebraMap R S) I
   证明: by
   rw [spanNorm]; rw [Ideal.map]; rw [Ideal.span_le]; rw [← Submodule.span_le]
@@ -500,7 +500,7 @@ theorem spanNorm_mul
 
 中文:
 定理 spanNorm_mul
-  条件: [IsDedekindDomain R] [IsDedekindDomain S] (I J : Ideal S)
+  条件: [是Dedekind整环 R] [是Dedekind整环 S] (I J : 理想 S)
   证明: by
   nontriviality R
   cases subsingleton_or_nontrivial S
@@ -556,7 +556,7 @@ exact ⟨intNorm T S x, subset_span Set.mem_image_of_mem _ hx, by rw [intNorm_in
 
 中文:
 定理 le_spanNorm_spanNorm
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: spanNorm R I <= spanNorm R (spanNorm T I)
   证明: by
   simp_rw [spanNorm, map]
@@ -585,7 +585,7 @@ theorem spanNorm_spanNorm_of_bot_or_top
 
 中文:
 定理 spanNorm_spanNorm_of_bot_or_top
-  结论: (eq_bot_or_top : 对任意 I : Ideal R, I = ⊥ ∨ I = ⊤)
+  结论: (eq_bot_or_top : 对任意 I : 理想 R, I = ⊥ ∨ I = ⊤)
   证明: by
   obtain h | h := eq_bot_or_top (spanNorm R I)
   · rw [h, spanNorm_eq_bot_iff, spanNorm_eq_bot_iff, spanNorm_eq_bot_iff.mp h]
@@ -618,7 +618,7 @@ theorem spanNorm_spanNorm
 
 中文:
 定理 spanNorm_spanNorm
-  结论: [IsDedekindDomain R] [IsDedekindDomain T] [IsDedekindDomain S]
+  结论: [是Dedekind整环 R] [是Dedekind整环 T] [是Dedekind整环 S]
   证明: by
   refine eq_of_localization_maximal fun P hP => ?_
   by_cases hP : P = ⊥
@@ -663,7 +663,7 @@ definition relNorm
 
 中文:
 定义 relNorm
-  签名: : Ideal S ->*₀ Ideal R where
+  签名: : 理想 S ->*₀ 理想 R where
   定义体: spanNorm R
   map_zero' := spanNorm_bot R
   map_one' := by rw [one_eq_top, spanNorm_top R, one_eq_top]
@@ -689,7 +689,7 @@ theorem relNorm_apply
 
 中文:
 定理 relNorm_apply
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   证明: rfl
 
 @[simp]
@@ -712,7 +712,7 @@ theorem spanNorm_eq
 
 中文:
 定理 spanNorm_eq
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: spanNorm R I = relNorm R I
   证明: rfl
 
@@ -734,7 +734,7 @@ theorem relNorm_bot
 
 中文:
 定理 relNorm_bot
-  结论: relNorm R (⊥ : Ideal S) = ⊥
+  结论: relNorm R (⊥ : 理想 S) = ⊥
   证明: by
   simpa only [zero_eq_bot] using map_zero (relNorm R : Ideal S ->*₀ _)
 
@@ -757,7 +757,7 @@ theorem relNorm_top
 
 中文:
 定理 relNorm_top
-  结论: relNorm R (⊤ : Ideal S) = ⊤
+  结论: relNorm R (⊤ : 理想 S) = ⊤
   证明: by
   simpa only [one_eq_top] using map_one (relNorm R : Ideal S ->*₀ _)
 
@@ -779,7 +779,7 @@ theorem relNorm_eq_bot_iff
 
 中文:
 定理 relNorm_eq_bot_iff
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   结论: relNorm R I = ⊥ ↔ I = ⊥
   证明: spanNorm_eq_bot_iff
 
@@ -800,7 +800,7 @@ theorem norm_mem_relNorm
 
 中文:
 定理 norm_mem_relNorm
-  条件: [Module.Free R S] (I : Ideal S) {x : S} (hx : x in I)
+  条件: [模.自由 R S] (I : 理想 S) {x : S} (hx : x in I)
   证明: norm_mem_spanNorm R x hx
 
 @[simp]
@@ -824,7 +824,7 @@ theorem relNorm_singleton
 中文:
 定理 relNorm_singleton
   条件: (r : S)
-  结论: relNorm R (span ({r} : Set S)) = span {Algebra.intNorm R S r}
+  结论: relNorm R (span ({r} : 集合 S)) = span {代数.intNorm R S r}
   证明: spanNorm_singleton R
 
 Depends on / 依赖: spanNorm_singleton
@@ -844,7 +844,7 @@ theorem map_relNorm
 
 中文:
 定理 map_relNorm
-  条件: (I : Ideal S) {T : 类型} [Semiring T] (f : R ->+* T)
+  条件: (I : 理想 S) {T : 类型} [半环 T] (f : R ->+* T)
   证明: map_spanIntNorm R I f
 
 @[gcongr, mono]
@@ -867,7 +867,7 @@ theorem relNorm_mono
 
 中文:
 定理 relNorm_mono
-  条件: {I J : Ideal S} (h : I <= J)
+  条件: {I J : 理想 S} (h : I <= J)
   结论: relNorm R I <= relNorm R J
   证明: spanNorm_mono R h
 
@@ -892,7 +892,7 @@ theorem relNorm_map_algEquiv_aux
 
 中文:
 定理 relNorm_map_algEquiv_aux
-  结论: {T : 类型} [CommRing T] [IsDedekindDomain T]
+  结论: {T : 类型} [交换环 T] [是Dedekind整环 T]
   证明: span_mono fun _ ⟨x, hx₁, hx₂⟩ => ⟨σ.toRingEquiv.symm x,
     by rwa [SetLike.mem_coe, Ideal.symm_apply_mem_of_equiv_iff],
     hx₂ ▸ Algebra.intNorm_map_algEquiv _ x σ.symm⟩
@@ -923,7 +923,7 @@ theorem relNorm_map_algEquiv
 
 中文:
 定理 relNorm_map_algEquiv
-  结论: {T : 类型} [CommRing T] [IsDedekindDomain T] [Is整数egrallyClosed T]
+  结论: {T : 类型} [交换环 T] [是Dedekind整环 T] [是整闭 T]
   证明: by
   refine le_antisymm (relNorm_map_algEquiv_aux σ I) ?_
   convert! relNorm_map_algEquiv_aux σ.symm (I.map σ)
@@ -953,7 +953,7 @@ theorem relNorm_comap_algEquiv
 
 中文:
 定理 relNorm_comap_algEquiv
-  结论: {T : 类型} [CommRing T] [IsDedekindDomain T] [Is整数egrallyClosed T]
+  结论: {T : 类型} [交换环 T] [是Dedekind整环 T] [是整闭 T]
   证明: map_symm σ.toRingEquiv ▸ relNorm_map_algEquiv σ.symm I
 
 Depends on / 依赖: map_symm, relNorm_map_algEquiv, toRingEquiv
@@ -976,7 +976,7 @@ theorem relNorm_smul
 
 中文:
 定理 relNorm_smul
-  结论: {G : 类型} [Group G] [MulSemiringAction G S] [SMulCommClass G R S] (g : G)
+  结论: {G : 类型} [群 G] [MulSemiring作用 G S] [标量交换类 G R S] (g : G)
   证明: relNorm_map_algEquiv (toAlgEquiv R S g) I
 
 Depends on / 依赖: relNorm_map_algEquiv, toAlgEquiv
@@ -995,7 +995,7 @@ theorem relNorm_le_comap
 
 中文:
 定理 relNorm_le_comap
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: relNorm R I <= comap (algebraMap R S) I
   证明: spanNorm_le_comap R I
 
@@ -1014,7 +1014,7 @@ theorem relNorm_relNorm
 
 中文:
 定理 relNorm_relNorm
-  结论: (T : 类型) [CommRing T] [IsDedekindDomain T] [Is整数egrallyClosed T]
+  结论: (T : 类型) [交换环 T] [是Dedekind整环 T] [是整闭 T]
   证明: spanNorm_spanNorm _ _ _
 
 Depends on / 依赖: spanNorm_spanNorm
@@ -1044,7 +1044,7 @@ theorem relNorm_algebraMap
 
 中文:
 定理 relNorm_algebraMap
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   rw [← spanNorm_eq]
   refine eq_of_localization_maximal (fun P hPd => ?_)
@@ -1080,7 +1080,7 @@ theorem relNorm_algebraMap'
 
 中文:
 定理 relNorm_algebraMap'
-  结论: {R'} [CommRing R'] (I : Ideal R') [Algebra R' R]
+  结论: {R'} [交换环 R'] (I : 理想 R') [代数 R' R]
   证明: by
   rw [← relNorm_algebraMap]; rw [Ideal.map_map]; rw [IsScalarTower.algebraMap_eq R' R S]
 
@@ -1111,8 +1111,8 @@ theorem exists_relNorm_eq_pow_of_isPrime
 relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _
 
 中文:
-定理 exists_relNorm_eq_pow_of_isPrime
-  条件: [p.IsPrime]
+定理 存在_relNorm_eq_pow_of_isPrime
+  条件: [p.是素]
   结论: 存在 s, relNorm R P = p ^ s
   证明: by
   by_cases hp : p = ⊥
@@ -1151,7 +1151,7 @@ theorem relNorm_eq_pow_of_isPrime_isGalois
 
 中文:
 定理 relNorm_eq_pow_of_isPrime_isGalois
-  结论: [p.IsMaximal] [P.IsPrime]
+  结论: [p.是极大] [P.是素]
   证明: by
   have : P.IsMaximal := IsMaximal.of_liesOver_isMaximal P p
   let G := Gal(FractionRing S/FractionRing R)
@@ -1214,7 +1214,7 @@ theorem relNorm_eq_pow_of_isMaximal
 
 中文:
 定理 relNorm_eq_pow_of_isMaximal
-  条件: [PerfectField (FractionRing R)] [P.IsMaximal] [p.IsMaximal]
+  条件: [完美域 (FractionRing R)] [P.是极大] [p.是极大]
   证明: by
   let T := Ring.NormalClosure R S
   obtain ⟨Q, hQ₁, hQ₂⟩ : exists Q : Ideal T, Q.IsMaximal ∧ Q.LiesOver P :=
@@ -1261,7 +1261,7 @@ theorem absNorm_relNorm
 
 中文:
 定理 absNorm_relNorm
-  条件: [PerfectField (FractionRing R)] (I : Ideal S)
+  条件: [完美域 (FractionRing R)] (I : 理想 S)
   证明: by
   have : Module.Finite Int R := Module.Finite.left Int R S
   by_cases hI : I = ⊥
@@ -1303,7 +1303,7 @@ theorem relNorm_int
 
 中文:
 定理 relNorm_int
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   证明: by
   rw [← Int.ideal_span_absNorm_eq_self (relNorm Int I)]; rw [absNorm_relNorm]
 
@@ -1324,7 +1324,7 @@ theorem absNorm_algebraMap
 
 中文:
 定理 absNorm_algebraMap
-  条件: (I : Ideal R) [Module.Finite 整数 R]
+  条件: (I : 理想 R) [模.有限 整数 R]
   证明: by
   rw [← absNorm_relNorm Int]; rw [← relNorm_relNorm Int R]; rw [relNorm_algebraMap]; rw [absNorm_relNorm]; rw [map_pow]
 

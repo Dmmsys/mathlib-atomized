@@ -39,7 +39,7 @@ structure HarmonicContOnCl
 
 中文:
 结构 HarmonicContOnCl
-  参数: (f : E -> F) (s : Set E)
+  参数: (f : E -> F) (s : 集合 E)
   公理与运算 (2 个):
     - harmonicOnNhd : HarmonicOnNhd f s
     - continuousOn : ContinuousOn f (closure s)
@@ -79,8 +79,8 @@ theorem IsClosed.harmonicContOnCl_iff
     exact h.harmonicContOnCl
 
 中文:
-定理 IsClosed.harmonicContOnCl_iff
-  条件: (hs : IsClosed s)
+定理 是闭集.harmonicContOnCl_iff
+  条件: (hs : 是闭集 s)
   证明: (·.1 · ·)
   mpr h := by
     rw [← hs.closure_eq] at h
@@ -212,7 +212,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {t : Set E} (h : HarmonicContOnCl f s) (ht : t subseteq s)
+  条件: {t : 集合 E} (h : HarmonicContOnCl f s) (ht : t subseteq s)
   证明: ⟨h.harmonicOnNhd.mono ht, h.continuousOn.mono (closure_mono ht)⟩
 
 Depends on / 依赖: closure_mono, continuousOn, h.continuousOn.mono, h.harmonicOnNhd.mono, harmonicOnNhd

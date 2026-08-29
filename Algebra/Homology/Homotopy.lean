@@ -104,7 +104,7 @@ theorem dNext_eq
 
 中文:
 定理 dNext_eq
-  条件: (f : 对任意 i j, C.X i ⟶ D.X j) {i i' : ι} (w : c.Rel i i')
+  条件: (f : 对任意 i j, C.X i ⟶ D.X j) {i i' : ι} (w : c.关系 i i')
   证明: by
   obtain rfl := c.next_eq' w
   rfl
@@ -129,7 +129,7 @@ lemma dNext_eq_zero
 
 中文:
 引理 dNext_eq_zero
-  条件: (f : 对任意 i j, C.X i ⟶ D.X j) (i : ι) (hi : ¬ c.Rel i (c.next i))
+  条件: (f : 对任意 i j, C.X i ⟶ D.X j) (i : ι) (hi : ¬ c.关系 i (c.next i))
   证明: by
   dsimp [dNext]
   rw [shape _ _ _ hi]; rw [zero_comp]
@@ -213,7 +213,7 @@ lemma prevD_eq_zero
 
 中文:
 引理 prevD_eq_zero
-  条件: (f : 对任意 i j, C.X i ⟶ D.X j) (i : ι) (hi : ¬ c.Rel (c.prev i) i)
+  条件: (f : 对任意 i j, C.X i ⟶ D.X j) (i : ι) (hi : ¬ c.关系 (c.prev i) i)
   证明: by
   dsimp [prevD]
   rw [shape _ _ _ hi]; rw [comp_zero]
@@ -277,7 +277,7 @@ theorem prevD_eq
 
 中文:
 定理 prevD_eq
-  条件: (f : 对任意 i j, C.X i ⟶ D.X j) {j j' : ι} (w : c.Rel j' j)
+  条件: (f : 对任意 i j, C.X i ⟶ D.X j) {j j' : ι} (w : c.关系 j' j)
   证明: by
   obtain rfl := c.prev_eq' w
   rfl
@@ -348,7 +348,7 @@ theorem dNext_nat
 
 中文:
 定理 dNext_nat
-  条件: (C D : ChainComplex V 自然数) (i : 自然数) (f : 对任意 i j, C.X i ⟶ D.X j)
+  条件: (C D : 链复形 V 自然数) (i : 自然数) (f : 对任意 i j, C.X i ⟶ D.X j)
   证明: by
   dsimp [dNext]
   cases i
@@ -377,7 +377,7 @@ theorem prevD_nat
 
 中文:
 定理 prevD_nat
-  条件: (C D : CochainComplex V 自然数) (i : 自然数) (f : 对任意 i j, C.X i ⟶ D.X j)
+  条件: (C D : 上链复形 V 自然数) (i : 自然数) (f : 对任意 i j, C.X i ⟶ D.X j)
   证明: by
   dsimp [prevD]
   cases i
@@ -407,11 +407,11 @@ structure Homotopy
     - comm : forall i, f.f i = dNext i hom + prevD i hom + g.f i  [default: by cat_disch]
 
 中文:
-结构 Homotopy
+结构 同伦
   参数: (f g : C ⟶ D)
   公理与运算 (3 个):
     - hom : 对任意 i j, C.X i ⟶ D.X j
-    - zero : 对任意 i j, ¬c.Rel j i -> hom i j = 0  [默认: by cat_disch]
+    - zero : 对任意 i j, ¬c.关系 j i -> hom i j = 0  [默认: by cat_disch]
     - comm : 对任意 i, f.f i = dNext i hom + prevD i hom + g.f i  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
@@ -443,7 +443,7 @@ definition equivSubZero
 
 中文:
 定义 equivSubZero
-  签名: : Homotopy f g ≃ Homotopy (f - g) 0 where
+  签名: : 同伦 f g ≃ 同伦 (f - g) 0 where
   定义体: { hom := fun i j => h.hom i j
       zero := fun _ _ w => h.zero _ _ w
       comm := fun i => by simp [h.comm] }
@@ -522,7 +522,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {f g : C ⟶ D} (h : Homotopy f g)
+  签名: {f g : C ⟶ D} (h : 同伦 f g)
   定义体: -h.hom
   zero i j w := by rw [Pi.neg_apply, Pi.neg_apply, h.zero i j w, neg_zero]
   comm i := by
@@ -550,7 +550,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: {e f g : C ⟶ D} (h : Homotopy e f) (k : Homotopy f g)
+  签名: {e f g : C ⟶ D} (h : 同伦 e f) (k : 同伦 f g)
   定义体: h.hom + k.hom
   zero i j w := by rw [Pi.add_apply, Pi.add_apply, h.zero i j w, k.zero i j w, zero_add]
   comm i := by grind [Homotopy.comm]
@@ -576,7 +576,7 @@ definition add
 
 中文:
 定义 add
-  签名: {f₁ g₁ f₂ g₂ : C ⟶ D} (h₁ : Homotopy f₁ g₁) (h₂ : Homotopy f₂ g₂)
+  签名: {f₁ g₁ f₂ g₂ : C ⟶ D} (h₁ : 同伦 f₁ g₁) (h₂ : 同伦 f₂ g₂)
   定义体: h₁.hom + h₂.hom
   zero i j hij := by rw [Pi.add_apply, Pi.add_apply, h₁.zero i j hij, h₂.zero i j hij, add_zero]
   comm i := by grind [HomologicalComplex.add_f_apply, Homotopy.comm]
@@ -607,7 +607,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: {R : 类型} [Semiring R] [Linear R V] (h : Homotopy f g) (a : R)
+  签名: {R : 类型} [半环 R] [线性 R V] (h : 同伦 f g) (a : R)
   定义体: a • h.hom i j
   zero i j hij := by
     rw [h.zero i j hij]; rw [smul_zero]
@@ -645,7 +645,7 @@ definition compRight
 
 中文:
 定义 compRight
-  签名: {e f : C ⟶ D} (h : Homotopy e f) (g : D ⟶ E)
+  签名: {e f : C ⟶ D} (h : 同伦 e f) (g : D ⟶ E)
   定义体: h.hom i j ≫ g.f j
   zero i j w := by rw [h.zero i j w, zero_comp]
   comm i := by rw [comp_f, h.comm i, dNext_comp_right, prevD_comp_right, Preadditive.add_comp,
@@ -674,7 +674,7 @@ definition compLeft
 
 中文:
 定义 compLeft
-  签名: {f g : D ⟶ E} (h : Homotopy f g) (e : C ⟶ D)
+  签名: {f g : D ⟶ E} (h : 同伦 f g) (e : C ⟶ D)
   定义体: e.f i ≫ h.hom i j
   zero i j w := by rw [h.zero i j w, comp_zero]
   comm i := by rw [comp_f, h.comm i, dNext_comp_left, prevD_comp_left, comp_f,
@@ -700,7 +700,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {C₁ C₂ C₃ : HomologicalComplex V c} {f₁ g₁ : C₁ ⟶ C₂} {f₂ g₂ : C₂ ⟶ C₃}
+  签名: {C₁ C₂ C₃ : 同调复形 V c} {f₁ g₁ : C₁ ⟶ C₂} {f₂ g₂ : C₂ ⟶ C₃}
   定义体: (h₁.compRight _).trans (h₂.compLeft _)
 
 Depends on / 依赖: compLeft, compRight
@@ -721,7 +721,7 @@ definition compRightId
 
 中文:
 定义 compRightId
-  签名: {f : C ⟶ C} (h : Homotopy f (𝟙 C)) (g : C ⟶ D)
+  签名: {f : C ⟶ C} (h : 同伦 f (𝟙 C)) (g : C ⟶ D)
   定义体: (h.compRight g).trans (ofEq <| id_comp _)
 
 Depends on / 依赖: compRight, h.compRight, id_comp
@@ -741,7 +741,7 @@ definition compLeftId
 
 中文:
 定义 compLeftId
-  签名: {f : D ⟶ D} (h : Homotopy f (𝟙 D)) (g : C ⟶ D)
+  签名: {f : D ⟶ D} (h : 同伦 f (𝟙 D)) (g : C ⟶ D)
   定义体: (h.compLeft g).trans (ofEq <| comp_id _)
 
 Depends on / 依赖: compLeft, comp_id, h.compLeft
@@ -802,7 +802,7 @@ definition nullHomotopicMap'
 
 中文:
 定义 nullHomotopicMap'
-  签名: (h : 对任意 i j, c.Rel j i -> (C.X i ⟶ D.X j))
+  签名: (h : 对任意 i j, c.关系 j i -> (C.X i ⟶ D.X j))
   定义体: nullHomotopicMap fun i j => dite (c.Rel j i) (h i j) fun _ => 0
 
 Depends on / 依赖: c.Rel, nullHomotopicMap
@@ -854,7 +854,7 @@ theorem nullHomotopicMap'_comp
 
 中文:
 定理 nullHomotopicMap'_comp
-  条件: (hom : 对任意 i j, c.Rel j i -> (C.X i ⟶ D.X j)) (g : D ⟶ E)
+  条件: (hom : 对任意 i j, c.关系 j i -> (C.X i ⟶ D.X j)) (g : D ⟶ E)
   证明: by
   rw [nullHomotopicMap']; rw [nullHomotopicMap_comp]
   congr
@@ -916,7 +916,7 @@ theorem comp_nullHomotopicMap'
 
 中文:
 定理 comp_nullHomotopicMap'
-  条件: (f : C ⟶ D) (hom : 对任意 i j, c.Rel j i -> (D.X i ⟶ E.X j))
+  条件: (f : C ⟶ D) (hom : 对任意 i j, c.关系 j i -> (D.X i ⟶ E.X j))
   证明: by
   rw [nullHomotopicMap']; rw [comp_nullHomotopicMap]
   congr
@@ -951,7 +951,7 @@ theorem map_nullHomotopicMap
 
 中文:
 定理 map_nullHomotopicMap
-  结论: {W : 类型} [Category* W] [Preadditive W] (G : V ⥤ W) [G.Additive]
+  结论: {W : 类型} [范畴* W] [预加性 W] (G : V ⥤ W) [G.加性]
   证明: by
   ext i
   dsimp [nullHomotopicMap, dNext, prevD]
@@ -984,7 +984,7 @@ theorem map_nullHomotopicMap'
 
 中文:
 定理 map_nullHomotopicMap'
-  结论: {W : 类型} [Category* W] [Preadditive W] (G : V ⥤ W) [G.Additive]
+  结论: {W : 类型} [范畴* W] [预加性 W] (G : V ⥤ W) [G.加性]
   证明: by
   rw [nullHomotopicMap']; rw [map_nullHomotopicMap]
   congr
@@ -1024,7 +1024,7 @@ definition nullHomotopy
 
 中文:
 定义 nullHomotopy
-  签名: (hom : 对任意 i j, C.X i ⟶ D.X j) (zero : 对任意 i j, ¬c.Rel j i -> hom i j = 0)
+  签名: (hom : 对任意 i j, C.X i ⟶ D.X j) (zero : 对任意 i j, ¬c.关系 j i -> hom i j = 0)
   定义体: { hom := hom
     zero := zero
     comm := by
@@ -1058,7 +1058,7 @@ definition nullHomotopy'
 
 中文:
 定义 nullHomotopy'
-  签名: (h : 对任意 i j, c.Rel j i -> (C.X i ⟶ D.X j))
+  签名: (h : 对任意 i j, c.关系 j i -> (C.X i ⟶ D.X j))
   定义体: by
   apply nullHomotopy fun i j => dite (c.Rel j i) (h i j) fun _ => 0
   grind
@@ -1084,7 +1084,7 @@ theorem nullHomotopicMap_f
 
 中文:
 定理 nullHomotopicMap_f
-  结论: {k₂ k₁ k₀ : ι} (r₂₁ : c.Rel k₂ k₁) (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₂ k₁ k₀ : ι} (r₂₁ : c.关系 k₂ k₁) (r₁₀ : c.关系 k₁ k₀)
   证明: by
   dsimp only [nullHomotopicMap]
   rw [dNext_eq hom r₁₀]; rw [prevD_eq hom r₂₁]
@@ -1112,7 +1112,7 @@ theorem nullHomotopicMap'_f
 
 中文:
 定理 nullHomotopicMap'_f
-  结论: {k₂ k₁ k₀ : ι} (r₂₁ : c.Rel k₂ k₁) (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₂ k₁ k₀ : ι} (r₂₁ : c.关系 k₂ k₁) (r₁₀ : c.关系 k₁ k₀)
   证明: by
   simp only [nullHomotopicMap']
   rw [nullHomotopicMap_f r₂₁ r₁₀]
@@ -1141,7 +1141,7 @@ theorem nullHomotopicMap_f_of_not_rel_left
 
 中文:
 定理 nullHomotopicMap_f_of_not_rel_left
-  结论: {k₁ k₀ : ι} (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₁ k₀ : ι} (r₁₀ : c.关系 k₁ k₀)
   证明: by
   dsimp only [nullHomotopicMap]
   rw [prevD_eq hom r₁₀]; rw [dNext]; rw [AddMonoidHom.mk'_apply]; rw [C.shape]; rw [zero_comp]; rw [zero_add]
@@ -1171,7 +1171,7 @@ theorem nullHomotopicMap'_f_of_not_rel_left
 
 中文:
 定理 nullHomotopicMap'_f_of_not_rel_left
-  结论: {k₁ k₀ : ι} (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₁ k₀ : ι} (r₁₀ : c.关系 k₁ k₀)
   证明: by
   simp only [nullHomotopicMap']
   rw [nullHomotopicMap_f_of_not_rel_left r₁₀ hk₀]
@@ -1200,7 +1200,7 @@ theorem nullHomotopicMap_f_of_not_rel_right
 
 中文:
 定理 nullHomotopicMap_f_of_not_rel_right
-  结论: {k₁ k₀ : ι} (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₁ k₀ : ι} (r₁₀ : c.关系 k₁ k₀)
   证明: by
   dsimp only [nullHomotopicMap]
   rw [dNext_eq hom r₁₀]; rw [prevD]; rw [AddMonoidHom.mk'_apply]; rw [D.shape]; rw [comp_zero]; rw [add_zero]
@@ -1230,7 +1230,7 @@ theorem nullHomotopicMap'_f_of_not_rel_right
 
 中文:
 定理 nullHomotopicMap'_f_of_not_rel_right
-  结论: {k₁ k₀ : ι} (r₁₀ : c.Rel k₁ k₀)
+  结论: {k₁ k₀ : ι} (r₁₀ : c.关系 k₁ k₀)
   证明: by
   simp only [nullHomotopicMap']
   rw [nullHomotopicMap_f_of_not_rel_right r₁₀ hk₁]
@@ -1261,7 +1261,7 @@ theorem nullHomotopicMap_f_eq_zero
 
 中文:
 定理 nullHomotopicMap_f_eq_zero
-  结论: {k₀ : ι} (hk₀ : 对任意 l : ι, ¬c.Rel k₀ l)
+  结论: {k₀ : ι} (hk₀ : 对任意 l : ι, ¬c.关系 k₀ l)
   证明: by
   dsimp [nullHomotopicMap, dNext, prevD]
   rw [C.shape]; rw [D.shape]; rw [zero_comp]; rw [comp_zero]; rw [add_zero] <;> apply_assumption
@@ -1289,7 +1289,7 @@ theorem nullHomotopicMap'_f_eq_zero
 
 中文:
 定理 nullHomotopicMap'_f_eq_zero
-  结论: {k₀ : ι} (hk₀ : 对任意 l : ι, ¬c.Rel k₀ l)
+  结论: {k₀ : ι} (hk₀ : 对任意 l : ι, ¬c.关系 k₀ l)
   证明: by
   simp only [nullHomotopicMap']
   apply nullHomotopicMap_f_eq_zero hk₀ hk₀'
@@ -1566,7 +1566,7 @@ definition mkInductive
 
 中文:
 定义 mkInductive
-  签名: : Homotopy e 0 where
+  签名: : 同伦 e 0 where
   定义体: if h : i + 1 = j then
       (mkInductiveAux₂ e zero comm_zero one comm_one succ i).2.1 ≫ (Q.xPrevIso h).hom
     else 0
@@ -1863,7 +1863,7 @@ definition mkCoinductive
 
 中文:
 定义 mkCoinductive
-  签名: : Homotopy e 0 where
+  签名: : 同伦 e 0 where
   定义体: if h : j + 1 = i then
       (P.xNextIso h).inv ≫ (mkCoinductiveAux₂ e zero comm_zero one comm_one succ j).2.1
     else 0
@@ -1918,13 +1918,13 @@ structure HomotopyEquiv
     - homotopyInvHomId : Homotopy (inv ≫ hom) (𝟙 D)
 
 中文:
-结构 HomotopyEquiv
-  参数: (C D : HomologicalComplex V c)
+结构 同伦等价
+  参数: (C D : 同调复形 V c)
   公理与运算 (4 个):
     - hom : C ⟶ D
     - inv : D ⟶ C
-    - homotopyHomInvId : Homotopy (hom ≫ inv) (𝟙 C)
-    - homotopyInvHomId : Homotopy (inv ≫ hom) (𝟙 D)
+    - homotopyHomInvId : 同伦 (hom ≫ inv) (𝟙 C)
+    - homotopyInvHomId : 同伦 (inv ≫ hom) (𝟙 D)
 -/
 structure HomotopyEquiv (C D : HomologicalComplex V c) where
   /-- The forward chain map -/
@@ -1948,7 +1948,7 @@ definition HomologicalComplex.homotopyEquivalences
   body: fun X Y f => exists (e : HomotopyEquiv X Y), e.hom = f
 
 中文:
-定义 HomologicalComplex.homotopyEquivalences
+定义 同调复形.homotopyEquivalences
   签名: :
   定义体: fun X Y f => exists (e : HomotopyEquiv X Y), e.hom = f
 
@@ -1978,7 +1978,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : HomotopyEquiv C C where
+  签名: : 同伦等价 C C where
   定义体: 𝟙 C
   inv := 𝟙 C
   homotopyHomInvId := Homotopy.ofEq (by simp)
@@ -2000,7 +2000,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomotopyEquiv C C)
+  签名: 可居 (同伦等价 C C)
   定义体: ⟨refl C⟩
 -/
 instance : Inhabited (HomotopyEquiv C C) :=
@@ -2021,7 +2021,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (f : HomotopyEquiv C D)
+  签名: (f : 同伦等价 C D)
   定义体: f.inv
   inv := f.hom
   homotopyHomInvId := f.homotopyInvHomId
@@ -2052,7 +2052,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (f : HomotopyEquiv C D) (g : HomotopyEquiv D E)
+  签名: (f : 同伦等价 C D) (g : 同伦等价 D E)
   定义体: f.hom ≫ g.hom
   inv := g.inv ≫ f.inv
   homotopyHomInvId := by simpa using
@@ -2081,7 +2081,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: {ι : 类型} {V : 类型u} [Category.{v} V] [Preadditive V] {c : ComplexShape ι}
+  签名: {ι : 类型} {V : 类型u} [范畴.{v} V] [预加性 V] {c : 余mplexShape ι}
   定义体: ⟨f.hom, f.inv, Homotopy.ofEq f.3, Homotopy.ofEq f.4⟩
 
 Depends on / 依赖: Homotopy, Homotopy.ofEq, f.hom, f.inv
@@ -2100,7 +2100,7 @@ lemma homotopyEquivalences_hom
 
 中文:
 引理 homotopyEquivalences_hom
-  条件: (f : HomotopyEquiv C D)
+  条件: (f : 同伦等价 C D)
   证明: ⟨f, rfl⟩
 -/
 lemma homotopyEquivalences_hom (f : HomotopyEquiv C D) :
@@ -2116,7 +2116,7 @@ lemma homotopyEquivalences_inv
 
 中文:
 引理 homotopyEquivalences_inv
-  条件: (f : HomotopyEquiv C D)
+  条件: (f : 同伦等价 C D)
   证明: f.symm.homotopyEquivalences_hom
 
 Depends on / 依赖: f.symm.homotopyEquivalences_hom, homotopyEquivalences_hom
@@ -2140,7 +2140,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : HomotopyEquiv C D) {g : C ⟶ D} (h : Homotopy f.hom g)
+  签名: (f : 同伦等价 C D) {g : C ⟶ D} (h : 同伦 f.hom g)
   定义体: g
   inv := f.inv
   homotopyHomInvId := (h.symm.compRight _).trans f.homotopyHomInvId
@@ -2168,7 +2168,7 @@ lemma homotopyEquivalences.of_isIso
 
 中文:
 引理 homotopyEquivalences.of_isIso
-  条件: (f : C ⟶ D) [IsIso f]
+  条件: (f : C ⟶ D) [是同构 f]
   结论: homotopyEquivalences _ _ f
   证明: ⟨.ofIso (asIso f), rfl⟩
 -/
@@ -2213,7 +2213,7 @@ instance :
 
 中文:
 实例 :
-  签名: (homotopyEquivalences V c).IsMultiplicative
+  签名: (homotopyEquivalences V c).是Multiplicative
   定义体: ⟨.refl _, rfl⟩
   comp_mem f g := by
     rintro ⟨f, rfl⟩ ⟨g, rfl⟩
@@ -2242,7 +2242,7 @@ instance :
 
 中文:
 实例 :
-  签名: (homotopyEquivalences V c).HasTwoOutOfThree命题erty
+  签名: (homotopyEquivalences V c).有TwoOutOfThreeProperty
   定义体: by
     rintro ⟨g, rfl⟩ ⟨e, he⟩
     refine (e.trans g.symm).homotopyEquivalences_hom.of_homotopy ?_
@@ -2313,8 +2313,8 @@ definition Functor.mapHomotopy
     simp [H]
 
 中文:
-定义 Functor.mapHomotopy
-  签名: (F : V ⥤ W) [F.Additive] {f g : C ⟶ D} (h : Homotopy f g)
+定义 函子.mapHomotopy
+  签名: (F : V ⥤ W) [F.加性] {f g : C ⟶ D} (h : 同伦 f g)
   定义体: F.map (h.hom i j)
   zero i j w := by dsimp; rw [h.zero i j w, F.map_zero]
   comm i := by
@@ -2350,8 +2350,8 @@ definition Functor.mapHomotopyEquiv
     rw [← (F.mapHomologicalComp
 
 中文:
-定义 Functor.mapHomotopyEquiv
-  签名: (F : V ⥤ W) [F.Additive] (h : HomotopyEquiv C D)
+定义 函子.mapHomotopyEquiv
+  签名: (F : V ⥤ W) [F.加性] (h : 同伦等价 C D)
   定义体: (F.mapHomologicalComplex c).map h.hom
   inv := (F.mapHomologicalComplex c).map h.inv
   homotopyHomInvId := by
@@ -2403,8 +2403,8 @@ definition Homotopy.toShortComplex
     s
 
 中文:
-定义 Homotopy.toShortComplex
-  签名: (ho : Homotopy f g) (i : ι)
+定义 同伦.toShortComplex
+  签名: (ho : 同伦 f g) (i : ι)
   定义体: if c.Rel (c.prev i) i
     then ho.hom _ (c.prev (c.prev i)) ≫ L.d _ _
     else f.f _ - g.f _ - K.d _ i ≫ ho.hom i _
@@ -2469,8 +2469,8 @@ lemma Homotopy.homologyMap_eq
   proof: open scoped Classical in ShortComplex.Homotopy.homologyMap_congr (ho.toShortComplex i)
 
 中文:
-引理 Homotopy.homologyMap_eq
-  条件: (ho : Homotopy f g) (i : ι) [K.HasHomology i] [L.HasHomology i]
+引理 同伦.homologyMap_eq
+  条件: (ho : 同伦 f g) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: open scoped Classical in ShortComplex.Homotopy.homologyMap_congr (ho.toShortComplex i)
 
 Depends on / 依赖: Classical, Homotopy, ShortComplex, ShortComplex.Homotopy.homologyMap_congr, ho.toShortComplex, homologyMap_congr, scoped, toShortComplex
@@ -2491,8 +2491,8 @@ definition HomotopyEquiv.toHomologyIso
   inv_hom_id := by rw [← homologyMap_comp, h.homotopyInvHomId.homologyMap_eq, homologyMap_id]
 
 中文:
-定义 HomotopyEquiv.toHomologyIso
-  签名: (h : HomotopyEquiv K L) (i : ι)
+定义 同伦等价.toHomologyIso
+  签名: (h : 同伦等价 K L) (i : ι)
   定义体: homologyMap h.hom i
   inv := homologyMap h.inv i
   hom_inv_id := by rw [← homologyMap_comp, h.homotopyHomInvId.homologyMap_eq, homologyMap_id]

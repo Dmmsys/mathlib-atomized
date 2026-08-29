@@ -54,8 +54,8 @@ definition ModuleCat.isFG
   body: fun V => Module.Finite R V
 
 中文:
-定义 ModuleCat.isFG
-  签名: : Object命题erty (ModuleCat.{v} R)
+定义 模范畴.isFG
+  签名: : ObjectProperty (模范畴.{v} R)
   定义体: fun V => Module.Finite R V
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -73,8 +73,8 @@ lemma ModuleCat.isFG_iff
   proof: Iff.rfl
 
 中文:
-引理 ModuleCat.isFG_iff
-  条件: (V : ModuleCat.{v} R)
+引理 模范畴.isFG_iff
+  条件: (V : 模范畴.{v} R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -194,7 +194,7 @@ lemma hom_hom_id
 中文:
 引理 hom_hom_id
   条件: (A : FGModuleCat.{v} R)
-  结论: (𝟙 A : A ⟶ A).hom.hom = LinearMap.id
+  结论: (𝟙 A : A ⟶ A).hom.hom = 线性映射.id
   证明: rfl
 -/
 @[simp] lemma hom_hom_id (A : FGModuleCat.{v} R) : (𝟙 A : A ⟶ A).hom.hom = LinearMap.id := rfl
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FGModuleCat.{v} R)
+  签名: 可居 (FGModuleCat.{v} R)
   定义体: ⟨⟨ModuleCat.of R PUnit, by unfold ModuleCat.isFG; infer_instance⟩⟩
 
 Depends on / 依赖: ModuleCat, ModuleCat.isFG, ModuleCat.of, infer_instance
@@ -229,7 +229,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (V : 类型v) [AddCommGroup V] [Module R V] [Module.Finite R V]
+  签名: (V : 类型v) [加法交换群 V] [模 R V] [模.有限 R V]
   定义体: ⟨ModuleCat.of R V, inferInstanceAs Module.Finite R V⟩
 
 @[simp]
@@ -250,7 +250,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (V : 类型v) [AddCommGroup V] [Module R V] [Module.Finite R V]
+  条件: (V : 类型v) [加法交换群 V] [模 R V] [模.有限 R V]
   证明: rfl
 -/
 lemma of_carrier (V : Type v) [AddCommGroup V] [Module R V] [Module.Finite R V] :
@@ -267,7 +267,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {V W : 类型v} [AddCommGroup V] [Module R V] [Module.Finite R V]
+  签名: {V W : 类型v} [加法交换群 V] [模 R V] [模.有限 R V]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -309,7 +309,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FGModuleCat.{v} R) (ModuleCat.{v} R)).Full
+  签名: (forget₂ (FGModuleCat.{v} R) (模范畴.{v} R)).满
   定义体: ⟨ofHom f.hom, rfl⟩
 
 Depends on / 依赖: f.hom
@@ -350,7 +350,7 @@ definition _root_.LinearEquiv.toFGModuleCatIso
   inv_hom_id := by ext x; exact e.right_inv x
 
 中文:
-定义 _root_.LinearEquiv.toFGModuleCatIso
+定义 _root_.线性等价.toFGModuleCatIso
   定义体: ConcreteCategory.ofHom e.toLinearMap
   inv := ConcreteCategory.ofHom e.symm.toLinearMap
   hom_inv_id := by ext x; exact e.left_inv x
@@ -378,7 +378,7 @@ map f := ofHom ULift.moduleEquiv.symm.toLinearMap ∘ₗ f.hom.hom ∘ₗ ULift.
 
 中文:
 定义 ulift
-  签名: : FGModuleCat.{v} R ⥤ FGModuleCat.{max v w} R where
+  签名: : FGModuleCat.{v} R ⥤ FGModuleCat.{最大值 v w} R where
   定义体: .of R ULift M
 map f := ofHom ULift.moduleEquiv.symm.toLinearMap ∘ₗ f.hom.hom ∘ₗ ULift.moduleEquiv.toLinearMap
 -/
@@ -397,7 +397,7 @@ definition fullyFaithfulULift
 
 中文:
 定义 fullyFaithfulULift
-  签名: : (ulift R).FullyFaithful where
+  签名: : (ulift R).满忠实 where
   定义体: ofHom ULift.moduleEquiv.toLinearMap ∘ₗ f.hom.hom ∘ₗ
     ULift.moduleEquiv.symm.toLinearMap
 
@@ -417,7 +417,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ulift R).Faithful
+  签名: (ulift R).忠实
   定义体: (fullyFaithfulULift R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulULift
@@ -435,7 +435,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ulift R).Full
+  签名: (ulift R).满
   定义体: (fullyFaithfulULift R).full
 
 Depends on / 依赖: fullyFaithfulULift
@@ -461,7 +461,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ModuleCat.isFG R).IsMonoidal
+  签名: (模范畴.isFG R).是幺半群
   定义体: Module.Finite.self R
   prop_tensor X Y (_ : Module.Finite _ _) (_ : Module.Finite _ _) :=
     Module.Finite.tensorProduct R X Y
@@ -485,7 +485,7 @@ lemma tensorUnit_obj
 
 中文:
 引理 tensorUnit_obj
-  结论: (𝟙_ (FGModuleCat R)).obj = 𝟙_ (ModuleCat R)
+  结论: (𝟙_ (FGModuleCat R)).obj = 𝟙_ (模范畴 R)
   证明: rfl
 -/
 @[simp] lemma tensorUnit_obj : (𝟙_ (FGModuleCat R)).obj = 𝟙_ (ModuleCat R) := rfl
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FGModuleCat.{u} R) (ModuleCat.{u} R)).Additive
+  签名: (forget₂ (FGModuleCat.{u} R) (模范畴.{u} R)).加性
 -/
 instance : (forget₂ (FGModuleCat.{u} R) (ModuleCat.{u} R)).Additive where
 /--
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FGModuleCat.{u} R) (ModuleCat.{u} R)).Linear R
+  签名: (forget₂ (FGModuleCat.{u} R) (模范畴.{u} R)).线性 R
 -/
 instance : (forget₂ (FGModuleCat.{u} R) (ModuleCat.{u} R)).Linear R where
 
@@ -540,7 +540,7 @@ theorem Iso.conj_eq_conj
   proof: rfl
 
 中文:
-定理 Iso.conj_eq_conj
+定理 同构.conj_eq_conj
   条件: {V W : FGModuleCat R} (i : V ≅ W) (f : End V)
   证明: rfl
 -/
@@ -557,7 +557,7 @@ theorem Iso.conj_hom_eq_conj
   proof: rfl
 
 中文:
-定理 Iso.conj_hom_eq_conj
+定理 同构.conj_hom_eq_conj
   条件: {V W : FGModuleCat R} (i : V ≅ W) (f : End V)
   证明: rfl
 -/
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ModuleCat.isFG K).IsMonoidalClosed
+  签名: (模范畴.isFG K).是幺半群闭
   定义体: ((inferInstance : Module.Finite K (X ->ₗ[K] Y))).equiv ModuleCat.homLinearEquiv.symm
 
 Depends on / 依赖: Finite, Module, Module.Finite, ModuleCat, ModuleCat.homLinearEquiv.symm, homLinearEquiv
@@ -645,7 +645,7 @@ lemma FGModuleCatDual_obj
 
 中文:
 引理 FGModuleCatDual_obj
-  结论: (FGModuleCatDual K V).obj = ModuleCat.of K (Module.Dual K V)
+  结论: (FGModuleCatDual K V).obj = 模范畴.of K (模.对偶 K V)
   证明: rfl
 -/
 @[simp] lemma FGModuleCatDual_obj : (FGModuleCatDual K V).obj = ModuleCat.of K (Module.Dual K V) :=
@@ -660,7 +660,7 @@ lemma FGModuleCatDual_coe
 
 中文:
 引理 FGModuleCatDual_coe
-  结论: (FGModuleCatDual K V : 类型u) = Module.Dual K V
+  结论: (FGModuleCatDual K V : 类型u) = 模.对偶 K V
   证明: rfl
 -/
 @[simp] lemma FGModuleCatDual_coe : (FGModuleCatDual K V : Type u) = Module.Dual K V := rfl
@@ -855,7 +855,7 @@ instance rightDual
 
 中文:
 实例 rightDual
-  签名: : HasRightDual V
+  签名: : 有RightDual V
   定义体: ⟨FGModuleCatDual K V⟩
 
 Depends on / 依赖: FGModuleCatDual
@@ -872,7 +872,7 @@ instance rightRigidCategory
 
 中文:
 实例 rightRigidCategory
-  签名: : RightRigidCategory (FGModuleCat K) where
+  签名: : RightRigid范畴 (FGModuleCat K) where
 -/
 instance rightRigidCategory : RightRigidCategory (FGModuleCat K) where
 
@@ -895,7 +895,7 @@ theorem LinearMap.comp_id_fgModuleCat
 @[simp]
 
 中文:
-定理 LinearMap.comp_id_fgModuleCat
+定理 线性映射.comp_id_fgModuleCat
   证明: ModuleCat.hom_ext_iff.mp Category.id_comp (ModuleCat.ofHom f)
 
 @[simp]
@@ -916,7 +916,7 @@ theorem LinearMap.id_fgModuleCat_comp
   proof: ModuleCat.hom_ext_iff.mp Category.comp_id (ModuleCat.ofHom f)
 
 中文:
-定理 LinearMap.id_fgModuleCat_comp
+定理 线性映射.id_fgModuleCat_comp
   证明: ModuleCat.hom_ext_iff.mp Category.comp_id (ModuleCat.ofHom f)
 
 Depends on / 依赖: Category, Category.comp_id, ModuleCat, ModuleCat.hom_ext_iff.mp, ModuleCat.ofHom, comp_id, hom_ext_iff

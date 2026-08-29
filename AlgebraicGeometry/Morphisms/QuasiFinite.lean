@@ -78,10 +78,10 @@ class LocallyQuasiFinite
     - quasiFinite_appLE : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.QuasiFinite
 
 中文:
-类 LocallyQuasiFinite
+类 局部拟有限
   参数: : 命题 where
   公理与运算 (1 个):
-    - quasiFinite_appLE : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.QuasiFinite
+    - quasiFinite_appLE : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.拟有限
 -/
 class LocallyQuasiFinite : Prop where
   quasiFinite_appLE :
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @LocallyQuasiFinite RingHom.QuasiFinite
+  签名: 有RingHomProperty @局部拟有限 环态射.拟有限
   定义体: RingHom.QuasiFinite.propertyIsLocal
   eq_affineLocally' := by
     ext X Y f
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @LocallyQuasiFinite
+  签名: MorphismProperty.是StableUnderComposition @局部拟有限
   定义体: HasRingHomProperty.stableUnderComposition RingHom.QuasiFinite.stableUnderComposition
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.stableUnderComposition, QuasiFinite, RingHom, RingHom.QuasiFinite.stableUnderComposition, stableUnderComposition
@@ -160,8 +160,8 @@ theorem LocallyQuasiFinite.of_comp
   proof: HasRingHomProperty.of_comp (fun _ _ => RingHom.QuasiFinite.of_comp) ‹_›
 
 中文:
-定理 LocallyQuasiFinite.of_comp
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+定理 局部拟有限.of_comp
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: HasRingHomProperty.of_comp (fun _ _ => RingHom.QuasiFinite.of_comp) ‹_›
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.of_comp, QuasiFinite, RingHom, RingHom.QuasiFinite.of_comp, of_comp
@@ -179,8 +179,8 @@ theorem LocallyQuasiFinite.comp_iff
   proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 中文:
-定理 LocallyQuasiFinite.comp_iff
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+定理 局部拟有限.comp_iff
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -200,7 +200,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @LocallyQuasiFinite
+  签名: MorphismProperty.是Multiplicative @局部拟有限
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @LocallyQuasiFinite where
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderBaseChange @LocallyQuasiFinite
+  签名: MorphismProperty.是StableUnderBaseChange @局部拟有限
   定义体: HasRingHomProperty.isStableUnderBaseChange RingHom.QuasiFinite.isStableUnderBaseChange
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, QuasiFinite, RingHom, RingHom.QuasiFinite.isStableUnderBaseChange, isStableUnderBaseChange
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.Respects @LocallyQuasiFinite @IsOpenImmersion
+  签名: MorphismProperty.Respects @局部拟有限 @是开浸入
   定义体: HasRingHomProperty.respects_isOpenImmersion
   (RingHom.QuasiFinite.stableUnderComposition.stableUnderCompositionWithLocalizationAway
     RingHom.QuasiFinite.holdsForLocalizationAway).1
@@ -294,7 +294,7 @@ instance [LocallyQuasiFinite
   body: .of_locallyQuasiFinite (pullback.snd _ _)
 
 中文:
-实例 [LocallyQuasiFinite
+实例 [局部拟有限
   签名: f] (y
   定义体: .of_locallyQuasiFinite (pullback.snd _ _)
 
@@ -314,8 +314,8 @@ lemma Scheme.Hom.isDiscrete_preimage_singleton
     (isDiscrete_univ_iff.mpr inferInstance).image (f.fiberι y).isEmbedding.toIsInducing
 
 中文:
-引理 Scheme.Hom.isDiscrete_preimage_singleton
-  条件: [LocallyQuasiFinite f] (y : Y)
+引理 概形.态射.isDiscrete_preimage_singleton
+  条件: [局部拟有限 f] (y : Y)
   证明: by
   simpa [Scheme.Hom.range_fiberι] using
     (isDiscrete_univ_iff.mpr inferInstance).image (f.fiberι y).isEmbedding.toIsInducing
@@ -336,8 +336,8 @@ lemma Scheme.Hom.isDiscrete_preimage
   proof: hs.preimage' f.continuous.continuousOn f.isDiscrete_preimage_singleton
 
 中文:
-引理 Scheme.Hom.isDiscrete_preimage
-  条件: [LocallyQuasiFinite f] {s : Set Y} (hs : IsDiscrete s)
+引理 概形.态射.isDiscrete_preimage
+  条件: [局部拟有限 f] {s : 集合 Y} (hs : 是离散 s)
   证明: hs.preimage' f.continuous.continuousOn f.isDiscrete_preimage_singleton
 
 Depends on / 依赖: continuous, continuousOn, f.continuous.continuousOn, f.isDiscrete_preimage_singleton, hs.preimage, isDiscrete_preimage_singleton, preimage
@@ -354,8 +354,8 @@ instance [LocallyQuasiFinite
   signature: f] [QuasiCompact f] (y
 
 中文:
-实例 [LocallyQuasiFinite
-  签名: f] [QuasiCompact f] (y
+实例 [局部拟有限
+  签名: f] [拟紧 f] (y
 -/
 instance [LocallyQuasiFinite f] [QuasiCompact f] (y : Y) : IsArtinianScheme (f.fiber y) where
 
@@ -372,8 +372,8 @@ lemma Scheme.Hom.finite_preimage_singleton
 alias IsFinite.finite_preimage_singleton := Scheme.Hom.finite_preimage_singleton
 
 中文:
-引理 Scheme.Hom.finite_preimage_singleton
-  条件: [LocallyQuasiFinite f] [QuasiCompact f] (y : Y)
+引理 概形.态射.finite_preimage_singleton
+  条件: [局部拟有限 f] [拟紧 f] (y : Y)
   证明: by
   simpa [Scheme.Hom.range_fiberι] using Set.finite_univ.image (f.fiberι y)
 
@@ -398,8 +398,8 @@ lemma Scheme.Hom.finite_preimage
   proof: hs.preimage' fun _ _ => f.finite_preimage_singleton _
 
 中文:
-引理 Scheme.Hom.finite_preimage
-  结论: [LocallyQuasiFinite f] [QuasiCompact f]
+引理 概形.态射.finite_preimage
+  结论: [局部拟有限 f] [拟紧 f]
   证明: hs.preimage' fun _ _ => f.finite_preimage_singleton _
 
 Depends on / 依赖: f.finite_preimage_singleton, finite_preimage_singleton, hs.preimage, preimage
@@ -417,8 +417,8 @@ lemma Scheme.Hom.tendsto_cofinite_cofinite
   proof: .cofinite_of_finite_preimage_singleton f.finite_preimage_singleton
 
 中文:
-引理 Scheme.Hom.tendsto_cofinite_cofinite
-  条件: [LocallyQuasiFinite f] [QuasiCompact f]
+引理 概形.态射.tendsto_cofinite_cofinite
+  条件: [局部拟有限 f] [拟紧 f]
   证明: .cofinite_of_finite_preimage_singleton f.finite_preimage_singleton
 
 Depends on / 依赖: cofinite_of_finite_preimage_singleton, f.finite_preimage_singleton, finite_preimage_singleton
@@ -513,7 +513,7 @@ lemma locallyQuasiFinite_iff_isFinite_fiber
 
 中文:
 引理 locallyQuasiFinite_iff_isFinite_fiber
-  条件: {f : X ⟶ Y} [QuasiCompact f]
+  条件: {f : X ⟶ Y} [拟紧 f]
   证明: ⟨fun _ => inferInstance, fun _ => .of_fiberToSpecResidueField f fun _ => inferInstance⟩
 
 Depends on / 依赖: of_fiberToSpecResidueField
@@ -605,8 +605,8 @@ lemma LocallyQuasiFinite.of_injective
   proof: .of_finite_preimage_singleton _ fun _ => (Set.subsingleton_singleton.preimage hf).finite
 
 中文:
-引理 LocallyQuasiFinite.of_injective
-  结论: {f : X ⟶ Y} [LocallyOfFiniteType f]
+引理 局部拟有限.of_injective
+  结论: {f : X ⟶ Y} [局部有限型 f]
   证明: .of_finite_preimage_singleton _ fun _ => (Set.subsingleton_singleton.preimage hf).finite
 
 Depends on / 依赖: Set.subsingleton_singleton.preimage, finite, of_finite_preimage_singleton, preimage, subsingleton_singleton
@@ -627,7 +627,7 @@ definition Scheme.Hom.QuasiFiniteAt
   body: (f.stalkMap x).hom.QuasiFinite
 
 中文:
-定义 Scheme.Hom.QuasiFiniteAt
+定义 概形.态射.QuasiFiniteAt
   签名: (x : X)
   定义体: (f.stalkMap x).hom.QuasiFinite
 
@@ -650,7 +650,7 @@ lemma Scheme.Hom.QuasiFiniteAt.quasiFiniteAt
     rw [← (Y.presheaf.germ U _ (hVU hxV)).hom.algebraMap_toAlgebra]; rw [RingHom.quasiFin
 
 中文:
-引理 Scheme.Hom.QuasiFiniteAt.quasiFiniteAt
+引理 概形.态射.QuasiFiniteAt.quasiFiniteAt
   证明: by
   algebraize [(f.appLE U V hVU).hom]
   have H : (Y.presheaf.germ U _ (hVU hxV)).hom.QuasiFinite := by
@@ -696,8 +696,8 @@ lemma Scheme.Hom.quasiFiniteAt
   ext; simp; rfl
 
 中文:
-引理 Scheme.Hom.quasiFiniteAt
-  条件: [LocallyQuasiFinite f] (x : X)
+引理 概形.态射.quasiFiniteAt
+  条件: [局部拟有限 f] (x : X)
   证明: by
   refine HasRingHomProperty.stalkMap ?_ ‹_› x
   introv hf
@@ -732,7 +732,7 @@ lemma Scheme.Hom.quasiFiniteAt_comp_iff_of_isOpenImmersion
     RingHom.QuasiFinite.respectsIso.cancel_right_isIso]
 
 中文:
-引理 Scheme.Hom.quasiFiniteAt_comp_iff_of_isOpenImmersion
+引理 概形.态射.quasiFiniteAt_comp_iff_of_isOpenImmersion
   证明: by
   simp only [QuasiFiniteAt, stalkMap_comp, CommRingCat.hom_comp,
     RingHom.QuasiFinite.respectsIso.cancel_right_isIso]
@@ -756,8 +756,8 @@ lemma Scheme.Hom.quasiFiniteAt_comp_iff
   exact RingHom.QuasiFinite.comp_iff (g.quasiFiniteAt _)
 
 中文:
-引理 Scheme.Hom.quasiFiniteAt_comp_iff
-  结论: {Z : Scheme} {f : X ⟶ Y} {g : Y ⟶ Z} {x : X}
+引理 概形.态射.quasiFiniteAt_comp_iff
+  结论: {Z : 概形} {f : X ⟶ Y} {g : Y ⟶ Z} {x : X}
   证明: by
   simp only [QuasiFiniteAt, stalkMap_comp]
   exact RingHom.QuasiFinite.comp_iff (g.quasiFiniteAt _)
@@ -780,7 +780,7 @@ lemma Scheme.Hom.quasiFiniteAt_iff
   rw [← SpecMap_stalkMap_fromSpecStalk]; rw [LocallyQuasiFinite.comp_iff]; rw [HasRingHomProperty.Spec_iff (P := @LocallyQuasiFinite)]; rw [QuasiFiniteAt]
 
 中文:
-引理 Scheme.Hom.quasiFiniteAt_iff
+引理 概形.态射.quasiFiniteAt_iff
   条件: {f : X ⟶ Y} {x : X}
   证明: by
   rw [← SpecMap_stalkMap_fromSpecStalk]; rw [LocallyQuasiFinite.comp_iff]; rw [HasRingHomProperty.Spec_iff (P := @LocallyQuasiFinite)]; rw [QuasiFiniteAt]

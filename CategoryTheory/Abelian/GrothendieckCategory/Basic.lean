@@ -80,13 +80,13 @@ class IsGrothendieckAbelian
     - hasSeparator : HasSeparator C  [default: by infer_instance]
 
 中文:
-类 IsGrothendieckAbelian
-  参数: [Abelian C]
+类 是GrothendieckAbelian
+  参数: [交换 C]
   公理与运算 (4 个):
     - locallySmall : LocallySmall.{w} C  [默认: by infer_instance]
-    - hasFilteredColimitsOfSize : HasFilteredColimitsOfSize.{w, w} C  [默认: by infer_instance]
+    - hasFilteredColimitsOfSize : 有FilteredColimitsOfSize.{w, w} C  [默认: by infer_instance]
     - ab5OfSize : AB5OfSize.{w, w} C  [默认: by infer_instance]
-    - hasSeparator : HasSeparator C  [默认: by infer_instance]
+    - hasSeparator : 有Separator C  [默认: by infer_instance]
 
 Depends on / 依赖: AB5OfSize, HasFilteredColimitsOfSize, HasSeparator, ab5OfSize, hasFilteredColimitsOfSize, hasSeparator, infer_instance
 -/
@@ -116,8 +116,8 @@ theorem IsGrothendieckAbelian.of_equivalence
     exact HasExactColimitsOfSha
 
 中文:
-定理 IsGrothendieckAbelian.of_equivalence
-  结论: [Abelian C] [Abelian D]
+定理 是GrothendieckAbelian.of_equivalence
+  结论: [交换 C] [交换 D]
   证明: by
   have hasFilteredColimits : HasFilteredColimitsOfSize.{w, w, v₂, u₂} D :=
     ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence α.inverse⟩
@@ -148,7 +148,7 @@ instance ShrinkHoms.isGrothendieckAbelian
 
 中文:
 实例 ShrinkHoms.isGrothendieckAbelian
-  签名: [Abelian C] [IsGrothendieckAbelian.{w} C]
+  签名: [交换 C] [是GrothendieckAbelian.{w} C]
   定义体: IsGrothendieckAbelian.of_equivalence ShrinkHoms.equivalence C
 
 Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.of_equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, of_equivalence
@@ -170,8 +170,8 @@ instance IsGrothendieckAbelian.hasColimits
   body: has_colimits_of_finite_and_filtered
 
 中文:
-实例 IsGrothendieckAbelian.hasColimits
-  签名: : HasColimitsOfSize.{w, w} C
+实例 是GrothendieckAbelian.hasColimits
+  签名: : 有余limitsOfSize.{w, w} C
   定义体: has_colimits_of_finite_and_filtered
 
 Depends on / 依赖: has_colimits_of_finite_and_filtered
@@ -189,8 +189,8 @@ instance IsGrothendieckAbelian.hasLimits
   Adjunction.has_limits_of_equivalence (ShrinkHoms.equivalence C |>.functor)
 
 中文:
-实例 IsGrothendieckAbelian.hasLimits
-  签名: : HasLimitsOfSize.{w, w} C
+实例 是GrothendieckAbelian.hasLimits
+  签名: : 有LimitsOfSize.{w, w} C
   定义体: have : HasLimits.{w, u} (ShrinkHoms C) := hasLimits_of_hasColimits_of_hasSeparator
   Adjunction.has_limits_of_equivalence (ShrinkHoms.equivalence C |>.functor)
 
@@ -209,8 +209,8 @@ instance IsGrothendieckAbelian.wellPowered
   body: wellPowered_of_equiv.{w} (ShrinkHoms.equivalence.{w} C).symm
 
 中文:
-实例 IsGrothendieckAbelian.wellPowered
-  签名: : WellPowered.{w} C
+实例 是GrothendieckAbelian.wellPowered
+  签名: : 良幂.{w} C
   定义体: wellPowered_of_equiv.{w} (ShrinkHoms.equivalence.{w} C).symm
 
 Depends on / 依赖: ShrinkHoms, ShrinkHoms.equivalence, equivalence, wellPowered_of_equiv
@@ -229,7 +229,7 @@ instance IsGrothendieckAbelian.ab4OfSize
   apply AB4.of_AB5
 
 中文:
-实例 IsGrothendieckAbelian.ab4OfSize
+实例 是GrothendieckAbelian.ab4OfSize
   签名: : AB4OfSize.{w} C
   定义体: by
   have : HasFiniteBiproducts C := HasFiniteBiproducts.of_hasFiniteProducts

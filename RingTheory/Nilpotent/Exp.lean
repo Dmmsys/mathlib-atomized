@@ -119,7 +119,7 @@ theorem exp_smul_eq_sum
 
 中文:
 定理 exp_smul_eq_sum
-  结论: {M : 类型} [AddCommGroup M] [Module A M] [Module Rat M] {a : A} {m : M}
+  结论: {M : 类型} [加法交换群 M] [模 A M] [模 有理数 M] {a : A} {m : M}
   证明: by
   rcases le_or_gt (nilpotencyClass a) k with h₀ | h₀
   · simp_rw [exp_eq_sum (pow_eq_zero_of_le h₀ (pow_nilpotencyClass hn)), sum_smul, smul_assoc]
@@ -156,7 +156,7 @@ theorem exp_add_of_commute
 
 中文:
 定理 exp_add_of_commute
-  条件: {a b : A} (h₁ : Commute a b) (h₂ : IsNilpotent a) (h₃ : IsNilpotent b)
+  条件: {a b : A} (h₁ : Commute a b) (h₂ : 是幂零 a) (h₃ : 是幂零 b)
   证明: by
   obtain ⟨n₁, hn₁⟩ := h₂
   obtain ⟨n₂, hn₂⟩ := h₃
@@ -287,7 +287,7 @@ theorem exp_mul_exp_neg_self
 
 中文:
 定理 exp_mul_exp_neg_self
-  条件: {a : A} (h : IsNilpotent a)
+  条件: {a : A} (h : 是幂零 a)
   证明: by
   simp [← exp_add_of_commute (Commute.neg_right rfl) h h.neg]
 
@@ -308,7 +308,7 @@ theorem exp_neg_mul_exp_self
 
 中文:
 定理 exp_neg_mul_exp_self
-  条件: {a : A} (h : IsNilpotent a)
+  条件: {a : A} (h : 是幂零 a)
   证明: by
   simp [← exp_add_of_commute (Commute.neg_left rfl) h.neg h]
 
@@ -332,8 +332,8 @@ theorem isUnit_exp
 
 中文:
 定理 isUnit_exp
-  条件: {a : A} (h : IsNilpotent a)
-  结论: IsUnit (exp a)
+  条件: {a : A} (h : 是幂零 a)
+  结论: 是单位 (exp a)
   证明: by
   apply isUnit_iff_exists.2
   use exp (-a)
@@ -359,7 +359,7 @@ theorem map_exp
 
 中文:
 定理 map_exp
-  结论: {B F : 类型} [Ring B] [FunLike F A B] [RingHomClass F A B] [Module Rat B]
+  结论: {B F : 类型} [环 B] [函数状 F A B] [环态射类 F A B] [模 有理数 B]
   证明: by
   obtain ⟨k, hk⟩ := ha
   have hk' : (f a) ^ k = 0 := by simp [← map_pow, hk]
@@ -384,7 +384,7 @@ theorem exp_smul
 
 中文:
 定理 exp_smul
-  结论: {G : 类型} [Monoid G] [MulSemiringAction G A]
+  结论: {G : 类型} [幺半群 G] [MulSemiring作用 G A]
   证明: (map_exp ha (MulSemiringAction.toRingHom G A g)).symm
 
 Depends on / 依赖: MulSemiringAction, MulSemiringAction.toRingHom, map_exp, toRingHom
@@ -410,8 +410,8 @@ theorem isNilpotent_exp_sub_one
 
 中文:
 定理 isNilpotent_exp_sub_one
-  条件: {a : A} (ha : IsNilpotent a)
-  结论: IsNilpotent (exp a - 1)
+  条件: {a : A} (ha : 是幂零 a)
+  结论: 是幂零 (exp a - 1)
   证明: by
   nontriviality A
   rw [exp]; rw [← Nat.sub_add_cancel (pos_nilpotencyClass_iff.2 ha)]; rw [Finset.sum_range_succ']
@@ -499,7 +499,7 @@ have h_nilR : IsNilpotent DR := h_nil.map rTensorAlgHom R B B
 
 中文:
 定理 exp_mul_of_derivation
-  结论: (R B : 类型) [CommRing R] [NonUnitalNonAssocRing B]
+  结论: (R B : 类型) [交换环 R] [非幺非结合环 B]
   证明: by
   let DL : Module.End R (B otimes[R] B) := D.lTensor B
   let DR : Module.End R (B otimes[R] B) := D.rTensor B

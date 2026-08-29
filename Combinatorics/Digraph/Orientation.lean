@@ -54,7 +54,7 @@ definition toSimpleGraphInclusive
 
 中文:
 定义 toSimpleGraphInclusive
-  签名: (G : Digraph V)
+  签名: (G : 有向图 V)
   定义体: SimpleGraph.fromRel G.Adj
 
 Depends on / 依赖: G.Adj, SimpleGraph, SimpleGraph.fromRel, fromRel
@@ -71,7 +71,7 @@ definition toSimpleGraphStrict
 
 中文:
 定义 toSimpleGraphStrict
-  签名: (G : Digraph V)
+  签名: (G : 有向图 V)
   定义体: v != w ∧ G.Adj v w ∧ G.Adj w v
 
 Depends on / 依赖: G.Adj
@@ -91,7 +91,7 @@ lemma toSimpleGraphStrict_subgraph_toSimpleGraphInclusive
 
 中文:
 引理 toSimpleGraphStrict_subgraph_toSimpleGraphInclusive
-  条件: (G : Digraph V)
+  条件: (G : 有向图 V)
   证明: fun _ _ h => ⟨h.1, Or.inl h.2.1⟩
 
 @[gcongr, mono]
@@ -115,7 +115,7 @@ lemma toSimpleGraphInclusive_mono
 
 中文:
 引理 toSimpleGraphInclusive_mono
-  结论: Monotone (toSimpleGraphInclusive : _ -> SimpleGraph V)
+  结论: 递增 (toSimpleGraphInclusive : _ -> 简单图 V)
   证明: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₂.2.imp (@h₁ _ _) (@h₁ _ _)⟩
 
 @[gcongr, mono]
@@ -136,7 +136,7 @@ lemma toSimpleGraphStrict_mono
 
 中文:
 引理 toSimpleGraphStrict_mono
-  结论: Monotone (toSimpleGraphStrict : _ -> SimpleGraph V)
+  结论: 递增 (toSimpleGraphStrict : _ -> 简单图 V)
   证明: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₁ h₂.2.1, h₁ h₂.2.2⟩
 
 @[simp]
@@ -158,7 +158,7 @@ lemma toSimpleGraphInclusive_top
 
 中文:
 引理 toSimpleGraphInclusive_top
-  结论: (⊤ : Digraph V).toSimpleGraphInclusive = ⊤
+  结论: (⊤ : 有向图 V).toSimpleGraphInclusive = ⊤
   证明: by
   ext; exact ⟨And.left, fun h => ⟨h.ne, Or.inl trivial⟩⟩
 
@@ -183,7 +183,7 @@ lemma toSimpleGraphStrict_top
 
 中文:
 引理 toSimpleGraphStrict_top
-  结论: (⊤ : Digraph V).toSimpleGraphStrict = ⊤
+  结论: (⊤ : 有向图 V).toSimpleGraphStrict = ⊤
   证明: by
   ext; exact ⟨And.left, fun h => ⟨h.ne, trivial, trivial⟩⟩
 
@@ -208,7 +208,7 @@ lemma toSimpleGraphInclusive_bot
 
 中文:
 引理 toSimpleGraphInclusive_bot
-  结论: (⊥ : Digraph V).toSimpleGraphInclusive = ⊥
+  结论: (⊥ : 有向图 V).toSimpleGraphInclusive = ⊥
   证明: by
   ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
 
@@ -231,7 +231,7 @@ lemma toSimpleGraphStrict_bot
 
 中文:
 引理 toSimpleGraphStrict_bot
-  结论: (⊥ : Digraph V).toSimpleGraphStrict = ⊥
+  结论: (⊥ : 有向图 V).toSimpleGraphStrict = ⊥
   证明: by
   ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
 

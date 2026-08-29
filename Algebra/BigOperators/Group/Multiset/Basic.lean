@@ -52,7 +52,7 @@ theorem prod_erase
 中文:
 定理 prod_erase
   条件: [DecidableEq M] (h : a in s)
-  结论: a * (s.erase a).prod = s.prod
+  结论: a * (s.erase a).乘积 = s.乘积
   证明: by
   rw [← s.coe_toList]; rw [coe_erase]; rw [prod_coe]; rw [prod_coe]; rw [List.prod_erase (mem_toList.2 h)]
 
@@ -104,7 +104,7 @@ theorem prod_add
 中文:
 定理 prod_add
   条件: (s t : Multiset M)
-  结论: prod (s + t) = prod s * prod t
+  结论: 乘积 (s + t) = 乘积 s * 乘积 t
   证明: Quotient.inductionOn₂ s t fun l₁ l₂ => by simp [List.prod_append]
 
 @[to_additive]
@@ -126,7 +126,7 @@ theorem prod_nsmul
 中文:
 定理 prod_nsmul
   条件: (m : Multiset M)
-  结论: 对任意 n : 自然数, (n • m).prod = m.prod ^ n
+  结论: 对任意 n : 自然数, (n • m).乘积 = m.乘积 ^ n
 -/
 theorem prod_nsmul (m : Multiset M) : forall n : Nat, (n • m).prod = m.prod ^ n
   | 0 => by
@@ -231,7 +231,7 @@ lemma prod_eq_one
 中文:
 引理 prod_eq_one
   条件: (h : 对任意 x in s, x = (1 : M))
-  结论: s.prod = 1
+  结论: s.乘积 = 1
   证明: by
   induction s using Quotient.inductionOn; simp [List.prod_eq_one h]
 
@@ -256,7 +256,7 @@ theorem prod_hom_ne_zero
 
 中文:
 定理 prod_hom_ne_zero
-  结论: {s : Multiset M} (hs : s != 0) {F : 类型} [FunLike F M N]
+  结论: {s : Multiset M} (hs : s != 0) {F : 类型} [函数状 F M N]
   证明: by
   induction s using Quot.inductionOn; aesop (add simp List.prod_hom_nonempty)
 
@@ -282,7 +282,7 @@ theorem prod_hom
 
 中文:
 定理 prod_hom
-  结论: (s : Multiset M) {F : 类型} [FunLike F M N]
+  结论: (s : Multiset M) {F : 类型} [函数状 F M N]
   证明: Quotient.inductionOn s fun l => by simp only [l.prod_hom f, quot_mk_to_coe, map_coe, prod_coe]
 
 @[to_additive]
@@ -309,7 +309,7 @@ theorem prod_hom'
 
 中文:
 定理 prod_hom'
-  结论: (s : Multiset ι) {F : 类型} [FunLike F M N]
+  结论: (s : Multiset ι) {F : 类型} [函数状 F M N]
   证明: by
   convert! (s.map g).prod_hom f
   exact (map_map _ _ _).symm
@@ -338,7 +338,7 @@ theorem prod_hom₂_ne_zero
 
 中文:
 定理 prod_hom₂_ne_zero
-  结论: [CommMonoid O] {s : Multiset ι} (hs : s != 0) (f : M -> N -> O)
+  结论: [交换幺半群 O] {s : Multiset ι} (hs : s != 0) (f : M -> N -> O)
   证明: by
   induction s using Quotient.inductionOn; aesop (add simp List.prod_hom₂_nonempty)
 
@@ -365,7 +365,7 @@ theorem prod_hom₂
 
 中文:
 定理 prod_hom₂
-  结论: [CommMonoid O] (s : Multiset ι) (f : M -> N -> O)
+  结论: [交换幺半群 O] (s : Multiset ι) (f : M -> N -> O)
   证明: Quotient.inductionOn s fun l => by
     simp only [l.prod_hom₂ f hf hf', quot_mk_to_coe, map_coe, prod_coe]
 
@@ -392,7 +392,7 @@ theorem prod_map_mul
 
 中文:
 定理 prod_map_mul
-  结论: (m.map fun i => f i * g i).prod = (m.map f).prod * (m.map g).prod
+  结论: (m.map fun i => f i * g i).乘积 = (m.map f).乘积 * (m.map g).乘积
   证明: m.prod_hom₂ (· * ·) mul_mul_mul_comm (mul_one _) _ _
 
 @[to_additive]
@@ -417,7 +417,7 @@ theorem prod_map_pow
 中文:
 定理 prod_map_pow
   条件: {n : 自然数}
-  结论: (m.map fun i => f i ^ n).prod = (m.map f).prod ^ n
+  结论: (m.map fun i => f i ^ n).乘积 = (m.map f).乘积 ^ n
   证明: m.prod_hom' (powMonoidHom n : M ->* M) f
 
 @[to_additive]
@@ -464,7 +464,7 @@ theorem prod_dvd_prod_of_le
 中文:
 定理 prod_dvd_prod_of_le
   条件: (h : s <= t)
-  结论: s.prod ∣ t.prod
+  结论: s.乘积 ∣ t.乘积
   证明: by
   obtain ⟨z, rfl⟩ := exists_add_of_le h
   simp only [prod_add, dvd_mul_right]
@@ -490,7 +490,7 @@ lemma _root_.map_multiset_prod
 
 中文:
 引理 _root_.map_multiset_prod
-  条件: [FunLike F M N] [MonoidHomClass F M N] (f : F) (s : Multiset M)
+  条件: [函数状 F M N] [幺半群态射类 F M N] (f : F) (s : Multiset M)
   证明: (s.prod_hom f).symm
 
 @[to_additive]
@@ -513,7 +513,7 @@ lemma _root_.map_multiset_ne_zero_prod
 
 中文:
 引理 _root_.map_multiset_ne_zero_prod
-  结论: [FunLike F M N] [MulHomClass F M N] (f : F)
+  结论: [函数状 F M N] [乘法态射类 F M N] (f : F)
   证明: (s.prod_hom_ne_zero hs f).symm
 
 @[to_additive]
@@ -536,7 +536,7 @@ lemma _root_.MonoidHom.map_multiset_prod
 @[to_additive]
 
 中文:
-引理 _root_.MonoidHom.map_multiset_prod
+引理 _root_.幺半群态射.map_multiset_prod
   条件: (f : M ->* N) (s : Multiset M)
   证明: (s.prod_hom f).symm
 
@@ -555,7 +555,7 @@ lemma _root_.MulHom.map_multiset_ne_zero_prod
   proof: (s.prod_hom_ne_zero hs f).symm
 
 中文:
-引理 _root_.MulHom.map_multiset_ne_zero_prod
+引理 _root_.乘法半群态射.map_multiset_ne_zero_prod
   结论: (f : M ->ₙ* N) (s : Multiset M)
   证明: (s.prod_hom_ne_zero hs f).symm
 -/
@@ -572,7 +572,7 @@ lemma dvd_prod
 
 中文:
 引理 dvd_prod
-  结论: a in s -> a ∣ s.prod
+  结论: a in s -> a ∣ s.乘积
   证明: Quotient.inductionOn s (fun l a h => by simpa using List.dvd_prod h) a
 
 Depends on / 依赖: List.dvd_prod, Quotient, Quotient.inductionOn, dvd_prod, inductionOn
@@ -592,7 +592,7 @@ lemma fst_prod
 中文:
 引理 fst_prod
   条件: (s : Multiset (M × N))
-  结论: s.prod.1 = (s.map Prod.fst).prod
+  结论: s.乘积.1 = (s.map 积类型.fst).乘积
   证明: map_multiset_prod (MonoidHom.fst _ _) _
 -/
 @[to_additive] lemma fst_prod (s : Multiset (M × N)) : s.prod.1 = (s.map Prod.fst).prod :=
@@ -610,7 +610,7 @@ lemma snd_prod
 中文:
 引理 snd_prod
   条件: (s : Multiset (M × N))
-  结论: s.prod.2 = (s.map Prod.snd).prod
+  结论: s.乘积.2 = (s.map 积类型.snd).乘积
   证明: map_multiset_prod (MonoidHom.snd _ _) _
 -/
 @[to_additive] lemma snd_prod (s : Multiset (M × N)) : s.prod.2 = (s.map Prod.snd).prod :=
@@ -632,7 +632,7 @@ theorem prod_dvd_prod_of_dvd
 
 中文:
 定理 prod_dvd_prod_of_dvd
-  结论: [CommMonoid N] {S : Multiset M} (g1 g2 : M -> N)
+  结论: [交换幺半群 N] {S : Multiset M} (g1 g2 : M -> N)
   证明: by
   apply Multiset.induction_on' S
   · simp
@@ -689,7 +689,7 @@ theorem coe_sumAddMonoidHom
 
 中文:
 定理 coe_sumAddMonoidHom
-  结论: (sumAddMonoidHom : Multiset M -> M) = sum
+  结论: (sumAddMonoidHom : Multiset M -> M) = 求和
   证明: rfl
 -/
 theorem coe_sumAddMonoidHom : (sumAddMonoidHom : Multiset M -> M) = sum :=
@@ -716,7 +716,7 @@ theorem prod_map_inv'
 中文:
 定理 prod_map_inv'
   条件: (m : Multiset G)
-  结论: (m.map Inv.inv).prod = m.prod⁻¹
+  结论: (m.map 取逆.inv).乘积 = m.乘积⁻¹
   证明: m.prod_hom (invMonoidHom : G ->* G)
 
 @[to_additive (attr := simp)]
@@ -740,7 +740,7 @@ theorem prod_map_inv
 
 中文:
 定理 prod_map_inv
-  结论: (m.map fun i => (f i)⁻¹).prod = (m.map f).prod⁻¹
+  结论: (m.map fun i => (f i)⁻¹).乘积 = (m.map f).乘积⁻¹
   证明: by
   rw [← (m.map f).prod_map_inv']; rw [map_map]; rw [Function.comp_def]
 
@@ -762,7 +762,7 @@ theorem prod_map_div
 
 中文:
 定理 prod_map_div
-  结论: (m.map fun i => f i / g i).prod = (m.map f).prod / (m.map g).prod
+  结论: (m.map fun i => f i / g i).乘积 = (m.map f).乘积 / (m.map g).乘积
   证明: m.prod_hom₂ (· / ·) mul_div_mul_comm (div_one _) _ _
 
 Depends on / 依赖: div_one, m.prod_hom, mul_div_mul_comm
@@ -786,7 +786,7 @@ theorem prod_map_zpow
 中文:
 定理 prod_map_zpow
   条件: {n : 整数}
-  结论: (m.map fun i => f i ^ n).prod = (m.map f).prod ^ n
+  结论: (m.map fun i => f i ^ n).乘积 = (m.map f).乘积 ^ n
   证明: by
   convert! (m.map f).prod_hom (zpowGroupHom n : G ->* G)
   simp only [map_map, Function.comp_apply, zpowGroupHom_apply]
@@ -812,7 +812,7 @@ theorem sum_map_singleton
 中文:
 定理 sum_map_singleton
   条件: (s : Multiset M)
-  结论: (s.map fun a => ({a} : Multiset M)).sum = s
+  结论: (s.map fun a => ({a} : Multiset M)).求和 = s
   证明: Multiset.induction_on s (by simp) (by simp)
 
 Depends on / 依赖: Multiset, Multiset.induction_on, induction_on
@@ -833,7 +833,7 @@ theorem sum_nat_mod
 中文:
 定理 sum_nat_mod
   条件: (s : Multiset 自然数) (n : 自然数)
-  结论: s.sum % n = (s.map (· % n)).sum % n
+  结论: s.求和 % n = (s.map (· % n)).求和 % n
   证明: by
   induction s using Multiset.induction <;> simp [Nat.add_mod, *]
 
@@ -855,7 +855,7 @@ theorem prod_nat_mod
 中文:
 定理 prod_nat_mod
   条件: (s : Multiset 自然数) (n : 自然数)
-  结论: s.prod % n = (s.map (· % n)).prod % n
+  结论: s.乘积 % n = (s.map (· % n)).乘积 % n
   证明: by
   induction s using Multiset.induction <;> simp [Nat.mul_mod, *]
 
@@ -877,7 +877,7 @@ theorem sum_int_mod
 中文:
 定理 sum_int_mod
   条件: (s : Multiset 整数) (n : 整数)
-  结论: s.sum % n = (s.map (· % n)).sum % n
+  结论: s.求和 % n = (s.map (· % n)).求和 % n
   证明: by
   induction s using Multiset.induction <;> simp [Int.add_emod, *]
 
@@ -899,7 +899,7 @@ theorem prod_int_mod
 中文:
 定理 prod_int_mod
   条件: (s : Multiset 整数) (n : 整数)
-  结论: s.prod % n = (s.map (· % n)).prod % n
+  结论: s.乘积 % n = (s.map (· % n)).乘积 % n
   证明: by
   induction s using Multiset.induction <;> simp [Int.mul_emod, *]
 
@@ -923,7 +923,7 @@ exact map_congr rfl fun x hx => tsub_add_cancel_of_le hfg _ hx
 
 中文:
 定理 sum_map_tsub
-  结论: [AddCommMonoid M] [PartialOrder M] [ExistsAddOfLE M]
+  结论: [加法交换幺半群 M] [偏序 M] [ExistsAddOfLE M]
   证明: eq_tsub_of_add_eq by
     rw [← sum_map_add]
     congr 1

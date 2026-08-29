@@ -553,7 +553,7 @@ definition sin
 
 中文:
 定义 sin
-  签名: : PowerSeries A
+  签名: : 幂级数 A
   定义体: mk fun n => if Even n then 0 else algebraMap Rat A ((-1) ^ (n / 2) / n !)
 
 Depends on / 依赖: algebraMap
@@ -571,7 +571,7 @@ definition cos
 
 中文:
 定义 cos
-  签名: : PowerSeries A
+  签名: : 幂级数 A
   定义体: mk fun n => if Even n then algebraMap Rat A ((-1) ^ (n / 2) / n !) else 0
 
 Depends on / 依赖: algebraMap

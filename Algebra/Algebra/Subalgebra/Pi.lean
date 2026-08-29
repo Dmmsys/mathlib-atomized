@@ -41,7 +41,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (s : Set ι) (t : 对任意 i, Subalgebra R (S i))
+  签名: (s : 集合 ι) (t : 对任意 i, 子代数 R (S i))
   定义体: Submodule.pi s fun i => (t i).toSubmodule
   mul_mem' hx hy i hi := (t i).mul_mem (hx i hi) (hy i hi)
   algebraMap_mem' _ i _ := (t i).algebraMap_mem _
@@ -100,8 +100,8 @@ lemma pi_top
 
 中文:
 引理 pi_top
-  条件: (s : Set ι)
-  结论: pi s (fun i => (⊤ : Subalgebra R (S i))) = ⊤
+  条件: (s : 集合 ι)
+  结论: pi s (fun i => (⊤ : 子代数 R (S i))) = ⊤
   证明: SetLike.coe_injective Set.pi_univ _
 
 Depends on / 依赖: Set.pi_univ, SetLike, SetLike.coe_injective, coe_injective, pi_univ

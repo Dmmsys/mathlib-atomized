@@ -69,8 +69,8 @@ definition IsMIntegralCurveOn
   body: forall t in s, HasMFDerivAt[s] γ t ((1 : Real ->L[Real] Real).smulRight <| v (γ t))
 
 中文:
-定义 IsMIntegralCurveOn
-  签名: (γ : 实数 -> M) (v : (x : M) -> TangentSpace% x) (s : Set 实数)
+定义 IsM整数egralCurveOn
+  签名: (γ : 实数 -> M) (v : (x : M) -> TangentSpace% x) (s : 集合 实数)
   定义体: forall t in s, HasMFDerivAt[s] γ t ((1 : Real ->L[Real] Real).smulRight <| v (γ t))
 
 Depends on / 依赖: HasMFDerivAt, finsuppTensorFinsuppLid_symm_single_smul, smulRight
@@ -87,7 +87,7 @@ definition IsMIntegralCurveAt
   body: forallᶠ t in 𝓝 t₀, HasMFDerivAt% γ t ((1 : Real ->L[Real] Real).smulRight <| v (γ t))
 
 中文:
-定义 IsMIntegralCurveAt
+定义 IsM整数egralCurveAt
   签名: (γ : 实数 -> M) (v : (x : M) -> TangentSpace% x) (t₀ : 实数)
   定义体: forallᶠ t in 𝓝 t₀, HasMFDerivAt% γ t ((1 : Real ->L[Real] Real).smulRight <| v (γ t))
 
@@ -105,7 +105,7 @@ definition IsMIntegralCurve
   body: forall t : Real, HasMFDerivAt% γ t ((1 : Real ->L[Real] Real).smulRight (v (γ t)))
 
 中文:
-定义 IsMIntegralCurve
+定义 IsM整数egralCurve
   签名: (γ : 实数 -> M) (v : (x : M) -> TangentSpace% x)
   定义体: forall t : Real, HasMFDerivAt% γ t ((1 : Real ->L[Real] Real).smulRight (v (γ t)))
 
@@ -125,8 +125,8 @@ lemma IsMIntegralCurve.isMIntegralCurveOn
   proof: fun t _ => (h t).hasMFDerivWithinAt
 
 中文:
-引理 IsMIntegralCurve.isMIntegralCurveOn
-  条件: (h : IsM整数egralCurve γ v) (s : Set 实数)
+引理 IsM整数egralCurve.isM整数egralCurveOn
+  条件: (h : IsM整数egralCurve γ v) (s : 集合 实数)
   证明: fun t _ => (h t).hasMFDerivWithinAt
 
 Depends on / 依赖: hasMFDerivWithinAt
@@ -142,7 +142,7 @@ lemma isMIntegralCurve_iff_isMIntegralCurveOn
   proof: ⟨fun h => h.isMIntegralCurveOn _, fun h t => (h t (mem_univ _)).hasMFDerivAt Filter.univ_mem⟩
 
 中文:
-引理 isMIntegralCurve_iff_isMIntegralCurveOn
+引理 isM整数egralCurve_iff_isM整数egralCurveOn
   证明: ⟨fun h => h.isMIntegralCurveOn _, fun h t => (h t (mem_univ _)).hasMFDerivAt Filter.univ_mem⟩
 
 Depends on / 依赖: Filter, Filter.univ_mem, h.isMIntegralCurveOn, hasMFDerivAt, isMIntegralCurveOn, mem_univ, univ_mem
@@ -167,7 +167,7 @@ lemma isMIntegralCurveAt_iff
     obtain ⟨s', h1, h2, 
 
 中文:
-引理 isMIntegralCurveAt_iff
+引理 isM整数egralCurveAt_iff
   证明: by
   constructor
   · intro h
@@ -212,7 +212,7 @@ lemma isMIntegralCurveAt_iff'
     exact ⟨Metric.ball t₀ ε, Metric.ball_mem_nhds _ hε, h⟩
 
 中文:
-引理 isMIntegralCurveAt_iff'
+引理 isM整数egralCurveAt_iff'
   证明: by
   rw [isMIntegralCurveAt_iff]
   constructor
@@ -245,7 +245,7 @@ lemma IsMIntegralCurve.isMIntegralCurveAt
   proof: isMIntegralCurveAt_iff.mpr ⟨univ, Filter.univ_mem, fun t _ => (h t).hasMFDerivWithinAt⟩
 
 中文:
-引理 IsMIntegralCurve.isMIntegralCurveAt
+引理 IsM整数egralCurve.isM整数egralCurveAt
   条件: (h : IsM整数egralCurve γ v) (t : 实数)
   证明: isMIntegralCurveAt_iff.mpr ⟨univ, Filter.univ_mem, fun t _ => (h t).hasMFDerivWithinAt⟩
 
@@ -265,7 +265,7 @@ lemma isMIntegralCurve_iff_isMIntegralCurveAt
 .hasMFDerivAt hs⟩ exact h t (mem_of_mem_nhds hs)
 
 中文:
-引理 isMIntegralCurve_iff_isMIntegralCurveAt
+引理 isM整数egralCurve_iff_isM整数egralCurveAt
   证明: ⟨fun h => h.isMIntegralCurveAt, fun h t => by
     obtain ⟨s, hs, h⟩ := isMIntegralCurveAt_iff.mp (h t)
 .hasMFDerivAt hs⟩ exact h t (mem_of_mem_nhds hs)
@@ -287,7 +287,7 @@ lemma IsMIntegralCurveOn.mono
   proof: fun t ht => (h t (hs ht)).mono hs
 
 中文:
-引理 IsMIntegralCurveOn.mono
+引理 IsM整数egralCurveOn.mono
   条件: (h : IsM整数egralCurveOn γ v s) (hs : s' subseteq s)
   证明: fun t ht => (h t (hs ht)).mono hs
 -/
@@ -304,7 +304,7 @@ lemma IsMIntegralCurveAt.hasMFDerivAt
 .hasMFDerivAt hs h t₀ (mem_of_mem_nhds hs)
 
 中文:
-引理 IsMIntegralCurveAt.hasMFDerivAt
+引理 IsM整数egralCurveAt.hasMFDerivAt
   条件: (h : IsM整数egralCurveAt γ v t₀)
   证明: have ⟨_, hs, h⟩ := isMIntegralCurveAt_iff.mp h
 .hasMFDerivAt hs h t₀ (mem_of_mem_nhds hs)
@@ -325,7 +325,7 @@ lemma IsMIntegralCurveOn.isMIntegralCurveAt
   proof: isMIntegralCurveAt_iff.mpr ⟨s, hs, h⟩
 
 中文:
-引理 IsMIntegralCurveOn.isMIntegralCurveAt
+引理 IsM整数egralCurveOn.isM整数egralCurveAt
   条件: (h : IsM整数egralCurveOn γ v s) (hs : s in 𝓝 t₀)
   证明: isMIntegralCurveAt_iff.mpr ⟨s, hs, h⟩
 
@@ -347,7 +347,7 @@ lemma IsMIntegralCurveAt.isMIntegralCurveOn
   exact h _ (mem_of_mem_nhds hs')
 
 中文:
-引理 IsMIntegralCurveAt.isMIntegralCurveOn
+引理 IsM整数egralCurveAt.isM整数egralCurveOn
   条件: (h : 对任意 t in s, IsM整数egralCurveAt γ v t)
   证明: by
   intro t ht
@@ -373,8 +373,8 @@ lemma isMIntegralCurveOn_iff_isMIntegralCurveAt
   proof: ⟨fun h _ ht => h.isMIntegralCurveAt (hs.mem_nhds ht), IsMIntegralCurveAt.isMIntegralCurveOn⟩
 
 中文:
-引理 isMIntegralCurveOn_iff_isMIntegralCurveAt
-  条件: (hs : IsOpen s)
+引理 isM整数egralCurveOn_iff_isM整数egralCurveAt
+  条件: (hs : 是开集 s)
   证明: ⟨fun h _ ht => h.isMIntegralCurveAt (hs.mem_nhds ht), IsMIntegralCurveAt.isMIntegralCurveOn⟩
 
 Depends on / 依赖: IsMIntegralCurveAt, IsMIntegralCurveAt.isMIntegralCurveOn, h.isMIntegralCurveAt, hs.mem_nhds, isMIntegralCurveAt, isMIntegralCurveOn, mem_nhds
@@ -392,7 +392,7 @@ lemma IsMIntegralCurveOn.continuousWithinAt
   proof: (hγ t₀ ht).1
 
 中文:
-引理 IsMIntegralCurveOn.continuousWithinAt
+引理 IsM整数egralCurveOn.continuousWithinAt
   条件: (hγ : IsM整数egralCurveOn γ v s) (ht : t₀ in s)
   证明: (hγ t₀ ht).1
 -/
@@ -408,7 +408,7 @@ lemma IsMIntegralCurveOn.continuousOn
   proof: fun t ht => (hγ t ht).continuousWithinAt
 
 中文:
-引理 IsMIntegralCurveOn.continuousOn
+引理 IsM整数egralCurveOn.continuousOn
   条件: (hγ : IsM整数egralCurveOn γ v s)
   证明: fun t ht => (hγ t ht).continuousWithinAt
 
@@ -427,7 +427,7 @@ lemma IsMIntegralCurveAt.continuousAt
 .continuousAt hs hγ.continuousWithinAt (mem_of_mem_nhds hs)
 
 中文:
-引理 IsMIntegralCurveAt.continuousAt
+引理 IsM整数egralCurveAt.continuousAt
   条件: (hγ : IsM整数egralCurveAt γ v t₀)
   证明: have ⟨_, hs, hγ⟩ := isMIntegralCurveAt_iff.mp hγ
 .continuousAt hs hγ.continuousWithinAt (mem_of_mem_nhds hs)
@@ -449,9 +449,9 @@ lemma IsMIntegralCurve.continuous
   proof: continuous_iff_continuousAt.mpr fun t => (hγ.isMIntegralCurveAt t).continuousAt
 
 中文:
-引理 IsMIntegralCurve.continuous
+引理 IsM整数egralCurve.continuous
   条件: (hγ : IsM整数egralCurve γ v)
-  结论: Continuous γ
+  结论: 连续 γ
   证明: continuous_iff_continuousAt.mpr fun t => (hγ.isMIntegralCurveAt t).continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, isMIntegralCurveAt
@@ -475,7 +475,7 @@ lemma IsMIntegralCurveOn.hasDerivWithinAt
   apply (HasMFDerivWithinAt.comp t (hasMFDerivWithinAt_extChartAt (I := I) hsrc) (hγ _ 
 
 中文:
-引理 IsMIntegralCurveOn.hasDerivWithinAt
+引理 IsM整数egralCurveOn.hasDerivWithinAt
   结论: (hγ : IsM整数egralCurveOn γ v s) {t : 实数} (ht : t in s)
   证明: by
   -- turn `HasDerivWithinAt` into comp of `HasMFDerivWithinAt`
@@ -515,7 +515,7 @@ lemma IsMIntegralCurveAt.eventually_hasDerivAt
   rw [hasDerivAt_iff_hasFDerivAt]; rw [← hasMFDerivAt
 
 中文:
-引理 IsMIntegralCurveAt.eventually_hasDerivAt
+引理 IsM整数egralCurveAt.eventually_hasDerivAt
   条件: (hγ : IsM整数egralCurveAt γ v t₀)
   证明: by
   apply eventually_mem_nhds_iff.mpr

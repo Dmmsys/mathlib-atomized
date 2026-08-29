@@ -43,7 +43,7 @@ theorem pi_mem_of_mulSingle_mem_aux
 
 中文:
 定理 pi_mem_of_mulSingle_mem_aux
-  结论: [DecidableEq η] (I : Finset η) {H : S} (x : Π i, f i)
+  结论: [DecidableEq η] (I : 有限集 η) {H : S} (x : Π i, f i)
   证明: by
   induction I using Finset.induction_on generalizing x with
   | empty =>
@@ -93,7 +93,7 @@ theorem pi_mem_of_mulSingle_mem
 
 中文:
 定理 pi_mem_of_mulSingle_mem
-  结论: [Finite η] [DecidableEq η] {H : S} (x : Π i, f i)
+  结论: [有限 η] [DecidableEq η] {H : S} (x : Π i, f i)
   证明: by
   cases nonempty_fintype η
   exact pi_mem_of_mulSingle_mem_aux Finset.univ x (by simp) fun i _ => h i
@@ -121,7 +121,7 @@ theorem pi_le_iff
 
 中文:
 定理 pi_le_iff
-  条件: [Finite η] [DecidableEq η] {H : Π i, Submonoid (f i)} {J : Submonoid (Π i, f i)}
+  条件: [有限 η] [DecidableEq η] {H : Π i, 子幺半群 (f i)} {J : 子幺半群 (Π i, f i)}
   证明: ⟨fun h i _ ⟨x, hx, H⟩ => h by simpa [← H],
    fun h x hx => pi_mem_of_mulSingle_mem x fun i => h i (mem_map_of_mem _ (hx i trivial))⟩
 
@@ -154,7 +154,7 @@ subset_closure mem_univ_pi.mpr fun j => by
 
 中文:
 定理 closure_pi
-  条件: [Finite η] {s : Π i, Set (f i)} (hs : 对任意 i, 1 in s i)
+  条件: [有限 η] {s : Π i, 集合 (f i)} (hs : 对任意 i, 1 in s i)
   证明: le_antisymm
     (closure_le.2 <| pi_subset_pi_iff.2 <| .inl fun _ _ => subset_closure)
     (by

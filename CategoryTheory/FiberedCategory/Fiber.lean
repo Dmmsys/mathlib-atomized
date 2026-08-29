@@ -66,7 +66,7 @@ instance fiberCategory
 
 中文:
 实例 fiberCategory
-  签名: : Category (Fiber p S) where
+  签名: : 范畴 (Fiber p S) where
   定义体: {φ : a.1 ⟶ b.1 // IsHomLift p (𝟙 S) φ}
   id a := ⟨𝟙 a.1, IsHomLift.id a.2⟩
   comp φ ψ := ⟨φ.val ≫ ψ.val, by have := φ.2; have := ψ.2; infer_instance⟩
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fiberInclusion : Fiber p S ⥤ _).Faithful
+  签名: (fiberInclusion : Fiber p S ⥤ _).忠实
 -/
 instance : (fiberInclusion : Fiber p S ⥤ _).Faithful where
 
@@ -142,7 +142,7 @@ lemma fiberInclusion_obj_inj
 
 中文:
 引理 fiberInclusion_obj_inj
-  结论: (fiberInclusion : Fiber p S ⥤ _).obj.Injective
+  结论: (fiberInclusion : Fiber p S ⥤ _).obj.单射
   证明: fun _ _ f => Subtype.val_inj.1 f
 
 Depends on / 依赖: Subtype, Subtype.val_inj, val_inj

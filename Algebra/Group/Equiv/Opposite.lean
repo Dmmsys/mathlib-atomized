@@ -100,7 +100,7 @@ definition opAddEquiv
 
 中文:
 定义 opAddEquiv
-  签名: [Add α]
+  签名: [加法 α]
   定义体: opEquiv
   map_add' _ _ := rfl
 
@@ -121,7 +121,7 @@ lemma opAddEquiv_toEquiv
 
 中文:
 引理 opAddEquiv_toEquiv
-  条件: [Add α]
+  条件: [加法 α]
   结论: ((opAddEquiv : α ≃+ αᵐᵒᵖ) : α ≃ αᵐᵒᵖ) = opEquiv
   证明: rfl
 
@@ -146,7 +146,7 @@ definition opMulEquiv
 
 中文:
 定义 opMulEquiv
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: opEquiv
   map_mul' _ _ := rfl
 
@@ -167,7 +167,7 @@ lemma opMulEquiv_toEquiv
 
 中文:
 引理 opMulEquiv_toEquiv
-  条件: [Mul α]
+  条件: [乘法 α]
   结论: ((opMulEquiv : α ≃* αᵃᵒᵖ) : α ≃ αᵃᵒᵖ) = opEquiv
   证明: rfl
 -/
@@ -191,8 +191,8 @@ definition MulEquiv.inv'
   body: { (Equiv.inv G).trans opEquiv with map_mul' x y := unop_injective <| mul_inv_rev x y }
 
 中文:
-定义 MulEquiv.inv'
-  签名: (G : 类型) [DivisionMonoid G]
+定义 乘法等价.inv'
+  签名: (G : 类型) [Division幺半群 G]
   定义体: { (Equiv.inv G).trans opEquiv with map_mul' x y := unop_injective <| mul_inv_rev x y }
 
 Depends on / 依赖: Equiv.inv, map_mul, mul_inv_rev, opEquiv, unop_injective
@@ -215,8 +215,8 @@ definition MulHom.toOpposite
   map_mul' x y := by simp [(hf x y).eq]
 
 中文:
-定义 MulHom.toOpposite
-  签名: {M N : 类型} [Mul M] [Mul N] (f : M ->ₙ* N)
+定义 乘法半群态射.toOpposite
+  签名: {M N : 类型} [乘法 M] [乘法 N] (f : M ->ₙ* N)
   定义体: op ∘ f
   map_mul' x y := by simp [(hf x y).eq]
 -/
@@ -240,8 +240,8 @@ definition MulHom.fromOpposite
   map_mul' _ _ := (f.map_mul _ _).trans (hf _ _).eq
 
 中文:
-定义 MulHom.fromOpposite
-  签名: {M N : 类型} [Mul M] [Mul N] (f : M ->ₙ* N)
+定义 乘法半群态射.fromOpposite
+  签名: {M N : 类型} [乘法 M] [乘法 N] (f : M ->ₙ* N)
   定义体: f ∘ MulOpposite.unop
   map_mul' _ _ := (f.map_mul _ _).trans (hf _ _).eq
 
@@ -268,8 +268,8 @@ definition MonoidHom.toOpposite
   map_mul' x y := by simp [(hf x y).eq]
 
 中文:
-定义 MonoidHom.toOpposite
-  签名: {M N : 类型} [MulOneClass M] [MulOneClass N] (f : M ->* N)
+定义 幺半群态射.toOpposite
+  签名: {M N : 类型} [MulOne类 M] [MulOne类 N] (f : M ->* N)
   定义体: op ∘ f
   map_one' := congrArg op f.map_one
   map_mul' x y := by simp [(hf x y).eq]
@@ -296,8 +296,8 @@ definition MonoidHom.fromOpposite
   map_mul' _ _ := (f.map_mul _ _).trans (hf _ _).eq
 
 中文:
-定义 MonoidHom.fromOpposite
-  签名: {M N : 类型} [MulOneClass M] [MulOneClass N] (f : M ->* N)
+定义 幺半群态射.fromOpposite
+  签名: {M N : 类型} [MulOne类 M] [MulOne类 N] (f : M ->* N)
   定义体: f ∘ MulOpposite.unop
   map_one' := f.map_one
   map_mul' _ _ := (f.map_mul _ _).trans (hf _ _).eq
@@ -329,8 +329,8 @@ definition MulHom.op
       map_mul' x y := congrArg unop (f.map_mul (MulOpposite.op y) (MulOpposite.op x)) }
 
 中文:
-定义 MulHom.op
-  签名: {M N} [Mul M] [Mul N]
+定义 乘法半群态射.op
+  签名: {M N} [乘法 M] [乘法 N]
   定义体: { toFun := MulOpposite.op ∘ f ∘ unop,
       map_mul' x y := unop_injective (f.map_mul y.unop x.unop) }
   invFun f :=
@@ -359,8 +359,8 @@ definition MulHom.unop
   body: MulHom.op.symm
 
 中文:
-定义 MulHom.unop
-  签名: {M N} [Mul M] [Mul N]
+定义 乘法半群态射.unop
+  签名: {M N} [乘法 M] [乘法 N]
   定义体: MulHom.op.symm
 
 Depends on / 依赖: MulHom, MulHom.op.symm
@@ -386,8 +386,8 @@ definition AddHom.mulOp
         fun x y => congrArg MulOpposite.unop (f.map_add (MulOpposite.op x) (MulOpposite.op y)) }
 
 中文:
-定义 AddHom.mulOp
-  签名: {M N} [Add M] [Add N]
+定义 加法半群态射.mulOp
+  签名: {M N} [加法 M] [加法 N]
   定义体: { toFun := MulOpposite.op ∘ f ∘ MulOpposite.unop,
       map_add' x y := unop_injective (f.map_add x.unop y.unop) }
   invFun f :=
@@ -418,8 +418,8 @@ definition AddHom.mulUnop
   body: AddHom.mulOp.symm
 
 中文:
-定义 AddHom.mulUnop
-  签名: {α β} [Add α] [Add β]
+定义 加法半群态射.mulUnop
+  签名: {α β} [加法 α] [加法 β]
   定义体: AddHom.mulOp.symm
 
 Depends on / 依赖: AddHom, AddHom.mulOp.symm
@@ -446,8 +446,8 @@ definition MonoidHom.op
       map_mul' x y := congrArg unop (f.map_mul (MulOpposi
 
 中文:
-定义 MonoidHom.op
-  签名: {M N} [MulOneClass M] [MulOneClass N]
+定义 幺半群态射.op
+  签名: {M N} [MulOne类 M] [MulOne类 N]
   定义体: { toFun := MulOpposite.op ∘ f ∘ unop, map_one' := congrArg MulOpposite.op f.map_one,
       map_mul' x y := unop_injective (f.map_mul y.unop x.unop) }
   invFun f :=
@@ -476,8 +476,8 @@ definition MonoidHom.unop
   body: MonoidHom.op.symm
 
 中文:
-定义 MonoidHom.unop
-  签名: {M N} [MulOneClass M] [MulOneClass N]
+定义 幺半群态射.unop
+  签名: {M N} [MulOne类 M] [MulOne类 N]
   定义体: MonoidHom.op.symm
 
 Depends on / 依赖: MonoidHom, MonoidHom.op.symm
@@ -498,8 +498,8 @@ definition MulEquiv.opOp
   map_mul' _ _ := rfl
 
 中文:
-定义 MulEquiv.opOp
-  签名: (M : 类型) [Mul M]
+定义 乘法等价.opOp
+  签名: (M : 类型) [乘法 M]
   定义体: MulOpposite.opEquiv.trans MulOpposite.opEquiv
   map_mul' _ _ := rfl
 
@@ -527,8 +527,8 @@ definition AddMonoidHom.mulOp
   
 
 中文:
-定义 AddMonoidHom.mulOp
-  签名: {M N} [AddZeroClass M] [AddZeroClass N]
+定义 加法幺半群态射.mulOp
+  签名: {M N} [加法零类 M] [加法零类 N]
   定义体: { toFun := MulOpposite.op ∘ f ∘ MulOpposite.unop, map_zero' := unop_injective f.map_zero,
       map_add' x y := unop_injective (f.map_add x.unop y.unop) }
   invFun f :=
@@ -561,8 +561,8 @@ definition AddMonoidHom.mulUnop
   body: AddMonoidHom.mulOp.symm
 
 中文:
-定义 AddMonoidHom.mulUnop
-  签名: {α β} [AddZeroClass α] [AddZeroClass β]
+定义 加法幺半群态射.mulUnop
+  签名: {α β} [加法零类 α] [加法零类 β]
   定义体: AddMonoidHom.mulOp.symm
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulOp.symm
@@ -582,8 +582,8 @@ definition AddEquiv.mulOp
   invFun f := opAddEquiv.trans (f.trans opAddEquiv.symm)
 
 中文:
-定义 AddEquiv.mulOp
-  签名: {α β} [Add α] [Add β]
+定义 加法等价.mulOp
+  签名: {α β} [加法 α] [加法 β]
   定义体: opAddEquiv.symm.trans (f.trans opAddEquiv)
   invFun f := opAddEquiv.trans (f.trans opAddEquiv.symm)
 
@@ -604,8 +604,8 @@ definition AddEquiv.mulUnop
   body: AddEquiv.mulOp.symm
 
 中文:
-定义 AddEquiv.mulUnop
-  签名: {α β} [Add α] [Add β]
+定义 加法等价.mulUnop
+  签名: {α β} [加法 α] [加法 β]
   定义体: AddEquiv.mulOp.symm
 
 Depends on / 依赖: AddEquiv, AddEquiv.mulOp.symm
@@ -630,8 +630,8 @@ definition MulEquiv.op
     { toFun 
 
 中文:
-定义 MulEquiv.op
-  签名: {α β} [Mul α] [Mul β]
+定义 乘法等价.op
+  签名: {α β} [乘法 α] [乘法 β]
   定义体: { toFun := MulOpposite.op ∘ f ∘ unop, invFun := MulOpposite.op ∘ f.symm ∘ unop,
       left_inv x := unop_injective (f.symm_apply_apply x.unop),
       right_inv x := unop_injective (f.apply_symm_apply x.unop),
@@ -665,8 +665,8 @@ definition MulEquiv.unop
   body: MulEquiv.op.symm
 
 中文:
-定义 MulEquiv.unop
-  签名: {α β} [Mul α] [Mul β]
+定义 乘法等价.unop
+  签名: {α β} [乘法 α] [乘法 β]
   定义体: MulEquiv.op.symm
 
 Depends on / 依赖: MulEquiv, MulEquiv.op.symm
@@ -688,8 +688,8 @@ lemma AddMonoidHom.mul_op_ext
   proof: AddMonoidHom.ext MulOpposite.rec' fun x => (DFunLike.congr_fun h :) x
 
 中文:
-引理 AddMonoidHom.mul_op_ext
-  结论: {α β} [AddZeroClass α] [AddZeroClass β] (f g : αᵐᵒᵖ ->+ β)
+引理 加法幺半群态射.mul_op_ext
+  结论: {α β} [加法零类 α] [加法零类 β] (f g : αᵐᵒᵖ ->+ β)
   证明: AddMonoidHom.ext MulOpposite.rec' fun x => (DFunLike.congr_fun h :) x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, DFunLike, DFunLike.congr_fun, MulOpposite, MulOpposite.rec, congr_fun

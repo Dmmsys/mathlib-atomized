@@ -44,7 +44,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace Mᵈᵐᵃ
+  签名: : 拓扑空间 Mᵈᵐᵃ
   定义体: .induced mk.symm ‹_›
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -66,7 +66,7 @@ theorem continuous_mk
 
 中文:
 定理 continuous_mk
-  结论: Continuous (@mk M)
+  结论: 连续 (@mk M)
   证明: continuous_induced_rng.2 continuous_id
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -86,7 +86,7 @@ theorem continuous_mk_symm
 
 中文:
 定理 continuous_mk_symm
-  结论: Continuous (@mk M).symm
+  结论: 连续 (@mk M).symm
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -156,7 +156,7 @@ theorem isInducing_mk
 
 中文:
 定理 isInducing_mk
-  结论: IsInducing (@mk M)
+  结论: 是Inducing (@mk M)
   证明: mkHomeomorph.isInducing
 -/
 @[to_additive] theorem isInducing_mk : IsInducing (@mk M) := mkHomeomorph.isInducing
@@ -170,7 +170,7 @@ theorem isEmbedding_mk
 
 中文:
 定理 isEmbedding_mk
-  结论: IsEmbedding (@mk M)
+  结论: 是嵌入 (@mk M)
   证明: mkHomeomorph.isEmbedding
 -/
 @[to_additive] theorem isEmbedding_mk : IsEmbedding (@mk M) := mkHomeomorph.isEmbedding
@@ -184,7 +184,7 @@ theorem isOpenEmbedding_mk
 
 中文:
 定理 isOpenEmbedding_mk
-  结论: IsOpenEmbedding (@mk M)
+  结论: 是开嵌入 (@mk M)
   证明: mkHomeomorph.isOpenEmbedding
 -/
 @[to_additive] theorem isOpenEmbedding_mk : IsOpenEmbedding (@mk M) := mkHomeomorph.isOpenEmbedding
@@ -198,7 +198,7 @@ theorem isClosedEmbedding_mk
 
 中文:
 定理 isClosedEmbedding_mk
-  结论: IsClosedEmbedding (@mk M)
+  结论: 是闭嵌入 (@mk M)
   证明: mkHomeomorph.isClosedEmbedding
 -/
 @[to_additive] theorem isClosedEmbedding_mk : IsClosedEmbedding (@mk M) :=
@@ -213,7 +213,7 @@ theorem isQuotientMap_mk
 
 中文:
 定理 isQuotientMap_mk
-  结论: IsQuotientMap (@mk M)
+  结论: 是商映射 (@mk M)
   证明: mkHomeomorph.isQuotientMap
 -/
 @[to_additive] theorem isQuotientMap_mk : IsQuotientMap (@mk M) := mkHomeomorph.isQuotientMap
@@ -228,7 +228,7 @@ theorem isInducing_mk_symm
 
 中文:
 定理 isInducing_mk_symm
-  结论: IsInducing (@mk M).symm
+  结论: 是Inducing (@mk M).symm
   证明: mkHomeomorph.symm.isInducing
 -/
 @[to_additive] theorem isInducing_mk_symm : IsInducing (@mk M).symm := mkHomeomorph.symm.isInducing
@@ -244,7 +244,7 @@ theorem isEmbedding_mk_symm
 
 中文:
 定理 isEmbedding_mk_symm
-  结论: IsEmbedding (@mk M).symm
+  结论: 是嵌入 (@mk M).symm
   证明: mkHomeomorph.symm.isEmbedding
 
 @[to_additive]
@@ -265,7 +265,7 @@ theorem isOpenEmbedding_mk_symm
 
 中文:
 定理 isOpenEmbedding_mk_symm
-  结论: IsOpenEmbedding (@mk M).symm
+  结论: 是开嵌入 (@mk M).symm
   证明: mkHomeomorph.symm.isOpenEmbedding
 
 @[to_additive]
@@ -287,7 +287,7 @@ theorem isClosedEmbedding_mk_symm
 
 中文:
 定理 isClosedEmbedding_mk_symm
-  结论: IsClosedEmbedding (@mk M).symm
+  结论: 是闭嵌入 (@mk M).symm
   证明: mkHomeomorph.symm.isClosedEmbedding
 
 @[to_additive]
@@ -308,7 +308,7 @@ theorem isQuotientMap_mk_symm
 
 中文:
 定理 isQuotientMap_mk_symm
-  结论: IsQuotientMap (@mk M).symm
+  结论: 是商映射 (@mk M).symm
   证明: mkHomeomorph.symm.isQuotientMap
 
 Depends on / 依赖: isQuotientMap, mkHomeomorph, mkHomeomorph.symm.isQuotientMap
@@ -325,7 +325,7 @@ instance instT0Space
 
 中文:
 实例 instT0Space
-  签名: [T0Space M]
+  签名: [T0空间 M]
   定义体: mkHomeomorph.t0Space
 -/
 @[to_additive] instance instT0Space [T0Space M] : T0Space Mᵈᵐᵃ := mkHomeomorph.t0Space
@@ -339,7 +339,7 @@ instance instT1Space
 
 中文:
 实例 instT1Space
-  签名: [T1Space M]
+  签名: [T1空间 M]
   定义体: mkHomeomorph.t1Space
 -/
 @[to_additive] instance instT1Space [T1Space M] : T1Space Mᵈᵐᵃ := mkHomeomorph.t1Space
@@ -353,7 +353,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space M]
+  签名: [T2空间 M]
   定义体: mkHomeomorph.t2Space
 -/
 @[to_additive] instance instT2Space [T2Space M] : T2Space Mᵈᵐᵃ := mkHomeomorph.t2Space
@@ -367,7 +367,7 @@ instance instT25Space
 
 中文:
 实例 instT25Space
-  签名: [T25Space M]
+  签名: [T25空间 M]
   定义体: mkHomeomorph.t25Space
 -/
 @[to_additive] instance instT25Space [T25Space M] : T25Space Mᵈᵐᵃ := mkHomeomorph.t25Space
@@ -381,7 +381,7 @@ instance instT3Space
 
 中文:
 实例 instT3Space
-  签名: [T3Space M]
+  签名: [T3空间 M]
   定义体: mkHomeomorph.t3Space
 -/
 @[to_additive] instance instT3Space [T3Space M] : T3Space Mᵈᵐᵃ := mkHomeomorph.t3Space
@@ -395,7 +395,7 @@ instance instT4Space
 
 中文:
 实例 instT4Space
-  签名: [T4Space M]
+  签名: [T4空间 M]
   定义体: mkHomeomorph.t4Space
 -/
 @[to_additive] instance instT4Space [T4Space M] : T4Space Mᵈᵐᵃ := mkHomeomorph.t4Space
@@ -409,7 +409,7 @@ instance instT5Space
 
 中文:
 实例 instT5Space
-  签名: [T5Space M]
+  签名: [T5空间 M]
   定义体: mkHomeomorph.t5Space
 -/
 @[to_additive] instance instT5Space [T5Space M] : T5Space Mᵈᵐᵃ := mkHomeomorph.t5Space
@@ -424,7 +424,7 @@ instance instR0Space
 
 中文:
 实例 instR0Space
-  签名: [R0Space M]
+  签名: [R0空间 M]
   定义体: isEmbedding_mk_symm.r0Space
 -/
 @[to_additive] instance instR0Space [R0Space M] : R0Space Mᵈᵐᵃ := isEmbedding_mk_symm.r0Space
@@ -440,7 +440,7 @@ instance instR1Space
 
 中文:
 实例 instR1Space
-  签名: [R1Space M]
+  签名: [R1空间 M]
   定义体: isEmbedding_mk_symm.r1Space
 
 @[to_additive]
@@ -460,7 +460,7 @@ instance instRegularSpace
 
 中文:
 实例 instRegularSpace
-  签名: [RegularSpace M]
+  签名: [正则空间 M]
   定义体: isEmbedding_mk_symm.regularSpace
 
 @[to_additive]
@@ -482,7 +482,7 @@ instance instNormalSpace
 
 中文:
 实例 instNormalSpace
-  签名: [NormalSpace M]
+  签名: [正规空间 M]
   定义体: mkHomeomorph.normalSpace
 
 @[to_additive]
@@ -504,7 +504,7 @@ instance instCompletelyNormalSpace
 
 中文:
 实例 instCompletelyNormalSpace
-  签名: [CompletelyNormalSpace M]
+  签名: [余mpletelyNormal空间 M]
   定义体: isEmbedding_mk_symm.completelyNormalSpace
 
 @[to_additive]
@@ -527,7 +527,7 @@ instance instDiscreteTopology
 
 中文:
 实例 instDiscreteTopology
-  签名: [DiscreteTopology M]
+  签名: [离散拓扑 M]
   定义体: isEmbedding_mk_symm.discreteTopology
 
 @[to_additive]
@@ -550,7 +550,7 @@ instance instSeparableSpace
 
 中文:
 实例 instSeparableSpace
-  签名: [SeparableSpace M]
+  签名: [可分空间 M]
   定义体: isQuotientMap_mk.separableSpace
 
 @[to_additive]
@@ -573,7 +573,7 @@ instance instFirstCountableTopology
 
 中文:
 实例 instFirstCountableTopology
-  签名: [FirstCountableTopology M]
+  签名: [第一可数拓扑 M]
   定义体: isInducing_mk_symm.firstCountableTopology
 
 @[to_additive]
@@ -596,7 +596,7 @@ instance instSecondCountableTopology
 
 中文:
 实例 instSecondCountableTopology
-  签名: [SecondCountableTopology M]
+  签名: [第二可数拓扑 M]
   定义体: isInducing_mk_symm.secondCountableTopology
 
 @[to_additive]
@@ -619,7 +619,7 @@ instance instCompactSpace
 
 中文:
 实例 instCompactSpace
-  签名: [CompactSpace M]
+  签名: [紧空间 M]
   定义体: mkHomeomorph.compactSpace
 
 @[to_additive]
@@ -642,7 +642,7 @@ instance instLocallyCompactSpace
 
 中文:
 实例 instLocallyCompactSpace
-  签名: [LocallyCompactSpace M]
+  签名: [局部紧空间 M]
   定义体: isOpenEmbedding_mk_symm.locallyCompactSpace
 
 @[to_additive]
@@ -665,7 +665,7 @@ instance instWeaklyLocallyCompactSpace
 
 中文:
 实例 instWeaklyLocallyCompactSpace
-  签名: [WeaklyLocallyCompactSpace M]
+  签名: [WeaklyLocallyCompact空间 M]
   定义体: isClosedEmbedding_mk_symm.weaklyLocallyCompactSpace
 
 @[to_additive (attr := simp)]

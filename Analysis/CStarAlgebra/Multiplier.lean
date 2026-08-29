@@ -170,7 +170,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add 𝓜(𝕜, A) where
+  签名: : 加法 𝓜(𝕜, A) where
   定义体: { toProd := a.toProd + b.toProd
       central := fun x y =>
         show (a.snd + b.snd) x * y = x * (a.fst + b.fst) y by
@@ -196,7 +196,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero 𝓜(𝕜, A) where
+  签名: : 零 𝓜(𝕜, A) where
   定义体: { toProd := 0
       central := fun x y => (zero_mul y).trans (mul_zero x).symm }
 
@@ -220,7 +220,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg 𝓜(𝕜, A) where
+  签名: : 取负 𝓜(𝕜, A) where
   定义体: { toProd := -a.toProd
       central := fun x y =>
         show -a.snd x * y = x * -a.fst y by
@@ -248,7 +248,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub 𝓜(𝕜, A) where
+  签名: : 减法 𝓜(𝕜, A) where
   定义体: { toProd := a.toProd - b.toProd
       central := fun x y =>
         show (a.snd - b.snd) x * y = x * (a.fst - b.fst) y by
@@ -283,7 +283,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul S 𝓜(𝕜, A) where
+  签名: : 标量乘法 S 𝓜(𝕜, A) where
   定义体: { toProd := s • a.toProd
       central := fun x y =>
         show (s • a.snd) x * y = x * (s • a.fst) y by
@@ -368,7 +368,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul S T] [IsScalarTower S T A]
+  签名: [标量乘法 S T] [标量塔 S T A]
   定义体: ext (𝕜 := 𝕜) (A := A) _ _ smul_assoc _ _ a.toProd
 
 Depends on / 依赖: a.toProd, smul_assoc, toProd
@@ -386,7 +386,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass S T A]
+  签名: [标量交换类 S T A]
   定义体: ext (𝕜 := 𝕜) (A := A) _ _ smul_comm _ _ a.toProd
 
 Depends on / 依赖: a.toProd, smul_comm, toProd
@@ -404,7 +404,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: {R : 类型} [Semiring R] [Module R A] [SMulCommClass 𝕜 R A]
+  签名: {R : 类型} [半环 R] [模 R A] [标量交换类 𝕜 R A]
   定义体: ext (𝕜 := 𝕜) (A := A) _ _ op_smul_eq_smul _ a.toProd
 
 Depends on / 依赖: a.toProd, op_smul_eq_smul, toProd
@@ -426,7 +426,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One 𝓜(𝕜, A)
+  签名: : 幺 𝓜(𝕜, A)
   定义体: ⟨⟨1, fun _x _y => rfl⟩⟩
 -/
 instance instOne : One 𝓜(𝕜, A) :=
@@ -443,7 +443,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul 𝓜(𝕜, A) where
+  签名: : 乘法 𝓜(𝕜, A) where
   定义体: { toProd := (a.fst.comp b.fst, b.snd.comp a.snd)
       central := fun x y => show b.snd (a.snd x) * y = x * a.fst (b.fst y) by simp only [central] }
 
@@ -466,8 +466,8 @@ instance instNatCast
         smul_mul_assoc]⟩
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast 𝓜(𝕜, A) where
+实例 inst自然数Cast
+  签名: : 自然数嵌入 𝓜(𝕜, A) where
   定义体: ⟨n, fun x y => by
       rw [Prod.snd_natCast]; rw [Prod.fst_natCast]
       simp only [← Nat.smul_one_eq_cast, smul_apply, one_apply_eq_self, mul_smul_comm,
@@ -494,8 +494,8 @@ instance instIntCast
         smul_mul_assoc]⟩
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast 𝓜(𝕜, A) where
+实例 inst整数Cast
+  签名: : 整数嵌入 𝓜(𝕜, A) where
   定义体: ⟨n, fun x y => by
       rw [Prod.snd_intCast]; rw [Prod.fst_intCast]
       simp only [← Int.smul_one_eq_cast, smul_apply, one_apply_eq_self, mul_smul_comm,
@@ -525,7 +525,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow 𝓜(𝕜, A) 自然数 where
+  签名: : 幂 𝓜(𝕜, A) 自然数 where
   定义体: ⟨a.toProd ^ n, fun x y => by
       induction n generalizing x y with
       | zero => rfl
@@ -556,7 +556,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited 𝓜(𝕜, A)
+  签名: : 可居 𝓜(𝕜, A)
   定义体: ⟨0⟩
 
 @[simp]
@@ -1151,7 +1151,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring 𝓜(𝕜, A)
+  签名: : 环 𝓜(𝕜, A)
   定义体: toProdMulOpposite_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
     (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
@@ -1233,7 +1233,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {S : 类型} [Semiring S] [Module S A] [SMulCommClass 𝕜 S A]
+  签名: {S : 类型} [半环 S] [模 S A] [标量交换类 𝕜 S A]
   定义体: Function.Injective.module S toProdHom (ext (𝕜 := 𝕜) (A := A)) fun _x _y => rfl
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, module, toProdHom
@@ -1258,7 +1258,7 @@ map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map
 
 中文:
 实例 instAlgebra
-  签名: : Algebra 𝕜 𝓜(𝕜, A) where
+  签名: : 代数 𝕜 𝓜(𝕜, A) where
   定义体: { toFun k :=
       { toProd := algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A)) k
         central := fun x y => by
@@ -1369,7 +1369,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: : Star 𝓜(𝕜, A) where
+  签名: : 对合 𝓜(𝕜, A) where
   定义体: { fst :=
         (((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A).comp a.snd).comp
           ((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A)
@@ -1447,7 +1447,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: : StarAddMonoid 𝓜(𝕜, A)
+  签名: : StarAdd幺半群 𝓜(𝕜, A)
   定义体: { DoubleCentralizer.instStar with
     star_involutive _ := by ext <;> simp
     star_add _ _ := by ext <;> simp }
@@ -1470,7 +1470,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: : StarRing 𝓜(𝕜, A)
+  签名: : 对合环 𝓜(𝕜, A)
   定义体: { DoubleCentralizer.instStarAddMonoid with
     star_mul _ _ := by ext <;> simp }
 
@@ -1491,7 +1491,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: : StarModule 𝕜 𝓜(𝕜, A)
+  签名: : 对合模 𝕜 𝓜(𝕜, A)
   定义体: { DoubleCentralizer.instStarAddMonoid (𝕜 := 𝕜) (A := A) with
     star_smul _ _ := by ext <;> exact star_smul _ _ }
 
@@ -1574,7 +1574,7 @@ theorem coe_fst
 中文:
 定理 coe_fst
   条件: (a : A)
-  结论: (a : 𝓜(𝕜, A)).fst = ContinuousLinearMap.mul 𝕜 A a
+  结论: (a : 𝓜(𝕜, A)).fst = 连续线性映射.mul 𝕜 A a
   证明: rfl
 
 @[simp, norm_cast]
@@ -1595,7 +1595,7 @@ theorem coe_snd
 中文:
 定理 coe_snd
   条件: (a : A)
-  结论: (a : 𝓜(𝕜, A)).snd = (ContinuousLinearMap.mul 𝕜 A).flip a
+  结论: (a : 𝓜(𝕜, A)).snd = (连续线性映射.mul 𝕜 A).flip a
   证明: rfl
 -/
 theorem coe_snd (a : A) : (a : 𝓜(𝕜, A)).snd = (ContinuousLinearMap.mul 𝕜 A).flip a :=
@@ -1649,7 +1649,7 @@ map_mul' _ _ := ext _ _ _ _ Prod.ext
 
 中文:
 定义 coeHom
-  签名: [StarRing 𝕜] [StarRing A] [StarModule 𝕜 A] [NormedStarGroup A]
+  签名: [对合环 𝕜] [对合环 A] [对合模 𝕜 A] [NormedStar群 A]
   定义体: a
 map_smul' _ _ := ext _ _ _ _ Prod.ext (map_smul _ _ _) (map_smul _ _ _)
 map_zero' := ext _ _ _ _ Prod.ext (map_zero _) (map_zero _)
@@ -1694,7 +1694,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedRing 𝓜(𝕜, A)
+  签名: 赋范环 𝓜(𝕜, A)
   定义体: NormedRing.induced _ _ (toProdMulOppositeHom : 𝓜(𝕜, A) ->+* (A ->L[𝕜] A) × (A ->L[𝕜] A)ᵐᵒᵖ)
     (by simpa using! toProdMulOpposite_injective)
 
@@ -1789,7 +1789,7 @@ instance instNormedSpace
 
 中文:
 实例 instNormedSpace
-  签名: : NormedSpace 𝕜 𝓜(𝕜, A)
+  签名: : 赋范空间 𝕜 𝓜(𝕜, A)
   定义体: { DoubleCentralizer.instModule with
     norm_smul_le := fun k a => (norm_smul_le k a.toProdMulOpposite :) }
 
@@ -1809,7 +1809,7 @@ instance instNormedAlgebra
 
 中文:
 实例 instNormedAlgebra
-  签名: : NormedAlgebra 𝕜 𝓜(𝕜, A)
+  签名: : 赋范代数 𝕜 𝓜(𝕜, A)
   定义体: { DoubleCentralizer.instAlgebra, DoubleCentralizer.instNormedSpace with }
 
 Depends on / 依赖: DoubleCentralizer, DoubleCentralizer.instAlgebra, DoubleCentralizer.instNormedSpace, instAlgebra, instNormedSpace
@@ -1845,8 +1845,8 @@ instance [CompleteSpace
   exact isClosed_iInter fun x => isClosed_iInter fun y => isClosed_eq (by fun_prop) (by fun_prop)
 
 中文:
-实例 [CompleteSpace
-  签名: A] : CompleteSpace 𝓜(𝕜, A)
+实例 [完备空间
+  签名: A] : 完备空间 𝓜(𝕜, A)
   定义体: by
   rw [completeSpace_iff_isComplete_range isUniformEmbedding_toProdMulOpposite.isUniformInducing]
   apply IsClosed.isComplete
@@ -2062,7 +2062,7 @@ instance instCStarRing
 
 中文:
 实例 instCStarRing
-  签名: : CStarRing 𝓜(𝕜, A) where
+  签名: : CStar环 𝓜(𝕜, A) where
   定义体: fun (a : 𝓜(𝕜, A)) => le_of_eq Eq.symm congr_arg ((↑) : Real>=0 -> Real)
     show ‖star a * a‖₊ = ‖a‖₊ * ‖a‖₊ by
     /- The essence of the argument is this: let `a = (L,R)` and recall `‖a‖ = ‖L‖`.

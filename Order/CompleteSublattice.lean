@@ -44,12 +44,12 @@ structure CompleteSublattice
     - sInfClosed' : forall ⦃s : Set α⦄, s subseteq carrier -> sInf s in carrier
 
 中文:
-结构 CompleteSublattice
-  参数: extends Sublattice α
-  继承: Sublattice α
+结构 余mpleteSublattice
+  参数: extends 子格 α
+  继承: 子格 α
   公理与运算 (2 个):
-    - sSupClosed' : 对任意 ⦃s : Set α⦄, s subseteq carrier -> sSup s in carrier
-    - sInfClosed' : 对任意 ⦃s : Set α⦄, s subseteq carrier -> sInf s in carrier
+    - sSupClosed' : 对任意 ⦃s : 集合 α⦄, s subseteq carrier -> sSup s in carrier
+    - sInfClosed' : 对任意 ⦃s : 集合 α⦄, s subseteq carrier -> sInf s in carrier
 -/
 structure CompleteSublattice extends Sublattice α where
   sSupClosed' : forall ⦃s : Set α⦄, s subseteq carrier -> sSup s in carrier
@@ -76,7 +76,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (carrier : Set α)
+  签名: (carrier : 集合 α)
   定义体: carrier
   sSupClosed' := sSupClosed'
   sInfClosed' := sInfClosed'
@@ -113,7 +113,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (CompleteSublattice α) α where
+  签名: : 集合状 (余mpleteSublattice α) α where
   定义体: L.carrier
   coe_injective L M h := by cases L; cases M; congr; exact SetLike.coe_injective h
 
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (CompleteSublattice α)
+  签名: 偏序 (余mpleteSublattice α)
   定义体: .ofSetLike (CompleteSublattice α) α
 
 Depends on / 依赖: CompleteSublattice, ofSetLike
@@ -184,7 +184,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot L where
+  签名: : 底元素 L where
   定义体: ⟨⊥, bot_mem⟩
 
 Depends on / 依赖: bot_mem
@@ -202,7 +202,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top L where
+  签名: : 顶元素 L where
   定义体: ⟨⊤, top_mem⟩
 
 Depends on / 依赖: top_mem
@@ -220,7 +220,7 @@ instance instSupSet
 
 中文:
 实例 instSupSet
-  签名: : SupSet L where
+  签名: : 上确界集 L where
   定义体: ⟨sSup (↑) '' s, L.sSupClosed' image_val_subset⟩
 
 Depends on / 依赖: L.sSupClosed, image_val_subset, sSupClosed
@@ -238,7 +238,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet L where
+  签名: : 下确界集 L where
   定义体: ⟨sInf (↑) '' s, L.sInfClosed' image_val_subset⟩
 
 Depends on / 依赖: L.sInfClosed, image_val_subset, sInfClosed
@@ -257,7 +257,7 @@ theorem sSupClosed
 
 中文:
 定理 sSupClosed
-  条件: {s : Set α} (h : s subseteq L)
+  条件: {s : 集合 α} (h : s subseteq L)
   结论: sSup s in L
   证明: L.sSupClosed' h
 
@@ -276,7 +276,7 @@ theorem sInfClosed
 
 中文:
 定理 sInfClosed
-  条件: {s : Set α} (h : s subseteq L)
+  条件: {s : 集合 α} (h : s subseteq L)
   结论: sInf s in L
   证明: L.sInfClosed' h
 
@@ -325,7 +325,7 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: (S : Set L)
+  条件: (S : 集合 L)
   结论: (↑(sSup S) : α) = sSup {(s : α) | s in S}
   证明: rfl
 -/
@@ -343,7 +343,7 @@ theorem coe_sSup'
 
 中文:
 定理 coe_sSup'
-  条件: (S : Set L)
+  条件: (S : 集合 L)
   结论: (↑(sSup S) : α) = ⨆ N in S, (N : α)
   证明: by
   rw [coe_sSup]; rw [← Set.image]; rw [sSup_image]
@@ -364,7 +364,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set L)
+  条件: (S : 集合 L)
   结论: (↑(sInf S) : α) = sInf {(s : α) | s in S}
   证明: rfl
 -/
@@ -382,7 +382,7 @@ theorem coe_sInf'
 
 中文:
 定理 coe_sInf'
-  条件: (S : Set L)
+  条件: (S : 集合 L)
   结论: (↑(sInf S) : α) = ⨅ N in S, (N : α)
   证明: by
   rw [coe_sInf]; rw [← Set.image]; rw [sInf_image]
@@ -443,7 +443,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max {x // x in L}
+  签名: 最大值 {x // x in L}
   定义体: Sublattice.instSupCoe
 
 Depends on / 依赖: Sublattice, Sublattice.instSupCoe, instSupCoe
@@ -459,7 +459,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min {x // x in L}
+  签名: 最小值 {x // x in L}
   定义体: Sublattice.instInfCoe
 
 Depends on / 依赖: Sublattice, Sublattice.instInfCoe, instInfCoe
@@ -477,7 +477,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice L
+  签名: : 完备格 L
   定义体: Subtype.coe_injective.completeLattice _ .rfl .rfl
     Sublattice.coe_sup Sublattice.coe_inf coe_sSup' coe_sInf' coe_top coe_bot
 
@@ -499,7 +499,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (L : CompleteSublattice α)
+  签名: (L : 余mpleteSublattice α)
   定义体: Subtype.val
   map_sInf' _ := rfl
   map_sSup' _ := rfl
@@ -522,7 +522,7 @@ lemma coe_subtype
 
 中文:
 引理 coe_subtype
-  条件: (L : CompleteSublattice α)
+  条件: (L : 余mpleteSublattice α)
   结论: L.subtype = ((↑) : L -> α)
   证明: rfl
 -/
@@ -538,7 +538,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: (L : Sublattice α) (a : L)
+  条件: (L : 子格 α) (a : L)
   结论: L.subtype a = a
   证明: rfl
 -/
@@ -554,7 +554,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (L : CompleteSublattice α)
+  条件: (L : 余mpleteSublattice α)
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -580,7 +580,7 @@ definition map
 
 中文:
 定义 map
-  签名: (L : CompleteSublattice α)
+  签名: (L : 余mpleteSublattice α)
   定义体: f '' L
   supClosed' := L.supClosed.image f
   infClosed' := L.infClosed.image f
@@ -638,7 +638,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (L : CompleteSublattice β)
+  签名: (L : 余mpleteSublattice β)
   定义体: f ⁻¹' L
   supClosed' := L.supClosed.preimage f
   infClosed' := L.infClosed.preimage f
@@ -670,7 +670,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {L : CompleteSublattice β} {a : α}
+  条件: {L : 余mpleteSublattice β} {a : α}
   结论: a in L.comap f ↔ f a in L
   证明: Iff.rfl
 -/
@@ -748,7 +748,7 @@ lemma isComplemented_iff
 
 中文:
 引理 isComplemented_iff
-  结论: ComplementedLattice L ↔ 对任意 a in L, 存在 b in L, IsCompl a b
+  结论: 有补格 L ↔ 对任意 a in L, 存在 b in L, 是补集 a b
   证明: by
   refine ⟨fun ⟨h⟩ a ha => ?_, fun h => ⟨fun ⟨a, ha⟩ => ?_⟩⟩
   · obtain ⟨b, hb⟩ := h ⟨a, ha⟩
@@ -775,7 +775,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (CompleteSublattice α)
+  签名: 顶元素 (余mpleteSublattice α)
   定义体: ⟨mk' univ (fun _ _ => mem_univ _) (fun _ _ => mem_univ _)⟩
 
 Depends on / 依赖: mem_univ
@@ -794,7 +794,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (s : Set α) (hs : s = L)
+  签名: (s : 集合 α) (hs : s = L)
   定义体: mk' s (hs ▸ L.sSupClosed') (hs ▸ L.sInfClosed')
 -/
 protected def copy (s : Set α) (hs : s = L) : CompleteSublattice α :=
@@ -811,7 +811,7 @@ lemma coe_copy
 
 中文:
 引理 coe_copy
-  条件: (s : Set α) (hs)
+  条件: (s : 集合 α) (hs)
   结论: L.copy s hs = s
   证明: rfl
 -/
@@ -828,7 +828,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: (s : Set α) (hs)
+  条件: (s : 集合 α) (hs)
   结论: L.copy s hs = L
   证明: SetLike.coe_injective hs
 
@@ -850,7 +850,7 @@ definition range
 
 中文:
 定义 range
-  签名: : CompleteSublattice β
+  签名: : 余mpleteSublattice β
   定义体: (CompleteSublattice.map f ⊤).copy (range f) image_univ.symm
 -/
 protected def range : CompleteSublattice β :=
@@ -866,7 +866,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  结论: (f.range : Set β) = range f
+  结论: (f.range : 集合 β) = range f
   证明: rfl
 -/
 theorem range_coe : (f.range : Set β) = range f := rfl
@@ -881,7 +881,7 @@ definition toOrderIsoRangeOfInjective
 
 中文:
 定义 toOrderIsoRangeOfInjective
-  签名: (hf : Injective f)
+  签名: (hf : 单射 f)
   定义体: (orderEmbeddingOfInjective f hf).orderIso
 -/
 @[simps! apply] noncomputable def toOrderIsoRangeOfInjective (hf : Injective f) : α ≃o f.range :=

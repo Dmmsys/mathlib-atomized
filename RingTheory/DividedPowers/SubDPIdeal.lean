@@ -87,8 +87,8 @@ structure IsSubDPIdeal
     - dpow_mem : forall (n : Nat) (_ : n != 0) {j : A} (_ : j in J), hI.dpow n j in J
 
 中文:
-结构 IsSubDPIdeal
-  参数: {A : 类型} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
+结构 是SubDP理想
+  参数: {A : 类型} [交换半环 A] {I : 理想 A} (hI : DividedPowers I)
   公理与运算 (2 个):
     - isSubideal : J <= I
     - dpow_mem : 对任意 (n : 自然数) (_ : n != 0) {j : A} (_ : j in J), hI.dpow n j in J
@@ -117,7 +117,7 @@ theorem self
 
 中文:
 定理 self
-  结论: IsSubDPIdeal hI I where
+  结论: 是SubDP理想 hI I where
   证明: le_rfl
   dpow_mem _ hn _ ha := hI.dpow_mem hn ha
 
@@ -143,7 +143,7 @@ definition dividedPowers
 
 中文:
 定义 dividedPowers
-  签名: {J : Ideal A} (hJ : IsSubDPIdeal hI J) [对任意 x, Decidable (x in J)]
+  签名: {J : 理想 A} (hJ : 是SubDP理想 hI J) [对任意 x, 可判定 (x in J)]
   定义体: if x in J then hI.dpow n x else 0
   dpow_null hx := by simp [if_neg hx]
   dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
@@ -218,7 +218,7 @@ theorem isDPMorphism
 
 中文:
 定理 isDPMorphism
-  条件: (hJ : IsSubDPIdeal hI J)
+  条件: (hJ : 是SubDP理想 hI J)
   证明: by
   simpa only [isDPMorphism_iff, Ideal.map_id, RingHom.id_apply]
     using ⟨hJ.1, fun _ _ _ ha => by rw [dpow_eq_of_mem _ _ ha]⟩
@@ -248,7 +248,7 @@ theorem isSubDPIdeal_inf_iff
 
 中文:
 定理 isSubDPIdeal_inf_iff
-  结论: {A : 类型} [CommRing A] {I : Ideal A} (hI : DividedPowers I)
+  结论: {A : 类型} [交换环 A] {I : 理想 A} (hI : DividedPowers I)
   证明: by
   refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
   · have hab' : a - b in I := I.sub_mem ha hb
@@ -290,7 +290,7 @@ theorem span_isSubDPIdeal_iff
 
 中文:
 定理 span_isSubDPIdeal_iff
-  条件: {S : Set A} (hS : S subseteq I)
+  条件: {S : 集合 A} (hS : S subseteq I)
   证明: by
   refine ⟨fun hhI n hn s hs => hhI.dpow_mem n hn (subset_span hs), fun hhI => ?_⟩
   · -- interesting direction
@@ -341,7 +341,7 @@ theorem isSubDPIdeal_sup
 
 中文:
 定理 isSubDPIdeal_sup
-  条件: {J K : Ideal A} (hJ : IsSubDPIdeal hI J) (hK : IsSubDPIdeal hI K)
+  条件: {J K : 理想 A} (hJ : 是SubDP理想 hI J) (hK : 是SubDP理想 hI K)
   证明: by
   rw [← J.span_eq]; rw [← K.span_eq]; rw [← span_union]; rw [span_isSubDPIdeal_iff (Set.union_subset_iff.mpr ⟨hJ.1]; rw [hK.1⟩)]
   intro n hn a ha
@@ -373,7 +373,7 @@ theorem isSubDPIdeal_iSup
 
 中文:
 定理 isSubDPIdeal_iSup
-  条件: {ι : 类型} {J : ι -> Ideal A} (hJ : 对任意 i, IsSubDPIdeal hI (J i))
+  条件: {ι : 类型} {J : ι -> 理想 A} (hJ : 对任意 i, 是SubDP理想 hI (J i))
   证明: by
   rw [iSup_eq_span]; rw [span_isSubDPIdeal_iff (Set.iUnion_subset_iff.mpr <| fun i => (hJ i).1)]
   simp_rw [Set.mem_iUnion]
@@ -407,7 +407,7 @@ theorem isSubDPIdeal_iInf
 
 中文:
 定理 isSubDPIdeal_iInf
-  条件: {ι : 类型} {J : ι -> Ideal A} (hJ : 对任意 i, IsSubDPIdeal hI (J i))
+  条件: {ι : 类型} {J : ι -> 理想 A} (hJ : 对任意 i, 是SubDP理想 hI (J i))
   证明: by
   cases isEmpty_or_nonempty ι with
   | inr _ =>
@@ -447,7 +447,7 @@ theorem isSubDPIdeal_map_of_isSubDPIdeal
 
 中文:
 定理 isSubDPIdeal_map_of_isSubDPIdeal
-  结论: {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {K : Ideal A}
+  结论: {f : A ->+* B} (hf : 是DP态射 hI hJ f) {K : 理想 A}
   证明: by
   rw [Ideal.map]; rw [span_isSubDPIdeal_iff]
   · rintro n hn y ⟨x, hx, rfl⟩
@@ -475,7 +475,7 @@ theorem isSubDPIdeal_map
 
 中文:
 定理 isSubDPIdeal_map
-  条件: {f : A ->+* B} (hf : IsDPMorphism hI hJ f)
+  条件: {f : A ->+* B} (hf : 是DP态射 hI hJ f)
   证明: isSubDPIdeal_map_of_isSubDPIdeal hf (IsSubDPIdeal.self hI)
 
 Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.self, isSubDPIdeal_map_of_isSubDPIdeal
@@ -501,10 +501,10 @@ structure SubDPIdeal
     - dpow_mem : forall (n : Nat) (_ : n != 0), forall j in carrier, hI.dpow n j in carrier
 
 中文:
-结构 SubDPIdeal
-  参数: {A : 类型} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
+结构 SubDP理想
+  参数: {A : 类型} [交换半环 A] {I : 理想 A} (hI : DividedPowers I)
   公理与运算 (3 个):
-    - carrier : Ideal A
+    - carrier : 理想 A
     - isSubideal : carrier <= I
     - dpow_mem : 对任意 (n : 自然数) (_ : n != 0), 对任意 j in carrier, hI.dpow n j in carrier
 -/
@@ -528,7 +528,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: {J : Ideal A} (hJ : hI.IsSubDPIdeal J)
+  签名: {J : 理想 A} (hJ : hI.是SubDP理想 J)
   定义体: ⟨J, hJ.1, hJ.2⟩
 -/
 def mk' {J : Ideal A} (hJ : hI.IsSubDPIdeal J) : hI.SubDPIdeal := ⟨J, hJ.1, hJ.2⟩
@@ -546,7 +546,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (SubDPIdeal hI) A
+  签名: 集合状 (SubDP理想 hI) A
   定义体: s.carrier
   coe_injective p q h := by
     rw [SetLike.coe_set_eq] at h
@@ -570,7 +570,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SubDPIdeal hI)
+  签名: 偏序 (SubDP理想 hI)
   定义体: .ofSetLike (SubDPIdeal hI) A
 
 Depends on / 依赖: SubDPIdeal, ofSetLike
@@ -589,7 +589,7 @@ definition toIdeal
 
 中文:
 定义 toIdeal
-  签名: (J : hI.SubDPIdeal)
+  签名: (J : hI.SubDP理想)
   定义体: J.carrier
 
 Depends on / 依赖: J.carrier, carrier
@@ -606,7 +606,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (hI.SubDPIdeal) (Ideal A)
+  签名: CoeOut (hI.SubDP理想) (理想 A)
   定义体: ⟨fun J => J.toIdeal⟩
 
 Depends on / 依赖: J.toIdeal, toIdeal
@@ -626,7 +626,7 @@ theorem coe_def
 
 中文:
 定理 coe_def
-  条件: (J : SubDPIdeal hI)
+  条件: (J : SubDP理想 hI)
   结论: J.toIdeal = J.carrier
   证明: rfl
 
@@ -646,7 +646,7 @@ theorem memCarrier
 
 中文:
 定理 memCarrier
-  条件: {s : SubDPIdeal hI} {x : A}
+  条件: {s : SubDP理想 hI} {x : A}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -667,8 +667,8 @@ lemma toIsSubDPIdeal
 
 中文:
 引理 toIsSubDPIdeal
-  条件: (J : SubDPIdeal hI)
-  结论: IsSubDPIdeal hI J.carrier where
+  条件: (J : SubDP理想 hI)
+  结论: 是SubDP理想 hI J.carrier where
   证明: J.isSubideal
   dpow_mem := J.dpow_mem
 
@@ -695,8 +695,8 @@ definition prod
       exact Submodule.mul_mem_mul (J.pow_mem_of
 
 中文:
-定义 prod
-  签名: (J : Ideal A)
+定义 乘积
+  签名: (J : 理想 A)
   定义体: I • J
   isSubideal := mul_le_left
   dpow_mem m hm x hx := by
@@ -734,7 +734,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (SubDPIdeal hI) (Set.Iic I)
+  签名: CoeOut (SubDP理想 hI) (集合.左无界右闭区间 I)
   定义体: ⟨fun J => ⟨J.carrier, J.isSubideal⟩⟩
 
 Depends on / 依赖: J.carrier, J.isSubideal, carrier, isSubideal
@@ -751,7 +751,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (SubDPIdeal hI)
+  签名: LE (SubDP理想 hI)
   定义体: ⟨fun J J' => J.carrier <= J'.carrier⟩
 
 Depends on / 依赖: J.carrier, carrier
@@ -769,7 +769,7 @@ theorem le_iff
 
 中文:
 定理 le_iff
-  条件: {J J' : SubDPIdeal hI}
+  条件: {J J' : SubDP理想 hI}
   结论: J <= J' ↔ J.carrier <= J'.carrier
   证明: Iff.rfl
 
@@ -787,7 +787,7 @@ instance :
 
 中文:
 实例 :
-  签名: LT (SubDPIdeal hI)
+  签名: LT (SubDP理想 hI)
   定义体: ⟨fun J J' => J.carrier < J'.carrier⟩
 
 Depends on / 依赖: J.carrier, carrier
@@ -805,7 +805,7 @@ theorem lt_iff
 
 中文:
 定理 lt_iff
-  条件: {J J' : SubDPIdeal hI}
+  条件: {J J' : SubDP理想 hI}
   结论: J < J' ↔ J.carrier < J'.carrier
   证明: Iff.rfl
 
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (SubDPIdeal hI)
+  签名: 顶元素 (SubDP理想 hI)
   定义体: ⟨{carrier := I
     isSubideal := le_refl _
     dpow_mem := fun _ hn _ hx => hI.dpow_mem hn hx }⟩
@@ -847,7 +847,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited hI.SubDPIdeal
+  签名: : 可居 hI.SubDP理想
   定义体: ⟨⊤⟩
 -/
 instance inhabited : Inhabited hI.SubDPIdeal := ⟨⊤⟩
@@ -864,7 +864,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (SubDPIdeal hI)
+  签名: 底元素 (SubDP理想 hI)
   定义体: ⟨{carrier := ⊥
     isSubideal := bot_le
     dpow_mem := fun _ hn x hx => by rw [mem_bot.mp hx, hI.dpow_eval_zero hn, mem_bot]}⟩
@@ -889,7 +889,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (SubDPIdeal hI)
+  签名: 最小值 (SubDP理想 hI)
   定义体: ⟨fun J J' =>
     { carrier := J.carrier ⊓ J'.carrier
       isSubideal := fun _ hx => J.isSubideal hx.1
@@ -914,7 +914,7 @@ theorem inf_carrier_def
 
 中文:
 定理 inf_carrier_def
-  条件: (J J' : SubDPIdeal hI)
+  条件: (J J' : SubDP理想 hI)
   结论: (J ⊓ J').carrier = J.carrier ⊓ J'.carrier
   证明: rfl
 -/
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (SubDPIdeal hI)
+  签名: 下确界集 (SubDP理想 hI)
   定义体: ⟨fun S =>
     { carrier := ⨅ s in Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
       isSubideal := fun x hx => by
@@ -969,7 +969,7 @@ theorem sInf_carrier_def
 
 中文:
 定理 sInf_carrier_def
-  条件: (S : Set (SubDPIdeal hI))
+  条件: (S : 集合 (SubDP理想 hI))
   证明: rfl
 -/
 theorem sInf_carrier_def (S : Set (SubDPIdeal hI)) :
@@ -985,7 +985,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (SubDPIdeal hI)
+  签名: 最大值 (SubDP理想 hI)
   定义体: ⟨fun J J' => SubDPIdeal.mk' (isSubDPIdeal_sup J.toIsSubDPIdeal J'.toIsSubDPIdeal)⟩
 
 Depends on / 依赖: J.toIsSubDPIdeal, SubDPIdeal, SubDPIdeal.mk, isSubDPIdeal_sup, toIsSubDPIdeal
@@ -1004,7 +1004,7 @@ theorem sup_carrier_def
 
 中文:
 定理 sup_carrier_def
-  条件: (J J' : SubDPIdeal hI)
+  条件: (J J' : SubDP理想 hI)
   结论: (J ⊔ J').carrier = J ⊔ J'
   证明: rfl
 -/
@@ -1024,7 +1024,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (SubDPIdeal hI)
+  签名: 上确界集 (SubDP理想 hI)
   定义体: ⟨fun S => SubDPIdeal.mk' (J := sSup ((fun J => J.carrier) '' S)) by
       have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
         rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
@@ -1058,7 +1058,7 @@ theorem sSup_carrier_def
 
 中文:
 定理 sSup_carrier_def
-  条件: (S : Set (SubDPIdeal hI))
+  条件: (S : 集合 (SubDP理想 hI))
   结论: (sSup S).carrier = sSup ((toIdeal) '' S)
   证明: rfl
 -/
@@ -1080,7 +1080,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (SubDPIdeal hI)
+  签名: 完备格 (SubDP理想 hI)
   定义体: by
   refine Function.Injective.completeLattice (fun J : SubDPIdeal hI => (J : Set.Iic I))
     (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
@@ -1130,7 +1130,7 @@ definition span
 
 中文:
 定义 span
-  签名: (S : Set A)
+  签名: (S : 集合 A)
   定义体: sInf {J : SubDPIdeal hI | S subseteq J.carrier}
 -/
 protected def span (S : Set A) : SubDPIdeal hI := sInf {J : SubDPIdeal hI | S subseteq J.carrier}
@@ -1148,7 +1148,7 @@ theorem _root_.DividedPowers.dpow_span_isSubideal
 
 中文:
 定理 _root_.DividedPowers.dpow_span_isSubideal
-  条件: {S : Set A} (hS : S subseteq I)
+  条件: {S : 集合 A} (hS : S subseteq I)
   证明: by
   rw [span_le]
   rintro y ⟨n, hn, x, hx, hxy⟩
@@ -1177,7 +1177,7 @@ theorem dpow_mem_span_of_mem_span
 
 中文:
 定理 dpow_mem_span_of_mem_span
-  结论: {S : Set A} (hS : S subseteq I) {k : 自然数} (hk : k != 0)
+  结论: {S : 集合 A} (hS : S subseteq I) {k : 自然数} (hk : k != 0)
   证明: by
   let J := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}
   have hSI := hI.dpow_span_isSubideal hS
@@ -1229,7 +1229,7 @@ theorem span_carrier_eq_dpow_span
 
 中文:
 定理 span_carrier_eq_dpow_span
-  条件: {S : Set A} (hS : S subseteq I)
+  条件: {S : 集合 A} (hS : S subseteq I)
   证明: by
   set J : SubDPIdeal hI := {
     carrier := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x }
@@ -1288,7 +1288,7 @@ theorem isSubDPIdeal_ker
 
 中文:
 定理 isSubDPIdeal_ker
-  条件: {f : A ->+* B} (hf : IsDPMorphism hI hJ f)
+  条件: {f : A ->+* B} (hf : 是DP态射 hI hJ f)
   证明: by
   rw [isSubDPIdeal_inf_iff]
   simp only [isDPMorphism_def] at hf
@@ -1323,8 +1323,8 @@ definition DPMorphism.ker
     exact ⟨dpow_eval_zero hJ hn, hI.dpow_mem hn ha'⟩
 
 中文:
-定义 DPMorphism.ker
-  签名: (f : DPMorphism hI hJ)
+定义 DP态射.ker
+  签名: (f : DP态射 hI hJ)
   定义体: RingHom.ker f.toRingHom ⊓ I
   isSubideal := inf_le_right
   dpow_mem _ hn a := by
@@ -1367,7 +1367,7 @@ definition dpEqualizer
 
 中文:
 定义 dpEqualizer
-  签名: : Ideal A where
+  签名: : 理想 A where
   定义体: { a in I | forall n : Nat, hI.dpow n a = hI'.dpow n a }
   add_mem' {a b} ha hb := by
     apply And.intro (I.add_mem ha.1 hb.1) (fun n => ?_)
@@ -1472,7 +1472,7 @@ theorem le_equalizer_of_isDPMorphism
 
 中文:
 定理 le_equalizer_of_isDPMorphism
-  结论: {B : 类型} [CommSemiring B] (f : A ->+* B)
+  结论: {B : 类型} [交换半环 B] (f : A ->+* B)
   证明: by
   rw [Ideal.map]; rw [span_le]
   rintro b ⟨a, ha, rfl⟩
@@ -1505,7 +1505,7 @@ definition subDPIdeal_inf_of_quot
 
 中文:
 定义 subDPIdeal_inf_of_quot
-  签名: {A : 类型} [CommRing A] {I : Ideal A} {hI : DividedPowers I}
+  签名: {A : 类型} [交换环 A] {I : 理想 A} {hI : DividedPowers I}
   定义体: J ⊓ I
   isSubideal := by simp only [inf_le_right]
   dpow_mem := fun _ hn a ⟨haJ, haI⟩ => by
@@ -1580,7 +1580,7 @@ theorem dpow_apply'
 
 中文:
 定理 dpow_apply'
-  条件: (hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)) {n : 自然数} {a : A} (ha : a in I)
+  条件: (hIf : 是SubDP理想 hI (环态射.ker f ⊓ I)) {n : 自然数} {a : A} (ha : a in I)
   证明: by
   classical
   simp only [dpow, Function.extend_def]
@@ -1713,7 +1713,7 @@ theorem isDPMorphism
 
 中文:
 定理 isDPMorphism
-  结论: IsDPMorphism hI (dividedPowers hI hf hIJ hIf) f
+  结论: 是DP态射 hI (dividedPowers hI hf hIJ hIf) f
   证明: ⟨le_of_eq hIJ.symm, fun a ha => by rw [dpow_apply hI hf hIJ hIf ha]⟩
 
 Depends on / 依赖: dpow_apply, hIJ.symm, le_of_eq
@@ -1760,7 +1760,7 @@ definition dpow
 
 中文:
 定义 dpow
-  签名: (J : Ideal A)
+  签名: (J : 理想 A)
   定义体: DividedPowers.Quotient.OfSurjective.dpow hI (Ideal.Quotient.mk J)
 
 Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.dpow, Ideal.Quotient.mk, OfSurjective, Quotient
@@ -1780,7 +1780,7 @@ theorem isSubDPIdeal_aux
 
 中文:
 定理 isSubDPIdeal_aux
-  条件: (hIJ : IsSubDPIdeal hI (J ⊓ I))
+  条件: (hIJ : 是SubDP理想 hI (J ⊓ I))
   证明: by
   simpa [Ideal.mk_ker] using hIJ
 -/
@@ -1801,7 +1801,7 @@ definition dividedPowers
 
 中文:
 定义 dividedPowers
-  签名: : DividedPowers (I.map (Ideal.Quotient.mk J))
+  签名: : DividedPowers (I.map (理想.商.mk J))
   定义体: DividedPowers.Quotient.OfSurjective.dividedPowers
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
 
@@ -1844,7 +1844,7 @@ theorem isDPMorphism
 
 中文:
 定理 isDPMorphism
-  结论: hI.IsDPMorphism (dividedPowers hI hIJ) (Ideal.Quotient.mk J)
+  结论: hI.是DP态射 (dividedPowers hI hIJ) (理想.商.mk J)
   证明: DividedPowers.Quotient.OfSurjective.isDPMorphism
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
 
@@ -1865,7 +1865,7 @@ theorem dividedPowers_unique
 
 中文:
 定理 dividedPowers_unique
-  结论: (hquot : DividedPowers (I.map (Ideal.Quotient.mk J)))
+  结论: (hquot : DividedPowers (I.map (理想.商.mk J)))
   证明: DividedPowers.Quotient.OfSurjective.dividedPowers_unique
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) hquot hm
 

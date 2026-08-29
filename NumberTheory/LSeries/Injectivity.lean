@@ -34,7 +34,7 @@ lemma LSeries.abscissaOfAbsConv_add_le
 
 中文:
 引理 LSeries.abscissaOfAbsConv_add_le
-  条件: (f g : 自然数 -> Complex)
+  条件: (f g : 自然数 -> 复形)
   证明: abscissaOfAbsConv_binop_le LSeriesSummable.add f g
 
 Depends on / 依赖: LSeriesSummable, LSeriesSummable.add, abscissaOfAbsConv_binop_le
@@ -55,7 +55,7 @@ private
 
 中文:
 引理 LSeries.abscissaOfAbsConv_sub_le
-  条件: (f g : 自然数 -> Complex)
+  条件: (f g : 自然数 -> 复形)
   证明: abscissaOfAbsConv_binop_le LSeriesSummable.sub f g
 
 private
@@ -82,7 +82,7 @@ lemma cpow_mul_div_cpow_eq_div_div_cpow
 
 中文:
 引理 cpow_mul_div_cpow_eq_div_div_cpow
-  条件: (m n : 自然数) (z : Complex) (x : 实数)
+  条件: (m n : 自然数) (z : 复形) (x : 实数)
   证明: by
   have Hn : (0 : Real) <= (n + 1 : Real)⁻¹ := by positivity
   rw [← mul_div_assoc]; rw [mul_comm]; rw [div_eq_mul_inv z]; rw [mul_div_assoc]
@@ -118,7 +118,7 @@ lemma LSeries.tendsto_cpow_mul_atTop
 
 中文:
 引理 LSeries.tendsto_cpow_mul_atTop
-  结论: {f : 自然数 -> Complex} {n : 自然数} (h : 对任意 m <= n, f m = 0)
+  结论: {f : 自然数 -> 复形} {n : 自然数} (h : 对任意 m <= n, f m = 0)
   证明: by
   obtain ⟨y, hay, hyt⟩ := exists_between ha
   lift y to Real using ⟨hyt.ne, ((OrderBot.bot_le _).trans_lt hay).ne'⟩
@@ -208,7 +208,7 @@ lemma LSeries.tendsto_atTop
 
 中文:
 引理 LSeries.tendsto_atTop
-  条件: {f : 自然数 -> Complex} (ha : abscissaOfAbsConv f < ⊤)
+  条件: {f : 自然数 -> 复形} (ha : abscissaOfAbsConv f < ⊤)
   证明: by
   let F (n : Nat) : Complex := if n = 0 then 0 else f n
   have hF₀ : F 0 = 0 := rfl
@@ -242,7 +242,7 @@ exact LSeries.eq_zero_of_not_LSeriesSummable f s mt LSeriesSummable.abscissaOfAb
 
 中文:
 引理 LSeries_eq_zero_of_abscissaOfAbsConv_eq_top
-  条件: {f : 自然数 -> Complex} (h : abscissaOfAbsConv f = ⊤)
+  条件: {f : 自然数 -> 复形} (h : abscissaOfAbsConv f = ⊤)
   证明: by
   ext1 s
 exact LSeries.eq_zero_of_not_LSeriesSummable f s mt LSeriesSummable.abscissaOfAbsConv_le
@@ -273,7 +273,7 @@ Eventually.of_forall by simp [LSeries_eq_zero_of_abscissaOfAbsConv_eq_top h]
 
 中文:
 引理 LSeries_eventually_eq_zero_iff'
-  条件: {f : 自然数 -> Complex}
+  条件: {f : 自然数 -> 复形}
   证明: by
   by_cases h : abscissaOfAbsConv f = ⊤
   · simpa [h] using!
@@ -333,7 +333,7 @@ lemma LSeries_eq_zero_iff
 
 中文:
 引理 LSeries_eq_zero_iff
-  条件: {f : 自然数 -> Complex} (hf : f 0 = 0)
+  条件: {f : 自然数 -> 复形} (hf : f 0 = 0)
   证明: by
   by_cases h : abscissaOfAbsConv f = ⊤
   · simpa [h] using! LSeries_eq_zero_of_abscissaOfAbsConv_eq_top h
@@ -374,7 +374,7 @@ lemma LSeries_sub_eventuallyEq_zero_of_LSeries_eventually_eq
 
 中文:
 引理 LSeries_sub_eventuallyEq_zero_of_LSeries_eventually_eq
-  结论: {f g : 自然数 -> Complex}
+  结论: {f g : 自然数 -> 复形}
   证明: by
   rw [EventuallyEq]; rw [eventually_atTop] at h ⊢
   obtain ⟨x₀, hx₀⟩ := h
@@ -422,7 +422,7 @@ lt_top_iff_ne_top.mp (abscissaOfAbsConv_sub_le f g).trans_lt max_lt hf hg
 
 中文:
 引理 LSeries.eq_of_LSeries_eventually_eq
-  结论: {f g : 自然数 -> Complex} (hf : abscissaOfAbsConv f < ⊤)
+  结论: {f g : 自然数 -> 复形} (hf : abscissaOfAbsConv f < ⊤)
   证明: by
   have hsub : (fun x : Real => LSeries (f - g) x) =ᶠ[atTop] (0 : Real -> Complex) :=
     LSeries_sub_eventuallyEq_zero_of_LSeries_eventually_eq hf hg h
@@ -456,7 +456,7 @@ lemma LSeries_eq_iff_of_abscissaOfAbsConv_lt_top
 
 中文:
 引理 LSeries_eq_iff_of_abscissaOfAbsConv_lt_top
-  结论: {f g : 自然数 -> Complex} (hf : abscissaOfAbsConv f < ⊤)
+  结论: {f g : 自然数 -> 复形} (hf : abscissaOfAbsConv f < ⊤)
   证明: by
   refine ⟨fun H n hn => ?_, fun H => funext (LSeries_congr fun {n} => H n)⟩
   refine eq_of_LSeries_eventually_eq hf hg ?_ hn
@@ -488,7 +488,7 @@ lemma LSeries_injOn
 
 中文:
 引理 LSeries_injOn
-  结论: Set.InjOn LSeries {f | f 0 = 0 ∧ abscissaOfAbsConv f < ⊤}
+  结论: 集合.单射限制 LSeries {f | f 0 = 0 ∧ abscissaOfAbsConv f < ⊤}
   证明: by
   intro f hf g hg h
   push _ in _ at hf hg

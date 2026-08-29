@@ -40,8 +40,8 @@ abbreviation Function.Surjective.mulActionLeft
   mul_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_mul, hsmul, mul_smul]
 
 中文:
-缩写 Function.Surjective.mulActionLeft
-  签名: {R S M : 类型} [Monoid R] [MulAction R M] [Monoid S]
+缩写 函数.满射.mulActionLeft
+  签名: {R S M : 类型} [幺半群 R] [乘法作用 R M] [幺半群 S]
   定义体: by rw [← f.map_one, hsmul, one_smul]
   mul_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_mul, hsmul, mul_smul]
 
@@ -74,7 +74,7 @@ abbreviation compHom
 
 中文:
 缩写 compHom
-  签名: [Monoid N] (g : N ->* M)
+  签名: [幺半群 N] (g : N ->* M)
   定义体: SMul.comp.smul g
   one_smul _ := by simpa [(· • ·)] using one_smul ..
   mul_smul _ _ _ := by simpa [(· • ·)] using mul_smul ..
@@ -134,7 +134,7 @@ lemma isPretransitive_compHom
 
 中文:
 引理 isPretransitive_compHom
-  结论: {E F G : 类型} [Monoid E] [Monoid F] [MulAction F G]
+  结论: {E F G : 类型} [幺半群 E] [幺半群 F] [乘法作用 F G]
   证明: MulAction.compHom _ f
     IsPretransitive E G := by
   let _ : MulAction E G := MulAction.compHom _ f
@@ -167,8 +167,8 @@ lemma IsPretransitive.of_compHom
   proof: letI := compHom α f; h.of_smul_eq f rfl
 
 中文:
-引理 IsPretransitive.of_compHom
-  结论: {M N α : 类型} [Monoid M] [Monoid N] [MulAction N α]
+引理 是Pretransitive.of_compHom
+  结论: {M N α : 类型} [幺半群 M] [幺半群 N] [乘法作用 N α]
   证明: letI := compHom α f; h.of_smul_eq f rfl
 
 Depends on / 依赖: IsPretransitive, compHom
@@ -198,8 +198,8 @@ definition MonoidHom.smulOneHom
   map_mul' x y := by rw [smul_one_mul, smul_smul]
 
 中文:
-定义 MonoidHom.smulOneHom
-  签名: {M N} [Monoid M] [MulOneClass N] [MulAction M N] [IsScalarTower M N N]
+定义 幺半群态射.smulOneHom
+  签名: {M N} [幺半群 M] [MulOne类 N] [乘法作用 M N] [标量塔 M N N]
   定义体: x • (1 : N)
   map_one' := one_smul _ _
   map_mul' x y := by rw [smul_one_mul, smul_smul]
@@ -228,7 +228,7 @@ right_inv := fun ⟨_, _⟩ => Subtype.ext MulAction.ext funext₂ smul_one_smul
 
 中文:
 定义 monoidHomEquivMulActionIsScalarTower
-  签名: (M N) [Monoid M] [Monoid N]
+  签名: (M N) [幺半群 M] [幺半群 N]
   定义体: ⟨MulAction.compHom N f, SMul.comp.isScalarTower _⟩
   invFun := fun ⟨_, _⟩ => MonoidHom.smulOneHom
   left_inv f := MonoidHom.ext fun m => mul_one (f m)

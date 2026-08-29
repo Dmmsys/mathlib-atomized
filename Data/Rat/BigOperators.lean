@@ -35,8 +35,8 @@ theorem cast_list_sum
 
 中文:
 定理 cast_list_sum
-  条件: (s : List Rat)
-  结论: (↑s.sum : α) = (s.map (↑)).sum
+  条件: (s : 列表 有理数)
+  结论: (↑s.求和 : α) = (s.map (↑)).求和
   证明: map_list_sum (Rat.castHom α) _
 
 @[simp, norm_cast]
@@ -60,8 +60,8 @@ theorem cast_multiset_sum
 
 中文:
 定理 cast_multiset_sum
-  条件: (s : Multiset Rat)
-  结论: (↑s.sum : α) = (s.map (↑)).sum
+  条件: (s : Multiset 有理数)
+  结论: (↑s.求和 : α) = (s.map (↑)).求和
   证明: map_multiset_sum (Rat.castHom α) _
 
 @[simp, norm_cast]
@@ -85,7 +85,7 @@ theorem cast_sum
 
 中文:
 定理 cast_sum
-  条件: (s : Finset ι) (f : ι -> Rat)
+  条件: (s : 有限集 ι) (f : ι -> 有理数)
   结论: ∑ i in s, f i = ∑ i in s, (f i : α)
   证明: map_sum (Rat.castHom α) _ s
 
@@ -108,8 +108,8 @@ theorem cast_list_prod
 
 中文:
 定理 cast_list_prod
-  条件: (s : List Rat)
-  结论: (↑s.prod : α) = (s.map (↑)).prod
+  条件: (s : 列表 有理数)
+  结论: (↑s.乘积 : α) = (s.map (↑)).乘积
   证明: map_list_prod (Rat.castHom α) _
 
 Depends on / 依赖: Rat.castHom, castHom, map_list_prod
@@ -137,8 +137,8 @@ theorem cast_multiset_prod
 
 中文:
 定理 cast_multiset_prod
-  条件: (s : Multiset Rat)
-  结论: (↑s.prod : α) = (s.map (↑)).prod
+  条件: (s : Multiset 有理数)
+  结论: (↑s.乘积 : α) = (s.map (↑)).乘积
   证明: map_multiset_prod (Rat.castHom α) _
 
 @[simp, norm_cast]
@@ -160,7 +160,7 @@ theorem cast_prod
 
 中文:
 定理 cast_prod
-  条件: (s : Finset ι) (f : ι -> Rat)
+  条件: (s : 有限集 ι) (f : ι -> 有理数)
   结论: ∏ i in s, f i = ∏ i in s, (f i : α)
   证明: map_prod (Rat.castHom α) _ _
 

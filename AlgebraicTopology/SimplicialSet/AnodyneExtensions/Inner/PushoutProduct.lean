@@ -66,7 +66,7 @@ lemma innerAnodyneExtensions_unionProd_ι
 
 中文:
 引理 innerAnodyneExtensions_unionProd_ι
-  结论: {m : 自然数} (k : Fin (m + 2)) (h0 : 0 < k)
+  结论: {m : 自然数} (k : 有限集 (m + 2)) (h0 : 0 < k)
   证明: by
   obtain ⟨k, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hn)
   obtain ⟨k, rfl⟩ := Fin.eq_succ_of_ne_zero
@@ -107,7 +107,7 @@ lemma innerFibration_pullbackObjObjπ
 
 中文:
 引理 innerFibration_pullbackObjObjπ
-  结论: [Mono i] [InnerFibration p]
+  结论: [单态射 i] [内纤维化 p]
   证明: by
   rw [innerFibration_iff]
   intro _ _ _ ⟨k, h0, hn⟩

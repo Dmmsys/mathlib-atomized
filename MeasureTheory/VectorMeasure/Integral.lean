@@ -95,8 +95,8 @@ definition VectorMeasure.transpose
   body: μ.mapRange B.flip.toAddMonoidHom B.flip.continuous
 
 中文:
-定义 VectorMeasure.transpose
-  签名: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+定义 向量测度.transpose
+  签名: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   定义体: μ.mapRange B.flip.toAddMonoidHom B.flip.continuous
 
 Depends on / 依赖: B.flip.continuous, B.flip.toAddMonoidHom, continuous, mapRange, toAddMonoidHom
@@ -116,7 +116,7 @@ definition cbmApplyMeasure
 
 中文:
 定义 cbmApplyMeasure
-  签名: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G) (s : Set X)
+  签名: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G) (s : 集合 X)
   定义体: μ.transpose B s x
   map_add' _ _ := map_add₂ ..
   map_smul' _ _ := map_smulₛₗ₂ ..
@@ -141,7 +141,7 @@ lemma transpose_eq_cbmApplyMeasure
 
 中文:
 引理 transpose_eq_cbmApplyMeasure
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by rfl
 
 @[simp]
@@ -161,7 +161,7 @@ theorem cbmApplyMeasure_apply
 
 中文:
 定理 cbmApplyMeasure_apply
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G) (s : Set X) (x : E)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G) (s : 集合 X) (x : E)
   证明: by
   rfl
 -/
@@ -181,7 +181,7 @@ theorem cbmApplyMeasure_union
 
 中文:
 定理 cbmApplyMeasure_union
-  结论: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G) {s t : Set X}
+  结论: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G) {s t : 集合 X}
   证明: by
   ext x
   simp [of_union hdisj hs ht]
@@ -207,7 +207,7 @@ theorem norm_cbmApplyMeasure_le
 
 中文:
 定理 norm_cbmApplyMeasure_le
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G) (s : Set X)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G) (s : 集合 X)
   证明: by
   rw [opNorm_le_iff (by positivity)]
   intro x
@@ -235,7 +235,7 @@ theorem dominatedFinMeasAdditive_cbmApplyMeasure
 
 中文:
 定理 dominatedFinMeasAdditive_cbmApplyMeasure
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   refine ⟨fun s t hs ht _ _ hdisj => cbmApplyMeasure_union μ B hs ht hdisj, fun s hs hsf => ?_⟩
   apply (norm_cbmApplyMeasure_le _ _ _).trans
@@ -293,7 +293,7 @@ lemma transpose_zero
 
 中文:
 引理 transpose_zero
-  结论: (0 : VectorMeasure X F).transpose B = 0
+  结论: (0 : 向量测度 X F).transpose B = 0
   证明: by
   simp [transpose]
 -/
@@ -315,7 +315,7 @@ lemma transpose_restrict
 
 中文:
 引理 transpose_restrict
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   by_cases hs : MeasurableSet s
   · ext t ht : 1
@@ -470,7 +470,7 @@ lemma absolutelyContinuous_variation_transpose
 
 中文:
 引理 absolutelyContinuous_variation_transpose
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: Measure.absolutelyContinuous_of_le_smul (variation_transpose_le μ B)
 
 Depends on / 依赖: Measure, Measure.absolutelyContinuous_of_le_smul, absolutelyContinuous_of_le_smul, variation_transpose_le
@@ -488,7 +488,7 @@ instance [IsFiniteMeasure
   body: isFiniteMeasure_of_le _ (variation_transpose_le μ B)
 
 中文:
-实例 [IsFiniteMeasure
+实例 [是有限测度
   签名: μ.variation] :
   定义体: isFiniteMeasure_of_le _ (variation_transpose_le μ B)
 
@@ -517,7 +517,7 @@ lemma variation_transpose_eq_smul
 
 中文:
 引理 variation_transpose_eq_smul
-  结论: [Nontrivial E] {C : 实数>=0}
+  结论: [非平凡 E] {C : 实数>=0}
   证明: by
   apply le_antisymm
   · apply (variation_transpose_le _ _).trans
@@ -566,7 +566,7 @@ lemma variation_transpose_eq
 
 中文:
 引理 variation_transpose_eq
-  条件: [Nontrivial E] (hB : 对任意 x y, ‖B x y‖₊ = ‖x‖₊ * ‖y‖₊)
+  条件: [非平凡 E] (hB : 对任意 x y, ‖B x y‖₊ = ‖x‖₊ * ‖y‖₊)
   证明: by
   have : μ.variation = (1 : Real>=0) • μ.variation := by simp
   rw [this]
@@ -614,7 +614,7 @@ lemma variation_transpose_lsmul_flip
 
 中文:
 引理 variation_transpose_lsmul_flip
-  条件: [Nontrivial E] {μ : SignedMeasure X}
+  条件: [非平凡 E] {μ : 符号测度 X}
   证明: by
   apply variation_transpose_eq
   simp [nnnorm_smul, mul_comm]
@@ -633,8 +633,8 @@ abbreviation Integrable
   body: MeasureTheory.Integrable f μ.variation
 
 中文:
-缩写 Integrable
-  签名: (μ : VectorMeasure X F) (f : X -> E)
+缩写 可积
+  签名: (μ : 向量测度 X F) (f : X -> E)
   定义体: MeasureTheory.Integrable f μ.variation
 -/
 protected abbrev Integrable (μ : VectorMeasure X F) (f : X -> E) : Prop :=
@@ -648,7 +648,7 @@ abbreviation IntegrableOn
   body: (μ.restrict s).Integrable f
 
 中文:
-缩写 IntegrableOn
+缩写 整数egrableOn
   定义体: (μ.restrict s).Integrable f
 -/
 protected abbrev IntegrableOn
@@ -669,7 +669,7 @@ notation3 "∫ᵛ "(...)", "r:60:(scoped f => f)" ∂["B:65"; "μ:65"]" => integ
 
 中文:
 定义 integral
-  签名: (μ : VectorMeasure X F) (f : X -> E) (B : E ->L[实数] F ->L[实数] G)
+  签名: (μ : 向量测度 X F) (f : X -> E) (B : E ->L[实数] F ->L[实数] G)
   定义体: setToFun μ.variation (μ.transpose B)
     (dominatedFinMeasAdditive_cbmApplyMeasure μ B) f
 
@@ -737,7 +737,7 @@ lemma integral_eq_setToFun_transpose
 
 中文:
 引理 integral_eq_setToFun_transpose
-  条件: (hf : μ.整数egrable f)
+  条件: (hf : μ.可积 f)
   证明: setToFun_congr_measure_of_integrable _ (by simp) (variation_transpose_le _ _) _ _ _ hf
 
 Depends on / 依赖: setToFun_congr_measure_of_integrable, variation_transpose_le
@@ -758,7 +758,7 @@ theorem integral_of_not_completeSpace
 
 中文:
 定理 integral_of_not_completeSpace
-  条件: (hG : ¬CompleteSpace G)
+  条件: (hG : ¬完备空间 G)
   证明: by
   simp [integral, setToFun, hG]
 
@@ -783,7 +783,7 @@ theorem transpose_zero_cbm
 
 中文:
 定理 transpose_zero_cbm
-  条件: (μ : VectorMeasure X F)
+  条件: (μ : 向量测度 X F)
   证明: by
   ext
   simp [transpose]
@@ -808,7 +808,7 @@ theorem transpose_add_vectorMeasure
 
 中文:
 定理 transpose_add_vectorMeasure
-  条件: (μ ν : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ ν : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   simp [transpose]
 
@@ -834,7 +834,7 @@ theorem transpose_add_cbm
 
 中文:
 定理 transpose_add_cbm
-  条件: (μ : VectorMeasure X F) (B C : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B C : E ->L[实数] F ->L[实数] G)
   证明: by
   ext
   simp [transpose]
@@ -865,7 +865,7 @@ theorem transpose_finsetSum_vectorMeasure
 
 中文:
 定理 transpose_finsetSum_vectorMeasure
-  结论: (μ : ι -> VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  结论: (μ : ι -> 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -899,7 +899,7 @@ theorem transpose_finsetSum_cbm
 
 中文:
 定理 transpose_finsetSum_cbm
-  条件: (μ : VectorMeasure X F) (B : ι -> E ->L[实数] F ->L[实数] G) (s : Finset ι)
+  条件: (μ : 向量测度 X F) (B : ι -> E ->L[实数] F ->L[实数] G) (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -929,7 +929,7 @@ theorem transpose_neg_vectorMeasure
 
 中文:
 定理 transpose_neg_vectorMeasure
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   ext
   simp [transpose]
@@ -955,7 +955,7 @@ theorem transpose_neg_cbm
 
 中文:
 定理 transpose_neg_cbm
-  条件: (μ : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   ext
   simp [transpose]
@@ -981,7 +981,7 @@ theorem transpose_sub_vectorMeasure
 
 中文:
 定理 transpose_sub_vectorMeasure
-  条件: (μ ν : VectorMeasure X F) (B : E ->L[实数] F ->L[实数] G)
+  条件: (μ ν : 向量测度 X F) (B : E ->L[实数] F ->L[实数] G)
   证明: by
   ext
   simp [transpose]
@@ -1007,7 +1007,7 @@ theorem transpose_sub_cbm
 
 中文:
 定理 transpose_sub_cbm
-  条件: (μ : VectorMeasure X F) (B C : E ->L[实数] F ->L[实数] G)
+  条件: (μ : 向量测度 X F) (B C : E ->L[实数] F ->L[实数] G)
   证明: by
   ext
   simp [transpose]
@@ -1035,7 +1035,7 @@ theorem integral_undef
 
 中文:
 定理 integral_undef
-  条件: (h : ¬ μ.整数egrable f)
+  条件: (h : ¬ μ.可积 f)
   证明: by
   simp [integral, setToFun_undef _ h]
 
@@ -1122,8 +1122,8 @@ lemma Integrable.add
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.add
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+引理 可积.add
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: MeasureTheory.Integrable.add hf hg
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1144,8 +1144,8 @@ lemma Integrable.neg
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.neg
-  条件: (hf : μ.整数egrable f)
+引理 可积.neg
+  条件: (hf : μ.可积 f)
   证明: MeasureTheory.Integrable.neg hf
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1166,8 +1166,8 @@ lemma Integrable.sub
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.sub
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+引理 可积.sub
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: MeasureTheory.Integrable.sub hf hg
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1188,8 +1188,8 @@ lemma Integrable.smul
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.smul
-  结论: {𝕜 : 类型} [NormedAddCommGroup 𝕜] [SMulZeroClass 𝕜 E]
+引理 可积.smul
+  结论: {𝕜 : 类型} [赋范交换加群 𝕜] [SMulZero类 𝕜 E]
   证明: MeasureTheory.Integrable.smul c hf
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1211,8 +1211,8 @@ theorem Integrable.finsetSum
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-定理 Integrable.finsetSum
-  结论: {ι : 类型} (s : Finset ι) {f : ι -> X -> E}
+定理 可积.finsetSum
+  结论: {ι : 类型} (s : 有限集 ι) {f : ι -> X -> E}
   证明: integrable_finsetSum' s hf
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1233,8 +1233,8 @@ theorem Integrable.fun_finsetSum
   proof: integrable_finsetSum s hf
 
 中文:
-定理 Integrable.fun_finsetSum
-  结论: {ι : 类型} (s : Finset ι) {f : ι -> X -> E}
+定理 可积.fun_finsetSum
+  结论: {ι : 类型} (s : 有限集 ι) {f : ι -> X -> E}
   证明: integrable_finsetSum s hf
 
 Depends on / 依赖: integrable_finsetSum
@@ -1253,7 +1253,7 @@ theorem integral_fun_add
 
 中文:
 定理 integral_fun_add
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: setToFun_add _ hf hg
 
 Depends on / 依赖: setToFun_add
@@ -1272,7 +1272,7 @@ theorem integral_add
 
 中文:
 定理 integral_add
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: integral_fun_add hf hg
 
 Depends on / 依赖: integral_fun_add
@@ -1290,7 +1290,7 @@ theorem integral_finsetSum
 
 中文:
 定理 integral_finsetSum
-  结论: (s : Finset ι) {f : ι -> X -> E}
+  结论: (s : 有限集 ι) {f : ι -> X -> E}
   证明: setToFun_finsetSum _ s hf
 
 Depends on / 依赖: setToFun_finsetSum
@@ -1349,7 +1349,7 @@ theorem integral_fun_sub
 
 中文:
 定理 integral_fun_sub
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: setToFun_sub _ hf hg
 
 Depends on / 依赖: setToFun_sub
@@ -1368,7 +1368,7 @@ theorem integral_sub
 
 中文:
 定理 integral_sub
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: integral_fun_sub hf hg
 
 Depends on / 依赖: integral_fun_sub
@@ -1432,7 +1432,7 @@ theorem integral_const
 
 中文:
 定理 integral_const
-  条件: [CompleteSpace G] [IsFiniteMeasure μ.variation] (c : E)
+  条件: [完备空间 G] [是有限测度 μ.variation] (c : E)
   证明: setToFun_const _ _
 
 Depends on / 依赖: setToFun_const
@@ -1461,8 +1461,8 @@ lemma Integrable.zero_vectorMeasure
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.zero_vectorMeasure
-  结论: (0 : VectorMeasure X F).整数egrable f
+引理 可积.zero_vectorMeasure
+  结论: (0 : 向量测度 X F).可积 f
   证明: by
   simp [VectorMeasure.Integrable]
 
@@ -1487,8 +1487,8 @@ lemma Integrable.add_vectorMeasure
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.add_vectorMeasure
-  条件: (hμ : μ.整数egrable f) (hν : ν.整数egrable f)
+引理 可积.add_vectorMeasure
+  条件: (hμ : μ.可积 f) (hν : ν.可积 f)
   证明: by
   apply Integrable.mono_measure (integrable_add_measure.2 ⟨hμ, hν⟩)
   grw [variation_add_le]
@@ -1514,8 +1514,8 @@ lemma Integrable.neg_vectorMeasure
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.neg_vectorMeasure
-  条件: (hμ : μ.整数egrable f)
+引理 可积.neg_vectorMeasure
+  条件: (hμ : μ.可积 f)
   证明: Integrable.mono_measure hμ (by simp)
 
 omit [NormedSpace Real E] [NormedSpace Real F] in
@@ -1540,8 +1540,8 @@ lemma Integrable.sub_vectorMeasure
 omit [NormedSpace Real E] in
 
 中文:
-引理 Integrable.sub_vectorMeasure
-  条件: (hμ : μ.整数egrable f) (hν : ν.整数egrable f)
+引理 可积.sub_vectorMeasure
+  条件: (hμ : μ.可积 f) (hν : ν.可积 f)
   证明: by
   convert hμ.add_vectorMeasure hν.neg_vectorMeasure using 1
   exact sub_eq_add_neg μ ν
@@ -1569,8 +1569,8 @@ lemma Integrable.smul_vectorMeasure
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-引理 Integrable.smul_vectorMeasure
-  条件: (hμ : μ.整数egrable f) (c : 实数)
+引理 可积.smul_vectorMeasure
+  条件: (hμ : μ.可积 f) (c : 实数)
   证明: by
   apply Integrable.mono_measure (Integrable.smul_measure_nnreal hμ (c := ‖c‖₊))
   simp [variation_smul]
@@ -1603,8 +1603,8 @@ lemma Integrable.finsetSum_vectorMeasure
 omit [NormedSpace Real E] [NormedSpace Real
 
 中文:
-引理 Integrable.finsetSum_vectorMeasure
-  结论: {ι : 类型} {μ : ι -> VectorMeasure X F} {s : Finset ι}
+引理 可积.finsetSum_vectorMeasure
+  结论: {ι : 类型} {μ : ι -> 向量测度 X F} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1645,8 +1645,8 @@ lemma Integrable.restrict
 @[simp]
 
 中文:
-引理 Integrable.restrict
-  条件: (hf : μ.整数egrable f) {s : Set X}
+引理 可积.restrict
+  条件: (hf : μ.可积 f) {s : 集合 X}
   证明: by
   by_cases hs : MeasurableSet s
   · simpa [VectorMeasure.Integrable, transpose_restrict, variation_restrict hs] using
@@ -1692,7 +1692,7 @@ lemma integral_of_isEmpty
 
 中文:
 引理 integral_of_isEmpty
-  条件: [IsEmpty X]
+  条件: [是空 X]
   结论: ∫ᵛ x, f x ∂[B; μ] = 0
   证明: by simp [eq_zero_of_isEmpty]
 
@@ -1778,7 +1778,7 @@ theorem integral_add_vectorMeasure
 
 中文:
 定理 integral_add_vectorMeasure
-  条件: (hμ : μ.整数egrable f) (hν : ν.整数egrable f)
+  条件: (hμ : μ.可积 f) (hν : ν.可积 f)
   证明: setToFun_add_left'' (by simp [transpose]) hμ hν (by grw [variation_add_le])
     (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
 
@@ -1806,7 +1806,7 @@ theorem integral_finsetSum_vectorMeasure
 
 中文:
 定理 integral_finsetSum_vectorMeasure
-  结论: {μ : ι -> VectorMeasure X F}
+  结论: {μ : ι -> 向量测度 X F}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1861,7 +1861,7 @@ theorem integral_sub_vectorMeasure
 
 中文:
 定理 integral_sub_vectorMeasure
-  条件: (hμ : μ.整数egrable f) (hν : ν.整数egrable f)
+  条件: (hμ : μ.可积 f) (hν : ν.可积 f)
   证明: by
   rw [sub_eq_add_neg]; rw [integral_add_vectorMeasure hμ hν.neg_vectorMeasure]; rw [integral_neg_vectorMeasure]; rw [← sub_eq_add_neg]
 
@@ -1912,7 +1912,7 @@ theorem integral_add_cbm
 
 中文:
 定理 integral_add_cbm
-  条件: (hB : μ.整数egrable f)
+  条件: (hB : μ.可积 f)
   证明: by
   refine setToFun_add_left'' (by simp [transpose]) hB hB ?_
     (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
@@ -1999,7 +1999,7 @@ theorem integral_sub_cbm
 
 中文:
 定理 integral_sub_cbm
-  条件: (hB : μ.整数egrable f)
+  条件: (hB : μ.可积 f)
   证明: by
   rw [sub_eq_add_neg]; rw [integral_add_cbm hB]; rw [integral_neg_cbm]; rw [← sub_eq_add_neg]
 
@@ -2021,9 +2021,9 @@ theorem Integrable.of_integral_ne_zero
   proof: Not.imp_symm integral_undef h
 
 中文:
-定理 Integrable.of_integral_ne_zero
+定理 可积.of_integral_ne_zero
   条件: (h : ∫ᵛ a, f a ∂[B; μ] != 0)
-  结论: μ.整数egrable f
+  结论: μ.可积 f
   证明: Not.imp_symm integral_undef h
 -/
 theorem Integrable.of_integral_ne_zero (h : ∫ᵛ a, f a ∂[B; μ] != 0) : μ.Integrable f :=
@@ -2062,7 +2062,7 @@ lemma integral_indicator₂
 
 中文:
 引理 integral_indicator₂
-  条件: {β : 类型} (f : β -> X -> E) (s : Set β) (b : β)
+  条件: {β : 类型} (f : β -> X -> E) (s : 集合 β) (b : β)
   证明: by
   by_cases hb : b in s <;> simp [hb]
 
@@ -2085,7 +2085,7 @@ theorem continuous_integral
 
 中文:
 定理 continuous_integral
-  结论: Continuous fun f : X ->₁[μ.variation] E => ∫ᵛ a, f a ∂[B; μ]
+  结论: 连续 fun f : X ->₁[μ.variation] E => ∫ᵛ a, f a ∂[B; μ]
   证明: by
   simp only [integral_eq_setToFun]
   exact continuous_setToFun _
@@ -2218,7 +2218,7 @@ theorem dist_integral_le_lintegral_edist
 
 中文:
 定理 dist_integral_le_lintegral_edist
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: by
   grw [dist_eq_norm, ← integral_sub hf hg, norm_integral_le_lintegral_norm]
   simp [edist_eq_enorm_sub]
@@ -2244,7 +2244,7 @@ theorem edist_integral_le_lintegral_edist
 
 中文:
 定理 edist_integral_le_lintegral_edist
-  条件: (hf : μ.整数egrable f) (hg : μ.整数egrable g)
+  条件: (hf : μ.可积 f) (hg : μ.可积 g)
   证明: by
   rw [edist_dist]
   apply ENNReal.ofReal_le_of_le_toReal
@@ -2284,7 +2284,7 @@ theorem exists_ne_zero_of_integral_ne_zero
   proof: (frequently_ae_ne_zero_of_integral_ne_zero h).exists
 
 中文:
-定理 exists_ne_zero_of_integral_ne_zero
+定理 存在_ne_zero_of_integral_ne_zero
   证明: (frequently_ae_ne_zero_of_integral_ne_zero h).exists
 
 Depends on / 依赖: frequently_ae_ne_zero_of_integral_ne_zero
@@ -2309,7 +2309,7 @@ lemma integral_toSignedMeasure
 
 中文:
 引理 integral_toSignedMeasure
-  条件: {μ : Measure X} [IsFiniteMeasure μ] {f : X -> G}
+  条件: {μ : 测度 X} [是有限测度 μ] {f : X -> G}
   证明: by
   rcases subsingleton_or_nontrivial G with h'G | h'G
   · apply Subsingleton.elim
@@ -2348,7 +2348,7 @@ theorem integral_dirac'
 
 中文:
 定理 integral_dirac'
-  结论: [MeasurableSpace X] [CompleteSpace G] {a : X} {v : F}
+  结论: [可测空间 X] [完备空间 G] {a : X} {v : F}
   证明: by
   borelize E
   have : IsFiniteMeasure ((dirac a v).transpose B).variation := by
@@ -2392,7 +2392,7 @@ theorem integral_dirac
 
 中文:
 定理 integral_dirac
-  结论: [MeasurableSpace X] [MeasurableSingletonClass X] [CompleteSpace G]
+  结论: [可测空间 X] [MeasurableSingleton类 X] [完备空间 G]
   证明: by
   have : IsFiniteMeasure ((dirac a v).transpose B).variation := by
     have : ‖B.flip v‖ₑ • Measure.dirac a = ‖B.flip v‖₊ • Measure.dirac a := rfl
@@ -2429,7 +2429,7 @@ theorem integral_unique
 
 中文:
 定理 integral_unique
-  条件: [Unique X] [CompleteSpace G]
+  条件: [唯一 X] [完备空间 G]
   证明: calc
     ∫ᵛ x, f x ∂[B; μ] = ∫ᵛ _, f default ∂[B; μ] := by congr with x; congr; exact Unique.uniq _ x
     _ = B (f default) (μ univ) := by rw [integral_const]
@@ -2506,7 +2506,7 @@ theorem continuousWithinAt_of_dominated
 
 中文:
 定理 continuousWithinAt_of_dominated
-  结论: {F : Y -> X -> E} {x₀ : Y} {bound : X -> 实数} {s : Set Y}
+  结论: {F : Y -> X -> E} {x₀ : Y} {bound : X -> 实数} {s : 集合 Y}
   证明: continuousWithinAt_setToFun_of_dominated _ hF_meas h_bound bound_integrable h_cont
 
 Depends on / 依赖: bound_integrable, continuousWithinAt_setToFun_of_dominated, hF_meas, h_bound, h_cont
@@ -2552,7 +2552,7 @@ theorem continuousOn_of_dominated
 
 中文:
 定理 continuousOn_of_dominated
-  结论: {F : Y -> X -> E} {bound : X -> 实数} {s : Set Y}
+  结论: {F : Y -> X -> E} {bound : X -> 实数} {s : 集合 Y}
   证明: continuousOn_setToFun_of_dominated _ hF_meas h_bound bound_integrable h_cont
 
 Depends on / 依赖: bound_integrable, continuousOn_setToFun_of_dominated, hF_meas, h_bound, h_cont
@@ -2607,7 +2607,7 @@ theorem norm_integral_le_of_norm_le_const
 
 中文:
 定理 norm_integral_le_of_norm_le_const
-  结论: [IsFiniteMeasure μ.variation]
+  结论: [是有限测度 μ.variation]
   证明: calc
   ‖∫ᵛ x, f x ∂[B; μ]‖
   _ <= ‖B‖ * (∫⁻ a, ENNReal.ofReal ‖f a‖ ∂μ.variation).toReal :=
@@ -2737,8 +2737,8 @@ theorem Integrable.map
   apply variation_map_le
 
 中文:
-定理 Integrable.map
-  结论: {β : 类型} [MeasurableSpace β] {φ : X -> β}
+定理 可积.map
+  结论: {β : 类型} [可测空间 β] {φ : X -> β}
   证明: by
   by_cases hφ : Measurable φ; swap
   · simp [VectorMeasure.map, hφ]
@@ -2771,7 +2771,7 @@ theorem integral_map
 
 中文:
 定理 integral_map
-  结论: {β : 类型} [MeasurableSpace β]
+  结论: {β : 类型} [可测空间 β]
   证明: by
   apply setToFun_of_le_map _ _ hfi' hfm hφ variation_map_le
   intro s x hs
@@ -2800,8 +2800,8 @@ theorem _root_.MeasurableEmbedding.variation_transpose_map
 omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
-定理 _root_.MeasurableEmbedding.variation_transpose_map
-  条件: (hφ : MeasurableEmbedding φ)
+定理 _root_.可测嵌入.variation_transpose_map
+  条件: (hφ : 可测嵌入 φ)
   证明: by
   rw [transpose_map]; rw [hφ.variation_map]
 
@@ -2823,7 +2823,7 @@ theorem _root_.MeasurableEmbedding.integrable_map_vectorMeasure
   simp_rw [VectorMeasure.Integrable, ← hφ.integrable_map_iff, hφ.variation_map]
 
 中文:
-定理 _root_.MeasurableEmbedding.integrable_map_vectorMeasure
+定理 _root_.可测嵌入.integrable_map_vectorMeasure
   证明: by
   simp_rw [VectorMeasure.Integrable, ← hφ.integrable_map_iff, hφ.variation_map]
 
@@ -2849,7 +2849,7 @@ theorem _root_.MeasurableEmbedding.integral_map_vectorMeasure
   · rw [integral_non_aestronglyMeasurable
 
 中文:
-定理 _root_.MeasurableEmbedding.integral_map_vectorMeasure
+定理 _root_.可测嵌入.integral_map_vectorMeasure
   证明: by
   by_cases hfm : AEStronglyMeasurable f (μ.variation.map φ)
   · by_cases h'fm : μ.Integrable (f ∘ φ)
@@ -2882,7 +2882,7 @@ theorem _root_.Topology.IsClosedEmbedding.integral_map_vectorMeasure
   proof: hφ.measurableEmbedding.integral_map_vectorMeasure
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.integral_map_vectorMeasure
+定理 _root_.拓扑.是闭嵌入.integral_map_vectorMeasure
   证明: hφ.measurableEmbedding.integral_map_vectorMeasure
 
 Depends on / 依赖: integral_map_vectorMeasure, measurableEmbedding, measurableEmbedding.integral_map_vectorMeasure
@@ -2903,7 +2903,7 @@ theorem integral_map_equiv
 
 中文:
 定理 integral_map_equiv
-  条件: {β} [MeasurableSpace β] (e : X ≃ᵐ β) (f : β -> E)
+  条件: {β} [可测空间 β] (e : X ≃ᵐ β) (f : β -> E)
   证明: e.measurableEmbedding.integral_map_vectorMeasure
 
 Depends on / 依赖: e.measurableEmbedding.integral_map_vectorMeasure, integral_map_vectorMeasure, measurableEmbedding
@@ -2945,7 +2945,7 @@ theorem tendsto_integral_filter_of_dominated_convergence
 
 中文:
 定理 tendsto_integral_filter_of_dominated_convergence
-  结论: {l : Filter ι} [l.IsCountablyGenerated]
+  结论: {l : 滤子 ι} [l.是余untablyGenerated]
   证明: tendsto_setToFun_filter_of_dominated_convergence _ bound hF_meas h_bound bound_integrable h_lim
 
 Depends on / 依赖: bound_integrable, hF_meas, h_bound, h_lim, tendsto_setToFun_filter_of_dominated_convergence
@@ -2970,7 +2970,7 @@ theorem hasSum_integral_of_dominated_convergence
 
 中文:
 定理 hasSum_integral_of_dominated_convergence
-  结论: [Countable ι] {F : ι -> X -> E} {f : X -> E}
+  结论: [可数 ι] {F : ι -> X -> E} {f : X -> E}
   证明: hasSum_setToFun_of_dominated_convergence _ bound hF_meas h_bound bound_summable bound_integrable
     h_lim
 
@@ -2996,7 +2996,7 @@ theorem integral_tsum
 
 中文:
 定理 integral_tsum
-  结论: [CompleteSpace E] [Countable ι]
+  结论: [完备空间 E] [可数 ι]
   证明: setToFun_tsum _ hf hf'
 
 Depends on / 依赖: setToFun_tsum
@@ -3017,7 +3017,7 @@ theorem tendsto_integral_filter_of_norm_le_const
 
 中文:
 定理 tendsto_integral_filter_of_norm_le_const
-  结论: {l : Filter ι} [l.IsCountablyGenerated]
+  结论: {l : 滤子 ι} [l.是余untablyGenerated]
   证明: tendsto_setToFun_filter_of_norm_le_const _ h_meas h_bound h_lim
 
 Depends on / 依赖: h_bound, h_lim, h_meas, tendsto_setToFun_filter_of_norm_le_const

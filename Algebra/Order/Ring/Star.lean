@@ -45,7 +45,7 @@ instance toIsOrderedRing
 
 中文:
 实例 toIsOrderedRing
-  签名: (R : 类型) [CommSemiring R] [PartialOrder R]
+  签名: (R : 类型) [交换半环 R] [偏序 R]
   定义体: smul_le_smul_of_nonneg_left hbc ha
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := smul_le_smul_of_nonneg_right hbc ha
 

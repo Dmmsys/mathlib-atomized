@@ -39,8 +39,8 @@ abbreviation FunLike.monoidWithZero
   mul_assoc _ _ _ := by apply DFunLike.ext; simp
 
 中文:
-缩写 FunLike.monoidWithZero
-  签名: : MonoidWithZero F where
+缩写 函数状.monoidWithZero
+  签名: : 带零幺半群 F where
   定义体: by apply DFunLike.ext; simp
   zero_mul _ := by apply DFunLike.ext; simp
   mul_one _ := by apply DFunLike.ext; simp
@@ -76,8 +76,8 @@ abbreviation FunLike.semiring
   natCast_succ n := by apply DFunLike.ext; simp [succ_nsmul]
 
 中文:
-缩写 FunLike.semiring
-  签名: : Semiring F where
+缩写 函数状.semiring
+  签名: : 半环 F where
   定义体: FunLike.monoidWithZero
   __ := FunLike.addCommMonoid
   left_distrib f g h := by apply DFunLike.ext; simp
@@ -117,8 +117,8 @@ abbreviation FunLike.ring
   intCast_negSucc n := by apply DFunLike.ext; simp [succ_nsmul]
 
 中文:
-缩写 FunLike.ring
-  签名: : Ring F where
+缩写 函数状.ring
+  签名: : 环 F where
   定义体: FunLike.semiring
   __ := FunLike.addCommGroup
   intCast_ofNat _ := by apply DFunLike.ext; simp

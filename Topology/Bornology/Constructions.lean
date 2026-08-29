@@ -37,8 +37,8 @@ instance Prod.instBornology
     @coprod_cofinite α β ▸ coprod_mono ‹Bornology α›.le_cofinite ‹Bornology β›.le_cofinite
 
 中文:
-实例 Prod.instBornology
-  签名: : Bornology (α × β) where
+实例 积类型.instBornology
+  签名: : 有界结构 (α × β) where
   定义体: (cobounded α).coprod (cobounded β)
   le_cofinite :=
     @coprod_cofinite α β ▸ coprod_mono ‹Bornology α›.le_cofinite ‹Bornology β›.le_cofinite
@@ -60,8 +60,8 @@ instance Pi.instBornology
   le_cofinite := iSup_le fun _ => (comap_mono (Bornology.le_cofinite _)).trans (comap_cofinite_le _)
 
 中文:
-实例 Pi.instBornology
-  签名: : Bornology (对任意 i, X i) where
+实例 依赖函数类型.instBornology
+  签名: : 有界结构 (对任意 i, X i) where
   定义体: Filter.coprodᵢ fun i => cobounded (X i)
   le_cofinite := iSup_le fun _ => (comap_mono (Bornology.le_cofinite _)).trans (comap_cofinite_le _)
 
@@ -81,8 +81,8 @@ abbreviation Bornology.induced
   le_cofinite := (comap_mono (Bornology.le_cofinite β)).trans (comap_cofinite_le _)
 
 中文:
-缩写 Bornology.induced
-  签名: {α β : 类型} [Bornology β] (f : α -> β)
+缩写 有界结构.induced
+  签名: {α β : 类型} [有界结构 β] (f : α -> β)
   定义体: comap f (cobounded β)
   le_cofinite := (comap_mono (Bornology.le_cofinite β)).trans (comap_cofinite_le _)
 
@@ -125,7 +125,7 @@ theorem isBounded_image_fst_and_snd
 
 中文:
 定理 isBounded_image_fst_and_snd
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: compl_mem_coprod.symm
 
 Depends on / 依赖: compl_mem_coprod, compl_mem_coprod.symm
@@ -145,8 +145,8 @@ lemma IsBounded.image_fst
 
 中文:
 引理 IsBounded.image_fst
-  条件: {s : Set (α × β)} (hs : IsBounded s)
-  结论: IsBounded (Prod.fst '' s)
+  条件: {s : 集合 (α × β)} (hs : IsBounded s)
+  结论: IsBounded (积类型.fst '' s)
   证明: (isBounded_image_fst_and_snd.2 hs).1
 
 Depends on / 依赖: isBounded_image_fst_and_snd
@@ -165,8 +165,8 @@ lemma IsBounded.image_snd
 
 中文:
 引理 IsBounded.image_snd
-  条件: {s : Set (α × β)} (hs : IsBounded s)
-  结论: IsBounded (Prod.snd '' s)
+  条件: {s : 集合 (α × β)} (hs : IsBounded s)
+  结论: IsBounded (积类型.snd '' s)
   证明: (isBounded_image_fst_and_snd.2 hs).2
 
 Depends on / 依赖: isBounded_image_fst_and_snd
@@ -187,7 +187,7 @@ theorem IsBounded.fst_of_prod
 
 中文:
 定理 IsBounded.fst_of_prod
-  条件: (h : IsBounded (s ×ˢ t)) (ht : t.Nonempty)
+  条件: (h : IsBounded (s ×ˢ t)) (ht : t.非空)
   结论: IsBounded s
   证明: fst_image_prod s ht ▸ h.image_fst
 
@@ -207,7 +207,7 @@ theorem IsBounded.snd_of_prod
 
 中文:
 定理 IsBounded.snd_of_prod
-  条件: (h : IsBounded (s ×ˢ t)) (hs : s.Nonempty)
+  条件: (h : IsBounded (s ×ˢ t)) (hs : s.非空)
   结论: IsBounded t
   证明: snd_image_prod hs t ▸ h.image_snd
 
@@ -227,7 +227,7 @@ theorem IsBounded.prod
 ⟨hs.subset fst_image_prod_subset _ _, ht.subset snd_image_prod_subset _ _⟩
 
 中文:
-定理 IsBounded.prod
+定理 IsBounded.乘积
   条件: (hs : IsBounded s) (ht : IsBounded t)
   结论: IsBounded (s ×ˢ t)
   证明: isBounded_image_fst_and_snd.1
@@ -249,7 +249,7 @@ theorem isBounded_prod_of_nonempty
 
 中文:
 定理 isBounded_prod_of_nonempty
-  条件: (hne : Set.Nonempty (s ×ˢ t))
+  条件: (hne : 集合.非空 (s ×ˢ t))
   证明: ⟨fun h => ⟨h.fst_of_prod hne.snd, h.snd_of_prod hne.fst⟩, fun h => h.1.prod h.2⟩
 
 Depends on / 依赖: fst_of_prod, h.fst_of_prod, h.snd_of_prod, hne.fst, hne.snd, snd_of_prod
@@ -319,7 +319,7 @@ theorem cobounded_pi
 
 中文:
 定理 cobounded_pi
-  结论: cobounded (对任意 i, X i) = Filter.coprodᵢ fun i => cobounded (X i)
+  结论: cobounded (对任意 i, X i) = 滤子.coprodᵢ fun i => cobounded (X i)
   证明: rfl
 -/
 theorem cobounded_pi : cobounded (forall i, X i) = Filter.coprodᵢ fun i => cobounded (X i) :=
@@ -334,8 +334,8 @@ theorem forall_isBounded_image_eval_iff
   proof: compl_mem_coprodᵢ.symm
 
 中文:
-定理 forall_isBounded_image_eval_iff
-  条件: {s : Set (对任意 i, X i)}
+定理 对任意_isBounded_image_eval_iff
+  条件: {s : 集合 (对任意 i, X i)}
   证明: compl_mem_coprodᵢ.symm
 -/
 theorem forall_isBounded_image_eval_iff {s : Set (forall i, X i)} :
@@ -352,7 +352,7 @@ lemma IsBounded.image_eval
 
 中文:
 引理 IsBounded.image_eval
-  条件: {s : Set (对任意 i, X i)} (hs : IsBounded s) (i : ι)
+  条件: {s : 集合 (对任意 i, X i)} (hs : IsBounded s) (i : ι)
   证明: forall_isBounded_image_eval_iff.2 hs i
 
 Depends on / 依赖: forall_isBounded_image_eval_iff
@@ -391,7 +391,7 @@ theorem isBounded_pi_of_nonempty
 
 中文:
 定理 isBounded_pi_of_nonempty
-  条件: (hne : (pi univ S).Nonempty)
+  条件: (hne : (pi univ S).非空)
   证明: ⟨fun H i => @eval_image_univ_pi _ _ _ i hne ▸ forall_isBounded_image_eval_iff.2 H i, IsBounded.pi⟩
 
 Depends on / 依赖: IsBounded, IsBounded.pi, eval_image_univ_pi, forall_isBounded_image_eval_iff
@@ -444,7 +444,7 @@ theorem isBounded_induced
 
 中文:
 定理 isBounded_induced
-  条件: {α β : 类型} [Bornology β] {f : α -> β} {s : Set α}
+  条件: {α β : 类型} [有界结构 β] {f : α -> β} {s : 集合 α}
   证明: compl_mem_comap
 
 Depends on / 依赖: compl_mem_comap
@@ -463,7 +463,7 @@ theorem isBounded_image_subtype_val
 
 中文:
 定理 isBounded_image_subtype_val
-  条件: {p : α -> 命题} {s : Set { x // p x }}
+  条件: {p : α -> 命题} {s : 集合 { x // p x }}
   证明: isBounded_induced.symm
 
 Depends on / 依赖: isBounded_induced, isBounded_induced.symm
@@ -491,8 +491,8 @@ instance [BoundedSpace
   simp [← cobounded_eq_bot_iff, cobounded_prod]
 
 中文:
-实例 [BoundedSpace
-  签名: α] [BoundedSpace β] : BoundedSpace (α × β)
+实例 [有界空间
+  签名: α] [有界空间 β] : 有界空间 (α × β)
   定义体: by
   simp [← cobounded_eq_bot_iff, cobounded_prod]
 
@@ -511,8 +511,8 @@ instance [forall
   simp [← cobounded_eq_bot_iff, cobounded_pi]
 
 中文:
-实例 [forall
-  签名: i, BoundedSpace (X i)] : BoundedSpace (对任意 i, X i)
+实例 [对任意
+  签名: i, 有界空间 (X i)] : 有界空间 (对任意 i, X i)
   定义体: by
   simp [← cobounded_eq_bot_iff, cobounded_pi]
 
@@ -532,7 +532,7 @@ theorem boundedSpace_induced_iff
 
 中文:
 定理 boundedSpace_induced_iff
-  条件: {α β : 类型} [Bornology β] {f : α -> β}
+  条件: {α β : 类型} [有界结构 β] {f : α -> β}
   证明: by
   rw [← @isBounded_univ]; rw [isBounded_induced]; rw [image_univ]
 
@@ -578,8 +578,8 @@ alias ⟨_, Bornology.IsBounded.boundedSpace_val⟩ := boundedSpace_val_set_iff
 
 中文:
 定理 boundedSpace_val_set_iff
-  条件: {s : Set α}
-  结论: BoundedSpace s ↔ IsBounded s
+  条件: {s : 集合 α}
+  结论: 有界空间 s ↔ IsBounded s
   证明: boundedSpace_subtype_iff
 
 alias ⟨_, Bornology.IsBounded.boundedSpace_subtype⟩ := boundedSpace_subtype_iff
@@ -604,7 +604,7 @@ instance [BoundedSpace
   body: (IsBounded.all { x | p x }).boundedSpace_subtype
 
 中文:
-实例 [BoundedSpace
+实例 [有界空间
   签名: α] {p
   定义体: (IsBounded.all { x | p x }).boundedSpace_subtype
 
@@ -625,7 +625,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bornology (Additive α)
+  签名: 有界结构 (加性 α)
   定义体: ‹Bornology α›
 
 Depends on / 依赖: Bornology
@@ -643,7 +643,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bornology (Multiplicative α)
+  签名: 有界结构 (Multiplicative α)
   定义体: ‹Bornology α›
 
 Depends on / 依赖: Bornology
@@ -660,8 +660,8 @@ instance [BoundedSpace
   body: ‹BoundedSpace α›
 
 中文:
-实例 [BoundedSpace
-  签名: α] : BoundedSpace (Additive α)
+实例 [有界空间
+  签名: α] : 有界空间 (加性 α)
   定义体: ‹BoundedSpace α›
 
 Depends on / 依赖: BoundedSpace
@@ -678,8 +678,8 @@ instance [BoundedSpace
   body: ‹BoundedSpace α›
 
 中文:
-实例 [BoundedSpace
-  签名: α] : BoundedSpace (Multiplicative α)
+实例 [有界空间
+  签名: α] : 有界空间 (Multiplicative α)
   定义体: ‹BoundedSpace α›
 
 Depends on / 依赖: BoundedSpace
@@ -699,7 +699,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bornology αᵒᵈ
+  签名: 有界结构 αᵒᵈ
   定义体: ‹Bornology α›
 
 Depends on / 依赖: Bornology
@@ -716,8 +716,8 @@ instance [BoundedSpace
   body: ‹BoundedSpace α›
 
 中文:
-实例 [BoundedSpace
-  签名: α] : BoundedSpace αᵒᵈ
+实例 [有界空间
+  签名: α] : 有界空间 αᵒᵈ
   定义体: ‹BoundedSpace α›
 
 Depends on / 依赖: BoundedSpace

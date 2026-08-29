@@ -130,7 +130,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {D' : 类型} [Category* D'] (G : D ⥤ D')
+  条件: {D' : 类型} [范畴* D'] (G : D ⥤ D')
   结论: E.map (F ⋙ G) = (E.map F).map G
   证明: rfl
 -/
@@ -148,7 +148,7 @@ lemma sieve₀_map
 
 中文:
 引理 sieve₀_map
-  结论: (E.map F).sieve₀ = Sieve.functorPushforward _ E.sieve₀
+  结论: (E.map F).sieve₀ = 筛.functorPushforward _ E.sieve₀
   证明: by
   rw [PreZeroHypercover.sieve₀]; rw [Sieve.ofArrows]; rw [← PreZeroHypercover.presieve₀]; rw [PreOneHypercover.map_toPreZeroHypercover]; rw [PreZeroHypercover.presieve₀_map]; rw [Sieve.generate_map_eq_functorPushforward]
 
@@ -167,7 +167,7 @@ definition isLimitMapMultiforkEquiv
 
 中文:
 定义 isLimitMapMultiforkEquiv
-  签名: {A : 类型u} [Category.{t} A] (P : Dᵒᵖ ⥤ A)
+  签名: {A : 类型u} [范畴.{t} A] (P : Dᵒᵖ ⥤ A)
   定义体: by rfl
 -/
 def isLimitMapMultiforkEquiv {A : Type u} [Category.{t} A] (P : Dᵒᵖ ⥤ A) :
@@ -320,8 +320,8 @@ class IsPreservedBy
     - mem₁((i₁ i₂ : E.I₀) ⦃W) : D⦄ (p₁ : W ⟶ F.obj (E.X i₁)) (p₂ : W ⟶ F.obj (E.X i₂)) (w : p₁ ≫ F.map (E.f i₁) = p₂ ≫ F.map (E.f i₂)) : (E.toPreOneHypercover.map F).sieve₁ p₁ p₂ in K W
 
 中文:
-类 IsPreservedBy
-  参数: (F : C ⥤ D) (K : GrothendieckTopology D)
+类 是PreservedBy
+  参数: (F : C ⥤ D) (K : Grothendieck拓扑 D)
   公理与运算 (2 个):
     - mem₀ : (E.toPreOneHypercover.map F).sieve₀ in K (F.obj X)
     - mem₁((i₁ i₂ : E.I₀) ⦃W) : D⦄ (p₁ : W ⟶ F.obj (E.X i₁)) (p₂ : W ⟶ F.obj (E.X i₂)) (w : p₁ ≫ F.map (E.f i₁) = p₂ ≫ F.map (E.f i₂)) : (E.toPreOneHypercover.map F).sieve₁ p₁ p₂ in K W
@@ -348,7 +348,7 @@ definition map
 
 中文:
 定义 map
-  签名: (F : C ⥤ D) (K : GrothendieckTopology D) [E.IsPreservedBy F K]
+  签名: (F : C ⥤ D) (K : Grothendieck拓扑 D) [E.是PreservedBy F K]
   定义体: E.toPreOneHypercover.map F
   mem₀ := IsPreservedBy.mem₀
   mem₁ _ _ _ _ _ h := IsPreservedBy.mem₁ _ _ _ _ h
@@ -372,7 +372,7 @@ instance :
 
 中文:
 实例 :
-  签名: E.IsPreservedBy (𝟭 C) J
+  签名: E.是PreservedBy (𝟭 C) J
   定义体: E.mem₀
   mem₁ := E.mem₁
 
@@ -419,10 +419,10 @@ class IsContinuous
     - op_comp_isSheaf_of_types((G : Sheaf K (Type max u₁ v₁ u₂ v₂))) : Presieve.IsSheaf J (F.op ⋙ G.obj)
 
 中文:
-类 IsContinuous
+类 是连续
   参数: : 命题 where
   公理与运算 (1 个):
-    - op_comp_isSheaf_of_types((G : Sheaf K (Type max u₁ v₁ u₂ v₂))) : Presieve.IsSheaf J (F.op ⋙ G.obj)
+    - op_comp_isSheaf_of_types((G : 层 K (类型 最大值 u₁ v₁ u₂ v₂))) : Presieve.是层 J (F.op ⋙ G.obj)
 
 Depends on / 依赖: IsContinuous, IsContinuous.op_comp_isSheaf_of_types, adj.map_comp_bijective_iff, isSheaf_iff_isSheaf_of_type, map_comp_bijective_iff, op_comp_isSheaf_of_types
 -/
@@ -478,7 +478,7 @@ lemma isSheaf_of_isContinuous_aux
 
 中文:
 引理 isSheaf_of_isContinuous_aux
-  结论: (F : C ⥤ D) [Functor.IsContinuous F J K]
+  结论: (F : C ⥤ D) [函子.是连续 F J K]
   证明: by
   let H : (Cᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂) ⥤ Dᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂ := F.op.lan
   let adj : H ⊣ (Functor.whiskeringLeft _ _ _).obj F.op := F.op.lanAdjunction _
@@ -528,7 +528,7 @@ lemma op_comp_isSheaf_of_types
 
 中文:
 引理 op_comp_isSheaf_of_types
-  条件: [Functor.IsContinuous F J K] (G : Sheaf K (Type t))
+  条件: [函子.是连续 F J K] (G : 层 K (类型 t))
   证明: by
   rw [← Presieve.isSheaf_comp_uliftFunctor_iff.{t]; rw [max u₁ v₁ u₂ v₂}]; rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_iff (Functor.associator _ _ _)]; rw [isSheaf_iff_isSheaf_of_type]
   apply isSheaf_of_isContinuous_aux.{t} J K
@@ -553,7 +553,7 @@ lemma op_comp_isSheaf
 
 中文:
 引理 op_comp_isSheaf
-  条件: [Functor.IsContinuous F J K] (G : Sheaf K A)
+  条件: [函子.是连续 F J K] (G : 层 K A)
   证明: fun T => F.op_comp_isSheaf_of_types J K ⟨_, (isSheaf_iff_isSheaf_of_type _ _).2 (G.property T)⟩
 
 Depends on / 依赖: F.op_comp_isSheaf_of_types, G.property, isSheaf_iff_isSheaf_of_type, op_comp_isSheaf_of_types, property
@@ -572,7 +572,7 @@ lemma op_comp_isSheaf_of_isSheaf
 
 中文:
 引理 op_comp_isSheaf_of_isSheaf
-  条件: [IsContinuous F J K] (P : Dᵒᵖ ⥤ A) (h : Presheaf.IsSheaf K P)
+  条件: [是连续 F J K] (P : Dᵒᵖ ⥤ A) (h : 预层.是层 K P)
   证明: F.op_comp_isSheaf J K ⟨P, h⟩
 
 Depends on / 依赖: F.op_comp_isSheaf, op_comp_isSheaf
@@ -594,7 +594,7 @@ lemma op_comp_isSheaf_of_isSheaf_type
 
 中文:
 引理 op_comp_isSheaf_of_isSheaf_type
-  结论: [F.IsContinuous J K] {G : Dᵒᵖ ⥤ 类型}
+  结论: [F.是连续 J K] {G : Dᵒᵖ ⥤ 类型}
   证明: by
   rw [← isSheaf_iff_isSheaf_of_type] at h ⊢
   exact F.op_comp_isSheaf_of_isSheaf _ _ _ h
@@ -670,7 +670,7 @@ instance isContinuous_id
 
 中文:
 实例 isContinuous_id
-  签名: : Functor.IsContinuous (𝟭 C) J J where
+  签名: : 函子.是连续 (𝟭 C) J J where
   定义体: (isSheaf_iff_isSheaf_of_type _ _).1 G.2
 
 Depends on / 依赖: isSheaf_iff_isSheaf_of_type
@@ -689,7 +689,7 @@ lemma isContinuous_comp
 
 中文:
 引理 isContinuous_comp
-  结论: (F₁ : C ⥤ D) (F₂ : D ⥤ E) (J : GrothendieckTopology C)
+  结论: (F₁ : C ⥤ D) (F₂ : D ⥤ E) (J : Grothendieck拓扑 C)
   证明: F₁.op_comp_isSheaf_of_types J K
       ⟨_,(isSheaf_iff_isSheaf_of_type _ _).2 (F₂.op_comp_isSheaf_of_types K L G)⟩
 
@@ -740,7 +740,7 @@ instance [Functor.IsContinuous
   assumption
 
 中文:
-实例 [Functor.IsContinuous
+实例 [函子.是连续
   签名: F J K] :
   定义体: by
   assumption
@@ -759,7 +759,7 @@ instance [Functor.IsContinuous
   assumption
 
 中文:
-实例 [Functor.IsContinuous
+实例 [函子.是连续
   签名: F J K] :
   定义体: by
   assumption
@@ -876,7 +876,7 @@ instance [PreservesOneHypercovers.{max
   body: isContinuous_of_preservesOneHypercovers.{max u₁ v₁} F J K
 
 中文:
-实例 [PreservesOneHypercovers.{max
+实例 [PreservesOneHypercovers.{最大值
   签名: u₁ v₁} F J K] :
   定义体: isContinuous_of_preservesOneHypercovers.{max u₁ v₁} F J K
 
@@ -905,7 +905,7 @@ definition sheafPushforwardContinuous
 
 中文:
 定义 sheafPushforwardContinuous
-  签名: : Sheaf K A ⥤ Sheaf J A
+  签名: : 层 K A ⥤ 层 J A
   定义体: ObjectProperty.lift _
     (sheafToPresheaf _ _ ⋙ (whiskeringLeft _ _ _).obj F.op)
     (F.op_comp_isSheaf J K)
@@ -975,7 +975,7 @@ definition sheafPushforwardContinuousComp
 
 中文:
 定义 sheafPushforwardContinuousComp
-  签名: [IsContinuous G K L]
+  签名: [是连续 G K L]
   定义体: isContinuous_comp F G J K L
     sheafPushforwardContinuous G A K L ⋙ sheafPushforwardContinuous F A J K ≅
     sheafPushforwardContinuous (F ⋙ G) A J L := Iso.refl _
@@ -1001,8 +1001,8 @@ definition sheafPushforwardContinuousNatTrans
   body: ⟨whiskerRight (NatTrans.op τ) _⟩
 
 中文:
-定义 sheafPushforwardContinuousNatTrans
-  签名: [IsContinuous F' J K]
+定义 sheafPushforwardContinuous自然数Trans
+  签名: [是连续 F' J K]
   定义体: ⟨whiskerRight (NatTrans.op τ) _⟩
 
 Depends on / 依赖: NatTrans, NatTrans.op, whiskerRight
@@ -1029,7 +1029,7 @@ definition sheafPushforwardContinuousIso
 
 中文:
 定义 sheafPushforwardContinuousIso
-  签名: [IsContinuous F' J K]
+  签名: [是连续 F' J K]
   定义体: sheafPushforwardContinuousNatTrans e.inv _ _ _
   inv := sheafPushforwardContinuousNatTrans e.hom _ _ _
   hom_inv_id := by ext; simp [← Functor.map_comp, ← op_comp]
@@ -1059,7 +1059,7 @@ definition sheafPushforwardContinuousId'
 
 中文:
 定义 sheafPushforwardContinuousId'
-  签名: [IsContinuous F'' J J]
+  签名: [是连续 F'' J J]
   定义体: sheafPushforwardContinuousIso eF'' _ _ _ ≪≫ sheafPushforwardContinuousId _ _
 
 Depends on / 依赖: sheafPushforwardContinuousId, sheafPushforwardContinuousIso
@@ -1119,7 +1119,7 @@ definition Adjunction.sheafPushforwardContinuous
     exact (adj.op.whisk
 
 中文:
-定义 Adjunction.sheafPushforwardContinuous
+定义 伴随.sheafPushforwardContinuous
   签名: {F : C ⥤ D} {G : D ⥤ C} (adj : F ⊣ G)
   定义体: { hom := (adj.op.whiskerLeft _).unit.app P.obj }
   counit.app P := { hom := (adj.op.whiskerLeft _).counit.app P.obj }

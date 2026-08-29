@@ -30,7 +30,7 @@ definition compactlySupported
 
 中文:
 定义 compactlySupported
-  签名: (α γ : 类型) [TopologicalSpace α] [NonUnitalNormedRing γ]
+  签名: (α γ : 类型) [拓扑空间 α] [非幺赋范环 γ]
   定义体: .mk' {z | HasCompactSupport z} .zero .add .neg .mul_left .mul_right
 
 Depends on / 依赖: HasCompactSupport, mul_left, mul_right
@@ -81,7 +81,7 @@ lemma exist_norm_eq
 
 中文:
 引理 exist_norm_eq
-  条件: [c : Nonempty α] {f : α ->ᵇ γ} (h : f in C_cb(α, γ))
+  条件: [c : 非空 α] {f : α ->ᵇ γ} (h : f in C_cb(α, γ))
   结论: 存在 (x : α),
   证明: by
   by_cases hs : (tsupport f).Nonempty
@@ -152,7 +152,7 @@ fun h => False.elim (h (Classical.arbitrary α) |>.trans_le hM).not_ge (by posit
 
 中文:
 定理 norm_lt_iff_of_nonempty_compactlySupported
-  结论: [c : Nonempty α] {f : α ->ᵇ γ}
+  结论: [c : 非空 α] {f : α ->ᵇ γ}
   证明: by
   obtain (hM | hM) := lt_or_ge 0 M
   · exact norm_lt_iff_of_compactlySupported h hM
@@ -178,7 +178,7 @@ theorem compactlySupported_eq_top_of_isCompact
 
 中文:
 定理 compactlySupported_eq_top_of_isCompact
-  条件: (h : IsCompact (Set.univ : Set α))
+  条件: (h : 是紧集 (集合.univ : 集合 α))
   证明: eq_top_iff.mpr fun _ _ => h.of_isClosed_subset (isClosed_tsupport _) (subset_univ _)
 
 Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, h.of_isClosed_subset, isClosed_tsupport, of_isClosed_subset, subset_univ
@@ -198,7 +198,7 @@ theorem compactlySupported_eq_top
 
 中文:
 定理 compactlySupported_eq_top
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   结论: C_cb(α, γ) = ⊤
   证明: compactlySupported_eq_top_of_isCompact CompactSpace.isCompact_univ
 
@@ -221,7 +221,7 @@ theorem compactlySupported_eq_top_iff
 
 中文:
 定理 compactlySupported_eq_top_iff
-  条件: [Nontrivial γ]
+  条件: [非平凡 γ]
   证明: by
   refine ⟨fun h => ?_, compactlySupported_eq_top_of_isCompact⟩
   obtain ⟨x, hx⟩ := exists_ne (0 : γ)
@@ -254,7 +254,7 @@ definition ofCompactSupport
 
 中文:
 定义 ofCompactSupport
-  签名: (g : α -> γ) (hg₁ : Continuous g) (hg₂ : HasCompactSupport g)
+  签名: (g : α -> γ) (hg₁ : 连续 g) (hg₂ : HasCompactSupport g)
   定义体: g
   continuous_toFun := hg₁
   map_bounded' := by
@@ -286,7 +286,7 @@ lemma ofCompactSupport_mem
 
 中文:
 引理 ofCompactSupport_mem
-  条件: (g : α -> γ) (hg₁ : Continuous g) (hg₂ : HasCompactSupport g)
+  条件: (g : α -> γ) (hg₁ : 连续 g) (hg₂ : HasCompactSupport g)
   证明: mem_compactlySupported.mpr hg₂
 
 Depends on / 依赖: mem_compactlySupported, mem_compactlySupported.mpr
@@ -309,7 +309,7 @@ exact HasCompactSupport.mul_left mem_c
 
 中文:
 实例 :
-  签名: SMul C(α, γ) C_cb(α, γ)
+  签名: 标量乘法 C(α, γ) C_cb(α, γ)
   定义体: fun (g : C(α, γ)) => (fun (f : C_cb(α, γ)) =>
     ⟨ofCompactSupport (g * (f : α ->ᵇ γ) : α -> γ) (Continuous.mul g.2 f.1.1.2)
     (HasCompactSupport.mul_left (mem_compactlySupported.mp f.2)), by

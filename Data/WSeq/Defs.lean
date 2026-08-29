@@ -71,7 +71,7 @@ class IsFinite
     - out : (toList s).Terminates
 
 中文:
-类 IsFinite
+类 是有限
   参数: (s : WSeq α)
   公理与运算 (1 个):
     - out : (toList s).Terminates
@@ -89,7 +89,7 @@ instance toList_terminates
 
 中文:
 实例 toList_terminates
-  签名: (s : WSeq α) [h : IsFinite s]
+  签名: (s : WSeq α) [h : 是有限 s]
   定义体: h.out
 
 Depends on / 依赖: h.out
@@ -107,7 +107,7 @@ definition get
 
 中文:
 定义 get
-  签名: (s : WSeq α) [IsFinite s]
+  签名: (s : WSeq α) [是有限 s]
   定义体: (toList s).get
 -/
 def get (s : WSeq α) [IsFinite s] : List α :=
@@ -207,7 +207,7 @@ definition filterMap
 
 中文:
 定义 filterMap
-  签名: (f : α -> Option β)
+  签名: (f : α -> 选项类型 β)
   定义体: Seq.corec fun s =>
     match Seq.destruct s with
     | none => none
@@ -560,7 +560,7 @@ definition any
 
 中文:
 定义 any
-  签名: (s : WSeq α) (p : α -> 布尔)
+  签名: (s : WSeq α) (p : α -> 布尔值)
   定义体: Computation.corec
     (fun s : WSeq α =>
       match Seq.destruct s with
@@ -596,7 +596,7 @@ definition all
 
 中文:
 定义 all
-  签名: (s : WSeq α) (p : α -> 布尔)
+  签名: (s : WSeq α) (p : α -> 布尔值)
   定义体: Computation.corec
     (fun s : WSeq α =>
       match Seq.destruct s with
@@ -745,7 +745,7 @@ theorem length_eq_map
 中文:
 定理 length_eq_map
   条件: (s : WSeq α)
-  结论: length s = Computation.map List.length (toList s)
+  结论: length s = Computation.map 列表.length (toList s)
   证明: by
   refine
     Computation.eq_of_bisim

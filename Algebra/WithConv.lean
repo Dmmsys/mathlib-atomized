@@ -90,7 +90,7 @@ lemma ofConv_surjective
 
 中文:
 引理 ofConv_surjective
-  结论: Function.Surjective (@ofConv A)
+  结论: 函数.满射 (@ofConv A)
   证明: Function.RightInverse.surjective ofConv_toConv
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, ofConv_toConv, surjective
@@ -108,7 +108,7 @@ lemma toConv_surjective
 
 中文:
 引理 toConv_surjective
-  结论: Function.Surjective (@toConv A)
+  结论: 函数.满射 (@toConv A)
   证明: Function.RightInverse.surjective toConv_ofConv
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toConv_ofConv
@@ -126,7 +126,7 @@ lemma ofConv_injective
 
 中文:
 引理 ofConv_injective
-  结论: Function.Injective (@ofConv A)
+  结论: 函数.单射 (@ofConv A)
   证明: Function.LeftInverse.injective toConv_ofConv
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, toConv_ofConv
@@ -144,7 +144,7 @@ lemma toConv_injective
 
 中文:
 引理 toConv_injective
-  结论: Function.Injective (@toConv A)
+  结论: 函数.单射 (@toConv A)
   证明: Function.LeftInverse.injective ofConv_toConv
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofConv_toConv
@@ -162,7 +162,7 @@ lemma ofConv_bijective
 
 中文:
 引理 ofConv_bijective
-  结论: Function.Bijective (@ofConv A)
+  结论: 函数.双射 (@ofConv A)
   证明: ⟨ofConv_injective, ofConv_surjective⟩
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine.mpr, iff_of_isAffine, ofConv_injective, ofConv_surjective
@@ -178,7 +178,7 @@ lemma toConv_bijective
 
 中文:
 引理 toConv_bijective
-  结论: Function.Bijective (@toConv A)
+  结论: 函数.双射 (@toConv A)
   证明: ⟨toConv_injective, toConv_surjective⟩
 
 Depends on / 依赖: toConv_injective, toConv_surjective
@@ -290,8 +290,8 @@ instance [Nontrivial
   body: (WithConv.equiv A).nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: A] : Nontrivial (WithConv A)
+实例 [非平凡
+  签名: A] : 非平凡 (WithConv A)
   定义体: (WithConv.equiv A).nontrivial
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, WithConv, WithConv.equiv, nontrivial, restrict
@@ -306,8 +306,8 @@ instance [Unique
   body: (WithConv.equiv A).unique
 
 中文:
-实例 [Unique
-  签名: A] : Unique (WithConv A)
+实例 [唯一
+  签名: A] : 唯一 (WithConv A)
   定义体: (WithConv.equiv A).unique
 
 Depends on / 依赖: QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, WithConv, WithConv.equiv, compactSpace_of_compactSpace, pullback, pullback.snd, unique
@@ -338,8 +338,8 @@ instance [AddMonoid
   body: (WithConv.equiv A).addMonoid
 
 中文:
-实例 [AddMonoid
-  签名: A] : AddMonoid (WithConv A)
+实例 [加法幺半群
+  签名: A] : 加法幺半群 (WithConv A)
   定义体: (WithConv.equiv A).addMonoid
 
 Depends on / 依赖: WithConv, WithConv.equiv, addMonoid
@@ -354,8 +354,8 @@ instance [AddCommMonoid
   body: (WithConv.equiv A).addCommMonoid
 
 中文:
-实例 [AddCommMonoid
-  签名: A] : AddCommMonoid (WithConv A)
+实例 [加法交换幺半群
+  签名: A] : 加法交换幺半群 (WithConv A)
   定义体: (WithConv.equiv A).addCommMonoid
 
 Depends on / 依赖: WithConv, WithConv.equiv, addCommMonoid
@@ -370,8 +370,8 @@ instance [AddGroup
   body: (WithConv.equiv A).addGroup
 
 中文:
-实例 [AddGroup
-  签名: A] : AddGroup (WithConv A)
+实例 [加法群
+  签名: A] : 加法群 (WithConv A)
   定义体: (WithConv.equiv A).addGroup
 
 Depends on / 依赖: WithConv, WithConv.equiv, addGroup
@@ -386,8 +386,8 @@ instance [AddCommGroup
   body: (WithConv.equiv A).addCommGroup
 
 中文:
-实例 [AddCommGroup
-  签名: A] : AddCommGroup (WithConv A)
+实例 [加法交换群
+  签名: A] : 加法交换群 (WithConv A)
   定义体: (WithConv.equiv A).addCommGroup
 
 Depends on / 依赖: WithConv, WithConv.equiv, addCommGroup
@@ -402,8 +402,8 @@ instance [Monoid
   body: fast_instance% (WithConv.equiv A).mulAction R
 
 中文:
-实例 [Monoid
-  签名: R] [MulAction R A] : MulAction R (WithConv A)
+实例 [幺半群
+  签名: R] [乘法作用 R A] : 乘法作用 R (WithConv A)
   定义体: fast_instance% (WithConv.equiv A).mulAction R
 -/
 @[to_additive] instance [Monoid R] [MulAction R A] : MulAction R (WithConv A) :=
@@ -417,8 +417,8 @@ instance [Monoid
   body: fast_instance% (WithConv.equiv A).distribMulAction R
 
 中文:
-实例 [Monoid
-  签名: R] [AddCommMonoid A] [DistribMulAction R A] : DistribMulAction R (WithConv A)
+实例 [幺半群
+  签名: R] [加法交换幺半群 A] [分配乘法作用 R A] : 分配乘法作用 R (WithConv A)
   定义体: fast_instance% (WithConv.equiv A).distribMulAction R
 
 Depends on / 依赖: WithConv, WithConv.equiv, distribMulAction, fast_instance
@@ -434,8 +434,8 @@ instance [Semiring
   body: fast_instance% (WithConv.equiv A).module R
 
 中文:
-实例 [Semiring
-  签名: R] [AddCommMonoid A] [Module R A] : Module R (WithConv A)
+实例 [半环
+  签名: R] [加法交换幺半群 A] [模 R A] : 模 R (WithConv A)
   定义体: fast_instance% (WithConv.equiv A).module R
 
 Depends on / 依赖: WithConv, WithConv.equiv, fast_instance, module
@@ -592,7 +592,7 @@ lemma ofConv_smul
 
 中文:
 引理 ofConv_smul
-  条件: [Monoid R] [MulAction R A] (c : R) (x : WithConv A)
+  条件: [幺半群 R] [乘法作用 R A] (c : R) (x : WithConv A)
   证明: rfl
 -/
 @[simp] lemma ofConv_smul [Monoid R] [MulAction R A] (c : R) (x : WithConv A) :
@@ -607,7 +607,7 @@ lemma toConv_smul
 
 中文:
 引理 toConv_smul
-  条件: [Monoid R] [MulAction R A] (c : R) (x : A)
+  条件: [幺半群 R] [乘法作用 R A] (c : R) (x : A)
   证明: rfl
 -/
 @[simp] lemma toConv_smul [Monoid R] [MulAction R A] (c : R) (x : A) :
@@ -768,7 +768,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [Semiring R] [Module R A]
+  签名: [半环 R] [模 R A]
   定义体: WithConv.addEquiv A
   map_smul' := by simp
 -/
@@ -786,7 +786,7 @@ lemma linearEquiv_apply
 
 中文:
 引理 linearEquiv_apply
-  结论: [Semiring R] [Module R A]
+  结论: [半环 R] [模 R A]
   证明: rfl
 -/
 @[simp] lemma linearEquiv_apply [Semiring R] [Module R A]
@@ -801,7 +801,7 @@ lemma symm_linearEquiv_apply
 
 中文:
 引理 symm_linearEquiv_apply
-  结论: [Semiring R] [Module R A]
+  结论: [半环 R] [模 R A]
   证明: rfl
 -/
 @[simp] lemma symm_linearEquiv_apply [Semiring R] [Module R A]
@@ -816,7 +816,7 @@ lemma toAddEquiv_linearEquiv
 
 中文:
 引理 toAddEquiv_linearEquiv
-  条件: [Semiring R] [Module R A]
+  条件: [半环 R] [模 R A]
   证明: rfl
 -/
 @[simp] lemma toAddEquiv_linearEquiv [Semiring R] [Module R A] :
@@ -832,7 +832,7 @@ lemma ofConv_sum
 
 中文:
 引理 ofConv_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> WithConv A)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> WithConv A)
   证明: map_sum (WithConv.addEquiv _) _ _
 
 Depends on / 依赖: of_locallyQuasiFinite, pullback, pullback.snd
@@ -849,7 +849,7 @@ lemma toConv_sum
 
 中文:
 引理 toConv_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> A)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> A)
   证明: map_sum (WithConv.addEquiv _).symm _ _
 -/
 @[simp] lemma toConv_sum {ι : Type*} (s : Finset ι) (f : ι -> A) :
@@ -864,7 +864,7 @@ lemma ofConv_listSum
 
 中文:
 引理 ofConv_listSum
-  条件: (l : List (WithConv A))
+  条件: (l : 列表 (WithConv A))
   证明: map_list_sum (WithConv.addEquiv _) _
 
 Depends on / 依赖: IsClosedImmersion, IsPreimmersion, LocallyQuasiFinite, f.fiberToSpecResidueField, fiberToSpecResidueField, infer_instance, isClosed_discrete, of_fiberToSpecResidueField, of_isPreimmersion, pullback, pullback.snd
@@ -881,7 +881,7 @@ lemma toConv_listSum
 
 中文:
 引理 toConv_listSum
-  条件: (l : List A)
+  条件: (l : 列表 A)
   证明: map_list_sum (WithConv.addEquiv _).symm _
 -/
 @[simp] lemma toConv_listSum (l : List A) :

@@ -129,7 +129,7 @@ theorem Valuation.transcendental_of_ne_one
   replace ⟨p, hpnt, hp⟩ : IsAlgebraic A y := .algebraMap t
 
 中文:
-定理 Valuation.transcendental_of_ne_one
+定理 赋值.transcendental_of_ne_one
   条件: (y : K) (h0 : y != 0) (hy : v y != 1)
   证明: by
   wlog! hlt : 1 < v y generalizing y

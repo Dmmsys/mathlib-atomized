@@ -79,10 +79,10 @@ class Functor.IsCocontinuous
     - cover_lift : forall {U : C} {S : Sieve (G.obj U)} (_ : S in K (G.obj U)), S.functorPullback G in J U
 
 中文:
-类 Functor.IsCocontinuous
+类 函子.是余continuous
   参数: : 命题 where
   公理与运算 (1 个):
-    - cover_lift : 对任意 {U : C} {S : Sieve (G.obj U)} (_ : S in K (G.obj U)), S.functorPullback G in J U
+    - cover_lift : 对任意 {U : C} {S : 筛 (G.obj U)} (_ : S in K (G.obj U)), S.functorPullback G in J U
 -/
 class Functor.IsCocontinuous : Prop where
   cover_lift : forall {U : C} {S : Sieve (G.obj U)} (_ : S in K (G.obj U)), S.functorPullback G in J U
@@ -96,8 +96,8 @@ lemma Functor.cover_lift
   proof: IsCocontinuous.cover_lift hS
 
 中文:
-引理 Functor.cover_lift
-  结论: [G.IsCocontinuous J K] {U : C} {S : Sieve (G.obj U)}
+引理 函子.cover_lift
+  结论: [G.是余continuous J K] {U : C} {S : 筛 (G.obj U)}
   证明: IsCocontinuous.cover_lift hS
 
 Depends on / 依赖: IsCocontinuous, IsCocontinuous.cover_lift, cover_lift
@@ -116,7 +116,7 @@ instance isCocontinuous_id
 
 中文:
 实例 isCocontinuous_id
-  签名: : Functor.IsCocontinuous (𝟭 C) J J
+  签名: : 函子.是余continuous (𝟭 C) J J
   定义体: ⟨fun h => by simpa using! h⟩
 -/
 instance isCocontinuous_id : Functor.IsCocontinuous (𝟭 C) J J :=
@@ -132,7 +132,7 @@ theorem isCocontinuous_comp
 
 中文:
 定理 isCocontinuous_comp
-  条件: [G.IsCocontinuous J K] [G'.IsCocontinuous K L]
+  条件: [G.是余continuous J K] [G'.是余continuous K L]
   证明: G.cover_lift J K (G'.cover_lift K L h)
 
 Depends on / 依赖: G.cover_lift, cover_lift
@@ -155,8 +155,8 @@ lemma Functor.IsCocontinuous.of_iso
     rwa [e.hom.naturality f, ← Category.assoc, Iso.inv_hom_id_app, Category.id_comp] at this
 
 中文:
-引理 Functor.IsCocontinuous.of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G) [F.IsCocontinuous J K]
+引理 函子.是余continuous.of_iso
+  条件: {F G : C ⥤ D} (e : F ≅ G) [F.是余continuous J K]
   证明: by
     refine J.superset_covering ?_ (F.cover_lift J K (K.pullback_stable (e.hom.app U) hS))
     intro Y f (hf : S.arrows (F.map f ≫ e.hom.app U))
@@ -183,7 +183,7 @@ lemma Functor.IsCocontinuous.iff_of_iso
   proof: ⟨fun _ => .of_iso e, fun _ => .of_iso e.symm⟩
 
 中文:
-引理 Functor.IsCocontinuous.iff_of_iso
+引理 函子.是余continuous.iff_of_iso
   条件: {F G : C ⥤ D} (e : F ≅ G)
   证明: ⟨fun _ => .of_iso e, fun _ => .of_iso e.symm⟩
 
@@ -204,7 +204,7 @@ lemma CoverPreserving.of_comp_of_isCocontinuous
     rw [Sieve.functorPushforward_comp]; rw [Sieve.functorPullback_functorPushforward_eq G]
 
 中文:
-引理 CoverPreserving.of_comp_of_isCocontinuous
+引理 余verPreserving.of_comp_of_isCocontinuous
   结论: {F : C ⥤ D} (G : D ⥤ E)
   证明: by
     refine K.superset_covering ?_ (G.cover_lift K _ (h.cover_preserve hS))
@@ -239,7 +239,7 @@ refine J.superset_covering ?_ h.cover_lift (K.pullback_stable (adj.counit.app _)
     refine J.superset_covering ?_ (J.pullba
 
 中文:
-引理 Adjunction.isCocontinuous_iff_coverPreserving
+引理 伴随.isCocontinuous_iff_coverPreserving
   条件: (adj : F ⊣ G)
   证明: by
   refine ⟨fun h => ⟨?_⟩, fun h => ⟨?_⟩⟩
@@ -279,8 +279,8 @@ lemma Adjunction.isContinuous_of_isCocontinuous
   rwa [← adj.isCocontinuous_iff_coverPreserving]
 
 中文:
-引理 Adjunction.isContinuous_of_isCocontinuous
-  条件: (adj : F ⊣ G) [F.IsCocontinuous J K]
+引理 伴随.isContinuous_of_isCocontinuous
+  条件: (adj : F ⊣ G) [F.是余continuous J K]
   证明: by
   have := adj.isRightAdjoint
   apply Functor.isContinuous_of_coverPreserving (compatiblePreservingOfFlat J G)
@@ -303,8 +303,8 @@ instance [F.IsCocontinuous
   body: (Adjunction.ofIsLeftAdjoint F).isContinuous_of_isCocontinuous J K
 
 中文:
-实例 [F.IsCocontinuous
-  签名: J K] [F.IsLeftAdjoint] : F.rightAdjoint.IsContinuous K J
+实例 [F.是余continuous
+  签名: J K] [F.是左伴随] : F.rightAdjoint.是连续 K J
   定义体: (Adjunction.ofIsLeftAdjoint F).isContinuous_of_isCocontinuous J K
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, isContinuous_of_isCocontinuous, ofIsLeftAdjoint
@@ -398,7 +398,7 @@ lemma liftAux_map
 
 中文:
 引理 liftAux_map
-  结论: {Y : C} (f : G.obj Y ⟶ X) {W : C} (g : W ⟶ Y) (i : S.Arrow)
+  结论: {Y : C} (f : G.obj Y ⟶ X) {W : C} (g : W ⟶ Y) (i : S.箭头)
   证明: (Multifork.IsLimit.fac
     (hF.isLimitMultifork ⟨_, G.cover_lift J K (K.pullback_stable f S.2)⟩) _ _
       ⟨W, g, by simpa only [Sieve.functorPullback_apply, functorPullback_mem,
@@ -513,7 +513,7 @@ lemma fac'
 
 中文:
 引理 fac'
-  条件: (j : StructuredArrow (op X) G.op)
+  条件: (j : 结构化箭头 (op X) G.op)
   证明: by
   apply IsLimit.fac
 
@@ -544,7 +544,7 @@ lemma fac
 
 中文:
 引理 fac
-  条件: (i : S.Arrow)
+  条件: (i : S.箭头)
   结论: lift hF hR s ≫ R.map i.f.op = s.ι i
   证明: by
   apply (hR (op i.Y)).hom_ext
@@ -624,7 +624,7 @@ definition isLimitMultifork
 
 中文:
 定义 isLimitMultifork
-  签名: : IsLimit (S.multifork R)
+  签名: : 是极限 (S.multifork R)
   定义体: Multifork.IsLimit.mk _ (lift hF hR) (fac hF hR)
     (fun s _ hm => hom_ext K hF hR (fun i => (hm i).trans (fac hF hR s i).symm))
 
@@ -658,7 +658,7 @@ theorem ran_isSheaf_of_isCocontinuous
 
 中文:
 定理 ran_isSheaf_of_isCocontinuous
-  条件: (ℱ : Sheaf J A)
+  条件: (ℱ : 层 J A)
   证明: by
   rw [Presheaf.isSheaf_iff_multifork]
   intro X S
@@ -685,8 +685,8 @@ definition Functor.sheafPushforwardCocontinuous
   body: ObjectProperty.lift _ (sheafToPresheaf _ _ ⋙ G.op.ran) (ran_isSheaf_of_isCocontinuous _ K)
 
 中文:
-定义 Functor.sheafPushforwardCocontinuous
-  签名: : Sheaf J A ⥤ Sheaf K A
+定义 函子.sheafPushforwardCocontinuous
+  签名: : 层 J A ⥤ 层 K A
   定义体: ObjectProperty.lift _ (sheafToPresheaf _ _ ⋙ G.op.ran) (ran_isSheaf_of_isCocontinuous _ K)
 
 Depends on / 依赖: G.op.ran, ObjectProperty, ObjectProperty.lift, ran_isSheaf_of_isCocontinuous, sheafToPresheaf
@@ -706,7 +706,7 @@ definition Functor.sheafPushforwardCocontinuousCompSheafToPresheafIso
   body: Iso.refl _
 
 中文:
-定义 Functor.sheafPushforwardCocontinuousCompSheafToPresheafIso
+定义 函子.sheafPushforwardCocontinuousCompSheafToPresheafIso
   签名: :
   定义体: Iso.refl _
 
@@ -777,7 +777,7 @@ lemma sheafAdjunctionCocontinuous_unit_app_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_unit_app_hom
-  条件: (F : Sheaf K A)
+  条件: (F : 层 K A)
   证明: by
   apply ((G.op.ranAdjunction A).map_restrictFullyFaithful_unit_app
     (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
@@ -820,7 +820,7 @@ lemma sheafAdjunctionCocontinuous_counit_app_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_counit_app_hom
-  条件: (F : Sheaf J A)
+  条件: (F : 层 J A)
   证明: ((G.op.ranAdjunction A).map_restrictFullyFaithful_counit_app
     (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
     (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
@@ -858,7 +858,7 @@ lemma sheafAdjunctionCocontinuous_homEquiv_apply_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_homEquiv_apply_hom
-  结论: {F : Sheaf K A} {H : Sheaf J A}
+  结论: {F : 层 K A} {H : 层 J A}
   证明: ((sheafToPresheaf K A).congr_map
     (((G.op.ranAdjunction A).restrictFullyFaithful_homEquiv_apply
       (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)

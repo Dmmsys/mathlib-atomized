@@ -36,7 +36,7 @@ theorem modEq_iff_eq_mod_zmultiples
 
 中文:
 定理 modEq_iff_eq_mod_zmultiples
-  结论: a ≡ b [PMOD p] ↔ (a : G ⧸ AddSubgroup.zmultiples p) = b
+  结论: a ≡ b [PMOD p] ↔ (a : G ⧸ 加法子群.zmultiples p) = b
   证明: by
   rw [modEq_comm]
   simp_rw [modEq_iff_eq_add_zsmul, QuotientAddGroup.eq_iff_sub_mem, AddSubgroup.mem_zmultiples_iff,

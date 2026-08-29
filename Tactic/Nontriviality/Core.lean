@@ -56,7 +56,7 @@ definition nontrivialityByElim
 
 中文:
 定义 nontrivialityByElim
-  签名: {u : Level} (α : Q(类型u)) (g : MVarId) (simpArgs : Array Syntax)
+  签名: {u : Level} (α : Q(类型u)) (g : MVarId) (simpArgs : 数组 Syntax)
   定义体: do
   let p : Q(Prop) ← g.getType
   guard (← instantiateMVars (← inferType p)).isProp

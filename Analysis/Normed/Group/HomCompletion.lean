@@ -69,8 +69,8 @@ definition NormedAddGroupHom.completion
   body: .ofLipschitz (f.toAddMonoidHom.completion f.continuous) f.lipschitz.completion_map
 
 中文:
-定义 NormedAddGroupHom.completion
-  签名: (f : NormedAddGroupHom G H)
+定义 赋范加群态射.completion
+  签名: (f : 赋范加群态射 G H)
   定义体: .ofLipschitz (f.toAddMonoidHom.completion f.continuous) f.lipschitz.completion_map
 
 Depends on / 依赖: completion, completion_map, continuous, f.continuous, f.lipschitz.completion_map, f.toAddMonoidHom.completion, lipschitz, ofLipschitz, toAddMonoidHom
@@ -90,8 +90,8 @@ theorem NormedAddGroupHom.completion_def
 @[simp]
 
 中文:
-定理 NormedAddGroupHom.completion_def
-  条件: (f : NormedAddGroupHom G H) (x : Completion G)
+定理 赋范加群态射.completion_def
+  条件: (f : 赋范加群态射 G H) (x : 完备化 G)
   证明: rfl
 
 @[simp]
@@ -110,8 +110,8 @@ theorem NormedAddGroupHom.completion_coe_to_fun
   proof: rfl
 
 中文:
-定理 NormedAddGroupHom.completion_coe_to_fun
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.completion_coe_to_fun
+  条件: (f : 赋范加群态射 G H)
   证明: rfl
 -/
 theorem NormedAddGroupHom.completion_coe_to_fun (f : NormedAddGroupHom G H) :
@@ -128,8 +128,8 @@ theorem NormedAddGroupHom.completion_coe
 @[simp]
 
 中文:
-定理 NormedAddGroupHom.completion_coe
-  条件: (f : NormedAddGroupHom G H) (g : G)
+定理 赋范加群态射.completion_coe
+  条件: (f : 赋范加群态射 G H) (g : G)
   证明: Completion.map_coe f.uniformContinuous _
 
 @[simp]
@@ -150,8 +150,8 @@ theorem NormedAddGroupHom.completion_coe'
   proof: f.completion_coe g
 
 中文:
-定理 NormedAddGroupHom.completion_coe'
-  条件: (f : NormedAddGroupHom G H) (g : G)
+定理 赋范加群态射.completion_coe'
+  条件: (f : 赋范加群态射 G H) (g : G)
   证明: f.completion_coe g
 
 Depends on / 依赖: completion_coe, f.completion_coe
@@ -206,7 +206,7 @@ theorem NormedAddGroupHom.completion_id
   rfl
 
 中文:
-定理 NormedAddGroupHom.completion_id
+定理 赋范加群态射.completion_id
   证明: by
   ext x
   rw [NormedAddGroupHom.completion_def]; rw [NormedAddGroupHom.coe_id]; rw [Completion.map_id]
@@ -232,8 +232,8 @@ theorem NormedAddGroupHom.completion_comp
   rfl
 
 中文:
-定理 NormedAddGroupHom.completion_comp
-  条件: (f : NormedAddGroupHom G H) (g : NormedAddGroupHom H K)
+定理 赋范加群态射.completion_comp
+  条件: (f : 赋范加群态射 G H) (g : 赋范加群态射 H K)
   证明: by
   ext x
   rw [NormedAddGroupHom.coe_comp]; rw [NormedAddGroupHom.completion_def]; rw [NormedAddGroupHom.completion_coe_to_fun]; rw [NormedAddGroupHom.completion_coe_to_fun]; rw [Completion.map_comp g.uniformContinuous f.uniformContinuous]
@@ -256,8 +256,8 @@ theorem NormedAddGroupHom.completion_neg
   proof: map_neg (normedAddGroupHomCompletionHom : NormedAddGroupHom G H ->+ _) f
 
 中文:
-定理 NormedAddGroupHom.completion_neg
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.completion_neg
+  条件: (f : 赋范加群态射 G H)
   证明: map_neg (normedAddGroupHomCompletionHom : NormedAddGroupHom G H ->+ _) f
 
 Depends on / 依赖: NormedAddGroupHom, map_neg, normedAddGroupHomCompletionHom
@@ -275,8 +275,8 @@ theorem NormedAddGroupHom.completion_add
   proof: normedAddGroupHomCompletionHom.map_add f g
 
 中文:
-定理 NormedAddGroupHom.completion_add
-  条件: (f g : NormedAddGroupHom G H)
+定理 赋范加群态射.completion_add
+  条件: (f g : 赋范加群态射 G H)
   证明: normedAddGroupHomCompletionHom.map_add f g
 
 Depends on / 依赖: map_add, normedAddGroupHomCompletionHom, normedAddGroupHomCompletionHom.map_add
@@ -296,8 +296,8 @@ theorem NormedAddGroupHom.completion_sub
 @[simp]
 
 中文:
-定理 NormedAddGroupHom.completion_sub
-  条件: (f g : NormedAddGroupHom G H)
+定理 赋范加群态射.completion_sub
+  条件: (f g : 赋范加群态射 G H)
   证明: map_sub (normedAddGroupHomCompletionHom : NormedAddGroupHom G H ->+ _) f g
 
 @[simp]
@@ -318,8 +318,8 @@ theorem NormedAddGroupHom.zero_completion
   proof: normedAddGroupHomCompletionHom.map_zero
 
 中文:
-定理 NormedAddGroupHom.zero_completion
-  结论: (0 : NormedAddGroupHom G H).completion = 0
+定理 赋范加群态射.zero_completion
+  结论: (0 : 赋范加群态射 G H).completion = 0
   证明: normedAddGroupHomCompletionHom.map_zero
 
 Depends on / 依赖: map_zero, normedAddGroupHomCompletionHom, normedAddGroupHomCompletionHom.map_zero
@@ -340,8 +340,8 @@ definition NormedAddCommGroup.toCompl
   bound' := ⟨1, by simp⟩
 
 中文:
-定义 NormedAddCommGroup.toCompl
-  签名: : NormedAddGroupHom G (Completion G) where
+定义 赋范交换加群.toCompl
+  签名: : 赋范加群态射 G (完备化 G) where
   定义体: (↑)
   map_add' := Completion.toCompl.map_add
   bound' := ⟨1, by simp⟩
@@ -363,7 +363,7 @@ theorem NormedAddCommGroup.norm_toCompl
   proof: Completion.norm_coe x
 
 中文:
-定理 NormedAddCommGroup.norm_toCompl
+定理 赋范交换加群.norm_toCompl
   条件: (x : G)
   结论: ‖toCompl x‖ = ‖x‖
   证明: Completion.norm_coe x
@@ -384,8 +384,8 @@ theorem NormedAddCommGroup.denseRange_toCompl
 @[simp]
 
 中文:
-定理 NormedAddCommGroup.denseRange_toCompl
-  结论: DenseRange (toCompl : G -> Completion G)
+定理 赋范交换加群.denseRange_toCompl
+  结论: DenseRange (toCompl : G -> 完备化 G)
   证明: Completion.isDenseInducing_coe.dense
 
 @[simp]
@@ -407,8 +407,8 @@ theorem NormedAddGroupHom.completion_toCompl
 @[simp]
 
 中文:
-定理 NormedAddGroupHom.completion_toCompl
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.completion_toCompl
+  条件: (f : 赋范加群态射 G H)
   证明: by ext x; simp
 
 @[simp]
@@ -428,8 +428,8 @@ theorem NormedAddGroupHom.norm_completion
     simpa using f.completion.le_opNorm x
 
 中文:
-定理 NormedAddGroupHom.norm_completion
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.norm_completion
+  条件: (f : 赋范加群态射 G H)
   结论: ‖f.completion‖ = ‖f‖
   证明: le_antisymm (ofLipschitz_norm_le _ _) opNorm_le_bound _ (norm_nonneg _) fun x => by
     simpa using f.completion.le_opNorm x
@@ -451,8 +451,8 @@ theorem NormedAddGroupHom.ker_le_ker_completion
   simp [h₀, mem_ker, Completion.coe_zero]
 
 中文:
-定理 NormedAddGroupHom.ker_le_ker_completion
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.ker_le_ker_completion
+  条件: (f : 赋范加群态射 G H)
   证明: by
   rintro _ ⟨⟨g, h₀ : f g = 0⟩, rfl⟩
   simp [h₀, mem_ker, Completion.coe_zero]
@@ -479,8 +479,8 @@ theorem NormedAddGroupHom.ker_completion
   rcases exists_pos_mul_lt ε_pos (1 + C' * ‖f‖) wi
 
 中文:
-定理 NormedAddGroupHom.ker_completion
-  结论: {f : NormedAddGroupHom G H} {C : 实数}
+定理 赋范加群态射.ker_completion
+  结论: {f : 赋范加群态射 G H} {C : 实数}
   证明: by
   refine le_antisymm ?_ (closure_minimal f.ker_le_ker_completion f.completion.isClosed_ker)
   rintro hatg (hatg_in : f.completion hatg = 0)
@@ -534,8 +534,8 @@ definition NormedAddGroupHom.extension
     f.lipschitz.completion_extension
 
 中文:
-定义 NormedAddGroupHom.extension
-  签名: (f : NormedAddGroupHom G H)
+定义 赋范加群态射.extension
+  签名: (f : 赋范加群态射 G H)
   定义体: .ofLipschitz (f.toAddMonoidHom.extension f.continuous)
     let _ := MetricSpace.ofT0PseudoMetricSpace H
     f.lipschitz.completion_extension
@@ -558,8 +558,8 @@ theorem NormedAddGroupHom.extension_def
 @[simp]
 
 中文:
-定理 NormedAddGroupHom.extension_def
-  条件: (f : NormedAddGroupHom G H) (v : G)
+定理 赋范加群态射.extension_def
+  条件: (f : 赋范加群态射 G H) (v : G)
   证明: rfl
 
 @[simp]
@@ -579,8 +579,8 @@ theorem NormedAddGroupHom.extension_coe
   proof: AddMonoidHom.extension_coe _ f.continuous _
 
 中文:
-定理 NormedAddGroupHom.extension_coe
-  条件: (f : NormedAddGroupHom G H) (v : G)
+定理 赋范加群态射.extension_coe
+  条件: (f : 赋范加群态射 G H) (v : G)
   结论: f.extension v = f v
   证明: AddMonoidHom.extension_coe _ f.continuous _
 
@@ -598,8 +598,8 @@ theorem NormedAddGroupHom.extension_coe_to_fun
   proof: rfl
 
 中文:
-定理 NormedAddGroupHom.extension_coe_to_fun
-  条件: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.extension_coe_to_fun
+  条件: (f : 赋范加群态射 G H)
   证明: rfl
 -/
 theorem NormedAddGroupHom.extension_coe_to_fun (f : NormedAddGroupHom G H) :
@@ -617,8 +617,8 @@ theorem NormedAddGroupHom.extension_unique
   rw [NormedAddGroupHom.extension_coe_to_fun]; rw [Completion.extension_unique f.uniformContinuous g.uniformContinuous fun a => hg a]
 
 中文:
-定理 NormedAddGroupHom.extension_unique
-  结论: (f : NormedAddGroupHom G H)
+定理 赋范加群态射.extension_unique
+  结论: (f : 赋范加群态射 G H)
   证明: by
   ext v
   rw [NormedAddGroupHom.extension_coe_to_fun]; rw [Completion.extension_unique f.uniformContinuous g.uniformContinuous fun a => hg a]

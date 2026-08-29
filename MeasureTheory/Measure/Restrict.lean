@@ -51,7 +51,7 @@ definition restrictₗ
 
 中文:
 定义 restrictₗ
-  签名: {m0 : MeasurableSpace α} (s : Set α)
+  签名: {m0 : 可测空间 α} (s : 集合 α)
   定义体: liftLinear (OuterMeasure.restrict s) fun μ s' hs' t => by
     suffices μ (s inter t) = μ (s inter t inter s') + μ ((s inter t) \ s') by
       simpa [← Set.inter_assoc, Set.inter_comm _ s, ← inter_sdiff_assoc]
@@ -77,7 +77,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {_m0 : MeasurableSpace α} (μ : Measure α) (s : Set α)
+  签名: {_m0 : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   定义体: restrictₗ s μ
 
 @[simp]
@@ -96,7 +96,7 @@ theorem restrictₗ_apply
 
 中文:
 定理 restrictₗ_apply
-  条件: {_m0 : MeasurableSpace α} (s : Set α) (μ : Measure α)
+  条件: {_m0 : 可测空间 α} (s : 集合 α) (μ : 测度 α)
   证明: rfl
 -/
 theorem restrictₗ_apply {_m0 : MeasurableSpace α} (s : Set α) (μ : Measure α) :
@@ -116,7 +116,7 @@ theorem restrict_toOuterMeasure_eq_toOuterMeasure_restrict
 
 中文:
 定理 restrict_toOuterMeasure_eq_toOuterMeasure_restrict
-  条件: (h : MeasurableSet s)
+  条件: (h : 可测集 s)
   证明: by
   simp_rw [restrict, restrictₗ, liftLinear, LinearMap.coe_mk, AddHom.coe_mk,
     toMeasure_toOuterMeasure, OuterMeasure.restrict_trim h, μ.trimmed]
@@ -168,7 +168,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (ht : MeasurableSet t)
+  条件: (ht : 可测集 t)
   结论: μ.restrict s t = μ (t inter s)
   证明: restrict_apply₀ ht.nullMeasurableSet
 
@@ -192,8 +192,8 @@ theorem restrict_mono'
 
 中文:
 定理 restrict_mono'
-  条件: {_m0 : MeasurableSpace α} ⦃s s'
-  结论: Set α⦄ ⦃μ ν : Measure α⦄ (hs : s <=ᵐ[μ] s')
+  条件: {_m0 : 可测空间 α} ⦃s s'
+  结论: 集合 α⦄ ⦃μ ν : 测度 α⦄ (hs : s <=ᵐ[μ] s')
   证明: Measure.le_iff.2 fun t ht => calc
     μ.restrict s t = μ (t inter s) := restrict_apply ht
     _ <= μ (t inter s') := (measure_mono_ae <| hs.mono fun _x hx ⟨hxt, hxs⟩ => ⟨hxt, hx hxs⟩)
@@ -223,8 +223,8 @@ theorem restrict_mono
 
 中文:
 定理 restrict_mono
-  条件: {_m0 : MeasurableSpace α} ⦃s s'
-  结论: Set α⦄ (hs : s subseteq s') ⦃μ ν : Measure α⦄
+  条件: {_m0 : 可测空间 α} ⦃s s'
+  结论: 集合 α⦄ (hs : s subseteq s') ⦃μ ν : 测度 α⦄
   证明: restrict_mono' (ae_of_all _ hs) hμν
 
 Depends on / 依赖: ae_of_all, restrict_mono
@@ -243,7 +243,7 @@ theorem restrict_mono_measure
 
 中文:
 定理 restrict_mono_measure
-  条件: {_ : MeasurableSpace α} {μ ν : Measure α} (h : μ <= ν) (s : Set α)
+  条件: {_ : 可测空间 α} {μ ν : 测度 α} (h : μ <= ν) (s : 集合 α)
   证明: restrict_mono subset_rfl h
 
 Depends on / 依赖: restrict_mono, subset_rfl
@@ -262,7 +262,7 @@ theorem restrict_mono_set
 
 中文:
 定理 restrict_mono_set
-  条件: {_ : MeasurableSpace α} (μ : Measure α) {s t : Set α} (h : s subseteq t)
+  条件: {_ : 可测空间 α} (μ : 测度 α) {s t : 集合 α} (h : s subseteq t)
   证明: restrict_mono h le_rfl
 
 Depends on / 依赖: le_rfl, restrict_mono
@@ -327,7 +327,7 @@ theorem restrict_apply'
 
 中文:
 定理 restrict_apply'
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ.restrict s t = μ (t inter s)
   证明: by
   rw [← toOuterMeasure_apply]; rw [Measure.restrict_toOuterMeasure_eq_toOuterMeasure_restrict hs]; rw [OuterMeasure.restrict_apply s t _]; rw [toOuterMeasure_apply]
@@ -349,8 +349,8 @@ theorem _root_.IsCountablySpanning.null_of_forall_inter_null
   exact fun i => ht (t i) (ht1 i)
 
 中文:
-定理 _root_.IsCountablySpanning.null_of_forall_inter_null
-  结论: {C : Set (Set α)}
+定理 _root_.IsCountablySpanning.null_of_对任意_inter_null
+  结论: {C : 集合 (集合 α)}
   证明: by
   obtain ⟨t, ht1, ht2⟩ := hC
   rw [show s = ⋃ n]; rw [s inter t n by rw [← inter_iUnion]; rw [ht2]; rw [inter_univ], measure_iUnion_null_iff]
@@ -375,8 +375,8 @@ theorem forall_measure_inter_isCountablySpanning_eq_zero
   mpr h t _ := measure_inter_null_of_null_left t h
 
 中文:
-定理 forall_measure_inter_isCountablySpanning_eq_zero
-  结论: {C : Set (Set α)}
+定理 对任意_measure_inter_isCountablySpanning_eq_zero
+  结论: {C : 集合 (集合 α)}
   证明: hC.null_of_forall_inter_null
   mpr h t _ := measure_inter_null_of_null_left t h
 
@@ -399,8 +399,8 @@ theorem _root_.IsCountablySpanning.null_of_forall_restrict_null
   simpa [← μ.restrict_apply' (hm _ htc)] using ht t htc
 
 中文:
-定理 _root_.IsCountablySpanning.null_of_forall_restrict_null
-  结论: {C : Set (Set α)}
+定理 _root_.IsCountablySpanning.null_of_对任意_restrict_null
+  结论: {C : 集合 (集合 α)}
   证明: by
   rw [← forall_measure_inter_isCountablySpanning_eq_zero hC]
   intro t htc
@@ -533,7 +533,7 @@ theorem restrict_apply_self
 
 中文:
 定理 restrict_apply_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (μ.restrict s) s = μ s
   证明: restrict_eq_self μ Subset.rfl
 
@@ -556,7 +556,7 @@ theorem restrict_apply_univ
 
 中文:
 定理 restrict_apply_univ
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: μ.restrict s univ = μ s
   证明: by
   rw [restrict_apply MeasurableSet.univ]; rw [Set.univ_inter]
@@ -579,7 +579,7 @@ theorem le_restrict_apply
 
 中文:
 定理 le_restrict_apply
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: μ (t inter s) <= μ.restrict s t
   证明: calc
     μ (t inter s) = μ.restrict s (t inter s) := (restrict_eq_self μ inter_subset_right).symm
@@ -603,7 +603,7 @@ theorem restrict_apply_le
 
 中文:
 定理 restrict_apply_le
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: μ.restrict s t <= μ t
   证明: Measure.le_iff'.1 restrict_le_self _
 
@@ -652,7 +652,7 @@ theorem restrict_add
 
 中文:
 定理 restrict_add
-  条件: {_m0 : MeasurableSpace α} (μ ν : Measure α) (s : Set α)
+  条件: {_m0 : 可测空间 α} (μ ν : 测度 α) (s : 集合 α)
   证明: (restrictₗ s).map_add μ ν
 
 @[simp]
@@ -677,8 +677,8 @@ theorem restrict_zero
 
 中文:
 定理 restrict_zero
-  条件: {_m0 : MeasurableSpace α} (s : Set α)
-  结论: (0 : Measure α).restrict s = 0
+  条件: {_m0 : 可测空间 α} (s : 集合 α)
+  结论: (0 : 测度 α).restrict s = 0
   证明: (restrictₗ s).map_zero
 
 @[simp]
@@ -700,7 +700,7 @@ theorem restrict_smul
 
 中文:
 定理 restrict_smul
-  结论: {_m0 : MeasurableSpace α} {R : 类型} [SMul R 实数>=0∞]
+  结论: {_m0 : 可测空间 α} {R : 类型} [标量乘法 R 实数>=0∞]
   证明: by
   simpa only [smul_one_smul] using! (restrictₗ s).map_smul (c • 1) μ
 
@@ -752,7 +752,7 @@ theorem restrict_restrict
 
 中文:
 定理 restrict_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: (μ.restrict t).restrict s = μ.restrict (s inter t)
   证明: restrict_restrict₀ hs.nullMeasurableSet
 
@@ -818,7 +818,7 @@ theorem restrict_restrict'
 
 中文:
 定理 restrict_restrict'
-  条件: (ht : MeasurableSet t)
+  条件: (ht : 可测集 t)
   证明: restrict_restrict₀' ht.nullMeasurableSet
 
 Depends on / 依赖: ht.nullMeasurableSet, nullMeasurableSet
@@ -838,7 +838,7 @@ theorem restrict_comm
 
 中文:
 定理 restrict_comm
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [restrict_restrict hs]; rw [restrict_restrict' hs]; rw [inter_comm]
 
@@ -860,7 +860,7 @@ theorem restrict_apply_eq_zero
 
 中文:
 定理 restrict_apply_eq_zero
-  条件: (ht : MeasurableSet t)
+  条件: (ht : 可测集 t)
   结论: μ.restrict s t = 0 ↔ μ (t inter s) = 0
   证明: by
   rw [restrict_apply ht]
@@ -904,7 +904,7 @@ theorem restrict_apply_eq_zero'
 
 中文:
 定理 restrict_apply_eq_zero'
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ.restrict s t = 0 ↔ μ (t inter s) = 0
   证明: by
   rw [restrict_apply' hs]
@@ -968,7 +968,7 @@ theorem restrict_zero_set
 
 中文:
 定理 restrict_zero_set
-  条件: {s : Set α} (h : μ s = 0)
+  条件: {s : 集合 α} (h : μ s = 0)
   结论: μ.restrict s = 0
   证明: restrict_eq_zero.2 h
 
@@ -1034,7 +1034,7 @@ theorem restrict_inter_add_sdiff₀
 
 中文:
 定理 restrict_inter_add_sdiff₀
-  条件: (s : Set α) (ht : NullMeasurableSet t μ)
+  条件: (s : 集合 α) (ht : NullMeasurableSet t μ)
   证明: by
   ext1 u hu
   simp only [add_apply, restrict_apply hu, ← inter_assoc, sdiff_eq]
@@ -1064,7 +1064,7 @@ theorem restrict_inter_add_sdiff
 
 中文:
 定理 restrict_inter_add_sdiff
-  条件: (s : Set α) (ht : MeasurableSet t)
+  条件: (s : 集合 α) (ht : 可测集 t)
   证明: restrict_inter_add_sdiff₀ s ht.nullMeasurableSet
 
 @[deprecated (since := "2026-06-03")] alias restrict_inter_add_diff := restrict_inter_add_sdiff
@@ -1089,7 +1089,7 @@ theorem restrict_union_add_inter₀
 
 中文:
 定理 restrict_union_add_inter₀
-  条件: (s : Set α) (ht : NullMeasurableSet t μ)
+  条件: (s : 集合 α) (ht : NullMeasurableSet t μ)
   证明: by
   rw [← restrict_inter_add_sdiff₀ (s union t) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [←
     restrict_inter_add_sdiff₀ s ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
@@ -1111,7 +1111,7 @@ theorem restrict_union_add_inter
 
 中文:
 定理 restrict_union_add_inter
-  条件: (s : Set α) (ht : MeasurableSet t)
+  条件: (s : 集合 α) (ht : 可测集 t)
   证明: restrict_union_add_inter₀ s ht.nullMeasurableSet
 
 Depends on / 依赖: ht.nullMeasurableSet, nullMeasurableSet
@@ -1131,7 +1131,7 @@ theorem restrict_union_add_inter'
 
 中文:
 定理 restrict_union_add_inter'
-  条件: (hs : MeasurableSet s) (t : Set α)
+  条件: (hs : 可测集 s) (t : 集合 α)
   证明: by
   simpa only [union_comm, inter_comm, add_comm] using restrict_union_add_inter t hs
 
@@ -1172,7 +1172,7 @@ theorem restrict_union
 
 中文:
 定理 restrict_union
-  条件: (h : Disjoint s t) (ht : MeasurableSet t)
+  条件: (h : Disjoint s t) (ht : 可测集 t)
   证明: restrict_union₀ h.aedisjoint ht.nullMeasurableSet
 
 Depends on / 依赖: aedisjoint, h.aedisjoint, ht.nullMeasurableSet, nullMeasurableSet
@@ -1194,7 +1194,7 @@ theorem restrict_union'
 
 中文:
 定理 restrict_union'
-  条件: (h : Disjoint s t) (hs : MeasurableSet s)
+  条件: (h : Disjoint s t) (hs : 可测集 s)
   证明: by
   rw [union_comm]; rw [restrict_union h.symm hs]; rw [add_comm]
 
@@ -1220,7 +1220,7 @@ theorem restrict_add_restrict_compl
 
 中文:
 定理 restrict_add_restrict_compl
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [← restrict_union (@disjoint_compl_right (Set α) _ _) hs.compl]; rw [union_compl_self]; rw [restrict_univ]
 
@@ -1245,7 +1245,7 @@ theorem restrict_compl_add_restrict
 
 中文:
 定理 restrict_compl_add_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: μ.restrict sᶜ + μ.restrict s = μ
   证明: by
   rw [add_comm]; rw [restrict_add_restrict_compl hs]
@@ -1267,7 +1267,7 @@ theorem restrict_union_le
 
 中文:
 定理 restrict_union_le
-  条件: (s s' : Set α)
+  条件: (s s' : 集合 α)
   结论: μ.restrict (s union s') <= μ.restrict s + μ.restrict s'
   证明: le_iff.2 fun t ht => by
     simpa [ht, inter_union_distrib_left] using measure_union_le (t inter s) (t inter s')
@@ -1292,7 +1292,7 @@ theorem restrict_iUnion_apply_ae
 
 中文:
 定理 restrict_iUnion_apply_ae
-  结论: [Countable ι] {s : ι -> Set α} (hd : Pairwise (AEDisjoint μ on s))
+  结论: [可数 ι] {s : ι -> 集合 α} (hd : 两两 (AEDisjoint μ on s))
   证明: by
   simp only [restrict_apply, ht, inter_iUnion]
   exact
@@ -1319,7 +1319,7 @@ theorem restrict_iUnion_apply
 
 中文:
 定理 restrict_iUnion_apply
-  结论: [Countable ι] {s : ι -> Set α} (hd : Pairwise (Disjoint on s))
+  结论: [可数 ι] {s : ι -> 集合 α} (hd : 两两 (Disjoint on s))
   证明: restrict_iUnion_apply_ae hd.aedisjoint (fun i => (hm i).nullMeasurableSet) ht
 
 Depends on / 依赖: aedisjoint, hd.aedisjoint, nullMeasurableSet, restrict_iUnion_apply_ae
@@ -1342,7 +1342,7 @@ theorem restrict_iUnion_apply_eq_iSup
 
 中文:
 定理 restrict_iUnion_apply_eq_iSup
-  结论: [Countable ι] {s : ι -> Set α} (hd : Directed (· subseteq ·) s)
+  结论: [可数 ι] {s : ι -> 集合 α} (hd : Directed (· subseteq ·) s)
   证明: by
   simp only [restrict_apply ht, inter_iUnion]
   rw [Directed.measure_iUnion]
@@ -1366,7 +1366,7 @@ theorem restrict_map
 
 中文:
 定理 restrict_map
-  条件: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
+  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
   证明: ext fun t ht => by simp [*, hf ht]
 -/
 theorem restrict_map {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s) :
@@ -1387,7 +1387,7 @@ theorem restrict_inter_toMeasurable
 
 中文:
 定理 restrict_inter_toMeasurable
-  条件: (h : μ s != ∞) (ht : MeasurableSet t) (hst : s subseteq t)
+  条件: (h : μ s != ∞) (ht : 可测集 t) (hst : s subseteq t)
   证明: by
   ext u hu
   rw [restrict_apply hu]; rw [restrict_apply hu]; rw [inter_comm t]; rw [inter_comm]; rw [inter_assoc]; rw [measure_toMeasurable_inter (ht.inter hu) h]
@@ -1438,8 +1438,8 @@ theorem restrict_eq_self_of_ae_mem
 
 中文:
 定理 restrict_eq_self_of_ae_mem
-  条件: {_m0 : MeasurableSpace α} ⦃s
-  结论: Set α⦄ ⦃μ : Measure α⦄
+  条件: {_m0 : 可测空间 α} ⦃s
+  结论: 集合 α⦄ ⦃μ : 测度 α⦄
   证明: calc
     μ.restrict s = μ.restrict univ := restrict_congr_set (eventuallyEq_univ.mpr hs)
     _ = μ := restrict_univ
@@ -1465,7 +1465,7 @@ theorem restrict_congr_meas
 
 中文:
 定理 restrict_congr_meas
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: ⟨fun H t hts ht => by
     rw [← inter_eq_self_of_subset_left hts]; rw [← restrict_apply ht]; rw [H]; rw [restrict_apply ht], fun H =>
     ext fun t ht => by
@@ -1567,7 +1567,7 @@ theorem restrict_biUnion_finset_congr
 
 中文:
 定理 restrict_biUnion_finset_congr
-  条件: {s : Finset ι} {t : ι -> Set α}
+  条件: {s : 有限集 ι} {t : ι -> 集合 α}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1604,7 +1604,7 @@ theorem restrict_iUnion_congr
 
 中文:
 定理 restrict_iUnion_congr
-  条件: [Countable ι] {s : ι -> Set α}
+  条件: [可数 ι] {s : ι -> 集合 α}
   证明: by
   refine ⟨fun h i => restrict_congr_mono (subset_iUnion _ _) h, fun h => ?_⟩
   ext1 t ht
@@ -1636,7 +1636,7 @@ theorem restrict_biUnion_congr
 
 中文:
 定理 restrict_biUnion_congr
-  条件: {s : Set ι} {t : ι -> Set α} (hc : s.Countable)
+  条件: {s : 集合 ι} {t : ι -> 集合 α} (hc : s.可数)
   证明: by
   have := hc.toEncodable
   simp only [biUnion_eq_iUnion, SetCoe.forall', restrict_iUnion_congr]
@@ -1660,7 +1660,7 @@ theorem restrict_sUnion_congr
 
 中文:
 定理 restrict_sUnion_congr
-  条件: {S : Set (Set α)} (hc : S.Countable)
+  条件: {S : 集合 (集合 α)} (hc : S.可数)
   证明: by
   rw [sUnion_eq_biUnion]; rw [restrict_biUnion_congr hc]
 
@@ -1685,7 +1685,7 @@ theorem restrict_sInf_eq_sInf_restrict
 
 中文:
 定理 restrict_sInf_eq_sInf_restrict
-  结论: {m0 : MeasurableSpace α} {m : Set (Measure α)}
+  结论: {m0 : 可测空间 α} {m : 集合 (测度 α)}
   证明: by
   ext1 s hs
   simp_rw [sInf_apply hs, restrict_apply hs, sInf_apply (MeasurableSet.inter hs ht),
@@ -1715,7 +1715,7 @@ theorem exists_mem_of_measure_ne_zero_of_ae
   exact (hs.and_eventually hp).exists
 
 中文:
-定理 exists_mem_of_measure_ne_zero_of_ae
+定理 存在_mem_of_measure_ne_zero_of_ae
   结论: (hs : μ s != 0) {p : α -> 命题}
   证明: by
   rw [← μ.restrict_apply_self]; rw [← frequently_ae_mem_iff] at hs
@@ -1744,8 +1744,8 @@ theorem QuasiMeasurePreserving.restrict
 
 
 中文:
-定理 QuasiMeasurePreserving.restrict
-  结论: {ν : Measure β} {f : α -> β}
+定理 拟保测.restrict
+  结论: {ν : 测度 β} {f : α -> β}
   证明: hf.measurable
   absolutelyContinuous := by
     refine AbsolutelyContinuous.mk fun u hum => ?_
@@ -1784,7 +1784,7 @@ alias ⟨_, ext_of_iUnion_eq_univ⟩ := ext_iff_of_iUnion_eq_univ
 
 中文:
 定理 ext_iff_of_iUnion_eq_univ
-  条件: [Countable ι] {s : ι -> Set α} (hs : ⋃ i, s i = univ)
+  条件: [可数 ι] {s : ι -> 集合 α} (hs : ⋃ i, s i = univ)
   证明: by
   rw [← restrict_iUnion_congr]; rw [hs]; rw [restrict_univ]; rw [restrict_univ]
 
@@ -1811,7 +1811,7 @@ alias ⟨_, ext_of_biUnion_eq_univ⟩ := ext_iff_of_biUnion_eq_univ
 
 中文:
 定理 ext_iff_of_biUnion_eq_univ
-  结论: {S : Set ι} {s : ι -> Set α} (hc : S.Countable)
+  结论: {S : 集合 ι} {s : ι -> 集合 α} (hc : S.可数)
   证明: by
   rw [← restrict_biUnion_congr hc]; rw [hs]; rw [restrict_univ]; rw [restrict_univ]
 
@@ -1837,7 +1837,7 @@ alias ⟨_, ext_of_sUnion_eq_univ⟩ := ext_iff_of_sUnion_eq_univ
 
 中文:
 定理 ext_iff_of_sUnion_eq_univ
-  条件: {S : Set (Set α)} (hc : S.Countable) (hs : ⋃₀ S = univ)
+  条件: {S : 集合 (集合 α)} (hc : S.可数) (hs : ⋃₀ S = univ)
   证明: ext_iff_of_biUnion_eq_univ hc by rwa [← sUnion_eq_biUnion]
 
 alias ⟨_, ext_of_sUnion_eq_univ⟩ := ext_iff_of_sUnion_eq_univ
@@ -1868,7 +1868,7 @@ theorem ext_of_generateFrom_of_cover
 
 中文:
 定理 ext_of_generateFrom_of_cover
-  结论: {S T : Set (Set α)} (h_gen : ‹_› = generateFrom S)
+  结论: {S T : 集合 (集合 α)} (h_gen : ‹_› = generateFrom S)
   证明: by
   refine ext_of_sUnion_eq_univ hc hU fun t ht => ?_
   ext1 u hu
@@ -1914,7 +1914,7 @@ theorem ext_of_generateFrom_of_cover_subset
 
 中文:
 定理 ext_of_generateFrom_of_cover_subset
-  结论: {S T : Set (Set α)} (h_gen : ‹_› = generateFrom S)
+  结论: {S T : 集合 (集合 α)} (h_gen : ‹_› = generateFrom S)
   证明: by
   refine ext_of_generateFrom_of_cover h_gen hc h_inter hU htop ?_ fun t ht => h_eq t (h_sub ht)
   intro t ht s hs; rcases (s inter t).eq_empty_or_nonempty with H | H
@@ -1948,7 +1948,7 @@ theorem ext_of_generateFrom_of_iUnion
 
 中文:
 定理 ext_of_generateFrom_of_iUnion
-  结论: (C : Set (Set α)) (B : 自然数 -> Set α) (hA : ‹_› = generateFrom C)
+  结论: (C : 集合 (集合 α)) (B : 自然数 -> 集合 α) (hA : ‹_› = generateFrom C)
   证明: by
   refine ext_of_generateFrom_of_cover_subset hA hC ?_ (countable_range B) h1B ?_ h_eq
   · rintro _ ⟨i, rfl⟩
@@ -1982,7 +1982,7 @@ theorem restrict_sum
 
 中文:
 定理 restrict_sum
-  条件: (μ : ι -> Measure α) {s : Set α} (hs : MeasurableSet s)
+  条件: (μ : ι -> 测度 α) {s : 集合 α} (hs : 可测集 s)
   证明: ext fun t ht => by simp only [sum_apply, restrict_apply, ht, ht.inter hs]
 
 @[simp]
@@ -2006,7 +2006,7 @@ theorem restrict_sum_of_countable
 
 中文:
 定理 restrict_sum_of_countable
-  条件: [Countable ι] (μ : ι -> Measure α) (s : Set α)
+  条件: [可数 ι] (μ : ι -> 测度 α) (s : 集合 α)
   证明: by
   ext t ht
   simp_rw [sum_apply _ ht, restrict_apply ht, sum_apply_of_countable]
@@ -2032,7 +2032,7 @@ lemma AbsolutelyContinuous.restrict
 
 中文:
 引理 AbsolutelyContinuous.restrict
-  条件: (h : μ ≪ ν) (s : Set α)
+  条件: (h : μ ≪ ν) (s : 集合 α)
   结论: μ.restrict s ≪ ν.restrict s
   证明: by
   refine Measure.AbsolutelyContinuous.mk (fun t ht htν => ?_)
@@ -2056,7 +2056,7 @@ theorem restrict_iUnion_ae
 
 中文:
 定理 restrict_iUnion_ae
-  结论: [Countable ι] {s : ι -> Set α} (hd : Pairwise (AEDisjoint μ on s))
+  结论: [可数 ι] {s : ι -> 集合 α} (hd : 两两 (AEDisjoint μ on s))
   证明: ext fun t ht => by simp only [sum_apply _ ht, restrict_iUnion_apply_ae hd hm ht]
 
 Depends on / 依赖: restrict_iUnion_apply_ae, sum_apply
@@ -2075,7 +2075,7 @@ theorem restrict_iUnion
 
 中文:
 定理 restrict_iUnion
-  结论: [Countable ι] {s : ι -> Set α} (hd : Pairwise (Disjoint on s))
+  结论: [可数 ι] {s : ι -> 集合 α} (hd : 两两 (Disjoint on s))
   证明: restrict_iUnion_ae hd.aedisjoint fun i => (hm i).nullMeasurableSet
 
 Depends on / 依赖: aedisjoint, hd.aedisjoint, nullMeasurableSet, restrict_iUnion_ae
@@ -2096,7 +2096,7 @@ theorem restrict_biUnion
 
 中文:
 定理 restrict_biUnion
-  结论: {s : ι -> Set α} {T : Set ι} (hT : Countable T)
+  结论: {s : ι -> 集合 α} {T : 集合 ι} (hT : 可数 T)
   证明: by
   rw [Set.biUnion_eq_iUnion]
   exact restrict_iUnion (fun i j hij => hd i.coe_prop j.coe_prop (Subtype.coe_ne_coe.mpr hij)) (hm ·)
@@ -2119,7 +2119,7 @@ theorem restrict_biUnion_finset
 
 中文:
 定理 restrict_biUnion_finset
-  结论: {s : ι -> Set α} {T : Finset ι}
+  结论: {s : ι -> 集合 α} {T : 有限集 ι}
   证明: restrict_biUnion (T := (T : Set ι)) Finite.to_countable hd hm
 
 Depends on / 依赖: Finite, Finite.to_countable, restrict_biUnion, to_countable
@@ -2139,7 +2139,7 @@ theorem restrict_iUnion_le
 
 中文:
 定理 restrict_iUnion_le
-  条件: [Countable ι] {s : ι -> Set α}
+  条件: [可数 ι] {s : ι -> 集合 α}
   证明: le_iff.2 fun t ht => by simpa [ht, inter_iUnion] using measure_iUnion_le (t inter s ·)
 
 Depends on / 依赖: inter_iUnion, le_iff, measure_iUnion_le
@@ -2158,7 +2158,7 @@ theorem restrict_biUnion_le
 
 中文:
 定理 restrict_biUnion_le
-  条件: {s : ι -> Set α} {T : Set ι} (hT : Countable T)
+  条件: {s : ι -> 集合 α} {T : 集合 ι} (hT : 可数 T)
   证明: le_iff.2 fun t ht => by simpa [ht, inter_iUnion] using measure_biUnion_le μ hT (t inter s ·)
 
 Depends on / 依赖: inter_iUnion, le_iff, measure_biUnion_le
@@ -2183,7 +2183,7 @@ iSup_le fun i => ae_mono restrict_mono (subset_iUnion s i) le_rfl
 
 中文:
 定理 ae_restrict_iUnion_eq
-  条件: [Countable ι] (s : ι -> Set α)
+  条件: [可数 ι] (s : ι -> 集合 α)
   证明: le_antisymm ((ae_sum_eq fun i => μ.restrict (s i)) ▸ ae_mono restrict_iUnion_le)
 iSup_le fun i => ae_mono restrict_mono (subset_iUnion s i) le_rfl
 
@@ -2208,7 +2208,7 @@ theorem ae_restrict_union_eq
 
 中文:
 定理 ae_restrict_union_eq
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   simp [union_eq_iUnion, iSup_bool_eq]
 
@@ -2230,7 +2230,7 @@ theorem ae_restrict_biUnion_eq
 
 中文:
 定理 ae_restrict_biUnion_eq
-  条件: (s : ι -> Set α) {t : Set ι} (ht : t.Countable)
+  条件: (s : ι -> 集合 α) {t : 集合 ι} (ht : t.可数)
   证明: by
   have := ht.to_subtype
   rw [biUnion_eq_iUnion]; rw [ae_restrict_iUnion_eq]; rw [← iSup_subtype'']
@@ -2252,7 +2252,7 @@ theorem ae_restrict_biUnion_finset_eq
 
 中文:
 定理 ae_restrict_biUnion_finset_eq
-  条件: (s : ι -> Set α) (t : Finset ι)
+  条件: (s : ι -> 集合 α) (t : 有限集 ι)
   证明: ae_restrict_biUnion_eq s t.countable_toSet
 
 Depends on / 依赖: ae_restrict_biUnion_eq, countable_toSet, f.hom, t.countable_toSet
@@ -2271,7 +2271,7 @@ theorem ae_restrict_iUnion_iff
 
 中文:
 定理 ae_restrict_iUnion_iff
-  条件: [Countable ι] (s : ι -> Set α) (p : α -> 命题)
+  条件: [可数 ι] (s : ι -> 集合 α) (p : α -> 命题)
   证明: by simp
 -/
 theorem ae_restrict_iUnion_iff [Countable ι] (s : ι -> Set α) (p : α -> Prop) :
@@ -2287,7 +2287,7 @@ theorem ae_restrict_union_iff
 
 中文:
 定理 ae_restrict_union_iff
-  条件: (s t : Set α) (p : α -> 命题)
+  条件: (s t : 集合 α) (p : α -> 命题)
   证明: by simp
 -/
 theorem ae_restrict_union_iff (s t : Set α) (p : α -> Prop) :
@@ -2306,7 +2306,7 @@ theorem ae_restrict_biUnion_iff
 
 中文:
 定理 ae_restrict_biUnion_iff
-  条件: (s : ι -> Set α) {t : Set ι} (ht : t.Countable) (p : α -> 命题)
+  条件: (s : ι -> 集合 α) {t : 集合 ι} (ht : t.可数) (p : α -> 命题)
   证明: by
   simp_rw [Filter.Eventually, ae_restrict_biUnion_eq s ht, mem_iSup]
 
@@ -2330,7 +2330,7 @@ theorem ae_restrict_biUnion_finset_iff
 
 中文:
 定理 ae_restrict_biUnion_finset_iff
-  条件: (s : ι -> Set α) (t : Finset ι) (p : α -> 命题)
+  条件: (s : ι -> 集合 α) (t : 有限集 ι) (p : α -> 命题)
   证明: by
   simp_rw [Filter.Eventually, ae_restrict_biUnion_finset_eq s, mem_iSup]
 
@@ -2351,7 +2351,7 @@ theorem ae_eq_restrict_iUnion_iff
 
 中文:
 定理 ae_eq_restrict_iUnion_iff
-  条件: [Countable ι] (s : ι -> Set α) (f g : α -> δ)
+  条件: [可数 ι] (s : ι -> 集合 α) (f g : α -> δ)
   证明: by
   simp_rw [EventuallyEq, ae_restrict_iUnion_eq, eventually_iSup]
 
@@ -2372,7 +2372,7 @@ theorem ae_eq_restrict_biUnion_iff
 
 中文:
 定理 ae_eq_restrict_biUnion_iff
-  条件: (s : ι -> Set α) {t : Set ι} (ht : t.Countable) (f g : α -> δ)
+  条件: (s : ι -> 集合 α) {t : 集合 ι} (ht : t.可数) (f g : α -> δ)
   证明: by
   simp_rw [ae_restrict_biUnion_eq s ht, EventuallyEq, eventually_iSup]
 
@@ -2392,7 +2392,7 @@ theorem ae_eq_restrict_biUnion_finset_iff
 
 中文:
 定理 ae_eq_restrict_biUnion_finset_iff
-  条件: (s : ι -> Set α) (t : Finset ι) (f g : α -> δ)
+  条件: (s : ι -> 集合 α) (t : 有限集 ι) (f g : α -> δ)
   证明: ae_eq_restrict_biUnion_iff s t.countable_toSet f g
 
 Depends on / 依赖: ae_eq_restrict_biUnion_iff, countable_toSet, t.countable_toSet
@@ -2413,7 +2413,7 @@ theorem ae_restrict_uIoc_eq
 
 中文:
 定理 ae_restrict_uIoc_eq
-  条件: [LinearOrder α] (a b : α)
+  条件: [线性序 α] (a b : α)
   证明: by
   simp only [uIoc_eq_union, ae_restrict_union_eq]
 
@@ -2435,7 +2435,7 @@ theorem ae_restrict_uIoc_iff
 
 中文:
 定理 ae_restrict_uIoc_iff
-  条件: [LinearOrder α] {a b : α} {P : α -> 命题}
+  条件: [线性序 α] {a b : α} {P : α -> 命题}
   证明: by
   rw [ae_restrict_uIoc_eq]; rw [eventually_sup]
 
@@ -2480,7 +2480,7 @@ theorem ae_restrict_iff
 
 中文:
 定理 ae_restrict_iff
-  条件: {p : α -> 命题} (hp : MeasurableSet { x | p x })
+  条件: {p : α -> 命题} (hp : 可测集 { x | p x })
   证明: ae_restrict_iff₀ hp.nullMeasurableSet
 
 Depends on / 依赖: hp.nullMeasurableSet, nullMeasurableSet
@@ -2501,7 +2501,7 @@ theorem ae_imp_of_ae_restrict
 
 中文:
 定理 ae_imp_of_ae_restrict
-  条件: {s : Set α} {p : α -> 命题} (h : 对任意ᵐ x ∂μ.restrict s, p x)
+  条件: {s : 集合 α} {p : α -> 命题} (h : 对任意ᵐ x ∂μ.restrict s, p x)
   证明: by
   simp only [ae_iff] at h ⊢
   simpa [ofPred_and, inter_comm] using measure_inter_eq_zero_of_restrict h
@@ -2547,7 +2547,7 @@ theorem ae_restrict_iff'
 
 中文:
 定理 ae_restrict_iff'
-  条件: {p : α -> 命题} (hs : MeasurableSet s)
+  条件: {p : α -> 命题} (hs : 可测集 s)
   证明: ae_restrict_iff'₀ hs.nullMeasurableSet
 -/
 theorem ae_restrict_iff' {p : α -> Prop} (hs : MeasurableSet s) :
@@ -2567,8 +2567,8 @@ theorem _root_.Filter.EventuallyEq.restrict
   exact absolutelyContinuous_restrict
 
 中文:
-定理 _root_.Filter.EventuallyEq.restrict
-  条件: {f g : α -> δ} {s : Set α} (hfg : f =ᵐ[μ] g)
+定理 _root_.滤子.EventuallyEq.restrict
+  条件: {f g : α -> δ} {s : 集合 α} (hfg : f =ᵐ[μ] g)
   证明: by
   -- note that we cannot use `ae_restrict_iff` since we do not require measurability
   refine hfg.filter_mono ?_
@@ -2613,7 +2613,7 @@ theorem ae_restrict_mem
 
 中文:
 定理 ae_restrict_mem
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: 对任意ᵐ x ∂μ.restrict s, x in s
   证明: ae_restrict_mem₀ hs.nullMeasurableSet
 
@@ -2631,8 +2631,8 @@ theorem ae_restrict_of_forall_mem
   proof: (ae_restrict_mem hs).mono h
 
 中文:
-定理 ae_restrict_of_forall_mem
-  结论: {μ : Measure α} {s : Set α}
+定理 ae_restrict_of_对任意_mem
+  结论: {μ : 测度 α} {s : 集合 α}
   证明: (ae_restrict_mem hs).mono h
 
 Depends on / 依赖: ae_restrict_mem
@@ -2650,8 +2650,8 @@ lemma _root_.Set.EqOn.aeEq_restrict
   proof: ae_restrict_of_forall_mem hs h
 
 中文:
-引理 _root_.Set.EqOn.aeEq_restrict
-  结论: {α β : 类型} [MeasurableSpace α] {μ : Measure α} {s : Set α}
+引理 _root_.集合.EqOn.aeEq_restrict
+  结论: {α β : 类型} [可测空间 α] {μ : 测度 α} {s : 集合 α}
   证明: ae_restrict_of_forall_mem hs h
 
 Depends on / 依赖: ae_restrict_of_forall_mem
@@ -2671,7 +2671,7 @@ theorem ae_restrict_of_ae
 
 中文:
 定理 ae_restrict_of_ae
-  条件: {s : Set α} {p : α -> 命题} (h : 对任意ᵐ x ∂μ, p x)
+  条件: {s : 集合 α} {p : α -> 命题} (h : 对任意ᵐ x ∂μ, p x)
   结论: 对任意ᵐ x ∂μ.restrict s, p x
   证明: h.filter_mono (ae_mono Measure.restrict_le_self)
 
@@ -2690,7 +2690,7 @@ theorem ae_restrict_of_ae_restrict_of_subset
 
 中文:
 定理 ae_restrict_of_ae_restrict_of_subset
-  结论: {s t : Set α} {p : α -> 命题} (hst : s subseteq t)
+  结论: {s t : 集合 α} {p : α -> 命题} (hst : s subseteq t)
   证明: h.filter_mono (ae_mono <| Measure.restrict_mono hst (le_refl μ))
 
 Depends on / 依赖: Measure, Measure.restrict_mono, ae_mono, filter_mono, h.filter_mono, le_refl, restrict_mono
@@ -2715,7 +2715,7 @@ theorem ae_of_ae_restrict_of_ae_restrict_compl
 
 中文:
 定理 ae_of_ae_restrict_of_ae_restrict_compl
-  结论: (t : Set α) {p : α -> 命题}
+  结论: (t : 集合 α) {p : α -> 命题}
   证明: nonpos_iff_eq_zero.1
     calc
       μ { x | ¬p x } <= μ ({ x | ¬p x } inter t) + μ ({ x | ¬p x } inter tᶜ) :=
@@ -2747,7 +2747,7 @@ theorem mem_map_restrict_ae_iff
 
 中文:
 定理 mem_map_restrict_ae_iff
-  条件: {β} {s : Set α} {t : Set β} {f : α -> β} (hs : MeasurableSet s)
+  条件: {β} {s : 集合 α} {t : 集合 β} {f : α -> β} (hs : 可测集 s)
   证明: by
   rw [mem_map]; rw [mem_ae_iff]; rw [Measure.restrict_apply' hs]
 
@@ -2787,7 +2787,7 @@ lemma ae_finsetSum_measure_iff
 
 中文:
 引理 ae_finsetSum_measure_iff
-  条件: {p : α -> 命题} {s : Finset ι} {μ : ι -> Measure α}
+  条件: {p : α -> 命题} {s : 有限集 ι} {μ : ι -> 测度 α}
   证明: by
   induction s using Finset.cons_induction <;> simp [*]
 
@@ -2807,7 +2807,7 @@ theorem ae_eq_comp'
 
 中文:
 定理 ae_eq_comp'
-  结论: {ν : Measure β} {f : α -> β} {g g' : β -> δ} (hf : AEMeasurable f μ)
+  结论: {ν : 测度 β} {f : α -> β} {g g' : β -> δ} (hf : 几乎处处可测 f μ)
   证明: (tendsto_ae_map hf).mono_right h2.ae_le h
 
 Depends on / 依赖: ae_le, h2.ae_le, mono_right, tendsto_ae_map
@@ -2825,8 +2825,8 @@ theorem Measure.QuasiMeasurePreserving.ae_eq_comp
   proof: ae_eq_comp' hf.aemeasurable h hf.absolutelyContinuous
 
 中文:
-定理 Measure.QuasiMeasurePreserving.ae_eq_comp
-  结论: {ν : Measure β} {f : α -> β} {g g' : β -> δ}
+定理 测度.拟保测.ae_eq_comp
+  结论: {ν : 测度 β} {f : α -> β} {g g' : β -> δ}
   证明: ae_eq_comp' hf.aemeasurable h hf.absolutelyContinuous
 
 Depends on / 依赖: absolutelyContinuous, ae_eq_comp, aemeasurable, hf.absolutelyContinuous, hf.aemeasurable
@@ -2847,7 +2847,7 @@ theorem ae_eq_comp
 
 中文:
 定理 ae_eq_comp
-  条件: {f : α -> β} {g g' : β -> δ} (hf : AEMeasurable f μ) (h : g =ᵐ[μ.map f] g')
+  条件: {f : α -> β} {g g' : β -> δ} (hf : 几乎处处可测 f μ) (h : g =ᵐ[μ.map f] g')
   证明: ae_eq_comp' hf h AbsolutelyContinuous.rfl
 
 @[to_additive]
@@ -2875,7 +2875,7 @@ theorem div_ae_eq_one
 
 中文:
 定理 div_ae_eq_one
-  条件: {β} [Group β] (f g : α -> β)
+  条件: {β} [群 β] (f g : α -> β)
   结论: f / g =ᵐ[μ] 1 ↔ f =ᵐ[μ] g
   证明: by
   refine ⟨fun h => h.mono fun x hx => ?_, fun h => h.mono fun x hx => ?_⟩
@@ -2905,7 +2905,7 @@ lemma one_le_div_ae
 
 中文:
 引理 one_le_div_ae
-  条件: {β : 类型} [Group β] [LE β] [MulRightMono β] (f g : α -> β)
+  条件: {β : 类型} [群 β] [LE β] [MulRightMono β] (f g : α -> β)
   证明: by
   refine ⟨fun h => h.mono fun a ha => ?_, fun h => h.mono fun a ha => ?_⟩
   · rwa [Pi.one_apply, Pi.div_apply, one_le_div'] at ha
@@ -2957,7 +2957,7 @@ theorem ae_restrict_eq
 
 中文:
 定理 ae_restrict_eq
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: ae (μ.restrict s) = ae μ ⊓ 𝓟 s
   证明: by
   ext t
@@ -3044,7 +3044,7 @@ theorem self_mem_ae_restrict
 
 中文:
 定理 self_mem_ae_restrict
-  条件: {s} (hs : MeasurableSet s)
+  条件: {s} (hs : 可测集 s)
   结论: s in ae (μ.restrict s)
   证明: by
   simp only [ae_restrict_eq hs, mem_principal, mem_inf_iff]
@@ -3150,7 +3150,7 @@ lemma nullMeasurableSet_restrict
 
 中文:
 引理 nullMeasurableSet_restrict
-  条件: (hs : NullMeasurableSet s μ) {t : Set α}
+  条件: (hs : NullMeasurableSet s μ) {t : 集合 α}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨t', -, ht', t't⟩ : exists t' ⊇ t, MeasurableSet t' ∧ t' =ᵐ[μ.restrict s] t :=
@@ -3200,7 +3200,7 @@ lemma nullMeasurableSet_restrict_of_subset
 
 中文:
 引理 nullMeasurableSet_restrict_of_subset
-  条件: {t : Set α} (ht : t subseteq s)
+  条件: {t : 集合 α} (ht : t subseteq s)
   证明: by
   refine ⟨fun h => ?_, fun h => h.mono_ac absolutelyContinuous_restrict⟩
   obtain ⟨t', t'_subs, ht', t't⟩ : exists t' subseteq t, MeasurableSet t' ∧ t' =ᵐ[μ.restrict s] t :=
@@ -3249,8 +3249,8 @@ theorem MeasurableSet.nullMeasurableSet_subtype_coe
   | empty => simp only [image_empty, nullMeasur
 
 中文:
-定理 MeasurableSet.nullMeasurableSet_subtype_coe
-  结论: {t : Set s} (hs : NullMeasurableSet s μ)
+定理 可测集.nullMeasurableSet_subtype_coe
+  结论: {t : 集合 s} (hs : NullMeasurableSet s μ)
   证明: by
   rw [Subtype.instMeasurableSpace]; rw [comap_eq_generateFrom] at ht
   induction t, ht using generateFrom_induction with
@@ -3289,7 +3289,7 @@ theorem NullMeasurableSet.subtype_coe
 
 中文:
 定理 NullMeasurableSet.subtype_coe
-  结论: {t : Set s} (hs : NullMeasurableSet s μ)
+  结论: {t : 集合 s} (hs : NullMeasurableSet s μ)
   证明: NullMeasurableSet.image _ μ Subtype.coe_injective
     (fun _ => MeasurableSet.nullMeasurableSet_subtype_coe hs) ht
 
@@ -3311,7 +3311,7 @@ theorem measure_subtype_coe_le_comap
 
 中文:
 定理 measure_subtype_coe_le_comap
-  条件: (hs : NullMeasurableSet s μ) (t : Set s)
+  条件: (hs : NullMeasurableSet s μ) (t : 集合 s)
   证明: le_comap_apply _ _ Subtype.coe_injective (fun _ =>
     MeasurableSet.nullMeasurableSet_subtype_coe hs) _
 
@@ -3332,7 +3332,7 @@ theorem measure_subtype_coe_eq_zero_of_comap_eq_zero
 
 中文:
 定理 measure_subtype_coe_eq_zero_of_comap_eq_zero
-  结论: (hs : NullMeasurableSet s μ) {t : Set s}
+  结论: (hs : NullMeasurableSet s μ) {t : 集合 s}
   证明: eq_bot_iff.mpr (measure_subtype_coe_le_comap hs t).trans ht.le
 
 Depends on / 依赖: eq_bot_iff, eq_bot_iff.mpr, ht.le, measure_subtype_coe_le_comap
@@ -3361,8 +3361,8 @@ definition Subtype.measureSpace
   body: Measure.comap Subtype.val volume
 
 中文:
-定义 Subtype.measureSpace
-  签名: : MeasureSpace (Subtype p) where
+定义 子类型.measureSpace
+  签名: : 测度空间 (子类型 p) where
   定义体: Measure.comap Subtype.val volume
 
 Depends on / 依赖: Measure, Measure.comap, Subtype, Subtype.val, volume
@@ -3381,8 +3381,8 @@ theorem Subtype.volume_def
   proof: rfl
 
 中文:
-定理 Subtype.volume_def
-  结论: (volume : Measure u) = volume.comap Subtype.val
+定理 子类型.volume_def
+  结论: (volume : 测度 u) = volume.comap 子类型.val
   证明: rfl
 -/
 theorem Subtype.volume_def : (volume : Measure u) = volume.comap Subtype.val :=
@@ -3402,9 +3402,9 @@ theorem Subtype.volume_univ
   · exact fun t => MeasurableSet.nullMeasurableSet_subtype_coe hu
 
 中文:
-定理 Subtype.volume_univ
+定理 子类型.volume_univ
   条件: (hu : NullMeasurableSet u)
-  结论: volume (univ : Set u) = volume u
+  结论: volume (univ : 集合 u) = volume u
   证明: by
   rw [Subtype.volume_def]; rw [comap_apply₀ _ _ _ _ MeasurableSet.univ.nullMeasurableSet]
   · simp only [image_univ, Subtype.range_coe_subtype, ofPred_mem_eq]
@@ -3429,7 +3429,7 @@ theorem volume_subtype_coe_le_volume
 
 中文:
 定理 volume_subtype_coe_le_volume
-  条件: (hu : NullMeasurableSet u) (t : Set u)
+  条件: (hu : NullMeasurableSet u) (t : 集合 u)
   证明: measure_subtype_coe_le_comap hu t
 
 Depends on / 依赖: measure_subtype_coe_le_comap
@@ -3448,7 +3448,7 @@ theorem volume_subtype_coe_eq_zero_of_volume_eq_zero
 
 中文:
 定理 volume_subtype_coe_eq_zero_of_volume_eq_zero
-  结论: (hu : NullMeasurableSet u) {t : Set u}
+  结论: (hu : NullMeasurableSet u) {t : 集合 u}
   证明: measure_subtype_coe_eq_zero_of_comap_eq_zero hu ht
 
 Depends on / 依赖: measure_subtype_coe_eq_zero_of_comap_eq_zero
@@ -3488,7 +3488,7 @@ theorem map_comap
 
 中文:
 定理 map_comap
-  条件: (μ : Measure β)
+  条件: (μ : 测度 β)
   结论: (comap f μ).map f = μ.restrict (range f)
   证明: by
   ext1 t ht
@@ -3515,7 +3515,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: (μ : Measure β) (s : Set α)
+  条件: (μ : 测度 β) (s : 集合 α)
   结论: comap f μ s = μ (f '' s)
   证明: calc
     comap f μ s = comap f μ (f ⁻¹' f '' s) := by rw [hf.injective.preimage_image]
@@ -3545,7 +3545,7 @@ theorem comap_map
 
 中文:
 定理 comap_map
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: (map f μ).comap f = μ
   证明: by
   ext t _
@@ -3569,7 +3569,7 @@ theorem ae_map_iff
 
 中文:
 定理 ae_map_iff
-  条件: {p : β -> 命题} {μ : Measure α}
+  条件: {p : β -> 命题} {μ : 测度 α}
   结论: (对任意ᵐ x ∂μ.map f, p x) ↔ 对任意ᵐ x ∂μ, p (f x)
   证明: by
   simp only [ae_iff, hf.map_apply, preimage_ofPred_eq]
@@ -3589,7 +3589,7 @@ theorem restrict_map
 
 中文:
 定理 restrict_map
-  条件: (μ : Measure α) (s : Set β)
+  条件: (μ : 测度 α) (s : 集合 β)
   证明: Measure.ext fun t ht => by simp [hf.map_apply, ht, hf.measurable ht]
 
 Depends on / 依赖: Measure, Measure.ext, hf.map_apply, hf.measurable, map_apply, measurable
@@ -3609,7 +3609,7 @@ theorem comap_preimage
 
 中文:
 定理 comap_preimage
-  条件: (μ : Measure β) (s : Set β)
+  条件: (μ : 测度 β) (s : 集合 β)
   证明: by
   rw [← hf.map_apply]; rw [hf.map_comap]; rw [restrict_apply' hf.measurableSet_range]
 -/
@@ -3629,7 +3629,7 @@ lemma comap_restrict
 
 中文:
 引理 comap_restrict
-  条件: (μ : Measure β) (s : Set β)
+  条件: (μ : 测度 β) (s : 集合 β)
   证明: by
   ext t ht
   rw [Measure.restrict_apply ht]; rw [comap_apply hf]; rw [comap_apply hf]; rw [Measure.restrict_apply (hf.measurableSet_image.2 ht)]; rw [image_inter_preimage]
@@ -3652,7 +3652,7 @@ lemma restrict_comap
 
 中文:
 引理 restrict_comap
-  条件: (μ : Measure β) (s : Set α)
+  条件: (μ : 测度 β) (s : 集合 α)
   证明: by
   rw [comap_restrict hf]; rw [preimage_image_eq _ hf.injective]
 
@@ -3673,8 +3673,8 @@ theorem _root_.MeasurableEquiv.restrict_map
   proof: e.measurableEmbedding.restrict_map _ _
 
 中文:
-定理 _root_.MeasurableEquiv.restrict_map
-  条件: (e : α ≃ᵐ β) (μ : Measure α) (s : Set β)
+定理 _root_.可测等价.restrict_map
+  条件: (e : α ≃ᵐ β) (μ : 测度 α) (s : 集合 β)
   证明: e.measurableEmbedding.restrict_map _ _
 
 Depends on / 依赖: e.measurableEmbedding.restrict_map, measurableEmbedding, restrict_map
@@ -3693,8 +3693,8 @@ lemma _root_.MeasurableEquiv.comap_apply
   rw [e.measurableEmbedding.comap_apply]; rw [e.image_eq_preimage_symm]
 
 中文:
-引理 _root_.MeasurableEquiv.comap_apply
-  条件: (e : α ≃ᵐ β) (μ : Measure β) (s : Set α)
+引理 _root_.可测等价.comap_apply
+  条件: (e : α ≃ᵐ β) (μ : 测度 β) (s : 集合 α)
   证明: by
   rw [e.measurableEmbedding.comap_apply]; rw [e.image_eq_preimage_symm]
 
@@ -3720,8 +3720,8 @@ lemma MeasureTheory.Measure.map_eq_comap
   grind
 
 中文:
-引理 MeasureTheory.Measure.map_eq_comap
-  结论: {_ : MeasurableSpace α} {_ : MeasurableSpace β} {f : α -> β}
+引理 测度论.测度.map_eq_comap
+  结论: {_ : 可测空间 α} {_ : 可测空间 β} {f : α -> β}
   证明: by
   ext s hs
   rw [map_apply hf hs]; rw [hg.comap_apply]; rw [← measure_sdiff_null hμg]
@@ -3752,7 +3752,7 @@ theorem comap_subtype_coe_apply
 
 中文:
 定理 comap_subtype_coe_apply
-  结论: {_m0 : MeasurableSpace α} {s : Set α} (hs : MeasurableSet s)
+  结论: {_m0 : 可测空间 α} {s : 集合 α} (hs : 可测集 s)
   证明: (MeasurableEmbedding.subtype_coe hs).comap_apply _ _
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.subtype_coe, comap_apply, subtype_coe
@@ -3772,7 +3772,7 @@ theorem map_comap_subtype_coe
 
 中文:
 定理 map_comap_subtype_coe
-  结论: {m0 : MeasurableSpace α} {s : Set α} (hs : MeasurableSet s)
+  结论: {m0 : 可测空间 α} {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [(MeasurableEmbedding.subtype_coe hs).map_comap]; rw [Subtype.range_coe]
 
@@ -3793,7 +3793,7 @@ theorem ae_restrict_iff_subtype
 
 中文:
 定理 ae_restrict_iff_subtype
-  结论: {m0 : MeasurableSpace α} {μ : Measure α} {s : Set α}
+  结论: {m0 : 可测空间 α} {μ : 测度 α} {s : 集合 α}
   证明: by
   rw [← map_comap_subtype_coe hs]; rw [(MeasurableEmbedding.subtype_coe hs).ae_map_iff]
 
@@ -3824,8 +3824,8 @@ theorem volume_set_coe_def
 
 中文:
 定理 volume_set_coe_def
-  条件: (s : Set α)
-  结论: (volume : Measure s) = comap ((↑) : s -> α) volume
+  条件: (s : 集合 α)
+  结论: (volume : 测度 s) = comap ((↑) : s -> α) volume
   证明: rfl
 -/
 theorem volume_set_coe_def (s : Set α) : (volume : Measure s) = comap ((↑) : s -> α) volume :=
@@ -3841,8 +3841,8 @@ theorem MeasurableSet.map_coe_volume
   rw [volume_set_coe_def]; rw [(MeasurableEmbedding.subtype_coe hs).map_comap volume]; rw [Subtype.range_coe]
 
 中文:
-定理 MeasurableSet.map_coe_volume
-  条件: {s : Set α} (hs : MeasurableSet s)
+定理 可测集.map_coe_volume
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [volume_set_coe_def]; rw [(MeasurableEmbedding.subtype_coe hs).map_comap volume]; rw [Subtype.range_coe]
 
@@ -3864,7 +3864,7 @@ theorem volume_image_subtype_coe
 
 中文:
 定理 volume_image_subtype_coe
-  条件: {s : Set α} (hs : MeasurableSet s) (t : Set s)
+  条件: {s : 集合 α} (hs : 可测集 s) (t : 集合 s)
   证明: (comap_subtype_coe_apply hs volume t).symm
 
 @[simp]
@@ -3889,7 +3889,7 @@ theorem volume_preimage_coe
 
 中文:
 定理 volume_preimage_coe
-  条件: (hs : NullMeasurableSet s) (ht : MeasurableSet t)
+  条件: (hs : NullMeasurableSet s) (ht : 可测集 t)
   证明: by
   rw [volume_set_coe_def]; rw [comap_apply₀ _ _ Subtype.coe_injective
       (fun h => MeasurableSet.nullMeasurableSet_subtype_coe hs)
@@ -3921,7 +3921,7 @@ theorem piecewise_ae_eq_restrict
 
 中文:
 定理 piecewise_ae_eq_restrict
-  条件: [DecidablePred (· in s)] (hs : MeasurableSet s)
+  条件: [DecidablePred (· in s)] (hs : 可测集 s)
   证明: by
   rw [ae_restrict_eq hs]
   exact (piecewise_eqOn s f g).eventuallyEq.filter_mono inf_le_right
@@ -3945,7 +3945,7 @@ theorem piecewise_ae_eq_restrict_compl
 
 中文:
 定理 piecewise_ae_eq_restrict_compl
-  条件: [DecidablePred (· in s)] (hs : MeasurableSet s)
+  条件: [DecidablePred (· in s)] (hs : 可测集 s)
   证明: by
   rw [ae_restrict_eq hs.compl]
   exact (piecewise_eqOn_compl s f g).eventuallyEq.filter_mono inf_le_right
@@ -3998,7 +3998,7 @@ theorem mem_map_indicator_ae_iff_mem_map_restrict_ae_of_zero_mem
 
 中文:
 定理 mem_map_indicator_ae_iff_mem_map_restrict_ae_of_zero_mem
-  结论: [Zero β] {t : Set β}
+  结论: [零 β] {t : 集合 β}
   证明: by
   classical
   simp_rw [mem_map, mem_ae_iff]
@@ -4035,7 +4035,7 @@ theorem mem_map_indicator_ae_iff_of_zero_notMem
 
 中文:
 定理 mem_map_indicator_ae_iff_of_zero_notMem
-  条件: [Zero β] {t : Set β} (ht : (0 : β) ∉ t)
+  条件: [零 β] {t : 集合 β} (ht : (0 : β) ∉ t)
   证明: by
   classical
   rw [mem_map]; rw [mem_ae_iff]; rw [Set.indicator_preimage]; rw [Set.ite]; rw [Set.compl_union]; rw [Set.compl_inter]
@@ -4067,7 +4067,7 @@ theorem map_restrict_ae_le_map_indicator_ae
 
 中文:
 定理 map_restrict_ae_le_map_indicator_ae
-  条件: [Zero β] (hs : MeasurableSet s)
+  条件: [零 β] (hs : 可测集 s)
   证明: by
   intro t
   by_cases ht : (0 : β) in t
@@ -4101,7 +4101,7 @@ theorem indicator_ae_eq_restrict
 
 中文:
 定理 indicator_ae_eq_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: indicator s f =ᵐ[μ.restrict s] f
   证明: by
   classical exact piecewise_ae_eq_restrict hs
@@ -4122,7 +4122,7 @@ theorem indicator_ae_eq_restrict_compl
 
 中文:
 定理 indicator_ae_eq_restrict_compl
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   classical exact piecewise_ae_eq_restrict_compl hs
 
@@ -4147,7 +4147,7 @@ theorem indicator_ae_eq_of_restrict_compl_ae_eq_zero
 
 中文:
 定理 indicator_ae_eq_of_restrict_compl_ae_eq_zero
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs.compl] at hf
   filter_upwards [hf] with x hx
@@ -4180,7 +4180,7 @@ theorem indicator_ae_eq_zero_of_restrict_ae_eq_zero
 
 中文:
 定理 indicator_ae_eq_zero_of_restrict_ae_eq_zero
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs] at hf
   filter_upwards [hf] with x hx
@@ -4257,7 +4257,7 @@ theorem ae_eq_restrict_iff_indicator_ae_eq
 
 中文:
 定理 ae_eq_restrict_iff_indicator_ae_eq
-  条件: {g : α -> β} (hs : MeasurableSet s)
+  条件: {g : α -> β} (hs : 可测集 s)
   证明: by
   rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs]
   refine ⟨fun h => ?_, fun h => ?_⟩ <;> filter_upwards [h] with x hx
@@ -4298,8 +4298,8 @@ lemma MeasureTheory.Measure.sum_restrict_le
   -- `P` is a partition of `s i` when restricted to `C ∈ G i` (subset
 
 中文:
-引理 MeasureTheory.Measure.sum_restrict_le
-  结论: {_ : MeasurableSpace α}
+引理 测度论.测度.sum_restrict_le
+  结论: {_ : 可测空间 α}
   证明: by
   classical
   refine le_iff.mpr (fun t ht => le_of_eq_of_le (sum_apply _ ht) ?_)

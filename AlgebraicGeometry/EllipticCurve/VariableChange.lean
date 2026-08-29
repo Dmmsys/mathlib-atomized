@@ -68,7 +68,7 @@ structure VariableChange
 
 中文:
 结构 VariableChange
-  参数: (R : 类型u) [CommRing R]
+  参数: (R : 类型u) [交换环 R]
   公理与运算 (4 个):
     - u : Rˣ
     - r : R
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (VariableChange R)
+  签名: 幺 (VariableChange R)
   定义体: ⟨1, 0, 0, 0⟩
 -/
 instance : One (VariableChange R) where
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (VariableChange R)
+  签名: 乘法 (VariableChange R)
   定义体: {
     u := C.u * C'.u
     r := C.r * C'.u ^ 2 + C'.r
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (VariableChange R)
+  签名: 取逆 (VariableChange R)
   定义体: {
     u := C.u⁻¹
     r := -C.r * C.u⁻¹ ^ 2
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (VariableChange R)
+  签名: 群 (VariableChange R)
   定义体: by
     simp only [mul_def, one_def, zero_add, zero_mul, mul_zero, one_mul]
   mul_one C := by
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (VariableChange R) (WeierstrassCurve R)
+  签名: 标量乘法 (VariableChange R) (WeierstrassCurve R)
   定义体: {
     a₁ := C.u⁻¹ * (W.a₁ + 2 * C.s)
     a₂ := C.u⁻¹ ^ 2 * (W.a₂ - C.s * W.a₁ + 3 * C.r - C.s ^ 2)
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (VariableChange R) (WeierstrassCurve R)
+  签名: 乘法作用 (VariableChange R) (WeierstrassCurve R)
   定义体: by
     rw [VariableChange.one_def]; rw [variableChange_def]; rw [inv_one]; rw [Units.val_one]
     ext <;> dsimp only <;> ring1
@@ -626,7 +626,7 @@ instance :
 
 中文:
 实例 :
-  签名: (C • W).IsElliptic
+  签名: (C • W).是Elliptic
   定义体: by
   rw [isElliptic_iff]; rw [variableChange_Δ]
   exact (C.u⁻¹.isUnit.pow 12).mul W.isUnit_Δ
@@ -787,7 +787,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: [Algebra R A]
+  签名: [代数 R A]
   定义体: C.map algebraMap R A
 
 Depends on / 依赖: C.map, algebraMap
@@ -809,7 +809,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: C.map (RingHom.id R) = C
+  结论: C.map (环态射.id R) = C
   证明: rfl
 -/
 lemma map_id : C.map (RingHom.id R) = C :=
@@ -827,7 +827,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: {A : 类型v} [CommRing A] (φ : R ->+* A) {B : Type w} [CommRing B] (ψ : A ->+* B)
+  条件: {A : 类型v} [交换环 A] (φ : R ->+* A) {B : 类型 w} [交换环 B] (ψ : A ->+* B)
   证明: rfl
 
 @[simp]
@@ -847,7 +847,7 @@ lemma map_baseChange
 
 中文:
 引理 map_baseChange
-  结论: {S : Type s} [CommRing S] [Algebra R S] {A : 类型v} [CommRing A] [Algebra R A]
+  结论: {S : 类型 s} [交换环 S] [代数 R S] {A : 类型v} [交换环 A] [代数 R A]
   证明: congr_arg C.map ψ.comp_algebraMap_of_tower R
 
 Depends on / 依赖: C.map, comp_algebraMap_of_tower, congr_arg
@@ -870,7 +870,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: {φ : R ->+* A} (hφ : Function.Injective φ)
+  条件: {φ : R ->+* A} (hφ : 函数.单射 φ)
   证明: fun _ _ h => by
   rcases mk.inj h with ⟨h, _, _, _⟩
   replace h := (Units.mk.inj h).left

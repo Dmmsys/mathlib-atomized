@@ -132,7 +132,7 @@ structure MorphComponents
   参数: (n : 自然数) (Z : C)
   公理与运算 (2 个):
     - a : X _⦋n + 1⦌ ⟶ Z
-    - b : Fin (n + 1) -> (X _⦋n⦌ ⟶ Z)
+    - b : 有限集 (n + 1) -> (X _⦋n⦌ ⟶ Z)
 -/
 structure MorphComponents (n : Nat) (Z : C) where
   a : X _⦋n + 1⦌ ⟶ Z

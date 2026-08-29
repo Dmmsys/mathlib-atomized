@@ -59,7 +59,7 @@ definition AffineScheme
 deriving Category
 
 中文:
-定义 AffineScheme
+定义 仿射概形
   定义体: Scheme.Spec.EssImageSubcategory
 deriving Category
 
@@ -79,10 +79,10 @@ class IsAffine
     - affine : IsIso X.toSpecΓ
 
 中文:
-类 IsAffine
-  参数: (X : Scheme)
+类 是仿射
+  参数: (X : 概形)
   公理与运算 (1 个):
-    - affine : IsIso X.toSpecΓ
+    - affine : 是同构 X.toSpecΓ
 -/
 class IsAffine (X : Scheme) : Prop where
   affine : IsIso X.toSpecΓ
@@ -104,8 +104,8 @@ definition Scheme.isoSpec
 @[reassoc]
 
 中文:
-定义 Scheme.isoSpec
-  签名: (X : Scheme) [IsAffine X]
+定义 概形.isoSpec
+  签名: (X : 概形) [是仿射 X]
   定义体: asIso X.toSpecΓ
 
 @[reassoc]
@@ -128,8 +128,8 @@ theorem Scheme.isoSpec_hom_naturality
 @[reassoc]
 
 中文:
-定理 Scheme.isoSpec_hom_naturality
-  条件: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
+定理 概形.isoSpec_hom_naturality
+  条件: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
   证明: by
   simp only [isoSpec, asIso_hom, Scheme.toSpecΓ_naturality]
 
@@ -154,8 +154,8 @@ theorem Scheme.isoSpec_inv_naturality
 @[reassoc (attr := simp)]
 
 中文:
-定理 Scheme.isoSpec_inv_naturality
-  条件: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
+定理 概形.isoSpec_inv_naturality
+  条件: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
   证明: by
   rw [Iso.eq_inv_comp]; rw [isoSpec]; rw [asIso_hom]; rw [← Scheme.toSpecΓ_naturality_assoc]; rw [isoSpec]; rw [asIso_inv]; rw [IsIso.hom_inv_id]; rw [Category.comp_id]
 
@@ -179,8 +179,8 @@ lemma Scheme.toSpecΓ_isoSpec_inv
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.toSpecΓ_isoSpec_inv
-  条件: (X : Scheme.{u}) [IsAffine X]
+引理 概形.toSpecΓ_isoSpec_inv
+  条件: (X : 概形.{u}) [是仿射 X]
   证明: X.isoSpec.hom_inv_id
 
 @[reassoc (attr := simp)]
@@ -201,8 +201,8 @@ lemma Scheme.isoSpec_inv_toSpecΓ
   proof: X.isoSpec.inv_hom_id
 
 中文:
-引理 Scheme.isoSpec_inv_toSpecΓ
-  条件: (X : Scheme.{u}) [IsAffine X]
+引理 概形.isoSpec_inv_toSpecΓ
+  条件: (X : 概形.{u}) [是仿射 X]
   证明: X.isoSpec.inv_hom_id
 
 Depends on / 依赖: X.isoSpec.inv_hom_id, inv_hom_id, isoSpec
@@ -223,8 +223,8 @@ definition AffineScheme.mk
   body: ⟨X, ΓSpec.adjunction.mem_essImage_of_unit_isIso _⟩
 
 中文:
-定义 AffineScheme.mk
-  签名: (X : Scheme) (_ : IsAffine X)
+定义 仿射概形.mk
+  签名: (X : 概形) (_ : 是仿射 X)
   定义体: ⟨X, ΓSpec.adjunction.mem_essImage_of_unit_isIso _⟩
 
 Depends on / 依赖: Spec.adjunction.mem_essImage_of_unit_isIso, adjunction, mem_essImage_of_unit_isIso
@@ -241,8 +241,8 @@ definition AffineScheme.of
   body: AffineScheme.mk X h
 
 中文:
-定义 AffineScheme.of
-  签名: (X : Scheme) [h : IsAffine X]
+定义 仿射概形.of
+  签名: (X : 概形) [h : 是仿射 X]
   定义体: AffineScheme.mk X h
 
 Depends on / 依赖: AffineScheme, AffineScheme.mk
@@ -261,8 +261,8 @@ definition AffineScheme.ofHom
 @[simp]
 
 中文:
-定义 AffineScheme.ofHom
-  签名: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
+定义 仿射概形.ofHom
+  签名: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
   定义体: InducedCategory.homMk f
 
 @[simp]
@@ -286,8 +286,8 @@ theorem essImage_Spec
 
 中文:
 定理 essImage_Spec
-  条件: {X : Scheme}
-  结论: Scheme.Spec.essImage X ↔ IsAffine X
+  条件: {X : 概形}
+  结论: 概形.Spec.essImage X ↔ 是仿射 X
   证明: ⟨fun h => ⟨Functor.essImage.unit_isIso h⟩,
     fun _ => ΓSpec.adjunction.mem_essImage_of_unit_isIso _⟩
 
@@ -307,7 +307,7 @@ instance isAffine_affineScheme
 
 中文:
 实例 isAffine_affineScheme
-  签名: (X : AffineScheme.{u})
+  签名: (X : 仿射概形.{u})
   定义体: ⟨Functor.essImage.unit_isIso X.property⟩
 
 Depends on / 依赖: Functor, Functor.essImage.unit_isIso, X.property, essImage, property, unit_isIso
@@ -328,7 +328,7 @@ instance isAffine_Spec
 
 中文:
 实例 isAffine_Spec
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: AlgebraicGeometry.isAffine_affineScheme ⟨_, Scheme.Spec.obj_mem_essImage (op R)⟩
 
 Depends on / 依赖: AlgebraicGeometry, AlgebraicGeometry.isAffine_affineScheme, MorphismProperty, MorphismProperty.pullback_fst, Scheme, Scheme.Spec.obj_mem_essImage, isAffine_affineScheme, obj_mem_essImage, pullback_fst
@@ -347,9 +347,9 @@ theorem IsAffine.of_isIso
   rw [← essImage_Spec] at h ⊢; exact Functor.essImage.ofIso (asIso f).symm h
 
 中文:
-定理 IsAffine.of_isIso
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsIso f] [h : IsAffine Y]
-  结论: IsAffine X
+定理 是仿射.of_isIso
+  条件: {X Y : 概形} (f : X ⟶ Y) [是同构 f] [h : 是仿射 Y]
+  结论: 是仿射 X
   证明: by
   rw [← essImage_Spec] at h ⊢; exact Functor.essImage.ofIso (asIso f).symm h
 
@@ -368,9 +368,9 @@ theorem IsAffine.iff_of_isIso
   proof: ⟨fun _ => .of_isIso (inv f), fun _ => .of_isIso f⟩
 
 中文:
-定理 IsAffine.iff_of_isIso
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsIso f]
-  结论: IsAffine X ↔ IsAffine Y
+定理 是仿射.iff_of_isIso
+  条件: {X Y : 概形} (f : X ⟶ Y) [是同构 f]
+  结论: 是仿射 X ↔ 是仿射 Y
   证明: ⟨fun _ => .of_isIso (inv f), fun _ => .of_isIso f⟩
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, of_isIso, restrict
@@ -391,7 +391,7 @@ definition arrowIsoSpecΓOfIsAffine
 
 中文:
 定义 arrowIsoSpecΓOfIsAffine
-  签名: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
+  签名: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
   定义体: Arrow.isoMk X.isoSpec Y.isoSpec (ΓSpec.adjunction.unit_naturality _)
 
 Depends on / 依赖: Arrow.isoMk, Scheme, Scheme.Hom.resLE, Spec.adjunction.unit_naturality, X.isoSpec, Y.isoSpec, adjunction, infer_instance, isoSpec, unit_naturality
@@ -411,7 +411,7 @@ definition arrowIsoΓSpecOfIsAffine
 
 中文:
 定义 arrowIsoΓSpecOfIsAffine
-  签名: {A B : CommRingCat} (f : A ⟶ B)
+  签名: {A B : 交换环范畴} (f : A ⟶ B)
   定义体: Arrow.isoMk (Scheme.ΓSpecIso _).symm (Scheme.ΓSpecIso _).symm
     (Scheme.ΓSpecIso_inv_naturality f).symm
 
@@ -431,8 +431,8 @@ theorem Scheme.isoSpec_Spec
   proof: Iso.ext (SpecMap_ΓSpecIso_hom R).symm
 
 中文:
-定理 Scheme.isoSpec_Spec
-  条件: (R : CommRingCat.{u})
+定理 概形.isoSpec_Spec
+  条件: (R : 交换环范畴.{u})
   证明: Iso.ext (SpecMap_ΓSpecIso_hom R).symm
 
 Depends on / 依赖: Iso.ext
@@ -450,8 +450,8 @@ theorem Scheme.isoSpec_Spec_hom
   proof: (SpecMap_ΓSpecIso_hom R).symm
 
 中文:
-定理 Scheme.isoSpec_Spec_hom
-  条件: (R : CommRingCat.{u})
+定理 概形.isoSpec_Spec_hom
+  条件: (R : 交换环范畴.{u})
   证明: (SpecMap_ΓSpecIso_hom R).symm
 -/
 @[simp] theorem Scheme.isoSpec_Spec_hom (R : CommRingCat.{u}) :
@@ -467,8 +467,8 @@ theorem Scheme.isoSpec_Spec_inv
   proof: congr($(isoSpec_Spec R).inv)
 
 中文:
-定理 Scheme.isoSpec_Spec_inv
-  条件: (R : CommRingCat.{u})
+定理 概形.isoSpec_Spec_inv
+  条件: (R : 交换环范畴.{u})
   证明: congr($(isoSpec_Spec R).inv)
 -/
 @[simp] theorem Scheme.isoSpec_Spec_inv (R : CommRingCat.{u}) :
@@ -486,7 +486,7 @@ lemma ext_of_isAffine
 
 中文:
 引理 ext_of_isAffine
-  条件: {X Y : Scheme} [IsAffine Y] {f g : X ⟶ Y} (e : f.appTop = g.appTop)
+  条件: {X Y : 概形} [是仿射 Y] {f g : X ⟶ Y} (e : f.appTop = g.appTop)
   证明: by
   rw [← cancel_mono Y.toSpecΓ]; rw [Scheme.toSpecΓ_naturality]; rw [Scheme.toSpecΓ_naturality]; rw [e]
 
@@ -575,7 +575,7 @@ definition Spec
 
 中文:
 定义 Spec
-  签名: : CommRingCatᵒᵖ ⥤ AffineScheme
+  签名: : CommRingCatᵒᵖ ⥤ 仿射概形
   定义体: Scheme.Spec.toEssImage
 
 Depends on / 依赖: Scheme, Scheme.Spec.toEssImage, toEssImage
@@ -594,7 +594,7 @@ instance Spec_full
 
 中文:
 实例 Spec_full
-  签名: : Spec.Full
+  签名: : Spec.满
   定义体: Functor.Full.toEssImage _
 
 Depends on / 依赖: Functor, Functor.Full.toEssImage, toEssImage
@@ -611,7 +611,7 @@ instance Spec_faithful
 
 中文:
 实例 Spec_faithful
-  签名: : Spec.Faithful
+  签名: : Spec.忠实
   定义体: Functor.Faithful.toEssImage _
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.toEssImage, toEssImage
@@ -628,7 +628,7 @@ instance Spec_essSurj
 
 中文:
 实例 Spec_essSurj
-  签名: : Spec.EssSurj
+  签名: : Spec.本质满射
   定义体: Functor.EssSurj.toEssImage (F := _)
 
 Depends on / 依赖: EssSurj, Functor, Functor.EssSurj.toEssImage, toEssImage
@@ -647,7 +647,7 @@ definition forgetToScheme
 
 中文:
 定义 forgetToScheme
-  签名: : AffineScheme ⥤ Scheme
+  签名: : 仿射概形 ⥤ 概形
   定义体: Scheme.Spec.essImage.ι
 
 Depends on / 依赖: QuasiSeparated, QuasiSeparated.of_quasiSeparatedSpace, Scheme, Scheme.Spec.essImage, essImage, of_quasiSeparatedSpace
@@ -666,7 +666,7 @@ instance forgetToScheme_full
 
 中文:
 实例 forgetToScheme_full
-  签名: : forgetToScheme.Full
+  签名: : forgetToScheme.满
   定义体: inferInstanceAs Scheme.Spec.essImage.ι.Full
 
 Depends on / 依赖: Scheme, Scheme.Spec.essImage, essImage
@@ -684,7 +684,7 @@ instance forgetToScheme_faithful
 
 中文:
 实例 forgetToScheme_faithful
-  签名: : forgetToScheme.Faithful
+  签名: : forgetToScheme.忠实
   定义体: inferInstanceAs Scheme.Spec.essImage.ι.Faithful
 
 Depends on / 依赖: Faithful, Scheme, Scheme.Spec.essImage, essImage
@@ -702,7 +702,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : AffineSchemeᵒᵖ ⥤ CommRingCat
+  签名: : AffineSchemeᵒᵖ ⥤ 交换环范畴
   定义体: forgetToScheme.op ⋙ Scheme.Γ
 
 Depends on / 依赖: Scheme, forgetToScheme, forgetToScheme.op
@@ -720,7 +720,7 @@ definition equivCommRingCat
 
 中文:
 定义 equivCommRingCat
-  签名: : AffineScheme ≌ CommRingCatᵒᵖ
+  签名: : 仿射概形 ≌ CommRingCatᵒᵖ
   定义体: equivEssImageOfReflective.symm
 
 Depends on / 依赖: equivEssImageOfReflective, equivEssImageOfReflective.symm
@@ -738,7 +738,7 @@ instance :
 
 中文:
 实例 :
-  签名: Γ.{u}.rightOp.IsEquivalence
+  签名: Γ.{u}.rightOp.是等价
   定义体: equivCommRingCat.isEquivalence_functor
 
 Depends on / 依赖: Scheme, equivCommRingCat, equivCommRingCat.isEquivalence_functor, isEquivalence_functor, quasiCompact_of_compactSpace
@@ -755,7 +755,7 @@ instance :
 
 中文:
 实例 :
-  签名: Γ.{u}.rightOp.op.IsEquivalence
+  签名: Γ.{u}.rightOp.op.是等价
   定义体: equivCommRingCat.op.isEquivalence_functor
 
 Depends on / 依赖: equivCommRingCat, equivCommRingCat.op.isEquivalence_functor, isEquivalence_functor
@@ -772,7 +772,7 @@ instance ΓIsEquiv
 
 中文:
 实例 ΓIsEquiv
-  签名: : Γ.{u}.IsEquivalence
+  签名: : Γ.{u}.是等价
   定义体: inferInstanceAs (Γ.{u}.rightOp.op ⋙ (opOpEquivalence _).functor).IsEquivalence
 
 Depends on / 依赖: IsEquivalence, functor, opOpEquivalence, rightOp, rightOp.op
@@ -791,7 +791,7 @@ instance hasColimits
 
 中文:
 实例 hasColimits
-  签名: : HasColimits AffineScheme.{u}
+  签名: : 有余极限 仿射概形.{u}
   定义体: haveI := Adjunction.has_limits_of_equivalence.{u} Γ.{u}
   Adjunction.has_colimits_of_equivalence.{u} (opOpEquivalence AffineScheme.{u}).inverse
 
@@ -814,7 +814,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits AffineScheme.{u}
+  签名: : 有极限 仿射概形.{u}
   定义体: by
   have := Adjunction.has_colimits_of_equivalence Γ.{u}
   have : HasLimits AffineScheme.{u}ᵒᵖᵒᵖ := Limits.hasLimits_op_of_hasColimits
@@ -900,8 +900,8 @@ definition IsAffineOpen
   body: IsAffine U
 
 中文:
-定义 IsAffineOpen
-  签名: {X : Scheme} (U : X.Opens)
+定义 是仿射开集
+  签名: {X : 概形} (U : X.Opens)
   定义体: IsAffine U
 
 Depends on / 依赖: IsAffine
@@ -918,8 +918,8 @@ definition Scheme.affineOpens
   body: {U : X.Opens | IsAffineOpen U}
 
 中文:
-定义 Scheme.affineOpens
-  签名: (X : Scheme)
+定义 概形.affineOpens
+  签名: (X : 概形)
   定义体: {U : X.Opens | IsAffineOpen U}
 
 Depends on / 依赖: IsAffineOpen, X.Opens
@@ -943,7 +943,7 @@ theorem isAffineOpen_opensRange
 
 中文:
 定理 isAffineOpen_opensRange
-  结论: {X Y : Scheme} [IsAffine X] (f : X ⟶ Y)
+  结论: {X Y : 概形} [是仿射 X] (f : X ⟶ Y)
   证明: by
   refine .of_isIso (IsOpenImmersion.isoOfRangeEq f (Y.ofRestrict _) ?_).inv
   exact Subtype.range_val.symm
@@ -969,8 +969,8 @@ theorem isAffineOpen_top
 
 中文:
 定理 isAffineOpen_top
-  条件: (X : Scheme) [IsAffine X]
-  结论: IsAffineOpen (⊤ : X.Opens)
+  条件: (X : 概形) [是仿射 X]
+  结论: 是仿射开集 (⊤ : X.Opens)
   证明: by
   convert! isAffineOpen_opensRange (𝟙 X)
   ext1
@@ -995,8 +995,8 @@ theorem exists_isAffineOpen_mem_and_subset
     ⟨AlgebraicGeometry.isAffineOpen_opensRange f (H := hf.1), hf.2.1, hf.2.2⟩⟩
 
 中文:
-定理 exists_isAffineOpen_mem_and_subset
-  结论: {X : Scheme.{u}} {x : X}
+定理 存在_isAffineOpen_mem_and_subset
+  结论: {X : 概形.{u}} {x : X}
   证明: by
   obtain ⟨R, f, hf⟩ := AlgebraicGeometry.Scheme.exists_affine_mem_range_and_range_subset hxU
   exact ⟨Scheme.Hom.opensRange f (H := hf.1),
@@ -1019,8 +1019,8 @@ lemma Scheme.exists_Spec_apply_eq
   proof: ⟨X.affineOpenCover.X _, X.affineOpenCover.f _, inferInstance, X.affineOpenCover.covers x⟩
 
 中文:
-引理 Scheme.exists_Spec_apply_eq
-  条件: {X : Scheme.{u}} (x : X)
+引理 概形.存在_Spec_apply_eq
+  条件: {X : 概形.{u}} (x : X)
   证明: ⟨X.affineOpenCover.X _, X.affineOpenCover.f _, inferInstance, X.affineOpenCover.covers x⟩
 
 Depends on / 依赖: X.affineOpenCover.X, X.affineOpenCover.covers, X.affineOpenCover.f, affineOpenCover, covers
@@ -1039,8 +1039,8 @@ instance Scheme.isAffine_affineCover
   body: isAffine_Spec _
 
 中文:
-实例 Scheme.isAffine_affineCover
-  签名: (X : Scheme) (i : X.affineCover.I₀)
+实例 概形.isAffine_affineCover
+  签名: (X : 概形) (i : X.affineCover.I₀)
   定义体: isAffine_Spec _
 
 Depends on / 依赖: isAffine_Spec
@@ -1058,8 +1058,8 @@ instance Scheme.isAffine_affineBasisCover
   body: isAffine_Spec _
 
 中文:
-实例 Scheme.isAffine_affineBasisCover
-  签名: (X : Scheme) (i : X.affineBasisCover.I₀)
+实例 概形.isAffine_affineBasisCover
+  签名: (X : 概形) (i : X.affineBasisCover.I₀)
   定义体: isAffine_Spec _
 
 Depends on / 依赖: isAffine_Spec
@@ -1077,8 +1077,8 @@ instance Scheme.isAffine_affineOpenCover
   body: inferInstanceAs (IsAffine (Spec (𝒰.X i)))
 
 中文:
-实例 Scheme.isAffine_affineOpenCover
-  签名: (X : Scheme) (𝒰 : X.AffineOpenCover) (i : 𝒰.I₀)
+实例 概形.isAffine_affineOpenCover
+  签名: (X : 概形) (𝒰 : X.AffineOpenCover) (i : 𝒰.I₀)
   定义体: inferInstanceAs (IsAffine (Spec (𝒰.X i)))
 
 Depends on / 依赖: IsAffine
@@ -1113,9 +1113,9 @@ theorem Scheme.isBasis_affineOpens
   exact isAffineOpen_opensRange _
 
 中文:
-定理 Scheme.isBasis_affineOpens
-  条件: (X : Scheme)
-  结论: Opens.IsBasis X.affineOpens
+定理 概形.isBasis_affineOpens
+  条件: (X : 概形)
+  结论: Opens.是基 X.affineOpens
   证明: by
   rw [Opens.isBasis_iff_nbhd]
   rintro U x (hU : x in (U : Set X))
@@ -1150,7 +1150,7 @@ theorem iSup_affineOpens_eq_top
 
 中文:
 定理 iSup_affineOpens_eq_top
-  条件: (X : Scheme)
+  条件: (X : 概形)
   结论: ⨆ i : X.affineOpens, (i : X.Opens) = ⊤
   证明: by
   apply Opens.ext
@@ -1176,7 +1176,7 @@ theorem Scheme.map_PrimeSpectrum_basicOpen_of_affine
   proof: Scheme.toSpecΓ_preimage_basicOpen _ _
 
 中文:
-定理 Scheme.map_PrimeSpectrum_basicOpen_of_affine
+定理 概形.map_PrimeSpectrum_basicOpen_of_affine
   证明: Scheme.toSpecΓ_preimage_basicOpen _ _
 
 Depends on / 依赖: Scheme, Scheme.toSpec
@@ -1203,7 +1203,7 @@ theorem isBasis_basicOpen
 
 中文:
 定理 isBasis_basicOpen
-  条件: (X : Scheme) [IsAffine X]
+  条件: (X : 概形) [是仿射 X]
   证明: by
   convert!
     PrimeSpectrum.isBasis_basic_opens.of_isInducing
@@ -1236,8 +1236,8 @@ definition Scheme.Opens.toSpecΓ
   body: U.toScheme.toSpecΓ ≫ Spec.map U.topIso.inv
 
 中文:
-定义 Scheme.Opens.toSpecΓ
-  签名: {X : Scheme.{u}} (U : X.Opens)
+定义 概形.Opens.toSpecΓ
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: U.toScheme.toSpecΓ ≫ Spec.map U.topIso.inv
 
 Depends on / 依赖: Spec.map, U.toScheme.toSpec, U.topIso.inv, toScheme, topIso
@@ -1259,8 +1259,8 @@ lemma Scheme.Opens.toSpecΓ_SpecMap_presheaf_map
   simp [← Spec.map_comp, ← X.presheaf.map_comp, toSpecΓ_naturality_assoc]
 
 中文:
-引理 Scheme.Opens.toSpecΓ_SpecMap_presheaf_map
-  条件: {X : Scheme} (U V : X.Opens) (h : U <= V)
+引理 概形.Opens.toSpecΓ_SpecMap_presheaf_map
+  条件: {X : 概形} (U V : X.Opens) (h : U <= V)
   证明: by
   delta Scheme.Opens.toSpecΓ
   simp [← Spec.map_comp, ← X.presheaf.map_comp, toSpecΓ_naturality_assoc]
@@ -1287,8 +1287,8 @@ lemma Scheme.Opens.toSpecΓ_SpecMap_presheaf_map_top
 @[simp]
 
 中文:
-引理 Scheme.Opens.toSpecΓ_SpecMap_presheaf_map_top
-  条件: {X : Scheme} (U : X.Opens)
+引理 概形.Opens.toSpecΓ_SpecMap_presheaf_map_top
+  条件: {X : 概形} (U : X.Opens)
   证明: by
   delta Scheme.Opens.toSpecΓ
   simp [← Spec.map_comp, ← X.presheaf.map_comp, toSpecΓ_naturality]
@@ -1313,8 +1313,8 @@ lemma Scheme.Opens.toSpecΓ_top
   simp [Scheme.Opens.toSpecΓ, toSpecΓ_naturality]; rfl
 
 中文:
-引理 Scheme.Opens.toSpecΓ_top
-  条件: {X : Scheme}
+引理 概形.Opens.toSpecΓ_top
+  条件: {X : 概形}
   证明: by
   simp [Scheme.Opens.toSpecΓ, toSpecΓ_naturality]; rfl
 
@@ -1336,8 +1336,8 @@ lemma Scheme.Opens.toSpecΓ_appTop
   simp [Scheme.Opens.toSpecΓ]
 
 中文:
-引理 Scheme.Opens.toSpecΓ_appTop
-  条件: {X : Scheme.{u}} (U : X.Opens)
+引理 概形.Opens.toSpecΓ_appTop
+  条件: {X : 概形.{u}} (U : X.Opens)
   证明: by
   simp [Scheme.Opens.toSpecΓ]
 
@@ -1363,8 +1363,8 @@ lemma Scheme.Opens.toSpecΓ_naturality
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Opens.toSpecΓ_naturality
-  条件: {X Y : Scheme} (f : X ⟶ Y) (U : Y.Opens)
+引理 概形.Opens.toSpecΓ_naturality
+  条件: {X Y : 概形} (f : X ⟶ Y) (U : Y.Opens)
   证明: by
   simp only [toSpecΓ, topIso, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv,
     eqToHom_op, Hom.app_eq_appLE, Category.assoc, ← Spec.map_comp, Hom.appLE_map,
@@ -1390,7 +1390,7 @@ lemma Scheme.Opens.toSpecΓ_SpecMap_appLE
   simp [Hom.appLE, Hom.resLE]
 
 中文:
-引理 Scheme.Opens.toSpecΓ_SpecMap_appLE
+引理 概形.Opens.toSpecΓ_SpecMap_appLE
   证明: by
   simp [Hom.appLE, Hom.resLE]
 
@@ -1731,7 +1731,7 @@ lemma fromSpec_toSpecΓ
 
 中文:
 引理 fromSpec_toSpecΓ
-  条件: {X : Scheme} {U : X.Opens} (hU : IsAffineOpen U)
+  条件: {X : 概形} {U : X.Opens} (hU : 是仿射开集 U)
   证明: by
   rw [fromSpec]; rw [Category.assoc]; rw [← Scheme.Opens.toSpecΓ_SpecMap_presheaf_map_top]; rw [isoSpec_inv_toSpecΓ_assoc]
 
@@ -1778,7 +1778,7 @@ theorem map_fromSpec
 
 中文:
 定理 map_fromSpec
-  条件: {V : X.Opens} (hV : IsAffineOpen V) (f : op U ⟶ op V)
+  条件: {V : X.Opens} (hV : 是仿射开集 V) (f : op U ⟶ op V)
   证明: by
   have : IsAffine U := hU
   have : IsAffine _ := hV
@@ -1843,7 +1843,7 @@ lemma fromSpec_top
 
 中文:
 引理 fromSpec_top
-  条件: [IsAffine X]
+  条件: [是仿射 X]
   结论: (isAffineOpen_top X).fromSpec = X.isoSpec.inv
   证明: by
   rw [fromSpec]; rw [Iso.inv_comp_eq]
@@ -1921,7 +1921,7 @@ theorem _root_.AlgebraicGeometry.Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion
 include hU in
 
 中文:
-定理 _root_.AlgebraicGeometry.Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion
+定理 _root_.AlgebraicGeometry.概形.态射.isAffineOpen_iff_of_isOpenImmersion
   证明: IsAffine.iff_of_isIso (IsOpenImmersion.isoOfRangeEq (U.ι ≫ f) (f ''ᵁ U).ι
     (by simp [Scheme.Hom.comp_base, Set.range_comp])).inv
 
@@ -1947,7 +1947,7 @@ theorem image_of_isOpenImmersion
 
 中文:
 定理 image_of_isOpenImmersion
-  条件: (f : X ⟶ Y) [H : IsOpenImmersion f]
+  条件: (f : X ⟶ Y) [H : 是开浸入 f]
   证明: by
   rwa [f.isAffineOpen_iff_of_isOpenImmersion]
 
@@ -1968,7 +1968,7 @@ theorem preimage_of_isIso
 
 中文:
 定理 preimage_of_isIso
-  条件: {U : Y.Opens} (hU : IsAffineOpen U) (f : X ⟶ Y) [IsIso f]
+  条件: {U : Y.Opens} (hU : 是仿射开集 U) (f : X ⟶ Y) [是同构 f]
   证明: haveI : IsAffine _ := hU
   .of_isIso (f ∣_ U)
 
@@ -1991,7 +1991,7 @@ theorem preimage_of_isOpenImmersion
 
 中文:
 定理 preimage_of_isOpenImmersion
-  结论: {U : Y.Opens} (hU : IsAffineOpen U)
+  结论: {U : Y.Opens} (hU : 是仿射开集 U)
   证明: by
   rwa [← f.isAffineOpen_iff_of_isOpenImmersion, f.image_preimage_eq_opensRange_inf,
     inf_eq_right.mpr hU']
@@ -2020,8 +2020,8 @@ definition _root_.AlgebraicGeometry.IsOpenImmersion.affineOpensEquiv
   map_rel_iff' := 
 
 中文:
-定义 _root_.AlgebraicGeometry.IsOpenImmersion.affineOpensEquiv
-  签名: (f : X ⟶ Y) [H : IsOpenImmersion f]
+定义 _root_.AlgebraicGeometry.是开浸入.affineOpensEquiv
+  签名: (f : X ⟶ Y) [H : 是开浸入 f]
   定义体: ⟨⟨f ''ᵁ U, U.2.image_of_isOpenImmersion f⟩, Set.image_subset_range _ _⟩
   invFun U := ⟨f ⁻¹ᵁ U, U.1.2.preimage_of_isOpenImmersion _ U.2⟩
   left_inv _ := Subtype.ext (f.preimage_image_eq _)
@@ -2053,7 +2053,7 @@ definition _root_.AlgebraicGeometry.affineOpensRestrict
 
 中文:
 定义 _root_.AlgebraicGeometry.affineOpensRestrict
-  签名: {X : Scheme.{u}} (U : X.Opens)
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: (IsOpenImmersion.affineOpensEquiv U.ι).toEquiv.trans (Equiv.subtypeEquivProp (by simp))
 
 @[simp]
@@ -2292,7 +2292,7 @@ lemma Spec_basicOpen
 
 中文:
 引理 Spec_basicOpen
-  条件: {R : CommRingCat} (f : R)
+  条件: {R : 交换环范畴} (f : R)
   证明: basicOpen_eq_of_affine f ▸ (isAffineOpen_top (Spec <| .of R)).basicOpen _
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.basicOpen, basicOpen
@@ -2312,7 +2312,7 @@ instance [IsAffine
 include hU in
 
 中文:
-实例 [IsAffine
+实例 [是仿射
   签名: X] (r
   定义体: (isAffineOpen_top X).basicOpen _
 
@@ -2367,7 +2367,7 @@ theorem exists_basicOpen_le
   replace h₂ : X.basicOpen r
 
 中文:
-定理 exists_basicOpen_le
+定理 存在_basicOpen_le
   条件: {V : X.Opens} (x : V) (h : ↑x in U)
   证明: by
   have : IsAffine _ := hU
@@ -2405,7 +2405,7 @@ lemma algebraMap_Spec_obj
 
 中文:
 引理 algebraMap_Spec_obj
-  条件: {R : CommRingCat} {U}
+  条件: {R : 交换环范畴} {U}
   结论: algebraMap R Γ(Spec R, U) =
   证明: rfl
 -/
@@ -2540,7 +2540,7 @@ lemma appLE_eq_away_map
 
 中文:
 引理 appLE_eq_away_map
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) {U : Y.Opens} (hU : IsAffineOpen U)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) {U : Y.Opens} (hU : 是仿射开集 U)
   证明: hU.isLocalization_basicOpen r
     letI := hV.isLocalization_basicOpen (f.appLE U V e r)
     f.appLE (Y.basicOpen r) (X.basicOpen (f.appLE U V e r)) (by simp [Scheme.Hom.appLE]) =
@@ -2578,7 +2578,7 @@ lemma app_basicOpen_eq_away_map
 
 中文:
 引理 app_basicOpen_eq_away_map
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) {U : Y.Opens}
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) {U : Y.Opens}
   证明: hU.isLocalization_basicOpen r
     haveI := h.isLocalization_basicOpen (f.app U r)
     f.app (Y.basicOpen r) =
@@ -2620,7 +2620,7 @@ Arrow.isoMk (Iso.refl _) (X.presheaf.mapI
 
 中文:
 定义 appBasicOpenIsoAwayMap
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) {U : Y.Opens}
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) {U : Y.Opens}
   定义体: hU.isLocalization_basicOpen r
     haveI := h.isLocalization_basicOpen (f.app U r)
     Arrow.mk (f.app (Y.basicOpen r)) ≅
@@ -2737,7 +2737,7 @@ theorem _root_.AlgebraicGeometry.exists_basicOpen_le_affine_inter
   replace hf' := (hf'.trans (RingedSpace.basicOpen_res _ _ _))
 
 中文:
-定理 _root_.AlgebraicGeometry.exists_basicOpen_le_affine_inter
+定理 _root_.AlgebraicGeometry.存在_basicOpen_le_affine_inter
   证明: by
   obtain ⟨f, hf₁, hf₂⟩ := hU.exists_basicOpen_le ⟨x, hx.2⟩ hx.1
   obtain ⟨g, hg₁, hg₂⟩ := hV.exists_basicOpen_le ⟨x, hf₂⟩ hx.2
@@ -2882,7 +2882,7 @@ theorem primeIdealOf_isMaximal_of_isClosed
 
 中文:
 定理 primeIdealOf_isMaximal_of_isClosed
-  条件: (x : U) (hx : IsClosed {(x : X)})
+  条件: (x : U) (hx : 是闭集 {(x : X)})
   证明: by
   have hx₀ : IsClosed {x} := by
     simpa [← Set.image_singleton, Set.preimage_image_eq _ Subtype.val_injective]
@@ -2921,7 +2921,7 @@ theorem isLocalization_stalk'
 
 中文:
 定理 isLocalization_stalk'
-  条件: (y : PrimeSpectrum Γ(X, U)) (hy : hU.fromSpec y in U)
+  条件: (y : 素谱 Γ(X, U)) (hy : hU.fromSpec y in U)
   证明: by
   apply
     (@IsLocalization.isLocalization_iff_of_ringEquiv (R := Γ(X, U))
@@ -2994,7 +2994,7 @@ lemma stalkMap_injective
 
 中文:
 引理 stalkMap_injective
-  结论: (f : X ⟶ Y) {U : Opens Y} (hU : IsAffineOpen U) (x : X)
+  结论: (f : X ⟶ Y) {U : Opens Y} (hU : 是仿射开集 U) (x : X)
   证明: by
   let := Y.presheaf.algebra_section_stalk ⟨f x, hx⟩
   apply (hU.isLocalization_stalk ⟨f x, hx⟩).injective_of_map_algebraMap_zero
@@ -3028,7 +3028,7 @@ lemma mem_ideal_iff
 
 中文:
 引理 mem_ideal_iff
-  条件: {s : Γ(X, U)} {I : Ideal Γ(X, U)}
+  条件: {s : Γ(X, U)} {I : 理想 Γ(X, U)}
   证明: by
   refine ⟨fun hs x hxU => Ideal.mem_map_of_mem _ hs, fun H => ?_⟩
   let (x : _) : Algebra Γ(X, U) (X.presheaf.stalk (hU.fromSpec x)) :=
@@ -3066,7 +3066,7 @@ include hU in
 
 中文:
 引理 ideal_le_iff
-  条件: {I J : Ideal Γ(X, U)}
+  条件: {I J : 理想 Γ(X, U)}
   证明: ⟨fun h _ _ => Ideal.map_mono h,
     fun H _ hs => hU.mem_ideal_iff.mpr fun x hx => H x hx (Ideal.mem_map_of_mem _ hs)⟩
 
@@ -3092,7 +3092,7 @@ lemma ideal_ext_iff
 
 中文:
 引理 ideal_ext_iff
-  条件: {I J : Ideal Γ(X, U)}
+  条件: {I J : 理想 Γ(X, U)}
   证明: by
   simp_rw [le_antisymm_iff, hU.ideal_le_iff, forall_and]
 
@@ -3171,7 +3171,7 @@ definition _root_.AlgebraicGeometry.Scheme.affineBasicOpen
   body: ⟨X.basicOpen f, U.prop.basicOpen f⟩
 
 中文:
-定义 _root_.AlgebraicGeometry.Scheme.affineBasicOpen
+定义 _root_.AlgebraicGeometry.概形.affineBasicOpen
   定义体: ⟨X.basicOpen f, U.prop.basicOpen f⟩
 
 Depends on / 依赖: U.prop.basicOpen, X.basicOpen, basicOpen
@@ -3190,7 +3190,7 @@ lemma _root_.AlgebraicGeometry.Scheme.affineBasicOpen_le
 include hU in
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.affineBasicOpen_le
+引理 _root_.AlgebraicGeometry.概形.affineBasicOpen_le
   证明: X.basicOpen_le f
 
 include hU in
@@ -3218,7 +3218,7 @@ theorem iSup_basicOpen_eq_self_iff
 
 中文:
 定理 iSup_basicOpen_eq_self_iff
-  条件: {s : Set Γ(X, U)}
+  条件: {s : 集合 Γ(X, U)}
   证明: by
   trans ⋃ i : s, (PrimeSpectrum.basicOpen i.1).1 = Set.univ
   · trans hU.fromSpec ⁻¹' (⨆ f : s, X.basicOpen (f : Γ(X, U))).1 = hU.fromSpec ⁻¹' U.1
@@ -3271,7 +3271,7 @@ theorem self_le_iSup_basicOpen_iff
 
 中文:
 定理 self_le_iSup_basicOpen_iff
-  条件: {s : Set Γ(X, U)}
+  条件: {s : 集合 Γ(X, U)}
   证明: by
   rw [← hU.iSup_basicOpen_eq_self_iff]; rw [@comm _ Eq]
   refine ⟨fun h => le_antisymm h ?_, le_of_eq⟩
@@ -3308,8 +3308,8 @@ definition Scheme.AffineOpenCover.ofIsOpenCover
     ⟨(hU' _).isoSpec.hom ⟨_, (hU.exists_mem x).choose_spec⟩, by simp [← Scheme.Hom.comp_apply]⟩
 
 中文:
-定义 Scheme.AffineOpenCover.ofIsOpenCover
-  签名: {X : Scheme.{u}} {ι : 类型} (U : ι -> X.Opens)
+定义 概形.AffineOpenCover.ofIsOpenCover
+  签名: {X : 概形.{u}} {ι : 类型} (U : ι -> X.Opens)
   定义体: ι
   X i := Γ(X, U i)
   f i := (hU' i).fromSpec
@@ -3346,7 +3346,7 @@ definition SpecMapRestrictBasicOpenIso
 
 中文:
 定义 SpecMapRestrictBasicOpenIso
-  签名: {R S : CommRingCat} (f : R ⟶ S) (r : R)
+  签名: {R S : 交换环范畴} (f : R ⟶ S) (r : R)
   定义体: by
   refine Arrow.isoMk ?_ ?_ ?_
   · exact (Spec _).isoOfEq (comap_basicOpen _ _) ≪≫ basicOpenIsoSpecAway (f.hom r)
@@ -3382,7 +3382,7 @@ lemma stalkMap_injective_of_isAffine
 
 中文:
 引理 stalkMap_injective_of_isAffine
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsAffine Y] (x : X)
+  结论: {X Y : 概形} (f : X ⟶ Y) [是仿射 Y] (x : X)
   证明: (isAffineOpen_top Y).stalkMap_injective f x trivial h
 
 Depends on / 依赖: isAffineOpen_top, stalkMap_injective
@@ -3410,7 +3410,7 @@ lemma iSup_basicOpen_of_span_eq_top
 
 中文:
 引理 iSup_basicOpen_of_span_eq_top
-  结论: {X : Scheme} (U) (s : Set Γ(X, U))
+  结论: {X : 概形} (U) (s : 集合 Γ(X, U))
   证明: by
   apply le_antisymm
   · rw [iSup₂_le_iff]
@@ -3463,7 +3463,7 @@ theorem of_affine_open_cover
 
 中文:
 定理 of_affine_open_cover
-  结论: {X : Scheme} {P : X.affineOpens -> 命题}
+  结论: {X : 概形} {P : X.affineOpens -> 命题}
   证明: by
   have : forall (x : V.1), exists f : Γ(X, V), ↑x in X.basicOpen f ∧ P (X.affineBasicOpen f) := by
     intro x
@@ -3518,7 +3518,7 @@ lemma eq_of_SpecMap_comp_eq_of_isAffineOpen
 
 中文:
 引理 eq_of_SpecMap_comp_eq_of_isAffineOpen
-  结论: {R S : CommRingCat} {X : Scheme}
+  结论: {R S : 交换环范畴} {X : 概形}
   证明: by
   have : Mono φ := ConcreteCategory.mono_of_injective _ hφ
   rw [← IsOpenImmersion.lift_fac U.ι f (by simpa [Set.range_subset_iff] using fun x hx => hUf.ge hx),
@@ -3557,7 +3557,7 @@ lemma toSpecΓ_preimage_zeroLocus
 
 中文:
 引理 toSpecΓ_preimage_zeroLocus
-  条件: (s : Set Γ(X, ⊤))
+  条件: (s : 集合 Γ(X, ⊤))
   证明: LocallyRingedSpace.toΓSpec_preimage_zeroLocus_eq s
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.to
@@ -3579,7 +3579,7 @@ lemma isoSpec_image_zeroLocus
 
 中文:
 引理 isoSpec_image_zeroLocus
-  结论: [IsAffine X]
+  结论: [是仿射 X]
   证明: by
   rw [← X.toSpecΓ_preimage_zeroLocus]
   simp [Scheme.isoSpec, Set.image_preimage_eq (h := (bijective_of_isIso _).surjective)]
@@ -3602,7 +3602,7 @@ lemma toSpecΓ_image_zeroLocus
 
 中文:
 引理 toSpecΓ_image_zeroLocus
-  条件: [IsAffine X] (s : Set Γ(X, ⊤))
+  条件: [是仿射 X] (s : 集合 Γ(X, ⊤))
   证明: X.isoSpec_image_zeroLocus _
 
 Depends on / 依赖: X.isoSpec_image_zeroLocus, isoSpec_image_zeroLocus
@@ -3624,7 +3624,7 @@ lemma isoSpec_inv_preimage_zeroLocus
 
 中文:
 引理 isoSpec_inv_preimage_zeroLocus
-  条件: [IsAffine X] (s : Set Γ(X, ⊤))
+  条件: [是仿射 X] (s : 集合 Γ(X, ⊤))
   证明: by
   rw [← toSpecΓ_preimage_zeroLocus]; rw [← Set.preimage_comp]; rw [← TopCat.coe_comp]; rw [← Scheme.Hom.comp_base]; rw [X.isoSpec_inv_toSpecΓ]
   rfl
@@ -3648,7 +3648,7 @@ lemma isoSpec_inv_image_zeroLocus
 
 中文:
 引理 isoSpec_inv_image_zeroLocus
-  条件: [IsAffine X] (s : Set Γ(X, ⊤))
+  条件: [是仿射 X] (s : 集合 Γ(X, ⊤))
   证明: by
   rw [← isoSpec_inv_preimage_zeroLocus]; rw [Set.image_preimage_eq]
   exact (bijective_of_isIso X.isoSpec.inv.base).surjective
@@ -3676,7 +3676,7 @@ lemma eq_zeroLocus_of_isClosed_of_isAffine
 
 中文:
 引理 eq_zeroLocus_of_isClosed_of_isAffine
-  条件: [IsAffine X] (s : Set X)
+  条件: [是仿射 X] (s : 集合 X)
   证明: by
   refine ⟨fun hs => ?_, ?_⟩
   · let Z : Set (Spec Γ(X, ⊤)) := X.toΓSpecFun '' s
@@ -3717,7 +3717,7 @@ lemma Opens.toSpecΓ_preimage_basicOpen
 
 中文:
 引理 Opens.toSpecΓ_preimage_basicOpen
-  条件: {X : Scheme.{u}} (U : X.Opens) (r : Γ(X, U))
+  条件: {X : 概形.{u}} (U : X.Opens) (r : Γ(X, U))
   证明: by
   dsimp [toSpecΓ]
   simp only [Scheme.toSpecΓ_preimage_basicOpen, preimage_basicOpen, ι_app, homOfLE_leOfHom]
@@ -3751,7 +3751,7 @@ lemma Opens.toSpecΓ_preimage_zeroLocus
 
 中文:
 引理 Opens.toSpecΓ_preimage_zeroLocus
-  条件: {X : Scheme.{u}} (U : X.Opens) (s : Set Γ(X, U))
+  条件: {X : 概形.{u}} (U : X.Opens) (s : 集合 Γ(X, U))
   证明: by
   ext x
   refine .trans (forall₂_congr fun y hy => ?_) Set.mem_iInter₂.symm
@@ -3782,8 +3782,8 @@ lemma IsAffineOpen.fromSpec_preimage_zeroLocus
   rfl
 
 中文:
-引理 IsAffineOpen.fromSpec_preimage_zeroLocus
-  结论: {X : Scheme.{u}} {U : X.Opens}
+引理 是仿射开集.fromSpec_preimage_zeroLocus
+  结论: {X : 概形.{u}} {U : X.Opens}
   证明: by
   ext x
   suffices (forall f in s, ¬f ∉ x.asIdeal) ↔ s subseteq x.asIdeal by
@@ -3812,8 +3812,8 @@ lemma IsAffineOpen.fromSpec_image_zeroLocus
   rw [← hU.fromSpec_preimage_zeroLocus]; rw [Set.image_preimage_eq_inter_range]; rw [range_fromSpec]
 
 中文:
-引理 IsAffineOpen.fromSpec_image_zeroLocus
-  结论: {X : Scheme.{u}} {U : X.Opens}
+引理 是仿射开集.fromSpec_image_zeroLocus
+  结论: {X : 概形.{u}} {U : X.Opens}
   证明: by
   rw [← hU.fromSpec_preimage_zeroLocus]; rw [Set.image_preimage_eq_inter_range]; rw [range_fromSpec]
 
@@ -3842,8 +3842,8 @@ lemma Scheme.zeroLocus_inf
         codisjoint_iff_compl_le
 
 中文:
-引理 Scheme.zeroLocus_inf
-  条件: (X : Scheme.{u}) {U : X.Opens} (I J : Ideal Γ(X, U))
+引理 概形.zeroLocus_inf
+  条件: (X : 概形.{u}) {U : X.Opens} (I J : 理想 Γ(X, U))
   证明: by
   suffices U.1 ↓inter (X.zeroLocus (U := U) ↑(I ⊓ J)) =
       U.1 ↓inter (X.zeroLocus (U := U) I union X.zeroLocus (U := U) J) by
@@ -3881,7 +3881,7 @@ lemma Scheme.zeroLocus_biInf
   simp
 
 中文:
-引理 Scheme.zeroLocus_biInf
+引理 概形.zeroLocus_biInf
   证明: by
   refine ht.induction_on _ (by simp) fun {i t} hit ht IH => ?_
   simp only [Set.mem_insert_iff, Set.iUnion_iUnion_eq_or_left, ← IH, ← zeroLocus_inf,
@@ -3913,7 +3913,7 @@ lemma Scheme.zeroLocus_biInf_of_nonempty
     (codisjoint_iff_compl_le_left.mp (X.codisjoint_zeroLocus (U := U) (I i)) hx)
 
 中文:
-引理 Scheme.zeroLocus_biInf_of_nonempty
+引理 概形.zeroLocus_biInf_of_nonempty
   证明: by
   rw [zeroLocus_biInf I ht]; rw [Set.union_eq_left]
   obtain ⟨i, hi⟩ := ht'
@@ -3940,7 +3940,7 @@ lemma Scheme.zeroLocus_iInf
   simpa using zeroLocus_biInf I Set.finite_univ
 
 中文:
-引理 Scheme.zeroLocus_iInf
+引理 概形.zeroLocus_iInf
   证明: by
   simpa using zeroLocus_biInf I Set.finite_univ
 
@@ -3961,7 +3961,7 @@ lemma Scheme.zeroLocus_iInf_of_nonempty
   simpa using zeroLocus_biInf_of_nonempty I Set.finite_univ
 
 中文:
-引理 Scheme.zeroLocus_iInf_of_nonempty
+引理 概形.zeroLocus_iInf_of_nonempty
   证明: by
   simpa using zeroLocus_biInf_of_nonempty I Set.finite_univ
 
@@ -3989,8 +3989,8 @@ definition Scheme.Hom.liftQuotient
     (Ideal.Quotient.lift _ ((Scheme.ΓSpecIso _).inv ≫ f.appTop).hom hI))
 
 中文:
-定义 Scheme.Hom.liftQuotient
-  签名: (f : X.Hom (Spec A)) (I : Ideal A)
+定义 概形.态射.liftQuotient
+  签名: (f : X.态射 (Spec A)) (I : 理想 A)
   定义体: X.toSpecΓ ≫ Spec.map (CommRingCat.ofHom
     (Ideal.Quotient.lift _ ((Scheme.ΓSpecIso _).inv ≫ f.appTop).hom hI))
 
@@ -4016,8 +4016,8 @@ lemma Scheme.Hom.liftQuotient_comp
     Scheme.toSpecΓ_naturality_assoc, ← SpecMap_ΓSpecIso_hom
 
 中文:
-引理 Scheme.Hom.liftQuotient_comp
-  结论: (f : X.Hom (Spec A)) (I : Ideal A)
+引理 概形.态射.liftQuotient_comp
+  结论: (f : X.态射 (Spec A)) (I : 理想 A)
   证明: by
   rw [Scheme.Hom.liftQuotient]; rw [Category.assoc]; rw [← Spec.map_comp]; rw [← CommRingCat.ofHom_comp]; rw [Ideal.Quotient.lift_comp_mk]
   simp only [CommRingCat.hom_comp, CommRingCat.ofHom_comp, CommRingCat.ofHom_hom, Spec.map_comp, ←
@@ -4117,7 +4117,7 @@ lemma specTargetImageRingHom_surjective
 
 中文:
 引理 specTargetImageRingHom_surjective
-  结论: Function.Surjective (specTargetImageRingHom f)
+  结论: 函数.满射 (specTargetImageRingHom f)
   证明: Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
@@ -4276,8 +4276,8 @@ lemma Scheme.localRingHom_comp_stalkIso
   proof: AlgebraicGeometry.localRingHom_comp_stalkIso f p
 
 中文:
-引理 Scheme.localRingHom_comp_stalkIso
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S) (p : PrimeSpectrum S)
+引理 概形.localRingHom_comp_stalkIso
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S) (p : 素谱 S)
   证明: AlgebraicGeometry.localRingHom_comp_stalkIso f p
 
 Depends on / 依赖: AlgebraicGeometry, AlgebraicGeometry.localRingHom_comp_stalkIso, MorphismProperty, MorphismProperty.pullback_snd, localRingHom_comp_stalkIso, pullback_snd
@@ -4303,8 +4303,8 @@ definition Scheme.arrowStalkMapSpecIso
     simp
 
 中文:
-定义 Scheme.arrowStalkMapSpecIso
-  签名: {R S : CommRingCat.{u}} (f : R ⟶ S) (p : PrimeSpectrum S)
+定义 概形.arrowStalkMapSpecIso
+  签名: {R S : 交换环范畴.{u}} (f : R ⟶ S) (p : 素谱 S)
   定义体: Arrow.isoMk
   (Spec.stalkIso R (p.comap f.hom))
 (Spec.stalkIso S p) by

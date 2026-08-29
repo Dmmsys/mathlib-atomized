@@ -40,7 +40,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  结论: [SemilatticeInf α] [LinearOrder β] [FunLike F β α]
+  结论: [SemilatticeInf α] [线性序 β] [函数状 F β α]
   证明: (StrictMono.monotone fun _ _ => map_rel a).map_inf m n
 
 Depends on / 依赖: StrictMono, StrictMono.monotone, map_inf, map_rel, monotone
@@ -60,7 +60,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  结论: [SemilatticeSup α] [LinearOrder β] [FunLike F β α]
+  结论: [SemilatticeSup α] [线性序 β] [函数状 F β α]
   证明: map_inf (α := αᵒᵈ) (β := βᵒᵈ) _ _ _
 
 Depends on / 依赖: map_inf
@@ -80,7 +80,7 @@ theorem directed
 
 中文:
 定理 directed
-  结论: [FunLike F α β] [RelHomClass F r s] {ι : Sort*} {a : ι -> α} {f : F}
+  结论: [函数状 F α β] [关系态射类 F r s] {ι : 类型层*} {a : ι -> α} {f : F}
   证明: ha.mono_comp _ fun _ _ h => map_rel f h
 
 Depends on / 依赖: ha.mono_comp, map_rel, mono_comp
@@ -99,7 +99,7 @@ theorem directedOn
 
 中文:
 定理 directedOn
-  结论: [FunLike F α β] [RelHomClass F r s] {f : F}
+  结论: [函数状 F α β] [关系态射类 F r s] {f : F}
   证明: hs.mono_comp fun _ _ h => map_rel f h
 
 Depends on / 依赖: hs.mono_comp, map_rel, mono_comp
@@ -124,7 +124,7 @@ theorem range_eq
 中文:
 定理 range_eq
   条件: (e : r ≃r s)
-  结论: Set.range e = Set.univ
+  结论: 集合.range e = 集合.univ
   证明: by simp
 -/
 theorem range_eq (e : r ≃r s) : Set.range e = Set.univ := by simp
@@ -229,7 +229,7 @@ definition inclusionEmbedding
 
 中文:
 定义 inclusionEmbedding
-  签名: (r : α -> α -> 命题) {s t : Set α} (h : s subseteq t)
+  签名: (r : α -> α -> 命题) {s t : 集合 α} (h : s subseteq t)
   定义体: Set.inclusion h
   inj' _ _ h := (Set.inclusion_inj _).mp h
   map_rel_iff' := Iff.rfl
@@ -253,7 +253,7 @@ theorem coe_inclusionEmbedding
 
 中文:
 定理 coe_inclusionEmbedding
-  条件: (r : α -> α -> 命题) {s t : Set α} (h : s subseteq t)
+  条件: (r : α -> α -> 命题) {s t : 集合 α} (h : s subseteq t)
   证明: rfl
 -/
 theorem coe_inclusionEmbedding (r : α -> α -> Prop) {s t : Set α} (h : s subseteq t) :
@@ -322,8 +322,8 @@ definition RelEmbedding.codRestrict
 @[simp]
 
 中文:
-定义 RelEmbedding.codRestrict
-  签名: (p : Set β) (f : r ↪r s) (H : 对任意 a, f a in p)
+定义 关系嵌入.codRestrict
+  签名: (p : 集合 β) (f : r ↪r s) (H : 对任意 a, f a in p)
   定义体: ⟨f.toEmbedding.codRestrict p H, f.map_rel_iff'⟩
 
 @[simp]
@@ -343,7 +343,7 @@ theorem RelEmbedding.codRestrict_apply
   proof: rfl
 
 中文:
-定理 RelEmbedding.codRestrict_apply
+定理 关系嵌入.codRestrict_apply
   条件: (p) (f : r ↪r s) (H a)
   证明: rfl
 -/
@@ -364,7 +364,7 @@ theorem RelIso.image_eq_preimage_symm
 
 中文:
 定理 RelIso.image_eq_preimage_symm
-  条件: (e : r ≃r s) (t : Set α)
+  条件: (e : r ≃r s) (t : 集合 α)
   结论: e '' t = e.symm ⁻¹' t
   证明: e.toEquiv.image_eq_preimage_symm t
 
@@ -385,7 +385,7 @@ theorem RelIso.preimage_eq_image_symm
 
 中文:
 定理 RelIso.preimage_eq_image_symm
-  条件: (e : r ≃r s) (t : Set β)
+  条件: (e : r ≃r s) (t : 集合 β)
   结论: e ⁻¹' t = e.symm '' t
   证明: by
   rw [e.symm.image_eq_preimage_symm]; rfl
@@ -407,7 +407,7 @@ theorem Acc.of_subrel
 
 中文:
 定理 Acc.of_subrel
-  结论: {r : α -> α -> 命题} [IsTrans α r] {b : α} (a : { a // r a b })
+  结论: {r : α -> α -> 命题} [是Trans α r] {b : α} (a : { a // r a b })
   证明: h.recOn fun a _ IH => ⟨_, fun _ hb => IH ⟨_, _root_.trans hb a.2⟩ hb⟩
 
 Depends on / 依赖: _root_, _root_.trans, h.recOn
@@ -427,7 +427,7 @@ theorem wellFounded_iff_wellFounded_subrel
 
 中文:
 定理 wellFounded_iff_wellFounded_subrel
-  条件: {r : α -> α -> 命题} [IsTrans α r]
+  条件: {r : α -> α -> 命题} [是Trans α r]
   证明: InvImage.wf Subtype.val h
   mpr h := ⟨fun a => ⟨_, fun b hr => ((h a).apply _).of_subrel ⟨b, hr⟩⟩⟩
 

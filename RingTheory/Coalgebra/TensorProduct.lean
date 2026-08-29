@@ -54,7 +54,7 @@ instance instCoalgebraStruct
 
 中文:
 实例 instCoalgebraStruct
-  签名: : CoalgebraStruct S (A otimes[R] B) where
+  签名: : 余algebraStruct S (A otimes[R] B) where
   定义体: AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B ∘ₗ
       AlgebraTensorModule.map comul comul
   counit := AlgebraTensorModule.rid R S S ∘ₗ AlgebraTensorModule.map counit counit
@@ -249,7 +249,7 @@ TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra S (A otimes[R] B) where
+  签名: : 余algebra S (A otimes[R] B) where
   定义体: coassoc (R := R)
   rTensor_counit_comp_comul := by
     ext x y
@@ -309,8 +309,8 @@ instance [IsCocomm
     simp
 
 中文:
-实例 [IsCocomm
-  签名: S A] [IsCocomm R B] : IsCocomm S (A otimes[R] B) where
+实例 [是余comm
+  签名: S A] [是余comm R B] : 是余comm S (A otimes[R] B) where
   定义体: by
     ext x y
     dsimp
@@ -610,7 +610,7 @@ theorem lid_tmul
 中文:
 定理 lid_tmul
   条件: (r : R) (a : P)
-  结论: Coalgebra.TensorProduct.lid R P (r otimesₜ a) = r • a
+  结论: 余algebra.张量积.lid R P (r otimesₜ a) = r • a
   证明: rfl
 
 @[simp]
@@ -630,7 +630,7 @@ theorem lid_symm_apply
 中文:
 定理 lid_symm_apply
   条件: (a : P)
-  结论: (Coalgebra.TensorProduct.lid R P).symm a = 1 otimesₜ a
+  结论: (余algebra.张量积.lid R P).symm a = 1 otimesₜ a
   证明: rfl
 -/
 theorem lid_symm_apply (a : P) : (Coalgebra.TensorProduct.lid R P).symm a = 1 otimesₜ a := rfl
@@ -712,7 +712,7 @@ theorem rid_tmul
 中文:
 定理 rid_tmul
   条件: (r : R) (a : M)
-  结论: Coalgebra.TensorProduct.rid R S M (a otimesₜ r) = r • a
+  结论: 余algebra.张量积.rid R S M (a otimesₜ r) = r • a
   证明: rfl
 
 @[simp]
@@ -732,7 +732,7 @@ theorem rid_symm_apply
 中文:
 定理 rid_symm_apply
   条件: (a : M)
-  结论: (Coalgebra.TensorProduct.rid R S M).symm a = a otimesₜ 1
+  结论: (余algebra.张量积.rid R S M).symm a = a otimesₜ 1
   证明: rfl
 -/
 theorem rid_symm_apply (a : M) : (Coalgebra.TensorProduct.rid R S M).symm a = a otimesₜ 1 := rfl

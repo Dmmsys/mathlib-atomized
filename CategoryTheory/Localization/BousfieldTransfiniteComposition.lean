@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderTransfiniteComposition.{w} P.isLocal
+  签名: MorphismProperty.是StableUnderTransfiniteComposition.{w} P.isLocal
 -/
 instance : MorphismProperty.IsStableUnderTransfiniteComposition.{w} P.isLocal where
 

@@ -48,7 +48,7 @@ theorem swap_smul_self_smul
 
 中文:
 定理 swap_smul_self_smul
-  条件: [MulAction (Perm α) β] (i j : α) (x : β)
+  条件: [乘法作用 (置换 α) β] (i j : α) (x : β)
   证明: by simp [smul_smul]
 
 Depends on / 依赖: smul_smul
@@ -66,7 +66,7 @@ theorem swap_smul_involutive
 
 中文:
 定理 swap_smul_involutive
-  条件: [MulAction (Perm α) β] (i j : α)
+  条件: [乘法作用 (置换 α) β] (i j : α)
   证明: swap_smul_self_smul i j
 
 Depends on / 依赖: swap_smul_self_smul
@@ -92,9 +92,9 @@ lemma BijOn.perm_inv
   proof: hf.symm f.invOn
 
 中文:
-引理 BijOn.perm_inv
-  条件: (hf : BijOn f s s)
-  结论: BijOn ↑(f⁻¹) s s
+引理 双射限制.perm_inv
+  条件: (hf : 双射限制 f s s)
+  结论: 双射限制 ↑(f⁻¹) s s
   证明: hf.symm f.invOn
 
 Depends on / 依赖: f.invOn, hf.symm
@@ -111,8 +111,8 @@ lemma MapsTo.perm_pow
   simp_rw [Equiv.Perm.coe_pow]; exact MapsTo.iterate
 
 中文:
-引理 MapsTo.perm_pow
-  结论: MapsTo f s s -> 对任意 n : 自然数, MapsTo (f ^ n) s s
+引理 映射到.perm_pow
+  结论: 映射到 f s s -> 对任意 n : 自然数, 映射到 (f ^ n) s s
   证明: by
   simp_rw [Equiv.Perm.coe_pow]; exact MapsTo.iterate
 
@@ -130,8 +130,8 @@ lemma SurjOn.perm_pow
   simp_rw [Equiv.Perm.coe_pow]; exact SurjOn.iterate
 
 中文:
-引理 SurjOn.perm_pow
-  结论: SurjOn f s s -> 对任意 n : 自然数, SurjOn (f ^ n) s s
+引理 满射限制.perm_pow
+  结论: 满射限制 f s s -> 对任意 n : 自然数, 满射限制 (f ^ n) s s
   证明: by
   simp_rw [Equiv.Perm.coe_pow]; exact SurjOn.iterate
 
@@ -149,8 +149,8 @@ lemma BijOn.perm_pow
   simp_rw [Equiv.Perm.coe_pow]; exact BijOn.iterate
 
 中文:
-引理 BijOn.perm_pow
-  结论: BijOn f s s -> 对任意 n : 自然数, BijOn (f ^ n) s s
+引理 双射限制.perm_pow
+  结论: 双射限制 f s s -> 对任意 n : 自然数, 双射限制 (f ^ n) s s
   证明: by
   simp_rw [Equiv.Perm.coe_pow]; exact BijOn.iterate
 
@@ -168,9 +168,9 @@ lemma BijOn.perm_zpow
   statement: forall n : Int, BijOn (f ^ n) s s
 
 中文:
-引理 BijOn.perm_zpow
-  条件: (hf : BijOn f s s)
-  结论: 对任意 n : 整数, BijOn (f ^ n) s s
+引理 双射限制.perm_zpow
+  条件: (hf : 双射限制 f s s)
+  结论: 对任意 n : 整数, 双射限制 (f ^ n) s s
 -/
 lemma BijOn.perm_zpow (hf : BijOn f s s) : forall n : Int, BijOn (f ^ n) s s
   | Int.ofNat n => hf.perm_pow n

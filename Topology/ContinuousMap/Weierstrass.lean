@@ -138,7 +138,7 @@ theorem continuousMap_mem_polynomialFunctions_closure
 
 中文:
 定理 continuousMap_mem_polynomialFunctions_closure
-  条件: (a b : 实数) (f : C(Set.Icc a b, 实数))
+  条件: (a b : 实数) (f : C(集合.闭区间 a b, 实数))
   证明: by
   rw [polynomialFunctions_closure_eq_top _ _]
   simp
@@ -166,8 +166,8 @@ theorem exists_polynomial_near_continuousMap
   exact ⟨m, H⟩
 
 中文:
-定理 exists_polynomial_near_continuousMap
-  结论: (a b : 实数) (f : C(Set.Icc a b, 实数)) (ε : 实数)
+定理 存在_polynomial_near_continuousMap
+  结论: (a b : 实数) (f : C(集合.闭区间 a b, 实数)) (ε : 实数)
   证明: by
   have w := mem_closure_iff_frequently.mp (continuousMap_mem_polynomialFunctions_closure _ _ f)
   rw [Metric.nhds_basis_ball.frequently_iff] at w
@@ -200,7 +200,7 @@ theorem exists_polynomial_near_of_continuousOn
   exact b ⟨x, m⟩
 
 中文:
-定理 exists_polynomial_near_of_continuousOn
+定理 存在_polynomial_near_of_continuousOn
   结论: (a b : 实数) (f : 实数 -> 实数)
   证明: by
   let f' : C(Set.Icc a b, Real) := ⟨fun x => f x, continuousOn_iff_continuous_domRestrict.mp c⟩

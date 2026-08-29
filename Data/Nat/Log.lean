@@ -919,7 +919,7 @@ theorem log_monotone
 中文:
 定理 log_monotone
   条件: {b : 自然数}
-  结论: Monotone (log b)
+  结论: 递增 (log b)
   证明: by
   refine monotone_nat_of_le_succ fun n => ?_
   rcases le_or_gt b 1 with hb | hb
@@ -1068,7 +1068,7 @@ theorem log_antitone_left
 中文:
 定理 log_antitone_left
   条件: {n : 自然数}
-  结论: AntitoneOn (fun b => log b n) (Set.Ioi 1)
+  结论: AntitoneOn (fun b => log b n) (集合.左开右无界区间 1)
   证明: fun _ hc _ _ hb =>
   log_anti_left (Set.mem_Iio.1 hc) hb
 
@@ -1928,7 +1928,7 @@ theorem clog_monotone
 中文:
 定理 clog_monotone
   条件: (b : 自然数)
-  结论: Monotone (clog b)
+  结论: 递增 (clog b)
   证明: fun _ _ => clog_mono_right _
 
 Depends on / 依赖: clog_mono_right
@@ -1949,7 +1949,7 @@ theorem clog_antitone_left
 中文:
 定理 clog_antitone_left
   条件: {n : 自然数}
-  结论: AntitoneOn (fun b : 自然数 => clog b n) (Set.Ioi 1)
+  结论: AntitoneOn (fun b : 自然数 => clog b n) (集合.左开右无界区间 1)
   证明: fun _ hc _ _ hb => clog_anti_left (Set.mem_Iio.1 hc) hb
 
 @[mono, gcongr]

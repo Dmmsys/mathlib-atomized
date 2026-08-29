@@ -36,7 +36,7 @@ structure HeytAlg
   参数: where
   公理与运算 (2 个):
     - carrier : 类型
-    - [str : HeytingAlgebra carrier]
+    - [str : Heyting代数 carrier]
 -/
 structure HeytAlg where
   /-- The underlying Heyting algebra. -/
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort HeytAlg (Type _)
+  签名: CoeSort HeytAlg (类型 _)
   定义体: ⟨HeytAlg.carrier⟩
 
 Depends on / 依赖: HeytAlg, HeytAlg.carrier, carrier
@@ -79,7 +79,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [HeytingAlgebra X]
+  签名: (X : 类型) [Heyting代数 X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type*) [HeytingAlgebra X] : HeytAlg := ⟨X⟩
@@ -97,11 +97,11 @@ structure Hom
     - hom' : HeytingHom X Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : HeytAlg.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : HeytingHom X Y
+    - hom' : Heyting态射 X Y
 -/
 structure Hom (X Y : HeytAlg.{u}) where
   private mk ::
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category HeytAlg.{u}
+  签名: 范畴 HeytAlg.{u}
   定义体: Hom X Y
   id X := ⟨HeytingHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory HeytAlg (HeytingHom · ·)
+  签名: 余ncrete范畴 HeytAlg (Heyting态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -164,8 +164,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := HeytAlg) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : HeytAlg.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : HeytAlg.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := HeytAlg) f
 -/
 abbrev Hom.hom {X Y : HeytAlg.{u}} (f : Hom X Y) :=
@@ -181,7 +181,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [HeytingAlgebra X] [HeytingAlgebra Y] (f : HeytingHom X Y)
+  签名: {X Y : 类型u} [Heyting代数 X] [Heyting代数 Y] (f : Heyting态射 X Y)
   定义体: ConcreteCategory.ofHom (C := HeytAlg) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, HeytAlg
@@ -202,8 +202,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : HeytAlg.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : HeytAlg.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -317,7 +317,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [HeytingAlgebra X]
+  条件: (X : 类型u) [Heyting代数 X]
   结论: (HeytAlg.of X : 类型u) = X
   证明: rfl
 
@@ -338,7 +338,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {X : HeytAlg}
-  结论: (𝟙 X : X ⟶ X).hom = HeytingHom.id _
+  结论: (𝟙 X : X ⟶ X).hom = Heyting态射.id _
   证明: rfl
 -/
 lemma hom_id {X : HeytAlg} : (𝟙 X : X ⟶ X).hom = HeytingHom.id _ := rfl
@@ -438,7 +438,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [HeytingAlgebra X] [HeytingAlgebra Y] (f : HeytingHom X Y)
+  条件: {X Y : 类型u} [Heyting代数 X] [Heyting代数 Y] (f : Heyting态射 X Y)
   证明: rfl
 
 @[simp]
@@ -482,8 +482,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [HeytingAlgebra X]
-  结论: ofHom (HeytingHom.id _) = 𝟙 (of X)
+  条件: {X : 类型u} [Heyting代数 X]
+  结论: ofHom (Heyting态射.id _) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -501,7 +501,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [HeytingAlgebra X] [HeytingAlgebra Y] [HeytingAlgebra Z]
+  结论: {X Y Z : 类型u} [Heyting代数 X] [Heyting代数 Y] [Heyting代数 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [HeytingAlgebra X] [HeytingAlgebra Y] [HeytingAlgebra Z]
@@ -519,7 +519,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {X Y : 类型u} [HeytingAlgebra X] [HeytingAlgebra Y]
+  结论: {X Y : 类型u} [Heyting代数 X] [Heyting代数 Y]
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [HeytingAlgebra X] [HeytingAlgebra Y]
@@ -578,7 +578,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited HeytAlg
+  签名: 可居 HeytAlg
   定义体: ⟨of PUnit⟩
 
 @[simps]
@@ -598,7 +598,7 @@ instance hasForgetToLat
 
 中文:
 实例 hasForgetToLat
-  签名: : HasForget₂ HeytAlg BddDistLat where
+  签名: : 有Forget₂ HeytAlg 有界分配格 where
   定义体: .of X
   forget₂.map f := BddDistLat.ofHom f.hom
 -/
@@ -620,7 +620,7 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : HeytAlg.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm

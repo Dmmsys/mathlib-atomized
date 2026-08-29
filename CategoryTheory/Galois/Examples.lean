@@ -90,8 +90,8 @@ definition Action.imageComplement
           = ((Y.ρ g⁻¹ * Y.ρ g)).hom y.val := by rw [f.comm, FintypeCat.comp_appl
 
 中文:
-定义 Action.imageComplement
-  签名: {X Y : Action FintypeCat G}
+定义 作用.imageComplement
+  签名: {X Y : 作用 FintypeCat G}
   定义体: FintypeCat.imageComplement f.hom
   ρ := {
     toFun g := FintypeCat.homMk (fun y => Subtype.mk ((Y.ρ g).hom y.val) <| by
@@ -129,8 +129,8 @@ definition Action.imageComplementIncl
   comm _ := rfl
 
 中文:
-定义 Action.imageComplementIncl
-  签名: {X Y : Action FintypeCat G} (f : X ⟶ Y)
+定义 作用.imageComplementIncl
+  签名: {X Y : 作用 FintypeCat G} (f : X ⟶ Y)
   定义体: FintypeCat.imageComplementIncl f.hom
   comm _ := rfl
 
@@ -158,8 +158,8 @@ instance [Finite
   exact Limits.hasColimitsOfShape_of_equivalence e.toSingleObjEquiv.symm
 
 中文:
-实例 [Finite
-  签名: G] : HasColimitsOfShape (SingleObj G) FintypeCat.{w}
+实例 [有限
+  签名: G] : 有形状余极限 (SingleObj G) FintypeCat.{w}
   定义体: by
   obtain ⟨G', hg, hf, ⟨e⟩⟩ := Finite.exists_type_univ_nonempty_mulEquiv G
   exact Limits.hasColimitsOfShape_of_equivalence e.toSingleObjEquiv.symm
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (forget (Action FintypeCat G))
+  签名: 保持FiniteLimits (forget (作用 FintypeCat G))
   定义体: by
   change PreservesFiniteLimits (Action.forget FintypeCat _ ⋙ FintypeCat.incl)
   apply comp_preservesFiniteLimits
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreGaloisCategory (Action FintypeCat G)
+  签名: PreGalois范畴 (作用 FintypeCat G)
   定义体: inferInstance
   monoInducesIsoOnDirectSummand {_ _} i _ :=
     haveI : Mono ((forget (Action FintypeCat G)).map i) := map_mono (forget _) i
@@ -237,7 +237,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiberFunctor (Action.forget FintypeCat G)
+  签名: Fiber函子 (作用.forget FintypeCat G)
   定义体: ⟨fun _ => inferInstance⟩
   preservesQuotientsByFiniteGroups _ _ _ := inferInstance
   reflectsIsos := ⟨fun f (_ : IsIso f.hom) => inferInstance⟩
@@ -257,7 +257,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiberFunctor (forget₂ (Action FintypeCat G) FintypeCat)
+  签名: Fiber函子 (forget₂ (作用 FintypeCat G) FintypeCat)
   定义体: inferInstanceAs FiberFunctor (Action.forget FintypeCat G)
 
 Depends on / 依赖: Action, Action.forget, FiberFunctor, FintypeCat, cat_disch, forget
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: GaloisCategory (Action FintypeCat G)
+  签名: Galois范畴 (作用 FintypeCat G)
   定义体: ⟨Action.forget FintypeCat G, ⟨inferInstance⟩⟩
 
 Depends on / 依赖: Action, Action.forget, FintypeCat, forget
@@ -298,8 +298,8 @@ let : MulAction G (FintypeCat.of T) := inferInstanceAs MulAction G
       ↑(Mu
 
 中文:
-定理 Action.pretransitive_of_isConnected
-  结论: (X : Action FintypeCat G)
+定理 作用.pretransitive_of_isConnected
+  结论: (X : 作用 FintypeCat G)
   证明: by
     /- We show that the `G`-orbit of `x` is a non-initial subobject of `X` and hence by
     connectedness, the orbit equals `X.V`. -/
@@ -344,8 +344,8 @@ theorem Action.isConnected_of_transitive
     obtain ⟨(y : Y.V)⟩ := (not_initial_iff_fiber_nonempty (Action.forget _ _) Y).
 
 中文:
-定理 Action.isConnected_of_transitive
-  结论: (X : FintypeCat) [MulAction G X]
+定理 作用.isConnected_of_transitive
+  结论: (X : FintypeCat) [乘法作用 G X]
   证明: not_initial_of_inhabited (Action.forget _ _) h.some
   noTrivialComponent Y i hm hni := by
     /- We show that the induced inclusion `i.hom` of finite sets is surjective, using the
@@ -383,8 +383,8 @@ theorem Action.isConnected_iff_transitive
   proof: ⟨fun _ => pretransitive_of_isConnected G X, fun _ => isConnected_of_transitive G X.V⟩
 
 中文:
-定理 Action.isConnected_iff_transitive
-  条件: (X : Action FintypeCat G) [Nonempty X.V]
+定理 作用.isConnected_iff_transitive
+  条件: (X : 作用 FintypeCat G) [非空 X.V]
   证明: ⟨fun _ => pretransitive_of_isConnected G X, fun _ => isConnected_of_transitive G X.V⟩
 
 Depends on / 依赖: isConnected_of_transitive, pretransitive_of_isConnected
@@ -410,7 +410,7 @@ Iso.symm Action.mkIso (Finty
 
 中文:
 定义 isoQuotientStabilizerOfIsConnected
-  签名: (X : Action FintypeCat G)
+  签名: (X : 作用 FintypeCat G)
   定义体: haveI : MulAction.IsPretransitive G X.V := Action.pretransitive_of_isConnected G X
   let e : X.V ≃ G ⧸ MulAction.stabilizer G x :=
 (Equiv.Set.univ X.V).symm.trans

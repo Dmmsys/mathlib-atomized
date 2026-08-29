@@ -79,8 +79,8 @@ definition ChainComplex.linearYonedaObj
   body: ((((linearYoneda A C).obj Y).rightOp.mapHomologicalComplex _).obj X).unop
 
 中文:
-定义 ChainComplex.linearYonedaObj
-  签名: {α : 类型} [AddRightCancelSemigroup α] [One α]
+定义 链复形.linearYonedaObj
+  签名: {α : 类型} [加法右消去半群 α] [幺 α]
   定义体: ((((linearYoneda A C).obj Y).rightOp.mapHomologicalComplex _).obj X).unop
 
 Depends on / 依赖: linearYoneda, mapHomologicalComplex, rightOp, rightOp.mapHomologicalComplex
@@ -138,7 +138,7 @@ lemma isZero_Ext_succ_of_projective
 
 中文:
 引理 isZero_Ext_succ_of_projective
-  条件: (X Y : C) [Projective X] (n : 自然数)
+  条件: (X Y : C) [投射 X] (n : 自然数)
   证明: by
   refine IsZero.of_iso ?_ ((ProjectiveResolution.self X).isoExt (n + 1) Y)
   rw [← HomologicalComplex.exactAt_iff_isZero_homology]; rw [HomologicalComplex.exactAt_iff]

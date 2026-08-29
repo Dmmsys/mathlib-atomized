@@ -51,7 +51,7 @@ definition ofSimpleGraph
 
 中文:
 定义 ofSimpleGraph
-  签名: {ι : 类型} [DecidableEq ι] (G : SimpleGraph ι)
+  签名: {ι : 类型} [DecidableEq ι] (G : 简单图 ι)
   定义体: ({s : Finset ι | exists v, s = {v}}) union Sym2.toFinset '' G.edgeSet
   isRelLowerSet_faces := by
     intro s hs

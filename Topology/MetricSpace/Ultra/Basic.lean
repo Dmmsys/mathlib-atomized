@@ -51,10 +51,10 @@ class IsUltrametricDist
     - dist_triangle_max : forall x y z : X, dist x z <= max (dist x y) (dist y z)
 
 中文:
-类 IsUltrametricDist
+类 是UltrametricDist
   参数: (X : 类型) [Dist X]
   公理与运算 (1 个):
-    - dist_triangle_max : 对任意 x y z : X, dist x z <= max (dist x y) (dist y z)
+    - dist_triangle_max : 对任意 x y z : X, dist x z <= 最大值 (dist x y) (dist y z)
 -/
 class IsUltrametricDist (X : Type*) [Dist X] : Prop where
   dist_triangle_max : forall x y z : X, dist x z <= max (dist x y) (dist y z)
@@ -73,7 +73,7 @@ lemma dist_triangle_max
 
 中文:
 引理 dist_triangle_max
-  结论: dist x z <= max (dist x y) (dist y z)
+  结论: dist x z <= 最大值 (dist x y) (dist y z)
   证明: IsUltrametricDist.dist_triangle_max x y z
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.dist_triangle_max, dist_triangle_max
@@ -326,7 +326,7 @@ lemma isClosed_ball
 中文:
 引理 isClosed_ball
   条件: (x : X) (r : 实数)
-  结论: IsClosed (ball x r)
+  结论: 是闭集 (ball x r)
   证明: by
   cases le_or_gt r 0 with
   | inl hr =>
@@ -452,7 +452,7 @@ lemma isOpen_closedBall
 中文:
 引理 isOpen_closedBall
   条件: {r : 实数} (hr : r != 0)
-  结论: IsOpen (closedBall x r)
+  结论: 是开集 (closedBall x r)
   证明: by
   cases lt_or_gt_of_ne hr with
   | inl h =>
@@ -539,7 +539,7 @@ lemma isOpen_sphere
 中文:
 引理 isOpen_sphere
   条件: {r : 实数} (hr : r != 0)
-  结论: IsOpen (sphere x r)
+  结论: 是开集 (sphere x r)
   证明: by
   rw [← closedBall_sdiff_ball]; rw [sdiff_eq]
   exact (isOpen_closedBall x hr).inter (isClosed_ball x r).isOpen_compl

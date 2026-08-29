@@ -32,7 +32,7 @@ definition IsAlmostIntegral
   body: exists r in R⁰, forall n, r • s ^ n in (algebraMap R S).range
 
 中文:
-定义 IsAlmostIntegral
+定义 IsAlmost整数egral
   签名: (s : S)
   定义体: exists r in R⁰, forall n, r • s ^ n in (algebraMap R S).range
 
@@ -60,8 +60,8 @@ definition completeIntegralClosure
     refine ⟨r * s, mul_mem hr hs,
 
 中文:
-定义 completeIntegralClosure
-  签名: : Subalgebra R S where
+定义 complete整数egralClosure
+  签名: : 子代数 R S where
   定义体: { s | IsAlmostIntegral R s }
   mul_mem' := by
     rintro a b ⟨r, hr, hr'⟩ ⟨s, hs, hs'⟩
@@ -98,7 +98,7 @@ lemma mem_completeIntegralClosure
   proof: .rfl
 
 中文:
-引理 mem_completeIntegralClosure
+引理 mem_complete整数egralClosure
   条件: {x : S}
   证明: .rfl
 -/
@@ -118,7 +118,7 @@ lemma IsIntegral.isAlmostIntegral_of_exists_smul_mem_range
     rw [← Nat.sub_add_cancel hi.le]; rw [pow_add]; rw [mul_smul]; rw [←
 
 中文:
-引理 IsIntegral.isAlmostIntegral_of_exists_smul_mem_range
+引理 是整.isAlmost整数egral_of_存在_smul_mem_range
   证明: by
   obtain ⟨b, hb', hb⟩ :
       exists b in R⁰, forall i < (minpoly R s).natDegree, (b • s ^ i) in (algebraMap R S).range := by
@@ -161,7 +161,7 @@ lemma IsIntegral.isAlmostIntegral_of_isLocalization
 @[stacks 00GX "Part 2"]
 
 中文:
-引理 IsIntegral.isAlmostIntegral_of_isLocalization
+引理 是整.isAlmost整数egral_of_isLocalization
   证明: by
   obtain ⟨s, t, rfl⟩ := IsLocalization.exists_mk'_eq M s
   exact H.isAlmostIntegral_of_exists_smul_mem_range ⟨t, hM t.2, by simp⟩
@@ -186,7 +186,7 @@ lemma IsIntegral.isAlmostIntegral
   proof: H.isAlmostIntegral_of_isLocalization _ le_rfl
 
 中文:
-引理 IsIntegral.isAlmostIntegral
+引理 是整.isAlmost整数egral
   结论: [IsFractionRing R S]
   证明: H.isAlmostIntegral_of_isLocalization _ le_rfl
 
@@ -205,7 +205,7 @@ lemma integralClosure_le_completeIntegralClosure
   proof: fun _ h => h.isAlmostIntegral
 
 中文:
-引理 integralClosure_le_completeIntegralClosure
+引理 integralClosure_le_complete整数egralClosure
   条件: [IsFractionRing R S]
   证明: fun _ h => h.isAlmostIntegral
 
@@ -229,7 +229,7 @@ lemma IsAlmostIntegral.isIntegral_of_nonZeroDivisors_le_comap
     change (Algebra.a
 
 中文:
-引理 IsAlmostIntegral.isIntegral_of_nonZeroDivisors_le_comap
+引理 IsAlmost整数egral.is整数egral_of_nonZeroDivisors_le_comap
   证明: by
   obtain ⟨r, hr, hr'⟩ := H
   let f : Algebra.adjoin R {s} ->ₗ[R]
@@ -280,8 +280,8 @@ lemma IsAlmostIntegral.isIntegral
   exact H.isIntegral_of_nonZeroDivisors_le_comap fun _ => by simp
 
 中文:
-引理 IsAlmostIntegral.isIntegral
-  结论: [IsNoetherianRing R] [IsDomain S] [FaithfulSMul R S]
+引理 IsAlmost整数egral.is整数egral
+  结论: [是Noether环 R] [是整环 S] [忠实标量乘法 R S]
   证明: by
   have := IsDomain.of_faithfulSMul R S
   exact H.isIntegral_of_nonZeroDivisors_le_comap fun _ => by simp
@@ -303,8 +303,8 @@ lemma isAlmostIntegral_iff_isIntegral
   ⟨IsAlmostIntegral.isIntegral, IsIntegral.isAlmostIntegral⟩
 
 中文:
-引理 isAlmostIntegral_iff_isIntegral
-  结论: [IsNoetherianRing R] [IsDomain R] [IsFractionRing R S]
+引理 isAlmost整数egral_iff_is整数egral
+  结论: [是Noether环 R] [是整环 R] [IsFractionRing R S]
   证明: letI := IsFractionRing.isDomain R (K := S)
   ⟨IsAlmostIntegral.isIntegral, IsIntegral.isAlmostIntegral⟩
 
@@ -323,7 +323,7 @@ lemma completeIntegralClosure_eq_integralClosure
   proof: SetLike.ext fun _ => isAlmostIntegral_iff_isIntegral
 
 中文:
-引理 completeIntegralClosure_eq_integralClosure
+引理 complete整数egralClosure_eq_integralClosure
   证明: SetLike.ext fun _ => isAlmostIntegral_iff_isIntegral
 
 Depends on / 依赖: SetLike, SetLike.ext, isAlmostIntegral_iff_isIntegral

@@ -62,7 +62,7 @@ abbreviation single₀
 
 中文:
 缩写 single₀
-  签名: [Zero J]
+  签名: [零 J]
   定义体: single 0
 
 Depends on / 依赖: single

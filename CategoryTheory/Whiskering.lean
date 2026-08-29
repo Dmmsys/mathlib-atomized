@@ -252,7 +252,7 @@ exact F.map_injective congr_fun (congr_arg NatTrans.app hαβ) X
 
 中文:
 实例 faithful_whiskeringRight_obj
-  签名: {F : D ⥤ E} [F.Faithful]
+  签名: {F : D ⥤ E} [F.忠实]
   定义体: by
     ext X
 exact F.map_injective congr_fun (congr_arg NatTrans.app hαβ) X
@@ -281,8 +281,8 @@ definition FullyFaithful.whiskeringRight
         apply f.naturality }
 
 中文:
-定义 FullyFaithful.whiskeringRight
-  签名: {F : D ⥤ E} (hF : F.FullyFaithful)
+定义 满忠实.whiskeringRight
+  签名: {F : D ⥤ E} (hF : F.满忠实)
   定义体: { app := fun X => hF.preimage (f.app X)
       naturality := fun _ _ g => by
         apply hF.map_injective
@@ -348,7 +348,7 @@ theorem whiskeringLeft_obj_comp
 
 中文:
 定理 whiskeringLeft_obj_comp
-  条件: {D' : 类型u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
+  条件: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
   证明: rfl
 -/
 theorem whiskeringLeft_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
@@ -369,7 +369,7 @@ definition whiskeringLeftObjCompIso
 
 中文:
 定义 whiskeringLeftObjCompIso
-  签名: {D' : 类型u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
+  签名: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -426,7 +426,7 @@ theorem whiskeringRight_obj_comp
 
 中文:
 定理 whiskeringRight_obj_comp
-  条件: {D' : 类型u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
+  条件: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
   证明: rfl
 -/
 theorem whiskeringRight_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
@@ -447,7 +447,7 @@ definition whiskeringRightObjCompIso
 
 中文:
 定义 whiskeringRightObjCompIso
-  签名: {D' : 类型u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
+  签名: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -469,7 +469,7 @@ instance full_whiskeringRight_obj
 
 中文:
 实例 full_whiskeringRight_obj
-  签名: {F : D ⥤ E} [F.Faithful] [F.Full]
+  签名: {F : D ⥤ E} [F.忠实] [F.满]
   定义体: ((Functor.FullyFaithful.ofFullyFaithful F).whiskeringRight C).full
 
 @[simp]
@@ -656,7 +656,7 @@ lemma NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight
   simp
 
 中文:
-引理 NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight
+引理 自然变换.hcomp_eq_whiskerLeft_comp_whiskerRight
   结论: {F G : C ⥤ D} {H K : D ⥤ E}
   证明: by
   ext
@@ -890,7 +890,7 @@ instance isIso_whiskerLeft
 
 中文:
 实例 isIso_whiskerLeft
-  签名: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α]
+  签名: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [是同构 α]
   定义体: (isoWhiskerLeft F (asIso α)).isIso_hom
 
 @[to_dual self]
@@ -914,7 +914,7 @@ instance isIso_whiskerRight
 
 中文:
 实例 isIso_whiskerRight
-  签名: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α]
+  签名: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [是同构 α]
   定义体: (isoWhiskerRight (asIso α) F).isIso_hom
 
 @[simp, to_dual self]
@@ -941,7 +941,7 @@ theorem inv_whiskerRight
 
 中文:
 定理 inv_whiskerRight
-  条件: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α]
+  条件: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [是同构 α]
   证明: by
   symm
   apply IsIso.eq_inv_of_inv_hom_id
@@ -973,7 +973,7 @@ theorem inv_whiskerLeft
 
 中文:
 定理 inv_whiskerLeft
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α]
+  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [是同构 α]
   证明: by
   symm
   apply IsIso.eq_inv_of_inv_hom_id
@@ -1549,7 +1549,7 @@ definition postcompose₂
 
 中文:
 定义 postcompose₂
-  签名: {E' : 类型} [Category* E']
+  签名: {E' : 类型} [范畴* E']
   定义体: whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
 
 Depends on / 依赖: whiskeringRight
@@ -1571,7 +1571,7 @@ definition postcompose₃
 
 中文:
 定义 postcompose₃
-  签名: {E' : 类型} [Category* E']
+  签名: {E' : 类型} [范畴* E']
   定义体: whiskeringRight C₃ _ _ ⋙ whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
 
 Depends on / 依赖: whiskeringRight

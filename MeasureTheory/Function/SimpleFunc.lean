@@ -55,8 +55,8 @@ structure SimpleFunc.{u,
   参数: v} (α
   公理与运算 (3 个):
     - toFun : α -> β
-    - measurableSet_fiber' : 对任意 x, MeasurableSet (toFun ⁻¹' {x})
-    - finite_range' : (Set.range toFun).Finite
+    - measurableSet_fiber' : 对任意 x, 可测集 (toFun ⁻¹' {x})
+    - finite_range' : (集合.range toFun).有限
 -/
 structure SimpleFunc.{u, v} (α : Type u) [MeasurableSpace α] (β : Type v) where
   /-- The underlying function -/
@@ -83,7 +83,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->ₛ β) α β where
+  签名: : 函数状 (α ->ₛ β) α β where
   定义体: toFun
   coe_injective | ⟨_, _, _⟩, ⟨_, _, _⟩, rfl => rfl
 -/
@@ -146,7 +146,7 @@ theorem finite_range
 中文:
 定理 finite_range
   条件: (f : α ->ₛ β)
-  结论: (Set.range f).Finite
+  结论: (集合.range f).有限
   证明: f.finite_range'
 
 Depends on / 依赖: f.finite_range, finite_range
@@ -166,7 +166,7 @@ theorem measurableSet_fiber
 中文:
 定理 measurableSet_fiber
   条件: (f : α ->ₛ β) (x : β)
-  结论: MeasurableSet (f ⁻¹' {x})
+  结论: 可测集 (f ⁻¹' {x})
   证明: f.measurableSet_fiber' x
 
 Depends on / 依赖: f.measurableSet_fiber, measurableSet_fiber
@@ -221,7 +221,7 @@ definition ofFinite
 
 中文:
 定义 ofFinite
-  签名: [Finite α] [MeasurableSingletonClass α] (f : α -> β)
+  签名: [有限 α] [MeasurableSingleton类 α] (f : α -> β)
   定义体: f
   measurableSet_fiber' x := (toFinite (f ⁻¹' {x})).measurableSet
   finite_range' := Set.finite_range f
@@ -242,7 +242,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: ofFinite isEmptyElim
 
 Depends on / 依赖: isEmptyElim, ofFinite
@@ -327,7 +327,7 @@ theorem coe_range
 中文:
 定理 coe_range
   条件: (f : α ->ₛ β)
-  结论: (↑f.range : Set β) = Set.range f
+  结论: (↑f.range : 集合 β) = 集合.range f
   证明: f.finite_range.coe_toFinset
 
 Depends on / 依赖: coe_toFinset, f.finite_range.coe_toFinset, finite_range
@@ -346,7 +346,7 @@ theorem mem_range_of_measure_ne_zero
 
 中文:
 定理 mem_range_of_measure_ne_zero
-  条件: {f : α ->ₛ β} {x : β} {μ : Measure α} (H : μ (f ⁻¹' {x}) != 0)
+  条件: {f : α ->ₛ β} {x : β} {μ : 测度 α} (H : μ (f ⁻¹' {x}) != 0)
   证明: let ⟨a, ha⟩ := nonempty_of_measure_ne_zero H
   mem_range.2 ⟨a, ha⟩
 
@@ -368,7 +368,7 @@ theorem forall_mem_range
   simp only [mem_range, Set.forall_mem_range]
 
 中文:
-定理 forall_mem_range
+定理 对任意_mem_range
   条件: {f : α ->ₛ β} {p : β -> 命题}
   结论: (对任意 y in f.range, p y) ↔ 对任意 x, p (f x)
   证明: by
@@ -390,7 +390,7 @@ theorem exists_range_iff
   simpa only [mem_range, exists_prop] using Set.exists_range_iff
 
 中文:
-定理 exists_range_iff
+定理 存在_range_iff
   条件: {f : α ->ₛ β} {p : β -> 命题}
   结论: (存在 y in f.range, p y) ↔ 存在 x, p (f x)
   证明: by
@@ -430,8 +430,8 @@ theorem exists_forall_le
   proof: f.range.exists_le.imp fun _ => forall_mem_range.1
 
 中文:
-定理 exists_forall_le
-  条件: [Nonempty β] [Preorder β] [IsDirectedOrder β] (f : α ->ₛ β)
+定理 存在_对任意_le
+  条件: [非空 β] [预序 β] [IsDirectedOrder β] (f : α ->ₛ β)
   证明: f.range.exists_le.imp fun _ => forall_mem_range.1
 
 Depends on / 依赖: exists_le, f.range.exists_le.imp, forall_mem_range
@@ -450,7 +450,7 @@ definition const
 
 中文:
 定义 const
-  签名: (α) {β} [MeasurableSpace α] (b : β)
+  签名: (α) {β} [可测空间 α] (b : β)
   定义体: ⟨fun _ => b, fun _ => MeasurableSet.const _, finite_range_const⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.const, finite_range_const
@@ -468,7 +468,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited β]
+  签名: [可居 β]
   定义体: ⟨const _ default⟩
 -/
 instance instInhabited [Inhabited β] : Inhabited (α ->ₛ β) :=
@@ -511,7 +511,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (b : β)
-  结论: ⇑(const α b) = Function.const α b
+  结论: ⇑(const α b) = 函数.const α b
   证明: rfl
 
 @[simp]
@@ -531,7 +531,7 @@ theorem range_const
 
 中文:
 定理 range_const
-  条件: (α) [MeasurableSpace α] [Nonempty α] (b : β)
+  条件: (α) [可测空间 α] [非空 α] (b : β)
   结论: (const α b).range = {b}
   证明: Finset.coe_injective by simp +unfoldPartialApp [Function.const]
 
@@ -551,7 +551,7 @@ theorem range_const_subset
 
 中文:
 定理 range_const_subset
-  条件: (α) [MeasurableSpace α] (b : β)
+  条件: (α) [可测空间 α] (b : β)
   结论: (const α b).range subseteq {b}
   证明: Finset.coe_subset.1 by simp
 
@@ -574,7 +574,7 @@ theorem simpleFunc_bot
 
 中文:
 定理 simpleFunc_bot
-  条件: {α} (f : @SimpleFunc α ⊥ β) [Nonempty β]
+  条件: {α} (f : @SimpleFunc α ⊥ β) [非空 β]
   结论: 存在 c, 对任意 x, f x = c
   证明: by
   have hf_meas := @SimpleFunc.measurableSet_fiber α _ ⊥ f
@@ -598,7 +598,7 @@ theorem simpleFunc_bot'
 
 中文:
 定理 simpleFunc_bot'
-  条件: {α} [Nonempty β] (f : @SimpleFunc α ⊥ β)
+  条件: {α} [非空 β] (f : @SimpleFunc α ⊥ β)
   证明: letI : MeasurableSpace α := ⊥; (simpleFunc_bot f).imp fun _ => ext
 
 Depends on / 依赖: MeasurableSpace, simpleFunc_bot
@@ -624,7 +624,7 @@ theorem measurableSet_cut
 
 中文:
 定理 measurableSet_cut
-  条件: (r : α -> β -> 命题) (f : α ->ₛ β) (h : 对任意 b, MeasurableSet { a | r a b })
+  条件: (r : α -> β -> 命题) (f : α ->ₛ β) (h : 对任意 b, 可测集 { a | r a b })
   证明: by
   have : { a | r a (f a) } = ⋃ b in range f, { a | r a b } inter f ⁻¹' {b} := by
     ext a
@@ -660,7 +660,7 @@ theorem measurableSet_preimage
 中文:
 定理 measurableSet_preimage
   条件: (f : α ->ₛ β) (s)
-  结论: MeasurableSet (f ⁻¹' s)
+  结论: 可测集 (f ⁻¹' s)
   证明: measurableSet_cut (fun _ b => b in s) f fun b => MeasurableSet.const (b in s)
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.const, measurableSet_cut
@@ -684,8 +684,8 @@ theorem measurable
 
 中文:
 定理 measurable
-  条件: [MeasurableSpace β] (f : α ->ₛ β)
-  结论: Measurable f
+  条件: [可测空间 β] (f : α ->ₛ β)
+  结论: 可测 f
   证明: fun s _ =>
   measurableSet_preimage f s
 
@@ -705,7 +705,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  条件: [MeasurableSpace β] {μ : Measure α} (f : α ->ₛ β)
+  条件: [可测空间 β] {μ : 测度 α} (f : α ->ₛ β)
   证明: f.measurable.aemeasurable
 -/
 protected theorem aemeasurable [MeasurableSpace β] {μ : Measure α} (f : α ->ₛ β) :
@@ -722,7 +722,7 @@ theorem sum_measure_preimage_singleton
 
 中文:
 定理 sum_measure_preimage_singleton
-  条件: (f : α ->ₛ β) {μ : Measure α} (s : Finset β)
+  条件: (f : α ->ₛ β) {μ : 测度 α} (s : 有限集 β)
   证明: sum_measure_preimage_singleton _ fun _ _ => f.measurableSet_fiber _
 -/
 protected theorem sum_measure_preimage_singleton (f : α ->ₛ β) {μ : Measure α} (s : Finset β) :
@@ -740,7 +740,7 @@ theorem sum_range_measure_preimage_singleton
 
 中文:
 定理 sum_range_measure_preimage_singleton
-  条件: (f : α ->ₛ β) (μ : Measure α)
+  条件: (f : α ->ₛ β) (μ : 测度 α)
   证明: by
   rw [f.sum_measure_preimage_singleton]; rw [coe_range]; rw [preimage_range]
 
@@ -764,7 +764,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: (s : Set α) (hs : MeasurableSet s) (f g : α ->ₛ β)
+  签名: (s : 集合 α) (hs : 可测集 s) (f g : α ->ₛ β)
   定义体: ⟨s.piecewise f g, fun _ =>
     letI : MeasurableSpace β := ⊤
     f.measurable.piecewise hs g.measurable trivial,
@@ -790,7 +790,7 @@ theorem coe_piecewise
 
 中文:
 定理 coe_piecewise
-  条件: {s : Set α} (hs : MeasurableSet s) (f g : α ->ₛ β)
+  条件: {s : 集合 α} (hs : 可测集 s) (f g : α ->ₛ β)
   证明: rfl
 -/
 theorem coe_piecewise {s : Set α} (hs : MeasurableSet s) (f g : α ->ₛ β) :
@@ -808,7 +808,7 @@ theorem piecewise_apply
 
 中文:
 定理 piecewise_apply
-  条件: {s : Set α} (hs : MeasurableSet s) (f g : α ->ₛ β) (a)
+  条件: {s : 集合 α} (hs : 可测集 s) (f g : α ->ₛ β) (a)
   证明: rfl
 -/
 theorem piecewise_apply {s : Set α} (hs : MeasurableSet s) (f g : α ->ₛ β) (a) :
@@ -829,7 +829,7 @@ theorem piecewise_compl
 
 中文:
 定理 piecewise_compl
-  条件: {s : Set α} (hs : MeasurableSet sᶜ) (f g : α ->ₛ β)
+  条件: {s : 集合 α} (hs : 可测集 sᶜ) (f g : α ->ₛ β)
   证明: coe_injective by simp
 
 @[simp]
@@ -855,7 +855,7 @@ theorem piecewise_univ
 中文:
 定理 piecewise_univ
   条件: (f g : α ->ₛ β)
-  结论: piecewise univ MeasurableSet.univ f g = f
+  结论: piecewise univ 可测集.univ f g = f
   证明: coe_injective by simp
 
 @[simp]
@@ -880,7 +880,7 @@ theorem piecewise_empty
 中文:
 定理 piecewise_empty
   条件: (f g : α ->ₛ β)
-  结论: piecewise ∅ MeasurableSet.empty f g = g
+  结论: piecewise ∅ 可测集.empty f g = g
   证明: coe_injective by simp
 
 @[simp]
@@ -903,7 +903,7 @@ exact coe_injective Set.piecewise_same _ _
 
 中文:
 定理 piecewise_same
-  条件: (f : α ->ₛ β) {s : Set α} (hs : MeasurableSet s)
+  条件: (f : α ->ₛ β) {s : 集合 α} (hs : 可测集 s)
   证明: by
   classical
 exact coe_injective Set.piecewise_same _ _
@@ -932,7 +932,7 @@ definition dite
 
 中文:
 定义 dite
-  签名: (s : Set α) (hs : MeasurableSet s) (f : s ->ₛ β) (g : (sᶜ : Set α) ->ₛ β)
+  签名: (s : 集合 α) (hs : 可测集 s) (f : s ->ₛ β) (g : (sᶜ : 集合 α) ->ₛ β)
   定义体: open scoped Classical in if hx : x in s then f ⟨x, hx⟩ else g ⟨x, hx⟩
   measurableSet_fiber' x := by
     classical
@@ -960,7 +960,7 @@ theorem support_indicator
 
 中文:
 定理 support_indicator
-  条件: [Zero β] {s : Set α} (hs : MeasurableSet s) (f : α ->ₛ β)
+  条件: [零 β] {s : 集合 α} (hs : 可测集 s) (f : α ->ₛ β)
   证明: Set.support_indicator
 
 Depends on / 依赖: Set.support_indicator, support_indicator
@@ -984,7 +984,7 @@ theorem range_indicator
 
 中文:
 定理 range_indicator
-  结论: {s : Set α} (hs : MeasurableSet s) (hs_nonempty : s.Nonempty)
+  结论: {s : 集合 α} (hs : 可测集 s) (hs_nonempty : s.非空)
   证明: by
   simp only [← Finset.coe_inj, coe_range, coe_piecewise, range_piecewise, coe_const,
     Finset.coe_insert, Finset.coe_singleton, hs_nonempty.image_const,
@@ -1010,7 +1010,7 @@ theorem measurable_bind
 
 中文:
 定理 measurable_bind
-  结论: [MeasurableSpace γ] (f : α ->ₛ β) (g : β -> α -> γ)
+  结论: [可测空间 γ] (f : α ->ₛ β) (g : β -> α -> γ)
   证明: fun s hs =>
   f.measurableSet_cut (fun a b => g b a in s) fun b => hg b hs
 -/
@@ -1162,7 +1162,7 @@ theorem range_map
 中文:
 定理 range_map
   条件: [DecidableEq γ] (g : β -> γ) (f : α ->ₛ β)
-  结论: (f.map g).range = f.range.image g
+  结论: (f.map g).range = f.range.像 g
   证明: Finset.coe_injective by simp only [coe_range, coe_map, Finset.coe_image, range_comp]
 
 @[simp]
@@ -1205,7 +1205,7 @@ theorem map_preimage
 
 中文:
 定理 map_preimage
-  条件: (f : α ->ₛ β) (g : β -> γ) (s : Set γ)
+  条件: (f : α ->ₛ β) (g : β -> γ) (s : 集合 γ)
   证明: by
   simp only [coe_range, sep_mem_eq, coe_map, Finset.coe_filter,
     ← mem_preimage, inter_comm, preimage_inter_range, ← Finset.mem_coe]
@@ -1253,7 +1253,7 @@ finite_range' := f.finite_range.subset Set.range_comp_subset_range _ _
 
 中文:
 定义 comp
-  签名: [MeasurableSpace β] (f : β ->ₛ γ) (g : α -> β) (hgm : Measurable g)
+  签名: [可测空间 β] (f : β ->ₛ γ) (g : α -> β) (hgm : 可测 g)
   定义体: f ∘ g
 finite_range' := f.finite_range.subset Set.range_comp_subset_range _ _
   measurableSet_fiber' z := hgm (f.measurableSet_fiber z)
@@ -1276,7 +1276,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: [MeasurableSpace β] (f : β ->ₛ γ) {g : α -> β} (hgm : Measurable g)
+  条件: [可测空间 β] (f : β ->ₛ γ) {g : α -> β} (hgm : 可测 g)
   证明: rfl
 -/
 theorem coe_comp [MeasurableSpace β] (f : β ->ₛ γ) {g : α -> β} (hgm : Measurable g) :
@@ -1293,7 +1293,7 @@ theorem range_comp_subset_range
 
 中文:
 定理 range_comp_subset_range
-  条件: [MeasurableSpace β] (f : β ->ₛ γ) {g : α -> β} (hgm : Measurable g)
+  条件: [可测空间 β] (f : β ->ₛ γ) {g : α -> β} (hgm : 可测 g)
   证明: Finset.coe_subset.1 by simp only [coe_range, coe_comp, Set.range_comp_subset_range]
 
 Depends on / 依赖: Finset, Finset.coe_subset, Set.range_comp_subset_range, coe_comp, coe_range, coe_subset, range_comp_subset_range
@@ -1318,7 +1318,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: [MeasurableSpace β] (f₁ : α ->ₛ γ) (g : α -> β) (hg : MeasurableEmbedding g)
+  签名: [可测空间 β] (f₁ : α ->ₛ γ) (g : α -> β) (hg : 可测嵌入 g)
   定义体: Function.extend g f₁ f₂
   finite_range' :=
     (f₁.finite_range.union <| f₂.finite_range.subset (image_subset_range _ _)).subset
@@ -1352,7 +1352,7 @@ theorem extend_apply
 
 中文:
 定理 extend_apply
-  结论: [MeasurableSpace β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : MeasurableEmbedding g)
+  结论: [可测空间 β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : 可测嵌入 g)
   证明: hg.injective.extend_apply _ _ _
 
 @[simp]
@@ -1376,7 +1376,7 @@ theorem extend_apply'
 
 中文:
 定理 extend_apply'
-  结论: [MeasurableSpace β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : MeasurableEmbedding g)
+  结论: [可测空间 β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : 可测嵌入 g)
   证明: Function.extend_apply' _ _ _ h
 
 @[simp]
@@ -1400,7 +1400,7 @@ theorem extend_comp_eq'
 
 中文:
 定理 extend_comp_eq'
-  结论: [MeasurableSpace β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : MeasurableEmbedding g)
+  结论: [可测空间 β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : 可测嵌入 g)
   证明: funext fun _ => extend_apply _ _ _ _
 
 @[simp]
@@ -1422,7 +1422,7 @@ theorem extend_comp_eq
 
 中文:
 定理 extend_comp_eq
-  结论: [MeasurableSpace β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : MeasurableEmbedding g)
+  结论: [可测空间 β] (f₁ : α ->ₛ γ) {g : α -> β} (hg : 可测嵌入 g)
   证明: coe_injective extend_comp_eq' _ hg _
 
 Depends on / 依赖: coe_injective, extend_comp_eq
@@ -1523,7 +1523,7 @@ theorem pair_preimage
 
 中文:
 定理 pair_preimage
-  条件: (f : α ->ₛ β) (g : α ->ₛ γ) (s : Set β) (t : Set γ)
+  条件: (f : α ->ₛ β) (g : α ->ₛ γ) (s : 集合 β) (t : 集合 γ)
   证明: rfl
 -/
 theorem pair_preimage (f : α ->ₛ β) (g : α ->ₛ γ) (s : Set β) (t : Set γ) :
@@ -1567,7 +1567,7 @@ theorem map_fst_pair
 中文:
 定理 map_fst_pair
   条件: (f : α ->ₛ β) (g : α ->ₛ γ)
-  结论: (f.pair g).map Prod.fst = f
+  结论: (f.pair g).map 积类型.fst = f
   证明: rfl
 -/
 @[simp] theorem map_fst_pair (f : α ->ₛ β) (g : α ->ₛ γ) : (f.pair g).map Prod.fst = f := rfl
@@ -1585,7 +1585,7 @@ theorem map_snd_pair
 中文:
 定理 map_snd_pair
   条件: (f : α ->ₛ β) (g : α ->ₛ γ)
-  结论: (f.pair g).map Prod.snd = g
+  结论: (f.pair g).map 积类型.snd = g
   证明: rfl
 
 @[simp]
@@ -1627,7 +1627,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One β]
+  签名: [幺 β]
   定义体: ⟨const α 1⟩
 
 @[to_additive]
@@ -1648,7 +1648,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul β]
+  签名: [乘法 β]
   定义体: ⟨fun f g => (f.map (· * ·)).seq g⟩
 
 @[to_additive]
@@ -1671,7 +1671,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: [Div β]
+  签名: [除法 β]
   定义体: ⟨fun f g => (f.map (· / ·)).seq g⟩
 
 @[to_additive]
@@ -1692,7 +1692,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv β]
+  签名: [取逆 β]
   定义体: ⟨fun f => f.map Inv.inv⟩
 
 Depends on / 依赖: Inv.inv, f.map
@@ -1710,7 +1710,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: [Max β]
+  签名: [最大值 β]
   定义体: ⟨fun f g => (f.map (· ⊔ ·)).seq g⟩
 
 Depends on / 依赖: f.map
@@ -1728,7 +1728,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: [Min β]
+  签名: [最小值 β]
   定义体: ⟨fun f g => (f.map (· ⊓ ·)).seq g⟩
 
 Depends on / 依赖: f.map
@@ -1770,7 +1770,7 @@ theorem const_one
 
 中文:
 定理 const_one
-  条件: [One β]
+  条件: [幺 β]
   结论: const α (1 : β) = 1
   证明: rfl
 
@@ -1793,7 +1793,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: [One β]
+  条件: [幺 β]
   结论: ⇑(1 : α ->ₛ β) = 1
   证明: rfl
 
@@ -1816,7 +1816,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul β] (f g : α ->ₛ β)
+  条件: [乘法 β] (f g : α ->ₛ β)
   结论: ⇑(f * g) = ⇑f * ⇑g
   证明: rfl
 
@@ -1839,7 +1839,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv β] (f : α ->ₛ β)
+  条件: [取逆 β] (f : α ->ₛ β)
   结论: ⇑(f⁻¹) = (⇑f)⁻¹
   证明: rfl
 
@@ -1862,7 +1862,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: [Div β] (f g : α ->ₛ β)
+  条件: [除法 β] (f g : α ->ₛ β)
   结论: ⇑(f / g) = ⇑f / ⇑g
   证明: rfl
 
@@ -1885,7 +1885,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: [Max β] (f g : α ->ₛ β)
+  条件: [最大值 β] (f g : α ->ₛ β)
   结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
   证明: rfl
 
@@ -1908,7 +1908,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: [Min β] (f g : α ->ₛ β)
+  条件: [最小值 β] (f g : α ->ₛ β)
   结论: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
   证明: rfl
 
@@ -1931,7 +1931,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [Mul β] (f g : α ->ₛ β) (a : α)
+  条件: [乘法 β] (f g : α ->ₛ β) (a : α)
   结论: (f * g) a = f a * g a
   证明: rfl
 
@@ -1954,7 +1954,7 @@ theorem div_apply
 
 中文:
 定理 div_apply
-  条件: [Div β] (f g : α ->ₛ β) (x : α)
+  条件: [除法 β] (f g : α ->ₛ β) (x : α)
   结论: (f / g) x = f x / g x
   证明: rfl
 
@@ -1975,7 +1975,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: [Inv β] (f : α ->ₛ β) (x : α)
+  条件: [取逆 β] (f : α ->ₛ β) (x : α)
   结论: f⁻¹ x = (f x)⁻¹
   证明: rfl
 -/
@@ -1993,7 +1993,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: [Max β] (f g : α ->ₛ β) (a : α)
+  条件: [最大值 β] (f g : α ->ₛ β) (a : α)
   结论: (f ⊔ g) a = f a ⊔ g a
   证明: rfl
 -/
@@ -2013,7 +2013,7 @@ theorem inf_apply
 
 中文:
 定理 inf_apply
-  条件: [Min β] (f g : α ->ₛ β) (a : α)
+  条件: [最小值 β] (f g : α ->ₛ β) (a : α)
   结论: (f ⊓ g) a = f a ⊓ g a
   证明: rfl
 
@@ -2036,7 +2036,7 @@ theorem range_one
 
 中文:
 定理 range_one
-  条件: [Nonempty α] [One β]
+  条件: [非空 α] [幺 β]
   结论: (1 : α ->ₛ β).range = {1}
   证明: Finset.ext fun x => by simp
 
@@ -2061,7 +2061,7 @@ theorem range_eq_empty_of_isEmpty
 
 中文:
 定理 range_eq_empty_of_isEmpty
-  条件: {β} [hα : IsEmpty α] (f : α ->ₛ β)
+  条件: {β} [hα : 是空 α] (f : α ->ₛ β)
   结论: f.range = ∅
   证明: by
   ext
@@ -2084,7 +2084,7 @@ theorem eq_zero_of_mem_range_zero
 
 中文:
 定理 eq_zero_of_mem_range_zero
-  条件: [Zero β]
+  条件: [零 β]
   结论: 对任意 {y : β}, y in (0 : α ->ₛ β).range -> y = 0
   证明: @(forall_mem_range.2 fun _ => rfl)
 
@@ -2107,7 +2107,7 @@ theorem mul_eq_map₂
 
 中文:
 定理 mul_eq_map₂
-  条件: [Mul β] (f g : α ->ₛ β)
+  条件: [乘法 β] (f g : α ->ₛ β)
   结论: f * g = (pair f g).map fun p : β × β => p.1 * p.2
   证明: rfl
 -/
@@ -2127,7 +2127,7 @@ theorem sup_eq_map₂
 
 中文:
 定理 sup_eq_map₂
-  条件: [Max β] (f g : α ->ₛ β)
+  条件: [最大值 β] (f g : α ->ₛ β)
   结论: f ⊔ g = (pair f g).map fun p : β × β => p.1 ⊔ p.2
   证明: rfl
 
@@ -2150,7 +2150,7 @@ theorem const_mul_eq_map
 
 中文:
 定理 const_mul_eq_map
-  条件: [Mul β] (f : α ->ₛ β) (b : β)
+  条件: [乘法 β] (f : α ->ₛ β) (b : β)
   结论: const α b * f = f.map fun a => b * a
   证明: rfl
 
@@ -2170,7 +2170,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  条件: [Mul β] [Mul γ] {g : β -> γ} (hg : 对任意 x y, g (x * y) = g x * g y) (f₁ f₂ : α ->ₛ β)
+  条件: [乘法 β] [乘法 γ] {g : β -> γ} (hg : 对任意 x y, g (x * y) = g x * g y) (f₁ f₂ : α ->ₛ β)
   证明: ext fun _ => hg _ _
 -/
 theorem map_mul [Mul β] [Mul γ] {g : β -> γ} (hg : forall x y, g (x * y) = g x * g y) (f₁ f₂ : α ->ₛ β) :
@@ -2192,7 +2192,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul K β]
+  签名: [标量乘法 K β]
   定义体: ⟨fun k f => f.map (k • ·)⟩
 
 @[to_additive (attr := simp)]
@@ -2216,7 +2216,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul K β] (c : K) (f : α ->ₛ β)
+  条件: [标量乘法 K β] (c : K) (f : α ->ₛ β)
   结论: ⇑(c • f) = c • ⇑f
   证明: rfl
 
@@ -2237,7 +2237,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul K β] (k : K) (f : α ->ₛ β) (a : α)
+  条件: [标量乘法 K β] (k : K) (f : α ->ₛ β) (a : α)
   结论: (k • f) a = k • f a
   证明: rfl
 -/
@@ -2255,8 +2255,8 @@ instance hasNatSMul
 @[to_additive existing hasNatSMul]
 
 中文:
-实例 hasNatSMul
-  签名: [AddMonoid β]
+实例 has自然数SMul
+  签名: [加法幺半群 β]
   定义体: inferInstance
 
 @[to_additive existing hasNatSMul]
@@ -2275,8 +2275,8 @@ instance hasNatPow
 @[simp]
 
 中文:
-实例 hasNatPow
-  签名: [Monoid β]
+实例 has自然数Pow
+  签名: [幺半群 β]
   定义体: ⟨fun f n => f.map (· ^ n)⟩
 
 @[simp]
@@ -2298,7 +2298,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: [Monoid β] (f : α ->ₛ β) (n : 自然数)
+  条件: [幺半群 β] (f : α ->ₛ β) (n : 自然数)
   结论: ⇑(f ^ n) = (⇑f) ^ n
   证明: rfl
 -/
@@ -2316,7 +2316,7 @@ theorem pow_apply
 
 中文:
 定理 pow_apply
-  条件: [Monoid β] (n : 自然数) (f : α ->ₛ β) (a : α)
+  条件: [幺半群 β] (n : 自然数) (f : α ->ₛ β) (a : α)
   结论: (f ^ n) a = f a ^ n
   证明: rfl
 -/
@@ -2334,8 +2334,8 @@ instance hasIntPow
 @[simp]
 
 中文:
-实例 hasIntPow
-  签名: [DivInvMonoid β]
+实例 has整数Pow
+  签名: [除逆幺半群 β]
   定义体: ⟨fun f n => f.map (· ^ n)⟩
 
 @[simp]
@@ -2357,7 +2357,7 @@ theorem coe_zpow
 
 中文:
 定理 coe_zpow
-  条件: [DivInvMonoid β] (f : α ->ₛ β) (z : 整数)
+  条件: [除逆幺半群 β] (f : α ->ₛ β) (z : 整数)
   结论: ⇑(f ^ z) = (⇑f) ^ z
   证明: rfl
 -/
@@ -2375,7 +2375,7 @@ theorem zpow_apply
 
 中文:
 定理 zpow_apply
-  条件: [DivInvMonoid β] (z : 整数) (f : α ->ₛ β) (a : α)
+  条件: [除逆幺半群 β] (z : 整数) (f : α ->ₛ β) (a : α)
   结论: (f ^ z) a = f a ^ z
   证明: rfl
 -/
@@ -2397,7 +2397,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid β]
+  签名: [加法幺半群 β]
   定义体: fast_instance% Function.Injective.addMonoid (fun f => show α -> β from f) coe_injective coe_zero
     coe_add fun _ _ => coe_smul _ _
 
@@ -2418,7 +2418,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid β]
+  签名: [加法交换幺半群 β]
   定义体: fast_instance% Function.Injective.addCommMonoid (fun f => show α -> β from f)
     coe_injective coe_zero coe_add fun _ _ => coe_smul _ _
 
@@ -2439,7 +2439,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: [AddGroup β]
+  签名: [加法群 β]
   定义体: Function.Injective.addGroup (fun f => show α -> β from f) coe_injective coe_zero coe_add coe_neg
     coe_sub (fun _ _ => coe_smul _ _) fun _ _ => coe_smul _ _
 
@@ -2460,7 +2460,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup β]
+  签名: [加法交换群 β]
   定义体: fast_instance% Function.Injective.addCommGroup (fun f => show α -> β from f) coe_injective
     coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _) fun _ _ => coe_smul _ _
 
@@ -2486,7 +2486,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid β]
+  签名: [幺半群 β]
   定义体: fast_instance% Function.Injective.monoid (fun f => show α -> β from f) coe_injective coe_one
     coe_mul coe_pow
 
@@ -2512,7 +2512,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid β]
+  签名: [交换幺半群 β]
   定义体: fast_instance% Function.Injective.commMonoid (fun f => show α -> β from f) coe_injective coe_one
     coe_mul coe_pow
 
@@ -2538,7 +2538,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group β]
+  签名: [群 β]
   定义体: fast_instance% Function.Injective.group (fun f => show α -> β from f) coe_injective coe_one
     coe_mul coe_inv coe_div coe_pow coe_zpow
 
@@ -2562,7 +2562,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup β]
+  签名: [交换群 β]
   定义体: fast_instance% Function.Injective.commGroup (fun f => show α -> β from f) coe_injective coe_one
     coe_mul coe_inv coe_div coe_pow coe_zpow
 
@@ -2581,8 +2581,8 @@ instance [Monoid
   body: fast_instance% Function.Injective.mulAction (fun f => show α -> β from f) coe_injective coe_smul
 
 中文:
-实例 [Monoid
-  签名: K] [MulAction K β] : MulAction K (α ->ₛ β)
+实例 [幺半群
+  签名: K] [乘法作用 K β] : 乘法作用 K (α ->ₛ β)
   定义体: fast_instance% Function.Injective.mulAction (fun f => show α -> β from f) coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.mulAction, Injective, coe_injective, coe_smul, fast_instance, mulAction
@@ -2601,7 +2601,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring K] [AddCommMonoid β] [Module K β]
+  签名: [半环 K] [加法交换幺半群 β] [模 K β]
   定义体: fast_instance% Function.Injective.module K ⟨⟨fun f => show α -> β from f, coe_zero⟩, coe_add⟩
     coe_injective coe_smul
 
@@ -2622,7 +2622,7 @@ theorem smul_eq_map
 
 中文:
 定理 smul_eq_map
-  条件: [SMul K β] (k : K) (f : α ->ₛ β)
+  条件: [标量乘法 K β] (k : K) (f : α ->ₛ β)
   结论: k • f = f.map (k • ·)
   证明: rfl
 -/
@@ -2639,7 +2639,7 @@ lemma smul_const
 
 中文:
 引理 smul_const
-  条件: [SMul K β] (k : K) (b : β)
+  条件: [标量乘法 K β] (k : K) (b : β)
   证明: ext fun _ => rfl
 -/
 lemma smul_const [SMul K β] (k : K) (b : β) :
@@ -2655,8 +2655,8 @@ instance [NonUnitalNonAssocSemiring
     coe_injective coe_zero coe_add coe_mul coe_smul
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: β] : NonUnitalNonAssocSemiring (α ->ₛ β)
+实例 [非幺非结合半环
+  签名: β] : 非幺非结合半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonUnitalNonAssocSemiring (fun f => show α -> β from f)
     coe_injective coe_zero coe_add coe_mul coe_smul
 
@@ -2676,8 +2676,8 @@ instance [NonUnitalSemiring
     SimpleFunc.coe_injective coe_zero coe_add coe_mul coe_smul
 
 中文:
-实例 [NonUnitalSemiring
-  签名: β] : NonUnitalSemiring (α ->ₛ β)
+实例 [非幺半环
+  签名: β] : 非幺半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonUnitalSemiring (fun f => show α -> β from f)
     SimpleFunc.coe_injective coe_zero coe_add coe_mul coe_smul
 
@@ -2698,8 +2698,8 @@ instance [NatCast
 @[simp, norm_cast]
 
 中文:
-实例 [NatCast
-  签名: β] : 自然数Cast (α ->ₛ β) where
+实例 [自然数嵌入
+  签名: β] : 自然数嵌入 (α ->ₛ β) where
   定义体: const _ (NatCast.natCast n)
 
 @[simp, norm_cast]
@@ -2720,7 +2720,7 @@ lemma coe_natCast
 
 中文:
 引理 coe_natCast
-  条件: [自然数Cast β] (n : 自然数)
+  条件: [自然数嵌入 β] (n : 自然数)
   证明: rfl
 -/
 lemma coe_natCast [NatCast β] (n : Nat) :
@@ -2736,8 +2736,8 @@ instance [NonAssocSemiring
     coe_injective coe_zero coe_one coe_add coe_mul coe_smul coe_natCast
 
 中文:
-实例 [NonAssocSemiring
-  签名: β] : NonAssocSemiring (α ->ₛ β)
+实例 [非结合半环
+  签名: β] : 非结合半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonAssocSemiring (fun f => show α -> β from f)
     coe_injective coe_zero coe_one coe_add coe_mul coe_smul coe_natCast
 
@@ -2758,8 +2758,8 @@ instance [IntCast
 @[simp, norm_cast]
 
 中文:
-实例 [IntCast
-  签名: β] : 整数Cast (α ->ₛ β) where
+实例 [整数嵌入
+  签名: β] : 整数嵌入 (α ->ₛ β) where
   定义体: const _ (IntCast.intCast n)
 
 @[simp, norm_cast]
@@ -2780,7 +2780,7 @@ lemma coe_intCast
 
 中文:
 引理 coe_intCast
-  条件: [整数Cast β] (n : 整数)
+  条件: [整数嵌入 β] (n : 整数)
   证明: rfl
 -/
 lemma coe_intCast [IntCast β] (n : Int) :
@@ -2796,8 +2796,8 @@ instance [NonAssocRing
     coe_zero coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_natCast coe_intCast
 
 中文:
-实例 [NonAssocRing
-  签名: β] : NonAssocRing (α ->ₛ β)
+实例 [非结合环
+  签名: β] : 非结合环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonAssocRing (fun f => show α -> β from f) coe_injective
     coe_zero coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_natCast coe_intCast
 
@@ -2817,8 +2817,8 @@ instance [NonUnitalCommSemiring
     coe_injective coe_zero coe_add coe_mul coe_smul
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: β] : NonUnitalCommSemiring (α ->ₛ β)
+实例 [非幺交换半环
+  签名: β] : 非幺交换半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonUnitalCommSemiring (fun f => show α -> β from f)
     coe_injective coe_zero coe_add coe_mul coe_smul
 
@@ -2838,8 +2838,8 @@ instance [CommSemiring
     coe_injective coe_zero coe_one coe_add coe_mul coe_smul coe_pow coe_natCast
 
 中文:
-实例 [CommSemiring
-  签名: β] : CommSemiring (α ->ₛ β)
+实例 [交换半环
+  签名: β] : 交换半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.commSemiring (fun f => show α -> β from f)
     coe_injective coe_zero coe_one coe_add coe_mul coe_smul coe_pow coe_natCast
 
@@ -2859,8 +2859,8 @@ instance [NonUnitalCommRing
     coe_injective coe_zero coe_add coe_mul coe_neg coe_sub coe_smul coe_smul
 
 中文:
-实例 [NonUnitalCommRing
-  签名: β] : NonUnitalCommRing (α ->ₛ β)
+实例 [非幺交换环
+  签名: β] : 非幺交换环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonUnitalCommRing (fun f => show α -> β from f)
     coe_injective coe_zero coe_add coe_mul coe_neg coe_sub coe_smul coe_smul
 
@@ -2880,8 +2880,8 @@ instance [CommRing
     coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_pow coe_natCast coe_intCast
 
 中文:
-实例 [CommRing
-  签名: β] : CommRing (α ->ₛ β)
+实例 [交换环
+  签名: β] : 交换环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.commRing (fun f => show α -> β from f) coe_injective coe_zero
     coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_pow coe_natCast coe_intCast
 
@@ -2901,8 +2901,8 @@ instance [Semiring
     coe_one coe_add coe_mul coe_smul coe_pow coe_natCast
 
 中文:
-实例 [Semiring
-  签名: β] : Semiring (α ->ₛ β)
+实例 [半环
+  签名: β] : 半环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.semiring (fun f => show α -> β from f) coe_injective coe_zero
     coe_one coe_add coe_mul coe_smul coe_pow coe_natCast
 
@@ -2922,8 +2922,8 @@ instance [NonUnitalRing
     coe_zero coe_add coe_mul coe_neg coe_sub coe_smul coe_smul
 
 中文:
-实例 [NonUnitalRing
-  签名: β] : NonUnitalRing (α ->ₛ β)
+实例 [非幺环
+  签名: β] : 非幺环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.nonUnitalRing (fun f => show α -> β from f) coe_injective
     coe_zero coe_add coe_mul coe_neg coe_sub coe_smul coe_smul
 
@@ -2943,8 +2943,8 @@ instance [Ring
     coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_pow coe_natCast coe_intCast
 
 中文:
-实例 [Ring
-  签名: β] : Ring (α ->ₛ β)
+实例 [环
+  签名: β] : 环 (α ->ₛ β)
   定义体: fast_instance% Function.Injective.ring (fun f => show α -> β from f) coe_injective coe_zero
     coe_one coe_add coe_mul coe_neg coe_sub coe_smul coe_smul coe_pow coe_natCast coe_intCast
 
@@ -2963,8 +2963,8 @@ instance [SMul
   body: ext fun _ => smul_assoc ..
 
 中文:
-实例 [SMul
-  签名: K γ] [SMul γ β] [SMul K β] [IsScalarTower K γ β] : IsScalarTower K γ (α ->ₛ β) where
+实例 [标量乘法
+  签名: K γ] [标量乘法 γ β] [标量乘法 K β] [标量塔 K γ β] : 标量塔 K γ (α ->ₛ β) where
   定义体: ext fun _ => smul_assoc ..
 
 Depends on / 依赖: smul_assoc
@@ -2981,8 +2981,8 @@ instance [SMul
   body: ext fun _ => smul_comm ..
 
 中文:
-实例 [SMul
-  签名: γ β] [SMul K β] [SMulCommClass K γ β] : SMulCommClass K γ (α ->ₛ β) where
+实例 [标量乘法
+  签名: γ β] [标量乘法 K β] [标量交换类 K γ β] : 标量交换类 K γ (α ->ₛ β) where
   定义体: ext fun _ => smul_comm ..
 
 Depends on / 依赖: smul_comm
@@ -3005,8 +3005,8 @@ toFun r := const α algebraMap K β r
   commutes' _ _ := ext fun _ => Alge
 
 中文:
-实例 [CommSemiring
-  签名: K] [Semiring β] [Algebra K β] : Algebra K (α ->ₛ β) where
+实例 [交换半环
+  签名: K] [半环 β] [代数 K β] : 代数 K (α ->ₛ β) where
   定义体: {
 toFun r := const α algebraMap K β r
 .map_one ▸ rfl map_one' := ext fun _ => algebraMap K β
@@ -3038,7 +3038,7 @@ lemma const_algebraMap
 
 中文:
 引理 const_algebraMap
-  条件: [CommSemiring K] [Semiring β] [Algebra K β] (k : K)
+  条件: [交换半环 K] [半环 β] [代数 K β] (k : K)
   证明: rfl
 
 @[simp]
@@ -3057,7 +3057,7 @@ lemma coe_algebraMap
 
 中文:
 引理 coe_algebraMap
-  条件: [CommSemiring K] [Semiring β] [Algebra K β] (k : K) (x : α)
+  条件: [交换半环 K] [半环 β] [代数 K β] (k : K) (x : α)
   证明: rfl
 -/
 lemma coe_algebraMap [CommSemiring K] [Semiring β] [Algebra K β] (k : K) (x : α) :
@@ -3076,8 +3076,8 @@ instance [Star
 @[simp]
 
 中文:
-实例 [Star
-  签名: β] : Star (α ->ₛ β) where
+实例 [对合
+  签名: β] : 对合 (α ->ₛ β) where
   定义体: f.map Star.star
 
 @[simp]
@@ -3099,7 +3099,7 @@ lemma coe_star
 
 中文:
 引理 coe_star
-  条件: [Star β] {f : α ->ₛ β}
+  条件: [对合 β] {f : α ->ₛ β}
   结论: ⇑(star f) = star ⇑f
   证明: rfl
 -/
@@ -3132,8 +3132,8 @@ instance [AddMonoid
   body: ext fun _ => star_add ..
 
 中文:
-实例 [AddMonoid
-  签名: β] [StarAddMonoid β] : StarAddMonoid (α ->ₛ β) where
+实例 [加法幺半群
+  签名: β] [StarAdd幺半群 β] : StarAdd幺半群 (α ->ₛ β) where
   定义体: ext fun _ => star_add ..
 
 Depends on / 依赖: star_add
@@ -3150,7 +3150,7 @@ instance [Mul
   body: ext fun _ => star_mul ..
 
 中文:
-实例 [Mul
+实例 [乘法
   签名: β] [StarMul β] : StarMul (α ->ₛ β) where
   定义体: ext fun _ => star_mul ..
 
@@ -3168,8 +3168,8 @@ instance [NonUnitalNonAssocSemiring
   body: ext fun _ => star_add ..
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: β] [StarRing β] : StarRing (α ->ₛ β) where
+实例 [非幺非结合半环
+  签名: β] [对合环 β] : 对合环 (α ->ₛ β) where
   定义体: ext fun _ => star_add ..
 
 Depends on / 依赖: star_add
@@ -3192,7 +3192,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (α ->ₛ β)
+  签名: : 预序 (α ->ₛ β)
   定义体: Preorder.lift (⇑)
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -3318,7 +3318,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: [PartialOrder β]
+  签名: [偏序 β]
   定义体: { SimpleFunc.instPreorder with
     le_antisymm := fun _f _g hfg hgf => ext fun a => le_antisymm (hfg a) (hgf a) }
 
@@ -3339,7 +3339,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: [LE β] [OrderBot β]
+  签名: [LE β] [有底序 β]
   定义体: const α ⊥
   bot_le _ _ := bot_le
 -/
@@ -3360,7 +3360,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: [LE β] [OrderTop β]
+  签名: [LE β] [有顶序 β]
   定义体: const α ⊤
   le_top _ _ := le_top
 
@@ -3380,8 +3380,8 @@ instance [CommMonoid
   body: mul_le_mul_left (h _) _
 
 中文:
-实例 [CommMonoid
-  签名: β] [Preorder β] [IsOrderedMonoid β] :
+实例 [交换幺半群
+  签名: β] [预序 β] [是Ordered幺半群 β] :
   定义体: mul_le_mul_left (h _) _
 
 Depends on / 依赖: mul_le_mul_left
@@ -3460,7 +3460,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [Lattice β]
+  签名: [格 β]
   定义体: { SimpleFunc.instSemilatticeSup, SimpleFunc.instSemilatticeInf with }
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.instSemilatticeInf, SimpleFunc.instSemilatticeSup, instSemilatticeInf, instSemilatticeSup
@@ -3478,7 +3478,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [LE β] [BoundedOrder β]
+  签名: [LE β] [有界序 β]
   定义体: { SimpleFunc.instOrderBot, SimpleFunc.instOrderTop with }
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.instOrderBot, SimpleFunc.instOrderTop, instOrderBot, instOrderTop
@@ -3500,7 +3500,7 @@ theorem finset_sup_apply
 
 中文:
 定理 finset_sup_apply
-  条件: [SemilatticeSup β] [OrderBot β] {f : γ -> α ->ₛ β} (s : Finset γ) (a : α)
+  条件: [SemilatticeSup β] [有底序 β] {f : γ -> α ->ₛ β} (s : 有限集 γ) (a : α)
   证明: by
   classical
   refine Finset.induction_on s rfl ?_
@@ -3531,7 +3531,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : α ->ₛ β) (s : Set α)
+  签名: (f : α ->ₛ β) (s : 集合 α)
   定义体: if hs : MeasurableSet s then piecewise s hs f 0 else 0
 
 Depends on / 依赖: MeasurableSet, piecewise
@@ -3551,7 +3551,7 @@ theorem restrict_of_not_measurable
 
 中文:
 定理 restrict_of_not_measurable
-  条件: {f : α ->ₛ β} {s : Set α} (hs : ¬MeasurableSet s)
+  条件: {f : α ->ₛ β} {s : 集合 α} (hs : ¬可测集 s)
   证明: dif_neg hs
 
 @[simp]
@@ -3577,7 +3577,7 @@ theorem coe_restrict
 
 中文:
 定理 coe_restrict
-  条件: (f : α ->ₛ β) {s : Set α} (hs : MeasurableSet s)
+  条件: (f : α ->ₛ β) {s : 集合 α} (hs : 可测集 s)
   证明: by
   classical
   rw [restrict]; rw [dif_pos hs]; rw [coe_piecewise]; rw [coe_zero]; rw [piecewise_eq_indicator]
@@ -3649,7 +3649,7 @@ theorem map_restrict_of_zero
 
 中文:
 定理 map_restrict_of_zero
-  条件: [Zero γ] {g : β -> γ} (hg : g 0 = 0) (f : α ->ₛ β) (s : Set α)
+  条件: [零 γ] {g : β -> γ} (hg : g 0 = 0) (f : α ->ₛ β) (s : 集合 α)
   证明: by
   classical
   exact ext fun x =>
@@ -3675,7 +3675,7 @@ theorem map_coe_ennreal_restrict
 
 中文:
 定理 map_coe_ennreal_restrict
-  条件: (f : α ->ₛ 实数>=0) (s : Set α)
+  条件: (f : α ->ₛ 实数>=0) (s : 集合 α)
   证明: map_restrict_of_zero ENNReal.coe_zero _ _
 
 Depends on / 依赖: ENNReal, ENNReal.coe_zero, coe_zero, map_restrict_of_zero
@@ -3694,7 +3694,7 @@ theorem map_coe_nnreal_restrict
 
 中文:
 定理 map_coe_nnreal_restrict
-  条件: (f : α ->ₛ 实数>=0) (s : Set α)
+  条件: (f : α ->ₛ 实数>=0) (s : 集合 α)
   证明: map_restrict_of_zero NNReal.coe_zero _ _
 
 Depends on / 依赖: NNReal, NNReal.coe_zero, coe_zero, map_restrict_of_zero
@@ -3713,7 +3713,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (f : α ->ₛ β) {s : Set α} (hs : MeasurableSet s) (a)
+  条件: (f : α ->ₛ β) {s : 集合 α} (hs : 可测集 s) (a)
   证明: by simp only [f.coe_restrict hs]
 
 Depends on / 依赖: coe_restrict, f.coe_restrict
@@ -3732,7 +3732,7 @@ theorem restrict_preimage
 
 中文:
 定理 restrict_preimage
-  结论: (f : α ->ₛ β) {s : Set α} (hs : MeasurableSet s) {t : Set β}
+  结论: (f : α ->ₛ β) {s : 集合 α} (hs : 可测集 s) {t : 集合 β}
   证明: by
   simp [hs, indicator_preimage_of_notMem _ _ ht, inter_comm]
 
@@ -3752,7 +3752,7 @@ theorem restrict_preimage_singleton
 
 中文:
 定理 restrict_preimage_singleton
-  结论: (f : α ->ₛ β) {s : Set α} (hs : MeasurableSet s) {r : β}
+  结论: (f : α ->ₛ β) {s : 集合 α} (hs : 可测集 s) {r : β}
   证明: f.restrict_preimage hs hr.symm
 
 Depends on / 依赖: f.restrict_preimage, hr.symm, restrict_preimage
@@ -3772,7 +3772,7 @@ theorem mem_restrict_range
 
 中文:
 定理 mem_restrict_range
-  条件: {r : β} {s : Set α} {f : α ->ₛ β} (hs : MeasurableSet s)
+  条件: {r : β} {s : 集合 α} {f : α ->ₛ β} (hs : 可测集 s)
   证明: by
   rw [← Finset.mem_coe]; rw [coe_range]; rw [coe_restrict _ hs]; rw [mem_range_indicator]
 
@@ -3799,7 +3799,7 @@ theorem mem_image_of_mem_range_restrict
 
 中文:
 定理 mem_image_of_mem_range_restrict
-  结论: {r : β} {s : Set α} {f : α ->ₛ β}
+  结论: {r : β} {s : 集合 α} {f : α ->ₛ β}
   证明: by
   classical
   exact if hs : MeasurableSet s then by simpa [mem_restrict_range hs, h0, -mem_range] using hr
@@ -3834,7 +3834,7 @@ theorem restrict_mono
 
 中文:
 定理 restrict_mono
-  条件: [Preorder β] (s : Set α) {f g : α ->ₛ β} (H : f <= g)
+  条件: [预序 β] (s : 集合 α) {f g : α ->ₛ β} (H : f <= g)
   证明: by
   classical
   exact if hs : MeasurableSet s then fun x => by
@@ -3894,7 +3894,7 @@ theorem approx_apply
 
 中文:
 定理 approx_apply
-  结论: [TopologicalSpace β] [OrderClosedTopology β] [MeasurableSpace β]
+  结论: [拓扑空间 β] [OrderClosed拓扑 β] [可测空间 β]
   证明: by
   dsimp only [approx]
   rw [finset_sup_apply]
@@ -3930,7 +3930,7 @@ Finset.sup_mono Finset.range_subset_range.2 h
 中文:
 定理 monotone_approx
   条件: (i : 自然数 -> β) (f : α -> β)
-  结论: Monotone (approx i f)
+  结论: 递增 (approx i f)
   证明: fun _ _ h =>
 Finset.sup_mono Finset.range_subset_range.2 h
 -/
@@ -3948,7 +3948,7 @@ theorem approx_comp
 
 中文:
 定理 approx_comp
-  结论: [TopologicalSpace β] [OrderClosedTopology β] [MeasurableSpace β]
+  结论: [拓扑空间 β] [OrderClosed拓扑 β] [可测空间 β]
   证明: by
   rw [approx_apply _ hf]; rw [approx_apply _ (hf.comp hg)]; rw [Function.comp_apply]
 
@@ -3979,7 +3979,7 @@ theorem iSup_approx_apply
 
 中文:
 定理 iSup_approx_apply
-  结论: [TopologicalSpace β] [CompleteLattice β] [OrderClosedTopology β] [Zero β]
+  结论: [拓扑空间 β] [完备格 β] [OrderClosed拓扑 β] [零 β]
   证明: by
   refine le_antisymm (iSup_le fun n => ?_) (iSup_le fun k => iSup_le fun hk => ?_)
   · rw [approx_apply a hf, h_zero]
@@ -4040,7 +4040,7 @@ theorem ennrealRatEmbed_encode
 
 中文:
 定理 ennrealRatEmbed_encode
-  条件: (q : Rat)
+  条件: (q : 有理数)
   证明: by
   rw [ennrealRatEmbed]; rw [Encodable.encodek]; rfl
 
@@ -4125,7 +4125,7 @@ theorem monotone_eapprox
 中文:
 定理 monotone_eapprox
   条件: (f : α -> 实数>=0∞)
-  结论: Monotone (eapprox f)
+  结论: 递增 (eapprox f)
   证明: monotone_approx _ f
 
 Depends on / 依赖: monotone_approx
@@ -4150,7 +4150,7 @@ lemma iSup_eapprox_apply
 
 中文:
 引理 iSup_eapprox_apply
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   结论: ⨆ n, (eapprox f n : α ->ₛ 实数>=0∞) a = f a
   证明: by
   rw [eapprox]; rw [iSup_approx_apply ennrealRatEmbed f a hf rfl]
@@ -4186,7 +4186,7 @@ lemma iSup_coe_eapprox
 
 中文:
 引理 iSup_coe_eapprox
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   结论: ⨆ n, ⇑(eapprox f n) = f
   证明: by
   simpa [funext_iff] using iSup_eapprox_apply hf
@@ -4206,7 +4206,7 @@ theorem eapprox_comp
 
 中文:
 定理 eapprox_comp
-  结论: [MeasurableSpace γ] {f : γ -> 实数>=0∞} {g : α -> γ} {n : 自然数} (hf : Measurable f)
+  结论: [可测空间 γ] {f : γ -> 实数>=0∞} {g : α -> γ} {n : 自然数} (hf : 可测 f)
   证明: funext fun a => approx_comp a hf hg
 
 Depends on / 依赖: approx_comp
@@ -4228,7 +4228,7 @@ lemma tendsto_eapprox
 
 中文:
 引理 tendsto_eapprox
-  条件: {f : α -> 实数>=0∞} (hf_meas : Measurable f) (a : α)
+  条件: {f : α -> 实数>=0∞} (hf_meas : 可测 f) (a : α)
   证明: by
   nth_rw 2 [← iSup_coe_eapprox hf_meas]
   rw [iSup_apply]
@@ -4305,7 +4305,7 @@ theorem tsum_eapproxDiff
 
 中文:
 定理 tsum_eapproxDiff
-  条件: (f : α -> 实数>=0∞) (hf : Measurable f) (a : α)
+  条件: (f : α -> 实数>=0∞) (hf : 可测 f) (a : α)
   证明: by
   simp_rw [ENNReal.tsum_eq_iSup_nat' (tendsto_add_atTop_nat 1), sum_eapproxDiff,
     iSup_eapprox_apply hf a]
@@ -4335,7 +4335,7 @@ definition lintegral
 
 中文:
 定义 lintegral
-  签名: {_m : MeasurableSpace α} (f : α ->ₛ 实数>=0∞) (μ : Measure α)
+  签名: {_m : 可测空间 α} (f : α ->ₛ 实数>=0∞) (μ : 测度 α)
   定义体: ∑ x in f.range, x * μ (f ⁻¹' {x})
 
 Depends on / 依赖: f.range
@@ -4361,7 +4361,7 @@ theorem lintegral_eq_of_subset
 
 中文:
 定理 lintegral_eq_of_subset
-  结论: (f : α ->ₛ 实数>=0∞) {s : Finset 实数>=0∞}
+  结论: (f : α ->ₛ 实数>=0∞) {s : 有限集 实数>=0∞}
   证明: by
   refine Finset.sum_bij_ne_zero (fun r _ _ => r) ?_ ?_ ?_ ?_
   · simpa only [forall_mem_range, mul_ne_zero_iff, and_imp]
@@ -4399,7 +4399,7 @@ hs Finset.mem_sdiff.2 ⟨f.mem_range_self x, mt Finset.mem_singleton.1 hfx⟩
 
 中文:
 定理 lintegral_eq_of_subset'
-  条件: (f : α ->ₛ 实数>=0∞) {s : Finset 实数>=0∞} (hs : f.range \ {0} subseteq s)
+  条件: (f : α ->ₛ 实数>=0∞) {s : 有限集 实数>=0∞} (hs : f.range \ {0} subseteq s)
   证明: f.lintegral_eq_of_subset fun x hfx _ =>
 hs Finset.mem_sdiff.2 ⟨f.mem_range_self x, mt Finset.mem_singleton.1 hfx⟩
 
@@ -4528,7 +4528,7 @@ definition lintegralₗ
 
 中文:
 定义 lintegralₗ
-  签名: {m : MeasurableSpace α}
+  签名: {m : 可测空间 α}
   定义体: { toFun := lintegral f
       map_add' := by simp [lintegral, mul_add, Finset.sum_add_distrib]
       map_smul' := fun c μ => by
@@ -4599,7 +4599,7 @@ theorem lintegral_smul
 
 中文:
 定理 lintegral_smul
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: by
   simpa only [smul_one_smul] using! (lintegralₗ f).map_smul (c • 1) μ
 
@@ -4623,7 +4623,7 @@ theorem lintegral_zero
 
 中文:
 定理 lintegral_zero
-  条件: [MeasurableSpace α] (f : α ->ₛ 实数>=0∞)
+  条件: [可测空间 α] (f : α ->ₛ 实数>=0∞)
   结论: f.lintegral 0 = 0
   证明: (lintegralₗ f).map_zero
 
@@ -4644,7 +4644,7 @@ theorem lintegral_finsetSum
 
 中文:
 定理 lintegral_finsetSum
-  条件: {ι} (f : α ->ₛ 实数>=0∞) (μ : ι -> Measure α) (s : Finset ι)
+  条件: {ι} (f : α ->ₛ 实数>=0∞) (μ : ι -> 测度 α) (s : 有限集 ι)
   证明: map_sum (lintegralₗ f) ..
 
 @[deprecated (since := "2026-04-08")] alias lintegral_finset_sum := lintegral_finsetSum
@@ -4670,7 +4670,7 @@ theorem lintegral_sum
 
 中文:
 定理 lintegral_sum
-  条件: {m : MeasurableSpace α} {ι} (f : α ->ₛ 实数>=0∞) (μ : ι -> Measure α)
+  条件: {m : 可测空间 α} {ι} (f : α ->ₛ 实数>=0∞) (μ : ι -> 测度 α)
   证明: by
   simp only [lintegral, Measure.sum_apply, f.measurableSet_preimage, ← Finset.tsum_subtype, ←
     ENNReal.tsum_mul_left]
@@ -4701,7 +4701,7 @@ else False.elim hx by simp
 
 中文:
 定理 restrict_lintegral
-  条件: (f : α ->ₛ 实数>=0∞) {s : Set α} (hs : MeasurableSet s)
+  条件: (f : α ->ₛ 实数>=0∞) {s : 集合 α} (hs : 可测集 s)
   证明: by
   classical
   exact calc
@@ -4739,7 +4739,7 @@ theorem lintegral_restrict
 
 中文:
 定理 lintegral_restrict
-  条件: {m : MeasurableSpace α} (f : α ->ₛ 实数>=0∞) (s : Set α) (μ : Measure α)
+  条件: {m : 可测空间 α} (f : α ->ₛ 实数>=0∞) (s : 集合 α) (μ : 测度 α)
   证明: by
   simp only [lintegral, Measure.restrict_apply, f.measurableSet_preimage]
 
@@ -4760,7 +4760,7 @@ theorem restrict_lintegral_eq_lintegral_restrict
 
 中文:
 定理 restrict_lintegral_eq_lintegral_restrict
-  结论: (f : α ->ₛ 实数>=0∞) {s : Set α}
+  结论: (f : α ->ₛ 实数>=0∞) {s : 集合 α}
   证明: by
   rw [f.restrict_lintegral hs]; rw [lintegral_restrict]
 
@@ -4784,7 +4784,7 @@ theorem lintegral_restrict_iUnion_of_directed
 
 中文:
 定理 lintegral_restrict_iUnion_of_directed
-  结论: {ι : 类型} [Countable ι]
+  结论: {ι : 类型} [可数 ι]
   证明: by
   simp only [lintegral, Measure.restrict_iUnion_apply_eq_iSup hd (measurableSet_preimage ..),
     ENNReal.mul_iSup]
@@ -4846,7 +4846,7 @@ theorem const_lintegral_restrict
 
 中文:
 定理 const_lintegral_restrict
-  条件: (c : 实数>=0∞) (s : Set α)
+  条件: (c : 实数>=0∞) (s : 集合 α)
   证明: by
   rw [const_lintegral]; rw [Measure.restrict_apply MeasurableSet.univ]; rw [univ_inter]
 
@@ -4867,7 +4867,7 @@ theorem restrict_const_lintegral
 
 中文:
 定理 restrict_const_lintegral
-  条件: (c : 实数>=0∞) {s : Set α} (hs : MeasurableSet s)
+  条件: (c : 实数>=0∞) {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [restrict_lintegral_eq_lintegral_restrict _ hs]; rw [const_lintegral_restrict]
 
@@ -4998,7 +4998,7 @@ theorem lintegral_eq_of_measure_preimage
 
 中文:
 定理 lintegral_eq_of_measure_preimage
-  结论: [MeasurableSpace β] {f : α ->ₛ 实数>=0∞} {g : β ->ₛ 实数>=0∞}
+  结论: [可测空间 β] {f : α ->ₛ 实数>=0∞} {g : β ->ₛ 实数>=0∞}
   证明: by
   simp only [lintegral, ← H]
   apply lintegral_eq_of_subset
@@ -5051,7 +5051,7 @@ theorem lintegral_map'
 
 中文:
 定理 lintegral_map'
-  结论: {β} [MeasurableSpace β] {μ' : Measure β} (f : α ->ₛ 实数>=0∞) (g : β ->ₛ 实数>=0∞)
+  结论: {β} [可测空间 β] {μ' : 测度 β} (f : α ->ₛ 实数>=0∞) (g : β ->ₛ 实数>=0∞)
   证明: lintegral_eq_of_measure_preimage fun y => by
     simp only [preimage, eq]
     exact (h (g ⁻¹' {y}) (g.measurableSet_preimage _)).symm
@@ -5075,7 +5075,7 @@ theorem lintegral_map
 
 中文:
 定理 lintegral_map
-  条件: {β} [MeasurableSpace β] (g : β ->ₛ 实数>=0∞) {f : α -> β} (hf : Measurable f)
+  条件: {β} [可测空间 β] (g : β ->ₛ 实数>=0∞) {f : α -> β} (hf : 可测 f)
   证明: Eq.symm lintegral_map' _ _ f (fun _ => rfl) fun _s hs => Measure.map_apply hf hs
 
 Depends on / 依赖: Eq.symm, Measure, Measure.map_apply, lintegral_map, map_apply
@@ -5103,7 +5103,7 @@ theorem support_eq
 
 中文:
 定理 support_eq
-  条件: [MeasurableSpace α] [Zero β] (f : α ->ₛ β)
+  条件: [可测空间 α] [零 β] (f : α ->ₛ β)
   证明: Set.ext fun x => by
     simp only [mem_support, Set.mem_preimage, mem_filter, mem_range_self, true_and, exists_prop,
       mem_iUnion, mem_singleton_iff, exists_eq_right']
@@ -5131,8 +5131,8 @@ theorem measurableSet_support
 
 中文:
 定理 measurableSet_support
-  条件: [MeasurableSpace α] (f : α ->ₛ β)
-  结论: MeasurableSet (support f)
+  条件: [可测空间 α] (f : α ->ₛ β)
+  结论: 可测集 (support f)
   证明: by
   rw [f.support_eq]
   exact Finset.measurableSet_biUnion _ fun y _ => measurableSet_fiber _ _
@@ -5186,7 +5186,7 @@ definition FinMeasSupp
 
 中文:
 定义 FinMeasSupp
-  签名: {_m : MeasurableSpace α} (f : α ->ₛ β) (μ : Measure α)
+  签名: {_m : 可测空间 α} (f : α ->ₛ β) (μ : 测度 α)
   定义体: f =ᶠ[μ.cofinite] 0
 -/
 protected def FinMeasSupp {_m : MeasurableSpace α} (f : α ->ₛ β) (μ : Measure α) : Prop :=
@@ -5361,7 +5361,7 @@ theorem map₂
 
 中文:
 定理 map₂
-  结论: [Zero δ] (hf : f.FinMeasSupp μ) {g : α ->ₛ γ} (hg : g.FinMeasSupp μ)
+  结论: [零 δ] (hf : f.FinMeasSupp μ) {g : α ->ₛ γ} (hg : g.FinMeasSupp μ)
   证明: (hf.pair hg).map H
 -/
 protected theorem map₂ [Zero δ] (hf : f.FinMeasSupp μ) {g : α ->ₛ γ} (hg : g.FinMeasSupp μ)
@@ -5380,7 +5380,7 @@ theorem add
 
 中文:
 定理 add
-  结论: {β} [AddZeroClass β] {f g : α ->ₛ β} (hf : f.FinMeasSupp μ)
+  结论: {β} [加法零类 β] {f g : α ->ₛ β} (hf : f.FinMeasSupp μ)
   证明: by
   rw [add_eq_map₂]
   exact hf.map₂ hg (zero_add 0)
@@ -5402,7 +5402,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: {β} [MulZeroClass β] {f g : α ->ₛ β} (hf : f.FinMeasSupp μ)
+  结论: {β} [乘零类 β] {f g : α ->ₛ β} (hf : f.FinMeasSupp μ)
   证明: by
   rw [mul_eq_map₂]
   exact hf.map₂ hg (zero_mul 0)
@@ -5561,7 +5561,7 @@ theorem induction
 
 中文:
 定理 induction
-  结论: {α γ} [MeasurableSpace α] [AddZeroClass γ]
+  结论: {α γ} [可测空间 α] [加法零类 γ]
   证明: by
   classical
   generalize h : f.range \ {0} = s
@@ -5629,7 +5629,7 @@ theorem induction'
 
 中文:
 定理 induction'
-  结论: {α γ} [MeasurableSpace α] [Nonempty γ] {P : SimpleFunc α γ -> 命题}
+  结论: {α γ} [可测空间 α] [非空 γ] {P : SimpleFunc α γ -> 命题}
   证明: by
   let c : γ := Classical.ofNonempty
   classical
@@ -5679,7 +5679,7 @@ theorem _root_.Measurable.add_simpleFunc
   proof: f.measurable_bind (fun b a => g a + b) fun b => hg.add_const b
 
 中文:
-定理 _root_.Measurable.add_simpleFunc
+定理 _root_.可测.add_simpleFunc
   证明: f.measurable_bind (fun b a => g a + b) fun b => hg.add_const b
 
 Depends on / 依赖: add_const, f.measurable_bind, hg.add_const, measurable_bind
@@ -5697,7 +5697,7 @@ theorem _root_.Measurable.simpleFunc_add
   proof: f.measurable_bind (fun b a => b + g a) fun b => hg.const_add b
 
 中文:
-定理 _root_.Measurable.simpleFunc_add
+定理 _root_.可测.simpleFunc_add
   证明: f.measurable_bind (fun b a => b + g a) fun b => hg.const_add b
 
 Depends on / 依赖: const_add, f.measurable_bind, hg.const_add, measurable_bind
@@ -5738,7 +5738,7 @@ theorem Measurable.ennreal_induction
         (fun f g hfg hf hg => add hfg f.measurable g.measurable hf hg) (eapprox f n)
 
 中文:
-定理 Measurable.ennreal_induction
+定理 可测.ennreal_induction
   结论: {motive : (α -> 实数>=0∞) -> 命题}
   证明: by
   convert! iSup (fun n => (eapprox f n).measurable) (monotone_eapprox f) _ using 2
@@ -5787,8 +5787,8 @@ lemma Measurable.ennreal_sigmaFinite_induction
       (fun n
 
 中文:
-引理 Measurable.ennreal_sigmaFinite_induction
-  结论: [SigmaFinite μ] {motive : (α -> 实数>=0∞) -> 命题}
+引理 可测.ennreal_sigmaFinite_induction
+  结论: [σ有限 μ] {motive : (α -> 实数>=0∞) -> 命题}
   证明: by
   refine Measurable.ennreal_induction (fun c s hs => ?_) add iSup hf
   convert!

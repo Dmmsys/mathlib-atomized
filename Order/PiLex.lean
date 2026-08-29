@@ -74,7 +74,7 @@ theorem lex_lt_of_lt_of_preorder
 
 中文:
 定理 lex_lt_of_lt_of_preorder
-  结论: [对任意 i, Preorder (β i)] {r} (hwf : WellFounded r) {x y : 对任意 i, β i}
+  结论: [对任意 i, 预序 (β i)] {r} (hwf : 良基 r) {x y : 对任意 i, β i}
   证明: let h' := Pi.lt_def.1 hlt
   let ⟨i, hi, hl⟩ := hwf.has_min {i | x i < y i} h'.2
   ⟨i, fun j hj => ⟨h'.1 j, not_not.1 fun h => hl j (lt_of_le_not_ge (h'.1 j) h) hj⟩, hi⟩
@@ -99,7 +99,7 @@ theorem lex_lt_of_lt
 
 中文:
 定理 lex_lt_of_lt
-  结论: [对任意 i, PartialOrder (β i)] {r} (hwf : WellFounded r) {x y : 对任意 i, β i}
+  结论: [对任意 i, 偏序 (β i)] {r} (hwf : 良基 r) {x y : 对任意 i, β i}
   证明: by
   simp_rw [Pi.Lex, le_antisymm_iff]
   exact lex_lt_of_lt_of_preorder hwf hlt
@@ -122,7 +122,7 @@ theorem lex_iff_of_unique
 
 中文:
 定理 lex_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (β i)] {r} [Std.Irrefl r] {x y : 对任意 i, β i}
+  条件: [唯一 ι] [对任意 i, LT (β i)] {r} [Std.Irrefl r] {x y : 对任意 i, β i}
   证明: by
   simp [Pi.Lex, Unique.forall_iff, Unique.exists_iff, irrefl]
 
@@ -148,7 +148,7 @@ exac
 
 中文:
 定理 trichotomous_lex
-  条件: [对任意 i, Std.Trichotomous (α := β i) s] (wf : WellFounded r)
+  条件: [对任意 i, Std.三歧 (α := β i) s] (wf : 良基 r)
   证明: { trichotomous a b hab hba := by
       by_contra! h
       rw [Function.ne_iff] at h
@@ -287,7 +287,7 @@ theorem Lex.lt_iff_of_unique
 
 中文:
 定理 Lex.lt_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (β i)] [Preorder ι] {x y : Lex (对任意 i, β i)}
+  条件: [唯一 ι] [对任意 i, LT (β i)] [预序 ι] {x y : Lex (对任意 i, β i)}
   证明: lex_iff_of_unique
 -/
 theorem Lex.lt_iff_of_unique [Unique ι] [forall i, LT (β i)] [Preorder ι] {x y : Lex (forall i, β i)} :
@@ -304,7 +304,7 @@ theorem Colex.lt_iff_of_unique
 
 中文:
 定理 Colex.lt_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (β i)] [Preorder ι] {x y : Colex (对任意 i, β i)}
+  条件: [唯一 ι] [对任意 i, LT (β i)] [预序 ι] {x y : Colex (对任意 i, β i)}
   证明: lex_iff_of_unique
 -/
 theorem Colex.lt_iff_of_unique [Unique ι] [forall i, LT (β i)] [Preorder ι] {x y : Colex (forall i, β i)} :
@@ -326,7 +326,7 @@ instance Lex.isStrictOrder
 
 中文:
 实例 Lex.isStrictOrder
-  签名: [LinearOrder ι] [对任意 a, PartialOrder (β a)]
+  签名: [线性序 ι] [对任意 a, 偏序 (β a)]
   定义体: fun a ⟨k, _, hk₂⟩ => lt_irrefl (a k) hk₂
   trans := by
     rintro a b c ⟨N₁, lt_N₁, a_lt_b⟩ ⟨N₂, lt_N₂, b_lt_c⟩
@@ -355,7 +355,7 @@ instance Colex.isStrictOrder
 
 中文:
 实例 Colex.isStrictOrder
-  签名: [LinearOrder ι] [对任意 a, PartialOrder (β a)]
+  签名: [线性序 ι] [对任意 a, 偏序 (β a)]
   定义体: Lex.isStrictOrder (ι := ιᵒᵈ)
 -/
 instance Colex.isStrictOrder [LinearOrder ι] [forall a, PartialOrder (β a)] :
@@ -371,8 +371,8 @@ instance [LinearOrder
   body: partialOrderOfSO (· < ·)
 
 中文:
-实例 [LinearOrder
-  签名: ι] [对任意 a, PartialOrder (β a)] : PartialOrder (Lex (对任意 i, β i))
+实例 [线性序
+  签名: ι] [对任意 a, 偏序 (β a)] : 偏序 (Lex (对任意 i, β i))
   定义体: partialOrderOfSO (· < ·)
 
 Depends on / 依赖: partialOrderOfSO
@@ -389,8 +389,8 @@ instance [LinearOrder
   body: partialOrderOfSO (· < ·)
 
 中文:
-实例 [LinearOrder
-  签名: ι] [对任意 a, PartialOrder (β a)] : PartialOrder (Colex (对任意 i, β i))
+实例 [线性序
+  签名: ι] [对任意 a, 偏序 (β a)] : 偏序 (Colex (对任意 i, β i))
   定义体: partialOrderOfSO (· < ·)
 
 Depends on / 依赖: partialOrderOfSO
@@ -409,7 +409,7 @@ instance Lex.linearOrder
 
 中文:
 实例 Lex.linearOrder
-  签名: [LinearOrder ι] [WellFoundedLT ι]
+  签名: [线性序 ι] [WellFoundedLT ι]
   定义体: @linearOrderOfSTO (Πₗ i, β i) (· < ·)
     { trichotomous := (trichotomous_lex _ _ IsWellFounded.wf).1 } (Classical.decRel _)
 -/
@@ -429,7 +429,7 @@ instance Colex.linearOrder
 
 中文:
 实例 Colex.linearOrder
-  签名: [LinearOrder ι] [WellFoundedGT ι]
+  签名: [线性序 ι] [WellFoundedGT ι]
   定义体: Lex.linearOrder (ι := ιᵒᵈ)
 -/
 noncomputable instance Colex.linearOrder [LinearOrder ι] [WellFoundedGT ι]
@@ -449,7 +449,7 @@ theorem lex_le_iff_of_unique
 
 中文:
 定理 lex_le_iff_of_unique
-  结论: [Unique ι] [LinearOrder ι] [对任意 i, PartialOrder (β i)]
+  结论: [唯一 ι] [线性序 ι] [对任意 i, 偏序 (β i)]
   证明: by
   simp_rw [le_iff_lt_or_eq, Pi.Lex.lt_iff_of_unique, ← ofLex_inj, funext_iff, Unique.forall_iff,
     ofLex_apply]
@@ -474,7 +474,7 @@ theorem colex_le_iff_of_unique
 
 中文:
 定理 colex_le_iff_of_unique
-  结论: [Unique ι] [LinearOrder ι] [对任意 i, PartialOrder (β i)]
+  结论: [唯一 ι] [线性序 ι] [对任意 i, 偏序 (β i)]
   证明: by
   simp_rw [le_iff_lt_or_eq, Pi.Colex.lt_iff_of_unique, ← ofColex_inj, funext_iff, Unique.forall_iff,
     ofColex_apply]
@@ -510,7 +510,7 @@ theorem toLex_monotone
 
 中文:
 定理 toLex_monotone
-  结论: Monotone (@toLex (对任意 i, β i))
+  结论: 递增 (@toLex (对任意 i, β i))
   证明: fun a b h =>
   or_iff_not_imp_left.2 fun hne =>
     let ⟨i, hi, hl⟩ := IsWellFounded.wf.has_min (r := (· < ·)) { i | a i != b i }
@@ -544,7 +544,7 @@ theorem toLex_strictMono
 
 中文:
 定理 toLex_strictMono
-  结论: StrictMono (@toLex (对任意 i, β i))
+  结论: 严格递增 (@toLex (对任意 i, β i))
   证明: fun a b h =>
   let ⟨i, hi, hl⟩ := IsWellFounded.wf.has_min (r := (· < ·)) { i | a i != b i }
     (Function.ne_iff.1 h.ne)
@@ -709,7 +709,7 @@ theorem toColex_monotone
 
 中文:
 定理 toColex_monotone
-  结论: Monotone (@toColex (对任意 i, β i))
+  结论: 递增 (@toColex (对任意 i, β i))
   证明: toLex_monotone (ι := ιᵒᵈ)
 
 Depends on / 依赖: toLex_monotone
@@ -728,7 +728,7 @@ theorem toColex_strictMono
 
 中文:
 定理 toColex_strictMono
-  结论: StrictMono (@toColex (对任意 i, β i))
+  结论: 严格递增 (@toColex (对任意 i, β i))
   证明: toLex_strictMono (ι := ιᵒᵈ)
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.div_surjective, IsFractionRing.of_field, algebraMap, div_surjective, eq.symm, of_field, toLex_strictMono
@@ -905,8 +905,8 @@ instance [LinearOrder
   bot_le _ := toLex_monotone bot_le
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedLT ι] [对任意 a, PartialOrder (β a)] [对任意 a, OrderBot (β a)] :
+实例 [线性序
+  签名: ι] [WellFoundedLT ι] [对任意 a, 偏序 (β a)] [对任意 a, 有底序 (β a)] :
   定义体: toLex ⊥
   bot_le _ := toLex_monotone bot_le
 -/
@@ -925,8 +925,8 @@ instance [LinearOrder
   bot_le _ := toColex_monotone bot_le
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedGT ι] [对任意 a, PartialOrder (β a)] [对任意 a, OrderBot (β a)] :
+实例 [线性序
+  签名: ι] [WellFoundedGT ι] [对任意 a, 偏序 (β a)] [对任意 a, 有底序 (β a)] :
   定义体: toColex ⊥
   bot_le _ := toColex_monotone bot_le
 
@@ -947,8 +947,8 @@ instance [LinearOrder
   le_top _ := toLex_monotone le_top
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedLT ι] [对任意 a, PartialOrder (β a)] [对任意 a, OrderTop (β a)] :
+实例 [线性序
+  签名: ι] [WellFoundedLT ι] [对任意 a, 偏序 (β a)] [对任意 a, 有顶序 (β a)] :
   定义体: toLex ⊤
   le_top _ := toLex_monotone le_top
 
@@ -969,8 +969,8 @@ instance [LinearOrder
   le_top _ := toColex_monotone le_top
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedGT ι] [对任意 a, PartialOrder (β a)] [对任意 a, OrderTop (β a)] :
+实例 [线性序
+  签名: ι] [WellFoundedGT ι] [对任意 a, 偏序 (β a)] [对任意 a, 有顶序 (β a)] :
   定义体: toColex ⊤
   le_top _ := toColex_monotone le_top
 
@@ -989,8 +989,8 @@ instance [LinearOrder
   signature: ι] [WellFoundedLT ι] [forall a, PartialOrder (β a)]
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedLT ι] [对任意 a, PartialOrder (β a)]
+实例 [线性序
+  签名: ι] [WellFoundedLT ι] [对任意 a, 偏序 (β a)]
 -/
 instance [LinearOrder ι] [WellFoundedLT ι] [forall a, PartialOrder (β a)]
     [forall a, BoundedOrder (β a)] : BoundedOrder (Lex (forall a, β a)) where
@@ -1003,8 +1003,8 @@ instance [LinearOrder
   signature: ι] [WellFoundedGT ι] [forall a, PartialOrder (β a)]
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedGT ι] [对任意 a, PartialOrder (β a)]
+实例 [线性序
+  签名: ι] [WellFoundedGT ι] [对任意 a, 偏序 (β a)]
 -/
 instance [LinearOrder ι] [WellFoundedGT ι] [forall a, PartialOrder (β a)]
     [forall a, BoundedOrder (β a)] : BoundedOrder (Colex (forall a, β a)) where
@@ -1027,8 +1027,8 @@ instance [Preorder
       · rwa [Function.update_self i
 
 中文:
-实例 [Preorder
-  签名: ι] [对任意 i, LT (β i)] [对任意 i, DenselyOrdered (β i)] :
+实例 [预序
+  签名: ι] [对任意 i, LT (β i)] [对任意 i, 稠密序 (β i)] :
   定义体: ⟨by
     rintro _ a₂ ⟨i, h, hi⟩
     obtain ⟨a, ha₁, ha₂⟩ := exists_between hi
@@ -1065,8 +1065,8 @@ instance [Preorder
   body: inferInstanceAs (DenselyOrdered (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 中文:
-实例 [Preorder
-  签名: ι] [对任意 i, LT (β i)] [对任意 i, DenselyOrdered (β i)] :
+实例 [预序
+  签名: ι] [对任意 i, LT (β i)] [对任意 i, 稠密序 (β i)] :
   定义体: inferInstanceAs (DenselyOrdered (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 Depends on / 依赖: DenselyOrdered, OrderDual, OrderDual.toDual, toDual
@@ -1090,7 +1090,7 @@ theorem Lex.noMaxOrder'
 
 中文:
 定理 Lex.noMaxOrder'
-  条件: [Preorder ι] [对任意 i, LT (β i)] (i : ι) [NoMaxOrder (β i)]
+  条件: [预序 ι] [对任意 i, LT (β i)] (i : ι) [NoMax序 (β i)]
   证明: ⟨fun a => by
     let ⟨b, hb⟩ := exists_gt (a i)
     classical
@@ -1118,7 +1118,7 @@ theorem Colex.noMaxOrder'
 
 中文:
 定理 Colex.noMaxOrder'
-  条件: [Preorder ι] [对任意 i, LT (β i)] (i : ι) [NoMaxOrder (β i)]
+  条件: [预序 ι] [对任意 i, LT (β i)] (i : ι) [NoMax序 (β i)]
   证明: Lex.noMaxOrder' (ι := ιᵒᵈ) i
 
 Depends on / 依赖: Lex.noMaxOrder, noMaxOrder
@@ -1138,8 +1138,8 @@ instance [LinearOrder
     ⟨_, toLex_strictMono hb⟩⟩
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedLT ι] [Nonempty ι] [对任意 i, PartialOrder (β i)]
+实例 [线性序
+  签名: ι] [WellFoundedLT ι] [非空 ι] [对任意 i, 偏序 (β i)]
   定义体: ⟨fun a =>
     let ⟨_, hb⟩ := exists_gt (ofLex a)
     ⟨_, toLex_strictMono hb⟩⟩
@@ -1162,8 +1162,8 @@ instance [LinearOrder
   body: inferInstanceAs (NoMaxOrder (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedGT ι] [Nonempty ι] [对任意 i, PartialOrder (β i)]
+实例 [线性序
+  签名: ι] [WellFoundedGT ι] [非空 ι] [对任意 i, 偏序 (β i)]
   定义体: inferInstanceAs (NoMaxOrder (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 Depends on / 依赖: NoMaxOrder, OrderDual, OrderDual.toDual, toDual
@@ -1183,8 +1183,8 @@ instance [LinearOrder
     ⟨_, toLex_strictMono hb⟩⟩
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedLT ι] [Nonempty ι] [对任意 i, PartialOrder (β i)]
+实例 [线性序
+  签名: ι] [WellFoundedLT ι] [非空 ι] [对任意 i, 偏序 (β i)]
   定义体: ⟨fun a =>
     let ⟨_, hb⟩ := exists_lt (ofLex a)
     ⟨_, toLex_strictMono hb⟩⟩
@@ -1207,8 +1207,8 @@ instance [LinearOrder
   body: inferInstanceAs (NoMinOrder (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 中文:
-实例 [LinearOrder
-  签名: ι] [WellFoundedGT ι] [Nonempty ι] [对任意 i, PartialOrder (β i)]
+实例 [线性序
+  签名: ι] [WellFoundedGT ι] [非空 ι] [对任意 i, 偏序 (β i)]
   定义体: inferInstanceAs (NoMinOrder (Lex (forall i : ιᵒᵈ, β (OrderDual.toDual i))))
 
 Depends on / 依赖: NoMinOrder, OrderDual, OrderDual.toDual, toDual
@@ -1228,7 +1228,7 @@ theorem lex_desc
 
 中文:
 定理 lex_desc
-  结论: {α} [Preorder ι] [DecidableEq ι] [LT α] {f : ι -> α} {i j : ι} (h₁ : i <= j)
+  结论: {α} [预序 ι] [DecidableEq ι] [LT α] {f : ι -> α} {i j : ι} (h₁ : i <= j)
   证明: ⟨i, fun _ hik => congr_arg f (Equiv.swap_apply_of_ne_of_ne hik.ne (hik.trans_le h₁).ne), by
     simpa only [Pi.toLex_apply, Function.comp_apply, Equiv.swap_apply_left] using h₂⟩
 
@@ -1251,7 +1251,7 @@ theorem colex_asc
 
 中文:
 定理 colex_asc
-  结论: {α} [Preorder ι] [DecidableEq ι] [LT α] {f : ι -> α} {i j : ι} (h₁ : i <= j)
+  结论: {α} [预序 ι] [DecidableEq ι] [LT α] {f : ι -> α} {i j : ι} (h₁ : i <= j)
   证明: by
   rw [Equiv.swap_comm]
   exact lex_desc (ι := ιᵒᵈ) h₁ h₂

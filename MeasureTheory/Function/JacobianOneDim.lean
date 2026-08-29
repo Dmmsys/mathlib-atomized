@@ -131,8 +131,8 @@ theorem exists_decomposition_of_monotoneOn_hasDerivWithinAt
   let 
 
 中文:
-定理 exists_decomposition_of_monotoneOn_hasDerivWithinAt
-  结论: (hs : MeasurableSet s)
+定理 存在_decomposition_of_monotoneOn_hasDerivWithinAt
+  结论: (hs : 可测集 s)
   证明: by
   let a := {x in s | 𝓝[s inter Ioi x] x = ⊥} union {x in s | 𝓝[s inter Iio x] x = ⊥}
   have a_count : a.Countable :=
@@ -256,7 +256,7 @@ theorem lintegral_image_eq_lintegral_deriv_mul_of_monotoneOn
 
 中文:
 定理 lintegral_image_eq_lintegral_deriv_mul_of_monotoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rcases exists_decomposition_of_monotoneOn_hasDerivWithinAt hs hf hf' with
     ⟨a, b, c, h_union, ha, hb, hc, h_disj, h_disj', a_count, fb_count, deriv_b, deriv_c, inj_c⟩
@@ -313,7 +313,7 @@ theorem lintegral_deriv_eq_volume_image_of_monotoneOn
 
 中文:
 定理 lintegral_deriv_eq_volume_image_of_monotoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   simpa using (lintegral_image_eq_lintegral_deriv_mul_of_monotoneOn hs hf' hf 1).symm
 
@@ -339,7 +339,7 @@ theorem integrableOn_image_iff_integrableOn_deriv_smul_of_monotoneOn
 
 中文:
 定理 integrableOn_image_iff_integrableOn_deriv_smul_of_monotoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rcases exists_decomposition_of_monotoneOn_hasDerivWithinAt hs hf hf' with
     ⟨a, b, c, h_union, ha, hb, hc, h_disj, h_disj', a_count, fb_count, deriv_b, deriv_c, inj_c⟩
@@ -397,7 +397,7 @@ theorem integral_image_eq_integral_deriv_smul_of_monotoneOn
 
 中文:
 定理 integral_image_eq_integral_deriv_smul_of_monotoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   by_cases H : IntegrableOn g (f '' s); swap
   · rw [integral_undef H, integral_undef]
@@ -572,7 +572,7 @@ theorem lintegral_image_eq_lintegral_deriv_mul_of_antitoneOn
 
 中文:
 定理 lintegral_image_eq_lintegral_deriv_mul_of_antitoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   let n : Real -> Real := (fun x => -x)
   let e := n ∘ f
@@ -608,7 +608,7 @@ theorem lintegral_deriv_eq_volume_image_of_antitoneOn
 
 中文:
 定理 lintegral_deriv_eq_volume_image_of_antitoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   simpa using (lintegral_image_eq_lintegral_deriv_mul_of_antitoneOn hs hf' hf 1).symm
 
@@ -635,7 +635,7 @@ theorem integrableOn_image_iff_integrableOn_deriv_smul_of_antitoneOn
 
 中文:
 定理 integrableOn_image_iff_integrableOn_deriv_smul_of_antitoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   let n : Real -> Real := (fun x => -x)
   let e := n ∘ f
@@ -677,7 +677,7 @@ theorem integral_image_eq_integral_deriv_smul_of_antitoneOn
 
 中文:
 定理 integral_image_eq_integral_deriv_smul_of_antitoneOn
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   let n : Real -> Real := (fun x => -x)
   let e := n ∘ f
@@ -828,7 +828,7 @@ lemma _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_
   simp only [det_toSpanSingleton]
 
 中文:
-引理 _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_deriv_mul
+引理 _root_.可测嵌入.withDensity_of实数_comap_apply_eq_integral_abs_deriv_mul
   证明: by
   rw [hf.withDensity_ofReal_comap_apply_eq_integral_abs_det_fderiv_mul volume hs
     hg hf_int hf']
@@ -857,7 +857,7 @@ lemma _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_d
   simp only [det_toSpanSingleton]
 
 中文:
-引理 _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_deriv_mul
+引理 _root_.可测等价.withDensity_of实数_map_symm_apply_eq_integral_abs_deriv_mul
   证明: by
   rw [MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_det_fderiv_mul volume hs
       f hg hf_int hf']
@@ -885,7 +885,7 @@ lemma _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_
     (fun x _ => (hf' x).hasDerivWithinAt)
 
 中文:
-引理 _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_deriv_mul'
+引理 _root_.可测嵌入.withDensity_of实数_comap_apply_eq_integral_abs_deriv_mul'
   证明: hf.withDensity_ofReal_comap_apply_eq_integral_abs_deriv_mul hs
     (by filter_upwards [hg] with x hx using fun _ => hx) hg_int.integrableOn
     (fun x _ => (hf' x).hasDerivWithinAt)
@@ -914,7 +914,7 @@ lemma _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_d
   simp only [det_toSpanSingleton]
 
 中文:
-引理 _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_deriv_mul'
+引理 _root_.可测等价.withDensity_of实数_map_symm_apply_eq_integral_abs_deriv_mul'
   证明: by
   rw [MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_det_fderiv_mul volume hs
       f (by filter_upwards [hg] with x hx using fun _ => hx) hg_int.integrableOn

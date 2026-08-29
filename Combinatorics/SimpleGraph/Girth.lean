@@ -41,7 +41,7 @@ definition egirth
 
 中文:
 定义 egirth
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: ⨅ a, ⨅ w : G.Walk a a, ⨅ _ : w.IsCycle, w.length
 
 @[simp]
@@ -65,7 +65,7 @@ lemma le_egirth
 中文:
 引理 le_egirth
   条件: {n : 自然数∞}
-  结论: n <= G.egirth ↔ 对任意 a (w : G.Walk a a), w.IsCycle -> n <= w.length
+  结论: n <= G.egirth ↔ 对任意 a (w : G.途径 a a), w.是环 -> n <= w.length
   证明: by
   simp [egirth]
 
@@ -85,7 +85,7 @@ lemma egirth_le_length
 
 中文:
 引理 egirth_le_length
-  条件: {a} {w : G.Walk a a} (h : w.IsCycle)
+  条件: {a} {w : G.途径 a a} (h : w.是环)
   结论: G.egirth <= w.length
   证明: le_egirth.mp le_rfl a w h
 
@@ -113,8 +113,8 @@ lemma Walk.IsCircuit.egirth_le_length
 @[simp]
 
 中文:
-引理 Walk.IsCircuit.egirth_le_length
-  条件: {a} {w : G.Walk a a} (hwc : w.IsCircuit)
+引理 途径.是Circuit.egirth_le_length
+  条件: {a} {w : G.途径 a a} (hwc : w.是Circuit)
   证明: by
   classical
   by_contra! hlg
@@ -175,7 +175,7 @@ lemma egirth_anti
 
 中文:
 引理 egirth_anti
-  结论: Antitone (egirth : SimpleGraph α -> 自然数∞)
+  结论: 递减 (egirth : 简单图 α -> 自然数∞)
   证明: fun G H h => iInf_mono fun a => iInf₂_mono' fun w hw => ⟨w.mapLe h, hw.mapLe _, by simp⟩
 
 Depends on / 依赖: hw.mapLe, iInf_mono, w.mapLe
@@ -197,7 +197,7 @@ lemma exists_egirth_eq_length
     exact ciInf_mem _
 
 中文:
-引理 exists_egirth_eq_length
+引理 存在_egirth_eq_length
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨a, w, hw, _⟩ hG
@@ -247,7 +247,7 @@ lemma egirth_bot
 
 中文:
 引理 egirth_bot
-  结论: egirth (⊥ : SimpleGraph α) = ⊤
+  结论: egirth (⊥ : 简单图 α) = ⊤
   证明: by simp
 -/
 @[simp] lemma egirth_bot : egirth (⊥ : SimpleGraph α) = ⊤ := by simp
@@ -271,7 +271,7 @@ set w : Walk ⊤ x x := .cons hxy .cons hyz .cons hxz.symm .nil with hw
 中文:
 定理 egirth_top
   条件: (h : 3 <= E自然数.card α)
-  结论: egirth (⊤ : SimpleGraph α) = 3
+  结论: egirth (⊤ : 简单图 α) = 3
   证明: by
   classical
   refine le_antisymm ?_ three_le_egirth
@@ -346,7 +346,7 @@ lemma Iso.egirth_eq
   proof: le_antisymm f.isContained'.egirth_le f.isContained.egirth_le
 
 中文:
-引理 Iso.egirth_eq
+引理 同构.egirth_eq
   条件: (f : G ≃g G')
   结论: G.egirth = G'.egirth
   证明: le_antisymm f.isContained'.egirth_le f.isContained.egirth_le
@@ -371,7 +371,7 @@ definition girth
 
 中文:
 定义 girth
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: G.egirth.toNat
 
 Depends on / 依赖: G.egirth.toNat, egirth
@@ -390,7 +390,7 @@ lemma girth_le_length
 
 中文:
 引理 girth_le_length
-  条件: {a} {w : G.Walk a a} (h : w.IsCycle)
+  条件: {a} {w : G.途径 a a} (h : w.是环)
   结论: G.girth <= w.length
   证明: ENat.natCast_le_natCast.mp G.egirth.natCast_toNat_le_self.trans egirth_le_length h
 
@@ -454,7 +454,7 @@ lemma girth_anti
 
 中文:
 引理 girth_anti
-  条件: {G' : SimpleGraph α} (hab : G <= G') (h : ¬ G.IsAcyclic)
+  条件: {G' : 简单图 α} (hab : G <= G') (h : ¬ G.IsAcyclic)
   结论: G'.girth <= G.girth
   证明: ENat.toNat_le_toNat (egirth_anti hab) egirth_eq_top.not.mpr h
 
@@ -472,8 +472,8 @@ lemma Walk.IsCircuit.girth_le_length
   proof: ENat.natCast_le_natCast.mp G.egirth.natCast_toNat_le_self.trans hwc.egirth_le_length
 
 中文:
-引理 Walk.IsCircuit.girth_le_length
-  条件: {a} {w : G.Walk a a} (hwc : w.IsCircuit)
+引理 途径.是Circuit.girth_le_length
+  条件: {a} {w : G.途径 a a} (hwc : w.是Circuit)
   证明: ENat.natCast_le_natCast.mp G.egirth.natCast_toNat_le_self.trans hwc.egirth_le_length
 
 Depends on / 依赖: ENat.natCast_le_natCast.mp, G.egirth.natCast_toNat_le_self.trans, egirth, egirth_le_length, hwc.egirth_le_length, natCast_le_natCast, natCast_toNat_le_self
@@ -494,7 +494,7 @@ lemma exists_girth_eq_length
   tauto
 
 中文:
-引理 exists_girth_eq_length
+引理 存在_girth_eq_length
   证明: by
   refine ⟨by tauto, fun h => ?_⟩
   obtain ⟨_, _, _⟩ := exists_egirth_eq_length.mpr h
@@ -521,7 +521,7 @@ lemma girth_bot
 
 中文:
 引理 girth_bot
-  结论: girth (⊥ : SimpleGraph α) = 0
+  结论: girth (⊥ : 简单图 α) = 0
   证明: by
   simp [girth]
 -/
@@ -541,7 +541,7 @@ theorem girth_top
 中文:
 定理 girth_top
   条件: (h : 3 <= E自然数.card α)
-  结论: girth (⊤ : SimpleGraph α) = 3
+  结论: girth (⊤ : 简单图 α) = 3
   证明: by
   simp [girth, egirth_top h]
 
@@ -581,7 +581,7 @@ lemma Iso.girth_eq
   simp [girth, f.egirth_eq]
 
 中文:
-引理 Iso.girth_eq
+引理 同构.girth_eq
   条件: (f : G ≃g G')
   结论: G.girth = G'.girth
   证明: by

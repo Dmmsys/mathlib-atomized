@@ -150,7 +150,7 @@ theorem coe_range
 中文:
 定理 coe_range
   条件: (n : 自然数)
-  结论: (range n : Set 自然数) = Set.Iio n
+  结论: (range n : 集合 自然数) = 集合.左无界右开区间 n
   证明: Set.ext fun _ => mem_range
 
 @[simp]
@@ -318,7 +318,7 @@ theorem range_mono
 
 中文:
 定理 range_mono
-  结论: Monotone range
+  结论: 递增 range
   证明: fun _ _ => range_subset_range.2
 
 Depends on / 依赖: range_subset_range
@@ -335,7 +335,7 @@ theorem strictMono_range
 
 中文:
 定理 strictMono_range
-  结论: StrictMono range
+  结论: 严格递增 range
   证明: strictMono_nat_of_lt_succ fun _ => by simp [ssubset_def]
 
 Depends on / 依赖: ssubset_def, strictMono_nat_of_lt_succ
@@ -414,7 +414,7 @@ protected alias ⟨_, Aesop.range_nonempty⟩ := nonempty_range_iff
 
 中文:
 定理 nonempty_range_iff
-  结论: (range n).Nonempty ↔ n != 0
+  结论: (range n).非空 ↔ n != 0
   证明: ⟨fun ⟨k, hk⟩ => by grind, fun h => ⟨0, by grind⟩⟩
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -464,7 +464,7 @@ theorem nonempty_range_add_one
 
 中文:
 定理 nonempty_range_add_one
-  结论: (range <| n + 1).Nonempty
+  结论: (range <| n + 1).非空
   证明: nonempty_range_iff.2 n.succ_ne_zero
 
 Depends on / 依赖: n.succ_ne_zero, nonempty_range_iff, succ_ne_zero
@@ -486,7 +486,7 @@ lemma range_nontrivial
 中文:
 引理 range_nontrivial
   条件: {n : 自然数} (hn : 1 < n)
-  结论: (range n).Nontrivial
+  结论: (range n).非平凡
   证明: by
   rw [Finset.Nontrivial]; rw [Finset.coe_range]
   exact ⟨0, by grind, 1, hn, Nat.zero_ne_one⟩
@@ -507,8 +507,8 @@ theorem exists_nat_subset_range
   proof: s.induction_on (by simp) fun a _ _ ⟨n, hn⟩ => ⟨max (a + 1) n, by grind⟩
 
 中文:
-定理 exists_nat_subset_range
-  条件: (s : Finset 自然数)
+定理 存在_nat_subset_range
+  条件: (s : 有限集 自然数)
   结论: 存在 n : 自然数, s subseteq range n
   证明: s.induction_on (by simp) fun a _ _ ⟨n, hn⟩ => ⟨max (a + 1) n, by grind⟩
 

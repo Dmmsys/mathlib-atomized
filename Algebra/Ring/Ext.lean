@@ -100,7 +100,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalNonAssocSemiring R⦄
+  结论: 非幺非结合半环 R⦄
   证明: by
   -- Split into `AddMonoid` instance, `mul` function and properties.
   rcases inst₁ with @⟨_, ⟨⟩⟩
@@ -132,7 +132,7 @@ theorem toDistrib_injective
 
 中文:
 定理 toDistrib_injective
-  结论: Function.Injective (@toDistrib R)
+  结论: 函数.单射 (@toDistrib R)
   证明: by
   intro _ _ h
   ext x y
@@ -182,7 +182,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalSemiring R⦄
+  结论: 非幺半环 R⦄
   证明: toNonUnitalNonAssocSemiring_injective
     NonUnitalNonAssocSemiring.ext h_add h_mul
 
@@ -212,9 +212,9 @@ theorem AddMonoidWithOne.ext
   have h_natCast : inst₁.toNatCast.natCast = inst₂.toNatCast.natCa
 
 中文:
-定理 AddMonoidWithOne.ext
+定理 加法带幺幺半群.ext
   条件: ⦃inst₁ inst₂
-  结论: AddMonoidWithOne R⦄
+  结论: 加法带幺幺半群 R⦄
   证明: by
   have h_monoid : inst₁.toAddMonoid = inst₂.toAddMonoid := by ext : 1; exact h_add
   have h_zero' : inst₁.toZero = inst₂.toZero := congrArg (·.toZero) h_monoid
@@ -250,7 +250,7 @@ theorem AddCommMonoidWithOne.toAddMonoidWithOne_injective
   rintro ⟨⟩ ⟨⟩ _; congr
 
 中文:
-定理 AddCommMonoidWithOne.toAddMonoidWithOne_injective
+定理 加法交换带幺幺半群.toAddMonoidWithOne_injective
   证明: by
   rintro ⟨⟩ ⟨⟩ _; congr
 -/
@@ -269,9 +269,9 @@ theorem AddCommMonoidWithOne.ext
     AddMonoidWithOne.ext h_add h_one
 
 中文:
-定理 AddCommMonoidWithOne.ext
+定理 加法交换带幺幺半群.ext
   条件: ⦃inst₁ inst₂
-  结论: AddCommMonoidWithOne R⦄
+  结论: 加法交换带幺幺半群 R⦄
   证明: AddCommMonoidWithOne.toAddMonoidWithOne_injective
     AddMonoidWithOne.ext h_add h_one
 -/
@@ -301,7 +301,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonAssocSemiring R⦄
+  结论: 非结合半环 R⦄
   证明: by
   have h : inst₁.toNonUnitalNonAssocSemiring = inst₂.toNonUnitalNonAssocSemiring := by
     ext : 1 <;> assumption
@@ -371,7 +371,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalNonAssocRing R⦄
+  结论: 非幺非结合环 R⦄
   证明: by
   -- Split into `AddCommGroup` instance, `mul` function and properties.
   rcases inst₁ with @⟨_, ⟨⟩⟩; rcases inst₂ with @⟨_, ⟨⟩⟩
@@ -438,7 +438,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalRing R⦄
+  结论: 非幺环 R⦄
   证明: by
   have : inst₁.toNonUnitalNonAssocRing = inst₂.toNonUnitalNonAssocRing := by
     ext : 1 <;> assumption
@@ -521,9 +521,9 @@ theorem AddGroupWithOne.ext
   -- Extract equality of necessary substru
 
 中文:
-定理 AddGroupWithOne.ext
+定理 加法带幺群.ext
   条件: ⦃inst₁ inst₂
-  结论: AddGroupWithOne R⦄
+  结论: 加法带幺群 R⦄
   证明: by
   have : inst₁.toAddMonoidWithOne = inst₂.toAddMonoidWithOne :=
     AddMonoidWithOne.ext h_add h_one
@@ -565,9 +565,9 @@ theorem AddCommGroupWithOne.ext
   congr
 
 中文:
-定理 AddCommGroupWithOne.ext
+定理 加法交换带幺群.ext
   条件: ⦃inst₁ inst₂
-  结论: AddCommGroupWithOne R⦄
+  结论: 加法交换带幺群 R⦄
   证明: by
   have : inst₁.toAddCommGroup = inst₂.toAddCommGroup :=
     AddCommGroup.ext h_add
@@ -609,7 +609,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonAssocRing R⦄
+  结论: 非结合环 R⦄
   证明: by
   have h₁ : inst₁.toNonUnitalNonAssocRing = inst₂.toNonUnitalNonAssocRing := by
     ext : 1 <;> assumption
@@ -703,7 +703,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: Semiring R⦄
+  结论: 半环 R⦄
   证明: by
   -- Show that enough substructures are equal.
   have h₀ : inst₁.toAddCommMonoid = inst₂.toAddCommMonoid := by
@@ -809,7 +809,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: Ring R⦄
+  结论: 环 R⦄
   证明: by
   -- Show that enough substructures are equal.
   have h₁ : inst₁.toSemiring = inst₂.toSemiring := by
@@ -956,7 +956,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalNonAssocCommSemiring R⦄
+  结论: 非幺非结合交换半环 R⦄
   证明: toNonUnitalNonAssocSemiring_injective
     NonUnitalNonAssocSemiring.ext h_add h_mul
 
@@ -1004,7 +1004,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalCommSemiring R⦄
+  结论: 非幺交换半环 R⦄
   证明: toNonUnitalSemiring_injective
     NonUnitalSemiring.ext h_add h_mul
 -/
@@ -1052,7 +1052,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalNonAssocCommRing R⦄
+  结论: 非幺非结合交换环 R⦄
   证明: toNonUnitalNonAssocRing_injective
     NonUnitalNonAssocRing.ext h_add h_mul
 -/
@@ -1098,7 +1098,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: NonUnitalCommRing R⦄
+  结论: 非幺交换环 R⦄
   证明: toNonUnitalRing_injective
     NonUnitalRing.ext h_add h_mul
 -/
@@ -1146,7 +1146,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: CommSemiring R⦄
+  结论: 交换半环 R⦄
   证明: toSemiring_injective
     Semiring.ext h_add h_mul
 -/
@@ -1173,7 +1173,7 @@ theorem toRing_injective
 
 中文:
 定理 toRing_injective
-  结论: Function.Injective (@toRing R)
+  结论: 函数.单射 (@toRing R)
   证明: by
   rintro ⟨⟩ ⟨⟩ _; congr
 -/
@@ -1192,7 +1192,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃inst₁ inst₂
-  结论: CommRing R⦄
+  结论: 交换环 R⦄
   证明: toRing_injective Ring.ext h_add h_mul
 -/
 @[ext] theorem ext ⦃inst₁ inst₂ : CommRing R⦄

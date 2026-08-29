@@ -50,7 +50,7 @@ theorem GammaIntegral_eq_mellin
   proof: funext fun s => by simp only [mellin, GammaIntegral, smul_eq_mul, mul_comm]
 
 中文:
-定理 GammaIntegral_eq_mellin
+定理 Gamma整数egral_eq_mellin
   结论: Gamma整数egral = mellin fun x => ↑(实数.exp (-x))
   证明: funext fun s => by simp only [mellin, GammaIntegral, smul_eq_mul, mul_comm]
 
@@ -73,8 +73,8 @@ theorem hasDerivAt_GammaIntegral
   · rw [← isBigO_norm_left
 
 中文:
-定理 hasDerivAt_GammaIntegral
-  条件: {s : Complex} (hs : 0 < s.re)
+定理 hasDerivAt_Gamma整数egral
+  条件: {s : 复形} (hs : 0 < s.re)
   证明: by
   rw [GammaIntegral_eq_mellin]
   convert! (mellin_hasDerivAt_of_isBigO_rpow (E := Complex) _ _ (lt_add_one _) _ hs).2
@@ -114,8 +114,8 @@ theorem differentiableAt_Gamma
 
 中文:
 定理 differentiableAt_Gamma
-  条件: (s : Complex) (hs : 对任意 m : 自然数, s != -m)
-  结论: DifferentiableAt Complex Gamma s
+  条件: (s : 复形) (hs : 对任意 m : 自然数, s != -m)
+  结论: DifferentiableAt 复形 Gamma s
   证明: by
   -- We will show, by induction on `n`, that `Gamma` is differentiable on `-n < Re s`.
   suffices forall (n : Nat) (s : Complex) (hsre : -n < s.re) (hs : forall m : Nat, s != -m), DifferentiableAt Complex _ s from
@@ -152,7 +152,7 @@ theorem differentiableAt_Gamma_one
 
 中文:
 定理 differentiableAt_Gamma_one
-  结论: DifferentiableAt Complex Gamma 1
+  结论: DifferentiableAt 复形 Gamma 1
   证明: differentiableAt_Gamma 1 (by norm_cast; simp)
 
 Depends on / 依赖: differentiableAt_Gamma
@@ -171,7 +171,7 @@ theorem continuousAt_Gamma
 
 中文:
 定理 continuousAt_Gamma
-  条件: (s : Complex) (hs : 对任意 m : 自然数, s != -m)
+  条件: (s : 复形) (hs : 对任意 m : 自然数, s != -m)
   结论: ContinuousAt Gamma s
   证明: (differentiableAt_Gamma s hs).continuousAt
 
@@ -211,7 +211,7 @@ theorem tendsto_self_mul_Gamma_nhds_zero
 
 中文:
 定理 tendsto_self_mul_Gamma_nhds_zero
-  结论: Tendsto (fun z : Complex => z * Gamma z) (𝓝[!=] 0) (𝓝 1)
+  结论: 收敛 (fun z : 复形 => z * Gamma z) (𝓝[!=] 0) (𝓝 1)
   证明: by
   rw [show 𝓝 (1 : Complex) = 𝓝 (Gamma (0 + 1)) by simp only [zero_add]; rw [Complex.Gamma_one]]
   refine tendsto_nhdsWithin_congr Gamma_add_one (continuousAt_iff_punctured_nhds.mp ?_)
@@ -255,7 +255,7 @@ theorem not_differentiableAt_Gamma_zero
 
 中文:
 定理 not_differentiableAt_Gamma_zero
-  结论: ¬ DifferentiableAt Complex Gamma 0
+  结论: ¬ DifferentiableAt 复形 Gamma 0
   证明: mt DifferentiableAt.continuousAt not_continuousAt_Gamma_zero
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.continuousAt, continuousAt, not_continuousAt_Gamma_zero
@@ -326,7 +326,7 @@ theorem not_differentiableAt_Gamma_neg_nat
 中文:
 定理 not_differentiableAt_Gamma_neg_nat
   条件: (n : 自然数)
-  结论: ¬ DifferentiableAt Complex Gamma (-n)
+  结论: ¬ DifferentiableAt 复形 Gamma (-n)
   证明: mt DifferentiableAt.continuousAt (not_continuousAt_Gamma_neg_nat n)
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.continuousAt, continuousAt, not_continuousAt_Gamma_neg_nat
@@ -347,7 +347,7 @@ theorem deriv_Gamma_add_one
 
 中文:
 定理 deriv_Gamma_add_one
-  条件: (s : Complex) (hs : s != 0)
+  条件: (s : 复形) (hs : s != 0)
   证明: by
   by_cases! h : exists m : Nat, s = -m
   · obtain ⟨m, rfl⟩ := h
@@ -413,7 +413,7 @@ theorem differentiableOn_Gamma_Ioi
 
 中文:
 定理 differentiableOn_Gamma_Ioi
-  结论: DifferentiableOn 实数 Gamma (Ioi 0)
+  结论: DifferentiableOn 实数 Gamma (左开右无界区间 0)
   证明: fun _ h => (differentiableAt_Gamma <| by bound [mem_Ioi.mp h]).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_Gamma, differentiableWithinAt, mem_Ioi, mem_Ioi.mp

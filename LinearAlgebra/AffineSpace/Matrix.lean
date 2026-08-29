@@ -93,7 +93,7 @@ theorem toMatrix_self
 中文:
 定理 toMatrix_self
   条件: [DecidableEq ι]
-  结论: b.toMatrix b = (1 : Matrix ι ι k)
+  结论: b.toMatrix b = (1 : 矩阵 ι ι k)
   证明: by
   ext i j
   rw [toMatrix_apply]; rw [coord_apply]; rw [Matrix.one_eq_pi_single]; rw [Pi.single_apply]
@@ -118,7 +118,7 @@ theorem toMatrix_row_sum_one
 
 中文:
 定理 toMatrix_row_sum_one
-  条件: [Fintype ι] (q : ι' -> P) (i : ι')
+  条件: [有限类型 ι] (q : ι' -> P) (i : ι')
   结论: ∑ j, b.toMatrix q i j = 1
   证明: by
   simp
@@ -145,7 +145,7 @@ theorem affineIndependent_of_toMatrix_right_inv
 
 中文:
 定理 affineIndependent_of_toMatrix_right_inv
-  结论: [Fintype ι] [Finite ι'] [DecidableEq ι']
+  结论: [有限类型 ι] [有限 ι'] [DecidableEq ι']
   证明: by
   cases nonempty_fintype ι'
   rw [affineIndependent_iff_eq_of_fintype_affineCombination_eq]
@@ -189,7 +189,7 @@ theorem affineSpan_eq_top_of_toMatrix_left_inv
 
 中文:
 定理 affineSpan_eq_top_of_toMatrix_left_inv
-  结论: [Finite ι] [Fintype ι'] [DecidableEq ι]
+  结论: [有限 ι] [有限类型 ι'] [DecidableEq ι]
   证明: by
   cases nonempty_fintype ι
   suffices forall i, b i in affineSpan k (range p) by
@@ -310,7 +310,7 @@ theorem isUnit_toMatrix
 
 中文:
 定理 isUnit_toMatrix
-  结论: IsUnit (b.toMatrix b₂)
+  结论: 是单位 (b.toMatrix b₂)
   证明: ⟨{ val := b.toMatrix b₂
       inv := b₂.toMatrix b
       val_inv := b.toMatrix_mul_toMatrix b₂
@@ -342,7 +342,7 @@ theorem isUnit_toMatrix_iff
 
 中文:
 定理 isUnit_toMatrix_iff
-  条件: [Nontrivial k] (p : ι -> P)
+  条件: [非平凡 k] (p : ι -> P)
   证明: by
   constructor
   · rintro ⟨⟨B, A, hA, hA'⟩, rfl : B = b.toMatrix p⟩

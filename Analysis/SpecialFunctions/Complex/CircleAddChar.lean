@@ -73,7 +73,7 @@ definition toCircle
 
 中文:
 定义 toCircle
-  签名: : AddChar (ZMod N) Circle
+  签名: : 加法特征 (ZMod N) Circle
   定义体: toCircle_addChar.compAddMonoidHom toAddCircle
 
 Depends on / 依赖: compAddMonoidHom, toAddCircle, toCircle_addChar, toCircle_addChar.compAddMonoidHom
@@ -190,7 +190,7 @@ lemma injective_toCircle
 
 中文:
 引理 injective_toCircle
-  结论: Injective (toCircle : ZMod N -> Circle)
+  结论: 单射 (toCircle : ZMod N -> Circle)
   证明: (AddCircle.injective_toCircle one_ne_zero).comp (toAddCircle_injective N)
 
 Depends on / 依赖: AddCircle, AddCircle.injective_toCircle, injective_toCircle, one_ne_zero, toAddCircle_injective
@@ -208,7 +208,7 @@ definition stdAddChar
 
 中文:
 定义 stdAddChar
-  签名: : AddChar (ZMod N) Complex
+  签名: : 加法特征 (ZMod N) 复形
   定义体: Circle.coeHom.compAddChar toCircle
 
 Depends on / 依赖: Circle, Circle.coeHom.compAddChar, coeHom, compAddChar, toCircle
@@ -261,7 +261,7 @@ lemma injective_stdAddChar
 
 中文:
 引理 injective_stdAddChar
-  结论: Injective (stdAddChar : AddChar (ZMod N) Complex)
+  结论: 单射 (stdAddChar : 加法特征 (ZMod N) 复形)
   证明: Subtype.coe_injective.comp injective_toCircle
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.comp, coe_injective, injective_toCircle
@@ -354,7 +354,7 @@ definition rootsOfUnitytoCircle
 
 中文:
 定义 rootsOfUnitytoCircle
-  签名: : (rootsOfUnity n Complex) ->* Circle where
+  签名: : (rootsOfUnity n 复形) ->* Circle where
   定义体: fun z => ⟨z.val.val,
     mem_sphere_zero_iff_norm.2 (Complex.norm_eq_one_of_mem_rootsOfUnity z.prop)⟩
   map_one' := rfl
@@ -383,7 +383,7 @@ definition rootsOfUnityCircleEquiv
 
 中文:
 定义 rootsOfUnityCircleEquiv
-  签名: : rootsOfUnity n Circle ≃* rootsOfUnity n Complex where
+  签名: : rootsOfUnity n Circle ≃* rootsOfUnity n 复形 where
   定义体: (rootsOfUnityUnitsMulEquiv Complex n).toMonoidHom.comp (restrictRootsOfUnity Circle.toUnits n)
   invFun z := ⟨(rootsOfUnitytoCircle n).toHomUnits z, by
     rw [mem_rootsOfUnity']; rw [MonoidHom.coe_toHomUnits]; rw [← map_pow]; rw [← (rootsOfUnitytoCircle n).map_one]
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasEnoughRootsOfUnity Circle n
+  签名: 有EnoughRootsOfUnity Circle n
   定义体: (rootsOfUnityCircleEquiv n).symm.hasEnoughRootsOfUnity
 
 Depends on / 依赖: hasEnoughRootsOfUnity, rootsOfUnityCircleEquiv, symm.hasEnoughRootsOfUnity

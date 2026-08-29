@@ -113,7 +113,7 @@ theorem coeff_p_pow
 
 中文:
 定理 coeff_p_pow
-  条件: [CharP R p] (i : 自然数)
+  条件: [特征p R p] (i : 自然数)
   结论: ((p : 𝕎 R) ^ i).coeff i = 1
   证明: by
   induction i with
@@ -149,7 +149,7 @@ theorem coeff_p_pow_eq_zero
 
 中文:
 定理 coeff_p_pow_eq_zero
-  条件: [CharP R p] {i j : 自然数} (hj : j != i)
+  条件: [特征p R p] {i j : 自然数} (hj : j != i)
   结论: ((p : 𝕎 R) ^ i).coeff j = 0
   证明: by
   induction i generalizing j with
@@ -191,7 +191,7 @@ theorem coeff_p
 
 中文:
 定理 coeff_p
-  条件: [CharP R p] (i : 自然数)
+  条件: [特征p R p] (i : 自然数)
   结论: (p : 𝕎 R).coeff i = if i = 1 then 1 else 0
   证明: by
   split_ifs with hi
@@ -223,7 +223,7 @@ theorem coeff_p_zero
 
 中文:
 定理 coeff_p_zero
-  条件: [CharP R p]
+  条件: [特征p R p]
   结论: (p : 𝕎 R).coeff 0 = 0
   证明: by
   rw [coeff_p]; rw [if_neg]
@@ -249,7 +249,7 @@ theorem coeff_p_one
 
 中文:
 定理 coeff_p_one
-  条件: [CharP R p]
+  条件: [特征p R p]
   结论: (p : 𝕎 R).coeff 1 = 1
   证明: by rw [coeff_p, if_pos rfl]
 
@@ -270,7 +270,7 @@ theorem p_nonzero
 
 中文:
 定理 p_nonzero
-  条件: [Nontrivial R] [CharP R p]
+  条件: [非平凡 R] [特征p R p]
   结论: (p : 𝕎 R) != 0
   证明: by
   intro h
@@ -294,7 +294,7 @@ theorem FractionRing.p_nonzero
 
 中文:
 定理 FractionRing.p_nonzero
-  条件: [Nontrivial R] [CharP R p]
+  条件: [非平凡 R] [特征p R p]
   结论: (p : FractionRing (𝕎 R)) != 0
   证明: by
   simpa using (IsFractionRing.injective (𝕎 R) (FractionRing (𝕎 R))).ne (WittVector.p_nonzero _ _)
@@ -354,7 +354,7 @@ theorem mul_charP_coeff_zero
 
 中文:
 定理 mul_charP_coeff_zero
-  条件: [CharP R p] (x : 𝕎 R)
+  条件: [特征p R p] (x : 𝕎 R)
   结论: (x * p).coeff 0 = 0
   证明: by
   rw [← frobenius_verschiebung]; rw [coeff_frobenius_charP]; rw [verschiebung_coeff_zero]; rw [zero_pow hp.out.ne_zero]
@@ -375,7 +375,7 @@ theorem mul_charP_coeff_succ
 
 中文:
 定理 mul_charP_coeff_succ
-  条件: [CharP R p] (x : 𝕎 R) (i : 自然数)
+  条件: [特征p R p] (x : 𝕎 R) (i : 自然数)
   证明: by
   rw [← frobenius_verschiebung]; rw [coeff_frobenius_charP]; rw [verschiebung_coeff_succ]
 
@@ -404,7 +404,7 @@ theorem mul_pow_charP_coeff_zero
 
 中文:
 定理 mul_pow_charP_coeff_zero
-  条件: [CharP R p] (x : 𝕎 R) {m n : 自然数} (h : m < n)
+  条件: [特征p R p] (x : 𝕎 R) {m n : 自然数} (h : m < n)
   证明: by
   induction n generalizing m with
   | zero => contradiction
@@ -446,7 +446,7 @@ theorem mul_pow_charP_coeff_succ
 
 中文:
 定理 mul_pow_charP_coeff_succ
-  条件: [CharP R p] (x : 𝕎 R) {m n : 自然数}
+  条件: [特征p R p] (x : 𝕎 R) {m n : 自然数}
   证明: by
   induction n generalizing m with
   | zero => simp
@@ -480,7 +480,7 @@ theorem verschiebung_frobenius
 
 中文:
 定理 verschiebung_frobenius
-  条件: [CharP R p] (x : 𝕎 R)
+  条件: [特征p R p] (x : 𝕎 R)
   结论: verschiebung (frobenius x) = x * p
   证明: by
   ext ⟨i⟩
@@ -505,7 +505,7 @@ theorem verschiebung_frobenius_comm
 
 中文:
 定理 verschiebung_frobenius_comm
-  条件: [CharP R p]
+  条件: [特征p R p]
   证明: fun x => by
   rw [verschiebung_frobenius]; rw [frobenius_verschiebung]
 

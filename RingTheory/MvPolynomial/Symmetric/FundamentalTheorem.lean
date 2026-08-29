@@ -94,7 +94,7 @@ definition invAccumulate
 
 中文:
 定义 invAccumulate
-  签名: (n m : 自然数) (s : Fin m -> 自然数) (i : Fin n)
+  签名: (n m : 自然数) (s : 有限集 m -> 自然数) (i : 有限集 n)
   定义体: (if hi : i < m then s ⟨i, hi⟩ else 0) - (if hi : i + 1 < m then s ⟨i + 1, hi⟩ else 0)
 -/
 def invAccumulate (n m : Nat) (s : Fin m -> Nat) (i : Fin n) : Nat :=
@@ -117,7 +117,7 @@ lemma accumulate_rec
 
 中文:
 引理 accumulate_rec
-  条件: {i n m : 自然数} (hin : i < n) (him : i + 1 < m) (t : Fin n -> 自然数)
+  条件: {i n m : 自然数} (hin : i < n) (him : i + 1 < m) (t : 有限集 n -> 自然数)
   证明: by
   simp_rw [accumulate_apply]
   convert! (add_sum_erase _ _ _).symm
@@ -155,7 +155,7 @@ lemma accumulate_last
 
 中文:
 引理 accumulate_last
-  结论: {i n m : 自然数} (hin : i < n) (hmi : m = i + 1) (t : Fin n -> 自然数)
+  结论: {i n m : 自然数} (hin : i < n) (hmi : m = i + 1) (t : 有限集 n -> 自然数)
   证明: by
   rw [accumulate_apply]
   apply sum_eq_single_of_mem
@@ -194,7 +194,7 @@ lemma accumulate_injective
 中文:
 引理 accumulate_injective
   条件: {n m} (hnm : n <= m)
-  结论: Function.Injective (accumulate n m)
+  结论: 函数.单射 (accumulate n m)
   证明: by
   refine fun t s he => funext fun i => ?_
   obtain h | h := lt_or_ge (i.1 + 1) m
@@ -229,7 +229,7 @@ lemma accumulate_invAccumulate
 
 中文:
 引理 accumulate_invAccumulate
-  条件: {n m} (hmn : m <= n) {s : Fin m -> 自然数} (hs : Antitone s)
+  条件: {n m} (hmn : m <= n) {s : 有限集 m -> 自然数} (hs : 递减 s)
   证明: funext fun ⟨i, hi⟩ => by
   have := Nat.le_sub_one_of_lt hi
   revert hi
@@ -295,7 +295,7 @@ lemma esymmAlgHom_apply
 
 中文:
 引理 esymmAlgHom_apply
-  条件: (p : MvPolynomial (Fin n) R)
+  条件: (p : 多元多项式 (有限集 n) R)
   证明: (Subalgebra.mvPolynomial_aeval_coe _ _ _).symm
 
 Depends on / 依赖: Subalgebra, Subalgebra.mvPolynomial_aeval_coe, mvPolynomial_aeval_coe
@@ -342,7 +342,7 @@ definition esymmAlgHomMonomial
 
 中文:
 定义 esymmAlgHomMonomial
-  签名: (t : Fin n ->₀ 自然数) (r : R)
+  签名: (t : 有限集 n ->₀ 自然数) (r : R)
   定义体: (esymmAlgHom σ R n <| monomial t r).val
 
 Depends on / 依赖: esymmAlgHom, monomial
@@ -362,7 +362,7 @@ lemma isSymmetric_esymmAlgHomMonomial
 
 中文:
 引理 isSymmetric_esymmAlgHomMonomial
-  条件: (t : Fin n ->₀ 自然数) (r : R)
+  条件: (t : 有限集 n ->₀ 自然数) (r : R)
   证明: (esymmAlgHom _ _ _ _).2
 
 Depends on / 依赖: esymmAlgHom
@@ -422,7 +422,7 @@ lemma esymmAlgHomMonomial_add
 
 中文:
 引理 esymmAlgHomMonomial_add
-  条件: {t s : Fin n ->₀ 自然数}
+  条件: {t s : 有限集 n ->₀ 自然数}
   证明: by
   simp_rw [esymmAlgHomMonomial, esymmAlgHom_apply, ← map_mul, monomial_mul, mul_one]
 
@@ -443,7 +443,7 @@ lemma esymmAlgHom_zero
 
 中文:
 引理 esymmAlgHom_zero
-  结论: esymmAlgHomMonomial σ (0 : Fin n ->₀ 自然数) r = C r
+  结论: esymmAlgHomMonomial σ (0 : 有限集 n ->₀ 自然数) r = C r
   证明: by
   rw [esymmAlgHomMonomial]; rw [monomial_zero']; rw [esymmAlgHom_apply]; rw [aeval_C]; rw [algebraMap_eq]
 
@@ -466,7 +466,7 @@ lemma supDegree_monic_esymm
 
 中文:
 引理 supDegree_monic_esymm
-  条件: [Nontrivial R] {i : 自然数} (him : i < m)
+  条件: [非平凡 R] {i : 自然数} (him : i < m)
   证明: by
   have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
     (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
@@ -512,7 +512,7 @@ lemma supDegree_esymm
 
 中文:
 引理 supDegree_esymm
-  条件: [Nontrivial R] (him : i < m)
+  条件: [非平凡 R] (him : i < m)
   证明: by
   rw [(supDegree_monic_esymm him).1]; rw [ofLex_toLex]
   ext j
@@ -547,7 +547,7 @@ lemma monic_esymm
 中文:
 引理 monic_esymm
   条件: {i : 自然数} (him : i <= m)
-  结论: Monic toLex (esymm (Fin m) R i)
+  结论: Monic toLex (esymm (有限集 m) R i)
   证明: by
   cases i with
   | zero =>
@@ -582,7 +582,7 @@ lemma leadingCoeff_esymmAlgHomMonomial
 
 中文:
 引理 leadingCoeff_esymmAlgHomMonomial
-  条件: (t : Fin n ->₀ 自然数) (hnm : n <= m)
+  条件: (t : 有限集 n ->₀ 自然数) (hnm : n <= m)
   证明: by
   induction t using Finsupp.induction₂ with
   | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
@@ -616,7 +616,7 @@ lemma supDegree_esymmAlgHomMonomial
 
 中文:
 引理 supDegree_esymmAlgHomMonomial
-  条件: (hr : r != 0) (t : Fin n ->₀ 自然数) (hnm : n <= m)
+  条件: (hr : r != 0) (t : 有限集 n ->₀ 自然数) (hnm : n <= m)
   证明: by
   nontriviality R
   induction t using Finsupp.induction₂ with
@@ -658,7 +658,7 @@ lemma IsSymmetric.antitone_supDegree
 
 中文:
 引理 IsSymmetric.antitone_supDegree
-  条件: [LinearOrder σ] {p : MvPolynomial σ R} (hp : p.IsSymmetric)
+  条件: [线性序 σ] {p : 多元多项式 σ R} (hp : p.IsSymmetric)
   证明: by
   obtain rfl | h0 := eq_or_ne p 0
   · rw [supDegree_zero, bot_eq_zero (α := Lex (σ ->₀ Nat))]
@@ -749,7 +749,7 @@ lemma esymmAlgHom_injective
 
 中文:
 引理 esymmAlgHom_injective
-  条件: (hn : n <= Fintype.card σ)
+  条件: (hn : n <= 有限类型.card σ)
   证明: by
   rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
   exact (AlgEquiv.injective _).comp (esymmAlgHom_fin_injective R hn)
@@ -872,7 +872,7 @@ lemma esymmAlgHom_surjective
 
 中文:
 引理 esymmAlgHom_surjective
-  条件: (hn : Fintype.card σ <= n)
+  条件: (hn : 有限类型.card σ <= n)
   证明: by
   rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
   exact (AlgEquiv.surjective _).comp (esymmAlgHom_fin_surjective R hn)
@@ -898,7 +898,7 @@ definition esymmAlgEquiv
 
 中文:
 定义 esymmAlgEquiv
-  签名: (hn : Fintype.card σ = n)
+  签名: (hn : 有限类型.card σ = n)
   定义体: AlgEquiv.ofBijective (esymmAlgHom σ R n)
     ⟨esymmAlgHom_injective R hn.ge, esymmAlgHom_surjective R hn.le⟩
 
@@ -922,7 +922,7 @@ lemma esymmAlgEquiv_symm_apply
 
 中文:
 引理 esymmAlgEquiv_symm_apply
-  条件: (hn : Fintype.card σ = n) (i : Fin n)
+  条件: (hn : 有限类型.card σ = n) (i : 有限集 n)
   证明: by
   apply_fun esymmAlgHom σ R n using esymmAlgHom_injective R hn.ge
   simp_rw [esymmAlgEquiv, AlgEquiv.ofBijective_apply_symm_apply, esymmAlgHom, aeval_X]

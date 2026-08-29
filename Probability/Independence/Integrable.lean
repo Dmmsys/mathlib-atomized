@@ -79,7 +79,7 @@ lemma Integrable.isProbabilityMeasure_of_indepFun
     (memLp_one_iff_integrable.mpr hf) h'f hindep
 
 中文:
-引理 Integrable.isProbabilityMeasure_of_indepFun
+引理 可积.isProbabilityMeasure_of_indepFun
   结论: (f : Ω -> E) (g : Ω -> F)
   证明: MemLp.isProbabilityMeasure_of_indepFun f g one_ne_zero ENNReal.one_ne_top
     (memLp_one_iff_integrable.mpr hf) h'f hindep

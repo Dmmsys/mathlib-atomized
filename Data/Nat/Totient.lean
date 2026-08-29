@@ -349,7 +349,7 @@ theorem _root_.ZMod.card_units_eq_totient
 
 中文:
 定理 _root_.ZMod.card_units_eq_totient
-  条件: (n : 自然数) [NeZero n] [Fintype (ZMod n)ˣ]
+  条件: (n : 自然数) [NeZero n] [有限类型 (ZMod n)ˣ]
   证明: calc
     Fintype.card (ZMod n)ˣ = Fintype.card { x : ZMod n // x.val.Coprime n } :=
       Fintype.card_congr ZMod.unitsEquivCoprime
@@ -518,7 +518,7 @@ theorem sum_totient
 中文:
 定理 sum_totient
   条件: (n : 自然数)
-  结论: n.divisors.sum φ = n
+  结论: n.divisors.求和 φ = n
   证明: by
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
@@ -590,7 +590,7 @@ theorem totient_prime_pow_succ
 
 中文:
 定理 totient_prime_pow_succ
-  条件: {p : 自然数} (hp : p.Prime) (n : 自然数)
+  条件: {p : 自然数} (hp : p.素) (n : 自然数)
   结论: φ (p ^ (n + 1)) = p ^ n * (p - 1)
   证明: calc
     φ (p ^ (n + 1)) = #{a in range (p ^ (n + 1)) | (p ^ (n + 1)).Coprime a} :=
@@ -644,7 +644,7 @@ theorem totient_prime_pow
 
 中文:
 定理 totient_prime_pow
-  条件: {p : 自然数} (hp : p.Prime) {n : 自然数} (hn : 0 < n)
+  条件: {p : 自然数} (hp : p.素) {n : 自然数} (hn : 0 < n)
   证明: by
   rcases exists_eq_succ_of_ne_zero (pos_iff_ne_zero.1 hn) with ⟨m, rfl⟩
   exact totient_prime_pow_succ hp _
@@ -668,7 +668,7 @@ theorem totient_prime
 
 中文:
 定理 totient_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: φ p = p - 1
   证明: by
   rw [← pow_one p]; rw [totient_prime_pow hp] <;> simp
@@ -698,7 +698,7 @@ theorem totient_eq_iff_prime
 中文:
 定理 totient_eq_iff_prime
   条件: {p : 自然数} (hp : 0 < p)
-  结论: p.totient = p - 1 ↔ p.Prime
+  结论: p.totient = p - 1 ↔ p.素
   证明: by
   refine ⟨fun h => ?_, totient_prime⟩
   replace hp : 1 < p := by
@@ -737,7 +737,7 @@ theorem card_units_zmod_lt_sub_one
 
 中文:
 定理 card_units_zmod_lt_sub_one
-  条件: {p : 自然数} (hp : 1 < p) [Fintype (ZMod p)ˣ]
+  条件: {p : 自然数} (hp : 1 < p) [有限类型 (ZMod p)ˣ]
   证明: by
   have : NeZero p := ⟨(pos_of_gt hp).ne'⟩
   rw [ZMod.card_units_eq_totient p]
@@ -767,7 +767,7 @@ theorem prime_iff_card_units
 
 中文:
 定理 prime_iff_card_units
-  条件: (p : 自然数) [Fintype (ZMod p)ˣ]
+  条件: (p : 自然数) [有限类型 (ZMod p)ˣ]
   证明: by
   rcases eq_zero_or_neZero p with rfl | hp
   · simp [ZMod, not_prime_zero, zero_tsub]
@@ -1093,7 +1093,7 @@ theorem totient_gcd_mul_totient_mul
 中文:
 定理 totient_gcd_mul_totient_mul
   条件: (a b : 自然数)
-  结论: φ (a.gcd b) * φ (a * b) = φ a * φ b * a.gcd b
+  结论: φ (a.最大公约数 b) * φ (a * b) = φ a * φ b * a.最大公约数 b
   证明: by
   have shuffle :
     forall a1 a2 b1 b2 c1 c2 : Nat,
@@ -1219,7 +1219,7 @@ theorem totient_mul_of_prime_of_dvd
 
 中文:
 定理 totient_mul_of_prime_of_dvd
-  条件: {p n : 自然数} (hp : p.Prime) (h : p ∣ n)
+  条件: {p n : 自然数} (hp : p.素) (h : p ∣ n)
   证明: by
   have h1 := totient_gcd_mul_totient_mul p n
   rw [gcd_eq_left h]; rw [mul_assoc] at h1
@@ -1245,7 +1245,7 @@ theorem totient_mul_of_prime_of_not_dvd
 
 中文:
 定理 totient_mul_of_prime_of_not_dvd
-  条件: {p n : 自然数} (hp : p.Prime) (h : ¬p ∣ n)
+  条件: {p n : 自然数} (hp : p.素) (h : ¬p ∣ n)
   证明: by
   rw [totient_mul _]; rw [totient_prime hp]
   simpa [h] using coprime_or_dvd_of_prime hp n
@@ -1408,7 +1408,7 @@ exact Right.one_le_mul hk Nat.le_sub_one_of_lt hp.one_lt
 
 中文:
 定理 prime_pow_pow_totient_ediv_prod
-  条件: {p k : 自然数} (hp : p.Prime) (hk : 0 < k)
+  条件: {p k : 自然数} (hp : p.素) (hk : 0 < k)
   证明: by
   have h : p ^ (k - 1) <= k * (p ^ (k - 1) * (p - 1)) := by
     rw [mul_left_comm]

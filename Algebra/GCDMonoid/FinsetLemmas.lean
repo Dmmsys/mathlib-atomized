@@ -36,8 +36,8 @@ theorem lcm_dvd_prod
 
 中文:
 定理 lcm_dvd_prod
-  条件: (s : Finset ι) (f : ι -> α)
-  结论: s.lcm f ∣ s.prod f
+  条件: (s : 有限集 ι) (f : ι -> α)
+  结论: s.最小公倍数 f ∣ s.乘积 f
   证明: lcm_dvd fun _ => dvd_prod_of_mem _
 
 Depends on / 依赖: dvd_prod_of_mem, lcm_dvd
@@ -55,7 +55,7 @@ theorem associated_lcm_prod
 
 中文:
 定理 associated_lcm_prod
-  条件: {s : Finset ι} {f : ι -> α} (h : Set.Pairwise s <| IsRelPrime.onFun f)
+  条件: {s : 有限集 ι} {f : ι -> α} (h : 集合.两两 s <| IsRelPrime.onFun f)
   证明: associated_of_dvd_dvd (s.lcm_dvd_prod f) (s.prod_dvd_of_isRelPrime h fun _ => dvd_lcm)
 
 Depends on / 依赖: associated_of_dvd_dvd, dvd_lcm, lcm_dvd_prod, prod_dvd_of_isRelPrime, s.lcm_dvd_prod, s.prod_dvd_of_isRelPrime
@@ -76,7 +76,7 @@ theorem lcm_eq_prod
 
 中文:
 定理 lcm_eq_prod
-  条件: {s : Finset ι} {f : ι -> 自然数} (h : Set.Pairwise s <| 自然数.Coprime.onFun f)
+  条件: {s : 有限集 ι} {f : ι -> 自然数} (h : 集合.两两 s <| 自然数.Coprime.onFun f)
   证明: by
   rw [show Nat.Coprime = IsRelPrime by ext; exact Nat.coprime_iff_isRelPrime] at h
 .eq_of_normalized (normalize_eq _) (normalize_eq _) exact associated_lcm_prod h
@@ -102,7 +102,7 @@ theorem factorization_lcm
 
 中文:
 定理 factorization_lcm
-  条件: {f : ι -> 自然数} {s : Finset ι} (hf : 对任意 k in s, f k != 0) (p : 自然数)
+  条件: {f : ι -> 自然数} {s : 有限集 ι} (hf : 对任意 k in s, f k != 0) (p : 自然数)
   证明: by
   classical
   induction s using Finset.induction with
@@ -136,7 +136,7 @@ theorem den_sum_dvd_lcm_den
 
 中文:
 定理 den_sum_dvd_lcm_den
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Rat)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 有理数)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -166,7 +166,7 @@ theorem den_sum_dvd_prod_den
 
 中文:
 定理 den_sum_dvd_prod_den
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Rat)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 有理数)
   证明: (den_sum_dvd_lcm_den s f).trans s.lcm_dvd_prod _
 
 Depends on / 依赖: den_sum_dvd_lcm_den, lcm_dvd_prod, s.lcm_dvd_prod
@@ -191,7 +191,7 @@ exact (Rat.mul_den_dvd ..).trans mul_dvd_mul_left _ ih
 
 中文:
 定理 den_prod_dvd_prod_den
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Rat)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 有理数)
   证明: by
   classical
   induction s using Finset.induction_on with

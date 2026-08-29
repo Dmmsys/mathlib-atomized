@@ -53,11 +53,11 @@ structure Group.Generators
     - closure_eq_top : Subgroup.closure (Set.range val) = ⊤
 
 中文:
-结构 Group.Generators
-  参数: (G : 类型) [Group G] (ι : 类型)
+结构 群.生成元
+  参数: (G : 类型) [群 G] (ι : 类型)
   公理与运算 (2 个):
     - val : ι -> G
-    - closure_eq_top : Subgroup.closure (Set.range val) = ⊤
+    - closure_eq_top : 子群.closure (集合.range val) = ⊤
 -/
 structure Group.Generators (G : Type*) [Group G] (ι : Type*) where
   /-- The generating family itself: `val i` is the element of `G` indexed by `i : ι`. -/
@@ -79,7 +79,7 @@ theorem lift_val_surjective
 
 中文:
 定理 lift_val_surjective
-  结论: Function.Surjective (FreeGroup.lift P.val)
+  结论: 函数.满射 (自由群.lift P.val)
   证明: FreeGroup.lift_surjective_iff_closure_range_eq_top.mpr P.closure_eq_top
 
 Depends on / 依赖: FreeGroup, FreeGroup.lift_surjective_iff_closure_range_eq_top.mpr, P.closure_eq_top, closure_eq_top, lift_surjective_iff_closure_range_eq_top
@@ -97,7 +97,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {M : 类型} [Monoid M] (f g : G ->* M) (h : 对任意 i, f (P.val i) = g (P.val i))
+  条件: {M : 类型} [幺半群 M] (f g : G ->* M) (h : 对任意 i, f (P.val i) = g (P.val i))
   证明: MonoidHom.eq_of_eqOn_dense P.closure_eq_top (Set.forall_mem_range.mpr h)
 
 Depends on / 依赖: MonoidHom, MonoidHom.eq_of_eqOn_dense, P.closure_eq_top, Set.forall_mem_range.mpr, closure_eq_top, eq_of_eqOn_dense, forall_mem_range
@@ -118,7 +118,7 @@ definition ofSet
 
 中文:
 定义 ofSet
-  签名: {S : Set G} (h : Subgroup.closure S = ⊤)
+  签名: {S : 集合 G} (h : 子群.closure S = ⊤)
   定义体: Subtype.val
   closure_eq_top := by rwa [Subtype.range_coe]
 
@@ -141,7 +141,7 @@ lemma ofSet_val
 
 中文:
 引理 ofSet_val
-  条件: {S : Set G} (hS : Subgroup.closure S = ⊤)
+  条件: {S : 集合 G} (hS : 子群.closure S = ⊤)
   证明: rfl
 -/
 lemma ofSet_val {S : Set G} (hS : Subgroup.closure S = ⊤) :
@@ -162,7 +162,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : G ->* H) (hf : Function.Surjective f)
+  签名: (f : G ->* H) (hf : 函数.满射 f)
   定义体: f ∘ P.val
   closure_eq_top := by
     rw [Set.range_comp]; rw [← MonoidHom.map_closure]; rw [P.closure_eq_top]; rw [Subgroup.map_top_of_surjective f hf]
@@ -185,7 +185,7 @@ lemma map_val
 
 中文:
 引理 map_val
-  条件: (P : Group.Generators G ι) (f : G ->* H) (hf : Function.Surjective f)
+  条件: (P : 群.生成元 G ι) (f : G ->* H) (hf : 函数.满射 f)
   证明: rfl
 -/
 lemma map_val (P : Group.Generators G ι) (f : G ->* H) (hf : Function.Surjective f) :
@@ -206,7 +206,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : Group.Generators G ι) (e : ι' ≃ ι)
+  签名: (P : 群.生成元 G ι) (e : ι' ≃ ι)
   定义体: P.val ∘ e
   closure_eq_top := by
     rw [Set.range_comp]; rw [EquivLike.range_eq_univ]; rw [Set.image_univ]; rw [P.closure_eq_top]
@@ -232,7 +232,7 @@ lemma reindex_val
 
 中文:
 引理 reindex_val
-  条件: (P : Group.Generators G ι) (e : ι' ≃ ι)
+  条件: (P : 群.生成元 G ι) (e : ι' ≃ ι)
   结论: (P.reindex e).val = P.val ∘ e
   证明: rfl
 -/
@@ -250,8 +250,8 @@ theorem fg
 
 中文:
 定理 fg
-  条件: [Finite ι] (P : Group.Generators G ι)
-  结论: Group.FG G
+  条件: [有限 ι] (P : 群.生成元 G ι)
+  结论: 群.FG G
   证明: Group.fg_of_surjective P.lift_val_surjective
 
 Depends on / 依赖: Group.fg_of_surjective, P.lift_val_surjective, fg_of_surjective, lift_val_surjective
@@ -274,7 +274,7 @@ theorem Group.fg_iff_nonempty_finite_generators
     exact P.fg
 
 中文:
-定理 Group.fg_iff_nonempty_finite_generators
+定理 群.fg_iff_nonempty_finite_generators
   证明: by
   constructor
   · rintro ⟨S, hS⟩

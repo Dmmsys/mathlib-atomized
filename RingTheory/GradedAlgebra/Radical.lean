@@ -61,8 +61,8 @@ theorem Ideal.IsHomogeneous.isPrime_of_homogeneous_mem_or_mem
         Then consider two sets `{i ∈ x.support | xᵢ ∉ I}` and `{j ∈ y.support 
 
 中文:
-定理 Ideal.IsHomogeneous.isPrime_of_homogeneous_mem_or_mem
-  结论: {I : Ideal A} (hI : I.IsHomogeneous 𝒜)
+定理 理想.IsHomogeneous.isPrime_of_homogeneous_mem_or_mem
+  结论: {I : 理想 A} (hI : I.IsHomogeneous 𝒜)
   证明: ⟨I_ne_top, by
     intro x y hxy
     by_contra! ⟨rid₁, rid₂⟩
@@ -172,8 +172,8 @@ theorem Ideal.IsHomogeneous.isPrime_iff
     h.isPrime_of_homogeneous_mem_or_mem I_ne_top @homogeneous_mem_or_mem⟩
 
 中文:
-定理 Ideal.IsHomogeneous.isPrime_iff
-  条件: {I : Ideal A} (h : I.IsHomogeneous 𝒜)
+定理 理想.IsHomogeneous.isPrime_iff
+  条件: {I : 理想 A} (h : I.IsHomogeneous 𝒜)
   证明: ⟨fun HI => ⟨HI.ne_top, fun _ _ hxy => Ideal.IsPrime.mem_or_mem HI hxy⟩,
     fun ⟨I_ne_top, homogeneous_mem_or_mem⟩ =>
     h.isPrime_of_homogeneous_mem_or_mem I_ne_top @homogeneous_mem_or_mem⟩
@@ -204,8 +204,8 @@ theorem Ideal.IsPrime.homogeneousCore
   · exact Ideal.mem_hom
 
 中文:
-定理 Ideal.IsPrime.homogeneousCore
-  条件: {I : Ideal A} (h : I.IsPrime)
+定理 理想.是素.homogeneousCore
+  条件: {I : 理想 A} (h : I.是素)
   证明: by
   apply (Ideal.homogeneousCore 𝒜 I).isHomogeneous.isPrime_of_homogeneous_mem_or_mem
   · exact ne_top_of_le_ne_top h.ne_top (Ideal.toIdeal_homogeneousCore_le 𝒜 I)
@@ -242,8 +242,8 @@ theorem Ideal.IsHomogeneous.radical_eq
     refine ⟨HomogeneousIdeal.isHomogeneous _, ?_, HJ₂.homo
 
 中文:
-定理 Ideal.IsHomogeneous.radical_eq
-  条件: {I : Ideal A} (hI : I.IsHomogeneous 𝒜)
+定理 理想.IsHomogeneous.radical_eq
+  条件: {I : 理想 A} (hI : I.IsHomogeneous 𝒜)
   证明: by
   rw [Ideal.radical_eq_sInf]
   apply le_antisymm
@@ -277,8 +277,8 @@ theorem Ideal.IsHomogeneous.radical
   exact Ideal.IsHomogeneous.sInf fun _ => And.left
 
 中文:
-定理 Ideal.IsHomogeneous.radical
-  条件: {I : Ideal A} (h : I.IsHomogeneous 𝒜)
+定理 理想.IsHomogeneous.radical
+  条件: {I : 理想 A} (h : I.IsHomogeneous 𝒜)
   证明: by
   rw [h.radical_eq]
   exact Ideal.IsHomogeneous.sInf fun _ => And.left

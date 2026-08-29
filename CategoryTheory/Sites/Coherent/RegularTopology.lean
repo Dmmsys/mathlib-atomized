@@ -44,7 +44,7 @@ theorem mem_sieves_of_hasEffectiveEpi
 
 中文:
 定理 mem_sieves_of_hasEffectiveEpi
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   证明: by
   rintro ⟨Y, π, h⟩
   have h_le : Sieve.generate (Presieve.ofArrows (fun () => Y) (fun _ => π)) <= S := by
@@ -108,7 +108,7 @@ theorem mem_sieves_iff_hasEffectiveEpi
 
 中文:
 定理 mem_sieves_iff_hasEffectiveEpi
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   证明: by
   constructor
   · intro h

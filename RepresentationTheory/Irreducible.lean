@@ -33,7 +33,7 @@ abbreviation IsIrreducible
   body: IsSimpleOrder (Subrepresentation ρ)
 
 中文:
-缩写 IsIrreducible
+缩写 是不可约
   定义体: IsSimpleOrder (Subrepresentation ρ)
 
 Depends on / 依赖: IsSimpleOrder, Subrepresentation
@@ -79,7 +79,7 @@ alias is_simple_module_iff_irreducible_ofModule := isSimpleModule_iff_irreducibl
 
 中文:
 定理 isSimpleModule_iff_irreducible_ofModule
-  条件: (M : 类型) [AddCommGroup M] [Module k[G] M]
+  条件: (M : 类型) [加法交换群 M] [模 k[G] M]
   证明: by
   rw [isSimpleModule_iff]
   exact OrderIso.isSimpleOrder_iff Subrepresentation.submoduleSubrepresentationOrderIso
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSimpleModule k[G] ρ.asModule
+  签名: 是单模 k[G] ρ.asModule
   定义体: (irreducible_iff_isSimpleModule_asModule ρ).mp inferInstance
 
 Depends on / 依赖: irreducible_iff_isSimpleModule_asModule
@@ -133,7 +133,7 @@ theorem injective_or_eq_zero
 
 中文:
 定理 injective_or_eq_zero
-  结论: Injective f ∨ f = 0
+  结论: 单射 f ∨ f = 0
   证明: by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
   exact LinearMap.injective_or_eq_zero (equivLinearMapAsModule ρ σ f)
@@ -157,8 +157,8 @@ theorem surjective_or_eq_zero
 
 中文:
 定理 surjective_or_eq_zero
-  条件: (g : 整数ertwiningMap σ ρ)
-  结论: Surjective g ∨ g = 0
+  条件: (g : 整数ertwining映射 σ ρ)
+  结论: 满射 g ∨ g = 0
   证明: by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule σ ρ)]
   exact LinearMap.surjective_or_eq_zero (equivLinearMapAsModule σ ρ g)
@@ -182,8 +182,8 @@ theorem bijective_or_eq_zero
 
 中文:
 定理 bijective_or_eq_zero
-  条件: [IsIrreducible σ]
-  结论: Bijective f ∨ f = 0
+  条件: [是不可约 σ]
+  结论: 双射 f ∨ f = 0
   证明: by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
   exact LinearMap.bijective_or_eq_zero (equivLinearMapAsModule ρ σ f)
@@ -204,8 +204,8 @@ instance [IsIrreducible
 fun h => isEmpty_iff.mp inferInstance (f - g).ofBijective h⟩
 
 中文:
-实例 [IsIrreducible
-  签名: σ] [IsEmpty (Equiv ρ σ)] : Subsingleton (整数ertwiningMap ρ σ)
+实例 [是不可约
+  签名: σ] [是空 (等价 ρ σ)] : 子单例 (整数ertwining映射 ρ σ)
   定义体: ⟨fun f g => sub_eq_zero.mp (bijective_or_eq_zero _).resolve_left
 fun h => isEmpty_iff.mp inferInstance (f - g).ofBijective h⟩
 
@@ -256,7 +256,7 @@ theorem finrank_intertwiningMap_self
 
 中文:
 定理 finrank_intertwiningMap_self
-  结论: Module.finrank k (整数ertwiningMap ρ ρ) = 1
+  结论: 模.finrank k (整数ertwining映射 ρ ρ) = 1
   证明: by
   rw [LinearEquiv.finrank_eq (LinearEquiv.ofBijective (Algebra.linearMap k (IntertwiningMap ρ ρ))
       algebraMap_intertwiningMap_bijective_of_isAlgClosed).symm]
@@ -282,8 +282,8 @@ theorem finrank_eq_one_of_isMulCommutative
 
 中文:
 定理 finrank_eq_one_of_isMulCommutative
-  条件: [IsMulCommutative G]
-  结论: Module.finrank k V = 1
+  条件: [是MulCommutative G]
+  结论: 模.finrank k V = 1
   证明: by
   exact IsSimpleModule.finrank_eq_one_of_isMulCommutative k[G] ρ.asModule k
 

@@ -32,8 +32,8 @@ theorem isSquare_nat_of_isNat
   proof: ⟨m, h.1.trans hm.symm⟩
 
 中文:
-定理 isSquare_nat_of_isNat
-  条件: (a n : 自然数) (h : Is自然数 a n) (m : 自然数) (hm : m * m = n)
+定理 isSquare_nat_of_is自然数
+  条件: (a n : 自然数) (h : 是自然数 a n) (m : 自然数) (hm : m * m = n)
   证明: ⟨m, h.1.trans hm.symm⟩
 
 Depends on / 依赖: hm.symm
@@ -57,8 +57,8 @@ theorem not_isSquare_nat_of_isNat
   grind
 
 中文:
-定理 not_isSquare_nat_of_isNat
-  结论: (a n : 自然数) (h : Is自然数 a n) (m k : 自然数) (hm : m * m = k)
+定理 not_isSquare_nat_of_is自然数
+  结论: (a n : 自然数) (h : 是自然数 a n) (m k : 自然数) (hm : m * m = k)
   证明: by
   rcases h with ⟨rfl⟩
   subst k
@@ -90,8 +90,8 @@ theorem iff_isSquare_int_of_isNat
   simp [h.1, Int.isSquare_natCast_iff]
 
 中文:
-定理 iff_isSquare_int_of_isNat
-  条件: (a : 整数) (n : 自然数) (h : Is自然数 a n)
+定理 iff_isSquare_int_of_is自然数
+  条件: (a : 整数) (n : 自然数) (h : 是自然数 a n)
   结论: IsSquare n ↔ IsSquare a
   证明: by
   simp [h.1, Int.isSquare_natCast_iff]
@@ -116,8 +116,8 @@ theorem iff_isSquare_of_isInt_int
     exact lt_of_le_of_lt (by simp) (mul_self_pos.mpr hb₀)
 
 中文:
-定理 iff_isSquare_of_isInt_int
-  条件: (a : 整数) (n : 自然数) (h : Is整数 a (.negOf自然数 n))
+定理 iff_isSquare_of_is整数_int
+  条件: (a : 整数) (n : 自然数) (h : 是整数 a (.negOf自然数 n))
   证明: by
   refine ⟨fun h' => by simp [h.1, h'], fun ⟨b, hb⟩ => ?_⟩
   rw [h.1]; rw [Int.cast_negOfNat] at hb
@@ -147,8 +147,8 @@ theorem iff_isSquare_of_isNat_rat
   simp [h.1]
 
 中文:
-定理 iff_isSquare_of_isNat_rat
-  条件: (a : Rat) (n : 自然数) (h : Is自然数 a n)
+定理 iff_isSquare_of_is自然数_rat
+  条件: (a : 有理数) (n : 自然数) (h : 是自然数 a n)
   证明: by
   simp [h.1]
 -/
@@ -171,8 +171,8 @@ theorem iff_isSquare_of_isInt_rat
     exact lt_of_le_of_lt (by simp) (mul_self_pos.mpr hb₀)
 
 中文:
-定理 iff_isSquare_of_isInt_rat
-  条件: (a : Rat) (n : 自然数) (h : Is整数 a (.negOf自然数 n))
+定理 iff_isSquare_of_is整数_rat
+  条件: (a : 有理数) (n : 自然数) (h : 是整数 a (.negOf自然数 n))
   证明: by
   refine ⟨fun h' => by simp [h.1, h'], fun ⟨b, hb⟩ => ?_⟩
   rw [h.1]; rw [Int.cast_negOfNat] at hb
@@ -206,7 +206,7 @@ theorem isSquare_of_isNNRat_rat
 
 中文:
 定理 isSquare_of_isNNRat_rat
-  结论: (a : Rat) (n d : 自然数) (hn : IsSquare n) (hd : IsSquare d)
+  结论: (a : 有理数) (n d : 自然数) (hn : IsSquare n) (hd : IsSquare d)
   证明: by
   rcases hn with ⟨n, rfl⟩
   rcases hd with ⟨d, rfl⟩
@@ -238,7 +238,7 @@ theorem not_isSquare_of_isNNRat_rat_of_num
 
 中文:
 定理 not_isSquare_of_isNNRat_rat_of_num
-  结论: (a : Rat) (n d : 自然数) (hn : ¬IsSquare n)
+  结论: (a : 有理数) (n d : 自然数) (hn : ¬IsSquare n)
   证明: by
   rw [ha.to_eq rfl rfl]; rw [Rat.isSquare_iff]; rw [← Int.cast_natCast n]; rw [← Int.cast_natCast d]; rw [Rat.num_div_eq_of_coprime]
   · simp [hn]
@@ -273,7 +273,7 @@ theorem not_isSquare_of_isNNRat_rat_of_den
 
 中文:
 定理 not_isSquare_of_isNNRat_rat_of_den
-  结论: (a : Rat) (n d : 自然数) (hd : ¬IsSquare d) (hnd : n.Coprime d)
+  结论: (a : 有理数) (n d : 自然数) (hd : ¬IsSquare d) (hnd : n.Coprime d)
   证明: by
   rw [ha.to_eq rfl rfl]; rw [Rat.isSquare_iff]; rw [← Int.cast_natCast n]; rw [← Int.cast_natCast d]; rw [← Int.isSquare_natCast_iff (n := Rat.den _)]; rw [Rat.den_div_eq_of_coprime]
   · simp [hd]
@@ -307,7 +307,7 @@ theorem not_isSquare_of_isRat_neg
 
 中文:
 定理 not_isSquare_of_isRat_neg
-  结论: (a : Rat) (n d : 自然数) (hn : n != 0) (hd : d != 0)
+  结论: (a : 有理数) (n d : 自然数) (hn : n != 0) (hd : d != 0)
   证明: by
   rw [ha.neg_to_eq rfl rfl]
   rintro ⟨q, hq⟩
@@ -347,7 +347,7 @@ definition evalIsSquareNat
       have hm : Q($em * $em = $n) := (q(Eq.refl $n) :
 
 中文:
-定义 evalIsSquareNat
+定义 evalIsSquare自然数
   签名: : NormNumExt where eval {u αP} e
   定义体: do
   match u, αP, e with
@@ -398,7 +398,7 @@ definition evalIsSquareInt
 
 
 中文:
-定义 evalIsSquareInt
+定义 evalIsSquare整数
   签名: : NormNumExt where eval {u αP} e
   定义体: do
   match u, αP, e with

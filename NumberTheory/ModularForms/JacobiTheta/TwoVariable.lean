@@ -51,7 +51,7 @@ definition jacobiTheta₂_term
 
 中文:
 定义 jacobiTheta₂_term
-  签名: (n : 整数) (z τ : Complex)
+  签名: (n : 整数) (z τ : 复形)
   定义体: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
 -/
 def jacobiTheta₂_term (n : Int) (z τ : Complex) : Complex := cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
@@ -68,7 +68,7 @@ definition jacobiTheta₂_term_fderiv
 
 中文:
 定义 jacobiTheta₂_term_fderiv
-  签名: (n : 整数) (z τ : Complex)
+  签名: (n : 整数) (z τ : 复形)
   定义体: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ) •
     ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex) +
       (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex))
@@ -94,7 +94,7 @@ lemma hasFDerivAt_jacobiTheta₂_term
 
 中文:
 引理 hasFDerivAt_jacobiTheta₂_term
-  条件: (n : 整数) (z τ : Complex)
+  条件: (n : 整数) (z τ : 复形)
   证明: by
   let f : Complex × Complex -> Complex := fun p => 2 * π * I * n * p.1 + π * I * n ^ 2 * p.2
   suffices HasFDerivAt f ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex)
@@ -121,7 +121,7 @@ definition jacobiTheta₂'_term
 
 中文:
 定义 jacobiTheta₂'_term
-  签名: (n : 整数) (z τ : Complex)
+  签名: (n : 整数) (z τ : 复形)
   定义体: 2 * π * I * n * jacobiTheta₂_term n z τ
 -/
 def jacobiTheta₂'_term (n : Int) (z τ : Complex) := 2 * π * I * n * jacobiTheta₂_term n z τ
@@ -143,7 +143,7 @@ lemma norm_jacobiTheta₂_term
 
 中文:
 引理 norm_jacobiTheta₂_term
-  条件: (n : 整数) (z τ : Complex)
+  条件: (n : 整数) (z τ : 复形)
   证明: by
   rw [jacobiTheta₂_term]; rw [Complex.norm_exp]; rw [(by push_cast; ring :
     (2 * π : Complex) * I * n * z + π * I * n ^ 2 * τ = (π * (2 * n) :) * z * I + (π * n ^ 2 :) * τ * I)]; rw [add_re]; rw [mul_I_re]; rw [im_ofReal_mul]; rw [mul_I_re]; rw [im_ofReal_mul]
@@ -172,7 +172,7 @@ lemma norm_jacobiTheta₂_term_le
 
 中文:
 引理 norm_jacobiTheta₂_term_le
-  结论: {S T : 实数} (hT : 0 < T) {z τ : Complex}
+  结论: {S T : 实数} (hT : 0 < T) {z τ : 复形}
   证明: by
   simp_rw [norm_jacobiTheta₂_term, Real.exp_le_exp, sub_eq_add_neg, neg_mul, ← neg_add,
     neg_le_neg_iff, mul_comm (2 : Real), mul_assoc π, ← mul_add, mul_le_mul_iff_right₀ pi_pos,
@@ -209,7 +209,7 @@ lemma norm_jacobiTheta₂'_term_le
 
 中文:
 引理 norm_jacobiTheta₂'_term_le
-  结论: {S T : 实数} (hT : 0 < T) {z τ : Complex}
+  结论: {S T : 实数} (hT : 0 < T) {z τ : 复形}
   证明: by
   rw [jacobiTheta₂'_term]; rw [norm_mul]
   refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hT hz hτ n)
@@ -283,7 +283,7 @@ lemma summable_jacobiTheta₂_term_iff
 
 中文:
 引理 summable_jacobiTheta₂_term_iff
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: Summable (jacobiTheta₂_term · z τ) ↔ 0 < im τ
   证明: by
   -- NB. This is a statement of no great mathematical interest; it is included largely to avoid
@@ -343,7 +343,7 @@ lemma norm_jacobiTheta₂_term_fderiv_le
 
 中文:
 引理 norm_jacobiTheta₂_term_fderiv_le
-  条件: (n : 整数) (z τ : Complex)
+  条件: (n : 整数) (z τ : 复形)
   证明: by
   -- this is slow to elaborate so do it once and reuse:
   have hns (a : Complex) (f : (Complex × Complex) ->L[Complex] Complex) : ‖a • f‖ = ‖a‖ * ‖f‖ := norm_smul a f
@@ -380,7 +380,7 @@ lemma norm_jacobiTheta₂_term_fderiv_ge
 
 中文:
 引理 norm_jacobiTheta₂_term_fderiv_ge
-  条件: (n : 整数) (z τ : Complex)
+  条件: (n : 整数) (z τ : 复形)
   证明: by
   have : ‖(jacobiTheta₂_term_fderiv n z τ) (0, 1)‖ <= ‖jacobiTheta₂_term_fderiv n z τ‖ := by
     refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
@@ -421,7 +421,7 @@ lemma summable_jacobiTheta₂_term_fderiv_iff
 
 中文:
 引理 summable_jacobiTheta₂_term_fderiv_iff
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   constructor
   · rw [← summable_jacobiTheta₂_term_iff (z := z)]
@@ -476,7 +476,7 @@ lemma summable_jacobiTheta₂'_term_iff
 
 中文:
 引理 summable_jacobiTheta₂'_term_iff
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   constructor
   · rw [← summable_jacobiTheta₂_term_iff (z := z)]
@@ -527,7 +527,7 @@ definition jacobiTheta₂
 
 中文:
 定义 jacobiTheta₂
-  签名: (z τ : Complex)
+  签名: (z τ : 复形)
   定义体: ∑' n : Int, jacobiTheta₂_term n z τ
 -/
 def jacobiTheta₂ (z τ : Complex) : Complex := ∑' n : Int, jacobiTheta₂_term n z τ
@@ -542,7 +542,7 @@ definition jacobiTheta₂_fderiv
 
 中文:
 定义 jacobiTheta₂_fderiv
-  签名: (z τ : Complex)
+  签名: (z τ : 复形)
   定义体: ∑' n : Int, jacobiTheta₂_term_fderiv n z τ
 -/
 def jacobiTheta₂_fderiv (z τ : Complex) : Complex × Complex ->L[Complex] Complex := ∑' n : Int, jacobiTheta₂_term_fderiv n z τ
@@ -557,7 +557,7 @@ definition jacobiTheta₂'
 
 中文:
 定义 jacobiTheta₂'
-  签名: (z τ : Complex)
+  签名: (z τ : 复形)
   定义体: ∑' n : Int, jacobiTheta₂'_term n z τ
 -/
 def jacobiTheta₂' (z τ : Complex) := ∑' n : Int, jacobiTheta₂'_term n z τ
@@ -572,7 +572,7 @@ lemma hasSum_jacobiTheta₂_term
 
 中文:
 引理 hasSum_jacobiTheta₂_term
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: ((summable_jacobiTheta₂_term_iff z τ).mpr hτ).hasSum
 
 Depends on / 依赖: hasSum
@@ -591,7 +591,7 @@ lemma hasSum_jacobiTheta₂_term_fderiv
 
 中文:
 引理 hasSum_jacobiTheta₂_term_fderiv
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: ((summable_jacobiTheta₂_term_fderiv_iff z τ).mpr hτ).hasSum
 
 Depends on / 依赖: hasSum
@@ -610,7 +610,7 @@ lemma hasSum_jacobiTheta₂'_term
 
 中文:
 引理 hasSum_jacobiTheta₂'_term
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: ((summable_jacobiTheta₂'_term_iff z τ).mpr hτ).hasSum
 
 Depends on / 依赖: _term_iff, hasSum
@@ -633,7 +633,7 @@ lemma jacobiTheta₂_undef
 
 中文:
 引理 jacobiTheta₂_undef
-  条件: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
+  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
   结论: jacobiTheta₂ z τ = 0
   证明: by
   apply tsum_eq_zero_of_not_summable
@@ -661,7 +661,7 @@ lemma jacobiTheta₂_fderiv_undef
 
 中文:
 引理 jacobiTheta₂_fderiv_undef
-  条件: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
+  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
   结论: jacobiTheta₂_fderiv z τ = 0
   证明: by
   apply tsum_eq_zero_of_not_summable
@@ -689,7 +689,7 @@ lemma jacobiTheta₂'_undef
 
 中文:
 引理 jacobiTheta₂'_undef
-  条件: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
+  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
   结论: jacobiTheta₂' z τ = 0
   证明: by
   apply tsum_eq_zero_of_not_summable
@@ -718,7 +718,7 @@ lemma hasFDerivAt_jacobiTheta₂
 
 中文:
 引理 hasFDerivAt_jacobiTheta₂
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: by
   obtain ⟨T, hT, hτ'⟩ := exists_between hτ
   obtain ⟨S, hz⟩ := exists_gt |im z|
@@ -769,7 +769,7 @@ lemma continuousAt_jacobiTheta₂
 
 中文:
 引理 continuousAt_jacobiTheta₂
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: (hasFDerivAt_jacobiTheta₂ z hτ).continuousAt
 
 Depends on / 依赖: continuousAt
@@ -788,7 +788,7 @@ lemma differentiableAt_jacobiTheta₂_fst
 
 中文:
 引理 differentiableAt_jacobiTheta₂_fst
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: ((hasFDerivAt_jacobiTheta₂ z hτ).comp (𝕜 := Complex) z (hasFDerivAt_prodMk_left z τ) :).differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt_prodMk_left
@@ -807,7 +807,7 @@ lemma differentiableAt_jacobiTheta₂_snd
 
 中文:
 引理 differentiableAt_jacobiTheta₂_snd
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: ((hasFDerivAt_jacobiTheta₂ z hτ).comp τ (hasFDerivAt_prodMk_right z τ)).differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt_prodMk_right
@@ -831,7 +831,7 @@ lemma hasDerivAt_jacobiTheta₂_fst
 
 中文:
 引理 hasDerivAt_jacobiTheta₂_fst
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: by
   -- This proof is annoyingly fiddly, because of the need to commute "evaluation at a point"
   -- through infinite sums of continuous linear maps.
@@ -873,7 +873,7 @@ lemma continuousAt_jacobiTheta₂'
 
 中文:
 引理 continuousAt_jacobiTheta₂'
-  条件: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
+  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
   证明: by
   obtain ⟨T, hT, hτ'⟩ := exists_between hτ
   obtain ⟨S, hz⟩ := exists_gt |im z|
@@ -920,7 +920,7 @@ lemma jacobiTheta₂_add_right
 
 中文:
 引理 jacobiTheta₂_add_right
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂ z (τ + 2) = jacobiTheta₂ z τ
   证明: by
   refine tsum_congr (fun n => ?_)
@@ -950,7 +950,7 @@ lemma jacobiTheta₂_add_left
 
 中文:
 引理 jacobiTheta₂_add_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂ (z + 1) τ = jacobiTheta₂ z τ
   证明: by
   refine tsum_congr (fun n => ?_)
@@ -978,7 +978,7 @@ lemma jacobiTheta₂_add_left'
 
 中文:
 引理 jacobiTheta₂_add_left'
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   conv_rhs => rw [jacobiTheta₂, ← tsum_mul_left, ← (Equiv.addRight 1).tsum_eq]
   refine tsum_congr (fun n => ?_)
@@ -1010,7 +1010,7 @@ lemma jacobiTheta₂_neg_left
 
 中文:
 引理 jacobiTheta₂_neg_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂ (-z) τ = jacobiTheta₂ z τ
   证明: by
   conv_lhs => rw [jacobiTheta₂, ← Equiv.tsum_eq (Equiv.neg Int)]
@@ -1038,7 +1038,7 @@ lemma jacobiTheta₂_conj
 
 中文:
 引理 jacobiTheta₂_conj
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   rw [← jacobiTheta₂_neg_left]; rw [jacobiTheta₂]; rw [conj_tsum]
   congr 2 with n
@@ -1069,7 +1069,7 @@ lemma jacobiTheta₂'_add_right
 
 中文:
 引理 jacobiTheta₂'_add_right
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂' z (τ + 2) = jacobiTheta₂' z τ
   证明: by
   refine tsum_congr (fun n => ?_)
@@ -1098,7 +1098,7 @@ lemma jacobiTheta₂'_add_left
 
 中文:
 引理 jacobiTheta₂'_add_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂' (z + 1) τ = jacobiTheta₂' z τ
   证明: by
   unfold jacobiTheta₂' jacobiTheta₂'_term jacobiTheta₂_term
@@ -1127,7 +1127,7 @@ lemma jacobiTheta₂'_add_left'
 
 中文:
 引理 jacobiTheta₂'_add_left'
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   rcases le_or_gt τ.im 0 with hτ | hτ
   · simp_rw [jacobiTheta₂_undef _ hτ, jacobiTheta₂'_undef _ hτ, mul_zero, sub_zero, mul_zero]
@@ -1170,7 +1170,7 @@ lemma jacobiTheta₂'_neg_left
 
 中文:
 引理 jacobiTheta₂'_neg_left
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂' (-z) τ = -jacobiTheta₂' z τ
   证明: by
   rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [← tsum_neg]; rw [← (Equiv.neg Int).tsum_eq]
@@ -1202,7 +1202,7 @@ lemma jacobiTheta₂'_conj
 
 中文:
 引理 jacobiTheta₂'_conj
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   rw [← neg_inj]; rw [← jacobiTheta₂'_neg_left]; rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [conj_tsum]; rw [← tsum_neg]
   congr 1 with n
@@ -1238,7 +1238,7 @@ theorem jacobiTheta₂_functional_equation
 
 中文:
 定理 jacobiTheta₂_functional_equation
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   结论: jacobiTheta₂ z τ =
   证明: by
   rcases le_or_gt (im τ) 0 with hτ | hτ
@@ -1293,7 +1293,7 @@ theorem jacobiTheta₂'_functional_equation
 
 中文:
 定理 jacobiTheta₂'_functional_equation
-  条件: (z τ : Complex)
+  条件: (z τ : 复形)
   证明: by
   rcases le_or_gt (im τ) 0 with hτ | hτ
   · rw [jacobiTheta₂'_undef z hτ, jacobiTheta₂'_undef, jacobiTheta₂_undef, mul_zero,

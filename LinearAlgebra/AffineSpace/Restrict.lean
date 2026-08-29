@@ -42,8 +42,8 @@ instance AffineSubspace.nonempty_map
   exact ⟨⟨φ x, AffineSubspace.mem_map.mpr ⟨x, hx, rfl⟩⟩⟩
 
 中文:
-实例 AffineSubspace.nonempty_map
-  签名: {E : AffineSubspace k P₁} [Ene : Nonempty E]
+实例 仿射子空间.nonempty_map
+  签名: {E : 仿射子空间 k P₁} [Ene : 非空 E]
   定义体: by
   obtain ⟨x, hx⟩ := id Ene
   exact ⟨⟨φ x, AffineSubspace.mem_map.mpr ⟨x, hx, rfl⟩⟩⟩
@@ -70,8 +70,8 @@ definition AffineMap.restrict
  
 
 中文:
-定义 AffineMap.restrict
-  签名: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂}
+定义 仿射映射.restrict
+  签名: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁} {F : 仿射子空间 k P₂}
   定义体: by
   refine ⟨?_, ?_, ?_⟩
 · exact fun x => ⟨φ x, hEF AffineSubspace.mem_map.mpr ⟨x, x.property, rfl⟩⟩
@@ -102,8 +102,8 @@ theorem AffineMap.restrict.coe_apply
   proof: rfl
 
 中文:
-定理 AffineMap.restrict.coe_apply
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
+定理 仿射映射.restrict.coe_apply
+  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
   证明: rfl
 -/
 theorem AffineMap.restrict.coe_apply (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
@@ -122,8 +122,8 @@ theorem AffineMap.restrict.linear_aux
   exact AffineSubspace.direction_le hEF
 
 中文:
-定理 AffineMap.restrict.linear_aux
-  结论: {φ : P₁ ->ᵃ[k] P₂} {E : AffineSubspace k P₁}
+定理 仿射映射.restrict.linear_aux
+  结论: {φ : P₁ ->ᵃ[k] P₂} {E : 仿射子空间 k P₁}
   证明: by
   rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
   exact AffineSubspace.direction_le hEF
@@ -144,8 +144,8 @@ theorem AffineMap.restrict.linear
   proof: rfl
 
 中文:
-定理 AffineMap.restrict.linear
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
+定理 仿射映射.restrict.linear
+  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
   证明: rfl
 -/
 theorem AffineMap.restrict.linear (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
@@ -165,8 +165,8 @@ theorem AffineMap.restrict.injective
   exact hφ h
 
 中文:
-定理 AffineMap.restrict.injective
-  结论: {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Injective φ)
+定理 仿射映射.restrict.injective
+  结论: {φ : P₁ ->ᵃ[k] P₂} (hφ : 函数.单射 φ)
   证明: by
   intro x y h
   simp only [Subtype.ext_iff, AffineMap.restrict.coe_apply] at h ⊢
@@ -194,8 +194,8 @@ theorem AffineMap.restrict.surjective
   exact ⟨⟨y, hy⟩, rfl⟩
 
 中文:
-定理 AffineMap.restrict.surjective
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
+定理 仿射映射.restrict.surjective
+  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
   证明: by
   rintro ⟨x, hx : x in F⟩
   rw [← h]; rw [AffineSubspace.mem_map] at hx
@@ -221,8 +221,8 @@ theorem AffineMap.restrict.bijective
   proof: ⟨AffineMap.restrict.injective hφ _, AffineMap.restrict.surjective _ rfl⟩
 
 中文:
-定理 AffineMap.restrict.bijective
-  结论: {E : AffineSubspace k P₁} [Nonempty E] {φ : P₁ ->ᵃ[k] P₂}
+定理 仿射映射.restrict.bijective
+  结论: {E : 仿射子空间 k P₁} [非空 E] {φ : P₁ ->ᵃ[k] P₂}
   证明: ⟨AffineMap.restrict.injective hφ _, AffineMap.restrict.surjective _ rfl⟩
 
 Depends on / 依赖: AffineMap, AffineMap.restrict.injective, AffineMap.restrict.surjective, injective, restrict, surjective
@@ -245,7 +245,7 @@ definition affineSubspaceMap
 
 中文:
 定义 affineSubspaceMap
-  签名: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
+  签名: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
   定义体: .ofBijective (AffineMap.restrict.bijective e.injective)
 
 @[simp]
@@ -269,7 +269,7 @@ theorem affineSubspaceMap_apply
 
 中文:
 定理 affineSubspaceMap_apply
-  结论: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
+  结论: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
   证明: rfl
 
 @[simp]
@@ -289,7 +289,7 @@ theorem affineSubspaceMap_apply_symm_apply
 
 中文:
 定理 affineSubspaceMap_apply_symm_apply
-  结论: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
+  结论: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
   证明: congrArg Subtype.val (e.affineSubspaceMap s).apply_symm_apply x
 
 Depends on / 依赖: Subtype, Subtype.val, affineSubspaceMap, apply_symm_apply, e.affineSubspaceMap

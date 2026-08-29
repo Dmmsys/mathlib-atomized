@@ -46,7 +46,7 @@ definition normalizedChainComplex
 
 中文:
 定义 normalizedChainComplex
-  签名: : ChainComplex C 自然数
+  签名: : 链复形 C 自然数
   定义体: (X.splitting.map (sigmaConst.obj R)).nondegComplex
 
 Depends on / 依赖: X.splitting.map, nondegComplex, sigmaConst, sigmaConst.obj, splitting
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (X.toNormalizedChainComplex R)
+  签名: 是分裂满态射 (X.toNormalizedChainComplex R)
   定义体: SimplicialObject.Splitting.isSplitEpi_toNondegComplex _
 
 Depends on / 依赖: SimplicialObject, SimplicialObject.Splitting.isSplitEpi_toNondegComplex, Splitting, isSplitEpi_toNondegComplex
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (X.fromNormalizedChainComplex R)
+  签名: 是分裂单态射 (X.fromNormalizedChainComplex R)
   定义体: SimplicialObject.Splitting.isSplitMono_fromNondegComplex _
 
 @[reassoc (attr := simp)]
@@ -571,7 +571,7 @@ lemma isZero_normalizedChainComplex_X_of_hasDimensionLT
 
 中文:
 引理 isZero_normalizedChainComplex_X_of_hasDimensionLT
-  结论: (n d : 自然数) [X.HasDimensionLT d]
+  结论: (n d : 自然数) [X.有DimensionLT d]
   证明: by
   rw [IsZero.iff_id_eq_zero]
   ext x hx
@@ -700,7 +700,7 @@ definition normalizedChainComplexFunctorObj
 
 中文:
 定义 normalizedChainComplexFunctorObj
-  签名: : SSet.{w} ⥤ ChainComplex C 自然数 where
+  签名: : SSet.{w} ⥤ 链复形 C 自然数 where
   定义体: X.normalizedChainComplex R
   map f := normalizedChainComplexMap f R
 
@@ -723,7 +723,7 @@ definition toNormalizedChainComplexNatTrans
   body: X.toNormalizedChainComplex R
 
 中文:
-定义 toNormalizedChainComplexNatTrans
+定义 toNormalizedChainComplex自然数Trans
   签名: :
   定义体: X.toNormalizedChainComplex R
 
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (X.toNormalizedChainComplex R)
+  签名: 拟同构 (X.toNormalizedChainComplex R)
   定义体: (X.homotopyEquivNormalizedChainComplex R).quasiIso_hom
 
 Depends on / 依赖: X.homotopyEquivNormalizedChainComplex, homotopyEquivNormalizedChainComplex, quasiIso_hom
@@ -767,7 +767,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (X.fromNormalizedChainComplex R)
+  签名: 拟同构 (X.fromNormalizedChainComplex R)
   定义体: (X.homotopyEquivNormalizedChainComplex R).quasiIso_inv
 
 Depends on / 依赖: X.homotopyEquivNormalizedChainComplex, homotopyEquivNormalizedChainComplex, quasiIso_inv
@@ -787,7 +787,7 @@ lemma exactAt_chainComplex_of_hasDimensionLT
 
 中文:
 引理 exactAt_chainComplex_of_hasDimensionLT
-  结论: (n d : 自然数) [X.HasDimensionLT d]
+  结论: (n d : 自然数) [X.有DimensionLT d]
   证明: by
   rw [exactAt_iff_of_quasiIsoAt (X.toNormalizedChainComplex R)]
   exact .of_isZero (X.isZero_normalizedChainComplex_X_of_hasDimensionLT R n d)
@@ -812,7 +812,7 @@ lemma isZero_homology_of_hasDimensionLT
 
 中文:
 引理 isZero_homology_of_hasDimensionLT
-  结论: (n d : 自然数) [X.HasDimensionLT d]
+  结论: (n d : 自然数) [X.有DimensionLT d]
   证明: by
   rw [← exactAt_iff_isZero_homology]
   exact X.exactAt_chainComplex_of_hasDimensionLT R n d

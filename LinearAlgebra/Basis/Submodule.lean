@@ -42,7 +42,7 @@ theorem mem_submodule_iff
 
 中文:
 定理 mem_submodule_iff
-  条件: {P : Submodule R M} (b : Basis ι R P) {x : M}
+  条件: {P : 子模 R M} (b : 基 ι R P) {x : M}
   证明: by
   conv_lhs =>
     rw [← P.range_subtype]; rw [← Submodule.map_top]; rw [← b.span_eq]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← Finsupp.range_linearCombination]
@@ -69,7 +69,7 @@ Finsupp.equivFunOnFinite.exists_congr_left.trans
 
 中文:
 定理 mem_submodule_iff'
-  条件: [Fintype ι] {P : Submodule R M} (b : Basis ι R P) {x : M}
+  条件: [有限类型 ι] {P : 子模 R M} (b : 基 ι R P) {x : M}
   证明: b.mem_submodule_iff.trans
 Finsupp.equivFunOnFinite.exists_congr_left.trans
       exists_congr fun c => by simp [Finsupp.sum_fintype, Finsupp.equivFunOnFinite]
@@ -110,8 +110,8 @@ theorem Basis.eq_bot_of_rank_eq_zero
   convert! (b.smul_eq_zero.mp
 
 中文:
-定理 Basis.eq_bot_of_rank_eq_zero
-  结论: [IsDomain R] (b : Basis ι R M) (N : Submodule R M)
+定理 基.eq_bot_of_rank_eq_zero
+  结论: [是整环 R] (b : 基 ι R M) (N : 子模 R M)
   证明: by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -165,8 +165,8 @@ definition Submodule.inductionOnRankAux
     apply Basis.eq_bo
 
 中文:
-定义 Submodule.inductionOnRankAux
-  签名: (b : Basis ι R M) (P : Submodule R M -> Sort*)
+定义 子模.inductionOnRankAux
+  签名: (b : 基 ι R M) (P : 子模 R M -> 类型层*)
   定义体: by
   haveI : DecidableEq M := Classical.decEq M
   have Pbot : P ⊥ := by
@@ -315,7 +315,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: : Basis ι R (span R (Set.range b))
+  签名: : 基 ι R (span R (集合.range b))
   定义体: Basis.span (b.linearIndependent.restrict_scalars (smul_left_injective R one_ne_zero))
 
 @[simp]
@@ -369,7 +369,7 @@ theorem restrictScalars_repr_apply
 
 中文:
 定理 restrictScalars_repr_apply
-  条件: (m : span R (Set.range b)) (i : ι)
+  条件: (m : span R (集合.range b)) (i : ι)
   证明: by
   suffices
     Finsupp.mapRange.linearMap (Algebra.linearMap R S) ∘ₗ (b.restrictScalars R).repr.toLinearMap =
@@ -455,7 +455,7 @@ definition addSubgroupOfClosure
 
 中文:
 定义 addSubgroupOfClosure
-  签名: (h : A = .closure (Set.range b))
+  签名: (h : A = .closure (集合.range b))
   定义体: (b.restrictScalars Int).map
     LinearEquiv.ofEq _ _
       (by rw [h, ← Submodule.span_int_eq_addSubgroupClosure, toAddSubgroup_toIntSubmodule])
@@ -484,7 +484,7 @@ theorem addSubgroupOfClosure_apply
 
 中文:
 定理 addSubgroupOfClosure_apply
-  条件: (h : A = .closure (Set.range b)) (i : ι)
+  条件: (h : A = .closure (集合.range b)) (i : ι)
   证明: by
   simp [addSubgroupOfClosure]
 
@@ -512,7 +512,7 @@ theorem addSubgroupOfClosure_repr_apply
 
 中文:
 定理 addSubgroupOfClosure_repr_apply
-  条件: (h : A = .closure (Set.range b)) (x : A) (i : ι)
+  条件: (h : A = .closure (集合.range b)) (x : A) (i : ι)
   证明: by
   suffices Finsupp.mapRange.linearMap (Algebra.linearMap Int R) ∘ₗ
       (b.addSubgroupOfClosure A h).repr.toLinearMap =

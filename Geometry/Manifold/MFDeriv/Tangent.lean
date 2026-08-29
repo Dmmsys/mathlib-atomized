@@ -46,7 +46,7 @@ theorem tangentMap_chart
 
 中文:
 定理 tangentMap_chart
-  条件: {p q : TangentBundle I M} (h : q.1 in (chartAt H p.1).source)
+  条件: {p q : 切丛 I M} (h : q.1 in (chartAt H p.1).source)
   证明: by
   dsimp [tangentMap]
   rw [MDifferentiableAt.mfderiv]
@@ -81,7 +81,7 @@ theorem tangentMap_chart_symm
 
 中文:
 定理 tangentMap_chart_symm
-  结论: {p : TangentBundle I M} {q : TangentBundle I H}
+  结论: {p : 切丛 I M} {q : 切丛 I H}
   证明: by
   dsimp only [tangentMap]
   rw [MDifferentiableAt.mfderiv (mdifferentiableAt_atlas_symm (chart_mem_atlas _ _) h)]
@@ -140,7 +140,7 @@ theorem UniqueMDiffOn.tangentBundle_proj_preimage
 
 中文:
 定理 UniqueMDiffOn.tangentBundle_proj_preimage
-  条件: {s : Set M} (hs : UniqueMDiffOn I s)
+  条件: {s : 集合 M} (hs : UniqueMDiffOn I s)
   证明: hs.bundle_preimage _
 
 Depends on / 依赖: bundle_preimage, hs.bundle_preimage

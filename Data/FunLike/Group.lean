@@ -96,7 +96,7 @@ theorem coe_coeMulHom
 
 中文:
 定理 coe_coeMulHom
-  结论: (coeMulHom F α β : F -> α -> β) = DFunLike.coe
+  结论: (coeMulHom F α β : F -> α -> β) = 依赖函数状.coe
   证明: rfl
 
 @[to_additive]
@@ -116,7 +116,7 @@ theorem coeMulHom_injective
 
 中文:
 定理 coeMulHom_injective
-  结论: Function.Injective (coeMulHom F α β)
+  结论: 函数.单射 (coeMulHom F α β)
   证明: by
   rw [coe_coeMulHom]
   exact DFunLike.coe_injective
@@ -198,7 +198,7 @@ theorem coe_coeMonoidHom
 
 中文:
 定理 coe_coeMonoidHom
-  结论: (coeMonoidHom F α β : F -> α -> β) = DFunLike.coe
+  结论: (coeMonoidHom F α β : F -> α -> β) = 依赖函数状.coe
   证明: rfl
 
 @[to_additive (attr := norm_cast)]
@@ -238,7 +238,7 @@ theorem coeMonoidHom_injective
 
 中文:
 定理 coeMonoidHom_injective
-  结论: Function.Injective (coeMonoidHom F α β)
+  结论: 函数.单射 (coeMonoidHom F α β)
   证明: by
   rw [coe_coeMonoidHom]
   exact DFunLike.coe_injective
@@ -270,7 +270,7 @@ abbreviation semigroup
 
 中文:
 缩写 semigroup
-  签名: [Semigroup β] [IsMulApply F α β]
+  签名: [半群 β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.semigroup (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected abbrev semigroup [Semigroup β] [IsMulApply F α β] : Semigroup F :=
@@ -290,7 +290,7 @@ abbreviation commSemigroup
 
 中文:
 缩写 commSemigroup
-  签名: [CommSemigroup β] [IsMulApply F α β]
+  签名: [交换半群 β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.commSemigroup (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected abbrev commSemigroup [CommSemigroup β] [IsMulApply F α β] :
@@ -311,7 +311,7 @@ theorem isLeftCancelMul
 
 中文:
 定理 isLeftCancelMul
-  条件: [Mul β] [IsLeftCancelMul β] [IsMulApply F α β]
+  条件: [乘法 β] [左乘消去 β] [是MulApply F α β]
   证明: DFunLike.coe_injective.isLeftCancelMul (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected theorem isLeftCancelMul [Mul β] [IsLeftCancelMul β] [IsMulApply F α β] :
@@ -332,7 +332,7 @@ theorem isRightCancelMul
 
 中文:
 定理 isRightCancelMul
-  条件: [Mul β] [IsRightCancelMul β] [IsMulApply F α β]
+  条件: [乘法 β] [右乘消去 β] [是MulApply F α β]
   证明: DFunLike.coe_injective.isRightCancelMul (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected theorem isRightCancelMul [Mul β] [IsRightCancelMul β] [IsMulApply F α β] :
@@ -353,7 +353,7 @@ theorem isCancelMul
 
 中文:
 定理 isCancelMul
-  条件: [Mul β] [IsCancelMul β] [IsMulApply F α β]
+  条件: [乘法 β] [是消去乘法 β] [是MulApply F α β]
   证明: DFunLike.coe_injective.isCancelMul (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected theorem isCancelMul [Mul β] [IsCancelMul β] [IsMulApply F α β] :
@@ -374,7 +374,7 @@ abbreviation leftCancelSemigroup
 
 中文:
 缩写 leftCancelSemigroup
-  签名: [LeftCancelSemigroup β] [IsMulApply F α β]
+  签名: [左消去半群 β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.leftCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected abbrev leftCancelSemigroup [LeftCancelSemigroup β] [IsMulApply F α β] :
@@ -395,7 +395,7 @@ abbreviation rightCancelSemigroup
 
 中文:
 缩写 rightCancelSemigroup
-  签名: [RightCancelSemigroup β] [IsMulApply F α β]
+  签名: [右消去半群 β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.rightCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
 -/
 protected abbrev rightCancelSemigroup [RightCancelSemigroup β] [IsMulApply F α β] :
@@ -417,7 +417,7 @@ abbreviation mulOneClass
 
 中文:
 缩写 mulOneClass
-  签名: [MulOneClass β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [MulOne类 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.mulOneClass (fun (f : F) => (f : α -> β)) coe_one coe_mul
 -/
 protected abbrev mulOneClass [MulOneClass β] [IsOneApply F α β] [IsMulApply F α β] :
@@ -440,7 +440,7 @@ abbreviation monoid
 
 中文:
 缩写 monoid
-  签名: [Monoid β] [IsOneApply F α β] [IsMulApply F α β] [IsPowApply 自然数 F α β]
+  签名: [幺半群 β] [是OneApply F α β] [是MulApply F α β] [是PowApply 自然数 F α β]
   定义体: DFunLike.coe_injective.monoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev monoid [Monoid β] [IsOneApply F α β] [IsMulApply F α β] [IsPowApply Nat F α β] :
@@ -461,7 +461,7 @@ abbreviation leftCancelMonoid
 
 中文:
 缩写 leftCancelMonoid
-  签名: [LeftCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [左消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.leftCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev leftCancelMonoid [LeftCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
@@ -483,7 +483,7 @@ abbreviation rightCancelMonoid
 
 中文:
 缩写 rightCancelMonoid
-  签名: [RightCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [右消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.rightCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev rightCancelMonoid [RightCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
@@ -504,7 +504,7 @@ abbreviation cancelMonoid
 
 中文:
 缩写 cancelMonoid
-  签名: [CancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.cancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev cancelMonoid [CancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
@@ -525,7 +525,7 @@ abbreviation commMonoid
 
 中文:
 缩写 commMonoid
-  签名: [CommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [交换幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.commMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev commMonoid [CommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
@@ -547,7 +547,7 @@ abbreviation cancelCommMonoid
 
 中文:
 缩写 cancelCommMonoid
-  签名: [CancelCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [消去交换幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.cancelCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
 -/
 protected abbrev cancelCommMonoid [CancelCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
@@ -570,7 +570,7 @@ abbreviation involutiveInv
 
 中文:
 缩写 involutiveInv
-  签名: [InvolutiveInv β] [IsInvApply F α β]
+  签名: [InvolutiveInv β] [是InvApply F α β]
   定义体: DFunLike.coe_injective.involutiveInv (fun (f : F) => (f : α -> β)) coe_inv
 -/
 protected abbrev involutiveInv [InvolutiveInv β] [IsInvApply F α β] : InvolutiveInv F :=
@@ -589,7 +589,7 @@ abbreviation invOneClass
 
 中文:
 缩写 invOneClass
-  签名: [InvOneClass β] [IsOneApply F α β] [IsInvApply F α β]
+  签名: [InvOne类 β] [是OneApply F α β] [是InvApply F α β]
   定义体: DFunLike.coe_injective.invOneClass (fun (f : F) => (f : α -> β)) coe_one coe_inv
 -/
 protected abbrev invOneClass [InvOneClass β] [IsOneApply F α β] [IsInvApply F α β] :
@@ -611,7 +611,7 @@ abbreviation divInvMonoid
 
 中文:
 缩写 divInvMonoid
-  签名: [DivInvMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [除逆幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.divInvMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
     coe_pow coe_pow
 -/
@@ -635,7 +635,7 @@ abbreviation divInvOneMonoid
 
 中文:
 缩写 divInvOneMonoid
-  签名: [DivInvOneMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [DivInvOne幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.divInvOneMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
     coe_inv coe_div coe_pow coe_pow
 -/
@@ -658,7 +658,7 @@ abbreviation divisionMonoid
 
 中文:
 缩写 divisionMonoid
-  签名: [DivisionMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [Division幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.divisionMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
     coe_inv coe_div coe_pow coe_pow
 -/
@@ -682,7 +682,7 @@ abbreviation divisionCommMonoid
 
 中文:
 缩写 divisionCommMonoid
-  签名: [DivisionCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
+  签名: [DivisionComm幺半群 β] [是OneApply F α β] [是MulApply F α β]
   定义体: DFunLike.coe_injective.divisionCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv
     coe_div coe_pow coe_pow
 -/
@@ -705,7 +705,7 @@ abbreviation group
 
 中文:
 缩写 group
-  签名: [Group β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
+  签名: [群 β] [是OneApply F α β] [是MulApply F α β] [是InvApply F α β]
   定义体: DFunLike.coe_injective.group (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div coe_pow
     coe_pow
 -/
@@ -729,7 +729,7 @@ abbreviation commGroup
 
 中文:
 缩写 commGroup
-  签名: [CommGroup β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
+  签名: [交换群 β] [是OneApply F α β] [是MulApply F α β] [是InvApply F α β]
   定义体: DFunLike.coe_injective.commGroup (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
     coe_pow coe_pow
 -/

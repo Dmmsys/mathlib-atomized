@@ -50,7 +50,7 @@ structure WLOGResult
     - reductionFVarIds : FVarId × FVarId
     - hypothesisGoal : MVarId
     - hypothesisFVarId : FVarId
-    - revertedFVarIds : Array FVarId
+    - revertedFVarIds : 数组 FVarId
 -/
 structure WLOGResult where
   /-- The `reductionGoal` requires showing that the case `h : ¬ P` can be reduced to the case where
@@ -92,7 +92,7 @@ definition _root_.Lean.MVarId.wlog
 
 中文:
 定义 _root_.Lean.MVarId.wlog
-  签名: (goal : MVarId) (h : Option Name) (P : Expr)
+  签名: (goal : MVarId) (h : 选项类型 Name) (P : Expr)
   定义体: goal.withContext do
   goal.checkNotAssigned `wlog
   let H := H.getD `this
@@ -170,7 +170,7 @@ definition wlogCore
 
 中文:
 定义 wlogCore
-  签名: (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray `ident))
+  签名: (h : TSyntax ``binderIdent) (P : 项) (xs : 选项类型 (TSyntaxArray `ident))
   定义体: do
   withMainContext do
   let H := H.map (·.getId)

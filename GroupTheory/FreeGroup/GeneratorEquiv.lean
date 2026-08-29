@@ -31,7 +31,7 @@ definition FreeAbelianGroup.basis
   body: ⟨(FreeAbelianGroup.equivFinsupp α).toIntLinearEquiv⟩
 
 中文:
-定义 FreeAbelianGroup.basis
+定义 自由交换群.basis
   签名: (α : 类型)
   定义体: ⟨(FreeAbelianGroup.equivFinsupp α).toIntLinearEquiv⟩
 
@@ -50,8 +50,8 @@ definition Equiv.ofFreeAbelianGroupLinearEquiv
 t.indexEquiv FreeAbelianGroup.basis _
 
 中文:
-定义 Equiv.ofFreeAbelianGroupLinearEquiv
-  签名: (e : FreeAbelianGroup α ≃ₗ[整数] FreeAbelianGroup β)
+定义 等价.ofFreeAbelianGroupLinearEquiv
+  签名: (e : 自由交换群 α ≃ₗ[整数] 自由交换群 β)
   定义体: let t : Basis α Int (FreeAbelianGroup β) := (FreeAbelianGroup.basis α).map e
 t.indexEquiv FreeAbelianGroup.basis _
 
@@ -70,8 +70,8 @@ definition Equiv.ofFreeAbelianGroupEquiv
   body: .ofFreeAbelianGroupLinearEquiv e.toIntLinearEquiv
 
 中文:
-定义 Equiv.ofFreeAbelianGroupEquiv
-  签名: (e : FreeAbelianGroup α ≃+ FreeAbelianGroup β)
+定义 等价.ofFreeAbelianGroupEquiv
+  签名: (e : 自由交换群 α ≃+ 自由交换群 β)
   定义体: .ofFreeAbelianGroupLinearEquiv e.toIntLinearEquiv
 
 Depends on / 依赖: e.toIntLinearEquiv, ofFreeAbelianGroupLinearEquiv, toIntLinearEquiv
@@ -88,8 +88,8 @@ definition Equiv.ofFreeGroupEquiv
   body: .ofFreeAbelianGroupEquiv (MulEquiv.toAdditive e.abelianizationCongr)
 
 中文:
-定义 Equiv.ofFreeGroupEquiv
-  签名: (e : FreeGroup α ≃* FreeGroup β)
+定义 等价.ofFreeGroupEquiv
+  签名: (e : 自由群 α ≃* 自由群 β)
   定义体: .ofFreeAbelianGroupEquiv (MulEquiv.toAdditive e.abelianizationCongr)
 
 Depends on / 依赖: MulEquiv, MulEquiv.toAdditive, abelianizationCongr, e.abelianizationCongr, ofFreeAbelianGroupEquiv, toAdditive
@@ -106,8 +106,8 @@ definition Equiv.ofIsFreeGroupEquiv
   body: .ofFreeGroupEquiv (toFreeGroup G).symm.trans e.trans toFreeGroup H
 
 中文:
-定义 Equiv.ofIsFreeGroupEquiv
-  签名: [Group G] [Group H] [IsFreeGroup G] [IsFreeGroup H] (e : G ≃* H)
+定义 等价.ofIsFreeGroupEquiv
+  签名: [群 G] [群 H] [是自由群 G] [是自由群 H] (e : G ≃* H)
   定义体: .ofFreeGroupEquiv (toFreeGroup G).symm.trans e.trans toFreeGroup H
 
 Depends on / 依赖: e.trans, ofFreeGroupEquiv, symm.trans, toFreeGroup

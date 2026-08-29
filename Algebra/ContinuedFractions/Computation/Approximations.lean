@@ -282,8 +282,8 @@ theorem of_partNum_eq_one_and_exists_int_partDen_eq
       get?_of_eq_some_of_succ_get?_intFractPa
 
 中文:
-定理 of_partNum_eq_one_and_exists_int_partDen_eq
-  结论: {gp : GenContFract.Pair K}
+定理 of_partNum_eq_one_and_存在_int_partDen_eq
+  结论: {gp : GenContFract.对 K}
   证明: by
   obtain ⟨ifp, stream_succ_nth_eq, -⟩ : exists ifp, IntFractPair.stream v (n + 1) = some ifp ∧ _ :=
     IntFractPair.exists_succ_get?_stream_of_gcf_of_get?_eq_some nth_s_eq
@@ -352,7 +352,7 @@ theorem exists_int_eq_of_partDen
   exact (of_partNum_eq_one_and_exists_int_partDen_eq nth_s_eq).right
 
 中文:
-定理 exists_int_eq_of_partDen
+定理 存在_int_eq_of_partDen
   结论: {b : K}
   证明: by
   obtain ⟨_, nth_s_eq, rfl⟩ : exists gp, (of v).s.get? n = some gp ∧ gp.b = b :=

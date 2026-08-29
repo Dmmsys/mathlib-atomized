@@ -38,7 +38,7 @@ theorem measurable_restrictLe
 中文:
 定理 measurable_restrictLe
   条件: (a : α)
-  结论: Measurable (restrictLe (π := X) a)
+  结论: 可测 (restrictLe (π := X) a)
   证明: Set.measurable_restrict _
 
 @[fun_prop]
@@ -59,7 +59,7 @@ theorem measurable_restrictLe₂
 中文:
 定理 measurable_restrictLe₂
   条件: {a b : α} (hab : a <= b)
-  结论: Measurable (restrictLe₂ (π := X) hab)
+  结论: 可测 (restrictLe₂ (π := X) hab)
   证明: Set.measurable_restrict₂ _
 -/
 theorem measurable_restrictLe₂ {a b : α} (hab : a <= b) : Measurable (restrictLe₂ (π := X) hab) :=
@@ -82,7 +82,7 @@ theorem measurable_frestrictLe
 中文:
 定理 measurable_frestrictLe
   条件: (a : α)
-  结论: Measurable (frestrictLe (π := X) a)
+  结论: 可测 (frestrictLe (π := X) a)
   证明: Finset.measurable_restrict _
 
 @[fun_prop]
@@ -103,7 +103,7 @@ theorem measurable_frestrictLe₂
 中文:
 定理 measurable_frestrictLe₂
   条件: {a b : α} (hab : a <= b)
-  结论: Measurable (frestrictLe₂ (π := X) hab)
+  结论: 可测 (frestrictLe₂ (π := X) hab)
   证明: Finset.measurable_restrict₂ _
 -/
 theorem measurable_frestrictLe₂ {a b : α} (hab : a <= b) : Measurable (frestrictLe₂ (π := X) hab) :=

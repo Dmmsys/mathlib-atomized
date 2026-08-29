@@ -35,7 +35,7 @@ theorem find?_eq_find?_of_perm
 
 中文:
 定理 find?_eq_find?_of_perm
-  结论: {p : α -> 布尔} {l₁ l₂ : List α}
+  结论: {p : α -> 布尔值} {l₁ l₂ : 列表 α}
   证明: by
   induction h with
   | nil => rfl
@@ -75,7 +75,7 @@ theorem find?_congr
 
 中文:
 定理 find?_congr
-  条件: {p₁ p₂ : α -> 布尔} {l : List α} (h : 对任意 x in l, p₁ x = p₂ x)
+  条件: {p₁ p₂ : α -> 布尔值} {l : 列表 α} (h : 对任意 x in l, p₁ x = p₂ x)
   证明: by
   induction l with grind
 -/

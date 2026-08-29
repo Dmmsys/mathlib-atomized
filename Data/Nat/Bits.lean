@@ -44,7 +44,7 @@ definition boddDiv2
 
 中文:
 定义 boddDiv2
-  签名: : 自然数 -> 布尔 × 自然数
+  签名: : 自然数 -> 布尔值 × 自然数
 -/
 def boddDiv2 : Nat -> Bool × Nat
   | 0 => (false, 0)
@@ -479,7 +479,7 @@ definition shiftLeft'
 
 中文:
 定义 shiftLeft'
-  签名: (b : 布尔) (m : 自然数)
+  签名: (b : 布尔值) (m : 自然数)
 -/
 def shiftLeft' (b : Bool) (m : Nat) : Nat -> Nat
   | 0 => m
@@ -574,7 +574,7 @@ definition bits
 
 中文:
 定义 bits
-  签名: : 自然数 -> List 布尔
+  签名: : 自然数 -> 列表 布尔值
   定义体: binaryRec [] fun b _ IH => b :: IH
 
 Depends on / 依赖: binaryRec
@@ -802,7 +802,7 @@ theorem bit_add
 
 中文:
 定理 bit_add
-  结论: 对任意 (b : 布尔) (n m : 自然数), bit b (n + m) = bit false n + bit b m
+  结论: 对任意 (b : 布尔值) (n m : 自然数), bit b (n + m) = bit false n + bit b m
 -/
 theorem bit_add : forall (b : Bool) (n m : Nat), bit b (n + m) = bit false n + bit b m
   | true, _, _ => by dsimp [bit]; lia
@@ -817,7 +817,7 @@ theorem bit_add'
 
 中文:
 定理 bit_add'
-  结论: 对任意 (b : 布尔) (n m : 自然数), bit b (n + m) = bit b n + bit false m
+  结论: 对任意 (b : 布尔值) (n m : 自然数), bit b (n + m) = bit b n + bit false m
 -/
 theorem bit_add' : forall (b : Bool) (n m : Nat), bit b (n + m) = bit b n + bit false m
   | true, _, _ => by dsimp [bit]; lia
@@ -860,7 +860,7 @@ theorem bitCasesOn_bit0
 
 中文:
 定理 bitCasesOn_bit0
-  条件: {motive : 自然数 -> Sort u} (H : 对任意 b n, motive (bit b n)) (n : 自然数)
+  条件: {motive : 自然数 -> 类型层 u} (H : 对任意 b n, motive (bit b n)) (n : 自然数)
   证明: bitCasesOn_bit H false n
 
 @[simp]
@@ -882,7 +882,7 @@ theorem bitCasesOn_bit1
 
 中文:
 定理 bitCasesOn_bit1
-  条件: {motive : 自然数 -> Sort u} (H : 对任意 b n, motive (bit b n)) (n : 自然数)
+  条件: {motive : 自然数 -> 类型层 u} (H : 对任意 b n, motive (bit b n)) (n : 自然数)
   证明: bitCasesOn_bit H true n
 
 Depends on / 依赖: bitCasesOn_bit
@@ -906,7 +906,7 @@ theorem bit_cases_on_injective
 
 中文:
 定理 bit_cases_on_injective
-  条件: {motive : 自然数 -> Sort u}
+  条件: {motive : 自然数 -> 类型层 u}
   证明: by
   intro H₁ H₂ h
   ext b n
@@ -933,7 +933,7 @@ theorem bit_cases_on_inj
 
 中文:
 定理 bit_cases_on_inj
-  条件: {motive : 自然数 -> Sort u} (H₁ H₂ : 对任意 b n, motive (bit b n))
+  条件: {motive : 自然数 -> 类型层 u} (H₁ H₂ : 对任意 b n, motive (bit b n))
   证明: bit_cases_on_injective.eq_iff
 
 Depends on / 依赖: bit_cases_on_injective, bit_cases_on_injective.eq_iff, eq_iff
@@ -951,7 +951,7 @@ lemma bit_le
 
 中文:
 引理 bit_le
-  结论: 对任意 (b : 布尔) {m n : 自然数}, m <= n -> bit b m <= bit b n
+  结论: 对任意 (b : 布尔值) {m n : 自然数}, m <= n -> bit b m <= bit b n
 -/
 lemma bit_le : forall (b : Bool) {m n : Nat}, m <= n -> bit b m <= bit b n
   | true, _, _, h => by dsimp [bit]; lia
@@ -1021,7 +1021,7 @@ theorem bits_append_bit
 
 中文:
 定理 bits_append_bit
-  条件: (n : 自然数) (b : 布尔) (hn : n = 0 -> b = true)
+  条件: (n : 自然数) (b : 布尔值) (hn : n = 0 -> b = true)
   证明: by
   rw [Nat.bits]; rw [Nat.bits]; rw [binaryRec_eq]
   simpa

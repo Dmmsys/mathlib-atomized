@@ -67,7 +67,7 @@ theorem lhopital_zero_right_on_Ioo
 
 中文:
 定理 lhopital_zero_right_on_Ioo
-  结论: (hab : a < b) (hff' : 对任意 x in Ioo a b, HasDerivAt f (f' x) x)
+  结论: (hab : a < b) (hff' : 对任意 x in 开区间 a b, 在点处可导 f (f' x) x)
   证明: by
   have sub : forall x in Ioo a b, Ioo a x subseteq Ioo a b := fun x hx =>
     Ioo_subset_Ioo (le_refl a) (le_of_lt hx.2)
@@ -132,7 +132,7 @@ theorem lhopital_zero_right_on_Ico
 
 中文:
 定理 lhopital_zero_right_on_Ico
-  结论: (hab : a < b) (hff' : 对任意 x in Ioo a b, HasDerivAt f (f' x) x)
+  结论: (hab : a < b) (hff' : 对任意 x in 开区间 a b, 在点处可导 f (f' x) x)
   证明: by
   refine lhopital_zero_right_on_Ioo hab hff' hgg' hg' ?_ ?_ hdiv
   · rw [← hfa, ← nhdsWithin_Ioo_eq_nhdsGT hab]
@@ -167,7 +167,7 @@ theorem lhopital_zero_left_on_Ioo
 
 中文:
 定理 lhopital_zero_left_on_Ioo
-  结论: (hab : a < b) (hff' : 对任意 x in Ioo a b, HasDerivAt f (f' x) x)
+  结论: (hab : a < b) (hff' : 对任意 x in 开区间 a b, 在点处可导 f (f' x) x)
   证明: by
   -- Here, we essentially compose by `Neg.neg`. The following is mostly technical details.
   have hdnf : forall x in -Ioo a b, HasDerivAt (f ∘ Neg.neg) (f' (-x) * -1) x := fun x hx =>
@@ -209,7 +209,7 @@ theorem lhopital_zero_left_on_Ioc
 
 中文:
 定理 lhopital_zero_left_on_Ioc
-  结论: (hab : a < b) (hff' : 对任意 x in Ioo a b, HasDerivAt f (f' x) x)
+  结论: (hab : a < b) (hff' : 对任意 x in 开区间 a b, 在点处可导 f (f' x) x)
   证明: by
   refine lhopital_zero_left_on_Ioo hab hff' hgg' hg' ?_ ?_ hdiv
   · rw [← hfb, ← nhdsWithin_Ioo_eq_nhdsLT hab]
@@ -245,7 +245,7 @@ theorem lhopital_zero_atTop_on_Ioi
 
 中文:
 定理 lhopital_zero_atTop_on_Ioi
-  结论: (hff' : 对任意 x in Ioi a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意 x in 左开右无界区间 a, 在点处可导 f (f' x) x)
   证明: by
   obtain ⟨a', haa', ha'⟩ : exists a', a < a' ∧ 0 < a' := ⟨1 + max a 0,
     ⟨lt_of_le_of_lt (le_max_left a 0) (lt_one_add _),
@@ -298,7 +298,7 @@ theorem lhopital_zero_atBot_on_Iio
 
 中文:
 定理 lhopital_zero_atBot_on_Iio
-  结论: (hff' : 对任意 x in Iio a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意 x in 左无界右开区间 a, 在点处可导 f (f' x) x)
   证明: by
   -- Here, we essentially compose by `Neg.neg`. The following is mostly technical details.
   have hdnf : forall x in -Iio a, HasDerivAt (f ∘ Neg.neg) (f' (-x) * -1) x := fun x hx =>
@@ -341,7 +341,7 @@ theorem lhopital_zero_right_on_Ioo
 
 中文:
 定理 lhopital_zero_right_on_Ioo
-  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (Ioo a b))
+  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (开区间 a b))
   证明: by
   have hdf : forall x in Ioo a b, DifferentiableAt Real f x := fun x hx =>
     (hdf x hx).differentiableAt (Ioo_mem_nhds hx.1 hx.2)
@@ -378,7 +378,7 @@ theorem lhopital_zero_right_on_Ico
 
 中文:
 定理 lhopital_zero_right_on_Ico
-  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (Ioo a b))
+  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (开区间 a b))
   证明: by
   refine lhopital_zero_right_on_Ioo hab hdf hg' ?_ ?_ hdiv
   · rw [← hfa, ← nhdsWithin_Ioo_eq_nhdsGT hab]
@@ -414,7 +414,7 @@ theorem lhopital_zero_left_on_Ioo
 
 中文:
 定理 lhopital_zero_left_on_Ioo
-  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (Ioo a b))
+  结论: (hab : a < b) (hdf : DifferentiableOn 实数 f (开区间 a b))
   证明: by
   have hdf : forall x in Ioo a b, DifferentiableAt Real f x := fun x hx =>
     (hdf x hx).differentiableAt (Ioo_mem_nhds hx.1 hx.2)
@@ -451,7 +451,7 @@ theorem lhopital_zero_atTop_on_Ioi
 
 中文:
 定理 lhopital_zero_atTop_on_Ioi
-  结论: (hdf : DifferentiableOn 实数 f (Ioi a))
+  结论: (hdf : DifferentiableOn 实数 f (左开右无界区间 a))
   证明: by
   have hdf : forall x in Ioi a, DifferentiableAt Real f x := fun x hx =>
     (hdf x hx).differentiableAt (Ioi_mem_nhds hx)
@@ -487,7 +487,7 @@ theorem lhopital_zero_atBot_on_Iio
 
 中文:
 定理 lhopital_zero_atBot_on_Iio
-  结论: (hdf : DifferentiableOn 实数 f (Iio a))
+  结论: (hdf : DifferentiableOn 实数 f (左无界右开区间 a))
   证明: by
   have hdf : forall x in Iio a, DifferentiableAt Real f x := fun x hx =>
     (hdf x hx).differentiableAt (Iio_mem_nhds hx)
@@ -538,7 +538,7 @@ theorem lhopital_zero_nhdsGT
 
 中文:
 定理 lhopital_zero_nhdsGT
-  结论: (hff' : 对任意ᶠ x in 𝓝[>] a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in 𝓝[>] a, 在点处可导 f (f' x) x)
   证明: by
   rw [eventually_iff_exists_mem] at *
   rcases hff' with ⟨s₁, hs₁, hff'⟩
@@ -584,7 +584,7 @@ theorem lhopital_zero_nhdsLT
 
 中文:
 定理 lhopital_zero_nhdsLT
-  结论: (hff' : 对任意ᶠ x in 𝓝[<] a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in 𝓝[<] a, 在点处可导 f (f' x) x)
   证明: by
   rw [eventually_iff_exists_mem] at *
   rcases hff' with ⟨s₁, hs₁, hff'⟩
@@ -625,7 +625,7 @@ theorem lhopital_zero_nhdsNE
 
 中文:
 定理 lhopital_zero_nhdsNE
-  结论: (hff' : 对任意ᶠ x in 𝓝[!=] a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in 𝓝[!=] a, 在点处可导 f (f' x) x)
   证明: by
   simp only [← Iio_union_Ioi, nhdsWithin_union, tendsto_sup, eventually_sup] at *
   exact ⟨lhopital_zero_nhdsLT hff'.1 hgg'.1 hg'.1 hfa.1 hga.1 hdiv.1,
@@ -657,7 +657,7 @@ replace hgg' := h.mp hgg'.mono fun _ h => h.hasDerivAt
 
 中文:
 定理 _root_.HasDerivWithinAt.lhopital_zero_nhdsWithin_convex
-  结论: {s : Set 实数} (hs : Convex 实数 s)
+  结论: {s : 集合 实数} (hs : 凸 实数 s)
   证明: .of_neBot_imp fun has => by
   replace has := closure_mono sdiff_subset (mem_closure_iff_nhdsWithin_neBot.2 has)
   have h := hs.sdiff_singleton_eventually_mem_nhds a
@@ -701,7 +701,7 @@ theorem lhopital_zero_nhds
 
 中文:
 定理 lhopital_zero_nhds
-  结论: (hff' : 对任意ᶠ x in 𝓝 a, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in 𝓝 a, 在点处可导 f (f' x) x)
   证明: by
   apply @lhopital_zero_nhdsNE _ _ _ f' _ g' <;>
     (first | apply eventually_nhdsWithin_of_eventually_nhds |
@@ -736,7 +736,7 @@ theorem lhopital_zero_atTop
 
 中文:
 定理 lhopital_zero_atTop
-  结论: (hff' : 对任意ᶠ x in atTop, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in atTop, 在点处可导 f (f' x) x)
   证明: by
   rw [eventually_iff_exists_mem] at *
   rcases hff' with ⟨s₁, hs₁, hff'⟩
@@ -784,7 +784,7 @@ theorem lhopital_zero_atBot
 
 中文:
 定理 lhopital_zero_atBot
-  结论: (hff' : 对任意ᶠ x in atBot, HasDerivAt f (f' x) x)
+  结论: (hff' : 对任意ᶠ x in atBot, 在点处可导 f (f' x) x)
   证明: by
   rw [eventually_iff_exists_mem] at *
   rcases hff' with ⟨s₁, hs₁, hff'⟩
@@ -831,7 +831,7 @@ theorem lhopital_zero_nhdsWithin_convex
 
 中文:
 定理 lhopital_zero_nhdsWithin_convex
-  结论: {s : Set 实数} (hs : Convex 实数 s)
+  结论: {s : 集合 实数} (hs : 凸 实数 s)
   证明: by
   have hdg : forallᶠ x in 𝓝[s \ {a}] a, DifferentiableWithinAt Real g (s \ {a}) x :=
     hg'.mp (Eventually.of_forall fun _ hg' =>
@@ -879,7 +879,7 @@ theorem lhopital_zero_nhdsWithin_convex
 
 中文:
 定理 lhopital_zero_nhdsWithin_convex
-  结论: {s : Set 实数} (hs : Convex 实数 s)
+  结论: {s : 集合 实数} (hs : 凸 实数 s)
   证明: by
   refine derivWithin.lhopital_zero_nhdsWithin_convex hs
     (hdf.mono fun _ h => h.differentiableWithinAt) (hg'.mp ?_) hfa hga

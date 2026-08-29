@@ -56,7 +56,7 @@ definition value
 
 中文:
 定义 value
-  签名: {X α : 类型} [TopologicalSpace X] {x : X} (φ : Germ (𝓝 x) α)
+  签名: {X α : 类型} [拓扑空间 X] {x : X} (φ : Germ (𝓝 x) α)
   定义体: Quotient.liftOn' φ (fun f => f x) fun f g h => by rw [Eventually.self_of_nhds h]
 
 @[simp]
@@ -116,7 +116,7 @@ theorem value_smul
 
 中文:
 定理 value_smul
-  结论: {α β : 类型} [SMul α β] (φ : Germ (𝓝 x) α)
+  结论: {α β : 类型} [标量乘法 α β] (φ : Germ (𝓝 x) α)
   证明: Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
 
 Depends on / 依赖: Germ.inductionOn, inductionOn
@@ -139,7 +139,7 @@ definition valueMulHom
 
 中文:
 定义 valueMulHom
-  签名: {X E : 类型} [Monoid E] [TopologicalSpace X] {x : X}
+  签名: {X E : 类型} [幺半群 E] [拓扑空间 X] {x : X}
   定义体: Filter.Germ.value
   map_one' := rfl
   map_mul' φ ψ := Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
@@ -162,7 +162,7 @@ definition valueₗ
 
 中文:
 定义 valueₗ
-  签名: {X 𝕜 E : 类型} [Semiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace X]
+  签名: {X 𝕜 E : 类型} [半环 𝕜] [加法交换幺半群 E] [模 𝕜 E] [拓扑空间 X]
   定义体: Filter.Germ.valueAddHom
   map_smul' := fun _ φ => Germ.inductionOn φ fun _ => rfl
 
@@ -183,7 +183,7 @@ definition valueRingHom
 
 中文:
 定义 valueRingHom
-  签名: {X E : 类型} [Semiring E] [TopologicalSpace X] {x : X}
+  签名: {X E : 类型} [半环 E] [拓扑空间 X] {x : X}
   定义体: { Filter.Germ.valueMulHom, Filter.Germ.valueAddHom with }
 
 Depends on / 依赖: Filter, Filter.Germ.valueAddHom, Filter.Germ.valueMulHom, valueAddHom, valueMulHom
@@ -203,7 +203,7 @@ definition valueOrderRingHom
 
 中文:
 定义 valueOrderRingHom
-  签名: {X E : 类型} [Semiring E] [PartialOrder E] [TopologicalSpace X] {x : X}
+  签名: {X E : 类型} [半环 E] [偏序 E] [拓扑空间 X] {x : X}
   定义体: Filter.Germ.valueRingHom
   monotone' := fun φ ψ =>
   Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ h => h.self_of_nhds
@@ -268,7 +268,7 @@ theorem Filter.Eventually.germ_congr_set
   exact Germ.coe_eq.mpr hy.2
 
 中文:
-定理 Filter.Eventually.germ_congr_set
+定理 滤子.Eventually.germ_congr_set
   证明: by
   rw [eventually_nhdsSet_iff_forall] at *
   intro x hx
@@ -331,7 +331,7 @@ theorem forall_restrictGermPredicate_iff
   rfl
 
 中文:
-定理 forall_restrictGermPredicate_iff
+定理 对任意_restrictGermPredicate_iff
   条件: {P : 对任意 x : X, Germ (𝓝 x) Y -> 命题}
   证明: by
   rw [eventually_nhdsSet_iff_forall]
@@ -352,7 +352,7 @@ theorem forall_restrictGermPredicate_of_forall
   proof: forall_restrictGermPredicate_iff.mpr (Eventually.of_forall h)
 
 中文:
-定理 forall_restrictGermPredicate_of_forall
+定理 对任意_restrictGermPredicate_of_对任意
   证明: forall_restrictGermPredicate_iff.mpr (Eventually.of_forall h)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, forall_restrictGermPredicate_iff, forall_restrictGermPredicate_iff.mpr, of_forall
@@ -376,7 +376,7 @@ definition sliceLeft
 
 中文:
 定义 sliceLeft
-  签名: [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z)
+  签名: [拓扑空间 Y] {p : X × Y} (P : Germ (𝓝 p) Z)
   定义体: P.compTendsto (Prod.mk · p.2) (Continuous.prodMk_left p.2).continuousAt
 
 @[simp]
@@ -397,7 +397,7 @@ theorem sliceLeft_coe
 
 中文:
 定理 sliceLeft_coe
-  条件: [TopologicalSpace Y] {y : Y} (f : X × Y -> Z)
+  条件: [拓扑空间 Y] {y : Y} (f : X × Y -> Z)
   证明: rfl
 -/
 theorem sliceLeft_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) :
@@ -416,7 +416,7 @@ definition sliceRight
 
 中文:
 定义 sliceRight
-  签名: [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z)
+  签名: [拓扑空间 Y] {p : X × Y} (P : Germ (𝓝 p) Z)
   定义体: P.compTendsto (Prod.mk p.1) (Continuous.prodMk_right p.1).continuousAt
 
 @[simp]
@@ -437,7 +437,7 @@ theorem sliceRight_coe
 
 中文:
 定理 sliceRight_coe
-  条件: [TopologicalSpace Y] {y : Y} (f : X × Y -> Z)
+  条件: [拓扑空间 Y] {y : Y} (f : X × Y -> Z)
   证明: rfl
 -/
 theorem sliceRight_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) :
@@ -454,7 +454,7 @@ lemma isConstant_comp_subtype
 
 中文:
 引理 isConstant_comp_subtype
-  结论: {s : Set X} {f : X -> Y} {x : s}
+  结论: {s : 集合 X} {f : X -> Y} {x : s}
   证明: isConstant_comp_tendsto hf continuousAt_subtype_val
 
 Depends on / 依赖: continuousAt_subtype_val, isConstant_comp_tendsto
@@ -485,7 +485,7 @@ lemma IsLocallyConstant.of_germ_isConstant
 
 中文:
 引理 IsLocallyConstant.of_germ_isConstant
-  条件: (h : 对任意 x : X, (f : Germ (𝓝 x) Y).IsConstant)
+  条件: (h : 对任意 x : X, (f : Germ (𝓝 x) Y).是常数)
   证明: by
   intro s
   rw [isOpen_iff_mem_nhds]
@@ -522,7 +522,7 @@ theorem eq_of_germ_isConstant
 
 中文:
 定理 eq_of_germ_isConstant
-  结论: [i : PreconnectedSpace X]
+  结论: [i : 预连通空间 X]
   证明: (IsLocallyConstant.of_germ_isConstant h).apply_eq_of_isPreconnected
     (preconnectedSpace_iff_univ.mp i) (by trivial) (by trivial)
 
@@ -549,7 +549,7 @@ lemma eq_of_germ_isConstant_on
 
 中文:
 引理 eq_of_germ_isConstant_on
-  结论: {s : Set X} (h : 对任意 x in s, (f : Germ (𝓝 x) Y).IsConstant)
+  结论: {s : 集合 X} (h : 对任意 x in s, (f : Germ (𝓝 x) Y).是常数)
   证明: by
   let i : s -> X := fun x => x
   change (f ∘ i) (⟨x, x_in⟩ : s) = (f ∘ i) (⟨x', x'_in⟩ : s)
@@ -578,7 +578,7 @@ theorem Germ.coe_prod
 
 中文:
 定理 Germ.coe_prod
-  结论: {α : 类型} (l : Filter α) (R : 类型) [CommMonoid R] {ι} (f : ι -> α -> R)
+  结论: {α : 类型} (l : 滤子 α) (R : 类型) [交换幺半群 R] {ι} (f : ι -> α -> R)
   证明: map_prod (Germ.coeMulHom l : (α -> R) ->* Germ l R) f s
 
 Depends on / 依赖: Germ.coeMulHom, coeMulHom, map_prod

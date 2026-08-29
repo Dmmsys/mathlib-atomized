@@ -40,8 +40,8 @@ class IsQuasiAffine
   (no additional axioms)
 
 中文:
-类 IsQuasiAffine
-  参数: (X : Scheme.{u})
+类 是QuasiAffine
+  参数: (X : 概形.{u})
   (无附加公理)
 -/
 class IsQuasiAffine (X : Scheme.{u}) : Prop extends
@@ -68,8 +68,8 @@ instance [X.IsQuasiAffine]
   infer_instance
 
 中文:
-实例 [X.IsQuasiAffine]
-  签名: : IsOpenImmersion X.toSpecΓ
+实例 [X.是QuasiAffine]
+  签名: : 是开浸入 X.toSpecΓ
   定义体: by
   have : IsIso X.toSpecΓ.imageι := by delta Hom.imageι Hom.image; rw [X.ker_toSpecΓ]; infer_instance
   rw [← X.toSpecΓ.toImage_imageι]
@@ -95,7 +95,7 @@ lemma IsQuasiAffine.of_isImmersion
   constructor
 
 中文:
-引理 IsQuasiAffine.of_isImmersion
+引理 是QuasiAffine.of_isImmersion
   证明: by
   have : IsImmersion (X.toSpecΓ ≫ Spec.map f.appTop) := by rw [← toSpecΓ_naturality]; infer_instance
   have : IsImmersion X.toSpecΓ := .of_comp _ (Spec.map f.appTop)
@@ -124,8 +124,8 @@ lemma IsQuasiAffine.isBasis_basicOpen
   refine ⟨_, ⟨r, ?_, rfl
 
 中文:
-引理 IsQuasiAffine.isBasis_basicOpen
-  条件: (X : Scheme.{u}) [IsQuasiAffine X]
+引理 是QuasiAffine.isBasis_basicOpen
+  条件: (X : 概形.{u}) [是QuasiAffine X]
   证明: by
   refine Opens.isBasis_iff_nbhd.mpr fun {U x} hxU => ?_
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU⟩ := (PrimeSpectrum.isBasis_basic_opens
@@ -163,8 +163,8 @@ lemma IsQuasiAffine.of_forall_exists_mem_basicOpen
       (fun _ => isRetrocompact_basicOpen _) (fun x => (hr _).i
 
 中文:
-引理 IsQuasiAffine.of_forall_exists_mem_basicOpen
-  结论: (X : Scheme.{u}) [CompactSpace X]
+引理 是QuasiAffine.of_对任意_存在_mem_basicOpen
+  结论: (X : 概形.{u}) [紧空间 X]
   证明: by
   suffices IsOpenImmersion X.toSpecΓ by constructor
   have : QuasiSeparatedSpace X := by
@@ -209,9 +209,9 @@ lemma IsQuasiAffine.of_isAffineHom
   rw [← preimag
 
 中文:
-引理 IsQuasiAffine.of_isAffineHom
-  条件: [IsAffineHom f] [Y.IsQuasiAffine]
-  结论: X.IsQuasiAffine
+引理 是QuasiAffine.of_isAffineHom
+  条件: [是仿射态射 f] [Y.是QuasiAffine]
+  结论: X.是QuasiAffine
   证明: by
   have := QuasiCompact.compactSpace_of_compactSpace f
   refine .of_forall_exists_mem_basicOpen _ fun x => ?_
@@ -245,7 +245,7 @@ definition openCoverBasicOpenTop
 
 中文:
 定义 openCoverBasicOpenTop
-  签名: (X : Scheme.{u}) [X.IsQuasiAffine]
+  签名: (X : 概形.{u}) [X.是QuasiAffine]
   定义体: X.openCoverOfIsOpenCover (fun i : { r // IsAffineOpen (X.basicOpen (U := ⊤) r) } =>
     X.basicOpen i.1) <| top_le_iff.mp fun x _ => by
   obtain ⟨_, ⟨_, ⟨r, hr, rfl⟩, rfl⟩, hxr, -⟩ :=
@@ -278,7 +278,7 @@ lemma isPullback_toSpecΓ_toSpecΓ
 
 中文:
 引理 isPullback_toSpecΓ_toSpecΓ
-  条件: (f : X ⟶ Y) [IsAffineHom f] [Y.IsQuasiAffine]
+  条件: (f : X ⟶ Y) [是仿射态射 f] [Y.是QuasiAffine]
   证明: by
   have := QuasiCompact.compactSpace_of_compactSpace f
   have := Scheme.IsQuasiAffine.of_isAffineHom f
@@ -333,7 +333,7 @@ lemma preimage_opensRange_toSpecΓ
 
 中文:
 引理 preimage_opensRange_toSpecΓ
-  条件: (f : X ⟶ Y) [IsAffineHom f] [X.IsQuasiAffine] [Y.IsQuasiAffine]
+  条件: (f : X ⟶ Y) [是仿射态射 f] [X.是QuasiAffine] [Y.是QuasiAffine]
   证明: by
   simpa using (IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback
     (isPullback_toSpecΓ_toSpecΓ f) ⊤).symm

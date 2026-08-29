@@ -61,7 +61,7 @@ definition Definable
 
 中文:
 定义 Definable
-  签名: (s : Set (α -> M))
+  签名: (s : 集合 (α -> M))
   定义体: exists φ : L[[A]].Formula α, s = Set.ofPred φ.Realize
 
 Depends on / 依赖: Formula, Realize, Set.ofPred, ofPred
@@ -85,7 +85,7 @@ theorem Definable.map_expansion
 
 中文:
 定理 Definable.map_expansion
-  结论: {L' : FirstOrder.Language} [L'.Structure M] (h : A.Definable L s)
+  结论: {L' : FirstOrder.Language} [L'.结构 M] (h : A.Definable L s)
   证明: by
   obtain ⟨ψ, rfl⟩ := h
   refine ⟨(φ.addConstants A).onFormula ψ, ?_⟩
@@ -115,7 +115,7 @@ theorem definable_iff_exists_formula_sum
   refine BoundedFormula.realize_mapTermRel
 
 中文:
-定理 definable_iff_exists_formula_sum
+定理 definable_iff_存在_formula_sum
   证明: by
   rw [Definable]; rw [Equiv.exists_congr_left (BoundedFormula.constantsVarsEquiv)]
   refine exists_congr (fun φ => iff_iff_eq.2 (congr_arg (s = ·) ?_))
@@ -224,7 +224,7 @@ theorem definable_empty
 
 中文:
 定理 definable_empty
-  结论: A.Definable L (∅ : Set (α -> M))
+  结论: A.Definable L (∅ : 集合 (α -> M))
   证明: ⟨⊥, by
     ext
     simp⟩
@@ -251,7 +251,7 @@ theorem definable_univ
 
 中文:
 定理 definable_univ
-  结论: A.Definable L (univ : Set (α -> M))
+  结论: A.Definable L (univ : 集合 (α -> M))
   证明: ⟨⊤, by
     ext
     simp⟩
@@ -281,7 +281,7 @@ theorem Definable.inter
 
 中文:
 定理 Definable.inter
-  条件: {f g : Set (α -> M)} (hf : A.Definable L f) (hg : A.Definable L g)
+  条件: {f g : 集合 (α -> M)} (hf : A.Definable L f) (hg : A.Definable L g)
   证明: by
   rcases hf with ⟨φ, rfl⟩
   rcases hg with ⟨θ, rfl⟩
@@ -315,7 +315,7 @@ theorem Definable.union
 
 中文:
 定理 Definable.union
-  条件: {f g : Set (α -> M)} (hf : A.Definable L f) (hg : A.Definable L g)
+  条件: {f g : 集合 (α -> M)} (hf : A.Definable L f) (hg : A.Definable L g)
   证明: by
   rcases hf with ⟨φ, hφ⟩
   rcases hg with ⟨θ, hθ⟩
@@ -347,7 +347,7 @@ theorem definable_finset_inf
 
 中文:
 定理 definable_finset_inf
-  结论: {ι : 类型} {f : ι -> Set (α -> M)} (hf : 对任意 i, A.Definable L (f i))
+  结论: {ι : 类型} {f : ι -> 集合 (α -> M)} (hf : 对任意 i, A.Definable L (f i))
   证明: by
   classical
     refine Finset.induction definable_univ (fun i s _ h => ?_) s
@@ -377,7 +377,7 @@ theorem definable_finset_sup
 
 中文:
 定理 definable_finset_sup
-  结论: {ι : 类型} {f : ι -> Set (α -> M)} (hf : 对任意 i, A.Definable L (f i))
+  结论: {ι : 类型} {f : ι -> 集合 (α -> M)} (hf : 对任意 i, A.Definable L (f i))
   证明: by
   classical
     refine Finset.induction definable_empty (fun i s _ h => ?_) s
@@ -404,8 +404,8 @@ theorem definable_biInter_finset
   exact definable_finset_inf hf s
 
 中文:
-定理 definable_biInter_finset
-  结论: {ι : 类型} {f : ι -> Set (α -> M)}
+定理 definable_bi整数er_finset
+  结论: {ι : 类型} {f : ι -> 集合 (α -> M)}
   证明: by
   rw [← Finset.inf_set_eq_iInter]
   exact definable_finset_inf hf s
@@ -429,7 +429,7 @@ theorem definable_biUnion_finset
 
 中文:
 定理 definable_biUnion_finset
-  结论: {ι : 类型} {f : ι -> Set (α -> M)}
+  结论: {ι : 类型} {f : ι -> 集合 (α -> M)}
   证明: by
   rw [← Finset.sup_set_eq_biUnion]
   exact definable_finset_sup hf s
@@ -453,8 +453,8 @@ theorem definable_iInter_of_finite
   simp
 
 中文:
-定理 definable_iInter_of_finite
-  结论: {ι : 类型} [Finite ι] {f : ι -> Set (α -> M)}
+定理 definable_i整数er_of_finite
+  结论: {ι : 类型} [有限 ι] {f : ι -> 集合 (α -> M)}
   证明: by
   have := Fintype.ofFinite ι
   convert! definable_finset_inf hf Finset.univ using 1
@@ -483,7 +483,7 @@ theorem definable_iUnion_of_finite
 
 中文:
 定理 definable_iUnion_of_finite
-  结论: {ι : 类型} [Finite ι] {f : ι -> Set (α -> M)}
+  结论: {ι : 类型} [有限 ι] {f : ι -> 集合 (α -> M)}
   证明: by
   have := Fintype.ofFinite ι
   convert! definable_finset_sup hf Finset.univ using 1
@@ -517,7 +517,7 @@ theorem Definable.compl
 
 中文:
 定理 Definable.compl
-  条件: {s : Set (α -> M)} (hf : A.Definable L s)
+  条件: {s : 集合 (α -> M)} (hf : A.Definable L s)
   结论: A.Definable L sᶜ
   证明: by
   rcases hf with ⟨φ, hφ⟩
@@ -546,7 +546,7 @@ theorem Definable.sdiff
 
 中文:
 定理 Definable.sdiff
-  条件: {s t : Set (α -> M)} (hs : A.Definable L s) (ht : A.Definable L t)
+  条件: {s t : 集合 (α -> M)} (hs : A.Definable L s) (ht : A.Definable L t)
   证明: hs.inter ht.compl
 
 Depends on / 依赖: hs.inter, ht.compl
@@ -565,7 +565,7 @@ lemma Definable.himp
 
 中文:
 引理 Definable.himp
-  条件: {s t : Set (α -> M)} (hs : A.Definable L s) (ht : A.Definable L t)
+  条件: {s t : 集合 (α -> M)} (hs : A.Definable L s) (ht : A.Definable L t)
   证明: by rw [himp_eq]; exact ht.union hs.compl
 -/
 @[simp] lemma Definable.himp {s t : Set (α -> M)} (hs : A.Definable L s) (ht : A.Definable L t) :
@@ -585,7 +585,7 @@ theorem Definable.preimage_comp
 
 中文:
 定理 Definable.preimage_comp
-  条件: (f : α -> β) {s : Set (α -> M)} (h : A.Definable L s)
+  条件: (f : α -> β) {s : 集合 (α -> M)} (h : A.Definable L s)
   证明: by
   obtain ⟨φ, rfl⟩ := h
   refine ⟨φ.relabel f, ?_⟩
@@ -619,7 +619,7 @@ theorem Definable.image_comp_equiv
 
 中文:
 定理 Definable.image_comp_equiv
-  条件: {s : Set (β -> M)} (h : A.Definable L s) (f : α ≃ β)
+  条件: {s : 集合 (β -> M)} (h : A.Definable L s) (f : α ≃ β)
   证明: by
   refine (congr rfl ?_).mp (h.preimage_comp f.symm)
   rw [image_eq_preimage_of_inverse]
@@ -705,7 +705,7 @@ theorem Definable.image_comp_sumInl_fin
 
 中文:
 定理 Definable.image_comp_sumInl_fin
-  结论: (m : 自然数) {s : Set (Sum α (Fin m) -> M)}
+  结论: (m : 自然数) {s : 集合 (和 α (有限集 m) -> M)}
   证明: by
   obtain ⟨φ, rfl⟩ := h
   refine ⟨(BoundedFormula.relabel id φ).exs, ?_⟩
@@ -750,7 +750,7 @@ theorem Definable.image_comp_embedding
 
 中文:
 定理 Definable.image_comp_embedding
-  结论: {s : Set (β -> M)} (h : A.Definable L s) (f : α ↪ β)
+  结论: {s : 集合 (β -> M)} (h : A.Definable L s) (f : α ↪ β)
   证明: by
   classical
     cases nonempty_fintype β
@@ -794,7 +794,7 @@ theorem Definable.image_comp
 
 中文:
 定理 Definable.image_comp
-  结论: {s : Set (β -> M)} (h : A.Definable L s) (f : α -> β) [Finite α]
+  结论: {s : 集合 (β -> M)} (h : A.Definable L s) (f : α -> β) [有限 α]
   证明: by
   classical
     cases nonempty_fintype α
@@ -855,8 +855,8 @@ lemma Definable.exists_of_finite
   simp [hφ]
 
 中文:
-引理 Definable.exists_of_finite
-  结论: [Finite β] {S : Set ((α oplus β) -> M)}
+引理 Definable.存在_of_finite
+  结论: [有限 β] {S : 集合 ((α oplus β) -> M)}
   证明: by
   obtain ⟨φ, hφ⟩ := hS
   exists φ.iExs β
@@ -884,8 +884,8 @@ lemma Definable.forall_of_finite
   simp [hφ]
 
 中文:
-引理 Definable.forall_of_finite
-  结论: [Finite β] {S : Set ((α oplus β) -> M)}
+引理 Definable.对任意_of_finite
+  结论: [有限 β] {S : 集合 ((α oplus β) -> M)}
   证明: by
   obtain ⟨φ, hφ⟩ := hS
   exists φ.iAlls β
@@ -912,7 +912,7 @@ definition Definable₁
 
 中文:
 定义 Definable₁
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: A.Definable L { x : Fin 1 -> M | x 0 in s }
 
 Depends on / 依赖: A.Definable, Definable
@@ -930,7 +930,7 @@ definition Definable₂
 
 中文:
 定义 Definable₂
-  签名: (s : Set (M × M))
+  签名: (s : 集合 (M × M))
   定义体: A.Definable L { x : Fin 2 -> M | (x 0, x 1) in s }
 
 Depends on / 依赖: A.Definable, Definable
@@ -969,7 +969,7 @@ theorem Definable.singleton_of_mem
 
 中文:
 定理 Definable.singleton_of_mem
-  条件: {a : M} {A : Set M} (ha : a in A)
+  条件: {a : M} {A : 集合 M} (ha : a in A)
   证明: (Definable.singleton L a).mono (Set.singleton_subset_iff.mpr ha)
 
 Depends on / 依赖: Definable, Definable.singleton, Set.singleton_subset_iff.mpr, singleton, singleton_subset_iff
@@ -989,7 +989,7 @@ theorem Definable.diagonal
 
 中文:
 定理 Definable.diagonal
-  条件: (A : Set M)
+  条件: (A : 集合 M)
   证明: by
   exists (Term.var 0).equal (Term.var 1)
 
@@ -1041,7 +1041,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (L.DefinableSet A α) (α -> M) where
+  签名: : 集合状 (L.DefinableSet A α) (α -> M) where
   定义体: Subtype.val
   coe_injective := Subtype.val_injective
 
@@ -1061,7 +1061,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (L.DefinableSet A α)
+  签名: 偏序 (L.DefinableSet A α)
   定义体: .ofSetLike (L.DefinableSet A α) (α -> M)
 
 Depends on / 依赖: DefinableSet, L.DefinableSet, ofSetLike
@@ -1078,7 +1078,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (L.DefinableSet A α)
+  签名: : 顶元素 (L.DefinableSet A α)
   定义体: ⟨⟨⊤, definable_univ⟩⟩
 
 Depends on / 依赖: definable_univ
@@ -1096,7 +1096,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (L.DefinableSet A α)
+  签名: : 底元素 (L.DefinableSet A α)
   定义体: ⟨⟨⊥, definable_empty⟩⟩
 
 Depends on / 依赖: definable_empty
@@ -1114,7 +1114,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (L.DefinableSet A α)
+  签名: : 最大值 (L.DefinableSet A α)
   定义体: ⟨fun s t => ⟨s union t, s.2.union t.2⟩⟩
 -/
 instance instSup : Max (L.DefinableSet A α) :=
@@ -1130,7 +1130,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (L.DefinableSet A α)
+  签名: : 最小值 (L.DefinableSet A α)
   定义体: ⟨fun s t => ⟨s inter t, s.2.inter t.2⟩⟩
 -/
 instance instInf : Min (L.DefinableSet A α) :=
@@ -1146,7 +1146,7 @@ instance instCompl
 
 中文:
 实例 instCompl
-  签名: : Compl (L.DefinableSet A α)
+  签名: : 补集 (L.DefinableSet A α)
   定义体: ⟨fun s => ⟨sᶜ, s.2.compl⟩⟩
 -/
 instance instCompl : Compl (L.DefinableSet A α) :=
@@ -1162,7 +1162,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff (L.DefinableSet A α)
+  签名: : 对称差 (L.DefinableSet A α)
   定义体: ⟨fun s t => ⟨s \ t, s.2.sdiff t.2⟩⟩
 -/
 instance instSDiff : SDiff (L.DefinableSet A α) :=
@@ -1195,7 +1195,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (L.DefinableSet A α)
+  签名: : 可居 (L.DefinableSet A α)
   定义体: ⟨⊥⟩
 -/
 instance instInhabited : Inhabited (L.DefinableSet A α) :=
@@ -1213,7 +1213,7 @@ theorem le_iff
 
 中文:
 定理 le_iff
-  结论: s <= t ↔ (s : Set (α -> M)) <= (t : Set (α -> M))
+  结论: s <= t ↔ (s : 集合 (α -> M)) <= (t : 集合 (α -> M))
   证明: Iff.rfl
 
 @[simp]
@@ -1376,7 +1376,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : L.DefinableSet A α) : Set (α -> M)) = univ
+  结论: ((⊤ : L.DefinableSet A α) : 集合 (α -> M)) = univ
   证明: rfl
 
 @[simp, norm_cast]
@@ -1397,7 +1397,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : L.DefinableSet A α) : Set (α -> M)) = ∅
+  结论: ((⊥ : L.DefinableSet A α) : 集合 (α -> M)) = ∅
   证明: rfl
 
 @[simp, norm_cast]
@@ -1506,7 +1506,7 @@ lemma coe_himp
 中文:
 引理 coe_himp
   条件: (s t : L.DefinableSet A α)
-  结论: ↑(s ⇨ t) = (s ⇨ t : Set (α -> M))
+  结论: ↑(s ⇨ t) = (s ⇨ t : 集合 (α -> M))
   证明: rfl
 -/
 lemma coe_himp (s t : L.DefinableSet A α) : ↑(s ⇨ t) = (s ⇨ t : Set (α -> M)) := rfl
@@ -1521,8 +1521,8 @@ instance instBooleanAlgebra
     coe_sup coe_inf coe_top coe_bot coe_compl coe_sdiff coe_himp
 
 中文:
-实例 instBooleanAlgebra
-  签名: : 布尔eanAlgebra (L.DefinableSet A α)
+实例 inst布尔eanAlgebra
+  签名: : 布尔代数 (L.DefinableSet A α)
   定义体: Function.Injective.booleanAlgebra _ Subtype.coe_injective .rfl .rfl
     coe_sup coe_inf coe_top coe_bot coe_compl coe_sdiff coe_himp
 
@@ -1600,7 +1600,7 @@ theorem DefinableFun.mono
 
 中文:
 定理 DefinableFun.mono
-  条件: {B : Set M} (hAs : A.DefinableFun L f) (hAB : A subseteq B)
+  条件: {B : 集合 M} (hAs : A.DefinableFun L f) (hAB : A subseteq B)
   证明: Set.Definable.mono hAs hAB
 
 @[fun_prop]
@@ -1622,7 +1622,7 @@ theorem DefinableFun.of_empty
 
 中文:
 定理 DefinableFun.of_empty
-  条件: (hAs : (∅ : Set M).DefinableFun L f)
+  条件: (hAs : (∅ : 集合 M).DefinableFun L f)
   证明: Set.Definable.mono hAs (empty_subset A)
 
 Depends on / 依赖: Definable, Set.Definable.mono, empty_subset
@@ -1682,8 +1682,8 @@ theorem _root_.FirstOrder.Language.Term.definableFun_realize
   simp [tupleGraph]
 
 中文:
-定理 _root_.FirstOrder.Language.Term.definableFun_realize
-  条件: (t : L.Term α)
+定理 _root_.FirstOrder.Language.项.definableFun_realize
+  条件: (t : L.项 α)
   证明: by
   rw [empty_definableFun_iff]
   refine ⟨(t.relabel some).equal (Term.var none), ?_⟩
@@ -1711,7 +1711,7 @@ theorem DefinableFun.fun_symbol
 
 中文:
 定理 DefinableFun.fun_symbol
-  条件: {n : 自然数} (f : L.Functions n)
+  条件: {n : 自然数} (f : L.函数 n)
   证明: (Term.func f Term.var).definableFun_realize
 
 Depends on / 依赖: Term.func, Term.var, definableFun_realize
@@ -1782,7 +1782,7 @@ theorem _root_.FirstOrder.Language.definableFun_const
 
 中文:
 定理 _root_.FirstOrder.Language.definableFun_const
-  结论: {A : Set M} {a : M}
+  结论: {A : 集合 M} {a : M}
   证明: by
   rw [definableFun_iff_empty_definableFun_with_params]
   exact ((L.con (⟨a,ha⟩ : ↑A)).term).definableFun_realize
@@ -1811,7 +1811,7 @@ lemma _root_.Set.Definable.preimage_map
   have h_cyl 
 
 中文:
-引理 _root_.Set.Definable.preimage_map
+引理 _root_.集合.Definable.preimage_map
   证明: by
   have h_graph : A.Definable L { w : α oplus β -> M | forall i, F (w ∘ Sum.inl) i = w (Sum.inr i) } := by
     rw [ofPred_forall]
@@ -1859,7 +1859,7 @@ theorem DefinableFun.comp
 
 中文:
 定理 DefinableFun.comp
-  结论: [Finite α] {g : (β -> M) -> α -> M}
+  结论: [有限 α] {g : (β -> M) -> α -> M}
   证明: by
   let G : (Option β -> M) -> Option α -> M := fun w j =>
     match j with
@@ -2075,7 +2075,7 @@ theorem TermDefinable.map_expansion
 
 中文:
 定理 TermDefinable.map_expansion
-  条件: (h : A.TermDefinable L f) (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+  条件: (h : A.TermDefinable L f) (φ : L ->ᴸ L') [φ.是ExpansionOn M]
   证明: by
   obtain ⟨ψ, rfl⟩ := h
   use (φ.addConstants A).onTerm ψ
@@ -2265,7 +2265,7 @@ theorem termDefinable₁_iff_exists_term
   congr!
 
 中文:
-定理 termDefinable₁_iff_exists_term
+定理 termDefinable₁_iff_存在_term
   条件: {f : M -> M}
   结论: A.TermDefinable₁ L f ↔
   证明: by
@@ -2350,7 +2350,7 @@ theorem TermDefinable.const
 中文:
 定理 TermDefinable.const
   条件: (C : L[[A]].Constants)
-  结论: A.TermDefinable L (Function.const (α -> M) C)
+  结论: A.TermDefinable L (函数.const (α -> M) C)
   证明: ⟨C.term, by simp only [Term.realize_constants]; rfl⟩
 
 Depends on / 依赖: C.term, Term.realize_constants, realize_constants
@@ -2372,7 +2372,7 @@ theorem TermDefinable₁.const
 中文:
 定理 TermDefinable₁.const
   条件: (C : L[[A]].Constants)
-  结论: A.TermDefinable₁ L (Function.const M C)
+  结论: A.TermDefinable₁ L (函数.const M C)
   证明: (TermDefinable.const C).termDefinable₁
 
 Depends on / 依赖: TermDefinable, TermDefinable.const

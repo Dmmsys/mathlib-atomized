@@ -38,8 +38,8 @@ lemma MeasurableSpace.pi_eq_generateFrom_projections
   simp only [pi, ← generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap]
 
 中文:
-引理 MeasurableSpace.pi_eq_generateFrom_projections
-  条件: {mα : 对任意 i, MeasurableSpace (α i)}
+引理 可测空间.pi_eq_generateFrom_projections
+  条件: {mα : 对任意 i, 可测空间 (α i)}
   证明: by
   simp only [pi, ← generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap]
 
@@ -62,7 +62,7 @@ theorem IsPiSystem.pi
 
 中文:
 定理 IsPiSystem.pi
-  条件: {C : 对任意 i, Set (Set (α i))} (hC : 对任意 i, IsPiSystem (C i))
+  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsPiSystem (C i))
   证明: by
   rintro _ ⟨s₁, hs₁, rfl⟩ _ ⟨s₂, hs₂, rfl⟩ hst
   rw [← pi_inter_distrib] at hst ⊢; rw [univ_pi_nonempty_iff] at hst
@@ -86,7 +86,7 @@ theorem isPiSystem_pi
 
 中文:
 定理 isPiSystem_pi
-  条件: [对任意 i, MeasurableSpace (α i)]
+  条件: [对任意 i, 可测空间 (α i)]
   证明: IsPiSystem.pi fun _ => isPiSystem_measurableSet
 
 Depends on / 依赖: IsPiSystem, IsPiSystem.pi, isPiSystem_measurableSet
@@ -116,7 +116,7 @@ theorem IsCountablySpanning.pi
 
 中文:
 定理 IsCountablySpanning.pi
-  条件: {C : 对任意 i, Set (Set (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
+  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
   证明: by
   choose s h1s h2s using hC
   cases nonempty_encodable (ι -> Nat)
@@ -160,7 +160,7 @@ theorem generateFrom_pi_eq
 
 中文:
 定理 generateFrom_pi_eq
-  条件: {C : 对任意 i, Set (Set (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
+  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
   证明: by
   classical
   cases nonempty_encodable ι
@@ -214,7 +214,7 @@ theorem generateFrom_eq_pi
 
 中文:
 定理 generateFrom_eq_pi
-  结论: [h : 对任意 i, MeasurableSpace (α i)] {C : 对任意 i, Set (Set (α i))}
+  结论: [h : 对任意 i, 可测空间 (α i)] {C : 对任意 i, 集合 (集合 (α i))}
   证明: by
   simp +instances only [← funext hC, generateFrom_pi_eq h2C]
 
@@ -236,7 +236,7 @@ theorem generateFrom_pi
 
 中文:
 定理 generateFrom_pi
-  条件: [对任意 i, MeasurableSpace (α i)]
+  条件: [对任意 i, 可测空间 (α i)]
   证明: generateFrom_eq_pi (fun _ => generateFrom_measurableSet) fun _ =>
     isCountablySpanning_measurableSet
 

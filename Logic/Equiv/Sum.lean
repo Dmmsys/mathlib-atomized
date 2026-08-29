@@ -278,7 +278,7 @@ abbreviation sumCongr
 
 中文:
 缩写 sumCongr
-  签名: {α β} (ea : Equiv.Perm α) (eb : Equiv.Perm β)
+  签名: {α β} (ea : 等价.置换 α) (eb : 等价.置换 β)
   定义体: Equiv.sumCongr ea eb
 
 @[simp]
@@ -299,7 +299,7 @@ theorem sumCongr_apply
 
 中文:
 定理 sumCongr_apply
-  条件: {α β} (ea : Equiv.Perm α) (eb : Equiv.Perm β) (x : α oplus β)
+  条件: {α β} (ea : 等价.置换 α) (eb : 等价.置换 β) (x : α oplus β)
   证明: rfl
 -/
 theorem sumCongr_apply {α β} (ea : Equiv.Perm α) (eb : Equiv.Perm β) (x : α oplus β) :
@@ -315,7 +315,7 @@ theorem sumCongr_trans
 
 中文:
 定理 sumCongr_trans
-  结论: {α β} (e : Equiv.Perm α) (f : Equiv.Perm β) (g : Equiv.Perm α)
+  结论: {α β} (e : 等价.置换 α) (f : 等价.置换 β) (g : 等价.置换 α)
   证明: Equiv.sumCongr_trans e f g h
 
 Depends on / 依赖: Equiv.sumCongr_trans, sumCongr_trans
@@ -334,7 +334,7 @@ theorem sumCongr_symm
 
 中文:
 定理 sumCongr_symm
-  条件: {α β} (e : Equiv.Perm α) (f : Equiv.Perm β)
+  条件: {α β} (e : 等价.置换 α) (f : 等价.置换 β)
   证明: Equiv.sumCongr_symm e f
 
 Depends on / 依赖: Equiv.sumCongr_symm, sumCongr_symm
@@ -355,7 +355,7 @@ theorem sumCongr_refl
 中文:
 定理 sumCongr_refl
   条件: {α β}
-  结论: sumCongr (Equiv.refl α) (Equiv.refl β) = Equiv.refl (α oplus β)
+  结论: sumCongr (等价.refl α) (等价.refl β) = 等价.refl (α oplus β)
   证明: Equiv.sumCongr_refl
 
 Depends on / 依赖: Equiv.sumCongr_refl, sumCongr_refl
@@ -376,7 +376,7 @@ definition boolEquivPUnitSumPUnit
 
 中文:
 定义 boolEquivPUnitSumPUnit
-  签名: : 布尔 ≃ PUnit.{u + 1} oplus PUnit.{v + 1}
+  签名: : 布尔值 ≃ 命题单元.{u + 1} oplus 命题单元.{v + 1}
   定义体: ⟨fun b => b.casesOn (inl PUnit.unit) (inr PUnit.unit), Sum.elim (fun _ => false) fun _ => true,
     fun b => by cases b <;> rfl, fun s => by rcases s with (⟨⟨⟩⟩ | ⟨⟨⟩⟩) <;> rfl⟩
 
@@ -674,7 +674,7 @@ definition sumEmpty
 
 中文:
 定义 sumEmpty
-  签名: (α β) [IsEmpty β]
+  签名: (α β) [是空 β]
   定义体: Sum.elim id isEmptyElim
   invFun := inl
   left_inv s := by
@@ -706,8 +706,8 @@ theorem sumEmpty_apply_inl
 
 中文:
 定理 sumEmpty_apply_inl
-  条件: {α β} [IsEmpty β] (a : α)
-  结论: sumEmpty α β (Sum.inl a) = a
+  条件: {α β} [是空 β] (a : α)
+  结论: sumEmpty α β (和.inl a) = a
   证明: rfl
 -/
 theorem sumEmpty_apply_inl {α β} [IsEmpty β] (a : α) : sumEmpty α β (Sum.inl a) = a :=
@@ -727,7 +727,7 @@ definition emptySum
 
 中文:
 定义 emptySum
-  签名: (α β) [IsEmpty α]
+  签名: (α β) [是空 α]
   定义体: (sumComm _ _).trans sumEmpty _ _
 
 @[simp]
@@ -749,8 +749,8 @@ theorem emptySum_apply_inr
 
 中文:
 定理 emptySum_apply_inr
-  条件: {α β} [IsEmpty α] (b : β)
-  结论: emptySum α β (Sum.inr b) = b
+  条件: {α β} [是空 α] (b : β)
+  结论: emptySum α β (和.inr b) = b
   证明: rfl
 
 Depends on / 依赖: count_nth_of_infinite, infinite_setOfPred_prime
@@ -771,7 +771,7 @@ definition sumEquivSigmaBool
     fun s => by cases s <;> rfl, fun s => by rcases s with ⟨_ | _, _⟩ <;> rfl⟩
 
 中文:
-定义 sumEquivSigmaBool
+定义 sumEquivSigma布尔
   签名: (α β)
   定义体: ⟨fun s => s.elim (fun x => ⟨false, x⟩) fun x => ⟨true, x⟩, fun s =>
     match s with
@@ -824,7 +824,7 @@ definition sigmaEquivOptionOfInhabited
 
 中文:
 定义 sigmaEquivOptionOfInhabited
-  签名: (α : 类型u) [Inhabited α] [DecidableEq α]
+  签名: (α : 类型u) [可居 α] [DecidableEq α]
   定义体: {a // a != default}
   snd.toFun a := if h : a = default then none else some ⟨a, h⟩
   snd.invFun := Option.elim' default (↑)

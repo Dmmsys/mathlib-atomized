@@ -46,7 +46,7 @@ abbreviation WalkingIso
 
 中文:
 缩写 WalkingIso
-  签名: : Type w
+  签名: : 类型 w
   定义体: Codiscrete (ULift Bool)
 
 Depends on / 依赖: Codiscrete
@@ -64,8 +64,8 @@ definition equivBool
   body: codiscreteEquiv.trans Equiv.ulift
 
 中文:
-定义 equivBool
-  签名: : WalkingIso.{w} ≃ 布尔
+定义 equiv布尔
+  签名: : WalkingIso.{w} ≃ 布尔值
   定义体: codiscreteEquiv.trans Equiv.ulift
 
 Depends on / 依赖: Equiv.ulift, codiscreteEquiv, codiscreteEquiv.trans
@@ -513,7 +513,7 @@ definition hom
 
 中文:
 定义 hom
-  签名: : Edge.{u} x₀ x₁ where
+  签名: : 边.{u} x₀ x₁ where
   定义体: ComposableArrows.mk₁ WalkingIso.iso.hom
   src_eq := ComposableArrows.ext₀ rfl
   tgt_eq := ComposableArrows.ext₀ rfl
@@ -537,7 +537,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : Edge.{u} x₁ x₀ where
+  签名: : 边.{u} x₁ x₀ where
   定义体: ComposableArrows.mk₁ WalkingIso.iso.inv
   src_eq := ComposableArrows.ext₀ rfl
   tgt_eq := ComposableArrows.ext₀ rfl
@@ -562,7 +562,7 @@ definition homInvId
 
 中文:
 定义 homInvId
-  签名: : Edge.CompStruct.{u} hom inv (Edge.id x₀) where
+  签名: : 边.余mpStruct.{u} hom inv (边.id x₀) where
   定义体: ComposableArrows.mk₂ WalkingIso.iso.hom WalkingIso.iso.inv
   d₂ := ComposableArrows.ext₁ rfl rfl rfl
   d₀ := ComposableArrows.ext₁ rfl rfl rfl
@@ -589,7 +589,7 @@ definition invHomId
 
 中文:
 定义 invHomId
-  签名: : Edge.CompStruct.{u} inv hom (Edge.id x₁) where
+  签名: : 边.余mpStruct.{u} inv hom (边.id x₁) where
   定义体: ComposableArrows.mk₂ WalkingIso.iso.inv WalkingIso.iso.hom
   d₂ := ComposableArrows.ext₁ rfl rfl rfl
   d₀ := ComposableArrows.ext₁ rfl rfl rfl
@@ -617,7 +617,7 @@ definition invStructHom
 
 中文:
 定义 invStructHom
-  签名: : Edge.InvStruct.{u} coherentIso.hom where
+  签名: : 边.InvStruct.{u} coherentIso.hom where
   定义体: inv
   homInvId := homInvId
   invHomId := invHomId

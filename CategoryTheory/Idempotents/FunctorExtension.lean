@@ -493,7 +493,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorExtension₂ C D).IsEquivalence
+  签名: (functorExtension₂ C D).是等价
   定义体: by
   rw [← karoubiUniversal₂_functor_eq]
   infer_instance
@@ -576,7 +576,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorExtension C D).IsEquivalence
+  签名: (functorExtension C D).是等价
   定义体: by
   rw [← karoubiUniversal_functor_eq]
   infer_instance
@@ -603,7 +603,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((whiskeringLeft C (Karoubi C) D).obj (toKaroubi C)).IsEquivalence
+  签名: ((whiskeringLeft C (Karoubi C) D).obj (toKaroubi C)).是等价
   定义体: by
   have : ((whiskeringLeft C (Karoubi C) D).obj (toKaroubi C) ⋙
     (whiskeringRight C D (Karoubi D)).obj (toKaroubi D) ⋙

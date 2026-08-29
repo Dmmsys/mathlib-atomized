@@ -56,8 +56,8 @@ definition IsPreconnected
     (s inter (u inter v)).Nonempty
 
 中文:
-定义 IsPreconnected
-  签名: (s : Set α)
+定义 是预连通
+  签名: (s : 集合 α)
   定义体: forall u v : Set α, IsOpen u -> IsOpen v -> s subseteq u union v -> (s inter u).Nonempty -> (s inter v).Nonempty ->
     (s inter (u inter v)).Nonempty
 
@@ -76,8 +76,8 @@ definition IsConnected
   body: s.Nonempty ∧ IsPreconnected s
 
 中文:
-定义 IsConnected
-  签名: (s : Set α)
+定义 是连通
+  签名: (s : 集合 α)
   定义体: s.Nonempty ∧ IsPreconnected s
 
 Depends on / 依赖: IsPreconnected, Nonempty, s.Nonempty
@@ -95,9 +95,9 @@ theorem IsConnected.nonempty
   proof: h.1
 
 中文:
-定理 IsConnected.nonempty
-  条件: {s : Set α} (h : IsConnected s)
-  结论: s.Nonempty
+定理 是连通.nonempty
+  条件: {s : 集合 α} (h : 是连通 s)
+  结论: s.非空
   证明: h.1
 -/
 theorem IsConnected.nonempty {s : Set α} (h : IsConnected s) : s.Nonempty :=
@@ -113,9 +113,9 @@ theorem IsConnected.isPreconnected
   proof: h.2
 
 中文:
-定理 IsConnected.isPreconnected
-  条件: {s : Set α} (h : IsConnected s)
-  结论: IsPreconnected s
+定理 是连通.isPreconnected
+  条件: {s : 集合 α} (h : 是连通 s)
+  结论: 是预连通 s
   证明: h.2
 -/
 theorem IsConnected.isPreconnected {s : Set α} (h : IsConnected s) : IsPreconnected s :=
@@ -132,8 +132,8 @@ theorem IsPreirreducible.isPreconnected
 
 中文:
 定理 IsPreirreducible.isPreconnected
-  条件: {s : Set α} (H : IsPreirreducible s)
-  结论: IsPreconnected s
+  条件: {s : 集合 α} (H : IsPreirreducible s)
+  结论: 是预连通 s
   证明: fun _ _ hu hv _ => H _ _ hu hv
 -/
 theorem IsPreirreducible.isPreconnected {s : Set α} (H : IsPreirreducible s) : IsPreconnected s :=
@@ -149,9 +149,9 @@ theorem IsIrreducible.isConnected
   proof: ⟨H.nonempty, H.isPreirreducible.isPreconnected⟩
 
 中文:
-定理 IsIrreducible.isConnected
-  条件: {s : Set α} (H : IsIrreducible s)
-  结论: IsConnected s
+定理 是不可约.isConnected
+  条件: {s : 集合 α} (H : 是不可约 s)
+  结论: 是连通 s
   证明: ⟨H.nonempty, H.isPreirreducible.isPreconnected⟩
 
 Depends on / 依赖: H.isPreirreducible.isPreconnected, H.nonempty, isPreconnected, isPreirreducible, nonempty
@@ -169,7 +169,7 @@ theorem isPreconnected_empty
 
 中文:
 定理 isPreconnected_empty
-  结论: IsPreconnected (∅ : Set α)
+  结论: 是预连通 (∅ : 集合 α)
   证明: isPreirreducible_empty.isPreconnected
 
 Depends on / 依赖: isPreconnected, isPreirreducible_empty, isPreirreducible_empty.isPreconnected
@@ -189,7 +189,7 @@ theorem isConnected_singleton
 中文:
 定理 isConnected_singleton
   条件: {x}
-  结论: IsConnected ({x} : Set α)
+  结论: 是连通 ({x} : 集合 α)
   证明: isIrreducible_singleton.isConnected
 
 Depends on / 依赖: isConnected, isIrreducible_singleton, isIrreducible_singleton.isConnected
@@ -209,7 +209,7 @@ theorem isPreconnected_singleton
 中文:
 定理 isPreconnected_singleton
   条件: {x}
-  结论: IsPreconnected ({x} : Set α)
+  结论: 是预连通 ({x} : 集合 α)
   证明: isConnected_singleton.isPreconnected
 
 Depends on / 依赖: isConnected_singleton, isConnected_singleton.isPreconnected, isPreconnected
@@ -227,9 +227,9 @@ theorem Set.Subsingleton.isPreconnected
   proof: hs.induction_on isPreconnected_empty fun _ => isPreconnected_singleton
 
 中文:
-定理 Set.Subsingleton.isPreconnected
-  条件: {s : Set α} (hs : s.Subsingleton)
-  结论: IsPreconnected s
+定理 集合.子单例.isPreconnected
+  条件: {s : 集合 α} (hs : s.子单例)
+  结论: 是预连通 s
   证明: hs.induction_on isPreconnected_empty fun _ => isPreconnected_singleton
 
 Depends on / 依赖: hs.induction_on, induction_on, isPreconnected_empty, isPreconnected_singleton
@@ -253,8 +253,8 @@ theorem isPreconnected_of_forall
   | inl
 
 中文:
-定理 isPreconnected_of_forall
-  结论: {s : Set α} (x : α)
+定理 isPreconnected_of_对任意
+  结论: {s : 集合 α} (x : α)
   证明: by
   rintro u v hu hv hs ⟨z, zs, zu⟩ ⟨y, ys, yv⟩
   have xs : x in s := by
@@ -292,8 +292,8 @@ theorem isPreconnected_of_forall_pair
   exacts [isPreconnected_empty, isPreconnected_of_forall x fun y => H x hx y]
 
 中文:
-定理 isPreconnected_of_forall_pair
-  结论: {s : Set α}
+定理 isPreconnected_of_对任意_pair
+  结论: {s : 集合 α}
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | ⟨x, hx⟩)
   exacts [isPreconnected_empty, isPreconnected_of_forall x fun y => H x hx y]
@@ -319,7 +319,7 @@ theorem isPreconnected_sUnion
 
 中文:
 定理 isPreconnected_sUnion
-  结论: (x : α) (c : Set (Set α)) (H1 : 对任意 s in c, x in s)
+  结论: (x : α) (c : 集合 (集合 α)) (H1 : 对任意 s in c, x in s)
   证明: by
   apply isPreconnected_of_forall x
   rintro y ⟨s, sc, ys⟩
@@ -343,7 +343,7 @@ theorem isPreconnected_iUnion
 
 中文:
 定理 isPreconnected_iUnion
-  结论: {ι : Sort*} {s : ι -> Set α} (h₁ : (⋂ i, s i).Nonempty)
+  结论: {ι : 类型层*} {s : ι -> 集合 α} (h₁ : (⋂ i, s i).非空)
   证明: Exists.elim h₁ fun f hf => isPreconnected_sUnion f _ hf (forall_mem_range.2 h₂)
 
 Depends on / 依赖: Exists, Exists.elim, forall_mem_range, isPreconnected_sUnion
@@ -362,8 +362,8 @@ theorem IsPreconnected.union
     (by rintro r (rfl | rfl | h) <;> assumption)
 
 中文:
-定理 IsPreconnected.union
-  结论: (x : α) {s t : Set α} (H1 : x in s) (H2 : x in t) (H3 : IsPreconnected s)
+定理 是预连通.union
+  结论: (x : α) {s t : 集合 α} (H1 : x in s) (H2 : x in t) (H3 : 是预连通 s)
   证明: sUnion_pair s t ▸ isPreconnected_sUnion x {s, t} (by rintro r (rfl | rfl | h) <;> assumption)
     (by rintro r (rfl | rfl | h) <;> assumption)
 
@@ -385,8 +385,8 @@ theorem IsPreconnected.union'
   exact hs.union x hxs hxt ht
 
 中文:
-定理 IsPreconnected.union'
-  结论: {s t : Set α} (H : (s inter t).Nonempty) (hs : IsPreconnected s)
+定理 是预连通.union'
+  结论: {s t : 集合 α} (H : (s inter t).非空) (hs : 是预连通 s)
   证明: by
   rcases H with ⟨x, hxs, hxt⟩
   exact hs.union x hxs hxt ht
@@ -411,8 +411,8 @@ theorem IsConnected.union
     Ht.isPreconnected
 
 中文:
-定理 IsConnected.union
-  结论: {s t : Set α} (H : (s inter t).Nonempty) (Hs : IsConnected s)
+定理 是连通.union
+  结论: {s t : 集合 α} (H : (s inter t).非空) (Hs : 是连通 s)
   证明: by
   rcases H with ⟨x, hx⟩
   refine ⟨⟨x, mem_union_left t (mem_of_mem_inter_left hx)⟩, ?_⟩
@@ -441,8 +441,8 @@ theorem IsPreconnected.sUnion_directed
     H _ hrS u v hu hv ((subset_sUnion_of_mem hrS).trans Huv) ⟨a, hsr has, hau⟩ ⟨b, htr h
 
 中文:
-定理 IsPreconnected.sUnion_directed
-  结论: {S : Set (Set α)} (K : DirectedOn (· subseteq ·) S)
+定理 是预连通.sUnion_directed
+  结论: {S : 集合 (集合 α)} (K : DirectedOn (· subseteq ·) S)
   证明: by
   rintro u v hu hv Huv ⟨a, ⟨s, hsS, has⟩, hau⟩ ⟨b, ⟨t, htS, hbt⟩, hbv⟩
   obtain ⟨r, hrS, hsr, htr⟩ : exists r in S, s subseteq r ∧ t subseteq r := K s hsS t htS
@@ -475,8 +475,8 @@ theorem IsPreconnected.biUnion_of_reflTransGen
       refine ⟨{i}, singl
 
 中文:
-定理 IsPreconnected.biUnion_of_reflTransGen
-  结论: {ι : 类型} {t : Set ι} {s : ι -> Set α}
+定理 是预连通.biUnion_of_reflTransGen
+  结论: {ι : 类型} {t : 集合 ι} {s : ι -> 集合 α}
   证明: by
   let R := fun i j : ι => (s i inter s j).Nonempty ∧ i in t
   have P : forall i, i in t -> forall j, j in t -> ReflTransGen R i j ->
@@ -525,8 +525,8 @@ theorem IsConnected.biUnion_of_reflTransGen
     IsPreconnected.biUnion_of_reflTransGen (fun i hi => (H i hi).isPreconnected) K⟩
 
 中文:
-定理 IsConnected.biUnion_of_reflTransGen
-  结论: {ι : 类型} {t : Set ι} {s : ι -> Set α}
+定理 是连通.biUnion_of_reflTransGen
+  结论: {ι : 类型} {t : 集合 ι} {s : ι -> 集合 α}
   证明: ⟨nonempty_biUnion.2 ⟨ht.some, ht.some_mem, (H _ ht.some_mem).nonempty⟩,
     IsPreconnected.biUnion_of_reflTransGen (fun i hi => (H i hi).isPreconnected) K⟩
 
@@ -551,8 +551,8 @@ theorem IsPreconnected.iUnion_of_reflTransGen
     simpa [mem_univ] using K i j
 
 中文:
-定理 IsPreconnected.iUnion_of_reflTransGen
-  结论: {ι : 类型} {s : ι -> Set α}
+定理 是预连通.iUnion_of_reflTransGen
+  结论: {ι : 类型} {s : ι -> 集合 α}
   证明: by
   rw [← biUnion_univ]
   exact IsPreconnected.biUnion_of_reflTransGen (fun i _ => H i) fun i _ j _ => by
@@ -578,8 +578,8 @@ theorem IsConnected.iUnion_of_reflTransGen
     IsPreconnected.iUnion_of_reflTransGen (fun i => (H i).isPreconnected) K⟩
 
 中文:
-定理 IsConnected.iUnion_of_reflTransGen
-  结论: {ι : 类型} [Nonempty ι] {s : ι -> Set α}
+定理 是连通.iUnion_of_reflTransGen
+  结论: {ι : 类型} [非空 ι] {s : ι -> 集合 α}
   证明: ⟨nonempty_iUnion.2 Nonempty.elim ‹_› fun i : ι => ⟨i, (H _).nonempty⟩,
     IsPreconnected.iUnion_of_reflTransGen (fun i => (H i).isPreconnected) K⟩
 
@@ -608,8 +608,8 @@ lemma IsPreconnected.transGen_of_iUnion
   let hi_S : i in S := Relat
 
 中文:
-引理 IsPreconnected.transGen_of_iUnion
-  结论: {ι : 类型} {s : ι -> Set α}
+引理 是预连通.transGen_of_iUnion
+  结论: {ι : 类型} {s : ι -> 集合 α}
   证明: by
   by_contra hij
   let S : Set ι := {k | TransGen (fun a b => (s a inter s b).Nonempty) i k}
@@ -658,8 +658,8 @@ theorem IsPreconnected.iUnion_of_chain
     reflTransGen_of_succ _ (fun i _ => K i) (by grind)
 
 中文:
-定理 IsPreconnected.iUnion_of_chain
-  结论: {s : β -> Set α} (H : 对任意 n, IsPreconnected (s n))
+定理 是预连通.iUnion_of_chain
+  结论: {s : β -> 集合 α} (H : 对任意 n, 是预连通 (s n))
   证明: IsPreconnected.iUnion_of_reflTransGen H fun _ _ =>
     reflTransGen_of_succ _ (fun i _ => K i) (by grind)
 
@@ -679,8 +679,8 @@ theorem IsConnected.iUnion_of_chain
   proof: IsConnected.iUnion_of_reflTransGen H fun _ _ => reflTransGen_of_succ _ (fun i _ => K i) (by grind)
 
 中文:
-定理 IsConnected.iUnion_of_chain
-  结论: [Nonempty β] {s : β -> Set α} (H : 对任意 n, IsConnected (s n))
+定理 是连通.iUnion_of_chain
+  结论: [非空 β] {s : β -> 集合 α} (H : 对任意 n, 是连通 (s n))
   证明: IsConnected.iUnion_of_reflTransGen H fun _ _ => reflTransGen_of_succ _ (fun i _ => K i) (by grind)
 
 Depends on / 依赖: IsConnected, IsConnected.iUnion_of_reflTransGen, iUnion_of_reflTransGen, reflTransGen_of_succ
@@ -703,8 +703,8 @@ ht.out hi hj ⟨hk.1.trans le_succ _, succ_le_of_lt hk.2⟩
   have
 
 中文:
-定理 IsPreconnected.biUnion_of_chain
-  结论: {s : β -> Set α} {t : Set β} (ht : OrdConnected t)
+定理 是预连通.biUnion_of_chain
+  结论: {s : β -> 集合 α} {t : 集合 β} (ht : 序连通 t)
   证明: by
   have h1 : forall {i j k : β}, i in t -> j in t -> k in Ico i j -> k in t := fun hi hj hk =>
     ht.out hi hj (Ico_subset_Icc_self hk)
@@ -738,8 +738,8 @@ theorem IsConnected.biUnion_of_chain
     IsPreconnected.biUnion_of_chain ht (fun i hi => (H i hi).isPreconnected) K⟩
 
 中文:
-定理 IsConnected.biUnion_of_chain
-  结论: {s : β -> Set α} {t : Set β} (hnt : t.Nonempty)
+定理 是连通.biUnion_of_chain
+  结论: {s : β -> 集合 α} {t : 集合 β} (hnt : t.非空)
   证明: ⟨nonempty_biUnion.2 ⟨hnt.some, hnt.some_mem, (H _ hnt.some_mem).nonempty⟩,
     IsPreconnected.biUnion_of_chain ht (fun i hi => (H i hi).isPreconnected) K⟩
 
@@ -766,8 +766,8 @@ theorem IsPreconnected.subset_closure
   ⟨r, Kst hrs, hruv⟩
 
 中文:
-定理 IsPreconnected.subset_closure
-  结论: {s : Set α} {t : Set α} (H : IsPreconnected s)
+定理 是预连通.subset_closure
+  结论: {s : 集合 α} {t : 集合 α} (H : 是预连通 s)
   证明: fun u v hu hv htuv ⟨_y, hyt, hyu⟩ ⟨_z, hzt, hzv⟩ =>
   let ⟨p, hpu, hps⟩ := mem_closure_iff.1 (Ktcs hyt) u hu hyu
   let ⟨q, hqv, hqs⟩ := mem_closure_iff.1 (Ktcs hzt) v hv hzv
@@ -791,8 +791,8 @@ theorem IsConnected.subset_closure
   proof: ⟨Nonempty.mono Kst H.left, IsPreconnected.subset_closure H.right Kst Ktcs⟩
 
 中文:
-定理 IsConnected.subset_closure
-  结论: {s : Set α} {t : Set α} (H : IsConnected s)
+定理 是连通.subset_closure
+  结论: {s : 集合 α} {t : 集合 α} (H : 是连通 s)
   证明: ⟨Nonempty.mono Kst H.left, IsPreconnected.subset_closure H.right Kst Ktcs⟩
 -/
 protected theorem IsConnected.subset_closure {s : Set α} {t : Set α} (H : IsConnected s)
@@ -808,8 +808,8 @@ theorem IsPreconnected.closure
   proof: IsPreconnected.subset_closure H subset_closure Subset.rfl
 
 中文:
-定理 IsPreconnected.closure
-  条件: {s : Set α} (H : IsPreconnected s)
+定理 是预连通.closure
+  条件: {s : 集合 α} (H : 是预连通 s)
   证明: IsPreconnected.subset_closure H subset_closure Subset.rfl
 -/
 protected theorem IsPreconnected.closure {s : Set α} (H : IsPreconnected s) :
@@ -826,9 +826,9 @@ theorem IsConnected.closure
   proof: IsConnected.subset_closure H subset_closure Subset.rfl
 
 中文:
-定理 IsConnected.closure
-  条件: {s : Set α} (H : IsConnected s)
-  结论: IsConnected (closure s)
+定理 是连通.closure
+  条件: {s : 集合 α} (H : 是连通 s)
+  结论: 是连通 (closure s)
   证明: IsConnected.subset_closure H subset_closure Subset.rfl
 -/
 protected theorem IsConnected.closure {s : Set α} (H : IsConnected s) : IsConnected (closure s) :=
@@ -848,8 +848,8 @@ theorem IsPreconnected.image
   -- Reformulate `huv : f '' s ⊆ u ∪ v` in terms of `u'` and `v'`
 
 中文:
-定理 IsPreconnected.image
-  结论: [TopologicalSpace β] {s : Set α} (H : IsPreconnected s)
+定理 是预连通.像
+  结论: [拓扑空间 β] {s : 集合 α} (H : 是预连通 s)
   证明: by
   -- Unfold/destruct definitions in hypotheses
   rintro u v hu hv huv ⟨_, ⟨x, xs, rfl⟩, xu⟩ ⟨_, ⟨y, ys, rfl⟩, yv⟩
@@ -885,8 +885,8 @@ theorem IsConnected.image
   proof: ⟨image_nonempty.mpr H.nonempty, H.isPreconnected.image f hf⟩
 
 中文:
-定理 IsConnected.image
-  结论: [TopologicalSpace β] {s : Set α} (H : IsConnected s) (f : α -> β)
+定理 是连通.像
+  结论: [拓扑空间 β] {s : 集合 α} (H : 是连通 s) (f : α -> β)
   证明: ⟨image_nonempty.mpr H.nonempty, H.isPreconnected.image f hf⟩
 -/
 protected theorem IsConnected.image [TopologicalSpace β] {s : Set α} (H : IsConnected s) (f : α -> β)
@@ -909,7 +909,7 @@ theorem isPreconnected_closed_iff
 
 中文:
 定理 isPreconnected_closed_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨by
       rintro h t t' ht ht' htt' ⟨x, xs, xt⟩ ⟨y, ys, yt'⟩
       rw [← not_disjoint_iff_nonempty_inter]; rw [← subset_compl_iff_disjoint_right]; rw [compl_inter]
@@ -957,8 +957,8 @@ theorem Topology.IsInducing.isPreconnected_image
   rcases 
 
 中文:
-定理 Topology.IsInducing.isPreconnected_image
-  结论: [TopologicalSpace β] {s : Set α} {f : α -> β}
+定理 拓扑.是Inducing.isPreconnected_image
+  结论: [拓扑空间 β] {s : 集合 α} {f : α -> β}
   证明: by
   refine ⟨fun h => ?_, fun h => h.image _ hf.continuous.continuousOn⟩
   rintro u v hu' hv' huv ⟨x, hxs, hxu⟩ ⟨y, hys, hyv⟩
@@ -994,8 +994,8 @@ theorem IsPreconnected.preimage_of_isOpenMap
     · simpa only [hsf, image_union] using image_mon
 
 中文:
-定理 IsPreconnected.preimage_of_isOpenMap
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set β}
+定理 是预连通.preimage_of_isOpenMap
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 β}
   证明: fun u v hu hv hsuv hsu hsv => by
   replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
   obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
@@ -1027,8 +1027,8 @@ theorem IsPreconnected.preimage_of_isClosedMap
       refine isPreconnected_closed_iff.1 hs (f '' u) (f '' v) (hf u hu) (hf v hv
 
 中文:
-定理 IsPreconnected.preimage_of_isClosedMap
-  结论: [TopologicalSpace β] {s : Set β}
+定理 是预连通.preimage_of_isClosedMap
+  结论: [拓扑空间 β] {s : 集合 β}
   证明: isPreconnected_closed_iff.2 fun u v hu hv hsuv hsu hsv => by
     replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
     obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
@@ -1057,8 +1057,8 @@ theorem IsConnected.preimage_of_isOpenMap
   proof: ⟨hs.nonempty.preimage' hsf, hs.isPreconnected.preimage_of_isOpenMap hinj hf hsf⟩
 
 中文:
-定理 IsConnected.preimage_of_isOpenMap
-  结论: [TopologicalSpace β] {s : Set β} (hs : IsConnected s)
+定理 是连通.preimage_of_isOpenMap
+  结论: [拓扑空间 β] {s : 集合 β} (hs : 是连通 s)
   证明: ⟨hs.nonempty.preimage' hsf, hs.isPreconnected.preimage_of_isOpenMap hinj hf hsf⟩
 
 Depends on / 依赖: hs.isPreconnected.preimage_of_isOpenMap, hs.nonempty.preimage, isPreconnected, nonempty, preimage, preimage_of_isOpenMap
@@ -1077,8 +1077,8 @@ theorem IsConnected.preimage_of_isClosedMap
   proof: ⟨hs.nonempty.preimage' hsf, hs.isPreconnected.preimage_of_isClosedMap hinj hf hsf⟩
 
 中文:
-定理 IsConnected.preimage_of_isClosedMap
-  结论: [TopologicalSpace β] {s : Set β} (hs : IsConnected s)
+定理 是连通.preimage_of_isClosedMap
+  结论: [拓扑空间 β] {s : 集合 β} (hs : 是连通 s)
   证明: ⟨hs.nonempty.preimage' hsf, hs.isPreconnected.preimage_of_isClosedMap hinj hf hsf⟩
 
 Depends on / 依赖: hs.isPreconnected.preimage_of_isClosedMap, hs.nonempty.preimage, isPreconnected, nonempty, preimage, preimage_of_isClosedMap
@@ -1103,8 +1103,8 @@ theorem IsPreconnected.subset_or_subset
       dis
 
 中文:
-定理 IsPreconnected.subset_or_subset
-  结论: (hu : IsOpen u) (hv : IsOpen v) (huv : Disjoint u v)
+定理 是预连通.subset_or_subset
+  结论: (hu : 是开集 u) (hv : 是开集 v) (huv : Disjoint u v)
   证明: by
   specialize hs u v hu hv hsuv
   obtain hsu | hsu := (s inter u).eq_empty_or_nonempty
@@ -1140,8 +1140,8 @@ lemma IsPreconnected.mapsTo_Ioi_or_Iio
     (hs.image f hf).subset_or_subset isOpen_Ioi isOpen_Iio (by grind) (by grind)
 
 中文:
-引理 IsPreconnected.mapsTo_Ioi_or_Iio
-  结论: (hs : IsPreconnected s) (hf : ContinuousOn f s)
+引理 是预连通.mapsTo_Ioi_or_Iio
+  结论: (hs : 是预连通 s) (hf : ContinuousOn f s)
   证明: by
   simpa [mapsTo_iff_image_subset] using
     (hs.image f hf).subset_or_subset isOpen_Ioi isOpen_Iio (by grind) (by grind)
@@ -1162,8 +1162,8 @@ lemma IsPreconnected.lt_of_ne
   proof: (hs.mapsTo_Ioi_or_Iio hf hfb).resolve_right (not_forall₂_of_exists₂_not (by grind)) hx
 
 中文:
-引理 IsPreconnected.lt_of_ne
-  结论: (hs : IsPreconnected s) (hf : ContinuousOn f s)
+引理 是预连通.lt_of_ne
+  结论: (hs : 是预连通 s) (hf : ContinuousOn f s)
   证明: (hs.mapsTo_Ioi_or_Iio hf hfb).resolve_right (not_forall₂_of_exists₂_not (by grind)) hx
 
 Depends on / 依赖: hs.mapsTo_Ioi_or_Iio, mapsTo_Ioi_or_Iio, resolve_right
@@ -1181,8 +1181,8 @@ lemma IsPreconnected.gt_of_ne
   proof: (hs.mapsTo_Ioi_or_Iio hf hfb).resolve_left (not_forall₂_of_exists₂_not (by grind)) hx
 
 中文:
-引理 IsPreconnected.gt_of_ne
-  结论: (hs : IsPreconnected s) (hf : ContinuousOn f s)
+引理 是预连通.gt_of_ne
+  结论: (hs : 是预连通 s) (hf : ContinuousOn f s)
   证明: (hs.mapsTo_Ioi_or_Iio hf hfb).resolve_left (not_forall₂_of_exists₂_not (by grind)) hx
 
 Depends on / 依赖: hs.mapsTo_Ioi_or_Iio, mapsTo_Ioi_or_Iio, resolve_left
@@ -1207,8 +1207,8 @@ theorem IsPreconnected.subset_left_of_subset_union
       exact Set.disjoint_iff.1 huv hx)
 
 中文:
-定理 IsPreconnected.subset_left_of_subset_union
-  结论: (hu : IsOpen u) (hv : IsOpen v)
+定理 是预连通.subset_left_of_subset_union
+  结论: (hu : 是开集 u) (hv : 是开集 v)
   证明: Disjoint.subset_left_of_subset_union hsuv
     (by
       by_contra hsv
@@ -1237,8 +1237,8 @@ theorem IsPreconnected.subset_right_of_subset_union
   proof: hs.subset_left_of_subset_union hv hu huv.symm (union_comm u v ▸ hsuv) hsv
 
 中文:
-定理 IsPreconnected.subset_right_of_subset_union
-  结论: (hu : IsOpen u) (hv : IsOpen v)
+定理 是预连通.subset_right_of_subset_union
+  结论: (hu : 是开集 u) (hv : 是开集 v)
   证明: hs.subset_left_of_subset_union hv hu huv.symm (union_comm u v ▸ hsuv) hsv
 
 Depends on / 依赖: hs.subset_left_of_subset_union, huv.symm, subset_left_of_subset_union, union_comm
@@ -1266,8 +1266,8 @@ theorem IsPreconnected.subset_of_closure_inter_subset
   exact disjoint_compl_right.mono_right 
 
 中文:
-定理 IsPreconnected.subset_of_closure_inter_subset
-  结论: (hs : IsPreconnected s) (hu : IsOpen u)
+定理 是预连通.subset_of_closure_inter_subset
+  结论: (hs : 是预连通 s) (hu : 是开集 u)
   证明: by
   have A : s subseteq u union (closure u)ᶜ := by
     intro x hx
@@ -1308,8 +1308,8 @@ theorem IsPreconnected.prod
   · exact (ht.image _ (by fun
 
 中文:
-定理 IsPreconnected.prod
-  结论: [TopologicalSpace β] {s : Set α} {t : Set β} (hs : IsPreconnected s)
+定理 是预连通.乘积
+  结论: [拓扑空间 β] {s : 集合 α} {t : 集合 β} (hs : 是预连通 s)
   证明: by
   apply isPreconnected_of_forall_pair
   rintro ⟨a₁, b₁⟩ ⟨ha₁, hb₁⟩ ⟨a₂, b₂⟩ ⟨ha₂, hb₂⟩
@@ -1337,8 +1337,8 @@ theorem IsConnected.prod
   proof: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 
 中文:
-定理 IsConnected.prod
-  结论: [TopologicalSpace β] {s : Set α} {t : Set β} (hs : IsConnected s)
+定理 是连通.乘积
+  结论: [拓扑空间 β] {s : 集合 α} {t : 集合 β} (hs : 是连通 s)
   证明: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 -/
 theorem IsConnected.prod [TopologicalSpace β] {s : Set α} {t : Set β} (hs : IsConnected s)
@@ -1364,7 +1364,7 @@ theorem isPreconnected_univ_pi
 
 中文:
 定理 isPreconnected_univ_pi
-  结论: [对任意 i, TopologicalSpace (X i)] {s : 对任意 i, Set (X i)}
+  结论: [对任意 i, 拓扑空间 (X i)] {s : 对任意 i, 集合 (X i)}
   证明: by
   rintro u v uo vo hsuv ⟨f, hfs, hfu⟩ ⟨g, hgs, hgv⟩
   classical
@@ -1418,7 +1418,7 @@ theorem isConnected_univ_pi
 
 中文:
 定理 isConnected_univ_pi
-  条件: [对任意 i, TopologicalSpace (X i)] {s : 对任意 i, Set (X i)}
+  条件: [对任意 i, 拓扑空间 (X i)] {s : 对任意 i, 集合 (X i)}
   证明: by
   simp only [IsConnected, ← univ_pi_nonempty_iff, forall_and, and_congr_right_iff]
   refine fun hne => ⟨fun hc i => ?_, isPreconnected_univ_pi⟩
@@ -1465,7 +1465,7 @@ definition connectedComponentIn
 
 中文:
 定义 connectedComponentIn
-  签名: (F : Set α) (x : α)
+  签名: (F : 集合 α) (x : α)
   定义体: if h : x in F then (↑) '' connectedComponent (⟨x, h⟩ : F) else ∅
 
 Depends on / 依赖: connectedComponent
@@ -1483,7 +1483,7 @@ theorem connectedComponentIn_eq_image
 
 中文:
 定理 connectedComponentIn_eq_image
-  条件: {F : Set α} {x : α} (h : x in F)
+  条件: {F : 集合 α} {x : α} (h : x in F)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -1502,7 +1502,7 @@ theorem connectedComponentIn_eq_empty
 
 中文:
 定理 connectedComponentIn_eq_empty
-  条件: {F : Set α} {x : α} (h : x ∉ F)
+  条件: {F : 集合 α} {x : α} (h : x ∉ F)
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -1542,7 +1542,7 @@ theorem mem_connectedComponentIn
 
 中文:
 定理 mem_connectedComponentIn
-  条件: {x : α} {F : Set α} (hx : x in F)
+  条件: {x : α} {F : 集合 α} (hx : x in F)
   证明: by
   simp [connectedComponentIn_eq_image hx, mem_connectedComponent, hx]
 
@@ -1564,7 +1564,7 @@ theorem connectedComponent_nonempty
 中文:
 定理 connectedComponent_nonempty
   条件: {x : α}
-  结论: (connectedComponent x).Nonempty
+  结论: (connectedComponent x).非空
   证明: ⟨x, mem_connectedComponent⟩
 
 Depends on / 依赖: mem_connectedComponent
@@ -1584,7 +1584,7 @@ theorem connectedComponentIn_nonempty_iff
 
 中文:
 定理 connectedComponentIn_nonempty_iff
-  条件: {x : α} {F : Set α}
+  条件: {x : α} {F : 集合 α}
   证明: by
   rw [connectedComponentIn]
   split_ifs <;> simp [connectedComponent_nonempty, *]
@@ -1609,7 +1609,7 @@ theorem connectedComponentIn_subset
 
 中文:
 定理 connectedComponentIn_subset
-  条件: (F : Set α) (x : α)
+  条件: (F : 集合 α) (x : α)
   结论: connectedComponentIn F x subseteq F
   证明: by
   rw [connectedComponentIn]
@@ -1633,7 +1633,7 @@ theorem isPreconnected_connectedComponent
 中文:
 定理 isPreconnected_connectedComponent
   条件: {x : α}
-  结论: IsPreconnected (connectedComponent x)
+  结论: 是预连通 (connectedComponent x)
   证明: isPreconnected_sUnion x _ (fun _ => And.right) fun _ => And.left
 
 Depends on / 依赖: And.left, And.right, isPreconnected_sUnion
@@ -1654,7 +1654,7 @@ theorem isPreconnected_connectedComponentIn
 
 中文:
 定理 isPreconnected_connectedComponentIn
-  条件: {x : α} {F : Set α}
+  条件: {x : α} {F : 集合 α}
   证明: by
   rw [connectedComponentIn]; split_ifs
   · exact IsInducing.subtypeVal.isPreconnected_image.mpr isPreconnected_connectedComponent
@@ -1680,7 +1680,7 @@ theorem isConnected_connectedComponent
 中文:
 定理 isConnected_connectedComponent
   条件: {x : α}
-  结论: IsConnected (connectedComponent x)
+  结论: 是连通 (connectedComponent x)
   证明: ⟨⟨x, mem_connectedComponent⟩, isPreconnected_connectedComponent⟩
 
 Depends on / 依赖: isPreconnected_connectedComponent, mem_connectedComponent
@@ -1700,7 +1700,7 @@ theorem isConnected_connectedComponentIn_iff
 
 中文:
 定理 isConnected_connectedComponentIn_iff
-  条件: {x : α} {F : Set α}
+  条件: {x : α} {F : 集合 α}
   证明: by
   simp_rw [← connectedComponentIn_nonempty_iff, IsConnected, isPreconnected_connectedComponentIn,
     and_true]
@@ -1721,8 +1721,8 @@ theorem IsPreconnected.subset_connectedComponent
   proof: fun _z hz => mem_sUnion_of_mem hz ⟨H1, H2⟩
 
 中文:
-定理 IsPreconnected.subset_connectedComponent
-  结论: {x : α} {s : Set α} (H1 : IsPreconnected s)
+定理 是预连通.subset_connectedComponent
+  结论: {x : α} {s : 集合 α} (H1 : 是预连通 s)
   证明: fun _z hz => mem_sUnion_of_mem hz ⟨H1, H2⟩
 
 Depends on / 依赖: mem_sUnion_of_mem
@@ -1746,8 +1746,8 @@ theorem IsPreconnected.subset_connectedComponentIn
   have := this.subset_connectedComp
 
 中文:
-定理 IsPreconnected.subset_connectedComponentIn
-  结论: {x : α} {F : Set α} (hs : IsPreconnected s)
+定理 是预连通.subset_connectedComponentIn
+  结论: {x : α} {F : 集合 α} (hs : 是预连通 s)
   证明: by
   have : IsPreconnected (((↑) : F -> α) ⁻¹' s) := by
     refine IsInducing.subtypeVal.isPreconnected_image.mp ?_
@@ -1781,8 +1781,8 @@ theorem IsConnected.subset_connectedComponent
   proof: H1.2.subset_connectedComponent H2
 
 中文:
-定理 IsConnected.subset_connectedComponent
-  结论: {x : α} {s : Set α} (H1 : IsConnected s)
+定理 是连通.subset_connectedComponent
+  结论: {x : α} {s : 集合 α} (H1 : 是连通 s)
   证明: H1.2.subset_connectedComponent H2
 
 Depends on / 依赖: subset_connectedComponent
@@ -1800,8 +1800,8 @@ theorem IsPreconnected.connectedComponentIn
   proof: (connectedComponentIn_subset F x).antisymm (h.subset_connectedComponentIn hx subset_rfl)
 
 中文:
-定理 IsPreconnected.connectedComponentIn
-  结论: {x : α} {F : Set α} (h : IsPreconnected F)
+定理 是预连通.connectedComponentIn
+  结论: {x : α} {F : 集合 α} (h : 是预连通 F)
   证明: (connectedComponentIn_subset F x).antisymm (h.subset_connectedComponentIn hx subset_rfl)
 
 Depends on / 依赖: antisymm, connectedComponentIn_subset, h.subset_connectedComponentIn, subset_connectedComponentIn, subset_rfl
@@ -1871,7 +1871,7 @@ theorem connectedComponentIn_eq
 
 中文:
 定理 connectedComponentIn_eq
-  条件: {x y : α} {F : Set α} (h : y in connectedComponentIn F x)
+  条件: {x y : α} {F : 集合 α} (h : y in connectedComponentIn F x)
   证明: by
   have hx : x in F := connectedComponentIn_nonempty_iff.mp ⟨y, h⟩
   simp_rw [connectedComponentIn_eq_image hx] at h ⊢
@@ -1955,7 +1955,7 @@ isConnected_connectedComponent.closure.subset_connectedComponent
 中文:
 定理 isClosed_connectedComponent
   条件: {x : α}
-  结论: IsClosed (connectedComponent x)
+  结论: 是闭集 (connectedComponent x)
   证明: closure_subset_iff_isClosed.1
 isConnected_connectedComponent.closure.subset_connectedComponent
       subset_closure mem_connectedComponent
@@ -1977,8 +1977,8 @@ theorem Continuous.image_connectedComponent_subset
     ((mem_image f (connectedComponent a) (f a)).2 ⟨a, mem_connectedComponent, rfl⟩)
 
 中文:
-定理 Continuous.image_connectedComponent_subset
-  结论: [TopologicalSpace β] {f : α -> β}
+定理 连续.image_connectedComponent_subset
+  结论: [拓扑空间 β] {f : α -> β}
   证明: (isConnected_connectedComponent.image f h.continuousOn).subset_connectedComponent
     ((mem_image f (connectedComponent a) (f a)).2 ⟨a, mem_connectedComponent, rfl⟩)
 
@@ -2003,7 +2003,7 @@ theorem ContinuousOn.image_connectedComponentIn_subset
 
 中文:
 定理 ContinuousOn.image_connectedComponentIn_subset
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: (isPreconnected_connectedComponentIn.image _ <| hf.mono <| connectedComponentIn_subset _ _)
 .subset_connectedComponentIn (mem_image_of_mem _ <| mem_connectedComponentIn hx)
       (image_mono <| connectedComponentIn_subset _ _)
@@ -2029,8 +2029,8 @@ theorem Continuous.image_connectedComponentIn_subset
   proof: hf.continuousOn.image_connectedComponentIn_subset hx
 
 中文:
-定理 Continuous.image_connectedComponentIn_subset
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+定理 连续.image_connectedComponentIn_subset
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: hf.continuousOn.image_connectedComponentIn_subset hx
 
 Depends on / 依赖: continuousOn, hf.continuousOn.image_connectedComponentIn_subset, image_connectedComponentIn_subset
@@ -2049,8 +2049,8 @@ theorem Continuous.mapsTo_connectedComponent
   proof: mapsTo_iff_image_subset.2 h.image_connectedComponent_subset a
 
 中文:
-定理 Continuous.mapsTo_connectedComponent
-  结论: [TopologicalSpace β] {f : α -> β} (h : Continuous f)
+定理 连续.mapsTo_connectedComponent
+  结论: [拓扑空间 β] {f : α -> β} (h : 连续 f)
   证明: mapsTo_iff_image_subset.2 h.image_connectedComponent_subset a
 
 Depends on / 依赖: h.image_connectedComponent_subset, image_connectedComponent_subset, mapsTo_iff_image_subset
@@ -2071,7 +2071,7 @@ theorem ContinuousOn.mapsTo_connectedComponentIn
 
 中文:
 定理 ContinuousOn.mapsTo_connectedComponentIn
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: mapsTo_iff_image_subset.2 h.image_connectedComponentIn_subset hx
 
 @[deprecated ContinuousOn.mapsTo_connectedComponentIn (since := "2026-07-27")]
@@ -2093,8 +2093,8 @@ theorem Continuous.mapsTo_connectedComponentIn
   proof: h.continuousOn.mapsTo_connectedComponentIn hx
 
 中文:
-定理 Continuous.mapsTo_connectedComponentIn
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+定理 连续.mapsTo_connectedComponentIn
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: h.continuousOn.mapsTo_connectedComponentIn hx
 
 Depends on / 依赖: continuousOn, h.continuousOn.mapsTo_connectedComponentIn, mapsTo_connectedComponentIn
@@ -2118,7 +2118,7 @@ theorem connectedComponent_prod
 
 中文:
 定理 connectedComponent_prod
-  条件: [TopologicalSpace β] (x : α) (y : β)
+  条件: [拓扑空间 β] (x : α) (y : β)
   证明: subset_antisymm
     (fun _ hp => ⟨continuous_fst.mapsTo_connectedComponent (x, y) hp,
       continuous_snd.mapsTo_connectedComponent (x, y) hp⟩)
@@ -2147,7 +2147,7 @@ theorem connectedComponent_pi
 
 中文:
 定理 connectedComponent_pi
-  条件: [对任意 i, TopologicalSpace (X i)] (x : 对任意 i, X i)
+  条件: [对任意 i, 拓扑空间 (X i)] (x : 对任意 i, X i)
   证明: subset_antisymm (fun _ hy i _ => (continuous_apply i).mapsTo_connectedComponent x hy)
     (isPreconnected_univ_pi (fun _ => isPreconnected_connectedComponent)
 .subset_connectedComponent fun _ _ => mem_connectedComponent)
@@ -2199,7 +2199,7 @@ theorem connectedComponentIn_mono
 
 中文:
 定理 connectedComponentIn_mono
-  条件: (x : α) {F G : Set α} (h : F subseteq G)
+  条件: (x : α) {F G : 集合 α} (h : F subseteq G)
   证明: by
   by_cases hx : x in F
   · rw [connectedComponentIn_eq_image hx, connectedComponentIn_eq_image (h hx), ←
@@ -2233,7 +2233,7 @@ theorem ContinuousOn.preimage_connectedComponentIn
 
 中文:
 定理 ContinuousOn.preimage_connectedComponentIn
-  结论: [TopologicalSpace β] {f : α -> β} {F : Set β}
+  结论: [拓扑空间 β] {f : α -> β} {F : 集合 β}
   证明: by
   refine subset_antisymm (fun z hz => ?_) (iUnion₂_subset fun x hx z hz => ?_)
   · exact mem_biUnion hz (mem_connectedComponentIn (connectedComponentIn_subset F y hz))
@@ -2264,8 +2264,8 @@ theorem Continuous.preimage_connectedComponent
     hf.continuousOn.preimage_connectedComponentIn (F := univ) y
 
 中文:
-定理 Continuous.preimage_connectedComponent
-  结论: [TopologicalSpace β] {f : α -> β}
+定理 连续.preimage_connectedComponent
+  结论: [拓扑空间 β] {f : α -> β}
   证明: by
   simpa [connectedComponentIn_univ] using
     hf.continuousOn.preimage_connectedComponentIn (F := univ) y
@@ -2288,10 +2288,10 @@ class PreconnectedSpace
     - isPreconnected_univ : IsPreconnected (univ : Set α)
 
 中文:
-类 PreconnectedSpace
-  参数: (α : 类型u) [TopologicalSpace α]
+类 预连通空间
+  参数: (α : 类型u) [拓扑空间 α]
   公理与运算 (1 个):
-    - isPreconnected_univ : IsPreconnected (univ : Set α)
+    - isPreconnected_univ : 是预连通 (univ : 集合 α)
 -/
 class PreconnectedSpace (α : Type u) [TopologicalSpace α] : Prop where
   /-- The universal set `Set.univ` in a preconnected space is a preconnected set. -/
@@ -2312,11 +2312,11 @@ class ConnectedSpace
     - toNonempty : Nonempty α
 
 中文:
-类 ConnectedSpace
-  参数: (α : 类型u) [TopologicalSpace α]
-  继承: PreconnectedSpace α
+类 连通空间
+  参数: (α : 类型u) [拓扑空间 α]
+  继承: 预连通空间 α
   公理与运算 (1 个):
-    - toNonempty : Nonempty α
+    - toNonempty : 非空 α
 -/
 class ConnectedSpace (α : Type u) [TopologicalSpace α] : Prop extends PreconnectedSpace α where
   /-- A connected space is nonempty. -/
@@ -2336,8 +2336,8 @@ theorem isConnected_univ
 
 中文:
 定理 isConnected_univ
-  条件: [ConnectedSpace α]
-  结论: IsConnected (univ : Set α)
+  条件: [连通空间 α]
+  结论: 是连通 (univ : 集合 α)
   证明: ⟨univ_nonempty, isPreconnected_univ⟩
 
 Depends on / 依赖: isPreconnected_univ, univ_nonempty
@@ -2355,7 +2355,7 @@ lemma preconnectedSpace_iff_univ
 
 中文:
 引理 preconnectedSpace_iff_univ
-  结论: PreconnectedSpace α ↔ IsPreconnected (univ : Set α)
+  结论: 预连通空间 α ↔ 是预连通 (univ : 集合 α)
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 lemma preconnectedSpace_iff_univ : PreconnectedSpace α ↔ IsPreconnected (univ : Set α) :=
@@ -2372,7 +2372,7 @@ lemma connectedSpace_iff_univ
 
 中文:
 引理 connectedSpace_iff_univ
-  结论: ConnectedSpace α ↔ IsConnected (univ : Set α)
+  结论: 连通空间 α ↔ 是连通 (univ : 集合 α)
   证明: ⟨fun h => ⟨univ_nonempty, h.1.1⟩,
    fun h => ConnectedSpace.mk (toPreconnectedSpace := ⟨h.2⟩) ⟨h.1.some⟩⟩
 
@@ -2392,7 +2392,7 @@ theorem isPreconnected_range
 
 中文:
 定理 isPreconnected_range
-  结论: [TopologicalSpace β] [PreconnectedSpace α] {f : α -> β}
+  结论: [拓扑空间 β] [预连通空间 α] {f : α -> β}
   证明: @image_univ _ _ f ▸ isPreconnected_univ.image _ h.continuousOn
 
 Depends on / 依赖: continuousOn, h.continuousOn, image_univ, isPreconnected_univ, isPreconnected_univ.image
@@ -2411,7 +2411,7 @@ theorem isConnected_range
 
 中文:
 定理 isConnected_range
-  条件: [TopologicalSpace β] [ConnectedSpace α] {f : α -> β} (h : Continuous f)
+  条件: [拓扑空间 β] [连通空间 α] {f : α -> β} (h : 连续 f)
   证明: ⟨range_nonempty f, isPreconnected_range h⟩
 
 Depends on / 依赖: isPreconnected_range, range_nonempty
@@ -2431,8 +2431,8 @@ theorem Function.Surjective.connectedSpace
   exact isConnected_range hf'
 
 中文:
-定理 Function.Surjective.connectedSpace
-  结论: [ConnectedSpace α] [TopologicalSpace β]
+定理 函数.满射.connectedSpace
+  结论: [连通空间 α] [拓扑空间 β]
   证明: by
   rw [connectedSpace_iff_univ]; rw [← hf.range_eq]
   exact isConnected_range hf'
@@ -2454,8 +2454,8 @@ lemma Homeomorph.connectedSpace_iff
     fun _ => e.symm.surjective.connectedSpace e.symm.continuous⟩
 
 中文:
-引理 Homeomorph.connectedSpace_iff
-  条件: [TopologicalSpace β] (e : α ≃ₜ β)
+引理 同胚.connectedSpace_iff
+  条件: [拓扑空间 β] (e : α ≃ₜ β)
   证明: ⟨fun _ => e.surjective.connectedSpace e.continuous,
     fun _ => e.symm.surjective.connectedSpace e.symm.continuous⟩
 
@@ -2475,8 +2475,8 @@ instance Quotient.instConnectedSpace
   body: Quotient.mk'_surjective.connectedSpace continuous_coinduced_rng
 
 中文:
-实例 Quotient.instConnectedSpace
-  签名: {s : Setoid α} [ConnectedSpace α]
+实例 商.instConnectedSpace
+  签名: {s : 集合等价关系 α} [连通空间 α]
   定义体: Quotient.mk'_surjective.connectedSpace continuous_coinduced_rng
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.connectedSpace, connectedSpace, continuous_coinduced_rng
@@ -2495,7 +2495,7 @@ theorem DenseRange.preconnectedSpace
 
 中文:
 定理 DenseRange.preconnectedSpace
-  结论: [TopologicalSpace β] [PreconnectedSpace α] {f : α -> β}
+  结论: [拓扑空间 β] [预连通空间 α] {f : α -> β}
   证明: ⟨hf.closure_eq ▸ (isPreconnected_range hc).closure⟩
 
 Depends on / 依赖: closure, closure_eq, hf.closure_eq, isPreconnected_range
@@ -2591,8 +2591,8 @@ theorem PreconnectedSpace.connectedComponent_eq_univ
   proof: preconnectedSpace_iff_connectedComponent.mp h x
 
 中文:
-定理 PreconnectedSpace.connectedComponent_eq_univ
-  结论: {X : 类型} [TopologicalSpace X]
+定理 预连通空间.connectedComponent_eq_univ
+  结论: {X : 类型} [拓扑空间 X]
   证明: preconnectedSpace_iff_connectedComponent.mp h x
 
 Depends on / 依赖: preconnectedSpace_iff_connectedComponent, preconnectedSpace_iff_connectedComponent.mp
@@ -2612,8 +2612,8 @@ instance [TopologicalSpace
     exact isPreconnected_univ.prod isPreconnected_univ⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: β] [PreconnectedSpace α] [PreconnectedSpace β] :
+实例 [拓扑空间
+  签名: β] [预连通空间 α] [预连通空间 β] :
   定义体: ⟨by
     rw [← univ_prod_univ]
     exact isPreconnected_univ.prod isPreconnected_univ⟩
@@ -2635,8 +2635,8 @@ instance [TopologicalSpace
   body: ⟨inferInstance⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: β] [ConnectedSpace α] [ConnectedSpace β] : ConnectedSpace (α × β)
+实例 [拓扑空间
+  签名: β] [连通空间 α] [连通空间 β] : 连通空间 (α × β)
   定义体: ⟨inferInstance⟩
 -/
 instance [TopologicalSpace β] [ConnectedSpace α] [ConnectedSpace β] : ConnectedSpace (α × β) :=
@@ -2651,8 +2651,8 @@ instance [forall
   body: ⟨by rw [← pi_univ univ]; exact isPreconnected_univ_pi fun i => isPreconnected_univ⟩
 
 中文:
-实例 [forall
-  签名: i, TopologicalSpace (X i)] [对任意 i, PreconnectedSpace (X i)] :
+实例 [对任意
+  签名: i, 拓扑空间 (X i)] [对任意 i, 预连通空间 (X i)] :
   定义体: ⟨by rw [← pi_univ univ]; exact isPreconnected_univ_pi fun i => isPreconnected_univ⟩
 
 Depends on / 依赖: isPreconnected_univ, isPreconnected_univ_pi, pi_univ
@@ -2670,8 +2670,8 @@ instance [forall
   body: ⟨inferInstance⟩
 
 中文:
-实例 [forall
-  签名: i, TopologicalSpace (X i)] [对任意 i, ConnectedSpace (X i)] : ConnectedSpace (对任意 i, X i)
+实例 [对任意
+  签名: i, 拓扑空间 (X i)] [对任意 i, 连通空间 (X i)] : 连通空间 (对任意 i, X i)
   定义体: ⟨inferInstance⟩
 -/
 instance [forall i, TopologicalSpace (X i)] [forall i, ConnectedSpace (X i)] : ConnectedSpace (forall i, X i) :=
@@ -2697,9 +2697,9 @@ theorem Subtype.preconnectedSpace
     rwa [← IsInducing.subtypeVal.isPreconnected_image, image_univ, Subtype.range_val]
 
 中文:
-定理 Subtype.preconnectedSpace
-  条件: {s : Set α} (h : IsPreconnected s)
-  结论: PreconnectedSpace s where
+定理 子类型.preconnectedSpace
+  条件: {s : 集合 α} (h : 是预连通 s)
+  结论: 预连通空间 s where
   证明: by
     rwa [← IsInducing.subtypeVal.isPreconnected_image, image_univ, Subtype.range_val]
 
@@ -2720,9 +2720,9 @@ theorem Subtype.connectedSpace
   toNonempty := h.nonempty.to_subtype
 
 中文:
-定理 Subtype.connectedSpace
-  条件: {s : Set α} (h : IsConnected s)
-  结论: ConnectedSpace s where
+定理 子类型.connectedSpace
+  条件: {s : 集合 α} (h : 是连通 s)
+  结论: 连通空间 s where
   证明: Subtype.preconnectedSpace h.isPreconnected
   toNonempty := h.nonempty.to_subtype
 
@@ -2744,8 +2744,8 @@ theorem isPreconnected_iff_preconnectedSpace
 
 中文:
 定理 isPreconnected_iff_preconnectedSpace
-  条件: {s : Set α}
-  结论: IsPreconnected s ↔ PreconnectedSpace s
+  条件: {s : 集合 α}
+  结论: 是预连通 s ↔ 预连通空间 s
   证明: ⟨Subtype.preconnectedSpace, fun h => by
     simpa using isPreconnected_univ.image ((↑) : s -> α) continuous_subtype_val.continuousOn⟩
 
@@ -2767,8 +2767,8 @@ theorem isConnected_iff_connectedSpace
 
 中文:
 定理 isConnected_iff_connectedSpace
-  条件: {s : Set α}
-  结论: IsConnected s ↔ ConnectedSpace s
+  条件: {s : 集合 α}
+  结论: 是连通 s ↔ 连通空间 s
   证明: ⟨Subtype.connectedSpace, fun h =>
     ⟨nonempty_subtype.mp h.2, isPreconnected_iff_preconnectedSpace.mpr h.1⟩⟩
 

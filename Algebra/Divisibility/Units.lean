@@ -166,7 +166,7 @@ theorem dvd
 
 中文:
 定理 dvd
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: u ∣ a
   证明: by
   rcases hu with ⟨u, rfl⟩
@@ -194,7 +194,7 @@ theorem dvd_mul_right
 
 中文:
 定理 dvd_mul_right
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: a ∣ b * u ↔ a ∣ b
   证明: by
   rcases hu with ⟨u, rfl⟩
@@ -221,7 +221,7 @@ theorem mul_right_dvd
 
 中文:
 定理 mul_right_dvd
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: a * u ∣ b ↔ a ∣ b
   证明: by
   rcases hu with ⟨u, rfl⟩
@@ -244,7 +244,7 @@ theorem isPrimal
 
 中文:
 定理 isPrimal
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: IsPrimal u
   证明: fun _ _ _ => ⟨u, 1, hu.dvd, one_dvd _, (mul_one u).symm⟩
 
@@ -275,7 +275,7 @@ theorem dvd_mul_left
 
 中文:
 定理 dvd_mul_left
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: a ∣ u * b ↔ a ∣ b
   证明: by
   rcases hu with ⟨u, rfl⟩
@@ -303,7 +303,7 @@ theorem mul_left_dvd
 
 中文:
 定理 mul_left_dvd
-  条件: (hu : IsUnit u)
+  条件: (hu : 是单位 u)
   结论: u * a ∣ b ↔ a ∣ b
   证明: by
   rcases hu with ⟨u, rfl⟩
@@ -335,7 +335,7 @@ theorem isUnit_iff_dvd_one
 中文:
 定理 isUnit_iff_dvd_one
   条件: {x : α}
-  结论: IsUnit x ↔ x ∣ 1
+  结论: 是单位 x ↔ x ∣ 1
   证明: ⟨IsUnit.dvd, fun ⟨y, h⟩ => ⟨⟨x, y, h.symm, by rw [h, mul_comm]⟩, rfl⟩⟩
 
 Depends on / 依赖: IsUnit, IsUnit.dvd, h.symm, mul_comm
@@ -353,9 +353,9 @@ theorem isUnit_iff_forall_dvd
   proof: isUnit_iff_dvd_one.trans ⟨fun h _ => h.trans (one_dvd _), fun h => h _⟩
 
 中文:
-定理 isUnit_iff_forall_dvd
+定理 isUnit_iff_对任意_dvd
   条件: {x : α}
-  结论: IsUnit x ↔ 对任意 y, x ∣ y
+  结论: 是单位 x ↔ 对任意 y, x ∣ y
   证明: isUnit_iff_dvd_one.trans ⟨fun h _ => h.trans (one_dvd _), fun h => h _⟩
 
 Depends on / 依赖: h.trans, isUnit_iff_dvd_one, isUnit_iff_dvd_one.trans, one_dvd
@@ -374,8 +374,8 @@ theorem isUnit_of_dvd_unit
 
 中文:
 定理 isUnit_of_dvd_unit
-  条件: {x y : α} (xy : x ∣ y) (hu : IsUnit y)
-  结论: IsUnit x
+  条件: {x y : α} (xy : x ∣ y) (hu : 是单位 y)
+  结论: 是单位 x
   证明: isUnit_iff_dvd_one.2 xy.trans isUnit_iff_dvd_one.1 hu
 
 Depends on / 依赖: isUnit_iff_dvd_one, xy.trans
@@ -395,7 +395,7 @@ theorem isUnit_of_dvd_one
 中文:
 定理 isUnit_of_dvd_one
   条件: {a : α} (h : a ∣ 1)
-  结论: IsUnit (a : α)
+  结论: 是单位 (a : α)
   证明: isUnit_iff_dvd_one.mpr h
 
 Depends on / 依赖: isUnit_iff_dvd_one, isUnit_iff_dvd_one.mpr
@@ -416,8 +416,8 @@ theorem not_isUnit_of_not_isUnit_dvd
 
 中文:
 定理 not_isUnit_of_not_isUnit_dvd
-  条件: {a b : α} (ha : ¬IsUnit a) (hb : a ∣ b)
-  结论: ¬IsUnit b
+  条件: {a b : α} (ha : ¬是单位 a) (hb : a ∣ b)
+  结论: ¬是单位 b
   证明: mt (isUnit_of_dvd_unit hb) ha
 
 @[simp]
@@ -469,7 +469,7 @@ definition IsRelPrime
 
 中文:
 定义 IsRelPrime
-  签名: [Monoid α] (x y : α)
+  签名: [幺半群 α] (x y : α)
   定义体: forall ⦃d⦄, d ∣ x -> d ∣ y -> IsUnit d
 
 Depends on / 依赖: IsUnit
@@ -545,7 +545,7 @@ theorem isRelPrime_self
 
 中文:
 定理 isRelPrime_self
-  结论: IsRelPrime x x ↔ IsUnit x
+  结论: IsRelPrime x x ↔ 是单位 x
   证明: ⟨(· dvd_rfl dvd_rfl), fun hu _ _ dvd => isUnit_of_dvd_unit dvd hu⟩
 
 Depends on / 依赖: dvd_rfl, isUnit_of_dvd_unit
@@ -563,8 +563,8 @@ theorem IsUnit.isRelPrime_left
   proof: fun _ hx _ => isUnit_of_dvd_unit hx h
 
 中文:
-定理 IsUnit.isRelPrime_left
-  条件: (h : IsUnit x)
+定理 是单位.isRelPrime_left
+  条件: (h : 是单位 x)
   结论: IsRelPrime x y
   证明: fun _ hx _ => isUnit_of_dvd_unit hx h
 
@@ -582,8 +582,8 @@ theorem IsUnit.isRelPrime_right
   proof: h.isRelPrime_left.symm
 
 中文:
-定理 IsUnit.isRelPrime_right
-  条件: (h : IsUnit y)
+定理 是单位.isRelPrime_right
+  条件: (h : 是单位 y)
   结论: IsRelPrime x y
   证明: h.isRelPrime_left.symm
 
@@ -762,7 +762,7 @@ theorem IsRelPrime.isUnit_of_dvd
 中文:
 定理 IsRelPrime.isUnit_of_dvd
   条件: (H : IsRelPrime x y) (d : x ∣ y)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: H dvd_rfl d
 
 Depends on / 依赖: dvd_rfl

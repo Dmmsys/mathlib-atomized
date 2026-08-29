@@ -290,7 +290,7 @@ lemma pullback.exists_lift
   proof: ⟨pullback.lift h k, by simp⟩
 
 中文:
-引理 pullback.exists_lift
+引理 pullback.存在_lift
   结论: {W X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
   证明: ⟨pullback.lift h k, by simp⟩
 
@@ -330,7 +330,7 @@ lemma pushout.exists_desc
   proof: ⟨pushout.desc h k, by simp⟩
 
 中文:
-引理 pushout.exists_desc
+引理 pushout.存在_desc
   结论: {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) [HasPushout f g]
   证明: ⟨pushout.desc h k, by simp⟩
 
@@ -396,7 +396,7 @@ theorem PullbackCone.fst_limit_cone
 
 中文:
 定理 PullbackCone.fst_limit_cone
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasLimit (cospan f g)]
+  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [有极限 (cospan f g)]
   证明: rfl
 
 @[simp]
@@ -415,7 +415,7 @@ theorem PullbackCone.snd_limit_cone
 
 中文:
 定理 PullbackCone.snd_limit_cone
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasLimit (cospan f g)]
+  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [有极限 (cospan f g)]
   证明: rfl
 -/
 theorem PullbackCone.snd_limit_cone {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasLimit (cospan f g)] :
@@ -1284,7 +1284,7 @@ lemma pullbackComparison_comp
 
 中文:
 引理 pullbackComparison_comp
-  结论: {E : 类型} [Category* E] (F : C ⥤ D) (G : D ⥤ E) {X Y S : C}
+  结论: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E) {X Y S : C}
   证明: by
   ext
   · rw [pullbackComparison_comp_fst]
@@ -1702,7 +1702,7 @@ abbreviation HasPullbacksAlong
   body: forall {W} (h : W ⟶ Y), HasPullback h f
 
 中文:
-缩写 HasPullbacksAlong
+缩写 有PullbacksAlong
   签名: (f : X ⟶ Y)
   定义体: forall {W} (h : W ⟶ Y), HasPullback h f
 
@@ -1719,7 +1719,7 @@ abbreviation HasPushoutsAlong
   body: forall {W} (h : X ⟶ W), HasPushout h f
 
 中文:
-缩写 HasPushoutsAlong
+缩写 有PushoutsAlong
   签名: (f : X ⟶ Y)
   定义体: forall {W} (h : X ⟶ W), HasPushout h f
 
@@ -1740,7 +1740,7 @@ abbreviation HasPullbacks
   body: HasLimitsOfShape WalkingCospan C
 
 中文:
-缩写 HasPullbacks
+缩写 有Pullbacks
   定义体: HasLimitsOfShape WalkingCospan C
 
 Depends on / 依赖: HasLimitsOfShape, WalkingCospan
@@ -1756,7 +1756,7 @@ abbreviation HasPushouts
   body: HasColimitsOfShape WalkingSpan C
 
 中文:
-缩写 HasPushouts
+缩写 有Pushouts
   定义体: HasColimitsOfShape WalkingSpan C
 
 Depends on / 依赖: HasColimitsOfShape, WalkingSpan
@@ -1860,7 +1860,7 @@ theorem hasPullback_symmetry_of_hasPullbacksAlong
 
 中文:
 定理 hasPullback_symmetry_of_hasPullbacksAlong
-  结论: {S X Y : C} {f : X ⟶ S} [HasPullbacksAlong f]
+  结论: {S X Y : C} {f : X ⟶ S} [有PullbacksAlong f]
   证明: hasPullback_symmetry g f
 
 Depends on / 依赖: hasPullback_symmetry
@@ -1879,7 +1879,7 @@ theorem hasPushouts_symmetry_of_hasPushoutsAlong
 
 中文:
 定理 hasPushouts_symmetry_of_hasPushoutsAlong
-  结论: {S X Y : C} {f : S ⟶ X} [HasPushoutsAlong f]
+  结论: {S X Y : C} {f : S ⟶ X} [有PushoutsAlong f]
   证明: hasPushout_symmetry g f
 
 Depends on / 依赖: hasPushout_symmetry

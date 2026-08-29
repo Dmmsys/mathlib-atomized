@@ -41,7 +41,7 @@ lemma pow_ssubset_pow_succ_of_pow_ne_closure
 
 中文:
 引理 pow_ssubset_pow_succ_of_pow_ne_closure
-  结论: (hX₁ : (1 : G) in X) (hX : X.Nontrivial)
+  结论: (hX₁ : (1 : G) in X) (hX : X.非平凡)
   证明: by
   obtain rfl | hn := eq_or_ne n 0
   · simpa [ssubset_iff_subset_not_subset, hX₁, -Finset.subset_singleton_iff]
@@ -107,7 +107,7 @@ lemma pow_right_strictMonoOn
 
 中文:
 引理 pow_right_strictMonoOn
-  条件: (hX₁ : 1 in X) (hX : X.Nontrivial)
+  条件: (hX₁ : 1 in X) (hX : X.非平凡)
   证明: by
   refine strictMonoOn_of_lt_add_one ⟨?_⟩ fun n _ _ hn =>
     pow_ssubset_pow_succ_of_pow_ne_closure hX₁ hX hn
@@ -148,7 +148,7 @@ lemma pow_right_strictMono
 
 中文:
 引理 pow_right_strictMono
-  条件: (hX₁ : 1 in X) (hXclosure : (closure (X : Set G) : Set G).Infinite)
+  条件: (hX₁ : 1 in X) (hXclosure : (closure (X : 集合 G) : 集合 G).无限)
   证明: by
   obtain rfl | hX := eq_singleton_or_nontrivial hX₁
   · simp [closure_singleton_one] at hXclosure
@@ -177,7 +177,7 @@ lemma add_one_le_card_pow
 
 中文:
 引理 add_one_le_card_pow
-  条件: (hX₁ : 1 in X) (hXclosure : (closure (X : Set G) : Set G).Infinite)
+  条件: (hX₁ : 1 in X) (hXclosure : (closure (X : 集合 G) : 集合 G).无限)
 -/
 lemma add_one_le_card_pow (hX₁ : 1 in X) (hXclosure : (closure (X : Set G) : Set G).Infinite) :
     forall n, n + 1 <= #(X ^ n)

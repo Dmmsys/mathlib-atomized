@@ -55,7 +55,7 @@ class WellPowered
     - subobject_small : forall X : C, Small.{w} (Subobject X)  [default: by infer_instance]
 
 中文:
-类 WellPowered
+类 良幂
   参数: [LocallySmall.{w} C]
   公理与运算 (1 个):
     - subobject_small : 对任意 X : C, Small.{w} (Subobject X)  [默认: by infer_instance]
@@ -75,7 +75,7 @@ instance small_subobject
 
 中文:
 实例 small_subobject
-  签名: [LocallySmall.{w} C] [WellPowered C] (X : C)
+  签名: [LocallySmall.{w} C] [良幂 C] (X : C)
   定义体: WellPowered.subobject_small X
 
 Depends on / 依赖: WellPowered, WellPowered.subobject_small, subobject_small
@@ -207,7 +207,7 @@ instance [LocallySmall.{w}
 
 中文:
 实例 [LocallySmall.{w}
-  签名: C] [WellPowered.{w} C] :
+  签名: C] [良幂.{w} C] :
   定义体: wellPowered_of_equiv.{w} (ShrinkHoms.equivalence.{w} C)
 
 Depends on / 依赖: ShrinkHoms, ShrinkHoms.equivalence, equivalence, wellPowered_of_equiv

@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Triangle C)
+  签名: 可居 (Triangle C)
   定义体: ⟨⟨0, 0, 0, 0, 0, 0⟩⟩
 -/
 instance : Inhabited (Triangle C) :=
@@ -180,7 +180,7 @@ structure TriangleMorphism
     - comm₃ : T₁.mor₃ ≫ hom₁⟦1⟧' = hom₃ ≫ T₂.mor₃  [default: by cat_disch]
 
 中文:
-结构 TriangleMorphism
+结构 Triangle态射
   参数: (T₁ : Triangle C) (T₂ : Triangle C)
   公理与运算 (6 个):
     - hom₁ : T₁.obj₁ ⟶ T₂.obj₁
@@ -255,8 +255,8 @@ definition TriangleMorphism.comp
   hom₃ := f.hom₃ ≫ g.hom₃
 
 中文:
-定义 TriangleMorphism.comp
-  签名: (f : TriangleMorphism T₁ T₂) (g : TriangleMorphism T₂ T₃)
+定义 Triangle态射.comp
+  签名: (f : Triangle态射 T₁ T₂) (g : Triangle态射 T₂ T₃)
   定义体: f.hom₁ ≫ g.hom₁
   hom₂ := f.hom₂ ≫ g.hom₂
   hom₃ := f.hom₃ ≫ g.hom₃
@@ -286,7 +286,7 @@ instance triangleCategory
 
 中文:
 实例 triangleCategory
-  签名: : Category (Triangle C) where
+  签名: : 范畴 (Triangle C) where
   定义体: TriangleMorphism A B
   id A := triangleMorphismId A
   comp f g := f.comp g
@@ -332,7 +332,7 @@ lemma id_hom₁
 中文:
 引理 id_hom₁
   条件: (A : Triangle C)
-  结论: TriangleMorphism.hom₁ (𝟙 A) = 𝟙 _
+  结论: Triangle态射.hom₁ (𝟙 A) = 𝟙 _
   证明: rfl
 -/
 lemma id_hom₁ (A : Triangle C) : TriangleMorphism.hom₁ (𝟙 A) = 𝟙 _ := rfl
@@ -348,7 +348,7 @@ lemma id_hom₂
 中文:
 引理 id_hom₂
   条件: (A : Triangle C)
-  结论: TriangleMorphism.hom₂ (𝟙 A) = 𝟙 _
+  结论: Triangle态射.hom₂ (𝟙 A) = 𝟙 _
   证明: rfl
 -/
 lemma id_hom₂ (A : Triangle C) : TriangleMorphism.hom₂ (𝟙 A) = 𝟙 _ := rfl
@@ -366,7 +366,7 @@ lemma id_hom₃
 中文:
 引理 id_hom₃
   条件: (A : Triangle C)
-  结论: TriangleMorphism.hom₃ (𝟙 A) = 𝟙 _
+  结论: Triangle态射.hom₃ (𝟙 A) = 𝟙 _
   证明: rfl
 
 @[reassoc]
@@ -548,7 +548,7 @@ lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁
 @[reassoc (attr := simp)]
 
 中文:
-引理 _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁
+引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₁
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₁, e.hom_inv_id, id_hom₁]
 @[reassoc (attr := simp)]
@@ -568,7 +568,7 @@ lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂
 @[reassoc (attr := simp)]
 
 中文:
-引理 _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂
+引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₂
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₂, e.hom_inv_id, id_hom₂]
 @[reassoc (attr := simp)]
@@ -589,7 +589,7 @@ lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃
 @[reassoc (attr := simp)]
 
 中文:
-引理 _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃
+引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₃
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₃, e.hom_inv_id, id_hom₃]
 
@@ -611,7 +611,7 @@ lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁
 @[reassoc (attr := simp)]
 
 中文:
-引理 _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁
+引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₁
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₁, e.inv_hom_id, id_hom₁]
 @[reassoc (attr := simp)]
@@ -631,7 +631,7 @@ lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂
 @[reassoc (attr := simp)]
 
 中文:
-引理 _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂
+引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₂
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₂, e.inv_hom_id, id_hom₂]
 @[reassoc (attr := simp)]
@@ -650,7 +650,7 @@ lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃
   proof: by rw [← comp_hom₃, e.inv_hom_id, id_hom₃]
 
 中文:
-引理 _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃
+引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₃
   条件: {A B : Triangle C} (e : A ≅ B)
   证明: by rw [← comp_hom₃, e.inv_hom_id, id_hom₃]
 
@@ -726,7 +726,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (T₁ ⟶ T₂)
+  签名: 零 (T₁ ⟶ T₂)
   定义体: { hom₁ := 0
       hom₂ := 0
       hom₃ := 0 }
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (T₁ ⟶ T₂)
+  签名: 加法 (T₁ ⟶ T₂)
   定义体: { hom₁ := f.hom₁ + g.hom₁
       hom₂ := f.hom₂ + g.hom₂
       hom₃ := f.hom₃ + g.hom₃ }
@@ -784,7 +784,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (T₁ ⟶ T₂)
+  签名: 取负 (T₁ ⟶ T₂)
   定义体: { hom₁ := -f.hom₁
       hom₂ := -f.hom₂
       hom₃ := -f.hom₃ }
@@ -812,7 +812,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (T₁ ⟶ T₂)
+  签名: 减法 (T₁ ⟶ T₂)
   定义体: { hom₁ := f.hom₁ - g.hom₁
       hom₂ := f.hom₂ - g.hom₂
       hom₃ := f.hom₃ - g.hom₃ }
@@ -845,7 +845,7 @@ omit [forall (n : Int), (shiftFunctor C n).Additive]
 
 中文:
 实例 :
-  签名: SMul R (T₁ ⟶ T₂)
+  签名: 标量乘法 R (T₁ ⟶ T₂)
   定义体: { hom₁ := n • f.hom₁
       hom₂ := n • f.hom₂
       hom₃ := n • f.hom₃ }
@@ -880,7 +880,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (T₁ ⟶ T₂)
+  签名: 加法交换群 (T₁ ⟶ T₂)
   定义体: by ext <;> apply zero_add
   add_assoc f g h := by ext <;> apply add_assoc
   add_zero f := by ext <;> apply add_zero
@@ -913,7 +913,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Triangle C)
+  签名: 预加性 (Triangle C)
 -/
 instance : Preadditive (Triangle C) where
 
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (T₁ ⟶ T₂)
+  签名: 模 R (T₁ ⟶ T₂)
   定义体: by aesop
   mul_smul := by aesop
   smul_zero := by aesop
@@ -968,7 +968,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (Triangle C)
+  签名: 线性 R (Triangle C)
 -/
 instance : Linear R (Triangle C) where
 
@@ -988,7 +988,7 @@ definition binaryBiproductTriangle
 
 中文:
 定义 binaryBiproductTriangle
-  签名: (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBiproduct X₁ X₂]
+  签名: (X₁ X₂ : C) [有ZeroMorphisms C] [有BinaryBiproduct X₁ X₂]
   定义体: Triangle.mk biprod.inl (Limits.biprod.snd : X₁ ⊞ X₂ ⟶ _) 0
 
 Depends on / 依赖: Limits, Limits.biprod.snd, Triangle, Triangle.mk, biprod, biprod.inl
@@ -1009,7 +1009,7 @@ definition binaryProductTriangle
 
 中文:
 定义 binaryProductTriangle
-  签名: (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryProduct X₁ X₂]
+  签名: (X₁ X₂ : C) [有ZeroMorphisms C] [HasBinaryProduct X₁ X₂]
   定义体: Triangle.mk ((Limits.prod.lift (𝟙 X₁) 0)) (Limits.prod.snd : X₁ ⨯ X₂ ⟶ _) 0
 
 Depends on / 依赖: Limits, Limits.prod.lift, Limits.prod.snd, Triangle, Triangle.mk
@@ -1177,7 +1177,7 @@ definition productTriangle.isLimitFan
 
 中文:
 定义 productTriangle.isLimitFan
-  签名: : IsLimit (productTriangle.fan T)
+  签名: : 是极限 (productTriangle.fan T)
   定义体: Fan.IsLimit.mk _ (fun s => productTriangle.lift T s.proj) (fun s j => by cat_disch) (by
     intro s m hm
     ext1
@@ -1211,7 +1211,7 @@ lemma productTriangle.zero₃₁
 
 中文:
 引理 productTriangle.zero₃₁
-  结论: [HasZeroMorphisms C]
+  结论: [有ZeroMorphisms C]
   证明: by
   have : HasProduct (fun j => (T j).obj₂⟦(1 : Int)⟧) :=
     ⟨_, isLimitFanMkObjOfIsLimit (shiftFunctor C (1 : Int)) _ _
@@ -1254,7 +1254,7 @@ definition contractibleTriangleFunctor
 
 中文:
 定义 contractibleTriangleFunctor
-  签名: [HasZeroObject C] [HasZeroMorphisms C]
+  签名: [有ZeroObject C] [有ZeroMorphisms C]
   定义体: contractibleTriangle X
   map f :=
     { hom₁ := f
@@ -1419,7 +1419,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso φ.hom₁
+  签名: 是同构 φ.hom₁
   定义体: (inferInstance : IsIso (π₁.map φ))
 -/
 instance : IsIso φ.hom₁ := (inferInstance : IsIso (π₁.map φ))
@@ -1433,7 +1433,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso φ.hom₂
+  签名: 是同构 φ.hom₂
   定义体: (inferInstance : IsIso (π₂.map φ))
 -/
 instance : IsIso φ.hom₂ := (inferInstance : IsIso (π₂.map φ))
@@ -1447,7 +1447,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso φ.hom₃
+  签名: 是同构 φ.hom₃
   定义体: (inferInstance : IsIso (π₃.map φ))
 -/
 instance : IsIso φ.hom₃ := (inferInstance : IsIso (π₃.map φ))

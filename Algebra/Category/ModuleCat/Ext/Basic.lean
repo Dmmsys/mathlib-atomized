@@ -46,7 +46,7 @@ lemma Ext.postcomp_smul_id_eq_zero_of_mem_annihilator
 
 中文:
 引理 Ext.postcomp_smul_id_eq_zero_of_mem_annihilator
-  结论: {r : R} (mem_ann : r in Module.annihilator R N)
+  结论: {r : R} (mem_ann : r in 模.annihilator R N)
   证明: by
   ext h
   have : r • 𝟙 N = 0 := by

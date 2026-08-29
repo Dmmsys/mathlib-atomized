@@ -64,7 +64,7 @@ definition ramificationIdxIn
 
 中文:
 定义 ramificationIdxIn
-  签名: {A : 类型} [CommRing A] (p : Ideal A)
+  签名: {A : 类型} [交换环 A] (p : 理想 A)
   定义体: if h : exists P : Ideal B, P.IsPrime ∧ P.LiesOver p then h.choose.ramificationIdx A
   else 0
 
@@ -86,7 +86,7 @@ definition inertiaDegIn
 
 中文:
 定义 inertiaDegIn
-  签名: {A : 类型} [CommRing A] (p : Ideal A)
+  签名: {A : 类型} [交换环 A] (p : 理想 A)
   定义体: if h : exists P : Ideal B, P.IsPrime ∧ P.LiesOver p then h.choose.inertiaDeg A else 0
 
 Depends on / 依赖: Finset, IsPrime, LiesOver, Measurable, P.IsPrime, P.LiesOver, classical, fun_prop, h.choose.inertiaDeg, hf_indep, hf_indep.indepFun_finset, hf_meas, indepFun_finset, inertiaDeg, mem_insert_of_mem, mem_insert_self, mem_singleton_self
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (primesOver p B)
+  签名: 乘法作用 G (primesOver p B)
   定义体: primesOver.mk p (σ • Q.1)
   one_smul Q := Subtype.ext (one_smul G Q.1)
   mul_smul σ τ Q := Subtype.ext (mul_smul σ τ Q.1)
@@ -164,7 +164,7 @@ theorem coe_smul_primesOver_mk
 
 中文:
 定理 coe_smul_primesOver_mk
-  条件: (σ : G) (P : Ideal B) [P.IsPrime] [P.LiesOver p]
+  条件: (σ : G) (P : 理想 B) [P.是素] [P.LiesOver p]
   证明: rfl
 
 Depends on / 依赖: IndepFun, hf_indep, hf_indep.indepFun_prodMk, hf_meas, measurable_fst, measurable_fst.mul, measurable_id, measurable_snd, this.comp
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Gal(L/K) (primesOver p B)
+  签名: 乘法作用 Gal(L/K) (primesOver p B)
   定义体: primesOver.mk p (map (galRestrict A K L B σ) Q.1)
   one_smul Q := by
     apply Subtype.val_inj.mp
@@ -251,7 +251,7 @@ theorem coe_smul_primesOver_mk_eq_map_galRestrict
 
 中文:
 定理 coe_smul_primesOver_mk_eq_map_galRestrict
-  结论: (σ : Gal(L/K)) (P : Ideal B) [P.IsPrime]
+  结论: (σ : Gal(L/K)) (P : 理想 B) [P.是素]
   证明: rfl
 
 Depends on / 依赖: hf_indep, hf_indep.indepFun_prodMk_prodMk, hf_meas, indepFun_prodMk_prodMk, measurable_mul
@@ -281,7 +281,7 @@ rcases IsInvariant.exists_smul_of_under_eq A B G P Q
   exact ⟨σ, hs.symm⟩
 
 中文:
-定理 exists_smul_eq_of_isGaloisGroup
+定理 存在_smul_eq_of_isGaloisGroup
   结论: 存在 σ : G, σ • P = Q
   证明: by
 rcases IsInvariant.exists_smul_of_under_eq A B G P Q
@@ -310,7 +310,7 @@ include p G in
 
 中文:
 实例 isPretransitive_of_isGaloisGroup
-  签名: : MulAction.IsPretransitive G (primesOver p B) where
+  签名: : 乘法作用.是Pretransitive G (primesOver p B) where
   定义体: by
     intro ⟨P, _, _⟩ ⟨Q, _, _⟩
     rcases exists_smul_eq_of_isGaloisGroup p P Q G with ⟨σ, hs⟩
@@ -429,7 +429,7 @@ include G in
 
 中文:
 定理 ramificationIdxIn_ne_zero
-  条件: [Module.Finite A B] [FaithfulSMul A B] {p : Ideal A} [p.IsPrime]
+  条件: [模.有限 A B] [忠实标量乘法 A B] {p : 理想 A} [p.是素]
   证明: by
   obtain ⟨P⟩ := (inferInstance : Nonempty (primesOver p B))
   rw [ramificationIdxIn_eq_ramificationIdx p P G]
@@ -492,7 +492,7 @@ theorem inertiaDegIn_ne_zero
 
 中文:
 定理 inertiaDegIn_ne_zero
-  条件: [Module.Finite A B] [FaithfulSMul A B] {p : Ideal A} [p.IsPrime]
+  条件: [模.有限 A B] [忠实标量乘法 A B] {p : 理想 A} [p.是素]
   证明: by
   obtain ⟨P⟩ := (inferInstance : Nonempty (primesOver p B))
   rw [inertiaDegIn_eq_inertiaDeg p P G]
@@ -554,7 +554,7 @@ theorem ramificationIdxIn_mul_ramificationIdxIn
 
 中文:
 定理 ramificationIdxIn_mul_ramificationIdxIn
-  条件: [Flat B C]
+  条件: [平坦 B C]
   证明: by
   obtain ⟨⟨Q, _, hQ⟩⟩ := (inferInstance : Nonempty (primesOver P C))
   have : Q.LiesOver p := LiesOver.trans Q P p
@@ -705,7 +705,7 @@ theorem card_stabilizer_eq_card_inertia_mul_finrank
 
 中文:
 定理 card_stabilizer_eq_card_inertia_mul_finrank
-  结论: (p : Ideal R) [p.IsPrime]
+  结论: (p : 理想 R) [p.是素]
   证明: by
   let := Localization.AtPrime.algebraOfLiesOver p P
   have heq : (algebraMap (S ⧸ P) P.ResidueField).comp (algebraMap (R ⧸ p) (S ⧸ P)) =
@@ -747,7 +747,7 @@ lemma ncard_primesOver_mul_card_inertia_mul_finrank
 
 中文:
 引理 ncard_primesOver_mul_card_inertia_mul_finrank
-  结论: (p : Ideal R) [p.IsPrime]
+  结论: (p : 理想 R) [p.是素]
   证明: by
   rw [mul_assoc]; rw [← card_stabilizer_eq_card_inertia_mul_finrank p P]; rw [← IsInvariant.orbit_eq_primesOver R S G p P]
   simpa using Nat.card_congr (MulAction.orbitProdStabilizerEquivGroup G P)
@@ -775,7 +775,7 @@ lemma card_inertia_eq_ramificationIdxIn
 
 中文:
 引理 card_inertia_eq_ramificationIdxIn
-  结论: [IsDomain R] [IsDomain S] [Module.Finite R S] [Flat R S]
+  结论: [是整环 R] [是整环 S] [模.有限 R S] [平坦 R S]
   证明: by
   have H := ncard_primesOver_mul_card_inertia_mul_finrank (G := G) p P
   rw [← inertiaDegIn_eq_inertiaDeg p P G] at H
@@ -807,7 +807,7 @@ lemma card_stabilizer_eq
 
 中文:
 引理 card_stabilizer_eq
-  结论: [IsDomain R] [IsDomain S] [Module.Finite R S] [Flat R S]
+  结论: [是整环 R] [是整环 S] [模.有限 R S] [平坦 R S]
   证明: by
   rw [card_stabilizer_eq_card_inertia_mul_finrank p P]; rw [card_inertia_eq_ramificationIdxIn p]; rw [inertiaDegIn_eq_inertiaDeg p P G]
 
@@ -845,8 +845,8 @@ lemma exists_comap_galRestrict_eq
   have := 
 
 中文:
-引理 exists_comap_galRestrict_eq
-  结论: [IsDedekindDomain R] [IsGalois K L] {p : Ideal R}
+引理 存在_comap_galRestrict_eq
+  结论: [是Dedekind整环 R] [是Galois K L] {p : 理想 R}
   证明: by
   have : IsDomain S :=
     (IsIntegralClosure.equiv R S L (integralClosure R L)).toMulEquiv.isDomain (integralClosure R L)

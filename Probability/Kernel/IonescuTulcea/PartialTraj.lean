@@ -159,7 +159,7 @@ lemma partialTraj_self
 中文:
 引理 partialTraj_self
   条件: (a : 自然数)
-  结论: partialTraj κ a a = Kernel.id
+  结论: partialTraj κ a a = 核.id
   证明: by rw [partialTraj_le le_rfl]; rfl
 
 @[simp]
@@ -273,8 +273,8 @@ instance [forall
   · rw [partialTraj_le hba]; infer_instance
 
 中文:
-实例 [forall
-  签名: n, IsFiniteKernel (κ n)] (a b
+实例 [对任意
+  签名: n, 是FiniteKernel (κ n)] (a b
   定义体: by
   obtain hab | hba := le_total a b
   · induction b, hab using Nat.le_induction with
@@ -305,8 +305,8 @@ instance [forall
   · rw [partialTraj_le hba]; infer_instance
 
 中文:
-实例 [forall
-  签名: n, IsZeroOrMarkovKernel (κ n)] (a b
+实例 [对任意
+  签名: n, 是ZeroOrMarkovKernel (κ n)] (a b
   定义体: by
   obtain hab | hba := le_total a b
   · induction b, hab using Nat.le_induction with
@@ -340,8 +340,8 @@ instance [forall
       exact IsMarkovKernel.map _ meas
 
 中文:
-实例 [forall
-  签名: n, IsMarkovKernel (κ n)] (a b
+实例 [对任意
+  签名: n, 是MarkovKernel (κ n)] (a b
   定义体: by
   obtain hab | hba := le_total a b
   · induction b, hab using Nat.le_induction with
@@ -452,7 +452,7 @@ lemma fst_prod_comp_id_prod
 
 中文:
 引理 fst_prod_comp_id_prod
-  结论: {X Y Z : 类型} {mX : MeasurableSpace X}
+  结论: {X Y Z : 类型} {mX : 可测空间 X}
   证明: by
   ext x s ms
   simp_rw [comp_apply' _ _ _ ms, lintegral_id_prod (Kernel.measurable_coe _ ms),
@@ -489,7 +489,7 @@ lemma partialTraj_eq_prod
 
 中文:
 引理 partialTraj_eq_prod
-  条件: [对任意 n, IsSFiniteKernel (κ n)] (a b : 自然数)
+  条件: [对任意 n, 是SFiniteKernel (κ n)] (a b : 自然数)
   证明: by
   obtain hba | hab := le_total b a
   · rw [partialTraj_le hba, IicProdIoc_le hba, map_comp_right, ← fst_eq, deterministic_map,
@@ -650,7 +650,7 @@ lemma partialTraj_map_frestrictLe₂_apply
 
 中文:
 引理 partialTraj_map_frestrictLe₂_apply
-  条件: (x₀ : Π i : Iic a, X i) (hbc : b <= c)
+  条件: (x₀ : Π i : 左无界右闭区间 a, X i) (hbc : b <= c)
   证明: by
   rw [← map_apply _ (by fun_prop)]; rw [partialTraj_map_frestrictLe₂]
 
@@ -749,7 +749,7 @@ lemma lmarginalPartialTraj_le
 
 中文:
 引理 lmarginalPartialTraj_le
-  条件: (hba : b <= a) {f : (Π n, X n) -> 实数>=0∞} (mf : Measurable f)
+  条件: (hba : b <= a) {f : (Π n, X n) -> 实数>=0∞} (mf : 可测 f)
   证明: by
   ext x₀
   rw [lmarginalPartialTraj]; rw [partialTraj_le hba]; rw [Kernel.lintegral_deterministic']
@@ -805,7 +805,7 @@ lemma lmarginalPartialTraj_eq_lintegral_map
 
 中文:
 引理 lmarginalPartialTraj_eq_lintegral_map
-  结论: [对任意 n, IsSFiniteKernel (κ n)] {f : (Π n, X n) -> 实数>=0∞}
+  结论: [对任意 n, 是SFiniteKernel (κ n)] {f : (Π n, X n) -> 实数>=0∞}
   证明: by
   nth_rw 1 [lmarginalPartialTraj, partialTraj_eq_prod, lintegral_map, lintegral_id_prod]
   · congrm ∫⁻ _, f (fun i => ?_) ∂_
@@ -845,7 +845,7 @@ lemma lmarginalPartialTraj_succ
 
 中文:
 引理 lmarginalPartialTraj_succ
-  结论: [对任意 n, IsSFiniteKernel (κ n)] (a : 自然数)
+  结论: [对任意 n, 是SFiniteKernel (κ n)] (a : 自然数)
   证明: by
   rw [lmarginalPartialTraj]; rw [partialTraj_succ_self]; rw [lintegral_map]; rw [lintegral_id_prod]; rw [lintegral_map]
   · congrm ∫⁻ x, f (fun i => ?_) ∂_
@@ -883,7 +883,7 @@ lemma measurable_lmarginalPartialTraj
 
 中文:
 引理 measurable_lmarginalPartialTraj
-  条件: (a b : 自然数) {f : (Π n, X n) -> 实数>=0∞} (hf : Measurable f)
+  条件: (a b : 自然数) {f : (Π n, X n) -> 实数>=0∞} (hf : 可测 f)
   证明: by
   unfold lmarginalPartialTraj
   let g : ((i : Iic b) -> X i) × (Π n, X n) -> Real>=0∞ := fun c => f (updateFinset c.2 _ c.1)
@@ -966,7 +966,7 @@ theorem lmarginalPartialTraj_of_le
 
 中文:
 定理 lmarginalPartialTraj_of_le
-  结论: [对任意 n, IsMarkovKernel (κ n)] (c : 自然数) {f : (Π n, X n) -> 实数>=0∞}
+  结论: [对任意 n, 是MarkovKernel (κ n)] (c : 自然数) {f : (Π n, X n) -> 实数>=0∞}
   证明: by
   ext x
   rw [lmarginalPartialTraj_eq_lintegral_map mf]
@@ -1004,7 +1004,7 @@ theorem lmarginalPartialTraj_const_right
 
 中文:
 定理 lmarginalPartialTraj_const_right
-  结论: [对任意 n, IsMarkovKernel (κ n)] {d : 自然数} {f : (Π n, X n) -> 实数>=0∞}
+  结论: [对任意 n, 是MarkovKernel (κ n)] {d : 自然数} {f : (Π n, X n) -> 实数>=0∞}
   证明: by
   wlog hcd : c <= d generalizing c d
   · rw [this had hac (le_of_not_ge hcd)]
@@ -1041,7 +1041,7 @@ theorem dependsOn_lmarginalPartialTraj
 
 中文:
 定理 dependsOn_lmarginalPartialTraj
-  结论: [对任意 n, IsSFiniteKernel (κ n)] (a : 自然数) {f : (Π n, X n) -> 实数>=0∞}
+  结论: [对任意 n, 是SFiniteKernel (κ n)] (a : 自然数) {f : (Π n, X n) -> 实数>=0∞}
   证明: by
   intro x y hxy
   obtain hba | hab := le_total b a

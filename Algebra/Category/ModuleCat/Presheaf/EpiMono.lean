@@ -41,8 +41,8 @@ lemma epi_of_surjective
 
 中文:
 引理 epi_of_surjective
-  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X))
-  结论: Epi f where
+  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, 函数.满射 (f.app X))
+  结论: 满态射 f where
   证明: by
     ext X m₂
     obtain ⟨m₁, rfl⟩ := hf m₂
@@ -69,8 +69,8 @@ lemma mono_of_injective
 
 中文:
 引理 mono_of_injective
-  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X))
-  结论: Mono f where
+  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, 函数.单射 (f.app X))
+  结论: 单态射 f where
   证明: by
     ext X m
     exact hf (ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m)
@@ -93,7 +93,7 @@ instance [Epi
   body: inferInstanceAs (Epi ((evaluation R X).map f))
 
 中文:
-实例 [Epi
+实例 [满态射
   签名: f] (X
   定义体: inferInstanceAs (Epi ((evaluation R X).map f))
 
@@ -111,7 +111,7 @@ instance [Mono
   body: inferInstanceAs (Mono ((evaluation R X).map f))
 
 中文:
-实例 [Mono
+实例 [单态射
   签名: f] (X
   定义体: inferInstanceAs (Mono ((evaluation R X).map f))
 
@@ -132,7 +132,7 @@ lemma surjective_of_epi
 
 中文:
 引理 surjective_of_epi
-  条件: [Epi f] (X : Cᵒᵖ)
+  条件: [满态射 f] (X : Cᵒᵖ)
   证明: by
   rw [← ModuleCat.epi_iff_surjective]
   infer_instance
@@ -156,7 +156,7 @@ lemma injective_of_mono
 
 中文:
 引理 injective_of_mono
-  条件: [Mono f] (X : Cᵒᵖ)
+  条件: [单态射 f] (X : Cᵒᵖ)
   证明: by
   rw [← ModuleCat.mono_iff_injective]
   infer_instance

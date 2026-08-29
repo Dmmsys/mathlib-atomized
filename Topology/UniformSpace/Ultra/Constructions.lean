@@ -41,7 +41,7 @@ instance SetRel.isTrans_entourageProd
 
 中文:
 实例 SetRel.isTrans_entourageProd
-  签名: {s : SetRel X X} {t : SetRel Y Y} [s.IsTrans] [t.IsTrans]
+  签名: {s : SetRel X X} {t : SetRel Y Y} [s.是Trans] [t.是Trans]
   定义体: ⟨s.trans h.left h'.left, t.trans h.right h'.right⟩
 
 Depends on / 依赖: h.left, h.right, s.trans, t.trans
@@ -64,8 +64,8 @@ lemma IsUltraUniformity.comap
     infer_instance
 
 中文:
-引理 IsUltraUniformity.comap
-  条件: {u : UniformSpace Y} (h : IsUltraUniformity Y) (f : X -> Y)
+引理 是UltraUniformity.comap
+  条件: {u : 一致空间 Y} (h : 是UltraUniformity Y) (f : X -> Y)
   证明: by
   let := u.comap f
   refine .mk_of_hasBasis (h.hasBasis.comap (Prod.map f f)) ?_ ?_ <;>
@@ -97,8 +97,8 @@ lemma IsUltraUniformity.inf
     infer_instance
 
 中文:
-引理 IsUltraUniformity.inf
-  结论: {u u' : UniformSpace X} (h : @IsUltraUniformity _ u)
+引理 是UltraUniformity.下确界
+  结论: {u u' : 一致空间 X} (h : @是UltraUniformity _ u)
   证明: by
   let := u ⊓ u'
   refine .mk_of_hasBasis (h.hasBasis.inf h'.hasBasis) ?_ ?_ <;>
@@ -126,8 +126,8 @@ instance IsUltraUniformity.prod
   body: .inf (.comap ‹_› _) (.comap ‹_› _)
 
 中文:
-实例 IsUltraUniformity.prod
-  签名: [UniformSpace X] [UniformSpace Y]
+实例 是UltraUniformity.乘积
+  签名: [一致空间 X] [一致空间 Y]
   定义体: .inf (.comap ‹_› _) (.comap ‹_› _)
 -/
 instance IsUltraUniformity.prod [UniformSpace X] [UniformSpace Y]
@@ -149,8 +149,8 @@ lemma IsUltraUniformity.iInf
     infer_instance
 
 中文:
-引理 IsUltraUniformity.iInf
-  结论: {ι : 类型} {U : (i : ι) -> UniformSpace X}
+引理 是UltraUniformity.iInf
+  结论: {ι : 类型} {U : (i : ι) -> 一致空间 X}
   证明: by
   let : UniformSpace X := ⨅ i, U i
   refine .mk_of_hasBasis (iInf_uniformity ▸ Filter.HasBasis.iInf fun i => (hU i).hasBasis) ?_ ?_ <;>
@@ -181,8 +181,8 @@ instance IsUltraUniformity.pi
   exact .iInf fun i => .comap (h i) (Function.eval i)
 
 中文:
-实例 IsUltraUniformity.pi
-  签名: {ι : 类型} {X : ι -> 类型} [U : Π i, UniformSpace (X i)]
+实例 是UltraUniformity.pi
+  签名: {ι : 类型} {X : ι -> 类型} [U : Π i, 一致空间 (X i)]
   定义体: by
   suffices @IsUltraUniformity _ (⨅ i, UniformSpace.comap (Function.eval i) (U i)) by
     simpa +instances [Pi.uniformSpace_eq _] using this
@@ -209,8 +209,8 @@ instance IsUltraUniformity.bot
   exact mk_of_hasBasis this inferInstance inferInstance
 
 中文:
-实例 IsUltraUniformity.bot
-  签名: [UniformSpace X] [DiscreteUniformity X]
+实例 是UltraUniformity.bot
+  签名: [一致空间 X] [DiscreteUniformity X]
   定义体: by
   have := Filter.hasBasis_principal (SetRel.id (α := X))
   rw [← DiscreteUniformity.eq_principal_setRelId] at this
@@ -236,8 +236,8 @@ lemma IsUltraUniformity.top
   exact mk_of_hasBasis this inferInstance inferInstance
 
 中文:
-引理 IsUltraUniformity.top
-  结论: @IsUltraUniformity X (⊤ : UniformSpace X)
+引理 是UltraUniformity.top
+  结论: @是UltraUniformity X (⊤ : 一致空间 X)
   证明: by
   let : UniformSpace X := ⊤
   have := Filter.hasBasis_top (α := (X × X))

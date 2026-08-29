@@ -43,8 +43,8 @@ structure StarMonoidHom
     - map_star' : forall a : A, toFun (star a) = star (toFun a)
 
 中文:
-结构 StarMonoidHom
-  参数: (A B : 类型) [Monoid A] [Star A] [Monoid B] [Star B]
+结构 对合幺半群态射
+  参数: (A B : 类型) [幺半群 A] [对合 A] [幺半群 B] [对合 B]
   继承: A ->* B
   公理与运算 (1 个):
     - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->⋆* B) A B
+  签名: 函数状 (A ->⋆* B) A B
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; simp_all
 
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass (A ->⋆* B) A B
+  签名: 幺半群态射类 (A ->⋆* B) A B
   定义体: f.map_mul'
   map_one f := f.map_one'
 
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarHomClass (A ->⋆* B) A B
+  签名: 对合态射类 (A ->⋆* B) A B
   定义体: f.map_star'
 
 Depends on / 依赖: f.map_star, map_star
@@ -163,7 +163,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: [FunLike F A B] [MonoidHomClass F A B] [StarHomClass F A B] (f : F)
+  签名: [函数状 F A B] [幺半群态射类 F A B] [对合态射类 F A B] (f : F)
   定义体: f
   map_one' := map_one f
   map_mul' := map_mul f
@@ -347,7 +347,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(StarMonoidHom.id A) = id
+  结论: ⇑(对合幺半群态射.id A) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(StarMonoidHom.id A) = id :=
@@ -467,7 +467,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->⋆* B)
-  结论: (StarMonoidHom.id B).comp f = f
+  结论: (对合幺半群态射.id B).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -510,7 +510,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (A ->⋆* A)
+  签名: 幺半群 (A ->⋆* A)
   定义体: comp
   mul_assoc := comp_assoc
   one := .id A
@@ -578,8 +578,8 @@ structure StarMulEquiv
     - map_star' : forall a : A, toFun (star a) = star (toFun a)
 
 中文:
-结构 StarMulEquiv
-  参数: (A B : 类型) [Mul A] [Mul B] [Star A] [Star B]
+结构 StarMul等价
+  参数: (A B : 类型) [乘法 A] [乘法 B] [对合 A] [对合 B]
   继承: A ≃* B
   公理与运算 (1 个):
     - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
@@ -616,7 +616,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A ≃⋆* B) A B
+  签名: 等价状 (A ≃⋆* B) A B
   定义体: e.toFun
   inv e := e.invFun
   left_inv e := e.left_inv
@@ -642,7 +642,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulEquivClass (A ≃⋆* B) A B
+  签名: 乘法等价类 (A ≃⋆* B) A B
   定义体: f.map_mul'
 
 Depends on / 依赖: f.map_mul, map_mul
@@ -662,7 +662,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarHomClass (A ≃⋆* B) A B
+  签名: 对合态射类 (A ≃⋆* B) A B
   定义体: f.map_star'
 
 @[ext]
@@ -727,7 +727,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ≃⋆* A)
+  签名: 可居 (A ≃⋆* A)
   定义体: ⟨.refl A⟩
 
 @[simp]
@@ -816,7 +816,7 @@ theorem invFun_eq_symm
 中文:
 定理 invFun_eq_symm
   条件: {e : A ≃⋆* B}
-  结论: EquivLike.inv e = e.symm
+  结论: 等价状.inv e = e.symm
   证明: rfl
 
 @[simp]
@@ -852,7 +852,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (A ≃⋆* B) -> B ≃⋆* A)
+  结论: 函数.双射 (symm : (A ≃⋆* B) -> B ≃⋆* A)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -896,7 +896,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: [EquivLike F A B] [MulEquivClass F A B] [StarHomClass F A B] (f : F)
+  签名: [等价状 F A B] [乘法等价类 F A B] [对合态射类 F A B] (f : F)
   定义体: f
   invFun := EquivLike.inv f
   left_inv := EquivLike.left_inv f
@@ -1159,7 +1159,7 @@ theorem leftInverse_symm
 中文:
 定理 leftInverse_symm
   条件: (e : A ≃⋆* B)
-  结论: Function.LeftInverse e.symm e
+  结论: 函数.左逆 e.symm e
   证明: e.left_inv
 
 Depends on / 依赖: e.left_inv, left_inv
@@ -1179,7 +1179,7 @@ theorem rightInverse_symm
 中文:
 定理 rightInverse_symm
   条件: (e : A ≃⋆* B)
-  结论: Function.RightInverse e.symm e
+  结论: 函数.右逆 e.symm e
   证明: e.right_inv
 
 Depends on / 依赖: e.right_inv, right_inv
@@ -1268,7 +1268,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : A ->⋆* B) (hf : Function.Bijective f)
+  签名: (f : A ->⋆* B) (hf : 函数.双射 f)
   定义体: { MulEquiv.ofBijective f (hf : Function.Bijective (f : A -> B)) with
     toFun := f
     map_star' := map_star f }
@@ -1293,7 +1293,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  条件: {f : A ->⋆* B} (hf : Function.Bijective f)
+  条件: {f : A ->⋆* B} (hf : 函数.双射 f)
   证明: rfl
 -/
 theorem coe_ofBijective {f : A ->⋆* B} (hf : Function.Bijective f) :
@@ -1310,7 +1310,7 @@ theorem ofBijective_apply
 
 中文:
 定理 ofBijective_apply
-  条件: {f : A ->⋆* B} (hf : Function.Bijective f) (a : A)
+  条件: {f : A ->⋆* B} (hf : 函数.双射 f) (a : A)
   证明: rfl
 -/
 theorem ofBijective_apply {f : A ->⋆* B} (hf : Function.Bijective f) (a : A) :

@@ -48,7 +48,7 @@ theorem ofFin_intCast
 中文:
 定理 ofFin_intCast
   条件: (z : 整数)
-  结论: ofFin (z : Fin (2 ^ w)) = ↑z
+  结论: ofFin (z : 有限集 (2 ^ w)) = ↑z
   证明: by
   cases w
   case zero =>
@@ -104,9 +104,9 @@ theorem toNat_injective
   statement: Function.Injective (BitVec.toNat : BitVec n -> _)
 
 中文:
-定理 toNat_injective
+定理 to自然数_injective
   条件: {n : 自然数}
-  结论: Function.Injective (BitVec.to自然数 : BitVec n -> _)
+  结论: 函数.单射 (BitVec.to自然数 : BitVec n -> _)
 -/
 theorem toNat_injective {n : Nat} : Function.Injective (BitVec.toNat : BitVec n -> _)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -122,7 +122,7 @@ theorem toFin_injective
 中文:
 定理 toFin_injective
   条件: {n : 自然数}
-  结论: Function.Injective (toFin : BitVec n -> _)
+  结论: 函数.单射 (toFin : BitVec n -> _)
 -/
 theorem toFin_injective {n : Nat} : Function.Injective (toFin : BitVec n -> _)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (BitVec w)
+  签名: 交换半环 (BitVec w)
   定义体: open Fin.CommRing in
   toFin_injective.commSemiring _
     toFin_zero
@@ -277,7 +277,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (BitVec w)
+  签名: 交换环 (BitVec w)
   定义体: open Fin.CommRing in
   toFin_injective.commRing _
     toFin_zero toFin_one toFin_add toFin_mul toFin_neg toFin_sub

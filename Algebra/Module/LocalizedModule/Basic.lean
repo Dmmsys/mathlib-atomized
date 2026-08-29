@@ -127,7 +127,7 @@ theorem r.isEquiv
 
 中文:
 定理 r.isEquiv
-  结论: IsEquiv _ (r S M)
+  结论: Is等价 _ (r S M)
   证明: { refl := fun ⟨m, s⟩ => ⟨1, by rw [one_smul]⟩
     trans := fun ⟨m1, s1⟩ ⟨m2, s2⟩ ⟨m3, s3⟩ ⟨u1, hu1⟩ ⟨u2, hu2⟩ => by
       use u1 * u2 * s2
@@ -159,7 +159,7 @@ instance r.setoid
 
 中文:
 实例 r.setoid
-  签名: : Setoid (M × S) where
+  签名: : 集合等价关系 (M × S) where
   定义体: r S M
   iseqv := ⟨(r.isEquiv S M).refl, (r.isEquiv S M).symm _ _, (r.isEquiv S M).trans _ _ _⟩
 -/
@@ -177,7 +177,7 @@ abbreviation _root_.LocalizedModule
 
 中文:
 缩写 _root_.LocalizedModule
-  签名: : Type max u v
+  签名: : 类型 最大值 u v
   定义体: OreLocalization S M
 
 Depends on / 依赖: OreLocalization
@@ -393,7 +393,7 @@ theorem subsingleton
 中文:
 定理 subsingleton
   条件: (h : 0 in S)
-  结论: Subsingleton (LocalizedModule S M)
+  结论: 子单例 (LocalizedModule S M)
   证明: by
   refine ⟨fun a b => ?_⟩
   induction a, b using LocalizedModule.induction_on₂
@@ -454,7 +454,7 @@ theorem mk_neg
 
 中文:
 定理 mk_neg
-  条件: {M : 类型} [AddCommGroup M] [Module R M] {m : M} {s : S}
+  条件: {M : 类型} [加法交换群 M] [模 R M] {m : M} {s : S}
   证明: by simp [mk]
 -/
 theorem mk_neg {M : Type*} [AddCommGroup M] [Module R M] {m : M} {s : S} :
@@ -476,7 +476,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: {A : 类型} [Semiring A] [Algebra R A] {S : Submonoid R}
+  签名: {A : 类型} [半环 A] [代数 R A] {S : 子幺半群 R}
   定义体: liftOn₂ m₁ m₂ (fun x₁ x₂ => LocalizedModule.mk (x₁.1 * x₂.1) (x₂.2 * x₁.2)) (by
     rintro ⟨a₁, s₁⟩ ⟨a₂, s₂⟩ ⟨b₁, t₁⟩ ⟨b₂, t₂⟩ ⟨u₁, e₁⟩ ⟨u₂, e₂⟩
     simp only [mul_comm s₂ s₁, mul_comm t₂ t₁]
@@ -540,7 +540,7 @@ theorem mk_mul_mk'
 
 中文:
 定理 mk_mul_mk'
-  条件: {A : 类型} [Semiring A] [Algebra R A] {a₁ a₂ : A} {s₁ s₂ : S}
+  条件: {A : 类型} [半环 A] [代数 R A] {a₁ a₂ : A} {s₁ s₂ : S}
   证明: rfl
 -/
 theorem mk_mul_mk' {A : Type*} [Semiring A] [Algebra R A] {a₁ a₂ : A} {s₁ s₂ : S} :
@@ -556,7 +556,7 @@ theorem mk_mul_mk
 
 中文:
 定理 mk_mul_mk
-  条件: {A : 类型} [Semiring A] [Algebra R A] {a₁ a₂ : A} {s₁ s₂ : S}
+  条件: {A : 类型} [半环 A] [代数 R A] {a₁ a₂ : A} {s₁ s₂ : S}
   证明: by rw [mk_mul_mk', mul_comm s₁ s₂]
 
 Depends on / 依赖: mk_mul_mk, mul_comm
@@ -579,7 +579,7 @@ theorem mk_pow
 
 中文:
 定理 mk_pow
-  条件: {A : 类型} [Semiring A] [Algebra R A] {S : Submonoid R} (n : 自然数) (a : A) (s : S)
+  条件: {A : 类型} [半环 A] [代数 R A] {S : 子幺半群 R} (n : 自然数) (a : A) (s : S)
   证明: by
   induction n with
   | zero =>
@@ -706,7 +706,7 @@ theorem prod_mk
 
 中文:
 定理 prod_mk
-  结论: {ι A : 类型} [CommSemiring A] [Algebra R A] {S : Submonoid R}
+  结论: {ι A : 类型} [交换半环 A] [代数 R A] {S : 子幺半群 R}
   证明: by
   induction t using Finset.cons_induction <;> simp [OreLocalization.one_def, *, mk_mul_mk]
 
@@ -735,7 +735,7 @@ abbreviation smulOfIsLocalization
 
 中文:
 缩写 smulOfIsLocalization
-  签名: : SMul T (LocalizedModule S M) where
+  签名: : 标量乘法 T (LocalizedModule S M) where
   定义体: let a := IsLocalization.sec S x
     liftOn p (fun p => mk (a.1 • p.1) (a.2 * p.2))
       (by
@@ -844,7 +844,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass T T' (LocalizedModule S M)
+  签名: 标量交换类 T T' (LocalizedModule S M)
   定义体: by
     induction p with | _ m s
     simp_rw [smul_def, smul_smul, mul_left_comm, mul_comm]
@@ -1045,7 +1045,7 @@ abbreviation moduleOfIsLocalization
 
 中文:
 缩写 moduleOfIsLocalization
-  签名: : Module T (LocalizedModule S M) where
+  签名: : 模 T (LocalizedModule S M) where
   定义体: one_smul_aux
   mul_smul := mul_smul_aux
   smul_add := smul_add_aux
@@ -1227,7 +1227,7 @@ theorem smul'_mul
 
 中文:
 定理 smul'_mul
-  条件: {A : 类型} [Semiring A] [Algebra R A] (x : T) (p₁ p₂ : LocalizedModule S A)
+  条件: {A : 类型} [半环 A] [代数 R A] (x : T) (p₁ p₂ : LocalizedModule S A)
   证明: by
   induction p₁, p₂ using induction_on₂ with | _ a₁ s₁ a₂ s₂ => _
   rw [mk_mul_mk]; rw [smul_def]; rw [smul_def]; rw [mk_mul_mk]; rw [mul_assoc]; rw [smul_mul_assoc]
@@ -1249,7 +1249,7 @@ theorem mul_smul'
 
 中文:
 定理 mul_smul'
-  条件: {A : 类型} [Semiring A] [Algebra R A] (x : T) (p₁ p₂ : LocalizedModule S A)
+  条件: {A : 类型} [半环 A] [代数 R A] (x : T) (p₁ p₂ : LocalizedModule S A)
   证明: by
   induction p₁, p₂ using induction_on₂ with | _ a₁ s₁ a₂ s₂ => _
   rw [smul_def]; rw [mk_mul_mk]; rw [mk_mul_mk]; rw [smul_def]; rw [mul_left_comm]; rw [mul_smul_comm]
@@ -1274,7 +1274,7 @@ abbreviation algebraOfIsLocalization
 
 中文:
 缩写 algebraOfIsLocalization
-  签名: {A : 类型} [Semiring A] [Algebra R A]
+  签名: {A : 类型} [半环 A] [代数 R A]
   定义体: Algebra.ofModule smul'_mul mul_smul'
 
 Depends on / 依赖: Algebra, Algebra.ofModule, _mul, mul_smul, ofModule
@@ -1299,7 +1299,7 @@ theorem algebraMap_mk'
 
 中文:
 定理 algebraMap_mk'
-  条件: {A : 类型} [Semiring A] [Algebra R A] (a : R) (s : S)
+  条件: {A : 类型} [半环 A] [代数 R A] (a : R) (s : S)
   证明: by
   with_unfolding_all
   rw [Algebra.algebraMap_eq_smul_one]
@@ -1327,7 +1327,7 @@ theorem algebraMap_mk
 
 中文:
 定理 algebraMap_mk
-  条件: {A : 类型} [Semiring A] [Algebra R A] (a : R) (s : S)
+  条件: {A : 类型} [半环 A] [代数 R A] (a : R) (s : S)
   证明: by
   rw [Localization.mk_eq_mk']
   exact algebraMap_mk' ..
@@ -1351,7 +1351,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R T (LocalizedModule S M)
+  签名: 标量塔 R T (LocalizedModule S M)
   定义体: by
     induction p with | _ m s
     rw [← IsLocalization.mk'_sec (M := S) T x]; rw [IsLocalization.smul_mk']; rw [mk'_smul_mk]; rw [mk'_smul_mk]; rw [smul'_mk]; rw [mul_smul]
@@ -1377,7 +1377,7 @@ abbreviation numeratorRingHom
 
 中文:
 缩写 numeratorRingHom
-  签名: {A : 类型} [Semiring A] [Algebra R A]
+  签名: {A : 类型} [半环 A] [代数 R A]
   定义体: mk r 1
   map_one' := by simp [OreLocalization.one_def]
   map_mul' := by simp [mk_mul_mk]
@@ -1569,10 +1569,10 @@ class IsLocalizedModule
     - exists_of_eq : forall {x₁ x₂}, f x₁ = f x₂ -> exists c : S, c • x₁ = c • x₂
 
 中文:
-类 IsLocalizedModule
-  参数: (S : Submonoid R) (f : M ->ₗ[R] M')
+类 是Localized模
+  参数: (S : 子幺半群 R) (f : M ->ₗ[R] M')
   公理与运算 (3 个):
-    - map_units : 对任意 x : S, IsUnit (algebraMap R (Module.End R M') x)
+    - map_units : 对任意 x : S, 是单位 (algebraMap R (模.End R M') x)
     - surj((S f)) : 对任意 y : M', 存在 x : M × S, x.2 • y = f x.1
     - exists_of_eq : 对任意 {x₁ x₂}, f x₁ = f x₂ -> 存在 c : S, c • x₁ = c • x₂
 -/
@@ -1596,8 +1596,8 @@ lemma IsLocalizedModule.eq_iff_exists
     exact ((Module.End.isUnit_iff _).mp <| map_units f c).1 h
 
 中文:
-引理 IsLocalizedModule.eq_iff_exists
-  条件: [IsLocalizedModule S f] {x₁ x₂}
+引理 是Localized模.eq_iff_存在
+  条件: [是Localized模 S f] {x₁ x₂}
   证明: Iff.intro exists_of_eq fun ⟨c, h⟩ => by
     apply_fun f at h
     simp_rw [f.map_smul_of_tower, Submonoid.smul_def, ← Module.algebraMap_end_apply R R] at h
@@ -1622,8 +1622,8 @@ lemma IsLocalizedModule.injective_iff_isRegular
   simp_rw [IsSMulRegular, Function.Injective, eq_iff_exists S, exists_imp, forall_comm (α := S)]
 
 中文:
-引理 IsLocalizedModule.injective_iff_isRegular
-  条件: [IsLocalizedModule S f]
+引理 是Localized模.injective_iff_isRegular
+  条件: [是Localized模 S f]
   证明: by
   simp_rw [IsSMulRegular, Function.Injective, eq_iff_exists S, exists_imp, forall_comm (α := S)]
 
@@ -1645,8 +1645,8 @@ instance IsLocalizedModule.of_linearEquiv
       by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bi
 
 中文:
-实例 IsLocalizedModule.of_linearEquiv
-  签名: (e : M' ≃ₗ[R] M'') [hf : IsLocalizedModule S f]
+实例 是Localized模.of_linearEquiv
+  签名: (e : M' ≃ₗ[R] M'') [hf : 是Localized模 S f]
   定义体: by
     rw [show algebraMap R (Module.End R M'') s = e ∘ₗ (algebraMap R (Module.End R M') s) ∘ₗ e.symm
       by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bi
@@ -1685,8 +1685,8 @@ instance IsLocalizedModule.of_linearEquiv_right
     exact ⟨c, by simpa only [Submonoid.smul_def
 
 中文:
-实例 IsLocalizedModule.of_linearEquiv_right
-  签名: (e : M'' ≃ₗ[R] M) [hf : IsLocalizedModule S f]
+实例 是Localized模.of_linearEquiv_right
+  签名: (e : M'' ≃ₗ[R] M) [hf : 是Localized模 S f]
   定义体: hf.map_units s
   surj x := by
     obtain ⟨⟨p, s⟩, h⟩ := hf.surj x
@@ -1723,7 +1723,7 @@ lemma IsLocalizedModule.comp_iff_of_bijective_left
   exact .of_linearEquiv _ _ _
 
 中文:
-引理 IsLocalizedModule.comp_iff_of_bijective_left
+引理 是Localized模.comp_iff_of_bijective_left
   结论: {f : M ->ₗ[R] M'} (e : M' ->ₗ[R] M'')
   证明: by
   refine ⟨fun h => ?_, fun h => .of_linearEquiv _ _ (.ofBijective _ he)⟩
@@ -1754,7 +1754,7 @@ lemma IsLocalizedModule.comp_iff_of_bijective_right
   exact .of_linearEquiv_right _ _ _
 
 中文:
-引理 IsLocalizedModule.comp_iff_of_bijective_right
+引理 是Localized模.comp_iff_of_bijective_right
   结论: (e : M ->ₗ[R] M') {f : M' ->ₗ[R] M''}
   证明: by
   refine ⟨fun h => ?_, fun h => .of_linearEquiv_right _ _ (.ofBijective _ he)⟩
@@ -1786,7 +1786,7 @@ lemma isLocalizedModule_id
 
 中文:
 引理 isLocalizedModule_id
-  结论: (R') [CommSemiring R'] [Algebra R R'] [IsLocalization S R'] [Module R' M]
+  结论: (R') [交换半环 R'] [代数 R R'] [是Localization S R'] [模 R' M]
   证明: by
     rw [← (Algebra.lsmul R (A := R') R M).commutes]; exact (IsLocalization.map_units R' s).map _
   surj m := ⟨(m, 1), one_smul _ _⟩
@@ -1855,7 +1855,7 @@ theorem lift'_mk
 
 中文:
 定理 lift'_mk
-  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: rfl
 
 Depends on / 依赖: _modOf, mul_of, one_mul
@@ -1879,7 +1879,7 @@ theorem lift'_add
 
 中文:
 定理 lift'_add
-  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: LocalizedModule.induction_on₂
     (by
       intro a a' b b'
@@ -1915,7 +1915,7 @@ theorem lift'_smul
 
 中文:
 定理 lift'_smul
-  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: m.induction_on fun a b => by
     rw [LocalizedModule.lift'_mk]; rw [LocalizedModule.smul'_mk]; rw [LocalizedModule.lift'_mk]; rw [← map_smul]; rw [← g.map_smul]
 -/
@@ -1982,7 +1982,7 @@ lemma lift_mk_one
 
 中文:
 引理 lift_mk_one
-  条件: (h : 对任意 (x : S), IsUnit ((algebraMap R (Module.End R M'')) x)) (m : M)
+  条件: (h : 对任意 (x : S), 是单位 ((algebraMap R (模.End R M'')) x)) (m : M)
   证明: by
   simp [lift_mk]
 
@@ -2004,7 +2004,7 @@ theorem lift_comp
 
 中文:
 定理 lift_comp
-  条件: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  条件: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   ext x
   simp [LocalizedModule.lift_mk]
@@ -2030,7 +2030,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   ext x; induction x with | _ m s
   rw [LocalizedModule.lift_mk]
@@ -2112,8 +2112,8 @@ lemma IsLocalizedModule.restrictScalars
     exact ⟨⟨x, ⟨r, hr₁⟩⟩, by simpa [Submonoid.smul_def] 
 
 中文:
-引理 IsLocalizedModule.restrictScalars
-  结论: (S : Submonoid R) [Module A M]
+引理 是Localized模.restrictScalars
+  结论: (S : 子幺半群 R) [模 A M]
   证明: by
     have := h.1 ⟨algebraMap R A s, Algebra.mem_algebraMapSubmonoid_of_mem s⟩
     simp only [← IsScalarTower.algebraMap_apply, Module.End.isUnit_iff] at this ⊢
@@ -2151,8 +2151,8 @@ lemma IsLocalizedModule.restrictScalars_powers
   exact IsLocalizedModule.restrictScalars _ f
 
 中文:
-引理 IsLocalizedModule.restrictScalars_powers
-  结论: [Module A M]
+引理 是Localized模.restrictScalars_powers
+  结论: [模 A M]
   证明: by
   rw [← Algebra.algebraMapSubmonoid_powers] at h
   exact IsLocalizedModule.restrictScalars _ f
@@ -2183,8 +2183,8 @@ lemma IsLocalizedModule.of_restrictScalars
     exac
 
 中文:
-引理 IsLocalizedModule.of_restrictScalars
-  结论: (S : Submonoid R)
+引理 是Localized模.of_restrictScalars
+  结论: (S : 子幺半群 R)
   证明: by
     obtain ⟨_, x, hx, rfl⟩ := x
     have := IsLocalizedModule.map_units (f.restrictScalars R) ⟨x, hx⟩
@@ -2222,8 +2222,8 @@ lemma IsLocalizedModule.restrictScalars_iff
   proof: ⟨fun _ => restrictScalars _ _, fun _ => of_restrictScalars _ _⟩
 
 中文:
-引理 IsLocalizedModule.restrictScalars_iff
-  结论: (S : Submonoid R)
+引理 是Localized模.restrictScalars_iff
+  结论: (S : 子幺半群 R)
   证明: ⟨fun _ => restrictScalars _ _, fun _ => of_restrictScalars _ _⟩
 
 Depends on / 依赖: of_restrictScalars, restrictScalars
@@ -2252,8 +2252,8 @@ lemma IsLocalizedModule.of_exists_mul_mem
   exists_of_eq {x₁
 
 中文:
-引理 IsLocalizedModule.of_exists_mul_mem
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+引理 是Localized模.of_存在_mul_mem
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: by
     obtain ⟨m, mx⟩ := h' x
     have := IsLocalizedModule.map_units f ⟨_, mx⟩
@@ -2460,7 +2460,7 @@ theorem fromLocalizedModule.inj
 
 中文:
 定理 fromLocalizedModule.inj
-  结论: Function.Injective fromLocalizedModule S f
+  结论: 函数.单射 fromLocalizedModule S f
   证明: fun x y eq1 => by
   induction x with | _ a b
   induction y with | _ a' b'
@@ -2490,7 +2490,7 @@ theorem fromLocalizedModule.surj
 
 中文:
 定理 fromLocalizedModule.surj
-  结论: Function.Surjective fromLocalizedModule S f
+  结论: 函数.满射 fromLocalizedModule S f
   证明: fun x =>
   let ⟨⟨m, s⟩, eq1⟩ := IsLocalizedModule.surj S f x
   ⟨LocalizedModule.mk m s, by
@@ -2511,7 +2511,7 @@ theorem fromLocalizedModule.bij
 
 中文:
 定理 fromLocalizedModule.bij
-  结论: Function.Bijective fromLocalizedModule S f
+  结论: 函数.双射 fromLocalizedModule S f
   证明: ⟨fromLocalizedModule.inj _ _, fromLocalizedModule.surj _ _⟩
 
 Depends on / 依赖: fromLocalizedModule, fromLocalizedModule.inj, fromLocalizedModule.surj
@@ -2725,7 +2725,7 @@ theorem lift_comp
 
 中文:
 定理 lift_comp
-  条件: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  条件: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   dsimp only [IsLocalizedModule.lift]
   rw [LinearMap.comp_assoc]; rw [iso_symm_comp]; rw [LocalizedModule.lift_comp S g h]
@@ -2753,7 +2753,7 @@ lemma lift_iso
 
 中文:
 引理 lift_iso
-  结论: (h : 对任意 (x : S), IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (h : 对任意 (x : S), 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   simp [lift]
 
@@ -2777,7 +2777,7 @@ lemma lift_comp_iso
 
 中文:
 引理 lift_comp_iso
-  条件: (h : 对任意 (x : S), IsUnit ((algebraMap R (Module.End R M'')) x))
+  条件: (h : 对任意 (x : S), 是单位 ((algebraMap R (模.End R M'')) x))
   证明: LinearMap.ext fun x => lift_iso S f g h x
 
 @[simp]
@@ -2821,7 +2821,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (g : M ->ₗ[R] M'') (h : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   dsimp only [IsLocalizedModule.lift]
   rw [LocalizedModule.lift_unique S g h (l.comp (iso S f).toLinearMap)]; rw [LinearMap.comp_assoc]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_toLinearMap]; rw [LinearMap.comp_id]
@@ -2866,7 +2866,7 @@ theorem linearMap_ext
 
 中文:
 定理 linearMap_ext
-  结论: {N N'} [AddCommMonoid N] [Module R N] [AddCommMonoid N'] [Module R N']
+  结论: {N N'} [加法交换幺半群 N] [模 R N] [加法交换幺半群 N'] [模 R N']
   证明: (is_universal S f _ <| map_units f').unique h rfl
 
 Depends on / 依赖: is_universal, map_units, unique
@@ -2888,7 +2888,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: (map_unit : 对任意 x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
+  结论: (map_unit : 对任意 x : S, 是单位 ((algebraMap R (模.End R M'')) x))
   证明: by
   rw [← lift_unique S f (k.comp f) map_unit j h]; rw [lift_unique]
   rfl
@@ -2912,7 +2912,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [IsLocalizedModule S g]
+  签名: [是Localized模 S g]
   定义体: (iso S f).symm.trans (iso S g)
 
 @[simp]
@@ -2936,7 +2936,7 @@ lemma linearEquiv_apply
 
 中文:
 引理 linearEquiv_apply
-  条件: [IsLocalizedModule S g] (x : M)
+  条件: [是Localized模 S g] (x : M)
   证明: by
   simp [linearEquiv]
 
@@ -2960,7 +2960,7 @@ lemma linearEquiv_symm_apply
 
 中文:
 引理 linearEquiv_symm_apply
-  条件: [IsLocalizedModule S g] (x : M)
+  条件: [是Localized模 S g] (x : M)
   证明: by
   simp [linearEquiv]
 
@@ -2983,7 +2983,7 @@ lemma linearEquiv_of_isLocalizedModule_comp
 
 中文:
 引理 linearEquiv_of_isLocalizedModule_comp
-  条件: (g : M' ->ₗ[R] M'') [IsLocalizedModule S (g ∘ₗ f)]
+  条件: (g : M' ->ₗ[R] M'') [是Localized模 S (g ∘ₗ f)]
   证明: by
   refine ext S f (IsLocalizedModule.map_units (g ∘ₗ f)) ?_
   ext
@@ -3014,7 +3014,7 @@ include f in
 中文:
 定理 smul_injective
   条件: (s : S)
-  结论: Function.Injective fun m : M' => s • m
+  结论: 函数.单射 fun m : M' => s • m
   证明: ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units f s)).injective
 
 include f in
@@ -3063,7 +3063,7 @@ lemma isRegular_of_smul_left_injective
 
 中文:
 引理 isRegular_of_smul_left_injective
-  结论: {m : M'} (inj : Function.Injective fun r : R => r • m)
+  结论: {m : M'} (inj : 函数.单射 fun r : R => r • m)
   证明: (Commute.isRegular_iff (Commute.all _)).mpr fun r r' eq => by
     have := congr_arg (· • m) eq
     simp_rw [mul_smul, ← Submonoid.smul_def, smul_inj f] at this
@@ -3108,7 +3108,7 @@ theorem mk'_smul
 
 中文:
 定理 mk'_smul
-  结论: {R₀ : 类型} [SMul R₀ R] [SMul R₀ M] [SMul R₀ M']
+  结论: {R₀ : 类型} [标量乘法 R₀ R] [标量乘法 R₀ M] [标量乘法 R₀ M']
   证明: by
   delta mk'
   rw [← LocalizedModule.smul'_mk]; rw [LinearMap.map_smul_of_tower]
@@ -3354,7 +3354,7 @@ theorem mk'_neg
 
 中文:
 定理 mk'_neg
-  结论: {M M' : 类型} [AddCommGroup M] [SubtractionCommMonoid M'] [Module R M]
+  结论: {M M' : 类型} [加法交换群 M] [SubtractionComm幺半群 M'] [模 R M]
   证明: by
   delta mk'
   rw [LocalizedModule.mk_neg]; rw [map_neg]
@@ -3376,7 +3376,7 @@ theorem mk'_sub
 
 中文:
 定理 mk'_sub
-  结论: {M M' : 类型} [AddCommGroup M] [SubtractionCommMonoid M'] [Module R M]
+  结论: {M M' : 类型} [加法交换群 M] [SubtractionComm幺半群 M'] [模 R M]
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [mk'_add]; rw [mk'_neg]
 -/
@@ -3396,7 +3396,7 @@ theorem mk'_sub_mk'
 
 中文:
 定理 mk'_sub_mk'
-  结论: {M M' : 类型} [AddCommGroup M] [SubtractionCommMonoid M'] [Module R M]
+  结论: {M M' : 类型} [加法交换群 M] [SubtractionComm幺半群 M'] [模 R M]
   证明: by
   rw [sub_eq_add_neg]; rw [← mk'_neg]; rw [mk'_add_mk']; rw [smul_neg]; rw [← sub_eq_add_neg]
 -/
@@ -3420,7 +3420,7 @@ theorem mk'_mul_mk'_of_map_mul
 
 中文:
 定理 mk'_mul_mk'_of_map_mul
-  结论: {M M' : 类型} [NonUnitalNonAssocSemiring M] [Semiring M']
+  结论: {M M' : 类型} [非幺非结合半环 M] [半环 M']
   证明: by
   symm
   apply (Module.End.algebraMap_isUnit_inv_apply_eq_iff _ _ _ _).mpr
@@ -3448,7 +3448,7 @@ theorem mk'_mul_mk'
 
 中文:
 定理 mk'_mul_mk'
-  结论: {M M' : 类型} [Semiring M] [Semiring M'] [Algebra R M] [Algebra R M']
+  结论: {M M' : 类型} [半环 M] [半环 M'] [代数 R M] [代数 R M']
   证明: mk'_mul_mk'_of_map_mul f.toLinearMap (map_mul f) m₁ m₂ s₁ s₂
 -/
 theorem mk'_mul_mk' {M M' : Type*} [Semiring M] [Semiring M'] [Algebra R M] [Algebra R M']
@@ -3608,7 +3608,7 @@ theorem mk'_surjective
 
 中文:
 定理 mk'_surjective
-  结论: Function.Surjective (Function.uncurry <| mk' f : M × S -> M')
+  结论: 函数.满射 (函数.uncurry <| mk' f : M × S -> M')
   证明: by
   intro x
   obtain ⟨⟨m, s⟩, e : s • x = f m⟩ := IsLocalizedModule.surj S f x
@@ -3753,7 +3753,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalizedModule S₂ (liftOfLE S₁ S₂ h f₁ f₂)
+  签名: 是Localized模 S₂ (liftOfLE S₁ S₂ h f₁ f₂)
   定义体: map_units f₂
   surj y := by
     obtain ⟨⟨y', s⟩, e⟩ := IsLocalizedModule.surj S₂ f₂ y
@@ -3800,7 +3800,7 @@ lemma injective_of_map_eq
 
 中文:
 引理 injective_of_map_eq
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: by
   intro a b hab
   obtain ⟨⟨x, m⟩, (hxm : m • a = f x)⟩ := IsLocalizedModule.surj S f a
@@ -3838,7 +3838,7 @@ lemma injective_of_map_zero
 
 中文:
 引理 injective_of_map_zero
-  结论: {M M' N : 类型} [AddCommGroup M] [AddCommGroup M']
+  结论: {M M' N : 类型} [加法交换群 M] [加法交换群 M']
   证明: by
   refine IsLocalizedModule.injective_of_map_eq S f (fun hxy => ?_)
   rw [← sub_eq_zero]; rw [← map_sub]
@@ -4029,7 +4029,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (h : M ->ₗ[R] N) (h_inj : Function.Injective h)
+  条件: (h : M ->ₗ[R] N) (h_inj : 函数.单射 h)
   证明: by
   intro x y
   obtain ⟨⟨x, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f x
@@ -4065,7 +4065,7 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (h : M ->ₗ[R] N) (h_surj : Function.Surjective h)
+  条件: (h : M ->ₗ[R] N) (h_surj : 函数.满射 h)
   证明: by
   intro x
   obtain ⟨⟨x, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S g x
@@ -4242,7 +4242,7 @@ theorem mkOfAlgebra
 
 中文:
 定理 mkOfAlgebra
-  结论: {R S S' : 类型} [CommSemiring R] [Ring S] [Ring S'] [Algebra R S]
+  结论: {R S S' : 类型} [交换半环 R] [环 S] [环 S'] [代数 R S]
   证明: by
   replace h₃ := fun x =>
     Iff.intro (h₃ x) fun ⟨⟨m, hm⟩, e⟩ =>
@@ -4301,7 +4301,7 @@ definition module
 
 中文:
 定义 module
-  签名: (f : M ->ₗ[R] M') [IsLocalizedModule S f]
+  签名: (f : M ->ₗ[R] M') [是Localized模 S f]
   定义体: (IsLocalizedModule.iso S f).symm.toAddEquiv.module A
 -/
 @[reducible] noncomputable def module (f : M ->ₗ[R] M') [IsLocalizedModule S f] : Module A M' :=
@@ -4320,7 +4320,7 @@ lemma isScalarTower_module
 
 中文:
 引理 isScalarTower_module
-  条件: (f : M ->ₗ[R] M') [IsLocalizedModule S f]
+  条件: (f : M ->ₗ[R] M') [是Localized模 S f]
   证明: IsLocalizedModule.module S f
     IsScalarTower R A M' :=
   (IsLocalizedModule.iso S f).symm.isScalarTower A
@@ -4345,7 +4345,7 @@ lemma mem_ker_iff
 
 中文:
 引理 mem_ker_iff
-  结论: (S : Submonoid R) {g : M ->ₗ[R] M'}
+  结论: (S : 子幺半群 R) {g : M ->ₗ[R] M'}
   证明: by
   simpa using IsLocalizedModule.eq_zero_iff S g
 
@@ -4370,7 +4370,7 @@ lemma subsingleton_iff_ker_eq_top
 
 中文:
 引理 subsingleton_iff_ker_eq_top
-  结论: (S : Submonoid R) (g : M ->ₗ[R] M')
+  结论: (S : 子幺半群 R) (g : M ->ₗ[R] M')
   证明: by
   rw [← top_le_iff]
   refine ⟨fun H m _ => Subsingleton.elim _ _, fun H => (subsingleton_iff_forall_eq 0).mpr fun x => ?_⟩
@@ -4399,7 +4399,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  结论: (S : Submonoid R) (g : M ->ₗ[R] M')
+  结论: (S : 子幺半群 R) (g : M ->ₗ[R] M')
   证明: by
   simp_rw [subsingleton_iff_ker_eq_top S g, ← top_le_iff, SetLike.le_def,
     mem_ker_iff S, Submodule.mem_top, true_implies]
@@ -4426,7 +4426,7 @@ lemma subsingleton_of_subsingleton
 
 中文:
 引理 subsingleton_of_subsingleton
-  结论: (S : Submonoid R) (g : M ->ₗ[R] M') [IsLocalizedModule S g]
+  结论: (S : 子幺半群 R) (g : M ->ₗ[R] M') [是Localized模 S g]
   证明: by
   rw [subsingleton_iff S g]
   intro m
@@ -4462,7 +4462,7 @@ lemma mem_ker_mkLinearMap_iff
 
 中文:
 引理 mem_ker_mkLinearMap_iff
-  条件: {S : Submonoid R} {m : M}
+  条件: {S : 子幺半群 R} {m : M}
   证明: IsLocalizedModule.mem_ker_iff S
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.mem_ker_iff, mem_ker_iff
@@ -4481,7 +4481,7 @@ lemma subsingleton_iff_ker_eq_top
 
 中文:
 引理 subsingleton_iff_ker_eq_top
-  条件: {S : Submonoid R}
+  条件: {S : 子幺半群 R}
   证明: IsLocalizedModule.subsingleton_iff_ker_eq_top S _
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.subsingleton_iff_ker_eq_top, subsingleton_iff_ker_eq_top
@@ -4501,7 +4501,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  条件: {S : Submonoid R}
+  条件: {S : 子幺半群 R}
   证明: IsLocalizedModule.subsingleton_iff S (LocalizedModule.mkLinearMap S M)
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.subsingleton_iff, LocalizedModule, LocalizedModule.mkLinearMap, mkLinearMap, subsingleton_iff
@@ -4522,7 +4522,7 @@ instance [Subsingleton
   use 1, S.one_mem, Subsingleton.elim _ _
 
 中文:
-实例 [Subsingleton
+实例 [子单例
   签名: M] (S
   定义体: by
   rw [IsLocalizedModule.subsingleton_iff S (LocalizedModule.mkLinearMap S M)]
@@ -4559,8 +4559,8 @@ lemma isTorsionFree_of_forall_isRegular
     ob
 
 中文:
-引理 isTorsionFree_of_forall_isRegular
-  结论: (S : Submonoid R) (hS : 对任意 s in S, s != 0 -> IsRegular s)
+引理 isTorsionFree_of_对任意_isRegular
+  结论: (S : 子幺半群 R) (hS : 对任意 s in S, s != 0 -> 是正则 s)
   证明: by
     by_cases hS₀ : 0 in S
     · have : Subsingleton N := (IsLocalizedModule.subsingleton_iff S f).2 fun _ => ⟨0, hS₀, by simp⟩
@@ -4597,7 +4597,7 @@ lemma isTorsionFree
 
 中文:
 引理 isTorsionFree
-  结论: [IsDomain R] [IsTorsionFree R M] (S : Submonoid R)
+  结论: [是整环 R] [是无挠 R M] (S : 子幺半群 R)
   证明: isTorsionFree_of_forall_isRegular f S by simp [isRegular_iff_ne_zero]
 
 Depends on / 依赖: isRegular_iff_ne_zero, isTorsionFree_of_forall_isRegular
@@ -4615,7 +4615,7 @@ instance [IsDomain
   body: isTorsionFree (LocalizedModule.mkLinearMap S M) S
 
 中文:
-实例 [IsDomain
+实例 [是整环
   签名: R] (S
   定义体: isTorsionFree (LocalizedModule.mkLinearMap S M) S
 
@@ -4640,8 +4640,8 @@ abbreviation IsLocalizedModule.Away
   body: IsLocalizedModule (Submonoid.powers x) f
 
 中文:
-缩写 IsLocalizedModule.Away
-  签名: {R M M' : 类型} [CommSemiring R] (x : R) [AddCommMonoid M]
+缩写 是Localized模.Away
+  签名: {R M M' : 类型} [交换半环 R] (x : R) [加法交换幺半群 M]
   定义体: IsLocalizedModule (Submonoid.powers x) f
 -/
 protected abbrev IsLocalizedModule.Away {R M M' : Type*} [CommSemiring R] (x : R) [AddCommMonoid M]
@@ -4658,7 +4658,7 @@ abbreviation LocalizedModule.Away
 
 中文:
 缩写 LocalizedModule.Away
-  签名: {R : 类型} [CommSemiring R] (x : R)
+  签名: {R : 类型} [交换半环 R] (x : R)
   定义体: LocalizedModule (Submonoid.powers x) M
 -/
 protected abbrev LocalizedModule.Away {R : Type*} [CommSemiring R] (x : R)

@@ -32,8 +32,8 @@ instance Module.Finite.instDFinsupp
   Module.Finite.equiv DFinsupp.linearEquivFunOnFintype.symm
 
 中文:
-实例 Module.Finite.instDFinsupp
-  签名: : Module.Finite R (Π₀ (i : ι), M i)
+实例 模.有限.instDFinsupp
+  签名: : 模.有限 R (Π₀ (i : ι), M i)
   定义体: letI : Fintype ι := Fintype.ofFinite _
   Module.Finite.equiv DFinsupp.linearEquivFunOnFintype.symm
 
@@ -52,8 +52,8 @@ instance Module.Finite.instDirectSum
   body: Module.Finite.instDFinsupp M
 
 中文:
-实例 Module.Finite.instDirectSum
-  签名: : Module.Finite R (⨁ i, M i)
+实例 模.有限.instDirectSum
+  签名: : 模.有限 R (⨁ i, M i)
   定义体: Module.Finite.instDFinsupp M
 
 Depends on / 依赖: Finite, Module, Module.Finite.instDFinsupp, instDFinsupp

@@ -87,7 +87,7 @@ theorem exponent_eq_one_iff
 
 中文:
 定理 exponent_eq_one_iff
-  结论: exponent θ = 1 ↔ Algebra.adjoin 整数 {θ} = ⊤
+  结论: exponent θ = 1 ↔ 代数.adjoin 整数 {θ} = ⊤
   证明: by
   rw [exponent]; rw [absNorm_eq_one_iff]; rw [comap_eq_top_iff]; rw [conductor_eq_top_iff_adjoin_eq_top]
 
@@ -108,7 +108,7 @@ exact isMaximal_def.mp I
 
 中文:
 定理 not_dvd_exponent_iff
-  条件: {p : 自然数} [Fact (自然数.Prime p)]
+  条件: {p : 自然数} [Fact (自然数.素 p)]
   证明: by
   rw [codisjoint_comm]; rw [← IsCoatom.not_le_iff_codisjoint]; rw [← under_def]; rw [← Ideal.dvd_iff_le]; rw [← Int.ideal_span_absNorm_eq_self (under Int (conductor Int θ))]; rw [Ideal.span_singleton_dvd_span_singleton_iff_dvd]; rw [Int.natCast_dvd_natCast]; rw [exponent]
 exact isMaximal_def.mp I
@@ -218,7 +218,7 @@ abbreviation monicFactorsMod
 
 中文:
 缩写 monicFactorsMod
-  签名: : Finset ((ZMod p)[X])
+  签名: : 有限集 ((ZMod p)[X])
   定义体: (normalizedFactors (map (Int.castRingHom (ZMod p)) (minpoly Int θ))).toFinset
 
 Depends on / 依赖: Int.castRingHom, castRingHom, minpoly, normalizedFactors, toFinset

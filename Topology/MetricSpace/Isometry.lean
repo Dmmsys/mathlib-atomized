@@ -44,8 +44,8 @@ definition Isometry
   body: forall x1 x2 : α, edist (f x1) (f x2) = edist x1 x2
 
 中文:
-定义 Isometry
-  签名: [PseudoEMetricSpace α] [PseudoEMetricSpace β] (f : α -> β)
+定义 等距
+  签名: [PseudoEMetric空间 α] [PseudoEMetric空间 β] (f : α -> β)
   定义体: forall x1 x2 : α, edist (f x1) (f x2) = edist x1 x2
 -/
 def Isometry [PseudoEMetricSpace α] [PseudoEMetricSpace β] (f : α -> β) : Prop :=
@@ -62,7 +62,7 @@ theorem isometry_iff_nndist_eq
 
 中文:
 定理 isometry_iff_nndist_eq
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] {f : α -> β}
+  条件: [伪度量空间 α] [伪度量空间 β] {f : α -> β}
   证明: by
   simp only [Isometry, edist_nndist, ENNReal.coe_inj]
 
@@ -83,7 +83,7 @@ theorem isometry_iff_dist_eq
 
 中文:
 定理 isometry_iff_dist_eq
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] {f : α -> β}
+  条件: [伪度量空间 α] [伪度量空间 β] {f : α -> β}
   证明: by
   simp only [isometry_iff_nndist_eq, ← coe_nndist, NNReal.coe_inj]
 
@@ -123,7 +123,7 @@ theorem edist_eq
 
 中文:
 定理 edist_eq
-  条件: (hf : Isometry f) (x y : α)
+  条件: (hf : 等距 f) (x y : α)
   结论: edist (f x) (f y) = edist x y
   证明: hf x y
 -/
@@ -141,7 +141,7 @@ theorem lipschitz
 
 中文:
 定理 lipschitz
-  条件: (h : Isometry f)
+  条件: (h : 等距 f)
   结论: LipschitzWith 1 f
   证明: LipschitzWith.of_edist_le fun x y => (h x y).le
 
@@ -162,7 +162,7 @@ theorem antilipschitz
 
 中文:
 定理 antilipschitz
-  条件: (h : Isometry f)
+  条件: (h : 等距 f)
   结论: AntilipschitzWith 1 f
   证明: fun x y => by
   simp only [h x y, ENNReal.coe_one, one_mul, le_refl]
@@ -186,8 +186,8 @@ theorem _root_.isometry_subsingleton
 
 中文:
 定理 _root_.isometry_subsingleton
-  条件: [Subsingleton α]
-  结论: Isometry f
+  条件: [子单例 α]
+  结论: 等距 f
   证明: fun x y => by
   rw [Subsingleton.elim x y]; simp
 
@@ -206,7 +206,7 @@ theorem _root_.isometry_id
 
 中文:
 定理 _root_.isometry_id
-  结论: Isometry (id : α -> α)
+  结论: 等距 (id : α -> α)
   证明: fun _ _ => rfl
 -/
 theorem _root_.isometry_id : Isometry (id : α -> α) := fun _ _ => rfl
@@ -222,7 +222,7 @@ theorem prodMap
 
 中文:
 定理 prodMap
-  结论: {δ} [PseudoEMetricSpace δ] {f : α -> β} {g : γ -> δ} (hf : Isometry f)
+  结论: {δ} [PseudoEMetric空间 δ] {f : α -> β} {g : γ -> δ} (hf : 等距 f)
   证明: fun x y => by
   simp only [Prod.edist_eq, Prod.map_fst, hf.edist_eq, Prod.map_snd, hg.edist_eq]
 
@@ -243,7 +243,7 @@ theorem piMap
 
 中文:
 定理 piMap
-  结论: {ι} [Fintype ι] {α β : ι -> 类型} [对任意 i, PseudoEMetricSpace (α i)]
+  结论: {ι} [有限类型 ι] {α β : ι -> 类型} [对任意 i, PseudoEMetric空间 (α i)]
   证明: fun x y => by
   simp only [edist_pi_def, (hf _).edist_eq, Pi.map_apply]
 -/
@@ -268,7 +268,7 @@ lemma single
 
 中文:
 引理 single
-  结论: [Fintype ι] [DecidableEq ι] {E : ι -> 类型} [对任意 i, PseudoEMetricSpace (E i)]
+  结论: [有限类型 ι] [DecidableEq ι] {E : ι -> 类型} [对任意 i, PseudoEMetric空间 (E i)]
   证明: by
   intro x y
   rw [edist_pi_def]
@@ -301,8 +301,8 @@ lemma inl
 
 中文:
 引理 inl
-  条件: [AddZeroClass α] [AddZeroClass β]
-  结论: Isometry (AddMonoidHom.inl α β)
+  条件: [加法零类 α] [加法零类 β]
+  结论: 等距 (加法幺半群态射.inl α β)
   证明: by
   intro x y
   rw [Prod.edist_eq]
@@ -327,8 +327,8 @@ lemma inr
 
 中文:
 引理 inr
-  条件: [AddZeroClass α] [AddZeroClass β]
-  结论: Isometry (AddMonoidHom.inr α β)
+  条件: [加法零类 α] [加法零类 β]
+  结论: 等距 (加法幺半群态射.inr α β)
   证明: by
   intro x y
   rw [Prod.edist_eq]
@@ -352,8 +352,8 @@ omit [PseudoEMetricSpace α] in
 
 中文:
 定理 comp
-  条件: {g : β -> γ} {f : α -> β} (hg : Isometry g) (hf : Isometry f)
-  结论: Isometry (g ∘ f)
+  条件: {g : β -> γ} {f : α -> β} (hg : 等距 g) (hf : 等距 f)
+  结论: 等距 (g ∘ f)
   证明: fun _ _ => (hg _ _).trans (hf _ _)
 
 omit [PseudoEMetricSpace α] in
@@ -373,8 +373,8 @@ lemma postcomp_pi
 
 中文:
 引理 postcomp_pi
-  条件: [Fintype α] {g : β -> γ} (hg : Isometry g)
-  结论: Isometry (fun f : α -> β => g ∘ f)
+  条件: [有限类型 α] {g : β -> γ} (hg : 等距 g)
+  结论: 等距 (fun f : α -> β => g ∘ f)
   证明: fun _ _ => by simp [edist_pi_def, hg.edist_eq]
 
 Depends on / 依赖: edist_eq, edist_pi_def, hg.edist_eq
@@ -393,8 +393,8 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  条件: (hf : Isometry f)
-  结论: UniformContinuous f
+  条件: (hf : 等距 f)
+  结论: 一致连续 f
   证明: hf.lipschitz.uniformContinuous
 -/
 protected theorem uniformContinuous (hf : Isometry f) : UniformContinuous f :=
@@ -411,8 +411,8 @@ theorem isUniformInducing
 
 中文:
 定理 isUniformInducing
-  条件: (hf : Isometry f)
-  结论: IsUniformInducing f
+  条件: (hf : 等距 f)
+  结论: 是UniformInducing f
   证明: hf.antilipschitz.isUniformInducing hf.uniformContinuous
 
 Depends on / 依赖: antilipschitz, hf.antilipschitz.isUniformInducing, hf.uniformContinuous, isUniformInducing, uniformContinuous
@@ -430,7 +430,7 @@ theorem tendsto_nhds_iff
 
 中文:
 定理 tendsto_nhds_iff
-  结论: {ι : 类型} {f : α -> β} {g : ι -> α} {a : Filter ι} {b : α}
+  结论: {ι : 类型} {f : α -> β} {g : ι -> α} {a : 滤子 ι} {b : α}
   证明: hf.isUniformInducing.isInducing.tendsto_nhds_iff
 
 Depends on / 依赖: hf.isUniformInducing.isInducing.tendsto_nhds_iff, isInducing, isUniformInducing, tendsto_nhds_iff
@@ -450,8 +450,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (hf : Isometry f)
-  结论: Continuous f
+  条件: (hf : 等距 f)
+  结论: 连续 f
   证明: hf.lipschitz.continuous
 -/
 protected theorem continuous (hf : Isometry f) : Continuous f :=
@@ -468,8 +468,8 @@ theorem right_inv
 
 中文:
 定理 right_inv
-  条件: {f : α -> β} {g : β -> α} (h : Isometry f) (hg : RightInverse g f)
-  结论: Isometry g
+  条件: {f : α -> β} {g : β -> α} (h : 等距 f) (hg : 右逆 g f)
+  结论: 等距 g
   证明: fun x y => by rw [← h, hg _, hg _]
 -/
 theorem right_inv {f : α -> β} {g : β -> α} (h : Isometry f) (hg : RightInverse g f) : Isometry g :=
@@ -490,7 +490,7 @@ alias preimage_emetric_closedBall := preimage_closedEBall
 
 中文:
 定理 preimage_closedEBall
-  条件: (h : Isometry f) (x : α) (r : 实数>=0∞)
+  条件: (h : 等距 f) (x : α) (r : 实数>=0∞)
   证明: by
   ext y
   simp [h.edist_eq]
@@ -523,7 +523,7 @@ alias preimage_emetric_ball := preimage_eball
 
 中文:
 定理 preimage_eball
-  条件: (h : Isometry f) (x : α) (r : 实数>=0∞)
+  条件: (h : 等距 f) (x : α) (r : 实数>=0∞)
   证明: by
   ext y
   simp [h.edist_eq]
@@ -552,7 +552,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (hf : Isometry f) (s : Set α)
+  条件: (hf : 等距 f) (s : 集合 α)
   结论: Metric.ediam (f '' s) = Metric.ediam s
   证明: eq_of_forall_ge_iff fun d => by simp only [Metric.ediam_le_iff, forall_mem_image, hf.edist_eq]
 
@@ -574,8 +574,8 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  条件: (hf : Isometry f)
-  结论: Metric.ediam (range f) = Metric.ediam (univ : Set α)
+  条件: (hf : 等距 f)
+  结论: Metric.ediam (range f) = Metric.ediam (univ : 集合 α)
   证明: by
   rw [← image_univ]
   exact hf.ediam_image univ
@@ -599,7 +599,7 @@ alias mapsTo_emetric_ball := mapsTo_eball
 
 中文:
 定理 mapsTo_eball
-  条件: (hf : Isometry f) (x : α) (r : 实数>=0∞)
+  条件: (hf : 等距 f) (x : α) (r : 实数>=0∞)
   证明: (hf.preimage_eball x r).ge
 
 @[deprecated (since := "2026-01-24")]
@@ -627,7 +627,7 @@ alias mapsTo_emetric_closedBall := mapsTo_closedEBall
 
 中文:
 定理 mapsTo_closedEBall
-  条件: (hf : Isometry f) (x : α) (r : 实数>=0∞)
+  条件: (hf : 等距 f) (x : α) (r : 实数>=0∞)
   证明: (hf.preimage_closedEBall x r).ge
 
 @[deprecated (since := "2026-01-24")]
@@ -653,8 +653,8 @@ theorem _root_.isometry_subtype_coe
 
 中文:
 定理 _root_.isometry_subtype_coe
-  条件: {s : Set α}
-  结论: Isometry ((↑) : s -> α)
+  条件: {s : 集合 α}
+  结论: 等距 ((↑) : s -> α)
   证明: fun _ _ => rfl
 -/
 theorem _root_.isometry_subtype_coe {s : Set α} : Isometry ((↑) : s -> α) := fun _ _ => rfl
@@ -668,8 +668,8 @@ theorem _root_.NNReal.isometry_coe
   proof: fun _ _ => rfl
 
 中文:
-定理 _root_.NNReal.isometry_coe
-  结论: Isometry ((↑) : NN实数 -> 实数)
+定理 _root_.非负实数.isometry_coe
+  结论: 等距 ((↑) : 非负实数 -> 实数)
   证明: fun _ _ => rfl
 -/
 theorem _root_.NNReal.isometry_coe : Isometry ((↑) : NNReal -> Real) := fun _ _ => rfl
@@ -684,7 +684,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: {γ} [TopologicalSpace γ] (hf : Isometry f) {g : γ -> α} {s : Set γ}
+  条件: {γ} [拓扑空间 γ] (hf : 等距 f) {g : γ -> α} {s : 集合 γ}
   证明: hf.isUniformInducing.isInducing.continuousOn_iff.symm
 
 Depends on / 依赖: continuousOn_iff, hf.isUniformInducing.isInducing.continuousOn_iff.symm, isInducing, isUniformInducing
@@ -703,7 +703,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {γ} [TopologicalSpace γ] (hf : Isometry f) {g : γ -> α}
+  条件: {γ} [拓扑空间 γ] (hf : 等距 f) {g : γ -> α}
   证明: hf.isUniformInducing.isInducing.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, hf.isUniformInducing.isInducing.continuous_iff.symm, isInducing, isUniformInducing
@@ -730,8 +730,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: (h : Isometry f)
-  结论: Injective f
+  条件: (h : 等距 f)
+  结论: 单射 f
   证明: h.antilipschitz.injective
 -/
 protected theorem injective (h : Isometry f) : Injective f :=
@@ -748,8 +748,8 @@ lemma isUniformEmbedding
 
 中文:
 引理 isUniformEmbedding
-  条件: (hf : Isometry f)
-  结论: IsUniformEmbedding f
+  条件: (hf : 等距 f)
+  结论: 是一致嵌入 f
   证明: hf.antilipschitz.isUniformEmbedding hf.lipschitz.uniformContinuous
 
 Depends on / 依赖: antilipschitz, hf.antilipschitz.isUniformEmbedding, hf.lipschitz.uniformContinuous, isUniformEmbedding, lipschitz, uniformContinuous
@@ -768,8 +768,8 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: (hf : Isometry f)
-  结论: IsEmbedding f
+  条件: (hf : 等距 f)
+  结论: 是嵌入 f
   证明: hf.isUniformEmbedding.isEmbedding
 
 Depends on / 依赖: hf.isUniformEmbedding.isEmbedding, isEmbedding, isUniformEmbedding
@@ -786,7 +786,7 @@ theorem isClosedEmbedding
 
 中文:
 定理 isClosedEmbedding
-  条件: [CompleteSpace α] [EMetricSpace γ] {f : α -> γ} (hf : Isometry f)
+  条件: [完备空间 α] [广义度量空间 γ] {f : α -> γ} (hf : 等距 f)
   证明: hf.antilipschitz.isClosedEmbedding hf.lipschitz.uniformContinuous
 
 Depends on / 依赖: antilipschitz, hf.antilipschitz.isClosedEmbedding, hf.lipschitz.uniformContinuous, isClosedEmbedding, lipschitz, uniformContinuous
@@ -814,7 +814,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (hf : Isometry f) (s : Set α)
+  条件: (hf : 等距 f) (s : 集合 α)
   结论: Metric.diam (f '' s) = Metric.diam s
   证明: by
   rw [Metric.diam]; rw [Metric.diam]; rw [hf.ediam_image]
@@ -837,8 +837,8 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  条件: (hf : Isometry f)
-  结论: Metric.diam (range f) = Metric.diam (univ : Set α)
+  条件: (hf : 等距 f)
+  结论: Metric.diam (range f) = Metric.diam (univ : 集合 α)
   证明: by
   rw [← image_univ]
   exact hf.diam_image univ
@@ -862,7 +862,7 @@ theorem preimage_setOfPred_dist
 
 中文:
 定理 preimage_setOfPred_dist
-  条件: (hf : Isometry f) (x : α) (p : 实数 -> 命题)
+  条件: (hf : 等距 f) (x : α) (p : 实数 -> 命题)
   证明: by
   simp [hf.dist_eq]
 
@@ -886,7 +886,7 @@ theorem preimage_closedBall
 
 中文:
 定理 preimage_closedBall
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: hf.preimage_setOfPred_dist x (· <= r)
 
 Depends on / 依赖: hf.preimage_setOfPred_dist, preimage_setOfPred_dist
@@ -905,7 +905,7 @@ theorem preimage_ball
 
 中文:
 定理 preimage_ball
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: hf.preimage_setOfPred_dist x (· < r)
 
 Depends on / 依赖: hf.preimage_setOfPred_dist, preimage_setOfPred_dist
@@ -924,7 +924,7 @@ theorem preimage_sphere
 
 中文:
 定理 preimage_sphere
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: hf.preimage_setOfPred_dist x (· = r)
 
 Depends on / 依赖: hf.preimage_setOfPred_dist, preimage_setOfPred_dist
@@ -943,7 +943,7 @@ theorem mapsTo_ball
 
 中文:
 定理 mapsTo_ball
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: (hf.preimage_ball x r).ge
 
 Depends on / 依赖: hf.preimage_ball, preimage_ball
@@ -962,7 +962,7 @@ theorem mapsTo_sphere
 
 中文:
 定理 mapsTo_sphere
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: (hf.preimage_sphere x r).ge
 
 Depends on / 依赖: hf.preimage_sphere, preimage_sphere
@@ -981,7 +981,7 @@ theorem mapsTo_closedBall
 
 中文:
 定理 mapsTo_closedBall
-  条件: (hf : Isometry f) (x : α) (r : 实数)
+  条件: (hf : 等距 f) (x : α) (r : 实数)
   证明: (hf.preimage_closedBall x r).ge
 
 Depends on / 依赖: hf.preimage_closedBall, preimage_closedBall
@@ -1006,8 +1006,8 @@ theorem IsUniformEmbedding.to_isometry
   Isometry.of_dist_eq fun _ _ => rfl
 
 中文:
-定理 IsUniformEmbedding.to_isometry
-  结论: {α β} [UniformSpace α] [MetricSpace β] {f : α -> β}
+定理 是一致嵌入.to_isometry
+  结论: {α β} [一致空间 α] [度量空间 β] {f : α -> β}
   证明: let _ := h.comapMetricSpace f
   Isometry.of_dist_eq fun _ _ => rfl
 
@@ -1028,8 +1028,8 @@ theorem Topology.IsEmbedding.to_isometry
   Isometry.of_dist_eq fun _ _ => rfl
 
 中文:
-定理 Topology.IsEmbedding.to_isometry
-  结论: {α β} [TopologicalSpace α] [PseudoMetricSpace β]
+定理 拓扑.是嵌入.to_isometry
+  结论: {α β} [拓扑空间 α] [伪度量空间 β]
   证明: let _ := h.comapPseudoMetricSpace
   Isometry.of_dist_eq fun _ _ => rfl
 
@@ -1049,8 +1049,8 @@ theorem PseudoEMetricSpace.isometry_induced
   proof: m.induced f; Isometry f := fun _ _ => rfl
 
 中文:
-定理 PseudoEMetricSpace.isometry_induced
-  条件: (f : α -> β) [m : PseudoEMetricSpace β]
+定理 PseudoEMetric空间.isometry_induced
+  条件: (f : α -> β) [m : PseudoEMetric空间 β]
   证明: m.induced f; Isometry f := fun _ _ => rfl
 
 Depends on / 依赖: Isometry, induced, m.induced
@@ -1067,8 +1067,8 @@ theorem PseudoMetricSpace.isometry_induced
   proof: m.induced f; Isometry f := fun _ _ => rfl
 
 中文:
-定理 PseudoMetricSpace.isometry_induced
-  条件: (f : α -> β) [m : PseudoMetricSpace β]
+定理 伪度量空间.isometry_induced
+  条件: (f : α -> β) [m : 伪度量空间 β]
   证明: m.induced f; Isometry f := fun _ _ => rfl
 
 Depends on / 依赖: Isometry, induced, m.induced
@@ -1085,8 +1085,8 @@ theorem EMetricSpace.isometry_induced
   proof: m.induced f hf; Isometry f := fun _ _ => rfl
 
 中文:
-定理 EMetricSpace.isometry_induced
-  条件: (f : α -> β) (hf : f.Injective) [m : EMetricSpace β]
+定理 广义度量空间.isometry_induced
+  条件: (f : α -> β) (hf : f.单射) [m : 广义度量空间 β]
   证明: m.induced f hf; Isometry f := fun _ _ => rfl
 
 Depends on / 依赖: Isometry, induced, m.induced
@@ -1103,8 +1103,8 @@ theorem MetricSpace.isometry_induced
   proof: m.induced f hf; Isometry f := fun _ _ => rfl
 
 中文:
-定理 MetricSpace.isometry_induced
-  条件: (f : α -> β) (hf : f.Injective) [m : MetricSpace β]
+定理 度量空间.isometry_induced
+  条件: (f : α -> β) (hf : f.单射) [m : 度量空间 β]
   证明: m.induced f hf; Isometry f := fun _ _ => rfl
 
 Depends on / 依赖: Isometry, induced, m.induced
@@ -1122,10 +1122,10 @@ class IsometryClass
     - isometry((f : F)) : Isometry f
 
 中文:
-类 IsometryClass
+类 等距类
   参数: (F : 类型) (α β : outParam 类型)
   公理与运算 (1 个):
-    - isometry((f : F)) : Isometry f
+    - isometry((f : F)) : 等距 f
 -/
 class IsometryClass (F : Type*) (α β : outParam Type*)
     [PseudoEMetricSpace α] [PseudoEMetricSpace β] [FunLike F α β] : Prop where
@@ -1167,7 +1167,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: (IsometryClass.isometry f).continuous
 -/
 protected theorem continuous : Continuous f :=
@@ -1216,7 +1216,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Metric.ediam (f '' s) = Metric.ediam s
   证明: (IsometryClass.isometry f).ediam_image s
 
@@ -1235,7 +1235,7 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  结论: Metric.ediam (range f) = Metric.ediam (univ : Set α)
+  结论: Metric.ediam (range f) = Metric.ediam (univ : 集合 α)
   证明: (IsometryClass.isometry f).ediam_range
 
 Depends on / 依赖: IsometryClass, IsometryClass.isometry, ediam_range, isometry
@@ -1253,7 +1253,7 @@ instance toContinuousMapClass
 
 中文:
 实例 toContinuousMapClass
-  签名: : ContinuousMapClass F α β where
+  签名: : 连续映射类 F α β where
   定义体: IsometryClass.continuous
 
 Depends on / 依赖: IsometryClass, IsometryClass.continuous, continuous
@@ -1274,7 +1274,7 @@ instance toHomeomorphClass
 
 中文:
 实例 toHomeomorphClass
-  签名: [EquivLike F α β] [IsometryClass F α β]
+  签名: [等价状 F α β] [等距类 F α β]
   定义体: IsometryClass.continuous
   inv_continuous f := ((IsometryClass.isometry f).right_inv (EquivLike.right_inv f)).continuous
 
@@ -1336,7 +1336,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Metric.diam (f '' s) = Metric.diam s
   证明: (IsometryClass.isometry f).diam_image s
 
@@ -1355,7 +1355,7 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  结论: Metric.diam (range f) = Metric.diam (univ : Set α)
+  结论: Metric.diam (range f) = Metric.diam (univ : 集合 α)
   证明: (IsometryClass.isometry f).diam_range
 
 Depends on / 依赖: IsometryClass, IsometryClass.isometry, diam_range, isometry
@@ -1379,11 +1379,11 @@ structure IsometryEquiv
     - isometry_toFun : Isometry toFun
 
 中文:
-结构 IsometryEquiv
-  参数: (α : 类型u) (β : 类型v) [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+结构 等距等价
+  参数: (α : 类型u) (β : 类型v) [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   继承: α ≃ β
   公理与运算 (1 个):
-    - isometry_toFun : Isometry toFun
+    - isometry_toFun : 等距 toFun
 -/
 structure IsometryEquiv (α : Type u) (β : Type v) [PseudoEMetricSpace α] [PseudoEMetricSpace β]
     extends α ≃ β where
@@ -1407,7 +1407,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Injective (toEquiv : (α ≃ᵢ β) -> (α ≃ β))
+  结论: 单射 (toEquiv : (α ≃ᵢ β) -> (α ≃ β))
 -/
 theorem toEquiv_injective : Injective (toEquiv : (α ≃ᵢ β) -> (α ≃ β))
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -1444,7 +1444,7 @@ coe_injective' _ _ h _ := toEquiv_injective DFunLike.ext' h
 
 中文:
 实例 :
-  签名: EquivLike (α ≃ᵢ β) α β
+  签名: 等价状 (α ≃ᵢ β) α β
   定义体: e.toEquiv
   inv e := e.toEquiv.symm
   left_inv e := e.left_inv
@@ -1470,7 +1470,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsometryClass (IsometryEquiv α β) α β
+  签名: 等距类 (等距等价 α β) α β
   定义体: isometry_toFun
 
 Depends on / 依赖: isometry_toFun
@@ -1541,7 +1541,7 @@ theorem isometry
 中文:
 定理 isometry
   条件: (h : α ≃ᵢ β)
-  结论: Isometry h
+  结论: 等距 h
   证明: h.isometry_toFun
 -/
 protected theorem isometry (h : α ≃ᵢ β) : Isometry h :=
@@ -1559,7 +1559,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (h : α ≃ᵢ β)
-  结论: Bijective h
+  结论: 双射 h
   证明: h.toEquiv.bijective
 -/
 protected theorem bijective (h : α ≃ᵢ β) : Bijective h :=
@@ -1577,7 +1577,7 @@ theorem injective
 中文:
 定理 injective
   条件: (h : α ≃ᵢ β)
-  结论: Injective h
+  结论: 单射 h
   证明: h.toEquiv.injective
 -/
 protected theorem injective (h : α ≃ᵢ β) : Injective h :=
@@ -1595,7 +1595,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (h : α ≃ᵢ β)
-  结论: Surjective h
+  结论: 满射 h
   证明: h.toEquiv.surjective
 -/
 protected theorem surjective (h : α ≃ᵢ β) : Surjective h :=
@@ -1629,7 +1629,7 @@ theorem dist_eq
 
 中文:
 定理 dist_eq
-  结论: {α β : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β] (h : α ≃ᵢ β)
+  结论: {α β : 类型} [伪度量空间 α] [伪度量空间 β] (h : α ≃ᵢ β)
   证明: h.isometry.dist_eq x y
 -/
 protected theorem dist_eq {α β : Type*} [PseudoMetricSpace α] [PseudoMetricSpace β] (h : α ≃ᵢ β)
@@ -1646,7 +1646,7 @@ theorem nndist_eq
 
 中文:
 定理 nndist_eq
-  结论: {α β : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β] (h : α ≃ᵢ β)
+  结论: {α β : 类型} [伪度量空间 α] [伪度量空间 β] (h : α ≃ᵢ β)
   证明: h.isometry.nndist_eq x y
 -/
 protected theorem nndist_eq {α β : Type*} [PseudoMetricSpace α] [PseudoMetricSpace β] (h : α ≃ᵢ β)
@@ -1667,7 +1667,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (h : α ≃ᵢ β)
-  结论: Continuous h
+  结论: 连续 h
   证明: h.isometry.continuous
 
 @[simp]
@@ -1689,7 +1689,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (h : α ≃ᵢ β) (s : Set α)
+  条件: (h : α ≃ᵢ β) (s : 集合 α)
   结论: Metric.ediam (h '' s) = Metric.ediam s
   证明: h.isometry.ediam_image s
 
@@ -1735,7 +1735,7 @@ left_inv _ := hf.injective hfg _
 
 中文:
 定义 mk'
-  签名: {α : 类型u} [EMetricSpace α] (f : α -> β) (g : β -> α) (hfg : 对任意 x, f (g x) = x)
+  签名: {α : 类型u} [广义度量空间 α] (f : α -> β) (g : β -> α) (hfg : 对任意 x, f (g x) = x)
   定义体: f
   invFun := g
 left_inv _ := hf.injective hfg _
@@ -1760,7 +1760,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (α : 类型) [PseudoEMetricSpace α]
+  签名: (α : 类型) [PseudoEMetric空间 α]
   定义体: { Equiv.refl α with isometry_toFun := isometry_id }
 -/
 protected def refl (α : Type*) [PseudoEMetricSpace α] : α ≃ᵢ α :=
@@ -1920,7 +1920,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Bijective (IsometryEquiv.symm : (α ≃ᵢ β) -> β ≃ᵢ α)
+  结论: 双射 (等距等价.symm : (α ≃ᵢ β) -> β ≃ᵢ α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2083,7 +2083,7 @@ theorem image_symm
 中文:
 定理 image_symm
   条件: (h : α ≃ᵢ β)
-  结论: image h.symm = preimage h
+  结论: 像 h.symm = 原像 h
   证明: image_eq_preimage_of_inverse h.symm.toEquiv.left_inv h.symm.toEquiv.right_inv
 
 Depends on / 依赖: h.symm.toEquiv.left_inv, h.symm.toEquiv.right_inv, image_eq_preimage_of_inverse, left_inv, right_inv, toEquiv
@@ -2105,7 +2105,7 @@ theorem preimage_symm
 中文:
 定理 preimage_symm
   条件: (h : α ≃ᵢ β)
-  结论: preimage h.symm = image h
+  结论: 原像 h.symm = 像 h
   证明: (image_eq_preimage_of_inverse h.toEquiv.left_inv h.toEquiv.right_inv).symm
 
 @[simp]
@@ -2148,7 +2148,7 @@ theorem ediam_univ
 中文:
 定理 ediam_univ
   条件: (h : α ≃ᵢ β)
-  结论: Metric.ediam (univ : Set α) = Metric.ediam (univ : Set β)
+  结论: Metric.ediam (univ : 集合 α) = Metric.ediam (univ : 集合 β)
   证明: by
   rw [← h.range_eq_univ]; rw [h.isometry.ediam_range]
 
@@ -2174,7 +2174,7 @@ theorem ediam_preimage
 
 中文:
 定理 ediam_preimage
-  条件: (h : α ≃ᵢ β) (s : Set β)
+  条件: (h : α ≃ᵢ β) (s : 集合 β)
   结论: Metric.ediam (h ⁻¹' s) = Metric.ediam s
   证明: by
   rw [← image_symm]; rw [ediam_image]
@@ -2409,7 +2409,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: {γ} [TopologicalSpace γ] (h : α ≃ᵢ β) {f : γ -> α} {s : Set γ}
+  条件: {γ} [拓扑空间 γ] (h : α ≃ᵢ β) {f : γ -> α} {s : 集合 γ}
   证明: h.toHomeomorph.comp_continuousOn_iff _ _
 
 @[simp]
@@ -2433,7 +2433,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {γ} [TopologicalSpace γ] (h : α ≃ᵢ β) {f : γ -> α}
+  条件: {γ} [拓扑空间 γ] (h : α ≃ᵢ β) {f : γ -> α}
   证明: h.toHomeomorph.comp_continuous_iff
 
 @[simp]
@@ -2455,7 +2455,7 @@ theorem comp_continuous_iff'
 
 中文:
 定理 comp_continuous_iff'
-  条件: {γ} [TopologicalSpace γ] (h : α ≃ᵢ β) {f : β -> γ}
+  条件: {γ} [拓扑空间 γ] (h : α ≃ᵢ β) {f : β -> γ}
   证明: h.toHomeomorph.comp_continuous_iff'
 
 Depends on / 依赖: comp_continuous_iff, h.toHomeomorph.comp_continuous_iff, toHomeomorph
@@ -2480,7 +2480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (α ≃ᵢ α)
+  签名: 群 (α ≃ᵢ α)
   定义体: IsometryEquiv.refl _
   mul e₁ e₂ := e₂.trans e₁
   inv := IsometryEquiv.symm
@@ -2597,7 +2597,7 @@ theorem completeSpace_iff
 中文:
 定理 completeSpace_iff
   条件: (e : α ≃ᵢ β)
-  结论: CompleteSpace α ↔ CompleteSpace β
+  结论: 完备空间 α ↔ 完备空间 β
   证明: by
   simp only [completeSpace_iff_isComplete_univ, ← e.range_eq_univ, ← image_univ,
     isComplete_image_iff e.isometry.isUniformInducing]
@@ -2619,8 +2619,8 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  条件: [CompleteSpace β] (e : α ≃ᵢ β)
-  结论: CompleteSpace α
+  条件: [完备空间 β] (e : α ≃ᵢ β)
+  结论: 完备空间 α
   证明: e.completeSpace_iff.2 ‹_›
 -/
 protected theorem completeSpace [CompleteSpace β] (e : α ≃ᵢ β) : CompleteSpace α :=
@@ -2644,7 +2644,7 @@ definition piCongrLeft'
 
 中文:
 定义 piCongrLeft'
-  签名: {ι' : 类型} [Fintype ι] [Fintype ι'] {Y : ι -> 类型}
+  签名: {ι' : 类型} [有限类型 ι] [有限类型 ι'] {Y : ι -> 类型}
   定义体: Equiv.piCongrLeft' _ e
   isometry_toFun x1 x2 := by
     simp_rw [edist_pi_def, Finset.sup_univ_eq_iSup]
@@ -2677,7 +2677,7 @@ definition piCongrLeft
 
 中文:
 定义 piCongrLeft
-  签名: {ι' : 类型} [Fintype ι] [Fintype ι'] {Y : ι' -> 类型}
+  签名: {ι' : 类型} [有限类型 ι] [有限类型 ι'] {Y : ι' -> 类型}
   定义体: (piCongrLeft' e.symm).symm
 
 Depends on / 依赖: e.symm, piCongrLeft
@@ -2703,7 +2703,7 @@ definition sumArrowIsometryEquivProdArrow
 
 中文:
 定义 sumArrowIsometryEquivProdArrow
-  签名: [Fintype α] [Fintype β]
+  签名: [有限类型 α] [有限类型 β]
   定义体: Equiv.sumArrowEquivProdArrow _ _ _
   isometry_toFun _ _ := by simp [Prod.edist_eq, edist_pi_def, Finset.sup_univ_eq_iSup, iSup_sum]
 
@@ -2726,7 +2726,7 @@ theorem sumArrowIsometryEquivProdArrow_toHomeomorph
 
 中文:
 定理 sumArrowIsometryEquivProdArrow_toHomeomorph
-  条件: {α β : 类型} [Fintype α] [Fintype β]
+  条件: {α β : 类型} [有限类型 α] [有限类型 β]
   证明: rfl
 -/
 theorem sumArrowIsometryEquivProdArrow_toHomeomorph {α β : Type*} [Fintype α] [Fintype β] :
@@ -2745,8 +2745,8 @@ theorem _root_.Fin.edist_append_eq_max_edist
     iSup_sum]
 
 中文:
-定理 _root_.Fin.edist_append_eq_max_edist
-  条件: (m n : 自然数) {x x2 : Fin m -> α} {y y2 : Fin n -> α}
+定理 _root_.有限集.edist_append_eq_max_edist
+  条件: (m n : 自然数) {x x2 : 有限集 m -> α} {y y2 : 有限集 n -> α}
   证明: by
   simp [edist_pi_def, Finset.sup_univ_eq_iSup, ← Equiv.iSup_comp (e := finSumFinEquiv),
     iSup_sum]
@@ -2773,7 +2773,7 @@ definition _root_.Fin.appendIsometry
 @[simp]
 
 中文:
-定义 _root_.Fin.appendIsometry
+定义 _root_.有限集.appendIsometry
   签名: (m n : 自然数)
   定义体: Fin.appendEquiv _ _
   isometry_toFun _ _ := by simp_rw [Fin.appendEquiv, Fin.edist_append_eq_max_edist, Prod.edist_eq]
@@ -2798,7 +2798,7 @@ theorem _root_.Fin.appendIsometry_toHomeomorph
 #adaptation_note
 
 中文:
-定理 _root_.Fin.appendIsometry_toHomeomorph
+定理 _root_.有限集.appendIsometry_toHomeomorph
   条件: (m n : 自然数)
   证明: rfl
 
@@ -2822,7 +2822,7 @@ definition _root_.Fin.appendIsometryOfEq
   body: (Fin.appendIsometry m l).trans (IsometryEquiv.piCongrLeft (Y := fun _ => α) (finCongr hmln))
 
 中文:
-定义 _root_.Fin.appendIsometryOfEq
+定义 _root_.有限集.appendIsometryOfEq
   签名: {n m l : 自然数} (hmln : m + l = n)
   定义体: (Fin.appendIsometry m l).trans (IsometryEquiv.piCongrLeft (Y := fun _ => α) (finCongr hmln))
 
@@ -2847,7 +2847,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: [Unique ι] [Fintype ι]
+  签名: [唯一 ι] [有限类型 ι]
   定义体: Equiv.funUnique ι α
   isometry_toFun x hx := by simp [edist_pi_def, Finset.univ_unique, Finset.sup_singleton]
 
@@ -2870,7 +2870,7 @@ definition piFinTwo
 
 中文:
 定义 piFinTwo
-  签名: (α : Fin 2 -> 类型) [对任意 i, PseudoEMetricSpace (α i)]
+  签名: (α : 有限集 2 -> 类型) [对任意 i, PseudoEMetric空间 (α i)]
   定义体: piFinTwoEquiv α
   isometry_toFun x hx := by simp [edist_pi_def, Fin.univ_succ, Prod.edist_eq]
 
@@ -2900,7 +2900,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Metric.diam (h '' s) = Metric.diam s
   证明: h.isometry.diam_image s
 
@@ -2926,7 +2926,7 @@ include h in
 
 中文:
 定理 diam_preimage
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: Metric.diam (h ⁻¹' s) = Metric.diam s
   证明: by
   rw [← image_symm]; rw [diam_image]
@@ -2951,7 +2951,7 @@ theorem diam_univ
 
 中文:
 定理 diam_univ
-  结论: Metric.diam (univ : Set α) = Metric.diam (univ : Set β)
+  结论: Metric.diam (univ : 集合 α) = Metric.diam (univ : 集合 β)
   证明: congr_arg ENNReal.toReal h.ediam_univ
 
 @[simp]
@@ -3131,8 +3131,8 @@ definition Isometry.isometryEquivOnRange
   toEquiv := Equiv.ofInjective f h.injective
 
 中文:
-定义 Isometry.isometryEquivOnRange
-  签名: [EMetricSpace α] [PseudoEMetricSpace β] {f : α -> β}
+定义 等距.isometryEquivOnRange
+  签名: [广义度量空间 α] [PseudoEMetric空间 β] {f : α -> β}
   定义体: h
   toEquiv := Equiv.ofInjective f h.injective
 -/
@@ -3152,8 +3152,8 @@ lemma Isometry.lipschitzWith_iff
   simp [LipschitzWith, h.edist_eq]
 
 中文:
-引理 Isometry.lipschitzWith_iff
-  结论: {α β γ : 类型} [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+引理 等距.lipschitzWith_iff
+  结论: {α β γ : 类型} [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   simp [LipschitzWith, h.edist_eq]
 
@@ -3242,7 +3242,7 @@ theorem toIsometryEquiv_injective
 
 中文:
 定理 toIsometryEquiv_injective
-  结论: Function.Injective ((↑) : F -> α ≃ᵢ β)
+  结论: 函数.单射 ((↑) : F -> α ≃ᵢ β)
   证明: fun _ _ e => DFunLike.ext _ _ fun a => DFunLike.congr_fun e a
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext, congr_fun

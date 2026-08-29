@@ -57,7 +57,7 @@ scoped[MeasureTheory] infixl:50 " ≪ " => MeasureTheory.Measure.AbsolutelyConti
 
 中文:
 定义 AbsolutelyContinuous
-  签名: {_m0 : MeasurableSpace α} (μ ν : Measure α)
+  签名: {_m0 : 可测空间 α} (μ ν : 测度 α)
   定义体: forall ⦃s : Set α⦄, ν s = 0 -> μ s = 0
 
 @[inherit_doc MeasureTheory.Measure.AbsolutelyContinuous]
@@ -139,7 +139,7 @@ theorem mk
 
 中文:
 定理 mk
-  条件: (h : 对任意 ⦃s : Set α⦄, MeasurableSet s -> ν s = 0 -> μ s = 0)
+  条件: (h : 对任意 ⦃s : 集合 α⦄, 可测集 s -> ν s = 0 -> μ s = 0)
   结论: μ ≪ ν
   证明: by
   intro s hs
@@ -167,7 +167,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: {_m0 : MeasurableSpace α} (μ : Measure α)
+  条件: {_m0 : 可测空间 α} (μ : 测度 α)
   结论: μ ≪ μ
   证明: rfl.absolutelyContinuous
 -/
@@ -201,7 +201,7 @@ instance instRefl
 
 中文:
 实例 instRefl
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: ⟨fun _ => AbsolutelyContinuous.rfl⟩
 
 @[simp]
@@ -225,7 +225,7 @@ lemma zero
 
 中文:
 引理 zero
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: 0 ≪ μ
   证明: fun _ _ => by simp
 
@@ -267,7 +267,7 @@ theorem map
 
 中文:
 定理 map
-  条件: (h : μ ≪ ν) {f : α -> β} (hf : Measurable f)
+  条件: (h : μ ≪ ν) {f : α -> β} (hf : 可测 f)
   结论: μ.map f ≪ ν.map f
   证明: AbsolutelyContinuous.mk fun s hs => by simpa [hf, hs] using @h _
 -/
@@ -285,7 +285,7 @@ theorem smul_left
 
 中文:
 定理 smul_left
-  条件: [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
+  条件: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
   证明: fun s hνs => by
   simp only [h hνs, smul_apply, smul_zero, ← smul_one_smul Real>=0∞ c (0 : Real>=0∞)]
 -/
@@ -306,7 +306,7 @@ theorem smul
 
 中文:
 定理 smul
-  条件: [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
+  条件: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
   证明: by
   intro s hνs
   rw [smul_apply]; rw [← smul_one_smul Real>=0∞]; rw [smul_eq_mul]; rw [mul_eq_zero] at hνs ⊢
@@ -359,7 +359,7 @@ lemma add_left_iff
 
 中文:
 引理 add_left_iff
-  条件: {μ₁ μ₂ ν : Measure α}
+  条件: {μ₁ μ₂ ν : 测度 α}
   证明: by
   refine ⟨fun h => ?_, fun h => (h.1.add h.2).trans ?_⟩
   · have : forall s, ν s = 0 -> μ₁ s = 0 ∧ μ₂ s = 0 := by intro s hs0; simpa using h hs0
@@ -388,7 +388,7 @@ lemma add_left
 
 中文:
 引理 add_left
-  条件: {μ₁ μ₂ ν : Measure α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν)
+  条件: {μ₁ μ₂ ν : 测度 α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν)
   结论: μ₁ + μ₂ ≪ ν
   证明: Measure.AbsolutelyContinuous.add_left_iff.mpr ⟨h₁, h₂⟩
 
@@ -411,7 +411,7 @@ lemma add_right
 
 中文:
 引理 add_right
-  条件: (h1 : μ ≪ ν) (ν' : Measure α)
+  条件: (h1 : μ ≪ ν) (ν' : 测度 α)
   结论: μ ≪ ν + ν'
   证明: by
   intro s hs
@@ -437,7 +437,7 @@ lemma add_right'
 
 中文:
 引理 add_right'
-  条件: (h : μ ≪ ν') (ν : Measure α)
+  条件: (h : μ ≪ ν') (ν : 测度 α)
   结论: μ ≪ ν + ν'
   证明: by
   simp [add_comm, add_right h]
@@ -458,8 +458,8 @@ lemma null_mono
 
 中文:
 引理 null_mono
-  条件: {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t
-  结论: Set α⦄
+  条件: {μ ν : 测度 α} (hμν : μ ≪ ν) ⦃t
+  结论: 集合 α⦄
   证明: hμν ht
 -/
 lemma null_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄
@@ -479,8 +479,8 @@ lemma pos_mono
 
 中文:
 引理 pos_mono
-  条件: {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t
-  结论: Set α⦄
+  条件: {μ ν : 测度 α} (hμν : μ ≪ ν) ⦃t
+  结论: 集合 α⦄
   证明: by
   contrapose! ht
   simp_all [hμν.null_mono]
@@ -532,7 +532,7 @@ lemma absolutelyContinuous_sum_left
 
 中文:
 引理 absolutelyContinuous_sum_left
-  条件: {μs : ι -> Measure α} (hμs : 对任意 i, μs i ≪ ν)
+  条件: {μs : ι -> 测度 α} (hμs : 对任意 i, μs i ≪ ν)
   证明: AbsolutelyContinuous.mk fun s hs hs0 => by simp [sum_apply _ hs, fun i => hμs i hs0]
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, sum_apply
@@ -554,7 +554,7 @@ lemma absolutelyContinuous_sum_right
 
 中文:
 引理 absolutelyContinuous_sum_right
-  条件: {μs : ι -> Measure α} (i : ι) (hνμ : ν ≪ μs i)
+  条件: {μs : ι -> 测度 α} (i : ι) (hνμ : ν ≪ μs i)
   证明: by
   refine AbsolutelyContinuous.mk fun s hs hs0 => ?_
   simp only [sum_apply _ hs, ENNReal.tsum_eq_zero] at hs0
@@ -597,7 +597,7 @@ theorem absolutelyContinuous_of_le_smul
 
 中文:
 定理 absolutelyContinuous_of_le_smul
-  条件: {μ' : Measure α} {c : 实数>=0∞} (hμ'_le : μ' <= c • μ)
+  条件: {μ' : 测度 α} {c : 实数>=0∞} (hμ'_le : μ' <= c • μ)
   证明: (Measure.absolutelyContinuous_of_le hμ'_le).trans smul_absolutelyContinuous
 
 Depends on / 依赖: Measure, Measure.absolutelyContinuous_of_le, absolutelyContinuous_of_le, smul_absolutelyContinuous
@@ -786,7 +786,7 @@ lemma absolutelyContinuous_map
 
 中文:
 引理 absolutelyContinuous_map
-  条件: (hf : MeasurableEmbedding f) (hμν : μ ≪ ν)
+  条件: (hf : 可测嵌入 f) (hμν : μ ≪ ν)
   证明: by
   intro t ht
   rw [hf.map_apply] at ht ⊢

@@ -82,11 +82,11 @@ structure Hypergraph
     - subset_vertexSet_of_mem_edgeSet' : forall ⦃e⦄, e in edgeSet -> e subseteq vertexSet
 
 中文:
-结构 Hypergraph
+结构 超图
   参数: (α : 类型)
   公理与运算 (3 个):
-    - vertexSet : Set α
-    - edgeSet : Set (Set α)
+    - vertexSet : 集合 α
+    - edgeSet : 集合 (集合 α)
     - subset_vertexSet_of_mem_edgeSet' : 对任意 ⦃e⦄, e in edgeSet -> e subseteq vertexSet
 -/
 structure Hypergraph (α : Type*) where
@@ -150,7 +150,7 @@ lemma edgeSet_subset_powerset_vertexSet
 
 中文:
 引理 edgeSet_subset_powerset_vertexSet
-  条件: {H : Hypergraph α}
+  条件: {H : 超图 α}
   结论: E(H) subseteq V(H).powerset
   证明: fun _ => subset_vertexSet_of_mem_edgeSet
 
@@ -238,8 +238,8 @@ definition Adj
   body: exists e in E(H), x in e ∧ y in e
 
 中文:
-定义 Adj
-  签名: (H : Hypergraph α) (x : α) (y : α)
+定义 伴随
+  签名: (H : 超图 α) (x : α) (y : α)
   定义体: exists e in E(H), x in e ∧ y in e
 -/
 def Adj (H : Hypergraph α) (x : α) (y : α) : Prop :=
@@ -255,9 +255,9 @@ lemma Adj.symm
   proof: by grind [Adj]
 
 中文:
-引理 Adj.symm
-  条件: (h : H.Adj x y)
-  结论: H.Adj y x
+引理 伴随.symm
+  条件: (h : H.伴随 x y)
+  结论: H.伴随 y x
   证明: by grind [Adj]
 -/
 lemma Adj.symm (h : H.Adj x y) : H.Adj y x := by grind [Adj]
@@ -274,7 +274,7 @@ lemma adj_comm
 中文:
 引理 adj_comm
   条件: (x y : α)
-  结论: H.Adj x y ↔ H.Adj y x
+  结论: H.伴随 x y ↔ H.伴随 y x
   证明: ⟨.symm, .symm⟩
 -/
 lemma adj_comm (x y : α) : H.Adj x y ↔ H.Adj y x := ⟨.symm, .symm⟩
@@ -294,7 +294,7 @@ definition EAdj
 
 中文:
 定义 EAdj
-  签名: (H : Hypergraph α) (e : Set α) (f : Set α)
+  签名: (H : 超图 α) (e : 集合 α) (f : 集合 α)
   定义体: e in E(H) ∧ f in E(H) ∧ exists x, x in e ∧ x in f
 -/
 def EAdj (H : Hypergraph α) (e : Set α) (f : Set α) : Prop :=
@@ -312,7 +312,7 @@ lemma EAdj.exists_vertex
   exact ⟨x, mem_vertexSet_of_mem_edgeSet h.1 hx.1, hx⟩
 
 中文:
-引理 EAdj.exists_vertex
+引理 EAdj.存在_vertex
   条件: (h : H.EAdj e f)
   结论: 存在 x in V(H), x in e ∧ x in f
   证明: by
@@ -354,7 +354,7 @@ lemma EAdj.inter_nonempty
 中文:
 引理 EAdj.inter_nonempty
   条件: (hef : H.EAdj e f)
-  结论: (e inter f).Nonempty
+  结论: (e inter f).非空
   证明: Set.inter_nonempty.mpr hef.2.2
 
 Depends on / 依赖: Set.inter_nonempty.mpr, inter_nonempty
@@ -398,8 +398,8 @@ definition image
     exact image_mono he.subset_vertexSet
 
 中文:
-定义 image
-  签名: (H : Hypergraph α) (f : α -> β)
+定义 像
+  签名: (H : 超图 α) (f : α -> β)
   定义体: V(H).image f
   edgeSet := E(H).image (Set.image f)
   subset_vertexSet_of_mem_edgeSet' := by
@@ -426,8 +426,8 @@ lemma mem_edgeSet_image
 
 中文:
 引理 mem_edgeSet_image
-  条件: {f : α -> β} {e : Set β}
-  结论: e in E(H.image f) ↔ 存在 e' in E(H), f '' e' = e
+  条件: {f : α -> β} {e : 集合 β}
+  结论: e in E(H.像 f) ↔ 存在 e' in E(H), f '' e' = e
   证明: .rfl
 
 Depends on / 依赖: Erased
@@ -447,7 +447,7 @@ lemma image_mem_edgeSet_image
 中文:
 引理 image_mem_edgeSet_image
   条件: {f : α -> β} (he : e in E(H))
-  结论: e.image f in E(H.image f)
+  结论: e.像 f in E(H.像 f)
   证明: mem_image_of_mem _ he
 
 Depends on / 依赖: mem_image_of_mem
@@ -466,7 +466,7 @@ lemma image_image
 
 中文:
 引理 image_image
-  条件: {f : α -> β} {g : β -> γ} (H : Hypergraph α)
+  条件: {f : α -> β} {g : β -> γ} (H : 超图 α)
   证明: by
   ext <;> simp [Set.image_image]
 
@@ -488,7 +488,7 @@ definition IsIsolated
 
 中文:
 定义 IsIsolated
-  签名: (H : Hypergraph α) (x : α)
+  签名: (H : 超图 α) (x : α)
   定义体: forall e in E(H), x ∉ e
 
 Depends on / 依赖: choice
@@ -526,7 +526,7 @@ definition IsLoop
 
 中文:
 定义 IsLoop
-  签名: (H : Hypergraph α) (e : Set α)
+  签名: (H : 超图 α) (e : 集合 α)
   定义体: e in E(H) ∧ exists x, e = {x}
 -/
 def IsLoop (H : Hypergraph α) (e : Set α) : Prop := e in E(H) ∧ exists x, e = {x}
@@ -557,7 +557,7 @@ lemma isLoop_iff_mem_and_ncard_one
 
 中文:
 引理 isLoop_iff_mem_and_ncard_one
-  结论: H.IsLoop e ↔ (e in E(H) ∧ Set.ncard e = 1)
+  结论: H.IsLoop e ↔ (e in E(H) ∧ 集合.ncard e = 1)
   证明: by
   grind [IsLoop, ncard_eq_one, mem_vertexSet_of_mem_edgeSet]
 
@@ -578,7 +578,7 @@ lemma IsLoop.ncard_one
 中文:
 引理 IsLoop.ncard_one
   条件: (h : H.IsLoop e)
-  结论: Set.ncard e = 1
+  结论: 集合.ncard e = 1
   证明: (isLoop_iff_mem_and_ncard_one.mp h).2
 
 Depends on / 依赖: isLoop_iff_mem_and_ncard_one, isLoop_iff_mem_and_ncard_one.mp
@@ -597,7 +597,7 @@ definition IsNonempty
 
 中文:
 定义 IsNonempty
-  签名: (H : Hypergraph α)
+  签名: (H : 超图 α)
   定义体: V(H).Nonempty ∨ E(H).Nonempty
 
 Depends on / 依赖: Nonempty
@@ -625,7 +625,7 @@ lemma IsNonempty.of_nonempty_vertexSet
 
 中文:
 引理 IsNonempty.of_nonempty_vertexSet
-  条件: (hV : V(H).Nonempty)
+  条件: (hV : V(H).非空)
   结论: H.IsNonempty
   证明: .inl hV
 
@@ -648,7 +648,7 @@ lemma IsNonempty.of_nonempty_edgeSet
 
 中文:
 引理 IsNonempty.of_nonempty_edgeSet
-  条件: (hE : E(H).Nonempty)
+  条件: (hE : E(H).非空)
   结论: H.IsNonempty
   证明: .inr hE
 
@@ -769,8 +769,8 @@ definition IsTrivial
   body: Set.Nonempty V(H) ∧ E(H) = ∅
 
 中文:
-定义 IsTrivial
-  签名: (H : Hypergraph α)
+定义 是平凡
+  签名: (H : 超图 α)
   定义体: Set.Nonempty V(H) ∧ E(H) = ∅
 
 Depends on / 依赖: Nonempty, Set.Nonempty
@@ -792,7 +792,7 @@ definition trivialOn
 
 中文:
 定义 trivialOn
-  签名: (f : Set α)
+  签名: (f : 集合 α)
   定义体: f
   edgeSet := ∅
   subset_vertexSet_of_mem_edgeSet' := by simp
@@ -812,8 +812,8 @@ lemma IsTrivial.trivialOn
   grind [trivialOn, IsTrivial]
 
 中文:
-引理 IsTrivial.trivialOn
-  条件: (hf : Set.Nonempty f)
+引理 是平凡.trivialOn
+  条件: (hf : 集合.非空 f)
   证明: by
   grind [trivialOn, IsTrivial]
 
@@ -834,8 +834,8 @@ lemma IsTrivial.isNonempty
   grind [IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty]
 
 中文:
-引理 IsTrivial.isNonempty
-  条件: (h : IsTrivial H)
+引理 是平凡.isNonempty
+  条件: (h : 是平凡 H)
   结论: IsNonempty H
   证明: by
   grind [IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty]
@@ -855,8 +855,8 @@ lemma IsTrivial.not_mem_edgeSet
   proof: by grind [IsTrivial]
 
 中文:
-引理 IsTrivial.not_mem_edgeSet
-  条件: (h : H.IsTrivial)
+引理 是平凡.not_mem_edgeSet
+  条件: (h : H.是平凡)
   结论: e ∉ E(H)
   证明: by grind [IsTrivial]
 
@@ -875,8 +875,8 @@ definition IsComplete
   body: forall e subseteq V(H), e in E(H)
 
 中文:
-定义 IsComplete
-  签名: (H : Hypergraph α)
+定义 是完备
+  签名: (H : 超图 α)
   定义体: forall e subseteq V(H), e in E(H)
 
 Depends on / 依赖: subseteq
@@ -898,7 +898,7 @@ definition completeOn
 
 中文:
 定义 completeOn
-  签名: (f : Set α)
+  签名: (f : 集合 α)
   定义体: f
   edgeSet := 𝒫 f
   subset_vertexSet_of_mem_edgeSet' := by simp
@@ -934,8 +934,8 @@ lemma IsComplete.mem_iff
   grind [IsComplete, subset_vertexSet_of_mem_edgeSet]
 
 中文:
-引理 IsComplete.mem_iff
-  条件: (h : H.IsComplete)
+引理 是完备.mem_iff
+  条件: (h : H.是完备)
   结论: e in E(H) ↔ e subseteq V(H)
   证明: by
   grind [IsComplete, subset_vertexSet_of_mem_edgeSet]
@@ -955,9 +955,9 @@ lemma IsComplete.completeOn
   proof: fun _ a => a
 
 中文:
-引理 IsComplete.completeOn
-  条件: (f : Set α)
-  结论: (completeOn f).IsComplete
+引理 是完备.completeOn
+  条件: (f : 集合 α)
+  结论: (completeOn f).是完备
   证明: fun _ a => a
 -/
 lemma IsComplete.completeOn (f : Set α) : (completeOn f).IsComplete := fun _ a => a
@@ -972,8 +972,8 @@ lemma IsComplete.isNonempty
   proof: Or.inr ⟨∅, h ∅ (Set.empty_subset _)⟩
 
 中文:
-引理 IsComplete.isNonempty
-  条件: (h : H.IsComplete)
+引理 是完备.isNonempty
+  条件: (h : H.是完备)
   结论: H.IsNonempty
   证明: Or.inr ⟨∅, h ∅ (Set.empty_subset _)⟩
 
@@ -994,9 +994,9 @@ lemma IsComplete.not_isTrivial
   exact hH.not_mem_edgeSet (h ∅ (Set.empty_subset _))
 
 中文:
-引理 IsComplete.not_isTrivial
-  条件: (h : H.IsComplete)
-  结论: ¬ H.IsTrivial
+引理 是完备.not_isTrivial
+  条件: (h : H.是完备)
+  结论: ¬ H.是平凡
   证明: by
   intro hH
   exact hH.not_mem_edgeSet (h ∅ (Set.empty_subset _))
@@ -1018,8 +1018,8 @@ lemma not_isTrivial_completeOn
 
 中文:
 引理 not_isTrivial_completeOn
-  条件: (f : Set α)
-  结论: ¬ (completeOn f).IsTrivial
+  条件: (f : 集合 α)
+  结论: ¬ (completeOn f).是平凡
   证明: (IsComplete.completeOn f).not_isTrivial
 
 Depends on / 依赖: IsComplete, IsComplete.completeOn, completeOn, not_isTrivial

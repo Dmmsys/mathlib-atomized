@@ -55,12 +55,12 @@ inductive FreeMonoidalCategory
     - tensor: FreeMonoidalCategory -> FreeMonoidalCategory -> FreeMonoidalCategory
 
 中文:
-归纳类型 FreeMonoidalCategory
+归纳类型 FreeMonoidal范畴
   参数: : 类型u
   构造子 (3 个):
-    - of: C -> FreeMonoidalCategory
-    - unit: FreeMonoidalCategory
-    - tensor: FreeMonoidalCategory -> FreeMonoidalCategory -> FreeMonoidalCategory
+    - of: C -> FreeMonoidal范畴
+    - unit: FreeMonoidal范畴
+    - tensor: FreeMonoidal范畴 -> FreeMonoidal范畴 -> FreeMonoidal范畴
 -/
 inductive FreeMonoidalCategory : Type u
   | of : C -> FreeMonoidalCategory
@@ -94,20 +94,20 @@ inductive Hom
     - tensor: {W X Y Z} (f : Hom W Y) (g : Hom X Z) : Hom (W.tensor X) (Y.tensor Z)
 
 中文:
-归纳类型 Hom
+归纳类型 态射
   参数: : F C -> F C -> 类型u
   构造子 (11 个):
-    - id: (X) : Hom X X
-    - α_hom: (X Y Z : F C) : Hom ((X.tensor Y).tensor Z) (X.tensor (Y.tensor Z))
-    - α_inv: (X Y Z : F C) : Hom (X.tensor (Y.tensor Z)) ((X.tensor Y).tensor Z)
-    - l_hom: (X) : Hom (unit.tensor X) X
-    - l_inv: (X) : Hom X (unit.tensor X)
-    - ρ_hom: (X : F C) : Hom (X.tensor unit) X
-    - ρ_inv: (X : F C) : Hom X (X.tensor unit)
-    - comp: {X Y Z} (f : Hom X Y) (g : Hom Y Z) : Hom X Z
-    - whiskerLeft: (X : F C) {Y₁ Y₂} (f : Hom Y₁ Y₂) : Hom (X.tensor Y₁) (X.tensor Y₂)
-    - whiskerRight: {X₁ X₂} (f : Hom X₁ X₂) (Y : F C) : Hom (X₁.tensor Y) (X₂.tensor Y)
-    - tensor: {W X Y Z} (f : Hom W Y) (g : Hom X Z) : Hom (W.tensor X) (Y.tensor Z)
+    - id: (X) : 态射 X X
+    - α_hom: (X Y Z : F C) : 态射 ((X.tensor Y).tensor Z) (X.tensor (Y.tensor Z))
+    - α_inv: (X Y Z : F C) : 态射 (X.tensor (Y.tensor Z)) ((X.tensor Y).tensor Z)
+    - l_hom: (X) : 态射 (unit.tensor X) X
+    - l_inv: (X) : 态射 X (unit.tensor X)
+    - ρ_hom: (X : F C) : 态射 (X.tensor unit) X
+    - ρ_inv: (X : F C) : 态射 X (X.tensor unit)
+    - comp: {X Y Z} (f : 态射 X Y) (g : 态射 Y Z) : 态射 X Z
+    - whiskerLeft: (X : F C) {Y₁ Y₂} (f : 态射 Y₁ Y₂) : 态射 (X.tensor Y₁) (X.tensor Y₂)
+    - whiskerRight: {X₁ X₂} (f : 态射 X₁ X₂) (Y : F C) : 态射 (X₁.tensor Y) (X₂.tensor Y)
+    - tensor: {W X Y Z} (f : 态射 W Y) (g : 态射 X Z) : 态射 (W.tensor X) (Y.tensor Z)
 -/
 inductive Hom : F C -> F C -> Type u
   | id (X) : Hom X X
@@ -159,35 +159,35 @@ inductive HomEquiv
     - triangle: {X Y} : HomEquiv ((Hom.α_hom X unit Y).comp ((Hom.l_hom Y).whiskerLeft X)) ((Hom.ρ_hom X).whiskerRight Y)
 
 中文:
-归纳类型 HomEquiv
+归纳类型 态射等价
   参数: : 对任意 {X Y : F C}, (X ⟶ᵐ Y) -> (X ⟶ᵐ Y) -> 命题
   构造子 (26 个):
-    - refl: {X Y} (f : X ⟶ᵐ Y) : HomEquiv f f
-    - symm: {X Y} (f g : X ⟶ᵐ Y) : HomEquiv f g -> HomEquiv g f
-    - trans: {X Y} {f g h : X ⟶ᵐ Y} : HomEquiv f g -> HomEquiv g h -> HomEquiv f h
-    - comp: {X Y Z} {f f' : X ⟶ᵐ Y} {g g' : Y ⟶ᵐ Z} : HomEquiv f f' -> HomEquiv g g' -> HomEquiv (f.comp g) (f'.comp g')
-    - whiskerLeft: (X) {Y Z} (f f' : Y ⟶ᵐ Z) : HomEquiv f f' -> HomEquiv (f.whiskerLeft X) (f'.whiskerLeft X)
-    - whiskerRight: {Y Z} (f f' : Y ⟶ᵐ Z) (X) : HomEquiv f f' -> HomEquiv (f.whiskerRight X) (f'.whiskerRight X)
-    - tensor: {W X Y Z} {f f' : W ⟶ᵐ X} {g g' : Y ⟶ᵐ Z} : HomEquiv f f' -> HomEquiv g g' -> HomEquiv (f.tensor g) (f'.tensor g')
-    - tensorHom_def: {X₁ Y₁ X₂ Y₂} (f : X₁ ⟶ᵐ Y₁) (g : X₂ ⟶ᵐ Y₂) : HomEquiv (f.tensor g) ((f.whiskerRight X₂).comp (g.whiskerLeft Y₁))
-    - comp_id: {X Y} (f : X ⟶ᵐ Y) : HomEquiv (f.comp (Hom.id _)) f
-    - id_comp: {X Y} (f : X ⟶ᵐ Y) : HomEquiv ((Hom.id _).comp f) f
-    - assoc: {X Y U V : F C} (f : X ⟶ᵐ U) (g : U ⟶ᵐ V) (h : V ⟶ᵐ Y) : HomEquiv ((f.comp g).comp h) (f.comp (g.comp h))
-    - id_tensorHom_id: {X Y} : HomEquiv ((Hom.id X).tensor (Hom.id Y)) (Hom.id _)
-    - tensorHom_comp_tensorHom: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : F C} (f₁ : X₁ ⟶ᵐ Y₁) (f₂ : X₂ ⟶ᵐ Y₂) (g₁ : Y₁ ⟶ᵐ Z₁) (g₂ : Y₂ ⟶ᵐ Z₂) : HomEquiv ((f₁.tensor f₂).comp (g₁.tensor g₂)) ((f₁.comp g₁).tensor (f₂.comp g₂))
-    - whiskerLeft_id: (X Y) : HomEquiv ((Hom.id Y).whiskerLeft X) (Hom.id (X.tensor Y))
-    - id_whiskerRight: (X Y) : HomEquiv ((Hom.id X).whiskerRight Y) (Hom.id (X.tensor Y))
-    - α_hom_inv: {X Y Z} : HomEquiv ((Hom.α_hom X Y Z).comp (Hom.α_inv X Y Z)) (Hom.id _)
-    - α_inv_hom: {X Y Z} : HomEquiv ((Hom.α_inv X Y Z).comp (Hom.α_hom X Y Z)) (Hom.id _)
-    - associator_naturality: {X₁ X₂ X₃ Y₁ Y₂ Y₃} (f₁ : X₁ ⟶ᵐ Y₁) (f₂ : X₂ ⟶ᵐ Y₂) (f₃ : X₃ ⟶ᵐ Y₃) : HomEquiv (((f₁.tensor f₂).tensor f₃).comp (Hom.α_hom Y₁ Y₂ Y₃)) ((Hom.α_hom X₁ X₂ X₃).comp (f₁.tensor (f₂.tensor f₃)))
-    - ρ_hom_inv: {X} : HomEquiv ((Hom.ρ_hom X).comp (Hom.ρ_inv X)) (Hom.id _)
-    - ρ_inv_hom: {X} : HomEquiv ((Hom.ρ_inv X).comp (Hom.ρ_hom X)) (Hom.id _)
-    - ρ_naturality: {X Y} (f : X ⟶ᵐ Y) : HomEquiv ((f.whiskerRight unit).comp (Hom.ρ_hom Y)) ((Hom.ρ_hom X).comp f)
-    - l_hom_inv: {X} : HomEquiv ((Hom.l_hom X).comp (Hom.l_inv X)) (Hom.id _)
-    - l_inv_hom: {X} : HomEquiv ((Hom.l_inv X).comp (Hom.l_hom X)) (Hom.id _)
-    - l_naturality: {X Y} (f : X ⟶ᵐ Y) : HomEquiv ((f.whiskerLeft unit).comp (Hom.l_hom Y)) ((Hom.l_hom X).comp f)
-    - pentagon: {W X Y Z} : HomEquiv (((Hom.α_hom W X Y).whiskerRight Z).comp ((Hom.α_hom W (X.tensor Y) Z).comp ((Hom.α_hom X Y Z).whiskerLeft W))) ((Hom.α_hom (W.tensor X) Y Z).comp (Hom.α_hom W X (Y.tensor Z)))
-    - triangle: {X Y} : HomEquiv ((Hom.α_hom X unit Y).comp ((Hom.l_hom Y).whiskerLeft X)) ((Hom.ρ_hom X).whiskerRight Y)
+    - refl: {X Y} (f : X ⟶ᵐ Y) : 态射等价 f f
+    - symm: {X Y} (f g : X ⟶ᵐ Y) : 态射等价 f g -> 态射等价 g f
+    - trans: {X Y} {f g h : X ⟶ᵐ Y} : 态射等价 f g -> 态射等价 g h -> 态射等价 f h
+    - comp: {X Y Z} {f f' : X ⟶ᵐ Y} {g g' : Y ⟶ᵐ Z} : 态射等价 f f' -> 态射等价 g g' -> 态射等价 (f.comp g) (f'.comp g')
+    - whiskerLeft: (X) {Y Z} (f f' : Y ⟶ᵐ Z) : 态射等价 f f' -> 态射等价 (f.whiskerLeft X) (f'.whiskerLeft X)
+    - whiskerRight: {Y Z} (f f' : Y ⟶ᵐ Z) (X) : 态射等价 f f' -> 态射等价 (f.whiskerRight X) (f'.whiskerRight X)
+    - tensor: {W X Y Z} {f f' : W ⟶ᵐ X} {g g' : Y ⟶ᵐ Z} : 态射等价 f f' -> 态射等价 g g' -> 态射等价 (f.tensor g) (f'.tensor g')
+    - tensorHom_def: {X₁ Y₁ X₂ Y₂} (f : X₁ ⟶ᵐ Y₁) (g : X₂ ⟶ᵐ Y₂) : 态射等价 (f.tensor g) ((f.whiskerRight X₂).comp (g.whiskerLeft Y₁))
+    - comp_id: {X Y} (f : X ⟶ᵐ Y) : 态射等价 (f.comp (态射.id _)) f
+    - id_comp: {X Y} (f : X ⟶ᵐ Y) : 态射等价 ((态射.id _).comp f) f
+    - assoc: {X Y U V : F C} (f : X ⟶ᵐ U) (g : U ⟶ᵐ V) (h : V ⟶ᵐ Y) : 态射等价 ((f.comp g).comp h) (f.comp (g.comp h))
+    - id_tensorHom_id: {X Y} : 态射等价 ((态射.id X).tensor (态射.id Y)) (态射.id _)
+    - tensorHom_comp_tensorHom: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : F C} (f₁ : X₁ ⟶ᵐ Y₁) (f₂ : X₂ ⟶ᵐ Y₂) (g₁ : Y₁ ⟶ᵐ Z₁) (g₂ : Y₂ ⟶ᵐ Z₂) : 态射等价 ((f₁.tensor f₂).comp (g₁.tensor g₂)) ((f₁.comp g₁).tensor (f₂.comp g₂))
+    - whiskerLeft_id: (X Y) : 态射等价 ((态射.id Y).whiskerLeft X) (态射.id (X.tensor Y))
+    - id_whiskerRight: (X Y) : 态射等价 ((态射.id X).whiskerRight Y) (态射.id (X.tensor Y))
+    - α_hom_inv: {X Y Z} : 态射等价 ((态射.α_hom X Y Z).comp (态射.α_inv X Y Z)) (态射.id _)
+    - α_inv_hom: {X Y Z} : 态射等价 ((态射.α_inv X Y Z).comp (态射.α_hom X Y Z)) (态射.id _)
+    - associator_naturality: {X₁ X₂ X₃ Y₁ Y₂ Y₃} (f₁ : X₁ ⟶ᵐ Y₁) (f₂ : X₂ ⟶ᵐ Y₂) (f₃ : X₃ ⟶ᵐ Y₃) : 态射等价 (((f₁.tensor f₂).tensor f₃).comp (态射.α_hom Y₁ Y₂ Y₃)) ((态射.α_hom X₁ X₂ X₃).comp (f₁.tensor (f₂.tensor f₃)))
+    - ρ_hom_inv: {X} : 态射等价 ((态射.ρ_hom X).comp (态射.ρ_inv X)) (态射.id _)
+    - ρ_inv_hom: {X} : 态射等价 ((态射.ρ_inv X).comp (态射.ρ_hom X)) (态射.id _)
+    - ρ_naturality: {X Y} (f : X ⟶ᵐ Y) : 态射等价 ((f.whiskerRight unit).comp (态射.ρ_hom Y)) ((态射.ρ_hom X).comp f)
+    - l_hom_inv: {X} : 态射等价 ((态射.l_hom X).comp (态射.l_inv X)) (态射.id _)
+    - l_inv_hom: {X} : 态射等价 ((态射.l_inv X).comp (态射.l_hom X)) (态射.id _)
+    - l_naturality: {X Y} (f : X ⟶ᵐ Y) : 态射等价 ((f.whiskerLeft unit).comp (态射.l_hom Y)) ((态射.l_hom X).comp f)
+    - pentagon: {W X Y Z} : 态射等价 (((态射.α_hom W X Y).whiskerRight Z).comp ((态射.α_hom W (X.tensor Y) Z).comp ((态射.α_hom X Y Z).whiskerLeft W))) ((态射.α_hom (W.tensor X) Y Z).comp (态射.α_hom W X (Y.tensor Z)))
+    - triangle: {X Y} : 态射等价 ((态射.α_hom X unit Y).comp ((态射.l_hom Y).whiskerLeft X)) ((态射.ρ_hom X).whiskerRight Y)
 -/
 inductive HomEquiv : forall {X Y : F C}, (X ⟶ᵐ Y) -> (X ⟶ᵐ Y) -> Prop
   | refl {X Y} (f : X ⟶ᵐ Y) : HomEquiv f f
@@ -276,7 +276,7 @@ instance categoryFreeMonoidalCategory
 
 中文:
 实例 categoryFreeMonoidalCategory
-  签名: : Category.{u} (F C) where
+  签名: : 范畴.{u} (F C) where
   定义体: Quotient (FreeMonoidalCategory.setoidHom X Y)
   id X := ⟦Hom.id X⟧
   comp := Quotient.map₂ Hom.comp (fun _ _ hf _ _ hg => HomEquiv.comp hf hg)
@@ -317,7 +317,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (F C)
+  签名: 幺半群范畴 (F C)
   定义体: FreeMonoidalCategory.tensor X Y
   tensorHom := Quotient.map₂ Hom.tensor (fun _ _ hf _ _ hg => HomEquiv.tensor hf hg)
   whiskerLeft X _ _ f := Quot.map (fun f => Hom.whiskerLeft X f) (fun f f' => .whiskerLeft X f f') f
@@ -462,7 +462,7 @@ theorem mk_id
 中文:
 定理 mk_id
   条件: {X : F C}
-  结论: ⟦Hom.id X⟧ = 𝟙 X
+  结论: ⟦态射.id X⟧ = 𝟙 X
   证明: rfl
 
 @[simp]
@@ -485,7 +485,7 @@ theorem mk_α_hom
 中文:
 定理 mk_α_hom
   条件: {X Y Z : F C}
-  结论: ⟦Hom.α_hom X Y Z⟧ = (α_ X Y Z).hom
+  结论: ⟦态射.α_hom X Y Z⟧ = (α_ X Y Z).hom
   证明: rfl
 
 @[simp]
@@ -508,7 +508,7 @@ theorem mk_α_inv
 中文:
 定理 mk_α_inv
   条件: {X Y Z : F C}
-  结论: ⟦Hom.α_inv X Y Z⟧ = (α_ X Y Z).inv
+  结论: ⟦态射.α_inv X Y Z⟧ = (α_ X Y Z).inv
   证明: rfl
 
 @[simp]
@@ -531,7 +531,7 @@ theorem mk_ρ_hom
 中文:
 定理 mk_ρ_hom
   条件: {X : F C}
-  结论: ⟦Hom.ρ_hom X⟧ = (ρ_ X).hom
+  结论: ⟦态射.ρ_hom X⟧ = (ρ_ X).hom
   证明: rfl
 
 @[simp]
@@ -554,7 +554,7 @@ theorem mk_ρ_inv
 中文:
 定理 mk_ρ_inv
   条件: {X : F C}
-  结论: ⟦Hom.ρ_inv X⟧ = (ρ_ X).inv
+  结论: ⟦态射.ρ_inv X⟧ = (ρ_ X).inv
   证明: rfl
 
 @[simp]
@@ -577,7 +577,7 @@ theorem mk_l_hom
 中文:
 定理 mk_l_hom
   条件: {X : F C}
-  结论: ⟦Hom.l_hom X⟧ = (fun_ X).hom
+  结论: ⟦态射.l_hom X⟧ = (fun_ X).hom
   证明: rfl
 
 @[simp]
@@ -600,7 +600,7 @@ theorem mk_l_inv
 中文:
 定理 mk_l_inv
   条件: {X : F C}
-  结论: ⟦Hom.l_inv X⟧ = (fun_ X).inv
+  结论: ⟦态射.l_inv X⟧ = (fun_ X).inv
   证明: rfl
 
 @[simp]
@@ -642,7 +642,7 @@ theorem unit_eq_unit
 
 中文:
 定理 unit_eq_unit
-  结论: FreeMonoidalCategory.unit = 𝟙_ (F C)
+  结论: FreeMonoidal范畴.unit = 𝟙_ (F C)
   证明: rfl
 
 Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.Hom.id
@@ -687,7 +687,7 @@ theorem Hom.inductionOn
   | comp f g 
 
 中文:
-定理 Hom.inductionOn
+定理 态射.inductionOn
   结论: {motive : {X Y : F C} -> (X ⟶ Y) -> 命题} {X Y : F C} (t : X ⟶ Y)
   证明: by
   induction t using Quotient.inductionOn with | _ f
@@ -904,7 +904,7 @@ instance :
 
 中文:
 实例 :
-  签名: (project f).Monoidal
+  签名: (project f).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _

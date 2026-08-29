@@ -129,7 +129,7 @@ lemma contDiff
 
 中文:
 引理 contDiff
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: contDiff_iff_contDiffAt.mpr (fun _ => f.contDiffAt)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, contDiff_iff_contDiffAt.mpr, f.contDiffAt

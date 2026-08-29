@@ -104,11 +104,11 @@ structure ContDiffMapSupportedIn
     - zero_on_compl' : EqOn toFun 0 Kᶜ
 
 中文:
-结构 ContDiffMapSupportedIn
-  参数: (n : 自然数∞) (K : Compacts E)
+结构 余ntDiffMapSupportedIn
+  参数: (n : 自然数∞) (K : 余mpacts E)
   公理与运算 (3 个):
     - toFun : E -> F
-    - contDiff' : ContDiff 实数 n toFun
+    - contDiff' : 连续可微 实数 n toFun
     - zero_on_compl' : EqOn toFun 0 Kᶜ
 -/
 structure ContDiffMapSupportedIn (n : Nat∞) (K : Compacts E) : Type _ where
@@ -141,11 +141,11 @@ class ContDiffMapSupportedInClass
     - map_zero_on_compl((f : B)) : EqOn f 0 Kᶜ
 
 中文:
-类 ContDiffMapSupportedInClass
+类 余ntDiffMapSupportedIn类
   参数: (B : 类型) (E F : outParam <| 类型)
-  继承: FunLike B E F
+  继承: 函数状 B E F
   公理与运算 (2 个):
-    - map_contDiff((f : B)) : ContDiff 实数 n f
+    - map_contDiff((f : B)) : 连续可微 实数 n f
     - map_zero_on_compl((f : B)) : EqOn f 0 Kᶜ
 -/
 class ContDiffMapSupportedInClass (B : Type*) (E F : outParam <| Type*)
@@ -222,7 +222,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: (f : 𝓓^{n}_{K}(E, F))
-  结论: ContDiff 实数 n f
+  结论: 连续可微 实数 n f
   证明: map_contDiff f
 -/
 protected theorem contDiff (f : 𝓓^{n}_{K}(E, F)) : ContDiff Real n f := map_contDiff f
@@ -427,7 +427,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 𝓓^{n}_{K}(E, F)
+  签名: 零 𝓓^{n}_{K}(E, F)
   定义体: .mk 0 contDiff_zero_fun fun _ _ => rfl
 
 Depends on / 依赖: contDiff_zero_fun
@@ -447,7 +447,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply 𝓓^{n}_{K}(E, F) E F
+  签名: 是ZeroApply 𝓓^{n}_{K}(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_zero := FunLike.coe_zero
@@ -469,7 +469,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add 𝓓^{n}_{K}(E, F)
+  签名: 加法 𝓓^{n}_{K}(E, F)
   定义体: .mk (f + g) (f.contDiff.add g.contDiff) by
     rw [← add_zero 0]
     exact f.zero_on_compl.comp_left₂ g.zero_on_compl
@@ -493,7 +493,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply 𝓓^{n}_{K}(E, F) E F
+  签名: 是加法Apply 𝓓^{n}_{K}(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_add := FunLike.coe_add
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg 𝓓^{n}_{K}(E, F)
+  签名: 取负 𝓓^{n}_{K}(E, F)
   定义体: .mk (-f) (f.contDiff.neg) by
     rw [← neg_zero]
     exact f.zero_on_compl.comp_left
@@ -539,7 +539,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply 𝓓^{n}_{K}(E, F) E F
+  签名: 是NegApply 𝓓^{n}_{K}(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_neg := FunLike.coe_neg
@@ -561,7 +561,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub 𝓓^{n}_{K}(E, F) where
+  签名: : 减法 𝓓^{n}_{K}(E, F) where
   定义体: .mk (f - g) (f.contDiff.sub g.contDiff) by
     rw [← sub_zero 0]
     exact f.zero_on_compl.comp_left₂ g.zero_on_compl
@@ -585,7 +585,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply 𝓓^{n}_{K}(E, F) E F
+  签名: 是SubApply 𝓓^{n}_{K}(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_sub := FunLike.coe_sub
@@ -607,7 +607,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {R} [Semiring R] [Module R F] [SMulCommClass 实数 R F] [ContinuousConstSMul R F]
+  签名: {R} [半环 R] [模 R F] [标量交换类 实数 R F] [连续常数标量乘法 R F]
   定义体: .mk (c • (f : E -> F)) (f.contDiff.const_smul c) by
     rw [← smul_zero c]
     exact f.zero_on_compl.comp_left
@@ -642,7 +642,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup 𝓓^{n}_{K}(E, F)
+  签名: 加法交换群 𝓓^{n}_{K}(E, F)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-06-15")] alias coeHom := FunLike.coeAddMonoidHom
@@ -741,7 +741,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : 𝓓^{n}_{K}(E, F))
-  结论: Continuous f
+  结论: 连续 f
   证明: f.contDiff.continuous
 -/
 protected theorem continuous (f : 𝓓^{n}_{K}(E, F)) : Continuous f :=
@@ -762,7 +762,7 @@ definition of_support_subset
 
 中文:
 定义 of_support_subset
-  签名: {f : E -> F} (hf : ContDiff 实数 n f) (hsupp : support f subseteq K)
+  签名: {f : E -> F} (hf : 连续可微 实数 n f) (hsupp : support f subseteq K)
   定义体: f
   contDiff' := hf
   zero_on_compl' := support_subset_iff'.mp hsupp
@@ -901,7 +901,7 @@ definition postcompLM
 
 中文:
 定义 postcompLM
-  签名: [LinearMap.CompatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
+  签名: [线性映射.余mpatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
   定义体: ⟨T ∘ f, T.restrictScalars Real
     fun x hx => by simp [f.zero_on_compl hx]⟩
   map_add' f g := by ext x; exact map_add T (f x) (g x)
@@ -929,7 +929,7 @@ lemma postcompLM_apply
 
 中文:
 引理 postcompLM_apply
-  结论: [LinearMap.CompatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
+  结论: [线性映射.余mpatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
   证明: rfl
 -/
 lemma postcompLM_apply [LinearMap.CompatibleSMul F F' Real 𝕜] (T : F ->L[𝕜] F')
@@ -1480,7 +1480,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: : TopologicalSpace 𝓓^{n}_{K}(E, F)
+  签名: : 拓扑空间 𝓓^{n}_{K}(E, F)
   定义体: ⨅ (i : Nat), induced (structureMapLM Real n i) inferInstance
 
 Depends on / 依赖: induced, structureMapLM
@@ -1500,7 +1500,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace 𝓓^{n}_{K}(E, F)
+  签名: : 一致空间 𝓓^{n}_{K}(E, F)
   定义体: .replaceTopology
   (⨅ (i : Nat), UniformSpace.comap (structureMapLM Real n i) inferInstance)
   toTopologicalSpace_iInf.symm
@@ -1521,7 +1521,7 @@ theorem uniformSpace_eq_iInf
 
 中文:
 定理 uniformSpace_eq_iInf
-  结论: (uniformSpace : UniformSpace 𝓓^{n}_{K}(E, F)) =
+  结论: (uniformSpace : 一致空间 𝓓^{n}_{K}(E, F)) =
   证明: UniformSpace.replaceTopology_eq _ toTopologicalSpace_iInf.symm
 -/
 protected theorem uniformSpace_eq_iInf : (uniformSpace : UniformSpace 𝓓^{n}_{K}(E, F)) =
@@ -1538,7 +1538,7 @@ instance isTopologicalAddGroup
 
 中文:
 实例 isTopologicalAddGroup
-  签名: : IsTopologicalAddGroup 𝓓^{n}_{K}(E, F)
+  签名: : 是拓扑加群 𝓓^{n}_{K}(E, F)
   定义体: topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
 
 Depends on / 依赖: topologicalAddGroup_iInf, topologicalAddGroup_induced
@@ -1558,7 +1558,7 @@ instance isUniformAddGroup
 
 中文:
 实例 isUniformAddGroup
-  签名: : IsUniformAddGroup 𝓓^{n}_{K}(E, F)
+  签名: : 是UniformAdd群 𝓓^{n}_{K}(E, F)
   定义体: by
   rw [ContDiffMapSupportedIn.uniformSpace_eq_iInf]
   exact isUniformAddGroup_iInf fun _ => IsUniformAddGroup.comap _
@@ -1579,7 +1579,7 @@ instance continuousSMul
 
 中文:
 实例 continuousSMul
-  签名: : ContinuousSMul 𝕜 𝓓^{n}_{K}(E, F)
+  签名: : 连续标量乘法 𝕜 𝓓^{n}_{K}(E, F)
   定义体: continuousSMul_iInf fun i => continuousSMul_induced (structureMapLM 𝕜 n i)
 
 Depends on / 依赖: continuousSMul_iInf, continuousSMul_induced, structureMapLM
@@ -1597,7 +1597,7 @@ instance locallyConvexSpace
 
 中文:
 实例 locallyConvexSpace
-  签名: : LocallyConvexSpace 实数 𝓓^{n}_{K}(E, F)
+  签名: : LocallyConvex空间 实数 𝓓^{n}_{K}(E, F)
   定义体: LocallyConvexSpace.iInf fun _ => LocallyConvexSpace.induced _
 
 Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.iInf, LocallyConvexSpace.induced, induced
@@ -1772,7 +1772,7 @@ theorem continuous_iff_comp
 
 中文:
 定理 continuous_iff_comp
-  条件: {X} [TopologicalSpace X] (φ : X -> 𝓓^{n}_{K}(E, F))
+  条件: {X} [拓扑空间 X] (φ : X -> 𝓓^{n}_{K}(E, F))
   证明: by
   simp [continuous_iInf_rng, continuous_induced_rng, structureMapCLM]
 
@@ -1800,7 +1800,7 @@ theorem continuous_iff_comp_order_le
 
 中文:
 定理 continuous_iff_comp_order_le
-  条件: {X : 类型} [TopologicalSpace X] (φ : X -> 𝓓^{n}_{K}(E, F))
+  条件: {X : 类型} [拓扑空间 X] (φ : X -> 𝓓^{n}_{K}(E, F))
   证明: by
   rw [continuous_iff_comp]
   congrm (forall i, ?_)
@@ -2186,7 +2186,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def mkCLMtoNormedSpace {G : 类型} [NormedAddCommGroup G]
+  签名: def mkCLMtoNormedSpace {G : 类型} [赋范交换加群 G]
   定义体: letI Φ : 𝓓^{n}_{K}(E, F) ->ₗ[𝕜] G := ⟨⟨A, hadd⟩, hsmul⟩
   { toLinearMap := Φ
     cont := show Continuous Φ by
@@ -2291,7 +2291,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEval 𝓓^{n}_{K}(E, F) E F
+  签名: 余ntinuousEval 𝓓^{n}_{K}(E, F) E F
   定义体: ContinuousEval.of_continuous_forget
     (toBoundedContinuousFunctionCLM Real).continuous
 
@@ -2315,7 +2315,7 @@ instance :
 
 中文:
 实例 :
-  签名: T3Space 𝓓^{n}_{K}(E, F)
+  签名: T3空间 𝓓^{n}_{K}(E, F)
   定义体: have : Injective (toBoundedContinuousFunctionCLM Real : 𝓓^{n}_{K}(E, F) ->L[Real] E ->ᵇ F) :=
     fun _ _ hfg => ext fun x => congr(($hfg : E -> F) x)
   have : T2Space 𝓓^{n}_{K}(E, F) := .of_injective_continuous this
@@ -2349,7 +2349,7 @@ theorem seminorm_postcompLM_le
 
 中文:
 定理 seminorm_postcompLM_le
-  结论: [LinearMap.CompatibleSMul F F' 实数 𝕜] {i : 自然数} (T : F ->L[𝕜] F')
+  结论: [线性映射.余mpatibleSMul F F' 实数 𝕜] {i : 自然数} (T : F ->L[𝕜] F')
   证明: by
   set T' := T.restrictScalars Real
   change N[Real]_{K, n, i} (postcompLM T' f) <= ‖T'‖ * N[Real]_{K, n, i} f
@@ -2396,7 +2396,7 @@ definition postcompCLM
 
 中文:
 定义 postcompCLM
-  签名: [LinearMap.CompatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
+  签名: [线性映射.余mpatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
   定义体: postcompLM T
   cont := show Continuous (postcompLM T) by
     refine continuous_of_isBounded (ContDiffMapSupportedIn.withSeminorms ..)
@@ -2426,7 +2426,7 @@ lemma postcompCLM_apply
 
 中文:
 引理 postcompCLM_apply
-  结论: [LinearMap.CompatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
+  结论: [线性映射.余mpatibleSMul F F' 实数 𝕜] (T : F ->L[𝕜] F')
   证明: rfl
 -/
 lemma postcompCLM_apply [LinearMap.CompatibleSMul F F' Real 𝕜] (T : F ->L[𝕜] F')
@@ -2804,7 +2804,7 @@ theorem aestronglyMeasurable
 
 中文:
 定理 aestronglyMeasurable
-  条件: {μ : Measure E} (f : 𝓓^{n}_{K}(E, F))
+  条件: {μ : 测度 E} (f : 𝓓^{n}_{K}(E, F))
   证明: f.stronglyMeasurable.aestronglyMeasurable
 -/
 protected theorem aestronglyMeasurable {μ : Measure E} (f : 𝓓^{n}_{K}(E, F)) :
@@ -2821,7 +2821,7 @@ theorem memLp_top
 
 中文:
 定理 memLp_top
-  条件: {μ : Measure E} (f : 𝓓^{n}_{K}(E, F))
+  条件: {μ : 测度 E} (f : 𝓓^{n}_{K}(E, F))
   证明: f.continuous.memLp_top_of_hasCompactSupport f.hasCompactSupport μ
 -/
 protected theorem memLp_top {μ : Measure E} (f : 𝓓^{n}_{K}(E, F)) :
@@ -2840,7 +2840,7 @@ theorem integrable
 
 中文:
 定理 integrable
-  结论: {μ : Measure E} [μ_finite : IsFiniteMeasure (μ.restrict K)]
+  结论: {μ : 测度 E} [μ_finite : 是有限测度 (μ.restrict K)]
   证明: by
   rw [← integrableOn_iff_integrable_of_support_subset f.support_subset]
   exact f.continuous.integrable_of_hasCompactSupport f.hasCompactSupport
@@ -2867,7 +2867,7 @@ theorem integrable_bilin
 
 中文:
 定理 integrable_bilin
-  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : Measure E} {φ : E -> F₂}
+  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : 测度 E} {φ : E -> F₂}
   证明: by
   suffices IntegrableOn (fun x => B (f x) (φ x)) K μ by
     rwa [integrableOn_iff_integrable_of_support_subset] at this
@@ -2907,7 +2907,7 @@ definition integralAgainstBilinLM
 
 中文:
 定义 integralAgainstBilinLM
-  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : Measure E) (φ : E -> F₂)
+  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : 测度 E) (φ : E -> F₂)
   定义体: open scoped Classical in
     if IntegrableOn φ K μ then ∫ x, B (f x) (φ x) ∂μ else 0
   map_add' f g := by
@@ -2946,7 +2946,7 @@ lemma integralAgainstBilinLM_apply
 
 中文:
 引理 integralAgainstBilinLM_apply
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   rfl
 -/
@@ -2967,7 +2967,7 @@ lemma integralAgainstBilinLM_eq_integral
 
 中文:
 引理 integralAgainstBilinLM_eq_integral
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   simp [hφ]
 -/
@@ -2988,8 +2988,8 @@ lemma integralAgainstBilinLM_eq_setIntegral
   rw [f.zero_on_compl hx]; rw [Pi.zero_apply]; rw [map_zero]; rw [zero_apply]
 
 中文:
-引理 integralAgainstBilinLM_eq_setIntegral
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+引理 integralAgainstBilinLM_eq_set整数egral
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   rw [integralAgainstBilinLM_eq_integral hφ]; rw [setIntegral_eq_integral_of_forall_compl_eq_zero]
   intro x hx
@@ -3020,7 +3020,7 @@ lemma norm_integralAgainstBilinLM_le
 
 中文:
 引理 norm_integralAgainstBilinLM_le
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   by_cases hφ : IntegrableOn φ K μ
   · have h : forallᵐ x ∂(μ.restrict K), ‖B (f x) (φ x)‖ <= ‖φ x‖ * ‖B‖ * N[𝕜]_{K, n, 0} f := by
@@ -3062,7 +3062,7 @@ definition integralAgainstBilinCLM
 
 中文:
 定义 integralAgainstBilinCLM
-  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : Measure E) (φ : E -> F₂)
+  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : 测度 E) (φ : E -> F₂)
   定义体: ContDiffMapSupportedIn.mkCLMtoNormedSpace 𝕜 (integralAgainstBilinLM B μ φ)
     (integralAgainstBilinLM B μ φ).map_add (integralAgainstBilinLM B μ φ).map_smul
     ⟨{0}, (∫ x in K, ‖φ x‖ ∂μ) * ‖B‖, by positivity,
@@ -3090,7 +3090,7 @@ lemma integralAgainstBilinCLM_apply
 
 中文:
 引理 integralAgainstBilinCLM_apply
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: integralAgainstBilinLM_apply
 
 Depends on / 依赖: integralAgainstBilinLM_apply
@@ -3111,7 +3111,7 @@ lemma integralAgainstBilinCLM_eq_integral
 
 中文:
 引理 integralAgainstBilinCLM_eq_integral
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: integralAgainstBilinLM_eq_integral hφ
 
 Depends on / 依赖: integralAgainstBilinLM_eq_integral
@@ -3130,8 +3130,8 @@ lemma integralAgainstBilinCLM_eq_setIntegral
   proof: integralAgainstBilinLM_eq_setIntegral hφ
 
 中文:
-引理 integralAgainstBilinCLM_eq_setIntegral
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+引理 integralAgainstBilinCLM_eq_set整数egral
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: integralAgainstBilinLM_eq_setIntegral hφ
 
 Depends on / 依赖: integralAgainstBilinLM_eq_setIntegral
@@ -3168,7 +3168,7 @@ definition bilinLeftCLM
 
 中文:
 定义 bilinLeftCLM
-  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {g : E -> F₂} (hg : ContDiff 实数 n g)
+  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {g : E -> F₂} (hg : 连续可微 实数 n g)
   定义体: ContDiffMapSupportedIn.mkCLM 𝕜 (fun φ x => B (φ x) (g x)) ?hadd ?hsmul (fun φ => ?hsmooth)
     (fun φ x hx => ?hsupp) (fun k hk => ?hbound)
 
@@ -3223,7 +3223,7 @@ theorem bilinLeftCLM_apply
 
 中文:
 定理 bilinLeftCLM_apply
-  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {g : E -> F₂} (hg : ContDiff 实数 n g)
+  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {g : E -> F₂} (hg : 连续可微 实数 n g)
   证明: rfl
 -/
 theorem bilinLeftCLM_apply (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {g : E -> F₂} (hg : ContDiff Real n g)

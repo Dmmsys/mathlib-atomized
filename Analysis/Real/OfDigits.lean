@@ -41,7 +41,7 @@ definition ofDigitsTerm
 
 中文:
 定义 ofDigitsTerm
-  签名: {b : 自然数} (digits : 自然数 -> Fin b)
+  签名: {b : 自然数} (digits : 自然数 -> 有限集 b)
   定义体: fun i => (digits i) * ((b : Real) ^ (i + 1))⁻¹
 
 Depends on / 依赖: digits
@@ -61,7 +61,7 @@ theorem ofDigitsTerm_nonneg
 
 中文:
 定理 ofDigitsTerm_nonneg
-  条件: {b : 自然数} {digits : 自然数 -> Fin b} {n : 自然数}
+  条件: {b : 自然数} {digits : 自然数 -> 有限集 b} {n : 自然数}
   证明: by
   simp only [ofDigitsTerm]
   positivity
@@ -84,7 +84,7 @@ lemma b_pos
 
 中文:
 引理 b_pos
-  条件: {b : 自然数} (digits : 自然数 -> Fin b)
+  条件: {b : 自然数} (digits : 自然数 -> 有限集 b)
   结论: 0 < b
   证明: Fin.pos (digits 0)
 -/
@@ -105,7 +105,7 @@ theorem ofDigitsTerm_le
 
 中文:
 定理 ofDigitsTerm_le
-  条件: {b : 自然数} {digits : 自然数 -> Fin b} {n : 自然数}
+  条件: {b : 自然数} {digits : 自然数 -> 有限集 b} {n : 自然数}
   证明: by
   obtain ⟨c, rfl⟩ := Nat.exists_add_one_eq.mpr (b_pos digits)
   unfold ofDigitsTerm
@@ -138,7 +138,7 @@ theorem summable_ofDigitsTerm
 
 中文:
 定理 summable_ofDigitsTerm
-  条件: {b : 自然数} {digits : 自然数 -> Fin b}
+  条件: {b : 自然数} {digits : 自然数 -> 有限集 b}
   证明: by
   refine Summable.of_nonneg_of_le (fun _ => ofDigitsTerm_nonneg) (fun _ => ofDigitsTerm_le) ?_
   obtain rfl | hb := (Nat.one_le_of_lt (b_pos digits)).eq_or_lt
@@ -167,7 +167,7 @@ definition ofDigits
 
 中文:
 定义 ofDigits
-  签名: {b : 自然数} (digits : 自然数 -> Fin b)
+  签名: {b : 自然数} (digits : 自然数 -> 有限集 b)
   定义体: ∑' n, ofDigitsTerm digits n
 
 Depends on / 依赖: digits, ofDigitsTerm
@@ -188,7 +188,7 @@ theorem ofDigits_nonneg
 
 中文:
 定理 ofDigits_nonneg
-  条件: {b : 自然数} (digits : 自然数 -> Fin b)
+  条件: {b : 自然数} (digits : 自然数 -> 有限集 b)
   结论: 0 <= ofDigits digits
   证明: by
   simp only [ofDigits]
@@ -217,7 +217,7 @@ theorem ofDigits_le_one
 
 中文:
 定理 ofDigits_le_one
-  条件: {b : 自然数} (digits : 自然数 -> Fin b)
+  条件: {b : 自然数} (digits : 自然数 -> 有限集 b)
   结论: ofDigits digits <= 1
   证明: by
   obtain rfl | hb := (Nat.one_le_of_lt (b_pos digits)).eq_or_lt
@@ -258,7 +258,7 @@ theorem ofDigits_eq_sum_add_ofDigits
 
 中文:
 定理 ofDigits_eq_sum_add_ofDigits
-  条件: {b : 自然数} (a : 自然数 -> Fin b) (n : 自然数)
+  条件: {b : 自然数} (a : 自然数 -> 有限集 b) (n : 自然数)
   证明: by
   simp only [ofDigits]
   rw [← Summable.sum_add_tsum_nat_add n summable_ofDigitsTerm]; rw [← Summable.tsum_mul_left _ summable_ofDigitsTerm]
@@ -293,7 +293,7 @@ theorem abs_ofDigits_sub_ofDigits_le
 
 中文:
 定理 abs_ofDigits_sub_ofDigits_le
-  结论: {b : 自然数} {x y : 自然数 -> Fin b} {n : 自然数}
+  结论: {b : 自然数} {x y : 自然数 -> 有限集 b} {n : 自然数}
   证明: by
   rw [ofDigits_eq_sum_add_ofDigits x n]; rw [ofDigits_eq_sum_add_ofDigits y n]
   have : ∑ i in Finset.range n, ofDigitsTerm x i = ∑ i in Finset.range n, ofDigitsTerm y i :=
@@ -348,7 +348,7 @@ theorem ofDigits_digits_sum_eq
 
 中文:
 定理 ofDigits_digits_sum_eq
-  条件: {x : 实数} {b : 自然数} [NeZero b] (hx : x in Set.Ico 0 1) (n : 自然数)
+  条件: {x : 实数} {b : 自然数} [NeZero b] (hx : x in 集合.左闭右开区间 0 1) (n : 自然数)
   证明: by
   have := NeZero.ne b
   induction n with
@@ -454,7 +454,7 @@ theorem hasSum_ofDigitsTerm_digits
 
 中文:
 定理 hasSum_ofDigitsTerm_digits
-  条件: (x : 实数) {b : 自然数} [NeZero b] (hb : 1 < b) (hx : x in Set.Ico 0 1)
+  条件: (x : 实数) {b : 自然数} [NeZero b] (hb : 1 < b) (hx : x in 集合.左闭右开区间 0 1)
   证明: by
   rw [hasSum_iff_tendsto_nat_of_summable_norm (by exact summable_ofDigitsTerm.abs)]
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_ tendsto_const_nhds
@@ -486,7 +486,7 @@ theorem ofDigits_digits
 
 中文:
 定理 ofDigits_digits
-  条件: {b : 自然数} [NeZero b] {x : 实数} (hb : 1 < b) (hx : x in Set.Ico 0 1)
+  条件: {b : 自然数} [NeZero b] {x : 实数} (hb : 1 < b) (hx : x in 集合.左闭右开区间 0 1)
   证明: by
   simp only [ofDigits]
   rw [← Summable.hasSum_iff]
@@ -638,7 +638,7 @@ theorem continuous_ofDigits
 中文:
 定理 continuous_ofDigits
   条件: {b : 自然数}
-  结论: Continuous (@ofDigits b)
+  结论: 连续 (@ofDigits b)
   证明: by
   match b with
   | 0 => fun_prop

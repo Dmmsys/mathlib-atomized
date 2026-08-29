@@ -43,11 +43,11 @@ class NonarchimedeanAddGroup
     - is_nonarchimedean : forall U in 𝓝 (0 : G), exists V : OpenAddSubgroup G, (V : Set G) subseteq U
 
 中文:
-类 NonarchimedeanAddGroup
-  参数: (G : 类型) [AddGroup G] [TopologicalSpace G]
-  继承: IsTopologicalAddGroup G
+类 NonarchimedeanAdd群
+  参数: (G : 类型) [加法群 G] [拓扑空间 G]
+  继承: 是拓扑加群 G
   公理与运算 (1 个):
-    - is_nonarchimedean : 对任意 U in 𝓝 (0 : G), 存在 V : OpenAddSubgroup G, (V : Set G) subseteq U
+    - is_nonarchimedean : 对任意 U in 𝓝 (0 : G), 存在 V : OpenAdd子群 G, (V : 集合 G) subseteq U
 -/
 class NonarchimedeanAddGroup (G : Type*) [AddGroup G] [TopologicalSpace G] : Prop
   extends IsTopologicalAddGroup G where
@@ -66,11 +66,11 @@ class NonarchimedeanGroup
     - is_nonarchimedean : forall U in 𝓝 (1 : G), exists V : OpenSubgroup G, (V : Set G) subseteq U
 
 中文:
-类 NonarchimedeanGroup
-  参数: (G : 类型) [Group G] [TopologicalSpace G]
-  继承: IsTopologicalGroup G
+类 Nonarchimedean群
+  参数: (G : 类型) [群 G] [拓扑空间 G]
+  继承: 是拓扑群 G
   公理与运算 (1 个):
-    - is_nonarchimedean : 对任意 U in 𝓝 (1 : G), 存在 V : OpenSubgroup G, (V : Set G) subseteq U
+    - is_nonarchimedean : 对任意 U in 𝓝 (1 : G), 存在 V : 开子群 G, (V : 集合 G) subseteq U
 -/
 class NonarchimedeanGroup (G : Type*) [Group G] [TopologicalSpace G] : Prop
   extends IsTopologicalGroup G where
@@ -87,11 +87,11 @@ class NonarchimedeanRing
     - is_nonarchimedean : forall U in 𝓝 (0 : R), exists V : OpenAddSubgroup R, (V : Set R) subseteq U
 
 中文:
-类 NonarchimedeanRing
-  参数: (R : 类型) [Ring R] [TopologicalSpace R]
-  继承: IsTopologicalRing R
+类 Nonarchimedean环
+  参数: (R : 类型) [环 R] [拓扑空间 R]
+  继承: 是拓扑环 R
   公理与运算 (1 个):
-    - is_nonarchimedean : 对任意 U in 𝓝 (0 : R), 存在 V : OpenAddSubgroup R, (V : Set R) subseteq U
+    - is_nonarchimedean : 对任意 U in 𝓝 (0 : R), 存在 V : OpenAdd子群 R, (V : 集合 R) subseteq U
 -/
 class NonarchimedeanRing (R : Type*) [Ring R] [TopologicalSpace R] : Prop
   extends IsTopologicalRing R where
@@ -127,8 +127,8 @@ theorem nonarchimedean_of_emb
 
 中文:
 定理 nonarchimedean_of_emb
-  条件: (f : G ->* H) (emb : IsOpenEmbedding f)
-  结论: NonarchimedeanGroup H
+  条件: (f : G ->* H) (emb : 是开嵌入 f)
+  结论: Nonarchimedean群 H
   证明: { is_nonarchimedean := fun U hU =>
       have h₁ : f ⁻¹' U in 𝓝 (1 : G) := by
         apply emb.continuous.tendsto
@@ -226,8 +226,8 @@ instance Prod.instNonarchimedeanGroup
     ⟨V.prod W, ‹_›⟩
 
 中文:
-实例 Prod.instNonarchimedeanGroup
-  签名: : NonarchimedeanGroup (G × K) where
+实例 积类型.instNonarchimedeanGroup
+  签名: : Nonarchimedean群 (G × K) where
   定义体: let ⟨V, W, h⟩ := prod_subset hU
     ⟨V.prod W, ‹_›⟩
 
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonarchimedeanRing (R × S)
+  签名: Nonarchimedean环 (R × S)
   定义体: NonarchimedeanAddGroup.is_nonarchimedean
 
 Depends on / 依赖: NonarchimedeanAddGroup, NonarchimedeanAddGroup.is_nonarchimedean, is_nonarchimedean
@@ -276,7 +276,7 @@ theorem left_mul_subset
 
 中文:
 定理 left_mul_subset
-  条件: (U : OpenAddSubgroup R) (r : R)
+  条件: (U : OpenAdd子群 R) (r : R)
   证明: ⟨U.comap (AddMonoidHom.mulLeft r) (continuous_const_mul r), (U : Set R).image_preimage_subset _⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, U.comap, continuous_const_mul, image_preimage_subset, mulLeft
@@ -303,8 +303,8 @@ let ⟨V, H⟩ := prod_self_subset (U.isOpen.preimage continuous_mul).mem_nhds b
 
 中文:
 定理 mul_subset
-  条件: (U : OpenAddSubgroup R)
-  结论: 存在 V : OpenAddSubgroup R, (V : Set R) * V subseteq U
+  条件: (U : OpenAdd子群 R)
+  结论: 存在 V : OpenAdd子群 R, (V : 集合 R) * V subseteq U
   证明: by
 let ⟨V, H⟩ := prod_self_subset (U.isOpen.preimage continuous_mul).mem_nhds by
     simpa only [Set.mem_preimage, Prod.snd_zero, mul_zero] using! U.zero_mem

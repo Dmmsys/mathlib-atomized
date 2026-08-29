@@ -34,7 +34,7 @@ lemma hasCardinalLT_of_mono
 
 中文:
 引理 hasCardinalLT_of_mono
-  结论: {Y : C} {κ : Cardinal.{w}}
+  结论: {Y : C} {κ : 基数.{w}}
   证明: h.of_injective _ (map_obj_injective f)
 
 Depends on / 依赖: h.of_injective, map_obj_injective, of_injective

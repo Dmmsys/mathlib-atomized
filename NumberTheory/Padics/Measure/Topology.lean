@@ -40,7 +40,7 @@ definition WeakTopology
 
 中文:
 定义 WeakTopology
-  签名: : TopologicalSpace (AbstractMeasure X R E)
+  签名: : 拓扑空间 (AbstractMeasure X R E)
   定义体: .induced (fun μ f => μ f) inferInstance
 -/
 @[reducible] def WeakTopology : TopologicalSpace (AbstractMeasure X R E) :=
@@ -60,7 +60,7 @@ definition StrongTopology
 
 中文:
 定义 StrongTopology
-  签名: : TopologicalSpace (AbstractMeasure X R E)
+  签名: : 拓扑空间 (AbstractMeasure X R E)
   定义体: inferInstanceAs (TopologicalSpace (C(X, R) ->L[R] E))
 -/
 @[reducible] def StrongTopology : TopologicalSpace (AbstractMeasure X R E) :=

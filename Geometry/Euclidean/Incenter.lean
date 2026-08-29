@@ -85,7 +85,7 @@ definition excenterWeightsUnnorm
 
 中文:
 定义 excenterWeightsUnnorm
-  签名: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  签名: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   定义体: (if i in signs then -1 else 1) * (s.height i)⁻¹
 
 Depends on / 依赖: height, s.height
@@ -105,7 +105,7 @@ lemma excenterWeightsUnnorm_reindex
 
 中文:
 引理 excenterWeightsUnnorm_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   ext i
   simp [excenterWeightsUnnorm]
@@ -153,7 +153,7 @@ lemma excenterWeightsUnnorm_restrict
 
 中文:
 引理 excenterWeightsUnnorm_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).excenterWeightsUnnorm = s.excenterWeightsUnnorm := by
   ext
@@ -176,7 +176,7 @@ lemma excenterWeightsUnnorm_empty_apply
 
 中文:
 引理 excenterWeightsUnnorm_empty_apply
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: one_mul _
 -/
 @[simp] lemma excenterWeightsUnnorm_empty_apply (i : Fin (n + 1)) :
@@ -197,7 +197,7 @@ lemma excenterWeightsUnnorm_ne_zero
 
 中文:
 引理 excenterWeightsUnnorm_ne_zero
-  条件: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  条件: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   证明: by
   rw [excenterWeightsUnnorm]
   refine mul_ne_zero ?_ ?_
@@ -223,7 +223,7 @@ definition ExcenterExists
 
 中文:
 定义 ExcenterExists
-  签名: (signs : Finset (Fin (n + 1)))
+  签名: (signs : 有限集 (有限集 (n + 1)))
   定义体: ∑ i, s.excenterWeightsUnnorm signs i != 0
 
 Depends on / 依赖: SetLike, SetLike.le_def, excenterWeightsUnnorm, le_def, mem_mk, s.excenterWeightsUnnorm, simp_rw
@@ -243,7 +243,7 @@ lemma excenterExists_reindex
 
 中文:
 引理 excenterExists_reindex
-  条件: {e : Fin (n + 1) ≃ Fin (m + 1)} {signs : Finset (Fin (m + 1))}
+  条件: {e : 有限集 (n + 1) ≃ 有限集 (m + 1)} {signs : 有限集 (有限集 (m + 1))}
   证明: by
   simp_rw [ExcenterExists, excenterWeightsUnnorm_reindex, Finset.sum_comp_equiv,
     Finset.map_univ_equiv]
@@ -290,7 +290,7 @@ lemma excenterExists_restrict
 
 中文:
 引理 excenterExists_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).ExcenterExists = s.ExcenterExists := by
   ext
@@ -313,7 +313,7 @@ definition excenterWeights
 
 中文:
 定义 excenterWeights
-  签名: (signs : Finset (Fin (n + 1)))
+  签名: (signs : 有限集 (有限集 (n + 1)))
   定义体: (∑ i, s.excenterWeightsUnnorm signs i)⁻¹ • s.excenterWeightsUnnorm signs
 
 Depends on / 依赖: excenterWeightsUnnorm, s.excenterWeightsUnnorm
@@ -333,7 +333,7 @@ lemma excenterWeights_reindex
 
 中文:
 引理 excenterWeights_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   simp_rw [excenterWeights, excenterWeightsUnnorm_reindex, Finset.sum_comp_equiv,
     Finset.map_univ_equiv, Pi.smul_comp]
@@ -381,7 +381,7 @@ lemma excenterWeights_restrict
 
 中文:
 引理 excenterWeights_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).excenterWeights = s.excenterWeights := by
   ext
@@ -409,7 +409,7 @@ lemma ExcenterExists.excenterWeights_ne_zero
 
 中文:
 引理 ExcenterExists.excenterWeights_ne_zero
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenterWeights]
   refine mul_ne_zero ?_ (s.excenterWeightsUnnorm_ne_zero _ _)
@@ -437,7 +437,7 @@ lemma excenterWeightsUnnorm_compl
 
 中文:
 引理 excenterWeightsUnnorm_compl
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: by
   ext i
   by_cases h : i in signs <;> simp [excenterWeightsUnnorm, h]
@@ -458,7 +458,7 @@ lemma excenterWeights_compl
 
 中文:
 引理 excenterWeights_compl
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: by
   simp [excenterWeights, inv_neg]
 -/
@@ -477,7 +477,7 @@ lemma excenterExists_compl
 
 中文:
 引理 excenterExists_compl
-  条件: {signs : Finset (Fin (n + 1))}
+  条件: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   simp [ExcenterExists]
 -/
@@ -500,7 +500,7 @@ lemma sum_excenterWeights
 
 中文:
 引理 sum_excenterWeights
-  条件: (signs : Finset (Fin (n + 1))) [Decidable (s.ExcenterExists signs)]
+  条件: (signs : 有限集 (有限集 (n + 1))) [可判定 (s.ExcenterExists signs)]
   证明: by
   simp_rw [ExcenterExists, excenterWeights]
   split_ifs with h
@@ -532,7 +532,7 @@ alias ⟨_, ExcenterExists.sum_excenterWeights_eq_one⟩ := sum_excenterWeights_
 
 中文:
 引理 sum_excenterWeights_eq_one_iff
-  条件: {signs : Finset (Fin (n + 1))}
+  条件: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   classical
   simp [sum_excenterWeights]
@@ -584,7 +584,7 @@ lemma excenterWeights_empty_pos
 
 中文:
 引理 excenterWeights_empty_pos
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: 0 < s.excenterWeights ∅ i
   证明: by
   simp only [excenterWeights, excenterWeightsUnnorm_empty_apply, Pi.smul_apply, smul_eq_mul]
@@ -612,7 +612,7 @@ lemma sign_excenterWeights_empty
 
 中文:
 引理 sign_excenterWeights_empty
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: SignType.sign (s.excenterWeights ∅ i) = 1
   证明: by
   rw [sign_eq_one_iff]
@@ -712,7 +712,7 @@ lemma inv_height_eq_sum_mul_inv_dist
 
 中文:
 引理 inv_height_eq_sum_mul_inv_dist
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: by
   rw [← sub_eq_zero]
   simp_rw [neg_mul]
@@ -757,7 +757,7 @@ lemma inv_height_lt_sum_inv_height
 
 中文:
 引理 inv_height_lt_sum_inv_height
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [inv_height_eq_sum_mul_inv_dist]
   refine Finset.sum_lt_sum_of_nonempty ?_ ?_
@@ -801,7 +801,7 @@ lemma sum_excenterWeightsUnnorm_singleton_pos
 
 中文:
 引理 sum_excenterWeightsUnnorm_singleton_pos
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [← Finset.sum_add_sum_compl {i}]; rw [Finset.sum_singleton]
   nth_rw 1 [excenterWeightsUnnorm]
@@ -839,7 +839,7 @@ lemma sign_excenterWeights_singleton_neg
 
 中文:
 引理 sign_excenterWeights_singleton_neg
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   simp_rw [excenterWeights, Pi.smul_apply, smul_eq_mul, sign_mul]
   convert! one_mul _
@@ -872,7 +872,7 @@ lemma sign_excenterWeights_singleton_pos
 
 中文:
 引理 sign_excenterWeights_singleton_pos
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (h : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (h : i != j)
   证明: by
   simp_rw [excenterWeights, Pi.smul_apply, smul_eq_mul, sign_mul]
   convert! one_mul _
@@ -901,7 +901,7 @@ lemma excenterExists_singleton
 
 中文:
 引理 excenterExists_singleton
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   结论: s.ExcenterExists {i}
   证明: (s.sum_excenterWeightsUnnorm_singleton_pos i).ne'
 
@@ -925,7 +925,7 @@ lemma excenterWeights_empty_lt_inv_two
 
 中文:
 引理 excenterWeights_empty_lt_inv_two
-  条件: [n.AtLeastTwo] (i : Fin (n + 1))
+  条件: [n.AtLeastTwo] (i : 有限集 (n + 1))
   证明: by
   have h : (s.height i)⁻¹ + (s.height i)⁻¹ < (s.height i)⁻¹ + ∑ j in {i}ᶜ, (s.height j)⁻¹ := by
     have := s.inv_height_lt_sum_inv_height i
@@ -957,7 +957,7 @@ definition exsphere
 
 中文:
 定义 exsphere
-  签名: (signs : Finset (Fin (n + 1)))
+  签名: (signs : 有限集 (有限集 (n + 1)))
   定义体: Finset.univ.affineCombination Real s.points (s.excenterWeights signs)
   radius := |(∑ i, s.excenterWeightsUnnorm signs i)⁻¹|
 
@@ -980,7 +980,7 @@ lemma exsphere_reindex
 
 中文:
 引理 exsphere_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   simp_rw [exsphere, excenterWeightsUnnorm_reindex, excenterWeights_reindex, Finset.sum_comp_equiv,
     reindex, ← Equiv.coe_toEmbedding, ← Finset.affineCombination_map]
@@ -1004,7 +1004,7 @@ definition insphere
 
 中文:
 定义 insphere
-  签名: : Sphere P
+  签名: : 球面 P
   定义体: s.exsphere ∅
 
 Depends on / 依赖: exsphere, s.exsphere
@@ -1024,7 +1024,7 @@ lemma insphere_reindex
 
 中文:
 引理 insphere_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   simp_rw [insphere, exsphere_reindex]
   simp
@@ -1044,7 +1044,7 @@ definition excenter
 
 中文:
 定义 excenter
-  签名: (signs : Finset (Fin (n + 1)))
+  签名: (signs : 有限集 (有限集 (n + 1)))
   定义体: (s.exsphere signs).center
 
 Depends on / 依赖: center, exsphere, s.exsphere
@@ -1063,7 +1063,7 @@ lemma excenter_reindex
 
 中文:
 引理 excenter_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   simp_rw [excenter, exsphere_reindex]
 
@@ -1086,7 +1086,7 @@ lemma ExcenterExists.excenter_map
 
 中文:
 引理 ExcenterExists.excenter_map
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   simp [excenter, exsphere, ← AffineIsometry.coe_toAffineMap, h.sum_excenterWeights_eq_one,
     Finset.map_affineCombination]
@@ -1112,7 +1112,7 @@ lemma ExcenterExists.excenter_restrict
 
 中文:
 引理 ExcenterExists.excenter_restrict
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).excenter signs = s.excenter signs := by
   rw [← s.excenterExists_restrict S hS] at h
@@ -1158,7 +1158,7 @@ lemma incenter_reindex
 
 中文:
 引理 incenter_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   simp_rw [incenter, exsphere_reindex]
   simp
@@ -1197,7 +1197,7 @@ lemma incenter_restrict
 
 中文:
 引理 incenter_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).incenter = s.incenter :=
   s.excenterExists_empty.excenter_restrict S hS
@@ -1218,7 +1218,7 @@ definition exradius
 
 中文:
 定义 exradius
-  签名: (signs : Finset (Fin (n + 1)))
+  签名: (signs : 有限集 (有限集 (n + 1)))
   定义体: (s.exsphere signs).radius
 
 Depends on / 依赖: exsphere, radius, s.exsphere
@@ -1237,7 +1237,7 @@ lemma exradius_reindex
 
 中文:
 引理 exradius_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   simp_rw [exradius, exsphere_reindex]
 
@@ -1282,7 +1282,7 @@ lemma exradius_restrict
 
 中文:
 引理 exradius_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).exradius = s.exradius := by
   ext
@@ -1325,7 +1325,7 @@ lemma inradius_reindex
 
 中文:
 引理 inradius_reindex
-  条件: (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   simp_rw [inradius, exsphere_reindex]
   simp
@@ -1364,7 +1364,7 @@ lemma inradius_restrict
 
 中文:
 引理 inradius_restrict
-  结论: (S : AffineSubspace 实数 P)
+  结论: (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).inradius = s.inradius :=
   congr_fun (s.exradius_restrict S hS) _
@@ -1385,7 +1385,7 @@ lemma exsphere_center
 
 中文:
 引理 exsphere_center
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: rfl
 -/
 @[simp] lemma exsphere_center (signs : Finset (Fin (n + 1))) :
@@ -1402,7 +1402,7 @@ lemma exsphere_radius
 
 中文:
 引理 exsphere_radius
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: rfl
 -/
 @[simp] lemma exsphere_radius (signs : Finset (Fin (n + 1))) :
@@ -1500,7 +1500,7 @@ lemma exsphere_compl
 
 中文:
 引理 exsphere_compl
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: by
   simp [exsphere, excenterWeights_compl, excenterWeightsUnnorm_compl, Pi.neg_apply]
 -/
@@ -1519,7 +1519,7 @@ lemma excenter_compl
 
 中文:
 引理 excenter_compl
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: by
   simp_rw [excenter, exsphere_compl]
 -/
@@ -1538,7 +1538,7 @@ lemma exradius_compl
 
 中文:
 引理 exradius_compl
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: by
   simp_rw [exradius, exsphere_compl]
 -/
@@ -1557,7 +1557,7 @@ lemma exsphere_univ
 
 中文:
 引理 exsphere_univ
-  结论: s.exsphere Finset.univ = s.insphere
+  结论: s.exsphere 有限集.univ = s.insphere
   证明: by
   rw [← Finset.compl_empty]; rw [exsphere_compl]; rw [insphere]
 -/
@@ -1575,7 +1575,7 @@ lemma excenter_univ
 
 中文:
 引理 excenter_univ
-  结论: s.excenter Finset.univ = s.incenter
+  结论: s.excenter 有限集.univ = s.incenter
   证明: by
   rw [excenter]; rw [exsphere_univ]; rw [insphere_center]
 
@@ -1595,7 +1595,7 @@ lemma exradius_univ
 
 中文:
 引理 exradius_univ
-  结论: s.exradius Finset.univ = s.inradius
+  结论: s.exradius 有限集.univ = s.inradius
   证明: by
   rw [exradius]; rw [exsphere_univ]; rw [insphere_radius]
 -/
@@ -1612,7 +1612,7 @@ lemma excenter_eq_affineCombination
 
 中文:
 引理 excenter_eq_affineCombination
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: rfl
 -/
 lemma excenter_eq_affineCombination (signs : Finset (Fin (n + 1))) :
@@ -1629,7 +1629,7 @@ lemma exradius_eq_abs_inv_sum
 
 中文:
 引理 exradius_eq_abs_inv_sum
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   证明: rfl
 -/
 lemma exradius_eq_abs_inv_sum (signs : Finset (Fin (n + 1))) :
@@ -1678,7 +1678,7 @@ lemma exradius_nonneg
 
 中文:
 引理 exradius_nonneg
-  条件: (signs : Finset (Fin (n + 1)))
+  条件: (signs : 有限集 (有限集 (n + 1)))
   结论: 0 <= s.exradius signs
   证明: abs_nonneg _
 
@@ -1698,7 +1698,7 @@ lemma ExcenterExists.exradius_pos
 
 中文:
 引理 ExcenterExists.exradius_pos
-  条件: {signs : Finset (Fin (n + 1))} (h : s.ExcenterExists signs)
+  条件: {signs : 有限集 (有限集 (n + 1))} (h : s.ExcenterExists signs)
   证明: abs_pos.2 (inv_ne_zero h)
 
 Depends on / 依赖: abs_pos, inv_ne_zero
@@ -1736,7 +1736,7 @@ lemma exradius_singleton_pos
 
 中文:
 引理 exradius_singleton_pos
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   结论: 0 < s.exradius {i}
   证明: (s.excenterExists_singleton i).exradius_pos
 
@@ -1756,7 +1756,7 @@ lemma ExcenterExists.excenter_mem_affineSpan_range
 
 中文:
 引理 ExcenterExists.excenter_mem_affineSpan_range
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: affineCombination_mem_affineSpan h.sum_excenterWeights_eq_one _
 
 Depends on / 依赖: affineCombination_mem_affineSpan, h.sum_excenterWeights_eq_one, sum_excenterWeights_eq_one
@@ -1775,7 +1775,7 @@ lemma incenter_mem_affineSpan_range
 
 中文:
 引理 incenter_mem_affineSpan_range
-  结论: s.incenter in affineSpan 实数 (Set.range s.points)
+  结论: s.incenter in affineSpan 实数 (集合.range s.points)
   证明: s.excenterExists_empty.excenter_mem_affineSpan_range
 
 Depends on / 依赖: excenterExists_empty, excenter_mem_affineSpan_range, s.excenterExists_empty.excenter_mem_affineSpan_range
@@ -1838,7 +1838,7 @@ lemma excenter_singleton_mem_affineSpan_range
 
 中文:
 引理 excenter_singleton_mem_affineSpan_range
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: (s.excenterExists_singleton i).excenter_mem_affineSpan_range
 
 Depends on / 依赖: excenterExists_singleton, excenter_mem_affineSpan_range, s.excenterExists_singleton
@@ -1863,7 +1863,7 @@ lemma ExcenterExists.signedInfDist_excenter_eq_mul_sum_inv
 
 中文:
 引理 ExcenterExists.signedInfDist_excenter_eq_mul_sum_inv
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   simp_rw [excenter_eq_affineCombination,
     signedInfDist_affineCombination _ _ h.sum_excenterWeights_eq_one, excenterWeights,
@@ -1898,7 +1898,7 @@ lemma ExcenterExists.sign_signedInfDist_excenter
 
 中文:
 引理 ExcenterExists.sign_signedInfDist_excenter
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [signedInfDist_affineCombination _ _ h.sum_excenterWeights_eq_one]; rw [sign_mul]
   convert! mul_one _
@@ -1928,7 +1928,7 @@ lemma sign_signedInfDist_incenter
 
 中文:
 引理 sign_signedInfDist_incenter
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: by
   convert! s.excenterExists_empty.sign_signedInfDist_excenter i
   simp
@@ -1957,7 +1957,7 @@ lemma ExcenterExists.affineCombination_eq_excenter_iff
 
 中文:
 引理 ExcenterExists.affineCombination_eq_excenter_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   constructor
   · simp_rw [excenter, exsphere]
@@ -1998,7 +1998,7 @@ lemma ExcenterExists.excenter_notMem_affineSpan_face
 
 中文:
 引理 ExcenterExists.excenter_notMem_affineSpan_face
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   intro hm
   rw [range_face_points] at hm
@@ -2039,7 +2039,7 @@ lemma incenter_notMem_affineSpan_face
 
 中文:
 引理 incenter_notMem_affineSpan_face
-  结论: {fs : Finset (Fin (n + 1))} {m : 自然数} (hfs : #fs = m + 1)
+  结论: {fs : 有限集 (有限集 (n + 1))} {m : 自然数} (hfs : #fs = m + 1)
   证明: s.excenterExists_empty.excenter_notMem_affineSpan_face hfs hne
 
 Depends on / 依赖: excenterExists_empty, excenter_notMem_affineSpan_face, s.excenterExists_empty.excenter_notMem_affineSpan_face
@@ -2059,7 +2059,7 @@ lemma ExcenterExists.excenter_notMem_affineSpan_faceOpposite
 
 中文:
 引理 ExcenterExists.excenter_notMem_affineSpan_faceOpposite
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: h.excenter_notMem_affineSpan_face _ (by have := NeZero.ne n; lia)
 
 Depends on / 依赖: NeZero, NeZero.ne, excenter_notMem_affineSpan_face, h.excenter_notMem_affineSpan_face
@@ -2079,7 +2079,7 @@ lemma incenter_notMem_affineSpan_faceOpposite
 
 中文:
 引理 incenter_notMem_affineSpan_faceOpposite
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.excenter_notMem_affineSpan_faceOpposite i
 
 Depends on / 依赖: excenterExists_empty, excenter_notMem_affineSpan_faceOpposite, s.excenterExists_empty.excenter_notMem_affineSpan_faceOpposite
@@ -2101,7 +2101,7 @@ lemma ExcenterExists.excenter_ne_point
 
 中文:
 引理 ExcenterExists.excenter_ne_point
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   have hf := h.excenter_notMem_affineSpan_face (fs := {i}) (m := 0) (by simp) (NeZero.ne' _)
   simpa using hf
@@ -2123,7 +2123,7 @@ lemma incenter_ne_point
 
 中文:
 引理 incenter_ne_point
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.excenter_ne_point i
 
 Depends on / 依赖: excenterExists_empty, excenter_ne_point, s.excenterExists_empty.excenter_ne_point
@@ -2186,7 +2186,7 @@ lemma incenter_notMem_affineSpan_pair
 
 中文:
 引理 incenter_notMem_affineSpan_pair
-  条件: [自然数.AtLeastTwo n] (i j : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i j : 有限集 (n + 1))
   证明: s.excenterExists_empty.excenter_notMem_affineSpan_pair i j
 
 Depends on / 依赖: excenterExists_empty, excenter_notMem_affineSpan_pair, s.excenterExists_empty.excenter_notMem_affineSpan_pair
@@ -2212,7 +2212,7 @@ lemma ExcenterExists.excenterWeights_eq_excenterWeights_iff
 
 中文:
 引理 ExcenterExists.excenterWeights_eq_excenterWeights_iff
-  结论: {signs₁ signs₂ : Finset (Fin (n + 1))}
+  结论: {signs₁ signs₂ : 有限集 (有限集 (n + 1))}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have hi : forall i, SignType.sign (s.excenterWeights signs₁ i) =
@@ -2264,7 +2264,7 @@ lemma ExcenterExists.excenter_eq_excenter_iff
 
 中文:
 引理 ExcenterExists.excenter_eq_excenter_iff
-  结论: {signs₁ signs₂ : Finset (Fin (n + 1))}
+  结论: {signs₁ signs₂ : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [h₂.affineCombination_eq_excenter_iff (s.sum_excenterWeights_eq_one_iff.2 h₁)]
   exact h₁.excenterWeights_eq_excenterWeights_iff h₂
@@ -2290,7 +2290,7 @@ lemma ExcenterExists.excenter_eq_incenter_iff
 
 中文:
 引理 ExcenterExists.excenter_eq_incenter_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [incenter]; rw [← excenter]; rw [h.excenter_eq_excenter_iff s.excenterExists_empty]
   simp
@@ -2316,7 +2316,7 @@ lemma excenter_singleton_ne_incenter
 
 中文:
 引理 excenter_singleton_ne_incenter
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   intro h
   rw [(s.excenterExists_singleton i).excenter_eq_incenter_iff] at h
@@ -2384,7 +2384,7 @@ lemma ExcenterExists.sSameSide_excenter_point_iff
 
 中文:
 引理 ExcenterExists.sSameSide_excenter_point_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [s.sSameSide_affineSpan_faceOpposite_point_right_iff h.sum_excenterWeights_eq_one]
 
@@ -2408,7 +2408,7 @@ lemma ExcenterExists.sSameSide_point_excenter_iff
 
 中文:
 引理 ExcenterExists.sSameSide_point_excenter_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [s.sSameSide_affineSpan_faceOpposite_point_left_iff h.sum_excenterWeights_eq_one]
 
@@ -2432,7 +2432,7 @@ lemma ExcenterExists.sOppSide_excenter_point_iff
 
 中文:
 引理 ExcenterExists.sOppSide_excenter_point_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [s.sOppSide_affineSpan_faceOpposite_point_right_iff h.sum_excenterWeights_eq_one]
 
@@ -2456,7 +2456,7 @@ lemma ExcenterExists.sOppSide_point_excenter_iff
 
 中文:
 引理 ExcenterExists.sOppSide_point_excenter_iff
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [excenter_eq_affineCombination]; rw [s.sOppSide_affineSpan_faceOpposite_point_left_iff h.sum_excenterWeights_eq_one]
 
@@ -2478,7 +2478,7 @@ lemma sSameSide_incenter_point
 
 中文:
 引理 sSameSide_incenter_point
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.sSameSide_excenter_point_iff.2 (s.excenterWeights_empty_pos i)
 
 Depends on / 依赖: excenterExists_empty, excenterWeights_empty_pos, s.excenterExists_empty.sSameSide_excenter_point_iff, s.excenterWeights_empty_pos, sSameSide_excenter_point_iff
@@ -2497,7 +2497,7 @@ lemma sSameSide_point_incenter
 
 中文:
 引理 sSameSide_point_incenter
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.sSameSide_point_excenter_iff.2 (s.excenterWeights_empty_pos i)
 
 Depends on / 依赖: excenterExists_empty, excenterWeights_empty_pos, s.excenterExists_empty.sSameSide_point_excenter_iff, s.excenterWeights_empty_pos, sSameSide_point_excenter_iff
@@ -2517,7 +2517,7 @@ lemma sOppSide_excenter_singleton_point
 
 中文:
 引理 sOppSide_excenter_singleton_point
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [(s.excenterExists_singleton i).sOppSide_excenter_point_iff]; rw [← sign_eq_neg_one_iff]; rw [s.sign_excenterWeights_singleton_neg i]
 
@@ -2539,7 +2539,7 @@ lemma sOppSide_point_excenter_singleton
 
 中文:
 引理 sOppSide_point_excenter_singleton
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [(s.excenterExists_singleton i).sOppSide_point_excenter_iff]; rw [← sign_eq_neg_one_iff]; rw [s.sign_excenterWeights_singleton_neg i]
 
@@ -2561,7 +2561,7 @@ lemma sSameSide_excenter_singleton_point
 
 中文:
 引理 sSameSide_excenter_singleton_point
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (h : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (h : i != j)
   证明: by
   rw [(s.excenterExists_singleton j).sSameSide_excenter_point_iff]; rw [← sign_eq_one_iff]; rw [s.sign_excenterWeights_singleton_pos h.symm]
 
@@ -2583,7 +2583,7 @@ lemma sSameSide_point_excenter_singleton
 
 中文:
 引理 sSameSide_point_excenter_singleton
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (h : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (h : i != j)
   证明: by
   rw [(s.excenterExists_singleton j).sSameSide_point_excenter_iff]; rw [← sign_eq_one_iff]; rw [s.sign_excenterWeights_singleton_pos h.symm]
 
@@ -2604,7 +2604,7 @@ definition touchpoint
 
 中文:
 定义 touchpoint
-  签名: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  签名: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   定义体: (s.faceOpposite i).orthogonalProjectionSpan (s.excenter signs)
 
 Depends on / 依赖: excenter, faceOpposite, orthogonalProjectionSpan, s.excenter, s.faceOpposite
@@ -2622,7 +2622,7 @@ lemma touchpoint_reindex
 
 中文:
 引理 touchpoint_reindex
-  结论: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  结论: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: orthogonalProjectionSpan_congr (s.range_faceOpposite_reindex _ _) (s.excenter_reindex _ _)
 
 Depends on / 依赖: excenter_reindex, orthogonalProjectionSpan_congr, range_faceOpposite_reindex, s.excenter_reindex, s.range_faceOpposite_reindex
@@ -2645,7 +2645,7 @@ lemma ExcenterExists.touchpoint_map
 
 中文:
 引理 ExcenterExists.touchpoint_map
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   simp [touchpoint, h.excenter_map, ← orthogonalProjectionSpan_map]
 -/
@@ -2669,7 +2669,7 @@ lemma ExcenterExists.touchpoint_restrict
 
 中文:
 引理 ExcenterExists.touchpoint_restrict
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).touchpoint signs i = s.touchpoint signs i := by
   rw [← s.excenterExists_restrict S hS] at h
@@ -2695,7 +2695,7 @@ lemma touchpoint_mem_affineSpan
 
 中文:
 引理 touchpoint_mem_affineSpan
-  条件: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  条件: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   证明: orthogonalProjection_mem _
 
 Depends on / 依赖: orthogonalProjection_mem
@@ -2716,7 +2716,7 @@ lemma touchpoint_mem_affineSpan_simplex
 
 中文:
 引理 touchpoint_mem_affineSpan_simplex
-  条件: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  条件: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   证明: by
   refine SetLike.le_def.1 (affineSpan_mono _ ?_) (s.touchpoint_mem_affineSpan signs i)
   simp
@@ -2738,7 +2738,7 @@ lemma touchpoint_eq_point_rev
 
 中文:
 引理 touchpoint_eq_point_rev
-  条件: (s : Simplex 实数 P 1) (signs : Finset (Fin 2)) (i : Fin 2)
+  条件: (s : 单纯形 实数 P 1) (signs : 有限集 (有限集 2)) (i : 有限集 2)
   证明: s.orthogonalProjectionSpan_faceOpposite_eq_point_rev _ _
 
 Depends on / 依赖: orthogonalProjectionSpan_faceOpposite_eq_point_rev, s.orthogonalProjectionSpan_faceOpposite_eq_point_rev
@@ -2761,7 +2761,7 @@ lemma ExcenterExists.signedInfDist_excenter
 
 中文:
 引理 ExcenterExists.signedInfDist_excenter
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [h.signedInfDist_excenter_eq_mul_sum_inv]; rw [mul_assoc]; rw [exradius_eq_abs_inv_sum]
   congr
@@ -2790,7 +2790,7 @@ lemma signedInfDist_incenter
 
 中文:
 引理 signedInfDist_incenter
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: s.signedInfDist i s.incenter = s.inradius
   证明: by
   rw [incenter]; rw [exsphere_center]; rw [s.excenterExists_empty.signedInfDist_excenter]
@@ -2816,7 +2816,7 @@ lemma ExcenterExists.dist_excenter
 
 中文:
 引理 ExcenterExists.dist_excenter
-  结论: {signs : Finset (Fin (n + 1))} (h : s.ExcenterExists signs)
+  结论: {signs : 有限集 (有限集 (n + 1))} (h : s.ExcenterExists signs)
   证明: by
   rw [touchpoint]; rw [← abs_signedInfDist_eq_dist_of_mem_affineSpan_range i h.excenter_mem_affineSpan_range]; rw [h.signedInfDist_excenter]; rw [abs_mul]; rw [abs_mul]; rw [abs_of_nonneg (s.exradius_nonneg signs)]
   simp only [abs_ite, abs_neg, abs_one, ite_self, one_mul]
@@ -2844,7 +2844,7 @@ lemma dist_incenter
 
 中文:
 引理 dist_incenter
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.dist_excenter _
 
 Depends on / 依赖: dist_excenter, excenterExists_empty, s.excenterExists_empty.dist_excenter
@@ -2865,7 +2865,7 @@ lemma ExcenterExists.dist_excenter_eq_dist_excenter
 
 中文:
 引理 ExcenterExists.dist_excenter_eq_dist_excenter
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   simp_rw [h.dist_excenter]
 
@@ -2887,7 +2887,7 @@ lemma dist_incenter_eq_dist_incenter
 
 中文:
 引理 dist_incenter_eq_dist_incenter
-  条件: (i₁ i₂ : Fin (n + 1))
+  条件: (i₁ i₂ : 有限集 (n + 1))
   证明: s.excenterExists_empty.dist_excenter_eq_dist_excenter _ _
 
 Depends on / 依赖: dist_excenter_eq_dist_excenter, excenterExists_empty, s.excenterExists_empty.dist_excenter_eq_dist_excenter
@@ -2907,7 +2907,7 @@ lemma ExcenterExists.touchpoint_mem_exsphere
 
 中文:
 引理 ExcenterExists.touchpoint_mem_exsphere
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: mem_sphere'.2 (h.dist_excenter i)
 
 Depends on / 依赖: dist_excenter, h.dist_excenter, mem_sphere
@@ -2927,7 +2927,7 @@ lemma touchpoint_mem_insphere
 
 中文:
 引理 touchpoint_mem_insphere
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: s.touchpoint ∅ i in s.insphere
   证明: s.excenterExists_empty.touchpoint_mem_exsphere _
 
@@ -2948,7 +2948,7 @@ lemma ExcenterExists.isTangentAt_touchpoint
 
 中文:
 引理 ExcenterExists.isTangentAt_touchpoint
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [touchpoint]; rw [orthogonalProjectionSpan]; rw [excenter]; rw [← EuclideanGeometry.Sphere.dist_orthogonalProjection_eq_radius_iff_isTangentAt]; rw [← orthogonalProjectionSpan]; rw [← excenter]; rw [← exradius]; rw [← touchpoint]; rw [h.dist_excenter]
 
@@ -2970,7 +2970,7 @@ lemma isTangentAt_insphere_touchpoint
 
 中文:
 引理 isTangentAt_insphere_touchpoint
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: s.excenterExists_empty.isTangentAt_touchpoint i
 
 Depends on / 依赖: excenterExists_empty, isTangentAt_touchpoint, s.excenterExists_empty.isTangentAt_touchpoint
@@ -2992,7 +2992,7 @@ lemma eq_touchpoint_of_isTangentAt_exsphere
 
 中文:
 引理 eq_touchpoint_of_isTangentAt_exsphere
-  结论: {signs : Finset (Fin (n + 1))} {i : Fin (n + 1)} {p : P}
+  结论: {signs : 有限集 (有限集 (n + 1))} {i : 有限集 (n + 1)} {p : P}
   证明: by
   rw [ht.eq_orthogonalProjection]; rw [touchpoint]; rw [orthogonalProjectionSpan]; rw [excenter]
 
@@ -3017,7 +3017,7 @@ lemma ExcenterExists.isTangentAt_exsphere_iff_eq_touchpoint
 
 中文:
 引理 ExcenterExists.isTangentAt_exsphere_iff_eq_touchpoint
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   refine ⟨eq_touchpoint_of_isTangentAt_exsphere, ?_⟩
   rintro rfl
@@ -3044,7 +3044,7 @@ lemma isTangentAt_insphere_iff_eq_touchpoint
 
 中文:
 引理 isTangentAt_insphere_iff_eq_touchpoint
-  条件: {i : Fin (n + 1)} {p : P}
+  条件: {i : 有限集 (n + 1)} {p : P}
   证明: s.excenterExists_empty.isTangentAt_exsphere_iff_eq_touchpoint
 
 Depends on / 依赖: excenterExists_empty, isTangentAt_exsphere_iff_eq_touchpoint, s.excenterExists_empty.isTangentAt_exsphere_iff_eq_touchpoint
@@ -3069,7 +3069,7 @@ lemma ExcenterExists.affineSpan_faceOpposite_eq_orthRadius
 
 中文:
 引理 ExcenterExists.affineSpan_faceOpposite_eq_orthRadius
-  结论: [hf : Fact (Module.finrank 实数 V = n)]
+  结论: [hf : Fact (模.finrank 实数 V = n)]
   证明: by
   refine (h.isTangentAt_touchpoint i).eq_orthRadius_of_finrank_add_one_eq (h.exradius_pos.ne') ?_
   rw [direction_affineSpan]; rw [(s.faceOpposite i).independent.finrank_vectorSpan_add_one]; rw [Fintype.card_fin]; rw [hf.out]
@@ -3097,7 +3097,7 @@ lemma affineSpan_faceOpposite_eq_orthRadius_insphere
 
 中文:
 引理 affineSpan_faceOpposite_eq_orthRadius_insphere
-  结论: [Fact (Module.finrank 实数 V = n)]
+  结论: [Fact (模.finrank 实数 V = n)]
   证明: s.excenterExists_empty.affineSpan_faceOpposite_eq_orthRadius i
 
 Depends on / 依赖: affineSpan_faceOpposite_eq_orthRadius, excenterExists_empty, s.excenterExists_empty.affineSpan_faceOpposite_eq_orthRadius
@@ -3122,7 +3122,7 @@ lemma exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter
       rw [altitudeFoot]; rw [← s.signedInfDist_affineCombinat
 
 中文:
-引理 exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter
+引理 存在_对任意_signedInfDist_eq_iff_excenterExists_and_eq_excenter
   结论: {p : P}
   证明: by
   refine ⟨?_, ?_⟩
@@ -3176,7 +3176,7 @@ lemma exists_forall_signedInfDist_eq_iff_eq_incenter
   · simp [excenterExists_empty]
 
 中文:
-引理 exists_forall_signedInfDist_eq_iff_eq_incenter
+引理 存在_对任意_signedInfDist_eq_iff_eq_incenter
   结论: {p : P}
   证明: by
   convert! s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter hp (signs := ∅)
@@ -3207,7 +3207,7 @@ lemma exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter
     refine ⟨{i in (Finset.univ : Finset (Fin (n + 1))) | s.signedInfDi
 
 中文:
-引理 exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter
+引理 存在_对任意_dist_eq_iff_存在_excenterExists_and_eq_excenter
   结论: {p : P}
   证明: by
   simp_rw [← abs_signedInfDist_eq_dist_of_mem_affineSpan_range _ hp]
@@ -3257,7 +3257,7 @@ lemma ExcenterExists.touchpoint_injective
 
 中文:
 引理 ExcenterExists.touchpoint_injective
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   intro i j hij
   by_contra hne
@@ -3314,7 +3314,7 @@ lemma touchpoint_empty_injective
 
 中文:
 引理 touchpoint_empty_injective
-  结论: Function.Injective (s.touchpoint ∅)
+  结论: 函数.单射 (s.touchpoint ∅)
   证明: s.excenterExists_empty.touchpoint_injective
 
 Depends on / 依赖: excenterExists_empty, s.excenterExists_empty.touchpoint_injective, touchpoint_injective
@@ -3334,7 +3334,7 @@ lemma ExcenterExists.touchpoint_notMem_affineSpan_of_ne
 
 中文:
 引理 ExcenterExists.touchpoint_notMem_affineSpan_of_ne
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: fun hm => h.touchpoint_injective.ne hne
     ((h.isTangentAt_touchpoint j).eq_of_mem_of_mem (h.touchpoint_mem_exsphere i) hm)
 
@@ -3356,7 +3356,7 @@ lemma touchpoint_empty_notMem_affineSpan_of_ne
 
 中文:
 引理 touchpoint_empty_notMem_affineSpan_of_ne
-  条件: {i j : Fin (n + 1)} (hne : i != j)
+  条件: {i j : 有限集 (n + 1)} (hne : i != j)
   证明: s.excenterExists_empty.touchpoint_notMem_affineSpan_of_ne hne
 
 Depends on / 依赖: excenterExists_empty, s.excenterExists_empty.touchpoint_notMem_affineSpan_of_ne, touchpoint_notMem_affineSpan_of_ne
@@ -3383,7 +3383,7 @@ lemma ExcenterExists.sign_signedInfDist_lineMap_excenter_touchpoint
 
 中文:
 引理 ExcenterExists.sign_signedInfDist_lineMap_excenter_touchpoint
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   have hc : ContinuousOn (fun (t : Real) => SignType.sign
       (s.signedInfDist j (AffineMap.lineMap (s.excenter signs) (s.touchpoint signs i) t)))
@@ -3438,7 +3438,7 @@ lemma sign_signedInfDist_lineMap_incenter_touchpoint
 
 中文:
 引理 sign_signedInfDist_lineMap_incenter_touchpoint
-  结论: {i j : Fin (n + 1)} (hne : i != j) {r : 实数}
+  结论: {i j : 有限集 (n + 1)} (hne : i != j) {r : 实数}
   证明: s.excenterExists_empty.sign_signedInfDist_lineMap_excenter_touchpoint hne hr
 
 Depends on / 依赖: excenterExists_empty, s.excenterExists_empty.sign_signedInfDist_lineMap_excenter_touchpoint, sign_signedInfDist_lineMap_excenter_touchpoint
@@ -3463,7 +3463,7 @@ lemma ExcenterExists.sign_signedInfDist_touchpoint
 
 中文:
 引理 ExcenterExists.sign_signedInfDist_touchpoint
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   rw [← h.sign_signedInfDist_lineMap_excenter_touchpoint hne (r := 1) ⟨zero_le_one]; rw [le_rfl⟩]
   simp
@@ -3487,7 +3487,7 @@ lemma sign_signedInfDist_touchpoint_empty
 
 中文:
 引理 sign_signedInfDist_touchpoint_empty
-  条件: {i j : Fin (n + 1)} (hne : i != j)
+  条件: {i j : 有限集 (n + 1)} (hne : i != j)
   证明: s.excenterExists_empty.sign_signedInfDist_touchpoint hne
 
 Depends on / 依赖: excenterExists_empty, s.excenterExists_empty.sign_signedInfDist_touchpoint, sign_signedInfDist_touchpoint
@@ -3508,7 +3508,7 @@ definition touchpointWeights
 
 中文:
 定义 touchpointWeights
-  签名: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  签名: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   定义体: (eq_affineCombination_of_mem_affineSpan_of_fintype
     (s.touchpoint_mem_affineSpan_simplex signs i)).choose
 
@@ -3529,7 +3529,7 @@ lemma sum_touchpointWeights
 
 中文:
 引理 sum_touchpointWeights
-  条件: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  条件: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   证明: (eq_affineCombination_of_mem_affineSpan_of_fintype
     (s.touchpoint_mem_affineSpan_simplex signs i)).choose_spec.1
 -/
@@ -3549,7 +3549,7 @@ lemma affineCombination_touchpointWeights
 
 中文:
 引理 affineCombination_touchpointWeights
-  条件: (signs : Finset (Fin (n + 1))) (i : Fin (n + 1))
+  条件: (signs : 有限集 (有限集 (n + 1))) (i : 有限集 (n + 1))
   证明: (eq_affineCombination_of_mem_affineSpan_of_fintype
     (s.touchpoint_mem_affineSpan_simplex signs i)).choose_spec.2.symm
 -/
@@ -3575,7 +3575,7 @@ lemma affineCombination_eq_touchpoint_iff
 
 中文:
 引理 affineCombination_eq_touchpoint_iff
-  结论: {signs : Finset (Fin (n + 1))} {i : Fin (n + 1)}
+  结论: {signs : 有限集 (有限集 (n + 1))} {i : 有限集 (n + 1)}
   证明: by
   constructor
   · rw [← s.affineCombination_touchpointWeights]
@@ -3612,7 +3612,7 @@ lemma touchpointWeights_reindex
 
 中文:
 引理 touchpointWeights_reindex
-  结论: (e : Fin (n + 1) ≃ Fin (m + 1)) (signs : Finset (Fin (m + 1)))
+  结论: (e : 有限集 (n + 1) ≃ 有限集 (m + 1)) (signs : 有限集 (有限集 (m + 1)))
   证明: by
   rw [eq_comm]; rw [← affineCombination_eq_touchpoint_iff]
   · rw [touchpoint_reindex, ← affineCombination_touchpointWeights, reindex]
@@ -3653,7 +3653,7 @@ lemma ExcenterExists.touchpointWeights_map
 
 中文:
 引理 ExcenterExists.touchpointWeights_map
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   ext i : 1
   rw [← affineCombination_eq_touchpoint_iff
@@ -3688,7 +3688,7 @@ lemma ExcenterExists.touchpointWeights_restrict
 
 中文:
 引理 ExcenterExists.touchpointWeights_restrict
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).touchpointWeights signs = s.touchpointWeights signs := by
   rw [← s.excenterExists_restrict S hS] at h
@@ -3720,7 +3720,7 @@ lemma ExcenterExists.sign_touchpointWeights
 
 中文:
 引理 ExcenterExists.sign_touchpointWeights
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: by
   have hs := h.sign_signedInfDist_touchpoint hne
   rw [← s.affineCombination_touchpointWeights signs i]; rw [h.sign_signedInfDist_excenter]; rw [s.signedInfDist_affineCombination j (by simp)] at hs
@@ -3752,7 +3752,7 @@ lemma sign_touchpointWeights_empty
 
 中文:
 引理 sign_touchpointWeights_empty
-  条件: {i j : Fin (n + 1)} (hne : i != j)
+  条件: {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   rw [s.excenterExists_empty.sign_touchpointWeights hne]
   simp
@@ -3781,7 +3781,7 @@ lemma touchpointWeights_eq_zero
 
 中文:
 引理 touchpointWeights_eq_zero
-  条件: {signs : Finset (Fin (n + 1))} (i : Fin (n + 1))
+  条件: {signs : 有限集 (有限集 (n + 1))} (i : 有限集 (n + 1))
   证明: by
   refine s.independent.eq_zero_of_affineCombination_mem_affineSpan
     (s.sum_touchpointWeights signs i) ?_ (Finset.mem_univ _)
@@ -3810,7 +3810,7 @@ lemma touchpointWeights_empty_pos
 
 中文:
 引理 touchpointWeights_empty_pos
-  条件: {i j : Fin (n + 1)} (hne : i != j)
+  条件: {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   simpa [sign_eq_one_iff] using s.sign_touchpointWeights_empty hne
 
@@ -3837,7 +3837,7 @@ lemma touchpoint_empty_mem_interior_faceOpposite
 
 中文:
 引理 touchpoint_empty_mem_interior_faceOpposite
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [faceOpposite]; rw [← affineCombination_touchpointWeights]; rw [s.affineCombination_mem_interior_face_iff_pos _ (s.sum_touchpointWeights _ _)]
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
@@ -3866,7 +3866,7 @@ lemma sign_touchpointWeights_singleton_pos
 
 中文:
 引理 sign_touchpointWeights_singleton_pos
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (hne : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   rw [(s.excenterExists_singleton i).sign_touchpointWeights hne]; rw [s.sign_excenterWeights_singleton_pos hne]
 
@@ -3887,7 +3887,7 @@ lemma touchpointWeights_singleton_pos
 
 中文:
 引理 touchpointWeights_singleton_pos
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (hne : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   simpa [sign_eq_one_iff] using s.sign_touchpointWeights_singleton_pos hne
 
@@ -3912,7 +3912,7 @@ lemma touchpoint_singleton_mem_interior_faceOpposite
 
 中文:
 引理 touchpoint_singleton_mem_interior_faceOpposite
-  条件: [自然数.AtLeastTwo n] (i : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i : 有限集 (n + 1))
   证明: by
   rw [faceOpposite]; rw [← affineCombination_touchpointWeights]; rw [s.affineCombination_mem_interior_face_iff_pos _ (s.sum_touchpointWeights _ _)]
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
@@ -3941,7 +3941,7 @@ lemma sign_touchpointWeights_singleton_neg
 
 中文:
 引理 sign_touchpointWeights_singleton_neg
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (hne : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   rw [(s.excenterExists_singleton i).sign_touchpointWeights hne.symm]; rw [s.sign_excenterWeights_singleton_neg]
 
@@ -3962,7 +3962,7 @@ lemma touchpointWeights_singleton_neg
 
 中文:
 引理 touchpointWeights_singleton_neg
-  条件: [自然数.AtLeastTwo n] {i j : Fin (n + 1)} (hne : i != j)
+  条件: [自然数.AtLeastTwo n] {i j : 有限集 (n + 1)} (hne : i != j)
   证明: by
   simpa [sign_eq_neg_one_iff] using s.sign_touchpointWeights_singleton_neg hne
 
@@ -3987,7 +3987,7 @@ lemma ExcenterExists.touchpoint_ne_point
 
 中文:
 引理 ExcenterExists.touchpoint_ne_point
-  结论: [自然数.AtLeastTwo n] {signs : Finset (Fin (n + 1))}
+  结论: [自然数.AtLeastTwo n] {signs : 有限集 (有限集 (n + 1))}
   证明: by
   intro he
   rw [eq_comm]; rw [← Finset.univ.affineCombination_piSingle Real s.points (Finset.mem_univ _)]; rw [affineCombination_eq_touchpoint_iff (Fintype.sum_pi_single' _ _)] at he
@@ -4019,7 +4019,7 @@ lemma touchpoint_empty_ne_point
 
 中文:
 引理 touchpoint_empty_ne_point
-  条件: [自然数.AtLeastTwo n] (i j : Fin (n + 1))
+  条件: [自然数.AtLeastTwo n] (i j : 有限集 (n + 1))
   证明: s.excenterExists_empty.touchpoint_ne_point i j
 
 Depends on / 依赖: excenterExists_empty, s.excenterExists_empty.touchpoint_ne_point, touchpoint_ne_point
@@ -4052,7 +4052,7 @@ lemma excenterExists
 
 中文:
 引理 excenterExists
-  条件: (signs : Finset (Fin 3))
+  条件: (signs : 有限集 (有限集 3))
   结论: t.ExcenterExists signs
   证明: by
   have h : signs = ∅ ∨ signs = ∅ᶜ ∨ exists i, signs = {i} ∨ signs = {i}ᶜ := by decide +revert
@@ -4092,7 +4092,7 @@ lemma excenter_eq_incenter_or_excenter_singleton
 
 中文:
 引理 excenter_eq_incenter_or_excenter_singleton
-  条件: (signs : Finset (Fin 3))
+  条件: (signs : 有限集 (有限集 3))
   证明: by
   have h : signs = ∅ ∨ signs = Finset.univ ∨ exists i, signs = {i} ∨ signs = {i}ᶜ := by decide +revert
   rcases h with rfl | rfl | ⟨i, rfl | rfl⟩
@@ -4130,7 +4130,7 @@ lemma excenter_eq_incenter_or_excenter_singleton_of_ne
 
 中文:
 引理 excenter_eq_incenter_or_excenter_singleton_of_ne
-  结论: (signs : Finset (Fin 3)) {i₁ i₂ i₃ : Fin 3}
+  结论: (signs : 有限集 (有限集 3)) {i₁ i₂ i₃ : 有限集 3}
   证明: by
   rcases t.excenter_eq_incenter_or_excenter_singleton signs with h | ⟨i, h⟩
   · exact .inl h
@@ -4165,7 +4165,7 @@ lemma sSameSide_affineSpan_pair_incenter_point
 
 中文:
 引理 sSameSide_affineSpan_pair_incenter_point
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
   证明: by
   convert! t.sSameSide_incenter_point i₁
   simp
@@ -4193,7 +4193,7 @@ lemma sSameSide_affineSpan_pair_point_incenter
 
 中文:
 引理 sSameSide_affineSpan_pair_point_incenter
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
   证明: by
   convert! t.sSameSide_point_incenter i₁
   simp
@@ -4221,7 +4221,7 @@ lemma sOppSide_affineSpan_pair_excenter_singleton_point
 
 中文:
 引理 sOppSide_affineSpan_pair_excenter_singleton_point
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   convert! t.sOppSide_excenter_singleton_point i₁
   simp
@@ -4249,7 +4249,7 @@ lemma sOppSide_affineSpan_pair_point_excenter_singleton
 
 中文:
 引理 sOppSide_affineSpan_pair_point_excenter_singleton
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   convert! t.sOppSide_point_excenter_singleton i₁
   simp
@@ -4277,7 +4277,7 @@ lemma sSameSide_affineSpan_pair_excenter_singleton_point
 
 中文:
 引理 sSameSide_affineSpan_pair_excenter_singleton_point
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   convert! t.sSameSide_excenter_singleton_point h₁₂
   simp
@@ -4305,7 +4305,7 @@ lemma sSameSide_affineSpan_pair_point_excenter_singleton
 
 中文:
 引理 sSameSide_affineSpan_pair_point_excenter_singleton
-  结论: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   convert! t.sSameSide_point_excenter_singleton h₁₂
   simp
@@ -4333,7 +4333,7 @@ lemma affineSpan_pair_eq_orthRadius
 
 中文:
 引理 affineSpan_pair_eq_orthRadius
-  结论: [Fact (Module.finrank 实数 V = 2)] (signs : Finset (Fin 3))
+  结论: [Fact (模.finrank 实数 V = 2)] (signs : 有限集 (有限集 3))
   证明: by
   convert! (t.excenterExists signs).affineSpan_faceOpposite_eq_orthRadius i₁
   have hc : {i₁}ᶜ = ({i₂, i₃} : Set (Fin 3)) := by grind
@@ -4359,7 +4359,7 @@ lemma affineSpan_pair_eq_orthRadius_insphere
 
 中文:
 引理 affineSpan_pair_eq_orthRadius_insphere
-  结论: [Fact (Module.finrank 实数 V = 2)]
+  结论: [Fact (模.finrank 实数 V = 2)]
   证明: t.affineSpan_pair_eq_orthRadius ∅ h₁₂ h₁₃ h₂₃
 
 Depends on / 依赖: affineSpan_pair_eq_orthRadius, t.affineSpan_pair_eq_orthRadius
@@ -4384,7 +4384,7 @@ lemma sbtw_touchpoint_empty
 
 中文:
 引理 sbtw_touchpoint_empty
-  条件: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
+  条件: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
   证明: by
   rw [← t.mem_interior_face_iff_sbtw h₁₃]
   convert! t.touchpoint_empty_mem_interior_faceOpposite i₂
@@ -4417,7 +4417,7 @@ lemma sbtw_touchpoint_singleton
 
 中文:
 引理 sbtw_touchpoint_singleton
-  条件: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
+  条件: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
   证明: by
   rw [← t.mem_interior_face_iff_sbtw h₁₃]
   convert! t.touchpoint_singleton_mem_interior_faceOpposite i₂
@@ -4450,7 +4450,7 @@ lemma touchpoint_singleton_sbtw
 
 中文:
 引理 touchpoint_singleton_sbtw
-  条件: {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
+  条件: {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃) (h₂₃ : i₂ != i₃)
   证明: by
   rw [← Affine.Simplex.affineCombination_touchpointWeights]
   have hw := t.sum_touchpointWeights {i₁} i₂

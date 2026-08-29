@@ -96,10 +96,10 @@ class TendstoIxxClass
     - tendsto_Ixx : Tendsto (fun p : α × α => Ixx p.1 p.2) (l₁ ×ˢ l₁) l₂.smallSets
 
 中文:
-类 TendstoIxxClass
-  参数: (Ixx : α -> α -> Set α) (l₁ : Filter α) (l₂ : outParam <| Filter α)
+类 TendstoIxx类
+  参数: (Ixx : α -> α -> 集合 α) (l₁ : 滤子 α) (l₂ : outParam <| 滤子 α)
   公理与运算 (1 个):
-    - tendsto_Ixx : Tendsto (fun p : α × α => Ixx p.1 p.2) (l₁ ×ˢ l₁) l₂.smallSets
+    - tendsto_Ixx : 收敛 (fun p : α × α => Ixx p.1 p.2) (l₁ ×ˢ l₁) l₂.smallSets
 -/
 class TendstoIxxClass (Ixx : α -> α -> Set α) (l₁ : Filter α) (l₂ : outParam <| Filter α) : Prop where
   /-- `Function.uncurry Ixx` tends to `l₂.smallSets` along `l₁ ×ˢ l₁`. In other words, for any
@@ -120,7 +120,7 @@ theorem tendstoIxxClass_principal
 
 中文:
 定理 tendstoIxxClass_principal
-  条件: {s t : Set α} {Ixx : α -> α -> Set α}
+  条件: {s t : 集合 α} {Ixx : α -> α -> 集合 α}
   证明: Iff.trans ⟨fun h => h.1, fun h => ⟨h⟩⟩ by
     simp only [smallSets_principal, prod_principal_principal, tendsto_principal_principal,
       forall_prod_set, mem_powerset_iff]
@@ -143,7 +143,7 @@ theorem tendstoIxxClass_inf
 
 中文:
 定理 tendstoIxxClass_inf
-  结论: {l₁ l₁' l₂ l₂' : Filter α} {Ixx} [h : TendstoIxxClass Ixx l₁ l₂]
+  结论: {l₁ l₁' l₂ l₂' : 滤子 α} {Ixx} [h : TendstoIxx类 Ixx l₁ l₂]
   证明: ⟨by simpa only [prod_inf_prod, smallSets_inf] using h.1.inf h'.1⟩
 
 Depends on / 依赖: prod_inf_prod, smallSets_inf
@@ -162,7 +162,7 @@ theorem tendstoIxxClass_of_subset
 
 中文:
 定理 tendstoIxxClass_of_subset
-  结论: {l₁ l₂ : Filter α} {Ixx Ixx' : α -> α -> Set α}
+  结论: {l₁ l₂ : 滤子 α} {Ixx Ixx' : α -> α -> 集合 α}
   证明: ⟨h'.1.smallSets_mono Eventually.of_forall Prod.forall.2 h⟩
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Prod.forall, of_forall, smallSets_mono
@@ -180,8 +180,8 @@ theorem HasBasis.tendstoIxxClass
   proof: ⟨(hl.prod_self.tendsto_iff hl.smallSets).2 fun i hi => ⟨i, hi, fun _ h => H i hi _ h.1 _ h.2⟩⟩
 
 中文:
-定理 HasBasis.tendstoIxxClass
-  结论: {ι : 类型} {p : ι -> 命题} {s} {l : Filter α}
+定理 有基.tendstoIxxClass
+  结论: {ι : 类型} {p : ι -> 命题} {s} {l : 滤子 α}
   证明: ⟨(hl.prod_self.tendsto_iff hl.smallSets).2 fun i hi => ⟨i, hi, fun _ h => H i hi _ h.1 _ h.2⟩⟩
 
 Depends on / 依赖: hl.prod_self.tendsto_iff, hl.smallSets, prod_self, smallSets, tendsto_iff
@@ -202,8 +202,8 @@ theorem Tendsto.Icc
   proof: (@TendstoIxxClass.tendsto_Ixx α Set.Icc _ _ _).comp h₁.prodMk h₂
 
 中文:
-定理 Tendsto.Icc
-  结论: {l₁ l₂ : Filter α} [TendstoIxxClass Icc l₁ l₂] {lb : Filter β}
+定理 收敛.闭区间
+  结论: {l₁ l₂ : 滤子 α} [TendstoIxx类 闭区间 l₁ l₂] {lb : 滤子 β}
   证明: (@TendstoIxxClass.tendsto_Ixx α Set.Icc _ _ _).comp h₁.prodMk h₂
 -/
 protected theorem Tendsto.Icc {l₁ l₂ : Filter α} [TendstoIxxClass Icc l₁ l₂] {lb : Filter β}
@@ -220,8 +220,8 @@ theorem Tendsto.Ioc
   proof: (@TendstoIxxClass.tendsto_Ixx α Set.Ioc _ _ _).comp h₁.prodMk h₂
 
 中文:
-定理 Tendsto.Ioc
-  结论: {l₁ l₂ : Filter α} [TendstoIxxClass Ioc l₁ l₂] {lb : Filter β}
+定理 收敛.左开右闭区间
+  结论: {l₁ l₂ : 滤子 α} [TendstoIxx类 左开右闭区间 l₁ l₂] {lb : 滤子 β}
   证明: (@TendstoIxxClass.tendsto_Ixx α Set.Ioc _ _ _).comp h₁.prodMk h₂
 -/
 protected theorem Tendsto.Ioc {l₁ l₂ : Filter α} [TendstoIxxClass Ioc l₁ l₂] {lb : Filter β}
@@ -238,8 +238,8 @@ theorem Tendsto.Ico
   proof: (@TendstoIxxClass.tendsto_Ixx α Set.Ico _ _ _).comp h₁.prodMk h₂
 
 中文:
-定理 Tendsto.Ico
-  结论: {l₁ l₂ : Filter α} [TendstoIxxClass Ico l₁ l₂] {lb : Filter β}
+定理 收敛.左闭右开区间
+  结论: {l₁ l₂ : 滤子 α} [TendstoIxx类 左闭右开区间 l₁ l₂] {lb : 滤子 β}
   证明: (@TendstoIxxClass.tendsto_Ixx α Set.Ico _ _ _).comp h₁.prodMk h₂
 -/
 protected theorem Tendsto.Ico {l₁ l₂ : Filter α} [TendstoIxxClass Ico l₁ l₂] {lb : Filter β}
@@ -256,8 +256,8 @@ theorem Tendsto.Ioo
   proof: (@TendstoIxxClass.tendsto_Ixx α Set.Ioo _ _ _).comp h₁.prodMk h₂
 
 中文:
-定理 Tendsto.Ioo
-  结论: {l₁ l₂ : Filter α} [TendstoIxxClass Ioo l₁ l₂] {lb : Filter β}
+定理 收敛.开区间
+  结论: {l₁ l₂ : 滤子 α} [TendstoIxx类 开区间 l₁ l₂] {lb : 滤子 β}
   证明: (@TendstoIxxClass.tendsto_Ixx α Set.Ioo _ _ _).comp h₁.prodMk h₂
 -/
 protected theorem Tendsto.Ioo {l₁ l₂ : Filter α} [TendstoIxxClass Ioo l₁ l₂] {lb : Filter β}
@@ -277,7 +277,7 @@ Set.OrdConnected.out ordConnected_biInter fun _ _ => ordConnected_Ici
 
 中文:
 实例 tendsto_Icc_atTop_atTop
-  签名: : TendstoIxxClass Icc (atTop : Filter α) atTop
+  签名: : TendstoIxx类 闭区间 (atTop : 滤子 α) atTop
   定义体: (hasBasis_iInf_principal_finite _).tendstoIxxClass fun _ _ =>
 Set.OrdConnected.out ordConnected_biInter fun _ _ => ordConnected_Ici
 
@@ -297,7 +297,7 @@ instance tendsto_Ico_atTop_atTop
 
 中文:
 实例 tendsto_Ico_atTop_atTop
-  签名: : TendstoIxxClass Ico (atTop : Filter α) atTop
+  签名: : TendstoIxx类 左闭右开区间 (atTop : 滤子 α) atTop
   定义体: tendstoIxxClass_of_subset fun _ _ => Ico_subset_Icc_self
 
 Depends on / 依赖: Ico_subset_Icc_self, tendstoIxxClass_of_subset
@@ -315,7 +315,7 @@ instance tendsto_Ioc_atTop_atTop
 
 中文:
 实例 tendsto_Ioc_atTop_atTop
-  签名: : TendstoIxxClass Ioc (atTop : Filter α) atTop
+  签名: : TendstoIxx类 左开右闭区间 (atTop : 滤子 α) atTop
   定义体: tendstoIxxClass_of_subset fun _ _ => Ioc_subset_Icc_self
 
 Depends on / 依赖: Ioc_subset_Icc_self, tendstoIxxClass_of_subset
@@ -333,7 +333,7 @@ instance tendsto_Ioo_atTop_atTop
 
 中文:
 实例 tendsto_Ioo_atTop_atTop
-  签名: : TendstoIxxClass Ioo (atTop : Filter α) atTop
+  签名: : TendstoIxx类 开区间 (atTop : 滤子 α) atTop
   定义体: tendstoIxxClass_of_subset fun _ _ => Ioo_subset_Icc_self
 
 Depends on / 依赖: Ioo_subset_Icc_self, tendstoIxxClass_of_subset
@@ -352,7 +352,7 @@ Set.OrdConnected.out ordConnected_biInter fun _ _ => ordConnected_Iic
 
 中文:
 实例 tendsto_Icc_atBot_atBot
-  签名: : TendstoIxxClass Icc (atBot : Filter α) atBot
+  签名: : TendstoIxx类 闭区间 (atBot : 滤子 α) atBot
   定义体: (hasBasis_iInf_principal_finite _).tendstoIxxClass fun _ _ =>
 Set.OrdConnected.out ordConnected_biInter fun _ _ => ordConnected_Iic
 
@@ -372,7 +372,7 @@ instance tendsto_Ico_atBot_atBot
 
 中文:
 实例 tendsto_Ico_atBot_atBot
-  签名: : TendstoIxxClass Ico (atBot : Filter α) atBot
+  签名: : TendstoIxx类 左闭右开区间 (atBot : 滤子 α) atBot
   定义体: tendstoIxxClass_of_subset fun _ _ => Ico_subset_Icc_self
 
 Depends on / 依赖: Ico_subset_Icc_self, tendstoIxxClass_of_subset
@@ -390,7 +390,7 @@ instance tendsto_Ioc_atBot_atBot
 
 中文:
 实例 tendsto_Ioc_atBot_atBot
-  签名: : TendstoIxxClass Ioc (atBot : Filter α) atBot
+  签名: : TendstoIxx类 左开右闭区间 (atBot : 滤子 α) atBot
   定义体: tendstoIxxClass_of_subset fun _ _ => Ioc_subset_Icc_self
 
 Depends on / 依赖: Ioc_subset_Icc_self, tendstoIxxClass_of_subset
@@ -408,7 +408,7 @@ instance tendsto_Ioo_atBot_atBot
 
 中文:
 实例 tendsto_Ioo_atBot_atBot
-  签名: : TendstoIxxClass Ioo (atBot : Filter α) atBot
+  签名: : TendstoIxx类 开区间 (atBot : 滤子 α) atBot
   定义体: tendstoIxxClass_of_subset fun _ _ => Ioo_subset_Icc_self
 
 Depends on / 依赖: Ioo_subset_Icc_self, tendstoIxxClass_of_subset
@@ -425,8 +425,8 @@ instance OrdConnected.tendsto_Icc
   body: tendstoIxxClass_principal.2 hs.out
 
 中文:
-实例 OrdConnected.tendsto_Icc
-  签名: {s : Set α} [hs : OrdConnected s]
+实例 序连通.tendsto_Icc
+  签名: {s : 集合 α} [hs : 序连通 s]
   定义体: tendstoIxxClass_principal.2 hs.out
 
 Depends on / 依赖: hs.out, tendstoIxxClass_principal
@@ -824,7 +824,7 @@ refine ⟨fun s hs => mem_map.2 mem_prod_self_iff.2 ?_⟩
 
 中文:
 实例 tendsto_uIcc_of_Icc
-  签名: {l : Filter α} [TendstoIxxClass Icc l l]
+  签名: {l : 滤子 α} [TendstoIxx类 闭区间 l l]
   定义体: by
 refine ⟨fun s hs => mem_map.2 mem_prod_self_iff.2 ?_⟩
   obtain ⟨t, htl, hts⟩ : exists t in l, forall p in (t : Set α) ×ˢ t, Icc (p : α × α).1 p.2 in s :=
@@ -856,8 +856,8 @@ theorem Tendsto.uIcc
   proof: (@TendstoIxxClass.tendsto_Ixx α Set.uIcc _ _ _).comp hf.prodMk hg
 
 中文:
-定理 Tendsto.uIcc
-  结论: {l : Filter α} [TendstoIxxClass Icc l l] {f g : β -> α}
+定理 收敛.uIcc
+  结论: {l : 滤子 α} [TendstoIxx类 闭区间 l l] {f g : β -> α}
   证明: (@TendstoIxxClass.tendsto_Ixx α Set.uIcc _ _ _).comp hf.prodMk hg
 -/
 protected theorem Tendsto.uIcc {l : Filter α} [TendstoIxxClass Icc l l] {f g : β -> α}

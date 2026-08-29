@@ -37,7 +37,7 @@ definition sin
 
 中文:
 定义 sin
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: (exp (-z * I) - exp (z * I)) * I / 2
 -/
 def sin (z : Complex) : Complex :=
@@ -55,7 +55,7 @@ definition cos
 
 中文:
 定义 cos
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: (exp (z * I) + exp (-z * I)) / 2
 -/
 def cos (z : Complex) : Complex :=
@@ -73,7 +73,7 @@ definition tan
 
 中文:
 定义 tan
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: sin z / cos z
 -/
 def tan (z : Complex) : Complex :=
@@ -89,7 +89,7 @@ definition cot
 
 中文:
 定义 cot
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: cos z / sin z
 -/
 def cot (z : Complex) : Complex :=
@@ -107,7 +107,7 @@ definition sinh
 
 中文:
 定义 sinh
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: (exp z - exp (-z)) / 2
 -/
 def sinh (z : Complex) : Complex :=
@@ -125,7 +125,7 @@ definition cosh
 
 中文:
 定义 cosh
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: (exp z + exp (-z)) / 2
 -/
 def cosh (z : Complex) : Complex :=
@@ -143,7 +143,7 @@ definition tanh
 
 中文:
 定义 tanh
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: sinh z / cosh z
 -/
 def tanh (z : Complex) : Complex :=
@@ -291,7 +291,7 @@ theorem sinh_add_aux
 
 中文:
 定理 sinh_add_aux
-  条件: {a b c d : Complex}
+  条件: {a b c d : 复形}
   证明: by ring
 -/
 private theorem sinh_add_aux {a b c d : Complex} :
@@ -369,7 +369,7 @@ theorem cosh_add_aux
 
 中文:
 定理 cosh_add_aux
-  条件: {a b c d : Complex}
+  条件: {a b c d : 复形}
   证明: by ring
 -/
 private theorem cosh_add_aux {a b c d : Complex} :
@@ -476,9 +476,9 @@ theorem ofReal_sinh_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_sinh_ofReal_re
+定理 of实数_sinh_of实数_re
   条件: (x : 实数)
-  结论: ((sinh x).re : Complex) = sinh x
+  结论: ((sinh x).re : 复形) = sinh x
   证明: conj_eq_iff_re.1 by rw [← sinh_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -501,9 +501,9 @@ theorem ofReal_sinh
 @[simp]
 
 中文:
-定理 ofReal_sinh
+定理 of实数_sinh
   条件: (x : 实数)
-  结论: (实数.sinh x : Complex) = sinh x
+  结论: (实数.sinh x : 复形) = sinh x
   证明: ofReal_sinh_ofReal_re _
 
 @[simp]
@@ -524,7 +524,7 @@ theorem sinh_ofReal_im
   proof: by rw [← ofReal_sinh_ofReal_re, ofReal_im]
 
 中文:
-定理 sinh_ofReal_im
+定理 sinh_of实数_im
   条件: (x : 实数)
   结论: (sinh x).im = 0
   证明: by rw [← ofReal_sinh_ofReal_re, ofReal_im]
@@ -543,7 +543,7 @@ theorem sinh_ofReal_re
   proof: rfl
 
 中文:
-定理 sinh_ofReal_re
+定理 sinh_of实数_re
   条件: (x : 实数)
   结论: (sinh x).re = 实数.sinh x
   证明: rfl
@@ -583,9 +583,9 @@ theorem ofReal_cosh_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_cosh_ofReal_re
+定理 of实数_cosh_of实数_re
   条件: (x : 实数)
-  结论: ((cosh x).re : Complex) = cosh x
+  结论: ((cosh x).re : 复形) = cosh x
   证明: conj_eq_iff_re.1 by rw [← cosh_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -608,9 +608,9 @@ theorem ofReal_cosh
 @[simp]
 
 中文:
-定理 ofReal_cosh
+定理 of实数_cosh
   条件: (x : 实数)
-  结论: (实数.cosh x : Complex) = cosh x
+  结论: (实数.cosh x : 复形) = cosh x
   证明: ofReal_cosh_ofReal_re _
 
 @[simp]
@@ -633,7 +633,7 @@ theorem cosh_ofReal_im
 @[simp]
 
 中文:
-定理 cosh_ofReal_im
+定理 cosh_of实数_im
   条件: (x : 实数)
   结论: (cosh x).im = 0
   证明: by rw [← ofReal_cosh_ofReal_re, ofReal_im]
@@ -655,7 +655,7 @@ theorem cosh_ofReal_re
   proof: rfl
 
 中文:
-定理 cosh_ofReal_re
+定理 cosh_of实数_re
   条件: (x : 实数)
   结论: (cosh x).re = 实数.cosh x
   证明: rfl
@@ -758,9 +758,9 @@ theorem ofReal_tanh_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_tanh_ofReal_re
+定理 of实数_tanh_of实数_re
   条件: (x : 实数)
-  结论: ((tanh x).re : Complex) = tanh x
+  结论: ((tanh x).re : 复形) = tanh x
   证明: conj_eq_iff_re.1 by rw [← tanh_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -783,9 +783,9 @@ theorem ofReal_tanh
 @[simp]
 
 中文:
-定理 ofReal_tanh
+定理 of实数_tanh
   条件: (x : 实数)
-  结论: (实数.tanh x : Complex) = tanh x
+  结论: (实数.tanh x : 复形) = tanh x
   证明: ofReal_tanh_ofReal_re _
 
 @[simp]
@@ -806,7 +806,7 @@ theorem tanh_ofReal_im
   proof: by rw [← ofReal_tanh_ofReal_re, ofReal_im]
 
 中文:
-定理 tanh_ofReal_im
+定理 tanh_of实数_im
   条件: (x : 实数)
   结论: (tanh x).im = 0
   证明: by rw [← ofReal_tanh_ofReal_re, ofReal_im]
@@ -827,7 +827,7 @@ theorem tanh_ofReal_re
 @[simp]
 
 中文:
-定理 tanh_ofReal_re
+定理 tanh_of实数_re
   条件: (x : 实数)
   结论: (tanh x).re = 实数.tanh x
   证明: rfl
@@ -1501,7 +1501,7 @@ theorem sin_add_mul_I
 
 中文:
 定理 sin_add_mul_I
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: sin (x + y * I) = sin x * cosh y + cos x * sinh y * I
   证明: by
   rw [sin_add]; rw [cos_mul_I]; rw [sin_mul_I]; rw [mul_assoc]
@@ -1523,7 +1523,7 @@ theorem sin_eq
 
 中文:
 定理 sin_eq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: sin z = sin z.re * cosh z.im + cos z.re * sinh z.im * I
   证明: by
   convert! sin_add_mul_I z.re z.im; exact (re_add_im z).symm
@@ -1545,7 +1545,7 @@ theorem cos_add_mul_I
 
 中文:
 定理 cos_add_mul_I
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: cos (x + y * I) = cos x * cosh y - sin x * sinh y * I
   证明: by
   rw [cos_add]; rw [cos_mul_I]; rw [sin_mul_I]; rw [mul_assoc]
@@ -1567,7 +1567,7 @@ theorem cos_eq
 
 中文:
 定理 cos_eq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: cos z = cos z.re * cosh z.im - sin z.re * sinh z.im * I
   证明: by
   convert! cos_add_mul_I z.re z.im; exact (re_add_im z).symm
@@ -1737,9 +1737,9 @@ theorem ofReal_sin_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_sin_ofReal_re
+定理 of实数_sin_of实数_re
   条件: (x : 实数)
-  结论: ((sin x).re : Complex) = sin x
+  结论: ((sin x).re : 复形) = sin x
   证明: conj_eq_iff_re.1 by rw [← sin_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -1762,9 +1762,9 @@ theorem ofReal_sin
 @[simp]
 
 中文:
-定理 ofReal_sin
+定理 of实数_sin
   条件: (x : 实数)
-  结论: (实数.sin x : Complex) = sin x
+  结论: (实数.sin x : 复形) = sin x
   证明: ofReal_sin_ofReal_re _
 
 @[simp]
@@ -1785,7 +1785,7 @@ theorem sin_ofReal_im
   proof: by rw [← ofReal_sin_ofReal_re, ofReal_im]
 
 中文:
-定理 sin_ofReal_im
+定理 sin_of实数_im
   条件: (x : 实数)
   结论: (sin x).im = 0
   证明: by rw [← ofReal_sin_ofReal_re, ofReal_im]
@@ -1804,7 +1804,7 @@ theorem sin_ofReal_re
   proof: rfl
 
 中文:
-定理 sin_ofReal_re
+定理 sin_of实数_re
   条件: (x : 实数)
   结论: (sin x).re = 实数.sin x
   证明: rfl
@@ -1849,9 +1849,9 @@ theorem ofReal_cos_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_cos_ofReal_re
+定理 of实数_cos_of实数_re
   条件: (x : 实数)
-  结论: ((cos x).re : Complex) = cos x
+  结论: ((cos x).re : 复形) = cos x
   证明: conj_eq_iff_re.1 by rw [← cos_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -1874,9 +1874,9 @@ theorem ofReal_cos
 @[simp]
 
 中文:
-定理 ofReal_cos
+定理 of实数_cos
   条件: (x : 实数)
-  结论: (实数.cos x : Complex) = cos x
+  结论: (实数.cos x : 复形) = cos x
   证明: ofReal_cos_ofReal_re _
 
 @[simp]
@@ -1897,7 +1897,7 @@ theorem cos_ofReal_im
   proof: by rw [← ofReal_cos_ofReal_re, ofReal_im]
 
 中文:
-定理 cos_ofReal_im
+定理 cos_of实数_im
   条件: (x : 实数)
   结论: (cos x).im = 0
   证明: by rw [← ofReal_cos_ofReal_re, ofReal_im]
@@ -1918,7 +1918,7 @@ theorem cos_ofReal_re
 @[simp]
 
 中文:
-定理 cos_ofReal_re
+定理 cos_of实数_re
   条件: (x : 实数)
   结论: (cos x).re = 实数.cos x
   证明: rfl
@@ -1990,7 +1990,7 @@ theorem tan_mul_cos
 
 中文:
 定理 tan_mul_cos
-  条件: {x : Complex} (hx : cos x != 0)
+  条件: {x : 复形} (hx : cos x != 0)
   结论: tan x * cos x = sin x
   证明: by
   rw [tan_eq_sin_div_cos]; rw [div_mul_cancel₀ _ hx]
@@ -2117,9 +2117,9 @@ theorem ofReal_tan_ofReal_re
 @[simp]
 
 中文:
-定理 ofReal_tan_ofReal_re
+定理 of实数_tan_of实数_re
   条件: (x : 实数)
-  结论: ((tan x).re : Complex) = tan x
+  结论: ((tan x).re : 复形) = tan x
   证明: conj_eq_iff_re.1 by rw [← tan_conj, conj_ofReal]
 
 @[simp]
@@ -2142,9 +2142,9 @@ theorem ofReal_cot_ofReal_re
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_cot_ofReal_re
+定理 of实数_cot_of实数_re
   条件: (x : 实数)
-  结论: ((cot x).re : Complex) = cot x
+  结论: ((cot x).re : 复形) = cot x
   证明: conj_eq_iff_re.1 by rw [← cot_conj, conj_ofReal]
 
 @[simp, norm_cast]
@@ -2167,9 +2167,9 @@ theorem ofReal_tan
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_tan
+定理 of实数_tan
   条件: (x : 实数)
-  结论: (实数.tan x : Complex) = tan x
+  结论: (实数.tan x : 复形) = tan x
   证明: ofReal_tan_ofReal_re _
 
 @[simp, norm_cast]
@@ -2192,9 +2192,9 @@ theorem ofReal_cot
 @[simp]
 
 中文:
-定理 ofReal_cot
+定理 of实数_cot
   条件: (x : 实数)
-  结论: (实数.cot x : Complex) = cot x
+  结论: (实数.cot x : 复形) = cot x
   证明: ofReal_cot_ofReal_re _
 
 @[simp]
@@ -2215,7 +2215,7 @@ theorem tan_ofReal_im
   proof: by rw [← ofReal_tan_ofReal_re, ofReal_im]
 
 中文:
-定理 tan_ofReal_im
+定理 tan_of实数_im
   条件: (x : 实数)
   结论: (tan x).im = 0
   证明: by rw [← ofReal_tan_ofReal_re, ofReal_im]
@@ -2234,7 +2234,7 @@ theorem tan_ofReal_re
   proof: rfl
 
 中文:
-定理 tan_ofReal_re
+定理 tan_of实数_re
   条件: (x : 实数)
   结论: (tan x).re = 实数.tan x
   证明: rfl
@@ -2473,7 +2473,7 @@ theorem one_add_tan_sq_mul_cos_sq_eq_one
 
 中文:
 定理 one_add_tan_sq_mul_cos_sq_eq_one
-  条件: {x : Complex} (h : cos x != 0)
+  条件: {x : 复形} (h : cos x != 0)
   证明: by
   conv_rhs => rw [← sin_sq_add_cos_sq x, ← tan_mul_cos h]
   ring
@@ -2498,7 +2498,7 @@ theorem inv_one_add_tan_sq
 
 中文:
 定理 inv_one_add_tan_sq
-  条件: {x : Complex} (hx : cos x != 0)
+  条件: {x : 复形} (hx : cos x != 0)
   结论: (1 + tan x ^ 2)⁻¹ = cos x ^ 2
   证明: by
   rw [tan_eq_sin_div_cos]; rw [div_pow]
@@ -2521,7 +2521,7 @@ theorem tan_sq_div_one_add_tan_sq
 
 中文:
 定理 tan_sq_div_one_add_tan_sq
-  条件: {x : Complex} (hx : cos x != 0)
+  条件: {x : 复形} (hx : cos x != 0)
   证明: by
   simp only [← tan_mul_cos hx, mul_pow, ← inv_one_add_tan_sq hx, div_eq_mul_inv]
 
@@ -2696,7 +2696,7 @@ theorem exp_ofReal_mul_I_re
 @[simp]
 
 中文:
-定理 exp_ofReal_mul_I_re
+定理 exp_of实数_mul_I_re
   条件: (x : 实数)
   结论: (exp (x * I)).re = 实数.cos x
   证明: by
@@ -2721,7 +2721,7 @@ theorem exp_ofReal_mul_I_im
   simp [exp_mul_I, sin_ofReal_re]
 
 中文:
-定理 exp_ofReal_mul_I_im
+定理 exp_of实数_mul_I_im
   条件: (x : 实数)
   结论: (exp (x * I)).im = 实数.sin x
   证明: by
@@ -2743,7 +2743,7 @@ theorem exp_ofReal_mul_I
   simp [exp_mul_I]
 
 中文:
-定理 exp_ofReal_mul_I
+定理 exp_of实数_mul_I
   条件: (x : 实数)
   结论: exp (x * I) = 实数.cos x + (实数.sin x) * I
   证明: by
@@ -2765,7 +2765,7 @@ theorem cos_add_sin_mul_I_pow
 
 中文:
 定理 cos_add_sin_mul_I_pow
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   证明: by
   rw [← exp_mul_I]; rw [← exp_mul_I]; rw [← exp_nat_mul]; rw [mul_assoc]
 
@@ -2794,7 +2794,7 @@ theorem cos_bound
 
 中文:
 定理 cos_bound
-  条件: {x : Complex} (hx : ‖x‖ <= 1)
+  条件: {x : 复形} (hx : ‖x‖ <= 1)
   结论: ‖cos x - (1 - x ^ 2 / 2)‖ <= ‖x‖ ^ 4 * (5 / 96)
   证明: calc
     ‖cos x - (1 - x ^ 2 / 2)‖ =
@@ -2839,7 +2839,7 @@ theorem sin_bound
 
 中文:
 定理 sin_bound
-  条件: {x : Complex} (hx : ‖x‖ <= 1)
+  条件: {x : 复形} (hx : ‖x‖ <= 1)
   结论: ‖sin x - (x - x ^ 3 / 6)‖ <= ‖x‖ ^ 5 / 100
   证明: calc
     ‖sin x - (x - x ^ 3 / 6)‖ =
@@ -4613,7 +4613,7 @@ theorem norm_exp_ofReal_mul_I
 @[simp]
 
 中文:
-定理 norm_exp_ofReal_mul_I
+定理 norm_exp_of实数_mul_I
   条件: (x : 实数)
   结论: ‖exp (x * I)‖ = 1
   证明: by
@@ -4640,7 +4640,7 @@ theorem norm_exp_I_mul_ofReal
 @[simp]
 
 中文:
-定理 norm_exp_I_mul_ofReal
+定理 norm_exp_I_mul_of实数
   条件: (x : 实数)
   结论: ‖exp (I * x)‖ = 1
   证明: by
@@ -4667,7 +4667,7 @@ theorem nnnorm_exp_ofReal_mul_I
 @[simp]
 
 中文:
-定理 nnnorm_exp_ofReal_mul_I
+定理 nnnorm_exp_of实数_mul_I
   条件: (x : 实数)
   结论: ‖exp (x * I)‖₊ = 1
   证明: by
@@ -4694,7 +4694,7 @@ theorem nnnorm_exp_I_mul_ofReal
 @[simp]
 
 中文:
-定理 nnnorm_exp_I_mul_ofReal
+定理 nnnorm_exp_I_mul_of实数
   条件: (x : 实数)
   结论: ‖exp (I * x)‖₊ = 1
   证明: by
@@ -4721,7 +4721,7 @@ theorem enorm_exp_ofReal_mul_I
 @[simp]
 
 中文:
-定理 enorm_exp_ofReal_mul_I
+定理 enorm_exp_of实数_mul_I
   条件: (x : 实数)
   结论: ‖exp (x * I)‖ₑ = 1
   证明: by
@@ -4746,7 +4746,7 @@ theorem enorm_exp_I_mul_ofReal
   simp [← ENNReal.toReal_eq_one_iff]
 
 中文:
-定理 enorm_exp_I_mul_ofReal
+定理 enorm_exp_I_mul_of实数
   条件: (x : 实数)
   结论: ‖exp (I * x)‖ₑ = 1
   证明: by
@@ -4771,7 +4771,7 @@ theorem norm_exp_I_mul_ofReal_sub_one
   rw 
 
 中文:
-定理 norm_exp_I_mul_ofReal_sub_one
+定理 norm_exp_I_mul_of实数_sub_one
   条件: (x : 实数)
   结论: ‖exp (I * x) - 1‖ = ‖2 * 实数.sin (x / 2)‖
   证明: by
@@ -4800,7 +4800,7 @@ theorem norm_exp
 
 中文:
 定理 norm_exp
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖exp z‖ = 实数.exp z.re
   证明: by
   rw [exp_eq_exp_re_mul_sin_add_cos]; rw [Complex.norm_mul]; rw [norm_exp_ofReal]; rw [norm_cos_add_sin_mul_I]; rw [mul_one]
@@ -4822,7 +4822,7 @@ theorem norm_exp_eq_iff_re_eq
 
 中文:
 定理 norm_exp_eq_iff_re_eq
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   结论: ‖exp x‖ = ‖exp y‖ ↔ x.re = y.re
   证明: by
   rw [norm_exp]; rw [norm_exp]; rw [Real.exp_eq_exp]

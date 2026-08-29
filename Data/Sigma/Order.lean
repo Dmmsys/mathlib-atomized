@@ -66,7 +66,7 @@ inductive LE
 归纳类型 LE
   参数: [对任意 i, LE (α i)]
   构造子 (1 个):
-    - fiber: (i : ι) (a b : α i) : a <= b -> Sigma.LE ⟨i, a⟩ ⟨i, b⟩
+    - fiber: (i : ι) (a b : α i) : a <= b -> 依赖和类型.LE ⟨i, a⟩ ⟨i, b⟩
 -/
 protected inductive LE [forall i, LE (α i)] : forall _a _b : Σ i, α i, Prop
   | fiber (i : ι) (a b : α i) : a <= b -> Sigma.LE ⟨i, a⟩ ⟨i, b⟩
@@ -84,7 +84,7 @@ inductive LT
 归纳类型 LT
   参数: [对任意 i, LT (α i)]
   构造子 (1 个):
-    - fiber: (i : ι) (a b : α i) : a < b -> Sigma.LT ⟨i, a⟩ ⟨i, b⟩
+    - fiber: (i : ι) (a b : α i) : a < b -> 依赖和类型.LT ⟨i, a⟩ ⟨i, b⟩
 -/
 protected inductive LT [forall i, LT (α i)] : forall _a _b : Σ i, α i, Prop
   | fiber (i : ι) (a b : α i) : a < b -> Sigma.LT ⟨i, a⟩ ⟨i, b⟩
@@ -98,7 +98,7 @@ instance [forall
   body: Sigma.LE
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, LE (α i)] : LE (Σ i, α i) where
   定义体: Sigma.LE
 -/
@@ -116,7 +116,7 @@ instance [forall
 @[simp]
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, LT (α i)] : LT (Σ i, α i) where
   定义体: Sigma.LT
 
@@ -140,7 +140,7 @@ theorem mk_le_mk_iff
 中文:
 定理 mk_le_mk_iff
   条件: [对任意 i, LE (α i)] {i : ι} {a b : α i}
-  结论: (⟨i, a⟩ : Sigma α) <= ⟨i, b⟩ ↔ a <= b
+  结论: (⟨i, a⟩ : 依赖和类型 α) <= ⟨i, b⟩ ↔ a <= b
   证明: ⟨fun ⟨_, _, _, h⟩ => h, Sigma.LE.fiber _ _ _⟩
 
 @[simp]
@@ -163,7 +163,7 @@ theorem mk_lt_mk_iff
 中文:
 定理 mk_lt_mk_iff
   条件: [对任意 i, LT (α i)] {i : ι} {a b : α i}
-  结论: (⟨i, a⟩ : Sigma α) < ⟨i, b⟩ ↔ a < b
+  结论: (⟨i, a⟩ : 依赖和类型 α) < ⟨i, b⟩ ↔ a < b
   证明: ⟨fun ⟨_, _, _, h⟩ => h, Sigma.LT.fiber _ _ _⟩
 
 Depends on / 依赖: Sigma.LT.fiber
@@ -268,7 +268,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: [对任意 i, Preorder (α i)]
+  签名: [对任意 i, 预序 (α i)]
   定义体: { le_refl := fun ⟨i, a⟩ => Sigma.LE.fiber i a a le_rfl,
     le_trans := by
       rintro _ _ _ ⟨i, a, b, hab⟩ ⟨_, _, c, hbc⟩
@@ -303,8 +303,8 @@ instance [forall
 exact congr_arg (Sigma.mk _ ·) hab.antisymm hba }
 
 中文:
-实例 [forall
-  签名: i, PartialOrder (α i)] : PartialOrder (Σ i, α i)
+实例 [对任意
+  签名: i, 偏序 (α i)] : 偏序 (Σ i, α i)
   定义体: { Sigma.preorder with
     le_antisymm := by
       rintro _ _ ⟨i, a, b, hab⟩ ⟨_, _, _, hba⟩
@@ -330,8 +330,8 @@ instance [forall
     exact ⟨⟨i, c⟩, LT.fiber i a c ha, LT.fiber i c b hb⟩
 
 中文:
-实例 [forall
-  签名: i, Preorder (α i)] [对任意 i, DenselyOrdered (α i)] : DenselyOrdered (Σ i, α i) where
+实例 [对任意
+  签名: i, 预序 (α i)] [对任意 i, 稠密序 (α i)] : 稠密序 (Σ i, α i) where
   定义体: by
     rintro ⟨i, a⟩ ⟨_, _⟩ ⟨_, _, b, h⟩
     obtain ⟨c, ha, hb⟩ := exists_between h
@@ -437,7 +437,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: { Sigma.Lex.LE, Sigma.Lex.LT with
     le_refl := fun ⟨_, a⟩ => Lex.right a a le_rfl,
     le_trans := fun _ _ _ => trans_of ((Lex (· < ·)) fun _ => (· <= ·)),
@@ -473,7 +473,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: [Preorder ι] [对任意 i, PartialOrder (α i)]
+  签名: [预序 ι] [对任意 i, 偏序 (α i)]
   定义体: { Lex.preorder with
     le_antisymm := fun _ _ => antisymm_of ((Lex (· < ·)) fun _ => (· <= ·)) }
 
@@ -500,7 +500,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: [LinearOrder ι] [对任意 i, LinearOrder (α i)]
+  签名: [线性序 ι] [对任意 i, 线性序 (α i)]
   定义体: { Lex.partialOrder with
     le_total := total_of ((Lex (· < ·)) fun _ => (· <= ·)),
     toDecidableEq := Sigma.instDecidableEqSigma
@@ -531,7 +531,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [PartialOrder ι] [OrderBot ι] [对任意 i, Preorder (α i)] [OrderBot (α ⊥)]
+  签名: [偏序 ι] [有底序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
   定义体: ⟨⊥, ⊥⟩
   bot_le := fun ⟨a, b⟩ => by
     obtain rfl | ha := eq_bot_or_bot_lt a
@@ -560,7 +560,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [PartialOrder ι] [OrderTop ι] [对任意 i, Preorder (α i)] [OrderTop (α ⊤)]
+  签名: [偏序 ι] [有顶序 ι] [对任意 i, 预序 (α i)] [有顶序 (α ⊤)]
   定义体: ⟨⊤, ⊤⟩
   le_top := fun ⟨a, b⟩ => by
     obtain rfl | ha := eq_top_or_lt_top a
@@ -585,7 +585,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [PartialOrder ι] [BoundedOrder ι] [对任意 i, Preorder (α i)] [OrderBot (α ⊥)]
+  签名: [偏序 ι] [有界序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
   定义体: { Lex.orderBot, Lex.orderTop with }
 
 Depends on / 依赖: Lex.orderBot, Lex.orderTop, orderBot, orderTop
@@ -610,7 +610,7 @@ instance denselyOrdered
 
 中文:
 实例 denselyOrdered
-  签名: [Preorder ι] [DenselyOrdered ι] [对任意 i, Nonempty (α i)] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [稠密序 ι] [对任意 i, 非空 (α i)] [对任意 i, 预序 (α i)]
   定义体: by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | ⟨_, b, h⟩)
     · obtain ⟨k, hi, hj⟩ := exists_between h
@@ -646,7 +646,7 @@ instance denselyOrdered_of_noMaxOrder
 
 中文:
 实例 denselyOrdered_of_noMaxOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | ⟨_, b, h⟩)
     · obtain ⟨c, ha⟩ := exists_gt a
@@ -681,7 +681,7 @@ instance denselyOrdered_of_noMinOrder
 
 中文:
 实例 denselyOrdered_of_noMinOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | ⟨_, b, h⟩)
     · obtain ⟨c, hb⟩ := exists_lt b
@@ -715,7 +715,7 @@ instance noMaxOrder_of_nonempty
 
 中文:
 实例 noMaxOrder_of_nonempty
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [NoMaxOrder ι]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMax序 ι]
   定义体: by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_gt i
@@ -746,7 +746,7 @@ instance noMinOrder_of_nonempty
 
 中文:
 实例 noMinOrder_of_nonempty
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [NoMinOrder ι]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMin序 ι]
   定义体: by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_lt i
@@ -776,7 +776,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [对任意 i, NoMaxOrder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMax序 (α i)]
   定义体: by
     rintro ⟨i, a⟩
     obtain ⟨b, h⟩ := exists_gt a
@@ -804,7 +804,7 @@ instance noMinOrder
 
 中文:
 实例 noMinOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [对任意 i, NoMinOrder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMin序 (α i)]
   定义体: by
     rintro ⟨i, a⟩
     obtain ⟨b, h⟩ := exists_lt a

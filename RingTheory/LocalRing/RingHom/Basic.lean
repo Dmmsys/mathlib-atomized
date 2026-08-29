@@ -37,8 +37,8 @@ theorem isLocalHom_id
 
 中文:
 定理 isLocalHom_id
-  条件: (R : 类型) [Semiring R]
-  结论: IsLocalHom (RingHom.id R) where
+  条件: (R : 类型) [半环 R]
+  结论: 是Local态射 (环态射.id R) where
   证明: id
 -/
 theorem isLocalHom_id (R : Type*) [Semiring R] : IsLocalHom (RingHom.id R) where
@@ -58,7 +58,7 @@ theorem isLocalHom_toRingHom
 
 中文:
 定理 isLocalHom_toRingHom
-  结论: {F : 类型} [FunLike F R S]
+  结论: {F : 类型} [函数状 F R S]
   证明: ⟨IsLocalHom.map_nonunit (f := f)⟩
 
 @[instance]
@@ -79,8 +79,8 @@ theorem RingHom.isLocalHom_comp
   proof: IsLocalHom.map_nonunit a ∘ IsLocalHom.map_nonunit (f := g) (f a)
 
 中文:
-定理 RingHom.isLocalHom_comp
-  结论: (g : S ->+* T) (f : R ->+* S) [IsLocalHom g]
+定理 环态射.isLocalHom_comp
+  结论: (g : S ->+* T) (f : R ->+* S) [是Local态射 g]
   证明: IsLocalHom.map_nonunit a ∘ IsLocalHom.map_nonunit (f := g) (f a)
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.map_nonunit, map_nonunit
@@ -99,7 +99,7 @@ theorem isLocalHom_of_comp
 
 中文:
 定理 isLocalHom_of_comp
-  条件: (f : R ->+* S) (g : S ->+* T) [IsLocalHom (g.comp f)]
+  条件: (f : R ->+* S) (g : S ->+* T) [是Local态射 (g.comp f)]
   证明: ⟨fun _ ha => (isUnit_map_iff (g.comp f) _).mp (g.isUnit_map ha)⟩
 
 Depends on / 依赖: g.comp, g.isUnit_map, isUnit_map, isUnit_map_iff
@@ -120,8 +120,8 @@ theorem RingHom.domain_isLocalRing
     (IsLocalRing.isUnit_or_isUnit_of_add_one (by rw [← map_add, h, map_one]))
 
 中文:
-定理 RingHom.domain_isLocalRing
-  条件: [IsLocalRing S] (f : R ->+* S) [IsLocalHom f]
+定理 环态射.domain_isLocalRing
+  条件: [是局部环 S] (f : R ->+* S) [是Local态射 f]
   证明: f.domain_nontrivial
   isUnit_or_isUnit_of_add_one {a b} h := Or.imp
     (isUnit_of_map_unit f a) (isUnit_of_map_unit f b)
@@ -154,7 +154,7 @@ theorem map_nonunit
 
 中文:
 定理 map_nonunit
-  条件: (f : R ->+* S) [IsLocalHom f] (a : R) (h : a in maximalIdeal R)
+  条件: (f : R ->+* S) [是Local态射 f] (a : R) (h : a in maximalIdeal R)
   证明: fun H => h isUnit_of_map_unit f a H
 
 Depends on / 依赖: isUnit_of_map_unit
@@ -230,7 +230,7 @@ lemma maximalIdeal_comap
 
 中文:
 引理 maximalIdeal_comap
-  条件: (f : R ->+* S) [IsLocalHom f]
+  条件: (f : R ->+* S) [是Local态射 f]
   结论: (maximalIdeal S).comap f = maximalIdeal R
   证明: ((local_hom_TFAE _).out 0 4).mp ‹_›
 
@@ -250,7 +250,7 @@ theorem map_maximalIdeal_le
 
 中文:
 定理 map_maximalIdeal_le
-  条件: (f : R ->+* S) [IsLocalHom f]
+  条件: (f : R ->+* S) [是Local态射 f]
   证明: by
   rw [Ideal.map_le_iff_le_comap]; rw [IsLocalRing.maximalIdeal_comap]
 
@@ -271,7 +271,7 @@ theorem map_maximalIdeal_lt_top
 
 中文:
 定理 map_maximalIdeal_lt_top
-  条件: (f : R ->+* S) [IsLocalHom f]
+  条件: (f : R ->+* S) [是Local态射 f]
   结论: (maximalIdeal R).map f < ⊤
   证明: (map_maximalIdeal_le f).trans_lt (maximalIdeal.isMaximal S).lt_top
 
@@ -299,7 +299,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  结论: [CommSemiring R] [IsLocalRing R] [Semiring S] [Nontrivial S] (f : R ->+* S)
+  结论: [交换半环 R] [是局部环 R] [半环 S] [非平凡 S] (f : R ->+* S)
   证明: of_isUnit_or_isUnit_of_isUnit_add (by
     intro a b hab
     obtain ⟨a, rfl⟩ := hf a
@@ -337,8 +337,8 @@ lemma _root_.IsLocalHom.of_surjective
 alias _root_.Function.Surjective.isLocalH
 
 中文:
-引理 _root_.IsLocalHom.of_surjective
-  结论: [CommRing R] [CommRing S] [Nontrivial S] [IsLocalRing R]
+引理 _root_.是Local态射.of_surjective
+  结论: [交换环 R] [交换环 S] [非平凡 S] [是局部环 R]
   证明: by
   have := IsLocalRing.of_surjective' f ‹_›
   refine ((local_hom_TFAE f).out 3 0).mp ?_
@@ -374,7 +374,7 @@ theorem surjective_units_map_of_local_ringHom
 
 中文:
 定理 surjective_units_map_of_local_ringHom
-  结论: [Semiring R] [Semiring S] (f : R ->+* S)
+  结论: [半环 R] [半环 S] (f : R ->+* S)
   证明: by
   intro a
   obtain ⟨b, hb⟩ := hf (a : S)
@@ -414,7 +414,7 @@ lemma map_maximalIdeal_of_surjective
 
 中文:
 引理 map_maximalIdeal_of_surjective
-  结论: [CommRing R] [CommRing S] [IsLocalRing R] [IsLocalRing S]
+  结论: [交换环 R] [交换环 S] [是局部环 R] [是局部环 S]
   证明: by
   let := IsLocalHom.of_surjective f hf
   rw [← maximalIdeal_comap f]; rw [Ideal.map_comap_of_surjective f hf]
@@ -439,7 +439,7 @@ lemma map_ringEquiv_maximalIdeal
 
 中文:
 引理 map_ringEquiv_maximalIdeal
-  结论: [CommRing R] [CommRing S] [IsLocalRing R] [IsLocalRing S]
+  结论: [交换环 R] [交换环 S] [是局部环 R] [是局部环 S]
   证明: map_maximalIdeal_of_surjective (e : R ->+* S) e.surjective
 
 Depends on / 依赖: e.surjective, map_maximalIdeal_of_surjective, surjective
@@ -463,7 +463,7 @@ theorem isLocalRing
 
 中文:
 定理 isLocalRing
-  结论: {A B : 类型} [CommSemiring A] [IsLocalRing A] [Semiring B]
+  结论: {A B : 类型} [交换半环 A] [是局部环 A] [半环 B]
   证明: haveI := e.symm.toEquiv.nontrivial
   IsLocalRing.of_surjective (e : A ->+* B) e.surjective
 -/

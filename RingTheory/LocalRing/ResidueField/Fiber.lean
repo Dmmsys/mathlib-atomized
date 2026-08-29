@@ -43,8 +43,8 @@ instance [IsLocalRing
     rw
 
 中文:
-实例 [IsLocalRing
-  签名: R] [IsLocalRing S] [IsLocalHom (algebraMap R S)] :
+实例 [是局部环
+  签名: R] [是局部环 S] [是Local态射 (algebraMap R S)] :
   定义体: let eSp : ResidueField R otimes[R] S ≃ₐ[R] S ⧸ (maximalIdeal R).map (algebraMap R S) :=
     (Algebra.TensorProduct.comm _ _ _).trans
       ((TensorProduct.quotIdealMapEquivTensorQuot S (maximalIdeal R)).symm.restrictScalars _)
@@ -80,7 +80,7 @@ lemma ResidueField.exists_smul_eq_tmul_one
   simp only [smul_def, Submodule.mem_bot, 
 
 中文:
-引理 ResidueField.exists_smul_eq_tmul_one
+引理 ResidueField.存在_smul_eq_tmul_one
   证明: by
   obtain ⟨t, r, a, hrt, e⟩ := RingHom.SurjectiveOnStalks.exists_mul_eq_tmul
     p.surjectiveOnStalks_residueField x ⊥ isPrime_bot
@@ -114,7 +114,7 @@ abbreviation Fiber
 
 中文:
 缩写 Fiber
-  签名: (p : Ideal R) [p.IsPrime] (S : 类型) [AddCommGroup S] [Module R S]
+  签名: (p : 理想 R) [p.是素] (S : 类型) [加法交换群 S] [模 R S]
   定义体: p.ResidueField otimes[R] S
 
 Depends on / 依赖: ResidueField, otimes, p.ResidueField
@@ -144,7 +144,7 @@ lemma Fiber.exists_smul_eq_one_tmul
   refine ⟨r, hr, s, by simpa using congr((Algebra.TensorProduct.comm _ _ _).symm $e)⟩
 
 中文:
-引理 Fiber.exists_smul_eq_one_tmul
+引理 Fiber.存在_smul_eq_one_tmul
   条件: (x : p.Fiber S)
   结论: 存在 r ∉ p, 存在 s, r • x = 1 otimesₜ[R] s
   证明: by
@@ -253,7 +253,7 @@ definition Fiber.algEquivAux₂
 
 中文:
 定义 Fiber.algEquivAux₂
-  签名: (q : Ideal (p.Fiber S)) [q.IsPrime]
+  签名: (q : 理想 (p.Fiber S)) [q.是素]
   定义体: q.comap includeRight
     letI Sr := Localization.AtPrime r
     letI pS := p.map (algebraMap R S)
@@ -303,7 +303,7 @@ definition Fiber.localizationAlgEquivQuotient
 
 中文:
 定义 Fiber.localizationAlgEquivQuotient
-  签名: (q : Ideal (p.Fiber S)) [q.IsPrime]
+  签名: (q : 理想 (p.Fiber S)) [q.是素]
   定义体: q.comap includeRight
     letI Sr := Localization.AtPrime r
     Localization.AtPrime q ≃ₐ[Localization.AtPrime p] Sr ⧸ p.map (algebraMap R Sr) :=
@@ -342,8 +342,8 @@ definition PrimeSpectrum.preimageEquivFiber
   invFun q := ⟨q.comap Algebra.TensorProduct.includeRight.toRingHom, 
 
 中文:
-定义 PrimeSpectrum.preimageEquivFiber
-  签名: (p : PrimeSpectrum R)
+定义 素谱.preimageEquivFiber
+  签名: (p : 素谱 R)
   定义体: ⟨RingHom.ker (Algebra.TensorProduct.lift
     (Ideal.ResidueField.mapₐ p.asIdeal q.1.asIdeal (Algebra.ofId _ _) congr($(q.2.symm).asIdeal))
       (IsScalarTower.toAlgHom _ _ _) fun _ _ => .all _ _).toRingHom, RingHom.ker_isPrime _⟩
@@ -393,8 +393,8 @@ definition PrimeSpectrum.preimageOrderIsoFiber
       obtain ⟨r, hr, s, e⟩ := I
 
 中文:
-定义 PrimeSpectrum.preimageOrderIsoFiber
-  签名: (p : PrimeSpectrum R)
+定义 素谱.preimageOrderIsoFiber
+  签名: (p : 素谱 R)
   定义体: preimageEquivFiber R S p
   map_rel_iff' {q₁ q₂} := by
     constructor
@@ -437,8 +437,8 @@ definition PrimeSpectrum.primesOverOrderIsoFiber
     (PrimeSpectrum.preimageOrderIsoFiber R S ⟨p, ‹_›⟩)
 
 中文:
-定义 PrimeSpectrum.primesOverOrderIsoFiber
-  签名: (R S : 类型) [CommRing R]
+定义 素谱.primesOverOrderIsoFiber
+  签名: (R S : 类型) [交换环 R]
   定义体: .trans ⟨⟨fun q => ⟨⟨q, q.2.1⟩, PrimeSpectrum.ext q.2.2.1.symm⟩,
     fun q => ⟨q.1.asIdeal, ⟨q.1.2, ⟨congr($(q.2).1).symm⟩⟩⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
     (PrimeSpectrum.preimageOrderIsoFiber R S ⟨p, ‹_›⟩)
@@ -469,8 +469,8 @@ definition PrimeSpectrum.preimageHomeomorphFiber
     exact ((Homeomorph
 
 中文:
-定义 PrimeSpectrum.preimageHomeomorphFiber
-  签名: (R S : 类型) [CommRing R]
+定义 素谱.preimageHomeomorphFiber
+  签名: (R S : 类型) [交换环 R]
   定义体: by
   letI H : Topology.IsEmbedding (preimageOrderIsoFiber R S p).symm := by
     refine (Topology.IsEmbedding.of_comp_iff .subtypeVal).mp ?_
@@ -511,8 +511,8 @@ theorem PrimeSpectrum.coe_primesOverOrderIsoFiber_symm_apply
   proof: rfl
 
 中文:
-定理 PrimeSpectrum.coe_primesOverOrderIsoFiber_symm_apply
-  条件: (q : PrimeSpectrum (p.Fiber S))
+定理 素谱.coe_primesOverOrderIsoFiber_symm_apply
+  条件: (q : 素谱 (p.Fiber S))
   证明: rfl
 -/
 theorem PrimeSpectrum.coe_primesOverOrderIsoFiber_symm_apply (q : PrimeSpectrum (p.Fiber S)) :

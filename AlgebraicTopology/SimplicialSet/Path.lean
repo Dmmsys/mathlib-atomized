@@ -51,10 +51,10 @@ structure Path₁
 结构 Path₁
   参数: (X : SSet.Truncated.{u} 1) (n : 自然数)
   公理与运算 (4 个):
-    - vertex : Fin (n + 1) -> X _⦋0⦌₁
-    - arrow : Fin n -> X _⦋1⦌₁
-    - arrow_src((i : Fin n)) : X.map (tr (δ 1)).op (arrow i) = vertex i.castSucc
-    - arrow_tgt((i : Fin n)) : X.map (tr (δ 0)).op (arrow i) = vertex i.succ
+    - vertex : 有限集 (n + 1) -> X _⦋0⦌₁
+    - arrow : 有限集 n -> X _⦋1⦌₁
+    - arrow_src((i : 有限集 n)) : X.map (tr (δ 1)).op (arrow i) = vertex i.castSucc
+    - arrow_tgt((i : 有限集 n)) : X.map (tr (δ 0)).op (arrow i) = vertex i.succ
 -/
 structure Path₁ (X : SSet.Truncated.{u} 1) (n : Nat) where
   /-- A path includes the data of `n + 1` 0-simplices in `X`. -/
@@ -75,7 +75,7 @@ definition Path
   body: .Path₁ m .obj X trunc (n + 1) 1
 
 中文:
-定义 Path
+定义 道路
   签名: {n : 自然数} (X : SSet.Truncated.{u} (n + 1)) (m : 自然数)
   定义体: .Path₁ m .obj X trunc (n + 1) 1
 -/
@@ -96,7 +96,7 @@ abbreviation vertex
 
 中文:
 缩写 vertex
-  签名: (f : Path X m) (i : Fin (m + 1))
+  签名: (f : 道路 X m) (i : 有限集 (m + 1))
   定义体: Path₁.vertex f i
 
 Depends on / 依赖: vertex
@@ -114,7 +114,7 @@ abbreviation arrow
 
 中文:
 缩写 arrow
-  签名: (f : Path X m) (i : Fin m)
+  签名: (f : 道路 X m) (i : 有限集 m)
   定义体: Path₁.arrow f i
 -/
 abbrev arrow (f : Path X m) (i : Fin m) : X _⦋1⦌ₙ₊₁ :=
@@ -130,7 +130,7 @@ lemma arrow_src
 
 中文:
 引理 arrow_src
-  条件: (f : Path X m) (i : Fin m)
+  条件: (f : 道路 X m) (i : 有限集 m)
   证明: Path₁.arrow_src f i
 
 Depends on / 依赖: arrow_src
@@ -151,7 +151,7 @@ lemma arrow_tgt
 
 中文:
 引理 arrow_tgt
-  条件: (f : Path X m) (i : Fin m)
+  条件: (f : 道路 X m) (i : 有限集 m)
   证明: Path₁.arrow_tgt f i
 
 @[ext]
@@ -173,7 +173,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {f g : Path X m} (hᵥ : f.vertex = g.vertex) (hₐ : f.arrow = g.arrow)
+  条件: {f g : 道路 X m} (hᵥ : f.vertex = g.vertex) (hₐ : f.arrow = g.arrow)
   证明: Path₁.ext hᵥ hₐ
 -/
 lemma ext {f g : Path X m} (hᵥ : f.vertex = g.vertex) (hₐ : f.arrow = g.arrow) :
@@ -199,7 +199,7 @@ lemma ext'
 
 中文:
 引理 ext'
-  条件: {f g : Path X (m + 1)} (h : 对任意 i, f.arrow i = g.arrow i)
+  条件: {f g : 道路 X (m + 1)} (h : 对任意 i, f.arrow i = g.arrow i)
   结论: f = g
   证明: by
   ext j
@@ -240,7 +240,7 @@ definition mk₂
 
 中文:
 定义 mk₂
-  签名: {n : 自然数} {X : Truncated.{u} (n + 1)} (p q : X.Path 1)
+  签名: {n : 自然数} {X : Truncated.{u} (n + 1)} (p q : X.道路 1)
   定义体: ![p.vertex 0, p.vertex 1, q.vertex 1]
   arrow := ![p.arrow 0, q.arrow 0]
   arrow_src i := by
@@ -280,7 +280,7 @@ definition interval
 
 中文:
 定义 interval
-  签名: (f : Path X m) (j l : 自然数) (h : j + l <= m := by omega)
+  签名: (f : 道路 X m) (j l : 自然数) (h : j + l <= m := by omega)
   定义体: f.vertex ⟨j + i, by lia⟩
   arrow i := f.arrow ⟨j + i, by lia⟩
   arrow_src i := f.arrow_src ⟨j + i, by lia⟩
@@ -313,7 +313,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Path X m) (σ : X ⟶ Y)
+  签名: (f : 道路 X m) (σ : X ⟶ Y)
   定义体: σ.app (op ⦋0⦌ₙ₊₁) (f.vertex i)
   arrow i := σ.app (op ⦋1⦌ₙ₊₁) (f.arrow i)
   arrow_src i := by
@@ -347,7 +347,7 @@ lemma map_vertex
 
 中文:
 引理 map_vertex
-  条件: (f : Path X m) (σ : X ⟶ Y) (i : Fin (m + 1))
+  条件: (f : 道路 X m) (σ : X ⟶ Y) (i : 有限集 (m + 1))
   证明: rfl
 -/
 lemma map_vertex (f : Path X m) (σ : X ⟶ Y) (i : Fin (m + 1)) :
@@ -366,7 +366,7 @@ lemma map_arrow
 
 中文:
 引理 map_arrow
-  条件: (f : Path X m) (σ : X ⟶ Y) (i : Fin m)
+  条件: (f : 道路 X m) (σ : X ⟶ Y) (i : 有限集 m)
   证明: rfl
 -/
 lemma map_arrow (f : Path X m) (σ : X ⟶ Y) (i : Fin m) :
@@ -384,7 +384,7 @@ lemma map_interval
 
 中文:
 引理 map_interval
-  条件: (f : Path X m) (σ : X ⟶ Y) (j l : 自然数) (h : j + l <= m)
+  条件: (f : 道路 X m) (σ : X ⟶ Y) (j l : 自然数) (h : j + l <= m)
   证明: rfl
 -/
 lemma map_interval (f : Path X m) (σ : X ⟶ Y) (j l : Nat) (h : j + l <= m) :
@@ -465,7 +465,7 @@ lemma spine_vertex
 
 中文:
 引理 spine_vertex
-  条件: (Δ : X _⦋m⦌ₙ₊₁) (i : Fin (m + 1))
+  条件: (Δ : X _⦋m⦌ₙ₊₁) (i : 有限集 (m + 1))
   证明: rfl
 -/
 lemma spine_vertex (Δ : X _⦋m⦌ₙ₊₁) (i : Fin (m + 1)) :
@@ -485,7 +485,7 @@ lemma spine_arrow
 
 中文:
 引理 spine_arrow
-  条件: (Δ : X _⦋m⦌ₙ₊₁) (i : Fin m)
+  条件: (Δ : X _⦋m⦌ₙ₊₁) (i : 有限集 m)
   证明: rfl
 -/
 lemma spine_arrow (Δ : X _⦋m⦌ₙ₊₁) (i : Fin m) :
@@ -572,7 +572,7 @@ abbreviation vertex
 
 中文:
 缩写 vertex
-  签名: (f : Path X n) (i : Fin (n + 1))
+  签名: (f : 道路 X n) (i : 有限集 (n + 1))
   定义体: Truncated.Path.vertex f i
 
 Depends on / 依赖: Truncated, Truncated.Path.vertex, vertex
@@ -590,7 +590,7 @@ abbreviation arrow
 
 中文:
 缩写 arrow
-  签名: (f : Path X n) (i : Fin n)
+  签名: (f : 道路 X n) (i : 有限集 n)
   定义体: Truncated.Path.arrow f i
 
 Depends on / 依赖: Truncated, Truncated.Path.arrow
@@ -608,7 +608,7 @@ lemma congr_vertex
 
 中文:
 引理 congr_vertex
-  条件: {f g : Path X n} (h : f = g) (i : Fin (n + 1))
+  条件: {f g : 道路 X n} (h : f = g) (i : 有限集 (n + 1))
   证明: by rw [h]
 -/
 lemma congr_vertex {f g : Path X n} (h : f = g) (i : Fin (n + 1)) :
@@ -624,7 +624,7 @@ lemma congr_arrow
 
 中文:
 引理 congr_arrow
-  条件: {f g : Path X n} (h : f = g) (i : Fin n)
+  条件: {f g : 道路 X n} (h : f = g) (i : 有限集 n)
   证明: by rw [h]
 -/
 lemma congr_arrow {f g : Path X n} (h : f = g) (i : Fin n) :
@@ -640,7 +640,7 @@ lemma arrow_src
 
 中文:
 引理 arrow_src
-  条件: (f : Path X n) (i : Fin n)
+  条件: (f : 道路 X n) (i : 有限集 n)
   证明: Truncated.Path.arrow_src f i
 
 Depends on / 依赖: Truncated, Truncated.Path.arrow_src, arrow_src
@@ -661,7 +661,7 @@ lemma arrow_tgt
 
 中文:
 引理 arrow_tgt
-  条件: (f : Path X n) (i : Fin n)
+  条件: (f : 道路 X n) (i : 有限集 n)
   证明: Truncated.Path.arrow_tgt f i
 
 @[ext]
@@ -683,7 +683,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {f g : Path X n} (hᵥ : f.vertex = g.vertex) (hₐ : f.arrow = g.arrow)
+  条件: {f g : 道路 X n} (hᵥ : f.vertex = g.vertex) (hₐ : f.arrow = g.arrow)
   证明: Truncated.Path.ext hᵥ hₐ
 
 Depends on / 依赖: Truncated, Truncated.Path.ext
@@ -707,7 +707,7 @@ lemma ext'
 
 中文:
 引理 ext'
-  条件: {f g : Path X (n + 1)} (h : 对任意 i, f.arrow i = g.arrow i)
+  条件: {f g : 道路 X (n + 1)} (h : 对任意 i, f.arrow i = g.arrow i)
   结论: f = g
   证明: Truncated.Path.ext' h
 
@@ -733,7 +733,7 @@ lemma ext₀
 
 中文:
 引理 ext₀
-  条件: {f g : Path X 0} (h : f.vertex 0 = g.vertex 0)
+  条件: {f g : 道路 X 0} (h : f.vertex 0 = g.vertex 0)
   结论: f = g
   证明: by
   ext i
@@ -757,7 +757,7 @@ definition interval
 
 中文:
 定义 interval
-  签名: (f : Path X n) (j l : 自然数) (h : j + l <= n := by grind)
+  签名: (f : 道路 X n) (j l : 自然数) (h : j + l <= n := by grind)
   定义体: Truncated.Path.interval f j l h
 
 Depends on / 依赖: Truncated, Truncated.Path.interval, interval
@@ -777,7 +777,7 @@ lemma arrow_interval
 
 中文:
 引理 arrow_interval
-  结论: (f : Path X n) (j l : 自然数) (k' : Fin l) (k : Fin n)
+  结论: (f : 道路 X n) (j l : 自然数) (k' : 有限集 l) (k : 有限集 n)
   证明: by
   dsimp [interval, arrow, Truncated.Path.interval, Truncated.Path.arrow]
   congr
@@ -804,7 +804,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Path X n) (σ : X ⟶ Y)
+  签名: (f : 道路 X n) (σ : X ⟶ Y)
   定义体: Truncated.Path.map f ((truncation 1).map σ)
 
 @[simp]
@@ -827,7 +827,7 @@ lemma map_vertex
 
 中文:
 引理 map_vertex
-  条件: (f : Path X n) (σ : X ⟶ Y) (i : Fin (n + 1))
+  条件: (f : 道路 X n) (σ : X ⟶ Y) (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -847,7 +847,7 @@ lemma map_arrow
 
 中文:
 引理 map_arrow
-  条件: (f : Path X n) (σ : X ⟶ Y) (i : Fin n)
+  条件: (f : 道路 X n) (σ : X ⟶ Y) (i : 有限集 n)
   证明: rfl
 -/
 lemma map_arrow (f : Path X n) (σ : X ⟶ Y) (i : Fin n) :
@@ -864,7 +864,7 @@ lemma map_interval
 
 中文:
 引理 map_interval
-  条件: (f : Path X n) (σ : X ⟶ Y) (j l : 自然数) (h : j + l <= n)
+  条件: (f : 道路 X n) (σ : X ⟶ Y) (j l : 自然数) (h : j + l <= n)
   证明: rfl
 -/
 lemma map_interval (f : Path X n) (σ : X ⟶ Y) (j l : Nat) (h : j + l <= n) :
@@ -889,7 +889,7 @@ definition spine
 
 中文:
 定义 spine
-  签名: : X _⦋n⦌ -> Path X n
+  签名: : X _⦋n⦌ -> 道路 X n
   定义体: .spine n .obj X truncation (n + 1)
 
 @[simp]
@@ -912,7 +912,7 @@ lemma spine_vertex
 
 中文:
 引理 spine_vertex
-  条件: (Δ : X _⦋n⦌) (i : Fin (n + 1))
+  条件: (Δ : X _⦋n⦌) (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -932,7 +932,7 @@ lemma spine_arrow
 
 中文:
 引理 spine_arrow
-  条件: (Δ : X _⦋n⦌) (i : Fin n)
+  条件: (Δ : X _⦋n⦌) (i : 有限集 n)
   证明: rfl
 -/
 lemma spine_arrow (Δ : X _⦋n⦌) (i : Fin n) :
@@ -1083,7 +1083,7 @@ lemma stdSimplex.spineId_vertex
 
 中文:
 引理 stdSimplex.spineId_vertex
-  条件: (n : 自然数) (i : Fin (n + 1))
+  条件: (n : 自然数) (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -1104,7 +1104,7 @@ lemma stdSimplex.spineId_arrow_apply_zero
 
 中文:
 引理 stdSimplex.spineId_arrow_apply_zero
-  条件: (n : 自然数) (i : Fin n)
+  条件: (n : 自然数) (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -1123,7 +1123,7 @@ lemma stdSimplex.spineId_arrow_apply_one
 
 中文:
 引理 stdSimplex.spineId_arrow_apply_one
-  条件: (n : 自然数) (i : Fin n)
+  条件: (n : 自然数) (i : 有限集 n)
   证明: rfl
 -/
 lemma stdSimplex.spineId_arrow_apply_one (n : Nat) (i : Fin n) :
@@ -1146,8 +1146,8 @@ arrow_tgt j := Subtype.ext p.arrow_tgt j
 @[simp]
 
 中文:
-定义 Subcomplex.liftPath
-  签名: {X : SSet.{u}} (A : X.Subcomplex) {n : 自然数} (p : Path X n)
+定义 子复形.liftPath
+  签名: {X : SSet.{u}} (A : X.子复形) {n : 自然数} (p : 道路 X n)
   定义体: ⟨p.vertex j, hp₀ _⟩
   arrow j := ⟨p.arrow j, hp₁ _⟩
 arrow_src j := Subtype.ext p.arrow_src j
@@ -1176,8 +1176,8 @@ lemma Subcomplex.map_ι_liftPath
   proof: rfl
 
 中文:
-引理 Subcomplex.map_ι_liftPath
-  结论: {X : SSet.{u}} (A : X.Subcomplex) {n : 自然数} (p : Path X n)
+引理 子复形.map_ι_liftPath
+  结论: {X : SSet.{u}} (A : X.子复形) {n : 自然数} (p : 道路 X n)
   证明: rfl
 -/
 lemma Subcomplex.map_ι_liftPath {X : SSet.{u}} (A : X.Subcomplex) {n : Nat} (p : Path X n)
@@ -1203,7 +1203,7 @@ definition horn.spineId
 
 中文:
 定义 horn.spineId
-  签名: {n : 自然数} (i : Fin (n + 3))
+  签名: {n : 自然数} (i : 有限集 (n + 3))
   定义体: Λ[n + 2, i].liftPath (stdSimplex.spineId (n + 2)) (by simp) (fun j => by
     convert! (horn.primitiveEdge.{u} h₀ hₙ j).2
     ext a
@@ -1232,7 +1232,7 @@ lemma horn.spineId_map_hornInclusion
 
 中文:
 引理 horn.spineId_map_hornInclusion
-  结论: {n : 自然数} (i : Fin (n + 3))
+  结论: {n : 自然数} (i : 有限集 (n + 3))
   证明: rfl
 -/
 lemma horn.spineId_map_hornInclusion {n : Nat} (i : Fin (n + 3))

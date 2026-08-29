@@ -70,7 +70,7 @@ definition IsVonNBounded
 
 中文:
 定义 IsVonNBounded
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: forall ⦃V⦄, V in 𝓝 (0 : E) -> Absorbs 𝕜 V s
 
 Depends on / 依赖: Absorbs
@@ -91,7 +91,7 @@ theorem isVonNBounded_empty
 
 中文:
 定理 isVonNBounded_empty
-  结论: IsVonNBounded 𝕜 (∅ : Set E)
+  结论: IsVonNBounded 𝕜 (∅ : 集合 E)
   证明: fun _ _ => Absorbs.empty
 
 Depends on / 依赖: Absorbs, Absorbs.empty
@@ -111,7 +111,7 @@ theorem isVonNBounded_iff
 
 中文:
 定理 isVonNBounded_iff
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: IsVonNBounded 𝕜 s ↔ 对任意 V in 𝓝 (0 : E), Absorbs 𝕜 V s
   证明: Iff.rfl
 
@@ -132,8 +132,8 @@ theorem _root_.Filter.HasBasis.isVonNBounded_iff
   exact (hA i hi).mono_left hV
 
 中文:
-定理 _root_.Filter.HasBasis.isVonNBounded_iff
-  结论: {q : ι -> 命题} {s : ι -> Set E} {A : Set E}
+定理 _root_.滤子.有基.isVonNBounded_iff
+  结论: {q : ι -> 命题} {s : ι -> 集合 E} {A : 集合 E}
   证明: by
   refine ⟨fun hA i hi => hA (h.mem_of_mem hi), fun hA V hV => ?_⟩
   rcases h.mem_iff.mp hV with ⟨i, hi, hV⟩
@@ -159,7 +159,7 @@ theorem IsVonNBounded.subset
 
 中文:
 定理 IsVonNBounded.subset
-  条件: {s₁ s₂ : Set E} (h : s₁ subseteq s₂) (hs₂ : IsVonNBounded 𝕜 s₂)
+  条件: {s₁ s₂ : 集合 E} (h : s₁ subseteq s₂) (hs₂ : IsVonNBounded 𝕜 s₂)
   证明: fun _ hV => (hs₂ hV).mono_right h
 
 @[simp]
@@ -181,7 +181,7 @@ theorem isVonNBounded_union
 
 中文:
 定理 isVonNBounded_union
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   证明: by
   simp only [IsVonNBounded, absorbs_union, forall_and]
 
@@ -203,7 +203,7 @@ theorem IsVonNBounded.union
 
 中文:
 定理 IsVonNBounded.union
-  条件: {s₁ s₂ : Set E} (hs₁ : IsVonNBounded 𝕜 s₁) (hs₂ : IsVonNBounded 𝕜 s₂)
+  条件: {s₁ s₂ : 集合 E} (hs₁ : IsVonNBounded 𝕜 s₁) (hs₂ : IsVonNBounded 𝕜 s₂)
   证明: isVonNBounded_union.2 ⟨hs₁, hs₂⟩
 
 @[nontriviality]
@@ -228,7 +228,7 @@ theorem IsVonNBounded.of_boundedSpace
 
 中文:
 定理 IsVonNBounded.of_boundedSpace
-  条件: [BoundedSpace 𝕜] {s : Set E}
+  条件: [有界空间 𝕜] {s : 集合 E}
   结论: IsVonNBounded 𝕜 s
   证明: fun _ _ =>
   .of_boundedSpace
@@ -256,7 +256,7 @@ _ = c • U := .symm Subsingleton.eq_univ_of_nonempty (Filter.nonempty_of_mem hU
 
 中文:
 定理 IsVonNBounded.of_subsingleton
-  条件: [Subsingleton E] {s : Set E}
+  条件: [子单例 E] {s : 集合 E}
   结论: IsVonNBounded 𝕜 s
   证明: fun U hU => .of_forall fun c => calc
     s subseteq univ := subset_univ s
@@ -283,7 +283,7 @@ theorem isVonNBounded_iUnion
 
 中文:
 定理 isVonNBounded_iUnion
-  条件: {ι : Sort*} [Finite ι] {s : ι -> Set E}
+  条件: {ι : 类型层*} [有限 ι] {s : ι -> 集合 E}
   证明: by
   simp only [IsVonNBounded, absorbs_iUnion, @forall_comm ι]
 
@@ -305,7 +305,7 @@ theorem isVonNBounded_biUnion
 
 中文:
 定理 isVonNBounded_biUnion
-  条件: {ι : 类型} {I : Set ι} (hI : I.Finite) {s : ι -> Set E}
+  条件: {ι : 类型} {I : 集合 ι} (hI : I.有限) {s : ι -> 集合 E}
   证明: by
   have _ := hI.to_subtype
   rw [biUnion_eq_iUnion]; rw [isVonNBounded_iUnion]; rw [Subtype.forall]
@@ -328,7 +328,7 @@ theorem isVonNBounded_sUnion
 
 中文:
 定理 isVonNBounded_sUnion
-  条件: {S : Set (Set E)} (hS : S.Finite)
+  条件: {S : 集合 (集合 E)} (hS : S.有限)
   证明: by
   rw [sUnion_eq_biUnion]; rw [isVonNBounded_biUnion hS]
 
@@ -471,7 +471,7 @@ hs (le_iff_nhds t t').mp h 0 hV
 
 中文:
 定理 IsVonNBounded.of_topologicalSpace_le
-  结论: {t t' : TopologicalSpace E} (h : t <= t') {s : Set E}
+  结论: {t t' : 拓扑空间 E} (h : t <= t') {s : 集合 E}
   证明: fun _ hV =>
 hs (le_iff_nhds t t').mp h 0 hV
 -/
@@ -497,7 +497,7 @@ alias ⟨IsVonNBounded.tendsto_smallSets_nhds, _⟩ := isVonNBounded_iff_tendsto
 
 中文:
 引理 isVonNBounded_iff_tendsto_smallSets_nhds
-  结论: {𝕜 E : 类型} [NormedDivisionRing 𝕜]
+  结论: {𝕜 E : 类型} [NormedDivision环 𝕜]
   证明: by
   rw [tendsto_smallSets_iff]
   refine forall₂_congr fun V hV => ?_
@@ -528,7 +528,7 @@ lemma isVonNBounded_iff_absorbing_le
 
 中文:
 引理 isVonNBounded_iff_absorbing_le
-  结论: {𝕜 E : 类型} [NormedDivisionRing 𝕜]
+  结论: {𝕜 E : 类型} [NormedDivision环 𝕜]
   证明: .rfl
 
 Depends on / 依赖: NonUnitalSeminormedRing, NonUnitalSeminormedRing.toSeminormedAddCommGroup, toSeminormedAddCommGroup
@@ -551,7 +551,7 @@ lemma isVonNBounded_pi_iff
 
 中文:
 引理 isVonNBounded_pi_iff
-  结论: {𝕜 ι : 类型} {E : ι -> 类型} [NormedDivisionRing 𝕜]
+  结论: {𝕜 ι : 类型} {E : ι -> 类型} [NormedDivision环 𝕜]
   证明: by
   simp_rw [isVonNBounded_iff_tendsto_smallSets_nhds, nhds_pi, Filter.pi, smallSets_iInf,
     smallSets_comap_eq_comap_image, tendsto_iInf, tendsto_comap_iff, Function.comp_def,
@@ -584,7 +584,7 @@ theorem IsVonNBounded.image
   simp only [isVonNBounded_iff_tendsto_smallSets_nhds, ← this, tendsto_map'_if
 
 中文:
-定理 IsVonNBounded.image
+定理 IsVonNBounded.像
   结论: {σ : 𝕜₁ ->+* 𝕜₂} [RingHomSurjective σ] [RingHomIsometric σ]
   证明: by
   have : map σ (𝓝 0) = 𝓝 0 := by
@@ -614,7 +614,7 @@ theorem IsVonNBounded.smul_tendsto_zero
 
 中文:
 定理 IsVonNBounded.smul_tendsto_zero
-  结论: [NormedField 𝕜]
+  结论: [赋范域 𝕜]
   证明: (hS.tendsto_smallSets_nhds.comp hε).of_smallSets hxS.mono fun _ => smul_mem_smul_set
 
 Depends on / 依赖: hS.tendsto_smallSets_nhds.comp, hxS.mono, of_smallSets, smul_mem_smul_set, tendsto_smallSets_nhds
@@ -647,7 +647,7 @@ theorem isVonNBounded_of_smul_tendsto_zero
 
 中文:
 定理 isVonNBounded_of_smul_tendsto_zero
-  结论: {ε : ι -> 𝕜} {l : Filter ι} [l.NeBot]
+  结论: {ε : ι -> 𝕜} {l : 滤子 ι} [l.NeBot]
   证明: by
   rw [(nhds_basis_balanced 𝕜 E).isVonNBounded_iff]
   by_contra! ⟨V, ⟨hV, hVb⟩, hVS⟩
@@ -690,7 +690,7 @@ theorem isVonNBounded_iff_smul_tendsto_zero
 
 中文:
 定理 isVonNBounded_iff_smul_tendsto_zero
-  结论: {ε : ι -> 𝕜} {l : Filter ι} [l.NeBot]
+  结论: {ε : ι -> 𝕜} {l : 滤子 ι} [l.NeBot]
   证明: ⟨fun hS _ hxS => hS.smul_tendsto_zero (Eventually.of_forall hxS) (le_trans hε nhdsWithin_le_nhds),
     isVonNBounded_of_smul_tendsto_zero (by exact hε self_mem_nhdsWithin)⟩
 
@@ -758,7 +758,7 @@ theorem IsVonNBounded.closure
 
 中文:
 定理 IsVonNBounded.closure
-  结论: [T1Space E] [RegularSpace E] [ContinuousConstSMul 𝕜 E]
+  结论: [T1空间 E] [正则空间 E] [连续常数标量乘法 𝕜 E]
   证明: by
   intro V hV
   rcases exists_mem_nhds_isClosed_subset hV with ⟨W, hW₁, hW₂, hW₃⟩
@@ -793,7 +793,7 @@ theorem isVonNBounded_singleton
 中文:
 定理 isVonNBounded_singleton
   条件: (x : E)
-  结论: IsVonNBounded 𝕜 ({x} : Set E)
+  结论: IsVonNBounded 𝕜 ({x} : 集合 E)
   证明: fun _ hV =>
   (absorbent_nhds_zero hV).absorbs
 
@@ -816,7 +816,7 @@ protected alias ⟨_, IsVonNBounded.insert⟩ := isVonNBounded_insert
 
 中文:
 定理 isVonNBounded_insert
-  条件: (x : E) {s : Set E}
+  条件: (x : E) {s : 集合 E}
   证明: by
   simp only [← singleton_union, isVonNBounded_union, isVonNBounded_singleton, true_and]
 
@@ -840,8 +840,8 @@ theorem _root_.Set.Finite.isVonNBounded
   (absorbent_nhds_zero hV).absorbs_finite hs
 
 中文:
-定理 _root_.Set.Finite.isVonNBounded
-  条件: {s : Set E} (hs : s.Finite)
+定理 _root_.集合.有限.isVonNBounded
+  条件: {s : 集合 E} (hs : s.有限)
   证明: fun _ hV =>
   (absorbent_nhds_zero hV).absorbs_finite hs
 -/
@@ -914,7 +914,7 @@ theorem IsVonNBounded.of_add_right
 
 中文:
 定理 IsVonNBounded.of_add_right
-  条件: (hst : IsVonNBounded 𝕜 (s + t)) (hs : s.Nonempty)
+  条件: (hst : IsVonNBounded 𝕜 (s + t)) (hs : s.非空)
   证明: let ⟨x, hx⟩ := hs
 (isVonNBounded_vadd x).mp hst.subset image_subset_image2_right hx
 
@@ -935,7 +935,7 @@ theorem IsVonNBounded.of_add_left
 
 中文:
 定理 IsVonNBounded.of_add_left
-  条件: (hst : IsVonNBounded 𝕜 (s + t)) (ht : t.Nonempty)
+  条件: (hst : IsVonNBounded 𝕜 (s + t)) (ht : t.非空)
   证明: ((add_comm s t).subst hst).of_add_right ht
 
 Depends on / 依赖: add_comm, of_add_right
@@ -954,7 +954,7 @@ theorem isVonNBounded_add_of_nonempty
 
 中文:
 定理 isVonNBounded_add_of_nonempty
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: ⟨fun h => ⟨h.of_add_left ht, h.of_add_right hs⟩, and_imp.2 IsVonNBounded.add⟩
 
 Depends on / 依赖: IsVonNBounded, IsVonNBounded.add, and_imp, h.of_add_left, h.of_add_right, of_add_left, of_add_right
@@ -1023,7 +1023,7 @@ theorem IsVonNBounded.of_sub_left
 
 中文:
 定理 IsVonNBounded.of_sub_left
-  条件: (hst : IsVonNBounded 𝕜 (s - t)) (ht : t.Nonempty)
+  条件: (hst : IsVonNBounded 𝕜 (s - t)) (ht : t.非空)
   证明: ((sub_eq_add_neg s t).subst hst).of_add_left ht.neg
 
 Depends on / 依赖: NonUnitalSubalgebraClass, NonUnitalSubalgebraClass.nonUnitalNormedRing, ht.neg, nonUnitalNormedRing, of_add_left, sub_eq_add_neg
@@ -1048,7 +1048,7 @@ theorem IsVonNBounded.of_sub_right
 
 中文:
 定理 IsVonNBounded.of_sub_right
-  条件: (hst : IsVonNBounded 𝕜 (s - t)) (hs : s.Nonempty)
+  条件: (hst : IsVonNBounded 𝕜 (s - t)) (hs : s.非空)
   证明: (((sub_eq_add_neg s t).subst hst).of_add_right hs).of_neg
 
 Depends on / 依赖: of_add_right, of_neg, sub_eq_add_neg
@@ -1068,7 +1068,7 @@ theorem isVonNBounded_sub_of_nonempty
 
 中文:
 定理 isVonNBounded_sub_of_nonempty
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   simp [sub_eq_add_neg, isVonNBounded_add_of_nonempty, hs, ht]
 
@@ -1110,7 +1110,7 @@ theorem sUnion_isVonNBounded_eq_univ
 
 中文:
 定理 sUnion_isVonNBounded_eq_univ
-  结论: ⋃₀ Set.ofPred (IsVonNBounded 𝕜) = (Set.univ : Set E)
+  结论: ⋃₀ 集合.ofPred (IsVonNBounded 𝕜) = (集合.univ : 集合 E)
   证明: Set.eq_univ_iff_forall.mpr fun x =>
     Set.mem_sUnion.mpr ⟨{x}, isVonNBounded_singleton _, Set.mem_singleton _⟩
 
@@ -1134,7 +1134,7 @@ abbreviation vonNBornology
 
 中文:
 缩写 vonNBornology
-  签名: : Bornology E
+  签名: : 有界结构 E
   定义体: Bornology.ofBounded (Set.ofPred (IsVonNBounded 𝕜)) (isVonNBounded_empty 𝕜 E)
     (fun _ hs _ ht => hs.subset ht) (fun _ hs _ => hs.union) isVonNBounded_singleton
 
@@ -1157,7 +1157,7 @@ theorem isBounded_iff_isVonNBounded
 
 中文:
 定理 isBounded_iff_isVonNBounded
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: isBounded_ofBounded_iff _
 
 Depends on / 依赖: isBounded_ofBounded_iff
@@ -1191,8 +1191,8 @@ theorem TotallyBounded.isVonNBounded
     have h' := 
 
 中文:
-定理 TotallyBounded.isVonNBounded
-  条件: {s : Set E} (hs : TotallyBounded s)
+定理 全有界.isVonNBounded
+  条件: {s : 集合 E} (hs : 全有界 s)
   证明: by
   if h : exists x : 𝕜, 1 < ‖x‖ then
     let : NontriviallyNormedField 𝕜 := ⟨h⟩
@@ -1240,8 +1240,8 @@ theorem IsCompact.isVonNBounded
   hs.totallyBounded.isVonNBounded 𝕜
 
 中文:
-定理 IsCompact.isVonNBounded
-  结论: [NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E]
+定理 是紧集.isVonNBounded
+  结论: [赋范域 𝕜] [加法交换群 E] [模 𝕜 E]
   证明: letI := IsTopologicalAddGroup.rightUniformSpace E
   haveI := isUniformAddGroup_of_addCommGroup (G := E)
   hs.totallyBounded.isVonNBounded 𝕜
@@ -1267,8 +1267,8 @@ theorem Filter.Tendsto.isVonNBounded_range
   hf.cauchySeq.totallyBounded_range.isVonNBounded 𝕜
 
 中文:
-定理 Filter.Tendsto.isVonNBounded_range
-  结论: [NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E]
+定理 滤子.收敛.isVonNBounded_range
+  结论: [赋范域 𝕜] [加法交换群 E] [模 𝕜 E]
   证明: letI := IsTopologicalAddGroup.rightUniformSpace E
   haveI := isUniformAddGroup_of_addCommGroup (G := E)
   hf.cauchySeq.totallyBounded_range.isVonNBounded 𝕜
@@ -1295,7 +1295,7 @@ refine (h hV).restrict_scalars AntilipschitzWith.tendsto_cobounded (K := ‖(1 :
   rw [nndist_eq_nnnorm]; rw [nndist_eq_nnnorm]; rw [← sub_smul]; rw [nnnorm_smul]; rw [← div_eq_inv_mul]; rw [mul_div_cancel_right₀ _ (
 
 中文:
-定理 Bornology.IsVonNBounded.restrict_scalars_of_nontrivial
+定理 有界结构.IsVonNBounded.restrict_scalars_of_nontrivial
   证明: by
   intro V hV
 refine (h hV).restrict_scalars AntilipschitzWith.tendsto_cobounded (K := ‖(1 : 𝕜')‖₊⁻¹) ?_
@@ -1326,7 +1326,7 @@ theorem Bornology.IsVonNBounded.restrict_scalars
     h.restrict_scalars_of_nontrivial _
 
 中文:
-定理 Bornology.IsVonNBounded.restrict_scalars
+定理 有界结构.IsVonNBounded.restrict_scalars
   证明: match subsingleton_or_nontrivial 𝕜' with
   | .inl _ =>
     have : Subsingleton E := MulActionWithZero.subsingleton 𝕜' E
@@ -1369,7 +1369,7 @@ theorem isVonNBounded_of_isBounded
 
 中文:
 定理 isVonNBounded_of_isBounded
-  条件: {s : Set E} (h : Bornology.IsBounded s)
+  条件: {s : 集合 E} (h : 有界结构.IsBounded s)
   证明: by
   rcases h.subset_ball 0 with ⟨r, hr⟩
   rw [Metric.nhds_basis_ball.isVonNBounded_iff]
@@ -1399,7 +1399,7 @@ theorem isVonNBounded_ball
 中文:
 定理 isVonNBounded_ball
   条件: (r : 实数)
-  结论: Bornology.IsVonNBounded 𝕜 (Metric.ball (0 : E) r)
+  结论: 有界结构.IsVonNBounded 𝕜 (Metric.ball (0 : E) r)
   证明: isVonNBounded_of_isBounded _ Metric.isBounded_ball
 
 Depends on / 依赖: Metric, Metric.isBounded_ball, isBounded_ball, isVonNBounded_of_isBounded
@@ -1447,8 +1447,8 @@ theorem isVonNBounded_iff
 
 中文:
 定理 isVonNBounded_iff
-  条件: {s : Set E}
-  结论: Bornology.IsVonNBounded 𝕜 s ↔ Bornology.IsBounded s
+  条件: {s : 集合 E}
+  结论: 有界结构.IsVonNBounded 𝕜 s ↔ 有界结构.IsBounded s
   证明: by
   refine ⟨fun h => ?_, isVonNBounded_of_isBounded _⟩
   rcases (h (Metric.ball_mem_nhds 0 zero_lt_one)).exists_pos with ⟨ρ, hρ, hρball⟩
@@ -1477,7 +1477,7 @@ theorem isVonNBounded_iff'
 
 中文:
 定理 isVonNBounded_iff'
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   rw [NormedSpace.isVonNBounded_iff]; rw [isBounded_iff_forall_norm_le]
 
@@ -1498,7 +1498,7 @@ theorem image_isVonNBounded_iff
 
 中文:
 定理 image_isVonNBounded_iff
-  条件: {α : 类型} {f : α -> E} {s : Set α}
+  条件: {α : 类型} {f : α -> E} {s : 集合 α}
   证明: by
   simp_rw [isVonNBounded_iff', Set.forall_mem_image]
 
@@ -1522,7 +1522,7 @@ theorem vonNBornology_eq
 
 中文:
 定理 vonNBornology_eq
-  结论: Bornology.vonNBornology 𝕜 E = PseudoMetricSpace.toBornology
+  结论: 有界结构.vonNBornology 𝕜 E = 伪度量空间.toBornology
   证明: by
   rw [Bornology.ext_iff_isBounded]
   intro s
@@ -1555,7 +1555,7 @@ theorem isBounded_iff_subset_smul_ball
 
 中文:
 定理 isBounded_iff_subset_smul_ball
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   rw [← isVonNBounded_iff 𝕜]
   constructor
@@ -1595,7 +1595,7 @@ exact Exists.imp fun a ha => ha.trans Set.smul_set_mono Metric.ball_subset_close
 
 中文:
 定理 isBounded_iff_subset_smul_closedBall
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   constructor
   · rw [isBounded_iff_subset_smul_ball 𝕜]
@@ -1631,10 +1631,10 @@ class QuasiCompleteSpace
     - quasiComplete : forall ⦃s : Set E⦄, Bornology.IsVonNBounded 𝕜 s -> IsClosed s -> IsComplete s
 
 中文:
-类 QuasiCompleteSpace
-  参数: (𝕜 : 类型) (E : 类型) [Zero E] [UniformSpace E] [SeminormedRing 𝕜]
+类 QuasiComplete空间
+  参数: (𝕜 : 类型) (E : 类型) [零 E] [一致空间 E] [Seminormed环 𝕜]
   公理与运算 (1 个):
-    - quasiComplete : 对任意 ⦃s : Set E⦄, Bornology.IsVonNBounded 𝕜 s -> IsClosed s -> IsComplete s
+    - quasiComplete : 对任意 ⦃s : 集合 E⦄, 有界结构.IsVonNBounded 𝕜 s -> 是闭集 s -> 是完备 s
 -/
 class QuasiCompleteSpace (𝕜 : Type*) (E : Type*) [Zero E] [UniformSpace E] [SeminormedRing 𝕜]
     [SMul 𝕜 E] : Prop where
@@ -1653,8 +1653,8 @@ instance [CompleteSpace
   body: IsClosed.isComplete
 
 中文:
-实例 [CompleteSpace
-  签名: E] : QuasiCompleteSpace 𝕜 E where
+实例 [完备空间
+  签名: E] : QuasiComplete空间 𝕜 E where
   定义体: IsClosed.isComplete
 
 Depends on / 依赖: IsClosed, IsClosed.isComplete, isComplete
@@ -1674,7 +1674,7 @@ theorem isCompact_closure_of_totallyBounded_quasiComplete
 
 中文:
 定理 isCompact_closure_of_totallyBounded_quasiComplete
-  结论: {E : 类型} {𝕜 : 类型} [NormedField 𝕜]
+  结论: {E : 类型} {𝕜 : 类型} [赋范域 𝕜]
   证明: hs.closure.isCompact_of_isComplete
     (QuasiCompleteSpace.quasiComplete (TotallyBounded.isVonNBounded 𝕜 (TotallyBounded.closure hs))
     isClosed_closure)

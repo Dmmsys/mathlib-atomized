@@ -78,7 +78,7 @@ structure Pretopology
   参数: extends Precoverage C
   继承: Precoverage C
   公理与运算 (3 个):
-    - has_isos : 对任意 ⦃X Y⦄ (f : Y ⟶ X) [IsIso f], Presieve.singleton f in coverings X
+    - has_isos : 对任意 ⦃X Y⦄ (f : Y ⟶ X) [是同构 f], Presieve.singleton f in coverings X
     - pullbacks : 对任意 ⦃X Y⦄ (f : Y ⟶ X) (S), S in coverings X -> pullbackArrows f S in coverings Y
     - transitive : 对任意 ⦃X : C⦄ (S : Presieve X) (Ti : 对任意 ⦃Y⦄ (f : Y ⟶ X), S f -> Presieve Y), S in coverings X -> (对任意 ⦃Y⦄ (f) (H : S f), Ti f H in coverings Y) -> S.bind Ti in coverings X
 -/
@@ -142,7 +142,7 @@ theorem le_def
 中文:
 定理 le_def
   条件: {K₁ K₂ : Pretopology C}
-  结论: K₁ <= K₂ ↔ (K₁ : 对任意 X : C, Set (Presieve X)) <= K₂
+  结论: K₁ <= K₂ ↔ (K₁ : 对任意 X : C, 集合 (Presieve X)) <= K₂
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Pretopology C)
+  签名: 偏序 (Pretopology C)
   定义体: { Pretopology.LE with
     le_refl := fun _ => le_def.mpr le_rfl
     le_trans := fun _ _ _ h₁₂ h₂₃ => le_def.mpr (le_trans h₁₂ h₂₃)
@@ -193,7 +193,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: : OrderTop (Pretopology C) where
+  签名: : 有顶序 (Pretopology C) where
   定义体: { coverings := fun _ => Set.univ
       has_isos := fun _ _ _ _ => Set.mem_univ _
       pullbacks := fun _ _ _ _ _ => Set.mem_univ _
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Pretopology C)
+  签名: 可居 (Pretopology C)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (Pretopology C) :=
@@ -315,8 +315,8 @@ definition GrothendieckTopology.toPretopology
     rw [Sieve.pullback
 
 中文:
-定义 GrothendieckTopology.toPretopology
-  签名: (J : GrothendieckTopology C)
+定义 Grothendieck拓扑.toPretopology
+  签名: (J : Grothendieck拓扑 C)
   定义体: {R | Sieve.generate R in J X}
   has_isos X Y f i := J.covering_of_eq_top (by simp)
   pullbacks X Y f R hR := by simpa [Sieve.pullbackArrows_comm] using J.pullback_stable f hR
@@ -360,7 +360,7 @@ definition Pretopology.gi
 
 中文:
 定义 Pretopology.gi
-  签名: : GaloisInsertion
+  签名: : Galois嵌入
   定义体: by
     constructor
     · intro h X R hR
@@ -395,8 +395,8 @@ lemma GrothendieckTopology.mem_toPretopology
   proof: Iff.rfl
 
 中文:
-引理 GrothendieckTopology.mem_toPretopology
-  条件: (t : GrothendieckTopology C) {X : C} (S : Presieve X)
+引理 Grothendieck拓扑.mem_toPretopology
+  条件: (t : Grothendieck拓扑 C) {X : C} (S : Presieve X)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -485,7 +485,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (Pretopology C) where
+  签名: : 有底序 (Pretopology C) where
   定义体: trivial C
   bot_le K X R := by
     rintro ⟨Y, f, hf, rfl⟩
@@ -553,7 +553,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Pretopology C)
+  签名: 下确界集 (Pretopology C)
   定义体: {
     coverings := sInf ((fun J => J.coverings) '' T)
     has_isos := fun X Y f _ => by
@@ -596,7 +596,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: (T : Set (Pretopology C)) {X : C} (S : Presieve X)
+  条件: (T : 集合 (Pretopology C)) {X : C} (S : Presieve X)
   证明: by
   change S in sInf ((fun J : Pretopology C => J.coverings) '' T) X ↔ _
   simp
@@ -620,7 +620,7 @@ lemma sInf_ofGrothendieck
 
 中文:
 引理 sInf_ofGrothendieck
-  条件: (T : Set (GrothendieckTopology C))
+  条件: (T : 集合 (Grothendieck拓扑 C))
   证明: by
   ext X S
   simp [mem_sInf, GrothendieckTopology.mem_toPretopology, GrothendieckTopology.mem_sInf]
@@ -643,7 +643,7 @@ lemma isGLB_sInf
 
 中文:
 引理 isGLB_sInf
-  条件: (T : Set (Pretopology C))
+  条件: (T : 集合 (Pretopology C))
   结论: IsGLB T (sInf T)
   证明: IsGLB.of_image (f := fun J => J.coverings) Iff.rfl (_root_.isGLB_sInf _)
 
@@ -670,7 +670,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Pretopology C)
+  签名: 完备格 (Pretopology C)
   定义体: orderBot C
   __ := orderTop C
   inf t₁ t₂ := {
@@ -741,7 +741,7 @@ definition Precoverage.toPretopology
 
 中文:
 定义 Precoverage.toPretopology
-  签名: [Limits.HasPullbacks C] (J : Precoverage C) [J.HasIsos]
+  签名: [Limits.有Pullbacks C] (J : Precoverage C) [J.有是os]
   定义体: J
   has_isos X Y f hf := mem_coverings_of_isIso f
   pullbacks X Y f R hR := J.pullbackArrows_mem f hR

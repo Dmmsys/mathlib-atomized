@@ -141,7 +141,7 @@ exact P.flip.toPerfPair.injective this (mem_range_self i) (mem_range_self j) hij
 
 中文:
 引理 injOn_dualMap_subtype_span_root_coroot
-  条件: [IsAddTorsionFree M]
+  条件: [是加法无挠 M]
   证明: by
   have := injOn_dualMap_subtype_span_range_range (finite_range P.root)
     (c := P.toLinearMap.flip ∘ P.coroot) P.root_coroot_two P.mapsTo_reflection_root
@@ -180,7 +180,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   have hp (hc' : P₁.coroot = P₂.coroot) : P₁.reflectionPerm = P₂.reflectionPerm := by
     ext i j
@@ -241,7 +241,7 @@ lemma coroot_eq_coreflection_of_root_eq'
 
 中文:
 引理 coroot_eq_coreflection_of_root_eq'
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   set α := root i
   set β := root j
@@ -312,7 +312,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+  签名: [特征零 R] [是整环 R] [是无挠 R M]
   定义体: p
   root := root
   coroot := coroot
@@ -358,8 +358,8 @@ lemma IsRootSystem.ext
     exact RootPairing.ext he hr 
 
 中文:
-引理 IsRootSystem.ext
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+引理 是RootSystem.ext
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   suffices forall (P₁ P₂ : RootPairing ι R M N) [P₁.IsRootSystem] [P₂.IsRootSystem],
       P₁.toLinearMap = P₂.toLinearMap -> P₁.root = P₂.root -> range P₁.coroot subseteq range P₂.coroot by
@@ -409,7 +409,7 @@ lemma coroot_eq_coreflection_of_root_eq_of_span_eq_top
 
 中文:
 引理 coroot_eq_coreflection_of_root_eq_of_span_eq_top
-  结论: [CharZero R] [IsDomain R]
+  结论: [特征零 R] [是整环 R]
   证明: by
   set α := root i
   set β := root j

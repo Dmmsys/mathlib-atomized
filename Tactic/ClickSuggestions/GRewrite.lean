@@ -35,7 +35,7 @@ structure GrwPos
   公理与运算 (3 个):
     - relName : Name
     - relation : Expr
-    - symm? : Option 布尔
+    - symm? : 选项类型 布尔值
 -/
 structure GrwPos where
   /-- The name of the relation. -/
@@ -64,7 +64,7 @@ definition gcongrBackward
 
 中文:
 定义 gcongrBackward
-  签名: (relName : Name) (relation : Expr) (symm : 布尔)
+  签名: (relName : Name) (relation : Expr) (symm : 布尔值)
   定义体: do
   let type ← inferType relation
   let α ← mkFreshTypeMVar
@@ -128,7 +128,7 @@ definition dummyDischarger
 
 中文:
 定义 dummyDischarger
-  签名: (ref : IO.Ref (Array GrwPos)) (hyp? : 布尔) (fvar : Expr)
+  签名: (ref : IO.Ref (数组 GrwPos)) (hyp? : 布尔值) (fvar : Expr)
   定义体: do
   let e ← instantiateMVars (← goal.getType)
   let mkApp2 relation lhs rhs := e | throwError "`{e}` is not a relation"
@@ -169,7 +169,7 @@ definition getGrwPos?
 
 中文:
 定义 getGrwPos?
-  签名: (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : 布尔)
+  签名: (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : 布尔值)
   定义体: do
   withLocalDeclD `_a (← inferType subExpr) fun fvar => do
   let root' ← replaceSubexpr (fun _ => pure (GCongr.mkHoleAnnotation fvar)) pos rootExpr
@@ -217,7 +217,7 @@ structure GrwLemma
   参数: where
   公理与运算 (3 个):
     - name : Premise
-    - symm : 布尔
+    - symm : 布尔值
     - relName : Name
 -/
 structure GrwLemma where
@@ -247,8 +247,8 @@ structure GrwInfo
   公理与运算 (5 个):
     - rootExpr : Expr
     - subExpr : Expr
-    - rflTarget? : Option Expr
-    - gpos : Array GrwPos
+    - rflTarget? : 选项类型 Expr
+    - gpos : 数组 GrwPos
     - rwKind : RwKind
 -/
 structure GrwInfo where
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord GrwKey
+  签名: 序 GrwKey
   定义体: (compare a.1 b.1).then
 (compare a.2 b.2).then
 (compare a.3 b.3).then
@@ -366,7 +366,7 @@ definition tacticSyntax
 
 中文:
 定义 tacticSyntax
-  签名: (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemmaName : 布尔)
+  签名: (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemmaName : 布尔值)
   定义体: do
   let proof ← if justLemmaName then
       `(term| $(mkIdent <| ← lem.name.unresolveName))

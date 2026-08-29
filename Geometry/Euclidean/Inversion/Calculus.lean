@@ -171,8 +171,8 @@ theorem Differentiable.inversion
   (hc a).inversion (hR a) (hx a) (hne a)
 
 中文:
-定理 Differentiable.inversion
-  结论: (hc : Differentiable 实数 c)
+定理 可微.inversion
+  结论: (hc : 可微 实数 c)
   证明: fun a =>
   (hc a).inversion (hR a) (hx a) (hne a)
 -/

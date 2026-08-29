@@ -70,7 +70,7 @@ theorem contDiffOn_fderiv_coord_change
 
 中文:
 定理 contDiffOn_fderiv_coord_change
-  结论: [IsManifold I (n + 1) M]
+  结论: [是流形 I (n + 1) M]
   证明: by
   have h : ((i.1.extend I).symm ≫ j.1.extend I).source subseteq range I := by
     refine I.extendCoordChange_source.trans_subset ?_; apply image_subset_range
@@ -126,7 +126,7 @@ definition tangentBundleCore
 
 中文:
 定义 tangentBundleCore
-  签名: : VectorBundleCore 𝕜 M E (atlas H M) where
+  签名: : 向量丛核心 𝕜 M E (atlas H M) where
   定义体: i.1.source
   isOpen_baseSet i := i.1.open_source
   indexAt := achart H
@@ -395,7 +395,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace TM
+  签名: 拓扑空间 TM
   定义体: inferInstanceAs TopologicalSpace (tangentBundleCore I M).TotalSpace
 
 Depends on / 依赖: TopologicalSpace, TotalSpace, tangentBundleCore
@@ -413,7 +413,7 @@ instance TangentSpace.fiberBundle
 
 中文:
 实例 TangentSpace.fiberBundle
-  签名: : FiberBundle E (TangentSpace I : M -> Type _)
+  签名: : 纤维丛 E (TangentSpace I : M -> 类型 _)
   定义体: inferInstanceAs FiberBundle E (tangentBundleCore I M).Fiber
 
 Depends on / 依赖: FiberBundle, tangentBundleCore
@@ -431,7 +431,7 @@ instance TangentSpace.vectorBundle
 
 中文:
 实例 TangentSpace.vectorBundle
-  签名: : VectorBundle 𝕜 E (TangentSpace I : M -> Type _)
+  签名: : 向量丛 𝕜 E (TangentSpace I : M -> 类型 _)
   定义体: inferInstanceAs VectorBundle 𝕜 E (tangentBundleCore I M).Fiber
 
 Depends on / 依赖: VectorBundle, tangentBundleCore
@@ -862,7 +862,7 @@ lemma tangentBundleCore.isContMDiff
 
 中文:
 引理 tangentBundleCore.isContMDiff
-  条件: [h : IsManifold I (n + 1) M]
+  条件: [h : 是流形 I (n + 1) M]
   证明: .of_le (n := n + 1) le_add_self
     (tangentBundleCore I M).IsContMDiff I n := by
   have : IsManifold I n M := .of_le (n := n + 1) (le_self_add)
@@ -898,8 +898,8 @@ lemma TangentBundle.contMDiffVectorBundle
   exact (tangentBundleCore I M).instContMDiffVectorBundl
 
 中文:
-引理 TangentBundle.contMDiffVectorBundle
-  条件: [h : IsManifold I (n + 1) M]
+引理 切丛.contMDiffVectorBundle
+  条件: [h : 是流形 I (n + 1) M]
   证明: .of_le (n := n + 1) le_add_self
     ContMDiffVectorBundle n E (TangentSpace I : M -> Type _) I := by
   have : IsManifold I 1 M := .of_le (n := n + 1) le_add_self
@@ -930,7 +930,7 @@ omit [IsManifold I 1 M] in
 
 中文:
 实例 [h
-  签名: : IsManifold I ∞ M] :
+  签名: : 是流形 I ∞ M] :
   定义体: by
   have : IsManifold I (∞ + 1) M := h
   exact TangentBundle.contMDiffVectorBundle
@@ -956,7 +956,7 @@ instance [IsManifold
 omit [IsManifold I 1 M] in
 
 中文:
-实例 [IsManifold
+实例 [是流形
   签名: I ω M] :
   定义体: TangentBundle.contMDiffVectorBundle
 
@@ -981,7 +981,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : IsManifold I 2 M] :
+  签名: : 是流形 I 2 M] :
   定义体: by
   have : IsManifold I (1 + 1) M := h
   exact TangentBundle.contMDiffVectorBundle
@@ -1014,7 +1014,7 @@ theorem trivializationAt_model_space_apply
 
 中文:
 定理 trivializationAt_model_space_apply
-  条件: (p : TangentBundle I H) (x : H)
+  条件: (p : 切丛 I H) (x : H)
   证明: by
   simp only [TangentBundle.trivializationAt_apply]
   have : fderivWithin 𝕜 (↑I ∘ ↑I.symm) (range I) (I p.proj) =
@@ -1053,7 +1053,7 @@ theorem tangentBundle_model_space_chartAt
 
 中文:
 定理 tangentBundle_model_space_chartAt
-  条件: (p : TangentBundle I H)
+  条件: (p : 切丛 I H)
   证明: by
   ext x : 1
   · ext; · rfl
@@ -1092,7 +1092,7 @@ theorem tangentBundle_model_space_coe_chartAt
 
 中文:
 定理 tangentBundle_model_space_coe_chartAt
-  条件: (p : TangentBundle I H)
+  条件: (p : 切丛 I H)
   证明: by
   rw [← OpenPartialHomeomorph.coe_toPartialEquiv]; rw [tangentBundle_model_space_chartAt]; rfl
 
@@ -1116,7 +1116,7 @@ theorem tangentBundle_model_space_coe_chartAt_symm
 
 中文:
 定理 tangentBundle_model_space_coe_chartAt_symm
-  条件: (p : TangentBundle I H)
+  条件: (p : 切丛 I H)
   证明: by
   rw [← OpenPartialHomeomorph.coe_toPartialEquiv]; rw [OpenPartialHomeomorph.symm_toPartialEquiv]; rw [tangentBundle_model_space_chartAt]; rfl
 
@@ -1168,7 +1168,7 @@ definition tangentBundleModelSpaceHomeomorph
 
 中文:
 定义 tangentBundleModelSpaceHomeomorph
-  签名: : TangentBundle I H ≃ₜ ModelProd H E
+  签名: : 切丛 I H ≃ₜ ModelProd H E
   定义体: { TotalSpace.toProd H E with
     continuous_toFun := by
       let p : TangentBundle I H := ⟨I.symm (0 : E), (0 : E)⟩

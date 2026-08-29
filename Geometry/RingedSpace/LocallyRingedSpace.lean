@@ -46,11 +46,11 @@ structure LocallyRingedSpace
     - isLocalRing : forall x, IsLocalRing (presheaf.stalk x)
 
 中文:
-结构 LocallyRingedSpace
-  参数: extends SheafedSpace CommRingCat.{u}
-  继承: SheafedSpace CommRingCat.{u}
+结构 LocallyRinged空间
+  参数: extends Sheafed空间 交换环范畴.{u}
+  继承: Sheafed空间 交换环范畴.{u}
   公理与运算 (1 个):
-    - isLocalRing : 对任意 x, IsLocalRing (presheaf.stalk x)
+    - isLocalRing : 对任意 x, 是局部环 (presheaf.stalk x)
 -/
 structure LocallyRingedSpace extends SheafedSpace CommRingCat.{u} where
   /-- Stalks of a locally ringed space are local rings. -/
@@ -92,7 +92,7 @@ definition toTopCat
 
 中文:
 定义 toTopCat
-  签名: : TopCat
+  签名: : 顶元素范畴
   定义体: X.1.carrier
 
 Depends on / 依赖: carrier
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort LocallyRingedSpace (类型u)
+  签名: CoeSort LocallyRinged空间 (类型u)
   定义体: ⟨fun X : LocallyRingedSpace => (X.toTopCat : Type _)⟩
 
 Depends on / 依赖: LocallyRingedSpace, X.toTopCat, toTopCat
@@ -133,7 +133,7 @@ definition 𝒪
 
 中文:
 定义 𝒪
-  签名: : Sheaf CommRingCat X.toTopCat
+  签名: : 层 交换环范畴 X.toTopCat
   定义体: X.sheaf
 
 Depends on / 依赖: X.sheaf
@@ -155,11 +155,11 @@ structure Hom
     - prop : forall x, IsLocalHom (toHom.stalkMap x).hom
 
 中文:
-结构 Hom
-  参数: (X Y : LocallyRingedSpace.{u})
-  继承: X.toPresheafedSpace.Hom Y.toPresheafedSpace
+结构 态射
+  参数: (X Y : LocallyRinged空间.{u})
+  继承: X.toPresheafedSpace.态射 Y.toPresheafedSpace
   公理与运算 (1 个):
-    - prop : 对任意 x, IsLocalHom (toHom.stalkMap x).hom
+    - prop : 对任意 x, 是Local态射 (toHom.stalkMap x).hom
 -/
 structure Hom (X Y : LocallyRingedSpace.{u}) : Type _
     extends X.toPresheafedSpace.Hom Y.toPresheafedSpace where
@@ -177,8 +177,8 @@ abbreviation Hom.toShHom
 @[simp]
 
 中文:
-缩写 Hom.toShHom
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X.Hom Y)
+缩写 态射.toShHom
+  签名: {X Y : LocallyRinged空间.{u}} (f : X.态射 Y)
   定义体: InducedCategory.homMk f.1
 
 @[simp]
@@ -198,8 +198,8 @@ lemma Hom.toShHom_mk
   proof: rfl
 
 中文:
-引理 Hom.toShHom_mk
-  结论: {X Y : LocallyRingedSpace.{u}}
+引理 态射.toShHom_mk
+  结论: {X Y : LocallyRinged空间.{u}}
   证明: rfl
 -/
 lemma Hom.toShHom_mk {X Y : LocallyRingedSpace.{u}}
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver LocallyRingedSpace
+  签名: 箭图 LocallyRinged空间
   定义体: ⟨Hom⟩
 -/
 instance : Quiver LocallyRingedSpace :=
@@ -231,8 +231,8 @@ lemma Hom.ext'
   proof: by cases f; cases g; congr
 
 中文:
-引理 Hom.ext'
-  结论: {X Y : LocallyRingedSpace.{u}} {f g : X ⟶ Y}
+引理 态射.ext'
+  结论: {X Y : LocallyRinged空间.{u}} {f g : X ⟶ Y}
   证明: by cases f; cases g; congr
 -/
 @[ext] lemma Hom.ext' {X Y : LocallyRingedSpace.{u}} {f g : X ⟶ Y}
@@ -250,8 +250,8 @@ definition Hom.stalkMap
 @[instance]
 
 中文:
-定义 Hom.stalkMap
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : X)
+定义 态射.stalkMap
+  签名: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) (x : X)
   定义体: f.toShHom.hom.stalkMap x
 
 @[instance]
@@ -273,7 +273,7 @@ theorem isLocalHomStalkMap
 
 中文:
 定理 isLocalHomStalkMap
-  条件: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : X)
+  条件: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) (x : X)
   证明: f.2 x
 -/
 theorem isLocalHomStalkMap {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : X) :
@@ -292,7 +292,7 @@ instance isLocalHomStalkMap'
 
 中文:
 实例 isLocalHomStalkMap'
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : X)
+  签名: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) (x : X)
   定义体: isLocalHomStalkMap f x
 
 @[instance]
@@ -314,7 +314,7 @@ theorem isLocalHomValStalkMap
 
 中文:
 定理 isLocalHomValStalkMap
-  条件: {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X)
+  条件: {X Y : LocallyRinged空间.{u}} (f : 态射 X Y) (x : X)
   证明: f.2 x
 -/
 theorem isLocalHomValStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) :
@@ -332,7 +332,7 @@ definition id
 
 中文:
 定义 id
-  签名: (X : LocallyRingedSpace.{u})
+  签名: (X : LocallyRinged空间.{u})
   定义体: ⟨𝟙 X.toPresheafedSpace, fun x => by dsimp; rw [PresheafedSpace.stalkMap.id]; infer_instance⟩
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.stalkMap.id, X.toPresheafedSpace, infer_instance, stalkMap, toPresheafedSpace
@@ -357,7 +357,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : LocallyRingedSpace.{u}} (f : Hom X Y) (g : Hom Y Z)
+  签名: {X Y Z : LocallyRinged空间.{u}} (f : 态射 X Y) (g : 态射 Y Z)
   定义体: (f.toHom ≫ g.toHom : X.toPresheafedSpace ⟶ Z.toPresheafedSpace)
   prop x := by
     rw [PresheafedSpace.stalkMap.comp]
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category LocallyRingedSpace.{u}
+  签名: 范畴 LocallyRinged空间.{u}
   定义体: Hom
   id := id
   comp f g := comp f g
@@ -408,7 +408,7 @@ definition forgetToSheafedSpace
 
 中文:
 定义 forgetToSheafedSpace
-  签名: : LocallyRingedSpace.{u} ⥤ SheafedSpace CommRingCat.{u} where
+  签名: : LocallyRinged空间.{u} ⥤ Sheafed空间 交换环范畴.{u} where
   定义体: X.toSheafedSpace
   map f := InducedCategory.homMk f.1
 
@@ -430,7 +430,7 @@ instance :
 
 中文:
 实例 :
-  签名: forgetToSheafedSpace.Faithful
+  签名: forgetToSheafedSpace.忠实
   定义体: by
     ext : 1
     exact congr_arg InducedCategory.Hom.hom h
@@ -455,7 +455,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X.toSheafedSpace ⟶ Y.toSheafedSpace)
+  签名: {X Y : LocallyRinged空间.{u}} (f : X.toSheafedSpace ⟶ Y.toSheafedSpace)
   定义体: f.hom
   prop := by assumption
 
@@ -480,7 +480,7 @@ definition forgetToTop
 
 中文:
 定义 forgetToTop
-  签名: : LocallyRingedSpace.{u} ⥤ TopCat.{u}
+  签名: : LocallyRinged空间.{u} ⥤ 顶元素范畴.{u}
   定义体: forgetToSheafedSpace ⋙ SheafedSpace.forget _
 
 @[simp]
@@ -503,7 +503,7 @@ theorem id_toHom
 
 中文:
 定理 id_toHom
-  条件: (X : LocallyRingedSpace.{u})
+  条件: (X : LocallyRinged空间.{u})
   证明: rfl
 
 @[simp]
@@ -525,7 +525,7 @@ theorem comp_toHom
 
 中文:
 定理 comp_toHom
-  条件: {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : LocallyRinged空间.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -545,7 +545,7 @@ theorem comp_toShHom
 
 中文:
 定理 comp_toShHom
-  条件: {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : LocallyRinged空间.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_toShHom {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -562,7 +562,7 @@ theorem id_toShHom'
 
 中文:
 定理 id_toShHom'
-  条件: (X : LocallyRingedSpace.{u})
+  条件: (X : LocallyRinged空间.{u})
   证明: rfl
 -/
 @[simp] theorem id_toShHom' (X : LocallyRingedSpace.{u}) :
@@ -579,7 +579,7 @@ theorem comp_base
 
 中文:
 定理 comp_base
-  条件: {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : LocallyRinged空间.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_base {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -596,7 +596,7 @@ theorem comp_c
 
 中文:
 定理 comp_c
-  条件: {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : LocallyRinged空间.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_c {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -613,7 +613,7 @@ theorem comp_c_app
 
 中文:
 定理 comp_c_app
-  条件: {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : (Opens Z)ᵒᵖ)
+  条件: {X Y Z : LocallyRinged空间.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : (Opens Z)ᵒᵖ)
   证明: rfl
 -/
 theorem comp_c_app {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : (Opens Z)ᵒᵖ) :
@@ -641,7 +641,7 @@ definition homOfSheafedSpaceHomOfIsIso
 
 中文:
 定义 homOfSheafedSpaceHomOfIsIso
-  签名: {X Y : LocallyRingedSpace.{u}}
+  签名: {X Y : LocallyRinged空间.{u}}
   定义体: f.hom
   prop _ :=
     -- Here we need to see that the stalk maps are really local ring homomorphisms.
@@ -681,7 +681,7 @@ definition isoOfSheafedSpaceIso
 
 中文:
 定义 isoOfSheafedSpaceIso
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X.toSheafedSpace ≅ Y.toSheafedSpace)
+  签名: {X Y : LocallyRinged空间.{u}} (f : X.toSheafedSpace ≅ Y.toSheafedSpace)
   定义体: homOfSheafedSpaceHomOfIsIso f.hom
   inv := homOfSheafedSpaceHomOfIsIso f.inv
   hom_inv_id := by
@@ -719,7 +719,7 @@ instance :
 
 中文:
 实例 :
-  签名: forgetToSheafedSpace.ReflectsIsomorphisms
+  签名: forgetToSheafedSpace.反映同构
   定义体: (isoOfSheafedSpaceIso (asIso (forgetToSheafedSpace.map f))).isIso_hom
 
 Depends on / 依赖: forgetToSheafedSpace, forgetToSheafedSpace.map, isIso_hom, isoOfSheafedSpaceIso
@@ -737,7 +737,7 @@ instance is_sheafedSpace_iso
 
 中文:
 实例 is_sheafedSpace_iso
-  签名: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) [是同构 f]
   定义体: LocallyRingedSpace.forgetToSheafedSpace.map_isIso f
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.map_isIso, forgetToSheafedSpace, map_isIso
@@ -764,7 +764,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {U : TopCat.{u}} (X : LocallyRingedSpace.{u}) {f : U ⟶ X.toTopCat}
+  签名: {U : 顶元素范畴.{u}} (X : LocallyRinged空间.{u}) {f : U ⟶ X.toTopCat}
   定义体: by
     intro x
     -- We show that the stalk of the restriction is isomorphic to the original stalk,
@@ -792,7 +792,7 @@ definition ofRestrict
 
 中文:
 定义 ofRestrict
-  签名: {U : TopCat.{u}} (X : LocallyRingedSpace.{u})
+  签名: {U : 顶元素范畴.{u}} (X : LocallyRinged空间.{u})
   定义体: ⟨X.toPresheafedSpace.ofRestrict h, fun _ => inferInstance⟩
 
 Depends on / 依赖: X.toPresheafedSpace.ofRestrict, ofRestrict, toPresheafedSpace
@@ -811,7 +811,7 @@ definition restrictTopIso
 
 中文:
 定义 restrictTopIso
-  签名: (X : LocallyRingedSpace.{u})
+  签名: (X : LocallyRinged空间.{u})
   定义体: isoOfSheafedSpaceIso X.toSheafedSpace.restrictTopIso
 
 Depends on / 依赖: X.toSheafedSpace.restrictTopIso, isoOfSheafedSpaceIso, restrictTopIso, toSheafedSpace
@@ -830,7 +830,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : LocallyRingedSpace.{u}ᵒᵖ ⥤ CommRingCat.{u}
+  签名: : LocallyRinged空间.{u}ᵒᵖ ⥤ 交换环范畴.{u}
   定义体: forgetToSheafedSpace.op ⋙ SheafedSpace.Γ
 
 Depends on / 依赖: SheafedSpace, forgetToSheafedSpace, forgetToSheafedSpace.op
@@ -850,7 +850,7 @@ theorem Γ_def
 
 中文:
 定理 Γ_def
-  结论: Γ = forgetToSheafedSpace.op ⋙ SheafedSpace.Γ
+  结论: Γ = forgetToSheafedSpace.op ⋙ Sheafed空间.Γ
   证明: rfl
 
 @[simp]
@@ -870,7 +870,7 @@ theorem Γ_obj
 
 中文:
 定理 Γ_obj
-  条件: (X : LocallyRingedSpace.{u}ᵒᵖ)
+  条件: (X : LocallyRinged空间.{u}ᵒᵖ)
   结论: Γ.obj X = X.unop.presheaf.obj (op ⊤)
   证明: rfl
 -/
@@ -890,7 +890,7 @@ theorem Γ_obj_op
 
 中文:
 定理 Γ_obj_op
-  条件: (X : LocallyRingedSpace.{u})
+  条件: (X : LocallyRinged空间.{u})
   结论: Γ.obj (op X) = X.presheaf.obj (op ⊤)
   证明: rfl
 
@@ -911,7 +911,7 @@ theorem Γ_map
 
 中文:
 定理 Γ_map
-  条件: {X Y : LocallyRingedSpace.{u}ᵒᵖ} (f : X ⟶ Y)
+  条件: {X Y : LocallyRinged空间.{u}ᵒᵖ} (f : X ⟶ Y)
   结论: Γ.map f = f.unop.c.app (op ⊤)
   证明: rfl
 -/
@@ -929,7 +929,7 @@ theorem Γ_map_op
 
 中文:
 定理 Γ_map_op
-  条件: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y)
+  条件: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y)
   结论: Γ.map f.op = f.c.app (op ⊤)
   证明: rfl
 -/
@@ -949,7 +949,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : LocallyRingedSpace.{u} where
+  签名: : LocallyRinged空间.{u} where
   定义体: TopCat.of PEmpty
   presheaf := (CategoryTheory.Functor.const _).obj (CommRingCat.of PUnit)
   IsSheaf := Presheaf.isSheaf_of_isTerminal _ CommRingCat.punitIsTerminal
@@ -973,7 +973,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection LocallyRingedSpace.{u}
+  签名: EmptyCollection LocallyRinged空间.{u}
   定义体: ⟨LocallyRingedSpace.empty⟩
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.empty
@@ -994,7 +994,7 @@ noncomputable
 
 中文:
 定义 emptyTo
-  签名: (X : LocallyRingedSpace.{u})
+  签名: (X : LocallyRinged空间.{u})
   定义体: ⟨⟨ofHom ⟨fun x => PEmpty.elim x, by fun_prop⟩,
     { app := fun U => CommRingCat.ofHom <| by refine ⟨⟨⟨0, ?_⟩, ?_⟩, ?_, ?_⟩ <;> intros <;> rfl }⟩,
     fun x => PEmpty.elim x⟩
@@ -1025,7 +1025,7 @@ definition emptyIsInitial
 
 中文:
 定义 emptyIsInitial
-  签名: : Limits.IsInitial (∅ : LocallyRingedSpace.{u})
+  签名: : Limits.IsInitial (∅ : LocallyRinged空间.{u})
   定义体: Limits.IsInitial.ofUnique _
 
 Depends on / 依赖: IsInitial, Limits, Limits.IsInitial.ofUnique, ofUnique
@@ -1053,7 +1053,7 @@ theorem basicOpen_zero
 
 中文:
 定理 basicOpen_zero
-  条件: (X : LocallyRingedSpace.{u}) (U : Opens X.carrier)
+  条件: (X : LocallyRinged空间.{u}) (U : Opens X.carrier)
   证明: by
   ext x
   simp only [RingedSpace.basicOpen, Opens.coe_mk, Set.mem_ofPred_eq,
@@ -1098,7 +1098,7 @@ lemma basicOpen_eq_bot_of_isNilpotent
 
 中文:
 引理 basicOpen_eq_bot_of_isNilpotent
-  结论: (X : LocallyRingedSpace.{u}) (U : Opens X.carrier)
+  结论: (X : LocallyRinged空间.{u}) (U : Opens X.carrier)
   证明: by
   obtain ⟨n, hn⟩ := hf
   cases n.eq_zero_or_pos with
@@ -1135,7 +1135,7 @@ instance component_nontrivial
 
 中文:
 实例 component_nontrivial
-  签名: (X : LocallyRingedSpace.{u}) (U : Opens X.carrier) [hU : Nonempty U]
+  签名: (X : LocallyRinged空间.{u}) (U : Opens X.carrier) [hU : 非空 U]
   定义体: (X.presheaf.germ _ _ hU.some.2).hom.domain_nontrivial
 
 @[simp]
@@ -1160,7 +1160,7 @@ lemma iso_hom_base_inv_base
 
 中文:
 引理 iso_hom_base_inv_base
-  条件: {X Y : LocallyRingedSpace.{u}} (e : X ≅ Y)
+  条件: {X Y : LocallyRinged空间.{u}} (e : X ≅ Y)
   证明: by
   simp only [← comp_base, Iso.hom_inv_id, id_toHom, PresheafedSpace.id_base]
 
@@ -1187,7 +1187,7 @@ lemma iso_hom_base_inv_base_apply
 
 中文:
 引理 iso_hom_base_inv_base_apply
-  条件: {X Y : LocallyRingedSpace.{u}} (e : X ≅ Y) (x : X)
+  条件: {X Y : LocallyRinged空间.{u}} (e : X ≅ Y) (x : X)
   证明: by
   change (e.hom.base ≫ e.inv.base) x = 𝟙 X.toPresheafedSpace x
   simp
@@ -1215,7 +1215,7 @@ lemma iso_inv_base_hom_base
 
 中文:
 引理 iso_inv_base_hom_base
-  条件: {X Y : LocallyRingedSpace.{u}} (e : X ≅ Y)
+  条件: {X Y : LocallyRinged空间.{u}} (e : X ≅ Y)
   证明: by
   simp only [← comp_base, Iso.inv_hom_id, id_toHom, PresheafedSpace.id_base]
 
@@ -1240,7 +1240,7 @@ lemma iso_inv_base_hom_base_apply
 
 中文:
 引理 iso_inv_base_hom_base_apply
-  条件: {X Y : LocallyRingedSpace.{u}} (e : X ≅ Y) (y : Y)
+  条件: {X Y : LocallyRinged空间.{u}} (e : X ≅ Y) (y : Y)
   证明: by
   change (e.inv.base ≫ e.hom.base) y = 𝟙 Y.toPresheafedSpace y
   simp
@@ -1267,7 +1267,7 @@ lemma stalkMap_id
 
 中文:
 引理 stalkMap_id
-  条件: (X : LocallyRingedSpace.{u}) (x : X)
+  条件: (X : LocallyRinged空间.{u}) (x : X)
   证明: PresheafedSpace.stalkMap.id _ x
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.stalkMap.id, stalkMap
@@ -1410,7 +1410,7 @@ lemma stalkMap_congr_point
 
 中文:
 引理 stalkMap_congr_point
-  条件: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x x' : X) (hxx' : x = x')
+  条件: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) (x x' : X) (hxx' : x = x')
   证明: by
   subst hxx'
   simp
@@ -1584,7 +1584,7 @@ theorem preimage_basicOpen
 
 中文:
 定理 preimage_basicOpen
-  结论: {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) {U : Opens Y}
+  结论: {X Y : LocallyRinged空间.{u}} (f : X ⟶ Y) {U : Opens Y}
   证明: by
   ext x
   constructor
@@ -1753,7 +1753,7 @@ instance ofRestrict_stalkMap_isIso
 
 中文:
 实例 ofRestrict_stalkMap_isIso
-  签名: : IsIso ((X.ofRestrict h).stalkMap x)
+  签名: : 是同构 ((X.ofRestrict h).stalkMap x)
   定义体: PresheafedSpace.ofRestrict_stalkMap_isIso X.toPresheafedSpace h x
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.ofRestrict_stalkMap_isIso, X.toPresheafedSpace, ofRestrict_stalkMap_isIso, toPresheafedSpace

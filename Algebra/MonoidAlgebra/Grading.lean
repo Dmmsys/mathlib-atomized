@@ -184,7 +184,7 @@ theorem grade_eq_lsingle_range
 中文:
 定理 grade_eq_lsingle_range
   条件: (m : M)
-  结论: grade R m = LinearMap.range (lsingle m)
+  结论: grade R m = 线性映射.range (lsingle m)
   证明: Submodule.ext (mem_grade_iff' R m)
 
 Depends on / 依赖: Submodule, Submodule.ext, mem_grade_iff
@@ -204,7 +204,7 @@ theorem single_mem_gradeBy
 
 中文:
 定理 single_mem_gradeBy
-  条件: {R} [CommSemiring R] (f : M -> ι) (m : M) (r : R)
+  条件: {R} [交换半环 R] (f : M -> ι) (m : M) (r : R)
   证明: by
   intro x hx
   rw [Finset.mem_singleton.mp (Finsupp.support_single_subset hx)]
@@ -226,7 +226,7 @@ theorem single_mem_grade
 
 中文:
 定理 single_mem_grade
-  条件: {R} [CommSemiring R] (i : M) (r : R)
+  条件: {R} [交换半环 R] (i : M) (r : R)
   证明: single_mem_gradeBy _ _ _
 
 Depends on / 依赖: single_mem_gradeBy
@@ -256,7 +256,7 @@ Finset.mem_add.1 suppo
 
 中文:
 实例 gradeBy.gradedMonoid
-  签名: [AddMonoid M] [AddMonoid ι] [CommSemiring R] (f : M ->+ ι)
+  签名: [加法幺半群 M] [加法幺半群 ι] [交换半环 R] (f : M ->+ ι)
   定义体: by
     rw [one_def] at h
 obtain rfl : m = 0 := Finset.mem_singleton.1 Finsupp.support_single_subset h
@@ -291,7 +291,7 @@ instance grade.gradedMonoid
 
 中文:
 实例 grade.gradedMonoid
-  签名: [AddMonoid M] [CommSemiring R]
+  签名: [加法幺半群 M] [交换半环 R]
   定义体: by
   apply gradeBy.gradedMonoid (AddMonoidHom.id _)
 
@@ -453,7 +453,7 @@ instance gradeBy.gradedAlgebra
 
 中文:
 实例 gradeBy.gradedAlgebra
-  签名: : GradedAlgebra (gradeBy R f)
+  签名: : 分次代数 (gradeBy R f)
   定义体: .ofAlgHom _ (decomposeAux f) (by ext; simp [decomposeAux_single]) by simp [decomposeAux_coe]
 
 @[simp]
@@ -510,7 +510,7 @@ instance grade.gradedAlgebra
 
 中文:
 实例 grade.gradedAlgebra
-  签名: : GradedAlgebra (grade R : ι -> Submodule _ _)
+  签名: : 分次代数 (grade R : ι -> 子模 _ _)
   定义体: inferInstanceAs GradedAlgebra (gradeBy R (AddMonoidHom.id ι))
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, GradedAlgebra, gradeBy
@@ -547,8 +547,8 @@ theorem gradeBy.isInternal
   proof: DirectSum.Decomposition.isInternal _
 
 中文:
-定理 gradeBy.isInternal
-  结论: DirectSum.Is整数ernal (gradeBy R f)
+定理 gradeBy.is整数ernal
+  结论: 直和.Is整数ernal (gradeBy R f)
   证明: DirectSum.Decomposition.isInternal _
 
 Depends on / 依赖: Decomposition, DirectSum, DirectSum.Decomposition.isInternal, isInternal
@@ -565,8 +565,8 @@ theorem grade.isInternal
   proof: DirectSum.Decomposition.isInternal _
 
 中文:
-定理 grade.isInternal
-  结论: DirectSum.Is整数ernal (grade R : ι -> Submodule R _)
+定理 grade.is整数ernal
+  结论: 直和.Is整数ernal (grade R : ι -> 子模 R _)
   证明: DirectSum.Decomposition.isInternal _
 
 Depends on / 依赖: Decomposition, DirectSum, DirectSum.Decomposition.isInternal, isInternal

@@ -63,7 +63,7 @@ definition distinguishedTriangles
 
 中文:
 定义 distinguishedTriangles
-  签名: : Set (Triangle Cᵒᵖ)
+  签名: : 集合 (Triangle Cᵒᵖ)
   定义体: {T | ((triangleOpEquivalence C).inverse.obj T).unop in distTriang C}
 
 Depends on / 依赖: distTriang, inverse, inverse.obj, triangleOpEquivalence
@@ -490,7 +490,7 @@ lemma map_distinguished_op_exact
 
 中文:
 引理 map_distinguished_op_exact
-  结论: {A : 类型} [Category* A] [Abelian A] (F : Cᵒᵖ ⥤ A)
+  结论: {A : 类型} [范畴* A] [交换 A] (F : Cᵒᵖ ⥤ A)
   证明: F.map_distinguished_exact _ (op_distinguished T hT)
 
 Depends on / 依赖: F.map_distinguished_exact, map_distinguished_exact, op_distinguished

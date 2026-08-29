@@ -43,7 +43,7 @@ instance [IsTopologicalSemiring
   body: s.toSubalgebra.topologicalSemiring
 
 中文:
-实例 [IsTopologicalSemiring
+实例 [是TopologicalSemiring
   签名: A] (s
   定义体: s.toSubalgebra.topologicalSemiring
 
@@ -61,7 +61,7 @@ instance [IsSemitopologicalSemiring
   body: s.toSubalgebra.semitopologicalSemiring
 
 中文:
-实例 [IsSemitopologicalSemiring
+实例 [是SemitopologicalSemiring
   签名: A] (s
   定义体: s.toSubalgebra.semitopologicalSemiring
 
@@ -81,7 +81,7 @@ lemma isEmbedding_inclusion
 
 中文:
 引理 isEmbedding_inclusion
-  条件: {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂)
+  条件: {S₁ S₂ : 对合子代数 R A} (h : S₁ <= S₂)
   证明: Eq.symm induced_compose
   injective := Subtype.map_injective h Function.injective_id
 
@@ -108,7 +108,7 @@ theorem isClosedEmbedding_inclusion
 
 中文:
 定理 isClosedEmbedding_inclusion
-  结论: {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂)
+  结论: {S₁ S₂ : 对合子代数 R A} (h : S₁ <= S₂)
   证明: { IsEmbedding.inclusion h with
     isClosed_range := isClosed_induced_iff.2
       ⟨S₁, hS₁, by
@@ -146,7 +146,7 @@ definition topologicalClosure
 
 中文:
 定义 topologicalClosure
-  签名: (s : StarSubalgebra R A)
+  签名: (s : 对合子代数 R A)
   定义体: {
     s.toSubalgebra.topologicalClosure with
     carrier := closure (s : Set A)
@@ -174,7 +174,7 @@ theorem topologicalClosure_toSubalgebra_comm
 
 中文:
 定理 topologicalClosure_toSubalgebra_comm
-  条件: (s : StarSubalgebra R A)
+  条件: (s : 对合子代数 R A)
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -196,7 +196,7 @@ theorem topologicalClosure_coe
 
 中文:
 定理 topologicalClosure_coe
-  条件: (s : StarSubalgebra R A)
+  条件: (s : 对合子代数 R A)
   证明: rfl
 -/
 theorem topologicalClosure_coe (s : StarSubalgebra R A) :
@@ -214,7 +214,7 @@ theorem le_topologicalClosure
 
 中文:
 定理 le_topologicalClosure
-  条件: (s : StarSubalgebra R A)
+  条件: (s : 对合子代数 R A)
   结论: s <= s.topologicalClosure
   证明: subset_closure
 
@@ -233,7 +233,7 @@ theorem isClosed_topologicalClosure
 
 中文:
 定理 isClosed_topologicalClosure
-  条件: (s : StarSubalgebra R A)
+  条件: (s : 对合子代数 R A)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -259,7 +259,7 @@ theorem topologicalClosure_minimal
 
 中文:
 定理 topologicalClosure_minimal
-  结论: {s t : StarSubalgebra R A} (h : s <= t)
+  结论: {s t : 对合子代数 R A} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -282,7 +282,7 @@ theorem topologicalClosure_mono
 
 中文:
 定理 topologicalClosure_mono
-  结论: Monotone (topologicalClosure : _ -> StarSubalgebra R A)
+  结论: 递增 (topologicalClosure : _ -> 对合子代数 R A)
   证明: fun _ S₂ h =>
   topologicalClosure_minimal (h.trans <| le_topologicalClosure S₂) (isClosed_topologicalClosure S₂)
 
@@ -302,7 +302,7 @@ theorem topologicalClosure_map_le
 
 中文:
 定理 topologicalClosure_map_le
-  结论: [StarModule R B] [IsSemitopologicalSemiring B] [ContinuousStar B]
+  结论: [对合模 R B] [是SemitopologicalSemiring B] [余ntinuousStar B]
   证明: hφ.closure_image_subset _
 
 Depends on / 依赖: closure_image_subset
@@ -322,7 +322,7 @@ theorem map_topologicalClosure_le
 
 中文:
 定理 map_topologicalClosure_le
-  结论: [StarModule R B] [IsSemitopologicalSemiring B] [ContinuousStar B]
+  结论: [对合模 R B] [是SemitopologicalSemiring B] [余ntinuousStar B]
   证明: image_closure_subset_closure_image hφ
 
 Depends on / 依赖: image_closure_subset_closure_image
@@ -342,7 +342,7 @@ theorem topologicalClosure_map
 
 中文:
 定理 topologicalClosure_map
-  结论: [StarModule R B] [IsSemitopologicalSemiring B] [ContinuousStar B]
+  结论: [对合模 R B] [是SemitopologicalSemiring B] [余ntinuousStar B]
   证明: SetLike.coe_injective hφ.closure_image_eq_of_continuous hφ' _
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, closure_image_eq_of_continuous, coe_injective
@@ -364,7 +364,7 @@ lemma topologicalClosure_adjoin_le_centralizer_centralizer
 
 中文:
 引理 topologicalClosure_adjoin_le_centralizer_centralizer
-  条件: [T2Space A] (s : Set A)
+  条件: [T2空间 A] (s : 集合 A)
   证明: topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
 
 Depends on / 依赖: Set.isClosed_centralizer, adjoin_le_centralizer_centralizer, isClosed_centralizer, topologicalClosure_minimal
@@ -386,8 +386,8 @@ theorem _root_.Subalgebra.topologicalClosure_star_comm
     (isClo
 
 中文:
-定理 _root_.Subalgebra.topologicalClosure_star_comm
-  条件: (s : Subalgebra R A)
+定理 _root_.子代数.topologicalClosure_star_comm
+  条件: (s : 子代数 R A)
   证明: by
   suffices forall t : Subalgebra R A, (star t).topologicalClosure <= star t.topologicalClosure from
     le_antisymm (this s) (by simpa only [star_star] using Subalgebra.star_mono (this (star s)))
@@ -413,7 +413,7 @@ abbreviation commSemiringTopologicalClosure
 
 中文:
 缩写 commSemiringTopologicalClosure
-  签名: [T2Space A] (s : StarSubalgebra R A)
+  签名: [T2空间 A] (s : 对合子代数 R A)
   定义体: fast_instance% s.toSubalgebra.commSemiringTopologicalClosure hs
 
 Depends on / 依赖: commSemiringTopologicalClosure, fast_instance, s.toSubalgebra.commSemiringTopologicalClosure, toSubalgebra
@@ -432,7 +432,7 @@ abbreviation commRingTopologicalClosure
 
 中文:
 缩写 commRingTopologicalClosure
-  签名: {R A} [CommRing R] [StarRing R] [TopologicalSpace A] [Ring A]
+  签名: {R A} [交换环 R] [对合环 R] [拓扑空间 A] [环 A]
   定义体: fast_instance% s.toSubalgebra.commRingTopologicalClosure hs
 
 Depends on / 依赖: commRingTopologicalClosure, fast_instance, s.toSubalgebra.commRingTopologicalClosure, toSubalgebra
@@ -458,8 +458,8 @@ theorem _root_.StarAlgHom.ext_topologicalClosure
   simpa only using! DFunLike.congr_fun h x
 
 中文:
-定理 _root_.StarAlgHom.ext_topologicalClosure
-  结论: [T2Space B] {S : StarSubalgebra R A}
+定理 _root_.StarAlg态射.ext_topologicalClosure
+  结论: [T2空间 B] {S : 对合子代数 R A}
   证明: by
   rw [DFunLike.ext'_iff]
   have : DenseRange (Set.inclusion (le_topologicalClosure S)) := by simp [-SetLike.coe_sort_coe]
@@ -494,7 +494,7 @@ theorem _root_.StarAlgHomClass.ext_topologicalClosure
 
 中文:
 定理 _root_.StarAlgHomClass.ext_topologicalClosure
-  结论: [T2Space B] {F : 类型}
+  结论: [T2空间 B] {F : 类型}
   证明: by
   have : (φ : S.topologicalClosure ->⋆ₐ[R] B) = (ψ : S.topologicalClosure ->⋆ₐ[R] B) := by
     refine StarAlgHom.ext_topologicalClosure (R := R) (A := A) (B := B) hφ hψ (StarAlgHom.ext ?_)
@@ -605,7 +605,7 @@ instance [T2Space
   body: fast_instance% StarSubalgebra.commSemiringTopologicalClosure _ mul_comm
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: A] {x
   定义体: fast_instance% StarSubalgebra.commSemiringTopologicalClosure _ mul_comm
 
@@ -632,7 +632,7 @@ theorem isClosed
 中文:
 定理 isClosed
   条件: (x : A)
-  结论: IsClosed (elemental R x : Set A)
+  结论: 是闭集 (elemental R x : 集合 A)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -656,7 +656,7 @@ theorem le_of_mem
 
 中文:
 定理 le_of_mem
-  结论: {S : StarSubalgebra R A} (hS : IsClosed (S : Set A)) {x : A}
+  结论: {S : 对合子代数 R A} (hS : 是闭集 (S : 集合 A)) {x : A}
   证明: topologicalClosure_minimal (adjoin_le <| Set.singleton_subset_iff.2 hx) hS
 
 Depends on / 依赖: Set.singleton_subset_iff, adjoin_le, singleton_subset_iff, topologicalClosure_minimal
@@ -676,7 +676,7 @@ theorem le_iff_mem
 
 中文:
 定理 le_iff_mem
-  条件: {x : A} {s : StarSubalgebra R A} (hs : IsClosed (s : Set A))
+  条件: {x : A} {s : 对合子代数 R A} (hs : 是闭集 (s : 集合 A))
   证明: ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
 
 Depends on / 依赖: le_of_mem, self_mem
@@ -699,7 +699,7 @@ theorem isClosedEmbedding_coe
 中文:
 定理 isClosedEmbedding_coe
   条件: (x : A)
-  结论: IsClosedEmbedding ((↑) : elemental R x -> A) where
+  结论: 是闭嵌入 ((↑) : elemental R x -> A) where
   证明: rfl
   injective := Subtype.coe_injective
   isClosed_range := by simpa using isClosed R x
@@ -721,7 +721,7 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: [T2Space A] (x : A)
+  条件: [T2空间 A] (x : A)
   证明: topologicalClosure_adjoin_le_centralizer_centralizer ..
 
 @[elab_as_elim]
@@ -799,7 +799,7 @@ theorem starAlgHomClass_ext
 
 中文:
 定理 starAlgHomClass_ext
-  结论: [T2Space B] {F : 类型} {a : A}
+  结论: [T2空间 B] {F : 类型} {a : A}
   证明: by
   refine StarAlgHomClass.ext_topologicalClosure hφ hψ fun x => ?_
   refine adjoin_induction_subtype x ?_ ?_ ?_ ?_ ?_

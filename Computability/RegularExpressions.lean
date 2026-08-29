@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RegularExpression α)
+  签名: 可居 (RegularExpression α)
   定义体: ⟨zero⟩
 -/
 instance : Inhabited (RegularExpression α) :=
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (RegularExpression α)
+  签名: 加法 (RegularExpression α)
   定义体: ⟨plus⟩
 -/
 instance : Add (RegularExpression α) :=
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (RegularExpression α)
+  签名: 乘法 (RegularExpression α)
   定义体: ⟨comp⟩
 -/
 instance : Mul (RegularExpression α) :=
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (RegularExpression α)
+  签名: 幺 (RegularExpression α)
   定义体: ⟨epsilon⟩
 
 Depends on / 依赖: epsilon
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (RegularExpression α)
+  签名: 零 (RegularExpression α)
   定义体: ⟨zero⟩
 -/
 instance : Zero (RegularExpression α) :=
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (RegularExpression α) 自然数
+  签名: 幂 (RegularExpression α) 自然数
   定义体: ⟨fun n r => npowRec r n⟩
 
 @[simp]
@@ -421,7 +421,7 @@ definition matchEpsilon
 
 中文:
 定义 matchEpsilon
-  签名: : RegularExpression α -> 布尔
+  签名: : RegularExpression α -> 布尔值
 -/
 def matchEpsilon : RegularExpression α -> Bool
   | 0 => false
@@ -600,7 +600,7 @@ definition rmatch
 
 中文:
 定义 rmatch
-  签名: : RegularExpression α -> List α -> 布尔
+  签名: : RegularExpression α -> 列表 α -> 布尔值
 -/
 def rmatch : RegularExpression α -> List α -> Bool
   | P, [] => matchEpsilon P
@@ -619,7 +619,7 @@ theorem zero_rmatch
 
 中文:
 定理 zero_rmatch
-  条件: (x : List α)
+  条件: (x : 列表 α)
   结论: rmatch 0 x = false
   证明: by
   induction x <;> simp [rmatch, matchEpsilon, *]
@@ -641,7 +641,7 @@ theorem one_rmatch_iff
 
 中文:
 定理 one_rmatch_iff
-  条件: (x : List α)
+  条件: (x : 列表 α)
   结论: rmatch 1 x ↔ x = []
   证明: by
   induction x <;> simp [rmatch, matchEpsilon, *]
@@ -671,7 +671,7 @@ theorem char_rmatch_iff
 
 中文:
 定理 char_rmatch_iff
-  条件: (a : α) (x : List α)
+  条件: (a : α) (x : 列表 α)
   结论: rmatch (char a) x ↔ x = [a]
   证明: by
   rcases x with - | ⟨_, x⟩
@@ -712,7 +712,7 @@ theorem add_rmatch_iff
 
 中文:
 定理 add_rmatch_iff
-  条件: (P Q : RegularExpression α) (x : List α)
+  条件: (P Q : RegularExpression α) (x : 列表 α)
   证明: by
   induction x generalizing P Q with
   | nil => simp only [rmatch, matchEpsilon, Bool.or_eq_true_iff]
@@ -750,7 +750,7 @@ theorem mul_rmatch_iff
 
 中文:
 定理 mul_rmatch_iff
-  条件: (P Q : RegularExpression α) (x : List α)
+  条件: (P Q : RegularExpression α) (x : 列表 α)
   证明: by
   induction x generalizing P Q with
   | nil =>
@@ -909,7 +909,7 @@ theorem rmatch_iff_matches'
 
 中文:
 定理 rmatch_iff_matches'
-  条件: (P : RegularExpression α) (x : List α)
+  条件: (P : RegularExpression α) (x : 列表 α)
   证明: by
   induction P generalizing x with
   | zero =>

@@ -128,7 +128,7 @@ structure Hom
     - w : F.map fst ≫ y.iso.hom = x.iso.hom ≫ G.map snd  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (x y : F ⊡ G)
   公理与运算 (3 个):
     - fst : x.fst ⟶ y.fst
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CategoricalPullback F G)
+  签名: 范畴 (CategoricalPullback F G)
   定义体: CategoricalPullback.Hom x y
   id x :=
     { fst := 𝟙 x.fst
@@ -199,7 +199,7 @@ lemma Hom.w'
   rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Eq.comm]; rw [Iso.inv_comp_eq]; rw [f.w]
 
 中文:
-引理 Hom.w'
+引理 态射.w'
   条件: {x y : F ⊡ G} (f : x ⟶ y)
   证明: by
   rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Eq.comm]; rw [Iso.inv_comp_eq]; rw [f.w]
@@ -345,7 +345,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso f.fst
+  签名: 是同构 f.fst
   定义体: inferInstanceAs (IsIso ((π₁ _ _).mapIso (asIso f)).hom)
 
 Depends on / 依赖: mapIso
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso f.snd
+  签名: 是同构 f.snd
   定义体: inferInstanceAs (IsIso ((π₂ _ _).mapIso (asIso f)).hom)
 
 @[simp, push ←]
@@ -508,7 +508,7 @@ structure Hom
     - w : whiskerRight fst F ≫ y.iso.hom = x.iso.hom ≫ whiskerRight snd G  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (x y : CatCommSqOver F G X)
   公理与运算 (3 个):
     - fst : x.fst ⟶ y.fst
@@ -547,7 +547,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CatCommSqOver F G X)
+  签名: 范畴 (CatCommSqOver F G X)
   定义体: CatCommSqOver.Hom X x y
   id x :=
     { fst := 𝟙 x.fst
@@ -957,7 +957,7 @@ definition mkNatIso
       · exact e₂.hom.naturality f)
 
 中文:
-定义 mkNatIso
+定义 mk自然数Iso
   签名: {J K : X ⥤ F ⊡ G}
   定义体: NatIso.ofComponents
     (fun x => CategoricalPullback.mkIso (e₁.app x) (e₂.app x)
@@ -1035,7 +1035,7 @@ lemma toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
   ext <;> simp
 
 中文:
-引理 toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
+引理 toCatCommSqOver_mapIso_mk自然数Iso_eq_mkIso
   证明: by
   ext <;> simp
 
@@ -1068,7 +1068,7 @@ lemma mkNatIso_eq
   ext <;> simp
 
 中文:
-引理 mkNatIso_eq
+引理 mk自然数Iso_eq
   证明: by
   rw [← toCatCommSqOver_mapIso_mkNatIso_eq_mkIso e₁ e₂ coh]
   dsimp [Equivalence.fullyFaithfulFunctor]
@@ -1132,7 +1132,7 @@ definition transform
 
 中文:
 定义 transform
-  签名: (X : 类型u₇) [Category.{v₇} X]
+  签名: (X : 类型u₇) [范畴.{v₇} X]
   定义体: { obj S :=
       { fst := S.fst ⋙ ψ.left
         snd := S.snd ⋙ ψ.right
@@ -1206,7 +1206,7 @@ definition transformObjComp
 
 中文:
 定义 transformObjComp
-  签名: (X : 类型u₁₀) [Category.{v₁₀} X]
+  签名: (X : 类型u₁₀) [范畴.{v₁₀} X]
   定义体: NatIso.ofComponents (fun _ =>
     CatCommSqOver.mkIso
       (Functor.associator _ _ _).symm
@@ -1242,7 +1242,7 @@ definition transformObjId
 
 中文:
 定义 transformObjId
-  签名: (X : 类型u₄) [Category.{v₄} X]
+  签名: (X : 类型u₄) [范畴.{v₄} X]
   定义体: NatIso.ofComponents fun _ =>
     CatCommSqOver.mkIso
       (Functor.rightUnitor _)
@@ -1350,7 +1350,7 @@ lemma transform_map_leftUnitor
 
 中文:
 引理 transform_map_leftUnitor
-  结论: (X : 类型u₇) [Category.{v₇} X]
+  结论: (X : 类型u₇) [范畴.{v₇} X]
   证明: by
   ext <;> simp
 -/
@@ -1374,7 +1374,7 @@ lemma transform_map_rightUnitor
 
 中文:
 引理 transform_map_rightUnitor
-  结论: (X : 类型u₇) [Category.{v₇} X]
+  结论: (X : 类型u₇) [范畴.{v₇} X]
   证明: by
   ext <;> simp
 -/
@@ -1577,7 +1577,7 @@ lemma precompose_map_associator
 
 中文:
 引理 precompose_map_associator
-  结论: {T : 类型u₇} [Category.{v₇} T]
+  结论: {T : 类型u₇} [范畴.{v₇} T]
   证明: by
   ext <;> simp
 -/

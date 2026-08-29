@@ -39,7 +39,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring α] [AddCommMonoid β] [Module α β]
+  签名: [半环 α] [加法交换幺半群 β] [模 α β]
   定义体: add_smul (R := α)
   zero_smul := zero_smul _
 
@@ -60,7 +60,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: [Semiring α] [AddCommMonoid β] [Module α β]
+  签名: [半环 α] [加法交换幺半群 β] [模 α β]
   定义体: add_smul (M := β)
   zero_smul := zero_smul _
 
@@ -84,7 +84,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring α] [AddCommMonoid β] [Module α β]
+  签名: [半环 α] [加法交换幺半群 β] [模 α β]
   定义体: ‹Module α β›
 
 Depends on / 依赖: Module
@@ -102,7 +102,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: [Semiring α] [AddCommMonoid β] [Module α β]
+  签名: [半环 α] [加法交换幺半群 β] [模 α β]
   定义体: ‹Module α β›
 
 Depends on / 依赖: Module

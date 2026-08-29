@@ -54,7 +54,7 @@ definition freeMonic
 
 中文:
 定义 freeMonic
-  签名: : (MvPolynomial (Fin n) R)[X]
+  签名: : (多元多项式 (有限集 n) R)[X]
   定义体: .X ^ n + ∑ i : Fin n, .C (.X i) * .X ^ (i : Nat)
 -/
 def freeMonic : (MvPolynomial (Fin n) R)[X] :=
@@ -107,7 +107,7 @@ lemma degree_freeMonic
 
 中文:
 引理 degree_freeMonic
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (freeMonic R n).degree = n
   证明: Polynomial.degree_eq_of_le_of_coeff_ne_zero ((Polynomial.degree_le_iff_coeff_zero _ _).mpr
     (by simp +contextual [coeff_freeMonic, LT.lt.not_gt, LT.lt.ne']))
@@ -131,7 +131,7 @@ lemma natDegree_freeMonic
 
 中文:
 引理 natDegree_freeMonic
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (freeMonic R n).natDegree = n
   证明: natDegree_eq_of_degree_eq_some (degree_freeMonic R n)
 
@@ -203,7 +203,7 @@ definition MonicDegreeEq.freeMonic
 
 中文:
 定义 MonicDegreeEq.freeMonic
-  签名: : MonicDegreeEq (MvPolynomial (Fin n) R) n
+  签名: : MonicDegreeEq (多元多项式 (有限集 n) R) n
   定义体: ⟨.freeMonic R n, by simp +contextual [coeff_freeMonic, not_lt_of_gt, LT.lt.ne']⟩
 
 Depends on / 依赖: LT.lt.ne, coeff_freeMonic, contextual, freeMonic, not_lt_of_gt
@@ -234,7 +234,7 @@ definition mapEquivMonic
 
 中文:
 定义 mapEquivMonic
-  签名: : (MvPolynomial (Fin n) R ->ₐ[R] S) ≃ MonicDegreeEq S n where
+  签名: : (多元多项式 (有限集 n) R ->ₐ[R] S) ≃ MonicDegreeEq S n where
   定义体: .map (.freeMonic _ _) f.toRingHom
   invFun p := aeval (p.1.coeff ·)
   left_inv f := by ext i; simp [coeff_freeMonic]
@@ -269,7 +269,7 @@ lemma coe_mapEquivMonic_comp
 
 中文:
 引理 coe_mapEquivMonic_comp
-  条件: (f : MvPolynomial (Fin n) R ->ₐ[R] S) (g : S ->ₐ[R] T)
+  条件: (f : 多元多项式 (有限集 n) R ->ₐ[R] S) (g : S ->ₐ[R] T)
   证明: (Polynomial.map_map ..).symm
 
 Depends on / 依赖: Polynomial, Polynomial.map_map, map_map
@@ -289,7 +289,7 @@ lemma coe_mapEquivMonic_comp'
 
 中文:
 引理 coe_mapEquivMonic_comp'
-  条件: (f : MvPolynomial (Fin n) R ->ₐ[R] S) (g : S ->ₐ[R] T)
+  条件: (f : 多元多项式 (有限集 n) R ->ₐ[R] S) (g : S ->ₐ[R] T)
   证明: Subtype.ext (coe_mapEquivMonic_comp ..)
 
 Depends on / 依赖: Subtype, Subtype.ext, coe_mapEquivMonic_comp
@@ -885,7 +885,7 @@ local notation "𝓡" => UniversalFactorizat
 
 中文:
 定义 UniversalFactorizationRing
-  签名: : Type _
+  签名: : 类型 _
   定义体: letI := (MvPolynomial.universalFactorizationMap R n m k hn).toAlgebra
   letI := ((MvPolynomial.mapEquivMonic R _ n).symm p).toAlgebra
   R otimes[MvPolynomial (Fin n) R] (MvPolynomial (Fin m) R otimes[R] MvPolynomial (Fin k) R)
@@ -1142,7 +1142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R 𝓡
+  签名: 模.有限 R 𝓡
   定义体: letI := (MvPolynomial.universalFactorizationMap R n m k hn).toAlgebra
   letI := ((MvPolynomial.mapEquivMonic R _ n).symm p).toAlgebra
   letI : Module.Finite _ _ := MvPolynomial.finite_universalFactorizationMap R n m k hn
@@ -1172,7 +1172,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.FinitePresentation R 𝓡
+  签名: 代数.有限呈现 R 𝓡
   定义体: letI := (MvPolynomial.universalFactorizationMap R n m k hn).toAlgebra
   letI := ((MvPolynomial.mapEquivMonic R _ n).symm p).toAlgebra
   letI : Algebra.FinitePresentation _ _ :=
@@ -1269,7 +1269,7 @@ local notation "𝓡'" => UniversalCoprimeFactorizationRing m k hn p
 
 中文:
 缩写 UniversalCoprimeFactorizationRing
-  签名: : Type _
+  签名: : 类型 _
   定义体: Localization.Away (M := 𝓡) (presentation m k hn p).jacobian
 
 local notation "𝓡'" => UniversalCoprimeFactorizationRing m k hn p
@@ -1384,7 +1384,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.Etale R 𝓡'
+  签名: 代数.平展 R 𝓡'
   定义体: by
   let Δ : 𝓡 := (presentation m k hn p).jacobian
   have hΔ : IsUnit (algebraMap 𝓡 (Localization.Away Δ) Δ) :=
@@ -1481,7 +1481,7 @@ lemma UniversalCoprimeFactorizationRing.homEquiv_comp_fst
 
 中文:
 引理 UniversalCoprimeFactorizationRing.homEquiv_comp_fst
-  结论: {T : 类型} [CommRing T] [Algebra R T]
+  结论: {T : 类型} [交换环 T] [代数 R T]
   证明: by
   ext1
   simp [homEquiv, UniversalFactorizationRing.homEquiv, Polynomial.map_map]
@@ -1510,7 +1510,7 @@ lemma UniversalCoprimeFactorizationRing.homEquiv_comp_snd
 
 中文:
 引理 UniversalCoprimeFactorizationRing.homEquiv_comp_snd
-  结论: {T : 类型} [CommRing T] [Algebra R T]
+  结论: {T : 类型} [交换环 T] [代数 R T]
   证明: by
   ext1
   simp [homEquiv, UniversalFactorizationRing.homEquiv, Polynomial.map_map]
@@ -1540,7 +1540,7 @@ lemma UniversalCoprimeFactorizationRing.exists_liesOver_residueFieldMap_bijectiv
    
 
 中文:
-引理 UniversalCoprimeFactorizationRing.exists_liesOver_residueFieldMap_bijective
+引理 UniversalCoprimeFactorizationRing.存在_liesOver_residueFieldMap_bijective
   证明: by
   let φ : 𝓡' ->ₐ[R] P.ResidueField :=
     (UniversalCoprimeFactorizationRing.homEquiv _ m k hn p).symm ⟨(f, g), H.symm, Hpq⟩
@@ -1609,7 +1609,7 @@ lemma _root_.Algebra.exists_etale_bijective_residueFieldMap_and_map_eq_mul_and_i
   exact ⟨_, _, _, inferInstance, Q, ‹_›, ‹_›, (factor
 
 中文:
-引理 _root_.Algebra.exists_etale_bijective_residueFieldMap_and_map_eq_mul_and_isCoprime.{u}
+引理 _root_.代数.存在_etale_bijective_residueFieldMap_and_map_eq_mul_and_isCoprime.{u}
   证明: by
   obtain ⟨Q, _, _, h₁, h₂, h₃⟩ :=
     exists_liesOver_residueFieldMap_bijective f.natDegree g.natDegree

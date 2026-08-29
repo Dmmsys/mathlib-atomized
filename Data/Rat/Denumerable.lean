@@ -36,7 +36,7 @@ instance instDenumerable
 
 中文:
 实例 instDenumerable
-  签名: : Denumerable Rat
+  签名: : 可枚举 有理数
   定义体: ofEncodableOfInfinite Rat
 
 Depends on / 依赖: ofEncodableOfInfinite

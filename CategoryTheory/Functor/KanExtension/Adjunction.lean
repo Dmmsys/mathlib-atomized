@@ -129,7 +129,7 @@ definition leftKanExtensionObjIsoColimit
 
 中文:
 定义 leftKanExtensionObjIsoColimit
-  签名: [HasLeftKanExtension L F] (X : D)
+  签名: [有LeftKanExtension L F] (X : D)
   定义体: LeftExtension.IsPointwiseLeftKanExtensionAt.isoColimit (F := F)
     (isPointwiseLeftKanExtensionLeftKanExtensionUnit L F X)
 
@@ -156,7 +156,7 @@ lemma ι_leftKanExtensionObjIsoColimit_inv
 
 中文:
 引理 ι_leftKanExtensionObjIsoColimit_inv
-  结论: [HasLeftKanExtension L F] (X : D)
+  结论: [有LeftKanExtension L F] (X : D)
   证明: by
   simp [leftKanExtensionObjIsoColimit]
 
@@ -288,7 +288,7 @@ Iso.symm NatIs
 
 中文:
 定义 leftKanExtensionIsoFiberwiseColimit
-  签名: [HasLeftKanExtension L F]
+  签名: [有LeftKanExtension L F]
   定义体: letI : forall X, HasColimit (Grothendieck.ι (functor L) X ⋙ grothendieckProj L ⋙ F) :=
 fun X => hasColimit_of_iso Iso.symm
         isoWhiskerRight (eqToIso congr($((functor L).map_id X).toFunctor)) _ ≪≫
@@ -515,7 +515,7 @@ definition lanCompColimIso
 
 中文:
 定义 lanCompColimIso
-  签名: [HasColimitsOfShape C H] [HasColimitsOfShape D H]
+  签名: [有形状余极限 C H] [有形状余极限 D H]
   定义体: Iso.symm NatIso.ofComponents
     (fun G => (colimitIsoOfIsLeftKanExtension _ (L.lanUnit.app G)).symm)
     (fun f => colimit.hom_ext (fun i => by
@@ -550,7 +550,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit (CostructuredArrow.grothendieckProj L ⋙ G)
+  签名: 有余极限 (CostructuredArrow.grothendieckProj L ⋙ G)
   定义体: hasColimit_of_hasColimit_fiberwiseColimit_of_hasColimit _
 
 Depends on / 依赖: hasColimit_of_hasColimit_fiberwiseColimit_of_hasColimit

@@ -60,7 +60,7 @@ definition IsExposed
 
 中文:
 定义 IsExposed
-  签名: (A B : Set E)
+  签名: (A B : 集合 E)
   定义体: B.Nonempty -> exists l : StrongDual 𝕜 E, B = { x in A | forall y in A, l y <= l x }
 
 Depends on / 依赖: B.Nonempty, Nonempty, StrongDual
@@ -84,8 +84,8 @@ definition ContinuousLinearMap.toExposed
   body: { x in A | forall y in A, l y <= l x }
 
 中文:
-定义 ContinuousLinearMap.toExposed
-  签名: (l : StrongDual 𝕜 E) (A : Set E)
+定义 连续线性映射.toExposed
+  签名: (l : StrongDual 𝕜 E) (A : 集合 E)
   定义体: { x in A | forall y in A, l y <= l x }
 -/
 def ContinuousLinearMap.toExposed (l : StrongDual 𝕜 E) (A : Set E) : Set E :=
@@ -100,7 +100,7 @@ theorem ContinuousLinearMap.toExposed.isExposed
   proof: fun _ => ⟨l, rfl⟩
 
 中文:
-定理 ContinuousLinearMap.toExposed.isExposed
+定理 连续线性映射.toExposed.isExposed
   结论: IsExposed 𝕜 A (l.toExposed A)
   证明: fun _ => ⟨l, rfl⟩
 -/
@@ -172,7 +172,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (A : Set E)
+  条件: (A : 集合 E)
   结论: IsExposed 𝕜 A A
   证明: fun ⟨_, _⟩ =>
   ⟨0, Subset.antisymm (fun _ hx => ⟨hx, fun _ _ => le_refl 0⟩) fun _ hx => hx.1⟩
@@ -242,7 +242,7 @@ theorem eq_inter_halfSpace'
 
 中文:
 定理 eq_inter_halfSpace'
-  条件: {A B : Set E} (hAB : IsExposed 𝕜 A B) (hB : B.Nonempty)
+  条件: {A B : 集合 E} (hAB : IsExposed 𝕜 A B) (hB : B.非空)
   证明: by
   obtain ⟨l, rfl⟩ := hAB hB
   obtain ⟨w, hw⟩ := hB
@@ -276,7 +276,7 @@ theorem eq_inter_halfSpace
 
 中文:
 定理 eq_inter_halfSpace
-  条件: [IsOrderedRing 𝕜] [Nontrivial 𝕜] {A B : Set E} (hAB : IsExposed 𝕜 A B)
+  条件: [是Ordered环 𝕜] [非平凡 𝕜] {A B : 集合 E} (hAB : IsExposed 𝕜 A B)
   证明: by
   obtain rfl | hB := B.eq_empty_or_nonempty
   · refine ⟨0, 1, ?_⟩
@@ -318,7 +318,7 @@ theorem inter
 
 中文:
 定理 inter
-  结论: [IsOrderedRing 𝕜] [ContinuousAdd 𝕜] {A B C : Set E} (hB : IsExposed 𝕜 A B)
+  结论: [是Ordered环 𝕜] [连续加法 𝕜] {A B C : 集合 E} (hB : IsExposed 𝕜 A B)
   证明: by
   rintro ⟨w, hwB, hwC⟩
   obtain ⟨l₁, rfl⟩ := hB ⟨w, hwB⟩
@@ -360,8 +360,8 @@ theorem sInter
       exact hAF C (Fins
 
 中文:
-定理 sInter
-  结论: [IsOrderedRing 𝕜] [ContinuousAdd 𝕜] {F : Finset (Set E)} (hF : F.Nonempty)
+定理 集合交集
+  结论: [是Ordered环 𝕜] [连续加法 𝕜] {F : 有限集 (集合 E)} (hF : F.非空)
   证明: by
   induction F using Finset.induction with
   | empty => exfalso; exact Finset.not_nonempty_empty hF
@@ -455,7 +455,7 @@ theorem isClosed
 
 中文:
 定理 isClosed
-  结论: [OrderClosedTopology 𝕜] {A B : Set E} (hAB : IsExposed 𝕜 A B)
+  结论: [OrderClosed拓扑 𝕜] {A B : 集合 E} (hAB : IsExposed 𝕜 A B)
   证明: by
   obtain rfl | hB := B.eq_empty_or_nonempty
   · simp
@@ -479,7 +479,7 @@ theorem isCompact
 
 中文:
 定理 isCompact
-  结论: [OrderClosedTopology 𝕜] [T2Space E] {A B : Set E}
+  结论: [OrderClosed拓扑 𝕜] [T2空间 E] {A B : 集合 E}
   证明: hA.of_isClosed_subset (hAB.isClosed hA.isClosed) hAB.subset
 -/
 protected theorem isCompact [OrderClosedTopology 𝕜] [T2Space E] {A B : Set E}
@@ -498,8 +498,8 @@ definition Set.exposedPoints
   body: { x in A | exists l : StrongDual 𝕜 E, forall y in A, l y <= l x ∧ (l x <= l y -> y = x) }
 
 中文:
-定义 Set.exposedPoints
-  签名: (A : Set E)
+定义 集合.exposedPoints
+  签名: (A : 集合 E)
   定义体: { x in A | exists l : StrongDual 𝕜 E, forall y in A, l y <= l x ∧ (l x <= l y -> y = x) }
 
 Depends on / 依赖: StrongDual
@@ -554,7 +554,7 @@ theorem exposedPoints_empty
 
 中文:
 定理 exposedPoints_empty
-  结论: (∅ : Set E).exposedPoints 𝕜 = ∅
+  结论: (∅ : 集合 E).exposedPoints 𝕜 = ∅
   证明: subset_empty_iff.1 exposedPoints_subset
 
 Depends on / 依赖: exposedPoints_subset, subset_empty_iff
@@ -638,8 +638,8 @@ theorem convex
 
 中文:
 定理 convex
-  条件: (hAB : IsExposed 𝕜 A B) (hA : Convex 𝕜 A)
-  结论: Convex 𝕜 B
+  条件: (hAB : IsExposed 𝕜 A B) (hA : 凸 𝕜 A)
+  结论: 凸 𝕜 B
   证明: by
   obtain rfl | hB := B.eq_empty_or_nonempty
   · exact convex_empty
@@ -677,7 +677,7 @@ theorem isExtreme
 中文:
 定理 isExtreme
   条件: (hAB : IsExposed 𝕜 A B)
-  结论: IsExtreme 𝕜 A B
+  结论: 是Extreme 𝕜 A B
   证明: by
   refine ⟨hAB.subset, fun x₁ hx₁A x₂ hx₂A x hxB hx => ?_⟩
   obtain ⟨l, rfl⟩ := hAB ⟨x, hxB⟩

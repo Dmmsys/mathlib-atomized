@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul M (Σ i, α i)
+  签名: 标量乘法 M (Σ i, α i)
   定义体: ⟨fun a => (Sigma.map id) fun _ => (a • ·)⟩
 
 @[to_additive]
@@ -114,7 +114,7 @@ instance instIsScalarTowerOfSMul
 
 中文:
 实例 instIsScalarTowerOfSMul
-  签名: [SMul M N] [对任意 i, IsScalarTower M N (α i)]
+  签名: [标量乘法 M N] [对任意 i, 标量塔 M N (α i)]
   定义体: ⟨fun a b x => by
     cases x
     rw [smul_mk]; rw [smul_mk]; rw [smul_mk]; rw [smul_assoc]⟩
@@ -143,8 +143,8 @@ instance [forall
 @[to_additive]
 
 中文:
-实例 [forall
-  签名: i, SMulCommClass M N (α i)] : SMulCommClass M N (Σ i, α i)
+实例 [对任意
+  签名: i, 标量交换类 M N (α i)] : 标量交换类 M N (Σ i, α i)
   定义体: ⟨fun a b x => by
     cases x
     rw [smul_mk]; rw [smul_mk]; rw [smul_mk]; rw [smul_mk]; rw [smul_comm]⟩
@@ -170,8 +170,8 @@ instance [forall
     rw [smul_mk]; rw [smul_mk]; rw [op_smul_eq_smul]⟩
 
 中文:
-实例 [forall
-  签名: i, SMul Mᵐᵒᵖ (α i)] [对任意 i, IsCentralScalar M (α i)] : IsCentralScalar M (Σ i, α i)
+实例 [对任意
+  签名: i, 标量乘法 Mᵐᵒᵖ (α i)] [对任意 i, 中心标量 M (α i)] : 中心标量 M (Σ i, α i)
   定义体: ⟨fun a x => by
     cases x
     rw [smul_mk]; rw [smul_mk]; rw [op_smul_eq_smul]⟩
@@ -197,9 +197,9 @@ theorem FaithfulSMul'
 @[to_additive]
 
 中文:
-定理 FaithfulSMul'
-  条件: [FaithfulSMul M (α i)]
-  结论: FaithfulSMul M (Σ i, α i)
+定理 忠实标量乘法'
+  条件: [忠实标量乘法 M (α i)]
+  结论: 忠实标量乘法 M (Σ i, α i)
   证明: ⟨fun h => eq_of_smul_eq_smul fun a : α i => heq_iff_eq.1 (Sigma.ext_iff.1 <| h <| mk i a).2⟩
 
 @[to_additive]
@@ -217,8 +217,8 @@ instance [Nonempty
   body: (Nonempty.elim ‹_›) fun i => Sigma.FaithfulSMul' i
 
 中文:
-实例 [Nonempty
-  签名: ι] [对任意 i, FaithfulSMul M (α i)] : FaithfulSMul M (Σ i, α i)
+实例 [非空
+  签名: ι] [对任意 i, 忠实标量乘法 M (α i)] : 忠实标量乘法 M (Σ i, α i)
   定义体: (Nonempty.elim ‹_›) fun i => Sigma.FaithfulSMul' i
 
 Depends on / 依赖: FaithfulSMul, Nonempty, Nonempty.elim, Sigma.FaithfulSMul

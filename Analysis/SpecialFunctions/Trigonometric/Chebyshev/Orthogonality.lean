@@ -56,7 +56,7 @@ definition measureT
 
 中文:
 定义 measureT
-  签名: : Measure 实数
+  签名: : 测度 实数
   定义体: (volume.withDensity
     fun x => ENNReal.ofNNReal (.mk (√(1 - x ^ 2)⁻¹) (by positivity))).restrict (Set.Ioc (-1) 1)
 
@@ -104,7 +104,7 @@ theorem intervalIntegrable_sqrt_one_sub_sq_inv
   simpa using! (hasDerivAt_arccos (by aesop) (by aesop)).neg
 
 中文:
-定理 intervalIntegrable_sqrt_one_sub_sq_inv
+定理 interval整数egrable_sqrt_one_sub_sq_inv
   证明: by
   rw [intervalIntegrable_iff]
   refine integrableOn_deriv_of_nonneg continuous_arccos.neg.continuousOn (fun x hx => ?_) (by simp)
@@ -132,7 +132,7 @@ theorem integrable_measureT
 
 中文:
 定理 integrable_measureT
-  条件: {f : 实数 -> 实数} (hf : ContinuousOn f (Set.Icc (-1) 1))
+  条件: {f : 实数 -> 实数} (hf : ContinuousOn f (集合.闭区间 (-1) 1))
   证明: by
   replace hf : ContinuousOn f (Set.uIcc (-1) 1) := by rwa [Set.uIcc_of_lt (by norm_num)]
   have := intervalIntegrable_sqrt_one_sub_sq_inv.continuousOn_mul hf

@@ -53,7 +53,7 @@ definition thickenedIndicatorAux
 
 中文:
 定义 thickenedIndicatorAux
-  签名: (δ : 实数) (E : Set α)
+  签名: (δ : 实数) (E : 集合 α)
   定义体: fun x : α => (1 : Real>=0∞) - infEDist x E / ENNReal.ofReal δ
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, infEDist, ofReal
@@ -76,7 +76,7 @@ theorem continuous_thickenedIndicatorAux
 
 中文:
 定理 continuous_thickenedIndicatorAux
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   证明: by
   unfold thickenedIndicatorAux
   let f := fun x : α => (⟨1, infEDist x E / ENNReal.ofReal δ⟩ : Real>=0 × Real>=0∞)
@@ -109,7 +109,7 @@ theorem thickenedIndicatorAux_le_one
 
 中文:
 定理 thickenedIndicatorAux_le_one
-  条件: (δ : 实数) (E : Set α) (x : α)
+  条件: (δ : 实数) (E : 集合 α) (x : α)
   证明: by
   apply tsub_le_self (α := Real>=0∞)
 
@@ -132,7 +132,7 @@ theorem thickenedIndicatorAux_lt_top
 
 中文:
 定理 thickenedIndicatorAux_lt_top
-  条件: {δ : 实数} {E : Set α} {x : α}
+  条件: {δ : 实数} {E : 集合 α} {x : α}
   证明: lt_of_le_of_lt (thickenedIndicatorAux_le_one _ _ _) one_lt_top
 
 Depends on / 依赖: lt_of_le_of_lt, one_lt_top, thickenedIndicatorAux_le_one
@@ -152,7 +152,7 @@ theorem thickenedIndicatorAux_closure_eq
 
 中文:
 定理 thickenedIndicatorAux_closure_eq
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: by
   simp +unfoldPartialApp only [thickenedIndicatorAux, infEDist_closure]
 
@@ -173,7 +173,7 @@ theorem thickenedIndicatorAux_one
 
 中文:
 定理 thickenedIndicatorAux_one
-  条件: (δ : 实数) (E : Set α) {x : α} (x_in_E : x in E)
+  条件: (δ : 实数) (E : 集合 α) {x : α} (x_in_E : x in E)
   证明: by
   simp [thickenedIndicatorAux, infEDist_zero_of_mem x_in_E, tsub_zero]
 
@@ -194,7 +194,7 @@ theorem thickenedIndicatorAux_one_of_mem_closure
 
 中文:
 定理 thickenedIndicatorAux_one_of_mem_closure
-  结论: (δ : 实数) (E : Set α) {x : α}
+  结论: (δ : 实数) (E : 集合 α) {x : α}
   证明: by
   rw [← thickenedIndicatorAux_closure_eq]; rw [thickenedIndicatorAux_one δ (closure E) x_mem]
 
@@ -220,7 +220,7 @@ theorem thickenedIndicatorAux_zero
 
 中文:
 定理 thickenedIndicatorAux_zero
-  结论: {δ : 实数} (δ_pos : 0 < δ) (E : Set α) {x : α}
+  结论: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α) {x : α}
   证明: by
   rw [thickening]; rw [mem_ofPred_eq]; rw [not_lt] at x_out
   unfold thickenedIndicatorAux
@@ -251,7 +251,7 @@ theorem thickenedIndicatorAux_mono
 
 中文:
 定理 thickenedIndicatorAux_mono
-  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : Set α)
+  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : 集合 α)
   证明: fun _ => tsub_le_tsub (@rfl Real>=0∞ 1).le (ENNReal.div_le_div rfl.le (ofReal_le_ofReal hle))
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_div, div_le_div, ofReal_le_ofReal, rfl.le, tsub_le_tsub
@@ -274,7 +274,7 @@ theorem indicator_le_thickenedIndicatorAux
 
 中文:
 定理 indicator_le_thickenedIndicatorAux
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: by
   intro a
   by_cases h : a in E
@@ -300,7 +300,7 @@ theorem thickenedIndicatorAux_subset
 
 中文:
 定理 thickenedIndicatorAux_subset
-  条件: (δ : 实数) {E₁ E₂ : Set α} (subset : E₁ subseteq E₂)
+  条件: (δ : 实数) {E₁ E₂ : 集合 α} (subset : E₁ subseteq E₂)
   证明: fun _ => tsub_le_tsub (@rfl Real>=0∞ 1).le (ENNReal.div_le_div (infEDist_anti subset) rfl.le)
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_div, div_le_div, infEDist_anti, rfl.le, subset, tsub_le_tsub
@@ -328,7 +328,7 @@ alias t
 
 中文:
 引理 thickenedIndicatorAux_mono_infEDist
-  结论: (δ : 实数) {E : Set α} {x y : α}
+  结论: (δ : 实数) {E : 集合 α} {x y : α}
   证明: by
   simp only [thickenedIndicatorAux]
   rcases le_total (infEDist x E / ENNReal.ofReal δ) 1 with hle | hle
@@ -432,7 +432,7 @@ definition thickenedIndicator
 
 中文:
 定义 thickenedIndicator
-  签名: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  签名: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   定义体: fun x : α => (thickenedIndicatorAux δ E x).toNNReal
   continuous_toFun := by
     apply ContinuousOn.comp_continuous continuousOn_toNNReal
@@ -471,7 +471,7 @@ theorem thickenedIndicator.coeFn_eq_comp
 
 中文:
 定理 thickenedIndicator.coeFn_eq_comp
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   证明: rfl
 -/
 theorem thickenedIndicator.coeFn_eq_comp {δ : Real} (δ_pos : 0 < δ) (E : Set α) :
@@ -491,7 +491,7 @@ theorem thickenedIndicator_le_one
 
 中文:
 定理 thickenedIndicator_le_one
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α) (x : α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α) (x : α)
   证明: by
   rw [thickenedIndicator.coeFn_eq_comp]
   simpa using (toNNReal_le_toNNReal (by finiteness) one_ne_top).mpr
@@ -516,7 +516,7 @@ theorem thickenedIndicator_one_of_mem_closure
 
 中文:
 定理 thickenedIndicator_one_of_mem_closure
-  结论: {δ : 实数} (δ_pos : 0 < δ) (E : Set α) {x : α}
+  结论: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α) {x : α}
   证明: by
   rw [thickenedIndicator_apply]; rw [thickenedIndicatorAux_one_of_mem_closure δ E x_mem]; rw [toNNReal_one]
 
@@ -537,7 +537,7 @@ lemma one_le_thickenedIndicator_apply'
 
 中文:
 引理 one_le_thickenedIndicator_apply'
-  结论: {X : Type _} [PseudoEMetricSpace X]
+  结论: {X : 类型 _} [PseudoEMetric空间 X]
   证明: by
   rw [thickenedIndicator_one_of_mem_closure δ_pos F hxF]
 
@@ -558,7 +558,7 @@ lemma one_le_thickenedIndicator_apply
 
 中文:
 引理 one_le_thickenedIndicator_apply
-  结论: (X : Type _) [PseudoEMetricSpace X]
+  结论: (X : 类型 _) [PseudoEMetric空间 X]
   证明: one_le_thickenedIndicator_apply' δ_pos (subset_closure hxF)
 
 Depends on / 依赖: one_le_thickenedIndicator_apply, subset_closure
@@ -578,7 +578,7 @@ theorem thickenedIndicator_one
 
 中文:
 定理 thickenedIndicator_one
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α) {x : α} (x_in_E : x in E)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α) {x : α} (x_in_E : x in E)
   证明: thickenedIndicator_one_of_mem_closure _ _ (subset_closure x_in_E)
 
 Depends on / 依赖: subset_closure, thickenedIndicator_one_of_mem_closure, x_in_E
@@ -598,7 +598,7 @@ theorem thickenedIndicator_zero
 
 中文:
 定理 thickenedIndicator_zero
-  结论: {δ : 实数} (δ_pos : 0 < δ) (E : Set α) {x : α}
+  结论: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α) {x : α}
   证明: by
   rw [thickenedIndicator_apply]; rw [thickenedIndicatorAux_zero δ_pos E x_out]; rw [toNNReal_zero]
 
@@ -622,7 +622,7 @@ theorem indicator_le_thickenedIndicator
 
 中文:
 定理 indicator_le_thickenedIndicator
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   证明: by
   intro a
   by_cases h : a in E
@@ -679,7 +679,7 @@ theorem thickenedIndicator_subset
 
 中文:
 定理 thickenedIndicator_subset
-  条件: {δ : 实数} (δ_pos : 0 < δ) {E₁ E₂ : Set α} (subset : E₁ subseteq E₂)
+  条件: {δ : 实数} (δ_pos : 0 < δ) {E₁ E₂ : 集合 α} (subset : E₁ subseteq E₂)
   证明: fun x =>
   (toNNReal_le_toNNReal (by finiteness) (by finiteness)).mpr
     (thickenedIndicatorAux_subset δ subset x)
@@ -709,7 +709,7 @@ alias thickenedIndicator_mono_infEdist := thickenedIndicator_mono_infEDist
 
 中文:
 引理 thickenedIndicator_mono_infEDist
-  结论: {δ : 实数} (δ_pos : 0 < δ) {E : Set α} {x y : α}
+  结论: {δ : 实数} (δ_pos : 0 < δ) {E : 集合 α} {x y : α}
   证明: by
   simp only [thickenedIndicator_apply]
   gcongr
@@ -788,7 +788,7 @@ lemma lipschitzWith_thickenedIndicator
 
 中文:
 引理 lipschitzWith_thickenedIndicator
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   证明: by
   intro x y
   wlog h : infEDist x E <= infEDist y E generalizing x y
@@ -853,7 +853,7 @@ lemma mulIndicator_thickening_eventually_eq_mulIndicator_closure
 
 中文:
 引理 mulIndicator_thickening_eventually_eq_mulIndicator_closure
-  条件: (f : α -> β) (E : Set α) (x : α)
+  条件: (f : α -> β) (E : 集合 α) (x : α)
   证明: by
   by_cases x_mem_closure : x in closure E
   · filter_upwards [self_mem_nhdsWithin] with δ δ_pos
@@ -893,7 +893,7 @@ lemma mulIndicator_cthickening_eventually_eq_mulIndicator_closure
 
 中文:
 引理 mulIndicator_cthickening_eventually_eq_mulIndicator_closure
-  条件: (f : α -> β) (E : Set α) (x : α)
+  条件: (f : α -> β) (E : 集合 α) (x : α)
   证明: by
   by_cases x_mem_closure : x in closure E
   · filter_upwards [univ_mem] with δ _
@@ -933,7 +933,7 @@ lemma tendsto_mulIndicator_thickening_mulIndicator_closure
 
 中文:
 引理 tendsto_mulIndicator_thickening_mulIndicator_closure
-  条件: (f : α -> β) (E : Set α)
+  条件: (f : α -> β) (E : 集合 α)
   证明: by
   rw [tendsto_pi_nhds]
   intro x
@@ -968,7 +968,7 @@ lemma tendsto_mulIndicator_cthickening_mulIndicator_closure
 
 中文:
 引理 tendsto_mulIndicator_cthickening_mulIndicator_closure
-  条件: (f : α -> β) (E : Set α)
+  条件: (f : α -> β) (E : 集合 α)
   证明: by
   rw [tendsto_pi_nhds]
   intro x

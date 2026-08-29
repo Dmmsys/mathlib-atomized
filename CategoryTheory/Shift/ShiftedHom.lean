@@ -397,7 +397,7 @@ lemma comp_add
 
 中文:
 引理 comp_add
-  结论: [对任意 (a : M), (shiftFunctor C a).Additive]
+  结论: [对任意 (a : M), (shiftFunctor C a).加性]
   证明: by
   rw [comp]; rw [comp]; rw [comp]; rw [Functor.map_add]; rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
 
@@ -449,7 +449,7 @@ lemma comp_neg
 
 中文:
 引理 comp_neg
-  结论: [对任意 (a : M), (shiftFunctor C a).Additive]
+  结论: [对任意 (a : M), (shiftFunctor C a).加性]
   证明: by
   rw [comp]; rw [comp]; rw [Functor.map_neg]; rw [Preadditive.neg_comp]; rw [Preadditive.comp_neg]
 
@@ -496,7 +496,7 @@ lemma comp_zero
 
 中文:
 引理 comp_zero
-  结论: [对任意 (a : M), (shiftFunctor C a).PreservesZeroMorphisms]
+  结论: [对任意 (a : M), (shiftFunctor C a).保持ZeroMorphisms]
   证明: by
   rw [comp]; rw [Functor.map_zero]; rw [Limits.zero_comp]; rw [Limits.comp_zero]
 
@@ -544,7 +544,7 @@ definition map
 
 中文:
 定义 map
-  签名: {a : M} (f : ShiftedHom X Y a) (F : C ⥤ D) [F.CommShift M]
+  签名: {a : M} (f : ShiftedHom X Y a) (F : C ⥤ D) [F.交换Shift M]
   定义体: F.map f ≫ (F.commShiftIso a).hom.app Y
 
 @[simp]
@@ -570,7 +570,7 @@ lemma map_mk₀
 
 中文:
 引理 map_mk₀
-  条件: (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) (F : C ⥤ D) [F.CommShift M]
+  条件: (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) (F : C ⥤ D) [F.交换Shift M]
   证明: by
   subst hm₀
   simp [map, mk₀, shiftFunctorZero', F.commShiftIso_zero M, ← Functor.map_comp_assoc]
@@ -617,7 +617,7 @@ lemma comp_map
 
 中文:
 引理 comp_map
-  结论: {a : M} (f : ShiftedHom X Y a) (F : C ⥤ D) [F.CommShift M]
+  结论: {a : M} (f : ShiftedHom X Y a) (F : C ⥤ D) [F.交换Shift M]
   证明: by
   simp [map, Functor.commShiftIso_comp_hom_app]
 
@@ -752,7 +752,7 @@ lemma map_add
 
 中文:
 引理 map_add
-  条件: {a : M} (α₁ α₂ : ShiftedHom X Y a) (F : C ⥤ D) [F.CommShift M] [F.Additive]
+  条件: {a : M} (α₁ α₂ : ShiftedHom X Y a) (F : C ⥤ D) [F.交换Shift M] [F.加性]
   证明: by
   simp [ShiftedHom.map, F.map_add]
 
@@ -776,7 +776,7 @@ lemma map_zero
 
 中文:
 引理 map_zero
-  条件: {a : M} (F : C ⥤ D) [F.CommShift M] [F.Additive]
+  条件: {a : M} (F : C ⥤ D) [F.交换Shift M] [F.加性]
   证明: by
   simp [ShiftedHom.map]
 
@@ -877,7 +877,7 @@ lemma map_smul
 
 中文:
 引理 map_smul
-  条件: (r : R) {a : M} (α : ShiftedHom X Y a) (F : C ⥤ D) [F.CommShift M] [F.Linear R]
+  条件: (r : R) {a : M} (α : ShiftedHom X Y a) (F : C ⥤ D) [F.交换Shift M] [F.线性 R]
   证明: by
   simp [ShiftedHom.map, F.map_smul]
 

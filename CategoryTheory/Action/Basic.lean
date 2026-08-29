@@ -46,8 +46,8 @@ structure Action
     - ρ : G ->* End V
 
 中文:
-结构 Action
-  参数: (G : 类型) [Monoid G]
+结构 作用
+  参数: (G : 类型) [幺半群 G]
   公理与运算 (2 个):
     - V : V
     - ρ : G ->* End V
@@ -74,7 +74,7 @@ theorem ρ_one
 
 中文:
 定理 ρ_one
-  条件: {G : 类型} [Monoid G] (A : Action V G)
+  条件: {G : 类型} [幺半群 G] (A : 作用 V G)
   结论: A.ρ 1 = 𝟙 A.V
   证明: by simp
 
@@ -99,7 +99,7 @@ definition ρAut
 
 中文:
 定义 ρAut
-  签名: {G : 类型} [Group G] (A : Action V G)
+  签名: {G : 类型} [群 G] (A : 作用 V G)
   定义体: { hom := A.ρ g
       inv := A.ρ (g⁻¹ : G)
       hom_inv_id := (A.ρ.map_mul (g⁻¹ : G) g).symm.trans (by rw [inv_mul_cancel, ρ_one])
@@ -149,7 +149,7 @@ instance inhabited'
 
 中文:
 实例 inhabited'
-  签名: : Inhabited (Action 类型 G)
+  签名: : 可居 (作用 类型 G)
   定义体: ⟨⟨PUnit, 1⟩⟩
 -/
 instance inhabited' : Inhabited (Action Type* G) :=
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Action AddCommGrpCat G)
+  签名: 可居 (作用 加法交换群范畴 G)
   定义体: ⟨trivial G AddCommGrpCat.of PUnit⟩
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, hom.app
@@ -192,8 +192,8 @@ structure Hom
     - comm : forall g : G, M.ρ g ≫ hom = hom ≫ N.ρ g  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (M N : Action V G)
+结构 态射
+  参数: (M N : 作用 V G)
   公理与运算 (2 个):
     - hom : M.V ⟶ N.V
     - comm : 对任意 g : G, M.ρ g ≫ hom = hom ≫ N.ρ g  [默认: by cat_disch]
@@ -223,7 +223,7 @@ definition id
 
 中文:
 定义 id
-  签名: (M : Action V G)
+  签名: (M : 作用 V G)
   定义体: 𝟙 M.V
 -/
 def id (M : Action V G) : Action.Hom M M where hom := 𝟙 M.V
@@ -248,7 +248,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N K : Action V G} (p : Action.Hom M N) (q : Action.Hom N K)
+  签名: {M N K : 作用 V G} (p : 作用.态射 M N) (q : 作用.态射 N K)
   定义体: p.hom ≫ q.hom
   comm := by
     intro g
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Action V G)
+  签名: 范畴 (作用 V G)
   定义体: Hom M N
   id M := Hom.id M
   comp f g := Hom.comp f g
@@ -299,8 +299,8 @@ lemma hom_injective
 
 中文:
 引理 hom_injective
-  条件: {M N : Action V G}
-  结论: Function.Injective (Hom.hom : (M ⟶ N) -> (M.V ⟶ N.V))
+  条件: {M N : 作用 V G}
+  结论: 函数.单射 (态射.hom : (M ⟶ N) -> (M.V ⟶ N.V))
   证明: fun _ _ => Hom.ext
 
 @[ext]
@@ -322,7 +322,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : Action V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom)
+  条件: {M N : 作用 V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom)
   结论: φ₁ = φ₂
   证明: Hom.ext h
 
@@ -344,8 +344,8 @@ theorem id_hom
 
 中文:
 定理 id_hom
-  条件: (M : Action V G)
-  结论: (𝟙 M : Hom M M).hom = 𝟙 M.V
+  条件: (M : 作用 V G)
+  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.V
   证明: rfl
 -/
 theorem id_hom (M : Action V G) : (𝟙 M : Hom M M).hom = 𝟙 M.V :=
@@ -365,7 +365,7 @@ theorem comp_hom
 
 中文:
 定理 comp_hom
-  条件: {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K)
+  条件: {M N K : 作用 V G} (f : M ⟶ N) (g : N ⟶ K)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -388,7 +388,7 @@ theorem hom_inv_hom
 
 中文:
 定理 hom_inv_hom
-  条件: {M N : Action V G} (f : M ≅ N)
+  条件: {M N : 作用 V G} (f : M ≅ N)
   证明: by
   rw [← comp_hom]; rw [Iso.hom_inv_id]; rw [id_hom]
 
@@ -412,7 +412,7 @@ theorem inv_hom_hom
 
 中文:
 定理 inv_hom_hom
-  条件: {M N : Action V G} (f : M ≅ N)
+  条件: {M N : 作用 V G} (f : M ≅ N)
   证明: by
   rw [← comp_hom]; rw [Iso.inv_hom_id]; rw [id_hom]
 
@@ -441,7 +441,7 @@ definition mkIso
 
 中文:
 定义 mkIso
-  签名: {M N : Action V G} (f : M.V ≅ N.V)
+  签名: {M N : 作用 V G} (f : M.V ≅ N.V)
   定义体: { hom := f.hom
       comm := comm }
   inv :=
@@ -474,7 +474,7 @@ instance isIso_hom_mk
 
 中文:
 实例 isIso_hom_mk
-  签名: {M N : Action V G} (f : M.V ⟶ N.V) [IsIso f] (w)
+  签名: {M N : 作用 V G} (f : M.V ⟶ N.V) [是同构 f] (w)
   定义体: (mkIso (asIso f) w).isIso_hom
 
 Depends on / 依赖: isIso_hom
@@ -510,7 +510,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Action V G ⥤ SingleObj G ⥤ V where
+  签名: : 作用 V G ⥤ SingleObj G ⥤ V where
   定义体: { obj := fun _ => M.V
       map := fun g => M.ρ g
       map_id := fun _ => M.ρ.map_one
@@ -551,7 +551,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (SingleObj G ⥤ V) ⥤ Action V G where
+  签名: : (SingleObj G ⥤ V) ⥤ 作用 V G where
   定义体: { V := F.obj PUnit.unit
       ρ :=
         { toFun := fun g => F.map g
@@ -588,7 +588,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (Action V G) ≅ functor ⋙ inverse
+  签名: : 𝟭 (作用 V G) ≅ functor ⋙ inverse
   定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -644,7 +644,7 @@ definition functorCategoryEquivalence
 
 中文:
 定义 functorCategoryEquivalence
-  签名: : Action V G ≌ SingleObj G ⥤ V where
+  签名: : 作用 V G ≌ SingleObj G ⥤ V where
   定义体: functor
   inverse := inverse
   unitIso := unitIso
@@ -669,7 +669,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FunctorCategoryEquivalence.functor (V := V) (G := G)).IsEquivalence
+  签名: (FunctorCategoryEquivalence.functor (V := V) (G := G)).是等价
   定义体: (functorCategoryEquivalence V G).isEquivalence_functor
 
 Depends on / 依赖: IsEquivalence
@@ -688,7 +688,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FunctorCategoryEquivalence.inverse (V := V) (G := G)).IsEquivalence
+  签名: (FunctorCategoryEquivalence.inverse (V := V) (G := G)).是等价
   定义体: (functorCategoryEquivalence V G).isEquivalence_inverse
 
 Depends on / 依赖: IsEquivalence
@@ -720,7 +720,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Action V G ⥤ V where
+  签名: : 作用 V G ⥤ V where
   定义体: M.V
   map f := f.hom
 -/
@@ -738,7 +738,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget V G).Faithful
+  签名: (forget V G).忠实
   定义体: Hom.ext w
 
 Depends on / 依赖: Hom.ext
@@ -756,7 +756,7 @@ abbreviation HomSubtype
 
 中文:
 缩写 HomSubtype
-  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, FunLike (FV X Y) (CV X) (CV Y)]
+  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, 函数状 (FV X Y) (CV X) (CV Y)]
   定义体: { f : FV M.V N.V // forall g : G,
       f ∘ ConcreteCategory.hom (M.ρ g) = ConcreteCategory.hom (N.ρ g) ∘ f }
 
@@ -797,7 +797,7 @@ instance hasForgetToV
 
 中文:
 实例 hasForgetToV
-  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, FunLike (FV X Y) (CV X) (CV Y)]
+  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, 函数状 (FV X Y) (CV X) (CV Y)]
   定义体: forget V G
 
 Depends on / 依赖: forget
@@ -836,7 +836,7 @@ instance preservesLimits_forget
 
 中文:
 实例 preservesLimits_forget
-  签名: [HasLimits V]
+  签名: [有极限 V]
   定义体: Limits.preservesLimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalenceCompEvaluation, Limits, Limits.preservesLimits_of_natIso, functorCategoryEquivalenceCompEvaluation, preservesLimits_of_natIso
@@ -856,7 +856,7 @@ instance preservesColimits_forget
 
 中文:
 实例 preservesColimits_forget
-  签名: [HasColimits V]
+  签名: [有余极限 V]
   定义体: preservesColimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalenceCompEvaluation, functorCategoryEquivalenceCompEvaluation, preservesColimits_of_natIso
@@ -879,8 +879,8 @@ theorem Iso.conj_ρ
       rw [Iso.conj_apply]; rw [Iso.eq_inv_comp]; simp [f.hom.comm]
 
 中文:
-定理 Iso.conj_ρ
-  条件: {M N : Action V G} (f : M ≅ N) (g : G)
+定理 同构.conj_ρ
+  条件: {M N : 作用 V G} (f : M ≅ N) (g : G)
   证明: by
       rw [Iso.conj_apply]; rw [Iso.eq_inv_comp]; simp [f.hom.comm]
 
@@ -909,7 +909,7 @@ definition actionPUnitEquivalence
 
 中文:
 定义 actionPUnitEquivalence
-  签名: : Action V PUnit ≌ V where
+  签名: : 作用 V 命题单元 ≌ V where
   定义体: forget V _
   inverse :=
     { obj := fun X => ⟨X, 1⟩
@@ -958,7 +958,7 @@ definition res
 
 中文:
 定义 res
-  签名: {G H : 类型} [Monoid G] [Monoid H] (f : G ->* H)
+  签名: {G H : 类型} [幺半群 G] [幺半群 H] (f : G ->* H)
   定义体: { V := M.V
       ρ := M.ρ.comp f }
   map p :=
@@ -991,7 +991,7 @@ definition resId
 
 中文:
 定义 resId
-  签名: {G : 类型} [Monoid G]
+  签名: {G : 类型} [幺半群 G]
   定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1015,7 +1015,7 @@ definition resComp
 
 中文:
 定义 resComp
-  签名: {G H K : 类型} [Monoid G] [Monoid H] [Monoid K]
+  签名: {G H K : 类型} [幺半群 G] [幺半群 H] [幺半群 K]
   定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
 
 Depends on / 依赖: F.map, Finite, Finite.of_injective, GaloisCategory, GaloisCategory.getFiberFunctor, Iso.refl, NatIso, NatIso.ofComponents, evaluation_injective_of_isConnected, getFiberFunctor, nonempty_fiber_of_isConnected, ofComponents, of_injective
@@ -1037,7 +1037,7 @@ definition resCongr
 
 中文:
 定义 resCongr
-  签名: {G H : 类型} [Monoid G] [Monoid H] {f f' : G ->* H} (h : f = f')
+  签名: {G H : 类型} [幺半群 G] [幺半群 H] {f f' : G ->* H} (h : f = f')
   定义体: NatIso.ofComponents (fun _ => Action.mkIso (Iso.refl _))
 
 Depends on / 依赖: Action, Action.mkIso, F.map, Finite, Finite.of_injective, GaloisCategory, GaloisCategory.getFiberFunctor, Iso.refl, NatIso, NatIso.ofComponents, evaluation_aut_injective_of_isConnected, f.hom, getFiberFunctor, nonempty_fiber_of_isConnected, ofComponents, of_injective
@@ -1064,7 +1064,7 @@ definition resEquiv
 
 中文:
 定义 resEquiv
-  签名: {G H : 类型} [Monoid G] [Monoid H] (f : G ≃* H)
+  签名: {G H : 类型} [幺半群 G] [幺半群 H] (f : G ≃* H)
   定义体: Action.res _ f
   inverse := Action.res _ f.symm
   unitIso := Action.resCongr (f := MonoidHom.id H) V (by ext; simp) ≪≫ (Action.resComp _ _ _).symm
@@ -1098,7 +1098,7 @@ instance :
 
 中文:
 实例 :
-  签名: (res V f).Faithful
+  签名: (res V f).忠实
   定义体: by
     ext
     rw [← res_map_hom _ f g₁]; rw [← res_map_hom _ f g₂]; rw [h]
@@ -1130,8 +1130,8 @@ lemma full_res
 
 中文:
 引理 full_res
-  条件: (f_surj : Function.Surjective f)
-  结论: (res V f).Full where
+  条件: (f_surj : 函数.满射 f)
+  结论: (res V f).满 where
   证明: by
     use ⟨g.hom, fun h => ?_⟩
     · ext
@@ -1182,7 +1182,7 @@ definition mapAction
 
 中文:
 定义 mapAction
-  签名: (F : V ⥤ W) (G : 类型) [Monoid G]
+  签名: (F : V ⥤ W) (G : 类型) [幺半群 G]
   定义体: { V := F.obj M.V
       ρ :=
         { toFun := fun g => F.map (M.ρ g)
@@ -1231,8 +1231,8 @@ definition FullyFaithful.mapAction
     exact f.comm _
 
 中文:
-定义 FullyFaithful.mapAction
-  签名: {F : V ⥤ W} (h : F.FullyFaithful) (G : 类型) [Monoid G]
+定义 满忠实.mapAction
+  签名: {F : V ⥤ W} (h : F.满忠实) (G : 类型) [幺半群 G]
   定义体: by
     refine ⟨h.preimage f.hom, fun _ => h.map_injective ?_⟩
     simp only [map_comp, map_preimage]
@@ -1266,7 +1266,7 @@ definition mapActionComp
 
 中文:
 定义 mapActionComp
-  签名: {T : 类型} [Category* T] (F : V ⥤ W) (F' : W ⥤ T)
+  签名: {T : 类型} [范畴* T] (F : V ⥤ W) (F' : W ⥤ T)
   定义体: NatIso.ofComponents (fun X => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1318,8 +1318,8 @@ definition Equivalence.mapAction
   functor_unitIso_comp X := by ext; simp
 
 中文:
-定义 Equivalence.mapAction
-  签名: {V W : 类型} [Category* V] [Category* W] (G : 类型) [Monoid G]
+定义 等价.mapAction
+  签名: {V W : 类型} [范畴* V] [范畴* W] (G : 类型) [幺半群 G]
   定义体: E.functor.mapAction G
   inverse := E.inverse.mapAction G
   unitIso := Functor.mapActionCongr G E.unitIso ≪≫ Functor.mapActionComp G _ _

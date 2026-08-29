@@ -194,11 +194,11 @@ class FiberBundle
     - trivialization_mem_atlas' : forall b : B, trivializationAt' b in trivializationAtlas'
 
 中文:
-类 FiberBundle
+类 纤维丛
   参数: where
   公理与运算 (5 个):
-    - totalSpaceMk_isInducing' : 对任意 b : B, IsInducing (@TotalSpace.mk B F E b)
-    - trivializationAtlas' : Set (Trivialization F (π F E))
+    - totalSpaceMk_isInducing' : 对任意 b : B, 是Inducing (@全空间.mk B F E b)
+    - trivializationAtlas' : 集合 (Trivialization F (π F E))
     - trivializationAt' : B -> Trivialization F (π F E)
     - mem_baseSet_trivializationAt' : 对任意 b : B, b in (trivializationAt' b).baseSet
     - trivialization_mem_atlas' : 对任意 b : B, trivializationAt' b in trivializationAtlas'
@@ -224,7 +224,7 @@ theorem totalSpaceMk_isInducing
 
 中文:
 定理 totalSpaceMk_isInducing
-  结论: IsInducing (@TotalSpace.mk B F E b)
+  结论: 是Inducing (@全空间.mk B F E b)
   证明: totalSpaceMk_isInducing' b
 
 Depends on / 依赖: totalSpaceMk_isInducing
@@ -241,7 +241,7 @@ abbreviation trivializationAtlas
 
 中文:
 缩写 trivializationAtlas
-  签名: : Set (Trivialization F (π F E))
+  签名: : 集合 (Trivialization F (π F E))
   定义体: trivializationAtlas'
 
 Depends on / 依赖: trivializationAtlas
@@ -326,7 +326,7 @@ class MemTrivializationAtlas
 
 中文:
 类 MemTrivializationAtlas
-  参数: [FiberBundle F E] (e : Trivialization F (π F E))
+  参数: [纤维丛 F E] (e : Trivialization F (π F E))
   公理与运算 (1 个):
     - out : e in trivializationAtlas F E
 -/
@@ -342,7 +342,7 @@ instance [FiberBundle
   body: trivialization_mem_atlas F E b
 
 中文:
-实例 [FiberBundle
+实例 [纤维丛
   签名: F E] (b
   定义体: trivialization_mem_atlas F E b
 
@@ -368,7 +368,7 @@ theorem map_proj_nhds
 
 中文:
 定理 map_proj_nhds
-  条件: (x : TotalSpace F E)
+  条件: (x : 全空间 F E)
   结论: map (π F E) (𝓝 x) = 𝓝 x.proj
   证明: (trivializationAt F E x.proj).map_proj_nhds
 (trivializationAt F E x.proj).mem_source.2 mem_baseSet_trivializationAt F E x.proj
@@ -393,7 +393,7 @@ theorem continuous_proj
 
 中文:
 定理 continuous_proj
-  结论: Continuous (π F E)
+  结论: 连续 (π F E)
   证明: continuous_iff_continuousAt.2 fun x => (map_proj_nhds F x).le
 
 Depends on / 依赖: continuous_iff_continuousAt, map_proj_nhds
@@ -411,7 +411,7 @@ theorem isOpenMap_proj
 
 中文:
 定理 isOpenMap_proj
-  结论: IsOpenMap (π F E)
+  结论: 是开映射 (π F E)
   证明: IsOpenMap.of_nhds_le fun x => (map_proj_nhds F x).ge
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.of_nhds_le, map_proj_nhds, of_nhds_le
@@ -433,8 +433,8 @@ theorem surjective_proj
 
 中文:
 定理 surjective_proj
-  条件: [Nonempty F]
-  结论: Function.Surjective (π F E)
+  条件: [非空 F]
+  结论: 函数.满射 (π F E)
   证明: fun b =>
   let ⟨p, _, hpb⟩ :=
     (trivializationAt F E b).proj_surjOn_baseSet (mem_baseSet_trivializationAt F E b)
@@ -456,8 +456,8 @@ theorem isQuotientMap_proj
 
 中文:
 定理 isQuotientMap_proj
-  条件: [Nonempty F]
-  结论: IsQuotientMap (π F E)
+  条件: [非空 F]
+  结论: 是商映射 (π F E)
   证明: (isOpenMap_proj F E).isQuotientMap (continuous_proj F E) (surjective_proj F E)
 
 Depends on / 依赖: continuous_proj, isOpenMap_proj, isQuotientMap, surjective_proj
@@ -477,7 +477,7 @@ theorem continuous_totalSpaceMk
 中文:
 定理 continuous_totalSpaceMk
   条件: (x : B)
-  结论: Continuous (@TotalSpace.mk B F E x)
+  结论: 连续 (@全空间.mk B F E x)
   证明: (totalSpaceMk_isInducing F E x).continuous
 
 Depends on / 依赖: continuous, totalSpaceMk_isInducing
@@ -497,7 +497,7 @@ theorem totalSpaceMk_isEmbedding
 中文:
 定理 totalSpaceMk_isEmbedding
   条件: (x : B)
-  结论: IsEmbedding (@TotalSpace.mk B F E x)
+  结论: 是嵌入 (@全空间.mk B F E x)
   证明: ⟨totalSpaceMk_isInducing F E x, TotalSpace.mk_injective x⟩
 
 Depends on / 依赖: TotalSpace, TotalSpace.mk_injective, mk_injective, totalSpaceMk_isInducing
@@ -517,7 +517,7 @@ exact isClosed_singleton.preimage continuous_proj F E⟩
 
 中文:
 定理 totalSpaceMk_isClosedEmbedding
-  条件: [T1Space B] (x : B)
+  条件: [T1空间 B] (x : B)
   证明: ⟨totalSpaceMk_isEmbedding F E x, by
     rw [TotalSpace.range_mk]
 exact isClosed_singleton.preimage continuous_proj F E⟩
@@ -566,8 +566,8 @@ lemma t0Space
 
 中文:
 引理 t0Space
-  条件: [T0Space F] (b : B)
-  结论: T0Space (E b)
+  条件: [T0空间 F] (b : B)
+  结论: T0空间 (E b)
   证明: .symm.t0Space FiberBundle.homeomorphAt F E b
 
 Depends on / 依赖: FiberBundle, FiberBundle.homeomorphAt, homeomorphAt, symm.t0Space, t0Space
@@ -586,8 +586,8 @@ lemma t1Space
 
 中文:
 引理 t1Space
-  条件: [T1Space F] (b : B)
-  结论: T1Space (E b)
+  条件: [T1空间 F] (b : B)
+  结论: T1空间 (E b)
   证明: .symm.t1Space FiberBundle.homeomorphAt F E b
 
 Depends on / 依赖: FiberBundle, FiberBundle.homeomorphAt, homeomorphAt, symm.t1Space, t1Space
@@ -606,8 +606,8 @@ lemma t2Space
 
 中文:
 引理 t2Space
-  条件: [T2Space F] (b : B)
-  结论: T2Space (E b)
+  条件: [T2空间 F] (b : B)
+  结论: T2空间 (E b)
   证明: .symm.t2Space FiberBundle.homeomorphAt F E b
 
 Depends on / 依赖: FiberBundle, FiberBundle.homeomorphAt, homeomorphAt, symm.t2Space, t2Space
@@ -626,8 +626,8 @@ lemma t3Space
 
 中文:
 引理 t3Space
-  条件: [T3Space F] (b : B)
-  结论: T3Space (E b)
+  条件: [T3空间 F] (b : B)
+  结论: T3空间 (E b)
   证明: .symm.t3Space FiberBundle.homeomorphAt F E b
 
 Depends on / 依赖: FiberBundle, FiberBundle.homeomorphAt, homeomorphAt, symm.t3Space, t3Space
@@ -648,7 +648,7 @@ theorem mem_trivializationAt_proj_source
 
 中文:
 定理 mem_trivializationAt_proj_source
-  条件: {x : TotalSpace F E}
+  条件: {x : 全空间 F E}
   证明: (Trivialization.mem_source _).mpr mem_baseSet_trivializationAt F E x.proj
 
 Depends on / 依赖: Trivialization, Trivialization.mem_source, mem_baseSet_trivializationAt, mem_source, x.proj
@@ -667,7 +667,7 @@ theorem trivializationAt_proj_fst
 
 中文:
 定理 trivializationAt_proj_fst
-  条件: {x : TotalSpace F E}
+  条件: {x : 全空间 F E}
   证明: Trivialization.coe_fst' _ mem_baseSet_trivializationAt F E x.proj
 
 Depends on / 依赖: Trivialization, Trivialization.coe_fst, coe_fst, mem_baseSet_trivializationAt, x.proj
@@ -690,7 +690,7 @@ theorem continuousWithinAt_totalSpace
 
 中文:
 定理 continuousWithinAt_totalSpace
-  条件: (f : X -> TotalSpace F E) {s : Set X} {x₀ : X}
+  条件: (f : X -> 全空间 F E) {s : 集合 X} {x₀ : X}
   证明: (trivializationAt F E (f x₀).proj).tendsto_nhds_iff mem_trivializationAt_proj_source
 
 Depends on / 依赖: mem_trivializationAt_proj_source, tendsto_nhds_iff, trivializationAt
@@ -711,7 +711,7 @@ theorem continuousAt_totalSpace
 
 中文:
 定理 continuousAt_totalSpace
-  条件: (f : X -> TotalSpace F E) {x₀ : X}
+  条件: (f : X -> 全空间 F E) {x₀ : X}
   证明: (trivializationAt F E (f x₀).proj).tendsto_nhds_iff mem_trivializationAt_proj_source
 
 Depends on / 依赖: mem_trivializationAt_proj_source, tendsto_nhds_iff, trivializationAt
@@ -734,7 +734,7 @@ theorem continuousWithinAt_section
 
 中文:
 定理 continuousWithinAt_section
-  条件: {s : 对任意 x, E x} {a : Set B} {x₀ : B}
+  条件: {s : 对任意 x, E x} {a : 集合 B} {x₀ : B}
   证明: by
   simp_rw [continuousWithinAt_totalSpace, and_iff_right_iff_imp]
   intro; exact continuousWithinAt_id
@@ -789,8 +789,8 @@ theorem FiberBundle.exists_trivialization_Icc_subset
   /- Let `s` be the set of
 
 中文:
-定理 FiberBundle.exists_trivialization_Icc_subset
-  结论: [ConditionallyCompleteLinearOrder B]
+定理 纤维丛.存在_trivialization_Icc_subset
+  结论: [条件完备线性序 B]
   证明: by
   obtain ⟨ea, hea⟩ : exists ea : Trivialization F (π F E), a in ea.baseSet :=
     ⟨trivializationAt F E a, mem_baseSet_trivializationAt F E a⟩
@@ -887,11 +887,11 @@ structure FiberBundleCore
     - coordChange_comp : forall i j k, forall x in baseSet i inter baseSet j inter baseSet k, forall v, (coordChange j k x) (coordChange i j x v) = coordChange i k x v
 
 中文:
-结构 FiberBundleCore
-  参数: (ι : 类型) (B : 类型) [TopologicalSpace B] (F : 类型)
+结构 纤维丛核心
+  参数: (ι : 类型) (B : 类型) [拓扑空间 B] (F : 类型)
   公理与运算 (8 个):
-    - baseSet : ι -> Set B
-    - isOpen_baseSet : 对任意 i, IsOpen (baseSet i)
+    - baseSet : ι -> 集合 B
+    - isOpen_baseSet : 对任意 i, 是开集 (baseSet i)
     - indexAt : B -> ι
     - mem_baseSet_at : 对任意 x, x in baseSet (indexAt x)
     - coordChange : ι -> ι -> B -> F -> F
@@ -928,7 +928,7 @@ definition Index
 
 中文:
 定义 Index
-  签名: (_Z : FiberBundleCore ι B F)
+  签名: (_Z : 纤维丛核心 ι B F)
   定义体: ι
 -/
 def Index (_Z : FiberBundleCore ι B F) := ι
@@ -945,7 +945,7 @@ definition Base
 
 中文:
 定义 Base
-  签名: (_Z : FiberBundleCore ι B F)
+  签名: (_Z : 纤维丛核心 ι B F)
   定义体: B
 -/
 def Base (_Z : FiberBundleCore ι B F) := B
@@ -963,7 +963,7 @@ definition Fiber
 
 中文:
 定义 Fiber
-  签名: (_ : FiberBundleCore ι B F) (_x : B)
+  签名: (_ : 纤维丛核心 ι B F) (_x : B)
   定义体: F
 -/
 def Fiber (_ : FiberBundleCore ι B F) (_x : B) := F
@@ -991,7 +991,7 @@ abbreviation TotalSpace
   body: Bundle.TotalSpace F Z.Fiber
 
 中文:
-缩写 TotalSpace
+缩写 全空间
   定义体: Bundle.TotalSpace F Z.Fiber
 
 Depends on / 依赖: Bundle, Bundle.TotalSpace, TotalSpace, Z.Fiber
@@ -1010,7 +1010,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: : Z.TotalSpace -> B
+  签名: : Z.全空间 -> B
   定义体: Bundle.TotalSpace.proj
 
 Depends on / 依赖: Bundle, Bundle.TotalSpace.proj, TotalSpace
@@ -1159,7 +1159,7 @@ theorem mem_localTrivAsPartialEquiv_source
 
 中文:
 定理 mem_localTrivAsPartialEquiv_source
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1202,7 +1202,7 @@ theorem localTrivAsPartialEquiv_apply
 
 中文:
 定理 localTrivAsPartialEquiv_apply
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   证明: rfl
 -/
 theorem localTrivAsPartialEquiv_apply (p : Z.TotalSpace) :
@@ -1265,7 +1265,7 @@ instance toTopologicalSpace
 
 中文:
 实例 toTopologicalSpace
-  签名: : TopologicalSpace (Bundle.TotalSpace F Z.Fiber)
+  签名: : 拓扑空间 (Bundle.全空间 F Z.Fiber)
   定义体: TopologicalSpace.generateFrom ⋃ (i : ι) (s : Set (B × F)) (_ : IsOpen s),
     {(Z.localTrivAsPartialEquiv i).source inter Z.localTrivAsPartialEquiv i ⁻¹' s}
 
@@ -1295,7 +1295,7 @@ theorem open_source'
 中文:
 定理 open_source'
   条件: (i : ι)
-  结论: IsOpen (Z.localTrivAsPartialEquiv i).source
+  结论: 是开集 (Z.localTrivAsPartialEquiv i).source
   证明: by
   apply TopologicalSpace.GenerateOpen.basic
   simp only [exists_prop, mem_iUnion, mem_singleton_iff]
@@ -1596,7 +1596,7 @@ theorem localTriv_apply
 
 中文:
 定理 localTriv_apply
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   证明: rfl
 -/
 theorem localTriv_apply (p : Z.TotalSpace) :
@@ -1620,7 +1620,7 @@ theorem localTrivAt_apply
 
 中文:
 定理 localTrivAt_apply
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   结论: (Z.localTrivAt p.1) p = ⟨p.1, p.2⟩
   证明: by
   rw [localTrivAt]; rw [localTriv_apply]; rw [coordChange_self]
@@ -1672,7 +1672,7 @@ theorem mem_localTriv_source
 
 中文:
 定理 mem_localTriv_source
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   证明: Iff.rfl
 
 @[simp, mfld_simps]
@@ -1696,7 +1696,7 @@ theorem mem_localTrivAt_source
 
 中文:
 定理 mem_localTrivAt_source
-  条件: (p : Z.TotalSpace) (b : B)
+  条件: (p : Z.全空间) (b : B)
   证明: Iff.rfl
 
 @[simp, mfld_simps]
@@ -1815,7 +1815,7 @@ theorem mk_mem_localTrivAt_source
 
 中文:
 定理 mk_mem_localTrivAt_source
-  结论: (⟨b, a⟩ : Z.TotalSpace) in (Z.localTrivAt b).source
+  结论: (⟨b, a⟩ : Z.全空间) in (Z.localTrivAt b).source
   证明: by
   simp only [mfld_simps]
 
@@ -1838,7 +1838,7 @@ instance fiberBundle
 
 中文:
 实例 fiberBundle
-  签名: : FiberBundle F Z.Fiber where
+  签名: : 纤维丛 F Z.Fiber where
   定义体: isInducing_iff_nhds.2 fun x => by
     rw [(Z.localTrivAt b).nhds_eq_comap_inf_principal (mk_mem_localTrivAt_source _ _ _)]; rw [comap_inf]; rw [comap_principal]; rw [comap_comap]
     simp only [Function.comp_def, localTrivAt_apply_mk, Trivialization.coe_coe,
@@ -1915,12 +1915,12 @@ structure FiberPrebundle
 结构 FiberPrebundle
   参数: where
   公理与运算 (6 个):
-    - pretrivializationAtlas : Set (Pretrivialization F (π F E))
+    - pretrivializationAtlas : 集合 (Pretrivialization F (π F E))
     - pretrivializationAt : B -> Pretrivialization F (π F E)
     - mem_base_pretrivializationAt : 对任意 x : B, x in (pretrivializationAt x).baseSet
     - pretrivialization_mem_atlas : 对任意 x : B, pretrivializationAt x in pretrivializationAtlas
     - continuous_trivChange : 对任意 e, e in pretrivializationAtlas -> 对任意 e', e' in pretrivializationAtlas -> ContinuousOn (e ∘ e'.toPartialEquiv.symm) (e'.target inter e'.toPartialEquiv.symm ⁻¹' e.source)
-    - totalSpaceMk_isInducing : 对任意 b : B, IsInducing (pretrivializationAt b ∘ TotalSpace.mk b)
+    - totalSpaceMk_isInducing : 对任意 b : B, 是Inducing (pretrivializationAt b ∘ 全空间.mk b)
 -/
 structure FiberPrebundle where
   pretrivializationAtlas : Set (Pretrivialization F (π F E))
@@ -2239,7 +2239,7 @@ definition toFiberBundle
 
 中文:
 定义 toFiberBundle
-  签名: : @FiberBundle B F _ _ E a.totalSpaceTopology _
+  签名: : @纤维丛 B F _ _ E a.totalSpaceTopology _
   定义体: let _ := a.totalSpaceTopology
   { totalSpaceMk_isInducing' := fun b => a.inducing_totalSpaceMk_of_inducing_comp b
       (a.totalSpaceMk_isInducing b)
@@ -2274,7 +2274,7 @@ theorem continuous_proj
 
 中文:
 定理 continuous_proj
-  结论: @Continuous _ _ a.totalSpaceTopology _ (π F E)
+  结论: @连续 _ _ a.totalSpaceTopology _ (π F E)
   证明: by
   let := a.totalSpaceTopology
   let := a.toFiberBundle
@@ -2309,7 +2309,7 @@ theorem continuousOn_of_comp_right
 
 中文:
 定理 continuousOn_of_comp_right
-  结论: {X : 类型} [TopologicalSpace X] {f : TotalSpace F E -> X}
+  结论: {X : 类型} [拓扑空间 X] {f : 全空间 F E -> X}
   证明: by
   let := a.totalSpaceTopology
   intro z hz

@@ -32,7 +32,7 @@ lemma eq_iff
 
 中文:
 引理 eq_iff
-  条件: {g : Rˣ} (hg : 对任意 x, x in Subgroup.zpowers g) (χ₁ χ₂ : MulChar R R')
+  条件: {g : Rˣ} (hg : 对任意 x, x in 子群.zpowers g) (χ₁ χ₂ : 乘法特征 R R')
   证明: by
   rw [← Equiv.apply_eq_iff_eq equivToUnitHom]; rw [MonoidHom.eq_iff_eq_on_generator hg]; rw [← coe_equivToUnitHom]; rw [← coe_equivToUnitHom]; rw [Units.ext_iff]
 
@@ -59,7 +59,7 @@ theorem domRestrict_ofUnitHom
 
 中文:
 定理 domRestrict_ofUnitHom
-  条件: (f : Rˣ ->* R'ˣ) (S : Submonoid R)
+  条件: (f : Rˣ ->* R'ˣ) (S : 子幺半群 R)
   结论: domRestrict S (ofUnitHom f) =
   证明: by
   ext x
@@ -98,7 +98,7 @@ definition starComp
 
 中文:
 定义 starComp
-  签名: [StarRing R'] (χ : MulChar R R')
+  签名: [对合环 R'] (χ : 乘法特征 R R')
   定义体: χ.ringHomComp (starRingEnd R')
 
 Depends on / 依赖: ringHomComp, starRingEnd
@@ -124,7 +124,7 @@ instance instStarMul
 
 中文:
 实例 instStarMul
-  签名: [StarRing R']
+  签名: [对合环 R']
   定义体: starComp
   star_involutive χ := by
     ext1
@@ -158,7 +158,7 @@ lemma star_apply
 
 中文:
 引理 star_apply
-  条件: [StarRing R'] (χ : MulChar R R') (a : R)
+  条件: [对合环 R'] (χ : 乘法特征 R R') (a : R)
   结论: (star χ) a = star (χ a)
   证明: rfl
 -/
@@ -176,7 +176,7 @@ lemma apply_mem_rootsOfUnity
 
 中文:
 引理 apply_mem_rootsOfUnity
-  条件: [Fintype Rˣ] (a : Rˣ) {χ : MulChar R R'}
+  条件: [有限类型 Rˣ] (a : Rˣ) {χ : 乘法特征 R R'}
   证明: by
   rw [mem_rootsOfUnity]; rw [← map_pow]; rw [← (equivToUnitHom χ).map_one]; rw [pow_card_eq_one]
 
@@ -204,7 +204,7 @@ lemma star_eq_inv
 
 中文:
 引理 star_eq_inv
-  条件: (χ : MulChar R Complex)
+  条件: (χ : 乘法特征 R 复形)
   结论: star χ = χ⁻¹
   证明: by
   cases nonempty_fintype Rˣ
@@ -232,7 +232,7 @@ lemma star_apply'
 
 中文:
 引理 star_apply'
-  条件: (χ : MulChar R Complex) (a : R)
+  条件: (χ : 乘法特征 R 复形) (a : R)
   结论: star (χ a) = χ⁻¹ a
   证明: by
   simp only [RCLike.star_def, ← star_eq_inv, star_apply]
@@ -267,7 +267,7 @@ refine ofUnitHom monoidHomOfForallMemZpowers hg this.trans dvd_of_eq ?_
 
 中文:
 定义 ofRootOfUnity
-  签名: {ζ : Rˣ} (hζ : ζ in rootsOfUnity (Fintype.card Mˣ) R)
+  签名: {ζ : Rˣ} (hζ : ζ in rootsOfUnity (有限类型.card Mˣ) R)
   定义体: by
   have : orderOf ζ ∣ Fintype.card Mˣ :=
 orderOf_dvd_iff_pow_eq_one.mpr (mem_rootsOfUnity _ ζ).mp hζ
@@ -296,7 +296,7 @@ lemma ofRootOfUnity_spec
 
 中文:
 引理 ofRootOfUnity_spec
-  结论: {ζ : Rˣ} (hζ : ζ in rootsOfUnity (Fintype.card Mˣ) R)
+  结论: {ζ : Rˣ} (hζ : ζ in rootsOfUnity (有限类型.card Mˣ) R)
   证明: by
   simp only [ofRootOfUnity, ofUnitHom_eq, equivToUnitHom_symm_coe,
     monoidHomOfForallMemZpowers_apply_gen]
@@ -324,7 +324,7 @@ invFun ζ := ofRootOfUnity ζ.prop Classical.choose_spec inst_cyc.exists_generat
 
 中文:
 定义 equiv_rootsOfUnity
-  签名: [inst_cyc : IsCyclic Mˣ]
+  签名: [inst_cyc : 是循环 Mˣ]
   定义体: ⟨χ.toUnitHom Classical.choose inst_cyc.exists_generator, by
       simp only [toUnitHom_eq, mem_rootsOfUnity, ← map_pow, pow_card_eq_one, map_one]⟩
 invFun ζ := ofRootOfUnity ζ.prop Classical.choose_spec inst_cyc.exists_generator
@@ -378,8 +378,8 @@ lemma exists_mulChar_orderOf
   have h' : ζ' ^ (Fint
 
 中文:
-引理 exists_mulChar_orderOf
-  结论: {n : 自然数} (h : n ∣ Fintype.card F - 1) {ζ : R}
+引理 存在_mulChar_orderOf
+  结论: {n : 自然数} (h : n ∣ 有限类型.card F - 1) {ζ : R}
   证明: by
   classical
   have hn₀ : 0 < n := by
@@ -428,8 +428,8 @@ lemma orderOf_dvd_card_sub_one
 
 中文:
 引理 orderOf_dvd_card_sub_one
-  条件: (χ : MulChar F R)
-  结论: orderOf χ ∣ Fintype.card F - 1
+  条件: (χ : 乘法特征 F R)
+  结论: orderOf χ ∣ 有限类型.card F - 1
   证明: by
   classical
   rw [← Fintype.card_units]
@@ -451,7 +451,7 @@ lemma exists_mulChar_orderOf_eq_card_units
   proof: exists_mulChar_orderOf F (by rw [Fintype.card_units]) hζ
 
 中文:
-引理 exists_mulChar_orderOf_eq_card_units
+引理 存在_mulChar_orderOf_eq_card_units
   结论: [DecidableEq F]
   证明: exists_mulChar_orderOf F (by rw [Fintype.card_units]) hζ
 
@@ -480,7 +480,7 @@ lemma apply_mem_rootsOfUnity_orderOf
 
 中文:
 引理 apply_mem_rootsOfUnity_orderOf
-  条件: (χ : MulChar F R) {a : F} (ha : a != 0)
+  条件: (χ : 乘法特征 F R) {a : F} (ha : a != 0)
   证明: by
   have hu : IsUnit (χ a) := ha.isUnit.map χ
   refine ⟨hu.unit, ?_, hu.unit_spec⟩
@@ -507,7 +507,7 @@ lemma apply_mem_rootsOfUnity_of_pow_eq_one
 
 中文:
 引理 apply_mem_rootsOfUnity_of_pow_eq_one
-  结论: {χ : MulChar F R} {n : 自然数} (hχ : χ ^ n = 1)
+  结论: {χ : 乘法特征 F R} {n : 自然数} (hχ : χ ^ n = 1)
   证明: by
   obtain ⟨μ, hμ₁, hμ₂⟩ := χ.apply_mem_rootsOfUnity_orderOf ha
   exact ⟨μ, rootsOfUnity_le_of_dvd (orderOf_dvd_of_pow_eq_one hχ) hμ₁, hμ₂⟩
@@ -536,8 +536,8 @@ lemma exists_apply_eq_pow
   exact ⟨k, hk₁, (hζ₂ ▸ hk₂).symm⟩
 
 中文:
-引理 exists_apply_eq_pow
-  结论: {χ : MulChar F R} {n : 自然数} [NeZero n] (hχ : χ ^ n = 1) {μ : R}
+引理 存在_apply_eq_pow
+  结论: {χ : 乘法特征 F R} {n : 自然数} [NeZero n] (hχ : χ ^ n = 1) {μ : R}
   证明: by
   obtain ⟨ζ, hζ₁, hζ₂⟩ := apply_mem_rootsOfUnity_of_pow_eq_one hχ ha
   have hζ' : ζ.val ^ n = 1 := (mem_rootsOfUnity' n ↑ζ).mp hζ₁
@@ -569,7 +569,7 @@ lemma apply_mem_algebraAdjoin_of_pow_eq_one
 
 中文:
 引理 apply_mem_algebraAdjoin_of_pow_eq_one
-  结论: {χ : MulChar F R} {n : 自然数} [NeZero n] (hχ : χ ^ n = 1)
+  结论: {χ : 乘法特征 F R} {n : 自然数} [NeZero n] (hχ : χ ^ n = 1)
   证明: by
   rcases eq_or_ne a 0 with rfl | h
   · exact χ.map_zero ▸ Subalgebra.zero_mem _
@@ -600,7 +600,7 @@ lemma apply_mem_algebraAdjoin
 
 中文:
 引理 apply_mem_algebraAdjoin
-  结论: {χ : MulChar F R} {μ : R} (hμ : IsPrimitiveRoot μ (orderOf χ))
+  结论: {χ : 乘法特征 F R} {μ : R} (hμ : 是PrimitiveRoot μ (orderOf χ))
   证明: have : NeZero (orderOf χ) := ⟨χ.orderOf_pos.ne'⟩
   apply_mem_algebraAdjoin_of_pow_eq_one (pow_orderOf_eq_one χ) hμ a
 

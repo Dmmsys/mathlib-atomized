@@ -102,7 +102,7 @@ theorem algebraMap_C
 中文:
 定理 algebraMap_C
   条件: (a : K)
-  结论: algebraMap K[X] K⟮X⟯ (Polynomial.C a) = C a
+  结论: algebraMap K[X] K⟮X⟯ (多项式.C a) = C a
   证明: rfl
 
 @[simp]
@@ -121,7 +121,7 @@ theorem algebraMap_comp_C
 
 中文:
 定理 algebraMap_comp_C
-  结论: (algebraMap K[X] K⟮X⟯).comp Polynomial.C = C
+  结论: (algebraMap K[X] K⟮X⟯).comp 多项式.C = C
   证明: rfl
 -/
 theorem algebraMap_comp_C : (algebraMap K[X] K⟮X⟯).comp Polynomial.C = C :=
@@ -161,7 +161,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Function.Injective (RatFunc.C (K := K))
+  结论: 函数.单射 (有理函数.C (K := K))
   证明: by
   rw [← algebraMap_comp_C]; rw [RingHom.coe_comp]
   exact Function.Injective.comp (algebraMap_injective K) (Polynomial.C_injective)
@@ -207,7 +207,7 @@ theorem algebraMap_X
 
 中文:
 定理 algebraMap_X
-  结论: algebraMap K[X] K⟮X⟯ Polynomial.X = X
+  结论: algebraMap K[X] K⟮X⟯ 多项式.X = X
   证明: rfl
 
 @[simp]
@@ -301,7 +301,7 @@ lemma liftRingHom_C
 
 中文:
 引理 liftRingHom_C
-  条件: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K)
+  条件: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K)
   证明: RatFunc.liftRingHom_algebraMap _ _ _
 
 @[simp]
@@ -323,7 +323,7 @@ lemma liftRingHom_X
 
 中文:
 引理 liftRingHom_X
-  条件: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  条件: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: RatFunc.liftRingHom_algebraMap _ _ _
 
 Depends on / 依赖: RatFunc, RatFunc.liftRingHom_algebraMap, liftRingHom_algebraMap
@@ -353,7 +353,7 @@ theorem num_C
 中文:
 定理 num_C
   条件: (c : K)
-  结论: num (C c) = Polynomial.C c
+  结论: num (C c) = 多项式.C c
   证明: num_algebraMap _
 
 @[simp]
@@ -401,7 +401,7 @@ theorem num_X
 
 中文:
 定理 num_X
-  结论: num (X : K⟮X⟯) = Polynomial.X
+  结论: num (X : K⟮X⟯) = 多项式.X
   证明: num_algebraMap _
 
 @[simp]
@@ -632,7 +632,7 @@ theorem eval_algebraMap
 
 中文:
 定理 eval_algebraMap
-  条件: {S : 类型} [CommSemiring S] [Algebra S K[X]] (p : S)
+  条件: {S : 类型} [交换半环 S] [代数 S K[X]] (p : S)
   证明: by
   simp [eval, IsScalarTower.algebraMap_apply S K[X] K⟮X⟯]
 
@@ -658,7 +658,7 @@ theorem eval_add
 
 中文:
 定理 eval_add
-  结论: {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
+  结论: {x y : K⟮X⟯} (hx : 多项式.eval₂ f a (denom x) != 0)
   证明: by
   unfold eval
   by_cases hxy : Polynomial.eval₂ f a (denom (x + y)) = 0
@@ -698,7 +698,7 @@ theorem eval_mul
 
 中文:
 定理 eval_mul
-  结论: {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
+  结论: {x y : K⟮X⟯} (hx : 多项式.eval₂ f a (denom x) != 0)
   证明: by
   unfold eval
   by_cases hxy : Polynomial.eval₂ f a (denom (x * y)) = 0
@@ -744,7 +744,7 @@ definition algEquivOfTranscendental
 
 中文:
 定义 algEquivOfTranscendental
-  签名: : RatFunc K ≃ₐ[K] K⟮f⟯
+  签名: : 有理函数 K ≃ₐ[K] K⟮f⟯
   定义体: IsFractionRing.algEquivOfAlgEquiv (Polynomial.algEquivOfTranscendental K f h)
 
 @[simp]
@@ -818,7 +818,7 @@ theorem algEquivOfTranscendental_apply
 
 中文:
 定理 algEquivOfTranscendental_apply
-  条件: (u : RatFunc K)
+  条件: (u : 有理函数 K)
   证明: by
   conv_lhs => rw [← num_div_denom u]
   simp [-num_div_denom]
@@ -896,7 +896,7 @@ lemma transcendental_X
 
 中文:
 引理 transcendental_X
-  结论: Transcendental K (X : K⟮X⟯)
+  结论: 超越 K (X : K⟮X⟯)
   证明: by
   rw [← RatFunc.algebraMap_X]; rw [transcendental_algebraMap_iff (algebraMap_injective K)]
   exact Polynomial.transcendental_X K
@@ -917,7 +917,7 @@ instance transcendental
 
 中文:
 实例 transcendental
-  签名: : Algebra.Transcendental K K⟮X⟯
+  签名: : 代数.超越 K K⟮X⟯
   定义体: ⟨X, transcendental_X⟩
 
 Depends on / 依赖: transcendental_X
@@ -955,7 +955,7 @@ definition idealX
 
 中文:
 定义 idealX
-  签名: : IsDedekindDomain.HeightOneSpectrum K[X] where
+  签名: : 是Dedekind整环.高一谱 K[X] where
   定义体: Ideal.span {X}
   isPrime := by rw [Ideal.span_singleton_prime]; exacts [Polynomial.prime_X, Polynomial.X_ne_zero]
   ne_bot := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact Polynomial.X_ne_zero
@@ -982,7 +982,7 @@ theorem idealX_span
 
 中文:
 定理 idealX_span
-  结论: (idealX K).asIdeal = Ideal.span {X}
+  结论: (idealX K).asIdeal = 理想.span {X}
   证明: rfl
 
 @[simp]
@@ -1023,7 +1023,7 @@ theorem valuation_of_mk
 
 中文:
 定理 valuation_of_mk
-  条件: (f : Polynomial K) {g : Polynomial K} (hg : g != 0)
+  条件: (f : 多项式 K) {g : 多项式 K} (hg : g != 0)
   证明: by
   simp only [RatFunc.mk_eq_mk' _ hg, valuation_of_mk']
 
@@ -1112,7 +1112,7 @@ theorem valuation_le_one_of_valuation_X_le_one
 
 中文:
 定理 valuation_le_one_of_valuation_X_le_one
-  条件: (hle : v RatFunc.X <= 1) (p : K[X])
+  条件: (hle : v 有理函数.X <= 1) (p : K[X])
   结论: v p <= 1
   证明: by
   rw [as_sum_range p]; rw [RatFunc.coePolynomial]; rw [map_sum]
@@ -1177,7 +1177,7 @@ instance valuedRatFunc
 
 中文:
 实例 valuedRatFunc
-  签名: : Valued K⟮X⟯ 整数ᵐ⁰
+  签名: : 赋值 K⟮X⟯ 整数ᵐ⁰
   定义体: Valued.mk' ((idealX K).valuation _)
 
 @[simp]
@@ -1218,7 +1218,7 @@ lemma valuation_surjective
 
 中文:
 引理 valuation_surjective
-  结论: Function.Surjective (Valued.v (R := RatFunc K))
+  结论: 函数.满射 (赋值.v (R := 有理函数 K))
   证明: by
   intro n
   by_cases hn0 : n = 0

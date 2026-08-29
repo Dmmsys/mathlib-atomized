@@ -33,7 +33,7 @@ definition toReal
   body: lift ⟨√↑d, Real.mul_self_sqrt (Int.cast_nonneg h)⟩
 
 中文:
-定义 toReal
+定义 to实数
   签名: {d : 整数} (h : 0 <= d)
   定义体: lift ⟨√↑d, Real.mul_self_sqrt (Int.cast_nonneg h)⟩
 
@@ -51,7 +51,7 @@ theorem toReal_injective
   proof: lift_injective _ hd
 
 中文:
-定理 toReal_injective
+定理 to实数_injective
   条件: {d : 整数} (h0d : 0 <= d) (hd : 对任意 n : 整数, d != n * n)
   证明: lift_injective _ hd
 

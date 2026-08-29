@@ -40,7 +40,7 @@ theorem MeasureTheory.LocallyIntegrable.exists_contDiff_dist_le_of_forall_mem_ba
   exact φ.hasCompactSupport_normed.contDiff_convolution_left _ φ.contDiff_normed hf
 
 中文:
-定理 MeasureTheory.LocallyIntegrable.exists_contDiff_dist_le_of_forall_mem_ball_dist_le
+定理 测度论.Locally整数egrable.存在_contDiff_dist_le_of_对任意_mem_ball_dist_le
   证明: by
   set φ : ContDiffBump (0 : E) := ⟨ε / 2, ε, half_pos hε, half_lt_self hε⟩
   refine ⟨_, ?_, fun a δ => φ.dist_normed_convolution_le hf.aestronglyMeasurable⟩
@@ -68,8 +68,8 @@ theorem Continuous.exists_contDiff_dist_le_of_forall_mem_ball_dist_le
   exact (hf.locallyIntegrable (μ := .addHaar)).exists_contDiff_dist_le_of_forall_mem_ball_dist_le hε
 
 中文:
-定理 Continuous.exists_contDiff_dist_le_of_forall_mem_ball_dist_le
-  结论: (hf : Continuous f)
+定理 连续.存在_contDiff_dist_le_of_对任意_mem_ball_dist_le
+  结论: (hf : 连续 f)
   证明: by
   borelize E
   exact (hf.locallyIntegrable (μ := .addHaar)).exists_contDiff_dist_le_of_forall_mem_ball_dist_le hε
@@ -95,8 +95,8 @@ theorem UniformContinuous.exists_contDiff_dist_le
   exact ⟨g, hgc, fun a => (hg a _ fun _ h => (hfδ h).le).trans_lt (half_lt_self hε)⟩
 
 中文:
-定理 UniformContinuous.exists_contDiff_dist_le
-  条件: (hf : UniformContinuous f) (hε : 0 < ε)
+定理 一致连续.存在_contDiff_dist_le
+  条件: (hf : 一致连续 f) (hε : 0 < ε)
   证明: by
   rcases Metric.uniformContinuous_iff.mp hf (ε / 2) (half_pos hε) with ⟨δ, hδ, hfδ⟩
   rcases hf.continuous.exists_contDiff_dist_le_of_forall_mem_ball_dist_le hδ with ⟨g, hgc, hg⟩
@@ -126,8 +126,8 @@ theorem ContinuousMap.dense_setOfPred_contDiff
 hK.cthickening.uniformContinuousOn_of_continuous by fu
 
 中文:
-定理 ContinuousMap.dense_setOfPred_contDiff
-  结论: Dense {f : C(E, F) | ContDiff 实数 ∞ f}
+定理 连续映射.dense_setOfPred_contDiff
+  结论: 稠密 {f : C(E, F) | 连续可微 实数 ∞ f}
   证明: by
   intro f
   rw [mem_closure_iff_nhds_basis

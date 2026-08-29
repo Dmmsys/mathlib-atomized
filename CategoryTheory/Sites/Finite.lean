@@ -39,7 +39,7 @@ definition finite
 
 中文:
 定义 finite
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: { s : Presieve X | s.uncurry.Finite }
 
 Depends on / 依赖: Finite, Presieve, s.uncurry.Finite, uncurry
@@ -76,7 +76,7 @@ theorem ofArrows_mem_finite
 
 中文:
 定理 ofArrows_mem_finite
-  条件: {X : C} {ι : 类型} [Finite ι] (Y : ι -> C) (f : (i : ι) -> Y i ⟶ X)
+  条件: {X : C} {ι : 类型} [有限 ι] (Y : ι -> C) (f : (i : ι) -> Y i ⟶ X)
   证明: by
   simpa using Set.finite_range _
 
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: (finite C).HasIsos
+  签名: (finite C).有是os
   定义体: by simp
 -/
 instance : (finite C).HasIsos where
@@ -124,7 +124,7 @@ definition finite
 
 中文:
 定义 finite
-  签名: (C : 类型u) [Category.{v} C] [HasPullbacks C]
+  签名: (C : 类型u) [范畴.{v} C] [有Pullbacks C]
   定义体: Precoverage.finite C
   has_isos _ _ _ := Precoverage.mem_coverings_of_isIso _
   pullbacks X Y u s hs := by simpa using hs.image _
@@ -150,7 +150,7 @@ theorem ofArrows_mem_finite
 
 中文:
 定理 ofArrows_mem_finite
-  条件: {X : C} {ι : 类型} [Finite ι] (Y : ι -> C) (f : (i : ι) -> Y i ⟶ X)
+  条件: {X : C} {ι : 类型} [有限 ι] (Y : ι -> C) (f : (i : ι) -> Y i ⟶ X)
   证明: Precoverage.ofArrows_mem_finite _ _
 
 Depends on / 依赖: Precoverage, Precoverage.ofArrows_mem_finite, ofArrows_mem_finite

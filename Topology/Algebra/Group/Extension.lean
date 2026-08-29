@@ -37,12 +37,12 @@ structure TopologicalGroup.IsSES
     - mulExact : Function.MulExact φ ψ
 
 中文:
-结构 TopologicalGroup.IsSES
-  参数: {A B C : 类型} [Group A] [Group B] [Group C]
+结构 拓扑群.是SES
+  参数: {A B C : 类型} [群 A] [群 B] [群 C]
   公理与运算 (3 个):
-    - isClosedEmbedding : Topology.IsClosedEmbedding φ
-    - isOpenQuotientMap : IsOpenQuotientMap ψ
-    - mulExact : Function.MulExact φ ψ
+    - isClosedEmbedding : 拓扑.是闭嵌入 φ
+    - isOpenQuotientMap : 是OpenQuotient映射 ψ
+    - mulExact : 函数.MulExact φ ψ
 -/
 structure TopologicalGroup.IsSES {A B C : Type*} [Group A] [Group B] [Group C]
     [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace C] (φ : A ->* B) (ψ : B ->* C) where
@@ -62,12 +62,12 @@ structure TopologicalAddGroup.IsSES
     - exact : Function.Exact φ ψ
 
 中文:
-结构 TopologicalAddGroup.IsSES
-  参数: {A B C : 类型} [AddGroup A] [AddGroup B] [AddGroup C]
+结构 拓扑加群.是SES
+  参数: {A B C : 类型} [加法群 A] [加法群 B] [加法群 C]
   公理与运算 (3 个):
-    - isClosedEmbedding : Topology.IsClosedEmbedding φ
-    - isOpenQuotientMap : IsOpenQuotientMap ψ
-    - exact : Function.Exact φ ψ
+    - isClosedEmbedding : 拓扑.是闭嵌入 φ
+    - isOpenQuotientMap : 是OpenQuotient映射 ψ
+    - exact : 函数.正合 φ ψ
 -/
 structure TopologicalAddGroup.IsSES {A B C : Type*} [AddGroup A] [AddGroup B] [AddGroup C]
     [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace C] (φ : A ->+ B) (ψ : B ->+ C) where
@@ -94,7 +94,7 @@ theorem ofClosedSubgroup
 
 中文:
 定理 ofClosedSubgroup
-  结论: {G : 类型} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  结论: {G : 类型} [群 G] [拓扑空间 G] [是拓扑群 G]
   证明: ⟨⟨Topology.IsInducing.subtypeVal, H.subtype_injective⟩, by simpa⟩
   isOpenQuotientMap := MulAction.isOpenQuotientMap_quotientMk
   mulExact := by simp [Function.MulExact]

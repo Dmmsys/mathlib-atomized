@@ -49,12 +49,12 @@ class IsAddMonHom.Normal
     - exists_comp_eq_addConj : exists ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ AddGrpObj.addConj G
 
 中文:
-类 IsAddMonHom.Normal
-  参数: {G H : C} [AddGrpObj G] [AddGrpObj H] (φ : H ⟶ G)
+类 是加法幺半群态射.正规
+  参数: {G H : C} [加法GrpObj G] [加法GrpObj H] (φ : H ⟶ G)
   公理与运算 (3 个):
-    - mono : Mono φ  [默认: by infer_instance]
-    - isAddMonHom : IsAddMonHom φ  [默认: by infer_instance]
-    - exists_comp_eq_addConj : 存在 ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ AddGrpObj.addConj G
+    - mono : 单态射 φ  [默认: by infer_instance]
+    - isAddMonHom : 是加法幺半群态射 φ  [默认: by infer_instance]
+    - exists_comp_eq_addConj : 存在 ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ 加法GrpObj.addConj G
 
 Depends on / 依赖: AddGrpObj, AddGrpObj.addConj, IsAddMonHom, addConj, exists_comp_eq_addConj, infer_instance, isAddMonHom, otimes
 -/
@@ -85,11 +85,11 @@ class Normal
     - exists_comp_eq_conj((φ)) : exists ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ conj G
 
 中文:
-类 Normal
+类 正规
   参数: (φ : H ⟶ G)
   公理与运算 (3 个):
-    - mono : Mono φ  [默认: by infer_instance]
-    - isMonHom : IsMonHom φ  [默认: by infer_instance]
+    - mono : 单态射 φ  [默认: by infer_instance]
+    - isMonHom : 是幺半群态射 φ  [默认: by infer_instance]
     - exists_comp_eq_conj((φ)) : 存在 ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ conj G
 
 Depends on / 依赖: IsMonHom, exists_comp_eq_conj, infer_instance, isMonHom, otimes
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Normal (𝟙 G)
+  签名: 正规 (𝟙 G)
   定义体: by cat_disch
 
 @[to_additive]
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: Normal η[G]
+  签名: 正规 η[G]
   定义体: by
     use toUnit _
     simp [conj, comp_mul, comp_inv, toUnit_unique _ (toUnit _), ← Hom.one_def]
@@ -165,8 +165,8 @@ lemma isNormalHom_iff
 
 中文:
 引理 isNormalHom_iff
-  条件: [IsMonHom φ] [Mono φ]
-  结论: Normal φ ↔ 存在 ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ conj G
+  条件: [是幺半群态射 φ] [单态射 φ]
+  结论: 正规 φ ↔ 存在 ψ : G otimes H ⟶ H, ψ ≫ φ = G ◁ φ ≫ conj G
   证明: ⟨fun h => h.exists_comp_eq_conj, fun h => ⟨‹_›, ‹_›, h⟩⟩
 
 Depends on / 依赖: exists_comp_eq_conj, h.exists_comp_eq_conj
@@ -198,7 +198,7 @@ theorem normal_iff_normal_monoidHom
 
 中文:
 定理 normal_iff_normal_monoidHom
-  条件: [IsMonHom φ] [Mono φ]
+  条件: [是幺半群态射 φ] [单态射 φ]
   证明: by
   rw [isNormalHom_iff]
   refine ⟨?_, ?_⟩
@@ -252,8 +252,8 @@ lemma Normal.of_isPullback_η
     · simp
 
 中文:
-引理 Normal.of_isPullback_η
-  结论: [IsMonHom φ] {P : C} (p : G ⟶ P) [GrpObj P] [IsMonHom p]
+引理 正规.of_isPullback_η
+  结论: [是幺半群态射 φ] {P : C} (p : G ⟶ P) [GrpObj P] [是幺半群态射 p]
   证明: h.mono_fst_of_mono
   exists_comp_eq_conj := by
     refine ⟨h.lift (G ◁ φ ≫ conj G) (toUnit _) ?_, ?_⟩

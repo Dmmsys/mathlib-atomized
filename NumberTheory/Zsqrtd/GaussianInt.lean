@@ -57,8 +57,8 @@ abbreviation GaussianInt
 local notation "Int[i]" => GaussianInt
 
 中文:
-缩写 GaussianInt
-  签名: : Type
+缩写 Gaussian整数
+  签名: : 类型
   定义体: Zsqrtd (-1)
 
 local notation "Int[i]" => GaussianInt
@@ -100,7 +100,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing 整数[i]
+  签名: : 交换环 整数[i]
   定义体: Zsqrtd.commRing
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.commRing, commRing
@@ -122,7 +122,7 @@ definition toComplex
 
 中文:
 定义 toComplex
-  签名: : 整数[i] ->+* Complex
+  签名: : 整数[i] ->+* 复形
   定义体: Zsqrtd.lift ⟨I, by simp⟩
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.lift
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe 整数[i] Complex
+  签名: Coe 整数[i] 复形
   定义体: ⟨toComplex⟩
 
 Depends on / 依赖: toComplex
@@ -162,7 +162,7 @@ theorem toComplex_def
 中文:
 定理 toComplex_def
   条件: (x : 整数[i])
-  结论: (x : Complex) = x.re + x.im * I
+  结论: (x : 复形) = x.re + x.im * I
   证明: rfl
 -/
 theorem toComplex_def (x : Int[i]) : (x : Complex) = x.re + x.im * I :=
@@ -180,7 +180,7 @@ theorem toComplex_def'
 中文:
 定理 toComplex_def'
   条件: (x y : 整数)
-  结论: ((⟨x, y⟩ : 整数[i]) : Complex) = x + y * I
+  结论: ((⟨x, y⟩ : 整数[i]) : 复形) = x + y * I
   证明: by simp [toComplex_def]
 
 Depends on / 依赖: toComplex_def
@@ -202,7 +202,7 @@ theorem toComplex_def₂
 中文:
 定理 toComplex_def₂
   条件: (x : 整数[i])
-  结论: (x : Complex) = ⟨x.re, x.im⟩
+  结论: (x : 复形) = ⟨x.re, x.im⟩
   证明: by
   apply Complex.ext <;> simp [toComplex_def]
 
@@ -228,7 +228,7 @@ theorem intCast_re
 中文:
 定理 intCast_re
   条件: (x : 整数[i])
-  结论: ((x.re : 整数) : 实数) = (x : Complex).re
+  结论: ((x.re : 整数) : 实数) = (x : 复形).re
   证明: by simp [toComplex_def]
 
 @[simp]
@@ -252,7 +252,7 @@ theorem intCast_im
 中文:
 定理 intCast_im
   条件: (x : 整数[i])
-  结论: ((x.im : 整数) : 实数) = (x : Complex).im
+  结论: ((x.im : 整数) : 实数) = (x : 复形).im
   证明: by simp [toComplex_def]
 
 @[simp]
@@ -276,7 +276,7 @@ theorem re_toComplex
 中文:
 定理 re_toComplex
   条件: (x y : 整数)
-  结论: ((⟨x, y⟩ : 整数[i]) : Complex).re = x
+  结论: ((⟨x, y⟩ : 整数[i]) : 复形).re = x
   证明: by simp [toComplex_def]
 
 @[simp]
@@ -298,7 +298,7 @@ theorem im_toComplex
 中文:
 定理 im_toComplex
   条件: (x y : 整数)
-  结论: ((⟨x, y⟩ : 整数[i]) : Complex).im = y
+  结论: ((⟨x, y⟩ : 整数[i]) : 复形).im = y
   证明: by simp [toComplex_def]
 
 Depends on / 依赖: toComplex_def
@@ -317,7 +317,7 @@ theorem toComplex_add
 中文:
 定理 toComplex_add
   条件: (x y : 整数[i])
-  结论: ((x + y : 整数[i]) : Complex) = x + y
+  结论: ((x + y : 整数[i]) : 复形) = x + y
   证明: toComplex.map_add _ _
 
 Depends on / 依赖: map_add, toComplex, toComplex.map_add
@@ -337,7 +337,7 @@ theorem toComplex_mul
 中文:
 定理 toComplex_mul
   条件: (x y : 整数[i])
-  结论: ((x * y : 整数[i]) : Complex) = x * y
+  结论: ((x * y : 整数[i]) : 复形) = x * y
   证明: toComplex.map_mul _ _
 
 Depends on / 依赖: map_mul, toComplex, toComplex.map_mul
@@ -355,7 +355,7 @@ theorem toComplex_one
 
 中文:
 定理 toComplex_one
-  结论: ((1 : 整数[i]) : Complex) = 1
+  结论: ((1 : 整数[i]) : 复形) = 1
   证明: toComplex.map_one
 
 Depends on / 依赖: map_one, toComplex, toComplex.map_one
@@ -373,7 +373,7 @@ theorem toComplex_zero
 
 中文:
 定理 toComplex_zero
-  结论: ((0 : 整数[i]) : Complex) = 0
+  结论: ((0 : 整数[i]) : 复形) = 0
   证明: toComplex.map_zero
 
 Depends on / 依赖: infer_instance, map_zero, toComplex, toComplex.map_zero
@@ -393,7 +393,7 @@ theorem toComplex_neg
 中文:
 定理 toComplex_neg
   条件: (x : 整数[i])
-  结论: ((-x : 整数[i]) : Complex) = -x
+  结论: ((-x : 整数[i]) : 复形) = -x
   证明: toComplex.map_neg _
 
 Depends on / 依赖: infer_instance, map_neg, toComplex, toComplex.map_neg
@@ -415,7 +415,7 @@ theorem toComplex_sub
 中文:
 定理 toComplex_sub
   条件: (x y : 整数[i])
-  结论: ((x - y : 整数[i]) : Complex) = x - y
+  结论: ((x - y : 整数[i]) : 复形) = x - y
   证明: toComplex.map_sub _ _
 
 @[simp]
@@ -442,7 +442,7 @@ theorem toComplex_star
 中文:
 定理 toComplex_star
   条件: (x : 整数[i])
-  结论: ((star x : 整数[i]) : Complex) = conj (x : Complex)
+  结论: ((star x : 整数[i]) : 复形) = conj (x : 复形)
   证明: by
   rw [toComplex_def₂]; rw [toComplex_def₂]
   exact congr_arg₂ _ rfl (Int.cast_neg _)
@@ -469,7 +469,7 @@ theorem toComplex_inj
 中文:
 定理 toComplex_inj
   条件: {x y : 整数[i]}
-  结论: (x : Complex) = y ↔ x = y
+  结论: (x : 复形) = y ↔ x = y
   证明: by
   cases x; cases y; simp [toComplex_def₂]
 
@@ -490,7 +490,7 @@ lemma toComplex_injective
 
 中文:
 引理 toComplex_injective
-  结论: Function.Injective Gaussian整数.toComplex
+  结论: 函数.单射 Gaussian整数.toComplex
   证明: fun ⦃_ _⦄ => toComplex_inj.mp
 
 @[simp]
@@ -516,7 +516,7 @@ theorem toComplex_eq_zero
 中文:
 定理 toComplex_eq_zero
   条件: {x : 整数[i]}
-  结论: (x : Complex) = 0 ↔ x = 0
+  结论: (x : 复形) = 0 ↔ x = 0
   证明: by
   rw [← toComplex_zero]; rw [toComplex_inj]
 
@@ -543,7 +543,7 @@ theorem intCast_real_norm
 中文:
 定理 intCast_real_norm
   条件: (x : 整数[i])
-  结论: (x.norm : 实数) = Complex.normSq (x : Complex)
+  结论: (x.norm : 实数) = 复形.normSq (x : 复形)
   证明: by
   rw [Zsqrtd.norm]; rw [normSq]; simp
 
@@ -568,7 +568,7 @@ theorem intCast_complex_norm
 中文:
 定理 intCast_complex_norm
   条件: (x : 整数[i])
-  结论: (x.norm : Complex) = Complex.normSq (x : Complex)
+  结论: (x.norm : 复形) = 复形.normSq (x : 复形)
   证明: by
   cases x; rw [Zsqrtd.norm, normSq]; simp
 
@@ -674,7 +674,7 @@ theorem natCast_natAbs_norm
 
 中文:
 定理 natCast_natAbs_norm
-  条件: {α : 类型} [AddGroupWithOne α] (x : 整数[i])
+  条件: {α : 类型} [加法带幺群 α] (x : 整数[i])
   证明: by
   simp
 
@@ -724,7 +724,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div 整数[i]
+  签名: 除法 整数[i]
   定义体: ⟨fun x y =>
     let n := (norm y : Rat)⁻¹
     let c := star y
@@ -771,7 +771,7 @@ theorem toComplex_re_div
 中文:
 定理 toComplex_re_div
   条件: (x y : 整数[i])
-  结论: ((x / y : 整数[i]) : Complex).re = round (x / y : Complex).re
+  结论: ((x / y : 整数[i]) : 复形).re = round (x / y : 复形).re
   证明: by
   rw [div_def]; rw [← @Rat.round_cast Real _ _]
   simp [-Rat.round_cast, mul_assoc, div_eq_mul_inv, add_mul]
@@ -796,7 +796,7 @@ theorem toComplex_im_div
 中文:
 定理 toComplex_im_div
   条件: (x y : 整数[i])
-  结论: ((x / y : 整数[i]) : Complex).im = round (x / y : Complex).im
+  结论: ((x / y : 整数[i]) : 复形).im = round (x / y : 复形).im
   证明: by
   rw [div_def]; rw [← @Rat.round_cast Real _ _]; rw [← @Rat.round_cast Real _ _]
   simp [-Rat.round_cast, mul_assoc, div_eq_mul_inv, add_mul]
@@ -819,7 +819,7 @@ theorem normSq_le_normSq_of_re_le_of_im_le
 
 中文:
 定理 normSq_le_normSq_of_re_le_of_im_le
-  结论: {x y : Complex} (hre : |x.re| <= |y.re|)
+  结论: {x y : 复形} (hre : |x.re| <= |y.re|)
   证明: by
   simp only [normSq_apply]
   nlinarith [sq_le_sq.mpr hre, sq_le_sq.mpr him]
@@ -883,7 +883,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mod 整数[i]
+  签名: 取模 整数[i]
   定义体: ⟨fun x y => x - y * (x / y)⟩
 -/
 instance : Mod Int[i] :=
@@ -1002,7 +1002,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial 整数[i]
+  签名: : 非平凡 整数[i]
   定义体: ⟨⟨0, 1, by decide⟩⟩
 -/
 instance instNontrivial : Nontrivial Int[i] :=
@@ -1026,7 +1026,7 @@ instance :
 
 中文:
 实例 :
-  签名: EuclideanDomain 整数[i]
+  签名: 欧几里得整环 整数[i]
   定义体: { GaussianInt.instCommRing,
     GaussianInt.instNontrivial with
     quotient := (· / ·)
@@ -1068,7 +1068,7 @@ mt norm_eq_one_iff.2 by
 
 中文:
 定理 sq_add_sq_of_nat_prime_of_not_irreducible
-  结论: (p : 自然数) [hp : Fact p.Prime]
+  结论: (p : 自然数) [hp : Fact p.素]
   证明: have hpu : ¬IsUnit (p : Int[i]) :=
 mt norm_eq_one_iff.2 by
       rw [norm_natCast]; rw [Int.natAbs_mul]; rw [mul_eq_one]

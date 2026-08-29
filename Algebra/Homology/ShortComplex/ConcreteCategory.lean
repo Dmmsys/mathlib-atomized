@@ -43,7 +43,7 @@ lemma ShortComplex.zero_apply
   rfl
 
 中文:
-引理 ShortComplex.zero_apply
+引理 短复形.zero_apply
   证明: by
   rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]; rw [S.zero]; rw [Functor.map_zero]
   rfl
@@ -79,7 +79,7 @@ lemma Preadditive.mono_iff_injective
   · apply Functor.mono_of_mono_map
 
 中文:
-引理 Preadditive.mono_iff_injective
+引理 预加性.mono_iff_injective
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← AddCommGrpCat.mono_iff_injective]
@@ -111,7 +111,7 @@ lemma Preadditive.mono_iff_injective'
   exact Arrow.isoOfNatIso e (Arrow.mk f)
 
 中文:
-引理 Preadditive.mono_iff_injective'
+引理 预加性.mono_iff_injective'
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   simp only [mono_iff_injective, ← CategoryTheory.ofHom_mono_iff_injective]
@@ -142,7 +142,7 @@ lemma Preadditive.epi_iff_surjective
   · apply Functor.epi_of_epi_map
 
 中文:
-引理 Preadditive.epi_iff_surjective
+引理 预加性.epi_iff_surjective
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← AddCommGrpCat.epi_iff_surjective]
@@ -174,7 +174,7 @@ lemma Preadditive.epi_iff_surjective'
   exact Arrow.isoOfNatIso e (Arrow.mk f)
 
 中文:
-引理 Preadditive.epi_iff_surjective'
+引理 预加性.epi_iff_surjective'
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   simp only [epi_iff_surjective, ← CategoryTheory.ofHom_epi_iff_surjective]
@@ -205,7 +205,7 @@ lemma exact_iff_exact_map_forget₂
 
 中文:
 引理 exact_iff_exact_map_forget₂
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: (S.exact_map_iff_of_faithful (forget₂ C Ab)).symm
 
 Depends on / 依赖: S.exact_map_iff_of_faithful, exact_map_iff_of_faithful
@@ -226,7 +226,7 @@ lemma exact_iff_of_hasForget
 
 中文:
 引理 exact_iff_of_hasForget
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   rw [S.exact_iff_exact_map_forget₂]; rw [ab_exact_iff]
   rfl
@@ -252,8 +252,8 @@ lemma ShortExact.injective_f
   exact hS.mono_f
 
 中文:
-引理 ShortExact.injective_f
-  条件: [HasZeroObject C] (hS : S.ShortExact)
+引理 短正合.injective_f
+  条件: [有ZeroObject C] (hS : S.短正合)
   证明: by
   rw [← Preadditive.mono_iff_injective]
   exact hS.mono_f
@@ -276,8 +276,8 @@ lemma ShortExact.surjective_g
   exact hS.epi_g
 
 中文:
-引理 ShortExact.surjective_g
-  条件: [HasZeroObject C] (hS : S.ShortExact)
+引理 短正合.surjective_g
+  条件: [有ZeroObject C] (hS : S.短正合)
   证明: by
   rw [← Preadditive.epi_iff_surjective]
   exact hS.epi_g
@@ -301,7 +301,7 @@ definition cyclesMk
 
 中文:
 定义 cyclesMk
-  签名: [S.HasHomology] (x₂ : (forget₂ C Ab).obj S.X₂)
+  签名: [S.有同调] (x₂ : (forget₂ C Ab).obj S.X₂)
   定义体: (S.mapCyclesIso (forget₂ C Ab)).hom ((ShortComplex.abCyclesIso _).inv ⟨x₂, hx₂⟩)
 
 Depends on / 依赖: S.mapCyclesIso, ShortComplex, ShortComplex.abCyclesIso, abCyclesIso, mapCyclesIso
@@ -330,7 +330,7 @@ lemma i_cyclesMk
 
 中文:
 引理 i_cyclesMk
-  结论: [S.HasHomology] (x₂ : (forget₂ C Ab).obj S.X₂)
+  结论: [S.有同调] (x₂ : (forget₂ C Ab).obj S.X₂)
   证明: by
   dsimp [cyclesMk]
   -- `abCyclesIso_inv_apply_iCycles` is not in `simp`-normal form, so we first

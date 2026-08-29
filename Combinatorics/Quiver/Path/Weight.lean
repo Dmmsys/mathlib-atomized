@@ -63,7 +63,7 @@ definition addWeight
 
 中文:
 定义 addWeight
-  签名: {R : 类型} [AddMonoid R] (w : 对任意 {i j : V}, (i ⟶ j) -> R)
+  签名: {R : 类型} [加法幺半群 R] (w : 对任意 {i j : V}, (i ⟶ j) -> R)
 -/
 def addWeight {R : Type*} [AddMonoid R] (w : forall {i j : V}, (i ⟶ j) -> R) : forall {i j : V}, Path i j -> R
   | _, _, Path.nil => 0
@@ -136,7 +136,7 @@ lemma weight_cons
 
 中文:
 引理 weight_cons
-  条件: (w : 对任意 {i j : V}, (i ⟶ j) -> R) {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: (w : 对任意 {i j : V}, (i ⟶ j) -> R) {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   证明: by
   simp [weight]
 
@@ -184,7 +184,7 @@ lemma weightOfEPs_cons
 
 中文:
 引理 weightOfEPs_cons
-  条件: (w : V -> V -> R) {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: (w : V -> V -> R) {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   证明: by unfold weightOfEPs; simp
 
 @[to_additive (attr := simp) addWeight_comp]
@@ -210,7 +210,7 @@ lemma weight_comp
 
 中文:
 引理 weight_comp
-  条件: (w : 对任意 {i j : V}, (i ⟶ j) -> R) {a b c : V} (p : Path a b) (q : Path b c)
+  条件: (w : 对任意 {i j : V}, (i ⟶ j) -> R) {a b c : V} (p : 道路 a b) (q : 道路 b c)
   证明: by
   induction q with
   | nil => simp
@@ -238,7 +238,7 @@ lemma weightOfEPs_comp
 
 中文:
 引理 weightOfEPs_comp
-  条件: (w : V -> V -> R) {a b c : V} (p : Path a b) (q : Path b c)
+  条件: (w : V -> V -> R) {a b c : V} (p : 道路 a b) (q : 道路 b c)
   证明: by
   simp [weightOfEPs, weight_comp]
 

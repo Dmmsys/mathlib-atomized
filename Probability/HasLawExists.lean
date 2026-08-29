@@ -32,8 +32,8 @@ lemma _root_.MeasureTheory.Measure.exists_hasLaw
   proof: ⟨𝓧, m𝓧, μ, id, measurable_id, .id⟩
 
 中文:
-引理 _root_.MeasureTheory.Measure.exists_hasLaw
-  结论: {𝓧 : 类型u} {m𝓧 : MeasurableSpace 𝓧}
+引理 _root_.测度论.测度.存在_hasLaw
+  结论: {𝓧 : 类型u} {m𝓧 : 可测空间 𝓧}
   证明: ⟨𝓧, m𝓧, μ, id, measurable_id, .id⟩
 
 Depends on / 依赖: measurable_id
@@ -60,7 +60,7 @@ lemma exists_hasLaw_indepFun
   exact ((measur
 
 中文:
-引理 exists_hasLaw_indepFun
+引理 存在_hasLaw_indepFun
   结论: {ι : 类型v} (𝓧 : ι -> 类型u)
   证明: by
   use Π i, (𝓧 i), .pi, infinitePi μ, fun i => Function.eval i
@@ -96,8 +96,8 @@ lemma exists_iid
   proof: exists_hasLaw_indepFun (fun _ => 𝓧) (fun _ => μ)
 
 中文:
-引理 exists_iid
-  结论: (ι : 类型v) {𝓧 : 类型u} {m𝓧 : MeasurableSpace 𝓧}
+引理 存在_iid
+  结论: (ι : 类型v) {𝓧 : 类型u} {m𝓧 : 可测空间 𝓧}
   证明: exists_hasLaw_indepFun (fun _ => 𝓧) (fun _ => μ)
 
 Depends on / 依赖: exists_hasLaw_indepFun

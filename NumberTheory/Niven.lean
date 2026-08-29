@@ -38,7 +38,7 @@ theorem ratCast_iff
 
 中文:
 定理 ratCast_iff
-  结论: Is整数egral 整数 (q : α) ↔ Is整数egral 整数 q
+  结论: 是整 整数 (q : α) ↔ 是整 整数 q
   证明: isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective Rat α)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, isIntegral_algebraMap_iff
@@ -61,9 +61,9 @@ theorem exists_int_iff_exists_rat
   simp [← h]
 
 中文:
-定理 exists_int_iff_exists_rat
-  条件: (h₁ : Is整数egral 整数 x)
-  结论: (存在 q : Rat, x = q) ↔ 存在 k : 整数, x = k
+定理 存在_int_iff_存在_rat
+  条件: (h₁ : 是整 整数 x)
+  结论: (存在 q : 有理数, x = q) ↔ 存在 k : 整数, x = k
   证明: by
   refine ⟨?_, fun ⟨w, h⟩ => ⟨w, by simp [h]⟩⟩
   rintro ⟨q, rfl⟩
@@ -104,7 +104,7 @@ lemma exp_rat_mul_pi_mul_I_pow_two_mul_den
 
 中文:
 引理 exp_rat_mul_pi_mul_I_pow_two_mul_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: exp (q * π * I) ^ (2 * q.den) = 1
   证明: by
   nth_rw 1 [← q.num_div_den, ← exp_nat_mul]
@@ -130,9 +130,9 @@ theorem isIntegral_exp_rat_mul_pi_mul_I
   exact exp_rat_mul_pi_mul_I_pow_two_mul_den _ ▸ isIntegral_one
 
 中文:
-定理 isIntegral_exp_rat_mul_pi_mul_I
-  条件: (q : Rat)
-  结论: Is整数egral 整数 exp q * π * I
+定理 is整数egral_exp_rat_mul_pi_mul_I
+  条件: (q : 有理数)
+  结论: 是整 整数 exp q * π * I
   证明: by
   refine .of_pow (Nat.mul_pos zero_lt_two q.den_pos) ?_
   exact exp_rat_mul_pi_mul_I_pow_two_mul_den _ ▸ isIntegral_one
@@ -153,8 +153,8 @@ theorem isIntegral_exp_neg_rat_mul_pi_mul_I
   simpa using isIntegral_exp_rat_mul_pi_mul_I (-q)
 
 中文:
-定理 isIntegral_exp_neg_rat_mul_pi_mul_I
-  条件: (q : Rat)
+定理 is整数egral_exp_neg_rat_mul_pi_mul_I
+  条件: (q : 有理数)
   证明: by
   simpa using isIntegral_exp_rat_mul_pi_mul_I (-q)
 
@@ -177,9 +177,9 @@ theorem isIntegral_two_mul_sin_rat_mul_pi
 .mul isIntegral_int_I
 
 中文:
-定理 isIntegral_two_mul_sin_rat_mul_pi
-  条件: (q : Rat)
-  结论: Is整数egral 整数 2 * sin (q * π)
+定理 is整数egral_two_mul_sin_rat_mul_pi
+  条件: (q : 有理数)
+  结论: 是整 整数 2 * sin (q * π)
   证明: by
   rw [sin.eq_1]; rw [mul_div_cancel₀ _ two_ne_zero]
   exact (isIntegral_exp_neg_rat_mul_pi_mul_I q).sub (isIntegral_exp_rat_mul_pi_mul_I q)
@@ -204,9 +204,9 @@ theorem isIntegral_two_mul_cos_rat_mul_pi
   exact (isIntegral_exp_rat_mul_pi_mul_I q).add (isIntegral_exp_neg_rat_mul_pi_mul_I q)
 
 中文:
-定理 isIntegral_two_mul_cos_rat_mul_pi
-  条件: (q : Rat)
-  结论: Is整数egral 整数 2 * cos (q * π)
+定理 is整数egral_two_mul_cos_rat_mul_pi
+  条件: (q : 有理数)
+  结论: 是整 整数 2 * cos (q * π)
   证明: by
   rw [cos.eq_1]; rw [mul_div_cancel₀ _ two_ne_zero]
   exact (isIntegral_exp_rat_mul_pi_mul_I q).add (isIntegral_exp_neg_rat_mul_pi_mul_I q)
@@ -228,8 +228,8 @@ theorem isAlgebraic_sin_rat_mul_pi
 
 中文:
 定理 isAlgebraic_sin_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 sin q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 sin q * π
   证明: .of_mul (by simp) (isAlgebraic_algebraMap _) (isIntegral_two_mul_sin_rat_mul_pi q).isAlgebraic
 
 Depends on / 依赖: isAlgebraic, isAlgebraic_algebraMap, isIntegral_two_mul_sin_rat_mul_pi, of_mul
@@ -248,8 +248,8 @@ theorem isAlgebraic_cos_rat_mul_pi
 
 中文:
 定理 isAlgebraic_cos_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 cos q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 cos q * π
   证明: .of_mul (by simp) (isAlgebraic_algebraMap _) (isIntegral_two_mul_cos_rat_mul_pi q).isAlgebraic
 
 Depends on / 依赖: isAlgebraic, isAlgebraic_algebraMap, isIntegral_two_mul_cos_rat_mul_pi, of_mul
@@ -268,8 +268,8 @@ theorem isAlgebraic_tan_rat_mul_pi
 
 中文:
 定理 isAlgebraic_tan_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 tan q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 tan q * π
   证明: (isAlgebraic_sin_rat_mul_pi q).mul (isAlgebraic_cos_rat_mul_pi q).inv
 
 Depends on / 依赖: Finpartition, P.exists_mem, bot_le, exists_mem, isAlgebraic_cos_rat_mul_pi, isAlgebraic_sin_rat_mul_pi, mem_bot_iff, singleton_subset_iff
@@ -292,9 +292,9 @@ theorem isIntegral_two_mul_sin_rat_mul_pi
     simp [Complex.isIntegral_two_mul_sin_rat_mul_pi]
 
 中文:
-定理 isIntegral_two_mul_sin_rat_mul_pi
-  条件: (q : Rat)
-  结论: Is整数egral 整数 2 * sin (q * π)
+定理 is整数egral_two_mul_sin_rat_mul_pi
+  条件: (q : 有理数)
+  结论: 是整 整数 2 * sin (q * π)
   证明: .mp by isIntegral_algebraMap_iff (B := Complex) RCLike.ofReal_injective
     simp [Complex.isIntegral_two_mul_sin_rat_mul_pi]
 
@@ -315,9 +315,9 @@ theorem isIntegral_two_mul_cos_rat_mul_pi
     simp [Complex.isIntegral_two_mul_cos_rat_mul_pi]
 
 中文:
-定理 isIntegral_two_mul_cos_rat_mul_pi
-  条件: (q : Rat)
-  结论: Is整数egral 整数 2 * cos (q * π)
+定理 is整数egral_two_mul_cos_rat_mul_pi
+  条件: (q : 有理数)
+  结论: 是整 整数 2 * cos (q * π)
   证明: .mp by isIntegral_algebraMap_iff (B := Complex) RCLike.ofReal_injective
     simp [Complex.isIntegral_two_mul_cos_rat_mul_pi]
 
@@ -338,8 +338,8 @@ theorem isAlgebraic_sin_rat_mul_pi
 
 中文:
 定理 isAlgebraic_sin_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 sin q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 sin q * π
   证明: .of_mul (by simp) (isAlgebraic_algebraMap _) (isIntegral_two_mul_sin_rat_mul_pi q).isAlgebraic
 
 Depends on / 依赖: isAlgebraic, isAlgebraic_algebraMap, isIntegral_two_mul_sin_rat_mul_pi, of_mul
@@ -358,8 +358,8 @@ theorem isAlgebraic_cos_rat_mul_pi
 
 中文:
 定理 isAlgebraic_cos_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 cos q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 cos q * π
   证明: .of_mul (by simp) (isAlgebraic_algebraMap _) (isIntegral_two_mul_cos_rat_mul_pi q).isAlgebraic
 
 Depends on / 依赖: isAlgebraic, isAlgebraic_algebraMap, isIntegral_two_mul_cos_rat_mul_pi, of_mul
@@ -379,8 +379,8 @@ theorem isAlgebraic_tan_rat_mul_pi
 
 中文:
 定理 isAlgebraic_tan_rat_mul_pi
-  条件: (q : Rat)
-  结论: IsAlgebraic 整数 tan q * π
+  条件: (q : 有理数)
+  结论: 是代数 整数 tan q * π
   证明: .mp by isAlgebraic_algebraMap_iff (A := Complex) RCLike.ofReal_injective
     simp [Complex.isAlgebraic_tan_rat_mul_pi]
 
@@ -410,7 +410,7 @@ theorem niven
 
 中文:
 定理 niven
-  条件: (hθ : 存在 r : Rat, θ = r * π) (hcos : 存在 q : Rat, cos θ = q)
+  条件: (hθ : 存在 r : 有理数, θ = r * π) (hcos : 存在 q : 有理数, cos θ = q)
   证明: by
   -- Since `2 cos θ ` is an algebraic integer and rational, it must be an integer.
   -- Hence, `2 cos θ ∈ {-2, -1, 0, 1, 2}`.
@@ -449,7 +449,7 @@ theorem niven_sin
 
 中文:
 定理 niven_sin
-  条件: (hθ : 存在 r : Rat, θ = r * π) (hcos : 存在 q : Rat, sin θ = q)
+  条件: (hθ : 存在 r : 有理数, θ = r * π) (hcos : 存在 q : 有理数, sin θ = q)
   证明: by
   convert! ← niven (θ := θ - π / 2) ?_ ?_ using 1
   · exact cos_sub_pi_div_two θ
@@ -484,7 +484,7 @@ theorem niven_angle_eq
 
 中文:
 定理 niven_angle_eq
-  结论: (hθ : 存在 r : Rat, θ = r * π) (hcos : 存在 q : Rat, cos θ = q)
+  结论: (hθ : 存在 r : 有理数, θ = r * π) (hcos : 存在 q : 有理数, cos θ = q)
   证明: by
   rcases niven hθ hcos with h | h | h | h | h <;>
   -- define `h₂` appropriately for each proof branch
@@ -525,7 +525,7 @@ theorem niven_angle_div_pi_eq
 
 中文:
 定理 niven_angle_div_pi_eq
-  结论: {r : Rat} (hcos : 存在 q : Rat, cos (r * π) = q)
+  结论: {r : 有理数} (hcos : 存在 q : 有理数, cos (r * π) = q)
   证明: by
 .mem_set_image.mp apply smul_left_injective Rat pi_ne_zero
   replace h_bnd : (r : Real) * π in Set.Icc (0 * π) (1 * π) := by
@@ -560,7 +560,7 @@ theorem niven_fract_angle_div_pi_eq
 
 中文:
 定理 niven_fract_angle_div_pi_eq
-  条件: {r : Rat} (hcos : 存在 q : Rat, cos (r * π) = q)
+  条件: {r : 有理数} (hcos : 存在 q : 有理数, cos (r * π) = q)
   证明: by
   suffices Int.fract r in ({0, 1 / 3, 1 / 2, 2 / 3, 1} : Set Rat) by
     grind [ne_of_lt (Int.fract_lt_one r)]
@@ -592,7 +592,7 @@ theorem irrational_cos_rat_mul_pi
 
 中文:
 定理 irrational_cos_rat_mul_pi
-  条件: {r : Rat} (hr : 3 < r.den)
+  条件: {r : 有理数} (hr : 3 < r.den)
   证明: by
   rw [← Rat.den_intFract] at hr
   by_contra! hnz

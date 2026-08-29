@@ -43,7 +43,7 @@ theorem tendstoUniformlyOn_tsum
 
 中文:
 定理 tendstoUniformlyOn_tsum
-  结论: {f : α -> β -> F} (hu : Summable u) {s : Set β}
+  结论: {f : α -> β -> F} (hu : Summable u) {s : 集合 β}
   证明: by
   refine tendstoUniformlyOn_iff.2 fun ε εpos => ?_
   filter_upwards [(tendsto_order.1 (tendsto_tsum_compl_atTop_zero u)).2 _ εpos] with t ht x hx
@@ -76,7 +76,7 @@ theorem tendstoUniformlyOn_tsum_nat
 
 中文:
 定理 tendstoUniformlyOn_tsum_nat
-  结论: {f : 自然数 -> β -> F} {u : 自然数 -> 实数} (hu : Summable u) {s : Set β}
+  结论: {f : 自然数 -> β -> F} {u : 自然数 -> 实数} (hu : Summable u) {s : 集合 β}
   证明: fun v hv => tendsto_finset_range.eventually (tendstoUniformlyOn_tsum hu hfu v hv)
 
 Depends on / 依赖: eventually, tendstoUniformlyOn_tsum, tendsto_finset_range, tendsto_finset_range.eventually
@@ -155,7 +155,7 @@ theorem tendstoUniformlyOn_tsum_nat_eventually
 
 中文:
 定理 tendstoUniformlyOn_tsum_nat_eventually
-  结论: {α F : 类型} [NormedAddCommGroup F]
+  结论: {α F : 类型} [赋范交换加群 F]
   证明: fun v hv => tendsto_finset_range.eventually
     tendstoUniformlyOn_tsum_of_cofinite_eventually hu (Nat.cofinite_eq_atTop ▸ hfu) v hv
 
@@ -253,7 +253,7 @@ theorem continuousOn_tsum
 
 中文:
 定理 continuousOn_tsum
-  结论: [TopologicalSpace β] {f : α -> β -> F} {s : Set β}
+  结论: [拓扑空间 β] {f : α -> β -> F} {s : 集合 β}
   证明: by
   refine (tendstoUniformlyOn_tsum hu hfu).continuousOn (Frequently.of_forall ?_)
   intro t
@@ -280,7 +280,7 @@ theorem continuous_tsum
 
 中文:
 定理 continuous_tsum
-  结论: [TopologicalSpace β] {f : α -> β -> F} (hf : 对任意 i, Continuous (f i))
+  结论: [拓扑空间 β] {f : α -> β -> F} (hf : 对任意 i, 连续 (f i))
   证明: by
   simp_rw [← continuousOn_univ] at hf ⊢
   exact continuousOn_tsum hf hu fun n x _ => hfu n x

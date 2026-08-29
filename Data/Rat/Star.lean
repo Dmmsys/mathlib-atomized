@@ -74,7 +74,7 @@ lemma addSubmonoid_closure_range_mul_self
 
 中文:
 引理 addSubmonoid_closure_range_mul_self
-  结论: closure (range fun x : Rat>=0 => x * x) = ⊤
+  结论: closure (range fun x : 有理数>=0 => x * x) = ⊤
   证明: by
   simpa only [sq] using addSubmonoid_closure_range_pow two_ne_zero
 -/
@@ -91,7 +91,7 @@ instance instStarOrderedRing
 
 中文:
 实例 instStarOrderedRing
-  签名: : StarOrderedRing Rat>=0 where
+  签名: : StarOrdered环 有理数>=0 where
   定义体: by simp [eq_comm, le_iff_exists_nonneg_add (a := a)]
 
 Depends on / 依赖: eq_comm, le_iff_exists_nonneg_add
@@ -146,7 +146,7 @@ lemma addSubmonoid_closure_range_mul_self
 
 中文:
 引理 addSubmonoid_closure_range_mul_self
-  结论: closure (range fun x : Rat => x * x) = nonneg _
+  结论: closure (range fun x : 有理数 => x * x) = nonneg _
   证明: by
   simpa only [sq] using addSubmonoid_closure_range_pow two_ne_zero even_two
 
@@ -165,7 +165,7 @@ instance instStarOrderedRing
 
 中文:
 实例 instStarOrderedRing
-  签名: : StarOrderedRing Rat where
+  签名: : StarOrdered环 有理数 where
   定义体: by simp [eq_comm, le_iff_exists_nonneg_add (a := a)]
 
 Depends on / 依赖: eq_comm, le_iff_exists_nonneg_add

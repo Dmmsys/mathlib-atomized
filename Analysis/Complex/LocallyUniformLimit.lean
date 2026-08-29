@@ -47,7 +47,7 @@ definition cderiv
 
 中文:
 定义 cderiv
-  签名: (r : 实数) (f : Complex -> E) (z : Complex)
+  签名: (r : 实数) (f : 复形 -> E) (z : 复形)
   定义体: (2 * π * I : Complex)⁻¹ • ∮ w in C(z, r), ((w - z) ^ 2)⁻¹ • f w
 -/
 noncomputable def cderiv (r : Real) (f : Complex -> E) (z : Complex) : E :=
@@ -63,7 +63,7 @@ theorem cderiv_eq_deriv
 
 中文:
 定理 cderiv_eq_deriv
-  结论: [CompleteSpace E] (hU : IsOpen U) (hf : DifferentiableOn Complex f U) (hr : 0 < r)
+  结论: [完备空间 E] (hU : 是开集 U) (hf : DifferentiableOn 复形 f U) (hr : 0 < r)
   证明: two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable hU hzr hf (mem_ball_self hr)
 
 Depends on / 依赖: mem_ball_self, two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable
@@ -306,7 +306,7 @@ theorem exists_cthickening_tendstoUniformlyOn
   exact ⟨δ, hδ, hKδ, tendstoUniformlyOn_deriv_of_cthickening_subset hf hF hδ hK hU hKδ⟩
 
 中文:
-定理 exists_cthickening_tendstoUniformlyOn
+定理 存在_cthickening_tendstoUniformlyOn
   结论: (hf : TendstoLocallyUniformlyOn F f φ U)
   证明: by
   obtain ⟨δ, hδ, hKδ⟩ := hK.exists_cthickening_subset_open hU hKU
@@ -492,7 +492,7 @@ theorem logDeriv_tendsto
 
 中文:
 定理 logDeriv_tendsto
-  结论: {ι : 类型} {p : Filter ι} {f : ι -> Complex -> Complex} {g : Complex -> Complex}
+  结论: {ι : 类型} {p : 滤子 ι} {f : ι -> 复形 -> 复形} {g : 复形 -> 复形}
   证明: ((hF.deriv hf hs).tendsto_at hx).div (hF.tendsto_at hx) hg
 
 Depends on / 依赖: hF.deriv, hF.tendsto_at, tendsto_at

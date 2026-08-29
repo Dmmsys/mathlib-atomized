@@ -64,7 +64,7 @@ theorem eq_of_eq
 
 中文:
 定理 eq_of_eq
-  条件: (hg : 对任意 y : S, IsUnit (g y)) {x y} (h : f x = f y)
+  条件: (hg : 对任意 y : S, 是单位 (g y)) {x y} (h : f x = f y)
   结论: g x = g y
   证明: by
   obtain ⟨c, hc⟩ := f.eq_iff_exists.1 h
@@ -97,7 +97,7 @@ theorem comp_eq_of_eq
 
 中文:
 定理 comp_eq_of_eq
-  结论: {T : Submonoid P} {Q : 类型} [CommMonoid Q] (hg : 对任意 y : S, g y in T)
+  结论: {T : 子幺半群 P} {Q : 类型} [交换幺半群 Q] (hg : 对任意 y : S, g y in T)
   证明: f.eq_of_eq (fun y : S => show IsUnit (k.toMonoidHom.comp g y) from k.map_units ⟨g y, hg y⟩) h
 
 Depends on / 依赖: IsUnit, eq_of_eq, f.eq_of_eq, k.map_units, k.toMonoidHom.comp, map_units, toMonoidHom
@@ -216,7 +216,7 @@ theorem lift_localizationMap_mk'
 
 中文:
 定理 lift_localizationMap_mk'
-  条件: (g : S.LocalizationMap P) (x y)
+  条件: (g : S.Localization映射 P) (x y)
   证明: f.lift_mk' _ _ _
 
 Depends on / 依赖: f.lift_mk, lift_mk
@@ -554,7 +554,7 @@ theorem lift_comp_lift
 
 中文:
 定理 lift_comp_lift
-  结论: {T : Submonoid M} (hST : S <= T) {Q : 类型} [CommMonoid Q]
+  结论: {T : 子幺半群 M} (hST : S <= T) {Q : 类型} [交换幺半群 Q]
   证明: .symm
   lift_unique _ _ fun x => by rw [← toMonoidHom_apply, ← MonoidHom.comp_apply,
     MonoidHom.comp_assoc, lift_comp, lift_comp]
@@ -580,7 +580,7 @@ theorem lift_comp_lift_eq
 
 中文:
 定理 lift_comp_lift_eq
-  结论: {Q : 类型} [CommMonoid Q] (k : LocalizationMap S Q)
+  结论: {Q : 类型} [交换幺半群 Q] (k : Localization映射 S Q)
   证明: lift_comp_lift f le_rfl k hl
 
 Depends on / 依赖: le_rfl, lift_comp_lift
@@ -607,7 +607,7 @@ theorem lift_left_inverse
 
 中文:
 定理 lift_left_inverse
-  条件: {k : LocalizationMap S P} (z : N)
+  条件: {k : Localization映射 S P} (z : N)
   证明: (DFunLike.congr_fun (lift_comp_lift_eq f k f.map_units) z).trans (lift_id f z)
 
 @[to_additive]
@@ -927,7 +927,7 @@ theorem map_id
 中文:
 定理 map_id
   条件: (z : N)
-  结论: f.map (fun y => show MonoidHom.id M y in S from y.2) f z = z
+  结论: f.map (fun y => show 幺半群态射.id M y in S from y.2) f z = z
   证明: f.lift_id z
 
 Depends on / 依赖: f.lift_id, lift_id
@@ -958,7 +958,7 @@ theorem map_comp_map
 
 中文:
 定理 map_comp_map
-  结论: {A : 类型} [CommMonoid A] {U : Submonoid A} {R} [CommMonoid R]
+  结论: {A : 类型} [交换幺半群 A] {U : 子幺半群 A} {R} [交换幺半群 R]
   证明: by
   ext z
   change j _ * _ = j (l _) * _
@@ -1000,7 +1000,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {A : 类型} [CommMonoid A] {U : Submonoid A} {R} [CommMonoid R]
+  结论: {A : 类型} [交换幺半群 A] {U : 子幺半群 A} {R} [交换幺半群 R]
   证明: by
   -- Porting note: need to specify `k` explicitly
   rw [← f.map_comp_map (k := k) hy j hl]
@@ -1067,7 +1067,7 @@ theorem map_surjective_of_surjOn
 
 中文:
 定理 map_surjective_of_surjOn
-  结论: (surj : (S : Set M).SurjOn g T)
+  结论: (surj : (S : 集合 M).满射限制 g T)
   证明: fun z => by
   obtain ⟨y, ⟨t, ht⟩, rfl⟩ := k.mk'_surjective z
   obtain ⟨s, hs, rfl⟩ := surj ht
@@ -1100,7 +1100,7 @@ theorem map_injective_of_injective
 
 中文:
 定理 map_injective_of_injective
-  条件: (hg : Injective g) (k : LocalizationMap (S.map g) Q)
+  条件: (hg : 单射 g) (k : Localization映射 (S.map g) Q)
   证明: f.map_injective_of_surjOn_or_injective _ (.inl <| Set.surjOn_image ..) hg
 
 Depends on / 依赖: Set.surjOn_image, f.map_injective_of_surjOn_or_injective, map_injective_of_surjOn_or_injective, surjOn_image
@@ -1126,7 +1126,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  条件: (hg : Surjective g) (k : LocalizationMap (S.map g) Q)
+  条件: (hg : 满射 g) (k : Localization映射 (S.map g) Q)
   证明: f.map_surjective_of_surjOn _ (Set.surjOn_image ..) hg
 
 Depends on / 依赖: Set.surjOn_image, f.map_surjective_of_surjOn, map_surjective_of_surjOn, surjOn_image
@@ -1167,7 +1167,7 @@ definition mulEquivOfLocalizations
 
 中文:
 定义 mulEquivOfLocalizations
-  签名: (k : LocalizationMap S P)
+  签名: (k : Localization映射 S P)
   定义体: { toFun := f.lift k.map_units
   invFun := k.lift f.map_units
   left_inv := f.lift_left_inverse
@@ -1198,7 +1198,7 @@ theorem mulEquivOfLocalizations_apply
 
 中文:
 定理 mulEquivOfLocalizations_apply
-  条件: {k : LocalizationMap S P} {x}
+  条件: {k : Localization映射 S P} {x}
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1219,7 +1219,7 @@ theorem mulEquivOfLocalizations_symm_apply
 
 中文:
 定理 mulEquivOfLocalizations_symm_apply
-  条件: {k : LocalizationMap S P} {x}
+  条件: {k : Localization映射 S P} {x}
   证明: rfl
 
 @[to_additive]
@@ -1238,7 +1238,7 @@ theorem mulEquivOfLocalizations_symm_eq_mulEquivOfLocalizations
 
 中文:
 定理 mulEquivOfLocalizations_symm_eq_mulEquivOfLocalizations
-  条件: {k : LocalizationMap S P}
+  条件: {k : Localization映射 S P}
   证明: rfl
 -/
 theorem mulEquivOfLocalizations_symm_eq_mulEquivOfLocalizations {k : LocalizationMap S P} :
@@ -1409,7 +1409,7 @@ theorem mulEquivOfLocalizations_right_inv
 
 中文:
 定理 mulEquivOfLocalizations_right_inv
-  条件: (k : LocalizationMap S P)
+  条件: (k : Localization映射 S P)
   证明: toMonoidHom_injective f.lift_comp k.map_units
 
 @[to_additive addEquivOfLocalizations_right_inv_apply]
@@ -1433,7 +1433,7 @@ theorem mulEquivOfLocalizations_right_inv_apply
 
 中文:
 定理 mulEquivOfLocalizations_right_inv_apply
-  条件: {k : LocalizationMap S P} {x}
+  条件: {k : Localization映射 S P} {x}
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -1500,7 +1500,7 @@ theorem ofMulEquivOfLocalizations_id
 
 中文:
 定理 ofMulEquivOfLocalizations_id
-  结论: f.ofMulEquivOfLocalizations (MulEquiv.refl N) = f
+  结论: f.ofMulEquivOfLocalizations (乘法等价.refl N) = f
   证明: by
   ext; rfl
 
@@ -1711,7 +1711,7 @@ definition mulEquivOfMulEquiv
 
 中文:
 定义 mulEquivOfMulEquiv
-  签名: (k : LocalizationMap T Q) {j : M ≃* P}
+  签名: (k : Localization映射 T Q) {j : M ≃* P}
   定义体: f.mulEquivOfLocalizations k.ofMulEquivOfDom H
 
 @[to_additive (attr := simp)]
@@ -1735,7 +1735,7 @@ theorem mulEquivOfMulEquiv_eq_map_apply
 
 中文:
 定理 mulEquivOfMulEquiv_eq_map_apply
-  结论: {k : LocalizationMap T Q} {j : M ≃* P}
+  结论: {k : Localization映射 T Q} {j : M ≃* P}
   证明: rfl
 
 @[to_additive]
@@ -1758,7 +1758,7 @@ theorem mulEquivOfMulEquiv_eq_map
 
 中文:
 定理 mulEquivOfMulEquiv_eq_map
-  结论: {k : LocalizationMap T Q} {j : M ≃* P}
+  结论: {k : Localization映射 T Q} {j : M ≃* P}
   证明: rfl
 
 @[to_additive]
@@ -1781,7 +1781,7 @@ theorem mulEquivOfMulEquiv_eq
 
 中文:
 定理 mulEquivOfMulEquiv_eq
-  结论: {k : LocalizationMap T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
+  结论: {k : Localization映射 T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
   证明: f.map_eq (fun y : S => H ▸ Set.mem_image_of_mem j y.2) _
 
 @[to_additive]
@@ -1806,7 +1806,7 @@ theorem mulEquivOfMulEquiv_mk'
 
 中文:
 定理 mulEquivOfMulEquiv_mk'
-  结论: {k : LocalizationMap T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
+  结论: {k : Localization映射 T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
   证明: f.map_mk' (fun y : S => H ▸ Set.mem_image_of_mem j y.2) _ _
 
 @[to_additive]
@@ -1831,7 +1831,7 @@ theorem of_mulEquivOfMulEquiv_apply
 
 中文:
 定理 of_mulEquivOfMulEquiv_apply
-  结论: {k : LocalizationMap T Q} {j : M ≃* P}
+  结论: {k : Localization映射 T Q} {j : M ≃* P}
   证明: Submonoid.LocalizationMap.ext_iff.1 (f.mulEquivOfLocalizations_right_inv (k.ofMulEquivOfDom H)) x
 
 @[to_additive]
@@ -1854,7 +1854,7 @@ theorem of_mulEquivOfMulEquiv
 
 中文:
 定理 of_mulEquivOfMulEquiv
-  条件: {k : LocalizationMap T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
+  条件: {k : Localization映射 T Q} {j : M ≃* P} (H : S.map j.toMonoidHom = T)
   证明: MonoidHom.ext f.of_mulEquivOfMulEquiv_apply H
 
 Depends on / 依赖: MonoidHom, MonoidHom.ext, f.of_mulEquivOfMulEquiv_apply, of_mulEquivOfMulEquiv_apply
@@ -1887,7 +1887,7 @@ definition mulEquivOfQuotient
 
 中文:
 定义 mulEquivOfQuotient
-  签名: (f : Submonoid.LocalizationMap S N)
+  签名: (f : 子幺半群.Localization映射 S N)
   定义体: (monoidOf S).mulEquivOfLocalizations f
 
 Depends on / 依赖: monoidOf, mulEquivOfLocalizations

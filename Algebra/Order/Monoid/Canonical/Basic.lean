@@ -30,7 +30,7 @@ theorem range_add_eq_image_Ici
 
 中文:
 定理 range_add_eq_image_Ici
-  结论: range (fun x => f (x + k)) = f '' Ici k
+  结论: range (fun x => f (x + k)) = f '' 左闭右无界区间 k
   证明: Set.ext fun x => ⟨fun ⟨y, hfy⟩ => ⟨y + k, self_le_add_left k y, hfy⟩,
     fun ⟨y, hy, hfy⟩ => ⟨y - k, by simpa [tsub_add_cancel_of_le hy] using hfy⟩⟩
 
@@ -62,8 +62,8 @@ theorem lt_add_iff_lt_left_or_exists_lt
     simp
 
 中文:
-定理 lt_add_iff_lt_left_or_exists_lt
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 lt_add_iff_lt_left_or_存在_lt
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   obtain h | h := lt_or_ge a b
   · have : a < b + c := h.trans_le (le_self_add ..)
@@ -92,8 +92,8 @@ theorem forall_lt_add_iff_lt_left
   aesop
 
 中文:
-定理 forall_lt_add_iff_lt_left
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 对任意_lt_add_iff_lt_left
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   simp_rw [lt_add_iff_lt_left_or_exists_lt]
   aesop
@@ -116,8 +116,8 @@ theorem exists_lt_add_iff_lt_left
   aesop
 
 中文:
-定理 exists_lt_add_iff_lt_left
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 存在_lt_add_iff_lt_left
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   simp_rw [lt_add_iff_lt_left_or_exists_lt]
   aesop
@@ -143,8 +143,8 @@ theorem le_add_iff_lt_left_or_exists_le
     simp
 
 中文:
-定理 le_add_iff_lt_left_or_exists_le
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 le_add_iff_lt_left_or_存在_le
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   obtain h | h := lt_or_ge a b
   · have : a <= b + c := h.le.trans (le_self_add ..)
@@ -173,8 +173,8 @@ theorem forall_le_add_iff_le_left
   aesop
 
 中文:
-定理 forall_le_add_iff_le_left
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 对任意_le_add_iff_le_left
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   simp_rw [le_add_iff_lt_left_or_exists_le]
   aesop
@@ -197,8 +197,8 @@ theorem exists_le_add_iff_le_left
   aesop
 
 中文:
-定理 exists_le_add_iff_le_left
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 存在_le_add_iff_le_left
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   simp_rw [le_add_iff_lt_left_or_exists_le]
   aesop
@@ -226,8 +226,8 @@ theorem lt_add_iff_lt_right_or_exists_lt
   simp_rw [add_comm]
 
 中文:
-定理 lt_add_iff_lt_right_or_exists_lt
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 lt_add_iff_lt_right_or_存在_lt
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   rw [add_comm]; rw [lt_add_iff_lt_left_or_exists_lt]
   simp_rw [add_comm]
@@ -250,8 +250,8 @@ theorem forall_lt_add_iff_lt_right
   aesop
 
 中文:
-定理 forall_lt_add_iff_lt_right
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 对任意_lt_add_iff_lt_right
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   simp_rw [lt_add_iff_lt_right_or_exists_lt]
   aesop
@@ -274,8 +274,8 @@ theorem exists_lt_add_iff_lt_right
   aesop
 
 中文:
-定理 exists_lt_add_iff_lt_right
-  条件: [AddLeftReflectLT α] [IsLeftCancelAdd α]
+定理 存在_lt_add_iff_lt_right
+  条件: [AddLeftReflectLT α] [是左消去加法 α]
   证明: by
   simp_rw [lt_add_iff_lt_right_or_exists_lt]
   aesop
@@ -298,8 +298,8 @@ theorem le_add_iff_lt_right_or_exists_le
   simp_rw [add_comm]
 
 中文:
-定理 le_add_iff_lt_right_or_exists_le
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 le_add_iff_lt_right_or_存在_le
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   rw [add_comm]; rw [le_add_iff_lt_left_or_exists_le]
   simp_rw [add_comm]
@@ -322,8 +322,8 @@ theorem forall_le_add_iff_le_right
   aesop
 
 中文:
-定理 forall_le_add_iff_le_right
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 对任意_le_add_iff_le_right
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   simp_rw [le_add_iff_lt_right_or_exists_le]
   aesop
@@ -346,8 +346,8 @@ theorem exists_le_add_iff_le_right
   aesop
 
 中文:
-定理 exists_le_add_iff_le_right
-  条件: [AddLeftMono α] [IsLeftCancelAdd α]
+定理 存在_le_add_iff_le_right
+  条件: [AddLeftMono α] [是左消去加法 α]
   证明: by
   simp_rw [le_add_iff_lt_right_or_exists_le]
   aesop

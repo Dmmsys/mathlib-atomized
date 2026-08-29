@@ -146,7 +146,7 @@ theorem isUniformInducing_iff
 
 中文:
 定理 isUniformInducing_iff
-  条件: [PseudoEMetricSpace β] {f : α -> β}
+  条件: [PseudoEMetric空间 β] {f : α -> β}
   证明: isUniformInducing_iff'.trans Iff.rfl.and
 ((uniformity_basis_edist.comap _).le_basis_iff uniformity_basis_edist).trans by
       simp only [subset_def, Prod.forall]; rfl
@@ -178,7 +178,7 @@ theorem controlled_of_isUniformInducing
 
 中文:
 定理 controlled_of_isUniformInducing
-  结论: [PseudoEMetricSpace β] {f : α -> β}
+  结论: [PseudoEMetric空间 β] {f : α -> β}
   证明: ⟨uniformContinuous_iff.1 h.uniformContinuous, (isUniformInducing_iff.1 h).2⟩
 
 @[deprecated controlled_of_isUniformInducing (since := "2026-04-01")]
@@ -202,7 +202,7 @@ theorem controlled_of_isUniformEmbedding
 
 中文:
 定理 controlled_of_isUniformEmbedding
-  结论: [PseudoEMetricSpace β] {f : α -> β}
+  结论: [PseudoEMetric空间 β] {f : α -> β}
   证明: controlled_of_isUniformInducing h.toIsUniformInducing
 
 Depends on / 依赖: controlled_of_isUniformInducing, h.toIsUniformInducing, toIsUniformInducing
@@ -224,7 +224,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   证明: by
   rw [← neBot_iff]; exact uniformity_basis_edist.cauchy_iff
 -/
@@ -287,7 +287,7 @@ theorem tendstoLocallyUniformlyOn_iff
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff
-  结论: {ι : 类型} [TopologicalSpace β] {F : ι -> β -> α} {f : β -> α}
+  结论: {ι : 类型} [拓扑空间 β] {F : ι -> β -> α} {f : β -> α}
   证明: by
   refine ⟨fun H ε hε => H _ (edist_mem_uniformity hε), fun H u hu x hx => ?_⟩
   rcases mem_uniformity_edist.1 hu with ⟨ε, εpos, hε⟩
@@ -318,7 +318,7 @@ theorem tendstoUniformlyOn_iff
 
 中文:
 定理 tendstoUniformlyOn_iff
-  条件: {ι : 类型} {F : ι -> β -> α} {f : β -> α} {p : Filter ι} {s : Set β}
+  条件: {ι : 类型} {F : ι -> β -> α} {f : β -> α} {p : 滤子 ι} {s : 集合 β}
   证明: by
   refine ⟨fun H ε hε => H _ (edist_mem_uniformity hε), fun H u hu => ?_⟩
   rcases mem_uniformity_edist.1 hu with ⟨ε, εpos, hε⟩
@@ -344,7 +344,7 @@ theorem tendstoLocallyUniformly_iff
 
 中文:
 定理 tendstoLocallyUniformly_iff
-  结论: {ι : 类型} [TopologicalSpace β] {F : ι -> β -> α} {f : β -> α}
+  结论: {ι : 类型} [拓扑空间 β] {F : ι -> β -> α} {f : β -> α}
   证明: by
   simp only [← tendstoLocallyUniformlyOn_univ, tendstoLocallyUniformlyOn_iff, mem_univ,
     forall_const, nhdsWithin_univ]
@@ -369,7 +369,7 @@ theorem tendstoUniformly_iff
 
 中文:
 定理 tendstoUniformly_iff
-  条件: {ι : 类型} {F : ι -> β -> α} {f : β -> α} {p : Filter ι}
+  条件: {ι : 类型} {F : ι -> β -> α} {f : β -> α} {p : 滤子 ι}
   证明: by
   simp only [← tendstoUniformlyOn_univ, tendstoUniformlyOn_iff, mem_univ, forall_const]
 
@@ -400,7 +400,7 @@ alias ⟨_root_.Inseparable.edist_eq_zero, _⟩ := EMetric.inseparable_iff
 
 中文:
 定理 inseparable_iff
-  结论: Inseparable x y ↔ edist x y = 0
+  结论: 不可分 x y ↔ edist x y = 0
   证明: by
   simp [inseparable_iff_mem_closure, mem_closure_iff, edist_comm, forall_gt_iff_le]
 
@@ -425,7 +425,7 @@ theorem nontrivial_iff_nontrivialTopology
 
 中文:
 定理 nontrivial_iff_nontrivialTopology
-  条件: {α} [EMetricSpace α]
+  条件: {α} [广义度量空间 α]
   证明: by
   simp_rw [nontrivial_iff, TopologicalSpace.nontrivial_iff_exists_not_inseparable,
     EMetric.inseparable_iff, edist_eq_zero]
@@ -448,7 +448,7 @@ theorem subsingleton_iff_indiscreteTopology
 
 中文:
 定理 subsingleton_iff_indiscreteTopology
-  条件: {α} [EMetricSpace α]
+  条件: {α} [广义度量空间 α]
   证明: by
   simpa [not_nontrivial_iff_subsingleton] using nontrivial_iff_nontrivialTopology (α := α).not
 
@@ -472,7 +472,7 @@ theorem cauchySeq_iff
 
 中文:
 定理 cauchySeq_iff
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: uniformity_basis_edist.cauchySeq_iff
 
 Depends on / 依赖: cauchySeq_iff, uniformity_basis_edist, uniformity_basis_edist.cauchySeq_iff
@@ -491,7 +491,7 @@ theorem cauchySeq_iff'
 
 中文:
 定理 cauchySeq_iff'
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: uniformity_basis_edist.cauchySeq_iff'
 
 Depends on / 依赖: cauchySeq_iff, uniformity_basis_edist, uniformity_basis_edist.cauchySeq_iff
@@ -509,8 +509,8 @@ theorem cauchySeq_iff_NNReal
   proof: uniformity_basis_edist_nnreal.cauchySeq_iff'
 
 中文:
-定理 cauchySeq_iff_NNReal
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α}
+定理 cauchySeq_iff_NN实数
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: uniformity_basis_edist_nnreal.cauchySeq_iff'
 
 Depends on / 依赖: cauchySeq_iff, uniformity_basis_edist_nnreal, uniformity_basis_edist_nnreal.cauchySeq_iff
@@ -532,7 +532,7 @@ theorem totallyBounded_iff
 
 中文:
 定理 totallyBounded_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨fun H _ε ε0 => H _ (edist_mem_uniformity ε0), fun H _r ru =>
     let ⟨ε, ε0, hε⟩ := mem_uniformity_edist.1 ru
     let ⟨t, ft, h⟩ := H ε ε0
@@ -560,7 +560,7 @@ theorem totallyBounded_iff'
 
 中文:
 定理 totallyBounded_iff'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨fun H _ε ε0 => (totallyBounded_iff_subset.1 H) _ (edist_mem_uniformity ε0), fun H _r ru =>
     let ⟨ε, ε0, hε⟩ := mem_uniformity_edist.1 ru
     let ⟨t, _, ft, h⟩ := H ε ε0
@@ -593,7 +593,7 @@ theorem subset_countable_closure_of_almost_dense_set
 
 中文:
 定理 subset_countable_closure_of_almost_dense_set
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: by
   apply UniformSpace.subset_countable_closure_of_almost_dense_set
   intro U hU
@@ -628,7 +628,7 @@ exact ⟨t, htf.countable, hst.trans iUnion₂_mono fun _ _ => eball_subset_clos
 
 中文:
 定理 subset_countable_closure_of_compact
-  条件: {s : Set α} (hs : IsCompact s)
+  条件: {s : 集合 α} (hs : 是紧集 s)
   证明: by
   refine subset_countable_closure_of_almost_dense_set s fun ε hε => ?_
   rcases totallyBounded_iff'.1 hs.totallyBounded ε hε with ⟨t, -, htf, hst⟩
@@ -711,7 +711,7 @@ theorem EMetric.isUniformEmbedding_iff'
 
 中文:
 定理 EMetric.isUniformEmbedding_iff'
-  条件: [PseudoEMetricSpace β] {f : γ -> β}
+  条件: [PseudoEMetric空间 β] {f : γ -> β}
   证明: by
   rw [isUniformEmbedding_iff_isUniformInducing]; rw [isUniformInducing_iff]; rw [uniformContinuous_iff]
 
@@ -734,8 +734,8 @@ abbreviation EMetricSpace.ofT0PseudoEMetricSpace
     eq_of_edist_eq_zero := fun h => (EMetric.inseparable_iff.2 h).eq }
 
 中文:
-缩写 EMetricSpace.ofT0PseudoEMetricSpace
-  签名: (α : 类型) [PseudoEMetricSpace α] [T0Space α]
+缩写 广义度量空间.ofT0PseudoEMetricSpace
+  签名: (α : 类型) [PseudoEMetric空间 α] [T0空间 α]
   定义体: { ‹PseudoEMetricSpace α› with
     eq_of_edist_eq_zero := fun h => (EMetric.inseparable_iff.2 h).eq }
 
@@ -755,8 +755,8 @@ instance Prod.emetricSpaceMax
   body: .ofT0PseudoEMetricSpace _
 
 中文:
-实例 Prod.emetricSpaceMax
-  签名: [EMetricSpace β]
+实例 积类型.emetricSpaceMax
+  签名: [广义度量空间 β]
   定义体: .ofT0PseudoEMetricSpace _
 
 Depends on / 依赖: ofT0PseudoEMetricSpace
@@ -778,7 +778,7 @@ theorem countable_closure_of_compact
 
 中文:
 定理 countable_closure_of_compact
-  条件: {s : Set γ} (hs : IsCompact s)
+  条件: {s : 集合 γ} (hs : 是紧集 s)
   证明: by
   rcases subset_countable_closure_of_compact hs with ⟨t, hts, htc, hsub⟩
   exact ⟨t, hts, htc, hsub.antisymm (closure_minimal hts hs.isClosed)⟩
@@ -803,7 +803,7 @@ instance [PseudoEMetricSpace
     edist_congr (EMetric.inseparable_iff.1 hx) (EMetric.inseparable_iff.1 hy)
 
 中文:
-实例 [PseudoEMetricSpace
+实例 [PseudoEMetric空间
   签名: X] : EDist (SeparationQuotient X) where
   定义体: SeparationQuotient.lift₂ edist fun _ _ _ _ hx hy =>
     edist_congr (EMetric.inseparable_iff.1 hx) (EMetric.inseparable_iff.1 hy)
@@ -822,7 +822,7 @@ theorem SeparationQuotient.edist_mk
 
 中文:
 定理 SeparationQuotient.edist_mk
-  条件: [PseudoEMetricSpace X] (x y : X)
+  条件: [PseudoEMetric空间 X] (x y : X)
   证明: rfl
 -/
 @[simp] theorem SeparationQuotient.edist_mk [PseudoEMetricSpace X] (x y : X) :
@@ -844,8 +844,8 @@ instance [PseudoEMetricSpace
 uniformity_edist := comap_
 
 中文:
-实例 [PseudoEMetricSpace
-  签名: X] : EMetricSpace (SeparationQuotient X)
+实例 [PseudoEMetric空间
+  签名: X] : 广义度量空间 (SeparationQuotient X)
   定义体: @EMetricSpace.ofT0PseudoEMetricSpace (SeparationQuotient X)
     { edist_self := surjective_mk.forall.2 edist_self,
       edist_comm := surjective_mk.forall₂.2 edist_comm,
@@ -880,7 +880,7 @@ theorem lebesgue_number_lemma_of_emetric
 
 中文:
 定理 lebesgue_number_lemma_of_emetric
-  结论: {ι : Sort*} {c : ι -> Set α} (hs : IsCompact s)
+  结论: {ι : 类型层*} {c : ι -> 集合 α} (hs : 是紧集 s)
   证明: by
   simpa only [eball, UniformSpace.ball, preimage_ofPred_eq, edist_comm]
     using uniformity_basis_edist.lebesgue_number_lemma hs hc₁ hc₂
@@ -904,7 +904,7 @@ theorem lebesgue_number_lemma_of_emetric_nhds'
 
 中文:
 定理 lebesgue_number_lemma_of_emetric_nhds'
-  结论: {c : (x : α) -> x in s -> Set α} (hs : IsCompact s)
+  结论: {c : (x : α) -> x in s -> 集合 α} (hs : 是紧集 s)
   证明: by
   simpa only [eball, UniformSpace.ball, preimage_ofPred_eq, edist_comm]
     using uniformity_basis_edist.lebesgue_number_lemma_nhds' hs hc
@@ -928,7 +928,7 @@ theorem lebesgue_number_lemma_of_emetric_nhds
 
 中文:
 定理 lebesgue_number_lemma_of_emetric_nhds
-  结论: {c : α -> Set α} (hs : IsCompact s)
+  结论: {c : α -> 集合 α} (hs : 是紧集 s)
   证明: by
   simpa only [eball, UniformSpace.ball, preimage_ofPred_eq, edist_comm]
     using uniformity_basis_edist.lebesgue_number_lemma_nhds hs hc
@@ -952,7 +952,7 @@ theorem lebesgue_number_lemma_of_emetric_nhdsWithin'
 
 中文:
 定理 lebesgue_number_lemma_of_emetric_nhdsWithin'
-  结论: {c : (x : α) -> x in s -> Set α}
+  结论: {c : (x : α) -> x in s -> 集合 α}
   证明: by
   simpa only [eball, UniformSpace.ball, preimage_ofPred_eq, edist_comm]
     using uniformity_basis_edist.lebesgue_number_lemma_nhdsWithin' hs hc
@@ -977,7 +977,7 @@ theorem lebesgue_number_lemma_of_emetric_nhdsWithin
 
 中文:
 定理 lebesgue_number_lemma_of_emetric_nhdsWithin
-  结论: {c : α -> Set α} (hs : IsCompact s)
+  结论: {c : α -> 集合 α} (hs : 是紧集 s)
   证明: by
   simpa only [eball, UniformSpace.ball, preimage_ofPred_eq, edist_comm]
     using uniformity_basis_edist.lebesgue_number_lemma_nhdsWithin hs hc
@@ -1000,7 +1000,7 @@ theorem lebesgue_number_lemma_of_emetric_sUnion
 
 中文:
 定理 lebesgue_number_lemma_of_emetric_sUnion
-  结论: {c : Set (Set α)} (hs : IsCompact s)
+  结论: {c : 集合 (集合 α)} (hs : 是紧集 s)
   证明: by
   rw [sUnion_eq_iUnion] at hc₂; simpa using lebesgue_number_lemma_of_emetric hs (by simpa) hc₂
 

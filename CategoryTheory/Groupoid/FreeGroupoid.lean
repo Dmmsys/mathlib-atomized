@@ -53,7 +53,7 @@ abbreviation Hom.toPosPath
   body: f.toPos.toPath
 
 中文:
-缩写 Hom.toPosPath
+缩写 态射.toPosPath
   签名: {X Y : V} (f : X ⟶ Y)
   定义体: f.toPos.toPath
 
@@ -72,7 +72,7 @@ abbreviation Hom.toNegPath
   body: f.toNeg.toPath
 
 中文:
-缩写 Hom.toNegPath
+缩写 态射.toNegPath
   签名: {X Y : V} (f : X ⟶ Y)
   定义体: f.toNeg.toPath
 
@@ -93,9 +93,9 @@ inductive FreeGroupoid.redStep
 
 中文:
 归纳类型 FreeGroupoid.redStep
-  参数: : HomRel (Paths (Quiver.Symmetrify V))
+  参数: : HomRel (Paths (箭图.Symmetrify V))
   构造子 (1 个):
-    - step: (X Z : Quiver.Symmetrify V) (f : X ⟶ Z) : redStep (𝟙 ((Paths.of (Quiver.Symmetrify V)).obj X)) (f.toPath ≫ (Quiver.reverse f).toPath)
+    - step: (X Z : 箭图.Symmetrify V) (f : X ⟶ Z) : redStep (𝟙 ((Paths.of (箭图.Symmetrify V)).obj X)) (f.toPath ≫ (箭图.reverse f).toPath)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient, FreeGroupoid, FreeGroupoid.redStep, Quotient, redStep
 -/
@@ -113,7 +113,7 @@ definition FreeGroupoid
 
 中文:
 定义 FreeGroupoid
-  签名: (V) [Q : Quiver V]
+  签名: (V) [Q : 箭图 V]
   定义体: CategoryTheory.Quotient (@FreeGroupoid.redStep V Q)
 -/
 protected def FreeGroupoid (V) [Q : Quiver V] :=
@@ -143,7 +143,7 @@ theorem congr_reverse
 
 中文:
 定理 congr_reverse
-  条件: {X Y : Paths <| Quiver.Symmetrify V} (p q : X ⟶ Y)
+  条件: {X Y : Paths <| 箭图.Symmetrify V} (p q : X ⟶ Y)
   证明: by
   rintro ⟨_, _, XW, _, _, WY, _, _, f⟩
   have : HomRel.CompClosure redStep (WY.reverse ≫ 𝟙 _ ≫ XW.reverse)
@@ -186,7 +186,7 @@ theorem congr_comp_reverse
 
 中文:
 定理 congr_comp_reverse
-  条件: {X Y : Paths <| Quiver.Symmetrify V} (p : X ⟶ Y)
+  条件: {X Y : Paths <| 箭图.Symmetrify V} (p : X ⟶ Y)
   证明: by
   apply Quot.eqvGen_sound
   induction p with
@@ -239,7 +239,7 @@ theorem congr_reverse_comp
 
 中文:
 定理 congr_reverse_comp
-  条件: {X Y : Paths <| Quiver.Symmetrify V} (p : X ⟶ Y)
+  条件: {X Y : Paths <| 箭图.Symmetrify V} (p : X ⟶ Y)
   证明: by
   nth_rw 2 [← Quiver.Path.reverse_reverse p]
   apply congr_comp_reverse
@@ -262,7 +262,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Quiver.FreeGroupoid V)
+  签名: 范畴 (箭图.FreeGroupoid V)
   定义体: Quotient.category redStep
 
 Depends on / 依赖: Quotient, Quotient.category, category, redStep
@@ -281,7 +281,7 @@ Quot.sound congr_reverse pp qq con
 
 中文:
 定义 quotInv
-  签名: {X Y : Quiver.FreeGroupoid V} (f : X ⟶ Y)
+  签名: {X Y : 箭图.FreeGroupoid V} (f : X ⟶ Y)
   定义体: Quot.liftOn f (fun pp => Quot.mk _ <| pp.reverse) fun pp qq con =>
 Quot.sound congr_reverse pp qq con
 
@@ -303,7 +303,7 @@ instance instGroupoid
 
 中文:
 实例 instGroupoid
-  签名: : Groupoid (Quiver.FreeGroupoid V) where
+  签名: : 群胚 (箭图.FreeGroupoid V) where
   定义体: quotInv
   inv_comp p := Quot.inductionOn p fun pp => congr_reverse_comp pp
   comp_inv p := Quot.inductionOn p fun pp => congr_comp_reverse pp
@@ -326,7 +326,7 @@ definition of
 
 中文:
 定义 of
-  签名: (V) [Quiver V]
+  签名: (V) [箭图 V]
   定义体: ⟨X⟩
   map f := Quot.mk _ f.toPosPath
 -/
@@ -437,7 +437,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (φ : V ⥤q V') (Φ : Quiver.FreeGroupoid V ⥤ V')
+  结论: (φ : V ⥤q V') (Φ : 箭图.FreeGroupoid V ⥤ V')
   证明: by
   apply Quotient.lift_unique
   apply Paths.lift_unique

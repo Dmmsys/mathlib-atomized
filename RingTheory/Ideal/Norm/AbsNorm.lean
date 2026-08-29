@@ -62,7 +62,7 @@ definition cardQuot
 
 中文:
 定义 cardQuot
-  签名: (S : Submodule R M)
+  签名: (S : 子模 R M)
   定义体: AddSubgroup.index S.toAddSubgroup
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.index, S.toAddSubgroup, toAddSubgroup
@@ -82,7 +82,7 @@ theorem cardQuot_apply
 
 中文:
 定理 cardQuot_apply
-  条件: (S : Submodule R M)
+  条件: (S : 子模 R M)
   结论: cardQuot S = 自然数.card (M ⧸ S)
   证明: by
   rfl
@@ -106,8 +106,8 @@ theorem cardQuot_bot
 
 中文:
 定理 cardQuot_bot
-  条件: [Infinite M]
-  结论: cardQuot (⊥ : Submodule R M) = 0
+  条件: [无限 M]
+  结论: cardQuot (⊥ : 子模 R M) = 0
   证明: AddSubgroup.index_bot.trans Nat.card_eq_zero_of_infinite
 
 @[simp]
@@ -128,7 +128,7 @@ theorem cardQuot_top
 
 中文:
 定理 cardQuot_top
-  结论: cardQuot (⊤ : Submodule R M) = 1
+  结论: cardQuot (⊤ : 子模 R M) = 1
   证明: AddSubgroup.index_top
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.index_top, index_top
@@ -150,7 +150,7 @@ theorem cardQuot_eq_one_iff
 
 中文:
 定理 cardQuot_eq_one_iff
-  条件: {P : Submodule R M}
+  条件: {P : 子模 R M}
   结论: cardQuot P = 1 ↔ P = ⊤
   证明: AddSubgroup.index_eq_one.trans (by simp [SetLike.ext_iff])
 
@@ -202,8 +202,8 @@ theorem Ideal.mul_add_mem_pow_succ_inj
   ring
 
 中文:
-定理 Ideal.mul_add_mem_pow_succ_inj
-  结论: (P : Ideal S) {i : 自然数} (a d d' e e' : S) (a_mem : a in P ^ i)
+定理 理想.mul_add_mem_pow_succ_inj
+  结论: (P : 理想 S) {i : 自然数} (a d d' e e' : S) (a_mem : a in P ^ i)
   证明: by
   have : a * d - a * d' in P ^ (i + 1) := by
     simp only [← mul_sub]
@@ -241,8 +241,8 @@ theorem Ideal.exists_mul_add_mem_pow_succ
     (sup_le (Ideal.span_le.mpr (Set.singleton_subset_iff.mp
 
 中文:
-定理 Ideal.exists_mul_add_mem_pow_succ
-  结论: [IsDedekindDomain S] (hP : P != ⊥)
+定理 理想.存在_mul_add_mem_pow_succ
+  结论: [是Dedekind整环 S] (hP : P != ⊥)
   证明: by
   suffices eq_b : P ^ i = Ideal.span {a} ⊔ P ^ (i + 1) by
     rw [eq_b] at c_mem
@@ -280,8 +280,8 @@ theorem Ideal.mem_prime_of_mul_mem_pow
   exact (prime_pow_succ_dvd_mul (Ideal.prime_of_isPrime hP P_prime) ab_mem).resolve_left a_notMem
 
 中文:
-定理 Ideal.mem_prime_of_mul_mem_pow
-  结论: [IsDedekindDomain S] {P : Ideal S} [P_prime : P.IsPrime]
+定理 理想.mem_prime_of_mul_mem_pow
+  结论: [是Dedekind整环 S] {P : 理想 S} [P_prime : P.是素]
   证明: by
   simp only [← Ideal.span_singleton_le_iff_mem, ← Ideal.dvd_iff_le, pow_succ, ←
     Ideal.span_singleton_mul_span_singleton] at a_notMem ab_mem ⊢
@@ -309,8 +309,8 @@ theorem Ideal.mul_add_mem_pow_succ_unique
   exact Ideal.mem_prime_of_mul_mem_pow hP a_notMem h'
 
 中文:
-定理 Ideal.mul_add_mem_pow_succ_unique
-  结论: [IsDedekindDomain S] (hP : P != ⊥)
+定理 理想.mul_add_mem_pow_succ_unique
+  结论: [是Dedekind整环 S] (hP : P != ⊥)
   证明: by
   have h' : a * (d - d') in P ^ (i + 1) := by
     convert! Ideal.add_mem _ h (Ideal.sub_mem _ e'_mem e_mem) using 1
@@ -345,7 +345,7 @@ theorem cardQuot_pow_of_prime
 
 中文:
 定理 cardQuot_pow_of_prime
-  条件: [IsDedekindDomain S] (hP : P != ⊥) {i : 自然数}
+  条件: [是Dedekind整环 S] (hP : P != ⊥) {i : 自然数}
   证明: by
   induction i with
   | zero => simp
@@ -404,7 +404,7 @@ theorem cardQuot_mul
 
 中文:
 定理 cardQuot_mul
-  条件: [IsDedekindDomain S] [Module.Free 整数 S] (I J : Ideal S)
+  条件: [是Dedekind整环 S] [模.自由 整数 S] (I J : 理想 S)
   证明: by
   let b := Module.Free.chooseBasis Int S
   have : Infinite S := Infinite.of_surjective _ b.repr.toEquiv.surjective
@@ -441,8 +441,8 @@ definition Ideal.absNorm
     rw [Ideal.zero_eq_bot]; rw [cardQuot_bot]
 
 中文:
-定义 Ideal.absNorm
-  签名: [IsDedekindDomain S] [Module.Free 整数 S]
+定义 理想.absNorm
+  签名: [是Dedekind整环 S] [模.自由 整数 S]
   定义体: Submodule.cardQuot
   map_mul' I J := by rw [cardQuot_mul]
   map_one' := by rw [Ideal.one_eq_top, cardQuot_top]
@@ -476,7 +476,7 @@ theorem absNorm_apply
 
 中文:
 定理 absNorm_apply
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: absNorm I = cardQuot I
   证明: rfl
 -/
@@ -495,7 +495,7 @@ lemma absNorm_eq_index
 
 中文:
 引理 absNorm_eq_index
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   结论: absNorm I = I.toAddSubgroup.index
   证明: rfl
 
@@ -516,7 +516,7 @@ theorem absNorm_bot
 
 中文:
 定理 absNorm_bot
-  结论: absNorm (⊥ : Ideal S) = 0
+  结论: absNorm (⊥ : 理想 S) = 0
   证明: by rw [← Ideal.zero_eq_bot, map_zero]
 
 @[simp]
@@ -538,7 +538,7 @@ theorem absNorm_top
 
 中文:
 定理 absNorm_top
-  结论: absNorm (⊤ : Ideal S) = 1
+  结论: absNorm (⊤ : 理想 S) = 1
   证明: by rw [← Ideal.one_eq_top, map_one]
 
 @[simp]
@@ -560,7 +560,7 @@ theorem absNorm_eq_one_iff
 
 中文:
 定理 absNorm_eq_one_iff
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   结论: absNorm I = 1 ↔ I = ⊤
   证明: by
   rw [absNorm_apply]; rw [cardQuot_eq_one_iff]
@@ -582,8 +582,8 @@ theorem absNorm_ne_zero_iff
 
 中文:
 定理 absNorm_ne_zero_iff
-  条件: (I : Ideal S)
-  结论: Ideal.absNorm I != 0 ↔ Finite (S ⧸ I)
+  条件: (I : 理想 S)
+  结论: 理想.absNorm I != 0 ↔ 有限 (S ⧸ I)
   证明: ⟨fun h => Nat.finite_of_card_ne_zero h, fun h =>
     (@AddSubgroup.finiteIndex_of_finite_quotient _ _ _ h).index_ne_zero⟩
 
@@ -604,8 +604,8 @@ theorem absNorm_dvd_absNorm_of_le
 
 中文:
 定理 absNorm_dvd_absNorm_of_le
-  条件: {I J : Ideal S} (h : J <= I)
-  结论: Ideal.absNorm I ∣ Ideal.absNorm J
+  条件: {I J : 理想 S} (h : J <= I)
+  结论: 理想.absNorm I ∣ 理想.absNorm J
   证明: map_dvd absNorm (dvd_iff_le.mpr h)
 
 Depends on / 依赖: absNorm, dvd_iff_le, dvd_iff_le.mpr, map_dvd
@@ -629,7 +629,7 @@ theorem irreducible_of_irreducible_absNorm
 
 中文:
 定理 irreducible_of_irreducible_absNorm
-  条件: {I : Ideal S} (hI : Irreducible (Ideal.absNorm I))
+  条件: {I : 理想 S} (hI : 不可约 (理想.absNorm I))
   证明: irreducible_iff.mpr
     ⟨fun h =>
       hI.not_isUnit (by simpa only [Ideal.isUnit_iff, Nat.isUnit_iff, absNorm_eq_one_iff] using h),
@@ -661,7 +661,7 @@ theorem isPrime_of_irreducible_absNorm
 
 中文:
 定理 isPrime_of_irreducible_absNorm
-  条件: {I : Ideal S} (hI : Irreducible (Ideal.absNorm I))
+  条件: {I : 理想 S} (hI : 不可约 (理想.absNorm I))
   证明: isPrime_of_prime
     (UniqueFactorizationMonoid.irreducible_iff_prime.mp (irreducible_of_irreducible_absNorm hI))
 
@@ -703,8 +703,8 @@ theorem absNorm_mem
 
 中文:
 定理 absNorm_mem
-  条件: (I : Ideal S)
-  结论: ↑(Ideal.absNorm I) in I
+  条件: (I : 理想 S)
+  结论: ↑(理想.absNorm I) in I
   证明: by
   rw [absNorm_apply]; rw [cardQuot]; rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_natCast]; rw [Quotient.index_eq_zero]
 
@@ -725,8 +725,8 @@ theorem span_singleton_absNorm_le
 
 中文:
 定理 span_singleton_absNorm_le
-  条件: (I : Ideal S)
-  结论: Ideal.span {(Ideal.absNorm I : S)} <= I
+  条件: (I : 理想 S)
+  结论: 理想.span {(理想.absNorm I : S)} <= I
   证明: by
   simp only [Ideal.span_le, Set.singleton_subset_iff, SetLike.mem_coe, Ideal.absNorm_mem I]
 
@@ -750,7 +750,7 @@ theorem span_singleton_absNorm
 
 中文:
 定理 span_singleton_absNorm
-  条件: {I : Ideal S} (hI : (Ideal.absNorm I).Prime)
+  条件: {I : 理想 S} (hI : (理想.absNorm I).素)
   证明: by
   have : Ideal.IsPrime (Ideal.span (singleton (Ideal.absNorm I : Int))) := by
     rwa [Ideal.span_singleton_prime (Int.ofNat_ne_zero.mpr hI.ne_zero), ← Nat.prime_iff_prime_int]
@@ -791,7 +791,7 @@ theorem natAbs_det_equiv
 
 中文:
 定理 natAbs_det_equiv
-  条件: (I : Ideal S) {E : 类型} [EquivLike E S I] [AddEquivClass E S I] (e : E)
+  条件: (I : 理想 S) {E : 类型} [等价状 E S I] [加法等价类 E S I] (e : E)
   证明: by
   -- `S ⧸ I` might be infinite if `I = ⊥`, but then `e` can't be an equiv.
   by_cases hI : I = ⊥
@@ -826,7 +826,7 @@ theorem natAbs_det_basis_change
 
 中文:
 定理 natAbs_det_basis_change
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (b : Basis ι 整数 S)
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (b : 基 ι 整数 S)
   证明: Submodule.natAbs_det_basis_change b (I.restrictScalars Int) bI
 
 @[simp]
@@ -890,7 +890,7 @@ lemma absNorm_span_natCast
 中文:
 引理 absNorm_span_natCast
   条件: (n : 自然数)
-  结论: (span {(n : S)}).absNorm = n ^ Module.finrank 整数 S
+  结论: (span {(n : S)}).absNorm = n ^ 模.finrank 整数 S
   证明: by
   simp [absNorm_span_singleton, Algebra.norm_natCast]
 
@@ -913,7 +913,7 @@ theorem absNorm_dvd_norm_of_mem
 
 中文:
 定理 absNorm_dvd_norm_of_mem
-  条件: {I : Ideal S} {x : S} (h : x in I)
+  条件: {I : 理想 S} {x : S} (h : x in I)
   证明: by
   rw [← Int.dvd_natAbs]; rw [← absNorm_span_singleton x]; rw [Int.natCast_dvd_natCast]
   exact absNorm_dvd_absNorm_of_le ((span_singleton_le_iff_mem _).mpr h)
@@ -942,7 +942,7 @@ theorem absNorm_span_insert
 
 中文:
 定理 absNorm_span_insert
-  条件: (r : S) (s : Set S)
+  条件: (r : S) (s : 集合 S)
   证明: (dvd_gcd_iff _ _ _).mpr
     ⟨absNorm_dvd_absNorm_of_le (span_mono (Set.subset_insert _ _)),
       _root_.trans
@@ -977,8 +977,8 @@ theorem absNorm_eq_zero_iff
 
 中文:
 定理 absNorm_eq_zero_iff
-  条件: {I : Ideal S}
-  结论: Ideal.absNorm I = 0 ↔ I = ⊥
+  条件: {I : 理想 S}
+  结论: 理想.absNorm I = 0 ↔ I = ⊥
   证明: by
   constructor
   · intro hI
@@ -1012,7 +1012,7 @@ theorem absNorm_ne_zero_iff_mem_nonZeroDivisors
 
 中文:
 定理 absNorm_ne_zero_iff_mem_nonZeroDivisors
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   证明: by
   simp_rw [ne_eq, Ideal.absNorm_eq_zero_iff, mem_nonZeroDivisors_iff_ne_zero, Submodule.zero_eq_bot]
 
@@ -1033,7 +1033,7 @@ theorem absNorm_pos_iff_mem_nonZeroDivisors
 
 中文:
 定理 absNorm_pos_iff_mem_nonZeroDivisors
-  条件: {I : Ideal S}
+  条件: {I : 理想 S}
   证明: by
   rw [← absNorm_ne_zero_iff_mem_nonZeroDivisors]; rw [Nat.pos_iff_ne_zero]
 
@@ -1054,8 +1054,8 @@ theorem absNorm_ne_zero_of_nonZeroDivisors
 
 中文:
 定理 absNorm_ne_zero_of_nonZeroDivisors
-  条件: (I : (Ideal S)⁰)
-  结论: absNorm (I : Ideal S) != 0
+  条件: (I : (理想 S)⁰)
+  结论: absNorm (I : 理想 S) != 0
   证明: absNorm_ne_zero_iff_mem_nonZeroDivisors.mpr (SetLike.coe_mem I)
 
 Depends on / 依赖: SetLike, SetLike.coe_mem, absNorm_ne_zero_iff_mem_nonZeroDivisors, absNorm_ne_zero_iff_mem_nonZeroDivisors.mpr, coe_mem
@@ -1074,8 +1074,8 @@ theorem absNorm_pos_of_nonZeroDivisors
 
 中文:
 定理 absNorm_pos_of_nonZeroDivisors
-  条件: (I : (Ideal S)⁰)
-  结论: 0 < absNorm (I : Ideal S)
+  条件: (I : (理想 S)⁰)
+  结论: 0 < absNorm (I : 理想 S)
   证明: absNorm_pos_iff_mem_nonZeroDivisors.mpr (SetLike.coe_mem I)
 
 Depends on / 依赖: SetLike, SetLike.coe_mem, absNorm_pos_iff_mem_nonZeroDivisors, absNorm_pos_iff_mem_nonZeroDivisors.mpr, coe_mem
@@ -1095,7 +1095,7 @@ lemma finiteIndex
 
 中文:
 引理 finiteIndex
-  条件: {I : Ideal S} (hI : I != ⊥)
+  条件: {I : 理想 S} (hI : I != ⊥)
   结论: I.toAddSubgroup.FiniteIndex
   证明: by
   rwa [AddSubgroup.finiteIndex_iff, ← absNorm_eq_index, Ne, absNorm_eq_zero_iff]
@@ -1118,7 +1118,7 @@ lemma isFiniteRelIndex
 
 中文:
 引理 isFiniteRelIndex
-  条件: {I : Ideal S} (hI : I != ⊥) (J : Ideal S)
+  条件: {I : 理想 S} (hI : I != ⊥) (J : 理想 S)
   证明: by
   have := finiteIndex hI
   exact isFiniteRelIndex_of_finiteIndex
@@ -1144,8 +1144,8 @@ lemma exists_prime_and_absNorm_eq_pow
       (Ideal.IsMaximal.ne_bot_of_isIntegral_int
 
 中文:
-引理 exists_prime_and_absNorm_eq_pow
-  条件: (P : Ideal S) [P.IsMaximal]
+引理 存在_prime_and_absNorm_eq_pow
+  条件: (P : 理想 S) [P.是极大]
   证明: by
   have : IsAddTorsionFree S := .of_isTorsionFree Int _
   have := CharZero.of_isAddTorsionFree S S
@@ -1184,7 +1184,7 @@ lemma exists_isMaximal_dvd_of_dvd_absNorm
   induction I using UniqueFactorizationMonoid.induction_on_prim
 
 中文:
-引理 exists_isMaximal_dvd_of_dvd_absNorm
+引理 存在_isMaximal_dvd_of_dvd_absNorm
   证明: by
   have : IsAddTorsionFree S := .of_isTorsionFree Int _
   have := CharZero.of_isAddTorsionFree S S
@@ -1234,7 +1234,7 @@ lemma exists_isMaximal_dvd_of_dvd_absNorm'
     (by exact_mod_cast hI)
 
 中文:
-引理 exists_isMaximal_dvd_of_dvd_absNorm'
+引理 存在_isMaximal_dvd_of_dvd_absNorm'
   证明: exists_isMaximal_dvd_of_dvd_absNorm (Int.prime_iff_natAbs_prime.mpr (by simpa)) _
     (by exact_mod_cast hI)
 
@@ -1261,7 +1261,7 @@ theorem finite_setOfPred_absNorm_eq
 
 中文:
 定理 finite_setOfPred_absNorm_eq
-  条件: [CharZero S] (n : 自然数)
+  条件: [特征零 S] (n : 自然数)
   证明: by
   obtain hn | hn := Nat.eq_zero_or_pos n
   · simp only [hn, absNorm_eq_zero_iff, Set.ofPred_eq_eq_singleton, Set.finite_singleton]
@@ -1306,7 +1306,7 @@ theorem finite_setOfPred_absNorm_le
 
 中文:
 定理 finite_setOfPred_absNorm_le
-  条件: [CharZero S] (n : 自然数)
+  条件: [特征零 S] (n : 自然数)
   证明: by
   rw [show {I : Ideal S | Ideal.absNorm I <= n} =
     (⋃ i in Set.Icc 0 n]; rw [{I : Ideal S | Ideal.absNorm I = i}) by ext; simp]
@@ -1340,7 +1340,7 @@ alias finite_setOf_absNorm_le
 
 中文:
 定理 finite_setOfPred_absNorm_le₀
-  条件: [CharZero S] (n : 自然数)
+  条件: [特征零 S] (n : 自然数)
   证明: by
   have : Finite {I : Ideal S // I in (Ideal S)⁰ ∧ absNorm I <= n} :=
     (finite_setOfPred_absNorm_le n).subset fun _ ⟨_, h⟩ => h
@@ -1376,7 +1376,7 @@ theorem card_norm_le_eq_card_norm_le_add_one
 
 中文:
 定理 card_norm_le_eq_card_norm_le_add_one
-  条件: (n : 自然数) [CharZero S]
+  条件: (n : 自然数) [特征零 S]
   证明: by
   classical
   have : Finite {I : Ideal S // I in (Ideal S)⁰ ∧ absNorm I <= n} :=
@@ -1422,7 +1422,7 @@ theorem norm_dvd_iff
 
 中文:
 定理 norm_dvd_iff
-  条件: {x : S} (hx : Prime (Algebra.norm 整数 x)) {y : 整数}
+  条件: {x : S} (hx : 素 (代数.norm 整数 x)) {y : 整数}
   证明: by
   rw [← Ideal.mem_span_singleton (y := x)]; rw [← eq_intCast (algebraMap Int S)]; rw [← Ideal.mem_comap]; rw [← Ideal.span_singleton_absNorm]; rw [Ideal.mem_span_singleton]; rw [Ideal.absNorm_span_singleton]; rw [Int.natAbs_dvd]
   rwa [Ideal.absNorm_span_singleton, ← Int.prime_iff_natAbs_prime]
@@ -1456,8 +1456,8 @@ theorem Int.ideal_span_absNorm_eq_self
 @[simp]
 
 中文:
-定理 Int.ideal_span_absNorm_eq_self
-  条件: (J : Ideal 整数)
+定理 整数.ideal_span_absNorm_eq_self
+  条件: (J : 理想 整数)
   证明: by
   obtain ⟨g, rfl⟩ := IsPrincipalIdealRing.principal J
   simp
@@ -1483,8 +1483,8 @@ theorem Int.prime_absNorm
   simp [prime_span_singleton_iff, prime_iff_natAbs_prime]
 
 中文:
-定理 Int.prime_absNorm
-  条件: (J : Ideal 整数)
+定理 整数.prime_absNorm
+  条件: (J : 理想 整数)
   证明: by
   obtain ⟨g, rfl⟩ := IsPrincipalIdealRing.principal J
   simp [prime_span_singleton_iff, prime_iff_natAbs_prime]

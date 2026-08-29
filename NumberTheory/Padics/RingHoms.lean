@@ -138,7 +138,7 @@ theorem norm_sub_modPart_aux
 
 中文:
 定理 norm_sub_modPart_aux
-  条件: (r : Rat) (h : ‖(r : Rat_[p])‖ <= 1)
+  条件: (r : 有理数) (h : ‖(r : Rat_[p])‖ <= 1)
   证明: by
   rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
   simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
@@ -221,7 +221,7 @@ theorem exists_mem_range_of_norm_rat_le_one
   proof: ⟨modPart p r, modPart_nonneg _, modPart_lt_p _, norm_sub_modPart _ h⟩
 
 中文:
-定理 exists_mem_range_of_norm_rat_le_one
+定理 存在_mem_range_of_norm_rat_le_one
   条件: (h : ‖(r : Rat_[p])‖ <= 1)
   证明: ⟨modPart p r, modPart_nonneg _, modPart_lt_p _, norm_sub_modPart _ h⟩
 
@@ -348,7 +348,7 @@ theorem exists_mem_range
       _ <= _ := Padic.nonarchi
 
 中文:
-定理 exists_mem_range
+定理 存在_mem_range
   结论: 存在 n : 自然数, n < p ∧ x - n in maximalIdeal 整数_[p]
   证明: by
   simp only [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, ← norm_lt_one_iff_dvd]
@@ -394,7 +394,7 @@ theorem existsUnique_mem_range
   rwa [ZMod.natCast_eq_natCast_iff, ModEq, mod_eq_of_lt hn₁, mod_eq_of_lt hm₁] at this
 
 中文:
-定理 existsUnique_mem_range
+定理 存在Unique_mem_range
   结论: 存在! n : 自然数, n < p ∧ x - n in maximalIdeal 整数_[p]
   证明: by
   obtain ⟨n, hn₁, hn₂⟩ := exists_mem_range x
@@ -811,7 +811,7 @@ lemma zmodRepr_natCast_ofNat
   rcases n with _ | _ | n <;> simp
 
 中文:
-引理 zmodRepr_natCast_ofNat
+引理 zmodRepr_natCast_of自然数
   条件: {n : 自然数} (hn : of自然数(n) < p)
   证明: by
   convert! zmodRepr_natCast_of_lt hn
@@ -868,7 +868,7 @@ definition toZModHom
 
 中文:
 定义 toZModHom
-  签名: (v : 自然数) (f : 整数_[p] -> 自然数) (f_spec : 对任意 x, x - f x in (Ideal.span {↑v} : Ideal 整数_[p]))
+  签名: (v : 自然数) (f : 整数_[p] -> 自然数) (f_spec : 对任意 x, x - f x in (理想.span {↑v} : 理想 整数_[p]))
   定义体: f x
   map_zero' := by
     rw [f_congr (0 : Int_[p]) _ 0, cast_zero]
@@ -1008,7 +1008,7 @@ theorem ker_toZMod
 
 中文:
 定理 ker_toZMod
-  结论: RingHom.ker (toZMod : 整数_[p] ->+* ZMod p) = maximalIdeal 整数_[p]
+  结论: 环态射.ker (toZMod : 整数_[p] ->+* ZMod p) = maximalIdeal 整数_[p]
   证明: by
   ext x
   rw [RingHom.mem_ker]
@@ -1092,7 +1092,7 @@ definition residueField
 
 中文:
 定义 residueField
-  签名: : IsLocalRing.ResidueField 整数_[p] ≃+* ZMod p
+  签名: : 是局部环.ResidueField 整数_[p] ≃+* ZMod p
   定义体: (Ideal.quotEquivOfEq PadicInt.ker_toZMod.symm).trans
     RingHom.quotientKerEquivOfSurjective (ZMod.ringHom_surjective PadicInt.toZMod)
 
@@ -1197,7 +1197,7 @@ theorem appr_mono
 中文:
 定理 appr_mono
   条件: (x : 整数_[p])
-  结论: Monotone x.appr
+  结论: 递增 x.appr
   证明: by
   apply monotone_nat_of_le_succ
   intro n
@@ -1290,7 +1290,7 @@ theorem appr_spec
 中文:
 定理 appr_spec
   条件: (n : 自然数)
-  结论: 对任意 x : 整数_[p], x - appr x n in Ideal.span {(p : 整数_[p]) ^ n}
+  结论: 对任意 x : 整数_[p], x - appr x n in 理想.span {(p : 整数_[p]) ^ n}
   证明: by
   simp only [Ideal.mem_span_singleton]
   induction n with
@@ -2280,7 +2280,7 @@ theorem toZModPow_eq_iff_ext
 
 中文:
 定理 toZModPow_eq_iff_ext
-  条件: {R : 类型} [NonAssocSemiring R] {g g' : R ->+* 整数_[p]}
+  条件: {R : 类型} [非结合半环 R] {g g' : R ->+* 整数_[p]}
   证明: by
   constructor
   · intro hg
@@ -2368,7 +2368,7 @@ lemma toZModPow_ofIntSeq_of_pow_dvd_sub
   obtain ⟨N
 
 中文:
-引理 toZModPow_ofIntSeq_of_pow_dvd_sub
+引理 toZModPow_of整数Seq_of_pow_dvd_sub
   证明: by
   set x := PadicInt.ofIntSeq _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)
   let s : PadicSeq p := ⟨(f ·), isCauSeq_padicNorm_of_pow_dvd_sub f p hi⟩

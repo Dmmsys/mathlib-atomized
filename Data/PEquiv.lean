@@ -60,11 +60,11 @@ structure PEquiv
     - inv : forall (a : α) (b : β), invFun b = some a ↔ toFun a = some b
 
 中文:
-结构 PEquiv
+结构 P等价
   参数: (α : 类型u) (β : 类型v)
   公理与运算 (3 个):
-    - toFun : α -> Option β
-    - invFun : β -> Option α
+    - toFun : α -> 选项类型 β
+    - invFun : β -> 选项类型 α
     - inv : 对任意 (a : α) (b : β), invFun b = some a ↔ toFun a = some b
 -/
 structure PEquiv (α : Type u) (β : Type v) where
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (α ≃. β) α (Option β)
+  签名: 函数状 (α ≃. β) α (选项类型 β)
   定义体: { coe := toFun
     coe_injective := by
       rintro ⟨f₁, f₂, hf⟩ ⟨g₁, g₂, hg⟩ (rfl : f₁ = g₁)
@@ -127,8 +127,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f₁ : α -> Option β) (f₂ h)
-  结论: (mk f₁ f₂ h : α -> Option β) = f₁
+  条件: (f₁ : α -> 选项类型 β) (f₂ h)
+  结论: (mk f₁ f₂ h : α -> 选项类型 β) = f₁
   证明: rfl
 -/
 @[simp] theorem coe_mk (f₁ : α -> Option β) (f₂ h) : (mk f₁ f₂ h : α -> Option β) = f₁ :=
@@ -144,7 +144,7 @@ theorem coe_mk_apply
 
 中文:
 定理 coe_mk_apply
-  条件: (f₁ : α -> Option β) (f₂ : β -> Option α) (h) (x : α)
+  条件: (f₁ : α -> 选项类型 β) (f₂ : β -> 选项类型 α) (h) (x : α)
   证明: rfl
 -/
 theorem coe_mk_apply (f₁ : α -> Option β) (f₂ : β -> Option α) (h) (x : α) :
@@ -297,7 +297,7 @@ theorem refl_apply
 中文:
 定理 refl_apply
   条件: (a : α)
-  结论: PEquiv.refl α a = some a
+  结论: P等价.refl α a = some a
   证明: rfl
 
 @[simp]
@@ -318,7 +318,7 @@ theorem symm_refl
 
 中文:
 定理 symm_refl
-  结论: (PEquiv.refl α).symm = PEquiv.refl α
+  结论: (P等价.refl α).symm = P等价.refl α
   证明: rfl
 
 @[simp]
@@ -398,7 +398,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (PEquiv.symm : (α ≃. β) -> β ≃. α)
+  结论: 函数.双射 (P等价.symm : (α ≃. β) -> β ≃. α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -416,7 +416,7 @@ theorem symm_injective
 
 中文:
 定理 symm_injective
-  结论: Function.Injective (@PEquiv.symm α β)
+  结论: 函数.单射 (@P等价.symm α β)
   证明: symm_bijective.injective
 
 Depends on / 依赖: injective, symm_bijective, symm_bijective.injective
@@ -526,7 +526,7 @@ theorem refl_trans
 中文:
 定理 refl_trans
   条件: (f : α ≃. β)
-  结论: (PEquiv.refl α).trans f = f
+  结论: (P等价.refl α).trans f = f
   证明: by
   ext; dsimp [PEquiv.trans]; rfl
 
@@ -550,7 +550,7 @@ theorem trans_refl
 中文:
 定理 trans_refl
   条件: (f : α ≃. β)
-  结论: f.trans (PEquiv.refl β) = f
+  结论: f.trans (P等价.refl β) = f
   证明: by
   ext; dsimp [PEquiv.trans]; simp
 
@@ -591,7 +591,7 @@ theorem injective_of_forall_ne_isSome
         rfl⟩
 
 中文:
-定理 injective_of_forall_ne_isSome
+定理 injective_of_对任意_ne_isSome
   结论: (f : α ≃. β) (a₂ : α)
   证明: HasLeftInverse.injective
     ⟨fun b => Option.recOn b a₂ fun b' => Option.recOn (f.symm b') a₂ id, fun x => by
@@ -627,9 +627,9 @@ theorem injective_of_forall_isSome
     (hn ⟨x⟩).elim
 
 中文:
-定理 injective_of_forall_isSome
+定理 injective_of_对任意_isSome
   条件: {f : α ≃. β} (h : 对任意 a : α, isSome (f a))
-  结论: Injective f
+  结论: 单射 f
   证明: (Classical.em (Nonempty α)).elim
     (fun hn => injective_of_forall_ne_isSome f (Classical.choice hn) fun a _ => h a) fun hn x =>
     (hn ⟨x⟩).elim
@@ -662,7 +662,7 @@ definition ofSet
 
 中文:
 定义 ofSet
-  签名: (s : Set α) [DecidablePred (· in s)]
+  签名: (s : 集合 α) [DecidablePred (· in s)]
   定义体: if a in s then some a else none
   invFun a := if a in s then some a else none
   inv a b := by
@@ -695,7 +695,7 @@ theorem mem_ofSet_self_iff
 
 中文:
 定理 mem_ofSet_self_iff
-  条件: {s : Set α} [DecidablePred (· in s)] {a : α}
+  条件: {s : 集合 α} [DecidablePred (· in s)] {a : α}
   结论: a in ofSet s a ↔ a in s
   证明: by
   dsimp [ofSet]; split_ifs <;> simp [*]
@@ -719,7 +719,7 @@ theorem mem_ofSet_iff
 
 中文:
 定理 mem_ofSet_iff
-  条件: {s : Set α} [DecidablePred (· in s)] {a b : α}
+  条件: {s : 集合 α} [DecidablePred (· in s)] {a b : α}
   证明: by
   dsimp [ofSet]
   grind
@@ -742,7 +742,7 @@ theorem ofSet_eq_some_iff
 
 中文:
 定理 ofSet_eq_some_iff
-  条件: {s : Set α} {_ : DecidablePred (· in s)} {a b : α}
+  条件: {s : 集合 α} {_ : DecidablePred (· in s)} {a b : α}
   证明: mem_ofSet_iff
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.integerNormalization_eq_zero_iff.not.mpr, integerNormalization_eq_zero_iff, map_ne_zero, mem_ofSet_iff
@@ -763,7 +763,7 @@ theorem ofSet_eq_some_self_iff
 
 中文:
 定理 ofSet_eq_some_self_iff
-  条件: {s : Set α} {_ : DecidablePred (· in s)} {a : α}
+  条件: {s : 集合 α} {_ : DecidablePred (· in s)} {a : α}
   证明: mem_ofSet_self_iff
 
 @[simp]
@@ -808,7 +808,7 @@ theorem ofSet_univ
 
 中文:
 定理 ofSet_univ
-  结论: ofSet Set.univ = PEquiv.refl α
+  结论: ofSet 集合.univ = P等价.refl α
   证明: rfl
 
 @[simp]
@@ -833,7 +833,7 @@ theorem ofSet_eq_refl
 
 中文:
 定理 ofSet_eq_refl
-  条件: {s : Set α} [DecidablePred (· in s)]
+  条件: {s : 集合 α} [DecidablePred (· in s)]
   证明: ⟨fun h => by
     rw [Set.eq_univ_iff_forall]
     intro
@@ -944,7 +944,7 @@ theorem trans_symm_eq_iff_forall_isSome
   rw [self_trans_symm]; rw [ofSet_eq_refl]; rw [Set.eq_univ_iff_forall]; rfl
 
 中文:
-定理 trans_symm_eq_iff_forall_isSome
+定理 trans_symm_eq_iff_对任意_isSome
   条件: {f : α ≃. β}
   证明: by
   rw [self_trans_symm]; rw [ofSet_eq_refl]; rw [Set.eq_univ_iff_forall]; rfl
@@ -967,7 +967,7 @@ instance instBotPEquiv
 
 中文:
 实例 instBotPEquiv
-  签名: : Bot (α ≃. β)
+  签名: : 底元素 (α ≃. β)
   定义体: ⟨{ toFun := fun _ => none
       invFun := fun _ => none
       inv := by simp }⟩
@@ -991,7 +991,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ≃. β)
+  签名: 可居 (α ≃. β)
   定义体: ⟨⊥⟩
 
 @[simp]
@@ -1359,8 +1359,8 @@ theorem single_subsingleton_eq_refl
 
 中文:
 定理 single_subsingleton_eq_refl
-  条件: [Subsingleton α] (a b : α)
-  结论: single a b = PEquiv.refl α
+  条件: [子单例 α] (a b : α)
+  结论: single a b = P等价.refl α
   证明: by
   ext i j
   dsimp [single]
@@ -1470,7 +1470,7 @@ instance instPartialOrderPEquiv
 
 中文:
 实例 instPartialOrderPEquiv
-  签名: : PartialOrder (α ≃. β) where
+  签名: : 偏序 (α ≃. β) where
   定义体: forall (a : α) (b : β), b in f a -> b in g a
   le_refl _ _ _ := id
   le_trans _ _ _ fg gh a b := gh a b ∘ fg a b
@@ -1524,7 +1524,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (α ≃. β)
+  签名: 有底序 (α ≃. β)
   定义体: { instBotPEquiv with bot_le := fun _ _ _ h => (not_mem_none _ h).elim }
 
 Depends on / 依赖: bot_le, instBotPEquiv, not_mem_none
@@ -1623,7 +1623,7 @@ theorem toPEquiv_refl
 
 中文:
 定理 toPEquiv_refl
-  结论: (Equiv.refl α).toPEquiv = PEquiv.refl α
+  结论: (等价.refl α).toPEquiv = P等价.refl α
   证明: rfl
 -/
 theorem toPEquiv_refl : (Equiv.refl α).toPEquiv = PEquiv.refl α :=

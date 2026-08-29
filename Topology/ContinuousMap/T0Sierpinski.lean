@@ -46,7 +46,7 @@ theorem eq_induced_by_maps_to_sierpinski
 
 中文:
 定理 eq_induced_by_maps_to_sierpinski
-  条件: (X : 类型) [t : TopologicalSpace X]
+  条件: (X : 类型) [t : 拓扑空间 X]
   证明: by
   apply le_antisymm
   · rw [le_iInf_iff]
@@ -103,7 +103,7 @@ theorem productOfMemOpens_isInducing
 
 中文:
 定理 productOfMemOpens_isInducing
-  结论: IsInducing (productOfMemOpens X)
+  结论: 是Inducing (productOfMemOpens X)
   证明: by
   convert! inducing_iInf_to_pi fun (u : Opens X) (x : X) => x in u
   apply eq_induced_by_maps_to_sierpinski
@@ -128,8 +128,8 @@ theorem productOfMemOpens_injective
 
 中文:
 定理 productOfMemOpens_injective
-  条件: [T0Space X]
-  结论: Function.Injective (productOfMemOpens X)
+  条件: [T0空间 X]
+  结论: 函数.单射 (productOfMemOpens X)
   证明: by
   intro x1 x2 h
   apply Inseparable.eq
@@ -153,8 +153,8 @@ theorem productOfMemOpens_isEmbedding
 
 中文:
 定理 productOfMemOpens_isEmbedding
-  条件: [T0Space X]
-  结论: IsEmbedding (productOfMemOpens X)
+  条件: [T0空间 X]
+  结论: 是嵌入 (productOfMemOpens X)
   证明: .mk (productOfMemOpens_isInducing X) (productOfMemOpens_injective X)
 
 Depends on / 依赖: productOfMemOpens_injective, productOfMemOpens_isInducing

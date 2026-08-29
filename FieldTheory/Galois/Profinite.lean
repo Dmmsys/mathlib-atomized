@@ -71,8 +71,8 @@ definition FiniteGaloisIntermediateField.finGaloisGroup
   FiniteGrp.of Gal(L/k)
 
 中文:
-定义 FiniteGaloisIntermediateField.finGaloisGroup
-  签名: (L : FiniteGalois整数ermediateField k K)
+定义 有限Galois中间域.finGaloisGroup
+  签名: (L : 有限Galois中间域 k K)
   定义体: letI := AlgEquiv.fintype k L
   FiniteGrp.of Gal(L/k)
 
@@ -96,7 +96,7 @@ definition finGaloisGroupMap
 
 中文:
 定义 finGaloisGroupMap
-  签名: {L₁ L₂ : (FiniteGalois整数ermediateField k K)ᵒᵖ}
+  签名: {L₁ L₂ : (有限Galois中间域 k K)ᵒᵖ}
   定义体: haveI : Normal k L₂.unop := IsGalois.to_normal
   letI : Algebra L₂.unop L₁.unop := RingHom.toAlgebra (Subsemiring.inclusion <| leOfHom le.1)
   haveI : IsScalarTower k L₂.unop L₁.unop := IsScalarTower.of_algebraMap_eq (congrFun rfl)
@@ -126,7 +126,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (L : (FiniteGalois整数ermediateField k K)ᵒᵖ)
+  条件: (L : (有限Galois中间域 k K)ᵒᵖ)
   证明: ConcreteCategory.ext (AlgEquiv.restrictNormalHom_id _ _)
 
 @[simp]
@@ -155,7 +155,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {L₁ L₂ L₃ : (FiniteGalois整数ermediateField k K)ᵒᵖ} (f : L₁ ⟶ L₂) (g : L₂ ⟶ L₃)
+  条件: {L₁ L₂ L₃ : (有限Galois中间域 k K)ᵒᵖ} (f : L₁ ⟶ L₂) (g : L₂ ⟶ L₃)
   证明: by
   iterate 2
     induction L₁ with | _ L₁ => ?_
@@ -198,7 +198,7 @@ definition finGaloisGroupFunctor
 
 中文:
 定义 finGaloisGroupFunctor
-  签名: : (FiniteGalois整数ermediateField k K)ᵒᵖ ⥤ FiniteGrp where
+  签名: : (有限Galois中间域 k K)ᵒᵖ ⥤ FiniteGrp where
   定义体: L.unop.finGaloisGroup
   map := finGaloisGroupMap
   map_id := finGaloisGroupMap.map_id
@@ -294,7 +294,7 @@ have := Module.Finite.equiv AlgEquiv.toLinearEquiv IntermediateField.liftAlgEqui
 
 中文:
 定理 restrictNormalHom_continuous
-  条件: (L : 整数ermediateField k K) [Normal k L]
+  条件: (L : 中间域 k K) [正规 k L]
   证明: by
   apply continuous_of_continuousAt_one _ (continuousAt_def.mpr _)
   intro N hN
@@ -341,7 +341,7 @@ lemma algEquivToLimit_continuous
 
 中文:
 引理 algEquivToLimit_continuous
-  结论: Continuous (algEquivToLimit k K)
+  结论: 连续 (algEquivToLimit k K)
   证明: by
   rw [continuous_induced_rng]
   refine continuous_pi (fun L => ?_)
@@ -368,7 +368,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: (L : FiniteGalois整数ermediateField k K)
+  签名: (L : 有限Galois中间域 k K)
   定义体: g.val (op L)
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -417,7 +417,7 @@ lemma proj_of_le
 
 中文:
 引理 proj_of_le
-  结论: (L : FiniteGalois整数ermediateField k K)
+  结论: (L : 有限Galois中间域 k K)
   证明: by
   induction L with | _ L => ?_
   induction L' with | _ L' => ?_
@@ -451,7 +451,7 @@ lemma proj_adjoin_singleton_val
 
 中文:
 引理 proj_adjoin_singleton_val
-  结论: [IsGalois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
+  结论: [是Galois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
   证明: proj_of_le _ g y _ _
 
 Depends on / 依赖: proj_of_le
@@ -473,7 +473,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def toAlgEquivAux [IsGalois k K]
+  签名: def toAlgEquivAux [是Galois k K]
   定义体: fun x => (proj (adjoin k {x}) g ⟨x, subset_adjoin _ _ (by simp only [Set.mem_singleton_iff])⟩).val
 -/
 private noncomputable def toAlgEquivAux [IsGalois k K]
@@ -492,7 +492,7 @@ lemma toAlgEquivAux_eq_proj_of_mem
 
 中文:
 引理 toAlgEquivAux_eq_proj_of_mem
-  结论: [IsGalois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
+  结论: [是Galois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
   证明: proj_adjoin_singleton_val g _ _ L hx
 
 Depends on / 依赖: proj_adjoin_singleton_val
@@ -515,7 +515,7 @@ lemma mk_toAlgEquivAux
 
 中文:
 引理 mk_toAlgEquivAux
-  结论: [IsGalois k K] (g : limit (asProfiniteGaloisGroupFunctor k K)) (x : K)
+  结论: [是Galois k K] (g : limit (asProfiniteGaloisGroupFunctor k K)) (x : K)
   证明: by
   rw [Subtype.ext_iff]; rw [Subtype.coe_mk]; rw [toAlgEquivAux_eq_proj_of_mem]
 
@@ -541,7 +541,7 @@ lemma toAlgEquivAux_eq_liftNormal
 
 中文:
 引理 toAlgEquivAux_eq_liftNormal
-  结论: [IsGalois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
+  结论: [是Galois k K] (g : limit (asProfiniteGaloisGroupFunctor k K))
   证明: by
   rw [toAlgEquivAux_eq_proj_of_mem g x L hx]
   exact (AlgEquiv.liftNormal_commutes (proj L g) _ ⟨x, hx⟩).symm
@@ -575,7 +575,7 @@ definition limitToAlgEquiv
 
 中文:
 定义 limitToAlgEquiv
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: toAlgEquivAux g
   invFun := toAlgEquivAux g⁻¹
   left_inv x := by
@@ -634,7 +634,7 @@ definition mulEquivToLimit
 
 中文:
 定义 mulEquivToLimit
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: algEquivToLimit k K
   map_mul' := map_mul _
   invFun := limitToAlgEquiv
@@ -678,7 +678,7 @@ lemma krullTopology_mem_nhds_one_iff_of_isGalois
 
 中文:
 引理 krullTopology_mem_nhds_one_iff_of_isGalois
-  条件: [IsGalois k K] (A : Set Gal(K/k))
+  条件: [是Galois k K] (A : 集合 Gal(K/k))
   证明: by
   rw [krullTopology_mem_nhds_one_iff_of_normal]
   exact ⟨fun ⟨L, _, hL, hsub⟩ => ⟨{ toIntermediateField := L, isGalois := ⟨⟩ }, hsub⟩,
@@ -708,7 +708,7 @@ lemma isOpen_mulEquivToLimit_image_fixingSubgroup
 
 中文:
 引理 isOpen_mulEquivToLimit_image_fixingSubgroup
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: by
   let fix1 : Set (Π L, (asProfiniteGaloisGroupFunctor k K).obj L) := {f | f (op L) = 1}
   suffices mulEquivToLimit k K '' L.1.fixingSubgroup = Set.preimage Subtype.val fix1 by
@@ -746,8 +746,8 @@ lemma mulEquivToLimit_symm_continuous
 
 中文:
 引理 mulEquivToLimit_symm_continuous
-  条件: [IsGalois k K]
-  结论: Continuous (mulEquivToLimit k K).symm
+  条件: [是Galois k K]
+  结论: 连续 (mulEquivToLimit k K).symm
   证明: by
   apply continuous_of_continuousAt_one _ (continuousAt_def.mpr _)
   simp only [map_one, krullTopology_mem_nhds_one_iff_of_isGalois, ← MulEquiv.coe_toEquiv_symm,
@@ -782,7 +782,7 @@ definition continuousMulEquivToLimit
 
 中文:
 定义 continuousMulEquivToLimit
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: mulEquivToLimit k K
   continuous_toFun := algEquivToLimit_continuous
   continuous_invFun := mulEquivToLimit_symm_continuous
@@ -804,8 +804,8 @@ instance [IsGalois
   body: (continuousMulEquivToLimit k K).symm.compactSpace
 
 中文:
-实例 [IsGalois
-  签名: k K] : CompactSpace Gal(K/k)
+实例 [是Galois
+  签名: k K] : 紧空间 Gal(K/k)
   定义体: (continuousMulEquivToLimit k K).symm.compactSpace
 
 Depends on / 依赖: compactSpace, continuousMulEquivToLimit, symm.compactSpace
@@ -823,7 +823,7 @@ definition profiniteGalGrp
 
 中文:
 定义 profiniteGalGrp
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: ProfiniteGrp.of Gal(K/k)
 
 Depends on / 依赖: ProfiniteGrp, ProfiniteGrp.of
@@ -841,7 +841,7 @@ definition profiniteGalGrpIsoLimit
 
 中文:
 定义 profiniteGalGrpIsoLimit
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: ContinuousMulEquiv.toProfiniteGrpIso (continuousMulEquivToLimit k K)
 
 Depends on / 依赖: ContinuousMulEquiv, ContinuousMulEquiv.toProfiniteGrpIso, continuousMulEquivToLimit, toProfiniteGrpIso

@@ -76,7 +76,7 @@ theorem pow_coeff_zero_ne_zero_of_unit
 
 中文:
 定理 pow_coeff_zero_ne_zero_of_unit
-  条件: [FiniteDimensional K L] (x : L) (hx : IsUnit x)
+  条件: [有限维 K L] (x : L) (hx : 是单位 x)
   证明: by
   have h_alg : Algebra.IsAlgebraic K L := Algebra.IsAlgebraic.of_finite K L
   have hx₀ : IsIntegral K x := (Algebra.IsAlgebraic.isAlgebraic x).isIntegral

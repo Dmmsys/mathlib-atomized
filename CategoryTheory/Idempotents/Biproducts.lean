@@ -65,7 +65,7 @@ definition bicone
 
 中文:
 定义 bicone
-  签名: [HasFiniteBiproducts C] {J : Type} [Finite J] (F : J -> Karoubi C)
+  签名: [有FiniteBiproducts C] {J : 类型} [有限 J] (F : J -> Karoubi C)
   定义体: { X := biproduct fun j => (F j).X
       p := biproduct.map fun j => (F j).p
       idem := by
@@ -118,8 +118,8 @@ theorem karoubi_hasFiniteBiproducts
 
 中文:
 定理 karoubi_hasFiniteBiproducts
-  条件: [HasFiniteBiproducts C]
-  结论: HasFiniteBiproducts (Karoubi C)
+  条件: [有FiniteBiproducts C]
+  结论: 有FiniteBiproducts (Karoubi C)
   证明: { out := fun n =>
       { has_biproduct := fun F => by
           apply hasBiproduct_of_total (Biproducts.bicone F)

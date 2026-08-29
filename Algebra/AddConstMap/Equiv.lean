@@ -33,8 +33,8 @@ structure AddConstEquiv
   (no additional axioms)
 
 中文:
-结构 AddConstEquiv
-  参数: (G H : 类型) [Add G] [Add H] (a : G) (b : H)
+结构 加法余nst等价
+  参数: (G H : 类型) [加法 G] [加法 H] (a : G) (b : H)
   继承: G ≃ H, G ->+c[a, b] H
   (无附加公理)
 -/
@@ -63,7 +63,7 @@ lemma toEquiv_injective
 
 中文:
 引理 toEquiv_injective
-  结论: Injective (toEquiv : (G ≃+c[a, b] H) -> G ≃ H)
+  结论: 单射 (toEquiv : (G ≃+c[a, b] H) -> G ≃ H)
 -/
 lemma toEquiv_injective : Injective (toEquiv : (G ≃+c[a, b] H) -> G ≃ H)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -491,7 +491,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (G ≃+c[a, a] G)
+  签名: : 幺 (G ≃+c[a, a] G)
   定义体: ⟨.refl _⟩
 -/
 instance instOne : One (G ≃+c[a, a] G) := ⟨.refl _⟩
@@ -505,7 +505,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (G ≃+c[a, a] G)
+  签名: : 乘法 (G ≃+c[a, a] G)
   定义体: ⟨fun f g => g.trans f⟩
 
 Depends on / 依赖: g.trans
@@ -521,7 +521,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (G ≃+c[a, a] G)
+  签名: : 取逆 (G ≃+c[a, a] G)
   定义体: ⟨.symm⟩
 -/
 instance instInv : Inv (G ≃+c[a, a] G) := ⟨.symm⟩
@@ -535,7 +535,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: : Div (G ≃+c[a, a] G)
+  签名: : 除法 (G ≃+c[a, a] G)
   定义体: ⟨fun f g => f * g⁻¹⟩
 -/
 instance instDiv : Div (G ≃+c[a, a] G) := ⟨fun f g => f * g⁻¹⟩
@@ -549,8 +549,8 @@ instance instPowNat
   body: ⟨e^n, (e.toAddConstMap^n).map_add_const'⟩
 
 中文:
-实例 instPowNat
-  签名: : Pow (G ≃+c[a, a] G) 自然数 where
+实例 instPow自然数
+  签名: : 幂 (G ≃+c[a, a] G) 自然数 where
   定义体: ⟨e^n, (e.toAddConstMap^n).map_add_const'⟩
 
 Depends on / 依赖: e.toAddConstMap, map_add_const, toAddConstMap
@@ -570,8 +570,8 @@ instance instPowInt
     | .negSucc n => (e.symm^(n + 1)).map_add_const'⟩
 
 中文:
-实例 instPowInt
-  签名: : Pow (G ≃+c[a, a] G) 整数 where
+实例 instPow整数
+  签名: : 幂 (G ≃+c[a, a] G) 整数 where
   定义体: ⟨e^n,
     match n with
     | .ofNat n => (e^n).map_add_const'
@@ -594,7 +594,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: : Group (G ≃+c[a, a] G)
+  签名: : 群 (G ≃+c[a, a] G)
   定义体: toEquiv_injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     fun _ _ => rfl
 
@@ -616,7 +616,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : (G ≃+c[a, a] G) ->* Equiv.Perm G
+  签名: : (G ≃+c[a, a] G) ->* 等价.置换 G
   定义体: .mk' toEquiv fun _ _ => rfl
 
 Depends on / 依赖: toEquiv

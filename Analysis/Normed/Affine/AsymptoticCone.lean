@@ -34,7 +34,7 @@ theorem AffineSpace.asymptoticNhds_le_cobounded
   change Tendsto (fun x : Real × V => dist (x.1 • x.2 +
 
 中文:
-定理 AffineSpace.asymptoticNhds_le_cobounded
+定理 仿射空间.asymptoticNhds_le_cobounded
   条件: {v : V} (hv : v != 0)
   证明: by
   have ⟨p⟩ : Nonempty P := inferInstance
@@ -66,7 +66,7 @@ theorem asymptoticCone_subset_singleton_of_bounded
 
 中文:
 定理 asymptoticCone_subset_singleton_of_bounded
-  条件: {s : Set P} (hs : IsBounded s)
+  条件: {s : 集合 P} (hs : IsBounded s)
   证明: by
   intro v h
   by_contra! hv
@@ -97,7 +97,7 @@ refine le_antisymm ?_ iSup₂_le fun _ h => asymptoticNhds_le_cobounded
   have ⟨cover, h₁
 
 中文:
-定理 AffineSpace.cobounded_eq_iSup_sphere_asymptoticNhds
+定理 仿射空间.cobounded_eq_iSup_sphere_asymptoticNhds
   证明: by
 refine le_antisymm ?_ iSup₂_le fun _ h => asymptoticNhds_le_cobounded
     Metric.ne_of_mem_sphere h one_ne_zero
@@ -144,7 +144,7 @@ theorem isBounded_iff_asymptoticCone_subset_singleton
 
 中文:
 定理 isBounded_iff_asymptoticCone_subset_singleton
-  条件: {s : Set P}
+  条件: {s : 集合 P}
   证明: by
   refine ⟨asymptoticCone_subset_singleton_of_bounded, fun h => ?_⟩
   simp_rw [isBounded_def, cobounded_eq_iSup_sphere_asymptoticNhds, mem_iSup]
@@ -173,8 +173,8 @@ theorem not_bounded_iff_exists_ne_zero_mem_asymptoticCone
   tauto
 
 中文:
-定理 not_bounded_iff_exists_ne_zero_mem_asymptoticCone
-  条件: {s : Set P}
+定理 not_bounded_iff_存在_ne_zero_mem_asymptoticCone
+  条件: {s : 集合 P}
   证明: by
   rw [isBounded_iff_asymptoticCone_subset_singleton]; rw [Set.subset_singleton_iff]; rw [not_forall]
   tauto

@@ -63,10 +63,10 @@ class IsContinuousRiemannianBundle
     - exists_continuous : exists g : (Π x, E x ->L[Real] E x ->L[Real] Real), Continuous (fun (x : B) => TotalSpace.mk' (F ->L[Real] F ->L[Real] Real) x (g x)) ∧ forall (x : B) (v w : E x), ⟪v, w⟫ = g x v w
 
 中文:
-类 IsContinuousRiemannianBundle
+类 是余ntinuousRiemannianBundle
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_continuous : 存在 g : (Π x, E x ->L[实数] E x ->L[实数] 实数), Continuous (fun (x : B) => TotalSpace.mk' (F ->L[实数] F ->L[实数] 实数) x (g x)) ∧ 对任意 (x : B) (v w : E x), ⟪v, w⟫ = g x v w
+    - exists_continuous : 存在 g : (Π x, E x ->L[实数] E x ->L[实数] 实数), 连续 (fun (x : B) => 全空间.mk' (F ->L[实数] F ->L[实数] 实数) x (g x)) ∧ 对任意 (x : B) (v w : E x), ⟪v, w⟫ = g x v w
 -/
 class IsContinuousRiemannianBundle : Prop where
   /-- There exists a bilinear form, depending continuously on the basepoint and defining the
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsContinuousRiemannianBundle F₁ (Bundle.Trivial B F₁)
+  签名: 是余ntinuousRiemannianBundle F₁ (Bundle.平凡 B F₁)
   定义体: by
   refine ⟨fun x => innerSL Real, ?_, fun x v w => rfl⟩
   rw [continuous_iff_continuousAt]
@@ -225,7 +225,7 @@ lemma Continuous.inner_bundle
   exact fun x => (hv x).inner_bundle (hw x)
 
 中文:
-引理 Continuous.inner_bundle
+引理 连续.inner_bundle
   证明: by
   simp only [continuous_iff_continuousAt] at hv hw ⊢
   exact fun x => (hv x).inner_bundle (hw x)
@@ -562,7 +562,7 @@ structure RiemannianMetric
     - isVonNBounded((b : B)) : IsVonNBounded Real {v : E b | inner b v v < 1}
 
 中文:
-结构 RiemannianMetric
+结构 Riemann度量
   参数: where
   公理与运算 (5 个):
     - inner((b : B)) : E b ->L[实数] E b ->L[实数] 实数
@@ -598,8 +598,8 @@ definition RiemannianMetric.toCore
   definite v h := by contrapose! h; exact (g.pos b v h).ne'
 
 中文:
-定义 RiemannianMetric.toCore
-  签名: (g : RiemannianMetric E) (b : B)
+定义 Riemann度量.toCore
+  签名: (g : Riemann度量 E) (b : B)
   定义体: g.inner b v w
   conj_inner_symm v w := g.symm b w v
   re_inner_nonneg v := by
@@ -633,10 +633,10 @@ class RiemannianBundle
     - g : RiemannianMetric E
 
 中文:
-类 RiemannianBundle
+类 Riemann丛
   参数: where
   公理与运算 (1 个):
-    - g : RiemannianMetric E
+    - g : Riemann度量 E
 -/
 class RiemannianBundle where
   /-- The family of inner products on the fibers -/
@@ -694,14 +694,14 @@ structure ContinuousRiemannianMetric
     - continuous : Continuous (fun (b : B) => TotalSpace.mk' (F ->L[Real] F ->L[Real] Real) b (inner b))
 
 中文:
-结构 ContinuousRiemannianMetric
+结构 余ntinuousRiemannianMetric
   参数: where
   公理与运算 (5 个):
     - inner((b : B)) : E b ->L[实数] E b ->L[实数] 实数
     - symm((b : B) (v w : E b)) : inner b v w = inner b w v
     - pos((b : B) (v : E b) (hv : v != 0)) : 0 < inner b v v
     - isVonNBounded((b : B)) : IsVonNBounded 实数 {v : E b | inner b v v < 1}
-    - continuous : Continuous (fun (b : B) => TotalSpace.mk' (F ->L[实数] F ->L[实数] 实数) b (inner b))
+    - continuous : 连续 (fun (b : B) => 全空间.mk' (F ->L[实数] F ->L[实数] 实数) b (inner b))
 -/
 structure ContinuousRiemannianMetric where
   /-- The inner product along the fibers of the bundle. -/
@@ -727,8 +727,8 @@ definition ContinuousRiemannianMetric.toRiemannianMetric
     let e : E b ≃L[Real] F := Trivializati
 
 中文:
-定义 ContinuousRiemannianMetric.toRiemannianMetric
-  签名: (g : ContinuousRiemannianMetric F E)
+定义 余ntinuousRiemannianMetric.toRiemannianMetric
+  签名: (g : 余ntinuousRiemannianMetric F E)
   定义体: g.inner
   symm := g.symm
   pos := g.pos

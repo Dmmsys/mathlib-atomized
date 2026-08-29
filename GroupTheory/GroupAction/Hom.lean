@@ -79,8 +79,8 @@ structure AddActionHom
     - map_vadd' : forall (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
 
 中文:
-结构 AddActionHom
-  参数: {M N : 类型} (φ : M -> N) (X : 类型) [VAdd M X] (Y : 类型) [VAdd N Y]
+结构 加法作用态射
+  参数: {M N : 类型} (φ : M -> N) (X : 类型) [向量加法 M X] (Y : 类型) [向量加法 N Y]
   公理与运算 (2 个):
     - toFun : X -> Y
     - map_vadd' : 对任意 (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
@@ -106,7 +106,7 @@ structure MulActionHom
     - map_smul' : forall (m : M) (x : X), toFun (m • x) = (φ m) • toFun x
 
 中文:
-结构 MulActionHom
+结构 乘法作用态射
   参数: where
   公理与运算 (2 个):
     - toFun : X -> Y
@@ -150,7 +150,7 @@ class AddActionSemiHomClass
     - map_vaddₛₗ : forall (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
 
 中文:
-类 AddActionSemiHomClass
+类 加法ActionSemi态射类
   参数: (F : 类型)
   公理与运算 (1 个):
     - map_vaddₛₗ : 对任意 (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
@@ -176,7 +176,7 @@ class MulActionSemiHomClass
     - map_smulₛₗ : forall (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
 
 中文:
-类 MulActionSemiHomClass
+类 MulActionSemi态射类
   参数: (F : 类型)
   公理与运算 (1 个):
     - map_smulₛₗ : 对任意 (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (MulActionHom φ X Y) X Y
+  签名: 函数状 (乘法作用态射 φ X Y) X Y
   定义体: MulActionHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -251,7 +251,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  结论: {F M X Y : 类型} [SMul M X] [SMul M Y]
+  结论: {F M X Y : 类型} [标量乘法 M X] [标量乘法 M Y]
   证明: map_smulₛₗ f c x
 
 @[to_additive]
@@ -275,7 +275,7 @@ initialize_simps_projections AddActionHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: MulActionSemiHomClass (X ->ₑ[φ] Y) φ X Y
+  签名: MulActionSemi态射类 (X ->ₑ[φ] Y) φ X Y
   定义体: MulActionHom.map_smul'
 
 initialize_simps_projections MulActionHom (toFun -> apply)
@@ -311,8 +311,8 @@ definition _root_.MulActionSemiHomClass.toMulActionHom
   map_smul' := map_smulₛₗ f
 
 中文:
-定义 _root_.MulActionSemiHomClass.toMulActionHom
-  签名: [MulActionSemiHomClass F φ X Y] (f : F)
+定义 _root_.MulActionSemi态射类.toMulActionHom
+  签名: [MulActionSemi态射类 F φ X Y] (f : F)
   定义体: DFunLike.coe f
   map_smul' := map_smulₛₗ f
 
@@ -335,7 +335,7 @@ instance [MulActionSemiHomClass
   body: ⟨MulActionSemiHomClass.toMulActionHom⟩
 
 中文:
-实例 [MulActionSemiHomClass
+实例 [MulActionSemi态射类
   签名: F φ X Y] : CoeTC F (X ->ₑ[φ] Y)
   定义体: ⟨MulActionSemiHomClass.toMulActionHom⟩
 
@@ -359,8 +359,8 @@ theorem _root_.IsScalarTower.smulHomClass
 @[to_additive]
 
 中文:
-定理 _root_.IsScalarTower.smulHomClass
-  结论: [MulOneClass X] [SMul X Y] [IsScalarTower M' X Y]
+定理 _root_.标量塔.smulHomClass
+  结论: [MulOne类 X] [标量乘法 X Y] [标量塔 M' X Y]
   证明: by
     rw [← mul_one (m • x)]; rw [← smul_eq_mul]; rw [map_smul]; rw [smul_assoc]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [id_eq]
 
@@ -512,7 +512,7 @@ lemma _root_.FaithfulSMul.of_injective
   proof: eq_of_smul_eq_smul fun m => hf by simp_rw [map_smul, h]
 
 中文:
-引理 _root_.FaithfulSMul.of_injective
+引理 _root_.忠实标量乘法.of_injective
   证明: eq_of_smul_eq_smul fun m => hf by simp_rw [map_smul, h]
 
 Depends on / 依赖: eq_of_smul_eq_smul, map_smul, simp_rw
@@ -591,7 +591,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : CompTriple φ ψ χ]
+  签名: (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : 余mpTriple φ ψ χ]
   定义体: ⟨fun x => g (f x), fun m x =>
     calc
       g (f (m • x)) = g (φ m • f x) := by rw [map_smulₛₗ]
@@ -691,7 +691,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {Q T : 类型} [SMul Q T]
+  结论: {Q T : 类型} [标量乘法 Q T]
   证明: ext fun _ => rfl
 -/
 theorem comp_assoc {Q T : Type*} [SMul Q T]
@@ -760,7 +760,7 @@ definition inverse'
 
 中文:
 定义 inverse'
-  签名: (f : X ->ₑ[φ] Y) (g : Y -> X) (k : Function.RightInverse φ' φ)
+  签名: (f : X ->ₑ[φ] Y) (g : Y -> X) (k : 函数.右逆 φ' φ)
   定义体: g
   map_smul' m x :=
     calc
@@ -900,7 +900,7 @@ definition _root_.SMulCommClass.toMulActionHom
   map_smul' := smul_comm _
 
 中文:
-定义 _root_.SMulCommClass.toMulActionHom
+定义 _root_.标量交换类.toMulActionHom
   签名: {M} (N α : 类型)
   定义体: (c • ·)
   map_smul' := smul_comm _
@@ -927,8 +927,8 @@ definition Pi.evalMulActionHom
   map_smul' _ _ := rfl
 
 中文:
-定义 Pi.evalMulActionHom
-  签名: {ι M : 类型} {X : ι -> 类型} [对任意 i, SMul M (X i)] (i : ι)
+定义 依赖函数类型.evalMulActionHom
+  签名: {ι M : 类型} {X : ι -> 类型} [对任意 i, 标量乘法 M (X i)] (i : ι)
   定义体: Function.eval i
   map_smul' _ _ := rfl
 
@@ -1012,7 +1012,7 @@ definition prod
 @[to_additive (attr := simp) fst_comp_prod]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
   定义体: (f x, g x)
   map_smul' _ _ := Prod.ext (map_smulₛₗ f _ _) (map_smulₛₗ g _ _)
@@ -1038,7 +1038,7 @@ lemma fst_comp_prod
 中文:
 引理 fst_comp_prod
   条件: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  结论: (fst _ _ _).comp (prod f g) = f
+  结论: (fst _ _ _).comp (乘积 f g) = f
   证明: rfl
 
 @[to_additive (attr := simp) snd_comp_prod]
@@ -1060,7 +1060,7 @@ lemma snd_comp_prod
 中文:
 引理 snd_comp_prod
   条件: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  结论: (snd _ _ _).comp (prod f g) = g
+  结论: (snd _ _ _).comp (乘积 f g) = g
   证明: rfl
 
 @[to_additive (attr := simp) prod_fst_snd]
@@ -1078,7 +1078,7 @@ lemma prod_fst_snd
 
 中文:
 引理 prod_fst_snd
-  结论: prod (fst M α β) (snd M α β) = .id ..
+  结论: 乘积 (fst M α β) (snd M α β) = .id ..
   证明: rfl
 -/
 lemma prod_fst_snd : prod (fst M α β) (snd M α β) = .id .. := rfl
@@ -1127,8 +1127,8 @@ instance [SMul
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-实例 [SMul
-  签名: M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] :
+实例 [标量乘法
+  签名: M X] [标量乘法 N Y] [标量乘法 R Y] [标量交换类 N R Y] :
   定义体: ⟨h • f, by simp [smul_comm _ h]⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1150,7 +1150,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X ->ₑ[σ] Y) (r : R)
+  条件: [标量乘法 M X] [标量乘法 N Y] [标量乘法 R Y] [标量交换类 N R Y] (f : X ->ₑ[σ] Y) (r : R)
   证明: rfl
 -/
 lemma coe_smul [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X ->ₑ[σ] Y) (r : R) :
@@ -1167,8 +1167,8 @@ instance [SMul
 @[simp, norm_cast]
 
 中文:
-实例 [SMul
-  签名: M X] [Zero Y] [SMulZeroClass N Y] :
+实例 [标量乘法
+  签名: M X] [零 Y] [SMulZero类 N Y] :
   定义体: ⟨0, by simp⟩
 
 @[simp, norm_cast]
@@ -1189,7 +1189,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  条件: [SMul M X] [Zero Y] [SMulZeroClass N Y]
+  条件: [标量乘法 M X] [零 Y] [SMulZero类 N Y]
   结论: ⇑(0 : X ->ₑ[σ] Y) = 0
   证明: rfl
 -/
@@ -1208,8 +1208,8 @@ instance [SMul
 @[simp, norm_cast]
 
 中文:
-实例 [SMul
-  签名: M X] [AddZeroClass Y] [DistribSMul N Y] :
+实例 [标量乘法
+  签名: M X] [加法零类 Y] [分配标量乘法 N Y] :
   定义体: ⟨f + g, by simp [smul_add]⟩
   zero_add _ := ext fun _ => zero_add _
   add_zero _ := ext fun _ => add_zero _
@@ -1235,7 +1235,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y)
+  条件: [标量乘法 M X] [加法零类 Y] [分配标量乘法 N Y] (f g : X ->ₑ[σ] Y)
   证明: rfl
 -/
 lemma coe_add [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) :
@@ -1252,8 +1252,8 @@ instance [SMul
   nsmul_succ n f := ext fun x => AddMonoid.nsmul_succ n (f x)
 
 中文:
-实例 [SMul
-  签名: M X] [AddMonoid Y] [DistribSMul N Y] :
+实例 [标量乘法
+  签名: M X] [加法幺半群 Y] [分配标量乘法 N Y] :
   定义体: ext fun _ => add_assoc _ _ _
   nsmul_zero f := ext fun x => AddMonoid.nsmul_zero (f x)
   nsmul_succ n f := ext fun x => AddMonoid.nsmul_succ n (f x)
@@ -1277,8 +1277,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M X] [AddCommMonoid Y] [DistribSMul N Y] :
+实例 [标量乘法
+  签名: M X] [加法交换幺半群 Y] [分配标量乘法 N Y] :
   定义体: ext fun _ => add_comm _ _
 
 @[to_additive]
@@ -1300,8 +1300,8 @@ instance [SMul
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
 中文:
-实例 [SMul
-  签名: M X] [SMul N Y] [Monoid R] [MulAction R Y] [SMulCommClass N R Y] :
+实例 [标量乘法
+  签名: M X] [标量乘法 N Y] [幺半群 R] [乘法作用 R Y] [标量交换类 N R Y] :
   定义体: ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
@@ -1322,8 +1322,8 @@ instance [AddZeroClass
   smul_add y _ _ := ext fun _ => smul_add y _ _
 
 中文:
-实例 [AddZeroClass
-  签名: Y] [SMul M X] [DistribSMul N Y] [DistribSMul R Y] [SMulCommClass N R Y] :
+实例 [加法零类
+  签名: Y] [标量乘法 M X] [分配标量乘法 N Y] [分配标量乘法 R Y] [标量交换类 N R Y] :
   定义体: ext fun _ => smul_zero y
   smul_add y _ _ := ext fun _ => smul_add y _ _
 
@@ -1344,8 +1344,8 @@ instance [AddMonoid
   __ := (inferInstance : DistribSMul _ _)
 
 中文:
-实例 [AddMonoid
-  签名: Y] [Monoid R] [SMul M X] [DistribSMul N Y]
+实例 [加法幺半群
+  签名: Y] [幺半群 R] [标量乘法 M X] [分配标量乘法 N Y]
   定义体: (inferInstance : MulAction _ _)
   __ := (inferInstance : DistribSMul _ _)
 
@@ -1367,8 +1367,8 @@ instance [AddCommMonoid
   zero_smul _ := ext fun _ => zero_smul R _
 
 中文:
-实例 [AddCommMonoid
-  签名: Y] [Semiring R] [SMul M X] [DistribSMul N Y]
+实例 [加法交换幺半群
+  签名: Y] [半环 R] [标量乘法 M X] [分配标量乘法 N Y]
   定义体: ext fun _ => add_smul _ _ _
   zero_smul _ := ext fun _ => zero_smul R _
 
@@ -1395,8 +1395,8 @@ instance [SMul
   zsmul_succ' _ _ :
 
 中文:
-实例 [SMul
-  签名: M X] [AddGroup Y] [DistribSMul N Y] : AddGroup (X ->ₑ[σ] Y) where
+实例 [标量乘法
+  签名: M X] [加法群 Y] [分配标量乘法 N Y] : 加法群 (X ->ₑ[σ] Y) where
   定义体: ⟨f - g, by simp [smul_sub]⟩
   neg f := ⟨-f, by simp⟩
   neg_add_cancel f := ext fun _ => neg_add_cancel _
@@ -1429,7 +1429,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: [SMul M X] [AddGroup Y] [DistribSMul N Y] (f : X ->ₑ[σ] Y)
+  条件: [标量乘法 M X] [加法群 Y] [分配标量乘法 N Y] (f : X ->ₑ[σ] Y)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1448,7 +1448,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y)
+  条件: [标量乘法 M X] [加法群 Y] [分配标量乘法 N Y] (f g : X ->ₑ[σ] Y)
   证明: rfl
 -/
 lemma coe_sub [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) :
@@ -1462,8 +1462,8 @@ instance [SMul
   signature: M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X ->ₑ[σ] Y) where
 
 中文:
-实例 [SMul
-  签名: M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X ->ₑ[σ] Y) where
+实例 [标量乘法
+  签名: M X] [加法交换群 Y] [分配标量乘法 N Y] : 加法交换群 (X ->ₑ[σ] Y) where
 -/
 instance [SMul M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X ->ₑ[σ] Y) where
 
@@ -1482,8 +1482,8 @@ instance [SMul
 @[simp, norm_cast]
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y] :
   定义体: ⟨f * g, by simp⟩
   mul_assoc _ _ _ := ext fun x => mul_assoc _ _ _
   one := ⟨1, by simp⟩
@@ -1513,7 +1513,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] (f g : X ->ₑ[σ] Y)
+  条件: [标量乘法 M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y] (f g : X ->ₑ[σ] Y)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1532,7 +1532,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  条件: [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y]
+  条件: [标量乘法 M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y]
   证明: rfl
 -/
 lemma coe_one [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] :
@@ -1547,8 +1547,8 @@ instance [SMul
   body: ext fun _ => mul_comm _ _
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [CommMonoid Y] [MulDistribMulAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [交换幺半群 Y] [MulDistribMul作用 N Y] :
   定义体: ext fun _ => mul_comm _ _
 
 Depends on / 依赖: mul_comm
@@ -1571,8 +1571,8 @@ instance [SMul
   right_distrib _ _ _ := ext fun x => right_distrib _ _ _
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [Semiring Y] [MulSemiringAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [半环 Y] [MulSemiring作用 N Y] :
   定义体: (inferInstance : Monoid _)
   __ := (inferInstance : AddCommMonoid _)
   zero_mul _ := ext fun x => zero_mul _
@@ -1599,8 +1599,8 @@ instance [SMul
   signature: M X] [Monoid N] [CommSemiring Y] [MulSemiringAction N Y] :
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [CommSemiring Y] [MulSemiringAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [交换半环 Y] [MulSemiring作用 N Y] :
 -/
 instance [SMul M X] [Monoid N] [CommSemiring Y] [MulSemiringAction N Y] :
     CommSemiring (X ->ₑ[σ] Y) where
@@ -1613,8 +1613,8 @@ instance [SMul
   signature: M X] [Monoid N] [Ring Y] [MulSemiringAction N Y] :
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [Ring Y] [MulSemiringAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [环 Y] [MulSemiring作用 N Y] :
 -/
 instance [SMul M X] [Monoid N] [Ring Y] [MulSemiringAction N Y] :
     Ring (X ->ₑ[σ] Y) where
@@ -1627,8 +1627,8 @@ instance [SMul
   signature: M X] [Monoid N] [CommRing Y] [MulSemiringAction N Y] :
 
 中文:
-实例 [SMul
-  签名: M X] [Monoid N] [CommRing Y] [MulSemiringAction N Y] :
+实例 [标量乘法
+  签名: M X] [幺半群 N] [交换环 Y] [MulSemiring作用 N Y] :
 -/
 instance [SMul M X] [Monoid N] [CommRing Y] [MulSemiringAction N Y] :
     CommRing (X ->ₑ[σ] Y) where
@@ -1657,7 +1657,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: [SMul M X] {f g : X ->[M] X}
+  条件: [标量乘法 M X] {f g : X ->[M] X}
   结论: f * g = f.comp g
   证明: rfl
 -/
@@ -1683,7 +1683,7 @@ map_mul' f g := congr_arg MulOpposite.op by
 
 中文:
 定义 equivMulOpposite
-  签名: [Monoid M]
+  签名: [幺半群 M]
   定义体: .op (f 1)
   invFun m := .mk (· * m.unop) fun _ _ => mul_assoc ..
   left_inv f := by ext m; change m • f 1 = _; rw [← map_smul, smul_eq_mul, mul_one]
@@ -1718,7 +1718,7 @@ definition mulOppositeEquiv
 
 中文:
 定义 mulOppositeEquiv
-  签名: [Monoid M]
+  签名: [幺半群 M]
   定义体: f 1
   invFun m := .mk (m * ·) fun _ _ => (mul_assoc ..).symm
   left_inv f := by ext m; change MulOpposite.op m • f 1 = _; simp [← map_smul]
@@ -1764,8 +1764,8 @@ structure DistribMulActionHom
   (no additional axioms)
 
 中文:
-结构 DistribMulActionHom
-  参数: (A : 类型) [AddMonoid A] [DistribMulAction M A] (B : 类型)
+结构 分配乘法作用态射
+  参数: (A : 类型) [加法幺半群 A] [分配乘法作用 M A] (B : 类型)
   继承: A ->ₑ[φ] B, A ->+ B
   (无附加公理)
 -/
@@ -1784,7 +1784,7 @@ structure MulDistribMulActionHom
   (no additional axioms)
 
 中文:
-结构 MulDistribMulActionHom
+结构 MulDistribMul作用态射
   参数: extends A ->ₑ[φ] B, A ->* B
   继承: A ->ₑ[φ] B, A ->* B
   (无附加公理)
@@ -1831,9 +1831,9 @@ class DistribMulActionSemiHomClass
   (no additional axioms)
 
 中文:
-类 DistribMulActionSemiHomClass
+类 DistribMulActionSemi态射类
   参数: (F : 类型)
-  继承: MulActionSemiHomClass F φ A B, AddMonoidHomClass F A B
+  继承: MulActionSemi态射类 F φ A B, 加法幺半群态射类 F A B
   (无附加公理)
 -/
 class DistribMulActionSemiHomClass (F : Type*)
@@ -1858,9 +1858,9 @@ class MulDistribMulActionSemiHomClass
   (no additional axioms)
 
 中文:
-类 MulDistribMulActionSemiHomClass
+类 MulDistribMulActionSemi态射类
   参数: (F : 类型)
-  继承: MulActionSemiHomClass F φ A B, MonoidHomClass F A B
+  继承: MulActionSemi态射类 F φ A B, 幺半群态射类 F A B
   (无附加公理)
 -/
 class MulDistribMulActionSemiHomClass (F : Type*)
@@ -1918,7 +1918,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->ₑ*[φ] B) A B
+  签名: 函数状 (A ->ₑ*[φ] B) A B
   定义体: m.toFun
   coe_injective f g h := by
     rcases f with ⟨tF, _, _⟩; rcases g with ⟨tG, _, _⟩
@@ -1947,7 +1947,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulActionSemiHomClass (A ->ₑ*[φ] B) φ A B
+  签名: MulDistribMulActionSemi态射类 (A ->ₑ*[φ] B) φ A B
   定义体: m.map_smul'
   map_one := MulDistribMulActionHom.map_one'
   map_mul := MulDistribMulActionHom.map_mul'
@@ -1977,7 +1977,7 @@ definition _root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom
   body: { (f : A ->* B), (f : A ->ₑ[φ] B) with }
 
 中文:
-定义 _root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom
+定义 _root_.MulDistribMulActionSemi态射类.toMulDistribMulActionHom
   定义体: { (f : A ->* B), (f : A ->ₑ[φ] B) with }
 -/
 def _root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom
@@ -1999,7 +1999,7 @@ instance [MulDistribMulActionSemiHomClass
   body: ⟨MulDistribMulActionSemiHomClass.toMulDistribMulActionHom⟩
 
 中文:
-实例 [MulDistribMulActionSemiHomClass
+实例 [MulDistribMulActionSemi态射类
   签名: F φ A B] : CoeTC F (A ->ₑ*[φ] B)
   定义体: ⟨MulDistribMulActionSemiHomClass.toMulDistribMulActionHom⟩
 
@@ -2024,8 +2024,8 @@ definition _root_.SMulCommClass.toDistribMulActionHom
 @[to_additive (attr := simp) (dont_translate := M N)]
 
 中文:
-定义 _root_.SMulCommClass.toDistribMulActionHom
-  签名: {M} (N A : 类型) [Monoid N] [AddMonoid A]
+定义 _root_.标量交换类.toDistribMulActionHom
+  签名: {M} (N A : 类型) [幺半群 N] [加法幺半群 A]
   定义体: { SMulCommClass.toMulActionHom N A c,
     DistribSMul.toAddMonoidHom _ c with
     toFun := (c • ·) }
@@ -2365,7 +2365,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : A)
-  结论: MulDistribMulActionHom.id M x = x
+  结论: MulDistribMul作用态射.id M x = x
   证明: by
   rfl
 -/
@@ -2386,7 +2386,7 @@ instance _root_.DistriMulActionHom.instZero
 
 中文:
 实例 _root_.DistriMulActionHom.instZero
-  签名: {A : 类型} [AddMonoid A] [DistribMulAction M A]
+  签名: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
   定义体: ⟨{ (0 : A ->+ B) with map_smul' := fun m _ => by simp }⟩
 
 @[to_additive (dont_translate := M)]
@@ -2410,7 +2410,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (A ->*[M] A)
+  签名: 幺 (A ->*[M] A)
   定义体: ⟨MulDistribMulActionHom.id M⟩
 
 @[simp]
@@ -2433,7 +2433,7 @@ theorem _root_.DistriMulActionHom.coe_zero
 
 中文:
 定理 _root_.DistriMulActionHom.coe_zero
-  结论: {A : 类型} [AddMonoid A] [DistribMulAction M A]
+  结论: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
   证明: rfl
 
 @[to_additive (attr := simp) (dont_translate := M)]
@@ -2471,7 +2471,7 @@ theorem _root_.DistriMulActionHom.zero_apply
 
 中文:
 定理 _root_.DistriMulActionHom.zero_apply
-  结论: {A : 类型} [AddMonoid A] [DistribMulAction M A]
+  结论: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
   证明: rfl
 
 @[to_additive (dont_translate := M)]
@@ -2520,7 +2520,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: [κ : MonoidHom.CompTriple φ ψ χ]
+  签名: [κ : 幺半群态射.余mpTriple φ ψ χ]
   定义体: { MulActionHom.comp (g : B ->ₑ[ψ] C) (f : A ->ₑ[φ] B),
     MonoidHom.comp (g : B ->* C) (f : A ->* B) with }
 
@@ -2546,7 +2546,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A)
+  条件: (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [幺半群态射.余mpTriple φ ψ χ] (x : A)
   证明: rfl
 
 @[to_additive (attr := simp) (dont_translate := M N)]
@@ -2569,7 +2569,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->ₑ*[φ] B)
-  结论: comp (MulDistribMulActionHom.id N) f = f
+  结论: comp (MulDistribMul作用态射.id N) f = f
   证明: ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp) (dont_translate := M N)]
@@ -2594,7 +2594,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : A ->ₑ*[φ] B)
-  结论: f.comp (MulDistribMulActionHom.id M) = f
+  结论: f.comp (MulDistribMul作用态射.id M) = f
   证明: ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp) (dont_translate := M N P Q)]
@@ -2615,7 +2615,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {Q D : 类型} [Monoid Q] [Monoid D] [MulDistribMulAction Q D]
+  结论: {Q D : 类型} [幺半群 Q] [幺半群 D] [MulDistribMul作用 Q D]
   证明: ext fun _ => rfl
 -/
 theorem comp_assoc {Q D : Type*} [Monoid Q] [Monoid D] [MulDistribMulAction Q D]
@@ -2639,7 +2639,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
+  签名: (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : 函数.左逆 g f)
   定义体: { (f : A ->* B₁).inverse g h₁ h₂, f.toMulActionHom.inverse g h₁ h₂ with toFun := g }
 
 Depends on / 依赖: f.toMulActionHom.inverse, inverse, toMulActionHom
@@ -2673,7 +2673,7 @@ theorem DistribMulActionHom.ext_ring
   rw [← mul_one x]; rw [← smul_eq_mul]; rw [f.map_smulₑ]; rw [g.map_smulₑ]; rw [h]
 
 中文:
-定理 DistribMulActionHom.ext_ring
+定理 分配乘法作用态射.ext_ring
   条件: {f g : R ->ₑ+[σ] N'} (h : f 1 = g 1)
   结论: f = g
   证明: by
@@ -2705,7 +2705,7 @@ structure MulSemiringActionHom
   (no additional axioms)
 
 中文:
-结构 MulSemiringActionHom
+结构 MulSemiring作用态射
   参数: extends R ->ₑ+[φ] S, R ->+* S
   继承: R ->ₑ+[φ] S, R ->+* S
   (无附加公理)
@@ -2736,9 +2736,9 @@ class MulSemiringActionSemiHomClass
   (no additional axioms)
 
 中文:
-类 MulSemiringActionSemiHomClass
+类 MulSemiringActionSemi态射类
   参数: (F : 类型)
-  继承: DistribMulActionSemiHomClass F φ R S, RingHomClass F R S
+  继承: DistribMulActionSemi态射类 F φ R S, 环态射类 F R S
   (无附加公理)
 -/
 class MulSemiringActionSemiHomClass (F : Type*)
@@ -2783,7 +2783,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (R ->ₑ+*[φ] S) R S
+  签名: 函数状 (R ->ₑ+*[φ] S) R S
   定义体: m.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨tF, _, _⟩, _, _⟩; rcases g with ⟨⟨tG, _, _⟩, _, _⟩
@@ -2811,7 +2811,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulSemiringActionSemiHomClass (R ->ₑ+*[φ] S) φ R S
+  签名: MulSemiringActionSemi态射类 (R ->ₑ+*[φ] S) φ R S
   定义体: m.map_zero'
   map_add m := m.map_add'
   map_one := MulSemiringActionHom.map_one'
@@ -2861,7 +2861,7 @@ instance [MulSemiringActionSemiHomClass
 @[norm_cast]
 
 中文:
-实例 [MulSemiringActionSemiHomClass
+实例 [MulSemiringActionSemi态射类
   签名: F φ R S] :
   定义体: ⟨MulSemiringActionHomClass.toMulSemiringActionHom⟩
 
@@ -3076,7 +3076,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [MulSemiringAction M S] (f : R ->+*[M] S) (m : M) (x : R)
+  条件: [MulSemiring作用 M S] (f : R ->+*[M] S) (m : M) (x : R)
   证明: map_smulₛₗ f m x
 -/
 protected theorem map_smul [MulSemiringAction M S] (f : R ->+*[M] S) (m : M) (x : R) :
@@ -3124,7 +3124,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : R)
-  结论: MulSemiringActionHom.id M x = x
+  结论: MulSemiring作用态射.id M x = x
   证明: rfl
 -/
 theorem id_apply (x : R) : MulSemiringActionHom.id M x = x :=
@@ -3155,7 +3155,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : MonoidHom.CompTriple φ ψ χ]
+  签名: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : 幺半群态射.余mpTriple φ ψ χ]
   定义体: { DistribMulActionHom.comp (g : S ->ₑ+[ψ] T) (f : R ->ₑ+[φ] S),
     RingHom.comp (g : S ->+* T) (f : R ->+* S) with }
 
@@ -3180,7 +3180,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R)
+  条件: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [幺半群态射.余mpTriple φ ψ χ] (x : R)
   证明: rfl
 
 @[simp]
@@ -3203,7 +3203,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : R ->ₑ+*[φ] S)
-  结论: (MulSemiringActionHom.id N).comp f = f
+  结论: (MulSemiring作用态射.id N).comp f = f
   证明: ext fun x => by rw [comp_apply, id_apply]
 
 @[simp]
@@ -3226,7 +3226,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : R ->ₑ+*[φ] S)
-  结论: f.comp (MulSemiringActionHom.id M) = f
+  结论: f.comp (MulSemiring作用态射.id M) = f
   证明: ext fun x => by rw [comp_apply, id_apply]
 
 Depends on / 依赖: comp_apply, id_apply
@@ -3249,7 +3249,7 @@ definition inverse'
 
 中文:
 定义 inverse'
-  签名: (f : R ->ₑ+*[φ] S) (g : S -> R) (k : Function.RightInverse φ' φ)
+  签名: (f : R ->ₑ+*[φ] S) (g : S -> R) (k : 函数.右逆 φ' φ)
   定义体: { (f : R ->+ S).inverse g h₁ h₂,
     (f : R ->* S).inverse g h₁ h₂,
     (f : R ->ₑ[φ] S).inverse' g k h₁ h₂ with
@@ -3280,7 +3280,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: {S₁ : 类型} [Semiring S₁] [MulSemiringAction M S₁]
+  签名: {S₁ : 类型} [半环 S₁] [MulSemiring作用 M S₁]
   定义体: { (f : R ->+ S₁).inverse g h₁ h₂,
     (f : R ->* S₁).inverse g h₁ h₂,
     f.toMulActionHom.inverse g h₁ h₂ with
@@ -3312,7 +3312,7 @@ lemma IsSMulRegular.of_injective
 
 中文:
 引理 IsSMulRegular.of_injective
-  结论: {R M : 类型} [SMul R M]
+  结论: {R M : 类型} [标量乘法 R M]
   证明: fun x y h3 => h1 h2
   (map_smulₛₗ f r x).symm.trans ((congrArg f h3).trans (map_smulₛₗ f r y))
 -/

@@ -42,8 +42,8 @@ structure LocallyBoundedMap
     - comap_cobounded_le' : (cobounded β).comap toFun <= cobounded α
 
 中文:
-结构 LocallyBoundedMap
-  参数: (α β : 类型) [Bornology α] [Bornology β]
+结构 LocallyBounded映射
+  参数: (α β : 类型) [有界结构 α] [有界结构 β]
   公理与运算 (2 个):
     - toFun : α -> β
     - comap_cobounded_le' : (cobounded β).comap toFun <= cobounded α
@@ -67,8 +67,8 @@ class LocallyBoundedMapClass
     - comap_cobounded_le((f : F)) : (cobounded β).comap f <= cobounded α
 
 中文:
-类 LocallyBoundedMapClass
-  参数: (F : 类型) (α β : outParam 类型) [Bornology α]
+类 LocallyBounded映射类
+  参数: (F : 类型) (α β : outParam 类型) [有界结构 α]
   公理与运算 (1 个):
     - comap_cobounded_le((f : F)) : (cobounded β).comap f <= cobounded α
 -/
@@ -93,8 +93,8 @@ theorem Bornology.IsBounded.image
   proof: comap_cobounded_le_iff.1 (comap_cobounded_le f) hs
 
 中文:
-定理 Bornology.IsBounded.image
-  结论: [Bornology α] [Bornology β] [LocallyBoundedMapClass F α β] (f : F)
+定理 有界结构.IsBounded.像
+  结论: [有界结构 α] [有界结构 β] [LocallyBounded映射类 F α β] (f : F)
   证明: comap_cobounded_le_iff.1 (comap_cobounded_le f) hs
 
 Depends on / 依赖: comap_cobounded_le, comap_cobounded_le_iff
@@ -117,8 +117,8 @@ definition LocallyBoundedMapClass.toLocallyBoundedMap
   comap_cobounded_le' := comap_cobounded_le f
 
 中文:
-定义 LocallyBoundedMapClass.toLocallyBoundedMap
-  签名: [Bornology α] [Bornology β]
+定义 LocallyBounded映射类.toLocallyBoundedMap
+  签名: [有界结构 α] [有界结构 β]
   定义体: f
   comap_cobounded_le' := comap_cobounded_le f
 -/
@@ -136,8 +136,8 @@ instance [Bornology
   body: ⟨fun f => ⟨f, comap_cobounded_le f⟩⟩
 
 中文:
-实例 [Bornology
-  签名: α] [Bornology β] [LocallyBoundedMapClass F α β] :
+实例 [有界结构
+  签名: α] [有界结构 β] [LocallyBounded映射类 F α β] :
   定义体: ⟨fun f => ⟨f, comap_cobounded_le f⟩⟩
 
 Depends on / 依赖: comap_cobounded_le
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (LocallyBoundedMap α β) α β
+  签名: 函数状 (LocallyBounded映射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -192,7 +192,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyBoundedMapClass (LocallyBoundedMap α β) α β
+  签名: LocallyBounded映射类 (LocallyBounded映射 α β) α β
   定义体: f.comap_cobounded_le'
 
 @[ext]
@@ -214,7 +214,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : LocallyBoundedMap α β} (h : 对任意 a, f a = g a)
+  条件: {f g : LocallyBounded映射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -235,7 +235,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
+  签名: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
   定义体: ⟨f', h.symm ▸ f.comap_cobounded_le'⟩
 
 @[simp]
@@ -255,7 +255,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -273,7 +273,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -294,7 +294,7 @@ definition ofMapBounded
 
 中文:
 定义 ofMapBounded
-  签名: (f : α -> β) (h : 对任意 ⦃s : Set α⦄, IsBounded s -> IsBounded (f '' s))
+  签名: (f : α -> β) (h : 对任意 ⦃s : 集合 α⦄, IsBounded s -> IsBounded (f '' s))
   定义体: ⟨f, comap_cobounded_le_iff.2 h⟩
 
 @[simp]
@@ -359,7 +359,7 @@ definition id
 
 中文:
 定义 id
-  签名: : LocallyBoundedMap α α
+  签名: : LocallyBounded映射 α α
   定义体: ⟨id, comap_id.le⟩
 -/
 protected def id : LocallyBoundedMap α α :=
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LocallyBoundedMap α α)
+  签名: 可居 (LocallyBounded映射 α α)
   定义体: ⟨LocallyBoundedMap.id α⟩
 
 @[simp, norm_cast]
@@ -398,7 +398,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(LocallyBoundedMap.id α) = id
+  结论: ⇑(LocallyBounded映射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(LocallyBoundedMap.id α) = id :=
@@ -419,7 +419,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: LocallyBoundedMap.id α a = a
+  结论: LocallyBounded映射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : LocallyBoundedMap.id α a = a :=
@@ -439,7 +439,7 @@ comap_comap.ge.trans (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_
 
 中文:
 定义 comp
-  签名: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β)
+  签名: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β)
   定义体: f ∘ g
   comap_cobounded_le' :=
 comap_comap.ge.trans (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_le'
@@ -465,7 +465,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β)
+  条件: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β)
   结论: ⇑(f.comp g) = f ∘ g
   证明: rfl
 
@@ -487,7 +487,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) (a : α)
+  条件: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β) (a : α)
   证明: rfl
 
 @[simp]
@@ -509,7 +509,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: (f : LocallyBoundedMap γ δ) (g : LocallyBoundedMap β γ)
+  结论: (f : LocallyBounded映射 γ δ) (g : LocallyBounded映射 β γ)
   证明: rfl
 
 @[simp]
@@ -532,8 +532,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : LocallyBoundedMap α β)
-  结论: f.comp (LocallyBoundedMap.id α) = f
+  条件: (f : LocallyBounded映射 α β)
+  结论: f.comp (LocallyBounded映射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -555,8 +555,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : LocallyBoundedMap α β)
-  结论: (LocallyBoundedMap.id β).comp f = f
+  条件: (f : LocallyBounded映射 α β)
+  结论: (LocallyBounded映射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -577,7 +577,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  结论: {g₁ g₂ : LocallyBoundedMap β γ} {f : LocallyBoundedMap α β}
+  结论: {g₁ g₂ : LocallyBounded映射 β γ} {f : LocallyBounded映射 α β}
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congrArg (comp · _)⟩
 
 @[simp]
@@ -599,7 +599,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : LocallyBoundedMap β γ} {f₁ f₂ : LocallyBoundedMap α β} (hg : Injective g)
+  条件: {g : LocallyBounded映射 β γ} {f₁ f₂ : LocallyBounded映射 α β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg

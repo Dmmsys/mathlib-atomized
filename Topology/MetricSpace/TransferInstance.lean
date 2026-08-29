@@ -48,7 +48,7 @@ abbreviation pseudometricSpace
 
 中文:
 缩写 pseudometricSpace
-  签名: [PseudoMetricSpace β] (e : α ≃ β)
+  签名: [伪度量空间 β] (e : α ≃ β)
   定义体: .induced e.toFun ‹_›
 -/
 protected abbrev pseudometricSpace [PseudoMetricSpace β] (e : α ≃ β) : PseudoMetricSpace α :=
@@ -64,7 +64,7 @@ abbreviation metricSpace
 
 中文:
 缩写 metricSpace
-  签名: [MetricSpace β] (e : α ≃ β)
+  签名: [度量空间 β] (e : α ≃ β)
   定义体: .induced e.toFun e.injective ‹_›
 -/
 protected abbrev metricSpace [MetricSpace β] (e : α ≃ β) : MetricSpace α :=

@@ -34,7 +34,7 @@ instance MonoidWithZeroHom.instLinearOrderedCommGroupWithZeroMrange
       MonoidHom.mem_mrange, forall_exists_inde
 
 中文:
-实例 MonoidWithZeroHom.instLinearOrderedCommGroupWithZeroMrange
+实例 带零幺半群态射.instLinearOrderedCommGroupWithZeroMrange
   签名: (v : F ->*₀ Γ₀)
   定义体: ⟨⊥, by simp [bot_eq_zero]⟩
   bot_le a := by simp [bot_eq_zero, ← Subtype.coe_le_coe]
@@ -65,7 +65,7 @@ instance Valuation.instLinearOrderedCommGroupWithZeroMrange
   body: inferInstanceAs (LinearOrderedCommGroupWithZero (MonoidHom.mrange (.ofClass v : F ->*₀ Γ₀)))
 
 中文:
-实例 Valuation.instLinearOrderedCommGroupWithZeroMrange
+实例 赋值.instLinearOrderedCommGroupWithZeroMrange
   签名: :
   定义体: inferInstanceAs (LinearOrderedCommGroupWithZero (MonoidHom.mrange (.ofClass v : F ->*₀ Γ₀)))
 
@@ -120,7 +120,7 @@ lemma wellFounded_gt_on_v_iff_discrete_mrange
 
 中文:
 引理 wellFounded_gt_on_v_iff_discrete_mrange
-  结论: [Nontrivial (MonoidHom.mrange v)ˣ]
+  结论: [非平凡 (幺半群态射.mrange v)ˣ]
   证明: by
   rw [←
     LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
@@ -170,7 +170,7 @@ lemma isPrincipalIdealRing_iff_not_denselyOrdered
 
 中文:
 引理 isPrincipalIdealRing_iff_not_denselyOrdered
-  结论: [MulArchimedean (MonoidHom.mrange v)]
+  结论: [MulArchimedean (幺半群态射.mrange v)]
   证明: by
   refine ⟨fun _ => not_denselyOrdered_of_isPrincipalIdealRing hv, fun H => ?_⟩
   rcases subsingleton_or_nontrivial (MonoidHom.mrange v)ˣ with hs | _
@@ -203,7 +203,7 @@ lemma isPrincipalIdealRing_iff_not_denselyOrdered_mrange
 
 中文:
 引理 isPrincipalIdealRing_iff_not_denselyOrdered_mrange
-  结论: [MulArchimedean (MonoidHom.mrange v)]
+  结论: [MulArchimedean (幺半群态射.mrange v)]
   证明: isPrincipalIdealRing_iff_not_denselyOrdered hv
 
 Depends on / 依赖: isPrincipalIdealRing_iff_not_denselyOrdered

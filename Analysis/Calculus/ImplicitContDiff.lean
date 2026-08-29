@@ -230,12 +230,12 @@ structure IsContDiffImplicitAt
     - ne_zero : n != 0
 
 中文:
-结构 IsContDiffImplicitAt
+结构 是余ntDiffImplicitAt
   参数: (n : 自然数∞ω) (f : E₁ × E₂ -> F) (f' : E₁ × E₂ ->L[𝕜] F)
   公理与运算 (4 个):
-    - hasFDerivAt : HasFDerivAt f f' u
+    - hasFDerivAt : 在点处Fréchet可导 f f' u
     - contDiffAt : ContDiffAt 𝕜 n f u
-    - bijective : Function.Bijective (f'.comp (ContinuousLinearMap.inr 𝕜 E₁ E₂))
+    - bijective : 函数.双射 (f'.comp (连续线性映射.inr 𝕜 E₁ E₂))
     - ne_zero : n != 0
 -/
 structure IsContDiffImplicitAt (n : Nat∞ω) (f : E₁ × E₂ -> F) (f' : E₁ × E₂ ->L[𝕜] F)

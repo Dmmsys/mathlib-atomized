@@ -82,7 +82,7 @@ theorem num_isRoot_scaleRoots_of_aeval_eq_zero
 
 中文:
 定理 num_isRoot_scaleRoots_of_aeval_eq_zero
-  结论: [UniqueFactorizationMonoid A] {p : A[X]} {x : K}
+  结论: [唯一分解幺半群 A] {p : A[X]} {x : K}
   证明: by
   apply isRoot_of_eval₂_map_eq_zero (IsFractionRing.injective A K)
   refine scaleRoots_aeval_eq_zero_of_aeval_mk'_eq_zero ?_
@@ -215,7 +215,7 @@ theorem isInteger_of_is_root_of_monic
   proof: isInteger_of_isUnit_den (isUnit_of_dvd_one (hp ▸ den_dvd_of_is_root hr))
 
 中文:
-定理 isInteger_of_is_root_of_monic
+定理 is整数eger_of_is_root_of_monic
   条件: {p : A[X]} (hp : Monic p) {r : K} (hr : aeval r p = 0)
   证明: isInteger_of_isUnit_den (isUnit_of_dvd_one (hp ▸ den_dvd_of_is_root hr))
 
@@ -240,7 +240,7 @@ theorem exists_integer_of_is_root_of_monic
     simpa using mul_dvd_mul (num_dvd_of_i
 
 中文:
-定理 exists_integer_of_is_root_of_monic
+定理 存在_integer_of_is_root_of_monic
   条件: {p : A[X]} (hp : Monic p) {r : K} (hr : aeval r p = 0)
   证明: by
   /- I tried deducing this from above by unwrapping IsInteger,
@@ -278,7 +278,7 @@ theorem integer_of_integral
 中文:
 定理 integer_of_integral
   条件: {x : K}
-  结论: Is整数egral A x -> Is整数eger A x
+  结论: 是整 A x -> Is整数eger A x
   证明: fun ⟨_, hp, hx⟩ =>
   isInteger_of_is_root_of_monic hp hx
 -/

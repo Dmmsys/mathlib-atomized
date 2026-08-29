@@ -48,7 +48,7 @@ definition toSmallShiftedHom
 
 中文:
 定义 toSmallShiftedHom
-  签名: (x : CohomologyClass K L n)
+  签名: (x : 上同调类 K L n)
   定义体: Quotient.lift (fun y => SmallShiftedHom.mk _ (Cocycle.equivHomShift.symm y)) (by
     let := HasDerivedCategory.standard C
     intro y₁ y₂ h

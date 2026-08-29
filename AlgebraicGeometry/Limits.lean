@@ -57,7 +57,7 @@ definition specZIsTerminal
 
 中文:
 定义 specZIsTerminal
-  签名: : IsTerminal (Spec <| .of 整数)
+  签名: : 是终止 (Spec <| .of 整数)
   定义体: @IsTerminal.isTerminalObj _ _ _ _ Scheme.Spec _ inferInstance
     (terminalOpOfInitial CommRingCat.zIsInitial)
 
@@ -78,7 +78,7 @@ definition specULiftZIsTerminal
 
 中文:
 定义 specULiftZIsTerminal
-  签名: : IsTerminal (Spec <| .of <| ULift.{u} 整数)
+  签名: : 是终止 (Spec <| .of <| 类型层提升.{u} 整数)
   定义体: @IsTerminal.isTerminalObj _ _ _ _ Scheme.Spec _ inferInstance
     (terminalOpOfInitial CommRingCat.isInitial)
 
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTerminal Scheme
+  签名: 有终止 概形
   定义体: hasTerminal_of_hasTerminal_of_preservesLimit Scheme.Spec
 
 Depends on / 依赖: Scheme, Scheme.Spec, hasTerminal_of_hasTerminal_of_preservesLimit
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAffine (⊤_ Scheme.{u})
+  签名: 是仿射 (⊤_ 概形.{u})
   定义体: .of_isIso (PreservesTerminal.iso Scheme.Spec).inv
 
 Depends on / 依赖: PreservesTerminal, PreservesTerminal.iso, Scheme, Scheme.Spec, of_isIso
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteLimits Scheme
+  签名: 有有限极限 概形
   定义体: hasFiniteLimits_of_hasTerminal_and_pullbacks
 
 Depends on / 依赖: hasFiniteLimits_of_hasTerminal_and_pullbacks
@@ -165,8 +165,8 @@ definition Scheme.emptyTo
 @[ext]
 
 中文:
-定义 Scheme.emptyTo
-  签名: (X : Scheme.{u})
+定义 概形.emptyTo
+  签名: (X : 概形.{u})
   定义体: ⟨{ base := TopCat.ofHom ⟨fun x => PEmpty.elim x, by fun_prop⟩
       c := { app := fun _ => CommRingCat.punitIsTerminal.from _ } }, fun x => PEmpty.elim x⟩
 
@@ -189,8 +189,8 @@ theorem Scheme.empty_ext
   proof: Scheme.Hom.ext' (Subsingleton.elim (α := ∅ ⟶ _) _ _)
 
 中文:
-定理 Scheme.empty_ext
-  条件: {X : Scheme.{u}} (f g : ∅ ⟶ X)
+定理 概形.empty_ext
+  条件: {X : 概形.{u}} (f g : ∅ ⟶ X)
   结论: f = g
   证明: Scheme.Hom.ext' (Subsingleton.elim (α := ∅ ⟶ _) _ _)
 
@@ -209,9 +209,9 @@ theorem Scheme.eq_emptyTo
   proof: Scheme.empty_ext f (Scheme.emptyTo X)
 
 中文:
-定理 Scheme.eq_emptyTo
-  条件: {X : Scheme.{u}} (f : ∅ ⟶ X)
-  结论: f = Scheme.emptyTo X
+定理 概形.eq_emptyTo
+  条件: {X : 概形.{u}} (f : ∅ ⟶ X)
+  结论: f = 概形.emptyTo X
   证明: Scheme.empty_ext f (Scheme.emptyTo X)
 
 Depends on / 依赖: Scheme, Scheme.emptyTo, Scheme.empty_ext, emptyTo, empty_ext
@@ -228,8 +228,8 @@ instance Scheme.hom_unique_of_empty_source
   body: ⟨⟨Scheme.emptyTo _⟩, fun _ => Scheme.empty_ext _ _⟩
 
 中文:
-实例 Scheme.hom_unique_of_empty_source
-  签名: (X : Scheme.{u})
+实例 概形.hom_unique_of_empty_source
+  签名: (X : 概形.{u})
   定义体: ⟨⟨Scheme.emptyTo _⟩, fun _ => Scheme.empty_ext _ _⟩
 
 Depends on / 依赖: Scheme, Scheme.emptyTo, Scheme.empty_ext, emptyTo, empty_ext
@@ -249,7 +249,7 @@ definition emptyIsInitial
 
 中文:
 定义 emptyIsInitial
-  签名: : IsInitial (∅ : Scheme.{u})
+  签名: : IsInitial (∅ : 概形.{u})
   定义体: IsInitial.ofUnique _
 
 @[simp]
@@ -270,7 +270,7 @@ theorem emptyIsInitial_to
 
 中文:
 定理 emptyIsInitial_to
-  结论: emptyIsInitial.to = Scheme.emptyTo
+  结论: emptyIsInitial.to = 概形.emptyTo
   证明: rfl
 -/
 theorem emptyIsInitial_to : emptyIsInitial.to = Scheme.emptyTo :=
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (∅ : Scheme.{u})
+  签名: 是空 (∅ : 概形.{u})
   定义体: show IsEmpty PEmpty by infer_instance
 
 Depends on / 依赖: IsEmpty, PEmpty, infer_instance
@@ -304,7 +304,7 @@ instance spec_punit_isEmpty
 
 中文:
 实例 spec_punit_isEmpty
-  签名: : IsEmpty (Spec <| .of PUnit.{u + 1})
+  签名: : 是空 (Spec <| .of 命题单元.{u + 1})
   定义体: inferInstanceAs IsEmpty (PrimeSpectrum PUnit)
 
 Depends on / 依赖: IsEmpty, PrimeSpectrum
@@ -336,7 +336,7 @@ definition isInitialOfIsEmpty
 
 中文:
 定义 isInitialOfIsEmpty
-  签名: {X : Scheme} [IsEmpty X]
+  签名: {X : 概形} [是空 X]
   定义体: emptyIsInitial.ofIso (asIso <| emptyIsInitial.to _)
 
 Depends on / 依赖: emptyIsInitial, emptyIsInitial.ofIso, emptyIsInitial.to
@@ -356,7 +356,7 @@ definition specPUnitIsInitial
 
 中文:
 定义 specPUnitIsInitial
-  签名: : IsInitial (Spec <| .of PUnit.{u + 1})
+  签名: : IsInitial (Spec <| .of 命题单元.{u + 1})
   定义体: emptyIsInitial.ofIso (asIso <| emptyIsInitial.to _)
 
 @[deprecated (since := "2026-02-08")] alias specPunitIsInitial := specPUnitIsInitial
@@ -380,8 +380,8 @@ lemma isInitial_iff_isEmpty
 
 中文:
 引理 isInitial_iff_isEmpty
-  条件: {X : Scheme.{u}}
-  结论: Nonempty (IsInitial X) ↔ IsEmpty X
+  条件: {X : 概形.{u}}
+  结论: 非空 (IsInitial X) ↔ 是空 X
   证明: ⟨fun ⟨h⟩ => (h.uniqueUpToIso specPUnitIsInitial).hom.homeomorph.isEmpty,
     fun _ => ⟨isInitialOfIsEmpty⟩⟩
 
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInitial Scheme.{u}
+  签名: HasInitial 概形.{u}
   定义体: hasInitial_of_unique ∅
 
 Depends on / 依赖: hasInitial_of_unique
@@ -422,7 +422,7 @@ instance initial_isEmpty
 
 中文:
 实例 initial_isEmpty
-  签名: : IsEmpty (⊥_ Scheme)
+  签名: : 是空 (⊥_ 概形)
   定义体: ⟨fun x => ((initial.to Scheme.empty :) x).elim⟩
 
 Depends on / 依赖: Scheme, Scheme.empty, initial, initial.to
@@ -441,8 +441,8 @@ theorem isAffineOpen_bot
 
 中文:
 定理 isAffineOpen_bot
-  条件: (X : Scheme)
-  结论: IsAffineOpen (⊥ : X.Opens)
+  条件: (X : 概形)
+  结论: 是仿射开集 (⊥ : X.Opens)
   证明: @isAffine_of_isEmpty _ (inferInstanceAs (IsEmpty (∅ : Set X)))
 
 Depends on / 依赖: IsEmpty, isAffine_of_isEmpty
@@ -460,7 +460,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasStrictInitialObjects Scheme
+  签名: 有StrictInitialObjects 概形
   定义体: hasStrictInitialObjects_of_initial_is_strict fun A f => by infer_instance
 
 Depends on / 依赖: hasStrictInitialObjects_of_initial_is_strict, infer_instance
@@ -494,8 +494,8 @@ theorem IsAffineOpen.of_subsingleton
   inferInstanceAs (IsAffine _)
 
 中文:
-定理 IsAffineOpen.of_subsingleton
-  结论: {X : Scheme} {U : X.Opens}
+定理 是仿射开集.of_subsingleton
+  结论: {X : 概形} {U : X.Opens}
   证明: have : Subsingleton U := hU.coe_sort
   inferInstanceAs (IsAffine _)
 
@@ -540,7 +540,7 @@ instance [Small.{u}
 
 中文:
 实例 [Small.{u}
-  签名: σ] : PreservesColimitsOfShape (Discrete σ) Scheme.forgetToTop.{u}
+  签名: σ] : 保持形状余极限 (离散 σ) 概形.forgetToTop.{u}
   定义体: inferInstanceAs (PreservesColimitsOfShape (Discrete σ) (Scheme.forgetToLocallyRingedSpace ⋙
       LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget CommRingCat))
 
@@ -560,7 +560,7 @@ instance [Small.{u}
 
 中文:
 实例 [Small.{u}
-  签名: σ] : HasColimitsOfShape (Discrete σ) Scheme.{u}
+  签名: σ] : 有形状余极限 (离散 σ) 概形.{u}
   定义体: ⟨fun _ => hasColimit_of_created _ Scheme.forgetToLocallyRingedSpace⟩
 
 Depends on / 依赖: Scheme, Scheme.forgetToLocallyRingedSpace, forgetToLocallyRingedSpace, hasColimit_of_created
@@ -652,7 +652,7 @@ fapply eq_bot_iff.mp disjoint_iff.mp disjoint_opensRange_sigmaι g i j hij
 
 中文:
 引理 isEmpty_of_commSq_sigmaι_of_ne
-  结论: [Small.{u} σ] {i j : σ} {Z : Scheme.{u}} {a : Z ⟶ g i}
+  结论: [Small.{u} σ] {i j : σ} {Z : 概形.{u}} {a : Z ⟶ g i}
   证明: by
   refine ⟨fun z => ?_⟩
 fapply eq_bot_iff.mp disjoint_iff.mp disjoint_opensRange_sigmaι g i j hij
@@ -704,7 +704,7 @@ instance [Small.{u}
 
 中文:
 实例 [Small.{u}
-  签名: σ] : CoproductsOfShapeDisjoint Scheme.{u} σ where
+  签名: σ] : 余productsOfShapeDisjoint 概形.{u} σ where
   定义体: by
     refine .of_hasCoproduct (fun _ => pullback.cone _ _) (fun _ => pullback.isLimit _ _) ?_
     intro i j hij
@@ -732,7 +732,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteCoproducts Scheme.{u}
+  签名: 有FiniteCoproducts 概形.{u}
   定义体: inferInstance
 -/
 instance : HasFiniteCoproducts Scheme.{u} where
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoCoprod Scheme.{u}
+  签名: MonoCoprod 概形.{u}
   定义体: .mk' fun X Y => ⟨.mk coprod.inl coprod.inr, coprodIsCoprod X Y, inferInstanceAs Mono coprod.inl⟩
 
 Depends on / 依赖: coprod, coprod.inl, coprod.inr, coprodIsCoprod
@@ -1008,7 +1008,7 @@ definition coprodIsoSigma
 
 中文:
 定义 coprodIsoSigma
-  签名: : X ⨿ Y ≅ ∐ fun i : ULift.{u} WalkingPair => i.1.casesOn X Y
+  签名: : X ⨿ Y ≅ ∐ fun i : 类型层提升.{u} WalkingPair => i.1.casesOn X Y
   定义体: Sigma.whiskerEquiv Equiv.ulift.symm (fun _ => by exact Iso.refl _)
 
 Depends on / 依赖: Equiv.ulift.symm, Iso.refl, Sigma.whiskerEquiv, whiskerEquiv
@@ -1026,7 +1026,7 @@ lemma ι_left_coprodIsoSigma_inv
 
 中文:
 引理 ι_left_coprodIsoSigma_inv
-  结论: Sigma.ι _ ⟨.left⟩ ≫ (coprodIsoSigma X Y).inv = coprod.inl
+  结论: 依赖和类型.ι _ ⟨.left⟩ ≫ (coprodIsoSigma X Y).inv = coprod.inl
   证明: Sigma.ι_comp_map' _ _ _
 
 Depends on / 依赖: and_true, hom_ext, mk.injEq, s.hom_ext
@@ -1044,7 +1044,7 @@ lemma ι_right_coprodIsoSigma_inv
 
 中文:
 引理 ι_right_coprodIsoSigma_inv
-  结论: Sigma.ι _ ⟨.right⟩ ≫ (coprodIsoSigma X Y).inv = coprod.inr
+  结论: 依赖和类型.ι _ ⟨.right⟩ ≫ (coprodIsoSigma X Y).inv = coprod.inr
   证明: Sigma.ι_comp_map' _ _ _
 -/
 lemma ι_right_coprodIsoSigma_inv : Sigma.ι _ ⟨.right⟩ ≫ (coprodIsoSigma X Y).inv = coprod.inr :=
@@ -1062,7 +1062,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (coprod.inl : X ⟶ X ⨿ Y)
+  签名: 是开浸入 (coprod.inl : X ⟶ X ⨿ Y)
   定义体: by
   rw [← ι_left_coprodIsoSigma_inv]; infer_instance
 
@@ -1083,7 +1083,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (coprod.inr : Y ⟶ X ⨿ Y)
+  签名: 是开浸入 (coprod.inr : Y ⟶ X ⨿ Y)
   定义体: by
   rw [← ι_right_coprodIsoSigma_inv]; infer_instance
 
@@ -1202,7 +1202,7 @@ definition coprodMk
 
 中文:
 定义 coprodMk
-  签名: : X oplus Y ≃ₜ (X ⨿ Y : Scheme.{u})
+  签名: : X oplus Y ≃ₜ (X ⨿ Y : 概形.{u})
   定义体: TopCat.homeoOfIso ((colimit.isoColimitCocone ⟨_, TopCat.binaryCofanIsColimit _ _⟩).symm ≪≫
     PreservesColimitPair.iso Scheme.forgetToTop X Y)
 
@@ -1348,7 +1348,7 @@ lemma nonempty_isColimit_binaryCofanMk_of_isCompl
 
 中文:
 引理 nonempty_isColimit_binaryCofanMk_of_isCompl
-  结论: {X Y S : Scheme.{u}}
+  结论: {X Y S : 概形.{u}}
   证明: by
   let c' : Cofan fun j => (WalkingPair.casesOn j X Y : Scheme.{u}) :=
     .mk S fun j => WalkingPair.casesOn j f g
@@ -1392,7 +1392,7 @@ lemma isPullback_inl_inl_coprodMap
 
 中文:
 引理 isPullback_inl_inl_coprodMap
-  结论: {X Y X' Y' : Scheme.{u}}
+  结论: {X Y X' Y' : 概形.{u}}
   证明: by
   refine IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_
   apply le_antisymm
@@ -1427,7 +1427,7 @@ lemma isPullback_inr_inr_coprodMap
 
 中文:
 引理 isPullback_inr_inr_coprodMap
-  结论: {X Y X' Y' : Scheme.{u}}
+  结论: {X Y X' Y' : 概形.{u}}
   证明: (isPullback_inl_inl_coprodMap g f).of_iso (.refl _) (.refl _) (coprod.braiding _ _)
     (coprod.braiding _ _) (by simp) (by simp) (by simp) (by simp)
 
@@ -1455,7 +1455,7 @@ instance :
 
 中文:
 实例 :
-  签名: FinitaryExtensive Scheme
+  签名: 有限广延 概形
   定义体: inferInstance
   van_kampen' {X Y} c hc := by
     suffices IsVanKampenColimit (BinaryCofan.mk (P := X ⨿ Y) coprod.inl coprod.inr) from
@@ -1499,7 +1499,7 @@ definition Scheme.coprodPresheafObjIso
   haveI h₂ : ι₁ ''ᵁ ι₁ 
 
 中文:
-定义 Scheme.coprodPresheafObjIso
+定义 概形.coprodPresheafObjIso
   签名: (U : (X ⨿ Y).Opens)
   定义体: letI ι₁ : X ⟶ X ⨿ Y := coprod.inl
   letI ι₂ : Y ⟶ X ⨿ Y := coprod.inr
@@ -1537,7 +1537,7 @@ lemma Scheme.coprodPresheafObjIso_hom_fst
   simp [coprodPresheafObjIso, Hom.appIso_hom, ← Functor.map_comp, Subsingleton.elim _ (𝟙 _)]
 
 中文:
-引理 Scheme.coprodPresheafObjIso_hom_fst
+引理 概形.coprodPresheafObjIso_hom_fst
   条件: (U : (X ⨿ Y).Opens)
   证明: by
   simp [coprodPresheafObjIso, Hom.appIso_hom, ← Functor.map_comp, Subsingleton.elim _ (𝟙 _)]
@@ -1561,7 +1561,7 @@ lemma Scheme.coprodPresheafObjIso_hom_snd
   simp [coprodPresheafObjIso, Hom.appIso_hom, ← Functor.map_comp, Subsingleton.elim _ (𝟙 _)]
 
 中文:
-引理 Scheme.coprodPresheafObjIso_hom_snd
+引理 概形.coprodPresheafObjIso_hom_snd
   条件: (U : (X ⨿ Y).Opens)
   证明: by
   simp [coprodPresheafObjIso, Hom.appIso_hom, ← Functor.map_comp, Subsingleton.elim _ (𝟙 _)]
@@ -1767,7 +1767,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (coprodSpec R S)
+  签名: 是同构 (coprodSpec R S)
   定义体: by
   rw [isIso_iff_isIso_stalkMap]
   refine ⟨?_, isIso_stalkMap_coprodSpec R S⟩
@@ -1816,7 +1816,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape (Discrete WalkingPair) Scheme.Spec.{u}
+  签名: 保持形状余极限 (离散 WalkingPair) 概形.Spec.{u}
   定义体: ⟨fun {_} =>
     have (X Y : CommRingCat.{u}ᵒᵖ) := PreservesColimitPair.of_iso_coprod_comparison Scheme.Spec X Y
     preservesColimit_of_iso_diagram _ (diagramIsoPair _).symm⟩
@@ -1843,7 +1843,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape (Discrete PEmpty.{1}) Scheme.Spec.{u}
+  签名: 保持形状余极限 (离散 命题空.{1}) 概形.Spec.{u}
   定义体: by
   have : IsEmpty (Scheme.Spec.obj (⊥_ CommRingCatᵒᵖ)) :=
     @Function.isEmpty _ _ spec_punit_isEmpty (Scheme.Spec.mapIso
@@ -1878,7 +1878,7 @@ definition sigmaSpec
 
 中文:
 定义 sigmaSpec
-  签名: (R : ι -> CommRingCat)
+  签名: (R : ι -> 交换环范畴)
   定义体: Sigma.desc (fun i => Spec.map (CommRingCat.ofHom (Pi.evalRingHom _ i)))
 
 @[reassoc (attr := simp)]
@@ -1899,7 +1899,7 @@ lemma ι_sigmaSpec
 
 中文:
 引理 ι_sigmaSpec
-  条件: (R : ι -> CommRingCat) (i)
+  条件: (R : ι -> 交换环范畴) (i)
   证明: Sigma.ι_desc _ _
 -/
 lemma ι_sigmaSpec (R : ι -> CommRingCat) (i) :
@@ -1949,7 +1949,7 @@ instance [Finite
   infer_instance
 
 中文:
-实例 [Finite
+实例 [有限
   签名: ι] (R
   定义体: by
   have : sigmaSpec R =
@@ -1987,8 +1987,8 @@ instance [Finite
     (Sigma.mapIso (fun i => Scheme.isoSpec _)).hom ≫ sigmaSpec _)
 
 中文:
-实例 [Finite
-  签名: σ] [对任意 i, IsAffine (g i)] : IsAffine (∐ g)
+实例 [有限
+  签名: σ] [对任意 i, 是仿射 (g i)] : 是仿射 (∐ g)
   定义体: by
   obtain ⟨ι, ⟨e⟩⟩ := Small.equiv_small.{u} (α := σ)
   have : Finite ι := e.finite_iff.mp ‹_›
@@ -2014,8 +2014,8 @@ instance [IsAffine
   body: .of_isIso ((coprod.mapIso X.isoSpec Y.isoSpec).hom ≫ coprodSpec _ _)
 
 中文:
-实例 [IsAffine
-  签名: X] [IsAffine Y] : IsAffine (X ⨿ Y)
+实例 [是仿射
+  签名: X] [是仿射 Y] : 是仿射 (X ⨿ Y)
   定义体: .of_isIso ((coprod.mapIso X.isoSpec Y.isoSpec).hom ≫ coprodSpec _ _)
 
 Depends on / 依赖: X.isoSpec, Y.isoSpec, coprod, coprod.mapIso, coprodSpec, isoSpec, mapIso, of_isIso
@@ -2040,8 +2040,8 @@ lemma IsAffineOpen.iSup_of_disjoint_aux
  
 
 中文:
-引理 IsAffineOpen.iSup_of_disjoint_aux
-  结论: [Finite ι] {U : ι -> X.Opens}
+引理 是仿射开集.iSup_of_disjoint_aux
+  结论: [有限 ι] {U : ι -> X.Opens}
   证明: by
   have := isOpenImmersion_sigmaDesc _ (fun i => (U i).ι)
     (fun i j e => by convert hU' e; simp [← Opens.coe_disjoint])
@@ -2075,8 +2075,8 @@ lemma IsAffineOpen.iSup_of_disjoint
   exact .iSup_of_disjoint_aux (by simp [*]) fun i j h => hU' (e.symm.injective.ne h)
 
 中文:
-引理 IsAffineOpen.iSup_of_disjoint
-  结论: [Finite σ] {U : σ -> X.Opens}
+引理 是仿射开集.iSup_of_disjoint
+  结论: [有限 σ] {U : σ -> X.Opens}
   证明: by
   obtain ⟨ι, ⟨e⟩⟩ := Small.equiv_small.{u} (α := σ)
   have : Finite ι := e.finite_iff.mp ‹_›
@@ -2106,8 +2106,8 @@ lemma IsAffineOpen.biSup_of_disjoint
   exact .iSup_of_disjoint (by simpa) fun i j e => hU' i.2 j.2 (by aesop)
 
 中文:
-引理 IsAffineOpen.biSup_of_disjoint
-  结论: {s : Set σ} (hs : s.Finite)
+引理 是仿射开集.biSup_of_disjoint
+  结论: {s : 集合 σ} (hs : s.有限)
   证明: by
   rw [← iSup_subtype'']
   have := hs.to_subtype
@@ -2135,8 +2135,8 @@ lemma IsAffineOpen.sup_of_disjoint
   aesop
 
 中文:
-引理 IsAffineOpen.sup_of_disjoint
-  结论: {U V : X.Opens} (hU : IsAffineOpen U) (hV : IsAffineOpen V)
+引理 是仿射开集.sup_of_disjoint
+  结论: {U V : X.Opens} (hU : 是仿射开集 U) (hV : 是仿射开集 V)
   证明: by
   convert!
     iSup_of_disjoint (U := fun i : Unit oplus Unit => i.elim (fun _ => U) (fun _ => V)) (by simp_all)
@@ -2192,7 +2192,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory Scheme
+  签名: CartesianMonoidal范畴 概形
   定义体: .ofHasFiniteProducts
 
 Depends on / 依赖: SimplicialObject, SimplicialObject.Truncated.cosk.faithful, Truncated, faithful, ofHasFiniteProducts
@@ -2208,7 +2208,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory Scheme
+  签名: 辫范畴 概形
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: SimplicialObject, SimplicialObject.Truncated.coskAdj.reflective, Truncated, coskAdj, ofCartesianMonoidalCategory, reflective
@@ -2231,8 +2231,8 @@ lemma Scheme.isAffine_of_isLimit
     (asIso α).sy
 
 中文:
-引理 Scheme.isAffine_of_isLimit
-  结论: {I : 类型} [Category* I] {D : I ⥤ Scheme.{u}}
+引理 概形.isAffine_of_isLimit
+  结论: {I : 类型} [范畴* I] {D : I ⥤ 概形.{u}}
   证明: by
   let α : D ⟶ (D ⋙ Scheme.Γ.rightOp) ⋙ Scheme.Spec := D.whiskerLeft ΓSpec.adjunction.unit
   have (i : _) : IsIso (α.app i) := IsAffine.affine

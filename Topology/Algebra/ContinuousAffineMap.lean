@@ -39,11 +39,11 @@ structure ContinuousAffineMap
     - cont : Continuous toFun
 
 中文:
-结构 ContinuousAffineMap
-  参数: (R : 类型) {V W : 类型} (P Q : 类型) [Ring R] [AddCommGroup V]
+结构 余ntinuousAffine映射
+  参数: (R : 类型) {V W : 类型} (P Q : 类型) [环 R] [加法交换群 V]
   继承: P ->ᵃ[R] Q
   公理与运算 (1 个):
-    - cont : Continuous toFun
+    - cont : 连续 toFun
 -/
 structure ContinuousAffineMap (R : Type*) {V W : Type*} (P Q : Type*) [Ring R] [AddCommGroup V]
   [Module R V] [TopologicalSpace P] [AddTorsor V P] [AddCommGroup W] [Module R W]
@@ -115,7 +115,7 @@ coe_injective _ _ h := toAffineMap_injective DFunLike.coe_injective h
 
 中文:
 实例 :
-  签名: FunLike (P ->ᴬ[R] Q) P Q
+  签名: 函数状 (P ->ᴬ[R] Q) P Q
   定义体: f.toAffineMap
 coe_injective _ _ h := toAffineMap_injective DFunLike.coe_injective h
 
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass (P ->ᴬ[R] Q) P Q
+  签名: 连续映射类 (P ->ᴬ[R] Q) P Q
   定义体: cont
 -/
 instance : ContinuousMapClass (P ->ᴬ[R] Q) P Q where
@@ -170,7 +170,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (P ->ᴬ[R] Q) (P -> Q) (⇑)
+  结论: @函数.单射 (P ->ᴬ[R] Q) (P -> Q) (⇑)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -458,7 +458,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : P ->ᴬ[R] Q)
-  结论: Continuous f
+  结论: 连续 f
   证明: f.2
 -/
 protected theorem continuous (f : P ->ᴬ[R] Q) : Continuous f := f.2
@@ -500,7 +500,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (q : Q)
-  结论: ⇑(const R P q) = Function.const P q
+  结论: ⇑(const R P q) = 函数.const P q
   证明: rfl
 -/
 theorem coe_const (q : Q) : ⇑(const R P q) = Function.const P q := rfl
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (P ->ᴬ[R] Q)
+  签名: 可居 (P ->ᴬ[R] Q)
   定义体: ⟨const R P Nonempty.some (by infer_instance : Nonempty Q)⟩
 
 Depends on / 依赖: Nonempty, Nonempty.some, infer_instance
@@ -701,7 +701,7 @@ definition lineMap
 
 中文:
 定义 lineMap
-  签名: (p₀ p₁ : P) [TopologicalSpace R] [TopologicalSpace V]
+  签名: (p₀ p₁ : P) [拓扑空间 R] [拓扑空间 V]
   定义体: AffineMap.lineMap p₀ p₁
   cont := (continuous_id.smul continuous_const).vadd continuous_const
 
@@ -722,7 +722,7 @@ lemma lineMap_toAffineMap
 
 中文:
 引理 lineMap_toAffineMap
-  结论: (p₀ p₁ : P) [TopologicalSpace R] [TopologicalSpace V]
+  结论: (p₀ p₁ : P) [拓扑空间 R] [拓扑空间 V]
   证明: rfl
 -/
 @[simp] lemma lineMap_toAffineMap (p₀ p₁ : P) [TopologicalSpace R] [TopologicalSpace V]
@@ -740,7 +740,7 @@ lemma coe_lineMap_eq
 
 中文:
 引理 coe_lineMap_eq
-  结论: (p₀ p₁ : P) [TopologicalSpace R] [TopologicalSpace V]
+  结论: (p₀ p₁ : P) [拓扑空间 R] [拓扑空间 V]
   证明: rfl
 -/
 lemma coe_lineMap_eq (p₀ p₁ : P) [TopologicalSpace R] [TopologicalSpace V]
@@ -761,7 +761,7 @@ theorem apply_lineMap'
 
 中文:
 定理 apply_lineMap'
-  结论: [TopologicalSpace R] [TopologicalSpace V] [TopologicalSpace W]
+  结论: [拓扑空间 R] [拓扑空间 V] [拓扑空间 W]
   证明: by
   simp_rw [coe_lineMap_eq, apply_lineMap]
 
@@ -998,7 +998,7 @@ theorem contLinear_eq_zero_iff_exists_const
   have h₂ : forall q : Q, f = const R P q ↔ (f : P ->ᵃ[R] Q) = AffineMap.const R P q := by
 
 中文:
-定理 contLinear_eq_zero_iff_exists_const
+定理 contLinear_eq_zero_iff_存在_const
   条件: (f : P ->ᴬ[R] Q)
   证明: by
   have h₁ : f.contLinear = 0 ↔ (f : P ->ᵃ[R] Q).linear = 0 := by
@@ -1042,7 +1042,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (P ->ᴬ[R] W)
+  签名: 零 (P ->ᴬ[R] W)
   定义体: ⟨ContinuousAffineMap.const R P 0⟩
 
 @[norm_cast, simp]
@@ -1102,7 +1102,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (P ->ᴬ[R] W)
+  签名: 标量乘法 S (P ->ᴬ[R] W)
   定义体: { t • (f : P ->ᵃ[R] W) with cont := f.continuous.const_smul t }
 
 @[norm_cast, simp]
@@ -1160,8 +1160,8 @@ instance [DistribMulAction
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [DistribMulAction
-  签名: Sᵐᵒᵖ W] [IsCentralScalar S W] : IsCentralScalar S (P ->ᴬ[R] W) where
+实例 [分配乘法作用
+  签名: Sᵐᵒᵖ W] [中心标量 S W] : 中心标量 S (P ->ᴬ[R] W) where
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -1179,7 +1179,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction S (P ->ᴬ[R] W)
+  签名: 乘法作用 S (P ->ᴬ[R] W)
   定义体: Function.Injective.mulAction _ coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.mulAction, Injective, coe_injective, coe_smul, mulAction
@@ -1224,7 +1224,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (P ->ᴬ[R] W)
+  签名: 加法 (P ->ᴬ[R] W)
   定义体: { (f : P ->ᵃ[R] W) + (g : P ->ᵃ[R] W) with cont := f.continuous.add g.continuous }
 
 @[norm_cast, simp]
@@ -1281,7 +1281,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (P ->ᴬ[R] W)
+  签名: 减法 (P ->ᴬ[R] W)
   定义体: { (f : P ->ᵃ[R] W) - (g : P ->ᵃ[R] W) with cont := f.continuous.sub g.continuous }
 
 @[norm_cast, simp]
@@ -1338,7 +1338,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (P ->ᴬ[R] W)
+  签名: 取负 (P ->ᴬ[R] W)
   定义体: { neg := fun f => { -(f : P ->ᵃ[R] W) with cont := f.continuous.neg } }
 
 @[norm_cast, simp]
@@ -1394,7 +1394,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (P ->ᴬ[R] W)
+  签名: 加法交换群 (P ->ᴬ[R] W)
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _) fun _ _ =>
     coe_smul _ _
 
@@ -1414,8 +1414,8 @@ instance [Monoid
     coe_smul
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S W] [SMulCommClass R S W] [ContinuousConstSMul S W] :
+实例 [幺半群
+  签名: S] [分配乘法作用 S W] [标量交换类 R S W] [连续常数标量乘法 S W] :
   定义体: Function.Injective.distribMulAction ⟨⟨fun f => f.toAffineMap.toFun, rfl⟩, coe_add⟩ coe_injective
     coe_smul
 
@@ -1435,8 +1435,8 @@ instance [Semiring
   body: Function.Injective.module S ⟨⟨fun f => f.toAffineMap.toFun, rfl⟩, coe_add⟩ coe_injective coe_smul
 
 中文:
-实例 [Semiring
-  签名: S] [Module S W] [SMulCommClass R S W] [ContinuousConstSMul S W] :
+实例 [半环
+  签名: S] [模 S W] [标量交换类 R S W] [连续常数标量乘法 S W] :
   定义体: Function.Injective.module S ⟨⟨fun f => f.toAffineMap.toFun, rfl⟩, coe_add⟩ coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, coe_add, coe_injective, coe_smul, f.toAffineMap.toFun, module, toAffineMap
@@ -1554,7 +1554,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddTorsor (P ->ᴬ[R] W) (P ->ᴬ[R] Q)
+  签名: 加法Torsor (P ->ᴬ[R] W) (P ->ᴬ[R] Q)
   定义体: { __ := f.toAffineMap +ᵥ g.toAffineMap, cont := f.cont.vadd g.cont }
   zero_vadd _ := ext fun _ => zero_vadd _ _
   add_vadd _ _ _ := ext fun _ => add_vadd _ _ _
@@ -1657,7 +1657,7 @@ lemma lineMap_apply'
 
 中文:
 引理 lineMap_apply'
-  结论: [ContinuousConstSMul R W] [SMulCommClass R R W] (f g : P ->ᴬ[R] Q) (c : R)
+  结论: [连续常数标量乘法 R W] [标量交换类 R R W] (f g : P ->ᴬ[R] Q) (c : R)
   证明: by
   simp [AffineMap.lineMap_apply]
 
@@ -1725,7 +1725,7 @@ definition prod
   cont := by eta_expand; dsimp; fun_prop
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : P₁ ->ᴬ[k] P₂) (g : P₁ ->ᴬ[k] P₃)
   定义体: AffineMap.prod f g
   cont := by eta_expand; dsimp; fun_prop
@@ -1750,7 +1750,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : P₁ ->ᴬ[k] P₂) (g : P₁ ->ᴬ[k] P₃)
-  结论: prod f g = Function.prod f g
+  结论: 乘积 f g = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -1771,7 +1771,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (f : P₁ ->ᴬ[k] P₂) (g : P₁ ->ᴬ[k] P₃) (p : P₁)
-  结论: prod f g p = (f p, g p)
+  结论: 乘积 f g p = (f p, g p)
   证明: rfl
 -/
 theorem prod_apply (f : P₁ ->ᴬ[k] P₂) (g : P₁ ->ᴬ[k] P₃) (p : P₁) : prod f g p = (f p, g p) :=
@@ -1814,7 +1814,7 @@ theorem coe_prodMap
 中文:
 定理 coe_prodMap
   条件: (f : P₁ ->ᴬ[k] P₂) (g : P₃ ->ᴬ[k] P₄)
-  结论: ⇑(f.prodMap g) = Prod.map f g
+  结论: ⇑(f.prodMap g) = 积类型.map f g
   证明: rfl
 
 @[simp]
@@ -1998,7 +1998,7 @@ theorem _root_.ContinuousAffineMap.decomp
   rw [ContinuousAffineMap.coe_mk_contLinear_eq_linear]; rw [ContinuousAffineMap.coe_mk]; rw [f.decomp]; rw [Pi.add_apply]; rw [LinearMap.map_zero]; rw [zero_add]; rw [← Function.const_def]
 
 中文:
-定理 _root_.ContinuousAffineMap.decomp
+定理 _root_.余ntinuousAffine映射.decomp
   条件: (f : V ->ᴬ[R] W)
   证明: by
   rcases f with ⟨f, h⟩

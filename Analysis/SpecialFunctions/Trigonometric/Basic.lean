@@ -67,7 +67,7 @@ theorem continuous_sin
 
 中文:
 定理 continuous_sin
-  结论: Continuous sin
+  结论: 连续 sin
   证明: by
   change Continuous fun z => (exp (-z * I) - exp (z * I)) * I / 2
   fun_prop
@@ -94,7 +94,7 @@ theorem continuousOn_sin
 
 中文:
 定理 continuousOn_sin
-  条件: {s : Set Complex}
+  条件: {s : 集合 复形}
   结论: ContinuousOn sin s
   证明: continuous_sin.continuousOn
 
@@ -120,7 +120,7 @@ theorem continuous_cos
 
 中文:
 定理 continuous_cos
-  结论: Continuous cos
+  结论: 连续 cos
   证明: by
   change Continuous fun z => (exp (z * I) + exp (-z * I)) / 2
   fun_prop
@@ -147,7 +147,7 @@ theorem continuousOn_cos
 
 中文:
 定理 continuousOn_cos
-  条件: {s : Set Complex}
+  条件: {s : 集合 复形}
   结论: ContinuousOn cos s
   证明: continuous_cos.continuousOn
 
@@ -173,7 +173,7 @@ theorem continuous_sinh
 
 中文:
 定理 continuous_sinh
-  结论: Continuous sinh
+  结论: 连续 sinh
   证明: by
   change Continuous fun z => (exp z - exp (-z)) / 2
   fun_prop
@@ -199,7 +199,7 @@ theorem continuous_cosh
 
 中文:
 定理 continuous_cosh
-  结论: Continuous cosh
+  结论: 连续 cosh
   证明: by
   change Continuous fun z => (exp z + exp (-z)) / 2
   fun_prop
@@ -229,7 +229,7 @@ theorem continuous_sin
 
 中文:
 定理 continuous_sin
-  结论: Continuous sin
+  结论: 连续 sin
   证明: Complex.continuous_re.comp (Complex.continuous_sin.comp Complex.continuous_ofReal)
 
 @[fun_prop]
@@ -277,7 +277,7 @@ theorem continuous_cos
 
 中文:
 定理 continuous_cos
-  结论: Continuous cos
+  结论: 连续 cos
   证明: Complex.continuous_re.comp (Complex.continuous_cos.comp Complex.continuous_ofReal)
 
 @[fun_prop]
@@ -325,7 +325,7 @@ theorem continuous_sinh
 
 中文:
 定理 continuous_sinh
-  结论: Continuous sinh
+  结论: 连续 sinh
   证明: Complex.continuous_re.comp (Complex.continuous_sinh.comp Complex.continuous_ofReal)
 
 @[continuity, fun_prop]
@@ -346,7 +346,7 @@ theorem continuous_cosh
 
 中文:
 定理 continuous_cosh
-  结论: Continuous cosh
+  结论: 连续 cosh
   证明: Complex.continuous_re.comp (Complex.continuous_cosh.comp Complex.continuous_ofReal)
 
 Depends on / 依赖: Complex.continuous_cosh.comp, Complex.continuous_ofReal, Complex.continuous_re.comp, EssSurj, StructuredArrow, StructuredArrow.pre, continuous_cosh, continuous_ofReal, continuous_re
@@ -368,8 +368,8 @@ theorem exists_cos_eq_zero
     ⟨le_of_lt cos_two_neg, le_of_lt cos_one_pos⟩
 
 中文:
-定理 exists_cos_eq_zero
-  结论: 0 in cos '' Icc (1 : 实数) 2
+定理 存在_cos_eq_zero
+  结论: 0 in cos '' 闭区间 (1 : 实数) 2
   证明: intermediate_value_Icc' (by simp) continuousOn_cos
     ⟨le_of_lt cos_two_neg, le_of_lt cos_one_pos⟩
 
@@ -840,7 +840,7 @@ theorem sin_antiperiodic
 
 中文:
 定理 sin_antiperiodic
-  结论: Function.Antiperiodic sin π
+  结论: 函数.Antiperiodic sin π
   证明: by simp [sin_add]
 
 Depends on / 依赖: sin_add
@@ -859,7 +859,7 @@ theorem sin_periodic
 
 中文:
 定理 sin_periodic
-  结论: Function.Periodic sin (2 * π)
+  结论: 函数.周期 sin (2 * π)
   证明: sin_antiperiodic.periodic_two_mul
 
 @[simp]
@@ -1349,7 +1349,7 @@ theorem cos_antiperiodic
 
 中文:
 定理 cos_antiperiodic
-  结论: Function.Antiperiodic cos π
+  结论: 函数.Antiperiodic cos π
   证明: by simp [cos_add]
 
 Depends on / 依赖: cos_add
@@ -1368,7 +1368,7 @@ theorem cos_periodic
 
 中文:
 定理 cos_periodic
-  结论: Function.Periodic cos (2 * π)
+  结论: 函数.周期 cos (2 * π)
   证明: cos_antiperiodic.periodic_two_mul
 
 @[simp]
@@ -2037,7 +2037,7 @@ theorem sin_pos_of_mem_Ioo
 
 中文:
 定理 sin_pos_of_mem_Ioo
-  条件: {x : 实数} (hx : x in Ioo 0 π)
+  条件: {x : 实数} (hx : x in 开区间 0 π)
   结论: 0 < sin x
   证明: sin_pos_of_pos_of_lt_pi hx.1 hx.2
 
@@ -2061,7 +2061,7 @@ theorem sin_nonneg_of_mem_Icc
 
 中文:
 定理 sin_nonneg_of_mem_Icc
-  条件: {x : 实数} (hx : x in Icc 0 π)
+  条件: {x : 实数} (hx : x in 闭区间 0 π)
   结论: 0 <= sin x
   证明: by
   rw [← closure_Ioo pi_ne_zero.symm] at hx
@@ -2331,7 +2331,7 @@ theorem cos_pos_of_mem_Ioo
 
 中文:
 定理 cos_pos_of_mem_Ioo
-  条件: {x : 实数} (hx : x in Ioo (-(π / 2)) (π / 2))
+  条件: {x : 实数} (hx : x in 开区间 (-(π / 2)) (π / 2))
   结论: 0 < cos x
   证明: sin_add_pi_div_two x ▸ sin_pos_of_mem_Ioo ⟨by linarith [hx.1], by linarith [hx.2]⟩
 
@@ -2351,7 +2351,7 @@ theorem cos_nonneg_of_mem_Icc
 
 中文:
 定理 cos_nonneg_of_mem_Icc
-  条件: {x : 实数} (hx : x in Icc (-(π / 2)) (π / 2))
+  条件: {x : 实数} (hx : x in 闭区间 (-(π / 2)) (π / 2))
   结论: 0 <= cos x
   证明: sin_add_pi_div_two x ▸ sin_nonneg_of_mem_Icc ⟨by linarith [hx.1], by linarith [hx.2]⟩
 
@@ -2817,7 +2817,7 @@ theorem strictMonoOn_sin
 
 中文:
 定理 strictMonoOn_sin
-  结论: StrictMonoOn sin (Icc (-(π / 2)) (π / 2))
+  结论: StrictMonoOn sin (闭区间 (-(π / 2)) (π / 2))
   证明: fun _ hx _ hy hxy =>
   sin_lt_sin_of_lt_of_le_pi_div_two hx.1 hy.2 hxy
 -/
@@ -2834,7 +2834,7 @@ theorem monotoneOn_sin
 
 中文:
 定理 monotoneOn_sin
-  结论: MonotoneOn sin (Set.Icc (-(π / 2)) (π / 2))
+  结论: MonotoneOn sin (集合.闭区间 (-(π / 2)) (π / 2))
   证明: strictMonoOn_sin.monotoneOn
 
 Depends on / 依赖: monotoneOn, strictMonoOn_sin, strictMonoOn_sin.monotoneOn
@@ -2896,7 +2896,7 @@ theorem strictAntiOn_cos
 
 中文:
 定理 strictAntiOn_cos
-  结论: StrictAntiOn cos (Icc 0 π)
+  结论: StrictAntiOn cos (闭区间 0 π)
   证明: fun _ hx _ hy hxy =>
   cos_lt_cos_of_nonneg_of_le_pi hx.1 hy.2 hxy
 -/
@@ -2913,7 +2913,7 @@ theorem antitoneOn_cos
 
 中文:
 定理 antitoneOn_cos
-  结论: AntitoneOn cos (Set.Icc 0 π)
+  结论: AntitoneOn cos (集合.闭区间 0 π)
   证明: strictAntiOn_cos.antitoneOn
 
 Depends on / 依赖: antitoneOn, strictAntiOn_cos, strictAntiOn_cos.antitoneOn
@@ -2969,7 +2969,7 @@ theorem injOn_sin
 
 中文:
 定理 injOn_sin
-  结论: InjOn sin (Icc (-(π / 2)) (π / 2))
+  结论: 单射限制 sin (闭区间 (-(π / 2)) (π / 2))
   证明: strictMonoOn_sin.injOn
 
 Depends on / 依赖: strictMonoOn_sin, strictMonoOn_sin.injOn
@@ -2987,7 +2987,7 @@ theorem injOn_cos
 
 中文:
 定理 injOn_cos
-  结论: InjOn cos (Icc 0 π)
+  结论: 单射限制 cos (闭区间 0 π)
   证明: strictAntiOn_cos.injOn
 
 Depends on / 依赖: strictAntiOn_cos, strictAntiOn_cos.injOn
@@ -3007,7 +3007,7 @@ theorem surjOn_sin
 
 中文:
 定理 surjOn_sin
-  结论: SurjOn sin (Icc (-(π / 2)) (π / 2)) (Icc (-1) 1)
+  结论: 满射限制 sin (闭区间 (-(π / 2)) (π / 2)) (闭区间 (-1) 1)
   证明: by
   simpa only [sin_neg, sin_pi_div_two] using!
     intermediate_value_Icc (neg_le_self pi_div_two_pos.le) continuous_sin.continuousOn
@@ -3029,7 +3029,7 @@ theorem surjOn_cos
 
 中文:
 定理 surjOn_cos
-  结论: SurjOn cos (Icc 0 π) (Icc (-1) 1)
+  结论: 满射限制 cos (闭区间 0 π) (闭区间 (-1) 1)
   证明: by
   simpa only [cos_zero, cos_pi] using! intermediate_value_Icc' pi_pos.le continuous_cos.continuousOn
 
@@ -3050,7 +3050,7 @@ theorem sin_mem_Icc
 中文:
 定理 sin_mem_Icc
   条件: (x : 实数)
-  结论: sin x in Icc (-1 : 实数) 1
+  结论: sin x in 闭区间 (-1 : 实数) 1
   证明: ⟨neg_one_le_sin x, sin_le_one x⟩
 
 Depends on / 依赖: neg_one_le_sin, sin_le_one
@@ -3070,7 +3070,7 @@ theorem cos_mem_Icc
 中文:
 定理 cos_mem_Icc
   条件: (x : 实数)
-  结论: cos x in Icc (-1 : 实数) 1
+  结论: cos x in 闭区间 (-1 : 实数) 1
   证明: ⟨neg_one_le_cos x, cos_le_one x⟩
 
 Depends on / 依赖: cos_le_one, neg_one_le_cos
@@ -3089,8 +3089,8 @@ theorem mapsTo_sin
 
 中文:
 定理 mapsTo_sin
-  条件: (s : Set 实数)
-  结论: MapsTo sin s (Icc (-1 : 实数) 1)
+  条件: (s : 集合 实数)
+  结论: 映射到 sin s (闭区间 (-1 : 实数) 1)
   证明: fun x _ => sin_mem_Icc x
 
 Depends on / 依赖: sin_mem_Icc
@@ -3108,8 +3108,8 @@ theorem mapsTo_cos
 
 中文:
 定理 mapsTo_cos
-  条件: (s : Set 实数)
-  结论: MapsTo cos s (Icc (-1 : 实数) 1)
+  条件: (s : 集合 实数)
+  结论: 映射到 cos s (闭区间 (-1 : 实数) 1)
   证明: fun x _ => cos_mem_Icc x
 
 Depends on / 依赖: cos_mem_Icc
@@ -3126,7 +3126,7 @@ theorem bijOn_sin
 
 中文:
 定理 bijOn_sin
-  结论: BijOn sin (Icc (-(π / 2)) (π / 2)) (Icc (-1) 1)
+  结论: 双射限制 sin (闭区间 (-(π / 2)) (π / 2)) (闭区间 (-1) 1)
   证明: ⟨mapsTo_sin _, injOn_sin, surjOn_sin⟩
 
 Depends on / 依赖: injOn_sin, mapsTo_sin, surjOn_sin
@@ -3146,7 +3146,7 @@ theorem bijOn_cos
 
 中文:
 定理 bijOn_cos
-  结论: BijOn cos (Icc 0 π) (Icc (-1) 1)
+  结论: 双射限制 cos (闭区间 0 π) (闭区间 (-1) 1)
   证明: ⟨mapsTo_cos _, injOn_cos, surjOn_cos⟩
 
 @[simp]
@@ -3169,7 +3169,7 @@ theorem range_cos
 
 中文:
 定理 range_cos
-  结论: range cos = (Icc (-1) 1 : Set 实数)
+  结论: range cos = (闭区间 (-1) 1 : 集合 实数)
   证明: Subset.antisymm (range_subset_iff.2 cos_mem_Icc) surjOn_cos.subset_range
 
 @[simp]
@@ -3190,7 +3190,7 @@ theorem range_sin
 
 中文:
 定理 range_sin
-  结论: range sin = (Icc (-1) 1 : Set 实数)
+  结论: range sin = (闭区间 (-1) 1 : 集合 实数)
   证明: Subset.antisymm (range_subset_iff.2 sin_mem_Icc) surjOn_sin.subset_range
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, range_subset_iff, sin_mem_Icc, subset_range, surjOn_sin, surjOn_sin.subset_range
@@ -3210,7 +3210,7 @@ theorem range_cos_infinite
 
 中文:
 定理 range_cos_infinite
-  结论: (range 实数.cos).Infinite
+  结论: (range 实数.cos).无限
   证明: by
   rw [Real.range_cos]
   exact Icc_infinite (by simp)
@@ -3233,7 +3233,7 @@ theorem range_sin_infinite
 
 中文:
 定理 range_sin_infinite
-  结论: (range 实数.sin).Infinite
+  结论: (range 实数.sin).无限
   证明: by
   rw [Real.range_sin]
   exact Icc_infinite (by simp)
@@ -4012,7 +4012,7 @@ theorem Polynomial.isRoot_cos_pi_div_five
   simpa using quadratic_root_cos_pi_div_five
 
 中文:
-定理 Polynomial.isRoot_cos_pi_div_five
+定理 多项式.isRoot_cos_pi_div_five
   证明: by
   simpa using quadratic_root_cos_pi_div_five
 
@@ -4077,7 +4077,7 @@ definition sinOrderIso
 
 中文:
 定义 sinOrderIso
-  签名: : Icc (-(π / 2)) (π / 2) ≃o Icc (-1 : 实数) 1
+  签名: : 闭区间 (-(π / 2)) (π / 2) ≃o 闭区间 (-1 : 实数) 1
   定义体: (strictMonoOn_sin.orderIso _ _).trans OrderIso.setCongr _ _ bijOn_sin.image_eq
 
 @[simp]
@@ -4099,7 +4099,7 @@ theorem coe_sinOrderIso_apply
 
 中文:
 定理 coe_sinOrderIso_apply
-  条件: (x : Icc (-(π / 2)) (π / 2))
+  条件: (x : 闭区间 (-(π / 2)) (π / 2))
   结论: (sinOrderIso x : 实数) = sin x
   证明: rfl
 -/
@@ -4119,7 +4119,7 @@ theorem sinOrderIso_apply
 
 中文:
 定理 sinOrderIso_apply
-  条件: (x : Icc (-(π / 2)) (π / 2))
+  条件: (x : 闭区间 (-(π / 2)) (π / 2))
   结论: sinOrderIso x = ⟨sin x, sin_mem_Icc x⟩
   证明: rfl
 
@@ -4339,7 +4339,7 @@ exact sin_pos_of_pos_of_lt_pi (sub_pos.2 hlt) by linarith [hx.1, hy.2]
 
 中文:
 定理 strictMonoOn_tan
-  结论: StrictMonoOn tan (Ioo (-(π / 2)) (π / 2))
+  结论: StrictMonoOn tan (开区间 (-(π / 2)) (π / 2))
   证明: by
   rintro x hx y hy hlt
   rw [tan_eq_sin_div_cos]; rw [tan_eq_sin_div_cos]; rw [div_lt_div_iff₀ (cos_pos_of_mem_Ioo hx) (cos_pos_of_mem_Ioo hy)]; rw [mul_comm]; rw [← sub_pos]; rw [← sin_sub]
@@ -4400,7 +4400,7 @@ theorem injOn_tan
 
 中文:
 定理 injOn_tan
-  结论: InjOn tan (Ioo (-(π / 2)) (π / 2))
+  结论: 单射限制 tan (开区间 (-(π / 2)) (π / 2))
   证明: strictMonoOn_tan.injOn
 
 Depends on / 依赖: strictMonoOn_tan, strictMonoOn_tan.injOn
@@ -4440,7 +4440,7 @@ theorem tan_periodic
 
 中文:
 定理 tan_periodic
-  结论: Function.Periodic tan π
+  结论: 函数.周期 tan π
   证明: by
   simpa only [Function.Periodic, tan_eq_sin_div_cos] using! sin_antiperiodic.div cos_antiperiodic
 
@@ -4723,7 +4723,7 @@ theorem tendsto_sin_pi_div_two
 
 中文:
 定理 tendsto_sin_pi_div_two
-  结论: Tendsto sin (𝓝[<] (π / 2)) (𝓝 1)
+  结论: 收敛 sin (𝓝[<] (π / 2)) (𝓝 1)
   证明: by
   convert! continuous_sin.continuousWithinAt.tendsto
   simp
@@ -4749,7 +4749,7 @@ theorem tendsto_cos_pi_div_two
 
 中文:
 定理 tendsto_cos_pi_div_two
-  结论: Tendsto cos (𝓝[<] (π / 2)) (𝓝[>] 0)
+  结论: 收敛 cos (𝓝[<] (π / 2)) (𝓝[>] 0)
   证明: by
   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
   · convert! continuous_cos.continuousWithinAt.tendsto
@@ -4780,7 +4780,7 @@ theorem tendsto_tan_pi_div_two
 
 中文:
 定理 tendsto_tan_pi_div_two
-  结论: Tendsto tan (𝓝[<] (π / 2)) atTop
+  结论: 收敛 tan (𝓝[<] (π / 2)) atTop
   证明: by
   convert!
     tendsto_cos_pi_div_two.inv_tendsto_nhdsGT_zero.atTop_mul_pos zero_lt_one
@@ -4807,7 +4807,7 @@ theorem tendsto_sin_neg_pi_div_two
 
 中文:
 定理 tendsto_sin_neg_pi_div_two
-  结论: Tendsto sin (𝓝[>] (-(π / 2))) (𝓝 (-1))
+  结论: 收敛 sin (𝓝[>] (-(π / 2))) (𝓝 (-1))
   证明: by
   convert! continuous_sin.continuousWithinAt.tendsto using 2
   simp
@@ -4833,7 +4833,7 @@ theorem tendsto_cos_neg_pi_div_two
 
 中文:
 定理 tendsto_cos_neg_pi_div_two
-  结论: Tendsto cos (𝓝[>] (-(π / 2))) (𝓝[>] 0)
+  结论: 收敛 cos (𝓝[>] (-(π / 2))) (𝓝[>] 0)
   证明: by
   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
   · convert! continuous_cos.continuousWithinAt.tendsto
@@ -4864,7 +4864,7 @@ theorem tendsto_tan_neg_pi_div_two
 
 中文:
 定理 tendsto_tan_neg_pi_div_two
-  结论: Tendsto tan (𝓝[>] (-(π / 2))) atBot
+  结论: 收敛 tan (𝓝[>] (-(π / 2))) atBot
   证明: by
   convert!
     tendsto_cos_neg_pi_div_two.inv_tendsto_nhdsGT_zero.atTop_mul_neg (by simp)
@@ -4897,7 +4897,7 @@ theorem sin_eq_zero_iff_cos_eq
 
 中文:
 定理 sin_eq_zero_iff_cos_eq
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: sin z = 0 ↔ cos z = 1 ∨ cos z = -1
   证明: by
   rw [← mul_self_eq_one_iff]; rw [← sin_sq_add_cos_sq]; rw [sq]; rw [sq]; rw [right_eq_add]; rw [mul_eq_zero]; rw [or_self]
@@ -4921,7 +4921,7 @@ theorem cos_eq_zero_iff_sin_eq
 
 中文:
 定理 cos_eq_zero_iff_sin_eq
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: cos z = 0 ↔ sin z = 1 ∨ sin z = -1
   证明: by
   rw [← mul_self_eq_one_iff]; rw [← sin_sq_add_cos_sq]; rw [sq]; rw [sq]; rw [left_eq_add]; rw [mul_eq_zero]; rw [or_self]
@@ -5085,7 +5085,7 @@ theorem sin_antiperiodic
 
 中文:
 定理 sin_antiperiodic
-  结论: Function.Antiperiodic sin π
+  结论: 函数.Antiperiodic sin π
   证明: by simp [sin_add]
 
 Depends on / 依赖: sin_add
@@ -5102,7 +5102,7 @@ theorem sin_periodic
 
 中文:
 定理 sin_periodic
-  结论: Function.Periodic sin (2 * π)
+  结论: 函数.周期 sin (2 * π)
   证明: sin_antiperiodic.periodic_two_mul
 
 Depends on / 依赖: periodic_two_mul, sin_antiperiodic, sin_antiperiodic.periodic_two_mul
@@ -5121,7 +5121,7 @@ theorem sin_add_pi
 
 中文:
 定理 sin_add_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x + π) = -sin x
   证明: sin_antiperiodic x
 
@@ -5141,7 +5141,7 @@ theorem sin_add_two_pi
 
 中文:
 定理 sin_add_two_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x + 2 * π) = sin x
   证明: sin_periodic x
 
@@ -5161,7 +5161,7 @@ theorem sin_sub_pi
 
 中文:
 定理 sin_sub_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x - π) = -sin x
   证明: sin_antiperiodic.sub_eq x
 
@@ -5181,7 +5181,7 @@ theorem sin_sub_two_pi
 
 中文:
 定理 sin_sub_two_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x - 2 * π) = sin x
   证明: sin_periodic.sub_eq x
 
@@ -5201,7 +5201,7 @@ theorem sin_pi_sub
 
 中文:
 定理 sin_pi_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (π - x) = sin x
   证明: neg_neg (sin x) ▸ sin_neg x ▸ sin_antiperiodic.sub_eq'
 
@@ -5221,7 +5221,7 @@ theorem sin_two_pi_sub
 
 中文:
 定理 sin_two_pi_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (2 * π - x) = -sin x
   证明: sin_neg x ▸ sin_periodic.sub_eq'
 
@@ -5281,7 +5281,7 @@ theorem sin_add_nat_mul_two_pi
 
 中文:
 定理 sin_add_nat_mul_two_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: sin (x + n * (2 * π)) = sin x
   证明: sin_periodic.nat_mul n x
 
@@ -5301,7 +5301,7 @@ theorem sin_add_int_mul_two_pi
 
 中文:
 定理 sin_add_int_mul_two_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: sin (x + n * (2 * π)) = sin x
   证明: sin_periodic.int_mul n x
 
@@ -5321,7 +5321,7 @@ theorem sin_sub_nat_mul_two_pi
 
 中文:
 定理 sin_sub_nat_mul_two_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: sin (x - n * (2 * π)) = sin x
   证明: sin_periodic.sub_nat_mul_eq n
 
@@ -5341,7 +5341,7 @@ theorem sin_sub_int_mul_two_pi
 
 中文:
 定理 sin_sub_int_mul_two_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: sin (x - n * (2 * π)) = sin x
   证明: sin_periodic.sub_int_mul_eq n
 
@@ -5361,7 +5361,7 @@ theorem sin_nat_mul_two_pi_sub
 
 中文:
 定理 sin_nat_mul_two_pi_sub
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: sin (n * (2 * π) - x) = -sin x
   证明: sin_neg x ▸ sin_periodic.nat_mul_sub_eq n
 
@@ -5381,7 +5381,7 @@ theorem sin_int_mul_two_pi_sub
 
 中文:
 定理 sin_int_mul_two_pi_sub
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: sin (n * (2 * π) - x) = -sin x
   证明: sin_neg x ▸ sin_periodic.int_mul_sub_eq n
 
@@ -5400,7 +5400,7 @@ theorem cos_antiperiodic
 
 中文:
 定理 cos_antiperiodic
-  结论: Function.Antiperiodic cos π
+  结论: 函数.Antiperiodic cos π
   证明: by simp [cos_add]
 
 Depends on / 依赖: Comma.preRight, Faithful, cos_add, preRight
@@ -5417,7 +5417,7 @@ theorem cos_periodic
 
 中文:
 定理 cos_periodic
-  结论: Function.Periodic cos (2 * π)
+  结论: 函数.周期 cos (2 * π)
   证明: cos_antiperiodic.periodic_two_mul
 
 Depends on / 依赖: Comma.preRight, cos_antiperiodic, cos_antiperiodic.periodic_two_mul, periodic_two_mul, preRight
@@ -5436,7 +5436,7 @@ theorem cos_add_pi
 
 中文:
 定理 cos_add_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x + π) = -cos x
   证明: cos_antiperiodic x
 
@@ -5456,7 +5456,7 @@ theorem cos_add_two_pi
 
 中文:
 定理 cos_add_two_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x + 2 * π) = cos x
   证明: cos_periodic x
 
@@ -5476,7 +5476,7 @@ theorem cos_sub_pi
 
 中文:
 定理 cos_sub_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x - π) = -cos x
   证明: cos_antiperiodic.sub_eq x
 
@@ -5496,7 +5496,7 @@ theorem cos_sub_two_pi
 
 中文:
 定理 cos_sub_two_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x - 2 * π) = cos x
   证明: cos_periodic.sub_eq x
 
@@ -5516,7 +5516,7 @@ theorem cos_pi_sub
 
 中文:
 定理 cos_pi_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (π - x) = -cos x
   证明: cos_neg x ▸ cos_antiperiodic.sub_eq'
 
@@ -5536,7 +5536,7 @@ theorem cos_two_pi_sub
 
 中文:
 定理 cos_two_pi_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (2 * π - x) = cos x
   证明: cos_neg x ▸ cos_periodic.sub_eq'
 
@@ -5596,7 +5596,7 @@ theorem cos_add_nat_mul_two_pi
 
 中文:
 定理 cos_add_nat_mul_two_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: cos (x + n * (2 * π)) = cos x
   证明: cos_periodic.nat_mul n x
 
@@ -5616,7 +5616,7 @@ theorem cos_add_int_mul_two_pi
 
 中文:
 定理 cos_add_int_mul_two_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: cos (x + n * (2 * π)) = cos x
   证明: cos_periodic.int_mul n x
 
@@ -5636,7 +5636,7 @@ theorem cos_sub_nat_mul_two_pi
 
 中文:
 定理 cos_sub_nat_mul_two_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: cos (x - n * (2 * π)) = cos x
   证明: cos_periodic.sub_nat_mul_eq n
 
@@ -5656,7 +5656,7 @@ theorem cos_sub_int_mul_two_pi
 
 中文:
 定理 cos_sub_int_mul_two_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: cos (x - n * (2 * π)) = cos x
   证明: cos_periodic.sub_int_mul_eq n
 
@@ -5676,7 +5676,7 @@ theorem cos_nat_mul_two_pi_sub
 
 中文:
 定理 cos_nat_mul_two_pi_sub
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: cos (n * (2 * π) - x) = cos x
   证明: cos_neg x ▸ cos_periodic.nat_mul_sub_eq n
 
@@ -5696,7 +5696,7 @@ theorem cos_int_mul_two_pi_sub
 
 中文:
 定理 cos_int_mul_two_pi_sub
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: cos (n * (2 * π) - x) = cos x
   证明: cos_neg x ▸ cos_periodic.int_mul_sub_eq n
 
@@ -5804,7 +5804,7 @@ theorem sin_add_pi_div_two
 
 中文:
 定理 sin_add_pi_div_two
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x + π / 2) = cos x
   证明: by simp [sin_add]
 
@@ -5823,7 +5823,7 @@ theorem sin_sub_pi_div_two
 
 中文:
 定理 sin_sub_pi_div_two
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (x - π / 2) = -cos x
   证明: by simp [sub_eq_add_neg, sin_add]
 
@@ -5842,7 +5842,7 @@ theorem sin_pi_div_two_sub
 
 中文:
 定理 sin_pi_div_two_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: sin (π / 2 - x) = cos x
   证明: by simp [sub_eq_add_neg, sin_add]
 
@@ -5861,7 +5861,7 @@ theorem cos_add_pi_div_two
 
 中文:
 定理 cos_add_pi_div_two
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x + π / 2) = -sin x
   证明: by simp [cos_add]
 
@@ -5880,7 +5880,7 @@ theorem cos_sub_pi_div_two
 
 中文:
 定理 cos_sub_pi_div_two
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (x - π / 2) = sin x
   证明: by simp [sub_eq_add_neg, cos_add]
 
@@ -5900,7 +5900,7 @@ theorem cos_pi_div_two_sub
 
 中文:
 定理 cos_pi_div_two_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: cos (π / 2 - x) = sin x
   证明: by
   rw [← cos_neg]; rw [neg_sub]; rw [cos_sub_pi_div_two]
@@ -5921,7 +5921,7 @@ theorem tan_periodic
 
 中文:
 定理 tan_periodic
-  结论: Function.Periodic tan π
+  结论: 函数.周期 tan π
   证明: by
   simpa only [tan_eq_sin_div_cos] using! sin_antiperiodic.div cos_antiperiodic
 
@@ -5941,7 +5941,7 @@ theorem tan_add_pi
 
 中文:
 定理 tan_add_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: tan (x + π) = tan x
   证明: tan_periodic x
 
@@ -5961,7 +5961,7 @@ theorem tan_sub_pi
 
 中文:
 定理 tan_sub_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: tan (x - π) = tan x
   证明: tan_periodic.sub_eq x
 
@@ -5981,7 +5981,7 @@ theorem tan_pi_sub
 
 中文:
 定理 tan_pi_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: tan (π - x) = -tan x
   证明: tan_neg x ▸ tan_periodic.sub_eq'
 
@@ -6002,7 +6002,7 @@ theorem tan_pi_div_two_sub
 
 中文:
 定理 tan_pi_div_two_sub
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: tan (π / 2 - x) = (tan x)⁻¹
   证明: by
   rw [tan_eq_sin_div_cos]; rw [tan_eq_sin_div_cos]; rw [inv_div]; rw [sin_pi_div_two_sub]; rw [cos_pi_div_two_sub]
@@ -6063,7 +6063,7 @@ theorem tan_add_nat_mul_pi
 
 中文:
 定理 tan_add_nat_mul_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: tan (x + n * π) = tan x
   证明: tan_periodic.nat_mul n x
 
@@ -6083,7 +6083,7 @@ theorem tan_add_int_mul_pi
 
 中文:
 定理 tan_add_int_mul_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: tan (x + n * π) = tan x
   证明: tan_periodic.int_mul n x
 
@@ -6103,7 +6103,7 @@ theorem tan_sub_nat_mul_pi
 
 中文:
 定理 tan_sub_nat_mul_pi
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: tan (x - n * π) = tan x
   证明: tan_periodic.sub_nat_mul_eq n
 
@@ -6123,7 +6123,7 @@ theorem tan_sub_int_mul_pi
 
 中文:
 定理 tan_sub_int_mul_pi
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: tan (x - n * π) = tan x
   证明: tan_periodic.sub_int_mul_eq n
 
@@ -6143,7 +6143,7 @@ theorem tan_nat_mul_pi_sub
 
 中文:
 定理 tan_nat_mul_pi_sub
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   结论: tan (n * π - x) = -tan x
   证明: tan_neg x ▸ tan_periodic.nat_mul_sub_eq n
 
@@ -6163,7 +6163,7 @@ theorem tan_int_mul_pi_sub
 
 中文:
 定理 tan_int_mul_pi_sub
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   结论: tan (n * π - x) = -tan x
   证明: tan_neg x ▸ tan_periodic.int_mul_sub_eq n
 
@@ -6182,7 +6182,7 @@ theorem exp_antiperiodic
 
 中文:
 定理 exp_antiperiodic
-  结论: Function.Antiperiodic exp (π * I)
+  结论: 函数.Antiperiodic exp (π * I)
   证明: by simp [exp_add, exp_mul_I]
 
 Depends on / 依赖: exp_add, exp_mul_I
@@ -6199,7 +6199,7 @@ theorem exp_periodic
 
 中文:
 定理 exp_periodic
-  结论: Function.Periodic exp (2 * π * I)
+  结论: 函数.周期 exp (2 * π * I)
   证明: (mul_assoc (2 : Complex) π I).symm ▸ exp_antiperiodic.periodic_two_mul
 
 Depends on / 依赖: exp_antiperiodic, exp_antiperiodic.periodic_two_mul, mul_assoc, periodic_two_mul
@@ -6218,7 +6218,7 @@ theorem exp_mul_I_antiperiodic
 
 中文:
 定理 exp_mul_I_antiperiodic
-  结论: Function.Antiperiodic (fun x => exp (x * I)) π
+  结论: 函数.Antiperiodic (fun x => exp (x * I)) π
   证明: by
   simpa only [mul_inv_cancel_right₀ I_ne_zero] using exp_antiperiodic.mul_const I_ne_zero
 
@@ -6239,7 +6239,7 @@ theorem exp_mul_I_periodic
 
 中文:
 定理 exp_mul_I_periodic
-  结论: Function.Periodic (fun x => exp (x * I)) (2 * π)
+  结论: 函数.周期 (fun x => exp (x * I)) (2 * π)
   证明: exp_mul_I_antiperiodic.periodic_two_mul
 
 @[simp]
@@ -6434,7 +6434,7 @@ theorem exp_add_pi_mul_I
 
 中文:
 定理 exp_add_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: exp (z + π * I) = -exp z
   证明: exp_antiperiodic z
 
@@ -6457,7 +6457,7 @@ theorem exp_sub_pi_mul_I
 
 中文:
 定理 exp_sub_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: exp (z - π * I) = -exp z
   证明: exp_antiperiodic.sub_eq z
 
@@ -6480,7 +6480,7 @@ theorem norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le
 
 中文:
 定理 norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le
-  结论: {a b : 实数} (ha : a <= 0) {z : Complex}
+  结论: {a b : 实数} (ha : a <= 0) {z : 复形}
   证明: by
   simp only [norm_exp, Real.exp_le_exp, re_ofReal_mul, add_re, exp_re, neg_im, Real.cos_neg, ←
     add_mul, mul_assoc, mul_comm (Real.cos b), neg_re, ← Real.cos_abs z.im]
@@ -6516,7 +6516,7 @@ theorem sinh_antiperiodic
 
 中文:
 定理 sinh_antiperiodic
-  结论: Function.Antiperiodic sinh (π * I)
+  结论: 函数.Antiperiodic sinh (π * I)
   证明: by
   simp [Complex.sinh_add, sinh_mul_I, cosh_mul_I]
 
@@ -6539,7 +6539,7 @@ theorem sinh_add_pi_mul_I
 
 中文:
 定理 sinh_add_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: sinh (z + π * I) = -sinh z
   证明: sinh_antiperiodic z
 
@@ -6562,7 +6562,7 @@ theorem sinh_periodic
 
 中文:
 定理 sinh_periodic
-  结论: Function.Periodic sinh (2 * π * I)
+  结论: 函数.周期 sinh (2 * π * I)
   证明: by
   convert! sinh_antiperiodic.periodic_two_mul using 1
   ring
@@ -6587,7 +6587,7 @@ theorem sinh_sub_pi_mul_I
 
 中文:
 定理 sinh_sub_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: sinh (z - π * I) = -sinh z
   证明: sinh_antiperiodic.sub_eq z
 
@@ -6609,7 +6609,7 @@ theorem cosh_antiperiodic
 
 中文:
 定理 cosh_antiperiodic
-  结论: Function.Antiperiodic cosh (π * I)
+  结论: 函数.Antiperiodic cosh (π * I)
   证明: by
   simp [Complex.cosh_add, cosh_mul_I, sinh_mul_I]
 
@@ -6632,7 +6632,7 @@ theorem cosh_add_pi_mul_I
 
 中文:
 定理 cosh_add_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: cosh (z + π * I) = -cosh z
   证明: cosh_antiperiodic z
 
@@ -6655,7 +6655,7 @@ theorem cosh_periodic
 
 中文:
 定理 cosh_periodic
-  结论: Function.Periodic cosh (2 * π * I)
+  结论: 函数.周期 cosh (2 * π * I)
   证明: by
   convert! cosh_antiperiodic.periodic_two_mul using 1
   ring
@@ -6680,7 +6680,7 @@ theorem cosh_sub_pi_mul_I
 
 中文:
 定理 cosh_sub_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: cosh (z - π * I) = -cosh z
   证明: cosh_antiperiodic.sub_eq z
 
@@ -6702,7 +6702,7 @@ theorem tanh_periodic
 
 中文:
 定理 tanh_periodic
-  结论: Function.Periodic tanh (π * I)
+  结论: 函数.周期 tanh (π * I)
   证明: by
   simp [tanh_eq_sinh_div_cosh]
 
@@ -6727,7 +6727,7 @@ theorem tanh_add_pi_mul_I
 
 中文:
 定理 tanh_add_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: tanh (z + π * I) = tanh z
   证明: tanh_periodic z
 
@@ -6750,7 +6750,7 @@ theorem tanh_sub_pi_mul_I
 
 中文:
 定理 tanh_sub_pi_mul_I
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: tanh (z - π * I) = tanh z
   证明: tanh_periodic.sub_eq z
 

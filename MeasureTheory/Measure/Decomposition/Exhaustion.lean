@@ -76,8 +76,8 @@ definition Measure.sigmaFiniteSetWRT
 @[measurability]
 
 中文:
-定义 Measure.sigmaFiniteSetWRT
-  签名: (μ ν : Measure α)
+定义 测度.sigmaFiniteSetWRT
+  签名: (μ ν : 测度 α)
   定义体: if h : exists s : Set α, MeasurableSet s ∧ SigmaFinite (μ.restrict s)
     ∧ (forall t, t subseteq sᶜ -> ν t != 0 -> μ t = ∞)
   then h.choose
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: SigmaFinite (μ.restrict (μ.sigmaFiniteSetWRT ν))
+  签名: σ有限 (μ.restrict (μ.sigmaFiniteSetWRT ν))
   定义体: by
   rw [Measure.sigmaFiniteSetWRT]
   split_ifs with h
@@ -173,8 +173,8 @@ lemma exists_isSigmaFiniteSet_measure_ge
         (_ : SigmaFinite (μ.restrict s)), ν s <= ν Set.univ)
 
 中文:
-引理 exists_isSigmaFiniteSet_measure_ge
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν] (n : 自然数)
+引理 存在_isSigmaFiniteSet_measure_ge
+  条件: (μ ν : 测度 α) [是有限测度 ν] (n : 自然数)
   证明: by
   by_cases! hC_lt : 1 / n < ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s
   · have h_lt_top : ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s < ∞ := by
@@ -222,8 +222,8 @@ definition Measure.sigmaFiniteSetGE
   body: (exists_isSigmaFiniteSet_measure_ge μ ν n).choose
 
 中文:
-定义 Measure.sigmaFiniteSetGE
-  签名: (μ ν : Measure α) [IsFiniteMeasure ν] (n : 自然数)
+定义 测度.sigmaFiniteSetGE
+  签名: (μ ν : 测度 α) [是有限测度 ν] (n : 自然数)
   定义体: (exists_isSigmaFiniteSet_measure_ge μ ν n).choose
 
 Depends on / 依赖: exists_isSigmaFiniteSet_measure_ge
@@ -241,7 +241,7 @@ lemma measurableSet_sigmaFiniteSetGE
 
 中文:
 引理 measurableSet_sigmaFiniteSetGE
-  条件: [IsFiniteMeasure ν] (n : 自然数)
+  条件: [是有限测度 ν] (n : 自然数)
   证明: (exists_isSigmaFiniteSet_measure_ge μ ν n).choose_spec.1
 
 Depends on / 依赖: choose_spec, exists_isSigmaFiniteSet_measure_ge
@@ -260,7 +260,7 @@ lemma sigmaFinite_restrict_sigmaFiniteSetGE
 
 中文:
 引理 sigmaFinite_restrict_sigmaFiniteSetGE
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν] (n : 自然数)
+  条件: (μ ν : 测度 α) [是有限测度 ν] (n : 自然数)
   证明: (exists_isSigmaFiniteSet_measure_ge μ ν n).choose_spec.2.1
 
 Depends on / 依赖: choose_spec, exists_isSigmaFiniteSet_measure_ge
@@ -283,7 +283,7 @@ lemma measure_sigmaFiniteSetGE_le
 
 中文:
 引理 measure_sigmaFiniteSetGE_le
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν] (n : 自然数)
+  条件: (μ ν : 测度 α) [是有限测度 ν] (n : 自然数)
   证明: by
   refine (le_iSup (f := fun s => _)
     (sigmaFinite_restrict_sigmaFiniteSetGE μ ν n)).trans ?_
@@ -310,7 +310,7 @@ lemma measure_sigmaFiniteSetGE_ge
 
 中文:
 引理 measure_sigmaFiniteSetGE_ge
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν] (n : 自然数)
+  条件: (μ ν : 测度 α) [是有限测度 ν] (n : 自然数)
   证明: (exists_isSigmaFiniteSet_measure_ge μ ν n).choose_spec.2.2
 
 Depends on / 依赖: choose_spec, exists_isSigmaFiniteSet_measure_ge
@@ -334,7 +334,7 @@ lemma tendsto_measure_sigmaFiniteSetGE
 
 中文:
 引理 tendsto_measure_sigmaFiniteSetGE
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 ν]
   证明: by
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_
     tendsto_const_nhds (measure_sigmaFiniteSetGE_ge μ ν) (measure_sigmaFiniteSetGE_le μ ν)
@@ -364,8 +364,8 @@ definition Measure.sigmaFiniteSetWRT'
   body: ⋃ n, μ.sigmaFiniteSetGE ν n
 
 中文:
-定义 Measure.sigmaFiniteSetWRT'
-  签名: (μ ν : Measure α) [IsFiniteMeasure ν]
+定义 测度.sigmaFiniteSetWRT'
+  签名: (μ ν : 测度 α) [是有限测度 ν]
   定义体: ⋃ n, μ.sigmaFiniteSetGE ν n
 
 Depends on / 依赖: sigmaFiniteSetGE
@@ -383,7 +383,7 @@ lemma measurableSet_sigmaFiniteSetWRT'
 
 中文:
 引理 measurableSet_sigmaFiniteSetWRT'
-  条件: [IsFiniteMeasure ν]
+  条件: [是有限测度 ν]
   证明: MeasurableSet.iUnion measurableSet_sigmaFiniteSetGE
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, iUnion, measurableSet_sigmaFiniteSetGE
@@ -406,7 +406,7 @@ lemma sigmaFinite_restrict_sigmaFiniteSetWRT'
 
 中文:
 引理 sigmaFinite_restrict_sigmaFiniteSetWRT'
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 ν]
   证明: by
   have := sigmaFinite_restrict_sigmaFiniteSetGE μ ν
   let f : Nat × Nat -> Set α := fun p : Nat × Nat => (μ.sigmaFiniteSetWRT' ν)ᶜ
@@ -462,7 +462,7 @@ lemma measure_sigmaFiniteSetWRT'
 
 中文:
 引理 measure_sigmaFiniteSetWRT'
-  条件: (μ ν : Measure α) [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 ν]
   证明: by
   apply le_antisymm
   · refine (le_iSup (f := fun _ => _)
@@ -502,7 +502,7 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet
 
 中文:
 引理 measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet
-  结论: [IsFiniteMeasure ν]
+  结论: [是有限测度 ν]
   证明: by
   suffices ¬ SigmaFinite (μ.restrict s) by
     by_contra h
@@ -554,7 +554,7 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'
 
 中文:
 引理 measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'
-  结论: [IsFiniteMeasure ν]
+  结论: [是有限测度 ν]
   证明: by
   rw [measure_eq_iInf]
   simp_rw [iInf_eq_top]
@@ -678,7 +678,7 @@ lemma measure_compl_sigmaFiniteSetWRT
 
 中文:
 引理 measure_compl_sigmaFiniteSetWRT
-  条件: (hμν : μ ≪ ν) [SigmaFinite μ] [SFinite ν]
+  条件: (hμν : μ ≪ ν) [σ有限 μ] [SFinite ν]
   证明: by
   have h : ν (μ.sigmaFiniteSetWRT ν)ᶜ != 0 -> μ (μ.sigmaFiniteSetWRT ν)ᶜ = ∞ :=
     measure_eq_top_of_subset_compl_sigmaFiniteSetWRT subset_rfl
@@ -720,8 +720,8 @@ definition Measure.sigmaFiniteSet
 @[measurability]
 
 中文:
-定义 Measure.sigmaFiniteSet
-  签名: (μ : Measure α)
+定义 测度.sigmaFiniteSet
+  签名: (μ : 测度 α)
   定义体: μ.sigmaFiniteSetWRT μ
 
 @[measurability]
@@ -741,7 +741,7 @@ lemma measurableSet_sigmaFiniteSet
 
 中文:
 引理 measurableSet_sigmaFiniteSet
-  结论: MeasurableSet μ.sigmaFiniteSet
+  结论: 可测集 μ.sigmaFiniteSet
   证明: measurableSet_sigmaFiniteSetWRT
 
 Depends on / 依赖: measurableSet_sigmaFiniteSetWRT
@@ -786,7 +786,7 @@ lemma restrict_compl_sigmaFiniteSet_eq_zero_or_top
 
 中文:
 引理 restrict_compl_sigmaFiniteSet_eq_zero_or_top
-  条件: (μ : Measure α) [SFinite μ] (s : Set α)
+  条件: (μ : 测度 α) [SFinite μ] (s : 集合 α)
   证明: by
   rw [Measure.restrict_apply' measurableSet_sigmaFiniteSet.compl]
   exact measure_eq_zero_or_top_of_subset_compl_sigmaFiniteSet Set.inter_subset_right
@@ -810,7 +810,7 @@ instance :
 
 中文:
 实例 :
-  签名: SigmaFinite (μ.restrict μ.sigmaFiniteSet)
+  签名: σ有限 (μ.restrict μ.sigmaFiniteSet)
   定义体: by
   rw [Measure.sigmaFiniteSet]
   infer_instance
@@ -861,7 +861,7 @@ lemma measure_compl_sigmaFiniteSet
 
 中文:
 引理 measure_compl_sigmaFiniteSet
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   结论: μ μ.sigmaFiniteSetᶜ = 0
   证明: measure_compl_sigmaFiniteSetWRT Measure.AbsolutelyContinuous.rfl
 
@@ -880,7 +880,7 @@ lemma measure_compl_sigmaFiniteSet_eq_zero_iff_sigmaFinite
 
 中文:
 引理 measure_compl_sigmaFiniteSet_eq_zero_iff_sigmaFinite
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   证明: ⟨sigmaFinite_of_measure_compl_sigmaFiniteSet_eq_zero, fun _ => measure_compl_sigmaFiniteSet μ⟩
 
 Depends on / 依赖: measure_compl_sigmaFiniteSet, sigmaFinite_of_measure_compl_sigmaFiniteSet_eq_zero

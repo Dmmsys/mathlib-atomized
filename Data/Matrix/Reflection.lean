@@ -49,8 +49,8 @@ definition Forall
   signature: : forall {m n} (_ : Matrix (Fin m) (Fin n) α -> Prop), Prop
 
 中文:
-定义 Forall
-  签名: : 对任意 {m n} (_ : Matrix (Fin m) (Fin n) α -> 命题), 命题
+定义 任意
+  签名: : 对任意 {m n} (_ : 矩阵 (有限集 m) (有限集 n) α -> 命题), 命题
 
 Depends on / 依赖: forall_iff
 -/
@@ -67,8 +67,8 @@ theorem forall_iff
   proof: (forall_iff _).symm
 
 中文:
-定理 forall_iff
-  结论: 对任意 {m n} (P : Matrix (Fin m) (Fin n) α -> 命题), Forall P ↔ 对任意 x, P x
+定理 对任意_iff
+  结论: 对任意 {m n} (P : 矩阵 (有限集 m) (有限集 n) α -> 命题), 任意 P ↔ 对任意 x, P x
   证明: (forall_iff _).symm
 
 Depends on / 依赖: forall_iff
@@ -91,8 +91,8 @@ definition Exists
   signature: : forall {m n} (_ : Matrix (Fin m) (Fin n) α -> Prop), Prop
 
 中文:
-定义 Exists
-  签名: : 对任意 {m n} (_ : Matrix (Fin m) (Fin n) α -> 命题), 命题
+定义 存在
+  签名: : 对任意 {m n} (_ : 矩阵 (有限集 m) (有限集 n) α -> 命题), 命题
 
 Depends on / 依赖: exists_iff
 -/
@@ -109,8 +109,8 @@ theorem exists_iff
   proof: (exists_iff _).symm
 
 中文:
-定理 exists_iff
-  结论: 对任意 {m n} (P : Matrix (Fin m) (Fin n) α -> 命题), Exists P ↔ 存在 x, P x
+定理 存在_iff
+  结论: 对任意 {m n} (P : 矩阵 (有限集 m) (有限集 n) α -> 命题), 存在 P ↔ 存在 x, P x
   证明: (exists_iff _).symm
 
 Depends on / 依赖: exists_iff
@@ -134,7 +134,7 @@ definition transposeᵣ
 
 中文:
 定义 transposeᵣ
-  签名: : 对任意 {m n}, Matrix (Fin m) (Fin n) α -> Matrix (Fin n) (Fin m) α
+  签名: : 对任意 {m n}, 矩阵 (有限集 m) (有限集 n) α -> 矩阵 (有限集 n) (有限集 m) α
 -/
 def transposeᵣ : forall {m n}, Matrix (Fin m) (Fin n) α -> Matrix (Fin n) (Fin m) α
   | _, 0, _ => of ![]
@@ -158,7 +158,7 @@ theorem transposeᵣ_eq
 
 中文:
 定理 transposeᵣ_eq
-  结论: 对任意 {m n} (A : Matrix (Fin m) (Fin n) α), transposeᵣ A = transpose A
+  结论: 对任意 {m n} (A : 矩阵 (有限集 m) (有限集 n) α), transposeᵣ A = transpose A
   证明: (transposeᵣ_eq _).symm
 -/
 theorem transposeᵣ_eq : forall {m n} (A : Matrix (Fin m) (Fin n) α), transposeᵣ A = transpose A
@@ -185,7 +185,7 @@ definition dotProductᵣ
 
 中文:
 定义 dotProductᵣ
-  签名: [Mul α] [Add α] [Zero α] {m} (a b : Fin m -> α)
+  签名: [乘法 α] [加法 α] [零 α] {m} (a b : 有限集 m -> α)
   定义体: FinVec.sum FinVec.seq (FinVec.map (· * ·) a) b
 
 Depends on / 依赖: FinVec, FinVec.map, FinVec.seq, FinVec.sum
@@ -216,7 +216,7 @@ example (a b c d : α) [Mul α] [AddCommMonoid α] : ![a, b] ⬝ᵥ ![c, d] = a 
 
 中文:
 定理 dotProductᵣ_eq
-  条件: [Mul α] [AddCommMonoid α] {m} (a b : Fin m -> α)
+  条件: [乘法 α] [加法交换幺半群 α] {m} (a b : 有限集 m -> α)
   证明: by
   simp_rw [dotProductᵣ, dotProduct, FinVec.sum_eq, FinVec.seq_eq, FinVec.map_eq,
       Function.comp_apply]
@@ -244,7 +244,7 @@ definition mulᵣ
 
 中文:
 定义 mulᵣ
-  签名: [Mul α] [Add α] [Zero α] (A : Matrix (Fin l) (Fin m) α) (B : Matrix (Fin m) (Fin n) α)
+  签名: [乘法 α] [加法 α] [零 α] (A : 矩阵 (有限集 l) (有限集 m) α) (B : 矩阵 (有限集 m) (有限集 n) α)
   定义体: of FinVec.map (fun v₁ => FinVec.map (fun v₂ => dotProductᵣ v₁ v₂) Bᵀ) A
 
 Depends on / 依赖: FinVec, FinVec.map
@@ -284,7 +284,7 @@ example [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b�
 
 中文:
 定理 mulᵣ_eq
-  结论: [Mul α] [AddCommMonoid α] (A : Matrix (Fin l) (Fin m) α)
+  结论: [乘法 α] [加法交换幺半群 α] (A : 矩阵 (有限集 l) (有限集 m) α)
   证明: by
   simp [mulᵣ, Matrix.transpose]
   rfl
@@ -318,7 +318,7 @@ definition mulVecᵣ
 
 中文:
 定义 mulVecᵣ
-  签名: [Mul α] [Add α] [Zero α] (A : Matrix (Fin l) (Fin m) α) (v : Fin m -> α)
+  签名: [乘法 α] [加法 α] [零 α] (A : 矩阵 (有限集 l) (有限集 m) α) (v : 有限集 m -> α)
   定义体: FinVec.map (fun a => dotProductᵣ a v) A
 
 Depends on / 依赖: FinVec, FinVec.map
@@ -352,7 +352,7 @@ example [NonUnitalNonAssocSemiring α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁ b�
 
 中文:
 定理 mulVecᵣ_eq
-  条件: [NonUnitalNonAssocSemiring α] (A : Matrix (Fin l) (Fin m) α) (v : Fin m -> α)
+  条件: [非幺非结合半环 α] (A : 矩阵 (有限集 l) (有限集 m) α) (v : 有限集 m -> α)
   证明: by
   simp [mulVecᵣ]
   rfl
@@ -380,7 +380,7 @@ definition vecMulᵣ
 
 中文:
 定义 vecMulᵣ
-  签名: [Mul α] [Add α] [Zero α] (v : Fin l -> α) (A : Matrix (Fin l) (Fin m) α)
+  签名: [乘法 α] [加法 α] [零 α] (v : 有限集 l -> α) (A : 矩阵 (有限集 l) (有限集 m) α)
   定义体: FinVec.map (fun a => dotProductᵣ v a) Aᵀ
 
 Depends on / 依赖: FinVec, FinVec.map
@@ -414,7 +414,7 @@ example [NonUnitalNonAssocSemiring α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁ b�
 
 中文:
 定理 vecMulᵣ_eq
-  条件: [NonUnitalNonAssocSemiring α] (v : Fin l -> α) (A : Matrix (Fin l) (Fin m) α)
+  条件: [非幺非结合半环 α] (v : 有限集 l -> α) (A : 矩阵 (有限集 l) (有限集 m) α)
   证明: by
   simp [vecMulᵣ]
   rfl
@@ -442,7 +442,7 @@ definition etaExpand
 
 中文:
 定义 etaExpand
-  签名: {m n} (A : Matrix (Fin m) (Fin n) α)
+  签名: {m n} (A : 矩阵 (有限集 m) (有限集 n) α)
   定义体: Matrix.of (FinVec.etaExpand fun i => FinVec.etaExpand fun j => A i j)
 
 Depends on / 依赖: FinVec, FinVec.etaExpand, Matrix, Matrix.of, etaExpand
@@ -465,7 +465,7 @@ theorem etaExpand_eq
 
 中文:
 定理 etaExpand_eq
-  条件: {m n} (A : Matrix (Fin m) (Fin n) α)
+  条件: {m n} (A : 矩阵 (有限集 m) (有限集 n) α)
   结论: etaExpand A = A
   证明: by
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166

@@ -58,7 +58,7 @@ theorem isLocalRing_of_isAdicComplete_maximal
 
 中文:
 定理 isLocalRing_of_isAdicComplete_maximal
-  条件: (m : Ideal R) [m.IsMaximal] [IsAdicComplete m R]
+  条件: (m : 理想 R) [m.是极大] [是AdicComplete m R]
   证明: IsLocalRing.of_unique_max_ideal ⟨m, ‹m.IsMaximal›, fun _ hJ =>
     (‹m.IsMaximal›.eq_of_le hJ.ne_top <|
 (IsAdicComplete.le_jacobson_bot m).trans sInf_le ⟨bot_le, hJ⟩).symm⟩
@@ -109,7 +109,7 @@ lemma isMaximal_map_of_le
 
 中文:
 引理 isMaximal_map_of_le
-  条件: (m : Ideal R) [m.IsMaximal] (le : I <= m) (fg : I.FG)
+  条件: (m : 理想 R) [m.是极大] (le : I <= m) (fg : I.FG)
   证明: by
   have mapeq : m.map (algebraMap R (AdicCompletion I R)) = (m.map (Ideal.Quotient.mk I)).comap
     (AdicCompletion.evalOneₐ I).toRingHom := by
@@ -142,7 +142,7 @@ lemma isLocalRing_of_fg
 
 中文:
 引理 isLocalRing_of_fg
-  条件: [IsLocalRing R] (fg : (maximalIdeal R).FG)
+  条件: [是局部环 R] (fg : (maximalIdeal R).FG)
   证明: by
   have := AdicCompletion.isMaximal_map_of_le _ _ (le_refl _) fg
   have := AdicCompletion.isAdicComplete_self _ fg
@@ -167,8 +167,8 @@ instance [IsNoetherianRing
   body: AdicCompletion.isLocalRing_of_fg (fg_of_isNoetherianRing (maximalIdeal R))
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] [IsLocalRing R] : IsLocalRing (AdicCompletion (maximalIdeal R) R)
+实例 [是Noether环
+  签名: R] [是局部环 R] : 是局部环 (AdicCompletion (maximalIdeal R) R)
   定义体: AdicCompletion.isLocalRing_of_fg (fg_of_isNoetherianRing (maximalIdeal R))
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.isLocalRing_of_fg, fg_of_isNoetherianRing, isLocalRing_of_fg, maximalIdeal
@@ -190,7 +190,7 @@ lemma maximalIdeal_eq_map_of_fg
 
 中文:
 引理 maximalIdeal_eq_map_of_fg
-  条件: [IsLocalRing R] (fg : (maximalIdeal R).FG)
+  条件: [是局部环 R] (fg : (maximalIdeal R).FG)
   证明: AdicCompletion.isLocalRing_of_fg fg
     maximalIdeal (AdicCompletion (maximalIdeal R) R) =
     (maximalIdeal R).map (algebraMap R (AdicCompletion (maximalIdeal R) R)) :=
@@ -217,7 +217,7 @@ lemma maximalIdeal_eq_map
 
 中文:
 引理 maximalIdeal_eq_map
-  条件: [IsNoetherianRing R] [IsLocalRing R]
+  条件: [是Noether环 R] [是局部环 R]
   证明: (IsLocalRing.eq_maximalIdeal (AdicCompletion.isMaximal_map_of_le _ _ (le_refl _)
     (maximalIdeal R).fg_of_isNoetherianRing)).symm
 
@@ -243,7 +243,7 @@ lemma mem_maximalIdeal_iff_eval_one_eq_zero
 
 中文:
 引理 mem_maximalIdeal_iff_eval_one_eq_zero
-  结论: [IsNoetherianRing R] [IsLocalRing R]
+  结论: [是Noether环 R] [是局部环 R]
   证明: by
   have : (AdicCompletion.eval (maximalIdeal R) R 1).ker =
     (maximalIdeal R) • (⊤ : Submodule R (AdicCompletion (maximalIdeal R) R)) := by
@@ -274,7 +274,7 @@ lemma algebraMap_isLocalHom_of_fg
 
 中文:
 引理 algebraMap_isLocalHom_of_fg
-  条件: [IsLocalRing R] (fg : (maximalIdeal R).FG)
+  条件: [是局部环 R] (fg : (maximalIdeal R).FG)
   证明: by
   have := AdicCompletion.isLocalRing_of_fg fg
   apply ((IsLocalRing.local_hom_TFAE _).out 0 2).mpr
@@ -297,8 +297,8 @@ instance [IsNoetherianRing
   body: AdicCompletion.algebraMap_isLocalHom_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] [IsLocalRing R] :
+实例 [是Noether环
+  签名: R] [是局部环 R] :
   定义体: AdicCompletion.algebraMap_isLocalHom_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.algebraMap_isLocalHom_of_fg, algebraMap_isLocalHom_of_fg, fg_of_isNoetherianRing, maximalIdeal
@@ -321,7 +321,7 @@ lemma isAdicComplete_of_fg
 
 中文:
 引理 isAdicComplete_of_fg
-  条件: [IsLocalRing R] (fg : (maximalIdeal R).FG)
+  条件: [是局部环 R] (fg : (maximalIdeal R).FG)
   证明: AdicCompletion.isLocalRing_of_fg fg
     IsAdicComplete (maximalIdeal (AdicCompletion (maximalIdeal R) R))
       (AdicCompletion (maximalIdeal R) R) := by
@@ -346,8 +346,8 @@ instance [IsNoetherianRing
   body: AdicCompletion.isAdicComplete_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] [IsLocalRing R] : IsAdicComplete
+实例 [是Noether环
+  签名: R] [是局部环 R] : 是AdicComplete
   定义体: AdicCompletion.isAdicComplete_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.isAdicComplete_of_fg, fg_of_isNoetherianRing, isAdicComplete_of_fg, maximalIdeal
@@ -371,7 +371,7 @@ lemma residueField_map_bijective_of_fg
 
 中文:
 引理 residueField_map_bijective_of_fg
-  条件: [IsLocalRing R] (fg : (maximalIdeal R).FG)
+  条件: [是局部环 R] (fg : (maximalIdeal R).FG)
   证明: AdicCompletion.isLocalRing_of_fg fg
     haveI := AdicCompletion.algebraMap_isLocalHom_of_fg fg
     Function.Bijective
@@ -411,7 +411,7 @@ lemma residueField_map_bijective
 
 中文:
 引理 residueField_map_bijective
-  条件: [IsNoetherianRing R] [IsLocalRing R]
+  条件: [是Noether环 R] [是局部环 R]
   证明: AdicCompletion.residueField_map_bijective_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.residueField_map_bijective_of_fg, fg_of_isNoetherianRing, maximalIdeal, residueField_map_bijective_of_fg
@@ -436,7 +436,7 @@ lemma spanFinrank_maximalIdeal_eq
 
 中文:
 引理 spanFinrank_maximalIdeal_eq
-  条件: [IsNoetherianRing R] [IsLocalRing R]
+  条件: [是Noether环 R] [是局部环 R]
   证明: by
   have fg : (maximalIdeal R).FG := fg_of_isNoetherianRing (maximalIdeal R)
   have comapeq := IsLocalRing.maximalIdeal_comap (algebraMap R (AdicCompletion (maximalIdeal R) R))

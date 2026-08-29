@@ -78,7 +78,7 @@ theorem IicSnd_apply
 
 中文:
 定理 IicSnd_apply
-  条件: (r : 实数) {s : Set α} (hs : MeasurableSet s)
+  条件: (r : 实数) {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [IicSnd]; rw [fst_apply hs]; rw [restrict_apply' (MeasurableSet.univ.prod measurableSet_Iic)]; rw [univ_prod]; rw [Set.prod_eq]
 
@@ -102,7 +102,7 @@ theorem IicSnd_univ
 中文:
 定理 IicSnd_univ
   条件: (r : 实数)
-  结论: ρ.IicSnd r univ = ρ (univ ×ˢ Iic r)
+  结论: ρ.IicSnd r univ = ρ (univ ×ˢ 左无界右闭区间 r)
   证明: IicSnd_apply ρ r MeasurableSet.univ
 
 @[gcongr]
@@ -184,8 +184,8 @@ theorem IsFiniteMeasure.IicSnd
   proof: isFiniteMeasure_of_le _ (IicSnd_le_fst ρ _)
 
 中文:
-定理 IsFiniteMeasure.IicSnd
-  条件: {ρ : Measure (α × 实数)} [IsFiniteMeasure ρ] (r : 实数)
+定理 是有限测度.IicSnd
+  条件: {ρ : 测度 (α × 实数)} [是有限测度 ρ] (r : 实数)
   证明: isFiniteMeasure_of_le _ (IicSnd_le_fst ρ _)
 
 Depends on / 依赖: IicSnd_le_fst, isFiniteMeasure_of_le
@@ -205,7 +205,7 @@ theorem iInf_IicSnd_gt
 
 中文:
 定理 iInf_IicSnd_gt
-  条件: (t : Rat) {s : Set α} (hs : MeasurableSet s) [IsFiniteMeasure ρ]
+  条件: (t : 有理数) {s : 集合 α} (hs : 可测集 s) [是有限测度 ρ]
   证明: by
   simp_rw [ρ.IicSnd_apply _ hs, Measure.iInf_rat_gt_prod_Iic hs]
 
@@ -229,7 +229,7 @@ theorem tendsto_IicSnd_atTop
 
 中文:
 定理 tendsto_IicSnd_atTop
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   simp_rw [ρ.IicSnd_apply _ hs, fst_apply hs, ← prod_univ]
   rw [← Real.iUnion_Iic_rat]; rw [prod_iUnion]
@@ -261,7 +261,7 @@ theorem tendsto_IicSnd_atBot
 
 中文:
 定理 tendsto_IicSnd_atBot
-  条件: [IsFiniteMeasure ρ] {s : Set α} (hs : MeasurableSet s)
+  条件: [是有限测度 ρ] {s : 集合 α} (hs : 可测集 s)
   证明: by
   simp_rw [ρ.IicSnd_apply _ hs]
   have h_empty : ρ (s ×ˢ ∅) = 0 := by simp only [prod_empty, measure_empty]
@@ -320,7 +320,7 @@ definition preCDF
 
 中文:
 定义 preCDF
-  签名: (ρ : Measure (α × 实数)) (r : Rat)
+  签名: (ρ : 测度 (α × 实数)) (r : 有理数)
   定义体: Measure.rnDeriv (ρ.IicSnd r) ρ.fst
 
 Depends on / 依赖: IicSnd, Measure, Measure.rnDeriv, rnDeriv
@@ -339,8 +339,8 @@ theorem measurable_preCDF
 
 中文:
 定理 measurable_preCDF
-  条件: {ρ : Measure (α × 实数)} {r : Rat}
-  结论: Measurable (preCDF ρ r)
+  条件: {ρ : 测度 (α × 实数)} {r : 有理数}
+  结论: 可测 (preCDF ρ r)
   证明: Measure.measurable_rnDeriv _ _
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, measurable_rnDeriv
@@ -360,7 +360,7 @@ lemma measurable_preCDF'
 
 中文:
 引理 measurable_preCDF'
-  条件: {ρ : Measure (α × 实数)}
+  条件: {ρ : 测度 (α × 实数)}
   证明: by
   rw [measurable_pi_iff]
   exact fun _ => measurable_preCDF.ennreal_toReal
@@ -382,7 +382,7 @@ theorem withDensity_preCDF
 
 中文:
 定理 withDensity_preCDF
-  条件: (ρ : Measure (α × 实数)) (r : Rat) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) (r : 有理数) [是有限测度 ρ]
   证明: Measure.absolutelyContinuous_iff_withDensity_rnDeriv_eq.mp (Measure.IicSnd_ac_fst ρ r)
 
 Depends on / 依赖: IicSnd_ac_fst, Measure, Measure.IicSnd_ac_fst, Measure.absolutelyContinuous_iff_withDensity_rnDeriv_eq.mp, absolutelyContinuous_iff_withDensity_rnDeriv_eq
@@ -404,8 +404,8 @@ theorem setLIntegral_preCDF_fst
   · simp only [withDensity_preCDF ρ r, Pi.one_apply, lintegral_one, Measur
 
 中文:
-定理 setLIntegral_preCDF_fst
-  结论: (ρ : Measure (α × 实数)) (r : Rat) {s : Set α} (hs : MeasurableSet s)
+定理 setL整数egral_preCDF_fst
+  结论: (ρ : 测度 (α × 实数)) (r : 有理数) {s : 集合 α} (hs : 可测集 s)
   证明: by
   have : forall r, ∫⁻ x in s, preCDF ρ r x ∂ρ.fst = ∫⁻ x in s, (preCDF ρ r * 1) x ∂ρ.fst := by
     simp only [mul_one, forall_const]
@@ -435,7 +435,7 @@ lemma lintegral_preCDF_fst
 
 中文:
 引理 lintegral_preCDF_fst
-  条件: (ρ : Measure (α × 实数)) (r : Rat) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) (r : 有理数) [是有限测度 ρ]
   证明: by
   rw [← setLIntegral_univ]; rw [setLIntegral_preCDF_fst ρ r MeasurableSet.univ]
 
@@ -460,7 +460,7 @@ theorem monotone_preCDF
 
 中文:
 定理 monotone_preCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ]
   证明: by
   simp_rw [Monotone, ae_all_iff]
   refine fun r r' hrr' => ae_le_of_forall_setLIntegral_le_of_sigmaFinite measurable_preCDF
@@ -493,7 +493,7 @@ theorem preCDF_le_one
 
 中文:
 定理 preCDF_le_one
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ]
   证明: by
   rw [ae_all_iff]
   refine fun r => ae_le_of_forall_setLIntegral_le_of_sigmaFinite measurable_preCDF fun s hs _ => ?_
@@ -526,8 +526,8 @@ lemma setIntegral_preCDF_fst
     exact (ha r).trans_lt ENNReal.one_lt_top
 
 中文:
-引理 setIntegral_preCDF_fst
-  结论: (ρ : Measure (α × 实数)) (r : Rat) {s : Set α} (hs : MeasurableSet s)
+引理 set整数egral_preCDF_fst
+  结论: (ρ : 测度 (α × 实数)) (r : 有理数) {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [integral_toReal]
   · rw [setLIntegral_preCDF_fst _ _ hs, measureReal_def]
@@ -559,7 +559,7 @@ lemma integral_preCDF_fst
 
 中文:
 引理 integral_preCDF_fst
-  条件: (ρ : Measure (α × 实数)) (r : Rat) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) (r : 有理数) [是有限测度 ρ]
   证明: by
   rw [← setIntegral_univ]; rw [setIntegral_preCDF_fst ρ _ MeasurableSet.univ]
 
@@ -584,7 +584,7 @@ lemma integrable_preCDF
 
 中文:
 引理 integrable_preCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : Rat)
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 有理数)
   证明: by
   refine integrable_of_forall_fin_meas_le _ (measure_lt_top ρ.fst univ) ?_ fun t _ _ => ?_
   · exact measurable_preCDF.ennreal_toReal.aestronglyMeasurable
@@ -620,7 +620,7 @@ lemma isRatCondKernelCDFAux_preCDF
 
 中文:
 引理 isRatCondKernelCDFAux_preCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ]
   证明: measurable_preCDF'.comp measurable_snd
   mono' a r r' hrr' := by
     filter_upwards [monotone_preCDF ρ, preCDF_le_one ρ] with a h₁ h₂
@@ -672,7 +672,7 @@ lemma isRatCondKernelCDF_preCDF
 
 中文:
 引理 isRatCondKernelCDF_preCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ]
   证明: (isRatCondKernelCDFAux_preCDF ρ).isRatCondKernelCDF
 
 Depends on / 依赖: isRatCondKernelCDF, isRatCondKernelCDFAux_preCDF
@@ -694,7 +694,7 @@ definition condCDF
 
 中文:
 定义 condCDF
-  签名: (ρ : Measure (α × 实数)) (a : α)
+  签名: (ρ : 测度 (α × 实数)) (a : α)
   定义体: stieltjesOfMeasurableRat (fun a r => (preCDF ρ r a).toReal) measurable_preCDF' a
 
 Depends on / 依赖: measurable_preCDF, preCDF, stieltjesOfMeasurableRat, toReal
@@ -714,7 +714,7 @@ lemma condCDF_eq_stieltjesOfMeasurableRat_unit_prod
 
 中文:
 引理 condCDF_eq_stieltjesOfMeasurableRat_unit_prod
-  条件: (ρ : Measure (α × 实数)) (a : α)
+  条件: (ρ : 测度 (α × 实数)) (a : α)
   证明: by
   ext x
   rw [condCDF]; rw [← stieltjesOfMeasurableRat_unit_prod]
@@ -739,7 +739,7 @@ lemma isCondKernelCDF_condCDF
 
 中文:
 引理 isCondKernelCDF_condCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ]
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ]
   证明: by
   simp_rw [condCDF_eq_stieltjesOfMeasurableRat_unit_prod ρ]
   exact isCondKernelCDF_stieltjesOfMeasurableRat (isRatCondKernelCDF_preCDF ρ)
@@ -763,7 +763,7 @@ theorem condCDF_nonneg
 
 中文:
 定理 condCDF_nonneg
-  条件: (ρ : Measure (α × 实数)) (a : α) (r : 实数)
+  条件: (ρ : 测度 (α × 实数)) (a : α) (r : 实数)
   结论: 0 <= condCDF ρ a r
   证明: stieltjesOfMeasurableRat_nonneg _ a r
 
@@ -783,7 +783,7 @@ theorem condCDF_le_one
 
 中文:
 定理 condCDF_le_one
-  条件: (ρ : Measure (α × 实数)) (a : α) (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) (a : α) (x : 实数)
   结论: condCDF ρ a x <= 1
   证明: stieltjesOfMeasurableRat_le_one _ _ _
 
@@ -802,7 +802,7 @@ theorem tendsto_condCDF_atBot
 
 中文:
 定理 tendsto_condCDF_atBot
-  条件: (ρ : Measure (α × 实数)) (a : α)
+  条件: (ρ : 测度 (α × 实数)) (a : α)
   证明: tendsto_stieltjesOfMeasurableRat_atBot _ _
 
 Depends on / 依赖: tendsto_stieltjesOfMeasurableRat_atBot
@@ -820,7 +820,7 @@ theorem tendsto_condCDF_atTop
 
 中文:
 定理 tendsto_condCDF_atTop
-  条件: (ρ : Measure (α × 实数)) (a : α)
+  条件: (ρ : 测度 (α × 实数)) (a : α)
   证明: tendsto_stieltjesOfMeasurableRat_atTop _ _
 
 Depends on / 依赖: tendsto_stieltjesOfMeasurableRat_atTop
@@ -840,7 +840,7 @@ theorem condCDF_ae_eq
 
 中文:
 定理 condCDF_ae_eq
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (r : Rat)
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (r : 有理数)
   证明: by
   simp_rw [condCDF_eq_stieltjesOfMeasurableRat_unit_prod ρ]
   exact stieltjesOfMeasurableRat_ae_eq (isRatCondKernelCDF_preCDF ρ) () r
@@ -864,8 +864,8 @@ theorem ofReal_condCDF_ae_eq
   exact ((ha_le_one r).trans_lt ENNReal.one_lt_top).ne
 
 中文:
-定理 ofReal_condCDF_ae_eq
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (r : Rat)
+定理 of实数_condCDF_ae_eq
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (r : 有理数)
   证明: by
   filter_upwards [condCDF_ae_eq ρ r, preCDF_le_one ρ] with a ha ha_le_one
   rw [ha]; rw [ENNReal.ofReal_toReal]
@@ -890,8 +890,8 @@ theorem measurable_condCDF
 
 中文:
 定理 measurable_condCDF
-  条件: (ρ : Measure (α × 实数)) (x : 实数)
-  结论: Measurable fun a => condCDF ρ a x
+  条件: (ρ : 测度 (α × 实数)) (x : 实数)
+  结论: 可测 fun a => condCDF ρ a x
   证明: measurable_stieltjesOfMeasurableRat _ _
 
 Depends on / 依赖: measurable_stieltjesOfMeasurableRat
@@ -909,7 +909,7 @@ theorem stronglyMeasurable_condCDF
 
 中文:
 定理 stronglyMeasurable_condCDF
-  条件: (ρ : Measure (α × 实数)) (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) (x : 实数)
   证明: stronglyMeasurable_stieltjesOfMeasurableRat _ _
 
 Depends on / 依赖: stronglyMeasurable_stieltjesOfMeasurableRat
@@ -926,8 +926,8 @@ theorem setLIntegral_condCDF
   proof: (isCondKernelCDF_condCDF ρ).setLIntegral () hs x
 
 中文:
-定理 setLIntegral_condCDF
-  结论: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : 实数) {s : Set α}
+定理 setL整数egral_condCDF
+  结论: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 实数) {s : 集合 α}
   证明: (isCondKernelCDF_condCDF ρ).setLIntegral () hs x
 
 Depends on / 依赖: isCondKernelCDF_condCDF, setLIntegral
@@ -947,7 +947,7 @@ theorem lintegral_condCDF
 
 中文:
 定理 lintegral_condCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 实数)
   证明: (isCondKernelCDF_condCDF ρ).lintegral () x
 
 Depends on / 依赖: isCondKernelCDF_condCDF, lintegral
@@ -966,7 +966,7 @@ theorem integrable_condCDF
 
 中文:
 定理 integrable_condCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 实数)
   证明: (isCondKernelCDF_condCDF ρ).integrable () x
 
 Depends on / 依赖: integrable, isCondKernelCDF_condCDF
@@ -984,8 +984,8 @@ theorem setIntegral_condCDF
   proof: (isCondKernelCDF_condCDF ρ).setIntegral () hs x
 
 中文:
-定理 setIntegral_condCDF
-  结论: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : 实数) {s : Set α}
+定理 set整数egral_condCDF
+  结论: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 实数) {s : 集合 α}
   证明: (isCondKernelCDF_condCDF ρ).setIntegral () hs x
 
 Depends on / 依赖: isCondKernelCDF_condCDF, setIntegral
@@ -1004,7 +1004,7 @@ theorem integral_condCDF
 
 中文:
 定理 integral_condCDF
-  条件: (ρ : Measure (α × 实数)) [IsFiniteMeasure ρ] (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) [是有限测度 ρ] (x : 实数)
   证明: (isCondKernelCDF_condCDF ρ).integral () x
 
 Depends on / 依赖: integral, isCondKernelCDF_condCDF
@@ -1027,7 +1027,7 @@ theorem measure_condCDF_Iic
 
 中文:
 定理 measure_condCDF_Iic
-  条件: (ρ : Measure (α × 实数)) (a : α) (x : 实数)
+  条件: (ρ : 测度 (α × 实数)) (a : α) (x : 实数)
   证明: by
   rw [← sub_zero (condCDF ρ a x)]
   exact (condCDF ρ a).measure_Iic (tendsto_condCDF_atBot ρ a) _
@@ -1052,7 +1052,7 @@ theorem measure_condCDF_univ
 
 中文:
 定理 measure_condCDF_univ
-  条件: (ρ : Measure (α × 实数)) (a : α)
+  条件: (ρ : 测度 (α × 实数)) (a : α)
   结论: (condCDF ρ a).measure univ = 1
   证明: by
   rw [← ENNReal.ofReal_one]; rw [← sub_zero (1 : Real)]
@@ -1074,7 +1074,7 @@ instance instIsProbabilityMeasureCondCDF
 
 中文:
 实例 instIsProbabilityMeasureCondCDF
-  签名: (ρ : Measure (α × 实数)) (a : α)
+  签名: (ρ : 测度 (α × 实数)) (a : α)
   定义体: ⟨measure_condCDF_univ ρ a⟩
 
 Depends on / 依赖: measure_condCDF_univ
@@ -1095,7 +1095,7 @@ theorem measurable_measure_condCDF
 
 中文:
 定理 measurable_measure_condCDF
-  条件: (ρ : Measure (α × 实数))
+  条件: (ρ : 测度 (α × 实数))
   证明: .measure_of_isPiSystem_of_isProbabilityMeasure (borel_eq_generateFrom_Iic Real) isPiSystem_Iic by
     simp_rw [forall_mem_range, measure_condCDF_Iic]
     exact fun u => (measurable_condCDF ρ u).ennreal_ofReal

@@ -41,8 +41,8 @@ abbreviation Scheme.functionField
   body: X.presheaf.stalk (genericPoint X)
 
 中文:
-缩写 Scheme.functionField
-  签名: [IrreducibleSpace X]
+缩写 概形.functionField
+  签名: [不可约空间 X]
   定义体: X.presheaf.stalk (genericPoint X)
 
 Depends on / 依赖: X.presheaf.stalk, genericPoint, presheaf
@@ -61,8 +61,8 @@ abbreviation Scheme.germToFunctionField
       (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using h))
 
 中文:
-缩写 Scheme.germToFunctionField
-  签名: [IrreducibleSpace X] (U : X.Opens)
+缩写 概形.germToFunctionField
+  签名: [不可约空间 X] (U : X.Opens)
   定义体: X.presheaf.germ U
     (genericPoint X)
       (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using h))
@@ -84,7 +84,7 @@ instance [IrreducibleSpace
   body: (X.germToFunctionField U).hom.toAlgebra
 
 中文:
-实例 [IrreducibleSpace
+实例 [不可约空间
   签名: X] (U
   定义体: (X.germToFunctionField U).hom.toAlgebra
 
@@ -104,8 +104,8 @@ instance [IsIntegral
     (by simp [irreducibleComponents_eq_singleton])).toField
 
 中文:
-实例 [IsIntegral
-  签名: X] : Field X.functionField
+实例 [是整
+  签名: X] : 域 X.functionField
   定义体: (isField_stalk_of_closure_mem_irreducibleComponents X _
     (by simp [irreducibleComponents_eq_singleton])).toField
 
@@ -131,8 +131,8 @@ theorem germ_injective_of_isIntegral
   exact map_injective_of_isIntegral X iU e
 
 中文:
-定理 germ_injective_of_isIntegral
-  条件: [Is整数egral X] {U : X.Opens} (x : X) (hx : x in U)
+定理 germ_injective_of_is整数egral
+  条件: [是整 X] {U : X.Opens} (x : X) (hx : x in U)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro y hy
@@ -163,8 +163,8 @@ theorem Scheme.germToFunctionField_injective
   proof: germ_injective_of_isIntegral _ _ _
 
 中文:
-定理 Scheme.germToFunctionField_injective
-  条件: [Is整数egral X] (U : X.Opens) [Nonempty U]
+定理 概形.germToFunctionField_injective
+  条件: [是整 X] (U : X.Opens) [非空 U]
   证明: germ_injective_of_isIntegral _ _ _
 
 Depends on / 依赖: germ_injective_of_isIntegral
@@ -190,7 +190,7 @@ theorem genericPoint_eq_of_isOpenImmersion
 
 中文:
 定理 genericPoint_eq_of_isOpenImmersion
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
+  结论: {X Y : 概形} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   apply ((genericPoint_spec Y).eq _).symm
   convert! (genericPoint_spec X).image f.continuous
@@ -227,7 +227,7 @@ instance stalkFunctionFieldAlgebra
 
 中文:
 实例 stalkFunctionFieldAlgebra
-  签名: [IrreducibleSpace X] (x : X)
+  签名: [不可约空间 X] (x : X)
   定义体: by
   -- TODO: can we write this normally after the refactor finishes?
   apply RingHom.toAlgebra
@@ -255,7 +255,7 @@ instance functionField_isScalarTower
 
 中文:
 实例 functionField_isScalarTower
-  签名: [IrreducibleSpace X] (U : X.Opens) (x : U)
+  签名: [不可约空间 X] (U : X.Opens) (x : U)
   定义体: by
   apply IsScalarTower.of_algebraMap_eq'
   simp_rw [RingHom.algebraMap_toAlgebra]
@@ -284,8 +284,8 @@ lemma Scheme.algebraMap_germ_eq_germToFunctionField
   simp [RingHom.algebraMap_toAlgebra, ← ConcreteCategory.comp_apply]
 
 中文:
-引理 Scheme.algebraMap_germ_eq_germToFunctionField
-  结论: [IrreducibleSpace X]
+引理 概形.algebraMap_germ_eq_germToFunctionField
+  结论: [不可约空间 X]
   证明: by
   simp [RingHom.algebraMap_toAlgebra, ← ConcreteCategory.comp_apply]
 
@@ -319,7 +319,7 @@ theorem genericPoint_eq_bot_of_affine
 
 中文:
 定理 genericPoint_eq_bot_of_affine
-  条件: (R : CommRingCat) [IsDomain R]
+  条件: (R : 交换环范畴) [是整环 R]
   证明: by
   apply (genericPoint_spec (Spec R)).eq
   rw [isGenericPoint_def]
@@ -355,7 +355,7 @@ instance functionField_isFractionRing_of_affine
 
 中文:
 实例 functionField_isFractionRing_of_affine
-  签名: (R : CommRingCat.{u}) [IsDomain R]
+  签名: (R : 交换环范畴.{u}) [是整环 R]
   定义体: by
   convert! StructureSheaf.IsLocalization.to_stalk R (genericPoint (Spec R))
   delta IsFractionRing IsLocalization.AtPrime
@@ -402,8 +402,8 @@ theorem IsAffineOpen.primeIdealOf_genericPoint
   exact (genericPo
 
 中文:
-定理 IsAffineOpen.primeIdealOf_genericPoint
-  结论: {X : Scheme} [Is整数egral X] {U : X.Opens}
+定理 是仿射开集.primeIdealOf_genericPoint
+  结论: {X : 概形} [是整 X] {U : X.Opens}
   证明: by
   delta IsAffineOpen.primeIdealOf
   convert!
@@ -451,7 +451,7 @@ theorem functionField_isFractionRing_of_isAffineOpen
 
 中文:
 定理 functionField_isFractionRing_of_isAffineOpen
-  结论: [Is整数egral X] (U : X.Opens)
+  结论: [是整 X] (U : X.Opens)
   证明: by
   delta IsFractionRing Scheme.functionField
   convert!
@@ -493,7 +493,7 @@ instance [IsIntegral
   have := hU.isLocalization_stalk 
 
 中文:
-实例 [IsIntegral
+实例 [是整
   签名: X] (x
   定义体: let U : X.Opens := (X.affineCover.f ((X.affineCover.idx x))).opensRange
   have hU : IsAffineOpen U := isAffineOpen_opensRange (X.affineCover.f _)
@@ -528,7 +528,7 @@ instance [IsIntegral
   body: Function.Injective.isDomain _ (IsFractionRing.injective (X.presheaf.stalk x) (X.functionField))
 
 中文:
-实例 [IsIntegral
+实例 [是整
   签名: X] {x
   定义体: Function.Injective.isDomain _ (IsFractionRing.injective (X.presheaf.stalk x) (X.functionField))
 
@@ -552,8 +552,8 @@ lemma exists_isUnit_germ_eq
   have h_germ_gA : X.presheaf.germ A (genericPoint
 
 中文:
-引理 exists_isUnit_germ_eq
-  条件: [Is整数egral X] (f : X.functionField) (hf : f != 0)
+引理 存在_isUnit_germ_eq
+  条件: [是整 X] (f : X.functionField) (hf : f != 0)
   证明: by
   obtain ⟨U, hU, g, hg⟩ := X.presheaf.exists_germ_eq f
   obtain ⟨_, ⟨A, hA, rfl⟩, hxA, hAU⟩ :=

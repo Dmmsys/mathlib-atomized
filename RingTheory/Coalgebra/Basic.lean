@@ -41,7 +41,7 @@ class CoalgebraStruct
     - counit : A ->ₗ[R] R
 
 中文:
-类 CoalgebraStruct
+类 余algebraStruct
   参数: (R : 类型u) (A : 类型v)
   公理与运算 (2 个):
     - comul : A ->ₗ[R] A otimes[R] A
@@ -70,13 +70,13 @@ structure Coalgebra.Repr
     - (eq : ∑ i in index, left i otimesₜ[R] right i = CoalgebraStruct.comul a)
 
 中文:
-结构 Coalgebra.Repr
+结构 余algebra.Repr
   参数: (R : 类型u) {A : 类型v}
   公理与运算 (4 个):
-    - (index : Finset ι)
+    - (index : 有限集 ι)
     - (left : ι -> A)
     - (right : ι -> A)
-    - (eq : ∑ i in index, left i otimesₜ[R] right i = CoalgebraStruct.comul a)
+    - (eq : ∑ i in index, left i otimesₜ[R] right i = 余algebraStruct.comul a)
 -/
 structure Coalgebra.Repr (R : Type u) {A : Type v}
     [CommSemiring R] [AddCommMonoid A] [Module R A] [CoalgebraStruct R A] (a : A) (ι : Type*) where
@@ -104,7 +104,7 @@ definition Coalgebra.Repr.arbitrary
 scoped[Coalgebra] notation "ℛ" => Coalgebra.Repr.arbitrary
 
 中文:
-定义 Coalgebra.Repr.arbitrary
+定义 余algebra.Repr.arbitrary
   签名: (R : 类型u) {A : 类型v}
   定义体: Prod.fst
   right := Prod.snd
@@ -144,13 +144,13 @@ class Coalgebra
     - lTensor_counit_comp_comul : counit.lTensor A ∘ₗ comul = (TensorProduct.mk R _ _).flip 1
 
 中文:
-类 Coalgebra
+类 余algebra
   参数: (R : 类型u) (A : 类型v)
-  继承: CoalgebraStruct R A
+  继承: 余algebraStruct R A
   公理与运算 (3 个):
-    - coassoc : TensorProduct.assoc R A A A ∘ₗ comul.rTensor A ∘ₗ comul = comul.lTensor A ∘ₗ comul
-    - rTensor_counit_comp_comul : counit.rTensor A ∘ₗ comul = TensorProduct.mk R _ _ 1
-    - lTensor_counit_comp_comul : counit.lTensor A ∘ₗ comul = (TensorProduct.mk R _ _).flip 1
+    - coassoc : 张量积.assoc R A A A ∘ₗ comul.rTensor A ∘ₗ comul = comul.lTensor A ∘ₗ comul
+    - rTensor_counit_comp_comul : counit.rTensor A ∘ₗ comul = 张量积.mk R _ _ 1
+    - lTensor_counit_comp_comul : counit.lTensor A ∘ₗ comul = (张量积.mk R _ _).flip 1
 -/
 class Coalgebra (R : Type u) (A : Type v)
     [CommSemiring R] [AddCommMonoid A] [Module R A] extends CoalgebraStruct R A where
@@ -404,7 +404,7 @@ theorem sum_counit_tmul_map_eq
 
 中文:
 定理 sum_counit_tmul_map_eq
-  结论: {B : 类型} [AddCommMonoid B] [Module R B]
+  结论: {B : 类型} [加法交换幺半群 B] [模 R B]
   证明: by
   have := sum_counit_tmul_eq repr
   apply_fun LinearMap.lTensor R (f : A ->ₗ[R] B) at this
@@ -435,7 +435,7 @@ theorem sum_map_tmul_counit_eq
 
 中文:
 定理 sum_map_tmul_counit_eq
-  结论: {B : 类型} [AddCommMonoid B] [Module R B]
+  结论: {B : 类型} [加法交换幺半群 B] [模 R B]
   证明: by
   have := sum_tmul_counit_eq repr
   apply_fun LinearMap.rTensor R (f : A ->ₗ[R] B) at this
@@ -465,7 +465,7 @@ theorem sum_map_tmul_tmul_eq
 
 中文:
 定理 sum_map_tmul_tmul_eq
-  结论: {B : 类型} [AddCommMonoid B] [Module R B]
+  结论: {B : 类型} [加法交换幺半群 B] [模 R B]
   证明: by
   have := sum_tmul_tmul_eq repr a₁ a₂
   apply_fun TensorProduct.map (f : A ->ₗ[R] B)
@@ -555,10 +555,10 @@ class IsCocomm
     - comm_comp_comul : (TensorProduct.comm R A A).comp comul = comul
 
 中文:
-类 IsCocomm
+类 是余comm
   参数: where
   公理与运算 (1 个):
-    - comm_comp_comul : (TensorProduct.comm R A A).comp comul = comul
+    - comm_comp_comul : (张量积.comm R A A).comp comul = comul
 -/
 class IsCocomm where
   protected comm_comp_comul : (TensorProduct.comm R A A).comp comul = comul
@@ -576,7 +576,7 @@ lemma comm_comp_comul
 
 中文:
 引理 comm_comp_comul
-  结论: (TensorProduct.comm R A A).comp comul = comul
+  结论: (张量积.comm R A A).comp comul = comul
   证明: IsCocomm.comm_comp_comul
 -/
 @[simp] lemma comm_comp_comul : (TensorProduct.comm R A A).comp comul = comul :=
@@ -595,7 +595,7 @@ lemma comm_comul
 中文:
 引理 comm_comul
   条件: (a : A)
-  结论: TensorProduct.comm R A A (comul a) = comul a
+  结论: 张量积.comm R A A (comul a) = comul a
   证明: congr($(comm_comp_comul R A) a)
 -/
 @[simp] lemma comm_comul (a : A) : TensorProduct.comm R A A (comul a) = comul a :=
@@ -624,7 +624,7 @@ instance toCoalgebra
 
 中文:
 实例 toCoalgebra
-  签名: : Coalgebra R R where
+  签名: : 余algebra R R where
   定义体: (TensorProduct.mk R R R) 1
   counit := .id
   coassoc := rfl
@@ -692,7 +692,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCocomm R R
+  签名: 是余comm R R
   定义体: by ext; simp
 -/
 instance : IsCocomm R R where comm_comp_comul := by ext; simp
@@ -721,7 +721,7 @@ instance instCoalgebraStruct
 
 中文:
 实例 instCoalgebraStruct
-  签名: : CoalgebraStruct R (A × B) where
+  签名: : 余algebraStruct R (A × B) where
   定义体: .coprod
     (TensorProduct.map (.inl R A B) (.inl R A B) ∘ₗ comul)
     (TensorProduct.map (.inr R A B) (.inr R A B) ∘ₗ comul)
@@ -919,7 +919,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R (A × B) where
+  签名: : 余algebra R (A × B) where
   定义体: by
     ext : 1
     · rw [comp_assoc, comul_comp_inl, ← comp_assoc, rTensor_comp_map, counit_comp_inl,
@@ -963,8 +963,8 @@ instance [IsCocomm
   body: by ext <;> simp [← TensorProduct.map_comm]
 
 中文:
-实例 [IsCocomm
-  签名: R A] [IsCocomm R B] : IsCocomm R (A × B) where
+实例 [是余comm
+  签名: R A] [是余comm R B] : 是余comm R (A × B) where
   定义体: by ext <;> simp [← TensorProduct.map_comm]
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_comm, map_comm
@@ -998,7 +998,7 @@ instance instCoalgebraStruct
 
 中文:
 实例 instCoalgebraStruct
-  签名: : CoalgebraStruct R (Π₀ i, A i) where
+  签名: : 余algebraStruct R (Π₀ i, A i) where
   定义体: DFinsupp.lsum R fun i =>
     TensorProduct.map (DFinsupp.lsingle i) (DFinsupp.lsingle i) ∘ₗ comul
   counit := DFinsupp.lsum R fun _ => counit
@@ -1050,7 +1050,7 @@ theorem counit_single
 中文:
 定理 counit_single
   条件: (i : ι) (a : A i)
-  结论: counit (DFinsupp.single i a) = counit (R := R) a
+  结论: counit (直和有限支撑.single i a) = counit (R := R) a
   证明: lsum_single _ _ _ _
 -/
 theorem counit_single (i : ι) (a : A i) : counit (DFinsupp.single i a) = counit (R := R) a :=
@@ -1141,7 +1141,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R (Π₀ i, A i) where
+  签名: : 余algebra R (Π₀ i, A i) where
   定义体: by
     ext : 1
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
@@ -1175,7 +1175,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: [对任意 i, IsCocomm R (A i)]
+  签名: [对任意 i, 是余comm R (A i)]
   定义体: by ext; simp [← TensorProduct.map_comm]
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_comm, map_comm
@@ -1208,7 +1208,7 @@ instance instCoalgebraStruct
 
 中文:
 实例 instCoalgebraStruct
-  签名: : CoalgebraStruct R (ι ->₀ A) where
+  签名: : 余algebraStruct R (ι ->₀ A) where
   定义体: Finsupp.lsum R fun i =>
     TensorProduct.map (Finsupp.lsingle i) (Finsupp.lsingle i) ∘ₗ comul
   counit := Finsupp.lsum R fun _ => counit
@@ -1260,7 +1260,7 @@ theorem counit_single
 中文:
 定理 counit_single
   条件: (i : ι) (a : A)
-  结论: counit (Finsupp.single i a) = counit (R := R) a
+  结论: counit (有限支撑.single i a) = counit (R := R) a
   证明: lsum_single _ _ _ _
 -/
 theorem counit_single (i : ι) (a : A) : counit (Finsupp.single i a) = counit (R := R) a :=
@@ -1348,7 +1348,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R (ι ->₀ A) where
+  签名: : 余algebra R (ι ->₀ A) where
   定义体: by
     ext : 1
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
@@ -1382,7 +1382,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: [IsCocomm R A]
+  签名: [是余comm R A]
   定义体: by ext; simp [← TensorProduct.map_comm]
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_comm, map_comm
@@ -1412,7 +1412,7 @@ instance instCoalgebraStruct
 
 中文:
 实例 instCoalgebraStruct
-  签名: : CoalgebraStruct R (Π i, A i) where
+  签名: : 余algebraStruct R (Π i, A i) where
   定义体: .lsum R _ R fun i => map (.single R _ i) (.single R _ i) ∘ₗ comul
   counit := .lsum R _ R fun _ => counit
 
@@ -1715,7 +1715,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R (Π i, A i) where
+  签名: : 余algebra R (Π i, A i) where
   定义体: by
     ext : 1
     rw [comp_assoc]; rw [comul_comp_single]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_single]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
@@ -1749,7 +1749,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: [对任意 i, IsCocomm R (A i)]
+  签名: [对任意 i, 是余comm R (A i)]
   定义体: by ext; simp [← map_comm]
 
 Depends on / 依赖: map_comm
@@ -1781,7 +1781,7 @@ abbreviation coalgebraStruct
 
 中文:
 缩写 coalgebraStruct
-  签名: [AddCommMonoid B] [Module R B] [CoalgebraStruct R B] (e : A ≃ B)
+  签名: [加法交换幺半群 B] [模 R B] [余algebraStruct R B] (e : A ≃ B)
   定义体: e.addCommMonoid
     letI := e.module R
     CoalgebraStruct R A :=
@@ -1825,7 +1825,7 @@ abbreviation coalgebra
 
 中文:
 缩写 coalgebra
-  签名: [AddCommMonoid B] [Module R B] [Coalgebra R B] (e : A ≃ B)
+  签名: [加法交换幺半群 B] [模 R B] [余algebra R B] (e : A ≃ B)
   定义体: e.addCommMonoid
     letI := e.module R
     Coalgebra R A :=
@@ -1885,7 +1885,7 @@ lemma coalgebraIsCocomm
 
 中文:
 引理 coalgebraIsCocomm
-  条件: [AddCommMonoid B] [Module R B] [Coalgebra R B] [IsCocomm R B] (e : A ≃ B)
+  条件: [加法交换幺半群 B] [模 R B] [余algebra R B] [是余comm R B] (e : A ≃ B)
   证明: e.addCommMonoid
     letI := e.module R
     letI := e.coalgebra R

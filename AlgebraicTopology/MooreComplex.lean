@@ -278,7 +278,7 @@ definition normalizedMooreComplex
 
 中文:
 定义 normalizedMooreComplex
-  签名: : SimplicialObject C ⥤ ChainComplex C 自然数 where
+  签名: : SimplicialObject C ⥤ 链复形 C 自然数 where
   定义体: obj
   map f := map f
 -/

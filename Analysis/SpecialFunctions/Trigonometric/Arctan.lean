@@ -214,7 +214,7 @@ theorem continuous_tan
 
 中文:
 定理 continuous_tan
-  结论: Continuous fun x : {x | cos x != 0} => tan x
+  结论: 连续 fun x : {x | cos x != 0} => tan x
   证明: continuousOn_iff_continuous_domRestrict.1 continuousOn_tan
 
 Depends on / 依赖: continuousOn_iff_continuous_domRestrict, continuousOn_tan
@@ -240,7 +240,7 @@ theorem continuousOn_tan_Ioo
 
 中文:
 定理 continuousOn_tan_Ioo
-  结论: ContinuousOn tan (Ioo (-(π / 2)) (π / 2))
+  结论: ContinuousOn tan (开区间 (-(π / 2)) (π / 2))
   证明: by
   refine ContinuousOn.mono continuousOn_tan fun x => ?_
   simp only [and_imp, mem_Ioo, mem_ofPred_eq, Ne]
@@ -285,7 +285,7 @@ theorem surjOn_tan
 
 中文:
 定理 surjOn_tan
-  结论: SurjOn tan (Ioo (-(π / 2)) (π / 2)) univ
+  结论: 满射限制 tan (开区间 (-(π / 2)) (π / 2)) univ
   证明: have := neg_lt_self pi_div_two_pos
   continuousOn_tan_Ioo.surjOn_of_tendsto (nonempty_Ioo.2 this)
     (by rw [tendsto_comp_coe_Ioo_atBot this]; exact tendsto_tan_neg_pi_div_two)
@@ -309,7 +309,7 @@ theorem tan_surjective
 
 中文:
 定理 tan_surjective
-  结论: Function.Surjective tan
+  结论: 函数.满射 tan
   证明: fun _ => surjOn_tan.subset_range trivial
 
 Depends on / 依赖: subset_range, surjOn_tan, surjOn_tan.subset_range
@@ -326,7 +326,7 @@ theorem image_tan_Ioo
 
 中文:
 定理 image_tan_Ioo
-  结论: tan '' Ioo (-(π / 2)) (π / 2) = univ
+  结论: tan '' 开区间 (-(π / 2)) (π / 2) = univ
   证明: univ_subset_iff.1 surjOn_tan
 
 Depends on / 依赖: surjOn_tan, univ_subset_iff
@@ -345,7 +345,7 @@ definition tanOrderIso
 
 中文:
 定义 tanOrderIso
-  签名: : Ioo (-(π / 2)) (π / 2) ≃o 实数
+  签名: : 开区间 (-(π / 2)) (π / 2) ≃o 实数
   定义体: (strictMonoOn_tan.orderIso _ _).trans
     (OrderIso.setCongr _ _ image_tan_Ioo).trans OrderIso.Set.univ
 
@@ -415,7 +415,7 @@ theorem arctan_mem_Ioo
 中文:
 定理 arctan_mem_Ioo
   条件: (x : 实数)
-  结论: arctan x in Ioo (-(π / 2)) (π / 2)
+  结论: arctan x in 开区间 (-(π / 2)) (π / 2)
   证明: Subtype.coe_prop _
 
 @[simp]
@@ -436,7 +436,7 @@ theorem range_arctan
 
 中文:
 定理 range_arctan
-  结论: range arctan = Ioo (-(π / 2)) (π / 2)
+  结论: range arctan = 开区间 (-(π / 2)) (π / 2)
   证明: ((EquivLike.surjective _).range_comp _).trans Subtype.range_coe
 
 Depends on / 依赖: EquivLike, EquivLike.surjective, Subtype, Subtype.range_coe, range_coe, range_comp, surjective
@@ -646,7 +646,7 @@ theorem arcsin_eq_arctan
 
 中文:
 定理 arcsin_eq_arctan
-  条件: (h : x in Ioo (-(1 : 实数)) 1)
+  条件: (h : x in 开区间 (-(1 : 实数)) 1)
   证明: by
   rw_mod_cast [arctan_eq_arcsin, div_pow, sq_sqrt, one_add_div, div_div, ← sqrt_mul,
     mul_div_cancel₀, sub_add_cancel, sqrt_one, div_one] <;> simp at h <;> nlinarith [h.1, h.2]
@@ -695,7 +695,7 @@ theorem arctan_strictMono
 
 中文:
 定理 arctan_strictMono
-  结论: StrictMono arctan
+  结论: 严格递增 arctan
   证明: tanOrderIso.symm.strictMono
 
 @[gcongr]
@@ -717,7 +717,7 @@ theorem arctan_mono
 
 中文:
 定理 arctan_mono
-  结论: Monotone arctan
+  结论: 递增 arctan
   证明: arctan_strictMono.monotone
 
 @[simp]
@@ -778,7 +778,7 @@ theorem arctan_injective
 
 中文:
 定理 arctan_injective
-  结论: arctan.Injective
+  结论: arctan.单射
   证明: arctan_strictMono.injective
 
 @[simp]
@@ -838,7 +838,7 @@ theorem tendsto_arctan_atTop
 
 中文:
 定理 tendsto_arctan_atTop
-  结论: Tendsto arctan atTop (𝓝[<] (π / 2))
+  结论: 收敛 arctan atTop (𝓝[<] (π / 2))
   证明: .mp tanOrderIso.symm.tendsto_atTop tendsto_Ioo_atTop (by simp)
 
 Depends on / 依赖: tanOrderIso, tanOrderIso.symm.tendsto_atTop, tendsto_Ioo_atTop, tendsto_atTop
@@ -856,7 +856,7 @@ theorem tendsto_arctan_atBot
 
 中文:
 定理 tendsto_arctan_atBot
-  结论: Tendsto arctan atBot (𝓝[>] (-(π / 2)))
+  结论: 收敛 arctan atBot (𝓝[>] (-(π / 2)))
   证明: .mp tanOrderIso.symm.tendsto_atBot tendsto_Ioo_atBot (by simp)
 
 Depends on / 依赖: tanOrderIso, tanOrderIso.symm.tendsto_atBot, tendsto_Ioo_atBot, tendsto_atBot
@@ -876,7 +876,7 @@ theorem arctan_eq_of_tan_eq
 
 中文:
 定理 arctan_eq_of_tan_eq
-  条件: (h : tan x = y) (hx : x in Ioo (-(π / 2)) (π / 2))
+  条件: (h : tan x = y) (hx : x in 开区间 (-(π / 2)) (π / 2))
   证明: injOn_tan (arctan_mem_Ioo _) hx (by rw [tan_arctan, h])
 
 @[simp]
@@ -1607,7 +1607,7 @@ theorem sin_arctan_strictMono
 
 中文:
 定理 sin_arctan_strictMono
-  结论: StrictMono (sin <| arctan ·)
+  结论: 严格递增 (sin <| arctan ·)
   证明: fun x y h =>
   strictMonoOn_sin (Ioo_subset_Icc_self <| arctan_mem_Ioo x)
     (Ioo_subset_Icc_self <| arctan_mem_Ioo y) (arctan_strictMono h)
@@ -1752,7 +1752,7 @@ theorem continuous_arctan
 
 中文:
 定理 continuous_arctan
-  结论: Continuous arctan
+  结论: 连续 arctan
   证明: continuous_subtype_val.comp tanOrderIso.toHomeomorph.continuous_invFun
 
 Depends on / 依赖: continuous_invFun, continuous_subtype_val, continuous_subtype_val.comp, tanOrderIso, tanOrderIso.toHomeomorph.continuous_invFun, toHomeomorph

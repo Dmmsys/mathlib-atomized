@@ -28,8 +28,8 @@ instance Set.Ici.subtype_functor_final
   exact ⟨⟨max j k, le_max_left _ _⟩, le_max_right _ _⟩
 
 中文:
-实例 Set.Ici.subtype_functor_final
-  签名: {J : 类型u} [LinearOrder J] (j : J)
+实例 集合.左闭右无界区间.subtype_functor_final
+  签名: {J : 类型u} [线性序 J] (j : J)
   定义体: by
   rw [Monotone.final_functor_iff]
   intro k

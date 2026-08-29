@@ -51,10 +51,10 @@ class GeometricallyReduced
     - geometrically_isReduced : geometrically IsReduced f
 
 中文:
-类 GeometricallyReduced
+类 几何既约
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - geometrically_isReduced : geometrically IsReduced f
+    - geometrically_isReduced : geometrically 是既约 f
 -/
 class GeometricallyReduced (f : X ⟶ Y) : Prop where
   geometrically_isReduced : geometrically IsReduced f
@@ -68,7 +68,7 @@ lemma GeometricallyReduced.eq_geometrically
   ext; exact geometricallyReduced_iff _
 
 中文:
-引理 GeometricallyReduced.eq_geometrically
+引理 几何既约.eq_geometrically
   证明: by
   ext; exact geometricallyReduced_iff _
 
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @GeometricallyReduced
+  签名: 是StableUnderBaseChange @几何既约
   定义体: GeometricallyReduced.eq_geometrically ▸ inferInstance
 
 Depends on / 依赖: GeometricallyReduced, GeometricallyReduced.eq_geometrically, eq_geometrically
@@ -106,8 +106,8 @@ instance [GeometricallyReduced
   body: MorphismProperty.pullback_fst f g inferInstance
 
 中文:
-实例 [GeometricallyReduced
-  签名: g] : GeometricallyReduced (pullback.fst f g)
+实例 [几何既约
+  签名: g] : 几何既约 (pullback.fst f g)
   定义体: MorphismProperty.pullback_fst f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -125,8 +125,8 @@ instance [GeometricallyReduced
   body: MorphismProperty.pullback_snd f g inferInstance
 
 中文:
-实例 [GeometricallyReduced
-  签名: f] : GeometricallyReduced (pullback.snd f g)
+实例 [几何既约
+  签名: f] : 几何既约 (pullback.snd f g)
   定义体: MorphismProperty.pullback_snd f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
@@ -159,7 +159,7 @@ lemma GeometricallyReduced.isReduced_of_flat_of_finite_irreducibleComponents
       exact 
 
 中文:
-引理 GeometricallyReduced.isReduced_of_flat_of_finite_irreducibleComponents
+引理 几何既约.isReduced_of_flat_of_finite_irreducibleComponents
   证明: by
   let pt (Z : irreducibleComponents Y) := Y.presheaf.stalk Z.property.1.genericPoint
   have hpt (Z : _) : IsField (pt Z) :=
@@ -216,7 +216,7 @@ lemma GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian
     let : IsNoetherian (Y.affineCover.X i) 
 
 中文:
-引理 GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian
+引理 几何既约.isReduced_of_flat_of_isLocallyNoetherian
   证明: by
   apply +allowSynthFailures @IsReduced.of_openCover (𝒰 := Y.affineCover.pullback₁ f)
   intro i
@@ -246,8 +246,8 @@ instance [GeometricallyReduced
   body: GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian (pullback.snd _ _)
 
 中文:
-实例 [GeometricallyReduced
-  签名: f] [Flat f] [IsReduced Y] [IsLocallyNoetherian Y] :
+实例 [几何既约
+  签名: f] [平坦 f] [是既约 Y] [是LocallyNoetherian Y] :
   定义体: GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian (pullback.snd _ _)
 
 Depends on / 依赖: GeometricallyReduced, GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian, isReduced_of_flat_of_isLocallyNoetherian, pullback, pullback.snd
@@ -265,8 +265,8 @@ instance [GeometricallyReduced
   body: GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian (pullback.fst _ _)
 
 中文:
-实例 [GeometricallyReduced
-  签名: g] [Flat g] [IsReduced X] [IsLocallyNoetherian X] :
+实例 [几何既约
+  签名: g] [平坦 g] [是既约 X] [是LocallyNoetherian X] :
   定义体: GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian (pullback.fst _ _)
 
 Depends on / 依赖: GeometricallyReduced, GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian, isReduced_of_flat_of_isLocallyNoetherian, pullback, pullback.fst

@@ -48,10 +48,10 @@ class MontelSpace
     - heine_borel : forall s : Set E, IsClosed s -> IsVonNBounded 𝕜 s -> IsCompact s
 
 中文:
-类 MontelSpace
-  参数: (𝕜 E : 类型) [SeminormedRing 𝕜] [Zero E] [SMul 𝕜 E]
+类 Montel空间
+  参数: (𝕜 E : 类型) [Seminormed环 𝕜] [零 E] [标量乘法 𝕜 E]
   公理与运算 (1 个):
-    - heine_borel : 对任意 s : Set E, IsClosed s -> IsVonNBounded 𝕜 s -> IsCompact s
+    - heine_borel : 对任意 s : 集合 E, 是闭集 s -> IsVonNBounded 𝕜 s -> 是紧集 s
 -/
 class MontelSpace (𝕜 E : Type*) [SeminormedRing 𝕜] [Zero E] [SMul 𝕜 E]
     [TopologicalSpace E] : Prop where
@@ -70,7 +70,7 @@ theorem isCompact_of_isClosed_of_isVonNBounded
 
 中文:
 定理 isCompact_of_isClosed_of_isVonNBounded
-  结论: [hm : MontelSpace 𝕜 E] {s : Set E}
+  结论: [hm : Montel空间 𝕜 E] {s : 集合 E}
   证明: hm.heine_borel s h_closed h_bounded
 
 Depends on / 依赖: h_bounded, h_closed, heine_borel, hm.heine_borel
@@ -103,7 +103,7 @@ theorem finiteDimensional_of_normedSpace
 
 中文:
 定理 finiteDimensional_of_normedSpace
-  结论: FiniteDimensional 𝕜 E
+  结论: 有限维 𝕜 E
   证明: FiniteDimensional.of_isCompact_closedBall₀ 𝕜 zero_lt_one
     (isCompact_of_isClosed_of_isVonNBounded 𝕜 Metric.isClosed_closedBall
       (NormedSpace.isVonNBounded_closedBall _ _ _))
@@ -139,7 +139,7 @@ definition _root_.LinearEquiv.toCompactConvergenceCLM
   body: LinearEquiv.refl 𝕜₂ _
 
 中文:
-定义 _root_.LinearEquiv.toCompactConvergenceCLM
+定义 _root_.线性等价.toCompactConvergenceCLM
   签名: :
   定义体: LinearEquiv.refl 𝕜₂ _
 -/
@@ -167,8 +167,8 @@ definition _root_.ContinuousLinearEquiv.toCompactConvergenceCLM
   co
 
 中文:
-定义 _root_.ContinuousLinearEquiv.toCompactConvergenceCLM
-  签名: [T1Space E] [MontelSpace 𝕜₁ E]
+定义 _root_.连续线性等价.toCompactConvergenceCLM
+  签名: [T1空间 E] [Montel空间 𝕜₁ E]
   定义体: LinearEquiv.toCompactConvergenceCLM σ E F
   continuous_toFun := by
     simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe, continuous_def]
@@ -212,8 +212,8 @@ theorem _root_.ContinuousLinearEquiv.toCompactConvergenceCLM_apply
 @[simp]
 
 中文:
-定理 _root_.ContinuousLinearEquiv.toCompactConvergenceCLM_apply
-  结论: [T1Space E] [MontelSpace 𝕜₁ E]
+定理 _root_.连续线性等价.toCompactConvergenceCLM_apply
+  结论: [T1空间 E] [Montel空间 𝕜₁ E]
   证明: rfl
 
 @[simp]
@@ -231,8 +231,8 @@ theorem _root_.ContinuousLinearEquiv.toCompactConvergenceCLM_symm_apply
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearEquiv.toCompactConvergenceCLM_symm_apply
-  结论: [T1Space E]
+定理 _root_.连续线性等价.toCompactConvergenceCLM_symm_apply
+  结论: [T1空间 E]
   证明: rfl
 -/
 theorem _root_.ContinuousLinearEquiv.toCompactConvergenceCLM_symm_apply [T1Space E]

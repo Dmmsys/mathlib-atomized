@@ -37,7 +37,7 @@ definition Nat.castEmbedding
   body: ⟨Nat.cast, cast_injective⟩
 
 中文:
-定义 Nat.castEmbedding
+定义 自然数.castEmbedding
   签名: : 自然数 ↪ R
   定义体: ⟨Nat.cast, cast_injective⟩
 
@@ -54,7 +54,7 @@ instance CharZero.NeZero.two
   body: by rw [← Nat.cast_two, Nat.cast_ne_zero]; decide
 
 中文:
-实例 CharZero.NeZero.two
+实例 特征零.NeZero.two
   签名: : NeZero (2 : R) where
   定义体: by rw [← Nat.cast_two, Nat.cast_ne_zero]; decide
 
@@ -125,8 +125,8 @@ lemma charZero
 
 中文:
 引理 charZero
-  条件: (ϕ : R ->+* S) [CharZero S]
-  结论: CharZero R where
+  条件: (ϕ : R ->+* S) [特征零 S]
+  结论: 特征零 R where
   证明: CharZero.cast_injective (R := S) by
     rw [← map_natCast ϕ]; rw [← map_natCast ϕ]; rw [h]
 
@@ -149,8 +149,8 @@ lemma charZero_iff
 
 中文:
 引理 charZero_iff
-  条件: {ϕ : R ->+* S} (hϕ : Injective ϕ)
-  结论: CharZero R ↔ CharZero S
+  条件: {ϕ : R ->+* S} (hϕ : 单射 ϕ)
+  结论: 特征零 R ↔ 特征零 S
   证明: ⟨fun hR =>
     ⟨by intro a b h; rwa [← @Nat.cast_inj R, ← hϕ.eq_iff, map_natCast ϕ, map_natCast ϕ]⟩,
     fun _ => ϕ.charZero⟩
@@ -173,8 +173,8 @@ lemma injective_nat
 
 中文:
 引理 injective_nat
-  条件: (f : 自然数 ->+* R) [CharZero R]
-  结论: Injective f
+  条件: (f : 自然数 ->+* R) [特征零 R]
+  结论: 单射 f
   证明: Subsingleton.elim (Nat.castRingHom _) f ▸ Nat.cast_injective
 
 Depends on / 依赖: Nat.castRingHom, Nat.cast_injective, Subsingleton, Subsingleton.elim, castRingHom, cast_injective
@@ -225,7 +225,7 @@ lemma Nat.cast_pow_eq_one
   simp [← cast_pow, cast_eq_one, hn]
 
 中文:
-引理 Nat.cast_pow_eq_one
+引理 自然数.cast_pow_eq_one
   条件: {a : 自然数} (hn : n != 0)
   结论: (a : R) ^ n = 1 ↔ a = 1
   证明: by
@@ -257,7 +257,7 @@ theorem CharZero.neg_eq_self_iff
   proof: neg_eq_iff_add_eq_zero.trans add_self_eq_zero
 
 中文:
-定理 CharZero.neg_eq_self_iff
+定理 特征零.neg_eq_self_iff
   条件: {a : R}
   结论: -a = a ↔ a = 0
   证明: neg_eq_iff_add_eq_zero.trans add_self_eq_zero
@@ -275,7 +275,7 @@ theorem CharZero.eq_neg_self_iff
   proof: eq_neg_iff_add_eq_zero.trans add_self_eq_zero
 
 中文:
-定理 CharZero.eq_neg_self_iff
+定理 特征零.eq_neg_self_iff
   条件: {a : R}
   结论: a = -a ↔ a = 0
   证明: eq_neg_iff_add_eq_zero.trans add_self_eq_zero

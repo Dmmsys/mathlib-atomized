@@ -89,8 +89,8 @@ class NonnegHomClass
     - apply_nonneg((f : F)) : forall a, 0 <= f a
 
 中文:
-类 NonnegHomClass
-  参数: (F : 类型) (α β : outParam 类型) [Zero β] [LE β] [FunLike F α β]
+类 Nonneg态射类
+  参数: (F : 类型) (α β : outParam 类型) [零 β] [LE β] [函数状 F α β]
   公理与运算 (1 个):
     - apply_nonneg((f : F)) : 对任意 a, 0 <= f a
 -/
@@ -108,7 +108,7 @@ class SubadditiveHomClass
     - map_add_le_add((f : F)) : forall a b, f (a + b) <= f a + f b
 
 中文:
-类 SubadditiveHomClass
+类 Subadditive态射类
   参数: (F : 类型) (α β : outParam 类型)
   公理与运算 (1 个):
     - map_add_le_add((f : F)) : 对任意 a b, f (a + b) <= f a + f b
@@ -130,8 +130,8 @@ class SubmultiplicativeHomClass
     - map_mul_le_mul((f : F)) : forall a b, f (a * b) <= f a * f b
 
 中文:
-类 SubmultiplicativeHomClass
-  参数: (F : 类型) (α β : outParam (类型)) [Mul α] [Mul β] [LE β]
+类 Submultiplicative态射类
+  参数: (F : 类型) (α β : outParam (类型)) [乘法 α] [乘法 β] [LE β]
   公理与运算 (1 个):
     - map_mul_le_mul((f : F)) : 对任意 a b, f (a * b) <= f a * f b
 -/
@@ -152,8 +152,8 @@ class MulLEAddHomClass
     - map_mul_le_add((f : F)) : forall a b, f (a * b) <= f a + f b
 
 中文:
-类 MulLEAddHomClass
-  参数: (F : 类型) (α β : outParam 类型) [Mul α] [Add β] [LE β] [FunLike F α β]
+类 MulLEAdd态射类
+  参数: (F : 类型) (α β : outParam 类型) [乘法 α] [加法 β] [LE β] [函数状 F α β]
   公理与运算 (1 个):
     - map_mul_le_add((f : F)) : 对任意 a b, f (a * b) <= f a + f b
 -/
@@ -172,10 +172,10 @@ class NonarchimedeanHomClass
     - map_add_le_max((f : F)) : forall a b, f (a + b) <= max (f a) (f b)
 
 中文:
-类 NonarchimedeanHomClass
+类 Nonarchimedean态射类
   参数: (F : 类型) (α β : outParam 类型)
   公理与运算 (1 个):
-    - map_add_le_max((f : F)) : 对任意 a b, f (a + b) <= max (f a) (f b)
+    - map_add_le_max((f : F)) : 对任意 a b, f (a + b) <= 最大值 (f a) (f b)
 -/
 class NonarchimedeanHomClass (F : Type*) (α β : outParam Type*)
     [Add α] [LinearOrder β] [FunLike F α β] : Prop where
@@ -210,7 +210,7 @@ theorem le_map_mul_map_div
 
 中文:
 定理 le_map_mul_map_div
-  结论: [Group α] [CommMagma β] [LE β] [SubmultiplicativeHomClass F α β]
+  结论: [群 α] [交换原群 β] [LE β] [Submultiplicative态射类 F α β]
   证明: by
   simpa only [mul_comm, div_mul_cancel] using map_mul_le_mul f (a / b) b
 
@@ -236,7 +236,7 @@ theorem le_map_add_map_div
 
 中文:
 定理 le_map_add_map_div
-  结论: [Group α] [AddCommMagma β] [LE β] [MulLEAddHomClass F α β] (f : F)
+  结论: [群 α] [加法交换原群 β] [LE β] [MulLEAdd态射类 F α β] (f : F)
   证明: by
   simpa only [add_comm, div_mul_cancel] using map_mul_le_add f (a / b) b
 
@@ -262,7 +262,7 @@ theorem le_map_div_mul_map_div
 
 中文:
 定理 le_map_div_mul_map_div
-  结论: [Group α] [Mul β] [LE β] [SubmultiplicativeHomClass F α β]
+  结论: [群 α] [乘法 β] [LE β] [Submultiplicative态射类 F α β]
   证明: by
   simpa only [div_mul_div_cancel] using map_mul_le_mul f (a / b) (b / c)
 
@@ -286,7 +286,7 @@ theorem le_map_div_add_map_div
 
 中文:
 定理 le_map_div_add_map_div
-  结论: [Group α] [Add β] [LE β] [MulLEAddHomClass F α β]
+  结论: [群 α] [加法 β] [LE β] [MulLEAdd态射类 F α β]
   证明: by
     simpa only [div_mul_div_cancel] using map_mul_le_add f (a / b) (b / c)
 
@@ -311,9 +311,9 @@ class AddGroupSeminormClass
     - map_neg_eq_map((f : F) (a : α)) : f (-a) = f a
 
 中文:
-类 AddGroupSeminormClass
+类 加法群半范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: SubadditiveHomClass F α β
+  继承: Subadditive态射类 F α β
   公理与运算 (2 个):
     - map_zero((f : F)) : f 0 = 0
     - map_neg_eq_map((f : F) (a : α)) : f (-a) = f a
@@ -342,9 +342,9 @@ class GroupSeminormClass
     - map_inv_eq_map((f : F) (a : α)) : f a⁻¹ = f a
 
 中文:
-类 GroupSeminormClass
+类 群半范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: MulLEAddHomClass F α β
+  继承: MulLEAdd态射类 F α β
   公理与运算 (2 个):
     - map_one_eq_zero((f : F)) : f 1 = 0
     - map_inv_eq_map((f : F) (a : α)) : f a⁻¹ = f a
@@ -368,9 +368,9 @@ class AddGroupNormClass
     - eq_zero_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 0
 
 中文:
-类 AddGroupNormClass
+类 加法群范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: AddGroupSeminormClass F α β
+  继承: 加法群半范数类 F α β
   公理与运算 (1 个):
     - eq_zero_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 0
 -/
@@ -395,9 +395,9 @@ class GroupNormClass
     - eq_one_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 1
 
 中文:
-类 GroupNormClass
+类 群范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: GroupSeminormClass F α β
+  继承: 群半范数类 F α β
   公理与运算 (1 个):
     - eq_one_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 1
 -/
@@ -490,7 +490,7 @@ theorem map_inv_mul
 
 中文:
 定理 map_inv_mul
-  条件: {α : 类型} [FunLike F α β] [CommGroup α] [GroupSeminormClass F α β] (x y : α)
+  条件: {α : 类型} [函数状 F α β] [交换群 α] [群半范数类 F α β] (x y : α)
   证明: by
   rw [← map_inv_eq_map]; rw [inv_mul']; rw [inv_inv]; rw [div_eq_mul_inv]
 
@@ -538,7 +538,7 @@ theorem abs_sub_map_le_div
 
 中文:
 定理 abs_sub_map_le_div
-  结论: [Group α] [AddCommGroup β] [LinearOrder β] [IsOrderedAddMonoid β]
+  结论: [群 α] [加法交换群 β] [线性序 β] [是OrderedAdd幺半群 β]
   证明: by
   rw [abs_sub_le_iff]; rw [sub_le_iff_le_add']; rw [sub_le_iff_le_add']
   exact ⟨le_map_add_map_div _ _ _, le_map_add_map_div' _ _ _⟩
@@ -627,7 +627,7 @@ theorem map_pos_of_ne_one
 
 中文:
 定理 map_pos_of_ne_one
-  结论: [Group α] [AddCommMonoid β] [LinearOrder β] [IsOrderedAddMonoid β]
+  结论: [群 α] [加法交换幺半群 β] [线性序 β] [是OrderedAdd幺半群 β]
   证明: (apply_nonneg _ _).lt_of_ne ((map_ne_zero_iff_ne_one _).2 hx).symm
 
 Depends on / 依赖: apply_nonneg, lt_of_ne, map_ne_zero_iff_ne_one
@@ -650,9 +650,9 @@ class RingSeminormClass
   (no additional axioms)
 
 中文:
-类 RingSeminormClass
+类 环半范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: AddGroupSeminormClass F α β, SubmultiplicativeHomClass F α β
+  继承: 加法群半范数类 F α β, Submultiplicative态射类 F α β
   (无附加公理)
 -/
 class RingSeminormClass (F : Type*) (α β : outParam Type*)
@@ -669,9 +669,9 @@ class RingNormClass
   (no additional axioms)
 
 中文:
-类 RingNormClass
+类 环范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: RingSeminormClass F α β, AddGroupNormClass F α β
+  继承: 环半范数类 F α β, 加法群范数类 F α β
   (无附加公理)
 -/
 class RingNormClass (F : Type*) (α β : outParam Type*)
@@ -688,9 +688,9 @@ class MulRingSeminormClass
   (no additional axioms)
 
 中文:
-类 MulRingSeminormClass
+类 乘法环半范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: AddGroupSeminormClass F α β, MonoidWithZeroHomClass F α β
+  继承: 加法群半范数类 F α β, 带零幺半群态射类 F α β
   (无附加公理)
 -/
 class MulRingSeminormClass (F : Type*) (α β : outParam Type*)
@@ -711,9 +711,9 @@ class MulRingNormClass
   (no additional axioms)
 
 中文:
-类 MulRingNormClass
+类 乘法环范数类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: MulRingSeminormClass F α β, AddGroupNormClass F α β
+  继承: 乘法环半范数类 F α β, 加法群范数类 F α β
   (无附加公理)
 -/
 class MulRingNormClass (F : Type*) (α β : outParam Type*)

@@ -67,7 +67,7 @@ theorem ruzsa_triangle_inequality_div_div_div
 
 中文:
 定理 ruzsa_triangle_inequality_div_div_div
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   rw [← card_product (A / B)]; rw [← mul_one #((A / B) ×ˢ (C / B))]
   refine card_mul_le_card_mul (fun b (a, c) => a / c = b) (fun x hx => ?_)
@@ -104,7 +104,7 @@ theorem ruzsa_triangle_inequality_mulInv_mulInv_mulInv
 
 中文:
 定理 ruzsa_triangle_inequality_mulInv_mulInv_mulInv
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa [div_eq_mul_inv] using ruzsa_triangle_inequality_div_div_div A B C
 
@@ -129,7 +129,7 @@ theorem ruzsa_triangle_inequality_invMul_invMul_invMul
 
 中文:
 定理 ruzsa_triangle_inequality_invMul_invMul_invMul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa [mul_comm, div_eq_mul_inv, ← map_op_mul, ← map_op_inv] using
     ruzsa_triangle_inequality_div_div_div (G := Gᵐᵒᵖ) (C.map opEquiv.toEmbedding)
@@ -157,7 +157,7 @@ theorem ruzsa_triangle_inequality_div_mul_mul
 
 中文:
 定理 ruzsa_triangle_inequality_div_mul_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa using ruzsa_triangle_inequality_div_div_div A B⁻¹ C
 
@@ -180,7 +180,7 @@ theorem ruzsa_triangle_inequality_mulInv_mul_mul
 
 中文:
 定理 ruzsa_triangle_inequality_mulInv_mul_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa using ruzsa_triangle_inequality_mulInv_mulInv_mulInv A B⁻¹ C
 
@@ -203,7 +203,7 @@ theorem ruzsa_triangle_inequality_invMul_mul_mul
 
 中文:
 定理 ruzsa_triangle_inequality_invMul_mul_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa using ruzsa_triangle_inequality_invMul_invMul_invMul A B⁻¹ C
 
@@ -227,7 +227,7 @@ theorem ruzsa_triangle_inequality_mul_div_mul
 
 中文:
 定理 ruzsa_triangle_inequality_mul_div_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa [div_eq_mul_inv] using ruzsa_triangle_inequality_invMul_mul_mul A⁻¹ B C
 
@@ -250,7 +250,7 @@ theorem ruzsa_triangle_inequality_mul_mulInv_mul
 
 中文:
 定理 ruzsa_triangle_inequality_mul_mulInv_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa [div_eq_mul_inv] using ruzsa_triangle_inequality_mul_div_mul A B C
 
@@ -273,7 +273,7 @@ theorem ruzsa_triangle_inequality_mul_mul_invMul
 
 中文:
 定理 ruzsa_triangle_inequality_mul_mul_invMul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   simpa using ruzsa_triangle_inequality_mulInv_mul_mul A B C⁻¹
 
@@ -303,7 +303,7 @@ theorem pluennecke_petridis_inequality_mul
 
 中文:
 定理 pluennecke_petridis_inequality_mul
-  结论: (C : Finset G)
+  结论: (C : 有限集 G)
   证明: by
   induction C using Finset.induction_on with
   | empty => simp
@@ -372,7 +372,7 @@ theorem mul_aux
 
 中文:
 定理 mul_aux
-  结论: (hA : A.Nonempty) (hAB : A subseteq B)
+  结论: (hA : A.非空) (hAB : A subseteq B)
   证明: by
   rintro A' hAA'
   obtain rfl | hA' := A'.eq_empty_or_nonempty
@@ -413,7 +413,7 @@ theorem ruzsa_triangle_inequality_mul_mul_mul
 
 中文:
 定理 ruzsa_triangle_inequality_mul_mul_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   obtain rfl | hB := B.eq_empty_or_nonempty
   · simp
@@ -453,7 +453,7 @@ theorem ruzsa_triangle_inequality_mul_div_div
 
 中文:
 定理 ruzsa_triangle_inequality_mul_div_div
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   rw [div_eq_mul_inv]; rw [← card_inv B]; rw [← card_inv (B / C)]; rw [inv_div']; rw [div_inv_eq_mul]
   exact ruzsa_triangle_inequality_mul_mul_mul _ _ _
@@ -479,7 +479,7 @@ theorem ruzsa_triangle_inequality_div_mul_div
 
 中文:
 定理 ruzsa_triangle_inequality_div_mul_div
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
   exact ruzsa_triangle_inequality_mul_mul_mul _ _ _
@@ -505,7 +505,7 @@ theorem card_div_mul_le_card_div_mul_card_mul
 
 中文:
 定理 card_div_mul_le_card_div_mul_card_mul
-  条件: (A B C : Finset G)
+  条件: (A B C : 有限集 G)
   证明: by
   rw [← div_inv_eq_mul]; rw [div_eq_mul_inv]
   exact ruzsa_triangle_inequality_mul_div_div _ _ _
@@ -584,7 +584,7 @@ theorem pluennecke_ruzsa_inequality_pow_div_pow_mul
 
 中文:
 定理 pluennecke_ruzsa_inequality_pow_div_pow_mul
-  条件: (hA : A.Nonempty) (B : Finset G) (m n : 自然数)
+  条件: (hA : A.非空) (B : 有限集 G) (m n : 自然数)
   证明: by
   have hA' : A in A.powerset.erase ∅ := mem_erase_of_ne_of_mem hA.ne_empty (mem_powerset_self _)
   obtain ⟨C, hC, hCmin⟩ :=
@@ -625,7 +625,7 @@ theorem pluennecke_ruzsa_inequality_pow_div_pow_div
 
 中文:
 定理 pluennecke_ruzsa_inequality_pow_div_pow_div
-  条件: (hA : A.Nonempty) (B : Finset G) (m n : 自然数)
+  条件: (hA : A.非空) (B : 有限集 G) (m n : 自然数)
   证明: by
   rw [← card_inv]; rw [inv_div']; rw [← inv_pow]; rw [← inv_pow]; rw [div_eq_mul_inv A]
   exact pluennecke_ruzsa_inequality_pow_div_pow_mul hA _ _ _
@@ -650,7 +650,7 @@ theorem pluennecke_ruzsa_inequality_pow_mul
 
 中文:
 定理 pluennecke_ruzsa_inequality_pow_mul
-  条件: (hA : A.Nonempty) (B : Finset G) (n : 自然数)
+  条件: (hA : A.非空) (B : 有限集 G) (n : 自然数)
   证明: by
   simpa only [_root_.pow_zero, div_one] using! pluennecke_ruzsa_inequality_pow_div_pow_mul hA _ _ 0
 
@@ -673,7 +673,7 @@ theorem pluennecke_ruzsa_inequality_pow_div
 
 中文:
 定理 pluennecke_ruzsa_inequality_pow_div
-  条件: (hA : A.Nonempty) (B : Finset G) (n : 自然数)
+  条件: (hA : A.非空) (B : 有限集 G) (n : 自然数)
   证明: by
   simpa only [_root_.pow_zero, div_one] using! pluennecke_ruzsa_inequality_pow_div_pow_div hA _ _ 0
 

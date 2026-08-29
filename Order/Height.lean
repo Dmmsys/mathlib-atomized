@@ -102,7 +102,7 @@ theorem chainHeight_ne_top_of_finite
 
 中文:
 定理 chainHeight_ne_top_of_finite
-  条件: (h : s.Finite)
+  条件: (h : s.有限)
   结论: s.chainHeight r != ⊤
   证明: LT.lt.ne_top lt_of_le_of_lt (chainHeight_le_encard s r) lt_top_iff_ne_top.mpr
     encard_ne_top_iff.mpr h
@@ -129,8 +129,8 @@ refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 
     obtain ⟨u, h
 
 中文:
-定理 exists_isChain_of_le_chainHeight
-  条件: {r} {s : Set α} (n : 自然数) (h : n <= s.chainHeight r)
+定理 存在_isChain_of_le_chainHeight
+  条件: {r} {s : 集合 α} (n : 自然数) (h : n <= s.chainHeight r)
   证明: by
   by_cases h' : n = 0
   · exact ⟨∅, by simp [h']⟩
@@ -165,7 +165,7 @@ theorem exists_eq_chainHeight_of_chainHeight_ne_top
   exact ⟨t.1, t.2.1, ht, t.2.2⟩
 
 中文:
-定理 exists_eq_chainHeight_of_chainHeight_ne_top
+定理 存在_eq_chainHeight_of_chainHeight_ne_top
   条件: (h : s.chainHeight r != ⊤)
   证明: by
   have : Nonempty { t // t subseteq s ∧ IsChain r t } := ⟨∅, by simp⟩
@@ -189,8 +189,8 @@ theorem exists_eq_chainHeight_of_finite
   proof: exists_eq_chainHeight_of_chainHeight_ne_top s r (chainHeight_ne_top_of_finite s r h)
 
 中文:
-定理 exists_eq_chainHeight_of_finite
-  条件: (h : s.Finite)
+定理 存在_eq_chainHeight_of_finite
+  条件: (h : s.有限)
   证明: exists_eq_chainHeight_of_chainHeight_ne_top s r (chainHeight_ne_top_of_finite s r h)
 
 Depends on / 依赖: chainHeight_ne_top_of_finite, exists_eq_chainHeight_of_chainHeight_ne_top
@@ -209,7 +209,7 @@ theorem encard_le_chainHeight_of_isChain
 
 中文:
 定理 encard_le_chainHeight_of_isChain
-  条件: {r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t)
+  条件: {r} (s t : 集合 α) (hs : t subseteq s) (hc : IsChain r t)
   证明: le_iSup_iff.mpr fun _ hb => hb ⟨t, hs, hc⟩
 
 Depends on / 依赖: le_iSup_iff, le_iSup_iff.mpr
@@ -228,7 +228,7 @@ theorem encard_eq_chainHeight_of_isChain
 
 中文:
 定理 encard_eq_chainHeight_of_isChain
-  条件: {r} (s : Set α) (hc : IsChain r s)
+  条件: {r} (s : 集合 α) (hc : IsChain r s)
   证明: le_antisymm (encard_le_chainHeight_of_isChain _ _ Set.Subset.rfl hc) (chainHeight_le_encard _ _)
 
 Depends on / 依赖: Set.Subset.rfl, Subset, chainHeight_le_encard, encard_le_chainHeight_of_isChain, le_antisymm
@@ -248,7 +248,7 @@ theorem finite_of_chainHeight_ne_top
 
 中文:
 定理 finite_of_chainHeight_ne_top
-  条件: {r} {s : Set α} (hc : IsChain r s) (h : s.chainHeight r != ⊤)
+  条件: {r} {s : 集合 α} (hc : IsChain r s) (h : s.chainHeight r != ⊤)
   证明: Set.encard_ne_top_iff.mp ne_top_of_le_ne_top h
     encard_le_chainHeight_of_isChain _ _ (subset_refl _) hc
 
@@ -272,7 +272,7 @@ theorem not_isChain_of_chainHeight_lt_encard
 
 中文:
 定理 not_isChain_of_chainHeight_lt_encard
-  结论: (s t : Set α) (ht : t subseteq s)
+  结论: (s t : 集合 α) (ht : t subseteq s)
   证明: by
   by_contra! hh
   grw [encard_le_chainHeight_of_isChain _ _ ht hh] at he
@@ -374,7 +374,7 @@ theorem chainHeight_empty
 
 中文:
 定理 chainHeight_empty
-  结论: (∅ : Set α).chainHeight r = 0
+  结论: (∅ : 集合 α).chainHeight r = 0
   证明: .mpr rfl chainHeight_eq_zero_iff _ _
 
 @[simp]
@@ -402,7 +402,7 @@ theorem one_le_chainHeight_iff
 
 中文:
 定理 one_le_chainHeight_iff
-  结论: 1 <= s.chainHeight r ↔ s.Nonempty
+  结论: 1 <= s.chainHeight r ↔ s.非空
   证明: by
   constructor
   all_goals
@@ -435,7 +435,7 @@ theorem chainHeight_of_isEmpty
 
 中文:
 定理 chainHeight_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: s.chainHeight r = 0
   证明: .mpr (Subsingleton.elim _ _) chainHeight_eq_zero_iff s r
 
@@ -463,7 +463,7 @@ theorem chainHeight_mono
 
 中文:
 定理 chainHeight_mono
-  条件: (s t : Set α) (h : s subseteq t)
+  条件: (s t : 集合 α) (h : s subseteq t)
   结论: s.chainHeight r <= t.chainHeight r
   证明: by
   refine forall_natCast_le_iff_le.mp fun n hn => ?_
@@ -589,7 +589,7 @@ have hc := Set.chainHeight_eq_of_relEmbedding univ Subtype.relEmbedding (r · ·
 
 中文:
 定理 chainHeight_coe_univ
-  结论: (@Set.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeight r
+  结论: (@集合.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeight r
   证明: by
 have hc := Set.chainHeight_eq_of_relEmbedding univ Subtype.relEmbedding (r · ·) (· in s)
   have hs : Subtype.val ⁻¹'o (r · ·) = (fun x y : s => r x y) := by funext; simp

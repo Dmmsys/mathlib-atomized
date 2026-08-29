@@ -36,7 +36,7 @@ definition IsAugmentation
 
 中文:
 定义 IsAugmentation
-  签名: [Semiring A] [Algebra R A] (I : Ideal A)
+  签名: [半环 A] [代数 R A] (I : 理想 A)
   定义体: IsCompl 1 (I.restrictScalars R)
 
 Depends on / 依赖: I.restrictScalars, IsCompl, restrictScalars
@@ -54,7 +54,7 @@ lemma isAugmentation_iff
 
 中文:
 引理 isAugmentation_iff
-  条件: [Semiring A] [Algebra R A] (I : Ideal A)
+  条件: [半环 A] [代数 R A] (I : 理想 A)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -73,7 +73,7 @@ theorem isAugmentation_subalgebra_iff
 
 中文:
 定理 isAugmentation_subalgebra_iff
-  结论: [CommSemiring A] [Algebra R A]
+  结论: [交换半环 A] [代数 R A]
   证明: by
   simp [Ideal.IsAugmentation, ← Submodule.isCompl_restrictScalars_iff R]
 

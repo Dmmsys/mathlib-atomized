@@ -102,8 +102,8 @@ theorem exists_nonempty_limit_obj_of_colimit
   let z := (limitObjIsoLimitCompEvaluat
 
 中文:
-定理 exists_nonempty_limit_obj_of_colimit
-  结论: [IsFiltered K]
+定理 存在_nonempty_limit_obj_of_colimit
+  结论: [是Filtered K]
   证明: by
   obtain ⟨t⟩ := h
   let t₂ := limMap (compYonedaColimitIsoColimitCompYoneda F G H).hom t
@@ -138,8 +138,8 @@ theorem exists_nonempty_limit_obj_of_isColimit
   refine hT.symm ≪≫ IsColimit.coconePointUniqueUpToIso hc (colimit.isColimit _)
 
 中文:
-定理 exists_nonempty_limit_obj_of_isColimit
-  结论: [IsFiltered K] {c : Cocone H} (hc : IsColimit c)
+定理 存在_nonempty_limit_obj_of_isColimit
+  结论: [是Filtered K] {c : 余锥 H} (hc : 是余极限 c)
   证明: by
   refine exists_nonempty_limit_obj_of_colimit F G H ?_
   suffices T ≅ colimit H from Nonempty.map (lim.map (whiskerLeft 𝒢 (yoneda.map this.hom))) h
@@ -173,7 +173,7 @@ theorem isFiltered
 
 中文:
 定理 isFiltered
-  条件: [IsFiltered I] (hF : 对任意 i, IsIndObject (F.obj i))
+  条件: [是Filtered I] (hF : 对任意 i, 是IndObject (F.obj i))
   证明: by
   -- It suffices to show that for any functor `G : J ⥤ CostructuredArrow yoneda (colimit F)` with
   -- `J` finite there is some `X` such that the set
@@ -243,7 +243,7 @@ theorem isIndObject_colimit
 
 中文:
 定理 isIndObject_colimit
-  结论: (I : 类型v) [SmallCategory I] [IsFiltered I]
+  结论: (I : 类型v) [小范畴 I] [是Filtered I]
   证明: by
   have : IsFiltered (CostructuredArrow yoneda (colimit F)) :=
     IndizationClosedUnderFilteredColimitsAux.isFiltered F hF

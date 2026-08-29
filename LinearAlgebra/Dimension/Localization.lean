@@ -56,7 +56,7 @@ lemma IsLocalizedModule.lift_rank_eq
   exacts [(IsLocalizedModule.linearIndependent_lift p f hs).choose_spec.cardinal_lift_l
 
 中文:
-引理 IsLocalizedModule.lift_rank_eq
+引理 是Localized模.lift_rank_eq
   证明: by
   cases subsingleton_or_nontrivial R
   · simp only [rank_subsingleton, lift_one]
@@ -90,7 +90,7 @@ lemma IsLocalizedModule.finrank_eq
   simpa using! congr_arg toNat (lift_rank_eq p f hp)
 
 中文:
-引理 IsLocalizedModule.finrank_eq
+引理 是Localized模.finrank_eq
   结论: finrank R N = finrank R M
   证明: by
   simpa using! congr_arg toNat (lift_rank_eq p f hp)
@@ -112,8 +112,8 @@ lemma IsLocalizedModule.rank_eq
   simpa using lift_rank_eq p f hp
 
 中文:
-引理 IsLocalizedModule.rank_eq
-  结论: {N : 类型uM} [AddCommGroup N] [Module R N] (f : M ->ₗ[R] N)
+引理 是Localized模.rank_eq
+  结论: {N : 类型uM} [加法交换群 N] [模 R N] (f : M ->ₗ[R] N)
   证明: by
   simpa using lift_rank_eq p f hp
 
@@ -138,8 +138,8 @@ lemma IsLocalization.rank_eq
 
 
 中文:
-引理 IsLocalization.rank_eq
-  结论: Module.rank S N = Module.rank R N
+引理 是Localization.rank_eq
+  结论: 模.rank S N = 模.rank R N
   证明: by
   cases subsingleton_or_nontrivial R
   · have := (algebraMap R S).codomain_trivial; simp only [rank_subsingleton]
@@ -170,7 +170,7 @@ theorem IsLocalization.finrank_eq
   simp_rw [finrank, rank_eq S p hp]
 
 中文:
-定理 IsLocalization.finrank_eq
+定理 是Localization.finrank_eq
   结论: finrank S N = finrank R N
   证明: by
   simp_rw [finrank, rank_eq S p hp]
@@ -199,8 +199,8 @@ theorem IsLocalization.linearIndepOn_finsetIntegerMultiple
   have inj := (IsLocalization.smul_bijective A (commonDe
 
 中文:
-定理 IsLocalization.linearIndepOn_finsetIntegerMultiple
-  结论: {A : 类型} [CommRing A] [Algebra S A]
+定理 是Localization.linearIndepOn_finset整数egerMultiple
+  结论: {A : 类型} [交换环 A] [代数 S A]
   证明: by
   classical
   rw [← LinearIndepOn.id_image_algebraMap_iff (A := A)]; rw [finsetIntegerMultiple_image]; rw [← s.coe_smul_finset]
@@ -240,7 +240,7 @@ theorem IsFractionRing.rank_right_eq
 
 中文:
 定理 IsFractionRing.rank_right_eq
-  结论: Module.rank S N = Module.rank R N
+  结论: 模.rank S N = 模.rank R N
   证明: IsLocalization.rank_eq S R⁰ le_rfl
 
 Depends on / 依赖: IsLocalization, IsLocalization.rank_eq, le_rfl, rank_eq
@@ -290,7 +290,7 @@ theorem IsFractionRing.finrank_left_eq
 
 中文:
 定理 IsFractionRing.finrank_left_eq
-  结论: (A : 类型) [CommRing A] [Algebra S A] [Algebra R A]
+  结论: (A : 类型) [交换环 A] [代数 S A] [代数 R A]
   证明: by
   nontriviality R
   classical
@@ -356,8 +356,8 @@ IsLocalizedModule.linearIndependent_lift R⁰ (LocalizedModule.mkLinearMap R⁰ 
   apply Card
 
 中文:
-定理 exists_set_linearIndependent_of_isDomain
-  条件: [IsDomain R]
+定理 存在_set_linearIndependent_of_isDomain
+  条件: [是整环 R]
   证明: by
   obtain ⟨w, hw⟩ :=
 IsLocalizedModule.linearIndependent_lift R⁰ (LocalizedModule.mkLinearMap R⁰ M)
@@ -393,7 +393,7 @@ theorem rank_quotient_add_rank_of_isDomain
 
 中文:
 定理 rank_quotient_add_rank_of_isDomain
-  条件: [IsDomain R] (M' : Submodule R M)
+  条件: [是整环 R] (M' : 子模 R M)
   证明: by
   apply lift_injective.{max uR uM}
   simp_rw [lift_add, ← IsLocalizedModule.lift_rank_eq R⁰ (M'.toLocalized R⁰) le_rfl,
@@ -423,8 +423,8 @@ instance IsDomain.hasRankNullity
   exists_set_linearIndependent M := exists_set_linearIndependent_of_isDomain R M
 
 中文:
-实例 IsDomain.hasRankNullity
-  签名: [IsDomain R]
+实例 是整环.hasRankNullity
+  签名: [是整环 R]
   定义体: rank_quotient_add_rank_of_isDomain
   exists_set_linearIndependent M := exists_set_linearIndependent_of_isDomain R M
 
@@ -521,7 +521,7 @@ theorem rank_eq_of_le_nonZeroDivisors
 
 中文:
 定理 rank_eq_of_le_nonZeroDivisors
-  结论: {P : 类型uM} [AddCommGroup P] [Module R P] [Module T P]
+  结论: {P : 类型uM} [加法交换群 P] [模 R P] [模 T P]
   证明: by
   simpa using lift_rank_eq_of_le_nonZeroDivisors S f hp hpT bc
 
@@ -619,7 +619,7 @@ theorem rank_eq
 
 中文:
 定理 rank_eq
-  结论: {P : 类型uM} [AddCommGroup P] [Module R P] [Module T P] [IsScalarTower R T P]
+  结论: {P : 类型uM} [加法交换群 P] [模 R P] [模 T P] [标量塔 R T P]
   证明: by
   simpa using bc.lift_rank_eq
 
@@ -654,7 +654,7 @@ lemma aleph0_le_rank_of_isEmpty_oreSet
 
 中文:
 引理 aleph0_le_rank_of_isEmpty_oreSet
-  条件: (hS : IsEmpty (OreLocalization.OreSet R⁰))
+  条件: (hS : 是空 (OreLocalization.OreSet R⁰))
   证明: by
   rw [← not_nonempty_iff]; rw [OreLocalization.nonempty_oreSet_iff_of_noZeroDivisors] at hS
   push Not at hS

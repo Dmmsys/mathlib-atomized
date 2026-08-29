@@ -27,8 +27,8 @@ lemma isNat_realSqrt
   proof: ⟨by simp [h.out, ← hy]⟩
 
 中文:
-引理 isNat_realSqrt
-  条件: {x : 实数} {nx ny : 自然数} (h : Is自然数 x nx) (hy : ny * ny = nx)
+引理 is自然数_realSqrt
+  条件: {x : 实数} {nx ny : 自然数} (h : 是自然数 x nx) (hy : ny * ny = nx)
   证明: ⟨by simp [h.out, ← hy]⟩
 
 Depends on / 依赖: h.out
@@ -45,8 +45,8 @@ lemma isNat_nnrealSqrt
   proof: ⟨by simp [h.out, ← hy]⟩
 
 中文:
-引理 isNat_nnrealSqrt
-  条件: {x : 实数>=0} {nx ny : 自然数} (h : Is自然数 x nx) (hy : ny * ny = nx)
+引理 is自然数_nnrealSqrt
+  条件: {x : 实数>=0} {nx ny : 自然数} (h : 是自然数 x nx) (hy : ny * ny = nx)
   证明: ⟨by simp [h.out, ← hy]⟩
 
 Depends on / 依赖: h.out
@@ -100,8 +100,8 @@ lemma isNat_realSqrt_neg
   proof: ⟨by simp [Real.sqrt_eq_zero', h.out]⟩
 
 中文:
-引理 isNat_realSqrt_neg
-  条件: {x : 实数} {nx : 自然数} (h : Is整数 x (整数.negOf自然数 nx))
+引理 is自然数_realSqrt_neg
+  条件: {x : 实数} {nx : 自然数} (h : 是整数 x (整数.negOf自然数 nx))
   证明: ⟨by simp [Real.sqrt_eq_zero', h.out]⟩
 
 Depends on / 依赖: Real.sqrt_eq_zero, h.out, sqrt_eq_zero
@@ -123,7 +123,7 @@ lemma isNat_realSqrt_of_isRat_negOfNat
   simpa [Nat.cast_zero, Real.sqrt_eq_zero', Int.cast_negOfNat, neg_mul, neg_nonpos] using h₁
 
 中文:
-引理 isNat_realSqrt_of_isRat_negOfNat
+引理 is自然数_realSqrt_of_isRat_negOf自然数
   结论: {x : 实数} {num : 自然数} {denom : 自然数}
   证明: by
   refine ⟨?_⟩
@@ -200,7 +200,7 @@ definition evalRealSqrt
         have pf₁ : Q($ey * $ey 
 
 中文:
-定义 evalRealSqrt
+定义 eval实数Sqrt
   签名: : NormNumExt where eval {u α} e
   定义体: do
   match u, α, e with
@@ -270,7 +270,7 @@ definition evalNNRealSqrt
         have pf₁ :
 
 中文:
-定义 evalNNRealSqrt
+定义 evalNN实数Sqrt
   签名: : NormNumExt where eval {u α} e
   定义体: do
   match u, α, e with

@@ -83,7 +83,7 @@ definition truncFinset
 
 中文:
 定义 truncFinset
-  签名: (R : 类型) [CommSemiring R] (s : Finset (σ ->₀ 自然数))
+  签名: (R : 类型) [交换半环 R] (s : 有限集 (σ ->₀ 自然数))
   定义体: ∑ x in s, MvPolynomial.monomial x (p.coeff x)
   map_add' _ _ := by simp [sum_add_distrib]
   map_smul' _ _ := by
@@ -261,7 +261,7 @@ theorem truncFinset_C
 中文:
 定理 truncFinset_C
   条件: (h : 0 in s) (r : R)
-  结论: truncFinset R s (C r) = MvPolynomial.C r
+  结论: truncFinset R s (C r) = 多元多项式.C r
   证明: truncFinset_monomial r h
 
 Depends on / 依赖: truncFinset_monomial
@@ -301,7 +301,7 @@ theorem truncFinset_truncFinset
 
 中文:
 定理 truncFinset_truncFinset
-  条件: {t : Finset (σ ->₀ 自然数)} (h : s subseteq t) (p : MvPowerSeries σ R)
+  条件: {t : 有限集 (σ ->₀ 自然数)} (h : s subseteq t) (p : MvPowerSeries σ R)
   证明: by
   ext x
   by_cases x in s <;> grind [MvPolynomial.coeff_coe]
@@ -325,7 +325,7 @@ theorem truncFinset_map
 
 中文:
 定理 truncFinset_map
-  条件: [CommSemiring S] (f : R ->+* S) (p : MvPowerSeries σ R)
+  条件: [交换半环 S] (f : R ->+* S) (p : MvPowerSeries σ R)
   证明: by
   ext x
   by_cases x in s <;> grind [coeff_map, MvPolynomial.coeff_map]
@@ -354,7 +354,7 @@ theorem coeff_truncFinset_mul_truncFinset_eq_coeff_mul₂
 
 中文:
 定理 coeff_truncFinset_mul_truncFinset_eq_coeff_mul₂
-  结论: {t : Finset (σ ->₀ 自然数)}
+  结论: {t : 有限集 (σ ->₀ 自然数)}
   证明: by
   classical
   simp only [MvPowerSeries.coeff_mul, MvPolynomial.coeff_mul]
@@ -388,7 +388,7 @@ theorem coeff_truncFinset_mul_truncFinset_eq_coeff_mul
 
 中文:
 定理 coeff_truncFinset_mul_truncFinset_eq_coeff_mul
-  结论: (hs : IsLowerSet (s : Set (σ ->₀ 自然数)))
+  结论: (hs : 是下集 (s : 集合 (σ ->₀ 自然数)))
   证明: coeff_truncFinset_mul_truncFinset_eq_coeff_mul₂ hs hs f g hx hx
 -/
 theorem coeff_truncFinset_mul_truncFinset_eq_coeff_mul (hs : IsLowerSet (s : Set (σ ->₀ Nat)))
@@ -412,7 +412,7 @@ theorem truncFinset_truncFinset_pow
 
 中文:
 定理 truncFinset_truncFinset_pow
-  结论: (hs : IsLowerSet (s : Set (σ ->₀ 自然数))) {k : 自然数} (hk : 1 <= k)
+  结论: (hs : 是下集 (s : 集合 (σ ->₀ 自然数))) {k : 自然数} (hk : 1 <= k)
   证明: by
   induction k, hk using Nat.le_induction with
   | base => simp [truncFinset_truncFinset]
@@ -495,7 +495,7 @@ lemma truncFinset_coe_eq_self_iff
 
 中文:
 引理 truncFinset_coe_eq_self_iff
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   refine ⟨fun h => ?_, fun h => MvPolynomial.ext _ _ fun x => ?_⟩
   · rw [← h]
@@ -527,7 +527,7 @@ definition trunc
 
 中文:
 定义 trunc
-  签名: (R : 类型) [CommSemiring R] (n : σ ->₀ 自然数)
+  签名: (R : 类型) [交换半环 R] (n : σ ->₀ 自然数)
   定义体: truncFinset R (Iio n)
 
 Depends on / 依赖: truncFinset
@@ -600,7 +600,7 @@ theorem trunc_C
 中文:
 定理 trunc_C
   条件: (n : σ ->₀ 自然数) (hnn : n != 0) (a : R)
-  结论: trunc R n (C a) = MvPolynomial.C a
+  结论: trunc R n (C a) = 多元多项式.C a
   证明: truncFinset_C (by simpa using pos_of_ne_zero hnn) a
 
 @[simp]
@@ -647,7 +647,7 @@ theorem trunc_map
 
 中文:
 定理 trunc_map
-  条件: [CommSemiring S] (n : σ ->₀ 自然数) (f : R ->+* S) (p : MvPowerSeries σ R)
+  条件: [交换半环 S] (n : σ ->₀ 自然数) (f : R ->+* S) (p : MvPowerSeries σ R)
   证明: truncFinset_map f p
 
 Depends on / 依赖: truncFinset_map
@@ -712,7 +712,7 @@ definition trunc'
 
 中文:
 定义 trunc'
-  签名: (R : 类型) [CommSemiring R] (n : σ ->₀ 自然数)
+  签名: (R : 类型) [交换半环 R] (n : σ ->₀ 自然数)
   定义体: truncFinset R (Iic n)
 -/
 def trunc' (R : Type*) [CommSemiring R] (n : σ ->₀ Nat) :
@@ -792,7 +792,7 @@ theorem trunc'_C
 中文:
 定理 trunc'_C
   条件: (n : σ ->₀ 自然数) (a : R)
-  结论: trunc' R n (C a) = MvPolynomial.C a
+  结论: trunc' R n (C a) = 多元多项式.C a
   证明: truncFinset_C (by simp) a
 -/
 theorem trunc'_C (n : σ ->₀ Nat) (a : R) : trunc' R n (C a) = MvPolynomial.C a :=
@@ -917,7 +917,7 @@ theorem trunc'_map
 
 中文:
 定理 trunc'_map
-  条件: [CommSemiring S] (n : σ ->₀ 自然数) (f : R ->+* S) (p : MvPowerSeries σ R)
+  条件: [交换半环 S] (n : σ ->₀ 自然数) (f : R ->+* S) (p : MvPowerSeries σ R)
   证明: truncFinset_map f p
 -/
 theorem trunc'_map [CommSemiring S] (n : σ ->₀ Nat) (f : R ->+* S) (p : MvPowerSeries σ R) :
@@ -1038,7 +1038,7 @@ definition truncTotal
 
 中文:
 定义 truncTotal
-  签名: {R : 类型} [CommSemiring R] (n : 自然数)
+  签名: {R : 类型} [交换半环 R] (n : 自然数)
   定义体: truncFinset R (finite_of_degree_lt n).toFinset
 
 Depends on / 依赖: finite_of_degree_lt, toFinset, truncFinset
@@ -1299,7 +1299,7 @@ theorem truncTotal_coe_eq_self_iff
 
 中文:
 定理 truncTotal_coe_eq_self_iff
-  条件: (p : MvPolynomial σ R) (h : n != 0)
+  条件: (p : 多元多项式 σ R) (h : n != 0)
   证明: by
   rw [truncTotal]; rw [truncFinset_coe_eq_self_iff]; rw [Set.Finite.subset_toFinset]; rw [MvPolynomial.totalDegree]; rw [Finset.sup_lt_iff (bot_lt_iff_ne_bot.mpr h)]; rw [Set.subset_def]
   simp [degree, sum]

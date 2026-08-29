@@ -78,7 +78,7 @@ theorem mem_union_left
 
 中文:
 定理 mem_union_left
-  条件: (h : a in l₁) (l₂ : List α)
+  条件: (h : a in l₁) (l₂ : 列表 α)
   结论: a in l₁ union l₂
   证明: mem_union_iff.2 (Or.inl h)
 
@@ -98,7 +98,7 @@ theorem mem_union_right
 
 中文:
 定理 mem_union_right
-  条件: (l₁ : List α) (h : a in l₂)
+  条件: (l₁ : 列表 α) (h : a in l₂)
   结论: a in l₁ union l₂
   证明: mem_union_iff.2 (Or.inr h)
 
@@ -123,7 +123,7 @@ theorem sublist_suffix_of_union
 
 中文:
 定理 sublist_suffix_of_union
-  结论: 对任意 l₁ l₂ : List α, 存在 t, t <+ l₁ ∧ t ++ l₂ = l₁ union l₂
+  结论: 对任意 l₁ l₂ : 列表 α, 存在 t, t <+ l₁ ∧ t ++ l₂ = l₁ union l₂
   证明: sublist_suffix_of_union l₁ l₂
     if h : a in l₁ union l₂ then
       ⟨t, sublist_cons_of_sublist _ s, by
@@ -156,7 +156,7 @@ theorem suffix_union_right
 
 中文:
 定理 suffix_union_right
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   结论: l₂ <:+ l₁ union l₂
   证明: (sublist_suffix_of_union l₁ l₂).imp fun _ => And.right
 
@@ -177,7 +177,7 @@ theorem union_sublist_append
 
 中文:
 定理 union_sublist_append
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   结论: l₁ union l₂ <+ l₁ ++ l₂
   证明: let ⟨_, s, e⟩ := sublist_suffix_of_union l₁ l₂
   e ▸ (append_sublist_append_right _).2 s
@@ -198,7 +198,7 @@ theorem forall_mem_union
   simp only [mem_union_iff, or_imp, forall_and]
 
 中文:
-定理 forall_mem_union
+定理 对任意_mem_union
   结论: (对任意 x in l₁ union l₂, p x) ↔ (对任意 x in l₁, p x) ∧ 对任意 x in l₂, p x
   证明: by
   simp only [mem_union_iff, or_imp, forall_and]
@@ -218,7 +218,7 @@ theorem forall_mem_of_forall_mem_union_left
   proof: (forall_mem_union.1 h).1
 
 中文:
-定理 forall_mem_of_forall_mem_union_left
+定理 对任意_mem_of_对任意_mem_union_left
   条件: (h : 对任意 x in l₁ union l₂, p x)
   结论: 对任意 x in l₁, p x
   证明: (forall_mem_union.1 h).1
@@ -238,7 +238,7 @@ theorem forall_mem_of_forall_mem_union_right
   proof: (forall_mem_union.1 h).2
 
 中文:
-定理 forall_mem_of_forall_mem_union_right
+定理 对任意_mem_of_对任意_mem_union_right
   条件: (h : 对任意 x in l₁ union l₂, p x)
   结论: 对任意 x in l₂, p x
   证明: (forall_mem_union.1 h).2
@@ -262,8 +262,8 @@ theorem Subset.union_eq_right
     rw [cons_union]; rw [insert_of_mem <| mem_union_right _ <| h mem_cons_self]; rw [ih subset_of_cons_subset h]
 
 中文:
-定理 Subset.union_eq_right
-  条件: {xs ys : List α} (h : xs subseteq ys)
+定理 子集.union_eq_right
+  条件: {xs ys : 列表 α} (h : xs subseteq ys)
   结论: xs union ys = ys
   证明: by
   induction xs with
@@ -300,7 +300,7 @@ theorem inter_nil
 
 中文:
 定理 inter_nil
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: [] inter l = []
   证明: rfl
 
@@ -324,7 +324,7 @@ theorem inter_cons_of_mem
 
 中文:
 定理 inter_cons_of_mem
-  条件: (l₁ : List α) (h : a in l₂)
+  条件: (l₁ : 列表 α) (h : a in l₂)
   结论: (a :: l₁) inter l₂ = a :: l₁ inter l₂
   证明: by
   simp [Inter.inter, List.inter, h]
@@ -351,7 +351,7 @@ theorem inter_cons_of_notMem
 
 中文:
 定理 inter_cons_of_notMem
-  条件: (l₁ : List α) (h : a ∉ l₂)
+  条件: (l₁ : 列表 α) (h : a ∉ l₂)
   结论: (a :: l₁) inter l₂ = l₁ inter l₂
   证明: by
   simp [Inter.inter, List.inter, h]
@@ -377,7 +377,7 @@ theorem inter_cons
 
 中文:
 定理 inter_cons
-  条件: (l₁ : List α)
+  条件: (l₁ : 列表 α)
   证明: by
   split_ifs <;> simp_all
 
@@ -402,7 +402,7 @@ theorem inter_nil'
 
 中文:
 定理 inter_nil'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l inter [] = []
   证明: by
   induction l with grind
@@ -478,7 +478,7 @@ theorem inter_subset_left
 
 中文:
 定理 inter_subset_left
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: l₁ inter l₂ subseteq l₁
   证明: filter_subset_self _
 
@@ -498,7 +498,7 @@ theorem inter_subset_right
 
 中文:
 定理 inter_subset_right
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: l₁ inter l₂ subseteq l₂
   证明: fun _ => mem_of_mem_inter_right
 
@@ -518,7 +518,7 @@ theorem subset_inter
 
 中文:
 定理 subset_inter
-  条件: {l l₁ l₂ : List α} (h₁ : l subseteq l₁) (h₂ : l subseteq l₂)
+  条件: {l l₁ l₂ : 列表 α} (h₁ : l subseteq l₁) (h₂ : l subseteq l₂)
   结论: l subseteq l₁ inter l₂
   证明: fun _ h =>
   mem_inter_iff.2 ⟨h₁ h, h₂ h⟩
@@ -564,8 +564,8 @@ theorem forall_mem_inter_of_forall_left
   proof: BAll.imp_left (fun _ => mem_of_mem_inter_left) h
 
 中文:
-定理 forall_mem_inter_of_forall_left
-  条件: (h : 对任意 x in l₁, p x) (l₂ : List α)
+定理 对任意_mem_inter_of_对任意_left
+  条件: (h : 对任意 x in l₁, p x) (l₂ : 列表 α)
   证明: BAll.imp_left (fun _ => mem_of_mem_inter_left) h
 
 Depends on / 依赖: BAll.imp_left, imp_left, mem_of_mem_inter_left
@@ -585,8 +585,8 @@ theorem forall_mem_inter_of_forall_right
 @[simp]
 
 中文:
-定理 forall_mem_inter_of_forall_right
-  条件: (l₁ : List α) (h : 对任意 x in l₂, p x)
+定理 对任意_mem_inter_of_对任意_right
+  条件: (l₁ : 列表 α) (h : 对任意 x in l₂, p x)
   证明: BAll.imp_left (fun _ => mem_of_mem_inter_right) h
 
 @[simp]
@@ -610,7 +610,7 @@ theorem inter_reverse
 
 中文:
 定理 inter_reverse
-  条件: {xs ys : List α}
+  条件: {xs ys : 列表 α}
   结论: xs inter ys.reverse = xs inter ys
   证明: by
   simp only [List.inter_def, elem_eq_mem, mem_reverse]
@@ -630,8 +630,8 @@ theorem Subset.inter_eq_left
   proof: List.filter_eq_self.mpr fun _ ha => elem_eq_true_of_mem (h ha)
 
 中文:
-定理 Subset.inter_eq_left
-  条件: {xs ys : List α} (h : xs subseteq ys)
+定理 子集.inter_eq_left
+  条件: {xs ys : 列表 α} (h : xs subseteq ys)
   结论: xs inter ys = xs
   证明: List.filter_eq_self.mpr fun _ ha => elem_eq_true_of_mem (h ha)
 
@@ -650,8 +650,8 @@ theorem Sublist.inter_left
   grind [inter_def, monotone_filter_right]
 
 中文:
-定理 Sublist.inter_left
-  条件: {l₁ l₂ l₃ : List α} (h : l₂.Sublist l₃)
+定理 子表.inter_left
+  条件: {l₁ l₂ l₃ : 列表 α} (h : l₂.子表 l₃)
   证明: by
   grind [inter_def, monotone_filter_right]
 
@@ -671,8 +671,8 @@ theorem Sublist.inter_right
   grind [inter_def]
 
 中文:
-定理 Sublist.inter_right
-  条件: {l₁ l₂ l₃ : List α} (h : l₁.Sublist l₂)
+定理 子表.inter_right
+  条件: {l₁ l₂ l₃ : 列表 α} (h : l₁.子表 l₂)
   证明: by
   grind [inter_def]
 
@@ -702,8 +702,8 @@ theorem nil_bagInter
 @[simp, grind =]
 
 中文:
-定理 nil_bagInter
-  条件: (l : List α)
+定理 nil_bag整数er
+  条件: (l : 列表 α)
   结论: [].bag整数er l = []
   证明: by cases l <;> rfl
 
@@ -724,8 +724,8 @@ theorem bagInter_nil
 @[simp]
 
 中文:
-定理 bagInter_nil
-  条件: (l : List α)
+定理 bag整数er_nil
+  条件: (l : 列表 α)
   结论: l.bag整数er [] = []
   证明: by cases l <;> rfl
 
@@ -749,8 +749,8 @@ alias cons_bagInter_of_pos := cons_bagInter_of_mem
 @[simp]
 
 中文:
-定理 cons_bagInter_of_mem
-  条件: (l₁ : List α) (h : a in l₂)
+定理 cons_bag整数er_of_mem
+  条件: (l₁ : 列表 α) (h : a in l₂)
   证明: by
   cases l₂ with grind [List.bagInter]
 
@@ -784,8 +784,8 @@ alias cons_bagInter_of_neg := cons_bagInter_of_not_mem
 @[grind =]
 
 中文:
-定理 cons_bagInter_of_not_mem
-  条件: (l₁ : List α) (h : a ∉ l₂)
+定理 cons_bag整数er_of_not_mem
+  条件: (l₁ : 列表 α) (h : a ∉ l₂)
   证明: by
   cases l₂ with grind [List.bagInter]
 
@@ -818,7 +818,7 @@ alias cons_bagInteger := cons_bagInter
 @[simp]
 
 中文:
-定理 cons_bagInter
+定理 cons_bag整数er
   证明: by
   split_ifs <;> simp_all
 
@@ -849,8 +849,8 @@ theorem bagInter_cons_of_not_mem
 @[simp]
 
 中文:
-定理 bagInter_cons_of_not_mem
-  条件: (l₂ : List α) (h : a ∉ l₁)
+定理 bag整数er_cons_of_not_mem
+  条件: (l₂ : 列表 α) (h : a ∉ l₁)
   证明: by
   induction l₁ generalizing l₂ <;> grind
 
@@ -876,8 +876,8 @@ theorem mem_bagInter
 @[simp]
 
 中文:
-定理 mem_bagInter
-  条件: {a : α} {l₁ l₂ : List α}
+定理 mem_bag整数er
+  条件: {a : α} {l₁ l₂ : 列表 α}
   结论: a in l₁.bag整数er l₂ ↔ a in l₁ ∧ a in l₂
   证明: by
   fun_induction List.bagInter with grind
@@ -900,8 +900,8 @@ theorem count_bagInter
   fun_induction List.bagInter with grind
 
 中文:
-定理 count_bagInter
-  条件: {a : α} {l₁ l₂ : List α}
+定理 count_bag整数er
+  条件: {a : α} {l₁ l₂ : 列表 α}
   证明: by
   fun_induction List.bagInter with grind
 
@@ -922,8 +922,8 @@ theorem bagInter_sublist_left
   fun_induction List.bagInter with grind
 
 中文:
-定理 bagInter_sublist_left
-  条件: {l₁ l₂ : List α}
+定理 bag整数er_sublist_left
+  条件: {l₁ l₂ : 列表 α}
   结论: l₁.bag整数er l₂ <+ l₁
   证明: by
   fun_induction List.bagInter with grind
@@ -944,7 +944,7 @@ theorem singleton_bagInter
   grind
 
 中文:
-定理 singleton_bagInter
+定理 singleton_bag整数er
   条件: (a : α)
   结论: [a].bag整数er l₁ = if a in l₁ then [a] else []
   证明: by
@@ -966,7 +966,7 @@ theorem bagInter_singleton
 @[simp]
 
 中文:
-定理 bagInter_singleton
+定理 bag整数er_singleton
   条件: (a : α)
   结论: l₁.bag整数er [a] = if a in l₁ then [a] else []
   证明: by
@@ -990,7 +990,7 @@ theorem bagInter_erase_of_not_mem
 @[simp]
 
 中文:
-定理 bagInter_erase_of_not_mem
+定理 bag整数er_erase_of_not_mem
   条件: (h : a ∉ l₁)
   证明: by
   induction l₁ generalizing l₂ <;> grind
@@ -1014,7 +1014,7 @@ theorem erase_bagInter_of_not_mem
   induction l₁ generalizing l₂ <;> grind
 
 中文:
-定理 erase_bagInter_of_not_mem
+定理 erase_bag整数er_of_not_mem
   条件: (h : a ∉ l₂)
   证明: by
   induction l₁ generalizing l₂ <;> grind
@@ -1033,8 +1033,8 @@ theorem bagInter_nil_iff_inter_nil
   statement: forall l₁ l₂ : List α, l₁.bagInter l₂ = [] ↔ l₁ inter l₂ = []
 
 中文:
-定理 bagInter_nil_iff_inter_nil
-  结论: 对任意 l₁ l₂ : List α, l₁.bag整数er l₂ = [] ↔ l₁ inter l₂ = []
+定理 bag整数er_nil_iff_inter_nil
+  结论: 对任意 l₁ l₂ : 列表 α, l₁.bag整数er l₂ = [] ↔ l₁ inter l₂ = []
 -/
 theorem bagInter_nil_iff_inter_nil : forall l₁ l₂ : List α, l₁.bagInter l₂ = [] ↔ l₁ inter l₂ = []
   | [], l₂ => by simp
@@ -1053,7 +1053,7 @@ theorem bagInter_eq_nil_iff_disjoint
   proof: (bagInter_nil_iff_inter_nil _ _).trans inter_eq_nil_iff_disjoint
 
 中文:
-定理 bagInter_eq_nil_iff_disjoint
+定理 bag整数er_eq_nil_iff_disjoint
   结论: l₁.bag整数er l₂ = [] ↔ l₁.Disjoint l₂
   证明: (bagInter_nil_iff_inter_nil _ _).trans inter_eq_nil_iff_disjoint
 
@@ -1072,7 +1072,7 @@ theorem Nodup.bagInter_right
   proof: nodup_iff_count.mpr fun x => (by grind [List.count_bagInter])
 
 中文:
-定理 Nodup.bagInter_right
+定理 Nodup.bag整数er_right
   条件: (h : l₁.Nodup)
   结论: (l₁.bag整数er l₂).Nodup
   证明: nodup_iff_count.mpr fun x => (by grind [List.count_bagInter])
@@ -1092,7 +1092,7 @@ theorem Nodup.bagInter_left
   proof: nodup_iff_count.mpr fun x => (by grind [List.count_bagInter])
 
 中文:
-定理 Nodup.bagInter_left
+定理 Nodup.bag整数er_left
   条件: (h : l₂.Nodup)
   结论: (l₁.bag整数er l₂).Nodup
   证明: nodup_iff_count.mpr fun x => (by grind [List.count_bagInter])
@@ -1119,8 +1119,8 @@ exact ih.trans Sublist.inter_left (by grind [erase_sublist])
     · simp_all
 
 中文:
-定理 Sublist.bagInter_inter
-  结论: (l₁.bag整数er l₂).Sublist (l₁ inter l₂)
+定理 子表.bag整数er_inter
+  结论: (l₁.bag整数er l₂).子表 (l₁ inter l₂)
   证明: by
   induction l₁ generalizing l₂ with
   | nil => simp

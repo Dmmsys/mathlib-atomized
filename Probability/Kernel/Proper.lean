@@ -46,10 +46,10 @@ structure IsProper
     - restrict_eq_indicator_smul' : forall ⦃B : Set X⦄ (hB : MeasurableSet[𝓑 ⊓ 𝓧] B) (x : X), π.restrict (inf_le_right (b := 𝓧) _ hB) x = B.indicator (fun _ => (1 : Real>=0∞)) x • π x
 
 中文:
-结构 IsProper
-  参数: (π : Kernel[𝓑, 𝓧] X X)
+结构 是真
+  参数: (π : 核[𝓑, 𝓧] X X)
   公理与运算 (1 个):
-    - restrict_eq_indicator_smul' : 对任意 ⦃B : Set X⦄ (hB : MeasurableSet[𝓑 ⊓ 𝓧] B) (x : X), π.restrict (inf_le_right (b := 𝓧) _ hB) x = B.indicator (fun _ => (1 : 实数>=0∞)) x • π x
+    - restrict_eq_indicator_smul' : 对任意 ⦃B : 集合 X⦄ (hB : 可测集[𝓑 ⊓ 𝓧] B) (x : X), π.restrict (inf_le_right (b := 𝓧) _ hB) x = B.indicator (fun _ => (1 : 实数>=0∞)) x • π x
 
 Depends on / 依赖: B.indicator, indicator
 -/
@@ -134,8 +134,8 @@ lemma IsProper.setLIntegral_eq_comp
   rfl
 
 中文:
-引理 IsProper.setLIntegral_eq_comp
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧) {μ : Measure[𝓧] X}
+引理 是真.setL整数egral_eq_comp
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧) {μ : 测度[𝓧] X}
   证明: by
   rw [Measure.bind_apply (by measurability) (π.measurable.mono h𝓑𝓧 le_rfl).aemeasurable]
   simp only [hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB, ← indicator_mul_const, Pi.one_apply, one_mul]
@@ -166,8 +166,8 @@ lemma IsProper.lintegral_indicator_mul_indicator
   rw [← hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB]; rw [inter_co
 
 中文:
-引理 IsProper.lintegral_indicator_mul_indicator
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧)
+引理 是真.lintegral_indicator_mul_indicator
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧)
   证明: by
   simp_rw [← inter_indicator_mul]
   rw [lintegral_indicator ((h𝓑𝓧 _ hB).inter hA)]; rw [lintegral_indicator hA]
@@ -199,8 +199,8 @@ lemma IsProper.lintegral_indicator_mul
   · rintro f₁ f₂ - _ _ hf
 
 中文:
-引理 IsProper.lintegral_indicator_mul
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧)
+引理 是真.lintegral_indicator_mul
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧)
   证明: by
   refine hf.ennreal_induction ?_ ?_ ?_
   · rintro c A hA
@@ -235,8 +235,8 @@ lemma IsProper.setLIntegral_eq_indicator_mul_lintegral
     lintegral_indicator (h𝓑𝓧 _ hB)]
 
 中文:
-引理 IsProper.setLIntegral_eq_indicator_mul_lintegral
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧)
+引理 是真.setL整数egral_eq_indicator_mul_lintegral
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧)
   证明: by
   simp [← hπ.lintegral_indicator_mul h𝓑𝓧 hf hB, ← indicator_mul_left,
     lintegral_indicator (h𝓑𝓧 _ hB)]
@@ -259,8 +259,8 @@ lemma IsProper.setLIntegral_inter_eq_indicator_mul_setLIntegral
   rw [← lintegral_indicator hA]; rw [← hπ.setLIntegral_eq_indicator_mul_lintegral h𝓑𝓧 _ hB]; rw [setLIntegral_indicator] <;> measurability
 
 中文:
-引理 IsProper.setLIntegral_inter_eq_indicator_mul_setLIntegral
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧)
+引理 是真.setL整数egral_inter_eq_indicator_mul_setL整数egral
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧)
   证明: by
   rw [← lintegral_indicator hA]; rw [← hπ.setLIntegral_eq_indicator_mul_lintegral h𝓑𝓧 _ hB]; rw [setLIntegral_indicator] <;> measurability
 
@@ -288,8 +288,8 @@ lemma IsProper.lintegral_mul
   
 
 中文:
-引理 IsProper.lintegral_mul
-  结论: (hπ : Is命题er π) (h𝓑𝓧 : 𝓑 <= 𝓧) (hf : Measurable[𝓧] f)
+引理 是真.lintegral_mul
+  结论: (hπ : 是真 π) (h𝓑𝓧 : 𝓑 <= 𝓧) (hf : 可测[𝓧] f)
   证明: by
   refine hg.ennreal_induction ?_ ?_ ?_
   · rintro c A hA

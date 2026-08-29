@@ -48,7 +48,7 @@ definition subobjectIsoSubobjectOp
 
 中文:
 定义 subobjectIsoSubobjectOp
-  签名: [Abelian C] (X : C)
+  签名: [交换 C] (X : C)
   定义体: by
   refine OrderIso.ofHomInv (cokernelOrderHom X) (kernelOrderHom X) ?_ ?_
   · change (cokernelOrderHom X).comp (kernelOrderHom X) = _
@@ -98,7 +98,7 @@ instance wellPowered_opposite
 
 中文:
 实例 wellPowered_opposite
-  签名: [Abelian C] [LocallySmall.{w} C] [WellPowered.{w} C]
+  签名: [交换 C] [LocallySmall.{w} C] [良幂.{w} C]
   定义体: (small_congr (subobjectIsoSubobjectOp (unop X)).toEquiv).1 inferInstance
 
 Depends on / 依赖: small_congr, subobjectIsoSubobjectOp, toEquiv

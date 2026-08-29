@@ -46,7 +46,7 @@ abbreviation IsUnramifiedAt
 
 中文:
 缩写 IsUnramifiedAt
-  签名: (q : Ideal A) [q.IsPrime]
+  签名: (q : 理想 A) [q.是素]
   定义体: FormallyUnramified R (Localization.AtPrime q)
 
 Depends on / 依赖: AtPrime, FormallyUnramified, Localization, Localization.AtPrime
@@ -65,7 +65,7 @@ definition unramifiedLocus
 
 中文:
 定义 unramifiedLocus
-  签名: : Set (PrimeSpectrum A)
+  签名: : 集合 (素谱 A)
   定义体: { p | IsUnramifiedAt R p.asIdeal }
 
 Depends on / 依赖: IsUnramifiedAt, asIdeal, p.asIdeal
@@ -113,7 +113,7 @@ lemma IsUnramifiedAt.of_restrictScalars
 
 中文:
 引理 IsUnramifiedAt.of_restrictScalars
-  结论: (P : Ideal B) [P.IsPrime]
+  结论: (P : 理想 B) [P.是素]
   证明: FormallyUnramified.of_restrictScalars R _ _
 
 Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_restrictScalars, of_restrictScalars
@@ -183,7 +183,7 @@ definition IsUnramifiedIn
 
 中文:
 定义 IsUnramifiedIn
-  签名: (A : 类型) [CommRing A] [Algebra R A] (𝔭 : Ideal R)
+  签名: (A : 类型) [交换环 A] [代数 R A] (𝔭 : 理想 R)
   定义体: forall (𝔓 : Ideal A) (_ : 𝔓.IsPrime), 𝔓.LiesOver 𝔭 -> Algebra.IsUnramifiedAt R 𝔓
 
 Depends on / 依赖: Algebra, Algebra.IsUnramifiedAt, IsPrime, IsUnramifiedAt, LiesOver
@@ -203,7 +203,7 @@ theorem isUnramifiedIn_top
 
 中文:
 定理 isUnramifiedIn_top
-  结论: IsUnramifiedIn A (⊤ : Ideal R)
+  结论: IsUnramifiedIn A (⊤ : 理想 R)
   证明: fun P hP _ => (hP.ne_top ((Ideal.eq_top_iff_of_liesOver P (⊤ : Ideal R)).mpr rfl)).elim
 
 Depends on / 依赖: Ideal.eq_top_iff_of_liesOver, eq_top_iff_of_liesOver, hP.ne_top, ne_top
@@ -302,7 +302,7 @@ theorem formallyUnramified_iff_forall
   proof: unramifiedLocus_eq_univ_iff.symm.trans Set.eq_univ_iff_forall
 
 中文:
-定理 formallyUnramified_iff_forall
+定理 formallyUnramified_iff_对任意
   证明: unramifiedLocus_eq_univ_iff.symm.trans Set.eq_univ_iff_forall
 
 Depends on / 依赖: Set.eq_univ_iff_forall, eq_univ_iff_forall, unramifiedLocus_eq_univ_iff, unramifiedLocus_eq_univ_iff.symm.trans
@@ -320,8 +320,8 @@ theorem unramified_iff_forall
   proof: .trans ⟨fun h => h.formallyUnramified, fun h => ⟨h, inferInstance⟩⟩ formallyUnramified_iff_forall
 
 中文:
-定理 unramified_iff_forall
-  条件: [FiniteType R A]
+定理 unramified_iff_对任意
+  条件: [有限型 R A]
   证明: .trans ⟨fun h => h.formallyUnramified, fun h => ⟨h, inferInstance⟩⟩ formallyUnramified_iff_forall
 
 Depends on / 依赖: formallyUnramified, formallyUnramified_iff_forall, h.formallyUnramified
@@ -344,7 +344,7 @@ lemma isOpen_unramifiedLocus
 中文:
 引理 isOpen_unramifiedLocus
   条件: [EssFiniteType R A]
-  结论: IsOpen (unramifiedLocus R A)
+  结论: 是开集 (unramifiedLocus R A)
   证明: by
   rw [unramifiedLocus_eq_compl_support]; rw [Module.support_eq_zeroLocus]
   exact (PrimeSpectrum.isClosed_zeroLocus _).isOpen_compl
@@ -368,8 +368,8 @@ lemma exists_formallyUnramified_of_isUnramifiedAt
   exact ⟨r, hpr, basicOpen_subset_unramifiedLocus_iff.mp hr⟩
 
 中文:
-引理 exists_formallyUnramified_of_isUnramifiedAt
-  结论: [EssFiniteType R A] (p : Ideal A) [p.IsPrime]
+引理 存在_formallyUnramified_of_isUnramifiedAt
+  结论: [EssFiniteType R A] (p : 理想 A) [p.是素]
   证明: by
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, hpr, hr⟩ :=
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open
@@ -396,8 +396,8 @@ lemma exists_unramified_of_isUnramifiedAt
   exact ⟨f, hfp, ⟨H, .trans ‹_› (IsLocalization.finiteType_of_monoid_fg (.powers f) _)⟩⟩
 
 中文:
-引理 exists_unramified_of_isUnramifiedAt
-  结论: [Algebra.FiniteType R A] (p : Ideal A) [p.IsPrime]
+引理 存在_unramified_of_isUnramifiedAt
+  结论: [代数.有限型 R A] (p : 理想 A) [p.是素]
   证明: by
   obtain ⟨f, hfp, H⟩ := exists_formallyUnramified_of_isUnramifiedAt (R := R) p
   exact ⟨f, hfp, ⟨H, .trans ‹_› (IsLocalization.finiteType_of_monoid_fg (.powers f) _)⟩⟩

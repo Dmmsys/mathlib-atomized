@@ -84,7 +84,7 @@ structure RewriteLemma
   参数: where
   公理与运算 (2 个):
     - name : Name
-    - symm : 布尔
+    - symm : 布尔值
 -/
 structure RewriteLemma where
   /-- The name of the lemma -/
@@ -299,7 +299,7 @@ private initialize importedRewriteLemmasExt : EnvExtension ExtState ←
 
 中文:
 实例 :
-  签名: Inhabited ExtState
+  签名: 可居 ExtState
   定义体: ExtState.default
 
 private initialize importedRewriteLemmasExt : EnvExtension ExtState ←
@@ -394,12 +394,12 @@ structure Rewrite
 结构 Rewrite
   参数: where
   公理与运算 (6 个):
-    - symm : 布尔
+    - symm : 布尔值
     - proof : Expr
     - replacement : Expr
     - stringLength : 自然数
-    - extraGoals : Array (MVarId × BinderInfo)
-    - makesNewMVars : 布尔
+    - extraGoals : 数组 (MVarId × BinderInfo)
+    - makesNewMVars : 布尔值
 -/
 structure Rewrite where
   /-- `symm` is `true` when rewriting from right to left -/
@@ -431,7 +431,7 @@ definition checkRewrite
 
 中文:
 定义 checkRewrite
-  签名: (thm e : Expr) (symm : 布尔)
+  签名: (thm e : Expr) (symm : 布尔值)
   定义体: do
   withTraceNodeBefore `rw?? (fun _ => return m!
     "rewriting {e} by {if symm then "← " else ""}{thm}") do
@@ -487,7 +487,7 @@ let lt (a b : (Rewrite × Name)) := Ordering.isLT
 
 中文:
 定义 checkAndSortRewriteLemmas
-  签名: (e : Expr) (rewrites : Array RewriteLemma)
+  签名: (e : Expr) (rewrites : 数组 RewriteLemma)
   定义体: do
   let rewrites ← rewrites.filterMapM fun rw =>
     tryCatchRuntimeEx do
@@ -568,7 +568,7 @@ definition getHypotheses
 
 中文:
 定义 getHypotheses
-  签名: (except : Option FVarId)
+  签名: (except : 选项类型 FVarId)
   定义体: withReducible do
   let mut tree : PreDiscrTree (FVarId × Bool) := {}
   for decl in ← getLCtx do
@@ -606,7 +606,7 @@ Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
 
 中文:
 定义 getHypothesisRewrites
-  签名: (e : Expr) (except : Option FVarId)
+  签名: (e : Expr) (except : 选项类型 FVarId)
   定义体: do
   let (candidates, _) ← (← getHypotheses except).getMatch e (unify := false) (matchRootStar := true)
   let candidates := candidates.flatten
@@ -646,7 +646,7 @@ definition getBinderInfos
 
 中文:
 定义 getBinderInfos
-  签名: (fn : Expr) (args : Array Expr)
+  签名: (fn : Expr) (args : 数组 Expr)
   定义体: do
   let mut fnType ← inferType fn
   let mut result := Array.mkEmpty args.size
@@ -737,7 +737,7 @@ definition filterRewrites
 
 中文:
 定义 filterRewrites
-  签名: {α} (e : Expr) (rewrites : Array α) (replacement : α -> Expr)
+  签名: {α} (e : Expr) (rewrites : 数组 α) (replacement : α -> Expr)
   定义体: withNewMCtxDepth do
   let mut filtered := #[]
   for rw in rewrites do
@@ -786,7 +786,7 @@ definition mkRewrite
 
 中文:
 定义 mkRewrite
-  签名: (occ : Option 自然数) (symm : 布尔) (e : Term) (loc : Option Name)
+  签名: (occ : 选项类型 自然数) (symm : 布尔值) (e : 项) (loc : 选项类型 Name)
   定义体: do
   let loc ← loc.mapM fun h => `(Lean.Parser.Tactic.location| at $(mkIdent h):term)
   let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
@@ -815,7 +815,7 @@ definition tacticPasteString
 
 中文:
 定义 tacticPasteString
-  签名: (tac : TSyntax `tactic) (range : Lsp.Range)
+  签名: (tac : TSyntax `tactic) (range : Lsp.值域)
   定义体: do
   let column := range.start.character
   let indent := column
@@ -840,7 +840,7 @@ definition tacticSyntax
 
 中文:
 定义 tacticSyntax
-  签名: (rw : Rewrite) (occ : Option 自然数) (loc : Option Name)
+  签名: (rw : Rewrite) (occ : 选项类型 自然数) (loc : 选项类型 Name)
   定义体: withoutModifyingMCtx do
   -- we want the new metavariables to be printed as `?_` in the tactic syntax
   for (mvarId, _) in rw.extraGoals do mvarId.setTag .anonymous
@@ -875,17 +875,17 @@ structure RewriteInterface
     - makesNewMVars : Bool
 
 中文:
-结构 RewriteInterface
+结构 Rewrite整数erface
   参数: where
   公理与运算 (8 个):
-    - symm : 布尔
+    - symm : 布尔值
     - tactic : String
     - replacement : Expr
     - replacementString : String
-    - extraGoals : Array CodeWithInfos
+    - extraGoals : 数组 CodeWithInfos
     - prettyLemma : CodeWithInfos
     - lemmaType : Expr
-    - makesNewMVars : 布尔
+    - makesNewMVars : 布尔值
 -/
 structure RewriteInterface where
   /-- `symm` is `true` when rewriting from right to left -/
@@ -921,8 +921,8 @@ definition Rewrite.toInterface
       let extraGoal ← ppExprTagged (← instantiateMVa
 
 中文:
-定义 Rewrite.toInterface
-  签名: (rw : Rewrite) (name : Name oplus FVarId) (occ : Option 自然数)
+定义 Rewrite.to整数erface
+  签名: (rw : Rewrite) (name : Name oplus FVarId) (occ : 选项类型 自然数)
   定义体: do
   let tactic ← tacticSyntax rw occ loc
   let tactic ← tacticPasteString tactic range
@@ -996,8 +996,8 @@ definition getRewriteInterfaces
     filtr := filtr.push (← filterRewrites e rewrites (·.rep
 
 中文:
-定义 getRewriteInterfaces
-  签名: (e : Expr) (occ : Option 自然数) (loc : Option Name) (except : Option FVarId)
+定义 getRewrite整数erfaces
+  签名: (e : Expr) (occ : 选项类型 自然数) (loc : 选项类型 Name) (except : 选项类型 FVarId)
   定义体: do
   let mut filtr := #[]
   let mut all := #[]
@@ -1042,7 +1042,7 @@ definition pattern
 
 中文:
 定义 pattern
-  签名: {α} (type : Expr) (symm : 布尔) (k : Expr -> MetaM α)
+  签名: {α} (type : Expr) (symm : 布尔值) (k : Expr -> MetaM α)
   定义体: do
   forallTelescopeReducing type fun _ e => do
     let some (lhs, rhs) := eqOrIff? (← whnf e) | throwError "Expected equation, not {indentExpr e}"
@@ -1068,7 +1068,7 @@ definition renderRewrites
 
 中文:
 定义 renderRewrites
-  签名: (e : Expr) (results : Array (Array Rewrite整数erface × Kind))
+  签名: (e : Expr) (results : 数组 (数组 Rewrite整数erface × Kind))
   定义体: do
   let htmls ← results.filterMapM (renderSection showNames)
   if htmls.isEmpty then
@@ -1270,7 +1270,7 @@ return some "Pattern " +
 
 中文:
 定义 SectionToMessageData
-  签名: (sec : Array (Rewrite × Name) × 布尔)
+  签名: (sec : 数组 (Rewrite × Name) × 布尔值)
   定义体: do
   let rewrites ← sec.1.toList.mapM fun (rw, name) => rw.toMessageData name
   let rewrites : MessageData := .group (.joinSep rewrites "\n")

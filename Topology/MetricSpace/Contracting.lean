@@ -46,7 +46,7 @@ definition ContractingWith
 
 中文:
 定义 ContractingWith
-  签名: [EMetricSpace α] (K : 实数>=0) (f : α -> α)
+  签名: [广义度量空间 α] (K : 实数>=0) (f : α -> α)
   定义体: K < 1 ∧ LipschitzWith K f
 
 Depends on / 依赖: LipschitzWith
@@ -225,7 +225,7 @@ theorem restrict
 
 中文:
 定理 restrict
-  条件: (hf : ContractingWith K f) {s : Set α} (hs : MapsTo f s s)
+  条件: (hf : ContractingWith K f) {s : 集合 α} (hs : 映射到 f s s)
   证明: ⟨hf.1, fun x y => hf.2 x y⟩
 -/
 theorem restrict (hf : ContractingWith K f) {s : Set α} (hs : MapsTo f s s) :
@@ -255,7 +255,7 @@ theorem exists_fixedPoint
   ⟨y, isFixedPt_of_tendsto_iterate hy hf.2.continuous.continu
 
 中文:
-定理 exists_fixedPoint
+定理 存在_fixedPoint
   条件: (hf : ContractingWith K f) (x : α) (hx : edist x (f x) != ∞)
   证明: have : CauchySeq fun n => f^[n] x :=
     cauchySeq_of_edist_le_geometric K (edist x (f x)) (ENNReal.coe_lt_one_iff.2 hf.1) hx
@@ -459,8 +459,8 @@ theorem exists_fixedPoint'
     simp only [(· ∘ ·), MapsTo.iterate_restrict, MapsTo.val_restrict_app
 
 中文:
-定理 exists_fixedPoint'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+定理 存在_fixedPoint'
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: by
   have := hsc.completeSpace_coe
   rcases hf.exists_fixedPoint ⟨x, hxs⟩ hx with ⟨y, hfy, h_tendsto, hle⟩
@@ -495,7 +495,7 @@ definition efixedPoint'
 
 中文:
 定义 efixedPoint'
-  签名: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  签名: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   定义体: Classical.choose hf.exists_fixedPoint' hsc hsf hxs hx
 
 Depends on / 依赖: Classical, Classical.choose, exists_fixedPoint, hf.exists_fixedPoint
@@ -515,7 +515,7 @@ theorem efixedPoint_mem'
 
 中文:
 定理 efixedPoint_mem'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: (Classical.choose_spec <| hf.exists_fixedPoint' hsc hsf hxs hx).1
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_fixedPoint, hf.exists_fixedPoint
@@ -535,7 +535,7 @@ theorem efixedPoint_isFixedPt'
 
 中文:
 定理 efixedPoint_isFixedPt'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: (Classical.choose_spec <| hf.exists_fixedPoint' hsc hsf hxs hx).2.1
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_fixedPoint, hf.exists_fixedPoint
@@ -555,7 +555,7 @@ theorem tendsto_iterate_efixedPoint'
 
 中文:
 定理 tendsto_iterate_efixedPoint'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: (Classical.choose_spec <| hf.exists_fixedPoint' hsc hsf hxs hx).2.2.1
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_fixedPoint, hf.exists_fixedPoint
@@ -575,7 +575,7 @@ theorem apriori_edist_iterate_efixedPoint_le'
 
 中文:
 定理 apriori_edist_iterate_efixedPoint_le'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: (Classical.choose_spec <| hf.exists_fixedPoint' hsc hsf hxs hx).2.2.2 n
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_fixedPoint, hf.exists_fixedPoint
@@ -599,7 +599,7 @@ theorem edist_efixedPoint_le'
 
 中文:
 定理 edist_efixedPoint_le'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: by
   convert! hf.apriori_edist_iterate_efixedPoint_le' hsc hsf hxs hx 0
   rw [pow_zero]; rw [mul_one]
@@ -623,7 +623,7 @@ theorem edist_efixedPoint_lt_top'
 
 中文:
 定理 edist_efixedPoint_lt_top'
-  结论: {s : Set α} (hsc : IsComplete s) (hsf : MapsTo f s s)
+  结论: {s : 集合 α} (hsc : 是完备 s) (hsf : 映射到 f s s)
   证明: (hf.edist_efixedPoint_le' hsc hsf hxs hx).trans_lt
     (ENNReal.mul_ne_top hx <| ENNReal.inv_ne_top.2 hf.one_sub_K_ne_zero).lt_top
 
@@ -654,7 +654,7 @@ theorem efixedPoint_eq_of_edist_lt_top'
 
 中文:
 定理 efixedPoint_eq_of_edist_lt_top'
-  结论: (hf : ContractingWith K f) {s : Set α} (hsc : IsComplete s)
+  结论: (hf : ContractingWith K f) {s : 集合 α} (hsc : 是完备 s)
   证明: by
   refine (hf.eq_or_edist_eq_top_of_fixedPoints ?_ ?_).elim id fun h' => False.elim (ne_of_lt ?_ h')
     <;> try apply efixedPoint_isFixedPt'

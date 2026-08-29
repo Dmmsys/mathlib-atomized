@@ -99,7 +99,7 @@ theorem forall'
   proof: Prod.forall
 
 中文:
-定理 forall'
+定理 对任意'
   条件: {p : α -> β -> 命题}
   结论: (对任意 x : α × β, p x.1 x.2) ↔ 对任意 a b, p a b
   证明: Prod.forall
@@ -121,7 +121,7 @@ theorem exists'
 @[simp]
 
 中文:
-定理 exists'
+定理 存在'
   条件: {p : α -> β -> 命题}
   结论: (存在 x : α × β, p x.1 x.2) ↔ 存在 a b, p a b
   证明: Prod.exists
@@ -148,7 +148,7 @@ theorem snd_comp_mk
 中文:
 定理 snd_comp_mk
   条件: (x : α)
-  结论: Prod.snd ∘ (Prod.mk x : β -> α × β) = id
+  结论: 积类型.snd ∘ (积类型.mk x : β -> α × β) = id
   证明: rfl
 
 @[simp]
@@ -169,7 +169,7 @@ theorem fst_comp_mk
 中文:
 定理 fst_comp_mk
   条件: (x : α)
-  结论: Prod.fst ∘ (Prod.mk x : β -> α × β) = Function.const β x
+  结论: 积类型.fst ∘ (积类型.mk x : β -> α × β) = 函数.const β x
   证明: rfl
 -/
 theorem fst_comp_mk (x : α) : Prod.fst ∘ (Prod.mk x : β -> α × β) = Function.const β x :=
@@ -209,7 +209,7 @@ theorem map_fst'
 中文:
 定理 map_fst'
   条件: (f : α -> γ) (g : β -> δ)
-  结论: Prod.fst ∘ map f g = f ∘ Prod.fst
+  结论: 积类型.fst ∘ map f g = f ∘ 积类型.fst
   证明: funext map_fst f g
 
 Depends on / 依赖: map_fst
@@ -229,7 +229,7 @@ theorem map_snd'
 中文:
 定理 map_snd'
   条件: (f : α -> γ) (g : β -> δ)
-  结论: Prod.snd ∘ map f g = g ∘ Prod.snd
+  结论: 积类型.snd ∘ map f g = g ∘ 积类型.snd
   证明: funext map_snd f g
 
 Depends on / 依赖: map_snd
@@ -268,7 +268,7 @@ theorem mk_right_injective
 中文:
 定理 mk_right_injective
   条件: {α β : 类型} (a : α)
-  结论: (mk a : β -> α × β).Injective
+  结论: (mk a : β -> α × β).单射
   证明: by
   intro b₁ b₂ h
   simpa only [true_and, Prod.mk_inj, eq_self_iff_true] using h
@@ -293,7 +293,7 @@ theorem mk_left_injective
 中文:
 定理 mk_left_injective
   条件: {α β : 类型} (b : β)
-  结论: (fun a => mk a b : α -> α × β).Injective
+  结论: (fun a => mk a b : α -> α × β).单射
   证明: by
   intro b₁ b₂ h
   simpa only [and_true, eq_self_iff_true, mk_inj] using h
@@ -355,7 +355,7 @@ theorem map_def
 中文:
 定理 map_def
   条件: {f : α -> γ} {g : β -> δ}
-  结论: Prod.map f g = fun p : α × β => (f p.1, g p.2)
+  结论: 积类型.map f g = fun p : α × β => (f p.1, g p.2)
   证明: funext fun p => Prod.ext (map_fst f g p) (map_snd f g p)
 
 Depends on / 依赖: Prod.ext, map_fst, map_snd
@@ -413,8 +413,8 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  条件: [h : Nonempty β]
-  结论: Function.Surjective (@fst α β)
+  条件: [h : 非空 β]
+  结论: 函数.满射 (@fst α β)
   证明: fun x => h.elim fun y => ⟨⟨x, y⟩, rfl⟩
 
 Depends on / 依赖: h.elim
@@ -433,8 +433,8 @@ theorem snd_surjective
 
 中文:
 定理 snd_surjective
-  条件: [h : Nonempty α]
-  结论: Function.Surjective (@snd α β)
+  条件: [h : 非空 α]
+  结论: 函数.满射 (@snd α β)
   证明: fun y => h.elim fun x => ⟨⟨x, y⟩, rfl⟩
 
 Depends on / 依赖: h.elim
@@ -453,8 +453,8 @@ theorem fst_injective
 
 中文:
 定理 fst_injective
-  条件: [Subsingleton β]
-  结论: Function.Injective (@fst α β)
+  条件: [子单例 β]
+  结论: 函数.单射 (@fst α β)
   证明: fun _ _ h => Prod.ext h (Subsingleton.elim _ _)
 
 Depends on / 依赖: Prod.ext, Subsingleton, Subsingleton.elim
@@ -475,8 +475,8 @@ theorem snd_injective
 
 中文:
 定理 snd_injective
-  条件: [Subsingleton α]
-  结论: Function.Injective (@snd α β)
+  条件: [子单例 α]
+  结论: 函数.单射 (@snd α β)
   证明: fun _ _ h => Prod.ext (Subsingleton.elim _ _) h
 
 @[simp]
@@ -499,7 +499,7 @@ theorem swap_leftInverse
 
 中文:
 定理 swap_leftInverse
-  结论: Function.LeftInverse (@swap α β) swap
+  结论: 函数.左逆 (@swap α β) swap
   证明: swap_swap
 
 @[simp]
@@ -520,7 +520,7 @@ theorem swap_rightInverse
 
 中文:
 定理 swap_rightInverse
-  结论: Function.RightInverse (@swap α β) swap
+  结论: 函数.右逆 (@swap α β) swap
   证明: swap_swap
 
 Depends on / 依赖: swap_swap
@@ -538,7 +538,7 @@ theorem swap_injective
 
 中文:
 定理 swap_injective
-  结论: Function.Injective (@swap α β)
+  结论: 函数.单射 (@swap α β)
   证明: swap_leftInverse.injective
 
 Depends on / 依赖: injective, swap_leftInverse, swap_leftInverse.injective
@@ -556,7 +556,7 @@ theorem swap_surjective
 
 中文:
 定理 swap_surjective
-  结论: Function.Surjective (@swap α β)
+  结论: 函数.满射 (@swap α β)
   证明: swap_leftInverse.surjective
 
 Depends on / 依赖: surjective, swap_leftInverse, swap_leftInverse.surjective
@@ -574,7 +574,7 @@ theorem swap_bijective
 
 中文:
 定理 swap_bijective
-  结论: Function.Bijective (@swap α β)
+  结论: 函数.双射 (@swap α β)
   证明: ⟨swap_injective, swap_surjective⟩
 
 Depends on / 依赖: swap_injective, swap_surjective
@@ -591,7 +591,7 @@ theorem _root_.Function.Semiconj.swap_map
   proof: Function.semiconj_iff_comp_eq.2 (map_comp_swap g f).symm
 
 中文:
-定理 _root_.Function.Semiconj.swap_map
+定理 _root_.函数.Semiconj.swap_map
   条件: (f : α -> α) (g : β -> β)
   证明: Function.semiconj_iff_comp_eq.2 (map_comp_swap g f).symm
 
@@ -655,7 +655,7 @@ lemma lex_iff
 
 中文:
 引理 lex_iff
-  结论: Prod.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2
+  结论: 积类型.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2
   证明: lex_def
 
 Depends on / 依赖: lex_def
@@ -698,7 +698,7 @@ theorem Lex.refl_left
 中文:
 定理 Lex.refl_left
   条件: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.Refl r]
-  结论: 对任意 x, Prod.Lex r s x x
+  结论: 对任意 x, 积类型.Lex r s x x
 -/
 theorem Lex.refl_left (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl r] : forall x, Prod.Lex r s x x
   | (_, _) => Lex.left _ _ (refl _)
@@ -718,7 +718,7 @@ theorem Lex.refl_right
 中文:
 定理 Lex.refl_right
   条件: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.Refl s]
-  结论: 对任意 x, Prod.Lex r s x x
+  结论: 对任意 x, 积类型.Lex r s x x
 -/
 theorem Lex.refl_right (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl s] : forall x, Prod.Lex r s x x
   | (_, _) => Lex.right _ (refl _)
@@ -736,7 +736,7 @@ instance [Std.Irrefl
 
 中文:
 实例 [Std.Irrefl
-  签名: r] [Std.Irrefl s] : Std.Irrefl (Prod.Lex r s)
+  签名: r] [Std.Irrefl s] : Std.Irrefl (积类型.Lex r s)
   定义体: ⟨by rintro ⟨i, a⟩ (⟨_, _, h⟩ | ⟨_, h⟩) <;> exact irrefl _ h⟩
 
 Depends on / 依赖: irrefl
@@ -755,7 +755,7 @@ theorem Lex.trans
 
 中文:
 定理 Lex.trans
-  条件: {r : α -> α -> 命题} {s : β -> β -> 命题} [IsTrans α r] [IsTrans β s]
+  条件: {r : α -> α -> 命题} {s : β -> β -> 命题} [是Trans α r] [是Trans β s]
 -/
 theorem Lex.trans {r : α -> α -> Prop} {s : β -> β -> Prop} [IsTrans α r] [IsTrans β s] :
     forall {x y z : α × β}, Prod.Lex r s x y -> Prod.Lex r s y z -> Prod.Lex r s x z
@@ -787,7 +787,7 @@ instance total_left
 
 中文:
 实例 total_left
-  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.Total r]
+  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.全 r]
   定义体: ⟨fun ⟨a₁, _⟩ ⟨a₂, _⟩ => (Std.Total.total a₁ a₂).imp (Lex.left _ _) (Lex.left _ _)⟩
 
 Depends on / 依赖: Lex.left, Std.Total.total
@@ -810,7 +810,7 @@ instance total_right
 
 中文:
 实例 total_right
-  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.Trichotomous r] [Std.Total s]
+  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.三歧 r] [Std.全 s]
   定义体: ⟨fun ⟨i, a⟩ ⟨j, b⟩ => by
     obtain hij | rfl | hji := trichotomous_of r i j
     · exact Or.inl (.left _ _ hij)
@@ -842,7 +842,7 @@ instance trichotomous
 
 中文:
 实例 trichotomous
-  签名: [Std.Trichotomous r] [Std.Trichotomous s]
+  签名: [Std.三歧 r] [Std.三歧 s]
   定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap by
     intro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j
@@ -898,9 +898,9 @@ theorem Injective.prodMap
   proof: fun _ _ h => Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
 
 中文:
-定理 Injective.prodMap
-  条件: (hf : Injective f) (hg : Injective g)
-  结论: Injective (map f g)
+定理 单射.prodMap
+  条件: (hf : 单射 f) (hg : 单射 g)
+  结论: 单射 (map f g)
   证明: fun _ _ h => Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
 
 Depends on / 依赖: Prod.ext, Prod.fst, Prod.snd, congr_arg
@@ -921,9 +921,9 @@ theorem Surjective.prodMap
   ⟨(x, y), Prod.ext hx hy⟩
 
 中文:
-定理 Surjective.prodMap
-  条件: (hf : Surjective f) (hg : Surjective g)
-  结论: Surjective (map f g)
+定理 满射.prodMap
+  条件: (hf : 满射 f) (hg : 满射 g)
+  结论: 满射 (map f g)
   证明: fun p =>
   let ⟨x, hx⟩ := hf p.1
   let ⟨y, hy⟩ := hg p.2
@@ -947,9 +947,9 @@ theorem Bijective.prodMap
   proof: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2⟩
 
 中文:
-定理 Bijective.prodMap
-  条件: (hf : Bijective f) (hg : Bijective g)
-  结论: Bijective (map f g)
+定理 双射.prodMap
+  条件: (hf : 双射 f) (hg : 双射 g)
+  结论: 双射 (map f g)
   证明: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2⟩
 
 Depends on / 依赖: prodMap
@@ -966,8 +966,8 @@ theorem LeftInverse.prodMap
   proof: fun a => by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
 
 中文:
-定理 LeftInverse.prodMap
-  条件: (hf : LeftInverse f₁ f₂) (hg : LeftInverse g₁ g₂)
+定理 左逆.prodMap
+  条件: (hf : 左逆 f₁ f₂) (hg : 左逆 g₁ g₂)
   证明: fun a => by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
 
 Depends on / 依赖: Prod.map_map, comp_eq_id, hf.comp_eq_id, hg.comp_eq_id, map_id, map_map
@@ -984,7 +984,7 @@ theorem RightInverse.prodMap
   proof: LeftInverse.prodMap
 
 中文:
-定理 RightInverse.prodMap
+定理 右逆.prodMap
   证明: LeftInverse.prodMap
 
 Depends on / 依赖: LeftInverse, LeftInverse.prodMap, prodMap
@@ -1002,7 +1002,7 @@ theorem Involutive.prodMap
   proof: LeftInverse.prodMap
 
 中文:
-定理 Involutive.prodMap
+定理 对合.prodMap
   条件: {f : α -> α} {g : β -> β}
   证明: LeftInverse.prodMap
 
@@ -1037,7 +1037,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ}
+  条件: [非空 α] [非空 β] {f : α -> γ} {g : β -> δ}
   证明: ⟨fun h =>
     ⟨fun a₁ a₂ ha => by
       inhabit β
@@ -1084,7 +1084,7 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: [Nonempty γ] [Nonempty δ] {f : α -> γ} {g : β -> δ}
+  条件: [非空 γ] [非空 δ] {f : α -> γ} {g : β -> δ}
   证明: ⟨fun h =>
     ⟨fun c => by
       inhabit δ
@@ -1129,7 +1129,7 @@ theorem map_bijective
 
 中文:
 定理 map_bijective
-  条件: [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ}
+  条件: [非空 α] [非空 β] {f : α -> γ} {g : β -> δ}
   证明: by
   have := Nonempty.map f ‹_›
   have := Nonempty.map g ‹_›
@@ -1165,7 +1165,7 @@ theorem map_leftInverse
 
 中文:
 定理 map_leftInverse
-  结论: [Nonempty β] [Nonempty δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
+  结论: [非空 β] [非空 δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
   证明: ⟨fun h =>
     ⟨fun b => by
       inhabit δ
@@ -1203,7 +1203,7 @@ theorem map_rightInverse
 
 中文:
 定理 map_rightInverse
-  结论: [Nonempty α] [Nonempty γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
+  结论: [非空 α] [非空 γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
   证明: map_leftInverse
 
 @[simp]
@@ -1225,7 +1225,7 @@ theorem map_involutive
 
 中文:
 定理 map_involutive
-  条件: [Nonempty α] [Nonempty β] {f : α -> α} {g : β -> β}
+  条件: [非空 α] [非空 β] {f : α -> α} {g : β -> β}
   证明: map_leftInverse
 
 Depends on / 依赖: map_leftInverse

@@ -57,7 +57,7 @@ definition withDensity
 
 中文:
 定义 withDensity
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ] (f : α -> β -> 实数>=0∞)
+  签名: (κ : 核 α β) [是SFiniteKernel κ] (f : α -> β -> 实数>=0∞)
   定义体: @dite _ (Measurable (Function.uncurry f)) (Classical.dec _) (fun hf =>
     (⟨fun a => (κ a).withDensity (f a),
       by
@@ -86,7 +86,7 @@ theorem withDensity_of_not_measurable
 
 中文:
 定理 withDensity_of_not_measurable
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by exact dif_neg hf
 
 Depends on / 依赖: dif_neg
@@ -106,7 +106,7 @@ theorem withDensity_apply
 
 中文:
 定理 withDensity_apply
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [withDensity]; rw [dif_pos hf]
   rfl
@@ -133,7 +133,7 @@ nonrec lemma withDensity_congr_ae (κ : Kernel α β) [IsSFiniteKernel κ] {f g 
 
 中文:
 定理 withDensity_apply'
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [Kernel.withDensity_apply κ hf]; rw [withDensity_apply' _ s]
 
@@ -177,7 +177,7 @@ lemma withDensity_one
 
 中文:
 引理 withDensity_one
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   ext; rw [Kernel.withDensity_apply _ measurable_const]; simp
 
@@ -202,7 +202,7 @@ lemma withDensity_one'
 
 中文:
 引理 withDensity_one'
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (κ : 核 α β) [是SFiniteKernel κ]
   证明: Kernel.withDensity_one _
 
 @[simp]
@@ -226,7 +226,7 @@ lemma withDensity_zero
 
 中文:
 引理 withDensity_zero
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   ext; rw [Kernel.withDensity_apply _ measurable_const]; simp
 
@@ -249,7 +249,7 @@ lemma withDensity_zero'
 
 中文:
 引理 withDensity_zero'
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (κ : 核 α β) [是SFiniteKernel κ]
   证明: Kernel.withDensity_zero _
 
 Depends on / 依赖: Kernel, Kernel.withDensity_zero, withDensity_zero
@@ -269,7 +269,7 @@ theorem lintegral_withDensity
 
 中文:
 定理 lintegral_withDensity
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [Kernel.withDensity_apply _ hf]; rw [lintegral_withDensity_eq_lintegral_mul _ (Measurable.of_uncurry_left hf) hg]
   simp_rw [Pi.mul_apply]
@@ -295,7 +295,7 @@ theorem integral_withDensity
 
 中文:
 定理 integral_withDensity
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [Kernel.withDensity_apply]; rw [integral_withDensity_eq_integral_smul]
   · fun_prop
@@ -326,7 +326,7 @@ theorem withDensity_add_left
 
 中文:
 定理 withDensity_add_left
-  结论: (κ η : Kernel α β) [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  结论: (κ η : 核 α β) [是SFiniteKernel κ] [是SFiniteKernel η]
   证明: by
   by_cases hf : Measurable (Function.uncurry f)
   · ext a s
@@ -360,7 +360,7 @@ theorem withDensity_kernel_sum
 
 中文:
 定理 withDensity_kernel_sum
-  结论: [Countable ι] (κ : ι -> Kernel α β) (hκ : 对任意 i, IsSFiniteKernel (κ i))
+  结论: [可数 ι] (κ : ι -> 核 α β) (hκ : 对任意 i, 是SFiniteKernel (κ i))
   证明: by
   by_cases hf : Measurable (Function.uncurry f)
   · ext1 a
@@ -395,7 +395,7 @@ lemma withDensity_add_right
 
 中文:
 引理 withDensity_add_right
-  结论: [IsSFiniteKernel κ] {f g : α -> β -> 实数>=0∞}
+  结论: [是SFiniteKernel κ] {f g : α -> β -> 实数>=0∞}
   证明: by
   ext a
   rw [add_apply]; rw [Kernel.withDensity_apply _ hf]; rw [Kernel.withDensity_apply _ hg]; rw [Kernel.withDensity_apply]; rw [Pi.add_apply]; rw [MeasureTheory.withDensity_add_right]
@@ -427,7 +427,7 @@ lemma withDensity_sub_add_cancel
 
 中文:
 引理 withDensity_sub_add_cancel
-  结论: [IsSFiniteKernel κ] {f g : α -> β -> 实数>=0∞}
+  结论: [是SFiniteKernel κ] {f g : α -> β -> 实数>=0∞}
   证明: by
   rw [← withDensity_add_right _ hg]
   swap; · exact hf.sub hg
@@ -463,7 +463,7 @@ theorem withDensity_tsum
 
 中文:
 定理 withDensity_tsum
-  结论: [Countable ι] (κ : Kernel α β) [IsSFiniteKernel κ] {f : ι -> α -> β -> 实数>=0∞}
+  结论: [可数 ι] (κ : 核 α β) [是SFiniteKernel κ] {f : ι -> α -> β -> 实数>=0∞}
   证明: by
   have h_sum_a : forall a, Summable fun n => f n a := fun a => Pi.summable.mpr fun b => ENNReal.summable
   have h_sum : Summable fun n => f n := Pi.summable.mpr h_sum_a
@@ -512,7 +512,7 @@ theorem isFiniteKernel_withDensity_of_bounded
 
 中文:
 定理 isFiniteKernel_withDensity_of_bounded
-  结论: (κ : Kernel α β) [IsFiniteKernel κ] {B : 实数>=0∞}
+  结论: (κ : 核 α β) [是FiniteKernel κ] {B : 实数>=0∞}
   证明: by
   by_cases hf : Measurable (Function.uncurry f)
   · exact ⟨⟨B * κ.bound, ENNReal.mul_lt_top hB_top.lt_top κ.bound_lt_top, fun a => by
@@ -550,7 +550,7 @@ theorem isSFiniteKernel_withDensity_of_isFiniteKernel
 
 中文:
 定理 isSFiniteKernel_withDensity_of_isFiniteKernel
-  结论: (κ : Kernel α β) [IsFiniteKernel κ]
+  结论: (κ : 核 α β) [是FiniteKernel κ]
   证明: by
   -- We already have that for `f` bounded from above and a `κ` a finite kernel,
   -- `withDensity κ f` is finite. We write any function as a countable sum of bounded

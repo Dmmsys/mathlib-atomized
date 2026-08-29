@@ -72,12 +72,12 @@ structure ComplexShape
     - prev_eq : forall {i i' j}, Rel i j -> Rel i' j -> i = i'
 
 中文:
-结构 ComplexShape
+结构 余mplexShape
   参数: (ι : 类型)
   公理与运算 (3 个):
     - Rel : ι -> ι -> 命题
-    - next_eq : 对任意 {i j j'}, Rel i j -> Rel i j' -> j = j'
-    - prev_eq : 对任意 {i i' j}, Rel i j -> Rel i' j -> i = i'
+    - next_eq : 对任意 {i j j'}, 关系 i j -> 关系 i j' -> j = j'
+    - prev_eq : 对任意 {i i' j}, 关系 i j -> 关系 i' j -> i = i'
 
 Depends on / 依赖: ComplexShape, ComplexShape.Rel
 -/
@@ -139,7 +139,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (c : ComplexShape ι)
+  签名: (c : 余mplexShape ι)
   定义体: c.Rel j i
   next_eq w w' := c.prev_eq w w'
   prev_eq w w' := c.next_eq w w'
@@ -166,7 +166,7 @@ definition decidableRelSymm
 
 中文:
 定义 decidableRelSymm
-  签名: {α : 类型} (c : ComplexShape α) [DecidableRel c.Rel]
+  签名: {α : 类型} (c : 余mplexShape α) [DecidableRel c.关系]
   定义体: fun a b => decidable_of_iff (c.Rel b a) Iff.rfl
 
 @[simp]
@@ -189,7 +189,7 @@ theorem symm_symm
 
 中文:
 定理 symm_symm
-  条件: (c : ComplexShape ι)
+  条件: (c : 余mplexShape ι)
   结论: c.symm.symm = c
   证明: rfl
 -/
@@ -237,7 +237,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (c₁ c₂ : ComplexShape ι)
+  签名: (c₁ c₂ : 余mplexShape ι)
   定义体: Relation.Comp c₁.Rel c₂.Rel
   next_eq w w' := by
     obtain ⟨k, w₁, w₂⟩ := w
@@ -280,7 +280,7 @@ instance subsingleton_next
 
 中文:
 实例 subsingleton_next
-  签名: (c : ComplexShape ι) (i : ι)
+  签名: (c : 余mplexShape ι) (i : ι)
   定义体: by
   constructor
   rintro ⟨j, rij⟩ ⟨k, rik⟩
@@ -315,7 +315,7 @@ definition next
 
 中文:
 定义 next
-  签名: (c : ComplexShape ι) (i : ι)
+  签名: (c : 余mplexShape ι) (i : ι)
   定义体: if h : exists j, c.Rel i j then h.choose else i
 
 @[to_dual]
@@ -343,7 +343,7 @@ theorem next_eq'
 
 中文:
 定理 next_eq'
-  条件: (c : ComplexShape ι) {i j : ι} (h : c.Rel i j)
+  条件: (c : 余mplexShape ι) {i j : ι} (h : c.关系 i j)
   结论: c.next i = j
   证明: by
   apply c.next_eq _ h
@@ -374,7 +374,7 @@ lemma next_eq_self'
 
 中文:
 引理 next_eq_self'
-  条件: (c : ComplexShape ι) (j : ι) (hj : 对任意 k, ¬c.Rel j k)
+  条件: (c : 余mplexShape ι) (j : ι) (hj : 对任意 k, ¬c.关系 j k)
   证明: dif_neg (by simpa using hj)
 
 @[to_dual]
@@ -396,7 +396,7 @@ lemma next_eq_self
 
 中文:
 引理 next_eq_self
-  条件: (c : ComplexShape ι) (j : ι) (hj : ¬c.Rel j (c.next j))
+  条件: (c : 余mplexShape ι) (j : ι) (hj : ¬c.关系 j (c.next j))
   证明: c.next_eq_self' j (fun k hk' => hj (by simpa only [c.next_eq' hk'] using hk'))
 
 Depends on / 依赖: c.next_eq, c.next_eq_self, next_eq, next_eq_self
@@ -417,7 +417,7 @@ definition up'
 
 中文:
 定义 up'
-  签名: {α : 类型} [Add α] [IsRightCancelAdd α] (a : α)
+  签名: {α : 类型} [加法 α] [是右消去加法 α] (a : α)
   定义体: i + a = j
   next_eq hi hj := hi.symm.trans hj
   prev_eq hi hj := add_right_cancel (hi.trans hj.symm)
@@ -445,7 +445,7 @@ definition down'
 
 中文:
 定义 down'
-  签名: {α : 类型} [Add α] [IsRightCancelAdd α] (a : α)
+  签名: {α : 类型} [加法 α] [是右消去加法 α] (a : α)
   定义体: j + a = i
   next_eq hi hj := add_right_cancel (hi.trans hj.symm)
   prev_eq hi hj := hi.symm.trans hj
@@ -468,7 +468,7 @@ theorem up'_mk
 
 中文:
 定理 up'_mk
-  条件: {α : 类型} [Add α] [IsRightCancelAdd α] (a : α) (i j : α) (h : i + a = j)
+  条件: {α : 类型} [加法 α] [是右消去加法 α] (a : α) (i j : α) (h : i + a = j)
   证明: h
 -/
 theorem up'_mk {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) (i j : α) (h : i + a = j) :
@@ -491,7 +491,7 @@ definition up
 
 中文:
 定义 up
-  签名: (α : 类型) [Add α] [IsRightCancelAdd α] [One α]
+  签名: (α : 类型) [加法 α] [是右消去加法 α] [幺 α]
   定义体: up' 1
 
 @[to_dual (reorder := i j) down_mk]
@@ -510,7 +510,7 @@ theorem up_mk
 
 中文:
 定理 up_mk
-  条件: {α : 类型} [Add α] [IsRightCancelAdd α] [One α] (i j : α) (h : i + 1 = j)
+  条件: {α : 类型} [加法 α] [是右消去加法 α] [幺 α] (i j : α) (h : i + 1 = j)
   证明: up'_mk (1 : α) i j h
 -/
 theorem up_mk {α : Type*} [Add α] [IsRightCancelAdd α] [One α] (i j : α) (h : i + 1 = j) :
@@ -561,7 +561,7 @@ instance instDecidableRelRelUp
 
 中文:
 实例 instDecidableRelRelUp
-  签名: [One α]
+  签名: [幺 α]
   定义体: by
   dsimp [ComplexShape.up]; infer_instance
 

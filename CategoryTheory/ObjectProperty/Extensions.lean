@@ -45,10 +45,10 @@ class IsClosedUnderExtensions
     - prop_X₂_of_shortExact({S : ShortComplex C} (hS : S.ShortExact) (h₁ : P S.X₁) (h₃ : P S.X₃)) : P S.X₂
 
 中文:
-类 IsClosedUnderExtensions
+类 是ClosedUnderExtensions
   参数: : 命题 where
   公理与运算 (1 个):
-    - prop_X₂_of_shortExact({S : ShortComplex C} (hS : S.ShortExact) (h₁ : P S.X₁) (h₃ : P S.X₃)) : P S.X₂
+    - prop_X₂_of_shortExact({S : 短复形 C} (hS : S.短正合) (h₁ : P S.X₁) (h₃ : P S.X₃)) : P S.X₂
 -/
 class IsClosedUnderExtensions : Prop where
   prop_X₂_of_shortExact {S : ShortComplex C} (hS : S.ShortExact)
@@ -64,7 +64,7 @@ lemma prop_X₂_of_shortExact
 
 中文:
 引理 prop_X₂_of_shortExact
-  结论: [P.IsClosedUnderExtensions]
+  结论: [P.是ClosedUnderExtensions]
   证明: IsClosedUnderExtensions.prop_X₂_of_shortExact hS h₁ h₃
 
 Depends on / 依赖: IsClosedUnderExtensions, IsClosedUnderExtensions.prop_X
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Object命题erty C).IsClosedUnderExtensions
+  签名: (⊤ : ObjectProperty C).是ClosedUnderExtensions
   定义体: by simp
 -/
 instance : (⊤ : ObjectProperty C).IsClosedUnderExtensions where
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderExtensions (IsZero (C := C))
+  签名: 是ClosedUnderExtensions (是零 (C := C))
   定义体: hS.exact.isZero_of_both_isZero h₁ h₃
 
 Depends on / 依赖: t.isIso_truncGE_map_truncGE
@@ -121,7 +121,7 @@ instance [P.IsClosedUnderExtensions]
     exact P.prop_X₂_of_shortExact (hS.map F) h₁ h₃
 
 中文:
-实例 [P.IsClosedUnderExtensions]
+实例 [P.是ClosedUnderExtensions]
   签名: (F : D ⥤ C)
   定义体: by
     have := hS.mono_f
@@ -152,7 +152,7 @@ lemma prop_biprod
 
 中文:
 引理 prop_biprod
-  结论: {X₁ X₂ : C} (h₁ : P X₁) (h₂ : P X₂) [Preadditive C] [HasZeroObject C]
+  结论: {X₁ X₂ : C} (h₁ : P X₁) (h₂ : P X₂) [预加性 C] [有ZeroObject C]
   证明: P.prop_X₂_of_shortExact
     (ShortComplex.Splitting.ofHasBinaryBiproduct X₁ X₂).shortExact h₁ h₂
 

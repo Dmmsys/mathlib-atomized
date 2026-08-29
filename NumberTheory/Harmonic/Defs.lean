@@ -31,7 +31,7 @@ definition harmonic
 
 中文:
 定义 harmonic
-  签名: : 自然数 -> Rat
+  签名: : 自然数 -> 有理数
   定义体: fun n => ∑ i in Finset.range n, (↑(i + 1))⁻¹
 
 @[simp]

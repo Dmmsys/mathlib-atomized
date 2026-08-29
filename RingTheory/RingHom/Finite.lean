@@ -45,7 +45,7 @@ theorem finite_stableUnderComposition
 
 中文:
 定理 finite_stableUnderComposition
-  结论: StableUnderComposition @Finite
+  结论: StableUnderComposition @有限
   证明: by
   introv R hf hg
   exact hg.comp hf
@@ -69,7 +69,7 @@ theorem finite_respectsIso
 
 中文:
 定理 finite_respectsIso
-  结论: RespectsIso @Finite
+  结论: RespectsIso @有限
   证明: by
   apply finite_stableUnderComposition.respectsIso
   intros
@@ -92,7 +92,7 @@ lemma finite_containsIdentities
 
 中文:
 引理 finite_containsIdentities
-  结论: ContainsIdentities @Finite
+  结论: 余ntainsIdentities @有限
   证明: Finite.id
 
 Depends on / 依赖: Finite, Finite.id
@@ -113,7 +113,7 @@ theorem finite_isStableUnderBaseChange
 
 中文:
 定理 finite_isStableUnderBaseChange
-  结论: IsStableUnderBaseChange @Finite
+  结论: 是StableUnderBaseChange @有限
   证明: by
   refine IsStableUnderBaseChange.mk finite_respectsIso ?_
   simp only [finite_algebraMap]
@@ -155,8 +155,8 @@ theorem RingHom.finite_localizationPreserves
   
 
 中文:
-定理 RingHom.finite_localizationPreserves
-  结论: RingHom.LocalizationPreserves @RingHom.Finite
+定理 环态射.finite_localizationPreserves
+  结论: 环态射.LocalizationPreserves @环态射.有限
   证明: by
   introv R hf
   let := f.toAlgebra
@@ -192,8 +192,8 @@ theorem RingHom.localization_away_map_finite
   proof: finite_localizationPreserves.away f r _ _ hf
 
 中文:
-定理 RingHom.localization_away_map_finite
-  结论: (R S R' S' : 类型u) [CommRing R] [CommRing S]
+定理 环态射.localization_away_map_finite
+  结论: (R S R' S' : 类型u) [交换环 R] [交换环 S]
   证明: finite_localizationPreserves.away f r _ _ hf
 
 Depends on / 依赖: finite_localizationPreserves, finite_localizationPreserves.away
@@ -221,8 +221,8 @@ theorem RingHom.finite_ofLocalizationSpan
       (Localization.Away (f 
 
 中文:
-定理 RingHom.finite_ofLocalizationSpan
-  结论: RingHom.OfLocalizationSpan @RingHom.Finite
+定理 环态射.finite_ofLocalizationSpan
+  结论: 环态射.OfLocalizationSpan @环态射.有限
   证明: by
   classical
   rw [RingHom.ofLocalizationSpan_iff_finite]

@@ -105,7 +105,7 @@ lemma helly_theorem_corner
 
 中文:
 引理 helly_theorem_corner
-  结论: {F : ι -> Set E} {s : Finset ι}
+  结论: {F : ι -> 集合 E} {s : 有限集 ι}
   证明: h_inter s (by simp) h_card_small
 -/
 private lemma helly_theorem_corner {F : ι -> Set E} {s : Finset ι}
@@ -132,7 +132,7 @@ theorem helly_theorem'
 
 中文:
 定理 helly_theorem'
-  结论: {F : ι -> Set E} {s : Finset ι}
+  结论: {F : ι -> 集合 E} {s : 有限集 ι}
   证明: by
   classical
   obtain h_card | h_card := lt_or_ge #s (finrank 𝕜 E + 1)
@@ -211,7 +211,7 @@ apply Set.Nonempty.mono biInter_mono hI_ss_J (fun _ _ => Set.Subset.rfl)
 
 中文:
 定理 helly_theorem
-  结论: {F : ι -> Set E} {s : Finset ι}
+  结论: {F : ι -> 集合 E} {s : 有限集 ι}
   证明: by
   apply helly_theorem' h_convex
   intro I hI_ss hI_card
@@ -248,7 +248,7 @@ theorem helly_theorem_set'
 
 中文:
 定理 helly_theorem_set'
-  结论: {F : Finset (Set E)}
+  结论: {F : 有限集 (集合 E)}
   证明: by
   classical -- for DecidableEq, required for the family version
   rw [show ⋂₀ F = ⋂ X in F]; rw [(X : Set E) by ext; simp]
@@ -286,7 +286,7 @@ theorem helly_theorem_set
 
 中文:
 定理 helly_theorem_set
-  结论: {F : Finset (Set E)}
+  结论: {F : 有限集 (集合 E)}
   证明: by
   apply helly_theorem_set' h_convex
   intro I hI_ss hI_card
@@ -325,7 +325,7 @@ theorem helly_theorem_compact'
 
 中文:
 定理 helly_theorem_compact'
-  结论: [TopologicalSpace E] [T2Space E] {F : ι -> Set E}
+  结论: [拓扑空间 E] [T2空间 E] {F : ι -> 集合 E}
   证明: by
   classical
   /- If `ι` is empty the statement is trivial. -/
@@ -376,7 +376,7 @@ theorem helly_theorem_compact
 
 中文:
 定理 helly_theorem_compact
-  结论: [TopologicalSpace E] [T2Space E] {F : ι -> Set E}
+  结论: [拓扑空间 E] [T2空间 E] {F : ι -> 集合 E}
   证明: by
   apply helly_theorem_compact' h_convex h_compact
   intro I hI_card
@@ -423,7 +423,7 @@ theorem helly_theorem_set_compact'
 
 中文:
 定理 helly_theorem_set_compact'
-  结论: [TopologicalSpace E] [T2Space E] {F : Set (Set E)}
+  结论: [拓扑空间 E] [T2空间 E] {F : 集合 (集合 E)}
   证明: by
   classical -- for DecidableEq, required for the family version
   rw [show ⋂₀ F = ⋂ X : F]; rw [(X : Set E) by ext; simp]
@@ -466,7 +466,7 @@ have hJ_fin : Fintype J := Finite.fintype finite_of_encard_eq_coe hJ
 
 中文:
 定理 helly_theorem_set_compact
-  结论: [TopologicalSpace E] [T2Space E] {F : Set (Set E)}
+  结论: [拓扑空间 E] [T2空间 E] {F : 集合 (集合 E)}
   证明: by
   apply helly_theorem_set_compact' h_convex h_compact
   intro I hI_ss hI_card

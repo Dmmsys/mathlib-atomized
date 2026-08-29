@@ -59,7 +59,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: : Ideal (Π i, R i) where
+  签名: : 理想 (Π i, R i) where
   定义体: { r | forall i, r i in I i }
   zero_mem' i := (I i).zero_mem
   add_mem' ha hb i := (I i).add_mem (ha i) (hb i)
@@ -132,7 +132,7 @@ theorem single_mem_pi
 中文:
 定理 single_mem_pi
   条件: [DecidableEq ι] {i : ι} {r : R i} (hr : r in I i)
-  结论: Pi.single i r in pi I
+  结论: 依赖函数类型.single i r in pi I
   证明: by
   intro j
   obtain rfl | ne := eq_or_ne i j
@@ -368,7 +368,7 @@ theorem sum_pow_mem_span_pow
 
 中文:
 定理 sum_pow_mem_span_pow
-  条件: {ι} (s : Finset ι) (f : ι -> α) (n : 自然数)
+  条件: {ι} (s : 有限集 ι) (f : ι -> α) (n : 自然数)
   证明: by
   classical
   simpa only [Multiset.card_map, Multiset.map_map, comp_apply, Multiset.toFinset_map,
@@ -401,7 +401,7 @@ theorem span_pow_eq_top
 
 中文:
 定理 span_pow_eq_top
-  条件: (s : Set α) (hs : span s = ⊤) (n : 自然数)
+  条件: (s : 集合 α) (hs : span s = ⊤) (n : 自然数)
   证明: by
   rw [eq_top_iff_one]
   rcases n with - | n
@@ -455,7 +455,7 @@ theorem span_range_pow_eq_top
 
 中文:
 定理 span_range_pow_eq_top
-  条件: (s : Set α) (hs : span s = ⊤) (n : s -> 自然数)
+  条件: (s : 集合 α) (hs : span s = ⊤) (n : s -> 自然数)
   证明: by
   have ⟨t, hts, mem⟩ := Submodule.mem_span_finite_of_mem_span ((eq_top_iff_one _).mp hs)
   refine top_unique ((span_pow_eq_top _ ((eq_top_iff_one _).mpr mem) <|
@@ -488,7 +488,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {ι : 类型} {f : ι -> α} {s : Finset ι}
+  结论: {ι : 类型} {f : ι -> α} {s : 有限集 ι}
   证明: by
   classical
   rw [Finset.prod_eq_prod_sdiff_singleton_mul hi]
@@ -521,7 +521,7 @@ lemma span_single_eq_top
 
 中文:
 引理 span_single_eq_top
-  结论: {ι : 类型} [DecidableEq ι] [Finite ι] (R : ι -> 类型)
+  结论: {ι : 类型} [DecidableEq ι] [有限 ι] (R : ι -> 类型)
   证明: by
   rw [_root_.eq_top_iff]
   rintro x -
@@ -569,7 +569,7 @@ definition equivFinTwo
 
 中文:
 定义 equivFinTwo
-  签名: : Ideal K ≃ Fin 2 where
+  签名: : 理想 K ≃ 有限集 2 where
   定义体: fun I => if I = ⊥ then 0 else 1
   invFun := ![⊥, ⊤]
   left_inv := fun I => by rcases eq_bot_or_top I with rfl | rfl <;> simp
@@ -591,7 +591,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (Ideal K)
+  签名: 有限 (理想 K)
   定义体: let _i := Classical.decEq (Ideal K); ⟨equivFinTwo K⟩
 
 Depends on / 依赖: Classical, Classical.decEq, equivFinTwo
@@ -608,7 +608,7 @@ instance isSimpleOrder
 
 中文:
 实例 isSimpleOrder
-  签名: : IsSimpleOrder (Ideal K)
+  签名: : 是单序 (理想 K)
   定义体: ⟨eq_bot_or_top⟩
 
 Depends on / 依赖: eq_bot_or_top, infer_instance, nhds_prod_eq
@@ -640,8 +640,8 @@ theorem exists_not_isUnit_of_not_isField
   exact ⟨x, hx, not_unit⟩
 
 中文:
-定理 exists_not_isUnit_of_not_isField
-  条件: [Nontrivial R] (hf : ¬IsField R)
+定理 存在_not_isUnit_of_not_isField
+  条件: [非平凡 R] (hf : ¬是域 R)
   证明: by
   have : ¬_ := fun h => hf ⟨exists_pair_ne R, mul_comm, h⟩
   simp_rw [isUnit_iff_exists_inv]
@@ -675,8 +675,8 @@ exact hx0 span_singleton_eq_bot.mp (hmax.eq_of_le (span_singleton_ne_top hxu) bo
 
 中文:
 定理 isField_iff_maximal_bot
-  条件: [Nontrivial R]
-  结论: IsField R ↔ (⊥ : Ideal R).IsMaximal
+  条件: [非平凡 R]
+  结论: 是域 R ↔ (⊥ : 理想 R).是极大
   证明: by
   refine ⟨fun h => let := h.toSemifield; bot_isMaximal, fun hmax => ?_⟩
   by_contra hf
@@ -703,8 +703,8 @@ theorem exists_maximal_of_not_isField
   refine isField_iff_maximal_bot.mpr ⟨⟨bot_ne_top, Ideal.maximal_of_no_maximal h⟩⟩
 
 中文:
-定理 exists_maximal_of_not_isField
-  条件: [Nontrivial R] (h : ¬ IsField R)
+定理 存在_maximal_of_not_isField
+  条件: [非平凡 R] (h : ¬ 是域 R)
   证明: by
   contrapose! h
   simp only [← bot_lt_iff_ne_bot] at h
@@ -730,7 +730,7 @@ theorem not_isField_of_ne_of_ne
 
 中文:
 定理 not_isField_of_ne_of_ne
-  条件: [Nontrivial R] {I : Ideal R} (h_bot : I != ⊥) (h_top : I != ⊤)
+  条件: [非平凡 R] {I : 理想 R} (h_bot : I != ⊥) (h_top : I != ⊤)
   证明: by
   contrapose h_bot
   exact ((isField_iff_maximal_bot.mp h_bot).eq_of_le h_top bot_le).symm
@@ -754,8 +754,8 @@ theorem not_isField_iff_exists_ideal_bot_lt_and_lt_top
   exact ⟨I, bot_lt_iff_ne_bot.mpr hI, lt_top_iff_ne_top.mpr hIm.ne_top⟩
 
 中文:
-定理 not_isField_iff_exists_ideal_bot_lt_and_lt_top
-  条件: [Nontrivial R]
+定理 not_isField_iff_存在_ideal_bot_lt_and_lt_top
+  条件: [非平凡 R]
   证明: by
   refine ⟨fun h => ?_, fun ⟨I, h_bot, h_top⟩ => not_isField_of_ne_of_ne h_bot.ne' h_top.ne⟩
   obtain ⟨I, hI, hIm⟩ := exists_maximal_of_not_isField h
@@ -781,8 +781,8 @@ theorem not_isField_iff_exists_prime
   exact ⟨I, hI, hIm.isPrime⟩
 
 中文:
-定理 not_isField_iff_exists_prime
-  条件: [Nontrivial R]
+定理 not_isField_iff_存在_prime
+  条件: [非平凡 R]
   证明: by
   refine ⟨fun h => ?_, fun ⟨I, h_bot, h_top⟩ => not_isField_of_ne_of_ne h_bot h_top.ne_top⟩
   obtain ⟨I, hI, hIm⟩ := exists_maximal_of_not_isField h
@@ -813,7 +813,7 @@ theorem isField_iff_isSimpleOrder_ideal
 
 中文:
 定理 isField_iff_isSimpleOrder_ideal
-  结论: IsField R ↔ IsSimpleOrder (Ideal R)
+  结论: 是域 R ↔ 是单序 (理想 R)
   证明: by
   cases subsingleton_or_nontrivial R
   · exact
@@ -848,7 +848,7 @@ theorem ne_bot_of_isMaximal_of_not_isField
 
 中文:
 定理 ne_bot_of_isMaximal_of_not_isField
-  结论: [Nontrivial R] {M : Ideal R} (max : M.IsMaximal)
+  结论: [非平凡 R] {M : 理想 R} (最大值 : M.是极大)
   证明: by
   rintro rfl
   obtain ⟨I, hIbot, hItop⟩ := not_isField_iff_exists_ideal_bot_lt_and_lt_top.mp not_field
@@ -879,7 +879,7 @@ theorem bot_lt_of_maximal
 
 中文:
 定理 bot_lt_of_maximal
-  条件: (M : Ideal R) [hm : M.IsMaximal] (non_field : ¬IsField R)
+  条件: (M : 理想 R) [hm : M.是极大] (non_field : ¬是域 R)
   结论: ⊥ < M
   证明: (Ring.ne_bot_of_isMaximal_of_not_isField hm non_field).bot_lt
 

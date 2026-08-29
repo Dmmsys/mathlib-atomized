@@ -62,7 +62,7 @@ lemma Commute.function_commute_mul_left
 中文:
 引理 Commute.function_commute_mul_left
   条件: (h : Commute a b)
-  结论: Function.Commute (a * ·) (b * ·)
+  结论: 函数.Commute (a * ·) (b * ·)
   证明: SemiconjBy.function_semiconj_mul_left h
 
 @[to_additive]
@@ -108,7 +108,7 @@ lemma Commute.function_commute_mul_right
 中文:
 引理 Commute.function_commute_mul_right
   条件: (h : Commute a b)
-  结论: Function.Commute (· * a) (· * b)
+  结论: 函数.Commute (· * a) (· * b)
   证明: SemiconjBy.function_semiconj_mul_right_swap h
 
 Depends on / 依赖: SemiconjBy, SemiconjBy.function_semiconj_mul_right_swap, function_semiconj_mul_right_swap

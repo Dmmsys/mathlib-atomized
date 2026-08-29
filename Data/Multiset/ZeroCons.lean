@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Multiset α)
+  签名: 零 (Multiset α)
   定义体: ⟨Multiset.zero⟩
 
 Depends on / 依赖: Multiset, Multiset.zero
@@ -109,7 +109,7 @@ instance inhabitedMultiset
 
 中文:
 实例 inhabitedMultiset
-  签名: : Inhabited (Multiset α)
+  签名: : 可居 (Multiset α)
   定义体: ⟨0⟩
 -/
 instance inhabitedMultiset : Inhabited (Multiset α) :=
@@ -127,8 +127,8 @@ instance [IsEmpty
 @[simp]
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (Multiset α) where
+实例 [是空
+  签名: α] : 唯一 (Multiset α) where
   定义体: 0
   uniq := by rintro ⟨_ | ⟨a, l⟩⟩; exacts [rfl, isEmptyElim a]
 
@@ -192,7 +192,7 @@ theorem coe_eq_zero
 
 中文:
 定理 coe_eq_zero
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (l : Multiset α) = 0 ↔ l = []
   证明: Iff.trans coe_eq_coe perm_nil
 
@@ -212,7 +212,7 @@ theorem coe_eq_zero_iff_isEmpty
 
 中文:
 定理 coe_eq_zero_iff_isEmpty
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (l : Multiset α) = 0 ↔ l.isEmpty
   证明: Iff.trans (coe_eq_zero l) isEmpty_iff.symm
 
@@ -307,8 +307,8 @@ theorem cons_coe
 
 中文:
 定理 cons_coe
-  条件: (a : α) (l : List α)
-  结论: (a ::ₘ l : Multiset α) = (a :: l : List α)
+  条件: (a : α) (l : 列表 α)
+  结论: (a ::ₘ l : Multiset α) = (a :: l : 列表 α)
   证明: rfl
 
 @[simp]
@@ -619,7 +619,7 @@ theorem forall_mem_cons
   proof: Quotient.inductionOn' s fun _ => List.forall_mem_cons
 
 中文:
-定理 forall_mem_cons
+定理 对任意_mem_cons
   条件: {p : α -> 命题} {a : α} {s : Multiset α}
   证明: Quotient.inductionOn' s fun _ => List.forall_mem_cons
 
@@ -643,7 +643,7 @@ theorem exists_cons_of_mem
 @[simp, grind ←]
 
 中文:
-定理 exists_cons_of_mem
+定理 存在_cons_of_mem
   条件: {s : Multiset α} {a : α}
   结论: a in s -> 存在 t, s = a ::ₘ t
   证明: Quot.inductionOn s fun l (h : a in l) =>
@@ -690,7 +690,7 @@ theorem eq_zero_of_forall_notMem
   proof: Quot.inductionOn s fun l H => by rw [eq_nil_iff_forall_not_mem.mpr H]; rfl
 
 中文:
-定理 eq_zero_of_forall_notMem
+定理 eq_zero_of_对任意_notMem
   条件: {s : Multiset α}
   结论: (对任意 x, x ∉ s) -> s = 0
   证明: Quot.inductionOn s fun l H => by rw [eq_nil_iff_forall_not_mem.mpr H]; rfl
@@ -710,7 +710,7 @@ theorem eq_zero_iff_forall_notMem
   proof: ⟨fun h => h.symm ▸ fun _ => notMem_zero _, eq_zero_of_forall_notMem⟩
 
 中文:
-定理 eq_zero_iff_forall_notMem
+定理 eq_zero_iff_对任意_notMem
   条件: {s : Multiset α}
   结论: s = 0 ↔ 对任意 a, a ∉ s
   证明: ⟨fun h => h.symm ▸ fun _ => notMem_zero _, eq_zero_of_forall_notMem⟩
@@ -733,7 +733,7 @@ theorem exists_mem_of_ne_zero
     | a :: l, _ => ⟨a, by simp⟩
 
 中文:
-定理 exists_mem_of_ne_zero
+定理 存在_mem_of_ne_zero
   条件: {s : Multiset α}
   结论: s != 0 -> 存在 a : α, a in s
   证明: Quot.inductionOn s fun l hl =>
@@ -761,7 +761,7 @@ theorem empty_or_exists_mem
 @[simp]
 
 中文:
-定理 empty_or_exists_mem
+定理 empty_or_存在_mem
   条件: (s : Multiset α)
   结论: s = 0 ∨ 存在 a, a in s
   证明: or_iff_not_imp_left.mpr Multiset.exists_mem_of_ne_zero
@@ -892,7 +892,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton α (Multiset α)
+  签名: 单例 α (Multiset α)
   定义体: ⟨fun a => a ::ₘ 0⟩
 -/
 instance : Singleton α (Multiset α) :=
@@ -1061,7 +1061,7 @@ theorem coe_eq_singleton
 
 中文:
 定理 coe_eq_singleton
-  条件: {l : List α} {a : α}
+  条件: {l : 列表 α} {a : α}
   结论: (l : Multiset α) = {a} ↔ l = [a]
   证明: by
   rw [← coe_singleton]; rw [coe_eq_coe]; rw [List.perm_singleton]
@@ -1370,7 +1370,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Multiset α)
+  签名: 有底序 (Multiset α)
   定义体: 0
   bot_le := zero_le
 -/
@@ -1952,7 +1952,7 @@ theorem card_pos_iff_exists_mem
   proof: Quot.inductionOn s fun _l => length_pos_iff_exists_mem
 
 中文:
-定理 card_pos_iff_exists_mem
+定理 card_pos_iff_存在_mem
   条件: {s : Multiset α}
   结论: 0 < card s ↔ 存在 a, a in s
   证明: Quot.inductionOn s fun _l => length_pos_iff_exists_mem
@@ -2155,11 +2155,11 @@ inductive Rel
     - cons: {a b as bs} : r a b -> Rel r as bs -> Rel r (a ::ₘ as) (b ::ₘ bs)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: (r : α -> β -> 命题)
   构造子 (2 个):
-    - zero: Rel r 0 0
-    - cons: {a b as bs} : r a b -> Rel r as bs -> Rel r (a ::ₘ as) (b ::ₘ bs)
+    - zero: 关系 r 0 0
+    - cons: {a b as bs} : r a b -> 关系 r as bs -> 关系 r (a ::ₘ as) (b ::ₘ bs)
 
 Depends on / 依赖: Rel.cons, Rel.recOn, Rel.zero
 -/
@@ -2180,8 +2180,8 @@ theorem rel_flip_aux
 
 中文:
 定理 rel_flip_aux
-  条件: {s t} (h : Rel r s t)
-  结论: Rel (flip r) t s
+  条件: {s t} (h : 关系 r s t)
+  结论: 关系 (flip r) t s
   证明: Rel.recOn h Rel.zero fun h₀ _h₁ ih => Rel.cons h₀ ih
 -/
 private theorem rel_flip_aux {s t} (h : Rel r s t) : Rel (flip r) t s :=
@@ -2199,7 +2199,7 @@ theorem rel_flip
 中文:
 定理 rel_flip
   条件: {s t}
-  结论: Rel (flip r) s t ↔ Rel r t s
+  结论: 关系 (flip r) s t ↔ 关系 r t s
   证明: ⟨rel_flip_aux, rel_flip_aux⟩
 
 Depends on / 依赖: rel_flip_aux
@@ -2224,7 +2224,7 @@ theorem rel_refl_of_refl_on
 中文:
 定理 rel_refl_of_refl_on
   条件: {m : Multiset α} {r : α -> α -> 命题}
-  结论: (对任意 x in m, r x x) -> Rel r m m
+  结论: (对任意 x in m, r x x) -> 关系 r m m
   证明: by
   refine m.induction_on ?_ ?_
   · intros
@@ -2253,7 +2253,7 @@ theorem rel_eq_refl
 中文:
 定理 rel_eq_refl
   条件: {s : Multiset α}
-  结论: Rel (· = ·) s s
+  结论: 关系 (· = ·) s s
   证明: rel_refl_of_refl_on fun _x _hx => rfl
 
 Depends on / 依赖: rel_refl_of_refl_on
@@ -2278,7 +2278,7 @@ theorem rel_eq
 中文:
 定理 rel_eq
   条件: {s t : Multiset α}
-  结论: Rel (· = ·) s t ↔ s = t
+  结论: 关系 (· = ·) s t ↔ s = t
   证明: by
   constructor
   · intro h
@@ -2309,8 +2309,8 @@ theorem Rel.mono
     exact ih fun a' ha' b' hb' h' => h a' (mem_cons_of_mem ha') b' (mem_cons_of_mem hb') h'
 
 中文:
-定理 Rel.mono
-  结论: {r p : α -> β -> 命题} {s t} (hst : Rel r s t)
+定理 关系.mono
+  结论: {r p : α -> β -> 命题} {s t} (hst : 关系 r s t)
   证明: by
   induction hst with
   | zero => exact Rel.zero
@@ -2342,7 +2342,7 @@ theorem rel_flip_eq
 中文:
 定理 rel_flip_eq
   条件: {s t : Multiset α}
-  结论: Rel (fun a b => b = a) s t ↔ s = t
+  结论: 关系 (fun a b => b = a) s t ↔ s = t
   证明: show Rel (flip (· = ·)) s t ↔ s = t by rw [rel_flip, rel_eq, eq_comm]
 
 @[simp]
@@ -2367,7 +2367,7 @@ theorem rel_zero_left
 中文:
 定理 rel_zero_left
   条件: {b : Multiset β}
-  结论: Rel r 0 b ↔ b = 0
+  结论: 关系 r 0 b ↔ b = 0
   证明: by rw [rel_iff]; simp
 
 @[simp]
@@ -2389,7 +2389,7 @@ theorem rel_zero_right
 中文:
 定理 rel_zero_right
   条件: {a : Multiset α}
-  结论: Rel r a 0 ↔ a = 0
+  结论: 关系 r a 0 ↔ a = 0
   证明: by rw [rel_iff]; simp
 
 Depends on / 依赖: rel_iff
@@ -2480,7 +2480,7 @@ theorem card_eq_card_of_rel
 
 中文:
 定理 card_eq_card_of_rel
-  条件: {r : α -> β -> 命题} {s : Multiset α} {t : Multiset β} (h : Rel r s t)
+  条件: {r : α -> β -> 命题} {s : Multiset α} {t : Multiset β} (h : 关系 r s t)
   证明: by induction h <;> simp [*]
 -/
 theorem card_eq_card_of_rel {r : α -> β -> Prop} {s : Multiset α} {t : Multiset β} (h : Rel r s t) :
@@ -2503,7 +2503,7 @@ theorem exists_mem_of_rel_of_mem
       exact ⟨b, mem_cons.2 (Or.inr hbt), hab⟩
 
 中文:
-定理 exists_mem_of_rel_of_mem
+定理 存在_mem_of_rel_of_mem
   结论: {r : α -> β -> 命题} {s : Multiset α} {t : Multiset β}
   证明: by
   induction h with
@@ -2545,7 +2545,7 @@ theorem rel_of_forall
     obtain ⟨m', rf
 
 中文:
-定理 rel_of_forall
+定理 rel_of_对任意
   结论: {m1 m2 : Multiset α} {r : α -> α -> 命题} (h : 对任意 a b, a in m1 -> b in m2 -> r a b)
   证明: by
   revert m1
@@ -2589,8 +2589,8 @@ theorem Rel.trans
     exact Multiset.Rel.c
 
 中文:
-定理 Rel.trans
-  结论: (r : α -> α -> 命题) [IsTrans α r] {s t u : Multiset α} (r1 : Rel r s t)
+定理 关系.trans
+  结论: (r : α -> α -> 命题) [是Trans α r] {s t u : Multiset α} (r1 : 关系 r s t)
   证明: by
   induction t using Multiset.induction_on generalizing s u with
   | empty => rw [rel_zero_right.mp r1, rel_zero_left.mp r2, rel_zero_left]
@@ -2625,7 +2625,7 @@ theorem pairwise_zero
 中文:
 定理 pairwise_zero
   条件: (r : α -> α -> 命题)
-  结论: Multiset.Pairwise r 0
+  结论: Multiset.两两 r 0
   证明: ⟨[], rfl, List.Pairwise.nil⟩
 
 Depends on / 依赖: List.Pairwise.nil, Pairwise

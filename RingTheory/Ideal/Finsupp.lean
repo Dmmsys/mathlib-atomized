@@ -28,8 +28,8 @@ lemma Finsupp.submodule_smul
   simp only [Finsupp.submodule_eq_iSup, Submodule.map_smul'', ← Submodule.smul_iSup]
 
 中文:
-引理 Finsupp.submodule_smul
-  结论: {M : 类型} [AddCommGroup M] [Module R M]
+引理 有限支撑.submodule_smul
+  结论: {M : 类型} [加法交换群 M] [模 R M]
   证明: by
   simp only [Finsupp.submodule_eq_iSup, Submodule.map_smul'', ← Submodule.smul_iSup]
 

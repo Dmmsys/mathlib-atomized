@@ -32,7 +32,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
+  签名: [半环 R] [加法交换幺半群 M] [加法交换幺半群 N] [模 R M] [模 R N]
   定义体: by ext <;> exact add_smul ..
   zero_smul _ := by ext <;> exact zero_smul ..
 

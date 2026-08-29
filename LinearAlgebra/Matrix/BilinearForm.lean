@@ -57,8 +57,8 @@ definition Matrix.toBilin'Aux
   body: Matrix.toLinearMap₂'Aux _ _ M
 
 中文:
-定义 Matrix.toBilin'Aux
-  签名: [Fintype n] (M : Matrix n n R₁)
+定义 矩阵.toBilin'Aux
+  签名: [有限类型 n] (M : 矩阵 n n R₁)
   定义体: Matrix.toLinearMap₂'Aux _ _ M
 
 Depends on / 依赖: Matrix, Matrix.toLinearMap
@@ -75,8 +75,8 @@ theorem Matrix.toBilin'Aux_single
   proof: Matrix.toLinearMap₂'Aux_single _ _ _ _ _
 
 中文:
-定理 Matrix.toBilin'Aux_single
-  条件: [Fintype n] [DecidableEq n] (M : Matrix n n R₁) (i j : n)
+定理 矩阵.toBilin'Aux_single
+  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 n n R₁) (i j : n)
   证明: Matrix.toLinearMap₂'Aux_single _ _ _ _ _
 -/
 theorem Matrix.toBilin'Aux_single [Fintype n] [DecidableEq n] (M : Matrix n n R₁) (i j : n) :
@@ -96,7 +96,7 @@ definition LinearMap.BilinForm.toMatrixAux
 @[simp]
 
 中文:
-定义 LinearMap.BilinForm.toMatrixAux
+定义 线性映射.BilinForm.toMatrixAux
   签名: (b : n -> M₁)
   定义体: LinearMap.toMatrix₂Aux R₁ b b
 
@@ -121,7 +121,7 @@ theorem LinearMap.BilinForm.toMatrixAux_apply
   proof: LinearMap.toMatrix₂Aux_apply R₁ B _ _ _ _
 
 中文:
-定理 LinearMap.BilinForm.toMatrixAux_apply
+定理 线性映射.BilinForm.toMatrixAux_apply
   条件: (B : BilinForm R₁ M₁) (b : n -> M₁) (i j : n)
   证明: LinearMap.toMatrix₂Aux_apply R₁ B _ _ _ _
 
@@ -146,7 +146,7 @@ theorem LinearMap.toBilin'Aux_toMatrixAux
   LinearMap.toBilin'Aux_toMatrixAux
 
 中文:
-定理 LinearMap.toBilin'Aux_toMatrixAux
+定理 线性映射.toBilin'Aux_toMatrixAux
   条件: [DecidableEq n] (B₂ : BilinForm R₁ (n -> R₁))
   证明: by
   rw [BilinForm.toMatrixAux]; rw [Matrix.toBilin'Aux]; rw [toLinearMap₂'Aux_toMatrix₂Aux]
@@ -182,8 +182,8 @@ definition LinearMap.BilinForm.toMatrix'
   body: LinearMap.toMatrix₂' R₁
 
 中文:
-定义 LinearMap.BilinForm.toMatrix'
-  签名: : BilinForm R₁ (n -> R₁) ≃ₗ[R₁] Matrix n n R₁
+定义 线性映射.BilinForm.toMatrix'
+  签名: : BilinForm R₁ (n -> R₁) ≃ₗ[R₁] 矩阵 n n R₁
   定义体: LinearMap.toMatrix₂' R₁
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix
@@ -202,8 +202,8 @@ definition Matrix.toBilin'
 @[simp]
 
 中文:
-定义 Matrix.toBilin'
-  签名: : Matrix n n R₁ ≃ₗ[R₁] BilinForm R₁ (n -> R₁)
+定义 矩阵.toBilin'
+  签名: : 矩阵 n n R₁ ≃ₗ[R₁] BilinForm R₁ (n -> R₁)
   定义体: BilinForm.toMatrix'.symm
 
 @[simp]
@@ -222,9 +222,9 @@ theorem Matrix.toBilin'Aux_eq
   proof: rfl
 
 中文:
-定理 Matrix.toBilin'Aux_eq
-  条件: (M : Matrix n n R₁)
-  结论: Matrix.toBilin'Aux M = Matrix.toBilin' M
+定理 矩阵.toBilin'Aux_eq
+  条件: (M : 矩阵 n n R₁)
+  结论: 矩阵.toBilin'Aux M = 矩阵.toBilin' M
   证明: rfl
 -/
 theorem Matrix.toBilin'Aux_eq (M : Matrix n n R₁) : Matrix.toBilin'Aux M = Matrix.toBilin' M :=
@@ -240,8 +240,8 @@ theorem Matrix.toBilin'_apply
     (by simp only [smul_eq_mul, mul_comm, mul_left_comm])
 
 中文:
-定理 Matrix.toBilin'_apply
-  条件: (M : Matrix n n R₁) (x y : n -> R₁)
+定理 矩阵.toBilin'_apply
+  条件: (M : 矩阵 n n R₁) (x y : n -> R₁)
   证明: (Matrix.toLinearMap₂'_apply _ _ _).trans
     (by simp only [smul_eq_mul, mul_comm, mul_left_comm])
 -/
@@ -261,8 +261,8 @@ theorem Matrix.toBilin'_apply'
 @[simp]
 
 中文:
-定理 Matrix.toBilin'_apply'
-  条件: (M : Matrix n n R₁) (v w : n -> R₁)
+定理 矩阵.toBilin'_apply'
+  条件: (M : 矩阵 n n R₁) (v w : n -> R₁)
   证明: Matrix.toLinearMap₂'_apply' _ _ _
 
 @[simp]
@@ -283,8 +283,8 @@ theorem Matrix.toBilin'_single
 @[simp]
 
 中文:
-定理 Matrix.toBilin'_single
-  条件: (M : Matrix n n R₁) (i j : n)
+定理 矩阵.toBilin'_single
+  条件: (M : 矩阵 n n R₁) (i j : n)
   证明: by
   simp [Matrix.toBilin'_apply, Pi.single_apply]
 
@@ -305,7 +305,7 @@ theorem LinearMap.BilinForm.toMatrix'_symm
 @[simp]
 
 中文:
-定理 LinearMap.BilinForm.toMatrix'_symm
+定理 线性映射.BilinForm.toMatrix'_symm
   证明: rfl
 
 @[simp]
@@ -325,7 +325,7 @@ theorem Matrix.toBilin'_symm
 @[simp]
 
 中文:
-定理 Matrix.toBilin'_symm
+定理 矩阵.toBilin'_symm
   证明: BilinForm.toMatrix'.symm_symm
 
 @[simp]
@@ -344,7 +344,7 @@ theorem Matrix.toBilin'_toMatrix'
   proof: Matrix.toBilin'.apply_symm_apply B
 
 中文:
-定理 Matrix.toBilin'_toMatrix'
+定理 矩阵.toBilin'_toMatrix'
   条件: (B : BilinForm R₁ (n -> R₁))
   证明: Matrix.toBilin'.apply_symm_apply B
 -/
@@ -367,7 +367,7 @@ theorem BilinForm.toMatrix'_toBilin'
 
 中文:
 定理 BilinForm.toMatrix'_toBilin'
-  条件: (M : Matrix n n R₁)
+  条件: (M : 矩阵 n n R₁)
   证明: (LinearMap.toMatrix₂' R₁).apply_symm_apply M
 
 @[simp]
@@ -462,7 +462,7 @@ theorem BilinForm.mul_toMatrix'_mul
 
 中文:
 定理 BilinForm.mul_toMatrix'_mul
-  结论: (B : BilinForm R₁ (n -> R₁)) (M : Matrix o n R₁)
+  结论: (B : BilinForm R₁ (n -> R₁)) (M : 矩阵 o n R₁)
   证明: B.mul_toMatrix₂'_mul _ _
 
 Depends on / 依赖: B.mul_toMatrix, _mul
@@ -481,7 +481,7 @@ theorem BilinForm.mul_toMatrix'
 
 中文:
 定理 BilinForm.mul_toMatrix'
-  条件: (B : BilinForm R₁ (n -> R₁)) (M : Matrix n n R₁)
+  条件: (B : BilinForm R₁ (n -> R₁)) (M : 矩阵 n n R₁)
   证明: LinearMap.mul_toMatrix' B _
 -/
 theorem BilinForm.mul_toMatrix' (B : BilinForm R₁ (n -> R₁)) (M : Matrix n n R₁) :
@@ -498,7 +498,7 @@ theorem BilinForm.toMatrix'_mul
 
 中文:
 定理 BilinForm.toMatrix'_mul
-  条件: (B : BilinForm R₁ (n -> R₁)) (M : Matrix n n R₁)
+  条件: (B : BilinForm R₁ (n -> R₁)) (M : 矩阵 n n R₁)
   证明: B.toMatrix₂'_mul _
 -/
 theorem BilinForm.toMatrix'_mul (B : BilinForm R₁ (n -> R₁)) (M : Matrix n n R₁) :
@@ -517,8 +517,8 @@ theorem Matrix.toBilin'_comp
     (by simp only [BilinForm.toMatrix'_comp, BilinForm.toMatrix'_toBilin', toMatrix'_toLin'])
 
 中文:
-定理 Matrix.toBilin'_comp
-  条件: (M : Matrix n n R₁) (P Q : Matrix n o R₁)
+定理 矩阵.toBilin'_comp
+  条件: (M : 矩阵 n n R₁) (P Q : 矩阵 n o R₁)
   证明: BilinForm.toMatrix'.injective
     (by simp only [BilinForm.toMatrix'_comp, BilinForm.toMatrix'_toBilin', toMatrix'_toLin'])
 -/
@@ -551,8 +551,8 @@ definition LinearMap.BilinForm.toMatrix
 @[deprecated (since := "2026-01-16")] alias BilinForm.toMatrix := LinearMap.BilinForm.toMatrix
 
 中文:
-定义 LinearMap.BilinForm.toMatrix
-  签名: : BilinForm R₁ M₁ ≃ₗ[R₁] Matrix n n R₁
+定义 线性映射.BilinForm.toMatrix
+  签名: : BilinForm R₁ M₁ ≃ₗ[R₁] 矩阵 n n R₁
   定义体: LinearMap.toMatrix₂ b b
 
 @[deprecated (since := "2026-01-16")] alias BilinForm.toMatrix := LinearMap.BilinForm.toMatrix
@@ -575,8 +575,8 @@ definition Matrix.toBilin
 @[simp]
 
 中文:
-定义 Matrix.toBilin
-  签名: : Matrix n n R₁ ≃ₗ[R₁] BilinForm R₁ M₁
+定义 矩阵.toBilin
+  签名: : 矩阵 n n R₁ ≃ₗ[R₁] BilinForm R₁ M₁
   定义体: (LinearMap.BilinForm.toMatrix b).symm
 
 @[simp]
@@ -599,7 +599,7 @@ theorem LinearMap.BilinForm.toMatrix_apply
 alias BilinForm.toMatrix_apply := LinearMap.BilinForm.toMatrix_apply
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_apply
+定理 线性映射.BilinForm.toMatrix_apply
   条件: (B : BilinForm R₁ M₁) (i j : n)
   证明: LinearMap.toMatrix₂_apply _ _ B _ _
 
@@ -627,7 +627,7 @@ theorem LinearMap.BilinForm.dotProduct_toMatrix_mulVec
 alias BilinForm.dotProduct_toMatrix_mulVec := LinearMap.BilinForm.dotProduct_toMatrix_mulVec
 
 中文:
-定理 LinearMap.BilinForm.dotProduct_toMatrix_mulVec
+定理 线性映射.BilinForm.dotProduct_toMatrix_mulVec
   条件: (B : BilinForm R₁ M₁) (x y : n -> R₁)
   证明: dotProduct_toMatrix₂_mulVec b b B x y
 
@@ -656,7 +656,7 @@ alias BilinForm.apply_eq_dotProduct_toMatrix_mulVec :=
 @[simp]
 
 中文:
-引理 LinearMap.BilinForm.apply_eq_dotProduct_toMatrix_mulVec
+引理 线性映射.BilinForm.apply_eq_dotProduct_toMatrix_mulVec
   条件: (B : BilinForm R₁ M₁) (x y : M₁)
   证明: apply_eq_dotProduct_toMatrix₂_mulVec b b B x y
 
@@ -685,8 +685,8 @@ theorem Matrix.toBilin_apply
     (by simp only [smul_eq_mul, mul_comm, mul_left_comm])
 
 中文:
-定理 Matrix.toBilin_apply
-  条件: (M : Matrix n n R₁) (x y : M₁)
+定理 矩阵.toBilin_apply
+  条件: (M : 矩阵 n n R₁) (x y : M₁)
   证明: (Matrix.toLinearMap₂_apply _ _ _ _ _).trans
     (by simp only [smul_eq_mul, mul_comm, mul_left_comm])
 
@@ -712,7 +712,7 @@ alias BilinearForm.toMatrixAux_eq := LinearMap.BilinForm.toMatrixAux_eq
 @[simp]
 
 中文:
-定理 LinearMap.BilinForm.toMatrixAux_eq
+定理 线性映射.BilinForm.toMatrixAux_eq
   条件: (B : BilinForm R₁ M₁)
   证明: LinearMap.toMatrix₂Aux_eq _ _ B
 
@@ -745,8 +745,8 @@ alias BilinForm.toMatrix_symm := LinearMap.BilinForm.toMatrix_symm
 @[simp]
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_symm
-  结论: (BilinForm.toMatrix b).symm = Matrix.toBilin b
+定理 线性映射.BilinForm.toMatrix_symm
+  结论: (BilinForm.toMatrix b).symm = 矩阵.toBilin b
   证明: rfl
 
 @[deprecated (since := "2026-01-16")]
@@ -770,8 +770,8 @@ theorem Matrix.toBilin_symm
   proof: (LinearMap.BilinForm.toMatrix b).symm_symm
 
 中文:
-定理 Matrix.toBilin_symm
-  结论: (Matrix.toBilin b).symm = LinearMap.BilinForm.toMatrix b
+定理 矩阵.toBilin_symm
+  结论: (矩阵.toBilin b).symm = 线性映射.BilinForm.toMatrix b
   证明: (LinearMap.BilinForm.toMatrix b).symm_symm
 
 Depends on / 依赖: BilinForm, LinearMap, LinearMap.BilinForm.toMatrix, symm_symm, toMatrix
@@ -791,8 +791,8 @@ theorem Matrix.toBilin_basisFun
     toBilin'_apply]
 
 中文:
-定理 Matrix.toBilin_basisFun
-  结论: Matrix.toBilin (Pi.basisFun R₁ n) = Matrix.toBilin'
+定理 矩阵.toBilin_basisFun
+  结论: 矩阵.toBilin (依赖函数类型.basisFun R₁ n) = 矩阵.toBilin'
   证明: by
   ext M
   simp only [coe_comp, coe_single, Function.comp_apply, toBilin_apply, Pi.basisFun_repr,
@@ -819,7 +819,7 @@ alias BilinForm.toMatrix_basisFun := LinearMap.BilinForm.toMatrix_basisFun
 @[simp]
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_basisFun
+定理 线性映射.BilinForm.toMatrix_basisFun
   证明: by
   rw [BilinForm.toMatrix]; rw [BilinForm.toMatrix']; rw [LinearMap.toMatrix₂_basisFun]
 
@@ -849,7 +849,7 @@ theorem Matrix.toBilin_toMatrix
 @[simp]
 
 中文:
-定理 Matrix.toBilin_toMatrix
+定理 矩阵.toBilin_toMatrix
   条件: (B : BilinForm R₁ M₁)
   证明: (Matrix.toBilin b).apply_symm_apply B
 
@@ -874,8 +874,8 @@ theorem LinearMap.BilinForm.toMatrix_toBilin
 alias BilinForm.toMatrix_toBilin := LinearMap.BilinForm.toMatrix_toBilin
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_toBilin
-  条件: (M : Matrix n n R₁)
+定理 线性映射.BilinForm.toMatrix_toBilin
+  条件: (M : 矩阵 n n R₁)
   证明: (BilinForm.toMatrix b).apply_symm_apply M
 
 @[deprecated (since := "2026-01-16")]
@@ -907,7 +907,7 @@ theorem LinearMap.BilinForm.toMatrix_comp
 alias BilinForm.toMatrix_comp := LinearMap.BilinForm.toMatrix_comp
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_comp
+定理 线性映射.BilinForm.toMatrix_comp
   条件: (B : BilinForm R₁ M₁) (l r : M₂' ->ₗ[R₁] M₁)
   证明: LinearMap.toMatrix₂_compl₁₂ _ _ _ _ B _ _
 
@@ -936,7 +936,7 @@ theorem LinearMap.BilinForm.toMatrix_compLeft
 alias BilinForm.toMatrix_compLeft := LinearMap.BilinForm.toMatrix_compLeft
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_compLeft
+定理 线性映射.BilinForm.toMatrix_compLeft
   条件: (B : BilinForm R₁ M₁) (f : M₁ ->ₗ[R₁] M₁)
   证明: LinearMap.toMatrix₂_comp _ _ _ B _
 
@@ -966,7 +966,7 @@ alias BilinForm.toMatrix_compRight := LinearMap.BilinForm.toMatrix_compRight
 @[simp]
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_compRight
+定理 线性映射.BilinForm.toMatrix_compRight
   条件: (B : BilinForm R₁ M₁) (f : M₁ ->ₗ[R₁] M₁)
   证明: LinearMap.toMatrix₂_compl₂ _ _ _ B _
 
@@ -997,8 +997,8 @@ theorem LinearMap.BilinForm.toMatrix_mul_basis_toMatrix
 alias BilinForm.toMatrix_mul_basis_toMatrix := LinearMap.BilinForm.toMatrix_mul_basis_toMatrix
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_mul_basis_toMatrix
-  条件: (c : Basis o R₁ M₁) (B : BilinForm R₁ M₁)
+定理 线性映射.BilinForm.toMatrix_mul_basis_toMatrix
+  条件: (c : 基 o R₁ M₁) (B : BilinForm R₁ M₁)
   证明: LinearMap.toMatrix₂_mul_basis_toMatrix _ _ _ _ B
 
 @[deprecated (since := "2026-01-16")]
@@ -1025,8 +1025,8 @@ theorem LinearMap.BilinForm.mul_toMatrix_mul
 alias BilinForm.mul_toMatrix_mul := LinearMap.BilinForm.mul_toMatrix_mul
 
 中文:
-定理 LinearMap.BilinForm.mul_toMatrix_mul
-  结论: (B : BilinForm R₁ M₁) (M : Matrix o n R₁)
+定理 线性映射.BilinForm.mul_toMatrix_mul
+  结论: (B : BilinForm R₁ M₁) (M : 矩阵 o n R₁)
   证明: LinearMap.mul_toMatrix₂_mul _ _ _ _ B _ _
 
 @[deprecated (since := "2026-01-16")]
@@ -1055,8 +1055,8 @@ theorem LinearMap.BilinForm.mul_toMatrix
 alias BilinForm.mul_toMatrix := LinearMap.BilinForm.mul_toMatrix
 
 中文:
-定理 LinearMap.BilinForm.mul_toMatrix
-  条件: (B : BilinForm R₁ M₁) (M : Matrix n n R₁)
+定理 线性映射.BilinForm.mul_toMatrix
+  条件: (B : BilinForm R₁ M₁) (M : 矩阵 n n R₁)
   证明: LinearMap.mul_toMatrix₂ _ _ _ B _
 
 @[deprecated (since := "2026-01-16")]
@@ -1083,8 +1083,8 @@ theorem LinearMap.BilinForm.toMatrix_mul
 alias BilinForm.toMatrix_mul := LinearMap.BilinForm.toMatrix_mul
 
 中文:
-定理 LinearMap.BilinForm.toMatrix_mul
-  条件: (B : BilinForm R₁ M₁) (M : Matrix n n R₁)
+定理 线性映射.BilinForm.toMatrix_mul
+  条件: (B : BilinForm R₁ M₁) (M : 矩阵 n n R₁)
   证明: LinearMap.toMatrix₂_mul _ _ _ B _
 
 @[deprecated (since := "2026-01-16")]
@@ -1113,8 +1113,8 @@ theorem Matrix.toBilin_comp
 @[simp]
 
 中文:
-定理 Matrix.toBilin_comp
-  条件: (M : Matrix n n R₁) (P Q : Matrix n o R₁)
+定理 矩阵.toBilin_comp
+  条件: (M : 矩阵 n n R₁) (P Q : 矩阵 n o R₁)
   证明: by
   ext x y
   rw [Matrix.toBilin]; rw [LinearMap.BilinForm.toMatrix]; rw [Matrix.toBilin]; rw [LinearMap.BilinForm.toMatrix]; rw [toMatrix₂_symm]; rw [toMatrix₂_symm]; rw [← Matrix.toLinearMap₂_compl₁₂ b b c c]
@@ -1143,7 +1143,7 @@ lemma LinearMap.BilinForm.isSymm_toMatrix_iff_isSymm
 @[simp]
 
 中文:
-引理 LinearMap.BilinForm.isSymm_toMatrix_iff_isSymm
+引理 线性映射.BilinForm.isSymm_toMatrix_iff_isSymm
   条件: {B : BilinForm R₁ M₁}
   证明: by
   simp [isSymm_iff, IsSymm.ext_iff, isSymm_iff_eq_flip, ext_iff_basis b, eq_comm]
@@ -1170,9 +1170,9 @@ lemma Matrix.isSymm_toBilin_iff_isSymm
 @[simp]
 
 中文:
-引理 Matrix.isSymm_toBilin_iff_isSymm
-  条件: {M : Matrix n n R₁}
-  结论: (M.toBilin b).IsSymm ↔ M.IsSymm
+引理 矩阵.isSymm_toBilin_iff_isSymm
+  条件: {M : 矩阵 n n R₁}
+  结论: (M.toBilin b).是Symm ↔ M.是Symm
   证明: by
   simp [← (M.toBilin b).isSymm_toMatrix_iff_isSymm b]
 
@@ -1195,7 +1195,7 @@ lemma LinearMap.BilinForm.isSymm_toMatrix'_iff_isSymm
 @[simp]
 
 中文:
-引理 LinearMap.BilinForm.isSymm_toMatrix'_iff_isSymm
+引理 线性映射.BilinForm.isSymm_toMatrix'_iff_isSymm
   条件: {B : BilinForm R₁ (n -> R₁)}
   证明: B.isSymm_toMatrix_iff_isSymm (Pi.basisFun R₁ n)
 
@@ -1219,9 +1219,9 @@ lemma Matrix.isSymm_toBilin'_iff_isSymm
   simp [← M.toBilin'.isSymm_toMatrix'_iff_isSymm]
 
 中文:
-引理 Matrix.isSymm_toBilin'_iff_isSymm
-  条件: {M : Matrix n n R₁}
-  结论: M.toBilin'.IsSymm ↔ M.IsSymm
+引理 矩阵.isSymm_toBilin'_iff_isSymm
+  条件: {M : 矩阵 n n R₁}
+  结论: M.toBilin'.是Symm ↔ M.是Symm
   证明: by
   simp [← M.toBilin'.isSymm_toMatrix'_iff_isSymm]
 
@@ -1251,8 +1251,8 @@ theorem Matrix.isAdjointPair_equiv'
   proof: Matrix.isAdjointPair_equiv _ _ _ _ h
 
 中文:
-定理 Matrix.isAdjointPair_equiv'
-  条件: [DecidableEq n] (P : Matrix n n R₂) (h : IsUnit P)
+定理 矩阵.isAdjointPair_equiv'
+  条件: [DecidableEq n] (P : 矩阵 n n R₂) (h : 是单位 P)
   证明: Matrix.isAdjointPair_equiv _ _ _ _ h
 
 Depends on / 依赖: Matrix, Matrix.isAdjointPair_equiv, isAdjointPair_equiv
@@ -1293,7 +1293,7 @@ definition selfAdjointMatricesSubmodule'
 
 中文:
 定义 selfAdjointMatricesSubmodule'
-  签名: : Submodule R₂ (Matrix n n R₂)
+  签名: : 子模 R₂ (矩阵 n n R₂)
   定义体: pairSelfAdjointMatricesSubmodule J J
 
 Depends on / 依赖: pairSelfAdjointMatricesSubmodule
@@ -1330,7 +1330,7 @@ definition skewAdjointMatricesSubmodule'
 
 中文:
 定义 skewAdjointMatricesSubmodule'
-  签名: : Submodule R₂ (Matrix n n R₂)
+  签名: : 子模 R₂ (矩阵 n n R₂)
   定义体: pairSelfAdjointMatricesSubmodule (-J) J
 
 Depends on / 依赖: pairSelfAdjointMatricesSubmodule
@@ -1379,8 +1379,8 @@ theorem _root_.Matrix.nondegenerate_toBilin'_iff_nondegenerate_toBilin
   proof: (nondegenerate_congr_iff b.equivFun.symm).symm
 
 中文:
-定理 _root_.Matrix.nondegenerate_toBilin'_iff_nondegenerate_toBilin
-  结论: {M : Matrix ι ι R₁}
+定理 _root_.矩阵.nondegenerate_toBilin'_iff_nondegenerate_toBilin
+  结论: {M : 矩阵 ι ι R₁}
   证明: (nondegenerate_congr_iff b.equivFun.symm).symm
 
 Depends on / 依赖: b.equivFun.symm, equivFun, nondegenerate_congr_iff
@@ -1401,8 +1401,8 @@ theorem _root_.Matrix.Nondegenerate.toBilin'
 @[simp]
 
 中文:
-定理 _root_.Matrix.Nondegenerate.toBilin'
-  条件: {M : Matrix ι ι R₂} (h : M.Nondegenerate)
+定理 _root_.矩阵.非退化.toBilin'
+  条件: {M : 矩阵 ι ι R₂} (h : M.非退化)
   证明: h.toLinearMap₂'
 
 @[simp]
@@ -1423,8 +1423,8 @@ theorem _root_.Matrix.nondegenerate_toBilin'_iff
   proof: Matrix.nondegenerate_toLinearMap₂'_iff
 
 中文:
-定理 _root_.Matrix.nondegenerate_toBilin'_iff
-  条件: {M : Matrix ι ι R₂}
+定理 _root_.矩阵.nondegenerate_toBilin'_iff
+  条件: {M : 矩阵 ι ι R₂}
   证明: Matrix.nondegenerate_toLinearMap₂'_iff
 -/
 theorem _root_.Matrix.nondegenerate_toBilin'_iff {M : Matrix ι ι R₂} :
@@ -1442,8 +1442,8 @@ theorem _root_.Matrix.Nondegenerate.toBilin
 @[simp]
 
 中文:
-定理 _root_.Matrix.Nondegenerate.toBilin
-  结论: {M : Matrix ι ι R₂} (h : M.Nondegenerate)
+定理 _root_.矩阵.非退化.toBilin
+  结论: {M : 矩阵 ι ι R₂} (h : M.非退化)
   证明: h.toLinearMap₂ b b
 
 @[simp]
@@ -1464,8 +1464,8 @@ theorem _root_.Matrix.nondegenerate_toBilin_iff
   proof: Matrix.nondegenerate_toLinearMap₂_iff b b
 
 中文:
-定理 _root_.Matrix.nondegenerate_toBilin_iff
-  条件: {M : Matrix ι ι R₂} (b : Basis ι R₂ M₂)
+定理 _root_.矩阵.nondegenerate_toBilin_iff
+  条件: {M : 矩阵 ι ι R₂} (b : 基 ι R₂ M₂)
   证明: Matrix.nondegenerate_toLinearMap₂_iff b b
 
 Depends on / 依赖: Matrix, Matrix.nondegenerate_toLinearMap
@@ -1486,8 +1486,8 @@ theorem _root_.Matrix.SeparatingLeft.toBilin'
 @[simp]
 
 中文:
-定理 _root_.Matrix.SeparatingLeft.toBilin'
-  条件: {M : Matrix ι ι R₂} (h : M.SeparatingLeft)
+定理 _root_.矩阵.SeparatingLeft.toBilin'
+  条件: {M : 矩阵 ι ι R₂} (h : M.SeparatingLeft)
   证明: h.toLinearMap₂'
 
 @[simp]
@@ -1508,8 +1508,8 @@ theorem _root_.Matrix.separatingLeft_toBilin'_iff
   proof: Matrix.separatingLeft_toLinearMap₂'_iff
 
 中文:
-定理 _root_.Matrix.separatingLeft_toBilin'_iff
-  条件: {M : Matrix ι ι R₂}
+定理 _root_.矩阵.separatingLeft_toBilin'_iff
+  条件: {M : 矩阵 ι ι R₂}
   证明: Matrix.separatingLeft_toLinearMap₂'_iff
 
 Depends on / 依赖: Matrix, Matrix.separatingLeft_toLinearMap, _iff
@@ -1529,8 +1529,8 @@ theorem _root_.Matrix.SeparatingLeft.toBilin
 @[simp]
 
 中文:
-定理 _root_.Matrix.SeparatingLeft.toBilin
-  结论: {M : Matrix ι ι R₂} (h : M.SeparatingLeft)
+定理 _root_.矩阵.SeparatingLeft.toBilin
+  结论: {M : 矩阵 ι ι R₂} (h : M.SeparatingLeft)
   证明: h.toLinearMap₂ b b
 
 @[simp]
@@ -1551,8 +1551,8 @@ theorem _root_.Matrix.separatingLeft_toBilin_iff
   proof: Matrix.separatingLeft_toLinearMap₂_iff b b
 
 中文:
-定理 _root_.Matrix.separatingLeft_toBilin_iff
-  条件: {M : Matrix ι ι R₂} (b : Basis ι R₂ M₂)
+定理 _root_.矩阵.separatingLeft_toBilin_iff
+  条件: {M : 矩阵 ι ι R₂} (b : 基 ι R₂ M₂)
   证明: Matrix.separatingLeft_toLinearMap₂_iff b b
 
 Depends on / 依赖: Matrix, Matrix.separatingLeft_toLinearMap
@@ -1573,8 +1573,8 @@ theorem _root_.Matrix.SeparatingRight.toBilin'
 @[simp]
 
 中文:
-定理 _root_.Matrix.SeparatingRight.toBilin'
-  条件: {M : Matrix ι ι R₂} (h : M.SeparatingRight)
+定理 _root_.矩阵.SeparatingRight.toBilin'
+  条件: {M : 矩阵 ι ι R₂} (h : M.SeparatingRight)
   证明: h.toLinearMap₂'
 
 @[simp]
@@ -1595,8 +1595,8 @@ theorem _root_.Matrix.separatingRight_toBilin'_iff
   proof: Matrix.separatingRight_toLinearMap₂'_iff
 
 中文:
-定理 _root_.Matrix.separatingRight_toBilin'_iff
-  条件: {M : Matrix ι ι R₂}
+定理 _root_.矩阵.separatingRight_toBilin'_iff
+  条件: {M : 矩阵 ι ι R₂}
   证明: Matrix.separatingRight_toLinearMap₂'_iff
 
 Depends on / 依赖: Matrix, Matrix.separatingRight_toLinearMap, _iff
@@ -1616,8 +1616,8 @@ theorem _root_.Matrix.SeparatingRight.toBilin
 @[simp]
 
 中文:
-定理 _root_.Matrix.SeparatingRight.toBilin
-  结论: {M : Matrix ι ι R₂} (h : M.SeparatingRight)
+定理 _root_.矩阵.SeparatingRight.toBilin
+  结论: {M : 矩阵 ι ι R₂} (h : M.SeparatingRight)
   证明: h.toLinearMap₂ b b
 
 @[simp]
@@ -1638,8 +1638,8 @@ theorem _root_.Matrix.separatingRight_toBilin_iff
   proof: Matrix.separatingRight_toLinearMap₂_iff b b
 
 中文:
-定理 _root_.Matrix.separatingRight_toBilin_iff
-  条件: {M : Matrix ι ι R₂} (b : Basis ι R₂ M₂)
+定理 _root_.矩阵.separatingRight_toBilin_iff
+  条件: {M : 矩阵 ι ι R₂} (b : 基 ι R₂ M₂)
   证明: Matrix.separatingRight_toLinearMap₂_iff b b
 
 Depends on / 依赖: Matrix, Matrix.separatingRight_toLinearMap
@@ -1685,8 +1685,8 @@ theorem Nondegenerate.toMatrix'
 @[simp]
 
 中文:
-定理 Nondegenerate.toMatrix'
-  条件: {B : BilinForm R₂ (ι -> R₂)} (h : B.Nondegenerate)
+定理 非退化.toMatrix'
+  条件: {B : BilinForm R₂ (ι -> R₂)} (h : B.非退化)
   证明: h.toMatrix₂'
 
 @[simp]
@@ -1708,7 +1708,7 @@ theorem nondegenerate_toMatrix_iff
 
 中文:
 定理 nondegenerate_toMatrix_iff
-  条件: {B : BilinForm R₂ M₂} (b : Basis ι R₂ M₂)
+  条件: {B : BilinForm R₂ M₂} (b : 基 ι R₂ M₂)
   证明: (Matrix.nondegenerate_toBilin_iff b).symm.trans (Matrix.toBilin_toMatrix b B).symm ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Matrix, Matrix.nondegenerate_toBilin_iff, Matrix.toBilin_toMatrix, nondegenerate_toBilin_iff, symm.trans, toBilin_toMatrix
@@ -1728,8 +1728,8 @@ theorem Nondegenerate.toMatrix
 @[simp]
 
 中文:
-定理 Nondegenerate.toMatrix
-  条件: {B : BilinForm R₂ M₂} (h : B.Nondegenerate) (b : Basis ι R₂ M₂)
+定理 非退化.toMatrix
+  条件: {B : BilinForm R₂ M₂} (h : B.非退化) (b : 基 ι R₂ M₂)
   证明: (nondegenerate_toMatrix_iff b).mpr h
 
 @[simp]
@@ -1794,7 +1794,7 @@ theorem separatingLeft_toMatrix_iff
 
 中文:
 定理 separatingLeft_toMatrix_iff
-  条件: {B : BilinForm R₂ M₂} (b : Basis ι R₂ M₂)
+  条件: {B : BilinForm R₂ M₂} (b : 基 ι R₂ M₂)
   证明: (Matrix.separatingLeft_toBilin_iff b).symm.trans (Matrix.toBilin_toMatrix b B).symm ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Matrix, Matrix.separatingLeft_toBilin_iff, Matrix.toBilin_toMatrix, separatingLeft_toBilin_iff, symm.trans, toBilin_toMatrix
@@ -1815,7 +1815,7 @@ theorem SeparatingLeft.toMatrix
 
 中文:
 定理 SeparatingLeft.toMatrix
-  条件: {B : BilinForm R₂ M₂} (h : B.SeparatingLeft) (b : Basis ι R₂ M₂)
+  条件: {B : BilinForm R₂ M₂} (h : B.SeparatingLeft) (b : 基 ι R₂ M₂)
   证明: (separatingLeft_toMatrix_iff b).mpr h
 
 @[simp]
@@ -1880,7 +1880,7 @@ theorem separatingRight_toMatrix_iff
 
 中文:
 定理 separatingRight_toMatrix_iff
-  条件: {B : BilinForm R₂ M₂} (b : Basis ι R₂ M₂)
+  条件: {B : BilinForm R₂ M₂} (b : 基 ι R₂ M₂)
   证明: (Matrix.separatingRight_toBilin_iff b).symm.trans (Matrix.toBilin_toMatrix b B).symm ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Matrix, Matrix.separatingRight_toBilin_iff, Matrix.toBilin_toMatrix, separatingRight_toBilin_iff, symm.trans, toBilin_toMatrix
@@ -1899,7 +1899,7 @@ theorem SeparatingRight.toMatrix
 
 中文:
 定理 SeparatingRight.toMatrix
-  条件: {B : BilinForm R₂ M₂} (h : B.SeparatingRight) (b : Basis ι R₂ M₂)
+  条件: {B : BilinForm R₂ M₂} (h : B.SeparatingRight) (b : 基 ι R₂ M₂)
   证明: (separatingRight_toMatrix_iff b).mpr h
 
 Depends on / 依赖: separatingRight_toMatrix_iff
@@ -1921,7 +1921,7 @@ theorem nondegenerate_toBilin'_iff_det_ne_zero
 
 中文:
 定理 nondegenerate_toBilin'_iff_det_ne_zero
-  条件: {M : Matrix ι ι A}
+  条件: {M : 矩阵 ι ι A}
   证明: by
   rw [Matrix.nondegenerate_toBilin'_iff]; rw [Matrix.nondegenerate_iff_det_ne_zero]
 
@@ -1941,7 +1941,7 @@ theorem nondegenerate_toBilin'_of_det_ne_zero'
 
 中文:
 定理 nondegenerate_toBilin'_of_det_ne_zero'
-  条件: (M : Matrix ι ι A) (h : M.det != 0)
+  条件: (M : 矩阵 ι ι A) (h : M.det != 0)
   证明: nondegenerate_toBilin'_iff_det_ne_zero.mpr h
 -/
 theorem nondegenerate_toBilin'_of_det_ne_zero' (M : Matrix ι ι A) (h : M.det != 0) :
@@ -1959,7 +1959,7 @@ theorem nondegenerate_iff_det_ne_zero
 
 中文:
 定理 nondegenerate_iff_det_ne_zero
-  条件: {B : BilinForm A M₂} (b : Basis ι A M₂)
+  条件: {B : BilinForm A M₂} (b : 基 ι A M₂)
   证明: by
   rw [← Matrix.nondegenerate_iff_det_ne_zero]; rw [nondegenerate_toMatrix_iff]
 
@@ -1979,7 +1979,7 @@ theorem nondegenerate_of_det_ne_zero
 
 中文:
 定理 nondegenerate_of_det_ne_zero
-  条件: (b : Basis ι A M₂) (h : (BilinForm.toMatrix b B₃).det != 0)
+  条件: (b : 基 ι A M₂) (h : (BilinForm.toMatrix b B₃).det != 0)
   证明: (nondegenerate_iff_det_ne_zero b).mpr h
 
 Depends on / 依赖: nondegenerate_iff_det_ne_zero
@@ -2010,9 +2010,9 @@ lemma Nondegenerate.ofSeparatingLeft
     ← Matrix.separatingLe
 
 中文:
-引理 Nondegenerate.ofSeparatingLeft
+引理 非退化.ofSeparatingLeft
   条件: (hB : SeparatingLeft B)
-  结论: B.Nondegenerate
+  结论: B.非退化
   证明: by
   obtain ⟨ι, b⟩ := Module.Free.exists_basis R₂ M₂
   have : Finite ι := Module.Finite.finite_basis b
@@ -2041,9 +2041,9 @@ lemma Nondegenerate.ofSeparatingRight
   proof: nondegenerate_flip_iff.mp .ofSeparatingLeft hB
 
 中文:
-引理 Nondegenerate.ofSeparatingRight
+引理 非退化.ofSeparatingRight
   条件: (hB : B.SeparatingRight)
-  结论: B.Nondegenerate
+  结论: B.非退化
   证明: nondegenerate_flip_iff.mp .ofSeparatingLeft hB
 
 Depends on / 依赖: nondegenerate_flip_iff, nondegenerate_flip_iff.mp, ofSeparatingLeft
@@ -2063,7 +2063,7 @@ lemma nondegenerate_iff_ker_eq_bot
 
 中文:
 引理 nondegenerate_iff_ker_eq_bot
-  结论: B.Nondegenerate ↔ B.ker = ⊥
+  结论: B.非退化 ↔ B.ker = ⊥
   证明: by
   refine ⟨Nondegenerate.ker_eq_bot, fun h => .ofSeparatingLeft ?_⟩
   rwa [separatingLeft_iff_ker_eq_bot]

@@ -46,7 +46,7 @@ theorem nhdsSet_diagonal
 
 中文:
 定理 nhdsSet_diagonal
-  条件: (X) [TopologicalSpace (X × X)]
+  条件: (X) [拓扑空间 (X × X)]
   证明: by
   rw [nhdsSet]; rw [← range_diag]; rw [← range_comp]
   rfl
@@ -68,7 +68,7 @@ theorem mem_nhdsSet_iff_forall
   simp_rw [nhdsSet, Filter.mem_sSup, forall_mem_image]
 
 中文:
-定理 mem_nhdsSet_iff_forall
+定理 mem_nhdsSet_iff_对任意
   结论: s in 𝓝ˢ t ↔ 对任意 x : X, x in t -> s in 𝓝 x
   证明: by
   simp_rw [nhdsSet, Filter.mem_sSup, forall_mem_image]
@@ -107,7 +107,7 @@ theorem bUnion_mem_nhdsSet
 
 中文:
 定理 bUnion_mem_nhdsSet
-  条件: {t : X -> Set X} (h : 对任意 x in s, t x in 𝓝 x)
+  条件: {t : X -> 集合 X} (h : 对任意 x in s, t x in 𝓝 x)
   结论: (⋃ x in s, t x) in 𝓝ˢ s
   证明: mem_nhdsSet_iff_forall.2 fun x hx => mem_of_superset (h x hx)
     subset_iUnion₂ (s := fun x _ => t x) x hx
@@ -188,8 +188,8 @@ theorem mem_nhdsSet_iff_exists
   rw [← subset_interior_iff_mem_nhdsSet]; rw [subset_interior_iff]
 
 中文:
-定理 mem_nhdsSet_iff_exists
-  结论: s in 𝓝ˢ t ↔ 存在 U : Set X, IsOpen U ∧ t subseteq U ∧ U subseteq s
+定理 mem_nhdsSet_iff_存在
+  结论: s in 𝓝ˢ t ↔ 存在 U : 集合 X, 是开集 U ∧ t subseteq U ∧ U subseteq s
   证明: by
   rw [← subset_interior_iff_mem_nhdsSet]; rw [subset_interior_iff]
 
@@ -207,7 +207,7 @@ theorem eventually_nhdsSet_iff_exists
   proof: mem_nhdsSet_iff_exists
 
 中文:
-定理 eventually_nhdsSet_iff_exists
+定理 eventually_nhdsSet_iff_存在
   条件: {p : X -> 命题}
   证明: mem_nhdsSet_iff_exists
 
@@ -226,7 +226,7 @@ theorem eventually_nhdsSet_iff_forall
   proof: mem_nhdsSet_iff_forall
 
 中文:
-定理 eventually_nhdsSet_iff_forall
+定理 eventually_nhdsSet_iff_对任意
   条件: {p : X -> 命题}
   证明: mem_nhdsSet_iff_forall
 
@@ -249,8 +249,8 @@ theorem hasBasis_nhdsSet
 
 中文:
 定理 hasBasis_nhdsSet
-  条件: (s : Set X)
-  结论: (𝓝ˢ s).HasBasis (fun U => IsOpen U ∧ s subseteq U) fun U => U
+  条件: (s : 集合 X)
+  结论: (𝓝ˢ s).有基 (fun U => 是开集 U ∧ s subseteq U) fun U => U
   证明: ⟨fun t => by simp [mem_nhdsSet_iff_exists, and_assoc]⟩
 
 @[simp]
@@ -272,7 +272,7 @@ lemma lift'_nhdsSet_interior
 
 中文:
 引理 lift'_nhdsSet_interior
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: (𝓝ˢ s).lift' interior = 𝓝ˢ s
   证明: (hasBasis_nhdsSet s).lift'_interior_eq_self fun _ => And.left
 -/
@@ -288,8 +288,8 @@ lemma Filter.HasBasis.nhdsSet_interior
   proof: lift'_nhdsSet_interior t ▸ h.lift'_interior
 
 中文:
-引理 Filter.HasBasis.nhdsSet_interior
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set X} {t : Set X}
+引理 滤子.有基.nhdsSet_interior
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 X} {t : 集合 X}
   证明: lift'_nhdsSet_interior t ▸ h.lift'_interior
 
 Depends on / 依赖: _interior, _nhdsSet_interior, h.lift
@@ -309,8 +309,8 @@ theorem IsOpen.mem_nhdsSet
   rw [← subset_interior_iff_mem_nhdsSet]; rw [hU.interior_eq]
 
 中文:
-定理 IsOpen.mem_nhdsSet
-  条件: (hU : IsOpen s)
+定理 是开集.mem_nhdsSet
+  条件: (hU : 是开集 s)
   结论: s in 𝓝ˢ t ↔ t subseteq s
   证明: by
   rw [← subset_interior_iff_mem_nhdsSet]; rw [hU.interior_eq]
@@ -330,8 +330,8 @@ theorem IsOpen.mem_nhdsSet_self
   proof: ho.mem_nhdsSet.mpr Subset.rfl
 
 中文:
-定理 IsOpen.mem_nhdsSet_self
-  条件: (ho : IsOpen s)
+定理 是开集.mem_nhdsSet_self
+  条件: (ho : 是开集 s)
   结论: s in 𝓝ˢ s
   证明: ho.mem_nhdsSet.mpr Subset.rfl
 
@@ -392,7 +392,7 @@ nonrec theorem Filter.EventuallyEq.self_of_nhdsSet {Y} {f g : X -> Y} (h : f =�
 @[simp]
 
 中文:
-定理 Filter.Eventually.self_of_nhdsSet
+定理 滤子.Eventually.self_of_nhdsSet
   条件: {p : X -> 命题} (h : 对任意ᶠ x in 𝓝ˢ s, p x)
   结论: 对任意 x in s, p x
   证明: principal_le_nhdsSet h
@@ -428,7 +428,7 @@ alias ⟨_, IsOpen.nhdsSet_eq⟩ := nhdsSet_eq_principal_iff
 
 中文:
 定理 nhdsSet_eq_principal_iff
-  结论: 𝓝ˢ s = 𝓟 s ↔ IsOpen s
+  结论: 𝓝ˢ s = 𝓟 s ↔ 是开集 s
   证明: by
   rw [← principal_le_nhdsSet.ge_iff_eq']; rw [le_principal_iff]; rw [mem_nhdsSet_iff_forall]; rw [isOpen_iff_mem_nhds]
 
@@ -517,7 +517,7 @@ theorem nhdsSet_empty
 
 中文:
 定理 nhdsSet_empty
-  结论: 𝓝ˢ (∅ : Set X) = ⊥
+  结论: 𝓝ˢ (∅ : 集合 X) = ⊥
   证明: by rw [isOpen_empty.nhdsSet_eq, principal_empty]
 
 Depends on / 依赖: isOpen_empty, isOpen_empty.nhdsSet_eq, nhdsSet_eq, principal_empty
@@ -536,7 +536,7 @@ theorem mem_nhdsSet_empty
 
 中文:
 定理 mem_nhdsSet_empty
-  结论: s in 𝓝ˢ (∅ : Set X)
+  结论: s in 𝓝ˢ (∅ : 集合 X)
   证明: by simp
 
 @[simp]
@@ -555,7 +555,7 @@ lemma nhdsSet_eq_bot_iff
 
 中文:
 引理 nhdsSet_eq_bot_iff
-  条件: {α : 类型} [TopologicalSpace α] {s : Set α}
+  条件: {α : 类型} [拓扑空间 α] {s : 集合 α}
   证明: by simp [← empty_mem_iff_bot, mem_nhdsSet_iff_forall, eq_empty_iff_forall_notMem]
   mpr := by simp +contextual
 
@@ -580,7 +580,7 @@ alias ⟨Set.Nonempty.nhdsSet_neBot, _⟩ := nhdsSet_neBot_iff
 
 中文:
 引理 nhdsSet_neBot_iff
-  条件: {α : 类型} [TopologicalSpace α] {s : Set α}
+  条件: {α : 类型} [拓扑空间 α] {s : 集合 α}
   证明: not_iff_not.mp by simp [not_nonempty_iff_eq_empty]
 
 alias ⟨Set.Nonempty.nhdsSet_neBot, _⟩ := nhdsSet_neBot_iff
@@ -608,7 +608,7 @@ theorem nhdsSet_univ
 
 中文:
 定理 nhdsSet_univ
-  结论: 𝓝ˢ (univ : Set X) = ⊤
+  结论: 𝓝ˢ (univ : 集合 X) = ⊤
   证明: by rw [isOpen_univ.nhdsSet_eq, principal_univ]
 
 @[gcongr, mono]
@@ -648,7 +648,7 @@ theorem monotone_nhdsSet
 
 中文:
 定理 monotone_nhdsSet
-  结论: Monotone (𝓝ˢ : Set X -> Filter X)
+  结论: 递增 (𝓝ˢ : 集合 X -> 滤子 X)
   证明: fun _ _ => nhdsSet_mono
 
 Depends on / 依赖: nhdsSet_mono
@@ -687,7 +687,7 @@ theorem tendsto_nhdsSet_of_tendsto_nhds
 
 中文:
 定理 tendsto_nhdsSet_of_tendsto_nhds
-  结论: {f : α -> X} {l : Filter α} {x : X} (hx : x in s)
+  结论: {f : α -> X} {l : 滤子 α} {x : X} (hx : x in s)
   证明: hf.trans (nhds_le_nhdsSet hx)
 
 @[simp]
@@ -712,7 +712,7 @@ theorem nhdsSet_union
 
 中文:
 定理 nhdsSet_union
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   结论: 𝓝ˢ (s union t) = 𝓝ˢ s ⊔ 𝓝ˢ t
   证明: by
   simp only [nhdsSet, image_union, sSup_union]
@@ -764,7 +764,7 @@ theorem nhdsSet_insert
 
 中文:
 定理 nhdsSet_insert
-  条件: (x : X) (s : Set X)
+  条件: (x : X) (s : 集合 X)
   结论: 𝓝ˢ (insert x s) = 𝓝 x ⊔ 𝓝ˢ s
   证明: by
   rw [insert_eq]; rw [nhdsSet_union]; rw [nhdsSet_singleton]
@@ -785,7 +785,7 @@ theorem nhdsSet_inter_le
 
 中文:
 定理 nhdsSet_inter_le
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   结论: 𝓝ˢ (s inter t) <= 𝓝ˢ s ⊓ 𝓝ˢ t
   证明: (monotone_nhdsSet (X := X)).map_inf_le s t
 
@@ -804,8 +804,8 @@ theorem nhdsSet_iInter_le
   proof: (monotone_nhdsSet (X := X)).map_iInf_le
 
 中文:
-定理 nhdsSet_iInter_le
-  条件: {ι : Sort*} (s : ι -> Set X)
+定理 nhdsSet_i整数er_le
+  条件: {ι : 类型层*} (s : ι -> 集合 X)
   结论: 𝓝ˢ (⋂ i, s i) <= ⨅ i, 𝓝ˢ (s i)
   证明: (monotone_nhdsSet (X := X)).map_iInf_le
 
@@ -824,8 +824,8 @@ theorem nhdsSet_sInter_le
   proof: (monotone_nhdsSet (X := X)).map_sInf_le
 
 中文:
-定理 nhdsSet_sInter_le
-  条件: (s : Set (Set X))
+定理 nhdsSet_s整数er_le
+  条件: (s : 集合 (集合 X))
   结论: 𝓝ˢ (⋂₀ s) <= ⨅ x in s, 𝓝ˢ x
   证明: (monotone_nhdsSet (X := X)).map_sInf_le
 
@@ -849,8 +849,8 @@ theorem IsClosed.nhdsSet_le_sup
     _ = 𝓝ˢ (s inter t) ⊔ 𝓟 (tᶜ) := by rw [h.isOpen_compl.nhdsSet_eq]
 
 中文:
-定理 IsClosed.nhdsSet_le_sup
-  条件: (h : IsClosed t)
+定理 是闭集.nhdsSet_le_sup
+  条件: (h : 是闭集 t)
   结论: 𝓝ˢ s <= 𝓝ˢ (s inter t) ⊔ 𝓟 (tᶜ)
   证明: calc
     𝓝ˢ s = 𝓝ˢ (s inter t union s inter tᶜ) := by rw [Set.inter_union_compl s t]
@@ -877,8 +877,8 @@ theorem IsClosed.nhdsSet_le_sup'
   proof: by rw [Set.inter_comm]; exact h.nhdsSet_le_sup s
 
 中文:
-定理 IsClosed.nhdsSet_le_sup'
-  条件: (h : IsClosed t)
+定理 是闭集.nhdsSet_le_sup'
+  条件: (h : 是闭集 t)
   证明: by rw [Set.inter_comm]; exact h.nhdsSet_le_sup s
 
 Depends on / 依赖: Set.inter_comm, h.nhdsSet_le_sup, inter_comm, nhdsSet_le_sup
@@ -896,7 +896,7 @@ theorem Filter.Eventually.eventually_nhdsSet
     (eventually_nhdsSet_iff_forall.mp h x x_in).eventually_nhds
 
 中文:
-定理 Filter.Eventually.eventually_nhdsSet
+定理 滤子.Eventually.eventually_nhdsSet
   条件: {p : X -> 命题} (h : 对任意ᶠ y in 𝓝ˢ s, p y)
   证明: eventually_nhdsSet_iff_forall.mpr fun x x_in =>
     (eventually_nhdsSet_iff_forall.mp h x x_in).eventually_nhds
@@ -918,7 +918,7 @@ theorem Filter.Eventually.union_nhdsSet
   rw [nhdsSet_union]; rw [eventually_sup]
 
 中文:
-定理 Filter.Eventually.union_nhdsSet
+定理 滤子.Eventually.union_nhdsSet
   条件: {p : X -> 命题}
   证明: by
   rw [nhdsSet_union]; rw [eventually_sup]
@@ -938,7 +938,7 @@ theorem Filter.Eventually.union
   proof: Filter.Eventually.union_nhdsSet.mpr ⟨hs, ht⟩
 
 中文:
-定理 Filter.Eventually.union
+定理 滤子.Eventually.union
   条件: {p : X -> 命题} (hs : 对任意ᶠ x in 𝓝ˢ s, p x) (ht : 对任意ᶠ x in 𝓝ˢ t, p x)
   证明: Filter.Eventually.union_nhdsSet.mpr ⟨hs, ht⟩
 
@@ -960,7 +960,7 @@ theorem nhdsSet_iUnion
 
 中文:
 定理 nhdsSet_iUnion
-  条件: {ι : Sort*} (s : ι -> Set X)
+  条件: {ι : 类型层*} (s : ι -> 集合 X)
   结论: 𝓝ˢ (⋃ i, s i) = ⨆ i, 𝓝ˢ (s i)
   证明: by
   simp only [nhdsSet, image_iUnion, sSup_iUnion (β := Filter X)]
@@ -981,7 +981,7 @@ theorem eventually_nhdsSet_iUnion₂
 
 中文:
 定理 eventually_nhdsSet_iUnion₂
-  条件: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set X} {P : X -> 命题}
+  条件: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 X} {P : X -> 命题}
   证明: by
   simp only [nhdsSet_iUnion, eventually_iSup]
 
@@ -1002,7 +1002,7 @@ theorem eventually_nhdsSet_iUnion
 
 中文:
 定理 eventually_nhdsSet_iUnion
-  条件: {ι : Sort*} {s : ι -> Set X} {P : X -> 命题}
+  条件: {ι : 类型层*} {s : ι -> 集合 X} {P : X -> 命题}
   证明: by
   simp only [nhdsSet_iUnion, eventually_iSup]
 

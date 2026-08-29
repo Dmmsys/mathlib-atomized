@@ -37,7 +37,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: : AddMonoidWithOne (α × β)
+  签名: : 加法带幺幺半群 (α × β)
   定义体: { Prod.instAddMonoid, @Prod.instOne α β _ _ with
     natCast := fun n => (n, n)
     natCast_zero := congr_arg₂ Prod.mk Nat.cast_zero Nat.cast_zero
@@ -87,7 +87,7 @@ theorem fst_ofNat
 @[simp]
 
 中文:
-定理 fst_ofNat
+定理 fst_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
@@ -129,7 +129,7 @@ theorem snd_ofNat
   proof: rfl
 
 中文:
-定理 snd_ofNat
+定理 snd_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/

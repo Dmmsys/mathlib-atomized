@@ -46,7 +46,7 @@ lemma Polynomial.isRegularLocalRing_localization_atPrime_of_comap_eq_maximalIdea
   have fg := Submodule.FG.finite_generato
 
 中文:
-引理 Polynomial.isRegularLocalRing_localization_atPrime_of_comap_eq_maximalIdeal
+引理 多项式.isRegularLocalRing_localization_atPrime_of_comap_eq_maximalIdeal
   证明: by
   apply IsRegularLocalRing.of_spanFinrank_maximalIdeal_le
   let q := (maximalIdeal R).map C
@@ -114,8 +114,8 @@ instance Polynomial.isRegularRing_of_isRegularRing
   l
 
 中文:
-实例 Polynomial.isRegularRing_of_isRegularRing
-  签名: [IsRegularRing R]
+实例 多项式.isRegularRing_of_isRegularRing
+  签名: [是正则环 R]
   定义体: by
   apply isRegularRing_iff.mpr (fun p hp => ?_)
   let q := p.comap C
@@ -169,8 +169,8 @@ instance MvPolynomial.isRegularRing_of_isRegularRing
     exact IsRegularRing.of_ringEquiv (MvPolynomial.optionEquivLe
 
 中文:
-实例 MvPolynomial.isRegularRing_of_isRegularRing
-  签名: [IsRegularRing R] {ι : 类型} [Finite ι]
+实例 多元多项式.isRegularRing_of_isRegularRing
+  签名: [是正则环 R] {ι : 类型} [有限 ι]
   定义体: by
   induction ι using Finite.induction_empty_option with
   | of_equiv e H => exact IsRegularRing.of_ringEquiv (renameEquiv _ e).toRingEquiv

@@ -138,8 +138,8 @@ theorem Coloring.even_length_iff_congr
     tauto
 
 中文:
-定理 Coloring.even_length_iff_congr
-  结论: {α} {G : SimpleGraph α}
+定理 染色.even_length_iff_congr
+  结论: {α} {G : 简单图 α}
   证明: by
   induction p with
   | nil => simp
@@ -175,8 +175,8 @@ theorem Coloring.odd_length_iff_not_congr
   tauto
 
 中文:
-定理 Coloring.odd_length_iff_not_congr
-  结论: {α} {G : SimpleGraph α}
+定理 染色.odd_length_iff_not_congr
+  结论: {α} {G : 简单图 α}
   证明: by
   rw [← Nat.not_even_iff_odd]; rw [c.even_length_iff_congr p]
   tauto
@@ -203,8 +203,8 @@ have h' : G.chromaticNumber <= 2 := Order.le_of_lt_add_one not_le.mp h
   have : ¬c' u ↔ c' u := (c'.odd_length_iff_not_co
 
 中文:
-定理 Walk.three_le_chromaticNumber_of_odd_loop
-  结论: {α} {G : SimpleGraph α} {u : α} (p : G.Walk u u)
+定理 途径.three_le_chromaticNumber_of_odd_loop
+  结论: {α} {G : 简单图 α} {u : α} (p : G.途径 u u)
   证明: Classical.by_contradiction by
   intro h
 have h' : G.chromaticNumber <= 2 := Order.le_of_lt_add_one not_le.mp h
@@ -427,7 +427,7 @@ definition Coloring.completeEquipartiteGraph
   body: ⟨Prod.fst, id⟩
 
 中文:
-定义 Coloring.completeEquipartiteGraph
+定义 染色.completeEquipartiteGraph
   签名: :
   定义体: ⟨Prod.fst, id⟩
 
@@ -473,8 +473,8 @@ lemma two_colorable_iff_forall_loop_even
     use fun a => Fin
 
 中文:
-引理 two_colorable_iff_forall_loop_even
-  条件: {α : 类型} {G : SimpleGraph α}
+引理 two_colorable_iff_对任意_loop_even
+  条件: {α : 类型} {G : 简单图 α}
   证明: by
   simp_rw [← Nat.not_odd_iff_even]
   constructor <;> intro h

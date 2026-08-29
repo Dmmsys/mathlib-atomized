@@ -60,13 +60,13 @@ structure OuterMeasure
     - iUnion_nat : forall s : Nat -> Set α, Pairwise (Disjoint on s) -> measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
 
 中文:
-结构 OuterMeasure
+结构 外测度
   参数: (α : 类型)
   公理与运算 (4 个):
-    - measureOf : Set α -> 实数>=0∞
+    - measureOf : 集合 α -> 实数>=0∞
     - empty : measureOf ∅ = 0
     - mono : 对任意 {s₁ s₂}, s₁ subseteq s₂ -> measureOf s₁ <= measureOf s₂
-    - iUnion_nat : 对任意 s : 自然数 -> Set α, Pairwise (Disjoint on s) -> measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
+    - iUnion_nat : 对任意 s : 自然数 -> 集合 α, 两两 (Disjoint on s) -> measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
 -/
 structure OuterMeasure (α : Type*) where
   /-- Outer measure function. Use automatic coercion instead. -/
@@ -90,12 +90,12 @@ class OuterMeasureClass
     - measure_iUnion_nat_le((f : F) (s : Nat -> Set α)) : Pairwise (Disjoint on s) -> f (⋃ i, s i) <= ∑' i, f (s i)
 
 中文:
-类 OuterMeasureClass
-  参数: (F : 类型) (α : outParam 类型) [FunLike F (Set α) 实数>=0∞]
+类 外测度类
+  参数: (F : 类型) (α : outParam 类型) [函数状 F (集合 α) 实数>=0∞]
   公理与运算 (3 个):
     - measure_empty((f : F)) : f ∅ = 0
     - measure_mono((f : F) {s t}) : s subseteq t -> f s <= f t
-    - measure_iUnion_nat_le((f : F) (s : 自然数 -> Set α)) : Pairwise (Disjoint on s) -> f (⋃ i, s i) <= ∑' i, f (s i)
+    - measure_iUnion_nat_le((f : F) (s : 自然数 -> 集合 α)) : 两两 (Disjoint on s) -> f (⋃ i, s i) <= ∑' i, f (s i)
 -/
 class OuterMeasureClass (F : Type*) (α : outParam Type*) [FunLike F (Set α) Real>=0∞] : Prop where
   protected measure_empty (f : F) : f ∅ = 0
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (OuterMeasure α) (Set α) 实数>=0∞
+  签名: 函数状 (外测度 α) (集合 α) 实数>=0∞
   定义体: m.measureOf
   coe_injective | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
 
@@ -139,7 +139,7 @@ theorem measureOf_eq_coe
 
 中文:
 定理 measureOf_eq_coe
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: m.measureOf = m
   证明: rfl
 -/
@@ -155,8 +155,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (m : Set α -> 实数>=0∞) (h₁ h₂ h₃)
-  结论: OuterMeasure.mk m h₁ h₂ h₃ = m
+  条件: (m : 集合 α -> 实数>=0∞) (h₁ h₂ h₃)
+  结论: 外测度.mk m h₁ h₂ h₃ = m
   证明: rfl
 -/
 @[simp] theorem coe_mk (m : Set α -> Real>=0∞) (h₁ h₂ h₃) : OuterMeasure.mk m h₁ h₂ h₃ = m := rfl
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: OuterMeasureClass (OuterMeasure α) α
+  签名: 外测度类 (外测度 α) α
   定义体: f.empty
   measure_mono f := f.mono
   measure_iUnion_nat_le f := f.iUnion_nat

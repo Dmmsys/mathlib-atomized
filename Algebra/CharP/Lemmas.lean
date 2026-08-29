@@ -148,7 +148,7 @@ theorem exists_add_pow_prime_pow_eq
   proof: ⟨_, h.add_pow_prime_pow_eq hp n⟩
 
 中文:
-定理 exists_add_pow_prime_pow_eq
+定理 存在_add_pow_prime_pow_eq
   条件: (h : Commute x y) (n : 自然数)
   证明: ⟨_, h.add_pow_prime_pow_eq hp n⟩
 -/
@@ -165,7 +165,7 @@ theorem exists_add_pow_prime_eq
   proof: ⟨_, h.add_pow_prime_eq hp⟩
 
 中文:
-定理 exists_add_pow_prime_eq
+定理 存在_add_pow_prime_eq
   条件: (h : Commute x y)
   证明: ⟨_, h.add_pow_prime_eq hp⟩
 -/
@@ -263,7 +263,7 @@ theorem exists_add_pow_prime_pow_eq
   proof: (Commute.all x y).exists_add_pow_prime_pow_eq hp n
 
 中文:
-定理 exists_add_pow_prime_pow_eq
+定理 存在_add_pow_prime_pow_eq
   证明: (Commute.all x y).exists_add_pow_prime_pow_eq hp n
 
 Depends on / 依赖: Commute, Commute.all, exists_add_pow_prime_pow_eq
@@ -281,7 +281,7 @@ theorem exists_add_pow_prime_eq
   proof: (Commute.all x y).exists_add_pow_prime_eq hp
 
 中文:
-定理 exists_add_pow_prime_eq
+定理 存在_add_pow_prime_eq
   结论: 存在 r, (x + y) ^ p = x ^ p + y ^ p + p * x * y * r
   证明: (Commute.all x y).exists_add_pow_prime_eq hp
 
@@ -917,8 +917,8 @@ lemma Nat.Prime.dvd_add_pow_sub_pow_of_dvd
   exact dvd_add h₁ (h₂.trans <| (dvd_mul_right ..).trans <| dvd_mul_right ..)
 
 中文:
-引理 Nat.Prime.dvd_add_pow_sub_pow_of_dvd
-  结论: (hpri : p.Prime) {r : R} (h₁ : r ∣ x ^ p)
+引理 自然数.素.dvd_add_pow_sub_pow_of_dvd
+  结论: (hpri : p.素) {r : R} (h₁ : r ∣ x ^ p)
   证明: by
   rw [add_pow_prime_eq hpri]; rw [add_right_comm]; rw [add_assoc]; rw [add_sub_assoc]; rw [add_sub_cancel_right]
   exact dvd_add h₁ (h₂.trans <| (dvd_mul_right ..).trans <| dvd_mul_right ..)
@@ -953,7 +953,7 @@ theorem char_ne_zero_of_finite
 
 中文:
 定理 char_ne_zero_of_finite
-  条件: (p : 自然数) [CharP R p] [Finite R]
+  条件: (p : 自然数) [特征p R p] [有限 R]
   结论: p != 0
   证明: by
   rintro rfl
@@ -978,7 +978,7 @@ theorem ringChar_ne_zero_of_finite
 
 中文:
 定理 ringChar_ne_zero_of_finite
-  条件: [Finite R]
+  条件: [有限 R]
   结论: ringChar R != 0
   证明: char_ne_zero_of_finite R (ringChar R)
 
@@ -1004,8 +1004,8 @@ theorem char_is_prime
 
 中文:
 定理 char_is_prime
-  条件: (p : 自然数) [CharP R p]
-  结论: p.Prime
+  条件: (p : 自然数) [特征p R p]
+  结论: p.素
   证明: Or.resolve_right (char_is_prime_or_zero R p) (char_ne_zero_of_finite R p)
 
 Depends on / 依赖: Or.resolve_right, char_is_prime_or_zero, char_ne_zero_of_finite, resolve_right
@@ -1025,7 +1025,7 @@ lemma prime_ringChar
 
 中文:
 引理 prime_ringChar
-  结论: 自然数.Prime (ringChar R)
+  结论: 自然数.素 (ringChar R)
   证明: by
   apply CharP.char_prime_of_ne_zero R
   exact CharP.ringChar_ne_zero_of_finite R
@@ -1110,8 +1110,8 @@ lemma list_sum_pow_char
 
 中文:
 引理 list_sum_pow_char
-  条件: (l : List R)
-  结论: l.sum ^ p = (l.map (· ^ p : R -> R)).sum
+  条件: (l : 列表 R)
+  结论: l.求和 ^ p = (l.map (· ^ p : R -> R)).求和
   证明: map_list_sum (frobenius R p) _
 
 Depends on / 依赖: frobenius, map_list_sum
@@ -1131,7 +1131,7 @@ lemma multiset_sum_pow_char
 中文:
 引理 multiset_sum_pow_char
   条件: (s : Multiset R)
-  结论: s.sum ^ p = (s.map (· ^ p : R -> R)).sum
+  结论: s.求和 ^ p = (s.map (· ^ p : R -> R)).求和
   证明: map_multiset_sum (frobenius R p) _
 
 Depends on / 依赖: frobenius, map_multiset_sum
@@ -1150,7 +1150,7 @@ lemma sum_pow_char
 
 中文:
 引理 sum_pow_char
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R)
   结论: (∑ i in s, f i) ^ p = ∑ i in s, f i ^ p
   证明: map_sum (frobenius R p) _ _
 
@@ -1170,8 +1170,8 @@ lemma list_sum_pow_char_pow
 
 中文:
 引理 list_sum_pow_char_pow
-  条件: (l : List R)
-  结论: l.sum ^ p ^ n = (l.map (· ^ p ^ n : R -> R)).sum
+  条件: (l : 列表 R)
+  结论: l.求和 ^ p ^ n = (l.map (· ^ p ^ n : R -> R)).求和
   证明: map_list_sum (iterateFrobenius R p n) _
 
 Depends on / 依赖: iterateFrobenius, map_list_sum
@@ -1208,7 +1208,7 @@ lemma sum_pow_char_pow
 
 中文:
 引理 sum_pow_char_pow
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R)
   证明: map_sum (iterateFrobenius R p n) _ _
 
 Depends on / 依赖: iterateFrobenius, map_sum

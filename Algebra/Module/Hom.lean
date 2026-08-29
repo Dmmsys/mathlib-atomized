@@ -41,7 +41,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddMonoid A] [AddCommMonoid B] [Module R B]
+  签名: [半环 R] [加法幺半群 A] [加法交换幺半群 B] [模 R B]
   定义体: ZeroHom.instMulActionWithZero
   add_smul _ _ _ := ext fun _ => add_smul _ _ _
   smul_add _ _ _ := ext fun _ => smul_add _ _ _
@@ -71,7 +71,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddMonoid A] [AddCommMonoid B] [Module R B]
+  签名: [半环 R] [加法幺半群 A] [加法交换幺半群 B] [模 R B]
   定义体: ext fun _ => add_smul _ _ _
   zero_smul _ := ext fun _ => zero_smul _ _
 
@@ -140,7 +140,7 @@ instance instDistribSMul
 
 中文:
 实例 instDistribSMul
-  签名: [DistribSMul M A]
+  签名: [分配标量乘法 M A]
   定义体: inferInstanceAs DistribSMul M (A ->+ A)
 
 Depends on / 依赖: DistribSMul
@@ -160,7 +160,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: : DistribMulAction R (AddMonoid.End A)
+  签名: : 分配乘法作用 R (加法幺半群.End A)
   定义体: inferInstanceAs DistribMulAction R (A ->+ A)
 
 Depends on / 依赖: DistribMulAction
@@ -179,7 +179,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: (r : R) (f : AddMonoid.End A)
+  条件: (r : R) (f : 加法幺半群.End A)
   结论: ⇑(r • f) = r • ⇑f
   证明: rfl
 -/
@@ -196,7 +196,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (r : R) (f : AddMonoid.End A) (x : A)
+  条件: (r : R) (f : 加法幺半群.End A) (x : A)
   结论: (r • f) x = r • f x
   证明: rfl
 -/
@@ -213,7 +213,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulCommClass R S A]
+  签名: [标量交换类 R S A]
   定义体: AddMonoidHom.instSMulCommClass
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.instSMulCommClass, instSMulCommClass
@@ -231,7 +231,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R S] [IsScalarTower R S A]
+  签名: [标量乘法 R S] [标量塔 R S A]
   定义体: AddMonoidHom.instIsScalarTower
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.instIsScalarTower, instIsScalarTower
@@ -249,7 +249,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [DistribMulAction Rᵐᵒᵖ A] [IsCentralScalar R A]
+  签名: [分配乘法作用 Rᵐᵒᵖ A] [中心标量 R A]
   定义体: AddMonoidHom.instIsCentralScalar
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.instIsCentralScalar, instIsCentralScalar
@@ -270,7 +270,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddCommMonoid A] [Module R A]
+  签名: [半环 R] [加法交换幺半群 A] [模 R A]
   定义体: inferInstanceAs Module R (A ->+ A)
 
 Depends on / 依赖: Module
@@ -289,7 +289,7 @@ instance applyModule
 
 中文:
 实例 applyModule
-  签名: [AddCommMonoid A]
+  签名: [加法交换幺半群 A]
   定义体: rfl
   zero_smul _ := rfl
 -/
@@ -317,7 +317,7 @@ definition smulLeft
 
 中文:
 定义 smulLeft
-  签名: [AddMonoid A] [DistribSMul M A] (c : M)
+  签名: [加法幺半群 A] [分配标量乘法 M A] (c : M)
   定义体: DistribSMul.toAddMonoidHom _ c
 -/
 protected def smulLeft [AddMonoid A] [DistribSMul M A] (c : M) : A ->+ A :=
@@ -333,7 +333,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: (Module.toAddMonoidEnd R M).toAddMonoidHom
 -/
 protected def smul [Semiring R] [AddCommMonoid M] [Module R M] : R ->+ M ->+ M :=
@@ -349,7 +349,7 @@ theorem coe_smul'
 
 中文:
 定理 coe_smul'
-  条件: [Semiring R] [AddCommMonoid M] [Module R M]
+  条件: [半环 R] [加法交换幺半群 M] [模 R M]
   证明: rfl
 -/
 @[simp] theorem coe_smul' [Semiring R] [AddCommMonoid M] [Module R M] :

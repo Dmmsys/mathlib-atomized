@@ -45,7 +45,7 @@ definition smallSets
 
 中文:
 定义 smallSets
-  签名: (l : Filter α)
+  签名: (l : 滤子 α)
   定义体: l.lift' powerset
 
 Depends on / 依赖: l.lift, powerset
@@ -66,7 +66,7 @@ theorem smallSets_eq_generate
 
 中文:
 定理 smallSets_eq_generate
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: f.smallSets = generate (powerset '' f.sets)
   证明: by
   simp_rw [generate_eq_biInf, smallSets, iInf_image, Filter.lift', Filter.lift, Function.comp_apply,
@@ -114,8 +114,8 @@ theorem HasBasis.smallSets
   proof: h.lift' monotone_powerset
 
 中文:
-定理 HasBasis.smallSets
-  条件: {p : ι -> 命题} {s : ι -> Set α} (h : HasBasis l p s)
+定理 有基.smallSets
+  条件: {p : ι -> 命题} {s : ι -> 集合 α} (h : 有基 l p s)
   证明: h.lift' monotone_powerset
 -/
 protected theorem HasBasis.smallSets {p : ι -> Prop} {s : ι -> Set α} (h : HasBasis l p s) :
@@ -132,7 +132,7 @@ theorem hasBasis_smallSets
 
 中文:
 定理 hasBasis_smallSets
-  条件: (l : Filter α)
+  条件: (l : 滤子 α)
   证明: l.basis_sets.smallSets
 
 Depends on / 依赖: basis_sets, l.basis_sets.smallSets, smallSets
@@ -150,8 +150,8 @@ theorem Eventually.exists_mem_basis_of_smallSets
   proof: (h₂.smallSets.eventually_iff.mp h₁).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, hi Subset.rfl⟩
 
 中文:
-定理 Eventually.exists_mem_basis_of_smallSets
-  结论: {p : ι -> 命题} {s : ι -> Set α} {P : Set α -> 命题}
+定理 Eventually.存在_mem_basis_of_smallSets
+  结论: {p : ι -> 命题} {s : ι -> 集合 α} {P : 集合 α -> 命题}
   证明: (h₂.smallSets.eventually_iff.mp h₁).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, hi Subset.rfl⟩
 
 Depends on / 依赖: Subset, Subset.rfl, eventually_iff, smallSets, smallSets.eventually_iff.mp
@@ -169,8 +169,8 @@ theorem Frequently.smallSets_of_forall_mem_basis
   proof: h₂.smallSets.frequently_iff.mpr fun _ hi => ⟨_, Subset.rfl, h₁ _ hi⟩
 
 中文:
-定理 Frequently.smallSets_of_forall_mem_basis
-  结论: {p : ι -> 命题} {s : ι -> Set α} {P : Set α -> 命题}
+定理 Frequently.smallSets_of_对任意_mem_basis
+  结论: {p : ι -> 命题} {s : ι -> 集合 α} {P : 集合 α -> 命题}
   证明: h₂.smallSets.frequently_iff.mpr fun _ hi => ⟨_, Subset.rfl, h₁ _ hi⟩
 
 Depends on / 依赖: Subset, Subset.rfl, frequently_iff, smallSets, smallSets.frequently_iff.mpr
@@ -188,8 +188,8 @@ theorem Eventually.exists_mem_of_smallSets
   proof: h.exists_mem_basis_of_smallSets l.basis_sets
 
 中文:
-定理 Eventually.exists_mem_of_smallSets
-  结论: {p : Set α -> 命题}
+定理 Eventually.存在_mem_of_smallSets
+  结论: {p : 集合 α -> 命题}
   证明: h.exists_mem_basis_of_smallSets l.basis_sets
 
 Depends on / 依赖: basis_sets, exists_mem_basis_of_smallSets, h.exists_mem_basis_of_smallSets, l.basis_sets
@@ -211,7 +211,7 @@ theorem tendsto_smallSets_iff
 
 中文:
 定理 tendsto_smallSets_iff
-  条件: {f : α -> Set β}
+  条件: {f : α -> 集合 β}
   证明: (hasBasis_smallSets lb).tendsto_right_iff
 
 Depends on / 依赖: hasBasis_smallSets, tendsto_right_iff
@@ -230,7 +230,7 @@ theorem eventually_smallSets
 
 中文:
 定理 eventually_smallSets
-  条件: {p : Set α -> 命题}
+  条件: {p : 集合 α -> 命题}
   证明: eventually_lift'_iff monotone_powerset
 
 Depends on / 依赖: _iff, eventually_lift, monotone_powerset
@@ -250,7 +250,7 @@ theorem eventually_smallSets'
 
 中文:
 定理 eventually_smallSets'
-  条件: {p : Set α -> 命题} (hp : 对任意 ⦃s t⦄, s subseteq t -> p t -> p s)
+  条件: {p : 集合 α -> 命题} (hp : 对任意 ⦃s t⦄, s subseteq t -> p t -> p s)
   证明: eventually_smallSets.trans
     exists_congr fun s => Iff.rfl.and ⟨fun H => H s Subset.rfl, fun hs _t ht => hp ht hs⟩
 
@@ -271,8 +271,8 @@ theorem HasBasis.eventually_smallSets
   rw [l.eventually_smallSets' hq]; rw [hl.exists_iff hq]
 
 中文:
-定理 HasBasis.eventually_smallSets
-  结论: {α : 类型} {ι : Sort*} {p : ι -> 命题} {l : Filter α}
+定理 有基.eventually_smallSets
+  结论: {α : 类型} {ι : 类型层*} {p : ι -> 命题} {l : 滤子 α}
   证明: by
   rw [l.eventually_smallSets' hq]; rw [hl.exists_iff hq]
 
@@ -294,7 +294,7 @@ theorem frequently_smallSets
 
 中文:
 定理 frequently_smallSets
-  条件: {p : Set α -> 命题}
+  条件: {p : 集合 α -> 命题}
   证明: l.hasBasis_smallSets.frequently_iff
 
 Depends on / 依赖: frequently_iff, hasBasis_smallSets, l.hasBasis_smallSets.frequently_iff
@@ -314,7 +314,7 @@ theorem frequently_smallSets_mem
 
 中文:
 定理 frequently_smallSets_mem
-  条件: (l : Filter α)
+  条件: (l : 滤子 α)
   结论: 存在ᶠ s in l.smallSets, s in l
   证明: frequently_smallSets.2 fun t ht => ⟨t, Subset.rfl, ht⟩
 
@@ -335,7 +335,7 @@ convert! not_iff_not.mpr l.eventually_smallSets' (p := (¬p ·)) (by tauto)
 
 中文:
 定理 frequently_smallSets'
-  结论: {α : 类型} {l : Filter α} {p : Set α -> 命题}
+  结论: {α : 类型} {l : 滤子 α} {p : 集合 α -> 命题}
   证明: by
 convert! not_iff_not.mpr l.eventually_smallSets' (p := (¬p ·)) (by tauto)
   simp
@@ -360,8 +360,8 @@ theorem HasBasis.frequently_smallSets
 @[simp]
 
 中文:
-定理 HasBasis.frequently_smallSets
-  结论: {α : 类型} {ι : Sort*} {p : ι -> 命题} {l : Filter α}
+定理 有基.frequently_smallSets
+  结论: {α : 类型} {ι : 类型层*} {p : ι -> 命题} {l : 滤子 α}
   证明: by
   rw [Filter.frequently_smallSets' hq]; rw [hl.forall_iff hq]
 
@@ -423,8 +423,8 @@ theorem HasAntitoneBasis.tendsto_smallSets
 @[gcongr, mono]
 
 中文:
-定理 HasAntitoneBasis.tendsto_smallSets
-  结论: {ι} [Preorder ι] {s : ι -> Set α}
+定理 有AntitoneBasis.tendsto_smallSets
+  结论: {ι} [预序 ι] {s : ι -> 集合 α}
   证明: tendsto_smallSets_iff.2 fun _t ht => hl.eventually_subset ht
 
 @[gcongr, mono]
@@ -448,7 +448,7 @@ theorem monotone_smallSets
 
 中文:
 定理 monotone_smallSets
-  结论: Monotone (@smallSets α)
+  结论: 递增 (@smallSets α)
   证明: monotone_lift' monotone_id monotone_const
 
 @[simp]
@@ -473,7 +473,7 @@ theorem smallSets_bot
 
 中文:
 定理 smallSets_bot
-  结论: (⊥ : Filter α).smallSets = pure ∅
+  结论: (⊥ : 滤子 α).smallSets = pure ∅
   证明: by
   rw [smallSets]; rw [lift'_bot]; rw [powerset_empty]; rw [principal_singleton]
   exact monotone_powerset
@@ -500,7 +500,7 @@ theorem smallSets_top
 
 中文:
 定理 smallSets_top
-  结论: (⊤ : Filter α).smallSets = ⊤
+  结论: (⊤ : 滤子 α).smallSets = ⊤
   证明: by
   rw [smallSets]; rw [lift'_top]; rw [powerset_univ]; rw [principal_univ]
 
@@ -523,7 +523,7 @@ theorem smallSets_principal
 
 中文:
 定理 smallSets_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (𝓟 s).smallSets = 𝓟 (𝒫 s)
   证明: lift'_principal monotone_powerset
 
@@ -544,7 +544,7 @@ theorem smallSets_comap_eq_comap_image
 
 中文:
 定理 smallSets_comap_eq_comap_image
-  条件: (l : Filter β) (f : α -> β)
+  条件: (l : 滤子 β) (f : α -> β)
   证明: by
   refine (gc_map_comap _).u_comm_of_l_comm (gc_map_comap _) bind_smallSets_gc bind_smallSets_gc ?_
   simp [Function.comp_def, map_bind, bind_map]
@@ -566,7 +566,7 @@ theorem smallSets_comap
 
 中文:
 定理 smallSets_comap
-  条件: (l : Filter β) (f : α -> β)
+  条件: (l : 滤子 β) (f : α -> β)
   证明: comap_lift'_eq2 monotone_powerset
 
 Depends on / 依赖: _eq2, comap_lift, monotone_powerset
@@ -585,7 +585,7 @@ theorem comap_smallSets
 
 中文:
 定理 comap_smallSets
-  条件: (l : Filter β) (f : α -> Set β)
+  条件: (l : 滤子 β) (f : α -> 集合 β)
   证明: comap_lift'_eq
 
 Depends on / 依赖: comap_lift
@@ -605,7 +605,7 @@ theorem smallSets_iInf
 
 中文:
 定理 smallSets_iInf
-  条件: {f : ι -> Filter α}
+  条件: {f : ι -> 滤子 α}
   结论: (iInf f).smallSets = ⨅ i, (f i).smallSets
   证明: lift'_iInf_of_map_univ (powerset_inter _ _) powerset_univ
 
@@ -625,7 +625,7 @@ theorem smallSets_inf
 
 中文:
 定理 smallSets_inf
-  条件: (l₁ l₂ : Filter α)
+  条件: (l₁ l₂ : 滤子 α)
   结论: (l₁ ⊓ l₂).smallSets = l₁.smallSets ⊓ l₂.smallSets
   证明: lift'_inf _ _ powerset_inter
 
@@ -646,7 +646,7 @@ instance smallSets_neBot
 
 中文:
 实例 smallSets_neBot
-  签名: (l : Filter α)
+  签名: (l : 滤子 α)
   定义体: by
   refine (lift'_neBot_iff ?_).2 fun _ _ => powerset_nonempty
   exact monotone_powerset
@@ -668,8 +668,8 @@ theorem Tendsto.smallSets_mono
   exact fun u hu => (ht u hu).mp (hst.mono fun _ hst ht => hst.trans ht)
 
 中文:
-定理 Tendsto.smallSets_mono
-  结论: {s t : α -> Set β} (ht : Tendsto t la lb.smallSets)
+定理 收敛.smallSets_mono
+  结论: {s t : α -> 集合 β} (ht : 收敛 t la lb.smallSets)
   证明: by
   rw [tendsto_smallSets_iff] at ht ⊢
   exact fun u hu => (ht u hu).mp (hst.mono fun _ hst ht => hst.trans ht)
@@ -693,8 +693,8 @@ hf.mp (tendsto_smallSets_iff.mp hs t ht).mono fun _ h₁ h₂ => h₁ h₂
 @[simp]
 
 中文:
-定理 Tendsto.of_smallSets
-  结论: {s : α -> Set β} {f : α -> β} (hs : Tendsto s la lb.smallSets)
+定理 收敛.of_smallSets
+  结论: {s : α -> 集合 β} {f : α -> β} (hs : 收敛 s la lb.smallSets)
   证明: fun t ht =>
 hf.mp (tendsto_smallSets_iff.mp hs t ht).mono fun _ h₁ h₂ => h₁ h₂
 
@@ -751,7 +751,7 @@ alias ⟨Eventually.of_smallSets, Eventually.smallSets⟩ := eventually_smallSet
 @[simp]
 
 中文:
-定理 eventually_smallSets_forall
+定理 eventually_smallSets_对任意
   条件: {p : α -> 命题}
   证明: by
   simpa only [inf_top_eq, eventually_top] using @eventually_smallSets_eventually α l ⊤ p
@@ -780,7 +780,7 @@ theorem eventually_smallSets_subset
 
 中文:
 定理 eventually_smallSets_subset
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: (对任意ᶠ t in l.smallSets, t subseteq s) ↔ s in l
   证明: eventually_smallSets_forall
 

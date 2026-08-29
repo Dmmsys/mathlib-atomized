@@ -40,7 +40,7 @@ definition orderIsoIooNegOneOne
 
 中文:
 定义 orderIsoIooNegOneOne
-  签名: (k : 类型) [Field k] [LinearOrder k] [IsStrictOrderedRing k]
+  签名: (k : 类型) [域 k] [线性序 k] [是StrictOrdered环 k]
   定义体: by
   refine StrictMono.orderIsoOfRightInverse ?_ ?_ (fun x => x / (1 - |↑x|)) ?_
   · refine codRestrict (fun x => x / (1 + |x|)) _ fun x => abs_lt.1 ?_

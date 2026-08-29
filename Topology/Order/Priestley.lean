@@ -47,10 +47,10 @@ class PriestleySpace
     - priestley({x y : α}) : ¬x <= y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
 
 中文:
-类 PriestleySpace
-  参数: (α : 类型) [Preorder α] [TopologicalSpace α]
+类 Priestley空间
+  参数: (α : 类型) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
-    - priestley({x y : α}) : ¬x <= y -> 存在 U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
+    - priestley({x y : α}) : ¬x <= y -> 存在 U : 集合 α, IsClopen U ∧ 是上集 U ∧ x in U ∧ y ∉ U
 -/
 class PriestleySpace (α : Type*) [Preorder α] [TopologicalSpace α] : Prop where
   priestley {x y : α} : ¬x <= y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
@@ -69,7 +69,7 @@ theorem exists_isClopen_upper_of_not_le
   proof: PriestleySpace.priestley
 
 中文:
-定理 exists_isClopen_upper_of_not_le
+定理 存在_isClopen_upper_of_not_le
   证明: PriestleySpace.priestley
 
 Depends on / 依赖: PriestleySpace, PriestleySpace.priestley, priestley
@@ -88,7 +88,7 @@ theorem exists_isClopen_lower_of_not_le
   ⟨Uᶜ, hU.compl, hU'.compl, Classical.not_not.2 hx, hy⟩
 
 中文:
-定理 exists_isClopen_lower_of_not_le
+定理 存在_isClopen_lower_of_not_le
   条件: (h : ¬x <= y)
   证明: let ⟨U, hU, hU', hx, hy⟩ := exists_isClopen_upper_of_not_le h
   ⟨Uᶜ, hU.compl, hU'.compl, Classical.not_not.2 hx, hy⟩
@@ -119,7 +119,7 @@ theorem exists_isClopen_upper_or_lower_of_ne
     exact ⟨U, hU, Or.inr hU', hx, hy⟩
 
 中文:
-定理 exists_isClopen_upper_or_lower_of_ne
+定理 存在_isClopen_upper_or_lower_of_ne
   条件: (h : x != y)
   证明: by
   obtain h | h := h.not_le_or_not_ge

@@ -40,7 +40,7 @@ abbreviation pairwiseNode
 
 中文:
 缩写 pairwiseNode
-  签名: (a b : Finset (BinaryTree Unit))
+  签名: (a b : 有限集 (BinaryTree 单元))
   定义体: (a ×ˢ b).map ⟨fun x => x.1 △ x.2, fun ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ => fun h => by simpa using h⟩
 -/
 abbrev pairwiseNode (a b : Finset (BinaryTree Unit)) : Finset (BinaryTree Unit) :=
@@ -57,7 +57,7 @@ definition treesOfNumNodesEq
 
 中文:
 定义 treesOfNumNodesEq
-  签名: : 自然数 -> Finset (BinaryTree Unit)
+  签名: : 自然数 -> 有限集 (BinaryTree 单元)
   定义体: fst_le ijh.2; lia
     · simp_wf; have := snd_le ijh.2; lia
 
@@ -85,8 +85,8 @@ abbreviation _root_.Tree.treesOfNumNodesEq
 @[simp]
 
 中文:
-缩写 _root_.Tree.treesOfNumNodesEq
-  签名: : 自然数 -> Finset (Tree Unit)
+缩写 _root_.树.treesOfNumNodesEq
+  签名: : 自然数 -> 有限集 (树 单元)
   定义体: BinaryTree.treesOfNumNodesEq
 
 @[simp]
@@ -157,7 +157,7 @@ theorem mem_treesOfNumNodesEq
 
 中文:
 定理 mem_treesOfNumNodesEq
-  条件: {x : BinaryTree Unit} {n : 自然数}
+  条件: {x : BinaryTree 单元} {n : 自然数}
   证明: by
   induction x using BinaryTree.unitRecOn generalizing n <;> cases n <;>
     simp [treesOfNumNodesEq_succ, *]
@@ -182,7 +182,7 @@ theorem mem_treesOfNumNodesEq_numNodes
 
 中文:
 定理 mem_treesOfNumNodesEq_numNodes
-  条件: (x : BinaryTree Unit)
+  条件: (x : BinaryTree 单元)
   结论: x in treesOfNumNodesEq x.numNodes
   证明: mem_treesOfNumNodesEq.mpr rfl
 

@@ -46,7 +46,7 @@ theorem isOka_fg
 
 中文:
 定理 isOka_fg
-  结论: IsOka (FG (R := R)) where
+  结论: 是Oka (FG (R := R)) where
   证明: ⟨{1}, by simp⟩
   oka {I a} hsup hcolon := by
     classical
@@ -100,8 +100,8 @@ theorem IsNoetherianRing.of_prime
     simp only
 
 中文:
-定理 IsNoetherianRing.of_prime
-  条件: (H : 对任意 I : Ideal R, I.IsPrime -> I.FG)
+定理 是Noether环.of_prime
+  条件: (H : 对任意 I : 理想 R, I.是素 -> I.FG)
   证明: by
   refine ⟨isOka_fg.forall_of_forall_prime' (fun C hC₁ hC₂ I hI h => ⟨sSup C, ?_, h⟩) H⟩
   obtain ⟨G, hG⟩ := h
@@ -131,8 +131,8 @@ theorem IsNoetherianRing.of_prime_ne_bot
   proof: .of_prime fun I hi => (eq_or_ne I ⊥).elim (· ▸ Submodule.fg_bot) H _ hi
 
 中文:
-定理 IsNoetherianRing.of_prime_ne_bot
-  条件: (H : 对任意 I : Ideal R, I.IsPrime -> I != ⊥ -> I.FG)
+定理 是Noether环.of_prime_ne_bot
+  条件: (H : 对任意 I : 理想 R, I.是素 -> I != ⊥ -> I.FG)
   证明: .of_prime fun I hi => (eq_or_ne I ⊥).elim (· ▸ Submodule.fg_bot) H _ hi
 
 Depends on / 依赖: Submodule, Submodule.fg_bot, eq_or_ne, fg_bot, of_prime

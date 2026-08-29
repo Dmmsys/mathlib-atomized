@@ -30,8 +30,8 @@ instance [WeaklyLocallyCompactSpace
     ⟨s₁ ×ˢ s₂, hc₁.prod hc₂, prod_mem_nhds h₁ h₂⟩
 
 中文:
-实例 [WeaklyLocallyCompactSpace
-  签名: X] [WeaklyLocallyCompactSpace Y] :
+实例 [WeaklyLocallyCompact空间
+  签名: X] [WeaklyLocallyCompact空间 Y] :
   定义体: let ⟨s₁, hc₁, h₁⟩ := exists_compact_mem_nhds x.1
     let ⟨s₂, hc₂, h₂⟩ := exists_compact_mem_nhds x.2
     ⟨s₁ ×ˢ s₂, hc₁.prod hc₂, prod_mem_nhds h₁ h₂⟩
@@ -65,8 +65,8 @@ theorem Topology.IsClosedEmbedding.weaklyLocallyCompactSpace
     ⟨f ⁻¹' K, hf.isCompact_preimage hK, hf.continuous.continuousAt hKx⟩
 
 中文:
-定理 Topology.IsClosedEmbedding.weaklyLocallyCompactSpace
-  结论: [WeaklyLocallyCompactSpace Y]
+定理 拓扑.是闭嵌入.weaklyLocallyCompactSpace
+  结论: [WeaklyLocallyCompact空间 Y]
   证明: let ⟨K, hK, hKx⟩ := exists_compact_mem_nhds (f x)
     ⟨f ⁻¹' K, hf.isCompact_preimage hK, hf.continuous.continuousAt hKx⟩
 -/
@@ -85,8 +85,8 @@ theorem IsClosed.weaklyLocallyCompactSpace
   proof: hs.isClosedEmbedding_subtypeVal.weaklyLocallyCompactSpace
 
 中文:
-定理 IsClosed.weaklyLocallyCompactSpace
-  结论: [WeaklyLocallyCompactSpace X]
+定理 是闭集.weaklyLocallyCompactSpace
+  结论: [WeaklyLocallyCompact空间 X]
   证明: hs.isClosedEmbedding_subtypeVal.weaklyLocallyCompactSpace
 -/
 protected theorem IsClosed.weaklyLocallyCompactSpace [WeaklyLocallyCompactSpace X]
@@ -105,8 +105,8 @@ theorem IsOpenQuotientMap.weaklyLocallyCompactSpace
     exact ⟨f '' K, hKc.image hf.continuous, hf.isOpenMap.image_mem_nhds hKx⟩
 
 中文:
-定理 IsOpenQuotientMap.weaklyLocallyCompactSpace
-  结论: [WeaklyLocallyCompactSpace X]
+定理 是OpenQuotient映射.weaklyLocallyCompactSpace
+  结论: [WeaklyLocallyCompact空间 X]
   证明: by
     refine hf.surjective.forall.2 fun x => ?_
     rcases exists_compact_mem_nhds x with ⟨K, hKc, hKx⟩
@@ -134,8 +134,8 @@ theorem exists_compact_superset
 exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s :=
 
 中文:
-定理 exists_compact_superset
-  条件: [WeaklyLocallyCompactSpace X] {K : Set X} (hK : IsCompact K)
+定理 存在_compact_superset
+  条件: [WeaklyLocallyCompact空间 X] {K : 集合 X} (hK : 是紧集 K)
   证明: by
   choose s hc hmem using fun x : X => exists_compact_mem_nhds x
   rcases hK.elim_nhds_subcover _ fun x _ => interior_mem_nhds.2 (hmem x) with ⟨I, -, hIK⟩
@@ -162,7 +162,7 @@ theorem disjoint_nhds_cocompact
 
 中文:
 定理 disjoint_nhds_cocompact
-  条件: [WeaklyLocallyCompactSpace X] (x : X)
+  条件: [WeaklyLocallyCompact空间 X] (x : X)
   证明: let ⟨_, hc, hx⟩ := exists_compact_mem_nhds x
   disjoint_of_disjoint_of_mem disjoint_compl_right hx hc.compl_mem_cocompact
 
@@ -183,7 +183,7 @@ theorem compact_basis_nhds
 
 中文:
 定理 compact_basis_nhds
-  条件: [LocallyCompactSpace X] (x : X)
+  条件: [局部紧空间 X] (x : X)
   证明: hasBasis_self.2 by simpa only [and_comm] using LocallyCompactSpace.local_compact_nhds x
 
 Depends on / 依赖: LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, and_comm, hasBasis_self, local_compact_nhds
@@ -202,7 +202,7 @@ theorem local_compact_nhds
 
 中文:
 定理 local_compact_nhds
-  条件: [LocallyCompactSpace X] {x : X} {n : Set X} (h : n in 𝓝 x)
+  条件: [局部紧空间 X] {x : X} {n : 集合 X} (h : n in 𝓝 x)
   证明: LocallyCompactSpace.local_compact_nhds _ _ h
 
 Depends on / 依赖: LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, local_compact_nhds
@@ -222,7 +222,7 @@ theorem LocallyCompactSpace.of_hasBasis
     ⟨s x i, (h x).mem_of_mem hp, ht, hc x i hp⟩⟩
 
 中文:
-定理 LocallyCompactSpace.of_hasBasis
+定理 局部紧空间.of_hasBasis
   结论: {ι : X -> 类型} {p : 对任意 x, ι x -> 命题}
   证明: ⟨fun x _t ht =>
     let ⟨i, hp, ht⟩ := (h x).mem_iff.1 ht
@@ -247,8 +247,8 @@ instance Prod.locallyCompactSpace
   .of_hasBasis this fun _ _ ⟨⟨_, h₁⟩, _, h₂⟩ => h₁.prod h₂
 
 中文:
-实例 Prod.locallyCompactSpace
-  签名: (X : 类型) (Y : 类型) [TopologicalSpace X]
+实例 积类型.locallyCompactSpace
+  签名: (X : 类型) (Y : 类型) [拓扑空间 X]
   定义体: have := fun x : X × Y => (compact_basis_nhds x.1).prod_nhds' (compact_basis_nhds x.2)
   .of_hasBasis this fun _ _ ⟨⟨_, h₁⟩, _, h₂⟩ => h₁.prod h₂
 
@@ -278,8 +278,8 @@ instance Pi.locallyCompactSpace_of_finite
     refine ⟨(Set.univ : Set ι).pi n'', ?_, subset_trans (fun _ h => ?_) hsub, isCompact_un
 
 中文:
-实例 Pi.locallyCompactSpace_of_finite
-  签名: [Finite ι]
+实例 依赖函数类型.locallyCompactSpace_of_finite
+  签名: [有限 ι]
   定义体: ⟨fun t n hn => by
     rw [nhds_pi]; rw [Filter.mem_pi] at hn
     obtain ⟨s, -, n', hn', hsub⟩ := hn
@@ -314,8 +314,8 @@ instance Pi.locallyCompactSpace
     · exact (set_pi_mem_nh
 
 中文:
-实例 Pi.locallyCompactSpace
-  签名: [对任意 i, CompactSpace (X i)]
+实例 依赖函数类型.locallyCompactSpace
+  签名: [对任意 i, 紧空间 (X i)]
   定义体: ⟨fun t n hn => by
     rw [nhds_pi]; rw [Filter.mem_pi] at hn
     obtain ⟨s, hs, n', hn', hsub⟩ := hn
@@ -353,8 +353,8 @@ instance Function.locallyCompactSpace_of_finite
   body: Pi.locallyCompactSpace_of_finite
 
 中文:
-实例 Function.locallyCompactSpace_of_finite
-  签名: [Finite ι] [LocallyCompactSpace Y]
+实例 函数.locallyCompactSpace_of_finite
+  签名: [有限 ι] [局部紧空间 Y]
   定义体: Pi.locallyCompactSpace_of_finite
 
 Depends on / 依赖: Pi.locallyCompactSpace_of_finite, locallyCompactSpace_of_finite
@@ -372,8 +372,8 @@ instance Function.locallyCompactSpace
   body: Pi.locallyCompactSpace
 
 中文:
-实例 Function.locallyCompactSpace
-  签名: [LocallyCompactSpace Y] [CompactSpace Y]
+实例 函数.locallyCompactSpace
+  签名: [局部紧空间 Y] [紧空间 Y]
   定义体: Pi.locallyCompactSpace
 
 Depends on / 依赖: Pi.locallyCompactSpace, locallyCompactSpace
@@ -403,8 +403,8 @@ theorem exists_compact_subset
   exact ⟨K, h3K, mem_interior_iff_mem_nhds.2 h1K, h2K⟩
 
 中文:
-定理 exists_compact_subset
-  结论: [LocallyCompactSpace X] {x : X} {U : Set X} (hU : IsOpen U)
+定理 存在_compact_subset
+  结论: [局部紧空间 X] {x : X} {U : 集合 X} (hU : 是开集 U)
   证明: by
   rcases LocallyCompactSpace.local_compact_nhds x U (hU.mem_nhds hx) with ⟨K, h1K, h2K, h3K⟩
   exact ⟨K, h3K, mem_interior_iff_mem_nhds.2 h1K, h2K⟩
@@ -430,8 +430,8 @@ lemma exists_mem_nhdsSet_isCompact_mapsTo
     hVU x (hsK x hx)⟩
 
 中文:
-引理 exists_mem_nhdsSet_isCompact_mapsTo
-  结论: [LocallyCompactPair X Y] {f : X -> Y} {K : Set X}
+引理 存在_mem_nhdsSet_isCompact_mapsTo
+  结论: [LocallyCompactPair X Y] {f : X -> Y} {K : 集合 X}
   证明: by
   choose! V hxV hVc hVU using fun x (hx : x in K) =>
     exists_mem_nhds_isCompact_mapsTo hf (hU.mem_nhds (hKU hx))
@@ -460,8 +460,8 @@ theorem exists_compact_between
   ⟨L, hL, subset_interior_iff_mem_nhdsSet.2 hKL, hLU⟩
 
 中文:
-定理 exists_compact_between
-  结论: [LocallyCompactSpace X] {K U : Set X} (hK : IsCompact K)
+定理 存在_compact_between
+  结论: [局部紧空间 X] {K U : 集合 X} (hK : 是紧集 K)
   证明: let ⟨L, hKL, hL, hLU⟩ := exists_mem_nhdsSet_isCompact_mapsTo continuous_id hK hU h_KU
   ⟨L, hL, subset_interior_iff_mem_nhdsSet.2 hKL, hLU⟩
 
@@ -485,8 +485,8 @@ theorem IsCompact.nhdsSet_basis_isCompact
   exact ⟨L, by rwa [← subset_interior_iff_mem_nhdsSet], hL, hLU⟩
 
 中文:
-定理 IsCompact.nhdsSet_basis_isCompact
-  条件: [LocallyCompactSpace X] {K : Set X} (hK : IsCompact K)
+定理 是紧集.nhdsSet_basis_isCompact
+  条件: [局部紧空间 X] {K : 集合 X} (hK : 是紧集 K)
   证明: by
   rw [hasBasis_self]; rw [(hasBasis_nhdsSet _).forall_iff (by grind)]
   intro U ⟨hU, h_KU⟩
@@ -514,8 +514,8 @@ theorem IsOpenQuotientMap.locallyCompactSpace
     exact ⟨f '' K, hf.isOpenMap.image_mem_nhds hKx, image_subset_iff.2 hKU, hKc.image hf.continuous⟩
 
 中文:
-定理 IsOpenQuotientMap.locallyCompactSpace
-  结论: [LocallyCompactSpace X] {f : X -> Y}
+定理 是OpenQuotient映射.locallyCompactSpace
+  结论: [局部紧空间 X] {f : X -> Y}
   证明: by
     refine hf.surjective.forall.2 fun x U hU => ?_
     rcases local_compact_nhds (hf.continuous.continuousAt hU) with ⟨K, hKx, hKU, hKc⟩
@@ -544,8 +544,8 @@ theorem Topology.IsInducing.locallyCompactSpace
     rw [hf.nhds_eq_comap]; rw [← comap_nhdsWithin_range];
 
 中文:
-定理 Topology.IsInducing.locallyCompactSpace
-  结论: [LocallyCompactSpace Y] {f : X -> Y}
+定理 拓扑.是Inducing.locallyCompactSpace
+  结论: [局部紧空间 Y] {f : X -> Y}
   证明: by
   rcases h with ⟨U, Z, hU, hZ, hUZ⟩
   have (x : X) : (𝓝 x).HasBasis (fun s => (s in 𝓝 (f x) ∧ IsCompact s) ∧ s subseteq U)
@@ -576,8 +576,8 @@ theorem Topology.IsClosedEmbedding.locallyCompactSpace
   proof: hf.isInducing.locallyCompactSpace hf.isClosed_range.isLocallyClosed
 
 中文:
-定理 Topology.IsClosedEmbedding.locallyCompactSpace
-  结论: [LocallyCompactSpace Y] {f : X -> Y}
+定理 拓扑.是闭嵌入.locallyCompactSpace
+  结论: [局部紧空间 Y] {f : X -> Y}
   证明: hf.isInducing.locallyCompactSpace hf.isClosed_range.isLocallyClosed
 -/
 protected theorem Topology.IsClosedEmbedding.locallyCompactSpace [LocallyCompactSpace Y] {f : X -> Y}
@@ -593,8 +593,8 @@ theorem Topology.IsOpenEmbedding.locallyCompactSpace
   proof: hf.isInducing.locallyCompactSpace hf.isOpen_range.isLocallyClosed
 
 中文:
-定理 Topology.IsOpenEmbedding.locallyCompactSpace
-  结论: [LocallyCompactSpace Y] {f : X -> Y}
+定理 拓扑.是开嵌入.locallyCompactSpace
+  结论: [局部紧空间 Y] {f : X -> Y}
   证明: hf.isInducing.locallyCompactSpace hf.isOpen_range.isLocallyClosed
 -/
 protected theorem Topology.IsOpenEmbedding.locallyCompactSpace [LocallyCompactSpace Y] {f : X -> Y}
@@ -611,7 +611,7 @@ theorem IsLocallyClosed.locallyCompactSpace
 
 中文:
 定理 IsLocallyClosed.locallyCompactSpace
-  结论: [LocallyCompactSpace X] {s : Set X}
+  结论: [局部紧空间 X] {s : 集合 X}
   证明: IsEmbedding.subtypeVal.locallyCompactSpace by rwa [Subtype.range_val]
 -/
 protected theorem IsLocallyClosed.locallyCompactSpace [LocallyCompactSpace X] {s : Set X}
@@ -627,8 +627,8 @@ theorem IsClosed.locallyCompactSpace
   proof: hs.isLocallyClosed.locallyCompactSpace
 
 中文:
-定理 IsClosed.locallyCompactSpace
-  结论: [LocallyCompactSpace X] {s : Set X}
+定理 是闭集.locallyCompactSpace
+  结论: [局部紧空间 X] {s : 集合 X}
   证明: hs.isLocallyClosed.locallyCompactSpace
 -/
 protected theorem IsClosed.locallyCompactSpace [LocallyCompactSpace X] {s : Set X}
@@ -644,8 +644,8 @@ theorem IsOpen.locallyCompactSpace
   proof: hs.isLocallyClosed.locallyCompactSpace
 
 中文:
-定理 IsOpen.locallyCompactSpace
-  条件: [LocallyCompactSpace X] {s : Set X} (hs : IsOpen s)
+定理 是开集.locallyCompactSpace
+  条件: [局部紧空间 X] {s : 集合 X} (hs : 是开集 s)
   证明: hs.isLocallyClosed.locallyCompactSpace
 -/
 protected theorem IsOpen.locallyCompactSpace [LocallyCompactSpace X] {s : Set X} (hs : IsOpen s) :

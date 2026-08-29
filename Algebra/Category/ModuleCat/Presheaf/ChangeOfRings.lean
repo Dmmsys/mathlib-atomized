@@ -43,7 +43,7 @@ definition restrictScalarsObj
 
 中文:
 定义 restrictScalarsObj
-  签名: (M' : PresheafOfModules.{v} R') (α : R ⟶ R')
+  签名: (M' : 预模层.{v} R') (α : R ⟶ R')
   定义体: fun X => (ModuleCat.restrictScalars (α.app X).hom).obj (M'.obj X)
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)` and `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: (restrictScalars (𝟙 R)).Full
+  签名: (restrictScalars (𝟙 R)).满
   定义体: inferInstanceAs (𝟭 _).Full
 -/
 instance : (restrictScalars (𝟙 R)).Full := inferInstanceAs (𝟭 _).Full

@@ -43,7 +43,7 @@ fun X Y => ofIso tensorComm X.form Y.form
 
 中文:
 实例 :
-  签名: BraidedCategory (QuadraticModuleCat.{u} R)
+  签名: 辫范畴 (二次模范畴.{u} R)
   定义体: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
 fun X Y => ofIso tensorComm X.form Y.form
 
@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (QuadraticModuleCat R) (ModuleCat R)).Braided
+  签名: (forget₂ (二次模范畴 R) (模范畴 R)).辫
 -/
 instance : (forget₂ (QuadraticModuleCat R) (ModuleCat R)).Braided where
 
@@ -76,7 +76,7 @@ instance instSymmetricCategory
 
 中文:
 实例 instSymmetricCategory
-  签名: : SymmetricCategory (QuadraticModuleCat.{u} R)
+  签名: : 对称范畴 (二次模范畴.{u} R)
   定义体: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
 
 Depends on / 依赖: ModuleCat, QuadraticModuleCat, ofFaithful

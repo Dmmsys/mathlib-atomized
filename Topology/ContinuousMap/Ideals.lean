@@ -97,7 +97,7 @@ definition idealOfSet
 
 中文:
 定义 idealOfSet
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: {f : C(X, R) | forall x in sᶜ, f x = 0}
   add_mem' {f g} hf hg x hx := by simp [hf x hx, hg x hx, add_zero]
   zero_mem' _ _ := rfl
@@ -122,7 +122,7 @@ theorem idealOfSet_closed
 
 中文:
 定理 idealOfSet_closed
-  条件: [T2Space R] (s : Set X)
+  条件: [T2空间 R] (s : 集合 X)
   证明: by
   simp only [idealOfSet, Submodule.coe_set_mk, Set.ofPred_forall]
   exact isClosed_iInter fun x => isClosed_iInter fun _ =>
@@ -149,7 +149,7 @@ theorem mem_idealOfSet
 
 中文:
 定理 mem_idealOfSet
-  条件: {s : Set X} {f : C(X, R)}
+  条件: {s : 集合 X} {f : C(X, R)}
   证明: by
   convert! Iff.rfl
 
@@ -171,7 +171,7 @@ theorem notMem_idealOfSet
 
 中文:
 定理 notMem_idealOfSet
-  条件: {s : Set X} {f : C(X, R)}
+  条件: {s : 集合 X} {f : C(X, R)}
   结论: f ∉ idealOfSet R s ↔ 存在 x in sᶜ, f x != 0
   证明: by
   simp_rw [mem_idealOfSet]; push Not; rfl
@@ -191,7 +191,7 @@ definition setOfIdeal
 
 中文:
 定义 setOfIdeal
-  签名: (I : Ideal C(X, R))
+  签名: (I : 理想 C(X, R))
   定义体: {x : X | forall f in I, (f : C(X, R)) x = 0}ᶜ
 -/
 def setOfIdeal (I : Ideal C(X, R)) : Set X :=
@@ -208,7 +208,7 @@ theorem notMem_setOfIdeal
 
 中文:
 定理 notMem_setOfIdeal
-  条件: {I : Ideal C(X, R)} {x : X}
+  条件: {I : 理想 C(X, R)} {x : X}
   证明: by
   rw [← Set.mem_compl_iff]; rw [setOfIdeal]; rw [compl_compl]; rw [Set.mem_ofPred]
 
@@ -229,7 +229,7 @@ theorem mem_setOfIdeal
 
 中文:
 定理 mem_setOfIdeal
-  条件: {I : Ideal C(X, R)} {x : X}
+  条件: {I : 理想 C(X, R)} {x : X}
   证明: by
   simp_rw [setOfIdeal, Set.mem_compl_iff, Set.mem_ofPred]; push Not; rfl
 
@@ -254,8 +254,8 @@ theorem setOfIdeal_open
 
 中文:
 定理 setOfIdeal_open
-  条件: [T2Space R] (I : Ideal C(X, R))
-  结论: IsOpen (setOfIdeal I)
+  条件: [T2空间 R] (I : 理想 C(X, R))
+  结论: 是开集 (setOfIdeal I)
   证明: by
   simp only [setOfIdeal, Set.ofPred_forall, isOpen_compl_iff]
   exact
@@ -284,7 +284,7 @@ definition opensOfIdeal
 
 中文:
 定义 opensOfIdeal
-  签名: [T2Space R] (I : Ideal C(X, R))
+  签名: [T2空间 R] (I : 理想 C(X, R))
   定义体: ⟨setOfIdeal I, setOfIdeal_open I⟩
 
 @[simp]
@@ -308,8 +308,8 @@ theorem setOfTop_eq_univ
 
 中文:
 定理 setOfTop_eq_univ
-  条件: [Nontrivial R]
-  结论: setOfIdeal (⊤ : Ideal C(X, R)) = Set.univ
+  条件: [非平凡 R]
+  结论: setOfIdeal (⊤ : 理想 C(X, R)) = 集合.univ
   证明: Set.univ_subset_iff.mp fun _ _ => mem_setOfIdeal.mpr ⟨1, Submodule.mem_top, one_ne_zero⟩
 
 @[simp]
@@ -334,7 +334,7 @@ theorem idealOfEmpty_eq_bot
 
 中文:
 定理 idealOfEmpty_eq_bot
-  结论: idealOfSet R (∅ : Set X) = ⊥
+  结论: idealOfSet R (∅ : 集合 X) = ⊥
   证明: Ideal.ext fun f => by
     simp only [mem_idealOfSet, Set.compl_empty, Set.mem_univ, forall_true_left, Ideal.mem_bot,
       DFunLike.ext_iff, zero_apply]
@@ -389,7 +389,7 @@ theorem ideal_gc
 
 中文:
 定理 ideal_gc
-  结论: GaloisConnection (setOfIdeal : Ideal C(X, R) -> Set X) (idealOfSet R)
+  结论: GaloisConnection (setOfIdeal : 理想 C(X, R) -> 集合 X) (idealOfSet R)
   证明: by
   refine fun I s => ⟨fun h f hf => ?_, fun h x hx => ?_⟩
   · by_contra h'
@@ -433,7 +433,7 @@ theorem exists_mul_le_one_eqOn_ge
     simpa only [
 
 中文:
-定理 exists_mul_le_one_eqOn_ge
+定理 存在_mul_le_one_eqOn_ge
   条件: (f : C(X, 实数>=0)) {c : 实数>=0} (hc : 0 < c)
   证明: ⟨{ toFun := (f ⊔ const X c)⁻¹
       continuous_toFun :=
@@ -475,7 +475,7 @@ theorem idealOfSet_ofIdeal_eq_closure
 
 中文:
 定理 idealOfSet_ofIdeal_eq_closure
-  条件: (I : Ideal C(X, 𝕜))
+  条件: (I : 理想 C(X, 𝕜))
   证明: by
   /- Since `idealOfSet 𝕜 (setOfIdeal I)` is closed and contains `I`, it contains `I.closure`.
     For the reverse inclusion, given `f ∈ idealOfSet 𝕜 (setOfIdeal I)` and `(ε : ℝ≥0) > 0` it
@@ -598,7 +598,7 @@ theorem idealOfSet_ofIdeal_isClosed
 
 中文:
 定理 idealOfSet_ofIdeal_isClosed
-  条件: {I : Ideal C(X, 𝕜)} (hI : IsClosed (I : Set C(X, 𝕜)))
+  条件: {I : 理想 C(X, 𝕜)} (hI : 是闭集 (I : 集合 C(X, 𝕜)))
   证明: (idealOfSet_ofIdeal_eq_closure I).trans (Ideal.ext <| Set.ext_iff.mp hI.closure_eq)
 
 Depends on / 依赖: Ideal.ext, Set.ext_iff.mp, closure_eq, ext_iff, hI.closure_eq, idealOfSet_ofIdeal_eq_closure
@@ -628,7 +628,7 @@ theorem setOfIdeal_ofSet_eq_interior
 
 中文:
 定理 setOfIdeal_ofSet_eq_interior
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: setOfIdeal (idealOfSet 𝕜 s) = interior s
   证明: by
   refine
@@ -673,7 +673,7 @@ theorem setOfIdeal_ofSet_of_isOpen
 
 中文:
 定理 setOfIdeal_ofSet_of_isOpen
-  条件: {s : Set X} (hs : IsOpen s)
+  条件: {s : 集合 X} (hs : 是开集 s)
   结论: setOfIdeal (idealOfSet 𝕜 s) = s
   证明: (setOfIdeal_ofSet_eq_interior 𝕜 s).trans hs.interior_eq
 
@@ -771,7 +771,7 @@ theorem idealOf_compl_singleton_isMaximal
 中文:
 定理 idealOf_compl_singleton_isMaximal
   条件: (x : X)
-  结论: (idealOfSet 𝕜 ({x}ᶜ : Set X)).IsMaximal
+  结论: (idealOfSet 𝕜 ({x}ᶜ : 集合 X)).是极大
   证明: (idealOfSet_isMaximal_iff 𝕜 _).mpr Opens.isCoatom_iff.mpr ⟨x, rfl⟩
 
 Depends on / 依赖: Opens.isCoatom_iff.mpr, idealOfSet_isMaximal_iff, isCoatom_iff
@@ -795,7 +795,7 @@ theorem setOfIdeal_eq_compl_singleton
 
 中文:
 定理 setOfIdeal_eq_compl_singleton
-  条件: (I : Ideal C(X, 𝕜)) [hI : I.IsMaximal]
+  条件: (I : 理想 C(X, 𝕜)) [hI : I.是极大]
   证明: by
   have h : (idealOfSet 𝕜 (setOfIdeal I)).IsMaximal :=
     (idealOfSet_ofIdeal_isClosed (inferInstance : IsClosed (I : Set C(X, 𝕜)))).symm ▸ hI
@@ -831,7 +831,7 @@ theorem ideal_isMaximal_iff
 
 中文:
 定理 ideal_isMaximal_iff
-  条件: (I : Ideal C(X, 𝕜)) [hI : IsClosed (I : Set C(X, 𝕜))]
+  条件: (I : 理想 C(X, 𝕜)) [hI : 是闭集 (I : 集合 C(X, 𝕜))]
   证明: by
   refine
     ⟨?_, fun h =>
@@ -954,7 +954,7 @@ theorem continuousMapEval_bijective
 
 中文:
 定理 continuousMapEval_bijective
-  结论: Bijective (continuousMapEval X 𝕜)
+  结论: 双射 (continuousMapEval X 𝕜)
   证明: by
   refine ⟨fun x y hxy => ?_, fun φ => ?_⟩
   · contrapose! hxy

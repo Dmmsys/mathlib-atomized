@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (DirectLimit G f)
+  签名: 幺 (DirectLimit G f)
   定义体: map₀ f fun _ => 1
 -/
 @[to_additive] instance : One (DirectLimit G f) where
@@ -118,7 +118,7 @@ theorem exists_eq_one
 @[to_additive (attr := simp)]
 
 中文:
-定理 exists_eq_one
+定理 存在_eq_one
   条件: (x)
   证明: by
   rw [one_def x.1]; rw [Quotient.eq]
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (DirectLimit G f)
+  签名: 对合 (DirectLimit G f)
   定义体: .map f f (fun _ x => star x) (fun i j h x => map_star (f i j h) x)
 
 Depends on / 依赖: map_star
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (DirectLimit G f)
+  签名: 乘法 (DirectLimit G f)
   定义体: map₂ f f f (fun _ => (· * ·)) fun _ _ _ => map_mul _
 -/
 @[to_additive] instance : Mul (DirectLimit G f) where
@@ -360,7 +360,7 @@ lemma map₀_mul
 
 中文:
 引理 map₀_mul
-  条件: [Nonempty ι] (r s : 对任意 i, G i)
+  条件: [非空 ι] (r s : 对任意 i, G i)
   结论: map₀ f (r * s) = map₀ f r * map₀ f s
   证明: by
   simp_rw [map₀, Pi.mul_apply, mul_def]
@@ -381,8 +381,8 @@ instance [forall
   body: DirectLimit.induction₂ _ fun i _ _ => by simp_rw [mul_def, mul_comm]
 
 中文:
-实例 [forall
-  签名: i, CommMagma (G i)] [对任意 i j h, MulHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换原群 (G i)] [对任意 i j h, 乘法态射类 (T h) (G i) (G j)] :
   定义体: DirectLimit.induction₂ _ fun i _ _ => by simp_rw [mul_def, mul_comm]
 -/
 @[to_additive] instance [forall i, CommMagma (G i)] [forall i j h, MulHomClass (T h) (G i) (G j)] :
@@ -398,8 +398,8 @@ instance [forall
   body: DirectLimit.induction₃ _ fun i _ _ _ => by simp_rw [mul_def, mul_assoc]
 
 中文:
-实例 [forall
-  签名: i, Semigroup (G i)] [对任意 i j h, MulHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 半群 (G i)] [对任意 i j h, 乘法态射类 (T h) (G i) (G j)] :
   定义体: DirectLimit.induction₃ _ fun i _ _ _ => by simp_rw [mul_def, mul_assoc]
 -/
 @[to_additive] instance [forall i, Semigroup (G i)] [forall i j h, MulHomClass (T h) (G i) (G j)] :
@@ -415,8 +415,8 @@ instance [forall
   body: mul_comm
 
 中文:
-实例 [forall
-  签名: i, CommSemigroup (G i)] [对任意 i j h, MulHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换半群 (G i)] [对任意 i j h, 乘法态射类 (T h) (G i) (G j)] :
   定义体: mul_comm
 -/
 @[to_additive] instance [forall i, CommSemigroup (G i)] [forall i j h, MulHomClass (T h) (G i) (G j)] :
@@ -461,7 +461,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (DirectLimit G f)
+  签名: 标量乘法 R (DirectLimit G f)
   定义体: map _ _ (fun _ => (r • ·)) fun _ _ _ => map_smul _ r
 -/
 @[to_additive] instance : SMul R (DirectLimit G f) where
@@ -523,8 +523,8 @@ instance [Star
     simp_rw [star_def, smul_def, ← star_smul, star_def]
 
 中文:
-实例 [Star
-  签名: R] [对任意 i, Star (G i)] [对任意 i j h, StarHomClass (T h) (G i) (G j)]
+实例 [对合
+  签名: R] [对任意 i, 对合 (G i)] [对任意 i j h, 对合态射类 (T h) (G i) (G j)]
   定义体: DirectLimit.induction _ fun i x => by
     simp_rw [star_def, smul_def, ← star_smul, star_def]
 
@@ -547,8 +547,8 @@ instance [Monoid
   mul_smul _ _ := DirectLimit.induction _ fun i _ => by simp_rw [smul_def, mul_smul]
 
 中文:
-实例 [Monoid
-  签名: R] [对任意 i, MulAction R (G i)]
+实例 [幺半群
+  签名: R] [对任意 i, 乘法作用 R (G i)]
   定义体: DirectLimit.induction _ fun i _ => by rw [smul_def, one_smul]
   mul_smul _ _ := DirectLimit.induction _ fun i _ => by simp_rw [smul_def, mul_smul]
 -/
@@ -570,8 +570,8 @@ instance [forall
   mul_one := DirectLimit.induction _ fun i _ => by simp_rw [one_def i, mul_def, mul_one]
 
 中文:
-实例 [forall
-  签名: i, MulOneClass (G i)] [对任意 i j h, MonoidHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, MulOne类 (G i)] [对任意 i j h, 幺半群态射类 (T h) (G i) (G j)] :
   定义体: DirectLimit.induction _ fun i _ => by simp_rw [one_def i, mul_def, one_mul]
   mul_one := DirectLimit.induction _ fun i _ => by simp_rw [one_def i, mul_def, mul_one]
 -/
@@ -595,7 +595,7 @@ definition map₀MonoidHom
 
 中文:
 定义 map₀MonoidHom
-  签名: [对任意 i, MulOneClass (G i)] [对任意 i j h, MonoidHomClass (T h) (G i) (G j)]
+  签名: [对任意 i, MulOne类 (G i)] [对任意 i j h, 幺半群态射类 (T h) (G i) (G j)]
   定义体: map₀ _ x
   map_one' := map₀_one
   map_mul' := map₀_mul
@@ -627,7 +627,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (DirectLimit G f)
+  签名: 幺半群 (DirectLimit G f)
   定义体: one_mul
   mul_one := mul_one
   npow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_pow _ x n
@@ -701,8 +701,8 @@ instance [forall
   body: mul_comm
 
 中文:
-实例 [forall
-  签名: i, CommMonoid (G i)] [对任意 i j h, MonoidHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换幺半群 (G i)] [对任意 i j h, 幺半群态射类 (T h) (G i) (G j)] :
   定义体: mul_comm
 -/
 @[to_additive] instance [forall i, CommMonoid (G i)] [forall i j h, MonoidHomClass (T h) (G i) (G j)] :
@@ -723,7 +723,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarAddMonoid (DirectLimit G f)
+  签名: StarAdd幺半群 (DirectLimit G f)
   定义体: DirectLimit.induction₂ _ fun i _ _ => by simp_rw [add_def, star_def, star_add, add_def]
 
 Depends on / 依赖: DirectLimit, DirectLimit.induction, add_def, simp_rw, star_add, star_def
@@ -751,7 +751,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (DirectLimit G f)
+  签名: 群 (DirectLimit G f)
   定义体: map _ _ (fun _ => (·⁻¹)) fun _ _ _ => map_inv _
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow _ x n
@@ -910,8 +910,8 @@ instance [forall
   body: mul_comm
 
 中文:
-实例 [forall
-  签名: i, CommGroup (G i)] [对任意 i j h, MonoidHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换群 (G i)] [对任意 i j h, 幺半群态射类 (T h) (G i) (G j)] :
   定义体: mul_comm
 -/
 @[to_additive] instance [forall i, CommGroup (G i)] [forall i j h, MonoidHomClass (T h) (G i) (G j)] :
@@ -928,8 +928,8 @@ instance [forall
   mul_zero := DirectLimit.induction _ fun i _ => by simp_rw [zero_def i, mul_def, mul_zero]
 
 中文:
-实例 [forall
-  签名: i, MulZeroClass (G i)] [对任意 i j h, MulHomClass (T h) (G i) (G j)]
+实例 [对任意
+  签名: i, 乘零类 (G i)] [对任意 i j h, 乘法态射类 (T h) (G i) (G j)]
   定义体: DirectLimit.induction _ fun i _ => by simp_rw [zero_def i, mul_def, zero_mul]
   mul_zero := DirectLimit.induction _ fun i _ => by simp_rw [zero_def i, mul_def, mul_zero]
 
@@ -956,7 +956,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulZeroOneClass (DirectLimit G f)
+  签名: 乘零幺类 (DirectLimit G f)
   定义体: zero_mul
   mul_zero := mul_zero
 
@@ -975,8 +975,8 @@ instance [forall
   body: ⟨0, 1, fun h => have ⟨i, _, _, eq⟩ := Quotient.eq.mp h; by simp at eq⟩
 
 中文:
-实例 [forall
-  签名: i, Nontrivial (G i)] : Nontrivial (DirectLimit G f) where
+实例 [对任意
+  签名: i, 非平凡 (G i)] : 非平凡 (DirectLimit G f) where
   定义体: ⟨0, 1, fun h => have ⟨i, _, _, eq⟩ := Quotient.eq.mp h; by simp at eq⟩
 
 Depends on / 依赖: Quotient, Quotient.eq.mp
@@ -996,8 +996,8 @@ instance [forall
   mul_zero := mul_zero
 
 中文:
-实例 [forall
-  签名: i, SemigroupWithZero (G i)] [对任意 i j h, MulHomClass (T h) (G i) (G j)]
+实例 [对任意
+  签名: i, 带零半群 (G i)] [对任意 i j h, 乘法态射类 (T h) (G i) (G j)]
   定义体: zero_mul
   mul_zero := mul_zero
 
@@ -1019,8 +1019,8 @@ instance [forall
   mul_zero := mul_zero
 
 中文:
-实例 [forall
-  签名: i, MonoidWithZero (G i)] [对任意 i j h, MonoidWithZeroHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 带零幺半群 (G i)] [对任意 i j h, 带零幺半群态射类 (T h) (G i) (G j)] :
   定义体: zero_mul
   mul_zero := mul_zero
 
@@ -1041,8 +1041,8 @@ instance [forall
   mul_zero := mul_zero
 
 中文:
-实例 [forall
-  签名: i, CommMonoidWithZero (G i)] [对任意 i j h, MonoidWithZeroHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 带零交换幺半群 (G i)] [对任意 i j h, 带零幺半群态射类 (T h) (G i) (G j)] :
   定义体: zero_mul
   mul_zero := mul_zero
 
@@ -1073,7 +1073,7 @@ instance :
 
 中文:
 实例 :
-  签名: GroupWithZero (DirectLimit G f)
+  签名: 带零群 (DirectLimit G f)
   定义体: map _ _ (fun _ => (·⁻¹)) fun _ _ _ => map_inv₀ _
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div₀ _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow₀ _ x n
@@ -1236,8 +1236,8 @@ instance [forall
   mul_comm := mul_comm
 
 中文:
-实例 [forall
-  签名: i, CommGroupWithZero (G i)] [对任意 i j h, MonoidWithZeroHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 带零交换群 (G i)] [对任意 i j h, 带零幺半群态射类 (T h) (G i) (G j)] :
   定义体: inferInstance
   mul_comm := mul_comm
 -/
@@ -1262,7 +1262,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoidWithOne (DirectLimit G f)
+  签名: 加法带幺幺半群 (DirectLimit G f)
   定义体: map₀ _ fun _ => n
   natCast_zero := show ⟦_⟧ = ⟦_⟧ by simp_rw [Nat.cast_zero]
   natCast_succ n := show ⟦_⟧ = ⟦_⟧ + ⟦_⟧ by simp_rw [Nat.cast_succ, add_def]
@@ -1282,7 +1282,7 @@ theorem natCast_def
 
 中文:
 定理 natCast_def
-  条件: [对任意 i j h, OneHomClass (T h) (G i) (G j)] (n : 自然数) (i)
+  条件: [对任意 i j h, 幺态射类 (T h) (G i) (G j)] (n : 自然数) (i)
   证明: map₀_def _ _ (fun _ _ _ => map_natCast' _ (map_one _) _) _
 
 Depends on / 依赖: map_natCast, map_one
@@ -1312,7 +1312,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroupWithOne (DirectLimit G f)
+  签名: 加法带幺群 (DirectLimit G f)
   定义体: inferInstance
   intCast n := map₀ _ fun _ => n
   intCast_ofNat n := show ⟦_⟧ = ⟦_⟧ by simp_rw [Int.cast_natCast]
@@ -1340,7 +1340,7 @@ theorem intCast_def
 
 中文:
 定理 intCast_def
-  条件: [对任意 i j h, OneHomClass (T h) (G i) (G j)] (n : 整数) (i)
+  条件: [对任意 i j h, 幺态射类 (T h) (G i) (G j)] (n : 整数) (i)
   证明: map₀_def _ _ (fun _ _ _ => map_intCast' _ (map_one _) _) _
 
 Depends on / 依赖: map_intCast, map_one
@@ -1360,8 +1360,8 @@ instance [forall
   body: add_comm
 
 中文:
-实例 [forall
-  签名: i, AddCommMonoidWithOne (G i)] [对任意 i j h, AddMonoidHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 加法交换带幺幺半群 (G i)] [对任意 i j h, 加法幺半群态射类 (T h) (G i) (G j)] :
   定义体: add_comm
 
 Depends on / 依赖: add_comm
@@ -1380,8 +1380,8 @@ instance [forall
   add_comm := add_comm
 
 中文:
-实例 [forall
-  签名: i, AddCommGroupWithOne (G i)] [对任意 i j h, AddMonoidHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 加法交换带幺群 (G i)] [对任意 i j h, 加法幺半群态射类 (T h) (G i) (G j)] :
   定义体: inferInstance
   add_comm := add_comm
 -/
@@ -1404,8 +1404,8 @@ instance [forall
   mul_zero := mul_zero
 
 中文:
-实例 [forall
-  签名: i, NonUnitalNonAssocSemiring (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺非结合半环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
   定义体: DirectLimit.induction₃ _ fun i _ _ _ => by
     simp_rw [add_def, mul_def, left_distrib, add_def]
   right_distrib := DirectLimit.induction₃ _ fun i _ _ _ => by
@@ -1433,8 +1433,8 @@ instance [forall
   body: star_add
 
 中文:
-实例 [forall
-  签名: i, NonUnitalNonAssocSemiring (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)]
+实例 [对任意
+  签名: i, 非幺非结合半环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)]
   定义体: star_add
 
 Depends on / 依赖: star_add
@@ -1453,8 +1453,8 @@ instance [forall
   body: mul_assoc
 
 中文:
-实例 [forall
-  签名: i, NonUnitalSemiring (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺半环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
   定义体: mul_assoc
 
 Depends on / 依赖: mul_assoc
@@ -1475,8 +1475,8 @@ instance [forall
   natCast_succ := Nat.cast_succ
 
 中文:
-实例 [forall
-  签名: i, NonAssocSemiring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非结合半环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
   定义体: one_mul
   mul_one := mul_one
   natCast_zero := Nat.cast_zero
@@ -1499,8 +1499,8 @@ instance [forall
   signature: i, Semiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, Semiring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 半环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, Semiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     Semiring (DirectLimit G f) where
@@ -1520,7 +1520,7 @@ definition map₀RingHom
 
 中文:
 定义 map₀RingHom
-  签名: [对任意 i, NonAssocSemiring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)]
+  签名: [对任意 i, 非结合半环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)]
   定义体: map₀ _ r
   __ := map₀AddMonoidHom f
   __ := map₀MonoidHom f
@@ -1539,8 +1539,8 @@ instance [forall
   signature: i, NonUnitalNonAssocCommSemiring (G i)]
 
 中文:
-实例 [forall
-  签名: i, NonUnitalNonAssocCommSemiring (G i)]
+实例 [对任意
+  签名: i, 非幺非结合交换半环 (G i)]
 -/
 instance [forall i, NonUnitalNonAssocCommSemiring (G i)]
     [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
@@ -1554,8 +1554,8 @@ instance [forall
   signature: i, NonUnitalCommSemiring (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonUnitalCommSemiring (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺交换半环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonUnitalCommSemiring (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
     NonUnitalCommSemiring (DirectLimit G f) where
@@ -1568,8 +1568,8 @@ instance [forall
   signature: i, NonAssocCommSemiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonAssocCommSemiring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非结合交换半环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonAssocCommSemiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     NonAssocCommSemiring (DirectLimit G f) where
@@ -1582,8 +1582,8 @@ instance [forall
   signature: i, CommSemiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, CommSemiring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换半环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, CommSemiring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     CommSemiring (DirectLimit G f) where
@@ -1596,8 +1596,8 @@ instance [forall
   signature: i, NonUnitalNonAssocRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonUnitalNonAssocRing (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺非结合环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonUnitalNonAssocRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
     NonUnitalNonAssocRing (DirectLimit G f) where
@@ -1610,8 +1610,8 @@ instance [forall
   signature: i, NonUnitalRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonUnitalRing (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonUnitalRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
     NonUnitalRing (DirectLimit G f) where
@@ -1624,8 +1624,8 @@ instance [forall
   signature: i, NonAssocRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonAssocRing (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非结合环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonAssocRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     NonAssocRing (DirectLimit G f) where
@@ -1638,8 +1638,8 @@ instance [forall
   signature: i, Ring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] : Ring (DirectLimit G f) where
 
 中文:
-实例 [forall
-  签名: i, Ring (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] : Ring (DirectLimit G f) where
+实例 [对任意
+  签名: i, 环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] : 环 (DirectLimit G f) where
 -/
 instance [forall i, Ring (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] : Ring (DirectLimit G f) where
 
@@ -1651,8 +1651,8 @@ instance [forall
   signature: i, NonUnitalNonAssocCommRing (G i)]
 
 中文:
-实例 [forall
-  签名: i, NonUnitalNonAssocCommRing (G i)]
+实例 [对任意
+  签名: i, 非幺非结合交换环 (G i)]
 -/
 instance [forall i, NonUnitalNonAssocCommRing (G i)]
     [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
@@ -1666,8 +1666,8 @@ instance [forall
   signature: i, NonUnitalCommRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonUnitalCommRing (G i)] [对任意 i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非幺交换环 (G i)] [对任意 i j h, 非幺环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonUnitalCommRing (G i)] [forall i j h, NonUnitalRingHomClass (T h) (G i) (G j)] :
     NonUnitalCommRing (DirectLimit G f) where
@@ -1680,8 +1680,8 @@ instance [forall
   signature: i, NonAssocCommRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, NonAssocCommRing (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 非结合交换环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, NonAssocCommRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     NonAssocCommRing (DirectLimit G f) where
@@ -1694,8 +1694,8 @@ instance [forall
   signature: i, CommRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
 
 中文:
-实例 [forall
-  签名: i, CommRing (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 交换环 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
 -/
 instance [forall i, CommRing (G i)] [forall i j h, RingHomClass (T h) (G i) (G j)] :
     CommRing (DirectLimit G f) where
@@ -1711,8 +1711,8 @@ instance [forall
   body: (smul_def _ _ _).trans by rw [smul_zero]; rfl
 
 中文:
-实例 [forall
-  签名: i, Zero (G i)] [对任意 i, SMulZeroClass R (G i)]
+实例 [对任意
+  签名: i, 零 (G i)] [对任意 i, SMulZero类 R (G i)]
   定义体: (smul_def _ _ _).trans by rw [smul_zero]; rfl
 
 Depends on / 依赖: smul_def, smul_zero
@@ -1731,8 +1731,8 @@ instance [Zero
   body: DirectLimit.induction _ fun i _ => by simp_rw [smul_def, zero_smul, zero_def i]
 
 中文:
-实例 [Zero
-  签名: R] [对任意 i, Zero (G i)] [对任意 i, SMulWithZero R (G i)]
+实例 [零
+  签名: R] [对任意 i, 零 (G i)] [对任意 i, 带零标量乘法 R (G i)]
   定义体: DirectLimit.induction _ fun i _ => by simp_rw [smul_def, zero_smul, zero_def i]
 
 Depends on / 依赖: DirectLimit, DirectLimit.induction, simp_rw, smul_def, zero_def, zero_smul
@@ -1753,8 +1753,8 @@ instance [forall
     simp_rw [add_def, smul_def, smul_add, add_def]
 
 中文:
-实例 [forall
-  签名: i, AddZeroClass (G i)] [对任意 i, DistribSMul R (G i)]
+实例 [对任意
+  签名: i, 加法零类 (G i)] [对任意 i, 分配标量乘法 R (G i)]
   定义体: DirectLimit.induction₂ _ fun i _ _ => by
     simp_rw [add_def, smul_def, smul_add, add_def]
 
@@ -1777,8 +1777,8 @@ instance [Monoid
   { smul_zero := smul_zero, smul_add := smul_add }
 
 中文:
-实例 [Monoid
-  签名: R] [对任意 i, AddMonoid (G i)] [对任意 i, DistribMulAction R (G i)]
+实例 [幺半群
+  签名: R] [对任意 i, 加法幺半群 (G i)] [对任意 i, 分配乘法作用 R (G i)]
   定义体: have _ i j h : MulActionHomClass (T h) R (G i) (G j) := inferInstance
   { smul_zero := smul_zero, smul_add := smul_add }
 
@@ -1801,8 +1801,8 @@ instance [Monoid
 smul_one r := (smul_def _ _ _).trans by rw [smul_one]; rfl
 
 中文:
-实例 [Monoid
-  签名: R] [对任意 i, Monoid (G i)] [对任意 i, MulDistribMulAction R (G i)]
+实例 [幺半群
+  签名: R] [对任意 i, 幺半群 (G i)] [对任意 i, MulDistribMul作用 R (G i)]
   定义体: DirectLimit.induction₂ _ fun i _ _ => by
     simp_rw [mul_def, smul_def, MulDistribMulAction.smul_mul, mul_def]
 smul_one r := (smul_def _ _ _).trans by rw [smul_one]; rfl
@@ -1828,8 +1828,8 @@ instance [Semiring
     zero_smul := DirectLimit.induction _ fun i _ => by simp_rw [smul_def, zero_smul, zero_def i] }
 
 中文:
-实例 [Semiring
-  签名: R] [对任意 i, AddCommMonoid (G i)] [对任意 i, Module R (G i)]
+实例 [半环
+  签名: R] [对任意 i, 加法交换幺半群 (G i)] [对任意 i, 模 R (G i)]
   定义体: have _ i j h : DistribMulActionHomClass (T h) R (G i) (G j) := inferInstance
   { add_smul _ _ := DirectLimit.induction _ fun i _ => by simp_rw [smul_def, add_smul, add_def],
     zero_smul := DirectLimit.induction _ fun i _ => by simp_rw [smul_def, zero_smul, zero_def i] }
@@ -1853,8 +1853,8 @@ instance [forall
     simp_rw [smul_eq_mul, smul_def, mul_def, smul_def, smul_mul_assoc]
 
 中文:
-实例 [forall
-  签名: i, Mul (G i)] [对任意 i, SMul R (G i)] [对任意 i, IsScalarTower R (G i) (G i)]
+实例 [对任意
+  签名: i, 乘法 (G i)] [对任意 i, 标量乘法 R (G i)] [对任意 i, 标量塔 R (G i) (G i)]
   定义体: DirectLimit.induction₂ _ fun i _ _ => by
     simp_rw [smul_eq_mul, smul_def, mul_def, smul_def, smul_mul_assoc]
 
@@ -1876,8 +1876,8 @@ instance [forall
     simp_rw [smul_eq_mul, smul_def, mul_def, smul_def, mul_smul_comm]
 
 中文:
-实例 [forall
-  签名: i, Mul (G i)] [对任意 i, SMul R (G i)] [对任意 i, SMulCommClass R (G i) (G i)]
+实例 [对任意
+  签名: i, 乘法 (G i)] [对任意 i, 标量乘法 R (G i)] [对任意 i, 标量交换类 R (G i) (G i)]
   定义体: DirectLimit.induction₂ _ fun i _ _ => by
     simp_rw [smul_eq_mul, smul_def, mul_def, smul_def, mul_smul_comm]
 
@@ -1899,8 +1899,8 @@ instance [forall
   SMulCommClass.symm _ _ _
 
 中文:
-实例 [forall
-  签名: i, Mul (G i)] [对任意 i, SMul R (G i)] [对任意 i, SMulCommClass (G i) R (G i)]
+实例 [对任意
+  签名: i, 乘法 (G i)] [对任意 i, 标量乘法 R (G i)] [对任意 i, 标量交换类 (G i) R (G i)]
   定义体: have _ (i) : SMulCommClass R (G i) (G i) := SMulCommClass.symm _ _ _
   SMulCommClass.symm _ _ _
 
@@ -1934,7 +1934,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivisionSemiring (DirectLimit G f)
+  签名: 除半环 (DirectLimit G f)
   定义体: inferInstance
   __ : Semiring _ := inferInstance
   nnratCast q := map₀ _ fun _ => q
@@ -1966,7 +1966,7 @@ theorem nnratCast_def
 
 中文:
 定理 nnratCast_def
-  条件: (q : Rat>=0) (i)
+  条件: (q : 有理数>=0) (i)
   结论: (q : DirectLimit G f) = ⟦⟨i, q⟩⟧
   证明: map₀_def _ _ (fun _ _ _ => map_nnratCast _ _) _
 
@@ -1990,7 +1990,7 @@ theorem lift_nnratCast
 
 中文:
 定理 lift_nnratCast
-  条件: (g : 对任意 i, H i) (h) (q : Rat>=0)
+  条件: (g : 对任意 i, H i) (h) (q : 有理数>=0)
   证明: by
   let ⟨i⟩ := ‹Nonempty ι›
   rw [nnratCast_def]; rw [lift_def]; rw [map_nnratCast (g i)]
@@ -2014,8 +2014,8 @@ instance [forall
   mul_comm := mul_comm
 
 中文:
-实例 [forall
-  签名: i, Semifield (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 半域 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
   定义体: inferInstance
   mul_comm := mul_comm
 -/
@@ -2044,7 +2044,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivisionRing (DirectLimit G f)
+  签名: 除环 (DirectLimit G f)
   定义体: inferInstance
   __ : Ring _ := inferInstance
   ratCast q := map₀ _ fun _ => q
@@ -2076,7 +2076,7 @@ theorem ratCast_def
 
 中文:
 定理 ratCast_def
-  条件: (q : Rat) (i)
+  条件: (q : 有理数) (i)
   结论: (q : DirectLimit G f) = ⟦⟨i, q⟩⟧
   证明: map₀_def _ _ (fun _ _ _ => map_ratCast _ _) _
 
@@ -2100,7 +2100,7 @@ theorem lift_ratCast
 
 中文:
 定理 lift_ratCast
-  条件: (g : 对任意 i, H i) (h) (q : Rat)
+  条件: (g : 对任意 i, H i) (h) (q : 有理数)
   证明: by
   let ⟨i⟩ := ‹Nonempty ι›
   rw [ratCast_def]; rw [lift_def]; rw [map_ratCast (g i)]
@@ -2124,8 +2124,8 @@ instance [forall
   mul_comm := mul_comm
 
 中文:
-实例 [forall
-  签名: i, Field (G i)] [对任意 i j h, RingHomClass (T h) (G i) (G j)] :
+实例 [对任意
+  签名: i, 域 (G i)] [对任意 i j h, 环态射类 (T h) (G i) (G j)] :
   定义体: inferInstance
   mul_comm := mul_comm
 -/
@@ -2175,7 +2175,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (DirectLimit G f)
+  签名: 代数 R (DirectLimit G f)
   定义体: map₀RingHom (f := f).comp (algebraMap R (forall i, G i))
   commutes' r := DirectLimit.induction f fun i _ => by
     dsimp [Pi.algebraMap_def, map₀RingHom]

@@ -66,7 +66,7 @@ theorem mem_iUnion₂
 
 中文:
 定理 mem_iUnion₂
-  条件: {x : γ} {s : 对任意 i, κ i -> Set γ}
+  条件: {x : γ} {s : 对任意 i, κ i -> 集合 γ}
   结论: (x in ⋃ (i) (j), s i j) ↔ 存在 i j, x in s i j
   证明: by
   simp_rw [mem_iUnion]
@@ -87,8 +87,8 @@ theorem mem_iInter₂
   simp_rw [mem_iInter]
 
 中文:
-定理 mem_iInter₂
-  条件: {x : γ} {s : 对任意 i, κ i -> Set γ}
+定理 mem_i整数er₂
+  条件: {x : γ} {s : 对任意 i, κ i -> 集合 γ}
   结论: (x in ⋂ (i) (j), s i j) ↔ 对任意 i j, x in s i j
   证明: by
   simp_rw [mem_iInter]
@@ -109,7 +109,7 @@ theorem mem_iUnion_of_mem
 
 中文:
 定理 mem_iUnion_of_mem
-  条件: {s : ι -> Set α} {a : α} (i : ι) (ha : a in s i)
+  条件: {s : ι -> 集合 α} {a : α} (i : ι) (ha : a in s i)
   结论: a in ⋃ i, s i
   证明: mem_iUnion.2 ⟨i, ha⟩
 
@@ -128,7 +128,7 @@ theorem mem_iUnion₂_of_mem
 
 中文:
 定理 mem_iUnion₂_of_mem
-  条件: {s : 对任意 i, κ i -> Set α} {a : α} {i : ι} (j : κ i) (ha : a in s i j)
+  条件: {s : 对任意 i, κ i -> 集合 α} {a : α} {i : ι} (j : κ i) (ha : a in s i j)
   证明: mem_iUnion₂.2 ⟨i, j, ha⟩
 -/
 theorem mem_iUnion₂_of_mem {s : forall i, κ i -> Set α} {a : α} {i : ι} (j : κ i) (ha : a in s i j) :
@@ -145,8 +145,8 @@ theorem mem_iInter_of_mem
   proof: mem_iInter.2 h
 
 中文:
-定理 mem_iInter_of_mem
-  条件: {s : ι -> Set α} {a : α} (h : 对任意 i, a in s i)
+定理 mem_i整数er_of_mem
+  条件: {s : ι -> 集合 α} {a : α} (h : 对任意 i, a in s i)
   结论: a in ⋂ i, s i
   证明: mem_iInter.2 h
 
@@ -164,8 +164,8 @@ theorem mem_iInter₂_of_mem
   proof: mem_iInter₂.2 h
 
 中文:
-定理 mem_iInter₂_of_mem
-  条件: {s : 对任意 i, κ i -> Set α} {a : α} (h : 对任意 i j, a in s i j)
+定理 mem_i整数er₂_of_mem
+  条件: {s : 对任意 i, κ i -> 集合 α} {a : α} (h : 对任意 i j, a in s i j)
   证明: mem_iInter₂.2 h
 -/
 theorem mem_iInter₂_of_mem {s : forall i, κ i -> Set α} {a : α} (h : forall i j, a in s i j) :
@@ -187,7 +187,7 @@ theorem iUnion_congr_Prop
 
 中文:
 定理 iUnion_congr_Prop
-  结论: {p q : 命题} {f₁ : p -> Set α} {f₂ : q -> Set α} (pq : p ↔ q)
+  结论: {p q : 命题} {f₁ : p -> 集合 α} {f₂ : q -> 集合 α} (pq : p ↔ q)
   证明: iSup_congr_Prop pq f
 
 @[congr]
@@ -208,8 +208,8 @@ theorem iInter_congr_Prop
   proof: iInf_congr_Prop pq f
 
 中文:
-定理 iInter_congr_Prop
-  结论: {p q : 命题} {f₁ : p -> Set α} {f₂ : q -> Set α} (pq : p ↔ q)
+定理 i整数er_congr_Prop
+  结论: {p q : 命题} {f₁ : p -> 集合 α} {f₂ : q -> 集合 α} (pq : p ↔ q)
   证明: iInf_congr_Prop pq f
 
 Depends on / 依赖: iInf_congr_Prop
@@ -229,8 +229,8 @@ theorem iUnion_plift_up
 
 中文:
 定理 iUnion_plift_up
-  条件: (f : PLift ι -> Set α)
-  结论: ⋃ i, f (PLift.up i) = ⋃ i, f i
+  条件: (f : 命题层提升 ι -> 集合 α)
+  结论: ⋃ i, f (命题层提升.up i) = ⋃ i, f i
   证明: iSup_plift_up _
 
 Depends on / 依赖: iSup_plift_up
@@ -249,8 +249,8 @@ theorem iUnion_plift_down
 
 中文:
 定理 iUnion_plift_down
-  条件: (f : ι -> Set α)
-  结论: ⋃ i, f (PLift.down i) = ⋃ i, f i
+  条件: (f : ι -> 集合 α)
+  结论: ⋃ i, f (命题层提升.down i) = ⋃ i, f i
   证明: iSup_plift_down _
 
 Depends on / 依赖: iSup_plift_down
@@ -268,9 +268,9 @@ theorem iInter_plift_up
   proof: iInf_plift_up _
 
 中文:
-定理 iInter_plift_up
-  条件: (f : PLift ι -> Set α)
-  结论: ⋂ i, f (PLift.up i) = ⋂ i, f i
+定理 i整数er_plift_up
+  条件: (f : 命题层提升 ι -> 集合 α)
+  结论: ⋂ i, f (命题层提升.up i) = ⋂ i, f i
   证明: iInf_plift_up _
 
 Depends on / 依赖: iInf_plift_up
@@ -288,9 +288,9 @@ theorem iInter_plift_down
   proof: iInf_plift_down _
 
 中文:
-定理 iInter_plift_down
-  条件: (f : ι -> Set α)
-  结论: ⋂ i, f (PLift.down i) = ⋂ i, f i
+定理 i整数er_plift_down
+  条件: (f : ι -> 集合 α)
+  结论: ⋂ i, f (命题层提升.down i) = ⋂ i, f i
   证明: iInf_plift_down _
 
 Depends on / 依赖: iInf_plift_down
@@ -309,7 +309,7 @@ theorem iUnion_eq_if
 
 中文:
 定理 iUnion_eq_if
-  条件: {p : 命题} [Decidable p] (s : Set α)
+  条件: {p : 命题} [可判定 p] (s : 集合 α)
   结论: ⋃ _ : p, s = if p then s else ∅
   证明: iSup_eq_if _
 
@@ -328,7 +328,7 @@ theorem iUnion_eq_dif
 
 中文:
 定理 iUnion_eq_dif
-  条件: {p : 命题} [Decidable p] (s : p -> Set α)
+  条件: {p : 命题} [可判定 p] (s : p -> 集合 α)
   证明: iSup_eq_dif _
 
 Depends on / 依赖: iSup_eq_dif
@@ -347,8 +347,8 @@ theorem iInter_eq_if
   proof: iInf_eq_if _
 
 中文:
-定理 iInter_eq_if
-  条件: {p : 命题} [Decidable p] (s : Set α)
+定理 i整数er_eq_if
+  条件: {p : 命题} [可判定 p] (s : 集合 α)
   结论: ⋂ _ : p, s = if p then s else univ
   证明: iInf_eq_if _
 
@@ -367,7 +367,7 @@ theorem iInf_eq_dif
 
 中文:
 定理 iInf_eq_dif
-  条件: {p : 命题} [Decidable p] (s : p -> Set α)
+  条件: {p : 命题} [可判定 p] (s : p -> 集合 α)
   证明: _root_.iInf_eq_dif _
 
 Depends on / 依赖: _root_, _root_.iInf_eq_dif, iInf_eq_dif
@@ -388,8 +388,8 @@ theorem exists_set_mem_of_union_eq_top
   simpa using p
 
 中文:
-定理 exists_set_mem_of_union_eq_top
-  结论: {ι : 类型} (t : Set ι) (s : ι -> Set β)
+定理 存在_set_mem_of_union_eq_top
+  结论: {ι : 类型} (t : 集合 ι) (s : ι -> 集合 β)
   证明: by
   have p : x in ⊤ := Set.mem_univ x
   rw [← w]; rw [Set.mem_iUnion] at p
@@ -415,7 +415,7 @@ theorem nonempty_of_union_eq_top_of_nonempty
 
 中文:
 定理 nonempty_of_union_eq_top_of_nonempty
-  结论: {ι : 类型} (t : Set ι) (s : ι -> Set α)
+  结论: {ι : 类型} (t : 集合 ι) (s : ι -> 集合 α)
   证明: by
   obtain ⟨x, m, -⟩ := exists_set_mem_of_union_eq_top t s w H.some
   exact ⟨x, m⟩
@@ -478,7 +478,7 @@ theorem ofPred_exists
 @[deprecated (since := "2026-07-09")] alias setOf_exists := ofPred_exists
 
 中文:
-定理 ofPred_exists
+定理 ofPred_存在
   条件: (p : ι -> β -> 命题)
   结论: { x | 存在 i, p i x } = ⋃ i, { x | p i x }
   证明: ext fun _ => .symm mem_iUnion
@@ -504,7 +504,7 @@ theorem ofPred_forall
 @[deprecated (since := "2026-07-09")] alias setOf_forall := ofPred_forall
 
 中文:
-定理 ofPred_forall
+定理 ofPred_对任意
   条件: (p : ι -> β -> 命题)
   结论: { x | 对任意 i, p i x } = ⋂ i, { x | p i x }
   证明: ext fun _ => .symm mem_iInter
@@ -529,7 +529,7 @@ theorem iUnion_subset
 
 中文:
 定理 iUnion_subset
-  条件: {s : ι -> Set α} {t : Set α} (h : 对任意 i, s i subseteq t)
+  条件: {s : ι -> 集合 α} {t : 集合 α} (h : 对任意 i, s i subseteq t)
   结论: ⋃ i, s i subseteq t
   证明: iSup_le h
 
@@ -548,7 +548,7 @@ theorem iUnion₂_subset
 
 中文:
 定理 iUnion₂_subset
-  条件: {s : 对任意 i, κ i -> Set α} {t : Set α} (h : 对任意 i j, s i j subseteq t)
+  条件: {s : 对任意 i, κ i -> 集合 α} {t : 集合 α} (h : 对任意 i j, s i j subseteq t)
   证明: iUnion_subset fun x => iUnion_subset (h x)
 
 Depends on / 依赖: iUnion_subset
@@ -567,8 +567,8 @@ theorem subset_iInter
   proof: le_iInf h
 
 中文:
-定理 subset_iInter
-  条件: {t : Set β} {s : ι -> Set β} (h : 对任意 i, t subseteq s i)
+定理 subset_i整数er
+  条件: {t : 集合 β} {s : ι -> 集合 β} (h : 对任意 i, t subseteq s i)
   结论: t subseteq ⋂ i, s i
   证明: le_iInf h
 
@@ -588,8 +588,8 @@ theorem subset_iInter₂
 @[simp]
 
 中文:
-定理 subset_iInter₂
-  条件: {s : Set α} {t : 对任意 i, κ i -> Set α} (h : 对任意 i j, s subseteq t i j)
+定理 subset_i整数er₂
+  条件: {s : 集合 α} {t : 对任意 i, κ i -> 集合 α} (h : 对任意 i j, s subseteq t i j)
   证明: subset_iInter fun x => subset_iInter h x
 
 @[simp]
@@ -612,7 +612,7 @@ theorem iUnion_subset_iff
 
 中文:
 定理 iUnion_subset_iff
-  条件: {s : ι -> Set α} {t : Set α}
+  条件: {s : ι -> 集合 α} {t : 集合 α}
   结论: ⋃ i, s i subseteq t ↔ 对任意 i, s i subseteq t
   证明: ⟨fun h _ => Subset.trans (le_iSup s _) h, iUnion_subset⟩
 
@@ -633,7 +633,7 @@ theorem iUnion₂_subset_iff
 
 中文:
 定理 iUnion₂_subset_iff
-  条件: {s : 对任意 i, κ i -> Set α} {t : Set α}
+  条件: {s : 对任意 i, κ i -> 集合 α} {t : 集合 α}
   证明: by simp_rw [iUnion_subset_iff]
 
 @[simp]
@@ -654,8 +654,8 @@ theorem subset_iInter_iff
   proof: le_iInf_iff
 
 中文:
-定理 subset_iInter_iff
-  条件: {s : Set α} {t : ι -> Set α}
+定理 subset_i整数er_iff
+  条件: {s : 集合 α} {t : ι -> 集合 α}
   结论: (s subseteq ⋂ i, t i) ↔ 对任意 i, s subseteq t i
   证明: le_iInf_iff
 
@@ -673,8 +673,8 @@ theorem subset_iInter₂_iff
   proof: by simp_rw [subset_iInter_iff]
 
 中文:
-定理 subset_iInter₂_iff
-  条件: {s : Set α} {t : 对任意 i, κ i -> Set α}
+定理 subset_i整数er₂_iff
+  条件: {s : 集合 α} {t : 对任意 i, κ i -> 集合 α}
   证明: by simp_rw [subset_iInter_iff]
 
 Depends on / 依赖: simp_rw, subset_iInter_iff
@@ -692,7 +692,7 @@ theorem subset_iUnion
 
 中文:
 定理 subset_iUnion
-  结论: 对任意 (s : ι -> Set β) (i : ι), s i subseteq ⋃ i, s i
+  结论: 对任意 (s : ι -> 集合 β) (i : ι), s i subseteq ⋃ i, s i
   证明: le_iSup
 
 Depends on / 依赖: le_iSup
@@ -709,8 +709,8 @@ theorem iInter_subset
   proof: iInf_le
 
 中文:
-定理 iInter_subset
-  结论: 对任意 (s : ι -> Set β) (i : ι), ⋂ i, s i subseteq s i
+定理 i整数er_subset
+  结论: 对任意 (s : ι -> 集合 β) (i : ι), ⋂ i, s i subseteq s i
   证明: iInf_le
 
 Depends on / 依赖: iInf_le
@@ -728,8 +728,8 @@ lemma iInter_subset_iUnion
   proof: iInf_le_iSup
 
 中文:
-引理 iInter_subset_iUnion
-  条件: [Nonempty ι] {s : ι -> Set α}
+引理 i整数er_subset_iUnion
+  条件: [非空 ι] {s : ι -> 集合 α}
   结论: ⋂ i, s i subseteq ⋃ i, s i
   证明: iInf_le_iSup
 
@@ -748,7 +748,7 @@ theorem subset_iUnion₂
 
 中文:
 定理 subset_iUnion₂
-  条件: {s : 对任意 i, κ i -> Set α} (i : ι) (j : κ i)
+  条件: {s : 对任意 i, κ i -> 集合 α} (i : ι) (j : κ i)
   结论: s i j subseteq ⋃ (i') (j'), s i' j'
   证明: le_iSup₂ i j
 -/
@@ -765,8 +765,8 @@ theorem iInter₂_subset
   proof: iInf₂_le i j
 
 中文:
-定理 iInter₂_subset
-  条件: {s : 对任意 i, κ i -> Set α} (i : ι) (j : κ i)
+定理 i整数er₂_subset
+  条件: {s : 对任意 i, κ i -> 集合 α} (i : ι) (j : κ i)
   结论: ⋂ (i) (j), s i j subseteq s i j
   证明: iInf₂_le i j
 -/
@@ -784,7 +784,7 @@ theorem subset_iUnion_of_subset
 
 中文:
 定理 subset_iUnion_of_subset
-  条件: {s : Set α} {t : ι -> Set α} (i : ι) (h : s subseteq t i)
+  条件: {s : 集合 α} {t : ι -> 集合 α} (i : ι) (h : s subseteq t i)
   结论: s subseteq ⋃ i, t i
   证明: le_iSup_of_le i h
 
@@ -802,8 +802,8 @@ theorem iInter_subset_of_subset
   proof: iInf_le_of_le i h
 
 中文:
-定理 iInter_subset_of_subset
-  条件: {s : ι -> Set α} {t : Set α} (i : ι) (h : s i subseteq t)
+定理 i整数er_subset_of_subset
+  条件: {s : ι -> 集合 α} {t : 集合 α} (i : ι) (h : s i subseteq t)
   证明: iInf_le_of_le i h
 
 Depends on / 依赖: iInf_le_of_le
@@ -822,7 +822,7 @@ theorem subset_iUnion₂_of_subset
 
 中文:
 定理 subset_iUnion₂_of_subset
-  结论: {s : Set α} {t : 对任意 i, κ i -> Set α} (i : ι) (j : κ i)
+  结论: {s : 集合 α} {t : 对任意 i, κ i -> 集合 α} (i : ι) (j : κ i)
   证明: le_iSup₂_of_le i j h
 -/
 theorem subset_iUnion₂_of_subset {s : Set α} {t : forall i, κ i -> Set α} (i : ι) (j : κ i)
@@ -838,8 +838,8 @@ theorem iInter₂_subset_of_subset
   proof: iInf₂_le_of_le i j h
 
 中文:
-定理 iInter₂_subset_of_subset
-  结论: {s : 对任意 i, κ i -> Set α} {t : Set α} (i : ι) (j : κ i)
+定理 i整数er₂_subset_of_subset
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 集合 α} (i : ι) (j : κ i)
   证明: iInf₂_le_of_le i j h
 -/
 theorem iInter₂_subset_of_subset {s : forall i, κ i -> Set α} {t : Set α} (i : ι) (j : κ i)
@@ -859,7 +859,7 @@ theorem iUnion_mono
 
 中文:
 定理 iUnion_mono
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i subseteq t i)
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i subseteq t i)
   结论: ⋃ i, s i subseteq ⋃ i, t i
   证明: iSup_mono h
 
@@ -882,7 +882,7 @@ theorem iUnion_mono''
 
 中文:
 定理 iUnion_mono''
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i subseteq t i)
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i subseteq t i)
   结论: iUnion s subseteq iUnion t
   证明: iSup_mono h
 
@@ -901,7 +901,7 @@ theorem iUnion₂_mono
 
 中文:
 定理 iUnion₂_mono
-  条件: {s t : 对任意 i, κ i -> Set α} (h : 对任意 i j, s i j subseteq t i j)
+  条件: {s t : 对任意 i, κ i -> 集合 α} (h : 对任意 i j, s i j subseteq t i j)
   证明: iSup₂_mono h
 -/
 theorem iUnion₂_mono {s t : forall i, κ i -> Set α} (h : forall i j, s i j subseteq t i j) :
@@ -920,8 +920,8 @@ theorem iInter_mono
 @[gcongr]
 
 中文:
-定理 iInter_mono
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i subseteq t i)
+定理 i整数er_mono
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i subseteq t i)
   结论: ⋂ i, s i subseteq ⋂ i, t i
   证明: iInf_mono h
 
@@ -943,8 +943,8 @@ theorem iInter_mono''
   proof: iInf_mono h
 
 中文:
-定理 iInter_mono''
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i subseteq t i)
+定理 i整数er_mono''
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i subseteq t i)
   结论: i整数er s subseteq i整数er t
   证明: iInf_mono h
 
@@ -962,8 +962,8 @@ theorem iInter₂_mono
   proof: iInf₂_mono h
 
 中文:
-定理 iInter₂_mono
-  条件: {s t : 对任意 i, κ i -> Set α} (h : 对任意 i j, s i j subseteq t i j)
+定理 i整数er₂_mono
+  条件: {s t : 对任意 i, κ i -> 集合 α} (h : 对任意 i j, s i j subseteq t i j)
   证明: iInf₂_mono h
 -/
 theorem iInter₂_mono {s t : forall i, κ i -> Set α} (h : forall i j, s i j subseteq t i j) :
@@ -980,7 +980,7 @@ theorem iUnion_mono'
 
 中文:
 定理 iUnion_mono'
-  条件: {s : ι -> Set α} {t : ι₂ -> Set α} (h : 对任意 i, 存在 j, s i subseteq t j)
+  条件: {s : ι -> 集合 α} {t : ι₂ -> 集合 α} (h : 对任意 i, 存在 j, s i subseteq t j)
   证明: iSup_mono' h
 
 Depends on / 依赖: iSup_mono
@@ -999,7 +999,7 @@ theorem iUnion₂_mono'
 
 中文:
 定理 iUnion₂_mono'
-  结论: {s : 对任意 i, κ i -> Set α} {t : 对任意 i', κ' i' -> Set α}
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 对任意 i', κ' i' -> 集合 α}
   证明: iSup₂_mono' h
 -/
 theorem iUnion₂_mono' {s : forall i, κ i -> Set α} {t : forall i', κ' i' -> Set α}
@@ -1017,8 +1017,8 @@ theorem iInter_mono'
     iInter_subset_of_subset i hi
 
 中文:
-定理 iInter_mono'
-  条件: {s : ι -> Set α} {t : ι' -> Set α} (h : 对任意 j, 存在 i, s i subseteq t j)
+定理 i整数er_mono'
+  条件: {s : ι -> 集合 α} {t : ι' -> 集合 α} (h : 对任意 j, 存在 i, s i subseteq t j)
   证明: Set.subset_iInter fun j =>
     let ⟨i, hi⟩ := h j
     iInter_subset_of_subset i hi
@@ -1042,8 +1042,8 @@ theorem iInter₂_mono'
     (iInter₂_subset _ _).trans hst
 
 中文:
-定理 iInter₂_mono'
-  结论: {s : 对任意 i, κ i -> Set α} {t : 对任意 i', κ' i' -> Set α}
+定理 i整数er₂_mono'
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 对任意 i', κ' i' -> 集合 α}
   证明: subset_iInter₂_iff.2 fun i' j' =>
     let ⟨_, _, hst⟩ := h i' j'
     (iInter₂_subset _ _).trans hst
@@ -1064,7 +1064,7 @@ theorem iUnion₂_subset_iUnion
 
 中文:
 定理 iUnion₂_subset_iUnion
-  条件: (κ : ι -> Sort*) (s : ι -> Set α)
+  条件: (κ : ι -> 类型层*) (s : ι -> 集合 α)
   证明: iUnion_mono fun _ => iUnion_subset fun _ => Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, iUnion_mono, iUnion_subset
@@ -1082,8 +1082,8 @@ theorem iInter_subset_iInter₂
   proof: iInter_mono fun _ => subset_iInter fun _ => Subset.rfl
 
 中文:
-定理 iInter_subset_iInter₂
-  条件: (κ : ι -> Sort*) (s : ι -> Set α)
+定理 i整数er_subset_i整数er₂
+  条件: (κ : ι -> 类型层*) (s : ι -> 集合 α)
   证明: iInter_mono fun _ => subset_iInter fun _ => Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, iInter_mono, subset_iInter
@@ -1137,7 +1137,7 @@ theorem iInter_ofPred
 @[deprecated (since := "2026-07-09")] alias iInter_setOf := iInter_ofPred
 
 中文:
-定理 iInter_ofPred
+定理 i整数er_ofPred
   条件: (P : ι -> α -> 命题)
   结论: ⋂ i, { x : α | P i x } = { x : α | 对任意 i, P i x }
   证明: by
@@ -1164,7 +1164,7 @@ theorem iUnion_congr_of_surjective
 
 中文:
 定理 iUnion_congr_of_surjective
-  结论: {f : ι -> Set α} {g : ι₂ -> Set α} (h : ι -> ι₂) (h1 : Surjective h)
+  结论: {f : ι -> 集合 α} {g : ι₂ -> 集合 α} (h : ι -> ι₂) (h1 : 满射 h)
   证明: h1.iSup_congr h h2
 
 Depends on / 依赖: h1.iSup_congr, iSup_congr
@@ -1182,8 +1182,8 @@ theorem iInter_congr_of_surjective
   proof: h1.iInf_congr h h2
 
 中文:
-定理 iInter_congr_of_surjective
-  结论: {f : ι -> Set α} {g : ι₂ -> Set α} (h : ι -> ι₂) (h1 : Surjective h)
+定理 i整数er_congr_of_surjective
+  结论: {f : ι -> 集合 α} {g : ι₂ -> 集合 α} (h : ι -> ι₂) (h1 : 满射 h)
   证明: h1.iInf_congr h h2
 
 Depends on / 依赖: h1.iInf_congr, iInf_congr
@@ -1203,7 +1203,7 @@ lemma iUnion_congr
 
 中文:
 引理 iUnion_congr
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i = t i)
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i = t i)
   结论: ⋃ i, s i = ⋃ i, t i
   证明: iSup_congr h
 
@@ -1220,8 +1220,8 @@ lemma iInter_congr
   proof: iInf_congr h
 
 中文:
-引理 iInter_congr
-  条件: {s t : ι -> Set α} (h : 对任意 i, s i = t i)
+引理 i整数er_congr
+  条件: {s t : ι -> 集合 α} (h : 对任意 i, s i = t i)
   结论: ⋂ i, s i = ⋂ i, t i
   证明: iInf_congr h
 
@@ -1239,7 +1239,7 @@ lemma iUnion₂_congr
 
 中文:
 引理 iUnion₂_congr
-  条件: {s t : 对任意 i, κ i -> Set α} (h : 对任意 i j, s i j = t i j)
+  条件: {s t : 对任意 i, κ i -> 集合 α} (h : 对任意 i j, s i j = t i j)
   证明: iUnion_congr fun i => iUnion_congr h i
 
 Depends on / 依赖: iUnion_congr
@@ -1257,8 +1257,8 @@ lemma iInter₂_congr
   proof: iInter_congr fun i => iInter_congr h i
 
 中文:
-引理 iInter₂_congr
-  条件: {s t : 对任意 i, κ i -> Set α} (h : 对任意 i j, s i j = t i j)
+引理 i整数er₂_congr
+  条件: {s t : 对任意 i, κ i -> 集合 α} (h : 对任意 i j, s i j = t i j)
   证明: iInter_congr fun i => iInter_congr h i
 
 Depends on / 依赖: iInter_congr
@@ -1276,8 +1276,8 @@ theorem BijOn.iUnion_comp
   proof: hf.iSup_comp g
 
 中文:
-定理 BijOn.iUnion_comp
-  结论: {s : Set β} {t : Set γ} {f : β -> γ} (g : γ -> Set α)
+定理 双射限制.iUnion_comp
+  结论: {s : 集合 β} {t : 集合 γ} {f : β -> γ} (g : γ -> 集合 α)
   证明: hf.iSup_comp g
 
 Depends on / 依赖: hf.iSup_comp, iSup_comp
@@ -1294,8 +1294,8 @@ theorem BijOn.iInter_comp
   proof: hf.iInf_comp g
 
 中文:
-定理 BijOn.iInter_comp
-  结论: {s : Set β} {t : Set γ} {f : β -> γ} (g : γ -> Set α)
+定理 双射限制.i整数er_comp
+  结论: {s : 集合 β} {t : 集合 γ} {f : β -> γ} (g : γ -> 集合 α)
   证明: hf.iInf_comp g
 
 Depends on / 依赖: hf.iInf_comp, iInf_comp
@@ -1312,8 +1312,8 @@ theorem BijOn.iUnion_congr
   proof: h1.iSup_congr f g h2
 
 中文:
-定理 BijOn.iUnion_congr
-  结论: {s : Set β} {t : Set γ} (f : β -> Set α) (g : γ -> Set α) {h : β -> γ}
+定理 双射限制.iUnion_congr
+  结论: {s : 集合 β} {t : 集合 γ} (f : β -> 集合 α) (g : γ -> 集合 α) {h : β -> γ}
   证明: h1.iSup_congr f g h2
 
 Depends on / 依赖: h1.iSup_congr, iSup_congr
@@ -1331,8 +1331,8 @@ theorem BijOn.iInter_congr
   proof: h1.iInf_congr f g h2
 
 中文:
-定理 BijOn.iInter_congr
-  结论: {s : Set β} {t : Set γ} (f : β -> Set α) (g : γ -> Set α) {h : β -> γ}
+定理 双射限制.i整数er_congr
+  结论: {s : 集合 β} {t : 集合 γ} (f : β -> 集合 α) (g : γ -> 集合 α) {h : β -> γ}
   证明: h1.iInf_congr f g h2
 
 Depends on / 依赖: h1.iInf_congr, iInf_congr
@@ -1355,7 +1355,7 @@ lemma iUnion_const
 
 中文:
 引理 iUnion_const
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: ⋃ _ : ι, s = s
   证明: iSup_const
 
@@ -1372,8 +1372,8 @@ lemma iInter_const
   proof: iInf_const
 
 中文:
-引理 iInter_const
-  条件: (s : Set β)
+引理 i整数er_const
+  条件: (s : 集合 β)
   结论: ⋂ _ : ι, s = s
   证明: iInf_const
 
@@ -1411,7 +1411,7 @@ lemma iInter_eq_const
   proof: (iInter_congr hf).trans iInter_const _
 
 中文:
-引理 iInter_eq_const
+引理 i整数er_eq_const
   条件: (hf : 对任意 i, f i = s)
   结论: ⋂ i, f i = s
   证明: (iInter_congr hf).trans iInter_const _
@@ -1435,7 +1435,7 @@ theorem compl_iUnion
 
 中文:
 定理 compl_iUnion
-  条件: (s : ι -> Set β)
+  条件: (s : ι -> 集合 β)
   结论: (⋃ i, s i)ᶜ = ⋂ i, (s i)ᶜ
   证明: compl_iSup
 
@@ -1458,7 +1458,7 @@ theorem compl_iUnion₂
 
 中文:
 定理 compl_iUnion₂
-  条件: (s : 对任意 i, κ i -> Set α)
+  条件: (s : 对任意 i, κ i -> 集合 α)
   结论: (⋃ (i) (j), s i j)ᶜ = ⋂ (i) (j), (s i j)ᶜ
   证明: by
   simp_rw [compl_iUnion]
@@ -1481,8 +1481,8 @@ theorem compl_iInter
   proof: compl_iInf
 
 中文:
-定理 compl_iInter
-  条件: (s : ι -> Set β)
+定理 compl_i整数er
+  条件: (s : ι -> 集合 β)
   结论: (⋂ i, s i)ᶜ = ⋃ i, (s i)ᶜ
   证明: compl_iInf
 
@@ -1502,8 +1502,8 @@ theorem compl_iInter₂
   simp_rw [compl_iInter]
 
 中文:
-定理 compl_iInter₂
-  条件: (s : 对任意 i, κ i -> Set α)
+定理 compl_i整数er₂
+  条件: (s : 对任意 i, κ i -> 集合 α)
   结论: (⋂ (i) (j), s i j)ᶜ = ⋃ (i) (j), (s i j)ᶜ
   证明: by
   simp_rw [compl_iInter]
@@ -1525,8 +1525,8 @@ theorem iUnion_eq_compl_iInter_compl
   simp only [compl_iInter, compl_compl]
 
 中文:
-定理 iUnion_eq_compl_iInter_compl
-  条件: (s : ι -> Set β)
+定理 iUnion_eq_compl_i整数er_compl
+  条件: (s : ι -> 集合 β)
   结论: ⋃ i, s i = (⋂ i, (s i)ᶜ)ᶜ
   证明: by
   simp only [compl_iInter, compl_compl]
@@ -1548,8 +1548,8 @@ theorem iInter_eq_compl_iUnion_compl
   simp only [compl_iUnion, compl_compl]
 
 中文:
-定理 iInter_eq_compl_iUnion_compl
-  条件: (s : ι -> Set β)
+定理 i整数er_eq_compl_iUnion_compl
+  条件: (s : ι -> 集合 β)
   结论: ⋂ i, s i = (⋃ i, (s i)ᶜ)ᶜ
   证明: by
   simp only [compl_iUnion, compl_compl]
@@ -1570,7 +1570,7 @@ theorem inter_iUnion
 
 中文:
 定理 inter_iUnion
-  条件: (s : Set β) (t : ι -> Set β)
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (s inter ⋃ i, t i) = ⋃ i, s inter t i
   证明: inf_iSup_eq _ _
 
@@ -1590,7 +1590,7 @@ theorem iUnion_inter
 
 中文:
 定理 iUnion_inter
-  条件: (s : Set β) (t : ι -> Set β)
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (⋃ i, t i) inter s = ⋃ i, t i inter s
   证明: iSup_inf_eq _ _
 
@@ -1609,7 +1609,7 @@ theorem iUnion_union_distrib
 
 中文:
 定理 iUnion_union_distrib
-  条件: (s : ι -> Set β) (t : ι -> Set β)
+  条件: (s : ι -> 集合 β) (t : ι -> 集合 β)
   证明: iSup_sup_eq
 
 Depends on / 依赖: iSup_sup_eq
@@ -1627,8 +1627,8 @@ theorem iInter_inter_distrib
   proof: iInf_inf_eq
 
 中文:
-定理 iInter_inter_distrib
-  条件: (s : ι -> Set β) (t : ι -> Set β)
+定理 i整数er_inter_distrib
+  条件: (s : ι -> 集合 β) (t : ι -> 集合 β)
   证明: iInf_inf_eq
 
 Depends on / 依赖: iInf_inf_eq
@@ -1648,7 +1648,7 @@ theorem union_iUnion
 
 中文:
 定理 union_iUnion
-  条件: [Nonempty ι] (s : Set β) (t : ι -> Set β)
+  条件: [非空 ι] (s : 集合 β) (t : ι -> 集合 β)
   结论: (s union ⋃ i, t i) = ⋃ i, s union t i
   证明: sup_iSup
 
@@ -1668,7 +1668,7 @@ theorem iUnion_union
 
 中文:
 定理 iUnion_union
-  条件: [Nonempty ι] (s : Set β) (t : ι -> Set β)
+  条件: [非空 ι] (s : 集合 β) (t : ι -> 集合 β)
   结论: (⋃ i, t i) union s = ⋃ i, t i union s
   证明: iSup_sup
 
@@ -1687,8 +1687,8 @@ theorem inter_iInter
   proof: inf_iInf
 
 中文:
-定理 inter_iInter
-  条件: [Nonempty ι] (s : Set β) (t : ι -> Set β)
+定理 inter_i整数er
+  条件: [非空 ι] (s : 集合 β) (t : ι -> 集合 β)
   结论: (s inter ⋂ i, t i) = ⋂ i, s inter t i
   证明: inf_iInf
 
@@ -1707,8 +1707,8 @@ theorem iInter_inter
   proof: iInf_inf
 
 中文:
-定理 iInter_inter
-  条件: [Nonempty ι] (s : Set β) (t : ι -> Set β)
+定理 i整数er_inter
+  条件: [非空 ι] (s : 集合 β) (t : ι -> 集合 β)
   结论: (⋂ i, t i) inter s = ⋂ i, t i inter s
   证明: iInf_inf
 
@@ -1728,7 +1728,7 @@ theorem insert_iUnion
 
 中文:
 定理 insert_iUnion
-  条件: [Nonempty ι] (x : β) (t : ι -> Set β)
+  条件: [非空 ι] (x : β) (t : ι -> 集合 β)
   证明: by
   simp_rw [← union_singleton, iUnion_union]
 
@@ -1749,8 +1749,8 @@ theorem union_iInter
   proof: sup_iInf_eq _ _
 
 中文:
-定理 union_iInter
-  条件: (s : Set β) (t : ι -> Set β)
+定理 union_i整数er
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (s union ⋂ i, t i) = ⋂ i, s union t i
   证明: sup_iInf_eq _ _
 
@@ -1769,8 +1769,8 @@ theorem iInter_union
   proof: iInf_sup_eq _ _
 
 中文:
-定理 iInter_union
-  条件: (s : ι -> Set β) (t : Set β)
+定理 i整数er_union
+  条件: (s : ι -> 集合 β) (t : 集合 β)
   结论: (⋂ i, s i) union t = ⋂ i, s i union t
   证明: iInf_sup_eq _ _
 
@@ -1790,8 +1790,8 @@ theorem insert_iInter
   simp_rw [← union_singleton, iInter_union]
 
 中文:
-定理 insert_iInter
-  条件: (x : β) (t : ι -> Set β)
+定理 insert_i整数er
+  条件: (x : β) (t : ι -> 集合 β)
   结论: insert x (⋂ i, t i) = ⋂ i, insert x (t i)
   证明: by
   simp_rw [← union_singleton, iInter_union]
@@ -1815,7 +1815,7 @@ theorem iUnion_sdiff
 
 中文:
 定理 iUnion_sdiff
-  条件: (s : Set β) (t : ι -> Set β)
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (⋃ i, t i) \ s = ⋃ i, t i \ s
   证明: by
   simp only [sdiff_eq, iUnion_inter]
@@ -1843,7 +1843,7 @@ theorem sdiff_iUnion
 
 中文:
 定理 sdiff_iUnion
-  条件: [Nonempty ι] (s : Set β) (t : ι -> Set β)
+  条件: [非空 ι] (s : 集合 β) (t : ι -> 集合 β)
   结论: (s \ ⋃ i, t i) = ⋂ i, s \ t i
   证明: by
   simp only [sdiff_eq, compl_iUnion, inter_iInter]
@@ -1870,8 +1870,8 @@ theorem sdiff_iInter
 @[deprecated (since := "2026-06-03")] alias diff_iInter := sdiff_iInter
 
 中文:
-定理 sdiff_iInter
-  条件: (s : Set β) (t : ι -> Set β)
+定理 sdiff_i整数er
+  条件: (s : 集合 β) (t : ι -> 集合 β)
   结论: (s \ ⋂ i, t i) = ⋃ i, s \ t i
   证明: by
   simp only [sdiff_eq, compl_iInter, inter_iUnion]
@@ -1899,7 +1899,7 @@ lemma iUnion_symmDiff_subset
 
 中文:
 引理 iUnion_symmDiff_subset
-  条件: {s : Set α} [Nonempty ι] {f : ι -> Set α}
+  条件: {s : 集合 α} [非空 ι] {f : ι -> 集合 α}
   证明: iSup_symmDiff_le
 
 Depends on / 依赖: iSup_symmDiff_le
@@ -1918,7 +1918,7 @@ lemma symmDiff_iUnion_subset
 
 中文:
 引理 symmDiff_iUnion_subset
-  条件: {s : Set α} [Nonempty ι] {f : ι -> Set α}
+  条件: {s : 集合 α} [非空 ι] {f : ι -> 集合 α}
   证明: symmDiff_iSup_le
 
 Depends on / 依赖: symmDiff_iSup_le
@@ -1937,7 +1937,7 @@ lemma iUnion_symmDiff_iUnion_subset
 
 中文:
 引理 iUnion_symmDiff_iUnion_subset
-  条件: {f g : ι -> Set α}
+  条件: {f g : ι -> 集合 α}
   证明: iSup_symmDiff_iSup_le
 
 Depends on / 依赖: iSup_symmDiff_iSup_le
@@ -1956,7 +1956,7 @@ lemma sUnion_symmDiff_subset
 
 中文:
 引理 sUnion_symmDiff_subset
-  条件: {s : Set α} {S : Set (Set α)} (hS : S.Nonempty)
+  条件: {s : 集合 α} {S : 集合 (集合 α)} (hS : S.非空)
   证明: sSup_symmDiff_le hS
 
 Depends on / 依赖: sSup_symmDiff_le
@@ -1975,7 +1975,7 @@ lemma symmDiff_sUnion_subset
 
 中文:
 引理 symmDiff_sUnion_subset
-  条件: {s : Set α} {S : Set (Set α)} (hS : S.Nonempty)
+  条件: {s : 集合 α} {S : 集合 (集合 α)} (hS : S.非空)
   证明: symmDiff_sSup_le hS
 
 Depends on / 依赖: symmDiff_sSup_le
@@ -1994,7 +1994,7 @@ lemma sUnion_symmDiff_sUnion_subset
 
 中文:
 引理 sUnion_symmDiff_sUnion_subset
-  结论: {S T : Set (Set α)} (hS : S.Nonempty)
+  结论: {S T : 集合 (集合 α)} (hS : S.非空)
   证明: sSup_symmDiff_sSup_le hS hT
 
 Depends on / 依赖: sSup_symmDiff_sSup_le
@@ -2017,7 +2017,7 @@ theorem iUnion_inter_subset
 
 中文:
 定理 iUnion_inter_subset
-  条件: {ι α} {s t : ι -> Set α}
+  条件: {ι α} {s t : ι -> 集合 α}
   结论: ⋃ i, s i inter t i subseteq (⋃ i, s i) inter ⋃ i, t i
   证明: le_iSup_inf_iSup s t
 
@@ -2036,7 +2036,7 @@ theorem iUnion_inter_of_monotone
 
 中文:
 定理 iUnion_inter_of_monotone
-  结论: {ι α} [Preorder ι] [IsDirectedOrder ι] {s t : ι -> Set α}
+  结论: {ι α} [预序 ι] [IsDirectedOrder ι] {s t : ι -> 集合 α}
   证明: iSup_inf_of_monotone hs ht
 
 Depends on / 依赖: iSup_inf_of_monotone
@@ -2055,7 +2055,7 @@ theorem iUnion_inter_of_antitone
 
 中文:
 定理 iUnion_inter_of_antitone
-  结论: {ι α} [Preorder ι] [IsCodirectedOrder ι] {s t : ι -> Set α}
+  结论: {ι α} [预序 ι] [IsCodirectedOrder ι] {s t : ι -> 集合 α}
   证明: iSup_inf_of_antitone hs ht
 
 Depends on / 依赖: iSup_inf_of_antitone
@@ -2073,8 +2073,8 @@ theorem iInter_union_of_monotone
   proof: iInf_sup_of_monotone hs ht
 
 中文:
-定理 iInter_union_of_monotone
-  结论: {ι α} [Preorder ι] [IsCodirectedOrder ι] {s t : ι -> Set α}
+定理 i整数er_union_of_monotone
+  结论: {ι α} [预序 ι] [IsCodirectedOrder ι] {s t : ι -> 集合 α}
   证明: iInf_sup_of_monotone hs ht
 
 Depends on / 依赖: iInf_sup_of_monotone
@@ -2092,8 +2092,8 @@ theorem iInter_union_of_antitone
   proof: iInf_sup_of_antitone hs ht
 
 中文:
-定理 iInter_union_of_antitone
-  结论: {ι α} [Preorder ι] [IsDirectedOrder ι] {s t : ι -> Set α}
+定理 i整数er_union_of_antitone
+  结论: {ι α} [预序 ι] [IsDirectedOrder ι] {s t : ι -> 集合 α}
   证明: iInf_sup_of_antitone hs ht
 
 Depends on / 依赖: iInf_sup_of_antitone
@@ -2112,8 +2112,8 @@ theorem iUnion_iInter_subset
   proof: iSup_iInf_le_iInf_iSup (flip s)
 
 中文:
-定理 iUnion_iInter_subset
-  条件: {s : ι -> ι' -> Set α}
+定理 iUnion_i整数er_subset
+  条件: {s : ι -> ι' -> 集合 α}
   结论: (⋃ j, ⋂ i, s i j) subseteq ⋂ i, ⋃ j, s i j
   证明: iSup_iInf_le_iInf_iSup (flip s)
 
@@ -2133,7 +2133,7 @@ theorem iUnion_option
 
 中文:
 定理 iUnion_option
-  条件: {ι} (s : Option ι -> Set α)
+  条件: {ι} (s : 选项类型 ι -> 集合 α)
   结论: ⋃ o, s o = s none union ⋃ i, s (some i)
   证明: iSup_option s
 
@@ -2152,8 +2152,8 @@ theorem iInter_option
   proof: iInf_option s
 
 中文:
-定理 iInter_option
-  条件: {ι} (s : Option ι -> Set α)
+定理 i整数er_option
+  条件: {ι} (s : 选项类型 ι -> 集合 α)
   结论: ⋂ o, s o = s none inter ⋂ i, s (some i)
   证明: iInf_option s
 
@@ -2176,7 +2176,7 @@ theorem iUnion_dite
 
 中文:
 定理 iUnion_dite
-  条件: (f : 对任意 i, p i -> Set α) (g : 对任意 i, ¬p i -> Set α)
+  条件: (f : 对任意 i, p i -> 集合 α) (g : 对任意 i, ¬p i -> 集合 α)
   证明: iSup_dite _ _ _
 
 Depends on / 依赖: iSup_dite
@@ -2195,7 +2195,7 @@ theorem iUnion_ite
 
 中文:
 定理 iUnion_ite
-  条件: (f g : ι -> Set α)
+  条件: (f g : ι -> 集合 α)
   证明: iUnion_dite _ _ _
 
 Depends on / 依赖: iUnion_dite
@@ -2213,8 +2213,8 @@ theorem iInter_dite
   proof: iInf_dite _ _ _
 
 中文:
-定理 iInter_dite
-  条件: (f : 对任意 i, p i -> Set α) (g : 对任意 i, ¬p i -> Set α)
+定理 i整数er_dite
+  条件: (f : 对任意 i, p i -> 集合 α) (g : 对任意 i, ¬p i -> 集合 α)
   证明: iInf_dite _ _ _
 
 Depends on / 依赖: iInf_dite
@@ -2232,8 +2232,8 @@ theorem iInter_ite
   proof: iInter_dite _ _ _
 
 中文:
-定理 iInter_ite
-  条件: (f g : ι -> Set α)
+定理 i整数er_ite
+  条件: (f g : ι -> 集合 α)
   证明: iInter_dite _ _ _
 
 Depends on / 依赖: iInter_dite
@@ -2256,8 +2256,8 @@ theorem iInter_false
   proof: iInf_false
 
 中文:
-定理 iInter_false
-  条件: {s : False -> Set α}
+定理 i整数er_false
+  条件: {s : 假 -> 集合 α}
   结论: i整数er s = univ
   证明: iInf_false
 
@@ -2279,7 +2279,7 @@ theorem iUnion_false
 
 中文:
 定理 iUnion_false
-  条件: {s : False -> Set α}
+  条件: {s : 假 -> 集合 α}
   结论: iUnion s = ∅
   证明: iSup_false
 
@@ -2303,8 +2303,8 @@ theorem iInter_true
 @[simp]
 
 中文:
-定理 iInter_true
-  条件: {s : True -> Set α}
+定理 i整数er_true
+  条件: {s : 真 -> 集合 α}
   结论: i整数er s = s trivial
   证明: iInf_true
 
@@ -2329,7 +2329,7 @@ theorem iUnion_true
 
 中文:
 定理 iUnion_true
-  条件: {s : True -> Set α}
+  条件: {s : 真 -> 集合 α}
   结论: iUnion s = s trivial
   证明: iSup_true
 
@@ -2352,8 +2352,8 @@ theorem iInter_exists
 @[simp]
 
 中文:
-定理 iInter_exists
-  条件: {p : ι -> 命题} {f : Exists p -> Set α}
+定理 i整数er_存在
+  条件: {p : ι -> 命题} {f : 存在 p -> 集合 α}
   证明: iInf_exists
 
 @[simp]
@@ -2376,8 +2376,8 @@ theorem iUnion_exists
 @[simp]
 
 中文:
-定理 iUnion_exists
-  条件: {p : ι -> 命题} {f : Exists p -> Set α}
+定理 iUnion_存在
+  条件: {p : ι -> 命题} {f : 存在 p -> 集合 α}
   证明: iSup_exists
 
 @[simp]
@@ -2401,7 +2401,7 @@ theorem iUnion_empty
 
 中文:
 定理 iUnion_empty
-  结论: (⋃ _ : ι, ∅ : Set α) = ∅
+  结论: (⋃ _ : ι, ∅ : 集合 α) = ∅
   证明: iSup_bot
 
 @[simp]
@@ -2421,8 +2421,8 @@ theorem iInter_univ
   proof: iInf_top
 
 中文:
-定理 iInter_univ
-  结论: (⋂ _ : ι, univ : Set α) = univ
+定理 i整数er_univ
+  结论: (⋂ _ : ι, univ : 集合 α) = univ
   证明: iInf_top
 
 Depends on / 依赖: iInf_top
@@ -2469,7 +2469,7 @@ theorem iInter_eq_univ
 @[simp]
 
 中文:
-定理 iInter_eq_univ
+定理 i整数er_eq_univ
   结论: ⋂ i, s i = univ ↔ 对任意 i, s i = univ
   证明: iInf_eq_top
 
@@ -2492,7 +2492,7 @@ theorem nonempty_iUnion
 
 中文:
 定理 nonempty_iUnion
-  结论: (⋃ i, s i).Nonempty ↔ 存在 i, (s i).Nonempty
+  结论: (⋃ i, s i).非空 ↔ 存在 i, (s i).非空
   证明: by
   simp [nonempty_iff_ne_empty]
 
@@ -2511,7 +2511,7 @@ theorem nonempty_biUnion
 
 中文:
 定理 nonempty_biUnion
-  条件: {t : Set α} {s : α -> Set β}
+  条件: {t : 集合 α} {s : α -> 集合 β}
   证明: by simp
 -/
 theorem nonempty_biUnion {t : Set α} {s : α -> Set β} :
@@ -2527,7 +2527,7 @@ theorem iUnion_nonempty_index
 
 中文:
 定理 iUnion_nonempty_index
-  条件: (s : Set α) (t : s.Nonempty -> Set β)
+  条件: (s : 集合 α) (t : s.非空 -> 集合 β)
   证明: iSup_exists
 
 Depends on / 依赖: iSup_exists
@@ -2550,8 +2550,8 @@ theorem iInter_iInter_eq_left
 @[simp]
 
 中文:
-定理 iInter_iInter_eq_left
-  条件: {b : β} {s : 对任意 x : β, x = b -> Set α}
+定理 i整数er_i整数er_eq_left
+  条件: {b : β} {s : 对任意 x : β, x = b -> 集合 α}
   证明: iInf_iInf_eq_left
 
 @[simp]
@@ -2574,8 +2574,8 @@ theorem iInter_iInter_eq_right
 @[simp]
 
 中文:
-定理 iInter_iInter_eq_right
-  条件: {b : β} {s : 对任意 x : β, b = x -> Set α}
+定理 i整数er_i整数er_eq_right
+  条件: {b : β} {s : 对任意 x : β, b = x -> 集合 α}
   证明: iInf_iInf_eq_right
 
 @[simp]
@@ -2599,7 +2599,7 @@ theorem iUnion_iUnion_eq_left
 
 中文:
 定理 iUnion_iUnion_eq_left
-  条件: {b : β} {s : 对任意 x : β, x = b -> Set α}
+  条件: {b : β} {s : 对任意 x : β, x = b -> 集合 α}
   证明: iSup_iSup_eq_left
 
 @[simp]
@@ -2621,7 +2621,7 @@ theorem iUnion_iUnion_eq_right
 
 中文:
 定理 iUnion_iUnion_eq_right
-  条件: {b : β} {s : 对任意 x : β, b = x -> Set α}
+  条件: {b : β} {s : 对任意 x : β, b = x -> 集合 α}
   证明: iSup_iSup_eq_right
 
 Depends on / 依赖: iSup_iSup_eq_right
@@ -2639,8 +2639,8 @@ theorem iInter_or
   proof: iInf_or
 
 中文:
-定理 iInter_or
-  条件: {p q : 命题} (s : p ∨ q -> Set α)
+定理 i整数er_or
+  条件: {p q : 命题} (s : p ∨ q -> 集合 α)
   证明: iInf_or
 
 Depends on / 依赖: iInf_or
@@ -2659,7 +2659,7 @@ theorem iUnion_or
 
 中文:
 定理 iUnion_or
-  条件: {p q : 命题} (s : p ∨ q -> Set α)
+  条件: {p q : 命题} (s : p ∨ q -> 集合 α)
   证明: iSup_or
 
 Depends on / 依赖: iSup_or
@@ -2679,7 +2679,7 @@ theorem iUnion_and
 
 中文:
 定理 iUnion_and
-  条件: {p q : 命题} (s : p ∧ q -> Set α)
+  条件: {p q : 命题} (s : p ∧ q -> 集合 α)
   结论: ⋃ h, s h = ⋃ (hp) (hq), s ⟨hp, hq⟩
   证明: iSup_and
 
@@ -2698,8 +2698,8 @@ theorem iInter_and
   proof: iInf_and
 
 中文:
-定理 iInter_and
-  条件: {p q : 命题} (s : p ∧ q -> Set α)
+定理 i整数er_and
+  条件: {p q : 命题} (s : p ∧ q -> 集合 α)
   结论: ⋂ h, s h = ⋂ (hp) (hq), s ⟨hp, hq⟩
   证明: iInf_and
 
@@ -2719,7 +2719,7 @@ theorem iUnion_comm
 
 中文:
 定理 iUnion_comm
-  条件: (s : ι -> ι' -> Set α)
+  条件: (s : ι -> ι' -> 集合 α)
   结论: ⋃ (i) (i'), s i i' = ⋃ (i') (i), s i i'
   证明: iSup_comm
 
@@ -2738,8 +2738,8 @@ theorem iInter_comm
   proof: iInf_comm
 
 中文:
-定理 iInter_comm
-  条件: (s : ι -> ι' -> Set α)
+定理 i整数er_comm
+  条件: (s : ι -> ι' -> 集合 α)
   结论: ⋂ (i) (i'), s i i' = ⋂ (i') (i), s i i'
   证明: iInf_comm
 
@@ -2759,7 +2759,7 @@ theorem iUnion_sigma
 
 中文:
 定理 iUnion_sigma
-  条件: {γ : α -> 类型} (s : Sigma γ -> Set β)
+  条件: {γ : α -> 类型} (s : 依赖和类型 γ -> 集合 β)
   结论: ⋃ ia, s ia = ⋃ i, ⋃ a, s ⟨i, a⟩
   证明: iSup_sigma
 
@@ -2778,7 +2778,7 @@ theorem iUnion_sigma'
 
 中文:
 定理 iUnion_sigma'
-  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> Set β)
+  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> 集合 β)
   证明: iSup_sigma' _
 
 Depends on / 依赖: iSup_sigma
@@ -2797,8 +2797,8 @@ theorem iInter_sigma
   proof: iInf_sigma
 
 中文:
-定理 iInter_sigma
-  条件: {γ : α -> 类型} (s : Sigma γ -> Set β)
+定理 i整数er_sigma
+  条件: {γ : α -> 类型} (s : 依赖和类型 γ -> 集合 β)
   结论: ⋂ ia, s ia = ⋂ i, ⋂ a, s ⟨i, a⟩
   证明: iInf_sigma
 
@@ -2816,8 +2816,8 @@ theorem iInter_sigma'
   proof: iInf_sigma' _
 
 中文:
-定理 iInter_sigma'
-  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> Set β)
+定理 i整数er_sigma'
+  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> 集合 β)
   证明: iInf_sigma' _
 
 Depends on / 依赖: iInf_sigma
@@ -2836,7 +2836,7 @@ theorem iUnion₂_comm
 
 中文:
 定理 iUnion₂_comm
-  条件: (s : 对任意 i, κ i -> 对任意 i', κ' i' -> Set α)
+  条件: (s : 对任意 i, κ i -> 对任意 i', κ' i' -> 集合 α)
   证明: iSup₂_comm _
 -/
 theorem iUnion₂_comm (s : forall i, κ i -> forall i', κ' i' -> Set α) :
@@ -2854,8 +2854,8 @@ theorem iInter₂_comm
 @[simp]
 
 中文:
-定理 iInter₂_comm
-  条件: (s : 对任意 i, κ i -> 对任意 i', κ' i' -> Set α)
+定理 i整数er₂_comm
+  条件: (s : 对任意 i, κ i -> 对任意 i', κ' i' -> 集合 α)
   证明: iInf₂_comm _
 
 @[simp]
@@ -2878,7 +2878,7 @@ theorem biUnion_and
 
 中文:
 定理 biUnion_and
-  条件: (p : ι -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p x ∧ q x y -> Set α)
+  条件: (p : ι -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p x ∧ q x y -> 集合 α)
   证明: by
   simp only [iUnion_and, @iUnion_comm _ ι']
 
@@ -2905,7 +2905,7 @@ theorem biUnion_and'
 
 中文:
 定理 biUnion_and'
-  条件: (p : ι' -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p y ∧ q x y -> Set α)
+  条件: (p : ι' -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p y ∧ q x y -> 集合 α)
   证明: by
   simp only [iUnion_and, @iUnion_comm _ ι]
 
@@ -2931,8 +2931,8 @@ theorem biInter_and
 @[simp]
 
 中文:
-定理 biInter_and
-  条件: (p : ι -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p x ∧ q x y -> Set α)
+定理 bi整数er_and
+  条件: (p : ι -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p x ∧ q x y -> 集合 α)
   证明: by
   simp only [iInter_and, @iInter_comm _ ι']
 
@@ -2958,8 +2958,8 @@ theorem biInter_and'
 @[simp]
 
 中文:
-定理 biInter_and'
-  条件: (p : ι' -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p y ∧ q x y -> Set α)
+定理 bi整数er_and'
+  条件: (p : ι' -> 命题) (q : ι -> ι' -> 命题) (s : 对任意 x y, p y ∧ q x y -> 集合 α)
   证明: by
   simp only [iInter_and, @iInter_comm _ ι]
 
@@ -2986,7 +2986,7 @@ theorem iUnion_iUnion_eq_or_left
 
 中文:
 定理 iUnion_iUnion_eq_or_left
-  条件: {b : β} {p : β -> 命题} {s : 对任意 x : β, x = b ∨ p x -> Set α}
+  条件: {b : β} {p : β -> 命题} {s : 对任意 x : β, x = b ∨ p x -> 集合 α}
   证明: by
   simp only [iUnion_or, iUnion_union_distrib, iUnion_iUnion_eq_left]
 
@@ -3009,8 +3009,8 @@ theorem iInter_iInter_eq_or_left
   simp only [iInter_or, iInter_inter_distrib, iInter_iInter_eq_left]
 
 中文:
-定理 iInter_iInter_eq_or_left
-  条件: {b : β} {p : β -> 命题} {s : 对任意 x : β, x = b ∨ p x -> Set α}
+定理 i整数er_i整数er_eq_or_left
+  条件: {b : β} {p : β -> 命题} {s : 对任意 x : β, x = b ∨ p x -> 集合 α}
   证明: by
   simp only [iInter_or, iInter_inter_distrib, iInter_iInter_eq_left]
 
@@ -3031,7 +3031,7 @@ lemma iUnion_sum
 
 中文:
 引理 iUnion_sum
-  条件: {s : α oplus β -> Set γ}
+  条件: {s : α oplus β -> 集合 γ}
   结论: ⋃ x, s x = (⋃ x, s (.inl x)) union ⋃ x, s (.inr x)
   证明: iSup_sum
 
@@ -3049,8 +3049,8 @@ lemma iInter_sum
   proof: iInf_sum
 
 中文:
-引理 iInter_sum
-  条件: {s : α oplus β -> Set γ}
+引理 i整数er_sum
+  条件: {s : α oplus β -> 集合 γ}
   结论: ⋂ x, s x = (⋂ x, s (.inl x)) inter ⋂ x, s (.inr x)
   证明: iInf_sum
 
@@ -3069,7 +3069,7 @@ theorem iUnion_psigma
 
 中文:
 定理 iUnion_psigma
-  条件: {γ : α -> 类型} (s : PSigma γ -> Set β)
+  条件: {γ : α -> 类型} (s : 命题和类型 γ -> 集合 β)
   结论: ⋃ ia, s ia = ⋃ i, ⋃ a, s ⟨i, a⟩
   证明: iSup_psigma _
 
@@ -3088,7 +3088,7 @@ theorem iUnion_psigma'
 
 中文:
 定理 iUnion_psigma'
-  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> Set β)
+  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> 集合 β)
   证明: iSup_psigma' _
 
 Depends on / 依赖: iSup_psigma
@@ -3107,8 +3107,8 @@ theorem iInter_psigma
   proof: iInf_psigma _
 
 中文:
-定理 iInter_psigma
-  条件: {γ : α -> 类型} (s : PSigma γ -> Set β)
+定理 i整数er_psigma
+  条件: {γ : α -> 类型} (s : 命题和类型 γ -> 集合 β)
   结论: ⋂ ia, s ia = ⋂ i, ⋂ a, s ⟨i, a⟩
   证明: iInf_psigma _
 
@@ -3126,8 +3126,8 @@ theorem iInter_psigma'
   proof: iInf_psigma' _
 
 中文:
-定理 iInter_psigma'
-  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> Set β)
+定理 i整数er_psigma'
+  条件: {γ : α -> 类型} (s : 对任意 i, γ i -> 集合 β)
   证明: iInf_psigma' _
 
 Depends on / 依赖: iInf_psigma
@@ -3149,7 +3149,7 @@ theorem mem_biUnion
 
 中文:
 定理 mem_biUnion
-  条件: {s : Set α} {t : α -> Set β} {x : α} {y : β} (xs : x in s) (ytx : y in t x)
+  条件: {s : 集合 α} {t : α -> 集合 β} {x : α} {y : β} (xs : x in s) (ytx : y in t x)
   证明: mem_iUnion₂_of_mem xs ytx
 -/
 theorem mem_biUnion {s : Set α} {t : α -> Set β} {x : α} {y : β} (xs : x in s) (ytx : y in t x) :
@@ -3165,8 +3165,8 @@ theorem mem_biInter
   proof: mem_iInter₂_of_mem h
 
 中文:
-定理 mem_biInter
-  条件: {s : Set α} {t : α -> Set β} {y : β} (h : 对任意 x in s, y in t x)
+定理 mem_bi整数er
+  条件: {s : 集合 α} {t : α -> 集合 β} {y : β} (h : 对任意 x in s, y in t x)
   证明: mem_iInter₂_of_mem h
 -/
 theorem mem_biInter {s : Set α} {t : α -> Set β} {y : β} (h : forall x in s, y in t x) :
@@ -3183,7 +3183,7 @@ theorem subset_biUnion_of_mem
 
 中文:
 定理 subset_biUnion_of_mem
-  条件: {s : Set α} {u : α -> Set β} {x : α} (xs : x in s)
+  条件: {s : 集合 α} {u : α -> 集合 β} {x : α} (xs : x in s)
   证明: subset_iUnion₂ (s := fun i _ => u i) x xs
 -/
 theorem subset_biUnion_of_mem {s : Set α} {u : α -> Set β} {x : α} (xs : x in s) :
@@ -3199,8 +3199,8 @@ theorem biInter_subset_of_mem
   proof: iInter₂_subset x xs
 
 中文:
-定理 biInter_subset_of_mem
-  条件: {s : Set α} {t : α -> Set β} {x : α} (xs : x in s)
+定理 bi整数er_subset_of_mem
+  条件: {s : 集合 α} {t : α -> 集合 β} {x : α} (xs : x in s)
   证明: iInter₂_subset x xs
 -/
 theorem biInter_subset_of_mem {s : Set α} {t : α -> Set β} {x : α} (xs : x in s) :
@@ -3216,8 +3216,8 @@ lemma biInter_subset_biUnion
   proof: biInf_le_biSup hs
 
 中文:
-引理 biInter_subset_biUnion
-  条件: {s : Set α} (hs : s.Nonempty) {t : α -> Set β}
+引理 bi整数er_subset_biUnion
+  条件: {s : 集合 α} (hs : s.非空) {t : α -> 集合 β}
   证明: biInf_le_biSup hs
 
 Depends on / 依赖: biInf_le_biSup
@@ -3235,7 +3235,7 @@ theorem biUnion_subset_biUnion_left
 
 中文:
 定理 biUnion_subset_biUnion_left
-  条件: {s s' : Set α} {t : α -> Set β} (h : s subseteq s')
+  条件: {s s' : 集合 α} {t : α -> 集合 β} (h : s subseteq s')
   证明: iUnion₂_subset fun _ hx => subset_biUnion_of_mem h hx
 
 Depends on / 依赖: subset_biUnion_of_mem
@@ -3253,8 +3253,8 @@ theorem biInter_subset_biInter_left
   proof: subset_iInter₂ fun _ hx => biInter_subset_of_mem h hx
 
 中文:
-定理 biInter_subset_biInter_left
-  条件: {s s' : Set α} {t : α -> Set β} (h : s' subseteq s)
+定理 bi整数er_subset_bi整数er_left
+  条件: {s s' : 集合 α} {t : α -> 集合 β} (h : s' subseteq s)
   证明: subset_iInter₂ fun _ hx => biInter_subset_of_mem h hx
 
 Depends on / 依赖: biInter_subset_of_mem
@@ -3273,7 +3273,7 @@ theorem biUnion_mono
 
 中文:
 定理 biUnion_mono
-  条件: {s s' : Set α} {t t' : α -> Set β} (hs : s' subseteq s) (h : 对任意 x in s, t x subseteq t' x)
+  条件: {s s' : 集合 α} {t t' : α -> 集合 β} (hs : s' subseteq s) (h : 对任意 x in s, t x subseteq t' x)
   证明: (biUnion_subset_biUnion_left hs).trans iUnion₂_mono h
 
 Depends on / 依赖: biUnion_subset_biUnion_left
@@ -3291,8 +3291,8 @@ theorem biInter_mono
   proof: (biInter_subset_biInter_left hs).trans iInter₂_mono h
 
 中文:
-定理 biInter_mono
-  条件: {s s' : Set α} {t t' : α -> Set β} (hs : s subseteq s') (h : 对任意 x in s, t x subseteq t' x)
+定理 bi整数er_mono
+  条件: {s s' : 集合 α} {t t' : α -> 集合 β} (hs : s subseteq s') (h : 对任意 x in s, t x subseteq t' x)
   证明: (biInter_subset_biInter_left hs).trans iInter₂_mono h
 
 Depends on / 依赖: biInter_subset_biInter_left
@@ -3311,7 +3311,7 @@ theorem biUnion_eq_iUnion
 
 中文:
 定理 biUnion_eq_iUnion
-  条件: (s : Set α) (t : 对任意 x in s, Set β)
+  条件: (s : 集合 α) (t : 对任意 x in s, 集合 β)
   证明: iSup_subtype'
 
 Depends on / 依赖: iSup_subtype
@@ -3329,8 +3329,8 @@ theorem biInter_eq_iInter
   proof: iInf_subtype'
 
 中文:
-定理 biInter_eq_iInter
-  条件: (s : Set α) (t : 对任意 x in s, Set β)
+定理 bi整数er_eq_i整数er
+  条件: (s : 集合 α) (t : 对任意 x in s, 集合 β)
   证明: iInf_subtype'
 
 Depends on / 依赖: iInf_subtype
@@ -3350,7 +3350,7 @@ lemma biUnion_const
 
 中文:
 引理 biUnion_const
-  条件: {s : Set α} (hs : s.Nonempty) (t : Set β)
+  条件: {s : 集合 α} (hs : s.非空) (t : 集合 β)
   结论: ⋃ a in s, t = t
   证明: biSup_const hs
 -/
@@ -3367,8 +3367,8 @@ lemma biInter_const
   proof: biInf_const hs
 
 中文:
-引理 biInter_const
-  条件: {s : Set α} (hs : s.Nonempty) (t : Set β)
+引理 bi整数er_const
+  条件: {s : 集合 α} (hs : s.非空) (t : 集合 β)
   结论: ⋂ a in s, t = t
   证明: biInf_const hs
 -/
@@ -3385,7 +3385,7 @@ theorem iUnion_subtype
 
 中文:
 定理 iUnion_subtype
-  条件: (p : α -> 命题) (s : { x // p x } -> Set β)
+  条件: (p : α -> 命题) (s : { x // p x } -> 集合 β)
   证明: iSup_subtype
 
 Depends on / 依赖: iSup_subtype
@@ -3403,8 +3403,8 @@ theorem iInter_subtype
   proof: iInf_subtype
 
 中文:
-定理 iInter_subtype
-  条件: (p : α -> 命题) (s : { x // p x } -> Set β)
+定理 i整数er_subtype
+  条件: (p : α -> 命题) (s : { x // p x } -> 集合 β)
   证明: iInf_subtype
 
 Depends on / 依赖: iInf_subtype
@@ -3423,9 +3423,9 @@ theorem biInter_empty
   proof: iInf_emptyset
 
 中文:
-定理 biInter_empty
-  条件: (u : α -> Set β)
-  结论: ⋂ x in (∅ : Set α), u x = univ
+定理 bi整数er_empty
+  条件: (u : α -> 集合 β)
+  结论: ⋂ x in (∅ : 集合 α), u x = univ
   证明: iInf_emptyset
 
 Depends on / 依赖: iInf_emptyset
@@ -3445,8 +3445,8 @@ theorem biInter_univ
 @[simp]
 
 中文:
-定理 biInter_univ
-  条件: (u : α -> Set β)
+定理 bi整数er_univ
+  条件: (u : α -> 集合 β)
   结论: ⋂ x in @univ α, u x = ⋂ x, u x
   证明: iInf_univ
 
@@ -3471,7 +3471,7 @@ theorem biUnion_self
 
 中文:
 定理 biUnion_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ⋃ x in s, s = s
   证明: Subset.antisymm (iUnion₂_subset fun _ _ => Subset.refl s) fun _ hx => mem_biUnion hx hx
 
@@ -3495,8 +3495,8 @@ theorem iUnion_nonempty_self
 
 中文:
 定理 iUnion_nonempty_self
-  条件: (s : Set α)
-  结论: ⋃ _ : s.Nonempty, s = s
+  条件: (s : 集合 α)
+  结论: ⋃ _ : s.非空, s = s
   证明: by
   rw [iUnion_nonempty_index]; rw [biUnion_self]
 
@@ -3515,9 +3515,9 @@ theorem biInter_singleton
   proof: iInf_singleton
 
 中文:
-定理 biInter_singleton
-  条件: (a : α) (s : α -> Set β)
-  结论: ⋂ x in ({a} : Set α), s x = s a
+定理 bi整数er_singleton
+  条件: (a : α) (s : α -> 集合 β)
+  结论: ⋂ x in ({a} : 集合 α), s x = s a
   证明: iInf_singleton
 
 Depends on / 依赖: iInf_singleton
@@ -3534,8 +3534,8 @@ theorem biInter_union
   proof: iInf_union
 
 中文:
-定理 biInter_union
-  条件: (s t : Set α) (u : α -> Set β)
+定理 bi整数er_union
+  条件: (s t : 集合 α) (u : α -> 集合 β)
   证明: iInf_union
 
 Depends on / 依赖: iInf_union
@@ -3553,8 +3553,8 @@ theorem biInter_insert
   proof: by simp
 
 中文:
-定理 biInter_insert
-  条件: (a : α) (s : Set α) (t : α -> Set β)
+定理 bi整数er_insert
+  条件: (a : α) (s : 集合 α) (t : α -> 集合 β)
   证明: by simp
 -/
 theorem biInter_insert (a : α) (s : Set α) (t : α -> Set β) :
@@ -3571,9 +3571,9 @@ theorem biInter_pair
   rw [biInter_insert]; rw [biInter_singleton]
 
 中文:
-定理 biInter_pair
-  条件: (a b : α) (s : α -> Set β)
-  结论: ⋂ x in ({a, b} : Set α), s x = s a inter s b
+定理 bi整数er_pair
+  条件: (a b : α) (s : α -> 集合 β)
+  结论: ⋂ x in ({a, b} : 集合 α), s x = s a inter s b
   证明: by
   rw [biInter_insert]; rw [biInter_singleton]
 
@@ -3593,8 +3593,8 @@ theorem biInter_inter
   simp [biInter_eq_iInter, ← iInter_inter]
 
 中文:
-定理 biInter_inter
-  条件: {ι α : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> Set α) (t : Set α)
+定理 bi整数er_inter
+  条件: {ι α : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 集合 α) (t : 集合 α)
   证明: by
   have : Nonempty s := hs.to_subtype
   simp [biInter_eq_iInter, ← iInter_inter]
@@ -3617,8 +3617,8 @@ theorem inter_biInter
   simp [inter_comm]
 
 中文:
-定理 inter_biInter
-  条件: {ι α : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> Set α) (t : Set α)
+定理 inter_bi整数er
+  条件: {ι α : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 集合 α) (t : 集合 α)
   证明: by
   rw [inter_comm]; rw [← biInter_inter hs]
   simp [inter_comm]
@@ -3641,8 +3641,8 @@ theorem biUnion_empty
 
 中文:
 定理 biUnion_empty
-  条件: (s : α -> Set β)
-  结论: ⋃ x in (∅ : Set α), s x = ∅
+  条件: (s : α -> 集合 β)
+  结论: ⋃ x in (∅ : 集合 α), s x = ∅
   证明: iSup_emptyset
 
 Depends on / 依赖: iSup_emptyset
@@ -3661,7 +3661,7 @@ theorem biUnion_univ
 
 中文:
 定理 biUnion_univ
-  条件: (s : α -> Set β)
+  条件: (s : α -> 集合 β)
   结论: ⋃ x in @univ α, s x = ⋃ x, s x
   证明: iSup_univ
 
@@ -3683,8 +3683,8 @@ theorem biUnion_singleton
 
 中文:
 定理 biUnion_singleton
-  条件: (a : α) (s : α -> Set β)
-  结论: ⋃ x in ({a} : Set α), s x = s a
+  条件: (a : α) (s : α -> 集合 β)
+  结论: ⋃ x in ({a} : 集合 α), s x = s a
   证明: iSup_singleton
 
 @[simp]
@@ -3706,7 +3706,7 @@ theorem biUnion_of_singleton
 
 中文:
 定理 biUnion_of_singleton
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ⋃ x in s, {x} = s
   证明: ext by simp
 -/
@@ -3725,7 +3725,7 @@ theorem biUnion_union
 
 中文:
 定理 biUnion_union
-  条件: (s t : Set α) (u : α -> Set β)
+  条件: (s t : 集合 α) (u : α -> 集合 β)
   证明: iSup_union
 
 @[simp]
@@ -3749,7 +3749,7 @@ theorem iUnion_coe_set
 
 中文:
 定理 iUnion_coe_set
-  条件: {α β : 类型} (s : Set α) (f : s -> Set β)
+  条件: {α β : 类型} (s : 集合 α) (f : s -> 集合 β)
   证明: iUnion_subtype _ _
 
 @[simp]
@@ -3770,8 +3770,8 @@ theorem iInter_coe_set
   proof: iInter_subtype _ _
 
 中文:
-定理 iInter_coe_set
-  条件: {α β : 类型} (s : Set α) (f : s -> Set β)
+定理 i整数er_coe_set
+  条件: {α β : 类型} (s : 集合 α) (f : s -> 集合 β)
   证明: iInter_subtype _ _
 
 Depends on / 依赖: iInter_subtype
@@ -3790,7 +3790,7 @@ theorem biUnion_insert
 
 中文:
 定理 biUnion_insert
-  条件: (a : α) (s : Set α) (t : α -> Set β)
+  条件: (a : α) (s : 集合 α) (t : α -> 集合 β)
   证明: by simp
 -/
 theorem biUnion_insert (a : α) (s : Set α) (t : α -> Set β) :
@@ -3808,8 +3808,8 @@ theorem biUnion_pair
 
 中文:
 定理 biUnion_pair
-  条件: (a b : α) (s : α -> Set β)
-  结论: ⋃ x in ({a, b} : Set α), s x = s a union s b
+  条件: (a b : α) (s : α -> 集合 β)
+  结论: ⋃ x in ({a, b} : 集合 α), s x = s a union s b
   证明: by
   simp
 -/
@@ -3826,7 +3826,7 @@ theorem inter_iUnion₂
 
 中文:
 定理 inter_iUnion₂
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: by simp only [inter_iUnion]
 
 Depends on / 依赖: inter_iUnion
@@ -3844,7 +3844,7 @@ theorem iUnion₂_inter
 
 中文:
 定理 iUnion₂_inter
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: by simp_rw [iUnion_inter]
 
 Depends on / 依赖: iUnion_inter, simp_rw
@@ -3861,8 +3861,8 @@ theorem union_iInter₂
   proof: by simp_rw [union_iInter]
 
 中文:
-定理 union_iInter₂
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+定理 union_i整数er₂
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: by simp_rw [union_iInter]
 
 Depends on / 依赖: simp_rw, union_iInter
@@ -3879,8 +3879,8 @@ theorem iInter₂_union
   proof: by simp_rw [iInter_union]
 
 中文:
-定理 iInter₂_union
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+定理 i整数er₂_union
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: by simp_rw [iInter_union]
 
 Depends on / 依赖: iInter_union, simp_rw
@@ -3898,7 +3898,7 @@ theorem mem_sUnion_of_mem
 
 中文:
 定理 mem_sUnion_of_mem
-  条件: {x : α} {t : Set α} {S : Set (Set α)} (hx : x in t) (ht : t in S)
+  条件: {x : α} {t : 集合 α} {S : 集合 (集合 α)} (hx : x in t) (ht : t in S)
   证明: ⟨t, ht, hx⟩
 -/
 theorem mem_sUnion_of_mem {x : α} {t : Set α} {S : Set (Set α)} (hx : x in t) (ht : t in S) :
@@ -3916,7 +3916,7 @@ theorem notMem_of_notMem_sUnion
 
 中文:
 定理 notMem_of_notMem_sUnion
-  结论: {x : α} {t : Set α} {S : Set (Set α)} (hx : x ∉ ⋃₀ S)
+  结论: {x : α} {t : 集合 α} {S : 集合 (集合 α)} (hx : x ∉ ⋃₀ S)
   证明: fun h => hx ⟨t, ht, h⟩
 -/
 theorem notMem_of_notMem_sUnion {x : α} {t : Set α} {S : Set (Set α)} (hx : x ∉ ⋃₀ S)
@@ -3932,8 +3932,8 @@ theorem sInter_subset_of_mem
   proof: sInf_le tS
 
 中文:
-定理 sInter_subset_of_mem
-  条件: {S : Set (Set α)} {t : Set α} (tS : t in S)
+定理 s整数er_subset_of_mem
+  条件: {S : 集合 (集合 α)} {t : 集合 α} (tS : t in S)
   结论: ⋂₀ S subseteq t
   证明: sInf_le tS
 
@@ -3953,7 +3953,7 @@ theorem subset_sUnion_of_mem
 
 中文:
 定理 subset_sUnion_of_mem
-  条件: {S : Set (Set α)} {t : Set α} (tS : t in S)
+  条件: {S : 集合 (集合 α)} {t : 集合 α} (tS : t in S)
   结论: t subseteq ⋃₀ S
   证明: le_sSup tS
 
@@ -3972,7 +3972,7 @@ theorem subset_sUnion_of_subset
 
 中文:
 定理 subset_sUnion_of_subset
-  结论: {s : Set α} (t : Set (Set α)) (u : Set α) (h₁ : s subseteq u)
+  结论: {s : 集合 α} (t : 集合 (集合 α)) (u : 集合 α) (h₁ : s subseteq u)
   证明: Subset.trans h₁ (subset_sUnion_of_mem h₂)
 
 Depends on / 依赖: Subset, Subset.trans, subset_sUnion_of_mem
@@ -3994,7 +3994,7 @@ theorem sUnion_subset
 
 中文:
 定理 sUnion_subset
-  条件: {S : Set (Set α)} {t : Set α} (h : 对任意 t' in S, t' subseteq t)
+  条件: {S : 集合 (集合 α)} {t : 集合 α} (h : 对任意 t' in S, t' subseteq t)
   结论: ⋃₀ S subseteq t
   证明: sSup_le h
 
@@ -4017,7 +4017,7 @@ theorem sUnion_subset_iff
 
 中文:
 定理 sUnion_subset_iff
-  条件: {s : Set (Set α)} {t : Set α}
+  条件: {s : 集合 (集合 α)} {t : 集合 α}
   结论: ⋃₀ s subseteq t ↔ 对任意 t' in s, t' subseteq t
   证明: sSup_le_iff
 
@@ -4036,7 +4036,7 @@ lemma sUnion_mono_subsets
 
 中文:
 引理 sUnion_mono_subsets
-  条件: {s : Set (Set α)} {f : Set α -> Set α} (hf : 对任意 t : Set α, t subseteq f t)
+  条件: {s : 集合 (集合 α)} {f : 集合 α -> 集合 α} (hf : 对任意 t : 集合 α, t subseteq f t)
   证明: fun _ ⟨t, htx, hxt⟩ => ⟨f t, mem_image_of_mem f htx, hf t hxt⟩
 
 Depends on / 依赖: mem_image_of_mem
@@ -4056,7 +4056,7 @@ lemma sUnion_mono_supsets
 
 中文:
 引理 sUnion_mono_supsets
-  条件: {s : Set (Set α)} {f : Set α -> Set α} (hf : 对任意 t : Set α, f t subseteq t)
+  条件: {s : 集合 (集合 α)} {f : 集合 α -> 集合 α} (hf : 对任意 t : 集合 α, f t subseteq t)
   证明: -- If t ∈ f '' s is arbitrary; t = f u for some u : Set α.
   fun _ ⟨_, ⟨u, hus, hut⟩, hxt⟩ => ⟨u, hus, (hut ▸ hf u) hxt⟩
 -/
@@ -4077,8 +4077,8 @@ theorem subset_sInter
 @[simp]
 
 中文:
-定理 subset_sInter
-  条件: {S : Set (Set α)} {t : Set α} (h : 对任意 t' in S, t subseteq t')
+定理 subset_s整数er
+  条件: {S : 集合 (集合 α)} {t : 集合 α} (h : 对任意 t' in S, t subseteq t')
   结论: t subseteq ⋂₀ S
   证明: le_sInf h
 
@@ -4102,8 +4102,8 @@ theorem subset_sInter_iff
 @[gcongr]
 
 中文:
-定理 subset_sInter_iff
-  条件: {S : Set (Set α)} {t : Set α}
+定理 subset_s整数er_iff
+  条件: {S : 集合 (集合 α)} {t : 集合 α}
   结论: t subseteq ⋂₀ S ↔ 对任意 t' in S, t subseteq t'
   证明: le_sInf_iff
 
@@ -4128,7 +4128,7 @@ theorem sUnion_subset_sUnion
 
 中文:
 定理 sUnion_subset_sUnion
-  条件: {S T : Set (Set α)} (h : S subseteq T)
+  条件: {S T : 集合 (集合 α)} (h : S subseteq T)
   结论: ⋃₀ S subseteq ⋃₀ T
   证明: sUnion_subset fun _ hs => subset_sUnion_of_mem (h hs)
 
@@ -4152,8 +4152,8 @@ theorem sInter_subset_sInter
 @[simp]
 
 中文:
-定理 sInter_subset_sInter
-  条件: {S T : Set (Set α)} (h : S subseteq T)
+定理 s整数er_subset_s整数er
+  条件: {S T : 集合 (集合 α)} (h : S subseteq T)
   结论: ⋂₀ T subseteq ⋂₀ S
   证明: subset_sInter fun _ hs => sInter_subset_of_mem (h hs)
 
@@ -4177,7 +4177,7 @@ theorem sUnion_empty
 
 中文:
 定理 sUnion_empty
-  结论: ⋃₀ ∅ = (∅ : Set α)
+  结论: ⋃₀ ∅ = (∅ : 集合 α)
   证明: sSup_empty
 
 @[simp]
@@ -4199,8 +4199,8 @@ theorem sInter_empty
 @[simp]
 
 中文:
-定理 sInter_empty
-  结论: ⋂₀ ∅ = (univ : Set α)
+定理 s整数er_empty
+  结论: ⋂₀ ∅ = (univ : 集合 α)
   证明: sInf_empty
 
 @[simp]
@@ -4224,7 +4224,7 @@ theorem sUnion_singleton
 
 中文:
 定理 sUnion_singleton
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ⋃₀ {s} = s
   证明: sSup_singleton
 
@@ -4248,8 +4248,8 @@ theorem sInter_singleton
 @[simp]
 
 中文:
-定理 sInter_singleton
-  条件: (s : Set α)
+定理 s整数er_singleton
+  条件: (s : 集合 α)
   结论: ⋂₀ {s} = s
   证明: sInf_singleton
 
@@ -4274,7 +4274,7 @@ theorem sUnion_eq_empty
 
 中文:
 定理 sUnion_eq_empty
-  条件: {S : Set (Set α)}
+  条件: {S : 集合 (集合 α)}
   结论: ⋃₀ S = ∅ ↔ 对任意 s in S, s = ∅
   证明: sSup_eq_bot
 
@@ -4296,8 +4296,8 @@ theorem sInter_eq_univ
   proof: sInf_eq_top
 
 中文:
-定理 sInter_eq_univ
-  条件: {S : Set (Set α)}
+定理 s整数er_eq_univ
+  条件: {S : 集合 (集合 α)}
   结论: ⋂₀ S = univ ↔ 对任意 s in S, s = univ
   证明: sInf_eq_top
 
@@ -4317,7 +4317,7 @@ theorem subset_powerset_iff
 
 中文:
 定理 subset_powerset_iff
-  条件: {s : Set (Set α)} {t : Set α}
+  条件: {s : 集合 (集合 α)} {t : 集合 α}
   结论: s subseteq 𝒫 t ↔ ⋃₀ s subseteq t
   证明: sUnion_subset_iff.symm
 
@@ -4375,7 +4375,7 @@ theorem sUnion_mem_empty_univ
 
 中文:
 定理 sUnion_mem_empty_univ
-  条件: {S : Set (Set α)} (h : S subseteq {∅, univ})
+  条件: {S : 集合 (集合 α)} (h : S subseteq {∅, univ})
   证明: by
   grind
 
@@ -4398,8 +4398,8 @@ theorem nonempty_sUnion
 
 中文:
 定理 nonempty_sUnion
-  条件: {S : Set (Set α)}
-  结论: (⋃₀ S).Nonempty ↔ 存在 s in S, Set.Nonempty s
+  条件: {S : 集合 (集合 α)}
+  结论: (⋃₀ S).非空 ↔ 存在 s in S, 集合.非空 s
   证明: by
   simp [nonempty_iff_ne_empty]
 
@@ -4419,9 +4419,9 @@ theorem Nonempty.of_sUnion
   ⟨s, hs⟩
 
 中文:
-定理 Nonempty.of_sUnion
-  条件: {s : Set (Set α)} (h : (⋃₀ s).Nonempty)
-  结论: s.Nonempty
+定理 非空.of_sUnion
+  条件: {s : 集合 (集合 α)} (h : (⋃₀ s).非空)
+  结论: s.非空
   证明: let ⟨s, hs, _⟩ := nonempty_sUnion.1 h
   ⟨s, hs⟩
 
@@ -4441,9 +4441,9 @@ theorem Nonempty.of_sUnion_eq_univ
   proof: Nonempty.of_sUnion h.symm ▸ univ_nonempty
 
 中文:
-定理 Nonempty.of_sUnion_eq_univ
-  条件: [Nonempty α] {s : Set (Set α)} (h : ⋃₀ s = univ)
-  结论: s.Nonempty
+定理 非空.of_sUnion_eq_univ
+  条件: [非空 α] {s : 集合 (集合 α)} (h : ⋃₀ s = univ)
+  结论: s.非空
   证明: Nonempty.of_sUnion h.symm ▸ univ_nonempty
 
 Depends on / 依赖: Nonempty, Nonempty.of_sUnion, h.symm, of_sUnion, univ_nonempty
@@ -4462,7 +4462,7 @@ theorem sUnion_union
 
 中文:
 定理 sUnion_union
-  条件: (S T : Set (Set α))
+  条件: (S T : 集合 (集合 α))
   结论: ⋃₀ (S union T) = ⋃₀ S union ⋃₀ T
   证明: sSup_union
 
@@ -4483,8 +4483,8 @@ theorem sInter_union
 @[simp]
 
 中文:
-定理 sInter_union
-  条件: (S T : Set (Set α))
+定理 s整数er_union
+  条件: (S T : 集合 (集合 α))
   结论: ⋂₀ (S union T) = ⋂₀ S inter ⋂₀ T
   证明: sInf_union
 
@@ -4509,7 +4509,7 @@ theorem sUnion_insert
 
 中文:
 定理 sUnion_insert
-  条件: (s : Set α) (T : Set (Set α))
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   结论: ⋃₀ insert s T = s union ⋃₀ T
   证明: sSup_insert
 
@@ -4533,8 +4533,8 @@ theorem sInter_insert
 @[simp]
 
 中文:
-定理 sInter_insert
-  条件: (s : Set α) (T : Set (Set α))
+定理 s整数er_insert
+  条件: (s : 集合 α) (T : 集合 (集合 α))
   结论: ⋂₀ insert s T = s inter ⋂₀ T
   证明: sInf_insert
 
@@ -4562,7 +4562,7 @@ alias sUnion_diff_singleton_empty := sUnion_sdiff_singleton_empty
 
 中文:
 定理 sUnion_sdiff_singleton_empty
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   结论: ⋃₀ (s \ {∅}) = ⋃₀ s
   证明: sSup_sdiff_singleton_bot s
 
@@ -4593,8 +4593,8 @@ theorem sInter_sdiff_singleton_univ
 alias sInter_diff_singleton_univ := sInter_sdiff_singleton_univ
 
 中文:
-定理 sInter_sdiff_singleton_univ
-  条件: (s : Set (Set α))
+定理 s整数er_sdiff_singleton_univ
+  条件: (s : 集合 (集合 α))
   结论: ⋂₀ (s \ {univ}) = ⋂₀ s
   证明: sInf_sdiff_singleton_top s
 
@@ -4620,7 +4620,7 @@ theorem sUnion_pair
 
 中文:
 定理 sUnion_pair
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: ⋃₀ {s, t} = s union t
   证明: sSup_pair
 
@@ -4641,8 +4641,8 @@ theorem sInter_pair
 @[simp]
 
 中文:
-定理 sInter_pair
-  条件: (s t : Set α)
+定理 s整数er_pair
+  条件: (s t : 集合 α)
   结论: ⋂₀ {s, t} = s inter t
   证明: sInf_pair
 
@@ -4667,7 +4667,7 @@ theorem sUnion_image
 
 中文:
 定理 sUnion_image
-  条件: (f : α -> Set β) (s : Set α)
+  条件: (f : α -> 集合 β) (s : 集合 α)
   结论: ⋃₀ (f '' s) = ⋃ a in s, f a
   证明: sSup_image
 
@@ -4691,8 +4691,8 @@ theorem sInter_image
 @[simp]
 
 中文:
-定理 sInter_image
-  条件: (f : α -> Set β) (s : Set α)
+定理 s整数er_image
+  条件: (f : α -> 集合 β) (s : 集合 α)
   结论: ⋂₀ (f '' s) = ⋂ a in s, f a
   证明: sInf_image
 
@@ -4716,7 +4716,7 @@ lemma sUnion_image2
 
 中文:
 引理 sUnion_image2
-  条件: (f : α -> β -> Set γ) (s : Set α) (t : Set β)
+  条件: (f : α -> β -> 集合 γ) (s : 集合 α) (t : 集合 β)
   证明: sSup_image2
 
 @[simp]
@@ -4738,8 +4738,8 @@ lemma sInter_image2
 @[simp]
 
 中文:
-引理 sInter_image2
-  条件: (f : α -> β -> Set γ) (s : Set α) (t : Set β)
+引理 s整数er_image2
+  条件: (f : α -> β -> 集合 γ) (s : 集合 α) (t : 集合 β)
   证明: sInf_image2
 
 @[simp]
@@ -4763,7 +4763,7 @@ theorem sUnion_range
 
 中文:
 定理 sUnion_range
-  条件: (f : ι -> Set β)
+  条件: (f : ι -> 集合 β)
   结论: ⋃₀ range f = ⋃ x, f x
   证明: rfl
 
@@ -4783,8 +4783,8 @@ theorem sInter_range
   proof: rfl
 
 中文:
-定理 sInter_range
-  条件: (f : ι -> Set β)
+定理 s整数er_range
+  条件: (f : ι -> 集合 β)
   结论: ⋂₀ range f = ⋂ x, f x
   证明: rfl
 -/
@@ -4803,7 +4803,7 @@ theorem iUnion_eq_univ_iff
 
 中文:
 定理 iUnion_eq_univ_iff
-  条件: {f : ι -> Set α}
+  条件: {f : ι -> 集合 α}
   结论: ⋃ i, f i = univ ↔ 对任意 x, 存在 i, x in f i
   证明: by
   simp only [eq_univ_iff_forall, mem_iUnion]
@@ -4824,7 +4824,7 @@ theorem iUnion₂_eq_univ_iff
 
 中文:
 定理 iUnion₂_eq_univ_iff
-  条件: {s : 对任意 i, κ i -> Set α}
+  条件: {s : 对任意 i, κ i -> 集合 α}
   证明: by
   simp only [iUnion_eq_univ_iff, mem_iUnion]
 
@@ -4846,7 +4846,7 @@ theorem sUnion_eq_univ_iff
 
 中文:
 定理 sUnion_eq_univ_iff
-  条件: {c : Set (Set α)}
+  条件: {c : 集合 (集合 α)}
   结论: ⋃₀ c = univ ↔ 对任意 a, 存在 b in c, a in b
   证明: by
   simp only [eq_univ_iff_forall, mem_sUnion]
@@ -4865,8 +4865,8 @@ theorem iInter_eq_empty_of_eq_empty
   proof: subset_eq_empty (iInter_subset _ i) h
 
 中文:
-定理 iInter_eq_empty_of_eq_empty
-  条件: {i : ι} {f : ι -> Set α} (h : f i = ∅)
+定理 i整数er_eq_empty_of_eq_empty
+  条件: {i : ι} {f : ι -> 集合 α} (h : f i = ∅)
   证明: subset_eq_empty (iInter_subset _ i) h
 
 Depends on / 依赖: iInter_subset, subset_eq_empty
@@ -4887,8 +4887,8 @@ theorem iInter_eq_empty_iff
   simp [Set.eq_empty_iff_forall_notMem]
 
 中文:
-定理 iInter_eq_empty_iff
-  条件: {f : ι -> Set α}
+定理 i整数er_eq_empty_iff
+  条件: {f : ι -> 集合 α}
   结论: ⋂ i, f i = ∅ ↔ 对任意 x, 存在 i, x ∉ f i
   证明: by
   simp [Set.eq_empty_iff_forall_notMem]
@@ -4909,8 +4909,8 @@ theorem iInter₂_eq_empty_iff
   simp only [eq_empty_iff_forall_notMem, mem_iInter, not_forall]
 
 中文:
-定理 iInter₂_eq_empty_iff
-  条件: {s : 对任意 i, κ i -> Set α}
+定理 i整数er₂_eq_empty_iff
+  条件: {s : 对任意 i, κ i -> 集合 α}
   证明: by
   simp only [eq_empty_iff_forall_notMem, mem_iInter, not_forall]
 
@@ -4932,8 +4932,8 @@ theorem sInter_eq_empty_iff
   simp [Set.eq_empty_iff_forall_notMem]
 
 中文:
-定理 sInter_eq_empty_iff
-  条件: {c : Set (Set α)}
+定理 s整数er_eq_empty_iff
+  条件: {c : 集合 (集合 α)}
   结论: ⋂₀ c = ∅ ↔ 对任意 a, 存在 b in c, a ∉ b
   证明: by
   simp [Set.eq_empty_iff_forall_notMem]
@@ -4956,9 +4956,9 @@ theorem nonempty_iInter
   simp [nonempty_iff_ne_empty, iInter_eq_empty_iff]
 
 中文:
-定理 nonempty_iInter
-  条件: {f : ι -> Set α}
-  结论: (⋂ i, f i).Nonempty ↔ 存在 x, 对任意 i, x in f i
+定理 nonempty_i整数er
+  条件: {f : ι -> 集合 α}
+  结论: (⋂ i, f i).非空 ↔ 存在 x, 对任意 i, x in f i
   证明: by
   simp [nonempty_iff_ne_empty, iInter_eq_empty_iff]
 
@@ -4978,8 +4978,8 @@ theorem nonempty_iInter₂
   simp
 
 中文:
-定理 nonempty_iInter₂
-  条件: {s : 对任意 i, κ i -> Set α}
+定理 nonempty_i整数er₂
+  条件: {s : 对任意 i, κ i -> 集合 α}
   证明: by
   simp
 -/
@@ -5000,9 +5000,9 @@ theorem nonempty_sInter
   simp [nonempty_iff_ne_empty, sInter_eq_empty_iff]
 
 中文:
-定理 nonempty_sInter
-  条件: {c : Set (Set α)}
-  结论: (⋂₀ c).Nonempty ↔ 存在 a, 对任意 b in c, a in b
+定理 nonempty_s整数er
+  条件: {c : 集合 (集合 α)}
+  结论: (⋂₀ c).非空 ↔ 存在 a, 对任意 b in c, a in b
   证明: by
   simp [nonempty_iff_ne_empty, sInter_eq_empty_iff]
 
@@ -5023,7 +5023,7 @@ theorem compl_sUnion
 
 中文:
 定理 compl_sUnion
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: (⋃₀ S)ᶜ = ⋂₀ (compl '' S)
   证明: ext fun x => by simp
 -/
@@ -5042,8 +5042,8 @@ theorem sUnion_eq_compl_sInter_compl
   rw [← compl_compl (⋃₀ S)]; rw [compl_sUnion]
 
 中文:
-定理 sUnion_eq_compl_sInter_compl
-  条件: (S : Set (Set α))
+定理 sUnion_eq_compl_s整数er_compl
+  条件: (S : 集合 (集合 α))
   结论: ⋃₀ S = (⋂₀ (compl '' S))ᶜ
   证明: by
   rw [← compl_compl (⋃₀ S)]; rw [compl_sUnion]
@@ -5065,8 +5065,8 @@ theorem compl_sInter
   rw [sUnion_eq_compl_sInter_compl]; rw [compl_compl_image]
 
 中文:
-定理 compl_sInter
-  条件: (S : Set (Set α))
+定理 compl_s整数er
+  条件: (S : 集合 (集合 α))
   结论: (⋂₀ S)ᶜ = ⋃₀ (compl '' S)
   证明: by
   rw [sUnion_eq_compl_sInter_compl]; rw [compl_compl_image]
@@ -5088,8 +5088,8 @@ theorem sInter_eq_compl_sUnion_compl
   rw [← compl_compl (⋂₀ S)]; rw [compl_sInter]
 
 中文:
-定理 sInter_eq_compl_sUnion_compl
-  条件: (S : Set (Set α))
+定理 s整数er_eq_compl_sUnion_compl
+  条件: (S : 集合 (集合 α))
   结论: ⋂₀ S = (⋃₀ (compl '' S))ᶜ
   证明: by
   rw [← compl_compl (⋂₀ S)]; rw [compl_sInter]
@@ -5110,7 +5110,7 @@ theorem inter_empty_of_inter_sUnion_empty
 
 中文:
 定理 inter_empty_of_inter_sUnion_empty
-  结论: {s t : Set α} {S : Set (Set α)} (hs : t in S)
+  结论: {s t : 集合 α} {S : 集合 (集合 α)} (hs : t in S)
   证明: eq_empty_of_subset_empty by
     rw [← h]; exact inter_subset_inter_right _ (subset_sUnion_of_mem hs)
 
@@ -5131,7 +5131,7 @@ theorem range_sigma_eq_iUnion_range
 
 中文:
 定理 range_sigma_eq_iUnion_range
-  条件: {γ : α -> 类型} (f : Sigma γ -> β)
+  条件: {γ : α -> 类型} (f : 依赖和类型 γ -> β)
   证明: Set.ext by simp
 
 Depends on / 依赖: Set.ext
@@ -5152,7 +5152,7 @@ theorem iUnion_eq_range_sigma
 
 中文:
 定理 iUnion_eq_range_sigma
-  条件: (s : α -> Set β)
+  条件: (s : α -> 集合 β)
   结论: ⋃ i, s i = range fun a : Σ i, s i => a.2
   证明: by
   simp [Set.ext_iff]
@@ -5174,7 +5174,7 @@ theorem iUnion_eq_range_psigma
 
 中文:
 定理 iUnion_eq_range_psigma
-  条件: (s : ι -> Set β)
+  条件: (s : ι -> 集合 β)
   结论: ⋃ i, s i = range fun a : Σ' i, s i => a.2
   证明: by
   simp [Set.ext_iff]
@@ -5197,7 +5197,7 @@ theorem iUnion_image_preimage_sigma_mk_eq_self
 
 中文:
 定理 iUnion_image_preimage_sigma_mk_eq_self
-  条件: {ι : 类型} {σ : ι -> 类型} (s : Set (Sigma σ))
+  条件: {ι : 类型} {σ : ι -> 类型} (s : 集合 (依赖和类型 σ))
   证明: by
   ext x
   simp only [mem_iUnion, mem_image, mem_preimage]
@@ -5226,9 +5226,9 @@ alias sUnion_mono := sUnion_subset_sUnion
 alias sInter_mono := sInter_subset_sInter
 
 中文:
-定理 Sigma.univ
+定理 依赖和类型.univ
   条件: (X : α -> 类型)
-  结论: (Set.univ : Set (Σ a, X a)) = ⋃ a, range (Sigma.mk a)
+  结论: (集合.univ : 集合 (Σ a, X a)) = ⋃ a, range (依赖和类型.mk a)
   证明: Set.ext fun x =>
     iff_of_true trivial ⟨range (Sigma.mk x.1), Set.mem_range_self _, x.2, Sigma.eta x⟩
 
@@ -5259,7 +5259,7 @@ theorem iUnion_subset_iUnion_const
 
 中文:
 定理 iUnion_subset_iUnion_const
-  条件: {s : Set α} (h : ι -> ι₂)
+  条件: {s : 集合 α} (h : ι -> ι₂)
   结论: ⋃ _ : ι, s subseteq ⋃ _ : ι₂, s
   证明: iSup_const_mono (α := Set α) h
 
@@ -5307,7 +5307,7 @@ theorem iUnion_insert_eq_range_union_iUnion
 
 中文:
 定理 iUnion_insert_eq_range_union_iUnion
-  条件: {ι : 类型} (x : ι -> β) (t : ι -> Set β)
+  条件: {ι : 类型} (x : ι -> β) (t : ι -> 集合 β)
   证明: by
   simp_rw [← union_singleton, iUnion_union_distrib, union_comm, iUnion_singleton_eq_range]
 
@@ -5329,7 +5329,7 @@ theorem iUnion_of_singleton
 中文:
 定理 iUnion_of_singleton
   条件: (α : 类型)
-  结论: (⋃ x, {x} : Set α) = univ
+  结论: (⋃ x, {x} : 集合 α) = univ
   证明: by simp [Set.ext_iff]
 
 Depends on / 依赖: IsManifold, IsManifold.of_le, Set.ext_iff, ext_iff, le_minSmoothness, minSmoothness, of_le
@@ -5347,8 +5347,8 @@ theorem iUnion_of_singleton_coe
 
 中文:
 定理 iUnion_of_singleton_coe
-  条件: (s : Set α)
-  结论: ⋃ i : s, ({(i : α)} : Set α) = s
+  条件: (s : 集合 α)
+  结论: ⋃ i : s, ({(i : α)} : 集合 α) = s
   证明: by simp
 -/
 theorem iUnion_of_singleton_coe (s : Set α) : ⋃ i : s, ({(i : α)} : Set α) = s := by simp
@@ -5365,8 +5365,8 @@ theorem sUnion_eq_biUnion
 
 中文:
 定理 sUnion_eq_biUnion
-  条件: {s : Set (Set α)}
-  结论: ⋃₀ s = ⋃ (i : Set α) (_ : i in s), i
+  条件: {s : 集合 (集合 α)}
+  结论: ⋃₀ s = ⋃ (i : 集合 α) (_ : i in s), i
   证明: by
   rw [← sUnion_image]; rw [image_id']
 
@@ -5386,9 +5386,9 @@ theorem sInter_eq_biInter
   rw [← sInter_image]; rw [image_id']
 
 中文:
-定理 sInter_eq_biInter
-  条件: {s : Set (Set α)}
-  结论: ⋂₀ s = ⋂ (i : Set α) (_ : i in s), i
+定理 s整数er_eq_bi整数er
+  条件: {s : 集合 (集合 α)}
+  结论: ⋂₀ s = ⋂ (i : 集合 α) (_ : i in s), i
   证明: by
   rw [← sInter_image]; rw [image_id']
 
@@ -5409,7 +5409,7 @@ theorem sUnion_eq_iUnion
 
 中文:
 定理 sUnion_eq_iUnion
-  条件: {s : Set (Set α)}
+  条件: {s : 集合 (集合 α)}
   结论: ⋃₀ s = ⋃ i : s, i
   证明: by
   simp only [← sUnion_range, Subtype.range_coe]
@@ -5432,8 +5432,8 @@ theorem sInter_eq_iInter
 @[simp]
 
 中文:
-定理 sInter_eq_iInter
-  条件: {s : Set (Set α)}
+定理 s整数er_eq_i整数er
+  条件: {s : 集合 (集合 α)}
   结论: ⋂₀ s = ⋂ i : s, i
   证明: by
   simp only [← sInter_range, Subtype.range_coe]
@@ -5459,7 +5459,7 @@ theorem iUnion_of_empty
 
 中文:
 定理 iUnion_of_empty
-  条件: [IsEmpty ι] (s : ι -> Set α)
+  条件: [是空 ι] (s : ι -> 集合 α)
   结论: ⋃ i, s i = ∅
   证明: iSup_of_empty _
 
@@ -5481,8 +5481,8 @@ theorem iInter_of_empty
   proof: iInf_of_empty _
 
 中文:
-定理 iInter_of_empty
-  条件: [IsEmpty ι] (s : ι -> Set α)
+定理 i整数er_of_empty
+  条件: [是空 ι] (s : ι -> 集合 α)
   结论: ⋂ i, s i = univ
   证明: iInf_of_empty _
 
@@ -5502,8 +5502,8 @@ theorem union_eq_iUnion
 
 中文:
 定理 union_eq_iUnion
-  条件: {s₁ s₂ : Set α}
-  结论: s₁ union s₂ = ⋃ b : 布尔, cond b s₁ s₂
+  条件: {s₁ s₂ : 集合 α}
+  结论: s₁ union s₂ = ⋃ b : 布尔值, cond b s₁ s₂
   证明: sup_eq_iSup s₁ s₂
 
 Depends on / 依赖: sup_eq_iSup
@@ -5521,9 +5521,9 @@ theorem inter_eq_iInter
   proof: inf_eq_iInf s₁ s₂
 
 中文:
-定理 inter_eq_iInter
-  条件: {s₁ s₂ : Set α}
-  结论: s₁ inter s₂ = ⋂ b : 布尔, cond b s₁ s₂
+定理 inter_eq_i整数er
+  条件: {s₁ s₂ : 集合 α}
+  结论: s₁ inter s₂ = ⋂ b : 布尔值, cond b s₁ s₂
   证明: inf_eq_iInf s₁ s₂
 
 Depends on / 依赖: inf_eq_iInf
@@ -5540,8 +5540,8 @@ theorem sInter_union_sInter
   proof: sInf_sup_sInf
 
 中文:
-定理 sInter_union_sInter
-  条件: {S T : Set (Set α)}
+定理 s整数er_union_s整数er
+  条件: {S T : 集合 (集合 α)}
   证明: sInf_sup_sInf
 
 Depends on / 依赖: sInf_sup_sInf
@@ -5560,7 +5560,7 @@ theorem sUnion_inter_sUnion
 
 中文:
 定理 sUnion_inter_sUnion
-  条件: {s t : Set (Set α)}
+  条件: {s t : 集合 (集合 α)}
   证明: sSup_inf_sSup
 
 Depends on / 依赖: sSup_inf_sSup
@@ -5579,7 +5579,7 @@ theorem biUnion_iUnion
 
 中文:
 定理 biUnion_iUnion
-  条件: (s : ι -> Set α) (t : α -> Set β)
+  条件: (s : ι -> 集合 α) (t : α -> 集合 β)
   证明: by simp [@iUnion_comm _ ι]
 
 Depends on / 依赖: iUnion_comm
@@ -5596,8 +5596,8 @@ theorem biInter_iUnion
   proof: by simp [@iInter_comm _ ι]
 
 中文:
-定理 biInter_iUnion
-  条件: (s : ι -> Set α) (t : α -> Set β)
+定理 bi整数er_iUnion
+  条件: (s : ι -> 集合 α) (t : α -> 集合 β)
   证明: by simp [@iInter_comm _ ι]
 
 Depends on / 依赖: iInter_comm
@@ -5617,7 +5617,7 @@ theorem sUnion_iUnion
 
 中文:
 定理 sUnion_iUnion
-  条件: (s : ι -> Set (Set α))
+  条件: (s : ι -> 集合 (集合 α))
   结论: ⋃₀ ⋃ i, s i = ⋃ i, ⋃₀ s i
   证明: by
   simp only [sUnion_eq_biUnion, biUnion_iUnion]
@@ -5638,8 +5638,8 @@ theorem sInter_iUnion
   simp only [sInter_eq_biInter, biInter_iUnion]
 
 中文:
-定理 sInter_iUnion
-  条件: (s : ι -> Set (Set α))
+定理 s整数er_iUnion
+  条件: (s : ι -> 集合 (集合 α))
   结论: ⋂₀ ⋃ i, s i = ⋂ i, ⋂₀ s i
   证明: by
   simp only [sInter_eq_biInter, biInter_iUnion]
@@ -5667,7 +5667,7 @@ theorem iUnion_range_eq_sUnion
 
 中文:
 定理 iUnion_range_eq_sUnion
-  结论: {α β : 类型} (C : Set (Set α)) {f : 对任意 s : C, β -> (s : Type _)}
+  结论: {α β : 类型} (C : 集合 (集合 α)) {f : 对任意 s : C, β -> (s : 类型 _)}
   证明: by
   ext x; constructor
   · rintro ⟨s, ⟨y, rfl⟩, ⟨s, hs⟩, rfl⟩
@@ -5707,7 +5707,7 @@ theorem iUnion_range_eq_iUnion
 
 中文:
 定理 iUnion_range_eq_iUnion
-  结论: (C : ι -> Set α) {f : 对任意 x : ι, β -> C x}
+  结论: (C : ι -> 集合 α) {f : 对任意 x : ι, β -> C x}
   证明: by
   ext x; rw [mem_iUnion, mem_iUnion]; constructor
   · rintro ⟨y, i, rfl⟩
@@ -5739,7 +5739,7 @@ lemma iUnion_sumElim
 
 中文:
 引理 iUnion_sumElim
-  条件: {ι σ : 类型} (s : ι -> Set α) (t : σ -> Set α)
+  条件: {ι σ : 类型} (s : ι -> 集合 α) (t : σ -> 集合 α)
   证明: by
   ext
   simp
@@ -5759,8 +5759,8 @@ theorem union_distrib_iInter_left
   proof: sup_iInf_eq _ _
 
 中文:
-定理 union_distrib_iInter_left
-  条件: (s : ι -> Set α) (t : Set α)
+定理 union_distrib_i整数er_left
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (t union ⋂ i, s i) = ⋂ i, t union s i
   证明: sup_iInf_eq _ _
 
@@ -5778,8 +5778,8 @@ theorem union_distrib_iInter₂_left
   proof: by simp_rw [union_distrib_iInter_left]
 
 中文:
-定理 union_distrib_iInter₂_left
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set α)
+定理 union_distrib_i整数er₂_left
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 α)
   证明: by simp_rw [union_distrib_iInter_left]
 
 Depends on / 依赖: simp_rw, union_distrib_iInter_left
@@ -5797,8 +5797,8 @@ theorem union_distrib_iInter_right
   proof: iInf_sup_eq _ _
 
 中文:
-定理 union_distrib_iInter_right
-  条件: (s : ι -> Set α) (t : Set α)
+定理 union_distrib_i整数er_right
+  条件: (s : ι -> 集合 α) (t : 集合 α)
   结论: (⋂ i, s i) union t = ⋂ i, s i union t
   证明: iInf_sup_eq _ _
 
@@ -5816,8 +5816,8 @@ theorem union_distrib_iInter₂_right
   proof: by simp_rw [union_distrib_iInter_right]
 
 中文:
-定理 union_distrib_iInter₂_right
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set α)
+定理 union_distrib_i整数er₂_right
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 α)
   证明: by simp_rw [union_distrib_iInter_right]
 
 Depends on / 依赖: simp_rw, union_distrib_iInter_right
@@ -5835,7 +5835,7 @@ lemma biUnion_lt_eq_iUnion
 
 中文:
 引理 biUnion_lt_eq_iUnion
-  条件: [LT α] [NoMaxOrder α] {s : α -> Set β}
+  条件: [LT α] [NoMax序 α] {s : α -> 集合 β}
   证明: biSup_lt_eq_iSup
 
 Depends on / 依赖: biSup_lt_eq_iSup
@@ -5853,7 +5853,7 @@ lemma biUnion_le_eq_iUnion
 
 中文:
 引理 biUnion_le_eq_iUnion
-  条件: [Preorder α] {s : α -> Set β}
+  条件: [预序 α] {s : α -> 集合 β}
   证明: biSup_le_eq_iSup
 
 Depends on / 依赖: biSup_le_eq_iSup
@@ -5870,8 +5870,8 @@ lemma biInter_lt_eq_iInter
   proof: biInf_lt_eq_iInf
 
 中文:
-引理 biInter_lt_eq_iInter
-  条件: [LT α] [NoMaxOrder α] {s : α -> Set β}
+引理 bi整数er_lt_eq_i整数er
+  条件: [LT α] [NoMax序 α] {s : α -> 集合 β}
   证明: biInf_lt_eq_iInf
 
 Depends on / 依赖: biInf_lt_eq_iInf
@@ -5888,8 +5888,8 @@ lemma biInter_le_eq_iInter
   proof: biInf_le_eq_iInf
 
 中文:
-引理 biInter_le_eq_iInter
-  条件: [Preorder α] {s : α -> Set β}
+引理 bi整数er_le_eq_i整数er
+  条件: [预序 α] {s : α -> 集合 β}
   证明: biInf_le_eq_iInf
 
 Depends on / 依赖: biInf_le_eq_iInf
@@ -5907,7 +5907,7 @@ lemma biUnion_gt_eq_iUnion
 
 中文:
 引理 biUnion_gt_eq_iUnion
-  条件: [LT α] [NoMinOrder α] {s : α -> Set β}
+  条件: [LT α] [NoMin序 α] {s : α -> 集合 β}
   证明: biSup_gt_eq_iSup
 
 Depends on / 依赖: biSup_gt_eq_iSup
@@ -5925,7 +5925,7 @@ lemma biUnion_ge_eq_iUnion
 
 中文:
 引理 biUnion_ge_eq_iUnion
-  条件: [Preorder α] {s : α -> Set β}
+  条件: [预序 α] {s : α -> 集合 β}
   证明: biSup_ge_eq_iSup
 
 Depends on / 依赖: biSup_ge_eq_iSup
@@ -5942,8 +5942,8 @@ lemma biInter_gt_eq_iInf
   proof: biInf_gt_eq_iInf
 
 中文:
-引理 biInter_gt_eq_iInf
-  条件: [LT α] [NoMinOrder α] {s : α -> Set β}
+引理 bi整数er_gt_eq_iInf
+  条件: [LT α] [NoMin序 α] {s : α -> 集合 β}
   证明: biInf_gt_eq_iInf
 
 Depends on / 依赖: biInf_gt_eq_iInf
@@ -5960,8 +5960,8 @@ lemma biInter_ge_eq_iInf
   proof: biInf_ge_eq_iInf
 
 中文:
-引理 biInter_ge_eq_iInf
-  条件: [Preorder α] {s : α -> Set β}
+引理 bi整数er_ge_eq_iInf
+  条件: [预序 α] {s : α -> 集合 β}
   证明: biInf_ge_eq_iInf
 
 Depends on / 依赖: biInf_ge_eq_iInf
@@ -6000,7 +6000,7 @@ theorem biInter_le
   proof: biInf_le_eq_inf s i
 
 中文:
-定理 biInter_le
+定理 bi整数er_le
   结论: (⋂ j <= i, s j) = (⋂ j < i, s j) inter s i
   证明: biInf_le_eq_inf s i
 
@@ -6036,7 +6036,7 @@ theorem biInter_ge
   proof: biInf_ge_eq_inf s i
 
 中文:
-定理 biInter_ge
+定理 bi整数er_ge
   结论: (⋂ j >= i, s j) = s i inter ⋂ j > i, s j
   证明: biInf_ge_eq_inf s i
 
@@ -6064,7 +6064,7 @@ theorem pi_def
 
 中文:
 定理 pi_def
-  条件: (i : Set α) (s : 对任意 a, Set (π a))
+  条件: (i : 集合 α) (s : 对任意 a, 集合 (π a))
   结论: pi i s = ⋂ a in i, eval a ⁻¹' s a
   证明: by
   ext
@@ -6085,8 +6085,8 @@ theorem univ_pi_eq_iInter
   simp only [pi_def, iInter_true, mem_univ]
 
 中文:
-定理 univ_pi_eq_iInter
-  条件: (t : 对任意 i, Set (π i))
+定理 univ_pi_eq_i整数er
+  条件: (t : 对任意 i, 集合 (π i))
   结论: pi univ t = ⋂ i, eval i ⁻¹' t i
   证明: by
   simp only [pi_def, iInter_true, mem_univ]
@@ -6111,7 +6111,7 @@ theorem pi_sdiff_pi_subset
 
 中文:
 定理 pi_sdiff_pi_subset
-  条件: (i : Set α) (s t : 对任意 a, Set (π a))
+  条件: (i : 集合 α) (s t : 对任意 a, 集合 (π a))
   证明: by
   refine sdiff_subset_comm.2 fun x hx a ha => ?_
   simp only [mem_sdiff, mem_pi, mem_iUnion, not_exists, mem_preimage, not_and, not_not] at hx
@@ -6141,7 +6141,7 @@ theorem iUnion_univ_pi
 
 中文:
 定理 iUnion_univ_pi
-  条件: {ι : α -> 类型} (t : (a : α) -> ι a -> Set (π a))
+  条件: {ι : α -> 类型} (t : (a : α) -> ι a -> 集合 (π a))
   证明: by
   ext
   simp [Classical.skolem]
@@ -6165,7 +6165,7 @@ theorem biUnion_univ_pi
 
 中文:
 定理 biUnion_univ_pi
-  条件: {ι : α -> 类型} (s : (a : α) -> Set (ι a)) (t : (a : α) -> ι a -> Set (π a))
+  条件: {ι : α -> 类型} (s : (a : α) -> 集合 (ι a)) (t : (a : α) -> ι a -> 集合 (π a))
   证明: by
   ext
   simp [Classical.skolem, forall_and]
@@ -6189,8 +6189,8 @@ theorem pi_iUnion_eq_iInter_pi
   grind
 
 中文:
-定理 pi_iUnion_eq_iInter_pi
-  条件: {α' : 类型} (s : α' -> Set α) (t : (a : α) -> Set (π a))
+定理 pi_iUnion_eq_i整数er_pi
+  条件: {α' : 类型} (s : α' -> 集合 α) (t : (a : α) -> 集合 (π a))
   证明: by
   ext f
   simp
@@ -6221,7 +6221,7 @@ theorem directedOn_iUnion
 
 中文:
 定理 directedOn_iUnion
-  结论: {r} {f : ι -> Set α} (hd : Directed (· subseteq ·) f)
+  结论: {r} {f : ι -> 集合 α} (hd : Directed (· subseteq ·) f)
   证明: by
   simp only [DirectedOn, mem_iUnion, exists_imp]
   exact fun a₁ b₁ fb₁ a₂ b₂ fb₂ =>
@@ -6251,7 +6251,7 @@ theorem directedOn_sUnion
 
 中文:
 定理 directedOn_sUnion
-  结论: {r} {S : Set (Set α)} (hd : DirectedOn (· subseteq ·) S)
+  结论: {r} {S : 集合 (集合 α)} (hd : DirectedOn (· subseteq ·) S)
   证明: by
   rw [sUnion_eq_iUnion]
   exact directedOn_iUnion (directedOn_iff_directed.mp hd) (fun i => h i.1 i.2)
@@ -6281,7 +6281,7 @@ theorem iUnion_comp
 
 中文:
 定理 iUnion_comp
-  条件: {f : ι -> ι₂} (hf : Surjective f) (g : ι₂ -> Set α)
+  条件: {f : ι -> ι₂} (hf : 满射 f) (g : ι₂ -> 集合 α)
   结论: ⋃ x, g (f x) = ⋃ y, g y
   证明: hf.iSup_comp g
 
@@ -6300,8 +6300,8 @@ theorem iInter_comp
   proof: hf.iInf_comp g
 
 中文:
-定理 iInter_comp
-  条件: {f : ι -> ι₂} (hf : Surjective f) (g : ι₂ -> Set α)
+定理 i整数er_comp
+  条件: {f : ι -> ι₂} (hf : 满射 f) (g : ι₂ -> 集合 α)
   结论: ⋂ x, g (f x) = ⋂ y, g y
   证明: hf.iInf_comp g
 
@@ -6338,7 +6338,7 @@ theorem disjoint_iUnion_left
 
 中文:
 定理 disjoint_iUnion_left
-  条件: {ι : Sort*} {s : ι -> Set α}
+  条件: {ι : 类型层*} {s : ι -> 集合 α}
   证明: iSup_disjoint_iff
 
 @[simp]
@@ -6360,7 +6360,7 @@ theorem disjoint_iUnion_right
 
 中文:
 定理 disjoint_iUnion_right
-  条件: {ι : Sort*} {s : ι -> Set α}
+  条件: {ι : 类型层*} {s : ι -> 集合 α}
   证明: disjoint_iSup_iff
 
 Depends on / 依赖: disjoint_iSup_iff
@@ -6379,7 +6379,7 @@ theorem disjoint_iUnion₂_left
 
 中文:
 定理 disjoint_iUnion₂_left
-  条件: {s : 对任意 i, κ i -> Set α} {t : Set α}
+  条件: {s : 对任意 i, κ i -> 集合 α} {t : 集合 α}
   证明: iSup₂_disjoint_iff
 -/
 theorem disjoint_iUnion₂_left {s : forall i, κ i -> Set α} {t : Set α} :
@@ -6398,7 +6398,7 @@ theorem disjoint_iUnion₂_right
 
 中文:
 定理 disjoint_iUnion₂_right
-  条件: {s : Set α} {t : 对任意 i, κ i -> Set α}
+  条件: {s : 集合 α} {t : 对任意 i, κ i -> 集合 α}
   证明: disjoint_iSup₂_iff
 
 @[simp]
@@ -6420,7 +6420,7 @@ theorem disjoint_sUnion_left
 
 中文:
 定理 disjoint_sUnion_left
-  条件: {S : Set (Set α)} {t : Set α}
+  条件: {S : 集合 (集合 α)} {t : 集合 α}
   证明: sSup_disjoint_iff
 
 @[simp]
@@ -6442,7 +6442,7 @@ theorem disjoint_sUnion_right
 
 中文:
 定理 disjoint_sUnion_right
-  条件: {s : Set α} {S : Set (Set α)}
+  条件: {s : 集合 α} {S : 集合 (集合 α)}
   证明: disjoint_sSup_iff
 
 Depends on / 依赖: disjoint_sSup_iff
@@ -6467,7 +6467,7 @@ lemma biUnion_compl_eq_of_pairwise_disjoint_of_iUnion_eq_univ
 
 中文:
 引理 biUnion_compl_eq_of_pairwise_disjoint_of_iUnion_eq_univ
-  结论: {ι : 类型} {Es : ι -> Set α}
+  结论: {ι : 类型} {Es : ι -> 集合 α}
   证明: by
   ext x
   obtain ⟨i, hix⟩ : exists i, x in Es i := by simp [← mem_iUnion, Es_union]
@@ -6514,8 +6514,8 @@ lemma nonempty_iInter_Iic_iff
   simp [this, BddBelow]
 
 中文:
-引理 nonempty_iInter_Iic_iff
-  条件: [Preorder α] {f : ι -> α}
+引理 nonempty_i整数er_Iic_iff
+  条件: [预序 α] {f : ι -> α}
   证明: by
   have : (⋂ (i : ι), Iic (f i)) = lowerBounds (range f) := by
     ext c; simp [lowerBounds]
@@ -6538,8 +6538,8 @@ lemma nonempty_iInter_Ici_iff
   proof: nonempty_iInter_Iic_iff (α := αᵒᵈ)
 
 中文:
-引理 nonempty_iInter_Ici_iff
-  条件: [Preorder α] {f : ι -> α}
+引理 nonempty_i整数er_Ici_iff
+  条件: [预序 α] {f : ι -> α}
   证明: nonempty_iInter_Iic_iff (α := αᵒᵈ)
 
 Depends on / 依赖: nonempty_iInter_Iic_iff
@@ -6562,7 +6562,7 @@ theorem Ici_iSup
 中文:
 定理 Ici_iSup
   条件: (f : ι -> α)
-  结论: Ici (⨆ i, f i) = ⋂ i, Ici (f i)
+  结论: 左闭右无界区间 (⨆ i, f i) = ⋂ i, 左闭右无界区间 (f i)
   证明: ext fun _ => by simp only [mem_Ici, iSup_le_iff, mem_iInter]
 
 Depends on / 依赖: iSup_le_iff, mem_Ici, mem_iInter
@@ -6582,7 +6582,7 @@ theorem Iic_iInf
 中文:
 定理 Iic_iInf
   条件: (f : ι -> α)
-  结论: Iic (⨅ i, f i) = ⋂ i, Iic (f i)
+  结论: 左无界右闭区间 (⨅ i, f i) = ⋂ i, 左无界右闭区间 (f i)
   证明: ext fun _ => by simp only [mem_Iic, le_iInf_iff, mem_iInter]
 
 Depends on / 依赖: le_iInf_iff, mem_Iic, mem_iInter
@@ -6603,7 +6603,7 @@ theorem Ici_iSup₂
 中文:
 定理 Ici_iSup₂
   条件: (f : 对任意 i, κ i -> α)
-  结论: Ici (⨆ (i) (j), f i j) = ⋂ (i) (j), Ici (f i j)
+  结论: 左闭右无界区间 (⨆ (i) (j), f i j) = ⋂ (i) (j), 左闭右无界区间 (f i j)
   证明: by
   simp_rw [Ici_iSup]
 
@@ -6625,7 +6625,7 @@ theorem Iic_iInf₂
 中文:
 定理 Iic_iInf₂
   条件: (f : 对任意 i, κ i -> α)
-  结论: Iic (⨅ (i) (j), f i j) = ⋂ (i) (j), Iic (f i j)
+  结论: 左无界右闭区间 (⨅ (i) (j), f i j) = ⋂ (i) (j), 左无界右闭区间 (f i j)
   证明: by
   simp_rw [Iic_iInf]
 
@@ -6645,8 +6645,8 @@ theorem Ici_sSup
 
 中文:
 定理 Ici_sSup
-  条件: (s : Set α)
-  结论: Ici (sSup s) = ⋂ a in s, Ici a
+  条件: (s : 集合 α)
+  结论: 左闭右无界区间 (sSup s) = ⋂ a in s, 左闭右无界区间 a
   证明: by rw [sSup_eq_iSup, Ici_iSup₂]
 
 Depends on / 依赖: sSup_eq_iSup
@@ -6664,8 +6664,8 @@ theorem Iic_sInf
 
 中文:
 定理 Iic_sInf
-  条件: (s : Set α)
-  结论: Iic (sInf s) = ⋂ a in s, Iic a
+  条件: (s : 集合 α)
+  结论: 左无界右闭区间 (sInf s) = ⋂ a in s, 左无界右闭区间 a
   证明: by rw [sInf_eq_iInf, Iic_iInf₂]
 
 Depends on / 依赖: sInf_eq_iInf
@@ -6695,7 +6695,7 @@ alias biUnion_diff_biUnion_subset := biUnion_sdiff_biUnion_subset
 
 中文:
 定理 biUnion_sdiff_biUnion_subset
-  条件: (s₁ s₂ : Set α)
+  条件: (s₁ s₂ : 集合 α)
   证明: by
   simp only [sdiff_subset_iff, ← biUnion_union]
   apply biUnion_subset_biUnion_left
@@ -6747,7 +6747,7 @@ theorem sigmaToiUnion_surjective
 
 中文:
 定理 sigmaToiUnion_surjective
-  结论: Surjective (sigmaToiUnion t)
+  结论: 满射 (sigmaToiUnion t)
   证明: by simpa using hb
     let ⟨a, hb⟩ := this
     ⟨⟨a, b, hb⟩, rfl⟩
@@ -6773,7 +6773,7 @@ Sigma.eq a_eq Subtype.ext by subst b_eq; subst a_eq; rfl
 
 中文:
 定理 sigmaToiUnion_injective
-  条件: (h : Pairwise (Disjoint on t))
+  条件: (h : 两两 (Disjoint on t))
   证明: congr_arg Subtype.val eq
     have a_eq : a₁ = a₂ :=
       by_contradiction fun ne =>
@@ -6803,7 +6803,7 @@ theorem sigmaToiUnion_bijective
 
 中文:
 定理 sigmaToiUnion_bijective
-  条件: (h : Pairwise (Disjoint on t))
+  条件: (h : 两两 (Disjoint on t))
   证明: ⟨sigmaToiUnion_injective t h, sigmaToiUnion_surjective t⟩
 
 Depends on / 依赖: sigmaToiUnion_injective, sigmaToiUnion_surjective
@@ -6823,7 +6823,7 @@ definition sigmaEquiv
 
 中文:
 定义 sigmaEquiv
-  签名: (s : α -> Set β) (hs : 对任意 b, 存在! i, b in s i)
+  签名: (s : α -> 集合 β) (hs : 对任意 b, 存在! i, b in s i)
   定义体: ⟨(hs b).choose, b, (hs b).choose_spec.1⟩
   left_inv | ⟨i, b, hb⟩ => Sigma.subtype_ext ((hs b).choose_spec.2 i hb).symm rfl
 
@@ -6847,7 +6847,7 @@ definition unionEqSigmaOfDisjoint
 
 中文:
 定义 unionEqSigmaOfDisjoint
-  签名: {t : α -> Set β}
+  签名: {t : α -> 集合 β}
   定义体: (Equiv.ofBijective _ <| sigmaToiUnion_bijective t h).symm
 
 @[simp]
@@ -6873,7 +6873,7 @@ lemma coe_unionEqSigmaOfDisjoint_symm_apply
 
 中文:
 引理 coe_unionEqSigmaOfDisjoint_symm_apply
-  结论: {α β : 类型} {t : α -> Set β}
+  结论: {α β : 类型} {t : α -> 集合 β}
   证明: by
   rfl
 
@@ -6897,7 +6897,7 @@ lemma coe_snd_unionEqSigmaOfDisjoint
 
 中文:
 引理 coe_snd_unionEqSigmaOfDisjoint
-  结论: {α β : 类型} {t : α -> Set β}
+  结论: {α β : 类型} {t : α -> 集合 β}
   证明: by
   conv => right; rw [← unionEqSigmaOfDisjoint h |>.symm_apply_apply x]
   rfl
@@ -6921,7 +6921,7 @@ theorem iUnion_ge_eq_iUnion_nat_add
 
 中文:
 定理 iUnion_ge_eq_iUnion_nat_add
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃ i >= n, u i = ⋃ i, u (i + n)
   证明: iSup_ge_eq_iSup_nat_add u n
 
@@ -6940,8 +6940,8 @@ theorem iInter_ge_eq_iInter_nat_add
   proof: iInf_ge_eq_iInf_nat_add u n
 
 中文:
-定理 iInter_ge_eq_iInter_nat_add
-  条件: (u : 自然数 -> Set α) (n : 自然数)
+定理 i整数er_ge_eq_i整数er_nat_add
+  条件: (u : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋂ i >= n, u i = ⋂ i, u (i + n)
   证明: iInf_ge_eq_iInf_nat_add u n
 
@@ -6959,8 +6959,8 @@ theorem _root_.Monotone.iUnion_nat_add
   proof: hf.iSup_nat_add k
 
 中文:
-定理 _root_.Monotone.iUnion_nat_add
-  条件: {f : 自然数 -> Set α} (hf : Monotone f) (k : 自然数)
+定理 _root_.递增.iUnion_nat_add
+  条件: {f : 自然数 -> 集合 α} (hf : 递增 f) (k : 自然数)
   证明: hf.iSup_nat_add k
 
 Depends on / 依赖: hf.iSup_nat_add, iSup_nat_add
@@ -6980,8 +6980,8 @@ theorem _root_.Antitone.iInter_nat_add
 @[simp]
 
 中文:
-定理 _root_.Antitone.iInter_nat_add
-  条件: {f : 自然数 -> Set α} (hf : Antitone f) (k : 自然数)
+定理 _root_.递减.i整数er_nat_add
+  条件: {f : 自然数 -> 集合 α} (hf : 递减 f) (k : 自然数)
   证明: hf.iInf_nat_add k
 
 @[simp]
@@ -7002,8 +7002,8 @@ theorem iUnion_iInter_ge_nat_add
   proof: iSup_iInf_ge_nat_add f k
 
 中文:
-定理 iUnion_iInter_ge_nat_add
-  条件: (f : 自然数 -> Set α) (k : 自然数)
+定理 iUnion_i整数er_ge_nat_add
+  条件: (f : 自然数 -> 集合 α) (k : 自然数)
   证明: iSup_iInf_ge_nat_add f k
 
 Depends on / 依赖: iSup_iInf_ge_nat_add
@@ -7023,7 +7023,7 @@ theorem union_iUnion_nat_succ
 
 中文:
 定理 union_iUnion_nat_succ
-  条件: (u : 自然数 -> Set α)
+  条件: (u : 自然数 -> 集合 α)
   结论: (u 0 union ⋃ i, u (i + 1)) = ⋃ i, u i
   证明: sup_iSup_nat_succ u
 
@@ -7042,8 +7042,8 @@ theorem inter_iInter_nat_succ
   proof: inf_iInf_nat_succ u
 
 中文:
-定理 inter_iInter_nat_succ
-  条件: (u : 自然数 -> Set α)
+定理 inter_i整数er_nat_succ
+  条件: (u : 自然数 -> 集合 α)
   结论: (u 0 inter ⋂ i, u (i + 1)) = ⋂ i, u i
   证明: inf_iInf_nat_succ u
 
@@ -7063,7 +7063,7 @@ theorem iUnion_le_nat
 
 中文:
 定理 iUnion_le_nat
-  结论: ⋃ n : 自然数, {i | i <= n} = Set.univ
+  结论: ⋃ n : 自然数, {i | i <= n} = 集合.univ
   证明: subset_antisymm (Set.subset_univ _)
     (fun i _ => Set.mem_iUnion_of_mem i (Set.mem_ofPred.mpr (le_refl _)))
 
@@ -7092,7 +7092,7 @@ theorem iSup_iUnion
 
 中文:
 定理 iSup_iUnion
-  条件: (s : ι -> Set α) (f : α -> β)
+  条件: (s : ι -> 集合 α) (f : α -> β)
   结论: ⨆ a in ⋃ i, s i, f a = ⨆ (i) (a in s i), f a
   证明: by
   rw [iSup_comm]
@@ -7115,7 +7115,7 @@ theorem iInf_iUnion
 
 中文:
 定理 iInf_iUnion
-  条件: (s : ι -> Set α) (f : α -> β)
+  条件: (s : ι -> 集合 α) (f : α -> β)
   结论: ⨅ a in ⋃ i, s i, f a = ⨅ (i) (a in s i), f a
   证明: iSup_iUnion (β := βᵒᵈ) s f
 
@@ -7136,7 +7136,7 @@ theorem sSup_iUnion
 
 中文:
 定理 sSup_iUnion
-  条件: (t : ι -> Set β)
+  条件: (t : ι -> 集合 β)
   结论: sSup (⋃ i, t i) = ⨆ i, sSup (t i)
   证明: by
   simp_rw [sSup_eq_iSup, iSup_iUnion]
@@ -7158,7 +7158,7 @@ theorem sSup_sUnion
 
 中文:
 定理 sSup_sUnion
-  条件: (s : Set (Set β))
+  条件: (s : 集合 (集合 β))
   结论: sSup (⋃₀ s) = ⨆ t in s, sSup t
   证明: by
   simp only [sUnion_eq_biUnion, sSup_eq_iSup, iSup_iUnion]
@@ -7179,7 +7179,7 @@ theorem sInf_sUnion
 
 中文:
 定理 sInf_sUnion
-  条件: (s : Set (Set β))
+  条件: (s : 集合 (集合 β))
   结论: sInf (⋃₀ s) = ⨅ t in s, sInf t
   证明: sSup_sUnion (β := βᵒᵈ) s
 
@@ -7199,7 +7199,7 @@ lemma iSup_sUnion
 
 中文:
 引理 iSup_sUnion
-  条件: (S : Set (Set α)) (f : α -> β)
+  条件: (S : 集合 (集合 α)) (f : α -> β)
   证明: by
   rw [sUnion_eq_iUnion]; rw [iSup_iUnion]; rw [← iSup_subtype'']
 
@@ -7220,7 +7220,7 @@ lemma iInf_sUnion
 
 中文:
 引理 iInf_sUnion
-  条件: (S : Set (Set α)) (f : α -> β)
+  条件: (S : 集合 (集合 α)) (f : α -> β)
   证明: by
   rw [sUnion_eq_iUnion]; rw [iInf_iUnion]; rw [← iInf_subtype'']
 
@@ -7240,8 +7240,8 @@ lemma forall_sUnion
   simp_rw [← iInf_Prop_eq, iInf_sUnion]
 
 中文:
-引理 forall_sUnion
-  条件: {S : Set (Set α)} {p : α -> 命题}
+引理 对任意_sUnion
+  条件: {S : 集合 (集合 α)} {p : α -> 命题}
   证明: by
   simp_rw [← iInf_Prop_eq, iInf_sUnion]
 
@@ -7261,8 +7261,8 @@ lemma exists_sUnion
   simp_rw [← exists_prop, ← iSup_Prop_eq, iSup_sUnion]
 
 中文:
-引理 exists_sUnion
-  条件: {S : Set (Set α)} {p : α -> 命题}
+引理 存在_sUnion
+  条件: {S : 集合 (集合 α)} {p : α -> 命题}
   证明: by
   simp_rw [← exists_prop, ← iSup_Prop_eq, iSup_sUnion]
 

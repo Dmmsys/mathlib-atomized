@@ -56,11 +56,11 @@ inductive QuaternionGroup
     - xa: ZMod (2 * n) -> QuaternionGroup n
 
 中文:
-归纳类型 QuaternionGroup
+归纳类型 Quaternion群
   参数: (n : 自然数)
   构造子 (2 个):
-    - a: ZMod (2 * n) -> QuaternionGroup n
-    - xa: ZMod (2 * n) -> QuaternionGroup n
+    - a: ZMod (2 * n) -> Quaternion群 n
+    - xa: ZMod (2 * n) -> Quaternion群 n
 -/
 inductive QuaternionGroup (n : Nat) : Type
   | a : ZMod (2 * n) -> QuaternionGroup n
@@ -81,7 +81,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: : QuaternionGroup n -> QuaternionGroup n -> QuaternionGroup n
+  签名: : Quaternion群 n -> Quaternion群 n -> Quaternion群 n
 -/
 private def mul : QuaternionGroup n -> QuaternionGroup n -> QuaternionGroup n
   | a i, a j => a (i + j)
@@ -100,7 +100,7 @@ definition one
 
 中文:
 定义 one
-  签名: : QuaternionGroup n
+  签名: : Quaternion群 n
   定义体: a 0
 -/
 private def one : QuaternionGroup n :=
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (QuaternionGroup n)
+  签名: 可居 (Quaternion群 n)
   定义体: ⟨one⟩
 -/
 instance : Inhabited (QuaternionGroup n) :=
@@ -134,7 +134,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : QuaternionGroup n -> QuaternionGroup n
+  签名: : Quaternion群 n -> Quaternion群 n
 -/
 private def inv : QuaternionGroup n -> QuaternionGroup n
   | a i => a (-i)
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (QuaternionGroup n)
+  签名: 群 (Quaternion群 n)
   定义体: mul
   mul_assoc := by
     unfold instHMul
@@ -301,7 +301,7 @@ theorem a_zero
 
 中文:
 定理 a_zero
-  结论: a 0 = (1 : QuaternionGroup n)
+  结论: a 0 = (1 : Quaternion群 n)
   证明: by
   rfl
 -/
@@ -318,7 +318,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : QuaternionGroup n) = a 0
+  结论: (1 : Quaternion群 n) = a 0
   证明: rfl
 -/
 theorem one_def : (1 : QuaternionGroup n) = a 0 :=
@@ -343,7 +343,7 @@ definition fintypeHelper
 
 中文:
 定义 fintypeHelper
-  签名: : ZMod (2 * n) oplus ZMod (2 * n) ≃ QuaternionGroup n where
+  签名: : ZMod (2 * n) oplus ZMod (2 * n) ≃ Quaternion群 n where
   定义体: match i with
     | a j => Sum.inl j
     | xa j => Sum.inr j
@@ -378,7 +378,7 @@ definition quaternionGroupZeroEquivDihedralGroupZero
 
 中文:
 定义 quaternionGroupZeroEquivDihedralGroupZero
-  签名: : QuaternionGroup 0 ≃* DihedralGroup 0 where
+  签名: : Quaternion群 0 ≃* Dihedral群 0 where
   定义体: by rintro (k | k) <;> rfl
   right_inv := by rintro (k | k) <;> rfl
   map_mul' := by rintro (k | k) (l | l) <;> simp
@@ -408,7 +408,7 @@ instance [NeZero
 
 中文:
 实例 [NeZero
-  签名: n] : Fintype (QuaternionGroup n)
+  签名: n] : 有限类型 (Quaternion群 n)
   定义体: Fintype.ofEquiv _ fintypeHelper
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, fintypeHelper, ofEquiv
@@ -426,7 +426,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (QuaternionGroup n)
+  签名: 非平凡 (Quaternion群 n)
   定义体: ⟨⟨a 0, xa 0, by simp [-a_zero]⟩⟩
 
 Depends on / 依赖: a_zero
@@ -450,7 +450,7 @@ theorem card
 中文:
 定理 card
   条件: [NeZero n]
-  结论: Fintype.card (QuaternionGroup n) = 4 * n
+  结论: 有限类型.card (Quaternion群 n) = 4 * n
   证明: by
   rw [← Fintype.card_eq.mpr ⟨fintypeHelper⟩]; rw [Fintype.card_sum]; rw [ZMod.card]; rw [two_mul]
   ring
@@ -482,7 +482,7 @@ theorem a_one_pow
 中文:
 定理 a_one_pow
   条件: (k : 自然数)
-  结论: (a 1 : QuaternionGroup n) ^ k = a k
+  结论: (a 1 : Quaternion群 n) ^ k = a k
   证明: by
   induction k with
   | zero => rw [Nat.cast_zero]; rfl
@@ -514,7 +514,7 @@ theorem a_one_pow_n
 
 中文:
 定理 a_one_pow_n
-  结论: (a 1 : QuaternionGroup n) ^ (2 * n) = 1
+  结论: (a 1 : Quaternion群 n) ^ (2 * n) = 1
   证明: by
   simp
 
@@ -641,7 +641,7 @@ theorem quaternionGroup_one_isCyclic
 
 中文:
 定理 quaternionGroup_one_isCyclic
-  结论: IsCyclic (QuaternionGroup 1)
+  结论: 是循环 (Quaternion群 1)
   证明: by
   apply isCyclic_of_orderOf_eq_card
   · rw [Nat.card_eq_fintype_card, card, mul_one]
@@ -676,7 +676,7 @@ theorem orderOf_a_one
 
 中文:
 定理 orderOf_a_one
-  结论: orderOf (a 1 : QuaternionGroup n) = 2 * n
+  结论: orderOf (a 1 : Quaternion群 n) = 2 * n
   证明: by
   rcases eq_zero_or_neZero n with rfl | hn
   · simp_rw [mul_zero, orderOf_eq_zero_iff']
@@ -748,7 +748,7 @@ theorem exponent
 
 中文:
 定理 exponent
-  结论: Monoid.exponent (QuaternionGroup n) = 2 * lcm n 2
+  结论: 幺半群.exponent (Quaternion群 n) = 2 * 最小公倍数 n 2
   证明: by
   rw [← normalize_eq 2]; rw [← lcm_mul_left]; rw [normalize_eq]
   simp only [Nat.reduceMul]

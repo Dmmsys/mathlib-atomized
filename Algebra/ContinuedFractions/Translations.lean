@@ -155,7 +155,7 @@ theorem partNum_eq_s_a
 
 中文:
 定理 partNum_eq_s_a
-  条件: {gp : Pair α} (s_nth_eq : g.s.get? n = some gp)
+  条件: {gp : 对 α} (s_nth_eq : g.s.get? n = some gp)
   证明: by simp [partNums, s_nth_eq]
 
 Depends on / 依赖: partNums, s_nth_eq
@@ -173,7 +173,7 @@ theorem partDen_eq_s_b
 
 中文:
 定理 partDen_eq_s_b
-  条件: {gp : Pair α} (s_nth_eq : g.s.get? n = some gp)
+  条件: {gp : 对 α} (s_nth_eq : g.s.get? n = some gp)
   证明: by simp [partDens, s_nth_eq]
 
 Depends on / 依赖: partDens, s_nth_eq
@@ -191,7 +191,7 @@ theorem exists_s_a_of_partNum
   simpa [partNums, Stream'.Seq.map_get?] using nth_partNum_eq
 
 中文:
-定理 exists_s_a_of_partNum
+定理 存在_s_a_of_partNum
   条件: {a : α} (nth_partNum_eq : g.partNums.get? n = some a)
   证明: by
   simpa [partNums, Stream'.Seq.map_get?] using nth_partNum_eq
@@ -212,7 +212,7 @@ theorem exists_s_b_of_partDen
   simpa [partDens, Stream'.Seq.map_get?] using nth_partDen_eq
 
 中文:
-定理 exists_s_b_of_partDen
+定理 存在_s_b_of_partDen
   结论: {b : α}
   证明: by
   simpa [partDens, Stream'.Seq.map_get?] using nth_partDen_eq
@@ -326,7 +326,7 @@ theorem exists_conts_a_of_num
   proof: by simpa
 
 中文:
-定理 exists_conts_a_of_num
+定理 存在_conts_a_of_num
   条件: {A : K} (nth_num_eq : g.nums n = A)
   证明: by simpa
 -/
@@ -344,7 +344,7 @@ theorem exists_conts_b_of_den
 @[simp]
 
 中文:
-定理 exists_conts_b_of_den
+定理 存在_conts_b_of_den
   条件: {B : K} (nth_denom_eq : g.dens n = B)
   证明: by simpa
 
@@ -490,7 +490,7 @@ theorem second_contAux_eq
 
 中文:
 定理 second_contAux_eq
-  条件: {gp : Pair K} (zeroth_s_eq : g.s.get? 0 = some gp)
+  条件: {gp : 对 K} (zeroth_s_eq : g.s.get? 0 = some gp)
   证明: by
   simp [zeroth_s_eq, contsAux, nextConts, nextDen, nextNum]
 
@@ -511,7 +511,7 @@ theorem first_cont_eq
 
 中文:
 定理 first_cont_eq
-  条件: {gp : Pair K} (zeroth_s_eq : g.s.get? 0 = some gp)
+  条件: {gp : 对 K} (zeroth_s_eq : g.s.get? 0 = some gp)
   证明: by
   simp [nth_cont_eq_succ_nth_contAux, second_contAux_eq zeroth_s_eq]
 
@@ -531,7 +531,7 @@ theorem first_num_eq
 
 中文:
 定理 first_num_eq
-  条件: {gp : Pair K} (zeroth_s_eq : g.s.get? 0 = some gp)
+  条件: {gp : 对 K} (zeroth_s_eq : g.s.get? 0 = some gp)
   证明: by simp [num_eq_conts_a, first_cont_eq zeroth_s_eq]
 
 Depends on / 依赖: first_cont_eq, num_eq_conts_a, zeroth_s_eq
@@ -551,7 +551,7 @@ theorem first_den_eq
 
 中文:
 定理 first_den_eq
-  条件: {gp : Pair K} (zeroth_s_eq : g.s.get? 0 = some gp)
+  条件: {gp : 对 K} (zeroth_s_eq : g.s.get? 0 = some gp)
   证明: by simp [den_eq_conts_b, first_cont_eq zeroth_s_eq]
 
 @[simp]
@@ -574,7 +574,7 @@ theorem zeroth_conv'Aux_eq_zero
 
 中文:
 定理 zeroth_conv'Aux_eq_zero
-  条件: {s : Stream'.Seq <| Pair K}
+  条件: {s : Stream'.序列 <| 对 K}
   证明: rfl
 
 @[simp]
@@ -609,7 +609,7 @@ theorem convs'Aux_succ_none
 
 中文:
 定理 convs'Aux_succ_none
-  条件: {s : Stream'.Seq (Pair K)} (h : s.head = none) (n : 自然数)
+  条件: {s : Stream'.序列 (对 K)} (h : s.head = none) (n : 自然数)
   证明: by simp [convs'Aux, h]
 -/
 theorem convs'Aux_succ_none {s : Stream'.Seq (Pair K)} (h : s.head = none) (n : Nat) :
@@ -626,7 +626,7 @@ theorem convs'Aux_succ_some
 
 中文:
 定理 convs'Aux_succ_some
-  结论: {s : Stream'.Seq (Pair K)} {p : Pair K} (h : s.head = some p)
+  结论: {s : Stream'.序列 (对 K)} {p : 对 K} (h : s.head = some p)
   证明: by
   simp [convs'Aux, h]
 -/

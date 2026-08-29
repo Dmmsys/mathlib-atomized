@@ -52,7 +52,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (Multiset α)
+  签名: : 局部有限序 (Multiset α)
   定义体: LocallyFiniteOrder.ofIcc (Multiset α)
     (fun s t => (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map
       Multiset.equivDFinsupp.toEquiv.symm.toEmbedding)
@@ -212,7 +212,7 @@ theorem card_Iic
 
 中文:
 定理 card_Iic
-  结论: (Finset.Iic s).card = ∏ i in s.toFinset, (s.count i + 1)
+  结论: (有限集.左无界右闭区间 s).card = ∏ i in s.toFinset, (s.count i + 1)
   证明: by
   simp_rw [Iic_eq_Icc, card_Icc, bot_eq_zero, toFinset_zero, empty_union, count_zero, tsub_zero]
 

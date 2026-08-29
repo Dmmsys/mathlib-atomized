@@ -67,8 +67,8 @@ structure RatFunc
   (no additional axioms)
 
 中文:
-结构 RatFunc
-  参数: [CommRing K]
+结构 有理函数
+  参数: [交换环 K]
   (无附加公理)
 -/
 structure RatFunc [CommRing K] : Type u where ofFractionRing ::
@@ -97,7 +97,7 @@ theorem ofFractionRing_injective
 
 中文:
 定理 ofFractionRing_injective
-  结论: Function.Injective (ofFractionRing : _ -> K⟮X⟯)
+  结论: 函数.单射 (ofFractionRing : _ -> K⟮X⟯)
   证明: fun _ _ => ofFractionRing.inj
 
 Depends on / 依赖: ofFractionRing, ofFractionRing.inj
@@ -114,7 +114,7 @@ theorem toFractionRing_injective
 
 中文:
 定理 toFractionRing_injective
-  结论: Function.Injective (toFractionRing : _ -> FractionRing K[X])
+  结论: 函数.单射 (toFractionRing : _ -> FractionRing K[X])
 -/
 theorem toFractionRing_injective : Function.Injective (toFractionRing : _ -> FractionRing K[X])
   | ⟨x⟩, ⟨y⟩, xy => by subst xy; rfl
@@ -168,7 +168,7 @@ theorem liftOn_ofFractionRing_mk
 
 中文:
 定理 liftOn_ofFractionRing_mk
-  结论: {P : Sort v} (n : K[X]) (d : K[X]⁰) (f : K[X] -> K[X] -> P)
+  结论: {P : 类型层 v} (n : K[X]) (d : K[X]⁰) (f : K[X] -> K[X] -> P)
   证明: by
   rw [RatFunc.liftOn]
   exact Localization.liftOn_mk _ _ _ _
@@ -194,7 +194,7 @@ theorem liftOn_condition_of_liftOn'_condition
 
 中文:
 定理 liftOn_condition_of_liftOn'_condition
-  结论: {P : Sort v} {f : K[X] -> K[X] -> P}
+  结论: {P : 类型层 v} {f : K[X] -> K[X] -> P}
   证明: calc
     f p q = f (q' * p) (q' * q) := (H hq hq').symm
     _ = f (q * p') (q * q') := by rw [h, mul_comm q']
@@ -255,7 +255,7 @@ theorem mk_zero
 中文:
 定理 mk_zero
   条件: (p : K[X])
-  结论: RatFunc.mk p 0 = ofFractionRing (0 : FractionRing K[X])
+  结论: 有理函数.mk p 0 = ofFractionRing (0 : FractionRing K[X])
   证明: by
   rw [mk_eq_div']; rw [map_zero]; rw [div_zero]
 
@@ -406,7 +406,7 @@ theorem liftOn_mk
 
 中文:
 定理 liftOn_mk
-  结论: {P : Sort v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
+  结论: {P : 类型层 v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
   证明: by
   by_cases hq : q = 0
   · subst hq
@@ -452,7 +452,7 @@ theorem liftOn'_mk
 
 中文:
 定理 liftOn'_mk
-  结论: {P : Sort v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
+  结论: {P : 类型层 v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
   证明: by
   rw [RatFunc.liftOn']; rw [RatFunc.liftOn_mk _ _ _ f0]
   apply liftOn_condition_of_liftOn'_condition H

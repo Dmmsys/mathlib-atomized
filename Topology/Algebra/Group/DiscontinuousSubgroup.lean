@@ -36,7 +36,7 @@ lemma Subgroup.properlyDiscontinuousSMul_iff
 @[to_additive]
 
 中文:
-引理 Subgroup.properlyDiscontinuousSMul_iff
+引理 子群.properlyDiscontinuousSMul_iff
   证明: by
   rw [properlyDiscontinuousSMul_iff]
   congr! with K L hK hL
@@ -67,7 +67,7 @@ lemma Subgroup.properlyDiscontinuousSMul_of_le
   exact (hG hK hL).subset fun _ ⟨hg, hg'⟩ => ⟨hGH hg, hg'⟩
 
 中文:
-引理 Subgroup.properlyDiscontinuousSMul_of_le
+引理 子群.properlyDiscontinuousSMul_of_le
   证明: by
   rw [Subgroup.properlyDiscontinuousSMul_iff] at hG ⊢
   intro K L hK hL
@@ -96,8 +96,8 @@ instance [SMul
   exact finite_disjoint_inter_image
 
 中文:
-实例 [SMul
-  签名: Γ α] [命题erlyDiscontinuousSMul Γ α] (G
+实例 [标量乘法
+  签名: Γ α] [ProperlyDiscontinuousSMul Γ α] (G
   定义体: by
   refine Subgroup.properlyDiscontinuousSMul_of_le ?_ le_top
   simp only [Subgroup.properlyDiscontinuousSMul_iff, Subgroup.mem_top, true_and]
@@ -131,7 +131,7 @@ lemma ProperlyDiscontinuousSMul.ofFiniteRelIndex
 
 中文:
 引理 ProperlyDiscontinuousSMul.ofFiniteRelIndex
-  结论: [MulAction Γ α] [ContinuousConstSMul Γ α]
+  结论: [乘法作用 Γ α] [连续常数标量乘法 Γ α]
   证明: by
   rw [Subgroup.properlyDiscontinuousSMul_iff] at hH ⊢
   intro K L hK hL
@@ -172,7 +172,7 @@ lemma Subgroup.properlyDiscontinuousSMul_iff_of_isFiniteRelIndex
 @[to_additive]
 
 中文:
-引理 Subgroup.properlyDiscontinuousSMul_iff_of_isFiniteRelIndex
+引理 子群.properlyDiscontinuousSMul_iff_of_isFiniteRelIndex
   证明: ⟨fun _ => .ofFiniteRelIndex H G, (properlyDiscontinuousSMul_of_le · hGH)⟩
 
 @[to_additive]
@@ -198,7 +198,7 @@ lemma Subgroup.Commensurable.properlyDiscontinuousSMul_iff
     (properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le
 
 中文:
-引理 Subgroup.Commensurable.properlyDiscontinuousSMul_iff
+引理 子群.Commensurable.properlyDiscontinuousSMul_iff
   证明: by
   have : IsFiniteRelIndex (G ⊓ H) H := ⟨Subgroup.inf_relIndex_right G H ▸ h.1⟩
   have : IsFiniteRelIndex (G ⊓ H) G := ⟨Subgroup.inf_relIndex_left G H ▸ h.2⟩

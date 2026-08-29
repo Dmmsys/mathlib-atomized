@@ -48,8 +48,8 @@ definition MutuallySingular
 scoped[MeasureTheory] infixl:60 " ⟂ₘ " => MeasureTheory.Measure.MutuallySingular
 
 中文:
-定义 MutuallySingular
-  签名: {_ : MeasurableSpace α} (μ ν : Measure α)
+定义 互奇异
+  签名: {_ : 可测空间 α} (μ ν : 测度 α)
   定义体: exists s : Set α, MeasurableSet s ∧ μ s = 0 ∧ ν sᶜ = 0
 
 @[inherit_doc MeasureTheory.Measure.MutuallySingular]
@@ -78,7 +78,7 @@ theorem mk
 
 中文:
 定理 mk
-  条件: {s t : Set α} (hs : μ s = 0) (ht : ν t = 0) (hst : univ subseteq s union t)
+  条件: {s t : 集合 α} (hs : μ s = 0) (ht : ν t = 0) (hst : univ subseteq s union t)
   证明: by
   use toMeasurable μ s, measurableSet_toMeasurable _ _, (measure_toMeasurable _).trans hs
   refine measure_mono_null (fun x hx => (hst trivial).resolve_left fun hxs => hx ?_) ht
@@ -125,7 +125,7 @@ lemma measurableSet_nullSet
 中文:
 引理 measurableSet_nullSet
   条件: (h : μ ⟂ₘ ν)
-  结论: MeasurableSet h.nullSet
+  结论: 可测集 h.nullSet
   证明: h.choose_spec.1
 
 @[simp]
@@ -392,7 +392,7 @@ lemma self_iff
 
 中文:
 引理 self_iff
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: μ ⟂ₘ μ ↔ μ = 0
   证明: by
   refine ⟨?_, fun h => by (rw [h]; exact zero_left)⟩
@@ -428,8 +428,8 @@ theorem sum_left
 
 中文:
 定理 sum_left
-  条件: {ι : 类型} [Countable ι] {μ : ι -> Measure α}
-  结论: sum μ ⟂ₘ ν ↔ 对任意 i, μ i ⟂ₘ ν
+  条件: {ι : 类型} [可数 ι] {μ : ι -> 测度 α}
+  结论: 求和 μ ⟂ₘ ν ↔ 对任意 i, μ i ⟂ₘ ν
   证明: by
   refine ⟨fun h i => h.mono (le_sum _ _) le_rfl, fun H => ?_⟩
   choose s hsm hsμ hsν using H
@@ -462,8 +462,8 @@ theorem sum_right
 
 中文:
 定理 sum_right
-  条件: {ι : 类型} [Countable ι] {ν : ι -> Measure α}
-  结论: μ ⟂ₘ sum ν ↔ 对任意 i, μ ⟂ₘ ν i
+  条件: {ι : 类型} [可数 ι] {ν : ι -> 测度 α}
+  结论: μ ⟂ₘ 求和 ν ↔ 对任意 i, μ ⟂ₘ ν i
   证明: comm.trans sum_left.trans forall_congr' fun _ => comm
 
 @[simp]
@@ -611,7 +611,7 @@ lemma restrict
 
 中文:
 引理 restrict
-  条件: (h : μ ⟂ₘ ν) (s : Set α)
+  条件: (h : μ ⟂ₘ ν) (s : 集合 α)
   结论: μ.restrict s ⟂ₘ ν
   证明: by
   refine ⟨h.nullSet, h.measurableSet_nullSet, ?_, h.measure_compl_nullSet⟩
@@ -639,7 +639,7 @@ lemma eq_zero_of_absolutelyContinuous_of_mutuallySingular
 
 中文:
 引理 eq_zero_of_absolutelyContinuous_of_mutuallySingular
-  结论: {μ ν : Measure α}
+  结论: {μ ν : 测度 α}
   证明: by
   rw [← Measure.MutuallySingular.self_iff]
   exact h_ms.mono_ac Measure.AbsolutelyContinuous.rfl h_ac
@@ -669,7 +669,7 @@ lemma absolutelyContinuous_of_add_of_mutuallySingular
 
 中文:
 引理 absolutelyContinuous_of_add_of_mutuallySingular
-  结论: {ν₁ ν₂ : Measure α}
+  结论: {ν₁ ν₂ : 测度 α}
   证明: by
   refine AbsolutelyContinuous.mk fun s hs hs_zero => ?_
   let t := h_ms.nullSet
@@ -710,8 +710,8 @@ lemma _root_.MeasurableEmbedding.mutuallySingular_map
   · rw [hf.map_apply, Set.preimage_compl, hf.injective.preimage_image, hμν.measure_compl_nullSet]
 
 中文:
-引理 _root_.MeasurableEmbedding.mutuallySingular_map
-  结论: {β : 类型} {_ : MeasurableSpace β}
+引理 _root_.可测嵌入.mutuallySingular_map
+  结论: {β : 类型} {_ : 可测空间 β}
   证明: by
   refine ⟨f '' hμν.nullSet, hf.measurableSet_image' hμν.measurableSet_nullSet, ?_, ?_⟩
   · rw [hf.map_apply, hf.injective.preimage_image, hμν.measure_nullSet]
@@ -741,7 +741,7 @@ lemma exists_null_set_measure_lt_of_disjoint
         exists x 
 
 中文:
-引理 exists_null_set_measure_lt_of_disjoint
+引理 存在_null_set_measure_lt_of_disjoint
   条件: (h : Disjoint μ ν) {ε : 实数>=0} (hε : 0 < ε)
   证明: by
   have h₁ : (μ ⊓ ν) univ = 0 := le_bot_iff.1 (h (inf_le_left (b := ν)) inf_le_right) ▸ rfl
@@ -844,7 +844,7 @@ lemma MutuallySingular.disjoint
 · exact ⟨measure_inter_null_of_null_right _ 
 
 中文:
-引理 MutuallySingular.disjoint
+引理 互奇异.disjoint
   条件: (h : μ ⟂ₘ ν)
   结论: Disjoint μ ν
   证明: by
@@ -891,7 +891,7 @@ lemma MutuallySingular.disjoint_ae
     exact measure_inter_null_of_null_right _ h.measure_
 
 中文:
-引理 MutuallySingular.disjoint_ae
+引理 互奇异.disjoint_ae
   条件: (h : μ ⟂ₘ ν)
   结论: Disjoint (ae μ) (ae ν)
   证明: by
@@ -977,7 +977,7 @@ lemma mutuallySingular_tfae
 
 中文:
 引理 mutuallySingular_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 2
   | h => h.disjoint

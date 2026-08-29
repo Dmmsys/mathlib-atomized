@@ -81,7 +81,7 @@ definition alternatingGroup
 
 中文:
 定义 alternatingGroup
-  签名: : Subgroup (Perm α)
+  签名: : 子群 (置换 α)
   定义体: sign.ker
 
 Depends on / 依赖: sign.ker
@@ -99,7 +99,7 @@ instance alternatingGroup.instFintype
 
 中文:
 实例 alternatingGroup.instFintype
-  签名: : Fintype (alternatingGroup α)
+  签名: : 有限类型 (alternatingGroup α)
   定义体: @Subtype.fintype _ _ sign.decidableMemKer _
 
 Depends on / 依赖: Subtype, Subtype.fintype, decidableMemKer, fintype, sign.decidableMemKer
@@ -116,8 +116,8 @@ instance [Subsingleton
   body: ⟨⟨1⟩, fun ⟨p, _⟩ => Subtype.ext (Subsingleton.elim p _)⟩
 
 中文:
-实例 [Subsingleton
-  签名: α] : Unique (alternatingGroup α)
+实例 [子单例
+  签名: α] : 唯一 (alternatingGroup α)
   定义体: ⟨⟨1⟩, fun ⟨p, _⟩ => Subtype.ext (Subsingleton.elim p _)⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, Subtype, Subtype.ext
@@ -157,7 +157,7 @@ theorem mem_alternatingGroup
 
 中文:
 定理 mem_alternatingGroup
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: f in alternatingGroup α ↔ sign f = 1
   证明: sign.mem_ker
 
@@ -177,7 +177,7 @@ theorem mul_mem_alternatingGroup_of_isSwap
 
 中文:
 定理 mul_mem_alternatingGroup_of_isSwap
-  条件: {g g' : Perm α} (hg : IsSwap g) (hg' : IsSwap g')
+  条件: {g g' : 置换 α} (hg : IsSwap g) (hg' : IsSwap g')
   证明: by
   simp [mem_alternatingGroup, map_mul, hg.sign_eq, hg'.sign_eq]
 
@@ -199,7 +199,7 @@ theorem prod_list_swap_mem_alternatingGroup_iff_even_length
 
 中文:
 定理 prod_list_swap_mem_alternatingGroup_iff_even_length
-  结论: {l : List (Perm α)}
+  结论: {l : 列表 (置换 α)}
   证明: by
   rw [mem_alternatingGroup]; rw [sign_prod_list_swap hl]; rw [neg_one_pow_eq_one_iff_even]
   decide
@@ -221,7 +221,7 @@ theorem IsThreeCycle.mem_alternatingGroup
 
 中文:
 定理 IsThreeCycle.mem_alternatingGroup
-  条件: {f : Perm α} (h : IsThreeCycle f)
+  条件: {f : 置换 α} (h : IsThreeCycle f)
   证明: Perm.mem_alternatingGroup.mpr h.sign
 
 Depends on / 依赖: Perm.mem_alternatingGroup.mpr, h.sign, mem_alternatingGroup
@@ -268,7 +268,7 @@ theorem alternatingGroup.index_eq_two
 
 中文:
 定理 alternatingGroup.index_eq_two
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   证明: by
   rw [alternatingGroup]; rw [index_ker]; rw [MonoidHom.range_eq_top.mpr (sign_surjective α)]
   simp_rw [mem_top, Nat.card_eq_fintype_card, card_subtype_true, card_units_int]
@@ -295,7 +295,7 @@ theorem alternatingGroup.index_eq_one
 
 中文:
 定理 alternatingGroup.index_eq_one
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: (alternatingGroup α).index = 1
   证明: by
   rw [Subgroup.index_eq_one]; apply Subsingleton.elim
@@ -317,8 +317,8 @@ definition Equiv.altCongrHom
 MulEquiv.subgroupCongr by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
 
 中文:
-定义 Equiv.altCongrHom
-  签名: {β : 类型} [Fintype β] [DecidableEq β] (e : α ≃ β)
+定义 等价.altCongrHom
+  签名: {β : 类型} [有限类型 β] [DecidableEq β] (e : α ≃ β)
   定义体: .trans e.permCongrHom.subgroupMap (alternatingGroup α)
 MulEquiv.subgroupCongr by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
 
@@ -340,7 +340,7 @@ theorem two_mul_nat_card_alternatingGroup
 
 中文:
 定理 two_mul_nat_card_alternatingGroup
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   证明: by
   simp only [← alternatingGroup.index_eq_two (α := α), index_mul_card]
 
@@ -361,7 +361,7 @@ theorem two_mul_card_alternatingGroup
 
 中文:
 定理 two_mul_card_alternatingGroup
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   证明: by
   simp only [← Nat.card_eq_fintype_card, two_mul_nat_card_alternatingGroup]
 
@@ -381,7 +381,7 @@ theorem card_alternatingGroup
 
 中文:
 定理 card_alternatingGroup
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   证明: Nat.eq_div_of_mul_eq_right two_ne_zero (two_mul_card_alternatingGroup.trans card_perm)
 
 Depends on / 依赖: Nat.eq_div_of_mul_eq_right, card_perm, eq_div_of_mul_eq_right, two_mul_card_alternatingGroup, two_mul_card_alternatingGroup.trans, two_ne_zero
@@ -401,7 +401,7 @@ theorem nat_card_alternatingGroup
 
 中文:
 定理 nat_card_alternatingGroup
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   证明: by
   simp only [Nat.card_eq_fintype_card, card_alternatingGroup]
 
@@ -483,7 +483,7 @@ instance normal
 
 中文:
 实例 normal
-  签名: : (alternatingGroup α).Normal
+  签名: : (alternatingGroup α).正规
   定义体: sign.normal_ker
 
 Depends on / 依赖: normal_ker, sign.normal_ker
@@ -509,7 +509,7 @@ theorem isConj_of
 
 中文:
 定理 isConj_of
-  结论: {σ τ : alternatingGroup α} (hc : IsConj (σ : Perm α) (τ : Perm α))
+  结论: {σ τ : alternatingGroup α} (hc : IsConj (σ : 置换 α) (τ : 置换 α))
   证明: by
   obtain ⟨σ, hσ⟩ := σ
   obtain ⟨τ, hτ⟩ := τ
@@ -798,7 +798,7 @@ theorem isThreeCycle_sq_of_three_mem_cycleType_five
 
 中文:
 定理 isThreeCycle_sq_of_three_mem_cycleType_five
-  条件: {g : Perm (Fin 5)} (h : 3 in cycleType g)
+  条件: {g : 置换 (有限集 5)} (h : 3 in cycleType g)
   证明: by
   obtain ⟨c, g', rfl, hd, _, h3⟩ := mem_cycleType_iff.1 h
   simp only [mul_assoc]
@@ -883,7 +883,7 @@ theorem nontrivial_of_three_le_card
 中文:
 定理 nontrivial_of_three_le_card
   条件: (h3 : 3 <= 自然数.card α)
-  结论: Nontrivial (alternatingGroup α)
+  结论: 非平凡 (alternatingGroup α)
   证明: by
   have : Nontrivial α := by
     rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
@@ -927,7 +927,7 @@ theorem isConj_swap_mul_swap_of_cycleType_two
 
 中文:
 定理 isConj_swap_mul_swap_of_cycleType_two
-  结论: {g : Perm (Fin 5)} (ha : g in alternatingGroup (Fin 5))
+  结论: {g : 置换 (有限集 5)} (ha : g in alternatingGroup (有限集 5))
   证明: by
   have h := g.support.card_le_univ
   rw [← Multiset.eq_replicate_card] at h2
@@ -1099,7 +1099,7 @@ definition ofSubtype
 
 中文:
 定义 ofSubtype
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨Perm.ofSubtype (x : Perm s), by
     rw [mem_alternatingGroup]; rw [sign_ofSubtype]; rw [mem_alternatingGroup.mp x.prop]⟩
   map_mul' := by simp
@@ -1126,8 +1126,8 @@ theorem ofSubtype_injective
 
 中文:
 定理 ofSubtype_injective
-  条件: {s : Finset α}
-  结论: Function.Injective (ofSubtype s)
+  条件: {s : 有限集 α}
+  结论: 函数.单射 (ofSubtype s)
   证明: by
   rw [← Function.Injective.of_comp_iff (alternatingGroup α).subtype_injective]
   exact Perm.ofSubtype_injective.comp (alternatingGroup s).subtype_injective
@@ -1148,7 +1148,7 @@ theorem ofSubtype_inj
 
 中文:
 定理 ofSubtype_inj
-  条件: {s : Finset α} {g h : alternatingGroup s}
+  条件: {s : 有限集 α} {g h : alternatingGroup s}
   证明: ofSubtype_injective.eq_iff
 
 Depends on / 依赖: eq_iff, ofSubtype_injective, ofSubtype_injective.eq_iff
@@ -1168,7 +1168,7 @@ theorem coe_ofSubtype
 
 中文:
 定理 coe_ofSubtype
-  条件: (s : Finset α) (k : alternatingGroup s)
+  条件: (s : 有限集 α) (k : alternatingGroup s)
   证明: by
   rfl
 -/
@@ -1189,7 +1189,7 @@ theorem map_ofSubtype
 
 中文:
 定理 map_ofSubtype
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   ext k
   rw [Subgroup.mem_map]; rw [Subgroup.mem_inf]; rw [MonoidHom.mem_range]
@@ -1216,7 +1216,7 @@ theorem ofSubtype_comp_subtype
 
 中文:
 定理 ofSubtype_comp_subtype
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (alternatingGroup α).subtype.comp (ofSubtype s) =
   证明: by
   rfl
@@ -1237,7 +1237,7 @@ theorem range_ofSubtype
 
 中文:
 定理 range_ofSubtype
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (ofSubtype s).range =
   证明: by
   rw [← map_subtype_inj]; rw [← MonoidHom.range_comp]; rw [ofSubtype_comp_subtype]; rw [MonoidHom.range_comp]; rw [range_subtype]; rw [subgroupOf_map_subtype]; rw [map_ofSubtype]
@@ -1260,7 +1260,7 @@ theorem mem_range_ofSubtype_iff
 
 中文:
 定理 mem_range_ofSubtype_iff
-  条件: (s : Finset α) (k : alternatingGroup α)
+  条件: (s : 有限集 α) (k : alternatingGroup α)
   证明: by
   rw [range_ofSubtype]; rw [mem_subgroupOf]; rw [Perm.mem_range_ofSubtype_iff]
   simp
@@ -1287,7 +1287,7 @@ theorem conj_smul_range_ofSubtype
 
 中文:
 定理 conj_smul_range_ofSubtype
-  条件: (s : Finset α) (g : alternatingGroup α)
+  条件: (s : 有限集 α) (g : alternatingGroup α)
   证明: by
   ext k
   simp_rw [mem_pointwise_smul_iff_inv_smul_mem, mem_range_ofSubtype_iff, ← map_inv,
@@ -1326,7 +1326,7 @@ theorem eq_alternatingGroup_of_index_eq_two
 
 中文:
 定理 eq_alternatingGroup_of_index_eq_two
-  条件: {G : Subgroup (Equiv.Perm α)} (hG : G.index = 2)
+  条件: {G : 子群 (等价.置换 α)} (hG : G.index = 2)
   证明: by
   nontriviality α
   obtain ⟨_, ⟨a, b, hab, rfl⟩, habG⟩ : exists g : Perm α, g.IsSwap ∧ g ∉ G := by
@@ -1400,7 +1400,7 @@ instance :
 
 中文:
 实例 :
-  签名: (alternatingGroup α).Characteristic
+  签名: (alternatingGroup α).特征
   定义体: by
     nontriviality α
     apply eq_alternatingGroup_of_index_eq_two

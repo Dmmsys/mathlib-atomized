@@ -117,7 +117,7 @@ abbreviation toBoundedOrder
 
 中文:
 缩写 toBoundedOrder
-  签名: [Lattice α]
+  签名: [格 α]
   定义体: { toOrderBot α, toOrderTop α with }
 
 Depends on / 依赖: toOrderBot, toOrderTop
@@ -148,7 +148,7 @@ abbreviation toCompleteLattice
 
 中文:
 缩写 toCompleteLattice
-  签名: [Lattice α] [BoundedOrder α]
+  签名: [格 α] [有界序 α]
   定义体: ‹Lattice α›
   __ := ‹BoundedOrder α›
   sSup := fun s => s.toFinset.sup id
@@ -186,7 +186,7 @@ abbreviation toCompleteDistribLatticeMinimalAxioms
 
 中文:
 缩写 toCompleteDistribLatticeMinimalAxioms
-  签名: [DistribLattice α] [BoundedOrder α]
+  签名: [Distrib格 α] [有界序 α]
   定义体: fun a s => by
     convert! (Finset.inf_sup_distrib_left s.toFinset id a).ge using 1
     rw [Finset.inf_eq_iInf]
@@ -224,7 +224,7 @@ abbreviation toCompleteDistribLattice
 
 中文:
 缩写 toCompleteDistribLattice
-  签名: [DistribLattice α] [BoundedOrder α]
+  签名: [Distrib格 α] [有界序 α]
   定义体: .ofMinimalAxioms (toCompleteDistribLatticeMinimalAxioms _)
 
 Depends on / 依赖: ofMinimalAxioms, toCompleteDistribLatticeMinimalAxioms
@@ -261,8 +261,8 @@ abbreviation toCompleteBooleanAlgebra
   __ := Fintype.toCompleteDistribLattice α
 
 中文:
-缩写 toCompleteBooleanAlgebra
-  签名: [布尔eanAlgebra α]
+缩写 toComplete布尔eanAlgebra
+  签名: [布尔代数 α]
   定义体: ‹BooleanAlgebra α›
   __ := Fintype.toCompleteDistribLattice α
 
@@ -282,8 +282,8 @@ abbreviation toCompleteAtomicBooleanAlgebra
   body: (toCompleteBooleanAlgebra α).toCompleteAtomicBooleanAlgebra
 
 中文:
-缩写 toCompleteAtomicBooleanAlgebra
-  签名: [布尔eanAlgebra α]
+缩写 toCompleteAtomic布尔eanAlgebra
+  签名: [布尔代数 α]
   定义体: (toCompleteBooleanAlgebra α).toCompleteAtomicBooleanAlgebra
 
 Depends on / 依赖: toCompleteAtomicBooleanAlgebra, toCompleteBooleanAlgebra
@@ -309,7 +309,7 @@ abbreviation toCompleteLatticeOfNonempty
 
 中文:
 缩写 toCompleteLatticeOfNonempty
-  签名: [Lattice α]
+  签名: [格 α]
   定义体: @toCompleteLattice _ _ _ toBoundedOrder α
 
 Depends on / 依赖: toBoundedOrder, toCompleteLattice
@@ -328,7 +328,7 @@ abbreviation toCompleteLinearOrderOfNonempty
 
 中文:
 缩写 toCompleteLinearOrderOfNonempty
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: @toCompleteLinearOrder _ _ _ toBoundedOrder α
 
 Depends on / 依赖: toBoundedOrder, toCompleteLinearOrder
@@ -350,7 +350,7 @@ instance Fin.completeLinearOrder
   body: Fintype.toCompleteLinearOrder _
 
 中文:
-实例 Fin.completeLinearOrder
+实例 有限集.completeLinearOrder
   签名: {n : 自然数} [NeZero n]
   定义体: Fintype.toCompleteLinearOrder _
 
@@ -368,8 +368,8 @@ instance Bool.completeBooleanAlgebra
   body: Fintype.toCompleteBooleanAlgebra _
 
 中文:
-实例 Bool.completeBooleanAlgebra
-  签名: : Complete布尔eanAlgebra 布尔
+实例 布尔值.complete布尔eanAlgebra
+  签名: : 完备布尔代数 布尔值
   定义体: Fintype.toCompleteBooleanAlgebra _
 
 Depends on / 依赖: Fintype, Fintype.toCompleteBooleanAlgebra, toCompleteBooleanAlgebra
@@ -388,8 +388,8 @@ instance Bool.completeLinearOrder
   __ : LinearOrder Bool := inferInstance
 
 中文:
-实例 Bool.completeLinearOrder
-  签名: : CompleteLinearOrder 布尔 where
+实例 布尔值.completeLinearOrder
+  签名: : 完备线性序 布尔值 where
   定义体: Fintype.toCompleteLattice _
   __ : BiheytingAlgebra Bool := inferInstance
   __ : LinearOrder Bool := inferInstance
@@ -410,8 +410,8 @@ instance Bool.completeAtomicBooleanAlgebra
   body: Fintype.toCompleteAtomicBooleanAlgebra _
 
 中文:
-实例 Bool.completeAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra 布尔
+实例 布尔值.completeAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 布尔值
   定义体: Fintype.toCompleteAtomicBooleanAlgebra _
 
 Depends on / 依赖: Fintype, Fintype.toCompleteAtomicBooleanAlgebra, toCompleteAtomicBooleanAlgebra
@@ -437,7 +437,7 @@ theorem Directed.finite_set_le
 
 中文:
 定理 Directed.finite_set_le
-  条件: (D : Directed r f) {s : Set γ} (hs : s.Finite)
+  条件: (D : Directed r f) {s : 集合 γ} (hs : s.有限)
   证明: by
   convert! D.finset_le hs.toFinset using 3; rw [Set.Finite.mem_toFinset]
 
@@ -459,7 +459,7 @@ lemma Directed.finite_le
 
 中文:
 引理 Directed.finite_le
-  结论: {ι κ : Sort*} [Nonempty ι] [Finite κ] {f : ι -> α} (hf : Directed r f)
+  结论: {ι κ : 类型层*} [非空 ι] [有限 κ] {f : ι -> α} (hf : Directed r f)
   证明: by
   simpa using
     (hf.comp_of_surjective PLift.down_surjective).finite_set_le (Set.finite_range (PLift.up ∘ g))
@@ -483,7 +483,7 @@ theorem Finite.exists_le
   proof: directed_id.finite_le _
 
 中文:
-定理 Finite.exists_le
+定理 有限.存在_le
   条件: [IsDirectedOrder α] (f : ι -> α)
   结论: 存在 M, 对任意 i, f i <= M
   证明: directed_id.finite_le _
@@ -503,7 +503,7 @@ theorem Finite.exists_ge
   proof: directed_id.finite_le (r := (· >= ·)) _
 
 中文:
-定理 Finite.exists_ge
+定理 有限.存在_ge
   条件: [IsCodirectedOrder α] (f : ι -> α)
   结论: 存在 M, 对任意 i, M <= f i
   证明: directed_id.finite_le (r := (· >= ·)) _
@@ -522,8 +522,8 @@ theorem Set.Finite.exists_le
   proof: directed_id.finite_set_le hs
 
 中文:
-定理 Set.Finite.exists_le
-  条件: [IsDirectedOrder α] {s : Set α} (hs : s.Finite)
+定理 集合.有限.存在_le
+  条件: [IsDirectedOrder α] {s : 集合 α} (hs : s.有限)
   证明: directed_id.finite_set_le hs
 
 Depends on / 依赖: directed_id, directed_id.finite_set_le, finite_set_le
@@ -543,8 +543,8 @@ theorem Set.Finite.exists_ge
 @[simp]
 
 中文:
-定理 Set.Finite.exists_ge
-  条件: [IsCodirectedOrder α] {s : Set α} (hs : s.Finite)
+定理 集合.有限.存在_ge
+  条件: [IsCodirectedOrder α] {s : 集合 α} (hs : s.有限)
   证明: directed_id.finite_set_le (r := (· >= ·)) hs
 
 @[simp]
@@ -572,9 +572,9 @@ theorem Finite.bddAbove_range
 @[simp]
 
 中文:
-定理 Finite.bddAbove_range
+定理 有限.bddAbove_range
   条件: [IsDirectedOrder α] (f : ι -> α)
-  结论: BddAbove (Set.range f)
+  结论: BddAbove (集合.range f)
   证明: by
   obtain ⟨M, hM⟩ := Finite.exists_le f
   refine ⟨M, fun a ha => ?_⟩
@@ -606,9 +606,9 @@ theorem Finite.bddBelow_range
   exact hM b
 
 中文:
-定理 Finite.bddBelow_range
+定理 有限.bddBelow_range
   条件: [IsCodirectedOrder α] (f : ι -> α)
-  结论: BddBelow (Set.range f)
+  结论: BddBelow (集合.range f)
   证明: by
   obtain ⟨M, hM⟩ := Finite.exists_ge f
   refine ⟨M, fun a ha => ?_⟩
@@ -639,7 +639,7 @@ lemma le_iSup_iff_of_directed
 
 中文:
 引理 le_iSup_iff_of_directed
-  条件: [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f)
+  条件: [非空 ι] [有限 ι] (hf : Directed (· <= ·) f)
   证明: by obtain ⟨i, hi⟩ := hf.finite_le id; exact ⟨i, ha.trans iSup_le hi⟩
   mpr := by rintro ⟨i, hai⟩; exact le_iSup_of_le i hai
 
@@ -663,7 +663,7 @@ lemma le_sSup_iff_of_directedOn
 
 中文:
 引理 le_sSup_iff_of_directedOn
-  条件: (hs : s.Nonempty) (hs' : s.Finite) (hs'' : DirectedOn (· <= ·) s)
+  条件: (hs : s.非空) (hs' : s.有限) (hs'' : DirectedOn (· <= ·) s)
   证明: by
   have := hs.to_subtype
   have := hs'.to_subtype
@@ -692,7 +692,7 @@ lemma subset_iUnion_iff_of_directed
 
 中文:
 引理 subset_iUnion_iff_of_directed
-  条件: [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f)
+  条件: [非空 ι] [有限 ι] (hf : Directed (· <= ·) f)
   证明: le_iSup_iff_of_directed hf
 
 Depends on / 依赖: le_iSup_iff_of_directed
@@ -710,7 +710,7 @@ lemma subset_sUnion_iff_of_directed
 
 中文:
 引理 subset_sUnion_iff_of_directed
-  结论: (hS : S.Nonempty) (hS' : S.Finite)
+  结论: (hS : S.非空) (hS' : S.有限)
   证明: le_sSup_iff_of_directedOn hS hS' hS''
 
 Depends on / 依赖: le_sSup_iff_of_directedOn
@@ -871,7 +871,7 @@ refine le_antisymm (sup_le ?_ ?_) ciSup_le fun i => sup_le_sup_right (le_ciSup f
 
 中文:
 引理 ciSup_sup
-  条件: [Nonempty ι] {f : ι -> α} {a : α}
+  条件: [非空 ι] {f : ι -> α} {a : α}
   证明: by
 refine le_antisymm (sup_le ?_ ?_) ciSup_le fun i => sup_le_sup_right (le_ciSup f i) a
   · exact ciSup_le fun i => le_ciSup_of_le i le_sup_left
@@ -895,7 +895,7 @@ lemma ciInf_inf
 
 中文:
 引理 ciInf_inf
-  条件: [Nonempty ι] {f : ι -> α} {a : α}
+  条件: [非空 ι] {f : ι -> α} {a : α}
   证明: ciSup_sup (α := αᵒᵈ) ..
 
 Depends on / 依赖: ciSup_sup
@@ -963,7 +963,7 @@ exact le_antisymm (le_ciSup_of_le j le_rfl)
 
 中文:
 引理 map_iSup_of_monotoneOn
-  结论: {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
+  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
   证明: by
   obtain ⟨j, hj⟩ : exists j, f j = ⨆ i, f i := exists_eq_ciSup_of_finite
   rw [← hj]
@@ -990,7 +990,7 @@ lemma map_iInf_of_monotoneOn
 
 中文:
 引理 map_iInf_of_monotoneOn
-  结论: {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
+  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
   证明: map_iSup_of_monotoneOn (α := αᵒᵈ) (β := βᵒᵈ) (fun _ hi _ hj h => hg hj hi h) hs
 
 Depends on / 依赖: map_iSup_of_monotoneOn
@@ -1010,7 +1010,7 @@ lemma map_iSup_of_antitoneOn
 
 中文:
 引理 map_iSup_of_antitoneOn
-  结论: {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
+  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
   证明: map_iSup_of_monotoneOn (β := βᵒᵈ) hg hs
 
 Depends on / 依赖: map_iSup_of_monotoneOn
@@ -1030,7 +1030,7 @@ lemma map_iInf_of_antitoneOn
 
 中文:
 引理 map_iInf_of_antitoneOn
-  结论: {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
+  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
   证明: map_iInf_of_monotoneOn (β := βᵒᵈ) hg hs
 
 Depends on / 依赖: map_iInf_of_monotoneOn
@@ -1050,7 +1050,7 @@ lemma map_iSup_of_monotone
 
 中文:
 引理 map_iSup_of_monotone
-  条件: (f : ι -> α) {g : α -> β} (hg : Monotone g)
+  条件: (f : ι -> α) {g : α -> β} (hg : 递增 g)
   证明: map_iSup_of_monotoneOn (monotoneOn_univ.mpr hg) (fun i => Set.mem_univ (f i))
 
 Depends on / 依赖: Set.mem_univ, map_iSup_of_monotoneOn, mem_univ, monotoneOn_univ, monotoneOn_univ.mpr
@@ -1069,7 +1069,7 @@ lemma map_iInf_of_monotone
 
 中文:
 引理 map_iInf_of_monotone
-  条件: (f : ι -> α) {g : α -> β} (hg : Monotone g)
+  条件: (f : ι -> α) {g : α -> β} (hg : 递增 g)
   证明: map_iSup_of_monotone (α := αᵒᵈ) (β := βᵒᵈ) f fun _ _ h => hg h
 
 Depends on / 依赖: map_iSup_of_monotone
@@ -1088,7 +1088,7 @@ lemma map_iSup_of_antitone
 
 中文:
 引理 map_iSup_of_antitone
-  条件: (f : ι -> α) {g : α -> β} (hg : Antitone g)
+  条件: (f : ι -> α) {g : α -> β} (hg : 递减 g)
   证明: map_iSup_of_monotone (β := βᵒᵈ) f hg
 
 Depends on / 依赖: map_iSup_of_monotone
@@ -1107,7 +1107,7 @@ lemma map_iInf_of_antitone
 
 中文:
 引理 map_iInf_of_antitone
-  条件: (f : ι -> α) {g : α -> β} (hg : Antitone g)
+  条件: (f : ι -> α) {g : α -> β} (hg : 递减 g)
   证明: map_iInf_of_monotone (β := βᵒᵈ) f hg
 
 Depends on / 依赖: map_iInf_of_monotone

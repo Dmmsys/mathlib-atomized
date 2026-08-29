@@ -59,7 +59,7 @@ definition equivMvPolynomial
 
 中文:
 定义 equivMvPolynomial
-  签名: (b : Basis κ R M)
+  签名: (b : 基 κ R M)
   定义体: .ofAlgHom
     (SymmetricAlgebra.lift <| Basis.constr b R .X)
     (MvPolynomial.aeval fun i => ι R M (b i))
@@ -91,7 +91,7 @@ lemma equivMvPolynomial_ι_apply
 
 中文:
 引理 equivMvPolynomial_ι_apply
-  条件: (b : Basis κ R M) (i : κ)
+  条件: (b : 基 κ R M) (i : κ)
   证明: (SymmetricAlgebra.lift_ι_apply _ _).trans by simp
 
 @[simp]
@@ -111,7 +111,7 @@ lemma equivMvPolynomial_symm_X
 
 中文:
 引理 equivMvPolynomial_symm_X
-  条件: (b : Basis κ R M) (i : κ)
+  条件: (b : 基 κ R M) (i : κ)
   证明: (equivMvPolynomial b).toEquiv.symm_apply_eq.mpr .symm equivMvPolynomial_ι_apply b i
 
 Depends on / 依赖: equivMvPolynomial, symm_apply_eq, toEquiv, toEquiv.symm_apply_eq.mpr
@@ -131,7 +131,7 @@ theorem IsSymmetricAlgebra.mvPolynomial
 
 中文:
 定理 IsSymmetricAlgebra.mvPolynomial
-  条件: (I : 类型) (b : Basis I R M)
+  条件: (I : 类型) (b : 基 I R M)
   证明: (SymmetricAlgebra.equivMvPolynomial b).bijective
 
 Depends on / 依赖: SymmetricAlgebra, SymmetricAlgebra.equivMvPolynomial, bijective, equivMvPolynomial
@@ -151,8 +151,8 @@ definition _root_.Module.Basis.symmetricAlgebra
   body: (MvPolynomial.basisMonomials κ R).map (SymmetricAlgebra.equivMvPolynomial b).symm.toLinearEquiv
 
 中文:
-定义 _root_.Module.Basis.symmetricAlgebra
-  签名: (b : Basis κ R M)
+定义 _root_.模.基.symmetricAlgebra
+  签名: (b : 基 κ R M)
   定义体: (MvPolynomial.basisMonomials κ R).map (SymmetricAlgebra.equivMvPolynomial b).symm.toLinearEquiv
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.basisMonomials, SymmetricAlgebra, SymmetricAlgebra.equivMvPolynomial, basisMonomials, equivMvPolynomial, symm.toLinearEquiv, toLinearEquiv
@@ -172,7 +172,7 @@ instance instModuleFree
 
 中文:
 实例 instModuleFree
-  签名: [Module.Free R M]
+  签名: [模.自由 R M]
   定义体: let ⟨⟨_I, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   .of_basis b.symmetricAlgebra
 
@@ -193,7 +193,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [NoZeroDivisors R] [Module.Free R M]
+  签名: [无零因子 R] [模.自由 R M]
   定义体: have ⟨⟨_, b⟩⟩ := ‹Module.Free R M›
   (equivMvPolynomial b).toMulEquiv.noZeroDivisors
 
@@ -219,7 +219,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: [IsDomain R] [Module.Free R M]
+  签名: [是整环 R] [模.自由 R M]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -244,7 +244,7 @@ lemma rank_eq
 
 中文:
 引理 rank_eq
-  条件: [Nontrivial M] [Module.Free R M]
+  条件: [非平凡 M] [模.自由 R M]
   证明: by
   let ⟨⟨κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   have : Nonempty κ := Basis.index_nonempty b

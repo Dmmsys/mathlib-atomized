@@ -128,7 +128,7 @@ definition induction
 
 中文:
 定义 induction
-  签名: {motive : X.N -> Sort*}
+  签名: {motive : X.N -> 类型层*}
   定义体: mk s.dim ⟨_, s.nonDegenerate⟩
 
 @[simp]
@@ -151,7 +151,7 @@ lemma induction_mk
 
 中文:
 引理 induction_mk
-  结论: {motive : X.N -> Sort*}
+  结论: {motive : X.N -> 类型层*}
   证明: rfl
 
 Depends on / 依赖: N.mk, motive, property, s.property, s.val
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder X.N
+  签名: 预序 X.N
   定义体: Preorder.lift toS
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -250,7 +250,7 @@ lemma le_iff_exists_mono
   exact ⟨fun ⟨f, hf⟩ => ⟨f, X.mono_of_nonDegenerate ⟨_, x.nonDegenerate⟩ f _ hf, hf⟩, by tauto⟩
 
 中文:
-引理 le_iff_exists_mono
+引理 le_iff_存在_mono
   条件: {x y : X.N}
   证明: by
   simp only [le_iff, CategoryTheory.Subfunctor.ofSection_le_iff,
@@ -358,7 +358,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder X.N
+  签名: 偏序 X.N
   定义体: by
     obtain ⟨n₁, ⟨x₁, hx₁⟩, rfl⟩ := x₁.mk_surjective
     obtain ⟨n₂, ⟨x₂, hx₂⟩, rfl⟩ := x₂.mk_surjective
@@ -544,7 +544,7 @@ lemma subcomplex_le_iff
 
 中文:
 引理 subcomplex_le_iff
-  条件: {A B : X.Subcomplex}
+  条件: {A B : X.子复形}
   证明: by
   rw [Subcomplex.le_iff_contains_nonDegenerate]
   refine ⟨fun h s => ?_, fun h n x hx => ?_⟩
@@ -677,7 +677,7 @@ definition orderEmbeddingN
 
 中文:
 定义 orderEmbeddingN
-  签名: : X.N ↪o X.Subcomplex where
+  签名: : X.N ↪o X.子复形 where
   定义体: x.subcomplex
   inj' _ _ h := by
     dsimp at h
@@ -767,7 +767,7 @@ lemma subcomplex_eq_of_epi
 
 中文:
 引理 subcomplex_eq_of_epi
-  结论: (x y : X.S) (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Epi f]
+  结论: (x y : X.S) (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [满态射 f]
   证明: by
   refine le_antisymm (subcomplex_map_le x y f hf) ?_
   simp only [Subcomplex.ofSimplex_le_iff]
@@ -802,7 +802,7 @@ lemma existsUnique_n
       have : Function.Injective (X
 
 中文:
-引理 existsUnique_n
+引理 存在Unique_n
   条件: (x : X.S)
   结论: 存在! (y : X.N), y.subcomplex = x.subcomplex
   证明: existsUnique_of_exists_of_unique (by
@@ -910,7 +910,7 @@ lemma existsUnique_toNπ
   refine existsUnique_of_exists_of_unique ⟨f, in
 
 中文:
-引理 existsUnique_toNπ
+引理 存在Unique_toNπ
   条件: {x : X.S} {y : X.N} (hy : x.toN = y)
   证明: by
   obtain ⟨n, x, hx, rfl⟩ := x.mk_surjective

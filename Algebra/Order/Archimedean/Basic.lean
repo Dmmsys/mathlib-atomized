@@ -55,7 +55,7 @@ lemma MulArchimedean.comap
 
 中文:
 引理 MulArchimedean.comap
-  结论: [CommMonoid G] [LinearOrder G] [CommMonoid M] [PartialOrder M]
+  结论: [交换幺半群 G] [线性序 G] [交换幺半群 M] [偏序 M]
   证明: by
     refine (MulArchimedean.arch (f x) (by simpa using hf h)).imp ?_
     simp [← map_pow, hf.le_iff_le]
@@ -85,7 +85,7 @@ instance OrderDual.instMulArchimedean
 
 中文:
 实例 OrderDual.instMulArchimedean
-  签名: [CommGroup G] [PartialOrder G] [IsOrderedMonoid G]
+  签名: [交换群 G] [偏序 G] [是Ordered幺半群 G]
   定义体: ⟨fun x y hy =>
     have hy : (ofDual y) < 1 := hy
     let ⟨n, hn⟩ := MulArchimedean.arch (ofDual x)⁻¹ (one_lt_inv'.2 hy)
@@ -110,8 +110,8 @@ instance Additive.instArchimedean
   body: ⟨fun x _ hy => MulArchimedean.arch x.toMul hy⟩
 
 中文:
-实例 Additive.instArchimedean
-  签名: [CommGroup G] [PartialOrder G] [MulArchimedean G]
+实例 加性.instArchimedean
+  签名: [交换群 G] [偏序 G] [MulArchimedean G]
   定义体: ⟨fun x _ hy => MulArchimedean.arch x.toMul hy⟩
 
 Depends on / 依赖: MulArchimedean, MulArchimedean.arch, x.toMul
@@ -130,7 +130,7 @@ instance Multiplicative.instMulArchimedean
 
 中文:
 实例 Multiplicative.instMulArchimedean
-  签名: [AddCommGroup G] [PartialOrder G] [Archimedean G]
+  签名: [加法交换群 G] [偏序 G] [阿基米德 G]
   定义体: ⟨fun x _ hy => Archimedean.arch x.toAdd hy⟩
 
 Depends on / 依赖: Archimedean, Archimedean.arch, x.toAdd
@@ -163,7 +163,7 @@ theorem existsUnique_zpow_near_of_one_lt
     apply 
 
 中文:
-定理 existsUnique_zpow_near_of_one_lt
+定理 存在Unique_zpow_near_of_one_lt
   条件: {a : G} (ha : 1 < a) (g : G)
   证明: by
   let s : Set Int := { n : Int | a ^ n <= g }
@@ -209,7 +209,7 @@ theorem existsUnique_zpow_near_of_one_lt'
 @[to_additive]
 
 中文:
-定理 existsUnique_zpow_near_of_one_lt'
+定理 存在Unique_zpow_near_of_one_lt'
   条件: {a : G} (ha : 1 < a) (g : G)
   证明: by
   simpa only [one_le_div', zpow_add_one, div_lt_iff_lt_mul'] using
@@ -238,7 +238,7 @@ theorem existsUnique_div_zpow_mem_Ico
 @[to_additive]
 
 中文:
-定理 existsUnique_div_zpow_mem_Ico
+定理 存在Unique_div_zpow_mem_Ico
   条件: {a : G} (ha : 1 < a) (b c : G)
   证明: by
   simpa only [mem_Ico, le_div_iff_mul_le, one_mul, mul_comm c, div_lt_iff_lt_mul, mul_assoc] using
@@ -267,7 +267,7 @@ theorem existsUnique_mul_zpow_mem_Ico
 @[to_additive]
 
 中文:
-定理 existsUnique_mul_zpow_mem_Ico
+定理 存在Unique_mul_zpow_mem_Ico
   条件: {a : G} (ha : 1 < a) (b c : G)
   证明: (Equiv.neg Int).bijective.existsUnique_iff.2 by
     simpa only [Equiv.neg_apply, mem_Ico, zpow_neg, ← div_eq_mul_inv, le_div_iff_mul_le, one_mul,
@@ -298,7 +298,7 @@ theorem existsUnique_add_zpow_mem_Ioc
 @[to_additive]
 
 中文:
-定理 existsUnique_add_zpow_mem_Ioc
+定理 存在Unique_add_zpow_mem_Ioc
   条件: {a : G} (ha : 1 < a) (b c : G)
   证明: (Equiv.addRight (1 : Int)).bijective.existsUnique_iff.2 by
     simpa only [zpow_add_one, div_lt_iff_lt_mul', le_div_iff_mul_le', ← mul_assoc, and_comm,
@@ -328,7 +328,7 @@ theorem existsUnique_sub_zpow_mem_Ioc
       existsUnique_add_zpow_mem_Ioc ha b c
 
 中文:
-定理 existsUnique_sub_zpow_mem_Ioc
+定理 存在Unique_sub_zpow_mem_Ioc
   条件: {a : G} (ha : 1 < a) (b c : G)
   证明: (Equiv.neg Int).bijective.existsUnique_iff.2 by
     simpa only [Equiv.neg_apply, zpow_neg, div_inv_eq_mul] using
@@ -462,7 +462,7 @@ theorem exists_floor
     exact ⟨n, hn.le⟩
 
 中文:
-定理 exists_floor
+定理 存在_floor
   条件: (x : R)
   结论: 存在 fl : 整数, 对任意 z : 整数, z <= fl ↔ (z : R) <= x
   证明: by
@@ -504,7 +504,7 @@ theorem exists_nat_pow_near
       have hnsp : Nat.pred n + 1
 
 中文:
-定理 exists_nat_pow_near
+定理 存在_nat_pow_near
   条件: (hx : 1 <= x) (hy : 1 < y)
   结论: 存在 n : 自然数, y ^ n <= x ∧ x < y ^ (n + 1)
   证明: by
@@ -550,7 +550,7 @@ lemma exists_nat_one_div_lt
   · exact n.cast_add_one_pos
 
 中文:
-引理 exists_nat_one_div_lt
+引理 存在_nat_one_div_lt
   条件: (hε : 0 < ε)
   结论: 存在 n : 自然数, 1 / (n + 1 : K) < ε
   证明: by
@@ -590,9 +590,9 @@ theorem exists_mem_Ico_zpow
     obtain ⟨M,
 
 中文:
-定理 exists_mem_Ico_zpow
+定理 存在_mem_Ico_zpow
   条件: (hx : 0 < x) (hy : 1 < y)
-  结论: 存在 n : 整数, x in Ico (y ^ n) (y ^ (n + 1))
+  结论: 存在 n : 整数, x in 左闭右开区间 (y ^ n) (y ^ (n + 1))
   证明: by
   have he : exists m : Int, y ^ m <= x := by
     obtain ⟨N, hN⟩ := pow_unbounded_of_one_lt x⁻¹ hy
@@ -632,9 +632,9 @@ theorem exists_mem_Ioc_zpow
     rwa [neg_add, neg_add_cancel_right, zpow_neg, le_inv_comm₀ hx (zpow_pos hyp _)]⟩
 
 中文:
-定理 exists_mem_Ioc_zpow
+定理 存在_mem_Ioc_zpow
   条件: (hx : 0 < x) (hy : 1 < y)
-  结论: 存在 n : 整数, x in Ioc (y ^ n) (y ^ (n + 1))
+  结论: 存在 n : 整数, x in 左开右闭区间 (y ^ n) (y ^ (n + 1))
   证明: let ⟨m, hle, hlt⟩ := exists_mem_Ico_zpow (inv_pos.2 hx) hy
   have hyp : 0 < y := lt_trans zero_lt_one hy
   ⟨-(m + 1), by rwa [zpow_neg, inv_lt_comm₀ (zpow_pos hyp _) hx], by
@@ -664,7 +664,7 @@ theorem exists_pow_lt_of_lt_one
   exact ⟨q, by rwa [inv_pow, inv_lt_inv₀ hx (pow_pos y_pos _)] at hq⟩
 
 中文:
-定理 exists_pow_lt_of_lt_one
+定理 存在_pow_lt_of_lt_one
   条件: (hx : 0 < x) (hy : y < 1)
   结论: 存在 n : 自然数, y ^ n < x
   证明: by
@@ -699,7 +699,7 @@ theorem exists_nat_pow_near_of_lt_one
   · rwa [inv_pow, inv_le_inv₀ (pow_pos ypos _) xpos] at hn
 
 中文:
-定理 exists_nat_pow_near_of_lt_one
+定理 存在_nat_pow_near_of_lt_one
   条件: (xpos : 0 < x) (hx : x <= 1) (ypos : 0 < y) (hy : y < 1)
   证明: by
   rcases exists_nat_pow_near (one_le_inv_iff₀.2 ⟨xpos, hx⟩) (one_lt_inv_iff₀.2 ⟨ypos, hy⟩) with
@@ -735,7 +735,7 @@ lemma exists_pow_btwn_of_lt_mul
   rw [(Nat.succ_pred_
 
 中文:
-引理 exists_pow_btwn_of_lt_mul
+引理 存在_pow_btwn_of_lt_mul
   结论: {a b c : K} (h : a < b * c) (hb₀ : 0 < b) (hb₁ : b <= 1)
   证明: by
   have := exists_pow_lt_of_lt_one hb₀ hc₁
@@ -778,7 +778,7 @@ lemma exists_zpow_btwn_of_lt_mul
     · rcases lt
 
 中文:
-引理 exists_zpow_btwn_of_lt_mul
+引理 存在_zpow_btwn_of_lt_mul
   结论: {a b c : K} (h : a < b * c) (hb₀ : 0 < b) (hc₀ : 0 < c)
   证明: by
   rcases le_or_gt a 0 with ha | ha
@@ -828,7 +828,7 @@ theorem archimedean_iff_nat_lt
 
 中文:
 定理 archimedean_iff_nat_lt
-  结论: Archimedean K ↔ 对任意 x : K, 存在 n : 自然数, x < n
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 n : 自然数, x < n
   证明: ⟨@exists_nat_gt K _ _ _, fun H =>
     ⟨fun x y y0 =>
 (H (x / y)).imp fun n h => le_of_lt by rwa [div_lt_iff₀ y0, ← nsmul_eq_mul] at h⟩⟩
@@ -853,7 +853,7 @@ theorem archimedean_iff_nat_le
 
 中文:
 定理 archimedean_iff_nat_le
-  结论: Archimedean K ↔ 对任意 x : K, 存在 n : 自然数, x <= n
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 n : 自然数, x <= n
   证明: archimedean_iff_nat_lt.trans
     ⟨fun H x => (H x).imp fun _ => le_of_lt, fun H x =>
       let ⟨n, h⟩ := H x
@@ -882,7 +882,7 @@ theorem archimedean_iff_int_lt
 
 中文:
 定理 archimedean_iff_int_lt
-  结论: Archimedean K ↔ 对任意 x : K, 存在 n : 整数, x < n
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 n : 整数, x < n
   证明: ⟨@exists_int_gt K _ _ _, by
     rw [archimedean_iff_nat_lt]
     intro h x
@@ -913,7 +913,7 @@ theorem archimedean_iff_int_le
 
 中文:
 定理 archimedean_iff_int_le
-  结论: Archimedean K ↔ 对任意 x : K, 存在 n : 整数, x <= n
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 n : 整数, x <= n
   证明: archimedean_iff_int_lt.trans
     ⟨fun H x => (H x).imp fun _ => le_of_lt, fun H x =>
       let ⟨n, h⟩ := H x
@@ -940,7 +940,7 @@ let ⟨q, h⟩ := H x; ⟨⌈q⌉₊, lt_of_lt_of_le h mod_cast Nat.le_ceil _⟩
 
 中文:
 定理 archimedean_iff_rat_lt
-  结论: Archimedean K ↔ 对任意 x : K, 存在 q : Rat, x < q where
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 q : 有理数, x < q where
   证明: let ⟨n, h⟩ := exists_nat_gt x
     ⟨n, by rwa [Rat.cast_natCast]⟩
   mpr H := archimedean_iff_nat_lt.2 fun x =>
@@ -968,7 +968,7 @@ theorem archimedean_iff_rat_le
 
 中文:
 定理 archimedean_iff_rat_le
-  结论: Archimedean K ↔ 对任意 x : K, 存在 q : Rat, x <= q
+  结论: 阿基米德 K ↔ 对任意 x : K, 存在 q : 有理数, x <= q
   证明: archimedean_iff_rat_lt.trans
     ⟨fun H x => (H x).imp fun _ => le_of_lt, fun H x =>
       let ⟨n, h⟩ := H x
@@ -992,7 +992,7 @@ instance :
 
 中文:
 实例 :
-  签名: Archimedean Rat
+  签名: 阿基米德 有理数
   定义体: archimedean_iff_rat_le.2 fun q => ⟨q, by rw [Rat.cast_id]⟩
 
 Depends on / 依赖: Rat.cast_id, archimedean_iff_rat_le, cast_id
@@ -1012,9 +1012,9 @@ theorem exists_rat_gt
   proof: archimedean_iff_rat_lt.mp ‹_› _
 
 中文:
-定理 exists_rat_gt
+定理 存在_rat_gt
   条件: (x : K)
-  结论: 存在 q : Rat, x < q
+  结论: 存在 q : 有理数, x < q
   证明: archimedean_iff_rat_lt.mp ‹_› _
 
 Depends on / 依赖: archimedean_iff_rat_lt, archimedean_iff_rat_lt.mp
@@ -1032,9 +1032,9 @@ theorem exists_rat_lt
   ⟨n, by rwa [Rat.cast_intCast]⟩
 
 中文:
-定理 exists_rat_lt
+定理 存在_rat_lt
   条件: (x : K)
-  结论: 存在 q : Rat, (q : K) < x
+  结论: 存在 q : 有理数, (q : K) < x
   证明: let ⟨n, h⟩ := exists_int_lt x
   ⟨n, by rwa [Rat.cast_intCast]⟩
 
@@ -1061,7 +1061,7 @@ refine ⟨(lt_div_iff₀ n0').2 (lt_iff_lt_of_le_iff_le (zh _)).1 (lt_add_one _)
   rwa [← lt_sub_if
 
 中文:
-定理 exists_div_btwn
+定理 存在_div_btwn
   条件: {x y : K} {n : 自然数} (h : x < y) (nh : (y - x)⁻¹ < n)
   证明: by
   obtain ⟨z, zh⟩ := exists_floor (x * n)
@@ -1099,9 +1099,9 @@ theorem exists_rat_btwn
   refine ⟨(z : Rat) / n, ?_, ?_⟩ <;> simpa
 
 中文:
-定理 exists_rat_btwn
+定理 存在_rat_btwn
   条件: {x y : K} (h : x < y)
-  结论: 存在 q : Rat, x < q ∧ q < y
+  结论: 存在 q : 有理数, x < q ∧ q < y
   证明: by
   obtain ⟨n, nh⟩ := exists_nat_gt (y - x)⁻¹
   obtain ⟨z, zh, zh'⟩ := exists_div_btwn h nh
@@ -1124,9 +1124,9 @@ theorem exists_rat_mem_uIoo
   proof: exists_rat_btwn (min_lt_max.mpr h)
 
 中文:
-定理 exists_rat_mem_uIoo
+定理 存在_rat_mem_uIoo
   条件: {x y : K} (h : x != y)
-  结论: 存在 q : Rat, ↑q in Set.uIoo x y
+  结论: 存在 q : 有理数, ↑q in 集合.uIoo x y
   证明: exists_rat_btwn (min_lt_max.mpr h)
 
 Depends on / 依赖: exists_rat_btwn, min_lt_max, min_lt_max.mpr
@@ -1149,7 +1149,7 @@ theorem exists_pow_btwn
 
 
 中文:
-定理 exists_pow_btwn
+定理 存在_pow_btwn
   条件: {n : 自然数} (hn : n != 0) {x y : K} (h : x < y) (hy : 0 < y)
   证明: by
   have ⟨δ, δ_pos, cont⟩ := uniform_continuous_npow_on_bounded (max 1 y)
@@ -1201,7 +1201,7 @@ theorem exists_rat_pow_btwn
 refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans
 
 中文:
-定理 exists_rat_pow_btwn
+定理 存在_rat_pow_btwn
   条件: {n : 自然数} (hn : n != 0) {x y : K} (h : x < y) (hy : 0 < y)
   证明: by
   obtain ⟨q₂, hx₂, hy₂⟩ := exists_rat_btwn (max_lt h hy)
@@ -1234,8 +1234,8 @@ theorem le_of_forall_rat_lt_imp_le
 hy.not_ge h _ hx
 
 中文:
-定理 le_of_forall_rat_lt_imp_le
-  条件: (h : 对任意 q : Rat, (q : K) < x -> (q : K) <= y)
+定理 le_of_对任意_rat_lt_imp_le
+  条件: (h : 对任意 q : 有理数, (q : K) < x -> (q : K) <= y)
   结论: x <= y
   证明: le_of_not_gt fun hyx =>
     let ⟨_, hy, hx⟩ := exists_rat_btwn hyx
@@ -1260,8 +1260,8 @@ theorem le_of_forall_lt_rat_imp_le
 hx.not_ge h _ hy
 
 中文:
-定理 le_of_forall_lt_rat_imp_le
-  条件: (h : 对任意 q : Rat, y < q -> x <= q)
+定理 le_of_对任意_lt_rat_imp_le
+  条件: (h : 对任意 q : 有理数, y < q -> x <= q)
   结论: x <= y
   证明: le_of_not_gt fun hyx =>
     let ⟨_, hy, hx⟩ := exists_rat_btwn hyx
@@ -1283,8 +1283,8 @@ theorem le_iff_forall_rat_lt_imp_le
   proof: ⟨fun hxy _ hqx => hqx.le.trans hxy, le_of_forall_rat_lt_imp_le⟩
 
 中文:
-定理 le_iff_forall_rat_lt_imp_le
-  结论: x <= y ↔ 对任意 q : Rat, (q : K) < x -> (q : K) <= y
+定理 le_iff_对任意_rat_lt_imp_le
+  结论: x <= y ↔ 对任意 q : 有理数, (q : K) < x -> (q : K) <= y
   证明: ⟨fun hxy _ hqx => hqx.le.trans hxy, le_of_forall_rat_lt_imp_le⟩
 
 Depends on / 依赖: hqx.le.trans, le_of_forall_rat_lt_imp_le
@@ -1301,8 +1301,8 @@ theorem le_iff_forall_lt_rat_imp_le
   proof: ⟨fun hxy _ hqx => hxy.trans hqx.le, le_of_forall_lt_rat_imp_le⟩
 
 中文:
-定理 le_iff_forall_lt_rat_imp_le
-  结论: x <= y ↔ 对任意 q : Rat, y < q -> x <= q
+定理 le_iff_对任意_lt_rat_imp_le
+  结论: x <= y ↔ 对任意 q : 有理数, y < q -> x <= q
   证明: ⟨fun hxy _ hqx => hxy.trans hqx.le, le_of_forall_lt_rat_imp_le⟩
 
 Depends on / 依赖: hqx.le, hxy.trans, le_of_forall_lt_rat_imp_le
@@ -1321,8 +1321,8 @@ theorem eq_of_forall_rat_lt_iff_lt
     le_of_forall_rat_lt_imp_le fun q hq => ((h q).2 hq).le
 
 中文:
-定理 eq_of_forall_rat_lt_iff_lt
-  条件: (h : 对任意 q : Rat, (q : K) < x ↔ (q : K) < y)
+定理 eq_of_对任意_rat_lt_iff_lt
+  条件: (h : 对任意 q : 有理数, (q : K) < x ↔ (q : K) < y)
   结论: x = y
   证明: (le_of_forall_rat_lt_imp_le fun q hq => ((h q).1 hq).le).antisymm
     le_of_forall_rat_lt_imp_le fun q hq => ((h q).2 hq).le
@@ -1344,8 +1344,8 @@ theorem eq_of_forall_lt_rat_iff_lt
     le_of_forall_lt_rat_imp_le fun q hq => ((h q).1 hq).le
 
 中文:
-定理 eq_of_forall_lt_rat_iff_lt
-  条件: (h : 对任意 q : Rat, x < q ↔ y < q)
+定理 eq_of_对任意_lt_rat_iff_lt
+  条件: (h : 对任意 q : 有理数, x < q ↔ y < q)
   结论: x = y
   证明: (le_of_forall_lt_rat_imp_le fun q hq => ((h q).2 hq).le).antisymm
     le_of_forall_lt_rat_imp_le fun q hq => ((h q).1 hq).le
@@ -1367,9 +1367,9 @@ theorem exists_pos_rat_lt
   simpa only [Rat.cast_pos] using exists_rat_btwn x0
 
 中文:
-定理 exists_pos_rat_lt
+定理 存在_pos_rat_lt
   条件: {x : K} (x0 : 0 < x)
-  结论: 存在 q : Rat, 0 < q ∧ (q : K) < x
+  结论: 存在 q : 有理数, 0 < q ∧ (q : K) < x
   证明: by
   simpa only [Rat.cast_pos] using exists_rat_btwn x0
 
@@ -1390,9 +1390,9 @@ exists_rat_btwn ((sub_lt_self_iff x).2 ε0).trans ((lt_add_iff_pos_left x).2 ε0
   ⟨q, abs_sub_lt_iff.2 ⟨sub_lt_comm.1 h₁, sub_lt_iff_lt_add.2 h₂⟩⟩
 
 中文:
-定理 exists_rat_near
+定理 存在_rat_near
   条件: (x : K) (ε0 : 0 < ε)
-  结论: 存在 q : Rat, |x - q| < ε
+  结论: 存在 q : 有理数, |x - q| < ε
   证明: let ⟨q, h₁, h₂⟩ :=
 exists_rat_btwn ((sub_lt_self_iff x).2 ε0).trans ((lt_add_iff_pos_left x).2 ε0)
   ⟨q, abs_sub_lt_iff.2 ⟨sub_lt_comm.1 h₁, sub_lt_iff_lt_add.2 h₂⟩⟩
@@ -1418,7 +1418,7 @@ instance :
 
 中文:
 实例 :
-  签名: Archimedean 自然数
+  签名: 阿基米德 自然数
   定义体: ⟨fun n m m0 => ⟨n, by
     rw [← mul_one n]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_one]
     exact Nat.le_mul_of_pos_right n m0⟩⟩
@@ -1444,7 +1444,7 @@ le_trans (Int.self_le_toNat _) by
 
 中文:
 实例 :
-  签名: Archimedean 整数
+  签名: 阿基米德 整数
   定义体: ⟨fun n m m0 =>
     ⟨n.toNat,
 le_trans (Int.self_le_toNat _) by
@@ -1472,7 +1472,7 @@ instance Nonneg.instArchimedean
 
 中文:
 实例 Nonneg.instArchimedean
-  签名: [AddCommMonoid M] [PartialOrder M] [IsOrderedAddMonoid M]
+  签名: [加法交换幺半群 M] [偏序 M] [是OrderedAdd幺半群 M]
   定义体: ⟨fun x y hy =>
     let ⟨n, hr⟩ := Archimedean.arch (x : M) (hy : (0 : M) < y)
     ⟨n, mod_cast hr⟩⟩
@@ -1496,7 +1496,7 @@ instance Nonneg.instMulArchimedean
 
 中文:
 实例 Nonneg.instMulArchimedean
-  签名: [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: ⟨fun x _ hy => (pow_unbounded_of_one_lt x hy).imp fun _ h => h.le⟩
 
 Depends on / 依赖: h.le, pow_unbounded_of_one_lt
@@ -1516,7 +1516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Archimedean NNRat
+  签名: 阿基米德 NNRat
   定义体: Nonneg.instArchimedean
 
 Depends on / 依赖: Nonneg, Nonneg.instArchimedean, instArchimedean
@@ -1551,8 +1551,8 @@ definition Archimedean.floorRing
   body: .ofBounded _ exists_nat_ge
 
 中文:
-定义 Archimedean.floorRing
-  签名: (R) [Ring R] [LinearOrder R] [IsStrictOrderedRing R]
+定义 阿基米德.floorRing
+  签名: (R) [环 R] [线性序 R] [是StrictOrdered环 R]
   定义体: .ofBounded _ exists_nat_ge
 
 Depends on / 依赖: exists_nat_ge, ofBounded
@@ -1579,8 +1579,8 @@ instance Units.instMulArchimedean
   body: ⟨fun x {_} h => MulArchimedean.arch x.val h⟩
 
 中文:
-实例 Units.instMulArchimedean
-  签名: (M) [CommMonoid M] [PartialOrder M] [MulArchimedean M]
+实例 单位群.instMulArchimedean
+  签名: (M) [交换幺半群 M] [偏序 M] [MulArchimedean M]
   定义体: ⟨fun x {_} h => MulArchimedean.arch x.val h⟩
 
 Depends on / 依赖: MulArchimedean, MulArchimedean.arch, x.val
@@ -1607,7 +1607,7 @@ instance WithBot.instArchimedean
 
 中文:
 实例 WithBot.instArchimedean
-  签名: (M) [AddCommMonoid M] [PartialOrder M] [Archimedean M]
+  签名: (M) [加法交换幺半群 M] [偏序 M] [阿基米德 M]
   定义体: by
   constructor
   intro x y hxy
@@ -1649,7 +1649,7 @@ instance WithZero.instMulArchimedean
 
 中文:
 实例 WithZero.instMulArchimedean
-  签名: (M) [CommMonoid M] [PartialOrder M] [MulArchimedean M]
+  签名: (M) [交换幺半群 M] [偏序 M] [MulArchimedean M]
   定义体: by
   constructor
   intro x y hxy

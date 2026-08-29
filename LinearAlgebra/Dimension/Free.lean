@@ -79,7 +79,7 @@ theorem rank_mul_rank
 
 中文:
 定理 rank_mul_rank
-  结论: (A : 类型v) [AddCommMonoid A]
+  结论: (A : 类型v) [加法交换幺半群 A]
   证明: by
   convert! lift_rank_mul_lift_rank F K A <;> rw [lift_id]
 
@@ -101,7 +101,7 @@ theorem Module.finrank_mul_finrank
   rw [← toNat_lift.{w} (Module.rank F K)]; rw [← toNat_lift.{v} (Module.rank K A)]; rw [← toNat_mul]; rw [lift_rank_mul_lift_rank]; rw [toNat_lift]
 
 中文:
-定理 Module.finrank_mul_finrank
+定理 模.finrank_mul_finrank
   结论: finrank F K * finrank K A = finrank F A
   证明: by
   simp_rw [finrank]
@@ -121,7 +121,7 @@ theorem Module.finrank_dvd_finrank_left
   proof: Dvd.intro_left (finrank F K) (finrank_mul_finrank ..)
 
 中文:
-定理 Module.finrank_dvd_finrank_left
+定理 模.finrank_dvd_finrank_left
   证明: Dvd.intro_left (finrank F K) (finrank_mul_finrank ..)
 
 Depends on / 依赖: Dvd.intro_left, finrank, finrank_mul_finrank, hasFiniteIntegral, hg.hasFiniteIntegral.mono, intro_left
@@ -138,7 +138,7 @@ theorem Module.finrank_dvd_finrank_right
   proof: Dvd.intro (finrank K A) (finrank_mul_finrank ..)
 
 中文:
-定理 Module.finrank_dvd_finrank_right
+定理 模.finrank_dvd_finrank_right
   证明: Dvd.intro (finrank K A) (finrank_mul_finrank ..)
 
 Depends on / 依赖: Dvd.intro, finrank, finrank_mul_finrank
@@ -156,8 +156,8 @@ theorem Module.finrank_div_finrank_cancel_right
   proof: Nat.div_eq_of_eq_mul_left h.bot_lt (finrank_mul_finrank ..).symm
 
 中文:
-定理 Module.finrank_div_finrank_cancel_right
-  条件: (h : Module.finrank K A != 0)
+定理 模.finrank_div_finrank_cancel_right
+  条件: (h : 模.finrank K A != 0)
   证明: Nat.div_eq_of_eq_mul_left h.bot_lt (finrank_mul_finrank ..).symm
 
 Depends on / 依赖: Nat.div_eq_of_eq_mul_left, bot_lt, div_eq_of_eq_mul_left, finrank_mul_finrank, h.bot_lt
@@ -175,8 +175,8 @@ theorem Module.finrank_div_finrank_cancel_left
   proof: Nat.div_eq_of_eq_mul_right h.bot_lt (finrank_mul_finrank ..).symm
 
 中文:
-定理 Module.finrank_div_finrank_cancel_left
-  条件: (h : Module.finrank F K != 0)
+定理 模.finrank_div_finrank_cancel_left
+  条件: (h : 模.finrank F K != 0)
   证明: Nat.div_eq_of_eq_mul_right h.bot_lt (finrank_mul_finrank ..).symm
 
 Depends on / 依赖: Nat.div_eq_of_eq_mul_right, bot_lt, div_eq_of_eq_mul_right, finrank_mul_finrank, h.bot_lt, hasFiniteIntegral, hg.hasFiniteIntegral.mono
@@ -194,8 +194,8 @@ theorem Module.finrank_div_finrank_cancel_right_of_nontrivial
   proof: finrank_div_finrank_cancel_right F K A ((finrank_pos_iff_of_free ..).mpr ‹_›).ne'
 
 中文:
-定理 Module.finrank_div_finrank_cancel_right_of_nontrivial
-  条件: [Nontrivial A] [Module.Finite K A]
+定理 模.finrank_div_finrank_cancel_right_of_nontrivial
+  条件: [非平凡 A] [模.有限 K A]
   证明: finrank_div_finrank_cancel_right F K A ((finrank_pos_iff_of_free ..).mpr ‹_›).ne'
 
 Depends on / 依赖: finrank_div_finrank_cancel_right, finrank_pos_iff_of_free
@@ -213,8 +213,8 @@ theorem Module.finrank_div_finrank_cancel_left_of_nontrivial
   proof: finrank_div_finrank_cancel_left F K A ((finrank_pos_iff_of_free ..).mpr ‹_›).ne'
 
 中文:
-定理 Module.finrank_div_finrank_cancel_left_of_nontrivial
-  条件: [Nontrivial K] [Module.Finite F K]
+定理 模.finrank_div_finrank_cancel_left_of_nontrivial
+  条件: [非平凡 K] [模.有限 F K]
   证明: finrank_div_finrank_cancel_left F K A ((finrank_pos_iff_of_free ..).mpr ‹_›).ne'
 
 Depends on / 依赖: finrank_div_finrank_cancel_left, finrank_pos_iff_of_free, hasFiniteIntegral, hf.hasFiniteIntegral.congr
@@ -251,7 +251,7 @@ theorem exists_linearMap_injective_of_linearIndependent_of_lift_rank_le
   refine ⟨B.constr Nat (v ∘ i), B.injective_constr_
 
 中文:
-定理 exists_linearMap_injective_of_linearIndependent_of_lift_rank_le
+定理 存在_linearMap_injective_of_linearIndependent_of_lift_rank_le
   证明: by
   nontriviality M
   have := Module.nontrivial R M
@@ -283,7 +283,7 @@ theorem exists_linearMap_injective_of_linearIndependent_of_rank_le
   proof: exists_linearMap_injective_of_linearIndependent_of_lift_rank_le hv (by simpa using cnd)
 
 中文:
-定理 exists_linearMap_injective_of_linearIndependent_of_rank_le
+定理 存在_linearMap_injective_of_linearIndependent_of_rank_le
   证明: exists_linearMap_injective_of_linearIndependent_of_lift_rank_le hv (by simpa using cnd)
 
 Depends on / 依赖: _enorm, enorm_eq_iff_norm_eq, enorm_eq_iff_norm_eq.mpr, exists_linearMap_injective_of_linearIndependent_of_lift_rank_le, h.mono, integrable_congr
@@ -304,7 +304,7 @@ theorem exists_linearMap_injective_of_lift_rank_lt
     hs₂.linearIndependent hs.symm.le
 
 中文:
-定理 exists_linearMap_injective_of_lift_rank_lt
+定理 存在_linearMap_injective_of_lift_rank_lt
   证明: by
   rcases exists_set_linearIndependent_of_lt_lift_rank cnd with ⟨s, hs, hs₂⟩
   exact exists_linearMap_injective_of_linearIndependent_of_lift_rank_le
@@ -328,8 +328,8 @@ theorem exists_linearMap_injective_of_rank_lt
   proof: exists_linearMap_injective_of_lift_rank_lt (by simpa using cnd)
 
 中文:
-定理 exists_linearMap_injective_of_rank_lt
-  条件: (cnd : Module.rank R M < Module.rank R N)
+定理 存在_linearMap_injective_of_rank_lt
+  条件: (cnd : 模.rank R M < 模.rank R N)
   证明: exists_linearMap_injective_of_lift_rank_lt (by simpa using cnd)
 
 Depends on / 依赖: exists_linearMap_injective_of_lift_rank_lt
@@ -358,7 +358,7 @@ theorem rank_eq_card_chooseBasisIndex
 
 中文:
 定理 rank_eq_card_chooseBasisIndex
-  结论: Module.rank R M = #(ChooseBasisIndex R M)
+  结论: 模.rank R M = #(ChooseBasisIndex R M)
   证明: (chooseBasis R M).mk_eq_rank''.symm
 
 Depends on / 依赖: chooseBasis, mk_eq_rank
@@ -376,8 +376,8 @@ theorem _root_.Module.finrank_eq_card_chooseBasisIndex
   simp [finrank, rank_eq_card_chooseBasisIndex]
 
 中文:
-定理 _root_.Module.finrank_eq_card_chooseBasisIndex
-  条件: [Module.Finite R M]
+定理 _root_.模.finrank_eq_card_chooseBasisIndex
+  条件: [模.有限 R M]
   证明: by
   simp [finrank, rank_eq_card_chooseBasisIndex]
 
@@ -402,7 +402,7 @@ have : Infinite M := infinite_iff.mpr lift_le.mp le_trans (by simp) h_lt.le
 
 中文:
 引理 rank_eq_mk_of_infinite_lt
-  条件: [Infinite R] (h_lt : lift.{v} #R < lift.{u} #M)
+  条件: [无限 R] (h_lt : lift.{v} #R < lift.{u} #M)
   证明: by
 have : Infinite M := infinite_iff.mpr lift_le.mp le_trans (by simp) h_lt.le
   have h : lift #M = lift #(ChooseBasisIndex R M ->₀ R) := lift_mk_eq'.mpr ⟨(chooseBasis R M).repr⟩
@@ -439,7 +439,7 @@ theorem lift_rank_le_iff_exists_linearMap
   mpr := fun ⟨f, hf⟩ => LinearMap.lift_rank_le_of_injective f hf
 
 中文:
-定理 lift_rank_le_iff_exists_linearMap
+定理 lift_rank_le_iff_存在_linearMap
   证明: by
     rcases Module.Free.exists_set R M' with ⟨_, ⟨B⟩⟩
     exact exists_linearMap_injective_of_linearIndependent_of_lift_rank_le B.linearIndependent
@@ -466,7 +466,7 @@ theorem rank_le_iff_exists_linearMap
   simp [← lift_rank_le_iff_exists_linearMap]
 
 中文:
-定理 rank_le_iff_exists_linearMap
+定理 rank_le_iff_存在_linearMap
   证明: by
   simp [← lift_rank_le_iff_exists_linearMap]
 
@@ -486,8 +486,8 @@ theorem finrank_le_iff_exists_linearMap
   simp [← lift_rank_le_iff_exists_linearMap, ← finrank_eq_rank]
 
 中文:
-定理 finrank_le_iff_exists_linearMap
-  条件: [Module.Finite R M] [Module.Finite R M']
+定理 finrank_le_iff_存在_linearMap
+  条件: [模.有限 R M] [模.有限 R M']
   证明: by
   simp [← lift_rank_le_iff_exists_linearMap, ← finrank_eq_rank]
 
@@ -539,7 +539,7 @@ theorem nonempty_linearEquiv_of_rank_eq
 
 中文:
 定理 nonempty_linearEquiv_of_rank_eq
-  条件: (cond : Module.rank R M = Module.rank R M₁)
+  条件: (cond : 模.rank R M = 模.rank R M₁)
   证明: nonempty_linearEquiv_of_lift_rank_eq congr_arg _ cond
 
 Depends on / 依赖: congr_arg, nonempty_linearEquiv_of_lift_rank_eq
@@ -560,7 +560,7 @@ definition LinearEquiv.ofLiftRankEq
   body: Classical.choice (nonempty_linearEquiv_of_lift_rank_eq cond)
 
 中文:
-定义 LinearEquiv.ofLiftRankEq
+定义 线性等价.ofLiftRankEq
   定义体: Classical.choice (nonempty_linearEquiv_of_lift_rank_eq cond)
 
 Depends on / 依赖: Classical, Classical.choice, choice, nonempty_linearEquiv_of_lift_rank_eq
@@ -579,8 +579,8 @@ definition LinearEquiv.ofRankEq
   body: Classical.choice (nonempty_linearEquiv_of_rank_eq cond)
 
 中文:
-定义 LinearEquiv.ofRankEq
-  签名: (cond : Module.rank R M = Module.rank R M₁)
+定义 线性等价.ofRankEq
+  签名: (cond : 模.rank R M = 模.rank R M₁)
   定义体: Classical.choice (nonempty_linearEquiv_of_rank_eq cond)
 
 Depends on / 依赖: Classical, Classical.choice, choice, nonempty_linearEquiv_of_rank_eq
@@ -602,8 +602,8 @@ theorem Module.nonempty_linearEquiv_iff_lift_rank_eq
 alias LinearEquiv.nonempty_equiv_iff_lift_rank_eq := Module.nonempty_linearEquiv_iff_lift_rank_eq
 
 中文:
-定理 Module.nonempty_linearEquiv_iff_lift_rank_eq
-  结论: Nonempty (M ≃ₗ[R] M') ↔
+定理 模.nonempty_linearEquiv_iff_lift_rank_eq
+  结论: 非空 (M ≃ₗ[R] M') ↔
   证明: ⟨fun ⟨h⟩ => LinearEquiv.lift_rank_eq h, fun h => nonempty_linearEquiv_of_lift_rank_eq h⟩
 
 @[deprecated (since := "2026-06-30")]
@@ -629,7 +629,7 @@ theorem Module.nonempty_linearEquiv_iff_rank_eq
 alias LinearEquiv.nonempty_equiv_iff_rank_eq := Module.nonempty_linearEquiv_iff_rank_eq
 
 中文:
-定理 Module.nonempty_linearEquiv_iff_rank_eq
+定理 模.nonempty_linearEquiv_iff_rank_eq
   证明: ⟨fun ⟨h⟩ => LinearEquiv.rank_eq h, fun h => nonempty_linearEquiv_of_rank_eq h⟩
 
 @[deprecated (since := "2026-06-30")]
@@ -652,7 +652,7 @@ theorem FiniteDimensional.nonempty_linearEquiv_of_finrank_eq
   proof: nonempty_linearEquiv_of_lift_rank_eq by simp only [← finrank_eq_rank, cond, lift_natCast]
 
 中文:
-定理 FiniteDimensional.nonempty_linearEquiv_of_finrank_eq
+定理 有限维.nonempty_linearEquiv_of_finrank_eq
   证明: nonempty_linearEquiv_of_lift_rank_eq by simp only [← finrank_eq_rank, cond, lift_natCast]
 
 Depends on / 依赖: finrank_eq_rank, lift_natCast, nonempty_linearEquiv_of_lift_rank_eq
@@ -671,8 +671,8 @@ theorem FiniteDimensional.nonempty_linearEquiv_iff_finrank_eq
   proof: ⟨fun ⟨h⟩ => h.finrank_eq, fun h => nonempty_linearEquiv_of_finrank_eq h⟩
 
 中文:
-定理 FiniteDimensional.nonempty_linearEquiv_iff_finrank_eq
-  结论: [Module.Finite R M]
+定理 有限维.nonempty_linearEquiv_iff_finrank_eq
+  结论: [模.有限 R M]
   证明: ⟨fun ⟨h⟩ => h.finrank_eq, fun h => nonempty_linearEquiv_of_finrank_eq h⟩
 
 Depends on / 依赖: finrank_eq, h.finrank_eq, nonempty_linearEquiv_of_finrank_eq
@@ -691,8 +691,8 @@ definition LinearEquiv.ofFinrankEq
   body: Classical.choice FiniteDimensional.nonempty_linearEquiv_of_finrank_eq cond
 
 中文:
-定义 LinearEquiv.ofFinrankEq
-  签名: [Module.Finite R M] [Module.Finite R M']
+定义 线性等价.ofFinrankEq
+  签名: [模.有限 R M] [模.有限 R M']
   定义体: Classical.choice FiniteDimensional.nonempty_linearEquiv_of_finrank_eq cond
 
 Depends on / 依赖: Classical, Classical.choice, FiniteDimensional, FiniteDimensional.nonempty_linearEquiv_of_finrank_eq, choice, nonempty_linearEquiv_of_finrank_eq
@@ -716,8 +716,8 @@ lemma subsingleton_of_rank_zero
 
 中文:
 引理 subsingleton_of_rank_zero
-  条件: (h : Module.rank R M = 0)
-  结论: Subsingleton M
+  条件: (h : 模.rank R M = 0)
+  结论: 子单例 M
   证明: by
   rw [← Basis.mk_eq_rank'' (Module.Free.chooseBasis R M)]; rw [Cardinal.mk_eq_zero_iff] at h
   exact (Module.Free.chooseBasis R M).repr.subsingleton
@@ -741,7 +741,7 @@ lemma rank_lt_aleph0_iff
 
 中文:
 引理 rank_lt_aleph0_iff
-  结论: Module.rank R M < ℵ₀ ↔ Module.Finite R M
+  结论: 模.rank R M < ℵ₀ ↔ 模.有限 R M
   证明: by
   rw [Free.rank_eq_card_chooseBasisIndex]; rw [mk_lt_aleph0_iff]
   exact ⟨fun h => Finite.of_basis (Free.chooseBasis R M),
@@ -767,7 +767,7 @@ theorem finrank_of_not_finite
 
 中文:
 定理 finrank_of_not_finite
-  条件: (h : ¬Module.Finite R M)
+  条件: (h : ¬模.有限 R M)
   结论: finrank R M = 0
   证明: by
   rw [finrank]; rw [toNat_eq_zero]; rw [← not_lt]; rw [Module.rank_lt_aleph0_iff]
@@ -793,7 +793,7 @@ theorem finite_of_finrank_pos
 中文:
 定理 finite_of_finrank_pos
   条件: (h : 0 < finrank R M)
-  结论: Module.Finite R M
+  结论: 模.有限 R M
   证明: by
   contrapose h
   simp [finrank_of_not_finite h]
@@ -816,7 +816,7 @@ theorem finite_of_finrank_eq_succ
 中文:
 定理 finite_of_finrank_eq_succ
   条件: {n : 自然数} (hn : finrank R M = n.succ)
-  结论: Module.Finite R M
+  结论: 模.有限 R M
   证明: finite_of_finrank_pos by rw [hn]; exact n.succ_pos
 
 Depends on / 依赖: finite_of_finrank_pos, n.succ_pos, succ_pos
@@ -835,7 +835,7 @@ theorem finite_iff_of_rank_eq_nsmul
 
 中文:
 定理 finite_iff_of_rank_eq_nsmul
-  结论: {W} [AddCommMonoid W] [Module R W] [Module.Free R W] {n : 自然数}
+  结论: {W} [加法交换幺半群 W] [模 R W] [模.自由 R W] {n : 自然数}
   证明: by
   simp only [← rank_lt_aleph0_iff, hVW, nsmul_lt_aleph0_iff_of_ne_zero hn]
 
@@ -864,7 +864,7 @@ lemma finrank_top_le_finrank_of_isScalarTower_of_free
 
 中文:
 引理 finrank_top_le_finrank_of_isScalarTower_of_free
-  结论: [Semiring S] [StrongRankCondition S]
+  结论: [半环 S] [StrongRankCondition S]
   证明: by
   by_cases H : Module.Finite S M
   · have := Module.Finite.trans (R := R) S M
@@ -903,7 +903,7 @@ lemma finrank_bot_le_finrank_of_isScalarTower_of_free
 
 中文:
 引理 finrank_bot_le_finrank_of_isScalarTower_of_free
-  结论: (S T : 类型) [Semiring S] [Semiring T]
+  结论: (S T : 类型) [半环 S] [半环 T]
   证明: by
   by_cases H : Module.Finite R S
   · have := Module.Finite.trans (R := R) S T
@@ -1008,7 +1008,7 @@ definition finBasis
 
 中文:
 定义 finBasis
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: (Module.Free.chooseBasis R M).reindex (Fintype.equivFinOfCardEq
     (finrank_eq_card_chooseBasisIndex R M).symm)
 
@@ -1029,7 +1029,7 @@ definition finBasisOfFinrankEq
 
 中文:
 定义 finBasisOfFinrankEq
-  签名: [Module.Finite R M] {n : 自然数} (hn : finrank R M = n)
+  签名: [模.有限 R M] {n : 自然数} (hn : finrank R M = n)
   定义体: (finBasis R M).reindex (finCongr hn)
 
 Depends on / 依赖: finBasis, finCongr, reindex
@@ -1051,7 +1051,7 @@ definition basisUnique
 
 中文:
 定义 basisUnique
-  签名: (ι : 类型) [Unique ι]
+  签名: (ι : 类型) [唯一 ι]
   定义体: haveI : Module.Finite R M :=
     Module.finite_of_finrank_pos (_root_.zero_lt_one.trans_le h.symm.le)
   (finBasisOfFinrankEq R M h).reindex (Equiv.ofUnique _ _)
@@ -1080,7 +1080,7 @@ theorem Basis.nonempty_unique_index_of_finrank_eq_one
   rwa [Module.finrank
 
 中文:
-定理 Basis.nonempty_unique_index_of_finrank_eq_one
+定理 基.nonempty_unique_index_of_finrank_eq_one
   证明: by
   -- why isn't this an instance?
   have : Nontrivial R := nontrivial_of_invariantBasisNumber R
@@ -1116,7 +1116,7 @@ omit [StrongRankCondition R] in
 
 中文:
 定理 basisUnique_repr_eq_zero_iff
-  结论: {ι : 类型} [Unique ι]
+  结论: {ι : 类型} [唯一 ι]
   证明: ⟨fun hv =>
     (basisUnique ι h).repr.map_eq_zero_iff.mp (Finsupp.ext fun j => Subsingleton.elim i j ▸ hv),
     fun hv => by rw [hv, map_zero, Finsupp.zero_apply]⟩
@@ -1190,7 +1190,7 @@ theorem _root_.LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one
   ex
 
 中文:
-定理 _root_.LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one
+定理 _root_.线性映射.存在Unique_eq_smul_id_of_finrank_eq_one
   证明: by
   let e := (nonempty_linearEquiv_of_finrank_eq_one d1).some
   set c := e.symm (u (e 1)) with hc
@@ -1238,8 +1238,8 @@ definition _root_.LinearEquiv.smul_id_of_finrank_eq_one
   right_inv 
 
 中文:
-定义 _root_.LinearEquiv.smul_id_of_finrank_eq_one
-  签名: (d1 : Module.finrank R M = 1)
+定义 _root_.线性等价.smul_id_of_finrank_eq_one
+  签名: (d1 : 模.finrank R M = 1)
   定义体: fun c => c • LinearMap.id
   map_add' c d := by ext; simp [add_smul]
   map_smul' c d := by ext; simp [mul_smul]

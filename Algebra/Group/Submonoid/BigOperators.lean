@@ -50,8 +50,8 @@ theorem coe_list_prod
 
 中文:
 定理 coe_list_prod
-  条件: (l : List S)
-  结论: (l.prod : M) = (l.map (↑)).prod
+  条件: (l : 列表 S)
+  结论: (l.乘积 : M) = (l.map (↑)).乘积
   证明: map_list_prod (SubmonoidClass.subtype S : _ ->* M) l
 
 @[to_additive (attr := norm_cast, simp)]
@@ -74,7 +74,7 @@ theorem coe_multiset_prod
 
 中文:
 定理 coe_multiset_prod
-  条件: {M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (m : Multiset S)
+  条件: {M} [交换幺半群 M] [集合状 B M] [子幺半群类 B M] (m : Multiset S)
   证明: (SubmonoidClass.subtype S : _ ->* M).map_multiset_prod m
 
 @[to_additive (attr := norm_cast, simp)]
@@ -102,7 +102,7 @@ alias coe_finset_prod := coe_finsetProd
 
 中文:
 定理 coe_finsetProd
-  结论: {ι M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (f : ι -> S)
+  结论: {ι M} [交换幺半群 M] [集合状 B M] [子幺半群类 B M] (f : ι -> S)
   证明: map_prod (SubmonoidClass.subtype S) f s
 
 @[deprecated (since := "2026-04-08")]
@@ -143,8 +143,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {l : List M} (hl : 对任意 x in l, x in S)
-  结论: l.prod in S
+  条件: {l : 列表 M} (hl : 对任意 x in l, x in S)
+  结论: l.乘积 in S
   证明: by
   lift l to List S using hl
   rw [← coe_list_prod]
@@ -174,7 +174,7 @@ theorem multiset_prod_mem
 
 中文:
 定理 multiset_prod_mem
-  结论: {M} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] (m : Multiset M)
+  结论: {M} [交换幺半群 M] [集合状 B M] [子幺半群类 B M] (m : Multiset M)
   证明: by
   lift m to Multiset S using hm
   rw [← coe_multiset_prod]
@@ -205,7 +205,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {M : 类型} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] {ι : 类型}
+  结论: {M : 类型} [交换幺半群 M] [集合状 B M] [子幺半群类 B M] {ι : 类型}
   证明: multiset_prod_mem (t.1.map f) fun _x hx =>
     let ⟨i, hi, hix⟩ := Multiset.mem_map.1 hx
     hix ▸ h i hi
@@ -238,8 +238,8 @@ theorem coe_list_prod
 
 中文:
 定理 coe_list_prod
-  条件: (l : List s)
-  结论: (l.prod : M) = (l.map (↑)).prod
+  条件: (l : 列表 s)
+  结论: (l.乘积 : M) = (l.map (↑)).乘积
   证明: map_list_prod s.subtype l
 
 @[to_additive (attr := norm_cast)]
@@ -262,7 +262,7 @@ theorem coe_multiset_prod
 
 中文:
 定理 coe_multiset_prod
-  条件: {M} [CommMonoid M] (S : Submonoid M) (m : Multiset S)
+  条件: {M} [交换幺半群 M] (S : 子幺半群 M) (m : Multiset S)
   证明: S.subtype.map_multiset_prod m
 
 @[to_additive (attr := norm_cast)]
@@ -290,7 +290,7 @@ alias coe_finset_prod := coe_finsetProd
 
 中文:
 定理 coe_finsetProd
-  条件: {ι M} [CommMonoid M] (S : Submonoid M) (f : ι -> S) (s : Finset ι)
+  条件: {ι M} [交换幺半群 M] (S : 子幺半群 M) (f : ι -> S) (s : 有限集 ι)
   证明: map_prod S.subtype f s
 
 @[deprecated (since := "2026-04-08")]
@@ -324,8 +324,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {l : List M} (hl : 对任意 x in l, x in s)
-  结论: l.prod in s
+  条件: {l : 列表 M} (hl : 对任意 x in l, x in s)
+  结论: l.乘积 in s
   证明: _root_.list_prod_mem hl
 
 Depends on / 依赖: _root_, _root_.list_prod_mem, list_prod_mem
@@ -348,7 +348,7 @@ theorem multiset_prod_mem
 
 中文:
 定理 multiset_prod_mem
-  结论: {M} [CommMonoid M] (S : Submonoid M) (m : Multiset M)
+  结论: {M} [交换幺半群 M] (S : 子幺半群 M) (m : Multiset M)
   证明: _root_.multiset_prod_mem m hm
 
 @[to_additive]
@@ -372,7 +372,7 @@ theorem multiset_noncommProd_mem
 
 中文:
 定理 multiset_noncommProd_mem
-  条件: (S : Submonoid M) (m : Multiset M) (comm) (h : 对任意 x in m, x in S)
+  条件: (S : 子幺半群 M) (m : Multiset M) (comm) (h : 对任意 x in m, x in S)
   证明: by
   induction m using Quotient.inductionOn with | h l => ?_
   simp only [Multiset.quot_mk_to_coe, Multiset.noncommProd_coe]
@@ -405,7 +405,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {M : 类型} [CommMonoid M] (S : Submonoid M) {ι : 类型} {t : Finset ι}
+  结论: {M : 类型} [交换幺半群 M] (S : 子幺半群 M) {ι : 类型} {t : 有限集 ι}
   证明: S.multiset_prod_mem (t.1.map f) fun _ hx =>
     let ⟨i, hi, hix⟩ := Multiset.mem_map.1 hx
     hix ▸ h i hi
@@ -436,7 +436,7 @@ theorem noncommProd_mem
 
 中文:
 定理 noncommProd_mem
-  结论: (S : Submonoid M) {ι : 类型} (t : Finset ι) (f : ι -> M) (comm)
+  结论: (S : 子幺半群 M) {ι : 类型} (t : 有限集 ι) (f : ι -> M) (comm)
   证明: by
   apply multiset_noncommProd_mem
   intro y
@@ -478,8 +478,8 @@ lemma mem_closure_iff_exists_finset_subset
     refine ⟨f + g
 
 中文:
-引理 mem_closure_iff_exists_finset_subset
-  条件: {s : Set M}
+引理 mem_closure_iff_存在_finset_subset
+  条件: {s : 集合 M}
   证明: by
     classical
     induction hx using closure_induction with
@@ -532,7 +532,7 @@ refine ⟨f, hf.trans hts, .symm Finset.prod_subset hts ?_⟩
 
 中文:
 引理 mem_closure_finset
-  条件: {s : Finset M}
+  条件: {s : 有限集 M}
   证明: by
     rw [mem_closure_iff_exists_finset_subset]
     rintro ⟨f, t, hts, hf, rfl⟩

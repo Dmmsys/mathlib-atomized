@@ -46,7 +46,7 @@ abbreviation HasTensor
 
 中文:
 缩写 HasTensor
-  签名: (K₁ K₂ : HomologicalComplex C c)
+  签名: (K₁ K₂ : 同调复形 C c)
   定义体: HasMapBifunctor K₁ K₂ (curriedTensor C) c
 
 Depends on / 依赖: HasMapBifunctor, curriedTensor
@@ -67,7 +67,7 @@ abbreviation tensorObj
 
 中文:
 缩写 tensorObj
-  签名: (K₁ K₂ : HomologicalComplex C c) [HasTensor K₁ K₂]
+  签名: (K₁ K₂ : 同调复形 C c) [HasTensor K₁ K₂]
   定义体: mapBifunctor K₁ K₂ (curriedTensor C) c
 
 Depends on / 依赖: curriedTensor, mapBifunctor
@@ -86,7 +86,7 @@ abbreviation ιTensorObj
 
 中文:
 缩写 ιTensorObj
-  签名: (K₁ K₂ : HomologicalComplex C c) [HasTensor K₁ K₂]
+  签名: (K₁ K₂ : 同调复形 C c) [HasTensor K₁ K₂]
   定义体: ιMapBifunctor K₁ K₂ (curriedTensor C) c i₁ i₂ j h
 
 Depends on / 依赖: curriedTensor
@@ -106,7 +106,7 @@ abbreviation tensorHom
 
 中文:
 缩写 tensorHom
-  签名: {K₁ K₂ L₁ L₂ : HomologicalComplex C c}
+  签名: {K₁ K₂ L₁ L₂ : 同调复形 C c}
   定义体: mapBifunctorMap f g _ _
 
 Depends on / 依赖: mapBifunctorMap
@@ -126,7 +126,7 @@ abbreviation HasGoodTensor₁₂
 
 中文:
 缩写 HasGoodTensor₁₂
-  签名: (K₁ K₂ K₃ : HomologicalComplex C c)
+  签名: (K₁ K₂ K₃ : 同调复形 C c)
   定义体: HasGoodTrifunctor₁₂Obj (curriedTensor C) (curriedTensor C) K₁ K₂ K₃ c c
 
 Depends on / 依赖: curriedTensor
@@ -144,7 +144,7 @@ abbreviation HasGoodTensor₂₃
 
 中文:
 缩写 HasGoodTensor₂₃
-  签名: (K₁ K₂ K₃ : HomologicalComplex C c)
+  签名: (K₁ K₂ K₃ : 同调复形 C c)
   定义体: HasGoodTrifunctor₂₃Obj (curriedTensor C) (curriedTensor C) K₁ K₂ K₃ c c c
 
 Depends on / 依赖: curriedTensor
@@ -162,7 +162,7 @@ abbreviation associator
 
 中文:
 缩写 associator
-  签名: (K₁ K₂ K₃ : HomologicalComplex C c)
+  签名: (K₁ K₂ K₃ : 同调复形 C c)
   定义体: mapBifunctorAssociator (curriedAssociatorNatIso C) K₁ K₂ K₃ c c c
 
 Depends on / 依赖: curriedAssociatorNatIso, mapBifunctorAssociator
@@ -185,7 +185,7 @@ abbreviation tensorUnit
 
 中文:
 缩写 tensorUnit
-  签名: : HomologicalComplex C c
+  签名: : 同调复形 C c
   定义体: (single C c 0).obj (𝟙_ C)
 
 Depends on / 依赖: single
@@ -770,7 +770,7 @@ definition Monoidal.inducingFunctorData
     rw [
 
 中文:
-定义 Monoidal.inducingFunctorData
+定义 幺半群.inducingFunctorData
   签名: :
   定义体: Iso.refl _
   εIso := tensorUnitIso C c
@@ -837,7 +837,7 @@ instance monoidalCategory
 
 中文:
 实例 monoidalCategory
-  签名: : MonoidalCategory (HomologicalComplex C c)
+  签名: : 幺半群范畴 (同调复形 C c)
   定义体: Monoidal.induced _ (Monoidal.inducingFunctorData C c)
 
 Depends on / 依赖: Monoidal, Monoidal.induced, Monoidal.inducingFunctorData, induced, inducingFunctorData

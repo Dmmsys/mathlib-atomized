@@ -506,7 +506,7 @@ definition IsLimit.mk
     uniq s m (w WalkingCospan.left) (w WalkingCospan.right)
 
 中文:
-定义 IsLimit.mk
+定义 是极限.mk
   签名: {W : C} {fst : W ⟶ X} {snd : W ⟶ Y} (eq : fst ≫ f = snd ≫ g)
   定义体: isLimitAux _ lift fac_left fac_right fun s m w =>
     uniq s m (w WalkingCospan.left) (w WalkingCospan.right)
@@ -531,8 +531,8 @@ theorem IsLimit.hom_ext
   proof: ht.hom_ext equalizer_ext _ h₀ h₁
 
 中文:
-定理 IsLimit.hom_ext
-  结论: {t : PullbackCone f g} (ht : IsLimit t) {W : C} {k l : W ⟶ t.pt}
+定理 是极限.hom_ext
+  结论: {t : PullbackCone f g} (ht : 是极限 t) {W : C} {k l : W ⟶ t.pt}
   证明: ht.hom_ext equalizer_ext _ h₀ h₁
 -/
 theorem IsLimit.hom_ext {t : PullbackCone f g} (ht : IsLimit t) {W : C} {k l : W ⟶ t.pt}
@@ -550,8 +550,8 @@ definition IsLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsLimit.lift
-  签名: {t : PullbackCone f g} (ht : IsLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+定义 是极限.lift
+  签名: {t : PullbackCone f g} (ht : 是极限 t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   定义体: ht.lift PullbackCone.mk _ _ w
 
 @[reassoc (attr := simp)]
@@ -572,8 +572,8 @@ lemma IsLimit.lift_fst
 @[reassoc (attr := simp)]
 
 中文:
-引理 IsLimit.lift_fst
-  结论: {t : PullbackCone f g} (ht : IsLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+引理 是极限.lift_fst
+  结论: {t : PullbackCone f g} (ht : 是极限 t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   证明: ht.fac _ _
 
 @[reassoc (attr := simp)]
@@ -593,8 +593,8 @@ lemma IsLimit.lift_snd
   proof: ht.fac _ _
 
 中文:
-引理 IsLimit.lift_snd
-  结论: {t : PullbackCone f g} (ht : IsLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+引理 是极限.lift_snd
+  结论: {t : PullbackCone f g} (ht : 是极限 t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   证明: ht.fac _ _
 
 Depends on / 依赖: ht.fac
@@ -611,8 +611,8 @@ definition IsLimit.lift'
   body: ⟨IsLimit.lift ht h k w, by simp⟩
 
 中文:
-定义 IsLimit.lift'
-  签名: {t : PullbackCone f g} (ht : IsLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+定义 是极限.lift'
+  签名: {t : PullbackCone f g} (ht : 是极限 t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   定义体: ⟨IsLimit.lift ht h k w, by simp⟩
 
 Depends on / 依赖: IsLimit, IsLimit.lift
@@ -631,7 +631,7 @@ definition mkSelfIsLimit
 
 中文:
 定义 mkSelfIsLimit
-  签名: {t : PullbackCone f g} (ht : IsLimit t)
+  签名: {t : PullbackCone f g} (ht : 是极限 t)
   定义体: IsLimit.ofIsoLimit ht (eta t)
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, hX.prop_diag_obj, hX.toColimitPresentation, ofIsoLimit, of_colimitPresentation, prop_diag_obj, toColimitPresentation
@@ -734,7 +734,7 @@ definition flipIsLimit
 
 中文:
 定义 flipIsLimit
-  签名: (ht : IsLimit t)
+  签名: (ht : 是极限 t)
   定义体: IsLimit.mk _ (fun s => ht.lift s.flip) (by simp) (by simp) (fun s m h₁ h₂ => by
     apply IsLimit.hom_ext ht <;> simp [h₁, h₂])
 
@@ -754,7 +754,7 @@ definition isLimitOfFlip
 
 中文:
 定义 isLimitOfFlip
-  签名: (ht : IsLimit t.flip)
+  签名: (ht : 是极限 t.flip)
   定义体: IsLimit.ofIsoLimit (flipIsLimit ht) t.flipFlipIso
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, flipFlipIso, flipIsLimit, ofIsoLimit, t.flipFlipIso
@@ -784,7 +784,7 @@ definition Cone.ofPullbackCone
   π := t.π ≫ (diagramIsoCospan F).inv
 
 中文:
-定义 Cone.ofPullbackCone
+定义 锥.ofPullbackCone
   签名: {F : WalkingCospan ⥤ C} (t : PullbackCone (F.map inl) (F.map inr))
   定义体: t.pt
   π := t.π ≫ (diagramIsoCospan F).inv
@@ -810,7 +810,7 @@ definition PullbackCone.ofCone
 
 中文:
 定义 PullbackCone.ofCone
-  签名: {F : WalkingCospan ⥤ C} (t : Cone F)
+  签名: {F : WalkingCospan ⥤ C} (t : 锥 F)
   定义体: t.pt
   π := t.π ≫ (diagramIsoCospan F).hom
 
@@ -837,7 +837,7 @@ definition PullbackCone.isoMk
 
 中文:
 定义 PullbackCone.isoMk
-  签名: {F : WalkingCospan ⥤ C} (t : Cone F)
+  签名: {F : WalkingCospan ⥤ C} (t : 锥 F)
   定义体: Cone.ext (Iso.refl _) by
     rintro (_ | (_ | _)) <;> simp
 
@@ -1264,8 +1264,8 @@ theorem IsColimit.hom_ext
   proof: ht.hom_ext coequalizer_ext _ h₀ h₁
 
 中文:
-定理 IsColimit.hom_ext
-  结论: {t : PushoutCocone f g} (ht : IsColimit t) {W : C} {k l : t.pt ⟶ W}
+定理 是余极限.hom_ext
+  结论: {t : PushoutCocone f g} (ht : 是余极限 t) {W : C} {k l : t.pt ⟶ W}
   证明: ht.hom_ext coequalizer_ext _ h₀ h₁
 -/
 theorem IsColimit.hom_ext {t : PushoutCocone f g} (ht : IsColimit t) {W : C} {k l : t.pt ⟶ W}
@@ -1281,8 +1281,8 @@ definition IsColimit.desc
   body: ht.desc (PushoutCocone.mk _ _ w)
 
 中文:
-定义 IsColimit.desc
-  签名: {t : PushoutCocone f g} (ht : IsColimit t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
+定义 是余极限.desc
+  签名: {t : PushoutCocone f g} (ht : 是余极限 t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
   定义体: ht.desc (PushoutCocone.mk _ _ w)
 -/
 def IsColimit.desc {t : PushoutCocone f g} (ht : IsColimit t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
@@ -1300,8 +1300,8 @@ lemma IsColimit.inl_desc
   proof: ht.fac _ _
 
 中文:
-引理 IsColimit.inl_desc
-  结论: {t : PushoutCocone f g} (ht : IsColimit t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
+引理 是余极限.inl_desc
+  结论: {t : PushoutCocone f g} (ht : 是余极限 t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
   证明: ht.fac _ _
 
 Depends on / 依赖: ht.fac
@@ -1321,8 +1321,8 @@ lemma IsColimit.inr_desc
   proof: ht.fac _ _
 
 中文:
-引理 IsColimit.inr_desc
-  结论: {t : PushoutCocone f g} (ht : IsColimit t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
+引理 是余极限.inr_desc
+  结论: {t : PushoutCocone f g} (ht : 是余极限 t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
   证明: ht.fac _ _
 
 Depends on / 依赖: ht.fac
@@ -1340,8 +1340,8 @@ definition IsColimit.desc'
   body: ⟨IsColimit.desc ht h k w, by simp⟩
 
 中文:
-定义 IsColimit.desc'
-  签名: {t : PushoutCocone f g} (ht : IsColimit t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
+定义 是余极限.desc'
+  签名: {t : PushoutCocone f g} (ht : 是余极限 t) {W : C} (h : Y ⟶ W) (k : Z ⟶ W)
   定义体: ⟨IsColimit.desc ht h k w, by simp⟩
 
 Depends on / 依赖: IsColimit, IsColimit.desc
@@ -1361,7 +1361,7 @@ definition IsColimit.mk
     uniq s m (w WalkingCospan.left) (w WalkingCospan.right)
 
 中文:
-定义 IsColimit.mk
+定义 是余极限.mk
   签名: {W : C} {inl : Y ⟶ W} {inr : Z ⟶ W} (eq : f ≫ inl = g ≫ inr)
   定义体: isColimitAux _ desc fac_left fac_right fun s m w =>
     uniq s m (w WalkingCospan.left) (w WalkingCospan.right)
@@ -1387,7 +1387,7 @@ definition mkSelfIsColimit
 
 中文:
 定义 mkSelfIsColimit
-  签名: {t : PushoutCocone f g} (ht : IsColimit t)
+  签名: {t : PushoutCocone f g} (ht : 是余极限 t)
   定义体: IsColimit.ofIsoColimit ht (eta t)
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, ofIsoColimit
@@ -1491,7 +1491,7 @@ definition flipIsColimit
 
 中文:
 定义 flipIsColimit
-  签名: (ht : IsColimit t)
+  签名: (ht : 是余极限 t)
   定义体: IsColimit.mk _ (fun s => ht.desc s.flip) (by simp) (by simp) (fun s m h₁ h₂ => by
     apply IsColimit.hom_ext ht <;> simp [h₁, h₂])
 
@@ -1511,7 +1511,7 @@ definition isColimitOfFlip
 
 中文:
 定义 isColimitOfFlip
-  签名: (ht : IsColimit t.flip)
+  签名: (ht : 是余极限 t.flip)
   定义体: IsColimit.ofIsoColimit (flipIsColimit ht) t.flipFlipIso
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, flipFlipIso, flipIsColimit, ofIsoColimit, t.flipFlipIso
@@ -1541,7 +1541,7 @@ definition Cocone.ofPushoutCocone
   ι := (diagramIsoSpan F).hom ≫ t.ι
 
 中文:
-定义 Cocone.ofPushoutCocone
+定义 余锥.ofPushoutCocone
   签名: {F : WalkingSpan ⥤ C} (t : PushoutCocone (F.map fst) (F.map snd))
   定义体: t.pt
   ι := (diagramIsoSpan F).hom ≫ t.ι
@@ -1566,7 +1566,7 @@ definition PushoutCocone.ofCocone
 
 中文:
 定义 PushoutCocone.ofCocone
-  签名: {F : WalkingSpan ⥤ C} (t : Cocone F)
+  签名: {F : WalkingSpan ⥤ C} (t : 余锥 F)
   定义体: t.pt
   ι := (diagramIsoSpan F).inv ≫ t.ι
 
@@ -1593,7 +1593,7 @@ definition PushoutCocone.isoMk
 
 中文:
 定义 PushoutCocone.isoMk
-  签名: {F : WalkingSpan ⥤ C} (t : Cocone F)
+  签名: {F : WalkingSpan ⥤ C} (t : 余锥 F)
   定义体: Cocone.ext (Iso.refl _) by
     rintro (_ | (_ | _)) <;> simp
 
@@ -1624,7 +1624,7 @@ definition cone
 
 中文:
 定义 cone
-  签名: (s : CommSq f g h i)
+  签名: (s : 交换Sq f g h i)
   定义体: PullbackCone.mk _ _ s.w
 
 Depends on / 依赖: PullbackCone, PullbackCone.mk
@@ -1644,7 +1644,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: (s : CommSq f g h i)
+  签名: (s : 交换Sq f g h i)
   定义体: PushoutCocone.mk _ _ s.w
 
 @[simp]
@@ -1668,7 +1668,7 @@ theorem cone_fst
 
 中文:
 定理 cone_fst
-  条件: (s : CommSq f g h i)
+  条件: (s : 交换Sq f g h i)
   结论: s.cone.fst = f
   证明: rfl
 
@@ -1691,7 +1691,7 @@ theorem cone_snd
 
 中文:
 定理 cone_snd
-  条件: (s : CommSq f g h i)
+  条件: (s : 交换Sq f g h i)
   结论: s.cone.snd = g
   证明: rfl
 
@@ -1714,7 +1714,7 @@ theorem cocone_inl
 
 中文:
 定理 cocone_inl
-  条件: (s : CommSq f g h i)
+  条件: (s : 交换Sq f g h i)
   结论: s.cocone.inl = h
   证明: rfl
 
@@ -1735,7 +1735,7 @@ theorem cocone_inr
 
 中文:
 定理 cocone_inr
-  条件: (s : CommSq f g h i)
+  条件: (s : 交换Sq f g h i)
   结论: s.cocone.inr = i
   证明: rfl
 -/

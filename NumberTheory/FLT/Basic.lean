@@ -58,7 +58,7 @@ definition FermatLastTheoremWith
 
 中文:
 定义 FermatLastTheoremWith
-  签名: (R : 类型) [Semiring R] (n : 自然数)
+  签名: (R : 类型) [半环 R] (n : 自然数)
   定义体: forall a b c : R, a != 0 -> b != 0 -> c != 0 -> a ^ n + b ^ n != c ^ n
 -/
 def FermatLastTheoremWith (R : Type*) [Semiring R] (n : Nat) : Prop :=
@@ -339,7 +339,7 @@ lemma fermatLastTheoremFor_iff_rat
 中文:
 引理 fermatLastTheoremFor_iff_rat
   条件: {n : 自然数}
-  结论: FermatLastTheoremFor n ↔ FermatLastTheoremWith Rat n
+  结论: FermatLastTheoremFor n ↔ FermatLastTheoremWith 有理数 n
   证明: (fermatLastTheoremWith_nat_int_rat_tfae n).out 0 2
 
 Depends on / 依赖: fermatLastTheoremWith_nat_int_rat_tfae
@@ -358,7 +358,7 @@ definition FermatLastTheoremWith'
 
 中文:
 定义 FermatLastTheoremWith'
-  签名: (R : 类型) [CommSemiring R] (n : 自然数)
+  签名: (R : 类型) [交换半环 R] (n : 自然数)
   定义体: forall a b c : R, a != 0 -> b != 0 -> c != 0 -> a ^ n + b ^ n = c ^ n ->
     exists d a' b' c', (a = a' * d ∧ b = b' * d ∧ c = c' * d) ∧ (IsUnit a' ∧ IsUnit b' ∧ IsUnit c')
 
@@ -378,7 +378,7 @@ lemma FermatLastTheoremWith.fermatLastTheoremWith'
 
 中文:
 引理 FermatLastTheoremWith.fermatLastTheoremWith'
-  结论: {R : 类型} [CommSemiring R] {n : 自然数}
+  结论: {R : 类型} [交换半环 R] {n : 自然数}
   证明: fun a b c _ _ _ _ => by exfalso; apply h a b c <;> assumption
 -/
 lemma FermatLastTheoremWith.fermatLastTheoremWith' {R : Type*} [CommSemiring R] {n : Nat}
@@ -398,7 +398,7 @@ lemma fermatLastTheoremWith'_of_semifield
 
 中文:
 引理 fermatLastTheoremWith'_of_semifield
-  条件: (𝕜 : 类型) [Semifield 𝕜] (n : 自然数)
+  条件: (𝕜 : 类型) [半域 𝕜] (n : 自然数)
   证明: fun a b c ha hb hc _ =>
   ⟨1, a, b, c,
     ⟨(mul_one a).symm, (mul_one b).symm, (mul_one c).symm⟩,
@@ -424,7 +424,7 @@ exact hn _ _ _ ua ub uc mul_right_cancel₀ (pow_ne_zero _ (right_ne_zero_of_mul
 
 中文:
 引理 FermatLastTheoremWith'.fermatLastTheoremWith
-  结论: {R : 类型} [CommSemiring R] [IsDomain R]
+  结论: {R : 类型} [交换半环 R] [是整环 R]
   证明: by
   intro a b c ha hb hc heq
   rcases h a b c ha hb hc heq with ⟨d, a', b', c', ⟨rfl, rfl, rfl⟩, ⟨ua, ub, uc⟩⟩
@@ -450,7 +450,7 @@ lemma fermatLastTheoremWith'_iff_fermatLastTheoremWith
 
 中文:
 引理 fermatLastTheoremWith'_iff_fermatLastTheoremWith
-  结论: {R : 类型} [CommSemiring R] [IsDomain R]
+  结论: {R : 类型} [交换半环 R] [是整环 R]
   证明: Iff.intro (fun h => h.fermatLastTheoremWith hn) (fun h => h.fermatLastTheoremWith')
 -/
 lemma fermatLastTheoremWith'_iff_fermatLastTheoremWith {R : Type*} [CommSemiring R] [IsDomain R]
@@ -526,7 +526,7 @@ lemma fermatLastTheoremWith_of_fermatLastTheoremWith_coprime
 
 中文:
 引理 fermatLastTheoremWith_of_fermatLastTheoremWith_coprime
-  结论: {n : 自然数} {R : 类型} [CommSemiring R]
+  结论: {n : 自然数} {R : 类型} [交换半环 R]
   证明: by
   intro a b c ha hb hc habc
   let s : Finset R := {a, b, c}; let d := s.gcd id
@@ -571,7 +571,7 @@ lemma dvd_c_of_prime_of_dvd_a_of_dvd_b_of_FLT
 
 中文:
 引理 dvd_c_of_prime_of_dvd_a_of_dvd_b_of_FLT
-  结论: {n : 自然数} {p : 整数} (hp : Prime p) {a b c : 整数}
+  结论: {n : 自然数} {p : 整数} (hp : 素 p) {a b c : 整数}
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp at HF
@@ -605,7 +605,7 @@ refine isCoprime_of_prime_dvd ?_ (fun p hp hpa hpb => hp.not_dvd_one ?_)
 
 中文:
 引理 isCoprime_of_gcd_eq_one_of_FLT
-  结论: {n : 自然数} {a b c : 整数} (Hgcd : Finset.gcd {a, b, c} id = 1)
+  结论: {n : 自然数} {a b c : 整数} (Hgcd : 有限集.最大公约数 {a, b, c} id = 1)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp only [pow_zero, Int.reduceAdd, OfNat.ofNat_ne_zero] at HF

@@ -48,7 +48,7 @@ abbreviation LSeries.logMul
 
 中文:
 缩写 LSeries.logMul
-  签名: (f : 自然数 -> Complex) (n : 自然数)
+  签名: (f : 自然数 -> 复形) (n : 自然数)
   定义体: log n * f n
 -/
 noncomputable abbrev LSeries.logMul (f : Nat -> Complex) (n : Nat) : Complex := log n * f n
@@ -69,7 +69,7 @@ lemma LSeries.hasDerivAt_term
 
 中文:
 引理 LSeries.hasDerivAt_term
-  条件: (f : 自然数 -> Complex) (n : 自然数) (s : Complex)
+  条件: (f : 自然数 -> 复形) (n : 自然数) (s : 复形)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp [hasDerivAt_const]
@@ -104,7 +104,7 @@ lemma LSeries.LSeriesSummable_logMul_and_hasDerivAt
 
 中文:
 引理 LSeries.LSeriesSummable_logMul_and_hasDerivAt
-  结论: {f : 自然数 -> Complex} {s : Complex}
+  结论: {f : 自然数 -> 复形} {s : 复形}
   证明: by
   -- The L-series of `f` is summable at some real `x < re s`.
   obtain ⟨x, hxs, hf⟩ := LSeriesSummable_lt_re_of_abscissaOfAbsConv_lt_re h
@@ -143,7 +143,7 @@ lemma LSeries_hasDerivAt
 
 中文:
 引理 LSeries_hasDerivAt
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : abscissaOfAbsConv f < s.re)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : abscissaOfAbsConv f < s.re)
   证明: (LSeriesSummable_logMul_and_hasDerivAt h).2
 
 Depends on / 依赖: LSeriesSummable_logMul_and_hasDerivAt
@@ -162,7 +162,7 @@ lemma LSeries_deriv
 
 中文:
 引理 LSeries_deriv
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : abscissaOfAbsConv f < s.re)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : abscissaOfAbsConv f < s.re)
   证明: (LSeries_hasDerivAt h).deriv
 
 Depends on / 依赖: LSeries_hasDerivAt
@@ -181,7 +181,7 @@ lemma LSeries_deriv_eqOn
 
 中文:
 引理 LSeries_deriv_eqOn
-  条件: {f : 自然数 -> Complex}
+  条件: {f : 自然数 -> 复形}
   证明: deriv_eqOn (isOpen_re_gt_EReal _) fun _ hs => (LSeries_hasDerivAt hs).hasDerivWithinAt
 
 Depends on / 依赖: LSeries_hasDerivAt, deriv_eqOn, hasDerivWithinAt, isOpen_re_gt_EReal
@@ -200,7 +200,7 @@ lemma LSeriesSummable_logMul_of_lt_re
 
 中文:
 引理 LSeriesSummable_logMul_of_lt_re
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : abscissaOfAbsConv f < s.re)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : abscissaOfAbsConv f < s.re)
   证明: (LSeriesSummable_logMul_and_hasDerivAt h).1
 
 Depends on / 依赖: LSeriesSummable_logMul_and_hasDerivAt
@@ -226,7 +226,7 @@ lemma LSeries.abscissaOfAbsConv_logMul
 
 中文:
 引理 LSeries.abscissaOfAbsConv_logMul
-  条件: {f : 自然数 -> Complex}
+  条件: {f : 自然数 -> 复形}
   证明: by
   apply le_antisymm <;> refine abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable' fun s hs => ?_
 · exact LSeriesSummable_logMul_of_lt_re by simp [hs]
@@ -268,7 +268,7 @@ lemma LSeries.absicssaOfAbsConv_logPowMul
 
 中文:
 引理 LSeries.absicssaOfAbsConv_logPowMul
-  条件: {f : 自然数 -> Complex} {m : 自然数}
+  条件: {f : 自然数 -> 复形} {m : 自然数}
   证明: by
   induction m with
   | zero => simp
@@ -301,7 +301,7 @@ lemma LSeries_iteratedDeriv
 
 中文:
 引理 LSeries_iteratedDeriv
-  条件: {f : 自然数 -> Complex} (m : 自然数) {s : Complex} (h : abscissaOfAbsConv f < s.re)
+  条件: {f : 自然数 -> 复形} (m : 自然数) {s : 复形} (h : abscissaOfAbsConv f < s.re)
   证明: by
   induction m generalizing s with
   | zero => simp
@@ -340,7 +340,7 @@ lemma LSeries_differentiableOn
 
 中文:
 引理 LSeries_differentiableOn
-  条件: (f : 自然数 -> Complex)
+  条件: (f : 自然数 -> 复形)
   证明: fun _ hz => (LSeries_hasDerivAt hz).differentiableAt.differentiableWithinAt
 
 Depends on / 依赖: LSeries_hasDerivAt, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt
@@ -359,7 +359,7 @@ lemma LSeries_analyticOnNhd
 
 中文:
 引理 LSeries_analyticOnNhd
-  条件: (f : 自然数 -> Complex)
+  条件: (f : 自然数 -> 复形)
   证明: (LSeries_differentiableOn f).analyticOnNhd isOpen_re_gt_EReal _
 
 Depends on / 依赖: LSeries_differentiableOn, analyticOnNhd, isOpen_re_gt_EReal
@@ -378,7 +378,7 @@ lemma LSeries_analyticOn
 
 中文:
 引理 LSeries_analyticOn
-  条件: (f : 自然数 -> Complex)
+  条件: (f : 自然数 -> 复形)
   证明: (LSeries_analyticOnNhd f).analyticOn
 
 Depends on / 依赖: LSeries_analyticOnNhd, analyticOn

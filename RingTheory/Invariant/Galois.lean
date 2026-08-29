@@ -39,8 +39,8 @@ definition IsIntegralClosure.MulSemiringAction
   body: MulSemiringAction.compHom B (galRestrict A K L B).toMonoidHom
 
 中文:
-定义 IsIntegralClosure.MulSemiringAction
-  签名: [Algebra.IsAlgebraic K L]
+定义 是整闭包.MulSemiring作用
+  签名: [代数.是代数 K L]
   定义体: MulSemiringAction.compHom B (galRestrict A K L B).toMonoidHom
 
 Depends on / 依赖: MulSemiringAction, MulSemiringAction.compHom, compHom, galRestrict, toMonoidHom
@@ -63,7 +63,7 @@ instance [Algebra.IsAlgebraic
     exact Or.inl (algebraMap_galRestrictHom_apply A K L B g b).symm⟩
 
 中文:
-实例 [Algebra.IsAlgebraic
+实例 [代数.是代数
   签名: K L] : let
   定义体: IsIntegralClosure.MulSemiringAction A K L B
     SMulDistribClass Gal(L/K) B L :=
@@ -95,8 +95,8 @@ theorem Algebra.isInvariant_of_isGalois
   replace hb : algebraMap B L b in IntermediateField.fixedField (⊤ : S
 
 中文:
-定理 Algebra.isInvariant_of_isGalois
-  条件: [FiniteDimensional K L] [h : IsGalois K L]
+定理 代数.isInvariant_of_isGalois
+  条件: [有限维 K L] [h : 是Galois K L]
   证明: IsIntegralClosure.MulSemiringAction A K L B
     Algebra.IsInvariant A B Gal(L/K) := by
   replace h := ((IsGalois.tfae (F := K) (E := L)).out 0 1).mp h
@@ -132,8 +132,8 @@ theorem Algebra.isInvariant_of_isGalois'
   proof: ⟨fun b h => (isInvariant_of_isGalois A K L B).1 b (fun g => h (galRestrict A K L B g))⟩
 
 中文:
-定理 Algebra.isInvariant_of_isGalois'
-  条件: [FiniteDimensional K L] [IsGalois K L]
+定理 代数.isInvariant_of_isGalois'
+  条件: [有限维 K L] [是Galois K L]
   证明: ⟨fun b h => (isInvariant_of_isGalois A K L B).1 b (fun g => h (galRestrict A K L B g))⟩
 
 Depends on / 依赖: galRestrict, isInvariant_of_isGalois
@@ -174,7 +174,7 @@ lemma normal
 
 中文:
 引理 normal
-  结论: Normal K L
+  结论: 正规 K L
   证明: by
   have := Algebra.IsInvariant.isIntegral A B G
   have := isAlgebraic_of_isFractionRing (A ⧸ P) (B ⧸ Q) K L
@@ -237,7 +237,7 @@ lemma finite_of_isInvariant
 
 中文:
 引理 finite_of_isInvariant
-  条件: [SMulCommClass G A B] [Algebra.IsSeparable K L]
+  条件: [标量交换类 G A B] [代数.是可分 K L]
   证明: by
   have : IsGalois K L := { __ := normal G P Q K L }
   have := Finite.of_surjective _ (IsFractionRing.stabilizerHom_surjective G P Q K L)
@@ -264,8 +264,8 @@ lemma Ideal.Quotient.normal
   proof: IsFractionRing.normal G P Q (A ⧸ P) (B ⧸ Q)
 
 中文:
-引理 Ideal.Quotient.normal
-  条件: [P.IsMaximal] [Q.IsMaximal]
+引理 理想.商.normal
+  条件: [P.是极大] [Q.是极大]
   证明: IsFractionRing.normal G P Q (A ⧸ P) (B ⧸ Q)
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.normal, normal
@@ -285,8 +285,8 @@ lemma Ideal.Quotient.finite_of_isInvariant
   proof: IsFractionRing.finite_of_isInvariant G P Q (A ⧸ P) (B ⧸ Q)
 
 中文:
-引理 Ideal.Quotient.finite_of_isInvariant
-  结论: [P.IsMaximal] [Q.IsMaximal]
+引理 理想.商.finite_of_isInvariant
+  结论: [P.是极大] [Q.是极大]
   证明: IsFractionRing.finite_of_isInvariant G P Q (A ⧸ P) (B ⧸ Q)
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.finite_of_isInvariant, finite_of_isInvariant

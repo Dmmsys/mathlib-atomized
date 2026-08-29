@@ -83,7 +83,7 @@ theorem mem_prod_iff
 
 中文:
 定理 mem_prod_iff
-  条件: {s : Set (α × β)} {f : Filter α} {g : Filter β}
+  条件: {s : 集合 (α × β)} {f : 滤子 α} {g : 滤子 β}
   证明: by
   constructor
   · rintro ⟨t₁, ⟨s₁, hs₁, hts₁⟩, t₂, ⟨s₂, hs₂, hts₂⟩, rfl⟩
@@ -118,7 +118,7 @@ theorem compl_diagonal_mem_prod
 
 中文:
 定理 compl_diagonal_mem_prod
-  条件: {l₁ l₂ : Filter α}
+  条件: {l₁ l₂ : 滤子 α}
   结论: (diagonal α)ᶜ in l₁ ×ˢ l₂ ↔ Disjoint l₁ l₂
   证明: by
   simp only [mem_prod_iff, Filter.disjoint_iff, prod_subset_compl_diagonal_iff_disjoint]
@@ -183,7 +183,7 @@ theorem mem_prod_principal
 
 中文:
 定理 mem_prod_principal
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: by
   rw [← @exists_mem_subset_iff _ f]; rw [mem_prod_iff]
   refine exists_congr fun u => Iff.rfl.and ⟨?_, fun h => ⟨t, mem_principal_self t, ?_⟩⟩
@@ -215,7 +215,7 @@ theorem mem_prod_top
 
 中文:
 定理 mem_prod_top
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: by
   rw [← principal_univ]; rw [mem_prod_principal]
   simp only [mem_univ, forall_true_left]
@@ -239,7 +239,7 @@ theorem eventually_prod_principal_iff
 
 中文:
 定理 eventually_prod_principal_iff
-  条件: {p : α × β -> 命题} {s : Set β}
+  条件: {p : α × β -> 命题} {s : 集合 β}
   证明: by
   rw [eventually_iff]; rw [eventually_iff]; rw [mem_prod_principal]
   simp only [mem_ofPred_eq]
@@ -262,7 +262,7 @@ theorem comap_prod
 
 中文:
 定理 comap_prod
-  条件: (f : α -> β × γ) (b : Filter β) (c : Filter γ)
+  条件: (f : α -> β × γ) (b : 滤子 β) (c : 滤子 γ)
   证明: by
   rw [prod_eq_inf]; rw [comap_inf]; rw [Filter.comap_comap]; rw [Filter.comap_comap]
 
@@ -283,7 +283,7 @@ theorem comap_prodMap_prod
 
 中文:
 定理 comap_prodMap_prod
-  条件: (f : α -> β) (g : γ -> δ) (lb : Filter β) (ld : Filter δ)
+  条件: (f : α -> β) (g : γ -> δ) (lb : 滤子 β) (ld : 滤子 δ)
   证明: by
   simp [prod_eq_inf, comap_comap, Function.comp_def]
 
@@ -304,7 +304,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: f ×ˢ (⊤ : Filter β) = f.comap Prod.fst
+  结论: f ×ˢ (⊤ : 滤子 β) = f.comap 积类型.fst
   证明: by
   rw [prod_eq_inf]; rw [comap_top]; rw [inf_top_eq]
 
@@ -324,7 +324,7 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  结论: (⊤ : Filter α) ×ˢ g = g.comap Prod.snd
+  结论: (⊤ : 滤子 α) ×ˢ g = g.comap 积类型.snd
   证明: by
   rw [prod_eq_inf]; rw [comap_top]; rw [top_inf_eq]
 
@@ -345,7 +345,7 @@ theorem sup_prod
 
 中文:
 定理 sup_prod
-  条件: (f₁ f₂ : Filter α) (g : Filter β)
+  条件: (f₁ f₂ : 滤子 α) (g : 滤子 β)
   结论: (f₁ ⊔ f₂) ×ˢ g = (f₁ ×ˢ g) ⊔ (f₂ ×ˢ g)
   证明: by
   simp only [prod_eq_inf, comap_sup, inf_sup_right]
@@ -367,7 +367,7 @@ theorem prod_sup
 
 中文:
 定理 prod_sup
-  条件: (f : Filter α) (g₁ g₂ : Filter β)
+  条件: (f : 滤子 α) (g₁ g₂ : 滤子 β)
   结论: f ×ˢ (g₁ ⊔ g₂) = (f ×ˢ g₁) ⊔ (f ×ˢ g₂)
   证明: by
   simp only [prod_eq_inf, comap_sup, inf_sup_left]
@@ -411,7 +411,7 @@ theorem tendsto_fst
 
 中文:
 定理 tendsto_fst
-  结论: Tendsto Prod.fst (f ×ˢ g) f
+  结论: 收敛 积类型.fst (f ×ˢ g) f
   证明: tendsto_inf_left tendsto_comap
 
 Depends on / 依赖: tendsto_comap, tendsto_inf_left
@@ -429,7 +429,7 @@ theorem tendsto_snd
 
 中文:
 定理 tendsto_snd
-  结论: Tendsto Prod.snd (f ×ˢ g) g
+  结论: 收敛 积类型.snd (f ×ˢ g) g
   证明: tendsto_inf_right tendsto_comap
 
 Depends on / 依赖: tendsto_comap, tendsto_inf_right
@@ -446,8 +446,8 @@ theorem Tendsto.fst
   proof: tendsto_fst.comp H
 
 中文:
-定理 Tendsto.fst
-  条件: {h : Filter γ} {m : α -> β × γ} (H : Tendsto m f (g ×ˢ h))
+定理 收敛.fst
+  条件: {h : 滤子 γ} {m : α -> β × γ} (H : 收敛 m f (g ×ˢ h))
   证明: tendsto_fst.comp H
 
 Depends on / 依赖: tendsto_fst, tendsto_fst.comp
@@ -465,8 +465,8 @@ theorem Tendsto.snd
   proof: tendsto_snd.comp H
 
 中文:
-定理 Tendsto.snd
-  条件: {h : Filter γ} {m : α -> β × γ} (H : Tendsto m f (g ×ˢ h))
+定理 收敛.snd
+  条件: {h : 滤子 γ} {m : α -> β × γ} (H : 收敛 m f (g ×ˢ h))
   证明: tendsto_snd.comp H
 
 Depends on / 依赖: tendsto_snd, tendsto_snd.comp
@@ -484,8 +484,8 @@ theorem Tendsto.prodMk
   proof: tendsto_inf.2 ⟨tendsto_comap_iff.2 h₁, tendsto_comap_iff.2 h₂⟩
 
 中文:
-定理 Tendsto.prodMk
-  结论: {h : Filter γ} {m₁ : α -> β} {m₂ : α -> γ}
+定理 收敛.prodMk
+  结论: {h : 滤子 γ} {m₁ : α -> β} {m₂ : α -> γ}
   证明: tendsto_inf.2 ⟨tendsto_comap_iff.2 h₁, tendsto_comap_iff.2 h₂⟩
 
 Depends on / 依赖: tendsto_comap_iff, tendsto_inf
@@ -504,7 +504,7 @@ theorem tendsto_prod_swap
 
 中文:
 定理 tendsto_prod_swap
-  结论: Tendsto (Prod.swap : α × β -> β × α) (f ×ˢ g) (g ×ˢ f)
+  结论: 收敛 (积类型.swap : α × β -> β × α) (f ×ˢ g) (g ×ˢ f)
   证明: tendsto_snd.prodMk tendsto_fst
 
 Depends on / 依赖: prodMk, tendsto_fst, tendsto_snd, tendsto_snd.prodMk
@@ -522,7 +522,7 @@ theorem Eventually.prod_inl
 
 中文:
 定理 Eventually.prod_inl
-  条件: {la : Filter α} {p : α -> 命题} (h : 对任意ᶠ x in la, p x) (lb : Filter β)
+  条件: {la : 滤子 α} {p : α -> 命题} (h : 对任意ᶠ x in la, p x) (lb : 滤子 β)
   证明: tendsto_fst.eventually h
 
 Depends on / 依赖: eventually, tendsto_fst, tendsto_fst.eventually
@@ -541,7 +541,7 @@ theorem Eventually.prod_inr
 
 中文:
 定理 Eventually.prod_inr
-  条件: {lb : Filter β} {p : β -> 命题} (h : 对任意ᶠ x in lb, p x) (la : Filter α)
+  条件: {lb : 滤子 β} {p : β -> 命题} (h : 对任意ᶠ x in lb, p x) (la : 滤子 α)
   证明: tendsto_snd.eventually h
 
 Depends on / 依赖: eventually, tendsto_snd, tendsto_snd.eventually
@@ -560,7 +560,7 @@ theorem Eventually.prod_mk
 
 中文:
 定理 Eventually.prod_mk
-  结论: {la : Filter α} {pa : α -> 命题} (ha : 对任意ᶠ x in la, pa x) {lb : Filter β}
+  结论: {la : 滤子 α} {pa : α -> 命题} (ha : 对任意ᶠ x in la, pa x) {lb : 滤子 β}
   证明: (ha.prod_inl lb).and (hb.prod_inr la)
 
 Depends on / 依赖: ha.prod_inl, hb.prod_inr, prod_inl, prod_inr
@@ -579,7 +579,7 @@ theorem EventuallyEq.prodMap
 
 中文:
 定理 EventuallyEq.prodMap
-  结论: {δ} {la : Filter α} {fa ga : α -> γ} (ha : fa =ᶠ[la] ga)
+  结论: {δ} {la : 滤子 α} {fa ga : α -> γ} (ha : fa =ᶠ[la] ga)
   证明: (Eventually.prod_mk ha hb).mono fun _ h => Prod.ext h.1 h.2
 
 Depends on / 依赖: Eventually, Eventually.prod_mk, Prod.ext, prod_mk
@@ -599,7 +599,7 @@ theorem EventuallyLE.prodMap
 
 中文:
 定理 EventuallyLE.prodMap
-  结论: {δ} [LE γ] [LE δ] {la : Filter α} {fa ga : α -> γ} (ha : fa <=ᶠ[la] ga)
+  结论: {δ} [LE γ] [LE δ] {la : 滤子 α} {fa ga : α -> γ} (ha : fa <=ᶠ[la] ga)
   证明: Eventually.prod_mk ha hb
 
 Depends on / 依赖: Eventually, Eventually.prod_mk, prod_mk
@@ -621,7 +621,7 @@ theorem Eventually.curry
 
 中文:
 定理 Eventually.curry
-  结论: {la : Filter α} {lb : Filter β} {p : α × β -> 命题}
+  结论: {la : 滤子 α} {lb : 滤子 β} {p : α × β -> 命题}
   证明: by
   rcases eventually_prod_iff.1 h with ⟨pa, ha, pb, hb, h⟩
   exact ha.mono fun a ha => hb.mono fun b hb => h ha hb
@@ -645,7 +645,7 @@ lemma Frequently.uncurry
 
 中文:
 引理 Frequently.uncurry
-  结论: {la : Filter α} {lb : Filter β} {p : α -> β -> 命题}
+  结论: {la : 滤子 α} {lb : 滤子 β} {p : α -> β -> 命题}
   证明: by
   contrapose! h
   exact h.curry
@@ -665,7 +665,7 @@ lemma Frequently.of_curry
 
 中文:
 引理 Frequently.of_curry
-  结论: {la : Filter α} {lb : Filter β} {p : α × β -> 命题}
+  结论: {la : 滤子 α} {lb : 滤子 β} {p : α × β -> 命题}
   证明: h.uncurry
 
 Depends on / 依赖: h.uncurry, uncurry
@@ -730,7 +730,7 @@ theorem Eventually.diag_of_prod_left
 
 中文:
 定理 Eventually.diag_of_prod_left
-  条件: {f : Filter α} {g : Filter γ} {p : (α × α) × γ -> 命题}
+  条件: {f : 滤子 α} {g : 滤子 γ} {p : (α × α) × γ -> 命题}
   证明: by
   intro h
   obtain ⟨t, ht, s, hs, hst⟩ := eventually_prod_iff.1 h
@@ -757,7 +757,7 @@ theorem Eventually.diag_of_prod_right
 
 中文:
 定理 Eventually.diag_of_prod_right
-  条件: {f : Filter α} {g : Filter γ} {p : α × γ × γ -> 命题}
+  条件: {f : 滤子 α} {g : 滤子 γ} {p : α × γ × γ -> 命题}
   证明: by
   intro h
   obtain ⟨t, ht, s, hs, hst⟩ := eventually_prod_iff.1 h
@@ -781,7 +781,7 @@ theorem tendsto_diag
 
 中文:
 定理 tendsto_diag
-  结论: Tendsto Function.diag f (f ×ˢ f)
+  结论: 收敛 函数.diag f (f ×ˢ f)
   证明: tendsto_iff_eventually.mpr fun _ hpr => hpr.diag_of_prod
 
 Depends on / 依赖: diag_of_prod, hpr.diag_of_prod, tendsto_iff_eventually, tendsto_iff_eventually.mpr
@@ -800,7 +800,7 @@ theorem prod_iInf_left
 
 中文:
 定理 prod_iInf_left
-  条件: [Nonempty ι] {f : ι -> Filter α} {g : Filter β}
+  条件: [非空 ι] {f : ι -> 滤子 α} {g : 滤子 β}
   证明: by
   simp only [prod_eq_inf, comap_iInf, iInf_inf]
 
@@ -823,7 +823,7 @@ theorem prod_iInf_right
 
 中文:
 定理 prod_iInf_right
-  条件: [Nonempty ι] {f : Filter α} {g : ι -> Filter β}
+  条件: [非空 ι] {f : 滤子 α} {g : ι -> 滤子 β}
   证明: by
   simp only [prod_eq_inf, comap_iInf, inf_iInf]
 
@@ -846,7 +846,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : Filter β} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : 滤子 β} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
   证明: inf_le_inf (comap_mono hf) (comap_mono hg)
 
 Depends on / 依赖: comap_mono, inf_le_inf
@@ -866,7 +866,7 @@ theorem prod_mono_left
 
 中文:
 定理 prod_mono_left
-  条件: (g : Filter β) {f₁ f₂ : Filter α} (hf : f₁ <= f₂)
+  条件: (g : 滤子 β) {f₁ f₂ : 滤子 α} (hf : f₁ <= f₂)
   结论: f₁ ×ˢ g <= f₂ ×ˢ g
   证明: Filter.prod_mono hf rfl.le
 
@@ -886,7 +886,7 @@ theorem prod_mono_right
 
 中文:
 定理 prod_mono_right
-  条件: (f : Filter α) {g₁ g₂ : Filter β} (hf : g₁ <= g₂)
+  条件: (f : 滤子 α) {g₁ g₂ : 滤子 β} (hf : g₁ <= g₂)
   结论: f ×ˢ g₁ <= f ×ˢ g₂
   证明: Filter.prod_mono rfl.le hf
 
@@ -908,7 +908,7 @@ theorem prod_comap_comap_eq.{u,
 中文:
 定理 prod_comap_comap_eq.{u,
   条件: v, w, x} {α₁
-  结论: 类型u} {α₂ : 类型v} {β₁ : Type w} {β₂ : Type x}
+  结论: 类型u} {α₂ : 类型v} {β₁ : 类型 w} {β₂ : 类型 x}
   证明: by
   simp only [prod_eq_inf, comap_comap, comap_inf, Function.comp_def]
 
@@ -930,7 +930,7 @@ theorem prod_comm'
 
 中文:
 定理 prod_comm'
-  结论: f ×ˢ g = comap Prod.swap (g ×ˢ f)
+  结论: f ×ˢ g = comap 积类型.swap (g ×ˢ f)
   证明: by
   simp only [prod_eq_inf, comap_comap, Function.comp_def, inf_comm, Prod.swap, comap_inf]
 
@@ -950,7 +950,7 @@ theorem prod_comm
 
 中文:
 定理 prod_comm
-  结论: f ×ˢ g = map Prod.swap (g ×ˢ f)
+  结论: f ×ˢ g = map 积类型.swap (g ×ˢ f)
   证明: by
   rw [prod_comm']; rw [← map_swap_eq_comap_swap]
 
@@ -972,7 +972,7 @@ refine exists_congr fun _ => Iff.rfl.and Iff.trans ?_ exists_mem_subset_iff
 
 中文:
 定理 mem_prod_iff_left
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: by
   simp only [mem_prod_iff, prod_subset_iff]
 refine exists_congr fun _ => Iff.rfl.and Iff.trans ?_ exists_mem_subset_iff
@@ -999,7 +999,7 @@ theorem mem_prod_iff_right
 
 中文:
 定理 mem_prod_iff_right
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: by
   rw [prod_comm]; rw [mem_map]; rw [mem_prod_iff_left]; rfl
 
@@ -1028,8 +1028,8 @@ theorem map_fst_prod
 
 中文:
 定理 map_fst_prod
-  条件: (f : Filter α) (g : Filter β) [NeBot g]
-  结论: map Prod.fst (f ×ˢ g) = f
+  条件: (f : 滤子 α) (g : 滤子 β) [NeBot g]
+  结论: map 积类型.fst (f ×ˢ g) = f
   证明: by
   ext s
   simp only [mem_map, mem_prod_iff_left, mem_preimage, eventually_const, ← subset_def,
@@ -1059,8 +1059,8 @@ theorem map_snd_prod
 
 中文:
 定理 map_snd_prod
-  条件: (f : Filter α) (g : Filter β) [NeBot f]
-  结论: map Prod.snd (f ×ˢ g) = g
+  条件: (f : 滤子 α) (g : 滤子 β) [NeBot f]
+  结论: map 积类型.snd (f ×ˢ g) = g
   证明: by
   rw [prod_comm]; rw [map_map]; apply map_fst_prod
 
@@ -1086,7 +1086,7 @@ theorem prod_le_prod
 
 中文:
 定理 prod_le_prod
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : Filter β} [NeBot f₁] [NeBot g₁]
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : 滤子 β} [NeBot f₁] [NeBot g₁]
   证明: ⟨fun h =>
     ⟨map_fst_prod f₁ g₁ ▸ tendsto_fst.mono_left h, map_snd_prod f₁ g₁ ▸ tendsto_snd.mono_left h⟩,
     fun h => prod_mono h.1 h.2⟩
@@ -1116,7 +1116,7 @@ exact ⟨hle.1.antisymm (prod_le_prod.1 h.ge).1, hle.2.antisymm (prod_le_prod.1 
 
 中文:
 定理 prod_inj
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : Filter β} [NeBot f₁] [NeBot g₁]
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : 滤子 β} [NeBot f₁] [NeBot g₁]
   证明: by
   refine ⟨fun h => ?_, fun h => h.1 ▸ h.2 ▸ rfl⟩
   have hle : f₁ <= f₂ ∧ g₁ <= g₂ := prod_le_prod.1 h.le
@@ -1166,7 +1166,7 @@ lemma Eventually.eventually_prod_of_eventually_swap
 
 中文:
 引理 Eventually.eventually_prod_of_eventually_swap
-  结论: {h : Filter γ}
+  结论: {h : 滤子 γ}
   证明: by
   refine eventually_prod_iff.mpr ⟨_, hp, _, hq, fun {x} hx {z} hz => ?_⟩
   rcases (hx.and hz).exists with ⟨y, hpy, hqy⟩
@@ -1193,7 +1193,7 @@ lemma Eventually.trans_prod
 
 中文:
 引理 Eventually.trans_prod
-  结论: {h : Filter γ}
+  结论: {h : 滤子 γ}
   证明: hp.curry.eventually_prod_of_eventually_swap (eventually_swap_iff.mp hq |>.curry) hpqr
 
 Depends on / 依赖: eventually_prod_of_eventually_swap, eventually_swap_iff, eventually_swap_iff.mp, hp.curry.eventually_prod_of_eventually_swap
@@ -1217,7 +1217,7 @@ theorem prod_assoc
 
 中文:
 定理 prod_assoc
-  条件: (f : Filter α) (g : Filter β) (h : Filter γ)
+  条件: (f : 滤子 α) (g : 滤子 β) (h : 滤子 γ)
   证明: by
   simp_rw [← comap_equiv_symm, prod_eq_inf, comap_inf, comap_comap, inf_assoc,
     Function.comp_def, Equiv.prodAssoc_symm_apply]
@@ -1241,7 +1241,7 @@ theorem prod_assoc_symm
 
 中文:
 定理 prod_assoc_symm
-  条件: (f : Filter α) (g : Filter β) (h : Filter γ)
+  条件: (f : 滤子 α) (g : 滤子 β) (h : 滤子 γ)
   证明: by
   simp_rw [map_equiv_symm, prod_eq_inf, comap_inf, comap_comap, inf_assoc,
     Function.comp_def, Equiv.prodAssoc_apply]
@@ -1263,7 +1263,7 @@ theorem tendsto_prodAssoc
 
 中文:
 定理 tendsto_prodAssoc
-  条件: {h : Filter γ}
+  条件: {h : 滤子 γ}
   证明: (prod_assoc f g h).le
 
 Depends on / 依赖: prod_assoc
@@ -1282,7 +1282,7 @@ theorem tendsto_prodAssoc_symm
 
 中文:
 定理 tendsto_prodAssoc_symm
-  条件: {h : Filter γ}
+  条件: {h : 滤子 γ}
   证明: (prod_assoc_symm f g h).le
 
 Depends on / 依赖: prod_assoc_symm
@@ -1302,7 +1302,7 @@ theorem map_swap4_prod
 
 中文:
 定理 map_swap4_prod
-  条件: {h : Filter γ} {k : Filter δ}
+  条件: {h : 滤子 γ} {k : 滤子 δ}
   证明: by
   simp_rw [map_swap4_eq_comap, prod_eq_inf, comap_inf, comap_comap]; ac_rfl
 
@@ -1323,7 +1323,7 @@ theorem tendsto_swap4_prod
 
 中文:
 定理 tendsto_swap4_prod
-  条件: {h : Filter γ} {k : Filter δ}
+  条件: {h : 滤子 γ} {k : 滤子 δ}
   证明: map_swap4_prod.le
 
 Depends on / 依赖: map_swap4_prod, map_swap4_prod.le
@@ -1350,7 +1350,7 @@ mem_of_superset (prod_mem_prod (image_mem_map hs₁) (image_mem_map hs₂))
 中文:
 定理 prod_map_map_eq.{u,
   条件: v, w, x} {α₁
-  结论: 类型u} {α₂ : 类型v} {β₁ : Type w} {β₂ : Type x}
+  结论: 类型u} {α₂ : 类型v} {β₁ : 类型 w} {β₂ : 类型 x}
   证明: le_antisymm
     (fun s hs =>
       let ⟨s₁, hs₁, s₂, hs₂, h⟩ := mem_prod_iff.mp hs
@@ -1401,7 +1401,7 @@ theorem prod_map_left
 
 中文:
 定理 prod_map_left
-  条件: (f : α -> β) (F : Filter α) (G : Filter γ)
+  条件: (f : α -> β) (F : 滤子 α) (G : 滤子 γ)
   证明: by
   rw [← prod_map_map_eq']; rw [map_id]
 
@@ -1422,7 +1422,7 @@ theorem prod_map_right
 
 中文:
 定理 prod_map_right
-  条件: (f : β -> γ) (F : Filter α) (G : Filter β)
+  条件: (f : β -> γ) (F : 滤子 α) (G : 滤子 β)
   证明: by
   rw [← prod_map_map_eq']; rw [map_id]
 
@@ -1443,8 +1443,8 @@ theorem le_prod_map_fst_snd
 
 中文:
 定理 le_prod_map_fst_snd
-  条件: {f : Filter (α × β)}
-  结论: f <= map Prod.fst f ×ˢ map Prod.snd f
+  条件: {f : 滤子 (α × β)}
+  结论: f <= map 积类型.fst f ×ˢ map 积类型.snd f
   证明: le_inf le_comap_map le_comap_map
 
 Depends on / 依赖: le_comap_map, le_inf
@@ -1463,8 +1463,8 @@ theorem Tendsto.prodMap
   exact Filter.prod_mono hf hg
 
 中文:
-定理 Tendsto.prodMap
-  结论: {δ : 类型} {f : α -> γ} {g : β -> δ} {a : Filter α} {b : Filter β}
+定理 收敛.prodMap
+  结论: {δ : 类型} {f : α -> γ} {g : β -> δ} {a : 滤子 α} {b : 滤子 β}
   证明: by
   rw [Tendsto]; rw [Prod.map_def]; rw [← prod_map_map_eq]
   exact Filter.prod_mono hf hg
@@ -1492,7 +1492,7 @@ theorem map_prod
 
 中文:
 定理 map_prod
-  条件: (m : α × β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α × β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: by
   simp only [Filter.ext_iff, mem_map, mem_prod_iff, mem_map_seq_iff, exists_and_left]
   intro s
@@ -1518,7 +1518,7 @@ theorem prod_eq
 
 中文:
 定理 prod_eq
-  结论: f ×ˢ g = (f.map Prod.mk).seq g
+  结论: f ×ˢ g = (f.map 积类型.mk).seq g
   证明: f.map_prod id g
 
 Depends on / 依赖: f.map_prod, map_prod
@@ -1536,7 +1536,7 @@ theorem prod_inf_prod
 
 中文:
 定理 prod_inf_prod
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : Filter β}
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : 滤子 β}
   证明: by
   simp only [prod_eq_inf, comap_inf, inf_comm, inf_assoc, inf_left_comm]
 
@@ -1558,7 +1558,7 @@ theorem inf_prod
 
 中文:
 定理 inf_prod
-  条件: {f₁ f₂ : Filter α}
+  条件: {f₁ f₂ : 滤子 α}
   结论: (f₁ ⊓ f₂) ×ˢ g = (f₁ ×ˢ g) ⊓ (f₂ ×ˢ g)
   证明: by
   rw [prod_inf_prod]; rw [inf_idem]
@@ -1582,7 +1582,7 @@ theorem prod_inf
 
 中文:
 定理 prod_inf
-  条件: {g₁ g₂ : Filter β}
+  条件: {g₁ g₂ : 滤子 β}
   结论: f ×ˢ (g₁ ⊓ g₂) = (f ×ˢ g₁) ⊓ (f ×ˢ g₂)
   证明: by
   rw [prod_inf_prod]; rw [inf_idem]
@@ -1609,7 +1609,7 @@ theorem prod_principal_principal
 
 中文:
 定理 prod_principal_principal
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   结论: 𝓟 s ×ˢ 𝓟 t = 𝓟 (s ×ˢ t)
   证明: by
   simp only [prod_eq_inf, comap_principal, principal_eq_iff_eq, comap_principal, inf_principal]; rfl
@@ -1634,8 +1634,8 @@ theorem pure_prod
 
 中文:
 定理 pure_prod
-  条件: {a : α} {f : Filter β}
-  结论: pure a ×ˢ f = map (Prod.mk a) f
+  条件: {a : α} {f : 滤子 β}
+  结论: pure a ×ˢ f = map (积类型.mk a) f
   证明: by
   rw [prod_eq]; rw [map_pure]; rw [pure_seq_eq_map]
 
@@ -1657,7 +1657,7 @@ theorem map_pure_prod
 
 中文:
 定理 map_pure_prod
-  条件: (f : α -> β -> γ) (a : α) (B : Filter β)
+  条件: (f : α -> β -> γ) (a : α) (B : 滤子 β)
   证明: by
   rw [Filter.pure_prod]; rfl
 
@@ -1746,7 +1746,7 @@ theorem prod_bot
 
 中文:
 定理 prod_bot
-  结论: f ×ˢ (⊥ : Filter β) = ⊥
+  结论: f ×ˢ (⊥ : 滤子 β) = ⊥
   证明: prod_eq_bot.2 Or.inr rfl
 -/
 @[simp] theorem prod_bot : f ×ˢ (⊥ : Filter β) = ⊥ := prod_eq_bot.2 Or.inr rfl
@@ -1761,7 +1761,7 @@ theorem bot_prod
 
 中文:
 定理 bot_prod
-  结论: (⊥ : Filter α) ×ˢ g = ⊥
+  结论: (⊥ : 滤子 α) ×ˢ g = ⊥
   证明: prod_eq_bot.2 Or.inl rfl
 -/
 @[simp] theorem bot_prod : (⊥ : Filter α) ×ˢ g = ⊥ := prod_eq_bot.2 Or.inl rfl
@@ -1796,7 +1796,7 @@ theorem NeBot.prod
   proof: prod_neBot.2 ⟨hf, hg⟩
 
 中文:
-定理 NeBot.prod
+定理 NeBot.乘积
   条件: (hf : NeBot f) (hg : NeBot g)
   结论: NeBot (f ×ˢ g)
   证明: prod_neBot.2 ⟨hf, hg⟩
@@ -1814,7 +1814,7 @@ instance prod.instNeBot
 @[simp]
 
 中文:
-实例 prod.instNeBot
+实例 乘积.instNeBot
   签名: [hf : NeBot f] [hg : NeBot g]
   定义体: hf.prod hg
 
@@ -1836,7 +1836,7 @@ lemma disjoint_prod
 
 中文:
 引理 disjoint_prod
-  条件: {f' : Filter α} {g' : Filter β}
+  条件: {f' : 滤子 α} {g' : 滤子 β}
   证明: by
   simp only [disjoint_iff, prod_inf_prod, prod_eq_bot]
 
@@ -1881,7 +1881,7 @@ theorem tendsto_prod_iff
 
 中文:
 定理 tendsto_prod_iff
-  条件: {f : α × β -> γ} {x : Filter α} {y : Filter β} {z : Filter γ}
+  条件: {f : α × β -> γ} {x : 滤子 α} {y : 滤子 β} {z : 滤子 γ}
   证明: by
   simp only [tendsto_def, mem_prod_iff, prod_sub_preimage_iff]
 
@@ -1902,7 +1902,7 @@ theorem tendsto_prod_iff'
 
 中文:
 定理 tendsto_prod_iff'
-  条件: {g' : Filter γ} {s : α -> β × γ}
+  条件: {g' : 滤子 γ} {s : α -> β × γ}
   证明: by
   simp only [prod_eq_inf, tendsto_inf, tendsto_comap_iff, Function.comp_def]
 
@@ -1922,7 +1922,7 @@ theorem le_prod
 
 中文:
 定理 le_prod
-  条件: {f : Filter (α × β)} {g : Filter α} {g' : Filter β}
+  条件: {f : 滤子 (α × β)} {g : 滤子 α} {g' : 滤子 β}
   证明: tendsto_prod_iff'
 
 Depends on / 依赖: tendsto_prod_iff
@@ -1951,7 +1951,7 @@ theorem coprod_eq_prod_top_sup_top_prod
 
 中文:
 定理 coprod_eq_prod_top_sup_top_prod
-  条件: (f : Filter α) (g : Filter β)
+  条件: (f : 滤子 α) (g : 滤子 β)
   证明: by
   rw [prod_top]; rw [top_prod]
   rfl
@@ -1976,7 +1976,7 @@ theorem mem_coprod_iff
 
 中文:
 定理 mem_coprod_iff
-  条件: {s : Set (α × β)} {f : Filter α} {g : Filter β}
+  条件: {s : 集合 (α × β)} {f : 滤子 α} {g : 滤子 β}
   证明: by
   simp [Filter.coprod]
 
@@ -2003,8 +2003,8 @@ theorem bot_coprod
 
 中文:
 定理 bot_coprod
-  条件: (l : Filter β)
-  结论: (⊥ : Filter α).coprod l = comap Prod.snd l
+  条件: (l : 滤子 β)
+  结论: (⊥ : 滤子 α).coprod l = comap 积类型.snd l
   证明: by
   simp [Filter.coprod]
 
@@ -2028,8 +2028,8 @@ theorem coprod_bot
 
 中文:
 定理 coprod_bot
-  条件: (l : Filter α)
-  结论: l.coprod (⊥ : Filter β) = comap Prod.fst l
+  条件: (l : 滤子 α)
+  结论: l.coprod (⊥ : 滤子 β) = comap 积类型.fst l
   证明: by
   simp [Filter.coprod]
 
@@ -2048,7 +2048,7 @@ theorem bot_coprod_bot
 
 中文:
 定理 bot_coprod_bot
-  结论: (⊥ : Filter α).coprod (⊥ : Filter β) = ⊥
+  结论: (⊥ : 滤子 α).coprod (⊥ : 滤子 β) = ⊥
   证明: by simp
 
 Depends on / 依赖: e.symm
@@ -2068,7 +2068,7 @@ theorem compl_mem_coprod
 
 中文:
 定理 compl_mem_coprod
-  条件: {s : Set (α × β)} {la : Filter α} {lb : Filter β}
+  条件: {s : 集合 (α × β)} {la : 滤子 α} {lb : 滤子 β}
   证明: by
   simp only [Filter.coprod, mem_sup, compl_mem_comap]
 
@@ -2091,7 +2091,7 @@ theorem coprod_mono
 
 中文:
 定理 coprod_mono
-  条件: {f₁ f₂ : Filter α} {g₁ g₂ : Filter β} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
+  条件: {f₁ f₂ : 滤子 α} {g₁ g₂ : 滤子 β} (hf : f₁ <= f₂) (hg : g₁ <= g₂)
   证明: sup_le_sup (comap_mono hf) (comap_mono hg)
 
 Depends on / 依赖: comap_mono, sup_le_sup
@@ -2113,7 +2113,7 @@ theorem coprod_neBot_iff
 
 中文:
 定理 coprod_neBot_iff
-  结论: (f.coprod g).NeBot ↔ f.NeBot ∧ Nonempty β ∨ Nonempty α ∧ g.NeBot
+  结论: (f.coprod g).NeBot ↔ f.NeBot ∧ 非空 β ∨ 非空 α ∧ g.NeBot
   证明: by
   simp [Filter.coprod]
 
@@ -2138,7 +2138,7 @@ theorem coprod_neBot_left
 
 中文:
 定理 coprod_neBot_left
-  条件: [NeBot f] [Nonempty β]
+  条件: [NeBot f] [非空 β]
   结论: (f.coprod g).NeBot
   证明: coprod_neBot_iff.2 (Or.inl ⟨‹_›, ‹_›⟩)
 
@@ -2161,7 +2161,7 @@ theorem coprod_neBot_right
 
 中文:
 定理 coprod_neBot_right
-  条件: [NeBot g] [Nonempty α]
+  条件: [NeBot g] [非空 α]
   结论: (f.coprod g).NeBot
   证明: coprod_neBot_iff.2 (Or.inr ⟨‹_›, ‹_›⟩)
 
@@ -2187,7 +2187,7 @@ theorem coprod_inf_prod_le
 
 中文:
 定理 coprod_inf_prod_le
-  条件: (f₁ f₂ : Filter α) (g₁ g₂ : Filter β)
+  条件: (f₁ f₂ : 滤子 α) (g₁ g₂ : 滤子 β)
   证明: calc
   f₁.coprod g₁ ⊓ f₂ ×ˢ g₂
   _ = (f₁ ×ˢ ⊤ ⊔ ⊤ ×ˢ g₁) ⊓ f₂ ×ˢ g₂ := by rw [coprod_eq_prod_top_sup_top_prod]
@@ -2216,7 +2216,7 @@ theorem principal_coprod_principal
 
 中文:
 定理 principal_coprod_principal
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   rw [Filter.coprod]; rw [comap_principal]; rw [comap_principal]; rw [sup_principal]; rw [Set.prod_eq]; rw [compl_inter]; rw [preimage_compl]; rw [preimage_compl]; rw [compl_compl]; rw [compl_compl]
 
@@ -2245,7 +2245,7 @@ theorem map_prodMap_coprod_le.{u,
 中文:
 定理 map_prodMap_coprod_le.{u,
   条件: v, w, x} {α₁
-  结论: 类型u} {α₂ : 类型v} {β₁ : Type w} {β₂ : Type x}
+  结论: 类型u} {α₂ : 类型v} {β₁ : 类型 w} {β₂ : 类型 x}
   证明: by
   intro s
   simp only [mem_map, mem_coprod_iff]
@@ -2344,8 +2344,8 @@ theorem Tendsto.prodMap_coprod
   proof: map_prodMap_coprod_le.trans (coprod_mono hf hg)
 
 中文:
-定理 Tendsto.prodMap_coprod
-  结论: {δ : 类型} {f : α -> γ} {g : β -> δ} {a : Filter α} {b : Filter β}
+定理 收敛.prodMap_coprod
+  结论: {δ : 类型} {f : α -> γ} {g : β -> δ} {a : 滤子 α} {b : 滤子 β}
   证明: map_prodMap_coprod_le.trans (coprod_mono hf hg)
 
 Depends on / 依赖: coprod_mono, map_prodMap_coprod_le, map_prodMap_coprod_le.trans
@@ -2366,8 +2366,8 @@ lemma Tendsto.coprod_of_prod_top_right
   grind
 
 中文:
-引理 Tendsto.coprod_of_prod_top_right
-  结论: {f : α × β -> γ} {la : Filter α} {lb : Filter β}
+引理 收敛.coprod_of_prod_top_right
+  结论: {f : α × β -> γ} {la : 滤子 α} {lb : 滤子 β}
   证明: by
   simp_all [tendsto_prod_iff, coprod_eq_prod_top_sup_top_prod]
   grind
@@ -2392,8 +2392,8 @@ lemma Tendsto.coprod_of_prod_top_left
   grind
 
 中文:
-引理 Tendsto.coprod_of_prod_top_left
-  结论: {f : α × β -> γ} {la : Filter α} {lb : Filter β}
+引理 收敛.coprod_of_prod_top_left
+  结论: {f : α × β -> γ} {la : 滤子 α} {lb : 滤子 β}
   证明: by
   simp_all [tendsto_prod_iff, coprod_eq_prod_top_sup_top_prod]
   grind

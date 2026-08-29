@@ -138,7 +138,7 @@ lemma zmod_injective
 
 中文:
 引理 zmod_injective
-  结论: Injective (zmod n)
+  结论: 单射 (zmod n)
   证明: by
   simp_rw [Injective, ZMod.intCast_surjective.forall]
   rintro x y h
@@ -186,7 +186,7 @@ definition zmodHom
 
 中文:
 定义 zmodHom
-  签名: : AddChar (ZMod n) (AddChar (ZMod n) Circle) where
+  签名: : 加法特征 (ZMod n) (加法特征 (ZMod n) Circle) where
   定义体: zmod n
   map_zero_eq_one' := by simp
   map_add_eq_mul' := by simp
@@ -247,7 +247,7 @@ definition circleEquivComplex
 
 中文:
 定义 circleEquivComplex
-  签名: [Finite α]
+  签名: [有限 α]
   定义体: toMonoidHomEquiv.symm coeHom.comp ψ.toMonoidHom
   invFun ψ :=
     { toFun := fun a => (⟨ψ a, mem_sphere_zero_iff_norm.2 <| ψ.norm_apply _⟩ : Circle)
@@ -284,8 +284,8 @@ lemma card_eq
 
 中文:
 引理 card_eq
-  条件: [Fintype α]
-  结论: card (AddChar α Complex) = card α
+  条件: [有限类型 α]
+  结论: card (加法特征 α 复形) = card α
   证明: by
   obtain ⟨ι, _, n, hn, ⟨e⟩⟩ := AddCommGroup.equiv_directSum_zmod_of_finite' α
   classical
@@ -317,7 +317,7 @@ definition zmodAddEquiv
 
 中文:
 定义 zmodAddEquiv
-  签名: : ZMod n ≃+ AddChar (ZMod n) Complex
+  签名: : ZMod n ≃+ 加法特征 (ZMod n) 复形
   定义体: by
   refine AddEquiv.ofBijective
     (circleEquivComplex.toAddMonoidHom.comp <| AddChar.toAddMonoidHom zmodHom) ?_
@@ -364,7 +364,7 @@ definition complexBasis
 
 中文:
 定义 complexBasis
-  签名: : Basis (AddChar α Complex) Complex (α -> Complex)
+  签名: : 基 (加法特征 α 复形) 复形 (α -> 复形)
   定义体: basisOfLinearIndependentOfCardEqFinrank (AddChar.linearIndependent _ _) by
     cases nonempty_fintype α; rw [card_eq, Module.finrank_fintype_fun_eq_card]
 
@@ -388,7 +388,7 @@ lemma coe_complexBasis
 
 中文:
 引理 coe_complexBasis
-  结论: ⇑(complexBasis α) = ((⇑) : AddChar α Complex -> α -> Complex)
+  结论: ⇑(complexBasis α) = ((⇑) : 加法特征 α 复形 -> α -> 复形)
   证明: by
   rw [complexBasis]; rw [coe_basisOfLinearIndependentOfCardEqFinrank]
 
@@ -411,7 +411,7 @@ lemma complexBasis_apply
 
 中文:
 引理 complexBasis_apply
-  条件: (ψ : AddChar α Complex)
+  条件: (ψ : 加法特征 α 复形)
   结论: complexBasis α ψ = ψ
   证明: by rw [coe_complexBasis]
 
@@ -437,8 +437,8 @@ lemma exists_apply_ne_zero
   simp only [complex
 
 中文:
-引理 exists_apply_ne_zero
-  结论: (存在 ψ : AddChar α Complex, ψ a != 1) ↔ a != 0
+引理 存在_apply_ne_zero
+  结论: (存在 ψ : 加法特征 α 复形, ψ a != 1) ↔ a != 0
   证明: by
   refine ⟨?_, fun ha => ?_⟩
   · rintro ⟨ψ, hψ⟩ rfl
@@ -475,8 +475,8 @@ lemma forall_apply_eq_zero
   simpa using exists_apply_ne_zero.not
 
 中文:
-引理 forall_apply_eq_zero
-  结论: (对任意 ψ : AddChar α Complex, ψ a = 1) ↔ a = 0
+引理 对任意_apply_eq_zero
+  结论: (对任意 ψ : 加法特征 α 复形, ψ a = 1) ↔ a = 0
   证明: by
   simpa using exists_apply_ne_zero.not
 
@@ -496,7 +496,7 @@ lemma doubleDualEmb_injective
 
 中文:
 引理 doubleDualEmb_injective
-  结论: Injective (doubleDualEmb : α -> AddChar (AddChar α Complex) Complex)
+  结论: 单射 (doubleDualEmb : α -> 加法特征 (加法特征 α 复形) 复形)
   证明: doubleDualEmb.ker_eq_bot_iff.1 eq_bot_iff.2 fun a ha =>
     forall_apply_eq_zero.1 fun ψ => by simpa using! DFunLike.congr_fun ha (Additive.ofMul ψ)
 
@@ -521,7 +521,7 @@ lemma doubleDualEmb_bijective
 
 中文:
 引理 doubleDualEmb_bijective
-  结论: Bijective (doubleDualEmb : α -> AddChar (AddChar α Complex) Complex)
+  结论: 双射 (doubleDualEmb : α -> 加法特征 (加法特征 α 复形) 复形)
   证明: by
   cases nonempty_fintype α
   exact (Fintype.bijective_iff_injective_and_card _).2
@@ -547,7 +547,7 @@ lemma doubleDualEmb_inj
 
 中文:
 引理 doubleDualEmb_inj
-  结论: (doubleDualEmb a : AddChar (AddChar α Complex) Complex) = doubleDualEmb b ↔ a = b
+  结论: (doubleDualEmb a : 加法特征 (加法特征 α 复形) 复形) = doubleDualEmb b ↔ a = b
   证明: doubleDualEmb_injective.eq_iff
 
 Depends on / 依赖: doubleDualEmb_injective, doubleDualEmb_injective.eq_iff, eq_iff
@@ -566,7 +566,7 @@ lemma doubleDualEmb_eq_zero
 
 中文:
 引理 doubleDualEmb_eq_zero
-  结论: (doubleDualEmb a : AddChar (AddChar α Complex) Complex) = 0 ↔ a = 0
+  结论: (doubleDualEmb a : 加法特征 (加法特征 α 复形) 复形) = 0 ↔ a = 0
   证明: by
   rw [← map_zero doubleDualEmb]; rw [doubleDualEmb_inj]
 -/
@@ -583,7 +583,7 @@ lemma doubleDualEmb_ne_zero
 
 中文:
 引理 doubleDualEmb_ne_zero
-  结论: (doubleDualEmb a : AddChar (AddChar α Complex) Complex) != 0 ↔ a != 0
+  结论: (doubleDualEmb a : 加法特征 (加法特征 α 复形) 复形) != 0 ↔ a != 0
   证明: doubleDualEmb_eq_zero.not
 
 Depends on / 依赖: doubleDualEmb_eq_zero, doubleDualEmb_eq_zero.not
@@ -603,7 +603,7 @@ definition doubleDualEquiv
 
 中文:
 定义 doubleDualEquiv
-  签名: : α ≃+ AddChar (AddChar α Complex) Complex
+  签名: : α ≃+ 加法特征 (加法特征 α 复形) 复形
   定义体: .ofBijective _ doubleDualEmb_bijective
 
 @[simp]
@@ -623,7 +623,7 @@ lemma coe_doubleDualEquiv
 
 中文:
 引理 coe_doubleDualEquiv
-  结论: ⇑(doubleDualEquiv : α ≃+ AddChar (AddChar α Complex) Complex) = doubleDualEmb
+  结论: ⇑(doubleDualEquiv : α ≃+ 加法特征 (加法特征 α 复形) 复形) = doubleDualEmb
   证明: rfl
 -/
 lemma coe_doubleDualEquiv : ⇑(doubleDualEquiv : α ≃+ AddChar (AddChar α Complex) Complex) = doubleDualEmb := rfl
@@ -638,7 +638,7 @@ lemma doubleDualEmb_doubleDualEquiv_symm_apply
 
 中文:
 引理 doubleDualEmb_doubleDualEquiv_symm_apply
-  条件: (a : AddChar (AddChar α Complex) Complex)
+  条件: (a : 加法特征 (加法特征 α 复形) 复形)
   证明: doubleDualEquiv.apply_symm_apply _
 -/
 @[simp] lemma doubleDualEmb_doubleDualEquiv_symm_apply (a : AddChar (AddChar α Complex) Complex) :
@@ -655,7 +655,7 @@ lemma doubleDualEquiv_symm_doubleDualEmb_apply
 
 中文:
 引理 doubleDualEquiv_symm_doubleDualEmb_apply
-  条件: (a : AddChar (AddChar α Complex) Complex)
+  条件: (a : 加法特征 (加法特征 α 复形) 复形)
   证明: doubleDualEquiv.symm_apply_apply _
 -/
 @[simp] lemma doubleDualEquiv_symm_doubleDualEmb_apply (a : AddChar (AddChar α Complex) Complex) :
@@ -674,7 +674,7 @@ lemma sum_apply_eq_ite
 
 中文:
 引理 sum_apply_eq_ite
-  条件: [Fintype α] [DecidableEq α] (a : α)
+  条件: [有限类型 α] [DecidableEq α] (a : α)
   证明: by
   simpa using sum_eq_ite (doubleDualEmb a : AddChar (AddChar α Complex) Complex)
 
@@ -695,7 +695,7 @@ lemma expect_apply_eq_ite
 
 中文:
 引理 expect_apply_eq_ite
-  条件: [Finite α] [DecidableEq α] (a : α)
+  条件: [有限 α] [DecidableEq α] (a : α)
   证明: by
   simpa using expect_eq_ite (doubleDualEmb a : AddChar (AddChar α Complex) Complex)
 
@@ -720,8 +720,8 @@ lemma sum_apply_eq_zero_iff_ne_zero
 
 中文:
 引理 sum_apply_eq_zero_iff_ne_zero
-  条件: [Finite α]
-  结论: ∑ ψ : AddChar α Complex, ψ a = 0 ↔ a != 0
+  条件: [有限 α]
+  结论: ∑ ψ : 加法特征 α 复形, ψ a = 0 ↔ a != 0
   证明: by
   classical
   cases nonempty_fintype α
@@ -747,8 +747,8 @@ lemma sum_apply_ne_zero_iff_eq_zero
 
 中文:
 引理 sum_apply_ne_zero_iff_eq_zero
-  条件: [Finite α]
-  结论: ∑ ψ : AddChar α Complex, ψ a != 0 ↔ a = 0
+  条件: [有限 α]
+  结论: ∑ ψ : 加法特征 α 复形, ψ a != 0 ↔ a = 0
   证明: sum_apply_eq_zero_iff_ne_zero.not_left
 
 Depends on / 依赖: not_left, sum_apply_eq_zero_iff_ne_zero, sum_apply_eq_zero_iff_ne_zero.not_left
@@ -770,8 +770,8 @@ lemma expect_apply_eq_zero_iff_ne_zero
 
 中文:
 引理 expect_apply_eq_zero_iff_ne_zero
-  条件: [Finite α]
-  结论: 𝔼 ψ : AddChar α Complex, ψ a = 0 ↔ a != 0
+  条件: [有限 α]
+  结论: 𝔼 ψ : 加法特征 α 复形, ψ a = 0 ↔ a != 0
   证明: by
   classical
   cases nonempty_fintype α
@@ -795,8 +795,8 @@ lemma expect_apply_ne_zero_iff_eq_zero
 
 中文:
 引理 expect_apply_ne_zero_iff_eq_zero
-  条件: [Finite α]
-  结论: 𝔼 ψ : AddChar α Complex, ψ a != 0 ↔ a = 0
+  条件: [有限 α]
+  结论: 𝔼 ψ : 加法特征 α 复形, ψ a != 0 ↔ a = 0
   证明: expect_apply_eq_zero_iff_ne_zero.not_left
 
 Depends on / 依赖: expect_apply_eq_zero_iff_ne_zero, expect_apply_eq_zero_iff_ne_zero.not_left, not_left

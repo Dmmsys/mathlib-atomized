@@ -175,7 +175,7 @@ theorem Complex.integral_rpow_mul_exp_neg_rpow
     _ = (∫ x in Ioi (0 : Real), x * |x| ^ q * rexp (-|x| ^ p)) * ∫ _
 
 中文:
-定理 Complex.integral_rpow_mul_exp_neg_rpow
+定理 复形.integral_rpow_mul_exp_neg_rpow
   条件: {p q : 实数} (hp : 1 <= p) (hq : -2 < q)
   证明: by
   calc
@@ -224,7 +224,7 @@ theorem Complex.integral_rpow_mul_exp_neg_mul_rpow
     _ = (∫ x in Ioi (0 : Real), x * |x| ^ q * rexp (-b * |x| ^ p
 
 中文:
-定理 Complex.integral_rpow_mul_exp_neg_mul_rpow
+定理 复形.integral_rpow_mul_exp_neg_mul_rpow
   结论: {p q b : 实数} (hp : 1 <= p) (hq : -2 < q)
   证明: by
   calc
@@ -274,7 +274,7 @@ theorem Complex.integral_exp_neg_rpow
     ring
 
 中文:
-定理 Complex.integral_exp_neg_rpow
+定理 复形.integral_exp_neg_rpow
   条件: {p : 实数} (hp : 1 <= p)
   证明: by
   convert! (integral_rpow_mul_exp_neg_rpow hp (by linarith : (-2 : Real) < 0)) using 1
@@ -304,7 +304,7 @@ theorem Complex.integral_exp_neg_mul_rpow
     ring
 
 中文:
-定理 Complex.integral_exp_neg_mul_rpow
+定理 复形.integral_exp_neg_mul_rpow
   条件: {p b : 实数} (hp : 1 <= p) (hb : 0 < b)
   证明: by
   convert! (integral_rpow_mul_exp_neg_mul_rpow hp (by linarith : (-2 : Real) < 0)) hb using 1

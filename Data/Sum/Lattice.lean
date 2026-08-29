@@ -183,7 +183,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice (α oplusₗ β)
+  签名: : 格 (α oplusₗ β)
   定义体: { instSemilatticeSup, instSemilatticeInf with }
 
 Depends on / 依赖: instSemilatticeInf, instSemilatticeSup
@@ -202,7 +202,7 @@ definition inlLatticeHom
 
 中文:
 定义 inlLatticeHom
-  签名: : LatticeHom α (α oplusₗ β) where
+  签名: : 格态射 α (α oplusₗ β) where
   定义体: inlₗ
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -224,7 +224,7 @@ definition inrLatticeHom
 
 中文:
 定义 inrLatticeHom
-  签名: : LatticeHom β (α oplusₗ β) where
+  签名: : 格态射 β (α oplusₗ β) where
   定义体: inrₗ
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -250,7 +250,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: [DistribLattice α] [DistribLattice β]
+  签名: [Distrib格 α] [Distrib格 β]
   定义体: by
     simp only [Lex.forall, Sum.forall, inr_le_inr_iff,
       le_sup_left, inl_le_inr, sup_of_le_right, and_self,

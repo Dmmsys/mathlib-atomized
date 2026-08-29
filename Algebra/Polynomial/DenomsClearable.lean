@@ -200,7 +200,7 @@ theorem one_le_pow_mul_abs_eval_div
 
 中文:
 定理 one_le_pow_mul_abs_eval_div
-  结论: {K : 类型} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+  结论: {K : 类型} [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: by
   obtain ⟨ev, bi, bu, hF⟩ :=
     denomsClearable_natDegree (b := b) (algebraMap Int K) f a

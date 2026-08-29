@@ -73,8 +73,8 @@ theorem exists_primitive_element_of_finite_top
     exact zpow_
 
 中文:
-定理 exists_primitive_element_of_finite_top
-  条件: [Finite E]
+定理 存在_primitive_element_of_finite_top
+  条件: [有限 E]
   结论: 存在 α : E, F⟮α⟯ = ⊤
   证明: by
   obtain ⟨α, hα⟩ := @IsCyclic.exists_generator Eˣ _ _
@@ -112,8 +112,8 @@ theorem exists_primitive_element_of_finite_bot
   exists_primitive_element_of_finite_top F E
 
 中文:
-定理 exists_primitive_element_of_finite_bot
-  条件: [Finite F] [FiniteDimensional F E]
+定理 存在_primitive_element_of_finite_bot
+  条件: [有限 F] [有限维 F E]
   证明: haveI : Finite E := Module.finite_of_finite F
   exists_primitive_element_of_finite_top F E
 
@@ -150,7 +150,7 @@ theorem primitive_element_inf_aux_exists_c
   simp_rw [s', s, Finset.mem_preimage, Mul
 
 中文:
-定理 primitive_element_inf_aux_exists_c
+定理 primitive_element_inf_aux_存在_c
   条件: (f g : F[X])
   证明: by
   let sf := (f.map ϕ).roots
@@ -197,7 +197,7 @@ theorem primitive_element_inf_aux
 
 中文:
 定理 primitive_element_inf_aux
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   结论: 存在 γ : E, F⟮α, β⟯ = F⟮γ⟯
   证明: by
   have hα := Algebra.IsSeparable.isIntegral F α
@@ -356,7 +356,7 @@ theorem exists_primitive_element
       intro K
 
 中文:
-定理 exists_primitive_element
+定理 存在_primitive_element
   结论: 存在 α : E, F⟮α⟯ = ⊤
   证明: by
   rcases isEmpty_or_nonempty (Fintype F) with (F_inf | ⟨⟨F_finite⟩⟩)
@@ -506,7 +506,7 @@ theorem FiniteDimensional.of_finite_intermediateField
   have hfin := finiteDimensional_iSup_of_finit
 
 中文:
-定理 FiniteDimensional.of_finite_intermediateField
+定理 有限维.of_finite_intermediateField
   证明: by
   let IF := { K : IntermediateField F E // exists x, K = F⟮x⟯ }
   have := isAlgebraic_of_finite_intermediateField F E
@@ -541,7 +541,7 @@ theorem exists_primitive_element_of_finite_intermediateField
   · apply induction_on_adjoin (fun K => exists 
 
 中文:
-定理 exists_primitive_element_of_finite_intermediateField
+定理 存在_primitive_element_of_finite_intermediateField
   证明: by
   have := FiniteDimensional.of_finite_intermediateField F E
   rcases finite_or_infinite F with (_ | _)
@@ -575,8 +575,8 @@ theorem FiniteDimensional.of_exists_primitive_element
   exact topEquiv.toLinearEquiv.finiteDimensional
 
 中文:
-定理 FiniteDimensional.of_exists_primitive_element
-  结论: [Algebra.IsAlgebraic F E]
+定理 有限维.of_存在_primitive_element
+  结论: [代数.是代数 F E]
   证明: by
   obtain ⟨α, hprim⟩ := h
   have hfin := adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral (R := F) α)
@@ -609,8 +609,8 @@ theorem finite_intermediateField_of_exists_primitive_element
 have h
 
 中文:
-定理 finite_intermediateField_of_exists_primitive_element
-  结论: [Algebra.IsAlgebraic F E]
+定理 finite_intermediateField_of_存在_primitive_element
+  结论: [代数.是代数 F E]
   证明: by
   have := FiniteDimensional.of_exists_primitive_element F E h
   obtain ⟨α, hprim⟩ := h
@@ -660,7 +660,7 @@ theorem exists_primitive_element_iff_finite_intermediateField
       exists_primitive_element_of_finite_intermediateField F E _⟩⟩
 
 中文:
-定理 exists_primitive_element_iff_finite_intermediateField
+定理 存在_primitive_element_iff_finite_intermediateField
   证明: ⟨fun ⟨_, h⟩ => finite_intermediateField_of_exists_primitive_element F E h,
     fun _ => ⟨isAlgebraic_of_finite_intermediateField F E,
       exists_primitive_element_of_finite_intermediateField F E _⟩⟩
@@ -693,8 +693,8 @@ theorem AlgHom.natCard_of_splits
 @[simp]
 
 中文:
-定理 AlgHom.natCard_of_splits
-  结论: (L : 类型) [Field L] [Algebra F L]
+定理 代数态射.natCard_of_splits
+  结论: (L : 类型) [域 L] [代数 F L]
   证明: (AlgHom.natCard_of_powerBasis (L := L) (Field.powerBasisOfFiniteOfSeparable F E)
 (Algebra.IsSeparable.isSeparable _ _) hL _).trans
       (PowerBasis.finrank _).symm
@@ -723,8 +723,8 @@ theorem AlgHom.card_of_splits
 @[simp]
 
 中文:
-定理 AlgHom.card_of_splits
-  结论: (L : 类型) [Field L] [Algebra F L]
+定理 代数态射.card_of_splits
+  结论: (L : 类型) [域 L] [代数 F L]
   证明: by
   rw [Fintype.card_eq_nat_card]; rw [AlgHom.natCard_of_splits F E L hL]
 
@@ -747,8 +747,8 @@ theorem AlgHom.card
   proof: AlgHom.card_of_splits _ _ _ (fun _ => IsAlgClosed.splits _)
 
 中文:
-定理 AlgHom.card
-  条件: (K : 类型) [Field K] [IsAlgClosed K] [Algebra F K]
+定理 代数态射.card
+  条件: (K : 类型) [域 K] [是代数闭 K] [代数 F K]
   证明: AlgHom.card_of_splits _ _ _ (fun _ => IsAlgClosed.splits _)
 
 Depends on / 依赖: AlgHom, AlgHom.card_of_splits, IsAlgClosed, IsAlgClosed.splits, card_of_splits, splits

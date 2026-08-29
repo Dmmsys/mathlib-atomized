@@ -43,7 +43,7 @@ scoped[Pointwise] attribute [instance] Finset.distribNeg
 
 中文:
 定义 noncomputable
-  签名: def distribNeg [DecidableEq α] [Mul α] [HasDistribNeg α]
+  签名: def distribNeg [DecidableEq α] [乘法 α] [有DistribNeg α]
   定义体: coe_injective.hasDistribNeg _ coe_neg coe_mul
 
 scoped[Pointwise] attribute [instance] Finset.distribNeg

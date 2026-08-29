@@ -56,10 +56,10 @@ class NNRatCast
     - nnratCast : Rat>=0 -> K
 
 中文:
-类 NNRatCast
+类 非负有理数嵌入
   参数: (K : 类型)
   公理与运算 (1 个):
-    - nnratCast : Rat>=0 -> K
+    - nnratCast : 有理数>=0 -> K
 -/
 class NNRatCast (K : Type*) where
   /-- The canonical homomorphism `ℚ≥0 → K`.
@@ -77,7 +77,7 @@ instance NNRat.instNNRatCast
 
 中文:
 实例 NNRat.instNNRatCast
-  签名: : NNRatCast Rat>=0 where nnratCast q
+  签名: : 非负有理数嵌入 有理数>=0 where nnratCast q
   定义体: q
 -/
 instance NNRat.instNNRatCast : NNRatCast Rat>=0 where nnratCast q := q
@@ -94,7 +94,7 @@ definition NNRat.cast
 
 中文:
 定义 NNRat.cast
-  签名: : Rat>=0 -> K
+  签名: : 有理数>=0 -> K
   定义体: NNRatCast.nnratCast
 -/
 @[coe, reducible, match_pattern] protected def NNRat.cast : Rat>=0 -> K := NNRatCast.nnratCast
@@ -109,8 +109,8 @@ instance NNRatCast.toCoeTail
   body: NNRat.cast
 
 中文:
-实例 NNRatCast.toCoeTail
-  签名: : CoeTail Rat>=0 K where coe
+实例 非负有理数嵌入.toCoeTail
+  签名: : CoeTail 有理数>=0 K where coe
   定义体: NNRat.cast
 
 Depends on / 依赖: NNRat.cast
@@ -127,8 +127,8 @@ instance NNRatCast.toCoeHTCT
   body: NNRat.cast
 
 中文:
-实例 NNRatCast.toCoeHTCT
-  签名: : CoeHTCT Rat>=0 K where coe
+实例 非负有理数嵌入.toCoeHTCT
+  签名: : CoeHTCT 有理数>=0 K where coe
   定义体: NNRat.cast
 
 Depends on / 依赖: NNRat.cast
@@ -144,8 +144,8 @@ instance Rat.instNNRatCast
   body: ⟨Subtype.val⟩
 
 中文:
-实例 Rat.instNNRatCast
-  签名: : NNRatCast Rat
+实例 有理数.instNNRatCast
+  签名: : 非负有理数嵌入 有理数
   定义体: ⟨Subtype.val⟩
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -166,7 +166,7 @@ definition num
 
 中文:
 定义 num
-  签名: (q : Rat>=0)
+  签名: (q : 有理数>=0)
   定义体: (q : Rat).num.natAbs
 
 Depends on / 依赖: natAbs, num.natAbs
@@ -183,7 +183,7 @@ definition den
 
 中文:
 定义 den
-  签名: (q : Rat>=0)
+  签名: (q : 有理数>=0)
   定义体: (q : Rat).den
 -/
 def den (q : Rat>=0) : Nat := (q : Rat).den
@@ -199,7 +199,7 @@ lemma num_mk
 
 中文:
 引理 num_mk
-  条件: (q : Rat) (hq : 0 <= q)
+  条件: (q : 有理数) (hq : 0 <= q)
   结论: num ⟨q, hq⟩ = q.num.natAbs
   证明: rfl
 -/
@@ -215,7 +215,7 @@ lemma den_mk
 
 中文:
 引理 den_mk
-  条件: (q : Rat) (hq : 0 <= q)
+  条件: (q : 有理数) (hq : 0 <= q)
   结论: den ⟨q, hq⟩ = q.den
   证明: rfl
 -/
@@ -232,7 +232,7 @@ lemma cast_id
 
 中文:
 引理 cast_id
-  条件: (n : Rat>=0)
+  条件: (n : 有理数>=0)
   结论: NNRat.cast n = n
   证明: rfl
 -/
@@ -267,8 +267,8 @@ lemma cast_id
 
 中文:
 引理 cast_id
-  条件: (n : Rat)
-  结论: Rat.cast n = n
+  条件: (n : 有理数)
+  结论: 有理数.cast n = n
   证明: rfl
 -/
 @[norm_cast] lemma cast_id (n : Rat) : Rat.cast n = n := rfl
@@ -282,7 +282,7 @@ lemma cast_eq_id
 
 中文:
 引理 cast_eq_id
-  结论: Rat.cast = id
+  结论: 有理数.cast = id
   证明: rfl
 -/
 @[simp] lemma cast_eq_id : Rat.cast = id := rfl

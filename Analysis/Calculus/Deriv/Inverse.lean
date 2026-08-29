@@ -65,8 +65,8 @@ theorem HasDerivAt.hasFDerivAt_equiv
   proof: hf
 
 中文:
-定理 HasDerivAt.hasFDerivAt_equiv
-  结论: {f : 𝕜 -> 𝕜} {f' x : 𝕜} (hf : HasDerivAt f f' x)
+定理 在点处可导.hasFDerivAt_equiv
+  结论: {f : 𝕜 -> 𝕜} {f' x : 𝕜} (hf : 在点处可导 f f' x)
   证明: hf
 -/
 theorem HasDerivAt.hasFDerivAt_equiv {f : 𝕜 -> 𝕜} {f' x : 𝕜} (hf : HasDerivAt f f' x)
@@ -126,7 +126,7 @@ theorem HasDerivAt.of_comp_left
   simp [div_eq_mul_inv]
 
 中文:
-定理 HasDerivAt.of_comp_left
+定理 在点处可导.of_comp_left
   结论: {f g h : 𝕜 -> 𝕜} {f' h' a : 𝕜} (hst : ContinuousAt g a)
   证明: by
   convert! hf.hasFDerivAt.of_comp_of_leftInverse hst hh hcomp (f'symm := .toSpanSingleton 𝕜 f'⁻¹)
@@ -151,7 +151,7 @@ theorem HasDerivAt.of_local_left_inverse
   proof: (hf.hasFDerivAt_equiv hf').of_local_left_inverse hg hfg
 
 中文:
-定理 HasDerivAt.of_local_left_inverse
+定理 在点处可导.of_local_left_inverse
   结论: {f g : 𝕜 -> 𝕜} {f' a : 𝕜} (hg : ContinuousAt g a)
   证明: (hf.hasFDerivAt_equiv hf').of_local_left_inverse hg hfg
 
@@ -258,8 +258,8 @@ theorem HasDerivAt.tendsto_nhdsNE
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).tendsto_nhdsWithin_nhdsNE hf'
 
 中文:
-定理 HasDerivAt.tendsto_nhdsNE
-  条件: (h : HasDerivAt f f' x) (hf' : f' != 0)
+定理 在点处可导.tendsto_nhdsNE
+  条件: (h : 在点处可导 f f' x) (hf' : f' != 0)
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).tendsto_nhdsWithin_nhdsNE hf'
 
@@ -279,8 +279,8 @@ theorem HasDerivAt.eventually_ne
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).eventually_ne hf'
 
 中文:
-定理 HasDerivAt.eventually_ne
-  条件: (h : HasDerivAt f f' x) (hf' : f' != 0)
+定理 在点处可导.eventually_ne
+  条件: (h : 在点处可导 f f' x) (hf' : f' != 0)
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).eventually_ne hf'
 
@@ -300,8 +300,8 @@ theorem HasDerivAt.eventually_notMem
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).eventually_notMem hf' t ht
 
 中文:
-定理 HasDerivAt.eventually_notMem
-  结论: (h : HasDerivAt f f' x) (hf' : f' != 0)
+定理 在点处可导.eventually_notMem
+  结论: (h : 在点处可导 f f' x) (hf' : f' != 0)
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasDerivWithinAt_univ.2 h).eventually_notMem hf' t ht
 
@@ -355,7 +355,7 @@ theorem derivWithin_zero_of_frequently_mem
 
 中文:
 定理 derivWithin_zero_of_frequently_mem
-  结论: (t : Set F) (ht : ¬ AccPt (f x) (𝓟 t))
+  结论: (t : 集合 F) (ht : ¬ 聚点 (f x) (𝓟 t))
   证明: by
   by_cases hf : DifferentiableWithinAt 𝕜 f s x
   · contrapose! h
@@ -408,7 +408,7 @@ theorem deriv_zero_of_frequently_mem
 
 中文:
 定理 deriv_zero_of_frequently_mem
-  结论: (t : Set F) (ht : ¬ AccPt (f x) (𝓟 t))
+  结论: (t : 集合 F) (ht : ¬ 聚点 (f x) (𝓟 t))
   证明: by
   rw [← derivWithin_univ]; rw [derivWithin_zero_of_frequently_mem t ht]
   rwa [← compl_eq_univ_sdiff]

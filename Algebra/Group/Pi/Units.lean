@@ -35,7 +35,7 @@ definition MulEquiv.piUnits
 @[to_additive]
 
 中文:
-定义 MulEquiv.piUnits
+定义 乘法等价.piUnits
   签名: : (Π i, M i)ˣ ≃* Π i, (M i)ˣ where
   定义体: ⟨f.val i, f.inv i, congr_fun f.val_inv i, congr_fun f.inv_val i⟩
   invFun f := ⟨(val <| f ·), (inv <| f ·), funext (val_inv <| f ·), funext (inv_val <| f ·)⟩
@@ -63,7 +63,7 @@ lemma Pi.isUnit_iff
 @[to_additive]
 
 中文:
-引理 Pi.isUnit_iff
+引理 依赖函数类型.isUnit_iff
   证明: by
   simp_rw [isUnit_iff_exists, funext_iff, ← forall_and]
   exact Classical.skolem (p := fun i y => x i * y = 1 ∧ y * x i = 1).symm
@@ -92,8 +92,8 @@ alias ⟨IsUnit.apply, _⟩ := Pi.isUnit_iff
 @[to_additive]
 
 中文:
-实例 Pi.instSubsingletonUnits
-  签名: [对任意 i, Subsingleton (M i)ˣ]
+实例 依赖函数类型.instSubsingletonUnits
+  签名: [对任意 i, 子单例 (M i)ˣ]
   定义体: .units_of_isUnit by simp [Pi.isUnit_iff, funext_iff]
 
 @[to_additive]
@@ -121,8 +121,8 @@ lemma IsUnit.val_inv_apply
   rw [← Units.inv_eq_val_inv]; rw [← MulEquiv.val_inv_piUnits_apply]; congr; ext; rfl
 
 中文:
-引理 IsUnit.val_inv_apply
-  条件: (hx : IsUnit x) (i : ι)
+引理 是单位.val_inv_apply
+  条件: (hx : 是单位 x) (i : ι)
   结论: (hx.unit⁻¹).1 i = (hx.apply i).unit⁻¹
   证明: by
   rw [← Units.inv_eq_val_inv]; rw [← MulEquiv.val_inv_piUnits_apply]; congr; ext; rfl

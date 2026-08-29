@@ -51,9 +51,9 @@ class IsRealClosed
     - exists_isRoot_of_odd_natDegree({f : R[X]} (hf : Odd f.natDegree)) : exists x, f.IsRoot x
 
 中文:
-类 IsRealClosed
-  参数: (R : 类型) [Field R]
-  继承: IsSemireal R
+类 是实数Closed
+  参数: (R : 类型) [域 R]
+  继承: 是Semireal R
   公理与运算 (2 个):
     - isSquare_or_isSquare_neg((x : R)) : IsSquare x ∨ IsSquare (-x)
     - exists_isRoot_of_odd_natDegree({f : R[X]} (hf : Odd f.natDegree)) : 存在 x, f.IsRoot x
@@ -84,7 +84,7 @@ theorem of_linearOrderedField
 
 中文:
 定理 of_linearOrderedField
-  结论: [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [线性序 R] [是StrictOrdered环 R]
   证明: by
     rcases le_total x 0 with (neg | pos)
 · exact .inr isSquare_of_nonneg (neg_nonneg_of_nonpos neg)
@@ -157,7 +157,7 @@ theorem exists_eq_pow_of_odd
   exact ⟨r, by linear_combination - (by simpa using hr : r ^ n - x = 0)⟩
 
 中文:
-定理 exists_eq_pow_of_odd
+定理 存在_eq_pow_of_odd
   条件: (x : R) {n : 自然数} (hn : Odd n)
   结论: 存在 r, x = r ^ n
   证明: by
@@ -184,7 +184,7 @@ theorem exists_eq_zpow_of_odd
     exact ⟨r⁻¹, by simpa using hr⟩
 
 中文:
-定理 exists_eq_zpow_of_odd
+定理 存在_eq_zpow_of_odd
   条件: (x : R) {k : 整数} (hk : Odd k)
   结论: 存在 r, x = r ^ k
   证明: by
@@ -217,7 +217,7 @@ theorem exists_eq_pow_of_isSquare
         rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;
 
 中文:
-定理 exists_eq_pow_of_isSquare
+定理 存在_eq_pow_of_isSquare
   条件: {x : R} (hx : IsSquare x) {n : 自然数} (hn : n != 0)
   证明: by
   induction n using Nat.strong_induction_on generalizing x with
@@ -255,7 +255,7 @@ theorem exists_eq_zpow_of_isSquare
     exact ⟨r⁻¹, by simpa using hr⟩
 
 中文:
-定理 exists_eq_zpow_of_isSquare
+定理 存在_eq_zpow_of_isSquare
   条件: {x : R} (hx : IsSquare x) {k : 整数} (hk : k != 0)
   证明: by
   rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
@@ -321,7 +321,7 @@ theorem exists_eq_pow_of_nonneg
   proof: exists_eq_pow_of_isSquare (.of_nonneg hx) hn
 
 中文:
-定理 exists_eq_pow_of_nonneg
+定理 存在_eq_pow_of_nonneg
   条件: {x : R} (hx : 0 <= x) {n : 自然数} (hn : n != 0)
   结论: 存在 r, x = r ^ n
   证明: exists_eq_pow_of_isSquare (.of_nonneg hx) hn
@@ -341,7 +341,7 @@ theorem exists_eq_zpow_of_nonneg
   proof: exists_eq_zpow_of_isSquare (.of_nonneg hx) hk
 
 中文:
-定理 exists_eq_zpow_of_nonneg
+定理 存在_eq_zpow_of_nonneg
   条件: {x : R} (hx : 0 <= x) {k : 整数} (hk : k != 0)
   结论: 存在 r, x = r ^ k
   证明: exists_eq_zpow_of_isSquare (.of_nonneg hx) hk

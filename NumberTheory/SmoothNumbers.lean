@@ -50,7 +50,7 @@ definition factoredNumbers
 
 中文:
 定义 factoredNumbers
-  签名: (s : Finset 自然数)
+  签名: (s : 有限集 自然数)
   定义体: {m | m != 0 ∧ forall p in primeFactorsList m, p in s}
 
 Depends on / 依赖: primeFactorsList
@@ -67,7 +67,7 @@ lemma mem_factoredNumbers
 
 中文:
 引理 mem_factoredNumbers
-  条件: {s : Finset 自然数} {m : 自然数}
+  条件: {s : 有限集 自然数} {m : 自然数}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -95,7 +95,7 @@ lemma mem_factoredNumbers_of_dvd
 
 中文:
 引理 mem_factoredNumbers_of_dvd
-  结论: {s : Finset 自然数} {m k : 自然数} (h : m in factoredNumbers s)
+  结论: {s : 有限集 自然数} {m k : 自然数} (h : m in factoredNumbers s)
   证明: by
   obtain ⟨h₁, h₂⟩ := h
   have hk := ne_zero_of_dvd_ne_zero h₁ h'
@@ -127,8 +127,8 @@ lemma mem_factoredNumbers_iff_forall_le
       ⟨H₀, fun p ⟨hp₁, hp₂, hp₃⟩ => H₁ p (le_of_dvd (Nat.pos_of_ne_zero hp₃) hp₂) hp₁ hp₂⟩⟩
 
 中文:
-引理 mem_factoredNumbers_iff_forall_le
-  条件: {s : Finset 自然数} {m : 自然数}
+引理 mem_factoredNumbers_iff_对任意_le
+  条件: {s : 有限集 自然数} {m : 自然数}
   证明: by
   simp_rw [mem_factoredNumbers, mem_primeFactorsList']
   exact ⟨fun ⟨H₀, H₁⟩ => ⟨H₀, fun p _ hp₂ hp₃ => H₁ p ⟨hp₂, hp₃, H₀⟩⟩,
@@ -160,7 +160,7 @@ p <= s.sup id := Fin
 
 中文:
 引理 mem_factoredNumbers'
-  条件: {s : Finset 自然数} {m : 自然数}
+  条件: {s : 有限集 自然数} {m : 自然数}
   证明: by
   obtain ⟨p, hp₁, hp₂⟩ := exists_infinite_primes (1 + Finset.sup s id)
   rw [mem_factoredNumbers_iff_forall_le]
@@ -193,7 +193,7 @@ lemma ne_zero_of_mem_factoredNumbers
 
 中文:
 引理 ne_zero_of_mem_factoredNumbers
-  条件: {s : Finset 自然数} {m : 自然数} (h : m in factoredNumbers s)
+  条件: {s : 有限集 自然数} {m : 自然数} (h : m in factoredNumbers s)
   结论: m != 0
   证明: h.1
 -/
@@ -212,7 +212,7 @@ lemma primeFactors_subset_of_mem_factoredNumbers
 
 中文:
 引理 primeFactors_subset_of_mem_factoredNumbers
-  结论: {s : Finset 自然数} {m : 自然数}
+  结论: {s : 有限集 自然数} {m : 自然数}
   证明: by
   rw [mem_factoredNumbers] at hm
   exact fun n hn => hm.2 n (mem_primeFactors_iff_mem_primeFactorsList.mp hn)
@@ -237,7 +237,7 @@ exact ⟨hm, fun p hp' => hp mem_primeFactors_iff_mem_primeFactorsList.mpr hp'�
 
 中文:
 引理 mem_factoredNumbers_of_primeFactors_subset
-  结论: {s : Finset 自然数} {m : 自然数} (hm : m != 0)
+  结论: {s : 有限集 自然数} {m : 自然数} (hm : m != 0)
   证明: by
   rw [mem_factoredNumbers]
 exact ⟨hm, fun p hp' => hp mem_primeFactors_iff_mem_primeFactorsList.mpr hp'⟩
@@ -263,7 +263,7 @@ lemma mem_factoredNumbers_iff_primeFactors_subset
 
 中文:
 引理 mem_factoredNumbers_iff_primeFactors_subset
-  条件: {s : Finset 自然数} {m : 自然数}
+  条件: {s : 有限集 自然数} {m : 自然数}
   证明: ⟨fun h => ⟨ne_zero_of_mem_factoredNumbers h, primeFactors_subset_of_mem_factoredNumbers h⟩,
    fun ⟨h₁, h₂⟩ => mem_factoredNumbers_of_primeFactors_subset h₁ h₂⟩
 
@@ -320,7 +320,7 @@ lemma mul_mem_factoredNumbers
 
 中文:
 引理 mul_mem_factoredNumbers
-  结论: {s : Finset 自然数} {m n : 自然数} (hm : m in factoredNumbers s)
+  结论: {s : 有限集 自然数} {m n : 自然数} (hm : m in factoredNumbers s)
   证明: by
   have hm' := primeFactors_subset_of_mem_factoredNumbers hm
   have hn' := primeFactors_subset_of_mem_factoredNumbers hn
@@ -352,7 +352,7 @@ simpa only [decide_eq_true_eq] using List.of_mem_filter me
 
 中文:
 引理 prod_mem_factoredNumbers
-  条件: (s : Finset 自然数) (n : 自然数)
+  条件: (s : 有限集 自然数) (n : 自然数)
   证明: by
   have h₀ : (n.primeFactorsList.filter (· in s)).prod != 0 :=
     List.prod_ne_zero fun h => (pos_of_mem_primeFactorsList (List.mem_of_mem_filter h)).false
@@ -386,7 +386,7 @@ fun h => hN h ▸ prime_of_mem_primeFactorsList hp
 
 中文:
 引理 factoredNumbers_insert
-  条件: (s : Finset 自然数) {N : 自然数} (hN : ¬ N.Prime)
+  条件: (s : 有限集 自然数) {N : 自然数} (hN : ¬ N.素)
   证明: by
   ext m
   refine ⟨fun hm => ⟨hm.1, fun p hp => ?_⟩,
@@ -414,7 +414,7 @@ lemma factoredNumbers_mono
 
 中文:
 引理 factoredNumbers_mono
-  条件: {s t : Finset 自然数} (hst : s <= t)
+  条件: {s t : 有限集 自然数} (hst : s <= t)
   证明: fun _ hx => ⟨hx.1, fun p hp => hst hx.2 p hp⟩
 -/
 @[gcongr] lemma factoredNumbers_mono {s t : Finset Nat} (hst : s <= t) :
@@ -439,7 +439,7 @@ exact h mem_primesBelow.mpr ⟨hp₂
 
 中文:
 引理 factoredNumbers_compl
-  条件: {N : 自然数} {s : Finset 自然数} (h : primesBelow N <= s)
+  条件: {N : 自然数} {s : 有限集 自然数} (h : primesBelow N <= s)
   证明: by
   intro n hn
   simp only [Set.mem_compl_iff, mem_factoredNumbers, Set.mem_sdiff, ne_eq, not_and, not_forall,
@@ -481,7 +481,7 @@ lemma pow_mul_mem_factoredNumbers
 
 中文:
 引理 pow_mul_mem_factoredNumbers
-  结论: {s : Finset 自然数} {p n : 自然数} (hp : p.Prime) (e : 自然数)
+  结论: {s : 有限集 自然数} {p n : 自然数} (hp : p.素) (e : 自然数)
   证明: by
   have hp' := pow_ne_zero e hp.ne_zero
   refine ⟨mul_ne_zero hp' hn.1, fun q hq => ?_⟩
@@ -515,8 +515,8 @@ lemma Prime.factoredNumbers_coprime
 exact fun H => hs hn.2 p H
 
 中文:
-引理 Prime.factoredNumbers_coprime
-  结论: {s : Finset 自然数} {p n : 自然数} (hp : p.Prime) (hs : p ∉ s)
+引理 素.factoredNumbers_coprime
+  结论: {s : 有限集 自然数} {p n : 自然数} (hp : p.素) (hs : p ∉ s)
   证明: by
   rw [hp.coprime_iff_not_dvd]; rw [← mem_primeFactorsList_iff_dvd hn.1 hp]
 exact fun H => hs hn.2 p H
@@ -539,7 +539,7 @@ lemma factoredNumbers.map_prime_pow_mul
 
 中文:
 引理 factoredNumbers.map_prime_pow_mul
-  结论: {F : 类型} [Mul F] {f : 自然数 -> F}
+  结论: {F : 类型} [乘法 F] {f : 自然数 -> F}
   证明: hmul Coprime.pow_left _ hp.factoredNumbers_coprime hs Subtype.mem m
 
 Depends on / 依赖: Coprime, Coprime.pow_left, Subtype, Subtype.mem, factoredNumbers_coprime, hp.factoredNumbers_coprime, pow_left
@@ -566,8 +566,8 @@ definition equivProdNatFactoredNumbers
     have hpm : ¬ p ∣ m := by grind [mem_prim
 
 中文:
-定义 equivProdNatFactoredNumbers
-  签名: {s : Finset 自然数} {p : 自然数} (hp : p.Prime) (hs : p ∉ s)
+定义 equivProd自然数FactoredNumbers
+  签名: {s : 有限集 自然数} {p : 自然数} (hp : p.素) (hs : p ∉ s)
   定义体: fun ⟨e, n⟩ => ⟨p ^ e * n, pow_mul_mem_factoredNumbers hp e n.2⟩
   invFun := fun ⟨m, _⟩ => (m.factorization p,
                             ⟨(m.primeFactorsList.filter (· in s)).prod, prod_mem_factoredNumbers ..⟩)
@@ -615,8 +615,8 @@ lemma equivProdNatFactoredNumbers_apply
 @[simp]
 
 中文:
-引理 equivProdNatFactoredNumbers_apply
-  结论: {s : Finset 自然数} {p e m : 自然数} (hp : p.Prime) (hs : p ∉ s)
+引理 equivProd自然数FactoredNumbers_apply
+  结论: {s : 有限集 自然数} {p e m : 自然数} (hp : p.素) (hs : p ∉ s)
   证明: rfl
 
 @[simp]
@@ -635,8 +635,8 @@ lemma equivProdNatFactoredNumbers_apply'
   proof: rfl
 
 中文:
-引理 equivProdNatFactoredNumbers_apply'
-  结论: {s : Finset 自然数} {p : 自然数} (hp : p.Prime) (hs : p ∉ s)
+引理 equivProd自然数FactoredNumbers_apply'
+  结论: {s : 有限集 自然数} {p : 自然数} (hp : p.素) (hs : p ∉ s)
   证明: rfl
 -/
 lemma equivProdNatFactoredNumbers_apply' {s : Finset Nat} {p : Nat} (hp : p.Prime) (hs : p ∉ s)
@@ -777,7 +777,7 @@ lemma mem_smoothNumbers_iff_forall_le
   simp only [smoothNumbers_eq_factoredNumbers, mem_factoredNumbers_iff_forall_le, Finset.mem_range]
 
 中文:
-引理 mem_smoothNumbers_iff_forall_le
+引理 mem_smoothNumbers_iff_对任意_le
   条件: {n m : 自然数}
   证明: by
   simp only [smoothNumbers_eq_factoredNumbers, mem_factoredNumbers_iff_forall_le, Finset.mem_range]
@@ -801,7 +801,7 @@ lemma mem_smoothNumbers'
 中文:
 引理 mem_smoothNumbers'
   条件: {n m : 自然数}
-  结论: m in smoothNumbers n ↔ 对任意 p, p.Prime -> p ∣ m -> p < n
+  结论: m in smoothNumbers n ↔ 对任意 p, p.素 -> p ∣ m -> p < n
   证明: by
   simp only [smoothNumbers_eq_factoredNumbers, mem_factoredNumbers', Finset.mem_range]
 
@@ -972,7 +972,7 @@ lemma smoothNumbers_succ
 
 中文:
 引理 smoothNumbers_succ
-  条件: {N : 自然数} (hN : ¬ N.Prime)
+  条件: {N : 自然数} (hN : ¬ N.素)
   结论: (N + 1).smoothNumbers = N.smoothNumbers
   证明: by
   simp only [smoothNumbers_eq_factoredNumbers, Finset.range_add_one, factoredNumbers_insert _ hN]
@@ -1111,8 +1111,8 @@ lemma Prime.smoothNumbers_coprime
   exact hp.factoredNumbers_coprime Finset.notMem_range_self hn
 
 中文:
-引理 Prime.smoothNumbers_coprime
-  条件: {p n : 自然数} (hp : p.Prime) (hn : n in smoothNumbers p)
+引理 素.smoothNumbers_coprime
+  条件: {p n : 自然数} (hp : p.素) (hn : n in smoothNumbers p)
   证明: by
   simp only [smoothNumbers_eq_factoredNumbers] at hn
   exact hp.factoredNumbers_coprime Finset.notMem_range_self hn
@@ -1134,7 +1134,7 @@ lemma map_prime_pow_mul
 
 中文:
 引理 map_prime_pow_mul
-  结论: {F : 类型} [Mul F] {f : 自然数 -> F}
+  结论: {F : 类型} [乘法 F] {f : 自然数 -> F}
   证明: hmul Coprime.pow_left _ hp.smoothNumbers_coprime Subtype.mem m
 
 Depends on / 依赖: Coprime, Coprime.pow_left, Subtype, Subtype.mem, hp.smoothNumbers_coprime, pow_left, smoothNumbers_coprime
@@ -1159,8 +1159,8 @@ setCongr (smoothNumbers_eq_factoredNumbers (p + 1)) ▸ Finset.range_add_one ▸
 @[simp]
 
 中文:
-定义 equivProdNatSmoothNumbers
-  签名: {p : 自然数} (hp : p.Prime)
+定义 equivProd自然数SmoothNumbers
+  签名: {p : 自然数} (hp : p.素)
   定义体: ((prodCongrRight fun _ => setCongr <| smoothNumbers_eq_factoredNumbers p).trans <|
     equivProdNatFactoredNumbers hp Finset.notMem_range_self).trans <|
 setCongr (smoothNumbers_eq_factoredNumbers (p + 1)) ▸ Finset.range_add_one ▸ rfl
@@ -1187,8 +1187,8 @@ lemma equivProdNatSmoothNumbers_apply
 @[simp]
 
 中文:
-引理 equivProdNatSmoothNumbers_apply
-  条件: {p e m : 自然数} (hp : p.Prime) (hm : m in p.smoothNumbers)
+引理 equivProd自然数SmoothNumbers_apply
+  条件: {p e m : 自然数} (hp : p.素) (hm : m in p.smoothNumbers)
   证明: rfl
 
 @[simp]
@@ -1206,8 +1206,8 @@ lemma equivProdNatSmoothNumbers_apply'
   proof: rfl
 
 中文:
-引理 equivProdNatSmoothNumbers_apply'
-  条件: {p : 自然数} (hp : p.Prime) (x : 自然数 × p.smoothNumbers)
+引理 equivProd自然数SmoothNumbers_apply'
+  条件: {p : 自然数} (hp : p.素) (x : 自然数 × p.smoothNumbers)
   证明: rfl
 -/
 lemma equivProdNatSmoothNumbers_apply' {p : Nat} (hp : p.Prime) (x : Nat × p.smoothNumbers) :

@@ -73,7 +73,7 @@ theorem torsionAux_tensorial₁
 
 中文:
 定理 torsionAux_tensorial₁
-  结论: (hcov : IsCovariantDerivativeOn E cov) (x : M)
+  结论: (hcov : 是余variantDerivativeOn E cov) (x : M)
   证明: by
     simp [torsionAux, hcov.leibniz hX hf, VectorField.mlieBracket_smul_left hf hX]
     module
@@ -106,7 +106,7 @@ theorem torsionAux_tensorial₂
 
 中文:
 定理 torsionAux_tensorial₂
-  结论: (hcov : IsCovariantDerivativeOn E cov) (x : M)
+  结论: (hcov : 是余variantDerivativeOn E cov) (x : M)
   证明: by
     simp [torsionAux, hcov.leibniz hY hf, VectorField.mlieBracket_smul_right hf hY]
     module
@@ -138,7 +138,7 @@ definition torsion
 
 中文:
 定义 torsion
-  签名: (hcov : IsCovariantDerivativeOn E cov univ) (x : M)
+  签名: (hcov : 是余variantDerivativeOn E cov univ) (x : M)
   定义体: TensorialAt.mkHom₂ (torsionAux cov · · x) _
     (fun τ _ => hcov.torsionAux_tensorial₁ x τ)
     (fun σ _ => hcov.torsionAux_tensorial₂ x σ)
@@ -161,7 +161,7 @@ theorem torsion_apply
 
 中文:
 定理 torsion_apply
-  结论: (hcov : IsCovariantDerivativeOn E cov univ) {x}
+  结论: (hcov : 是余variantDerivativeOn E cov univ) {x}
   证明: TensorialAt.mkHom₂_apply _ _ hX hY
 
 Depends on / 依赖: TensorialAt, TensorialAt.mkHom
@@ -183,7 +183,7 @@ theorem torsion_apply_eq_extend
 
 中文:
 定理 torsion_apply_eq_extend
-  结论: (hcov : IsCovariantDerivativeOn E cov univ) {x}
+  结论: (hcov : 是余variantDerivativeOn E cov univ) {x}
   证明: by
   simp [torsion, torsionAux, TensorialAt.mkHom₂_apply_eq_extend]
 
@@ -209,7 +209,7 @@ lemma torsion_self
 
 中文:
 引理 torsion_self
-  条件: (hcov : IsCovariantDerivativeOn E cov univ) (X₀ : TangentSpace I x)
+  条件: (hcov : 是余variantDerivativeOn E cov univ) (X₀ : TangentSpace I x)
   证明: by
   simp [torsion_apply_eq_extend]
 
@@ -234,7 +234,7 @@ lemma torsion_antisymm
 
 中文:
 引理 torsion_antisymm
-  条件: (hcov : IsCovariantDerivativeOn E cov univ) (X₀ Y₀ : TangentSpace I x)
+  条件: (hcov : 是余variantDerivativeOn E cov univ) (X₀ Y₀ : TangentSpace I x)
   证明: by
   simp only [torsion_apply_eq_extend, neg_sub]
   rw [VectorField.mlieBracket_swap]

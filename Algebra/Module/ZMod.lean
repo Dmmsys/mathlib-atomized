@@ -36,8 +36,8 @@ abbreviation AddCommMonoid.zmodModule
     smul_zero :
 
 中文:
-缩写 AddCommMonoid.zmodModule
-  签名: [NeZero n] [AddCommMonoid M] (h : 对任意 (x : M), n • x = 0)
+缩写 加法交换幺半群.zmodModule
+  签名: [NeZero n] [加法交换幺半群 M] (h : 对任意 (x : M), n • x = 0)
   定义体: by
   have h_mod (c : Nat) (x : M) : (c % n) • x = c • x := by
     suffices (c % n + c / n * n) • x = c • x by rwa [add_nsmul, mul_nsmul, h, add_zero] at this
@@ -78,8 +78,8 @@ abbreviation AddCommGroup.zmodModule
   | _ + 1 => AddCommMonoid.zmodModule h
 
 中文:
-缩写 AddCommGroup.zmodModule
-  签名: {G : 类型} [AddCommGroup G] (h : 对任意 (x : G), n • x = 0)
+缩写 加法交换群.zmodModule
+  签名: {G : 类型} [加法交换群 G] (h : 对任意 (x : G), n • x = 0)
   定义体: match n with
   | 0 => AddCommGroup.toIntModule G
   | _ + 1 => AddCommMonoid.zmodModule h
@@ -103,7 +103,7 @@ abbreviation QuotientAddGroup.zmodModule
 
 中文:
 缩写 QuotientAddGroup.zmodModule
-  签名: {G : 类型} [AddCommGroup G] {H : AddSubgroup G}
+  签名: {G : 类型} [加法交换群 G] {H : 加法子群 G}
   定义体: AddCommGroup.zmodModule by simpa [QuotientAddGroup.forall_mk, ← QuotientAddGroup.mk_nsmul]
 
 Depends on / 依赖: AddCommGroup, AddCommGroup.zmodModule, QuotientAddGroup, QuotientAddGroup.forall_mk, QuotientAddGroup.mk_nsmul, forall_mk, mk_nsmul, zmodModule
@@ -203,7 +203,7 @@ theorem toZModLinearMap_injective
 
 中文:
 定理 toZModLinearMap_injective
-  结论: Function.Injective toZModLinearMap n (M := M) (M₁ := M₁)
+  结论: 函数.单射 toZModLinearMap n (M := M) (M₁ := M₁)
   证明: fun _ _ h => ext fun x => congr($h x)
 
 @[simp]
@@ -271,7 +271,7 @@ definition toZModSubmodule
 
 中文:
 定义 toZModSubmodule
-  签名: : AddSubgroup M ≃o Submodule (ZMod n) M where
+  签名: : 加法子群 M ≃o 子模 (ZMod n) M where
   定义体: { S with smul_mem' := fun c _ h => ZMod.smul_mem (K := S) h c }
   invFun := Submodule.toAddSubgroup
   map_rel_iff' := Iff.rfl
@@ -312,8 +312,8 @@ lemma coe_toZModSubmodule
 
 中文:
 引理 coe_toZModSubmodule
-  条件: (S : AddSubgroup M)
-  结论: (toZModSubmodule n S : Set M) = S
+  条件: (S : 加法子群 M)
+  结论: (toZModSubmodule n S : 集合 M) = S
   证明: rfl
 -/
 @[simp] lemma coe_toZModSubmodule (S : AddSubgroup M) : (toZModSubmodule n S : Set M) = S := rfl
@@ -330,7 +330,7 @@ lemma mem_toZModSubmodule
 
 中文:
 引理 mem_toZModSubmodule
-  条件: {S : AddSubgroup M}
+  条件: {S : 加法子群 M}
   结论: x in toZModSubmodule n S ↔ x in S
   证明: .rfl
 
@@ -351,7 +351,7 @@ theorem toZModSubmodule_toAddSubgroup
 
 中文:
 定理 toZModSubmodule_toAddSubgroup
-  条件: (S : AddSubgroup M)
+  条件: (S : 加法子群 M)
   证明: rfl
 
 @[simp]
@@ -370,8 +370,8 @@ theorem _root_.Submodule.toAddSubgroup_toZModSubmodule
   proof: rfl
 
 中文:
-定理 _root_.Submodule.toAddSubgroup_toZModSubmodule
-  条件: (S : Submodule (ZMod n) M)
+定理 _root_.子模.toAddSubgroup_toZModSubmodule
+  条件: (S : 子模 (ZMod n) M)
   证明: rfl
 -/
 theorem _root_.Submodule.toAddSubgroup_toZModSubmodule (S : Submodule (ZMod n) M) :
@@ -396,8 +396,8 @@ lemma exists_submodule_subset_card_le
   exact ⟨AddSubgroup.toZModSubmodule _ (AddSubgroup.toSubgroup.symm H'm), H'mk, kH'm, H'mHm⟩
 
 中文:
-引理 exists_submodule_subset_card_le
-  结论: (hp : p.Prime) [Module (ZMod p) G]
+引理 存在_submodule_subset_card_le
+  结论: (hp : p.素) [模 (ZMod p) G]
   证明: by
   obtain ⟨H'm, H'mHm, H'mk, kH'm⟩ := Sylow.exists_subgroup_le_card_le
     (H := AddSubgroup.toSubgroup ((AddSubgroup.toZModSubmodule _).symm H)) hp

@@ -56,10 +56,10 @@ structure FormalCoproduct
     - obj((i : I)) : C
 
 中文:
-结构 FormalCoproduct
+结构 形式余积
   参数: where
   公理与运算 (2 个):
-    - I : Type w
+    - I : 类型 w
     - obj((i : I)) : C
 -/
 structure FormalCoproduct where
@@ -81,8 +81,8 @@ structure Hom
     - φ((i : X.I)) : X.obj i ⟶ Y.obj (f i)
 
 中文:
-结构 Hom
-  参数: (X Y : FormalCoproduct.{w} C)
+结构 态射
+  参数: (X Y : 形式余积.{w} C)
   公理与运算 (2 个):
     - f : X.I -> Y.I
     - φ((i : X.I)) : X.obj i ⟶ Y.obj (f i)
@@ -109,7 +109,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (FormalCoproduct.{w} C) where
+  签名: : 范畴 (形式余积.{w} C) where
   定义体: Hom
   id X := { f := id, φ := fun _ => 𝟙 _ }
   comp α β := { f := β.f ∘ α.f, φ := fun _ => α.φ _ ≫ β.φ _ }
@@ -137,7 +137,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {X Y : FormalCoproduct.{w} C} {f g : X ⟶ Y} (h₁ : f.f = g.f)
+  结论: {X Y : 形式余积.{w} C} {f g : X ⟶ Y} (h₁ : f.f = g.f)
   证明: by
   obtain ⟨f, F⟩ := f
   obtain ⟨g, G⟩ := g
@@ -163,7 +163,7 @@ lemma hom_ext_iff
 
 中文:
 引理 hom_ext_iff
-  条件: {X Y : FormalCoproduct.{w} C} (f g : X ⟶ Y)
+  条件: {X Y : 形式余积.{w} C} (f g : X ⟶ Y)
   证明: ⟨(· ▸ by simp), fun ⟨h₁, h₂⟩ => hom_ext h₁ h₂⟩
 
 Depends on / 依赖: hom_ext
@@ -182,7 +182,7 @@ lemma hom_ext_iff'
 
 中文:
 引理 hom_ext_iff'
-  条件: {X Y : FormalCoproduct.{w} C} (f g : X ⟶ Y)
+  条件: {X Y : 形式余积.{w} C} (f g : X ⟶ Y)
   证明: ⟨(· ▸ by simp), fun h => hom_ext (funext fun i => (h i).fst) fun i => (h i).snd⟩
 
 Depends on / 依赖: hom_ext
@@ -205,7 +205,7 @@ definition isoOfComponents
 
 中文:
 定义 isoOfComponents
-  签名: {X Y : FormalCoproduct.{w} C} (e : X.I ≃ Y.I)
+  签名: {X Y : 形式余积.{w} C} (e : X.I ≃ Y.I)
   定义体: { f := e, φ := fun i => (h i).hom }
   inv := { f := e.symm, φ := fun i => eqToHom (by simp) ≫ (h (e.symm i)).inv }
   hom_inv_id := by ext <;> aesop
@@ -230,7 +230,7 @@ definition incl
 
 中文:
 定义 incl
-  签名: : C ⥤ FormalCoproduct.{w} C where
+  签名: : C ⥤ 形式余积.{w} C where
   定义体: ⟨PUnit, fun _ => X⟩
   map f := ⟨fun _ => PUnit.unit, fun _ => f⟩
 -/
@@ -251,7 +251,7 @@ definition Hom.fromIncl
   body: ⟨fun _ => i, fun _ => f⟩
 
 中文:
-定义 Hom.fromIncl
+定义 态射.fromIncl
   签名: (i : Y.I) (f : X ⟶ Y.obj i)
   定义体: ⟨fun _ => i, fun _ => f⟩
 -/
@@ -267,7 +267,7 @@ definition Hom.asSigma
   body: ⟨f.f PUnit.unit, f.φ PUnit.unit⟩
 
 中文:
-定义 Hom.asSigma
+定义 态射.asSigma
   签名: (f : (incl C).obj X ⟶ Y)
   定义体: ⟨f.f PUnit.unit, f.φ PUnit.unit⟩
 
@@ -287,7 +287,7 @@ lemma Hom.fromIncl_asSigma
   ext <;> aesop
 
 中文:
-引理 Hom.fromIncl_asSigma
+引理 态射.fromIncl_asSigma
   条件: (f : (incl C).obj X ⟶ Y)
   证明: by
   ext <;> aesop
@@ -312,7 +312,7 @@ definition inclHomEquiv
 
 中文:
 定义 inclHomEquiv
-  签名: (X : C) (Y : FormalCoproduct.{w} C)
+  签名: (X : C) (Y : 形式余积.{w} C)
   定义体: f.asSigma
   invFun f := .fromIncl f.1 f.2
   left_inv f := f.fromIncl_asSigma
@@ -335,7 +335,7 @@ definition fullyFaithfulIncl
 
 中文:
 定义 fullyFaithfulIncl
-  签名: : (incl C).FullyFaithful where
+  签名: : (incl C).满忠实 where
   定义体: f.φ PUnit.unit
 -/
 @[simps!] def fullyFaithfulIncl : (incl C).FullyFaithful where
@@ -351,7 +351,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl C).Full
+  签名: (incl C).满
   定义体: fullyFaithfulIncl.full
 
 Depends on / 依赖: fullyFaithfulIncl, fullyFaithfulIncl.full
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl C).Faithful
+  签名: (incl C).忠实
   定义体: fullyFaithfulIncl.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulIncl, fullyFaithfulIncl.faithful
@@ -387,7 +387,7 @@ definition homOfPiHom
 
 中文:
 定义 homOfPiHom
-  签名: (X : C) {J : Type w} (f : (j : J) -> C) (φ : (j : J) -> f j ⟶ X)
+  签名: (X : C) {J : 类型 w} (f : (j : J) -> C) (φ : (j : J) -> f j ⟶ X)
   定义体: ⟨fun _ => PUnit.unit, φ⟩
 -/
 @[simps!] def homOfPiHom (X : C) {J : Type w} (f : (j : J) -> C) (φ : (j : J) -> f j ⟶ X) :
@@ -532,7 +532,7 @@ definition isColimitCofan
 
 中文:
 定义 isColimitCofan
-  签名: : IsColimit (cofan 𝒜 f)
+  签名: : 是余极限 (cofan 𝒜 f)
   定义体: Cofan.IsColimit.mk (cofan 𝒜 f) (fun t => (cofanHomEquiv _ _ _).symm t.inj)
     (fun t i => congrFun ((cofanHomEquiv _ _ _).right_inv t.inj) i)
     (fun _ _ h => (Equiv.eq_symm_apply _).2 (funext h))
@@ -552,7 +552,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCoproducts.{w} (FormalCoproduct.{w} C)
+  签名: HasCoproducts.{w} (形式余积.{w} C)
   定义体: hasCoproducts_of_colimit_cofans _ (isColimitCofan _)
 
 Depends on / 依赖: hasCoproducts_of_colimit_cofans, isColimitCofan
@@ -606,7 +606,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: (X : FormalCoproduct.{w} C)
+  签名: (X : 形式余积.{w} C)
   定义体: (incl C).obj ∘ X.obj
 
 Depends on / 依赖: X.obj
@@ -743,7 +743,7 @@ definition objIsoOfEq
 
 中文:
 定义 objIsoOfEq
-  签名: (X : FormalCoproduct.{w} C) {i j : X.I} (hij : i = j)
+  签名: (X : 形式余积.{w} C) {i j : X.I} (hij : i = j)
   定义体: eqToIso (by rw [hij])
 
 @[simp]
@@ -767,7 +767,7 @@ lemma objIsoOfEq_rfl
 
 中文:
 引理 objIsoOfEq_rfl
-  条件: (X : FormalCoproduct.{w} C) (i : X.I)
+  条件: (X : 形式余积.{w} C) (i : X.I)
   证明: rfl
 
 @[simp]
@@ -791,7 +791,7 @@ lemma objIsoOfEq_trans
 
 中文:
 引理 objIsoOfEq_trans
-  结论: (X : FormalCoproduct.{w} C) {i j k : X.I}
+  结论: (X : 形式余积.{w} C) {i j k : X.I}
   证明: by
   subst hij hjk
   simp
@@ -817,7 +817,7 @@ lemma objIsoOfEq_symm
 
 中文:
 引理 objIsoOfEq_symm
-  结论: (X : FormalCoproduct.{w} C) {i j : X.I}
+  结论: (X : 形式余积.{w} C) {i j : X.I}
   证明: by
   subst hij
   simp
@@ -843,7 +843,7 @@ definition isTerminalIncl
 
 中文:
 定义 isTerminalIncl
-  签名: (T : C) (ht : IsTerminal T)
+  签名: (T : C) (ht : 是终止 T)
   定义体: IsTerminal.ofUniqueHom (fun _ => ⟨fun _ => PUnit.unit, fun _ => ht.from _⟩)
     (fun _ _ => hom_ext (funext fun _ => rfl) (fun _ => ht.hom_ext _ _))
 
@@ -862,8 +862,8 @@ instance [HasTerminal
   body: (isTerminalIncl (⊤_ C) terminalIsTerminal).hasTerminal
 
 中文:
-实例 [HasTerminal
-  签名: C] : HasTerminal (FormalCoproduct.{w} C)
+实例 [有终止
+  签名: C] : 有终止 (形式余积.{w} C)
   定义体: (isTerminalIncl (⊤_ C) terminalIsTerminal).hasTerminal
 
 Depends on / 依赖: hasTerminal, isTerminalIncl, terminalIsTerminal
@@ -1044,7 +1044,7 @@ definition isLimitPullbackCone
 
 中文:
 定义 isLimitPullbackCone
-  签名: : IsLimit (pullbackCone f g pb)
+  签名: : 是极限 (pullbackCone f g pb)
   定义体: by
   refine PullbackCone.IsLimit.mk
     (fst := (pullbackCone f g pb).fst) (snd := (pullbackCone f g pb).snd) _
@@ -1103,7 +1103,7 @@ omit pb
 
 中文:
 引理 isPullback
-  结论: IsPullback (pullbackCone f g pb).fst (pullbackCone f g pb).snd f g
+  结论: 是拉回 (pullbackCone f g pb).fst (pullbackCone f g pb).snd f g
   证明: ⟨⟨pullbackCone_condition f g pb⟩, ⟨isLimitPullbackCone f g pb hpb⟩⟩
 
 omit pb
@@ -1144,7 +1144,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasPullbacks (FormalCoproduct.{w} C)
+  签名: 有Pullbacks (形式余积.{w} C)
   定义体: hasPullbacks_of_hasLimit_cospan _
 
 Depends on / 依赖: hasPullbacks_of_hasLimit_cospan
@@ -1173,7 +1173,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: : (C ⥤ A) ⥤ (FormalCoproduct.{w} C ⥤ A) where
+  签名: : (C ⥤ A) ⥤ (形式余积.{w} C ⥤ A) where
   定义体: { obj X := ∐ fun (i : X.I) => F.obj (X.obj i)
       map {X Y} f := Sigma.desc fun i => F.map (f.φ i) ≫ Sigma.ι (F.obj ∘ Y.obj) (f.f i)
       map_comp _ _ := Sigma.hom_ext _ _ (fun _ => by simp [Sigma.ι_desc]) }
@@ -1226,7 +1226,7 @@ definition isColimitEvalMapCoconeCofan
 
 中文:
 定义 isColimitEvalMapCoconeCofan
-  签名: : IsColimit (((eval.{w} C A).obj F).mapCocone (cofan.{w} J f)) where
+  签名: : 是余极限 (((eval.{w} C A).obj F).mapCocone (cofan.{w} J f)) where
   定义体: Sigma.desc fun i => Sigma.ι (F.obj ∘ (f i.1).obj) i.2 ≫ s.ι.app ⟨i.1⟩
   fac s i := Sigma.hom_ext _ _ fun i => by simp [cofan, Function.comp_def]
   uniq s m h := Sigma.hom_ext _ _ fun ⟨i₁, i₂⟩ => by simp [← h, cofan, Function.comp_def]
@@ -1249,7 +1249,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit (Discrete.functor f) ((eval.{w} C A).obj F)
+  签名: 保持余极限 (离散.functor f) ((eval.{w} C A).obj F)
   定义体: ⟨fun hc => ⟨IsColimit.ofIsoColimit (isColimitEvalMapCoconeCofan J f F)
     ((Cocone.functoriality _ _).mapIso ((isColimitCofan J f).uniqueUpToIso hc))⟩⟩
 
@@ -1269,7 +1269,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape (Discrete J) ((eval.{w} C A).obj F)
+  签名: 保持形状余极限 (离散 J) ((eval.{w} C A).obj F)
   定义体: preservesColimitsOfShape_of_discrete _
 
 Depends on / 依赖: preservesColimitsOfShape_of_discrete
@@ -1348,7 +1348,7 @@ definition evalOp
 
 中文:
 定义 evalOp
-  签名: : (Cᵒᵖ ⥤ A) ⥤ ((FormalCoproduct.{w} C)ᵒᵖ ⥤ A) where
+  签名: : (Cᵒᵖ ⥤ A) ⥤ ((形式余积.{w} C)ᵒᵖ ⥤ A) where
   定义体: { obj X := ∏ᶜ fun (i : X.unop.I) => F.obj (op (X.unop.obj i))
       map f := Pi.lift fun i => Pi.π _ (f.unop.f i) ≫ F.map (f.unop.φ i).op }
   map α := { app f := Pi.map fun i => α.app (op (f.unop.obj i)) }
@@ -1397,7 +1397,7 @@ definition isLimitEvalMapConeCofanOp
 
 中文:
 定义 isLimitEvalMapConeCofanOp
-  签名: : IsLimit (((evalOp.{w} C A).obj F).mapCone (cofan.{w} J f).op) where
+  签名: : 是极限 (((evalOp.{w} C A).obj F).mapCone (cofan.{w} J f).op) where
   定义体: Pi.lift fun i => s.π.app ⟨i.1⟩ ≫ Pi.π _ i.2
   fac s i := Pi.hom_ext _ _ fun i => by simp [cofan]
   uniq s m h := Pi.hom_ext _ _ fun ⟨i₁, i₂⟩ => by simp [← h, cofan]
@@ -1420,7 +1420,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (Discrete.functor (op ∘ f)) ((evalOp.{w} C A).obj F)
+  签名: 保持极限 (离散.functor (op ∘ f)) ((evalOp.{w} C A).obj F)
   定义体: ⟨fun hc => ⟨IsLimit.ofIsoLimit (isLimitEvalMapConeCofanOp J f F) ((Cone.functoriality _ _).mapIso
     ((Cofan.IsColimit.op (isColimitCofan J f)).uniqueUpToIso hc))⟩⟩
 

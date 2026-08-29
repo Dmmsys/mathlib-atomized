@@ -73,7 +73,7 @@ class OrzechProperty
 类 OrzechProperty
   参数: : 命题 where
   公理与运算 (1 个):
-    - injective_of_surjective_of_submodule' : 对任意 {M : 类型u} [AddCommMonoid M] [Module R M] [Module.Finite R M] {N : Submodule R M} (f : N ->ₗ[R] M), Surjective f -> Injective f
+    - injective_of_surjective_of_submodule' : 对任意 {M : 类型u} [加法交换幺半群 M] [模 R M] [模.有限 R M] {N : 子模 R M} (f : N ->ₗ[R] M), 满射 f -> 单射 f
 -/
 class OrzechProperty : Prop where
   injective_of_surjective_of_submodule' : forall {M : Type u} [AddCommMonoid M] [Module R M]
@@ -92,8 +92,8 @@ instance [Finite
     .of_comp (hg.surjective.comp hf).bijective_of_finite.1
 
 中文:
-实例 [Finite
-  签名: R] : Orzech命题erty R where
+实例 [有限
+  签名: R] : OrzechProperty R where
   定义体: have : Finite M := Module.finite_of_finite R
     have ⟨_g, hg⟩ := N.subtype_injective.hasLeftInverse
     .of_comp (hg.surjective.comp hf).bijective_of_finite.1

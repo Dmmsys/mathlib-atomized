@@ -365,7 +365,7 @@ theorem not_isUnit
 中文:
 定理 not_isUnit
   条件: (hp : p.IsUnitTrinomial)
-  结论: ¬IsUnit p
+  结论: ¬是单位 p
   证明: by
   obtain ⟨k, m, n, hkm, hmn, u, v, w, rfl⟩ := hp
   exact fun h =>
@@ -481,7 +481,7 @@ theorem leadingCoeff_isUnit
 中文:
 定理 leadingCoeff_isUnit
   条件: (hp : p.IsUnitTrinomial)
-  结论: IsUnit p.leadingCoeff
+  结论: 是单位 p.leadingCoeff
   证明: hp.coeff_isUnit (natDegree_mem_support_of_nonzero hp.ne_zero)
 
 Depends on / 依赖: coeff_isUnit, hp.coeff_isUnit, hp.ne_zero, natDegree_mem_support_of_nonzero, ne_zero
@@ -501,7 +501,7 @@ theorem trailingCoeff_isUnit
 中文:
 定理 trailingCoeff_isUnit
   条件: (hp : p.IsUnitTrinomial)
-  结论: IsUnit p.trailingCoeff
+  结论: 是单位 p.trailingCoeff
   证明: hp.coeff_isUnit (natTrailingDegree_mem_support_of_nonzero hp.ne_zero)
 
 Depends on / 依赖: coeff_isUnit, hp.coeff_isUnit, hp.ne_zero, natTrailingDegree_mem_support_of_nonzero, ne_zero
@@ -624,7 +624,7 @@ theorem irreducible_aux1
 
 中文:
 定理 irreducible_aux1
-  结论: {k m n : 自然数} (hkm : k < m) (hmn : m < n) (u v w : Units 整数)
+  结论: {k m n : 自然数} (hkm : k < m) (hmn : m < n) (u v w : 单位群 整数)
   证明: by
   have key : n - m + k < n := by rwa [← lt_tsub_iff_right, tsub_lt_tsub_iff_left_of_le hmn.le]
   rw [hp]; rw [trinomial_mirror hkm hmn u.ne_zero w.ne_zero]

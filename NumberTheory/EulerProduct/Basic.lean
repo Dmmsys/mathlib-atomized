@@ -60,7 +60,7 @@ exact hsum.comp_injective Nat.pow_right_injective hp
 
 中文:
 引理 Summable.norm_lt_one
-  结论: {F : 类型} [NormedDivisionRing F] [CompleteSpace F] {f : 自然数 ->* F}
+  结论: {F : 类型} [NormedDivision环 F] [完备空间 F] {f : 自然数 ->* F}
   证明: by
   refine summable_geometric_iff_norm_lt_one.mp ?_
   simp_rw [← map_pow]
@@ -101,7 +101,7 @@ lemma instT0Space
 
 中文:
 引理 instT0Space
-  结论: T0Space R
+  结论: T0空间 R
   证明: MetricSpace.instT0Space
 -/
 @[local instance] private lemma instT0Space : T0Space R := MetricSpace.instT0Space
@@ -181,7 +181,7 @@ lemma prod_filter_prime_tsum_eq_tsum_factoredNumbers
 
 中文:
 引理 prod_filter_prime_tsum_eq_tsum_factoredNumbers
-  条件: (hsum : Summable (‖f ·‖)) (s : Finset 自然数)
+  条件: (hsum : Summable (‖f ·‖)) (s : 有限集 自然数)
   证明: (summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum hf₁ hmul
     (fun hp => hsum.comp_injective <| Nat.pow_right_injective hp.one_lt) _).2.tsum_eq.symm
 
@@ -516,7 +516,7 @@ using hsum.comp_injective Nat.pow_right_injective hp.one_lt
 
 中文:
 引理 one_sub_inv_eq_geometric_of_summable_norm
-  结论: {f : 自然数 ->*₀ F} {p : 自然数} (hp : p.Prime)
+  结论: {f : 自然数 ->*₀ F} {p : 自然数} (hp : p.素)
   证明: by
   simp only [map_pow]
   refine (tsum_geometric_of_norm_lt_one <| summable_geometric_iff_norm_lt_one.mp ?_).symm

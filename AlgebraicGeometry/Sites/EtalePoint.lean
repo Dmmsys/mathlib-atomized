@@ -51,8 +51,8 @@ lemma exists_fac_of_etale_of_isSepClosed
   have : f.resid
 
 中文:
-引理 exists_fac_of_etale_of_isSepClosed
-  结论: {X S : Scheme.{u}} (f : X ⟶ S) [Etale f]
+引理 存在_fac_of_etale_of_isSepClosed
+  结论: {X S : 概形.{u}} (f : X ⟶ S) [平展 f]
   证明: by
   obtain ⟨⟨s, a⟩, rfl⟩ := (SpecToEquivOfField Ω S).symm.surjective s
   obtain rfl : f x = s := by simp [hx, SpecToEquivOfField]
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofiltered (Etale.forget S ⋙ coyoneda.obj (op (Over.mk s))).Elements
+  签名: 是余filtered (平展.forget S ⋙ coyoneda.obj (op (Over.mk s))).Elements
   定义体: Functor.isCofiltered_elements _
 
 Depends on / 依赖: Functor, Functor.isCofiltered_elements, isCofiltered_elements
@@ -182,7 +182,7 @@ definition pointSmallEtaleFiberObjToPreimage
 
 中文:
 定义 pointSmallEtaleFiberObjToPreimage
-  签名: {X : S.Etale}
+  签名: {X : S.平展}
   定义体: ⟨t.left (default : Spec (.of Ω)), by
     have := (Over.w t).symm
     cat_disch⟩
@@ -219,7 +219,7 @@ lemma pointSmallEtaleFiberObjToPreimage_surjective
 
 中文:
 引理 pointSmallEtaleFiberObjToPreimage_surjective
-  条件: (X : S.Etale)
+  条件: (X : S.平展)
   证明: by
   intro y
   obtain ⟨y, rfl⟩ := (X.hom.fiberHomeo s₀).surjective y
@@ -306,7 +306,7 @@ lemma isConservativeFamilyOfPoints_pointSmallEtale'
 
 中文:
 引理 isConservativeFamilyOfPoints_pointSmallEtale'
-  条件: (S : Scheme.{u})
+  条件: (S : 概形.{u})
   证明: isConservative_pointSmallEtale _ (by
     ext s
     simp only [Equiv.invFun_as_coe, Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: GrothendieckTopology.HasEnoughPoints.{u} (smallEtaleTopology S)
+  签名: Grothendieck拓扑.有EnoughPoints.{u} (smallEtaleTopology S)
   定义体: ⟨_, inferInstance, isConservativeFamilyOfPoints_pointSmallEtale' S⟩
 
 Depends on / 依赖: isConservativeFamilyOfPoints_pointSmallEtale

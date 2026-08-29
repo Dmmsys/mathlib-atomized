@@ -99,7 +99,7 @@ definition evalPrettyMonomial
 
 中文:
 定义 evalPrettyMonomial
-  签名: (iM : Q(GroupWithZero $M)) (r : 整数) (x : Q($M))
+  签名: (iM : Q(带零群 $M)) (r : 整数) (x : Q($M))
   定义体: match r with
   | 0 => /- If an exponent is zero then we must not have been able to prove that x is nonzero. -/
     return ⟨q($x / $x), q(zpow'_zero_eq_div ..)⟩
@@ -219,7 +219,7 @@ definition split
 
 中文:
 定义 split
-  签名: (iM : Q(CommGroupWithZero $M)) (l : qNF M)
+  签名: (iM : Q(带零交换群 $M)) (l : qNF M)
   定义体: match l with
   | [] => return ⟨[], [], q(Eq.symm (div_one (1:$M)))⟩
   | ((r, x), i) :: t => do
@@ -264,7 +264,7 @@ definition evalPrettyAux
 
 中文:
 定义 evalPrettyAux
-  签名: (iM : Q(CommGroupWithZero $M)) (l : qNF M)
+  签名: (iM : Q(带零交换群 $M)) (l : qNF M)
   定义体: match l with
   | [] => return ⟨q(1), q(rfl)⟩
   | [((r, x), _)] => do
@@ -305,7 +305,7 @@ definition evalPretty
 
 中文:
 定义 evalPretty
-  签名: (iM : Q(CommGroupWithZero $M)) (l : qNF M)
+  签名: (iM : Q(带零交换群 $M)) (l : qNF M)
   定义体: do
   let ⟨l_n, l_d, pf⟩ ← split iM l
   let ⟨num, pf_n⟩ ← evalPrettyAux q(inferInstance) l_n
@@ -370,7 +370,7 @@ definition mkMulProof
 
 中文:
 定义 mkMulProof
-  签名: (iM : Q(CommGroupWithZero $M)) (l₁ l₂ : qNF M)
+  签名: (iM : Q(带零交换群 $M)) (l₁ l₂ : qNF M)
   定义体: match l₁, l₂ with
   | [], l => (q(one_mul (NF.eval $(l.toNF))):)
   | l, [] => (q(mul_one (NF.eval $(l.toNF))):)
@@ -437,7 +437,7 @@ definition mkDivProof
 
 中文:
 定义 mkDivProof
-  签名: (iM : Q(CommGroupWithZero $M)) (l₁ l₂ : qNF M)
+  签名: (iM : Q(带零交换群 $M)) (l₁ l₂ : qNF M)
   定义体: match l₁, l₂ with
   | [], l => (q(NF.one_div_eq_eval $(l.toNF)):)
   | l, [] => (q(div_one (NF.eval $(l.toNF))):)
@@ -480,11 +480,11 @@ inductive DenomCondition
 
 中文:
 归纳类型 DenomCondition
-  参数: (iM : Q(GroupWithZero $M))
+  参数: (iM : Q(带零群 $M))
   构造子 (3 个):
     - none: 
     - nonzero: 
-    - positive: (iM' : Q(PartialOrder $M)) (iM'' : Q(PosMulStrictMono $M)) (iM''' : Q(PosMulReflectLT $M)) (iM'''' : Q(ZeroLEOneClass $M))
+    - positive: (iM' : Q(偏序 $M)) (iM'' : Q(正乘严格递增 $M)) (iM''' : Q(正乘反映严格偏序 $M)) (iM'''' : Q(ZeroLEOne类 $M))
 -/
 inductive DenomCondition (iM : Q(GroupWithZero $M))
   | none
@@ -503,7 +503,7 @@ definition proof
 
 中文:
 定义 proof
-  签名: {iM : Q(GroupWithZero $M)} (L : qNF M)
+  签名: {iM : Q(带零群 $M)} (L : qNF M)
 -/
 @[expose] def proof {iM : Q(GroupWithZero $M)} (L : qNF M) : DenomCondition iM -> Type
   | .none => Unit
@@ -519,7 +519,7 @@ definition proofZero
 
 中文:
 定义 proofZero
-  签名: {iM : Q(CommGroupWithZero $M)}
+  签名: {iM : Q(带零交换群 $M)}
 
 Depends on / 依赖: cond.proof
 -/
@@ -549,7 +549,7 @@ definition mkDenomConditionProofSucc
 
 中文:
 定义 mkDenomConditionProofSucc
-  签名: {iM : Q(CommGroupWithZero $M)}
+  签名: {iM : Q(带零交换群 $M)}
   定义体: match cond with
   | .none => return (← disch q($e != 0), Unit.unit)
   | .nonzero => do
@@ -596,7 +596,7 @@ definition mkDenomConditionProofSucc'
 
 中文:
 定义 mkDenomConditionProofSucc'
-  签名: {iM : Q(CommGroupWithZero $M)}
+  签名: {iM : Q(带零交换群 $M)}
   定义体: match cond with
   | .none => return Unit.unit
   | .nonzero => do
@@ -639,8 +639,8 @@ MetaM Σ (L l₁' l₂' : qNF M),
         Q((NF.eval $(L.to
 
 中文:
-定义 gcd
-  签名: (iM : Q(CommGroupWithZero $M)) (l₁ l₂ : qNF M)
+定义 最大公约数
+  签名: (iM : Q(带零交换群 $M)) (l₁ l₂ : qNF M)
   定义体: /- Handle the case where atom `i` is present in the first list but not the second. -/
   let absent (l₁ l₂ : qNF M) (n : Int) (e : Q($M)) (i : Nat) :
 MetaM Σ (L l₁' l₂' : qNF M),
@@ -752,7 +752,7 @@ definition normalize
 
 中文:
 定义 normalize
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type))
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type))
   定义体: do
   let baseCase (y : Q($M)) (normalize? : Bool) :
       AtomM (Σ (l : qNF M), Q($y = NF.eval $(l.toNF))) := do
@@ -894,7 +894,7 @@ definition reduceExprQ
 
 中文:
 定义 reduceExprQ
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type))
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type))
   定义体: do
   let ⟨y, ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM x
   let ⟨l', pf'⟩ ← qNF.removeZeros disch iM l
@@ -926,7 +926,7 @@ definition reduceEqQ
 
 中文:
 定义 reduceEqQ
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type))
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type))
   定义体: do
   let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf_l₁⟩ ← normalize disch iM e₁
   let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf_l₂⟩ ← normalize disch iM e₂
@@ -964,7 +964,7 @@ definition reduceLeQ
 
 中文:
 定义 reduceLeQ
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type))
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type))
   定义体: do
   let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf_l₁⟩ ← normalize disch iM e₁
   let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf_l₂⟩ ← normalize disch iM e₂
@@ -1005,7 +1005,7 @@ definition reduceLtQ
 
 中文:
 定义 reduceLtQ
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type))
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type))
   定义体: do
   let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf_l₁⟩ ← normalize disch iM e₁
   let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf_l₂⟩ ← normalize disch iM e₂
@@ -1046,7 +1046,7 @@ guard
 
 中文:
 定义 reduceExpr
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type)) (x : Expr)
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type)) (x : Expr)
   定义体: do
   -- for `field_simp` to work with the recursive infrastructure in `AtomM.recurse`, we need to fail
   -- on things `field_simp` would treat as atoms
@@ -1088,7 +1088,7 @@ definition reduceProp
 
 中文:
 定义 reduceProp
-  签名: (disch : 对任意 {u : Level} (type : Q(Sort u)), MetaM Q($type)) (t : Expr)
+  签名: (disch : 对任意 {u : Level} (type : Q(类型层 u)), MetaM Q($type)) (t : Expr)
   定义体: do
   let ⟨i, _, a, b⟩ ← t.ineq?
   -- infer `u` and `K : Q(Type u)` such that `x : Q($K)`
@@ -1150,7 +1150,7 @@ return fun e => Prod.fst < > (FieldSimp.discharge e).run ctx >>= Option.getM
 
 中文:
 定义 parseDischarger
-  签名: (d : Option (TSyntax ``discharger)) (args : Option (TSyntax ``simpArgs))
+  签名: (d : 选项类型 (TSyntax ``discharger)) (args : 选项类型 (TSyntax ``simpArgs))
   定义体: do
   match d with
   | none =>

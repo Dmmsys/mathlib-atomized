@@ -609,7 +609,7 @@ definition leftHomotopic
 
 中文:
 定义 leftHomotopic
-  签名: : HomRel (Arrow V)
+  签名: : HomRel (箭头 V)
   定义体: fun _ _ f g => Nonempty (LeftHomotopy f g)
 
 Depends on / 依赖: LeftHomotopy, Nonempty
@@ -630,7 +630,7 @@ instance leftHomotopy_congruence
 
 中文:
 实例 leftHomotopy_congruence
-  签名: : Congruence (leftHomotopic V) where
+  签名: : 余ngruence (leftHomotopic V) where
   定义体: { refl := fun C => ⟨LeftHomotopy.refl C⟩
       symm := fun ⟨w⟩ => ⟨w.symm⟩
       trans := fun ⟨w₁⟩ ⟨w₂⟩ => ⟨w₁.trans w₂⟩ }
@@ -657,7 +657,7 @@ definition rightHomotopic
 
 中文:
 定义 rightHomotopic
-  签名: : HomRel (Arrow V)
+  签名: : HomRel (箭头 V)
   定义体: fun _ _ f g => Nonempty (RightHomotopy f g)
 
 Depends on / 依赖: Nonempty, RightHomotopy
@@ -678,7 +678,7 @@ instance rightHomotopy_congruence
 
 中文:
 实例 rightHomotopy_congruence
-  签名: : Congruence (rightHomotopic V) where
+  签名: : 余ngruence (rightHomotopic V) where
   定义体: { refl := fun C => ⟨RightHomotopy.refl C⟩
       symm := fun ⟨w⟩ => ⟨w.symm⟩
       trans := fun ⟨w₁⟩ ⟨w₂⟩ => ⟨w₁.trans w₂⟩ }

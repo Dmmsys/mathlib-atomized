@@ -204,7 +204,7 @@ theorem exists_taggedPartition_isHenstock_isSubordinate_homothetic
     have hsub : forall J' in (splitCenter J).biUnion
 
 中文:
-定理 exists_taggedPartition_isHenstock_isSubordinate_homothetic
+定理 存在_taggedPartition_isHenstock_isSubordinate_homothetic
   结论: (I : Box ι)
   证明: by
   refine subbox_induction_on I (fun J _ hJ => ?_) fun z _ => ?_
@@ -265,8 +265,8 @@ theorem exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
     isSubordinate_biUnionTagged.2 fun J _ => πir J, ?_, π.iUnion_biUnion_parti
 
 中文:
-定理 exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
-  结论: {I : Box ι} (r : (ι -> 实数) -> Ioi (0 : 实数))
+定理 存在_tagged_le_isHenstock_isSubordinate_iUnion_eq
+  结论: {I : Box ι} (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: by
   have := fun J => Box.exists_taggedPartition_isHenstock_isSubordinate_homothetic J r
   choose! πi πip πiH πir _ πid using this
@@ -296,7 +296,7 @@ definition toSubordinate
 
 中文:
 定义 toSubordinate
-  签名: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  签名: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   定义体: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose
 
 Depends on / 依赖: exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
@@ -314,7 +314,7 @@ theorem toSubordinate_toPrepartition_le
 
 中文:
 定理 toSubordinate_toPrepartition_le
-  条件: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  条件: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose_spec.1
 
 Depends on / 依赖: choose_spec, exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
@@ -333,7 +333,7 @@ theorem isHenstock_toSubordinate
 
 中文:
 定理 isHenstock_toSubordinate
-  条件: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  条件: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose_spec.2.1
 
 Depends on / 依赖: choose_spec, exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
@@ -354,7 +354,7 @@ theorem isSubordinate_toSubordinate
 
 中文:
 定理 isSubordinate_toSubordinate
-  条件: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  条件: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose_spec.2.2.1
 
 @[simp]
@@ -378,7 +378,7 @@ theorem distortion_toSubordinate
 
 中文:
 定理 distortion_toSubordinate
-  条件: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  条件: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose_spec.2.2.2.1
 
 @[simp]
@@ -400,7 +400,7 @@ theorem iUnion_toSubordinate
 
 中文:
 定理 iUnion_toSubordinate
-  条件: (π : Prepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  条件: (π : 预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   证明: (π.exists_tagged_le_isHenstock_isSubordinate_iUnion_eq r).choose_spec.2.2.2.2
 
 Depends on / 依赖: choose_spec, exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
@@ -424,7 +424,7 @@ definition unionComplToSubordinate
 
 中文:
 定义 unionComplToSubordinate
-  签名: (π₁ : TaggedPrepartition I) (π₂ : Prepartition I)
+  签名: (π₁ : 标记预分拆 I) (π₂ : 预分拆 I)
   定义体: π₁.disjUnion (π₂.toSubordinate r)
     (((π₂.iUnion_toSubordinate r).trans hU).symm ▸ disjoint_sdiff_self_right)
 
@@ -445,7 +445,7 @@ theorem isPartition_unionComplToSubordinate
 
 中文:
 定理 isPartition_unionComplToSubordinate
-  结论: (π₁ : TaggedPrepartition I) (π₂ : Prepartition I)
+  结论: (π₁ : 标记预分拆 I) (π₂ : 预分拆 I)
   证明: Prepartition.isPartitionDisjUnionOfEqDiff ((π₂.iUnion_toSubordinate r).trans hU)
 
 Depends on / 依赖: Prepartition, Prepartition.isPartitionDisjUnionOfEqDiff, iUnion_toSubordinate, isPartitionDisjUnionOfEqDiff
@@ -469,7 +469,7 @@ theorem unionComplToSubordinate_boxes
 
 中文:
 定理 unionComplToSubordinate_boxes
-  结论: (π₁ : TaggedPrepartition I) (π₂ : Prepartition I)
+  结论: (π₁ : 标记预分拆 I) (π₂ : 预分拆 I)
   证明: rfl
 
 @[simp]
@@ -491,7 +491,7 @@ theorem iUnion_unionComplToSubordinate_boxes
 
 中文:
 定理 iUnion_unionComplToSubordinate_boxes
-  结论: (π₁ : TaggedPrepartition I) (π₂ : Prepartition I)
+  结论: (π₁ : 标记预分拆 I) (π₂ : 预分拆 I)
   证明: (isPartition_unionComplToSubordinate _ _ _ _).iUnion_eq
 
 @[simp]
@@ -515,7 +515,7 @@ theorem distortion_unionComplToSubordinate
 
 中文:
 定理 distortion_unionComplToSubordinate
-  结论: (π₁ : TaggedPrepartition I) (π₂ : Prepartition I)
+  结论: (π₁ : 标记预分拆 I) (π₂ : 预分拆 I)
   证明: by
   simp [unionComplToSubordinate]
 

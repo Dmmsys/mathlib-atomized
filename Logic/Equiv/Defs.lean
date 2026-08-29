@@ -78,13 +78,13 @@ structure Equiv
     - right_inv : RightInverse invFun toFun  [default: by intro; first | rfl | ext <;> rfl]
 
 中文:
-结构 Equiv
-  参数: (α β : Sort*)
+结构 等价
+  参数: (α β : 类型层*)
   公理与运算 (4 个):
     - toFun : α -> β
     - invFun : β -> α
-    - left_inv : LeftInverse invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
-    - right_inv : RightInverse invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
+    - left_inv : 左逆 invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
+    - right_inv : 右逆 invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
 
 Depends on / 依赖: RightInverse, invFun, protected, right_inv
 -/
@@ -118,8 +118,8 @@ definition EquivLike.toEquiv
   right_inv := EquivLike.right_inv f
 
 中文:
-定义 EquivLike.toEquiv
-  签名: {F} [EquivLike F α β] (f : F)
+定义 等价状.toEquiv
+  签名: {F} [等价状 F α β] (f : F)
   定义体: f
   invFun := EquivLike.inv f
   left_inv := EquivLike.left_inv f
@@ -144,8 +144,8 @@ abbreviation Equiv.Perm
   body: Equiv α α
 
 中文:
-缩写 Equiv.Perm
-  签名: (α : Sort*)
+缩写 等价.置换
+  签名: (α : 类型层*)
   定义体: Equiv α α
 -/
 abbrev Equiv.Perm (α : Sort*) :=
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (α ≃ β) α β
+  签名: 等价状 (α ≃ β) α β
   定义体: Equiv.toFun
   inv := Equiv.invFun
   left_inv := Equiv.left_inv
@@ -197,8 +197,8 @@ lemma _root_.EquivLike.coe_coe
   proof: rfl
 
 中文:
-引理 _root_.EquivLike.coe_coe
-  条件: {F} [EquivLike F α β] (e : F)
+引理 _root_.等价状.coe_coe
+  条件: {F} [等价状 F α β] (e : F)
   证明: rfl
 -/
 lemma _root_.EquivLike.coe_coe {F} [EquivLike F α β] (e : F) :
@@ -216,7 +216,7 @@ theorem coe_fn_mk
 中文:
 定理 coe_fn_mk
   条件: (f : α -> β) (g l r)
-  结论: (Equiv.mk f g l r : α -> β) = f
+  结论: (等价.mk f g l r : α -> β) = f
   证明: rfl
 -/
 @[simp, grind =] theorem coe_fn_mk (f : α -> β) (g l r) : (Equiv.mk f g l r : α -> β) = f :=
@@ -232,7 +232,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: @Function.Injective (α ≃ β) (α -> β) (fun e => e)
+  结论: @函数.单射 (α ≃ β) (α -> β) (fun e => e)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -269,7 +269,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : Equiv α β} (H : 对任意 x, f x = g x)
+  条件: {f g : 等价 α β} (H : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g H
 -/
@@ -286,7 +286,7 @@ theorem congr_arg
 
 中文:
 定理 congr_arg
-  条件: {f : Equiv α β} {x x' : α}
+  条件: {f : 等价 α β} {x x' : α}
   结论: x = x' -> f x = f x'
   证明: DFunLike.congr_arg f
 -/
@@ -304,7 +304,7 @@ theorem congr_fun
 
 中文:
 定理 congr_fun
-  条件: {f g : Equiv α β} (h : f = g) (x : α)
+  条件: {f g : 等价 α β} (h : f = g) (x : α)
   结论: f x = g x
   证明: DFunLike.congr_fun h x
 -/
@@ -321,8 +321,8 @@ theorem Perm.ext
   proof: Equiv.ext H
 
 中文:
-定理 Perm.ext
-  条件: {σ τ : Equiv.Perm α} (H : 对任意 x, σ x = τ x)
+定理 置换.ext
+  条件: {σ τ : 等价.置换 α} (H : 对任意 x, σ x = τ x)
   结论: σ = τ
   证明: Equiv.ext H
 -/
@@ -338,8 +338,8 @@ theorem Perm.congr_arg
   proof: Equiv.congr_arg
 
 中文:
-定理 Perm.congr_arg
-  条件: {f : Equiv.Perm α} {x x' : α}
+定理 置换.congr_arg
+  条件: {f : 等价.置换 α} {x x' : α}
   结论: x = x' -> f x = f x'
   证明: Equiv.congr_arg
 -/
@@ -356,8 +356,8 @@ theorem Perm.congr_fun
   proof: Equiv.congr_fun h x
 
 中文:
-定理 Perm.congr_fun
-  条件: {f g : Equiv.Perm α} (h : f = g) (x : α)
+定理 置换.congr_fun
+  条件: {f g : 等价.置换 α} (h : f = g) (x : α)
   结论: f x = g x
   证明: Equiv.congr_fun h x
 -/
@@ -374,7 +374,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: ⟨id, id, fun _ => rfl, fun _ => rfl⟩
 -/
 @[refl] protected def refl (α : Sort*) : α ≃ α := ⟨id, id, fun _ => rfl, fun _ => rfl⟩
@@ -389,7 +389,7 @@ instance inhabited'
 
 中文:
 实例 inhabited'
-  签名: : Inhabited (α ≃ α)
+  签名: : 可居 (α ≃ α)
   定义体: ⟨Equiv.refl α⟩
 
 Depends on / 依赖: Equiv.refl
@@ -446,7 +446,7 @@ theorem left_inv'
 中文:
 定理 left_inv'
   条件: (e : α ≃ β)
-  结论: Function.LeftInverse e.symm e
+  结论: 函数.左逆 e.symm e
   证明: e.left_inv
 
 Depends on / 依赖: e.left_inv, left_inv
@@ -464,7 +464,7 @@ theorem right_inv'
 中文:
 定理 right_inv'
   条件: (e : α ≃ β)
-  结论: Function.RightInverse e.symm e
+  结论: 函数.右逆 e.symm e
   证明: e.right_inv
 
 Depends on / 依赖: e.right_inv, right_inv
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: Trans Equiv Equiv Equiv
+  签名: Trans 等价 等价 等价
   定义体: Equiv.trans
 
 Depends on / 依赖: Equiv.trans
@@ -542,7 +542,7 @@ definition symmEquiv
 
 中文:
 定义 symmEquiv
-  签名: (α β : Sort*)
+  签名: (α β : 类型层*)
   定义体: .symm
   invFun := .symm
 -/
@@ -596,7 +596,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : α ≃ β)
-  结论: Injective e
+  结论: 单射 e
   证明: EquivLike.injective e
 -/
 protected theorem injective (e : α ≃ β) : Injective e := EquivLike.injective e
@@ -613,7 +613,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : α ≃ β)
-  结论: Surjective e
+  结论: 满射 e
   证明: EquivLike.surjective e
 -/
 protected theorem surjective (e : α ≃ β) : Surjective e := EquivLike.surjective e
@@ -630,7 +630,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : α ≃ β)
-  结论: Bijective e
+  结论: 双射 e
   证明: EquivLike.bijective e
 -/
 protected theorem bijective (e : α ≃ β) : Bijective e := EquivLike.bijective e
@@ -646,8 +646,8 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: (e : α ≃ β) [Subsingleton β]
-  结论: Subsingleton α
+  条件: (e : α ≃ β) [子单例 β]
+  结论: 子单例 α
   证明: e.injective.subsingleton
 -/
 protected theorem subsingleton (e : α ≃ β) [Subsingleton β] : Subsingleton α :=
@@ -664,8 +664,8 @@ theorem subsingleton.symm
 
 中文:
 定理 subsingleton.symm
-  条件: (e : α ≃ β) [Subsingleton α]
-  结论: Subsingleton β
+  条件: (e : α ≃ β) [子单例 α]
+  结论: 子单例 β
   证明: e.symm.injective.subsingleton
 -/
 protected theorem subsingleton.symm (e : α ≃ β) [Subsingleton α] : Subsingleton β :=
@@ -683,7 +683,7 @@ theorem subsingleton_congr
 中文:
 定理 subsingleton_congr
   条件: (e : α ≃ β)
-  结论: Subsingleton α ↔ Subsingleton β
+  结论: 子单例 α ↔ 子单例 β
   证明: ⟨fun _ => e.symm.subsingleton, fun _ => e.subsingleton⟩
 
 Depends on / 依赖: e.subsingleton, e.symm.subsingleton, subsingleton
@@ -701,7 +701,7 @@ instance equiv_subsingleton_cod
 
 中文:
 实例 equiv_subsingleton_cod
-  签名: [Subsingleton β]
+  签名: [子单例 β]
   定义体: ⟨fun _ _ => Equiv.ext fun _ => Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Equiv.ext, Subsingleton, Subsingleton.elim
@@ -719,7 +719,7 @@ instance equiv_subsingleton_dom
 
 中文:
 实例 equiv_subsingleton_dom
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: ⟨fun f _ => Equiv.ext fun _ => @Subsingleton.elim _ (Equiv.subsingleton.symm f) _ _⟩
 
 Depends on / 依赖: Equiv.ext, Equiv.subsingleton.symm, Subsingleton, Subsingleton.elim, subsingleton
@@ -737,7 +737,7 @@ instance permUnique
 
 中文:
 实例 permUnique
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: uniqueOfSubsingleton (Equiv.refl α)
 
 Depends on / 依赖: Equiv.refl, uniqueOfSubsingleton
@@ -755,9 +755,9 @@ theorem Perm.subsingleton_eq_refl
   proof: Subsingleton.elim _ _
 
 中文:
-定理 Perm.subsingleton_eq_refl
-  条件: [Subsingleton α] (e : Perm α)
-  结论: e = Equiv.refl α
+定理 置换.subsingleton_eq_refl
+  条件: [子单例 α] (e : 置换 α)
+  结论: e = 等价.refl α
   证明: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -776,8 +776,8 @@ theorem nontrivial
 
 中文:
 定理 nontrivial
-  条件: {α β} (e : α ≃ β) [Nontrivial β]
-  结论: Nontrivial α
+  条件: {α β} (e : α ≃ β) [非平凡 β]
+  结论: 非平凡 α
   证明: e.surjective.nontrivial
 -/
 protected theorem nontrivial {α β} (e : α ≃ β) [Nontrivial β] : Nontrivial α :=
@@ -795,7 +795,7 @@ theorem nontrivial_congr
 中文:
 定理 nontrivial_congr
   条件: {α β} (e : α ≃ β)
-  结论: Nontrivial α ↔ Nontrivial β
+  结论: 非平凡 α ↔ 非平凡 β
   证明: ⟨fun _ => e.symm.nontrivial, fun _ => e.nontrivial⟩
 
 Depends on / 依赖: e.nontrivial, e.symm.nontrivial, nontrivial
@@ -831,7 +831,7 @@ theorem nonempty_congr
 中文:
 定理 nonempty_congr
   条件: (e : α ≃ β)
-  结论: Nonempty α ↔ Nonempty β
+  结论: 非空 α ↔ 非空 β
   证明: Nonempty.congr e e.symm
 
 Depends on / 依赖: Nonempty, Nonempty.congr, e.symm
@@ -849,8 +849,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (e : α ≃ β) [Nonempty β]
-  结论: Nonempty α
+  条件: (e : α ≃ β) [非空 β]
+  结论: 非空 α
   证明: e.nonempty_congr.mpr ‹_›
 -/
 protected theorem nonempty (e : α ≃ β) [Nonempty β] : Nonempty α := e.nonempty_congr.mpr ‹_›
@@ -865,7 +865,7 @@ abbreviation inhabited
 
 中文:
 缩写 inhabited
-  签名: [Inhabited β] (e : α ≃ β)
+  签名: [可居 β] (e : α ≃ β)
   定义体: ⟨e.symm default⟩
 -/
 protected abbrev inhabited [Inhabited β] (e : α ≃ β) : Inhabited α := ⟨e.symm default⟩
@@ -880,7 +880,7 @@ abbreviation unique
 
 中文:
 缩写 unique
-  签名: [Unique β] (e : α ≃ β)
+  签名: [唯一 β] (e : α ≃ β)
   定义体: e.symm.surjective.unique
 -/
 protected abbrev unique [Unique β] (e : α ≃ β) : Unique α := e.symm.surjective.unique
@@ -898,7 +898,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {α β : Sort _} (h : α = β)
+  签名: {α β : 类型层 _} (h : α = β)
   定义体: cast h
   invFun := cast h.symm
   left_inv := by grind
@@ -922,7 +922,7 @@ theorem coe_fn_symm_mk
 中文:
 定理 coe_fn_symm_mk
   条件: (f : α -> β) (g l r)
-  结论: ((Equiv.mk f g l r).symm : β -> α) = g
+  结论: ((等价.mk f g l r).symm : β -> α) = g
   证明: rfl
 -/
 @[simp] theorem coe_fn_symm_mk (f : α -> β) (g l r) : ((Equiv.mk f g l r).symm : β -> α) = g := rfl
@@ -937,7 +937,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: (Equiv.refl α : α -> α) = id
+  结论: (等价.refl α : α -> α) = id
   证明: rfl
 -/
 @[simp] theorem coe_refl : (Equiv.refl α : α -> α) = id := rfl
@@ -953,8 +953,8 @@ theorem Perm.coe_subsingleton
   rw [Perm.subsingleton_eq_refl e]; rw [coe_refl]
 
 中文:
-定理 Perm.coe_subsingleton
-  条件: {α : 类型} [Subsingleton α] (e : Perm α)
+定理 置换.coe_subsingleton
+  条件: {α : 类型} [子单例 α] (e : 置换 α)
   结论: (e : α -> α) = id
   证明: by
   rw [Perm.subsingleton_eq_refl e]; rw [coe_refl]
@@ -976,7 +976,7 @@ theorem refl_apply
 中文:
 定理 refl_apply
   条件: (x : α)
-  结论: Equiv.refl α x = x
+  结论: 等价.refl α x = x
   证明: rfl
 -/
 @[simp, grind =] theorem refl_apply (x : α) : Equiv.refl α x = x := rfl
@@ -1091,8 +1091,8 @@ lemma _root_.EquivLike.apply_coe_symm_apply
   proof: (e : α ≃ β).apply_symm_apply x
 
 中文:
-引理 _root_.EquivLike.apply_coe_symm_apply
-  条件: {F} [EquivLike F α β] (e : F) (x : β)
+引理 _root_.等价状.apply_coe_symm_apply
+  条件: {F} [等价状 F α β] (e : F) (x : β)
   证明: (e : α ≃ β).apply_symm_apply x
 -/
 @[simp] lemma _root_.EquivLike.apply_coe_symm_apply {F} [EquivLike F α β] (e : F) (x : β) :
@@ -1108,8 +1108,8 @@ lemma _root_.EquivLike.coe_symm_apply_apply
   proof: (e : α ≃ β).symm_apply_apply x
 
 中文:
-引理 _root_.EquivLike.coe_symm_apply_apply
-  条件: {F} [EquivLike F α β] (e : F) (x : α)
+引理 _root_.等价状.coe_symm_apply_apply
+  条件: {F} [等价状 F α β] (e : F) (x : α)
   证明: (e : α ≃ β).symm_apply_apply x
 -/
 @[simp] lemma _root_.EquivLike.coe_symm_apply_apply {F} [EquivLike F α β] (e : F) (x : α) :
@@ -1125,8 +1125,8 @@ lemma _root_.EquivLike.coe_symm_comp_self
   proof: (e : α ≃ β).symm_comp_self
 
 中文:
-引理 _root_.EquivLike.coe_symm_comp_self
-  条件: {F} [EquivLike F α β] (e : F)
+引理 _root_.等价状.coe_symm_comp_self
+  条件: {F} [等价状 F α β] (e : F)
   证明: (e : α ≃ β).symm_comp_self
 -/
 @[simp] lemma _root_.EquivLike.coe_symm_comp_self {F} [EquivLike F α β] (e : F) :
@@ -1142,8 +1142,8 @@ lemma _root_.EquivLike.self_comp_coe_symm
   proof: (e : α ≃ β).self_comp_symm
 
 中文:
-引理 _root_.EquivLike.self_comp_coe_symm
-  条件: {F} [EquivLike F α β] (e : F)
+引理 _root_.等价状.self_comp_coe_symm
+  条件: {F} [等价状 F α β] (e : F)
   证明: (e : α ≃ β).self_comp_symm
 -/
 @[simp] lemma _root_.EquivLike.self_comp_coe_symm {F} [EquivLike F α β] (e : F) :
@@ -1236,7 +1236,7 @@ theorem cast_apply
 中文:
 定理 cast_apply
   条件: {α β} (h : α = β) (x : α)
-  结论: Equiv.cast h x = cast h x
+  结论: 等价.cast h x = cast h x
   证明: rfl
 -/
 @[simp] theorem cast_apply {α β} (h : α = β) (x : α) : Equiv.cast h x = cast h x := rfl
@@ -1253,7 +1253,7 @@ theorem cast_symm
 中文:
 定理 cast_symm
   条件: {α β} (h : α = β)
-  结论: Equiv.cast h.symm = (Equiv.cast h).symm
+  结论: 等价.cast h.symm = (等价.cast h).symm
   证明: rfl
 -/
 theorem cast_symm {α β} (h : α = β) : Equiv.cast h.symm = (Equiv.cast h).symm := rfl
@@ -1270,7 +1270,7 @@ theorem cast_refl
 中文:
 定理 cast_refl
   条件: {α} (h : α = α := rfl)
-  结论: Equiv.cast h = Equiv.refl α
+  结论: 等价.cast h = 等价.refl α
   证明: rfl
 -/
 @[simp] theorem cast_refl {α} (h : α = α := rfl) : Equiv.cast h = Equiv.refl α := rfl
@@ -1305,7 +1305,7 @@ theorem cast_eq_iff_heq
 中文:
 定理 cast_eq_iff_heq
   条件: {α β} (h : α = β) {a : α} {b : β}
-  结论: Equiv.cast h a = b ↔ a ≍ b
+  结论: 等价.cast h a = b ↔ a ≍ b
   证明: by
   subst h; simp
 -/
@@ -1398,7 +1398,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (Equiv.symm : (α ≃ β) -> β ≃ α)
+  结论: 函数.双射 (等价.symm : (α ≃ β) -> β ≃ α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -1418,7 +1418,7 @@ theorem trans_refl
 中文:
 定理 trans_refl
   条件: (e : α ≃ β)
-  结论: e.trans (Equiv.refl β) = e
+  结论: e.trans (等价.refl β) = e
   证明: by grind
 -/
 @[simp] theorem trans_refl (e : α ≃ β) : e.trans (Equiv.refl β) = e := by grind
@@ -1433,7 +1433,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (Equiv.refl α).symm = Equiv.refl α
+  结论: (等价.refl α).symm = 等价.refl α
   证明: rfl
 -/
 @[simp, grind =] theorem refl_symm : (Equiv.refl α).symm = Equiv.refl α := rfl
@@ -1450,7 +1450,7 @@ theorem refl_trans
 中文:
 定理 refl_trans
   条件: (e : α ≃ β)
-  结论: (Equiv.refl α).trans e = e
+  结论: (等价.refl α).trans e = e
   证明: by cases e; rfl
 -/
 @[simp] theorem refl_trans (e : α ≃ β) : (Equiv.refl α).trans e = e := by cases e; rfl
@@ -1467,7 +1467,7 @@ theorem symm_trans_self
 中文:
 定理 symm_trans_self
   条件: (e : α ≃ β)
-  结论: e.symm.trans e = Equiv.refl β
+  结论: e.symm.trans e = 等价.refl β
   证明: by grind
 -/
 @[simp] theorem symm_trans_self (e : α ≃ β) : e.symm.trans e = Equiv.refl β := by grind
@@ -1484,7 +1484,7 @@ theorem self_trans_symm
 中文:
 定理 self_trans_symm
   条件: (e : α ≃ β)
-  结论: e.trans e.symm = Equiv.refl α
+  结论: e.trans e.symm = 等价.refl α
   证明: by grind
 -/
 @[simp] theorem self_trans_symm (e : α ≃ β) : e.trans e.symm = Equiv.refl α := by grind
@@ -1555,7 +1555,7 @@ theorem leftInverse_symm
 中文:
 定理 leftInverse_symm
   条件: (f : α ≃ β)
-  结论: LeftInverse f.symm f
+  结论: 左逆 f.symm f
   证明: f.left_inv
 
 Depends on / 依赖: f.left_inv, left_inv
@@ -1574,7 +1574,7 @@ theorem rightInverse_symm
 中文:
 定理 rightInverse_symm
   条件: (f : α ≃ β)
-  结论: Function.RightInverse f.symm f
+  结论: 函数.右逆 f.symm f
   证明: f.right_inv
 
 Depends on / 依赖: f.right_inv, right_inv
@@ -1593,7 +1593,7 @@ theorem injective_comp
 中文:
 定理 injective_comp
   条件: (e : α ≃ β) (f : β -> γ)
-  结论: Injective (f ∘ e) ↔ Injective f
+  结论: 单射 (f ∘ e) ↔ 单射 f
   证明: EquivLike.injective_comp e f
 
 Depends on / 依赖: EquivLike, EquivLike.injective_comp, injective_comp
@@ -1613,7 +1613,7 @@ theorem comp_injective
 中文:
 定理 comp_injective
   条件: (f : α -> β) (e : β ≃ γ)
-  结论: Injective (e ∘ f) ↔ Injective f
+  结论: 单射 (e ∘ f) ↔ 单射 f
   证明: EquivLike.comp_injective f e
 
 Depends on / 依赖: EquivLike, EquivLike.comp_injective, comp_injective
@@ -1633,7 +1633,7 @@ theorem surjective_comp
 中文:
 定理 surjective_comp
   条件: (e : α ≃ β) (f : β -> γ)
-  结论: Surjective (f ∘ e) ↔ Surjective f
+  结论: 满射 (f ∘ e) ↔ 满射 f
   证明: EquivLike.surjective_comp e f
 
 Depends on / 依赖: EquivLike, EquivLike.surjective_comp, surjective_comp
@@ -1653,7 +1653,7 @@ theorem comp_surjective
 中文:
 定理 comp_surjective
   条件: (f : α -> β) (e : β ≃ γ)
-  结论: Surjective (e ∘ f) ↔ Surjective f
+  结论: 满射 (e ∘ f) ↔ 满射 f
   证明: EquivLike.comp_surjective f e
 
 Depends on / 依赖: EquivLike, EquivLike.comp_surjective, comp_surjective
@@ -1673,7 +1673,7 @@ theorem bijective_comp
 中文:
 定理 bijective_comp
   条件: (e : α ≃ β) (f : β -> γ)
-  结论: Bijective (f ∘ e) ↔ Bijective f
+  结论: 双射 (f ∘ e) ↔ 双射 f
   证明: EquivLike.bijective_comp e f
 
 Depends on / 依赖: EquivLike, EquivLike.bijective_comp, bijective_comp
@@ -1695,7 +1695,7 @@ theorem comp_bijective
 中文:
 定理 comp_bijective
   条件: (f : α -> β) (e : β ≃ γ)
-  结论: Bijective (e ∘ f) ↔ Bijective f
+  结论: 双射 (e ∘ f) ↔ 双射 f
   证明: EquivLike.comp_bijective f e
 
 @[simp]
@@ -1740,7 +1740,7 @@ invFun bd := ab.trans bd.trans cd.symm
 
 中文:
 定义 equivCongr
-  签名: {δ : Sort*} (ab : α ≃ β) (cd : γ ≃ δ)
+  签名: {δ : 类型层*} (ab : α ≃ β) (cd : γ ≃ δ)
   定义体: (ab.symm.trans ac).trans cd
 invFun bd := ab.trans bd.trans cd.symm
   left_inv ac := by grind
@@ -1866,7 +1866,7 @@ definition permCongr
 
 中文:
 定义 permCongr
-  签名: : Perm α' ≃ Perm β'
+  签名: : 置换 α' ≃ 置换 β'
   定义体: equivCongr e e
 
 Depends on / 依赖: equivCongr
@@ -1884,7 +1884,7 @@ theorem permCongr_def
 
 中文:
 定理 permCongr_def
-  条件: (p : Equiv.Perm α')
+  条件: (p : 等价.置换 α')
   结论: e.permCongr p = (e.symm.trans p).trans e
   证明: rfl
 -/
@@ -1901,7 +1901,7 @@ theorem permCongr_refl
 
 中文:
 定理 permCongr_refl
-  结论: e.permCongr (Equiv.refl _) = Equiv.refl _
+  结论: e.permCongr (等价.refl _) = 等价.refl _
   证明: by
   simp [permCongr_def]
 -/
@@ -1933,7 +1933,7 @@ theorem permCongr_apply
 
 中文:
 定理 permCongr_apply
-  条件: (p : Equiv.Perm α') (x)
+  条件: (p : 等价.置换 α') (x)
   证明: rfl
 -/
 @[simp, grind =] theorem permCongr_apply (p : Equiv.Perm α') (x) :
@@ -1949,7 +1949,7 @@ theorem permCongr_symm_apply
 
 中文:
 定理 permCongr_symm_apply
-  条件: (p : Equiv.Perm β') (x)
+  条件: (p : 等价.置换 β') (x)
   证明: rfl
 -/
 theorem permCongr_symm_apply (p : Equiv.Perm β') (x) :
@@ -1965,7 +1965,7 @@ theorem permCongr_trans
 
 中文:
 定理 permCongr_trans
-  条件: (p p' : Equiv.Perm α')
+  条件: (p p' : 等价.置换 α')
   证明: by grind
 -/
 theorem permCongr_trans (p p' : Equiv.Perm α') :
@@ -1983,7 +1983,7 @@ definition equivOfIsEmpty
 
 中文:
 定义 equivOfIsEmpty
-  签名: (α β : Sort*) [IsEmpty α] [IsEmpty β]
+  签名: (α β : 类型层*) [是空 α] [是空 β]
   定义体: ⟨isEmptyElim, isEmptyElim, isEmptyElim, isEmptyElim⟩
 
 Depends on / 依赖: isEmptyElim
@@ -2001,7 +2001,7 @@ definition equivEmpty
 
 中文:
 定义 equivEmpty
-  签名: (α : Sort u) [IsEmpty α]
+  签名: (α : 类型层 u) [是空 α]
   定义体: equivOfIsEmpty α _
 
 Depends on / 依赖: equivOfIsEmpty
@@ -2018,7 +2018,7 @@ definition equivPEmpty
 
 中文:
 定义 equivPEmpty
-  签名: (α : Sort v) [IsEmpty α]
+  签名: (α : 类型层 v) [是空 α]
   定义体: equivOfIsEmpty α _
 
 Depends on / 依赖: equivOfIsEmpty
@@ -2035,7 +2035,7 @@ definition equivEmptyEquiv
 
 中文:
 定义 equivEmptyEquiv
-  签名: (α : Sort u)
+  签名: (α : 类型层 u)
   定义体: ⟨fun e => Function.isEmpty e, @equivEmpty α, fun e => ext fun x => (e x).elim, fun _ => rfl⟩
 
 Depends on / 依赖: Function, Function.isEmpty, equivEmpty, isEmpty
@@ -2075,7 +2075,7 @@ definition ofUnique
 
 中文:
 定义 ofUnique
-  签名: (α β : Sort _) [Unique.{u} α] [Unique.{v} β]
+  签名: (α β : 类型层 _) [唯一.{u} α] [唯一.{v} β]
   定义体: default
   invFun := default
   left_inv _ := Subsingleton.elim _ _
@@ -2099,7 +2099,7 @@ definition equivPUnit
 
 中文:
 定义 equivPUnit
-  签名: (α : Sort u) [Unique α]
+  签名: (α : 类型层 u) [唯一 α]
   定义体: ofUnique α _
 
 Depends on / 依赖: ofUnique
@@ -2153,7 +2153,7 @@ definition plift
 
 中文:
 定义 plift
-  签名: : PLift α ≃ α
+  签名: : 命题层提升 α ≃ α
   定义体: ⟨PLift.down, PLift.up, PLift.up_down, PLift.down_up⟩
 -/
 protected def plift : PLift α ≃ α := ⟨PLift.down, PLift.up, PLift.up_down, PLift.down_up⟩
@@ -2191,7 +2191,7 @@ definition arrowCongr
 
 中文:
 定义 arrowCongr
-  签名: {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
+  签名: {α₁ β₁ α₂ β₂ : 类型层*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
   定义体: e₂ ∘ f ∘ e₁.symm
   invFun f := e₂.symm ∘ f ∘ e₁
   left_inv f := by grind
@@ -2213,7 +2213,7 @@ theorem arrowCongr_comp
 
 中文:
 定理 arrowCongr_comp
-  结论: {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
+  结论: {α₁ β₁ γ₁ α₂ β₂ γ₂ : 类型层*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
   证明: by grind
 -/
 theorem arrowCongr_comp {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
@@ -2230,7 +2230,7 @@ theorem arrowCongr_refl
 
 中文:
 定理 arrowCongr_refl
-  条件: {α β : Sort*}
+  条件: {α β : 类型层*}
   证明: rfl
 -/
 @[simp] theorem arrowCongr_refl {α β : Sort*} :
@@ -2246,7 +2246,7 @@ theorem arrowCongr_trans
 
 中文:
 定理 arrowCongr_trans
-  结论: {α₁ α₂ α₃ β₁ β₂ β₃ : Sort*}
+  结论: {α₁ α₂ α₃ β₁ β₂ β₃ : 类型层*}
   证明: rfl
 -/
 @[simp] theorem arrowCongr_trans {α₁ α₂ α₃ β₁ β₂ β₃ : Sort*}
@@ -2263,7 +2263,7 @@ theorem arrowCongr_symm
 
 中文:
 定理 arrowCongr_symm
-  条件: {α₁ α₂ β₁ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
+  条件: {α₁ α₂ β₁ β₂ : 类型层*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
   证明: rfl
 -/
 @[simp, grind =] theorem arrowCongr_symm {α₁ α₂ β₁ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) :
@@ -2368,7 +2368,7 @@ theorem conj_refl
 
 中文:
 定理 conj_refl
-  结论: conj (Equiv.refl α) = Equiv.refl (α -> α)
+  结论: conj (等价.refl α) = 等价.refl (α -> α)
   证明: rfl
 -/
 @[simp] theorem conj_refl : conj (Equiv.refl α) = Equiv.refl (α -> α) := rfl
@@ -2605,7 +2605,7 @@ definition punitEquivPUnit
 
 中文:
 定义 punitEquivPUnit
-  签名: : PUnit.{v} ≃ PUnit.{w} where
+  签名: : 命题单元.{v} ≃ 命题单元.{w} where
   定义体: .unit
   invFun _ := .unit
 -/
@@ -2625,8 +2625,8 @@ definition propEquivBool
   right_inv b := by simp
 
 中文:
-定义 propEquivBool
-  签名: : 命题 ≃ 布尔 where
+定义 propEquiv布尔
+  签名: : 命题 ≃ 布尔值 where
   定义体: @decide p (Classical.propDecidable _)
   invFun b := b
   left_inv p := by simp
@@ -2653,7 +2653,7 @@ definition arrowPUnitEquivPUnit
 
 中文:
 定义 arrowPUnitEquivPUnit
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: .unit
   invFun _ _ := .unit
 -/
@@ -2675,7 +2675,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: [Unique α] (β : α -> Sort*)
+  签名: [唯一 α] (β : α -> 类型层*)
   定义体: f default
   invFun := uniqueElim
   left_inv f := by ext i; cases Unique.eq_default i; rfl
@@ -2697,7 +2697,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (α β) [Unique.{u} α]
+  签名: (α β) [唯一.{u} α]
   定义体: piUnique _
 
 Depends on / 依赖: piUnique
@@ -2714,7 +2714,7 @@ definition punitArrowEquiv
 
 中文:
 定义 punitArrowEquiv
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: funUnique PUnit.{u} α
 
 Depends on / 依赖: funUnique
@@ -2731,7 +2731,7 @@ definition trueArrowEquiv
 
 中文:
 定义 trueArrowEquiv
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: funUnique _ _
 
 Depends on / 依赖: funUnique
@@ -2750,7 +2750,7 @@ definition arrowPUnitOfIsEmpty
 
 中文:
 定义 arrowPUnitOfIsEmpty
-  签名: (α β : Sort*) [IsEmpty α]
+  签名: (α β : 类型层*) [是空 α]
   定义体: PUnit.unit
   invFun _ := isEmptyElim
   left_inv _ := funext isEmptyElim
@@ -2772,7 +2772,7 @@ definition emptyArrowEquivPUnit
 
 中文:
 定义 emptyArrowEquivPUnit
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: arrowPUnitOfIsEmpty _ _
 
 Depends on / 依赖: arrowPUnitOfIsEmpty
@@ -2789,7 +2789,7 @@ definition pemptyArrowEquivPUnit
 
 中文:
 定义 pemptyArrowEquivPUnit
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: arrowPUnitOfIsEmpty _ _
 
 Depends on / 依赖: arrowPUnitOfIsEmpty
@@ -2806,7 +2806,7 @@ definition falseArrowEquivPUnit
 
 中文:
 定义 falseArrowEquivPUnit
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: arrowPUnitOfIsEmpty _ _
 
 Depends on / 依赖: arrowPUnitOfIsEmpty
@@ -2851,7 +2851,7 @@ definition psigmaEquivSigmaPLift
 
 中文:
 定义 psigmaEquivSigmaPLift
-  签名: {α} (β : α -> Sort*)
+  签名: {α} (β : α -> 类型层*)
   定义体: ⟨PLift.up a.1, PLift.up a.2⟩
   invFun a := ⟨a.1.down, a.2.down⟩
 
@@ -2877,7 +2877,7 @@ definition psigmaCongrRight
 
 中文:
 定义 psigmaCongrRight
-  签名: {β₁ β₂ : α -> Sort*} (F : 对任意 a, β₁ a ≃ β₂ a)
+  签名: {β₁ β₂ : α -> 类型层*} (F : 对任意 a, β₁ a ≃ β₂ a)
   定义体: ⟨a.1, F a.1 a.2⟩
   invFun a := ⟨a.1, (F a.1).symm a.2⟩
   left_inv := by grind
@@ -2901,7 +2901,7 @@ theorem psigmaCongrRight_trans
 
 中文:
 定理 psigmaCongrRight_trans
-  结论: {α} {β₁ β₂ β₃ : α -> Sort*}
+  结论: {α} {β₁ β₂ β₃ : α -> 类型层*}
   证明: rfl
 
 @[grind =]
@@ -2924,7 +2924,7 @@ theorem psigmaCongrRight_symm
 
 中文:
 定理 psigmaCongrRight_symm
-  条件: {α} {β₁ β₂ : α -> Sort*} (F : 对任意 a, β₁ a ≃ β₂ a)
+  条件: {α} {β₁ β₂ : α -> 类型层*} (F : 对任意 a, β₁ a ≃ β₂ a)
   证明: rfl
 
 @[simp]
@@ -2943,7 +2943,7 @@ theorem psigmaCongrRight_refl
 
 中文:
 定理 psigmaCongrRight_refl
-  条件: {α} {β : α -> Sort*}
+  条件: {α} {β : α -> 类型层*}
   证明: rfl
 -/
 theorem psigmaCongrRight_refl {α} {β : α -> Sort*} :
@@ -3108,7 +3108,7 @@ abbreviation sigmaCongrRight
 
 中文:
 缩写 sigmaCongrRight
-  签名: {α} {β : α -> Sort _} (F : 对任意 a, Perm (β a))
+  签名: {α} {β : α -> 类型层 _} (F : 对任意 a, 置换 (β a))
   定义体: Equiv.sigmaCongrRight F
 
 Depends on / 依赖: Equiv.sigmaCongrRight, sigmaCongrRight
@@ -3126,7 +3126,7 @@ theorem sigmaCongrRight_trans
 
 中文:
 定理 sigmaCongrRight_trans
-  结论: {α} {β : α -> Sort _}
+  结论: {α} {β : α -> 类型层 _}
   证明: rfl
 -/
 @[simp] theorem sigmaCongrRight_trans {α} {β : α -> Sort _}
@@ -3144,7 +3144,7 @@ theorem sigmaCongrRight_symm
 
 中文:
 定理 sigmaCongrRight_symm
-  条件: {α} {β : α -> Sort _} (F : 对任意 a, Perm (β a))
+  条件: {α} {β : α -> 类型层 _} (F : 对任意 a, 置换 (β a))
   证明: rfl
 -/
 @[simp] theorem sigmaCongrRight_symm {α} {β : α -> Sort _} (F : forall a, Perm (β a)) :
@@ -3161,7 +3161,7 @@ theorem sigmaCongrRight_refl
 
 中文:
 定理 sigmaCongrRight_refl
-  条件: {α} {β : α -> Sort _}
+  条件: {α} {β : α -> 类型层 _}
   证明: rfl
 -/
 @[simp] theorem sigmaCongrRight_refl {α} {β : α -> Sort _} :
@@ -3183,7 +3183,7 @@ definition functionSwap
 
 中文:
 定义 functionSwap
-  签名: (α β : Sort*) (γ : α -> β -> Sort*)
+  签名: (α β : 类型层*) (γ : α -> β -> 类型层*)
   定义体: Function.swap
   invFun := Function.swap
 
@@ -3203,8 +3203,8 @@ theorem _root_.Function.swap_bijective
   proof: .bijective functionSwap _ _ _
 
 中文:
-定理 _root_.Function.swap_bijective
-  条件: {α β : Sort*} {γ : α -> β -> Sort*}
+定理 _root_.函数.swap_bijective
+  条件: {α β : 类型层*} {γ : α -> β -> 类型层*}
   证明: .bijective functionSwap _ _ _
 
 Depends on / 依赖: bijective, functionSwap
@@ -3228,7 +3228,7 @@ definition sigmaCongrLeft
 
 中文:
 定义 sigmaCongrLeft
-  签名: {α₁ α₂ : 类型} {β : α₂ -> Sort _} (e : α₁ ≃ α₂)
+  签名: {α₁ α₂ : 类型} {β : α₂ -> 类型层 _} (e : α₁ ≃ α₂)
   定义体: ⟨e a.1, a.2⟩
   invFun a := ⟨e.symm a.1, (e.right_inv' a.1).symm ▸ a.2⟩
   left_inv := fun ⟨a, b⟩ => by simp
@@ -3251,7 +3251,7 @@ definition sigmaCongrLeft'
 
 中文:
 定义 sigmaCongrLeft'
-  签名: {α₁ α₂} {β : α₁ -> Sort _} (f : α₁ ≃ α₂)
+  签名: {α₁ α₂} {β : α₁ -> 类型层 _} (f : α₁ ≃ α₂)
   定义体: (sigmaCongrLeft f.symm).symm
 
 Depends on / 依赖: f.symm, sigmaCongrLeft
@@ -3269,7 +3269,7 @@ definition sigmaCongr
 
 中文:
 定义 sigmaCongr
-  签名: {α₁ α₂} {β₁ : α₁ -> Sort _} {β₂ : α₂ -> Sort _} (f : α₁ ≃ α₂)
+  签名: {α₁ α₂} {β₁ : α₁ -> 类型层 _} {β₂ : α₂ -> 类型层 _} (f : α₁ ≃ α₂)
   定义体: (sigmaCongrRight F).trans (sigmaCongrLeft f)
 
 Depends on / 依赖: sigmaCongrLeft, sigmaCongrRight
@@ -3309,7 +3309,7 @@ definition sigmaEquivProdOfEquiv
 
 中文:
 定义 sigmaEquivProdOfEquiv
-  签名: {α β} {β₁ : α -> Sort _} (F : 对任意 a, β₁ a ≃ β)
+  签名: {α β} {β₁ : α -> 类型层 _} (F : 对任意 a, β₁ a ≃ β)
   定义体: (sigmaCongrRight F).trans (sigmaEquivProd α β)
 
 Depends on / 依赖: sigmaCongrRight, sigmaEquivProd
@@ -3348,7 +3348,7 @@ definition pSigmaAssoc
 
 中文:
 定义 pSigmaAssoc
-  签名: {α : Sort*} {β : α -> Sort*} (γ : 对任意 a : α, β a -> Sort*)
+  签名: {α : 类型层*} {β : α -> 类型层*} (γ : 对任意 a : α, β a -> 类型层*)
   定义体: ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
   invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
 -/
@@ -3370,7 +3370,7 @@ lemma forall_congr_right
   proof: ⟨fun h a => by simpa using h (e.symm a), fun h _ => h _⟩
 
 中文:
-引理 forall_congr_right
+引理 对任意_congr_right
   结论: (对任意 a, q (e a)) ↔ 对任意 b, q b
   证明: ⟨fun h a => by simpa using h (e.symm a), fun h _ => h _⟩
 -/
@@ -3386,7 +3386,7 @@ lemma forall_congr_left
   proof: e.symm.forall_congr_right.symm
 
 中文:
-引理 forall_congr_left
+引理 对任意_congr_left
   结论: (对任意 a, p a) ↔ 对任意 b, p (e.symm b)
   证明: e.symm.forall_congr_right.symm
 -/
@@ -3403,7 +3403,7 @@ lemma forall_congr
   proof: e.forall_congr_left.trans (by simp [h])
 
 中文:
-引理 forall_congr
+引理 对任意_congr
   条件: (h : 对任意 a, p a ↔ q (e a))
   结论: (对任意 a, p a) ↔ 对任意 b, q b
   证明: e.forall_congr_left.trans (by simp [h])
@@ -3421,7 +3421,7 @@ lemma forall_congr'
   proof: e.forall_congr_left.trans (by simp [h])
 
 中文:
-引理 forall_congr'
+引理 对任意_congr'
   条件: (h : 对任意 b, p (e.symm b) ↔ q b)
   结论: (对任意 a, p a) ↔ 对任意 b, q b
   证明: e.forall_congr_left.trans (by simp [h])
@@ -3438,7 +3438,7 @@ lemma exists_congr_right
   proof: ⟨fun ⟨_, h⟩ => ⟨_, h⟩, fun ⟨a, h⟩ => ⟨e.symm a, by simpa using h⟩⟩
 
 中文:
-引理 exists_congr_right
+引理 存在_congr_right
   结论: (存在 a, q (e a)) ↔ 存在 b, q b
   证明: ⟨fun ⟨_, h⟩ => ⟨_, h⟩, fun ⟨a, h⟩ => ⟨e.symm a, by simpa using h⟩⟩
 -/
@@ -3454,7 +3454,7 @@ lemma exists_congr_left
   proof: e.symm.exists_congr_right.symm
 
 中文:
-引理 exists_congr_left
+引理 存在_congr_left
   结论: (存在 a, p a) ↔ 存在 b, p (e.symm b)
   证明: e.symm.exists_congr_right.symm
 -/
@@ -3471,7 +3471,7 @@ lemma exists_congr
   proof: e.exists_congr_left.trans by simp [h]
 
 中文:
-引理 exists_congr
+引理 存在_congr
   条件: (h : 对任意 a, p a ↔ q (e a))
   结论: (存在 a, p a) ↔ 存在 b, q b
   证明: e.exists_congr_left.trans by simp [h]
@@ -3489,7 +3489,7 @@ lemma exists_congr'
   proof: e.exists_congr_left.trans by simp [h]
 
 中文:
-引理 exists_congr'
+引理 存在_congr'
   条件: (h : 对任意 b, p (e.symm b) ↔ q b)
   结论: (存在 a, p a) ↔ 存在 b, q b
   证明: e.exists_congr_left.trans by simp [h]
@@ -3508,7 +3508,7 @@ lemma exists_subtype_congr
   simp [← nonempty_subtype, nonempty_congr e]
 
 中文:
-引理 exists_subtype_congr
+引理 存在_subtype_congr
   条件: (e : {a // p a} ≃ {b // q b})
   结论: (存在 a, p a) ↔ 存在 b, q b
   证明: by
@@ -3526,7 +3526,7 @@ lemma existsUnique_congr_right
   proof: e.exists_congr by simpa using fun _ _ => e.forall_congr (by simp)
 
 中文:
-引理 existsUnique_congr_right
+引理 存在Unique_congr_right
   结论: (存在! a, q (e a)) ↔ 存在! b, q b
   证明: e.exists_congr by simpa using fun _ _ => e.forall_congr (by simp)
 -/
@@ -3542,7 +3542,7 @@ lemma existsUnique_congr_left
   proof: e.symm.existsUnique_congr_right.symm
 
 中文:
-引理 existsUnique_congr_left
+引理 存在Unique_congr_left
   结论: (存在! a, p a) ↔ 存在! b, p (e.symm b)
   证明: e.symm.existsUnique_congr_right.symm
 -/
@@ -3559,7 +3559,7 @@ lemma existsUnique_congr
   proof: e.existsUnique_congr_left.trans by simp [h]
 
 中文:
-引理 existsUnique_congr
+引理 存在Unique_congr
   条件: (h : 对任意 a, p a ↔ q (e a))
   结论: (存在! a, p a) ↔ 存在! b, q b
   证明: e.existsUnique_congr_left.trans by simp [h]
@@ -3577,7 +3577,7 @@ lemma existsUnique_congr'
   proof: e.existsUnique_congr_left.trans by simp [h]
 
 中文:
-引理 existsUnique_congr'
+引理 存在Unique_congr'
   条件: (h : 对任意 b, p (e.symm b) ↔ q b)
   结论: (存在! a, p a) ↔ 存在! b, q b
   证明: e.existsUnique_congr_left.trans by simp [h]
@@ -3596,7 +3596,7 @@ lemma existsUnique_subtype_congr
         nonempty_congr e, subsingleton_congr e]
 
 中文:
-引理 existsUnique_subtype_congr
+引理 存在Unique_subtype_congr
   条件: (e : {a // p a} ≃ {b // q b})
   证明: by
   simp [← unique_subtype_iff_existsUnique, unique_iff_subsingleton_and_nonempty,
@@ -3623,8 +3623,8 @@ theorem forall₂_congr
   proof: eα.forall_congr fun _ => eβ.forall_congr @h _
 
 中文:
-定理 forall₂_congr
-  结论: {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
+定理 对任意₂_congr
+  结论: {α₁ α₂ β₁ β₂ : 类型层*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
   证明: eα.forall_congr fun _ => eβ.forall_congr @h _
 -/
 protected theorem forall₂_congr {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
@@ -3641,8 +3641,8 @@ theorem forall₂_congr'
   proof: (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
 
 中文:
-定理 forall₂_congr'
-  结论: {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
+定理 对任意₂_congr'
+  结论: {α₁ α₂ β₁ β₂ : 类型层*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
   证明: (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
 -/
 protected theorem forall₂_congr' {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
@@ -3657,7 +3657,7 @@ theorem forall₃_congr
   proof: Equiv.forall₂_congr _ _ Equiv.forall_congr _ @h _ _
 
 中文:
-定理 forall₃_congr
+定理 对任意₃_congr
   证明: Equiv.forall₂_congr _ _ Equiv.forall_congr _ @h _ _
 -/
 protected theorem forall₃_congr
@@ -3674,7 +3674,7 @@ theorem forall₃_congr'
   proof: (Equiv.forall₃_congr eα.symm eβ.symm eγ.symm h.symm).symm
 
 中文:
-定理 forall₃_congr'
+定理 对任意₃_congr'
   证明: (Equiv.forall₃_congr eα.symm eβ.symm eγ.symm h.symm).symm
 -/
 protected theorem forall₃_congr'
@@ -3699,7 +3699,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : α -> β) (hf : Bijective f)
+  签名: (f : α -> β) (hf : 双射 f)
   定义体: f
   invFun := surjInv hf.surjective
   left_inv := leftInverse_surjInv hf
@@ -3722,7 +3722,7 @@ lemma coe_ofBijective
 
 中文:
 引理 coe_ofBijective
-  条件: (f : α -> β) (hf : Bijective f)
+  条件: (f : α -> β) (hf : 双射 f)
   结论: ⇑(ofBijective f hf) = f
   证明: rfl
 -/
@@ -3756,7 +3756,7 @@ lemma ofBijective_apply_symm_apply
 
 中文:
 引理 ofBijective_apply_symm_apply
-  条件: (f : α -> β) (hf : Bijective f) (x : β)
+  条件: (f : α -> β) (hf : 双射 f) (x : β)
   证明: (ofBijective f hf).apply_symm_apply x
 
 @[simp]
@@ -3778,7 +3778,7 @@ lemma ofBijective_symm_apply_apply
 
 中文:
 引理 ofBijective_symm_apply_apply
-  条件: (f : α -> β) (hf : Bijective f) (x : α)
+  条件: (f : α -> β) (hf : 双射 f) (x : α)
   证明: (ofBijective f hf).symm_apply_apply x
 
 Depends on / 依赖: ofBijective, symm_apply_apply
@@ -3802,7 +3802,7 @@ definition bijectiveEquiv
 
 中文:
 定义 bijectiveEquiv
-  签名: : { f : α -> β // Bijective f } ≃ (α ≃ β) where
+  签名: : { f : α -> β // 双射 f } ≃ (α ≃ β) where
   定义体: .ofBijective f f.prop
   invFun f := ⟨f, f.bijective⟩
   left_inv _ := rfl
@@ -3916,7 +3916,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
+  签名: {ra : 集合等价关系 α} {rb : 集合等价关系 β} (e : α ≃ β)
   定义体: Quot.congr e eq
 -/
 protected def congr {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
@@ -3933,7 +3933,7 @@ theorem congr_mk
 
 中文:
 定理 congr_mk
-  结论: {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
+  结论: {ra : 集合等价关系 α} {rb : 集合等价关系 β} (e : α ≃ β)
   证明: rfl
 -/
 @[simp] theorem congr_mk {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
@@ -3950,7 +3950,7 @@ definition congrRight
 
 中文:
 定义 congrRight
-  签名: {r r' : Setoid α}
+  签名: {r r' : 集合等价关系 α}
   定义体: Quot.congrRight eq
 -/
 protected def congrRight {r r' : Setoid α}
@@ -3969,7 +3969,7 @@ definition finZeroEquiv
 
 中文:
 定义 finZeroEquiv
-  签名: : Fin 0 ≃ Empty
+  签名: : 有限集 0 ≃ 空
   定义体: .equivEmpty _
 
 Depends on / 依赖: equivEmpty
@@ -3986,7 +3986,7 @@ definition finZeroEquiv'
 
 中文:
 定义 finZeroEquiv'
-  签名: : Fin 0 ≃ PEmpty.{u}
+  签名: : 有限集 0 ≃ 命题空.{u}
   定义体: .equivPEmpty _
 
 Depends on / 依赖: equivPEmpty
@@ -4003,7 +4003,7 @@ definition finOneEquiv
 
 中文:
 定义 finOneEquiv
-  签名: : Fin 1 ≃ Unit
+  签名: : 有限集 1 ≃ 单元
   定义体: .equivPUnit _
 
 Depends on / 依赖: equivPUnit
@@ -4023,7 +4023,7 @@ definition finTwoEquiv
 
 中文:
 定义 finTwoEquiv
-  签名: : Fin 2 ≃ 布尔 where
+  签名: : 有限集 2 ≃ 布尔值 where
   定义体: i == 1
   invFun b := bif b then 1 else 0
   left_inv i := by grind
@@ -4176,8 +4176,8 @@ abbreviation max
   body: e.symm (max (e a) (e b))
 
 中文:
-缩写 max
-  签名: [Max β]
+缩写 最大值
+  签名: [最大值 β]
   定义体: e.symm (max (e a) (e b))
 -/
 protected abbrev max [Max β] : Max α where
@@ -4194,7 +4194,7 @@ lemma max_def
 
 中文:
 引理 max_def
-  条件: [Max β] (a b : α)
+  条件: [最大值 β] (a b : α)
   证明: e.max
     max a b = e.symm (max (e a) (e b)) := rfl
 
@@ -4213,8 +4213,8 @@ abbreviation min
   body: e.symm (min (e a) (e b))
 
 中文:
-缩写 min
-  签名: [Min β]
+缩写 最小值
+  签名: [最小值 β]
   定义体: e.symm (min (e a) (e b))
 -/
 protected abbrev min [Min β] : Min α where
@@ -4231,7 +4231,7 @@ lemma min_def
 
 中文:
 引理 min_def
-  条件: [Min β] (a b : α)
+  条件: [最小值 β] (a b : α)
   证明: e.min
     min a b = e.symm (min (e a) (e b)) := rfl
 
@@ -4251,7 +4251,7 @@ abbreviation ord
 
 中文:
 缩写 ord
-  签名: [Ord β]
+  签名: [序 β]
   定义体: compare (e a) (e b)
 -/
 protected abbrev ord [Ord β] : Ord α where
@@ -4268,7 +4268,7 @@ lemma ord_def
 
 中文:
 引理 ord_def
-  条件: [Ord β] (a b : α)
+  条件: [序 β] (a b : α)
   证明: e.ord
     compare a b = compare (e a) (e b) := rfl
 

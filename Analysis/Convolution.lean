@@ -201,8 +201,8 @@ theorem _root_.Continuous.convolution_integrand_fst
   proof: L.continuous₂.comp₂ continuous_const by fun_prop
 
 中文:
-定理 _root_.Continuous.convolution_integrand_fst
-  条件: [ContinuousSub G] (hg : Continuous g) (t : G)
+定理 _root_.连续.convolution_integrand_fst
+  条件: [余ntinuousSub G] (hg : 连续 g) (t : G)
   证明: L.continuous₂.comp₂ continuous_const by fun_prop
 
 Depends on / 依赖: L.continuous, continuous_const, fun_prop
@@ -252,7 +252,7 @@ definition ConvolutionExistsAt
 
 中文:
 定义 ConvolutionExistsAt
-  签名: [Sub G] (f : G -> E) (g : G -> E') (x : G) (L : E ->L[𝕜] E' ->L[𝕜] F)
+  签名: [减法 G] (f : G -> E) (g : G -> E') (x : G) (L : E ->L[𝕜] E' ->L[𝕜] F)
   定义体: Integrable (fun t => L (f t) (g (x - t))) μ
 
 Depends on / 依赖: Integrable, volume_tac
@@ -271,7 +271,7 @@ definition ConvolutionExists
 
 中文:
 定义 ConvolutionExists
-  签名: [Sub G] (f : G -> E) (g : G -> E') (L : E ->L[𝕜] E' ->L[𝕜] F)
+  签名: [减法 G] (f : G -> E) (g : G -> E') (L : E ->L[𝕜] E' ->L[𝕜] F)
   定义体: forall x : G, ConvolutionExistsAt f g x L μ
 
 Depends on / 依赖: ConvolutionExistsAt, volume_tac
@@ -293,7 +293,7 @@ theorem ConvolutionExistsAt.integrable
 
 中文:
 定理 ConvolutionExistsAt.integrable
-  条件: [Sub G] {x : G} (h : ConvolutionExistsAt f g x L μ)
+  条件: [减法 G] {x : G} (h : ConvolutionExistsAt f g x L μ)
   证明: h
 -/
 theorem ConvolutionExistsAt.integrable [Sub G] {x : G} (h : ConvolutionExistsAt f g x L μ) :
@@ -385,7 +385,7 @@ theorem _root_.BddAbove.convolutionExistsAt'
 
 中文:
 定理 _root_.BddAbove.convolutionExistsAt'
-  结论: {x₀ : G} {s : Set G}
+  结论: {x₀ : G} {s : 集合 G}
   证明: by
   rw [ConvolutionExistsAt]
   rw [← integrableOn_iff_integrable_of_support_subset h2s]
@@ -572,8 +572,8 @@ theorem Integrable.convolution_integrand
     h_meas.prod_swap.norm.integra
 
 中文:
-定理 Integrable.convolution_integrand
-  条件: (hf : 整数egrable f ν) (hg : 整数egrable g μ)
+定理 可积.convolution_integrand
+  条件: (hf : 可积 f ν) (hg : 可积 g μ)
   证明: by
   have h_meas : AEStronglyMeasurable (fun p : G × G => L (f p.2) (g (p.1 - p.2))) (μ.prod ν) :=
     hf.aestronglyMeasurable.convolution_integrand L hg.aestronglyMeasurable
@@ -610,8 +610,8 @@ theorem Integrable.ae_convolution_exists
       hf.convolution_integrand L hg).1
 
 中文:
-定理 Integrable.ae_convolution_exists
-  条件: (hf : 整数egrable f ν) (hg : 整数egrable g μ)
+定理 可积.ae_convolution_存在
+  条件: (hf : 可积 f ν) (hg : 可积 g μ)
   证明: ((integrable_prod_iff <|
           hf.aestronglyMeasurable.convolution_integrand L hg.aestronglyMeasurable).mp <|
       hf.convolution_integrand L hg).1
@@ -762,7 +762,7 @@ theorem _root_.BddAbove.convolutionExistsAt
 
 中文:
 定理 _root_.BddAbove.convolutionExistsAt
-  结论: [MeasurableAdd₂ G] [SFinite μ] {x₀ : G} {s : Set G}
+  结论: [MeasurableAdd₂ G] [SFinite μ] {x₀ : G} {s : 集合 G}
   证明: by
   refine BddAbove.convolutionExistsAt' L ?_ hs h2s hf ?_
   · simp_rw [← sub_eq_neg_add, hbg]
@@ -907,7 +907,7 @@ definition convolution
 
 中文:
 定义 convolution
-  签名: [Sub G] (f : G -> E) (g : G -> E') (L : E ->L[𝕜] E' ->L[𝕜] F)
+  签名: [减法 G] (f : G -> E) (g : G -> E') (L : E ->L[𝕜] E' ->L[𝕜] F)
   定义体: fun x =>
   ∫ t, L (f t) (g (x - t)) ∂μ
 
@@ -942,7 +942,7 @@ theorem convolution_def
 
 中文:
 定理 convolution_def
-  条件: [Sub G]
+  条件: [减法 G]
   结论: (f ⋆[L, μ] g) x = ∫ t, L (f t) (g (x - t)) ∂μ
   证明: rfl
 -/
@@ -959,7 +959,7 @@ theorem convolution_lsmul
 
 中文:
 定理 convolution_lsmul
-  条件: [Sub G] {f : G -> 𝕜} {g : G -> F}
+  条件: [减法 G] {f : G -> 𝕜} {g : G -> F}
   证明: rfl
 -/
 theorem convolution_lsmul [Sub G] {f : G -> 𝕜} {g : G -> F} :
@@ -976,7 +976,7 @@ theorem convolution_mul
 
 中文:
 定理 convolution_mul
-  条件: [Sub G] [NormedSpace 实数 𝕜] {f : G -> 𝕜} {g : G -> 𝕜}
+  条件: [减法 G] [赋范空间 实数 𝕜] {f : G -> 𝕜} {g : G -> 𝕜}
   证明: rfl
 -/
 theorem convolution_mul [Sub G] [NormedSpace Real 𝕜] {f : G -> 𝕜} {g : G -> 𝕜} :
@@ -999,7 +999,7 @@ theorem smul_convolution
 
 中文:
 定理 smul_convolution
-  条件: [SMulCommClass 实数 𝕜 F] {y : 𝕜}
+  条件: [标量交换类 实数 𝕜 F] {y : 𝕜}
   结论: y • f ⋆[L, μ] g = y • (f ⋆[L, μ] g)
   证明: by
   ext; simp only [Pi.smul_apply, convolution_def, ← integral_smul, L.map_smul₂]
@@ -1023,7 +1023,7 @@ theorem convolution_smul
 
 中文:
 定理 convolution_smul
-  条件: [SMulCommClass 实数 𝕜 F] {y : 𝕜}
+  条件: [标量交换类 实数 𝕜 F] {y : 𝕜}
   结论: f ⋆[L, μ] y • g = y • (f ⋆[L, μ] g)
   证明: by
   ext; simp only [Pi.smul_apply, convolution_def, ← integral_smul, (L _).map_smul]
@@ -1345,8 +1345,8 @@ theorem Integrable.integrable_convolution
   proof: (hf.convolution_integrand L hg).integral_prod_left
 
 中文:
-定理 Integrable.integrable_convolution
-  结论: (hf : 整数egrable f μ)
+定理 可积.integrable_convolution
+  结论: (hf : 可积 f μ)
   证明: (hf.convolution_integrand L hg).integral_prod_left
 
 Depends on / 依赖: convolution_integrand, hf.convolution_integrand, integral_prod_left
@@ -1373,7 +1373,7 @@ theorem _root_.HasCompactSupport.convolution
 
 中文:
 定理 _root_.HasCompactSupport.convolution
-  结论: [T2Space G] (hcf : HasCompactSupport f)
+  结论: [T2空间 G] (hcf : HasCompactSupport f)
   证明: (hcg.isCompact.add hcf).of_isClosed_subset isClosed_closure
     closure_minimal
       ((support_convolution_subset_swap L).trans <| add_subset_add subset_closure subset_closure)
@@ -1404,7 +1404,7 @@ theorem continuousOn_convolution_right_with_param
 
 中文:
 定理 continuousOn_convolution_right_with_param
-  结论: {g : P -> G -> E'} {s : Set P} {k : Set G}
+  结论: {g : P -> G -> E'} {s : 集合 P} {k : 集合 G}
   证明: by
   /- First get rid of the case where the space is not locally compact. Then `g` vanishes everywhere
   and the conclusion is trivial. -/
@@ -1472,7 +1472,7 @@ theorem continuousOn_convolution_right_with_param_comp
 
 中文:
 定理 continuousOn_convolution_right_with_param_comp
-  结论: {s : Set P} {v : P -> G}
+  结论: {s : 集合 P} {v : P -> G}
   证明: by
   apply
     (continuousOn_convolution_right_with_param L hk hgs hf hg).comp (continuousOn_id.prodMk hv)
@@ -1671,7 +1671,7 @@ theorem convolution_mul_swap
 
 中文:
 定理 convolution_mul_swap
-  条件: [NormedSpace 实数 𝕜] {f : G -> 𝕜} {g : G -> 𝕜}
+  条件: [赋范空间 实数 𝕜] {f : G -> 𝕜} {g : G -> 𝕜}
   证明: convolution_eq_swap _
 
 Depends on / 依赖: convolution_eq_swap
@@ -1838,7 +1838,7 @@ theorem dist_convolution_le'
 
 中文:
 定理 dist_convolution_le'
-  结论: {x₀ : G} {R ε : 实数} {z₀ : E'} (hε : 0 <= ε) (hif : 整数egrable f μ)
+  结论: {x₀ : G} {R ε : 实数} {z₀ : E'} (hε : 0 <= ε) (hif : 可积 f μ)
   证明: by
   have hfg : ConvolutionExistsAt f g x₀ L μ := by
     refine BddAbove.convolutionExistsAt L ?_ Metric.isOpen_ball.measurableSet (Subset.trans ?_ hf)
@@ -1942,7 +1942,7 @@ theorem convolution_tendsto_right
 
 中文:
 定理 convolution_tendsto_right
-  结论: {ι} {g : ι -> G -> E'} {l : Filter ι} {x₀ : G} {z₀ : E'}
+  结论: {ι} {g : ι -> G -> E'} {l : 滤子 ι} {x₀ : G} {z₀ : E'}
   证明: by
   simp_rw [tendsto_smallSets_iff] at hφ
   rw [Metric.tendsto_nhds] at hcg ⊢
@@ -2024,7 +2024,7 @@ theorem integral_convolution
 
 中文:
 定理 integral_convolution
-  结论: [MeasurableAdd₂ G] [MeasurableNeg G] [NormedSpace 实数 E]
+  结论: [MeasurableAdd₂ G] [MeasurableNeg G] [赋范空间 实数 E]
   证明: by
   refine (integral_integral_swap (by apply hf.convolution_integrand L hg)).trans ?_
   simp_rw [integral_comp_comm _ (hg.comp_sub_right _), integral_sub_right_eq_self]
@@ -2170,7 +2170,7 @@ theorem convolution_precompR_apply
 
 中文:
 定理 convolution_precompR_apply
-  结论: [NormedAddCommGroup G] [BorelSpace G]
+  结论: [赋范交换加群 G] [Borel空间 G]
   证明: by
   have := hcg.convolutionExists_right (L.precompR E'' :) hf hg x₀
   simp_rw [convolution_def, ContinuousLinearMap.integral_apply this]
@@ -2281,7 +2281,7 @@ theorem integrable_posConvolution
 
 中文:
 定理 integrable_posConvolution
-  结论: {f : 实数 -> E} {g : 实数 -> E'} {μ ν : Measure 实数} [SFinite μ]
+  结论: {f : 实数 -> E} {g : 实数 -> E'} {μ ν : 测度 实数} [SFinite μ]
   证明: by
   rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet (Ioi (0 : Real)))] at hf hg
   rw [posConvolution_eq_convolution_indicator f g L ν]
@@ -2311,7 +2311,7 @@ theorem integral_posConvolution
 
 中文:
 定理 integral_posConvolution
-  结论: [CompleteSpace E] [CompleteSpace E'] [CompleteSpace F]
+  结论: [完备空间 E] [完备空间 E'] [完备空间 F]
   证明: by
   rw [← integrable_indicator_iff measurableSet_Ioi] at hf hg
   simp_rw [← integral_indicator measurableSet_Ioi]

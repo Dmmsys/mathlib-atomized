@@ -47,7 +47,7 @@ lemma hasExactColimitsOfShape
 
 中文:
 引理 hasExactColimitsOfShape
-  结论: [HasColimitsOfShape J A] [HasExactColimitsOfShape J A]
+  结论: [有形状余极限 J A] [有ExactColimitsOfShape J A]
   证明: by
   let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
     (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
@@ -75,7 +75,7 @@ lemma hasExactLimitsOfShape
 
 中文:
 引理 hasExactLimitsOfShape
-  结论: [HasLimitsOfShape J A] [HasExactLimitsOfShape J A]
+  结论: [有形状极限 J A] [有ExactLimitsOfShape J A]
   证明: by
   let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
     (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence

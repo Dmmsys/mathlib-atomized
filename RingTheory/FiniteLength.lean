@@ -36,11 +36,11 @@ inductive IsFiniteLength
     - of_simple_quotient: {M} [AddCommGroup M] [Module R M] {N : Submodule R M} [IsSimpleModule R (M ⧸ N)] : IsFiniteLength N -> IsFiniteLength M
 
 中文:
-归纳类型 IsFiniteLength
-  参数: : 对任意 (M : 类型) [AddCommGroup M] [Module R M], 命题
+归纳类型 是FiniteLength
+  参数: : 对任意 (M : 类型) [加法交换群 M] [模 R M], 命题
   构造子 (2 个):
-    - of_subsingleton: {M} [AddCommGroup M] [Module R M] [Subsingleton M] : IsFiniteLength M
-    - of_simple_quotient: {M} [AddCommGroup M] [Module R M] {N : Submodule R M} [IsSimpleModule R (M ⧸ N)] : IsFiniteLength N -> IsFiniteLength M
+    - of_subsingleton: {M} [加法交换群 M] [模 R M] [子单例 M] : 是FiniteLength M
+    - of_simple_quotient: {M} [加法交换群 M] [模 R M] {N : 子模 R M} [是单模 R (M ⧸ N)] : 是FiniteLength N -> 是FiniteLength M
 -/
 inductive IsFiniteLength : forall (M : Type*) [AddCommGroup M] [Module R M], Prop
   | of_subsingleton {M} [AddCommGroup M] [Module R M] [Subsingleton M] : IsFiniteLength M
@@ -66,7 +66,7 @@ theorem LinearEquiv.isFiniteLength
       IsSimpleModule.congr (Submodule.Quotient.equiv S _ e rfl).
 
 中文:
-定理 LinearEquiv.isFiniteLength
+定理 线性等价.isFiniteLength
   结论: (e : M ≃ₗ[R] N)
   证明: by
   induction h generalizing N with
@@ -100,8 +100,8 @@ theorem exists_compositionSeries_of_isNoetherian_isArtinian
   exact ⟨⟨n, fun i => f i, fun i => hn.2 i i.2⟩, f0.eq_bot, hn.1.eq_top⟩
 
 中文:
-定理 exists_compositionSeries_of_isNoetherian_isArtinian
-  条件: [IsNoetherian R M] [IsArtinian R M]
+定理 存在_compositionSeries_of_isNoetherian_isArtinian
+  条件: [是Noether R M] [是Artin R M]
   证明: by
   obtain ⟨f, f0, n, hn⟩ := exists_covBy_seq_of_wellFoundedLT_wellFoundedGT (Submodule R M)
   exact ⟨⟨n, fun i => f i, fun i => hn.2 i i.2⟩, f0.eq_bot, hn.1.eq_top⟩
@@ -128,7 +128,7 @@ theorem isFiniteLength_of_exists_compositionSeries
     |
 
 中文:
-定理 isFiniteLength_of_exists_compositionSeries
+定理 isFiniteLength_of_存在_compositionSeries
   证明: Submodule.topEquiv.isFiniteLength by
     obtain ⟨s, s_head, s_last⟩ := h
     rw [← s_last]
@@ -198,7 +198,7 @@ theorem isFiniteLength_iff_exists_compositionSeries
     isFiniteLength_of_exists_compositionSeries⟩
 
 中文:
-定理 isFiniteLength_iff_exists_compositionSeries
+定理 isFiniteLength_iff_存在_compositionSeries
   证明: ⟨fun h => have ⟨_, _⟩ := isFiniteLength_iff_isNoetherian_isArtinian.mp h
     exists_compositionSeries_of_isNoetherian_isArtinian R M,
     isFiniteLength_of_exists_compositionSeries⟩
@@ -226,8 +226,8 @@ theorem IsSemisimpleModule.finite_tfae
   tfae_have 3 -> 5
 
 中文:
-定理 IsSemisimpleModule.finite_tfae
-  条件: [IsSemisimpleModule R M]
+定理 是半单模.finite_tfae
+  条件: [是半单模 R M]
   证明: by
   rw [isFiniteLength_iff_isNoetherian_isArtinian]
   obtain ⟨s, hs⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
@@ -264,8 +264,8 @@ instance [IsSemisimpleModule
   body: (IsSemisimpleModule.finite_tfae.out 0 2).mp ‹_›
 
 中文:
-实例 [IsSemisimpleModule
-  签名: R M] [Module.Finite R M] : IsArtinian R M
+实例 [是半单模
+  签名: R M] [模.有限 R M] : 是Artin R M
   定义体: (IsSemisimpleModule.finite_tfae.out 0 2).mp ‹_›
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.finite_tfae.out, finite_tfae
@@ -287,8 +287,8 @@ lemma IsFiniteLength.of_injective
   exact ⟨isNoetherian_of_injective f hf, isArtinian_of_injective f hf⟩
 
 中文:
-引理 IsFiniteLength.of_injective
-  条件: (H : IsFiniteLength R N) (hf : Function.Injective f)
+引理 是FiniteLength.of_injective
+  条件: (H : 是FiniteLength R N) (hf : 函数.单射 f)
   证明: by
   rw [isFiniteLength_iff_isNoetherian_isArtinian] at H ⊢
   cases H
@@ -315,8 +315,8 @@ lemma IsFiniteLength.of_surjective
     isArtinian_of_surjective _ f hf⟩
 
 中文:
-引理 IsFiniteLength.of_surjective
-  条件: (H : IsFiniteLength R M) (hf : Function.Surjective f)
+引理 是FiniteLength.of_surjective
+  条件: (H : 是FiniteLength R M) (hf : 函数.满射 f)
   证明: by
   rw [isFiniteLength_iff_isNoetherian_isArtinian] at H ⊢
   cases H

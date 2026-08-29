@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (IsKernelPair f a b)
+  签名: 子单例 (IsKernelPair f a b)
   定义体: ⟨fun P Q => by constructor⟩
 -/
 instance : Subsingleton (IsKernelPair f a b) :=
@@ -89,7 +89,7 @@ theorem id_of_mono
 
 中文:
 定理 id_of_mono
-  条件: [Mono f]
+  条件: [单态射 f]
   结论: IsKernelPair f (𝟙 _) (𝟙 _)
   证明: ⟨⟨rfl⟩, ⟨PullbackCone.isLimitMkIdId _⟩⟩
 
@@ -107,8 +107,8 @@ instance [Mono
   body: ⟨id_of_mono f⟩
 
 中文:
-实例 [Mono
-  签名: f] : Inhabited (IsKernelPair f (𝟙 _) (𝟙 _))
+实例 [单态射
+  签名: f] : 可居 (IsKernelPair f (𝟙 _) (𝟙 _))
   定义体: ⟨id_of_mono f⟩
 
 Depends on / 依赖: id_of_mono
@@ -256,7 +256,7 @@ theorem cancel_right_of_mono
 
 中文:
 定理 cancel_right_of_mono
-  结论: {f₁ : X ⟶ Y} {f₂ : Y ⟶ Z} [Mono f₂]
+  结论: {f₁ : X ⟶ Y} {f₂ : Y ⟶ Z} [单态射 f₂]
   证明: cancel_right (by rw [← cancel_mono f₂, assoc, assoc, big_k.w]) big_k
 
 Depends on / 依赖: big_k, big_k.w, cancel_mono, cancel_right
@@ -283,7 +283,7 @@ theorem comp_of_mono
 
 中文:
 定理 comp_of_mono
-  条件: {f₁ : X ⟶ Y} {f₂ : Y ⟶ Z} [Mono f₂] (small_k : IsKernelPair f₁ a b)
+  条件: {f₁ : X ⟶ Y} {f₂ : Y ⟶ Z} [单态射 f₂] (small_k : IsKernelPair f₁ a b)
   证明: { w := by rw [small_k.w_assoc]
     isLimit' := ⟨by
       refine PullbackCone.isLimitAux _
@@ -325,7 +325,7 @@ definition toCoequalizer
 
 中文:
 定义 toCoequalizer
-  签名: (k : IsKernelPair f a b) (r : RegularEpi f)
+  签名: (k : IsKernelPair f a b) (r : 正则满态射 f)
   定义体: by
   let t := k.isLimit.lift (PullbackCone.mk _ _ r.w)
   have ht : t ≫ a = r.left := k.isLimit.fac _ WalkingCospan.left
@@ -359,7 +359,7 @@ definition toCoequalizer'
 
 中文:
 定义 toCoequalizer'
-  签名: (k : IsKernelPair f a b) [IsRegularEpi f]
+  签名: (k : IsKernelPair f a b) [是正则满态射 f]
   定义体: toCoequalizer k IsRegularEpi.getStruct f
 
 Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct, toCoequalizer
@@ -429,8 +429,8 @@ theorem mono_of_isIso_fst
 
 中文:
 定理 mono_of_isIso_fst
-  条件: (h : IsKernelPair f a b) [IsIso a]
-  结论: Mono f
+  条件: (h : IsKernelPair f a b) [是同构 a]
+  结论: 单态射 f
   证明: by
   obtain ⟨l, h₁, h₂⟩ := Limits.PullbackCone.IsLimit.lift' h.isLimit (𝟙 _) (𝟙 _) (by simp)
   rw [IsPullback.cone_fst]; rw [← IsIso.eq_comp_inv]; rw [Category.id_comp] at h₁
@@ -462,7 +462,7 @@ theorem mono_of_eq_fst_snd'
 中文:
 定理 mono_of_eq_fst_snd'
   条件: (h : IsKernelPair f a a)
-  结论: Mono f
+  结论: 单态射 f
   证明: ⟨fun g₁ g₂ e => (lift_fst h g₁ g₂ e).symm.trans lift_snd h g₁ g₂ e⟩
 
 Depends on / 依赖: lift_fst, lift_snd, symm.trans
@@ -483,7 +483,7 @@ theorem mono_of_eq_fst_snd
 中文:
 定理 mono_of_eq_fst_snd
   条件: (h : IsKernelPair f a b) (e : a = b)
-  结论: Mono f
+  结论: 单态射 f
   证明: by
   induction e; exact h.mono_of_eq_fst_snd'
 
@@ -510,8 +510,8 @@ theorem isIso_of_mono
 
 中文:
 定理 isIso_of_mono
-  条件: (h : IsKernelPair f a b) [Mono f]
-  结论: IsIso a
+  条件: (h : IsKernelPair f a b) [单态射 f]
+  结论: 是同构 a
   证明: by
   rw [←
     show _ = a from
@@ -544,7 +544,7 @@ theorem of_isIso_of_mono
 
 中文:
 定理 of_isIso_of_mono
-  条件: [IsIso a] [Mono f]
+  条件: [是同构 a] [单态射 f]
   结论: IsKernelPair f a a
   证明: by
   change IsPullback _ _ _ _
@@ -588,8 +588,8 @@ lemma IsRegularEpi.exists_of_isKernelPair
   proof: ⟨h.toCoequalizer'.desc (Cofork.ofπ f w), Cofork.IsColimit.π_desc h.toCoequalizer'⟩
 
 中文:
-引理 IsRegularEpi.exists_of_isKernelPair
-  结论: {X Y : C} (π : X ⟶ Y) [IsRegularEpi π] {Z : C}
+引理 是正则满态射.存在_of_isKernelPair
+  结论: {X Y : C} (π : X ⟶ Y) [是正则满态射 π] {Z : C}
   证明: ⟨h.toCoequalizer'.desc (Cofork.ofπ f w), Cofork.IsColimit.π_desc h.toCoequalizer'⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.of, IsColimit, h.toCoequalizer, toCoequalizer

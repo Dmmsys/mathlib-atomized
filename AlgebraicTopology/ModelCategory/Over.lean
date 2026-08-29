@@ -51,7 +51,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithCofibrations (Over S)
+  签名: 带余纤维化范畴 (Over S)
   定义体: (cofibrations C).over
 
 Depends on / 依赖: cofibrations
@@ -109,7 +109,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [cofibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
   infer_instance
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithFibrations (Over S)
+  签名: 带纤维化范畴 (Over S)
   定义体: (fibrations C).over
 
 Depends on / 依赖: fibrations
@@ -195,7 +195,7 @@ instance [(fibrations
 
 中文:
 实例 [(fibrations
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [fibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
   infer_instance
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithWeakEquivalences (Over S)
+  签名: 带弱等价范畴 (Over S)
   定义体: (weakEquivalences C).over
 
 Depends on / 依赖: weakEquivalences
@@ -281,7 +281,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
   infer_instance
@@ -336,7 +336,7 @@ instance [CategoryWithWeakEquivalences
   infer_instance
 
 中文:
-实例 [CategoryWithWeakEquivalences
+实例 [带弱等价范畴
   签名: C]
   定义体: by
   rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
@@ -367,7 +367,7 @@ instance [(trivialCofibrations
 
 中文:
 实例 [(trivialCofibrations
-  签名: C).HasFactorization (fibrations C)] :
+  签名: C).有分解 (fibrations C)] :
   定义体: by
   rw [fibrations_over_def]; rw [trivialCofibrations_over_eq]
   infer_instance
@@ -391,7 +391,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).HasFactorization (trivialFibrations C)] :
+  签名: C).有分解 (trivialFibrations C)] :
   定义体: by
   rw [cofibrations_over_def]; rw [trivialFibrations_over_eq]
   infer_instance
@@ -415,8 +415,8 @@ instance ModelCategory.over
   cm4b _ _ _ _ _ := .over _ _
 
 中文:
-实例 ModelCategory.over
-  签名: [ModelCategory C]
+实例 模型范畴.over
+  签名: [模型范畴 C]
   定义体: .over _ _
   cm4b _ _ _ _ _ := .over _ _
 -/

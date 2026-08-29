@@ -41,7 +41,7 @@ definition erase
 
 中文:
 定义 erase
-  签名: : SkewMonoidAlgebra M α ->+ SkewMonoidAlgebra M α where
+  签名: : 斜幺半群代数 M α ->+ 斜幺半群代数 M α where
   定义体: ⟨f.coeff.erase a⟩
   map_zero' := by simp
   map_add' := by simp
@@ -159,7 +159,7 @@ theorem single_add_erase
 
 中文:
 定理 single_add_erase
-  条件: (a : α) (f : SkewMonoidAlgebra M α)
+  条件: (a : α) (f : 斜幺半群代数 M α)
   证明: by
   ext; simp [ coeff_add, Finsupp.single_add_erase]
 
@@ -187,7 +187,7 @@ theorem induction
 
 中文:
 定理 induction
-  结论: {p : SkewMonoidAlgebra M α -> 命题} (f : SkewMonoidAlgebra M α) (h0 : p 0)
+  结论: {p : 斜幺半群代数 M α -> 命题} (f : 斜幺半群代数 M α) (h0 : p 0)
   证明: suffices forall (s) (f : SkewMonoidAlgebra M α), f.support = s -> p f from this _ _ rfl
   fun s =>
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
@@ -232,7 +232,7 @@ definition update
 
 中文:
 定义 update
-  签名: : SkewMonoidAlgebra M α
+  签名: : 斜幺半群代数 M α
   定义体: ⟨f.coeff.update a b⟩
 
 @[deprecated (since := "2026-07-04")] alias update_toFinsupp := coeff_update

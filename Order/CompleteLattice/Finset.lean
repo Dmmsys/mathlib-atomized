@@ -51,7 +51,7 @@ theorem iSup_eq_iSup_finset
 中文:
 定理 iSup_eq_iSup_finset
   条件: (s : ι -> α)
-  结论: ⨆ i, s i = ⨆ t : Finset ι, ⨆ i in t, s i
+  结论: ⨆ i, s i = ⨆ t : 有限集 ι, ⨆ i in t, s i
   证明: by
   refine le_antisymm ?_ ?_
 · exact iSup_le fun b => le_iSup_of_le {b} le_iSup_of_le b le_iSup_of_le (by simp) le_rfl
@@ -109,8 +109,8 @@ theorem iUnion_eq_iUnion_finset
 
 中文:
 定理 iUnion_eq_iUnion_finset
-  条件: (s : ι -> Set α)
-  结论: ⋃ i, s i = ⋃ t : Finset ι, ⋃ i in t, s i
+  条件: (s : ι -> 集合 α)
+  结论: ⋃ i, s i = ⋃ t : 有限集 ι, ⋃ i in t, s i
   证明: iSup_eq_iSup_finset s
 
 Depends on / 依赖: iSup_eq_iSup_finset
@@ -128,7 +128,7 @@ theorem iUnion_eq_iUnion_finset'
 
 中文:
 定理 iUnion_eq_iUnion_finset'
-  条件: (s : ι' -> Set α)
+  条件: (s : ι' -> 集合 α)
   证明: iSup_eq_iSup_finset' s
 
 Depends on / 依赖: iSup_eq_iSup_finset
@@ -147,9 +147,9 @@ theorem iInter_eq_iInter_finset
   proof: iInf_eq_iInf_finset s
 
 中文:
-定理 iInter_eq_iInter_finset
-  条件: (s : ι -> Set α)
-  结论: ⋂ i, s i = ⋂ t : Finset ι, ⋂ i in t, s i
+定理 i整数er_eq_i整数er_finset
+  条件: (s : ι -> 集合 α)
+  结论: ⋂ i, s i = ⋂ t : 有限集 ι, ⋂ i in t, s i
   证明: iInf_eq_iInf_finset s
 
 Depends on / 依赖: iInf_eq_iInf_finset
@@ -166,8 +166,8 @@ theorem iInter_eq_iInter_finset'
   proof: iInf_eq_iInf_finset' s
 
 中文:
-定理 iInter_eq_iInter_finset'
-  条件: (s : ι' -> Set α)
+定理 i整数er_eq_i整数er_finset'
+  条件: (s : ι' -> 集合 α)
   证明: iInf_eq_iInf_finset' s
 
 Depends on / 依赖: iInf_eq_iInf_finset
@@ -190,7 +190,7 @@ theorem iUnion_finset_eq_set
 
 中文:
 定理 iUnion_finset_eq_set
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   证明: by
   ext x
   simp only [Set.mem_iUnion, Set.mem_image, SetLike.mem_coe, Subtype.exists,
@@ -226,7 +226,7 @@ exact fun _ => ⟨fun h x hxs hx => hxs h hx (subset_insert _ _) (mem_insert_sel
     fun h t ht hst x hxt => by_contra fun hxs => h x hxs (hP ht (insert_subset hxt hst))⟩
 
 中文:
-定理 maximal_iff_forall_insert
+定理 maximal_iff_对任意_insert
   条件: (hP : 对任意 ⦃s t⦄, P t -> s subseteq t -> P s)
   证明: by
   simp only [Maximal, and_congr_right_iff]
@@ -255,7 +255,7 @@ h.2 x hxs hP ht (subset_erase.2 ⟨hts, hxt⟩)⟩
 alias minimal_iff_forall_diff_singleton := minimal_iff_forall_erase
 
 中文:
-定理 minimal_iff_forall_erase
+定理 minimal_iff_对任意_erase
   条件: (hP : 对任意 ⦃s t⦄, P t -> t subseteq s -> P s)
   证明: ⟨h.prop, fun x hxs hx => by simpa using h.le_of_le hx (erase_subset _ _) hxs⟩
   mpr h := ⟨h.1, fun t ht hts x hxs => by_contra fun hxt =>
@@ -293,8 +293,8 @@ theorem iSup_coe
 
 中文:
 定理 iSup_coe
-  条件: [SupSet β] (f : α -> β) (s : Finset α)
-  结论: ⨆ x in (↑s : Set α), f x = ⨆ x in s, f x
+  条件: [上确界集 β] (f : α -> β) (s : 有限集 α)
+  结论: ⨆ x in (↑s : 集合 α), f x = ⨆ x in s, f x
   证明: rfl
 -/
 theorem iSup_coe [SupSet β] (f : α -> β) (s : Finset α) : ⨆ x in (↑s : Set α), f x = ⨆ x in s, f x :=
@@ -317,7 +317,7 @@ theorem iSup_singleton
 中文:
 定理 iSup_singleton
   条件: (a : α) (s : α -> β)
-  结论: ⨆ x in ({a} : Finset α), s x = s a
+  结论: ⨆ x in ({a} : 有限集 α), s x = s a
   证明: by simp
 
 @[to_dual]
@@ -337,7 +337,7 @@ theorem iSup_option_toFinset
 
 中文:
 定理 iSup_option_toFinset
-  条件: (o : Option α) (f : α -> β)
+  条件: (o : 选项类型 α) (f : α -> β)
   结论: ⨆ x in o.toFinset, f x = ⨆ x in o, f x
   证明: by
   simp
@@ -361,7 +361,7 @@ theorem iSup_union
 
 中文:
 定理 iSup_union
-  条件: {f : α -> β} {s t : Finset α}
+  条件: {f : α -> β} {s t : 有限集 α}
   证明: by
   simpa using! _root_.iSup_union
 
@@ -387,7 +387,7 @@ theorem iSup_insert
 
 中文:
 定理 iSup_insert
-  条件: (a : α) (s : Finset α) (t : α -> β)
+  条件: (a : α) (s : 有限集 α) (t : α -> β)
   证明: by
   simpa using! _root_.iSup_insert
 
@@ -413,7 +413,7 @@ theorem iSup_finset_image
 
 中文:
 定理 iSup_finset_image
-  条件: {f : γ -> α} {g : α -> β} {s : Finset γ}
+  条件: {f : γ -> α} {g : α -> β} {s : 有限集 γ}
   证明: by
   simpa using! iSup_image
 
@@ -440,7 +440,7 @@ theorem iSup_insert_update
 
 中文:
 定理 iSup_insert_update
-  条件: {x : α} {t : Finset α} (f : α -> β) {s : β} (hx : x ∉ t)
+  条件: {x : α} {t : 有限集 α} (f : α -> β) {s : β} (hx : x ∉ t)
   证明: by
   rw [Finset.iSup_insert]
   grind
@@ -465,7 +465,7 @@ theorem iSup_biUnion
 
 中文:
 定理 iSup_biUnion
-  条件: (s : Finset γ) (t : γ -> Finset α) (f : α -> β)
+  条件: (s : 有限集 γ) (t : γ -> 有限集 α) (f : α -> β)
   证明: by simp [@iSup_comm _ α, iSup_and]
 
 Depends on / 依赖: iSup_and, iSup_comm
@@ -486,8 +486,8 @@ theorem set_biUnion_coe
 
 中文:
 定理 set_biUnion_coe
-  条件: (s : Finset α) (t : α -> Set β)
-  结论: ⋃ x in (↑s : Set α), t x = ⋃ x in s, t x
+  条件: (s : 有限集 α) (t : α -> 集合 β)
+  结论: ⋃ x in (↑s : 集合 α), t x = ⋃ x in s, t x
   证明: rfl
 -/
 theorem set_biUnion_coe (s : Finset α) (t : α -> Set β) : ⋃ x in (↑s : Set α), t x = ⋃ x in s, t x :=
@@ -503,9 +503,9 @@ theorem set_biInter_coe
   proof: rfl
 
 中文:
-定理 set_biInter_coe
-  条件: (s : Finset α) (t : α -> Set β)
-  结论: ⋂ x in (↑s : Set α), t x = ⋂ x in s, t x
+定理 set_bi整数er_coe
+  条件: (s : 有限集 α) (t : α -> 集合 β)
+  结论: ⋂ x in (↑s : 集合 α), t x = ⋂ x in s, t x
   证明: rfl
 -/
 theorem set_biInter_coe (s : Finset α) (t : α -> Set β) : ⋂ x in (↑s : Set α), t x = ⋂ x in s, t x :=
@@ -522,8 +522,8 @@ theorem set_biUnion_singleton
 
 中文:
 定理 set_biUnion_singleton
-  条件: (a : α) (s : α -> Set β)
-  结论: ⋃ x in ({a} : Finset α), s x = s a
+  条件: (a : α) (s : α -> 集合 β)
+  结论: ⋃ x in ({a} : 有限集 α), s x = s a
   证明: iSup_singleton a s
 
 Depends on / 依赖: iSup_singleton
@@ -543,9 +543,9 @@ theorem set_biInter_singleton
 @[simp]
 
 中文:
-定理 set_biInter_singleton
-  条件: (a : α) (s : α -> Set β)
-  结论: ⋂ x in ({a} : Finset α), s x = s a
+定理 set_bi整数er_singleton
+  条件: (a : α) (s : α -> 集合 β)
+  结论: ⋂ x in ({a} : 有限集 α), s x = s a
   证明: iInf_singleton a s
 
 @[simp]
@@ -566,7 +566,7 @@ theorem set_biUnion_preimage_singleton
 
 中文:
 定理 set_biUnion_preimage_singleton
-  条件: (f : α -> β) (s : Finset β)
+  条件: (f : α -> β) (s : 有限集 β)
   证明: Set.biUnion_preimage_singleton f s
 
 Depends on / 依赖: Set.biUnion_preimage_singleton, biUnion_preimage_singleton
@@ -585,7 +585,7 @@ theorem set_biUnion_option_toFinset
 
 中文:
 定理 set_biUnion_option_toFinset
-  条件: (o : Option α) (f : α -> Set β)
+  条件: (o : 选项类型 α) (f : α -> 集合 β)
   证明: iSup_option_toFinset o f
 
 Depends on / 依赖: iSup_option_toFinset
@@ -603,8 +603,8 @@ theorem set_biInter_option_toFinset
   proof: iInf_option_toFinset o f
 
 中文:
-定理 set_biInter_option_toFinset
-  条件: (o : Option α) (f : α -> Set β)
+定理 set_bi整数er_option_toFinset
+  条件: (o : 选项类型 α) (f : α -> 集合 β)
   证明: iInf_option_toFinset o f
 
 Depends on / 依赖: iInf_option_toFinset
@@ -623,7 +623,7 @@ theorem subset_set_biUnion_of_mem
 
 中文:
 定理 subset_set_biUnion_of_mem
-  条件: {s : Finset α} {f : α -> Set β} {x : α} (h : x in s)
+  条件: {s : 有限集 α} {f : α -> 集合 β} {x : α} (h : x in s)
   证明: le_iSup_of_le x by simp [h]
 
 Depends on / 依赖: le_iSup_of_le
@@ -644,7 +644,7 @@ theorem set_biUnion_union
 
 中文:
 定理 set_biUnion_union
-  条件: (s t : Finset α) (u : α -> Set β)
+  条件: (s t : 有限集 α) (u : α -> 集合 β)
   证明: iSup_union
 
 Depends on / 依赖: iSup_union
@@ -662,8 +662,8 @@ theorem set_biInter_inter
   proof: iInf_union
 
 中文:
-定理 set_biInter_inter
-  条件: (s t : Finset α) (u : α -> Set β)
+定理 set_bi整数er_inter
+  条件: (s t : 有限集 α) (u : α -> 集合 β)
   证明: iInf_union
 
 Depends on / 依赖: iInf_union
@@ -682,7 +682,7 @@ theorem set_biUnion_insert
 
 中文:
 定理 set_biUnion_insert
-  条件: (a : α) (s : Finset α) (t : α -> Set β)
+  条件: (a : α) (s : 有限集 α) (t : α -> 集合 β)
   证明: iSup_insert a s t
 
 Depends on / 依赖: iSup_insert
@@ -700,8 +700,8 @@ theorem set_biInter_insert
   proof: iInf_insert a s t
 
 中文:
-定理 set_biInter_insert
-  条件: (a : α) (s : Finset α) (t : α -> Set β)
+定理 set_bi整数er_insert
+  条件: (a : α) (s : 有限集 α) (t : α -> 集合 β)
   证明: iInf_insert a s t
 
 Depends on / 依赖: iInf_insert
@@ -720,7 +720,7 @@ theorem set_biUnion_finset_image
 
 中文:
 定理 set_biUnion_finset_image
-  条件: {f : γ -> α} {g : α -> Set β} {s : Finset γ}
+  条件: {f : γ -> α} {g : α -> 集合 β} {s : 有限集 γ}
   证明: iSup_finset_image
 
 Depends on / 依赖: iSup_finset_image
@@ -738,8 +738,8 @@ theorem set_biInter_finset_image
   proof: iInf_finset_image
 
 中文:
-定理 set_biInter_finset_image
-  条件: {f : γ -> α} {g : α -> Set β} {s : Finset γ}
+定理 set_bi整数er_finset_image
+  条件: {f : γ -> α} {g : α -> 集合 β} {s : 有限集 γ}
   证明: iInf_finset_image
 
 Depends on / 依赖: iInf_finset_image
@@ -758,7 +758,7 @@ theorem set_biUnion_insert_update
 
 中文:
 定理 set_biUnion_insert_update
-  条件: {x : α} {t : Finset α} (f : α -> Set β) {s : Set β} (hx : x ∉ t)
+  条件: {x : α} {t : 有限集 α} (f : α -> 集合 β) {s : 集合 β} (hx : x ∉ t)
   证明: iSup_insert_update f hx
 
 Depends on / 依赖: iSup_insert_update
@@ -776,8 +776,8 @@ theorem set_biInter_insert_update
   proof: iInf_insert_update f hx
 
 中文:
-定理 set_biInter_insert_update
-  条件: {x : α} {t : Finset α} (f : α -> Set β) {s : Set β} (hx : x ∉ t)
+定理 set_bi整数er_insert_update
+  条件: {x : α} {t : 有限集 α} (f : α -> 集合 β) {s : 集合 β} (hx : x ∉ t)
   证明: iInf_insert_update f hx
 
 Depends on / 依赖: iInf_insert_update
@@ -796,7 +796,7 @@ theorem set_biUnion_biUnion
 
 中文:
 定理 set_biUnion_biUnion
-  条件: (s : Finset γ) (t : γ -> Finset α) (f : α -> Set β)
+  条件: (s : 有限集 γ) (t : γ -> 有限集 α) (f : α -> 集合 β)
   证明: iSup_biUnion s t f
 
 Depends on / 依赖: iSup_biUnion
@@ -814,8 +814,8 @@ theorem set_biInter_biUnion
   proof: iInf_biUnion s t f
 
 中文:
-定理 set_biInter_biUnion
-  条件: (s : Finset γ) (t : γ -> Finset α) (f : α -> Set β)
+定理 set_bi整数er_biUnion
+  条件: (s : 有限集 γ) (t : γ -> 有限集 α) (f : α -> 集合 β)
   证明: iInf_biUnion s t f
 
 Depends on / 依赖: iInf_biUnion

@@ -45,8 +45,8 @@ lemma Module.Finite.of_finite_tensorProduct_of_faithfullyFlat
   have : Function.Sur
 
 中文:
-引理 Module.Finite.of_finite_tensorProduct_of_faithfullyFlat
-  结论: {M : 类型} [AddCommGroup M]
+引理 模.有限.of_finite_tensorProduct_of_faithfullyFlat
+  结论: {M : 类型} [加法交换群 M]
   证明: by
   obtain ⟨n, s, hs⟩ := Module.Finite.exists_fin (R := T) (M := T otimes[R] M)
   choose k t m h using fun i : Fin n => TensorProduct.exists_sum_tmul_eq (s i)
@@ -86,8 +86,8 @@ lemma Ideal.FG.of_FG_map_of_faithfullyFlat
     refi
 
 中文:
-引理 Ideal.FG.of_FG_map_of_faithfullyFlat
-  结论: [Module.FaithfullyFlat R S] {I : Ideal R}
+引理 理想.FG.of_FG_map_of_faithfullyFlat
+  结论: [模.忠实平坦 R S] {I : 理想 R}
   证明: by
   change Submodule.FG I
   rw [← Module.Finite.iff_fg]
@@ -141,7 +141,7 @@ lemma FiniteType.of_finiteType_tensorProduct_of_faithfullyFlat
   apply Algebra.FiniteType.of_surjective f
 
 中文:
-引理 FiniteType.of_finiteType_tensorProduct_of_faithfullyFlat
+引理 有限型.of_finiteType_tensorProduct_of_faithfullyFlat
   证明: by
   obtain ⟨s, hs⟩ := Algebra.FiniteType.out (R := T) (A := T otimes[R] S)
   have (x : s) := TensorProduct.exists_sum_tmul_eq x.1
@@ -181,7 +181,7 @@ lemma FinitePresentation.of_finitePresentation_tensorProduct_of_faithfullyFlat
     .of_linearEquiv _ _ (Al
 
 中文:
-引理 FinitePresentation.of_finitePresentation_tensorProduct_of_faithfullyFlat
+引理 有限呈现.of_finitePresentation_tensorProduct_of_faithfullyFlat
   证明: by
   have : Algebra.FiniteType R S := .of_finiteType_tensorProduct_of_faithfullyFlat T
   rw [Algebra.FiniteType.iff_quotient_mvPolynomial''] at this
@@ -224,7 +224,7 @@ lemma FiniteType.codescendsAlong_faithfullyFlat
   exact .of_finiteType_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 FiniteType.codescendsAlong_faithfullyFlat
+引理 有限型.codescendsAlong_faithfullyFlat
   证明: by
   refine .mk _ finiteType_respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [finiteType_algebraMap] at h' ⊢
@@ -252,7 +252,7 @@ lemma FinitePresentation.codescendsAlong_faithfullyFlat
   exact .of_finitePresentation_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 FinitePresentation.codescendsAlong_faithfullyFlat
+引理 有限呈现.codescendsAlong_faithfullyFlat
   证明: by
   refine .mk _ finitePresentation_respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [finitePresentation_algebraMap] at h' ⊢
@@ -280,7 +280,7 @@ lemma Finite.codescendsAlong_faithfullyFlat
   exact .of_finite_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 Finite.codescendsAlong_faithfullyFlat
+引理 有限.codescendsAlong_faithfullyFlat
   证明: by
   refine .mk _ finite_respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [finite_algebraMap] at h' ⊢

@@ -97,7 +97,7 @@ theorem isComplement_iff_bijective
 
 中文:
 定理 isComplement_iff_bijective
-  条件: {S : 类型} [SetLike S G] (s t : S)
+  条件: {S : 类型} [集合状 S G] (s t : S)
   证明: Iff.rfl
 
 @[to_additive]
@@ -121,7 +121,7 @@ theorem isComplement'_def
 
 中文:
 定理 isComplement'_def
-  结论: IsComplement' H K ↔ IsComplement (H : Set G) (K : Set G)
+  结论: IsComplement' H K ↔ IsComplement (H : 集合 G) (K : 集合 G)
   证明: Iff.rfl
 
 @[to_additive]
@@ -142,7 +142,7 @@ theorem isComplement_iff_existsUnique
 @[to_additive]
 
 中文:
-定理 isComplement_iff_existsUnique
+定理 isComplement_iff_存在Unique
   证明: Function.bijective_iff_existsUnique _
 
 @[to_additive]
@@ -165,7 +165,7 @@ theorem IsComplement.existsUnique
 @[to_additive]
 
 中文:
-定理 IsComplement.existsUnique
+定理 IsComplement.存在Unique
   条件: (h : IsComplement S T) (g : G)
   证明: isComplement_iff_existsUnique.mp h g
 
@@ -250,7 +250,7 @@ theorem isComplement_univ_singleton
 中文:
 定理 isComplement_univ_singleton
   条件: {g : G}
-  结论: IsComplement (univ : Set G) {g}
+  结论: IsComplement (univ : 集合 G) {g}
   证明: ⟨fun ⟨_, _, rfl⟩ ⟨_, _, rfl⟩ h => Prod.ext (Subtype.ext (mul_right_cancel h)) rfl, fun x =>
     ⟨⟨⟨x * g⁻¹, ⟨⟩⟩, g, rfl⟩, inv_mul_cancel_right x g⟩⟩
 
@@ -278,7 +278,7 @@ theorem isComplement_singleton_univ
 中文:
 定理 isComplement_singleton_univ
   条件: {g : G}
-  结论: IsComplement ({g} : Set G) univ
+  结论: IsComplement ({g} : 集合 G) univ
   证明: ⟨fun ⟨⟨_, rfl⟩, _⟩ ⟨⟨_, rfl⟩, _⟩ h => Prod.ext rfl (Subtype.ext (mul_left_cancel h)), fun x =>
     ⟨⟨⟨g, rfl⟩, g⁻¹ * x, ⟨⟩⟩, mul_inv_cancel_left g x⟩⟩
 
@@ -533,7 +533,7 @@ lemma IsComplement.nonempty_left
 中文:
 引理 IsComplement.nonempty_left
   条件: (hst : IsComplement S T)
-  结论: S.Nonempty
+  结论: S.非空
   证明: by
   contrapose! hst; simp [hst]
 
@@ -558,7 +558,7 @@ lemma IsComplement.nonempty_right
 中文:
 引理 IsComplement.nonempty_right
   条件: (hst : IsComplement S T)
-  结论: T.Nonempty
+  结论: T.非空
   证明: by
   contrapose! hst; simp [hst]
 
@@ -631,7 +631,7 @@ theorem isComplement'_top_bot
 
 中文:
 定理 isComplement'_top_bot
-  结论: IsComplement' (⊤ : Subgroup G) ⊥
+  结论: IsComplement' (⊤ : 子群 G) ⊥
   证明: isComplement_univ_singleton
 
 @[to_additive]
@@ -652,7 +652,7 @@ theorem isComplement'_bot_top
 
 中文:
 定理 isComplement'_bot_top
-  结论: IsComplement' (⊥ : Subgroup G) ⊤
+  结论: IsComplement' (⊥ : 子群 G) ⊤
   证明: isComplement_singleton_univ
 
 @[to_additive (attr := simp)]
@@ -759,7 +759,7 @@ lemma isComplement_iff_existsUnique_inv_mul_mem
 @[to_additive]
 
 中文:
-引理 isComplement_iff_existsUnique_inv_mul_mem
+引理 isComplement_iff_存在Unique_inv_mul_mem
   证明: by
   convert! isComplement_iff_existsUnique with g
   constructor <;> rintro ⟨x, hx, hx'⟩
@@ -792,7 +792,7 @@ lemma isComplement_iff_existsUnique_mul_inv_mem
 @[to_additive]
 
 中文:
-引理 isComplement_iff_existsUnique_mul_inv_mem
+引理 isComplement_iff_存在Unique_mul_inv_mem
   证明: by
   convert! isComplement_iff_existsUnique with g
   constructor <;> rintro ⟨x, hx, hx'⟩
@@ -821,7 +821,7 @@ lemma isComplement_subgroup_right_iff_existsUnique_quotientGroupMk
     QuotientGroup.forall_mk]
 
 中文:
-引理 isComplement_subgroup_right_iff_existsUnique_quotientGroupMk
+引理 isComplement_subgroup_right_iff_存在Unique_quotientGroupMk
   证明: by
   simp_rw [isComplement_iff_existsUnique_inv_mul_mem, SetLike.mem_coe, ← QuotientGroup.eq,
     QuotientGroup.forall_mk]
@@ -847,7 +847,7 @@ lemma isComplement_subgroup_left_iff_existsUnique_quotientMk''
 @[to_additive]
 
 中文:
-引理 isComplement_subgroup_left_iff_existsUnique_quotientMk''
+引理 isComplement_subgroup_left_iff_存在Unique_quotientMk''
   证明: by
   simp_rw [isComplement_iff_existsUnique_mul_inv_mem, SetLike.mem_coe,
     ← QuotientGroup.rightRel_apply, ← Quotient.eq'', Quotient.forall]
@@ -1072,7 +1072,7 @@ exact Subtype.ext congr_arg f ((hf q₁).symm.trans h).trans (hf q₂)
 
 中文:
 引理 isComplement_range_right
-  结论: {f : Quotient (QuotientGroup.rightRel H) -> G}
+  结论: {f : 商 (商群.rightRel H) -> G}
   证明: by
   rw [isComplement_subgroup_left_iff_bijective]
   refine ⟨?_, fun q => ⟨⟨f q, q, rfl⟩, hf q⟩⟩
@@ -1106,8 +1106,8 @@ lemma exists_isComplement_left
   · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quo
 
 中文:
-引理 exists_isComplement_left
-  条件: (H : Subgroup G) (g : G)
+引理 存在_isComplement_left
+  条件: (H : 子群 G) (g : G)
   结论: 存在 S, IsComplement S H ∧ g in S
   证明: by
   classical
@@ -1141,8 +1141,8 @@ lemma exists_isComplement_right
   · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quoti
 
 中文:
-引理 exists_isComplement_right
-  条件: (H : Subgroup G) (g : G)
+引理 存在_isComplement_right
+  条件: (H : 子群 G) (g : G)
   证明: by
   classical
   refine ⟨Set.range (Function.update Quotient.out _ g), isComplement_range_right fun q => ?_,
@@ -1179,8 +1179,8 @@ lemma exists_left_transversal_of_le
     
 
 中文:
-引理 exists_left_transversal_of_le
-  条件: {H' H : Subgroup G} (h : H' <= H)
+引理 存在_left_transversal_of_le
+  条件: {H' H : 子群 G} (h : H' <= H)
   证明: by
   let H'' : Subgroup H := H'.comap H.subtype
   have : H' = H''.map H.subtype := by simp [H'', h]
@@ -1224,8 +1224,8 @@ lemma exists_right_transversal_of_le
    
 
 中文:
-引理 exists_right_transversal_of_le
-  条件: {H' H : Subgroup G} (h : H' <= H)
+引理 存在_right_transversal_of_le
+  条件: {H' H : 子群 G} (h : H' <= H)
   证明: by
   let H'' : Subgroup H := H'.comap H.subtype
   have : H' = H''.map H.subtype := by simp [H'', h]
@@ -1264,7 +1264,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: {S T : Set G} (hST : IsComplement S T)
+  签名: {S T : 集合 G} (hST : IsComplement S T)
   定义体: (Equiv.ofBijective (fun x : S × T => x.1.1 * x.2.1) hST).symm
 
 Depends on / 依赖: Equiv.ofBijective, ofBijective
@@ -1869,7 +1869,7 @@ theorem finite_left_iff
 中文:
 定理 finite_left_iff
   条件: (h : IsComplement S H)
-  结论: Finite S ↔ H.FiniteIndex
+  结论: 有限 S ↔ H.FiniteIndex
   证明: by
   rw [← h.leftQuotientEquiv.finite_iff]
   exact ⟨fun _ => finiteIndex_of_finite_quotient, fun _ => finite_quotient_of_finiteIndex⟩
@@ -1897,7 +1897,7 @@ lemma finite_left
 中文:
 引理 finite_left
   条件: [H.FiniteIndex] (hS : IsComplement S H)
-  结论: S.Finite
+  结论: S.有限
   证明: hS.finite_left_iff.2 ‹_›
 
 @[to_additive]
@@ -2063,7 +2063,7 @@ theorem finite_right_iff
 中文:
 定理 finite_right_iff
   条件: (h : IsComplement H T)
-  结论: Finite T ↔ H.FiniteIndex
+  结论: 有限 T ↔ H.FiniteIndex
   证明: by
   rw [← h.rightQuotientEquiv.finite_iff]; rw [(QuotientGroup.quotientRightRelEquivQuotientLeftRel H).finite_iff]
   exact ⟨fun _ => finiteIndex_of_finite_quotient, fun _ => finite_quotient_of_finiteIndex⟩
@@ -2091,7 +2091,7 @@ lemma finite_right
 中文:
 引理 finite_right
   条件: [H.FiniteIndex] (hT : IsComplement H T)
-  结论: T.Finite
+  结论: T.有限
   证明: hT.finite_right_iff.2 ‹_›
 
 @[to_additive]
@@ -2137,7 +2137,7 @@ theorem rightQuotientEquiv_apply
 
 中文:
 定理 rightQuotientEquiv_apply
-  结论: {f : Quotient (QuotientGroup.rightRel H) -> G}
+  结论: {f : 商 (商群.rightRel H) -> G}
   证明: by
   refine (Subtype.ext_iff.mp ?_).trans (Subtype.coe_mk (f q) ⟨q, rfl⟩)
   exact (rightQuotientEquiv (isComplement_range_right hf)).eq_symm_apply.1 (hf q).symm
@@ -2292,7 +2292,7 @@ abbreviation LeftTransversal
 
 中文:
 缩写 LeftTransversal
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: {S : Set G // IsComplement S H}
 
 Depends on / 依赖: IsComplement
@@ -2311,7 +2311,7 @@ abbreviation RightTransversal
 
 中文:
 缩写 RightTransversal
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: {T : Set G // IsComplement H T}
 
 Depends on / 依赖: IsComplement
@@ -2335,7 +2335,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction F H.LeftTransversal
+  签名: 乘法作用 F H.LeftTransversal
   定义体: ⟨f • (T : Set G), by
       refine isComplement_iff_existsUnique_inv_mul_mem.mpr fun g => ?_
       obtain ⟨t, ht1, ht2⟩ := isComplement_iff_existsUnique_inv_mul_mem.mp T.2 (f⁻¹ • g)
@@ -2454,7 +2454,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited H.LeftTransversal
+  签名: 可居 H.LeftTransversal
   定义体: ⟨⟨Set.range Quotient.out, isComplement_range_left Quotient.out_eq'⟩⟩
 
 @[to_additive]
@@ -2477,7 +2477,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited H.RightTransversal
+  签名: 可居 H.RightTransversal
   定义体: ⟨⟨Set.range Quotient.out, isComplement_range_right Quotient.out_eq'⟩⟩
 
 Depends on / 依赖: Quotient, Quotient.out, Quotient.out_eq, Set.range, isComplement_range_right, out_eq
@@ -2505,7 +2505,7 @@ theorem IsComplement'.isCompl
 中文:
 定理 IsComplement'.isCompl
   条件: (h : IsComplement' H K)
-  结论: IsCompl H K
+  结论: 是补集 H K
   证明: by
   refine
     ⟨disjoint_iff_inf_le.mpr fun g ⟨p, q⟩ =>
@@ -2602,7 +2602,7 @@ definition IsComplement'.QuotientMulEquiv
 
 中文:
 定义 IsComplement'.QuotientMulEquiv
-  签名: [K.Normal] (h : H.IsComplement' K)
+  签名: [K.正规] (h : H.IsComplement' K)
   定义体: MulEquiv.symm
   { h.leftQuotientEquiv.symm with
     map_mul' := fun _ _ => rfl }
@@ -2684,7 +2684,7 @@ theorem isComplement'_of_card_mul_and_disjoint
 
 中文:
 定理 isComplement'_of_card_mul_and_disjoint
-  结论: [Finite G]
+  结论: [有限 G]
   证明: (Nat.bijective_iff_injective_and_card _).mpr
     ⟨mul_injective_of_disjoint h2, (Nat.card_prod H K).trans h1⟩
 -/
@@ -2704,7 +2704,7 @@ theorem isComplement'_iff_card_mul_and_disjoint
 
 中文:
 定理 isComplement'_iff_card_mul_and_disjoint
-  条件: [Finite G]
+  条件: [有限 G]
   证明: ⟨fun h => ⟨h.card_mul_card, h.disjoint⟩, fun h => isComplement'_of_card_mul_and_disjoint h.1 h.2⟩
 -/
 theorem isComplement'_iff_card_mul_and_disjoint [Finite G] :
@@ -2721,7 +2721,7 @@ theorem isComplement'_of_coprime
 
 中文:
 定理 isComplement'_of_coprime
-  结论: [Finite G]
+  结论: [有限 G]
   证明: isComplement'_of_card_mul_and_disjoint h1 disjoint_of_coprime_natCard h2
 -/
 theorem isComplement'_of_coprime [Finite G]
@@ -2745,7 +2745,7 @@ theorem isComplement'_stabilizer
 
 中文:
 定理 isComplement'_stabilizer
-  结论: {α : 类型} [MulAction G α] (a : α)
+  结论: {α : 类型} [乘法作用 G α] (a : α)
   证明: by
   refine isComplement_iff_existsUnique.mpr fun g => ?_
   obtain ⟨h, hh⟩ := h2 g

@@ -64,7 +64,7 @@ definition PosSemidef
 
 中文:
 定义 PosSemidef
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: M.IsHermitian ∧ forall x : n ->₀ R, 0 <= x.sum fun i xi => x.sum fun j xj => star xi * M i j * xj
 
 Depends on / 依赖: IsHermitian, M.IsHermitian, x.sum
@@ -86,7 +86,7 @@ theorem PosSemidef.diagonal
 
 中文:
 定理 PosSemidef.diagonal
-  条件: [StarOrderedRing R] [DecidableEq n] {d : n -> R} (h : 0 <= d)
+  条件: [StarOrdered环 R] [DecidableEq n] {d : n -> R} (h : 0 <= d)
   证明: isHermitian_diagonal_of_self_adjoint _ funext fun i => IsSelfAdjoint.of_nonneg (h i)
   right x := by
     -- TODO: positivity
@@ -111,7 +111,7 @@ lemma posSemidef_diagonal_iff
 
 中文:
 引理 posSemidef_diagonal_iff
-  条件: [StarOrderedRing R] [DecidableEq n] {d : n -> R}
+  条件: [StarOrdered环 R] [DecidableEq n] {d : n -> R}
   证明: ⟨fun ⟨_, hP⟩ i => by simpa using hP (.single i 1), .diagonal⟩
 -/
 @[simp] lemma posSemidef_diagonal_iff [StarOrderedRing R] [DecidableEq n] {d : n -> R} :
@@ -131,7 +131,7 @@ theorem isHermitian
 
 中文:
 定理 isHermitian
-  条件: {M : Matrix n n R} (hM : M.PosSemidef)
+  条件: {M : 矩阵 n n R} (hM : M.PosSemidef)
   结论: M.IsHermitian
   证明: hM.1
 -/
@@ -150,7 +150,7 @@ simpa [Finsupp.sum_mapDomain_index, add_mul, mul_add] using hM.2 x.mapDomain e
 
 中文:
 定理 submatrix
-  条件: {M : Matrix n n R} (hM : M.PosSemidef) (e : m -> n)
+  条件: {M : 矩阵 n n R} (hM : M.PosSemidef) (e : m -> n)
   证明: by
   refine ⟨hM.1.submatrix _, fun x => ?_⟩
 simpa [Finsupp.sum_mapDomain_index, add_mul, mul_add] using hM.2 x.mapDomain e
@@ -179,7 +179,7 @@ theorem transpose
 
 中文:
 定理 transpose
-  条件: {M : Matrix n n R'} (hM : M.PosSemidef)
+  条件: {M : 矩阵 n n R'} (hM : M.PosSemidef)
   结论: Mᵀ.PosSemidef
   证明: by
   have (a b c : R') : a * b * c = c * b * a := by ring
@@ -208,8 +208,8 @@ theorem _root_.Matrix.posSemidef_transpose_iff
   proof: ⟨.transpose, .transpose⟩
 
 中文:
-定理 _root_.Matrix.posSemidef_transpose_iff
-  条件: {M : Matrix n n R'}
+定理 _root_.矩阵.posSemidef_transpose_iff
+  条件: {M : 矩阵 n n R'}
   结论: Mᵀ.PosSemidef ↔ M.PosSemidef
   证明: ⟨.transpose, .transpose⟩
 
@@ -231,7 +231,7 @@ theorem conjTranspose
 
 中文:
 定理 conjTranspose
-  条件: {M : Matrix n n R} (hM : M.PosSemidef)
+  条件: {M : 矩阵 n n R} (hM : M.PosSemidef)
   结论: Mᴴ.PosSemidef
   证明: hM.1.symm ▸ hM
 
@@ -249,8 +249,8 @@ theorem _root_.Matrix.posSemidef_conjTranspose_iff
   proof: ⟨(by simpa using ·.conjTranspose), .conjTranspose⟩
 
 中文:
-定理 _root_.Matrix.posSemidef_conjTranspose_iff
-  条件: {M : Matrix n n R}
+定理 _root_.矩阵.posSemidef_conjTranspose_iff
+  条件: {M : 矩阵 n n R}
   证明: ⟨(by simpa using ·.conjTranspose), .conjTranspose⟩
 
 Depends on / 依赖: conjTranspose
@@ -270,7 +270,7 @@ lemma add
 
 中文:
 引理 add
-  结论: [AddLeftMono R] {A : Matrix m m R} {B : Matrix m m R}
+  结论: [AddLeftMono R] {A : 矩阵 m m R} {B : 矩阵 m m R}
   证明: ⟨hA.isHermitian.add hB.isHermitian, fun x => by
     simpa [mul_add, add_mul] using add_nonneg (hA.2 x) (hB.2 x)⟩
 -/
@@ -291,7 +291,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [StarRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [对合环 α]
   证明: by
   refine ⟨IsSelfAdjoint.smul (.of_nonneg ha) hx.1, fun y => ?_⟩
   simpa [mul_smul_comm, smul_mul_assoc, ← Finsupp.smul_sum] using smul_nonneg ha (hx.2 _)
@@ -312,7 +312,7 @@ lemma zero
 
 中文:
 引理 zero
-  结论: PosSemidef (0 : Matrix n n R)
+  结论: PosSemidef (0 : 矩阵 n n R)
   证明: ⟨isHermitian_zero, by simp⟩
 -/
 protected lemma zero : PosSemidef (0 : Matrix n n R) := ⟨isHermitian_zero, by simp⟩
@@ -329,8 +329,8 @@ lemma one
 
 中文:
 引理 one
-  条件: [StarOrderedRing R] [DecidableEq n]
-  结论: PosSemidef (1 : Matrix n n R)
+  条件: [StarOrdered环 R] [DecidableEq n]
+  结论: PosSemidef (1 : 矩阵 n n R)
   证明: ⟨isHermitian_one, fun x => Finsupp.sum_nonneg fun i _ => Finsupp.sum_nonneg fun j _ => by
     obtain rfl | hij := eq_or_ne i j <;> simp [*]⟩
 -/
@@ -349,7 +349,7 @@ theorem natCast
 
 中文:
 定理 natCast
-  条件: [StarOrderedRing R] [DecidableEq n] (d : 自然数)
+  条件: [StarOrdered环 R] [DecidableEq n] (d : 自然数)
   证明: ⟨isHermitian_natCast _, fun x => Finsupp.sum_nonneg fun i _ => Finsupp.sum_nonneg fun j _ => by
     obtain rfl | hij := eq_or_ne i j <;> simp [← diagonal_natCast', star_left_conjugate_nonneg, *]⟩
 -/
@@ -367,8 +367,8 @@ theorem ofNat
   proof: .natCast d
 
 中文:
-定理 ofNat
-  条件: [StarOrderedRing R] [DecidableEq n] (d : 自然数) [d.AtLeastTwo]
+定理 of自然数
+  条件: [StarOrdered环 R] [DecidableEq n] (d : 自然数) [d.AtLeastTwo]
   证明: .natCast d
 -/
 protected theorem ofNat [StarOrderedRing R] [DecidableEq n] (d : Nat) [d.AtLeastTwo] :
@@ -388,7 +388,7 @@ theorem intCast
 
 中文:
 定理 intCast
-  条件: [StarOrderedRing R] [DecidableEq n] (d : 整数) (hd : 0 <= d)
+  条件: [StarOrdered环 R] [DecidableEq n] (d : 整数) (hd : 0 <= d)
   证明: ⟨isHermitian_intCast _, fun x => Finsupp.sum_nonneg fun i _ => Finsupp.sum_nonneg fun j _ => by
     obtain rfl | hij := eq_or_ne i j <;> simp [← diagonal_intCast', star_left_conjugate_nonneg, *]⟩
 
@@ -408,7 +408,7 @@ theorem _root_.Matrix.posSemidef_intCast_iff
   proof: by simp [← diagonal_intCast']
 
 中文:
-定理 _root_.Matrix.posSemidef_intCast_iff
+定理 _root_.矩阵.posSemidef_intCast_iff
   证明: by simp [← diagonal_intCast']
 -/
 protected theorem _root_.Matrix.posSemidef_intCast_iff
@@ -427,7 +427,7 @@ simpa using hA.2 .single i 1
 
 中文:
 引理 diag_nonneg
-  条件: {A : Matrix n n R} (hA : A.PosSemidef) {i : n}
+  条件: {A : 矩阵 n n R} (hA : A.PosSemidef) {i : n}
   结论: 0 <= A i i
   证明: by
 simpa using hA.2 .single i 1
@@ -450,7 +450,7 @@ theorem posSemidef_submatrix_equiv
 
 中文:
 定理 posSemidef_submatrix_equiv
-  条件: {M : Matrix n n R} (e : m ≃ n)
+  条件: {M : 矩阵 n n R} (e : m ≃ n)
   证明: ⟨fun h => by simpa using h.submatrix e.symm, fun h => h.submatrix _⟩
 
 Depends on / 依赖: e.symm, h.submatrix, submatrix
@@ -501,7 +501,7 @@ definition PosDef
 
 中文:
 定义 PosDef
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: M.IsHermitian ∧ forall ⦃x : n ->₀ R⦄, x != 0 -> 0 < x.sum fun i xi => x.sum fun j xj => star xi * M i j * xj
 
 Depends on / 依赖: IsHermitian, M.IsHermitian, x.sum
@@ -522,7 +522,7 @@ theorem isHermitian
 
 中文:
 定理 isHermitian
-  条件: {M : Matrix n n R} (hM : M.PosDef)
+  条件: {M : 矩阵 n n R} (hM : M.PosDef)
   结论: M.IsHermitian
   证明: hM.1
 -/
@@ -540,7 +540,7 @@ theorem posSemidef
 
 中文:
 定理 posSemidef
-  条件: {M : Matrix n n R} (hM : M.PosDef)
+  条件: {M : 矩阵 n n R} (hM : M.PosDef)
   结论: M.PosSemidef
   证明: ⟨hM.1, fun x => by obtain rfl | hx := eq_or_ne x 0 <;> simp [le_of_lt, hM.2, *]⟩
 
@@ -562,7 +562,7 @@ hM.2 .2 hx .ne_iff' Finsupp.mapDomain_zero Finsupp.mapDomain_injective he
 
 中文:
 定理 submatrix
-  结论: {M : Matrix n n R} (hM : M.PosDef) {e : m -> n}
+  结论: {M : 矩阵 n n R} (hM : M.PosDef) {e : m -> n}
   证明: by
   refine ⟨hM.1.submatrix _, fun x hx => ?_⟩
   simpa [Finsupp.sum_mapDomain_index, add_mul, mul_add] using
@@ -594,7 +594,7 @@ theorem transpose
 
 中文:
 定理 transpose
-  条件: {M : Matrix n n R'} (hM : M.PosDef)
+  条件: {M : 矩阵 n n R'} (hM : M.PosDef)
   结论: Mᵀ.PosDef
   证明: by
   have (a b c : R') : a * b * c = c * b * a := by ring
@@ -626,7 +626,7 @@ theorem transpose_iff
 
 中文:
 定理 transpose_iff
-  条件: {M : Matrix n n R'}
+  条件: {M : 矩阵 n n R'}
   结论: Mᵀ.PosDef ↔ M.PosDef
   证明: ⟨(by simpa using ·.transpose), .transpose⟩
 
@@ -649,7 +649,7 @@ theorem diagonal
 
 中文:
 定理 diagonal
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: isHermitian_diagonal_of_self_adjoint _ funext fun i => IsSelfAdjoint.of_nonneg (h i).le
   right x hx := by
     refine Finsupp.sum_pos' (fun _ _ => Finsupp.sum_nonneg ?_) ?_
@@ -679,7 +679,7 @@ theorem _root_.Matrix.posDef_diagonal_iff
 @[simp, nontriviality]
 
 中文:
-定理 _root_.Matrix.posDef_diagonal_iff
+定理 _root_.矩阵.posDef_diagonal_iff
   证明: ⟨fun h i => by simpa using h.2 (x := .single i 1), .diagonal⟩
 
 @[simp, nontriviality]
@@ -703,7 +703,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: (h : Subsingleton R) (M : Matrix n n R)
+  条件: (h : 子单例 R) (M : 矩阵 n n R)
   结论: M.PosDef
   证明: ⟨.of_subsingleton, fun _ hx => (hx <| Subsingleton.elim ..).elim⟩
 
@@ -724,7 +724,7 @@ theorem one
 
 中文:
 定理 one
-  条件: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+  条件: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: by
   nontriviality R
   exact .diagonal fun i => zero_lt_one' R
@@ -748,7 +748,7 @@ theorem natCast
 
 中文:
 定理 natCast
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: by
   nontriviality R
   exact .diagonal fun _ => by simpa [pos_iff_ne_zero]
@@ -771,8 +771,8 @@ theorem _root_.Matrix.posDef_natCast_iff
   proof: posDef_diagonal_iff.trans by simp
 
 中文:
-定理 _root_.Matrix.posDef_natCast_iff
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+定理 _root_.矩阵.posDef_natCast_iff
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: posDef_diagonal_iff.trans by simp
 
 Depends on / 依赖: posDef_diagonal_iff, posDef_diagonal_iff.trans
@@ -791,8 +791,8 @@ theorem ofNat
   proof: .natCast d (NeZero.ne _)
 
 中文:
-定理 ofNat
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+定理 of自然数
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: .natCast d (NeZero.ne _)
 -/
 protected theorem ofNat [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
@@ -814,7 +814,7 @@ theorem intCast
 
 中文:
 定理 intCast
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: by
   nontriviality R
   exact .diagonal fun _ => by simpa [pos_iff_ne_zero]
@@ -837,8 +837,8 @@ theorem _root_.Matrix.posDef_intCast_iff
   proof: posDef_diagonal_iff.trans by simp
 
 中文:
-定理 _root_.Matrix.posDef_intCast_iff
-  结论: [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
+定理 _root_.矩阵.posDef_intCast_iff
+  结论: [StarOrdered环 R] [DecidableEq n] [无零因子 R]
   证明: posDef_diagonal_iff.trans by simp
 
 Depends on / 依赖: posDef_diagonal_iff, posDef_diagonal_iff.trans
@@ -897,7 +897,7 @@ lemma add
 
 中文:
 引理 add
-  结论: [AddLeftMono R] {A : Matrix m m R} {B : Matrix m m R}
+  结论: [AddLeftMono R] {A : 矩阵 m m R} {B : 矩阵 m m R}
   证明: hA.add_posSemidef hB.posSemidef
 -/
 protected lemma add [AddLeftMono R] {A : Matrix m m R} {B : Matrix m m R}
@@ -922,8 +922,8 @@ theorem _root_.Matrix.posDef_sum
           H (not_not.mp h) fun _ _hi => hA _ (Fin
 
 中文:
-定理 _root_.Matrix.posDef_sum
-  结论: {ι : 类型} [AddLeftMono R] {A : ι -> Matrix m m R}
+定理 _root_.矩阵.posDef_sum
+  结论: {ι : 类型} [AddLeftMono R] {A : ι -> 矩阵 m m R}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -961,7 +961,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [StarRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [对合环 α]
   证明: by
   refine ⟨IsSelfAdjoint.smul (IsSelfAdjoint.of_nonneg ha.le) hx.1, fun y hy => ?_⟩
   simpa [← Finsupp.smul_sum] using smul_pos ha (hx.2 hy)
@@ -985,7 +985,7 @@ theorem conjTranspose
 
 中文:
 定理 conjTranspose
-  条件: {M : Matrix n n R} (hM : M.PosDef)
+  条件: {M : 矩阵 n n R} (hM : M.PosDef)
   结论: Mᴴ.PosDef
   证明: hM.1.symm ▸ hM
 
@@ -1004,8 +1004,8 @@ theorem _root_.Matrix.posDef_conjTranspose_iff
   proof: ⟨(by simpa using ·.conjTranspose), .conjTranspose⟩
 
 中文:
-定理 _root_.Matrix.posDef_conjTranspose_iff
-  条件: {M : Matrix n n R}
+定理 _root_.矩阵.posDef_conjTranspose_iff
+  条件: {M : 矩阵 n n R}
   结论: Mᴴ.PosDef ↔ M.PosDef
   证明: ⟨(by simpa using ·.conjTranspose), .conjTranspose⟩
 
@@ -1026,7 +1026,7 @@ lemma diag_pos
 
 中文:
 引理 diag_pos
-  条件: [Nontrivial R] {A : Matrix n n R} (hA : A.PosDef) {i : n}
+  条件: [非平凡 R] {A : 矩阵 n n R} (hA : A.PosDef) {i : n}
   结论: 0 < A i i
   证明: by
   simpa [trace] using hA.2 (x := Finsupp.single i 1)
@@ -1056,7 +1056,7 @@ theorem posSemidef_iff_dotProduct_mulVec
 
 中文:
 定理 posSemidef_iff_dotProduct_mulVec
-  条件: {M : Matrix n n R}
+  条件: {M : 矩阵 n n R}
   证明: by
   simp [PosSemidef, ← Finsupp.equivFunOnFinite.forall_congr_right, dotProduct, mulVec,
     Finsupp.sum_fintype, Finset.mul_sum, mul_assoc]
@@ -1081,7 +1081,7 @@ theorem dotProduct_mulVec_nonneg
 
 中文:
 定理 dotProduct_mulVec_nonneg
-  条件: {M : Matrix n n R} (hM : M.PosSemidef)
+  条件: {M : 矩阵 n n R} (hM : M.PosSemidef)
   证明: (posSemidef_iff_dotProduct_mulVec.mp hM).2
 
 Depends on / 依赖: posSemidef_iff_dotProduct_mulVec, posSemidef_iff_dotProduct_mulVec.mp
@@ -1101,7 +1101,7 @@ omit [Fintype m] in variable [Finite m] in
 
 中文:
 引理 of_dotProduct_mulVec_nonneg
-  结论: {M : Matrix n n R} (hM1 : M.IsHermitian)
+  结论: {M : 矩阵 n n R} (hM1 : M.IsHermitian)
   证明: posSemidef_iff_dotProduct_mulVec.mpr ⟨hM1, hM2⟩
 
 omit [Fintype m] in variable [Finite m] in
@@ -1129,7 +1129,7 @@ omit [Fintype m] in variable [Finite m] in
 
 中文:
 引理 conjTranspose_mul_mul_same
-  条件: {A : Matrix n n R} (hA : PosSemidef A) (B : Matrix n m R)
+  条件: {A : 矩阵 n n R} (hA : PosSemidef A) (B : 矩阵 n m R)
   证明: by
   have := Fintype.ofFinite m
   refine of_dotProduct_mulVec_nonneg (isHermitian_conjTranspose_mul_mul B hA.1) fun x => ?_
@@ -1159,7 +1159,7 @@ lemma mul_mul_conjTranspose_same
 
 中文:
 引理 mul_mul_conjTranspose_same
-  条件: {A : Matrix n n R} (hA : PosSemidef A) (B : Matrix m n R)
+  条件: {A : 矩阵 n n R} (hA : PosSemidef A) (B : 矩阵 m n R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using hA.conjTranspose_mul_mul_same Bᴴ
 
@@ -1184,7 +1184,7 @@ lemma pow
 
 中文:
 引理 pow
-  结论: [StarOrderedRing R] [DecidableEq n]
+  结论: [StarOrdered环 R] [DecidableEq n]
   证明: match k with
   | 0 => .one
   | 1 => by simpa using hM
@@ -1218,7 +1218,7 @@ lemma inv
 
 中文:
 引理 inv
-  条件: [DecidableEq n] {M : Matrix n n R'} (hM : M.PosSemidef)
+  条件: [DecidableEq n] {M : 矩阵 n n R'} (hM : M.PosSemidef)
   结论: M⁻¹.PosSemidef
   证明: by
   by_cases h : IsUnit M.det
@@ -1247,7 +1247,7 @@ lemma zpow
 
 中文:
 引理 zpow
-  结论: [StarOrderedRing R'] [DecidableEq n]
+  结论: [StarOrdered环 R'] [DecidableEq n]
   证明: by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · simpa using hM.pow n
@@ -1271,7 +1271,7 @@ lemma trace_nonneg
 
 中文:
 引理 trace_nonneg
-  条件: [AddLeftMono R] {A : Matrix n n R} (hA : A.PosSemidef)
+  条件: [AddLeftMono R] {A : 矩阵 n n R} (hA : A.PosSemidef)
   结论: 0 <= A.trace
   证明: Fintype.sum_nonneg fun _ => hA.diag_nonneg
 
@@ -1299,7 +1299,7 @@ omit [Fintype m] in variable
 
 中文:
 定理 posSemidef_conjTranspose_mul_self
-  条件: [StarOrderedRing R] (A : Matrix m n R)
+  条件: [StarOrdered环 R] (A : 矩阵 m n R)
   证明: by
   have := Fintype.ofFinite n
   refine .of_dotProduct_mulVec_nonneg (isHermitian_conjTranspose_mul_self _) fun x => ?_
@@ -1329,7 +1329,7 @@ theorem posSemidef_self_mul_conjTranspose
 
 中文:
 定理 posSemidef_self_mul_conjTranspose
-  条件: [StarOrderedRing R] (A : Matrix m n R)
+  条件: [StarOrdered环 R] (A : 矩阵 m n R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using posSemidef_conjTranspose_mul_self Aᴴ
 
@@ -1356,7 +1356,7 @@ theorem trace_conjTranspose_mul_self_eq_zero_iff
 
 中文:
 定理 trace_conjTranspose_mul_self_eq_zero_iff
-  条件: {A : Matrix m n R}
+  条件: {A : 矩阵 m n R}
   证明: by
   rw [← star_vec_dotProduct_vec]; rw [dotProduct_star_self_eq_zero]; rw [vec_eq_zero_iff]
 
@@ -1377,7 +1377,7 @@ theorem trace_mul_conjTranspose_self_eq_zero_iff
 
 中文:
 定理 trace_mul_conjTranspose_self_eq_zero_iff
-  条件: {A : Matrix m n R}
+  条件: {A : 矩阵 m n R}
   证明: by
   simpa using trace_conjTranspose_mul_self_eq_zero_iff (A := Aᴴ)
 
@@ -1406,8 +1406,8 @@ theorem IsUnit.posSemidef_star_left_conjugate_iff
     Units.mul_inv, mul_one, star_on
 
 中文:
-定理 IsUnit.posSemidef_star_left_conjugate_iff
-  条件: (hU : IsUnit U)
+定理 是单位.posSemidef_star_left_conjugate_iff
+  条件: (hU : 是单位 U)
   证明: by
   refine ⟨fun h => ?_, fun h => h.conjTranspose_mul_mul_same _⟩
   lift U to (Matrix n n R)ˣ using hU
@@ -1435,8 +1435,8 @@ theorem IsUnit.posSemidef_star_right_conjugate_iff
   simpa using hU.star.posSemidef_star_left_conjugate_iff
 
 中文:
-定理 IsUnit.posSemidef_star_right_conjugate_iff
-  条件: (hU : IsUnit U)
+定理 是单位.posSemidef_star_right_conjugate_iff
+  条件: (hU : 是单位 U)
   证明: by
   simpa using hU.star.posSemidef_star_left_conjugate_iff
 
@@ -1462,7 +1462,7 @@ omit [Fintype n] in variable [Finite n] in
 
 中文:
 定理 posSemidef_vecMulVec_self_star
-  条件: [StarOrderedRing R] (a : n -> R)
+  条件: [StarOrdered环 R] (a : n -> R)
   证明: by
   simp [vecMulVec_eq Unit, ← conjTranspose_replicateCol, posSemidef_self_mul_conjTranspose]
 
@@ -1486,7 +1486,7 @@ theorem posSemidef_vecMulVec_star_self
 
 中文:
 定理 posSemidef_vecMulVec_star_self
-  条件: [StarOrderedRing R] (a : n -> R)
+  条件: [StarOrdered环 R] (a : n -> R)
   证明: by
   simp [vecMulVec_eq Unit, ← conjTranspose_replicateRow, posSemidef_conjTranspose_mul_self]
 
@@ -1511,7 +1511,7 @@ theorem posDef_iff_dotProduct_mulVec
 
 中文:
 定理 posDef_iff_dotProduct_mulVec
-  条件: {M : Matrix n n R}
+  条件: {M : 矩阵 n n R}
   证明: by
   have (x : n ->₀ R) : x = 0 ↔ Finsupp.equivFunOnFinite x = 0 :=
     ⟨fun h1 => Finsupp.coe_eq_zero.mpr h1,fun h2 => Finsupp.coe_eq_zero.mp h2⟩
@@ -1542,7 +1542,7 @@ lemma dotProduct_mulVec_pos
 
 中文:
 引理 dotProduct_mulVec_pos
-  条件: {M : Matrix n n R} (hM : M.PosDef) {x} (hx : x != 0)
+  条件: {M : 矩阵 n n R} (hM : M.PosDef) {x} (hx : x != 0)
   证明: (posDef_iff_dotProduct_mulVec.mp hM).2 hx
 
 Depends on / 依赖: posDef_iff_dotProduct_mulVec, posDef_iff_dotProduct_mulVec.mp
@@ -1560,7 +1560,7 @@ lemma of_dotProduct_mulVec_pos
 
 中文:
 引理 of_dotProduct_mulVec_pos
-  结论: {M : Matrix n n R} (hM1 : M.IsHermitian)
+  结论: {M : 矩阵 n n R} (hM1 : M.IsHermitian)
   证明: posDef_iff_dotProduct_mulVec.mpr ⟨hM1, hM2⟩
 
 Depends on / 依赖: posDef_iff_dotProduct_mulVec, posDef_iff_dotProduct_mulVec.mpr
@@ -1582,7 +1582,7 @@ have : B *ᵥ x != 0 := fun h => hx .1 h hB.eq_iff' (mulVec_zero _)
 
 中文:
 引理 conjTranspose_mul_mul_same
-  结论: {A : Matrix n n R} {B : Matrix n m R} (hA : A.PosDef)
+  结论: {A : 矩阵 n n R} {B : 矩阵 n m R} (hA : A.PosDef)
   证明: by
   refine of_dotProduct_mulVec_pos (isHermitian_conjTranspose_mul_mul _ hA.1) fun x hx => ?_
 have : B *ᵥ x != 0 := fun h => hx .1 h hB.eq_iff' (mulVec_zero _)
@@ -1610,7 +1610,7 @@ replace hB := star_injective.comp hB.comp star_injective
 
 中文:
 引理 mul_mul_conjTranspose_same
-  结论: {A : Matrix n n R} {B : Matrix m n R} (hA : A.PosDef)
+  结论: {A : 矩阵 n n R} {B : 矩阵 m n R} (hA : A.PosDef)
   证明: by
 replace hB := star_injective.comp hB.comp star_injective
   simp_rw [Function.comp_def, star_vecMul, star_star] at hB
@@ -1637,7 +1637,7 @@ theorem conjTranspose_mul_self
 
 中文:
 定理 conjTranspose_mul_self
-  结论: [StarOrderedRing R] [NoZeroDivisors R] (A : Matrix m n R)
+  结论: [StarOrdered环 R] [无零因子 R] (A : 矩阵 m n R)
   证明: by
   classical
   simpa using conjTranspose_mul_mul_same .one hA
@@ -1662,7 +1662,7 @@ theorem mul_conjTranspose_self
 
 中文:
 定理 mul_conjTranspose_self
-  结论: [StarOrderedRing R] [NoZeroDivisors R] (A : Matrix m n R)
+  结论: [StarOrdered环 R] [无零因子 R] (A : 矩阵 m n R)
   证明: by
   classical
   simpa using mul_mul_conjTranspose_same .one hA
@@ -1687,7 +1687,7 @@ theorem of_toQuadraticForm'
 
 中文:
 定理 of_toQuadraticForm'
-  结论: {R : 类型} [CommRing R] [PartialOrder R] [StarRing R] [TrivialStar R]
+  结论: {R : 类型} [交换环 R] [偏序 R] [对合环 R] [TrivialStar R]
   证明: by
   refine of_dotProduct_mulVec_pos (by simpa) fun x hx => ?_
   simpa [toQuadraticForm', toLinearMap₂'_apply'] using hMq x hx
@@ -1712,7 +1712,7 @@ theorem toQuadraticForm'
 
 中文:
 定理 toQuadraticForm'
-  结论: {R : 类型} [CommRing R] [PartialOrder R] [StarRing R] [TrivialStar R]
+  结论: {R : 类型} [交换环 R] [偏序 R] [对合环 R] [TrivialStar R]
   证明: by
   intro x hx
   simpa [Matrix.toQuadraticForm', toLinearMap₂'_apply'] using hM.dotProduct_mulVec_pos hx
@@ -1738,7 +1738,7 @@ theorem _root_.LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix
   · simpa [Finsupp.linearCombination_apply
 
 中文:
-定理 _root_.LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix
+定理 _root_.线性映射.BilinForm.posDef_toQuadraticMap_iff_matrix
   证明: by
   have aux (i j : n) (s t : R) : t * B (b i) (b j) * s = t * (s * B (b j) (b i)) := by
     grind [hB_symm.eq (b i) (b j)]
@@ -1774,7 +1774,7 @@ lemma trace_pos
 
 中文:
 引理 trace_pos
-  结论: [Nontrivial R] [IsOrderedCancelAddMonoid R] [Nonempty n] {A : Matrix n n R}
+  结论: [非平凡 R] [是OrderedCancelAdd幺半群 R] [非空 n] {A : 矩阵 n n R}
   证明: Finset.sum_pos (fun _ _ => hA.diag_pos) Finset.univ_nonempty
 
 Depends on / 依赖: Finset, Finset.sum_pos, Finset.univ_nonempty, diag_pos, hA.diag_pos, sum_pos, univ_nonempty
@@ -1802,8 +1802,8 @@ obtain ⟨a, b, ha⟩ := Function.not_injective_iff.mp mulVec_injective_iff_isUn
 
 中文:
 定理 isUnit
-  条件: [DecidableEq n] {M : Matrix n n K} (hM : M.PosDef)
-  结论: IsUnit M
+  条件: [DecidableEq n] {M : 矩阵 n n K} (hM : M.PosDef)
+  结论: 是单位 M
   证明: by
   by_contra h
   obtain ⟨a, ha, ha2⟩ : exists a != 0, M *ᵥ a = 0 := by
@@ -1837,7 +1837,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: [DecidableEq n] {M : Matrix n n K} (hM : M.PosDef)
+  条件: [DecidableEq n] {M : 矩阵 n n K} (hM : M.PosDef)
   结论: M⁻¹.PosDef
   证明: by
   have := hM.mul_mul_conjTranspose_same (B := M⁻¹) ?_
@@ -1865,8 +1865,8 @@ theorem _root_.Matrix.posDef_inv_iff
     Matrix.inv_inv_of_invertible M ▸ h.inv, (·.inv)⟩
 
 中文:
-定理 _root_.Matrix.posDef_inv_iff
-  条件: [DecidableEq n] {M : Matrix n n K}
+定理 _root_.矩阵.posDef_inv_iff
+  条件: [DecidableEq n] {M : 矩阵 n n K}
   证明: ⟨fun h =>
     letI := (Matrix.isUnit_nonsing_inv_iff.1 <| h.isUnit).invertible
     Matrix.inv_inv_of_invertible M ▸ h.inv, (·.inv)⟩
@@ -1898,8 +1898,8 @@ refine ⟨fun h => ?_, fun h => h.conjTranspose_mul_mul_same mulVec_injective_of
   
 
 中文:
-定理 _root_.Matrix.IsUnit.posDef_star_left_conjugate_iff
-  条件: (hU : IsUnit U)
+定理 _root_.矩阵.是单位.posDef_star_left_conjugate_iff
+  条件: (hU : 是单位 U)
   证明: by
 refine ⟨fun h => ?_, fun h => h.conjTranspose_mul_mul_same mulVec_injective_of_isUnit hU⟩
   lift U to (Matrix n n R)ˣ using hU
@@ -1927,8 +1927,8 @@ theorem _root_.Matrix.IsUnit.posDef_star_right_conjugate_iff
   simpa using hU.star.posDef_star_left_conjugate_iff
 
 中文:
-定理 _root_.Matrix.IsUnit.posDef_star_right_conjugate_iff
-  条件: (hU : IsUnit U)
+定理 _root_.矩阵.是单位.posDef_star_right_conjugate_iff
+  条件: (hU : 是单位 U)
   证明: by
   simpa using hU.star.posDef_star_left_conjugate_iff
 
@@ -1961,7 +1961,7 @@ theorem fromBlocks₁₁
 
 中文:
 定理 fromBlocks₁₁
-  结论: [DecidableEq m] {A : Matrix m m R'}
+  结论: [DecidableEq m] {A : 矩阵 m m R'}
   证明: by
   have := Fintype.ofFinite n
   rw [posSemidef_iff_dotProduct_mulVec]; rw [IsHermitian.fromBlocks₁₁ _ _ hA.1]
@@ -2003,7 +2003,7 @@ theorem fromBlocks₂₂
 
 中文:
 定理 fromBlocks₂₂
-  结论: [DecidableEq n] (A : Matrix m m R')
+  结论: [DecidableEq n] (A : 矩阵 m m R')
   证明: by
   rw [← posSemidef_submatrix_equiv (Equiv.sumComm n m)]; rw [Equiv.sumComm_apply]; rw [fromBlocks_submatrix_sum_swap_sum_swap]
   convert! fromBlocks₁₁ Bᴴ A hD <;> simp

@@ -28,9 +28,9 @@ class HasConicalProducts
     - hasConicalLimitsOfShape : forall J : Type w, HasConicalLimitsOfShape (Discrete J) V C  [default: by infer_instance]
 
 中文:
-类 HasConicalProducts
+类 有余nicalProducts
   公理与运算 (1 个):
-    - hasConicalLimitsOfShape : 对任意 J : Type w, HasConicalLimitsOfShape (Discrete J) V C  [默认: by infer_instance]
+    - hasConicalLimitsOfShape : 对任意 J : 类型 w, 有余nicalLimitsOfShape (离散 J) V C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -56,7 +56,7 @@ abbreviation HasConicalProduct
 
 中文:
 缩写 HasConicalProduct
-  签名: {I : Type w} (f : I -> C)
+  签名: {I : 类型 w} (f : I -> C)
   定义体: HasConicalLimit V (Discrete.functor f)
 
 Depends on / 依赖: Discrete, Discrete.functor, HasConicalLimit, functor

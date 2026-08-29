@@ -44,10 +44,10 @@ class ContainsZero
     - exists_zero : exists (Z : C), IsZero Z ∧ P Z
 
 中文:
-类 ContainsZero
+类 余ntainsZero
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_zero : 存在 (Z : C), IsZero Z ∧ P Z
+    - exists_zero : 存在 (Z : C), 是零 Z ∧ P Z
 -/
 class ContainsZero : Prop where
   exists_zero : exists (Z : C), IsZero Z ∧ P Z
@@ -61,8 +61,8 @@ lemma exists_prop_of_containsZero
   proof: ContainsZero.exists_zero
 
 中文:
-引理 exists_prop_of_containsZero
-  条件: [P.ContainsZero]
+引理 存在_prop_of_containsZero
+  条件: [P.余ntainsZero]
   证明: ContainsZero.exists_zero
 
 Depends on / 依赖: ContainsZero, ContainsZero.exists_zero, exists_zero
@@ -87,7 +87,7 @@ lemma prop_of_isZero
 
 中文:
 引理 prop_of_isZero
-  结论: [P.ContainsZero] [P.IsClosedUnderIsomorphisms]
+  结论: [P.余ntainsZero] [P.在同构下封闭]
   证明: by
   obtain ⟨Z₀, hZ₀, h₀⟩ := P.exists_prop_of_containsZero
   exact P.prop_of_iso (hZ₀.iso hZ) h₀
@@ -110,7 +110,7 @@ lemma prop_zero
 
 中文:
 引理 prop_zero
-  条件: [P.ContainsZero] [P.IsClosedUnderIsomorphisms] [HasZeroObject C]
+  条件: [P.余ntainsZero] [P.在同构下封闭] [有ZeroObject C]
   证明: P.prop_of_isZero (isZero_zero C)
 
 Depends on / 依赖: P.prop_of_isZero, isZero_zero, prop_of_isZero
@@ -128,7 +128,7 @@ instance [HasZeroObject
   body: ⟨0, isZero_zero C, by simp⟩
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] : (⊤
   定义体: ⟨0, isZero_zero C, by simp⟩
 
@@ -146,8 +146,8 @@ instance [HasZeroObject
   body: ⟨0, isZero_zero C, isZero_zero C⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : ContainsZero (IsZero (C := C)) where
+实例 [有ZeroObject
+  签名: C] : 余ntainsZero (是零 (C := C)) where
   定义体: ⟨0, isZero_zero C, isZero_zero C⟩
 -/
 instance [HasZeroObject C] : ContainsZero (IsZero (C := C)) where
@@ -164,8 +164,8 @@ instance [P.ContainsZero]
     exact ⟨F.obj Z, F.map_isZero h₁, P.prop_map_obj F h₂⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: [HasZeroMorphisms C] [HasZeroMorphisms D]
+实例 [P.余ntainsZero]
+  签名: [有ZeroMorphisms C] [有ZeroMorphisms D]
   定义体: by
     obtain ⟨Z, h₁, h₂⟩ := P.exists_prop_of_containsZero
     exact ⟨F.obj Z, F.map_isZero h₁, P.prop_map_obj F h₂⟩
@@ -187,8 +187,8 @@ instance [P.ContainsZero]
   body: ⟨0, isZero_zero D, P.prop_of_isZero (F.map_isZero (isZero_zero D))⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: [P.IsClosedUnderIsomorphisms]
+实例 [P.余ntainsZero]
+  签名: [P.在同构下封闭]
   定义体: ⟨0, isZero_zero D, P.prop_of_isZero (F.map_isZero (isZero_zero D))⟩
 
 Depends on / 依赖: F.map_isZero, P.prop_of_isZero, isZero_zero, map_isZero, prop_of_isZero
@@ -211,8 +211,8 @@ instance [P.ContainsZero]
     exact ⟨Z, hZ, P.le_isoClosure _ hP⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: : P.isoClosure.ContainsZero where
+实例 [P.余ntainsZero]
+  签名: : P.isoClosure.余ntainsZero where
   定义体: by
     obtain ⟨Z, hZ, hP⟩ := P.exists_prop_of_containsZero
     exact ⟨Z, hZ, P.le_isoClosure _ hP⟩
@@ -235,8 +235,8 @@ instance [P.ContainsZero]
     exact ⟨Z, hZ, P.prop_of_isZero hZ, hQ⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: [P.IsClosedUnderIsomorphisms] [Q.ContainsZero]
+实例 [P.余ntainsZero]
+  签名: [P.在同构下封闭] [Q.余ntainsZero]
   定义体: by
     obtain ⟨Z, hZ, hQ⟩ := Q.exists_prop_of_containsZero
     exact ⟨Z, hZ, P.prop_of_isZero hZ, hQ⟩
@@ -260,8 +260,8 @@ instance [P.ContainsZero]
     exact ⟨op Z, hZ.op, mem⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: : P.op.ContainsZero where
+实例 [P.余ntainsZero]
+  签名: : P.op.余ntainsZero where
   定义体: by
     obtain ⟨Z, hZ, mem⟩ := P.exists_prop_of_containsZero
     exact ⟨op Z, hZ.op, mem⟩
@@ -289,8 +289,8 @@ instance [P.ContainsZero]
     exact ⟨_, IsZero.of_full_of_faithful_of_isZero P.ι ⟨X, h₂⟩ h₁⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: : HasZeroObject P.FullSubcategory where
+实例 [P.余ntainsZero]
+  签名: : 有ZeroObject P.满子范畴 where
   定义体: by
     obtain ⟨X, h₁, h₂⟩ := P.exists_prop_of_containsZero
     exact ⟨_, IsZero.of_full_of_faithful_of_isZero P.ι ⟨X, h₂⟩ h₁⟩
@@ -313,8 +313,8 @@ instance [P.ContainsZero]
     exact ⟨Z, hZ, hP, Q.prop_of_isZero hZ⟩
 
 中文:
-实例 [P.ContainsZero]
-  签名: [Q.ContainsZero] [Q.IsClosedUnderIsomorphisms]
+实例 [P.余ntainsZero]
+  签名: [Q.余ntainsZero] [Q.在同构下封闭]
   定义体: by
     obtain ⟨Z, hZ, hP⟩ := P.exists_prop_of_containsZero
     exact ⟨Z, hZ, hP, Q.prop_of_isZero hZ⟩
@@ -338,7 +338,7 @@ abbreviation Functor.kernel
   body: ObjectProperty.inverseImage IsZero F
 
 中文:
-缩写 Functor.kernel
+缩写 函子.kernel
   签名: (F : C ⥤ D)
   定义体: ObjectProperty.inverseImage IsZero F
 

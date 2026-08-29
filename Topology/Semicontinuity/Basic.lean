@@ -90,8 +90,8 @@ theorem LowerSemicontinuousOn.exists_isMinOn
     · change Dir
 
 中文:
-定理 LowerSemicontinuousOn.exists_isMinOn
-  结论: {s : Set α} (ne_s : s.Nonempty)
+定理 LowerSemicontinuousOn.存在_isMinOn
+  结论: {s : 集合 α} (ne_s : s.非空)
   证明: by
   simp only [isMinOn_iff]
   have _ : Nonempty α := Exists.nonempty ne_s
@@ -149,7 +149,7 @@ theorem LowerSemicontinuousOn.bddBelow_of_isCompact
 
 中文:
 定理 LowerSemicontinuousOn.bddBelow_of_isCompact
-  结论: [Nonempty β] {s : Set α} (hs : IsCompact s)
+  结论: [非空 β] {s : 集合 α} (hs : 是紧集 s)
   证明: by
   cases s.eq_empty_or_nonempty with
   | inl h =>
@@ -195,8 +195,8 @@ theorem IsOpen.lowerSemicontinuous_indicator
     by_cases h' : x' in s <;> simp [h', hz.trans_le hy, hz]
 
 中文:
-定理 IsOpen.lowerSemicontinuous_indicator
-  条件: (hs : IsOpen s) (hy : 0 <= y)
+定理 是开集.lowerSemicontinuous_indicator
+  条件: (hs : 是开集 s) (hy : 0 <= y)
   证明: by
   intro x z hz
   by_cases h : x in s <;> simp [h] at hz
@@ -225,8 +225,8 @@ theorem IsOpen.lowerSemicontinuousOn_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousOn t
 
 中文:
-定理 IsOpen.lowerSemicontinuousOn_indicator
-  条件: (hs : IsOpen s) (hy : 0 <= y)
+定理 是开集.lowerSemicontinuousOn_indicator
+  条件: (hs : 是开集 s) (hy : 0 <= y)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousOn t
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousOn, lowerSemicontinuous_indicator
@@ -244,8 +244,8 @@ theorem IsOpen.lowerSemicontinuousAt_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousAt x
 
 中文:
-定理 IsOpen.lowerSemicontinuousAt_indicator
-  条件: (hs : IsOpen s) (hy : 0 <= y)
+定理 是开集.lowerSemicontinuousAt_indicator
+  条件: (hs : 是开集 s) (hy : 0 <= y)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousAt x
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousAt, lowerSemicontinuous_indicator
@@ -263,8 +263,8 @@ theorem IsOpen.lowerSemicontinuousWithinAt_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousWithinAt t x
 
 中文:
-定理 IsOpen.lowerSemicontinuousWithinAt_indicator
-  条件: (hs : IsOpen s) (hy : 0 <= y)
+定理 是开集.lowerSemicontinuousWithinAt_indicator
+  条件: (hs : 是开集 s) (hy : 0 <= y)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousWithinAt t x
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousWithinAt, lowerSemicontinuous_indicator
@@ -288,8 +288,8 @@ theorem IsClosed.lowerSemicontinuous_indicator
     simp +contextual [hz]
 
 中文:
-定理 IsClosed.lowerSemicontinuous_indicator
-  条件: (hs : IsClosed s) (hy : y <= 0)
+定理 是闭集.lowerSemicontinuous_indicator
+  条件: (hs : 是闭集 s) (hy : y <= 0)
   证明: by
   intro x z hz
   by_cases h : x in s <;> simp [h] at hz
@@ -318,8 +318,8 @@ theorem IsClosed.lowerSemicontinuousOn_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousOn t
 
 中文:
-定理 IsClosed.lowerSemicontinuousOn_indicator
-  条件: (hs : IsClosed s) (hy : y <= 0)
+定理 是闭集.lowerSemicontinuousOn_indicator
+  条件: (hs : 是闭集 s) (hy : y <= 0)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousOn t
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousOn, lowerSemicontinuous_indicator
@@ -337,8 +337,8 @@ theorem IsClosed.lowerSemicontinuousAt_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousAt x
 
 中文:
-定理 IsClosed.lowerSemicontinuousAt_indicator
-  条件: (hs : IsClosed s) (hy : y <= 0)
+定理 是闭集.lowerSemicontinuousAt_indicator
+  条件: (hs : 是闭集 s) (hy : y <= 0)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousAt x
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousAt, lowerSemicontinuous_indicator
@@ -356,8 +356,8 @@ theorem IsClosed.lowerSemicontinuousWithinAt_indicator
   proof: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousWithinAt t x
 
 中文:
-定理 IsClosed.lowerSemicontinuousWithinAt_indicator
-  条件: (hs : IsClosed s) (hy : y <= 0)
+定理 是闭集.lowerSemicontinuousWithinAt_indicator
+  条件: (hs : 是闭集 s) (hy : y <= 0)
   证明: (hs.lowerSemicontinuous_indicator hy).lowerSemicontinuousWithinAt t x
 
 Depends on / 依赖: hs.lowerSemicontinuous_indicator, lowerSemicontinuousWithinAt, lowerSemicontinuous_indicator
@@ -457,7 +457,7 @@ apply Filter.Eventually.mp hfy (M x) (M_mem x hx) x hx b hb
   exact lt_of_lt_of_le h (M_max z hz (M_mem x hx))
 
 中文:
-定理 lowerSemicontinuousOn_of_forall_isMaxOn_and_mem
+定理 lowerSemicontinuousOn_of_对任意_isMaxOn_and_mem
   证明: by
   intro x hx b hb
 apply Filter.Eventually.mp hfy (M x) (M_mem x hx) x hx b hb
@@ -487,7 +487,7 @@ theorem upperSemicontinuousOn_of_forall_isMinOn_and_mem
   proof: lowerSemicontinuousOn_of_forall_isMaxOn_and_mem (β := βᵒᵈ) hfy m_mem m_min
 
 中文:
-定理 upperSemicontinuousOn_of_forall_isMinOn_and_mem
+定理 upperSemicontinuousOn_of_对任意_isMinOn_and_mem
   证明: lowerSemicontinuousOn_of_forall_isMaxOn_and_mem (β := βᵒᵈ) hfy m_mem m_min
 
 Depends on / 依赖: lowerSemicontinuousOn_of_forall_isMaxOn_and_mem, m_mem, m_min
@@ -642,8 +642,8 @@ theorem Continuous.lowerSemicontinuous
   proof: fun _x => h.continuousAt.lowerSemicontinuousAt
 
 中文:
-定理 Continuous.lowerSemicontinuous
-  条件: {f : α -> γ} (h : Continuous f)
+定理 连续.lowerSemicontinuous
+  条件: {f : α -> γ} (h : 连续 f)
   结论: LowerSemicontinuous f
   证明: fun _x => h.continuousAt.lowerSemicontinuousAt
 
@@ -833,7 +833,7 @@ theorem LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_fin
 .isClosed_preimage c exact fun i hi => lowerSemicontinuous_restrict
 
 中文:
-定理 LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_finset
+定理 LowerSemicontinuousOn.inter_bi整数er_preimage_Iic_eq_empty_iff_存在_finset
   证明: by
   refine ⟨fun H => ?_, fun ⟨u, hu⟩ => ?_⟩
   · suffices forall i in I, IsClosed (s ↓inter (fun i => f i ⁻¹' Iic c) i) by
@@ -876,7 +876,7 @@ theorem lowerSemicontinuousOn_iff_isClosed_epigraph
 
 中文:
 定理 lowerSemicontinuousOn_iff_isClosed_epigraph
-  条件: {f : α -> γ} {s : Set α} (hs : IsClosed s)
+  条件: {f : α -> γ} {s : 集合 α} (hs : 是闭集 s)
   证明: by
   simp_rw [lowerSemicontinuousOn_iff, lowerSemicontinuousWithinAt_iff,
     eventually_nhdsWithin_iff, ← isOpen_compl_iff, compl_ofPred, isOpen_iff_eventually, mem_ofPred,
@@ -1019,8 +1019,8 @@ theorem Continuous.comp_lowerSemicontinuousOn
   proof: fun x hx => hg.continuousAt.comp_lowerSemicontinuousWithinAt (hf x hx) gmon
 
 中文:
-定理 Continuous.comp_lowerSemicontinuousOn
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_lowerSemicontinuousOn
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x hx => hg.continuousAt.comp_lowerSemicontinuousWithinAt (hf x hx) gmon
 
 Depends on / 依赖: comp_lowerSemicontinuousWithinAt, continuousAt, hg.continuousAt.comp_lowerSemicontinuousWithinAt
@@ -1039,8 +1039,8 @@ theorem Continuous.comp_lowerSemicontinuous
   hg.continuousAt.comp_lowerSemicontinuousAt (hf x) gmon
 
 中文:
-定理 Continuous.comp_lowerSemicontinuous
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_lowerSemicontinuous
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x =>
   hg.continuousAt.comp_lowerSemicontinuousAt (hf x) gmon
 -/
@@ -1097,8 +1097,8 @@ theorem Continuous.comp_lowerSemicontinuousOn_antitone
   proof: fun x hx => hg.continuousAt.comp_lowerSemicontinuousWithinAt_antitone (hf x hx) gmon
 
 中文:
-定理 Continuous.comp_lowerSemicontinuousOn_antitone
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_lowerSemicontinuousOn_antitone
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x hx => hg.continuousAt.comp_lowerSemicontinuousWithinAt_antitone (hf x hx) gmon
 
 Depends on / 依赖: comp_lowerSemicontinuousWithinAt_antitone, continuousAt, hg.continuousAt.comp_lowerSemicontinuousWithinAt_antitone
@@ -1117,8 +1117,8 @@ theorem Continuous.comp_lowerSemicontinuous_antitone
   hg.continuousAt.comp_lowerSemicontinuousAt_antitone (hf x) gmon
 
 中文:
-定理 Continuous.comp_lowerSemicontinuous_antitone
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_lowerSemicontinuous_antitone
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x =>
   hg.continuousAt.comp_lowerSemicontinuousAt_antitone (hf x) gmon
 -/
@@ -1389,7 +1389,7 @@ theorem lowerSemicontinuousWithinAt_sum
 
 中文:
 定理 lowerSemicontinuousWithinAt_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: by
   classical
     induction a using Finset.induction_on with
@@ -1426,7 +1426,7 @@ theorem lowerSemicontinuousAt_sum
 
 中文:
 定理 lowerSemicontinuousAt_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: by
   simp_rw [← lowerSemicontinuousWithinAt_univ_iff] at *
   exact lowerSemicontinuousWithinAt_sum ha
@@ -1450,7 +1450,7 @@ theorem lowerSemicontinuousOn_sum
 
 中文:
 定理 lowerSemicontinuousOn_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: fun x hx =>
   lowerSemicontinuousWithinAt_sum fun i hi => ha i hi x hx
 -/
@@ -1469,7 +1469,7 @@ theorem lowerSemicontinuous_sum
 
 中文:
 定理 lowerSemicontinuous_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: fun x => lowerSemicontinuousAt_sum fun i hi => ha i hi x
 
 Depends on / 依赖: lowerSemicontinuousAt_sum
@@ -1500,7 +1500,7 @@ theorem LowerSemicontinuousWithinAt.sup
   · filter_upwards [hg b hb] with x using Or.intro_right _
 
 中文:
-定理 LowerSemicontinuousWithinAt.sup
+定理 LowerSemicontinuousWithinAt.上确界
   证明: by
   intro b hb
   simp only [lt_sup_iff] at hb ⊢
@@ -1529,7 +1529,7 @@ theorem LowerSemicontinuousAt.sup
   exact hf.sup hg
 
 中文:
-定理 LowerSemicontinuousAt.sup
+定理 LowerSemicontinuousAt.上确界
   证明: by
   rw [← lowerSemicontinuousWithinAt_univ_iff] at *
   exact hf.sup hg
@@ -1551,7 +1551,7 @@ theorem LowerSemicontinuousOn.sup
   LowerSemicontinuousWithinAt.sup (hf a ha) (hg a ha)
 
 中文:
-定理 LowerSemicontinuousOn.sup
+定理 LowerSemicontinuousOn.上确界
   证明: fun a ha =>
   LowerSemicontinuousWithinAt.sup (hf a ha) (hg a ha)
 -/
@@ -1569,7 +1569,7 @@ theorem LowerSemicontinuous.sup
   LowerSemicontinuousAt.sup (hf a) (hg a)
 
 中文:
-定理 LowerSemicontinuous.sup
+定理 LowerSemicontinuous.上确界
   证明: fun a =>
   LowerSemicontinuousAt.sup (hf a) (hg a)
 -/
@@ -1589,7 +1589,7 @@ theorem LowerSemicontinuousWithinAt.inf
   exact Eventually.and (hf b hb.1) (hg b hb.2)
 
 中文:
-定理 LowerSemicontinuousWithinAt.inf
+定理 LowerSemicontinuousWithinAt.下确界
   证明: by
   intro b hb
   simp only [lt_inf_iff] at hb ⊢
@@ -1614,7 +1614,7 @@ theorem LowerSemicontinuousAt.inf
   exact hf.inf hg
 
 中文:
-定理 LowerSemicontinuousAt.inf
+定理 LowerSemicontinuousAt.下确界
   证明: by
   rw [← lowerSemicontinuousWithinAt_univ_iff] at *
   exact hf.inf hg
@@ -1636,7 +1636,7 @@ theorem LowerSemicontinuousOn.inf
   LowerSemicontinuousWithinAt.inf (hf a ha) (hg a ha)
 
 中文:
-定理 LowerSemicontinuousOn.inf
+定理 LowerSemicontinuousOn.下确界
   证明: fun a ha =>
   LowerSemicontinuousWithinAt.inf (hf a ha) (hg a ha)
 -/
@@ -1655,7 +1655,7 @@ theorem LowerSemicontinuous.inf
   LowerSemicontinuousAt.inf (hf a) (hg a)
 
 中文:
-定理 LowerSemicontinuous.inf
+定理 LowerSemicontinuous.下确界
   结论: (hf : LowerSemicontinuous f)
   证明: fun a =>
   LowerSemicontinuousAt.inf (hf a) (hg a)
@@ -2049,8 +2049,8 @@ theorem UpperSemicontinuousOn.exists_isMaxOn
   proof: LowerSemicontinuousOn.exists_isMinOn (β := βᵒᵈ) ne_s hs hf
 
 中文:
-定理 UpperSemicontinuousOn.exists_isMaxOn
-  结论: {s : Set α} (ne_s : s.Nonempty)
+定理 UpperSemicontinuousOn.存在_isMaxOn
+  结论: {s : 集合 α} (ne_s : s.非空)
   证明: LowerSemicontinuousOn.exists_isMinOn (β := βᵒᵈ) ne_s hs hf
 
 Depends on / 依赖: LowerSemicontinuousOn, LowerSemicontinuousOn.exists_isMinOn, exists_isMinOn, ne_s
@@ -2070,7 +2070,7 @@ theorem UpperSemicontinuousOn.bddAbove_of_isCompact
 
 中文:
 定理 UpperSemicontinuousOn.bddAbove_of_isCompact
-  结论: [Nonempty β] {s : Set α}
+  结论: [非空 β] {s : 集合 α}
   证明: LowerSemicontinuousOn.bddBelow_of_isCompact (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: LowerSemicontinuousOn, LowerSemicontinuousOn.bddBelow_of_isCompact, bddBelow_of_isCompact
@@ -2097,8 +2097,8 @@ theorem IsOpen.upperSemicontinuous_indicator
   proof: IsOpen.lowerSemicontinuous_indicator (β := βᵒᵈ) hs hy
 
 中文:
-定理 IsOpen.upperSemicontinuous_indicator
-  条件: (hs : IsOpen s) (hy : y <= 0)
+定理 是开集.upperSemicontinuous_indicator
+  条件: (hs : 是开集 s) (hy : y <= 0)
   证明: IsOpen.lowerSemicontinuous_indicator (β := βᵒᵈ) hs hy
 
 Depends on / 依赖: IsOpen, IsOpen.lowerSemicontinuous_indicator, lowerSemicontinuous_indicator
@@ -2116,8 +2116,8 @@ theorem IsOpen.upperSemicontinuousOn_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousOn t
 
 中文:
-定理 IsOpen.upperSemicontinuousOn_indicator
-  条件: (hs : IsOpen s) (hy : y <= 0)
+定理 是开集.upperSemicontinuousOn_indicator
+  条件: (hs : 是开集 s) (hy : y <= 0)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousOn t
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousOn, upperSemicontinuous_indicator
@@ -2135,8 +2135,8 @@ theorem IsOpen.upperSemicontinuousAt_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousAt x
 
 中文:
-定理 IsOpen.upperSemicontinuousAt_indicator
-  条件: (hs : IsOpen s) (hy : y <= 0)
+定理 是开集.upperSemicontinuousAt_indicator
+  条件: (hs : 是开集 s) (hy : y <= 0)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousAt x
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousAt, upperSemicontinuous_indicator
@@ -2154,8 +2154,8 @@ theorem IsOpen.upperSemicontinuousWithinAt_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousWithinAt t x
 
 中文:
-定理 IsOpen.upperSemicontinuousWithinAt_indicator
-  条件: (hs : IsOpen s) (hy : y <= 0)
+定理 是开集.upperSemicontinuousWithinAt_indicator
+  条件: (hs : 是开集 s) (hy : y <= 0)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousWithinAt t x
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousWithinAt, upperSemicontinuous_indicator
@@ -2173,8 +2173,8 @@ theorem IsClosed.upperSemicontinuous_indicator
   proof: IsClosed.lowerSemicontinuous_indicator (β := βᵒᵈ) hs hy
 
 中文:
-定理 IsClosed.upperSemicontinuous_indicator
-  条件: (hs : IsClosed s) (hy : 0 <= y)
+定理 是闭集.upperSemicontinuous_indicator
+  条件: (hs : 是闭集 s) (hy : 0 <= y)
   证明: IsClosed.lowerSemicontinuous_indicator (β := βᵒᵈ) hs hy
 
 Depends on / 依赖: IsClosed, IsClosed.lowerSemicontinuous_indicator, lowerSemicontinuous_indicator
@@ -2192,8 +2192,8 @@ theorem IsClosed.upperSemicontinuousOn_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousOn t
 
 中文:
-定理 IsClosed.upperSemicontinuousOn_indicator
-  条件: (hs : IsClosed s) (hy : 0 <= y)
+定理 是闭集.upperSemicontinuousOn_indicator
+  条件: (hs : 是闭集 s) (hy : 0 <= y)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousOn t
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousOn, upperSemicontinuous_indicator
@@ -2211,8 +2211,8 @@ theorem IsClosed.upperSemicontinuousAt_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousAt x
 
 中文:
-定理 IsClosed.upperSemicontinuousAt_indicator
-  条件: (hs : IsClosed s) (hy : 0 <= y)
+定理 是闭集.upperSemicontinuousAt_indicator
+  条件: (hs : 是闭集 s) (hy : 0 <= y)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousAt x
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousAt, upperSemicontinuous_indicator
@@ -2230,8 +2230,8 @@ theorem IsClosed.upperSemicontinuousWithinAt_indicator
   proof: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousWithinAt t x
 
 中文:
-定理 IsClosed.upperSemicontinuousWithinAt_indicator
-  条件: (hs : IsClosed s) (hy : 0 <= y)
+定理 是闭集.upperSemicontinuousWithinAt_indicator
+  条件: (hs : 是闭集 s) (hy : 0 <= y)
   证明: (hs.upperSemicontinuous_indicator hy).upperSemicontinuousWithinAt t x
 
 Depends on / 依赖: hs.upperSemicontinuous_indicator, upperSemicontinuousWithinAt, upperSemicontinuous_indicator
@@ -2401,8 +2401,8 @@ theorem Continuous.upperSemicontinuous
   proof: fun _x => h.continuousAt.upperSemicontinuousAt
 
 中文:
-定理 Continuous.upperSemicontinuous
-  条件: {f : α -> γ} (h : Continuous f)
+定理 连续.upperSemicontinuous
+  条件: {f : α -> γ} (h : 连续 f)
   结论: UpperSemicontinuous f
   证明: fun _x => h.continuousAt.upperSemicontinuousAt
 
@@ -2554,7 +2554,7 @@ theorem UpperSemicontinuousOn.inter_biInter_preimage_Ici_eq_empty_iff_exists_fin
   proof: LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_finset ks hfi (γ := γᵒᵈ)
 
 中文:
-定理 UpperSemicontinuousOn.inter_biInter_preimage_Ici_eq_empty_iff_exists_finset
+定理 UpperSemicontinuousOn.inter_bi整数er_preimage_Ici_eq_empty_iff_存在_finset
   证明: LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_finset ks hfi (γ := γᵒᵈ)
 
 Depends on / 依赖: LowerSemicontinuousOn, LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_finset, inter_biInter_preimage_Iic_eq_empty_iff_exists_finset
@@ -2577,7 +2577,7 @@ theorem upperSemicontinuousOn_iff_isClosed_hypograph
 
 中文:
 定理 upperSemicontinuousOn_iff_isClosed_hypograph
-  条件: {f : α -> γ} (hs : IsClosed s)
+  条件: {f : α -> γ} (hs : 是闭集 s)
   证明: lowerSemicontinuousOn_iff_isClosed_epigraph hs (γ := γᵒᵈ)
 
 Depends on / 依赖: lowerSemicontinuousOn_iff_isClosed_epigraph
@@ -2632,7 +2632,7 @@ theorem upperSemicontinuousOn_iff_preimage_Iio
 
 中文:
 定理 upperSemicontinuousOn_iff_preimage_Iio
-  条件: [Preorder β]
+  条件: [预序 β]
   证明: lowerSemicontinuousOn_iff_preimage_Ioi (β := βᵒᵈ)
 
 Depends on / 依赖: lowerSemicontinuousOn_iff_preimage_Ioi
@@ -2651,7 +2651,7 @@ theorem upperSemicontinuousOn_iff_preimage_Ici
 
 中文:
 定理 upperSemicontinuousOn_iff_preimage_Ici
-  条件: [LinearOrder β]
+  条件: [线性序 β]
   证明: lowerSemicontinuousOn_iff_preimage_Iic (γ := βᵒᵈ)
 
 Depends on / 依赖: lowerSemicontinuousOn_iff_preimage_Iic
@@ -2981,8 +2981,8 @@ theorem Continuous.comp_upperSemicontinuousOn
   proof: fun x hx => hg.continuousAt.comp_upperSemicontinuousWithinAt (hf x hx) gmon
 
 中文:
-定理 Continuous.comp_upperSemicontinuousOn
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_upperSemicontinuousOn
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x hx => hg.continuousAt.comp_upperSemicontinuousWithinAt (hf x hx) gmon
 
 Depends on / 依赖: comp_upperSemicontinuousWithinAt, continuousAt, hg.continuousAt.comp_upperSemicontinuousWithinAt
@@ -3001,8 +3001,8 @@ theorem Continuous.comp_upperSemicontinuous
   hg.continuousAt.comp_upperSemicontinuousAt (hf x) gmon
 
 中文:
-定理 Continuous.comp_upperSemicontinuous
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_upperSemicontinuous
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x =>
   hg.continuousAt.comp_upperSemicontinuousAt (hf x) gmon
 -/
@@ -3059,8 +3059,8 @@ theorem Continuous.comp_upperSemicontinuousOn_antitone
   proof: fun x hx => hg.continuousAt.comp_upperSemicontinuousWithinAt_antitone (hf x hx) gmon
 
 中文:
-定理 Continuous.comp_upperSemicontinuousOn_antitone
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_upperSemicontinuousOn_antitone
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x hx => hg.continuousAt.comp_upperSemicontinuousWithinAt_antitone (hf x hx) gmon
 
 Depends on / 依赖: comp_upperSemicontinuousWithinAt_antitone, continuousAt, hg.continuousAt.comp_upperSemicontinuousWithinAt_antitone
@@ -3079,8 +3079,8 @@ theorem Continuous.comp_upperSemicontinuous_antitone
   hg.continuousAt.comp_upperSemicontinuousAt_antitone (hf x) gmon
 
 中文:
-定理 Continuous.comp_upperSemicontinuous_antitone
-  结论: {g : γ -> δ} {f : α -> γ} (hg : Continuous g)
+定理 连续.comp_upperSemicontinuous_antitone
+  结论: {g : γ -> δ} {f : α -> γ} (hg : 连续 g)
   证明: fun x =>
   hg.continuousAt.comp_upperSemicontinuousAt_antitone (hf x) gmon
 -/
@@ -3278,7 +3278,7 @@ theorem upperSemicontinuousWithinAt_sum
 
 中文:
 定理 upperSemicontinuousWithinAt_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: lowerSemicontinuousWithinAt_sum (γ := γᵒᵈ) ha
 
 Depends on / 依赖: lowerSemicontinuousWithinAt_sum
@@ -3300,7 +3300,7 @@ theorem upperSemicontinuousAt_sum
 
 中文:
 定理 upperSemicontinuousAt_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: by
   simp_rw [← upperSemicontinuousWithinAt_univ_iff] at *
   exact upperSemicontinuousWithinAt_sum ha
@@ -3324,7 +3324,7 @@ theorem upperSemicontinuousOn_sum
 
 中文:
 定理 upperSemicontinuousOn_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: fun x hx =>
   upperSemicontinuousWithinAt_sum fun i hi => ha i hi x hx
 -/
@@ -3343,7 +3343,7 @@ theorem upperSemicontinuous_sum
 
 中文:
 定理 upperSemicontinuous_sum
-  结论: {f : ι -> α -> γ} {a : Finset ι}
+  结论: {f : ι -> α -> γ} {a : 有限集 ι}
   证明: fun x => upperSemicontinuousAt_sum fun i hi => ha i hi x
 
 Depends on / 依赖: upperSemicontinuousAt_sum
@@ -3369,7 +3369,7 @@ theorem UpperSemicontinuousWithinAt.inf
   proof: LowerSemicontinuousWithinAt.sup (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousWithinAt.inf
+定理 UpperSemicontinuousWithinAt.下确界
   证明: LowerSemicontinuousWithinAt.sup (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousWithinAt, LowerSemicontinuousWithinAt.sup
@@ -3387,7 +3387,7 @@ theorem UpperSemicontinuousAt.inf
   proof: LowerSemicontinuousAt.sup (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousAt.inf
+定理 UpperSemicontinuousAt.下确界
   证明: LowerSemicontinuousAt.sup (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousAt, LowerSemicontinuousAt.sup
@@ -3405,7 +3405,7 @@ theorem UpperSemicontinuousOn.inf
   proof: LowerSemicontinuousOn.sup (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousOn.inf
+定理 UpperSemicontinuousOn.下确界
   证明: LowerSemicontinuousOn.sup (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousOn, LowerSemicontinuousOn.sup
@@ -3424,7 +3424,7 @@ theorem UpperSemicontinuous.inf
   proof: LowerSemicontinuous.sup (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuous.inf
+定理 UpperSemicontinuous.下确界
   条件: (hf : UpperSemicontinuous f) (hg : UpperSemicontinuous g)
   证明: LowerSemicontinuous.sup (β := βᵒᵈ) hf hg
 
@@ -3442,7 +3442,7 @@ theorem UpperSemicontinuousWithinAt.sup
   proof: LowerSemicontinuousWithinAt.inf (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousWithinAt.sup
+定理 UpperSemicontinuousWithinAt.上确界
   证明: LowerSemicontinuousWithinAt.inf (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousWithinAt, LowerSemicontinuousWithinAt.inf
@@ -3460,7 +3460,7 @@ theorem UpperSemicontinuousAt.sup
   proof: LowerSemicontinuousAt.inf (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousAt.sup
+定理 UpperSemicontinuousAt.上确界
   证明: LowerSemicontinuousAt.inf (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousAt, LowerSemicontinuousAt.inf
@@ -3478,7 +3478,7 @@ theorem UpperSemicontinuousOn.sup
   proof: LowerSemicontinuousOn.inf (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuousOn.sup
+定理 UpperSemicontinuousOn.上确界
   证明: LowerSemicontinuousOn.inf (β := βᵒᵈ) hf hg
 
 Depends on / 依赖: LowerSemicontinuousOn, LowerSemicontinuousOn.inf
@@ -3497,7 +3497,7 @@ theorem UpperSemicontinuous.sup
   proof: LowerSemicontinuous.inf (β := βᵒᵈ) hf hg
 
 中文:
-定理 UpperSemicontinuous.sup
+定理 UpperSemicontinuous.上确界
   条件: (hf : UpperSemicontinuous f) (hg : UpperSemicontinuous g)
   证明: LowerSemicontinuous.inf (β := βᵒᵈ) hf hg
 

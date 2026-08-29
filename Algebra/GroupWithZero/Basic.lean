@@ -142,7 +142,7 @@ theorem zero_mul_eq_const
 
 中文:
 定理 zero_mul_eq_const
-  结论: ((0 : M₀) * ·) = Function.const _ 0
+  结论: ((0 : M₀) * ·) = 函数.const _ 0
   证明: funext zero_mul
 
 Depends on / 依赖: zero_mul
@@ -160,7 +160,7 @@ theorem mul_zero_eq_const
 
 中文:
 定理 mul_zero_eq_const
-  结论: (· * (0 : M₀)) = Function.const _ 0
+  结论: (· * (0 : M₀)) = 函数.const _ 0
   证明: funext mul_zero
 
 Depends on / 依赖: mul_zero
@@ -228,7 +228,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: [Zero M₀] [Mul M₀] [NoZeroDivisors M₀] {x y : M₀} [NeZero x] [NeZero y]
+  签名: [零 M₀] [乘法 M₀] [无零因子 M₀] {x y : M₀} [NeZero x] [NeZero y]
   定义体: ⟨mul_ne_zero out out⟩
 
 Depends on / 依赖: mul_ne_zero
@@ -303,7 +303,7 @@ alias ⟨subsingleton_of_zero_eq_one, _⟩ := subsingleton_iff_zero_eq_one
 
 中文:
 定理 subsingleton_iff_zero_eq_one
-  结论: (0 : M₀) = 1 ↔ Subsingleton M₀
+  结论: (0 : M₀) = 1 ↔ 子单例 M₀
   证明: ⟨fun h => haveI := uniqueOfZeroEqOne h; inferInstance, fun h => @Subsingleton.elim _ h _ _⟩
 
 alias ⟨subsingleton_of_zero_eq_one, _⟩ := subsingleton_iff_zero_eq_one
@@ -344,7 +344,7 @@ theorem zero_ne_one_or_forall_eq_0
   proof: not_or_of_imp eq_zero_of_zero_eq_one
 
 中文:
-定理 zero_ne_one_or_forall_eq_0
+定理 zero_ne_one_or_对任意_eq_0
   结论: (0 : M₀) != 1 ∨ 对任意 a : M₀, a = 0
   证明: not_or_of_imp eq_zero_of_zero_eq_one
 
@@ -414,8 +414,8 @@ definition IsNilpotent
   body: exists n : Nat, x ^ n = 0
 
 中文:
-定义 IsNilpotent
-  签名: [Zero R] [Pow R 自然数] (x : R)
+定义 是幂零
+  签名: [零 R] [幂 R 自然数] (x : R)
   定义体: exists n : Nat, x ^ n = 0
 -/
 def IsNilpotent [Zero R] [Pow R Nat] (x : R) : Prop :=
@@ -431,9 +431,9 @@ theorem IsNilpotent.mk
   proof: ⟨n, e⟩
 
 中文:
-定理 IsNilpotent.mk
-  条件: [Zero R] [Pow R 自然数] (x : R) (n : 自然数) (e : x ^ n = 0)
-  结论: IsNilpotent x
+定理 是幂零.mk
+  条件: [零 R] [幂 R 自然数] (x : R) (n : 自然数) (e : x ^ n = 0)
+  结论: 是幂零 x
   证明: ⟨n, e⟩
 -/
 theorem IsNilpotent.mk [Zero R] [Pow R Nat] (x : R) (n : Nat) (e : x ^ n = 0) : IsNilpotent x :=
@@ -450,8 +450,8 @@ lemma isNilpotent_of_subsingleton
 
 中文:
 引理 isNilpotent_of_subsingleton
-  条件: [Zero R] [Pow R 自然数] [Subsingleton R]
-  结论: IsNilpotent x
+  条件: [零 R] [幂 R 自然数] [子单例 R]
+  结论: 是幂零 x
   证明: ⟨0, Subsingleton.elim _ _⟩
 -/
 @[simp] lemma isNilpotent_of_subsingleton [Zero R] [Pow R Nat] [Subsingleton R] : IsNilpotent x :=
@@ -467,9 +467,9 @@ theorem IsNilpotent.zero
   proof: ⟨1, pow_one 0⟩
 
 中文:
-定理 IsNilpotent.zero
-  条件: [MonoidWithZero R]
-  结论: IsNilpotent (0 : R)
+定理 是幂零.zero
+  条件: [带零幺半群 R]
+  结论: 是幂零 (0 : R)
   证明: ⟨1, pow_one 0⟩
 -/
 @[simp] theorem IsNilpotent.zero [MonoidWithZero R] : IsNilpotent (0 : R) :=
@@ -485,7 +485,7 @@ theorem not_isNilpotent_one
 
 中文:
 定理 not_isNilpotent_one
-  条件: [MonoidWithZero R] [Nontrivial R]
+  条件: [带零幺半群 R] [非平凡 R]
   证明: fun ⟨_, H⟩ => zero_ne_one (H.symm.trans (one_pow _))
 
 Depends on / 依赖: H.symm.trans, one_pow, zero_ne_one
@@ -503,8 +503,8 @@ lemma IsNilpotent.pow_succ
   ⟨N, by rw [← pow_mul, Nat.succ_mul, pow_add, hN, mul_zero]⟩
 
 中文:
-引理 IsNilpotent.pow_succ
-  结论: (n : 自然数) {S : 类型} [MonoidWithZero S] {x : S}
+引理 是幂零.pow_succ
+  结论: (n : 自然数) {S : 类型} [带零幺半群 S] {x : S}
   证明: have ⟨N, hN⟩ := hx
   ⟨N, by rw [← pow_mul, Nat.succ_mul, pow_add, hN, mul_zero]⟩
 
@@ -525,8 +525,8 @@ theorem IsNilpotent.of_pow
   ⟨m * n, by rw [← h, pow_mul x m n]⟩
 
 中文:
-定理 IsNilpotent.of_pow
-  结论: [MonoidWithZero R] {x : R} {m : 自然数}
+定理 是幂零.of_pow
+  结论: [带零幺半群 R] {x : R} {m : 自然数}
   证明: have ⟨n, h⟩ := h
   ⟨m * n, by rw [← h, pow_mul x m n]⟩
 
@@ -551,8 +551,8 @@ lemma IsNilpotent.pow_of_pos
 @[simp]
 
 中文:
-引理 IsNilpotent.pow_of_pos
-  结论: {n} {S : 类型} [MonoidWithZero S] {x : S}
+引理 是幂零.pow_of_pos
+  结论: {n} {S : 类型} [带零幺半群 S] {x : S}
   证明: by
   cases n with
   | zero => contradiction
@@ -578,8 +578,8 @@ lemma IsNilpotent.pow_iff_pos
   proof: ⟨of_pow, (pow_of_pos · hn)⟩
 
 中文:
-引理 IsNilpotent.pow_iff_pos
-  条件: {n} {S : 类型} [MonoidWithZero S] {x : S} (hn : n != 0)
+引理 是幂零.pow_iff_pos
+  条件: {n} {S : 类型} [带零幺半群 S] {x : S} (hn : n != 0)
   证明: ⟨of_pow, (pow_of_pos · hn)⟩
 
 Depends on / 依赖: of_pow, pow_of_pos
@@ -600,10 +600,10 @@ class IsReduced
     - eq_zero : forall x : R, IsNilpotent x -> x = 0
 
 中文:
-类 IsReduced
-  参数: (R : 类型) [Zero R] [Pow R 自然数]
+类 是既约
+  参数: (R : 类型) [零 R] [幂 R 自然数]
   公理与运算 (1 个):
-    - eq_zero : 对任意 x : R, IsNilpotent x -> x = 0
+    - eq_zero : 对任意 x : R, 是幂零 x -> x = 0
 -/
 class IsReduced (R : Type*) [Zero R] [Pow R Nat] : Prop where
   /-- A reduced structure has no nonzero nilpotent elements. -/
@@ -619,7 +619,7 @@ theorem eq_zero_of_pow_eq_zero
 
 中文:
 定理 eq_zero_of_pow_eq_zero
-  条件: [Zero R] [Pow R 自然数] [IsReduced R] {n : 自然数} (h : x ^ n = 0)
+  条件: [零 R] [幂 R 自然数] [是既约 R] {n : 自然数} (h : x ^ n = 0)
   证明: IsReduced.eq_zero x ⟨n, h⟩
 
 Depends on / 依赖: IsReduced, IsReduced.eq_zero, eq_zero
@@ -643,8 +643,8 @@ theorem IsNilpotent.eq_zero
 @[simp]
 
 中文:
-定理 IsNilpotent.eq_zero
-  条件: [Zero R] [Pow R 自然数] [IsReduced R] (h : IsNilpotent x)
+定理 是幂零.eq_zero
+  条件: [零 R] [幂 R 自然数] [是既约 R] (h : 是幂零 x)
   结论: x = 0
   证明: IsReduced.eq_zero x h
 
@@ -667,8 +667,8 @@ theorem isNilpotent_iff_eq_zero
 
 中文:
 定理 isNilpotent_iff_eq_zero
-  条件: [MonoidWithZero R] [IsReduced R]
-  结论: IsNilpotent x ↔ x = 0
+  条件: [带零幺半群 R] [是既约 R]
+  结论: 是幂零 x ↔ x = 0
   证明: ⟨fun h => h.eq_zero, fun h => h.symm ▸ IsNilpotent.zero⟩
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.zero, eq_zero, h.eq_zero, h.symm
@@ -686,8 +686,8 @@ lemma exists_isNilpotent_of_not_isReduced
   simpa [isReduced_iff, not_forall, and_comm] using h
 
 中文:
-引理 exists_isNilpotent_of_not_isReduced
-  条件: {R : 类型} [Zero R] [Pow R 自然数] (h : ¬IsReduced R)
+引理 存在_isNilpotent_of_not_isReduced
+  条件: {R : 类型} [零 R] [幂 R 自然数] (h : ¬是既约 R)
   证明: by
   simpa [isReduced_iff, not_forall, and_comm] using h
 
@@ -756,7 +756,7 @@ lemma zero_pow_eq_one₀
 
 中文:
 引理 zero_pow_eq_one₀
-  条件: [Nontrivial M₀]
+  条件: [非平凡 M₀]
   结论: (0 : M₀) ^ n = 1 ↔ n = 0
   证明: by
   rw [zero_pow_eq]; rw [one_ne_zero.ite_eq_left_iff]
@@ -816,7 +816,7 @@ lemma zero_pow_eq_zero
 
 中文:
 引理 zero_pow_eq_zero
-  条件: [Nontrivial M₀]
+  条件: [非平凡 M₀]
   结论: (0 : M₀) ^ n = 0 ↔ n != 0
   证明: ⟨by rintro h rfl; simp at h, zero_pow⟩
 
@@ -964,7 +964,7 @@ lemma pow_eq_zero_iff'
 
 中文:
 引理 pow_eq_zero_iff'
-  条件: [Nontrivial M₀]
+  条件: [非平凡 M₀]
   结论: a ^ n = 0 ↔ a = 0 ∧ n != 0
   证明: by
   obtain rfl | hn := eq_or_ne n 0 <;> simp [*]
@@ -997,8 +997,8 @@ theorem exists_right_inv_of_exists_left_inv
   conv_lhs => rw [← one_mul (a * b), ← hc, mul_assoc, ← mul_assoc b, hb, one_mul, hc]
 
 中文:
-定理 exists_right_inv_of_exists_left_inv
-  结论: {α} [MonoidWithZero α]
+定理 存在_right_inv_of_存在_left_inv
+  结论: {α} [带零幺半群 α]
   证明: by
   obtain _ | _ := subsingleton_or_nontrivial α
   · exact ⟨a, Subsingleton.elim _ _⟩
@@ -1038,7 +1038,7 @@ theorem mul_right_eq_self₀
 
 中文:
 定理 mul_right_eq_self₀
-  条件: [IsLeftCancelMulZero M₀]
+  条件: [是左消去MulZero M₀]
   结论: a * b = a ↔ b = 1 ∨ a = 0
   证明: calc
     a * b = a ↔ a * b = a * 1 := by rw [mul_one]
@@ -1066,7 +1066,7 @@ theorem mul_left_eq_self₀
 
 中文:
 定理 mul_left_eq_self₀
-  条件: [IsRightCancelMulZero M₀]
+  条件: [是右消去MulZero M₀]
   结论: a * b = b ↔ a = 1 ∨ b = 0
   证明: calc
     a * b = b ↔ a * b = 1 * b := by rw [one_mul]
@@ -1096,7 +1096,7 @@ theorem mul_eq_left₀
 
 中文:
 定理 mul_eq_left₀
-  条件: [IsLeftCancelMulZero M₀] (ha : a != 0)
+  条件: [是左消去MulZero M₀] (ha : a != 0)
   结论: a * b = a ↔ b = 1
   证明: by
   rw [Iff.comm]; rw [← mul_right_inj' ha]; rw [mul_one]
@@ -1123,7 +1123,7 @@ theorem mul_eq_right₀
 
 中文:
 定理 mul_eq_right₀
-  条件: [IsRightCancelMulZero M₀] (hb : b != 0)
+  条件: [是右消去MulZero M₀] (hb : b != 0)
   结论: a * b = b ↔ a = 1
   证明: by
   rw [Iff.comm]; rw [← mul_left_inj' hb]; rw [one_mul]
@@ -1150,7 +1150,7 @@ theorem left_eq_mul₀
 
 中文:
 定理 left_eq_mul₀
-  条件: [IsLeftCancelMulZero M₀] (ha : a != 0)
+  条件: [是左消去MulZero M₀] (ha : a != 0)
   结论: a = a * b ↔ b = 1
   证明: by
   rw [eq_comm]; rw [mul_eq_left₀ ha]
@@ -1175,7 +1175,7 @@ theorem right_eq_mul₀
 
 中文:
 定理 right_eq_mul₀
-  条件: [IsRightCancelMulZero M₀] (hb : b != 0)
+  条件: [是右消去MulZero M₀] (hb : b != 0)
   结论: b = a * b ↔ a = 1
   证明: by
   rw [eq_comm]; rw [mul_eq_right₀ hb]
@@ -1195,7 +1195,7 @@ theorem eq_zero_of_mul_eq_self_right
 
 中文:
 定理 eq_zero_of_mul_eq_self_right
-  条件: [IsLeftCancelMulZero M₀] (h₁ : b != 1) (h₂ : a * b = a)
+  条件: [是左消去MulZero M₀] (h₁ : b != 1) (h₂ : a * b = a)
   证明: Classical.byContradiction fun ha => h₁ mul_left_cancel₀ ha h₂.symm ▸ (mul_one a).symm
 
 Depends on / 依赖: Classical, Classical.byContradiction, byContradiction, mul_one
@@ -1214,7 +1214,7 @@ theorem eq_zero_of_mul_eq_self_left
 
 中文:
 定理 eq_zero_of_mul_eq_self_left
-  条件: [IsRightCancelMulZero M₀] (h₁ : b != 1) (h₂ : b * a = a)
+  条件: [是右消去MulZero M₀] (h₁ : b != 1) (h₂ : b * a = a)
   证明: Classical.byContradiction fun ha => h₁ mul_right_cancel₀ ha h₂.symm ▸ (one_mul a).symm
 
 Depends on / 依赖: Classical, Classical.byContradiction, byContradiction, one_mul
@@ -1255,7 +1255,7 @@ theorem GroupWithZero.mul_right_injective
   simpa only [← mul_assoc, inv_mul_cancel₀ h, one_mul] using congr_arg (fun y => x⁻¹ * y) w
 
 中文:
-定理 GroupWithZero.mul_right_injective
+定理 带零群.mul_right_injective
   条件: (h : x != 0)
   证明: fun y y' w => by
   simpa only [← mul_assoc, inv_mul_cancel₀ h, one_mul] using congr_arg (fun y => x⁻¹ * y) w
@@ -1278,7 +1278,7 @@ theorem GroupWithZero.mul_left_injective
 @[simp high] -- should take priority over `IsUnit.mul_inv_cancel_right`
 
 中文:
-定理 GroupWithZero.mul_left_injective
+定理 带零群.mul_left_injective
   条件: (h : x != 0)
   证明: fun y y' w => by
   simpa only [mul_assoc, mul_inv_cancel₀ h, mul_one] using congr_arg (fun y => y * x⁻¹) w
@@ -1772,7 +1772,7 @@ theorem mul_left_surjective₀
 中文:
 定理 mul_left_surjective₀
   条件: {a : G₀} (h : a != 0)
-  结论: Surjective fun g => a * g
+  结论: 满射 fun g => a * g
   证明: fun g =>
   ⟨a⁻¹ * g, by simp [← mul_assoc, mul_inv_cancel₀ h]⟩
 -/
@@ -1792,7 +1792,7 @@ theorem mul_right_surjective₀
 中文:
 定理 mul_right_surjective₀
   条件: {a : G₀} (h : a != 0)
-  结论: Surjective fun g => g * a
+  结论: 满射 fun g => g * a
   证明: fun g =>
   ⟨g * a⁻¹, by simp [mul_assoc, inv_mul_cancel₀ h]⟩
 -/

@@ -55,7 +55,7 @@ definition coneCompEvaluationOfConeCompDiagramFunctorCompEvaluation
 
 中文:
 定义 coneCompEvaluationOfConeCompDiagramFunctorCompEvaluation
-  签名: {X : C} {K : Type s}
+  签名: {X : C} {K : 类型 s}
   定义体: E.pt
   π :=
     { app := fun k => E.π.app k ≫ Multiequalizer.ι (W.index (F.obj k)) i
@@ -95,7 +95,7 @@ definition liftToDiagramLimitObjAux
 
 中文:
 定义 liftToDiagramLimitObjAux
-  签名: {X : C} {K : Type s} [SmallCategory K] [HasLimitsOfShape K D]
+  签名: {X : C} {K : 类型 s} [小范畴 K] [有形状极限 K D]
   定义体: (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op i.Y)) (limit.isLimit F)).lift
         (coneCompEvaluationOfConeCompDiagramFunctorCompEvaluation i E)
 
@@ -122,7 +122,7 @@ lemma liftToDiagramLimitObjAux_fac
 
 中文:
 引理 liftToDiagramLimitObjAux_fac
-  结论: {X : C} {K : Type s} [SmallCategory K]
+  结论: {X : C} {K : 类型 s} [小范畴 K]
   证明: IsLimit.fac _ _ _
 
 Depends on / 依赖: IsLimit, IsLimit.fac
@@ -154,7 +154,7 @@ abbreviation liftToDiagramLimitObj
 
 中文:
 缩写 liftToDiagramLimitObj
-  签名: {X : C} {K : Type s} [SmallCategory K] [HasLimitsOfShape K D]
+  签名: {X : C} {K : 类型 s} [小范畴 K] [有形状极限 K D]
   定义体: Multiequalizer.lift ((unop W).index (limit F)) E.pt (liftToDiagramLimitObjAux F E)
     (by
       intro i
@@ -258,7 +258,7 @@ instance preservesLimits_diagramFunctor
 
 中文:
 实例 preservesLimits_diagramFunctor
-  签名: (X : C) [HasLimitsOfSize.{max t u v, max t u v} D]
+  签名: (X : C) [有LimitsOfSize.{最大值 t u v, 最大值 t u v} D]
   定义体: by
   constructor
   intro _ _
@@ -294,7 +294,7 @@ definition liftToPlusObjLimitObj
 
 中文:
 定义 liftToPlusObjLimitObj
-  签名: {K : Type s} [SmallCategory K] [FinCategory K]
+  签名: {K : 类型 s} [小范畴 K] [有限范畴 K]
   定义体: let F' := F ⋙ J.diagramFunctor D X
   let e := colimitLimitIso (F ⋙ J.diagramFunctor D X)
   let t : J.diagram (limit F) X ≅ limit (F ⋙ J.diagramFunctor D X) :=
@@ -352,7 +352,7 @@ theorem liftToPlusObjLimitObj_fac
 
 中文:
 定理 liftToPlusObjLimitObj_fac
-  结论: {K : Type s} [SmallCategory K] [FinCategory K]
+  结论: {K : 类型 s} [小范畴 K] [有限范畴 K]
   证明: by
   dsimp only [liftToPlusObjLimitObj]
   rw [← (limit.isLimit (F ⋙ J.plusFunctor D ⋙ (evaluation Cᵒᵖ D).obj (op X))).fac S k]; rw [Category.assoc]
@@ -706,7 +706,7 @@ instance [PreservesLimits
 
 中文:
 实例 [PreservesLimits
-  签名: (forget D)] [HasFiniteLimits D]
+  签名: (forget D)] [有有限极限 D]
   定义体: HasSheafify.mk' J D (plusPlusAdjunction J D)
 
 Depends on / 依赖: HasSheafify, HasSheafify.mk, plusPlusAdjunction
@@ -727,7 +727,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSheafify J (Type (max u v))
+  签名: 有Sheafify J (类型 (最大值 u v))
   定义体: by
   infer_instance
 
@@ -749,8 +749,8 @@ instance [FinitaryExtensive
   body: finitaryExtensive_of_reflective (sheafificationAdjunction _ _)
 
 中文:
-实例 [FinitaryExtensive
-  签名: D] [HasPullbacks D] [HasSheafify J D] :
+实例 [有限广延
+  签名: D] [有Pullbacks D] [有Sheafify J D] :
   定义体: finitaryExtensive_of_reflective (sheafificationAdjunction _ _)
 
 Depends on / 依赖: finitaryExtensive_of_reflective, sheafificationAdjunction
@@ -769,7 +769,7 @@ instance [Adhesive
 
 中文:
 实例 [Adhesive
-  签名: D] [HasPullbacks D] [HasPushouts D] [HasSheafify J D] :
+  签名: D] [有Pullbacks D] [有Pushouts D] [有Sheafify J D] :
   定义体: adhesive_of_reflective (sheafificationAdjunction _ _)
 
 Depends on / 依赖: adhesive_of_reflective, sheafificationAdjunction
@@ -788,7 +788,7 @@ instance SheafOfTypes.finitary_extensive
 
 中文:
 实例 SheafOfTypes.finitary_extensive
-  签名: [HasSheafify J (Type w)]
+  签名: [有Sheafify J (类型 w)]
   定义体: inferInstance
 -/
 instance SheafOfTypes.finitary_extensive [HasSheafify J (Type w)] :
@@ -805,7 +805,7 @@ instance SheafOfTypes.adhesive
 
 中文:
 实例 SheafOfTypes.adhesive
-  签名: [HasSheafify J (Type w)]
+  签名: [有Sheafify J (类型 w)]
   定义体: inferInstance
 -/
 instance SheafOfTypes.adhesive [HasSheafify J (Type w)] :
@@ -822,7 +822,7 @@ instance SheafOfTypes.balanced
 
 中文:
 实例 SheafOfTypes.balanced
-  签名: [HasSheafify J (Type w)]
+  签名: [有Sheafify J (类型 w)]
   定义体: inferInstance
 -/
 instance SheafOfTypes.balanced [HasSheafify J (Type w)] :

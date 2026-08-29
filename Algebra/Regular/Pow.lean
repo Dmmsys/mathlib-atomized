@@ -34,7 +34,7 @@ lemma IsLeftRegular.prod
   proof: s.prod_induction _ _ (@IsLeftRegular.mul R _) isRegular_one.left h
 
 中文:
-引理 IsLeftRegular.prod
+引理 IsLeftRegular.乘积
   条件: (h : 对任意 i in s, IsLeftRegular (f i))
   证明: s.prod_induction _ _ (@IsLeftRegular.mul R _) isRegular_one.left h
 
@@ -53,7 +53,7 @@ lemma IsRightRegular.prod
   proof: s.prod_induction _ _ (@IsRightRegular.mul R _) isRegular_one.right h
 
 中文:
-引理 IsRightRegular.prod
+引理 IsRightRegular.乘积
   条件: (h : 对任意 i in s, IsRightRegular (f i))
   证明: s.prod_induction _ _ (@IsRightRegular.mul R _) isRegular_one.right h
 
@@ -73,8 +73,8 @@ lemma IsRegular.prod
    IsRightRegular.prod fun a ha => (h a ha).right⟩
 
 中文:
-引理 IsRegular.prod
-  条件: (h : 对任意 i in s, IsRegular (f i))
+引理 是正则.乘积
+  条件: (h : 对任意 i in s, 是正则 (f i))
   证明: ⟨IsLeftRegular.prod fun a ha => (h a ha).left,
    IsRightRegular.prod fun a ha => (h a ha).right⟩
 

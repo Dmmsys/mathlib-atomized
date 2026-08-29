@@ -60,7 +60,7 @@ definition PreGNS
 
 中文:
 定义 PreGNS
-  签名: (f : A ->ₚ[Complex] Complex)
+  签名: (f : A ->ₚ[复形] 复形)
   定义体: A
 -/
 def PreGNS (f : A ->ₚ[Complex] Complex) := A
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup f.PreGNS
+  签名: 加法交换群 f.PreGNS
   定义体: inferInstanceAs (AddCommGroup A)
 
 Depends on / 依赖: AddCommGroup
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module Complex f.PreGNS
+  签名: 模 复形 f.PreGNS
   定义体: inferInstanceAs (Module Complex A)
 
 Depends on / 依赖: Module
@@ -108,7 +108,7 @@ definition toPreGNS
 
 中文:
 定义 toPreGNS
-  签名: : A ≃ₗ[Complex] f.PreGNS
+  签名: : A ≃ₗ[复形] f.PreGNS
   定义体: LinearEquiv.refl Complex _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl
@@ -127,7 +127,7 @@ definition ofPreGNS
 
 中文:
 定义 ofPreGNS
-  签名: : f.PreGNS ≃ₗ[Complex] A
+  签名: : f.PreGNS ≃ₗ[复形] A
   定义体: f.toPreGNS.symm
 
 @[simp]
@@ -192,7 +192,7 @@ abbreviation preGNSpreInnerProdSpace
 
 中文:
 缩写 preGNSpreInnerProdSpace
-  签名: : PreInnerProductSpace.Core Complex f.PreGNS where
+  签名: : PreInnerProduct空间.核 复形 f.PreGNS where
   定义体: f (star (f.ofPreGNS a) * f.ofPreGNS b)
   conj_inner_symm := by simp [← Complex.star_def, ← map_star f]
 .1 re_inner_nonneg _ := RCLike.nonneg_iff.mp (f.map_nonneg (star_mul_self_nonneg _))
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeminormedAddCommGroup f.PreGNS
+  签名: SeminormedAddComm群 f.PreGNS
   定义体: InnerProductSpace.Core.toSeminormedAddCommGroup (c := f.preGNSpreInnerProdSpace)
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toSeminormedAddCommGroup, f.preGNSpreInnerProdSpace, preGNSpreInnerProdSpace, toSeminormedAddCommGroup
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: InnerProductSpace Complex f.PreGNS
+  签名: 内积空间 复形 f.PreGNS
   定义体: InnerProductSpace.ofCore f.preGNSpreInnerProdSpace
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.ofCore, f.preGNSpreInnerProdSpace, ofCore, preGNSpreInnerProdSpace
@@ -397,7 +397,7 @@ lemma completion_leftMulMapPreGNS_map_smul
 
 中文:
 引理 completion_leftMulMapPreGNS_map_smul
-  条件: (m : Complex) (x : A)
+  条件: (m : 复形) (x : A)
   证明: by
   ext a
   induction a using induction_on with
@@ -433,7 +433,7 @@ definition gnsNonUnitalStarAlgHom
 
 中文:
 定义 gnsNonUnitalStarAlgHom
-  签名: : A ->⋆ₙₐ[Complex] (f.GNS ->L[Complex] f.GNS) where
+  签名: : A ->⋆ₙₐ[复形] (f.GNS ->L[复形] f.GNS) where
   定义体: (f.leftMulMapPreGNS a).completion
   map_smul' := by simp
   map_zero' := by simpa using f.completion_leftMulMapPreGNS_map_smul 0 0
@@ -560,7 +560,7 @@ definition gnsStarAlgHom
 
 中文:
 定义 gnsStarAlgHom
-  签名: : A ->⋆ₐ[Complex] (f.GNS ->L[Complex] f.GNS) where
+  签名: : A ->⋆ₐ[复形] (f.GNS ->L[复形] f.GNS) where
   定义体: f.gnsNonUnitalStarAlgHom
   map_one' := by simp
   commutes' r := by simp [Algebra.algebraMap_eq_smul_one]

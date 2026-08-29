@@ -37,7 +37,7 @@ theorem rev_involutive
 
 中文:
 定理 rev_involutive
-  结论: Involutive (rev : Fin n -> Fin n)
+  结论: 对合 (rev : 有限集 n -> 有限集 n)
   证明: rev_rev
 
 Depends on / 依赖: rev_rev
@@ -57,7 +57,7 @@ definition revPerm
 
 中文:
 定义 revPerm
-  签名: : Equiv.Perm (Fin n)
+  签名: : 等价.置换 (有限集 n)
   定义体: Involutive.toPerm rev rev_involutive
 
 Depends on / 依赖: Involutive, Involutive.toPerm, rev_involutive, toPerm
@@ -75,7 +75,7 @@ theorem rev_injective
 
 中文:
 定理 rev_injective
-  结论: Injective (@rev n)
+  结论: 单射 (@rev n)
   证明: rev_involutive.injective
 
 Depends on / 依赖: injective, rev_involutive, rev_involutive.injective
@@ -93,7 +93,7 @@ theorem rev_surjective
 
 中文:
 定理 rev_surjective
-  结论: Surjective (@rev n)
+  结论: 满射 (@rev n)
   证明: rev_involutive.surjective
 
 Depends on / 依赖: rev_involutive, rev_involutive.surjective, surjective
@@ -113,7 +113,7 @@ theorem rev_bijective
 
 中文:
 定理 rev_bijective
-  结论: Bijective (@rev n)
+  结论: 双射 (@rev n)
   证明: rev_involutive.bijective
 
 @[simp]
@@ -151,7 +151,7 @@ theorem cast_rev
 
 中文:
 定理 cast_rev
-  条件: (i : Fin n) (h : n = m)
+  条件: (i : 有限集 n) (h : n = m)
   证明: by
   subst h; simp
 -/
@@ -171,7 +171,7 @@ theorem rev_eq_iff
 
 中文:
 定理 rev_eq_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: rev i = j ↔ i = rev j
   证明: by
   rw [← rev_inj]; rw [rev_rev]
@@ -192,7 +192,7 @@ theorem rev_ne_iff
 
 中文:
 定理 rev_ne_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: rev i != j ↔ i != rev j
   证明: rev_eq_iff.not
 
@@ -212,7 +212,7 @@ theorem rev_lt_iff
 
 中文:
 定理 rev_lt_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: rev i < j ↔ rev j < i
   证明: by
   rw [← rev_lt_rev]; rw [rev_rev]
@@ -234,7 +234,7 @@ theorem rev_le_iff
 
 中文:
 定理 rev_le_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: rev i <= j ↔ rev j <= i
   证明: by
   rw [← rev_le_rev]; rw [rev_rev]
@@ -256,7 +256,7 @@ theorem lt_rev_iff
 
 中文:
 定理 lt_rev_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: i < rev j ↔ j < rev i
   证明: by
   rw [← rev_lt_rev]; rw [rev_rev]
@@ -278,7 +278,7 @@ theorem le_rev_iff
 
 中文:
 定理 le_rev_iff
-  条件: {i j : Fin n}
+  条件: {i j : 有限集 n}
   结论: i <= rev j ↔ j <= rev i
   证明: by
   rw [← rev_le_rev]; rw [rev_rev]
@@ -300,7 +300,7 @@ theorem val_rev_zero
 中文:
 定理 val_rev_zero
   条件: [NeZero n]
-  结论: ((rev 0 : Fin n) : 自然数) = n.pred
+  结论: ((rev 0 : 有限集 n) : 自然数) = n.pred
   证明: rfl
 -/
 theorem val_rev_zero [NeZero n] : ((rev 0 : Fin n) : Nat) = n.pred := rfl
@@ -316,7 +316,7 @@ theorem rev_pred
 
 中文:
 定理 rev_pred
-  条件: {i : Fin (n + 1)} (h : i != 0) (h' := rev_ne_iff.mpr ((rev_last _).symm ▸ h))
+  条件: {i : 有限集 (n + 1)} (h : i != 0) (h' := rev_ne_iff.mpr ((rev_last _).symm ▸ h))
   证明: by
   rw [← castSucc_inj]; rw [castSucc_castPred]; rw [← rev_succ]; rw [succ_pred]
 
@@ -337,7 +337,7 @@ theorem rev_castPred
 
 中文:
 定理 rev_castPred
-  结论: {i : Fin (n + 1)}
+  结论: {i : 有限集 (n + 1)}
   证明: by
   rw [← succ_inj]; rw [succ_pred]; rw [← rev_castSucc]; rw [castSucc_castPred]
 
@@ -363,7 +363,7 @@ lemma succAbove_rev_left
 
 中文:
 引理 succAbove_rev_left
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by
   obtain h | h := (rev p).succ_le_or_le_castSucc i
   · rw [succAbove_of_succ_le _ _ h,
@@ -391,7 +391,7 @@ lemma succAbove_rev_right
 
 中文:
 引理 succAbove_rev_right
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by rw [succAbove_rev_left, rev_rev]
 
 Depends on / 依赖: rev_rev, succAbove_rev_left
@@ -410,7 +410,7 @@ lemma rev_succAbove
 
 中文:
 引理 rev_succAbove
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by
   rw [succAbove_rev_left]; rw [rev_rev]
 
@@ -435,7 +435,7 @@ lemma predAbove_rev_left
 
 中文:
 引理 predAbove_rev_left
-  条件: (p : Fin n) (i : Fin (n + 1))
+  条件: (p : 有限集 n) (i : 有限集 (n + 1))
   证明: by
   obtain h | h := (rev i).succ_le_or_le_castSucc p
   · rw [predAbove_of_succ_le _ _ h, rev_pred,
@@ -463,7 +463,7 @@ lemma predAbove_rev_right
 
 中文:
 引理 predAbove_rev_right
-  条件: (p : Fin n) (i : Fin (n + 1))
+  条件: (p : 有限集 n) (i : 有限集 (n + 1))
   证明: by rw [predAbove_rev_left, rev_rev]
 
 Depends on / 依赖: predAbove_rev_left, rev_rev
@@ -481,7 +481,7 @@ lemma rev_predAbove
 
 中文:
 引理 rev_predAbove
-  条件: {n : 自然数} (p : Fin n) (i : Fin (n + 1))
+  条件: {n : 自然数} (p : 有限集 n) (i : 有限集 (n + 1))
   证明: by rw [predAbove_rev_left, rev_rev]
 
 Depends on / 依赖: predAbove_rev_left, rev_rev
@@ -502,7 +502,7 @@ lemma add_rev_cast
 
 中文:
 引理 add_rev_cast
-  条件: (j : Fin (n + 1))
+  条件: (j : 有限集 (n + 1))
   结论: j.1 + j.rev.1 = n
   证明: by
   obtain ⟨j, hj⟩ := j
@@ -526,7 +526,7 @@ lemma rev_add_cast
 
 中文:
 引理 rev_add_cast
-  条件: (j : Fin (n + 1))
+  条件: (j : 有限集 (n + 1))
   结论: j.rev.1 + j.1 = n
   证明: by
   rw [Nat.add_comm]; rw [j.add_rev_cast]

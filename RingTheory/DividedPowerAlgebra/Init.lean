@@ -89,14 +89,14 @@ inductive Rel
     - add: {n : Nat} {a b : M} : Rel (X (n, a + b)) ((Finset.antidiagonal n).sum fun k => X (k.1, a) * X (k.2, b))
 
 中文:
-归纳类型 Rel
-  参数: : MvPolynomial (自然数 × M) R -> MvPolynomial (自然数 × M) R -> 命题
+归纳类型 关系
+  参数: : 多元多项式 (自然数 × M) R -> 多元多项式 (自然数 × M) R -> 命题
   构造子 (5 个):
-    - rfl_zero: Rel 0 0 -- Needed for technical reasons.
-    - zero: {a : M} : Rel (X (0, a)) 1
-    - smul: {r : R} {n : 自然数} {a : M} : Rel (X (n, r • a)) (r ^ n • X (n, a))
-    - mul: {m n : 自然数} {a : M} : Rel (X (m, a) * X (n, a)) (自然数.choose (m + n) m • X (m + n, a))
-    - add: {n : 自然数} {a b : M} : Rel (X (n, a + b)) ((Finset.antidiagonal n).sum fun k => X (k.1, a) * X (k.2, b))
+    - rfl_zero: 关系 0 0 -- Needed for technical reasons.
+    - zero: {a : M} : 关系 (X (0, a)) 1
+    - smul: {r : R} {n : 自然数} {a : M} : 关系 (X (n, r • a)) (r ^ n • X (n, a))
+    - mul: {m n : 自然数} {a : M} : 关系 (X (m, a) * X (n, a)) (自然数.choose (m + n) m • X (m + n, a))
+    - add: {n : 自然数} {a b : M} : 关系 (X (n, a + b)) ((有限集.antidiagonal n).求和 fun k => X (k.1, a) * X (k.2, b))
 -/
 inductive Rel : MvPolynomial (Nat × M) R -> MvPolynomial (Nat × M) R -> Prop
   | rfl_zero : Rel 0 0 -- Needed for technical reasons.
@@ -116,7 +116,7 @@ definition RelI
 
 中文:
 定义 RelI
-  签名: : Ideal (MvPolynomial (自然数 × M) R)
+  签名: : 理想 (多元多项式 (自然数 × M) R)
   定义体: ofRel (DividedPowerAlgebra.Rel R M)
 
 Depends on / 依赖: DividedPowerAlgebra, DividedPowerAlgebra.Rel
@@ -133,7 +133,7 @@ definition ringCon
 
 中文:
 定义 ringCon
-  签名: : RingCon (MvPolynomial (自然数 × M) R)
+  签名: : RingCon (多元多项式 (自然数 × M) R)
   定义体: ringConGen (DividedPowerAlgebra.Rel R M)
 
 Depends on / 依赖: Algebra, Algebra.FiniteType, DividedPowerAlgebra, DividedPowerAlgebra.Rel, Finite, FiniteType, Module, Module.Finite, algebraize, example, expected, f.toAlgebra, provided, ringConGen, toAlgebra
@@ -166,7 +166,7 @@ lemma mkAlgHom_surjective
 
 中文:
 引理 mkAlgHom_surjective
-  结论: Function.Surjective (RingCon.mkₐ R (ringCon R M))
+  结论: 函数.满射 (RingCon.mkₐ R (ringCon R M))
   证明: Quotient.mk_surjective
 
 @[simp]
@@ -520,7 +520,7 @@ theorem dp_sum
 
 中文:
 定理 dp_sum
-  条件: {ι : 类型} [DecidableEq ι] (s : Finset ι) (q : 自然数) (x : ι -> M)
+  条件: {ι : 类型} [DecidableEq ι] (s : 有限集 ι) (q : 自然数) (x : ι -> M)
   证明: DividedPowers.dpow_sum' (I := ⊤) _ (fun _ => dp_zero)
     (fun _ _ => dp_add) dp_null_of_ne_zero (fun _ _ => trivial)
 
@@ -543,7 +543,7 @@ theorem dp_sum_smul
 
 中文:
 定理 dp_sum_smul
-  条件: {ι : 类型} [DecidableEq ι] (s : Finset ι) (q : 自然数) (a : ι -> R) (x : ι -> M)
+  条件: {ι : 类型} [DecidableEq ι] (s : 有限集 ι) (q : 自然数) (a : ι -> R) (x : ι -> M)
   证明: by
   simp_rw [dp_sum, dp_smul, Algebra.smul_def, map_prod, ← Finset.prod_mul_distrib]
 
@@ -573,7 +573,7 @@ lemma prod_dp
 
 中文:
 引理 prod_dp
-  条件: {ι : 类型} {s : Finset ι} {n : ι -> 自然数} {m : M}
+  条件: {ι : 类型} {s : 有限集 ι} {n : ι -> 自然数} {m : M}
   证明: by
   classical
   induction s using Finset.induction with
@@ -686,7 +686,7 @@ theorem algHom_ext_iff
 
 中文:
 定理 algHom_ext_iff
-  结论: {A : 类型} [CommSemiring A] [Algebra R A]
+  结论: {A : 类型} [交换半环 A] [代数 R A]
   证明: by
   refine ⟨fun h _ _ => by rw [h], fun h => ?_⟩
   rw [DFunLike.ext'_iff]
@@ -716,7 +716,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: {A : 类型} [CommSemiring A] [Algebra R A]
+  结论: {A : 类型} [交换半环 A] [代数 R A]
   证明: algHom_ext_iff.mpr h
 
 Depends on / 依赖: algHom_ext_iff, algHom_ext_iff.mpr
@@ -752,7 +752,7 @@ theorem submodule_span_prod_dp_eq_top
 
 中文:
 定理 submodule_span_prod_dp_eq_top
-  条件: (hv : span R (Set.range v) = ⊤)
+  条件: (hv : span R (集合.range v) = ⊤)
   证明: by
   rw [eq_top_iff]
   intro p hp
@@ -1000,7 +1000,7 @@ theorem lift_apply
 
 中文:
 定理 lift_apply
-  条件: (p : MvPolynomial (自然数 × M) R)
+  条件: (p : 多元多项式 (自然数 × M) R)
   证明: by
   rw [lift]; rw [lift'_apply]
 
@@ -1190,7 +1190,7 @@ lemma LinearMap.dp_smul
   rw [f.map_smul]; rw [algebra_compatible_smul S r (f a)]; rw [DividedPowerAlgebra.dp_smul]; rw [← map_pow]; rw [algebraMap_smul]
 
 中文:
-引理 LinearMap.dp_smul
+引理 线性映射.dp_smul
   条件: {n : 自然数} {r : R} {a : M}
   结论: dp S n (f (r • a)) = r ^ n • dp S n (f a)
   证明: by
@@ -1249,7 +1249,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: {p : MvPolynomial (自然数 × M) R}
+  条件: {p : 多元多项式 (自然数 × M) R}
   证明: by
   rw [map]; rw [lift'_apply]
 
@@ -1340,7 +1340,7 @@ theorem lift_surjective
 
 中文:
 定理 lift_surjective
-  条件: {f : M ->ₗ[R] N} (hf : Function.Surjective f)
+  条件: {f : M ->ₗ[R] N} (hf : 函数.满射 f)
   证明: by
   rw [← AlgHom.range_eq_top]; rw [← Algebra.map_top (map R f)]; rw [eq_top_iff]; rw [← (AlgHom.range_eq_top (RingCon.mkₐ R (ringCon R N))).mpr mkAlgHom_surjective]; rw [← Algebra.map_top]; rw [(Subalgebra.gc_map_comap _).le_iff_le]; rw [← MvPolynomial.adjoin_range_X]; rw [Algebra.adjoin_le_iff]
  
@@ -1412,7 +1412,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map R (LinearMap.id (R := R) (M := M)) = AlgHom.id R _
+  结论: map R (线性映射.id (R := R) (M := M)) = 代数态射.id R _
   证明: by
   rw [algHom_ext_iff]
   intros
@@ -1479,7 +1479,7 @@ theorem LinearEquiv.coe_lift
   proof: rfl
 
 中文:
-定理 LinearEquiv.coe_lift
+定理 线性等价.coe_lift
   条件: (g : M ≃ₗ[R] N)
   结论: mapEquiv g = map R g.toLinearMap
   证明: rfl
@@ -1495,7 +1495,7 @@ theorem LinearEquiv.coe_lift_symm
   proof: rfl
 
 中文:
-定理 LinearEquiv.coe_lift_symm
+定理 线性等价.coe_lift_symm
   条件: (g : M ≃ₗ[R] N)
   证明: rfl
 -/
@@ -1512,7 +1512,7 @@ theorem mapEquiv_refl
 
 中文:
 定理 mapEquiv_refl
-  结论: mapEquiv (LinearEquiv.refl R M) = AlgEquiv.refl
+  结论: mapEquiv (线性等价.refl R M) = 代数等价.refl
   证明: AlgEquiv.coe_toAlgHom_injective map_id
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom_injective, coe_toAlgHom_injective, map_id

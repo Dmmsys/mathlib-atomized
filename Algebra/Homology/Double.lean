@@ -54,7 +54,7 @@ definition double
 
 中文:
 定义 double
-  签名: : HomologicalComplex C c where
+  签名: : 同调复形 C c where
   定义体: if k = i₀ then X₀ else if k = i₁ then X₁ else 0
   d k k' :=
     if hk : k = i₀ ∧ k' = i₁ ∧ i₀ != i₁ then
@@ -233,7 +233,7 @@ lemma from_double_hom_ext
 
 中文:
 引理 from_double_hom_ext
-  结论: {K : HomologicalComplex C c} {φ φ' : double f hi₀₁ ⟶ K}
+  结论: {K : 同调复形 C c} {φ φ' : double f hi₀₁ ⟶ K}
   证明: by
   ext k
   by_cases h : k = i₀ ∨ k = i₁
@@ -268,7 +268,7 @@ lemma to_double_hom_ext
 
 中文:
 引理 to_double_hom_ext
-  结论: {K : HomologicalComplex C c} {φ φ' : K ⟶ double f hi₀₁}
+  结论: {K : 同调复形 C c} {φ φ' : K ⟶ double f hi₀₁}
   证明: by
   ext k
   by_cases h : k = i₀ ∨ k = i₁

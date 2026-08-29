@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: One 自然数+
+  签名: 幺 自然数+
   定义体: ⟨⟨1, Nat.zero_lt_one⟩⟩
 
 Depends on / 依赖: Nat.zero_lt_one, zero_lt_one
@@ -60,7 +60,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (n h)
-  结论: (P自然数.val (⟨n, h⟩ : 自然数+) : 自然数) = n
+  结论: (正自然数.val (⟨n, h⟩ : 自然数+) : 自然数) = n
   证明: rfl
 -/
 theorem mk_coe (n h) : (PNat.val (⟨n, h⟩ : Nat+) : Nat) = n :=
@@ -118,7 +118,7 @@ definition toPNat
   body: ⟨n, h⟩
 
 中文:
-定义 toPNat
+定义 toP自然数
   签名: (n : 自然数) (h : 0 < n := by decide)
   定义体: ⟨n, h⟩
 -/
@@ -136,7 +136,7 @@ definition succPNat
 @[simp]
 
 中文:
-定义 succPNat
+定义 succP自然数
   签名: (n : 自然数)
   定义体: ⟨succ n, succ_pos n⟩
 
@@ -160,7 +160,7 @@ theorem succPNat_coe
 @[simp]
 
 中文:
-定理 succPNat_coe
+定理 succP自然数_coe
   条件: (n : 自然数)
   结论: (succP自然数 n : 自然数) = succ n
   证明: rfl
@@ -183,7 +183,7 @@ theorem natPred_succPNat
 @[simp]
 
 中文:
-定理 natPred_succPNat
+定理 natPred_succP自然数
   条件: (n : 自然数)
   结论: n.succP自然数.natPred = n
   证明: rfl
@@ -204,7 +204,7 @@ theorem _root_.PNat.succPNat_natPred
   proof: Subtype.ext succ_pred_eq_of_pos n.2
 
 中文:
-定理 _root_.PNat.succPNat_natPred
+定理 _root_.正自然数.succP自然数_natPred
   条件: (n : 自然数+)
   结论: n.natPred.succP自然数 = n
   证明: Subtype.ext succ_pred_eq_of_pos n.2
@@ -225,7 +225,7 @@ definition toPNat'
 @[simp]
 
 中文:
-定义 toPNat'
+定义 toP自然数'
   签名: (n : 自然数)
   定义体: succPNat (pred n)
 
@@ -248,7 +248,7 @@ theorem toPNat'_zero
 @[simp]
 
 中文:
-定理 toPNat'_zero
+定理 toP自然数'_zero
   结论: 自然数.toP自然数' 0 = 1
   证明: rfl
 
@@ -265,7 +265,7 @@ theorem toPNat'_coe
   statement: forall n : Nat, (toPNat' n : Nat) = ite (0 < n) n 1
 
 中文:
-定理 toPNat'_coe
+定理 toP自然数'_coe
   结论: 对任意 n : 自然数, (toP自然数' n : 自然数) = ite (0 < n) n 1
 -/
 theorem toPNat'_coe : forall n : Nat, (toPNat' n : Nat) = ite (0 < n) n 1
@@ -419,7 +419,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective P自然数.val
+  结论: 函数.单射 正自然数.val
   证明: Subtype.coe_injective
 
 @[simp]
@@ -480,7 +480,7 @@ theorem toPNat'_coe
 @[simp]
 
 中文:
-定理 toPNat'_coe
+定理 toP自然数'_coe
   条件: {n : 自然数}
   结论: 0 < n -> (n.toP自然数' : 自然数) = n
   证明: succ_pred_eq_of_pos
@@ -505,7 +505,7 @@ theorem coe_toPNat'
 @[deprecated "use `one_le`" (since := "2026-05-07")]
 
 中文:
-定理 coe_toPNat'
+定理 coe_toP自然数'
   条件: (n : 自然数+)
   结论: (n : 自然数).toP自然数' = n
   证明: eq (toPNat'_coe n.pos)
@@ -571,7 +571,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 自然数+
+  签名: 可居 自然数+
   定义体: ⟨1⟩
 
 Depends on / 依赖: Finsupp, Finsupp.sum
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation 自然数+
+  签名: 良基关系 自然数+
   定义体: measure (fun (a : Nat+) => (a : Nat))
 
 Depends on / 依赖: measure
@@ -674,7 +674,7 @@ definition strongInductionOn
 
 中文:
 定义 strongInductionOn
-  签名: {p : 自然数+ -> Sort*} (n : 自然数+)
+  签名: {p : 自然数+ -> 类型层*} (n : 自然数+)
 -/
 def strongInductionOn {p : Nat+ -> Sort*} (n : Nat+) : (forall k, (forall m, m < k -> p m) -> p k) -> p n
   | IH => IH _ fun a _ => strongInductionOn a IH
@@ -864,7 +864,7 @@ instance Nat.canLiftPNat
   body: ⟨fun n hn => ⟨Nat.toPNat' n, PNat.toPNat'_coe hn⟩⟩
 
 中文:
-实例 Nat.canLiftPNat
+实例 自然数.canLiftP自然数
   签名: : CanLift 自然数 自然数+ (↑) (fun n => 0 < n)
   定义体: ⟨fun n hn => ⟨Nat.toPNat' n, PNat.toPNat'_coe hn⟩⟩
 
@@ -884,7 +884,7 @@ instance Int.canLiftPNat
       rw [Nat.toPNat'_coe]; rw [if_pos (Int.natAbs_pos.2 hn.ne')]; rw [Int.natAbs_of_nonneg hn.le]⟩⟩
 
 中文:
-实例 Int.canLiftPNat
+实例 整数.canLiftP自然数
   签名: : CanLift 整数 自然数+ (↑) ((0 < ·))
   定义体: ⟨fun n hn =>
     ⟨Nat.toPNat' (Int.natAbs n), by

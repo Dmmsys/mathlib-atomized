@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddTorsionFree 整数_[p]
+  签名: 是加法无挠 整数_[p]
   定义体: smul_right_injective Int_[p]
 
 Depends on / 依赖: Int_, smul_right_injective
@@ -129,7 +129,7 @@ instance instBinomialRing
 
 中文:
 实例 instBinomialRing
-  签名: : BinomialRing 整数_[p] where
+  签名: : 二项环 整数_[p] where
   定义体: ⟨(ascPochhammer Int_[p] k).eval x / (k.factorial : Rat_[p]), by
     rw [norm_div]; rw [div_le_one (by simpa using k.factorial_ne_zero)]
     exact x.norm_ascPochhammer_le k⟩
@@ -164,7 +164,7 @@ lemma continuous_multichoose
 中文:
 引理 continuous_multichoose
   条件: (k : 自然数)
-  结论: Continuous (fun x : 整数_[p] => Ring.multichoose x k)
+  结论: 连续 (fun x : 整数_[p] => 环.multichoose x k)
   证明: by
   simp only [Ring.multichoose, BinomialRing.multichoose]
   fun_prop
@@ -192,7 +192,7 @@ lemma continuous_choose
 中文:
 引理 continuous_choose
   条件: (k : 自然数)
-  结论: Continuous (fun x : 整数_[p] => Ring.choose x k)
+  结论: 连续 (fun x : 整数_[p] => 环.choose x k)
   证明: by
   simp only [Ring.choose]
   fun_prop
@@ -238,7 +238,7 @@ lemma mahler_apply
 中文:
 引理 mahler_apply
   条件: (k : 自然数) (x : 整数_[p])
-  结论: mahler k x = Ring.choose x k
+  结论: mahler k x = 环.choose x k
   证明: rfl
 -/
 lemma mahler_apply (k : Nat) (x : Int_[p]) : mahler k x = Ring.choose x k := rfl
@@ -283,8 +283,8 @@ lemma IsUltrametricDist.norm_fwdDiff_iter_apply_le
   refine norm_sum_le_of_f
 
 中文:
-引理 IsUltrametricDist.norm_fwdDiff_iter_apply_le
-  结论: [TopologicalSpace M] [CompactSpace M]
+引理 是UltrametricDist.norm_fwdDiff_iter_apply_le
+  结论: [拓扑空间 M] [紧空间 M]
   证明: by
   -- A proof by induction on `n` would be possible but would involve some messing around to
   -- define `Δ_[h]` as an operator on continuous maps (not just on bare functions). So instead we
@@ -315,7 +315,7 @@ lemma bojanic_mahler_step1
 
 中文:
 引理 bojanic_mahler_step1
-  结论: [AddCommMonoidWithOne M] [AddCommGroup G] (f : M -> G)
+  结论: [加法交换带幺幺半群 M] [加法交换群 G] (f : M -> G)
   证明: by
   have aux : Δ_[1]^[n + R] f 0 = R.choose (R - 1 + 1) • Δ_[1]^[n + R] f 0 := by
     rw [Nat.sub_add_cancel hR]; rw [Nat.choose_self]; rw [one_smul]
@@ -415,7 +415,7 @@ lemma fwdDiff_iter_le_of_forall_le
    
 
 中文:
-引理 fwdDiff_iter_le_of_forall_le
+引理 fwdDiff_iter_le_of_对任意_le
   结论: {f : C(整数_[p], E)} {s t : 自然数}
   证明: by
   -- We show the following more general statement by induction on `k`:
@@ -462,7 +462,7 @@ lemma fwdDiff_tendsto_zero
 中文:
 引理 fwdDiff_tendsto_zero
   条件: (f : C(整数_[p], E))
-  结论: Tendsto (Δ_[1]^[·] f 0) atTop (𝓝 0)
+  结论: 收敛 (Δ_[1]^[·] f 0) atTop (𝓝 0)
   证明: by
   -- first extract an `s`
   refine NormedAddGroup.tendsto_nhds_zero.mpr (fun ε hε => ?_)
@@ -650,7 +650,7 @@ lemma hasSum_mahlerSeries
 
 中文:
 引理 hasSum_mahlerSeries
-  条件: (ha : Tendsto a atTop (𝓝 0))
+  条件: (ha : 收敛 a atTop (𝓝 0))
   证明: by
   refine (NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero ?_).hasSum
   rw [tendsto_zero_iff_norm_tendsto_zero] at ha ⊢
@@ -676,7 +676,7 @@ lemma mahlerSeries_apply
 
 中文:
 引理 mahlerSeries_apply
-  条件: (ha : Tendsto a atTop (𝓝 0)) (x : 整数_[p])
+  条件: (ha : 收敛 a atTop (𝓝 0)) (x : 整数_[p])
   证明: by
   simp only [mahlerSeries, ← ContinuousMap.tsum_apply (hasSum_mahlerSeries ha).summable,
     mahlerTerm_apply]
@@ -702,7 +702,7 @@ lemma mahlerSeries_apply_nat
 
 中文:
 引理 mahlerSeries_apply_nat
-  条件: (ha : Tendsto a atTop (𝓝 0)) {m n : 自然数} (hmn : m <= n)
+  条件: (ha : 收敛 a atTop (𝓝 0)) {m n : 自然数} (hmn : m <= n)
   证明: by
   have h_van (i) : m.choose (i + (n + 1)) = 0 := Nat.choose_eq_zero_of_lt (by lia)
   have aux : Summable fun i => m.choose (i + (n + 1)) • a (i + (n + 1)) := by
@@ -734,7 +734,7 @@ lemma fwdDiff_mahlerSeries
 
 中文:
 引理 fwdDiff_mahlerSeries
-  条件: (ha : Tendsto a atTop (𝓝 0)) (n)
+  条件: (ha : 收敛 a atTop (𝓝 0)) (n)
   证明: calc Δ_[1]^[n] (mahlerSeries a) 0
   -- throw away terms after the nth
   _ = Δ_[1]^[n] (fun k => ∑ j in range (n + 1), k.choose j • (a j)) 0 := by

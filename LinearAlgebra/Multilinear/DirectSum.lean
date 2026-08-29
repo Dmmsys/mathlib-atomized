@@ -43,7 +43,7 @@ theorem directSum_ext
 
 中文:
 定理 directSum_ext
-  结论: [Finite ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: dfinsupp_ext h
 
 Depends on / 依赖: dfinsupp_ext
@@ -69,7 +69,7 @@ definition fromDirectSumEquiv
 
 中文:
 定义 fromDirectSumEquiv
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: haveI : Fintype ι := Fintype.ofFinite ι
   haveI : (i : ι) -> DecidableEq (κ i) := fun i => Classical.typeDecidableEq (κ i)
   fromDFinsuppEquiv _ _
@@ -98,7 +98,7 @@ theorem fromDirectSumEquiv_lof
 
 中文:
 定理 fromDirectSumEquiv_lof
-  结论: [Finite ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: by
   have : Fintype ι := Fintype.ofFinite ι
   rw [fromDirectSumEquiv]; rw [← fromDFinsuppEquiv_single]
@@ -127,7 +127,7 @@ theorem fromDirectSumEquiv_apply
 
 中文:
 定理 fromDirectSumEquiv_apply
-  结论: [Fintype ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限类型 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: by
   rw [fromDirectSumEquiv]; rw [← fromDFinsuppEquiv_apply]
   convert! rfl
@@ -158,7 +158,7 @@ theorem fromDirectSumEquiv_symm_apply
 
 中文:
 定理 fromDirectSumEquiv_symm_apply
-  结论: [Finite ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: by
   have : Fintype ι := Fintype.ofFinite ι
   simp_rw [fromDirectSumEquiv, DirectSum.lof, ← fromDFinsuppEquiv_symm_apply]

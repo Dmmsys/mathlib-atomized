@@ -46,9 +46,9 @@ theorem Set.range_one
 @[to_additive]
 
 中文:
-定理 Set.range_one
-  条件: {α β : 类型} [One β] [Nonempty α]
-  结论: Set.range (1 : α -> β) = {1}
+定理 集合.range_one
+  条件: {α β : 类型} [幺 β] [非空 α]
+  结论: 集合.range (1 : α -> β) = {1}
   证明: range_const
 
 @[to_additive]
@@ -68,8 +68,8 @@ theorem Set.preimage_one
   proof: Set.preimage_const 1 s
 
 中文:
-定理 Set.preimage_one
-  条件: {α β : 类型} [One β] (s : Set β) [Decidable ((1 : β) in s)]
+定理 集合.preimage_one
+  条件: {α β : 类型} [幺 β] (s : 集合 β) [可判定 ((1 : β) in s)]
   证明: Set.preimage_const 1 s
 
 Depends on / 依赖: Set.preimage_const, preimage_const
@@ -91,7 +91,7 @@ instance instIsMulTorsionFree
 
 中文:
 实例 instIsMulTorsionFree
-  签名: [对任意 i, Monoid (M i)] [对任意 i, IsMulTorsionFree (M i)]
+  签名: [对任意 i, 幺半群 (M i)] [对任意 i, 是MulTorsionFree (M i)]
   定义体: by ext i; exact pow_left_injective hn congr_fun hab i
 
 Depends on / 依赖: congr_fun, pow_left_injective
@@ -113,8 +113,8 @@ lemma one_mono
 
 中文:
 引理 one_mono
-  条件: [One β]
-  结论: Monotone (1 : α -> β)
+  条件: [幺 β]
+  结论: 递增 (1 : α -> β)
   证明: monotone_const
 -/
 @[to_additive] lemma one_mono [One β] : Monotone (1 : α -> β) := monotone_const
@@ -129,8 +129,8 @@ lemma one_anti
 
 中文:
 引理 one_anti
-  条件: [One β]
-  结论: Antitone (1 : α -> β)
+  条件: [幺 β]
+  结论: 递减 (1 : α -> β)
   证明: antitone_const
 -/
 @[to_additive] lemma one_anti [One β] : Antitone (1 : α -> β) := antitone_const
@@ -151,7 +151,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: {M N} {_ : Mul M} {_ : CommSemigroup N} (f g : M ->ₙ* N)
+  条件: {M N} {_ : 乘法 M} {_ : 交换半群 N} (f g : M ->ₙ* N)
   结论: (f * g : M -> N) =
   证明: rfl
 -/
@@ -185,8 +185,8 @@ definition MulHom.pi
 @[to_additive]
 
 中文:
-定义 MulHom.pi
-  签名: {γ : Type w} [Mul γ] (g : 对任意 i, γ ->ₙ* f i)
+定义 乘法半群态射.pi
+  签名: {γ : 类型 w} [乘法 γ] (g : 对任意 i, γ ->ₙ* f i)
   定义体: g i x
   map_mul' x y := funext fun i => (g i).map_mul x y
 
@@ -222,8 +222,8 @@ alias MulHom.injective_pi := MulHom.pi_injective
 alias Pi.mulHom_injective := MulHom.pi_injective
 
 中文:
-定理 MulHom.pi_injective
-  结论: {γ : Type w} [Nonempty I] [Mul γ] (g : 对任意 i, γ ->ₙ* f i)
+定理 乘法半群态射.pi_injective
+  结论: {γ : 类型 w} [非空 I] [乘法 γ] (g : 对任意 i, γ ->ₙ* f i)
   证明: fun _ _ h =>
   let ⟨i⟩ := ‹Nonempty I›
   hg i ((funext_iff.mp h :) i)
@@ -265,7 +265,7 @@ definition Pi.evalMulHom
   map_mul' _ _ := Pi.mul_apply _ _ i
 
 中文:
-定义 Pi.evalMulHom
+定义 依赖函数类型.evalMulHom
   签名: (i : I)
   定义体: g i
   map_mul' _ _ := Pi.mul_apply _ _ i
@@ -290,8 +290,8 @@ definition MulHom.piMap
   body: .pi fun i => (g i).comp (Pi.evalMulHom M i)
 
 中文:
-定义 MulHom.piMap
-  签名: [Π i, Mul (M i)] [Π i, Mul (N i)] (g : Π i, M i ->ₙ* N i)
+定义 乘法半群态射.piMap
+  签名: [Π i, 乘法 (M i)] [Π i, 乘法 (N i)] (g : Π i, M i ->ₙ* N i)
   定义体: .pi fun i => (g i).comp (Pi.evalMulHom M i)
 
 Depends on / 依赖: Pi.evalMulHom, evalMulHom
@@ -312,8 +312,8 @@ definition Pi.constMulHom
   map_mul' _ _ := rfl
 
 中文:
-定义 Pi.constMulHom
-  签名: (α β : 类型) [Mul β]
+定义 依赖函数类型.constMulHom
+  签名: (α β : 类型) [乘法 β]
   定义体: Function.const α
   map_mul' _ _ := rfl
 
@@ -340,8 +340,8 @@ definition MulHom.coeFn
   map_mul' _ _ := rfl
 
 中文:
-定义 MulHom.coeFn
-  签名: (α β : 类型) [Mul α] [CommSemigroup β]
+定义 乘法半群态射.coeFn
+  签名: (α β : 类型) [乘法 α] [交换半群 β]
   定义体: g
   map_mul' _ _ := rfl
 -/
@@ -364,8 +364,8 @@ definition MulHom.compLeft
   map_mul' _ _ := by ext; simp
 
 中文:
-定义 MulHom.compLeft
-  签名: {α β : 类型} [Mul α] [Mul β] (f : α ->ₙ* β) (I : 类型)
+定义 乘法半群态射.compLeft
+  签名: {α β : 类型} [乘法 α] [乘法 β] (f : α ->ₙ* β) (I : 类型)
   定义体: f ∘ h
   map_mul' _ _ := by ext; simp
 -/
@@ -401,8 +401,8 @@ definition MonoidHom.pi
 alias Pi.monoidHom_apply
 
 中文:
-定义 MonoidHom.pi
-  签名: {γ : Type w} [MulOneClass γ] (g : 对任意 i, γ ->* f i)
+定义 幺半群态射.pi
+  签名: {γ : 类型 w} [MulOne类 γ] (g : 对任意 i, γ ->* f i)
   定义体: { MulHom.pi fun i => (g i).toMulHom with
     toFun := fun x i => g i x
     map_one' := funext fun i => (g i).map_one }
@@ -441,8 +441,8 @@ alias MonoidHom.injective_pi := MonoidHom.pi_injective
 alias Pi.monoidHom_injective := MonoidHom.pi_injective
 
 中文:
-定理 MonoidHom.pi_injective
-  结论: {γ : Type w} [Nonempty I] [MulOneClass γ]
+定理 幺半群态射.pi_injective
+  结论: {γ : 类型 w} [非空 I] [MulOne类 γ]
   证明: MulHom.pi_injective (fun i => (g i).toMulHom) hg
 
 @[to_additive (attr := deprecated (since := "2026-05-29"))]
@@ -485,7 +485,7 @@ definition Pi.evalMonoidHom
 @[simp, norm_cast]
 
 中文:
-定义 Pi.evalMonoidHom
+定义 依赖函数类型.evalMonoidHom
   签名: (i : I)
   定义体: g i
   map_one' := Pi.one_apply i
@@ -509,9 +509,9 @@ lemma Pi.coe_evalMonoidHom
   proof: rfl
 
 中文:
-引理 Pi.coe_evalMonoidHom
+引理 依赖函数类型.coe_evalMonoidHom
   条件: (i : I)
-  结论: ⇑(evalMonoidHom f i) = Function.eval i
+  结论: ⇑(evalMonoidHom f i) = 函数.eval i
   证明: rfl
 -/
 lemma Pi.coe_evalMonoidHom (i : I) : ⇑(evalMonoidHom f i) = Function.eval i := rfl
@@ -532,8 +532,8 @@ definition MonoidHom.piMap
   body: .pi fun i => (g i).comp (Pi.evalMonoidHom M i)
 
 中文:
-定义 MonoidHom.piMap
-  签名: [Π i, MulOneClass (M i)] [Π i, MulOneClass (N i)] (g : Π i, M i ->* N i)
+定义 幺半群态射.piMap
+  签名: [Π i, MulOne类 (M i)] [Π i, MulOne类 (N i)] (g : Π i, M i ->* N i)
   定义体: .pi fun i => (g i).comp (Pi.evalMonoidHom M i)
 
 Depends on / 依赖: Pi.evalMonoidHom, evalMonoidHom
@@ -555,8 +555,8 @@ definition Pi.constMonoidHom
   map_mul' _ _ := rfl
 
 中文:
-定义 Pi.constMonoidHom
-  签名: (α β : 类型) [MulOneClass β]
+定义 依赖函数类型.constMonoidHom
+  签名: (α β : 类型) [MulOne类 β]
   定义体: Function.const α
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -586,8 +586,8 @@ definition MonoidHom.coeFn
   map_mul' _ _ := rfl
 
 中文:
-定义 MonoidHom.coeFn
-  签名: (α β : 类型) [MulOneClass α] [CommMonoid β]
+定义 幺半群态射.coeFn
+  签名: (α β : 类型) [MulOne类 α] [交换幺半群 β]
   定义体: g
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -613,8 +613,8 @@ definition MonoidHom.compLeft
   map_mul' _ _ := by ext; simp
 
 中文:
-定义 MonoidHom.compLeft
-  签名: {α β : 类型} [MulOneClass α] [MulOneClass β] (f : α ->* β)
+定义 幺半群态射.compLeft
+  签名: {α β : 类型} [MulOne类 α] [MulOne类 β] (f : α ->* β)
   定义体: f ∘ h
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -659,8 +659,8 @@ theorem OneHom.mulSingle_apply
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-定理 OneHom.mulSingle_apply
-  条件: [对任意 i, One <| f i] (i : I) (x : f i)
+定理 幺态射.mulSingle_apply
+  条件: [对任意 i, 幺 <| f i] (i : I) (x : f i)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -678,8 +678,8 @@ theorem OneHom.coe_mulSingle
   proof: rfl
 
 中文:
-定理 OneHom.coe_mulSingle
-  条件: [对任意 i, One <| f i] (i : I)
+定理 幺态射.coe_mulSingle
+  条件: [对任意 i, 幺 <| f i] (i : I)
   证明: rfl
 -/
 theorem OneHom.coe_mulSingle [forall i, One <| f i] (i : I) :
@@ -706,8 +706,8 @@ definition MonoidHom.mulSingle
 @[to_additive (attr := simp)]
 
 中文:
-定义 MonoidHom.mulSingle
-  签名: [对任意 i, MulOneClass <| f i] (i : I)
+定义 幺半群态射.mulSingle
+  签名: [对任意 i, MulOne类 <| f i] (i : I)
   定义体: { OneHom.mulSingle f i with map_mul' := mulSingle_op₂ (fun _ => (· * ·)) (fun _ => one_mul _) _ }
 
 @[to_additive (attr := simp)]
@@ -729,8 +729,8 @@ theorem MonoidHom.mulSingle_apply
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-定理 MonoidHom.mulSingle_apply
-  条件: [对任意 i, MulOneClass <| f i] (i : I) (x : f i)
+定理 幺半群态射.mulSingle_apply
+  条件: [对任意 i, MulOne类 <| f i] (i : I) (x : f i)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -751,8 +751,8 @@ theorem MonoidHom.coe_mulSingle
 @[to_additive]
 
 中文:
-定理 MonoidHom.coe_mulSingle
-  条件: [对任意 i, MulOneClass <| f i] (i : I)
+定理 幺半群态射.coe_mulSingle
+  条件: [对任意 i, MulOne类 <| f i] (i : I)
   证明: rfl
 
 @[to_additive]
@@ -772,8 +772,8 @@ theorem Pi.mulSingle_sup
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_sup
-  条件: [对任意 i, SemilatticeSup (f i)] [对任意 i, One (f i)] (i : I) (x y : f i)
+定理 依赖函数类型.mulSingle_sup
+  条件: [对任意 i, SemilatticeSup (f i)] [对任意 i, 幺 (f i)] (i : I) (x y : f i)
   证明: Function.update_sup _ _ _ _
 
 @[to_additive]
@@ -796,8 +796,8 @@ theorem Pi.mulSingle_inf
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_inf
-  条件: [对任意 i, SemilatticeInf (f i)] [对任意 i, One (f i)] (i : I) (x y : f i)
+定理 依赖函数类型.mulSingle_inf
+  条件: [对任意 i, SemilatticeInf (f i)] [对任意 i, 幺 (f i)] (i : I) (x y : f i)
   证明: Function.update_inf _ _ _ _
 
 @[to_additive]
@@ -820,8 +820,8 @@ theorem Pi.mulSingle_mul
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_mul
-  条件: [对任意 i, MulOneClass <| f i] (i : I) (x y : f i)
+定理 依赖函数类型.mulSingle_mul
+  条件: [对任意 i, MulOne类 <| f i] (i : I) (x y : f i)
   证明: (MonoidHom.mulSingle f i).map_mul x y
 
 @[to_additive]
@@ -844,8 +844,8 @@ theorem Pi.mulSingle_inv
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_inv
-  条件: [对任意 i, Group <| f i] (i : I) (x : f i)
+定理 依赖函数类型.mulSingle_inv
+  条件: [对任意 i, 群 <| f i] (i : I) (x : f i)
   证明: (MonoidHom.mulSingle f i).map_inv x
 
 @[to_additive]
@@ -868,8 +868,8 @@ theorem Pi.mulSingle_div
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_div
-  条件: [对任意 i, Group <| f i] (i : I) (x y : f i)
+定理 依赖函数类型.mulSingle_div
+  条件: [对任意 i, 群 <| f i] (i : I) (x y : f i)
   证明: (MonoidHom.mulSingle f i).map_div x y
 
 @[to_additive]
@@ -892,8 +892,8 @@ theorem Pi.mulSingle_pow
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_pow
-  条件: [对任意 i, Monoid (f i)] (i : I) (x : f i) (n : 自然数)
+定理 依赖函数类型.mulSingle_pow
+  条件: [对任意 i, 幺半群 (f i)] (i : I) (x : f i) (n : 自然数)
   证明: (MonoidHom.mulSingle f i).map_pow x n
 
 @[to_additive]
@@ -914,8 +914,8 @@ theorem Pi.mulSingle_zpow
   proof: (MonoidHom.mulSingle f i).map_zpow x n
 
 中文:
-定理 Pi.mulSingle_zpow
-  条件: [对任意 i, Group (f i)] (i : I) (x : f i) (n : 整数)
+定理 依赖函数类型.mulSingle_zpow
+  条件: [对任意 i, 群 (f i)] (i : I) (x : f i) (n : 整数)
   证明: (MonoidHom.mulSingle f i).map_zpow x n
 
 Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, map_zpow, mulSingle
@@ -942,8 +942,8 @@ theorem Pi.mulSingle_commute
   by_cases i = k <;> simp_all
 
 中文:
-定理 Pi.mulSingle_commute
-  条件: [对任意 i, MulOneClass <| f i]
+定理 依赖函数类型.mulSingle_commute
+  条件: [对任意 i, MulOne类 <| f i]
   证明: by
   intro i j hij x y; ext k
   by_cases i = k <;> simp_all
@@ -969,8 +969,8 @@ theorem Pi.mulSingle_apply_commute
 @[to_additive]
 
 中文:
-定理 Pi.mulSingle_apply_commute
-  条件: [对任意 i, MulOneClass <| f i] (x : 对任意 i, f i) (i j : I)
+定理 依赖函数类型.mulSingle_apply_commute
+  条件: [对任意 i, MulOne类 <| f i] (x : 对任意 i, f i) (i j : I)
   证明: by
   obtain rfl | hij := Decidable.eq_or_ne i j
   · rfl
@@ -1002,8 +1002,8 @@ theorem Pi.update_eq_div_mul_mulSingle
 @[to_additive]
 
 中文:
-定理 Pi.update_eq_div_mul_mulSingle
-  条件: [对任意 i, Group <| f i] (g : 对任意 i : I, f i) (x : f i)
+定理 依赖函数类型.update_eq_div_mul_mulSingle
+  条件: [对任意 i, 群 <| f i] (g : 对任意 i : I, f i) (x : f i)
   证明: by
   ext j
   rcases eq_or_ne i j with (rfl | h)
@@ -1038,8 +1038,8 @@ theorem Pi.mulSingle_mul_mulSingle_eq_mulSingle_mul_mulSingle
   · aesop (add simp [mulSingle_apply])
 
 中文:
-定理 Pi.mulSingle_mul_mulSingle_eq_mulSingle_mul_mulSingle
-  结论: {M : 类型} [CommMonoid M]
+定理 依赖函数类型.mulSingle_mul_mulSingle_eq_mulSingle_mul_mulSingle
+  结论: {M : 类型} [交换幺半群 M]
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · have hk := congr_fun h k
@@ -1102,7 +1102,7 @@ theorem Pi.semiconjBy_iff
 @[to_additive]
 
 中文:
-定理 Pi.semiconjBy_iff
+定理 依赖函数类型.semiconjBy_iff
   条件: {x y z : 对任意 i, f i}
   证明: funext_iff
 
@@ -1148,7 +1148,7 @@ theorem Pi.commute_iff
   proof: semiconjBy_iff
 
 中文:
-定理 Pi.commute_iff
+定理 依赖函数类型.commute_iff
   条件: {x y : 对任意 i, f i}
   结论: Commute x y ↔ 对任意 i, Commute (x i) (y i)
   证明: semiconjBy_iff
@@ -1175,7 +1175,7 @@ theorem update_one
 
 中文:
 定理 update_one
-  条件: [对任意 i, One (f i)] [DecidableEq I] (i : I)
+  条件: [对任意 i, 幺 (f i)] [DecidableEq I] (i : I)
   结论: update (1 : 对任意 i, f i) i 1 = 1
   证明: update_eq_self i (1 : (a : I) -> f a)
 
@@ -1199,7 +1199,7 @@ theorem update_mul
 
 中文:
 定理 update_mul
-  结论: [对任意 i, Mul (f i)] [DecidableEq I] (f₁ f₂ : 对任意 i, f i) (i : I) (x₁ : f i)
+  结论: [对任意 i, 乘法 (f i)] [DecidableEq I] (f₁ f₂ : 对任意 i, f i) (i : I) (x₁ : f i)
   证明: funext fun j => (apply_update₂ (fun _ => (· * ·)) f₁ f₂ i x₁ x₂ j).symm
 
 @[to_additive]
@@ -1221,7 +1221,7 @@ theorem update_inv
 
 中文:
 定理 update_inv
-  条件: [对任意 i, Inv (f i)] [DecidableEq I] (f₁ : 对任意 i, f i) (i : I) (x₁ : f i)
+  条件: [对任意 i, 取逆 (f i)] [DecidableEq I] (f₁ : 对任意 i, f i) (i : I) (x₁ : f i)
   证明: funext fun j => (apply_update (fun _ => Inv.inv) f₁ i x₁ j).symm
 
 @[to_additive]
@@ -1243,7 +1243,7 @@ theorem update_div
 
 中文:
 定理 update_div
-  结论: [对任意 i, Div (f i)] [DecidableEq I] (f₁ f₂ : 对任意 i, f i) (i : I) (x₁ : f i)
+  结论: [对任意 i, 除法 (f i)] [DecidableEq I] (f₁ f₂ : 对任意 i, f i) (i : I) (x₁ : f i)
   证明: funext fun j => (apply_update₂ (fun _ => (· / ·)) f₁ f₂ i x₁ x₂ j).symm
 -/
 theorem update_div [forall i, Div (f i)] [DecidableEq I] (f₁ f₂ : forall i, f i) (i : I) (x₁ : f i)
@@ -1310,8 +1310,8 @@ theorem Set.piecewise_mul
 @[to_additive]
 
 中文:
-定理 Set.piecewise_mul
-  结论: [对任意 i, Mul (f i)] (s : Set I) [对任意 i, Decidable (i in s)]
+定理 集合.piecewise_mul
+  结论: [对任意 i, 乘法 (f i)] (s : 集合 I) [对任意 i, 可判定 (i in s)]
   证明: s.piecewise_op₂ f₁ _ _ _ fun _ => (· * ·)
 
 @[to_additive]
@@ -1335,8 +1335,8 @@ theorem Set.piecewise_inv
 @[to_additive]
 
 中文:
-定理 Set.piecewise_inv
-  条件: [对任意 i, Inv (f i)] (s : Set I) [对任意 i, Decidable (i in s)] (f₁ g₁ : 对任意 i, f i)
+定理 集合.piecewise_inv
+  条件: [对任意 i, 取逆 (f i)] (s : 集合 I) [对任意 i, 可判定 (i in s)] (f₁ g₁ : 对任意 i, f i)
   证明: s.piecewise_op f₁ g₁ fun _ x => x⁻¹
 
 @[to_additive]
@@ -1357,8 +1357,8 @@ theorem Set.piecewise_div
   proof: s.piecewise_op₂ f₁ _ _ _ fun _ => (· / ·)
 
 中文:
-定理 Set.piecewise_div
-  结论: [对任意 i, Div (f i)] (s : Set I) [对任意 i, Decidable (i in s)]
+定理 集合.piecewise_div
+  结论: [对任意 i, 除法 (f i)] (s : 集合 I) [对任意 i, 可判定 (i in s)]
   证明: s.piecewise_op₂ f₁ _ _ _ fun _ => (· / ·)
 
 Depends on / 依赖: s.piecewise_op
@@ -1388,8 +1388,8 @@ definition Function.ExtendByOne.hom
   map_mul' f g := by simpa using Function.extend_mul s f g 1 1
 
 中文:
-定义 Function.ExtendByOne.hom
-  签名: [MulOneClass R]
+定义 函数.ExtendByOne.hom
+  签名: [MulOne类 R]
   定义体: Function.extend s f 1
   map_one' := Function.extend_one s
   map_mul' f g := by simpa using Function.extend_mul s f g 1 1
@@ -1421,7 +1421,7 @@ theorem mulSingle_mono
 
 中文:
 定理 mulSingle_mono
-  结论: Monotone (Pi.mulSingle i : f i -> 对任意 i, f i)
+  结论: 递增 (依赖函数类型.mulSingle i : f i -> 对任意 i, f i)
   证明: Function.update_mono
 
 @[to_additive]
@@ -1444,7 +1444,7 @@ theorem mulSingle_strictMono
 
 中文:
 定理 mulSingle_strictMono
-  结论: StrictMono (Pi.mulSingle i : f i -> 对任意 i, f i)
+  结论: 严格递增 (依赖函数类型.mulSingle i : f i -> 对任意 i, f i)
   证明: Function.update_strictMono
 
 @[to_additive]
@@ -1467,7 +1467,7 @@ lemma mulSingle_comp_equiv
 
 中文:
 引理 mulSingle_comp_equiv
-  结论: {m n : 类型} [DecidableEq n] [DecidableEq m] [One α] (σ : n ≃ m)
+  结论: {m n : 类型} [DecidableEq n] [DecidableEq m] [幺 α] (σ : n ≃ m)
   证明: by
   ext x
   aesop (add simp Pi.mulSingle_apply)
@@ -1499,8 +1499,8 @@ theorem curry_one
 
 中文:
 定理 curry_one
-  条件: [对任意 a b, One (γ a b)]
-  结论: Sigma.curry (1 : (i : Σ a, β a) -> γ i.1 i.2) = 1
+  条件: [对任意 a b, 幺 (γ a b)]
+  结论: 依赖和类型.curry (1 : (i : Σ a, β a) -> γ i.1 i.2) = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1522,8 +1522,8 @@ theorem uncurry_one
 
 中文:
 定理 uncurry_one
-  条件: [对任意 a b, One (γ a b)]
-  结论: Sigma.uncurry (1 : 对任意 a b, γ a b) = 1
+  条件: [对任意 a b, 幺 (γ a b)]
+  结论: 依赖和类型.uncurry (1 : 对任意 a b, γ a b) = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1544,7 +1544,7 @@ theorem curry_mul
 
 中文:
 定理 curry_mul
-  条件: [对任意 a b, Mul (γ a b)] (x y : (i : Σ a, β a) -> γ i.1 i.2)
+  条件: [对任意 a b, 乘法 (γ a b)] (x y : (i : Σ a, β a) -> γ i.1 i.2)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1566,7 +1566,7 @@ theorem uncurry_mul
 
 中文:
 定理 uncurry_mul
-  条件: [对任意 a b, Mul (γ a b)] (x y : 对任意 a b, γ a b)
+  条件: [对任意 a b, 乘法 (γ a b)] (x y : 对任意 a b, γ a b)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1588,7 +1588,7 @@ theorem curry_inv
 
 中文:
 定理 curry_inv
-  条件: [对任意 a b, Inv (γ a b)] (x : (i : Σ a, β a) -> γ i.1 i.2)
+  条件: [对任意 a b, 取逆 (γ a b)] (x : (i : Σ a, β a) -> γ i.1 i.2)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1610,7 +1610,7 @@ theorem uncurry_inv
 
 中文:
 定理 uncurry_inv
-  条件: [对任意 a b, Inv (γ a b)] (x : 对任意 a b, γ a b)
+  条件: [对任意 a b, 取逆 (γ a b)] (x : 对任意 a b, γ a b)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1633,7 +1633,7 @@ theorem curry_mulSingle
 
 中文:
 定理 curry_mulSingle
-  结论: [DecidableEq α] [对任意 a, DecidableEq (β a)] [对任意 a b, One (γ a b)]
+  结论: [DecidableEq α] [对任意 a, DecidableEq (β a)] [对任意 a b, 幺 (γ a b)]
   证明: by
   simp only [Pi.mulSingle, Sigma.curry_update, Sigma.curry_one, Pi.one_apply]
 
@@ -1658,7 +1658,7 @@ theorem uncurry_mulSingle_mulSingle
 
 中文:
 定理 uncurry_mulSingle_mulSingle
-  结论: [DecidableEq α] [对任意 a, DecidableEq (β a)] [对任意 a b, One (γ a b)]
+  结论: [DecidableEq α] [对任意 a, DecidableEq (β a)] [对任意 a b, 幺 (γ a b)]
   证明: by
   rw [← curry_mulSingle ⟨a]; rw [b⟩]; rw [uncurry_curry]
 

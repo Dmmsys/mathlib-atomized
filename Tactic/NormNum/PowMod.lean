@@ -47,7 +47,7 @@ structure IsNatPowModT
     - run' : p -> Nat.mod (Nat.pow a b) m = c
 
 中文:
-结构 IsNatPowModT
+结构 是自然数PowModT
   参数: (p : 命题) (a b m c : 自然数)
   公理与运算 (1 个):
     - run' : p -> 自然数.mod (自然数.pow a b) m = c
@@ -63,7 +63,7 @@ theorem IsNatPowModT.run
   proof: p.run' (congr_arg (fun x => x % m) (Nat.pow_one a))
 
 中文:
-定理 IsNatPowModT.run
+定理 是自然数PowModT.run
   证明: p.run' (congr_arg (fun x => x % m) (Nat.pow_one a))
 
 Depends on / 依赖: Nat.pow_one, congr_arg, p.run, pow_one
@@ -81,8 +81,8 @@ theorem IsNatPowModT.trans
   proof: ⟨h2.run' ∘ h1.run'⟩
 
 中文:
-定理 IsNatPowModT.trans
-  结论: (h1 : Is自然数PowModT p a b m c)
+定理 是自然数PowModT.trans
+  结论: (h1 : 是自然数PowModT p a b m c)
   证明: ⟨h2.run' ∘ h1.run'⟩
 
 Depends on / 依赖: h1.run, h2.run
@@ -99,7 +99,7 @@ theorem IsNatPowModT.bit0
   proof: ⟨fun h1 => by simp only [two_mul, Nat.pow_eq, pow_add, ← h1, Nat.mul_eq]; exact Nat.mul_mod ..⟩
 
 中文:
-定理 IsNatPowModT.bit0
+定理 是自然数PowModT.bit0
   证明: ⟨fun h1 => by simp only [two_mul, Nat.pow_eq, pow_add, ← h1, Nat.mul_eq]; exact Nat.mul_mod ..⟩
 
 Depends on / 依赖: Nat.mul_eq, Nat.mul_mod, Nat.pow_eq, mul_eq, mul_mod, pow_add, pow_eq, two_mul
@@ -193,7 +193,7 @@ theorem IsNatPowModT.bit1
     rw [pow_add]; rw [two_mul]; rw [pow_add]; rw [pow_one]; rw [Nat.mul_mod (a ^ b % m) a]; rw [Nat.mod_mod]; rw [← Nat.mul_mod (a ^ b) a]; rw [← Nat.mul_mod]; rw [mul_assoc]⟩
 
 中文:
-定理 IsNatPowModT.bit1
+定理 是自然数PowModT.bit1
   证明: ⟨by
     rintro rfl
     change a ^ (2 * b + 1) % m = (a ^ b % m) * ((a ^ b % m * a) % m) % m
@@ -227,7 +227,7 @@ haveI : m =Q 1 := ⟨⟩
         ⟨q(nat
 
 中文:
-定义 evalNatPowMod
+定义 eval自然数PowMod
   签名: (a b m : Q(自然数))
   定义体: if b.natLit! = 0 then
 haveI : b =Q 0 := ⟨⟩

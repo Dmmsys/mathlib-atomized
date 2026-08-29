@@ -143,7 +143,7 @@ instance productive_ofSeq
 
 中文:
 实例 productive_ofSeq
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: ⟨fun n => by rw [get?_ofSeq]; infer_instance⟩
 
 Depends on / 依赖: _ofSeq, infer_instance
@@ -227,7 +227,7 @@ theorem toSeq_ofSeq
 
 中文:
 定理 toSeq_ofSeq
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: toSeq (ofSeq s) = s
   证明: by
   apply Subtype.ext; funext n

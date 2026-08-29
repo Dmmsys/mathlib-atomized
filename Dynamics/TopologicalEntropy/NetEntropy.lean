@@ -73,7 +73,7 @@ definition IsDynNetIn
 
 中文:
 定义 IsDynNetIn
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数) (s : Set X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数) (s : 集合 X)
   定义体: s subseteq F ∧ s.PairwiseDisjoint fun x : X => ball x (dynEntourage T U n)
 
 Depends on / 依赖: PairwiseDisjoint, dynEntourage, s.PairwiseDisjoint, subseteq
@@ -172,7 +172,7 @@ lemma IsDynNetIn.card_le_card_of_isDynCoverOf
 
 中文:
 引理 IsDynNetIn.card_le_card_of_isDynCoverOf
-  结论: {s t : Finset X}
+  结论: {s t : 有限集 X}
   证明: by
   have (x : X) (x_s : x in s) : exists z in t, z in ball x (dynEntourage T U n) := by
     simpa using! ht (hs.1 x_s)
@@ -205,7 +205,7 @@ definition netMaxcard
 
 中文:
 定义 netMaxcard
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   定义体: ⨆ (s : Finset X) (_ : IsDynNetIn T F U n s), (s.card : Nat∞)
 
 Depends on / 依赖: Finset, IsDynNetIn, s.card
@@ -223,7 +223,7 @@ lemma IsDynNetIn.card_le_netMaxcard
 
 中文:
 引理 IsDynNetIn.card_le_netMaxcard
-  条件: {s : Finset X} (h : IsDynNetIn T F U n s)
+  条件: {s : 有限集 X} (h : IsDynNetIn T F U n s)
   证明: le_iSup₂ (α := Nat∞) s h
 -/
 lemma IsDynNetIn.card_le_netMaxcard {s : Finset X} (h : IsDynNetIn T F U n s) :
@@ -240,7 +240,7 @@ lemma netMaxcard_monotone_time
 
 中文:
 引理 netMaxcard_monotone_time
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   证明: fun _ _ m_n => biSup_mono fun _ h => h.of_le m_n
 
 Depends on / 依赖: biSup_mono, h.of_le, of_le
@@ -259,7 +259,7 @@ lemma netMaxcard_antitone
 
 中文:
 引理 netMaxcard_antitone
-  条件: (T : X -> X) (F : Set X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (n : 自然数)
   证明: fun _ _ U_V => biSup_mono fun _ h => h.of_entourage_subset U_V
 
 Depends on / 依赖: biSup_mono, h.of_entourage_subset, of_entourage_subset
@@ -285,7 +285,7 @@ lemma netMaxcard_finite_iff
 
 中文:
 引理 netMaxcard_finite_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   apply Iff.intro <;> intro h
   · obtain ⟨k, k_max⟩ := ENat.ne_top_iff_exists.mp h.ne
@@ -383,7 +383,7 @@ lemma netMaxcard_eq_zero_iff
 
 中文:
 引理 netMaxcard_eq_zero_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [h, netMaxcard_empty]⟩
   rw [eq_empty_iff_forall_notMem]
@@ -419,7 +419,7 @@ lemma one_le_netMaxcard_iff
 
 中文:
 引理 one_le_netMaxcard_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   rw [Order.one_le_iff_ne_zero]; rw [nonempty_iff_ne_empty]
   exact not_iff_not.2 (netMaxcard_eq_zero_iff T F U n)
@@ -448,7 +448,7 @@ lemma netMaxcard_zero
 
 中文:
 引理 netMaxcard_zero
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   结论: netMaxcard T F U 0 = 1
   证明: by
   apply (iSup₂_le _).antisymm ((one_le_netMaxcard_iff T F U 0).2 h)
@@ -485,7 +485,7 @@ lemma netMaxcard_univ
 
 中文:
 引理 netMaxcard_univ
-  条件: (T : X -> X) (h : F.Nonempty) (n : 自然数)
+  条件: (T : X -> X) (h : F.非空) (n : 自然数)
   结论: netMaxcard T F univ n = 1
   证明: by
   apply (iSup₂_le _).antisymm ((one_le_netMaxcard_iff T F univ n).2 h)
@@ -523,7 +523,7 @@ lemma netMaxcard_infinite_iff
 
 中文:
 引理 netMaxcard_infinite_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   apply Iff.intro <;> intro h
   · intro k
@@ -567,7 +567,7 @@ lemma netMaxcard_le_coverMincard
 
 中文:
 引理 netMaxcard_le_coverMincard
-  条件: (T : X -> X) (F : Set X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (n : 自然数)
   证明: by
   rcases eq_top_or_lt_top (coverMincard T F U n) with h | h
   · exact h ▸ le_top
@@ -603,7 +603,7 @@ lemma coverMincard_le_netMaxcard
 
 中文:
 引理 coverMincard_le_netMaxcard
-  条件: (T : X -> X) (F : Set X) [U.IsRefl] [U.IsSymm] (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) [U.IsRefl] [U.是Symm] (n : 自然数)
   证明: by
   classical
   -- WLOG, there exists a maximal dynamical net `s`.
@@ -657,7 +657,7 @@ definition netEntropyEntourage
 
 中文:
 定义 netEntropyEntourage
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   定义体: expGrowthSup fun n : Nat => netMaxcard T F U n
 
 Depends on / 依赖: expGrowthSup, netMaxcard
@@ -675,7 +675,7 @@ definition netEntropyInfEntourage
 
 中文:
 定义 netEntropyInfEntourage
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   定义体: expGrowthInf fun n : Nat => netMaxcard T F U n
 
 Depends on / 依赖: expGrowthInf, netMaxcard
@@ -693,7 +693,7 @@ lemma netEntropyInfEntourage_antitone
 
 中文:
 引理 netEntropyInfEntourage_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ U_V => expGrowthInf_monotone fun n => ENat.toENNReal_mono (netMaxcard_antitone T F n U_V)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthInf_monotone, netMaxcard_antitone, toENNReal_mono
@@ -712,7 +712,7 @@ lemma netEntropyEntourage_antitone
 
 中文:
 引理 netEntropyEntourage_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ U_V => expGrowthSup_monotone fun n => ENat.toENNReal_mono (netMaxcard_antitone T F n U_V)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthSup_monotone, netMaxcard_antitone, toENNReal_mono
@@ -733,7 +733,7 @@ lemma netEntropyInfEntourage_le_netEntropyEntourage
 
 中文:
 引理 netEntropyInfEntourage_le_netEntropyEntourage
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   证明: expGrowthInf_le_expGrowthSup
 
 @[simp]
@@ -810,7 +810,7 @@ lemma netEntropyInfEntourage_nonneg
 
 中文:
 引理 netEntropyInfEntourage_nonneg
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   证明: by
   apply Monotone.expGrowthInf_nonneg
   · exact fun _ _ m_n => ENat.toENNReal_mono (netMaxcard_monotone_time T F U m_n)
@@ -840,7 +840,7 @@ lemma netEntropyEntourage_nonneg
 
 中文:
 引理 netEntropyEntourage_nonneg
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   证明: (netEntropyInfEntourage_nonneg T h U).trans (netEntropyInfEntourage_le_netEntropyEntourage T F U)
 
 Depends on / 依赖: netEntropyInfEntourage_le_netEntropyEntourage, netEntropyInfEntourage_nonneg
@@ -861,7 +861,7 @@ lemma netEntropyInfEntourage_univ
 
 中文:
 引理 netEntropyInfEntourage_univ
-  条件: (T : X -> X) {F : Set X} (h : F.Nonempty)
+  条件: (T : X -> X) {F : 集合 X} (h : F.非空)
   证明: by
   rw [← expGrowthInf_const one_ne_zero one_ne_top]; rw [netEntropyInfEntourage]
   simp only [netMaxcard_univ T h, ENat.toENNReal_one]
@@ -885,7 +885,7 @@ lemma netEntropyEntourage_univ
 
 中文:
 引理 netEntropyEntourage_univ
-  条件: (T : X -> X) {F : Set X} (h : F.Nonempty)
+  条件: (T : X -> X) {F : 集合 X} (h : F.非空)
   证明: by
   rw [← expGrowthSup_const one_ne_zero one_ne_top]; rw [netEntropyEntourage]
   simp only [netMaxcard_univ T h, ENat.toENNReal_one]
@@ -907,7 +907,7 @@ lemma netEntropyInfEntourage_le_coverEntropyInfEntourage
 
 中文:
 引理 netEntropyInfEntourage_le_coverEntropyInfEntourage
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: expGrowthInf_monotone fun n => ENat.toENNReal_mono (netMaxcard_le_coverMincard T F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthInf_monotone, netMaxcard_le_coverMincard, toENNReal_mono
@@ -926,7 +926,7 @@ lemma coverEntropyInfEntourage_le_netEntropyInfEntourage
 
 中文:
 引理 coverEntropyInfEntourage_le_netEntropyInfEntourage
-  结论: (T : X -> X) (F : Set X) [U.IsRefl]
+  结论: (T : X -> X) (F : 集合 X) [U.IsRefl]
   证明: expGrowthInf_monotone fun n => ENat.toENNReal_mono (coverMincard_le_netMaxcard T F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, coverMincard_le_netMaxcard, expGrowthInf_monotone, toENNReal_mono
@@ -946,7 +946,7 @@ lemma netEntropyEntourage_le_coverEntropyEntourage
 
 中文:
 引理 netEntropyEntourage_le_coverEntropyEntourage
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: expGrowthSup_monotone fun n => ENat.toENNReal_mono (netMaxcard_le_coverMincard T F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthSup_monotone, netMaxcard_le_coverMincard, toENNReal_mono
@@ -965,7 +965,7 @@ lemma coverEntropyEntourage_le_netEntropyEntourage
 
 中文:
 引理 coverEntropyEntourage_le_netEntropyEntourage
-  条件: (T : X -> X) (F : Set X) [U.IsRefl] [U.IsSymm]
+  条件: (T : X -> X) (F : 集合 X) [U.IsRefl] [U.是Symm]
   证明: expGrowthSup_monotone fun n => ENat.toENNReal_mono (coverMincard_le_netMaxcard T F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, coverMincard_le_netMaxcard, expGrowthSup_monotone, toENNReal_mono
@@ -1062,7 +1062,7 @@ lemma coverEntropyInf_eq_iSup_basis_netEntropyInfEntourage
 
 中文:
 引理 coverEntropyInf_eq_iSup_basis_netEntropyInfEntourage
-  结论: {ι : Sort*} {p : ι -> 命题}
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: by
   rw [coverEntropyInf_eq_iSup_netEntropyInfEntourage T F]
   apply (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩).antisymm'
@@ -1099,7 +1099,7 @@ lemma coverEntropy_eq_iSup_basis_netEntropyEntourage
 
 中文:
 引理 coverEntropy_eq_iSup_basis_netEntropyEntourage
-  结论: {ι : Sort*} {p : ι -> 命题}
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: by
   rw [coverEntropy_eq_iSup_netEntropyEntourage T F]
   apply (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩).antisymm'

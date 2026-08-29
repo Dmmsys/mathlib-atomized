@@ -60,7 +60,7 @@ theorem mem_derangements_iff_fixedPoints_eq_empty
 
 中文:
 定理 mem_derangements_iff_fixedPoints_eq_empty
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   证明: Set.eq_empty_iff_forall_notMem.symm
 
 Depends on / 依赖: Set.eq_empty_iff_forall_notMem.symm, eq_empty_iff_forall_notMem
@@ -79,7 +79,7 @@ definition Equiv.derangementsCongr
     intro b; simp only [ne_eq, permCongr_apply, symm_apply_apply, EmbeddingLike.apply_eq_iff_eq]
 
 中文:
-定义 Equiv.derangementsCongr
+定义 等价.derangementsCongr
   签名: (e : α ≃ β)
   定义体: e.permCongr.subtypeEquiv fun {f} => e.forall_congr by
     intro b; simp only [ne_eq, permCongr_apply, symm_apply_apply, EmbeddingLike.apply_eq_iff_eq]
@@ -207,7 +207,7 @@ definition RemoveNone.fiber
 
 中文:
 定义 RemoveNone.fiber
-  签名: (a : Option α)
+  签名: (a : 选项类型 α)
   定义体: { f : Perm α | (a, f) in Equiv.Perm.decomposeOption '' derangements (Option α) }
 
 Depends on / 依赖: Equiv.Perm.decomposeOption, decomposeOption, derangements
@@ -227,7 +227,7 @@ theorem RemoveNone.mem_fiber
 
 中文:
 定理 RemoveNone.mem_fiber
-  条件: (a : Option α) (f : Perm α)
+  条件: (a : 选项类型 α) (f : 置换 α)
   证明: by
   simp [RemoveNone.fiber, derangements]
 

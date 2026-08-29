@@ -36,10 +36,10 @@ class IsCountablyGenerated
     - out : exists s : Set (Set α), s.Countable ∧ f = generate s
 
 中文:
-类 IsCountablyGenerated
-  参数: (f : Filter α)
+类 是余untablyGenerated
+  参数: (f : 滤子 α)
   公理与运算 (1 个):
-    - out : 存在 s : Set (Set α), s.Countable ∧ f = generate s
+    - out : 存在 s : 集合 (集合 α), s.可数 ∧ f = generate s
 -/
 class IsCountablyGenerated (f : Filter α) : Prop where
   /-- There exists a countable set that generates the filter. -/
@@ -56,11 +56,11 @@ structure IsCountableBasis
     - countable : (Set.ofPred p).Countable
 
 中文:
-结构 IsCountableBasis
-  参数: (p : ι -> 命题) (s : ι -> Set α)
-  继承: IsBasis p s
+结构 是余untableBasis
+  参数: (p : ι -> 命题) (s : ι -> 集合 α)
+  继承: 是基 p s
   公理与运算 (1 个):
-    - countable : (Set.ofPred p).Countable
+    - countable : (集合.ofPred p).可数
 -/
 structure IsCountableBasis (p : ι -> Prop) (s : ι -> Set α) : Prop extends IsBasis p s where
   /-- The set of `i` that satisfy the predicate `p` is countable. -/
@@ -77,11 +77,11 @@ structure HasCountableBasis
     - countable : (Set.ofPred p).Countable
 
 中文:
-结构 HasCountableBasis
-  参数: (l : Filter α) (p : ι -> 命题) (s : ι -> Set α)
-  继承: HasBasis l p s
+结构 有余untableBasis
+  参数: (l : 滤子 α) (p : ι -> 命题) (s : ι -> 集合 α)
+  继承: 有基 l p s
   公理与运算 (1 个):
-    - countable : (Set.ofPred p).Countable
+    - countable : (集合.ofPred p).可数
 -/
 structure HasCountableBasis (l : Filter α) (p : ι -> Prop) (s : ι -> Set α) : Prop
     extends HasBasis l p s where
@@ -99,11 +99,11 @@ structure CountableFilterBasis
     - countable : sets.Countable
 
 中文:
-结构 CountableFilterBasis
+结构 余untableFilterBasis
   参数: (α : 类型)
-  继承: FilterBasis α
+  继承: 滤子基 α
   公理与运算 (1 个):
-    - countable : sets.Countable
+    - countable : sets.可数
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrRight, AlgEquiv.refl, Algebra, Algebra.IsFiniteSplit.nonempty_algEquiv_fun, IsFiniteSplit, TensorProduct, TensorProduct.congr, TensorProduct.piRight, TensorProduct.rid, nonempty_algEquiv_fun, piCongrRight, piRight
 -/
@@ -121,8 +121,8 @@ instance Nat.inhabitedCountableFilterBasis
   body: ⟨⟨default, countable_range fun n => Ici n⟩⟩
 
 中文:
-实例 Nat.inhabitedCountableFilterBasis
-  签名: : Inhabited (CountableFilterBasis 自然数)
+实例 自然数.inhabitedCountableFilterBasis
+  签名: : 可居 (余untableFilterBasis 自然数)
   定义体: ⟨⟨default, countable_range fun n => Ici n⟩⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrLeft, Fintype, Fintype.equivFin, countable_range, equivFin, nonempty_fintype, piCongrLeft
@@ -139,8 +139,8 @@ theorem HasCountableBasis.isCountablyGenerated
   proof: ⟨⟨{ t | exists i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
 
 中文:
-定理 HasCountableBasis.isCountablyGenerated
-  结论: {f : Filter α} {p : ι -> 命题} {s : ι -> Set α}
+定理 有余untableBasis.isCountablyGenerated
+  结论: {f : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: ⟨⟨{ t | exists i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
 
 Depends on / 依赖: countable, eq_generate, h.countable.image, h.toHasBasis.eq_generate, toHasBasis
@@ -158,8 +158,8 @@ theorem HasBasis.isCountablyGenerated
   proof: HasCountableBasis.isCountablyGenerated ⟨h, to_countable _⟩
 
 中文:
-定理 HasBasis.isCountablyGenerated
-  结论: [Countable ι] {f : Filter α} {p : ι -> 命题} {s : ι -> Set α}
+定理 有基.isCountablyGenerated
+  结论: [可数 ι] {f : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: HasCountableBasis.isCountablyGenerated ⟨h, to_countable _⟩
 
 Depends on / 依赖: HasCountableBasis, HasCountableBasis.isCountablyGenerated, isCountablyGenerated, to_countable
@@ -184,7 +184,7 @@ theorem antitone_seq_of_seq
 
 中文:
 定理 antitone_seq_of_seq
-  条件: (s : 自然数 -> Set α)
+  条件: (s : 自然数 -> 集合 α)
   证明: by
   use fun n => ⋂ m <= n, s m; constructor
   · exact fun i j hij => biInter_mono (Iic_subset_Iic.2 hij) fun n _ => Subset.rfl
@@ -217,7 +217,7 @@ theorem countable_biInf_eq_iInf_seq
 
 中文:
 定理 countable_biInf_eq_iInf_seq
-  结论: [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
+  结论: [完备格 α] {B : 集合 ι} (Bcbl : B.可数)
   证明: let ⟨g, hg⟩ := Bcbl.exists_eq_range Bne
   ⟨g, hg.symm ▸ iInf_range⟩
 
@@ -243,7 +243,7 @@ theorem countable_biInf_eq_iInf_seq'
 
 中文:
 定理 countable_biInf_eq_iInf_seq'
-  结论: [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
+  结论: [完备格 α] {B : 集合 ι} (Bcbl : B.可数)
   证明: by
   rcases B.eq_empty_or_nonempty with hB | Bnonempty
   · rw [hB, iInf_emptyset]
@@ -271,7 +271,7 @@ theorem countable_biInf_principal_eq_seq_iInf
 
 中文:
 定理 countable_biInf_principal_eq_seq_iInf
-  条件: {B : Set (Set α)} (Bcbl : B.Countable)
+  条件: {B : 集合 (集合 α)} (Bcbl : B.可数)
   证明: countable_biInf_eq_iInf_seq' Bcbl 𝓟 principal_univ
 
 Depends on / 依赖: countable_biInf_eq_iInf_seq, principal_univ
@@ -291,8 +291,8 @@ theorem HasAntitoneBasis.mem_iff
   proof: hs.toHasBasis.mem_iff.trans by simp only [true_and]
 
 中文:
-定理 HasAntitoneBasis.mem_iff
-  结论: [Preorder ι] {l : Filter α} {s : ι -> Set α}
+定理 有AntitoneBasis.mem_iff
+  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
   证明: hs.toHasBasis.mem_iff.trans by simp only [true_and]
 -/
 protected theorem HasAntitoneBasis.mem_iff [Preorder ι] {l : Filter α} {s : ι -> Set α}
@@ -308,8 +308,8 @@ theorem HasAntitoneBasis.mem
   proof: hs.toHasBasis.mem_of_mem trivial
 
 中文:
-定理 HasAntitoneBasis.mem
-  结论: [Preorder ι] {l : Filter α} {s : ι -> Set α}
+定理 有AntitoneBasis.mem
+  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
   证明: hs.toHasBasis.mem_of_mem trivial
 -/
 protected theorem HasAntitoneBasis.mem [Preorder ι] {l : Filter α} {s : ι -> Set α}
@@ -326,8 +326,8 @@ theorem HasAntitoneBasis.hasBasis_ge
     ⟨j, trivial, Subset.rfl⟩
 
 中文:
-定理 HasAntitoneBasis.hasBasis_ge
-  结论: [Preorder ι] [IsDirectedOrder ι] {l : Filter α}
+定理 有AntitoneBasis.hasBasis_ge
+  结论: [预序 ι] [IsDirectedOrder ι] {l : 滤子 α}
   证明: hs.1.to_hasBasis (fun j _ => (exists_ge_ge i j).imp fun _k hk => ⟨hk.1, hs.2 hk.2⟩) fun j _ =>
     ⟨j, trivial, Subset.rfl⟩
 
@@ -353,8 +353,8 @@ theorem HasBasis.exists_antitone_subbasis
   let x : 
 
 中文:
-定理 HasBasis.exists_antitone_subbasis
-  结论: {f : Filter α} [h : f.IsCountablyGenerated]
+定理 有基.存在_antitone_subbasis
+  结论: {f : 滤子 α} [h : f.是余untablyGenerated]
   证明: by
   obtain ⟨x', hx'⟩ : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i) := by
     rcases h with ⟨s, hsc, rfl⟩
@@ -399,8 +399,8 @@ theorem exists_antitone_basis
   ⟨x, hx⟩
 
 中文:
-定理 exists_antitone_basis
-  条件: (f : Filter α) [f.IsCountablyGenerated]
+定理 存在_antitone_basis
+  条件: (f : 滤子 α) [f.是余untablyGenerated]
   证明: let ⟨x, _, hx⟩ := f.basis_sets.exists_antitone_subbasis
   ⟨x, hx⟩
 
@@ -421,8 +421,8 @@ theorem exists_antitone_seq
   ⟨x, hx.antitone, by simp [hx.1.mem_iff]⟩
 
 中文:
-定理 exists_antitone_seq
-  条件: (f : Filter α) [f.IsCountablyGenerated]
+定理 存在_antitone_seq
+  条件: (f : 滤子 α) [f.是余untablyGenerated]
   证明: let ⟨x, hx⟩ := f.exists_antitone_basis
   ⟨x, hx.antitone, by simp [hx.1.mem_iff]⟩
 
@@ -445,8 +445,8 @@ instance Inf.isCountablyGenerated
   exact HasCountableBasis.isCountablyGenerated ⟨hs.1.inf ht.1, Set.to_countable _⟩
 
 中文:
-实例 Inf.isCountablyGenerated
-  签名: (f g : Filter α) [IsCountablyGenerated f]
+实例 下确界.isCountablyGenerated
+  签名: (f g : 滤子 α) [是余untablyGenerated f]
   定义体: by
   rcases f.exists_antitone_basis with ⟨s, hs⟩
   rcases g.exists_antitone_basis with ⟨t, ht⟩
@@ -471,7 +471,7 @@ instance map.isCountablyGenerated
 
 中文:
 实例 map.isCountablyGenerated
-  签名: (l : Filter α) [l.IsCountablyGenerated] (f : α -> β)
+  签名: (l : 滤子 α) [l.是余untablyGenerated] (f : α -> β)
   定义体: let ⟨_x, hxl⟩ := l.exists_antitone_basis
   (hxl.map _).isCountablyGenerated
 
@@ -493,7 +493,7 @@ instance comap.isCountablyGenerated
 
 中文:
 实例 comap.isCountablyGenerated
-  签名: (l : Filter β) [l.IsCountablyGenerated] (f : α -> β)
+  签名: (l : 滤子 β) [l.是余untablyGenerated] (f : α -> β)
   定义体: let ⟨_x, hxl⟩ := l.exists_antitone_basis
   (hxl.comap _).isCountablyGenerated
 
@@ -516,8 +516,8 @@ instance Sup.isCountablyGenerated
   exact HasCountableBasis.isCountablyGenerated ⟨hs.1.sup ht.1, Set.to_countable _⟩
 
 中文:
-实例 Sup.isCountablyGenerated
-  签名: (f g : Filter α) [IsCountablyGenerated f]
+实例 上确界.isCountablyGenerated
+  签名: (f g : 滤子 α) [是余untablyGenerated f]
   定义体: by
   rcases f.exists_antitone_basis with ⟨s, hs⟩
   rcases g.exists_antitone_basis with ⟨t, ht⟩
@@ -540,8 +540,8 @@ instance prod.isCountablyGenerated
   body: Filter.Inf.isCountablyGenerated _ _
 
 中文:
-实例 prod.isCountablyGenerated
-  签名: (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
+实例 乘积.isCountablyGenerated
+  签名: (la : 滤子 α) (lb : 滤子 β) [是余untablyGenerated la]
   定义体: Filter.Inf.isCountablyGenerated _ _
 
 Depends on / 依赖: Filter, Filter.Inf.isCountablyGenerated, isCountablyGenerated
@@ -560,7 +560,7 @@ instance coprod.isCountablyGenerated
 
 中文:
 实例 coprod.isCountablyGenerated
-  签名: (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
+  签名: (la : 滤子 α) (lb : 滤子 β) [是余untablyGenerated la]
   定义体: Filter.Sup.isCountablyGenerated _ _
 
 Depends on / 依赖: Filter, Filter.Sup.isCountablyGenerated, isCountablyGenerated
@@ -583,7 +583,7 @@ theorem isCountablyGenerated_seq
 
 中文:
 定理 isCountablyGenerated_seq
-  条件: [Countable ι'] (x : ι' -> Set α)
+  条件: [可数 ι'] (x : ι' -> 集合 α)
   证明: by
   use range x, countable_range x
   rw [generate_eq_biInf]; rw [iInf_range]
@@ -607,7 +607,7 @@ theorem isCountablyGenerated_of_seq
 
 中文:
 定理 isCountablyGenerated_of_seq
-  条件: {f : Filter α} (h : 存在 x : 自然数 -> Set α, f = ⨅ i, 𝓟 (x i))
+  条件: {f : 滤子 α} (h : 存在 x : 自然数 -> 集合 α, f = ⨅ i, 𝓟 (x i))
   证明: by
   rcases h with ⟨x, rfl⟩
   apply isCountablyGenerated_seq
@@ -629,7 +629,7 @@ theorem isCountablyGenerated_biInf_principal
 
 中文:
 定理 isCountablyGenerated_biInf_principal
-  条件: {B : Set (Set α)} (h : B.Countable)
+  条件: {B : 集合 (集合 α)} (h : B.可数)
   证明: isCountablyGenerated_of_seq (countable_biInf_principal_eq_seq_iInf h)
 
 Depends on / 依赖: countable_biInf_principal_eq_seq_iInf, isCountablyGenerated_of_seq
@@ -655,8 +655,8 @@ theorem isCountablyGenerated_iff_exists_antitone_basis
 @[instance]
 
 中文:
-定理 isCountablyGenerated_iff_exists_antitone_basis
-  条件: {f : Filter α}
+定理 isCountablyGenerated_iff_存在_antitone_basis
+  条件: {f : 滤子 α}
   证明: by
   constructor
   · intro h
@@ -692,8 +692,8 @@ theorem isCountablyGenerated_principal
 
 中文:
 定理 isCountablyGenerated_principal
-  条件: (s : Set α)
-  结论: IsCountablyGenerated (𝓟 s)
+  条件: (s : 集合 α)
+  结论: 是余untablyGenerated (𝓟 s)
   证明: isCountablyGenerated_of_seq ⟨fun _ => s, iInf_const.symm⟩
 
 @[instance]
@@ -720,7 +720,7 @@ theorem isCountablyGenerated_pure
 中文:
 定理 isCountablyGenerated_pure
   条件: (a : α)
-  结论: IsCountablyGenerated (pure a)
+  结论: 是余untablyGenerated (pure a)
   证明: by
   rw [← principal_singleton]
   exact isCountablyGenerated_principal _
@@ -746,7 +746,7 @@ theorem isCountablyGenerated_bot
 
 中文:
 定理 isCountablyGenerated_bot
-  结论: IsCountablyGenerated (⊥ : Filter α)
+  结论: 是余untablyGenerated (⊥ : 滤子 α)
   证明: @principal_empty α ▸ isCountablyGenerated_principal _
 
 @[instance]
@@ -767,7 +767,7 @@ theorem isCountablyGenerated_top
 
 中文:
 定理 isCountablyGenerated_top
-  结论: IsCountablyGenerated (⊤ : Filter α)
+  结论: 是余untablyGenerated (⊤ : 滤子 α)
   证明: @principal_univ α ▸ isCountablyGenerated_principal _
 
 Depends on / 依赖: isCountablyGenerated_principal, principal_univ
@@ -790,7 +790,7 @@ instance iInf.isCountablyGenerated
 
 中文:
 实例 iInf.isCountablyGenerated
-  签名: {ι : Sort*} {α : 类型} [Countable ι] (f : ι -> Filter α)
+  签名: {ι : 类型层*} {α : 类型} [可数 ι] (f : ι -> 滤子 α)
   定义体: by
   choose s hs using fun i => exists_antitone_basis (f i)
   rw [← PLift.down_surjective.iInf_comp]
@@ -820,7 +820,7 @@ instance pi.isCountablyGenerated
 
 中文:
 实例 pi.isCountablyGenerated
-  签名: {ι : 类型} {α : ι -> 类型} [Countable ι]
+  签名: {ι : 类型} {α : ι -> 类型} [可数 ι]
   定义体: iInf.isCountablyGenerated _
 
 Depends on / 依赖: iInf.isCountablyGenerated, isCountablyGenerated

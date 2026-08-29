@@ -52,8 +52,8 @@ lemma Algebra.trace_quotient_mk
   simp only [leftMulMatrix_apply, coe_lmul_eq_mul, LinearMap.toMatr
 
 中文:
-引理 Algebra.trace_quotient_mk
-  条件: [IsLocalRing R] (x : S)
+引理 代数.trace_quotient_mk
+  条件: [是局部环 R] (x : S)
   证明: by
   let ι := Module.Free.ChooseBasisIndex R S
   let b : Module.Basis ι R S := Module.Free.chooseBasis R S
@@ -148,8 +148,8 @@ lemma Algebra.trace_quotient_eq_of_isDedekindDomain
     (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp,
 
 中文:
-引理 Algebra.trace_quotient_eq_of_isDedekindDomain
-  结论: (x) [IsDedekindDomain R] [IsDomain S]
+引理 代数.trace_quotient_eq_of_isDedekindDomain
+  结论: (x) [是Dedekind整环 R] [是整环 S]
   证明: by
   let Rₚ := Localization.AtPrime p
   let Sₚ := Localization (Algebra.algebraMapSubmonoid S p.primeCompl)

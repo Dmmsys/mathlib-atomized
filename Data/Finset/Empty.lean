@@ -52,8 +52,8 @@ definition Nonempty
 @[grind =]
 
 中文:
-定义 Nonempty
-  签名: (s : Finset α)
+定义 非空
+  签名: (s : 有限集 α)
   定义体: exists x : α, x in s
 
 @[grind =]
@@ -72,8 +72,8 @@ theorem nonempty_def
 
 中文:
 定理 nonempty_def
-  条件: {s : Finset α}
-  结论: s.Nonempty ↔ 存在 x, x in s
+  条件: {s : 有限集 α}
+  结论: s.非空 ↔ 存在 x, x in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -92,7 +92,7 @@ instance decidableNonempty
 
 中文:
 实例 decidableNonempty
-  签名: {s : Finset α}
+  签名: {s : 有限集 α}
   定义体: decidable_of_iff (exists a in s, true) by simp [Finset.Nonempty]
 
 @[simp, norm_cast]
@@ -114,8 +114,8 @@ theorem coe_nonempty
 
 中文:
 定理 coe_nonempty
-  条件: {s : Finset α}
-  结论: (s : Set α).Nonempty ↔ s.Nonempty
+  条件: {s : 有限集 α}
+  结论: (s : 集合 α).非空 ↔ s.非空
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -139,8 +139,8 @@ alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
 
 中文:
 定理 nonempty_coe_sort
-  条件: {s : Finset α}
-  结论: Nonempty (s : Type _) ↔ s.Nonempty
+  条件: {s : 有限集 α}
+  结论: 非空 (s : 类型 _) ↔ s.非空
   证明: nonempty_subtype
 
 alias ⟨_, Nonempty.to_set⟩ := coe_nonempty
@@ -166,8 +166,8 @@ theorem Nonempty.exists_mem
   proof: h
 
 中文:
-定理 Nonempty.exists_mem
-  条件: {s : Finset α} (h : s.Nonempty)
+定理 非空.存在_mem
+  条件: {s : 有限集 α} (h : s.非空)
   结论: 存在 x : α, x in s
   证明: h
 -/
@@ -184,9 +184,9 @@ theorem Nonempty.mono
   proof: Set.Nonempty.mono hst hs
 
 中文:
-定理 Nonempty.mono
-  条件: {s t : Finset α} (hst : s subseteq t) (hs : s.Nonempty)
-  结论: t.Nonempty
+定理 非空.mono
+  条件: {s t : 有限集 α} (hst : s subseteq t) (hs : s.非空)
+  结论: t.非空
   证明: Set.Nonempty.mono hst hs
 -/
 @[gcongr] theorem Nonempty.mono {s t : Finset α} (hst : s subseteq t) (hs : s.Nonempty) : t.Nonempty :=
@@ -205,8 +205,8 @@ theorem Nonempty.forall_const
 @[simp]
 
 中文:
-定理 Nonempty.forall_const
-  条件: {s : Finset α} (h : s.Nonempty) {p : 命题}
+定理 非空.对任意_const
+  条件: {s : 有限集 α} (h : s.非空) {p : 命题}
   结论: (对任意 x in s, p) ↔ p
   证明: let ⟨x, hx⟩ := h
   ⟨fun h => h x hx, fun h _ _ => h⟩
@@ -228,8 +228,8 @@ theorem forall_mem_const
   proof: (nonempty_coe_sort.mp ‹_›).forall_const
 
 中文:
-定理 forall_mem_const
-  条件: {s : Finset α} [Nonempty s] {p : 命题}
+定理 对任意_mem_const
+  条件: {s : 有限集 α} [非空 s] {p : 命题}
   结论: (对任意 x in s, p) ↔ p
   证明: (nonempty_coe_sort.mp ‹_›).forall_const
 
@@ -248,9 +248,9 @@ theorem Nonempty.to_subtype
   proof: nonempty_coe_sort.2
 
 中文:
-定理 Nonempty.to_subtype
-  条件: {s : Finset α}
-  结论: s.Nonempty -> Nonempty s
+定理 非空.to_subtype
+  条件: {s : 有限集 α}
+  结论: s.非空 -> 非空 s
   证明: nonempty_coe_sort.2
 
 Depends on / 依赖: nonempty_coe_sort
@@ -268,9 +268,9 @@ theorem Nonempty.to_type
   proof: fun ⟨x, _hx⟩ => ⟨x⟩
 
 中文:
-定理 Nonempty.to_type
-  条件: {s : Finset α}
-  结论: s.Nonempty -> Nonempty α
+定理 非空.to_type
+  条件: {s : 有限集 α}
+  结论: s.非空 -> 非空 α
   证明: fun ⟨x, _hx⟩ => ⟨x⟩
 -/
 theorem Nonempty.to_type {s : Finset α} : s.Nonempty -> Nonempty α := fun ⟨x, _hx⟩ => ⟨x⟩
@@ -292,7 +292,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : Finset α
+  签名: : 有限集 α
   定义体: ⟨0, nodup_zero⟩
 -/
 protected def empty : Finset α :=
@@ -308,7 +308,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection (Finset α)
+  签名: EmptyCollection (有限集 α)
   定义体: ⟨Finset.empty⟩
 
 Depends on / 依赖: Finset, Finset.empty
@@ -328,7 +328,7 @@ instance inhabitedFinset
 
 中文:
 实例 inhabitedFinset
-  签名: : Inhabited (Finset α)
+  签名: : 可居 (有限集 α)
   定义体: ⟨∅⟩
 
 @[simp]
@@ -351,7 +351,7 @@ theorem empty_val
 
 中文:
 定理 empty_val
-  结论: (∅ : Finset α).1 = 0
+  结论: (∅ : 有限集 α).1 = 0
   证明: rfl
 
 @[simp, grind ←]
@@ -375,7 +375,7 @@ theorem notMem_empty
 中文:
 定理 notMem_empty
   条件: (a : α)
-  结论: a ∉ (∅ : Finset α)
+  结论: a ∉ (∅ : 有限集 α)
   证明: by
   simp only [mem_def, empty_val, notMem_zero, not_false_iff]
 
@@ -399,7 +399,7 @@ theorem not_nonempty_empty
 
 中文:
 定理 not_nonempty_empty
-  结论: ¬(∅ : Finset α).Nonempty
+  结论: ¬(∅ : 有限集 α).非空
   证明: fun ⟨x, hx⟩ => notMem_empty x hx
 
 @[simp]
@@ -419,7 +419,7 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  结论: (⟨0, nodup_zero⟩ : Finset α) = ∅
+  结论: (⟨0, nodup_zero⟩ : 有限集 α) = ∅
   证明: rfl
 -/
 theorem mk_zero : (⟨0, nodup_zero⟩ : Finset α) = ∅ :=
@@ -437,7 +437,7 @@ notMem_empty a e ▸ h
 
 中文:
 定理 ne_empty_of_mem
-  条件: {a : α} {s : Finset α} (h : a in s)
+  条件: {a : α} {s : 有限集 α} (h : a in s)
   结论: s != ∅
   证明: fun e =>
 notMem_empty a e ▸ h
@@ -457,8 +457,8 @@ theorem Nonempty.ne_empty
 @[simp]
 
 中文:
-定理 Nonempty.ne_empty
-  条件: {s : Finset α} (h : s.Nonempty)
+定理 非空.ne_empty
+  条件: {s : 有限集 α} (h : s.非空)
   结论: s != ∅
   证明: (Exists.elim h) fun _a => ne_empty_of_mem
 
@@ -481,7 +481,7 @@ theorem empty_subset
 
 中文:
 定理 empty_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ subseteq s
   证明: zero_subset _
 
@@ -500,8 +500,8 @@ theorem eq_empty_of_forall_notMem
   proof: eq_of_veq (eq_zero_of_forall_notMem H)
 
 中文:
-定理 eq_empty_of_forall_notMem
-  条件: {s : Finset α} (H : 对任意 x, x ∉ s)
+定理 eq_empty_of_对任意_notMem
+  条件: {s : 有限集 α} (H : 对任意 x, x ∉ s)
   结论: s = ∅
   证明: eq_of_veq (eq_zero_of_forall_notMem H)
 
@@ -522,8 +522,8 @@ theorem eq_empty_iff_forall_notMem
 @[simp]
 
 中文:
-定理 eq_empty_iff_forall_notMem
-  条件: {s : Finset α}
+定理 eq_empty_iff_对任意_notMem
+  条件: {s : 有限集 α}
   结论: s = ∅ ↔ 对任意 x, x ∉ s
   证明: by grind
 
@@ -543,7 +543,7 @@ theorem val_eq_zero
 
 中文:
 定理 val_eq_zero
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s.1 = 0 ↔ s = ∅
   证明: @val_inj _ s ∅
 
@@ -583,7 +583,7 @@ theorem not_ssubset_empty
 
 中文:
 定理 not_ssubset_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ¬s ⊂ ∅
   证明: by grind
 -/
@@ -602,8 +602,8 @@ theorem nonempty_of_ne_empty
 
 中文:
 定理 nonempty_of_ne_empty
-  条件: {s : Finset α} (h : s != ∅)
-  结论: s.Nonempty
+  条件: {s : 有限集 α} (h : s != ∅)
+  结论: s.非空
   证明: exists_mem_of_ne_zero (mt val_eq_zero.1 h)
 
 @[push ←]
@@ -627,8 +627,8 @@ theorem nonempty_iff_ne_empty
 
 中文:
 定理 nonempty_iff_ne_empty
-  条件: {s : Finset α}
-  结论: s.Nonempty ↔ s != ∅
+  条件: {s : 有限集 α}
+  结论: s.非空 ↔ s != ∅
   证明: ⟨Nonempty.ne_empty, nonempty_of_ne_empty⟩
 
 @[simp, push]
@@ -650,8 +650,8 @@ theorem not_nonempty_iff_eq_empty
 
 中文:
 定理 not_nonempty_iff_eq_empty
-  条件: {s : Finset α}
-  结论: ¬s.Nonempty ↔ s = ∅
+  条件: {s : 有限集 α}
+  结论: ¬s.非空 ↔ s = ∅
   证明: nonempty_iff_ne_empty.not.trans not_not
 
 Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.not.trans, not_not
@@ -672,8 +672,8 @@ theorem eq_empty_or_nonempty
 
 中文:
 定理 eq_empty_or_nonempty
-  条件: (s : Finset α)
-  结论: s = ∅ ∨ s.Nonempty
+  条件: (s : 有限集 α)
+  结论: s = ∅ ∨ s.非空
   证明: by_cases Or.inl fun h => Or.inr (nonempty_of_ne_empty h)
 
 @[simp, norm_cast]
@@ -696,7 +696,7 @@ theorem coe_empty
 
 中文:
 定理 coe_empty
-  结论: ((∅ : Finset α) : Set α) = ∅
+  结论: ((∅ : 有限集 α) : 集合 α) = ∅
   证明: by grind
 
 @[simp, norm_cast]
@@ -717,8 +717,8 @@ theorem coe_eq_empty
 
 中文:
 定理 coe_eq_empty
-  条件: {s : Finset α}
-  结论: (s : Set α) = ∅ ↔ s = ∅
+  条件: {s : 有限集 α}
+  结论: (s : 集合 α) = ∅ ↔ s = ∅
   证明: by grind
 
 @[simp]
@@ -738,8 +738,8 @@ theorem isEmpty_coe_sort
 
 中文:
 定理 isEmpty_coe_sort
-  条件: {s : Finset α}
-  结论: IsEmpty (s : Type _) ↔ s = ∅
+  条件: {s : 有限集 α}
+  结论: 是空 (s : 类型 _) ↔ s = ∅
   证明: by
   simpa using @Set.isEmpty_coe_sort α s
 
@@ -758,7 +758,7 @@ instance instIsEmpty
 
 中文:
 实例 instIsEmpty
-  签名: : IsEmpty (∅ : Finset α)
+  签名: : 是空 (∅ : 有限集 α)
   定义体: isEmpty_coe_sort.2 rfl
 
 Depends on / 依赖: AtLeastTwo, Nat.AtLeastTwo, NatCast, instOfNatAtLeastTwo, isEmpty_coe_sort
@@ -777,7 +777,7 @@ theorem eq_empty_of_isEmpty
 
 中文:
 定理 eq_empty_of_isEmpty
-  条件: [IsEmpty α] (s : Finset α)
+  条件: [是空 α] (s : 有限集 α)
   结论: s = ∅
   证明: Finset.eq_empty_of_forall_notMem isEmptyElim
 
@@ -799,7 +799,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Finset α)
+  签名: 有底序 (有限集 α)
   定义体: ∅
   bot_le := empty_subset
 
@@ -822,7 +822,7 @@ theorem bot_eq_empty
 
 中文:
 定理 bot_eq_empty
-  结论: (⊥ : Finset α) = ∅
+  结论: (⊥ : 有限集 α) = ∅
   证明: rfl
 
 @[simp]
@@ -843,7 +843,7 @@ alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
 
 中文:
 定理 empty_ssubset
-  结论: ∅ ⊂ s ↔ s.Nonempty
+  结论: ∅ ⊂ s ↔ s.非空
   证明: (@bot_lt_iff_ne_bot (Finset α) _ _ _).trans nonempty_iff_ne_empty.symm
 
 alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
@@ -867,9 +867,9 @@ theorem exists_mem_empty_iff
   grind
 
 中文:
-定理 exists_mem_empty_iff
+定理 存在_mem_empty_iff
   条件: (p : α -> 命题)
-  结论: (存在 x, x in (∅ : Finset α) ∧ p x) ↔ False
+  结论: (存在 x, x in (∅ : 有限集 α) ∧ p x) ↔ 假
   证明: by
   grind
 -/
@@ -887,9 +887,9 @@ theorem forall_mem_empty_iff
   grind
 
 中文:
-定理 forall_mem_empty_iff
+定理 对任意_mem_empty_iff
   条件: (p : α -> 命题)
-  结论: (对任意 x, x in (∅ : Finset α) -> p x) ↔ True
+  结论: (对任意 x, x in (∅ : 有限集 α) -> p x) ↔ 真
   证明: by
   grind
 -/

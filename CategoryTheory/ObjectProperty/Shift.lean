@@ -85,7 +85,7 @@ lemma shift_zero
 
 中文:
 引理 shift_zero
-  条件: [P.IsClosedUnderIsomorphisms]
+  条件: [P.在同构下封闭]
   结论: P.shift (0 : A) = P
   证明: by
   ext X
@@ -111,7 +111,7 @@ lemma shift_shift
 
 中文:
 引理 shift_shift
-  条件: (a b c : A) (h : a + b = c) [P.IsClosedUnderIsomorphisms]
+  条件: (a b c : A) (h : a + b = c) [P.在同构下封闭]
   证明: by
   ext X
   exact P.prop_iff_of_iso ((shiftFunctorAdd' C a b c h).symm.app X)
@@ -160,7 +160,7 @@ lemma shift_iSup
 
 中文:
 引理 shift_iSup
-  条件: {ι : Sort*} (P : ι -> Object命题erty C) (a : A)
+  条件: {ι : 类型层*} (P : ι -> ObjectProperty C) (a : A)
   证明: by
   ext
   simp [prop_shift_iff]
@@ -182,7 +182,7 @@ class IsStableUnderShiftBy
     - le_shift : P <= P.shift a
 
 中文:
-类 IsStableUnderShiftBy
+类 是StableUnderShiftBy
   参数: (a : A)
   公理与运算 (1 个):
     - le_shift : P <= P.shift a
@@ -200,7 +200,7 @@ lemma le_shift
 
 中文:
 引理 le_shift
-  条件: (a : A) [P.IsStableUnderShiftBy a]
+  条件: (a : A) [P.是StableUnderShiftBy a]
   证明: IsStableUnderShiftBy.le_shift
 
 Depends on / 依赖: IsStableUnderShiftBy, IsStableUnderShiftBy.le_shift, le_shift
@@ -239,10 +239,10 @@ class IsStableUnderShift
     - isStableUnderShiftBy((a : A)) : P.IsStableUnderShiftBy a  [default: by infer_instance]
 
 中文:
-类 IsStableUnderShift
+类 是StableUnderShift
   参数: where
   公理与运算 (1 个):
-    - isStableUnderShiftBy((a : A)) : P.IsStableUnderShiftBy a  [默认: by infer_instance]
+    - isStableUnderShiftBy((a : A)) : P.是StableUnderShiftBy a  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -259,7 +259,7 @@ instance [P.IsStableUnderShift
   signature: A] :
 
 中文:
-实例 [P.IsStableUnderShift
+实例 [P.是StableUnderShift
   签名: A] :
 -/
 instance [P.IsStableUnderShift A] :
@@ -273,7 +273,7 @@ instance [P.IsStableUnderShift
   signature: A]
 
 中文:
-实例 [P.IsStableUnderShift
+实例 [P.是StableUnderShift
   签名: A]
 -/
 instance [P.IsStableUnderShift A]
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderShift (⊥ : Object命题erty C) A
+  签名: 是StableUnderShift (⊥ : ObjectProperty C) A
 -/
 instance : IsStableUnderShift (⊥ : ObjectProperty C) A where
 
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderShift (⊤ : Object命题erty C) A
+  签名: 是StableUnderShift (⊤ : ObjectProperty C) A
 -/
 instance : IsStableUnderShift (⊤ : ObjectProperty C) A where
 
@@ -318,7 +318,7 @@ lemma prop_shift_iff_of_isStableUnderShift
 
 中文:
 引理 prop_shift_iff_of_isStableUnderShift
-  结论: {G : 类型} [AddGroup G] [HasShift C G]
+  结论: {G : 类型} [加法群 G] [有Shift C G]
   证明: by
   refine ⟨fun hX => ?_, P.le_shift g _⟩
   rw [← P.shift_zero G]; rw [← P.shift_shift g (-g) 0 (by simp)]
@@ -344,7 +344,7 @@ definition shiftClosure
 
 中文:
 定义 shiftClosure
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (Y : C) (a : A) (_ : X ≅ Y⟦a⟧), P Y
 -/
 def shiftClosure : ObjectProperty C := fun X => exists (Y : C) (a : A) (_ : X ≅ Y⟦a⟧), P Y
@@ -399,8 +399,8 @@ instance [P.Nonempty]
   body: .mono P.le_shiftClosure
 
 中文:
-实例 [P.Nonempty]
-  签名: : (P.shiftClosure A).Nonempty
+实例 [P.非空]
+  签名: : (P.shiftClosure A).非空
   定义体: .mono P.le_shiftClosure
 
 Depends on / 依赖: P.le_shiftClosure, le_shiftClosure
@@ -449,7 +449,7 @@ lemma shiftClosure_eq_self
 
 中文:
 引理 shiftClosure_eq_self
-  条件: [P.IsClosedUnderIsomorphisms] [P.IsStableUnderShift A]
+  条件: [P.在同构下封闭] [P.是StableUnderShift A]
   证明: by
   refine le_antisymm ?_ P.le_shiftClosure
   rintro X ⟨Y, a, i, hY⟩
@@ -478,7 +478,7 @@ lemma shiftClosure_bot
 
 中文:
 引理 shiftClosure_bot
-  结论: shiftClosure (⊥ : Object命题erty C) A = ⊥
+  结论: shiftClosure (⊥ : ObjectProperty C) A = ⊥
   证明: shiftClosure_eq_self _
 
 @[simp]
@@ -498,7 +498,7 @@ lemma shiftClosure_top
 
 中文:
 引理 shiftClosure_top
-  结论: shiftClosure (⊤ : Object命题erty C) A = ⊤
+  结论: shiftClosure (⊤ : ObjectProperty C) A = ⊤
   证明: shiftClosure_eq_self _
 
 Depends on / 依赖: shiftClosure_eq_self
@@ -516,7 +516,7 @@ lemma shiftClosure_le_iff
 
 中文:
 引理 shiftClosure_le_iff
-  条件: [IsClosedUnderIsomorphisms Q] [Q.IsStableUnderShift A]
+  条件: [在同构下封闭 Q] [Q.是StableUnderShift A]
   证明: ⟨(le_shiftClosure P).trans,
     fun h => (monotone_shiftClosure h).trans (by rw [shiftClosure_eq_self])⟩
 
@@ -539,7 +539,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.shiftClosure A).IsClosedUnderIsomorphisms
+  签名: (P.shiftClosure A).在同构下封闭
   定义体: by
     rintro X Y i ⟨Z, a, i', hZ⟩
     exact ⟨Z, a, i.symm.trans i', hZ⟩
@@ -566,7 +566,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.shiftClosure A).IsStableUnderShift A
+  签名: (P.shiftClosure A).是StableUnderShift A
 -/
 instance : (P.shiftClosure A).IsStableUnderShift A where
 
@@ -580,7 +580,7 @@ lemma isStableUnderShift_iff_shiftClosure_eq_self
 
 中文:
 引理 isStableUnderShift_iff_shiftClosure_eq_self
-  条件: [P.IsClosedUnderIsomorphisms]
+  条件: [P.在同构下封闭]
   证明: ⟨fun _ => shiftClosure_eq_self _, fun h => by rw [← h]; infer_instance⟩
 
 Depends on / 依赖: infer_instance, shiftClosure_eq_self
@@ -603,8 +603,8 @@ instance [P.IsClosedUnderIsomorphisms]
     exact ⟨-a + b, by rwa [P.shift_shift _ _ _ (add_neg_cancel_left a b)]⟩
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
-  签名: (G : 类型) [AddGroup G]
+实例 [P.在同构下封闭]
+  签名: (G : 类型) [加法群 G]
   定义体: IsStableUnderShiftBy.mk by
     rw [shift_iSup]
     intro X hX
@@ -640,7 +640,7 @@ lemma shiftClosure_eq_iSup
 
 中文:
 引理 shiftClosure_eq_iSup
-  条件: [P.IsClosedUnderIsomorphisms] (G : 类型) [AddGroup G] [HasShift C G]
+  条件: [P.在同构下封闭] (G : 类型) [加法群 G] [有Shift C G]
   证明: by
   apply le_antisymm
   · rw [shiftClosure_le_iff]
@@ -696,7 +696,7 @@ instance commShiftι
 
 中文:
 实例 commShiftι
-  签名: : P.ι.CommShift A
+  签名: : P.ι.交换Shift A
   定义体: Functor.CommShift.ofHasShiftOfFullyFaithful _ _ _
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.ofHasShiftOfFullyFaithful, ofHasShiftOfFullyFaithful
@@ -720,7 +720,7 @@ instance [F.CommShift
   body: Functor.CommShift.ofComp (P.liftCompιIso F hF) A
 
 中文:
-实例 [F.CommShift
+实例 [F.交换Shift
   签名: A] :
   定义体: Functor.CommShift.ofComp (P.liftCompιIso F hF) A
 
@@ -739,7 +739,7 @@ instance [F.CommShift
   body: Functor.CommShift.ofComp_compatibility _ _
 
 中文:
-实例 [F.CommShift
+实例 [F.交换Shift
   签名: A] :
   定义体: Functor.CommShift.ofComp_compatibility _ _
 
@@ -760,8 +760,8 @@ instance [P.IsClosedUnderIsomorphisms]
   body: { le_shift _ hY := P.prop_of_iso ((F.commShiftIso n).symm.app _) (P.le_shift n _ hY) }
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
-  签名: (F : E ⥤ C) [F.CommShift A]
+实例 [P.在同构下封闭]
+  签名: (F : E ⥤ C) [F.交换Shift A]
   定义体: { le_shift _ hY := P.prop_of_iso ((F.commShiftIso n).symm.app _) (P.le_shift n _ hY) }
 
 Depends on / 依赖: F.commShiftIso, P.le_shift, P.prop_of_iso, commShiftIso, le_shift, prop_of_iso, symm.app

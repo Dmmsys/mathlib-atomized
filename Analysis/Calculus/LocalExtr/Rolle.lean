@@ -58,8 +58,8 @@ theorem exists_hasDerivAt_eq_zero
 ⟨c, cmem, hc.hasDerivAt_eq_zero hff' c cmem⟩
 
 中文:
-定理 exists_hasDerivAt_eq_zero
-  结论: (hab : a < b) (hfc : ContinuousOn f (Icc a b)) (hfI : f a = f b)
+定理 存在_hasDerivAt_eq_zero
+  结论: (hab : a < b) (hfc : ContinuousOn f (闭区间 a b)) (hfI : f a = f b)
   证明: let ⟨c, cmem, hc⟩ := exists_isLocalExtr_Ioo hab hfc hfI
 ⟨c, cmem, hc.hasDerivAt_eq_zero hff' c cmem⟩
 
@@ -82,8 +82,8 @@ theorem exists_deriv_eq_zero
   ⟨c, cmem, hc.deriv_eq_zero⟩
 
 中文:
-定理 exists_deriv_eq_zero
-  条件: (hab : a < b) (hfc : ContinuousOn f (Icc a b)) (hfI : f a = f b)
+定理 存在_deriv_eq_zero
+  条件: (hab : a < b) (hfc : ContinuousOn f (闭区间 a b)) (hfI : f a = f b)
   证明: let ⟨c, cmem, hc⟩ := exists_isLocalExtr_Ioo hab hfc hfI
   ⟨c, cmem, hc.deriv_eq_zero⟩
 
@@ -105,8 +105,8 @@ theorem exists_hasDerivAt_eq_zero'
 ⟨c, cmem, hc.hasDerivAt_eq_zero hff' c cmem⟩
 
 中文:
-定理 exists_hasDerivAt_eq_zero'
-  结论: (hab : a < b) (hfa : Tendsto f (𝓝[>] a) (𝓝 l))
+定理 存在_hasDerivAt_eq_zero'
+  结论: (hab : a < b) (hfa : 收敛 f (𝓝[>] a) (𝓝 l))
   证明: let ⟨c, cmem, hc⟩ := exists_isLocalExtr_Ioo_of_tendsto hab
     (fun x hx => (hff' x hx).continuousAt.continuousWithinAt) hfa hfb
 ⟨c, cmem, hc.hasDerivAt_eq_zero hff' c cmem⟩
@@ -133,8 +133,8 @@ theorem exists_deriv_eq_zero'
     exact ⟨c, hc, deriv_zero_of_not_differentiableAt hcdiff⟩
 
 中文:
-定理 exists_deriv_eq_zero'
-  结论: (hab : a < b) (hfa : Tendsto f (𝓝[>] a) (𝓝 l))
+定理 存在_deriv_eq_zero'
+  结论: (hab : a < b) (hfa : 收敛 f (𝓝[>] a) (𝓝 l))
   证明: by
   by_cases! h : forall x in Ioo a b, DifferentiableAt Real f x
   · exact exists_hasDerivAt_eq_zero' hab hfa hfb fun x hx => (h x hx).hasDerivAt

@@ -48,7 +48,7 @@ instance isLocalization
 
 中文:
 实例 isLocalization
-  签名: : IsLocalization (M.map <| C (σ := σ)) (MvPolynomial σ S)
+  签名: : 是Localization (M.map <| C (σ := σ)) (多元多项式 σ S)
   定义体: isLocalizedModule_iff_isLocalization.mp (isLocalizedModule_iff_isBaseChange M S _).mpr
     .of_equiv (algebraTensorAlgEquiv _ _).toLinearEquiv fun _ => by simp
 
@@ -114,7 +114,7 @@ definition auxHom
 
 中文:
 定义 auxHom
-  签名: : (MvPolynomial Unit R) ⧸ (Ideal.span { C r * X () - 1 }) ->ₐ[R] S
+  签名: : (多元多项式 单元 R) ⧸ (理想.span { C r * X () - 1 }) ->ₐ[R] S
   定义体: Ideal.Quotient.liftₐ (Ideal.span { C r * X () - 1}) (aeval (fun _ => invSelf r)) by
     intro p hp
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hp
@@ -153,7 +153,7 @@ lemma auxHom_mk
 
 中文:
 引理 auxHom_mk
-  条件: (p : MvPolynomial Unit R)
+  条件: (p : 多元多项式 单元 R)
   证明: rfl
 -/
 private lemma auxHom_mk (p : MvPolynomial Unit R) :
@@ -178,7 +178,7 @@ IsLocalization.Away.lift (S := S) (g := g) r by
 
 中文:
 定义 auxInv
-  签名: : S ->+* (MvPolynomial Unit R) ⧸ Ideal.span { C r * X () - 1 }
+  签名: : S ->+* (多元多项式 单元 R) ⧸ 理想.span { C r * X () - 1 }
   定义体: letI g : R ->+* MvPolynomial Unit R ⧸ (Ideal.span { C r * X () - 1 }) :=
     (Ideal.Quotient.mk _).comp C
 IsLocalization.Away.lift (S := S) (g := g) r by
@@ -212,7 +212,7 @@ lemma auxHom_auxInv
 
 中文:
 引理 auxHom_auxInv
-  结论: (auxHom S r).toRingHom.comp (auxInv S r) = RingHom.id S
+  结论: (auxHom S r).toRingHom.comp (auxInv S r) = 环态射.id S
   证明: by
   apply IsLocalization.ringHom_ext (Submonoid.powers r)
   ext x
@@ -240,7 +240,7 @@ lemma auxInv_auxHom
 
 中文:
 引理 auxInv_auxHom
-  结论: (auxInv S r).comp (auxHom (S := S) r).toRingHom = RingHom.id _
+  结论: (auxInv S r).comp (auxHom (S := S) r).toRingHom = 环态射.id _
   证明: by
   rw [← RingHom.cancel_right (Ideal.Quotient.mk_surjective)]
   ext x
@@ -321,7 +321,7 @@ lemma mvPolynomialQuotientEquiv_apply
 
 中文:
 引理 mvPolynomialQuotientEquiv_apply
-  条件: (p : MvPolynomial Unit R)
+  条件: (p : 多元多项式 单元 R)
   证明: rfl
 
 Depends on / 依赖: invSelf

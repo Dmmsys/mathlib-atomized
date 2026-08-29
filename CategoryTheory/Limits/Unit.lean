@@ -37,7 +37,7 @@ definition punitCone
 
 中文:
 定义 punitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: ⟨⟨⟨⟩⟩, (Functor.punitExt _ _).hom⟩
 
 Depends on / 依赖: Functor, Functor.punitExt, punitExt
@@ -55,7 +55,7 @@ definition punitCocone
 
 中文:
 定义 punitCocone
-  签名: : Cocone F
+  签名: : 余锥 F
   定义体: ⟨⟨⟨⟩⟩, (Functor.punitExt _ _).hom⟩
 
 Depends on / 依赖: Functor, Functor.punitExt, punitExt
@@ -73,7 +73,7 @@ definition punitConeIsLimit
 
 中文:
 定义 punitConeIsLimit
-  签名: {c : Cone F}
+  签名: {c : 锥 F}
   定义体: fun s => eqToHom (by simp [eq_iff_true_of_subsingleton])
 
 Depends on / 依赖: eqToHom, eq_iff_true_of_subsingleton
@@ -91,7 +91,7 @@ definition punitCoconeIsColimit
 
 中文:
 定义 punitCoconeIsColimit
-  签名: {c : Cocone F}
+  签名: {c : 余锥 F}
   定义体: fun s => eqToHom (by simp [eq_iff_true_of_subsingleton])
 
 Depends on / 依赖: eqToHom, eq_iff_true_of_subsingleton
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfSize.{v', v} (Discrete PUnit)
+  签名: 有LimitsOfSize.{v', v} (离散 命题单元)
   定义体: ⟨fun _ _ => ⟨fun _ => ⟨punitCone, punitConeIsLimit⟩⟩⟩
 
 Depends on / 依赖: punitCone, punitConeIsLimit
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfSize.{v', v} (Discrete PUnit)
+  签名: 有余limitsOfSize.{v', v} (离散 命题单元)
   定义体: ⟨fun _ _ => ⟨fun _ => ⟨punitCocone, punitCoconeIsColimit⟩⟩⟩
 
 Depends on / 依赖: punitCocone, punitCoconeIsColimit

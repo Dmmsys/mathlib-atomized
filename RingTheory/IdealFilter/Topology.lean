@@ -62,7 +62,7 @@ definition addGroupFilterBasis
 
 中文:
 定义 addGroupFilterBasis
-  签名: {A : 类型} [Ring A] (F : IdealFilter A)
+  签名: {A : 类型} [环 A] (F : IdealFilter A)
   定义体: {(I : Set A) | I in F}
   nonempty := ⟨_, ⟨_, F.nonempty.choose_spec, rfl⟩⟩
   inter_sets := by
@@ -104,7 +104,7 @@ definition ringFilterBasis
 
 中文:
 定义 ringFilterBasis
-  签名: {A : 类型} [Ring A] {F : IdealFilter A} [F.IsUniform]
+  签名: {A : 类型} [环 A] {F : IdealFilter A} [F.是一致]
   定义体: F.addGroupFilterBasis
   mul' := by
     rintro U ⟨I, hI, rfl⟩
@@ -144,8 +144,8 @@ theorem isUniform_iff_exists_ringFilterBasis
   exact Order.PFilter.mem_of_le (fun x hx => by simpa using (hsub hx)) hJ
 
 中文:
-定理 isUniform_iff_exists_ringFilterBasis
-  条件: {A : 类型} [Ring A] {F : IdealFilter A}
+定理 isUniform_iff_存在_ringFilterBasis
+  条件: {A : 类型} [环 A] {F : IdealFilter A}
   证明: by
   refine ⟨fun _ => ⟨F.ringFilterBasis, rfl⟩, fun ⟨B, hB⟩ => ⟨fun {I} hI a => ?_⟩⟩
   obtain ⟨V, hbasis, hsub⟩ := B.mul_right a (U := I) (hB.ge (by simpa))
@@ -177,7 +177,7 @@ deriving Ring
 
 中文:
 定义 WithIdealFilter
-  签名: {A : 类型} [Ring A]
+  签名: {A : 类型} [环 A]
   定义体: fun _ => A
 deriving Ring
 -/
@@ -200,7 +200,7 @@ abbreviation idealSet
 
 中文:
 缩写 idealSet
-  签名: (I : Ideal A)
+  签名: (I : 理想 A)
   定义体: (I : Set A)
 -/
 abbrev idealSet (I : Ideal A) : Set (WithIdealFilter F) := (I : Set A)
@@ -215,7 +215,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (WithIdealFilter F)
+  签名: : 拓扑空间 (WithIdealFilter F)
   定义体: fast_instance% F.addGroupFilterBasis.topology
 
 Depends on / 依赖: F.addGroupFilterBasis.topology, addGroupFilterBasis, fast_instance, topology
@@ -233,7 +233,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (WithIdealFilter F)
+  签名: : 是拓扑加群 (WithIdealFilter F)
   定义体: F.addGroupFilterBasis.isTopologicalAddGroup
 
 Depends on / 依赖: F.addGroupFilterBasis.isTopologicalAddGroup, addGroupFilterBasis, isTopologicalAddGroup
@@ -259,7 +259,7 @@ lemma mem_nhds_iff
 
 中文:
 引理 mem_nhds_iff
-  条件: {a : (WithIdealFilter F)} {s : Set (WithIdealFilter F)}
+  条件: {a : (WithIdealFilter F)} {s : 集合 (WithIdealFilter F)}
   证明: by
   constructor
   · intro hs
@@ -294,7 +294,7 @@ lemma mem_nhds_zero_iff
 
 中文:
 引理 mem_nhds_zero_iff
-  条件: {s : Set (WithIdealFilter F)}
+  条件: {s : 集合 (WithIdealFilter F)}
   证明: by
   simpa [zero_vadd] using mem_nhds_iff (a := 0) (s := s)
 
@@ -319,7 +319,7 @@ instance instIsLinearTopology
 
 中文:
 实例 instIsLinearTopology
-  签名: : IsLinearTopology (WithIdealFilter F) (WithIdealFilter F)
+  签名: : 是线性拓扑 (WithIdealFilter F) (WithIdealFilter F)
   定义体: IsLinearTopology.mk_of_hasBasis' (R := (WithIdealFilter F))
     (M := (WithIdealFilter F))
     (ι := Ideal A) (S := Ideal A)
@@ -347,7 +347,7 @@ instance instIsTopologicalRing
 
 中文:
 实例 instIsTopologicalRing
-  签名: [F.IsUniform]
+  签名: [F.是一致]
   定义体: F.ringFilterBasis.isTopologicalRing
 
 Depends on / 依赖: F.ringFilterBasis.isTopologicalRing, isTopologicalRing, ringFilterBasis

@@ -47,7 +47,7 @@ theorem addHaar_frontier
 
 中文:
 定理 addHaar_frontier
-  条件: (hs : Convex 实数 s)
+  条件: (hs : 凸 实数 s)
   结论: μ (frontier s) = 0
   证明: by
   /- If `s` is included in a hyperplane, then `frontier s ⊆ closure s` is included in the same
@@ -116,7 +116,7 @@ theorem nullMeasurableSet
 
 中文:
 定理 nullMeasurableSet
-  条件: (hs : Convex 实数 s)
+  条件: (hs : 凸 实数 s)
   结论: NullMeasurableSet s μ
   证明: nullMeasurableSet_of_null_frontier (hs.addHaar_frontier μ)
 -/

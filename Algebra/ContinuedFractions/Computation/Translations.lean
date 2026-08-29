@@ -178,7 +178,7 @@ theorem stream_succ_of_int
 
 中文:
 定理 stream_succ_of_int
-  条件: [IsStrictOrderedRing K] (a : 整数) (n : 自然数)
+  条件: [是StrictOrdered环 K] (a : 整数) (n : 自然数)
   证明: by
   induction n with
   | zero =>
@@ -211,7 +211,7 @@ theorem exists_succ_nth_stream_of_fr_zero
   simpa only [IntFractPair.of, Int.fract, sub_eq_zero] usin
 
 中文:
-定理 exists_succ_nth_stream_of_fr_zero
+定理 存在_succ_nth_stream_of_fr_zero
   结论: {ifp_succ_n : 整数FractPair K}
   证明: by
   -- get the witness from `succ_nth_stream_eq_some_iff` and prove that it has the additional
@@ -299,7 +299,7 @@ theorem IntFractPair.seq1_fst_eq_of
   proof: rfl
 
 中文:
-定理 IntFractPair.seq1_fst_eq_of
+定理 整数FractPair.seq1_fst_eq_of
   结论: (整数FractPair.seq1 v).fst = 整数FractPair.of v
   证明: rfl
 -/
@@ -364,7 +364,7 @@ theorem IntFractPair.get?_seq1_eq_succ_get?_stream
   proof: rfl
 
 中文:
-定理 IntFractPair.get?_seq1_eq_succ_get?_stream
+定理 整数FractPair.get?_seq1_eq_succ_get?_stream
   证明: rfl
 -/
 theorem IntFractPair.get?_seq1_eq_succ_get?_stream :
@@ -437,8 +437,8 @@ theorem IntFractPair.exists_succ_get?_stream_of_gcf_of_get?_eq_some
   simp_all only [Option.some.injEq, exists_eq_left']
 
 中文:
-定理 IntFractPair.exists_succ_get?_stream_of_gcf_of_get?_eq_some
-  结论: {gp_n : Pair K}
+定理 整数FractPair.存在_succ_get?_stream_of_gcf_of_get?_eq_some
+  结论: {gp_n : 对 K}
   证明: by
   obtain ⟨ifp, stream_succ_nth_eq, rfl⟩ :
       exists ifp, IntFractPair.stream v (n + 1) = some ifp ∧ Pair.mk 1 (ifp.b : K) = gp_n := by
@@ -585,7 +585,7 @@ theorem of_s_of_int
 中文:
 定理 of_s_of_int
   条件: (a : 整数)
-  结论: (of (a : K)).s = Stream'.Seq.nil
+  结论: (of (a : K)).s = Stream'.序列.nil
   证明: haveI h : forall n, (of (a : K)).s.get? n = none := by
     intro n
     induction n with

@@ -58,7 +58,7 @@ definition LDL.lowerInv
 
 中文:
 定义 LDL.lowerInv
-  签名: : Matrix n n 𝕜
+  签名: : 矩阵 n n 𝕜
   定义体: @gramSchmidt 𝕜 (n -> 𝕜) _ (Sᵀ.toNormedAddCommGroup hS.transpose)
     (Sᵀ.toInnerProductSpace hS.transpose.posSemidef) n _ _ _ (Pi.basisFun 𝕜 n)
 
@@ -118,7 +118,7 @@ instance LDL.invertibleLowerInv
 
 中文:
 实例 LDL.invertibleLowerInv
-  签名: : Invertible (LDL.lowerInv hS)
+  签名: : 可逆 (LDL.lowerInv hS)
   定义体: by
   rw [LDL.lowerInv_eq_gramSchmidtBasis]
   haveI :=
@@ -187,7 +187,7 @@ definition LDL.diag
 
 中文:
 定义 LDL.diag
-  签名: : Matrix n n 𝕜
+  签名: : 矩阵 n n 𝕜
   定义体: Matrix.diagonal (LDL.diagEntries hS)
 
 Depends on / 依赖: LDL.diagEntries, Matrix, Matrix.diagonal, diagEntries, diagonal

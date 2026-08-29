@@ -82,7 +82,7 @@ theorem coe_range
 中文:
 定理 coe_range
   条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂)
-  结论: (range f : Set M₂) = Set.range f
+  结论: (range f : 集合 M₂) = 集合.range f
   证明: rfl
 -/
 theorem coe_range [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) : (range f : Set M₂) = Set.range f :=
@@ -186,7 +186,7 @@ theorem range_id
 
 中文:
 定理 range_id
-  结论: range (LinearMap.id : M ->ₗ[R] M) = ⊤
+  结论: range (线性映射.id : M ->ₗ[R] M) = ⊤
   证明: SetLike.coe_injective Set.range_id
 
 Depends on / 依赖: Set.range_id, SetLike, SetLike.coe_injective, coe_injective, range_id
@@ -263,7 +263,7 @@ theorem range_eq_top_of_surjective
 
 中文:
 定理 range_eq_top_of_surjective
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (hf : Surjective f)
+  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (hf : 满射 f)
   证明: range_eq_top.2 hf
 
 Depends on / 依赖: range_eq_top
@@ -308,7 +308,7 @@ theorem range_le_iff_comap
 
 中文:
 定理 range_le_iff_comap
-  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R₂ M₂}
+  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R₂ M₂}
   证明: by rw [range_eq_map, map_le_iff_le_comap, eq_top_iff]
 
 Depends on / 依赖: eq_top_iff, map_le_iff_le_comap, range_eq_map
@@ -328,7 +328,7 @@ theorem map_le_range
 
 中文:
 定理 map_le_range
-  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M}
+  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M}
   证明: SetLike.coe_mono (Set.image_subset_range f p)
 
 @[simp]
@@ -352,7 +352,7 @@ theorem range_neg
 
 中文:
 定理 range_neg
-  结论: {R : 类型} {R₂ : 类型} {M : 类型} {M₂ : 类型} [Semiring R] [Ring R₂]
+  结论: {R : 类型} {R₂ : 类型} {M : 类型} {M₂ : 类型} [半环 R] [环 R₂]
   证明: by
   change range ((-LinearMap.id : M₂ ->ₗ[R₂] M₂).comp f) = _
   rw [range_comp]; rw [Submodule.map_neg]; rw [Submodule.map_id]
@@ -375,7 +375,7 @@ lemma range_domRestrict
 
 中文:
 引理 range_domRestrict
-  条件: [RingHomSurjective τ₁₂] (K : Submodule R M) (f : M ->ₛₗ[τ₁₂] M₂)
+  条件: [RingHomSurjective τ₁₂] (K : 子模 R M) (f : M ->ₛₗ[τ₁₂] M₂)
   证明: by ext; simp
 -/
 @[simp] lemma range_domRestrict [RingHomSurjective τ₁₂] (K : Submodule R M) (f : M ->ₛₗ[τ₁₂] M₂) :
@@ -395,7 +395,7 @@ lemma range_domRestrict_le_range
 
 中文:
 引理 range_domRestrict_le_range
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (S : Submodule R M)
+  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (S : 子模 R M)
   证明: by
   rintro x ⟨⟨y, hy⟩, rfl⟩
   exact LinearMap.mem_range_self f y
@@ -419,8 +419,8 @@ theorem _root_.AddMonoidHom.coe_toIntLinearMap_range
   proof: rfl
 
 中文:
-定理 _root_.AddMonoidHom.coe_toIntLinearMap_range
-  结论: {M M₂ : 类型} [AddCommGroup M]
+定理 _root_.加法幺半群态射.coe_to整数LinearMap_range
+  结论: {M M₂ : 类型} [加法交换群 M]
   证明: rfl
 -/
 theorem _root_.AddMonoidHom.coe_toIntLinearMap_range {M M₂ : Type*} [AddCommGroup M]
@@ -436,7 +436,7 @@ lemma _root_.Submodule.map_comap_eq_of_le
   proof: SetLike.coe_injective Set.image_preimage_eq_of_subset h
 
 中文:
-引理 _root_.Submodule.map_comap_eq_of_le
+引理 _root_.子模.map_comap_eq_of_le
   结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂}
   证明: SetLike.coe_injective Set.image_preimage_eq_of_subset h
 
@@ -456,7 +456,7 @@ lemma range_restrictScalars
 
 中文:
 引理 range_restrictScalars
-  结论: [SMul R R₂] [Module R₂ M] [Module R M₂] [CompatibleSMul M M₂ R R₂]
+  结论: [标量乘法 R R₂] [模 R₂ M] [模 R M₂] [余mpatibleSMul M M₂ R R₂]
   证明: rfl
 -/
 lemma range_restrictScalars [SMul R R₂] [Module R₂ M] [Module R M₂] [CompatibleSMul M M₂ R R₂]
@@ -539,7 +539,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [Fintype M] [DecidableEq M₂] [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂)
+  签名: [有限类型 M] [DecidableEq M₂] [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂)
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -559,7 +559,7 @@ theorem range_codRestrict
 
 中文:
 定理 range_codRestrict
-  结论: {τ₂₁ : R₂ ->+* R} [RingHomSurjective τ₂₁] (p : Submodule R M)
+  结论: {τ₂₁ : R₂ ->+* R} [RingHomSurjective τ₂₁] (p : 子模 R M)
   证明: by
   simpa only [range_eq_map] using map_codRestrict _ _ _ _
 
@@ -580,7 +580,7 @@ theorem _root_.Submodule.map_comap_eq
     rintro _ ⟨⟨x, _, rfl⟩, hx⟩; exact ⟨x, hx, rfl⟩
 
 中文:
-定理 _root_.Submodule.map_comap_eq
+定理 _root_.子模.map_comap_eq
   结论: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂)
   证明: le_antisymm (le_inf map_le_range (map_comap_le _ _)) by
     rintro _ ⟨⟨x, _, rfl⟩, hx⟩; exact ⟨x, hx, rfl⟩
@@ -605,7 +605,7 @@ theorem _root_.Submodule.map_comap_eq_self
 @[simp]
 
 中文:
-定理 _root_.Submodule.map_comap_eq_self
+定理 _root_.子模.map_comap_eq_self
   结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂}
   证明: by
   rwa [Submodule.map_comap_eq, inf_eq_right]
@@ -744,7 +744,7 @@ theorem comap_injective
 中文:
 定理 comap_injective
   条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : range f = ⊤)
-  结论: Injective (comap f)
+  结论: 单射 (comap f)
   证明: fun _ _ h =>
   le_antisymm ((comap_le_comap_iff hf).1 (le_of_eq h)) ((comap_le_comap_iff hf).1 (ge_of_eq h))
 -/
@@ -764,7 +764,7 @@ range_le_ker_iff.mpr by rw [comp_sub, comp_id, ← comp_assoc, h, id_comp, sub_s
 
 中文:
 定理 ker_eq_range_of_comp_eq_id
-  结论: {M P} [AddCommGroup M] [Module R M]
+  结论: {M P} [加法交换群 M] [模 R M]
   证明: le_antisymm (fun x hx => ⟨x, show x - g (f x) = x by rw [hx, map_zero, sub_zero]⟩)
 range_le_ker_iff.mpr by rw [comp_sub, comp_id, ← comp_assoc, h, id_comp, sub_self]
 
@@ -788,7 +788,7 @@ lemma range_eq_ker_of_leftInverse
 
 中文:
 引理 range_eq_ker_of_leftInverse
-  结论: {M P} [AddCommGroup M] [Module R M]
+  结论: {M P} [加法交换群 M] [模 R M]
   证明: -- If `y = f x ∈ range f`, we have `(f ∘ g) y = f (g (f x)) = f x = y` by hypothesis `h`.
   -- Conversely, f g z - z = 0 implies z = f (g z) ∈ range f.
   le_antisymm (by rintro y ⟨x, rfl⟩; simp [h x]) (fun x hx => ⟨g x, by simpa [sub_eq_zero] using hx⟩)
@@ -853,7 +853,7 @@ theorem ker_le_iff
 
 中文:
 定理 ker_le_iff
-  条件: [RingHomSurjective τ₁₂] {p : Submodule R M}
+  条件: [RingHomSurjective τ₁₂] {p : 子模 R M}
   证明: by
   constructor
   · intro h
@@ -1041,7 +1041,7 @@ theorem map_subtype_le
 
 中文:
 定理 map_subtype_le
-  条件: (p' : Submodule R p)
+  条件: (p' : 子模 R p)
   结论: map p.subtype p' <= p
   证明: by
   simpa using (map_le_range : map p.subtype p' <= range p.subtype)
@@ -1063,7 +1063,7 @@ theorem map_subtype_top
 
 中文:
 定理 map_subtype_top
-  结论: map p.subtype (⊤ : Submodule R p) = p
+  结论: map p.subtype (⊤ : 子模 R p) = p
   证明: by simp
 
 @[simp]
@@ -1082,7 +1082,7 @@ theorem comap_subtype_eq_top
 
 中文:
 定理 comap_subtype_eq_top
-  条件: {p p' : Submodule R M}
+  条件: {p p' : 子模 R M}
   结论: comap p.subtype p' = ⊤ ↔ p <= p'
   证明: eq_top_iff.trans map_le_iff_le_comap.symm.trans by rw [map_subtype_top]
 
@@ -1103,7 +1103,7 @@ lemma submoduleOf_eq_top
 
 中文:
 引理 submoduleOf_eq_top
-  条件: {p q : Submodule R M}
+  条件: {p q : 子模 R M}
   证明: by simp [submoduleOf]
 
 @[simp]
@@ -1141,7 +1141,7 @@ theorem submoduleOf_self
 
 中文:
 定理 submoduleOf_self
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   结论: N.submoduleOf N = ⊤
   证明: comap_subtype_self _
 
@@ -1164,7 +1164,7 @@ theorem submoduleOf_sup_of_le
 
 中文:
 定理 submoduleOf_sup_of_le
-  条件: {N₁ N₂ N : Submodule R M} (h₁ : N₁ <= N) (h₂ : N₂ <= N)
+  条件: {N₁ N₂ N : 子模 R M} (h₁ : N₁ <= N) (h₂ : N₂ <= N)
   证明: by
   apply Submodule.map_injective_of_injective N.subtype_injective
   simp only [submoduleOf, map_comap_eq]
@@ -1192,7 +1192,7 @@ lemma comap_subtype_le_iff
 
 中文:
 引理 comap_subtype_le_iff
-  条件: {p q r : Submodule R M}
+  条件: {p q r : 子模 R M}
   证明: ⟨fun h => by simpa using map_mono (f := p.subtype) h,
    fun h => by simpa using comap_mono (f := p.subtype) h⟩
 
@@ -1216,7 +1216,7 @@ theorem range_inclusion
 
 中文:
 定理 range_inclusion
-  条件: (p q : Submodule R M) (h : p <= q)
+  条件: (p q : 子模 R M) (h : p <= q)
   证明: by
   rw [← map_top]; rw [inclusion]; rw [LinearMap.map_codRestrict]; rw [map_top]; rw [range_subtype]
 
@@ -1239,7 +1239,7 @@ theorem map_subtype_range_inclusion
 
 中文:
 定理 map_subtype_range_inclusion
-  条件: {p p' : Submodule R M} (h : p <= p')
+  条件: {p p' : 子模 R M} (h : p <= p')
   证明: by simp [range_inclusion, map_comap_eq, h]
 
 Depends on / 依赖: map_comap_eq, range_inclusion
@@ -1257,7 +1257,7 @@ lemma restrictScalars_map
 
 中文:
 引理 restrictScalars_map
-  结论: [SMul R R₂] [Module R₂ M] [Module R M₂] [IsScalarTower R R₂ M]
+  结论: [标量乘法 R R₂] [模 R₂ M] [模 R M₂] [标量塔 R R₂ M]
   证明: rfl
 -/
 lemma restrictScalars_map [SMul R R₂] [Module R₂ M] [Module R M₂] [IsScalarTower R R₂ M]
@@ -1280,7 +1280,7 @@ map_rel_iff' {p₁ p₂} := Subtype.coe_le_coe.symm.trans by
 
 中文:
 定义 MapSubtype.orderIso
-  签名: : Submodule R p ≃o { p' : Submodule R M // p' <= p } where
+  签名: : 子模 R p ≃o { p' : 子模 R M // p' <= p } where
   定义体: ⟨map p.subtype p', map_subtype_le p _⟩
   invFun q := comap p.subtype q
   left_inv p' := comap_map_eq_of_injective (by exact Subtype.val_injective) p'
@@ -1310,7 +1310,7 @@ definition MapSubtype.orderEmbedding
 
 中文:
 定义 MapSubtype.orderEmbedding
-  签名: : Submodule R p ↪o Submodule R M
+  签名: : 子模 R p ↪o 子模 R M
   定义体: (RelIso.toRelEmbedding <| MapSubtype.orderIso p).trans
     Subtype.relEmbedding (X := Submodule R M) (fun p p' => p <= p') _
 
@@ -1333,7 +1333,7 @@ theorem map_subtype_embedding_eq
 
 中文:
 定理 map_subtype_embedding_eq
-  条件: (p' : Submodule R p)
+  条件: (p' : 子模 R p)
   证明: rfl
 -/
 theorem map_subtype_embedding_eq (p' : Submodule R p) :
@@ -1350,7 +1350,7 @@ definition mapIic
 
 中文:
 定义 mapIic
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: Submodule.MapSubtype.orderIso p
 
 Depends on / 依赖: MapSubtype, Submodule, Submodule.MapSubtype.orderIso, orderIso
@@ -1386,7 +1386,7 @@ lemma codisjoint_map
 
 中文:
 引理 codisjoint_map
-  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} (hf : Function.Surjective f)
+  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} (hf : 函数.满射 f)
   证明: by
   rw [codisjoint_iff]; rw [← Submodule.map_sup]; rw [codisjoint_iff.mp hpq]; rw [map_top]; rw [LinearMap.range_eq_top_of_surjective f hf]
 
@@ -1470,7 +1470,7 @@ definition submoduleImage
 
 中文:
 定义 submoduleImage
-  签名: {M' : 类型} [AddCommMonoid M'] [Module R M'] {O : Submodule R M}
+  签名: {M' : 类型} [加法交换幺半群 M'] [模 R M'] {O : 子模 R M}
   定义体: (N.comap O.subtype).map ϕ
 
 @[simp]
@@ -1497,7 +1497,7 @@ theorem mem_submoduleImage
 
 中文:
 定理 mem_submoduleImage
-  结论: {M' : 类型} [AddCommMonoid M'] [Module R M'] {O : Submodule R M}
+  结论: {M' : 类型} [加法交换幺半群 M'] [模 R M'] {O : 子模 R M}
   证明: by
   refine Submodule.mem_map.trans ⟨?_, ?_⟩ <;> simp_rw [Submodule.mem_comap]
   · rintro ⟨⟨y, yO⟩, yN : y in N, h⟩
@@ -1527,7 +1527,7 @@ theorem mem_submoduleImage_of_le
 
 中文:
 定理 mem_submoduleImage_of_le
-  结论: {M' : 类型} [AddCommMonoid M'] [Module R M'] {O : Submodule R M}
+  结论: {M' : 类型} [加法交换幺半群 M'] [模 R M'] {O : 子模 R M}
   证明: by
   grind [mem_submoduleImage]
 
@@ -1549,7 +1549,7 @@ theorem submoduleImage_apply_of_le
 
 中文:
 定理 submoduleImage_apply_of_le
-  结论: {M' : 类型} [AddCommMonoid M'] [Module R M']
+  结论: {M' : 类型} [加法交换幺半群 M'] [模 R M']
   证明: by
   rw [submoduleImage]; rw [range_comp]; rw [Submodule.range_inclusion]
 
@@ -1592,7 +1592,7 @@ theorem surjective_rangeRestrict
 
 中文:
 定理 surjective_rangeRestrict
-  结论: Surjective f.rangeRestrict
+  结论: 满射 f.rangeRestrict
   证明: by
   rw [← range_eq_top]; rw [range_rangeRestrict]
 
@@ -1628,7 +1628,7 @@ theorem injective_rangeRestrict_iff
 
 中文:
 定理 injective_rangeRestrict_iff
-  结论: Injective f.rangeRestrict ↔ Injective f
+  结论: 单射 f.rangeRestrict ↔ 单射 f
   证明: Set.injective_codRestrict _
 -/
 @[simp] theorem injective_rangeRestrict_iff : Injective f.rangeRestrict ↔ Injective f :=

@@ -113,7 +113,7 @@ lemma nonDegenerateEquiv₁_fst
 
 中文:
 引理 nonDegenerateEquiv₁_fst
-  条件: (i : Fin (p + 1))
+  条件: (i : 有限集 (p + 1))
   证明: rfl
 
 Depends on / 依赖: SimplexCategory
@@ -134,7 +134,7 @@ lemma nonDegenerateEquiv₁_snd
 
 中文:
 引理 nonDegenerateEquiv₁_snd
-  条件: (i : Fin (p + 1))
+  条件: (i : 有限集 (p + 1))
   证明: rfl
 -/
 lemma nonDegenerateEquiv₁_snd (i : Fin (p + 1)) :

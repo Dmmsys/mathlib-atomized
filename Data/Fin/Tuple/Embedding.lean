@@ -46,7 +46,7 @@ definition tail
 
 中文:
 定义 tail
-  签名: {n : 自然数} (x : Fin (n + 1) ↪ α)
+  签名: {n : 自然数} (x : 有限集 (n + 1) ↪ α)
   定义体: ⟨Fin.tail x, x.injective.comp Fin.succ_injective _⟩
 
 @[simp, norm_cast]
@@ -68,8 +68,8 @@ theorem coe_tail
 
 中文:
 定理 coe_tail
-  条件: {n : 自然数} (x : Fin (n + 1) ↪ α)
-  结论: ↑(tail x) = Fin.tail x
+  条件: {n : 自然数} (x : 有限集 (n + 1) ↪ α)
+  结论: ↑(tail x) = 有限集.tail x
   证明: rfl
 -/
 theorem coe_tail {n : Nat} (x : Fin (n + 1) ↪ α) : ↑(tail x) = Fin.tail x := rfl
@@ -86,7 +86,7 @@ definition cons
 
 中文:
 定义 cons
-  签名: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  签名: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   定义体: ⟨Fin.cons a x, cons_injective_iff.mpr ⟨ha, x.inj'⟩⟩
 
 @[simp, norm_cast]
@@ -107,7 +107,7 @@ theorem coe_cons
 
 中文:
 定理 coe_cons
-  条件: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  条件: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   证明: rfl
 -/
 theorem coe_cons {n : Nat} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x) :
@@ -123,7 +123,7 @@ theorem tail_cons
 
 中文:
 定理 tail_cons
-  条件: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  条件: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   证明: rfl
 -/
 theorem tail_cons {n : Nat} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x) :
@@ -139,7 +139,7 @@ definition init
 
 中文:
 定义 init
-  签名: {n : 自然数} (x : Fin (n + 1) ↪ α)
+  签名: {n : 自然数} (x : 有限集 (n + 1) ↪ α)
   定义体: ⟨Fin.init x, x.injective.comp castSucc_injective _⟩
 
 Depends on / 依赖: Fin.init, castSucc_injective, injective, x.injective.comp
@@ -159,7 +159,7 @@ definition snoc
 
 中文:
 定义 snoc
-  签名: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  签名: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   定义体: ⟨Fin.snoc x a, snoc_injective_iff.mpr ⟨x.inj', ha⟩⟩
 
 @[simp, norm_cast]
@@ -181,7 +181,7 @@ theorem coe_snoc
 
 中文:
 定理 coe_snoc
-  条件: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  条件: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   证明: rfl
 -/
 theorem coe_snoc {n : Nat} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x) :
@@ -198,7 +198,7 @@ theorem init_snoc
 
 中文:
 定理 init_snoc
-  条件: {n : 自然数} (x : Fin n ↪ α) {a : α} (ha : a ∉ range x)
+  条件: {n : 自然数} (x : 有限集 n ↪ α) {a : α} (ha : a ∉ range x)
   证明: by
   simp [snoc, init]
 -/
@@ -217,7 +217,7 @@ theorem snoc_castSucc
 
 中文:
 定理 snoc_castSucc
-  条件: {n : 自然数} {x : Fin n ↪ α} {a : α} {ha : a ∉ range x} {i : Fin n}
+  条件: {n : 自然数} {x : 有限集 n ↪ α} {a : α} {ha : a ∉ range x} {i : 有限集 n}
   证明: by
   rw [coe_snoc]; rw [Fin.snoc_castSucc]
 
@@ -238,7 +238,7 @@ theorem snoc_last
 
 中文:
 定理 snoc_last
-  条件: {n : 自然数} {x : Fin n ↪ α} {a : α} {ha : a ∉ range x}
+  条件: {n : 自然数} {x : 有限集 n ↪ α} {a : α} {ha : a ∉ range x}
   证明: by
   rw [coe_snoc]; rw [Fin.snoc_last]
 
@@ -261,7 +261,7 @@ definition append
 
 中文:
 定义 append
-  签名: {m n : 自然数} {x : Fin m ↪ α} {y : Fin n ↪ α} (h : Disjoint (range x) (range y))
+  签名: {m n : 自然数} {x : 有限集 m ↪ α} {y : 有限集 n ↪ α} (h : Disjoint (range x) (range y))
   定义体: ⟨Fin.append x y,
     Fin.append_injective_iff.mpr ⟨x.inj', y.inj', disjoint_range_iff.mp h⟩⟩
 
@@ -285,7 +285,7 @@ theorem coe_append
 
 中文:
 定理 coe_append
-  条件: {m n : 自然数} {x : Fin m ↪ α} {y : Fin n ↪ α} (h : Disjoint (range x) (range y))
+  条件: {m n : 自然数} {x : 有限集 m ↪ α} {y : 有限集 n ↪ α} (h : Disjoint (range x) (range y))
   证明: rfl
 -/
 theorem coe_append {m n : Nat} {x : Fin m ↪ α} {y : Fin n ↪ α} (h : Disjoint (range x) (range y)) :
@@ -315,7 +315,7 @@ definition twoEmbeddingEquiv
 
 中文:
 定义 twoEmbeddingEquiv
-  签名: : (Fin 2 ↪ α) ≃ {(a, b) : α × α | a != b} where
+  签名: : (有限集 2 ↪ α) ≃ {(a, b) : α × α | a != b} where
   定义体: ⟨(e 0, e 1), by
     simp only [ne_eq, Fin.isValue, mem_ofPred_eq, EmbeddingLike.apply_eq_iff_eq, zero_eq_one_iff,
       succ_ne_self, not_false_eq_true]⟩

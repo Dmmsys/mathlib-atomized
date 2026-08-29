@@ -30,7 +30,7 @@ definition WideSubquiver
 
 中文:
 定义 WideSubquiver
-  签名: (V) [Quiver.{v} V]
+  签名: (V) [箭图.{v} V]
   定义体: forall a b : V, Set (a ⟶ b)
 -/
 def WideSubquiver (V) [Quiver.{v} V] :=
@@ -49,7 +49,7 @@ definition WideSubquiver.toType
 
 中文:
 定义 WideSubquiver.toType
-  签名: (V) [Quiver V] (_ : WideSubquiver V)
+  签名: (V) [箭图 V] (_ : WideSubquiver V)
   定义体: V
 -/
 def WideSubquiver.toType (V) [Quiver V] (_ : WideSubquiver V) : Type u :=
@@ -65,7 +65,7 @@ instance wideSubquiverHasCoeToSort
 
 中文:
 实例 wideSubquiverHasCoeToSort
-  签名: {V} [Quiver V]
+  签名: {V} [箭图 V]
   定义体: WideSubquiver.toType V H
 
 Depends on / 依赖: WideSubquiver, WideSubquiver.toType, toType
@@ -83,7 +83,7 @@ instance WideSubquiver.quiver
 
 中文:
 实例 WideSubquiver.quiver
-  签名: {V} [Quiver V] (H : WideSubquiver V)
+  签名: {V} [箭图 V] (H : WideSubquiver V)
   定义体: ⟨fun a b => { f // f in H a b }⟩
 -/
 instance WideSubquiver.quiver {V} [Quiver V] (H : WideSubquiver V) : Quiver H :=
@@ -115,8 +115,8 @@ structure Total
     - hom : left ⟶ right
 
 中文:
-结构 Total
-  参数: (V : 类型u) [Quiver.{v} V]
+结构 全
+  参数: (V : 类型u) [箭图.{v} V]
   公理与运算 (3 个):
     - left : V
     - right : V
@@ -141,7 +141,7 @@ definition wideSubquiverEquivSetTotal
 
 中文:
 定义 wideSubquiverEquivSetTotal
-  签名: {V} [Quiver V]
+  签名: {V} [箭图 V]
   定义体: { e | e.hom in H e.left e.right }
   invFun S a b := { e | Total.mk a b e in S }
 
@@ -163,7 +163,7 @@ definition Labelling
 
 中文:
 定义 Labelling
-  签名: (V : 类型u) [Quiver V] (L : Sort*)
+  签名: (V : 类型u) [箭图 V] (L : 类型层*)
   定义体: forall ⦃a b : V⦄, (a ⟶ b) -> L
 -/
 def Labelling (V : Type u) [Quiver V] (L : Sort*) :=

@@ -42,7 +42,7 @@ not_irrelevant_le le := p.3 hf.trans map_le_of_le_comap _ le
 
 中文:
 定义 comapFun
-  签名: (p : ProjectiveSpectrum ℬ)
+  签名: (p : 射影谱 ℬ)
   定义体: p.1.comap f
   isPrime := p.2.comap f
 not_irrelevant_le le := p.3 hf.trans map_le_of_le_comap _ le
@@ -65,7 +65,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: : C(ProjectiveSpectrum ℬ, ProjectiveSpectrum 𝒜) where
+  签名: : C(射影谱 ℬ, 射影谱 𝒜) where
   定义体: comapFun f hf
   continuous_toFun := by
     simp_rw [continuous_iff_isClosed, isClosed_iff_zeroLocus, exists_imp, forall_eq_apply_imp_iff]
@@ -225,7 +225,7 @@ lemma germ_map_sectionInBasicOpen
 
 中文:
 引理 germ_map_sectionInBasicOpen
-  结论: {p : ProjectiveSpectrum ℬ}
+  结论: {p : 射影谱 ℬ}
   证明: rfl
 -/
 lemma germ_map_sectionInBasicOpen {p : ProjectiveSpectrum ℬ}
@@ -249,7 +249,7 @@ lemma val_sectionInBasicOpen_apply
 
 中文:
 引理 val_sectionInBasicOpen_apply
-  结论: (p : ProjectiveSpectrum.top 𝒜)
+  结论: (p : 射影谱.top 𝒜)
   证明: rfl
 -/
 @[simp] lemma val_sectionInBasicOpen_apply (p : ProjectiveSpectrum.top 𝒜)
@@ -276,7 +276,7 @@ theorem localRingHom_comp_stalkIso
 
 中文:
 定理 localRingHom_comp_stalkIso
-  条件: (p : ProjectiveSpectrum ℬ)
+  条件: (p : 射影谱 ℬ)
   证明: by
   rw [← Iso.eq_inv_comp]; rw [Iso.comp_inv_eq]
   ext : 1

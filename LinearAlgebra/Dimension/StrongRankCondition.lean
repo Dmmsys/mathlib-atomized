@@ -79,7 +79,7 @@ theorem mk_eq_mk_of_basis
 
 中文:
 定理 mk_eq_mk_of_basis
-  条件: (v : Basis ι R M) (v' : Basis ι' R M)
+  条件: (v : 基 ι R M) (v' : 基 ι' R M)
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   cases fintypeOrInfinite ι
@@ -125,8 +125,8 @@ definition Module.Basis.indexEquiv
   body: (Cardinal.lift_mk_eq'.1 <| mk_eq_mk_of_basis v v').some
 
 中文:
-定义 Module.Basis.indexEquiv
-  签名: (v : Basis ι R M) (v' : Basis ι' R M)
+定义 模.基.indexEquiv
+  签名: (v : 基 ι R M) (v' : 基 ι' R M)
   定义体: (Cardinal.lift_mk_eq'.1 <| mk_eq_mk_of_basis v v').some
 
 Depends on / 依赖: Cardinal, Cardinal.lift_mk_eq, lift_mk_eq, mk_eq_mk_of_basis
@@ -145,7 +145,7 @@ theorem mk_eq_mk_of_basis'
 
 中文:
 定理 mk_eq_mk_of_basis'
-  条件: {ι' : Type w} (v : Basis ι R M) (v' : Basis ι' R M)
+  条件: {ι' : 类型 w} (v : 基 ι R M) (v' : 基 ι' R M)
   结论: #ι = #ι'
   证明: Cardinal.lift_inj.1 mk_eq_mk_of_basis v v'
 
@@ -174,8 +174,8 @@ theorem Basis.le_span''
   · apply Surjective.comp (g := b.repr.toLinearMa
 
 中文:
-定理 Basis.le_span''
-  结论: {ι : 类型} [Fintype ι] (b : Basis ι R M) {w : Set M} [Fintype w]
+定理 基.le_span''
+  结论: {ι : 类型} [有限类型 ι] (b : 基 ι R M) {w : 集合 M} [有限类型 w]
   证明: by
   -- We construct a surjective linear map `(w → R) →ₗ[R] (ι → R)`,
   -- by expressing a linear combination in `w` as a linear combination in `ι`.
@@ -210,7 +210,7 @@ theorem basis_le_span'
 
 中文:
 定理 basis_le_span'
-  条件: {ι : 类型} (b : Basis ι R M) {w : Set M} [Fintype w] (s : span R w = ⊤)
+  条件: {ι : 类型} (b : 基 ι R M) {w : 集合 M} [有限类型 w] (s : span R w = ⊤)
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   have := basis_finite_of_finite_spans w.toFinite s b
@@ -248,8 +248,8 @@ theorem Module.Basis.le_span
   
 
 中文:
-定理 Module.Basis.le_span
-  条件: {J : Set M} (v : Basis ι R M) (hJ : span R J = ⊤)
+定理 模.基.le_span
+  条件: {J : 集合 M} (v : 基 ι R M) (hJ : span R J = ⊤)
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   cases fintypeOrInfinite J
@@ -312,7 +312,7 @@ theorem linearIndependent_le_span_aux'
 
 中文:
 定理 linearIndependent_le_span_aux'
-  结论: {ι : 类型} [Fintype ι] (v : ι -> M)
+  结论: {ι : 类型} [有限类型 ι] (v : ι -> M)
   证明: by
   -- We construct an injective linear map `(ι → R) →ₗ[R] (w → R)`,
   -- by thinking of `f : ι → R` as a linear combination of the finite family `v`,
@@ -384,7 +384,7 @@ theorem linearIndependent_le_span'
 
 中文:
 定理 linearIndependent_le_span'
-  结论: {ι : 类型} (v : ι -> M) (i : LinearIndependent R v) (w : Set M)
+  结论: {ι : 类型} (v : ι -> M) (i : LinearIndependent R v) (w : 集合 M)
   证明: by
   have : Finite ι := i.finite_of_le_span_finite v w s
   let := Fintype.ofFinite ι
@@ -415,7 +415,7 @@ theorem linearIndependent_le_span
 
 中文:
 定理 linearIndependent_le_span
-  结论: {ι : 类型} (v : ι -> M) (i : LinearIndependent R v) (w : Set M)
+  结论: {ι : 类型} (v : ι -> M) (i : LinearIndependent R v) (w : 集合 M)
   证明: by
   apply linearIndependent_le_span' v i w
   rw [s]
@@ -467,7 +467,7 @@ theorem linearIndependent_le_infinite_basis
 
 中文:
 定理 linearIndependent_le_infinite_basis
-  结论: {ι : Type w} (b : Basis ι R M) [Infinite ι] {κ : Type w}
+  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι] {κ : 类型 w}
   证明: by
   classical
   by_contra h
@@ -511,7 +511,7 @@ theorem linearIndependent_le_basis
 
 中文:
 定理 linearIndependent_le_basis
-  结论: {ι : Type w} (b : Basis ι R M) {κ : Type w} (v : κ -> M)
+  结论: {ι : 类型 w} (b : 基 ι R M) {κ : 类型 w} (v : κ -> M)
   证明: by
   classical
   -- We split into cases depending on whether `ι` is infinite.
@@ -584,7 +584,7 @@ theorem linearIndependent_le_span''
 
 中文:
 定理 linearIndependent_le_span''
-  结论: {ι : 类型v} {v : ι -> M} (i : LinearIndependent R v) (w : Set M)
+  结论: {ι : 类型v} {v : ι -> M} (i : LinearIndependent R v) (w : 集合 M)
   证明: by
   fapply card_le_of_injective'' (R := R)
   · apply Finsupp.linearCombination
@@ -617,8 +617,8 @@ theorem Basis.card_le_card_of_linearIndependent_aux
   simpa using linearIndependent_le_basis (Pi.basisFun R (Fin n)) v h
 
 中文:
-定理 Basis.card_le_card_of_linearIndependent_aux
-  结论: {R : 类型} [Semiring R] [StrongRankCondition R]
+定理 基.card_le_card_of_linearIndependent_aux
+  结论: {R : 类型} [半环 R] [StrongRankCondition R]
   证明: fun h => by
   simpa using linearIndependent_le_basis (Pi.basisFun R (Fin n)) v h
 
@@ -643,7 +643,7 @@ theorem maximal_linearIndependent_eq_infinite_basis
 
 中文:
 定理 maximal_linearIndependent_eq_infinite_basis
-  结论: {ι : Type w} (b : Basis ι R M) [Infinite ι]
+  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι]
   证明: by
   apply le_antisymm
   · exact linearIndependent_le_basis b v i
@@ -681,9 +681,9 @@ theorem Module.Basis.mk_eq_rank''
     · 
 
 中文:
-定理 Module.Basis.mk_eq_rank''
-  条件: {ι : 类型v} (v : Basis ι R M)
-  结论: #ι = Module.rank R M
+定理 模.基.mk_eq_rank''
+  条件: {ι : 类型v} (v : 基 ι R M)
+  结论: #ι = 模.rank R M
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   rw [Module.rank_def]
@@ -727,9 +727,9 @@ theorem Module.Basis.mk_range_eq_rank
   proof: v.reindexRange.mk_eq_rank''
 
 中文:
-定理 Module.Basis.mk_range_eq_rank
-  条件: (v : Basis ι R M)
-  结论: #(range v) = Module.rank R M
+定理 模.基.mk_range_eq_rank
+  条件: (v : 基 ι R M)
+  结论: #(range v) = 模.rank R M
   证明: v.reindexRange.mk_eq_rank''
 
 Depends on / 依赖: mk_eq_rank, reindexRange, v.reindexRange.mk_eq_rank
@@ -750,7 +750,7 @@ theorem rank_eq_card_basis
 
 中文:
 定理 rank_eq_card_basis
-  条件: {ι : Type w} [Fintype ι] (h : Basis ι R M)
+  条件: {ι : 类型 w} [有限类型 ι] (h : 基 ι R M)
   证明: by
   classical
   have := nontrivial_of_invariantBasisNumber R
@@ -777,7 +777,7 @@ theorem card_le_card_of_linearIndependent
 
 中文:
 定理 card_le_card_of_linearIndependent
-  结论: {ι : 类型} [Fintype ι] (b : Basis ι R M)
+  结论: {ι : 类型} [有限类型 ι] (b : 基 ι R M)
   证明: by
   simpa [rank_eq_card_basis b, Cardinal.mk_fintype] using hv.cardinal_lift_le_rank
 
@@ -799,7 +799,7 @@ theorem card_le_card_of_submodule
 
 中文:
 定理 card_le_card_of_submodule
-  结论: (N : Submodule R M) [Fintype ι] (b : Basis ι R M)
+  结论: (N : 子模 R M) [有限类型 ι] (b : 基 ι R M)
   证明: b.card_le_card_of_linearIndependent
     (b'.linearIndependent.map_injOn N.subtype N.injective_subtype.injOn)
 
@@ -821,7 +821,7 @@ theorem card_le_card_of_le
 
 中文:
 定理 card_le_card_of_le
-  结论: {N O : Submodule R M} (hNO : N <= O) [Fintype ι]
+  结论: {N O : 子模 R M} (hNO : N <= O) [有限类型 ι]
   证明: b.card_le_card_of_linearIndependent
     (b'.linearIndependent.map_injOn (inclusion hNO) (N.inclusion_injective _).injOn)
 
@@ -844,7 +844,7 @@ theorem mk_eq_rank
 
 中文:
 定理 mk_eq_rank
-  条件: (v : Basis ι R M)
+  条件: (v : 基 ι R M)
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   rw [← v.mk_range_eq_rank]; rw [Cardinal.mk_range_eq_of_injective v.injective]
@@ -866,7 +866,7 @@ theorem mk_eq_rank'.{m}
 
 中文:
 定理 mk_eq_rank'.{m}
-  条件: (v : Basis ι R M)
+  条件: (v : 基 ι R M)
   证明: Cardinal.lift_umax_eq.{w, v, m}.mpr v.mk_eq_rank
 
 Depends on / 依赖: Cardinal, Cardinal.lift_umax_eq, lift_umax_eq, mk_eq_rank, v.mk_eq_rank
@@ -914,8 +914,8 @@ theorem rank_span_set
 
 中文:
 定理 rank_span_set
-  条件: {s : Set M} (hs : LinearIndepOn R id s)
-  结论: Module.rank R ↑(span R s) = #s
+  条件: {s : 集合 M} (hs : LinearIndepOn R id s)
+  结论: 模.rank R ↑(span R s) = #s
   证明: by
   rw [← @ofPred_mem_eq _ s]; rw [← Subtype.range_coe_subtype]
   exact rank_span hs
@@ -936,8 +936,8 @@ theorem toENat_rank_span_set
   rw [image_eq_range]; rw [← hs.injOn.encard_image]; rw [← toENat_cardinalMk]; rw [image_eq_range]; rw [← rank_span hs.linearIndependent]
 
 中文:
-定理 toENat_rank_span_set
-  条件: {v : ι -> M} {s : Set ι} (hs : LinearIndepOn R v s)
+定理 toE自然数_rank_span_set
+  条件: {v : ι -> M} {s : 集合 ι} (hs : LinearIndepOn R v s)
   证明: by
   rw [image_eq_range]; rw [← hs.injOn.encard_image]; rw [← toENat_cardinalMk]; rw [image_eq_range]; rw [← rank_span hs.linearIndependent]
 
@@ -958,8 +958,8 @@ definition Submodule.inductionOnRank
     simpa using b.card_le_card_of_linearIndependent hli
 
 中文:
-定义 Submodule.inductionOnRank
-  签名: {R M} [Ring R] [StrongRankCondition R] [AddCommGroup M] [Module R M]
+定义 子模.inductionOnRank
+  签名: {R M} [环 R] [StrongRankCondition R] [加法交换群 M] [模 R M]
   定义体: letI := Fintype.ofFinite ι
   Submodule.inductionOnRankAux b P ih (Fintype.card ι) N fun hs hli => by
     simpa using b.card_le_card_of_linearIndependent hli
@@ -991,8 +991,8 @@ theorem Ideal.rank_eq
     simp only [← smul_assoc, ← Finset.sum_smul, smul_e
 
 中文:
-定理 Ideal.rank_eq
-  结论: {R S : 类型} [CommRing R] [StrongRankCondition R] [Ring S] [IsDomain S]
+定理 理想.rank_eq
+  结论: {R S : 类型} [交换环 R] [StrongRankCondition R] [环 S] [是整环 S]
   证明: by
   obtain ⟨a, ha⟩ := Submodule.nonzero_mem_of_bot_lt (bot_lt_iff_ne_bot.mpr hI)
   have : LinearIndependent R fun i => b i • a := by
@@ -1035,7 +1035,7 @@ theorem rank_pos_of_free
 
 中文:
 定理 rank_pos_of_free
-  条件: [Module.Free R M] [Nontrivial M]
+  条件: [模.自由 R M] [非平凡 M]
   证明: have := Module.nontrivial R M
   (pos_of_ne_zero <| Cardinal.mk_ne_zero _).trans_le
     (Free.chooseBasis R M).linearIndependent.cardinal_le_rank
@@ -1062,7 +1062,7 @@ theorem rank_pos_iff_of_free
 
 中文:
 定理 rank_pos_iff_of_free
-  条件: [Module.Free R M]
+  条件: [模.自由 R M]
   证明: by
   refine ⟨fun h => ?_, fun _ => rank_pos_of_free⟩
   rw [← not_subsingleton_iff_nontrivial]
@@ -1089,7 +1089,7 @@ theorem rank_zero_iff_of_free
 
 中文:
 定理 rank_zero_iff_of_free
-  条件: [Module.Free R M]
+  条件: [模.自由 R M]
   证明: by
   rw [← not_nontrivial_iff_subsingleton]; rw [iff_not_comm]; rw [← Module.rank_pos_iff_of_free (R := R)]; rw [pos_iff_ne_zero]
 
@@ -1110,7 +1110,7 @@ theorem finrank_eq_nat_card_basis
 
 中文:
 定理 finrank_eq_nat_card_basis
-  条件: (h : Basis ι R M)
+  条件: (h : 基 ι R M)
   证明: by
   rw [Nat.card]; rw [← toNat_lift.{v}]; rw [h.mk_eq_rank]; rw [toNat_lift]; rw [finrank]
 
@@ -1130,7 +1130,7 @@ theorem finrank_eq_card_basis
 
 中文:
 定理 finrank_eq_card_basis
-  条件: {ι : Type w} [Fintype ι] (h : Basis ι R M)
+  条件: {ι : 类型 w} [有限类型 ι] (h : 基 ι R M)
   证明: finrank_eq_of_rank_eq (rank_eq_card_basis h)
 
 Depends on / 依赖: _eq_lintegral_enorm, _zero, eLpNorm, finrank_eq_of_rank_eq, hq0_ne, hq0_ne.symm, hq_neg, le_or_gt, lt_of_le_of_ne, rank_eq_card_basis
@@ -1151,7 +1151,7 @@ theorem mk_finrank_eq_card_basis
 
 中文:
 定理 mk_finrank_eq_card_basis
-  条件: [Module.Finite R M] {ι : Type w} (h : Basis ι R M)
+  条件: [模.有限 R M] {ι : 类型 w} (h : 基 ι R M)
   证明: by
   cases @nonempty_fintype _ (Module.Finite.finite_basis h)
   rw [Cardinal.mk_fintype]; rw [finrank_eq_card_basis h]
@@ -1173,7 +1173,7 @@ theorem finrank_eq_card_finset_basis
 
 中文:
 定理 finrank_eq_card_finset_basis
-  条件: {ι : Type w} {b : Finset ι} (h : Basis b R M)
+  条件: {ι : 类型 w} {b : 有限集 ι} (h : 基 b R M)
   证明: by rw [finrank_eq_card_basis h, Fintype.card_coe]
 
 Depends on / 依赖: Fintype, Fintype.card_coe, card_coe, finrank_eq_card_basis
@@ -1195,7 +1195,7 @@ theorem rank_self
 
 中文:
 定理 rank_self
-  结论: Module.rank R R = 1
+  结论: 模.rank R R = 1
   证明: by
   rw [← Cardinal.lift_inj]; rw [← (Basis.singleton PUnit R).mk_eq_rank]; rw [Cardinal.mk_punit]
 
@@ -1280,7 +1280,7 @@ theorem finrank_of_bijective_algebraMap
 
 中文:
 定理 finrank_of_bijective_algebraMap
-  结论: {R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S]
+  结论: {R S : 类型} [交换半环 R] [半环 S] [代数 R S]
   证明: by
   rw [← (AlgEquiv.ofBijective (Algebra.ofId R S) h).toLinearEquiv.finrank_eq]; rw [finrank_self]
 
@@ -1301,7 +1301,7 @@ theorem rank_of_bijective_algebraMap
 
 中文:
 定理 rank_of_bijective_algebraMap
-  结论: {R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S]
+  结论: {R S : 类型} [交换半环 R] [半环 S] [代数 R S]
   证明: by
   rw [rank_eq_one_iff_finrank_eq_one]; rw [finrank_of_bijective_algebraMap h]
 
@@ -1325,8 +1325,8 @@ definition _root_.Module.Basis.unique
   exact Nonempty.some ((unique_iff_subsingleton_and_nonempty _).2 this)
 
 中文:
-定义 _root_.Module.Basis.unique
-  签名: {ι : 类型} (b : Basis ι R R)
+定义 _root_.模.基.unique
+  签名: {ι : 类型} (b : 基 ι R R)
   定义体: by
   have : Cardinal.mk ι = ↑(Module.finrank R R) := (Module.mk_finrank_eq_card_basis b).symm
   have : Subsingleton ι ∧ Nonempty ι := by simpa [Cardinal.eq_one_iff_unique]
@@ -1356,8 +1356,8 @@ theorem rank_lt_aleph0
 
 中文:
 定理 rank_lt_aleph0
-  条件: [Module.Finite R M]
-  结论: Module.rank R M < ℵ₀
+  条件: [模.有限 R M]
+  结论: 模.rank R M < ℵ₀
   证明: by
   simp only [Module.rank_def]
   obtain ⟨S, hS⟩ := Module.finite_def.mp ‹_›
@@ -1394,8 +1394,8 @@ theorem finrank_eq_rank
 
 中文:
 定理 finrank_eq_rank
-  条件: [Module.Finite R M]
-  结论: ↑(finrank R M) = Module.rank R M
+  条件: [模.有限 R M]
+  结论: ↑(finrank R M) = 模.rank R M
   证明: by
   rw [Module.finrank]; rw [cast_toNat_of_lt_aleph0 (rank_lt_aleph0 R M)]
 
@@ -1419,7 +1419,7 @@ theorem finrank_eq_zero_iff_of_free
 
 中文:
 定理 finrank_eq_zero_iff_of_free
-  条件: [Module.Free R M] [Module.Finite R M]
+  条件: [模.自由 R M] [模.有限 R M]
   证明: by
   have := Module.rank_lt_aleph0 R M
   rw [← not_le] at this
@@ -1446,7 +1446,7 @@ theorem finrank_eq_zero_of_subsingleton
 
 中文:
 定理 finrank_eq_zero_of_subsingleton
-  条件: [Module.Free R M] [Subsingleton M]
+  条件: [模.自由 R M] [子单例 M]
   证明: (finrank_eq_zero_iff_of_free R M).mpr inferInstance
 
 Depends on / 依赖: finrank_eq_zero_iff_of_free
@@ -1467,7 +1467,7 @@ theorem finrank_pos_iff_of_free
 
 中文:
 定理 finrank_pos_iff_of_free
-  条件: [Module.Free R M] [Module.Finite R M]
+  条件: [模.自由 R M] [模.有限 R M]
   证明: by
   rw [← not_subsingleton_iff_nontrivial]; rw [← iff_not_comm]
   simp [Module.finrank_eq_zero_iff_of_free]
@@ -1490,8 +1490,8 @@ theorem _root_.Submodule.finrank_eq_rank
   exact lt_of_le_of_lt (Submodule.rank_le N) (rank_lt_aleph0 R M)
 
 中文:
-定理 _root_.Submodule.finrank_eq_rank
-  条件: [Module.Finite R M] (N : Submodule R M)
+定理 _root_.子模.finrank_eq_rank
+  条件: [模.有限 R M] (N : 子模 R M)
   证明: by
   rw [finrank]; rw [Cardinal.cast_toNat_of_lt_aleph0]
   exact lt_of_le_of_lt (Submodule.rank_le N) (rank_lt_aleph0 R M)
@@ -1516,8 +1516,8 @@ theorem LinearMap.finrank_le_finrank_of_injective
   proof: finrank_le_finrank_of_rank_le_rank (lift_rank_le_of_injective _ hf) (rank_lt_aleph0 _ _)
 
 中文:
-定理 LinearMap.finrank_le_finrank_of_injective
-  结论: [Module.Finite R M'] {f : M ->ₗ[R] M'}
+定理 线性映射.finrank_le_finrank_of_injective
+  结论: [模.有限 R M'] {f : M ->ₗ[R] M'}
   证明: finrank_le_finrank_of_rank_le_rank (lift_rank_le_of_injective _ hf) (rank_lt_aleph0 _ _)
 
 Depends on / 依赖: finrank_le_finrank_of_rank_le_rank, lift_rank_le_of_injective, rank_lt_aleph0
@@ -1535,8 +1535,8 @@ theorem LinearMap.finrank_le_finrank_of_surjective
   proof: finrank_le_finrank_of_rank_le_rank (lift_rank_le_of_surjective _ hf) (rank_lt_aleph0 _ _)
 
 中文:
-定理 LinearMap.finrank_le_finrank_of_surjective
-  结论: [Module.Finite R M] {f : M ->ₗ[R] M'}
+定理 线性映射.finrank_le_finrank_of_surjective
+  结论: [模.有限 R M] {f : M ->ₗ[R] M'}
   证明: finrank_le_finrank_of_rank_le_rank (lift_rank_le_of_surjective _ hf) (rank_lt_aleph0 _ _)
 
 Depends on / 依赖: _const, eLpNorm, finrank_le_finrank_of_rank_le_rank, hq_pos, lift_rank_le_of_surjective, measure_univ, rank_lt_aleph0
@@ -1554,8 +1554,8 @@ theorem LinearMap.finrank_range_le
   proof: finrank_le_finrank_of_rank_le_rank (lift_rank_range_le f) (rank_lt_aleph0 _ _)
 
 中文:
-定理 LinearMap.finrank_range_le
-  条件: [Module.Finite R M] (f : M ->ₗ[R] M')
+定理 线性映射.finrank_range_le
+  条件: [模.有限 R M] (f : M ->ₗ[R] M')
   证明: finrank_le_finrank_of_rank_le_rank (lift_rank_range_le f) (rank_lt_aleph0 _ _)
 
 Depends on / 依赖: finrank_le_finrank_of_rank_le_rank, lift_rank_range_le, rank_lt_aleph0
@@ -1576,8 +1576,8 @@ theorem LinearMap.finrank_le_of_isSMulRegular
   exact natCast_lt_aleph0
 
 中文:
-定理 LinearMap.finrank_le_of_isSMulRegular
-  结论: {S : 类型} [CommSemiring S] [Algebra S R]
+定理 线性映射.finrank_le_of_isSMulRegular
+  结论: {S : 类型} [交换半环 S] [代数 S R]
   证明: by
   refine finrank_le_finrank_of_rank_le_rank (lift_le.mpr <| rank_le_of_isSMulRegular L L' hr h) ?_
   rw [← Module.finrank_eq_rank R L']
@@ -1607,8 +1607,8 @@ lemma Module.finrank_top_le_finrank_of_isScalarTower
   · exact Module.rank_lt_aleph0 _ _
 
 中文:
-引理 Module.finrank_top_le_finrank_of_isScalarTower
-  结论: [Module.Finite R M] [Semiring S]
+引理 模.finrank_top_le_finrank_of_isScalarTower
+  结论: [模.有限 R M] [半环 S]
   证明: by
   rw [finrank]; rw [finrank]; rw [Cardinal.toNat_le_iff_le_of_lt_aleph0]
   · exact rank_top_le_rank_of_isScalarTower R S M
@@ -1638,8 +1638,8 @@ lemma Module.finrank_bot_le_finrank_of_isScalarTower
 omit [StrongRankCondition R]
 
 中文:
-引理 Module.finrank_bot_le_finrank_of_isScalarTower
-  结论: (S T : 类型) [Semiring S] [Semiring T]
+引理 模.finrank_bot_le_finrank_of_isScalarTower
+  结论: (S T : 类型) [半环 S] [半环 T]
   证明: finrank_le_finrank_of_rank_le_rank (lift_rank_bot_le_lift_rank_of_isScalarTower R S T)
     (Module.rank_lt_aleph0 _ _)
 
@@ -1670,8 +1670,8 @@ theorem strongRankCondition_iff_forall_rank_lt_aleph0
     convert! (Finsupp.basisSingleOne
 
 中文:
-定理 strongRankCondition_iff_forall_rank_lt_aleph0
-  条件: [Nontrivial R]
+定理 strongRankCondition_iff_对任意_rank_lt_aleph0
+  条件: [非平凡 R]
   证明: (strongRankCondition_iff_succ R).trans not_iff_not.mp by
     push Not
     refine ⟨fun ⟨n, f, inj⟩ => ⟨n, ?_⟩, fun ⟨n, le⟩ =>
@@ -1706,8 +1706,8 @@ theorem strongRankCondition_iff_forall_zero_lt_finrank
 (ExtendByZero.linearMap R _) exte
 
 中文:
-定理 strongRankCondition_iff_forall_zero_lt_finrank
-  条件: [Nontrivial R]
+定理 strongRankCondition_iff_对任意_zero_lt_finrank
+  条件: [非平凡 R]
   证明: by
   rw [strongRankCondition_iff_forall_rank_lt_aleph0]; rw [← not_iff_not]
   push Not
@@ -1743,7 +1743,7 @@ not_subsingleton R IsNoetherian.subsingleton_of_injective
 
 中文:
 定理 StrongRankCondition.of_isNoetherian
-  条件: [Nontrivial R] [对任意 n, IsNoetherian R (Fin n -> R)]
+  条件: [非平凡 R] [对任意 n, 是Noether R (有限集 n -> R)]
   证明: (strongRankCondition_iff_succ R).2 fun n f hf =>
     have e := LinearEquiv.piCongrLeft R (fun _ => R) (finSuccEquiv n) ≪≫ₗ .piOptionEquivProd _
 not_subsingleton R IsNoetherian.subsingleton_of_injective
@@ -1778,7 +1778,7 @@ theorem exists_finset_span_eq_linearIndepOn
   exact ⟨t, ht_s
 
 中文:
-定理 exists_finset_span_eq_linearIndepOn
+定理 存在_finset_span_eq_linearIndepOn
   证明: by
   rcases exists_linearIndependent K s with ⟨t, ht_sub, ht_span, ht_indep⟩
   obtain ⟨t, rfl, ht_card⟩ : exists u : Finset M, ↑u = t ∧ u.card = finrank K (span K s) := by
@@ -1807,7 +1807,7 @@ theorem exists_fun_fin_finrank_span_eq
   exact ⟨(↑) ∘ e, fun i => hts (e i).2, by simpa, ht_indep.comp _ e.injective⟩
 
 中文:
-定理 exists_fun_fin_finrank_span_eq
+定理 存在_fun_fin_finrank_span_eq
   证明: by
   rcases exists_finset_span_eq_linearIndepOn K s with ⟨t, hts, ht_card, ht_span, ht_indep⟩
   set e := (Finset.equivFinOfCardEq ht_card).symm
@@ -1838,7 +1838,7 @@ theorem mem_span_set_iff_exists_finsupp_le_finrank
     exa
 
 中文:
-定理 mem_span_set_iff_exists_finsupp_le_finrank
+定理 mem_span_set_iff_存在_finsupp_le_finrank
   证明: by
   constructor
   · intro h
@@ -1879,11 +1879,11 @@ class IsQuadraticExtension
     - finrank_eq_two' : Module.finrank R S = 2
 
 中文:
-类 IsQuadraticExtension
-  参数: (R S : 类型) [CommSemiring R] [StrongRankCondition R] [Semiring S]
-  继承: Module.Free R S
+类 是QuadraticExtension
+  参数: (R S : 类型) [交换半环 R] [StrongRankCondition R] [半环 S]
+  继承: 模.自由 R S
   公理与运算 (1 个):
-    - finrank_eq_two' : Module.finrank R S = 2
+    - finrank_eq_two' : 模.finrank R S = 2
 
 Depends on / 依赖: _eq_lintegral_enorm, eLpNorm, h.mono, lintegral_mono_ae
 -/
@@ -1900,8 +1900,8 @@ theorem IsQuadraticExtension.finrank_eq_two
   proof: finrank_eq_two'
 
 中文:
-定理 IsQuadraticExtension.finrank_eq_two
-  结论: (R S : 类型) [CommSemiring R] [StrongRankCondition R]
+定理 是QuadraticExtension.finrank_eq_two
+  结论: (R S : 类型) [交换半环 R] [StrongRankCondition R]
   证明: finrank_eq_two'
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe.mpr, _mono_enorm_ae, coe_le_coe, eLpNorm, finrank_eq_two, h.mono

@@ -61,7 +61,7 @@ instance hasNorm
 
 中文:
 实例 hasNorm
-  签名: : Norm (V ->ᴬ[𝕜] W)
+  签名: : 范数 (V ->ᴬ[𝕜] W)
   定义体: ⟨fun f => max ‖f 0‖ ‖f.contLinear‖⟩
 
 Depends on / 依赖: contLinear, f.contLinear
@@ -79,7 +79,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  结论: ‖f‖ = max ‖f 0‖ ‖f.contLinear‖
+  结论: ‖f‖ = 最大值 ‖f 0‖ ‖f.contLinear‖
   证明: rfl
 -/
 theorem norm_def : ‖f‖ = max ‖f 0‖ ‖f.contLinear‖ :=
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (V ->ᴬ[𝕜] Q)
+  签名: 伪度量空间 (V ->ᴬ[𝕜] Q)
   定义体: (decompEquiv 𝕜 V Q).pseudometricSpace
 
 Depends on / 依赖: decompEquiv, pseudometricSpace
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeminormedAddCommGroup (V ->ᴬ[𝕜] W)
+  签名: SeminormedAddComm群 (V ->ᴬ[𝕜] W)
   定义体: dist_eq_norm_neg_add (E := W × (V ->L[𝕜] W)) _ _
 
 Depends on / 依赖: dist_eq_norm_neg_add
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedSpace 𝕜 (V ->ᴬ[𝕜] W)
+  签名: 赋范空间 𝕜 (V ->ᴬ[𝕜] W)
   定义体: norm_smul_le t (f 0, f.contLinear)
 
 Depends on / 依赖: contLinear, f.contLinear, norm_smul_le
@@ -472,7 +472,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace (V ->ᴬ[𝕜] Q)
+  签名: 度量空间 (V ->ᴬ[𝕜] Q)
   定义体: (decompEquiv 𝕜 V Q).metricSpace
 
 Depends on / 依赖: decompEquiv, metricSpace
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAddCommGroup (V ->ᴬ[𝕜] W)
+  签名: 赋范交换加群 (V ->ᴬ[𝕜] W)
   定义体: inferInstance
   __ : MetricSpace (V ->ᴬ[𝕜] W) := inferInstance
 -/

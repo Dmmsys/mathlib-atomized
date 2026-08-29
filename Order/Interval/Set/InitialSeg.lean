@@ -97,7 +97,7 @@ alias principalSegIio_toRelEmbedding := principalSegIio_apply
 
 中文:
 引理 principalSegIio_apply
-  条件: (k : Iio j)
+  条件: (k : 左无界右开区间 j)
   结论: principalSegIio j k = k.1
   证明: rfl
 
@@ -187,7 +187,7 @@ alias principalSegIioIicOfLE_toRelEmbedding := principalSegIioIicOfLE_apply
 
 中文:
 引理 principalSegIioIicOfLE_apply
-  条件: (h : i <= j) (k : Iio i)
+  条件: (h : i <= j) (k : 左无界右开区间 i)
   证明: rfl
 
 @[deprecated (since := "2026-04-12")]
@@ -214,8 +214,8 @@ definition PrincipalSeg.orderIsoIio
   body: .ofRelIsoLT f.subrelIso.symm
 
 中文:
-定义 PrincipalSeg.orderIsoIio
-  签名: {α β : 类型} [PartialOrder α] [PartialOrder β]
+定义 主段.orderIsoIio
+  签名: {α β : 类型} [偏序 α] [偏序 β]
   定义体: .ofRelIsoLT f.subrelIso.symm
 
 Depends on / 依赖: f.subrelIso.symm, ofRelIsoLT, subrelIso

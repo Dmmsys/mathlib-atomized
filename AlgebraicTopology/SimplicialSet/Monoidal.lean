@@ -292,7 +292,7 @@ definition stdSimplex.isTerminalObj₀
 
 中文:
 定义 stdSimplex.isTerminalObj₀
-  签名: : IsTerminal (Δ[0] : SSet.{u})
+  签名: : 是终止 (Δ[0] : SSet.{u})
   定义体: IsTerminal.ofUniqueHom (fun _ => SSet.const (obj₀Equiv.symm 0))
     (fun _ _ => by
       ext ⟨n⟩
@@ -345,7 +345,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟙_ SSet.{u}).Finite
+  签名: (𝟙_ SSet.{u}).有限
   定义体: finite_of_iso (stdSimplex.isTerminalObj₀.{u}.uniqueUpToIso
     CartesianMonoidalCategory.isTerminalTensorUnit)
 
@@ -388,7 +388,7 @@ instance :
 
 中文:
 实例 :
-  签名: opFunctor.{u}.Monoidal
+  签名: opFunctor.{u}.幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso _ _ := Iso.refl _ }
@@ -414,8 +414,8 @@ definition prod
   map i _ hx := ⟨A.map i hx.1, B.map i hx.2⟩
 
 中文:
-定义 prod
-  签名: {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
+定义 乘积
+  签名: {X Y : SSet.{u}} (A : X.子复形) (B : Y.子复形)
   定义体: (A.obj Δ).prod (B.obj Δ)
   map i _ hx := ⟨A.map i hx.1, B.map i hx.2⟩
 
@@ -453,7 +453,7 @@ lemma prod_le_top_prod
 
 中文:
 引理 prod_le_top_prod
-  条件: {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
+  条件: {X Y : SSet.{u}} (A : X.子复形) (B : Y.子复形)
   证明: prod_monotone le_top (by rfl)
 
 Depends on / 依赖: le_top, prod_monotone
@@ -472,7 +472,7 @@ lemma prod_le_prod_top
 
 中文:
 引理 prod_le_prod_top
-  条件: {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
+  条件: {X Y : SSet.{u}} (A : X.子复形) (B : Y.子复形)
   证明: prod_monotone (by rfl) le_top
 
 Depends on / 依赖: le_top, prod_monotone
@@ -541,7 +541,7 @@ definition prodIso
 
 中文:
 定义 prodIso
-  签名: {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
+  签名: {X Y : SSet.{u}} (A : X.子复形) (B : Y.子复形)
   定义体: CartesianMonoidalCategory.lift
     (lift ((A.prod B).ι ≫ CartesianMonoidalCategory.fst _ _) (by
       intro _ _ ⟨⟨_, ⟨_, _⟩⟩, _⟩
@@ -689,7 +689,7 @@ lemma ι₀_app_snd_apply
 
 中文:
 引理 ι₀_app_snd_apply
-  条件: {X : SSet.{u}} {m : 自然数} (x : X _⦋m⦌) (k : Fin (m + 1))
+  条件: {X : SSet.{u}} {m : 自然数} (x : X _⦋m⦌) (k : 有限集 (m + 1))
   证明: rfl
 -/
 lemma ι₀_app_snd_apply {X : SSet.{u}} {m : Nat} (x : X _⦋m⦌) (k : Fin (m + 1)) :
@@ -815,7 +815,7 @@ lemma ι₁_app_snd_apply
 
 中文:
 引理 ι₁_app_snd_apply
-  条件: {X : SSet.{u}} {m : 自然数} (x : X _⦋m⦌) (k : Fin (m + 1))
+  条件: {X : SSet.{u}} {m : 自然数} (x : X _⦋m⦌) (k : 有限集 (m + 1))
   证明: rfl
 -/
 lemma ι₁_app_snd_apply {X : SSet.{u}} {m : Nat} (x : X _⦋m⦌) (k : Fin (m + 1)) :
@@ -869,7 +869,7 @@ lemma prod_δ_fst
 
 中文:
 引理 prod_δ_fst
-  条件: {n : 自然数} (i : Fin (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌)
   证明: rfl
 -/
 @[simp, grind =] lemma prod_δ_fst {n : Nat} (i : Fin (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌) :
@@ -885,7 +885,7 @@ lemma prod_δ_snd
 
 中文:
 引理 prod_δ_snd
-  条件: {n : 自然数} (i : Fin (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌)
   证明: rfl
 -/
 @[simp, grind =] lemma prod_δ_snd {n : Nat} (i : Fin (n + 2)) (z : (X otimes Y : SSet.{u}) _⦋n + 1⦌) :
@@ -901,7 +901,7 @@ lemma prod_σ_fst
 
 中文:
 引理 prod_σ_fst
-  条件: {n : 自然数} (i : Fin (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌)
   证明: rfl
 -/
 @[simp, grind =] lemma prod_σ_fst {n : Nat} (i : Fin (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌) :
@@ -917,7 +917,7 @@ lemma prod_σ_snd
 
 中文:
 引理 prod_σ_snd
-  条件: {n : 自然数} (i : Fin (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌)
   证明: rfl
 -/
 @[simp, grind =] lemma prod_σ_snd {n : Nat} (i : Fin (n + 1)) (z : (X otimes Y : SSet.{u}) _⦋n⦌) :
@@ -941,7 +941,7 @@ definition unionProd
 
 中文:
 定义 unionProd
-  签名: : (X otimes Y).Subcomplex
+  签名: : (X otimes Y).子复形
   定义体: ((⊤ : X.Subcomplex).prod T) ⊔ (S.prod ⊤)
 
 Depends on / 依赖: S.prod, Subcomplex, X.Subcomplex
@@ -983,7 +983,7 @@ lemma top_prod_le_unionProd
 
 中文:
 引理 top_prod_le_unionProd
-  结论: (⊤ : X.Subcomplex).prod T <= S.unionProd T
+  结论: (⊤ : X.子复形).乘积 T <= S.unionProd T
   证明: le_sup_left
 
 Depends on / 依赖: le_sup_left
@@ -1000,7 +1000,7 @@ lemma prod_top_le_unionProd
 
 中文:
 引理 prod_top_le_unionProd
-  结论: (S.prod ⊤) <= S.unionProd T
+  结论: (S.乘积 ⊤) <= S.unionProd T
   证明: le_sup_right
 
 Depends on / 依赖: le_sup_right
@@ -1017,7 +1017,7 @@ lemma prod_le_unionProd
 
 中文:
 引理 prod_le_unionProd
-  结论: S.prod T <= S.unionProd T
+  结论: S.乘积 T <= S.unionProd T
   证明: (prod_le_prod_top S T).trans (prod_top_le_unionProd S T)
 
 Depends on / 依赖: prod_le_prod_top, prod_top_le_unionProd
@@ -1162,7 +1162,7 @@ lemma bicartSq
 
 中文:
 引理 bicartSq
-  结论: BicartSq (S.prod T) ((⊤ : X.Subcomplex).prod T) (S.prod ⊤) (unionProd S T) where
+  结论: BicartSq (S.乘积 T) ((⊤ : X.子复形).乘积 T) (S.乘积 ⊤) (unionProd S T) where
   证明: rfl
   inf_eq := by
     ext n ⟨x, y⟩
@@ -1191,7 +1191,7 @@ lemma isPushout
 
 中文:
 引理 isPushout
-  结论: IsPushout (S.ι ▷ (T : SSet)) ((S : SSet) ◁ T.ι)
+  结论: 是推出 (S.ι ▷ (T : SSet)) ((S : SSet) ◁ T.ι)
   证明: (bicartSq S T).isPushout.of_iso (S.prodIso T)
     (prodIso _ _ ≪≫ whiskerRightIso (topIso X) _)
     (prodIso _ _ ≪≫ whiskerLeftIso _ (topIso Y))
@@ -1225,7 +1225,7 @@ lemma preimage_β_hom
 
 中文:
 引理 preimage_β_hom
-  结论: (unionProd S T).preimage (β_ _ _).hom = unionProd T S
+  结论: (unionProd S T).原像 (β_ _ _).hom = unionProd T S
   证明: by
   ext n ⟨x, y⟩
   dsimp
@@ -1258,7 +1258,7 @@ lemma preimage_β_inv
 
 中文:
 引理 preimage_β_inv
-  结论: (unionProd S T).preimage (β_ _ _).inv = unionProd T S
+  结论: (unionProd S T).原像 (β_ _ _).inv = unionProd T S
   证明: by
   apply preimage_β_hom
 
@@ -1281,7 +1281,7 @@ lemma image_β_hom
 
 中文:
 引理 image_β_hom
-  结论: (unionProd S T).image (β_ _ _).hom = unionProd T S
+  结论: (unionProd S T).像 (β_ _ _).hom = unionProd T S
   证明: by
   rw [← preimage_β_hom]; rw [preimage_image_of_isIso]
 
@@ -1304,7 +1304,7 @@ lemma image_β_inv
 
 中文:
 引理 image_β_inv
-  结论: (unionProd S T).image (β_ _ _).inv = unionProd T S
+  结论: (unionProd S T).像 (β_ _ _).inv = unionProd T S
   证明: by
   apply image_β_hom
 -/
@@ -1356,7 +1356,7 @@ instance :
 
 中文:
 实例 :
-  签名: (truncation.{u} n).Monoidal
+  签名: (truncation.{u} n).幺半群
   定义体: inferInstanceAs ((Functor.whiskeringLeft _ _ _).obj _).Monoidal
 
 Depends on / 依赖: Functor, Functor.whiskeringLeft, Monoidal, whiskeringLeft
@@ -1379,7 +1379,7 @@ lemma tensor_map_apply_fst
 
 中文:
 引理 tensor_map_apply_fst
-  结论: {d e : (SimplexCategory.Truncated n)ᵒᵖ}
+  结论: {d e : (单纯形范畴.Truncated n)ᵒᵖ}
   证明: rfl
 
 @[simp]
@@ -1399,7 +1399,7 @@ lemma tensor_map_apply_snd
 
 中文:
 引理 tensor_map_apply_snd
-  结论: {d e : (SimplexCategory.Truncated n)ᵒᵖ}
+  结论: {d e : (单纯形范畴.Truncated n)ᵒᵖ}
   证明: rfl
 -/
 lemma tensor_map_apply_snd {d e : (SimplexCategory.Truncated n)ᵒᵖ}

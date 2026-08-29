@@ -42,7 +42,7 @@ theorem measurable
 中文:
 定理 measurable
   条件: (L : E ->L[R] F)
-  结论: Measurable L
+  结论: 可测 L
   证明: L.continuous.measurable
 
 @[fun_prop]
@@ -61,7 +61,7 @@ theorem measurable_comp
 
 中文:
 定理 measurable_comp
-  条件: (L : E ->L[R] F) {φ : α -> E} (φ_meas : Measurable φ)
+  条件: (L : E ->L[R] F) {φ : α -> E} (φ_meas : 可测 φ)
   证明: L.measurable.comp φ_meas
 
 Depends on / 依赖: L.measurable.comp, measurable
@@ -88,7 +88,7 @@ instance instMeasurableSpace
 
 中文:
 实例 instMeasurableSpace
-  签名: : MeasurableSpace (E ->L[𝕜] F)
+  签名: : 可测空间 (E ->L[𝕜] F)
   定义体: borel _
 -/
 instance instMeasurableSpace : MeasurableSpace (E ->L[𝕜] F) :=
@@ -106,7 +106,7 @@ instance instBorelSpace
 
 中文:
 实例 instBorelSpace
-  签名: : BorelSpace (E ->L[𝕜] F)
+  签名: : Borel空间 (E ->L[𝕜] F)
   定义体: ⟨rfl⟩
 
 @[fun_prop]
@@ -125,7 +125,7 @@ theorem measurable_apply
 
 中文:
 定理 measurable_apply
-  条件: [MeasurableSpace F] [BorelSpace F] (x : E)
+  条件: [可测空间 F] [Borel空间 F] (x : E)
   证明: (apply 𝕜 F x).continuous.measurable
 
 Depends on / 依赖: continuous, continuous.measurable, measurable
@@ -144,7 +144,7 @@ theorem measurable_apply'
 
 中文:
 定理 measurable_apply'
-  结论: [MeasurableSpace E] [OpensMeasurableSpace E] [MeasurableSpace F]
+  结论: [可测空间 E] [OpensMeasurable空间 E] [可测空间 F]
   证明: measurable_pi_lambda _ fun f => f.measurable
 
 Depends on / 依赖: f.measurable, measurable, measurable_pi_lambda
@@ -163,7 +163,7 @@ theorem measurable_coe
 
 中文:
 定理 measurable_coe
-  条件: [MeasurableSpace F] [BorelSpace F]
+  条件: [可测空间 F] [Borel空间 F]
   证明: measurable_pi_lambda _ measurable_apply
 
 Depends on / 依赖: measurable_apply, measurable_pi_lambda
@@ -192,8 +192,8 @@ theorem Measurable.apply_continuousLinearMap
 @[fun_prop]
 
 中文:
-定理 Measurable.apply_continuousLinearMap
-  条件: {φ : α -> F ->L[𝕜] E} (hφ : Measurable φ) (v : F)
+定理 可测.apply_continuousLinearMap
+  条件: {φ : α -> F ->L[𝕜] E} (hφ : 可测 φ) (v : F)
   证明: (ContinuousLinearMap.apply 𝕜 E v).measurable.comp hφ
 
 @[fun_prop]
@@ -214,8 +214,8 @@ theorem AEMeasurable.apply_continuousLinearMap
   proof: (ContinuousLinearMap.apply 𝕜 E v).measurable.comp_aemeasurable hφ
 
 中文:
-定理 AEMeasurable.apply_continuousLinearMap
-  结论: {φ : α -> F ->L[𝕜] E} {μ : Measure α}
+定理 几乎处处可测.apply_continuousLinearMap
+  结论: {φ : α -> F ->L[𝕜] E} {μ : 测度 α}
   证明: (ContinuousLinearMap.apply 𝕜 E v).measurable.comp_aemeasurable hφ
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, comp_aemeasurable, measurable, measurable.comp_aemeasurable
@@ -261,7 +261,7 @@ theorem aemeasurable_smul_const
 
 中文:
 定理 aemeasurable_smul_const
-  条件: {f : α -> 𝕜} {μ : Measure α} {c : E} (hc : c != 0)
+  条件: {f : α -> 𝕜} {μ : 测度 α} {c : E} (hc : c != 0)
   证明: (isClosedEmbedding_smul_left hc).measurableEmbedding.aemeasurable_comp_iff
 
 Depends on / 依赖: aemeasurable_comp_iff, isClosedEmbedding_smul_left, measurableEmbedding, measurableEmbedding.aemeasurable_comp_iff

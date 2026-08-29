@@ -50,7 +50,7 @@ lemma exists_variableChange_of_char_two_of_j_ne_zero
   · si
 
 中文:
-引理 exists_variableChange_of_char_two_of_j_ne_zero
+引理 存在_variableChange_of_char_two_of_j_ne_zero
   证明: by
   obtain ⟨s, hs⟩ := IsSepClosed.exists_root_C_mul_X_pow_add_C_mul_X_add_C' 2 2
     1 1 (E.a₂ + E'.a₂) (by simp) (by simp) one_ne_zero
@@ -92,7 +92,7 @@ lemma exists_variableChange_of_char_two_of_j_eq_zero
 have : NeZero (3 : F) :
 
 中文:
-引理 exists_variableChange_of_char_two_of_j_eq_zero
+引理 存在_variableChange_of_char_two_of_j_eq_zero
   证明: by
   have ha₃ := E.Δ'.ne_zero
   rw [E.coe_Δ']; rw [Δ_of_isCharTwoJEqZeroNF_of_char_two]; rw [pow_ne_zero_iff (Nat.succ_ne_zero _)] at ha₃
@@ -147,7 +147,7 @@ lemma exists_variableChange_of_char_two
       obtain ⟨C'', hC⟩ := exists_variabl
 
 中文:
-引理 exists_variableChange_of_char_two
+引理 存在_variableChange_of_char_two
   条件: (heq : E.j = E'.j)
   证明: by
   obtain ⟨C, _ | _⟩ := E.exists_variableChange_isCharTwoNF
@@ -195,7 +195,7 @@ lemma exists_variableChange_of_char_three_of_j_ne_zero
   rw [E'.coe_Δ']; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [mul_ne_zer
 
 中文:
-引理 exists_variableChange_of_char_three_of_j_ne_zero
+引理 存在_variableChange_of_char_three_of_j_ne_zero
   证明: by
   have h := E.Δ'.ne_zero
   rw [E.coe_Δ']; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [mul_ne_zero_iff]; rw [neg_ne_zero]; rw [pow_ne_zero_iff three_ne_zero] at h
@@ -251,7 +251,7 @@ lemma exists_variableChange_of_char_three_of_j_eq_zero
 have : NeZero (
 
 中文:
-引理 exists_variableChange_of_char_three_of_j_eq_zero
+引理 存在_variableChange_of_char_three_of_j_eq_zero
   证明: by
   have ha₄ := E.Δ'.ne_zero
   rw [E.coe_Δ']; rw [Δ_of_isShortNF_of_char_three]; rw [neg_ne_zero]; rw [pow_ne_zero_iff three_ne_zero] at ha₄
@@ -306,7 +306,7 @@ lemma exists_variableChange_of_char_three
       use C'⁻¹ * C'' 
 
 中文:
-引理 exists_variableChange_of_char_three
+引理 存在_variableChange_of_char_three
   条件: (heq : E.j = E'.j)
   证明: by
   obtain ⟨C, _ | _⟩ := E.exists_variableChange_isCharThreeNF
@@ -352,7 +352,7 @@ have : NeZero (4 : F) := NeZero.mk by
     norm_num1
 
 中文:
-引理 exists_variableChange_of_char_ne_two_or_three
+引理 存在_variableChange_of_char_ne_two_or_three
   证明: by
   replace hchar2 : (2 : F) != 0 := CharP.cast_ne_zero_of_ne_of_prime F Nat.prime_two hchar2
   replace hchar3 : (3 : F) != 0 := CharP.cast_ne_zero_of_ne_of_prime F Nat.prime_three hchar3
@@ -492,7 +492,7 @@ theorem exists_variableChange_of_j_eq
   exact exists_variableChange_of_char_ne_two_or_three _ _ hchar2 hchar3
 
 中文:
-定理 exists_variableChange_of_j_eq
+定理 存在_variableChange_of_j_eq
   条件: (heq : E.j = E'.j)
   结论: 存在 C : VariableChange F, C • E = E'
   证明: by

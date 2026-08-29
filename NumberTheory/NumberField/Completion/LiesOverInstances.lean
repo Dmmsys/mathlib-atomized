@@ -37,7 +37,7 @@ definition completionMap
 
 中文:
 定义 completionMap
-  签名: : v.Completion ->+* w.Completion
+  签名: : v.完备化 ->+* w.完备化
   定义体: ((Completion.equiv w).symm.toRingHom.comp
     (LiesOver.isometry_algebraMap w v).mapRingHom).comp (Completion.equiv v).toRingHom
 
@@ -58,7 +58,7 @@ theorem continuous_completionMap
 
 中文:
 定理 continuous_completionMap
-  结论: Continuous (completionMap (v := v) (w := w))
+  结论: 连续 (completionMap (v := v) (w := w))
   证明: (continuous_ofCompletion w).comp
     UniformSpace.Completion.continuous_map.comp (continuous_toCompletion v)
 -/

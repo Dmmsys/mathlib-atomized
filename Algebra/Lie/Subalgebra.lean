@@ -51,9 +51,9 @@ structure LieSubalgebra
     - lie_mem' : forall {x y}, x in carrier -> y in carrier -> ⁅x, y⁆ in carrier
 
 中文:
-结构 LieSubalgebra
-  参数: extends Submodule R L
-  继承: Submodule R L
+结构 Lie子代数
+  参数: extends 子模 R L
+  继承: 子模 R L
   公理与运算 (1 个):
     - lie_mem' : 对任意 {x y}, x in carrier -> y in carrier -> ⁅x, y⁆ in carrier
 -/
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (LieSubalgebra R L)
+  签名: 零 (Lie子代数 R L)
   定义体: ⟨⟨0, @fun x y hx _hy => by
     rw [(Submodule.mem_bot R).1 hx]; rw [zero_lie]
     exact Submodule.zero_mem 0⟩⟩
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LieSubalgebra R L)
+  签名: 可居 (Lie子代数 R L)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (LieSubalgebra R L) :=
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (LieSubalgebra R L) (Submodule R L)
+  签名: Coe (Lie子代数 R L) (子模 R L)
   定义体: ⟨LieSubalgebra.toSubmodule⟩
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.toSubmodule, toSubmodule
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (LieSubalgebra R L) L
+  签名: 集合状 (Lie子代数 R L) L
   定义体: L'.carrier
   coe_injective L' L'' h := by
     rcases L' with ⟨⟨⟩⟩
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (LieSubalgebra R L)
+  签名: 偏序 (Lie子代数 R L)
   定义体: .ofSetLike (LieSubalgebra R L) L
 
 Depends on / 依赖: LieSubalgebra, ofSetLike
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSubgroupClass (LieSubalgebra R L) L
+  签名: 加法子群类 (Lie子代数 R L) L
   定义体: Submodule.add_mem _
   zero_mem L' := L'.zero_mem'
   neg_mem {L'} x hx := show -x in (L' : Submodule R L) from neg_mem hx
@@ -205,7 +205,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (LieSubalgebra R L) R L
+  签名: SMulMem类 (Lie子代数 R L) R L
   定义体: SMulMemClass.smul_mem (s := s.toSubmodule)
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, s.toSubmodule, smul_mem, toSubmodule
@@ -238,7 +238,7 @@ instance lieRing
 
 中文:
 实例 lieRing
-  签名: (L' : LieSubalgebra R L)
+  签名: (L' : Lie子代数 R L)
   定义体: ⟨⁅x.val, y.val⁆, L'.lie_mem' x.property y.property⟩
   lie_add := by
     intros
@@ -290,8 +290,8 @@ instance [SMul
   body: L'.toSubmodule.module'
 
 中文:
-实例 [SMul
-  签名: R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L'
+实例 [标量乘法
+  签名: R₁ R] [模 R₁ L] [标量塔 R₁ R L] (L'
   定义体: L'.toSubmodule.module'
 
 Depends on / 依赖: module, toSubmodule, toSubmodule.module
@@ -308,8 +308,8 @@ instance [SMul
   body: L'.toSubmodule.isCentralScalar
 
 中文:
-实例 [SMul
-  签名: R₁ R] [SMul R₁ᵐᵒᵖ R] [Module R₁ L] [Module R₁ᵐᵒᵖ L] [IsScalarTower R₁ R L]
+实例 [标量乘法
+  签名: R₁ R] [标量乘法 R₁ᵐᵒᵖ R] [模 R₁ L] [模 R₁ᵐᵒᵖ L] [标量塔 R₁ R L]
   定义体: L'.toSubmodule.isCentralScalar
 
 Depends on / 依赖: isCentralScalar, toSubmodule, toSubmodule.isCentralScalar
@@ -328,8 +328,8 @@ instance [SMul
   body: L'.toSubmodule.isScalarTower
 
 中文:
-实例 [SMul
-  签名: R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L'
+实例 [标量乘法
+  签名: R₁ R] [模 R₁ L] [标量塔 R₁ R L] (L'
   定义体: L'.toSubmodule.isScalarTower
 
 Depends on / 依赖: isScalarTower, toSubmodule, toSubmodule.isScalarTower
@@ -359,7 +359,7 @@ instance lieAlgebra
 
 中文:
 实例 lieAlgebra
-  签名: (L' : LieSubalgebra R L)
+  签名: (L' : Lie子代数 R L)
   定义体: by
     { intros
       apply SetCoe.ext
@@ -478,7 +478,7 @@ theorem mem_carrier
 中文:
 定理 mem_carrier
   条件: {x : L}
-  结论: x in L'.carrier ↔ x in (L' : Set L)
+  结论: x in L'.carrier ↔ x in (L' : 集合 L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -498,7 +498,7 @@ theorem mem_mk_iff
 
 中文:
 定理 mem_mk_iff
-  条件: (S : Set L) (h₁ h₂ h₃ h₄) {x : L}
+  条件: (S : 集合 L) (h₁ h₂ h₃ h₄) {x : L}
   证明: Iff.rfl
 
 @[simp]
@@ -524,7 +524,7 @@ theorem mem_toSubmodule
 中文:
 定理 mem_toSubmodule
   条件: {x : L}
-  结论: x in (L' : Submodule R L) ↔ x in L'
+  结论: x in (L' : 子模 R L) ↔ x in L'
   证明: Iff.rfl
 
 @[simp]
@@ -545,7 +545,7 @@ theorem mem_mk_iff'
 
 中文:
 定理 mem_mk_iff'
-  条件: (p : Submodule R L) (h) {x : L}
+  条件: (p : 子模 R L) (h) {x : L}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -568,7 +568,7 @@ theorem mem_coe
 中文:
 定理 mem_coe
   条件: {x : L}
-  结论: x in (L' : Set L) ↔ x in L'
+  结论: x in (L' : 集合 L) ↔ x in L'
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -653,7 +653,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (L₁' L₂' : LieSubalgebra R L) (h : 对任意 x, x in L₁' ↔ x in L₂')
+  条件: (L₁' L₂' : Lie子代数 R L) (h : 对任意 x, x in L₁' ↔ x in L₂')
   结论: L₁' = L₂'
   证明: SetLike.ext h
 
@@ -675,7 +675,7 @@ theorem ext_iff'
 
 中文:
 定理 ext_iff'
-  条件: (L₁' L₂' : LieSubalgebra R L)
+  条件: (L₁' L₂' : Lie子代数 R L)
   结论: L₁' = L₂' ↔ 对任意 x, x in L₁' ↔ x in L₂'
   证明: SetLike.ext_iff
 
@@ -697,7 +697,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (S : Set L) (h₁ h₂ h₃ h₄)
+  条件: (S : 集合 L) (h₁ h₂ h₃ h₄)
   证明: rfl
 -/
 theorem mk_coe (S : Set L) (h₁ h₂ h₃ h₄) :
@@ -714,7 +714,7 @@ theorem toSubmodule_mk
 
 中文:
 定理 toSubmodule_mk
-  条件: (p : Submodule R L) (h)
+  条件: (p : 子模 R L) (h)
   证明: rfl
 
 Depends on / 依赖: LieSubalgebra, Submodule
@@ -734,7 +734,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : LieSubalgebra R L -> Set L)
+  结论: 函数.单射 ((↑) : Lie子代数 R L -> 集合 L)
   证明: SetLike.coe_injective
 
 @[norm_cast]
@@ -756,8 +756,8 @@ theorem coe_set_eq
 
 中文:
 定理 coe_set_eq
-  条件: (L₁' L₂' : LieSubalgebra R L)
-  结论: (L₁' : Set L) = L₂' ↔ L₁' = L₂'
+  条件: (L₁' L₂' : Lie子代数 R L)
+  结论: (L₁' : 集合 L) = L₂' ↔ L₁' = L₂'
   证明: SetLike.coe_set_eq
 
 Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
@@ -780,7 +780,7 @@ theorem toSubmodule_injective
 
 中文:
 定理 toSubmodule_injective
-  结论: Function.Injective ((↑) : LieSubalgebra R L -> Submodule R L)
+  结论: 函数.单射 ((↑) : Lie子代数 R L -> 子模 R L)
   证明: fun L₁' L₂' h => by
   rw [SetLike.ext'_iff] at h
   rw [← coe_set_eq]
@@ -807,7 +807,7 @@ theorem toSubmodule_inj
 
 中文:
 定理 toSubmodule_inj
-  条件: (L₁' L₂' : LieSubalgebra R L)
+  条件: (L₁' L₂' : Lie子代数 R L)
   证明: toSubmodule_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toSubmodule_injective, toSubmodule_injective.eq_iff
@@ -826,7 +826,7 @@ theorem coe_toSubmodule
 
 中文:
 定理 coe_toSubmodule
-  结论: ((L' : Submodule R L) : Set L) = L'
+  结论: ((L' : 子模 R L) : 集合 L) = L'
   证明: rfl
 -/
 theorem coe_toSubmodule : ((L' : Submodule R L) : Set L) = L' :=
@@ -886,7 +886,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLieTower L' L M
+  签名: 是LieTower L' L M
   定义体: leibniz_lie x.val y m
 
 Depends on / 依赖: leibniz_lie, x.val
@@ -906,7 +906,7 @@ instance lieRingModule
 
 中文:
 实例 lieRingModule
-  签名: : LieRingModule L' M where
+  签名: : Lie环模 L' M where
   定义体: add_lie (x : L) y m
   lie_add x y m := lie_add (x : L) y m
   leibniz_lie x y m := leibniz_lie x (y : L) m
@@ -932,7 +932,7 @@ instance lieModule
 
 中文:
 实例 lieModule
-  签名: [LieModule R L M]
+  签名: [Lie模 R L M]
   定义体: by
     rw [coe_bracket_of_module]; rw [Submodule.coe_smul_of_tower]; rw [smul_lie]; rw [coe_bracket_of_module]
   lie_smul t x m := by simp only [coe_bracket_of_module, lie_smul]
@@ -955,8 +955,8 @@ definition _root_.LieModuleHom.restrictLie
 @[simp]
 
 中文:
-定义 _root_.LieModuleHom.restrictLie
-  签名: (f : M ->ₗ⁅R,L⁆ N) (L' : LieSubalgebra R L)
+定义 _root_.Lie模态射.restrictLie
+  签名: (f : M ->ₗ⁅R,L⁆ N) (L' : Lie子代数 R L)
   定义体: { (f : M ->ₗ[R] N) with map_lie' := @fun x m => f.map_lie (↑x) m }
 
 @[simp]
@@ -977,7 +977,7 @@ theorem _root_.LieModuleHom.coe_restrictLie
   proof: rfl
 
 中文:
-定理 _root_.LieModuleHom.coe_restrictLie
+定理 _root_.Lie模态射.coe_restrictLie
   条件: (f : M ->ₗ⁅R,L⁆ N)
   结论: ⇑(f.restrictLie L') = f
   证明: rfl
@@ -1094,7 +1094,7 @@ definition range
 
 中文:
 定义 range
-  签名: : LieSubalgebra R L₂
+  签名: : Lie子代数 R L₂
   定义体: { LinearMap.range (f : L ->ₗ[R] L₂) with
       lie_mem' := by
         rintro - - ⟨x, rfl⟩ ⟨y, rfl⟩
@@ -1123,7 +1123,7 @@ theorem coe_range
 
 中文:
 定理 coe_range
-  结论: (f.range : Set L₂) = Set.range f
+  结论: (f.range : 集合 L₂) = 集合.range f
   证明: LinearMap.coe_range (f : L ->ₗ[R] L₂)
 
 @[simp]
@@ -1238,7 +1238,7 @@ theorem surjective_rangeRestrict
 
 中文:
 定理 surjective_rangeRestrict
-  结论: Function.Surjective f.rangeRestrict
+  结论: 函数.满射 f.rangeRestrict
   证明: by
   rintro ⟨y, hy⟩
   rw [mem_range] at hy; obtain ⟨x, rfl⟩ := hy
@@ -1268,7 +1268,7 @@ definition equivRangeOfInjective
 
 中文:
 定义 equivRangeOfInjective
-  签名: (h : Function.Injective f)
+  签名: (h : 函数.单射 f)
   定义体: LieEquiv.ofBijective f.rangeRestrict
     ⟨fun x y hxy => by
       simp only [Subtype.mk_eq_mk, rangeRestrict_apply] at hxy
@@ -1295,7 +1295,7 @@ theorem equivRangeOfInjective_apply
 
 中文:
 定理 equivRangeOfInjective_apply
-  条件: (h : Function.Injective f) (x : L)
+  条件: (h : 函数.单射 f) (x : L)
   证明: rfl
 -/
 theorem equivRangeOfInjective_apply (h : Function.Injective f) (x : L) :
@@ -1318,8 +1318,8 @@ theorem Submodule.exists_lieSubalgebra_coe_eq_iff
     use { p with lie_mem' := h _ _ }
 
 中文:
-定理 Submodule.exists_lieSubalgebra_coe_eq_iff
-  条件: (p : Submodule R L)
+定理 子模.存在_lieSubalgebra_coe_eq_iff
+  条件: (p : 子模 R L)
   证明: by
   constructor
   · rintro ⟨K, rfl⟩ _ _
@@ -1382,7 +1382,7 @@ definition map
 
 中文:
 定义 map
-  签名: : LieSubalgebra R L₂
+  签名: : Lie子代数 R L₂
   定义体: { (K : Submodule R L).map (f : L ->ₗ[R] L₂) with
     lie_mem' {x y} hx hy := by
       simp only [AddSubsemigroup.mem_carrier] at hx hy
@@ -1456,7 +1456,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: : LieSubalgebra R L
+  签名: : Lie子代数 R L
   定义体: { (K₂ : Submodule R L₂).comap (f : L ->ₗ[R] L₂) with
     lie_mem' := @fun x y hx hy => by
       suffices ⁅f x, f y⁆ in K₂ by simp [this]
@@ -1501,7 +1501,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (hf : Function.Injective f)
+  签名: (hf : 函数.单射 f)
   定义体: Submodule.equivMapOfInjective f.toLinearMap hf K
   map_lie' {x y} := by
     ext
@@ -1531,7 +1531,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (LieSubalgebra R L)
+  签名: 偏序 (Lie子代数 R L)
   定义体: { PartialOrder.lift ((↑) : LieSubalgebra R L -> Set L) coe_injective with
     le := fun N N' => forall ⦃x⦄, x in N -> x in N' }
 
@@ -1553,7 +1553,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  结论: K <= K' ↔ (K : Set L) subseteq K'
+  结论: K <= K' ↔ (K : 集合 L) subseteq K'
   证明: Iff.rfl
 
 @[simp]
@@ -1574,7 +1574,7 @@ theorem toSubmodule_le_toSubmodule
 
 中文:
 定理 toSubmodule_le_toSubmodule
-  结论: (K : Submodule R L) <= K' ↔ K <= K'
+  结论: (K : 子模 R L) <= K' ↔ K <= K'
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (LieSubalgebra R L)
+  签名: 底元素 (Lie子代数 R L)
   定义体: ⟨0⟩
 
 @[simp]
@@ -1615,7 +1615,7 @@ theorem bot_coe
 
 中文:
 定理 bot_coe
-  结论: ((⊥ : LieSubalgebra R L) : Set L) = {0}
+  结论: ((⊥ : Lie子代数 R L) : 集合 L) = {0}
   证明: rfl
 
 @[simp]
@@ -1634,7 +1634,7 @@ theorem bot_toSubmodule
 
 中文:
 定理 bot_toSubmodule
-  结论: ((⊥ : LieSubalgebra R L) : Submodule R L) = ⊥
+  结论: ((⊥ : Lie子代数 R L) : 子模 R L) = ⊥
   证明: rfl
 -/
 theorem bot_toSubmodule : ((⊥ : LieSubalgebra R L) : Submodule R L) = ⊥ :=
@@ -1654,7 +1654,7 @@ lemma toSubmodule_eq_bot
 
 中文:
 引理 toSubmodule_eq_bot
-  条件: (K : LieSubalgebra R L)
+  条件: (K : Lie子代数 R L)
   结论: K.toSubmodule = ⊥ ↔ K = ⊥
   证明: by
   simp [← toSubmodule_inj]
@@ -1677,7 +1677,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: (x : L)
-  结论: x in (⊥ : LieSubalgebra R L) ↔ x = 0
+  结论: x in (⊥ : Lie子代数 R L) ↔ x = 0
   证明: mem_singleton_iff
 
 Depends on / 依赖: mem_singleton_iff
@@ -1697,7 +1697,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (LieSubalgebra R L)
+  签名: 顶元素 (Lie子代数 R L)
   定义体: ⟨{ (⊤ : Submodule R L) with lie_mem' := @fun x y _ _ => mem_univ ⁅x, y⁆ }⟩
 
 @[simp]
@@ -1720,7 +1720,7 @@ theorem top_coe
 
 中文:
 定理 top_coe
-  结论: ((⊤ : LieSubalgebra R L) : Set L) = univ
+  结论: ((⊤ : Lie子代数 R L) : 集合 L) = univ
   证明: rfl
 
 @[simp]
@@ -1739,7 +1739,7 @@ theorem top_toSubmodule
 
 中文:
 定理 top_toSubmodule
-  结论: ((⊤ : LieSubalgebra R L) : Submodule R L) = ⊤
+  结论: ((⊤ : Lie子代数 R L) : 子模 R L) = ⊤
   证明: rfl
 -/
 theorem top_toSubmodule : ((⊤ : LieSubalgebra R L) : Submodule R L) = ⊤ :=
@@ -1759,7 +1759,7 @@ lemma toSubmodule_eq_top
 
 中文:
 引理 toSubmodule_eq_top
-  条件: (K : LieSubalgebra R L)
+  条件: (K : Lie子代数 R L)
   结论: K.toSubmodule = ⊤ ↔ K = ⊤
   证明: by
   simp [← toSubmodule_inj]
@@ -1782,7 +1782,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : L)
-  结论: x in (⊤ : LieSubalgebra R L)
+  结论: x in (⊤ : Lie子代数 R L)
   证明: mem_univ x
 
 Depends on / 依赖: mem_univ
@@ -1801,7 +1801,7 @@ theorem _root_.LieHom.range_eq_map
   simp
 
 中文:
-定理 _root_.LieHom.range_eq_map
+定理 _root_.Lie态射.range_eq_map
   结论: f.range = map f ⊤
   证明: by
   ext
@@ -1823,7 +1823,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (LieSubalgebra R L)
+  签名: 最小值 (Lie子代数 R L)
   定义体: ⟨fun K K' =>
     { (K ⊓ K' : Submodule R L) with
       lie_mem' := fun hx hy => mem_inter (K.lie_mem hx.1 hy.1) (K'.lie_mem hx.2 hy.2) }⟩
@@ -1851,7 +1851,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (LieSubalgebra R L)
+  签名: 下确界集 (Lie子代数 R L)
   定义体: ⟨fun S =>
     { sInf {(s : Submodule R L) | s in S} with
       lie_mem' := @fun x y hx hy => by
@@ -1884,7 +1884,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  结论: (↑(K ⊓ K') : Set L) = (K : Set L) inter (K' : Set L)
+  结论: (↑(K ⊓ K') : 集合 L) = (K : 集合 L) inter (K' : 集合 L)
   证明: rfl
 
 @[simp]
@@ -1905,7 +1905,7 @@ theorem sInf_toSubmodule
 
 中文:
 定理 sInf_toSubmodule
-  条件: (S : Set (LieSubalgebra R L))
+  条件: (S : 集合 (Lie子代数 R L))
   证明: rfl
 
 @[simp]
@@ -1929,8 +1929,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (LieSubalgebra R L))
-  结论: (↑(sInf S) : Set L) = ⋂ s in S, (s : Set L)
+  条件: (S : 集合 (Lie子代数 R L))
+  结论: (↑(sInf S) : 集合 L) = ⋂ s in S, (s : 集合 L)
   证明: by
   rw [← coe_toSubmodule]; rw [sInf_toSubmodule]; rw [Submodule.coe_sInf]
   ext x
@@ -1960,7 +1960,7 @@ theorem sInf_glb
 
 中文:
 定理 sInf_glb
-  条件: (S : Set (LieSubalgebra R L))
+  条件: (S : 集合 (Lie子代数 R L))
   结论: IsGLB S (sInf S)
   证明: by
   have h : forall K K' : LieSubalgebra R L, (K : Set L) <= K' ↔ K <= K' := by
@@ -2000,7 +2000,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (LieSubalgebra R L)
+  签名: : 完备格 (Lie子代数 R L)
   定义体: { completeLatticeOfInf _ sInf_glb with
     bot := ⊥
     bot_le := fun N _ h => by
@@ -2039,7 +2039,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (LieSubalgebra R L)
+  签名: 加法 (Lie子代数 R L)
   定义体: max
 -/
 instance : Add (LieSubalgebra R L) where add := max
@@ -2054,7 +2054,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (LieSubalgebra R L)
+  签名: 零 (Lie子代数 R L)
   定义体: ⊥
 -/
 instance : Zero (LieSubalgebra R L) where zero := ⊥
@@ -2073,7 +2073,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (LieSubalgebra R L) where
+  签名: : 加法交换幺半群 (Lie子代数 R L) where
   定义体: sup_assoc
   zero_add := bot_sup_eq
   add_zero := sup_bot_eq
@@ -2099,7 +2099,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (LieSubalgebra R L)
+  签名: 是OrderedAdd幺半群 (Lie子代数 R L)
   定义体: sup_le_sup_right
 
 Depends on / 依赖: sup_le_sup_right
@@ -2121,7 +2121,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd (LieSubalgebra R L)
+  签名: 典范有序加法 (Lie子代数 R L)
   定义体: ⟨b, (sup_eq_right.2 h).symm⟩
   le_add_self _ _ := le_sup_right
   le_self_add _ _ := le_sup_left
@@ -2236,7 +2236,7 @@ instance subsingleton_of_bot
 
 中文:
 实例 subsingleton_of_bot
-  签名: : Subsingleton (LieSubalgebra R (⊥ : LieSubalgebra R L))
+  签名: : 子单例 (Lie子代数 R (⊥ : Lie子代数 R L))
   定义体: by
   apply subsingleton_of_bot_eq_top
   ext ⟨x, hx⟩; change x in ⊥ at hx; rw [LieSubalgebra.mem_bot] at hx; subst hx
@@ -2261,7 +2261,7 @@ theorem subsingleton_bot
 
 中文:
 定理 subsingleton_bot
-  结论: Subsingleton (⊥ : LieSubalgebra R L)
+  结论: 子单例 (⊥ : Lie子代数 R L)
   证明: show Subsingleton ((⊥ : LieSubalgebra R L) : Set L) by simp
 
 Depends on / 依赖: LieSubalgebra, Subsingleton
@@ -2299,7 +2299,7 @@ instance wellFoundedGT_of_noetherian
 
 中文:
 实例 wellFoundedGT_of_noetherian
-  签名: [IsNoetherian R L]
+  签名: [是Noether R L]
   定义体: RelHomClass.isWellFounded (⟨toSubmodule, @fun _ _ h => h⟩ : _ ->r (· > ·))
 
 Depends on / 依赖: RelHomClass, RelHomClass.isWellFounded, isWellFounded, toSubmodule
@@ -2317,7 +2317,7 @@ theorem map_top
 
 中文:
 定理 map_top
-  结论: f.range = LieSubalgebra.map f ⊤
+  结论: f.range = Lie子代数.map f ⊤
   证明: by ext; simp
 -/
 theorem map_top : f.range = LieSubalgebra.map f ⊤ := by ext; simp
@@ -2398,7 +2398,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  结论: Function.Injective (inclusion h)
+  结论: 函数.单射 (inclusion h)
   证明: fun x y => by
   simp only [inclusion_apply, imp_self, Subtype.mk_eq_mk, SetLike.coe_eq_coe]
 
@@ -2419,7 +2419,7 @@ definition ofLe
 
 中文:
 定义 ofLe
-  签名: : LieSubalgebra R K'
+  签名: : Lie子代数 R K'
   定义体: (inclusion h).range
 
 @[simp]
@@ -2508,7 +2508,7 @@ theorem coe_ofLe
 
 中文:
 定理 coe_ofLe
-  结论: (ofLe h : Submodule R K') = LinearMap.range (Submodule.inclusion h)
+  结论: (ofLe h : 子模 R K') = 线性映射.range (子模.inclusion h)
   证明: rfl
 -/
 theorem coe_ofLe : (ofLe h : Submodule R K') = LinearMap.range (Submodule.inclusion h) :=
@@ -2567,7 +2567,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {K : LieSubalgebra R L} {K' : LieSubalgebra R L₂}
+  条件: {K : Lie子代数 R L} {K' : Lie子代数 R L₂}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -2609,7 +2609,7 @@ definition lieSpan
 
 中文:
 定义 lieSpan
-  签名: : LieSubalgebra R L
+  签名: : Lie子代数 R L
   定义体: sInf { N | s subseteq N }
 
 Depends on / 依赖: subseteq
@@ -2633,7 +2633,7 @@ theorem mem_lieSpan
 中文:
 定理 mem_lieSpan
   条件: {x : L}
-  结论: x in lieSpan R L s ↔ 对任意 K : LieSubalgebra R L, s subseteq K -> x in K
+  结论: x in lieSpan R L s ↔ 对任意 K : Lie子代数 R L, s subseteq K -> x in K
   证明: by
   rw [← SetLike.mem_coe]; rw [lieSpan]; rw [coe_sInf]
   exact Set.mem_iInter₂
@@ -2685,7 +2685,7 @@ theorem submodule_span_le_lieSpan
 
 中文:
 定理 submodule_span_le_lieSpan
-  结论: Submodule.span R s <= lieSpan R L s
+  结论: 子模.span R s <= lieSpan R L s
   证明: by
   rw [Submodule.span_le]; rw [coe_toSubmodule]
   apply subset_lieSpan
@@ -2743,7 +2743,7 @@ theorem lieSpan_mono
 
 中文:
 定理 lieSpan_mono
-  条件: {t : Set L} (h : s subseteq t)
+  条件: {t : 集合 L} (h : s subseteq t)
   结论: lieSpan R L s <= lieSpan R L t
   证明: by
   rw [lieSpan_le]
@@ -2765,7 +2765,7 @@ theorem lieSpan_eq
 
 中文:
 定理 lieSpan_eq
-  结论: lieSpan R L (K : Set L) = K
+  结论: lieSpan R L (K : 集合 L) = K
   证明: le_antisymm (lieSpan_le.mpr rfl.subset) subset_lieSpan
 
 Depends on / 依赖: le_antisymm, lieSpan_le, lieSpan_le.mpr, rfl.subset, subset, subset_lieSpan
@@ -2788,7 +2788,7 @@ theorem coe_lieSpan_submodule_eq_iff
 
 中文:
 定理 coe_lieSpan_submodule_eq_iff
-  条件: {p : Submodule R L}
+  条件: {p : 子模 R L}
   证明: by
   rw [p.exists_lieSubalgebra_coe_eq_iff]; constructor <;> intro h
   · intro x m hm
@@ -2822,7 +2822,7 @@ theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
   induction hx, hy using span_i
 
 中文:
-定理 coe_lieSpan_eq_span_of_forall_lie_eq_zero
+定理 coe_lieSpan_eq_span_of_对任意_lie_eq_zero
   证明: by
   suffices forall {x y}, x in span R s -> y in span R s -> ⁅x, y⁆ in span R s by
     refine le_antisymm ?_ submodule_span_le_lieSpan
@@ -2897,7 +2897,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (lieSpan R L : Set L -> LieSubalgebra R L) (↑) where
+  签名: : Galois嵌入 (lieSpan R L : 集合 L -> Lie子代数 R L) (↑) where
   定义体: lieSpan R L s
   gc _ _ := lieSpan_le
   le_l_u _ := subset_lieSpan
@@ -2924,7 +2924,7 @@ theorem span_empty
 
 中文:
 定理 span_empty
-  结论: lieSpan R L (∅ : Set L) = ⊥
+  结论: lieSpan R L (∅ : 集合 L) = ⊥
   证明: (LieSubalgebra.gi R L).gc.l_bot
 
 @[simp]
@@ -2945,7 +2945,7 @@ theorem span_univ
 
 中文:
 定理 span_univ
-  结论: lieSpan R L (Set.univ : Set L) = ⊤
+  结论: lieSpan R L (集合.univ : 集合 L) = ⊤
   证明: eq_top_iff.2 SetLike.le_def.2 subset_lieSpan
 
 Depends on / 依赖: SetLike, SetLike.le_def, eq_top_iff, le_def, subset_lieSpan
@@ -2966,7 +2966,7 @@ theorem span_union
 
 中文:
 定理 span_union
-  条件: (s t : Set L)
+  条件: (s t : 集合 L)
   结论: lieSpan R L (s union t) = lieSpan R L s ⊔ lieSpan R L t
   证明: (LieSubalgebra.gi R L).gc.l_sup
 
@@ -2986,7 +2986,7 @@ theorem span_iUnion
 
 中文:
 定理 span_iUnion
-  条件: {ι} (s : ι -> Set L)
+  条件: {ι} (s : ι -> 集合 L)
   结论: lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R L (s i)
   证明: (LieSubalgebra.gi R L).gc.l_iSup
 
@@ -3194,7 +3194,7 @@ map_lie' {x y} := SetCoe.ext f.map_lie x y }
 
 中文:
 定义 ofInjective
-  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f)
+  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (h : 函数.单射 f)
   定义体: { LinearEquiv.ofInjective (f : L₁ ->ₗ[R] L₂) <| by rwa [LieHom.coe_toLinearMap] with
 map_lie' {x y} := SetCoe.ext f.map_lie x y }
 
@@ -3217,7 +3217,7 @@ theorem ofInjective_apply
 
 中文:
 定理 ofInjective_apply
-  条件: (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁)
+  条件: (f : L₁ ->ₗ⁅R⁆ L₂) (h : 函数.单射 f) (x : L₁)
   证明: rfl
 -/
 theorem ofInjective_apply (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁) :
@@ -3242,7 +3242,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: (h : (L₁' : Set L₁) = L₁'')
+  签名: (h : (L₁' : 集合 L₁) = L₁'')
   定义体: { LinearEquiv.ofEq (L₁' : Submodule R L₁) (L₁'' : Submodule R L₁) (by
       ext x
       change x in (L₁' : Set L₁) ↔ x in (L₁'' : Set L₁)
@@ -3271,7 +3271,7 @@ theorem ofEq_apply
 
 中文:
 定理 ofEq_apply
-  条件: (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : L)
+  条件: (L L' : Lie子代数 R L₁) (h : (L : 集合 L₁) = L') (x : L)
   证明: rfl
 -/
 theorem ofEq_apply (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : L) :
@@ -3295,7 +3295,7 @@ definition lieSubalgebraMap
 
 中文:
 定义 lieSubalgebraMap
-  签名: : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : LieSubalgebra R L₂)
+  签名: : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : Lie子代数 R L₂)
   定义体: { LinearEquiv.submoduleMap (e : L₁ ≃ₗ[R] L₂) ↑L₁'' with
     map_lie' := @fun x y => by
       apply SetCoe.ext

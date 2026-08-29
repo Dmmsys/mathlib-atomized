@@ -31,7 +31,7 @@ theorem smul_mono_right
 
 中文:
 定理 smul_mono_right
-  结论: [SMul M α] [Preorder α] [CovariantClass M α HSMul.hSMul LE.le]
+  结论: [标量乘法 M α] [预序 α] [协变类 M α 异质标量乘法.hSMul LE.le]
   证明: fun _ _ => CovariantClass.elim _
 
 Depends on / 依赖: CovariantClass, CovariantClass.elim
@@ -52,7 +52,7 @@ theorem smul_le_smul_left
 
 中文:
 定理 smul_le_smul_left
-  结论: [SMul M α] [Preorder α] [CovariantClass M α HSMul.hSMul LE.le]
+  结论: [标量乘法 M α] [预序 α] [协变类 M α 异质标量乘法.hSMul LE.le]
   证明: smul_mono_right _ h
 
 Depends on / 依赖: smul_mono_right
@@ -72,7 +72,7 @@ theorem smul_inf_le
 
 中文:
 定理 smul_inf_le
-  结论: [SMul M α] [SemilatticeInf α] [CovariantClass M α HSMul.hSMul LE.le]
+  结论: [标量乘法 M α] [SemilatticeInf α] [协变类 M α 异质标量乘法.hSMul LE.le]
   证明: (smul_mono_right _).map_inf_le _ _
 
 Depends on / 依赖: map_inf_le, smul_mono_right
@@ -91,7 +91,7 @@ theorem smul_iInf_le
 
 中文:
 定理 smul_iInf_le
-  结论: [SMul M α] [CompleteLattice α] [CovariantClass M α HSMul.hSMul LE.le]
+  结论: [标量乘法 M α] [完备格 α] [协变类 M α 异质标量乘法.hSMul LE.le]
   证明: le_iInf fun _ => smul_mono_right _ (iInf_le _ _)
 
 Depends on / 依赖: iInf_le, le_iInf, smul_mono_right
@@ -111,7 +111,7 @@ theorem smul_strictMono_right
 
 中文:
 定理 smul_strictMono_right
-  结论: [SMul M α] [Preorder α] [CovariantClass M α HSMul.hSMul LT.lt]
+  结论: [标量乘法 M α] [预序 α] [协变类 M α 异质标量乘法.hSMul LT.lt]
   证明: fun _ _ => CovariantClass.elim _
 
 Depends on / 依赖: CovariantClass, CovariantClass.elim
@@ -135,7 +135,7 @@ lemma le_pow_smul
 
 中文:
 引理 le_pow_smul
-  结论: {G : 类型} [Monoid G] {α : 类型} [Preorder α] {g : G} {a : α}
+  结论: {G : 类型} [幺半群 G] {α : 类型} [预序 α] {g : G} {a : α}
   证明: by
   induction n with
   | zero => rw [pow_zero, one_smul]
@@ -169,7 +169,7 @@ lemma pow_smul_le
 
 中文:
 引理 pow_smul_le
-  结论: {G : 类型} [Monoid G] {α : 类型} [Preorder α] {g : G} {a : α}
+  结论: {G : 类型} [幺半群 G] {α : 类型} [预序 α] {g : G} {a : α}
   证明: by
   induction n with
   | zero => rw [pow_zero, one_smul]

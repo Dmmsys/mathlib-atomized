@@ -88,7 +88,7 @@ theorem abs_def
 中文:
 定理 abs_def
   条件: (x : 实数)
-  结论: (x : E实数).abs = ENN实数.of实数 |x|
+  结论: (x : E实数).abs = 广义非负实数.of实数 |x|
   证明: rfl
 -/
 theorem abs_def (x : Real) : (x : EReal).abs = ENNReal.ofReal |x| := rfl
@@ -536,7 +536,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoidWithZero E实数
+  签名: 带零交换幺半群 E实数
   定义体: { (inferInstance : MulZeroOneClass EReal) with
     mul_assoc := fun x y z => by
       rw [← sign_eq_and_abs_eq_iff_eq]
@@ -566,7 +566,7 @@ Or.imp_right And.imp_right And.imp_right (mul_le_mul_right · _)
 
 中文:
 实例 :
-  签名: PosMulMono E实数
+  签名: 正乘递增 E实数
   定义体: posMulMono_iff_covariant_pos.2 .mk by
   rintro ⟨x, x0⟩ a b h
   simp only [le_iff_sign, EReal.sign_mul, sign_pos x0, one_mul, EReal.abs_mul] at h ⊢
@@ -591,7 +591,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulPosMono E实数
+  签名: 乘正递增 E实数
   定义体: posMulMono_iff_mulPosMono.1 inferInstance
 
 Depends on / 依赖: posMulMono_iff_mulPosMono
@@ -608,7 +608,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulReflectLT E实数
+  签名: 正乘反映严格偏序 E实数
   定义体: PosMulMono.toPosMulReflectLT
 
 Depends on / 依赖: PosMulMono, PosMulMono.toPosMulReflectLT, toPosMulReflectLT
@@ -625,7 +625,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulPosReflectLT E实数
+  签名: 乘正反映严格偏序 E实数
   定义体: MulPosMono.toMulPosReflectLT
 
 Depends on / 依赖: MulPosMono, MulPosMono.toMulPosReflectLT, toMulPosReflectLT
@@ -725,7 +725,7 @@ lemma exists_nat_ge_mul
     rwa [← coe_coe_eq_natCast n, ← coe_coe_eq_natCast m, ← EReal.coe_mul, EReal.coe_le_coe_iff]
 
 中文:
-引理 exists_nat_ge_mul
+引理 存在_nat_ge_mul
   条件: {a : E实数} (ha : a != ⊤) (n : 自然数)
   证明: match a with
   | ⊤ => ha.irrefl.rec
@@ -761,7 +761,7 @@ lemma min_neg_neg
 中文:
 引理 min_neg_neg
   条件: (x y : E实数)
-  结论: min (-x) (-y) = -max x y
+  结论: 最小值 (-x) (-y) = -最大值 x y
   证明: by
   rcases le_total x y with (h | h) <;> simp_all
 
@@ -783,7 +783,7 @@ lemma max_neg_neg
 中文:
 引理 max_neg_neg
   条件: (x y : E实数)
-  结论: max (-x) (-y) = -min x y
+  结论: 最大值 (-x) (-y) = -最小值 x y
   证明: by
   rcases le_total x y with (h | h) <;> simp_all
 
@@ -820,7 +820,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (E实数)
+  签名: 取逆 (E实数)
   定义体: ⟨EReal.inv⟩
 
 Depends on / 依赖: EReal.inv
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvMonoid E实数
+  签名: 除逆幺半群 E实数
   定义体: EReal.inv
 
 @[simp]
@@ -939,7 +939,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvOneMonoid E实数
+  签名: DivInvOne幺半群 E实数
   定义体: by nth_rw 1 [← coe_one, ← coe_inv 1, _root_.inv_one, coe_one]
 
 Depends on / 依赖: _root_, _root_.inv_one, coe_inv, coe_one, inv_one, nth_rw
@@ -1317,7 +1317,7 @@ lemma inv_strictAntiOn
 
 中文:
 引理 inv_strictAntiOn
-  结论: StrictAntiOn (fun (x : E实数) => x⁻¹) (Ioi 0)
+  结论: StrictAntiOn (fun (x : E实数) => x⁻¹) (左开右无界区间 0)
   证明: by
   intro a a_0 b b_0 a_b
   push _ in _ at *
@@ -1836,7 +1836,7 @@ lemma monotone_div_right_of_nonneg
 中文:
 引理 monotone_div_right_of_nonneg
   条件: (h : 0 <= b)
-  结论: Monotone fun a => a / b
+  结论: 递增 fun a => a / b
   证明: fun _ _ h' => mul_le_mul_of_nonneg_right h' (inv_nonneg_of_nonneg h)
 
 @[gcongr]
@@ -1886,7 +1886,7 @@ apply lt_of_le_of_ne div_le_div_right_of_nonneg (le_of_lt h) (le_of_lt a_lt_a')
 中文:
 引理 strictMono_div_right_of_pos
   条件: (h : 0 < b) (h' : b != ⊤)
-  结论: StrictMono fun a => a / b
+  结论: 严格递增 fun a => a / b
   证明: by
   intro a a' a_lt_a'
 apply lt_of_le_of_ne div_le_div_right_of_nonneg (le_of_lt h) (le_of_lt a_lt_a')
@@ -1942,7 +1942,7 @@ lemma antitone_div_right_of_nonpos
 中文:
 引理 antitone_div_right_of_nonpos
   条件: (h : b <= 0)
-  结论: Antitone fun a => a / b
+  结论: 递减 fun a => a / b
   证明: by
   intro a a' h'
   change a' * b⁻¹ <= a * b⁻¹
@@ -1996,7 +1996,7 @@ apply lt_of_le_of_ne div_le_div_right_of_nonpos (le_of_lt h) (le_of_lt a_lt_a')
 中文:
 引理 strictAnti_div_right_of_neg
   条件: (h : b < 0) (h' : b != ⊥)
-  结论: StrictAnti fun a => a / b
+  结论: 严格递减 fun a => a / b
   证明: by
   intro a a' a_lt_a'
   simp only
@@ -2265,7 +2265,7 @@ lemma exists_lt_mul_left_of_nonneg
   · h
 
 中文:
-引理 exists_lt_mul_left_of_nonneg
+引理 存在_lt_mul_left_of_nonneg
   条件: (ha : 0 <= a) (hc : 0 <= c) (h : c < a * b)
   证明: by
   rcases eq_or_ne b ⊤ with rfl | b_top
@@ -2304,7 +2304,7 @@ lemma exists_lt_mul_right_of_nonneg
   exact exists_lt_mul_left_of_nonneg hb.le hc h
 
 中文:
-引理 exists_lt_mul_right_of_nonneg
+引理 存在_lt_mul_right_of_nonneg
   条件: (ha : 0 <= a) (hc : 0 <= c) (h : c < a * b)
   证明: by
   have hb : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
@@ -2331,7 +2331,7 @@ lemma exists_mul_left_lt
     exact ⟨a', mem_Ioo.2 ⟨aa', a_top'⟩, lt_of_le_of_lt (mul_le_m
 
 中文:
-引理 exists_mul_left_lt
+引理 存在_mul_left_lt
   条件: (h₁ : a != 0 ∨ b != ⊤) (h₂ : a != ⊤ ∨ 0 < b) (hc : a * b < c)
   证明: by
   rcases eq_top_or_lt_top a with rfl | a_top
@@ -2368,7 +2368,7 @@ lemma exists_mul_right_lt
   exact exists_mul_left_lt h₂.symm h₁.symm hc
 
 中文:
-引理 exists_mul_right_lt
+引理 存在_mul_right_lt
   条件: (h₁ : 0 < a ∨ b != ⊤) (h₂ : a != ⊤ ∨ b != 0) (hc : a * b < c)
   证明: by
   simp_rw [mul_comm a] at hc ⊢
@@ -2393,7 +2393,7 @@ lemma le_mul_of_forall_lt
   obtain ⟨b', bb', hd
 
 中文:
-引理 le_mul_of_forall_lt
+引理 le_mul_of_对任意_lt
   结论: (h₁ : 0 < a ∨ b != ⊤) (h₂ : a != ⊤ ∨ 0 < b)
   证明: by
   refine le_of_forall_gt_imp_ge_of_dense fun d hd => ?_
@@ -2428,7 +2428,7 @@ lemma mul_le_of_forall_lt_of_nonneg
   exact dab.le.trans (h a' aa' b' bb')
 
 中文:
-引理 mul_le_of_forall_lt_of_nonneg
+引理 mul_le_of_对任意_lt_of_nonneg
   结论: (ha : 0 <= a) (hc : 0 <= c)
   证明: by
   refine le_of_forall_lt_imp_le_of_dense fun d dab => ?_

@@ -93,7 +93,7 @@ definition uliftYoneda
 
 中文:
 定义 uliftYoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)
+  签名: : C ⥤ Cᵒᵖ ⥤ 类型 (最大值 w v₁)
   定义体: yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{w}
 
 Depends on / 依赖: uliftFunctor, whiskeringRight, yoneda
@@ -126,7 +126,7 @@ definition uliftYonedaIsoYoneda
 
 中文:
 定义 uliftYonedaIsoYoneda
-  签名: {C : 类型u₁} [Category.{max w v₁} C]
+  签名: {C : 类型u₁} [范畴.{最大值 w v₁} C]
   定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
 
 Depends on / 依赖: yoneda
@@ -177,7 +177,7 @@ abbreviation uliftCoyoneda
 
 中文:
 缩写 uliftCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ Type (max w v₁)
+  签名: : Cᵒᵖ ⥤ C ⥤ 类型 (最大值 w v₁)
   定义体: uliftYoneda.{w}.flip
 
 Depends on / 依赖: uliftYoneda
@@ -209,7 +209,7 @@ definition uliftCoyonedaIsoCoyoneda
 
 中文:
 定义 uliftCoyonedaIsoCoyoneda
-  签名: {C : 类型u₁} [Category.{max w v₁} C]
+  签名: {C : 类型u₁} [范畴.{最大值 w v₁} C]
   定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
 
 Depends on / 依赖: coyoneda
@@ -254,7 +254,7 @@ definition fullyFaithful
 
 中文:
 定义 fullyFaithful
-  签名: : (yoneda (C := C)).FullyFaithful where
+  签名: : (yoneda (C := C)).满忠实 where
   定义体: f.app _ (𝟙 _)
   map_preimage := by -- this was automatic
     intro Z W f
@@ -300,7 +300,7 @@ instance yoneda_full
 
 中文:
 实例 yoneda_full
-  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).Full
+  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).满
   定义体: fullyFaithful.full
 
 Depends on / 依赖: fullyFaithful, fullyFaithful.full
@@ -320,7 +320,7 @@ instance yoneda_faithful
 
 中文:
 实例 yoneda_faithful
-  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).Faithful
+  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).忠实
   定义体: fullyFaithful.faithful
 
 Depends on / 依赖: faithful, fullyFaithful, fullyFaithful.faithful
@@ -369,8 +369,8 @@ theorem isIso
 
 中文:
 定理 isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso (yoneda.map f)]
-  结论: IsIso f
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 (yoneda.map f)]
+  结论: 是同构 f
   证明: isIso_of_fully_faithful yoneda f
 
 Depends on / 依赖: isIso_of_fully_faithful, yoneda
@@ -394,7 +394,7 @@ definition fullyFaithful
 
 中文:
 定义 fullyFaithful
-  签名: : (uliftYoneda.{w} (C := C)).FullyFaithful
+  签名: : (uliftYoneda.{w} (C := C)).满忠实
   定义体: Yoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
 
 Depends on / 依赖: FullyFaithful
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftYoneda.{w} (C := C)).Full
+  签名: (uliftYoneda.{w} (C := C)).满
   定义体: (fullyFaithful C).full
 -/
 instance : (uliftYoneda.{w} (C := C)).Full :=
@@ -428,7 +428,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftYoneda.{w} (C := C)).Faithful
+  签名: (uliftYoneda.{w} (C := C)).忠实
   定义体: (fullyFaithful C).faithful
 
 Depends on / 依赖: Faithful
@@ -455,7 +455,7 @@ definition fullyFaithful
 
 中文:
 定义 fullyFaithful
-  签名: : (coyoneda (C := C)).FullyFaithful where
+  签名: : (coyoneda (C := C)).满忠实 where
   定义体: (f.app _ (𝟙 _)).op
   map_preimage := by
     intro Z W f
@@ -498,7 +498,7 @@ definition preimage
   body: (f.app _ (𝟙 X.unop)).op
 
 中文:
-定义 preimage
+定义 原像
   签名: {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y)
   定义体: (f.app _ (𝟙 X.unop)).op
 
@@ -517,7 +517,7 @@ instance coyoneda_full
 
 中文:
 实例 coyoneda_full
-  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).Full
+  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).满
   定义体: fullyFaithful.full
 
 Depends on / 依赖: fullyFaithful, fullyFaithful.full
@@ -535,7 +535,7 @@ instance coyoneda_faithful
 
 中文:
 实例 coyoneda_faithful
-  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).Faithful
+  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).忠实
   定义体: fullyFaithful.faithful
 
 Depends on / 依赖: faithful, fullyFaithful, fullyFaithful.faithful
@@ -584,8 +584,8 @@ theorem isIso
 
 中文:
 定理 isIso
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso (coyoneda.map f)]
-  结论: IsIso f
+  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) [是同构 (coyoneda.map f)]
+  结论: 是同构 f
   证明: isIso_of_fully_faithful coyoneda f
 
 Depends on / 依赖: coyoneda, isIso_of_fully_faithful
@@ -605,7 +605,7 @@ definition punitIso
 
 中文:
 定义 punitIso
-  签名: : coyoneda.obj (Opposite.op PUnit) ≅ 𝟭 (类型v₁)
+  签名: : coyoneda.obj (对偶.op 命题单元) ≅ 𝟭 (类型v₁)
   定义体: NatIso.ofComponents fun X =>
     { hom := ↾fun f => f.hom ⟨⟩
       inv := ↾fun x => ↾fun _ => x }
@@ -672,7 +672,7 @@ definition fullyFaithful
 
 中文:
 定义 fullyFaithful
-  签名: : (uliftCoyoneda.{w} (C := C)).FullyFaithful
+  签名: : (uliftCoyoneda.{w} (C := C)).满忠实
   定义体: Coyoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
 
 Depends on / 依赖: FullyFaithful
@@ -690,7 +690,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftCoyoneda.{w} (C := C)).Full
+  签名: (uliftCoyoneda.{w} (C := C)).满
   定义体: (fullyFaithful C).full
 -/
 instance : (uliftCoyoneda.{w} (C := C)).Full :=
@@ -706,7 +706,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftCoyoneda.{w} (C := C)).Faithful
+  签名: (uliftCoyoneda.{w} (C := C)).忠实
   定义体: (fullyFaithful C).faithful
 
 Depends on / 依赖: Faithful
@@ -731,7 +731,7 @@ structure RepresentableBy
     - homEquiv_comp({X X' : C} (f : X ⟶ X') (g : X' ⟶ Y)) : homEquiv (f ≫ g) = F.map f.op (homEquiv g)  [default: by cat_disch]
 
 中文:
-结构 RepresentableBy
+结构 可表示
   参数: (F : Cᵒᵖ ⥤ 类型v) (Y : C)
   公理与运算 (2 个):
     - homEquiv({X : C}) : (X ⟶ Y) ≃ F.obj (op X)
@@ -754,7 +754,7 @@ lemma RepresentableBy.comp_homEquiv_symm
   proof: e.homEquiv.injective (by simp [homEquiv_comp])
 
 中文:
-引理 RepresentableBy.comp_homEquiv_symm
+引理 可表示.comp_homEquiv_symm
   结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C}
   证明: e.homEquiv.injective (by simp [homEquiv_comp])
 
@@ -774,7 +774,7 @@ lemma RepresentableBy.homEquiv_unop_comp
   proof: h.homEquiv_comp _ _
 
 中文:
-引理 RepresentableBy.homEquiv_unop_comp
+引理 可表示.homEquiv_unop_comp
   结论: {F : Cᵒᵖ ⥤ 类型} {Y : C}
   证明: h.homEquiv_comp _ _
 
@@ -798,8 +798,8 @@ definition RepresentableBy.ofIso
     apply e'.hom.naturality_apply
 
 中文:
-定义 RepresentableBy.ofIso
-  签名: {F F' : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.RepresentableBy Y)
+定义 可表示.ofIso
+  签名: {F F' : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
   定义体: e.homEquiv.trans (e'.app _).toEquiv
   homEquiv_comp {X X'} f g := by
     dsimp
@@ -827,7 +827,7 @@ structure CorepresentableBy
     - homEquiv_comp({Y Y' : C} (g : Y ⟶ Y') (f : X ⟶ Y)) : homEquiv (f ≫ g) = F.map g (homEquiv f)  [default: by cat_disch]
 
 中文:
-结构 CorepresentableBy
+结构 余representableBy
   参数: (F : C ⥤ 类型v) (X : C)
   公理与运算 (2 个):
     - homEquiv({Y : C}) : (X ⟶ Y) ≃ F.obj Y
@@ -850,7 +850,7 @@ lemma CorepresentableBy.homEquiv_symm_comp
   proof: e.homEquiv.injective (by simp [homEquiv_comp])
 
 中文:
-引理 CorepresentableBy.homEquiv_symm_comp
+引理 余representableBy.homEquiv_symm_comp
   结论: {F : C ⥤ 类型v} {X : C}
   证明: e.homEquiv.injective (by simp [homEquiv_comp])
 
@@ -874,8 +874,8 @@ definition CorepresentableBy.ofIso
     apply e'.hom.naturality_apply
 
 中文:
-定义 CorepresentableBy.ofIso
-  签名: {F F' : C ⥤ 类型v} {X : C} (e : F.CorepresentableBy X)
+定义 余representableBy.ofIso
+  签名: {F F' : C ⥤ 类型v} {X : C} (e : F.余representableBy X)
   定义体: e.homEquiv.trans (e'.app _).toEquiv
   homEquiv_comp {Y Y'} g f := by
     dsimp
@@ -903,8 +903,8 @@ lemma RepresentableBy.homEquiv_eq
   conv_lhs => rw [← Category.comp_id f, e.homEquiv_comp]
 
 中文:
-引理 RepresentableBy.homEquiv_eq
-  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.RepresentableBy Y)
+引理 可表示.homEquiv_eq
+  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
   证明: by
   conv_lhs => rw [← Category.comp_id f, e.homEquiv_comp]
 
@@ -925,8 +925,8 @@ lemma CorepresentableBy.homEquiv_eq
   conv_lhs => rw [← Category.id_comp f, e.homEquiv_comp]
 
 中文:
-引理 CorepresentableBy.homEquiv_eq
-  结论: {F : C ⥤ 类型v} {X : C} (e : F.CorepresentableBy X)
+引理 余representableBy.homEquiv_eq
+  结论: {F : C ⥤ 类型v} {X : C} (e : F.余representableBy X)
   证明: by
   conv_lhs => rw [← Category.id_comp f, e.homEquiv_comp]
 
@@ -950,8 +950,8 @@ definition RepresentableBy.uniqueUpToIso
     (by simp [ε, comp_homEquiv_symm, homEquiv_comp])
 
 中文:
-定义 RepresentableBy.uniqueUpToIso
-  签名: {F : Cᵒᵖ ⥤ 类型v} {Y Y' : C} (e : F.RepresentableBy Y)
+定义 可表示.uniqueUpToIso
+  签名: {F : Cᵒᵖ ⥤ 类型v} {Y Y' : C} (e : F.可表示 Y)
   定义体: let ε {X} := (@e.homEquiv X).trans e'.homEquiv.symm
   Yoneda.ext _ _ ε ε.symm (by simp) (by simp)
     (by simp [ε, comp_homEquiv_symm, homEquiv_comp])
@@ -979,8 +979,8 @@ definition CorepresentableBy.uniqueUpToIso
 @[ext]
 
 中文:
-定义 CorepresentableBy.uniqueUpToIso
-  签名: {F : C ⥤ 类型v} {X X' : C} (e : F.CorepresentableBy X)
+定义 余representableBy.uniqueUpToIso
+  签名: {F : C ⥤ 类型v} {X X' : C} (e : F.余representableBy X)
   定义体: let ε {Y} := (@e.homEquiv Y).trans e'.homEquiv.symm
   Coyoneda.ext _ _ ε ε.symm (by simp) (by simp)
     (by simp [ε, homEquiv_symm_comp, homEquiv_comp])
@@ -1013,8 +1013,8 @@ lemma RepresentableBy.ext
 @[ext]
 
 中文:
-引理 RepresentableBy.ext
-  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} {e e' : F.RepresentableBy Y}
+引理 可表示.ext
+  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} {e e' : F.可表示 Y}
   证明: by
   have : forall {X : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
     rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
@@ -1052,8 +1052,8 @@ lemma CorepresentableBy.ext
   rfl
 
 中文:
-引理 CorepresentableBy.ext
-  结论: {F : C ⥤ 类型v} {X : C} {e e' : F.CorepresentableBy X}
+引理 余representableBy.ext
+  结论: {F : C ⥤ 类型v} {X : C} {e e' : F.余representableBy X}
   证明: by
   have : forall {Y : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
     rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
@@ -1121,7 +1121,7 @@ definition RepresentableBy.yoneda
 @[simp]
 
 中文:
-定义 RepresentableBy.yoneda
+定义 可表示.yoneda
   签名: (X : C)
   定义体: Functor.representableByEquiv.symm (Iso.refl _)
 
@@ -1140,7 +1140,7 @@ lemma RepresentableBy.coyoneda_homEquiv
   proof: rfl
 
 中文:
-引理 RepresentableBy.coyoneda_homEquiv
+引理 可表示.coyoneda_homEquiv
   条件: (X Y : C)
   证明: rfl
 -/
@@ -1157,8 +1157,8 @@ definition RepresentableBy.toIso
   body: representableByEquiv e
 
 中文:
-定义 RepresentableBy.toIso
-  签名: {F : Cᵒᵖ ⥤ 类型v₁} {Y : C} (e : F.RepresentableBy Y)
+定义 可表示.toIso
+  签名: {F : Cᵒᵖ ⥤ 类型v₁} {Y : C} (e : F.可表示 Y)
   定义体: representableByEquiv e
 
 Depends on / 依赖: representableByEquiv
@@ -1215,7 +1215,7 @@ definition CorepresentableBy.coyoneda
 @[simp]
 
 中文:
-定义 CorepresentableBy.coyoneda
+定义 余representableBy.coyoneda
   签名: (X : Cᵒᵖ)
   定义体: Functor.corepresentableByEquiv.symm (Iso.refl _)
 
@@ -1235,7 +1235,7 @@ lemma CorepresentableBy.coyoneda_homEquiv
   proof: rfl
 
 中文:
-引理 CorepresentableBy.coyoneda_homEquiv
+引理 余representableBy.coyoneda_homEquiv
   条件: (X : Cᵒᵖ) (Y : C)
   证明: rfl
 -/
@@ -1252,8 +1252,8 @@ definition CorepresentableBy.toIso
   body: corepresentableByEquiv e
 
 中文:
-定义 CorepresentableBy.toIso
-  签名: {F : C ⥤ 类型v₁} {X : C} (e : F.CorepresentableBy X)
+定义 余representableBy.toIso
+  签名: {F : C ⥤ 类型v₁} {X : C} (e : F.余representableBy X)
   定义体: corepresentableByEquiv e
 
 Depends on / 依赖: corepresentableByEquiv
@@ -1274,8 +1274,8 @@ definition RepresentableBy.ofIsoObj
   homEquiv_comp := by simp [R.homEquiv_comp]
 
 中文:
-定义 RepresentableBy.ofIsoObj
-  签名: {F : Cᵒᵖ ⥤ Type w} {X Y : C} (R : F.RepresentableBy X)
+定义 可表示.ofIsoObj
+  签名: {F : Cᵒᵖ ⥤ 类型 w} {X Y : C} (R : F.可表示 X)
   定义体: e.homToEquiv.trans R.homEquiv
   homEquiv_comp := by simp [R.homEquiv_comp]
 
@@ -1299,8 +1299,8 @@ definition CorepresentableBy.ofIsoObj
   homEquiv_comp := by simp [R.homEquiv_comp]
 
 中文:
-定义 CorepresentableBy.ofIsoObj
-  签名: {F : C ⥤ Type w} {X Y : C} (R : F.CorepresentableBy X)
+定义 余representableBy.ofIsoObj
+  签名: {F : C ⥤ 类型 w} {X Y : C} (R : F.余representableBy X)
   定义体: e.homFromEquiv.trans R.homEquiv
   homEquiv_comp := by simp [R.homEquiv_comp]
 
@@ -1327,8 +1327,8 @@ definition RepresentableBy.equivOfIsoObj
   right_inv _ := by ext; simp
 
 中文:
-定义 RepresentableBy.equivOfIsoObj
-  签名: {F : Cᵒᵖ ⥤ Type w} {X Y : C} (e : Y ≅ X)
+定义 可表示.equivOfIsoObj
+  签名: {F : Cᵒᵖ ⥤ 类型 w} {X Y : C} (e : Y ≅ X)
   定义体: R.ofIsoObj e
   invFun R := R.ofIsoObj e.symm
   left_inv _ := by ext; simp
@@ -1358,8 +1358,8 @@ definition CorepresentableBy.equivOfIsoObj
   right_inv _ := by ext; simp
 
 中文:
-定义 CorepresentableBy.equivOfIsoObj
-  签名: {F : C ⥤ Type w} {X Y : C} (e : Y ≅ X)
+定义 余representableBy.equivOfIsoObj
+  签名: {F : C ⥤ 类型 w} {X Y : C} (e : Y ≅ X)
   定义体: R.ofIsoObj e
   invFun R := R.ofIsoObj e.symm
   left_inv _ := by ext; simp
@@ -1463,8 +1463,8 @@ definition RepresentableBy.equivUliftYonedaIso
       homEquiv_comp {X Y} f g := congr($(e.hom.naturality f.op) ⟨g⟩) }
 
 中文:
-定义 RepresentableBy.equivUliftYonedaIso
-  签名: (F : Cᵒᵖ ⥤ Type (max w v₁)) (X : C)
+定义 可表示.equivUliftYonedaIso
+  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)) (X : C)
   定义体: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
     intro X Y f
     ext x
@@ -1502,8 +1502,8 @@ definition CorepresentableBy.equivUliftCoyonedaIso
       homEquiv_comp {X Y} f g := congr($(e.hom.naturality f) ⟨g⟩) }
 
 中文:
-定义 CorepresentableBy.equivUliftCoyonedaIso
-  签名: (F : C ⥤ Type (max w v₁)) (X : C)
+定义 余representableBy.equivUliftCoyonedaIso
+  签名: (F : C ⥤ 类型 (最大值 w v₁)) (X : C)
   定义体: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
     intro X Y f
     ext x
@@ -1538,10 +1538,10 @@ class IsRepresentable
     - has_representation : exists (Y : C), Nonempty (F.RepresentableBy Y)
 
 中文:
-类 IsRepresentable
+类 是Representable
   参数: (F : Cᵒᵖ ⥤ 类型v)
   公理与运算 (1 个):
-    - has_representation : 存在 (Y : C), Nonempty (F.RepresentableBy Y)
+    - has_representation : 存在 (Y : C), 非空 (F.可表示 Y)
 -/
 class IsRepresentable (F : Cᵒᵖ ⥤ Type v) : Prop where
   has_representation : exists (Y : C), Nonempty (F.RepresentableBy Y)
@@ -1555,8 +1555,8 @@ lemma RepresentableBy.isRepresentable
   proof: ⟨Y, ⟨e⟩⟩
 
 中文:
-引理 RepresentableBy.isRepresentable
-  条件: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.RepresentableBy Y)
+引理 可表示.isRepresentable
+  条件: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
   证明: ⟨Y, ⟨e⟩⟩
 -/
 lemma RepresentableBy.isRepresentable {F : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y) :
@@ -1572,7 +1572,7 @@ lemma IsRepresentable.mk'
   proof: (representableByEquiv.symm e).isRepresentable
 
 中文:
-引理 IsRepresentable.mk'
+引理 是Representable.mk'
   条件: {F : Cᵒᵖ ⥤ 类型v₁} {X : C} (e : yoneda.obj X ≅ F)
   证明: (representableByEquiv.symm e).isRepresentable
 
@@ -1602,10 +1602,10 @@ class IsCorepresentable
     - has_corepresentation : exists (X : C), Nonempty (F.CorepresentableBy X)
 
 中文:
-类 IsCorepresentable
+类 是余representable
   参数: (F : C ⥤ 类型v)
   公理与运算 (1 个):
-    - has_corepresentation : 存在 (X : C), Nonempty (F.CorepresentableBy X)
+    - has_corepresentation : 存在 (X : C), 非空 (F.余representableBy X)
 -/
 class IsCorepresentable (F : C ⥤ Type v) : Prop where
   has_corepresentation : exists (X : C), Nonempty (F.CorepresentableBy X)
@@ -1619,7 +1619,7 @@ lemma CorepresentableBy.isCorepresentable
   proof: ⟨X, ⟨e⟩⟩
 
 中文:
-引理 CorepresentableBy.isCorepresentable
+引理 余representableBy.isCorepresentable
   结论: {F : C ⥤ 类型v} {X : C}
   证明: ⟨X, ⟨e⟩⟩
 -/
@@ -1636,7 +1636,7 @@ lemma IsCorepresentable.mk'
   proof: (corepresentableByEquiv.symm e).isCorepresentable
 
 中文:
-引理 IsCorepresentable.mk'
+引理 是余representable.mk'
   条件: {F : C ⥤ 类型v₁} {X : C} (e : coyoneda.obj (op X) ≅ F)
   证明: (corepresentableByEquiv.symm e).isCorepresentable
 
@@ -1687,7 +1687,7 @@ definition representableBy
 
 中文:
 定义 representableBy
-  签名: : F.RepresentableBy F.reprX
+  签名: : F.可表示 F.reprX
   定义体: hF.has_representation.choose_spec.some
 
 Depends on / 依赖: choose_spec, hF.has_representation.choose_spec.some, has_representation
@@ -1704,8 +1704,8 @@ definition RepresentableBy.isoReprX
   body: RepresentableBy.uniqueUpToIso e (representableBy F)
 
 中文:
-定义 RepresentableBy.isoReprX
-  签名: {Y : C} (e : F.RepresentableBy Y)
+定义 可表示.isoReprX
+  签名: {Y : C} (e : F.可表示 Y)
   定义体: RepresentableBy.uniqueUpToIso e (representableBy F)
 
 Depends on / 依赖: RepresentableBy, RepresentableBy.uniqueUpToIso, representableBy, uniqueUpToIso
@@ -1742,7 +1742,7 @@ definition reprW
 
 中文:
 定义 reprW
-  签名: (F : Cᵒᵖ ⥤ 类型v₁) [F.IsRepresentable]
+  签名: (F : Cᵒᵖ ⥤ 类型v₁) [F.是Representable]
   定义体: F.representableBy.toIso
 
 Depends on / 依赖: F.representableBy.toIso, representableBy
@@ -1761,7 +1761,7 @@ theorem reprW_hom_app
 
 中文:
 定理 reprW_hom_app
-  结论: (F : Cᵒᵖ ⥤ 类型v₁) [F.IsRepresentable]
+  结论: (F : Cᵒᵖ ⥤ 类型v₁) [F.是Representable]
   证明: by
   apply RepresentableBy.homEquiv_eq
 
@@ -1782,7 +1782,7 @@ definition uliftYonedaReprXIso
 
 中文:
 定义 uliftYonedaReprXIso
-  签名: (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable]
+  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 v v₁)) [F.是Representable]
   定义体: (RepresentableBy.equivUliftYonedaIso F _) F.representableBy
 
 Depends on / 依赖: F.representableBy, RepresentableBy, RepresentableBy.equivUliftYonedaIso, equivUliftYonedaIso, representableBy
@@ -1801,7 +1801,7 @@ lemma uliftYonedaReprXIso_hom_app
 
 中文:
 引理 uliftYonedaReprXIso_hom_app
-  结论: (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable]
+  结论: (F : Cᵒᵖ ⥤ 类型 (最大值 v v₁)) [F.是Representable]
   证明: RepresentableBy.homEquiv_eq _ _
 
 Depends on / 依赖: RepresentableBy, RepresentableBy.homEquiv_eq, homEquiv_eq
@@ -1845,7 +1845,7 @@ definition corepresentableBy
 
 中文:
 定义 corepresentableBy
-  签名: : F.CorepresentableBy F.coreprX
+  签名: : F.余representableBy F.coreprX
   定义体: hF.has_corepresentation.choose_spec.some
 
 Depends on / 依赖: choose_spec, hF.has_corepresentation.choose_spec.some, has_corepresentation
@@ -1863,8 +1863,8 @@ definition CorepresentableBy.isoCoreprX
   body: CorepresentableBy.uniqueUpToIso e (corepresentableBy F)
 
 中文:
-定义 CorepresentableBy.isoCoreprX
-  签名: {Y : C} (e : F.CorepresentableBy Y)
+定义 余representableBy.isoCoreprX
+  签名: {Y : C} (e : F.余representableBy Y)
   定义体: CorepresentableBy.uniqueUpToIso e (corepresentableBy F)
 
 Depends on / 依赖: CorepresentableBy, CorepresentableBy.uniqueUpToIso, corepresentableBy, uniqueUpToIso
@@ -1901,7 +1901,7 @@ definition coreprW
 
 中文:
 定义 coreprW
-  签名: (F : C ⥤ 类型v₁) [F.IsCorepresentable]
+  签名: (F : C ⥤ 类型v₁) [F.是余representable]
   定义体: F.corepresentableBy.toIso
 
 Depends on / 依赖: F.corepresentableBy.toIso, corepresentableBy
@@ -1921,7 +1921,7 @@ theorem coreprW_hom_app
 
 中文:
 定理 coreprW_hom_app
-  条件: (F : C ⥤ 类型v₁) [F.IsCorepresentable] (X : C) (f : F.coreprX ⟶ X)
+  条件: (F : C ⥤ 类型v₁) [F.是余representable] (X : C) (f : F.coreprX ⟶ X)
   证明: by
   apply CorepresentableBy.homEquiv_eq
 
@@ -1941,7 +1941,7 @@ definition uliftCoyonedaCoreprXIso
 
 中文:
 定义 uliftCoyonedaCoreprXIso
-  签名: (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable]
+  签名: (F : C ⥤ 类型 (最大值 v v₁)) [F.是余representable]
   定义体: (CorepresentableBy.equivUliftCoyonedaIso F _) F.corepresentableBy
 
 Depends on / 依赖: CorepresentableBy, CorepresentableBy.equivUliftCoyonedaIso, F.corepresentableBy, corepresentableBy, equivUliftCoyonedaIso
@@ -1960,7 +1960,7 @@ lemma uliftCoyonedaCoreprXIso_hom_app
 
 中文:
 引理 uliftCoyonedaCoreprXIso_hom_app
-  结论: (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable]
+  结论: (F : C ⥤ 类型 (最大值 v v₁)) [F.是余representable]
   证明: CorepresentableBy.homEquiv_eq _ _
 
 Depends on / 依赖: CorepresentableBy, CorepresentableBy.homEquiv_eq, homEquiv_eq
@@ -2022,7 +2022,7 @@ theorem isRepresentable_of_natIso
 
 中文:
 定理 isRepresentable_of_natIso
-  条件: (F : Cᵒᵖ ⥤ 类型v) {G} (i : F ≅ G) [F.IsRepresentable]
+  条件: (F : Cᵒᵖ ⥤ 类型v) {G} (i : F ≅ G) [F.是Representable]
   证明: (F.representableBy.ofIso i).isRepresentable
 
 Depends on / 依赖: F.representableBy.ofIso, isRepresentable, representableBy
@@ -2041,7 +2041,7 @@ theorem corepresentable_of_natIso
 
 中文:
 定理 corepresentable_of_natIso
-  条件: (F : C ⥤ 类型v) {G} (i : F ≅ G) [F.IsCorepresentable]
+  条件: (F : C ⥤ 类型v) {G} (i : F ≅ G) [F.是余representable]
   证明: (F.corepresentableBy.ofIso i).isCorepresentable
 
 Depends on / 依赖: F.corepresentableBy.ofIso, corepresentableBy, isCorepresentable
@@ -2059,8 +2059,8 @@ definition Functor.CorepresentableBy.id
   body: corepresentableByEquiv.symm Coyoneda.punitIso
 
 中文:
-定义 Functor.CorepresentableBy.id
-  签名: : (𝟭 (类型v)).CorepresentableBy PUnit
+定义 函子.余representableBy.id
+  签名: : (𝟭 (类型v)).余representableBy 命题单元
   定义体: corepresentableByEquiv.symm Coyoneda.punitIso
 
 Depends on / 依赖: Coyoneda, Coyoneda.punitIso, corepresentableByEquiv, corepresentableByEquiv.symm, punitIso
@@ -2077,7 +2077,7 @@ lemma Functor.CorepresentableBy.id_homEquiv_apply
   proof: rfl
 
 中文:
-引理 Functor.CorepresentableBy.id_homEquiv_apply
+引理 函子.余representableBy.id_homEquiv_apply
   结论: (X : 类型v)
   证明: rfl
 -/
@@ -2094,7 +2094,7 @@ lemma Functor.CorepresentableBy.id_homEquiv_symm_apply
   proof: rfl
 
 中文:
-引理 Functor.CorepresentableBy.id_homEquiv_symm_apply
+引理 函子.余representableBy.id_homEquiv_symm_apply
   结论: (X : 类型v) (x : X)
   证明: rfl
 -/
@@ -2112,7 +2112,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.IsCorepresentable (𝟭 (类型v))
+  签名: 函子.是余representable (𝟭 (类型v))
   定义体: Functor.CorepresentableBy.id.isCorepresentable
 
 Depends on / 依赖: CorepresentableBy, Functor, Functor.CorepresentableBy.id.isCorepresentable, isCorepresentable
@@ -2135,7 +2135,7 @@ instance prodCategoryInstance1
 
 中文:
 实例 prodCategoryInstance1
-  签名: : Category ((Cᵒᵖ ⥤ 类型v₁) × Cᵒᵖ)
+  签名: : 范畴 ((Cᵒᵖ ⥤ 类型v₁) × Cᵒᵖ)
   定义体: CategoryTheory.prod'.{max u₁ v₁, v₁} (Cᵒᵖ ⥤ Type v₁) Cᵒᵖ
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.prod
@@ -2153,7 +2153,7 @@ instance prodCategoryInstance2
 
 中文:
 实例 prodCategoryInstance2
-  签名: : Category (Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁))
+  签名: : 范畴 (Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁))
   定义体: CategoryTheory.prod'.{v₁, max u₁ v₁} Cᵒᵖ (Cᵒᵖ ⥤ Type v₁)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.prod
@@ -2500,7 +2500,7 @@ definition yonedaEvaluation
 
 中文:
 定义 yonedaEvaluation
-  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ Type (max u₁ v₁)
+  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
   定义体: evaluationUncurried Cᵒᵖ (Type v₁) ⋙ uliftFunctor
 
 @[simp]
@@ -2541,7 +2541,7 @@ definition yonedaPairing
 
 中文:
 定义 yonedaPairing
-  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ Type (max u₁ v₁)
+  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
   定义体: Functor.prod yoneda.op (𝟭 (Cᵒᵖ ⥤ Type v₁)) ⋙ Functor.hom (Cᵒᵖ ⥤ Type v₁)
 
 @[ext]
@@ -2653,7 +2653,7 @@ definition curriedYonedaLemma
 
 中文:
 定义 curriedYonedaLemma
-  签名: {C : 类型u₁} [SmallCategory C]
+  签名: {C : 类型u₁} [小范畴 C]
   定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv)) (by
     intro X Y f
     ext a b
@@ -2691,7 +2691,7 @@ definition largeCurriedYonedaLemma
 
 中文:
 定义 largeCurriedYonedaLemma
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| yonedaEquiv.trans Equiv.ulift.symm)
@@ -2731,7 +2731,7 @@ definition yonedaOpCompYonedaObj
 
 中文:
 定义 yonedaOpCompYonedaObj
-  签名: {C : 类型u₁} [Category.{v₁} C] (P : Cᵒᵖ ⥤ 类型v₁)
+  签名: {C : 类型u₁} [范畴.{v₁} C] (P : Cᵒᵖ ⥤ 类型v₁)
   定义体: isoWhiskerRight largeCurriedYonedaLemma ((evaluation _ _).obj P)
 
 Depends on / 依赖: evaluation, isoWhiskerRight, largeCurriedYonedaLemma
@@ -2756,7 +2756,7 @@ definition curriedYonedaLemma'
 
 中文:
 定义 curriedYonedaLemma'
-  签名: {C : 类型u₁} [SmallCategory C]
+  签名: {C : 类型u₁} [小范畴 C]
   定义体: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv) (by
     intro X Y f
     ext a
@@ -2873,7 +2873,7 @@ definition uliftYonedaEquiv
 
 中文:
 定义 uliftYonedaEquiv
-  签名: {X : C} {F : Cᵒᵖ ⥤ Type (max w v₁)}
+  签名: {X : C} {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
   定义体: τ.app (op X) (ULift.up (𝟙 _))
   invFun x := { app Y := ↾fun y => F.map y.down.op x }
   left_inv τ := by
@@ -2907,7 +2907,7 @@ lemma uliftYonedaEquiv_naturality
 
 中文:
 引理 uliftYonedaEquiv_naturality
-  结论: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)}
+  结论: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
   证明: by
   simp [uliftYonedaEquiv, uliftYoneda, ← f.naturality_apply]
 
@@ -2930,7 +2930,7 @@ lemma uliftYonedaEquiv_comp
 
 中文:
 引理 uliftYonedaEquiv_comp
-  结论: {X : C} {F G : Cᵒᵖ ⥤ Type (max w v₁)}
+  结论: {X : C} {F G : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
   证明: rfl
 
 @[reassoc]
@@ -2956,7 +2956,7 @@ lemma uliftYonedaEquiv_symm_map
 
 中文:
 引理 uliftYonedaEquiv_symm_map
-  结论: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type (max w v₁)}
+  结论: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
   证明: by
   obtain ⟨u, rfl⟩ := uliftYonedaEquiv.surjective t
   rw [uliftYonedaEquiv_naturality]
@@ -3029,7 +3029,7 @@ lemma hom_ext_uliftYoneda
 
 中文:
 引理 hom_ext_uliftYoneda
-  结论: {P Q : Cᵒᵖ ⥤ Type (max w v₁)} {f g : P ⟶ Q}
+  结论: {P Q : Cᵒᵖ ⥤ 类型 (最大值 w v₁)} {f g : P ⟶ Q}
   证明: by
   ext X x
   simpa [-op_unop, uliftYonedaEquiv_comp] using
@@ -3067,7 +3067,7 @@ definition uliftYonedaOpCompCoyoneda
 
 中文:
 定义 uliftYonedaOpCompCoyoneda
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| uliftYonedaEquiv.trans Equiv.ulift.symm)
@@ -3309,7 +3309,7 @@ definition coyonedaEvaluation
 
 中文:
 定义 coyonedaEvaluation
-  签名: : C × (C ⥤ 类型v₁) ⥤ Type (max u₁ v₁)
+  签名: : C × (C ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
   定义体: evaluationUncurried C (Type v₁) ⋙ uliftFunctor
 
 @[simp]
@@ -3350,7 +3350,7 @@ definition coyonedaPairing
 
 中文:
 定义 coyonedaPairing
-  签名: : C × (C ⥤ 类型v₁) ⥤ Type (max u₁ v₁)
+  签名: : C × (C ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
   定义体: Functor.prod coyoneda.rightOp (𝟭 (C ⥤ Type v₁)) ⋙ Functor.hom (C ⥤ Type v₁)
 
 @[ext]
@@ -3462,7 +3462,7 @@ definition curriedCoyonedaLemma
 
 中文:
 定义 curriedCoyonedaLemma
-  签名: {C : 类型u₁} [SmallCategory C]
+  签名: {C : 类型u₁} [小范畴 C]
   定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv)) (by
     intro X Y f
     ext a b
@@ -3500,7 +3500,7 @@ definition largeCurriedCoyonedaLemma
 
 中文:
 定义 largeCurriedCoyonedaLemma
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| coyonedaEquiv.trans Equiv.ulift.symm)
@@ -3543,7 +3543,7 @@ definition coyonedaCompYonedaObj
 
 中文:
 定义 coyonedaCompYonedaObj
-  签名: {C : 类型u₁} [Category.{v₁} C] (P : C ⥤ 类型v₁)
+  签名: {C : 类型u₁} [范畴.{v₁} C] (P : C ⥤ 类型v₁)
   定义体: isoWhiskerRight largeCurriedCoyonedaLemma ((evaluation _ _).obj P)
 
 Depends on / 依赖: evaluation, isoWhiskerRight, largeCurriedCoyonedaLemma
@@ -3567,7 +3567,7 @@ definition curriedCoyonedaLemma'
 
 中文:
 定义 curriedCoyonedaLemma'
-  签名: {C : 类型u₁} [SmallCategory C]
+  签名: {C : 类型u₁} [小范畴 C]
   定义体: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv) (by
     intro X Y f
     ext a
@@ -3686,7 +3686,7 @@ definition uliftCoyonedaEquiv
 
 中文:
 定义 uliftCoyonedaEquiv
-  签名: {X : Cᵒᵖ} {F : C ⥤ Type (max w v₁)}
+  签名: {X : Cᵒᵖ} {F : C ⥤ 类型 (最大值 w v₁)}
   定义体: τ.app X.unop (ULift.up (𝟙 _))
   invFun x := { app Y := ↾fun y => F.map y.down x }
   left_inv τ := by
@@ -3719,7 +3719,7 @@ lemma uliftCoyonedaEquiv_naturality
 
 中文:
 引理 uliftCoyonedaEquiv_naturality
-  结论: {X Y : C} {F : C ⥤ Type max w v₁}
+  结论: {X Y : C} {F : C ⥤ 类型 最大值 w v₁}
   证明: by
   simp [uliftCoyonedaEquiv, ← comp_apply, ← f.naturality]
 
@@ -3742,7 +3742,7 @@ lemma uliftCoyonedaEquiv_comp
 
 中文:
 引理 uliftCoyonedaEquiv_comp
-  结论: {X : Cᵒᵖ} {F G : C ⥤ Type (max w v₁)}
+  结论: {X : Cᵒᵖ} {F G : C ⥤ 类型 (最大值 w v₁)}
   证明: rfl
 
 @[reassoc]
@@ -3766,7 +3766,7 @@ lemma uliftCoyonedaEquiv_symm_map
 
 中文:
 引理 uliftCoyonedaEquiv_symm_map
-  结论: {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type (max w v₁)}
+  结论: {X Y : C} (f : X ⟶ Y) {F : C ⥤ 类型 (最大值 w v₁)}
   证明: by
   obtain ⟨u, rfl⟩ := uliftCoyonedaEquiv.surjective t
   rw [uliftCoyonedaEquiv_naturality]
@@ -3820,7 +3820,7 @@ lemma hom_ext_uliftCoyoneda
 
 中文:
 引理 hom_ext_uliftCoyoneda
-  结论: {P Q : C ⥤ Type (max w v₁)} {f g : P ⟶ Q}
+  结论: {P Q : C ⥤ 类型 (最大值 w v₁)} {f g : P ⟶ Q}
   证明: by
   ext X x
   simpa [uliftCoyonedaEquiv]
@@ -3857,7 +3857,7 @@ definition uliftCoyonedaRightOpCompCoyoneda
 
 中文:
 定义 uliftCoyonedaRightOpCompCoyoneda
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| uliftCoyonedaEquiv.trans Equiv.ulift.symm)
@@ -4011,8 +4011,8 @@ definition Functor.sectionsEquivHom
     rw [Unique.eq_default x]
 
 中文:
-定义 Functor.sectionsEquivHom
-  签名: (F : C ⥤ 类型u₂) (X : 类型u₂) [Unique X]
+定义 函子.sectionsEquivHom
+  签名: (F : C ⥤ 类型u₂) (X : 类型u₂) [唯一 X]
   定义体: { app j := ↾fun _ => s.1 j
       naturality _ _ _ := by ext x; simp }
   invFun τ := by
@@ -4049,7 +4049,7 @@ lemma Functor.sectionsEquivHom_naturality
   rfl
 
 中文:
-引理 Functor.sectionsEquivHom_naturality
+引理 函子.sectionsEquivHom_naturality
   结论: {F G : C ⥤ 类型u₂} (f : F ⟶ G) (X : 类型u₂)
   证明: by
   rfl
@@ -4069,7 +4069,7 @@ lemma Functor.sectionsEquivHom_naturality_symm
   rfl
 
 中文:
-引理 Functor.sectionsEquivHom_naturality_symm
+引理 函子.sectionsEquivHom_naturality_symm
   结论: {F G : C ⥤ 类型u₂} (f : F ⟶ G)
   证明: by
   rfl
@@ -4092,8 +4092,8 @@ definition sectionsFunctorNatIsoCoyoneda
   body: NatIso.ofComponents fun F => (F.sectionsEquivHom X).toIso
 
 中文:
-定义 sectionsFunctorNatIsoCoyoneda
-  签名: (X : Type (max u₁ u₂)) [Unique X]
+定义 sectionsFunctor自然数IsoCoyoneda
+  签名: (X : 类型 (最大值 u₁ u₂)) [唯一 X]
   定义体: NatIso.ofComponents fun F => (F.sectionsEquivHom X).toIso
 
 Depends on / 依赖: F.sectionsEquivHom, NatIso, NatIso.ofComponents, ofComponents, sectionsEquivHom
@@ -4122,8 +4122,8 @@ definition homNatIso
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
 
 中文:
-定义 homNatIso
-  签名: {D : 类型u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C)
+定义 hom自然数Iso
+  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D} (hF : F.满忠实) (X : C)
   定义体: NatIso.ofComponents
     (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
@@ -4150,7 +4150,7 @@ definition compUliftYonedaCompWhiskeringLeft
 
 中文:
 定义 compUliftYonedaCompWhiskeringLeft
-  签名: {D : 类型u₂} [Category.{v₂} D] {F : C ⥤ D}
+  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D}
   定义体: NatIso.ofComponents (fun X => hF.homNatIso _) fun f => by
     ext; exact Equiv.ulift.injective (hF.map_injective (by simp))
 
@@ -4176,8 +4176,8 @@ definition homNatIso'
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
 
 中文:
-定义 homNatIso'
-  签名: {D : 类型u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C)
+定义 hom自然数Iso'
+  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D} (hF : F.满忠实) (X : C)
   定义体: NatIso.ofComponents
     (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
@@ -4204,7 +4204,7 @@ definition compUliftCoyonedaCompWhiskeringLeft
 
 中文:
 定义 compUliftCoyonedaCompWhiskeringLeft
-  签名: {D : 类型u₂} [Category.{v₂} D] {F : C ⥤ D}
+  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D}
   定义体: NatIso.ofComponents (fun X => hF.homNatIso' _)
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
 

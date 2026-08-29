@@ -47,7 +47,7 @@ theorem comp_eq_snd_compProd
 
 中文:
 定理 comp_eq_snd_compProd
-  结论: (η : Kernel Y Z) [IsSFiniteKernel η] (κ : Kernel X Y)
+  结论: (η : 核 Y Z) [是SFiniteKernel η] (κ : 核 X Y)
   证明: by
   ext a s hs
   rw [comp_apply' _ _ _ hs]; rw [snd_apply' _ _ hs]; rw [compProd_apply (measurable_snd hs)]
@@ -220,7 +220,7 @@ lemma parallelComp_id_right_comp_parallelComp
 
 中文:
 引理 parallelComp_id_right_comp_parallelComp
-  结论: {η : Kernel X' Z} [IsSFiniteKernel η]
+  结论: {η : 核 X' Z} [是SFiniteKernel η]
   证明: by
   suffices swap T Y ∘ₖ (ξ ∥ₖ Kernel.id) ∘ₖ (η ∥ₖ κ) = swap T Y ∘ₖ ((ξ ∘ₖ η) ∥ₖ κ) by
     calc ξ ∥ₖ Kernel.id ∘ₖ (η ∥ₖ κ)
@@ -253,7 +253,7 @@ lemma parallelComp_comp_parallelComp
 
 中文:
 引理 parallelComp_comp_parallelComp
-  结论: [IsSFiniteKernel κ] {η : Kernel Y Z} [IsSFiniteKernel η]
+  结论: [是SFiniteKernel κ] {η : 核 Y Z} [是SFiniteKernel η]
   证明: by
   rw [← parallelComp_id_left_comp_parallelComp]; rw [← parallelComp_id_right_comp_parallelComp]; rw [← comp_assoc]; rw [parallelComp_id_left_comp_parallelComp]; rw [comp_id]
 
@@ -275,7 +275,7 @@ lemma parallelComp_comp_prod
 
 中文:
 引理 parallelComp_comp_prod
-  结论: [IsSFiniteKernel κ] {η : Kernel Y Z} [IsSFiniteKernel η]
+  结论: [是SFiniteKernel κ] {η : 核 Y Z} [是SFiniteKernel η]
   证明: by
   rw [← parallelComp_comp_copy]; rw [← comp_assoc]; rw [parallelComp_comp_parallelComp]; rw [← parallelComp_comp_copy]
 
@@ -330,7 +330,7 @@ lemma id_parallelComp_comp_parallelComp_id
 
 中文:
 引理 id_parallelComp_comp_parallelComp_id
-  条件: [IsSFiniteKernel κ]
+  条件: [是SFiniteKernel κ]
   证明: by
   rw [parallelComp_id_left_comp_parallelComp]
   congr

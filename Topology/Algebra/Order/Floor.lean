@@ -127,7 +127,7 @@ theorem tendsto_floor_atTop
 
 中文:
 定理 tendsto_floor_atTop
-  结论: Tendsto (floor : α -> 整数) atTop atTop
+  结论: 收敛 (floor : α -> 整数) atTop atTop
   证明: floor_mono.tendsto_atTop_atTop fun b =>
     ⟨(b + 1 : Int), by rw [floor_intCast]; exact (lt_add_one _).le⟩
 
@@ -147,7 +147,7 @@ theorem tendsto_floor_atBot
 
 中文:
 定理 tendsto_floor_atBot
-  结论: Tendsto (floor : α -> 整数) atBot atBot
+  结论: 收敛 (floor : α -> 整数) atBot atBot
   证明: floor_mono.tendsto_atBot_atBot fun b => ⟨b, (floor_intCast _).le⟩
 
 Depends on / 依赖: floor_intCast, floor_mono, floor_mono.tendsto_atBot_atBot, tendsto_atBot_atBot
@@ -165,7 +165,7 @@ theorem tendsto_ceil_atTop
 
 中文:
 定理 tendsto_ceil_atTop
-  结论: Tendsto (ceil : α -> 整数) atTop atTop
+  结论: 收敛 (ceil : α -> 整数) atTop atTop
   证明: ceil_mono.tendsto_atTop_atTop fun b => ⟨b, (ceil_intCast _).ge⟩
 
 Depends on / 依赖: ceil_intCast, ceil_mono, ceil_mono.tendsto_atTop_atTop, tendsto_atTop_atTop
@@ -184,7 +184,7 @@ theorem tendsto_ceil_atBot
 
 中文:
 定理 tendsto_ceil_atBot
-  结论: Tendsto (ceil : α -> 整数) atBot atBot
+  结论: 收敛 (ceil : α -> 整数) atBot atBot
   证明: ceil_mono.tendsto_atBot_atBot fun b =>
     ⟨(b - 1 : Int), by rw [ceil_intCast]; exact (sub_one_lt _).le⟩
 
@@ -254,7 +254,7 @@ theorem tendsto_floor_right_pure_floor
 中文:
 定理 tendsto_floor_right_pure_floor
   条件: (x : α)
-  结论: Tendsto (floor : α -> 整数) (𝓝[>=] x) (pure ⌊x⌋)
+  结论: 收敛 (floor : α -> 整数) (𝓝[>=] x) (pure ⌊x⌋)
   证明: tendsto_pure.2 mem_of_superset (Ico_mem_nhdsGE <| lt_floor_add_one x) fun _y hy =>
     floor_eq_on_Ico _ _ ⟨(floor_le x).trans hy.1, hy.2⟩
 
@@ -277,7 +277,7 @@ theorem tendsto_floor_right_pure
 中文:
 定理 tendsto_floor_right_pure
   条件: (n : 整数)
-  结论: Tendsto (floor : α -> 整数) (𝓝[>=] n) (pure n)
+  结论: 收敛 (floor : α -> 整数) (𝓝[>=] n) (pure n)
   证明: by
   simpa only [floor_intCast] using tendsto_floor_right_pure_floor (n : α)
 
@@ -300,7 +300,7 @@ theorem tendsto_ceil_left_pure_ceil
 中文:
 定理 tendsto_ceil_left_pure_ceil
   条件: (x : α)
-  结论: Tendsto (ceil : α -> 整数) (𝓝[<=] x) (pure ⌈x⌉)
+  结论: 收敛 (ceil : α -> 整数) (𝓝[<=] x) (pure ⌈x⌉)
   证明: tendsto_pure.2 mem_of_superset
     (Ioc_mem_nhdsLE <| sub_lt_iff_lt_add.2 <| ceil_lt_add_one _) fun _y hy =>
       ceil_eq_on_Ioc _ _ ⟨hy.1, hy.2.trans (le_ceil _)⟩
@@ -325,7 +325,7 @@ theorem tendsto_ceil_left_pure
 中文:
 定理 tendsto_ceil_left_pure
   条件: (n : 整数)
-  结论: Tendsto (ceil : α -> 整数) (𝓝[<=] n) (pure n)
+  结论: 收敛 (ceil : α -> 整数) (𝓝[<=] n) (pure n)
   证明: by
   simpa only [ceil_intCast] using tendsto_ceil_left_pure_ceil (n : α)
 
@@ -447,7 +447,7 @@ theorem tendsto_floor_right
 中文:
 定理 tendsto_floor_right
   条件: (n : 整数)
-  结论: Tendsto (fun x => floor x : α -> α) (𝓝[>=] n) (𝓝[>=] n)
+  结论: 收敛 (fun x => floor x : α -> α) (𝓝[>=] n) (𝓝[>=] n)
   证明: ((tendsto_pure_pure _ _).comp (tendsto_floor_right_pure n)).mono_right
     pure_le_nhdsWithin le_rfl
 
@@ -469,7 +469,7 @@ theorem tendsto_floor_right'
 中文:
 定理 tendsto_floor_right'
   条件: (n : 整数)
-  结论: Tendsto (fun x => floor x : α -> α) (𝓝[>=] n) (𝓝 n)
+  结论: 收敛 (fun x => floor x : α -> α) (𝓝[>=] n) (𝓝 n)
   证明: (tendsto_floor_right n).mono_right inf_le_left
 
 Depends on / 依赖: inf_le_left, mono_right, tendsto_floor_right
@@ -490,7 +490,7 @@ theorem tendsto_ceil_left
 中文:
 定理 tendsto_ceil_left
   条件: (n : 整数)
-  结论: Tendsto (fun x => ceil x : α -> α) (𝓝[<=] n) (𝓝[<=] n)
+  结论: 收敛 (fun x => ceil x : α -> α) (𝓝[<=] n) (𝓝[<=] n)
   证明: ((tendsto_pure_pure _ _).comp (tendsto_ceil_left_pure n)).mono_right
     pure_le_nhdsWithin le_rfl
 
@@ -613,7 +613,7 @@ theorem continuousOn_fract
 
 中文:
 定理 continuousOn_fract
-  条件: [IsTopologicalAddGroup α] (n : 整数)
+  条件: [是拓扑加群 α] (n : 整数)
   证明: continuousOn_id.sub (continuousOn_floor n)
 
 Depends on / 依赖: continuousOn_floor, continuousOn_id, continuousOn_id.sub
@@ -633,7 +633,7 @@ theorem continuousAt_fract
 
 中文:
 定理 continuousAt_fract
-  结论: [OrderClosedTopology α] [IsTopologicalAddGroup α]
+  结论: [OrderClosed拓扑 α] [是拓扑加群 α]
   证明: (continuousOn_fract ⌊x⌋).continuousAt
     Ico_mem_nhds ((floor_le _).lt_of_ne h.symm) (lt_floor_add_one _)
 
@@ -659,7 +659,7 @@ theorem tendsto_fract_left'
 
 中文:
 定理 tendsto_fract_left'
-  条件: [OrderClosedTopology α] [IsTopologicalAddGroup α] (n : 整数)
+  条件: [OrderClosed拓扑 α] [是拓扑加群 α] (n : 整数)
   证明: by
   rw [← sub_sub_cancel (n : α) 1]
   refine (tendsto_id.mono_left nhdsWithin_le_nhds).sub ?_
@@ -684,7 +684,7 @@ theorem tendsto_fract_left
 
 中文:
 定理 tendsto_fract_left
-  条件: [OrderClosedTopology α] [IsTopologicalAddGroup α] (n : 整数)
+  条件: [OrderClosed拓扑 α] [是拓扑加群 α] (n : 整数)
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ (tendsto_fract_left' _)
     (Eventually.of_forall fract_lt_one)
 
@@ -705,7 +705,7 @@ theorem tendsto_fract_right'
 
 中文:
 定理 tendsto_fract_right'
-  条件: [OrderClosedTopology α] [IsTopologicalAddGroup α] (n : 整数)
+  条件: [OrderClosed拓扑 α] [是拓扑加群 α] (n : 整数)
   证明: sub_self (n : α) ▸ (tendsto_nhdsWithin_of_tendsto_nhds tendsto_id).sub (tendsto_floor_right' n)
 
 Depends on / 依赖: sub_self, tendsto_floor_right, tendsto_id, tendsto_nhdsWithin_of_tendsto_nhds
@@ -727,7 +727,7 @@ local notation "I" => (Icc 0 1 : Set α)
 
 中文:
 定理 tendsto_fract_right
-  条件: [OrderClosedTopology α] [IsTopologicalAddGroup α] (n : 整数)
+  条件: [OrderClosed拓扑 α] [是拓扑加群 α] (n : 整数)
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ (tendsto_fract_right' _)
     (Eventually.of_forall fract_nonneg)
 

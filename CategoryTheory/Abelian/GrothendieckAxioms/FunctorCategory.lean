@@ -31,8 +31,8 @@ instance [HasColimitsOfShape
   body: { preservesFiniteLimits _ := inferInstance }
 
 中文:
-实例 [HasColimitsOfShape
-  签名: J A] [HasExactColimitsOfShape J A] [HasFiniteLimits A] :
+实例 [有形状余极限
+  签名: J A] [有ExactColimitsOfShape J A] [有有限极限 A] :
   定义体: { preservesFiniteLimits _ := inferInstance }
 
 Depends on / 依赖: preservesFiniteLimits
@@ -50,8 +50,8 @@ instance [HasLimitsOfShape
   body: { preservesFiniteColimits _ := inferInstance }
 
 中文:
-实例 [HasLimitsOfShape
-  签名: J A] [HasExactLimitsOfShape J A] [HasFiniteColimits A] :
+实例 [有形状极限
+  签名: J A] [有ExactLimitsOfShape J A] [有有限余极限 A] :
   定义体: { preservesFiniteColimits _ := inferInstance }
 
 Depends on / 依赖: preservesFiniteColimits

@@ -86,10 +86,10 @@ class LinearMap.IsWeak
     - eq_induced : t = .induced (B · ·) Pi.topologicalSpace
 
 中文:
-类 LinearMap.IsWeak
-  参数: [t : TopologicalSpace E] (B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜)
+类 线性映射.是Weak
+  参数: [t : 拓扑空间 E] (B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜)
   公理与运算 (1 个):
-    - eq_induced : t = .induced (B · ·) Pi.topologicalSpace
+    - eq_induced : t = .induced (B · ·) 依赖函数类型.topologicalSpace
 -/
 class LinearMap.IsWeak [t : TopologicalSpace E] (B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜) : Prop where
   eq_induced : t = .induced (B · ·) Pi.topologicalSpace
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: B.flip.flip.IsWeak
+  签名: B.flip.flip.是Weak
   定义体: hB
 -/
 instance : B.flip.flip.IsWeak := hB
@@ -123,7 +123,7 @@ theorem coeFn_continuous
 
 中文:
 定理 coeFn_continuous
-  结论: Continuous (B · ·)
+  结论: 连续 (B · ·)
   证明: hB.eq_induced ▸ continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom, eq_induced, hB.eq_induced
@@ -145,7 +145,7 @@ lemma continuous_eval
 中文:
 引理 continuous_eval
   条件: (y : F)
-  结论: Continuous (B · y)
+  结论: 连续 (B · y)
   证明: continuous_pi_iff.mp (coeFn_continuous B) _
 
 Depends on / 依赖: coeFn_continuous, continuous_pi_iff, continuous_pi_iff.mp
@@ -163,7 +163,7 @@ lemma continuous_of_continuous_eval
 
 中文:
 引理 continuous_of_continuous_eval
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: hB.eq_induced ▸ continuous_induced_rng.mpr (continuous_pi_iff.mpr hf)
 
 Depends on / 依赖: continuous_induced_rng, continuous_induced_rng.mpr, continuous_pi_iff, continuous_pi_iff.mpr, eq_induced, hB.eq_induced
@@ -183,7 +183,7 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] {f : α -> E}
+  条件: {α : 类型} [拓扑空间 α] {f : α -> E}
   证明: ⟨fun _ => by fun_prop, hB.continuous_of_continuous_eval⟩
 
 Depends on / 依赖: continuous_of_continuous_eval, fun_prop, hB.continuous_of_continuous_eval
@@ -202,7 +202,7 @@ theorem isInducing
 
 中文:
 定理 isInducing
-  结论: IsInducing (B · ·) where
+  结论: 是Inducing (B · ·) where
   证明: hB.eq_induced
 
 Depends on / 依赖: eq_induced, hB.eq_induced
@@ -223,7 +223,7 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: (hB_inj : Function.Injective B)
+  条件: (hB_inj : 函数.单射 B)
   证明: by
   convert! (LinearMap.coe_injective.comp hB_inj |>.isEmbedding_induced)
   exact hB.eq_induced
@@ -246,8 +246,8 @@ theorem tendsto_iff_forall_eval_tendsto
   rw [← tendsto_pi_nhds]; rw [(isEmbedding hB_inj).tendsto_nhds_iff]; rw [Function.comp_def]
 
 中文:
-定理 tendsto_iff_forall_eval_tendsto
-  结论: {α : 类型} {l : Filter α} {f : α -> E} {x : E}
+定理 tendsto_iff_对任意_eval_tendsto
+  结论: {α : 类型} {l : 滤子 α} {f : α -> E} {x : E}
   证明: by
   rw [← tendsto_pi_nhds]; rw [(isEmbedding hB_inj).tendsto_nhds_iff]; rw [Function.comp_def]
 
@@ -273,7 +273,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: [AddCommMonoid E'] [Module 𝕜 E']
+  结论: [加法交换幺半群 E'] [模 𝕜 E']
   证明: by
     rw [e.symm.toHomeomorph.induced_eq.symm]
     apply congr(TopologicalSpace.induced e.symm $(hB.eq_induced)).trans
@@ -307,7 +307,7 @@ include hB in
 
 中文:
 定义 eval
-  签名: [ContinuousAdd 𝕜] [ContinuousConstSMul 𝕜 𝕜]
+  签名: [连续加法 𝕜] [连续常数标量乘法 𝕜 𝕜]
   定义体: ⟨B.flip f, by fun_prop⟩
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -340,8 +340,8 @@ include hB in
 
 中文:
 定理 continuousAdd
-  条件: [ContinuousAdd 𝕜]
-  结论: ContinuousAdd E where
+  条件: [连续加法 𝕜]
+  结论: 连续加法 E where
   证明: by
     let t₁ : TopologicalSpace E := .induced (B · ·) Pi.topologicalSpace
     have : B.IsWeak := ⟨rfl⟩
@@ -378,8 +378,8 @@ theorem continuousSMul
 
 中文:
 定理 continuousSMul
-  条件: [ContinuousSMul 𝕜 𝕜]
-  结论: ContinuousSMul 𝕜 E where
+  条件: [连续标量乘法 𝕜 𝕜]
+  结论: 连续标量乘法 𝕜 E where
   证明: by
     let t₁ : TopologicalSpace E := .induced (B · ·) Pi.topologicalSpace
     have : B.IsWeak := ⟨rfl⟩
@@ -413,7 +413,7 @@ theorem isTopologicalAddGroup
 
 中文:
 定理 isTopologicalAddGroup
-  结论: {𝕜 E F : 类型} [CommRing 𝕜] [TopologicalSpace 𝕜]
+  结论: {𝕜 E F : 类型} [交换环 𝕜] [拓扑空间 𝕜]
   证明: continuousAdd B
   continuous_neg := by
     let t₁ : TopologicalSpace E := .induced (B · ·) Pi.topologicalSpace

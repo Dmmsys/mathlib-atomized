@@ -36,8 +36,8 @@ theorem Setoid.IsPartition.ncard_eq_finsum
     simp only [← Nat.card_coe_set_eq, N
 
 中文:
-定理 Setoid.IsPartition.ncard_eq_finsum
-  结论: {α : 类型} {P : Set (Set α)}
+定理 集合等价关系.IsPartition.ncard_eq_finsum
+  结论: {α : 类型} {P : 集合 (集合 α)}
   证明: by
   classical
   have hst (t : Set α) : (s inter t).Finite := hs.inter_of_left t

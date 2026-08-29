@@ -70,7 +70,7 @@ definition IsMatching
 
 中文:
 定义 IsMatching
-  签名: (M : Subgraph G)
+  签名: (M : 子图 G)
   定义体: forall ⦃v⦄, v in M.verts -> exists! w, M.Adj v w
 
 Depends on / 依赖: M.Adj, M.verts
@@ -107,7 +107,7 @@ theorem IsMatching.toEdge_eq_of_adj
 
 中文:
 定理 IsMatching.toEdge_eq_of_adj
-  条件: (h : M.IsMatching) (hvw : M.Adj v w)
+  条件: (h : M.IsMatching) (hvw : M.伴随 v w)
   证明: by
   rw [IsMatching.toEdge]; rw [Subtype.mk_eq_mk]; rw [← h hvw.fst_mem |>.choose_spec.right w hvw]
 
@@ -131,7 +131,7 @@ theorem IsMatching.toEdge.surjective
 中文:
 定理 IsMatching.toEdge.surjective
   条件: (h : M.IsMatching)
-  结论: Surjective h.toEdge
+  结论: 满射 h.toEdge
   证明: by
   rintro ⟨⟨x, y⟩, he⟩
   exact ⟨⟨x, M.edge_vert he⟩, h.toEdge_eq_of_adj he⟩
@@ -154,7 +154,7 @@ theorem IsMatching.toEdge_eq_toEdge_of_adj
 
 中文:
 定理 IsMatching.toEdge_eq_toEdge_of_adj
-  条件: (h : M.IsMatching) (ha : M.Adj v w)
+  条件: (h : M.IsMatching) (ha : M.伴随 v w)
   证明: by
   rw [h.toEdge_eq_of_adj ha]; rw [h.toEdge_eq_of_adj ha.symm]; rw [Subtype.mk_eq_mk]; rw [Sym2.eq_swap]
 
@@ -197,7 +197,7 @@ theorem IsMatching.toEdge_preimage_singleton
 
 中文:
 定理 IsMatching.toEdge_preimage_singleton
-  条件: (h : M.IsMatching) (huv : M.Adj u v)
+  条件: (h : M.IsMatching) (huv : M.伴随 u v)
   证明: by
   refine Set.ext fun w => ⟨fun hw => ?_, fun hw => ?_⟩
   · grind [h.mem_coe_toEdge w.property]
@@ -259,7 +259,7 @@ lemma IsMatching.eq_of_adj_left
 
 中文:
 引理 IsMatching.eq_of_adj_left
-  条件: (hM : M.IsMatching) (huv : M.Adj u v) (huw : M.Adj u w)
+  条件: (hM : M.IsMatching) (huv : M.伴随 u v) (huw : M.伴随 u w)
   结论: v = w
   证明: (hM <| M.edge_vert huv).unique huv huw
 
@@ -279,7 +279,7 @@ lemma IsMatching.eq_of_adj_right
 
 中文:
 引理 IsMatching.eq_of_adj_right
-  条件: (hM : M.IsMatching) (huw : M.Adj u w) (hvw : M.Adj v w)
+  条件: (hM : M.IsMatching) (huw : M.伴随 u w) (hvw : M.伴随 v w)
   结论: u = v
   证明: hM.eq_of_adj_left huw.symm hvw.symm
 
@@ -298,7 +298,7 @@ lemma IsMatching.not_adj_left_of_ne
 
 中文:
 引理 IsMatching.not_adj_left_of_ne
-  条件: (hM : M.IsMatching) (hvw : v != w) (huv : M.Adj u v)
+  条件: (hM : M.IsMatching) (hvw : v != w) (huv : M.伴随 u v)
   证明: fun huw => hvw hM.eq_of_adj_left huv huw
 
 Depends on / 依赖: eq_of_adj_left, hM.eq_of_adj_left
@@ -316,7 +316,7 @@ lemma IsMatching.not_adj_right_of_ne
 
 中文:
 引理 IsMatching.not_adj_right_of_ne
-  条件: (hM : M.IsMatching) (huv : u != v) (huw : M.Adj u w)
+  条件: (hM : M.IsMatching) (huv : u != v) (huw : M.伴随 u w)
   证明: fun hvw => huv hM.eq_of_adj_right huw hvw
 
 Depends on / 依赖: eq_of_adj_right, hM.eq_of_adj_right
@@ -342,7 +342,7 @@ lemma IsMatching.sup
     | inl h => exact h
 
 中文:
-引理 IsMatching.sup
+引理 IsMatching.上确界
   结论: (hM : M.IsMatching) (hM' : M'.IsMatching)
   证明: by
   intro v hv
@@ -398,7 +398,7 @@ lemma IsMatching.iSup
 
 中文:
 引理 IsMatching.iSup
-  结论: {ι : Sort _} {f : ι -> Subgraph G} (hM : (i : ι) -> (f i).IsMatching)
+  结论: {ι : 类型层 _} {f : ι -> 子图 G} (hM : (i : ι) -> (f i).IsMatching)
   证明: by
   intro v hv
   obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (verts_iSup ▸ hv)
@@ -446,7 +446,7 @@ lemma IsMatching.subgraphOfAdj
 
 中文:
 引理 IsMatching.subgraphOfAdj
-  条件: (h : G.Adj v w)
+  条件: (h : G.伴随 v w)
   结论: (G.subgraphOfAdj h).IsMatching
   证明: by
   intro _ hv
@@ -480,7 +480,7 @@ obtain ⟨w, hw⟩ := hM Set.mem_of_mem_image_val (Subgraph.verts_coeSubgraph M)
 
 中文:
 引理 IsMatching.coeSubgraph
-  条件: {G' : Subgraph G} {M : Subgraph G'.coe} (hM : M.IsMatching)
+  条件: {G' : 子图 G} {M : 子图 G'.coe} (hM : M.IsMatching)
   证明: by
   intro _ hv
 obtain ⟨w, hw⟩ := hM Set.mem_of_mem_image_val (Subgraph.verts_coeSubgraph M).symm ▸ hv
@@ -522,8 +522,8 @@ lemma IsMatching.exists_of_disjoint_sets_of_equiv
   simp on
 
 中文:
-引理 IsMatching.exists_of_disjoint_sets_of_equiv
-  结论: {s t : Set V} (h : Disjoint s t)
+引理 IsMatching.存在_of_disjoint_sets_of_equiv
+  结论: {s t : 集合 V} (h : Disjoint s t)
   证明: by
   use {
     verts := s union t
@@ -584,7 +584,7 @@ lemma IsMatching.map
 
 中文:
 引理 IsMatching.map
-  结论: {G' : SimpleGraph W} {M : Subgraph G} (f : G ->g G')
+  结论: {G' : 简单图 W} {M : 子图 G} (f : G ->g G')
   证明: by
   rintro _ ⟨v, hv, rfl⟩
   obtain ⟨v', hv'⟩ := hM hv
@@ -617,8 +617,8 @@ lemma Iso.isMatching_map
   mpr := .map f.toHom f.injective
 
 中文:
-引理 Iso.isMatching_map
-  条件: {G' : SimpleGraph W} {M : Subgraph G} (f : G ≃g G')
+引理 同构.isMatching_map
+  条件: {G' : 简单图 W} {M : 子图 G} (f : G ≃g G')
   证明: by simpa [← map_comp] using h.map f.symm.toHom f.symm.injective
   mpr := .map f.toHom f.injective
 
@@ -643,7 +643,7 @@ theorem IsMatching.verts_eq_biUnion_edgeSet
 
 中文:
 定理 IsMatching.verts_eq_biUnion_edgeSet
-  条件: {M : G.Subgraph} (h : M.IsMatching)
+  条件: {M : G.子图} (h : M.IsMatching)
   证明: by
   refine Set.ext fun v => .trans ⟨fun hv => ?_, fun ⟨e, he, hv⟩ => ?_⟩ Set.mem_iUnion₂.symm
   · have ⟨u, he, _⟩ := h hv
@@ -671,7 +671,7 @@ refine fun M₁ h₁ M₂ h₂ h => Subgraph.ext ?_ .mp h Sym2.fromRel_eq_fromRe
 
 中文:
 定理 IsMatching.injOn_edgeSet
-  结论: (Set.ofPred IsMatching).InjOn (edgeSet (G := G))
+  结论: (集合.ofPred IsMatching).单射限制 (edgeSet (G := G))
   证明: by
 refine fun M₁ h₁ M₂ h₂ h => Subgraph.ext ?_ .mp h Sym2.fromRel_eq_fromRel_iff_eq ..
   rw [h₁.verts_eq_biUnion_edgeSet]; rw [h₂.verts_eq_biUnion_edgeSet]; rw [h]
@@ -692,7 +692,7 @@ theorem IsMatching.strictMonoOn_edgeSet
 
 中文:
 定理 IsMatching.strictMonoOn_edgeSet
-  结论: StrictMonoOn (edgeSet (G := G)) (Set.ofPred IsMatching)
+  结论: StrictMonoOn (edgeSet (G := G)) (集合.ofPred IsMatching)
   证明: .strictMonoOn_of_injOn injOn_edgeSet edgeSet_monotone.monotoneOn _
 
 Depends on / 依赖: IsMatching, Set.ofPred, ofPred
@@ -710,7 +710,7 @@ definition IsPerfectMatching
 
 中文:
 定义 IsPerfectMatching
-  签名: (M : G.Subgraph)
+  签名: (M : G.子图)
   定义体: M.IsMatching ∧ M.IsSpanning
 
 Depends on / 依赖: IsMatching, IsSpanning, M.IsMatching, M.IsSpanning
@@ -755,8 +755,8 @@ theorem isMatching_iff_forall_degree
   simp only [degree_eq_one_iff_existsUnique_adj, IsMatching]
 
 中文:
-定理 isMatching_iff_forall_degree
-  条件: [对任意 v, Fintype (M.neighborSet v)]
+定理 isMatching_iff_对任意_degree
+  条件: [对任意 v, 有限类型 (M.neighborSet v)]
   证明: by
   simp only [degree_eq_one_iff_existsUnique_adj, IsMatching]
 
@@ -782,7 +782,7 @@ theorem IsMatching.even_card
 
 中文:
 定理 IsMatching.even_card
-  条件: [Fintype M.verts] (h : M.IsMatching)
+  条件: [有限类型 M.verts] (h : M.IsMatching)
   结论: Even M.verts.toFinset.card
   证明: by
   classical
@@ -815,7 +815,7 @@ theorem isPerfectMatching_iff
 
 中文:
 定理 isPerfectMatching_iff
-  结论: M.IsPerfectMatching ↔ 对任意 v, 存在! w, M.Adj v w
+  结论: M.IsPerfectMatching ↔ 对任意 v, 存在! w, M.伴随 v w
   证明: by
   refine ⟨?_, fun hm => ⟨fun v _ => hm v, fun v => ?_⟩⟩
   · rintro ⟨hm, hs⟩ v
@@ -842,8 +842,8 @@ theorem isPerfectMatching_iff_forall_degree
   simp [degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff]
 
 中文:
-定理 isPerfectMatching_iff_forall_degree
-  条件: [对任意 v, Fintype (M.neighborSet v)]
+定理 isPerfectMatching_iff_对任意_degree
+  条件: [对任意 v, 有限类型 (M.neighborSet v)]
   证明: by
   simp [degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff]
 
@@ -865,7 +865,7 @@ theorem IsPerfectMatching.even_card
 
 中文:
 定理 IsPerfectMatching.even_card
-  条件: [Fintype V] (h : M.IsPerfectMatching)
+  条件: [有限类型 V] (h : M.IsPerfectMatching)
   证明: by
   classical
   simpa only [h.2.card_verts] using IsMatching.even_card h.1
@@ -974,8 +974,8 @@ lemma IsClique.even_iff_exists_isMatching
   obtain ⟨f⟩ : Nonempty (t ≃ u) 
 
 中文:
-引理 IsClique.even_iff_exists_isMatching
-  结论: {u : Set V} (hc : G.IsClique u)
+引理 IsClique.even_iff_存在_isMatching
+  结论: {u : 集合 V} (hc : G.IsClique u)
   证明: by
   refine ⟨fun h => ?_, by
     rintro ⟨M, rfl, hMr⟩
@@ -1018,7 +1018,7 @@ lemma even_card_of_isPerfectMatching
 
 中文:
 引理 even_card_of_isPerfectMatching
-  结论: [Fintype V] [DecidableEq V] [DecidableRel G.Adj]
+  结论: [有限类型 V] [DecidableEq V] [DecidableRel G.伴随]
   证明: by
   #adaptation_note /-- https://github.com/leanprover/lean4/pull/5020
   some instances that use the chain of coercions
@@ -1059,7 +1059,7 @@ lemma odd_matches_node_outside
 
 中文:
 引理 odd_matches_node_outside
-  结论: [Finite V] {u : Set V}
+  结论: [有限 V] {u : 集合 V}
   证明: by
   by_contra! h
   have hMmatch : (M.induce c.val.supp).IsMatching := by
@@ -1107,7 +1107,7 @@ definition IsMatchingFree
 
 中文:
 定义 IsMatchingFree
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: forall M : Subgraph G, ¬ M.IsPerfectMatching
 
 Depends on / 依赖: IsPerfectMatching, M.IsPerfectMatching, Subgraph
@@ -1131,7 +1131,7 @@ lemma IsMatchingFree.mono
 
 中文:
 引理 IsMatchingFree.mono
-  条件: {G G' : SimpleGraph V} (h : G <= G') (hmf : G'.IsMatchingFree)
+  条件: {G G' : 简单图 V} (h : G <= G') (hmf : G'.IsMatchingFree)
   证明: by
   intro x
   by_contra! hc
@@ -1165,8 +1165,8 @@ lemma exists_maximal_isMatchingFree
   exact ⟨Gmax, ⟨hGmax.1, ⟨hGmax.2.prop, fun _ h' => hGmax.2.not_prop_of_gt h'⟩⟩⟩
 
 中文:
-引理 exists_maximal_isMatchingFree
-  条件: [Finite V] (h : G.IsMatchingFree)
+引理 存在_maximal_isMatchingFree
+  条件: [有限 V] (h : G.IsMatchingFree)
   证明: by
   simp_rw [← @not_forall_not _ Subgraph.IsPerfectMatching]
   obtain ⟨Gmax, hGmax⟩ := Finite.exists_le_maximal h
@@ -1191,7 +1191,7 @@ definition IsCycles
 
 中文:
 定义 IsCycles
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: forall ⦃v⦄, (G.neighborSet v).Nonempty -> (G.neighborSet v).ncard = 2
 
 Depends on / 依赖: G.neighborSet, Nonempty, neighborSet
@@ -1212,7 +1212,7 @@ lemma IsCycles.other_adj_of_adj
 
 中文:
 引理 IsCycles.other_adj_of_adj
-  条件: (h : G.IsCycles) (hadj : G.Adj v w)
+  条件: (h : G.IsCycles) (hadj : G.伴随 v w)
   证明: by
   simp_rw [← SimpleGraph.mem_neighborSet] at hadj ⊢
   have := h ⟨w, hadj⟩
@@ -1244,8 +1244,8 @@ lemma IsCycles.existsUnique_ne_adj
   grind
 
 中文:
-引理 IsCycles.existsUnique_ne_adj
-  条件: (h : G.IsCycles) (hadj : G.Adj v w)
+引理 IsCycles.存在Unique_ne_adj
+  条件: (h : G.IsCycles) (hadj : G.伴随 v w)
   证明: by
   obtain ⟨w', ⟨hww, hww'⟩⟩ := h.other_adj_of_adj hadj
   use w'
@@ -1316,8 +1316,8 @@ lemma Walk.IsCycle.isCycles_spanningCoe_toSubgraph
 exact p.mem_verts_toSubgraph.mp p.toSubgraph.edge_vert hw
 
 中文:
-引理 Walk.IsCycle.isCycles_spanningCoe_toSubgraph
-  条件: {u : V} {p : G.Walk u u} (hpc : p.IsCycle)
+引理 途径.是环.isCycles_spanningCoe_toSubgraph
+  条件: {u : V} {p : G.途径 u u} (hpc : p.是环)
   证明: by
   intro v hv
   apply hpc.ncard_neighborSet_toSubgraph_eq_two
@@ -1348,8 +1348,8 @@ lemma Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge
       Walk.toSubgraph, Subgra
 
 中文:
-引理 Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge
-  结论: {u v} {p : G.Walk u v} (hp : p.IsPath)
+引理 途径.是道路.isCycles_spanningCoe_toSubgraph_sup_edge
+  结论: {u v} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   let c := (p.mapLe (OrderTop.le_top G)).cons (by simp [h.symm] : (completeGraph V).Adj v u)
   have : p.toSubgraph.spanningCoe ⊔ edge v u = c.toSubgraph.spanningCoe := by
@@ -1382,8 +1382,8 @@ lemma Walk.IsCycle.adj_toSubgraph_iff_of_isCycles
       (Set.No
 
 中文:
-引理 Walk.IsCycle.adj_toSubgraph_iff_of_isCycles
-  结论: [LocallyFinite G] {u} {p : G.Walk u u}
+引理 途径.是环.adj_toSubgraph_iff_of_isCycles
+  结论: [局部有限 G] {u} {p : G.途径 u u}
   证明: by
   refine fun w => Subgraph.adj_iff_of_neighborSet_equiv (?_ : Nonempty _).some (Set.toFinite _)
   have := hp.ncard_neighborSet_toSubgraph_eq_two (by aesop)
@@ -1418,7 +1418,7 @@ lemma Subgraph.IsPerfectMatching.symmDiff_isCycles
     spanningCoe_adj
 
 中文:
-引理 Subgraph.IsPerfectMatching.symmDiff_isCycles
+引理 子图.IsPerfectMatching.symmDiff_isCycles
   证明: by
   intro v
   obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
@@ -1462,7 +1462,7 @@ lemma IsCycles.snd_of_mem_support_of_isPath_of_adj
 
 中文:
 引理 IsCycles.snd_of_mem_support_of_isPath_of_adj
-  结论: [Finite V] {v w w' : V}
+  结论: [有限 V] {v w w' : V}
   证明: by
   apply hp.snd_of_toSubgraph_adj
   rw [Walk.mem_support_iff_exists_getVert] at hw'
@@ -1507,7 +1507,7 @@ lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux
 
 中文:
 引理 IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux
-  结论: [Finite V] {v w : V}
+  结论: [有限 V] {v w : V}
   证明: by
   -- Consider the case when p is nil
   by_cases hvw : v = w
@@ -1572,7 +1572,7 @@ lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe
 
 中文:
 引理 IsCycles.reachable_sdiff_toSubgraph_spanningCoe
-  结论: [Finite V] {v w : V} (hcyc : G.IsCycles)
+  结论: [有限 V] {v w : V} (hcyc : G.IsCycles)
   证明: by
   have : Fintype V := Fintype.ofFinite V
   exact reachable_sdiff_toSubgraph_spanningCoe_aux hcyc p hp
@@ -1599,7 +1599,7 @@ lemma IsCycles.reachable_deleteEdges
 
 中文:
 引理 IsCycles.reachable_deleteEdges
-  结论: [Finite V] (hadj : G.Adj v w)
+  结论: [有限 V] (hadj : G.伴随 v w)
   证明: by
   have : fromEdgeSet {s(v, w)} = hadj.toWalk.toSubgraph.spanningCoe := by
     simp only [Walk.toSubgraph, singletonSubgraph_le_iff, subgraphOfAdj_verts, Set.mem_insert_iff,
@@ -1635,8 +1635,8 @@ lemma IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp
     obtain ⟨
 
 中文:
-引理 IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp
-  结论: [Finite V]
+引理 IsCycles.存在_cycle_toSubgraph_verts_eq_connectedComponentSupp
+  结论: [有限 V]
   证明: by
   classical
   obtain ⟨w, hw⟩ := hn
@@ -1687,7 +1687,7 @@ definition IsAlternating
 
 中文:
 定义 IsAlternating
-  签名: (G G' : SimpleGraph V)
+  签名: (G G' : 简单图 V)
   定义体: forall ⦃v w w' : V⦄, w != w' -> G.Adj v w -> G.Adj v w' -> (G'.Adj v w ↔ ¬ G'.Adj v w')
 
 Depends on / 依赖: G.Adj
@@ -1705,7 +1705,7 @@ lemma IsAlternating.mono
 
 中文:
 引理 IsAlternating.mono
-  条件: {G'' : SimpleGraph V} (halt : G.IsAlternating G') (h : G'' <= G)
+  条件: {G'' : 简单图 V} (halt : G.IsAlternating G') (h : G'' <= G)
   证明: fun _ _ _ hww' hvw hvw' => halt hww' (h hvw) (h hvw')
 -/
 lemma IsAlternating.mono {G'' : SimpleGraph V} (halt : G.IsAlternating G') (h : G'' <= G) :
@@ -1724,7 +1724,7 @@ lemma IsAlternating.spanningCoe
 
 中文:
 引理 IsAlternating.spanningCoe
-  条件: (halt : G.IsAlternating G') (H : Subgraph G)
+  条件: (halt : G.IsAlternating G') (H : 子图 G)
   证明: by
   intro v w w' hww' hvw hvv'
   simp only [Subgraph.spanningCoe_adj] at hvw hvv'
@@ -1756,7 +1756,7 @@ lemma IsAlternating.sup_edge
 
 中文:
 引理 IsAlternating.sup_edge
-  结论: {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'.Adj u x)
+  结论: {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'.伴随 u x)
   证明: by
   by_cases hadj : G.Adj u x
   · rwa [sup_edge_of_adj G hadj]
@@ -1809,7 +1809,7 @@ lemma Subgraph.IsPerfectMatching.symmDiff_of_isAlternating
     simp only [Subgraph.
 
 中文:
-引理 Subgraph.IsPerfectMatching.symmDiff_of_isAlternating
+引理 子图.IsPerfectMatching.symmDiff_of_isAlternating
   结论: (hM : M.IsPerfectMatching)
   证明: by
   rw [Subgraph.isPerfectMatching_iff]
@@ -1864,8 +1864,8 @@ lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_left
   aesop
 
 中文:
-引理 Subgraph.IsPerfectMatching.isAlternating_symmDiff_left
-  结论: {M' : Subgraph G'}
+引理 子图.IsPerfectMatching.isAlternating_symmDiff_left
+  结论: {M' : 子图 G'}
   证明: by
   intro v w w' hww' hvw hvw'
   obtain ⟨v1, hm1, hv1⟩ := hM.1 (hM.2 v)
@@ -1893,7 +1893,7 @@ lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_right
   simpa [symmDiff_comm] using isAlternating_symmDiff_left hM' hM
 
 中文:
-引理 Subgraph.IsPerfectMatching.isAlternating_symmDiff_right
+引理 子图.IsPerfectMatching.isAlternating_symmDiff_right
   证明: by
   simpa [symmDiff_comm] using isAlternating_symmDiff_left hM' hM
 

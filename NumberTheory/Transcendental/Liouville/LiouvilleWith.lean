@@ -124,7 +124,7 @@ refine ⟨max C 1, zero_lt_one.trans_le le_max_right _ _, ?_⟩
   apply le_max_left
 
 中文:
-定理 exists_pos
+定理 存在_pos
   条件: (h : LiouvilleWith p x)
   证明: by
   rcases h with ⟨C, hC⟩
@@ -525,7 +525,7 @@ theorem add_rat
 
 中文:
 定理 add_rat
-  条件: (h : LiouvilleWith p x) (r : Rat)
+  条件: (h : LiouvilleWith p x) (r : 有理数)
   结论: LiouvilleWith p (x + r)
   证明: by
   rcases h.exists_pos with ⟨C, _hC₀, hC⟩
@@ -605,7 +605,7 @@ theorem rat_add
 
 中文:
 定理 rat_add
-  条件: (h : LiouvilleWith p x) (r : Rat)
+  条件: (h : LiouvilleWith p x) (r : 有理数)
   结论: LiouvilleWith p (r + x)
   证明: add_comm x r ▸ h.add_rat r
 
@@ -885,7 +885,7 @@ theorem sub_rat
 
 中文:
 定理 sub_rat
-  条件: (h : LiouvilleWith p x) (r : Rat)
+  条件: (h : LiouvilleWith p x) (r : 有理数)
   结论: LiouvilleWith p (x - r)
   证明: sub_rat_iff.2 h
 
@@ -1017,7 +1017,7 @@ theorem rat_sub
 
 中文:
 定理 rat_sub
-  条件: (h : LiouvilleWith p x) (r : Rat)
+  条件: (h : LiouvilleWith p x) (r : 有理数)
   结论: LiouvilleWith p (r - x)
   证明: rat_sub_iff.2 h
 
@@ -1207,7 +1207,7 @@ theorem frequently_exists_num
     have H : Tendsto (fun m => 1 / (b 
 
 中文:
-定理 frequently_exists_num
+定理 frequently_存在_num
   条件: (hx : Liouville x) (n : 自然数)
   证明: by
   by_contra! H
@@ -1293,7 +1293,7 @@ theorem forall_liouvilleWith_iff
   exact ⟨a, b, mod_cast hb, hne, by simpa [rpow_neg] using hlt⟩
 
 中文:
-定理 forall_liouvilleWith_iff
+定理 对任意_liouvilleWith_iff
   条件: {x : 实数}
   结论: (对任意 p, LiouvilleWith p x) ↔ Liouville x
   证明: by

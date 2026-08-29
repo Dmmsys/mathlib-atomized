@@ -67,7 +67,7 @@ lemma HasFiniteMulSupport.fun_comp
 
 中文:
 引理 HasFiniteMulSupport.fun_comp
-  结论: {N : 类型} [One N] {g : M -> N} {f : α -> M}
+  结论: {N : 类型} [幺 N] {g : M -> N} {f : α -> M}
   证明: hf.subset mulSupport_comp_subset hg f
 
 @[to_additive (attr := fun_prop)]
@@ -92,7 +92,7 @@ lemma HasFiniteMulSupport.comp
 
 中文:
 引理 HasFiniteMulSupport.comp
-  结论: {N : 类型} [One N] {g : M -> N} {f : α -> M}
+  结论: {N : 类型} [幺 N] {g : M -> N} {f : α -> M}
   证明: hf.subset mulSupport_comp_subset hg f
 
 @[to_additive (attr := fun_prop)]
@@ -117,7 +117,7 @@ lemma HasFiniteMulSupport.fst
 
 中文:
 引理 HasFiniteMulSupport.fst
-  条件: {M' : 类型} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
+  条件: {M' : 类型} [幺 M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
   证明: hf.comp rfl
 
 @[to_additive (attr := fun_prop)]
@@ -141,7 +141,7 @@ lemma HasFiniteMulSupport.snd
 
 中文:
 引理 HasFiniteMulSupport.snd
-  条件: {M' : 类型} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
+  条件: {M' : 类型} [幺 M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
   证明: hf.comp rfl
 
 @[to_additive (attr := fun_prop)]
@@ -168,7 +168,7 @@ lemma HasFiniteMulSupport.prodMk
 
 中文:
 引理 HasFiniteMulSupport.prodMk
-  结论: {M' : 类型} [One M'] {f : α -> M} {g : α -> M'}
+  结论: {M' : 类型} [幺 M'] {f : α -> M} {g : α -> M'}
   证明: by
   simp only [HasFiniteMulSupport] at hf hg ⊢
   rw [mulSupport_prodMk f g]
@@ -198,7 +198,7 @@ lemma HasFiniteMulSupport.mul
 
 中文:
 引理 HasFiniteMulSupport.mul
-  结论: {M : 类型} [MulOneClass M] {f g : α -> M}
+  结论: {M : 类型} [MulOne类 M] {f g : α -> M}
   证明: (hf.union hg).subset mulSupport_mul ..
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -223,7 +223,7 @@ lemma HasFiniteMulSupport.inv
 
 中文:
 引理 HasFiniteMulSupport.inv
-  结论: {M : 类型} [DivisionMonoid M] {f : α -> M}
+  结论: {M : 类型} [Division幺半群 M] {f : α -> M}
   证明: hf.comp inv_one
 
 @[to_additive (attr := fun_prop)]
@@ -247,8 +247,8 @@ lemma HasFiniteMulSupport.prod
 @[to_additive (attr := to_fun (attr := fun_prop))]
 
 中文:
-引理 HasFiniteMulSupport.prod
-  结论: {M : 类型} [CommMonoid M] {ι : 类型} {f : ι -> α -> M}
+引理 HasFiniteMulSupport.乘积
+  结论: {M : 类型} [交换幺半群 M] {ι : 类型} {f : ι -> α -> M}
   证明: (s.finite_toSet.biUnion fun i _ => hf i).subset s.mulSupport_prod f
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -273,7 +273,7 @@ lemma HasFiniteMulSupport.div
 
 中文:
 引理 HasFiniteMulSupport.div
-  结论: {M : 类型} [DivisionMonoid M] {f g : α -> M}
+  结论: {M : 类型} [Division幺半群 M] {f g : α -> M}
   证明: (hf.union hg).subset mulSupport_div ..
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -298,7 +298,7 @@ lemma HasFiniteMulSupport.pow
 
 中文:
 引理 HasFiniteMulSupport.pow
-  结论: {M : 类型} [Monoid M] {f : α -> M} (hf : HasFiniteMulSupport f)
+  结论: {M : 类型} [幺半群 M] {f : α -> M} (hf : HasFiniteMulSupport f)
   证明: hf.comp (one_pow n)
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -323,7 +323,7 @@ lemma HasFiniteMulSupport.zpow
 
 中文:
 引理 HasFiniteMulSupport.zpow
-  结论: {M : 类型} [DivisionMonoid M] {f : α -> M}
+  结论: {M : 类型} [Division幺半群 M] {f : α -> M}
   证明: hf.comp (one_zpow n)
 
 @[to_additive (attr := fun_prop)]
@@ -347,8 +347,8 @@ lemma HasFiniteMulSupport.max
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 HasFiniteMulSupport.max
-  结论: [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+引理 HasFiniteMulSupport.最大值
+  结论: [线性序 M] {f g : α -> M} (hf : HasFiniteMulSupport f)
   证明: (hf.union hg).subset mulSupport_max ..
 
 @[to_additive (attr := fun_prop)]
@@ -372,8 +372,8 @@ lemma HasFiniteMulSupport.min
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 HasFiniteMulSupport.min
-  结论: [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+引理 HasFiniteMulSupport.最小值
+  结论: [线性序 M] {f g : α -> M} (hf : HasFiniteMulSupport f)
   证明: (hf.union hg).subset mulSupport_min ..
 
 @[to_additive (attr := fun_prop)]
@@ -397,7 +397,7 @@ lemma HasFiniteMulSupport.sup
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 HasFiniteMulSupport.sup
+引理 HasFiniteMulSupport.上确界
   结论: [SemilatticeSup M] {f g : α -> M} (hf : HasFiniteMulSupport f)
   证明: (hf.union hg).subset mulSupport_sup ..
 
@@ -422,7 +422,7 @@ lemma HasFiniteMulSupport.inf
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 HasFiniteMulSupport.inf
+引理 HasFiniteMulSupport.下确界
   结论: [SemilatticeInf M] {f g : α -> M} (hf : HasFiniteMulSupport f)
   证明: (hf.union hg).subset mulSupport_inf ..
 
@@ -448,7 +448,7 @@ lemma HasFiniteMulSupport.iSup
 
 中文:
 引理 HasFiniteMulSupport.iSup
-  结论: [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
+  结论: [条件完备格 M] {ι : 类型层*} [非空 ι]
   证明: (Set.finite_iUnion hf).subset mulSupport_iSup f
 
 @[to_additive (attr := fun_prop)]
@@ -473,7 +473,7 @@ lemma HasFiniteMulSupport.iInf
 
 中文:
 引理 HasFiniteMulSupport.iInf
-  结论: [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
+  结论: [条件完备格 M] {ι : 类型层*} [非空 ι]
   证明: (Set.finite_iUnion hf).subset mulSupport_iInf f
 
 @[to_additive (attr := fun_prop)]
@@ -502,7 +502,7 @@ lemma HasFiniteMulSupport.pi
 
 中文:
 引理 HasFiniteMulSupport.pi
-  结论: {ι : 类型} [Finite α] {f : ι -> α -> M}
+  结论: {ι : 类型} [有限 α] {f : ι -> α -> M}
   证明: by
   simp only [HasFiniteMulSupport] at hf ⊢
   refine (Set.finite_iUnion hf).subset fun i hi => ?_
@@ -538,7 +538,7 @@ lemma HasFiniteMulSupport.sup'
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 HasFiniteMulSupport.sup'
+引理 HasFiniteMulSupport.上确界'
   结论: [SemilatticeSup M] {ι : 类型} {f : ι -> α -> M}
   证明: by
   simp only [HasFiniteMulSupport] at hf ⊢
@@ -575,7 +575,7 @@ lemma HasFiniteMulSupport.inf'
   exact Finset.inf'_eq_of_forall hs (fun x => f x a) ha
 
 中文:
-引理 HasFiniteMulSupport.inf'
+引理 HasFiniteMulSupport.下确界'
   结论: [SemilatticeInf M] {ι : 类型} {f : ι -> α -> M}
   证明: by
   simp only [HasFiniteMulSupport] at hf ⊢
@@ -612,7 +612,7 @@ lemma HasFiniteMulSupport.comp_of_injective
 
 中文:
 引理 HasFiniteMulSupport.comp_of_injective
-  条件: (hg : Injective g) (hf : f.HasFiniteMulSupport)
+  条件: (hg : 单射 g) (hf : f.HasFiniteMulSupport)
   证明: by
   refine Set.Finite.of_injOn ?_ (Set.injOn_of_injective hg) hf
   grind [Set.mapsTo_iff_subset_preimage, Function.mulSupport]
@@ -639,7 +639,7 @@ lemma HasFiniteMulSupport.fun_comp_of_injective
 
 中文:
 引理 HasFiniteMulSupport.fun_comp_of_injective
-  条件: (hg : Injective g) (hf : f.HasFiniteMulSupport)
+  条件: (hg : 单射 g) (hf : f.HasFiniteMulSupport)
   证明: hf.comp_of_injective hg
 
 @[to_additive]
@@ -663,7 +663,7 @@ lemma HasFiniteMulSupport.of_comp
 
 中文:
 引理 HasFiniteMulSupport.of_comp
-  结论: [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
+  结论: [幺 β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
   证明: by
   refine Set.Finite.subset hfg fun _ ha => Set.mem_ofPred.mpr fun H => Set.mem_ofPred.mp ha ?_
   grind
@@ -688,7 +688,7 @@ lemma HasFiniteSupport.hasFiniteMulSupport_fun_pow
 
 中文:
 引理 HasFiniteSupport.hasFiniteMulSupport_fun_pow
-  结论: {M : 类型} [Monoid M] (f : α -> M) {g : α -> 自然数}
+  结论: {M : 类型} [幺半群 M] (f : α -> M) {g : α -> 自然数}
   证明: Set.Finite.subset hg fun a ha => by contrapose! ha; simp_all
 
 Depends on / 依赖: Finite, Set.Finite.subset, contrapose, subset
@@ -791,7 +791,7 @@ lemma smul_left
 
 中文:
 引理 smul_left
-  条件: [Zero R] [SMulWithZero R M] {f : α -> R} (hf : f.HasFiniteSupport) (g : α -> M)
+  条件: [零 R] [带零标量乘法 R M] {f : α -> R} (hf : f.HasFiniteSupport) (g : α -> M)
   证明: Set.Finite.subset hf fun _ ha => support_smul_subset_left f g ha
 
 @[to_fun (attr := fun_prop)]
@@ -813,7 +813,7 @@ lemma smul_right
 
 中文:
 引理 smul_right
-  条件: [SMulZeroClass R M] (f : α -> R) {g : α -> M} (hg : g.HasFiniteSupport)
+  条件: [SMulZero类 R M] (f : α -> R) {g : α -> M} (hg : g.HasFiniteSupport)
   证明: Set.Finite.subset hg fun _ ha => support_smul_subset_right f g ha
 
 Depends on / 依赖: Finite, Set.Finite.subset, subset, support_smul_subset_right

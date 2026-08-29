@@ -50,10 +50,10 @@ class LocallyOfFiniteType
     - finiteType_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FiniteType
 
 中文:
-类 LocallyOfFiniteType
+类 局部有限型
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - finiteType_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FiniteType
+    - finiteType_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.有限型
 
 Depends on / 依赖: LocallyOfFiniteType, LocallyOfFiniteType.finiteType_appLE, finiteType_appLE
 -/
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @LocallyOfFiniteType RingHom.FiniteType
+  签名: 有RingHomProperty @局部有限型 环态射.有限型
   定义体: RingHom.finiteType_isLocal
   eq_affineLocally' := by
     ext X Y f
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @LocallyOfFiniteType
+  签名: MorphismProperty.是StableUnderComposition @局部有限型
   定义体: HasRingHomProperty.stableUnderComposition RingHom.finiteType_stableUnderComposition
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.stableUnderComposition, RingHom, RingHom.finiteType_stableUnderComposition, finiteType_stableUnderComposition, stableUnderComposition
@@ -128,7 +128,7 @@ instance locallyOfFiniteType_comp
 
 中文:
 实例 locallyOfFiniteType_comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: MorphismProperty.comp_mem _ f g hf hg
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -147,7 +147,7 @@ theorem locallyOfFiniteType_of_comp
 
 中文:
 定理 locallyOfFiniteType_of_comp
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: HasRingHomProperty.of_comp (fun _ _ => RingHom.FiniteType.of_comp_finiteType) ‹_›
 
 Depends on / 依赖: FiniteType, HasRingHomProperty, HasRingHomProperty.of_comp, RingHom, RingHom.FiniteType.of_comp_finiteType, of_comp, of_comp_finiteType
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @LocallyOfFiniteType
+  签名: MorphismProperty.是Multiplicative @局部有限型
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @LocallyOfFiniteType where
@@ -223,8 +223,8 @@ lemma LocallyOfFiniteType.stalkMap
       (RingHom.Fini
 
 中文:
-引理 LocallyOfFiniteType.stalkMap
-  条件: [LocallyOfFiniteType f] (x : X)
+引理 局部有限型.stalkMap
+  条件: [局部有限型 f] (x : X)
   证明: HasRingHomProperty.stalkMap_of_respectsIso RingHom.EssFiniteType.respectsIso
     (fun f hf _ _ => RingHom.EssFiniteType.holdsForLocalization.localRingHom
       RingHom.EssFiniteType.stableUnderComposition

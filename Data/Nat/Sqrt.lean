@@ -544,7 +544,7 @@ lemma exists_mul_self
   proof: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq], fun h => ⟨sqrt x, h⟩⟩
 
 中文:
-引理 exists_mul_self
+引理 存在_mul_self
   条件: (x : 自然数)
   结论: (存在 n, n * n = x) ↔ sqrt x * sqrt x = x
   证明: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq], fun h => ⟨sqrt x, h⟩⟩
@@ -565,7 +565,7 @@ lemma exists_mul_self'
   simpa only [Nat.pow_two] using exists_mul_self x
 
 中文:
-引理 exists_mul_self'
+引理 存在_mul_self'
   条件: (x : 自然数)
   结论: (存在 n, n ^ 2 = x) ↔ sqrt x ^ 2 = x
   证明: by
@@ -670,7 +670,7 @@ lemma not_exists_sq
   grind
 
 中文:
-引理 not_exists_sq
+引理 not_存在_sq
   条件: (hl : m * m < n) (hr : n < (m + 1) * (m + 1))
   结论: ¬存在 t, t * t = n
   证明: by
@@ -697,7 +697,7 @@ lemma not_exists_sq'
   simpa only [Nat.pow_two] using not_exists_sq
 
 中文:
-引理 not_exists_sq'
+引理 not_存在_sq'
   结论: m ^ 2 < n -> n < (m + 1) ^ 2 -> ¬存在 t, t ^ 2 = n
   证明: by
   simpa only [Nat.pow_two] using not_exists_sq

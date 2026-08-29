@@ -36,7 +36,7 @@ instance pathConnectedSpace
 
 中文:
 实例 pathConnectedSpace
-  签名: : PathConnectedSpace AddCircle p
+  签名: : 道路连通空间 AddCircle p
   定义体: inferInstanceAs PathConnectedSpace (Quotient _)
 
 Depends on / 依赖: PathConnectedSpace, Quotient
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erlyDiscontinuousVAdd (zmultiples p).op 实数
+  签名: ProperlyDiscontinuousVAdd (zmultiples p).op 实数
   定义体: (zmultiples p).properlyDiscontinuousVAdd_opposite_of_tendsto_cofinite
     (AddSubgroup.tendsto_zmultiples_subtype_cofinite p)
 
@@ -231,7 +231,7 @@ lemma toAddCircle_injective
 
 中文:
 引理 toAddCircle_injective
-  结论: Function.Injective (toAddCircle : ZMod N -> _)
+  结论: 函数.单射 (toAddCircle : ZMod N -> _)
   证明: by
   intro x y hxy
   have : (0 : Real) < N := Nat.cast_pos.mpr (NeZero.pos _)

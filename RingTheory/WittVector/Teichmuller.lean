@@ -126,7 +126,7 @@ theorem teichmuller_mul_aux₁
 
 中文:
 定理 teichmuller_mul_aux₁
-  条件: {R : 类型} (x y : MvPolynomial R Rat)
+  条件: {R : 类型} (x y : 多元多项式 R 有理数)
   证明: by
   apply (ghostMap.bijective_of_invertible p (MvPolynomial R Rat)).1
   rw [map_mul]
@@ -153,7 +153,7 @@ theorem teichmuller_mul_aux₂
 
 中文:
 定理 teichmuller_mul_aux₂
-  条件: {R : 类型} (x y : MvPolynomial R 整数)
+  条件: {R : 类型} (x y : 多元多项式 R 整数)
   证明: by
   refine map_injective (MvPolynomial.map (Int.castRingHom Rat))
     (MvPolynomial.map_injective _ Int.cast_injective) ?_
@@ -324,7 +324,7 @@ lemma constantCoeff_surjective
 
 中文:
 引理 constantCoeff_surjective
-  结论: Function.Surjective (constantCoeff : 𝕎 R -> R)
+  结论: 函数.满射 (constantCoeff : 𝕎 R -> R)
   证明: fun r => ⟨teichmuller p r, rfl⟩
 
 Depends on / 依赖: teichmuller

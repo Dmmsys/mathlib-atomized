@@ -28,7 +28,7 @@ lemma real_iff
 
 中文:
 引理 real_iff
-  条件: [Algebra Complex A] {a : A}
+  条件: [代数 复形 A] {a : A}
   证明: by
   simp [spectrumRestricts_iff, Set.LeftInvOn, Function.LeftInverse, eq_comm]
 
@@ -55,7 +55,7 @@ lemma real_iff
 
 中文:
 引理 real_iff
-  条件: [Module Complex A] [IsScalarTower Complex A A] [SMulCommClass Complex A A] {a : A}
+  条件: [模 复形 A] [标量塔 复形 A A] [标量交换类 复形 A A] {a : A}
   证明: by
   rw [quasispectrumRestricts_iff_spectrumRestricts_inr]; rw [Unitization.quasispectrum_eq_spectrum_inr' _ Complex]; rw [SpectrumRestricts.real_iff]
 

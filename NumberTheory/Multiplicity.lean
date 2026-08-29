@@ -157,7 +157,7 @@ hp.dvd_of_dvd_pow (hp.dvd_or_dvd <| (dvd_geom_sum₂_iff_of_dvd_sub' hxy).mp h).
 
 中文:
 定理 not_dvd_geom_sum₂
-  条件: {p : R} (hp : Prime p) (hxy : p ∣ x - y) (hx : ¬p ∣ x) (hn : ¬p ∣ n)
+  条件: {p : R} (hp : 素 p) (hxy : p ∣ x - y) (hx : ¬p ∣ x) (hn : ¬p ∣ n)
   证明: fun h =>
 hx
 hp.dvd_of_dvd_pow (hp.dvd_or_dvd <| (dvd_geom_sum₂_iff_of_dvd_sub' hxy).mp h).resolve_left hn
@@ -277,7 +277,7 @@ theorem emultiplicity_pow_sub_pow_of_prime
 
 中文:
 定理 emultiplicity_pow_sub_pow_of_prime
-  结论: {p : R} (hp : Prime p) {x y : R}
+  结论: {p : R} (hp : 素 p) {x y : R}
   证明: by
   rw [← geom_sum₂_mul]; rw [emultiplicity_mul hp]; rw [emultiplicity_eq_zero.2 (not_dvd_geom_sum₂ hp hxy hx hn)]; rw [zero_add]
 
@@ -411,7 +411,7 @@ theorem Int.emultiplicity_pow_sub_pow
   rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, 
 
 中文:
-定理 Int.emultiplicity_pow_sub_pow
+定理 整数.emultiplicity_pow_sub_pow
   条件: {x y : 整数} (hxy : ↑p ∣ x - y) (hx : ¬↑p ∣ x) (n : 自然数)
   证明: by
   rcases n with - | n
@@ -452,7 +452,7 @@ theorem Int.emultiplicity_pow_add_pow
   exact Int.emultiplicity_pow_sub_pow hp hp1 hxy hx n
 
 中文:
-定理 Int.emultiplicity_pow_add_pow
+定理 整数.emultiplicity_pow_add_pow
   结论: {x y : 整数} (hxy : ↑p ∣ x + y) (hx : ¬↑p ∣ x)
   证明: by
   rw [← sub_neg_eq_add] at hxy
@@ -485,7 +485,7 @@ theorem Nat.emultiplicity_pow_sub_pow
   · simp o
 
 中文:
-定理 Nat.emultiplicity_pow_sub_pow
+定理 自然数.emultiplicity_pow_sub_pow
   条件: {x y : 自然数} (hxy : p ∣ x - y) (hx : ¬p ∣ x) (n : 自然数)
   证明: by
   obtain hyx | hyx := le_total y x
@@ -524,7 +524,7 @@ theorem Nat.emultiplicity_pow_add_pow
   exact Int.emultiplicity_pow_add_pow hp hp1 hxy hx hn
 
 中文:
-定理 Nat.emultiplicity_pow_add_pow
+定理 自然数.emultiplicity_pow_add_pow
   结论: {x y : 自然数} (hxy : p ∣ x + y) (hx : ¬p ∣ x)
   证明: by
   iterate 2 rw [← Int.natCast_emultiplicity]
@@ -561,7 +561,7 @@ theorem pow_two_pow_sub_pow_two_pow
 
 中文:
 定理 pow_two_pow_sub_pow_two_pow
-  条件: [CommRing R] {x y : R} (n : 自然数)
+  条件: [交换环 R] {x y : R} (n : 自然数)
   证明: by
   induction n with
   | zero => simp only [pow_zero, pow_one, range_zero, prod_empty, one_mul]
@@ -597,7 +597,7 @@ theorem Int.sq_mod_four_eq_one_of_odd
   decide
 
 中文:
-定理 Int.sq_mod_four_eq_one_of_odd
+定理 整数.sq_mod_four_eq_one_of_odd
   条件: {x : 整数}
   结论: Odd x -> x ^ 2 % 4 = 1
   证明: by
@@ -631,7 +631,7 @@ lemma Int.eight_dvd_sq_sub_one_of_odd
   simpa [eq] using (mul_dvd_mul_iff_left four_ne_zero).mpr (two_dvd_mul_add_one m)
 
 中文:
-引理 Int.eight_dvd_sq_sub_one_of_odd
+引理 整数.eight_dvd_sq_sub_one_of_odd
   条件: {k : 整数} (hk : Odd k)
   结论: 8 ∣ k ^ 2 - 1
   证明: by
@@ -659,7 +659,7 @@ lemma Nat.eight_dvd_sq_sub_one_of_odd
   simpa [eq] using (mul_dvd_mul_iff_left four_ne_zero).mpr (two_dvd_mul_add_one m)
 
 中文:
-引理 Nat.eight_dvd_sq_sub_one_of_odd
+引理 自然数.eight_dvd_sq_sub_one_of_odd
   条件: {k : 自然数} (hk : Odd k)
   结论: 8 ∣ k ^ 2 - 1
   证明: by
@@ -688,7 +688,7 @@ theorem Int.two_pow_two_pow_add_two_pow_two_pow
   · rw [pow_one, ← even_iff_two
 
 中文:
-定理 Int.two_pow_two_pow_add_two_pow_two_pow
+定理 整数.two_pow_two_pow_add_two_pow_two_pow
   条件: {x y : 整数} (hx : ¬2 ∣ x) (hxy : 4 ∣ x - y) (i : 自然数)
   证明: by
   have hx_odd : Odd x := by rwa [← Int.not_even_iff_odd, even_iff_two_dvd]
@@ -727,7 +727,7 @@ theorem Int.two_pow_two_pow_sub_pow_two_pow
     Finset.card_range, nsmul_one, Int.two_pow_two_pow_add_two_pow_two_pow hx hxy]
 
 中文:
-定理 Int.two_pow_two_pow_sub_pow_two_pow
+定理 整数.two_pow_two_pow_sub_pow_two_pow
   条件: {x y : 整数} (n : 自然数) (hxy : 4 ∣ x - y) (hx : ¬2 ∣ x)
   证明: by
   simp only [pow_two_pow_sub_pow_two_pow n, emultiplicity_mul Int.prime_two,
@@ -756,7 +756,7 @@ theorem Int.two_pow_sub_pow'
   · simp only [pow_zero, sub_self, emultiplicity_zer
 
 中文:
-定理 Int.two_pow_sub_pow'
+定理 整数.two_pow_sub_pow'
   条件: {x y : 整数} (n : 自然数) (hxy : 4 ∣ x - y) (hx : ¬2 ∣ x)
   证明: by
   have hx_odd : Odd x := by rwa [← Int.not_even_iff_odd, even_iff_two_dvd]
@@ -807,7 +807,7 @@ theorem Int.two_pow_sub_pow
  
 
 中文:
-定理 Int.two_pow_sub_pow
+定理 整数.two_pow_sub_pow
   条件: {x y : 整数} {n : 自然数} (hxy : 2 ∣ x - y) (hx : ¬2 ∣ x) (hn : Even n)
   证明: by
   have hy : Odd y := by
@@ -861,7 +861,7 @@ theorem Nat.two_pow_sub_pow
     rw [← Int.natCast_dvd_natCast]; rw [Int.ofNat_sub hyx] a
 
 中文:
-定理 Nat.two_pow_sub_pow
+定理 自然数.two_pow_sub_pow
   条件: {x y : 自然数} (hxy : 2 ∣ x - y) (hx : ¬2 ∣ x) {n : 自然数} (hn : Even n)
   证明: by
   obtain hyx | hyx := le_total y x

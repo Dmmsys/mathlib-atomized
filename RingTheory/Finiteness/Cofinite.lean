@@ -39,7 +39,7 @@ abbreviation CoFG
 
 中文:
 缩写 CoFG
-  签名: (S : Submodule R M)
+  签名: (S : 子模 R M)
   定义体: Module.Finite R (M ⧸ S)
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -57,7 +57,7 @@ theorem CoFG.of_finite
 
 中文:
 定理 CoFG.of_finite
-  条件: [Module.Finite R M] {S : Submodule R M}
+  条件: [模.有限 R M] {S : 子模 R M}
   结论: S.CoFG
   证明: Module.Finite.quotient R S
 -/
@@ -74,7 +74,7 @@ theorem CoFG.top
 
 中文:
 定理 CoFG.top
-  结论: (⊤ : Submodule R M).CoFG
+  结论: (⊤ : 子模 R M).CoFG
   证明: inferInstance
 -/
 @[simp] theorem CoFG.top : (⊤ : Submodule R M).CoFG := inferInstance
@@ -89,8 +89,8 @@ theorem _root_.Module.Finite.iff_cofg_bot
   proof: ⟨fun _ => Module.Finite.equiv (quotEquivOfEqBot ⊥ rfl), fun _ => CoFG.of_finite⟩
 
 中文:
-定理 _root_.Module.Finite.iff_cofg_bot
-  结论: (⊥ : Submodule R M).CoFG ↔ Module.Finite R M
+定理 _root_.模.有限.iff_cofg_bot
+  结论: (⊥ : 子模 R M).CoFG ↔ 模.有限 R M
   证明: ⟨fun _ => Module.Finite.equiv (quotEquivOfEqBot ⊥ rfl), fun _ => CoFG.of_finite⟩
 
 Depends on / 依赖: CoFG.of_finite, Finite, Module, Module.Finite.equiv, of_finite, quotEquivOfEqBot
@@ -109,7 +109,7 @@ theorem CoFG.fg_of_isCompl
 
 中文:
 定理 CoFG.fg_of_isCompl
-  条件: {S T : Submodule R M} (hST : IsCompl S T) (hS : S.CoFG)
+  条件: {S T : 子模 R M} (hST : 是补集 S T) (hS : S.CoFG)
   结论: T.FG
   证明: Module.Finite.iff_fg.mp Module.Finite.equiv quotientEquivOfIsCompl S T hST
 
@@ -128,7 +128,7 @@ theorem CoFG.fg_of_disjoint
 
 中文:
 定理 CoFG.fg_of_disjoint
-  结论: [IsNoetherianRing R] {S T : Submodule R M} (hST : Disjoint S T)
+  结论: [是Noether环 R] {S T : 子模 R M} (hST : Disjoint S T)
   证明: .of_disjoint_of_isNoetherian_quotient hST
 
 Depends on / 依赖: of_disjoint_of_isNoetherian_quotient
@@ -148,7 +148,7 @@ theorem FG.cofg_of_codisjoint
 
 中文:
 定理 FG.cofg_of_codisjoint
-  条件: {S T : Submodule R M} (hST : Codisjoint S T) (hS : S.FG)
+  条件: {S T : 子模 R M} (hST : Codisjoint S T) (hS : S.FG)
   证明: have := Module.Finite.iff_fg.mpr hS
   .of_surjective (T.mkQ.domRestrict S) (by simp [← LinearMap.range_eq_top, hST.symm.eq_top])
 
@@ -170,7 +170,7 @@ theorem FG.cofg_of_isCompl
 
 中文:
 定理 FG.cofg_of_isCompl
-  条件: {S T : Submodule R M} (hST : IsCompl S T) (hS : S.FG)
+  条件: {S T : 子模 R M} (hST : 是补集 S T) (hS : S.FG)
   结论: T.CoFG
   证明: hS.cofg_of_codisjoint hST.codisjoint
 
@@ -195,7 +195,7 @@ alias CoFG.cofg_of_le := CoFG.of_le
 
 中文:
 定理 CoFG.of_le
-  条件: {S T : Submodule R M} (hT : S <= T) (hS : S.CoFG)
+  条件: {S T : 子模 R M} (hT : S <= T) (hS : S.CoFG)
   结论: T.CoFG
   证明: by
   rw [← sup_eq_right.mpr hT]
@@ -255,7 +255,7 @@ theorem CoFG.ker
 
 中文:
 定理 CoFG.ker
-  条件: [IsNoetherian R N] (f : M ->ₗ[R] N)
+  条件: [是Noether R N] (f : M ->ₗ[R] N)
   结论: (ker f).CoFG
   证明: range_fg_iff_ker_cofg.mp IsNoetherian.noetherian _
 -/
@@ -279,8 +279,8 @@ theorem CoFG.inf
   exact CoFG.ker _
 
 中文:
-定理 CoFG.inf
-  条件: {S T : Submodule R M} (hS : S.CoFG) (hT : T.CoFG)
+定理 CoFG.下确界
+  条件: {S T : 子模 R M} (hS : S.CoFG) (hT : T.CoFG)
   证明: by
   rw [← Submodule.ker_mkQ S]; rw [← Submodule.ker_mkQ T]; rw [← LinearMap.ker_prod]
   exact CoFG.ker _
@@ -307,7 +307,7 @@ theorem CoFG.sInf
 
 中文:
 定理 CoFG.sInf
-  条件: {s : Finset (Submodule R M)} (hs : 对任意 S in s, S.CoFG)
+  条件: {s : 有限集 (子模 R M)} (hs : 对任意 S in s, S.CoFG)
   证明: by
   induction s using Finset.induction with
   | empty => simp
@@ -334,7 +334,7 @@ theorem CoFG.sInf_of_finite
 
 中文:
 定理 CoFG.sInf_of_finite
-  结论: {s : Set (Submodule R M)} (hs : s.Finite)
+  结论: {s : 集合 (子模 R M)} (hs : s.有限)
   证明: by
   rw [← hs.coe_toFinset] at hcofg ⊢; exact CoFG.sInf hcofg
 

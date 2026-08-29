@@ -31,7 +31,7 @@ lemma nhdsKer_eq_of_t1Space
 
 中文:
 引理 nhdsKer_eq_of_t1Space
-  条件: [T1Space X] (s : Set X)
+  条件: [T1空间 X] (s : 集合 X)
   结论: nhdsKer s = s
   证明: by
   ext; simp [mem_nhdsKer_iff_specializes]

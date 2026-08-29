@@ -111,7 +111,7 @@ theorem _root_.AddMonoid.exponent_additive
 @[simp]
 
 中文:
-定理 _root_.AddMonoid.exponent_additive
+定理 _root_.加法幺半群.exponent_additive
   证明: rfl
 
 @[simp]
@@ -130,7 +130,7 @@ theorem exponent_multiplicative
 
 中文:
 定理 exponent_multiplicative
-  条件: {G : 类型} [AddMonoid G]
+  条件: {G : 类型} [加法幺半群 G]
   证明: rfl
 -/
 theorem exponent_multiplicative {G : Type*} [AddMonoid G] :
@@ -395,7 +395,7 @@ theorem exponent_eq_zero_iff_forall
 @[to_additive exponent_nsmul_eq_zero]
 
 中文:
-定理 exponent_eq_zero_iff_forall
+定理 exponent_eq_zero_iff_对任意
   结论: exponent G = 0 ↔ 对任意 n > 0, 存在 g : G, g ^ n != 1
   证明: by
   rw [exponent_eq_zero_iff]; rw [ExponentExists]
@@ -493,7 +493,7 @@ theorem exponent_pos_of_exists
 @[to_additive]
 
 中文:
-定理 exponent_pos_of_exists
+定理 exponent_pos_of_存在
   条件: (n : 自然数) (hpos : 0 < n) (hG : 对任意 g : G, g ^ n = 1)
   证明: ExponentExists.exponent_pos ⟨n, hpos, hG⟩
 
@@ -594,7 +594,7 @@ theorem exp_eq_one_iff
 
 中文:
 定理 exp_eq_one_iff
-  结论: exponent G = 1 ↔ Subsingleton G
+  结论: exponent G = 1 ↔ 子单例 G
   证明: by
   refine ⟨fun eq_one => ⟨fun a b => ?a_eq_b⟩, fun h => le_antisymm ?le ?ge⟩
   · rw [← pow_one a, ← pow_one b, ← eq_one, Monoid.pow_exponent_eq_one, Monoid.pow_exponent_eq_one]
@@ -628,7 +628,7 @@ theorem exp_eq_one_of_subsingleton
 
 中文:
 定理 exp_eq_one_of_subsingleton
-  条件: [hs : Subsingleton G]
+  条件: [hs : 子单例 G]
   结论: exponent G = 1
   证明: exp_eq_one_iff.mpr hs
 
@@ -710,7 +710,7 @@ theorem exponent_dvd_iff_forall_pow_eq_one
     have h₂ : n % expone
 
 中文:
-定理 exponent_dvd_iff_forall_pow_eq_one
+定理 exponent_dvd_iff_对任意_pow_eq_one
   条件: {n : 自然数}
   结论: exponent G ∣ n ↔ 对任意 g : G, g ^ n = 1
   证明: by
@@ -788,7 +788,7 @@ theorem lcm_orderOf_dvd_exponent
 
 中文:
 定理 lcm_orderOf_dvd_exponent
-  条件: [Fintype G]
+  条件: [有限类型 G]
   证明: by
   apply Finset.lcm_dvd
   intro g _
@@ -822,8 +822,8 @@ theorem _root_.Nat.Prime.exists_orderOf_eq_pow_factorization_exponent
       rw [bot_eq_zero]; rw [Nat.factorization_zero]; rw [Finsupp.zero_app
 
 中文:
-定理 _root_.Nat.Prime.exists_orderOf_eq_pow_factorization_exponent
-  条件: {p : 自然数} (hp : p.Prime)
+定理 _root_.自然数.素.存在_orderOf_eq_pow_factorization_exponent
+  条件: {p : 自然数} (hp : p.素)
   证明: by
   have := Fact.mk hp
   rcases eq_or_ne ((exponent G).factorization p) 0 with (h | h)
@@ -926,7 +926,7 @@ theorem _root_.Commute.exists_orderOf_eq_lcm
   · exact ⟨_, mul_mem (pow_mem (subset_closure (by simp)) _) (pow_mem (su
 
 中文:
-定理 _root_.Commute.exists_orderOf_eq_lcm
+定理 _root_.Commute.存在_orderOf_eq_lcm
   条件: {x y : G} (h : Commute x y)
   证明: by
   by_cases hx : orderOf x = 0 <;> by_cases hy : orderOf y = 0
@@ -968,7 +968,7 @@ exact Eq.symm (hp.dvd_iff_eq hg).mp hG ▸ Monoid.order_dvd_exponent g
 
 中文:
 引理 exponent_eq_prime_iff
-  条件: {G : 类型} [Monoid G] [Nontrivial G] {p : 自然数} (hp : p.Prime)
+  条件: {G : 类型} [幺半群 G] [非平凡 G] {p : 自然数} (hp : p.素)
   证明: by
   refine ⟨fun hG g hg => ?_, fun h => dvd_antisymm ?_ ?_⟩
   · rw [Ne, ← orderOf_eq_one_iff] at hg
@@ -1090,8 +1090,8 @@ theorem lcm_orderOf_eq_exponent
 
 中文:
 定理 lcm_orderOf_eq_exponent
-  条件: [Fintype G]
-  结论: (Finset.univ : Finset G).lcm orderOf = exponent G
+  条件: [有限类型 G]
+  结论: (有限集.univ : 有限集 G).最小公倍数 orderOf = exponent G
   证明: Nat.dvd_antisymm
     (lcm_orderOf_dvd_exponent G)
     (exponent_dvd.mpr fun g => Finset.dvd_lcm (Finset.mem_univ g))
@@ -1122,7 +1122,7 @@ theorem exponent_dvd_of_monoidHom
 
 中文:
 定理 exponent_dvd_of_monoidHom
-  条件: (e : G ->* H) (e_inj : Function.Injective e)
+  条件: (e : G ->* H) (e_inj : 函数.单射 e)
   证明: exponent_dvd_of_forall_pow_eq_one fun g => e_inj (by
     rw [map_pow]; rw [pow_exponent_eq_one]; rw [map_one])
 
@@ -1147,7 +1147,7 @@ theorem exponent_submonoid_dvd
 
 中文:
 定理 exponent_submonoid_dvd
-  条件: (H : Submonoid G)
+  条件: (H : 子幺半群 G)
   证明: Monoid.exponent_dvd_of_monoidHom H.subtype H.subtype_injective
 
 Depends on / 依赖: H.subtype, H.subtype_injective, Monoid, Monoid.exponent_dvd_of_monoidHom, exponent_dvd_of_monoidHom, subtype, subtype_injective
@@ -1176,7 +1176,7 @@ theorem exponent_eq_of_mulEquiv
 中文:
 定理 exponent_eq_of_mulEquiv
   条件: (e : G ≃* H)
-  结论: Monoid.exponent G = Monoid.exponent H
+  结论: 幺半群.exponent G = 幺半群.exponent H
   证明: Nat.dvd_antisymm
     (exponent_dvd_of_monoidHom e e.injective)
     (exponent_dvd_of_monoidHom e.symm e.symm.injective)
@@ -1206,7 +1206,7 @@ theorem _root_.Submonoid.exponent_top
 @[to_additive]
 
 中文:
-定理 _root_.Submonoid.exponent_top
+定理 _root_.子幺半群.exponent_top
   证明: exponent_eq_of_mulEquiv Submonoid.topEquiv
 
 @[to_additive]
@@ -1229,8 +1229,8 @@ theorem _root_.Submonoid.pow_exponent_eq_one
   rwa [SubmonoidClass.mk_pow, ← OneMemClass.coe_eq_one] at this
 
 中文:
-定理 _root_.Submonoid.pow_exponent_eq_one
-  条件: {S : Submonoid G} {g : G} (g_in_s : g in S)
+定理 _root_.子幺半群.pow_exponent_eq_one
+  条件: {S : 子幺半群 G} {g : G} (g_in_s : g in S)
   证明: by
   have := Monoid.pow_exponent_eq_one (⟨g, g_in_s⟩ : S)
   rwa [SubmonoidClass.mk_pow, ← OneMemClass.coe_eq_one] at this
@@ -1323,8 +1323,8 @@ lemma one_lt_exponent
 
 中文:
 引理 one_lt_exponent
-  条件: [Nontrivial G]
-  结论: 1 < Monoid.exponent G
+  条件: [非平凡 G]
+  结论: 1 < 幺半群.exponent G
   证明: by
   rw [Nat.one_lt_iff_ne_zero_and_ne_one]
   exact ⟨exponent_ne_zero_of_finite, mt exp_eq_one_iff.mp (not_subsingleton G)⟩
@@ -1348,7 +1348,7 @@ instance neZero_exponent_of_finite
 
 中文:
 实例 neZero_exponent_of_finite
-  签名: : NeZero Monoid.exponent G
+  签名: : NeZero 幺半群.exponent G
   定义体: ⟨Monoid.exponent_ne_zero_of_finite⟩
 
 Depends on / 依赖: Monoid, Monoid.exponent_ne_zero_of_finite, exponent_ne_zero_of_finite
@@ -1380,7 +1380,7 @@ theorem exists_orderOf_eq_exponent
   apply Na
 
 中文:
-定理 exists_orderOf_eq_exponent
+定理 存在_orderOf_eq_exponent
   条件: (hG : ExponentExists G)
   结论: 存在 g : G, orderOf g = exponent G
   证明: by
@@ -1532,7 +1532,7 @@ theorem exponent_eq_max'_orderOf
 
 中文:
 定理 exponent_eq_max'_orderOf
-  条件: [Fintype G]
+  条件: [有限类型 G]
   证明: by
   rw [← Finset.Nonempty.csSup_eq_max']; rw [Finset.coe_image]; rw [Finset.coe_univ]; rw [Set.image_univ]; rw [← iSup]
   exact exponent_eq_iSup_orderOf orderOf_pos
@@ -1565,9 +1565,9 @@ theorem Group.exponent_dvd_card
 @[to_additive]
 
 中文:
-定理 Group.exponent_dvd_card
-  条件: [Fintype G]
-  结论: Monoid.exponent G ∣ Fintype.card G
+定理 群.exponent_dvd_card
+  条件: [有限类型 G]
+  结论: 幺半群.exponent G ∣ 有限类型.card G
   证明: Monoid.exponent_dvd.mpr fun _ => orderOf_dvd_card
 
 @[to_additive]
@@ -1589,8 +1589,8 @@ theorem Group.exponent_dvd_nat_card
 @[to_additive]
 
 中文:
-定理 Group.exponent_dvd_nat_card
-  结论: Monoid.exponent G ∣ 自然数.card G
+定理 群.exponent_dvd_nat_card
+  结论: 幺半群.exponent G ∣ 自然数.card G
   证明: Monoid.exponent_dvd.mpr orderOf_dvd_natCard
 
 @[to_additive]
@@ -1612,8 +1612,8 @@ theorem Subgroup.exponent_toSubmonoid
 @[to_additive (attr := simp)]
 
 中文:
-定理 Subgroup.exponent_toSubmonoid
-  条件: (H : Subgroup G)
+定理 子群.exponent_toSubmonoid
+  条件: (H : 子群 G)
   证明: Monoid.exponent_eq_of_mulEquiv (MulEquiv.subgroupCongr rfl)
 
 @[to_additive (attr := simp)]
@@ -1636,8 +1636,8 @@ theorem Subgroup.exponent_top
 @[to_additive]
 
 中文:
-定理 Subgroup.exponent_top
-  结论: Monoid.exponent (⊤ : Subgroup G) = Monoid.exponent G
+定理 子群.exponent_top
+  结论: 幺半群.exponent (⊤ : 子群 G) = 幺半群.exponent G
   证明: Monoid.exponent_eq_of_mulEquiv topEquiv
 
 @[to_additive]
@@ -1659,8 +1659,8 @@ theorem Subgroup.pow_exponent_eq_one
 @[to_additive]
 
 中文:
-定理 Subgroup.pow_exponent_eq_one
-  条件: {H : Subgroup G} {g : G} (g_in_H : g in H)
+定理 子群.pow_exponent_eq_one
+  条件: {H : 子群 G} {g : G} (g_in_H : g in H)
   证明: exponent_toSubmonoid H ▸ Submonoid.pow_exponent_eq_one g_in_H
 
 @[to_additive]
@@ -1682,7 +1682,7 @@ theorem Group.exponent_dvd_iff_forall_zpow_eq_one
 @[to_additive]
 
 中文:
-定理 Group.exponent_dvd_iff_forall_zpow_eq_one
+定理 群.exponent_dvd_iff_对任意_zpow_eq_one
   证明: by
   simp_rw [Int.natCast_dvd, Monoid.exponent_dvd_iff_forall_pow_eq_one, pow_natAbs_eq_one]
 
@@ -1704,7 +1704,7 @@ theorem Group.exponent_dvd_sub_iff_zpow_eq_zpow
   simp_rw [Group.exponent_dvd_iff_forall_zpow_eq_one, zpow_sub, mul_inv_eq_one]
 
 中文:
-定理 Group.exponent_dvd_sub_iff_zpow_eq_zpow
+定理 群.exponent_dvd_sub_iff_zpow_eq_zpow
   证明: by
   simp_rw [Group.exponent_dvd_iff_forall_zpow_eq_one, zpow_sub, mul_inv_eq_one]
 
@@ -1737,8 +1737,8 @@ theorem Monoid.exponent_pi_eq_zero
   simpa using congr_fun h j
 
 中文:
-定理 Monoid.exponent_pi_eq_zero
-  结论: {ι : 类型} {M : ι -> 类型} [对任意 i, Monoid (M i)] {j : ι}
+定理 幺半群.exponent_pi_eq_zero
+  结论: {ι : 类型} {M : ι -> 类型} [对任意 i, 幺半群 (M i)] {j : ι}
   证明: by
   classical
   rw [@exponent_eq_zero_iff]; rw [ExponentExists] at hj ⊢
@@ -1774,8 +1774,8 @@ theorem MonoidHom.exponent_dvd
   rw [← map_pow]; rw [pow_exponent_eq_one]; rw [map_one]
 
 中文:
-定理 MonoidHom.exponent_dvd
-  结论: {F M₁ M₂ : 类型} [Monoid M₁] [Monoid M₂]
+定理 幺半群态射.exponent_dvd
+  结论: {F M₁ M₂ : 类型} [幺半群 M₁] [幺半群 M₂]
   证明: by
   refine Monoid.exponent_dvd_of_forall_pow_eq_one fun m₂ => ?_
   obtain ⟨m₁, rfl⟩ := hf m₂
@@ -1810,8 +1810,8 @@ theorem Monoid.exponent_pi
   · apply Finset.lcm_dvd fun i _ =
 
 中文:
-定理 Monoid.exponent_pi
-  条件: {ι : 类型} [Fintype ι] {M : ι -> 类型} [对任意 i, Monoid (M i)]
+定理 幺半群.exponent_pi
+  条件: {ι : 类型} [有限类型 ι] {M : ι -> 类型} [对任意 i, 幺半群 (M i)]
   证明: by
   refine dvd_antisymm ?_ ?_
   · refine exponent_dvd_of_forall_pow_eq_one fun m => ?_
@@ -1853,8 +1853,8 @@ exact dvd_trans (Monoid.order_dvd_exponent (g.1)) dvd_lcm_left _ _
     · rw [Prod.pow_snd, Prod.snd_one, ← orderOf_dvd_iff
 
 中文:
-定理 Monoid.exponent_prod
-  条件: {M₁ M₂ : 类型} [Monoid M₁] [Monoid M₂]
+定理 幺半群.exponent_prod
+  条件: {M₁ M₂ : 类型} [幺半群 M₁] [幺半群 M₂]
   证明: by
   refine dvd_antisymm ?_ (lcm_dvd ?_ ?_)
   · refine exponent_dvd_of_forall_pow_eq_one fun g => ?_
@@ -1900,7 +1900,7 @@ lemma orderOf_eq_two_iff
 
 中文:
 引理 orderOf_eq_two_iff
-  条件: (hG : Monoid.exponent G = 2) {x : G}
+  条件: (hG : 幺半群.exponent G = 2) {x : G}
   证明: ⟨by rintro hx rfl; norm_num at hx, orderOf_eq_prime (hG ▸ Monoid.pow_exponent_eq_one x)⟩
 
 @[to_additive]
@@ -1928,7 +1928,7 @@ theorem Commute.of_orderOf_dvd_two
 
 中文:
 定理 Commute.of_orderOf_dvd_two
-  条件: [IsCancelMul G] (h : 对任意 g : G, orderOf g ∣ 2) (a b : G)
+  条件: [是消去乘法 G] (h : 对任意 g : G, orderOf g ∣ 2) (a b : G)
   证明: by
   simp_rw [orderOf_dvd_iff_pow_eq_one] at h
   rw [commute_iff_eq]; rw [← mul_right_inj a]; rw [← mul_left_inj b]
@@ -1963,7 +1963,7 @@ lemma mul_comm_of_exponent_two
 
 中文:
 引理 mul_comm_of_exponent_two
-  条件: [IsCancelMul G] (hG : Monoid.exponent G = 2) (a b : G)
+  条件: [是消去乘法 G] (hG : 幺半群.exponent G = 2) (a b : G)
   证明: Commute.of_orderOf_dvd_two (fun g => hG ▸ Monoid.order_dvd_exponent g) a b
 
 Depends on / 依赖: Commute, Commute.of_orderOf_dvd_two, Monoid, Monoid.order_dvd_exponent, of_orderOf_dvd_two, order_dvd_exponent
@@ -1984,7 +1984,7 @@ abbreviation commMonoidOfExponentTwo
 
 中文:
 缩写 commMonoidOfExponentTwo
-  签名: [IsCancelMul G] (hG : Monoid.exponent G = 2)
+  签名: [是消去乘法 G] (hG : 幺半群.exponent G = 2)
   定义体: mul_comm_of_exponent_two hG
 
 Depends on / 依赖: mul_comm_of_exponent_two
@@ -2013,8 +2013,8 @@ theorem Group.exponent_quotient_dvd
   proof: MonoidHom.exponent_dvd (QuotientGroup.mk'_surjective H)
 
 中文:
-定理 Group.exponent_quotient_dvd
-  条件: (H : Subgroup G) [H.Normal]
+定理 群.exponent_quotient_dvd
+  条件: (H : 子群 G) [H.正规]
   证明: MonoidHom.exponent_dvd (QuotientGroup.mk'_surjective H)
 
 Depends on / 依赖: MonoidHom, MonoidHom.exponent_dvd, QuotientGroup, QuotientGroup.mk, _surjective, exponent_dvd
@@ -2035,7 +2035,7 @@ lemma inv_eq_self_of_exponent_two
 
 中文:
 引理 inv_eq_self_of_exponent_two
-  条件: (hG : Monoid.exponent G = 2) (x : G)
+  条件: (hG : 幺半群.exponent G = 2) (x : G)
   证明: inv_eq_of_mul_eq_one_left pow_two (a := x) ▸ hG ▸ Monoid.pow_exponent_eq_one x
 
 Depends on / 依赖: Monoid, Monoid.pow_exponent_eq_one, inv_eq_of_mul_eq_one_left, pow_exponent_eq_one, pow_two
@@ -2113,7 +2113,7 @@ lemma mul_notMem_of_exponent_two
 
 中文:
 引理 mul_notMem_of_exponent_two
-  结论: (h : Monoid.exponent G = 2) {x y : G}
+  结论: (h : 幺半群.exponent G = 2) {x y : G}
   证明: mul_notMem_of_orderOf_eq_two (orderOf_eq_prime (h ▸ Monoid.pow_exponent_eq_one x) hx)
     (orderOf_eq_prime (h ▸ Monoid.pow_exponent_eq_one y) hy) hxy
 

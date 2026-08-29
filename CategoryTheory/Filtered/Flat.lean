@@ -43,8 +43,8 @@ lemma isFiltered_of_representablyCoflat
 
 中文:
 引理 isFiltered_of_representablyCoflat
-  条件: [IsFiltered D] [RepresentablyCoflat F]
-  结论: IsFiltered C
+  条件: [是Filtered D] [RepresentablyCoflat F]
+  结论: 是Filtered C
   证明: isFiltered_of_isFiltered_costructuredArrow F (𝟭 _)
 
 Depends on / 依赖: isFiltered_of_isFiltered_costructuredArrow
@@ -64,7 +64,7 @@ lemma isCofiltered_of_representablyFlat
 
 中文:
 引理 isCofiltered_of_representablyFlat
-  条件: [IsCofiltered D] [RepresentablyFlat F]
+  条件: [是余filtered D] [RepresentablyFlat F]
   证明: by
   have := isFiltered_of_representablyCoflat F.op
   exact isCofiltered_of_isFiltered_op C

@@ -41,8 +41,8 @@ instance Real.instCompleteSpace
   exact this.imp fun N hN n hn => hε (
 
 中文:
-实例 Real.instCompleteSpace
-  签名: : CompleteSpace 实数
+实例 实数.instCompleteSpace
+  签名: : 完备空间 实数
   定义体: by
   apply complete_of_cauchySeq_tendsto
   intro u hu
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 实数>=0
+  签名: 拓扑空间 实数>=0
   定义体: inferInstance
 -/
 instance : TopologicalSpace Real>=0 := inferInstance
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace 实数>=0
+  签名: 完备空间 实数>=0
   定义体: isClosed_Ici.completeSpace_coe
 
 @[fun_prop]
@@ -116,7 +116,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : 实数>=0 -> 实数)
+  结论: 连续 ((↑) : 实数>=0 -> 实数)
   证明: continuous_subtype_val
 
 Depends on / 依赖: continuous_subtype_val
@@ -137,7 +137,7 @@ definition _root_.ContinuousMap.coeNNRealReal
 @[simp]
 
 中文:
-定义 _root_.ContinuousMap.coeNNRealReal
+定义 _root_.连续映射.coeNN实数实数
   签名: : C(实数>=0, 实数)
   定义体: ⟨(↑), continuous_coe⟩
 
@@ -158,8 +158,8 @@ lemma coeNNRealReal_zero
   proof: rfl
 
 中文:
-引理 coeNNRealReal_zero
-  结论: ContinuousMap.coeNN实数实数 0 = 0
+引理 coeNN实数实数_zero
+  结论: 连续映射.coeNN实数实数 0 = 0
   证明: rfl
 -/
 lemma coeNNRealReal_zero : ContinuousMap.coeNNRealReal 0 = 0 := rfl
@@ -173,8 +173,8 @@ instance ContinuousMap.canLift
   body: ⟨⟨fun x => .mk (f x) (hf x), f.2.subtype_mk _⟩, DFunLike.ext' rfl⟩
 
 中文:
-实例 ContinuousMap.canLift
-  签名: {X : 类型} [TopologicalSpace X]
+实例 连续映射.canLift
+  签名: {X : 类型} [拓扑空间 X]
   定义体: ⟨⟨fun x => .mk (f x) (hf x), f.2.subtype_mk _⟩, DFunLike.ext' rfl⟩
 -/
 instance ContinuousMap.canLift {X : Type*} [TopologicalSpace X] :

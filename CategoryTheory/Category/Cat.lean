@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Cat
+  签名: 可居 Cat
   定义体: ⟨⟨Type u, CategoryTheory.types⟩⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.types
@@ -117,7 +117,7 @@ definition of
 
 中文:
 定义 of
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: Bundled.of C
 
 Depends on / 依赖: Bundled, Bundled.of, HasLimits, HasLimitsOfSize, hasSmallestLimitsOfHasLimits
@@ -146,7 +146,7 @@ structure Hom
     - toFunctor : C ⥤ D
 
 中文:
-结构 Hom
+结构 态射
   参数: (C D : Cat.{v, u})
   公理与运算 (2 个):
     - ofFunctor : :
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Cat.{v, u})
+  签名: 箭图 (Cat.{v, u})
   定义体: Hom C D
 -/
 instance : Quiver (Cat.{v, u}) where
@@ -186,8 +186,8 @@ definition _root_.CategoryTheory.Functor.toCatHom
 @[ext]
 
 中文:
-定义 _root_.CategoryTheory.Functor.toCatHom
-  签名: {C D : 类型u} [Category.{v} C] [Category.{v} D]
+定义 _root_.范畴论.函子.toCatHom
+  签名: {C D : 类型u} [范畴.{v} C] [范畴.{v} D]
   定义体: F
 
 @[ext]
@@ -234,8 +234,8 @@ definition _root_.CategoryTheory.Functor.equivCatHom
   right_inv _ := rfl
 
 中文:
-定义 _root_.CategoryTheory.Functor.equivCatHom
-  签名: (C D : 类型u) [Category.{v} C] [Category.{v} D]
+定义 _root_.范畴论.函子.equivCatHom
+  签名: (C D : 类型u) [范畴.{v} C] [范畴.{v} D]
   定义体: Functor.toCatHom
   invFun := Cat.Hom.toFunctor
   left_inv _ := rfl
@@ -268,7 +268,7 @@ definition Hom.equivFunctor
 but we have removed this when disabling `set_option backward.privateInPublic` as a global option. -/
 
 中文:
-定义 Hom.equivFunctor
+定义 态射.equivFunctor
   签名: (C D : Cat.{v, u})
   定义体: (equivCatHom _ _).symm
 
@@ -335,8 +335,8 @@ definition _root_.CategoryTheory.NatTrans.toCatHom₂
   body: η
 
 中文:
-定义 _root_.CategoryTheory.NatTrans.toCatHom₂
-  签名: {C D : 类型u} [Category.{v} C]
+定义 _root_.范畴论.自然变换.toCatHom₂
+  签名: {C D : 类型u} [范畴.{v} C]
   定义体: η
 -/
 def _root_.CategoryTheory.NatTrans.toCatHom₂ {C D : Type u} [Category.{v} C]
@@ -388,8 +388,8 @@ lemma _root_.CategoryTheory.NatTrans.toCatHom₂_id
 @[simp, push_cast]
 
 中文:
-引理 _root_.CategoryTheory.NatTrans.toCatHom₂_id
-  结论: {C D : 类型u} [Category.{v} C] [Category.{v} D]
+引理 _root_.范畴论.自然变换.toCatHom₂_id
+  结论: {C D : 类型u} [范畴.{v} C] [范畴.{v} D]
   证明: rfl
 
 @[simp, push_cast]
@@ -410,8 +410,8 @@ lemma _root_.CategoryTheory.NatTrans.toCatHom₂_comp
 @[simp, push_cast]
 
 中文:
-引理 _root_.CategoryTheory.NatTrans.toCatHom₂_comp
-  结论: {C D : 类型u} [Category.{v} C] [Category.{v} D]
+引理 _root_.范畴论.自然变换.toCatHom₂_comp
+  结论: {C D : 类型u} [范畴.{v} C] [范畴.{v} D]
   证明: rfl
 
 @[simp, push_cast]
@@ -432,7 +432,7 @@ lemma toNatTrans_id
 @[simp, push_cast]
 
 中文:
-引理 toNatTrans_id
+引理 to自然数Trans_id
   条件: {C D : Cat.{v, u}} (F : C ⟶ D)
   证明: rfl
 
@@ -453,7 +453,7 @@ lemma toNatTrans_comp
 @[ext]
 
 中文:
-引理 toNatTrans_comp
+引理 to自然数Trans_comp
   条件: {C D : Cat.{v, u}} {F G H : C ⟶ D} (η₁ : F ⟶ G) (η₂ : G ⟶ H)
   证明: rfl
 
@@ -472,7 +472,7 @@ lemma _root_.CategoryTheory.Cat.Hom₂.ext
   proof: congr($(h).toCatHom₂)
 
 中文:
-引理 _root_.CategoryTheory.Cat.Hom₂.ext
+引理 _root_.范畴论.Cat.Hom₂.ext
   结论: {C D : Cat.{v, u}} {F G : C ⟶ D} {η₁ η₂ : F ⟶ G}
   证明: congr($(h).toCatHom₂)
 -/
@@ -494,7 +494,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {C D : 类型u} [Category.{v} C] [Category.{v} D] {F G : C ⥤ D} (e : F ≅ G)
+  签名: {C D : 类型u} [范畴.{v} C] [范畴.{v} D] {F G : C ⥤ D} (e : F ≅ G)
   定义体: e.hom.toCatHom₂
   inv := e.inv.toCatHom₂
   hom_inv_id := congrArg NatTrans.toCatHom₂ e.hom_inv_id
@@ -525,7 +525,7 @@ definition toNatIso
 @[simp]
 
 中文:
-定义 toNatIso
+定义 to自然数Iso
   签名: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G)
   定义体: e.hom.toNatTrans
   inv := e.inv.toNatTrans
@@ -554,7 +554,7 @@ lemma isoMk_toNatIso
 @[simp]
 
 中文:
-引理 isoMk_toNatIso
+引理 isoMk_to自然数Iso
   条件: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G)
   证明: rfl
 
@@ -573,8 +573,8 @@ lemma toNatIso_isoMk
   proof: rfl
 
 中文:
-引理 toNatIso_isoMk
-  条件: {C D : 类型u} [Category.{v} C] [Category.{v} D] {F G : C ⥤ D} (e : F ≅ G)
+引理 to自然数Iso_isoMk
+  条件: {C D : 类型u} [范畴.{v} C] [范畴.{v} D] {F G : C ⥤ D} (e : F ≅ G)
   证明: rfl
 -/
 lemma toNatIso_isoMk {C D : Type u} [Category.{v} C] [Category.{v} D] {F G : C ⥤ D} (e : F ≅ G) :
@@ -600,7 +600,7 @@ lemma hom_inv_id_toNatTrans
 @[reassoc (attr := simp)]
 
 中文:
-引理 hom_inv_id_toNatTrans
+引理 hom_inv_id_to自然数Trans
   条件: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G)
   证明: (toNatIso e).hom_inv_id
 
@@ -624,7 +624,7 @@ lemma inv_hom_id_toNatTrans
 @[reassoc (attr := simp)]
 
 中文:
-引理 inv_hom_id_toNatTrans
+引理 inv_hom_id_to自然数Trans
   条件: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G)
   证明: (toNatIso e).inv_hom_id
 
@@ -648,7 +648,7 @@ lemma hom_inv_id_toNatTrans_app
 @[reassoc (attr := simp)]
 
 中文:
-引理 hom_inv_id_toNatTrans_app
+引理 hom_inv_id_to自然数Trans_app
   条件: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G) (A : X)
   证明: (toNatIso e).hom_inv_id_app A
 
@@ -670,7 +670,7 @@ lemma inv_hom_id_toNatTrans_app
   proof: (toNatIso e).inv_hom_id_app A
 
 中文:
-引理 inv_hom_id_toNatTrans_app
+引理 inv_hom_id_to自然数Trans_app
   条件: {X Y : Cat.{v, u}} {F G : X ⟶ Y} (e : F ≅ G) (A : X)
   证明: (toNatIso e).inv_hom_id_app A
 
@@ -701,7 +701,7 @@ instance bicategory
 
 中文:
 实例 bicategory
-  签名: : Bicategory.{max v u, max v u} Cat.{v, u} where
+  签名: : 双范畴.{最大值 v u, 最大值 v u} Cat.{v, u} where
   定义体: (𝟭 C).toCatHom
   comp F G := (F.toFunctor ⋙ G.toFunctor).toCatHom
   homCategory := fun _ _ => Hom.instCategory
@@ -734,7 +734,7 @@ instance bicategory.strict
 
 中文:
 实例 bicategory.strict
-  签名: : Bicategory.Strict Cat.{v, u} where
+  签名: : 双范畴.Strict Cat.{v, u} where
   定义体: by cases F; rfl
   comp_id {C} {D} F := by cases F; rfl
   assoc := by intros; rfl
@@ -758,7 +758,7 @@ instance category
 
 中文:
 实例 category
-  签名: : LargeCategory.{max v u} Cat.{v, u}
+  签名: : 大范畴.{最大值 v u} Cat.{v, u}
   定义体: StrictBicategory.category Cat.{v, u}
 
 @[simp, push_cast]
@@ -781,7 +781,7 @@ lemma Hom.id_toFunctor
 @[simp]
 
 中文:
-引理 Hom.id_toFunctor
+引理 态射.id_toFunctor
   条件: {C : Cat.{v, u}}
   结论: (𝟙 C : C ⟶ C).toFunctor = 𝟭 C
   证明: rfl
@@ -804,7 +804,7 @@ theorem Hom.id_obj
 @[simp]
 
 中文:
-定理 Hom.id_obj
+定理 态射.id_obj
   条件: {C : Cat.{v, u}} (X : C)
   结论: (𝟙 C : C ⟶ C).toFunctor.obj X = X
   证明: by
@@ -829,7 +829,7 @@ theorem Hom.id_map
 @[simp, push_cast]
 
 中文:
-定理 Hom.id_map
+定理 态射.id_map
   条件: {C : Cat.{v, u}} {X Y : C} (f : X ⟶ Y)
   结论: (𝟙 C : C ⟶ C).toFunctor.map f = f
   证明: by
@@ -850,7 +850,7 @@ lemma Hom.comp_toFunctor
   proof: rfl
 
 中文:
-引理 Hom.comp_toFunctor
+引理 态射.comp_toFunctor
   条件: {C D E : Cat.{v, u}} (F : C ⟶ D) (G : D ⟶ E)
   证明: rfl
 -/
@@ -869,7 +869,7 @@ theorem Hom.comp_obj
 @[simp]
 
 中文:
-定理 Hom.comp_obj
+定理 态射.comp_obj
   条件: {C D E : Cat.{v, u}} (F : C ⟶ D) (G : D ⟶ E) (X : C)
   证明: by
   simp
@@ -893,7 +893,7 @@ theorem Hom.comp_map
 @[simp]
 
 中文:
-定理 Hom.comp_map
+定理 态射.comp_map
   条件: {C D E : Cat.{v, u}} (F : C ⟶ D) (G : D ⟶ E) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp
@@ -959,7 +959,7 @@ theorem Hom₂.eqToHom_toNatTrans
   proof: by cases h; simp
 
 中文:
-定理 Hom₂.eqToHom_toNatTrans
+定理 Hom₂.eqToHom_to自然数Trans
   条件: {C D : Cat.{v, u}} {F G : C ⟶ D} (h : F = G)
   证明: by cases h; simp
 -/
@@ -999,7 +999,7 @@ lemma whiskerLeft_toNatTrans
   proof: rfl
 
 中文:
-引理 whiskerLeft_toNatTrans
+引理 whiskerLeft_to自然数Trans
   条件: {C D E : Cat.{v, u}} (F : C ⟶ D) {G H : D ⟶ E} (η : G ⟶ H)
   证明: rfl
 -/
@@ -1036,7 +1036,7 @@ lemma whiskerRight_toNatTrans
   proof: rfl
 
 中文:
-引理 whiskerRight_toNatTrans
+引理 whiskerRight_to自然数Trans
   条件: {C D E : Cat.{v, u}} {F G : C ⟶ D} (H : D ⟶ E) (η : F ⟶ G)
   证明: rfl
 -/
@@ -1075,7 +1075,7 @@ lemma Hom.toNatIso_leftUnitor
 @[simp, push_cast]
 
 中文:
-引理 Hom.toNatIso_leftUnitor
+引理 态射.to自然数Iso_leftUnitor
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: rfl
 
@@ -1096,7 +1096,7 @@ lemma leftUnitor_hom_toNatTrans
 @[simp, push_cast]
 
 中文:
-引理 leftUnitor_hom_toNatTrans
+引理 leftUnitor_hom_to自然数Trans
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: rfl
 
@@ -1115,7 +1115,7 @@ lemma leftUnitor_inv_toNatTrans
   proof: rfl
 
 中文:
-引理 leftUnitor_inv_toNatTrans
+引理 leftUnitor_inv_to自然数Trans
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: rfl
 -/
@@ -1174,7 +1174,7 @@ lemma Hom.toNatIso_rightUnitor
 @[simp, push_cast]
 
 中文:
-引理 Hom.toNatIso_rightUnitor
+引理 态射.to自然数Iso_rightUnitor
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: by simp; rfl
 
@@ -1197,7 +1197,7 @@ lemma rightUnitor_hom_toNatTrans
 @[simp, push_cast]
 
 中文:
-引理 rightUnitor_hom_toNatTrans
+引理 rightUnitor_hom_to自然数Trans
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: rfl
 
@@ -1216,7 +1216,7 @@ lemma rightUnitor_inv_toNatTrans
   proof: rfl
 
 中文:
-引理 rightUnitor_inv_toNatTrans
+引理 rightUnitor_inv_to自然数Trans
   条件: {B C : Cat.{v, u}} (F : B ⟶ C)
   证明: rfl
 -/
@@ -1275,7 +1275,7 @@ lemma Hom.toNatIso_associator
 @[simp, push_cast]
 
 中文:
-引理 Hom.toNatIso_associator
+引理 态射.to自然数Iso_associator
   条件: {B C D E : Cat.{v, u}} (F : B ⟶ C) (G : C ⟶ D) (H : D ⟶ E)
   证明: rfl
 
@@ -1296,7 +1296,7 @@ lemma associator_hom_toNatTrans
 @[simp, push_cast]
 
 中文:
-引理 associator_hom_toNatTrans
+引理 associator_hom_to自然数Trans
   条件: {B C D E : Cat.{v, u}} (F : B ⟶ C) (G : C ⟶ D) (H : D ⟶ E)
   证明: rfl
 
@@ -1315,7 +1315,7 @@ lemma associator_inv_toNatTrans
   proof: rfl
 
 中文:
-引理 associator_inv_toNatTrans
+引理 associator_inv_to自然数Trans
   条件: {B C D E : Cat.{v, u}} (F : B ⟶ C) (G : C ⟶ D) (H : D ⟶ E)
   证明: rfl
 -/
@@ -1402,7 +1402,7 @@ theorem of_α
 
 中文:
 定理 of_α
-  条件: (C) [Category* C]
+  条件: (C) [范畴* C]
   结论: (of C).α = C
   证明: rfl
 -/
@@ -1597,7 +1597,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Faithful typeToCat.{u}
+  签名: 函子.忠实 typeToCat.{u}
   定义体: by
     ext x
     exact congrArg Discrete.as (Functor.congr_obj congr(($h).toFunctor) ⟨x⟩)
@@ -1624,7 +1624,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Full typeToCat.{u}
+  签名: 函子.满 typeToCat.{u}
   定义体: ⟨↾(Discrete.as ∘ F.toFunctor.obj ∘ Discrete.mk), by
     ext
     refine Functor.ext (by cat_disch) ?_

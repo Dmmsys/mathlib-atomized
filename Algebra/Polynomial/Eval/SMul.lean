@@ -89,7 +89,7 @@ theorem eval_smul
 
 中文:
 定理 eval_smul
-  结论: [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p : R[X])
+  结论: [SMulZero类 S R] [标量塔 S R R] (s : S) (p : R[X])
   证明: by
   rw [← smul_one_smul R s p]; rw [eval]; rw [eval₂_smul]; rw [RingHom.id_apply]; rw [smul_one_mul]; rw [eval₂_id]
 
@@ -113,7 +113,7 @@ definition leval
 
 中文:
 定义 leval
-  签名: {R : 类型} [Semiring R] (r : R)
+  签名: {R : 类型} [半环 R] (r : R)
   定义体: f.eval r
   map_add' _f _g := eval_add
   map_smul' c f := eval_smul c f r
@@ -141,7 +141,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  条件: [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p q : R[X])
+  条件: [SMulZero类 S R] [标量塔 S R R] (s : S) (p q : R[X])
   证明: by
   rw [← smul_one_smul R s p]; rw [comp]; rw [comp]; rw [eval₂_smul]; rw [← smul_eq_C_mul]; rw [smul_assoc]; rw [one_smul]
 

@@ -52,7 +52,7 @@ class FinallySmall
 类 FinallySmall
   参数: : 命题 where
   公理与运算 (1 个):
-    - final_smallCategory : 存在 (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Final F
+    - final_smallCategory : 存在 (S : 类型 w) (_ : 小范畴 S) (F : S ⥤ J), 终 F
 -/
 class FinallySmall : Prop where
   /-- There is a final functor from a small category. -/
@@ -68,7 +68,7 @@ theorem FinallySmall.mk'
 
 中文:
 定理 FinallySmall.mk'
-  结论: {J : 类型u} [Category.{v} J] {S : Type w} [SmallCategory S]
+  结论: {J : 类型u} [范畴.{v} J] {S : 类型 w} [小范畴 S]
   证明: ⟨S, _, F, inferInstance⟩
 -/
 theorem FinallySmall.mk' {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
@@ -188,7 +188,7 @@ theorem finallySmall_of_final_of_finallySmall
 
 中文:
 定理 finallySmall_of_final_of_finallySmall
-  条件: [FinallySmall.{w} K] (F : K ⥤ J) [Final F]
+  条件: [FinallySmall.{w} K] (F : K ⥤ J) [终 F]
   证明: suffices Final ((fromFinalModel K) ⋙ F) from .mk' ((fromFinalModel K) ⋙ F)
   final_comp _ _
 
@@ -210,7 +210,7 @@ theorem finallySmall_of_final_of_essentiallySmall
 
 中文:
 定理 finallySmall_of_final_of_essentiallySmall
-  条件: [EssentiallySmall.{w} K] (F : K ⥤ J) [Final F]
+  条件: [EssentiallySmall.{w} K] (F : K ⥤ J) [终 F]
   证明: have := finallySmall_of_essentiallySmall K
   finallySmall_of_final_of_finallySmall F
 
@@ -231,7 +231,7 @@ instance [Limits.HasTerminal
   .mk' ((Functor.const PUnit.{w + 1}).obj (⊤_ J))
 
 中文:
-实例 [Limits.HasTerminal
+实例 [Limits.有终止
   签名: J] : FinallySmall.{w} J
   定义体: have := Functor.final_const_terminal (C := PUnit.{w + 1}) (D := J)
   .mk' ((Functor.const PUnit.{w + 1}).obj (⊤_ J))
@@ -266,7 +266,7 @@ class InitiallySmall
 类 InitiallySmall
   参数: : 命题 where
   公理与运算 (1 个):
-    - initial_smallCategory : 存在 (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Initial F
+    - initial_smallCategory : 存在 (S : 类型 w) (_ : 小范畴 S) (F : S ⥤ J), 初始 F
 -/
 class InitiallySmall : Prop where
   /-- There is an initial functor from a small category. -/
@@ -282,7 +282,7 @@ theorem InitiallySmall.mk'
 
 中文:
 定理 InitiallySmall.mk'
-  结论: {J : 类型u} [Category.{v} J] {S : Type w} [SmallCategory S]
+  结论: {J : 类型u} [范畴.{v} J] {S : 类型 w} [小范畴 S]
   证明: ⟨S, _, F, inferInstance⟩
 -/
 theorem InitiallySmall.mk' {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
@@ -515,7 +515,7 @@ theorem FinallySmall.exists_small_weakly_terminal_set
   exact ⟨(fromFinalModel J).obj f.right, Set.mem_range_self _, ⟨f.hom⟩⟩
 
 中文:
-定理 FinallySmall.exists_small_weakly_terminal_set
+定理 FinallySmall.存在_small_weakly_terminal_set
   条件: [FinallySmall.{w} J]
   证明: by
   refine ⟨Set.range (fromFinalModel J).obj, inferInstance, fun i => ?_⟩
@@ -546,7 +546,7 @@ theorem finallySmall_of_small_weakly_terminal_set
 
 中文:
 定理 finallySmall_of_small_weakly_terminal_set
-  结论: [IsFilteredOrEmpty J] (s : Set J) [Small.{v} s]
+  结论: [是FilteredOrEmpty J] (s : 集合 J) [Small.{v} s]
   证明: by
   suffices Functor.Final (ObjectProperty.ι (· in s)) from
     finallySmall_of_final_of_essentiallySmall (ObjectProperty.ι (· in s))
@@ -576,8 +576,8 @@ theorem finallySmall_iff_exists_small_weakly_terminal_set
   exact finallySmall_of_small_weakly_terminal_set s hs'
 
 中文:
-定理 finallySmall_iff_exists_small_weakly_terminal_set
-  条件: [IsFilteredOrEmpty J]
+定理 finallySmall_iff_存在_small_weakly_terminal_set
+  条件: [是FilteredOrEmpty J]
   证明: by
   refine ⟨fun _ => FinallySmall.exists_small_weakly_terminal_set _, fun h => ?_⟩
   rcases h with ⟨s, hs, hs'⟩
@@ -609,7 +609,7 @@ theorem InitiallySmall.exists_small_weakly_initial_set
   exact ⟨(fromInitialModel J).obj f.left, Set.mem_range_self _, ⟨f.hom⟩⟩
 
 中文:
-定理 InitiallySmall.exists_small_weakly_initial_set
+定理 InitiallySmall.存在_small_weakly_initial_set
   条件: [InitiallySmall.{w} J]
   证明: by
   refine ⟨Set.range (fromInitialModel J).obj, inferInstance, fun i => ?_⟩
@@ -640,7 +640,7 @@ theorem initiallySmall_of_small_weakly_initial_set
 
 中文:
 定理 initiallySmall_of_small_weakly_initial_set
-  结论: [IsCofilteredOrEmpty J] (s : Set J) [Small.{v} s]
+  结论: [是余filteredOrEmpty J] (s : 集合 J) [Small.{v} s]
   证明: by
   suffices Functor.Initial (ObjectProperty.ι (· in s)) from
     initiallySmall_of_initial_of_essentiallySmall (ObjectProperty.ι (· in s))
@@ -706,8 +706,8 @@ theorem initiallySmall_iff_exists_small_weakly_initial_set
   exact initiallySmall_of_small_weakly_initial_set s hs'
 
 中文:
-定理 initiallySmall_iff_exists_small_weakly_initial_set
-  条件: [IsCofilteredOrEmpty J]
+定理 initiallySmall_iff_存在_small_weakly_initial_set
+  条件: [是余filteredOrEmpty J]
   证明: by
   refine ⟨fun _ => InitiallySmall.exists_small_weakly_initial_set _, fun h => ?_⟩
   rcases h with ⟨s, hs, hs'⟩
@@ -735,7 +735,7 @@ theorem hasColimitsOfShape_of_finallySmall
 
 中文:
 定理 hasColimitsOfShape_of_finallySmall
-  结论: (J : 类型u) [Category.{v} J] [FinallySmall.{w} J]
+  结论: (J : 类型u) [范畴.{v} J] [FinallySmall.{w} J]
   证明: Final.hasColimitsOfShape_of_final (fromFinalModel J)
 
 Depends on / 依赖: Final.hasColimitsOfShape_of_final, fromFinalModel, hasColimitsOfShape_of_final
@@ -754,7 +754,7 @@ theorem hasLimitsOfShape_of_initiallySmall
 
 中文:
 定理 hasLimitsOfShape_of_initiallySmall
-  结论: (J : 类型u) [Category.{v} J] [InitiallySmall.{w} J]
+  结论: (J : 类型u) [范畴.{v} J] [InitiallySmall.{w} J]
   证明: Initial.hasLimitsOfShape_of_initial (fromInitialModel J)
 
 Depends on / 依赖: Initial, Initial.hasLimitsOfShape_of_initial, fromInitialModel, hasLimitsOfShape_of_initial

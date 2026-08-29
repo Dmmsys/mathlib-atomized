@@ -163,7 +163,7 @@ lemma isLimit_types_iff
 
 中文:
 引理 isLimit_types_iff
-  结论: Nonempty (IsLimit c) ↔ Function.Bijective c.toSections
+  结论: 非空 (是极限 c) ↔ 函数.双射 c.toSections
   证明: by
   rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [← toSections_fac]; rw [EquivLike.comp_bijective]
 

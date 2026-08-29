@@ -54,7 +54,7 @@ class LocallyDirected
 
 中文:
 类 LocallyDirected
-  参数: (𝒰 : X.Cover (precoverage P)) [Category* 𝒰.I₀]
+  参数: (𝒰 : X.Cover (precoverage P)) [范畴* 𝒰.I₀]
   公理与运算 (6 个):
     - trans({i j : 𝒰.I₀} (hij : i ⟶ j)) : 𝒰.X i ⟶ 𝒰.X j
     - trans_id((i : 𝒰.I₀)) : trans (𝟙 i) = 𝟙 (𝒰.X i)  [默认: by cat_disch]
@@ -177,7 +177,7 @@ lemma exists_lift_trans_eq
   proof: LocallyDirected.directed x
 
 中文:
-引理 exists_lift_trans_eq
+引理 存在_lift_trans_eq
   条件: {i j : 𝒰.I₀} (x : (pullback (𝒰.f i) (𝒰.f j)).carrier)
   证明: LocallyDirected.directed x
 
@@ -202,7 +202,7 @@ lemma exists_of_f_eq_f
   simp [← Scheme.Hom.comp_apply]
 
 中文:
-引理 exists_of_f_eq_f
+引理 存在_of_f_eq_f
   条件: {i j : 𝒰.I₀} (xi : 𝒰.X i) (xj : 𝒰.X j) (h : 𝒰.f i xi = 𝒰.f j xj)
   证明: by
   obtain ⟨z, rfl, rfl⟩ := Scheme.Pullback.exists_preimage_pullback xi xj h
@@ -230,7 +230,7 @@ lemma exists_of_trans_eq_trans
   rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [Hom.comp_base]; rw [Hom.comp_base]; rw [ConcreteCategory.comp_apply]; rw [h]; rw [ConcreteCategory.comp_apply]
 
 中文:
-引理 exists_of_trans_eq_trans
+引理 存在_of_trans_eq_trans
   结论: {i j k : 𝒰.I₀} (fi : i ⟶ k) (fj : j ⟶ k) (xi : 𝒰.X i)
   证明: exists_of_f_eq_f _ _ _ by
   rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [Hom.comp_base]; rw [Hom.comp_base]; rw [ConcreteCategory.comp_apply]; rw [h]; rw [ConcreteCategory.comp_apply]
@@ -283,7 +283,7 @@ definition intersectionOfLocallyDirected
 
 中文:
 定义 intersectionOfLocallyDirected
-  签名: [P.IsStableUnderBaseChange] [P.HasOfPostcomp命题erty P]
+  签名: [P.是StableUnderBaseChange] [P.有OfPostcompProperty P]
   定义体: Σ (k : 𝒰.I₀), (k ⟶ i) × (k ⟶ j)
   X k := 𝒰.X k.1
   f k := pullback.lift (𝒰.trans k.2.1) (𝒰.trans k.2.2) (by simp)
@@ -321,7 +321,7 @@ definition functorOfLocallyDirected
 
 中文:
 定义 functorOfLocallyDirected
-  签名: : 𝒰.I₀ ⥤ Scheme.{u} where
+  签名: : 𝒰.I₀ ⥤ 概形.{u} where
   定义体: 𝒰.X
   map := 𝒰.trans
 -/
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝒰.functorOfLocallyDirected ⋙ Scheme.forget).IsLocallyDirected
+  签名: (𝒰.functorOfLocallyDirected ⋙ 概形.forget).是LocallyDirected
   定义体: by
     simp only [Functor.comp_obj, functorOfLocallyDirected_obj, forget_obj, Functor.comp_map,
       functorOfLocallyDirected_map, forget_map, ConcreteCategory.hom_ofHom,
@@ -403,7 +403,7 @@ definition coconeOfLocallyDirected
 
 中文:
 定义 coconeOfLocallyDirected
-  签名: : Cocone 𝒰.functorOfLocallyDirected where
+  签名: : 余锥 𝒰.functorOfLocallyDirected where
   定义体: X
   ι := 𝒰.functorOfLocallyDirectedHomBase
 -/
@@ -426,7 +426,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (𝒰.pullback₁ f).I₀
+  签名: 范畴 (𝒰.pullback₁ f).I₀
   定义体: inferInstanceAs Category 𝒰.I₀
 
 Depends on / 依赖: Category
@@ -530,7 +530,7 @@ definition glueMorphismsOfLocallyDirected
 
 中文:
 定义 glueMorphismsOfLocallyDirected
-  签名: (𝒰 : X.OpenCover) [Category* 𝒰.I₀] [𝒰.LocallyDirected]
+  签名: (𝒰 : X.OpenCover) [范畴* 𝒰.I₀] [𝒰.LocallyDirected]
   定义体: 𝒰.glueMorphisms g fun i j => by
     apply (𝒰.intersectionOfLocallyDirected i j).hom_ext
     intro k
@@ -561,7 +561,7 @@ lemma map_glueMorphismsOfLocallyDirected
 
 中文:
 引理 map_glueMorphismsOfLocallyDirected
-  结论: {Y : Scheme.{u}} (g : 对任意 i, 𝒰.X i ⟶ Y)
+  结论: {Y : 概形.{u}} (g : 对任意 i, 𝒰.X i ⟶ Y)
   证明: by
   simp [glueMorphismsOfLocallyDirected]
 
@@ -585,7 +585,7 @@ definition isColimitCoconeOfLocallyDirected
 
 中文:
 定义 isColimitCoconeOfLocallyDirected
-  签名: : IsColimit 𝒰.coconeOfLocallyDirected where
+  签名: : 是余极限 𝒰.coconeOfLocallyDirected where
   定义体: 𝒰.glueMorphismsOfLocallyDirected s.ι.app fun _ => s.ι.naturality _
   uniq s m hm := 𝒰.hom_ext _ _ fun j => by simpa using hm j
 
@@ -610,7 +610,7 @@ definition glueMorphismsOverOfLocallyDirected
 
 中文:
 定义 glueMorphismsOverOfLocallyDirected
-  签名: {S : Scheme.{u}} {X : Over S}
+  签名: {S : 概形.{u}} {X : Over S}
   定义体: Over.homMk (𝒰.glueMorphismsOfLocallyDirected g h) by
     apply 𝒰.hom_ext
     intro i
@@ -643,7 +643,7 @@ lemma map_glueMorphismsOverOfLocallyDirected_left
 
 中文:
 引理 map_glueMorphismsOverOfLocallyDirected_left
-  结论: {S : Scheme.{u}} {X : Over S}
+  结论: {S : 概形.{u}} {X : Over S}
   证明: by
   simp [glueMorphismsOverOfLocallyDirected]
 
@@ -677,7 +677,7 @@ definition Cover.LocallyDirected.ofIsBasisOpensRange
 
 中文:
 定义 Cover.LocallyDirected.ofIsBasisOpensRange
-  签名: {𝒰 : X.OpenCover} [Preorder 𝒰.I₀]
+  签名: {𝒰 : X.OpenCover} [预序 𝒰.I₀]
   定义体: IsOpenImmersion.lift (𝒰.f j) (𝒰.f i) (hle.mp (leOfHom hij))
   trans_id i := by rw [← cancel_mono (𝒰.f i)]; simp
   trans_comp hij hjk := by rw [← cancel_mono (𝒰.f _)]; simp
@@ -819,7 +819,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder X.directedAffineCover.I₀
+  签名: 预序 X.directedAffineCover.I₀
   定义体: inferInstanceAs Preorder X.affineOpens
 
 Depends on / 依赖: Preorder, X.affineOpens, affineOpens
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: Scheme.Cover.LocallyDirected X.directedAffineCover
+  签名: 概形.Cover.LocallyDirected X.directedAffineCover
   定义体: .ofIsBasisOpensRange (by intros; simp; rfl) by
     convert! X.isBasis_affineOpens
     simp

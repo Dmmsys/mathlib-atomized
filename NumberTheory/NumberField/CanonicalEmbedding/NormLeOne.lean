@@ -225,7 +225,7 @@ abbreviation normLeOne
 
 中文:
 缩写 normLeOne
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: fundamentalCone K inter {x | mixedEmbedding.norm x <= 1}
 
 Depends on / 依赖: fundamentalCone, mixedEmbedding, mixedEmbedding.norm
@@ -645,7 +645,7 @@ theorem expMap_sum
 
 中文:
 定理 expMap_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> realSpace K)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> realSpace K)
   证明: by
   ext
   simp [← Real.exp_sum, ← mul_sum]
@@ -762,7 +762,7 @@ theorem hasFDerivAt_expMap
 中文:
 定理 hasFDerivAt_expMap
   条件: (x : realSpace K)
-  结论: HasFDerivAt expMap (fderiv_expMap x) x
+  结论: 在点处Fréchet可导 expMap (fderiv_expMap x) x
   证明: by
   simpa [expMap, fderiv_expMap, hasFDerivAt_pi', OpenPartialHomeomorph.pi_apply,
     ContinuousLinearMap.proj_pi] using!
@@ -796,7 +796,7 @@ definition equivFinRank
 
 中文:
 定义 equivFinRank
-  签名: : Fin (rank K) ≃ {w : InfinitePlace K // w != w₀}
+  签名: : 有限集 (rank K) ≃ {w : InfinitePlace K // w != w₀}
   定义体: Fintype.equivOfCardEq by
     rw [Fintype.card_subtype_compl]; rw [Fintype.card_ofSubsingleton]; rw [Fintype.card_fin]; rw [rank]
 
@@ -1040,7 +1040,7 @@ definition completeBasis
 
 中文:
 定义 completeBasis
-  签名: : Basis (InfinitePlace K) 实数 (realSpace K)
+  签名: : 基 (InfinitePlace K) 实数 (realSpace K)
   定义体: basisOfLinearIndependentOfCardEqFinrank (linearIndependent_completeFamily K)
     (Module.finrank_fintype_fun_eq_card _).symm
 
@@ -1500,7 +1500,7 @@ theorem normAtAllPlaces_image_preimage_expMapBasis
 
 中文:
 定理 normAtAllPlaces_image_preimage_expMapBasis
-  条件: (s : Set (realSpace K))
+  条件: (s : 集合 (realSpace K))
   证明: by
   apply normAtAllPlaces_image_preimage_of_nonneg
   rintro _ ⟨x, _, rfl⟩ w
@@ -1657,8 +1657,8 @@ theorem setLIntegral_expMapBasis_image
   rw [← lintegral_const
 
 中文:
-定理 setLIntegral_expMapBasis_image
-  结论: {s : Set (realSpace K)} (hs : MeasurableSet s)
+定理 setL整数egral_expMapBasis_image
+  结论: {s : 集合 (realSpace K)} (hs : 可测集 s)
   证明: by
   rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume hs
     (fun x _ => (hasFDerivAt_expMapBasis K x).hasFDerivWithinAt) (injective_expMapBasis K).injOn]
@@ -1706,7 +1706,7 @@ abbreviation paramSet
 
 中文:
 缩写 paramSet
-  签名: : Set (realSpace K)
+  签名: : 集合 (realSpace K)
   定义体: Set.univ.pi fun w => if w = w₀ then Set.Iic 0 else Set.Ico 0 1
 
 Depends on / 依赖: Set.Ico, Set.Iic, Set.univ.pi
@@ -1922,7 +1922,7 @@ theorem setLIntegral_paramSet_exp
   simp_rw [Function.update_self, lmarginal, lintegral_const, 
 
 中文:
-定理 setLIntegral_paramSet_exp
+定理 setL整数egral_paramSet_exp
   条件: {n : 自然数} (hn : 0 < n)
   证明: by
   classical
@@ -1965,7 +1965,7 @@ abbreviation compactSet
 
 中文:
 缩写 compactSet
-  签名: : Set (realSpace K)
+  签名: : 集合 (realSpace K)
   定义体: (Set.Icc (0 : Real) 1) • (expMapBasis '' Set.univ.pi fun w => if w = w₀ then {0} else Set.Icc 0 1)
 
 Depends on / 依赖: Set.Icc, Set.univ.pi, expMapBasis

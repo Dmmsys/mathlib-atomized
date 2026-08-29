@@ -32,8 +32,8 @@ instance Int.euclideanDomain
 remaind
 
 中文:
-实例 Int.euclideanDomain
-  签名: : EuclideanDomain 整数
+实例 整数.euclideanDomain
+  签名: : 欧几里得整环 整数
   定义体: { (inferInstance : CommRing Int), (inferInstance : Nontrivial Int) with
     quotient := (· / ·), quotient_zero := Int.ediv_zero, remainder := (· % ·),
     quotient_mul_add_remainder_eq := Int.mul_ediv_add_emod,

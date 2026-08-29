@@ -48,8 +48,8 @@ lemma DivisionRing.nonempty_linearEquiv_of_isSimpleModule
   exact ⟨e ≪≫ₗ I.quotEquivOfEqBot ((eq_bot_or_eq_top I).resolve_right hI.ne_top)⟩
 
 中文:
-引理 DivisionRing.nonempty_linearEquiv_of_isSimpleModule
-  结论: (N : 类型) [AddCommGroup N]
+引理 除环.nonempty_linearEquiv_of_isSimpleModule
+  结论: (N : 类型) [加法交换群 N]
   证明: by
   obtain ⟨I, hI, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp ‹_›
   exact ⟨e ≪≫ₗ I.quotEquivOfEqBot ((eq_bot_or_eq_top I).resolve_right hI.ne_top)⟩
@@ -74,7 +74,7 @@ lemma isSimpleModule_iff_eq_zero_or_injective
 
 中文:
 引理 isSimpleModule_iff_eq_zero_or_injective
-  结论: (R : 类型u) (M : 类型v) [Ring R] [AddCommGroup M]
+  结论: (R : 类型u) (M : 类型v) [环 R] [加法交换群 M]
   证明: .elim .1 hM.1.1, fun N _ _ f => hM.1.2 (LinearMap.ker f) ⟨fun hM => ⟨Submodule.nontrivial_iff _
     (fun h => Or.inr <| by rwa [LinearMap.ker_eq_bot] at h) (fun h => Or.inl <|by simp_all)⟩,
 .2 ⟨fun p => (hM2 (M ⧸ p) p.mkQ).elim fun ⟨hM1, hM2⟩ => isSimpleModule_iff R M
@@ -101,7 +101,7 @@ lemma IsSimpleModule.obj_of_isEquivalence
   exact simple_obj e M
 
 中文:
-引理 IsSimpleModule.obj_of_isEquivalence
+引理 是单模.obj_of_isEquivalence
   证明: by
   rw [← simple_iff_isSimpleModule'] at *
   exact simple_obj e M

@@ -56,7 +56,7 @@ theorem cauchySeq_prod_of_tendsto_cofinite_one
 
 中文:
 定理 cauchySeq_prod_of_tendsto_cofinite_one
-  条件: {f : α -> G} (hf : Tendsto f cofinite (𝓝 1))
+  条件: {f : α -> G} (hf : 收敛 f cofinite (𝓝 1))
   证明: by
   /- Let `U` be a neighborhood of `1`. It suffices to show that there exists `s : Finset α` such
   that for any `t : Finset α` disjoint from `s`, we have `∏ i ∈ t, f i ∈ U`. -/
@@ -152,7 +152,7 @@ theorem multipliable_of_tendsto_cofinite_one
 
 中文:
 定理 multipliable_of_tendsto_cofinite_one
-  结论: [CompleteSpace G] {f : α -> G}
+  结论: [完备空间 G] {f : α -> G}
   证明: CompleteSpace.complete (cauchySeq_prod_of_tendsto_cofinite_one hf)
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, cauchySeq_prod_of_tendsto_cofinite_one, complete
@@ -176,7 +176,7 @@ theorem multipliable_iff_tendsto_cofinite_one
 
 中文:
 定理 multipliable_iff_tendsto_cofinite_one
-  条件: [CompleteSpace G] (f : α -> G)
+  条件: [完备空间 G] (f : α -> G)
   证明: ⟨Multipliable.tendsto_cofinite_one, multipliable_of_tendsto_cofinite_one⟩
 
 Depends on / 依赖: Multipliable, Multipliable.tendsto_cofinite_one, multipliable_of_tendsto_cofinite_one, tendsto_cofinite_one
@@ -204,7 +204,7 @@ theorem Summable.mul_of_complete_nonarchimedean
 
 中文:
 定理 Summable.mul_of_complete_nonarchimedean
-  结论: [CompleteSpace R] {f : α -> R} {g : β -> R}
+  结论: [完备空间 R] {f : α -> R} {g : β -> R}
   证明: by
   rw [NonarchimedeanAddGroup.summable_iff_tendsto_cofinite_zero] at *
   exact tendsto_mul_cofinite_nhds_zero hf hg
@@ -273,7 +273,7 @@ theorem tsum_mul_tsum_of_nonarchimedean
 
 中文:
 定理 tsum_mul_tsum_of_nonarchimedean
-  结论: [T0Space R] {f : α -> R} {g : β -> R} (hf : Summable f)
+  结论: [T0空间 R] {f : α -> R} {g : β -> R} (hf : Summable f)
   证明: (hf.hasSum.mul_of_nonarchimedean hg.hasSum).tsum_eq.symm
 
 Depends on / 依赖: hasSum, hf.hasSum.mul_of_nonarchimedean, hg.hasSum, mul_of_nonarchimedean, tsum_eq, tsum_eq.symm

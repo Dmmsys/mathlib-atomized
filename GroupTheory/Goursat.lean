@@ -50,7 +50,7 @@ definition goursatFst
 
 中文:
 定义 goursatFst
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: ((MonoidHom.snd G H).comp I.subtype).ker.map ((MonoidHom.fst G H).comp I.subtype)
 
 Depends on / 依赖: I.subtype, MonoidHom, MonoidHom.fst, MonoidHom.snd, ker.map, subtype
@@ -80,7 +80,7 @@ definition goursatSnd
 
 中文:
 定义 goursatSnd
-  签名: : Subgroup H
+  签名: : 子群 H
   定义体: ((MonoidHom.fst G H).comp I.subtype).ker.map ((MonoidHom.snd G H).comp I.subtype)
 
 @[to_additive (attr := simp)]
@@ -151,7 +151,7 @@ include hI₂ in
 
 中文:
 引理 normal_goursatFst
-  结论: I.goursatFst.Normal
+  结论: I.goursatFst.正规
   证明: .map inferInstance _ hI₁
 
 include hI₂ in
@@ -172,7 +172,7 @@ include hI₁ hI₂ in
 
 中文:
 引理 normal_goursatSnd
-  结论: I.goursatSnd.Normal
+  结论: I.goursatSnd.正规
   证明: .map inferInstance _ hI₂
 
 include hI₁ hI₂ in
@@ -235,7 +235,7 @@ lemma goursatFst_prod_goursatSnd_le
 
 中文:
 引理 goursatFst_prod_goursatSnd_le
-  结论: I.goursatFst.prod I.goursatSnd <= I
+  结论: I.goursatFst.乘积 I.goursatSnd <= I
   证明: by
   rintro ⟨g, h⟩ ⟨hg, hh⟩
   simpa using mul_mem (mem_goursatFst.1 hg) (mem_goursatSnd.1 hh)

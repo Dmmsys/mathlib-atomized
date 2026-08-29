@@ -723,7 +723,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: [Algebra R A]
+  签名: [代数 R A]
   定义体: W.map algebraMap R A
 
 Depends on / 依赖: W.map, algebraMap
@@ -941,7 +941,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: W.map (RingHom.id R) = W
+  结论: W.map (环态射.id R) = W
   证明: rfl
 
 Depends on / 依赖: Finite, Finite.of_injective, f.toOrderHom.toFun, of_injective, toOrderHom
@@ -962,7 +962,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: {B : Type w} [CommRing B] (g : A ->+* B)
+  条件: {B : 类型 w} [交换环 B] (g : A ->+* B)
   结论: (W.map f).map g = W.map (g.comp f)
   证明: rfl
 
@@ -982,7 +982,7 @@ lemma map_baseChange
 
 中文:
 引理 map_baseChange
-  结论: {S : Type s} [CommRing S] [Algebra R S] {A : 类型v} [CommRing A] [Algebra R A]
+  结论: {S : 类型 s} [交换环 S] [代数 R S] {A : 类型v} [交换环 A] [代数 R A]
   证明: congrArg W.map g.comp_algebraMap_of_tower R
 
 Depends on / 依赖: W.map, comp_algebraMap_of_tower, g.comp_algebraMap_of_tower
@@ -1005,7 +1005,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: fun _ _ h => by
   rcases mk.inj h with ⟨_, _, _, _, _⟩
   ext <;> apply_fun _ using hf <;> assumption
@@ -1033,7 +1033,7 @@ definition twoTorsionPolynomial
 
 中文:
 定义 twoTorsionPolynomial
-  签名: : Cubic R
+  签名: : 三次 R
   定义体: ⟨4, W.b₂, 2 * W.b₄, W.b₆⟩
 -/
 def twoTorsionPolynomial : Cubic R :=
@@ -1185,7 +1185,7 @@ exact and_iff_right hu.pow 4
 
 中文:
 引理 twoTorsionPolynomial_discr_isUnit
-  条件: (hu : IsUnit (2 : R))
+  条件: (hu : 是单位 (2 : R))
   证明: by
   rw [twoTorsionPolynomial_discr]; rw [IsUnit.mul_iff]; rw [show (16 : R) = 2 ^ 4 by norm_num1]
 exact and_iff_right hu.pow 4
@@ -1209,7 +1209,7 @@ lemma twoTorsionPolynomial_discr_ne_zero
 
 中文:
 引理 twoTorsionPolynomial_discr_ne_zero
-  条件: [Nontrivial R] (hu : IsUnit (2 : R)) (hΔ : IsUnit W.Δ)
+  条件: [非平凡 R] (hu : 是单位 (2 : R)) (hΔ : 是单位 W.Δ)
   证明: ((W.twoTorsionPolynomial_discr_isUnit hu).mpr hΔ).ne_zero
 
 Depends on / 依赖: W.twoTorsionPolynomial_discr_isUnit, ne_zero, twoTorsionPolynomial_discr_isUnit
@@ -1237,10 +1237,10 @@ class IsElliptic
     - isUnit : IsUnit W.Δ
 
 中文:
-类 IsElliptic
+类 是Elliptic
   参数: : 命题 where
   公理与运算 (1 个):
-    - isUnit : IsUnit W.Δ
+    - isUnit : 是单位 W.Δ
 -/
 protected class IsElliptic : Prop where
   isUnit : IsUnit W.Δ
@@ -1257,7 +1257,7 @@ lemma isUnit_Δ
 
 中文:
 引理 isUnit_Δ
-  结论: IsUnit W.Δ
+  结论: 是单位 W.Δ
   证明: IsElliptic.isUnit
 
 Depends on / 依赖: IsElliptic, IsElliptic.isUnit, isUnit
@@ -1371,7 +1371,7 @@ lemma j_eq_zero_iff
 
 中文:
 引理 j_eq_zero_iff
-  条件: [IsReduced R]
+  条件: [是既约 R]
   结论: W.j = 0 ↔ W.c₄ = 0
   证明: by
   rw [j_eq_zero_iff']; rw [pow_eq_zero_iff three_ne_zero]
@@ -1459,7 +1459,7 @@ lemma j_eq_zero_iff_of_char_two
 
 中文:
 引理 j_eq_zero_iff_of_char_two
-  条件: [IsReduced R]
+  条件: [是既约 R]
   结论: W.j = 0 ↔ W.a₁ = 0
   证明: by
   rw [j_eq_zero_iff_of_char_two']; rw [pow_eq_zero_iff (Nat.succ_ne_zero _)]
@@ -1549,7 +1549,7 @@ lemma j_eq_zero_iff_of_char_three
 
 中文:
 引理 j_eq_zero_iff_of_char_three
-  条件: [IsReduced R]
+  条件: [是既约 R]
   结论: W.j = 0 ↔ W.b₂ = 0
   证明: by
   rw [j_eq_zero_iff_of_char_three']; rw [pow_eq_zero_iff (Nat.succ_ne_zero _)]
@@ -1573,7 +1573,7 @@ lemma twoTorsionPolynomial_discr_ne_zero_of_isElliptic
 
 中文:
 引理 twoTorsionPolynomial_discr_ne_zero_of_isElliptic
-  条件: [Nontrivial R] (hu : IsUnit (2 : R))
+  条件: [非平凡 R] (hu : 是单位 (2 : R))
   证明: W.twoTorsionPolynomial_discr_ne_zero hu W.isUnit_Δ
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, W.isUnit_, W.twoTorsionPolynomial_discr_ne_zero, twoTorsionPolynomial_discr_ne_zero
@@ -1599,7 +1599,7 @@ instance :
 
 中文:
 实例 :
-  签名: (W.map f).IsElliptic
+  签名: (W.map f).是Elliptic
   定义体: by
   simp only [isElliptic_iff, map_Δ, W.isUnit_Δ.map]
 
@@ -1641,7 +1641,7 @@ lemma map_Δ'
 
 中文:
 引理 map_Δ'
-  结论: (W.map f).Δ' = Units.map f W.Δ'
+  结论: (W.map f).Δ' = 单位群.map f W.Δ'
   证明: by
   ext
   exact W.coe_map_Δ' f
@@ -1685,7 +1685,7 @@ lemma inv_map_Δ'
 
 中文:
 引理 inv_map_Δ'
-  结论: (W.map f).Δ'⁻¹ = Units.map f W.Δ'⁻¹
+  结论: (W.map f).Δ'⁻¹ = 单位群.map f W.Δ'⁻¹
   证明: by
   simp
 

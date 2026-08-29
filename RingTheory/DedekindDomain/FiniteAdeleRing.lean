@@ -46,7 +46,7 @@ definition HeightOneSpectrum.Support
   body: {v : HeightOneSpectrum R | 1 < v.valuation K k}
 
 中文:
-定义 HeightOneSpectrum.Support
+定义 高一谱.Support
   签名: (k : K)
   定义体: {v : HeightOneSpectrum R | 1 < v.valuation K k}
 
@@ -72,9 +72,9 @@ lemma HeightOneSpectrum.Support.finite
     apply_fun v.val
 
 中文:
-引理 HeightOneSpectrum.Support.finite
+引理 高一谱.Support.finite
   条件: (k : K)
-  结论: (Support R k).Finite
+  结论: (Support R k).有限
   证明: by
   -- We write k=n/d.
   obtain ⟨⟨n, ⟨d, hd⟩⟩, hk⟩ := IsLocalization.surj (nonZeroDivisors R) k
@@ -130,7 +130,7 @@ definition FiniteAdeleRing
 
 中文:
 定义 FiniteAdeleRing
-  签名: : Type _
+  签名: : 类型 _
   定义体: Πʳ v : HeightOneSpectrum R, [v.adicCompletion K, v.adicCompletionIntegers K]
 
 Depends on / 依赖: HeightOneSpectrum, adicCompletion, adicCompletionIntegers, v.adicCompletion, v.adicCompletionIntegers
@@ -149,7 +149,7 @@ CommRing Πʳ v : HeightOneSpectrum R, [v.adicCompletion K, v.adicCompletionInte
 
 中文:
 实例 :
-  签名: CommRing (FiniteAdeleRing R K)
+  签名: 交换环 (FiniteAdeleRing R K)
   定义体: inferInstanceAs
 CommRing Πʳ v : HeightOneSpectrum R, [v.adicCompletion K, v.adicCompletionIntegers K]
 -/
@@ -167,7 +167,7 @@ TopologicalSpace Πʳ v : HeightOneSpectrum R, [v.adicCompletion K, v.adicComple
 
 中文:
 实例 :
-  签名: TopologicalSpace (FiniteAdeleRing R K)
+  签名: 拓扑空间 (FiniteAdeleRing R K)
   定义体: inferInstanceAs
 TopologicalSpace Πʳ v : HeightOneSpectrum R, [v.adicCompletion K, v.adicCompletionIntegers K]
 -/
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: DFunLike (FiniteAdeleRing R K) (HeightOneSpectrum R) (adicCompletion K)
+  签名: 依赖函数状 (FiniteAdeleRing R K) (高一谱 R) (adicCompletion K)
   定义体: a.1
   coe_injective _ _ := Subtype.ext
 -/
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra K 𝔸ᶠ[R, K]
+  签名: 代数 K 𝔸ᶠ[R, K]
   定义体: (FiniteAdeleRing.algebraMap R K).toAlgebra
 
 @[simp]
@@ -263,7 +263,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: (k : K) (v : HeightOneSpectrum R)
+  条件: (k : K) (v : 高一谱 R)
   证明: rfl
 -/
 theorem algebraMap_apply (k : K) (v : HeightOneSpectrum R) :
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R 𝔸ᶠ[R, K]
+  签名: 代数 R 𝔸ᶠ[R, K]
   定义体: Algebra.compHom _ (algebraMap R K)
 
 Depends on / 依赖: Algebra, Algebra.compHom, algebraMap, compHom
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R K 𝔸ᶠ[R, K]
+  签名: 标量塔 R K 𝔸ᶠ[R, K]
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -341,7 +341,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalRing 𝔸ᶠ[R, K]
+  签名: 是拓扑环 𝔸ᶠ[R, K]
   定义体: haveI : Fact (forall v : HeightOneSpectrum R,
       IsOpen (v.adicCompletionIntegers K : Set (v.adicCompletion K))) :=
     ⟨fun _ => Valued.isOpen_valuationSubring _⟩

@@ -68,7 +68,7 @@ theorem hull
 
 中文:
 定理 hull
-  条件: {s : Set M} (hs : s.Finite) (hli : LinearIndepOn R id s)
+  条件: {s : 集合 M} (hs : s.有限) (hli : LinearIndepOn R id s)
   证明: ⟨s, hs, hli, rfl⟩
 -/
 protected theorem hull {s : Set M} (hs : s.Finite) (hli : LinearIndepOn R id s) :

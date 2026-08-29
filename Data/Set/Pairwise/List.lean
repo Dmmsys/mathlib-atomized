@@ -35,7 +35,7 @@ theorem Nodup.pairwise_of_set_pairwise
 
 中文:
 定理 Nodup.pairwise_of_set_pairwise
-  结论: {l : List α} {r : α -> α -> 命题} (hl : l.Nodup)
+  结论: {l : 列表 α} {r : α -> α -> 命题} (hl : l.Nodup)
   证明: hl.pairwise_of_forall_ne h
 
 @[simp]

@@ -280,7 +280,7 @@ lemma regularityReduced_edges_card_aux
 
 中文:
 引理 regularityReduced_edges_card_aux
-  结论: [Nonempty α] (hε : 0 < ε) (hP : P.IsEquipartition)
+  结论: [非空 α] (hε : 0 < ε) (hP : P.IsEquipartition)
   证明: by
   let A := (P.nonUniforms G (ε / 8)).biUnion fun (U, V) => U ×ˢ V
   let B := P.parts.biUnion offDiag

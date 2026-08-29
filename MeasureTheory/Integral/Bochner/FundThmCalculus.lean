@@ -42,7 +42,7 @@ theorem Filter.Tendsto.integral_sub_linear_isLittleO_ae
   have : forallᶠ s in l.smallSets, f
 
 中文:
-定理 Filter.Tendsto.integral_sub_linear_isLittleO_ae
+定理 滤子.收敛.integral_sub_linear_isLittleO_ae
   证明: by
   suffices
       (fun s => (∫ x in s, f x ∂μ) - μ.real s • b) =o[l.smallSets] fun s => μ.real s from
@@ -84,7 +84,7 @@ theorem ContinuousWithinAt.integral_sub_linear_isLittleO_ae
 
 中文:
 定理 ContinuousWithinAt.integral_sub_linear_isLittleO_ae
-  结论: [TopologicalSpace X]
+  结论: [拓扑空间 X]
   证明: haveI : (𝓝[t] x).IsMeasurablyGenerated := ht.nhdsWithin_isMeasurablyGenerated _
   (hx.mono_left inf_le_left).integral_sub_linear_isLittleO_ae hfm (μ.finiteAt_nhdsWithin x t) hs m
     hsμ
@@ -110,7 +110,7 @@ theorem ContinuousAt.integral_sub_linear_isLittleO_ae
 
 中文:
 定理 ContinuousAt.integral_sub_linear_isLittleO_ae
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X]
+  结论: [拓扑空间 X] [OpensMeasurable空间 X]
   证明: (hx.mono_left inf_le_left).integral_sub_linear_isLittleO_ae hfm (μ.finiteAt_nhds x) hs m hsμ
 -/
 theorem ContinuousAt.integral_sub_linear_isLittleO_ae [TopologicalSpace X] [OpensMeasurableSpace X]
@@ -132,7 +132,7 @@ theorem ContinuousOn.integral_sub_linear_isLittleO_ae
 
 中文:
 定理 ContinuousOn.integral_sub_linear_isLittleO_ae
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X]
+  结论: [拓扑空间 X] [OpensMeasurable空间 X]
   证明: (hft x hx).integral_sub_linear_isLittleO_ae ht
     ⟨t, self_mem_nhdsWithin, hft.aestronglyMeasurable ht⟩ hs m hsμ
 -/

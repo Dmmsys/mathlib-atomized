@@ -165,7 +165,7 @@ definition toRealLinearIsometryEquivOfMapZero
 @[simp]
 
 中文:
-定义 toRealLinearIsometryEquivOfMapZero
+定义 to实数LinearIsometryEquivOfMapZero
   签名: (f : E ≃ᵢ F) (h0 : f 0 = 0)
   定义体: { (AddMonoidHom.ofMapMidpoint Real Real f h0 f.map_midpoint).toRealLinearMap f.continuous, f with
     norm_map' := fun x => show ‖f x‖ = ‖x‖ by simp only [← dist_zero_right, ← h0, f.dist_eq] }
@@ -190,7 +190,7 @@ theorem coe_toRealLinearIsometryEquivOfMapZero
 @[simp]
 
 中文:
-定理 coe_toRealLinearIsometryEquivOfMapZero
+定理 coe_to实数LinearIsometryEquivOfMapZero
   条件: (f : E ≃ᵢ F) (h0 : f 0 = 0)
   证明: rfl
 
@@ -210,7 +210,7 @@ theorem coe_toRealLinearIsometryEquivOfMapZero_symm
   proof: rfl
 
 中文:
-定理 coe_toRealLinearIsometryEquivOfMapZero_symm
+定理 coe_to实数LinearIsometryEquivOfMapZero_symm
   条件: (f : E ≃ᵢ F) (h0 : f 0 = 0)
   证明: rfl
 -/
@@ -230,7 +230,7 @@ definition toRealLinearIsometryEquiv
 @[simp]
 
 中文:
-定义 toRealLinearIsometryEquiv
+定义 to实数LinearIsometryEquiv
   签名: (f : E ≃ᵢ F)
   定义体: (f.trans (IsometryEquiv.addRight (f 0)).symm).toRealLinearIsometryEquivOfMapZero
     (by simpa only [sub_eq_add_neg] using! sub_self (f 0))
@@ -255,7 +255,7 @@ theorem toRealLinearIsometryEquiv_apply
 @[simp]
 
 中文:
-定理 toRealLinearIsometryEquiv_apply
+定理 to实数LinearIsometryEquiv_apply
   条件: (f : E ≃ᵢ F) (x : E)
   证明: (sub_eq_add_neg (f x) (f 0)).symm
 
@@ -277,7 +277,7 @@ theorem toRealLinearIsometryEquiv_symm_apply
   proof: rfl
 
 中文:
-定理 toRealLinearIsometryEquiv_symm_apply
+定理 to实数LinearIsometryEquiv_symm_apply
   条件: (f : E ≃ᵢ F) (y : F)
   证明: rfl
 -/
@@ -299,7 +299,7 @@ definition toRealAffineIsometryEquiv
 @[simp]
 
 中文:
-定义 toRealAffineIsometryEquiv
+定义 to实数AffineIsometryEquiv
   签名: (f : PE ≃ᵢ PF)
   定义体: AffineIsometryEquiv.mk' f
     ((vaddConst (Classical.arbitrary PE)).trans <|
@@ -329,7 +329,7 @@ theorem coeFn_toRealAffineIsometryEquiv
 @[simp]
 
 中文:
-定理 coeFn_toRealAffineIsometryEquiv
+定理 coeFn_to实数AffineIsometryEquiv
   条件: (f : PE ≃ᵢ PF)
   结论: ⇑f.to实数AffineIsometryEquiv = f
   证明: rfl
@@ -351,7 +351,7 @@ theorem coe_toRealAffineIsometryEquiv
   rfl
 
 中文:
-定理 coe_toRealAffineIsometryEquiv
+定理 coe_to实数AffineIsometryEquiv
   条件: (f : PE ≃ᵢ PF)
   证明: by
   ext

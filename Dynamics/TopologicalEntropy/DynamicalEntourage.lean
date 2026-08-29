@@ -140,7 +140,7 @@ lemma dynEntourage_mem_uniformity
 
 中文:
 引理 dynEntourage_mem_uniformity
-  结论: [UniformSpace X] (h : UniformContinuous T)
+  结论: [一致空间 X] (h : 一致连续 T)
   证明: by
   rw [dynEntourage_eq_inter_Ico T U n]
   induction n with
@@ -181,7 +181,7 @@ lemma ball_dynEntourage_mem_nhds
 
 中文:
 引理 ball_dynEntourage_mem_nhds
-  结论: [UniformSpace X] (h : Continuous T)
+  结论: [一致空间 X] (h : 连续 T)
   证明: by
   rw [dynEntourage_eq_inter_Ico T U n]; rw [ball_iInter]; rw [Filter.iInter_mem]; rw [Subtype.forall]
   intro k _
@@ -233,7 +233,7 @@ instance isSymm_dynEntourage
 
 中文:
 实例 isSymm_dynEntourage
-  签名: [U.IsSymm]
+  签名: [U.是Symm]
   定义体: by
   simp only [dynEntourage, map_iterate]
   infer_instance
@@ -290,7 +290,7 @@ lemma _root_.isOpen.dynEntourage
 
 中文:
 引理 _root_.isOpen.dynEntourage
-  结论: [TopologicalSpace X] {T : X -> X} (T_cont : Continuous T)
+  结论: [拓扑空间 X] {T : X -> X} (T_cont : 连续 T)
   证明: by
   rw [dynEntourage_eq_inter_Ico T U n]
   refine isOpen_iInter_of_finite fun k => ?_
@@ -433,7 +433,7 @@ lemma mem_ball_dynEntourage_comp
 
 中文:
 引理 mem_ball_dynEntourage_comp
-  结论: (T : X -> X) (n : 自然数) {U : SetRel X X} [U.IsSymm]
+  结论: (T : X -> X) (n : 自然数) {U : SetRel X X} [U.是Symm]
   证明: by
   rcases h with ⟨z, z_Bx, z_By⟩
   rw [mem_ball_symmetry] at z_Bx
@@ -460,7 +460,7 @@ lemma _root_.Function.Semiconj.preimage_dynEntourage
   rw [← preimage_comp]; rw [← preimage_comp]; rw [map_iterate S S k]; rw [map_iterate T T k]; rw [map_comp_map]; rw [map_comp_map]; rw [(Function.Semiconj.iterate_right h k).comp_eq]
 
 中文:
-引理 _root_.Function.Semiconj.preimage_dynEntourage
+引理 _root_.函数.Semiconj.preimage_dynEntourage
   结论: {Y : 类型} {S : X -> X} {T : Y -> Y} {φ : X -> Y}
   证明: by
   rw [dynEntourage]; rw [preimage_iInter₂]

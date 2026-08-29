@@ -63,7 +63,7 @@ instance categoryPaths
 
 中文:
 实例 categoryPaths
-  签名: : Category.{max u₁ v₁} (Paths V) where
+  签名: : 范畴.{最大值 u₁ v₁} (Paths V) where
   定义体: fun X Y : V => Quiver.Path X Y
   id _ := Quiver.Path.nil
   comp f g := Quiver.Path.comp f g
@@ -257,7 +257,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {C} [Category* C] (φ : V ⥤q C)
+  签名: {C} [范畴* C] (φ : V ⥤q C)
   定义体: φ.obj
   map {X} {Y} f :=
     @Quiver.Path.rec V _ X (fun Y _ => φ.obj X ⟶ φ.obj Y) (𝟙 <| φ.obj X)
@@ -300,7 +300,7 @@ theorem lift_nil
 
 中文:
 定理 lift_nil
-  条件: {C} [Category* C] (φ : V ⥤q C) (X : V)
+  条件: {C} [范畴* C] (φ : V ⥤q C) (X : V)
   证明: rfl
 -/
 theorem lift_nil {C} [Category* C] (φ : V ⥤q C) (X : V) :
@@ -318,7 +318,7 @@ theorem lift_cons
 
 中文:
 定理 lift_cons
-  条件: {C} [Category* C] (φ : V ⥤q C) {X Y Z : V} (p : Quiver.Path X Y) (f : Y ⟶ Z)
+  条件: {C} [范畴* C] (φ : V ⥤q C) {X Y Z : V} (p : 箭图.道路 X Y) (f : Y ⟶ Z)
   证明: rfl
 -/
 theorem lift_cons {C} [Category* C] (φ : V ⥤q C) {X Y Z : V} (p : Quiver.Path X Y) (f : Y ⟶ Z) :
@@ -338,7 +338,7 @@ theorem lift_toPath
 
 中文:
 定理 lift_toPath
-  条件: {C} [Category* C] (φ : V ⥤q C) {X Y : V} (f : X ⟶ Y)
+  条件: {C} [范畴* C] (φ : V ⥤q C) {X Y : V} (f : X ⟶ Y)
   证明: by
   dsimp [Quiver.Hom.toPath, lift]
   simp
@@ -370,7 +370,7 @@ theorem lift_spec
 
 中文:
 定理 lift_spec
-  条件: {C} [Category* C] (φ : V ⥤q C)
+  条件: {C} [范畴* C] (φ : V ⥤q C)
   结论: of V ⋙q (lift φ).toPrefunctor = φ
   证明: by
   fapply Prefunctor.ext
@@ -417,7 +417,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: {C} [Category* C] (φ : V ⥤q C) (Φ : Paths V ⥤ C)
+  结论: {C} [范畴* C] (φ : V ⥤q C) (Φ : Paths V ⥤ C)
   证明: by
   subst_vars
   fapply Functor.ext
@@ -477,7 +477,7 @@ theorem ext_functor
 
 中文:
 定理 ext_functor
-  结论: {C} [Category* C] {F G : Paths V ⥤ C} (h_obj : F.obj = G.obj)
+  结论: {C} [范畴* C] {F G : Paths V ⥤ C} (h_obj : F.obj = G.obj)
   证明: by
   fapply Functor.ext
   · intro X
@@ -521,7 +521,7 @@ theorem Prefunctor.mapPath_comp'
   proof: Prefunctor.mapPath_comp _ _ _
 
 中文:
-定理 Prefunctor.mapPath_comp'
+定理 预函子.mapPath_comp'
   条件: (F : V ⥤q W) {X Y Z : Paths V} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: Prefunctor.mapPath_comp _ _ _
 
@@ -569,7 +569,7 @@ lemma composePath_nil
 中文:
 引理 composePath_nil
   条件: {X : C}
-  结论: composePath (Path.nil : Path X X) = 𝟙 X
+  结论: composePath (道路.nil : 道路 X X) = 𝟙 X
   证明: rfl
 -/
 lemma composePath_nil {X : C} : composePath (Path.nil : Path X X) = 𝟙 X := rfl
@@ -587,7 +587,7 @@ lemma composePath_cons
 
 中文:
 引理 composePath_cons
-  条件: {X Y Z : C} (p : Path X Y) (e : Y ⟶ Z)
+  条件: {X Y Z : C} (p : 道路 X Y) (e : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -633,7 +633,7 @@ theorem composePath_comp
 
 中文:
 定理 composePath_comp
-  条件: {X Y Z : C} (f : Path X Y) (g : Path Y Z)
+  条件: {X Y Z : C} (f : 道路 X Y) (g : 道路 Y Z)
   证明: by
   induction g with
   | nil => simp
@@ -761,7 +761,7 @@ definition toQuotientPaths
 
 中文:
 定义 toQuotientPaths
-  签名: : C ⥤ Quotient (pathsHomRel C) where
+  签名: : C ⥤ 商 (pathsHomRel C) where
   定义体: Quotient.mk X
   map f := Quot.mk _ f.toPath
   map_id X := Quot.sound (HomRel.CompClosure.of (by simp))
@@ -789,7 +789,7 @@ definition quotientPathsTo
 
 中文:
 定义 quotientPathsTo
-  签名: : Quotient (pathsHomRel C) ⥤ C
+  签名: : 商 (pathsHomRel C) ⥤ C
   定义体: Quotient.lift _ (pathComposition C) fun _ _ _ _ w => w
 
 Depends on / 依赖: Quotient, Quotient.lift, pathComposition
@@ -816,7 +816,7 @@ definition quotientPathsEquiv
 
 中文:
 定义 quotientPathsEquiv
-  签名: : Quotient (pathsHomRel C) ≌ C where
+  签名: : 商 (pathsHomRel C) ≌ C where
   定义体: quotientPathsTo C
   inverse := toQuotientPaths C
   unitIso :=

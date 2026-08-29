@@ -70,7 +70,7 @@ definition expMulMulExp
 
 中文:
 定义 expMulMulExp
-  签名: (a b x : A) (z : Complex)
+  签名: (a b x : A) (z : 复形)
   定义体: exp (z • star b) * x * exp (z • star (-a))
 -/
 noncomputable def expMulMulExp (a b x : A) (z : Complex) : A := exp (z • star b) * x * exp (z • star (-a))
@@ -91,7 +91,7 @@ lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary
 
 中文:
 引理 expMulMulExp_eq_expUnitary_mul_mul_expUnitary
-  条件: (h : SemiconjBy x a b) (z : Complex)
+  条件: (h : SemiconjBy x a b) (z : 复形)
   证明: by
   let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
   nth_rw 1 [expMulMulExp, ← (h.smul_right (star z)).exp_neg_mul_mul_exp_eq_self]
@@ -129,7 +129,7 @@ lemma expMulMulExp_const
 
 中文:
 引理 expMulMulExp_const
-  条件: (h : SemiconjBy x a b) (z : Complex)
+  条件: (h : SemiconjBy x a b) (z : 复形)
   结论: expMulMulExp a b x z = x
   证明: by
   have hf : Differentiable Complex (expMulMulExp a b x : Complex -> A) := by unfold expMulMulExp; fun_prop

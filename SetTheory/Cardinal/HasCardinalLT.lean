@@ -30,7 +30,7 @@ definition HasCardinalLT
 
 中文:
 定义 HasCardinalLT
-  签名: (X : 类型u) (κ : Cardinal.{v})
+  签名: (X : 类型u) (κ : 基数.{v})
   定义体: Cardinal.lift.{v} (Cardinal.mk X) < Cardinal.lift κ
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.mk
@@ -49,7 +49,7 @@ lemma hasCardinalLT_iff_cardinal_mk_lt
 
 中文:
 引理 hasCardinalLT_iff_cardinal_mk_lt
-  条件: (X : 类型u) (κ : Cardinal.{u})
+  条件: (X : 类型u) (κ : 基数.{u})
   证明: by
   simp [HasCardinalLT]
 
@@ -103,7 +103,7 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: {κ' : Cardinal.{v}} (hκ' : κ <= κ')
+  条件: {κ' : 基数.{v}} (hκ' : κ <= κ')
   证明: lt_of_lt_of_le h (by simpa only [Cardinal.lift_le] using hκ')
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le, lift_le, lt_of_lt_of_le
@@ -129,7 +129,7 @@ lemma of_injective
 
 中文:
 引理 of_injective
-  条件: (f : Y -> X) (hf : Function.Injective f)
+  条件: (f : Y -> X) (hf : 函数.单射 f)
   证明: by
   dsimp [HasCardinalLT] at h ⊢
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
@@ -163,7 +163,7 @@ lemma of_surjective
 
 中文:
 引理 of_surjective
-  条件: (f : X -> Y) (hf : Function.Surjective f)
+  条件: (f : X -> Y) (hf : 函数.满射 f)
   证明: by
   dsimp [HasCardinalLT] at h ⊢
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
@@ -199,7 +199,7 @@ lemma hasCardinalLT_iff_of_equiv
 
 中文:
 引理 hasCardinalLT_iff_of_equiv
-  条件: {X : 类型u} {Y : 类型u'} (e : X ≃ Y) (κ : Cardinal.{v})
+  条件: {X : 类型u} {Y : 类型u'} (e : X ≃ Y) (κ : 基数.{v})
   证明: ⟨fun h => h.of_injective _ e.symm.injective,
     fun h => h.of_injective _ e.injective⟩
 
@@ -270,7 +270,7 @@ lemma hasCardinalLT_lift_iff
 
 中文:
 引理 hasCardinalLT_lift_iff
-  条件: (X : 类型v) (κ : Cardinal.{w})
+  条件: (X : 类型v) (κ : 基数.{w})
   证明: by
   simp [HasCardinalLT, ← (Cardinal.lift_strictMono.{max v w, max u}).lt_iff_lt]
 
@@ -293,7 +293,7 @@ lemma hasCardinalLT_ulift_iff
 
 中文:
 引理 hasCardinalLT_ulift_iff
-  条件: (X : 类型v) (κ : Cardinal.{w})
+  条件: (X : 类型v) (κ : 基数.{w})
   证明: hasCardinalLT_iff_of_equiv Equiv.ulift κ
 
 Depends on / 依赖: Equiv.ulift, hasCardinalLT_iff_of_equiv
@@ -320,7 +320,7 @@ lemma hasCardinalLT_sum_iff
 
 中文:
 引理 hasCardinalLT_sum_iff
-  结论: (X : 类型u) (Y : 类型u') (κ : Cardinal.{w})
+  结论: (X : 类型u) (Y : 类型u') (κ : 基数.{w})
   证明: by
   constructor
   · intro h
@@ -361,7 +361,7 @@ lemma hasCardinalLT_option_iff
 
 中文:
 引理 hasCardinalLT_option_iff
-  结论: (X : 类型u) (κ : Cardinal.{w})
+  结论: (X : 类型u) (κ : 基数.{w})
   证明: by
   rw [hasCardinalLT_iff_of_equiv (Equiv.optionEquivSumPUnit.{0} X)]; rw [hasCardinalLT_sum_iff _ _ _ hκ]; rw [and_iff_left_iff_imp]
   refine fun _ => HasCardinalLT.of_le ?_ hκ
@@ -452,7 +452,7 @@ lemma hasCardinalLT_sigma'
 
 中文:
 引理 hasCardinalLT_sigma'
-  结论: {ι : Type w} (α : ι -> Type w) (κ : Cardinal.{w}) [Fact κ.IsRegular]
+  结论: {ι : 类型 w} (α : ι -> 类型 w) (κ : 基数.{w}) [Fact κ.是正则]
   证明: by
   simp only [hasCardinalLT_iff_cardinal_mk_lt] at hι hα ⊢
   rw [Cardinal.mk_sigma]
@@ -483,7 +483,7 @@ lemma hasCardinalLT_sigma
 
 中文:
 引理 hasCardinalLT_sigma
-  结论: {ι : 类型u} (α : ι -> 类型v) (κ : Cardinal.{w}) [Fact κ.IsRegular]
+  结论: {ι : 类型u} (α : ι -> 类型v) (κ : 基数.{w}) [Fact κ.是正则]
   证明: by
   have : Fact (Cardinal.lift.{max u v} κ).IsRegular := ⟨Cardinal.IsRegular.lift Fact.out⟩
   have := hasCardinalLT_sigma'
@@ -577,7 +577,7 @@ lemma hasCardinalLT_prod'
 
 中文:
 引理 hasCardinalLT_prod'
-  结论: {T₁ T₂ : Type w} {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 <= κ)
+  结论: {T₁ T₂ : 类型 w} {κ : 基数.{w}} (hκ : 基数.aleph0 <= κ)
   证明: by
   rw [hasCardinalLT_iff_cardinal_mk_lt] at h₁ h₂ ⊢
   simpa using Cardinal.mul_lt_of_lt hκ h₁ h₂
@@ -639,7 +639,7 @@ lemma exists_regular_cardinal
         hasCardinalLT_iff_cardinal_mk_lt]⟩
 
 中文:
-引理 exists_regular_cardinal
+引理 存在_regular_cardinal
   条件: (X : 类型u) [Small.{w} X]
   证明: ⟨Order.succ (max (Cardinal.mk (Shrink.{w} X)) .aleph0),
     Cardinal.isRegular_succ (le_max_right _ _), by
@@ -666,7 +666,7 @@ lemma exists_regular_cardinal_forall
   exact ⟨κ, hκ, fun i => h.of_injective _ sigma_mk_injective⟩
 
 中文:
-引理 exists_regular_cardinal_forall
+引理 存在_regular_cardinal_对任意
   结论: {ι : 类型v} (X : ι -> 类型u) [Small.{w} ι]
   证明: by
   obtain ⟨κ, hκ, h⟩ := exists_regular_cardinal.{w} (Sigma X)

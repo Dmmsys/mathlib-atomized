@@ -84,7 +84,7 @@ structure PointedGaloisObject
   公理与运算 (3 个):
     - obj : C
     - pt : F.obj obj
-    - isGalois : IsGalois obj  [默认: by infer_instance]
+    - isGalois : 是Galois obj  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -122,7 +122,7 @@ structure Hom
     - comp : F.map val A.pt = B.pt  [default: by simp]
 
 中文:
-结构 Hom
+结构 态射
   参数: (A B : PointedGaloisObject F)
   公理与运算 (2 个):
     - val : A.obj ⟶ B.obj
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{u₂} (PointedGaloisObject F)
+  签名: 范畴.{u₂} (PointedGaloisObject F)
   定义体: Hom A B
   id A := { val := 𝟙 (A : C) }
   comp {A B C} f g := { val := f.val ≫ g.val }
@@ -322,7 +322,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone ((incl F).op ⋙ coyoneda) where
+  签名: : 余锥 ((incl F).op ⋙ coyoneda) where
   定义体: F ⋙ FintypeCat.incl
   ι := {
     app := fun ⟨A, a, _⟩ => { app X := ↾fun (f : (A : C) ⟶ X) => F.map f a }
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofilteredOrEmpty (PointedGaloisObject F)
+  签名: 是余filteredOrEmpty (PointedGaloisObject F)
   定义体: fun ⟨A, a, _⟩ ⟨B, b, _⟩ => by
     obtain ⟨Z, f, z, hgal, hfz⟩ := exists_hom_from_galois_of_fiber F (A ⨯ B)
  (fiberBinaryProductEquiv F A B).symm (a, b)
@@ -419,7 +419,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: : IsColimit (cocone F)
+  签名: : 是余极限 (cocone F)
   定义体: by
   refine evaluationJointlyReflectsColimits _ (fun X => ?_)
   refine Types.FilteredColimit.isColimitOf _ _ ?_ ?_
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit ((incl F).op ⋙ coyoneda)
+  签名: 有余极限 ((incl F).op ⋙ coyoneda)
   定义体: ⟨cocone F, isColimit F⟩
 
 Depends on / 依赖: cocone, isColimit
@@ -489,7 +489,7 @@ definition autGaloisSystem
 
 中文:
 定义 autGaloisSystem
-  签名: : PointedGaloisObject F ⥤ GrpCat.{u₂} where
+  签名: : PointedGaloisObject F ⥤ 群范畴.{u₂} where
   定义体: fun A => GrpCat.of Aut (A : C)
   map := fun {A B} f => GrpCat.ofHom (autMapHom f)
 
@@ -509,7 +509,7 @@ definition AutGalois
 
 中文:
 定义 AutGalois
-  签名: : Type (max u₁ u₂)
+  签名: : 类型 (最大值 u₁ u₂)
   定义体: (autGaloisSystem F ⋙ forget _).sections
 
 Depends on / 依赖: autGaloisSystem, forget, sections
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (AutGalois F)
+  签名: 群 (AutGalois F)
   定义体: inferInstanceAs Group (autGaloisSystem F ⋙ forget _).sections
 
 Depends on / 依赖: autGaloisSystem, forget, sections
@@ -963,7 +963,7 @@ theorem FibreFunctor.end_isUnit
 中文:
 定理 FibreFunctor.end_isUnit
   条件: (f : End F)
-  结论: IsUnit f
+  结论: 是单位 f
   证明: (isUnit_map_iff (endMulEquivAutGalois F) _).mp
     (Group.isUnit ((endMulEquivAutGalois F) f))
 
@@ -1052,7 +1052,7 @@ lemma autMulEquivAutGalois_π
 
 中文:
 引理 autMulEquivAutGalois_π
-  条件: (f : Aut F) (A : C) [IsGalois A] (a : F.obj A)
+  条件: (f : Aut F) (A : C) [是Galois A] (a : F.obj A)
   证明: by
   dsimp [autMulEquivAutGalois, endMulEquivAutGalois]
   rw [endEquivAutGalois_π]
@@ -1081,7 +1081,7 @@ lemma autMulEquivAutGalois_symm_app
 
 中文:
 引理 autMulEquivAutGalois_symm_app
-  条件: (x : AutGalois F) (A : C) [IsGalois A] (a : F.obj A)
+  条件: (x : AutGalois F) (A : C) [是Galois A] (a : F.obj A)
   证明: by
   rw [← autMulEquivAutGalois_π]; rw [MulEquiv.apply_symm_apply]
   rfl
@@ -1110,8 +1110,8 @@ theorem FiberFunctor.isPretransitive_of_isGalois
   simpa [mulAction_def, ha]
 
 中文:
-定理 FiberFunctor.isPretransitive_of_isGalois
-  条件: (X : C) [IsGalois X]
+定理 Fiber函子.isPretransitive_of_isGalois
+  条件: (X : C) [是Galois X]
   证明: by
   refine ⟨fun x y => ?_⟩
   obtain ⟨(φ : Aut X), h⟩ := MulAction.IsPretransitive.exists_smul_eq (M := Aut X) x y
@@ -1144,8 +1144,8 @@ instance FiberFunctor.isPretransitive_of_isConnected'
   have : MulAction.IsPretransitive (Aut F) (F.obj A) := isPretra
 
 中文:
-实例 FiberFunctor.isPretransitive_of_isConnected'
-  签名: (X : C) [IsConnected X]
+实例 Fiber函子.isPretransitive_of_isConnected'
+  签名: (X : C) [是连通 X]
   定义体: by
   obtain ⟨A, f, hgal⟩ := exists_hom_from_galois_of_connected F X
   have hs : Function.Surjective (F.map f) := surjective_of_nonempty_fiber_of_isConnected F f
@@ -1192,8 +1192,8 @@ instance FiberFunctor.isPretransitive_of_isConnected
     obtain ⟨g', 
 
 中文:
-实例 FiberFunctor.isPretransitive_of_isConnected
-  签名: (X : C) [IsConnected X]
+实例 Fiber函子.isPretransitive_of_isConnected
+  签名: (X : C) [是连通 X]
   定义体: by
     let F' : C ⥤ FintypeCat.{u₂} := F ⋙ FintypeCat.uSwitch.{w, u₂}
     let : FiberFunctor F' := FiberFunctor.comp_right _

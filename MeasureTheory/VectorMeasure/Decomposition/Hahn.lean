@@ -100,7 +100,7 @@ definition ExistsOneDivLT
 
 中文:
 定义 ExistsOneDivLT
-  签名: (s : SignedMeasure α) (i : Set α) (n : 自然数)
+  签名: (s : 符号测度 α) (i : 集合 α) (n : 自然数)
   定义体: exists k : Set α, k subseteq i ∧ MeasurableSet k ∧ (1 / (n + 1) : Real) < s k
 -/
 private def ExistsOneDivLT (s : SignedMeasure α) (i : Set α) (n : Nat) : Prop :=
@@ -117,7 +117,7 @@ theorem existsNatOneDivLTMeasure_of_not_negative
   ⟨n, k, hj₂, hj₁, hn⟩
 
 中文:
-定理 existsNatOneDivLTMeasure_of_not_negative
+定理 存在自然数OneDivLTMeasure_of_not_negative
   条件: (hi : ¬s <=[i] 0)
   证明: let ⟨k, hj₁, hj₂, hj⟩ := exists_pos_measure_of_not_restrict_le_zero s hi
   let ⟨n, hn⟩ := exists_nat_one_div_lt hj
@@ -140,7 +140,7 @@ definition findExistsOneDivLT
 
 中文:
 定义 findExistsOneDivLT
-  签名: (s : SignedMeasure α) (i : Set α)
+  签名: (s : 符号测度 α) (i : 集合 α)
   定义体: if hi : ¬s <=[i] 0 then Nat.find (existsNatOneDivLTMeasure_of_not_negative hi) else 0
 -/
 private def findExistsOneDivLT (s : SignedMeasure α) (i : Set α) : Nat :=
@@ -204,7 +204,7 @@ definition someExistsOneDivLT
 
 中文:
 定义 someExistsOneDivLT
-  签名: (s : SignedMeasure α) (i : Set α)
+  签名: (s : 符号测度 α) (i : 集合 α)
   定义体: if hi : ¬s <=[i] 0 then Classical.choose (findExistsOneDivLT_spec hi) else ∅
 -/
 private def someExistsOneDivLT (s : SignedMeasure α) (i : Set α) : Set α :=
@@ -299,7 +299,7 @@ theorem someExistsOneDivLT_measurableSet
 
 中文:
 定理 someExistsOneDivLT_measurableSet
-  结论: MeasurableSet (someExistsOneDivLT s i)
+  结论: 可测集 (someExistsOneDivLT s i)
   证明: by
   by_cases hi : ¬s <=[i] 0
   · exact
@@ -345,7 +345,7 @@ definition restrictNonposSeq
 
 中文:
 定义 restrictNonposSeq
-  签名: (s : SignedMeasure α) (i : Set α)
+  签名: (s : 符号测度 α) (i : 集合 α)
 -/
 private def restrictNonposSeq (s : SignedMeasure α) (i : Set α) : Nat -> Set α
   | 0 => someExistsOneDivLT s (i \ ∅) -- I used `i \ ∅` instead of `i` to simplify some proofs
@@ -541,7 +541,7 @@ theorem restrictNonposSeq_disjoint
 
 中文:
 定理 restrictNonposSeq_disjoint
-  结论: Pairwise (Disjoint on restrictNonposSeq s i)
+  结论: 两两 (Disjoint on restrictNonposSeq s i)
   证明: by
   intro n m h
   rw [Function.onFun]; rw [Set.disjoint_iff_inter_eq_empty]
@@ -573,8 +573,8 @@ theorem exists_subset_restrict_nonpos'
     Measurabl
 
 中文:
-定理 exists_subset_restrict_nonpos'
-  结论: (hi₁ : MeasurableSet i) (hi₂ : s i < 0)
+定理 存在_subset_restrict_nonpos'
+  结论: (hi₁ : 可测集 i) (hi₂ : s i < 0)
   证明: by
   classical
   by_cases h : s <=[i] 0
@@ -642,7 +642,7 @@ have hi₁ : MeasurableSet i := by_contradiction fun h => ne_of_lt hi s.not_meas
   set 
 
 中文:
-定理 exists_subset_restrict_nonpos
+定理 存在_subset_restrict_nonpos
   条件: (hi : s i < 0)
   证明: by
 have hi₁ : MeasurableSet i := by_contradiction fun h => ne_of_lt hi s.not_measurable h
@@ -726,7 +726,7 @@ definition measureOfNegatives
 
 中文:
 定义 measureOfNegatives
-  签名: (s : SignedMeasure α)
+  签名: (s : 符号测度 α)
   定义体: s '' { B | MeasurableSet B ∧ s <=[B] 0 }
 
 Depends on / 依赖: MeasurableSet
@@ -819,8 +819,8 @@ theorem exists_compl_positive_negative
   set A := ⋃ n, B n with
 
 中文:
-定理 exists_compl_positive_negative
-  条件: (s : SignedMeasure α)
+定理 存在_compl_positive_negative
+  条件: (s : 符号测度 α)
   证明: by
   obtain ⟨f, _, hf₂, hf₁⟩ :=
     exists_seq_tendsto_sInf ⟨0, @zero_mem_measureOfNegatives _ _ s⟩ bddBelow_measureOfNegatives
@@ -879,8 +879,8 @@ theorem exists_isCompl_positive_negative
   ⟨i, iᶜ, hi₁, hi₂, hi₁.compl, hi₃, isCompl_compl⟩
 
 中文:
-定理 exists_isCompl_positive_negative
-  条件: (s : SignedMeasure α)
+定理 存在_isCompl_positive_negative
+  条件: (s : 符号测度 α)
   证明: let ⟨i, hi₁, hi₂, hi₃⟩ := exists_compl_positive_negative s
   ⟨i, iᶜ, hi₁, hi₂, hi₁.compl, hi₃, isCompl_compl⟩
 
@@ -907,7 +907,7 @@ theorem of_symmDiff_compl_positive_negative
 
 中文:
 定理 of_symmDiff_compl_positive_negative
-  结论: {s : SignedMeasure α} {i j : Set α}
+  结论: {s : 符号测度 α} {i j : 集合 α}
   证明: by
   rw [restrict_le_restrict_iff s 0]; rw [restrict_le_restrict_iff 0 s] at hi' hj'
   constructor

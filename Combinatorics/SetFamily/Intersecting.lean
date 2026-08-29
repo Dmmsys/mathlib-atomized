@@ -53,8 +53,8 @@ definition Intersecting
 @[gcongr, mono]
 
 中文:
-定义 Intersecting
-  签名: (s : Set α)
+定义 整数ersecting
+  签名: (s : 集合 α)
   定义体: forall ⦃a⦄, a in s -> forall ⦃b⦄, b in s -> ¬Disjoint a b
 
 @[gcongr, mono]
@@ -76,7 +76,7 @@ theorem Intersecting.mono
   hs (h ha) (h hb)
 
 中文:
-定理 Intersecting.mono
+定理 整数ersecting.mono
   条件: (h : t subseteq s) (hs : s.整数ersecting)
   结论: t.整数ersecting
   证明: fun _a ha _b hb =>
@@ -95,7 +95,7 @@ theorem Intersecting.bot_notMem
   proof: fun h => hs h h disjoint_bot_left
 
 中文:
-定理 Intersecting.bot_notMem
+定理 整数ersecting.bot_notMem
   条件: (hs : s.整数ersecting)
   结论: ⊥ ∉ s
   证明: fun h => hs h h disjoint_bot_left
@@ -114,7 +114,7 @@ theorem Intersecting.ne_bot
   proof: ne_of_mem_of_not_mem ha hs.bot_notMem
 
 中文:
-定理 Intersecting.ne_bot
+定理 整数ersecting.ne_bot
   条件: (hs : s.整数ersecting) (ha : a in s)
   结论: a != ⊥
   证明: ne_of_mem_of_not_mem ha hs.bot_notMem
@@ -136,7 +136,7 @@ theorem intersecting_empty
 
 中文:
 定理 intersecting_empty
-  结论: (∅ : Set α).整数ersecting
+  结论: (∅ : 集合 α).整数ersecting
   证明: fun _ => False.elim
 
 @[simp]
@@ -156,7 +156,7 @@ theorem intersecting_singleton
 
 中文:
 定理 intersecting_singleton
-  结论: ({a} : Set α).整数ersecting ↔ a != ⊥
+  结论: ({a} : 集合 α).整数ersecting ↔ a != ⊥
   证明: by simp [Intersecting]
 
 Depends on / 依赖: Intersecting
@@ -177,7 +177,7 @@ theorem Intersecting.insert
   · exact hs hb hc
 
 中文:
-定理 Intersecting.insert
+定理 整数ersecting.insert
   结论: (hs : s.整数ersecting) (ha : a != ⊥)
   证明: by
   rintro b (rfl | hb) c (rfl | hc)
@@ -276,8 +276,8 @@ theorem Subsingleton.intersecting
   proof: intersecting_iff_pairwise_not_disjoint.trans and_iff_right hs.pairwise _
 
 中文:
-定理 Subsingleton.intersecting
-  条件: (hs : s.Subsingleton)
+定理 子单例.intersecting
+  条件: (hs : s.子单例)
   结论: s.整数ersecting ↔ s != {⊥}
   证明: intersecting_iff_pairwise_not_disjoint.trans and_iff_right hs.pairwise _
 -/
@@ -301,7 +301,7 @@ theorem intersecting_iff_eq_empty_of_subsingleton
 
 中文:
 定理 intersecting_iff_eq_empty_of_subsingleton
-  条件: [Subsingleton α] (s : Set α)
+  条件: [子单例 α] (s : 集合 α)
   证明: by
   refine
     subsingleton_of_subsingleton.intersecting.trans
@@ -337,7 +337,7 @@ theorem Intersecting.isUpperSet
 hs.insert (mt (eq_bot_mono hab) <| hs.ne_bot ha) fun c hc hbc => hs ha hc hbc.mono_left hab
 
 中文:
-定理 Intersecting.isUpperSet
+定理 整数ersecting.isUpperSet
   结论: (hs : s.整数ersecting)
   证明: by
   rintro a b hab ha
@@ -370,8 +370,8 @@ theorem Intersecting.isUpperSet'
 hs.insert (mt (eq_bot_mono hab) <| hs.ne_bot ha) fun c hc hbc => hs ha hc hbc.mono_left hab
 
 中文:
-定理 Intersecting.isUpperSet'
-  结论: {s : Finset α} (hs : (s : Set α).整数ersecting)
+定理 整数ersecting.isUpperSet'
+  结论: {s : 有限集 α} (hs : (s : 集合 α).整数ersecting)
   证明: by
   classical
     rintro a b hab ha
@@ -408,8 +408,8 @@ theorem Intersecting.exists_mem_set
   proof: not_disjoint_iff.1 h𝒜 hs ht
 
 中文:
-定理 Intersecting.exists_mem_set
-  结论: {𝒜 : Set (Set α)} (h𝒜 : 𝒜.整数ersecting) {s t : Set α}
+定理 整数ersecting.存在_mem_set
+  结论: {𝒜 : 集合 (集合 α)} (h𝒜 : 𝒜.整数ersecting) {s t : 集合 α}
   证明: not_disjoint_iff.1 h𝒜 hs ht
 
 Depends on / 依赖: not_disjoint_iff
@@ -427,8 +427,8 @@ theorem Intersecting.exists_mem_finset
   proof: not_disjoint_iff.1 disjoint_coe.not.2 h𝒜 hs ht
 
 中文:
-定理 Intersecting.exists_mem_finset
-  结论: [DecidableEq α] {𝒜 : Set (Finset α)} (h𝒜 : 𝒜.整数ersecting)
+定理 整数ersecting.存在_mem_finset
+  结论: [DecidableEq α] {𝒜 : 集合 (有限集 α)} (h𝒜 : 𝒜.整数ersecting)
   证明: not_disjoint_iff.1 disjoint_coe.not.2 h𝒜 hs ht
 
 Depends on / 依赖: disjoint_coe, disjoint_coe.not, not_disjoint_iff
@@ -448,8 +448,8 @@ theorem Intersecting.compl_notMem
   proof: fun h => hs ha h disjoint_compl_right
 
 中文:
-定理 Intersecting.compl_notMem
-  条件: {s : Set α} (hs : s.整数ersecting) {a : α} (ha : a in s)
+定理 整数ersecting.compl_notMem
+  条件: {s : 集合 α} (hs : s.整数ersecting) {a : α} (ha : a in s)
   证明: fun h => hs ha h disjoint_compl_right
 
 Depends on / 依赖: disjoint_compl_right
@@ -467,8 +467,8 @@ theorem Intersecting.notMem
   proof: fun h => hs ha h disjoint_compl_left
 
 中文:
-定理 Intersecting.notMem
-  条件: {s : Set α} (hs : s.整数ersecting) {a : α} (ha : aᶜ in s)
+定理 整数ersecting.notMem
+  条件: {s : 集合 α} (hs : s.整数ersecting) {a : α} (ha : aᶜ in s)
   结论: a ∉ s
   证明: fun h => hs ha h disjoint_compl_left
 
@@ -490,8 +490,8 @@ theorem Intersecting.disjoint_map_compl
   exact hs.compl_notMem hx' hx
 
 中文:
-定理 Intersecting.disjoint_map_compl
-  条件: {s : Finset α} (hs : (s : Set α).整数ersecting)
+定理 整数ersecting.disjoint_map_compl
+  条件: {s : 有限集 α} (hs : (s : 集合 α).整数ersecting)
   证明: by
   rw [Finset.disjoint_left]
   rintro x hx hxc
@@ -518,8 +518,8 @@ theorem Intersecting.card_le
   rw [Nat.two_mul]; rw [card_disjUnion]; rw [card_map]
 
 中文:
-定理 Intersecting.card_le
-  条件: [Fintype α] {s : Finset α} (hs : (s : Set α).整数ersecting)
+定理 整数ersecting.card_le
+  条件: [有限类型 α] {s : 有限集 α} (hs : (s : 集合 α).整数ersecting)
   证明: by
   refine (s.disjUnion _ hs.disjoint_map_compl).card_le_univ.trans_eq' ?_
   rw [Nat.two_mul]; rw [card_disjUnion]; rw [card_map]
@@ -548,8 +548,8 @@ refine ⟨fun h => ?_, fun h t ht hst => Finset.eq_of_subset_of_card_le hst
       rw [Fintype.card]; rw [← this]; rw
 
 中文:
-定理 Intersecting.is_max_iff_card_eq
-  条件: (hs : (s : Set α).整数ersecting)
+定理 整数ersecting.is_max_iff_card_eq
+  条件: (hs : (s : 集合 α).整数ersecting)
   证明: by
   classical
 refine ⟨fun h => ?_, fun h t ht hst => Finset.eq_of_subset_of_card_le hst
@@ -595,8 +595,8 @@ theorem Intersecting.exists_card_eq
   · exact ⟨s, Subset.rfl, hs.is_max_if
 
 中文:
-定理 Intersecting.exists_card_eq
-  条件: (hs : (s : Set α).整数ersecting)
+定理 整数ersecting.存在_card_eq
+  条件: (hs : (s : 集合 α).整数ersecting)
   证明: by
   have := hs.card_le
   rw [Nat.mul_comm]; rw [← Nat.le_div_iff_mul_le Nat.two_pos] at this
@@ -643,8 +643,8 @@ definition IsIntersectingOf
   body: 𝒜.Pairwise fun s t => #(s inter t) in L
 
 中文:
-定义 IsIntersectingOf
-  签名: (L : Set 自然数) (𝒜 : Set (Finset α))
+定义 Is整数ersectingOf
+  签名: (L : 集合 自然数) (𝒜 : 集合 (有限集 α))
   定义体: 𝒜.Pairwise fun s t => #(s inter t) in L
 
 Depends on / 依赖: Pairwise
@@ -712,7 +712,7 @@ theorem empty
 
 中文:
 定理 empty
-  结论: Is整数ersectingOf L (∅ : Set (Finset α))
+  结论: Is整数ersectingOf L (∅ : 集合 (有限集 α))
   证明: by tauto
 -/
 protected theorem empty : IsIntersectingOf L (∅ : Set (Finset α)) := by tauto

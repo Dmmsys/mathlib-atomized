@@ -234,7 +234,7 @@ definition rec'
 
 中文:
 定义 rec'
-  签名: {F : αᵐᵒᵖ -> Sort*} (h : 对任意 X, F (op X))
+  签名: {F : αᵐᵒᵖ -> 类型层*} (h : 对任意 X, F (op X))
   定义体: fun X => h (unop X)
 -/
 protected def rec' {F : αᵐᵒᵖ -> Sort*} (h : forall X, F (op X)) : forall X, F X := fun X => h (unop X)
@@ -277,7 +277,7 @@ theorem op_bijective
 
 中文:
 定理 op_bijective
-  结论: Bijective (op : α -> αᵐᵒᵖ)
+  结论: 双射 (op : α -> αᵐᵒᵖ)
   证明: opEquiv.bijective
 
 @[to_additive]
@@ -300,7 +300,7 @@ theorem unop_bijective
 
 中文:
 定理 unop_bijective
-  结论: Bijective (unop : αᵐᵒᵖ -> α)
+  结论: 双射 (unop : αᵐᵒᵖ -> α)
   证明: opEquiv.symm.bijective
 
 @[to_additive]
@@ -323,7 +323,7 @@ theorem op_injective
 
 中文:
 定理 op_injective
-  结论: Injective (op : α -> αᵐᵒᵖ)
+  结论: 单射 (op : α -> αᵐᵒᵖ)
   证明: op_bijective.injective
 
 @[to_additive]
@@ -346,7 +346,7 @@ theorem op_surjective
 
 中文:
 定理 op_surjective
-  结论: Surjective (op : α -> αᵐᵒᵖ)
+  结论: 满射 (op : α -> αᵐᵒᵖ)
   证明: op_bijective.surjective
 
 @[to_additive]
@@ -369,7 +369,7 @@ theorem unop_injective
 
 中文:
 定理 unop_injective
-  结论: Injective (unop : αᵐᵒᵖ -> α)
+  结论: 单射 (unop : αᵐᵒᵖ -> α)
   证明: unop_bijective.injective
 
 @[to_additive]
@@ -392,7 +392,7 @@ theorem unop_surjective
 
 中文:
 定理 unop_surjective
-  结论: Surjective (unop : αᵐᵒᵖ -> α)
+  结论: 满射 (unop : αᵐᵒᵖ -> α)
   证明: unop_bijective.surjective
 
 @[to_additive (attr := simp)]
@@ -459,7 +459,7 @@ lemma «forall»
   proof: op_surjective.forall
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : αᵐᵒᵖ -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (op a)
   证明: op_surjective.forall
@@ -477,7 +477,7 @@ lemma «exists»
   proof: op_surjective.exists
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : αᵐᵒᵖ -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (op a)
   证明: op_surjective.exists
@@ -495,7 +495,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial α]
+  签名: [非平凡 α]
   定义体: op_injective.nontrivial
 -/
 @[to_additive] instance instNontrivial [Nontrivial α] : Nontrivial αᵐᵒᵖ := op_injective.nontrivial
@@ -512,7 +512,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited α]
+  签名: [可居 α]
   定义体: ⟨op default⟩
 
 @[to_additive]
@@ -530,7 +530,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: unop_injective.subsingleton
 
 Depends on / 依赖: subsingleton, unop_injective, unop_injective.subsingleton
@@ -547,7 +547,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: Unique.mk' _
 -/
 @[to_additive] instance instUnique [Unique α] : Unique αᵐᵒᵖ := Unique.mk' _
@@ -564,7 +564,7 @@ instance instIsEmpty
 
 中文:
 实例 instIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: Function.isEmpty unop
 
 @[to_additive]
@@ -599,7 +599,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero α]
+  签名: [零 α]
   定义体: op 0
 -/
 instance instZero [Zero α] : Zero αᵐᵒᵖ where zero := op 0
@@ -614,7 +614,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One α]
+  签名: [幺 α]
   定义体: op 1
 -/
 @[to_additive] instance instOne [One α] : One αᵐᵒᵖ where one := op 1
@@ -629,7 +629,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [Add α]
+  签名: [加法 α]
   定义体: op (unop x + unop y)
 -/
 instance instAdd [Add α] : Add αᵐᵒᵖ where add x y := op (unop x + unop y)
@@ -643,7 +643,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [Sub α]
+  签名: [减法 α]
   定义体: op (unop x - unop y)
 -/
 instance instSub [Sub α] : Sub αᵐᵒᵖ where sub x y := op (unop x - unop y)
@@ -657,7 +657,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [Neg α]
+  签名: [取负 α]
   定义体: op -unop x
 -/
 instance instNeg [Neg α] : Neg αᵐᵒᵖ where neg x := op -unop x
@@ -690,7 +690,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: op (unop y * unop x)
 -/
 @[to_additive] instance instMul [Mul α] : Mul αᵐᵒᵖ where mul x y := op (unop y * unop x)
@@ -706,7 +706,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: op (unop x)⁻¹
 
 @[to_additive]
@@ -741,8 +741,8 @@ instance [Add
   body: unop_injective add_left_cancel (congr_arg unop eq)
 
 中文:
-实例 [Add
-  签名: α] [IsLeftCancelAdd α] : IsLeftCancelAdd αᵐᵒᵖ where
+实例 [加法
+  签名: α] [是左消去加法 α] : 是左消去加法 αᵐᵒᵖ where
   定义体: unop_injective add_left_cancel (congr_arg unop eq)
 
 Depends on / 依赖: add_left_cancel, congr_arg, unop_injective
@@ -759,8 +759,8 @@ instance [Add
   body: unop_injective add_right_cancel (congr_arg unop eq)
 
 中文:
-实例 [Add
-  签名: α] [IsRightCancelAdd α] : IsRightCancelAdd αᵐᵒᵖ where
+实例 [加法
+  签名: α] [是右消去加法 α] : 是右消去加法 αᵐᵒᵖ where
   定义体: unop_injective add_right_cancel (congr_arg unop eq)
 
 Depends on / 依赖: add_right_cancel, congr_arg, unop_injective
@@ -776,8 +776,8 @@ instance [Add
   signature: α] [IsCancelAdd α] : IsCancelAdd αᵐᵒᵖ where
 
 中文:
-实例 [Add
-  签名: α] [IsCancelAdd α] : IsCancelAdd αᵐᵒᵖ where
+实例 [加法
+  签名: α] [是消去加法 α] : 是消去加法 αᵐᵒᵖ where
 -/
 instance [Add α] [IsCancelAdd α] : IsCancelAdd αᵐᵒᵖ where
 
@@ -793,8 +793,8 @@ theorem isLeftCancelAdd_iff
 
 中文:
 定理 isLeftCancelAdd_iff
-  条件: [Add α]
-  结论: IsLeftCancelAdd αᵐᵒᵖ ↔ IsLeftCancelAdd α where
+  条件: [加法 α]
+  结论: 是左消去加法 αᵐᵒᵖ ↔ 是左消去加法 α where
   证明: ⟨fun _ _ _ eq => op_injective add_left_cancel (congr_arg op eq)⟩
   mpr _ := inferInstance
 
@@ -816,8 +816,8 @@ theorem isRightCancelAdd_iff
 
 中文:
 定理 isRightCancelAdd_iff
-  条件: [Add α]
-  结论: IsRightCancelAdd αᵐᵒᵖ ↔ IsRightCancelAdd α where
+  条件: [加法 α]
+  结论: 是右消去加法 αᵐᵒᵖ ↔ 是右消去加法 α where
   证明: ⟨fun _ _ _ eq => op_injective add_right_cancel (congr_arg op eq)⟩
   mpr _ := inferInstance
 
@@ -839,8 +839,8 @@ theorem isCancelAdd_iff
 
 中文:
 定理 isCancelAdd_iff
-  条件: [Add α]
-  结论: IsCancelAdd αᵐᵒᵖ ↔ IsCancelAdd α
+  条件: [加法 α]
+  结论: 是消去加法 αᵐᵒᵖ ↔ 是消去加法 α
   证明: by
   simp_rw [isCancelAdd_iff, isLeftCancelAdd_iff, isRightCancelAdd_iff]
 -/
@@ -857,7 +857,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul α β]
+  签名: [标量乘法 α β]
   定义体: op (c • unop x)
 -/
 @[to_additive] instance instSMul [SMul α β] : SMul α βᵐᵒᵖ where smul c x := op (c • unop x)
@@ -873,7 +873,7 @@ lemma op_zero
 
 中文:
 引理 op_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: op (0 : α) = 0
   证明: rfl
 -/
@@ -890,7 +890,7 @@ lemma unop_zero
 
 中文:
 引理 unop_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: unop (0 : αᵐᵒᵖ) = 0
   证明: rfl
 -/
@@ -907,7 +907,7 @@ lemma op_one
 
 中文:
 引理 op_one
-  条件: [One α]
+  条件: [幺 α]
   结论: op (1 : α) = 1
   证明: rfl
 -/
@@ -924,7 +924,7 @@ lemma unop_one
 
 中文:
 引理 unop_one
-  条件: [One α]
+  条件: [幺 α]
   结论: unop (1 : αᵐᵒᵖ) = 1
   证明: rfl
 -/
@@ -941,7 +941,7 @@ lemma op_add
 
 中文:
 引理 op_add
-  条件: [Add α] (x y : α)
+  条件: [加法 α] (x y : α)
   结论: op (x + y) = op x + op y
   证明: rfl
 -/
@@ -958,7 +958,7 @@ lemma unop_add
 
 中文:
 引理 unop_add
-  条件: [Add α] (x y : αᵐᵒᵖ)
+  条件: [加法 α] (x y : αᵐᵒᵖ)
   结论: unop (x + y) = unop x + unop y
   证明: rfl
 -/
@@ -975,7 +975,7 @@ lemma op_neg
 
 中文:
 引理 op_neg
-  条件: [Neg α] (x : α)
+  条件: [取负 α] (x : α)
   结论: op (-x) = -op x
   证明: rfl
 -/
@@ -992,7 +992,7 @@ lemma unop_neg
 
 中文:
 引理 unop_neg
-  条件: [Neg α] (x : αᵐᵒᵖ)
+  条件: [取负 α] (x : αᵐᵒᵖ)
   结论: unop (-x) = -unop x
   证明: rfl
 -/
@@ -1011,7 +1011,7 @@ lemma op_mul
 
 中文:
 引理 op_mul
-  条件: [Mul α] (x y : α)
+  条件: [乘法 α] (x y : α)
   结论: op (x * y) = op y * op x
   证明: rfl
 
@@ -1031,7 +1031,7 @@ lemma unop_mul
 
 中文:
 引理 unop_mul
-  条件: [Mul α] (x y : αᵐᵒᵖ)
+  条件: [乘法 α] (x y : αᵐᵒᵖ)
   结论: unop (x * y) = unop y * unop x
   证明: rfl
 -/
@@ -1048,7 +1048,7 @@ lemma op_inv
 
 中文:
 引理 op_inv
-  条件: [Inv α] (x : α)
+  条件: [取逆 α] (x : α)
   结论: op x⁻¹ = (op x)⁻¹
   证明: rfl
 -/
@@ -1065,7 +1065,7 @@ lemma unop_inv
 
 中文:
 引理 unop_inv
-  条件: [Inv α] (x : αᵐᵒᵖ)
+  条件: [取逆 α] (x : αᵐᵒᵖ)
   结论: unop x⁻¹ = (unop x)⁻¹
   证明: rfl
 -/
@@ -1082,7 +1082,7 @@ lemma op_sub
 
 中文:
 引理 op_sub
-  条件: [Sub α] (x y : α)
+  条件: [减法 α] (x y : α)
   结论: op (x - y) = op x - op y
   证明: rfl
 -/
@@ -1101,7 +1101,7 @@ lemma unop_sub
 
 中文:
 引理 unop_sub
-  条件: [Sub α] (x y : αᵐᵒᵖ)
+  条件: [减法 α] (x y : αᵐᵒᵖ)
   结论: unop (x - y) = unop x - unop y
   证明: rfl
 
@@ -1123,7 +1123,7 @@ lemma op_smul
 
 中文:
 引理 op_smul
-  条件: [SMul α β] (a : α) (b : β)
+  条件: [标量乘法 α β] (a : α) (b : β)
   结论: op (a • b) = a • op b
   证明: rfl
 
@@ -1145,7 +1145,7 @@ lemma unop_smul
 
 中文:
 引理 unop_smul
-  条件: [SMul α β] (a : α) (b : βᵐᵒᵖ)
+  条件: [标量乘法 α β] (a : α) (b : βᵐᵒᵖ)
   结论: unop (a • b) = a • unop b
   证明: rfl
 
@@ -1167,7 +1167,7 @@ theorem unop_eq_zero_iff
 
 中文:
 定理 unop_eq_zero_iff
-  条件: [Zero α] (a : αᵐᵒᵖ)
+  条件: [零 α] (a : αᵐᵒᵖ)
   结论: a.unop = (0 : α) ↔ a = (0 : αᵐᵒᵖ)
   证明: unop_injective.eq_iff' rfl
 
@@ -1190,7 +1190,7 @@ theorem op_eq_zero_iff
 
 中文:
 定理 op_eq_zero_iff
-  条件: [Zero α] (a : α)
+  条件: [零 α] (a : α)
   结论: op a = (0 : αᵐᵒᵖ) ↔ a = (0 : α)
   证明: op_injective.eq_iff' rfl
 
@@ -1210,7 +1210,7 @@ theorem unop_ne_zero_iff
 
 中文:
 定理 unop_ne_zero_iff
-  条件: [Zero α] (a : αᵐᵒᵖ)
+  条件: [零 α] (a : αᵐᵒᵖ)
   结论: a.unop != (0 : α) ↔ a != (0 : αᵐᵒᵖ)
   证明: not_congr unop_eq_zero_iff a
 
@@ -1232,7 +1232,7 @@ theorem op_ne_zero_iff
 
 中文:
 定理 op_ne_zero_iff
-  条件: [Zero α] (a : α)
+  条件: [零 α] (a : α)
   结论: op a != (0 : αᵐᵒᵖ) ↔ a != (0 : α)
   证明: not_congr op_eq_zero_iff a
 
@@ -1255,7 +1255,7 @@ theorem unop_eq_one_iff
 
 中文:
 定理 unop_eq_one_iff
-  条件: [One α] (a : αᵐᵒᵖ)
+  条件: [幺 α] (a : αᵐᵒᵖ)
   结论: a.unop = 1 ↔ a = 1
   证明: unop_injective.eq_iff' rfl
 
@@ -1278,7 +1278,7 @@ lemma op_eq_one_iff
 
 中文:
 引理 op_eq_one_iff
-  条件: [One α] (a : α)
+  条件: [幺 α] (a : α)
   结论: op a = 1 ↔ a = 1
   证明: op_injective.eq_iff
 
@@ -1300,7 +1300,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One α]
+  签名: [幺 α]
   定义体: op 1
 -/
 instance instOne [One α] : One αᵃᵒᵖ where one := op 1
@@ -1316,7 +1316,7 @@ lemma op_one
 
 中文:
 引理 op_one
-  条件: [One α]
+  条件: [幺 α]
   结论: op (1 : α) = 1
   证明: rfl
 -/
@@ -1333,7 +1333,7 @@ lemma unop_one
 
 中文:
 引理 unop_one
-  条件: [One α]
+  条件: [幺 α]
   结论: unop 1 = (1 : α)
   证明: rfl
 -/
@@ -1350,7 +1350,7 @@ lemma op_eq_one_iff
 
 中文:
 引理 op_eq_one_iff
-  条件: [One α] {a : α}
+  条件: [幺 α] {a : α}
   结论: op a = 1 ↔ a = 1
   证明: op_injective.eq_iff
 -/
@@ -1367,7 +1367,7 @@ lemma unop_eq_one_iff
 
 中文:
 引理 unop_eq_one_iff
-  条件: [One α] {a : αᵃᵒᵖ}
+  条件: [幺 α] {a : αᵃᵒᵖ}
   结论: unop a = 1 ↔ a = 1
   证明: unop_injective.eq_iff
 -/
@@ -1385,7 +1385,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: op (unop a * unop b)
 -/
 instance instMul [Mul α] : Mul αᵃᵒᵖ where mul a b := op (unop a * unop b)
@@ -1401,7 +1401,7 @@ lemma op_mul
 
 中文:
 引理 op_mul
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: op (a * b) = op a * op b
   证明: rfl
 -/
@@ -1418,7 +1418,7 @@ lemma unop_mul
 
 中文:
 引理 unop_mul
-  条件: [Mul α] (a b : αᵃᵒᵖ)
+  条件: [乘法 α] (a b : αᵃᵒᵖ)
   结论: unop (a * b) = unop a * unop b
   证明: rfl
 -/
@@ -1434,7 +1434,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: op (unop a)⁻¹
 -/
 instance instInv [Inv α] : Inv αᵃᵒᵖ where inv a := op (unop a)⁻¹
@@ -1468,7 +1468,7 @@ lemma op_inv
 
 中文:
 引理 op_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: op a⁻¹ = (op a)⁻¹
   证明: rfl
 -/
@@ -1485,7 +1485,7 @@ lemma unop_inv
 
 中文:
 引理 unop_inv
-  条件: [Inv α] (a : αᵃᵒᵖ)
+  条件: [取逆 α] (a : αᵃᵒᵖ)
   结论: unop a⁻¹ = (unop a)⁻¹
   证明: rfl
 -/
@@ -1501,7 +1501,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: [Div α]
+  签名: [除法 α]
   定义体: op (unop a / unop b)
 -/
 instance instDiv [Div α] : Div αᵃᵒᵖ where div a b := op (unop a / unop b)
@@ -1517,7 +1517,7 @@ lemma op_div
 
 中文:
 引理 op_div
-  条件: [Div α] (a b : α)
+  条件: [除法 α] (a b : α)
   结论: op (a / b) = op a / op b
   证明: rfl
 -/
@@ -1534,7 +1534,7 @@ lemma unop_div
 
 中文:
 引理 unop_div
-  条件: [Div α] (a b : αᵃᵒᵖ)
+  条件: [除法 α] (a b : αᵃᵒᵖ)
   结论: unop (a / b) = unop a / unop b
   证明: rfl
 -/

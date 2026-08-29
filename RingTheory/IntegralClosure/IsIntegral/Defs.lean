@@ -43,7 +43,7 @@ definition RingHom.IsIntegralElem
   body: exists p : R[X], Monic p ∧ eval₂ f x p = 0
 
 中文:
-定义 RingHom.IsIntegralElem
+定义 环态射.Is整数egralElem
   签名: (f : R ->+* A) (x : A)
   定义体: exists p : R[X], Monic p ∧ eval₂ f x p = 0
 -/
@@ -62,7 +62,7 @@ definition RingHom.IsIntegral
   body: forall x : A, f.IsIntegralElem x
 
 中文:
-定义 RingHom.IsIntegral
+定义 环态射.是整
   签名: (f : R ->+* A)
   定义体: forall x : A, f.IsIntegralElem x
 
@@ -82,7 +82,7 @@ definition IsIntegral
   body: (algebraMap R A).IsIntegralElem x
 
 中文:
-定义 IsIntegral
+定义 是整
   签名: (x : A)
   定义体: (algebraMap R A).IsIntegralElem x
 

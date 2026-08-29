@@ -63,7 +63,7 @@ theorem continuous_mabs
 
 中文:
 定理 continuous_mabs
-  结论: Continuous (mabs : G -> G)
+  结论: 连续 (mabs : G -> G)
   证明: continuous_id.max continuous_inv
 
 Depends on / 依赖: continuous_id, continuous_id.max, continuous_inv
@@ -87,8 +87,8 @@ theorem Filter.Tendsto.mabs
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.Tendsto.mabs
-  条件: {a : G} (h : Tendsto f l (𝓝 a))
+定理 滤子.收敛.mabs
+  条件: {a : G} (h : 收敛 f l (𝓝 a))
   证明: (continuous_mabs.tendsto _).comp h
 
 @[to_additive (attr := simp)]
@@ -161,9 +161,9 @@ theorem Continuous.mabs
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Continuous.mabs
-  条件: (h : Continuous f)
-  结论: Continuous fun x => |f x|ₘ
+定理 连续.mabs
+  条件: (h : 连续 f)
+  结论: 连续 fun x => |f x|ₘ
   证明: continuous_mabs.comp h
 
 @[to_additive (attr := fun_prop)]
@@ -251,7 +251,7 @@ theorem tendsto_mabs_nhdsNE_one
 
 中文:
 定理 tendsto_mabs_nhdsNE_one
-  结论: Tendsto (mabs : G -> G) (𝓝[!=] 1) (𝓝[>] 1)
+  结论: 收敛 (mabs : G -> G) (𝓝[!=] 1) (𝓝[>] 1)
   证明: (continuous_mabs.tendsto' (1 : G) 1 mabs_one).inf
     tendsto_principal_principal.2 fun _x => one_lt_mabs.2
 
@@ -336,7 +336,7 @@ theorem not_denseRange_zpow
 
 中文:
 定理 not_denseRange_zpow
-  条件: [Nontrivial G] [DenselyOrdered G] {a : G}
+  条件: [非平凡 G] [稠密序 G] {a : G}
   证明: denseRange_zpow_iff_surjective.not.mpr fun h =>
     not_isCyclic_of_denselyOrdered G ⟨⟨a, h⟩⟩
 

@@ -37,7 +37,7 @@ definition isTerminal
 
 中文:
 定义 isTerminal
-  签名: {F : C ⥤ D} (hF : 对任意 (X : C), IsTerminal (F.obj X))
+  签名: {F : C ⥤ D} (hF : 对任意 (X : C), 是终止 (F.obj X))
   定义体: by
   refine evaluationJointlyReflectsLimits _
     fun X => IsLimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)

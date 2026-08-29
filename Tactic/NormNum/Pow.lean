@@ -96,7 +96,7 @@ structure IsNatPowT
     - run' : p -> Nat.pow a b = c
 
 中文:
-结构 IsNatPowT
+结构 是自然数PowT
   参数: (p : 命题) (a b c : 自然数)
   公理与运算 (1 个):
     - run' : p -> 自然数.pow a b = c
@@ -115,7 +115,7 @@ theorem IsNatPowT.run
   proof: p.run' (Nat.pow_one _)
 
 中文:
-定理 IsNatPowT.run
+定理 是自然数PowT.run
   证明: p.run' (Nat.pow_one _)
 
 Depends on / 依赖: Nat.pow_one, p.run, pow_one
@@ -132,8 +132,8 @@ theorem IsNatPowT.trans
   proof: ⟨h2.run' ∘ h1.run'⟩
 
 中文:
-定理 IsNatPowT.trans
-  结论: {p : 命题} {b' c' : 自然数} (h1 : Is自然数PowT p a b c)
+定理 是自然数PowT.trans
+  结论: {p : 命题} {b' c' : 自然数} (h1 : 是自然数PowT p a b c)
   证明: ⟨h2.run' ∘ h1.run'⟩
 
 Depends on / 依赖: T4Space, T5Space, T5Space.toT4Space, h1.run, h2.run, toT4Space
@@ -151,8 +151,8 @@ theorem IsNatPowT.bit0
   proof: ⟨fun h1 => by simp [two_mul, pow_add, ← h1]⟩
 
 中文:
-定理 IsNatPowT.bit0
-  结论: Is自然数PowT (自然数.pow a b = c) a (nat_lit 2 * b) (自然数.mul c c)
+定理 是自然数PowT.bit0
+  结论: 是自然数PowT (自然数.pow a b = c) a (nat_lit 2 * b) (自然数.mul c c)
   证明: ⟨fun h1 => by simp [two_mul, pow_add, ← h1]⟩
 
 Depends on / 依赖: pow_add, two_mul
@@ -168,7 +168,7 @@ theorem IsNatPowT.bit1
   proof: ⟨fun h1 => by simp [two_mul, pow_add, mul_assoc, ← h1]⟩
 
 中文:
-定理 IsNatPowT.bit1
+定理 是自然数PowT.bit1
   证明: ⟨fun h1 => by simp [two_mul, pow_add, mul_assoc, ← h1]⟩
 
 Depends on / 依赖: mul_assoc, pow_add, two_mul
@@ -196,7 +196,7 @@ haveI : b =Q Nat.succ b' := ⟨⟩
 haveI 
 
 中文:
-定义 evalNatPow
+定义 eval自然数Pow
   签名: (a b : Q(自然数))
   定义体: do
   if b.natLit! = 0 then
@@ -263,7 +263,7 @@ theorem intPow_ofNat
   proof: by simp [← h1]
 
 中文:
-定理 intPow_ofNat
+定理 intPow_of自然数
   条件: (h1 : 自然数.pow a b = c)
   证明: by simp [← h1]
 -/
@@ -281,7 +281,7 @@ theorem intPow_negOfNat_bit0
   simp
 
 中文:
-定理 intPow_negOfNat_bit0
+定理 intPow_negOf自然数_bit0
   结论: {b' c' : 自然数} (h1 : 自然数.pow a b' = c')
   证明: by
   rw [← hb]; rw [Int.negOfNat_eq]; rw [Int.pow_eq]; rw [pow_mul]; rw [neg_pow_two]; rw [← pow_mul]; rw [two_mul]; rw [pow_add]; rw [← hc]; rw [← h1]
@@ -306,7 +306,7 @@ theorem intPow_negOfNat_bit1
   simp [mul_comm, mul_left_comm]
 
 中文:
-定理 intPow_negOfNat_bit1
+定理 intPow_negOf自然数_bit1
   结论: {b' c' : 自然数} (h1 : 自然数.pow a b' = c')
   证明: by
   rw [← hb]; rw [Int.negOfNat_eq]; rw [Int.negOfNat_eq]; rw [Int.pow_eq]; rw [pow_succ]; rw [pow_mul]; rw [neg_pow_two]; rw [← pow_mul]; rw [two_mul]; rw [pow_add]; rw [← hc]; rw [← h1]
@@ -339,7 +339,7 @@ have : a =Q .negOfNat a' := ⟨⟩
     let ⟨c₀, p⟩ ← ev
 
 中文:
-定义 evalIntPow
+定义 eval整数Pow
   签名: (za : 整数) (a : Q(整数)) (b : Q(自然数))
   定义体: do
   have a' : Q(Nat) := a.appArg!
@@ -387,8 +387,8 @@ theorem isNat_pow
   statement: forall {f : α -> Nat -> α} {a : α} {b a' b' c : Nat},
 
 中文:
-定理 isNat_pow
-  条件: {α} [Semiring α]
+定理 is自然数_pow
+  条件: {α} [半环 α]
   结论: 对任意 {f : α -> 自然数 -> α} {a : α} {b a' b' c : 自然数},
 -/
 theorem isNat_pow {α} [Semiring α] : forall {f : α -> Nat -> α} {a : α} {b a' b' c : Nat},
@@ -405,8 +405,8 @@ theorem isInt_pow
   statement: forall {f : α -> Nat -> α} {a : α} {b : Nat} {a' : Int} {b' : Nat} {c : Int},
 
 中文:
-定理 isInt_pow
-  条件: {α} [Ring α]
+定理 is整数_pow
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> 自然数 -> α} {a : α} {b : 自然数} {a' : 整数} {b' : 自然数} {c : 整数},
 -/
 theorem isInt_pow {α} [Ring α] : forall {f : α -> Nat -> α} {a : α} {b : Nat} {a' : Int} {b' : Nat} {c : Int},
@@ -428,7 +428,7 @@ theorem isRat_pow
 
 中文:
 定理 isRat_pow
-  条件: {α} [Ring α] {f : α -> 自然数 -> α} {a : α} {an cn : 整数} {ad b b' cd : 自然数}
+  条件: {α} [环 α] {f : α -> 自然数 -> α} {a : α} {an cn : 整数} {ad b b' cd : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨rfl⟩ (rfl : an ^ b = _) (rfl : ad ^ b = _)
   have := invertiblePow (ad:α) b
@@ -460,7 +460,7 @@ theorem isNNRat_pow
 
 中文:
 定理 isNNRat_pow
-  条件: {α} [Semiring α] {f : α -> 自然数 -> α} {a : α} {an cn : 自然数} {ad b b' cd : 自然数}
+  条件: {α} [半环 α] {f : α -> 自然数 -> α} {a : α} {an cn : 自然数} {ad b b' cd : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨rfl⟩ (rfl : an ^ b = _) (rfl : ad ^ b = _)
   have := invertiblePow (ad:α) b
@@ -592,8 +592,8 @@ theorem isNat_zpow_pos
   rwa [pb.out, zpow_natCast]
 
 中文:
-定理 isNat_zpow_pos
-  结论: {α : 类型} [DivisionSemiring α] {a : α} {b : 整数} {nb ne : 自然数}
+定理 is自然数_zpow_pos
+  结论: {α : 类型} [除半环 α] {a : α} {b : 整数} {nb ne : 自然数}
   证明: by
   rwa [pb.out, zpow_natCast]
 
@@ -614,8 +614,8 @@ theorem isNat_zpow_neg
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 
 中文:
-定理 isNat_zpow_neg
-  结论: {α : 类型} [DivisionSemiring α] {a : α} {b : 整数} {nb ne : 自然数}
+定理 is自然数_zpow_neg
+  结论: {α : 类型} [除半环 α] {a : α} {b : 整数} {nb ne : 自然数}
   证明: by
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 
@@ -636,8 +636,8 @@ theorem isInt_zpow_pos
   rwa [pb.out, zpow_natCast]
 
 中文:
-定理 isInt_zpow_pos
-  结论: {α : 类型} [DivisionRing α] {a : α} {b : 整数} {nb ne : 自然数}
+定理 is整数_zpow_pos
+  结论: {α : 类型} [除环 α] {a : α} {b : 整数} {nb ne : 自然数}
   证明: by
   rwa [pb.out, zpow_natCast]
 
@@ -658,8 +658,8 @@ theorem isInt_zpow_neg
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 
 中文:
-定理 isInt_zpow_neg
-  结论: {α : 类型} [DivisionRing α] {a : α} {b : 整数} {nb ne : 自然数}
+定理 is整数_zpow_neg
+  结论: {α : 类型} [除环 α] {a : α} {b : 整数} {nb ne : 自然数}
   证明: by
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 
@@ -681,7 +681,7 @@ theorem isNNRat_zpow_pos
 
 中文:
 定理 isNNRat_zpow_pos
-  结论: {α : 类型} [DivisionSemiring α] {a : α} {b : 整数} {nb : 自然数}
+  结论: {α : 类型} [除半环 α] {a : α} {b : 整数} {nb : 自然数}
   证明: by
   rwa [pb.out, zpow_natCast]
 
@@ -704,7 +704,7 @@ theorem isNNRat_zpow_neg
 
 中文:
 定理 isNNRat_zpow_neg
-  结论: {α : 类型} [DivisionSemiring α] {a : α} {b : 整数} {nb : 自然数}
+  结论: {α : 类型} [除半环 α] {a : α} {b : 整数} {nb : 自然数}
   证明: by
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 
@@ -727,7 +727,7 @@ theorem isRat_zpow_pos
 
 中文:
 定理 isRat_zpow_pos
-  结论: {α : 类型} [DivisionRing α] {a : α} {b : 整数} {nb : 自然数}
+  结论: {α : 类型} [除环 α] {a : α} {b : 整数} {nb : 自然数}
   证明: by
   rwa [pb.out, zpow_natCast]
 
@@ -759,7 +759,7 @@ blocks below were not necessary: we just did it once outside the `match rb with`
 
 中文:
 定理 isRat_zpow_neg
-  结论: {α : 类型} [DivisionRing α] {a : α} {b : 整数} {nb : 自然数}
+  结论: {α : 类型} [除环 α] {a : α} {b : 整数} {nb : 自然数}
   证明: by
   rwa [pb.out, Int.cast_negOfNat, zpow_neg, zpow_natCast]
 

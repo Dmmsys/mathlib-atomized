@@ -63,9 +63,9 @@ class RingHomId
 
 中文:
 类 RingHomId
-  参数: {R : 类型} [Semiring R] (σ : R ->+* R)
+  参数: {R : 类型} [半环 R] (σ : R ->+* R)
   公理与运算 (1 个):
-    - eq_id : σ = RingHom.id R
+    - eq_id : σ = 环态射.id R
 -/
 class RingHomId {R : Type*} [Semiring R] (σ : R ->+* R) : Prop where
   eq_id : σ = RingHom.id R
@@ -138,8 +138,8 @@ class RingHomInvPair
 类 RingHomInvPair
   参数: (σ : R₁ ->+* R₂) (σ' : outParam (R₂ ->+* R₁))
   公理与运算 (2 个):
-    - comp_eq : σ'.comp σ = RingHom.id R₁
-    - comp_eq₂ : σ.comp σ' = RingHom.id R₂
+    - comp_eq : σ'.comp σ = 环态射.id R₁
+    - comp_eq₂ : σ.comp σ' = 环态射.id R₂
 -/
 class RingHomInvPair (σ : R₁ ->+* R₂) (σ' : outParam (R₂ ->+* R₁)) : Prop where
   /-- `σ'` is a left inverse of `σ` -/
@@ -213,7 +213,7 @@ instance ids
 
 中文:
 实例 ids
-  签名: : RingHomInvPair (RingHom.id R₁) (RingHom.id R₁)
+  签名: : RingHomInvPair (环态射.id R₁) (环态射.id R₁)
   定义体: ⟨rfl, rfl⟩
 -/
 instance ids : RingHomInvPair (RingHom.id R₁) (RingHom.id R₁) :=
@@ -349,7 +349,7 @@ instance ids
 
 中文:
 实例 ids
-  签名: : RingHomCompTriple (RingHom.id R₁) σ₁₂ σ₁₂
+  签名: : RingHomCompTriple (环态射.id R₁) σ₁₂ σ₁₂
   定义体: ⟨by
     simp⟩
 -/
@@ -368,7 +368,7 @@ instance right_ids
 
 中文:
 实例 right_ids
-  签名: : RingHomCompTriple σ₁₂ (RingHom.id R₂) σ₁₂
+  签名: : RingHomCompTriple σ₁₂ (环态射.id R₂) σ₁₂
   定义体: ⟨by
     simp⟩
 -/
@@ -391,7 +391,7 @@ class RingHomSurjective
 类 RingHomSurjective
   参数: (σ : R₁ ->+* R₂)
   公理与运算 (1 个):
-    - is_surjective : Function.Surjective σ
+    - is_surjective : 函数.满射 σ
 -/
 class RingHomSurjective (σ : R₁ ->+* R₂) : Prop where
   /-- The ring homomorphism is surjective -/
@@ -407,9 +407,9 @@ theorem RingHom.surjective
   proof: t.is_surjective
 
 中文:
-定理 RingHom.surjective
+定理 环态射.surjective
   条件: (σ : R₁ ->+* R₂) [t : RingHomSurjective σ]
-  结论: Function.Surjective σ
+  结论: 函数.满射 σ
   证明: t.is_surjective
 
 Depends on / 依赖: is_surjective, t.is_surjective
@@ -433,7 +433,7 @@ instance ids
 
 中文:
 实例 ids
-  签名: : RingHomSurjective (RingHom.id R₁)
+  签名: : RingHomSurjective (环态射.id R₁)
   定义体: ⟨is_surjective⟩
 
 Depends on / 依赖: is_surjective

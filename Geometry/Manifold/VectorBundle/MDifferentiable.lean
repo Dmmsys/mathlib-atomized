@@ -51,7 +51,7 @@ theorem mdifferentiableWithinAt_totalSpace
 
 中文:
 定理 mdifferentiableWithinAt_totalSpace
-  条件: (f : M -> TotalSpace F E) {s : Set M} {x₀ : M}
+  条件: (f : M -> 全空间 F E) {s : 集合 M} {x₀ : M}
   证明: by
   simp +singlePass only [mdifferentiableWithinAt_iff_target]
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
@@ -92,7 +92,7 @@ theorem mdifferentiableAt_totalSpace
 
 中文:
 定理 mdifferentiableAt_totalSpace
-  条件: (f : M -> TotalSpace F E) {x₀ : M}
+  条件: (f : M -> 全空间 F E) {x₀ : M}
   证明: by
   simpa [← mdifferentiableWithinAt_univ] using mdifferentiableWithinAt_totalSpace _ f
 
@@ -117,7 +117,7 @@ theorem mdifferentiableWithinAt_section
 
 中文:
 定理 mdifferentiableWithinAt_section
-  条件: (s : Π b, E b) {u : Set B} {b₀ : B}
+  条件: (s : Π b, E b) {u : 集合 B} {b₀ : B}
   证明: by
   rw [mdifferentiableWithinAt_totalSpace]
   change MDifferentiableWithinAt _ _ id _ _ ∧ _ ↔ _
@@ -193,7 +193,7 @@ theorem mdifferentiableOn_proj
 
 中文:
 定理 mdifferentiableOn_proj
-  条件: {s : Set (TotalSpace F E)}
+  条件: {s : 集合 (全空间 F E)}
   结论: MDiff[s] (π F E)
   证明: (mdifferentiable_proj E).mdifferentiableOn
 
@@ -213,7 +213,7 @@ theorem mdifferentiableAt_proj
 
 中文:
 定理 mdifferentiableAt_proj
-  条件: {p : TotalSpace F E}
+  条件: {p : 全空间 F E}
   结论: MDiffAt (π F E) p
   证明: (mdifferentiable_proj E).mdifferentiableAt
 
@@ -232,7 +232,7 @@ theorem mdifferentiableWithinAt_proj
 
 中文:
 定理 mdifferentiableWithinAt_proj
-  条件: {s : Set (TotalSpace F E)} {p : TotalSpace F E}
+  条件: {s : 集合 (全空间 F E)} {p : 全空间 F E}
   证明: (mdifferentiableAt_proj E).mdifferentiableWithinAt
 
 Depends on / 依赖: mdifferentiableAt_proj, mdifferentiableWithinAt
@@ -295,7 +295,7 @@ theorem mdifferentiableOn_zeroSection
 
 中文:
 定理 mdifferentiableOn_zeroSection
-  条件: {t : Set B}
+  条件: {t : 集合 B}
   结论: MDiff[t] (zeroSection F E)
   证明: (mdifferentiable_zeroSection _ _).mdifferentiableOn
 
@@ -334,7 +334,7 @@ theorem mdifferentiableWithinAt_zeroSection
 
 中文:
 定理 mdifferentiableWithinAt_zeroSection
-  条件: {t : Set B} {x : B}
+  条件: {t : 集合 B} {x : B}
   证明: (mdifferentiable_zeroSection _ _ x).mdifferentiableWithinAt
 
 Depends on / 依赖: mdifferentiableWithinAt, mdifferentiable_zeroSection
@@ -360,7 +360,7 @@ lemma mdifferentiableWithinAt_section_of_subsingleton
 
 中文:
 引理 mdifferentiableWithinAt_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   证明: (contMDiffWithinAt_section_of_subsingleton _).mdifferentiableWithinAt one_ne_zero
 
 @[nontriviality]
@@ -387,7 +387,7 @@ lemma mdifferentiableAt_section_of_subsingleton
 
 中文:
 引理 mdifferentiableAt_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: MDiffAt (T% s) x
   证明: by
   rw [← mdifferentiableWithinAt_univ]
@@ -415,7 +415,7 @@ lemma mdifferentiableOn_section_of_subsingleton
 
 中文:
 引理 mdifferentiableOn_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: MDiff[u] (T% s)
   证明: fun _x _hx => mdifferentiableWithinAt_section_of_subsingleton ..
 
@@ -438,7 +438,7 @@ lemma mdifferentiable_section_of_subsingleton
 
 中文:
 引理 mdifferentiable_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: MDiff (T% s)
   证明: fun _x => mdifferentiableAt_section_of_subsingleton ..
 
@@ -895,7 +895,7 @@ have := (h x hx).mdifferentiableAt ha.mem_nhds hx
 
 中文:
 定理 mdifferentiableOn_section_iff
-  结论: {s : 对任意 x, E x} {a : Set B}
+  结论: {s : 对任意 x, E x} {a : 集合 B}
   证明: by
   refine ⟨fun h x hx => ?_, fun h x hx => ?_⟩ <;>
 have := (h x hx).mdifferentiableAt ha.mem_nhds hx
@@ -954,7 +954,7 @@ theorem mdifferentiable
 
 中文:
 定理 mdifferentiable
-  结论: [ContMDiffVectorBundle 1 F Z I]
+  结论: [余ntMDiffVectorBundle 1 F Z I]
   证明: ⟨e.contMDiffOn.mdifferentiableOn one_ne_zero, e.contMDiffOn_symm.mdifferentiableOn one_ne_zero⟩
 
 Depends on / 依赖: contMDiffOn, contMDiffOn_symm, e.contMDiffOn.mdifferentiableOn, e.contMDiffOn_symm.mdifferentiableOn, mdifferentiableOn, one_ne_zero
@@ -1443,7 +1443,7 @@ lemma MDifferentiableWithinAt.sum_section
 
 中文:
 引理 MDifferentiableWithinAt.sum_section
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> (x : B) -> E x}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> (x : B) -> E x}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1476,7 +1476,7 @@ lemma MDifferentiableAt.sum_section
 
 中文:
 引理 MDifferentiableAt.sum_section
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> (x : B) -> E x} {x₀ : B}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> (x : B) -> E x} {x₀ : B}
   证明: by
   simp_rw [← mdifferentiableWithinAt_univ] at hs ⊢
   exact MDifferentiableWithinAt.sum_section hs
@@ -1499,7 +1499,7 @@ lemma MDifferentiableOn.sum_section
 
 中文:
 引理 MDifferentiableOn.sum_section
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> (x : B) -> E x}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> (x : B) -> E x}
   证明: fun x₀ hx₀ => .sum_section fun i hi => hs i hi x₀ hx₀
 
 Depends on / 依赖: sum_section
@@ -1519,7 +1519,7 @@ lemma MDifferentiable.sum_section
 
 中文:
 引理 MDifferentiable.sum_section
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> (x : B) -> E x}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> (x : B) -> E x}
   证明: fun x₀ => .sum_section fun i hi => (hs i) hi x₀
 
 Depends on / 依赖: sum_section
@@ -1667,7 +1667,7 @@ lemma MDifferentiable.sum_section_of_locallyFinite
 
 中文:
 引理 MDifferentiable.sum_section_of_locallyFinite
-  结论: (ht : LocallyFinite fun i => {x : B | t i x != 0})
+  结论: (ht : 局部有限 fun i => {x : B | t i x != 0})
   证明: fun x => .sum_section_of_locallyFinite ht fun i => ht' i x
 
 Depends on / 依赖: sum_section_of_locallyFinite
@@ -1905,8 +1905,8 @@ lemma exists_contMDiffOn_extend
     exact thi
 
 中文:
-引理 exists_contMDiffOn_extend
-  结论: [(x : M) -> Module 𝕜 (V x)] [VectorBundle 𝕜 F V]
+引理 存在_contMDiffOn_extend
+  结论: [(x : M) -> 模 𝕜 (V x)] [向量丛 𝕜 F V]
   证明: by
   set t := trivializationAt F V x₀
   refine ⟨t.baseSet, ?_, ?_⟩
@@ -1994,8 +1994,8 @@ lemma exists_mdifferentiableOn_extend
   exact ⟨s, hs, hsσ.mdifferentiableOn one_ne_zero⟩
 
 中文:
-引理 exists_mdifferentiableOn_extend
-  结论: [对任意 x, Module 𝕜 (V x)] [VectorBundle 𝕜 F V]
+引理 存在_mdifferentiableOn_extend
+  结论: [对任意 x, 模 𝕜 (V x)] [向量丛 𝕜 F V]
   证明: by
   obtain ⟨s, hs, hsσ⟩ := exists_contMDiffOn_extend (k := 1) I F σ₀
   exact ⟨s, hs, hsσ.mdifferentiableOn one_ne_zero⟩
@@ -2040,8 +2040,8 @@ lemma _root_.VectorBundle.injective_eval_mdifferentiableAt_sec
   simpa using congr($h (extend F σ₀) (mdifferentiableAt_extend ..))
 
 中文:
-引理 _root_.VectorBundle.injective_eval_mdifferentiableAt_sec
-  结论: [对任意 x, Module 𝕜 (V x)]
+引理 _root_.向量丛.injective_eval_mdifferentiableAt_sec
+  结论: [对任意 x, 模 𝕜 (V x)]
   证明: by
   intro X X' h
   ext σ₀
@@ -2071,8 +2071,8 @@ lemma _root_.VectorBundle.injective_eval_contMDiffAt_sec
   simpa using congr($h (extend F σ₀) (contMDiffAt_extend ..))
 
 中文:
-引理 _root_.VectorBundle.injective_eval_contMDiffAt_sec
-  结论: {n : WithTop 自然数∞} [对任意 x, Module 𝕜 (V x)]
+引理 _root_.向量丛.injective_eval_contMDiffAt_sec
+  结论: {n : WithTop 自然数∞} [对任意 x, 模 𝕜 (V x)]
   证明: by
   intro X X' h
   ext σ₀

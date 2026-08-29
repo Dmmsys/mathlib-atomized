@@ -83,7 +83,7 @@ definition compNatTrans
     rw [Category.assoc]; rw [Category.assoc]; rw [← NatTrans.naturality_app]; rw [← δ.dinaturality_assoc f]; rw [NatTrans.naturality]
 
 中文:
-定义 compNatTrans
+定义 comp自然数Trans
   签名: (δ : F ⤞ G) (α : G ⟶ H)
   定义体: δ.app X ≫ (α.app (op X)).app X
   dinaturality f := by
@@ -105,7 +105,7 @@ definition precompNatTrans
   body: (α.app (op X)).app X ≫ δ.app X
 
 中文:
-定义 precompNatTrans
+定义 precomp自然数Trans
   签名: (δ : G ⤞ H) (α : F ⟶ G)
   定义体: (α.app (op X)).app X ≫ δ.app X
 -/

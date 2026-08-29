@@ -66,7 +66,7 @@ definition coeMulHom
 
 中文:
 定义 coeMulHom
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: coe
   map_mul' _ _ := rfl
 -/
@@ -215,7 +215,7 @@ lemma lift_symm_injective_of_injective
 
 中文:
 引理 lift_symm_injective_of_injective
-  条件: {f : WithOne α ->* β} (hf : Function.Injective f)
+  条件: {f : WithOne α ->* β} (hf : 函数.单射 f)
   证明: fun _ _ => by simp [hf.eq_iff]
 
 Depends on / 依赖: eq_iff, hf.eq_iff
@@ -294,7 +294,7 @@ theorem mapMulHom_id
 
 中文:
 定理 mapMulHom_id
-  结论: mapMulHom (MulHom.id α) = MonoidHom.id (WithOne α)
+  结论: mapMulHom (乘法半群态射.id α) = 幺半群态射.id (WithOne α)
   证明: by
   ext x
   induction x <;> rfl
@@ -315,7 +315,7 @@ theorem mapMulHom_injective
 
 中文:
 定理 mapMulHom_injective
-  条件: {f : α ->ₙ* β} (hf : Function.Injective f)
+  条件: {f : α ->ₙ* β} (hf : 函数.单射 f)
 -/
 theorem mapMulHom_injective {f : α ->ₙ* β} (hf : Function.Injective f) :
     Function.Injective (mapMulHom f)
@@ -427,7 +427,7 @@ definition _root_.MulEquiv.withOneCongr
 @[to_additive (attr := simp)]
 
 中文:
-定义 _root_.MulEquiv.withOneCongr
+定义 _root_.乘法等价.withOneCongr
   签名: (e : α ≃* β)
   定义体: { mapMulHom e.toMulHom with
     toFun := mapMulHom e.toMulHom, invFun := mapMulHom e.symm.toMulHom,
@@ -456,8 +456,8 @@ theorem _root_.MulEquiv.withOneCongr_refl
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.MulEquiv.withOneCongr_refl
-  结论: (MulEquiv.refl α).withOneCongr = MulEquiv.refl _
+定理 _root_.乘法等价.withOneCongr_refl
+  结论: (乘法等价.refl α).withOneCongr = 乘法等价.refl _
   证明: MulEquiv.toMonoidHom_injective mapMulHom_id
 
 @[to_additive (attr := simp)]
@@ -479,7 +479,7 @@ theorem _root_.MulEquiv.withOneCongr_symm
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.MulEquiv.withOneCongr_symm
+定理 _root_.乘法等价.withOneCongr_symm
   条件: (e : α ≃* β)
   证明: rfl
 
@@ -499,7 +499,7 @@ theorem _root_.MulEquiv.withOneCongr_trans
   proof: MulEquiv.toMonoidHom_injective (mapMulHom_comp _ _).symm
 
 中文:
-定理 _root_.MulEquiv.withOneCongr_trans
+定理 _root_.乘法等价.withOneCongr_trans
   条件: (e₁ : α ≃* β) (e₂ : β ≃* γ)
   证明: MulEquiv.toMonoidHom_injective (mapMulHom_comp _ _).symm
 

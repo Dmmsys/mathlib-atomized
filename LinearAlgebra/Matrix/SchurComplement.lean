@@ -58,7 +58,7 @@ theorem fromBlocks_eq_of_invertible₁₁
 
 中文:
 定理 fromBlocks_eq_of_invertible₁₁
-  结论: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix l m α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 l m α)
   证明: by
   simp only [fromBlocks_multiply, Matrix.mul_zero, Matrix.zero_mul, add_zero, zero_add,
     Matrix.one_mul, Matrix.mul_one, invOf_mul_self, Matrix.mul_invOf_cancel_left,
@@ -88,7 +88,7 @@ theorem fromBlocks_eq_of_invertible₂₂
 
 中文:
 定理 fromBlocks_eq_of_invertible₂₂
-  结论: (A : Matrix l m α) (B : Matrix l n α) (C : Matrix n m α)
+  结论: (A : 矩阵 l m α) (B : 矩阵 l n α) (C : 矩阵 n m α)
   证明: (Matrix.reindex (Equiv.sumComm _ _) (Equiv.sumComm _ _)).injective by
     simpa [reindex_apply, Equiv.sumComm_symm, ← submatrix_mul_equiv _ _ _ (Equiv.sumComm n m), ←
       submatrix_mul_equiv _ _ _ (Equiv.sumComm n l), Equiv.sumComm_apply,
@@ -126,7 +126,7 @@ definition fromBlocksZero₂₁Invertible
 
 中文:
 定义 fromBlocksZero₂₁Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (D : 矩阵 n n α)
   定义体: invertibleOfLeftInverse _ (fromBlocks (⅟A) (-(⅟A * B * ⅟D)) 0 (⅟D)) by
     simp_rw [fromBlocks_multiply, Matrix.mul_zero, Matrix.zero_mul, zero_add, add_zero,
       Matrix.neg_mul, invOf_mul_self, Matrix.invOf_mul_cancel_right, add_neg_cancel,
@@ -157,7 +157,7 @@ definition fromBlocksZero₁₂Invertible
 
 中文:
 定义 fromBlocksZero₁₂Invertible
-  签名: (A : Matrix m m α) (C : Matrix n m α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   定义体: invertibleOfLeftInverse _
       (fromBlocks (⅟A) 0 (-(⅟D * C * ⅟A))
         (⅟D)) <| by -- a symmetry argument is more work than just copying the proof
@@ -187,7 +187,7 @@ theorem invOf_fromBlocks_zero₂₁_eq
 
 中文:
 定理 invOf_fromBlocks_zero₂₁_eq
-  结论: (A : Matrix m m α) (B : Matrix m n α) (D : Matrix n n α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (D : 矩阵 n n α)
   证明: by
   let := fromBlocksZero₂₁Invertible A B D
   convert! (rfl : ⅟(fromBlocks A B 0 D) = _)
@@ -212,7 +212,7 @@ theorem invOf_fromBlocks_zero₁₂_eq
 
 中文:
 定理 invOf_fromBlocks_zero₁₂_eq
-  结论: (A : Matrix m m α) (C : Matrix n m α) (D : Matrix n n α)
+  结论: (A : 矩阵 m m α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   证明: by
   let := fromBlocksZero₁₂Invertible A C D
   convert! (rfl : ⅟(fromBlocks A 0 C D) = _)
@@ -238,7 +238,7 @@ definition invertibleOfFromBlocksZero₂₁Invertible
 
 中文:
 定义 invertibleOfFromBlocksZero₂₁Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (D : 矩阵 n n α)
   定义体: invertibleOfLeftInverse _ (⅟(fromBlocks A B 0 D)).toBlocks₁₁ by
       have := invOf_mul_self (fromBlocks A B 0 D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A B 0 D))]; rw [fromBlocks_multiply] at this
@@ -275,7 +275,7 @@ definition invertibleOfFromBlocksZero₁₂Invertible
 
 中文:
 定义 invertibleOfFromBlocksZero₁₂Invertible
-  签名: (A : Matrix m m α) (C : Matrix n m α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   定义体: invertibleOfRightInverse _ (⅟(fromBlocks A 0 C D)).toBlocks₁₁ by
       have := mul_invOf_self (fromBlocks A 0 C D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A 0 C D))]; rw [fromBlocks_multiply] at this
@@ -317,7 +317,7 @@ definition fromBlocksZero₂₁InvertibleEquiv
 
 中文:
 定义 fromBlocksZero₂₁InvertibleEquiv
-  签名: (A : Matrix m m α) (B : Matrix m n α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (D : 矩阵 n n α)
   定义体: invertibleOfFromBlocksZero₂₁Invertible A B D
   invFun i := by
     letI := i.1
@@ -352,7 +352,7 @@ definition fromBlocksZero₁₂InvertibleEquiv
 
 中文:
 定义 fromBlocksZero₁₂InvertibleEquiv
-  签名: (A : Matrix m m α) (C : Matrix n m α) (D : Matrix n n α)
+  签名: (A : 矩阵 m m α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   定义体: invertibleOfFromBlocksZero₁₂Invertible A C D
   invFun i := by
     letI := i.1
@@ -387,7 +387,7 @@ theorem isUnit_fromBlocks_zero₂₁
 
 中文:
 定理 isUnit_fromBlocks_zero₂₁
-  条件: {A : Matrix m m α} {B : Matrix m n α} {D : Matrix n n α}
+  条件: {A : 矩阵 m m α} {B : 矩阵 m n α} {D : 矩阵 n n α}
   证明: by
   simp only [← nonempty_invertible_iff_isUnit, ← nonempty_prod,
     (fromBlocksZero₂₁InvertibleEquiv _ _ _).nonempty_congr]
@@ -415,7 +415,7 @@ theorem isUnit_fromBlocks_zero₁₂
 
 中文:
 定理 isUnit_fromBlocks_zero₁₂
-  条件: {A : Matrix m m α} {C : Matrix n m α} {D : Matrix n n α}
+  条件: {A : 矩阵 m m α} {C : 矩阵 n m α} {D : 矩阵 n n α}
   证明: by
   simp only [← nonempty_invertible_iff_isUnit, ← nonempty_prod,
     (fromBlocksZero₁₂InvertibleEquiv _ _ _).nonempty_congr]
@@ -446,7 +446,7 @@ theorem inv_fromBlocks_zero₂₁_of_isUnit_iff
 
 中文:
 定理 inv_fromBlocks_zero₂₁_of_isUnit_iff
-  结论: (A : Matrix m m α) (B : Matrix m n α) (D : Matrix n n α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (D : 矩阵 n n α)
   证明: by
   by_cases hA : IsUnit A
   · have hD := hAD.mp hA
@@ -494,7 +494,7 @@ theorem inv_fromBlocks_zero₁₂_of_isUnit_iff
 
 中文:
 定理 inv_fromBlocks_zero₁₂_of_isUnit_iff
-  结论: (A : Matrix m m α) (C : Matrix n m α) (D : Matrix n n α)
+  结论: (A : 矩阵 m m α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   证明: by
   by_cases hA : IsUnit A
   · have hD := hAD.mp hA
@@ -552,7 +552,7 @@ definition fromBlocks₂₂Invertible
 
 中文:
 定义 fromBlocks₂₂Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: by
   -- factor `fromBlocks` via `fromBlocks_eq_of_invertible₂₂`, and state the inverse we expect
   convert!
@@ -609,7 +609,7 @@ definition fromBlocks₁₁Invertible
 
 中文:
 定义 fromBlocks₁₁Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: by
   -- we argue by symmetry
   letI := fromBlocks₂₂Invertible D C B A
@@ -646,7 +646,7 @@ theorem invOf_fromBlocks₂₂_eq
 
 中文:
 定理 invOf_fromBlocks₂₂_eq
-  结论: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   证明: by
   let := fromBlocks₂₂Invertible A B C D
   convert! (rfl : ⅟(fromBlocks A B C D) = _)
@@ -674,7 +674,7 @@ theorem invOf_fromBlocks₁₁_eq
 
 中文:
 定理 invOf_fromBlocks₁₁_eq
-  结论: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   证明: by
   let := fromBlocks₁₁Invertible A B C D
   convert! (rfl : ⅟(fromBlocks A B C D) = _)
@@ -708,7 +708,7 @@ definition invertibleOfFromBlocks₂₂Invertible
 
 中文:
 定义 invertibleOfFromBlocks₂₂Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: by
   suffices Invertible (fromBlocks (A - B * ⅟D * C) 0 0 D) by
     exact (invertibleOfFromBlocksZero₁₂Invertible (A - B * ⅟D * C) 0 D).1
@@ -751,7 +751,7 @@ definition invertibleOfFromBlocks₁₁Invertible
 
 中文:
 定义 invertibleOfFromBlocks₁₁Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: by
   -- another symmetry argument
   letI iABCD' :=
@@ -781,7 +781,7 @@ definition invertibleEquivFromBlocks₂₂Invertible
 
 中文:
 定义 invertibleEquivFromBlocks₂₂Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: invertibleOfFromBlocks₂₂Invertible _ _ _ _
   invFun _i_schur := fromBlocks₂₂Invertible _ _ _ _
   left_inv _iABCD := Subsingleton.elim _ _
@@ -808,7 +808,7 @@ definition invertibleEquivFromBlocks₁₁Invertible
 
 中文:
 定义 invertibleEquivFromBlocks₁₁Invertible
-  签名: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  签名: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   定义体: invertibleOfFromBlocks₁₁Invertible _ _ _ _
   invFun _i_schur := fromBlocks₁₁Invertible _ _ _ _
   left_inv _iABCD := Subsingleton.elim _ _
@@ -834,7 +834,7 @@ theorem isUnit_fromBlocks_iff_of_invertible₂₂
 
 中文:
 定理 isUnit_fromBlocks_iff_of_invertible₂₂
-  结论: {A : Matrix m m α} {B : Matrix m n α}
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α}
   证明: by
   simp only [← nonempty_invertible_iff_isUnit,
     (invertibleEquivFromBlocks₂₂Invertible A B C D).nonempty_congr]
@@ -859,7 +859,7 @@ theorem isUnit_fromBlocks_iff_of_invertible₁₁
 
 中文:
 定理 isUnit_fromBlocks_iff_of_invertible₁₁
-  结论: {A : Matrix m m α} {B : Matrix m n α}
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α}
   证明: by
   simp only [← nonempty_invertible_iff_isUnit,
     (invertibleEquivFromBlocks₁₁Invertible A B C D).nonempty_congr]
@@ -892,7 +892,7 @@ theorem det_fromBlocks₁₁
 
 中文:
 定理 det_fromBlocks₁₁
-  结论: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   证明: by
   rw [fromBlocks_eq_of_invertible₁₁ (A := A)]; rw [det_mul]; rw [det_mul]; rw [det_fromBlocks_zero₂₁]; rw [det_fromBlocks_zero₂₁]; rw [det_fromBlocks_zero₁₂]; rw [det_one]; rw [det_one]; rw [one_mul]; rw [one_mul]; rw [mul_one]
 
@@ -918,7 +918,7 @@ theorem det_fromBlocks_one₁₁
 
 中文:
 定理 det_fromBlocks_one₁₁
-  条件: (B : Matrix m n α) (C : Matrix n m α) (D : Matrix n n α)
+  条件: (B : 矩阵 m n α) (C : 矩阵 n m α) (D : 矩阵 n n α)
   证明: by
   have : Invertible (1 : Matrix m m α) := invertibleOne
   rw [det_fromBlocks₁₁]; rw [invOf_one]; rw [Matrix.mul_one]; rw [det_one]; rw [one_mul]
@@ -947,7 +947,7 @@ theorem det_fromBlocks₂₂
 
 中文:
 定理 det_fromBlocks₂₂
-  结论: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  结论: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   证明: by
   have : fromBlocks A B C D =
       (fromBlocks D C B A).submatrix (Equiv.sumComm _ _) (Equiv.sumComm _ _) := by
@@ -981,7 +981,7 @@ theorem det_fromBlocks_one₂₂
 
 中文:
 定理 det_fromBlocks_one₂₂
-  条件: (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
+  条件: (A : 矩阵 m m α) (B : 矩阵 m n α) (C : 矩阵 n m α)
   证明: by
   have : Invertible (1 : Matrix n n α) := invertibleOne
   rw [det_fromBlocks₂₂]; rw [invOf_one]; rw [Matrix.mul_one]; rw [det_one]; rw [one_mul]
@@ -1006,7 +1006,7 @@ theorem det_one_add_mul_comm
 
 中文:
 定理 det_one_add_mul_comm
-  条件: (A : Matrix m n α) (B : Matrix n m α)
+  条件: (A : 矩阵 m n α) (B : 矩阵 n m α)
   证明: calc
     det (1 + A * B) = det (fromBlocks 1 (-A) B 1) := by
       rw [det_fromBlocks_one₂₂]; rw [Matrix.neg_mul]; rw [sub_neg_eq_add]
@@ -1031,7 +1031,7 @@ theorem det_mul_add_one_comm
 
 中文:
 定理 det_mul_add_one_comm
-  条件: (A : Matrix m n α) (B : Matrix n m α)
+  条件: (A : 矩阵 m n α) (B : 矩阵 n m α)
   证明: by rw [add_comm, det_one_add_mul_comm, add_comm]
 
 Depends on / 依赖: add_comm, det_one_add_mul_comm
@@ -1050,7 +1050,7 @@ theorem det_one_sub_mul_comm
 
 中文:
 定理 det_one_sub_mul_comm
-  条件: (A : Matrix m n α) (B : Matrix n m α)
+  条件: (A : 矩阵 m n α) (B : 矩阵 n m α)
   证明: by
   rw [sub_eq_add_neg]; rw [← Matrix.neg_mul]; rw [det_one_add_mul_comm]; rw [Matrix.mul_neg]; rw [← sub_eq_add_neg]
 
@@ -1072,7 +1072,7 @@ theorem det_one_add_replicateCol_mul_replicateRow
 
 中文:
 定理 det_one_add_replicateCol_mul_replicateRow
-  条件: {ι : 类型} [Unique ι] (u v : m -> α)
+  条件: {ι : 类型} [唯一 ι] (u v : m -> α)
   证明: by
   rw [det_one_add_mul_comm]; rw [det_unique]; rw [Pi.add_apply]; rw [Pi.add_apply]; rw [Matrix.one_apply_eq]; rw [Matrix.replicateRow_mul_replicateCol_apply]
 
@@ -1095,7 +1095,7 @@ theorem det_add_replicateCol_mul_replicateRow
 
 中文:
 定理 det_add_replicateCol_mul_replicateRow
-  结论: {ι : 类型} [Unique ι]
+  结论: {ι : 类型} [唯一 ι]
   证明: by
   nth_rewrite 1 [← Matrix.mul_one A]
   rwa [← Matrix.mul_nonsing_inv_cancel_left A (replicateCol ι u * replicateRow ι v),
@@ -1124,7 +1124,7 @@ theorem det_add_mul
 
 中文:
 定理 det_add_mul
-  结论: {A : Matrix m m α} (U : Matrix m n α)
+  结论: {A : 矩阵 m m α} (U : 矩阵 m n α)
   证明: by
   nth_rewrite 1 [← Matrix.mul_one A]
   rwa [← Matrix.mul_nonsing_inv_cancel_left A (U * V), ← Matrix.mul_add,

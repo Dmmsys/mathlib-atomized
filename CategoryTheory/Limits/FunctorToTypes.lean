@@ -41,7 +41,7 @@ theorem jointly_surjective
 
 中文:
 定理 jointly_surjective
-  结论: (k : K) {t : Cocone F} (h : IsColimit t) (x : t.pt.obj k)
+  结论: (k : K) {t : 余锥 F} (h : 是余极限 t) (x : t.pt.obj k)
   证明: by
   let hev := isColimitOfPreserves ((evaluation _ _).obj k) h
   obtain ⟨j, y, rfl⟩ := Types.jointly_surjective _ hev x
@@ -65,7 +65,7 @@ theorem jointly_surjective'
 
 中文:
 定理 jointly_surjective'
-  条件: [对任意 k, HasColimit (F.flip.obj k)] (k : K) (x : (colimit F).obj k)
+  条件: [对任意 k, 有余极限 (F.flip.obj k)] (k : K) (x : (colimit F).obj k)
   证明: jointly_surjective _ _ (colimit.isColimit _) x
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, jointly_surjective
@@ -84,7 +84,7 @@ theorem colimit.map_ι_apply
 
 中文:
 定理 colimit.map_ι_apply
-  条件: [HasColimit F] (j : J) {k k' : K} {f : k ⟶ k'} {x}
+  条件: [有余极限 F] (j : J) {k k' : K} {f : k ⟶ k'} {x}
   证明: ConcreteCategory.congr_hom ((colimit.ι F j).naturality _).symm _
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, colimit, congr_hom, naturality

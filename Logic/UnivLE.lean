@@ -77,7 +77,7 @@ theorem univLE_max
 
 中文:
 定理 univLE_max
-  结论: UnivLE.{u, max u v} where small α
+  结论: UnivLE.{u, 最大值 u v} where small α
   证明: small_max.{v} α
 
 Depends on / 依赖: small_max
@@ -96,7 +96,7 @@ theorem Small.trans_univLE
 
 中文:
 定理 Small.trans_univLE
-  条件: (α : Type w) [hα : Small.{u} α] [h : UnivLE.{u, v}]
+  条件: (α : 类型 w) [hα : Small.{u} α] [h : UnivLE.{u, v}]
   证明: let ⟨β, ⟨f⟩⟩ := hα.equiv_small
   let ⟨_, ⟨g⟩⟩ := (h.small β).equiv_small
   ⟨_, ⟨f.trans g⟩⟩
@@ -187,7 +187,7 @@ instance univLE_of_max
 
 中文:
 实例 univLE_of_max
-  签名: [UnivLE.{max u v, v}]
+  签名: [UnivLE.{最大值 u v, v}]
   定义体: @UnivLE.trans univLE_max ‹_›
 
 Depends on / 依赖: UnivLE, UnivLE.trans, univLE_max

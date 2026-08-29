@@ -34,7 +34,7 @@ theorem isUniformGroup_sInf
 
 中文:
 定理 isUniformGroup_sInf
-  条件: {us : Set (UniformSpace G)} (h : 对任意 u in us, @IsUniformGroup G u _)
+  条件: {us : 集合 (一致空间 G)} (h : 对任意 u in us, @是一致群 G u _)
   证明: @IsUniformGroup.mk G (_) _
     uniformContinuous_sInf_rng.mpr fun u hu =>
       uniformContinuous_sInf_dom₂ hu hu (@IsUniformGroup.uniformContinuous_div G u _ (h u hu))
@@ -64,7 +64,7 @@ theorem isUniformGroup_iInf
 
 中文:
 定理 isUniformGroup_iInf
-  结论: {ι : Sort*} {us' : ι -> UniformSpace G}
+  结论: {ι : 类型层*} {us' : ι -> 一致空间 G}
   证明: by
   rw [← sInf_range]
   exact isUniformGroup_sInf (Set.forall_mem_range.mpr h')
@@ -92,7 +92,7 @@ theorem isUniformGroup_inf
 
 中文:
 定理 isUniformGroup_inf
-  结论: {u₁ u₂ : UniformSpace G} (h₁ : @IsUniformGroup G u₁ _)
+  结论: {u₁ u₂ : 一致空间 G} (h₁ : @是一致群 G u₁ _)
   证明: by
   rw [inf_eq_iInf]
   refine isUniformGroup_iInf fun b => ?_
@@ -124,8 +124,8 @@ lemma IsUniformInducing.isUniformGroup
 @[to_additive]
 
 中文:
-引理 IsUniformInducing.isUniformGroup
-  结论: [UniformSpace G] [UniformSpace H]
+引理 是UniformInducing.isUniformGroup
+  结论: [一致空间 G] [一致空间 H]
   证明: by
     simp_rw [hf.uniformContinuous_iff, Function.comp_def, map_div]
     exact uniformContinuous_div.comp (hf.uniformContinuous.prodMap hf.uniformContinuous)
@@ -152,8 +152,8 @@ theorem IsUniformGroup.comap
   proof: letI : UniformSpace G := u.comap f; IsUniformInducing.isUniformGroup f ⟨rfl⟩
 
 中文:
-定理 IsUniformGroup.comap
-  结论: {u : UniformSpace H} [IsUniformGroup H]
+定理 是一致群.comap
+  结论: {u : 一致空间 H} [是一致群 H]
   证明: letI : UniformSpace G := u.comap f; IsUniformInducing.isUniformGroup f ⟨rfl⟩
 -/
 protected theorem IsUniformGroup.comap {u : UniformSpace H} [IsUniformGroup H]
@@ -179,8 +179,8 @@ instance Prod.instIsUniformGroup
 @[to_additive]
 
 中文:
-实例 Prod.instIsUniformGroup
-  签名: [UniformSpace G] [hG : IsUniformGroup G]
+实例 积类型.instIsUniformGroup
+  签名: [一致空间 G] [hG : 是一致群 G]
   定义体: by
   rw [instUniformSpaceProd]
   exact isUniformGroup_inf (.comap <| MonoidHom.fst G H) (.comap <| MonoidHom.snd G H)
@@ -207,8 +207,8 @@ instance Pi.instIsUniformGroup
   exact isUniformGroup_iInf fun i => .comap (Pi.evalMonoidHom G i)
 
 中文:
-实例 Pi.instIsUniformGroup
-  签名: {ι : 类型} {G : ι -> 类型} [对任意 i, UniformSpace (G i)]
+实例 依赖函数类型.instIsUniformGroup
+  签名: {ι : 类型} {G : ι -> 类型} [对任意 i, 一致空间 (G i)]
   定义体: by
   rw [Pi.uniformSpace_eq]
   exact isUniformGroup_iInf fun i => .comap (Pi.evalMonoidHom G i)
@@ -235,8 +235,8 @@ instance [UniformSpace
   body: DiscreteUniformity.uniformContinuous (G × G) fun p => p.1 / p.2
 
 中文:
-实例 [UniformSpace
-  签名: G] [DiscreteUniformity G] : IsUniformGroup G where
+实例 [一致空间
+  签名: G] [DiscreteUniformity G] : 是一致群 G where
   定义体: DiscreteUniformity.uniformContinuous (G × G) fun p => p.1 / p.2
 
 Depends on / 依赖: DiscreteUniformity, DiscreteUniformity.uniformContinuous, uniformContinuous

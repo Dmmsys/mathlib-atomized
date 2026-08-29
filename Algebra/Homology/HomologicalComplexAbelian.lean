@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalEpiCategory (HomologicalComplex C c)
+  签名: 是正规满态射范畴 (同调复形 C c)
   定义体: ⟨fun p _ =>
   ⟨NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
     (isColimitOfEval _ _ (fun _ =>
@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalMonoCategory (HomologicalComplex C c)
+  签名: 是正规单态射范畴 (同调复形 C c)
   定义体: ⟨fun p _ =>
   ⟨NormalMono.mk _ (cokernel.π p) (cokernel.condition _)
     (isLimitOfEval _ _ (fun _ =>
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (HomologicalComplex C c)
+  签名: 交换 (同调复形 C c)
 -/
 noncomputable instance : Abelian (HomologicalComplex C c) where
 
@@ -109,7 +109,7 @@ lemma exact_of_degreewise_exact
 
 中文:
 引理 exact_of_degreewise_exact
-  条件: (hS : 对任意 (i : ι), (S.map (eval C c i)).Exact)
+  条件: (hS : 对任意 (i : ι), (S.map (eval C c i)).正合)
   证明: by
   simp only [ShortComplex.exact_iff_isZero_homology] at hS ⊢
   rw [IsZero.iff_id_eq_zero]
@@ -256,8 +256,8 @@ instance [F.PreservesZeroMorphisms]
 inferInstanceAs PreservesLimitsOfShape J HomologicalComplex.eval C c i ⋙ F)
 
 中文:
-实例 [F.PreservesZeroMorphisms]
-  签名: {J : 类型} [Category* J] [HasLimitsOfShape J C]
+实例 [F.保持ZeroMorphisms]
+  签名: {J : 类型} [范畴* J] [有形状极限 J C]
   定义体: HomologicalComplex.preservesLimitsOfShape_of_eval _ (fun i =>
 inferInstanceAs PreservesLimitsOfShape J HomologicalComplex.eval C c i ⋙ F)
 
@@ -278,8 +278,8 @@ instance [F.PreservesZeroMorphisms]
 inferInstanceAs PreservesColimitsOfShape J HomologicalComplex.eval C c i ⋙ F)
 
 中文:
-实例 [F.PreservesZeroMorphisms]
-  签名: {J : 类型} [Category* J] [HasColimitsOfShape J C]
+实例 [F.保持ZeroMorphisms]
+  签名: {J : 类型} [范畴* J] [有形状余极限 J C]
   定义体: HomologicalComplex.preservesColimitsOfShape_of_eval _ (fun i =>
 inferInstanceAs PreservesColimitsOfShape J HomologicalComplex.eval C c i ⋙ F)
 
@@ -299,8 +299,8 @@ instance [HasFiniteLimits
   body: ⟨by intros; infer_instance⟩
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] [F.PreservesZeroMorphisms] [PreservesFiniteLimits F] :
+实例 [有有限极限
+  签名: C] [F.保持ZeroMorphisms] [保持FiniteLimits F] :
   定义体: ⟨by intros; infer_instance⟩
 
 Depends on / 依赖: infer_instance, intros
@@ -318,8 +318,8 @@ instance [HasFiniteColimits
   body: ⟨by intros; infer_instance⟩
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] [F.PreservesZeroMorphisms] [PreservesFiniteColimits F] :
+实例 [有有限余极限
+  签名: C] [F.保持ZeroMorphisms] [保持FiniteColimits F] :
   定义体: ⟨by intros; infer_instance⟩
 
 Depends on / 依赖: infer_instance, intros

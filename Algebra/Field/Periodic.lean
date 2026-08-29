@@ -53,8 +53,8 @@ theorem Periodic.const_smul₀
   · simpa only [smul_add, smul_inv_smul₀ ha] using h (a • x)
 
 中文:
-定理 Periodic.const_smul₀
-  结论: [AddCommMonoid α] [DivisionSemiring γ] [Module γ α]
+定理 周期.const_smul₀
+  结论: [加法交换幺半群 α] [除半环 γ] [模 γ α]
   证明: fun x => by
   by_cases ha : a = 0
   · simp only [ha, zero_smul]
@@ -75,8 +75,8 @@ theorem Periodic.const_mul
   proof: Periodic.const_smul₀ h a
 
 中文:
-定理 Periodic.const_mul
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.const_mul
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: Periodic.const_smul₀ h a
 -/
 protected theorem Periodic.const_mul [DivisionSemiring α] (h : Periodic f c) (a : α) :
@@ -93,8 +93,8 @@ theorem Periodic.const_inv_smul₀
   simpa only [inv_inv] using h.const_smul₀ a⁻¹
 
 中文:
-定理 Periodic.const_inv_smul₀
-  结论: [AddCommMonoid α] [DivisionSemiring γ] [Module γ α]
+定理 周期.const_inv_smul₀
+  结论: [加法交换幺半群 α] [除半环 γ] [模 γ α]
   证明: by
   simpa only [inv_inv] using h.const_smul₀ a⁻¹
 
@@ -113,8 +113,8 @@ theorem Periodic.const_inv_mul
   proof: h.const_inv_smul₀ a
 
 中文:
-定理 Periodic.const_inv_mul
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.const_inv_mul
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: h.const_inv_smul₀ a
 
 Depends on / 依赖: h.const_inv_smul
@@ -132,8 +132,8 @@ theorem Periodic.mul_const
   proof: h.const_smul₀ (MulOpposite.op a)
 
 中文:
-定理 Periodic.mul_const
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.mul_const
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: h.const_smul₀ (MulOpposite.op a)
 
 Depends on / 依赖: EuclideanDomain, MulOpposite, MulOpposite.op, h.const_smul, toEuclideanDomain
@@ -151,8 +151,8 @@ theorem Periodic.mul_const'
   proof: by simpa only [div_eq_mul_inv] using h.mul_const a
 
 中文:
-定理 Periodic.mul_const'
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.mul_const'
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: by simpa only [div_eq_mul_inv] using h.mul_const a
 
 Depends on / 依赖: div_eq_mul_inv, h.mul_const, mul_const
@@ -169,8 +169,8 @@ theorem Periodic.mul_const_inv
   proof: h.const_inv_smul₀ (MulOpposite.op a)
 
 中文:
-定理 Periodic.mul_const_inv
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.mul_const_inv
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: h.const_inv_smul₀ (MulOpposite.op a)
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, h.const_inv_smul
@@ -188,8 +188,8 @@ theorem Periodic.div_const
   proof: by simpa only [div_eq_mul_inv] using h.mul_const_inv a
 
 中文:
-定理 Periodic.div_const
-  条件: [DivisionSemiring α] (h : Periodic f c) (a : α)
+定理 周期.div_const
+  条件: [除半环 α] (h : 周期 f c) (a : α)
   证明: by simpa only [div_eq_mul_inv] using h.mul_const_inv a
 
 Depends on / 依赖: div_eq_mul_inv, h.mul_const_inv, mul_const_inv
@@ -207,8 +207,8 @@ theorem Periodic.exists_mem_Ico₀
   ⟨x - n • c, H, (h.sub_zsmul_eq n).symm⟩
 
 中文:
-定理 Periodic.exists_mem_Ico₀
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.存在_mem_Ico₀
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: let ⟨n, H, _⟩ := existsUnique_zsmul_near_of_pos' hc x
   ⟨x - n • c, H, (h.sub_zsmul_eq n).symm⟩
 
@@ -230,8 +230,8 @@ theorem Periodic.exists_mem_Ico
   ⟨x + n • c, H, (h.zsmul n x).symm⟩
 
 中文:
-定理 Periodic.exists_mem_Ico
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.存在_mem_Ico
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: let ⟨n, H, _⟩ := existsUnique_add_zsmul_mem_Ico hc x a
   ⟨x + n • c, H, (h.zsmul n x).symm⟩
 
@@ -253,8 +253,8 @@ theorem Periodic.exists_mem_Ioc
   ⟨x + n • c, H, (h.zsmul n x).symm⟩
 
 中文:
-定理 Periodic.exists_mem_Ioc
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.存在_mem_Ioc
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: let ⟨n, H, _⟩ := existsUnique_add_zsmul_mem_Ioc hc x a
   ⟨x + n • c, H, (h.zsmul n x).symm⟩
 
@@ -277,8 +277,8 @@ theorem Periodic.image_Ioc
     ⟨y, hy, hyx.symm⟩
 
 中文:
-定理 Periodic.image_Ioc
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.image_Ioc
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: (image_subset_range _ _).antisymm range_subset_iff.2 fun x =>
     let ⟨y, hy, hyx⟩ := h.exists_mem_Ioc hc x a
     ⟨y, hy, hyx.symm⟩
@@ -301,8 +301,8 @@ theorem Periodic.image_Icc
   proof: (image_subset_range _ _).antisymm h.image_Ioc hc a ▸ image_mono Ioc_subset_Icc_self
 
 中文:
-定理 Periodic.image_Icc
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.image_Icc
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: (image_subset_range _ _).antisymm h.image_Ioc hc a ▸ image_mono Ioc_subset_Icc_self
 
 Depends on / 依赖: Ioc_subset_Icc_self, antisymm, h.image_Ioc, image_Ioc, image_mono, image_subset_range
@@ -325,8 +325,8 @@ theorem Periodic.image_uIcc
   | inr hc => rw [uIcc_of_le (le_add_of_nonneg_right hc.le), h.image_Icc hc]
 
 中文:
-定理 Periodic.image_uIcc
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 周期.image_uIcc
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: by
   cases hc.lt_or_gt with
   | inl hc =>
@@ -356,7 +356,7 @@ theorem Antiperiodic.add_nat_mul_eq
 
 中文:
 定理 Antiperiodic.add_nat_mul_eq
-  条件: [NonAssocSemiring α] [Ring β] (h : Antiperiodic f c) (n : 自然数)
+  条件: [非结合半环 α] [环 β] (h : Antiperiodic f c) (n : 自然数)
   证明: by
   simpa only [nsmul_eq_mul, zsmul_eq_mul, Int.cast_pow, Int.cast_neg,
     Int.cast_one] using h.add_nsmul_eq n
@@ -380,7 +380,7 @@ theorem Antiperiodic.sub_nat_mul_eq
 
 中文:
 定理 Antiperiodic.sub_nat_mul_eq
-  条件: [NonAssocRing α] [Ring β] (h : Antiperiodic f c) (n : 自然数)
+  条件: [非结合环 α] [环 β] (h : Antiperiodic f c) (n : 自然数)
   证明: by
   simpa only [nsmul_eq_mul, zsmul_eq_mul, Int.cast_pow, Int.cast_neg,
     Int.cast_one] using h.sub_nsmul_eq n
@@ -404,7 +404,7 @@ theorem Antiperiodic.nat_mul_sub_eq
 
 中文:
 定理 Antiperiodic.nat_mul_sub_eq
-  条件: [NonAssocRing α] [Ring β] (h : Antiperiodic f c) (n : 自然数)
+  条件: [非结合环 α] [环 β] (h : Antiperiodic f c) (n : 自然数)
   证明: by
   simpa only [nsmul_eq_mul, zsmul_eq_mul, Int.cast_pow, Int.cast_neg,
     Int.cast_one] using h.nsmul_sub_eq n
@@ -426,7 +426,7 @@ theorem Antiperiodic.const_smul₀
 
 中文:
 定理 Antiperiodic.const_smul₀
-  结论: [AddMonoid α] [Neg β] [GroupWithZero γ] [DistribMulAction γ α]
+  结论: [加法幺半群 α] [取负 β] [带零群 γ] [分配乘法作用 γ α]
   证明: fun x => by simpa only [smul_add, smul_inv_smul₀ ha] using h (a • x)
 
 Depends on / 依赖: smul_add
@@ -445,7 +445,7 @@ theorem Antiperiodic.const_mul
 
 中文:
 定理 Antiperiodic.const_mul
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: h.const_smul₀ ha
 
 Depends on / 依赖: h.const_smul
@@ -465,7 +465,7 @@ theorem Antiperiodic.const_inv_smul₀
 
 中文:
 定理 Antiperiodic.const_inv_smul₀
-  结论: [AddMonoid α] [Neg β] [GroupWithZero γ] [DistribMulAction γ α]
+  结论: [加法幺半群 α] [取负 β] [带零群 γ] [分配乘法作用 γ α]
   证明: by
   simpa only [inv_inv] using h.const_smul₀ (inv_ne_zero ha)
 
@@ -485,7 +485,7 @@ theorem Antiperiodic.const_inv_mul
 
 中文:
 定理 Antiperiodic.const_inv_mul
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: h.const_inv_smul₀ ha
 
 Depends on / 依赖: h.const_inv_smul
@@ -504,7 +504,7 @@ theorem Antiperiodic.mul_const
 
 中文:
 定理 Antiperiodic.mul_const
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: h.const_smul₀ (MulOpposite.op_ne_zero_iff a).mpr ha
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_ne_zero_iff, h.const_smul, op_ne_zero_iff
@@ -524,7 +524,7 @@ theorem Antiperiodic.mul_const'
 
 中文:
 定理 Antiperiodic.mul_const'
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: by
   simpa only [div_eq_mul_inv] using h.mul_const ha
 
@@ -544,7 +544,7 @@ theorem Antiperiodic.mul_const_inv
 
 中文:
 定理 Antiperiodic.mul_const_inv
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: h.const_inv_smul₀ (MulOpposite.op_ne_zero_iff a).mpr ha
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_ne_zero_iff, h.const_inv_smul, op_ne_zero_iff
@@ -564,7 +564,7 @@ theorem Antiperiodic.div_inv
 
 中文:
 定理 Antiperiodic.div_inv
-  结论: [DivisionSemiring α] [Neg β] (h : Antiperiodic f c) {a : α}
+  结论: [除半环 α] [取负 β] (h : Antiperiodic f c) {a : α}
   证明: by
   simpa only [div_eq_mul_inv] using h.mul_const_inv ha
 
@@ -585,8 +585,8 @@ theorem Int.fract_periodic
   proof: fun a => mod_cast Int.fract_add_intCast a 1
 
 中文:
-定理 Int.fract_periodic
-  条件: (α) [Ring α] [LinearOrder α] [IsStrictOrderedRing α] [FloorRing α]
+定理 整数.fract_periodic
+  条件: (α) [环 α] [线性序 α] [是StrictOrdered环 α] [Floor环 α]
   证明: fun a => mod_cast Int.fract_add_intCast a 1
 
 Depends on / 依赖: Int.fract_add_intCast, fract_add_intCast, mod_cast

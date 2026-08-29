@@ -343,7 +343,7 @@ theorem SupIrred.finset_sup_eq
 
 中文:
 定理 SupIrred.finset_sup_eq
-  条件: (ha : SupIrred a) (h : s.sup f = a)
+  条件: (ha : SupIrred a) (h : s.上确界 f = a)
   结论: 存在 i in s, f i = a
   证明: by
   classical
@@ -381,7 +381,7 @@ theorem SupPrime.le_finset_sup
 中文:
 定理 SupPrime.le_finset_sup
   条件: (ha : SupPrime a)
-  结论: a <= s.sup f ↔ 存在 i in s, a <= f i
+  结论: a <= s.上确界 f ↔ 存在 i in s, a <= f i
   证明: by
   classical
   induction s using Finset.induction with
@@ -419,7 +419,7 @@ theorem exists_supIrred_decomposition
  
 
 中文:
-定理 exists_supIrred_decomposition
+定理 存在_supIrred_decomposition
   条件: (a : α)
   证明: by
   classical
@@ -702,7 +702,7 @@ theorem InfIrred.finset_inf_eq
 
 中文:
 定理 InfIrred.finset_inf_eq
-  结论: InfIrred a -> s.inf f = a -> 存在 i in s, f i = a
+  结论: InfIrred a -> s.下确界 f = a -> 存在 i in s, f i = a
   证明: @SupIrred.finset_sup_eq _ αᵒᵈ _ _ _ _ _
 
 Depends on / 依赖: SupIrred, SupIrred.finset_sup_eq, finset_sup_eq
@@ -722,7 +722,7 @@ theorem InfPrime.finset_inf_le
 中文:
 定理 InfPrime.finset_inf_le
   条件: (ha : InfPrime a)
-  结论: s.inf f <= a ↔ 存在 i in s, f i <= a
+  结论: s.下确界 f <= a ↔ 存在 i in s, f i <= a
   证明: @SupPrime.le_finset_sup _ αᵒᵈ _ _ _ _ _ ha
 
 Depends on / 依赖: SupPrime, SupPrime.le_finset_sup, le_finset_sup
@@ -741,7 +741,7 @@ theorem exists_infIrred_decomposition
   proof: exists_supIrred_decomposition (α := αᵒᵈ) _
 
 中文:
-定理 exists_infIrred_decomposition
+定理 存在_infIrred_decomposition
   条件: (a : α)
   证明: exists_supIrred_decomposition (α := αᵒᵈ) _
 

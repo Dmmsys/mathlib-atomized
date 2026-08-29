@@ -52,12 +52,12 @@ inductive SubsheafClosure
     - amalgamate: {Z : C} {R : Presieve Z} (hR : R in K Z) {y : Presieve.FamilyOfElements F R} (hy : y.Compatible) (hmem : forall ⦃W : C⦄ (r : W ⟶ Z) (hr : R r), K.SubsheafClosure 𝒮 W (y r hr)) {t : F.obj (.op Z)} (ht : y.IsAmalgamation t) : K.SubsheafClosure 𝒮 Z t
 
 中文:
-归纳类型 SubsheafClosure
-  参数: (K : Precoverage C) {F : Cᵒᵖ ⥤ Type w}
+归纳类型 子层闭包
+  参数: (K : Precoverage C) {F : Cᵒᵖ ⥤ 类型 w}
   构造子 (3 个):
-    - base: {Z : C} {a : F.obj (.op Z)} : a in 𝒮 Z -> K.SubsheafClosure 𝒮 Z a
-    - restrict: {Z W : C} (h : Z ⟶ W) {a : F.obj (.op W)} : K.SubsheafClosure 𝒮 W a -> K.SubsheafClosure 𝒮 Z (F.map h.op a)
-    - amalgamate: {Z : C} {R : Presieve Z} (hR : R in K Z) {y : Presieve.FamilyOfElements F R} (hy : y.Compatible) (hmem : 对任意 ⦃W : C⦄ (r : W ⟶ Z) (hr : R r), K.SubsheafClosure 𝒮 W (y r hr)) {t : F.obj (.op Z)} (ht : y.IsAmalgamation t) : K.SubsheafClosure 𝒮 Z t
+    - base: {Z : C} {a : F.obj (.op Z)} : a in 𝒮 Z -> K.子层闭包 𝒮 Z a
+    - restrict: {Z W : C} (h : Z ⟶ W) {a : F.obj (.op W)} : K.子层闭包 𝒮 W a -> K.子层闭包 𝒮 Z (F.map h.op a)
+    - amalgamate: {Z : C} {R : Presieve Z} (hR : R in K Z) {y : Presieve.FamilyOfElements F R} (hy : y.余mpatible) (hmem : 对任意 ⦃W : C⦄ (r : W ⟶ Z) (hr : R r), K.子层闭包 𝒮 W (y r hr)) {t : F.obj (.op Z)} (ht : y.IsAmalgamation t) : K.子层闭包 𝒮 Z t
 -/
 inductive SubsheafClosure (K : Precoverage C) {F : Cᵒᵖ ⥤ Type w}
     (𝒮 : forall Z : C, Set (F.obj (.op Z))) :
@@ -88,7 +88,7 @@ definition subsheafify
 
 中文:
 定义 subsheafify
-  签名: (𝒮 : 对任意 Z : C, Set (F.obj (.op Z)))
+  签名: (𝒮 : 对任意 Z : C, 集合 (F.obj (.op Z)))
   定义体: { x | K.SubsheafClosure 𝒮 U.unop x }
   map _ _ ht := .restrict _ ht
 
@@ -115,7 +115,7 @@ lemma isSheafFor_subsheafify
 
 中文:
 引理 isSheafFor_subsheafify
-  结论: (𝒮 : 对任意 Z : C, Set (F.obj (.op Z))) {X : C} {R : Presieve X}
+  结论: (𝒮 : 对任意 Z : C, 集合 (F.obj (.op Z))) {X : C} {R : Presieve X}
   证明: by
   let G := K.subsheafify 𝒮
   rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
@@ -150,7 +150,7 @@ inductive Witness
 
 中文:
 归纳类型 Witness
-  参数: (ι : C -> Type w)
+  参数: (ι : C -> 类型 w)
   构造子 (3 个):
     - base: (X : C) : ι X -> Witness ι X
     - restrict: {X Y : C} (f : X ⟶ Y) : Witness ι Y -> Witness ι X

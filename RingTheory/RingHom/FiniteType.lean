@@ -50,7 +50,7 @@ theorem finiteType_stableUnderComposition
 
 中文:
 定理 finiteType_stableUnderComposition
-  结论: StableUnderComposition @FiniteType
+  结论: StableUnderComposition @有限型
   证明: by
   introv R hf hg
   exact hg.comp hf
@@ -75,7 +75,7 @@ apply Algebra.FiniteType.equiv (inferInstanceAs <| Algebra.FiniteType R R)
 
 中文:
 定理 finiteType_respectsIso
-  结论: RingHom.RespectsIso @RingHom.FiniteType
+  结论: 环态射.RespectsIso @环态射.有限型
   证明: by
   refine finiteType_stableUnderComposition.respectsIso (fun {R S} _ _ e => ?_)
   algebraize [e.toRingHom]
@@ -106,7 +106,7 @@ theorem finiteType_isStableUnderBaseChange
 
 中文:
 定理 finiteType_isStableUnderBaseChange
-  结论: IsStableUnderBaseChange @FiniteType
+  结论: 是StableUnderBaseChange @有限型
   证明: by
   apply IsStableUnderBaseChange.mk
   · exact finiteType_respectsIso
@@ -135,7 +135,7 @@ theorem finiteType_localizationPreserves
 
 中文:
 定理 finiteType_localizationPreserves
-  结论: RingHom.LocalizationPreserves @RingHom.FiniteType
+  结论: 环态射.LocalizationPreserves @环态射.有限型
   证明: finiteType_isStableUnderBaseChange.localizationPreserves
 
 Depends on / 依赖: finiteType_isStableUnderBaseChange, finiteType_isStableUnderBaseChange.localizationPreserves, localizationPreserves
@@ -153,7 +153,7 @@ theorem localization_away_map_finiteType
 
 中文:
 定理 localization_away_map_finiteType
-  结论: (R S R' S' : 类型u) [CommRing R] [CommRing S]
+  结论: (R S R' S' : 类型u) [交换环 R] [交换环 S]
   证明: finiteType_localizationPreserves.away _ r _ _ hf
 
 Depends on / 依赖: finiteType_localizationPreserves, finiteType_localizationPreserves.away
@@ -178,7 +178,7 @@ theorem finiteType_ofLocalizationSpan
 
 中文:
 定理 finiteType_ofLocalizationSpan
-  结论: RingHom.OfLocalizationSpan @RingHom.FiniteType
+  结论: 环态射.OfLocalizationSpan @环态射.有限型
   证明: by
   refine OfLocalizationSpan.mk _ finiteType_respectsIso (fun s hs h => ?_)
   simp_rw [finiteType_algebraMap] at h ⊢
@@ -204,7 +204,7 @@ theorem finiteType_holdsForLocalizationAway
 
 中文:
 定理 finiteType_holdsForLocalizationAway
-  结论: HoldsForLocalizationAway @FiniteType
+  结论: HoldsForLocalizationAway @有限型
   证明: by
   introv R _
   rw [finiteType_algebraMap]
@@ -233,7 +233,7 @@ theorem finiteType_ofLocalizationSpanTarget
 
 中文:
 定理 finiteType_ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget @FiniteType
+  结论: OfLocalizationSpanTarget @有限型
   证明: by
   introv R hs H
   algebraize [f]
@@ -267,7 +267,7 @@ theorem finiteType_isLocal
 
 中文:
 定理 finiteType_isLocal
-  结论: 命题ertyIsLocal @FiniteType
+  结论: PropertyIsLocal @有限型
   证明: ⟨finiteType_localizationPreserves.away,
     finiteType_ofLocalizationSpanTarget,
     finiteType_ofLocalizationSpanTarget.ofLocalizationSpan

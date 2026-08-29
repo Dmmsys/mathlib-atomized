@@ -39,8 +39,8 @@ lemma AddGroupSeminormClass.isUltrametricDist
     rw [add_assoc]; rw [← add_assoc y]; rw [add_neg_cancel]; rw [zero_add]⟩
 
 中文:
-引理 AddGroupSeminormClass.isUltrametricDist
-  结论: [AddGroup α] [AddGroupSeminormClass F α 实数]
+引理 加法群半范数类.isUltrametricDist
+  结论: [加法群 α] [加法群半范数类 F α 实数]
   证明: ⟨fun x y z => by
     simp +instances only [hd, dist_eq_norm_neg_add,
       AddGroupSeminormClass.toSeminormedAddGroup_norm_eq]

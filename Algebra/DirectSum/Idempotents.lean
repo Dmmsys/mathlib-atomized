@@ -104,7 +104,7 @@ theorem completeOrthogonalIdempotents_idempotent
 
 中文:
 定理 completeOrthogonalIdempotents_idempotent
-  条件: [Fintype I]
+  条件: [有限类型 I]
   证明: isIdempotentElem_idempotent V
   ortho i j hij := by
     simp only

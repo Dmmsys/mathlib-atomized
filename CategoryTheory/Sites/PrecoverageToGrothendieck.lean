@@ -53,10 +53,10 @@ inductive Saturate
 归纳类型 Saturate
   参数: (J : Precoverage C)
   构造子 (4 个):
-    - of: (X : C) (S : Presieve X) (hS : S in J X) : J.Saturate X (Sieve.generate S)
+    - of: (X : C) (S : Presieve X) (hS : S in J X) : J.Saturate X (筛.generate S)
     - top: (X : C) : J.Saturate X ⊤
-    - pullback: (X : C) (S : Sieve X) : J.Saturate X S -> 对任意 (Y : C) (f : Y ⟶ X), J.Saturate Y (S.pullback f)
-    - transitive: (X : C) (S R : Sieve X) : J.Saturate X S -> (对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> J.Saturate Y (R.pullback f)) -> J.Saturate X R
+    - pullback: (X : C) (S : 筛 X) : J.Saturate X S -> 对任意 (Y : C) (f : Y ⟶ X), J.Saturate Y (S.pullback f)
+    - transitive: (X : C) (S R : 筛 X) : J.Saturate X S -> (对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> J.Saturate Y (R.pullback f)) -> J.Saturate X R
 -/
 inductive Saturate (J : Precoverage C) : (X : C) -> Sieve X -> Prop where
   | of (X : C) (S : Presieve X) (hS : S in J X) : J.Saturate X (Sieve.generate S)
@@ -105,7 +105,7 @@ lemma mem_toGrothendieck_iff
 
 中文:
 引理 mem_toGrothendieck_iff
-  条件: {X : C} {S : Sieve X}
+  条件: {X : C} {S : 筛 X}
   证明: .rfl
 
 @[grind .]
@@ -298,7 +298,7 @@ lemma mem_toGrothendieck_iff_of_isStableUnderComposition
 
 中文:
 引理 mem_toGrothendieck_iff_of_isStableUnderComposition
-  结论: [IsStableUnderComposition J]
+  结论: [是StableUnderComposition J]
   证明: by
   refine ⟨fun hS => ?_, fun ⟨R, hR, hle⟩ => ?_⟩
   · induction hS with
@@ -361,7 +361,7 @@ lemma toGrothendieck_toPretopology_eq_toGrothendieck
 
 中文:
 引理 toGrothendieck_toPretopology_eq_toGrothendieck
-  结论: [IsStableUnderComposition J]
+  结论: [是StableUnderComposition J]
   证明: by
   ext
   exact J.mem_toGrothendieck_iff_of_isStableUnderComposition.symm
@@ -388,7 +388,7 @@ lemma Presieve.IsSheaf.isSheafFor_of_mem_precoverage
   simpa [Presieve.isSheafFor_iff_generate] using h (f := 𝟙 S) R hR
 
 中文:
-引理 Presieve.IsSheaf.isSheafFor_of_mem_precoverage
+引理 Presieve.是层.isSheafFor_of_mem_precoverage
   结论: {J : Precoverage C} {P : Cᵒᵖ ⥤ 类型}
   证明: by
   rw [J.isSheaf_toGrothendieck_iff] at h
@@ -550,7 +550,7 @@ definition toPrecoverage
 
 中文:
 定义 toPrecoverage
-  签名: (J : GrothendieckTopology C)
+  签名: (J : Grothendieck拓扑 C)
   定义体: { R | Sieve.generate R in J S }
 
 Depends on / 依赖: Sieve.generate, generate
@@ -568,7 +568,7 @@ lemma mem_toPrecoverage_iff
 
 中文:
 引理 mem_toPrecoverage_iff
-  条件: (J : GrothendieckTopology C) {S : C} (R : Presieve S)
+  条件: (J : Grothendieck拓扑 C) {S : C} (R : Presieve S)
   证明: .rfl
 -/
 lemma mem_toPrecoverage_iff (J : GrothendieckTopology C) {S : C} (R : Presieve S) :
@@ -585,7 +585,7 @@ lemma arrows_mem_toPrecoverage_iff
 
 中文:
 引理 arrows_mem_toPrecoverage_iff
-  条件: (J : GrothendieckTopology C) {S : C} (R : Sieve S)
+  条件: (J : Grothendieck拓扑 C) {S : C} (R : 筛 S)
   证明: by
   rw [mem_toPrecoverage_iff]; rw [Sieve.generate_sieve]
 
@@ -711,8 +711,8 @@ lemma GrothendieckTopology.toPrecoverage_top
   proof: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).u_top
 
 中文:
-引理 GrothendieckTopology.toPrecoverage_top
-  结论: toPrecoverage (⊤ : GrothendieckTopology C) = ⊤
+引理 Grothendieck拓扑.toPrecoverage_top
+  结论: toPrecoverage (⊤ : Grothendieck拓扑 C) = ⊤
   证明: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).u_top
 
 Depends on / 依赖: Precoverage, Precoverage.galoisConnection_toGrothendieck_toPrecoverage, galoisConnection_toGrothendieck_toPrecoverage, u_top
@@ -732,7 +732,7 @@ lemma Precoverage.toGrothendieck_monotone
 
 中文:
 引理 Precoverage.toGrothendieck_monotone
-  结论: Monotone (toGrothendieck (C := C))
+  结论: 递增 (toGrothendieck (C := C))
   证明: (galoisConnection_toGrothendieck_toPrecoverage C).monotone_l
 
 @[gcongr]
@@ -774,8 +774,8 @@ lemma GrothendieckTopology.toPrecoverage_monotone
   proof: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).monotone_u
 
 中文:
-引理 GrothendieckTopology.toPrecoverage_monotone
-  结论: Monotone (toPrecoverage (C := C))
+引理 Grothendieck拓扑.toPrecoverage_monotone
+  结论: 递增 (toPrecoverage (C := C))
   证明: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).monotone_u
 -/
 lemma GrothendieckTopology.toPrecoverage_monotone : Monotone (toPrecoverage (C := C)) :=
@@ -809,8 +809,8 @@ lemma GrothendieckTopology.toGrothendieck_toPrecoverage_le
   proof: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).l_u_le _
 
 中文:
-引理 GrothendieckTopology.toGrothendieck_toPrecoverage_le
-  条件: (J : GrothendieckTopology C)
+引理 Grothendieck拓扑.toGrothendieck_toPrecoverage_le
+  条件: (J : Grothendieck拓扑 C)
   证明: (Precoverage.galoisConnection_toGrothendieck_toPrecoverage C).l_u_le _
 
 Depends on / 依赖: Precoverage, Precoverage.galoisConnection_toGrothendieck_toPrecoverage, galoisConnection_toGrothendieck_toPrecoverage, l_u_le

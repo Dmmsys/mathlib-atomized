@@ -63,7 +63,7 @@ definition SuperpolynomialDecay
 
 中文:
 定义 SuperpolynomialDecay
-  签名: {α β : 类型} [TopologicalSpace β] [CommSemiring β] (l : Filter α)
+  签名: {α β : 类型} [拓扑空间 β] [交换半环 β] (l : 滤子 α)
   定义体: forall n : Nat, Tendsto (fun a : α => k a ^ n * f a) l (𝓝 0)
 
 Depends on / 依赖: Tendsto
@@ -132,7 +132,7 @@ theorem superpolynomialDecay_zero
 
 中文:
 定理 superpolynomialDecay_zero
-  条件: (l : Filter α) (k : α -> β)
+  条件: (l : 滤子 α) (k : α -> β)
   结论: SuperpolynomialDecay l k 0
   证明: fun z => by simpa only [Pi.zero_apply, mul_zero] using tendsto_const_nhds
 
@@ -152,7 +152,7 @@ theorem SuperpolynomialDecay.add
 
 中文:
 定理 SuperpolynomialDecay.add
-  结论: [ContinuousAdd β] (hf : SuperpolynomialDecay l k f)
+  结论: [连续加法 β] (hf : SuperpolynomialDecay l k f)
   证明: fun z => by
   simpa only [mul_add, add_zero, Pi.add_apply] using (hf z).add (hg z)
 
@@ -173,7 +173,7 @@ theorem SuperpolynomialDecay.mul
 
 中文:
 定理 SuperpolynomialDecay.mul
-  结论: [ContinuousMul β] (hf : SuperpolynomialDecay l k f)
+  结论: [连续乘法 β] (hf : SuperpolynomialDecay l k f)
   证明: fun z => by
   simpa only [mul_assoc, one_mul, mul_zero, pow_zero] using! (hf z).mul (hg 0)
 
@@ -194,7 +194,7 @@ theorem SuperpolynomialDecay.mul_const
 
 中文:
 定理 SuperpolynomialDecay.mul_const
-  条件: [ContinuousMul β] (hf : SuperpolynomialDecay l k f) (c : β)
+  条件: [连续乘法 β] (hf : SuperpolynomialDecay l k f) (c : β)
   证明: fun z => by
   simpa only [← mul_assoc, zero_mul] using Tendsto.mul_const c (hf z)
 
@@ -214,7 +214,7 @@ theorem SuperpolynomialDecay.const_mul
 
 中文:
 定理 SuperpolynomialDecay.const_mul
-  条件: [ContinuousMul β] (hf : SuperpolynomialDecay l k f) (c : β)
+  条件: [连续乘法 β] (hf : SuperpolynomialDecay l k f) (c : β)
   证明: (hf.mul_const c).congr fun _ => mul_comm _ _
 
 Depends on / 依赖: hf.mul_const, mul_comm, mul_const
@@ -324,7 +324,7 @@ theorem SuperpolynomialDecay.polynomial_mul
 
 中文:
 定理 SuperpolynomialDecay.polynomial_mul
-  结论: [ContinuousAdd β] [ContinuousMul β]
+  结论: [连续加法 β] [连续乘法 β]
   证明: Polynomial.induction_on' p (fun p q hp hq => by simpa [add_mul] using! hp.add hq) fun n c => by
     simpa [mul_assoc] using! (hf.param_pow_mul n).const_mul c
 
@@ -346,7 +346,7 @@ theorem SuperpolynomialDecay.mul_polynomial
 
 中文:
 定理 SuperpolynomialDecay.mul_polynomial
-  结论: [ContinuousAdd β] [ContinuousMul β]
+  结论: [连续加法 β] [连续乘法 β]
   证明: (hf.polynomial_mul p).congr fun _ => mul_comm _ _
 
 Depends on / 依赖: hf.polynomial_mul, mul_comm, polynomial_mul
@@ -511,7 +511,7 @@ theorem superpolynomialDecay_mul_const_iff
 
 中文:
 定理 superpolynomialDecay_mul_const_iff
-  条件: [ContinuousMul β] {c : β} (hc0 : c != 0)
+  条件: [连续乘法 β] {c : β} (hc0 : c != 0)
   证明: ⟨fun h => (h.mul_const c⁻¹).congr fun x => by simp [mul_assoc, mul_inv_cancel₀ hc0], fun h =>
     h.mul_const c⟩
 
@@ -533,7 +533,7 @@ theorem superpolynomialDecay_const_mul_iff
 
 中文:
 定理 superpolynomialDecay_const_mul_iff
-  条件: [ContinuousMul β] {c : β} (hc0 : c != 0)
+  条件: [连续乘法 β] {c : β} (hc0 : c != 0)
   证明: ⟨fun h => (h.const_mul c⁻¹).congr fun x => by simp [← mul_assoc, inv_mul_cancel₀ hc0], fun h =>
     h.const_mul c⟩
 
@@ -567,7 +567,7 @@ theorem superpolynomialDecay_iff_abs_isBoundedUnder
 
 中文:
 定理 superpolynomialDecay_iff_abs_isBoundedUnder
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: by
   refine
     ⟨fun h z => Tendsto.isBoundedUnder_le (Tendsto.abs (h z)), fun h =>
@@ -614,7 +614,7 @@ theorem superpolynomialDecay_iff_zpow_tendsto_zero
 
 中文:
 定理 superpolynomialDecay_iff_zpow_tendsto_zero
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: by
   refine ⟨fun h z => ?_, fun h n => by simpa only [zpow_natCast] using! h (n : Int)⟩
   by_cases! hz : 0 <= z
@@ -654,7 +654,7 @@ theorem SuperpolynomialDecay.param_zpow_mul
 
 中文:
 定理 SuperpolynomialDecay.param_zpow_mul
-  结论: (hk : Tendsto k l atTop)
+  结论: (hk : 收敛 k l atTop)
   证明: by
   rw [superpolynomialDecay_iff_zpow_tendsto_zero _ hk] at hf ⊢
   refine fun z' => (hf <| z' + z).congr' ((hk.eventually_ne_atTop 0).mono fun x hx => ?_)
@@ -679,7 +679,7 @@ theorem SuperpolynomialDecay.mul_param_zpow
 
 中文:
 定理 SuperpolynomialDecay.mul_param_zpow
-  结论: (hk : Tendsto k l atTop)
+  结论: (hk : 收敛 k l atTop)
   证明: (hf.param_zpow_mul hk z).congr fun _ => mul_comm _ _
 
 Depends on / 依赖: hf.param_zpow_mul, mul_comm, param_zpow_mul
@@ -699,7 +699,7 @@ theorem SuperpolynomialDecay.inv_param_mul
 
 中文:
 定理 SuperpolynomialDecay.inv_param_mul
-  结论: (hk : Tendsto k l atTop)
+  结论: (hk : 收敛 k l atTop)
   证明: by
   simpa using! hf.param_zpow_mul hk (-1)
 
@@ -719,7 +719,7 @@ theorem SuperpolynomialDecay.param_inv_mul
 
 中文:
 定理 SuperpolynomialDecay.param_inv_mul
-  结论: (hk : Tendsto k l atTop)
+  结论: (hk : 收敛 k l atTop)
   证明: (hf.inv_param_mul hk).congr fun _ => mul_comm _ _
 
 Depends on / 依赖: hf.inv_param_mul, inv_param_mul, mul_comm
@@ -743,7 +743,7 @@ theorem superpolynomialDecay_param_mul_iff
 
 中文:
 定理 superpolynomialDecay_param_mul_iff
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: ⟨fun h =>
     (h.inv_param_mul hk).congr'
       ((hk.eventually_ne_atTop 0).mono fun x hx => by simp [← mul_assoc, inv_mul_cancel₀ hx]),
@@ -769,7 +769,7 @@ theorem superpolynomialDecay_mul_param_iff
 
 中文:
 定理 superpolynomialDecay_mul_param_iff
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: by
   simpa [mul_comm k] using superpolynomialDecay_param_mul_iff f hk
 
@@ -794,7 +794,7 @@ theorem superpolynomialDecay_param_pow_mul_iff
 
 中文:
 定理 superpolynomialDecay_param_pow_mul_iff
-  条件: (hk : Tendsto k l atTop) (n : 自然数)
+  条件: (hk : 收敛 k l atTop) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -823,7 +823,7 @@ theorem superpolynomialDecay_mul_param_pow_iff
 
 中文:
 定理 superpolynomialDecay_mul_param_pow_iff
-  条件: (hk : Tendsto k l atTop) (n : 自然数)
+  条件: (hk : 收敛 k l atTop) (n : 自然数)
   证明: by
   simpa [mul_comm f] using superpolynomialDecay_param_pow_mul_iff f hk n
 
@@ -895,7 +895,7 @@ theorem superpolynomialDecay_iff_isBigO
 
 中文:
 定理 superpolynomialDecay_iff_isBigO
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: by
   refine (superpolynomialDecay_iff_zpow_tendsto_zero f hk).trans ?_
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0
@@ -935,7 +935,7 @@ theorem superpolynomialDecay_iff_isLittleO
 
 中文:
 定理 superpolynomialDecay_iff_isLittleO
-  条件: (hk : Tendsto k l atTop)
+  条件: (hk : 收敛 k l atTop)
   证明: by
   refine ⟨fun h z => ?_, fun h => (superpolynomialDecay_iff_isBigO f hk).2 fun z => (h z).isBigO⟩
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0

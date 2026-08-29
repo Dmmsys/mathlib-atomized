@@ -53,7 +53,7 @@ lemma Metric.exists_subseq_summable_dist_of_cauchySeq
 exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (
 
 中文:
-引理 Metric.exists_subseq_summable_dist_of_cauchySeq
+引理 Metric.存在_subseq_summable_dist_of_cauchySeq
   条件: (u : 自然数 -> α) (hu : CauchySeq u)
   证明: by
   obtain ⟨f, hf₁, hf₂⟩ := Metric.exists_subseq_bounded_of_cauchySeq u hu
@@ -93,7 +93,7 @@ lemma NormedAddCommGroup.completeSpace_of_summable_imp_tendsto
     e
 
 中文:
-引理 NormedAddCommGroup.completeSpace_of_summable_imp_tendsto
+引理 赋范交换加群.completeSpace_of_summable_imp_tendsto
   证明: by
   apply Metric.complete_of_cauchySeq_tendsto
   intro u hu
@@ -136,8 +136,8 @@ refine cauchySeq_tendsto_of_complete cauchySeq_of_summable_dist ?_
   simp [dist_eq_norm, sum_range_succ, hu]
 
 中文:
-引理 NormedAddCommGroup.summable_imp_tendsto_of_complete
-  结论: [CompleteSpace E] (u : 自然数 -> E)
+引理 赋范交换加群.summable_imp_tendsto_of_complete
+  结论: [完备空间 E] (u : 自然数 -> E)
   证明: by
 refine cauchySeq_tendsto_of_complete cauchySeq_of_summable_dist ?_
   simp [dist_eq_norm, sum_range_succ, hu]
@@ -157,7 +157,7 @@ lemma NormedAddCommGroup.summable_imp_tendsto_iff_completeSpace
   proof: ⟨completeSpace_of_summable_imp_tendsto, fun _ u hu => summable_imp_tendsto_of_complete u hu⟩
 
 中文:
-引理 NormedAddCommGroup.summable_imp_tendsto_iff_completeSpace
+引理 赋范交换加群.summable_imp_tendsto_iff_completeSpace
   证明: ⟨completeSpace_of_summable_imp_tendsto, fun _ u hu => summable_imp_tendsto_of_complete u hu⟩
 
 Depends on / 依赖: completeSpace_of_summable_imp_tendsto, summable_imp_tendsto_of_complete

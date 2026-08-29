@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnoughInjectives (ModuleCat.{v} 整数)
+  签名: 有足够单射 (模范畴.{v} 整数)
   定义体: EnoughInjectives.of_equivalence (forget₂ (ModuleCat Int) AddCommGrpCat)
 
 Depends on / 依赖: AddCommGrpCat, EnoughInjectives, EnoughInjectives.of_equivalence, ModuleCat, of_equivalence
@@ -51,8 +51,8 @@ lemma ModuleCat.enoughInjectives
   proof: EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap Int R))
 
 中文:
-引理 ModuleCat.enoughInjectives
-  结论: EnoughInjectives (ModuleCat.{max v u} R)
+引理 模范畴.enoughInjectives
+  结论: 有足够单射 (模范畴.{最大值 v u} R)
   证明: EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap Int R))
 
 Depends on / 依赖: EnoughInjectives, EnoughInjectives.of_adjunction, ModuleCat, ModuleCat.restrictCoextendScalarsAdj, algebraMap, of_adjunction, restrictCoextendScalarsAdj
@@ -72,7 +72,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] : EnoughInjectives (ModuleCat.{v} R)
+  签名: R] : 有足够单射 (模范畴.{v} R)
   定义体: letI := enoughInjectives.{v} (Shrink.{v} R)
   EnoughInjectives.of_equivalence (restrictScalars (equivShrink R).symm.ringEquiv.toRingHom)
 

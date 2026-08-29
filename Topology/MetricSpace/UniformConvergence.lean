@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (α ->ᵤ β)
+  签名: PseudoEMetric空间 (α ->ᵤ β)
   定义体: by simp [edist_def]
   edist_comm := by simp [edist_def, edist_comm]
   edist_triangle f₁ f₂ f₃ := calc
@@ -227,7 +227,7 @@ lemma lipschitzOnWith_iff
 
 中文:
 引理 lipschitzOnWith_iff
-  条件: {f : γ -> α ->ᵤ β} {K : 实数>=0} {s : Set γ}
+  条件: {f : γ -> α ->ᵤ β} {K : 实数>=0} {s : 集合 γ}
   证明: by
   simp [lipschitzOnWith_iff_restrict, lipschitzWith_iff]
   rfl
@@ -249,7 +249,7 @@ lemma lipschitzOnWith_ofFun_iff
 
 中文:
 引理 lipschitzOnWith_ofFun_iff
-  条件: {f : γ -> α -> β} {K : 实数>=0} {s : Set γ}
+  条件: {f : γ -> α -> β} {K : 实数>=0} {s : 集合 γ}
   证明: lipschitzOnWith_iff
 
 Depends on / 依赖: lipschitzOnWith_iff
@@ -271,7 +271,7 @@ lemma _root_.LipschitzOnWith.uniformEquicontinuousOn
 
 中文:
 引理 _root_.LipschitzOnWith.uniformEquicontinuousOn
-  结论: (f : α -> γ -> β) (K : 实数>=0) {s : Set γ}
+  结论: (f : α -> γ -> β) (K : 实数>=0) {s : 集合 γ}
   证明: by
   rw [uniformEquicontinuousOn_iff_uniformContinuousOn]
   rw [← lipschitzOnWith_ofFun_iff] at h
@@ -350,8 +350,8 @@ have : BddAbove .range fun x => dist (toFun f x) (toFun g x) := by
      
 
 中文:
-实例 [BoundedSpace
-  签名: β] : PseudoMetricSpace (α ->ᵤ β)
+实例 [有界空间
+  签名: β] : 伪度量空间 (α ->ᵤ β)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun f g => ⨆ x, dist (toFun f x) (toFun g x))
     (fun _ _ => Real.iSup_nonneg fun i => dist_nonneg)
@@ -387,7 +387,7 @@ lemma dist_def
 
 中文:
 引理 dist_def
-  条件: [BoundedSpace β] (f g : α ->ᵤ β)
+  条件: [有界空间 β] (f g : α ->ᵤ β)
   证明: rfl
 -/
 lemma dist_def [BoundedSpace β] (f g : α ->ᵤ β) :
@@ -405,7 +405,7 @@ lemma dist_le
 
 中文:
 引理 dist_le
-  条件: [BoundedSpace β] {f g : α ->ᵤ β} {C : 实数} (hC : 0 <= C)
+  条件: [有界空间 β] {f g : α ->ᵤ β} {C : 实数} (hC : 0 <= C)
   证明: by
   simp_rw [dist_edist, ← ENNReal.le_ofReal_iff_toReal_le (edist_ne_top _ _) hC, edist_le]
 
@@ -428,8 +428,8 @@ refine lt_of_le_of_lt ?_ .ediam_ne_top.lt_top BoundedSpace.bounded_univ (α := �
     exact fun f g x => Metric.edist_le_ediam_of_mem (Set.mem_univ _) (Set
 
 中文:
-实例 [BoundedSpace
-  签名: β] : BoundedSpace (α ->ᵤ β) where
+实例 [有界空间
+  签名: β] : 有界空间 (α ->ᵤ β) where
   定义体: by
     rw [Metric.isBounded_iff_ediam_ne_top]; rw [← lt_top_iff_ne_top]
 refine lt_of_le_of_lt ?_ .ediam_ne_top.lt_top BoundedSpace.bounded_univ (α := β)
@@ -460,7 +460,7 @@ lemma isometry_ofFun_boundedContinuousFunction
 
 中文:
 引理 isometry_ofFun_boundedContinuousFunction
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   simp [Isometry, edist_def, edist_eq_iSup]
 
@@ -481,7 +481,7 @@ lemma isometry_ofFun_continuousMap
 
 中文:
 引理 isometry_ofFun_continuousMap
-  条件: [TopologicalSpace α] [CompactSpace α]
+  条件: [拓扑空间 α] [紧空间 α]
   证明: isometry_ofFun_boundedContinuousFunction.comp
 .isometry ContinuousMap.isometryEquivBoundedOfCompact α β
 
@@ -503,7 +503,7 @@ lemma edist_continuousMapMk
 
 中文:
 引理 edist_continuousMapMk
-  结论: [TopologicalSpace α] [CompactSpace α]
+  结论: [拓扑空间 α] [紧空间 α]
   证明: by
   simp [← isometry_ofFun_continuousMap.edist_eq]
 
@@ -542,8 +542,8 @@ lemma continuous_of_forall_lipschitzWith
 @[nolint unusedArguments]
 
 中文:
-引理 continuous_of_forall_lipschitzWith
-  结论: {f : γ -> α ->ᵤ[𝔖] β} (K : Set α -> 实数>=0)
+引理 continuous_of_对任意_lipschitzWith
+  结论: {f : γ -> α ->ᵤ[𝔖] β} (K : 集合 α -> 实数>=0)
   证明: by
   rw [UniformOnFun.continuous_rng_iff]
   refine fun s hs => LipschitzWith.continuous (K := K s) ?_
@@ -574,7 +574,7 @@ instance [Finite
   body: ⨆ x in ⋃₀ 𝔖, edist (toFun 𝔖 f x) (toFun 𝔖 g x)
 
 中文:
-实例 [Finite
+实例 [有限
   签名: 𝔖] : EDist (α ->ᵤ[𝔖] β) where
   定义体: ⨆ x in ⋃₀ 𝔖, edist (toFun 𝔖 f x) (toFun 𝔖 g x)
 -/
@@ -591,7 +591,7 @@ lemma edist_def
 
 中文:
 引理 edist_def
-  条件: [Finite 𝔖] (f g : α ->ᵤ[𝔖] β)
+  条件: [有限 𝔖] (f g : α ->ᵤ[𝔖] β)
   证明: rfl
 -/
 lemma edist_def [Finite 𝔖] (f g : α ->ᵤ[𝔖] β) :
@@ -609,7 +609,7 @@ lemma edist_def'
 
 中文:
 引理 edist_def'
-  条件: [Finite 𝔖] (f g : α ->ᵤ[𝔖] β)
+  条件: [有限 𝔖] (f g : α ->ᵤ[𝔖] β)
   证明: by
   simp [edist_def, iSup_and, iSup_comm (ι := α)]
 
@@ -629,7 +629,7 @@ lemma edist_eq_restrict_sUnion
 
 中文:
 引理 edist_eq_restrict_sUnion
-  条件: [Finite 𝔖] {f g : α ->ᵤ[𝔖] β}
+  条件: [有限 𝔖] {f g : α ->ᵤ[𝔖] β}
   证明: iSup_subtype'
 
 Depends on / 依赖: iSup_subtype
@@ -652,7 +652,7 @@ lemma edist_eq_pi_restrict
 
 中文:
 引理 edist_eq_pi_restrict
-  条件: [Fintype 𝔖] {f g : α ->ᵤ[𝔖] β}
+  条件: [有限类型 𝔖] {f g : α ->ᵤ[𝔖] β}
   证明: by
   simp_rw [edist_def', iSup_subtype', edist_pi_def, Finset.sup_univ_eq_iSup]
   rfl
@@ -684,7 +684,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (α ->ᵤ[𝔖] β)
+  签名: PseudoEMetric空间 (α ->ᵤ[𝔖] β)
   定义体: by simp [edist_eq_restrict_sUnion]
   edist_comm := by simp [edist_eq_restrict_sUnion, edist_comm]
   edist_triangle f₁ f₂ f₃ := by simp [edist_eq_restrict_sUnion, edist_triangle]
@@ -763,7 +763,7 @@ lemma lipschitzOnWith_iff
 
 中文:
 引理 lipschitzOnWith_iff
-  条件: {f : γ -> α ->ᵤ[𝔖] β} {K : 实数>=0} {s : Set γ}
+  条件: {f : γ -> α ->ᵤ[𝔖] β} {K : 实数>=0} {s : 集合 γ}
   证明: by
   simp [lipschitzOnWith_iff_restrict, lipschitzWith_iff]
   rfl
@@ -845,7 +845,7 @@ lemma lipschitzWith_one_ofFun_toFun'
 
 中文:
 引理 lipschitzWith_one_ofFun_toFun'
-  条件: [Finite 𝔗] (h : ⋃₀ 𝔖 subseteq ⋃₀ 𝔗)
+  条件: [有限 𝔗] (h : ⋃₀ 𝔖 subseteq ⋃₀ 𝔗)
   证明: lipschitzWith_iff.mpr fun _x hx => lipschitzWith_eval (h hx)
 
 Depends on / 依赖: lipschitzWith_eval, lipschitzWith_iff, lipschitzWith_iff.mpr
@@ -864,7 +864,7 @@ lemma lipschitzWith_restrict
 
 中文:
 引理 lipschitzWith_restrict
-  条件: (s : Set α) (hs : s in 𝔖)
+  条件: (s : 集合 α) (hs : s in 𝔖)
   证明: UniformFun.lipschitzWith_iff.mpr fun x => lipschitzWith_eval ⟨s, hs, x.2⟩
 
 Depends on / 依赖: UniformFun, UniformFun.lipschitzWith_iff.mpr, lipschitzWith_eval, lipschitzWith_iff
@@ -884,7 +884,7 @@ lemma isometry_restrict
 
 中文:
 引理 isometry_restrict
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simp [Isometry, edist_def, UniformFun.edist_def, iSup_subtype]
 
@@ -915,8 +915,8 @@ instance [BoundedSpace
       have : BddAbove (.range fun x : ⋃₀ 𝔖 => dist (
 
 中文:
-实例 [BoundedSpace
-  签名: β] : PseudoMetricSpace (α ->ᵤ[𝔖] β)
+实例 [有界空间
+  签名: β] : 伪度量空间 (α ->ᵤ[𝔖] β)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun f g => ⨆ x : ⋃₀ 𝔖, dist (toFun 𝔖 f x) (toFun 𝔖 g x))
     (fun _ _ => Real.iSup_nonneg fun i => dist_nonneg)
@@ -955,8 +955,8 @@ instance [BoundedSpace
     exact ⟨UniformFun.ofFun (toFun 𝔖 f), by simp⟩
 
 中文:
-实例 [BoundedSpace
-  签名: β] : BoundedSpace (α ->ᵤ[𝔖] β) where
+实例 [有界空间
+  签名: β] : 有界空间 (α ->ᵤ[𝔖] β) where
   定义体: by
 .isBounded_image (.all Set.univ) convert! lipschitzWith_one_ofFun_toFun (𝔖 := 𝔖) (β := β)
     ext f
@@ -983,7 +983,7 @@ lemma edist_continuousRestrict
 
 中文:
 引理 edist_continuousRestrict
-  结论: [TopologicalSpace α] {f g : α ->ᵤ[𝔖] β}
+  结论: [拓扑空间 α] {f g : α ->ᵤ[𝔖] β}
   证明: by
   simp [ContinuousMap.edist_eq_iSup, iSup_subtype, edist_def]
 
@@ -1006,7 +1006,7 @@ lemma edist_continuousRestrict_of_singleton
 
 中文:
 引理 edist_continuousRestrict_of_singleton
-  结论: [TopologicalSpace α] {s : Set α}
+  结论: [拓扑空间 α] {s : 集合 α}
   证明: by
   simp [ContinuousMap.edist_eq_iSup, iSup_subtype, edist_def]
 

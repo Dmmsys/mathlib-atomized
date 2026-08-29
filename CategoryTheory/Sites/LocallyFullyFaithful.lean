@@ -50,7 +50,7 @@ definition Functor.imageSieve
 @[simp]
 
 中文:
-定义 Functor.imageSieve
+定义 函子.imageSieve
   签名: {U V : C} (f : G.obj U ⟶ G.obj V)
   定义体: exists l, G.map l = G.map i ≫ f
   downward_closed := by
@@ -79,7 +79,7 @@ lemma Functor.imageSieve_map
   ext W g; simpa using ⟨g ≫ f, by simp⟩
 
 中文:
-引理 Functor.imageSieve_map
+引理 函子.imageSieve_map
   条件: {U V : C} (f : U ⟶ V)
   结论: G.imageSieve (G.map f) = ⊤
   证明: by
@@ -104,7 +104,7 @@ definition Sieve.equalizer
 @[simp]
 
 中文:
-定义 Sieve.equalizer
+定义 筛.equalizer
   签名: {U V : C} (f₁ f₂ : U ⟶ V)
   定义体: i ≫ f₁ = i ≫ f₂
   downward_closed := by aesop
@@ -126,7 +126,7 @@ lemma Sieve.equalizer_self
   proof: by ext; simp
 
 中文:
-引理 Sieve.equalizer_self
+引理 筛.equalizer_self
   条件: {U V : C} (f : U ⟶ V)
   结论: equalizer f f = ⊤
   证明: by ext; simp
@@ -142,7 +142,7 @@ lemma Sieve.equalizer_eq_equalizerSieve
   proof: rfl
 
 中文:
-引理 Sieve.equalizer_eq_equalizerSieve
+引理 筛.equalizer_eq_equalizerSieve
   条件: {U V : C} (f₁ f₂ : U ⟶ V)
   证明: rfl
 
@@ -160,8 +160,8 @@ lemma Functor.imageSieve_eq_imageSieve
   proof: rfl
 
 中文:
-引理 Functor.imageSieve_eq_imageSieve
-  结论: {D : 类型uD} [Category.{vC} D] (G : C ⥤ D) {U V : C}
+引理 函子.imageSieve_eq_imageSieve
+  结论: {D : 类型uD} [范畴.{vC} D] (G : C ⥤ D) {U V : C}
   证明: rfl
 -/
 lemma Functor.imageSieve_eq_imageSieve {D : Type uD} [Category.{vC} D] (G : C ⥤ D) {U V : C}
@@ -182,7 +182,7 @@ class IsLocallyFull
     - functorPushforward_imageSieve_mem : forall {U V} (f : G.obj U ⟶ G.obj V), (G.imageSieve f).functorPushforward G in K _
 
 中文:
-类 IsLocallyFull
+类 是LocallyFull
   参数: : 命题 where
   公理与运算 (1 个):
     - functorPushforward_imageSieve_mem : 对任意 {U V} (f : G.obj U ⟶ G.obj V), (G.imageSieve f).functorPushforward G in K _
@@ -201,10 +201,10 @@ class IsLocallyFaithful
     - functorPushforward_equalizer_mem : forall {U V : C} (f₁ f₂ : U ⟶ V), G.map f₁ = G.map f₂ -> (Sieve.equalizer f₁ f₂).functorPushforward G in K _
 
 中文:
-类 IsLocallyFaithful
+类 是LocallyFaithful
   参数: : 命题 where
   公理与运算 (1 个):
-    - functorPushforward_equalizer_mem : 对任意 {U V : C} (f₁ f₂ : U ⟶ V), G.map f₁ = G.map f₂ -> (Sieve.equalizer f₁ f₂).functorPushforward G in K _
+    - functorPushforward_equalizer_mem : 对任意 {U V : C} (f₁ f₂ : U ⟶ V), G.map f₁ = G.map f₂ -> (筛.equalizer f₁ f₂).functorPushforward G in K _
 -/
 class IsLocallyFaithful : Prop where
   functorPushforward_equalizer_mem : forall {U V : C} (f₁ f₂ : U ⟶ V), G.map f₁ = G.map f₂ ->
@@ -220,7 +220,7 @@ lemma functorPushforward_imageSieve_mem
 
 中文:
 引理 functorPushforward_imageSieve_mem
-  条件: [G.IsLocallyFull K] {U V} (f : G.obj U ⟶ G.obj V)
+  条件: [G.是LocallyFull K] {U V} (f : G.obj U ⟶ G.obj V)
   证明: Functor.IsLocallyFull.functorPushforward_imageSieve_mem _
 
 Depends on / 依赖: Functor, Functor.IsLocallyFull.functorPushforward_imageSieve_mem, IsLocallyFull, functorPushforward_imageSieve_mem
@@ -263,8 +263,8 @@ theorem IsLocallyFull.ext
   simp [h iWX iWY e]
 
 中文:
-定理 IsLocallyFull.ext
-  结论: [G.IsLocallyFull K]
+定理 是LocallyFull.ext
+  结论: [G.是LocallyFull K]
   证明: by
   apply (((isSheaf_iff_isSheaf_of_type _ _).1 ℱ.property) _
     (G.functorPushforward_imageSieve_mem K i)).isSeparatedFor.ext
@@ -296,8 +296,8 @@ theorem IsLocallyFaithful.ext
   simp [h iWX hiWX]
 
 中文:
-定理 IsLocallyFaithful.ext
-  结论: [G.IsLocallyFaithful K] (ℱ : Sheaf K 类型)
+定理 是LocallyFaithful.ext
+  结论: [G.是LocallyFaithful K] (ℱ : 层 K 类型)
   证明: by
   apply (((isSheaf_iff_isSheaf_of_type _ _).1 ℱ.property) _
     (G.functorPushforward_equalizer_mem K i₁ i₂ e)).isSeparatedFor.ext

@@ -62,11 +62,11 @@ structure OpenPartialHomeomorph
 
 中文:
 结构 OpenPartialHomeomorph
-  参数: (X : 类型) (Y : 类型) [TopologicalSpace X]
+  参数: (X : 类型) (Y : 类型) [拓扑空间 X]
   继承: PartialHomeomorph X Y
   公理与运算 (2 个):
-    - open_source : IsOpen source
-    - open_target : IsOpen target
+    - open_source : 是开集 source
+    - open_target : 是开集 target
 -/
 structure OpenPartialHomeomorph (X : Type*) (Y : Type*) [TopologicalSpace X]
     [TopologicalSpace Y] extends PartialHomeomorph X Y where
@@ -235,7 +235,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (e : PartialEquiv X Y) (h₁ h₂ h₃ h₄)
+  条件: (e : 部分等价 X Y) (h₁ h₂ h₃ h₄)
   证明: rfl
 
 @[deprecated (since := "2026-05-20")] alias mk_coe := coe_mk
@@ -261,7 +261,7 @@ theorem coe_mk_symm
 
 中文:
 定理 coe_mk_symm
-  条件: (e : PartialEquiv X Y) (h₁ h₂ h₃ h₄)
+  条件: (e : 部分等价 X Y) (h₁ h₂ h₃ h₄)
   证明: rfl
 
 @[deprecated (since := "2026-05-20")] alias mk_coe_symm := coe_mk_symm
@@ -596,7 +596,7 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  结论: MapsTo e e.source e.target
+  结论: 映射到 e e.source e.target
   证明: fun _ => e.map_source
 -/
 protected theorem mapsTo : MapsTo e e.source e.target := fun _ => e.map_source
@@ -613,7 +613,7 @@ theorem mapsTo_symm
 
 中文:
 定理 mapsTo_symm
-  结论: MapsTo e.symm e.target e.source
+  结论: 映射到 e.symm e.target e.source
   证明: e.symm.mapsTo
 
 @[deprecated (since := "2026-05-28")] alias symm_mapsTo := OpenPartialHomeomorph.mapsTo_symm
@@ -679,7 +679,7 @@ theorem injOn
 
 中文:
 定理 injOn
-  结论: InjOn e e.source
+  结论: 单射限制 e e.source
   证明: e.leftInvOn.injOn
 -/
 protected theorem injOn : InjOn e e.source :=
@@ -695,7 +695,7 @@ theorem bijOn
 
 中文:
 定理 bijOn
-  结论: BijOn e e.source e.target
+  结论: 双射限制 e e.source e.target
   证明: e.invOn.bijOn e.mapsTo e.mapsTo_symm
 -/
 protected theorem bijOn : BijOn e e.source e.target :=
@@ -711,7 +711,7 @@ theorem surjOn
 
 中文:
 定理 surjOn
-  结论: SurjOn e e.source e.target
+  结论: 满射限制 e e.source e.target
   证明: e.bijOn.surjOn
 -/
 protected theorem surjOn : SurjOn e e.source e.target :=
@@ -734,8 +734,8 @@ definition _root_.Homeomorph.toOpenPartialHomeomorphOfImageEq
   open_target := by simpa [← h]
 
 中文:
-定义 _root_.Homeomorph.toOpenPartialHomeomorphOfImageEq
-  签名: (e : X ≃ₜ Y) (s : Set X) (hs : IsOpen s)
+定义 _root_.同胚.toOpenPartialHomeomorphOfImageEq
+  签名: (e : X ≃ₜ Y) (s : 集合 X) (hs : 是开集 s)
   定义体: e.toPartialHomeomorphOfImageEq s t h
   open_source := hs
   open_target := by simpa [← h]
@@ -760,7 +760,7 @@ definition _root_.Homeomorph.toOpenPartialHomeomorph
     by rw [image_univ, e.surjective.range_eq]
 
 中文:
-定义 _root_.Homeomorph.toOpenPartialHomeomorph
+定义 _root_.同胚.toOpenPartialHomeomorph
   签名: (e : X ≃ₜ Y)
   定义体: e.toOpenPartialHomeomorphOfImageEq univ isOpen_univ univ
     by rw [image_univ, e.surjective.range_eq]
@@ -785,7 +785,7 @@ definition replacePartialEquiv
 
 中文:
 定义 replacePartialEquiv
-  签名: (e : OpenPartialHomeomorph X Y) (e' : PartialEquiv X Y)
+  签名: (e : OpenPartialHomeomorph X Y) (e' : 部分等价 X Y)
   定义体: e.toPartialHomeomorph.replacePartialEquiv e' h
   open_source := h ▸ e.open_source
   open_target := h ▸ e.open_target
@@ -817,7 +817,7 @@ theorem replacePartialEquiv_eq_self
 
 中文:
 定理 replacePartialEquiv_eq_self
-  结论: (e' : PartialEquiv X Y)
+  结论: (e' : 部分等价 X Y)
   证明: by
   cases e
   subst e'
@@ -937,7 +937,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective
+  结论: 函数.双射
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm

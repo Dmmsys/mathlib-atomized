@@ -63,7 +63,7 @@ definition Over.Hom
   body: CommaMorphism f g
 
 中文:
-定义 Over.Hom
+定义 Over.态射
   签名: {X : T} (f g : Over X)
   定义体: CommaMorphism f g
 -/
@@ -86,7 +86,7 @@ instance Over.inhabited
 
 中文:
 实例 Over.inhabited
-  签名: [Inhabited T]
+  签名: [可居 T]
   定义体: { left := default
       right := default
       hom := 𝟙 _ }
@@ -146,7 +146,7 @@ abbreviation Hom.left
   body: CommaMorphism.left φ
 
 中文:
-缩写 Hom.left
+缩写 态射.left
   签名: : f.left ⟶ g.left
   定义体: CommaMorphism.left φ
 -/
@@ -190,7 +190,7 @@ lemma Hom.w
 @[ext]
 
 中文:
-引理 Hom.w
+引理 态射.w
   结论: φ.left ≫ g.hom = f.hom
   证明: Over.w φ
 
@@ -275,7 +275,7 @@ theorem id_left
 中文:
 定理 id_left
   条件: (U : Over X)
-  结论: Hom.left (𝟙 U) = 𝟙 U.left
+  结论: 态射.left (𝟙 U) = 𝟙 U.left
   证明: rfl
 
 @[simp, reassoc]
@@ -542,7 +542,7 @@ lemma forall_iff
   aesop
 
 中文:
-引理 forall_iff
+引理 对任意_iff
   条件: (P : Over X -> 命题)
   证明: by
   aesop
@@ -823,8 +823,8 @@ instance [IsIso
   body: (Over.mapIso <| asIso f).isEquivalence_functor
 
 中文:
-实例 [IsIso
-  签名: f] : (Over.map f).IsEquivalence
+实例 [是同构
+  签名: f] : (Over.map f).是等价
   定义体: (Over.mapIso <| asIso f).isEquivalence_functor
 
 Depends on / 依赖: Over.mapIso, isEquivalence_functor, mapIso
@@ -1054,7 +1054,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : (forget X).ReflectsIsomorphisms where
+  签名: : (forget X).反映同构 where
   定义体: ⟨Over.homMk (inv ((forget X).map f) :), by cat_disch⟩
 
 Depends on / 依赖: Over.homMk, cat_disch, forget
@@ -1072,7 +1072,7 @@ definition mkIdTerminal
 
 中文:
 定义 mkIdTerminal
-  签名: : Limits.IsTerminal (mk (𝟙 X))
+  签名: : Limits.是终止 (mk (𝟙 X))
   定义体: CostructuredArrow.mkIdTerminal
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mkIdTerminal, mkIdTerminal
@@ -1114,7 +1114,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget X).Faithful where
+  签名: : (forget X).忠实 where
 -/
 instance forget_faithful : (forget X).Faithful where
 
@@ -1130,8 +1130,8 @@ theorem epi_of_epi_left
 
 中文:
 定理 epi_of_epi_left
-  条件: {f g : Over X} (k : f ⟶ g) [hk : Epi k.left]
-  结论: Epi k
+  条件: {f g : Over X} (k : f ⟶ g) [hk : 满态射 k.left]
+  结论: 满态射 k
   证明: (forget X).epi_of_epi_map hk
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -1149,7 +1149,7 @@ instance epi_homMk
 
 中文:
 实例 epi_homMk
-  签名: {U V : Over X} {f : U.left ⟶ V.left} [Epi f] (w)
+  签名: {U V : Over X} {f : U.left ⟶ V.left} [满态射 f] (w)
   定义体: (forget X).epi_of_epi_map ‹_›
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -1168,8 +1168,8 @@ theorem mono_of_mono_left
 
 中文:
 定理 mono_of_mono_left
-  条件: {f g : Over X} (k : f ⟶ g) [hk : Mono k.left]
-  结论: Mono k
+  条件: {f g : Over X} (k : f ⟶ g) [hk : 单态射 k.left]
+  结论: 单态射 k
   证明: (forget X).mono_of_mono_map hk
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -1187,7 +1187,7 @@ instance mono_homMk
 
 中文:
 实例 mono_homMk
-  签名: {U V : Over X} {f : U.left ⟶ V.left} [Mono f] (w)
+  签名: {U V : Over X} {f : U.left ⟶ V.left} [单态射 f] (w)
   定义体: (forget X).mono_of_mono_map ‹_›
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -1213,7 +1213,7 @@ instance mono_left_of_mono
 
 中文:
 实例 mono_left_of_mono
-  签名: {f g : Over X} (k : f ⟶ g) [Mono k]
+  签名: {f g : Over X} (k : f ⟶ g) [单态射 k]
   定义体: by
   refine ⟨fun {Y : T} l m a => ?_⟩
   let l' : mk (m ≫ f.hom) ⟶ f := homMk l (by
@@ -1375,7 +1375,7 @@ definition iteratedSliceForwardNaturalityIso
   body: Iso.refl _
 
 中文:
-定义 iteratedSliceForwardNaturalityIso
+定义 iteratedSliceForward自然数uralityIso
   签名: {g : Over X} (p : f ⟶ g)
   定义体: Iso.refl _
 
@@ -1450,7 +1450,7 @@ lemma post_comp
 
 中文:
 引理 post_comp
-  条件: {E : 类型} [Category* E] (F : T ⥤ D) (G : D ⥤ E)
+  条件: {E : 类型} [范畴* E] (F : T ⥤ D) (G : D ⥤ E)
   证明: rfl
 -/
 lemma post_comp {E : Type*} [Category* E] (F : T ⥤ D) (G : D ⥤ E) :
@@ -1491,7 +1491,7 @@ definition postComp
 
 中文:
 定义 postComp
-  签名: {E : 类型} [Category* E] (F : T ⥤ D) (G : D ⥤ E)
+  签名: {E : 类型} [范畴* E] (F : T ⥤ D) (G : D ⥤ E)
   定义体: NatIso.ofComponents (fun X => Iso.refl _) (fun f => by
     ext
     dsimp only [Iso.refl_hom, Over.comp_left, Over.id_left]
@@ -1563,8 +1563,8 @@ instance [F.Faithful]
     exact F.map_injective (congrArg CommaMorphism.left h)
 
 中文:
-实例 [F.Faithful]
-  签名: : (Over.post (X := X) F).Faithful where
+实例 [F.忠实]
+  签名: : (Over.post (X := X) F).忠实 where
   定义体: by
     ext
     exact F.map_injective (congrArg CommaMorphism.left h)
@@ -1588,8 +1588,8 @@ instance [F.Faithful]
     exact ⟨Over.homMk a (F.map_injective (by simp [ha, dsimp% f.w])), by cat_disch⟩
 
 中文:
-实例 [F.Faithful]
-  签名: [F.Full]
+实例 [F.忠实]
+  签名: [F.满]
   定义体: by
     obtain ⟨a, ha⟩ := F.map_surjective f.left
     exact ⟨Over.homMk a (F.map_injective (by simp [ha, dsimp% f.w])), by cat_disch⟩
@@ -1612,8 +1612,8 @@ instance [F.Full]
     exact ⟨Over.mk f, ⟨Over.isoMk e⟩⟩
 
 中文:
-实例 [F.Full]
-  签名: [F.EssSurj]
+实例 [F.满]
+  签名: [F.本质满射]
   定义体: by
     obtain ⟨A', ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := F) B.left
     obtain ⟨f, hf⟩ := F.map_surjective (e.hom ≫ B.hom)
@@ -1635,8 +1635,8 @@ instance [F.IsEquivalence]
   signature: : (Over.post (X := X) F).IsEquivalence where
 
 中文:
-实例 [F.IsEquivalence]
-  签名: : (Over.post (X := X) F).IsEquivalence where
+实例 [F.是等价]
+  签名: : (Over.post (X := X) F).是等价 where
 
 Depends on / 依赖: IsEquivalence
 -/
@@ -1653,8 +1653,8 @@ definition _root_.CategoryTheory.Functor.FullyFaithful.over
   body: Over.homMk (h.preimage f.left) h.map_injective (by simpa using Over.w f)
 
 中文:
-定义 _root_.CategoryTheory.Functor.FullyFaithful.over
-  签名: (h : F.FullyFaithful)
+定义 _root_.范畴论.函子.满忠实.over
+  签名: (h : F.满忠实)
   定义体: Over.homMk (h.preimage f.left) h.map_injective (by simpa using Over.w f)
 
 Depends on / 依赖: FullyFaithful
@@ -1720,7 +1720,7 @@ instance isRightAdjoint_post
 
 中文:
 实例 isRightAdjoint_post
-  签名: {Y : D} {G : D ⥤ T} [G.IsRightAdjoint]
+  签名: {Y : D} {G : D ⥤ T} [G.是右伴随]
   定义体: let ⟨F, ⟨a⟩⟩ := ‹G.IsRightAdjoint›; ⟨_, ⟨postAdjunctionRight a⟩⟩
 
 Depends on / 依赖: IsRightAdjoint
@@ -1802,7 +1802,7 @@ definition equivalenceOfIsTerminal
 
 中文:
 定义 equivalenceOfIsTerminal
-  签名: (hX : IsTerminal X)
+  签名: (hX : 是终止 X)
   定义体: forget X
   inverse := { obj Y := mk (hX.from Y), map f := homMk f }
   unitIso := NatIso.ofComponents fun Y => isoMk (.refl _) (hX.hom_ext _ _)
@@ -1831,7 +1831,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {J : 类型} [Category* J] (D : J ⥤ T) {X : T} (s : D ⟶ (Functor.const J).obj X)
+  签名: {J : 类型} [范畴* J] (D : J ⥤ T) {X : T} (s : D ⟶ (函子.const J).obj X)
   定义体: mk (s.app j)
   map f := homMk (D.map f) (by simp)
 -/
@@ -1855,7 +1855,7 @@ definition liftCone
 
 中文:
 定义 liftCone
-  签名: {J : 类型} [Category* J] (D : J ⥤ T) {X : T} (s : D ⟶ (Functor.const J).obj X)
+  签名: {J : 类型} [范畴* J] (D : J ⥤ T) {X : T} (s : D ⟶ (函子.const J).obj X)
   定义体: mk p
   π.app j := homMk (c.π.app j)
 -/
@@ -1885,7 +1885,7 @@ definition isLimitLiftCone
 
 中文:
 定义 isLimitLiftCone
-  签名: {J : 类型} [Category* J] [Nonempty J]
+  签名: {J : 类型} [范畴* J] [非空 J]
   定义体: homMk (hc.lift ((forget _).mapCone t)) (by
     let j : J := Classical.arbitrary _
     simp [← hp j, dsimp% (t.π.app j).w, dsimp% hc.fac_assoc ((forget X).mapCone t) j])
@@ -1932,7 +1932,7 @@ definition Limits.Cone.overPost
   π.app k := Over.homMk (c.π.app k.left)
 
 中文:
-定义 Limits.Cone.overPost
+定义 Limits.锥.overPost
   定义体: Over.mk (c.π.app j)
   π.app k := Over.homMk (c.π.app k.left)
 -/
@@ -1984,7 +1984,7 @@ instance isEquivalence_toOver
 
 中文:
 实例 isEquivalence_toOver
-  签名: (F : D ⥤ T) (X : T) [F.IsEquivalence]
+  签名: (F : D ⥤ T) (X : T) [F.是等价]
   定义体: CostructuredArrow.isEquivalence_pre _ _ _
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.isEquivalence_pre, isEquivalence_pre
@@ -2134,7 +2134,7 @@ definition Under.Hom
   body: CommaMorphism f g
 
 中文:
-定义 Under.Hom
+定义 Under.态射
   签名: {X : T} (f g : Under X)
   定义体: CommaMorphism f g
 -/
@@ -2157,7 +2157,7 @@ instance Under.inhabited
 
 中文:
 实例 Under.inhabited
-  签名: [Inhabited T]
+  签名: [可居 T]
   定义体: { left := default
       right := default
       hom := 𝟙 _ }
@@ -2217,7 +2217,7 @@ abbreviation Hom.right
   body: CommaMorphism.right φ
 
 中文:
-缩写 Hom.right
+缩写 态射.right
   签名: : f.right ⟶ g.right
   定义体: CommaMorphism.right φ
 
@@ -2263,7 +2263,7 @@ lemma Hom.w
 @[ext]
 
 中文:
-引理 Hom.w
+引理 态射.w
   结论: f.hom ≫ φ.right = g.hom
   证明: Under.w φ
 
@@ -2337,7 +2337,7 @@ theorem id_right
 中文:
 定理 id_right
   条件: (U : Under X)
-  结论: Hom.right (𝟙 U) = 𝟙 U.right
+  结论: 态射.right (𝟙 U) = 𝟙 U.right
   证明: rfl
 
 @[simp]
@@ -2558,7 +2558,7 @@ lemma forall_iff
   aesop
 
 中文:
-引理 forall_iff
+引理 对任意_iff
   条件: (P : Under X -> 命题)
   证明: by
   aesop
@@ -2837,8 +2837,8 @@ instance [IsIso
   body: (Under.mapIso <| asIso f).isEquivalence_functor
 
 中文:
-实例 [IsIso
-  签名: f] : (Under.map f).IsEquivalence
+实例 [是同构
+  签名: f] : (Under.map f).是等价
   定义体: (Under.mapIso <| asIso f).isEquivalence_functor
 
 Depends on / 依赖: Under.mapIso, isEquivalence_functor, mapIso
@@ -3048,7 +3048,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : (forget X).ReflectsIsomorphisms where
+  签名: : (forget X).反映同构 where
   定义体: ⟨Under.homMk (inv ((forget X).map f) :), by cat_disch⟩
 
 Depends on / 依赖: Under.homMk, cat_disch, forget
@@ -3108,7 +3108,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget X).Faithful where
+  签名: : (forget X).忠实 where
 -/
 instance forget_faithful : (forget X).Faithful where
 
@@ -3124,8 +3124,8 @@ theorem mono_of_mono_right
 
 中文:
 定理 mono_of_mono_right
-  条件: {f g : Under X} (k : f ⟶ g) [hk : Mono k.right]
-  结论: Mono k
+  条件: {f g : Under X} (k : f ⟶ g) [hk : 单态射 k.right]
+  结论: 单态射 k
   证明: (forget X).mono_of_mono_map hk
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -3143,7 +3143,7 @@ instance mono_homMk
 
 中文:
 实例 mono_homMk
-  签名: {U V : Under X} {f : U.right ⟶ V.right} [Mono f] (w)
+  签名: {U V : Under X} {f : U.right ⟶ V.right} [单态射 f] (w)
   定义体: (forget X).mono_of_mono_map ‹_›
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -3162,8 +3162,8 @@ theorem epi_of_epi_right
 
 中文:
 定理 epi_of_epi_right
-  条件: {f g : Under X} (k : f ⟶ g) [hk : Epi k.right]
-  结论: Epi k
+  条件: {f g : Under X} (k : f ⟶ g) [hk : 满态射 k.right]
+  结论: 满态射 k
   证明: (forget X).epi_of_epi_map hk
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -3181,7 +3181,7 @@ instance epi_homMk
 
 中文:
 实例 epi_homMk
-  签名: {U V : Under X} {f : U.right ⟶ V.right} [Epi f] (w)
+  签名: {U V : Under X} {f : U.right ⟶ V.right} [满态射 f] (w)
   定义体: (forget X).epi_of_epi_map ‹_›
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -3205,7 +3205,7 @@ instance epi_right_of_epi
 
 中文:
 实例 epi_right_of_epi
-  签名: {f g : Under X} (k : f ⟶ g) [Epi k]
+  签名: {f g : Under X} (k : f ⟶ g) [满态射 k]
   定义体: by
   refine ⟨fun {Y : T} l m a => ?_⟩
   let l' : g ⟶ mk (g.hom ≫ m) := homMk l (by
@@ -3256,7 +3256,7 @@ lemma post_comp
 
 中文:
 引理 post_comp
-  条件: {E : 类型} [Category* E] (F : T ⥤ D) (G : D ⥤ E)
+  条件: {E : 类型} [范畴* E] (F : T ⥤ D) (G : D ⥤ E)
   证明: rfl
 -/
 lemma post_comp {E : Type*} [Category* E] (F : T ⥤ D) (G : D ⥤ E) :
@@ -3297,7 +3297,7 @@ definition postComp
 
 中文:
 定义 postComp
-  签名: {E : 类型} [Category* E] (F : T ⥤ D) (G : D ⥤ E)
+  签名: {E : 类型} [范畴* E] (F : T ⥤ D) (G : D ⥤ E)
   定义体: NatIso.ofComponents (fun X => Iso.refl _) (fun f => by
     ext
     dsimp only [Iso.refl_hom, Under.comp_right, Under.id_right]
@@ -3369,8 +3369,8 @@ instance [F.Faithful]
     exact F.map_injective (congrArg CommaMorphism.right h)
 
 中文:
-实例 [F.Faithful]
-  签名: : (Under.post (X := X) F).Faithful where
+实例 [F.忠实]
+  签名: : (Under.post (X := X) F).忠实 where
   定义体: by
     ext
     exact F.map_injective (congrArg CommaMorphism.right h)
@@ -3394,8 +3394,8 @@ instance [F.Faithful]
     exact ⟨Under.homMk a (F.map_injective (by simp [ha, dsimp% f.w])), by ext; simpa⟩
 
 中文:
-实例 [F.Faithful]
-  签名: [F.Full]
+实例 [F.忠实]
+  签名: [F.满]
   定义体: by
     obtain ⟨a, ha⟩ := F.map_surjective f.right
     exact ⟨Under.homMk a (F.map_injective (by simp [ha, dsimp% f.w])), by ext; simpa⟩
@@ -3418,8 +3418,8 @@ instance [F.Full]
     exact ⟨Under.mk f, ⟨Under.isoMk e⟩⟩
 
 中文:
-实例 [F.Full]
-  签名: [F.EssSurj]
+实例 [F.满]
+  签名: [F.本质满射]
   定义体: by
     obtain ⟨B', ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := F) B.right
     obtain ⟨f, hf⟩ := F.map_surjective (B.hom ≫ e.inv)
@@ -3441,8 +3441,8 @@ instance [F.IsEquivalence]
   signature: : (Under.post (X := X) F).IsEquivalence where
 
 中文:
-实例 [F.IsEquivalence]
-  签名: : (Under.post (X := X) F).IsEquivalence where
+实例 [F.是等价]
+  签名: : (Under.post (X := X) F).是等价 where
 
 Depends on / 依赖: IsEquivalence
 -/
@@ -3459,8 +3459,8 @@ definition _root_.CategoryTheory.Functor.FullyFaithful.under
   body: Under.homMk (h.preimage f.right) h.map_injective (by simpa using Under.w f)
 
 中文:
-定义 _root_.CategoryTheory.Functor.FullyFaithful.under
-  签名: (h : F.FullyFaithful)
+定义 _root_.范畴论.函子.满忠实.under
+  签名: (h : F.满忠实)
   定义体: Under.homMk (h.preimage f.right) h.map_injective (by simpa using Under.w f)
 
 Depends on / 依赖: FullyFaithful
@@ -3540,7 +3540,7 @@ instance isLeftAdjoint_post
 
 中文:
 实例 isLeftAdjoint_post
-  签名: [F.IsLeftAdjoint]
+  签名: [F.是左伴随]
   定义体: let ⟨G, ⟨a⟩⟩ := ‹F.IsLeftAdjoint›; ⟨_, ⟨postAdjunctionLeft a⟩⟩
 
 Depends on / 依赖: IsLeftAdjoint
@@ -3627,7 +3627,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {J : 类型} [Category* J] (D : J ⥤ T) {X : T} (s : (Functor.const J).obj X ⟶ D)
+  签名: {J : 类型} [范畴* J] (D : J ⥤ T) {X : T} (s : (函子.const J).obj X ⟶ D)
   定义体: .mk (s.app j)
   map f := Under.homMk (D.map f) (by simpa using (s.naturality f).symm)
 -/
@@ -3651,7 +3651,7 @@ definition liftCocone
 
 中文:
 定义 liftCocone
-  签名: {J : 类型} [Category* J] (D : J ⥤ T) {X : T} (s : (Functor.const J).obj X ⟶ D)
+  签名: {J : 类型} [范畴* J] (D : J ⥤ T) {X : T} (s : (函子.const J).obj X ⟶ D)
   定义体: mk p
   ι.app j := homMk (c.ι.app j)
 -/
@@ -3681,7 +3681,7 @@ definition isColimitLiftCocone
 
 中文:
 定义 isColimitLiftCocone
-  签名: {J : 类型} [Category* J] [Nonempty J]
+  签名: {J : 类型} [范畴* J] [非空 J]
   定义体: Under.homMk (hc.desc ((Under.forget _).mapCocone t)) (by
     let j : J := Classical.arbitrary _
     simp [← dsimp% (t.ι.app j).w, ← dsimp% (hp j), dsimp% hc.fac ((forget X).mapCocone t)])
@@ -3729,8 +3729,8 @@ definition Limits.Cocone.underPost
   ι.app k := Under.homMk (c.ι.app k.right)
 
 中文:
-定义 Limits.Cocone.underPost
-  签名: {J C : 类型} [Category* J] [Category* C]
+定义 Limits.余锥.underPost
+  签名: {J C : 类型} [范畴* J] [范畴* C]
   定义体: Under.mk (c.ι.app j)
   ι.app k := Under.homMk (c.ι.app k.right)
 -/
@@ -3784,7 +3784,7 @@ instance isEquivalence_toUnder
 
 中文:
 实例 isEquivalence_toUnder
-  签名: (X : T) (F : D ⥤ T) [F.IsEquivalence]
+  签名: (X : T) (F : D ⥤ T) [F.是等价]
   定义体: StructuredArrow.isEquivalence_pre _ _ _
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.isEquivalence_pre, isEquivalence_pre
@@ -3848,7 +3848,7 @@ lemma essImage_overPost
 
 中文:
 引理 essImage_overPost
-  条件: [F.Full] {Y : Over (F.obj X)}
+  条件: [F.满] {Y : Over (F.obj X)}
   证明: .of_overPost
   mpr := fun ⟨Z, ⟨e⟩⟩ => let ⟨f, hf⟩ := F.map_surjective (e.hom ≫ Y.hom); ⟨.mk f, ⟨Over.isoMk e⟩⟩
 -/
@@ -3869,7 +3869,7 @@ lemma essImage_underPost
 
 中文:
 引理 essImage_underPost
-  条件: [F.Full] {Y : Under (F.obj X)}
+  条件: [F.满] {Y : Under (F.obj X)}
   证明: .of_underPost
   mpr := fun ⟨Z, ⟨e⟩⟩ => let ⟨f, hf⟩ := F.map_surjective (Y.hom ≫ e.inv); ⟨.mk f, ⟨Under.isoMk e⟩⟩
 -/

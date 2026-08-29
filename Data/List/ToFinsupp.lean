@@ -181,7 +181,7 @@ theorem toFinsupp_apply_fin
 
 中文:
 定理 toFinsupp_apply_fin
-  条件: (n : Fin l.length)
+  条件: (n : 有限集 l.length)
   结论: l.toFinsupp n = l[n]
   证明: getD_eq_getElem _ _ n.isLt
 
@@ -227,7 +227,7 @@ theorem toFinsupp_nil
 
 中文:
 定理 toFinsupp_nil
-  条件: [DecidablePred fun i => getD ([] : List M) i 0 != 0]
+  条件: [DecidablePred fun i => getD ([] : 列表 M) i 0 != 0]
   证明: by
   ext
   simp
@@ -275,7 +275,7 @@ theorem toFinsupp_append
 
 中文:
 定理 toFinsupp_append
-  结论: {R : 类型} [AddZeroClass R] (l₁ l₂ : List R)
+  结论: {R : 类型} [加法零类 R] (l₁ l₂ : 列表 R)
   证明: by
   ext n
   simp only [toFinsupp_apply, Finsupp.add_apply]
@@ -321,7 +321,7 @@ theorem toFinsupp_cons_eq_single_add_embDomain
 
 中文:
 定理 toFinsupp_cons_eq_single_add_embDomain
-  结论: {R : 类型} [AddZeroClass R] (x : R) (xs : List R)
+  结论: {R : 类型} [加法零类 R] (x : R) (xs : 列表 R)
   证明: by
   classical
     convert! toFinsupp_append [x] xs using 3
@@ -353,7 +353,7 @@ theorem toFinsupp_concat_eq_toFinsupp_add_single
 
 中文:
 定理 toFinsupp_concat_eq_toFinsupp_add_single
-  结论: {R : 类型} [AddZeroClass R] (x : R) (xs : List R)
+  结论: {R : 类型} [加法零类 R] (x : R) (xs : 列表 R)
   证明: by
   classical rw [toFinsupp_append, toFinsupp_singleton, Finsupp.embDomain_single,
     addLeftEmbedding_apply, add_zero]
@@ -384,7 +384,7 @@ theorem toFinsupp_eq_sum_mapIdx_single
 
 中文:
 定理 toFinsupp_eq_sum_mapIdx_single
-  结论: {R : 类型} [AddMonoid R] (l : List R)
+  结论: {R : 类型} [加法幺半群 R] (l : 列表 R)
   证明: by
   /- Porting note: `induction` fails to substitute `l = []` in
   `[DecidablePred (getD l · 0 ≠ 0)]`, so we manually do some `revert`/`intro` as a workaround -/

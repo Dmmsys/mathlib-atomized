@@ -45,7 +45,7 @@ theorem singleton_sdiv_self
 中文:
 定理 singleton_sdiv_self
   条件: (p : P)
-  结论: ({p} : Set P) /ₛ {p} = {(1 : G)}
+  结论: ({p} : 集合 P) /ₛ {p} = {(1 : G)}
   证明: by
   rw [Set.singleton_sdiv_singleton]; rw [sdiv_self]
 
@@ -71,7 +71,7 @@ theorem one_mem_sdiv_iff
 
 中文:
 定理 one_mem_sdiv_iff
-  条件: {s t : Set P}
+  条件: {s t : 集合 P}
   结论: (1 : G) in s /ₛ t ↔ ¬Disjoint s t
   证明: by
   simp [not_disjoint_iff_nonempty_inter, mem_sdiv, Set.Nonempty]
@@ -95,8 +95,8 @@ theorem Nonempty.one_mem_sdiv_self
   ⟨p, hp, p, hp, sdiv_self _⟩
 
 中文:
-定理 Nonempty.one_mem_sdiv_self
-  条件: {s : Set P} (h : s.Nonempty)
+定理 非空.one_mem_sdiv_self
+  条件: {s : 集合 P} (h : s.非空)
   结论: (1 : G) in s /ₛ s
   证明: let ⟨p, hp⟩ := h
   ⟨p, hp, p, hp, sdiv_self _⟩
@@ -172,7 +172,7 @@ theorem sdiv_left_injective
 中文:
 定理 sdiv_left_injective
   条件: (p : P)
-  结论: Function.Injective ((· /ₛ p) : P -> G)
+  结论: 函数.单射 ((· /ₛ p) : P -> G)
   证明: fun _ _ =>
   sdiv_left_cancel
 -/
@@ -245,7 +245,7 @@ theorem sdiv_right_injective
 中文:
 定理 sdiv_right_injective
   条件: (p : P)
-  结论: Function.Injective ((p /ₛ ·) : P -> G)
+  结论: 函数.单射 ((p /ₛ ·) : P -> G)
   证明: fun _ _ =>
   sdiv_right_cancel
 -/
@@ -456,7 +456,7 @@ lemma smul_set_sdiv_smul_set
 
 中文:
 引理 smul_set_sdiv_smul_set
-  条件: (v : G) (s t : Set P)
+  条件: (v : G) (s t : 集合 P)
   结论: (v • s) /ₛ (v • t) = s /ₛ t
   证明: by
   ext; simp [mem_sdiv, mem_smul_set]
@@ -659,7 +659,7 @@ theorem prod_sdiv_prod_comm
 
 中文:
 定理 prod_sdiv_prod_comm
-  条件: (s₁ s₂ : Set P) (t₁ t₂ : Set P')
+  条件: (s₁ s₂ : 集合 P) (t₁ t₂ : 集合 P')
   证明: by
   aesop (add norm simp [mem_sdiv, mem_prod])
 
@@ -810,7 +810,7 @@ definition constVAddHom
 
 中文:
 定义 constVAddHom
-  签名: (G : 类型) (P : 类型) [AddGroup G] [AddTorsor G P]
+  签名: (G : 类型) (P : 类型) [加法群 G] [加法Torsor G P]
   定义体: constVAdd P (v.toAdd)
   map_one' := constVAdd_zero G P
   map_mul' v v' := constVAdd_add P v.toAdd v'.toAdd
@@ -835,7 +835,7 @@ definition constSMulHom
 
 中文:
 定义 constSMulHom
-  签名: : G ->* Equiv.Perm P where
+  签名: : G ->* 等价.置换 P where
   定义体: constSMul P v
   map_one' := constSMul_one G P
   map_mul' := constSMul_mul P
@@ -908,7 +908,7 @@ theorem pointReflection_fixed_iff_of_injective_two_nsmul
 
 中文:
 定理 pointReflection_fixed_iff_of_injective_two_nsmul
-  条件: {x y : P} (h : Injective (2 • · : G -> G))
+  条件: {x y : P} (h : 单射 (2 • · : G -> G))
   证明: by
   rw [pointReflection_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]; rw [← neg_vsub_eq_vsub_rev]; rw [neg_eq_iff_add_eq_zero]; rw [← two_nsmul]; rw [← nsmul_zero 2]; rw [h.eq_iff]; rw [vsub_eq_zero_iff_eq]; rw [eq_comm]
 
@@ -931,7 +931,7 @@ theorem injective_pointReflection_left_of_injective_two_nsmul
 
 中文:
 定理 injective_pointReflection_left_of_injective_two_nsmul
-  结论: {G P : 类型} [AddCommGroup G]
+  结论: {G P : 类型} [加法交换群 G]
   证明: fun x₁ x₂ (hy : pointReflection x₁ y = pointReflection x₂ y) => by
   rwa [pointReflection_apply, pointReflection_apply, vadd_eq_vadd_iff_sub_eq_vsub,
     vsub_sub_vsub_cancel_right, ← neg_vsub_eq_vsub_rev, neg_eq_iff_add_eq_zero,
@@ -958,7 +958,7 @@ lemma pointReflection_eq_subLeft
 
 中文:
 引理 pointReflection_eq_subLeft
-  条件: {G : 类型} [AddCommGroup G] (x : G)
+  条件: {G : 类型} [加法交换群 G] (x : G)
   证明: by
   ext; simp [pointReflection, sub_add_eq_add_sub, two_nsmul]
 
@@ -983,7 +983,7 @@ sdiv_smul' x y := hf by simp only [sdiv, smul, sdiv_smul]
   smul_sdiv' c x := by simp [sdiv, smul]
 
 中文:
-缩写 Function.Injective.torsor
+缩写 函数.单射.torsor
   签名: {G P Q : 类型}
   定义体: hf.mulAction f smul
 sdiv_smul' x y := hf by simp only [sdiv, smul, sdiv_smul]
@@ -1014,7 +1014,7 @@ abbreviation Function.Surjective.torsor
   smul_sdiv' := by simp [hf.forall, ← smul, ← sdiv]
 
 中文:
-缩写 Function.Surjective.torsor
+缩写 函数.满射.torsor
   签名: {G P Q : 类型}
   定义体: hf.mulAction f smul
   nonempty := Torsor.nonempty.map f

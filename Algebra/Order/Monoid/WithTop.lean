@@ -31,7 +31,7 @@ instance isOrderedAddMonoid
 
 中文:
 实例 isOrderedAddMonoid
-  签名: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  签名: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   定义体: add_le_add_left
 
 Depends on / 依赖: add_le_add_left
@@ -49,7 +49,7 @@ instance canonicallyOrderedAdd
 
 中文:
 实例 canonicallyOrderedAdd
-  签名: [Add α] [Preorder α] [CanonicallyOrderedAdd α]
+  签名: [加法 α] [预序 α] [典范有序加法 α]
 
 Depends on / 依赖: mul_smul, smul_eq_mul
 -/
@@ -78,7 +78,7 @@ instance isOrderedAddMonoid
 
 中文:
 实例 isOrderedAddMonoid
-  签名: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  签名: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   定义体: { add_le_add_left := fun _ _ h c => add_le_add_left h c }
 
 Depends on / 依赖: add_le_add_left
@@ -103,7 +103,7 @@ theorem le_self_add
 
 中文:
 定理 le_self_add
-  结论: [Add α] [LE α] [CanonicallyOrderedAdd α]
+  结论: [加法 α] [LE α] [典范有序加法 α]
   证明: by
   induction x
   · simp at hx
@@ -138,7 +138,7 @@ theorem le_add_self
 
 中文:
 定理 le_add_self
-  结论: [AddCommMagma α] [LE α] [CanonicallyOrderedAdd α]
+  结论: [加法交换原群 α] [LE α] [典范有序加法 α]
   证明: by
   induction x
   · simp at hx
@@ -168,7 +168,7 @@ lemma lt_zero_iff_eq_bot
 
 中文:
 引理 lt_zero_iff_eq_bot
-  结论: {α : 类型} [AddMonoid α] [Preorder α] [CanonicallyOrderedAdd α]
+  结论: {α : 类型} [加法幺半群 α] [预序 α] [典范有序加法 α]
   证明: by
   induction a <;> simp
 -/

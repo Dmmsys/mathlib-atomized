@@ -37,7 +37,7 @@ instance Comma.locallySmall
         (fun _ _ _ => by aesop)
 
 中文:
-实例 Comma.locallySmall
+实例 交换a.locallySmall
   定义体: small_of_injective.{w}
       (f := fun g => (⟨g.left, g.right⟩ : _ × _))
         (fun _ _ _ => by aesop)
@@ -60,7 +60,7 @@ instance StructuredArrow.locallySmall
   body: Comma.locallySmall _ _
 
 中文:
-实例 StructuredArrow.locallySmall
+实例 结构化箭头.locallySmall
   签名: (S : T) (T : B ⥤ T)
   定义体: Comma.locallySmall _ _
 

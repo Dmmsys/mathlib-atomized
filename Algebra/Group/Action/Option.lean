@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul M (Option α)
+  签名: 标量乘法 M (选项类型 α)
   定义体: ⟨fun a => Option.map (a • ·)⟩
 
 @[to_additive]
@@ -89,7 +89,7 @@ theorem smul_none
 
 中文:
 定理 smul_none
-  结论: a • (none : Option α) = none
+  结论: a • (none : 选项类型 α) = none
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -133,7 +133,7 @@ instance instIsScalarTowerOfSMul
 
 中文:
 实例 instIsScalarTowerOfSMul
-  签名: [SMul M N] [IsScalarTower M N α]
+  签名: [标量乘法 M N] [标量塔 M N α]
   定义体: ⟨fun a b x => by
     cases x
     exacts [rfl, congr_arg some (smul_assoc _ _ _)]⟩
@@ -159,8 +159,8 @@ instance [SMulCommClass
 @[to_additive]
 
 中文:
-实例 [SMulCommClass
-  签名: M N α] : SMulCommClass M N (Option α)
+实例 [标量交换类
+  签名: M N α] : 标量交换类 M N (选项类型 α)
   定义体: ⟨fun _ _ => Function.Commute.option_map smul_comm _ _⟩
 
 @[to_additive]
@@ -184,8 +184,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: Mᵐᵒᵖ α] [IsCentralScalar M α] : IsCentralScalar M (Option α)
+实例 [标量乘法
+  签名: Mᵐᵒᵖ α] [中心标量 M α] : 中心标量 M (选项类型 α)
   定义体: ⟨fun a x => by
     cases x
     exacts [rfl, congr_arg some (op_smul_eq_smul _ _)]⟩
@@ -209,8 +209,8 @@ instance [FaithfulSMul
   body: ⟨fun h => eq_of_smul_eq_smul fun b : α => by injection h (some b)⟩
 
 中文:
-实例 [FaithfulSMul
-  签名: M α] : FaithfulSMul M (Option α)
+实例 [忠实标量乘法
+  签名: M α] : 忠实标量乘法 M (选项类型 α)
   定义体: ⟨fun h => eq_of_smul_eq_smul fun b : α => by injection h (some b)⟩
 
 Depends on / 依赖: eq_of_smul_eq_smul, injection
@@ -234,8 +234,8 @@ instance [Monoid
     exacts [rfl, congr_arg some (mul_smul _ _ _)]
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M α] :
+实例 [幺半群
+  签名: M] [乘法作用 M α] :
   定义体: by
     cases b
     exacts [rfl, congr_arg some (one_smul _ _)]

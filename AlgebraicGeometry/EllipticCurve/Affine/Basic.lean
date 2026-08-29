@@ -79,8 +79,8 @@ abbreviation Affine
   body: WeierstrassCurve R
 
 中文:
-缩写 Affine
-  签名: : Type r
+缩写 仿射
+  签名: : 类型 r
   定义体: WeierstrassCurve R
 
 Depends on / 依赖: WeierstrassCurve
@@ -142,7 +142,7 @@ lemma polynomial_eq
 
 中文:
 引理 polynomial_eq
-  结论: W.polynomial = Cubic.toPoly
+  结论: W.polynomial = 三次.toPoly
   证明: by
   simp_rw [polynomial, Cubic.toPoly]
   map_simp
@@ -173,7 +173,7 @@ lemma polynomial_ne_zero
 
 中文:
 引理 polynomial_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: W.polynomial != 0
   证明: by
   rw [polynomial_eq]
@@ -203,7 +203,7 @@ lemma degree_polynomial
 
 中文:
 引理 degree_polynomial
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: W.polynomial.degree = 2
   证明: by
   rw [polynomial_eq]
@@ -231,7 +231,7 @@ lemma natDegree_polynomial
 
 中文:
 引理 natDegree_polynomial
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: W.polynomial.natDegree = 2
   证明: by
   rw [polynomial_eq]
@@ -280,8 +280,8 @@ lemma irreducible_polynomial
 
 中文:
 引理 irreducible_polynomial
-  条件: [IsDomain R]
-  结论: Irreducible W.polynomial
+  条件: [是整环 R]
+  结论: 不可约 W.polynomial
   证明: by
   by_contra h
   rcases (monic_polynomial.not_irreducible_iff_exists_add_mul_eq_coeff natDegree_polynomial).mp h
@@ -368,7 +368,7 @@ definition Equation
   body: W.polynomial.evalEval x y = 0
 
 中文:
-定义 Equation
+定义 方程
   签名: (x y : R)
   定义体: W.polynomial.evalEval x y = 0
 
@@ -390,7 +390,7 @@ lemma equation_iff'
 中文:
 引理 equation_iff'
   条件: (x y : R)
-  结论: W.Equation x y ↔
+  结论: W.方程 x y ↔
   证明: by
   rw [Equation]; rw [evalEval_polynomial]
 
@@ -415,7 +415,7 @@ lemma equation_iff
 中文:
 引理 equation_iff
   条件: (x y : R)
-  结论: W.Equation x y ↔
+  结论: W.方程 x y ↔
   证明: by
   rw [equation_iff']; rw [sub_eq_zero]
 
@@ -439,7 +439,7 @@ lemma equation_zero
 
 中文:
 引理 equation_zero
-  结论: W.Equation 0 0 ↔ W.a₆ = 0
+  结论: W.方程 0 0 ↔ W.a₆ = 0
   证明: by
   rw [Equation]; rw [evalEval_polynomial_zero]; rw [neg_eq_zero]
 
@@ -626,7 +626,7 @@ definition Nonsingular
   body: W.Equation x y ∧ (W.polynomialX.evalEval x y != 0 ∨ W.polynomialY.evalEval x y != 0)
 
 中文:
-定义 Nonsingular
+定义 非奇异
   签名: (x y : R)
   定义体: W.Equation x y ∧ (W.polynomialX.evalEval x y != 0 ∨ W.polynomialY.evalEval x y != 0)
 
@@ -648,7 +648,7 @@ lemma nonsingular_iff'
 中文:
 引理 nonsingular_iff'
   条件: (x y : R)
-  结论: W.Nonsingular x y ↔ W.Equation x y ∧
+  结论: W.非奇异 x y ↔ W.方程 x y ∧
   证明: by
   rw [Nonsingular]; rw [equation_iff']; rw [evalEval_polynomialX]; rw [evalEval_polynomialY]
 
@@ -675,7 +675,7 @@ lemma nonsingular_iff
 中文:
 引理 nonsingular_iff
   条件: (x y : R)
-  结论: W.Nonsingular x y ↔ W.Equation x y ∧
+  结论: W.非奇异 x y ↔ W.方程 x y ∧
   证明: by
   rw [nonsingular_iff']; rw [sub_ne_zero]; rw [← sub_ne_zero (a := y)]
   congr! 3
@@ -703,7 +703,7 @@ lemma nonsingular_zero
 
 中文:
 引理 nonsingular_zero
-  结论: W.Nonsingular 0 0 ↔ W.a₆ = 0 ∧ (W.a₃ != 0 ∨ W.a₄ != 0)
+  结论: W.非奇异 0 0 ↔ W.a₆ = 0 ∧ (W.a₃ != 0 ∨ W.a₄ != 0)
   证明: by
   rw [Nonsingular]; rw [equation_zero]; rw [evalEval_polynomialX_zero]; rw [neg_ne_zero]; rw [evalEval_polynomialY_zero]; rw [or_comm]
 
@@ -801,7 +801,7 @@ lemma equation_iff_nonsingular
 
 中文:
 引理 equation_iff_nonsingular
-  条件: [Nontrivial R] [W.IsElliptic] {x y : R}
+  条件: [非平凡 R] [W.是Elliptic] {x y : R}
   证明: W.equation_iff_nonsingular_of_Δ_ne_zero W.coe_Δ' ▸ W.Δ'.ne_zero
 
 Depends on / 依赖: W.coe_, W.equation_iff_nonsingular_of_, ne_zero
@@ -824,7 +824,7 @@ abbreviation map
 
 中文:
 缩写 map
-  签名: : Affine S
+  签名: : 仿射 S
   定义体: WeierstrassCurve.map W f
 
 Depends on / 依赖: WeierstrassCurve, WeierstrassCurve.map
@@ -845,7 +845,7 @@ abbreviation baseChange
 
 中文:
 缩写 baseChange
-  签名: [Algebra R S]
+  签名: [代数 R S]
   定义体: WeierstrassCurve.baseChange W S
 
 Depends on / 依赖: WeierstrassCurve, WeierstrassCurve.baseChange, baseChange
@@ -891,9 +891,9 @@ lemma Equation.map
   rw [Equation]; rw [map_polynomial]; rw [map_mapRingHom_evalEval]; rw [h]; rw [map_zero]
 
 中文:
-引理 Equation.map
-  条件: {x y : R} (h : W.Equation x y)
-  结论: (W.map f).Equation (f x) (f y)
+引理 方程.map
+  条件: {x y : R} (h : W.方程 x y)
+  结论: (W.map f).方程 (f x) (f y)
   证明: by
   rw [Equation]; rw [map_polynomial]; rw [map_mapRingHom_evalEval]; rw [h]; rw [map_zero]
 
@@ -914,7 +914,7 @@ lemma map_equation
 
 中文:
 引理 map_equation
-  条件: (hf : Function.Injective f) (x y : R)
+  条件: (hf : 函数.单射 f) (x y : R)
   证明: by
   simp only [Equation, map_polynomial, map_mapRingHom_evalEval, map_eq_zero_iff f hf]
 
@@ -983,7 +983,7 @@ lemma map_nonsingular
 
 中文:
 引理 map_nonsingular
-  条件: (hf : Function.Injective f) (x y : R)
+  条件: (hf : 函数.单射 f) (x y : R)
   证明: by
   simp only [Nonsingular, evalEval, W.map_equation hf, map_polynomialX, map_polynomialY,
     map_mapRingHom_evalEval, map_ne_zero_iff f hf]
@@ -1049,9 +1049,9 @@ lemma Equation.baseChange
   rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
 
 中文:
-引理 Equation.baseChange
-  条件: {x y : A} (h : (W⁄A).Equation x y)
-  结论: (W⁄B).Equation (f x) (f y)
+引理 方程.baseChange
+  条件: {x y : A} (h : (W⁄A).方程 x y)
+  结论: (W⁄B).方程 (f x) (f y)
   证明: by
   convert! Equation.map f.toRingHom h using 1
   rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
@@ -1074,7 +1074,7 @@ lemma baseChange_equation
 
 中文:
 引理 baseChange_equation
-  条件: (hf : Function.Injective f) (x y : A)
+  条件: (hf : 函数.单射 f) (x y : A)
   证明: by
   rw [← map_equation _ hf]; rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]; rw [RingHom.coe_coe]
 
@@ -1136,7 +1136,7 @@ lemma baseChange_nonsingular
 
 中文:
 引理 baseChange_nonsingular
-  条件: (hf : Function.Injective f) (x y : A)
+  条件: (hf : 函数.单射 f) (x y : A)
   证明: by
   rw [← map_nonsingular _ hf]; rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]; rw [RingHom.coe_coe]
 

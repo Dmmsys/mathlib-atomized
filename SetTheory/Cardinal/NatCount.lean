@@ -34,7 +34,7 @@ theorem count_le_cardinal
 
 中文:
 定理 count_le_cardinal
-  结论: (count p n : Cardinal) <= Cardinal.mk { k | p k }
+  结论: (count p n : 基数) <= 基数.mk { k | p k }
   证明: by
   rw [count_eq_card_fintype]; rw [← Cardinal.mk_fintype]
   exact Cardinal.mk_subtype_mono fun x hx => hx.2
@@ -57,7 +57,7 @@ theorem count_le_setENCard
 
 中文:
 定理 count_le_setENCard
-  结论: count p n <= Set.encard { k | p k }
+  结论: count p n <= 集合.encard { k | p k }
   证明: by
   simp only [Set.encard, ENat.card, Set.coe_ofPred, Cardinal.natCast_le_toENat]
   exact Nat.count_le_cardinal n
@@ -81,8 +81,8 @@ theorem count_le_setNCard
 
 中文:
 定理 count_le_setNCard
-  条件: (h : { k | p k }.Finite)
-  结论: count p n <= Set.ncard { k | p k }
+  条件: (h : { k | p k }.有限)
+  结论: count p n <= 集合.ncard { k | p k }
   证明: by
   rw [Set.ncard_def]; rw [← ENat.natCast_le_natCast]; rw [ENat.natCast_toNat (by simpa)]
   exact count_le_setENCard n

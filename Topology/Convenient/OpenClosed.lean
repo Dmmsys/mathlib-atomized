@@ -44,8 +44,8 @@ lemma IsOpen.isGeneratedBy
   suffices forall (V : Set U), (forall a, IsOpen ((g a) 
 
 中文:
-引理 IsOpen.isGeneratedBy
-  条件: [IsGeneratedBy X Y] {U : Set Y} (hU : IsOpen U)
+引理 是开集.isGeneratedBy
+  条件: [是GeneratedBy X Y] {U : 集合 Y} (hU : 是开集 U)
   证明: by
   let W (a : Σ (i : ι), C(X i, Y)) : TopologicalSpace.Opens (X a.1) :=
     ⟨a.2 ⁻¹' U, a.2.continuous.isOpen_preimage U hU⟩
@@ -85,8 +85,8 @@ lemma Topology.IsOpenEmbedding.isGeneratedBy
   hf.toIsEmbedding.toHomeomorph.symm.isQuotientMap.isGeneratedBy
 
 中文:
-引理 Topology.IsOpenEmbedding.isGeneratedBy
-  结论: [IsGeneratedBy X Y]
+引理 拓扑.是开嵌入.isGeneratedBy
+  结论: [是GeneratedBy X Y]
   证明: have := hf.isOpen_range.isGeneratedBy (X := X)
   hf.toIsEmbedding.toHomeomorph.symm.isQuotientMap.isGeneratedBy
 
@@ -119,8 +119,8 @@ lemma IsClosed.isGeneratedBy
   suffices forall (V : Set F), (forall a, IsClosed ((g
 
 中文:
-引理 IsClosed.isGeneratedBy
-  条件: [IsGeneratedBy X Y] {F : Set Y} (hF : IsClosed F)
+引理 是闭集.isGeneratedBy
+  条件: [是GeneratedBy X Y] {F : 集合 Y} (hF : 是闭集 F)
   证明: by
   let W (a : Σ (i : ι), C(X i, Y)) : TopologicalSpace.Closeds (X a.1) :=
     ⟨a.2 ⁻¹' F, IsClosed.preimage a.2.continuous hF⟩
@@ -160,8 +160,8 @@ lemma Topology.IsClosedEmbedding.isGeneratedBy
   hf.toIsEmbedding.toHomeomorph.symm.isQuotientMap.isGeneratedBy
 
 中文:
-引理 Topology.IsClosedEmbedding.isGeneratedBy
-  结论: [IsGeneratedBy X Y]
+引理 拓扑.是闭嵌入.isGeneratedBy
+  结论: [是GeneratedBy X Y]
   证明: have := hf.isClosed_range.isGeneratedBy (X := X)
   hf.toIsEmbedding.toHomeomorph.symm.isQuotientMap.isGeneratedBy
 

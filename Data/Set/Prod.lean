@@ -50,8 +50,8 @@ theorem Subsingleton.prod
   Prod.ext (hs hx.1 hy.1) (ht hx.2 hy.2)
 
 中文:
-定理 Subsingleton.prod
-  条件: (hs : s.Subsingleton) (ht : t.Subsingleton)
+定理 子单例.乘积
+  条件: (hs : s.子单例) (ht : t.子单例)
   证明: fun _x hx _y hy =>
   Prod.ext (hs hx.1 hy.1) (ht hx.2 hy.2)
 -/
@@ -209,7 +209,7 @@ theorem prod_subset_iff
 
 中文:
 定理 prod_subset_iff
-  条件: {P : Set (α × β)}
+  条件: {P : 集合 (α × β)}
   结论: s ×ˢ t subseteq P ↔ 对任意 x in s, 对任意 y in t, (x, y) in P
   证明: ⟨fun h _ hx _ hy => h (mk_mem_prod hx hy), fun h ⟨_, _⟩ hp => h _ hp.1 _ hp.2⟩
 
@@ -228,7 +228,7 @@ theorem forall_prod_set
   proof: prod_subset_iff
 
 中文:
-定理 forall_prod_set
+定理 对任意_prod_set
   条件: {p : α × β -> 命题}
   结论: (对任意 x in s ×ˢ t, p x) ↔ 对任意 x in s, 对任意 y in t, p (x, y)
   证明: prod_subset_iff
@@ -251,7 +251,7 @@ theorem exists_prod_set
 @[simp]
 
 中文:
-定理 exists_prod_set
+定理 存在_prod_set
   条件: {p : α × β -> 命题}
   结论: (存在 x in s ×ˢ t, p x) ↔ 存在 x in s, 存在 y in t, p (x, y)
   证明: by
@@ -279,7 +279,7 @@ theorem prod_empty
 
 中文:
 定理 prod_empty
-  结论: s ×ˢ (∅ : Set β) = ∅
+  结论: s ×ˢ (∅ : 集合 β) = ∅
   证明: by
   ext
   exact iff_of_eq (and_false _)
@@ -307,7 +307,7 @@ theorem empty_prod
 
 中文:
 定理 empty_prod
-  结论: (∅ : Set α) ×ˢ t = ∅
+  结论: (∅ : 集合 α) ×ˢ t = ∅
   证明: by
   ext
   exact iff_of_eq (false_and _)
@@ -355,8 +355,8 @@ theorem univ_prod
 
 中文:
 定理 univ_prod
-  条件: {t : Set β}
-  结论: (univ : Set α) ×ˢ t = Prod.snd ⁻¹' t
+  条件: {t : 集合 β}
+  结论: (univ : 集合 α) ×ˢ t = 积类型.snd ⁻¹' t
   证明: by simp [prod_eq]
 
 Depends on / 依赖: prod_eq
@@ -374,8 +374,8 @@ theorem prod_univ
 
 中文:
 定理 prod_univ
-  条件: {s : Set α}
-  结论: s ×ˢ (univ : Set β) = Prod.fst ⁻¹' s
+  条件: {s : 集合 α}
+  结论: s ×ˢ (univ : 集合 β) = 积类型.fst ⁻¹' s
   证明: by simp [prod_eq]
 
 Depends on / 依赖: prod_eq
@@ -394,7 +394,7 @@ lemma prod_eq_univ
 
 中文:
 引理 prod_eq_univ
-  条件: [Nonempty α] [Nonempty β]
+  条件: [非空 α] [非空 β]
   结论: s ×ˢ t = univ ↔ s = univ ∧ t = univ
   证明: by
   simp [eq_univ_iff_forall, forall_and]
@@ -414,7 +414,7 @@ theorem singleton_prod
 
 中文:
 定理 singleton_prod
-  结论: ({a} : Set α) ×ˢ t = Prod.mk a '' t
+  结论: ({a} : 集合 α) ×ˢ t = 积类型.mk a '' t
   证明: by
   ext ⟨x, y⟩
   simp [and_left_comm, eq_comm]
@@ -439,7 +439,7 @@ theorem prod_singleton
 
 中文:
 定理 prod_singleton
-  结论: s ×ˢ ({b} : Set β) = (fun a => (a, b)) '' s
+  结论: s ×ˢ ({b} : 集合 β) = (fun a => (a, b)) '' s
   证明: by
   ext ⟨x, y⟩
   simp [and_left_comm, eq_comm]
@@ -465,7 +465,7 @@ theorem singleton_prod_singleton
 
 中文:
 定理 singleton_prod_singleton
-  结论: ({a} : Set α) ×ˢ ({b} : Set β) = {(a, b)}
+  结论: ({a} : 集合 α) ×ˢ ({b} : 集合 β) = {(a, b)}
   证明: by ext ⟨c, d⟩; simp
 
 @[simp]
@@ -611,7 +611,7 @@ lemma compl_prod_eq_union
 
 中文:
 引理 compl_prod_eq_union
-  条件: {α β : 类型} (s : Set α) (t : Set β)
+  条件: {α β : 类型} (s : 集合 α) (t : 集合 β)
   证明: by
   grind
 
@@ -655,7 +655,7 @@ theorem Disjoint.set_prod_left
 
 中文:
 定理 Disjoint.set_prod_left
-  条件: (hs : Disjoint s₁ s₂) (t₁ t₂ : Set β)
+  条件: (hs : Disjoint s₁ s₂) (t₁ t₂ : 集合 β)
   证明: disjoint_left.2 fun ⟨_a, _b⟩ ⟨ha₁, _⟩ ⟨ha₂, _⟩ => disjoint_left.1 hs ha₁ ha₂
 
 Depends on / 依赖: disjoint_left
@@ -674,7 +674,7 @@ theorem Disjoint.set_prod_right
 
 中文:
 定理 Disjoint.set_prod_right
-  条件: (ht : Disjoint t₁ t₂) (s₁ s₂ : Set α)
+  条件: (ht : Disjoint t₁ t₂) (s₁ s₂ : 集合 α)
   证明: disjoint_left.2 fun ⟨_a, _b⟩ ⟨_, hb₁⟩ ⟨_, hb₂⟩ => disjoint_left.1 ht hb₁ hb₂
 
 Depends on / 依赖: WithZero, WithZero.denselyOrdered_iff.mpr, denselyOrdered_iff, disjoint_left
@@ -695,7 +695,7 @@ theorem prodMap_image_prod
 
 中文:
 定理 prodMap_image_prod
-  条件: (f : α -> β) (g : γ -> δ) (s : Set α) (t : Set γ)
+  条件: (f : α -> β) (g : γ -> δ) (s : 集合 α) (t : 集合 γ)
   证明: by
   ext
   aesop
@@ -716,7 +716,7 @@ theorem insert_prod
 
 中文:
 定理 insert_prod
-  结论: insert a s ×ˢ t = Prod.mk a '' t union s ×ˢ t
+  结论: insert a s ×ˢ t = 积类型.mk a '' t union s ×ˢ t
   证明: by
   simp only [insert_eq, union_prod, singleton_prod]
 
@@ -806,7 +806,7 @@ theorem preimage_prod_map_prod
 
 中文:
 定理 preimage_prod_map_prod
-  条件: (f : α -> β) (g : γ -> δ) (s : Set β) (t : Set δ)
+  条件: (f : α -> β) (g : γ -> δ) (s : 集合 β) (t : 集合 δ)
   证明: rfl
 -/
 theorem preimage_prod_map_prod (f : α -> β) (g : γ -> δ) (s : Set β) (t : Set δ) :
@@ -871,7 +871,7 @@ theorem mk_preimage_prod_right
 中文:
 定理 mk_preimage_prod_right
   条件: (ha : a in s)
-  结论: Prod.mk a ⁻¹' s ×ˢ t = t
+  结论: 积类型.mk a ⁻¹' s ×ˢ t = t
   证明: by grind
 
 @[simp]
@@ -913,7 +913,7 @@ theorem mk_preimage_prod_right_eq_empty
 中文:
 定理 mk_preimage_prod_right_eq_empty
   条件: (ha : a ∉ s)
-  结论: Prod.mk a ⁻¹' s ×ˢ t = ∅
+  结论: 积类型.mk a ⁻¹' s ×ˢ t = ∅
   证明: by grind
 -/
 theorem mk_preimage_prod_right_eq_empty (ha : a ∉ s) : Prod.mk a ⁻¹' s ×ˢ t = ∅ := by grind
@@ -1000,8 +1000,8 @@ theorem preimage_swap_prod
 
 中文:
 定理 preimage_swap_prod
-  条件: (s : Set α) (t : Set β)
-  结论: Prod.swap ⁻¹' s ×ˢ t = t ×ˢ s
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: 积类型.swap ⁻¹' s ×ˢ t = t ×ˢ s
   证明: by grind
 
 @[simp]
@@ -1021,8 +1021,8 @@ theorem image_swap_prod
 
 中文:
 定理 image_swap_prod
-  条件: (s : Set α) (t : Set β)
-  结论: Prod.swap '' s ×ˢ t = t ×ˢ s
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: 积类型.swap '' s ×ˢ t = t ×ˢ s
   证明: by
   rw [image_swap_eq_preimage_swap]; rw [preimage_swap_prod]
 
@@ -1042,8 +1042,8 @@ theorem mapsTo_swap_prod
 
 中文:
 定理 mapsTo_swap_prod
-  条件: (s : Set α) (t : Set β)
-  结论: MapsTo Prod.swap (s ×ˢ t) (t ×ˢ s)
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: 映射到 积类型.swap (s ×ˢ t) (t ×ˢ s)
   证明: fun _ ⟨hx, hy⟩ => ⟨hy, hx⟩
 
 Depends on / 依赖: Iff.rfl
@@ -1107,7 +1107,7 @@ theorem range_prodMap
 中文:
 定理 range_prodMap
   条件: {m₁ : α -> γ} {m₂ : β -> δ}
-  结论: range (Prod.map m₁ m₂) = range m₁ ×ˢ range m₂
+  结论: range (积类型.map m₁ m₂) = range m₁ ×ˢ range m₂
   证明: prod_range_range_eq.symm
 
 Depends on / 依赖: prod_range_range_eq, prod_range_range_eq.symm
@@ -1175,8 +1175,8 @@ theorem Nonempty.prod
   ⟨(x, y), ⟨hx, hy⟩⟩
 
 中文:
-定理 Nonempty.prod
-  结论: s.Nonempty -> t.Nonempty -> (s ×ˢ t).Nonempty
+定理 非空.乘积
+  结论: s.非空 -> t.非空 -> (s ×ˢ t).非空
   证明: fun ⟨x, hx⟩ ⟨y, hy⟩ =>
   ⟨(x, y), ⟨hx, hy⟩⟩
 -/
@@ -1192,8 +1192,8 @@ theorem Nonempty.fst
   proof: fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
 
 中文:
-定理 Nonempty.fst
-  结论: (s ×ˢ t).Nonempty -> s.Nonempty
+定理 非空.fst
+  结论: (s ×ˢ t).非空 -> s.非空
   证明: fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
 -/
 theorem Nonempty.fst : (s ×ˢ t).Nonempty -> s.Nonempty := fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
@@ -1209,8 +1209,8 @@ theorem Nonempty.snd
 @[simp]
 
 中文:
-定理 Nonempty.snd
-  结论: (s ×ˢ t).Nonempty -> t.Nonempty
+定理 非空.snd
+  结论: (s ×ˢ t).非空 -> t.非空
   证明: fun ⟨x, hx⟩ => ⟨x.2, hx.2⟩
 
 @[simp]
@@ -1230,7 +1230,7 @@ theorem prod_nonempty_iff
 
 中文:
 定理 prod_nonempty_iff
-  结论: (s ×ˢ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ×ˢ t).非空 ↔ s.非空 ∧ t.非空
   证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.1.prod h.2⟩
 
 @[simp]
@@ -1271,7 +1271,7 @@ theorem prod_sub_preimage_iff
 
 中文:
 定理 prod_sub_preimage_iff
-  条件: {W : Set γ} {f : α × β -> γ}
+  条件: {W : 集合 γ} {f : α × β -> γ}
   证明: by simp [subset_def]
 
 Depends on / 依赖: subset_def
@@ -1289,7 +1289,7 @@ theorem image_prodMk_subset_prod
 
 中文:
 定理 image_prodMk_subset_prod
-  条件: {f : α -> β} {g : α -> γ} {s : Set α}
+  条件: {f : α -> β} {g : α -> γ} {s : 集合 α}
   证明: by grind
 -/
 theorem image_prodMk_subset_prod {f : α -> β} {g : α -> γ} {s : Set α} :
@@ -1324,7 +1324,7 @@ theorem image_prodMk_subset_prod_right
 中文:
 定理 image_prodMk_subset_prod_right
   条件: (ha : a in s)
-  结论: Prod.mk a '' t subseteq s ×ˢ t
+  结论: 积类型.mk a '' t subseteq s ×ˢ t
   证明: by grind
 -/
 theorem image_prodMk_subset_prod_right (ha : a in s) : Prod.mk a '' t subseteq s ×ˢ t := by grind
@@ -1340,8 +1340,8 @@ theorem prod_subset_preimage_fst
 
 中文:
 定理 prod_subset_preimage_fst
-  条件: (s : Set α) (t : Set β)
-  结论: s ×ˢ t subseteq Prod.fst ⁻¹' s
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: s ×ˢ t subseteq 积类型.fst ⁻¹' s
   证明: inter_subset_left
 
 Depends on / 依赖: inter_subset_left
@@ -1360,8 +1360,8 @@ theorem fst_image_prod_subset
 
 中文:
 定理 fst_image_prod_subset
-  条件: (s : Set α) (t : Set β)
-  结论: Prod.fst '' s ×ˢ t subseteq s
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: 积类型.fst '' s ×ˢ t subseteq s
   证明: image_subset_iff.2 prod_subset_preimage_fst s t
 
 Depends on / 依赖: image_subset_iff, prod_subset_preimage_fst
@@ -1382,8 +1382,8 @@ theorem fst_image_prod
 
 中文:
 定理 fst_image_prod
-  条件: (s : Set β) {t : Set α} (ht : t.Nonempty)
-  结论: Prod.fst '' s ×ˢ t = s
+  条件: (s : 集合 β) {t : 集合 α} (ht : t.非空)
+  结论: 积类型.fst '' s ×ˢ t = s
   证明: (fst_image_prod_subset _ _).antisymm fun y hy =>
     let ⟨x, hx⟩ := ht
     ⟨(y, x), ⟨hy, hx⟩, rfl⟩
@@ -1406,8 +1406,8 @@ lemma mapsTo_fst_prod
 
 中文:
 引理 mapsTo_fst_prod
-  条件: {s : Set α} {t : Set β}
-  结论: MapsTo Prod.fst (s ×ˢ t) s
+  条件: {s : 集合 α} {t : 集合 β}
+  结论: 映射到 积类型.fst (s ×ˢ t) s
   证明: fun _ hx => (mem_prod.1 hx).1
 
 Depends on / 依赖: mem_prod
@@ -1426,8 +1426,8 @@ theorem prod_subset_preimage_snd
 
 中文:
 定理 prod_subset_preimage_snd
-  条件: (s : Set α) (t : Set β)
-  结论: s ×ˢ t subseteq Prod.snd ⁻¹' t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: s ×ˢ t subseteq 积类型.snd ⁻¹' t
   证明: inter_subset_right
 
 Depends on / 依赖: inter_subset_right
@@ -1446,8 +1446,8 @@ theorem snd_image_prod_subset
 
 中文:
 定理 snd_image_prod_subset
-  条件: (s : Set α) (t : Set β)
-  结论: Prod.snd '' s ×ˢ t subseteq t
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: 积类型.snd '' s ×ˢ t subseteq t
   证明: image_subset_iff.2 prod_subset_preimage_snd s t
 
 Depends on / 依赖: image_subset_iff, prod_subset_preimage_snd
@@ -1468,8 +1468,8 @@ theorem snd_image_prod
 
 中文:
 定理 snd_image_prod
-  条件: {s : Set α} (hs : s.Nonempty) (t : Set β)
-  结论: Prod.snd '' s ×ˢ t = t
+  条件: {s : 集合 α} (hs : s.非空) (t : 集合 β)
+  结论: 积类型.snd '' s ×ˢ t = t
   证明: (snd_image_prod_subset _ _).antisymm fun y y_in =>
     let ⟨x, x_in⟩ := hs
     ⟨(x, y), ⟨x_in, y_in⟩, rfl⟩
@@ -1491,7 +1491,7 @@ theorem subset_fst_image_prod_snd_image
 
 中文:
 定理 subset_fst_image_prod_snd_image
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: fun ⟨p₁, p₂⟩ _ => by aesop
 -/
 theorem subset_fst_image_prod_snd_image {s : Set (α × β)} :
@@ -1508,8 +1508,8 @@ lemma mapsTo_snd_prod
 
 中文:
 引理 mapsTo_snd_prod
-  条件: {s : Set α} {t : Set β}
-  结论: MapsTo Prod.snd (s ×ˢ t) t
+  条件: {s : 集合 α} {t : 集合 β}
+  结论: 映射到 积类型.snd (s ×ˢ t) t
   证明: fun _ hx => (mem_prod.1 hx).2
 
 Depends on / 依赖: mem_prod
@@ -1592,7 +1592,7 @@ theorem prod_subset_prod_iff'
 
 中文:
 定理 prod_subset_prod_iff'
-  条件: (h : (s ×ˢ t).Nonempty)
+  条件: (h : (s ×ˢ t).非空)
   结论: s ×ˢ t subseteq s₁ ×ˢ t₁ ↔ s subseteq s₁ ∧ t subseteq t₁
   证明: by
   rw [prod_subset_prod_iff]; rw [or_iff_left]
@@ -1618,7 +1618,7 @@ theorem prod_subset_prod_iff_left
 
 中文:
 定理 prod_subset_prod_iff_left
-  条件: (h : t.Nonempty)
+  条件: (h : t.非空)
   结论: s ×ˢ t subseteq s₁ ×ˢ t ↔ s subseteq s₁
   证明: by
   simp +contextual [prod_subset_prod_iff, or_iff_left h.ne_empty]
@@ -1640,7 +1640,7 @@ theorem prod_subset_prod_iff_right
 
 中文:
 定理 prod_subset_prod_iff_right
-  条件: (h : s.Nonempty)
+  条件: (h : s.非空)
   结论: s ×ˢ t subseteq s ×ˢ t₁ ↔ t subseteq t₁
   证明: by
   simp +contextual [prod_subset_prod_iff, or_comm (a := s = ∅), or_iff_left h.ne_empty]
@@ -1666,7 +1666,7 @@ theorem prod_eq_prod_iff_of_nonempty
 
 中文:
 定理 prod_eq_prod_iff_of_nonempty
-  条件: (h : (s ×ˢ t).Nonempty)
+  条件: (h : (s ×ˢ t).非空)
   证明: by
   constructor
   · intro heq
@@ -1744,7 +1744,7 @@ theorem prod_eq_iff_eq
 
 中文:
 定理 prod_eq_iff_eq
-  条件: (ht : t.Nonempty)
+  条件: (ht : t.非空)
   结论: s ×ˢ t = s₁ ×ˢ t ↔ s = s₁
   证明: by
   simp_rw [prod_eq_prod_iff, ht.ne_empty, and_true, or_iff_left_iff_imp, or_false]
@@ -1769,8 +1769,8 @@ theorem subset_prod
 
 中文:
 定理 subset_prod
-  条件: {s : Set (α × β)}
-  结论: s subseteq (Prod.fst '' s) ×ˢ (Prod.snd '' s)
+  条件: {s : 集合 (α × β)}
+  结论: s subseteq (积类型.fst '' s) ×ˢ (积类型.snd '' s)
   证明: fun _ hp => mem_prod.2 ⟨mem_image_of_mem _ hp, mem_image_of_mem _ hp⟩
 
 Depends on / 依赖: mem_image_of_mem, mem_prod
@@ -1791,8 +1791,8 @@ theorem _root_.Monotone.set_prod
   proof: fun _ _ h => prod_mono (hf h) (hg h)
 
 中文:
-定理 _root_.Monotone.set_prod
-  条件: (hf : Monotone f) (hg : Monotone g)
+定理 _root_.递增.set_prod
+  条件: (hf : 递增 f) (hg : 递增 g)
   证明: fun _ _ h => prod_mono (hf h) (hg h)
 
 Depends on / 依赖: prod_mono
@@ -1810,8 +1810,8 @@ theorem _root_.Antitone.set_prod
   proof: fun _ _ h => prod_mono (hf h) (hg h)
 
 中文:
-定理 _root_.Antitone.set_prod
-  条件: (hf : Antitone f) (hg : Antitone g)
+定理 _root_.递减.set_prod
+  条件: (hf : 递减 f) (hg : 递减 g)
   证明: fun _ _ h => prod_mono (hf h) (hg h)
 
 Depends on / 依赖: prod_mono
@@ -2000,8 +2000,8 @@ lemma diagonal_nonempty
 
 中文:
 引理 diagonal_nonempty
-  条件: [Nonempty α]
-  结论: (diagonal α).Nonempty
+  条件: [非空 α]
+  结论: (diagonal α).非空
   证明: Nonempty.elim ‹_› fun x => ⟨_, mem_diagonal x⟩
 
 Depends on / 依赖: Nonempty, Nonempty.elim, mem_diagonal
@@ -2041,7 +2041,7 @@ theorem preimage_coe_coe_diagonal
 
 中文:
 定理 preimage_coe_coe_diagonal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   ext ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
   simp [Set.diagonal]
@@ -2068,7 +2068,7 @@ theorem range_diag
 
 中文:
 定理 range_diag
-  结论: range Function.diag = diagonal α
+  结论: range 函数.diag = diagonal α
   证明: by
   ext ⟨x, y⟩
   simp [diagonal, eq_comm]
@@ -2137,8 +2137,8 @@ theorem diag_preimage_prod
 
 中文:
 定理 diag_preimage_prod
-  条件: (s t : Set α)
-  结论: Function.diag ⁻¹' s ×ˢ t = s inter t
+  条件: (s t : 集合 α)
+  结论: 函数.diag ⁻¹' s ×ˢ t = s inter t
   证明: rfl
 
 Depends on / 依赖: coe_eq_singleton, isComplement_univ_right, isComplement_univ_right.trans
@@ -2157,8 +2157,8 @@ theorem diag_preimage_prod_self
 
 中文:
 定理 diag_preimage_prod_self
-  条件: (s : Set α)
-  结论: Function.diag ⁻¹' s ×ˢ s = s
+  条件: (s : 集合 α)
+  结论: 函数.diag ⁻¹' s ×ˢ s = s
   证明: inter_self s
 
 Depends on / 依赖: inter_self
@@ -2178,8 +2178,8 @@ theorem diag_image
 
 中文:
 定理 diag_image
-  条件: (s : Set α)
-  结论: Function.diag '' s = diagonal α inter s ×ˢ s
+  条件: (s : 集合 α)
+  结论: 函数.diag '' s = diagonal α inter s ×ˢ s
   证明: by
   rw [← range_diag]; rw [← image_preimage_eq_range_inter]; rw [diag_preimage_prod_self]
 
@@ -2199,7 +2199,7 @@ theorem diagonal_eq_univ_iff
 
 中文:
 定理 diagonal_eq_univ_iff
-  结论: diagonal α = univ ↔ Subsingleton α
+  结论: diagonal α = univ ↔ 子单例 α
   证明: by
   simp only [subsingleton_iff, eq_univ_iff_forall, Prod.forall, mem_diagonal_iff]
 
@@ -2219,7 +2219,7 @@ theorem diagonal_eq_univ
 
 中文:
 定理 diagonal_eq_univ
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: diagonal α = univ
   证明: diagonal_eq_univ_iff.2 ‹_›
 
@@ -2243,7 +2243,7 @@ theorem range_const_eq_diagonal
 
 中文:
 定理 range_const_eq_diagonal
-  条件: {α β : 类型} [hβ : Nonempty β]
+  条件: {α β : 类型} [hβ : 非空 β]
   证明: by
   refine (range_eq_iff _ _).mpr ⟨fun _ _ _ => rfl, fun f hf => ?_⟩
   rcases isEmpty_or_nonempty α with h | ⟨⟨a⟩⟩
@@ -2276,7 +2276,7 @@ abbreviation Function.Pullback
   body: {p : X × Z // f p.1 = g p.2}
 
 中文:
-缩写 Function.Pullback
+缩写 函数.拉回
   签名: (f : X -> Y) (g : Z -> Y)
   定义体: {p : X × Z // f p.1 = g p.2}
 -/
@@ -2291,7 +2291,7 @@ abbreviation Function.PullbackSelf
   body: f.Pullback f
 
 中文:
-缩写 Function.PullbackSelf
+缩写 函数.PullbackSelf
   签名: (f : X -> Y)
   定义体: f.Pullback f
 
@@ -2308,8 +2308,8 @@ definition Function.Pullback.fst
   body: p.val.1
 
 中文:
-定义 Function.Pullback.fst
-  签名: {f : X -> Y} {g : Z -> Y} (p : f.Pullback g)
+定义 函数.拉回.fst
+  签名: {f : X -> Y} {g : Z -> Y} (p : f.拉回 g)
   定义体: p.val.1
 
 Depends on / 依赖: p.val
@@ -2325,8 +2325,8 @@ definition Function.Pullback.snd
   body: p.val.2
 
 中文:
-定义 Function.Pullback.snd
-  签名: {f : X -> Y} {g : Z -> Y} (p : f.Pullback g)
+定义 函数.拉回.snd
+  签名: {f : X -> Y} {g : Z -> Y} (p : f.拉回 g)
   定义体: p.val.2
 
 Depends on / 依赖: p.val
@@ -2343,7 +2343,7 @@ lemma Function.pullback_comm_sq
   proof: funext fun p => p.2
 
 中文:
-引理 Function.pullback_comm_sq
+引理 函数.pullback_comm_sq
   条件: (f : X -> Y) (g : Z -> Y)
   证明: funext fun p => p.2
 -/
@@ -2376,7 +2376,7 @@ definition Function.pullbackDiagonal
   body: {p | p.fst = p.snd}
 
 中文:
-定义 Function.pullbackDiagonal
+定义 函数.pullbackDiagonal
   签名: (f : X -> Y)
   定义体: {p | p.fst = p.snd}
 
@@ -2394,7 +2394,7 @@ definition Function.mapPullback
 (congr_fun commX _).trans (congr_arg mapY p.2).trans congr_fun commZ.symm _⟩
 
 中文:
-定义 Function.mapPullback
+定义 函数.mapPullback
   签名: {X₁ X₂ Y₁ Y₂ Z₁ Z₂}
   定义体: ⟨(mapX p.fst, mapZ p.snd),
 (congr_fun commX _).trans (congr_arg mapY p.2).trans congr_fun commZ.symm _⟩
@@ -2419,7 +2419,7 @@ definition Function.PullbackSelf.map_fst
   body: mapPullback fst g fst (pullback_comm_sq f g) (pullback_comm_sq f g)
 
 中文:
-定义 Function.PullbackSelf.map_fst
+定义 函数.PullbackSelf.map_fst
   签名: {f : X -> Y} {g : Z -> Y}
   定义体: mapPullback fst g fst (pullback_comm_sq f g) (pullback_comm_sq f g)
 
@@ -2439,7 +2439,7 @@ definition Function.PullbackSelf.map_snd
   body: mapPullback snd f snd (pullback_comm_sq f g).symm (pullback_comm_sq f g).symm
 
 中文:
-定义 Function.PullbackSelf.map_snd
+定义 函数.PullbackSelf.map_snd
   签名: {f : X -> Y} {g : Z -> Y}
   定义体: mapPullback snd f snd (pullback_comm_sq f g).symm (pullback_comm_sq f g).symm
 
@@ -2486,8 +2486,8 @@ theorem Function.Injective.preimage_pullbackDiagonal
   proof: ext fun _ => inj.eq_iff
 
 中文:
-定理 Function.Injective.preimage_pullbackDiagonal
-  条件: {f : X -> Y} {g : Z -> X} (inj : g.Injective)
+定理 函数.单射.preimage_pullbackDiagonal
+  条件: {f : X -> Y} {g : Z -> X} (inj : g.单射)
   证明: ext fun _ => inj.eq_iff
 
 Depends on / 依赖: eq_iff, inj.eq_iff
@@ -2513,7 +2513,7 @@ theorem image_toPullbackDiag
 
 中文:
 定理 image_toPullbackDiag
-  条件: (f : X -> Y) (s : Set X)
+  条件: (f : X -> Y) (s : 集合 X)
   证明: by
   ext x
   constructor
@@ -2569,7 +2569,7 @@ theorem injective_toPullbackDiag
 中文:
 定理 injective_toPullbackDiag
   条件: (f : X -> Y)
-  结论: (toPullbackDiag f).Injective
+  结论: (toPullbackDiag f).单射
   证明: fun _ _ h => congr_arg Prod.fst (congr_arg Subtype.val h)
 
 Depends on / 依赖: Prod.fst, Subtype, Subtype.val, congr_arg
@@ -2598,7 +2598,7 @@ And.imp (@h _) And.imp_left @h _
 
 中文:
 定理 offDiag_mono
-  结论: Monotone (offDiag : Set α -> Set (α × α))
+  结论: 递增 (offDiag : 集合 α -> 集合 (α × α))
   证明: fun _ _ h _ =>
 And.imp (@h _) And.imp_left @h _
 
@@ -2621,7 +2621,7 @@ theorem offDiag_nonempty
 
 中文:
 定理 offDiag_nonempty
-  结论: s.offDiag.Nonempty ↔ s.Nontrivial
+  结论: s.offDiag.非空 ↔ s.非平凡
   证明: by
   simp [offDiag, Set.Nonempty, Set.Nontrivial]
 
@@ -2648,7 +2648,7 @@ alias ⟨_, Subsingleton.offDiag_eq_empty⟩ := offDiag_eq_empty
 
 中文:
 定理 offDiag_eq_empty
-  结论: s.offDiag = ∅ ↔ s.Subsingleton
+  结论: s.offDiag = ∅ ↔ s.子单例
   证明: by
   rw [← not_nonempty_iff_eq_empty]; rw [← not_nontrivial_iff]; rw [offDiag_nonempty.not]
 
@@ -2717,7 +2717,7 @@ theorem offDiag_empty
 
 中文:
 定理 offDiag_empty
-  结论: (∅ : Set α).offDiag = ∅
+  结论: (∅ : 集合 α).offDiag = ∅
   证明: by simp
 
 @[simp]
@@ -2739,7 +2739,7 @@ theorem offDiag_singleton
 中文:
 定理 offDiag_singleton
   条件: (a : α)
-  结论: ({a} : Set α).offDiag = ∅
+  结论: ({a} : 集合 α).offDiag = ∅
   证明: by simp
 
 @[simp]
@@ -2759,7 +2759,7 @@ theorem offDiag_univ
 
 中文:
 定理 offDiag_univ
-  结论: (univ : Set α).offDiag = (diagonal α)ᶜ
+  结论: (univ : 集合 α).offDiag = (diagonal α)ᶜ
   证明: ext by simp
 
 @[simp]
@@ -2912,7 +2912,7 @@ theorem empty_pi
 
 中文:
 定理 empty_pi
-  条件: (s : 对任意 i, Set (α i))
+  条件: (s : 对任意 i, 集合 (α i))
   结论: pi ∅ s = univ
   证明: by grind
 -/
@@ -2931,7 +2931,7 @@ theorem subsingleton_univ_pi
 
 中文:
 定理 subsingleton_univ_pi
-  条件: (ht : 对任意 i, (t i).Subsingleton)
+  条件: (ht : 对任意 i, (t i).子单例)
   证明: fun _f hf _g hg => funext fun i =>
   (ht i) (hf _ <| mem_univ _) (hg _ <| mem_univ _)
 
@@ -2955,8 +2955,8 @@ theorem pi_univ
 
 中文:
 定理 pi_univ
-  条件: (s : Set ι)
-  结论: (pi s fun i => (univ : Set (α i))) = univ
+  条件: (s : 集合 ι)
+  结论: (pi s fun i => (univ : 集合 (α i))) = univ
   证明: eq_univ_of_forall fun _ _ _ => mem_univ _
 
 @[simp]
@@ -2979,7 +2979,7 @@ theorem pi_univ_ite
 
 中文:
 定理 pi_univ_ite
-  条件: (s : Set ι) [DecidablePred (· in s)] (t : 对任意 i, Set (α i))
+  条件: (s : 集合 ι) [DecidablePred (· in s)] (t : 对任意 i, 集合 (α i))
   证明: by grind
 
 @[gcongr]
@@ -3105,7 +3105,7 @@ theorem pi_nonempty_iff
 
 中文:
 定理 pi_nonempty_iff
-  结论: (s.pi t).Nonempty ↔ 对任意 i, 存在 x, i in s -> x in t i
+  结论: (s.pi t).非空 ↔ 对任意 i, 存在 x, i in s -> x in t i
   证明: by
   simp [Classical.skolem, Set.Nonempty]
 
@@ -3125,7 +3125,7 @@ theorem univ_pi_nonempty_iff
 
 中文:
 定理 univ_pi_nonempty_iff
-  结论: (pi univ t).Nonempty ↔ 对任意 i, (t i).Nonempty
+  结论: (pi univ t).非空 ↔ 对任意 i, (t i).非空
   证明: by
   simp [Classical.skolem, Set.Nonempty]
 
@@ -3150,7 +3150,7 @@ theorem pi_eq_empty_iff
 
 中文:
 定理 pi_eq_empty_iff
-  结论: s.pi t = ∅ ↔ 存在 i, IsEmpty (α i) ∨ i in s ∧ t i = ∅
+  结论: s.pi t = ∅ ↔ 存在 i, 是空 (α i) ∨ i in s ∧ t i = ∅
   证明: by
   rw [← not_nonempty_iff_eq_empty]; rw [pi_nonempty_iff]
   push Not
@@ -3206,8 +3206,8 @@ theorem univ_pi_empty
 
 中文:
 定理 univ_pi_empty
-  条件: [h : Nonempty ι]
-  结论: pi univ (fun _ => ∅ : 对任意 i, Set (α i)) = ∅
+  条件: [h : 非空 ι]
+  结论: pi univ (fun _ => ∅ : 对任意 i, 集合 (α i)) = ∅
   证明: univ_pi_eq_empty_iff.2 h.elim fun x => ⟨x, rfl⟩
 
 @[simp]
@@ -3268,7 +3268,7 @@ theorem uniqueElim_preimage
 
 中文:
 定理 uniqueElim_preimage
-  条件: [Unique ι] (t : 对任意 i, Set (α i))
+  条件: [唯一 ι] (t : 对任意 i, 集合 (α i))
   证明: by ext; simp [Unique.forall_iff]
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_iff
@@ -3337,7 +3337,7 @@ theorem insert_pi
 
 中文:
 定理 insert_pi
-  条件: (i : ι) (s : Set ι) (t : 对任意 i, Set (α i))
+  条件: (i : ι) (s : 集合 ι) (t : 对任意 i, 集合 (α i))
   证明: by grind
 
 @[simp]
@@ -3357,7 +3357,7 @@ theorem singleton_pi
 
 中文:
 定理 singleton_pi
-  条件: (i : ι) (t : 对任意 i, Set (α i))
+  条件: (i : ι) (t : 对任意 i, 集合 (α i))
   结论: pi {i} t = eval i ⁻¹' t i
   证明: by grind
 -/
@@ -3374,7 +3374,7 @@ theorem singleton_pi'
 
 中文:
 定理 singleton_pi'
-  条件: (i : ι) (t : 对任意 i, Set (α i))
+  条件: (i : ι) (t : 对任意 i, 集合 (α i))
   结论: pi {i} t = { x | x i in t i }
   证明: singleton_pi i t
 
@@ -3395,7 +3395,7 @@ theorem univ_pi_singleton
 中文:
 定理 univ_pi_singleton
   条件: (f : 对任意 i, α i)
-  结论: (pi univ fun i => {f i}) = ({f} : Set (对任意 i, α i))
+  结论: (pi univ fun i => {f i}) = ({f} : 集合 (对任意 i, α i))
   证明: ext fun g => by simp [funext_iff]
 
 Depends on / 依赖: funext_iff
@@ -3413,7 +3413,7 @@ theorem preimage_pi
 
 中文:
 定理 preimage_pi
-  条件: (s : Set ι) (t : 对任意 i, Set (β i)) (f : 对任意 i, α i -> β i)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (β i)) (f : 对任意 i, α i -> β i)
   证明: rfl
 -/
 theorem preimage_pi (s : Set ι) (t : forall i, Set (β i)) (f : forall i, α i -> β i) :
@@ -3437,7 +3437,7 @@ theorem pi_if
 
 中文:
 定理 pi_if
-  条件: {p : ι -> 命题} [h : DecidablePred p] (s : Set ι) (t₁ t₂ : 对任意 i, Set (α i))
+  条件: {p : ι -> 命题} [h : DecidablePred p] (s : 集合 ι) (t₁ t₂ : 对任意 i, 集合 (α i))
   证明: by
   ext f
   refine ⟨fun h => ?_, ?_⟩
@@ -3512,7 +3512,7 @@ theorem pi_inter_compl
 
 中文:
 定理 pi_inter_compl
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   结论: pi s t inter pi sᶜ t = pi univ t
   证明: by grind
 -/
@@ -3608,7 +3608,7 @@ theorem univ_pi_update_univ
 
 中文:
 定理 univ_pi_update_univ
-  条件: [DecidableEq ι] (i : ι) (s : Set (α i))
+  条件: [DecidableEq ι] (i : ι) (s : 集合 (α i))
   证明: by
   rw [univ_pi_update i (fun j => (univ : Set (α j))) s fun j t => t]; rw [pi_univ]; rw [inter_univ]; rw [preimage]
 
@@ -3671,7 +3671,7 @@ theorem subset_eval_image_pi
 
 中文:
 定理 subset_eval_image_pi
-  条件: (ht : (s.pi t).Nonempty) (i : ι)
+  条件: (ht : (s.pi t).非空) (i : ι)
   结论: t i subseteq eval i '' s.pi t
   证明: by
   classical
@@ -3698,7 +3698,7 @@ theorem eval_image_pi
 
 中文:
 定理 eval_image_pi
-  条件: (hs : i in s) (ht : (s.pi t).Nonempty)
+  条件: (hs : i in s) (ht : (s.pi t).非空)
   结论: eval i '' s.pi t = t i
   证明: (eval_image_pi_subset hs).antisymm (subset_eval_image_pi ht i)
 
@@ -3728,7 +3728,7 @@ lemma eval_image_pi_of_notMem
 
 中文:
 引理 eval_image_pi_of_notMem
-  条件: [Decidable (s.pi t).Nonempty] (hi : i ∉ s)
+  条件: [可判定 (s.pi t).非空] (hi : i ∉ s)
   证明: by
   classical
   ext xᵢ
@@ -3767,7 +3767,7 @@ theorem eval_image_univ_pi
 
 中文:
 定理 eval_image_univ_pi
-  条件: (ht : (pi univ t).Nonempty)
+  条件: (ht : (pi univ t).非空)
   证明: eval_image_pi (mem_univ i) ht
 
 Depends on / 依赖: _of_card_mul_and_disjoint, card_mul_card, disjoint, eval_image_pi, h.card_mul_card, h.disjoint, isComplement, mem_univ
@@ -3786,7 +3786,7 @@ theorem piMap_mapsTo_pi
 
 中文:
 定理 piMap_mapsTo_pi
-  结论: {I : Set ι} {f : 对任意 i, α i -> β i} {s : 对任意 i, Set (α i)} {t : 对任意 i, Set (β i)}
+  结论: {I : 集合 ι} {f : 对任意 i, α i -> β i} {s : 对任意 i, 集合 (α i)} {t : 对任意 i, 集合 (β i)}
   证明: fun _x hx i hi => h i hi (hx i hi)
 
 Depends on / 依赖: _of_card_mul_and_disjoint, disjoint_of_coprime_natCard, isComplement
@@ -3806,7 +3806,7 @@ theorem piMap_image_pi_subset
 
 中文:
 定理 piMap_image_pi_subset
-  条件: {f : 对任意 i, α i -> β i} (t : 对任意 i, Set (α i))
+  条件: {f : 对任意 i, α i -> β i} (t : 对任意 i, 集合 (α i))
   证明: image_subset_iff.2 piMap_mapsTo_pi fun _ _ => mapsTo_image _ _
 
 Depends on / 依赖: Prod.ext, Subtype, Subtype.ext, Subtype.ext_iff, coe_mul, coe_one, eq_inv_of_mul_eq_one_right, ext_iff, image_subset_iff, inv_mul_cancel_left, isComplement_iff_existsUnique, isComplement_iff_existsUnique.mpr, mapsTo_image, mul_assoc, mul_smul, piMap_mapsTo_pi, right_eq_mul, smul_def, specialize
@@ -3832,7 +3832,7 @@ theorem piMap_image_pi
 
 中文:
 定理 piMap_image_pi
-  条件: {f : 对任意 i, α i -> β i} (hf : 对任意 i ∉ s, Surjective (f i)) (t : 对任意 i, Set (α i))
+  条件: {f : 对任意 i, α i -> β i} (hf : 对任意 i ∉ s, 满射 (f i)) (t : 对任意 i, 集合 (α i))
   证明: by
   refine Subset.antisymm (piMap_image_pi_subset _) fun b hb => ?_
   have (i : ι) : exists a, f i a = b i ∧ (i in s -> a in t i) := by
@@ -3867,7 +3867,7 @@ theorem piMap_image_univ_pi
 
 中文:
 定理 piMap_image_univ_pi
-  条件: (f : 对任意 i, α i -> β i) (t : 对任意 i, Set (α i))
+  条件: (f : 对任意 i, α i -> β i) (t : 对任意 i, 集合 (α i))
   证明: piMap_image_pi (by simp) t
 
 @[simp]
@@ -3892,7 +3892,7 @@ theorem range_piMap
 中文:
 定理 range_piMap
   条件: (f : 对任意 i, α i -> β i)
-  结论: range (Pi.map f) = pi univ fun i => range (f i)
+  结论: range (依赖函数类型.map f) = pi univ fun i => range (f i)
   证明: by
   simp only [← image_univ, ← piMap_image_univ_pi, pi_univ]
 
@@ -4055,7 +4055,7 @@ theorem eval_preimage
 
 中文:
 定理 eval_preimage
-  条件: [DecidableEq ι] {s : Set (α i)}
+  条件: [DecidableEq ι] {s : 集合 (α i)}
   证明: by
   ext x
   simp [@forall_update_iff _ (fun i => Set (α i)) _ _ _ _ fun i' y => x i' in y]
@@ -4079,7 +4079,7 @@ theorem eval_preimage'
 
 中文:
 定理 eval_preimage'
-  条件: [DecidableEq ι] {s : Set (α i)}
+  条件: [DecidableEq ι] {s : 集合 (α i)}
   证明: by
   ext
   simp
@@ -4146,7 +4146,7 @@ theorem update_image
 
 中文:
 定理 update_image
-  条件: [DecidableEq ι] (x : (i : ι) -> β i) (i : ι) (s : Set (β i))
+  条件: [DecidableEq ι] (x : (i : ι) -> β i) (i : ι) (s : 集合 (β i))
   证明: by
   ext y
   simp only [mem_image, update_eq_iff, ne_eq, and_left_comm (a := _ in s), exists_eq_left, mem_pi,
@@ -4194,7 +4194,7 @@ theorem subset_pi_eval_image
 
 中文:
 定理 subset_pi_eval_image
-  条件: (s : Set ι) (u : Set (对任意 i, α i))
+  条件: (s : 集合 ι) (u : 集合 (对任意 i, α i))
   结论: u subseteq pi s fun i => eval i '' u
   证明: fun f hf _ _ => ⟨f, hf, rfl⟩
 -/
@@ -4211,7 +4211,7 @@ theorem univ_pi_ite
 
 中文:
 定理 univ_pi_ite
-  条件: (s : Set ι) [DecidablePred (· in s)] (t : 对任意 i, Set (α i))
+  条件: (s : 集合 ι) [DecidablePred (· in s)] (t : 对任意 i, 集合 (α i))
   证明: by grind
 -/
 theorem univ_pi_ite (s : Set ι) [DecidablePred (· in s)] (t : forall i, Set (α i)) :
@@ -4227,7 +4227,7 @@ lemma uncurry_preimage_prod_pi
 
 中文:
 引理 uncurry_preimage_prod_pi
-  条件: {κ α : 类型} (s : Set ι) (t : Set κ) (u : ι × κ -> Set α)
+  条件: {κ α : 类型} (s : 集合 ι) (t : 集合 κ) (u : ι × κ -> 集合 α)
   证明: by grind
 -/
 lemma uncurry_preimage_prod_pi {κ α : Type*} (s : Set ι) (t : Set κ) (u : ι × κ -> Set α) :
@@ -4253,7 +4253,7 @@ theorem piCongrLeft_symm_preimage_pi
 
 中文:
 定理 piCongrLeft_symm_preimage_pi
-  条件: (f : ι' ≃ ι) (s : Set ι') (t : 对任意 i, Set (α i))
+  条件: (f : ι' ≃ ι) (s : 集合 ι') (t : 对任意 i, 集合 (α i))
   证明: by
   ext; simp
 -/
@@ -4272,7 +4272,7 @@ theorem piCongrLeft_symm_preimage_univ_pi
 
 中文:
 定理 piCongrLeft_symm_preimage_univ_pi
-  条件: (f : ι' ≃ ι) (t : 对任意 i, Set (α i))
+  条件: (f : ι' ≃ ι) (t : 对任意 i, 集合 (α i))
   证明: by
   simpa [f.surjective.range_eq] using piCongrLeft_symm_preimage_pi f univ t
 
@@ -4295,7 +4295,7 @@ theorem piCongrLeft_preimage_pi
 
 中文:
 定理 piCongrLeft_preimage_pi
-  条件: (f : ι' ≃ ι) (s : Set ι') (t : 对任意 i, Set (α i))
+  条件: (f : ι' ≃ ι) (s : 集合 ι') (t : 对任意 i, 集合 (α i))
   证明: by
   apply Set.ext
   rw [← (f.piCongrLeft α).symm.forall_congr_right]
@@ -4320,7 +4320,7 @@ theorem piCongrLeft_preimage_univ_pi
 
 中文:
 定理 piCongrLeft_preimage_univ_pi
-  条件: (f : ι' ≃ ι) (t : 对任意 i, Set (α i))
+  条件: (f : ι' ≃ ι) (t : 对任意 i, 集合 (α i))
   证明: by
   simpa [f.surjective.range_eq] using piCongrLeft_preimage_pi f univ t
 
@@ -4342,7 +4342,7 @@ theorem sumPiEquivProdPi_symm_preimage_univ_pi
 
 中文:
 定理 sumPiEquivProdPi_symm_preimage_univ_pi
-  条件: (π : ι oplus ι' -> 类型) (t : 对任意 i, Set (π i))
+  条件: (π : ι oplus ι' -> 类型) (t : 对任意 i, 集合 (π i))
   证明: by
   ext
   simp
@@ -4421,7 +4421,7 @@ protected alias ⟨_, Nonempty.graphOn⟩ := graphOn_nonempty
 
 中文:
 引理 graphOn_nonempty
-  结论: (s.graphOn f).Nonempty ↔ s.Nonempty
+  结论: (s.graphOn f).非空 ↔ s.非空
   证明: image_nonempty
 
 protected alias ⟨_, Nonempty.graphOn⟩ := graphOn_nonempty
@@ -4446,7 +4446,7 @@ lemma graphOn_union
 
 中文:
 引理 graphOn_union
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   结论: graphOn f (s union t) = graphOn f s union graphOn f t
   证明: image_union ..
 
@@ -4495,7 +4495,7 @@ lemma graphOn_insert
 
 中文:
 引理 graphOn_insert
-  条件: (f : α -> β) (x : α) (s : Set α)
+  条件: (f : α -> β) (x : α) (s : 集合 α)
   证明: image_insert_eq ..
 
 @[simp]
@@ -4519,8 +4519,8 @@ lemma image_fst_graphOn
 
 中文:
 引理 image_fst_graphOn
-  条件: (f : α -> β) (s : Set α)
-  结论: Prod.fst '' graphOn f s = s
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 积类型.fst '' graphOn f s = s
   证明: by
   simp [graphOn, image_image]
 
@@ -4541,7 +4541,7 @@ lemma image_snd_graphOn
 中文:
 引理 image_snd_graphOn
   条件: (f : α -> β)
-  结论: Prod.snd '' s.graphOn f = f '' s
+  结论: 积类型.snd '' s.graphOn f = f '' s
   证明: by ext x; simp
 -/
 @[simp] lemma image_snd_graphOn (f : α -> β) : Prod.snd '' s.graphOn f = f '' s := by ext x; simp
@@ -4556,7 +4556,7 @@ lemma fst_injOn_graph
 
 中文:
 引理 fst_injOn_graph
-  结论: (s.graphOn f).InjOn Prod.fst
+  结论: (s.graphOn f).单射限制 积类型.fst
   证明: by aesop (add simp InjOn)
 -/
 lemma fst_injOn_graph : (s.graphOn f).InjOn Prod.fst := by aesop (add simp InjOn)
@@ -4572,7 +4572,7 @@ lemma graphOn_comp
 
 中文:
 引理 graphOn_comp
-  条件: (s : Set α) (f : α -> β) (g : β -> γ)
+  条件: (s : 集合 α) (f : α -> β) (g : β -> γ)
   证明: by
   simpa using! image_comp (fun x => (x.1, g x.2)) (fun x => (x, f x)) _
 
@@ -4630,7 +4630,7 @@ lemma graphOn_prod_graphOn
 
 中文:
 引理 graphOn_prod_graphOn
-  条件: (s : Set α) (t : Set β) (f : α -> γ) (g : β -> δ)
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> γ) (g : β -> δ)
   证明: by
   aesop
 -/
@@ -4649,7 +4649,7 @@ lemma graphOn_prod_prodMap
 
 中文:
 引理 graphOn_prod_prodMap
-  条件: (s : Set α) (t : Set β) (f : α -> γ) (g : β -> δ)
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> γ) (g : β -> δ)
   证明: by
   aesop
 -/
@@ -4676,8 +4676,8 @@ lemma exists_range_eq_graphOn_univ
   exact hf _ _ (hf₁ (f g).1).choose_spec
 
 中文:
-引理 exists_range_eq_graphOn_univ
-  结论: {f : α -> β × γ} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_range_eq_graphOn_univ
+  结论: {f : α -> β × γ} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   refine ⟨fun h => (f (hf₁ h).choose).snd, ?_⟩
   ext x
@@ -4713,8 +4713,8 @@ obtain ⟨e₂, he₂⟩ := exists_range_eq_graphOn_univ (f := Equiv.prodComm _ 
     aesop (add simp [Prod.swap_eq_iff
 
 中文:
-引理 exists_equiv_range_eq_graphOn_univ
-  结论: {f : α -> β × γ} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_equiv_range_eq_graphOn_univ
+  结论: {f : α -> β × γ} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   obtain ⟨e₁, he₁⟩ := exists_range_eq_graphOn_univ hf₁ fun _ _ => (hf _ _).1
 obtain ⟨e₂, he₂⟩ := exists_range_eq_graphOn_univ (f := Equiv.prodComm _ _ ∘ f) (by simpa)
@@ -4751,8 +4751,8 @@ lemma exists_eq_mgraphOn_univ
     fun a b h => congr_arg (Prod.snd ∘ (Subtype.val : s -> β × γ)) (hs₁.injective h)
 
 中文:
-引理 exists_eq_mgraphOn_univ
-  结论: {s : Set (β × γ)}
+引理 存在_eq_mgraphOn_univ
+  结论: {s : 集合 (β × γ)}
   证明: by
   simpa using exists_range_eq_graphOn_univ hs₁.surjective
     fun a b h => congr_arg (Prod.snd ∘ (Subtype.val : s -> β × γ)) (hs₁.injective h)

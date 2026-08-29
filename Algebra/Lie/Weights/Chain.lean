@@ -120,7 +120,7 @@ lemma exists_genWeightSpace_smul_add_eq_bot
   proof: (Nat.eventually_pos.and <| eventually_genWeightSpace_smul_add_eq_bot M χ₁ χ₂ hχ₁).exists
 
 中文:
-引理 exists_genWeightSpace_smul_add_eq_bot
+引理 存在_genWeightSpace_smul_add_eq_bot
   证明: (Nat.eventually_pos.and <| eventually_genWeightSpace_smul_add_eq_bot M χ₁ χ₂ hχ₁).exists
 
 Depends on / 依赖: Nat.eventually_pos.and, eventually_genWeightSpace_smul_add_eq_bot, eventually_pos
@@ -143,7 +143,7 @@ lemma exists₂_genWeightSpace_smul_add_eq_bot
   · rw [natCast
 
 中文:
-引理 exists₂_genWeightSpace_smul_add_eq_bot
+引理 存在₂_genWeightSpace_smul_add_eq_bot
   证明: by
   obtain ⟨q, hq₀, hq⟩ := exists_genWeightSpace_smul_add_eq_bot M χ₁ χ₂ hχ₁
   obtain ⟨p, hp₀, hp⟩ := exists_genWeightSpace_smul_add_eq_bot M (-χ₁) χ₂ (neg_ne_zero.mpr hχ₁)
@@ -178,7 +178,7 @@ definition genWeightSpaceChain
 
 中文:
 定义 genWeightSpaceChain
-  签名: : LieSubmodule R L M
+  签名: : Lie子模 R L M
   定义体: ⨆ k in Ioo p q, genWeightSpace M (k • χ₁ + χ₂)
 
 Depends on / 依赖: genWeightSpace
@@ -263,7 +263,7 @@ lemma genWeightSpace_le_genWeightSpaceChain
 
 中文:
 引理 genWeightSpace_le_genWeightSpaceChain
-  条件: {k : 整数} (hk : k in Ioo p q)
+  条件: {k : 整数} (hk : k in 开区间 p q)
   证明: le_biSup (fun i => genWeightSpace M (i • χ₁ + χ₂)) hk
 
 Depends on / 依赖: genWeightSpace, le_biSup
@@ -297,7 +297,7 @@ lemma lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right
 
 中文:
 引理 lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right
-  结论: [LieRing.IsNilpotent H]
+  结论: [Lie环.是幂零 H]
   证明: by
   rw [genWeightSpaceChain]; rw [iSup_subtype'] at hy
   induction hy using LieSubmodule.iSup_induction' with
@@ -345,7 +345,7 @@ lemma lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_left
 
 中文:
 引理 lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_left
-  结论: [LieRing.IsNilpotent H]
+  结论: [Lie环.是幂零 H]
   证明: by
   replace hp : genWeightSpace M ((-p) • (-α) + χ) = ⊥ := by rwa [smul_neg, neg_smul, neg_neg]
   rw [← genWeightSpaceChain_neg] at hy ⊢
@@ -437,7 +437,7 @@ lemma exists_forall_mem_corootSpace_smul_add_eq_zero
     replace hχ : Nontrivial (genWe
 
 中文:
-引理 exists_forall_mem_corootSpace_smul_add_eq_zero
+引理 存在_对任意_mem_corootSpace_smul_add_eq_zero
   证明: by
   obtain ⟨p, hp₀, q, hq₀, hp, hq⟩ := exists₂_genWeightSpace_smul_add_eq_bot M α χ hα
   let a := ∑ i in Finset.Ioo p q, finrank R (genWeightSpace M (i • α + χ)) • i
@@ -1066,7 +1066,7 @@ lemma LieModule.isNilpotent_toEnd_of_mem_rootSpace
     obta
 
 中文:
-引理 LieModule.isNilpotent_toEnd_of_mem_rootSpace
+引理 Lie模.isNilpotent_toEnd_of_mem_rootSpace
   证明: by
   refine Module.End.isNilpotent_iff_of_finite.mpr fun m => ?_
   have hm : m in ⨆ χ : LieModule.Weight K H M, genWeightSpace M χ := by
@@ -1105,7 +1105,7 @@ lemma LieAlgebra.isNilpotent_ad_of_mem_rootSpace
   proof: isNilpotent_toEnd_of_mem_rootSpace (M := L) H hχ hx
 
 中文:
-引理 LieAlgebra.isNilpotent_ad_of_mem_rootSpace
+引理 Lie代数.isNilpotent_ad_of_mem_rootSpace
   证明: isNilpotent_toEnd_of_mem_rootSpace (M := L) H hχ hx
 
 Depends on / 依赖: isNilpotent_toEnd_of_mem_rootSpace

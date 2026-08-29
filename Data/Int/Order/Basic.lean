@@ -93,7 +93,7 @@ protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder 整数 where
+  签名: : 线性序 整数 where
   定义体: Int.le_refl
   le_trans := @Int.le_trans
   le_antisymm := @Int.le_antisymm

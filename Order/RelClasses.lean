@@ -92,9 +92,9 @@ theorem IsTrans.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 IsTrans.swap
-  条件: (r) [IsTrans α r]
-  结论: IsTrans α (swap r)
+定理 是Trans.swap
+  条件: (r) [是Trans α r]
+  结论: 是Trans α (swap r)
   证明: inferInstance
 
 @[deprecated inferInstance (since := "2026-04-28")]
@@ -115,9 +115,9 @@ theorem Std.Antisymm.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 Std.Antisymm.swap
-  条件: (r : α -> α -> 命题) [Std.Antisymm r]
-  结论: Std.Antisymm (swap r)
+定理 Std.反对称.swap
+  条件: (r : α -> α -> 命题) [Std.反对称 r]
+  结论: Std.反对称 (swap r)
   证明: inferInstance
 
 @[deprecated inferInstance (since := "2026-04-28")]
@@ -167,9 +167,9 @@ theorem Std.Total.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 Std.Total.swap
-  条件: (r : α -> α -> 命题) [Std.Total r]
-  结论: Std.Total (swap r)
+定理 Std.全.swap
+  条件: (r : α -> α -> 命题) [Std.全 r]
+  结论: Std.全 (swap r)
   证明: inferInstance
 
 @[deprecated inferInstance (since := "2026-04-28")]
@@ -192,9 +192,9 @@ theorem Std.Trichotomous.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 Std.Trichotomous.swap
-  条件: (r : α -> α -> 命题) [Std.Trichotomous r]
-  结论: Std.Trichotomous (swap r)
+定理 Std.三歧.swap
+  条件: (r : α -> α -> 命题) [Std.三歧 r]
+  结论: Std.三歧 (swap r)
   证明: inferInstance
 
 @[deprecated (since := "2026-01-24")] alias IsTrichotomous.swap := Std.Trichotomous.swap
@@ -219,9 +219,9 @@ theorem IsPreorder.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 IsPreorder.swap
-  条件: (r) [IsPreorder α r]
-  结论: IsPreorder α (swap r)
+定理 是预序.swap
+  条件: (r) [是预序 α r]
+  结论: 是预序 α (swap r)
   证明: inferInstance
 
 @[deprecated inferInstance (since := "2026-04-28")]
@@ -242,9 +242,9 @@ theorem IsStrictOrder.swap
 @[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
-定理 IsStrictOrder.swap
-  条件: (r) [IsStrictOrder α r]
-  结论: IsStrictOrder α (swap r)
+定理 是Strict序.swap
+  条件: (r) [是Strict序 α r]
+  结论: 是Strict序 α (swap r)
   证明: inferInstance
 
 @[deprecated inferInstance (since := "2026-04-28")]
@@ -263,9 +263,9 @@ theorem IsPartialOrder.swap
   proof: inferInstance
 
 中文:
-定理 IsPartialOrder.swap
-  条件: (r) [IsPartialOrder α r]
-  结论: IsPartialOrder α (swap r)
+定理 是偏序.swap
+  条件: (r) [是偏序 α r]
+  结论: 是偏序 α (swap r)
   证明: inferInstance
 -/
 theorem IsPartialOrder.swap (r) [IsPartialOrder α r] : IsPartialOrder α (swap r) :=
@@ -282,7 +282,7 @@ theorem eq_empty_relation
 
 中文:
 定理 eq_empty_relation
-  条件: (r : α -> α -> 命题) [Std.Irrefl r] [Subsingleton α]
+  条件: (r : α -> α -> 命题) [Std.Irrefl r] [子单例 α]
   结论: r = emptyRelation
   证明: funext₂ by simpa using not_rel_of_subsingleton r
 
@@ -311,7 +311,7 @@ abbreviation partialOrderOfSO
 
 中文:
 缩写 partialOrderOfSO
-  签名: (r) [IsStrictOrder α r]
+  签名: (r) [是Strict序 α r]
   定义体: x = y ∨ r x y
   lt := r
   le_refl _ := Or.inl rfl
@@ -357,7 +357,7 @@ abbreviation linearOrderOfSTO
 
 中文:
 缩写 linearOrderOfSTO
-  签名: (r) [IsStrictTotalOrder α r] [DecidableRel r]
+  签名: (r) [是StrictTotal序 α r] [DecidableRel r]
   定义体: let hD : DecidableRel (fun x y => x = y ∨ r x y) := fun x y => decidable_of_iff (¬r y x)
     ⟨fun h => ((trichotomous_of r y x).resolve_left h).imp Eq.symm id, fun h =>
       h.elim (fun h => h ▸ irrefl_of _ _) (asymm_of r)⟩
@@ -392,9 +392,9 @@ theorem IsStrictTotalOrder.swap
   proof: inferInstance
 
 中文:
-定理 IsStrictTotalOrder.swap
-  条件: (r) [IsStrictTotalOrder α r]
-  结论: IsStrictTotalOrder α (swap r)
+定理 是StrictTotal序.swap
+  条件: (r) [是StrictTotal序 α r]
+  结论: 是StrictTotal序 α (swap r)
   证明: inferInstance
 -/
 theorem IsStrictTotalOrder.swap (r) [IsStrictTotalOrder α r] : IsStrictTotalOrder α (swap r) :=
@@ -412,7 +412,7 @@ class IsOrderConnected
     - conn : forall a b c, lt a c -> lt a b ∨ lt b c
 
 中文:
-类 IsOrderConnected
+类 是OrderConnected
   参数: (α : 类型u) (lt : α -> α -> 命题)
   公理与运算 (1 个):
     - conn : 对任意 a b c, lt a c -> lt a b ∨ lt b c
@@ -430,8 +430,8 @@ theorem IsOrderConnected.neg_trans
   proof: mt (IsOrderConnected.conn a b c) by simp [h₁, h₂]
 
 中文:
-定理 IsOrderConnected.neg_trans
-  结论: {r : α -> α -> 命题} [IsOrderConnected α r] {a b c}
+定理 是OrderConnected.neg_trans
+  结论: {r : α -> α -> 命题} [是OrderConnected α r] {a b c}
   证明: mt (IsOrderConnected.conn a b c) by simp [h₁, h₂]
 
 Depends on / 依赖: IsOrderConnected, IsOrderConnected.conn
@@ -453,7 +453,7 @@ theorem isStrictWeakOrder_of_isOrderConnected
 
 中文:
 定理 isStrictWeakOrder_of_isOrderConnected
-  条件: [Std.Asymm r] [IsOrderConnected α r]
+  条件: [Std.Asymm r] [是OrderConnected α r]
   证明: { @Std.Asymm.irrefl α r _ with
     trans := fun _ _ c h₁ h₂ => (IsOrderConnected.conn _ c _ h₁).resolve_right (asymm h₂),
     incomp_trans := fun _ _ _ ⟨h₁, h₂⟩ ⟨h₃, h₄⟩ =>
@@ -487,7 +487,7 @@ theorem InvImage.trichotomous
 
 中文:
 定理 InvImage.trichotomous
-  条件: [Std.Trichotomous r] {f : β -> α} (h : Function.Injective f)
+  条件: [Std.三歧 r] {f : β -> α} (h : 函数.单射 f)
   证明: ⟨fun {a b} hab hba => h Std.Trichotomous.trichotomous (f a) (f b) hab hba⟩
 
 @[deprecated (since := "2026-01-24")] alias InvImage.isTrichotomous := InvImage.trichotomous
@@ -531,10 +531,10 @@ class IsWellFounded
     - wf : WellFounded r
 
 中文:
-类 IsWellFounded
+类 是良基
   参数: (α : 类型u) (r : α -> α -> 命题)
   公理与运算 (1 个):
-    - wf : WellFounded r
+    - wf : 良基 r
 -/
 @[mk_iff] class IsWellFounded (α : Type u) (r : α -> α -> Prop) : Prop where
   /-- The relation is `WellFounded`, as a proposition. -/
@@ -549,8 +549,8 @@ instance WellFoundedRelation.isWellFounded
   body: { h with }
 
 中文:
-实例 WellFoundedRelation.isWellFounded
-  签名: [h : WellFoundedRelation α]
+实例 良基关系.isWellFounded
+  签名: [h : 良基关系 α]
   定义体: { h with }
 -/
 instance WellFoundedRelation.isWellFounded [h : WellFoundedRelation α] :
@@ -567,8 +567,8 @@ theorem WellFoundedRelation.asymmetric
 termination_by a
 
 中文:
-定理 WellFoundedRelation.asymmetric
-  条件: {α : Sort*} [WellFoundedRelation α] {a b : α}
+定理 良基关系.asymmetric
+  条件: {α : 类型层*} [良基关系 α] {a b : α}
   证明: fun hab hba => WellFoundedRelation.asymmetric hba hab
 termination_by a
 
@@ -589,8 +589,8 @@ theorem WellFoundedRelation.asymmetric₃
 termination_by a
 
 中文:
-定理 WellFoundedRelation.asymmetric₃
-  条件: {α : Sort*} [WellFoundedRelation α] {a b c : α}
+定理 良基关系.asymmetric₃
+  条件: {α : 类型层*} [良基关系 α] {a b c : α}
   证明: fun hab hbc hca => WellFoundedRelation.asymmetric₃ hca hab hbc
 termination_by a
 
@@ -610,8 +610,8 @@ lemma WellFounded.prod_lex
   proof: (Prod.lex ⟨_, ha⟩ ⟨_, hb⟩).wf
 
 中文:
-引理 WellFounded.prod_lex
-  结论: {ra : α -> α -> 命题} {rb : β -> β -> 命题} (ha : WellFounded ra)
+引理 良基.prod_lex
+  结论: {ra : α -> α -> 命题} {rb : β -> β -> 命题} (ha : 良基 ra)
   证明: (Prod.lex ⟨_, ha⟩ ⟨_, hb⟩).wf
 
 Depends on / 依赖: Prod.lex
@@ -632,7 +632,7 @@ theorem WellFounded.psigma_lex
   proof: WellFounded.intro fun ⟨a, b⟩ => lexAccessible (WellFounded.apply ha a) hb b
 
 中文:
-定理 WellFounded.psigma_lex
+定理 良基.psigma_lex
   证明: WellFounded.intro fun ⟨a, b⟩ => lexAccessible (WellFounded.apply ha a) hb b
 
 Depends on / 依赖: WellFounded, WellFounded.apply, WellFounded.intro, lexAccessible
@@ -650,7 +650,7 @@ theorem WellFounded.psigma_revLex
   proof: WellFounded.intro fun ⟨a, b⟩ => revLexAccessible (apply hb b) (WellFounded.apply ha) a
 
 中文:
-定理 WellFounded.psigma_revLex
+定理 良基.psigma_revLex
   证明: WellFounded.intro fun ⟨a, b⟩ => revLexAccessible (apply hb b) (WellFounded.apply ha) a
 
 Depends on / 依赖: WellFounded, WellFounded.apply, WellFounded.intro, revLexAccessible
@@ -669,7 +669,7 @@ theorem WellFounded.psigma_skipLeft
   proof: psigma_revLex emptyWf.wf hb
 
 中文:
-定理 WellFounded.psigma_skipLeft
+定理 良基.psigma_skipLeft
   结论: (α : 类型u) {β : 类型v} {s : β -> β -> 命题}
   证明: psigma_revLex emptyWf.wf hb
 
@@ -732,7 +732,7 @@ definition fix
 
 中文:
 定义 fix
-  签名: {motive : α -> Sort*}
+  签名: {motive : α -> 类型层*}
   定义体: wf.fix
 
 Depends on / 依赖: _iff_mul_eq, _spec, eq_comm, eq_mk, map_neg, neg_mul, wf.fix
@@ -751,7 +751,7 @@ theorem fix_eq
 
 中文:
 定理 fix_eq
-  条件: {motive : α -> Sort*} (ind : 对任意 x : α, (对任意 y : α, r y x -> motive y) -> motive x)
+  条件: {motive : α -> 类型层*} (ind : 对任意 x : α, (对任意 y : α, r y x -> motive y) -> motive x)
   证明: wf.fix_eq ind
 
 Depends on / 依赖: _add, _neg, fix_eq, neg_mul, sub_eq_add_neg, wf.fix_eq
@@ -772,7 +772,7 @@ definition toWellFoundedRelation
 
 中文:
 定义 toWellFoundedRelation
-  签名: : WellFoundedRelation α
+  签名: : 良基关系 α
   定义体: ⟨r, IsWellFounded.wf⟩
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.wf
@@ -791,8 +791,8 @@ theorem WellFounded.asymmetric
   proof: @WellFoundedRelation.asymmetric _ ⟨_, h⟩ _ _
 
 中文:
-定理 WellFounded.asymmetric
-  条件: {α : Sort*} {r : α -> α -> 命题} (h : WellFounded r) (a b)
+定理 良基.asymmetric
+  条件: {α : 类型层*} {r : α -> α -> 命题} (h : 良基 r) (a b)
   证明: @WellFoundedRelation.asymmetric _ ⟨_, h⟩ _ _
 
 Depends on / 依赖: WellFoundedRelation, WellFoundedRelation.asymmetric, asymmetric
@@ -810,8 +810,8 @@ theorem WellFounded.asymmetric₃
   proof: @WellFoundedRelation.asymmetric₃ _ ⟨_, h⟩ _ _ _
 
 中文:
-定理 WellFounded.asymmetric₃
-  条件: {α : Sort*} {r : α -> α -> 命题} (h : WellFounded r) (a b c)
+定理 良基.asymmetric₃
+  条件: {α : 类型层*} {r : α -> α -> 命题} (h : 良基 r) (a b c)
   证明: @WellFoundedRelation.asymmetric₃ _ ⟨_, h⟩ _ _ _
 
 Depends on / 依赖: WellFoundedRelation, WellFoundedRelation.asymmetric
@@ -864,7 +864,7 @@ lemma wellFounded_lt
 中文:
 引理 wellFounded_lt
   条件: [LT α] [WellFoundedLT α]
-  结论: @WellFounded α (· < ·)
+  结论: @良基 α (· < ·)
   证明: IsWellFounded.wf
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.wf
@@ -909,9 +909,9 @@ class IsWellOrder
   (no additional axioms)
 
 中文:
-类 IsWellOrder
+类 是良序
   参数: (α : 类型u) (r : α -> α -> 命题)
-  继承: IsWellFounded α r, Std.Trichotomous r
+  继承: 是良基 α r, Std.三歧 r
   (无附加公理)
 
 Depends on / 依赖: of_isLocalization
@@ -989,7 +989,7 @@ definition fix
 
 中文:
 定义 fix
-  签名: {motive : α -> Sort*}
+  签名: {motive : α -> 类型层*}
   定义体: IsWellFounded.fix (· < ·)
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.fix
@@ -1010,7 +1010,7 @@ theorem fix_eq
 
 中文:
 定理 fix_eq
-  条件: {motive : α -> Sort*} (ind : 对任意 x : α, (对任意 y : α, y < x -> motive y) -> motive x)
+  条件: {motive : α -> 类型层*} (ind : 对任意 x : α, (对任意 y : α, y < x -> motive y) -> motive x)
   证明: IsWellFounded.fix_eq _ ind
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.fix_eq, fix_eq
@@ -1032,7 +1032,7 @@ definition toWellFoundedRelation
 
 中文:
 定义 toWellFoundedRelation
-  签名: : WellFoundedRelation α
+  签名: : 良基关系 α
   定义体: IsWellFounded.toWellFoundedRelation (· < ·)
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.toWellFoundedRelation, toWellFoundedRelation
@@ -1054,8 +1054,8 @@ definition IsWellOrder.linearOrder
   body: linearOrderOfSTO r
 
 中文:
-定义 IsWellOrder.linearOrder
-  签名: (r : α -> α -> 命题) [IsWellOrder α r]
+定义 是良序.linearOrder
+  签名: (r : α -> α -> 命题) [是良序 α r]
   定义体: linearOrderOfSTO r
 
 Depends on / 依赖: linearOrderOfSTO
@@ -1075,8 +1075,8 @@ definition IsWellOrder.toHasWellFounded
   wf := hwo.wf
 
 中文:
-定义 IsWellOrder.toHasWellFounded
-  签名: [LT α] [hwo : IsWellOrder α (· < ·)]
+定义 是良序.toHasWellFounded
+  签名: [LT α] [hwo : 是良序 α (· < ·)]
   定义体: (· < ·)
   wf := hwo.wf
 -/
@@ -1095,8 +1095,8 @@ theorem Subsingleton.isWellOrder
   trichotomous a b _ _ := Subsingleton.elim a b
 
 中文:
-定理 Subsingleton.isWellOrder
-  条件: [Subsingleton α] (r : α -> α -> 命题) [Std.Irrefl r]
+定理 子单例.isWellOrder
+  条件: [子单例 α] (r : α -> α -> 命题) [Std.Irrefl r]
   证明: .intro fun a => ⟨_, fun y h => not_rel_of_subsingleton r y a h
   trichotomous a b _ _ := Subsingleton.elim a b
 
@@ -1116,8 +1116,8 @@ instance [Subsingleton
   body: Subsingleton.isWellOrder _
 
 中文:
-实例 [Subsingleton
-  签名: α] : IsWellOrder α emptyRelation
+实例 [子单例
+  签名: α] : 是良序 α emptyRelation
   定义体: Subsingleton.isWellOrder _
 
 Depends on / 依赖: Subsingleton, Subsingleton.isWellOrder, isWellOrder
@@ -1138,8 +1138,8 @@ instance Prod.Lex.instIsWellFounded
   body: ⟨IsWellFounded.wf.prod_lex IsWellFounded.wf⟩
 
 中文:
-实例 Prod.Lex.instIsWellFounded
-  签名: [IsWellFounded α r] [IsWellFounded β s]
+实例 积类型.Lex.instIsWellFounded
+  签名: [是良基 α r] [是良基 β s]
   定义体: ⟨IsWellFounded.wf.prod_lex IsWellFounded.wf⟩
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.wf, IsWellFounded.wf.prod_lex, prod_lex
@@ -1162,8 +1162,8 @@ instance [IsWellOrder
     rfl
 
 中文:
-实例 [IsWellOrder
-  签名: α r] [IsWellOrder β s] : IsWellOrder (α × β) (Prod.Lex r s) where
+实例 [是良序
+  签名: α r] [是良序 β s] : 是良序 (α × β) (积类型.Lex r s) where
   定义体: fun ⟨a₁, a₂⟩ ⟨b₁, b₂⟩ hab hba => by
     obtain rfl := Std.Trichotomous.trichotomous a₁ b₁
       (mt (Prod.Lex.left a₂ b₂) hab) (mt (Prod.Lex.left b₂ a₂) hba)
@@ -1199,7 +1199,7 @@ theorem Subrelation.isWellFounded
 
 中文:
 定理 Subrelation.isWellFounded
-  结论: (r : α -> α -> 命题) [IsWellFounded α r] {s : α -> α -> 命题}
+  结论: (r : α -> α -> 命题) [是良基 α r] {s : α -> α -> 命题}
   证明: ⟨h.wf IsWellFounded.wf⟩
 
 @[to_dual]
@@ -1225,8 +1225,8 @@ instance Prod.wellFoundedLT
     ref
 
 中文:
-实例 Prod.wellFoundedLT
-  签名: [Preorder α] [WellFoundedLT α] [Preorder β] [WellFoundedLT β]
+实例 积类型.wellFoundedLT
+  签名: [预序 α] [WellFoundedLT α] [预序 β] [WellFoundedLT β]
   定义体: by
     suffices h : forall a, forall a' <= a, forall b, Acc (· < ·) (a', b) from ⟨fun x => h x.1 x.1 le_rfl x.2⟩
     intro a a' ha b
@@ -1263,7 +1263,7 @@ definition Unbounded
 
 中文:
 定义 Unbounded
-  签名: (r : α -> α -> 命题) (s : Set α)
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: forall a, exists b in s, ¬r b a
 
 Depends on / 依赖: IsLocalization, IsLocalization.of_le_isUnit, isUnit_of_mem_nonZeroDivisors, of_le_isUnit
@@ -1282,8 +1282,8 @@ definition Bounded
 @[simp]
 
 中文:
-定义 Bounded
-  签名: (r : α -> α -> 命题) (s : Set α)
+定义 有界
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: exists a, forall b in s, r b a
 
 @[simp]
@@ -1306,8 +1306,8 @@ theorem not_bounded_iff
 
 中文:
 定理 not_bounded_iff
-  条件: {r : α -> α -> 命题} (s : Set α)
-  结论: ¬Bounded r s ↔ Unbounded r s
+  条件: {r : α -> α -> 命题} (s : 集合 α)
+  结论: ¬有界 r s ↔ Unbounded r s
   证明: by
   simp only [Bounded, Unbounded, not_forall, not_exists, exists_prop]
 
@@ -1331,8 +1331,8 @@ theorem not_unbounded_iff
 
 中文:
 定理 not_unbounded_iff
-  条件: {r : α -> α -> 命题} (s : Set α)
-  结论: ¬Unbounded r s ↔ Bounded r s
+  条件: {r : α -> α -> 命题} (s : 集合 α)
+  结论: ¬Unbounded r s ↔ 有界 r s
   证明: by
   rw [not_iff_comm]; rw [not_bounded_iff]
 
@@ -1352,7 +1352,7 @@ theorem unbounded_of_isEmpty
 
 中文:
 定理 unbounded_of_isEmpty
-  条件: [IsEmpty α] {r : α -> α -> 命题} (s : Set α)
+  条件: [是空 α] {r : α -> α -> 命题} (s : 集合 α)
   结论: Unbounded r s
   证明: isEmptyElim
 
@@ -1447,7 +1447,7 @@ instance instIsTrans
 
 中文:
 实例 instIsTrans
-  签名: [IsTrans α r] {f : β -> α}
+  签名: [是Trans α r] {f : β -> α}
   定义体: ⟨fun _ _ _ => trans_of r⟩
 
 Depends on / 依赖: trans_of
@@ -1464,7 +1464,7 @@ instance instIsPreorder
 
 中文:
 实例 instIsPreorder
-  签名: [IsPreorder α r] {f : β -> α}
+  签名: [是预序 α r] {f : β -> α}
 -/
 instance instIsPreorder [IsPreorder α r] {f : β -> α} : IsPreorder β (f ⁻¹'o r) where
 
@@ -1477,7 +1477,7 @@ instance instIsStrictOrder
 
 中文:
 实例 instIsStrictOrder
-  签名: [IsStrictOrder α r] {f : β -> α}
+  签名: [是Strict序 α r] {f : β -> α}
 -/
 instance instIsStrictOrder [IsStrictOrder α r] {f : β -> α} : IsStrictOrder β (f ⁻¹'o r) where
 
@@ -1491,7 +1491,7 @@ instance instIsStrictWeakOrder
 
 中文:
 实例 instIsStrictWeakOrder
-  签名: [IsStrictWeakOrder α r] {f : β -> α}
+  签名: [是StrictWeak序 α r] {f : β -> α}
   定义体: IsStrictWeakOrder.incomp_trans (lt := r) _ _ _
 
 Depends on / 依赖: FaithfulSMul, IsStrictWeakOrder, IsStrictWeakOrder.incomp_trans, incomp_trans
@@ -1509,7 +1509,7 @@ instance instIsEquiv
 
 中文:
 实例 instIsEquiv
-  签名: [IsEquiv α r] {f : β -> α}
+  签名: [Is等价 α r] {f : β -> α}
 -/
 instance instIsEquiv [IsEquiv α r] {f : β -> α} : IsEquiv β (f ⁻¹'o r) where
 
@@ -1523,7 +1523,7 @@ instance instTotal
 
 中文:
 实例 instTotal
-  签名: [Std.Total r] {f : β -> α}
+  签名: [Std.全 r] {f : β -> α}
   定义体: ⟨fun _ _ => total_of r _ _⟩
 
 Depends on / 依赖: total_of
@@ -1544,8 +1544,8 @@ theorem antisymm
 
 中文:
 定理 antisymm
-  条件: [Std.Antisymm r] {f : β -> α} (hf : f.Injective)
-  结论: Std.Antisymm (f ⁻¹'o r)
+  条件: [Std.反对称 r] {f : β -> α} (hf : f.单射)
+  结论: Std.反对称 (f ⁻¹'o r)
   证明: ⟨fun _ _ h₁ h₂ => hf antisymm_of r h₁ h₂⟩
 
 @[deprecated (since := "2026-01-06")] alias isAntisymm := antisymm
@@ -1572,7 +1572,7 @@ class IsNonstrictStrictOrder
     - right_iff_left_not_left((a b : α)) : s a b ↔ r a b ∧ ¬r b a
 
 中文:
-类 IsNonstrictStrictOrder
+类 是NonstrictStrict序
   参数: (α : 类型) (r : semiOutParam (α -> α -> 命题)) (s : α -> α -> 命题)
   公理与运算 (1 个):
     - right_iff_left_not_left((a b : α)) : s a b ↔ r a b ∧ ¬r b a
@@ -1592,7 +1592,7 @@ theorem right_iff_left_not_left
 
 中文:
 定理 right_iff_left_not_left
-  条件: {r s : α -> α -> 命题} [IsNonstrictStrictOrder α r s] {a b : α}
+  条件: {r s : α -> α -> 命题} [是NonstrictStrict序 α r s] {a b : α}
   证明: IsNonstrictStrictOrder.right_iff_left_not_left _ _
 
 Depends on / 依赖: IsNonstrictStrictOrder, IsNonstrictStrictOrder.right_iff_left_not_left, right_iff_left_not_left
@@ -1611,7 +1611,7 @@ theorem right_iff_left_not_left_of
 
 中文:
 定理 right_iff_left_not_left_of
-  条件: (r s : α -> α -> 命题) [IsNonstrictStrictOrder α r s] {a b : α}
+  条件: (r s : α -> α -> 命题) [是NonstrictStrict序 α r s] {a b : α}
   证明: right_iff_left_not_left
 
 Depends on / 依赖: right_iff_left_not_left
@@ -1731,7 +1731,7 @@ instance instReflLe
 
 中文:
 实例 instReflLe
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ⟨le_refl⟩
 
 Depends on / 依赖: le_refl
@@ -1773,8 +1773,8 @@ instance [Preorder
 @[to_dual instIsPreorderGe]
 
 中文:
-实例 [Preorder
-  签名: α] : IsTrans α (· <= ·)
+实例 [预序
+  签名: α] : 是Trans α (· <= ·)
   定义体: ⟨@le_trans _ _⟩
 
 @[to_dual instIsPreorderGe]
@@ -1793,8 +1793,8 @@ instance [Preorder
   signature: α] : IsPreorder α (· <= ·) where
 
 中文:
-实例 [Preorder
-  签名: α] : IsPreorder α (· <= ·) where
+实例 [预序
+  签名: α] : 是预序 α (· <= ·) where
 -/
 instance [Preorder α] : IsPreorder α (· <= ·) where
 
@@ -1811,7 +1811,7 @@ instance instIrreflLt
 
 中文:
 实例 instIrreflLt
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ⟨lt_irrefl⟩
 
 @[to_dual instIsTransGt]
@@ -1833,8 +1833,8 @@ instance [Preorder
 @[to_dual instAsymmGt]
 
 中文:
-实例 [Preorder
-  签名: α] : IsTrans α (· < ·)
+实例 [预序
+  签名: α] : 是Trans α (· < ·)
   定义体: ⟨@lt_trans _ _⟩
 
 @[to_dual instAsymmGt]
@@ -1857,7 +1857,7 @@ instance instAsymmLt
 
 中文:
 实例 instAsymmLt
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ⟨@lt_asymm _ _⟩
 
 @[to_dual instAntisymmGt]
@@ -1880,7 +1880,7 @@ instance instAntisymmLt
 
 中文:
 实例 instAntisymmLt
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: Std.Asymm.antisymm _
 
 @[to_dual instIsStrictOrderGt]
@@ -1899,8 +1899,8 @@ instance [Preorder
   signature: α] : IsStrictOrder α (· < ·) where
 
 中文:
-实例 [Preorder
-  签名: α] : IsStrictOrder α (· < ·) where
+实例 [预序
+  签名: α] : 是Strict序 α (· < ·) where
 -/
 instance [Preorder α] : IsStrictOrder α (· < ·) where
 
@@ -1916,8 +1916,8 @@ instance [Preorder
 @[to_dual instAntisymmGe]
 
 中文:
-实例 [Preorder
-  签名: α] : IsNonstrictStrictOrder α (· <= ·) (· < ·)
+实例 [预序
+  签名: α] : 是NonstrictStrict序 α (· <= ·) (· < ·)
   定义体: ⟨@lt_iff_le_not_ge _ _⟩
 
 @[to_dual instAntisymmGe]
@@ -1940,7 +1940,7 @@ instance instAntisymmLe
 
 中文:
 实例 instAntisymmLe
-  签名: [PartialOrder α]
+  签名: [偏序 α]
   定义体: ⟨@le_antisymm _ _⟩
 
 @[to_dual instIsPartialOrderGe]
@@ -1959,8 +1959,8 @@ instance [PartialOrder
   signature: α] : IsPartialOrder α (· <= ·) where
 
 中文:
-实例 [PartialOrder
-  签名: α] : IsPartialOrder α (· <= ·) where
+实例 [偏序
+  签名: α] : 是偏序 α (· <= ·) where
 -/
 instance [PartialOrder α] : IsPartialOrder α (· <= ·) where
 
@@ -1977,7 +1977,7 @@ instance LE.total
 
 中文:
 实例 LE.total
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: ⟨le_total⟩
 
 @[to_dual instIsLinearOrderGe]
@@ -1996,8 +1996,8 @@ instance [LinearOrder
   signature: α] : IsLinearOrder α (· <= ·) where
 
 中文:
-实例 [LinearOrder
-  签名: α] : IsLinearOrder α (· <= ·) where
+实例 [线性序
+  签名: α] : 是线性序 α (· <= ·) where
 -/
 instance [LinearOrder α] : IsLinearOrder α (· <= ·) where
 
@@ -2014,7 +2014,7 @@ instance instTrichotomousLt
 
 中文:
 实例 instTrichotomousLt
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: ⟨by grind⟩
 
 @[to_dual instTrichotomousGe]
@@ -2035,7 +2035,7 @@ instance instTrichotomousLe
 
 中文:
 实例 instTrichotomousLe
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: inferInstance
 
 @[to_dual instIsStrictTotalOrderGt]
@@ -2052,8 +2052,8 @@ instance [LinearOrder
   signature: α] : IsStrictTotalOrder α (· < ·) where
 
 中文:
-实例 [LinearOrder
-  签名: α] : IsStrictTotalOrder α (· < ·) where
+实例 [线性序
+  签名: α] : 是StrictTotal序 α (· < ·) where
 -/
 instance [LinearOrder α] : IsStrictTotalOrder α (· < ·) where
 
@@ -2076,8 +2076,8 @@ alias transitive_le := isTrans_le
 
 中文:
 定理 isTrans_le
-  条件: [Preorder α]
-  结论: IsTrans α LE.le
+  条件: [预序 α]
+  结论: 是Trans α LE.le
   证明: inferInstance
 
 @[deprecated (since := "2026-02-21")]
@@ -2114,8 +2114,8 @@ alias transitive_lt := isTrans_lt
 
 中文:
 定理 isTrans_lt
-  条件: [Preorder α]
-  结论: IsTrans α LT.lt
+  条件: [预序 α]
+  结论: 是Trans α LT.lt
   证明: inferInstance
 
 @[deprecated (since := "2026-02-21")]
@@ -2144,7 +2144,7 @@ instance OrderDual.total_le
 
 中文:
 实例 OrderDual.total_le
-  签名: [LE α] [h : @Std.Total α (· <= ·)]
+  签名: [LE α] [h : @Std.全 α (· <= ·)]
   定义体: inferInstanceAs @Std.Total α swap (· <= ·)
 
 Depends on / 依赖: Std.Total

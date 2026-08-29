@@ -155,7 +155,7 @@ theorem notMem_val_image
 
 中文:
 定理 notMem_val_image
-  条件: {a : α} (t : Set (ofStabilizer G a))
+  条件: {a : α} (t : 集合 (ofStabilizer G a))
   证明: by
   rintro ⟨b, hb⟩
   exact b.prop (by simp [hb])
@@ -210,7 +210,7 @@ lemma ENat_card_ofStabilizer_add_one_eq
 @[to_additive]
 
 中文:
-引理 ENat_card_ofStabilizer_add_one_eq
+引理 E自然数_card_ofStabilizer_add_one_eq
   条件: (a : α)
   证明: by
   dsimp only [ENat.card]
@@ -246,7 +246,7 @@ lemma nat_card_ofStabilizer_add_one_eq
 
 中文:
 引理 nat_card_ofStabilizer_add_one_eq
-  条件: [Finite α] (a : α)
+  条件: [有限 α] (a : α)
   证明: by
   classical
   let := Fintype.ofFinite α
@@ -275,7 +275,7 @@ lemma nat_card_ofStabilizer_eq
 
 中文:
 引理 nat_card_ofStabilizer_eq
-  条件: [Finite α] (a : α)
+  条件: [有限 α] (a : α)
   证明: Nat.eq_sub_of_add_eq (nat_card_ofStabilizer_add_one_eq G a)
 
 Depends on / 依赖: Nat.eq_sub_of_add_eq, eq_sub_of_add_eq, nat_card_ofStabilizer_add_one_eq
@@ -298,8 +298,8 @@ definition _root_.SubAddAction.ofStabilizer.conjMap
       AddAction.stabilizerEquivStabilizer_apply, ← vadd_assoc]
 
 中文:
-定义 _root_.SubAddAction.ofStabilizer.conjMap
-  签名: {G : 类型} [AddGroup G] {α : 类型} [AddAction G α]
+定义 _root_.SubAdd作用.ofStabilizer.conjMap
+  签名: {G : 类型} [加法群 G] {α : 类型} [加法作用 G α]
   定义体: ⟨g +ᵥ x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
   map_vadd' := fun ⟨k, hk⟩ x => by
     simp [← SetLike.coe_eq_coe, AddAction.addSubgroup_vadd_def,
@@ -375,7 +375,7 @@ theorem _root_.AddAction.stabilizerEquivStabilizer_compTriple
     simp [AddAction.stabilizerEquivStabilizer, H, AddAut.addConj, ← add_assoc]
 
 中文:
-定理 _root_.AddAction.stabilizerEquivStabilizer_compTriple
+定理 _root_.加法作用.stabilizerEquivStabilizer_compTriple
   证明: by
     ext
     simp [AddAction.stabilizerEquivStabilizer, H, AddAut.addConj, ← add_assoc]
@@ -405,7 +405,7 @@ theorem _root_.MulAction.stabilizerEquivStabilizer_compTriple
     simp [stabilizerEquivStabilizer, H, MulAut.conj, ← mul_assoc]
 
 中文:
-定理 _root_.MulAction.stabilizerEquivStabilizer_compTriple
+定理 _root_.乘法作用.stabilizerEquivStabilizer_compTriple
   条件: (H : k = h * g)
   证明: by
     ext
@@ -546,7 +546,7 @@ theorem ofStabilizer.conjMap_bijective
 
 中文:
 定理 ofStabilizer.conjMap_bijective
-  结论: Function.Bijective (conjMap hg)
+  结论: 函数.双射 (conjMap hg)
   证明: by
   constructor
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
@@ -584,7 +584,7 @@ definition ofStabilizer.snoc
 
 中文:
 定义 ofStabilizer.snoc
-  签名: {n : 自然数} (x : Fin n ↪ ofStabilizer G a)
+  签名: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a)
   定义体: Fin.Embedding.snoc (x.trans (subtype _)) (a := a) (by
     simp only [Set.mem_range, trans_apply, Function.Embedding.subtype_apply, not_exists]
     exact fun i => (x i).prop)
@@ -613,7 +613,7 @@ theorem ofStabilizer.snoc_castSucc
 
 中文:
 定理 ofStabilizer.snoc_castSucc
-  条件: {n : 自然数} (x : Fin n ↪ ofStabilizer G a) (i : Fin n)
+  条件: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a) (i : 有限集 n)
   证明: by
   simp [snoc]
 
@@ -635,7 +635,7 @@ theorem ofStabilizer.snoc_last
 
 中文:
 定理 ofStabilizer.snoc_last
-  条件: {n : 自然数} (x : Fin n ↪ ofStabilizer G a)
+  条件: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a)
   证明: by
   simp [snoc]
 -/
@@ -659,8 +659,8 @@ lemma exists_smul_of_last_eq
     suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc 
 
 中文:
-引理 exists_smul_of_last_eq
-  条件: [IsPretransitive G α] {n : 自然数} (a : α) (x : Fin n.succ ↪ α)
+引理 存在_smul_of_last_eq
+  条件: [是Pretransitive G α] {n : 自然数} (a : α) (x : 有限集 n.succ ↪ α)
   证明: by
   obtain ⟨g, hgx⟩ := exists_smul_eq G (x (Fin.last n)) a
   have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
@@ -709,8 +709,8 @@ instance _root_.SMul.ofStabilizer
 @[simp]
 
 中文:
-实例 _root_.SMul.ofStabilizer
-  签名: (s : Set α)
+实例 _root_.标量乘法.ofStabilizer
+  签名: (s : 集合 α)
   定义体: ⟨g • ↑x, by
     convert! Set.smul_mem_smul_set x.prop
     exact (mem_stabilizer_iff.mp g.prop).symm⟩
@@ -735,8 +735,8 @@ theorem _root_.SMul.smul_stabilizer_def
   proof: rfl
 
 中文:
-定理 _root_.SMul.smul_stabilizer_def
-  条件: (s : Set α) (g : stabilizer G s) (x : s)
+定理 _root_.标量乘法.smul_stabilizer_def
+  条件: (s : 集合 α) (g : stabilizer G s) (x : s)
   证明: rfl
 -/
 theorem _root_.SMul.smul_stabilizer_def (s : Set α) (g : stabilizer G s) (x : s) :
@@ -802,7 +802,7 @@ theorem stabilizer_compl
 
 中文:
 定理 stabilizer_compl
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   have (s : Set α) : stabilizer G s <= stabilizer G (sᶜ) := by
     intro g h

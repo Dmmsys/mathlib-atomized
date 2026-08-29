@@ -76,9 +76,9 @@ structure Chain
   (no additional axioms)
 
 中文:
-结构 Chain
-  参数: (α : 类型u) [Preorder α]
-  继承: Nat ->o α
+结构 链
+  参数: (α : 类型u) [预序 α]
+  继承: 自然数 ->o α
   (无附加公理)
 -/
 structure Chain (α : Type u) [Preorder α] extends Nat ->o α
@@ -99,7 +99,7 @@ initialize_simps_projections Chain (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (Chain α) 自然数 α
+  签名: 函数状 (链 α) 自然数 α
   定义体: c.toOrderHom
   coe_injective := by rintro ⟨f, hf⟩; congr!
 
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (Chain α) 自然数 α
+  签名: 序态射类 (链 α) 自然数 α
   定义体: c.monotone hmn
 
 Depends on / 依赖: c.monotone, isIntegral_one, monotone
@@ -143,7 +143,7 @@ lemma ext
 中文:
 引理 ext
   条件: ⦃f g
-  结论: Chain α⦄ (h : ⇑f = ⇑g) : f = g
+  结论: 链 α⦄ (h : ⇑f = ⇑g) : f = g
   证明: DFunLike.ext' h
 
 Depends on / 依赖: isIntegral_zero
@@ -161,7 +161,7 @@ lemma coe_toOrderHom
 
 中文:
 引理 coe_toOrderHom
-  条件: (c : Chain α)
+  条件: (c : 链 α)
   结论: ⇑c.toOrderHom = c
   证明: rfl
 
@@ -178,8 +178,8 @@ instance [Inhabited
   body: ⟨⟨default, fun _ _ _ => le_rfl⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Chain α)
+实例 [可居
+  签名: α] : 可居 (链 α)
   定义体: ⟨⟨default, fun _ _ _ => le_rfl⟩⟩
 
 Depends on / 依赖: algebraMap_injective, algebraMap_mk, le_rfl, map_mul
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (Chain α)
+  签名: Membership α (链 α)
   定义体: exists i, a = c i
 
 Depends on / 依赖: isIntegral_algebraMap
@@ -219,7 +219,7 @@ instance instLE
 
 中文:
 实例 instLE
-  签名: : LE (Chain α) where le x y
+  签名: : LE (链 α) where le x y
   定义体: forall i, exists j, x i <= y j
 -/
 instance instLE : LE (Chain α) where le x y := forall i, exists j, x i <= y j
@@ -234,7 +234,7 @@ lemma isChain_range
 
 中文:
 引理 isChain_range
-  结论: IsChain (· <= ·) (Set.range c)
+  结论: IsChain (· <= ·) (集合.range c)
   证明: Monotone.isChain_range (OrderHomClass.mono c)
 
 Depends on / 依赖: Monotone, Monotone.isChain_range, OrderHomClass, OrderHomClass.mono, isChain_range
@@ -270,7 +270,7 @@ definition map
 
 中文:
 定义 map
-  签名: : Chain β where toOrderHom
+  签名: : 链 β where toOrderHom
   定义体: f.comp c.toOrderHom
 
 Depends on / 依赖: c.toOrderHom, f.comp, toOrderHom
@@ -312,7 +312,7 @@ theorem mem_map
 中文:
 定理 mem_map
   条件: (x : α)
-  结论: x in c -> f x in Chain.map c f
+  结论: x in c -> f x in 链.map c f
   证明: fun ⟨i, h⟩ => ⟨i, h.symm ▸ rfl⟩
 
 Depends on / 依赖: h.symm
@@ -332,7 +332,7 @@ theorem exists_of_mem_map
 @[simp]
 
 中文:
-定理 exists_of_mem_map
+定理 存在_of_mem_map
   条件: {b : β}
   结论: b in c.map f -> 存在 a, a in c ∧ f a = b
   证明: fun ⟨i, h⟩ => ⟨c i, ⟨i, rfl⟩, h.symm⟩
@@ -384,7 +384,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: c.map OrderHom.id = c
+  结论: c.map 序态射.id = c
   证明: by ext; simp
 -/
 @[simp] lemma map_id : c.map OrderHom.id = c := by ext; simp
@@ -440,7 +440,7 @@ definition zip
 
 中文:
 定义 zip
-  签名: (c₀ : Chain α) (c₁ : Chain β)
+  签名: (c₀ : 链 α) (c₁ : 链 β)
   定义体: c₀.toOrderHom.prod c₁.toOrderHom
 
 Depends on / 依赖: toOrderHom, toOrderHom.prod
@@ -461,7 +461,7 @@ lemma zip_apply
 
 中文:
 引理 zip_apply
-  条件: (c₀ : Chain α) (c₁ : Chain β) (n : 自然数)
+  条件: (c₀ : 链 α) (c₁ : 链 β) (n : 自然数)
   结论: c₀.zip c₁ n = (c₀ n, c₁ n)
   证明: rfl
 
@@ -536,7 +536,7 @@ lemma range_pair
 中文:
 引理 range_pair
   条件: (a b : α) (hab)
-  结论: Set.range (pair a b hab) = {a, b}
+  结论: 集合.range (pair a b hab) = {a, b}
   证明: by
   ext; exact Nat.or_exists_add_one.symm.trans (by aesop)
 
@@ -583,13 +583,13 @@ class OmegaCompletePartialOrder
     - ωSup_le : forall (c : Chain α) (x), (forall i, c i <= x) -> ωSup c <= x
 
 中文:
-类 OmegaCompletePartialOrder
+类 OmegaCompletePartial序
   参数: (α : 类型)
-  继承: PartialOrder α
+  继承: 偏序 α
   公理与运算 (3 个):
-    - ωSup : Chain α -> α
-    - le_ωSup : 对任意 c : Chain α, 对任意 i, c i <= ωSup c
-    - ωSup_le : 对任意 (c : Chain α) (x), (对任意 i, c i <= x) -> ωSup c <= x
+    - ωSup : 链 α -> α
+    - le_ωSup : 对任意 c : 链 α, 对任意 i, c i <= ωSup c
+    - ωSup_le : 对任意 (c : 链 α) (x), (对任意 i, c i <= x) -> ωSup c <= x
 -/
 class OmegaCompletePartialOrder (α : Type*) extends PartialOrder α where
   /-- The supremum of an increasing sequence -/
@@ -614,7 +614,7 @@ abbreviation lift
 
 中文:
 缩写 lift
-  签名: [PartialOrder β] (f : β ->o α) (ωSup₀ : Chain β -> β)
+  签名: [偏序 β] (f : β ->o α) (ωSup₀ : 链 β -> β)
   定义体: ωSup₀
   ωSup_le c x hx := h _ _ (by rw [h']; apply ωSup_le; intro i; apply f.monotone (hx i))
   le_ωSup c i := h _ _ (by rw [h']; apply le_ωSup (c.map f))
@@ -637,7 +637,7 @@ theorem le_ωSup_of_le
 
 中文:
 定理 le_ωSup_of_le
-  条件: {c : Chain α} {x : α} (i : 自然数) (h : x <= c i)
+  条件: {c : 链 α} {x : α} (i : 自然数) (h : x <= c i)
   结论: x <= ωSup c
   证明: le_trans h (le_ωSup c _)
 
@@ -663,7 +663,7 @@ Or.inr le_ωSup_of_le _ thi
 
 中文:
 定理 ωSup_total
-  条件: {c : Chain α} {x : α} (h : 对任意 i, c i <= x ∨ x <= c i)
+  条件: {c : 链 α} {x : α} (h : 对任意 i, c i <= x ∨ x <= c i)
   结论: ωSup c <= x ∨ x <= ωSup c
   证明: by_cases
     (fun (this : forall i, c i <= x) => Or.inl (ωSup_le _ _ this))
@@ -698,7 +698,7 @@ theorem ωSup_le_ωSup_of_le
 
 中文:
 定理 ωSup_le_ωSup_of_le
-  条件: {c₀ c₁ : Chain α} (h : c₀ <= c₁)
+  条件: {c₀ c₁ : 链 α} (h : c₀ <= c₁)
   结论: ωSup c₀ <= ωSup c₁
   证明: (ωSup_le _ _) fun i => by
     obtain ⟨_, h⟩ := h i
@@ -727,7 +727,7 @@ theorem ωSup_le_iff
 
 中文:
 定理 ωSup_le_iff
-  条件: {c : Chain α} {x : α}
+  条件: {c : 链 α} {x : α}
   结论: ωSup c <= x ↔ 对任意 i, c i <= x
   证明: by
   constructor <;> intros
@@ -761,8 +761,8 @@ lemma isLUB_range_ωSup
 
 中文:
 引理 isLUB_range_ωSup
-  条件: (c : Chain α)
-  结论: IsLUB (Set.range c) (ωSup c)
+  条件: (c : 链 α)
+  结论: IsLUB (集合.range c) (ωSup c)
   证明: by
   constructor
   · simp only [upperBounds, Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff,
@@ -802,7 +802,7 @@ lemma ωSup_eq_of_isLUB
 
 中文:
 引理 ωSup_eq_of_isLUB
-  条件: {c : Chain α} {a : α} (h : IsLUB (Set.range c) a)
+  条件: {c : 链 α} {a : α} (h : IsLUB (集合.range c) a)
   结论: a = ωSup c
   证明: by
   rw [le_antisymm_iff]
@@ -841,7 +841,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: {α : 类型} [OmegaCompletePartialOrder α] (p : α -> 命题)
+  签名: {α : 类型} [OmegaCompletePartial序 α] (p : α -> 命题)
   定义体: OmegaCompletePartialOrder.lift (OrderHom.Subtype.val p)
     (fun c => ⟨ωSup _, hp (c.map (OrderHom.Subtype.val p)) fun _ ⟨n, q⟩ => q.symm ▸ (c n).2⟩)
     (fun _ _ h => h) (fun _ => rfl)
@@ -914,7 +914,7 @@ lemma ωScottContinuous.monotone
 中文:
 引理 ωScottContinuous.monotone
   条件: (h : ωScottContinuous f)
-  结论: Monotone f
+  结论: 递增 f
   证明: ScottContinuousOn.monotone _ (fun a b hab => by
     use pair a b hab; exact range_pair a b hab) h
 
@@ -938,7 +938,7 @@ lemma ωScottContinuous.isLUB
 
 中文:
 引理 ωScottContinuous.isLUB
-  条件: {c : Chain α} (hf : ωScottContinuous f)
+  条件: {c : 链 α} (hf : ωScottContinuous f)
   证明: by
   simpa [Set.range_comp]
     using hf (by simp) (Set.range_nonempty _) (isChain_range c).directedOn (isLUB_range_ωSup c)
@@ -980,7 +980,7 @@ lemma ωScottContinuous.map_ωSup
 
 中文:
 引理 ωScottContinuous.map_ωSup
-  条件: (hf : ωScottContinuous f) (c : Chain α)
+  条件: (hf : ωScottContinuous f) (c : 链 α)
   证明: ωSup_eq_of_isLUB hf.isLUB
 
 Depends on / 依赖: Algebra, Algebra.IsInvariant.isInvariant, IsInvariant, Subtype, Subtype.ext, Subtype.val, congr_arg, hf.isLUB, isInvariant
@@ -1107,7 +1107,7 @@ lemma ωScottContinuous.const
 中文:
 引理 ωScottContinuous.const
   条件: {x : β}
-  结论: ωScottContinuous (Function.const α x)
+  结论: ωScottContinuous (函数.const α x)
   证明: ScottContinuousOn.const x
 
 Depends on / 依赖: ScottContinuousOn, ScottContinuousOn.const
@@ -1138,7 +1138,7 @@ theorem eq_of_chain
 
 中文:
 定理 eq_of_chain
-  条件: {c : Chain (Part α)} {a b : α} (ha : some a in c) (hb : some b in c)
+  条件: {c : 链 (Part α)} {a b : α} (ha : some a in c) (hb : some b in c)
   结论: a = b
   证明: by
   obtain ⟨i, ha⟩ := ha; replace ha := ha.symm
@@ -1169,7 +1169,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def ωSup (c : Chain (Part α))
+  签名: def ωSup (c : 链 (Part α))
   定义体: if h : exists a, some a in c then some (Classical.choose h) else none
 -/
 protected noncomputable def ωSup (c : Chain (Part α)) : Part α :=
@@ -1190,7 +1190,7 @@ theorem ωSup_eq_some
 
 中文:
 定理 ωSup_eq_some
-  条件: {c : Chain (Part α)} {a : α} (h : some a in c)
+  条件: {c : 链 (Part α)} {a : α} (h : some a in c)
   结论: Part.ωSup c = some a
   证明: have : exists a, some a in c := ⟨a, h⟩
   have a' : some (Classical.choose this) in c := Classical.choose_spec this
@@ -1218,7 +1218,7 @@ theorem ωSup_eq_none
 
 中文:
 定理 ωSup_eq_none
-  条件: {c : Chain (Part α)} (h : ¬存在 a, some a in c)
+  条件: {c : 链 (Part α)} (h : ¬存在 a, some a in c)
   结论: Part.ωSup c = none
   证明: dif_neg h
 
@@ -1244,7 +1244,7 @@ theorem mem_chain_of_mem_ωSup
 
 中文:
 定理 mem_chain_of_mem_ωSup
-  条件: {c : Chain (Part α)} {a : α} (h : a in Part.ωSup c)
+  条件: {c : 链 (Part α)} {a : α} (h : a in Part.ωSup c)
   结论: some a in c
   证明: by
   simp only [Part.ωSup] at h; split_ifs at h with h_1
@@ -1342,7 +1342,7 @@ theorem mem_ωSup
 
 中文:
 定理 mem_ωSup
-  条件: (x : α) (c : Chain (Part α))
+  条件: (x : α) (c : 链 (Part α))
   结论: x in ωSup c ↔ some x in c
   证明: by
   simp only [ωSup, Part.ωSup]
@@ -1390,8 +1390,8 @@ instance [forall
 le_ωSup _ _ _ := le_ωSup_of_le _ le_rfl
 
 中文:
-实例 [forall
-  签名: a, OmegaCompletePartialOrder (β a)] :
+实例 [对任意
+  签名: a, OmegaCompletePartial序 (β a)] :
   定义体: ωSup (c.map (Pi.evalOrderHom a))
   ωSup_le _ _ hf a :=
 ωSup_le _ _ by
@@ -1532,7 +1532,7 @@ definition ωSupImpl
 
 中文:
 定义 ωSupImpl
-  签名: (c : Chain (α × β))
+  签名: (c : 链 (α × β))
   定义体: (ωSup (c.map OrderHom.fst), ωSup (c.map OrderHom.snd))
 
 @[simps! ωSup_fst ωSup_snd]
@@ -1553,7 +1553,7 @@ instance :
 
 中文:
 实例 :
-  签名: OmegaCompletePartialOrder (α × β)
+  签名: OmegaCompletePartial序 (α × β)
   定义体: Prod.ωSupImpl
   ωSup_le := fun _ _ h => ⟨ωSup_le _ _ fun i => (h i).1, ωSup_le _ _ fun i => (h i).2⟩
   le_ωSup c i := ⟨le_ωSup (c.map OrderHom.fst) i, le_ωSup (c.map OrderHom.snd) i⟩
@@ -1576,7 +1576,7 @@ theorem ωSup_zip
 
 中文:
 定理 ωSup_zip
-  条件: (c₀ : Chain α) (c₁ : Chain β)
+  条件: (c₀ : 链 α) (c₁ : 链 β)
   结论: ωSup (c₀.zip c₁) = (ωSup c₀, ωSup c₁)
   证明: rfl
 
@@ -1620,7 +1620,7 @@ lemma ωScottContinuous_fst
 
 中文:
 引理 ωScottContinuous_fst
-  结论: ωScottContinuous (Prod.fst : α × β -> α)
+  结论: ωScottContinuous (积类型.fst : α × β -> α)
   证明: ScottContinuousOn.fst
 
 @[fun_prop]
@@ -1641,7 +1641,7 @@ lemma ωScottContinuous_snd
 
 中文:
 引理 ωScottContinuous_snd
-  结论: ωScottContinuous (Prod.snd : α × β -> β)
+  结论: ωScottContinuous (积类型.snd : α × β -> β)
   证明: ScottContinuousOn.snd
 
 Depends on / 依赖: ScottContinuousOn, ScottContinuousOn.snd
@@ -1672,7 +1672,7 @@ definition ωSup
 
 中文:
 定义 ωSup
-  签名: (c : Chain (α ->o β))
+  签名: (c : 链 (α ->o β))
   定义体: ωSup (c.map (OrderHom.apply a))
   monotone' _ _ h := ωSup_le_ωSup_of_le ((Chain.map_le_map _) fun a => a.monotone h)
 
@@ -1693,7 +1693,7 @@ instance omegaCompletePartialOrder
 
 中文:
 实例 omegaCompletePartialOrder
-  签名: : OmegaCompletePartialOrder (α ->o β)
+  签名: : OmegaCompletePartial序 (α ->o β)
   定义体: OmegaCompletePartialOrder.lift OrderHom.coeFnHom OrderHom.ωSup (fun _ _ h => h) fun _ => rfl
 
 Depends on / 依赖: OmegaCompletePartialOrder, OmegaCompletePartialOrder.lift, OrderHom, OrderHom.coeFnHom, coeFnHom
@@ -1715,11 +1715,11 @@ structure ContinuousHom
     - map_ωSup'((c : Chain α)) : toFun (ωSup c) = ωSup (c.map toOrderHom)
 
 中文:
-结构 ContinuousHom
-  参数: extends OrderHom α β
-  继承: OrderHom α β
+结构 连续态射
+  参数: extends 序态射 α β
+  继承: 序态射 α β
   公理与运算 (1 个):
-    - map_ωSup'((c : Chain α)) : toFun (ωSup c) = ωSup (c.map toOrderHom)
+    - map_ωSup'((c : 链 α)) : toFun (ωSup c) = ωSup (c.map toOrderHom)
 -/
 structure ContinuousHom extends OrderHom α β where
   /-- The underlying function of a `ContinuousHom` is continuous, i.e. it preserves `ωSup` -/
@@ -1740,7 +1740,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (α ->𝒄 β) α β
+  签名: 函数状 (α ->𝒄 β) α β
   定义体: f.toFun
   coe_injective := by rintro ⟨⟩ ⟨⟩ h; congr; exact DFunLike.ext' h
 
@@ -1760,7 +1760,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (α ->𝒄 β) α β
+  签名: 序态射类 (α ->𝒄 β) α β
   定义体: f.mono h
 
 Depends on / 依赖: f.mono
@@ -1778,7 +1778,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (α ->𝒄 β)
+  签名: 偏序 (α ->𝒄 β)
   定义体: (PartialOrder.lift fun f => f.toOrderHom.toFun) by rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ h; congr
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, f.toOrderHom.toFun, toOrderHom
@@ -1959,7 +1959,7 @@ theorem monotone
 中文:
 定理 monotone
   条件: (f : α ->𝒄 β)
-  结论: Monotone f
+  结论: 递增 f
   证明: f.monotone'
 
 @[gcongr, mono]
@@ -2008,7 +2008,7 @@ theorem ωSup_bind
 
 中文:
 定理 ωSup_bind
-  条件: {β γ : 类型v} (c : Chain α) (f : α ->o Part β) (g : α ->o β -> Part γ)
+  条件: {β γ : 类型v} (c : 链 α) (f : α ->o Part β) (g : α ->o β -> Part γ)
   证明: by
   apply eq_of_forall_ge_iff; intro x
   simp only [ωSup_le_iff, Part.bind_le]
@@ -2128,7 +2128,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (F : α ->𝒄 β) (C : Chain α)
+  条件: (F : α ->𝒄 β) (C : 链 α)
   结论: F (ωSup C) = ωSup (C.map F)
   证明: F.ωScottContinuous.map_ωSup _
 
@@ -2358,8 +2358,8 @@ instance [Inhabited
   body: ⟨const default⟩
 
 中文:
-实例 [Inhabited
-  签名: β] : Inhabited (α ->𝒄 β)
+实例 [可居
+  签名: β] : 可居 (α ->𝒄 β)
   定义体: ⟨const default⟩
 -/
 instance [Inhabited β] : Inhabited (α ->𝒄 β) :=
@@ -2412,8 +2412,8 @@ theorem forall_forall_merge
 @[simp]
 
 中文:
-定理 forall_forall_merge
-  条件: (c₀ : Chain (α ->𝒄 β)) (c₁ : Chain α) (z : β)
+定理 对任意_对任意_merge
+  条件: (c₀ : 链 (α ->𝒄 β)) (c₁ : 链 α) (z : β)
   证明: by
   constructor <;> introv h
   · apply h
@@ -2452,8 +2452,8 @@ theorem forall_forall_merge'
   rw [forall_comm]; rw [forall_forall_merge]
 
 中文:
-定理 forall_forall_merge'
-  条件: (c₀ : Chain (α ->𝒄 β)) (c₁ : Chain α) (z : β)
+定理 对任意_对任意_merge'
+  条件: (c₀ : 链 (α ->𝒄 β)) (c₁ : 链 α) (z : β)
   证明: by
   rw [forall_comm]; rw [forall_forall_merge]
 
@@ -2479,7 +2479,7 @@ definition ωSup
 
 中文:
 定义 ωSup
-  签名: (c : Chain (α ->𝒄 β))
+  签名: (c : 链 (α ->𝒄 β))
   定义体: ωSup c.map toMono
   map_ωSup' c' := eq_of_forall_ge_iff fun a => by simp [(c _).ωScottContinuous.map_ωSup]
 
@@ -2501,7 +2501,7 @@ instance :
 
 中文:
 实例 :
-  签名: OmegaCompletePartialOrder (α ->𝒄 β)
+  签名: OmegaCompletePartial序 (α ->𝒄 β)
   定义体: OmegaCompletePartialOrder.lift ContinuousHom.toMono ContinuousHom.ωSup
     (fun _ _ h => h) (fun _ => rfl)
 
@@ -2603,7 +2603,7 @@ theorem ωSup_apply_ωSup
 
 中文:
 定理 ωSup_apply_ωSup
-  条件: (c₀ : Chain (α ->𝒄 β)) (c₁ : Chain α)
+  条件: (c₀ : 链 (α ->𝒄 β)) (c₁ : 链 α)
   证明: by simp [Prod.apply_apply, Prod.ωSup_zip]
 
 Depends on / 依赖: Prod.apply_apply, apply_apply

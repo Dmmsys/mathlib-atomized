@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (WithConv <| C ->ₐ[R] A)
+  签名: 幺 (WithConv <| C ->ₐ[R] A)
   定义体: toConv (Algebra.ofId R A).comp counitAlgHom R C
 
 Depends on / 依赖: Algebra, Algebra.ofId, counitAlgHom, toConv
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (WithConv <| C ->ₐ[R] A)
+  签名: 乘法 (WithConv <| C ->ₐ[R] A)
   定义体: toConv .comp (lmul' R) .comp (map f.ofConv g.ofConv) comulAlgHom R C
 
 Depends on / 依赖: comulAlgHom, f.ofConv, g.ofConv, ofConv, toConv
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (WithConv <| C ->ₐ[R] A) 自然数
+  签名: 幂 (WithConv <| C ->ₐ[R] A) 自然数
   定义体: ⟨fun f n => npowRec n f⟩
 
 Depends on / 依赖: npowRec
@@ -100,7 +100,7 @@ lemma convOne_def
 
 中文:
 引理 convOne_def
-  结论: 1 = toConv ((Algebra.ofId R A).comp (counitAlgHom R C))
+  结论: 1 = toConv ((代数.ofId R A).comp (counitAlgHom R C))
   证明: rfl
 -/
 lemma convOne_def : 1 = toConv ((Algebra.ofId R A).comp (counitAlgHom R C)) := rfl
@@ -264,7 +264,7 @@ lemma convMul_comp_bialgHom_distrib
 
 中文:
 引理 convMul_comp_bialgHom_distrib
-  条件: [Bialgebra R B] (f g : WithConv <| C ->ₐ[R] A) (h : B ->ₐc[R] C)
+  条件: [双代数 R B] (f g : WithConv <| C ->ₐ[R] A) (h : B ->ₐc[R] C)
   证明: by
   simp [convMul_def, comp_assoc, Algebra.TensorProduct.map_comp]
 
@@ -289,7 +289,7 @@ lemma comp_convMul_distrib
 
 中文:
 引理 comp_convMul_distrib
-  条件: [Algebra R B] (h : A ->ₐ[R] B) (f g : WithConv <| C ->ₐ[R] A)
+  条件: [代数 R B] (h : A ->ₐ[R] B) (f g : WithConv <| C ->ₐ[R] A)
   证明: by
   apply toLinearMap_injective
   apply WithConv.toConv_injective
@@ -317,7 +317,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (WithConv <| C ->ₐ[R] A)
+  签名: 幺半群 (WithConv <| C ->ₐ[R] A)
   定义体: fast_instance%
   (toConv_injective.comp <| toLinearMap_injective.comp ofConv_injective).monoid _
     toLinearMap_convOne toLinearMap_convMul toLinearMap_convPow
@@ -342,7 +342,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (WithConv <| C ->ₐ[R] A)
+  签名: 交换幺半群 (WithConv <| C ->ₐ[R] A)
   定义体: fast_instance%
   (toConv_injective.comp <| toLinearMap_injective.comp ofConv_injective).commMonoid _
     toLinearMap_convOne toLinearMap_convMul toLinearMap_convPow
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (WithConv <| C ->ₐc[R] A)
+  签名: 幺 (WithConv <| C ->ₐc[R] A)
   定义体: toConv (unitBialgHom R A).comp counitBialgHom R C
 
 Depends on / 依赖: counitBialgHom, toConv, unitBialgHom
@@ -459,7 +459,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (WithConv <| C ->ₐc[R] A)
+  签名: 乘法 (WithConv <| C ->ₐc[R] A)
   定义体: toConv .comp (mulBialgHom R A) .comp (map f.ofConv g.ofConv) comulBialgHom R C
 
 Depends on / 依赖: comulBialgHom, f.ofConv, g.ofConv, mulBialgHom, ofConv, toConv
@@ -477,7 +477,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (WithConv <| C ->ₐc[R] A) 自然数
+  签名: 幂 (WithConv <| C ->ₐc[R] A) 自然数
   定义体: ⟨fun f n => npowRec n f⟩
 
 Depends on / 依赖: npowRec
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (WithConv <| C ->ₐc[R] A)
+  签名: 交换幺半群 (WithConv <| C ->ₐc[R] A)
   定义体: fast_instance%
   (toConv_injective.comp <| coe_linearMap_injective.comp ofConv_injective).commMonoid _
     toLinearMap_convOne toLinearMap_convMul toLinearMap_convPow

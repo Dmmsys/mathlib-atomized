@@ -60,7 +60,7 @@ class MonoidalLeftActionStruct
 
 中文:
 类 MonoidalLeftActionStruct
-  参数: [MonoidalCategoryStruct C]
+  参数: [幺半群范畴结构 C]
   公理与运算 (6 个):
     - actionObj : C -> D -> D
     - actionHomLeft({c c' : C} (f : c ⟶ c') (d : D)) : actionObj c d ⟶ actionObj c' d
@@ -148,8 +148,8 @@ class MonoidalLeftAction
     - rightUnitor_actionHom((c : C) (d : D)) : (ρ_ c).hom ⊵ₗ d = (αₗ _ _ _).hom ≫ c ⊴ₗ (funₗ _).hom  [default: by cat_disch]
 
 中文:
-类 MonoidalLeftAction
-  参数: [MonoidalCategory C]
+类 MonoidalLeft作用
+  参数: [幺半群范畴 C]
   公理与运算 (11 个):
     - actionHom_def({c c' : C} {d d' : D} (f : c ⟶ c') (g : d ⟶ d')) : f ⊙ₗₘ g = f ⊵ₗ d ≫ c' ⊴ₗ g  [默认: by cat_disch]
     - actionHomRight_id((c : C) (d : D)) : c ⊴ₗ 𝟙 d = 𝟙 (c ⊙ₗ d)  [默认: by cat_disch]
@@ -235,7 +235,7 @@ instance selfLeftAction
 
 中文:
 实例 selfLeftAction
-  签名: [MonoidalCategory C]
+  签名: [幺半群范畴 C]
   定义体: x otimes y
   actionHom f g := f otimesₘ g
   actionUnitIso x := fun_ x
@@ -674,7 +674,7 @@ theorem actionHomRight_hom_inv'
 
 中文:
 定理 actionHomRight_hom_inv'
-  条件: (x : C) {y z : D} (f : y ⟶ z) [IsIso f]
+  条件: (x : C) {y z : D} (f : y ⟶ z) [是同构 f]
   证明: by
   rw [← actionHomRight_comp]; rw [IsIso.hom_inv_id]; rw [actionHomRight_id]
 
@@ -700,7 +700,7 @@ theorem hom_inv_actionHomLeft'
 
 中文:
 定理 hom_inv_actionHomLeft'
-  条件: {x y : C} (f : x ⟶ y) [IsIso f] (z : D)
+  条件: {x y : C} (f : x ⟶ y) [是同构 f] (z : D)
   证明: by
   rw [← comp_actionHomLeft]; rw [IsIso.hom_inv_id]; rw [id_actionHomLeft]
 
@@ -726,7 +726,7 @@ theorem actionHomRight_inv_hom'
 
 中文:
 定理 actionHomRight_inv_hom'
-  条件: (x : C) {y z : D} (f : y ⟶ z) [IsIso f]
+  条件: (x : C) {y z : D} (f : y ⟶ z) [是同构 f]
   证明: by
   rw [← actionHomRight_comp]; rw [IsIso.inv_hom_id]; rw [actionHomRight_id]
 
@@ -750,7 +750,7 @@ theorem inv_hom_actionHomLeft'
 
 中文:
 定理 inv_hom_actionHomLeft'
-  条件: {x y : C} (f : x ⟶ y) [IsIso f] (z : D)
+  条件: {x y : C} (f : x ⟶ y) [是同构 f] (z : D)
   证明: by
   rw [← comp_actionHomLeft]; rw [IsIso.inv_hom_id]; rw [id_actionHomLeft]
 
@@ -770,7 +770,7 @@ instance isIso_actionHomRight
 
 中文:
 实例 isIso_actionHomRight
-  签名: (x : C) {y z : D} (f : y ⟶ z) [IsIso f]
+  签名: (x : C) {y z : D} (f : y ⟶ z) [是同构 f]
   定义体: ⟨x ⊴ₗ inv f, by simp⟩
 -/
 instance isIso_actionHomRight (x : C) {y z : D} (f : y ⟶ z) [IsIso f] :
@@ -787,7 +787,7 @@ instance isIso_actionHomLeft
 
 中文:
 实例 isIso_actionHomLeft
-  签名: {x y : C} (f : x ⟶ y) [IsIso f] (z : D)
+  签名: {x y : C} (f : x ⟶ y) [是同构 f] (z : D)
   定义体: ⟨inv f ⊵ₗ z, by simp⟩
 -/
 instance isIso_actionHomLeft {x y : C} (f : x ⟶ y) [IsIso f] (z : D) :
@@ -831,7 +831,7 @@ lemma inv_actionHomLeft
 
 中文:
 引理 inv_actionHomLeft
-  条件: {x y : C} (f : x ⟶ y) [IsIso f] (z : D)
+  条件: {x y : C} (f : x ⟶ y) [是同构 f] (z : D)
   证明: IsIso.inv_eq_of_hom_inv_id hom_inv_actionHomLeft' f z
 
 @[simp]
@@ -855,7 +855,7 @@ lemma inv_actionHomRight
 
 中文:
 引理 inv_actionHomRight
-  条件: (x : C) {y z : D} (f : y ⟶ z) [IsIso f]
+  条件: (x : C) {y z : D} (f : y ⟶ z) [是同构 f]
   证明: IsIso.inv_eq_of_hom_inv_id actionHomRight_hom_inv' x f
 
 @[simp]
@@ -946,7 +946,7 @@ definition actionAssocNatIso
      NatIso.ofComponents fun _ => αₗ _ _ _
 
 中文:
-定义 actionAssocNatIso
+定义 actionAssoc自然数Iso
   签名: :
   定义体: NatIso.ofComponents fun _ =>
     NatIso.ofComponents fun _ =>
@@ -973,7 +973,7 @@ definition actionUnitNatIso
   body: NatIso.ofComponents (funₗ ·)
 
 中文:
-定义 actionUnitNatIso
+定义 actionUnit自然数Iso
   签名: : actionLeft D (𝟙_ C) ≅ 𝟭 D
   定义体: NatIso.ofComponents (funₗ ·)
 
@@ -1001,7 +1001,7 @@ class MonoidalRightActionStruct
 
 中文:
 类 MonoidalRightActionStruct
-  参数: [MonoidalCategoryStruct C]
+  参数: [幺半群范畴结构 C]
   公理与运算 (6 个):
     - actionObj : D -> C -> D
     - actionHomRight((d : D) {c c' : C} (f : c ⟶ c')) : actionObj d c ⟶ actionObj d c'
@@ -1089,8 +1089,8 @@ class MonoidalRightAction
     - actionHom_rightUnitor((c : C) (d : D)) : d ⊴ᵣ (ρ_ c).hom = (αᵣ _ _ _).hom ≫ (ρᵣ _).hom  [default: by cat_disch]
 
 中文:
-类 MonoidalRightAction
-  参数: [MonoidalCategory C]
+类 MonoidalRight作用
+  参数: [幺半群范畴 C]
   公理与运算 (11 个):
     - actionHom_def({c c' : C} {d d' : D} (f : d ⟶ d') (g : c ⟶ c')) : f ⊙ᵣₘ g = f ⊵ᵣ c ≫ d' ⊴ᵣ g  [默认: by cat_disch]
     - actionHomRight_id((c : C) (d : D)) : d ⊴ᵣ 𝟙 c = 𝟙 (d ⊙ᵣ c)  [默认: by cat_disch]
@@ -1173,7 +1173,7 @@ instance selRightfAction
 
 中文:
 实例 selRightfAction
-  签名: [MonoidalCategory C]
+  签名: [幺半群范畴 C]
   定义体: x otimes y
   actionHom f g := f otimesₘ g
   actionUnitIso x := ρ_ x
@@ -1612,7 +1612,7 @@ theorem actionHomRight_hom_inv'
 
 中文:
 定理 actionHomRight_hom_inv'
-  条件: (x : D) {y z : C} (f : y ⟶ z) [IsIso f]
+  条件: (x : D) {y z : C} (f : y ⟶ z) [是同构 f]
   证明: by
   rw [← actionHomRight_comp]; rw [IsIso.hom_inv_id]; rw [actionHomRight_id]
 
@@ -1638,7 +1638,7 @@ theorem hom_inv_actionHomLeft'
 
 中文:
 定理 hom_inv_actionHomLeft'
-  条件: {x y : D} (f : x ⟶ y) [IsIso f] (z : C)
+  条件: {x y : D} (f : x ⟶ y) [是同构 f] (z : C)
   证明: by
   rw [← comp_actionHomLeft]; rw [IsIso.hom_inv_id]; rw [id_actionHomLeft]
 
@@ -1664,7 +1664,7 @@ theorem actionHomRight_inv_hom'
 
 中文:
 定理 actionHomRight_inv_hom'
-  条件: (x : D) {y z : C} (f : y ⟶ z) [IsIso f]
+  条件: (x : D) {y z : C} (f : y ⟶ z) [是同构 f]
   证明: by
   rw [← actionHomRight_comp]; rw [IsIso.inv_hom_id]; rw [actionHomRight_id]
 
@@ -1688,7 +1688,7 @@ theorem inv_hom_actionHomLeft'
 
 中文:
 定理 inv_hom_actionHomLeft'
-  条件: {x y : D} (f : x ⟶ y) [IsIso f] (z : C)
+  条件: {x y : D} (f : x ⟶ y) [是同构 f] (z : C)
   证明: by
   rw [← comp_actionHomLeft]; rw [IsIso.inv_hom_id]; rw [id_actionHomLeft]
 
@@ -1708,7 +1708,7 @@ instance isIso_actionHomLeft
 
 中文:
 实例 isIso_actionHomLeft
-  签名: {x y : D} (f : x ⟶ y) [IsIso f] (z : C)
+  签名: {x y : D} (f : x ⟶ y) [是同构 f] (z : C)
   定义体: ⟨inv f ⊵ᵣ z, by simp⟩
 -/
 instance isIso_actionHomLeft {x y : D} (f : x ⟶ y) [IsIso f] (z : C) :
@@ -1725,7 +1725,7 @@ instance isIso_actionHomRight
 
 中文:
 实例 isIso_actionHomRight
-  签名: (x : D) {y z : C} (f : y ⟶ z) [IsIso f]
+  签名: (x : D) {y z : C} (f : y ⟶ z) [是同构 f]
   定义体: ⟨x ⊴ᵣ inv f, by simp⟩
 -/
 instance isIso_actionHomRight (x : D) {y z : C} (f : y ⟶ z) [IsIso f] :
@@ -1769,7 +1769,7 @@ lemma inv_actionHomLeft
 
 中文:
 引理 inv_actionHomLeft
-  条件: {x y : D} (f : x ⟶ y) [IsIso f] (z : C)
+  条件: {x y : D} (f : x ⟶ y) [是同构 f] (z : C)
   证明: IsIso.inv_eq_of_hom_inv_id hom_inv_actionHomLeft' f z
 
 @[simp]
@@ -1793,7 +1793,7 @@ lemma inv_actionHomRight
 
 中文:
 引理 inv_actionHomRight
-  条件: (x : D) {y z : C} (f : y ⟶ z) [IsIso f]
+  条件: (x : D) {y z : C} (f : y ⟶ z) [是同构 f]
   证明: IsIso.inv_eq_of_hom_inv_id actionHomRight_hom_inv' x f
 
 @[simp]
@@ -1883,7 +1883,7 @@ definition actionAssocNatIso
      NatIso.ofComponents fun _ => αᵣ _ _ _
 
 中文:
-定义 actionAssocNatIso
+定义 actionAssoc自然数Iso
   签名: :
   定义体: NatIso.ofComponents fun _ =>
     NatIso.ofComponents fun _ =>
@@ -1910,7 +1910,7 @@ definition actionUnitNatIso
   body: NatIso.ofComponents (ρᵣ ·)
 
 中文:
-定义 actionUnitNatIso
+定义 actionUnit自然数Iso
   签名: : actionRight D (𝟙_ C) ≅ 𝟭 D
   定义体: NatIso.ofComponents (ρᵣ ·)
 

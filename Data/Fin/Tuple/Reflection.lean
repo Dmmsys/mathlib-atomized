@@ -46,7 +46,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: : 对任意 {m}, (Fin m -> α -> β) -> (Fin m -> α) -> Fin m -> β
+  签名: : 对任意 {m}, (有限集 m -> α -> β) -> (有限集 m -> α) -> 有限集 m -> β
 -/
 def seq : forall {m}, (Fin m -> α -> β) -> (Fin m -> α) -> Fin m -> β
   | 0, _, _ => ![]
@@ -63,7 +63,7 @@ theorem seq_eq
 
 中文:
 定理 seq_eq
-  结论: 对任意 {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v = fun i => f i (v i)
+  结论: 对任意 {m} (f : 有限集 m -> α -> β) (v : 有限集 m -> α), seq f v = fun i => f i (v i)
   证明: rfl
 -/
 theorem seq_eq : forall {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v = fun i => f i (v i)
@@ -115,7 +115,7 @@ example {f : α -> β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂
 
 中文:
 定理 map_eq
-  条件: (f : α -> β) {m} (v : Fin m -> α)
+  条件: (f : α -> β) {m} (v : 有限集 m -> α)
   结论: map f v = f ∘ v
   证明: seq_eq _ _
 
@@ -140,7 +140,7 @@ definition etaExpand
 
 中文:
 定义 etaExpand
-  签名: {m} (v : Fin m -> α)
+  签名: {m} (v : 有限集 m -> α)
   定义体: map id v
 -/
 def etaExpand {m} (v : Fin m -> α) : Fin m -> α :=
@@ -167,7 +167,7 @@ example (a : Fin 2 -> α) : a = ![a 0, a 1] :=
 
 中文:
 定理 etaExpand_eq
-  条件: {m} (v : Fin m -> α)
+  条件: {m} (v : 有限集 m -> α)
   结论: etaExpand v = v
   证明: map_eq id v
 
@@ -190,8 +190,8 @@ definition Forall
   signature: : forall {m} (_ : (Fin m -> α) -> Prop), Prop
 
 中文:
-定义 Forall
-  签名: : 对任意 {m} (_ : (Fin m -> α) -> 命题), 命题
+定义 任意
+  签名: : 对任意 {m} (_ : (有限集 m -> α) -> 命题), 命题
 
 Depends on / 依赖: forall_iff
 -/
@@ -215,8 +215,8 @@ theorem forall_iff
   proof: (forall_iff _).symm
 
 中文:
-定理 forall_iff
-  结论: 对任意 {m} (P : (Fin m -> α) -> 命题), Forall P ↔ 对任意 x, P x
+定理 对任意_iff
+  结论: 对任意 {m} (P : (有限集 m -> α) -> 命题), 任意 P ↔ 对任意 x, P x
   证明: (forall_iff _).symm
 
 Depends on / 依赖: forall_iff
@@ -238,8 +238,8 @@ definition Exists
   signature: : forall {m} (_ : (Fin m -> α) -> Prop), Prop
 
 中文:
-定义 Exists
-  签名: : 对任意 {m} (_ : (Fin m -> α) -> 命题), 命题
+定义 存在
+  签名: : 对任意 {m} (_ : (有限集 m -> α) -> 命题), 命题
 
 Depends on / 依赖: exists_iff
 -/
@@ -256,8 +256,8 @@ theorem exists_iff
   proof: (exists_iff _).symm
 
 中文:
-定理 exists_iff
-  结论: 对任意 {m} (P : (Fin m -> α) -> 命题), Exists P ↔ 存在 x, P x
+定理 存在_iff
+  结论: 对任意 {m} (P : (有限集 m -> α) -> 命题), 存在 P ↔ 存在 x, P x
   证明: (exists_iff _).symm
 
 Depends on / 依赖: exists_iff
@@ -279,8 +279,8 @@ definition sum
   signature: [Add α] [Zero α]
 
 中文:
-定义 sum
-  签名: [Add α] [Zero α]
+定义 求和
+  签名: [加法 α] [零 α]
 -/
 def sum [Add α] [Zero α] : forall {m} (_ : Fin m -> α), α
   | 0, _ => 0
@@ -299,8 +299,8 @@ definition prod
   signature: [Mul α] [One α]
 
 中文:
-定义 prod
-  签名: [Mul α] [One α]
+定义 乘积
+  签名: [乘法 α] [幺 α]
 
 Depends on / 依赖: prod_eq, to_additive
 -/
@@ -335,8 +335,8 @@ example [AddCommMonoid α] (a : Fin 3 -> α) : ∑ i, a i = a 0 + a 1 + a 2 :=
 
 中文:
 定理 prod_eq
-  条件: [CommMonoid α]
-  结论: 对任意 {m} (a : Fin m -> α), prod a = ∏ i, a i
+  条件: [交换幺半群 α]
+  结论: 对任意 {m} (a : 有限集 m -> α), 乘积 a = ∏ i, a i
   证明: (prod_eq _).symm
 
 example [AddCommMonoid α] (a : Fin 3 -> α) : ∑ i, a i = a 0 + a 1 + a 2 :=

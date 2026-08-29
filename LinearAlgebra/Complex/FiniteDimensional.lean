@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiniteDimensional 实数 Complex
+  签名: 有限维 实数 复形
   定义体: basisOneI.finiteDimensional_of_finite
 
 Depends on / 依赖: basisOneI, basisOneI.finiteDimensional_of_finite, finiteDimensional_of_finite
@@ -56,7 +56,7 @@ theorem finrank_real_complex
 
 中文:
 定理 finrank_real_complex
-  结论: finrank 实数 Complex = 2
+  结论: finrank 实数 复形 = 2
   证明: by
   rw [finrank_eq_card_basis basisOneI]; rw [Fintype.card_fin]
 
@@ -78,7 +78,7 @@ theorem rank_real_complex
 
 中文:
 定理 rank_real_complex
-  结论: Module.rank 实数 Complex = 2
+  结论: 模.rank 实数 复形 = 2
   证明: by simp [← finrank_eq_rank, finrank_real_complex]
 
 Depends on / 依赖: finrank_eq_rank, finrank_real_complex
@@ -96,7 +96,7 @@ theorem rank_real_complex'.{u}
 
 中文:
 定理 rank_real_complex'.{u}
-  结论: Cardinal.lift.{u} (Module.rank 实数 Complex) = 2
+  结论: 基数.lift.{u} (模.rank 实数 复形) = 2
   证明: by
   rw [← finrank_eq_rank]; rw [finrank_real_complex]; rw [Cardinal.lift_natCast]; rw [Nat.cast_ofNat]
 
@@ -115,7 +115,7 @@ theorem finrank_real_complex_fact
 
 中文:
 定理 finrank_real_complex_fact
-  结论: Fact (finrank 实数 Complex = 2)
+  结论: Fact (finrank 实数 复形 = 2)
   证明: ⟨finrank_real_complex⟩
 
 Depends on / 依赖: finrank_real_complex
@@ -141,7 +141,7 @@ theorem rank_real_of_complex
 
 中文:
 定理 rank_real_of_complex
-  条件: (E : 类型) [AddCommGroup E] [Module Complex E]
+  条件: (E : 类型) [加法交换群 E] [模 复形 E]
   证明: Cardinal.lift_inj.{_, 0}.1 by
     rw [← lift_rank_mul_lift_rank Real Complex E]; rw [Complex.rank_real_complex']
     simp only [Cardinal.lift_id']
@@ -165,7 +165,7 @@ theorem finrank_real_of_complex
 
 中文:
 定理 finrank_real_of_complex
-  条件: (E : 类型) [AddCommGroup E] [Module Complex E]
+  条件: (E : 类型) [加法交换群 E] [模 复形 E]
   证明: by
   rw [← Module.finrank_mul_finrank Real Complex E]; rw [Complex.finrank_real_complex]
 
@@ -191,8 +191,8 @@ lemma Real.rank_rat_real
   simpa [mk_real] using aleph0_lt_continuum
 
 中文:
-引理 Real.rank_rat_real
-  结论: Module.rank Rat 实数 = continuum
+引理 实数.rank_rat_real
+  结论: 模.rank 有理数 实数 = continuum
   证明: by
   refine (Free.rank_eq_mk_of_infinite_lt Rat Real ?_).trans mk_real
   simpa [mk_real] using aleph0_lt_continuum
@@ -216,8 +216,8 @@ lemma Complex.rank_rat_complex
   simpa using aleph0_lt_continuum
 
 中文:
-引理 Complex.rank_rat_complex
-  结论: Module.rank Rat Complex = continuum
+引理 复形.rank_rat_complex
+  结论: 模.rank 有理数 复形 = continuum
   证明: by
   refine (Free.rank_eq_mk_of_infinite_lt Rat Complex ?_).trans Cardinal.mk_complex
   simpa using aleph0_lt_continuum
@@ -237,8 +237,8 @@ theorem Complex.nonempty_linearEquiv_real
   proof: Module.nonempty_linearEquiv_iff_rank_eq.mpr by simp
 
 中文:
-定理 Complex.nonempty_linearEquiv_real
-  结论: Nonempty (Complex ≃ₗ[Rat] 实数)
+定理 复形.nonempty_linearEquiv_real
+  结论: 非空 (复形 ≃ₗ[有理数] 实数)
   证明: Module.nonempty_linearEquiv_iff_rank_eq.mpr by simp
 
 Depends on / 依赖: Module, Module.nonempty_linearEquiv_iff_rank_eq.mpr, nonempty_linearEquiv_iff_rank_eq

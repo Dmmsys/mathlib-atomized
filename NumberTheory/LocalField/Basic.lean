@@ -30,7 +30,7 @@ class IsNonarchimedeanLocalField
   (no additional axioms)
 
 中文:
-类 IsNonarchimedeanLocalField
+类 是NonarchimedeanLocalField
   (无附加公理)
 -/
 class IsNonarchimedeanLocalField
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalDivisionRing K
+  签名: 是TopologicalDivision环 K
   定义体: by
   let := IsTopologicalAddGroup.rightUniformSpace K
   have := isUniformAddGroup_of_addCommGroup (G := K)
@@ -96,7 +96,7 @@ lemma isCompact_closedBall
 中文:
 引理 isCompact_closedBall
   条件: (γ : ValueGroupWithZero K)
-  结论: IsCompact { x | valuation K x <= γ }
+  结论: 是紧集 { x | valuation K x <= γ }
   证明: by
   obtain ⟨γ, rfl⟩ := ValuativeRel.valuation_surjective γ
   by_cases hγ : γ = 0
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace 𝒪[K]
+  签名: 紧空间 𝒪[K]
   定义体: isCompact_iff_compactSpace.mp (isCompact_closedBall K 1)
 
 Depends on / 依赖: isCompact_closedBall, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscreteValuationRing 𝒪[K]
+  签名: 是离散赋值环 𝒪[K]
   定义体: letI := IsTopologicalAddGroup.rightUniformSpace K
   haveI := isUniformAddGroup_of_addCommGroup (G := K)
   haveI : CompactSpace (Valued.integer K) := inferInstanceAs (CompactSpace 𝒪[K])
@@ -207,7 +207,7 @@ definition valueGroupWithZeroIsoInt
   let e : (Mon
 
 中文:
-定义 valueGroupWithZeroIsoInt
+定义 valueGroupWithZeroIso整数
   签名: : ValueGroupWithZero K ≃*o 整数ᵐ⁰
   定义体: by
   apply Nonempty.some
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCyclic (ValueGroupWithZero K)ˣ
+  签名: 是循环 (ValueGroupWithZero K)ˣ
   定义体: (Units.mapEquiv (valueGroupWithZeroIsoInt K).toMulEquiv).isCyclic.mpr inferInstance
 
 Depends on / 依赖: Units.mapEquiv, isCyclic, isCyclic.mpr, mapEquiv, toMulEquiv, valueGroupWithZeroIsoInt
@@ -261,7 +261,7 @@ instance :
 
 中文:
 实例 :
-  签名: ValuativeRel.IsDiscrete K
+  签名: ValuativeRel.是离散 K
   定义体: (ValuativeRel.nonempty_orderIso_withZeroMul_int_iff.mp ⟨valueGroupWithZeroIsoInt K⟩).1
 
 Depends on / 依赖: ValuativeRel, ValuativeRel.nonempty_orderIso_withZeroMul_int_iff.mp, nonempty_orderIso_withZeroMul_int_iff, valueGroupWithZeroIsoInt
@@ -280,7 +280,7 @@ instance :
 
 中文:
 实例 :
-  签名: ValuativeRel.IsRankLeOne K
+  签名: ValuativeRel.是秩不超过一 K
   定义体: ValuativeRel.isRankLeOne_iff_mulArchimedean.mpr
     (.comap (valueGroupWithZeroIsoInt K).toMonoidHom (valueGroupWithZeroIsoInt K).strictMono)
 
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite 𝓀[K]
+  签名: 有限 𝓀[K]
   定义体: letI := IsTopologicalAddGroup.rightUniformSpace K
   haveI := isUniformAddGroup_of_addCommGroup (G := K)
   letI : (Valued.v (R := K)).RankOne :=
@@ -345,7 +345,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace K
+  签名: 完备空间 K
   定义体: letI : (Valued.v (R := K)).RankOne :=
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
@@ -379,7 +379,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace 𝒪[K]
+  签名: 完备空间 𝒪[K]
   定义体: letI : (Valued.v (R := K)).RankOne :=
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAdicComplete 𝓂[K] 𝒪[K]
+  签名: 是AdicComplete 𝓂[K] 𝒪[K]
   定义体: by
     let S n : Set 𝒪[K] := f n +ᵥ ((𝓂[K] ^ n : Ideal 𝒪[K]) : Set 𝒪[K])
     have hS n : S (n + 1) subseteq S n := by

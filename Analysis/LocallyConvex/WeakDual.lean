@@ -400,7 +400,7 @@ theorem dualEmbedding_surjective
 
 中文:
 定理 dualEmbedding_surjective
-  结论: Function.Surjective (WeakBilin.eval B)
+  结论: 函数.满射 (WeakBilin.eval B)
   证明: fun f => by
   have : f.toLinearMap in
       Submodule.span 𝕜 (ContinuousLinearMap.coeLM 𝕜 ∘ₗ WeakBilin.eval B).range := by
@@ -479,7 +479,7 @@ theorem LinearMap.weakBilin_withSeminorms
 .congr_equiv e (LinearMap.ltoFun 𝕜 F 𝕜 𝕜 ∘ₗ B : (WeakBilin B) ->ₗ[𝕜] (F -> 𝕜))
 
 中文:
-定理 LinearMap.weakBilin_withSeminorms
+定理 线性映射.weakBilin_withSeminorms
   条件: (B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜)
   证明: let e : F ≃ (Σ _ : F, Fin 1) := .symm .sigmaUnique _ _
   withSeminorms_induced (withSeminorms_pi (fun _ => norm_withSeminorms 𝕜 𝕜))
@@ -502,7 +502,7 @@ theorem LinearMap.hasBasis_weakBilin
   proof: .hasBasis LinearMap.weakBilin_withSeminorms B
 
 中文:
-定理 LinearMap.hasBasis_weakBilin
+定理 线性映射.hasBasis_weakBilin
   条件: (B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜)
   证明: .hasBasis LinearMap.weakBilin_withSeminorms B
 

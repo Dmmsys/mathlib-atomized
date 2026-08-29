@@ -65,10 +65,10 @@ class Scheme.IsGermInjectiveAt
     - cond : exists (U : X.Opens) (hx : x in U), IsAffineOpen U ∧ Function.Injective (X.presheaf.germ U x hx)
 
 中文:
-类 Scheme.IsGermInjectiveAt
-  参数: (X : Scheme.{u}) (x : X)
+类 概形.是GermInjectiveAt
+  参数: (X : 概形.{u}) (x : X)
   公理与运算 (1 个):
-    - cond : 存在 (U : X.Opens) (hx : x in U), IsAffineOpen U ∧ Function.Injective (X.presheaf.germ U x hx)
+    - cond : 存在 (U : X.Opens) (hx : x in U), 是仿射开集 U ∧ 函数.单射 (X.presheaf.germ U x hx)
 -/
 class Scheme.IsGermInjectiveAt (X : Scheme.{u}) (x : X) : Prop where
   cond : exists (U : X.Opens) (hx : x in U), IsAffineOpen U ∧ Function.Injective (X.presheaf.germ U x hx)
@@ -88,7 +88,7 @@ lemma injective_germ_basicOpen
 
 中文:
 引理 injective_germ_basicOpen
-  结论: (U : X.Opens) (hU : IsAffineOpen U)
+  结论: (U : X.Opens) (hU : 是仿射开集 U)
   证明: by
   rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at H ⊢
   intro t ht
@@ -120,8 +120,8 @@ lemma Scheme.exists_germ_injective
   proof: Scheme.IsGermInjectiveAt.cond
 
 中文:
-引理 Scheme.exists_germ_injective
-  条件: (X : Scheme.{u}) (x : X) [X.IsGermInjectiveAt x]
+引理 概形.存在_germ_injective
+  条件: (X : 概形.{u}) (x : X) [X.是GermInjectiveAt x]
   证明: Scheme.IsGermInjectiveAt.cond
 
 Depends on / 依赖: IsGermInjectiveAt, Scheme, Scheme.IsGermInjectiveAt.cond
@@ -143,8 +143,8 @@ lemma Scheme.exists_le_and_germ_injective
   exact ⟨X.basicOpen f, hxf, hU.basicOpen f, hf, injective_germ_basicOpen U hU x hx f hxf H⟩
 
 中文:
-引理 Scheme.exists_le_and_germ_injective
-  结论: (X : Scheme.{u}) (x : X) [X.IsGermInjectiveAt x]
+引理 概形.存在_le_and_germ_injective
+  结论: (X : 概形.{u}) (x : X) [X.是GermInjectiveAt x]
   证明: by
   obtain ⟨U, hx, hU, H⟩ := Scheme.IsGermInjectiveAt.cond (x := x)
   obtain ⟨f, hf, hxf⟩ := hU.exists_basicOpen_le ⟨x, hxV⟩ hx
@@ -188,7 +188,7 @@ lemma isGermInjectiveAt_iff_of_isOpenImmersion
 
 中文:
 引理 isGermInjectiveAt_iff_of_isOpenImmersion
-  条件: {x : X} [IsOpenImmersion f]
+  条件: {x : X} [是开浸入 f]
   证明: by
   refine ⟨fun H => ?_, fun _ => inferInstance⟩
   obtain ⟨U, hxU, hU, hU', H⟩ :=
@@ -223,8 +223,8 @@ abbreviation Scheme.IsGermInjective
   body: forall x : X, X.IsGermInjectiveAt x
 
 中文:
-缩写 Scheme.IsGermInjective
-  签名: (X : Scheme.{u})
+缩写 概形.IsGermInjective
+  签名: (X : 概形.{u})
   定义体: forall x : X, X.IsGermInjectiveAt x
 
 Depends on / 依赖: IsGermInjectiveAt, X.IsGermInjectiveAt
@@ -242,7 +242,7 @@ lemma Scheme.IsGermInjective.of_openCover
   infer_instance
 
 中文:
-引理 Scheme.IsGermInjective.of_openCover
+引理 概形.IsGermInjective.of_openCover
   证明: by
   intro x
   rw [← (𝒰.covers x).choose_spec]
@@ -274,7 +274,7 @@ lemma Scheme.IsGermInjective.Spec
   obtain ⟨x,
 
 中文:
-引理 Scheme.IsGermInjective.Spec
+引理 概形.IsGermInjective.Spec
   证明: by
   refine fun p => ⟨?_⟩
   obtain ⟨f, hf, H⟩ := H p.asIdeal p.2
@@ -368,7 +368,7 @@ lemma spread_out_unique_of_isGermInjective
 
 中文:
 引理 spread_out_unique_of_isGermInjective
-  结论: {x : X} [X.IsGermInjectiveAt x]
+  结论: {x : X} [X.是GermInjectiveAt x]
   证明: by
   obtain ⟨_, ⟨V : Y.Opens, hV, rfl⟩, hxV, -⟩ :=
     Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
@@ -422,7 +422,7 @@ lemma spread_out_unique_of_isGermInjective'
 
 中文:
 引理 spread_out_unique_of_isGermInjective'
-  结论: {x : X} [X.IsGermInjectiveAt x]
+  结论: {x : X} [X.是GermInjectiveAt x]
   证明: by
   fapply spread_out_unique_of_isGermInjective
   · simpa using congr($e (IsLocalRing.closedPoint _))
@@ -457,7 +457,7 @@ lemma exists_lift_of_germInjective_aux
     exact ⟨by simpa using fun x _ =>
 
 中文:
-引理 exists_lift_of_germInjective_aux
+引理 存在_lift_of_germInjective_aux
   结论: {U : X.Opens} {x : X} (hxU)
   证明: by
   let := φRA.hom.toAlgebra
@@ -509,8 +509,8 @@ lemma exists_lift_of_germInjective
     rw [← X.pr
 
 中文:
-引理 exists_lift_of_germInjective
-  结论: {x : X} [X.IsGermInjectiveAt x] {U : X.Opens} (hxU : x in U)
+引理 存在_lift_of_germInjective
+  结论: {x : X} [X.是GermInjectiveAt x] {U : X.Opens} (hxU : x in U)
   证明: by
   obtain ⟨V, hxV, iVU, hV⟩ := exists_lift_of_germInjective_aux hxU φ φRA φRX hφRA e
   obtain ⟨V', hxV', hV', iV'V, H⟩ := X.exists_le_and_germ_injective x V hxV
@@ -589,7 +589,7 @@ lemma spread_out_of_isGermInjective
 
 中文:
 引理 spread_out_of_isGermInjective
-  结论: [LocallyOfFiniteType sY] {x : X} [X.IsGermInjectiveAt x] {y : Y}
+  结论: [局部有限型 sY] {x : X} [X.是GermInjectiveAt x] {y : Y}
   证明: by
   obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
     S.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (sX x)) isOpen_univ
@@ -643,7 +643,7 @@ lemma spread_out_of_isGermInjective'
 
 中文:
 引理 spread_out_of_isGermInjective'
-  结论: [LocallyOfFiniteType sY] {x : X} [X.IsGermInjectiveAt x]
+  结论: [局部有限型 sY] {x : X} [X.是GermInjectiveAt x]
   证明: by
   have := spread_out_of_isGermInjective sX sY ?_ (Scheme.stalkClosedPointTo φ) ?_
   · simpa only [Scheme.Spec_stalkClosedPointTo_fromSpecStalk] using this

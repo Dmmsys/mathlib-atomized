@@ -44,8 +44,8 @@ theorem Filter.Tendsto.atTop_mul_pos
     hf using mul_le_mul_of_nonneg_left hg.le hf
 
 中文:
-定理 Filter.Tendsto.atTop_mul_pos
-  结论: {C : 𝕜} (hC : 0 < C) (hf : Tendsto f l atTop)
+定理 滤子.收敛.atTop_mul_pos
+  结论: {C : 𝕜} (hC : 0 < C) (hf : 收敛 f l atTop)
   证明: by
   refine tendsto_atTop_mono' _ ?_ (hf.atTop_mul_const (half_pos hC))
   filter_upwards [hg.eventually (lt_mem_nhds (half_lt_self hC)), hf.eventually_ge_atTop 0] with x hg
@@ -74,8 +74,8 @@ theorem Filter.Tendsto.pos_mul_atTop
 @[simp]
 
 中文:
-定理 Filter.Tendsto.pos_mul_atTop
-  结论: {C : 𝕜} (hC : 0 < C) (hf : Tendsto f l (𝓝 C))
+定理 滤子.收敛.pos_mul_atTop
+  结论: {C : 𝕜} (hC : 0 < C) (hf : 收敛 f l (𝓝 C))
   证明: by
   simpa only [mul_comm] using hg.atTop_mul_pos hC hf
 
@@ -101,7 +101,7 @@ lemma inv_atTop₀
 
 中文:
 引理 inv_atTop₀
-  结论: (atTop : Filter 𝕜)⁻¹ = 𝓝[>] 0
+  结论: (atTop : 滤子 𝕜)⁻¹ = 𝓝[>] 0
   证明: (((atTop_basis_Ioi' (0 : 𝕜)).map _).comp_surjective inv_surjective).eq_of_same_basis
     (nhdsGT_basis _).congr (by simp) fun a ha => by simp [inv_Ioi₀ (inv_pos.2 ha)]
 
@@ -141,7 +141,7 @@ theorem tendsto_inv_nhdsGT_zero
 
 中文:
 定理 tendsto_inv_nhdsGT_zero
-  结论: Tendsto (fun x : 𝕜 => x⁻¹) (𝓝[>] (0 : 𝕜)) atTop
+  结论: 收敛 (fun x : 𝕜 => x⁻¹) (𝓝[>] (0 : 𝕜)) atTop
   证明: inv_nhdsGT_zero.le
 
 Depends on / 依赖: inv_nhdsGT_zero, inv_nhdsGT_zero.le
@@ -159,7 +159,7 @@ theorem tendsto_inv_atTop_nhdsGT_zero
 
 中文:
 定理 tendsto_inv_atTop_nhdsGT_zero
-  结论: Tendsto (fun r : 𝕜 => r⁻¹) atTop (𝓝[>] (0 : 𝕜))
+  结论: 收敛 (fun r : 𝕜 => r⁻¹) atTop (𝓝[>] (0 : 𝕜))
   证明: inv_atTop₀.le
 -/
 theorem tendsto_inv_atTop_nhdsGT_zero : Tendsto (fun r : 𝕜 => r⁻¹) atTop (𝓝[>] (0 : 𝕜)) :=
@@ -200,7 +200,7 @@ theorem tendsto_inv_atTop_zero
 
 中文:
 定理 tendsto_inv_atTop_zero
-  结论: Tendsto (fun r : 𝕜 => r⁻¹) atTop (𝓝 0)
+  结论: 收敛 (fun r : 𝕜 => r⁻¹) atTop (𝓝 0)
   证明: tendsto_inv_atTop_nhdsGT_zero.mono_right inf_le_left
 
 Depends on / 依赖: inf_le_left, mono_right, tendsto_inv_atTop_nhdsGT_zero, tendsto_inv_atTop_nhdsGT_zero.mono_right
@@ -218,9 +218,9 @@ theorem Filter.Tendsto.inv_tendsto_atTop
   proof: tendsto_inv_atTop_zero.comp h
 
 中文:
-定理 Filter.Tendsto.inv_tendsto_atTop
-  条件: (h : Tendsto f l atTop)
-  结论: Tendsto f⁻¹ l (𝓝 0)
+定理 滤子.收敛.inv_tendsto_atTop
+  条件: (h : 收敛 f l atTop)
+  结论: 收敛 f⁻¹ l (𝓝 0)
   证明: tendsto_inv_atTop_zero.comp h
 
 Depends on / 依赖: tendsto_inv_atTop_zero, tendsto_inv_atTop_zero.comp
@@ -238,9 +238,9 @@ theorem Filter.Tendsto.inv_tendsto_nhdsGT_zero
   proof: tendsto_inv_nhdsGT_zero.comp h
 
 中文:
-定理 Filter.Tendsto.inv_tendsto_nhdsGT_zero
-  条件: (h : Tendsto f l (𝓝[>] 0))
-  结论: Tendsto f⁻¹ l atTop
+定理 滤子.收敛.inv_tendsto_nhdsGT_zero
+  条件: (h : 收敛 f l (𝓝[>] 0))
+  结论: 收敛 f⁻¹ l atTop
   证明: tendsto_inv_nhdsGT_zero.comp h
 
 Depends on / 依赖: tendsto_inv_nhdsGT_zero, tendsto_inv_nhdsGT_zero.comp
@@ -324,8 +324,8 @@ theorem IsTopologicalRing.of_norm
     refine ⟨δ, δ0, fun x hx => (hf _).t
 
 中文:
-定理 IsTopologicalRing.of_norm
-  结论: {R 𝕜 : 类型} [NonUnitalNonAssocRing R]
+定理 是拓扑环.of_norm
+  结论: {R 𝕜 : 类型} [非幺非结合环 R]
   证明: by
   have h0 : forall f : R -> R, forall c >= (0 : 𝕜), (forall x, norm (f x) <= c * norm x) ->
       Tendsto f (𝓝 0) (𝓝 0) := by
@@ -380,8 +380,8 @@ theorem Filter.Tendsto.atTop_mul_neg
     tendsto_neg_atTop_atBot.comp this
 
 中文:
-定理 Filter.Tendsto.atTop_mul_neg
-  结论: {C : 𝕜} (hC : C < 0) (hf : Tendsto f l atTop)
+定理 滤子.收敛.atTop_mul_neg
+  结论: {C : 𝕜} (hC : C < 0) (hf : 收敛 f l atTop)
   证明: by
   have := hf.atTop_mul_pos (neg_pos.2 hC) hg.neg
   simpa only [Function.comp_def, neg_mul_eq_mul_neg, neg_neg] using
@@ -405,8 +405,8 @@ theorem Filter.Tendsto.neg_mul_atTop
   simpa only [mul_comm] using hg.atTop_mul_neg hC hf
 
 中文:
-定理 Filter.Tendsto.neg_mul_atTop
-  结论: {C : 𝕜} (hC : C < 0) (hf : Tendsto f l (𝓝 C))
+定理 滤子.收敛.neg_mul_atTop
+  结论: {C : 𝕜} (hC : C < 0) (hf : 收敛 f l (𝓝 C))
   证明: by
   simpa only [mul_comm] using hg.atTop_mul_neg hC hf
 
@@ -427,8 +427,8 @@ theorem Filter.Tendsto.atBot_mul_pos
   simpa [Function.comp_def] using tendsto_neg_atTop_atBot.comp this
 
 中文:
-定理 Filter.Tendsto.atBot_mul_pos
-  结论: {C : 𝕜} (hC : 0 < C) (hf : Tendsto f l atBot)
+定理 滤子.收敛.atBot_mul_pos
+  结论: {C : 𝕜} (hC : 0 < C) (hf : 收敛 f l atBot)
   证明: by
   have := (tendsto_neg_atBot_atTop.comp hf).atTop_mul_pos hC hg
   simpa [Function.comp_def] using tendsto_neg_atTop_atBot.comp this
@@ -451,8 +451,8 @@ theorem Filter.Tendsto.atBot_mul_neg
   simpa [Function.comp_def] using tendsto_neg_atBot_atTop.comp this
 
 中文:
-定理 Filter.Tendsto.atBot_mul_neg
-  结论: {C : 𝕜} (hC : C < 0) (hf : Tendsto f l atBot)
+定理 滤子.收敛.atBot_mul_neg
+  结论: {C : 𝕜} (hC : C < 0) (hf : 收敛 f l atBot)
   证明: by
   have := (tendsto_neg_atBot_atTop.comp hf).atTop_mul_neg hC hg
   simpa [Function.comp_def] using tendsto_neg_atBot_atTop.comp this
@@ -474,8 +474,8 @@ theorem Filter.Tendsto.pos_mul_atBot
   simpa only [mul_comm] using hg.atBot_mul_pos hC hf
 
 中文:
-定理 Filter.Tendsto.pos_mul_atBot
-  结论: {C : 𝕜} (hC : 0 < C) (hf : Tendsto f l (𝓝 C))
+定理 滤子.收敛.pos_mul_atBot
+  结论: {C : 𝕜} (hC : 0 < C) (hf : 收敛 f l (𝓝 C))
   证明: by
   simpa only [mul_comm] using hg.atBot_mul_pos hC hf
 
@@ -497,8 +497,8 @@ theorem Filter.Tendsto.neg_mul_atBot
 @[simp]
 
 中文:
-定理 Filter.Tendsto.neg_mul_atBot
-  结论: {C : 𝕜} (hC : C < 0) (hf : Tendsto f l (𝓝 C))
+定理 滤子.收敛.neg_mul_atBot
+  结论: {C : 𝕜} (hC : C < 0) (hf : 收敛 f l (𝓝 C))
   证明: by
   simpa only [mul_comm] using hg.atBot_mul_neg hC hf
 
@@ -524,7 +524,7 @@ lemma inv_atBot₀
 
 中文:
 引理 inv_atBot₀
-  结论: (atBot : Filter 𝕜)⁻¹ = 𝓝[<] 0
+  结论: (atBot : 滤子 𝕜)⁻¹ = 𝓝[<] 0
   证明: (((atBot_basis_Iio' (0 : 𝕜)).map _).comp_surjective inv_surjective).eq_of_same_basis
     (nhdsLT_basis _).congr (by simp) fun a ha => by simp [inv_Iio₀ (inv_neg''.2 ha)]
 
@@ -567,7 +567,7 @@ theorem tendsto_inv_nhdsLT_zero
 
 中文:
 定理 tendsto_inv_nhdsLT_zero
-  结论: Tendsto (fun x : 𝕜 => x⁻¹) (𝓝[<] (0 : 𝕜)) atBot
+  结论: 收敛 (fun x : 𝕜 => x⁻¹) (𝓝[<] (0 : 𝕜)) atBot
   证明: inv_nhdsLT_zero.le
 
 Depends on / 依赖: inv_nhdsLT_zero, inv_nhdsLT_zero.le
@@ -610,7 +610,7 @@ theorem tendsto_inv_atBot_nhdsLT_zero
 
 中文:
 定理 tendsto_inv_atBot_nhdsLT_zero
-  结论: Tendsto (fun r : 𝕜 => r⁻¹) atBot (𝓝[<] (0 : 𝕜))
+  结论: 收敛 (fun r : 𝕜 => r⁻¹) atBot (𝓝[<] (0 : 𝕜))
   证明: inv_atBot₀.le
 -/
 theorem tendsto_inv_atBot_nhdsLT_zero : Tendsto (fun r : 𝕜 => r⁻¹) atBot (𝓝[<] (0 : 𝕜)) :=
@@ -626,7 +626,7 @@ theorem tendsto_inv_atBot_zero
 
 中文:
 定理 tendsto_inv_atBot_zero
-  结论: Tendsto (fun r : 𝕜 => r⁻¹) atBot (𝓝 0)
+  结论: 收敛 (fun r : 𝕜 => r⁻¹) atBot (𝓝 0)
   证明: tendsto_inv_atBot_nhdsLT_zero.mono_right inf_le_left
 
 Depends on / 依赖: inf_le_left, mono_right, tendsto_inv_atBot_nhdsLT_zero, tendsto_inv_atBot_nhdsLT_zero.mono_right
@@ -645,8 +645,8 @@ theorem Filter.Tendsto.div_atTop
   exact mul_zero a ▸ h.mul (tendsto_inv_atTop_zero.comp hg)
 
 中文:
-定理 Filter.Tendsto.div_atTop
-  条件: {a : 𝕜} (h : Tendsto f l (𝓝 a)) (hg : Tendsto g l atTop)
+定理 滤子.收敛.div_atTop
+  条件: {a : 𝕜} (h : 收敛 f l (𝓝 a)) (hg : 收敛 g l atTop)
   证明: by
   simp only [div_eq_mul_inv]
   exact mul_zero a ▸ h.mul (tendsto_inv_atTop_zero.comp hg)
@@ -669,8 +669,8 @@ theorem Filter.Tendsto.div_atBot
   exact mul_zero a ▸ h.mul (tendsto_inv_atBot_zero.comp hg)
 
 中文:
-定理 Filter.Tendsto.div_atBot
-  条件: {a : 𝕜} (h : Tendsto f l (𝓝 a)) (hg : Tendsto g l atBot)
+定理 滤子.收敛.div_atBot
+  条件: {a : 𝕜} (h : 收敛 f l (𝓝 a)) (hg : 收敛 g l atBot)
   证明: by
   simp only [div_eq_mul_inv]
   exact mul_zero a ▸ h.mul (tendsto_inv_atBot_zero.comp hg)
@@ -691,8 +691,8 @@ lemma Filter.Tendsto.const_div_atTop
   proof: tendsto_const_nhds.div_atTop hg
 
 中文:
-引理 Filter.Tendsto.const_div_atTop
-  条件: (hg : Tendsto g l atTop) (r : 𝕜)
+引理 滤子.收敛.const_div_atTop
+  条件: (hg : 收敛 g l atTop) (r : 𝕜)
   证明: tendsto_const_nhds.div_atTop hg
 
 Depends on / 依赖: div_atTop, tendsto_const_nhds, tendsto_const_nhds.div_atTop
@@ -710,8 +710,8 @@ lemma Filter.Tendsto.const_div_atBot
   proof: tendsto_const_nhds.div_atBot hg
 
 中文:
-引理 Filter.Tendsto.const_div_atBot
-  条件: (hg : Tendsto g l atBot) (r : 𝕜)
+引理 滤子.收敛.const_div_atBot
+  条件: (hg : 收敛 g l atBot) (r : 𝕜)
   证明: tendsto_const_nhds.div_atBot hg
 
 Depends on / 依赖: div_atBot, tendsto_const_nhds, tendsto_const_nhds.div_atBot
@@ -730,9 +730,9 @@ theorem Filter.Tendsto.inv_tendsto_atBot
   proof: tendsto_inv_atBot_zero.comp h
 
 中文:
-定理 Filter.Tendsto.inv_tendsto_atBot
-  条件: (h : Tendsto f l atBot)
-  结论: Tendsto f⁻¹ l (𝓝 0)
+定理 滤子.收敛.inv_tendsto_atBot
+  条件: (h : 收敛 f l atBot)
+  结论: 收敛 f⁻¹ l (𝓝 0)
   证明: tendsto_inv_atBot_zero.comp h
 
 Depends on / 依赖: tendsto_inv_atBot_zero, tendsto_inv_atBot_zero.comp
@@ -750,9 +750,9 @@ theorem Filter.Tendsto.inv_tendsto_nhdsLT_zero
   proof: tendsto_inv_nhdsLT_zero.comp h
 
 中文:
-定理 Filter.Tendsto.inv_tendsto_nhdsLT_zero
-  条件: (h : Tendsto f l (𝓝[<] 0))
-  结论: Tendsto f⁻¹ l atBot
+定理 滤子.收敛.inv_tendsto_nhdsLT_zero
+  条件: (h : 收敛 f l (𝓝[<] 0))
+  结论: 收敛 f⁻¹ l atBot
   证明: tendsto_inv_nhdsLT_zero.comp h
 
 Depends on / 依赖: tendsto_inv_nhdsLT_zero, tendsto_inv_nhdsLT_zero.comp

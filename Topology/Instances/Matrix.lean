@@ -54,8 +54,8 @@ instance [TopologicalSpace
   body: inferInstanceAs TopologicalSpace (m -> n -> R)
 
 中文:
-实例 [TopologicalSpace
-  签名: R] : TopologicalSpace (Matrix m n R)
+实例 [拓扑空间
+  签名: R] : 拓扑空间 (矩阵 m n R)
   定义体: inferInstanceAs TopologicalSpace (m -> n -> R)
 
 Depends on / 依赖: TopologicalSpace
@@ -72,8 +72,8 @@ instance [TopologicalSpace
   body: inferInstanceAs T2Space (m -> n -> R)
 
 中文:
-实例 [TopologicalSpace
-  签名: R] [T2Space R] : T2Space (Matrix m n R)
+实例 [拓扑空间
+  签名: R] [T2空间 R] : T2空间 (矩阵 m n R)
   定义体: inferInstanceAs T2Space (m -> n -> R)
 
 Depends on / 依赖: T2Space
@@ -90,8 +90,8 @@ instance [TopologicalSpace
   body: inferInstanceAs DiscreteTopology (m -> n -> R)
 
 中文:
-实例 [TopologicalSpace
-  签名: R] [Finite m] [Finite n] [DiscreteTopology R] :
+实例 [拓扑空间
+  签名: R] [有限 m] [有限 n] [离散拓扑 R] :
   定义体: inferInstanceAs DiscreteTopology (m -> n -> R)
 
 Depends on / 依赖: DiscreteTopology
@@ -113,8 +113,8 @@ theorem IsOpen.matrix
     isOpen_set_pi Set.finite_univ fun _ _ => hS).preimage continuous_id
 
 中文:
-定理 IsOpen.matrix
-  结论: [Finite m] [Finite n]
+定理 是开集.matrix
+  结论: [有限 m] [有限 n]
   证明: Set.matrix_eq_pi ▸
     (isOpen_set_pi Set.finite_univ fun _ _ =>
     isOpen_set_pi Set.finite_univ fun _ _ => hS).preimage continuous_id
@@ -137,8 +137,8 @@ theorem IsCompact.matrix
   proof: isCompact_pi_infinite fun _ => isCompact_pi_infinite fun _ => hS
 
 中文:
-定理 IsCompact.matrix
-  条件: [TopologicalSpace R] {S : Set R} (hS : IsCompact S)
+定理 是紧集.matrix
+  条件: [拓扑空间 R] {S : 集合 R} (hS : 是紧集 S)
   证明: isCompact_pi_infinite fun _ => isCompact_pi_infinite fun _ => hS
 
 Depends on / 依赖: isCompact_pi_infinite
@@ -164,8 +164,8 @@ instance [SMul
   body: inferInstanceAs (ContinuousConstSMul α (m -> n -> R))
 
 中文:
-实例 [SMul
-  签名: α R] [ContinuousConstSMul α R] : ContinuousConstSMul α (Matrix m n R)
+实例 [标量乘法
+  签名: α R] [连续常数标量乘法 α R] : 连续常数标量乘法 α (矩阵 m n R)
   定义体: inferInstanceAs (ContinuousConstSMul α (m -> n -> R))
 
 Depends on / 依赖: ContinuousConstSMul
@@ -182,8 +182,8 @@ instance [TopologicalSpace
   body: inferInstanceAs (ContinuousSMul α (m -> n -> R))
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [SMul α R] [ContinuousSMul α R] : ContinuousSMul α (Matrix m n R)
+实例 [拓扑空间
+  签名: α] [标量乘法 α R] [连续标量乘法 α R] : 连续标量乘法 α (矩阵 m n R)
   定义体: inferInstanceAs (ContinuousSMul α (m -> n -> R))
 
 Depends on / 依赖: ContinuousSMul
@@ -200,8 +200,8 @@ instance [Add
   body: Pi.continuousAdd
 
 中文:
-实例 [Add
-  签名: R] [ContinuousAdd R] : ContinuousAdd (Matrix m n R)
+实例 [加法
+  签名: R] [连续加法 R] : 连续加法 (矩阵 m n R)
   定义体: Pi.continuousAdd
 
 Depends on / 依赖: Pi.continuousAdd, continuousAdd
@@ -218,8 +218,8 @@ instance [Neg
   body: Pi.continuousNeg
 
 中文:
-实例 [Neg
-  签名: R] [ContinuousNeg R] : ContinuousNeg (Matrix m n R)
+实例 [取负
+  签名: R] [连续取负 R] : 连续取负 (矩阵 m n R)
   定义体: Pi.continuousNeg
 
 Depends on / 依赖: Pi.continuousNeg, continuousNeg
@@ -236,8 +236,8 @@ instance [AddGroup
   body: Pi.topologicalAddGroup
 
 中文:
-实例 [AddGroup
-  签名: R] [IsTopologicalAddGroup R] : IsTopologicalAddGroup (Matrix m n R)
+实例 [加法群
+  签名: R] [是拓扑加群 R] : 是拓扑加群 (矩阵 m n R)
   定义体: Pi.topologicalAddGroup
 
 Depends on / 依赖: Pi.topologicalAddGroup, topologicalAddGroup
@@ -258,7 +258,7 @@ theorem continuous_matrix
 
 中文:
 定理 continuous_matrix
-  结论: [TopologicalSpace α] {f : α -> Matrix m n R}
+  结论: [拓扑空间 α] {f : α -> 矩阵 m n R}
   证明: continuous_pi fun _ => continuous_pi fun _ => h _ _
 
 Depends on / 依赖: continuous_pi
@@ -276,8 +276,8 @@ theorem Continuous.matrix_elem
   proof: (continuous_apply_apply i j).comp hA
 
 中文:
-定理 Continuous.matrix_elem
-  条件: {A : X -> Matrix m n R} (hA : Continuous A) (i : m) (j : n)
+定理 连续.matrix_elem
+  条件: {A : X -> 矩阵 m n R} (hA : 连续 A) (i : m) (j : n)
   证明: (continuous_apply_apply i j).comp hA
 
 Depends on / 依赖: continuous_apply_apply
@@ -302,7 +302,7 @@ alias ⟨_, Continuous.matrixOf⟩ := continuous_matrixOf
 
 中文:
 引理 continuous_matrixOf
-  条件: [TopologicalSpace α] {f : α -> m -> n -> R}
+  条件: [拓扑空间 α] {f : α -> m -> n -> R}
   证明: by
   rfl
 
@@ -330,8 +330,8 @@ theorem Continuous.matrix_map
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_map
-  结论: [TopologicalSpace S] {A : X -> Matrix m n S} {f : S -> R}
+定理 连续.matrix_map
+  结论: [拓扑空间 S] {A : X -> 矩阵 m n S} {f : S -> R}
   证明: continuous_matrix fun _ _ => hf.comp hA.matrix_elem _ _
 
 @[continuity, fun_prop]
@@ -354,8 +354,8 @@ theorem Continuous.matrix_transpose
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_transpose
-  条件: {A : X -> Matrix m n R} (hA : Continuous A)
+定理 连续.matrix_transpose
+  条件: {A : X -> 矩阵 m n R} (hA : 连续 A)
   证明: continuous_matrix fun i j => hA.matrix_elem j i
 
 @[continuity, fun_prop]
@@ -376,8 +376,8 @@ theorem Continuous.matrix_conjTranspose
   proof: hA.matrix_transpose.matrix_map continuous_star
 
 中文:
-定理 Continuous.matrix_conjTranspose
-  结论: [Star R] [ContinuousStar R] {A : X -> Matrix m n R}
+定理 连续.matrix_conjTranspose
+  结论: [对合 R] [余ntinuousStar R] {A : X -> 矩阵 m n R}
   证明: hA.matrix_transpose.matrix_map continuous_star
 
 Depends on / 依赖: continuous_star, hA.matrix_transpose.matrix_map, matrix_map, matrix_transpose
@@ -397,8 +397,8 @@ instance [Star
 @[continuity, fun_prop]
 
 中文:
-实例 [Star
-  签名: R] [ContinuousStar R] : ContinuousStar (Matrix m m R)
+实例 [对合
+  签名: R] [余ntinuousStar R] : 余ntinuousStar (矩阵 m m R)
   定义体: ⟨continuous_id.matrix_conjTranspose⟩
 
 @[continuity, fun_prop]
@@ -420,8 +420,8 @@ theorem Continuous.matrix_replicateCol
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_replicateCol
-  条件: {ι : 类型} {A : X -> n -> R} (hA : Continuous A)
+定理 连续.matrix_replicateCol
+  条件: {ι : 类型} {A : X -> n -> R} (hA : 连续 A)
   证明: continuous_matrix fun i _ => (continuous_apply i).comp hA
 
 @[continuity, fun_prop]
@@ -444,8 +444,8 @@ theorem Continuous.matrix_replicateRow
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_replicateRow
-  条件: {ι : 类型} {A : X -> n -> R} (hA : Continuous A)
+定理 连续.matrix_replicateRow
+  条件: {ι : 类型} {A : X -> n -> R} (hA : 连续 A)
   证明: continuous_matrix fun _ _ => (continuous_apply _).comp hA
 
 @[continuity, fun_prop]
@@ -468,8 +468,8 @@ theorem Continuous.matrix_diagonal
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_diagonal
-  条件: [Zero R] [DecidableEq n] {A : X -> n -> R} (hA : Continuous A)
+定理 连续.matrix_diagonal
+  条件: [零 R] [DecidableEq n] {A : X -> n -> R} (hA : 连续 A)
   证明: continuous_matrix fun i _ => ((continuous_apply i).comp hA).if_const _ continuous_zero
 
 @[continuity, fun_prop]
@@ -492,8 +492,8 @@ theorem Continuous.dotProduct
   fun_prop
 
 中文:
-定理 Continuous.dotProduct
-  结论: [Fintype n] [Mul R] [AddCommMonoid R] [ContinuousAdd R]
+定理 连续.dotProduct
+  结论: [有限类型 n] [乘法 R] [加法交换幺半群 R] [连续加法 R]
   证明: by
   dsimp only [dotProduct]
   fun_prop
@@ -516,8 +516,8 @@ theorem Continuous.matrix_mul
     continuous_finsetSum _ fun _ _ => (hA.matrix_elem _ _).mul (hB.matrix_elem _ _)
 
 中文:
-定理 Continuous.matrix_mul
-  结论: [Fintype n] [Mul R] [AddCommMonoid R] [ContinuousAdd R]
+定理 连续.matrix_mul
+  结论: [有限类型 n] [乘法 R] [加法交换幺半群 R] [连续加法 R]
   证明: continuous_matrix fun _ _ =>
     continuous_finsetSum _ fun _ _ => (hA.matrix_elem _ _).mul (hB.matrix_elem _ _)
 
@@ -538,8 +538,8 @@ instance [Fintype
   body: ⟨continuous_fst.matrix_mul continuous_snd⟩
 
 中文:
-实例 [Fintype
-  签名: n] [Mul R] [AddCommMonoid R] [ContinuousAdd R] [ContinuousMul R] :
+实例 [有限类型
+  签名: n] [乘法 R] [加法交换幺半群 R] [连续加法 R] [连续乘法 R] :
   定义体: ⟨continuous_fst.matrix_mul continuous_snd⟩
 
 Depends on / 依赖: continuous_fst, continuous_fst.matrix_mul, continuous_snd, matrix_mul
@@ -556,8 +556,8 @@ instance [Fintype
   signature: n] [NonUnitalNonAssocSemiring R] [IsTopologicalSemiring R] :
 
 中文:
-实例 [Fintype
-  签名: n] [NonUnitalNonAssocSemiring R] [IsTopologicalSemiring R] :
+实例 [有限类型
+  签名: n] [非幺非结合半环 R] [是TopologicalSemiring R] :
 -/
 instance [Fintype n] [NonUnitalNonAssocSemiring R] [IsTopologicalSemiring R] :
     IsTopologicalSemiring (Matrix n n R) where
@@ -570,8 +570,8 @@ instance Matrix.topologicalRing
   signature: [Fintype n] [NonUnitalNonAssocRing R] [IsTopologicalRing R]
 
 中文:
-实例 Matrix.topologicalRing
-  签名: [Fintype n] [NonUnitalNonAssocRing R] [IsTopologicalRing R]
+实例 矩阵.topologicalRing
+  签名: [有限类型 n] [非幺非结合环 R] [是拓扑环 R]
 -/
 instance Matrix.topologicalRing [Fintype n] [NonUnitalNonAssocRing R] [IsTopologicalRing R] :
     IsTopologicalRing (Matrix n n R) where
@@ -588,8 +588,8 @@ theorem Continuous.matrix_vecMulVec
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_vecMulVec
-  结论: [Mul R] [ContinuousMul R] {A : X -> m -> R} {B : X -> n -> R}
+定理 连续.matrix_vecMulVec
+  结论: [乘法 R] [连续乘法 R] {A : X -> m -> R} {B : X -> n -> R}
   证明: continuous_matrix fun _ _ => ((continuous_apply _).comp hA).mul ((continuous_apply _).comp hB)
 
 @[continuity, fun_prop]
@@ -612,8 +612,8 @@ theorem Continuous.matrix_mulVec
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_mulVec
-  结论: [NonUnitalNonAssocSemiring R] [ContinuousAdd R] [ContinuousMul R]
+定理 连续.matrix_mulVec
+  结论: [非幺非结合半环 R] [连续加法 R] [连续乘法 R]
   证明: continuous_pi fun i => ((continuous_apply i).comp hA).dotProduct hB
 
 @[continuity, fun_prop]
@@ -637,8 +637,8 @@ theorem Continuous.matrix_vecMul
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_vecMul
-  结论: [NonUnitalNonAssocSemiring R] [ContinuousAdd R] [ContinuousMul R]
+定理 连续.matrix_vecMul
+  结论: [非幺非结合半环 R] [连续加法 R] [连续乘法 R]
   证明: continuous_pi fun _i => hA.dotProduct continuous_pi fun _j => hB.matrix_elem _ _
 
 @[continuity, fun_prop]
@@ -662,8 +662,8 @@ theorem Continuous.matrix_submatrix
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_submatrix
-  结论: {A : X -> Matrix l n R} (hA : Continuous A) (e₁ : m -> l)
+定理 连续.matrix_submatrix
+  结论: {A : X -> 矩阵 l n R} (hA : 连续 A) (e₁ : m -> l)
   证明: continuous_matrix fun _i _j => hA.matrix_elem _ _
 
 @[continuity, fun_prop]
@@ -686,8 +686,8 @@ theorem Continuous.matrix_reindex
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_reindex
-  结论: {A : X -> Matrix l n R} (hA : Continuous A) (e₁ : l ≃ m)
+定理 连续.matrix_reindex
+  结论: {A : X -> 矩阵 l n R} (hA : 连续 A) (e₁ : l ≃ m)
   证明: hA.matrix_submatrix _ _
 
 @[continuity, fun_prop]
@@ -708,8 +708,8 @@ theorem Continuous.matrix_diag
   proof: continuous_pi fun _ => hA.matrix_elem _ _
 
 中文:
-定理 Continuous.matrix_diag
-  条件: {A : X -> Matrix n n R} (hA : Continuous A)
+定理 连续.matrix_diag
+  条件: {A : X -> 矩阵 n n R} (hA : 连续 A)
   证明: continuous_pi fun _ => hA.matrix_elem _ _
 
 Depends on / 依赖: continuous_pi, hA.matrix_elem, matrix_elem
@@ -731,7 +731,7 @@ theorem continuous_matrix_diag
 
 中文:
 定理 continuous_matrix_diag
-  结论: Continuous (Matrix.diag : Matrix n n R -> n -> R)
+  结论: 连续 (矩阵.diag : 矩阵 n n R -> n -> R)
   证明: show Continuous fun x : Matrix n n R => Matrix.diag x from continuous_id.matrix_diag
 
 @[continuity, fun_prop]
@@ -753,8 +753,8 @@ theorem Continuous.matrix_trace
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_trace
-  结论: [Fintype n] [AddCommMonoid R] [ContinuousAdd R]
+定理 连续.matrix_trace
+  结论: [有限类型 n] [加法交换幺半群 R] [连续加法 R]
   证明: continuous_finsetSum _ fun _ _ => hA.matrix_elem _ _
 
 @[continuity, fun_prop]
@@ -780,8 +780,8 @@ theorem Continuous.matrix_det
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_det
-  结论: [Fintype n] [DecidableEq n] [CommRing R] [IsTopologicalRing R]
+定理 连续.matrix_det
+  结论: [有限类型 n] [DecidableEq n] [交换环 R] [是拓扑环 R]
   证明: by
   simp_rw [Matrix.det_apply]
   refine continuous_finsetSum _ fun l _ => Continuous.const_smul ?_ _
@@ -811,8 +811,8 @@ theorem Continuous.matrix_updateCol
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_updateCol
-  结论: [DecidableEq n] (i : n) {A : X -> Matrix m n R}
+定理 连续.matrix_updateCol
+  结论: [DecidableEq n] (i : n) {A : X -> 矩阵 m n R}
   证明: continuous_matrix fun _j k =>
 (continuous_apply k).comp
       ((continuous_apply _).comp hA).update i ((continuous_apply _).comp hB)
@@ -840,8 +840,8 @@ theorem Continuous.matrix_updateRow
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_updateRow
-  结论: [DecidableEq m] (i : m) {A : X -> Matrix m n R} {B : X -> n -> R}
+定理 连续.matrix_updateRow
+  结论: [DecidableEq m] (i : m) {A : X -> 矩阵 m n R} {B : X -> n -> R}
   证明: hA.update i hB
 
 @[continuity, fun_prop]
@@ -864,8 +864,8 @@ theorem Continuous.matrix_cramer
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_cramer
-  结论: [Fintype n] [DecidableEq n] [CommRing R] [IsTopologicalRing R]
+定理 连续.matrix_cramer
+  结论: [有限类型 n] [DecidableEq n] [交换环 R] [是拓扑环 R]
   证明: continuous_pi fun _ => (hA.matrix_updateCol _ hB).matrix_det
 
 @[continuity, fun_prop]
@@ -888,8 +888,8 @@ theorem Continuous.matrix_adjugate
     (hA.matrix_transpose.matrix_updateCol k continuous_const).matrix_det
 
 中文:
-定理 Continuous.matrix_adjugate
-  结论: [Fintype n] [DecidableEq n] [CommRing R] [IsTopologicalRing R]
+定理 连续.matrix_adjugate
+  结论: [有限类型 n] [DecidableEq n] [交换环 R] [是拓扑环 R]
   证明: continuous_matrix fun _j k =>
     (hA.matrix_transpose.matrix_updateCol k continuous_const).matrix_det
 
@@ -910,7 +910,7 @@ theorem continuousAt_matrix_inv
 
 中文:
 定理 continuousAt_matrix_inv
-  结论: [Fintype n] [DecidableEq n] [CommRing R] [IsTopologicalRing R]
+  结论: [有限类型 n] [DecidableEq n] [交换环 R] [是拓扑环 R]
   证明: (h.comp continuous_id.matrix_det.continuousAt).smul continuous_id.matrix_adjugate.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_id, continuous_id.matrix_adjugate.continuousAt, continuous_id.matrix_det.continuousAt, h.comp, matrix_adjugate, matrix_det
@@ -932,8 +932,8 @@ lemma IsInducing.matrix_map
   proof: IsInducing.piMap fun _ : m => (IsInducing.piMap fun _ : n => hf)
 
 中文:
-引理 IsInducing.matrix_map
-  条件: (hf : IsInducing f)
+引理 是Inducing.matrix_map
+  条件: (hf : 是Inducing f)
   证明: IsInducing.piMap fun _ : m => (IsInducing.piMap fun _ : n => hf)
 
 Depends on / 依赖: IsInducing, IsInducing.piMap
@@ -951,8 +951,8 @@ lemma IsEmbedding.matrix_map
   proof: IsEmbedding.piMap fun _ : m => (IsEmbedding.piMap fun _ : n => hf)
 
 中文:
-引理 IsEmbedding.matrix_map
-  条件: (hf : IsEmbedding f)
+引理 是嵌入.matrix_map
+  条件: (hf : 是嵌入 f)
   证明: IsEmbedding.piMap fun _ : m => (IsEmbedding.piMap fun _ : n => hf)
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.piMap
@@ -970,8 +970,8 @@ lemma IsClosedEmbedding.matrix_map
   proof: IsClosedEmbedding.piMap fun _ : m => (IsClosedEmbedding.piMap fun _ : n => hf)
 
 中文:
-引理 IsClosedEmbedding.matrix_map
-  条件: (hf : IsClosedEmbedding f)
+引理 是闭嵌入.matrix_map
+  条件: (hf : 是闭嵌入 f)
   证明: IsClosedEmbedding.piMap fun _ : m => (IsClosedEmbedding.piMap fun _ : n => hf)
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.piMap
@@ -989,8 +989,8 @@ lemma IsOpenEmbedding.matrix_map
   proof: IsOpenEmbedding.piMap fun _ : m => (IsOpenEmbedding.piMap fun _ : n => hf)
 
 中文:
-引理 IsOpenEmbedding.matrix_map
-  条件: [Finite m] [Finite n] (hf : IsOpenEmbedding f)
+引理 是开嵌入.matrix_map
+  条件: [有限 m] [有限 n] (hf : 是开嵌入 f)
   证明: IsOpenEmbedding.piMap fun _ : m => (IsOpenEmbedding.piMap fun _ : n => hf)
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.piMap
@@ -1017,8 +1017,8 @@ theorem Continuous.matrix_fromBlocks
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_fromBlocks
-  结论: {A : X -> Matrix n l R} {B : X -> Matrix n m R}
+定理 连续.matrix_fromBlocks
+  结论: {A : X -> 矩阵 n l R} {B : X -> 矩阵 n m R}
   证明: continuous_matrix by
     rintro (i | i) (j | j) <;> refine Continuous.matrix_elem ?_ i j <;> assumption
 
@@ -1046,8 +1046,8 @@ theorem Continuous.matrix_blockDiagonal
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_blockDiagonal
-  结论: [Zero R] [DecidableEq p] {A : X -> p -> Matrix m n R}
+定理 连续.matrix_blockDiagonal
+  结论: [零 R] [DecidableEq p] {A : X -> p -> 矩阵 m n R}
   证明: continuous_matrix fun ⟨i₁, i₂⟩ ⟨j₁, _j₂⟩ =>
     (((continuous_apply i₂).comp hA).matrix_elem i₁ j₁).if_const _ continuous_zero
 
@@ -1072,8 +1072,8 @@ theorem Continuous.matrix_blockDiag
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_blockDiag
-  条件: {A : X -> Matrix (m × p) (n × p) R} (hA : Continuous A)
+定理 连续.matrix_blockDiag
+  条件: {A : X -> 矩阵 (m × p) (n × p) R} (hA : 连续 A)
   证明: continuous_pi fun _i => continuous_matrix fun _j _k => hA.matrix_elem _ _
 
 @[continuity, fun_prop]
@@ -1101,8 +1101,8 @@ theorem Continuous.matrix_blockDiagonal'
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.matrix_blockDiagonal'
-  结论: [Zero R] [DecidableEq l]
+定理 连续.matrix_blockDiagonal'
+  结论: [零 R] [DecidableEq l]
   证明: continuous_matrix fun ⟨i₁, i₂⟩ ⟨j₁, j₂⟩ => by
     dsimp only [blockDiagonal'_apply']
     split_ifs with h
@@ -1133,7 +1133,7 @@ theorem Continuous.matrix_blockDiag'
   proof: continuous_pi fun _i => continuous_matrix fun _j _k => hA.matrix_elem _ _
 
 中文:
-定理 Continuous.matrix_blockDiag'
+定理 连续.matrix_blockDiag'
   证明: continuous_pi fun _i => continuous_matrix fun _j _k => hA.matrix_elem _ _
 
 Depends on / 依赖: continuous_matrix, continuous_pi, hA.matrix_elem, matrix_elem
@@ -1159,7 +1159,7 @@ alias isClosed_setOf_blockTriangular := isClosed_setO
 
 中文:
 定理 isClosed_setOfPred_blockTriangular
-  结论: {α : 类型} {b : m -> α} [LinearOrder α] [Zero R]
+  结论: {α : 类型} {b : m -> α} [线性序 α] [零 R]
   证明: by
   simp only [BlockTriangular, Set.ofPred_forall]
   refine isClosed_iInter fun i => isClosed_iInter fun j => isClosed_iInter fun _ => ?_
@@ -1200,7 +1200,7 @@ theorem HasSum.matrix_transpose
 
 中文:
 定理 HasSum.matrix_transpose
-  条件: {f : X -> Matrix m n R} {a : Matrix m n R} (hf : HasSum f a L)
+  条件: {f : X -> 矩阵 m n R} {a : 矩阵 m n R} (hf : HasSum f a L)
   证明: (hf.map (Matrix.transposeAddEquiv m n R) continuous_id.matrix_transpose :)
 
 Depends on / 依赖: Matrix, Matrix.transposeAddEquiv, continuous_id, continuous_id.matrix_transpose, hf.map, matrix_transpose, transposeAddEquiv
@@ -1221,7 +1221,7 @@ theorem Summable.matrix_transpose
 
 中文:
 定理 Summable.matrix_transpose
-  条件: {f : X -> Matrix m n R} (hf : Summable f L)
+  条件: {f : X -> 矩阵 m n R} (hf : Summable f L)
   证明: hf.hasSum.matrix_transpose.summable
 
 @[simp]
@@ -1244,7 +1244,7 @@ theorem summable_matrix_transpose
 
 中文:
 定理 summable_matrix_transpose
-  条件: {f : X -> Matrix m n R}
+  条件: {f : X -> 矩阵 m n R}
   证明: Summable.map_iff_of_equiv (Matrix.transposeAddEquiv m n R)
     continuous_id.matrix_transpose continuous_id.matrix_transpose
 
@@ -1265,8 +1265,8 @@ theorem Matrix.transpose_tsum
     continuous_id.matrix_transpose transpose_transpose
 
 中文:
-定理 Matrix.transpose_tsum
-  条件: [T2Space R] {f : X -> Matrix m n R}
+定理 矩阵.transpose_tsum
+  条件: [T2空间 R] {f : X -> 矩阵 m n R}
   证明: Function.LeftInverse.map_tsum f (g := transposeAddEquiv m n R) continuous_id.matrix_transpose
     continuous_id.matrix_transpose transpose_transpose
 
@@ -1287,7 +1287,7 @@ theorem HasSum.matrix_conjTranspose
 
 中文:
 定理 HasSum.matrix_conjTranspose
-  结论: [StarAddMonoid R] [ContinuousStar R] {f : X -> Matrix m n R}
+  结论: [StarAdd幺半群 R] [余ntinuousStar R] {f : X -> 矩阵 m n R}
   证明: (hf.map (Matrix.conjTransposeAddEquiv m n R) continuous_id.matrix_conjTranspose :)
 
 Depends on / 依赖: Matrix, Matrix.conjTransposeAddEquiv, conjTransposeAddEquiv, continuous_id, continuous_id.matrix_conjTranspose, hf.map, matrix_conjTranspose
@@ -1308,7 +1308,7 @@ theorem Summable.matrix_conjTranspose
 
 中文:
 定理 Summable.matrix_conjTranspose
-  结论: [StarAddMonoid R] [ContinuousStar R] {f : X -> Matrix m n R}
+  结论: [StarAdd幺半群 R] [余ntinuousStar R] {f : X -> 矩阵 m n R}
   证明: hf.hasSum.matrix_conjTranspose.summable
 
 @[simp]
@@ -1331,7 +1331,7 @@ theorem summable_matrix_conjTranspose
 
 中文:
 定理 summable_matrix_conjTranspose
-  条件: [StarAddMonoid R] [ContinuousStar R] {f : X -> Matrix m n R}
+  条件: [StarAdd幺半群 R] [余ntinuousStar R] {f : X -> 矩阵 m n R}
   证明: Summable.map_iff_of_equiv (Matrix.conjTransposeAddEquiv m n R)
     continuous_id.matrix_conjTranspose continuous_id.matrix_conjTranspose
 
@@ -1353,8 +1353,8 @@ theorem Matrix.conjTranspose_tsum
     conjTranspose_conjTranspose
 
 中文:
-定理 Matrix.conjTranspose_tsum
-  结论: [StarAddMonoid R] [ContinuousStar R] [T2Space R]
+定理 矩阵.conjTranspose_tsum
+  结论: [StarAdd幺半群 R] [余ntinuousStar R] [T2空间 R]
   证明: Function.LeftInverse.map_tsum f (g := conjTransposeAddEquiv m n R)
     continuous_id.matrix_conjTranspose continuous_id.matrix_conjTranspose
     conjTranspose_conjTranspose
@@ -1442,8 +1442,8 @@ theorem Matrix.diagonal_tsum
     continuous_id.matrix_diagonal continuous_matrix_diag diag_diagonal
 
 中文:
-定理 Matrix.diagonal_tsum
-  条件: [DecidableEq n] [T2Space R] {f : X -> n -> R}
+定理 矩阵.diagonal_tsum
+  条件: [DecidableEq n] [T2空间 R] {f : X -> n -> R}
   证明: Function.LeftInverse.map_tsum f (g := diagonalAddMonoidHom n R)
     continuous_id.matrix_diagonal continuous_matrix_diag diag_diagonal
 
@@ -1464,7 +1464,7 @@ theorem HasSum.matrix_diag
 
 中文:
 定理 HasSum.matrix_diag
-  条件: {f : X -> Matrix n n R} {a : Matrix n n R} (hf : HasSum f a L)
+  条件: {f : X -> 矩阵 n n R} {a : 矩阵 n n R} (hf : HasSum f a L)
   证明: hf.map (diagAddMonoidHom n R) continuous_matrix_diag
 
 Depends on / 依赖: continuous_matrix_diag, diagAddMonoidHom, hf.map
@@ -1483,7 +1483,7 @@ theorem Summable.matrix_diag
 
 中文:
 定理 Summable.matrix_diag
-  条件: {f : X -> Matrix n n R} (hf : Summable f L)
+  条件: {f : X -> 矩阵 n n R} (hf : Summable f L)
   证明: hf.hasSum.matrix_diag.summable
 
 Depends on / 依赖: hasSum, hf.hasSum.matrix_diag.summable, matrix_diag, summable
@@ -1504,7 +1504,7 @@ theorem HasSum.matrix_blockDiagonal
 
 中文:
 定理 HasSum.matrix_blockDiagonal
-  结论: [DecidableEq p] {f : X -> p -> Matrix m n R}
+  结论: [DecidableEq p] {f : X -> p -> 矩阵 m n R}
   证明: hf.map (blockDiagonalAddMonoidHom m n p R) continuous_id.matrix_blockDiagonal
 
 Depends on / 依赖: blockDiagonalAddMonoidHom, continuous_id, continuous_id.matrix_blockDiagonal, hf.map, matrix_blockDiagonal
@@ -1524,7 +1524,7 @@ theorem Summable.matrix_blockDiagonal
 
 中文:
 定理 Summable.matrix_blockDiagonal
-  结论: [DecidableEq p] {f : X -> p -> Matrix m n R}
+  结论: [DecidableEq p] {f : X -> p -> 矩阵 m n R}
   证明: hf.hasSum.matrix_blockDiagonal.summable
 
 Depends on / 依赖: hasSum, hf.hasSum.matrix_blockDiagonal.summable, matrix_blockDiagonal, summable
@@ -1545,7 +1545,7 @@ theorem summable_matrix_blockDiagonal
 
 中文:
 定理 summable_matrix_blockDiagonal
-  条件: [DecidableEq p] {f : X -> p -> Matrix m n R}
+  条件: [DecidableEq p] {f : X -> p -> 矩阵 m n R}
   证明: Summable.map_iff_of_leftInverse (blockDiagonalAddMonoidHom m n p R)
     (blockDiagAddMonoidHom m n p R) continuous_id.matrix_blockDiagonal
     continuous_id.matrix_blockDiag fun A => blockDiag_blockDiagonal A
@@ -1568,8 +1568,8 @@ theorem Matrix.blockDiagonal_tsum
     continuous_id.matrix_blockDiagonal continuous_id.matrix_blockDiag blockDiag_blockDiagonal
 
 中文:
-定理 Matrix.blockDiagonal_tsum
-  条件: [DecidableEq p] [T2Space R] {f : X -> p -> Matrix m n R}
+定理 矩阵.blockDiagonal_tsum
+  条件: [DecidableEq p] [T2空间 R] {f : X -> p -> 矩阵 m n R}
   证明: Function.LeftInverse.map_tsum (g := blockDiagonalAddMonoidHom m n p R) f
     continuous_id.matrix_blockDiagonal continuous_id.matrix_blockDiag blockDiag_blockDiagonal
 
@@ -1590,7 +1590,7 @@ theorem HasSum.matrix_blockDiag
 
 中文:
 定理 HasSum.matrix_blockDiag
-  结论: {f : X -> Matrix (m × p) (n × p) R} {a : Matrix (m × p) (n × p) R}
+  结论: {f : X -> 矩阵 (m × p) (n × p) R} {a : 矩阵 (m × p) (n × p) R}
   证明: (hf.map (blockDiagAddMonoidHom m n p R) <| Continuous.matrix_blockDiag continuous_id :)
 
 Depends on / 依赖: Continuous, Continuous.matrix_blockDiag, blockDiagAddMonoidHom, continuous_id, hf.map, matrix_blockDiag
@@ -1609,7 +1609,7 @@ theorem Summable.matrix_blockDiag
 
 中文:
 定理 Summable.matrix_blockDiag
-  条件: {f : X -> Matrix (m × p) (n × p) R} (hf : Summable f L)
+  条件: {f : X -> 矩阵 (m × p) (n × p) R} (hf : Summable f L)
   证明: hf.hasSum.matrix_blockDiag.summable
 
 Depends on / 依赖: hasSum, hf.hasSum.matrix_blockDiag.summable, matrix_blockDiag, summable
@@ -1628,7 +1628,7 @@ theorem HasSum.matrix_blockDiagonal'
 
 中文:
 定理 HasSum.matrix_blockDiagonal'
-  结论: [DecidableEq l] {f : X -> 对任意 i, Matrix (m' i) (n' i) R}
+  结论: [DecidableEq l] {f : X -> 对任意 i, 矩阵 (m' i) (n' i) R}
   证明: hf.map (blockDiagonal'AddMonoidHom m' n' R) continuous_id.matrix_blockDiagonal'
 
 Depends on / 依赖: AddMonoidHom, blockDiagonal, continuous_id, continuous_id.matrix_blockDiagonal, hf.map, matrix_blockDiagonal
@@ -1648,7 +1648,7 @@ theorem Summable.matrix_blockDiagonal'
 
 中文:
 定理 Summable.matrix_blockDiagonal'
-  结论: [DecidableEq l] {f : X -> 对任意 i, Matrix (m' i) (n' i) R}
+  结论: [DecidableEq l] {f : X -> 对任意 i, 矩阵 (m' i) (n' i) R}
   证明: hf.hasSum.matrix_blockDiagonal'.summable
 
 Depends on / 依赖: hasSum, hf.hasSum.matrix_blockDiagonal, matrix_blockDiagonal, summable
@@ -1669,7 +1669,7 @@ theorem summable_matrix_blockDiagonal'
 
 中文:
 定理 summable_matrix_blockDiagonal'
-  条件: [DecidableEq l] {f : X -> 对任意 i, Matrix (m' i) (n' i) R}
+  条件: [DecidableEq l] {f : X -> 对任意 i, 矩阵 (m' i) (n' i) R}
   证明: Summable.map_iff_of_leftInverse (blockDiagonal'AddMonoidHom m' n' R)
     (blockDiag'AddMonoidHom m' n' R) continuous_id.matrix_blockDiagonal'
     continuous_id.matrix_blockDiag' fun A => blockDiag'_blockDiagonal' A
@@ -1692,8 +1692,8 @@ theorem Matrix.blockDiagonal'_tsum
     continuous_id.matrix_blockDiagonal' continuous_id.matrix_blockDiag' blockDiag'_blockDiagonal'
 
 中文:
-定理 Matrix.blockDiagonal'_tsum
-  结论: [DecidableEq l] [T2Space R]
+定理 矩阵.blockDiagonal'_tsum
+  结论: [DecidableEq l] [T2空间 R]
   证明: Function.LeftInverse.map_tsum (g := blockDiagonal'AddMonoidHom m' n' R) f
     continuous_id.matrix_blockDiagonal' continuous_id.matrix_blockDiag' blockDiag'_blockDiagonal'
 -/
@@ -1713,7 +1713,7 @@ theorem HasSum.matrix_blockDiag'
 
 中文:
 定理 HasSum.matrix_blockDiag'
-  结论: {f : X -> Matrix (Σ i, m' i) (Σ i, n' i) R}
+  结论: {f : X -> 矩阵 (Σ i, m' i) (Σ i, n' i) R}
   证明: hf.map (blockDiag'AddMonoidHom m' n' R) continuous_id.matrix_blockDiag'
 
 Depends on / 依赖: AddMonoidHom, blockDiag, continuous_id, continuous_id.matrix_blockDiag, hf.map, matrix_blockDiag
@@ -1733,7 +1733,7 @@ theorem Summable.matrix_blockDiag'
 
 中文:
 定理 Summable.matrix_blockDiag'
-  条件: {f : X -> Matrix (Σ i, m' i) (Σ i, n' i) R} (hf : Summable f L)
+  条件: {f : X -> 矩阵 (Σ i, m' i) (Σ i, n' i) R} (hf : Summable f L)
   证明: hf.hasSum.matrix_blockDiag'.summable
 
 Depends on / 依赖: hasSum, hf.hasSum.matrix_blockDiag, matrix_blockDiag, summable

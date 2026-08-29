@@ -75,7 +75,7 @@ definition lawson
 
 中文:
 定义 lawson
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: lower α ⊓ scott α univ
 -/
 def lawson (α : Type*) [Preorder α] : TopologicalSpace α := lower α ⊓ scott α univ
@@ -92,10 +92,10 @@ class IsLawson
     - topology_eq_lawson : ‹TopologicalSpace α› = lawson α
 
 中文:
-类 IsLawson
+类 是Lawson
   参数: : 命题 where
   公理与运算 (1 个):
-    - topology_eq_lawson : ‹TopologicalSpace α› = lawson α
+    - topology_eq_lawson : ‹拓扑空间 α› = lawson α
 -/
 class IsLawson : Prop where
   topology_eq_lawson : ‹TopologicalSpace α› = lawson α
@@ -139,7 +139,7 @@ theorem isTopologicalBasis
 
 中文:
 定理 isTopologicalBasis
-  结论: TopologicalSpace.IsTopologicalBasis (lawsonBasis α)
+  结论: 拓扑空间.是TopologicalBasis (lawsonBasis α)
   证明: by
   have lawsonBasis_image2 : lawsonBasis α =
       (image2 (fun x x_1 => ⇑WithLower.toLower ⁻¹' x inter ⇑WithScott.toScott ⁻¹' x_1)
@@ -326,7 +326,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {β : WithLawson α -> Sort*}
+  签名: {β : WithLawson α -> 类型层*}
   定义体: fun a => h (ofLawson a)
 -/
 protected def rec {β : WithLawson α -> Sort*}
@@ -341,8 +341,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithLawson α)
+实例 [非空
+  签名: α] : 非空 (WithLawson α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -357,8 +357,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithLawson α)
+实例 [可居
+  签名: α] : 可居 (WithLawson α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -377,7 +377,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (WithLawson α)
+  签名: : 预序 (WithLawson α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -396,7 +396,7 @@ inferInstanceAs TopologicalSpace α
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (WithLawson α)
+  签名: : 拓扑空间 (WithLawson α)
   定义体: -- fast_instance% lawson α fails
   letI : TopologicalSpace α := lawson α
 inferInstanceAs TopologicalSpace α
@@ -416,7 +416,7 @@ instance instIsLawson
 
 中文:
 实例 instIsLawson
-  签名: : IsLawson (WithLawson α)
+  签名: : 是Lawson (WithLawson α)
   定义体: ⟨rfl⟩
 -/
 instance instIsLawson : IsLawson (WithLawson α) := ⟨rfl⟩
@@ -431,7 +431,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: [TopologicalSpace α] [IsLawson α]
+  签名: [拓扑空间 α] [是Lawson α]
   定义体: ofLawson.toHomeomorphOfIsInducing ⟨IsLawson.topology_eq_lawson (α := α) ▸ induced_id.symm⟩
 
 Depends on / 依赖: IsLawson, IsLawson.topology_eq_lawson, induced_id, induced_id.symm, ofLawson, ofLawson.toHomeomorphOfIsInducing, toHomeomorphOfIsInducing, topology_eq_lawson
@@ -449,7 +449,7 @@ theorem isOpen_preimage_ofLawson
 
 中文:
 定理 isOpen_preimage_ofLawson
-  条件: {S : Set α}
+  条件: {S : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -467,7 +467,7 @@ theorem isClosed_preimage_ofLawson
 
 中文:
 定理 isClosed_preimage_ofLawson
-  条件: {S : Set α}
+  条件: {S : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -485,7 +485,7 @@ theorem isOpen_def
 
 中文:
 定理 isOpen_def
-  条件: {T : Set (WithLawson α)}
+  条件: {T : 集合 (WithLawson α)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -562,7 +562,7 @@ lemma lawsonClosed_of_scottClosed
 
 中文:
 引理 lawsonClosed_of_scottClosed
-  条件: (s : Set α) (h : IsClosed (WithScott.ofScott ⁻¹' s))
+  条件: (s : 集合 α) (h : 是闭集 (WithScott.ofScott ⁻¹' s))
   证明: h.mono lawson_le_scott
 
 Depends on / 依赖: h.mono, lawson_le_scott
@@ -580,7 +580,7 @@ lemma lawsonClosed_of_lowerClosed
 
 中文:
 引理 lawsonClosed_of_lowerClosed
-  条件: (s : Set α) (h : IsClosed (WithLower.ofLower ⁻¹' s))
+  条件: (s : 集合 α) (h : 是闭集 (WithLower.ofLower ⁻¹' s))
   证明: h.mono lawson_le_lower
 
 Depends on / 依赖: h.mono, lawson_le_lower
@@ -599,7 +599,7 @@ lemma lawsonOpen_iff_scottOpen_of_isUpperSet
 
 中文:
 引理 lawsonOpen_iff_scottOpen_of_isUpperSet
-  条件: {s : Set α} (h : IsUpperSet s)
+  条件: {s : 集合 α} (h : 是上集 s)
   证明: ⟨fun hs => IsScott.isOpen_iff_isUpperSet_and_scottHausdorff_open (D := univ).mpr
     ⟨h, (scottHausdorff_le_lawson s) hs⟩, lawson_le_scott _⟩
 
@@ -671,7 +671,7 @@ lemma lawsonOpen_iff_scottOpen_of_isUpperSet'
 
 中文:
 引理 lawsonOpen_iff_scottOpen_of_isUpperSet'
-  条件: (s : Set α) (h : IsUpperSet s)
+  条件: (s : 集合 α) (h : 是上集 s)
   证明: by
   rw [@IsLawson.topology_eq_lawson α _ L _]; rw [@IsScott.topology_eq α univ _ S _]
   exact lawsonOpen_iff_scottOpen_of_isUpperSet h
@@ -696,7 +696,7 @@ include S in
 
 中文:
 引理 lawsonClosed_iff_scottClosed_of_isLowerSet
-  条件: (s : Set α) (h : IsLowerSet s)
+  条件: (s : 集合 α) (h : 是下集 s)
   证明: by
   rw [← @isOpen_compl_iff]; rw [← isOpen_compl_iff]; rw [(lawsonOpen_iff_scottOpen_of_isUpperSet' L S _ (isUpperSet_compl.mpr h))]
 
@@ -721,7 +721,7 @@ lemma lawsonClosed_iff_dirSupClosed_of_isLowerSet
 
 中文:
 引理 lawsonClosed_iff_dirSupClosed_of_isLowerSet
-  条件: (s : Set α) (h : IsLowerSet s)
+  条件: (s : 集合 α) (h : 是下集 s)
   证明: by
   rw [lawsonClosed_iff_scottClosed_of_isLowerSet L S _ h]; rw [@IsScott.isClosed_iff_isLowerSet_and_dirSupClosed]
   simp_all

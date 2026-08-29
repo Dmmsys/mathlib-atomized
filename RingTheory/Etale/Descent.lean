@@ -55,7 +55,7 @@ lemma FormallyUnramified.of_formallyUnramified_tensorProduct_of_faithfullyFlat
   exact Module.FaithfullyFlat.lTensor_reflects_triviality R T _
 
 中文:
-引理 FormallyUnramified.of_formallyUnramified_tensorProduct_of_faithfullyFlat
+引理 形式非分歧.of_formallyUnramified_tensorProduct_of_faithfullyFlat
   证明: by
   constructor
   let _ : Algebra S (T otimes[R] S) := TensorProduct.rightAlgebra
@@ -97,8 +97,8 @@ lemma Smooth.of_smooth_tensorProduct_of_faithfullyFlat
     let e : S oti
 
 中文:
-引理 Smooth.of_smooth_tensorProduct_of_faithfullyFlat
-  条件: [Smooth T (T otimes[R] S)]
+引理 光滑.of_smooth_tensorProduct_of_faithfullyFlat
+  条件: [光滑 T (T otimes[R] S)]
   证明: by
   have : Algebra.FinitePresentation R S := .of_finitePresentation_tensorProduct_of_faithfullyFlat T
   refine ⟨?_, .of_finitePresentation_tensorProduct_of_faithfullyFlat T⟩
@@ -137,8 +137,8 @@ lemma Unramified.of_unramified_tensorProduct_of_faithfullyFlat
     .of_finiteType_tensorProduct_of_faithfullyFlat T⟩
 
 中文:
-引理 Unramified.of_unramified_tensorProduct_of_faithfullyFlat
-  条件: [Unramified T (T otimes[R] S)]
+引理 非分歧.of_unramified_tensorProduct_of_faithfullyFlat
+  条件: [非分歧 T (T otimes[R] S)]
   证明: ⟨.of_formallyUnramified_tensorProduct_of_faithfullyFlat T,
     .of_finiteType_tensorProduct_of_faithfullyFlat T⟩
 
@@ -161,8 +161,8 @@ lemma Etale.of_etale_tensorProduct_of_faithfullyFlat
     .of_smooth_tensorProduct_of_faithfullyFlat T⟩
 
 中文:
-引理 Etale.of_etale_tensorProduct_of_faithfullyFlat
-  条件: [Etale T (T otimes[R] S)]
+引理 平展.of_etale_tensorProduct_of_faithfullyFlat
+  条件: [平展 T (T otimes[R] S)]
   证明: by
   rw [Etale.iff_formallyUnramified_and_smooth]
   exact ⟨.of_formallyUnramified_tensorProduct_of_faithfullyFlat T,
@@ -193,8 +193,8 @@ lemma Smooth.codescendsAlong_faithfullyFlat
   exact .of_smooth_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 Smooth.codescendsAlong_faithfullyFlat
-  结论: CodescendsAlong Smooth FaithfullyFlat
+引理 光滑.codescendsAlong_faithfullyFlat
+  结论: 余descendsAlong 光滑 忠实平坦
   证明: by
   refine .mk _ Smooth.respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [smooth_algebraMap] at h' ⊢
@@ -221,7 +221,7 @@ lemma FormallyUnramified.codescendsAlong_faithfullyFlat
   exact .of_formallyUnramified_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 FormallyUnramified.codescendsAlong_faithfullyFlat
+引理 形式非分歧.codescendsAlong_faithfullyFlat
   证明: by
   refine .mk _ FormallyUnramified.respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [formallyUnramified_algebraMap] at h' ⊢
@@ -250,8 +250,8 @@ lemma Etale.codescendsAlong_faithfullyFlat
   exact .of_etale_tensorProduct_of_faithfullyFlat S
 
 中文:
-引理 Etale.codescendsAlong_faithfullyFlat
-  结论: CodescendsAlong Etale FaithfullyFlat
+引理 平展.codescendsAlong_faithfullyFlat
+  结论: 余descendsAlong 平展 忠实平坦
   证明: by
   refine .mk _ Etale.respectsIso fun R S T _ _ _ _ _ h h' => ?_
   rw [etale_algebraMap] at h' ⊢

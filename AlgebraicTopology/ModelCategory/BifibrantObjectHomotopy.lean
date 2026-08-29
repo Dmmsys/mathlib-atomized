@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomRel.IsStableUnderPostcomp (homRel C)
+  签名: HomRel.是StableUnderPostcomp (homRel C)
   定义体: h.postcomp _
 
 Depends on / 依赖: h.postcomp, postcomp
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomRel.IsStableUnderPrecomp (homRel C)
+  签名: HomRel.是StableUnderPrecomp (homRel C)
   定义体: h.precomp _
 
 Depends on / 依赖: h.precomp, precomp
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Congruence (homRel C)
+  签名: 余ngruence (homRel C)
   定义体: { refl _ := .refl _
       symm h := .symm h
       trans h₁ h₂ := .trans h₁ h₂ }
@@ -199,7 +199,7 @@ lemma toHoCat_obj_surjective
 
 中文:
 引理 toHoCat_obj_surjective
-  结论: Function.Surjective (toHoCat (C := C)).obj
+  结论: 函数.满射 (toHoCat (C := C)).obj
   证明: fun ⟨_⟩ => ⟨_, rfl⟩
 -/
 lemma toHoCat_obj_surjective : Function.Surjective (toHoCat (C := C)).obj :=
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Full (toHoCat (C := C))
+  签名: 函子.满 (toHoCat (C := C))
   定义体: by dsimp [toHoCat]; infer_instance
 
 Depends on / 依赖: infer_instance, toHoCat
@@ -391,7 +391,7 @@ instance :
 
 中文:
 实例 :
-  签名: toHoCat.IsLocalization (weakEquivalences (BifibrantObject C))
+  签名: toHoCat.是Localization (weakEquivalences (BifibrantObject C))
   定义体: .mk' _ _ strictUniversalPropertyFixedTargetToHoCat
     strictUniversalPropertyFixedTargetToHoCat
 
@@ -751,7 +751,7 @@ lemma exists_bifibrant
   exact ⟨BifibrantObject.mk h.Z, ho
 
 中文:
-引理 exists_bifibrant
+引理 存在_bifibrant
   条件: (X : CofibrantObject C)
   证明: by
   let h := MorphismProperty.factorizationData (trivialCofibrations C) (fibrations C)
@@ -843,7 +843,7 @@ lemma exists_bifibrant_map
   exact ⟨BifibrantObject.homMk sq.lift, by cat_disch⟩
 
 中文:
-引理 exists_bifibrant_map
+引理 存在_bifibrant_map
   条件: {X₁ X₂ : CofibrantObject C} (f : X₁ ⟶ X₂)
   证明: by
   have sq : CommSq (ι.map (f ≫ iBifibrantResolutionObj X₂))
@@ -1218,7 +1218,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (HoCat.adjCounit' (C := C))
+  签名: 是同构 (HoCat.adjCounit' (C := C))
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
@@ -1322,7 +1322,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (HoCat.adj (C := C)).counit
+  签名: 是同构 (HoCat.adj (C := C)).counit
   定义体: by
   dsimp [HoCat.adj]
   infer_instance
@@ -1343,7 +1343,7 @@ instance :
 
 中文:
 实例 :
-  签名: (BifibrantObject.HoCat.ιCofibrantObject (C := C)).Full
+  签名: (BifibrantObject.HoCat.ιCofibrantObject (C := C)).满
   定义体: HoCat.adj.fullyFaithfulROfIsIsoCounit.full
 -/
 instance : (BifibrantObject.HoCat.ιCofibrantObject (C := C)).Full :=
@@ -1359,7 +1359,7 @@ instance :
 
 中文:
 实例 :
-  签名: (BifibrantObject.HoCat.ιCofibrantObject (C := C)).Faithful
+  签名: (BifibrantObject.HoCat.ιCofibrantObject (C := C)).忠实
   定义体: HoCat.adj.fullyFaithfulROfIsIsoCounit.faithful
 
 Depends on / 依赖: Faithful
@@ -1388,7 +1388,7 @@ instance :
 
 中文:
 实例 :
-  签名: HoCat.bifibrantResolution.IsLocalization (weakEquivalences (HoCat C))
+  签名: HoCat.bifibrantResolution.是Localization (weakEquivalences (HoCat C))
   定义体: HoCat.adj.isLocalization_leftAdjoint _ (by
     intro X Y f hf
     obtain ⟨X, rfl⟩ := toHoCat_obj_surjective X
@@ -1503,7 +1503,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ιCofibrantObjectLocalizerMorphism C).IsLocalizedEquivalence
+  签名: (ιCofibrantObjectLocalizerMorphism C).是LocalizedEquivalence
   定义体: let : CatCommSq (ιCofibrantObjectLocalizerMorphism C).functor toHoCat
       (CofibrantObject.toHoCat ⋙ CofibrantObject.HoCat.bifibrantResolution) (𝟭 _) :=
     ⟨(associator _ _ _).symm ≪≫
@@ -1538,7 +1538,7 @@ instance :
 
 中文:
 实例 :
-  签名: (localizerMorphism C).IsLocalizedEquivalence
+  签名: (localizerMorphism C).是LocalizedEquivalence
   定义体: inferInstanceAs ((ιCofibrantObjectLocalizerMorphism C).comp
     (CofibrantObject.localizerMorphism C)).IsLocalizedEquivalence
 
@@ -1567,7 +1567,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ιFibrantObjectLocalizerMorphism C).IsLocalizedEquivalence
+  签名: (ιFibrantObjectLocalizerMorphism C).是LocalizedEquivalence
   定义体: let L := FibrantObject.ι ⋙ (weakEquivalences C).Q
   have : ((ιFibrantObjectLocalizerMorphism C).functor ⋙ L).IsLocalization
     (weakEquivalences _) :=
@@ -1601,7 +1601,7 @@ lemma locallySmall_of_isLocalization
 
 中文:
 引理 locallySmall_of_isLocalization
-  结论: {D : 类型} [Category* D]
+  结论: {D : 类型} [范畴* D]
   证明: locallySmall_of_faithful ((BifibrantObject.localizerMorphism C).localizedFunctor
     BifibrantObject.toHoCat L).inv
 

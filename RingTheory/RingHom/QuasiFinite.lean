@@ -30,8 +30,8 @@ definition QuasiFinite
   body: @Algebra.QuasiFinite R S _ _ f.toAlgebra
 
 中文:
-定义 QuasiFinite
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+定义 拟有限
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: @Algebra.QuasiFinite R S _ _ f.toAlgebra
 
 Depends on / 依赖: Algebra, Algebra.QuasiFinite, QuasiFinite, f.toAlgebra, toAlgebra
@@ -48,8 +48,8 @@ lemma QuasiFinite.toAlgebra
   proof: hf
 
 中文:
-引理 QuasiFinite.toAlgebra
-  条件: {f : R ->+* S} (hf : QuasiFinite f)
+引理 拟有限.toAlgebra
+  条件: {f : R ->+* S} (hf : 拟有限 f)
   证明: hf
 -/
 lemma QuasiFinite.toAlgebra {f : R ->+* S} (hf : QuasiFinite f) :
@@ -68,7 +68,7 @@ lemma quasiFinite_algebraMap
 
 中文:
 引理 quasiFinite_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [RingHom.QuasiFinite]; rw [toAlgebra_algebraMap]
 
@@ -89,8 +89,8 @@ lemma QuasiFinite.comp
   exact .trans R S T
 
 中文:
-引理 QuasiFinite.comp
-  条件: {f : S ->+* T} {g : R ->+* S} (hf : f.QuasiFinite) (hg : g.QuasiFinite)
+引理 拟有限.comp
+  条件: {f : S ->+* T} {g : R ->+* S} (hf : f.拟有限) (hg : g.拟有限)
   证明: by
   algebraize [f, g, (f.comp g)]
   exact .trans R S T
@@ -113,8 +113,8 @@ lemma QuasiFinite.of_comp
   exact .of_restrictScalars R S T
 
 中文:
-引理 QuasiFinite.of_comp
-  条件: {f : S ->+* T} {g : R ->+* S} (h : (f.comp g).QuasiFinite)
+引理 拟有限.of_comp
+  条件: {f : S ->+* T} {g : R ->+* S} (h : (f.comp g).拟有限)
   证明: by
   algebraize [f, g, (f.comp g)]
   exact .of_restrictScalars R S T
@@ -135,8 +135,8 @@ lemma QuasiFinite.comp_iff
   proof: ⟨.of_comp, (.comp · hg)⟩
 
 中文:
-引理 QuasiFinite.comp_iff
-  条件: {f : S ->+* T} {g : R ->+* S} (hg : g.QuasiFinite)
+引理 拟有限.comp_iff
+  条件: {f : S ->+* T} {g : R ->+* S} (hg : g.拟有限)
   证明: ⟨.of_comp, (.comp · hg)⟩
 
 Depends on / 依赖: of_comp
@@ -157,9 +157,9 @@ lemma QuasiFinite.of_finite
   exact inferInstanceAs (Algebra.QuasiFinite _ _)
 
 中文:
-引理 QuasiFinite.of_finite
-  条件: {f : S ->+* T} (hf : f.Finite)
-  结论: f.QuasiFinite
+引理 拟有限.of_finite
+  条件: {f : S ->+* T} (hf : f.有限)
+  结论: f.拟有限
   证明: by
   algebraize [f]
   exact inferInstanceAs (Algebra.QuasiFinite _ _)
@@ -179,8 +179,8 @@ lemma QuasiFinite.stableUnderComposition
   proof: fun _ _ _ _ _ _ _ _ hf hg => comp hg hf
 
 中文:
-引理 QuasiFinite.stableUnderComposition
-  结论: StableUnderComposition QuasiFinite
+引理 拟有限.stableUnderComposition
+  结论: StableUnderComposition 拟有限
   证明: fun _ _ _ _ _ _ _ _ hf hg => comp hg hf
 -/
 lemma QuasiFinite.stableUnderComposition : StableUnderComposition QuasiFinite :=
@@ -195,8 +195,8 @@ lemma QuasiFinite.respectsIso
   proof: stableUnderComposition.respectsIso fun e => .of_finite e.finite
 
 中文:
-引理 QuasiFinite.respectsIso
-  结论: RespectsIso QuasiFinite
+引理 拟有限.respectsIso
+  结论: RespectsIso 拟有限
   证明: stableUnderComposition.respectsIso fun e => .of_finite e.finite
 
 Depends on / 依赖: e.finite, finite, of_finite, respectsIso, stableUnderComposition, stableUnderComposition.respectsIso
@@ -217,8 +217,8 @@ lemma QuasiFinite.isStableUnderBaseChange
   infer_instance
 
 中文:
-引理 QuasiFinite.isStableUnderBaseChange
-  结论: IsStableUnderBaseChange QuasiFinite
+引理 拟有限.isStableUnderBaseChange
+  结论: 是StableUnderBaseChange 拟有限
   证明: by
   refine .mk respectsIso ?_
   introv H
@@ -244,8 +244,8 @@ lemma QuasiFinite.holdsForLocalizationAway
   exact quasiFinite_algebraMap.mpr (.of_isLocalization (.powers r))
 
 中文:
-引理 QuasiFinite.holdsForLocalizationAway
-  结论: HoldsForLocalizationAway QuasiFinite
+引理 拟有限.holdsForLocalizationAway
+  结论: HoldsForLocalizationAway 拟有限
   证明: by
   introv R _
   exact quasiFinite_algebraMap.mpr (.of_isLocalization (.powers r))
@@ -274,8 +274,8 @@ lemma QuasiFinite.ofLocalizationSpanTarget
     infer_
 
 中文:
-引理 QuasiFinite.ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget QuasiFinite
+引理 拟有限.ofLocalizationSpanTarget
+  结论: OfLocalizationSpanTarget 拟有限
   证明: by
   rw [RingHom.ofLocalizationSpanTarget_iff_finite]
   introv R hs H
@@ -334,8 +334,8 @@ lemma QuasiFinite.propertyIsLocal
   StableUnderCompo
 
 中文:
-引理 QuasiFinite.propertyIsLocal
-  结论: 命题ertyIsLocal QuasiFinite where
+引理 拟有限.propertyIsLocal
+  结论: PropertyIsLocal 拟有限 where
   证明: isStableUnderBaseChange.localizationPreserves.away
   ofLocalizationSpanTarget := ofLocalizationSpanTarget
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
@@ -367,7 +367,7 @@ lemma QuasiFinite.of_isIntegral_of_finiteType
   exact Algebra.QuasiFinite.of_isIntegral_of_finiteType s
 
 中文:
-引理 QuasiFinite.of_isIntegral_of_finiteType
+引理 拟有限.of_is整数egral_of_finiteType
   证明: by
   algebraize [f, g, g.comp f]
   obtain ⟨s, hs⟩ := Algebra.IsStandardOpenImmersion.exists_away S T
@@ -393,7 +393,7 @@ abbreviation QuasiFiniteAt
 
 中文:
 缩写 QuasiFiniteAt
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S) (p : Ideal S)
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S) (p : 理想 S)
   定义体: letI := f.toAlgebra; Algebra.QuasiFiniteAt R p
 
 Depends on / 依赖: Algebra, Algebra.QuasiFiniteAt, QuasiFiniteAt, f.toAlgebra, toAlgebra

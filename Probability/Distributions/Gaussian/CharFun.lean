@@ -65,8 +65,8 @@ lemma IsGaussian.charFunDual_eq'
   · exact IsGaussian.memLp_two_id
 
 中文:
-引理 IsGaussian.charFunDual_eq'
-  条件: [IsGaussian μ] (L : StrongDual 实数 E)
+引理 是Gaussian.charFunDual_eq'
+  条件: [是Gaussian μ] (L : StrongDual 实数 E)
   证明: by
   rw [IsGaussian.charFunDual_eq]; rw [covarianceBilinDual_self_eq_variance]; rw [integral_complex_ofReal]; rw [L.integral_comp_id_comm']
   · exact IsGaussian.integrable_id
@@ -96,7 +96,7 @@ lemma isGaussian_iff_gaussian_charFunDual
 
 中文:
 引理 isGaussian_iff_gaussian_charFunDual
-  条件: [IsFiniteMeasure μ]
+  条件: [是有限测度 μ]
   证明: by
   refine ⟨fun h => ⟨μ[id], covarianceBilinDual μ, isPosSemidef_covarianceBilinDual,
     h.charFunDual_eq'⟩,
@@ -140,7 +140,7 @@ lemma gaussian_charFunDual_congr
 
 中文:
 引理 gaussian_charFunDual_congr
-  结论: [IsFiniteMeasure μ] {m : E}
+  结论: [是有限测度 μ] {m : E}
   证明: by
   have h' := isGaussian_iff_gaussian_charFunDual.2 ⟨m, f, hf, h⟩
   simp_rw [h'.charFunDual_eq', Complex.exp_eq_exp_iff_exists_int] at h
@@ -196,8 +196,8 @@ lemma IsGaussian.ext_covarianceBilinDual
   simp_rw [IsGaussian.charFunDual_eq', hm, hv]
 
 中文:
-引理 IsGaussian.ext_covarianceBilinDual
-  结论: {ν : Measure E} [IsGaussian μ] [IsGaussian ν]
+引理 是Gaussian.ext_covarianceBilinDual
+  结论: {ν : 测度 E} [是Gaussian μ] [是Gaussian ν]
   证明: by
   apply Measure.ext_of_charFunDual
   ext L
@@ -219,8 +219,8 @@ lemma IsGaussian.ext_iff_covarianceBilinDual
   mpr h := IsGaussian.ext_covarianceBilinDual h.1 h.2
 
 中文:
-引理 IsGaussian.ext_iff_covarianceBilinDual
-  结论: {ν : Measure E} [IsGaussian μ]
+引理 是Gaussian.ext_iff_covarianceBilinDual
+  结论: {ν : 测度 E} [是Gaussian μ]
   证明: by simp [h]
   mpr h := IsGaussian.ext_covarianceBilinDual h.1 h.2
 -/
@@ -249,8 +249,8 @@ lemma IsGaussian.charFun_eq'
   · exact IsGaussian.memLp_two_id
 
 中文:
-引理 IsGaussian.charFun_eq'
-  条件: [IsGaussian μ] (t : E)
+引理 是Gaussian.charFun_eq'
+  条件: [是Gaussian μ] (t : E)
   证明: by
   rw [IsGaussian.charFun_eq]; rw [covarianceBilin_self]; rw [integral_complex_ofReal]; rw [integral_inner]
   · rfl
@@ -284,7 +284,7 @@ lemma isGaussian_iff_gaussian_charFun
 
 中文:
 引理 isGaussian_iff_gaussian_charFun
-  条件: [IsFiniteMeasure μ]
+  条件: [是有限测度 μ]
   证明: by
   rw [isGaussian_iff_gaussian_charFunDual]
   refine ⟨fun ⟨m, f, hf, h⟩ => ⟨m,
@@ -329,7 +329,7 @@ lemma gaussian_charFun_congr
 
 中文:
 引理 gaussian_charFun_congr
-  结论: [IsFiniteMeasure μ] (m : E) (f : E ->L[实数] E ->L[实数] 实数)
+  结论: [是有限测度 μ] (m : E) (f : E ->L[实数] E ->L[实数] 实数)
   证明: by
   let g : StrongDual Real E ->L[Real] StrongDual Real E ->L[Real] Real :=
     f.bilinearComp (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
@@ -366,8 +366,8 @@ lemma IsGaussian.ext
   simp_rw [IsGaussian.charFun_eq', hm, hv]
 
 中文:
-引理 IsGaussian.ext
-  结论: {ν : Measure E} [IsGaussian μ] [IsGaussian ν]
+引理 是Gaussian.ext
+  结论: {ν : 测度 E} [是Gaussian μ] [是Gaussian ν]
   证明: by
   apply Measure.ext_of_charFun
   ext t
@@ -389,8 +389,8 @@ lemma IsGaussian.ext_iff
   mpr h := IsGaussian.ext h.1 h.2
 
 中文:
-引理 IsGaussian.ext_iff
-  条件: {ν : Measure E} [IsGaussian μ] [IsGaussian ν]
+引理 是Gaussian.ext_iff
+  条件: {ν : 测度 E} [是Gaussian μ] [是Gaussian ν]
   证明: by simp [h]
   mpr h := IsGaussian.ext h.1 h.2
 -/

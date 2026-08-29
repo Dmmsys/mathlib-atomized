@@ -48,7 +48,7 @@ definition log
 
 中文:
 定义 log
-  签名: : PowerSeries A
+  签名: : 幂级数 A
   定义体: mk fun n => if n = 0 then 0 else algebraMap Rat A ((-1 : Rat) ^ (n + 1) / n)
 
 Depends on / 依赖: algebraMap
@@ -119,7 +119,7 @@ theorem map_log
 
 中文:
 定理 map_log
-  条件: {A' : 类型} [CommRing A'] [Algebra Rat A'] (f : A ->+* A')
+  条件: {A' : 类型} [交换环 A'] [代数 有理数 A'] (f : A ->+* A')
   证明: by
   ext n; simp only [coeff_map, coeff_log]; split_ifs <;> simp [RingHom.map_rat_algebraMap]
 
@@ -155,7 +155,7 @@ theorem order_log
 
 中文:
 定理 order_log
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   结论: (log A).order = 1
   证明: order_eq_nat.mpr ⟨by simp, fun i hi => by simp [Nat.lt_one_iff.mp hi]⟩
 
@@ -178,7 +178,7 @@ theorem deriv_log
 
 中文:
 定理 deriv_log
-  结论: d⁄dX A (log A) = mk fun n => algebraMap Rat A ((-1 : Rat) ^ n)
+  结论: d⁄dX A (log A) = mk fun n => algebraMap 有理数 A ((-1 : 有理数) ^ n)
   证明: by
   ext n
   have : (n + 1) = algebraMap Rat A (n + 1) := by simp
@@ -203,8 +203,8 @@ theorem HasSubst.log
   proof: HasSubst.of_constantCoeff_zero' constantCoeff_log
 
 中文:
-定理 HasSubst.log
-  结论: HasSubst (log A)
+定理 有Subst.log
+  结论: 有Subst (log A)
   证明: HasSubst.of_constantCoeff_zero' constantCoeff_log
 
 Depends on / 依赖: HasSubst, HasSubst.of_constantCoeff_zero, constantCoeff_log, of_constantCoeff_zero
@@ -221,8 +221,8 @@ theorem HasSubst.exp_sub_one
   proof: HasSubst.of_constantCoeff_zero' (by simp [constantCoeff_exp])
 
 中文:
-定理 HasSubst.exp_sub_one
-  结论: HasSubst (exp A - 1)
+定理 有Subst.exp_sub_one
+  结论: 有Subst (exp A - 1)
   证明: HasSubst.of_constantCoeff_zero' (by simp [constantCoeff_exp])
 
 Depends on / 依赖: HasSubst, HasSubst.of_constantCoeff_zero, constantCoeff_exp, of_constantCoeff_zero

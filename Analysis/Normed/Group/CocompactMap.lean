@@ -46,8 +46,8 @@ theorem CocompactMapClass.norm_le
   suffices x in f ⁻¹' (Metric.closedBall 0 ε)ᶜ by si
 
 中文:
-定理 CocompactMapClass.norm_le
-  结论: [命题erSpace F] [FunLike 𝓕 E F] [CocompactMapClass 𝓕 E F]
+定理 余compact映射类.norm_le
+  结论: [真空间 F] [函数状 𝓕 E F] [余compact映射类 𝓕 E F]
   证明: by
   have h := cocompact_tendsto f
   rw [tendsto_def] at h
@@ -90,8 +90,8 @@ theorem Filter.tendsto_cocompact_cocompact_of_norm
   
 
 中文:
-定理 Filter.tendsto_cocompact_cocompact_of_norm
-  结论: [命题erSpace E] {f : E -> F}
+定理 滤子.tendsto_cocompact_cocompact_of_norm
+  结论: [真空间 E] {f : E -> F}
   证明: by
   rw [tendsto_def]
   intro s hs
@@ -129,8 +129,8 @@ theorem ContinuousMapClass.toCocompactMapClass_of_norm
   proof: (tendsto_cocompact_cocompact_of_norm <| h ·)
 
 中文:
-定理 ContinuousMapClass.toCocompactMapClass_of_norm
-  结论: [命题erSpace E] [FunLike 𝓕 E F]
+定理 连续映射类.toCocompactMapClass_of_norm
+  结论: [真空间 E] [函数状 𝓕 E F]
   证明: (tendsto_cocompact_cocompact_of_norm <| h ·)
 
 Depends on / 依赖: tendsto_cocompact_cocompact_of_norm

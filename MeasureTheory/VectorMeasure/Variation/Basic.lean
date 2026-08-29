@@ -51,7 +51,7 @@ lemma sum_finpartition
 
 中文:
 引理 sum_finpartition
-  结论: [AddCommMonoid V] [TopologicalSpace V] [T2Space V]
+  结论: [加法交换幺半群 V] [拓扑空间 V] [T2空间 V]
   证明: by
   rw [← μ.of_biUnion_finset (P.pairwiseDisjoint_apply (fun _ _ => rfl) rfl) (fun p _ => p.prop)]; rw [← Finset.sup_set_eq_biUnion]; rw [P.sup_parts_apply (fun _ _ => rfl) rfl]
 
@@ -79,7 +79,7 @@ lemma variation_apply
 
 中文:
 引理 variation_apply
-  条件: (μ : VectorMeasure X V) (s : Set X)
+  条件: (μ : 向量测度 X V) (s : 集合 X)
   证明: rfl
 
 @[simp]
@@ -98,7 +98,7 @@ lemma ennrealVariation_apply
 
 中文:
 引理 ennrealVariation_apply
-  条件: (μ : VectorMeasure X V) {s : Set X} (hs : MeasurableSet s)
+  条件: (μ : 向量测度 X V) {s : 集合 X} (hs : 可测集 s)
   证明: Measure.toENNRealVectorMeasure_apply_measurable hs
 
 Depends on / 依赖: Measure, Measure.toENNRealVectorMeasure_apply_measurable, toENNRealVectorMeasure_apply_measurable
@@ -123,7 +123,7 @@ lemma le_variation
 
 中文:
 引理 le_variation
-  结论: (μ : VectorMeasure X V) {s : Set X} (hs : MeasurableSet s) {P : Finset (Set X)}
+  结论: (μ : 向量测度 X V) {s : 集合 X} (hs : 可测集 s) {P : 有限集 (集合 X)}
   证明: by
   classical
   set Q := Finpartition.ofPairwiseDisjoint P hP₂ with defQ
@@ -173,8 +173,8 @@ lemma exists_lt_sum_of_lt_variation
   
 
 中文:
-引理 exists_lt_sum_of_lt_variation
-  结论: (μ : VectorMeasure X V) {s : Set X} (hs : MeasurableSet s)
+引理 存在_lt_sum_of_lt_variation
+  结论: (μ : 向量测度 X V) {s : 集合 X} (hs : 可测集 s)
   证明: by
   simp only [variation_apply, preVariation, ennrealToMeasure_apply hs, ennrealPreVariation_apply]
     at ha ⊢
@@ -223,8 +223,8 @@ lemma exists_variation_le_add'
     preVariation.exi
 
 中文:
-引理 exists_variation_le_add'
-  结论: (μ : VectorMeasure X V) {s : Set X} (hs : MeasurableSet s)
+引理 存在_variation_le_add'
+  结论: (μ : 向量测度 X V) {s : 集合 X} (hs : 可测集 s)
   证明: by
   simp only [variation_apply, preVariation, ennrealToMeasure_apply hs, ennrealPreVariation_apply]
     at hμ ⊢
@@ -267,8 +267,8 @@ lemma exists_variation_le_add
   proof: exists_variation_le_add' μ hs (mod_cast hε) hμ
 
 中文:
-引理 exists_variation_le_add
-  结论: (μ : VectorMeasure X V) {s : Set X} (hs : MeasurableSet s)
+引理 存在_variation_le_add
+  结论: (μ : 向量测度 X V) {s : 集合 X} (hs : 可测集 s)
   证明: exists_variation_le_add' μ hs (mod_cast hε) hμ
 
 Depends on / 依赖: exists_variation_le_add, mod_cast
@@ -296,7 +296,7 @@ theorem enorm_measure_le_variation
 
 中文:
 定理 enorm_measure_le_variation
-  条件: (μ : VectorMeasure X V) (E : Set X)
+  条件: (μ : 向量测度 X V) (E : 集合 X)
   证明: by
   by_cases hE : MeasurableSet E
   swap; · simp [hE]
@@ -332,7 +332,7 @@ lemma variation_zero
 
 中文:
 引理 variation_zero
-  结论: (0 : VectorMeasure X V).variation = 0
+  结论: (0 : 向量测度 X V).variation = 0
   证明: by
   simp only [variation, zero_apply, enorm_zero]
   exact preVariation_zero
@@ -359,7 +359,7 @@ lemma absolutelyContinuous
 
 中文:
 引理 absolutelyContinuous
-  条件: (μ : VectorMeasure X V)
+  条件: (μ : 向量测度 X V)
   结论: μ ≪ᵥ μ.ennrealVariation
   证明: by
   intro s hs
@@ -393,8 +393,8 @@ lemma variation_apply_le_of_forall_enorm_le
     _ = m (i.pa
 
 中文:
-引理 variation_apply_le_of_forall_enorm_le
-  结论: {m : Measure X} (hs : MeasurableSet s)
+引理 variation_apply_le_of_对任意_enorm_le
+  结论: {m : 测度 X} (hs : 可测集 s)
   证明: by
   simp only [variation_apply, preVariation, ennrealToMeasure_apply hs, ennrealPreVariation_apply,
     preVariationFun, hs, dite_true, iSup_le_iff]
@@ -433,8 +433,8 @@ lemma variation_le_of_forall_enorm_le
   proof: Measure.le_intro fun _ hs _ => variation_apply_le_of_forall_enorm_le hs (fun E hE _ => h E hE)
 
 中文:
-引理 variation_le_of_forall_enorm_le
-  条件: {m : Measure X} (h : 对任意 E, MeasurableSet E -> ‖μ E‖ₑ <= m E)
+引理 variation_le_of_对任意_enorm_le
+  条件: {m : 测度 X} (h : 对任意 E, 可测集 E -> ‖μ E‖ₑ <= m E)
   证明: Measure.le_intro fun _ hs _ => variation_apply_le_of_forall_enorm_le hs (fun E hE _ => h E hE)
 
 Depends on / 依赖: Measure, Measure.le_intro, le_intro, variation_apply_le_of_forall_enorm_le
@@ -459,7 +459,7 @@ lemma variation_add_le
 
 中文:
 引理 variation_add_le
-  条件: [ContinuousAdd V]
+  条件: [连续加法 V]
   结论: variation (μ + ν) <= variation μ + variation ν
   证明: by
   refine variation_le_of_forall_enorm_le fun E _ => ?_
@@ -493,7 +493,7 @@ lemma variation_finsetSum_le
 
 中文:
 引理 variation_finsetSum_le
-  条件: [ContinuousAdd V] {ι} (s : Finset ι) (μ : ι -> VectorMeasure X V)
+  条件: [连续加法 V] {ι} (s : 有限集 ι) (μ : ι -> 向量测度 X V)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -529,7 +529,7 @@ lemma variation_apply_eq_zero
 
 中文:
 引理 variation_apply_eq_zero
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   refine ⟨fun h t hts ht => ?_, fun h => ?_⟩
   · rw [← enorm_eq_zero, ← le_zero_iff, ← h]
@@ -599,7 +599,7 @@ lemma variation_restrict
 
 中文:
 引理 variation_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   apply le_antisymm
   · apply variation_le_of_forall_enorm_le (fun t ht => ?_)
@@ -665,8 +665,8 @@ instance [IsFiniteMeasure
   body: isFiniteMeasure_of_le _ variation_restrict_le
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ.variation] : IsFiniteMeasure (μ.restrict s).variation
+实例 [是有限测度
+  签名: μ.variation] : 是有限测度 (μ.restrict s).variation
   定义体: isFiniteMeasure_of_le _ variation_restrict_le
 
 Depends on / 依赖: isFiniteMeasure_of_le, variation_restrict_le
@@ -714,8 +714,8 @@ instance [IsFiniteMeasure
   body: isFiniteMeasure_of_le _ variation_map_le
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ.variation] : IsFiniteMeasure (μ.map φ).variation
+实例 [是有限测度
+  签名: μ.variation] : 是有限测度 (μ.map φ).variation
   定义体: isFiniteMeasure_of_le _ variation_map_le
 
 Depends on / 依赖: isFiniteMeasure_of_le, variation_map_le
@@ -738,8 +738,8 @@ theorem _root_.MeasurableEmbedding.variation_map
     have : (μ.map φ).variation (s \ rang
 
 中文:
-定理 _root_.MeasurableEmbedding.variation_map
-  条件: (hφ : MeasurableEmbedding φ)
+定理 _root_.可测嵌入.variation_map
+  条件: (hφ : 可测嵌入 φ)
   证明: by
   apply le_antisymm variation_map_le ?_
   apply Measure.le_iff.2 (fun s hs => ?_)
@@ -820,7 +820,7 @@ theorem norm_measure_le_variation
 
 中文:
 定理 norm_measure_le_variation
-  条件: {E : Set X} (hE : μ.variation E != ∞ := by finiteness)
+  条件: {E : 集合 X} (hE : μ.variation E != ∞ := by finiteness)
   证明: by
   rw [measureReal_def]; rw [← toReal_enorm]; rw [ENNReal.toReal_le_toReal (enorm_ne_top) hE]
   exact enorm_measure_le_variation μ E
@@ -884,7 +884,7 @@ lemma variation_smul_le
 
 中文:
 引理 variation_smul_le
-  条件: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 V] {c : 𝕜}
+  条件: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 V] {c : 𝕜}
   证明: by
   apply variation_le_of_forall_enorm_le (fun s hs => ?_)
   simp only [smul_apply, enorm_smul, Measure.smul_apply, Measure.nnreal_smul_coe_apply]
@@ -915,7 +915,7 @@ lemma variation_smul
 
 中文:
 引理 variation_smul
-  条件: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 V] {c : 𝕜}
+  条件: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 V] {c : 𝕜}
   证明: by
   apply le_antisymm variation_smul_le ?_
   rcases eq_or_ne c 0 with rfl | hc
@@ -961,8 +961,8 @@ instance [Finite
     exact (Finset.sup_lt_iff (by simp)).2 (fun b hb => by sim
 
 中文:
-实例 [Finite
-  签名: X] : IsFiniteMeasure μ.variation where
+实例 [有限
+  签名: X] : 是有限测度 μ.variation where
   定义体: by
     classical
     let : Fintype X := Fintype.ofFinite X
@@ -998,7 +998,7 @@ lemma _root_.MeasureTheory.Measure.variation_toSignedMeasure
     simp [hs, Measure.real, Real.enorm_eq_ofReal]
 
 中文:
-引理 _root_.MeasureTheory.Measure.variation_toSignedMeasure
+引理 _root_.测度论.测度.variation_toSignedMeasure
   证明: by
   apply le_antisymm
   · apply variation_le_of_forall_enorm_le (fun s hs => ?_)
@@ -1029,7 +1029,7 @@ lemma _root_.MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_vari
   largest measure i
 
 中文:
-引理 _root_.MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation
+引理 _root_.测度论.符号测度.存在_subset_lt_enorm_apply_of_lt_variation
   证明: by
   /- One may almost realize the variation through a partition into finitely many sets.
   As their measures are real numbers, we can group together those of positive measure, and
@@ -1115,7 +1115,7 @@ lemma iSup_sum_finpartition_parts
 
 中文:
 引理 iSup_sum_finpartition_parts
-  条件: {s : Set X} (hs : MeasurableSet s)
+  条件: {s : 集合 X} (hs : 可测集 s)
   证明: by
   simp_rw [μ.sum_finpartition, iSup_const]
 
@@ -1140,7 +1140,7 @@ lemma preVariationFun_apply_of_ennreal
 
 中文:
 引理 preVariationFun_apply_of_ennreal
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: preVariationFun μ s = μ s
   证明: by
   by_cases h : MeasurableSet s

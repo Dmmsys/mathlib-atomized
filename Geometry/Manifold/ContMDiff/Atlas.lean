@@ -60,7 +60,7 @@ theorem ModelWithCorners.contMDiff
 @[deprecated (since := "2026-06-16")] alias contMDiff_model := ModelWithCorners.contMDiff
 
 中文:
-定理 ModelWithCorners.contMDiff
+定理 带角模型.contMDiff
   结论: ContMDiff I 𝓘(𝕜, E) n I
   证明: by
   intro x
@@ -92,7 +92,7 @@ theorem ModelWithCorners.contMDiffOn_symm
 alias contMDiffOn_model_symm := ModelWithCorners.contMDiffOn_symm
 
 中文:
-定理 ModelWithCorners.contMDiffOn_symm
+定理 带角模型.contMDiffOn_symm
   结论: ContMDiffOn 𝓘(𝕜, E) I n I.symm (range I)
   证明: by
   intro x hx
@@ -202,7 +202,7 @@ theorem contMDiffOn_chart
 
 中文:
 定理 contMDiffOn_chart
-  条件: [IsManifold I n M]
+  条件: [是流形 I n M]
   证明: contMDiffOn_of_mem_maximalAtlas chart_mem_maximalAtlas x
 
 Depends on / 依赖: chart_mem_maximalAtlas, contMDiffOn_of_mem_maximalAtlas
@@ -221,7 +221,7 @@ theorem contMDiffOn_chart_symm
 
 中文:
 定理 contMDiffOn_chart_symm
-  条件: [IsManifold I n M]
+  条件: [是流形 I n M]
   证明: contMDiffOn_symm_of_mem_maximalAtlas chart_mem_maximalAtlas x
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Aux_apply_apply, Prod.smul_mk, chart_mem_maximalAtlas, contMDiffOn_symm_of_mem_maximalAtlas, mul_assoc, smul_def, smul_mk
@@ -279,7 +279,7 @@ theorem contMDiffAt_extChartAt'
 
 中文:
 定理 contMDiffAt_extChartAt'
-  条件: [IsManifold I n M] {x' : M} (h : x' in (chartAt H x).source)
+  条件: [是流形 I n M] {x' : M} (h : x' in (chartAt H x).source)
   证明: (chartAt H x).contMDiffAt_extend (chart_mem_maximalAtlas x) h
 
 Depends on / 依赖: Prod.snd, chartAt, chart_mem_maximalAtlas, congr_arg, contMDiffAt_extend
@@ -327,7 +327,7 @@ theorem contMDiffOn_extChartAt
 
 中文:
 定理 contMDiffOn_extChartAt
-  条件: [IsManifold I n M]
+  条件: [是流形 I n M]
   证明: (chartAt H x).contMDiffOn_extend (chart_mem_maximalAtlas x)
 
 Depends on / 依赖: chartAt, chart_mem_maximalAtlas, contMDiffOn_extend
@@ -379,7 +379,7 @@ theorem contMDiffOn_extChartAt_symm
 
 中文:
 定理 contMDiffOn_extChartAt_symm
-  条件: [IsManifold I n M] (x : M)
+  条件: [是流形 I n M] (x : M)
   证明: by
   convert! contMDiffOn_extend_symm (chart_mem_maximalAtlas (I := I) x)
   · rw [extChartAt_target, I.image_eq]
@@ -403,7 +403,7 @@ theorem contMDiffWithinAt_extChartAt_symm_target
 
 中文:
 定理 contMDiffWithinAt_extChartAt_symm_target
-  结论: [IsManifold I n M]
+  结论: [是流形 I n M]
   证明: contMDiffOn_extChartAt_symm x y hy
 
 Depends on / 依赖: contMDiffOn_extChartAt_symm
@@ -424,7 +424,7 @@ theorem contMDiffWithinAt_extChartAt_symm_range
 
 中文:
 定理 contMDiffWithinAt_extChartAt_symm_range
-  结论: [IsManifold I n M]
+  结论: [是流形 I n M]
   证明: (contMDiffWithinAt_extChartAt_symm_target x hy).mono_of_mem_nhdsWithin
     (extChartAt_target_mem_nhdsWithin_of_mem hy)
 
@@ -534,7 +534,7 @@ lemma OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
 
 中文:
 引理 OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
-  结论: [IsManifold I n M]
+  结论: [是流形 I n M]
   证明: by
   simp only [mfld_simps, IsManifold.mem_maximalAtlas_iff, StructureGroupoid.maximalAtlas,
     contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid,
@@ -574,8 +574,8 @@ lemma IsManifold.mem_maximalAtlas_iff_contMDiffOn
    fun ⟨hφ, hφ'⟩ => φ.mem_maximalAtlas_of_contMDiffOn hφ hφ'⟩
 
 中文:
-引理 IsManifold.mem_maximalAtlas_iff_contMDiffOn
-  结论: [IsManifold I n M]
+引理 是流形.mem_maximalAtlas_iff_contMDiffOn
+  结论: [是流形 I n M]
   证明: ⟨fun h => ⟨contMDiffOn_of_mem_maximalAtlas h, contMDiffOn_symm_of_mem_maximalAtlas h⟩,
    fun ⟨hφ, hφ'⟩ => φ.mem_maximalAtlas_of_contMDiffOn hφ hφ'⟩
 

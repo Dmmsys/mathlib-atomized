@@ -47,10 +47,10 @@ inductive Independent
     - mk: (f : ι -> V) (hf : forall i : ι, f i != 0) (hl : LinearIndependent K f) : Independent fun i => mk K (f i) (hf i)
 
 中文:
-归纳类型 Independent
+归纳类型 独立
   参数: : (ι -> ℙ K V) -> 命题
   构造子 (1 个):
-    - mk: (f : ι -> V) (hf : 对任意 i : ι, f i != 0) (hl : LinearIndependent K f) : Independent fun i => mk K (f i) (hf i)
+    - mk: (f : ι -> V) (hf : 对任意 i : ι, f i != 0) (hl : LinearIndependent K f) : 独立 fun i => mk K (f i) (hf i)
 -/
 inductive Independent : (ι -> ℙ K V) -> Prop
   | mk (f : ι -> V) (hf : forall i : ι, f i != 0) (hl : LinearIndependent K f) :
@@ -76,7 +76,7 @@ theorem independent_iff
 
 中文:
 定理 independent_iff
-  结论: Independent f ↔ LinearIndependent K (Projectivization.rep ∘ f)
+  结论: 独立 f ↔ LinearIndependent K (Projectivization.rep ∘ f)
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨ff, hff, hh⟩
@@ -120,7 +120,7 @@ theorem independent_iff_iSupIndep
 
 中文:
 定理 independent_iff_iSupIndep
-  结论: Independent f ↔ iSupIndep fun i => (f i).submodule
+  结论: 独立 f ↔ iSupIndep fun i => (f i).submodule
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨f, hf, hi⟩
@@ -215,7 +215,7 @@ theorem dependent_iff_not_independent
 
 中文:
 定理 dependent_iff_not_independent
-  结论: Dependent f ↔ ¬Independent f
+  结论: Dependent f ↔ ¬独立 f
   证明: by
   rw [dependent_iff]; rw [independent_iff]
 
@@ -235,7 +235,7 @@ theorem independent_iff_not_dependent
 
 中文:
 定理 independent_iff_not_dependent
-  结论: Independent f ↔ ¬Dependent f
+  结论: 独立 f ↔ ¬Dependent f
   证明: by
   rw [dependent_iff_not_independent]; rw [Classical.not_not]
 
@@ -295,7 +295,7 @@ theorem independent_pair_iff_ne
 中文:
 定理 independent_pair_iff_ne
   条件: (u v : ℙ K V)
-  结论: Independent ![u, v] ↔ u != v
+  结论: 独立 ![u, v] ↔ u != v
   证明: by
   rw [independent_iff_not_dependent]; rw [dependent_pair_iff_eq u v]
 

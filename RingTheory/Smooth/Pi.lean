@@ -42,7 +42,7 @@ theorem of_pi
 
 中文:
 定理 of_pi
-  条件: [FormallySmooth R (Π i, A i)] (i)
+  条件: [形式光滑 R (Π i, A i)] (i)
   证明: by
   classical
   fapply FormallySmooth.of_split (Pi.evalAlgHom R A i)
@@ -91,7 +91,7 @@ theorem pi_iff
 
 中文:
 定理 pi_iff
-  条件: [Finite I]
+  条件: [有限 I]
   证明: by
   classical
   cases nonempty_fintype I
@@ -183,8 +183,8 @@ instance [Finite
   body: (pi_iff _).mpr ‹_›
 
 中文:
-实例 [Finite
-  签名: I] [对任意 i, FormallySmooth R (A i)] : FormallySmooth R (Π i, A i)
+实例 [有限
+  签名: I] [对任意 i, 形式光滑 R (A i)] : 形式光滑 R (Π i, A i)
   定义体: (pi_iff _).mpr ‹_›
 
 Depends on / 依赖: pi_iff

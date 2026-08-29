@@ -233,7 +233,7 @@ lemma sigmoid_strictMono
 
 中文:
 引理 sigmoid_strictMono
-  结论: StrictMono sigmoid
+  结论: 严格递增 sigmoid
   证明: fun a b hab => by
   simp only [sigmoid]
   gcongr
@@ -345,7 +345,7 @@ lemma sigmoid_monotone
 
 中文:
 引理 sigmoid_monotone
-  结论: Monotone sigmoid
+  结论: 递增 sigmoid
   证明: sigmoid_strictMono.monotone
 
 Depends on / 依赖: monotone, sigmoid_strictMono, sigmoid_strictMono.monotone
@@ -364,7 +364,7 @@ lemma sigmoid_injective
 
 中文:
 引理 sigmoid_injective
-  结论: Function.Injective sigmoid
+  结论: 函数.单射 sigmoid
   证明: sigmoid_strictMono.injective
 
 @[simp]
@@ -463,7 +463,7 @@ lemma range_sigmoid
 
 中文:
 引理 range_sigmoid
-  结论: range 实数.sigmoid = Ioo 0 1
+  结论: range 实数.sigmoid = 开区间 0 1
   证明: by
   refine subset_antisymm ?_ fun x hx => ?_
   · rintro - ⟨x, rfl⟩
@@ -496,7 +496,7 @@ lemma tendsto_sigmoid_atTop
 
 中文:
 引理 tendsto_sigmoid_atTop
-  结论: Tendsto sigmoid atTop (𝓝 1)
+  结论: 收敛 sigmoid atTop (𝓝 1)
   证明: by
 .inv₀ .const_add 1 simpa using! Real.tendsto_exp_comp_nhds_zero.mpr tendsto_neg_atTop_atBot
     by norm_num
@@ -518,7 +518,7 @@ lemma tendsto_sigmoid_atBot
 
 中文:
 引理 tendsto_sigmoid_atBot
-  结论: Tendsto sigmoid atBot (𝓝 0)
+  结论: 收敛 sigmoid atBot (𝓝 0)
   证明: tendsto_const_nhds.add_atTop (tendsto_exp_comp_atTop.mpr tendsto_neg_atBot_atTop)
 .inv_tendsto_atTop
 
@@ -656,7 +656,7 @@ lemma analyticOnNhd_sigmoid
 
 中文:
 引理 analyticOnNhd_sigmoid
-  结论: AnalyticOnNhd 实数 sigmoid Set.univ
+  结论: AnalyticOnNhd 实数 sigmoid 集合.univ
   证明: fun _ _ => analyticAt_sigmoid
 
 Depends on / 依赖: analyticAt_sigmoid
@@ -694,7 +694,7 @@ lemma analyticOn_sigmoid
 
 中文:
 引理 analyticOn_sigmoid
-  结论: AnalyticOn 实数 sigmoid Set.univ
+  结论: AnalyticOn 实数 sigmoid 集合.univ
   证明: analyticOnNhd_sigmoid.analyticOn
 
 Depends on / 依赖: analyticOn, analyticOnNhd_sigmoid, analyticOnNhd_sigmoid.analyticOn
@@ -733,7 +733,7 @@ lemma analyticWithinAt_sigmoid
 
 中文:
 引理 analyticWithinAt_sigmoid
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 sigmoid s x
   证明: analyticAt_sigmoid.analyticWithinAt
 
@@ -772,7 +772,7 @@ lemma contDiff_sigmoid
 
 中文:
 引理 contDiff_sigmoid
-  结论: ContDiff 实数 ω sigmoid
+  结论: 连续可微 实数 ω sigmoid
   证明: analyticOn_sigmoid.contDiff
 
 Depends on / 依赖: analyticOn_sigmoid, analyticOn_sigmoid.contDiff, contDiff
@@ -793,9 +793,9 @@ lemma ContDiff.sigmoid
 @[fun_prop]
 
 中文:
-引理 ContDiff.sigmoid
-  条件: (hf : ContDiff 实数 ω f)
-  结论: ContDiff 实数 ω (sigmoid ∘ f)
+引理 连续可微.sigmoid
+  条件: (hf : 连续可微 实数 ω f)
+  结论: 连续可微 实数 ω (sigmoid ∘ f)
   证明: contDiff_sigmoid.comp hf
 
 @[fun_prop]
@@ -818,7 +818,7 @@ lemma differentiable_sigmoid
 
 中文:
 引理 differentiable_sigmoid
-  结论: Differentiable 实数 sigmoid
+  结论: 可微 实数 sigmoid
   证明: .differentiable_one contDiff_sigmoid.of_le le_top
 
 @[fun_prop]
@@ -841,9 +841,9 @@ lemma Differentiable.sigmoid
 @[fun_prop]
 
 中文:
-引理 Differentiable.sigmoid
-  条件: (hf : Differentiable 实数 f)
-  结论: Differentiable 实数 (sigmoid ∘ f)
+引理 可微.sigmoid
+  条件: (hf : 可微 实数 f)
+  结论: 可微 实数 (sigmoid ∘ f)
   证明: differentiable_sigmoid.comp hf
 
 @[fun_prop]
@@ -915,7 +915,7 @@ omit [NormedSpace Real E] in
 
 中文:
 引理 continuous_sigmoid
-  结论: Continuous sigmoid
+  结论: 连续 sigmoid
   证明: by
   apply Differentiable.continuous (𝕜 := Real) -- fun_prop can't choose `𝕜`
   fun_prop
@@ -941,9 +941,9 @@ lemma Continuous.sigmoid
   proof: continuous_sigmoid.comp hf
 
 中文:
-引理 Continuous.sigmoid
-  条件: (hf : Continuous f)
-  结论: Continuous (sigmoid ∘ f)
+引理 连续.sigmoid
+  条件: (hf : 连续 f)
+  结论: 连续 (sigmoid ∘ f)
   证明: continuous_sigmoid.comp hf
 
 Depends on / 依赖: continuous_sigmoid, continuous_sigmoid.comp
@@ -1033,7 +1033,7 @@ lemma sigmoid_strictMono
 
 中文:
 引理 sigmoid_strictMono
-  结论: StrictMono sigmoid
+  结论: 严格递增 sigmoid
   证明: Real.sigmoid_strictMono
 
 Depends on / 依赖: Real.sigmoid_strictMono, sigmoid_strictMono
@@ -1141,7 +1141,7 @@ lemma sigmoid_monotone
 
 中文:
 引理 sigmoid_monotone
-  结论: Monotone sigmoid
+  结论: 递增 sigmoid
   证明: sigmoid_strictMono.monotone
 
 Depends on / 依赖: monotone, sigmoid_strictMono, sigmoid_strictMono.monotone
@@ -1160,7 +1160,7 @@ lemma sigmoid_injective
 
 中文:
 引理 sigmoid_injective
-  结论: Function.Injective sigmoid
+  结论: 函数.单射 sigmoid
   证明: sigmoid_strictMono.injective
 
 @[simp]
@@ -1204,7 +1204,7 @@ lemma continuous_sigmoid
 
 中文:
 引理 continuous_sigmoid
-  结论: Continuous sigmoid
+  结论: 连续 sigmoid
   证明: _root_.continuous_sigmoid.subtype_mk _
 
 Depends on / 依赖: _root_, _root_.continuous_sigmoid.subtype_mk, continuous_sigmoid, subtype_mk
@@ -1251,7 +1251,7 @@ lemma range_sigmoid
 
 中文:
 引理 range_sigmoid
-  结论: range unit整数erval.sigmoid = Ioo 0 1
+  结论: range unit整数erval.sigmoid = 开区间 0 1
   证明: by
   rw [sigmoid]; rw [Subtype.range_coind]; rw [Real.range_sigmoid]
   ext
@@ -1276,7 +1276,7 @@ lemma tendsto_sigmoid_atTop
 
 中文:
 引理 tendsto_sigmoid_atTop
-  结论: Tendsto sigmoid atTop (𝓝 1)
+  结论: 收敛 sigmoid atTop (𝓝 1)
   证明: tendsto_subtype_rng.mpr Real.tendsto_sigmoid_atTop
 
 Depends on / 依赖: Real.tendsto_sigmoid_atTop, tendsto_sigmoid_atTop, tendsto_subtype_rng, tendsto_subtype_rng.mpr
@@ -1294,7 +1294,7 @@ lemma tendsto_sigmoid_atBot
 
 中文:
 引理 tendsto_sigmoid_atBot
-  结论: Tendsto sigmoid atBot (𝓝 0)
+  结论: 收敛 sigmoid atBot (𝓝 0)
   证明: tendsto_subtype_rng.mpr Real.tendsto_sigmoid_atBot
 
 Depends on / 依赖: Real.tendsto_sigmoid_atBot, tendsto_sigmoid_atBot, tendsto_subtype_rng, tendsto_subtype_rng.mpr
@@ -1336,8 +1336,8 @@ lemma Topology.isEmbedding_sigmoid
     fun a _ b _ _ => unitInterval.range_sigmoid ▸ Ioo_subset_Ioo a.2.1 b.2.2)
 
 中文:
-引理 Topology.isEmbedding_sigmoid
-  结论: IsEmbedding unit整数erval.sigmoid
+引理 拓扑.isEmbedding_sigmoid
+  结论: 是嵌入 unit整数erval.sigmoid
   证明: OrderEmbedding.sigmoid.isEmbedding_of_ordConnected (ordConnected_of_Ioo <|
     fun a _ b _ _ => unitInterval.range_sigmoid ▸ Ioo_subset_Ioo a.2.1 b.2.2)
 
@@ -1357,7 +1357,7 @@ lemma measurableEmbedding_sigmoid
 
 中文:
 引理 measurableEmbedding_sigmoid
-  结论: MeasurableEmbedding unit整数erval.sigmoid
+  结论: 可测嵌入 unit整数erval.sigmoid
   证明: Topology.isEmbedding_sigmoid.measurableEmbedding unitInterval.range_sigmoid ▸ measurableSet_Ioo
 
 Depends on / 依赖: Topology, Topology.isEmbedding_sigmoid.measurableEmbedding, isEmbedding_sigmoid, measurableEmbedding, measurableSet_Ioo, range_sigmoid, unitInterval, unitInterval.range_sigmoid
@@ -1375,7 +1375,7 @@ lemma measurableEmbedding_sigmoid_comp_embeddingReal
   proof: measurableEmbedding_sigmoid.comp (MeasureTheory.measurableEmbedding_embeddingReal α)
 
 中文:
-引理 measurableEmbedding_sigmoid_comp_embeddingReal
+引理 measurableEmbedding_sigmoid_comp_embedding实数
   证明: measurableEmbedding_sigmoid.comp (MeasureTheory.measurableEmbedding_embeddingReal α)
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.measurableEmbedding_embeddingReal, measurableEmbedding_embeddingReal, measurableEmbedding_sigmoid, measurableEmbedding_sigmoid.comp

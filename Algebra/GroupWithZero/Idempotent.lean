@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero { p : M₀ // IsIdempotentElem p }
+  签名: 零 { p : M₀ // IsIdempotentElem p }
   定义体: ⟨0, zero⟩
 -/
 instance : Zero { p : M₀ // IsIdempotentElem p } where zero := ⟨0, zero⟩

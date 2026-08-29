@@ -58,7 +58,7 @@ definition extendRCLike
 
 中文:
 定义 extendRCLike
-  签名: (fr : Dual 实数 F)
+  签名: (fr : 对偶 实数 F)
   定义体: letI fc : F -> 𝕜 := fun x => (fr x : 𝕜) - (I : 𝕜) * fr ((I : 𝕜) • x)
   have add (x y) : fc (x + y) = fc x + fc y := by
     simp only [fc, smul_add, map_add, mul_add]
@@ -99,7 +99,7 @@ theorem extendRCLike_apply
 
 中文:
 定理 extendRCLike_apply
-  条件: (fr : Dual 实数 F) (x : F)
+  条件: (fr : 对偶 实数 F) (x : F)
   证明: rfl
 
 @[simp]
@@ -122,7 +122,7 @@ theorem re_extendRCLike_apply
 
 中文:
 定理 re_extendRCLike_apply
-  条件: (fr : Dual 实数 F) (x : F)
+  条件: (fr : 对偶 实数 F) (x : F)
   结论: re (fr.extendRCLike x : 𝕜) = fr x
   证明: by
   simp only [extendRCLike_apply, map_sub, zero_mul, mul_zero, sub_zero, rclike_simps]
@@ -147,7 +147,7 @@ lemma im_extendRCLike_apply
 
 中文:
 引理 im_extendRCLike_apply
-  条件: (g : Dual 实数 F) (x : F)
+  条件: (g : 对偶 实数 F) (x : F)
   证明: by
   obtain (h | h) := RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜)
   all_goals simp [h, extendRCLike_apply]
@@ -173,7 +173,7 @@ theorem norm_extendRCLike_apply_sq
 
 中文:
 定理 norm_extendRCLike_apply_sq
-  条件: (fr : Dual 实数 F) (x : F)
+  条件: (fr : 对偶 实数 F) (x : F)
   证明: calc
   ‖(fr.extendRCLike x : 𝕜)‖ ^ 2 = re (conj (fr.extendRCLike x) * fr.extendRCLike x : 𝕜) := by
     rw [RCLike.conj_mul]; rw [← ofReal_pow]; rw [ofReal_re]
@@ -204,7 +204,7 @@ definition extendRCLikeₗ
 
 中文:
 定义 extendRCLikeₗ
-  签名: : Dual 实数 F ≃ₗ[实数] Dual 𝕜 F where
+  签名: : 对偶 实数 F ≃ₗ[实数] 对偶 𝕜 F where
   定义体: extendRCLike (𝕜 := 𝕜)
   invFun f := RCLike.reLm.comp (f.restrictScalars Real)
   left_inv f := by ext; simp

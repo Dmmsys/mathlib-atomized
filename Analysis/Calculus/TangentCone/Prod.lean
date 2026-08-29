@@ -110,7 +110,7 @@ theorem UniqueDiffWithinAt.prod
   rw [LinearMap.span_in
 
 中文:
-定理 UniqueDiffWithinAt.prod
+定理 UniqueDiffWithinAt.乘积
   结论: (hs : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   rw [uniqueDiffWithinAt_iff] at hs ht ⊢
@@ -141,7 +141,7 @@ theorem UniqueDiffOn.prod
   proof: fun ⟨x, y⟩ h => UniqueDiffWithinAt.prod (hs x h.1) (ht y h.2)
 
 中文:
-定理 UniqueDiffOn.prod
+定理 UniqueDiffOn.乘积
   条件: (hs : UniqueDiffOn 𝕜 s) (ht : UniqueDiffOn 𝕜 t)
   证明: fun ⟨x, y⟩ h => UniqueDiffWithinAt.prod (hs x h.1) (ht y h.2)
 

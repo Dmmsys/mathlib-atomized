@@ -44,7 +44,7 @@ theorem iSup₂_iInf₂_le_iInf₂_iSup₂
 
 中文:
 定理 iSup₂_iInf₂_le_iInf₂_iSup₂
-  条件: [CompleteLinearOrder β]
+  条件: [完备线性序 β]
   证明: by
   rw [iSup₂_le_iff]; intro y hy
   rw [le_iInf₂_iff]; intro x hx
@@ -69,7 +69,7 @@ definition IsSaddlePointOn
 
 中文:
 定义 IsSaddlePointOn
-  签名: [Preorder β] (a : E) (b : F)
+  签名: [预序 β] (a : E) (b : F)
   定义体: forall x in X, forall y in Y, f a y <= f x b
 -/
 def IsSaddlePointOn [Preorder β] (a : E) (b : F) : Prop :=
@@ -88,7 +88,7 @@ lemma IsSaddlePointOn.swap_left
 
 中文:
 引理 IsSaddlePointOn.swap_left
-  结论: [Preorder β] {a a' : E} {b b' : F} (ha' : a' in X) (hb : b in Y)
+  结论: [预序 β] {a a' : E} {b b' : F} (ha' : a' in X) (hb : b in Y)
   证明: fun x hx y hy =>
   le_trans (h a' ha' y hy) (h' x hx b hb)
 -/
@@ -107,7 +107,7 @@ lemma IsSaddlePointOn.swap_right
 
 中文:
 引理 IsSaddlePointOn.swap_right
-  结论: [Preorder β] {a a' : E} {b b' : F} (ha : a in X) (hb' : b' in Y)
+  结论: [预序 β] {a a' : E} {b b' : F} (ha : a in X) (hb' : b' in Y)
   证明: IsSaddlePointOn.swap_left ha hb' h' h
 
 Depends on / 依赖: IsSaddlePointOn, IsSaddlePointOn.swap_left, swap_left
@@ -140,7 +140,7 @@ lemma isSaddlePointOn_iff
 
 中文:
 引理 isSaddlePointOn_iff
-  结论: [CompleteLinearOrder β]
+  结论: [完备线性序 β]
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨h, h'⟩ x hx y hy => ?_⟩
   · apply le_antisymm
@@ -199,7 +199,7 @@ lemma isSaddlePointOn_iff'
 
 中文:
 引理 isSaddlePointOn_iff'
-  结论: [CompleteLinearOrder β]
+  结论: [完备线性序 β]
   证明: by
   rw [isSaddlePointOn_iff ha hb]
   refine ⟨fun ⟨h, h'⟩ => ?_, fun h => ⟨?_, ?_⟩⟩
@@ -253,7 +253,7 @@ lemma isSaddlePointOn_value
 
 中文:
 引理 isSaddlePointOn_value
-  结论: [CompleteLinearOrder β]
+  结论: [完备线性序 β]
   证明: by
   rw [isSaddlePointOn_iff ha hb] at h
   constructor

@@ -143,7 +143,7 @@ definition lowerCrossingTimeAux
 
 中文:
 定义 lowerCrossingTimeAux
-  签名: [Preorder ι] [InfSet ι] (a : 实数) (f : ι -> Ω -> 实数) (c N : ι)
+  签名: [预序 ι] [下确界集 ι] (a : 实数) (f : ι -> Ω -> 实数) (c N : ι)
   定义体: hittingBtwn f (Set.Iic a) c N
 
 Depends on / 依赖: Set.Iic, hittingBtwn
@@ -161,7 +161,7 @@ definition upperCrossingTime
 
 中文:
 定义 upperCrossingTime
-  签名: [Preorder ι] [OrderBot ι] [InfSet ι] (a b : 实数) (f : ι -> Ω -> 实数)
+  签名: [预序 ι] [有底序 ι] [下确界集 ι] (a b : 实数) (f : ι -> Ω -> 实数)
 -/
 noncomputable def upperCrossingTime [Preorder ι] [OrderBot ι] [InfSet ι] (a b : Real) (f : ι -> Ω -> Real)
     (N : ι) : Nat -> Ω -> ι
@@ -179,7 +179,7 @@ definition lowerCrossingTime
 
 中文:
 定义 lowerCrossingTime
-  签名: [Preorder ι] [OrderBot ι] [InfSet ι] (a b : 实数) (f : ι -> Ω -> 实数)
+  签名: [预序 ι] [有底序 ι] [下确界集 ι] (a b : 实数) (f : ι -> Ω -> 实数)
   定义体: fun ω => hittingBtwn f (Set.Iic a) (upperCrossingTime a b f N n ω) N ω
 
 Depends on / 依赖: Set.Iic, hittingBtwn, upperCrossingTime
@@ -227,7 +227,7 @@ theorem lowerCrossingTime_zero
 
 中文:
 定理 lowerCrossingTime_zero
-  结论: lowerCrossingTime a b f N 0 = hittingBtwn f (Set.Iic a) ⊥ N
+  结论: lowerCrossingTime a b f N 0 = hittingBtwn f (集合.左无界右闭区间 a) ⊥ N
   证明: rfl
 -/
 theorem lowerCrossingTime_zero : lowerCrossingTime a b f N 0 = hittingBtwn f (Set.Iic a) ⊥ N :=
@@ -692,7 +692,7 @@ theorem exists_upperCrossingTime_eq
     ⟨upperCrossingTime a 
 
 中文:
-定理 exists_upperCrossingTime_eq
+定理 存在_upperCrossingTime_eq
   条件: (f : 自然数 -> Ω -> 实数) (N : 自然数) (ω : Ω) (hab : a < b)
   证明: by
   by_contra! h
@@ -1050,7 +1050,7 @@ theorem Submartingale.sum_upcrossingStrat_mul
 
 中文:
 定理 Submartingale.sum_upcrossingStrat_mul
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: hf.sum_mul_sub hf.stronglyAdapted.upcrossingStrat (fun _ _ => upcrossingStrat_le_one) fun _ _ =>
     upcrossingStrat_nonneg
 
@@ -1078,7 +1078,7 @@ theorem Submartingale.sum_sub_upcrossingStrat_mul
 
 中文:
 定理 Submartingale.sum_sub_upcrossingStrat_mul
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   refine hf.sum_mul_sub
     (fun n => (stronglyAdapted_const ℱ 1 n).sub (hf.stronglyAdapted.upcrossingStrat n))
@@ -1115,7 +1115,7 @@ theorem Submartingale.sum_mul_upcrossingStrat_le
 
 中文:
 定理 Submartingale.sum_mul_upcrossingStrat_le
-  条件: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  条件: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   have h₁ : (0 : Real) <=
       μ[∑ k in Finset.range n, (1 - upcrossingStrat a b f N k) * (f (k + 1) - f k)] := by
@@ -1159,7 +1159,7 @@ definition upcrossingsBefore
 
 中文:
 定义 upcrossingsBefore
-  签名: [Preorder ι] [OrderBot ι] [InfSet ι] (a b : 实数) (f : ι -> Ω -> 实数)
+  签名: [预序 ι] [有底序 ι] [下确界集 ι] (a b : 实数) (f : ι -> Ω -> 实数)
   定义体: sSup {n | upperCrossingTime a b f N n ω < N}
 
 @[simp]
@@ -1181,7 +1181,7 @@ theorem upcrossingsBefore_bot
 
 中文:
 定理 upcrossingsBefore_bot
-  结论: [Preorder ι] [OrderBot ι] [InfSet ι] {a b : 实数} {f : ι -> Ω -> 实数}
+  结论: [预序 ι] [有底序 ι] [下确界集 ι] {a b : 实数} {f : ι -> Ω -> 实数}
   证明: by simp [upcrossingsBefore]
 
 Depends on / 依赖: upcrossingsBefore
@@ -1470,7 +1470,7 @@ theorem upcrossingsBefore_mono
 中文:
 定理 upcrossingsBefore_mono
   条件: (hab : a < b)
-  结论: Monotone fun N ω => upcrossingsBefore a b f N ω
+  结论: 递增 fun N ω => upcrossingsBefore a b f N ω
   证明: by
   intro N M hNM ω
   simp only [upcrossingsBefore]
@@ -1504,7 +1504,7 @@ theorem upcrossingsBefore_lt_of_exists_upcrossing
   rw [lowerCrossingTime]; rw [hittingBtwn_le_iff_of_lt _ (Nat.
 
 中文:
-定理 upcrossingsBefore_lt_of_exists_upcrossing
+定理 upcrossingsBefore_lt_of_存在_upcrossing
   结论: (hab : a < b) {N₁ N₂ : 自然数} (hN₁ : N <= N₁)
   证明: by
   refine lt_of_lt_of_le (Nat.lt_succ_self _) (le_csSup (upperCrossingTime_lt_bddAbove hab) ?_)
@@ -1713,7 +1713,7 @@ theorem integral_mul_upcrossingsBefore_le_integral
 
 中文:
 定理 integral_mul_upcrossingsBefore_le_integral
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: calc
     (b - a) * μ[upcrossingsBefore a b f N] <=
         μ[∑ k in Finset.range N, upcrossingStrat a b f N k * (f (k + 1) - f k)] := by
@@ -1846,7 +1846,7 @@ theorem mul_integral_upcrossingsBefore_le_integral_pos_part_aux
 
 中文:
 定理 mul_integral_upcrossingsBefore_le_integral_pos_part_aux
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   refine le_trans (le_of_eq ?_)
     (integral_mul_upcrossingsBefore_le_integral (hf.sub_martingale (martingale_const _ _ _)).pos
@@ -1882,7 +1882,7 @@ theorem Submartingale.mul_integral_upcrossingsBefore_le_integral_pos_part
 
 中文:
 定理 Submartingale.mul_integral_upcrossingsBefore_le_integral_pos_part
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   by_cases! hab : a < b
   · exact mul_integral_upcrossingsBefore_le_integral_pos_part_aux hf hab
@@ -2010,7 +2010,7 @@ theorem StronglyAdapted.integrable_upcrossingsBefore
 
 中文:
 定理 StronglyAdapted.integrable_upcrossingsBefore
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: haveI : forallᵐ ω ∂μ, ‖(upcrossingsBefore a b f N ω : Real)‖ <= N := by
     filter_upwards with ω
     rw [Real.norm_eq_abs]; rw [Nat.abs_cast]; rw [Nat.cast_le]
@@ -2039,7 +2039,7 @@ definition upcrossings
 
 中文:
 定义 upcrossings
-  签名: [Preorder ι] [OrderBot ι] [InfSet ι] (a b : 实数) (f : ι -> Ω -> 实数)
+  签名: [预序 ι] [有底序 ι] [下确界集 ι] (a b : 实数) (f : ι -> Ω -> 实数)
   定义体: ⨆ N, (upcrossingsBefore a b f N ω : Real>=0∞)
 
 Depends on / 依赖: upcrossingsBefore
@@ -2130,7 +2130,7 @@ theorem Submartingale.mul_lintegral_upcrossings_le_lintegral_pos_part
 
 中文:
 定理 Submartingale.mul_lintegral_upcrossings_le_lintegral_pos_part
-  结论: [IsFiniteMeasure μ] (a b : 实数)
+  结论: [是有限测度 μ] (a b : 实数)
   证明: by
   by_cases! hab : a < b
   · simp_rw [upcrossings]

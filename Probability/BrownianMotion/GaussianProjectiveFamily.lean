@@ -64,7 +64,7 @@ definition covMatrix
 
 中文:
 定义 covMatrix
-  签名: (I : Finset 实数>=0)
+  签名: (I : 有限集 实数>=0)
   定义体: .of fun s t => min s t
 
 @[simp]
@@ -120,7 +120,7 @@ lemma posSemidef_covMatrix
 
 中文:
 引理 posSemidef_covMatrix
-  条件: (I : Finset 实数>=0)
+  条件: (I : 有限集 实数>=0)
   证明: by
   have : covMatrix I = .of fun s t => volume.real ((Icc 0 s.1.1) inter (Icc 0 t.1.1)) := by
     ext; simp [Icc_inter_Icc]
@@ -148,7 +148,7 @@ definition projectiveFamily
 
 中文:
 定义 projectiveFamily
-  签名: (I : Finset 实数>=0)
+  签名: (I : 有限集 实数>=0)
   定义体: .map (MeasurableEquiv.toLp 2 (I -> Real)).symm multivariateGaussian 0 (covMatrix I)
 
 Depends on / 依赖: CanLift, MeasurableEquiv, MeasurableEquiv.toLp, NonUnitalSubring, covMatrix, multivariateGaussian
@@ -167,7 +167,7 @@ lemma measurePreserving_ofLp_multivariateGaussian
 
 中文:
 引理 measurePreserving_ofLp_multivariateGaussian
-  条件: (I : Finset 实数>=0)
+  条件: (I : 有限集 实数>=0)
   证明: by fun_prop
   map_eq := rfl
 
@@ -193,7 +193,7 @@ lemma measurePreserving_toLp_projectiveFamily
 
 中文:
 引理 measurePreserving_toLp_projectiveFamily
-  条件: (I : Finset 实数>=0)
+  条件: (I : 有限集 实数>=0)
   证明: by fun_prop
   map_eq := by
     rw [projectiveFamily]; rw [Measure.map_map]
@@ -224,7 +224,7 @@ lemma integral_projectiveFamily
 
 中文:
 引理 integral_projectiveFamily
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   simp [projectiveFamily, integral_map_equiv]
 
@@ -253,7 +253,7 @@ lemma covariance_projectiveFamily
 
 中文:
 引理 covariance_projectiveFamily
-  条件: (I : Finset 实数>=0) (f g : (I -> 实数) -> 实数)
+  条件: (I : 有限集 实数>=0) (f g : (I -> 实数) -> 实数)
   证明: by
   rw [projectiveFamily]; rw [covariance_map_equiv]
   rfl
@@ -281,7 +281,7 @@ lemma variance_projectiveFamily
 
 中文:
 引理 variance_projectiveFamily
-  条件: (I : Finset 实数>=0) (f : (I -> 实数) -> 实数)
+  条件: (I : 有限集 实数>=0) (f : (I -> 实数) -> 实数)
   证明: by
   rw [projectiveFamily]; rw [variance_map_equiv]
   rfl
@@ -308,7 +308,7 @@ instance isGaussian_projectiveFamily
 
 中文:
 实例 isGaussian_projectiveFamily
-  签名: (I : Finset 实数>=0)
+  签名: (I : 有限集 实数>=0)
   定义体: by
   rw [projectiveFamily]; rw [show ⇑(MeasurableEquiv.toLp 2 (I -> Real)).symm = ⇑(EuclideanSpace.equiv I Real) from rfl]
   infer_instance
@@ -334,7 +334,7 @@ lemma integral_id_projectiveFamily
 
 中文:
 引理 integral_id_projectiveFamily
-  条件: (I : Finset 实数>=0)
+  条件: (I : 有限集 实数>=0)
   证明: by
   rw [integral_projectiveFamily]; rw [← PiLp.coe_continuousLinearEquiv 2 Real]; rw [ContinuousLinearEquiv.integral_comp_id_comm]; rw [integral_id_multivariateGaussian]; rw [map_zero]
 
@@ -356,7 +356,7 @@ lemma integral_id_projectiveFamily'
 
 中文:
 引理 integral_id_projectiveFamily'
-  条件: (I : Finset 实数>=0)
+  条件: (I : 有限集 实数>=0)
   证明: integral_id_projectiveFamily I
 
 @[simp]
@@ -380,7 +380,7 @@ lemma integral_eval_projectiveFamily
 
 中文:
 引理 integral_eval_projectiveFamily
-  条件: (I : Finset 实数>=0) (s : I)
+  条件: (I : 有限集 实数>=0) (s : I)
   证明: by
   conv => enter [1, 2]; change fun x => ContinuousLinearMap.proj (R := Real) s x
   rw [ContinuousLinearMap.integral_comp_id_comm]; rw [integral_id_projectiveFamily]; rw [map_zero]
@@ -405,7 +405,7 @@ lemma covariance_eval_projectiveFamily
 
 中文:
 引理 covariance_eval_projectiveFamily
-  条件: (I : Finset 实数>=0) (s t : I)
+  条件: (I : 有限集 实数>=0) (s t : I)
   证明: by
   rw [covariance_fun_projectiveFamily]; rw [covariance_eval_multivariateGaussian (posSemidef_covMatrix I)]; rw [covMatrix_apply]
 
@@ -480,7 +480,7 @@ lemma measurePreserving_eval_sub_eval_projectiveFamily
 
 中文:
 引理 measurePreserving_eval_sub_eval_projectiveFamily
-  条件: (I : Finset 实数>=0) (s t : I)
+  条件: (I : 有限集 实数>=0) (s t : I)
   证明: by fun_prop
   map_eq := by
     rw [HasGaussianLaw.map_eq_gaussianReal]; rw [variance_fun_sub]; rw [variance_eval_projectiveFamily]; rw [variance_eval_projectiveFamily]; rw [covariance_eval_projectiveFamily]; rw [integral_sub]

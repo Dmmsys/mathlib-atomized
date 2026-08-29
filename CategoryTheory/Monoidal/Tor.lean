@@ -99,7 +99,7 @@ lemma isZero_Tor_succ_of_projective
 
 中文:
 引理 isZero_Tor_succ_of_projective
-  条件: (X Y : C) [Projective Y] (n : 自然数)
+  条件: (X Y : C) [投射 Y] (n : 自然数)
   证明: by
   apply Functor.isZero_leftDerived_obj_projective_succ
 
@@ -120,7 +120,7 @@ lemma isZero_Tor'_succ_of_projective
 
 中文:
 引理 isZero_Tor'_succ_of_projective
-  条件: (X Y : C) [Projective X] (n : 自然数)
+  条件: (X Y : C) [投射 X] (n : 自然数)
   证明: by
   apply Functor.isZero_leftDerived_obj_projective_succ
 

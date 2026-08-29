@@ -45,10 +45,10 @@ class IsOpenPosMeasure
     - open_pos : forall U : Set X, IsOpen U -> U.Nonempty -> μ U != 0
 
 中文:
-类 IsOpenPosMeasure
+类 是OpenPosMeasure
   参数: : 命题 where
   公理与运算 (1 个):
-    - open_pos : 对任意 U : Set X, IsOpen U -> U.Nonempty -> μ U != 0
+    - open_pos : 对任意 U : 集合 X, 是开集 U -> U.非空 -> μ U != 0
 -/
 class IsOpenPosMeasure : Prop where
   open_pos : forall U : Set X, IsOpen U -> U.Nonempty -> μ U != 0
@@ -65,8 +65,8 @@ theorem _root_.IsOpen.measure_ne_zero
   proof: IsOpenPosMeasure.open_pos U hU hne
 
 中文:
-定理 _root_.IsOpen.measure_ne_zero
-  条件: (hU : IsOpen U) (hne : U.Nonempty)
+定理 _root_.是开集.measure_ne_zero
+  条件: (hU : 是开集 U) (hne : U.非空)
   结论: μ U != 0
   证明: IsOpenPosMeasure.open_pos U hU hne
 
@@ -85,8 +85,8 @@ theorem _root_.IsOpen.measure_pos
   proof: (hU.measure_ne_zero μ hne).bot_lt
 
 中文:
-定理 _root_.IsOpen.measure_pos
-  条件: (hU : IsOpen U) (hne : U.Nonempty)
+定理 _root_.是开集.measure_pos
+  条件: (hU : 是开集 U) (hne : U.非空)
   结论: 0 < μ U
   证明: (hU.measure_ne_zero μ hne).bot_lt
 
@@ -108,9 +108,9 @@ theorem _root_.IsOpen.measure_pos_iff
   proof: ⟨fun h => nonempty_iff_ne_empty.2 fun he => h.ne' he.symm ▸ measure_empty, hU.measure_pos μ⟩
 
 中文:
-定理 _root_.IsOpen.measure_pos_iff
-  条件: (hU : IsOpen U)
-  结论: 0 < μ U ↔ U.Nonempty
+定理 _root_.是开集.measure_pos_iff
+  条件: (hU : 是开集 U)
+  结论: 0 < μ U ↔ U.非空
   证明: ⟨fun h => nonempty_iff_ne_empty.2 fun he => h.ne' he.symm ▸ measure_empty, hU.measure_pos μ⟩
 
 Depends on / 依赖: h.ne, hU.measure_pos, he.symm, measure_empty, measure_pos, nonempty_iff_ne_empty
@@ -130,8 +130,8 @@ theorem _root_.IsOpen.measure_eq_zero_iff
     not_congr (hU.measure_pos_iff μ)
 
 中文:
-定理 _root_.IsOpen.measure_eq_zero_iff
-  条件: (hU : IsOpen U)
+定理 _root_.是开集.measure_eq_zero_iff
+  条件: (hU : 是开集 U)
   结论: μ U = 0 ↔ U = ∅
   证明: by
   simpa only [not_lt, nonpos_iff_eq_zero, not_nonempty_iff_eq_empty] using
@@ -154,7 +154,7 @@ theorem measure_pos_of_nonempty_interior
 
 中文:
 定理 measure_pos_of_nonempty_interior
-  条件: (h : (interior s).Nonempty)
+  条件: (h : (interior s).非空)
   结论: 0 < μ s
   证明: (isOpen_interior.measure_pos μ h).trans_le (measure_mono interior_subset)
 
@@ -195,7 +195,7 @@ theorem isOpenPosMeasure_smul
 中文:
 定理 isOpenPosMeasure_smul
   条件: {c : 实数>=0∞} (h : c != 0)
-  结论: IsOpenPosMeasure (c • μ)
+  结论: 是OpenPosMeasure (c • μ)
   证明: ⟨fun _U Uo Une => mul_ne_zero h (Uo.measure_ne_zero μ Une)⟩
 
 Depends on / 依赖: Uo.measure_ne_zero, measure_ne_zero, mul_ne_zero
@@ -217,7 +217,7 @@ theorem AbsolutelyContinuous.isOpenPosMeasure
 中文:
 定理 AbsolutelyContinuous.isOpenPosMeasure
   条件: (h : μ ≪ ν)
-  结论: IsOpenPosMeasure ν
+  结论: 是OpenPosMeasure ν
   证明: ⟨fun _U ho hne h₀ => ho.measure_ne_zero μ hne (h h₀)⟩
 -/
 protected theorem AbsolutelyContinuous.isOpenPosMeasure (h : μ ≪ ν) : IsOpenPosMeasure ν :=
@@ -235,7 +235,7 @@ theorem _root_.LE.le.isOpenPosMeasure
 中文:
 定理 _root_.LE.le.isOpenPosMeasure
   条件: (h : μ <= ν)
-  结论: IsOpenPosMeasure ν
+  结论: 是OpenPosMeasure ν
   证明: h.absolutelyContinuous.isOpenPosMeasure
 
 Depends on / 依赖: absolutelyContinuous, h.absolutelyContinuous.isOpenPosMeasure, isOpenPosMeasure
@@ -252,8 +252,8 @@ theorem _root_.IsOpen.measure_zero_iff_eq_empty
   proof: ⟨fun h => (hU.measure_eq_zero_iff μ).mp h, fun h => by simp [h]⟩
 
 中文:
-定理 _root_.IsOpen.measure_zero_iff_eq_empty
-  条件: (hU : IsOpen U)
+定理 _root_.是开集.measure_zero_iff_eq_empty
+  条件: (hU : 是开集 U)
   证明: ⟨fun h => (hU.measure_eq_zero_iff μ).mp h, fun h => by simp [h]⟩
 
 Depends on / 依赖: hU.measure_eq_zero_iff, measure_eq_zero_iff
@@ -272,8 +272,8 @@ theorem _root_.IsOpen.ae_eq_empty_iff_eq
   rw [ae_eq_empty]; rw [hU.measure_zero_iff_eq_empty]
 
 中文:
-定理 _root_.IsOpen.ae_eq_empty_iff_eq
-  条件: (hU : IsOpen U)
+定理 _root_.是开集.ae_eq_empty_iff_eq
+  条件: (hU : 是开集 U)
   证明: by
   rw [ae_eq_empty]; rw [hU.measure_zero_iff_eq_empty]
 
@@ -293,8 +293,8 @@ theorem _root_.IsOpen.eq_empty_of_measure_zero
   proof: (hU.measure_eq_zero_iff μ).mp h₀
 
 中文:
-定理 _root_.IsOpen.eq_empty_of_measure_zero
-  条件: (hU : IsOpen U) (h₀ : μ U = 0)
+定理 _root_.是开集.eq_empty_of_measure_zero
+  条件: (hU : 是开集 U) (h₀ : μ U = 0)
   结论: U = ∅
   证明: (hU.measure_eq_zero_iff μ).mp h₀
 
@@ -315,8 +315,8 @@ theorem _root_.IsClosed.ae_eq_univ_iff_eq
   rwa [ae_eq_univ, hF.isOpen_compl.measure_eq_zero_iff μ, compl_empty_iff] at h
 
 中文:
-定理 _root_.IsClosed.ae_eq_univ_iff_eq
-  条件: (hF : IsClosed F)
+定理 _root_.是闭集.ae_eq_univ_iff_eq
+  条件: (hF : 是闭集 F)
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [h]⟩
   rwa [ae_eq_univ, hF.isOpen_compl.measure_eq_zero_iff μ, compl_empty_iff] at h
@@ -338,8 +338,8 @@ theorem _root_.IsClosed.measure_eq_univ_iff_eq
   rw [← ae_eq_univ_iff_measure_eq hF.measurableSet.nullMeasurableSet]; rw [hF.ae_eq_univ_iff_eq]
 
 中文:
-定理 _root_.IsClosed.measure_eq_univ_iff_eq
-  结论: [OpensMeasurableSpace X] [IsFiniteMeasure μ]
+定理 _root_.是闭集.measure_eq_univ_iff_eq
+  结论: [OpensMeasurable空间 X] [是有限测度 μ]
   证明: by
   rw [← ae_eq_univ_iff_measure_eq hF.measurableSet.nullMeasurableSet]; rw [hF.ae_eq_univ_iff_eq]
 
@@ -360,8 +360,8 @@ theorem _root_.IsClosed.measure_eq_one_iff_eq_univ
   rw [← measure_univ (μ := μ)]; rw [hF.measure_eq_univ_iff_eq]
 
 中文:
-定理 _root_.IsClosed.measure_eq_one_iff_eq_univ
-  结论: [OpensMeasurableSpace X] [IsProbabilityMeasure μ]
+定理 _root_.是闭集.measure_eq_one_iff_eq_univ
+  结论: [OpensMeasurable空间 X] [是概率测度 μ]
   证明: by
   rw [← measure_univ (μ := μ)]; rw [hF.measure_eq_univ_iff_eq]
 
@@ -406,7 +406,7 @@ theorem dense_of_ae
 中文:
 定理 dense_of_ae
   条件: {p : X -> 命题} (hp : 对任意ᵐ x ∂μ, p x)
-  结论: Dense {x | p x}
+  结论: 稠密 {x | p x}
   证明: by
   rw [dense_iff_closure_eq]; rw [closure_eq_compl_interior_compl]; rw [compl_univ_iff]
   exact μ.interior_eq_empty_of_null hp
@@ -434,7 +434,7 @@ theorem eqOn_open_of_ae_eq
 
 中文:
 定理 eqOn_open_of_ae_eq
-  结论: {f g : X -> Y} (h : f =ᵐ[μ.restrict U] g) (hU : IsOpen U)
+  结论: {f g : X -> Y} (h : f =ᵐ[μ.restrict U] g) (hU : 是开集 U)
   证明: by
   replace h := ae_imp_of_ae_restrict h
   simp only [ae_iff, Classical.not_imp] at h
@@ -471,7 +471,7 @@ theorem eq_of_ae_eq
 
 中文:
 定理 eq_of_ae_eq
-  条件: {f g : X -> Y} (h : f =ᵐ[μ] g) (hf : Continuous f) (hg : Continuous g)
+  条件: {f g : X -> Y} (h : f =ᵐ[μ] g) (hf : 连续 f) (hg : 连续 g)
   结论: f = g
   证明: suffices EqOn f g univ from funext fun _ => this trivial
   eqOn_open_of_ae_eq (ae_restrict_of_ae h) isOpen_univ hf.continuousOn hg.continuousOn
@@ -520,8 +520,8 @@ theorem _root_.Continuous.ae_eq_iff_eq
   proof: ⟨fun h => eq_of_ae_eq h hf hg, fun h => h ▸ EventuallyEq.rfl⟩
 
 中文:
-定理 _root_.Continuous.ae_eq_iff_eq
-  条件: {f g : X -> Y} (hf : Continuous f) (hg : Continuous g)
+定理 _root_.连续.ae_eq_iff_eq
+  条件: {f g : X -> Y} (hf : 连续 f) (hg : 连续 g)
   证明: ⟨fun h => eq_of_ae_eq h hf hg, fun h => h ▸ EventuallyEq.rfl⟩
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, eq_of_ae_eq
@@ -542,8 +542,8 @@ theorem _root_.Continuous.isOpenPosMeasure_map
   exact (hUo.preimage hf).measure_ne_zero μ (hf_surj.nonempty_preimage.mpr hUne)
 
 中文:
-定理 _root_.Continuous.isOpenPosMeasure_map
-  结论: [OpensMeasurableSpace X]
+定理 _root_.连续.isOpenPosMeasure_map
+  结论: [OpensMeasurable空间 X]
   证明: by
   refine ⟨fun U hUo hUne => ?_⟩
   rw [Measure.map_apply hf.measurable hUo.measurableSet]
@@ -570,8 +570,8 @@ theorem IsOpenPosMeasure.comap
     exact IsOpenPosMeasure.open_pos _ (hf.isOpen_iff_image_isOpen.mp hU) (Une.image f)
 
 中文:
-定理 IsOpenPosMeasure.comap
-  结论: [BorelSpace X]
+定理 是OpenPosMeasure.comap
+  结论: [Borel空间 X]
   证明: by
     rw [hf.measurableEmbedding.comap_apply]
     exact IsOpenPosMeasure.open_pos _ (hf.isOpen_iff_image_isOpen.mp hU) (Une.image f)
@@ -602,8 +602,8 @@ theorem measure_Ioi_pos
 
 中文:
 定理 measure_Ioi_pos
-  条件: [NoMaxOrder X] (a : X)
-  结论: 0 < μ (Ioi a)
+  条件: [NoMax序 X] (a : X)
+  结论: 0 < μ (左开右无界区间 a)
   证明: isOpen_Ioi.measure_pos μ nonempty_Ioi
 
 Depends on / 依赖: isOpen_Ioi, isOpen_Ioi.measure_pos, measure_pos, nonempty_Ioi
@@ -622,8 +622,8 @@ theorem measure_Iio_pos
 
 中文:
 定理 measure_Iio_pos
-  条件: [NoMinOrder X] (a : X)
-  结论: 0 < μ (Iio a)
+  条件: [NoMin序 X] (a : X)
+  结论: 0 < μ (左无界右开区间 a)
   证明: isOpen_Iio.measure_pos μ nonempty_Iio
 
 Depends on / 依赖: isOpen_Iio, isOpen_Iio.measure_pos, measure_pos, nonempty_Iio
@@ -642,8 +642,8 @@ theorem measure_Ioo_pos
 
 中文:
 定理 measure_Ioo_pos
-  条件: [DenselyOrdered X] {a b : X}
-  结论: 0 < μ (Ioo a b) ↔ a < b
+  条件: [稠密序 X] {a b : X}
+  结论: 0 < μ (开区间 a b) ↔ a < b
   证明: (isOpen_Ioo.measure_pos_iff μ).trans nonempty_Ioo
 
 Depends on / 依赖: isOpen_Ioo, isOpen_Ioo.measure_pos_iff, measure_pos_iff, nonempty_Ioo
@@ -662,8 +662,8 @@ theorem measure_Ioo_eq_zero
 
 中文:
 定理 measure_Ioo_eq_zero
-  条件: [DenselyOrdered X] {a b : X}
-  结论: μ (Ioo a b) = 0 ↔ b <= a
+  条件: [稠密序 X] {a b : X}
+  结论: μ (开区间 a b) = 0 ↔ b <= a
   证明: (isOpen_Ioo.measure_eq_zero_iff μ).trans (Ioo_eq_empty_iff.trans not_lt)
 
 Depends on / 依赖: Ioo_eq_empty_iff, Ioo_eq_empty_iff.trans, isOpen_Ioo, isOpen_Ioo.measure_eq_zero_iff, measure_eq_zero_iff, not_lt
@@ -681,7 +681,7 @@ theorem eqOn_Ioo_of_ae_eq
 
 中文:
 定理 eqOn_Ioo_of_ae_eq
-  结论: {a b : X} {f g : X -> Y} (hfg : f =ᵐ[μ.restrict (Ioo a b)] g)
+  结论: {a b : X} {f g : X -> Y} (hfg : f =ᵐ[μ.restrict (开区间 a b)] g)
   证明: eqOn_of_ae_eq hfg hf hg Ioo_subset_closure_interior
 
 Depends on / 依赖: Ioo_subset_closure_interior, eqOn_of_ae_eq
@@ -700,7 +700,7 @@ theorem eqOn_Ioc_of_ae_eq
 
 中文:
 定理 eqOn_Ioc_of_ae_eq
-  结论: [DenselyOrdered X] {a b : X} {f g : X -> Y}
+  结论: [稠密序 X] {a b : X} {f g : X -> Y}
   证明: eqOn_of_ae_eq hfg hf hg (Ioc_subset_closure_interior _ _)
 
 Depends on / 依赖: Ioc_subset_closure_interior, eqOn_of_ae_eq
@@ -720,7 +720,7 @@ theorem eqOn_Ico_of_ae_eq
 
 中文:
 定理 eqOn_Ico_of_ae_eq
-  结论: [DenselyOrdered X] {a b : X} {f g : X -> Y}
+  结论: [稠密序 X] {a b : X} {f g : X -> Y}
   证明: eqOn_of_ae_eq hfg hf hg (Ico_subset_closure_interior _ _)
 
 Depends on / 依赖: Ico_subset_closure_interior, eqOn_of_ae_eq
@@ -740,7 +740,7 @@ theorem eqOn_Icc_of_ae_eq
 
 中文:
 定理 eqOn_Icc_of_ae_eq
-  结论: [DenselyOrdered X] {a b : X} (hne : a != b) {f g : X -> Y}
+  结论: [稠密序 X] {a b : X} (hne : a != b) {f g : X -> Y}
   证明: eqOn_of_ae_eq hfg hf hg (closure_interior_Icc hne).symm.subset
 
 Depends on / 依赖: closure_interior_Icc, eqOn_of_ae_eq, subset, symm.subset
@@ -816,7 +816,7 @@ lemma measure_closedBall_pos_iff
 
 中文:
 引理 measure_closedBall_pos_iff
-  结论: {X : 类型} [MetricSpace X] {m : MeasurableSpace X}
+  结论: {X : 类型} [度量空间 X] {m : 可测空间 X}
   证明: by
   refine ⟨fun h => ?_, measure_closedBall_pos μ x⟩
   contrapose! h
@@ -912,7 +912,7 @@ lemma IsNowhereDense.of_isClosed_null
 
 中文:
 引理 IsNowhereDense.of_isClosed_null
-  条件: (h₁s : IsClosed s) (h₂s : μ s = 0)
+  条件: (h₁s : 是闭集 s) (h₂s : μ s = 0)
   证明: h₁s.isNowhereDense_iff.mpr (interior_eq_empty_of_null h₂s)
 
 Depends on / 依赖: interior_eq_empty_of_null, isNowhereDense_iff, s.isNowhereDense_iff.mpr
@@ -936,7 +936,7 @@ lemma IsMeagre.of_isSigmaCompact_null
 
 中文:
 引理 IsMeagre.of_isSigmaCompact_null
-  条件: [T2Space X] (h₁s : IsSigmaCompact s) (h₂s : μ s = 0)
+  条件: [T2空间 X] (h₁s : IsSigmaCompact s) (h₂s : μ s = 0)
   证明: by
   rcases h₁s with ⟨K, hcompact, hcover⟩
   have h (n : Nat) : IsNowhereDense (K n) := by

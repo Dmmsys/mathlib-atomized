@@ -116,7 +116,7 @@ instance [IsCardinalAccessibleCategory
       (IsColimit.ofIsoColimit p.isColimit (Cocone.ext (Iso.refl _)))⟩
 
 中文:
-实例 [IsCardinalAccessibleCategory
+实例 [是CardinalAccessible范畴
   签名: C κ] :
   定义体: by
     obtain ⟨J, _, _, ⟨p⟩⟩ :=
@@ -146,7 +146,7 @@ instance [IsCardinalAccessibleCategory
   exact IsCardinalFiltered.of_final p.toCostructuredArrow κ
 
 中文:
-实例 [IsCardinalAccessibleCategory
+实例 [是CardinalAccessible范畴
   签名: C κ] (X
   定义体: by
   obtain ⟨J, _, _, ⟨p⟩⟩ :=

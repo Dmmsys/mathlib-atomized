@@ -58,7 +58,7 @@ definition borel
 
 中文:
 定义 borel
-  签名: (α : 类型u) [TopologicalSpace α]
+  签名: (α : 类型u) [拓扑空间 α]
   定义体: generateFrom { s : Set α | IsOpen s }
 
 Depends on / 依赖: IsOpen, generateFrom
@@ -77,7 +77,7 @@ theorem borel_anti
 
 中文:
 定理 borel_anti
-  结论: Antitone (@borel α)
+  结论: 递减 (@borel α)
   证明: fun _ _ h =>
   MeasurableSpace.generateFrom_le fun _ hs => .basic _ (h _ hs)
 -/
@@ -95,7 +95,7 @@ theorem borel_eq_top_of_discrete
 
 中文:
 定理 borel_eq_top_of_discrete
-  条件: [TopologicalSpace α] [DiscreteTopology α]
+  条件: [拓扑空间 α] [离散拓扑 α]
   结论: borel α = ⊤
   证明: top_le_iff.1 fun s _ => GenerateMeasurable.basic s (isOpen_discrete s)
 
@@ -120,7 +120,7 @@ theorem borel_eq_generateFrom_of_subbasis
 
 中文:
 定理 borel_eq_generateFrom_of_subbasis
-  结论: {s : Set (Set α)} [t : TopologicalSpace α]
+  结论: {s : 集合 (集合 α)} [t : 拓扑空间 α]
   证明: le_antisymm
     (generateFrom_le fun u (hu : t.IsOpen u) => by
       rw [hs] at hu
@@ -156,8 +156,8 @@ theorem TopologicalSpace.IsTopologicalBasis.borel_eq_generateFrom
   proof: borel_eq_generateFrom_of_subbasis hs.eq_generateFrom
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.borel_eq_generateFrom
-  结论: [TopologicalSpace α]
+定理 拓扑空间.是TopologicalBasis.borel_eq_generateFrom
+  结论: [拓扑空间 α]
   证明: borel_eq_generateFrom_of_subbasis hs.eq_generateFrom
 
 Depends on / 依赖: borel_eq_generateFrom_of_subbasis, eq_generateFrom, hs.eq_generateFrom
@@ -178,8 +178,8 @@ theorem isPiSystem_isOpen
 
 中文:
 定理 isPiSystem_isOpen
-  条件: [TopologicalSpace α]
-  结论: IsPiSystem ({s : Set α | IsOpen s})
+  条件: [拓扑空间 α]
+  结论: IsPiSystem ({s : 集合 α | 是开集 s})
   证明: fun _s hs _t ht _ => IsOpen.inter hs ht
 
 Depends on / 依赖: IsOpen, IsOpen.inter
@@ -198,8 +198,8 @@ lemma isPiSystem_isClosed
 
 中文:
 引理 isPiSystem_isClosed
-  条件: [TopologicalSpace α]
-  结论: IsPiSystem ({s : Set α | IsClosed s})
+  条件: [拓扑空间 α]
+  结论: IsPiSystem ({s : 集合 α | 是闭集 s})
   证明: fun _s hs _t ht _ => IsClosed.inter hs ht
 
 Depends on / 依赖: IsClosed, IsClosed.inter
@@ -222,7 +222,7 @@ theorem borel_eq_generateFrom_isClosed
 
 中文:
 定理 borel_eq_generateFrom_isClosed
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: le_antisymm
     (generateFrom_le fun _t ht =>
       @MeasurableSet.of_compl α _ (generateFrom { s | IsClosed s })
@@ -251,7 +251,7 @@ theorem borel_comap
 
 中文:
 定理 borel_comap
-  条件: {f : α -> β} {t : TopologicalSpace β}
+  条件: {f : α -> β} {t : 拓扑空间 β}
   证明: comap_generateFrom.symm
 
 Depends on / 依赖: comap_generateFrom, comap_generateFrom.symm
@@ -270,8 +270,8 @@ theorem Continuous.borel_measurable
     generateFrom_le fun s hs => GenerateMeasurable.basic (f ⁻¹' s) (hs.preimage hf)
 
 中文:
-定理 Continuous.borel_measurable
-  结论: [TopologicalSpace α] [TopologicalSpace β] {f : α -> β}
+定理 连续.borel_measurable
+  结论: [拓扑空间 α] [拓扑空间 β] {f : α -> β}
   证明: Measurable.of_le_map
     generateFrom_le fun s hs => GenerateMeasurable.basic (f ⁻¹' s) (hs.preimage hf)
 
@@ -292,8 +292,8 @@ class OpensMeasurableSpace
     - borel_le : borel α <= h
 
 中文:
-类 OpensMeasurableSpace
-  参数: (α : 类型) [TopologicalSpace α] [h : MeasurableSpace α]
+类 OpensMeasurable空间
+  参数: (α : 类型) [拓扑空间 α] [h : 可测空间 α]
   公理与运算 (1 个):
     - borel_le : borel α <= h
 -/
@@ -311,10 +311,10 @@ class BorelSpace
     - measurable_eq : ‹MeasurableSpace α› = borel α
 
 中文:
-类 BorelSpace
-  参数: (α : 类型) [TopologicalSpace α] [MeasurableSpace α]
+类 Borel空间
+  参数: (α : 类型) [拓扑空间 α] [可测空间 α]
   公理与运算 (1 个):
-    - measurable_eq : ‹MeasurableSpace α› = borel α
+    - measurable_eq : ‹可测空间 α› = borel α
 -/
 class BorelSpace (α : Type*) [TopologicalSpace α] [MeasurableSpace α] : Prop where
   /-- The measurable sets are exactly the Borel-measurable sets. -/
@@ -399,8 +399,8 @@ instance Subtype.borelSpace
   body: ⟨by borelize α; symm; apply borel_comap⟩
 
 中文:
-实例 Subtype.borelSpace
-  签名: {α : 类型} [TopologicalSpace α] [MeasurableSpace α]
+实例 子类型.borelSpace
+  签名: {α : 类型} [拓扑空间 α] [可测空间 α]
   定义体: ⟨by borelize α; symm; apply borel_comap⟩
 
 Depends on / 依赖: borel_comap, borelize
@@ -421,8 +421,8 @@ instance Countable.instBorelSpace
   exact ⟨by aesop⟩
 
 中文:
-实例 Countable.instBorelSpace
-  签名: [Countable α] [MeasurableSpace α] [MeasurableSingletonClass α]
+实例 可数.instBorelSpace
+  签名: [可数 α] [可测空间 α] [MeasurableSingleton类 α]
   定义体: by
   have : forall s, @MeasurableSet α inferInstance s := fun s => s.to_countable.measurableSet
   have : forall s, @MeasurableSet α (borel α) s := fun s => measurableSet_generateFrom (isOpen_discrete s)
@@ -447,8 +447,8 @@ instance Subtype.opensMeasurableSpace
     exact comap_mono h.1⟩
 
 中文:
-实例 Subtype.opensMeasurableSpace
-  签名: {α : 类型} [TopologicalSpace α] [MeasurableSpace α]
+实例 子类型.opensMeasurableSpace
+  签名: {α : 类型} [拓扑空间 α] [可测空间 α]
   定义体: ⟨by
     rw [borel_comap]
     exact comap_mono h.1⟩
@@ -471,7 +471,7 @@ lemma opensMeasurableSpace_iff_forall_measurableSet
 exact OpensMeasurableSpace.borel_le _ GenerateMeasurable.basic _ hs
 
 中文:
-引理 opensMeasurableSpace_iff_forall_measurableSet
+引理 opensMeasurableSpace_iff_对任意_measurableSet
   证明: by
   refine ⟨fun h s hs => ?_, fun h => ⟨generateFrom_le h⟩⟩
 exact OpensMeasurableSpace.borel_le _ GenerateMeasurable.basic _ hs
@@ -507,9 +507,9 @@ theorem IsOpen.measurableSet
   proof: OpensMeasurableSpace.borel_le _ GenerateMeasurable.basic _ h
 
 中文:
-定理 IsOpen.measurableSet
-  条件: (h : IsOpen s)
-  结论: MeasurableSet s
+定理 是开集.measurableSet
+  条件: (h : 是开集 s)
+  结论: 可测集 s
   证明: OpensMeasurableSpace.borel_le _ GenerateMeasurable.basic _ h
 
 Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, OpensMeasurableSpace, OpensMeasurableSpace.borel_le, borel_le
@@ -527,8 +527,8 @@ theorem IsOpen.nullMeasurableSet
   proof: h.measurableSet.nullMeasurableSet
 
 中文:
-定理 IsOpen.nullMeasurableSet
-  条件: {μ} (h : IsOpen s)
+定理 是开集.nullMeasurableSet
+  条件: {μ} (h : 是开集 s)
   结论: NullMeasurableSet s μ
   证明: h.measurableSet.nullMeasurableSet
 
@@ -550,8 +550,8 @@ theorem MeasurableSet.induction_on_open
     (isOpen _ isOpen_empty) isOpen compl iUnion t ht
 
 中文:
-定理 MeasurableSet.induction_on_open
-  结论: {C : 对任意 s : Set γ, MeasurableSet s -> 命题}
+定理 可测集.induction_on_open
+  结论: {C : 对任意 s : 集合 γ, 可测集 s -> 命题}
   证明: fun t ht =>
   MeasurableSpace.induction_on_inter BorelSpace.measurable_eq isPiSystem_isOpen
     (isOpen _ isOpen_empty) isOpen compl iUnion t ht
@@ -581,7 +581,7 @@ theorem measurableSet_interior
 
 中文:
 定理 measurableSet_interior
-  结论: MeasurableSet (interior s)
+  结论: 可测集 (interior s)
   证明: isOpen_interior.measurableSet
 
 Depends on / 依赖: isOpen_interior, isOpen_interior.measurableSet, measurableSet
@@ -603,7 +603,7 @@ theorem IsGδ.measurableSet
 中文:
 定理 IsGδ.measurableSet
   条件: (h : IsGδ s)
-  结论: MeasurableSet s
+  结论: 可测集 s
   证明: by
   rcases h with ⟨S, hSo, hSc, rfl⟩
   exact MeasurableSet.sInter hSc fun t ht => (hSo t ht).measurableSet
@@ -624,7 +624,7 @@ theorem measurableSet_of_continuousAt
 
 中文:
 定理 measurableSet_of_continuousAt
-  条件: {β} [PseudoEMetricSpace β] (f : α -> β)
+  条件: {β} [PseudoEMetric空间 β] (f : α -> β)
   证明: (IsGδ.setOfPred_continuousAt f).measurableSet
 
 Depends on / 依赖: measurableSet, setOfPred_continuousAt
@@ -643,9 +643,9 @@ theorem IsClosed.measurableSet
   proof: h.isOpen_compl.measurableSet.of_compl
 
 中文:
-定理 IsClosed.measurableSet
-  条件: (h : IsClosed s)
-  结论: MeasurableSet s
+定理 是闭集.measurableSet
+  条件: (h : 是闭集 s)
+  结论: 可测集 s
   证明: h.isOpen_compl.measurableSet.of_compl
 
 Depends on / 依赖: h.isOpen_compl.measurableSet.of_compl, isOpen_compl, measurableSet, of_compl
@@ -663,8 +663,8 @@ theorem IsClosed.nullMeasurableSet
   proof: h.measurableSet.nullMeasurableSet
 
 中文:
-定理 IsClosed.nullMeasurableSet
-  条件: {μ} (h : IsClosed s)
+定理 是闭集.nullMeasurableSet
+  条件: {μ} (h : 是闭集 s)
   结论: NullMeasurableSet s μ
   证明: h.measurableSet.nullMeasurableSet
 
@@ -683,9 +683,9 @@ theorem IsCompact.measurableSet
   proof: h.isClosed.measurableSet
 
 中文:
-定理 IsCompact.measurableSet
-  条件: [T2Space α] (h : IsCompact s)
-  结论: MeasurableSet s
+定理 是紧集.measurableSet
+  条件: [T2空间 α] (h : 是紧集 s)
+  结论: 可测集 s
   证明: h.isClosed.measurableSet
 
 Depends on / 依赖: h.isClosed.measurableSet, isClosed, measurableSet
@@ -703,8 +703,8 @@ theorem IsCompact.nullMeasurableSet
   proof: h.isClosed.nullMeasurableSet
 
 中文:
-定理 IsCompact.nullMeasurableSet
-  条件: [T2Space α] {μ} (h : IsCompact s)
+定理 是紧集.nullMeasurableSet
+  条件: [T2空间 α] {μ} (h : 是紧集 s)
   结论: NullMeasurableSet s μ
   证明: h.isClosed.nullMeasurableSet
 
@@ -723,8 +723,8 @@ theorem Inseparable.mem_measurableSet_iff
     (fun _ _ _ h => by simp [h]) s hs
 
 中文:
-定理 Inseparable.mem_measurableSet_iff
-  结论: {x y : γ} (h : Inseparable x y) {s : Set γ}
+定理 不可分.mem_measurableSet_iff
+  结论: {x y : γ} (h : 不可分 x y) {s : 集合 γ}
   证明: MeasurableSet.induction_on_open (fun _ => h.mem_open_iff) (fun _ _ => Iff.not)
     (fun _ _ _ h => by simp [h]) s hs
 
@@ -746,8 +746,8 @@ theorem IsCompact.closure_subset_measurableSet
   exact fun x hx y hy => (hy.mem_measurableSet_iff hs).1 (hKs hx)
 
 中文:
-定理 IsCompact.closure_subset_measurableSet
-  结论: [R1Space γ] {K s : Set γ} (hK : IsCompact K)
+定理 是紧集.closure_subset_measurableSet
+  结论: [R1空间 γ] {K s : 集合 γ} (hK : 是紧集 K)
   证明: by
   rw [hK.closure_eq_biUnion_inseparable]; rw [iUnion₂_subset_iff]
   exact fun x hx y hy => (hy.mem_measurableSet_iff hs).1 (hKs hx)
@@ -775,8 +775,8 @@ theorem IsCompact.measure_closure
 @[measurability]
 
 中文:
-定理 IsCompact.measure_closure
-  条件: [R1Space γ] {K : Set γ} (hK : IsCompact K) (μ : Measure γ)
+定理 是紧集.measure_closure
+  条件: [R1空间 γ] {K : 集合 γ} (hK : 是紧集 K) (μ : 测度 γ)
   证明: by
   refine le_antisymm ?_ (measure_mono subset_closure)
   calc
@@ -809,7 +809,7 @@ theorem measurableSet_closure
 
 中文:
 定理 measurableSet_closure
-  结论: MeasurableSet (closure s)
+  结论: 可测集 (closure s)
   证明: isClosed_closure.measurableSet
 
 @[measurability]
@@ -830,7 +830,7 @@ theorem measurableSet_frontier
 
 中文:
 定理 measurableSet_frontier
-  结论: MeasurableSet (frontier s)
+  结论: 可测集 (frontier s)
   证明: measurableSet_closure.diff measurableSet_interior
 
 Depends on / 依赖: measurableSet_closure, measurableSet_closure.diff, measurableSet_interior
@@ -850,7 +850,7 @@ theorem measurable_of_isOpen
 
 中文:
 定理 measurable_of_isOpen
-  条件: {f : δ -> γ} (hf : 对任意 s, IsOpen s -> MeasurableSet (f ⁻¹' s))
+  条件: {f : δ -> γ} (hf : 对任意 s, 是开集 s -> 可测集 (f ⁻¹' s))
   证明: by
   rw [‹BorelSpace γ›.measurable_eq]
   exact measurable_generateFrom hf
@@ -874,7 +874,7 @@ theorem measurable_of_isClosed
 
 中文:
 定理 measurable_of_isClosed
-  条件: {f : δ -> γ} (hf : 对任意 s, IsClosed s -> MeasurableSet (f ⁻¹' s))
+  条件: {f : δ -> γ} (hf : 对任意 s, 是闭集 s -> 可测集 (f ⁻¹' s))
   证明: by
   apply measurable_of_isOpen; intro s hs
   rw [← MeasurableSet.compl_iff]; rw [← preimage_compl]; apply hf; rw [isClosed_compl_iff]; exact hs
@@ -958,8 +958,8 @@ theorem MeasurableSet.nhdsWithin_isMeasurablyGenerated
   Filter.inf_isMeasurablyGenerated _ _
 
 中文:
-定理 MeasurableSet.nhdsWithin_isMeasurablyGenerated
-  条件: {s : Set α} (hs : MeasurableSet s) (a : α)
+定理 可测集.nhdsWithin_isMeasurablyGenerated
+  条件: {s : 集合 α} (hs : 可测集 s) (a : α)
   证明: haveI := hs.principal_isMeasurablyGenerated
   Filter.inf_isMeasurablyGenerated _ _
 
@@ -991,7 +991,7 @@ theorem borel_eq_top_of_countable
 
 中文:
 定理 borel_eq_top_of_countable
-  条件: {α : 类型} [TopologicalSpace α] [T0Space α] [Countable α]
+  条件: {α : 类型} [拓扑空间 α] [T0空间 α] [可数 α]
   证明: by
   refine top_unique fun s _ => ?_
   borelize α
@@ -1024,8 +1024,8 @@ instance Pi.opensMeasurableSpace
       pi_generateFrom_e
 
 中文:
-实例 Pi.opensMeasurableSpace
-  签名: {ι : 类型} {X : ι -> 类型} [Countable ι]
+实例 依赖函数类型.opensMeasurableSpace
+  签名: {ι : 类型} {X : ι -> 类型} [可数 ι]
   定义体: by
   constructor
   have : Pi.topologicalSpace = .generateFrom { t | exists (s : forall a, Set (X a)) (i : Finset ι),
@@ -1065,8 +1065,8 @@ instance Pi.opensMeasurableSpace_of_subsingleton
     refine MeasurableSpace.generateFrom_le fun s hs => MeasurableSpace.measurableSet_c
 
 中文:
-实例 Pi.opensMeasurableSpace_of_subsingleton
-  签名: {ι : 类型} {X : ι -> 类型} [Subsingleton ι]
+实例 依赖函数类型.opensMeasurableSpace_of_subsingleton
+  签名: {ι : 类型} {X : ι -> 类型} [子单例 ι]
   定义体: by
     obtain h | h := isEmpty_or_nonempty ι
     · exact fun s _ => Subsingleton.set_cases .empty .univ s
@@ -1101,9 +1101,9 @@ class SecondCountableTopologyEither
 
 中文:
 类 SecondCountableTopologyEither
-  参数: (α β : 类型) [TopologicalSpace α] [TopologicalSpace β]
+  参数: (α β : 类型) [拓扑空间 α] [拓扑空间 β]
   公理与运算 (1 个):
-    - out : SecondCountableTopology α ∨ SecondCountableTopology β
+    - out : 第二可数拓扑 α ∨ 第二可数拓扑 β
 -/
 class SecondCountableTopologyEither (α β : Type*) [TopologicalSpace α] [TopologicalSpace β] :
   Prop where
@@ -1135,7 +1135,7 @@ instance Prod.opensMeasurableSpace
       
 
 中文:
-实例 Prod.opensMeasurableSpace
+实例 积类型.opensMeasurableSpace
   签名: [h : SecondCountableTopologyEither α β]
   定义体: by
   apply opensMeasurableSpace_iff_forall_measurableSet.2 (fun s hs => ?_)
@@ -1207,7 +1207,7 @@ theorem interior_ae_eq_of_null_frontier
 
 中文:
 定理 interior_ae_eq_of_null_frontier
-  条件: {μ : Measure α'} {s : Set α'} (h : μ (frontier s) = 0)
+  条件: {μ : 测度 α'} {s : 集合 α'} (h : μ (frontier s) = 0)
   证明: interior_subset.eventuallyLE.antisymm subset_closure.eventuallyLE.trans (ae_le_set.2 h)
 
 Depends on / 依赖: ae_le_set, antisymm, eventuallyLE, interior_subset, interior_subset.eventuallyLE.antisymm, subset_closure, subset_closure.eventuallyLE.trans
@@ -1226,7 +1226,7 @@ theorem measure_interior_of_null_frontier
 
 中文:
 定理 measure_interior_of_null_frontier
-  条件: {μ : Measure α'} {s : Set α'} (h : μ (frontier s) = 0)
+  条件: {μ : 测度 α'} {s : 集合 α'} (h : μ (frontier s) = 0)
   证明: measure_congr (interior_ae_eq_of_null_frontier h)
 
 Depends on / 依赖: interior_ae_eq_of_null_frontier, measure_congr
@@ -1245,7 +1245,7 @@ theorem nullMeasurableSet_of_null_frontier
 
 中文:
 定理 nullMeasurableSet_of_null_frontier
-  条件: {s : Set α} {μ : Measure α} (h : μ (frontier s) = 0)
+  条件: {s : 集合 α} {μ : 测度 α} (h : μ (frontier s) = 0)
   证明: ⟨interior s, isOpen_interior.measurableSet, (interior_ae_eq_of_null_frontier h).symm⟩
 
 Depends on / 依赖: interior, interior_ae_eq_of_null_frontier, isOpen_interior, isOpen_interior.measurableSet, measurableSet
@@ -1264,7 +1264,7 @@ theorem closure_ae_eq_of_null_frontier
 
 中文:
 定理 closure_ae_eq_of_null_frontier
-  条件: {μ : Measure α'} {s : Set α'} (h : μ (frontier s) = 0)
+  条件: {μ : 测度 α'} {s : 集合 α'} (h : μ (frontier s) = 0)
   证明: ((ae_le_set.2 h).trans interior_subset.eventuallyLE).antisymm subset_closure.eventuallyLE
 
 Depends on / 依赖: ae_le_set, antisymm, eventuallyLE, interior_subset, interior_subset.eventuallyLE, subset_closure, subset_closure.eventuallyLE
@@ -1283,7 +1283,7 @@ theorem measure_closure_of_null_frontier
 
 中文:
 定理 measure_closure_of_null_frontier
-  条件: {μ : Measure α'} {s : Set α'} (h : μ (frontier s) = 0)
+  条件: {μ : 测度 α'} {s : 集合 α'} (h : μ (frontier s) = 0)
   证明: measure_congr (closure_ae_eq_of_null_frontier h)
 
 Depends on / 依赖: closure_ae_eq_of_null_frontier, measure_congr
@@ -1307,7 +1307,7 @@ _ <= μ (frontier s union frontier s') := measure_mono (frontier_inter_subset _ 
 
 中文:
 定理 null_frontier_inter
-  结论: {μ : Measure α'} {s s' : Set α'}
+  结论: {μ : 测度 α'} {s s' : 集合 α'}
   证明: by
   apply bot_unique
   calc μ (frontier (s inter s'))
@@ -1338,7 +1338,7 @@ instance separatesPointsOfOpensMeasurableSpaceOfT0Space
 
 中文:
 实例 separatesPointsOfOpensMeasurableSpaceOfT0Space
-  签名: [T0Space α]
+  签名: [T0空间 α]
   定义体: by
     contrapose!
     exact fun a => exists_measurableSet_of_ne a
@@ -1364,9 +1364,9 @@ theorem Continuous.measurable
   proof: hf.borel_measurable.mono OpensMeasurableSpace.borel_le (le_of_eq <| BorelSpace.measurable_eq)
 
 中文:
-定理 Continuous.measurable
-  条件: {f : α -> γ} (hf : Continuous f)
-  结论: Measurable f
+定理 连续.measurable
+  条件: {f : α -> γ} (hf : 连续 f)
+  结论: 可测 f
   证明: hf.borel_measurable.mono OpensMeasurableSpace.borel_le (le_of_eq <| BorelSpace.measurable_eq)
 
 Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq, OpensMeasurableSpace, OpensMeasurableSpace.borel_le, borel_le, borel_measurable, hf.borel_measurable.mono, le_of_eq, measurable_eq
@@ -1387,9 +1387,9 @@ theorem Continuous.aemeasurable
   proof: h.measurable.aemeasurable
 
 中文:
-定理 Continuous.aemeasurable
-  条件: {f : α -> γ} (h : Continuous f) {μ : Measure α}
-  结论: AEMeasurable f μ
+定理 连续.aemeasurable
+  条件: {f : α -> γ} (h : 连续 f) {μ : 测度 α}
+  结论: 几乎处处可测 f μ
   证明: h.measurable.aemeasurable
 
 Depends on / 依赖: aemeasurable, h.measurable.aemeasurable, measurable
@@ -1410,7 +1410,7 @@ theorem ContinuousOn.measurable_of_countable_compl
 
 中文:
 定理 ContinuousOn.measurable_of_countable_compl
-  结论: [MeasurableSingletonClass α]
+  结论: [MeasurableSingleton类 α]
   证明: by
   apply measurable_of_measurable_on_compl_countable _ hs
   rw [compl_compl]
@@ -1438,7 +1438,7 @@ theorem measurable_of_countable_not_continuousAt
 
 中文:
 定理 measurable_of_countable_not_continuousAt
-  结论: [MeasurableSingletonClass α]
+  结论: [MeasurableSingleton类 α]
   证明: by
   have : ContinuousOn f {x | ContinuousAt f x} := fun x hx => hx.continuousWithinAt
   apply this.measurable_of_countable_compl
@@ -1463,8 +1463,8 @@ theorem Topology.IsClosedEmbedding.measurable
   proof: hf.continuous.measurable
 
 中文:
-定理 Topology.IsClosedEmbedding.measurable
-  条件: {f : α -> γ} (hf : IsClosedEmbedding f)
+定理 拓扑.是闭嵌入.measurable
+  条件: {f : α -> γ} (hf : 是闭嵌入 f)
   证明: hf.continuous.measurable
 
 Depends on / 依赖: continuous, hf.continuous.measurable, measurable
@@ -1490,7 +1490,7 @@ theorem ContinuousOn.measurable_piecewise
 
 中文:
 定理 ContinuousOn.measurable_piecewise
-  结论: {f g : α -> γ} {s : Set α} [对任意 j : α, Decidable (j in s)]
+  结论: {f g : α -> γ} {s : 集合 α} [对任意 j : α, 可判定 (j in s)]
   证明: by
   refine measurable_of_isOpen fun t ht => ?_
   rw [piecewise_preimage]; rw [Set.ite]
@@ -1549,9 +1549,9 @@ theorem Homeomorph.measurable
   proof: h.continuous.measurable
 
 中文:
-定理 Homeomorph.measurable
+定理 同胚.measurable
   条件: (h : α ≃ₜ γ)
-  结论: Measurable h
+  结论: 可测 h
   证明: h.continuous.measurable
 
 Depends on / 依赖: Nat.pred_lt, Nat.sub_one, S.two_le_multiplicity, Solution, _descent_multiplicity, pred_lt, sub_one, two_le_multiplicity
@@ -1568,7 +1568,7 @@ definition Homeomorph.toMeasurableEquiv
   body: h.toEquiv
 
 中文:
-定义 Homeomorph.toMeasurableEquiv
+定义 同胚.toMeasurableEquiv
   签名: (h : γ ≃ₜ γ₂)
   定义体: h.toEquiv
 
@@ -1589,9 +1589,9 @@ lemma Homeomorph.measurableEmbedding
 @[simp]
 
 中文:
-引理 Homeomorph.measurableEmbedding
+引理 同胚.measurableEmbedding
   条件: (h : γ ≃ₜ γ₂)
-  结论: MeasurableEmbedding h
+  结论: 可测嵌入 h
   证明: h.toMeasurableEquiv.measurableEmbedding
 
 @[simp]
@@ -1614,7 +1614,7 @@ theorem Homeomorph.toMeasurableEquiv_coe
 @[simp]
 
 中文:
-定理 Homeomorph.toMeasurableEquiv_coe
+定理 同胚.toMeasurableEquiv_coe
   条件: (h : γ ≃ₜ γ₂)
   结论: (h.toMeasurableEquiv : γ -> γ₂) = h
   证明: rfl
@@ -1634,7 +1634,7 @@ theorem Homeomorph.toMeasurableEquiv_symm_coe
   proof: rfl
 
 中文:
-定理 Homeomorph.toMeasurableEquiv_symm_coe
+定理 同胚.toMeasurableEquiv_symm_coe
   条件: (h : γ ≃ₜ γ₂)
   证明: rfl
 -/
@@ -1657,9 +1657,9 @@ theorem ContinuousMap.measurable
 @[fun_prop]
 
 中文:
-定理 ContinuousMap.measurable
+定理 连续映射.measurable
   条件: (f : C(α, γ))
-  结论: Measurable f
+  结论: 可测 f
   证明: f.continuous.measurable
 
 @[fun_prop]
@@ -1681,7 +1681,7 @@ theorem measurable_of_continuousOn_compl_singleton
 
 中文:
 定理 measurable_of_continuousOn_compl_singleton
-  结论: [T1Space α] {f : α -> γ} (a : α)
+  结论: [T1空间 α] {f : α -> γ} (a : α)
   证明: measurable_of_measurable_on_compl_singleton a
     (continuousOn_iff_continuous_domRestrict.1 hf).measurable
 
@@ -1701,7 +1701,7 @@ theorem Continuous.measurable2
   proof: h.measurable.comp (hf.prodMk hg)
 
 中文:
-定理 Continuous.measurable2
+定理 连续.measurable2
   结论: [SecondCountableTopologyEither α β] {f : δ -> α}
   证明: h.measurable.comp (hf.prodMk hg)
 
@@ -1721,7 +1721,7 @@ theorem Continuous.aemeasurable2
   proof: h.measurable.comp_aemeasurable (hf.prodMk hg)
 
 中文:
-定理 Continuous.aemeasurable2
+定理 连续.aemeasurable2
   结论: [SecondCountableTopologyEither α β]
   证明: h.measurable.comp_aemeasurable (hf.prodMk hg)
 
@@ -1761,8 +1761,8 @@ instance [SecondCountableTopology
   body: ⟨isClosed_diagonal.measurableSet⟩
 
 中文:
-实例 [SecondCountableTopology
-  签名: α] [T2Space α] : MeasurableEq α
+实例 [第二可数拓扑
+  签名: α] [T2空间 α] : MeasurableEq α
   定义体: ⟨isClosed_diagonal.measurableSet⟩
 -/
 instance [SecondCountableTopology α] [T2Space α] : MeasurableEq α :=
@@ -1790,7 +1790,7 @@ exact iSup_le fun i => comap_le_iff_le_map.2 (continuous_apply i).borel_measurab
 
 中文:
 定理 pi_le_borel_pi
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: by
   have : ‹forall i, MeasurableSpace (X i)› = fun i => borel (X i) :=
     funext fun i => BorelSpace.measurable_eq
@@ -1821,7 +1821,7 @@ theorem prod_le_borel_prod
 
 中文:
 定理 prod_le_borel_prod
-  结论: Prod.instMeasurableSpace <= borel (α × β)
+  结论: 积类型.instMeasurableSpace <= borel (α × β)
   证明: by
   rw [‹BorelSpace α›.measurable_eq]; rw [‹BorelSpace β›.measurable_eq]
   refine sup_le ?_ ?_
@@ -1845,8 +1845,8 @@ instance Pi.borelSpace
   body: ⟨le_antisymm pi_le_borel_pi OpensMeasurableSpace.borel_le⟩
 
 中文:
-实例 Pi.borelSpace
-  签名: {ι : 类型} {X : ι -> 类型} [Countable ι] [对任意 i, TopologicalSpace (X i)]
+实例 依赖函数类型.borelSpace
+  签名: {ι : 类型} {X : ι -> 类型} [可数 ι] [对任意 i, 拓扑空间 (X i)]
   定义体: ⟨le_antisymm pi_le_borel_pi OpensMeasurableSpace.borel_le⟩
 
 Depends on / 依赖: OpensMeasurableSpace, OpensMeasurableSpace.borel_le, borel_le, le_antisymm, pi_le_borel_pi
@@ -1865,8 +1865,8 @@ instance Pi.borelSpace_of_subsingleton
   body: ⟨le_antisymm pi_le_borel_pi OpensMeasurableSpace.borel_le⟩
 
 中文:
-实例 Pi.borelSpace_of_subsingleton
-  签名: {ι : 类型} {X : ι -> 类型} [Subsingleton ι]
+实例 依赖函数类型.borelSpace_of_subsingleton
+  签名: {ι : 类型} {X : ι -> 类型} [子单例 ι]
   定义体: ⟨le_antisymm pi_le_borel_pi OpensMeasurableSpace.borel_le⟩
 
 Depends on / 依赖: OpensMeasurableSpace, OpensMeasurableSpace.borel_le, borel_le, le_antisymm, pi_le_borel_pi
@@ -1885,7 +1885,7 @@ instance Prod.borelSpace
   body: ⟨le_antisymm prod_le_borel_prod OpensMeasurableSpace.borel_le⟩
 
 中文:
-实例 Prod.borelSpace
+实例 积类型.borelSpace
   签名: [SecondCountableTopologyEither α β]
   定义体: ⟨le_antisymm prod_le_borel_prod OpensMeasurableSpace.borel_le⟩
 
@@ -1907,8 +1907,8 @@ lemma MeasurableEmbedding.borelSpace
   rw [← this]; rw [← borel_comap]; rw [h''e.eq_induced]
 
 中文:
-引理 MeasurableEmbedding.borelSpace
-  结论: {α β : 类型} [MeasurableSpace α] [TopologicalSpace α]
+引理 可测嵌入.borelSpace
+  结论: {α β : 类型} [可测空间 α] [拓扑空间 α]
   证明: by
   constructor
   have : MeasurableSpace.comap e (borel β) = ‹_› := by simpa [hβ.measurable_eq] using h'e.comap_eq
@@ -1933,8 +1933,8 @@ instance _root_.ULift.instBorelSpace
   body: MeasurableEquiv.ulift.measurableEmbedding.borelSpace Homeomorph.ulift.isInducing
 
 中文:
-实例 _root_.ULift.instBorelSpace
-  签名: : BorelSpace (ULift α)
+实例 _root_.类型层提升.instBorelSpace
+  签名: : Borel空间 (类型层提升 α)
   定义体: MeasurableEquiv.ulift.measurableEmbedding.borelSpace Homeomorph.ulift.isInducing
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift.isInducing, MeasurableEquiv, MeasurableEquiv.ulift.measurableEmbedding.borelSpace, borelSpace, isInducing, measurableEmbedding
@@ -1952,8 +1952,8 @@ instance DiscreteMeasurableSpace.toBorelSpace
   constructor; ext; simp [MeasurableSpace.measurableSet_generateFrom, MeasurableSet.of_discrete]
 
 中文:
-实例 DiscreteMeasurableSpace.toBorelSpace
-  签名: {α : 类型} [TopologicalSpace α] [DiscreteTopology α]
+实例 DiscreteMeasurable空间.toBorelSpace
+  签名: {α : 类型} [拓扑空间 α] [离散拓扑 α]
   定义体: by
   constructor; ext; simp [MeasurableSpace.measurableSet_generateFrom, MeasurableSet.of_discrete]
 
@@ -1974,8 +1974,8 @@ theorem Topology.IsEmbedding.measurableEmbedding
     (MeasurableEmbedding.subtype_coe h₂).comp (MeasurableEquiv.measurableEmbedding _)
 
 中文:
-定理 Topology.IsEmbedding.measurableEmbedding
-  结论: {f : α -> β} (h₁ : IsEmbedding f)
+定理 拓扑.是嵌入.measurableEmbedding
+  结论: {f : α -> β} (h₁ : 是嵌入 f)
   证明: show MeasurableEmbedding
       (((↑) : range f -> β) ∘ h₁.toHomeomorph.toMeasurableEquiv) from
     (MeasurableEmbedding.subtype_coe h₂).comp (MeasurableEquiv.measurableEmbedding _)
@@ -1995,7 +1995,7 @@ theorem Topology.IsClosedEmbedding.measurableEmbedding
   proof: h.isEmbedding.measurableEmbedding h.isClosed_range.measurableSet
 
 中文:
-定理 Topology.IsClosedEmbedding.measurableEmbedding
+定理 拓扑.是闭嵌入.measurableEmbedding
   结论: {f : α -> β}
   证明: h.isEmbedding.measurableEmbedding h.isClosed_range.measurableSet
 -/
@@ -2012,8 +2012,8 @@ theorem Topology.IsOpenEmbedding.measurableEmbedding
   proof: h.isEmbedding.measurableEmbedding h.isOpen_range.measurableSet
 
 中文:
-定理 Topology.IsOpenEmbedding.measurableEmbedding
-  条件: {f : α -> β} (h : IsOpenEmbedding f)
+定理 拓扑.是开嵌入.measurableEmbedding
+  条件: {f : α -> β} (h : 是开嵌入 f)
   证明: h.isEmbedding.measurableEmbedding h.isOpen_range.measurableSet
 -/
 protected theorem Topology.IsOpenEmbedding.measurableEmbedding {f : α -> β} (h : IsOpenEmbedding f) :
@@ -2029,8 +2029,8 @@ instance Empty.borelSpace
   body: ⟨borel_eq_top_of_discrete.symm⟩
 
 中文:
-实例 Empty.borelSpace
-  签名: : BorelSpace Empty
+实例 空.borelSpace
+  签名: : Borel空间 空
   定义体: ⟨borel_eq_top_of_discrete.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_discrete, borel_eq_top_of_discrete.symm
@@ -2047,8 +2047,8 @@ instance Unit.borelSpace
   body: ⟨borel_eq_top_of_discrete.symm⟩
 
 中文:
-实例 Unit.borelSpace
-  签名: : BorelSpace Unit
+实例 单元.borelSpace
+  签名: : Borel空间 单元
   定义体: ⟨borel_eq_top_of_discrete.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_discrete, borel_eq_top_of_discrete.symm
@@ -2065,8 +2065,8 @@ instance Bool.borelSpace
   body: ⟨borel_eq_top_of_discrete.symm⟩
 
 中文:
-实例 Bool.borelSpace
-  签名: : BorelSpace 布尔
+实例 布尔值.borelSpace
+  签名: : Borel空间 布尔值
   定义体: ⟨borel_eq_top_of_discrete.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_discrete, borel_eq_top_of_discrete.symm
@@ -2083,8 +2083,8 @@ instance Nat.borelSpace
   body: ⟨borel_eq_top_of_discrete.symm⟩
 
 中文:
-实例 Nat.borelSpace
-  签名: : BorelSpace 自然数
+实例 自然数.borelSpace
+  签名: : Borel空间 自然数
   定义体: ⟨borel_eq_top_of_discrete.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_discrete, borel_eq_top_of_discrete.symm
@@ -2101,8 +2101,8 @@ instance Int.borelSpace
   body: ⟨borel_eq_top_of_discrete.symm⟩
 
 中文:
-实例 Int.borelSpace
-  签名: : BorelSpace 整数
+实例 整数.borelSpace
+  签名: : Borel空间 整数
   定义体: ⟨borel_eq_top_of_discrete.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_discrete, borel_eq_top_of_discrete.symm
@@ -2119,8 +2119,8 @@ instance Rat.borelSpace
   body: ⟨borel_eq_top_of_countable.symm⟩
 
 中文:
-实例 Rat.borelSpace
-  签名: : BorelSpace Rat
+实例 有理数.borelSpace
+  签名: : Borel空间 有理数
   定义体: ⟨borel_eq_top_of_countable.symm⟩
 
 Depends on / 依赖: borel_eq_top_of_countable, borel_eq_top_of_countable.symm
@@ -2137,8 +2137,8 @@ instance Real.measurableSpace
   body: borel Real
 
 中文:
-实例 Real.measurableSpace
-  签名: : MeasurableSpace 实数
+实例 实数.measurableSpace
+  签名: : 可测空间 实数
   定义体: borel Real
 -/
 instance Real.measurableSpace : MeasurableSpace Real :=
@@ -2153,8 +2153,8 @@ instance Real.borelSpace
   body: ⟨rfl⟩
 
 中文:
-实例 Real.borelSpace
-  签名: : BorelSpace 实数
+实例 实数.borelSpace
+  签名: : Borel空间 实数
   定义体: ⟨rfl⟩
 -/
 instance Real.borelSpace : BorelSpace Real :=
@@ -2169,8 +2169,8 @@ instance NNReal.measurableSpace
   body: inferInstanceAs MeasurableSpace (Subtype _)
 
 中文:
-实例 NNReal.measurableSpace
-  签名: : MeasurableSpace 实数>=0
+实例 非负实数.measurableSpace
+  签名: : 可测空间 实数>=0
   定义体: inferInstanceAs MeasurableSpace (Subtype _)
 
 Depends on / 依赖: MeasurableSpace, Subtype
@@ -2187,8 +2187,8 @@ instance NNReal.borelSpace
   body: inferInstanceAs BorelSpace (Subtype _)
 
 中文:
-实例 NNReal.borelSpace
-  签名: : BorelSpace 实数>=0
+实例 非负实数.borelSpace
+  签名: : Borel空间 实数>=0
   定义体: inferInstanceAs BorelSpace (Subtype _)
 
 Depends on / 依赖: BorelSpace, Subtype
@@ -2205,8 +2205,8 @@ instance ENNReal.measurableSpace
   body: borel Real>=0∞
 
 中文:
-实例 ENNReal.measurableSpace
-  签名: : MeasurableSpace 实数>=0∞
+实例 广义非负实数.measurableSpace
+  签名: : 可测空间 实数>=0∞
   定义体: borel Real>=0∞
 -/
 instance ENNReal.measurableSpace : MeasurableSpace Real>=0∞ :=
@@ -2221,8 +2221,8 @@ instance ENNReal.borelSpace
   body: ⟨rfl⟩
 
 中文:
-实例 ENNReal.borelSpace
-  签名: : BorelSpace 实数>=0∞
+实例 广义非负实数.borelSpace
+  签名: : Borel空间 实数>=0∞
   定义体: ⟨rfl⟩
 -/
 instance ENNReal.borelSpace : BorelSpace Real>=0∞ :=
@@ -2237,8 +2237,8 @@ instance EReal.measurableSpace
   body: borel EReal
 
 中文:
-实例 EReal.measurableSpace
-  签名: : MeasurableSpace E实数
+实例 E实数.measurableSpace
+  签名: : 可测空间 E实数
   定义体: borel EReal
 -/
 instance EReal.measurableSpace : MeasurableSpace EReal :=
@@ -2253,8 +2253,8 @@ instance EReal.borelSpace
   body: ⟨rfl⟩
 
 中文:
-实例 EReal.borelSpace
-  签名: : BorelSpace E实数
+实例 E实数.borelSpace
+  签名: : Borel空间 E实数
   定义体: ⟨rfl⟩
 -/
 instance EReal.borelSpace : BorelSpace EReal :=
@@ -2276,7 +2276,7 @@ theorem map
 
 中文:
 定理 map
-  条件: (μ : Measure α) [IsFiniteMeasureOnCompacts μ] (f : α ≃ₜ β)
+  条件: (μ : 测度 α) [紧集上有限测度 μ] (f : α ≃ₜ β)
   证明: by
   refine ⟨fun K hK => ?_⟩
   rw [← f.toMeasurableEquiv_coe]; rw [MeasurableEquiv.map_apply]
@@ -2299,7 +2299,7 @@ theorem comap
 
 中文:
 定理 comap
-  条件: (μ : Measure β) [IsFiniteMeasureOnCompacts μ] (f : α ≃ₜ β)
+  条件: (μ : 测度 β) [紧集上有限测度 μ] (f : α ≃ₜ β)
   证明: IsFiniteMeasureOnCompacts.comap' μ f.continuous f.measurableEmbedding
 -/
 protected theorem comap (μ : Measure β) [IsFiniteMeasureOnCompacts μ] (f : α ≃ₜ β) :

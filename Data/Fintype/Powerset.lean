@@ -30,8 +30,8 @@ instance Finset.fintype
 @[simp]
 
 中文:
-实例 Finset.fintype
-  签名: [Fintype α]
+实例 有限集.fintype
+  签名: [有限类型 α]
   定义体: ⟨univ.powerset, fun _ => Finset.mem_powerset.2 (Finset.subset_univ _)⟩
 
 @[simp]
@@ -52,9 +52,9 @@ theorem Fintype.card_finset
   proof: Finset.card_powerset Finset.univ
 
 中文:
-定理 Fintype.card_finset
-  条件: [Fintype α]
-  结论: Fintype.card (Finset α) = 2 ^ Fintype.card α
+定理 有限类型.card_finset
+  条件: [有限类型 α]
+  结论: 有限类型.card (有限集 α) = 2 ^ 有限类型.card α
   证明: Finset.card_powerset Finset.univ
 
 Depends on / 依赖: Finset, Finset.card_powerset, Finset.univ, card_powerset
@@ -75,7 +75,7 @@ lemma powerset_univ
 
 中文:
 引理 powerset_univ
-  结论: (univ : Finset α).powerset = univ
+  结论: (univ : 有限集 α).powerset = univ
   证明: coe_injective by simp [-coe_eq_univ]
 -/
 @[simp] lemma powerset_univ : (univ : Finset α).powerset = univ :=
@@ -91,7 +91,7 @@ lemma filter_subset_univ
 
 中文:
 引理 filter_subset_univ
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: by ext; simp
 -/
 lemma filter_subset_univ [DecidableEq α] (s : Finset α) :
@@ -125,7 +125,7 @@ lemma mem_powersetCard_univ
 
 中文:
 引理 mem_powersetCard_univ
-  结论: s in powersetCard k (univ : Finset α) ↔ #s = k
+  结论: s in powersetCard k (univ : 有限集 α) ↔ #s = k
   证明: mem_powersetCard.trans and_iff_right subset_univ _
 
 Depends on / 依赖: and_iff_right, mem_powersetCard, mem_powersetCard.trans, subset_univ
@@ -164,8 +164,8 @@ theorem Fintype.card_finset_len
   simp [Fintype.subtype_card, Finset.card_univ]
 
 中文:
-定理 Fintype.card_finset_len
-  条件: [Fintype α] (k : 自然数)
+定理 有限类型.card_finset_len
+  条件: [有限类型 α] (k : 自然数)
   证明: by
   simp [Fintype.subtype_card, Finset.card_univ]
 
@@ -187,8 +187,8 @@ instance Set.fintype
     simp⟩
 
 中文:
-实例 Set.fintype
-  签名: [Fintype α]
+实例 集合.fintype
+  签名: [有限类型 α]
   定义体: ⟨(@Finset.univ (Finset α) _).map coeEmb.1, fun s => by
     classical
     refine mem_map.2 ⟨({a | a in s} : Finset _), Finset.mem_univ _, (coe_filter _ _).trans ?_⟩
@@ -216,8 +216,8 @@ instance Set.instFinite
 @[simp]
 
 中文:
-实例 Set.instFinite
-  签名: [Finite α]
+实例 集合.instFinite
+  签名: [有限 α]
   定义体: by
   cases nonempty_fintype α
   infer_instance
@@ -241,9 +241,9 @@ theorem Fintype.card_set
   proof: (Finset.card_map _).trans (Finset.card_powerset _)
 
 中文:
-定理 Fintype.card_set
-  条件: [Fintype α]
-  结论: Fintype.card (Set α) = 2 ^ Fintype.card α
+定理 有限类型.card_set
+  条件: [有限类型 α]
+  结论: 有限类型.card (集合 α) = 2 ^ 有限类型.card α
   证明: (Finset.card_map _).trans (Finset.card_powerset _)
 
 Depends on / 依赖: Finset, Finset.card_map, Finset.card_powerset, card_map, card_powerset

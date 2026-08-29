@@ -53,11 +53,11 @@ class IsImmersion
     - isLocallyClosed_range : IsLocallyClosed (Set.range f)
 
 中文:
-类 IsImmersion
+类 是Immersion
   参数: (f : X ⟶ Y)
-  继承: IsPreimmersion f
+  继承: 是Preimmersion f
   公理与运算 (1 个):
-    - isLocallyClosed_range : IsLocallyClosed (Set.range f)
+    - isLocallyClosed_range : IsLocallyClosed (集合.range f)
 -/
 class IsImmersion (f : X ⟶ Y) : Prop extends IsPreimmersion f where
   isLocallyClosed_range : IsLocallyClosed (Set.range f)
@@ -71,8 +71,8 @@ lemma Scheme.Hom.isLocallyClosed_range
   proof: IsImmersion.isLocallyClosed_range
 
 中文:
-引理 Scheme.Hom.isLocallyClosed_range
-  条件: (f : X ⟶ Y) [IsImmersion f]
+引理 概形.态射.isLocallyClosed_range
+  条件: (f : X ⟶ Y) [是Immersion f]
   证明: IsImmersion.isLocallyClosed_range
 
 Depends on / 依赖: IsImmersion, IsImmersion.isLocallyClosed_range, isLocallyClosed_range
@@ -90,8 +90,8 @@ definition Scheme.Hom.coborderRange
   body: ⟨coborder (Set.range f), f.isLocallyClosed_range.isOpen_coborder⟩
 
 中文:
-定义 Scheme.Hom.coborderRange
-  签名: (f : X ⟶ Y) [IsImmersion f]
+定义 概形.态射.coborderRange
+  签名: (f : X ⟶ Y) [是Immersion f]
   定义体: ⟨coborder (Set.range f), f.isLocallyClosed_range.isOpen_coborder⟩
 
 Depends on / 依赖: Set.range, coborder, f.isLocallyClosed_range.isOpen_coborder, isLocallyClosed_range, isOpen_coborder
@@ -113,8 +113,8 @@ definition Scheme.Hom.liftCoborder
   body: IsOpenImmersion.lift f.coborderRange.ι f (by simpa using! subset_coborder)
 
 中文:
-定义 Scheme.Hom.liftCoborder
-  签名: (f : X ⟶ Y) [IsImmersion f]
+定义 概形.态射.liftCoborder
+  签名: (f : X ⟶ Y) [是Immersion f]
   定义体: IsOpenImmersion.lift f.coborderRange.ι f (by simpa using! subset_coborder)
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift, coborderRange, f.coborderRange, subset_coborder
@@ -136,8 +136,8 @@ lemma Scheme.Hom.liftCoborder_ι
   proof: IsOpenImmersion.lift_fac _ _ _
 
 中文:
-引理 Scheme.Hom.liftCoborder_ι
-  条件: (f : X ⟶ Y) [IsImmersion f]
+引理 概形.态射.liftCoborder_ι
+  条件: (f : X ⟶ Y) [是Immersion f]
   证明: IsOpenImmersion.lift_fac _ _ _
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift_fac, lift_fac
@@ -157,8 +157,8 @@ lemma Scheme.Hom.liftCoborder_preimage
   rw [Scheme.Hom.comp_preimage]; rw [Scheme.Hom.preimage_image_eq]
 
 中文:
-引理 Scheme.Hom.liftCoborder_preimage
-  条件: [IsImmersion f] (U : f.coborderRange.toScheme.Opens)
+引理 概形.态射.liftCoborder_preimage
+  条件: [是Immersion f] (U : f.coborderRange.toScheme.Opens)
   证明: by
   conv_rhs => enter [1]; rw [← f.liftCoborder_ι]
   rw [Scheme.Hom.comp_preimage]; rw [Scheme.Hom.preimage_image_eq]
@@ -184,7 +184,7 @@ lemma liftCoborder_app
 
 中文:
 引理 liftCoborder_app
-  条件: [IsImmersion f] (U : f.coborderRange.toScheme.Opens)
+  条件: [是Immersion f] (U : f.coborderRange.toScheme.Opens)
   证明: by
   rw [Scheme.Hom.congr_app (f.liftCoborder_ι).symm (f.coborderRange.ι ''ᵁ U)]
   simp [Scheme.Hom.app_eq f.liftCoborder (f.coborderRange.ι.preimage_image_eq U),
@@ -215,8 +215,8 @@ instance [IsImmersion
   apply Set.i
 
 中文:
-实例 [IsImmersion
-  签名: f] : IsClosedImmersion f.liftCoborder
+实例 [是Immersion
+  签名: f] : 是闭浸入 f.liftCoborder
   定义体: by
   have : IsPreimmersion (f.liftCoborder ≫ f.coborderRange.ι) := by
     simp only [Scheme.Hom.liftCoborder_ι]; infer_instance
@@ -248,8 +248,8 @@ instance [IsImmersion
   exact dense_coborder
 
 中文:
-实例 [IsImmersion
-  签名: f] : IsDominant f.coborderRange.ι
+实例 [是Immersion
+  签名: f] : 是Dominant f.coborderRange.ι
   定义体: by
   rw [isDominant_iff]; rw [DenseRange]; rw [Scheme.Opens.range_ι]
   exact dense_coborder
@@ -271,7 +271,7 @@ lemma isImmersion_eq_inf
 
 中文:
 引理 isImmersion_eq_inf
-  结论: @IsImmersion = (@IsPreimmersion ⊓
+  结论: @是Immersion = (@是Preimmersion ⊓
   证明: by
   ext; exact isImmersion_iff _
 
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @IsImmersion
+  签名: IsZariskiLocalAtTarget @是Immersion
   定义体: by
   suffices IsZariskiLocalAtTarget
       (topologically fun {X Y} _ _ f => IsLocallyClosed (Set.range f)) from
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsImmersion
+  签名: MorphismProperty.是Multiplicative @是Immersion
   定义体: inferInstance
   comp_mem {X Y Z} f g hf hg := by
     refine { __ := (inferInstance : IsPreimmersion (f ≫ g)), isLocallyClosed_range := ?_ }
@@ -379,7 +379,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsImmersion f]
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是Immersion f]
   定义体: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
 
 Depends on / 依赖: IsStableUnderComposition, MorphismProperty, MorphismProperty.IsStableUnderComposition.comp_mem, comp_mem
@@ -399,8 +399,8 @@ lemma isImmersion_iff_exists
     fun ⟨_, _, _, _, _, e⟩ => e ▸ inferInstance⟩
 
 中文:
-引理 isImmersion_iff_exists
-  结论: IsImmersion f ↔ 存在 (Z : Scheme) (g₁ : X ⟶ Z) (g₂ : Z ⟶ Y),
+引理 isImmersion_iff_存在
+  结论: 是Immersion f ↔ 存在 (Z : 概形) (g₁ : X ⟶ Z) (g₂ : Z ⟶ Y),
   证明: ⟨fun _ => ⟨_, f.liftCoborder, f.coborderRange.ι, inferInstance, inferInstance, f.liftCoborder_ι⟩,
     fun ⟨_, _, _, _, _, e⟩ => e ▸ inferInstance⟩
 
@@ -428,7 +428,7 @@ instance isStableUnderBaseChange
 
 中文:
 实例 isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @IsImmersion where
+  签名: : MorphismProperty.是StableUnderBaseChange @是Immersion where
   定义体: by
     intro X Y Y' S f g f' g' H hg
     let Z := Limits.pullback f g.coborderRange.ι
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsImmersion (pullback.diagonal f)
+  签名: 是Immersion (pullback.diagonal f)
   定义体: by
   let 𝒰 := Y.affineCover
   let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsImmersion ⊤
+  签名: MorphismProperty.有OfPostcompProperty @是Immersion ⊤
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsImmersion _)
 
@@ -548,7 +548,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [IsImmersion (f ≫ g)]
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [是Immersion (f ≫ g)]
   证明: MorphismProperty.HasOfPostcompProperty.of_postcomp (W' := ⊤) _ g trivial ‹_›
 
 Depends on / 依赖: HasOfPostcompProperty, MorphismProperty, MorphismProperty.HasOfPostcompProperty.of_postcomp, of_postcomp
@@ -567,7 +567,7 @@ theorem comp_iff
 
 中文:
 定理 comp_iff
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsImmersion g]
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是Immersion g]
   证明: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsImmersion (prod.lift (𝟙 X) (𝟙 X))
+  签名: 是Immersion (乘积.lift (𝟙 X) (𝟙 X))
   定义体: by
   rw [← MorphismProperty.cancel_right_of_respectsIso @IsImmersion _ (prodIsoPullback X X).hom]
   convert! (inferInstance : IsImmersion (pullback.diagonal (terminal.from X)))
@@ -617,8 +617,8 @@ instance [IsImmersion
   IsImmersion.of_comp f.toImage f.imageι
 
 中文:
-实例 [IsImmersion
-  签名: f] : IsImmersion f.toImage
+实例 [是Immersion
+  签名: f] : 是Immersion f.toImage
   定义体: have : IsImmersion (f.toImage ≫ f.imageι) := by simpa
   IsImmersion.of_comp f.toImage f.imageι
 
@@ -646,7 +646,7 @@ lemma isPullback_toImage_liftCoborder
 
 中文:
 引理 isPullback_toImage_liftCoborder
-  条件: [IsImmersion f] [QuasiCompact f]
+  条件: [是Immersion f] [拟紧 f]
   证明: by
   refine (isPullback_of_isClosedImmersion _ _ _ _ (by simp) ?_).flip
   rw [Hom.imageι]; rw [IdealSheafData.ker_subschemeι]
@@ -678,8 +678,8 @@ instance [IsImmersion
   body: MorphismProperty.of_isPullback (IsImmersion.isPullback_toImage_liftCoborder f).flip inferInstance
 
 中文:
-实例 [IsImmersion
-  签名: f] [QuasiCompact f] : IsOpenImmersion f.toImage
+实例 [是Immersion
+  签名: f] [拟紧 f] : 是开浸入 f.toImage
   定义体: MorphismProperty.of_isPullback (IsImmersion.isPullback_toImage_liftCoborder f).flip inferInstance
 
 Depends on / 依赖: IsImmersion, IsImmersion.isPullback_toImage_liftCoborder, MorphismProperty, MorphismProperty.of_isPullback, isPullback_toImage_liftCoborder, of_isPullback
@@ -698,8 +698,8 @@ lemma isImmersion_iff_exists_of_quasiCompact
     fun ⟨_, _, _, _, _, e⟩ => e ▸ inferInstance⟩
 
 中文:
-引理 isImmersion_iff_exists_of_quasiCompact
-  条件: [QuasiCompact f]
+引理 isImmersion_iff_存在_of_quasiCompact
+  条件: [拟紧 f]
   证明: ⟨fun _ => ⟨_, f.toImage, f.imageι, inferInstance, inferInstance, f.toImage_imageι⟩,
     fun ⟨_, _, _, _, _, e⟩ => e ▸ inferInstance⟩
 

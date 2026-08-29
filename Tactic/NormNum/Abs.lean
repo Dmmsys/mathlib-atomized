@@ -33,8 +33,8 @@ theorem isNat_abs_nonneg
   rfl
 
 中文:
-定理 isNat_abs_nonneg
-  结论: {α : 类型} [Ring α] [Lattice α] [IsOrderedRing α]
+定理 is自然数_abs_nonneg
+  结论: {α : 类型} [环 α] [格 α] [是Ordered环 α]
   证明: by
   rw [pa.out]; rw [Nat.abs_cast]
   constructor
@@ -60,8 +60,8 @@ theorem isNat_abs_neg
   simp
 
 中文:
-定理 isNat_abs_neg
-  结论: {α : 类型} [Ring α] [Lattice α] [IsOrderedRing α]
+定理 is自然数_abs_neg
+  结论: {α : 类型} [环 α] [格 α] [是Ordered环 α]
   证明: by
   rw [pa.out]
   constructor
@@ -90,7 +90,7 @@ theorem isNNRat_abs_nonneg
 
 中文:
 定理 isNNRat_abs_nonneg
-  结论: {α : 类型} [DivisionRing α] [LinearOrder α]
+  结论: {α : 类型} [除环 α] [线性序 α]
   证明: by
   obtain ⟨ha1, rfl⟩ := ra
   refine ⟨ha1, abs_of_nonneg ?_⟩
@@ -125,7 +125,7 @@ theorem isNNRat_abs_neg
 
 中文:
 定理 isNNRat_abs_neg
-  结论: {α : 类型} [DivisionRing α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [除环 α] [线性序 α] [是StrictOrdered环 α]
   证明: by
   obtain ⟨ha1, rfl⟩ := ra
   simp only [Int.cast_negOfNat, neg_mul, abs_neg]

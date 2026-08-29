@@ -84,15 +84,15 @@ class IsCardinalForSmallObjectArgument
     - preservesColimit({A B X Y : C} (i : A ⟶ B) (_ : I i) (f : X ⟶ Y) (hf : RelativeCellComplex.{w} (fun (_ : κ.ord.ToType) => I.homFamily) f)) : PreservesColimit hf.F (coyoneda.obj (Opposite.op A))
 
 中文:
-类 IsCardinalForSmallObjectArgument
-  参数: (κ : Cardinal.{w}) [Fact κ.IsRegular]
+类 是CardinalForSmallObjectArgument
+  参数: (κ : 基数.{w}) [Fact κ.是正则]
   公理与运算 (6 个):
-    - isSmall : IsSmall.{w} I  [默认: by infer_instance]
+    - isSmall : 是Small.{w} I  [默认: by infer_instance]
     - locallySmall : LocallySmall.{w} C  [默认: by infer_instance]
-    - hasPushouts : HasPushouts C  [默认: by infer_instance]
+    - hasPushouts : 有Pushouts C  [默认: by infer_instance]
     - hasCoproducts : HasCoproducts.{w} C  [默认: by infer_instance]
-    - hasIterationOfShape : HasIterationOfShape κ.ord.ToType C  [默认: by infer_instance]
-    - preservesColimit({A B X Y : C} (i : A ⟶ B) (_ : I i) (f : X ⟶ Y) (hf : RelativeCellComplex.{w} (fun (_ : κ.ord.ToType) => I.homFamily) f)) : PreservesColimit hf.F (coyoneda.obj (Opposite.op A))
+    - hasIterationOfShape : 有IterationOfShape κ.ord.ToType C  [默认: by infer_instance]
+    - preservesColimit({A B X Y : C} (i : A ⟶ B) (_ : I i) (f : X ⟶ Y) (hf : RelativeCellComplex.{w} (fun (_ : κ.ord.ToType) => I.homFamily) f)) : 保持余极限 hf.F (coyoneda.obj (对偶.op A))
 
 Depends on / 依赖: HasCoproducts, HasIterationOfShape, HasPushouts, I.homFamily, LocallySmall, Opposite, Opposite.op, PreservesColimit, RelativeCellComplex, ToType, coyoneda, coyoneda.obj, hasCoproducts, hasIterationOfShape, hasPushouts, hf.F, homFamily, infer_instance, locallySmall, ord.ToType
 -/
@@ -128,7 +128,7 @@ lemma isSmall
 
 中文:
 引理 isSmall
-  结论: IsSmall.{w} I
+  结论: 是Small.{w} I
   证明: IsCardinalForSmallObjectArgument.isSmall κ
 
 Depends on / 依赖: IsCardinalForSmallObjectArgument, IsCardinalForSmallObjectArgument.isSmall, isSmall
@@ -164,7 +164,7 @@ lemma hasIterationOfShape
 
 中文:
 引理 hasIterationOfShape
-  结论: HasIterationOfShape κ.ord.ToType C
+  结论: 有IterationOfShape κ.ord.ToType C
   证明: IsCardinalForSmallObjectArgument.hasIterationOfShape I
 
 Depends on / 依赖: IsCardinalForSmallObjectArgument, IsCardinalForSmallObjectArgument.hasIterationOfShape, hasIterationOfShape
@@ -182,7 +182,7 @@ lemma hasPushouts
 
 中文:
 引理 hasPushouts
-  结论: HasPushouts C
+  结论: 有Pushouts C
   证明: IsCardinalForSmallObjectArgument.hasPushouts I κ
 
 Depends on / 依赖: IsCardinalForSmallObjectArgument, IsCardinalForSmallObjectArgument.hasPushouts, hasPushouts
@@ -274,7 +274,7 @@ definition succStruct
 
 中文:
 定义 succStruct
-  签名: : SuccStruct (Arrow C ⥤ Arrow C)
+  签名: : SuccStruct (箭头 C ⥤ 箭头 C)
   定义体: haveI := hasColimitsOfShape_discrete I κ
   haveI := hasPushouts I κ
   SuccStruct.ofNatTrans (ε I.homFamily)
@@ -335,7 +335,7 @@ definition propArrow
 
 中文:
 定义 propArrow
-  签名: : Morphism命题erty (Arrow C)
+  签名: : MorphismProperty (箭头 C)
   定义体: fun _ _ f =>
   (coproducts.{w} I).pushouts f.left ∧ (isomorphisms C) f.right
 -/
@@ -401,7 +401,7 @@ definition iterationFunctor
 
 中文:
 定义 iterationFunctor
-  签名: : κ.ord.ToType ⥤ Arrow C ⥤ Arrow C
+  签名: : κ.ord.ToType ⥤ 箭头 C ⥤ 箭头 C
   定义体: haveI := hasIterationOfShape I κ
   (succStruct I κ).iterationFunctor κ.ord.ToType
 
@@ -422,7 +422,7 @@ definition iteration
 
 中文:
 定义 iteration
-  签名: : Arrow C ⥤ Arrow C
+  签名: : 箭头 C ⥤ 箭头 C
   定义体: haveI := hasIterationOfShape I κ
   (succStruct I κ).iteration κ.ord.ToType
 
@@ -510,7 +510,7 @@ definition transfiniteCompositionOfShapeιIterationAppRight
 
 中文:
 定义 transfiniteCompositionOfShapeιIterationAppRight
-  签名: (f : Arrow C)
+  签名: (f : 箭头 C)
   定义体: haveI := hasIterationOfShape I κ
   let h := transfiniteCompositionOfShapeSuccStructPropιIteration I κ
   { toTransfiniteCompositionOfShape :=
@@ -548,7 +548,7 @@ definition iterationObjRightIso
 
 中文:
 定义 iterationObjRightIso
-  签名: (f : Arrow C)
+  签名: (f : 箭头 C)
   定义体: asIso ((ιIteration I κ).app f).right
 -/
 noncomputable def iterationObjRightIso (f : Arrow C) :
@@ -567,7 +567,7 @@ definition iterationFunctorObjObjRightIso
 
 中文:
 定义 iterationFunctorObjObjRightIso
-  签名: (f : Arrow C) (j : κ.ord.ToType)
+  签名: (f : 箭头 C) (j : κ.ord.ToType)
   定义体: asIso ((transfiniteCompositionOfShapeιIterationAppRight I κ f).incl.app j) ≪≫
     (iterationObjRightIso I κ f).symm
 
@@ -592,7 +592,7 @@ lemma iterationFunctorObjObjRightIso_ιIteration_app_right
 
 中文:
 引理 iterationFunctorObjObjRightIso_ιIteration_app_right
-  条件: (f : Arrow C) (j : κ.ord.ToType)
+  条件: (f : 箭头 C) (j : κ.ord.ToType)
   证明: by
   simp [iterationFunctorObjObjRightIso, iterationObjRightIso]
 
@@ -647,7 +647,7 @@ definition iterationFunctorMapSuccAppArrowIso
 
 中文:
 定义 iterationFunctorMapSuccAppArrowIso
-  签名: (f : Arrow C) (j : κ.ord.ToType)
+  签名: (f : 箭头 C) (j : κ.ord.ToType)
   定义体: hasColimitsOfShape_discrete I κ
     letI := hasPushouts I κ
     Arrow.mk (((iterationFunctor I κ).map (homOfLE (Order.le_succ j))).app f) ≅
@@ -684,7 +684,7 @@ lemma iterationFunctorMapSuccAppArrowIso_hom_left
 
 中文:
 引理 iterationFunctorMapSuccAppArrowIso_hom_left
-  条件: (f : Arrow C) (j : κ.ord.ToType)
+  条件: (f : 箭头 C) (j : κ.ord.ToType)
   证明: rfl
 -/
 lemma iterationFunctorMapSuccAppArrowIso_hom_left (f : Arrow C) (j : κ.ord.ToType) :
@@ -1098,7 +1098,7 @@ definition objMap
 
 中文:
 定义 objMap
-  签名: {f g : Arrow C} (φ : f ⟶ g)
+  签名: {f g : 箭头 C} (φ : f ⟶ g)
   定义体: ((iteration I κ).map φ).left
 
 @[simp]
@@ -1124,7 +1124,7 @@ lemma objMap_id
 
 中文:
 引理 objMap_id
-  条件: (f : Arrow C)
+  条件: (f : 箭头 C)
   结论: objMap I κ (𝟙 f) = 𝟙 _
   证明: by
   simp only [objMap, Functor.map_id]
@@ -1153,7 +1153,7 @@ lemma objMap_comp
 
 中文:
 引理 objMap_comp
-  条件: {f g h : Arrow C} (φ : f ⟶ g) (ψ : g ⟶ h)
+  条件: {f g h : 箭头 C} (φ : f ⟶ g) (ψ : g ⟶ h)
   证明: by
   simp only [objMap, Functor.map_comp]
   rfl
@@ -1178,7 +1178,7 @@ lemma ιObj_naturality
 
 中文:
 引理 ιObj_naturality
-  条件: {f g : Arrow C} (φ : f ⟶ g)
+  条件: {f g : 箭头 C} (φ : f ⟶ g)
   证明: Arrow.leftFunc.congr_map ((ιIteration I κ).naturality φ).symm
 
 Depends on / 依赖: Arrow.leftFunc.congr_map, congr_map, leftFunc, naturality
@@ -1205,7 +1205,7 @@ lemma πObj_naturality
 
 中文:
 引理 πObj_naturality
-  条件: {f g : Arrow C} (φ : f ⟶ g)
+  条件: {f g : 箭头 C} (φ : f ⟶ g)
   证明: by
   let e₁ := asIso ((ιIteration I κ).app (Arrow.mk f.hom)).right
   let e₂ := asIso ((ιIteration I κ).app (Arrow.mk g.hom)).right

@@ -44,7 +44,7 @@ theorem det_toLinearMap_eq_norm
 
 中文:
 定理 det_toLinearMap_eq_norm
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: by
   rw [← LinearMap.det_toMatrix <| basis ..]
   have : !![z.re, a * z.im; z.im, z.re + b * z.im].det = z.norm := by

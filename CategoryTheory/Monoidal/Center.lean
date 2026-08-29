@@ -89,7 +89,7 @@ definition Center
   body: Σ X : C, HalfBraiding X
 
 中文:
-定义 Center
+定义 中心
   定义体: Σ X : C, HalfBraiding X
 
 Depends on / 依赖: HalfBraiding
@@ -114,8 +114,8 @@ structure Hom
     - comm : forall U, (f ▷ U) ≫ (Y.2.β U).hom = (X.2.β U).hom ≫ (U ◁ f)  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (X Y : Center C)
+结构 态射
+  参数: (X Y : 中心 C)
   公理与运算 (2 个):
     - f : X.1 ⟶ Y.1
     - comm : 对任意 U, (f ▷ U) ≫ (Y.2.β U).hom = (X.2.β U).hom ≫ (U ◁ f)  [默认: by cat_disch]
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Center C)
+  签名: 箭图 (中心 C)
   定义体: Hom
 
 @[ext]
@@ -162,7 +162,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {X Y : Center C} (f g : X ⟶ Y) (w : f.f = g.f)
+  条件: {X Y : 中心 C} (f g : X ⟶ Y) (w : f.f = g.f)
   结论: f = g
   证明: by
   cases f; cases g; congr
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Center C)
+  签名: 范畴 (中心 C)
   定义体: { f := 𝟙 X.1 }
   comp f g := { f := f.f ≫ g.f }
 
@@ -207,8 +207,8 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (X : Center C)
-  结论: Hom.f (𝟙 X) = 𝟙 X.1
+  条件: (X : 中心 C)
+  结论: 态射.f (𝟙 X) = 𝟙 X.1
   证明: rfl
 
 @[simp]
@@ -228,7 +228,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {X Y Z : Center C} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 中心 C} (f : X ⟶ Y) (g : Y ⟶ Z)
   结论: (f ≫ g).f = f.f ≫ g.f
   证明: rfl
 -/
@@ -252,7 +252,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : Center C} (f : X ⟶ Y) [IsIso f.f]
+  签名: {X Y : 中心 C} (f : X ⟶ Y) [是同构 f.f]
   定义体: f
   inv := ⟨inv f.f,
     fun U => by simp [← cancel_epi (f.f ▷ U), ← comp_whiskerRight_assoc,
@@ -276,7 +276,7 @@ instance isIso_of_f_isIso
 
 中文:
 实例 isIso_of_f_isIso
-  签名: {X Y : Center C} (f : X ⟶ Y) [IsIso f.f]
+  签名: {X Y : 中心 C} (f : X ⟶ Y) [是同构 f.f]
   定义体: by
   change IsIso (isoMk f).hom
   infer_instance
@@ -307,7 +307,7 @@ definition tensorObj
 
 中文:
 定义 tensorObj
-  签名: (X Y : Center C)
+  签名: (X Y : 中心 C)
   定义体: ⟨X.1 otimes Y.1,
     { β := fun U =>
         α_ _ _ _ ≪≫
@@ -372,7 +372,7 @@ theorem whiskerLeft_comm
 
 中文:
 定理 whiskerLeft_comm
-  条件: (X : Center C) {Y₁ Y₂ : Center C} (f : Y₁ ⟶ Y₂) (U : C)
+  条件: (X : 中心 C) {Y₁ Y₂ : 中心 C} (f : Y₁ ⟶ Y₂) (U : C)
   证明: by
   dsimp only [tensorObj_fst, tensorObj_snd_β, Iso.trans_hom, whiskerLeftIso_hom,
     Iso.symm_hom, whiskerRightIso_hom]
@@ -410,7 +410,7 @@ definition whiskerLeft
 
 中文:
 定义 whiskerLeft
-  签名: (X : Center C) {Y₁ Y₂ : Center C} (f : Y₁ ⟶ Y₂)
+  签名: (X : 中心 C) {Y₁ Y₂ : 中心 C} (f : Y₁ ⟶ Y₂)
   定义体: X.1 ◁ f.f
   comm U := whiskerLeft_comm X f U
 -/
@@ -438,7 +438,7 @@ theorem whiskerRight_comm
 
 中文:
 定理 whiskerRight_comm
-  条件: {X₁ X₂ : Center C} (f : X₁ ⟶ X₂) (Y : Center C) (U : C)
+  条件: {X₁ X₂ : 中心 C} (f : X₁ ⟶ X₂) (Y : 中心 C) (U : C)
   证明: by
   dsimp only [tensorObj_fst, tensorObj_snd_β, Iso.trans_hom, whiskerLeftIso_hom,
     Iso.symm_hom, whiskerRightIso_hom]
@@ -475,7 +475,7 @@ definition whiskerRight
 
 中文:
 定义 whiskerRight
-  签名: {X₁ X₂ : Center C} (f : X₁ ⟶ X₂) (Y : Center C)
+  签名: {X₁ X₂ : 中心 C} (f : X₁ ⟶ X₂) (Y : 中心 C)
   定义体: f.f ▷ Y.1
   comm U := whiskerRight_comm f Y U
 -/
@@ -499,7 +499,7 @@ definition tensorHom
 
 中文:
 定义 tensorHom
-  签名: {X₁ Y₁ X₂ Y₂ : Center C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
+  签名: {X₁ Y₁ X₂ Y₂ : 中心 C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
   定义体: f.f otimesₘ g.f
   comm U := by
     rw [tensorHom_def]; rw [comp_whiskerRight_assoc]; rw [whiskerLeft_comm]; rw [whiskerRight_comm_assoc]; rw [MonoidalCategory.whiskerLeft_comp]
@@ -524,7 +524,7 @@ definition tensorUnit
 
 中文:
 定义 tensorUnit
-  签名: : Center C
+  签名: : 中心 C
   定义体: ⟨𝟙_ C, { β := fun U => fun_ U ≪≫ (ρ_ U).symm }⟩
 
 Depends on / 依赖: fun_
@@ -544,7 +544,7 @@ definition associator
 
 中文:
 定义 associator
-  签名: (X Y Z : Center C)
+  签名: (X Y Z : 中心 C)
   定义体: isoMk ⟨(α_ X.1 Y.1 Z.1).hom, fun U => by simp⟩
 -/
 def associator (X Y Z : Center C) : tensorObj (tensorObj X Y) Z ≅ tensorObj X (tensorObj Y Z) :=
@@ -562,7 +562,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: (X : Center C)
+  签名: (X : 中心 C)
   定义体: isoMk ⟨(fun_ X.1).hom, fun U => by simp⟩
 
 Depends on / 依赖: fun_
@@ -582,7 +582,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: (X : Center C)
+  签名: (X : 中心 C)
   定义体: isoMk ⟨(ρ_ X.1).hom, fun U => by simp⟩
 -/
 def rightUnitor (X : Center C) : tensorObj X tensorUnit ≅ X :=
@@ -618,7 +618,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (Center C)
+  签名: 幺半群范畴 (中心 C)
   定义体: tensorObj X Y
   tensorHom f g := tensorHom f g
   tensorHom_def := by intros; ext; simp [tensorHom_def]
@@ -655,7 +655,7 @@ theorem tensor_fst
 
 中文:
 定理 tensor_fst
-  条件: (X Y : Center C)
+  条件: (X Y : 中心 C)
   结论: (X otimes Y).1 = X.1 otimes Y.1
   证明: rfl
 -/
@@ -674,7 +674,7 @@ theorem tensor_β
 
 中文:
 定理 tensor_β
-  条件: (X Y : Center C) (U : C)
+  条件: (X Y : 中心 C) (U : C)
   证明: rfl
 -/
 theorem tensor_β (X Y : Center C) (U : C) :
@@ -697,7 +697,7 @@ theorem whiskerLeft_f
 
 中文:
 定理 whiskerLeft_f
-  条件: (X : Center C) {Y₁ Y₂ : Center C} (f : Y₁ ⟶ Y₂)
+  条件: (X : 中心 C) {Y₁ Y₂ : 中心 C} (f : Y₁ ⟶ Y₂)
   结论: (X ◁ f).f = X.1 ◁ f.f
   证明: rfl
 -/
@@ -717,7 +717,7 @@ theorem whiskerRight_f
 
 中文:
 定理 whiskerRight_f
-  条件: {X₁ X₂ : Center C} (f : X₁ ⟶ X₂) (Y : Center C)
+  条件: {X₁ X₂ : 中心 C} (f : X₁ ⟶ X₂) (Y : 中心 C)
   结论: (f ▷ Y).f = f.f ▷ Y.1
   证明: rfl
 -/
@@ -737,7 +737,7 @@ theorem tensor_f
 
 中文:
 定理 tensor_f
-  条件: {X₁ Y₁ X₂ Y₂ : Center C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
+  条件: {X₁ Y₁ X₂ Y₂ : 中心 C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
   结论: (f otimesₘ g).f = f.f otimesₘ g.f
   证明: rfl
 -/
@@ -758,7 +758,7 @@ theorem tensorUnit_β
 中文:
 定理 tensorUnit_β
   条件: (U : C)
-  结论: (𝟙_ (Center C)).2.β U = fun_ U ≪≫ (ρ_ U).symm
+  结论: (𝟙_ (中心 C)).2.β U = fun_ U ≪≫ (ρ_ U).symm
   证明: rfl
 -/
 theorem tensorUnit_β (U : C) : (𝟙_ (Center C)).2.β U = fun_ U ≪≫ (ρ_ U).symm :=
@@ -777,8 +777,8 @@ theorem associator_hom_f
 
 中文:
 定理 associator_hom_f
-  条件: (X Y Z : Center C)
-  结论: Hom.f (α_ X Y Z).hom = (α_ X.1 Y.1 Z.1).hom
+  条件: (X Y Z : 中心 C)
+  结论: 态射.f (α_ X Y Z).hom = (α_ X.1 Y.1 Z.1).hom
   证明: rfl
 -/
 theorem associator_hom_f (X Y Z : Center C) : Hom.f (α_ X Y Z).hom = (α_ X.1 Y.1 Z.1).hom :=
@@ -799,8 +799,8 @@ theorem associator_inv_f
 
 中文:
 定理 associator_inv_f
-  条件: (X Y Z : Center C)
-  结论: Hom.f (α_ X Y Z).inv = (α_ X.1 Y.1 Z.1).inv
+  条件: (X Y Z : 中心 C)
+  结论: 态射.f (α_ X Y Z).inv = (α_ X.1 Y.1 Z.1).inv
   证明: by
   apply Iso.inv_ext' -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
   rw [← associator_hom_f]; rw [← comp_f]; rw [Iso.hom_inv_id]; rfl
@@ -824,8 +824,8 @@ theorem leftUnitor_hom_f
 
 中文:
 定理 leftUnitor_hom_f
-  条件: (X : Center C)
-  结论: Hom.f (fun_ X).hom = (fun_ X.1).hom
+  条件: (X : 中心 C)
+  结论: 态射.f (fun_ X).hom = (fun_ X.1).hom
   证明: rfl
 -/
 theorem leftUnitor_hom_f (X : Center C) : Hom.f (fun_ X).hom = (fun_ X.1).hom :=
@@ -846,8 +846,8 @@ theorem leftUnitor_inv_f
 
 中文:
 定理 leftUnitor_inv_f
-  条件: (X : Center C)
-  结论: Hom.f (fun_ X).inv = (fun_ X.1).inv
+  条件: (X : 中心 C)
+  结论: 态射.f (fun_ X).inv = (fun_ X.1).inv
   证明: by
   apply Iso.inv_ext' -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
   rw [← leftUnitor_hom_f]; rw [← comp_f]; rw [Iso.hom_inv_id]; rfl
@@ -871,8 +871,8 @@ theorem rightUnitor_hom_f
 
 中文:
 定理 rightUnitor_hom_f
-  条件: (X : Center C)
-  结论: Hom.f (ρ_ X).hom = (ρ_ X.1).hom
+  条件: (X : 中心 C)
+  结论: 态射.f (ρ_ X).hom = (ρ_ X.1).hom
   证明: rfl
 -/
 theorem rightUnitor_hom_f (X : Center C) : Hom.f (ρ_ X).hom = (ρ_ X.1).hom :=
@@ -893,8 +893,8 @@ theorem rightUnitor_inv_f
 
 中文:
 定理 rightUnitor_inv_f
-  条件: (X : Center C)
-  结论: Hom.f (ρ_ X).inv = (ρ_ X.1).inv
+  条件: (X : 中心 C)
+  结论: 态射.f (ρ_ X).inv = (ρ_ X.1).inv
   证明: by
   apply Iso.inv_ext' -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
   rw [← rightUnitor_hom_f]; rw [← comp_f]; rw [Iso.hom_inv_id]; rfl
@@ -924,7 +924,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Center C ⥤ C where
+  签名: : 中心 C ⥤ C where
   定义体: X.1
   map f := f.f
 -/
@@ -945,7 +945,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Monoidal
+  签名: (forget C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -1002,7 +1002,7 @@ lemma forget_μ
 
 中文:
 引理 forget_μ
-  条件: (X Y : Center C)
+  条件: (X Y : 中心 C)
   结论: μ (forget C) X Y = 𝟙 _
   证明: rfl
 -/
@@ -1019,7 +1019,7 @@ lemma forget_δ
 
 中文:
 引理 forget_δ
-  条件: (X Y : Center C)
+  条件: (X Y : 中心 C)
   结论: δ (forget C) X Y = 𝟙 _
   证明: rfl
 -/
@@ -1036,7 +1036,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).ReflectsIsomorphisms
+  签名: (forget C).反映同构
   定义体: by dsimp at i; change IsIso (isoMk f).hom; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1065,7 +1065,7 @@ definition braiding
 
 中文:
 定义 braiding
-  签名: (X Y : Center C)
+  签名: (X Y : 中心 C)
   定义体: isoMk
     ⟨(X.2.β Y.1).hom, fun U => by
       dsimp
@@ -1094,7 +1094,7 @@ instance braidedCategoryCenter
 
 中文:
 实例 braidedCategoryCenter
-  签名: : BraidedCategory (Center C) where
+  签名: : 辫范畴 (中心 C) where
   定义体: braiding
 
 Depends on / 依赖: braiding
@@ -1145,7 +1145,7 @@ definition ofBraided
 
 中文:
 定义 ofBraided
-  签名: : C ⥤ Center C where
+  签名: : C ⥤ 中心 C where
   定义体: ofBraidedObj
   map f :=
     { f
@@ -1177,7 +1177,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofBraided C).Monoidal
+  签名: (ofBraided C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso :=
         { hom := { f := 𝟙 _ }

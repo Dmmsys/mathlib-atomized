@@ -38,7 +38,7 @@ theorem mono_cast
 
 中文:
 定理 mono_cast
-  结论: Monotone (自然数.cast : 自然数 -> α)
+  结论: 递增 (自然数.cast : 自然数 -> α)
   证明: monotone_nat_of_le_succ fun n => by
     rw [Nat.cast_succ]; exact le_add_of_nonneg_right zero_le_one
 
@@ -82,7 +82,7 @@ theorem ofNat_nonneg'
   proof: cast_nonneg' n
 
 中文:
-定理 ofNat_nonneg'
+定理 of自然数_nonneg'
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: 0 <= (of自然数(n) : α)
   证明: cast_nonneg' n
@@ -159,7 +159,7 @@ theorem strictMono_cast
 
 中文:
 定理 strictMono_cast
-  结论: StrictMono (自然数.cast : 自然数 -> α)
+  结论: 严格递增 (自然数.cast : 自然数 -> α)
   证明: mono_cast.strictMono_of_injective cast_injective
 
 Depends on / 依赖: cast_injective, mono_cast, mono_cast.strictMono_of_injective, strictMono_of_injective
@@ -372,7 +372,7 @@ theorem ofNat_le_cast
 @[simp]
 
 中文:
-定理 ofNat_le_cast
+定理 of自然数_le_cast
   结论: (of自然数(m) : α) <= n ↔ (Of自然数.of自然数 m : 自然数) <= n
   证明: cast_le
 
@@ -393,7 +393,7 @@ theorem ofNat_lt_cast
   proof: cast_lt
 
 中文:
-定理 ofNat_lt_cast
+定理 of自然数_lt_cast
   结论: (of自然数(m) : α) < n ↔ (Of自然数.of自然数 m : 自然数) < n
   证明: cast_lt
 
@@ -418,7 +418,7 @@ theorem cast_le_ofNat
 @[simp]
 
 中文:
-定理 cast_le_ofNat
+定理 cast_le_of自然数
   结论: (m : α) <= (of自然数(n) : α) ↔ m <= Of自然数.of自然数 n
   证明: cast_le
 
@@ -441,7 +441,7 @@ theorem cast_lt_ofNat
 @[simp]
 
 中文:
-定理 cast_lt_ofNat
+定理 cast_lt_of自然数
   结论: (m : α) < (of自然数(n) : α) ↔ m < Of自然数.of自然数 n
   证明: cast_lt
 
@@ -464,7 +464,7 @@ theorem one_lt_ofNat
 @[simp]
 
 中文:
-定理 one_lt_ofNat
+定理 one_lt_of自然数
   结论: 1 < (of自然数(n) : α)
   证明: one_lt_cast.mpr AtLeastTwo.one_lt
 
@@ -487,7 +487,7 @@ theorem one_le_ofNat
 @[simp]
 
 中文:
-定理 one_le_ofNat
+定理 one_le_of自然数
   结论: 1 <= (of自然数(n) : α)
   证明: one_le_cast.mpr NeZero.one_le
 
@@ -510,7 +510,7 @@ theorem not_ofNat_le_one
 @[simp]
 
 中文:
-定理 not_ofNat_le_one
+定理 not_of自然数_le_one
   结论: ¬(of自然数(n) : α) <= 1
   证明: (cast_le_one.not.trans not_le).mpr AtLeastTwo.one_lt
 
@@ -531,7 +531,7 @@ theorem not_ofNat_lt_one
   proof: mt le_of_lt not_ofNat_le_one
 
 中文:
-定理 not_ofNat_lt_one
+定理 not_of自然数_lt_one
   结论: ¬(of自然数(n) : α) < 1
   证明: mt le_of_lt not_ofNat_le_one
 
@@ -555,7 +555,7 @@ theorem ofNat_le
   proof: cast_le
 
 中文:
-定理 ofNat_le
+定理 of自然数_le
   证明: cast_le
 
 Depends on / 依赖: cast_le
@@ -573,7 +573,7 @@ theorem ofNat_lt
   proof: cast_lt
 
 中文:
-定理 ofNat_lt
+定理 of自然数_lt
   证明: cast_lt
 
 Depends on / 依赖: cast_lt
@@ -593,8 +593,8 @@ instance [AddMonoidWithOne
   body: ⟨1, 0, (Nat.cast_one (R := α) ▸ Nat.cast_ne_zero.2 (by decide))⟩
 
 中文:
-实例 [AddMonoidWithOne
-  签名: α] [CharZero α] : Nontrivial α where 存在_pair_ne
+实例 [加法带幺幺半群
+  签名: α] [特征零 α] : 非平凡 α where 存在_pair_ne
   定义体: ⟨1, 0, (Nat.cast_one (R := α) ▸ Nat.cast_ne_zero.2 (by decide))⟩
 
 Depends on / 依赖: Nat.cast_ne_zero, Nat.cast_one, cast_ne_zero, cast_one
@@ -616,7 +616,7 @@ theorem NeZero.nat_of_injective
 
 中文:
 定理 NeZero.nat_of_injective
-  结论: {n : 自然数} [NeZero (n : R)] [RingHomClass F R S] {f : F}
+  结论: {n : 自然数} [NeZero (n : R)] [环态射类 F R S] {f : F}
   证明: ⟨fun h => NeZero.natCast_ne n R hf by simpa only [map_natCast, map_zero f]⟩
 
 Depends on / 依赖: NeZero, NeZero.natCast_ne, map_natCast, map_zero, natCast_ne

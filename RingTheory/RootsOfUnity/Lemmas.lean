@@ -43,7 +43,7 @@ lemma prod_one_sub_pow_eq_order
 
 中文:
 引理 prod_one_sub_pow_eq_order
-  条件: {n : 自然数} {μ : R} (hμ : IsPrimitiveRoot μ (n + 1))
+  条件: {n : 自然数} {μ : R} (hμ : 是PrimitiveRoot μ (n + 1))
   证明: by
   have := X_pow_sub_C_eq_prod hμ n.zero_lt_succ (one_pow (n + 1))
   rw [C_1]; rw [← mul_geom_sum]; rw [prod_range_succ']; rw [pow_zero]; rw [mul_one]; rw [mul_comm]; rw [eq_comm] at this
@@ -74,7 +74,7 @@ lemma prod_pow_sub_one_eq_order
 
 中文:
 引理 prod_pow_sub_one_eq_order
-  条件: {n : 自然数} {μ : R} (hμ : IsPrimitiveRoot μ (n + 1))
+  条件: {n : 自然数} {μ : R} (hμ : 是PrimitiveRoot μ (n + 1))
   证明: by
   have : (-1 : R) ^ n = ∏ k in range n, -1 := by rw [prod_const, card_range]
   simp only [this, ← prod_mul_distrib, neg_one_mul, neg_sub, ← prod_one_sub_pow_eq_order hμ]
@@ -102,7 +102,7 @@ lemma self_sub_one_pow_dvd_order
 
 中文:
 引理 self_sub_one_pow_dvd_order
-  条件: {k n : 自然数} (hn : k < n) {μ : R} (hμ : IsPrimitiveRoot μ n)
+  条件: {k n : 自然数} (hn : k < n) {μ : R} (hμ : 是PrimitiveRoot μ n)
   证明: by
   let n' + 1 := n
   obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.le_of_lt_succ hn)

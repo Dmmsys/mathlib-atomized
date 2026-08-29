@@ -46,7 +46,7 @@ theorem Bornology.IsBounded.mul
 @[to_ad
 
 中文:
-定理 Bornology.IsBounded.mul
+定理 有界结构.IsBounded.mul
   条件: (hs : IsBounded s) (ht : IsBounded t)
   结论: IsBounded (s * t)
   证明: by
@@ -83,7 +83,7 @@ theorem Bornology.IsBounded.of_mul
 @[to_additive]
 
 中文:
-定理 Bornology.IsBounded.of_mul
+定理 有界结构.IsBounded.of_mul
   条件: (hst : IsBounded (s * t))
   结论: IsBounded s ∨ IsBounded t
   证明: by
@@ -114,7 +114,7 @@ theorem Bornology.IsBounded.inv
 @[to_additive]
 
 中文:
-定理 Bornology.IsBounded.inv
+定理 有界结构.IsBounded.inv
   结论: IsBounded s -> IsBounded s⁻¹
   证明: by
   simp_rw [isBounded_iff_forall_norm_le', ← image_inv_eq_inv, forall_mem_image, norm_inv']
@@ -139,7 +139,7 @@ theorem Bornology.IsBounded.div
   proof: div_eq_mul_inv s t ▸ hs.mul ht.inv
 
 中文:
-定理 Bornology.IsBounded.div
+定理 有界结构.IsBounded.div
   条件: (hs : IsBounded s) (ht : IsBounded t)
   结论: IsBounded (s / t)
   证明: div_eq_mul_inv s t ▸ hs.mul ht.inv
@@ -181,7 +181,7 @@ alias infEdist_inv_inv := infEDist_inv_inv
 
 中文:
 定理 infEDist_inv_inv
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   结论: infEDist x⁻¹ s⁻¹ = infEDist x s
   证明: by
   rw [← image_inv_eq_inv]; rw [infEDist_image isometry_inv]
@@ -228,7 +228,7 @@ alias infEdist_inv := infEDist_inv
 
 中文:
 定理 infEDist_inv
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   结论: infEDist x⁻¹ s = infEDist x s⁻¹
   证明: by
   rw [← infEDist_inv_inv]; rw [inv_inv]
@@ -267,7 +267,7 @@ theorem ediam_mul_le
 
 中文:
 定理 ediam_mul_le
-  条件: (x y : Set E)
+  条件: (x y : 集合 E)
   结论: ediam (x * y) <= ediam x + ediam y
   证明: (LipschitzOnWith.ediam_image2_le (· * ·) _ _
         (fun _ _ => (isometry_mul_right _).lipschitz.lipschitzOnWith) fun _ _ =>
@@ -1243,8 +1243,8 @@ theorem IsCompact.mul_closedBall_one
 @[to_additive]
 
 中文:
-定理 IsCompact.mul_closedBall_one
-  条件: (hs : IsCompact s) (hδ : 0 <= δ)
+定理 是紧集.mul_closedBall_one
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ)
   证明: by
   rw [hs.cthickening_eq_biUnion_closedBall hδ]
   ext x
@@ -1274,8 +1274,8 @@ theorem IsCompact.div_closedBall_one
 @[to_additive]
 
 中文:
-定理 IsCompact.div_closedBall_one
-  条件: (hs : IsCompact s) (hδ : 0 <= δ)
+定理 是紧集.div_closedBall_one
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ)
   证明: by simp [div_eq_mul_inv, hs.mul_closedBall_one hδ]
 
 @[to_additive]
@@ -1297,8 +1297,8 @@ theorem IsCompact.closedBall_one_mul
 @[to_additive]
 
 中文:
-定理 IsCompact.closedBall_one_mul
-  条件: (hs : IsCompact s) (hδ : 0 <= δ)
+定理 是紧集.closedBall_one_mul
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ)
   证明: by rw [mul_comm, hs.mul_closedBall_one hδ]
 
 @[to_additive]
@@ -1321,8 +1321,8 @@ theorem IsCompact.closedBall_one_div
 @[to_additive]
 
 中文:
-定理 IsCompact.closedBall_one_div
-  条件: (hs : IsCompact s) (hδ : 0 <= δ)
+定理 是紧集.closedBall_one_div
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ)
   证明: by
   simp [div_eq_mul_inv, mul_comm, hs.inv.mul_closedBall_one hδ]
 
@@ -1347,8 +1347,8 @@ theorem IsCompact.mul_closedBall
 @[to_additive]
 
 中文:
-定理 IsCompact.mul_closedBall
-  条件: (hs : IsCompact s) (hδ : 0 <= δ) (x : E)
+定理 是紧集.mul_closedBall
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ) (x : E)
   证明: by
   rw [← smul_closedBall_one]; rw [mul_smul_comm]; rw [hs.mul_closedBall_one hδ]
 
@@ -1373,8 +1373,8 @@ theorem IsCompact.div_closedBall
 @[to_additive]
 
 中文:
-定理 IsCompact.div_closedBall
-  条件: (hs : IsCompact s) (hδ : 0 <= δ) (x : E)
+定理 是紧集.div_closedBall
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ) (x : E)
   证明: by
   simp [div_eq_mul_inv, hs.mul_closedBall hδ]
 
@@ -1398,8 +1398,8 @@ theorem IsCompact.closedBall_mul
 @[to_additive]
 
 中文:
-定理 IsCompact.closedBall_mul
-  条件: (hs : IsCompact s) (hδ : 0 <= δ) (x : E)
+定理 是紧集.closedBall_mul
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ) (x : E)
   证明: by rw [mul_comm, hs.mul_closedBall hδ]
 
 @[to_additive]
@@ -1420,8 +1420,8 @@ theorem IsCompact.closedBall_div
   simp [hs.closedBall_mul hδ]
 
 中文:
-定理 IsCompact.closedBall_div
-  条件: (hs : IsCompact s) (hδ : 0 <= δ) (x : E)
+定理 是紧集.closedBall_div
+  条件: (hs : 是紧集 s) (hδ : 0 <= δ) (x : E)
   证明: by
   simp [hs.closedBall_mul hδ]
 

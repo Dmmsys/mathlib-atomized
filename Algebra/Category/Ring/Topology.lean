@@ -141,7 +141,7 @@ lemma isHomeomorph_precomp
 
 中文:
 引理 isHomeomorph_precomp
-  条件: (f : A ⟶ B) [IsIso f]
+  条件: (f : A ⟶ B) [是同构 f]
   证明: (precompHomeomorph (asIso f)).isHomeomorph
 
 Depends on / 依赖: isHomeomorph, precompHomeomorph
@@ -238,7 +238,7 @@ definition mvPolynomialHomeomorph
 
 中文:
 定义 mvPolynomialHomeomorph
-  签名: (σ : 类型v) (R A : CommRingCat.{max u v})
+  签名: (σ : 类型v) (R A : 交换环范畴.{最大值 u v})
   定义体: ⟨CommRingCat.ofHom MvPolynomial.C ≫ f, fun i => f (.X i)⟩
   invFun fx := CommRingCat.ofHom (MvPolynomial.eval₂Hom fx.1.hom fx.2)
   left_inv f := by ext <;> simp
@@ -283,7 +283,7 @@ lemma isClosedEmbedding_hom
 
 中文:
 引理 isClosedEmbedding_hom
-  条件: [IsTopologicalRing R] [T1Space R]
+  条件: [是拓扑环 R] [T1空间 R]
   证明: by
   let f : CommRingCat.of (MvPolynomial A (⊥_ CommRingCat)) ⟶ A :=
     CommRingCat.ofHom (MvPolynomial.eval₂Hom (initial.to A).hom id)
@@ -316,8 +316,8 @@ instance [T2Space
   body: (isEmbedding_hom R A).t2Space
 
 中文:
-实例 [T2Space
-  签名: R] : T2Space (A ⟶ R)
+实例 [T2空间
+  签名: R] : T2空间 (A ⟶ R)
   定义体: (isEmbedding_hom R A).t2Space
 
 Depends on / 依赖: isEmbedding_hom, t2Space
@@ -334,8 +334,8 @@ instance [IsTopologicalRing
   body: (isClosedEmbedding_hom R A).compactSpace
 
 中文:
-实例 [IsTopologicalRing
-  签名: R] [T1Space R] [CompactSpace R] :
+实例 [是拓扑环
+  签名: R] [T1空间 R] [紧空间 R] :
   定义体: (isClosedEmbedding_hom R A).compactSpace
 
 Depends on / 依赖: compactSpace, isClosedEmbedding_hom
@@ -361,7 +361,7 @@ lemma isEmbedding_pushout
 
 中文:
 引理 isEmbedding_pushout
-  条件: [IsTopologicalRing R] (φ : A ⟶ B) (ψ : A ⟶ C)
+  条件: [是拓扑环 R] (φ : A ⟶ B) (ψ : A ⟶ C)
   证明: by
   -- The key idea: Let `X = Spec B` and `Y = Spec C`.
   -- We want to show `(X × Y)(R)` has the subspace topology from `X(R) × Y(R)`.

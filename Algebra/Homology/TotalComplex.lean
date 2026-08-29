@@ -150,7 +150,7 @@ lemma d₁_eq_zero
 
 中文:
 引理 d₁_eq_zero
-  条件: (h : ¬ c₁.Rel i₁ (c₁.next i₁))
+  条件: (h : ¬ c₁.关系 i₁ (c₁.next i₁))
   证明: by
   dsimp [d₁]
   rw [K.shape_f _ _ h]; rw [zero_comp]; rw [smul_zero]
@@ -175,7 +175,7 @@ lemma d₂_eq_zero
 
 中文:
 引理 d₂_eq_zero
-  条件: (h : ¬ c₂.Rel i₂ (c₂.next i₂))
+  条件: (h : ¬ c₂.关系 i₂ (c₂.next i₂))
   证明: by
   dsimp [d₂]
   rw [HomologicalComplex.shape _ _ _ h]; rw [zero_comp]; rw [smul_zero]
@@ -203,7 +203,7 @@ lemma d₁_eq'
 
 中文:
 引理 d₁_eq'
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
   证明: by
   obtain rfl := c₁.next_eq' h
   rfl
@@ -227,7 +227,7 @@ lemma d₁_eq
 
 中文:
 引理 d₁_eq
-  结论: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
+  结论: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
   证明: by
   rw [d₁_eq' K c₁₂ h i₂ i₁₂]; rw [K.toGradedObject.ιMapObjOrZero_eq]
 
@@ -251,7 +251,7 @@ lemma d₂_eq'
 
 中文:
 引理 d₂_eq'
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (i₁₂ : I₁₂)
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (i₁₂ : I₁₂)
   证明: by
   obtain rfl := c₂.next_eq' h
   rfl
@@ -275,7 +275,7 @@ lemma d₂_eq
 
 中文:
 引理 d₂_eq
-  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (i₁₂ : I₁₂)
+  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (i₁₂ : I₁₂)
   证明: by
   rw [d₂_eq' K c₁₂ i₁ h i₁₂]; rw [K.toGradedObject.ιMapObjOrZero_eq]
 
@@ -302,7 +302,7 @@ lemma d₁_eq_zero'
 
 中文:
 引理 d₁_eq_zero'
-  结论: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
+  结论: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
   证明: by
   rw [totalAux.d₁_eq' K c₁₂ h i₂ i₁₂]; rw [K.toGradedObject.ιMapObjOrZero_eq_zero]; rw [comp_zero]; rw [smul_zero]
   exact h'
@@ -328,7 +328,7 @@ lemma d₂_eq_zero'
 
 中文:
 引理 d₂_eq_zero'
-  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (i₁₂ : I₁₂)
+  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (i₁₂ : I₁₂)
   证明: by
   rw [totalAux.d₂_eq' K c₁₂ i₁ h i₁₂]; rw [K.toGradedObject.ιMapObjOrZero_eq_zero]; rw [comp_zero]; rw [smul_zero]
   exact h'
@@ -402,7 +402,7 @@ lemma ιMapObj_D₁
 
 中文:
 引理 ιMapObj_D₁
-  条件: (i₁₂ i₁₂' : I₁₂) (i : I₁ × I₂) (h : ComplexShape.π c₁ c₂ c₁₂ i = i₁₂)
+  条件: (i₁₂ i₁₂' : I₁₂) (i : I₁ × I₂) (h : 余mplexShape.π c₁ c₂ c₁₂ i = i₁₂)
   证明: by
   simp [D₁]
 -/
@@ -424,7 +424,7 @@ lemma ιMapObj_D₂
 
 中文:
 引理 ιMapObj_D₂
-  条件: (i₁₂ i₁₂' : I₁₂) (i : I₁ × I₂) (h : ComplexShape.π c₁ c₂ c₁₂ i = i₁₂)
+  条件: (i₁₂ i₁₂' : I₁₂) (i : I₁ × I₂) (h : 余mplexShape.π c₁ c₂ c₁₂ i = i₁₂)
   证明: by
   simp [D₂]
 -/
@@ -454,7 +454,7 @@ lemma D₁_shape
 
 中文:
 引理 D₁_shape
-  条件: (i₁₂ i₁₂' : I₁₂) (h₁₂ : ¬ c₁₂.Rel i₁₂ i₁₂')
+  条件: (i₁₂ i₁₂' : I₁₂) (h₁₂ : ¬ c₁₂.关系 i₁₂ i₁₂')
   结论: K.D₁ c₁₂ i₁₂ i₁₂' = 0
   证明: by
   ext ⟨i₁, i₂⟩ h
@@ -495,7 +495,7 @@ lemma D₂_shape
 
 中文:
 引理 D₂_shape
-  条件: (i₁₂ i₁₂' : I₁₂) (h₁₂ : ¬ c₁₂.Rel i₁₂ i₁₂')
+  条件: (i₁₂ i₁₂' : I₁₂) (h₁₂ : ¬ c₁₂.关系 i₁₂ i₁₂')
   结论: K.D₂ c₁₂ i₁₂ i₁₂' = 0
   证明: by
   ext ⟨i₁, i₂⟩ h
@@ -712,7 +712,7 @@ definition total
 
 中文:
 定义 total
-  签名: : HomologicalComplex C c₁₂ where
+  签名: : 同调复形 C c₁₂ where
   定义体: K.toGradedObject.mapObj (ComplexShape.π c₁ c₂ c₁₂)
   d i₁₂ i₁₂' := K.D₁ c₁₂ i₁₂ i₁₂' + K.D₂ c₁₂ i₁₂ i₁₂'
   shape i₁₂ i₁₂' h₁₂ := by
@@ -879,7 +879,7 @@ lemma ι_D₁
 
 中文:
 引理 ι_D₁
-  条件: (i₁₂ i₁₂' : I₁₂) (i₁ : I₁) (i₂ : I₂) (h : ComplexShape.π c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = i₁₂)
+  条件: (i₁₂ i₁₂' : I₁₂) (i₁ : I₁) (i₂ : I₂) (h : 余mplexShape.π c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = i₁₂)
   证明: by
   apply totalAux.ιMapObj_D₁
 
@@ -926,7 +926,7 @@ lemma d₁_eq'
 
 中文:
 引理 d₁_eq'
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
   证明: totalAux.d₁_eq' _ _ h _ _
 
 Depends on / 依赖: totalAux, totalAux.d
@@ -946,7 +946,7 @@ lemma d₁_eq
 
 中文:
 引理 d₁_eq
-  结论: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
+  结论: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (i₁₂ : I₁₂)
   证明: totalAux.d₁_eq _ _ h _ _ _
 
 Depends on / 依赖: totalAux, totalAux.d
@@ -967,7 +967,7 @@ lemma d₂_eq'
 
 中文:
 引理 d₂_eq'
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (i₁₂ : I₁₂)
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (i₁₂ : I₁₂)
   证明: totalAux.d₂_eq' _ _ _ h _
 
 Depends on / 依赖: totalAux, totalAux.d
@@ -987,7 +987,7 @@ lemma d₂_eq
 
 中文:
 引理 d₂_eq
-  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (i₁₂ : I₁₂)
+  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (i₁₂ : I₁₂)
   证明: totalAux.d₂_eq _ _ _ h _ _
 
 Depends on / 依赖: totalAux, totalAux.d
@@ -1035,7 +1035,7 @@ lemma ι_totalDesc
 
 中文:
 引理 ι_totalDesc
-  条件: (i₁ : I₁) (i₂ : I₂) (hi : ComplexShape.π c₁ c₂ c₁₂ (i₁, i₂) = i₁₂)
+  条件: (i₁ : I₁) (i₂ : I₂) (hi : 余mplexShape.π c₁ c₂ c₁₂ (i₁, i₂) = i₁₂)
   证明: by
   simp [totalDesc, ιTotal]
 
@@ -1341,7 +1341,7 @@ lemma ιTotal_map
 
 中文:
 引理 ιTotal_map
-  条件: (i₁ : I₁) (i₂ : I₂) (i₁₂ : I₁₂) (h : ComplexShape.π c₁ c₂ c₁₂ (i₁, i₂) = i₁₂)
+  条件: (i₁ : I₁) (i₂ : I₂) (i₁₂ : I₁₂) (h : 余mplexShape.π c₁ c₂ c₁₂ (i₁, i₂) = i₁₂)
   证明: by
   simp [total.map, ιTotal]
 

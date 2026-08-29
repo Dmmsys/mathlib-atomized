@@ -68,10 +68,10 @@ class IsSepClosed
     - splits_of_separable : forall p : k[X], p.Separable -> p.Splits
 
 中文:
-类 IsSepClosed
+类 是SepClosed
   参数: : 命题 where
   公理与运算 (1 个):
-    - splits_of_separable : 对任意 p : k[X], p.Separable -> p.Splits
+    - splits_of_separable : 对任意 p : k[X], p.可分 -> p.Splits
 -/
 class IsSepClosed : Prop where
   splits_of_separable : forall p : k[X], p.Separable -> p.Splits
@@ -85,8 +85,8 @@ instance IsSepClosed.of_isAlgClosed
   body: ⟨fun p _ => IsAlgClosed.splits p⟩
 
 中文:
-实例 IsSepClosed.of_isAlgClosed
-  签名: [IsAlgClosed k]
+实例 是SepClosed.of_isAlgClosed
+  签名: [是代数闭 k]
   定义体: ⟨fun p _ => IsAlgClosed.splits p⟩
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, splits
@@ -105,8 +105,8 @@ theorem IsSepClosed.splits_codomain
   proof: IsSepClosed.splits_of_separable (p.map f) (Separable.map h)
 
 中文:
-定理 IsSepClosed.splits_codomain
-  结论: [IsSepClosed K] {f : k ->+* K}
+定理 是SepClosed.splits_codomain
+  结论: [是SepClosed K] {f : k ->+* K}
   证明: IsSepClosed.splits_of_separable (p.map f) (Separable.map h)
 
 Depends on / 依赖: IsSepClosed, IsSepClosed.splits_of_separable, Separable, Separable.map, p.map, splits_of_separable
@@ -124,8 +124,8 @@ theorem IsSepClosed.splits_domain
   proof: (IsSepClosed.splits_of_separable _ h).map f
 
 中文:
-定理 IsSepClosed.splits_domain
-  结论: [IsSepClosed k] {f : k ->+* K}
+定理 是SepClosed.splits_domain
+  结论: [是SepClosed k] {f : k ->+* K}
   证明: (IsSepClosed.splits_of_separable _ h).map f
 
 Depends on / 依赖: IsSepClosed, IsSepClosed.splits_of_separable, splits_of_separable
@@ -145,8 +145,8 @@ theorem exists_root
   proof: (IsSepClosed.splits_of_separable p hsep).exists_eval_eq_zero hp
 
 中文:
-定理 exists_root
-  条件: [IsSepClosed k] (p : k[X]) (hp : p.degree != 0) (hsep : p.Separable)
+定理 存在_root
+  条件: [是SepClosed k] (p : k[X]) (hp : p.degree != 0) (hsep : p.可分)
   证明: (IsSepClosed.splits_of_separable p hsep).exists_eval_eq_zero hp
 
 Depends on / 依赖: IsSepClosed, IsSepClosed.splits_of_separable, exists_eval_eq_zero, splits_of_separable
@@ -169,7 +169,7 @@ have hdeg : f.degree != 0 := degree_ne_of_natDegree_ne (n := 0) by
     · grind [zero_add
 
 中文:
-定理 exists_root_C_mul_X_pow_add_C_mul_X_add_C
+定理 存在_root_C_mul_X_pow_add_C_mul_X_add_C
   证明: by
   let f : k[X] := C a * X ^ n + C b * X + C c
   -- Specify `n := 0` below, otherwise Lean unfolds `0` to `Zero.zero`.
@@ -200,7 +200,7 @@ theorem exists_root_C_mul_X_pow_add_C_mul_X_add_C'
   proof: exists_root_C_mul_X_pow_add_C_mul_X_add_C a b c ((CharP.cast_eq_zero_iff k p n).2 hn) hn' hb
 
 中文:
-定理 exists_root_C_mul_X_pow_add_C_mul_X_add_C'
+定理 存在_root_C_mul_X_pow_add_C_mul_X_add_C'
   证明: exists_root_C_mul_X_pow_add_C_mul_X_add_C a b c ((CharP.cast_eq_zero_iff k p n).2 hn) hn' hb
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, cast_eq_zero_iff, exists_root_C_mul_X_pow_add_C_mul_X_add_C
@@ -234,8 +234,8 @@ theorem exists_pow_nat_eq
   · exact ⟨0, by rw [hx, pow_eq_zero_iff hn'.ne'
 
 中文:
-定理 exists_pow_nat_eq
-  条件: [IsSepClosed k] (x : k) (n : 自然数) [hn : NeZero (n : k)]
+定理 存在_pow_nat_eq
+  条件: [是SepClosed k] (x : k) (n : 自然数) [hn : NeZero (n : k)]
   证明: by
   have hn' : 0 < n := Nat.pos_of_ne_zero fun h => by
     rw [h]; rw [Nat.cast_zero] at hn
@@ -274,8 +274,8 @@ theorem exists_eq_mul_self
   exact ⟨z, sq z⟩
 
 中文:
-定理 exists_eq_mul_self
-  条件: [IsSepClosed k] (x : k) [h2 : NeZero (2 : k)]
+定理 存在_eq_mul_self
+  条件: [是SepClosed k] (x : k) [h2 : NeZero (2 : k)]
   结论: 存在 z, x = z * z
   证明: by
   rcases exists_pow_nat_eq x 2 with ⟨z, rfl⟩
@@ -303,7 +303,7 @@ theorem roots_eq_zero_iff
 
 中文:
 定理 roots_eq_zero_iff
-  条件: [IsSepClosed k] {p : k[X]} (hsep : p.Separable)
+  条件: [是SepClosed k] {p : k[X]} (hsep : p.可分)
   证明: by
   refine ⟨fun h => ?_, fun hp => by rw [hp, roots_C]⟩
   rcases le_or_gt (degree p) 0 with hd | hd
@@ -334,8 +334,8 @@ theorem exists_eval₂_eq_zero_of_injective
   ⟨x, by rwa [eval₂_eq_eval_map, ← IsRoot]⟩
 
 中文:
-定理 exists_eval₂_eq_zero_of_injective
-  结论: {k : 类型} [CommSemiring k] [IsSepClosed K] (f : k ->+* K)
+定理 存在_eval₂_eq_zero_of_injective
+  结论: {k : 类型} [交换半环 k] [是SepClosed K] (f : k ->+* K)
   证明: let ⟨x, hx⟩ := exists_root (p.map f) (by rwa [degree_map_eq_of_injective hf])
     (Separable.map hsep)
   ⟨x, by rwa [eval₂_eq_eval_map, ← IsRoot]⟩
@@ -358,8 +358,8 @@ theorem exists_eval₂_eq_zero
   proof: exists_eval₂_eq_zero_of_injective _ f.injective _ hp hsep
 
 中文:
-定理 exists_eval₂_eq_zero
-  结论: {k : 类型} [CommRing k] [IsSimpleRing k] [IsSepClosed K] (f : k ->+* K)
+定理 存在_eval₂_eq_zero
+  结论: {k : 类型} [交换环 k] [是单环 k] [是SepClosed K] (f : k ->+* K)
   证明: exists_eval₂_eq_zero_of_injective _ f.injective _ hp hsep
 
 Depends on / 依赖: f.injective, injective
@@ -379,8 +379,8 @@ theorem exists_aeval_eq_zero
   proof: exists_eval₂_eq_zero_of_injective _ (FaithfulSMul.algebraMap_injective ..) p hp hsep
 
 中文:
-定理 exists_aeval_eq_zero
-  结论: {k : 类型} [CommSemiring k] [IsSepClosed K] [Algebra k K]
+定理 存在_aeval_eq_zero
+  结论: {k : 类型} [交换半环 k] [是SepClosed K] [代数 k K]
   证明: exists_eval₂_eq_zero_of_injective _ (FaithfulSMul.algebraMap_injective ..) p hp hsep
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective
@@ -405,8 +405,8 @@ theorem of_exists_root
     exact ⟨x, by simpa [hp.ne_zero] usi
 
 中文:
-定理 of_exists_root
-  条件: (H : 对任意 p : k[X], p.Monic -> Irreducible p -> Separable p -> 存在 x, p.eval x = 0)
+定理 of_存在_root
+  条件: (H : 对任意 p : k[X], p.Monic -> 不可约 p -> 可分 p -> 存在 x, p.eval x = 0)
   证明: by
   replace H (p : k[X]) (hp : Irreducible p) (hs : Separable p) : exists x, p.eval x = 0 := by
     obtain ⟨x, hx⟩ := H (p * C (leadingCoeff p)⁻¹) (monic_mul_leadingCoeff_inv hp.ne_zero)
@@ -441,7 +441,7 @@ theorem degree_eq_one_of_irreducible
 
 中文:
 定理 degree_eq_one_of_irreducible
-  结论: [IsSepClosed k] {p : k[X]}
+  结论: [是SepClosed k] {p : k[X]}
   证明: (IsSepClosed.splits_of_separable p hsep).degree_eq_one_of_irreducible hp
 
 Depends on / 依赖: IsSepClosed, IsSepClosed.splits_of_separable, degree_eq_one_of_irreducible, splits_of_separable
@@ -497,7 +497,7 @@ lemma algebraMap_bijective
 
 中文:
 引理 algebraMap_bijective
-  条件: [IsSepClosed k] [Algebra k K] [Algebra.IsSeparable k K]
+  条件: [是SepClosed k] [代数 k K] [代数.是可分 k K]
   证明: ⟨RingHom.injective _, IsSepClosed.algebraMap_surjective _ _⟩
 
 Depends on / 依赖: IsSepClosed, IsSepClosed.algebraMap_surjective, RingHom, RingHom.injective, algebraMap_surjective, injective
@@ -519,8 +519,8 @@ theorem IntermediateField.eq_bot_of_isSepClosed_of_isSeparable
   exact ⟨y, congr_arg (algebraMap L K) hy⟩
 
 中文:
-定理 IntermediateField.eq_bot_of_isSepClosed_of_isSeparable
-  结论: [IsSepClosed k] [Algebra k K]
+定理 中间域.eq_bot_of_isSepClosed_of_isSeparable
+  结论: [是SepClosed k] [代数 k K]
   证明: bot_unique fun x hx => by
   obtain ⟨y, hy⟩ := IsSepClosed.algebraMap_surjective k L ⟨x, hx⟩
   exact ⟨y, congr_arg (algebraMap L K) hy⟩
@@ -545,11 +545,11 @@ class IsSepClosure
     - separable : Algebra.IsSeparable k K
 
 中文:
-类 IsSepClosure
-  参数: [Algebra k K]
+类 是SepClosure
+  参数: [代数 k K]
   公理与运算 (2 个):
-    - sep_closed : IsSepClosed K
-    - separable : Algebra.IsSeparable k K
+    - sep_closed : 是SepClosed K
+    - separable : 代数.是可分 k K
 -/
 class IsSepClosure [Algebra k K] : Prop where
   sep_closed : IsSepClosed K
@@ -564,8 +564,8 @@ instance IsSepClosure.self_of_isSepClosed
   body: ⟨by assumption, Algebra.isSeparable_self k⟩
 
 中文:
-实例 IsSepClosure.self_of_isSepClosed
-  签名: [IsSepClosed k]
+实例 是SepClosure.self_of_isSepClosed
+  签名: [是SepClosed k]
   定义体: ⟨by assumption, Algebra.isSeparable_self k⟩
 
 Depends on / 依赖: Algebra, Algebra.isSeparable_self, isSeparable_self
@@ -606,7 +606,7 @@ theorem isSepClosure_iff
 
 中文:
 定理 isSepClosure_iff
-  条件: [Algebra k K]
+  条件: [代数 k K]
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isSepClosure_iff [Algebra k K] :
@@ -625,7 +625,7 @@ instance isSeparable
 
 中文:
 实例 isSeparable
-  签名: [Algebra k K] [IsSepClosure k K]
+  签名: [代数 k K] [是SepClosure k K]
   定义体: IsSepClosure.separable
 
 Depends on / 依赖: IsSepClosure, IsSepClosure.separable, separable
@@ -743,7 +743,7 @@ instance separableClosure.isGalois
 
 中文:
 实例 separableClosure.isGalois
-  签名: [Normal F E]
+  签名: [正规 F E]
   定义体: separableClosure.isSeparable F E
   to_normal := by
     rw [← separableClosure.normalClosure_eq_self]
@@ -770,8 +770,8 @@ theorem IsSepClosed.separableClosure_eq_bot_iff
   obtain ⟨x, rfl⟩ := h ▸ mem_separableClosure_iff.2 (h
 
 中文:
-定理 IsSepClosed.separableClosure_eq_bot_iff
-  条件: [IsSepClosed E]
+定理 是SepClosed.separableClosure_eq_bot_iff
+  条件: [是SepClosed E]
   证明: by
   refine ⟨fun h => IsSepClosed.of_exists_root _ fun p _ hirr hsep => ?_,
     fun _ => IntermediateField.eq_bot_of_isSepClosed_of_isSeparable _⟩
@@ -799,7 +799,7 @@ instance separableClosure.isSepClosure
 
 中文:
 实例 separableClosure.isSepClosure
-  签名: [IsSepClosed E]
+  签名: [是SepClosed E]
   定义体: ⟨(IsSepClosed.separableClosure_eq_bot_iff _ E).mp (separableClosure.separableClosure_eq_bot F E),
     isSeparable F E⟩
 
@@ -818,8 +818,8 @@ abbreviation SeparableClosure
   body: separableClosure F (AlgebraicClosure F)
 
 中文:
-缩写 SeparableClosure
-  签名: : Type _
+缩写 可分闭包
+  签名: : 类型 _
   定义体: separableClosure F (AlgebraicClosure F)
 
 Depends on / 依赖: AlgebraicClosure, separableClosure
@@ -835,8 +835,8 @@ instance SeparableClosure.isSepClosed
   body: (inferInstance : IsSepClosure F (SeparableClosure F)).sep_closed
 
 中文:
-实例 SeparableClosure.isSepClosed
-  签名: : IsSepClosed (SeparableClosure F)
+实例 可分闭包.isSepClosed
+  签名: : 是SepClosed (可分闭包 F)
   定义体: (inferInstance : IsSepClosure F (SeparableClosure F)).sep_closed
 
 Depends on / 依赖: IsSepClosure, SeparableClosure, sep_closed

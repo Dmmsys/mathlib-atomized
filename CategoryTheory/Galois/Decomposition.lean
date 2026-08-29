@@ -72,7 +72,7 @@ lemma has_decomp_connected_components_aux_conn
 
 中文:
 引理 has_decomp_connected_components_aux_conn
-  条件: (X : C) [IsConnected X]
+  条件: (X : C) [是连通 X]
   证明: by
   refine ⟨Unit, fun _ => X, fun _ => 𝟙 X, Cofan.IsColimit.mk _ (fun s => s.inj ()), ?_⟩
   exact ⟨fun _ => inferInstance, inferInstance⟩
@@ -131,7 +131,7 @@ lemma has_decomp_connected_components_aux
 
 中文:
 引理 has_decomp_connected_components_aux
-  结论: (F : C ⥤ FintypeCat.{w}) [FiberFunctor F]
+  结论: (F : C ⥤ FintypeCat.{w}) [Fiber函子 F]
   证明: by
   induction n using Nat.strongRecOn with | _ n hi
   intro X hn
@@ -281,7 +281,7 @@ lemma connected_component_unique
 
 中文:
 引理 connected_component_unique
-  结论: {X A B : C} [IsConnected A] [IsConnected B] (a : F.obj A)
+  结论: {X A B : C} [是连通 A] [是连通 B] (a : F.obj A)
   证明: by
   /- We consider the fiber product of A and B over X. This is a non-empty (because of `h`)
   subobject of `A` and `B` and hence isomorphic to `A` and `B` by connectedness. -/
@@ -395,7 +395,7 @@ lemma mkSelfProdFib_map_π
 中文:
 引理 mkSelfProdFib_map_π
   条件: (t : F.obj X)
-  结论: F.map (Pi.π _ t) (mkSelfProdFib F X) = t
+  结论: F.map (依赖函数类型.π _ t) (mkSelfProdFib F X) = t
   证明: by
   rw [← piComparison_comp_π]
   simp [← PreservesProduct.iso_hom, mkSelfProdFib]
@@ -514,7 +514,7 @@ instance [Mono
   body: mono_comp _ _
 
 中文:
-实例 [Mono
+实例 [单态射
   签名: u] (b
   定义体: mono_comp _ _
 -/
@@ -577,7 +577,7 @@ lemma subobj_selfProd_trans
 
 中文:
 引理 subobj_selfProd_trans
-  条件: [Mono u] (b : F.obj A)
+  条件: [单态射 u] (b : F.obj A)
   结论: 存在 (f : A ≅ A), F.map f.hom b = a
   证明: by
   apply connected_component_unique F b a u (selfProdPermIncl h b)
@@ -607,7 +607,7 @@ lemma exists_galois_representative
     obtain ⟨fi2, hfi2⟩ := subobj_selfProd_tran
 
 中文:
-引理 exists_galois_representative
+引理 存在_galois_representative
   条件: (X : C)
   结论: 存在 (A : C) (a : F.obj A),
   证明: by
@@ -654,7 +654,7 @@ lemma exists_hom_from_galois_of_fiber
   exact ⟨A, f, a, h1, hf⟩
 
 中文:
-引理 exists_hom_from_galois_of_fiber
+引理 存在_hom_from_galois_of_fiber
   条件: (X : C) (x : F.obj X)
   证明: by
   obtain ⟨A, a, h1, h2⟩ := exists_galois_representative F X
@@ -683,8 +683,8 @@ lemma exists_hom_from_galois_of_fiber_nonempty
 include F in
 
 中文:
-引理 exists_hom_from_galois_of_fiber_nonempty
-  条件: (X : C) (h : Nonempty (F.obj X))
+引理 存在_hom_from_galois_of_fiber_nonempty
+  条件: (X : C) (h : 非空 (F.obj X))
   证明: by
   obtain ⟨x⟩ := h
   obtain ⟨A, f, a, h1, _⟩ := exists_hom_from_galois_of_fiber F X x
@@ -710,8 +710,8 @@ lemma exists_hom_from_galois_of_connected
   proof: exists_hom_from_galois_of_fiber_nonempty F X inferInstance
 
 中文:
-引理 exists_hom_from_galois_of_connected
-  条件: (X : C) [IsConnected X]
+引理 存在_hom_from_galois_of_connected
+  条件: (X : C) [是连通 X]
   证明: exists_hom_from_galois_of_fiber_nonempty F X inferInstance
 
 Depends on / 依赖: exists_hom_from_galois_of_fiber_nonempty

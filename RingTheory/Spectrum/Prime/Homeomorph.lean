@@ -53,7 +53,7 @@ lemma PrimeSpectrum.isHomeomorph_comap
   have hint : f.kerLift.IsInte
 
 中文:
-引理 PrimeSpectrum.isHomeomorph_comap
+引理 素谱.isHomeomorph_comap
   结论: (f : R ->+* S) (H : 对任意 (x : S), 存在 n > 0, x ^ n in f.range)
   证明: by
   have h1 : Function.Injective (comap f) := by
@@ -107,8 +107,8 @@ lemma PrimeSpectrum.isHomeomorph_comap_of_isPurelyInseparable
   exact Algebra.TensorProduct.includeLeft_injective (S := R) (algebraMap k K).injective
 
 中文:
-引理 PrimeSpectrum.isHomeomorph_comap_of_isPurelyInseparable
-  条件: [IsPurelyInseparable k K]
+引理 素谱.isHomeomorph_comap_of_isPurelyInseparable
+  条件: [是纯不可分 k K]
   证明: by
   let q := ringExpChar k
   refine isHomeomorph_comap _ (IsPurelyInseparable.exists_pow_mem_range_tensorProduct) ?_
@@ -139,8 +139,8 @@ lemma PrimeSpectrum.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
   have heq : Algebra.TensorProduct.map (Algebra.ofId K L) (AlgHom.id
 
 中文:
-引理 PrimeSpectrum.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
-  结论: [Algebra R K]
+引理 素谱.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
+  结论: [代数 R K]
   证明: by
   let e : (L otimes[R] S) ≃ₐ[K] L otimes[K] (K otimes[R] S) :=
     (Algebra.TensorProduct.cancelBaseChange R K K L S).symm

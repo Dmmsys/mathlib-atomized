@@ -55,7 +55,7 @@ theorem eq_iff_rel_eq
 
 中文:
 定理 eq_iff_rel_eq
-  条件: {r₁ r₂ : Setoid α}
+  条件: {r₁ r₂ : 集合等价关系 α}
   结论: r₁ = r₂ ↔ ⇑r₁ = ⇑r₂
   证明: ⟨fun h => h ▸ rfl, fun h => Setoid.ext fun _ _ => h ▸ Iff.rfl⟩
 
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Setoid α)
+  签名: LE (集合等价关系 α)
   定义体: ⟨fun r s => forall ⦃x y⦄, r x y -> s x y⟩
 -/
 instance : LE (Setoid α) :=
@@ -91,7 +91,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {r s : Setoid α}
+  条件: {r s : 集合等价关系 α}
   结论: r <= s ↔ 对任意 {x y}, r x y -> s x y
   证明: Iff.rfl
 
@@ -113,7 +113,7 @@ theorem le_iff_rel_le
 
 中文:
 定理 le_iff_rel_le
-  条件: {r₁ r₂ : Setoid α}
+  条件: {r₁ r₂ : 集合等价关系 α}
   结论: r₁ <= r₂ ↔ ⇑r₁ <= ⇑r₂
   证明: Iff.rfl
 
@@ -137,7 +137,7 @@ theorem refl'
 
 中文:
 定理 refl'
-  条件: (r : Setoid α) (x)
+  条件: (r : 集合等价关系 α) (x)
   结论: r x x
   证明: r.iseqv.refl x
 
@@ -161,7 +161,7 @@ theorem symm'
 
 中文:
 定理 symm'
-  条件: (r : Setoid α)
+  条件: (r : 集合等价关系 α)
   结论: 对任意 {x y}, r x y -> r y x
   证明: r.iseqv.symm
 
@@ -183,7 +183,7 @@ theorem trans'
 
 中文:
 定理 trans'
-  条件: (r : Setoid α)
+  条件: (r : 集合等价关系 α)
   结论: 对任意 {x y z}, r x y -> r y z -> r x z
   证明: r.iseqv.trans
 
@@ -202,7 +202,7 @@ theorem comm'
 
 中文:
 定理 comm'
-  条件: (s : Setoid α) {x y}
+  条件: (s : 集合等价关系 α) {x y}
   结论: s x y ↔ s y x
   证明: ⟨s.symm', s.symm'⟩
 
@@ -222,7 +222,7 @@ theorem comm
 
 中文:
 定理 comm
-  条件: [Setoid α] {x y : α}
+  条件: [集合等价关系 α] {x y : α}
   结论: x ≈ y ↔ y ≈ x
   证明: ⟨Setoid.symm, Setoid.symm⟩
 
@@ -266,8 +266,8 @@ theorem ker_mk_eq
 
 中文:
 定理 ker_mk_eq
-  条件: (r : Setoid α)
-  结论: ker (@Quotient.mk'' _ r) = r
+  条件: (r : 集合等价关系 α)
+  结论: ker (@商.mk'' _ r) = r
   证明: ext fun _ _ => Quotient.eq
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -289,7 +289,7 @@ theorem ker_apply_mk_out
 中文:
 定理 ker_apply_mk_out
   条件: {f : α -> β} (a : α)
-  结论: f (⟦a⟧ : Quotient (Setoid.ker f)).out = f a
+  结论: f (⟦a⟧ : 商 (集合等价关系.ker f)).out = f a
   证明: @Quotient.mk_out _ (Setoid.ker f) a
 
 @[simp]
@@ -336,8 +336,8 @@ definition prod
       fun h₁ h₂ => ⟨r.trans' h₁.1 h₂.1, s.trans' h₁.2 h₂.2⟩⟩
 
 中文:
-定义 prod
-  签名: (r : Setoid α) (s : Setoid β)
+定义 乘积
+  签名: (r : 集合等价关系 α) (s : 集合等价关系 β)
   定义体: r x.1 y.1 ∧ s x.2 y.2
   iseqv :=
     ⟨fun x => ⟨r.refl' x.1, s.refl' x.2⟩, fun h => ⟨r.symm' h.1, s.symm' h.2⟩,
@@ -360,7 +360,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  条件: {r : Setoid α} {s : Setoid β} {x₁ x₂ : α} {y₁ y₂ : β}
+  条件: {r : 集合等价关系 α} {s : 集合等价关系 β} {x₁ x₂ : α} {y₁ y₂ : β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -379,7 +379,7 @@ lemma piSetoid_apply
 
 中文:
 引理 piSetoid_apply
-  条件: {ι : Sort*} {α : ι -> Sort*} {r : 对任意 i, Setoid (α i)} {x y : 对任意 i, α i}
+  条件: {ι : 类型层*} {α : ι -> 类型层*} {r : 对任意 i, 集合等价关系 (α i)} {x y : 对任意 i, α i}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -407,7 +407,7 @@ definition prodQuotientEquiv
 
 中文:
 定义 prodQuotientEquiv
-  签名: (r : Setoid α) (s : Setoid β)
+  签名: (r : 集合等价关系 α) (s : 集合等价关系 β)
   定义体: Quotient.liftOn' q (fun xy => (Quotient.mk'' xy.1, Quotient.mk'' xy.2))
     fun x y hxy => Prod.ext (by simpa [Quotient.eq] using hxy.1) (by simpa [Quotient.eq] using hxy.2)
   left_inv q := by
@@ -451,7 +451,7 @@ definition piQuotientEquiv
 
 中文:
 定义 piQuotientEquiv
-  签名: {ι : Sort*} {α : ι -> Sort*} (r : 对任意 i, Setoid (α i))
+  签名: {ι : 类型层*} {α : ι -> 类型层*} (r : 对任意 i, 集合等价关系 (α i))
   定义体: Quotient.mk'' fun i => (x i).out
   invFun q := Quotient.liftOn' q (fun x i => Quotient.mk'' (x i)) fun x y hxy => by
     ext i
@@ -495,7 +495,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Setoid α)
+  签名: 最小值 (集合等价关系 α)
   定义体: ⟨fun r s =>
     ⟨fun x y => r x y ∧ s x y,
       ⟨fun x => ⟨r.refl' x, s.refl' x⟩, fun h => ⟨r.symm' h.1, s.symm' h.2⟩, fun h1 h2 =>
@@ -520,7 +520,7 @@ theorem inf_def
 
 中文:
 定理 inf_def
-  条件: {r s : Setoid α}
+  条件: {r s : 集合等价关系 α}
   结论: ⇑(r ⊓ s) = ⇑r ⊓ ⇑s
   证明: rfl
 -/
@@ -538,7 +538,7 @@ theorem inf_iff_and
 
 中文:
 定理 inf_iff_and
-  条件: {r s : Setoid α} {x y}
+  条件: {r s : 集合等价关系 α} {x y}
   结论: (r ⊓ s) x y ↔ r x y ∧ s x y
   证明: Iff.rfl
 
@@ -560,7 +560,7 @@ r.trans' (h1 r hr) h2 r hr⟩ }⟩
 
 中文:
 实例 :
-  签名: InfSet (Setoid α)
+  签名: 下确界集 (集合等价关系 α)
   定义体: ⟨fun S =>
     { r := fun x y => forall r in S, r x y
 iseqv := ⟨fun x r _ => r.refl' x, fun h r hr => r.symm' h r hr, fun h1 h2 r hr =>
@@ -588,7 +588,7 @@ theorem sInf_def
 
 中文:
 定理 sInf_def
-  条件: {s : Set (Setoid α)}
+  条件: {s : 集合 (集合等价关系 α)}
   结论: ⇑(sInf s) = sInf ((⇑) '' s)
   证明: by
   ext
@@ -616,7 +616,7 @@ le_trans _ _ _ hr hs _ _ h := hs hr h
 
 中文:
 实例 :
-  签名: PartialOrder (Setoid α)
+  签名: 偏序 (集合等价关系 α)
   定义体: r <= s ∧ ¬s <= r
   le_refl _ _ _ := id
 le_trans _ _ _ hr hs _ _ h := hs hr h
@@ -646,7 +646,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (Setoid α)
+  签名: : 完备格 (集合等价关系 α)
   定义体: { (completeLatticeOfInf (Setoid α)) fun _ =>
       ⟨fun _ hr _ _ h => h _ hr, fun _ hr _ _ h _ hr' => hr hr' h⟩ with
     inf := Min.min
@@ -682,7 +682,7 @@ theorem top_def
 
 中文:
 定理 top_def
-  结论: ⇑(⊤ : Setoid α) = ⊤
+  结论: ⇑(⊤ : 集合等价关系 α) = ⊤
   证明: rfl
 
 @[simp, grind =]
@@ -701,7 +701,7 @@ theorem bot_def
 
 中文:
 定理 bot_def
-  结论: ⇑(⊥ : Setoid α) = (· = ·)
+  结论: ⇑(⊥ : 集合等价关系 α) = (· = ·)
   证明: rfl
 -/
 theorem bot_def : ⇑(⊥ : Setoid α) = (· = ·) :=
@@ -762,8 +762,8 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: {s : Setoid α}
-  结论: s = (⊤ : Setoid α) ↔ 对任意 x y : α, s x y
+  条件: {s : 集合等价关系 α}
+  结论: s = (⊤ : 集合等价关系 α) ↔ 对任意 x y : α, s x y
   证明: by
   rw [_root_.eq_top_iff]; rw [Setoid.le_def]; rw [Setoid.top_def]
   simp only [Pi.top_apply, Prop.top_eq_true, forall_true_left]
@@ -789,7 +789,7 @@ theorem ker_eq_bot_iff
 中文:
 定理 ker_eq_bot_iff
   条件: {f : α -> β}
-  结论: ker f = ⊥ ↔ f.Injective
+  结论: ker f = ⊥ ↔ f.单射
   证明: le_bot_iff.symm
 
 Depends on / 依赖: le_bot_iff, le_bot_iff.symm
@@ -807,7 +807,7 @@ lemma sInf_equiv
 
 中文:
 引理 sInf_equiv
-  条件: {S : Set (Setoid α)} {x y : α}
+  条件: {S : 集合 (集合等价关系 α)} {x y : α}
   证明: sInf S
     x ≈ y ↔ forall s in S, s x y := Iff.rfl
 -/
@@ -825,7 +825,7 @@ lemma sInf_iff
 
 中文:
 引理 sInf_iff
-  条件: {S : Set (Setoid α)} {x y : α}
+  条件: {S : 集合 (集合等价关系 α)} {x y : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -844,7 +844,7 @@ lemma quotient_mk_sInf_eq
 
 中文:
 引理 quotient_mk_sInf_eq
-  条件: {S : Set (Setoid α)} {x y : α}
+  条件: {S : 集合 (集合等价关系 α)} {x y : α}
   证明: by
   simp [sInf_iff, Quotient.eq]
 
@@ -864,7 +864,7 @@ definition map_of_le
 
 中文:
 定义 map_of_le
-  签名: {s t : Setoid α} (h : s <= t)
+  签名: {s t : 集合等价关系 α} (h : s <= t)
   定义体: Quotient.map' id h
 
 Depends on / 依赖: Quotient, Quotient.map
@@ -882,7 +882,7 @@ definition map_sInf
 
 中文:
 定义 map_sInf
-  签名: {S : Set (Setoid α)} {s : Setoid α} (h : s in S)
+  签名: {S : 集合 (集合等价关系 α)} {s : 集合等价关系 α} (h : s in S)
   定义体: Setoid.map_of_le fun _ _ a => a s h
 
 Depends on / 依赖: Setoid, Setoid.map_of_le, map_of_le
@@ -967,7 +967,7 @@ theorem sup_eq_eqvGen
 
 中文:
 定理 sup_eq_eqvGen
-  条件: (r s : Setoid α)
+  条件: (r s : 集合等价关系 α)
   证明: by
   rw [eqvGen_eq]
   apply congr_arg sInf
@@ -993,7 +993,7 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: {r s : Setoid α}
+  条件: {r s : 集合等价关系 α}
   结论: r ⊔ s = EqvGen.setoid (⇑r ⊔ ⇑s)
   证明: by
   rw [sup_eq_eqvGen]; rfl
@@ -1018,7 +1018,7 @@ theorem sSup_eq_eqvGen
 
 中文:
 定理 sSup_eq_eqvGen
-  条件: (S : Set (Setoid α))
+  条件: (S : 集合 (集合等价关系 α))
   证明: by
   rw [eqvGen_eq]
   apply congr_arg sInf
@@ -1050,7 +1050,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: {s : Set (Setoid α)}
+  条件: {s : 集合 (集合等价关系 α)}
   结论: sSup s = EqvGen.setoid (sSup ((⇑) '' s))
   证明: by
   rw [sSup_eq_eqvGen]; rw [sSup_image]
@@ -1077,7 +1077,7 @@ theorem eqvGen_of_setoid
 
 中文:
 定理 eqvGen_of_setoid
-  条件: (r : Setoid α)
+  条件: (r : 集合等价关系 α)
   结论: EqvGen.setoid r.r = r
   证明: le_antisymm (by rw [eqvGen_eq]; exact sInf_le fun _ _ => id) EqvGen.rel
 
@@ -1116,7 +1116,7 @@ theorem eqvGen_le
 
 中文:
 定理 eqvGen_le
-  条件: {r : α -> α -> 命题} {s : Setoid α} (h : 对任意 x y, r x y -> s x y)
+  条件: {r : α -> α -> 命题} {s : 集合等价关系 α} (h : 对任意 x y, r x y -> s x y)
   证明: by rw [eqvGen_eq]; exact sInf_le h
 
 Depends on / 依赖: eqvGen_eq, sInf_le
@@ -1156,7 +1156,7 @@ gc _ s := ⟨fun H _ _ h => H EqvGen.rel _ _ h, fun H => eqvGen_of_setoid s ▸ 
 
 中文:
 定义 gi
-  签名: : @GaloisInsertion (α -> α -> 命题) (Setoid α) _ _ EqvGen.setoid (⇑) where
+  签名: : @Galois嵌入 (α -> α -> 命题) (集合等价关系 α) _ _ EqvGen.setoid (⇑) where
   定义体: EqvGen.setoid r
 gc _ s := ⟨fun H _ _ h => H EqvGen.rel _ _ h, fun H => eqvGen_of_setoid s ▸ eqvGen_mono H⟩
   le_l_u x := (eqvGen_of_setoid x).symm ▸ le_refl x
@@ -1186,7 +1186,7 @@ theorem injective_iff_ker_bot
 中文:
 定理 injective_iff_ker_bot
   条件: (f : α -> β)
-  结论: Injective f ↔ ker f = ⊥
+  结论: 单射 f ↔ ker f = ⊥
   证明: (@eq_bot_iff (Setoid α) _ _ (ker f)).symm
 
 Depends on / 依赖: Setoid, eq_bot_iff
@@ -1226,7 +1226,7 @@ definition liftEquiv
 
 中文:
 定义 liftEquiv
-  签名: (r : Setoid α)
+  签名: (r : 集合等价关系 α)
   定义体: Quotient.lift (f : α -> β) f.2
   invFun f := ⟨f ∘ Quotient.mk'', fun x y h => by simp [ker_def, Quotient.sound' h]⟩
   right_inv _ := funext fun x => Quotient.inductionOn' x fun _ => rfl
@@ -1250,7 +1250,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: {r : Setoid α} {f : α -> β} (H : r <= ker f) (g : Quotient r -> β)
+  结论: {r : 集合等价关系 α} {f : α -> β} (H : r <= ker f) (g : 商 r -> β)
   证明: by
   ext ⟨x⟩
   rw [← Quotient.mk]; rw [Quotient.lift_mk f H]; rw [Hg]; rw [Function.comp_apply]; rw [Quotient.mk''_eq_mk]
@@ -1315,7 +1315,7 @@ theorem kerLift_injective
 中文:
 定理 kerLift_injective
   条件: (f : α -> β)
-  结论: Injective kerLift f
+  结论: 单射 kerLift f
   证明: fun x y => Quotient.inductionOn₂' x y fun _ _ h => Quotient.sound' h
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.sound
@@ -1336,7 +1336,7 @@ Quotient.exact h show Quotient.lift f H ⟦x⟧ = Quotient.lift f H ⟦y⟧ from
 
 中文:
 定理 ker_eq_lift_of_injective
-  结论: {r : Setoid α} (f : α -> β) (H : r <= ker f)
+  结论: {r : 集合等价关系 α} (f : α -> β) (H : r <= ker f)
   证明: le_antisymm
     (fun x y hk =>
 Quotient.exact h show Quotient.lift f H ⟦x⟧ = Quotient.lift f H ⟦y⟧ from hk)
@@ -1361,7 +1361,7 @@ theorem lift_injective_iff_ker_eq_of_le
 
 中文:
 定理 lift_injective_iff_ker_eq_of_le
-  结论: {r : Setoid α} {f : α -> β}
+  结论: {r : 集合等价关系 α} {f : α -> β}
   证明: ⟨ker_eq_lift_of_injective f hle, fun h => h ▸ kerLift_injective _⟩
 
 Depends on / 依赖: kerLift_injective, ker_eq_lift_of_injective
@@ -1382,7 +1382,7 @@ theorem range_kerLift_eq_range
 
 中文:
 定理 range_kerLift_eq_range
-  结论: Set.range (kerLift f) = Set.range f
+  结论: 集合.range (kerLift f) = 集合.range f
   证明: Set.range_quotient_lift (s := ker f) _
 -/
 @[simp] theorem range_kerLift_eq_range : Set.range (kerLift f) = Set.range f :=
@@ -1398,7 +1398,7 @@ definition quotientKerEquivRangeKerLift
 
 中文:
 定义 quotientKerEquivRangeKerLift
-  签名: : Quotient (ker f) ≃ Set.range (kerLift f)
+  签名: : 商 (ker f) ≃ 集合.range (kerLift f)
   定义体: .ofInjective _ kerLift_injective _
 
 Depends on / 依赖: kerLift_injective, ofInjective
@@ -1416,7 +1416,7 @@ definition quotientKerEquivRange
 
 中文:
 定义 quotientKerEquivRange
-  签名: : Quotient (ker f) ≃ Set.range f
+  签名: : 商 (ker f) ≃ 集合.range f
   定义体: .trans .setCongr range_kerLift_eq_range _ quotientKerEquivRangeKerLift _
 
 Depends on / 依赖: quotientKerEquivRangeKerLift, range_kerLift_eq_range, setCongr
@@ -1440,7 +1440,7 @@ left_inv a := Quotient.inductionOn' a fun a => Quotient.sound' hf (f a)
 
 中文:
 定义 quotientKerEquivOfRightInverse
-  签名: (g : β -> α) (hf : Function.RightInverse g f)
+  签名: (g : β -> α) (hf : 函数.右逆 g f)
   定义体: kerLift f
   invFun b := Quotient.mk'' (g b)
 left_inv a := Quotient.inductionOn' a fun a => Quotient.sound' hf (f a)
@@ -1465,7 +1465,7 @@ definition quotientKerEquivOfSurjective
 
 中文:
 定义 quotientKerEquivOfSurjective
-  签名: (hf : Surjective f)
+  签名: (hf : 满射 f)
   定义体: quotientKerEquivOfRightInverse _ (Function.surjInv hf) (rightInverse_surjInv hf)
 
 Depends on / 依赖: Function, Function.surjInv, quotientKerEquivOfRightInverse, rightInverse_surjInv, surjInv
@@ -1489,7 +1489,7 @@ definition map
 
 中文:
 定义 map
-  签名: (r : Setoid α) (f : α -> β)
+  签名: (r : 集合等价关系 α) (f : α -> β)
   定义体: Relation.EqvGen.setoid (Relation.Map r f f)
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.setoid, Relation.Map, setoid
@@ -1515,7 +1515,7 @@ theorem coe_map_of_ker_le
 
 中文:
 定理 coe_map_of_ker_le
-  条件: (r : Setoid α) (f : α -> β) (hf : ker f <= r)
+  条件: (r : 集合等价关系 α) (f : α -> β) (hf : ker f <= r)
   证明: by
   refine le_antisymm ?_ (sup_le Relation.EqvGen.rel (by rintro _ _ rfl; exact .refl _))
   rintro _ _ hxy
@@ -1557,7 +1557,7 @@ definition mapOfSurjective
 
 中文:
 定义 mapOfSurjective
-  签名: (r : Setoid α) (f : α -> β) (h : ker f <= r) (hf : Surjective f)
+  签名: (r : 集合等价关系 α) (f : α -> β) (h : ker f <= r) (hf : 满射 f)
   定义体: ⟨Relation.Map r f f, Relation.map_equivalence r.iseqv f hf h⟩
 
 Depends on / 依赖: Relation, Relation.Map, Relation.map_equivalence, map_equivalence, r.iseqv
@@ -1576,7 +1576,7 @@ theorem mapOfSurjective_eq_map
 
 中文:
 定理 mapOfSurjective_eq_map
-  条件: (h : ker f <= r) (hf : Surjective f)
+  条件: (h : ker f <= r) (hf : 满射 f)
   证明: by
   rw [← eqvGen_of_setoid (mapOfSurjective r f h hf)]; rfl
 
@@ -1596,7 +1596,7 @@ abbreviation comap
 
 中文:
 缩写 comap
-  签名: (f : α -> β) (r : Setoid β)
+  签名: (f : α -> β) (r : 集合等价关系 β)
   定义体: ⟨r on f, r.iseqv.comap _⟩
 
 Depends on / 依赖: r.iseqv.comap
@@ -1615,7 +1615,7 @@ theorem comap_rel_eq
 
 中文:
 定理 comap_rel_eq
-  条件: (f : α -> β) (r : Setoid β)
+  条件: (f : α -> β) (r : 集合等价关系 β)
   结论: ⇑(comap f r) = (⇑r on f)
   证明: rfl
 -/
@@ -1633,7 +1633,7 @@ theorem comap_rel
 
 中文:
 定理 comap_rel
-  条件: (f : α -> β) (r : Setoid β) (x y : α)
+  条件: (f : α -> β) (r : 集合等价关系 β) (x y : α)
   结论: comap f r x y ↔ r (f x) (f y)
   证明: Iff.rfl
 
@@ -1655,8 +1655,8 @@ theorem comap_eq
 
 中文:
 定理 comap_eq
-  条件: {f : α -> β} {r : Setoid β}
-  结论: comap f r = ker (@Quotient.mk'' _ r ∘ f)
+  条件: {f : α -> β} {r : 集合等价关系 β}
+  结论: comap f r = ker (@商.mk'' _ r ∘ f)
   证明: ext fun x y => show _ ↔ ⟦_⟧ = ⟦_⟧ by rw [Quotient.eq]; rfl
 
 @[simp]
@@ -1680,7 +1680,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (c : Setoid α)
+  条件: (c : 集合等价关系 α)
   结论: c.comap id = c
   证明: rfl
 
@@ -1700,7 +1700,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: (c : Setoid γ) (g : β -> γ) (f : α -> β)
+  条件: (c : 集合等价关系 γ) (g : β -> γ) (f : α -> β)
   结论: c.comap (g ∘ f) = (c.comap g).comap f
   证明: rfl
 -/
@@ -1717,7 +1717,7 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  条件: (f : α -> β) (hf : Function.Surjective f)
+  条件: (f : α -> β) (hf : 函数.满射 f)
   证明: fun _ _ h => ext hf.forall₂.2 Setoid.ext_iff.1 h
 
 Depends on / 依赖: Setoid, Setoid.ext_iff, ext_iff, hf.forall
@@ -1737,7 +1737,7 @@ theorem le_comap_map
 
 中文:
 定理 le_comap_map
-  条件: {r : Setoid α} {f : α -> β}
+  条件: {r : 集合等价关系 α} {f : α -> β}
   结论: r <= comap f (r.map f)
   证明: fun _ _ h => Relation.EqvGen.rel _ _ ⟨_, _, h, rfl, rfl⟩
 
@@ -1763,7 +1763,7 @@ theorem comap_map_of_ker_le
 
 中文:
 定理 comap_map_of_ker_le
-  条件: (f : α -> β) (r : Setoid α) (hf : ker f <= r)
+  条件: (f : α -> β) (r : 集合等价关系 α) (hf : ker f <= r)
   证明: by
   apply le_antisymm _ le_comap_map
   rw [le_iff_rel_le]; rw [comap_rel_eq]; rw [coe_map_of_ker_le _ _ hf]
@@ -1796,7 +1796,7 @@ theorem comap_map_eq
 
 中文:
 定理 comap_map_eq
-  条件: (f : α -> β) (r : Setoid α) (hf : f.Injective)
+  条件: (f : α -> β) (r : 集合等价关系 α) (hf : f.单射)
   结论: comap f (r.map f) = r
   证明: comap_map_of_ker_le f r ker_eq_bot_iff.2 hf ▸ bot_le
 
@@ -1815,7 +1815,7 @@ theorem comap_surjective
 
 中文:
 定理 comap_surjective
-  条件: (f : α -> β) (hf : Function.Injective f)
+  条件: (f : α -> β) (hf : 函数.单射 f)
   证明: fun r => ⟨_, comap_map_eq f r hf⟩
 
 Depends on / 依赖: comap_map_eq
@@ -1835,7 +1835,7 @@ definition comapQuotientEquiv
 
 中文:
 定义 comapQuotientEquiv
-  签名: (f : α -> β) (r : Setoid β)
+  签名: (f : α -> β) (r : 集合等价关系 β)
   定义体: (Quotient.congrRight <| Setoid.ext_iff.1 comap_eq).trans quotientKerEquivRange
     Quotient.mk'' ∘ f
 
@@ -1862,7 +1862,7 @@ definition quotientQuotientEquivQuotient
 
 中文:
 定义 quotientQuotientEquivQuotient
-  签名: (s : Setoid α) (h : r <= s)
+  签名: (s : 集合等价关系 α) (h : r <= s)
   定义体: (Quotient.liftOn' x fun w =>
 (Quotient.liftOn' w (@Quotient.mk'' _ s)) fun _ _ H => Quotient.sound h H)
       fun x y => Quotient.inductionOn₂' x y fun _ _ H => show @Quot.mk _ _ _ = @Quot.mk _ _ _ from H
@@ -1902,7 +1902,7 @@ definition correspondence
 
 中文:
 定义 correspondence
-  签名: (r : Setoid α)
+  签名: (r : 集合等价关系 α)
   定义体: ⟨Quotient.lift₂ s.1.1 fun _ _ _ _ h₁ h₂ => Eq.propIntro
       (fun h => s.1.trans' (s.1.trans' (s.1.symm' (s.2 h₁)) h) (s.2 h₂))
       (fun h => s.1.trans' (s.1.trans' (s.2 h₁) h) (s.1.symm' (s.2 h₂))),
@@ -1934,7 +1934,7 @@ definition sigmaQuotientEquivOfLe
 
 中文:
 定义 sigmaQuotientEquivOfLe
-  签名: {r s : Setoid α} (hle : r <= s)
+  签名: {r s : 集合等价关系 α} (hle : r <= s)
   定义体: .trans (.symm <| .sigmaCongrRight fun _ => .subtypeQuotientEquivQuotientSubtype
       (s₁ := r) (s₂ := r.comap Subtype.val) _ _ (fun _ => Iff.rfl) fun _ _ => Iff.rfl)
     (.sigmaFiberEquiv fun a => a.lift (Quotient.mk s) fun _ _ h => Quotient.sound <| hle h)
@@ -1965,9 +1965,9 @@ theorem Quotient.subsingleton_iff
   simp_rw [Prop.top_eq_true, true_implies, Quotient.eq
 
 中文:
-定理 Quotient.subsingleton_iff
-  条件: {s : Setoid α}
-  结论: Subsingleton (Quotient s) ↔ s = ⊤
+定理 商.subsingleton_iff
+  条件: {s : 集合等价关系 α}
+  结论: 子单例 (商 s) ↔ s = ⊤
   证明: by
   simp only [_root_.subsingleton_iff, eq_top_iff, Setoid.le_def, Setoid.top_def, Pi.top_apply]
   refine Quotient.mk'_surjective.forall.trans (forall_congr' fun a => ?_)
@@ -1996,7 +1996,7 @@ theorem Quot.subsingleton_iff
   simp
 
 中文:
-定理 Quot.subsingleton_iff
+定理 商.subsingleton_iff
   条件: (r : α -> α -> 命题)
   证明: by
   simp only [_root_.subsingleton_iff, _root_.eq_top_iff, Pi.le_def, Pi.top_apply]

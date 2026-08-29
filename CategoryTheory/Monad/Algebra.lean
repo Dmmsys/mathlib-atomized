@@ -51,8 +51,8 @@ structure Algebra
     - assoc : T.μ.app A ≫ a = (T : C ⥤ C).map a ≫ a  [default: by cat_disch]
 
 中文:
-结构 Algebra
-  参数: (T : Monad C)
+结构 代数
+  参数: (T : 单子 C)
   公理与运算 (4 个):
     - A : C
     - a : (T : C ⥤ C).obj A ⟶ A
@@ -90,8 +90,8 @@ structure Hom
     - h : (T : C ⥤ C).map f ≫ B.a = A.a ≫ f  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (A B : Algebra T)
+结构 态射
+  参数: (A B : 代数 T)
   公理与运算 (2 个):
     - f : A.A ⟶ B.A
     - h : (T : C ⥤ C).map f ≫ B.a = A.a ≫ f  [默认: by cat_disch]
@@ -118,7 +118,7 @@ definition id
 
 中文:
 定义 id
-  签名: (A : Algebra T)
+  签名: (A : 代数 T)
   定义体: 𝟙 A.A
 -/
 def id (A : Algebra T) : Hom A A where f := 𝟙 A.A
@@ -136,7 +136,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {P Q R : Algebra T} (f : Hom P Q) (g : Hom Q R)
+  签名: {P Q R : 代数 T} (f : 态射 P Q) (g : 态射 Q R)
   定义体: f.f ≫ g.f
 -/
 def comp {P Q R : Algebra T} (f : Hom P Q) (g : Hom Q R) : Hom P R where f := f.f ≫ g.f
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryStruct (Algebra T)
+  签名: CategoryStruct (代数 T)
   定义体: Hom
   id := Hom.id
   comp := @Hom.comp _ _ _
@@ -182,8 +182,8 @@ lemma Hom.ext'
 @[simp]
 
 中文:
-引理 Hom.ext'
-  条件: (X Y : Algebra T) (f g : X ⟶ Y) (h : f.f = g.f)
+引理 态射.ext'
+  条件: (X Y : 代数 T) (f g : X ⟶ Y) (h : f.f = g.f)
   结论: f = g
   证明: Hom.ext h
 
@@ -206,7 +206,7 @@ theorem comp_eq_comp
 
 中文:
 定理 comp_eq_comp
-  条件: {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'')
+  条件: {A A' A'' : 代数 T} (f : A ⟶ A') (g : A' ⟶ A'')
   证明: rfl
 
 @[simp]
@@ -229,8 +229,8 @@ theorem id_eq_id
 
 中文:
 定理 id_eq_id
-  条件: (A : Algebra T)
-  结论: Algebra.Hom.id A = 𝟙 A
+  条件: (A : 代数 T)
+  结论: 代数.态射.id A = 𝟙 A
   证明: rfl
 
 @[simp]
@@ -252,7 +252,7 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (A : Algebra T)
+  条件: (A : 代数 T)
   结论: (𝟙 A : A ⟶ A).f = 𝟙 A.A
   证明: rfl
 
@@ -273,7 +273,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'')
+  条件: {A A' A'' : 代数 T} (f : A ⟶ A') (g : A' ⟶ A'')
   结论: (f ≫ g).f = f.f ≫ g.f
   证明: rfl
 -/
@@ -289,7 +289,7 @@ instance eilenbergMoore
 
 中文:
 实例 eilenbergMoore
-  签名: : Category (Algebra T) where
+  签名: : 范畴 (代数 T) where
 -/
 instance eilenbergMoore : Category (Algebra T) where
 
@@ -313,7 +313,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {A B : Algebra T} (h : A.A ≅ B.A)
+  签名: {A B : 代数 T} (h : A.A ≅ B.A)
   定义体: { f := h.hom }
   inv :=
     { f := h.inv
@@ -349,7 +349,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Algebra T ⥤ C where
+  签名: : 代数 T ⥤ C where
   定义体: A.A
   map f := f.f
 -/
@@ -374,7 +374,7 @@ definition free
 
 中文:
 定义 free
-  签名: : C ⥤ Algebra T where
+  签名: : C ⥤ 代数 T where
   定义体: { A := T.obj X
       a := T.μ.app X
       assoc := (T.assoc _).symm }
@@ -402,8 +402,8 @@ instance [Inhabited
   body: ⟨(free T).obj default⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (Algebra T)
+实例 [可居
+  签名: C] : 可居 (代数 T)
   定义体: ⟨(free T).obj default⟩
 -/
 instance [Inhabited C] : Inhabited (Algebra T) :=
@@ -475,8 +475,8 @@ theorem algebra_iso_of_iso
 
 中文:
 定理 algebra_iso_of_iso
-  条件: {A B : Algebra T} (f : A ⟶ B) [IsIso f.f]
-  结论: IsIso f
+  条件: {A B : 代数 T} (f : A ⟶ B) [是同构 f.f]
+  结论: 是同构 f
   证明: ⟨⟨{ f := inv f.f, h := by simp }, by cat_disch⟩⟩
 
 Depends on / 依赖: cat_disch
@@ -494,7 +494,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : T.forget.ReflectsIsomorphisms where
+  签名: : T.forget.反映同构 where
   定义体: algebra_iso_of_iso T f
 
 Depends on / 依赖: algebra_iso_of_iso
@@ -511,7 +511,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : T.forget.Faithful where
+  签名: : T.forget.忠实 where
 -/
 instance forget_faithful : T.forget.Faithful where
 
@@ -526,8 +526,8 @@ theorem algebra_epi_of_epi
 
 中文:
 定理 algebra_epi_of_epi
-  条件: {X Y : Algebra T} (f : X ⟶ Y) [h : Epi f.f]
-  结论: Epi f
+  条件: {X Y : 代数 T} (f : X ⟶ Y) [h : 满态射 f.f]
+  结论: 满态射 f
   证明: (forget T).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -546,8 +546,8 @@ theorem algebra_mono_of_mono
 
 中文:
 定理 algebra_mono_of_mono
-  条件: {X Y : Algebra T} (f : X ⟶ Y) [h : Mono f.f]
-  结论: Mono f
+  条件: {X Y : 代数 T} (f : X ⟶ Y) [h : 单态射 f.f]
+  结论: 单态射 f
   证明: (forget T).mono_of_mono_map h
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -565,7 +565,7 @@ instance :
 
 中文:
 实例 :
-  签名: T.forget.IsRightAdjoint
+  签名: T.forget.是右伴随
   定义体: ⟨T.free, ⟨T.adj⟩⟩
 
 Depends on / 依赖: T.adj, T.free
@@ -592,7 +592,7 @@ definition algebraFunctorOfMonadHom
 
 中文:
 定义 algebraFunctorOfMonadHom
-  签名: {T₁ T₂ : Monad C} (h : T₂ ⟶ T₁)
+  签名: {T₁ T₂ : 单子 C} (h : T₂ ⟶ T₁)
   定义体: { A := A.A
       a := h.app A.A ≫ A.a
       unit := by simp [A.unit]
@@ -625,7 +625,7 @@ definition algebraFunctorOfMonadHomId
 
 中文:
 定义 algebraFunctorOfMonadHomId
-  签名: {T₁ : Monad C}
+  签名: {T₁ : 单子 C}
   定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
 
 Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -648,7 +648,7 @@ definition algebraFunctorOfMonadHomComp
 
 中文:
 定义 algebraFunctorOfMonadHomComp
-  签名: {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
+  签名: {T₁ T₂ T₃ : 单子 C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
   定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
 
 Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -674,7 +674,7 @@ definition algebraFunctorOfMonadHomEq
 
 中文:
 定义 algebraFunctorOfMonadHomEq
-  签名: {T₁ T₂ : Monad C} {f g : T₁ ⟶ T₂} (h : f = g)
+  签名: {T₁ T₂ : 单子 C} {f g : T₁ ⟶ T₂} (h : f = g)
   定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
 
 Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -706,7 +706,7 @@ definition algebraEquivOfIsoMonads
 
 中文:
 定义 algebraEquivOfIsoMonads
-  签名: {T₁ T₂ : Monad C} (h : T₁ ≅ T₂)
+  签名: {T₁ T₂ : 单子 C} (h : T₁ ≅ T₂)
   定义体: algebraFunctorOfMonadHom h.inv
   inverse := algebraFunctorOfMonadHom h.hom
   unitIso :=
@@ -739,7 +739,7 @@ theorem algebra_equiv_of_iso_monads_comp_forget
 
 中文:
 定理 algebra_equiv_of_iso_monads_comp_forget
-  条件: {T₁ T₂ : Monad C} (h : T₁ ⟶ T₂)
+  条件: {T₁ T₂ : 单子 C} (h : T₁ ⟶ T₂)
   证明: rfl
 -/
 theorem algebra_equiv_of_iso_monads_comp_forget {T₁ T₂ : Monad C} (h : T₁ ⟶ T₂) :
@@ -763,8 +763,8 @@ structure Coalgebra
     - coassoc : a ≫ G.δ.app A = a ≫ G.map a  [default: by cat_disch]
 
 中文:
-结构 Coalgebra
-  参数: (G : Comonad C)
+结构 余algebra
+  参数: (G : 余单子 C)
   公理与运算 (4 个):
     - A : C
     - a : A ⟶ (G : C ⥤ C).obj A
@@ -803,8 +803,8 @@ structure Hom
     - h : A.a ≫ (G : C ⥤ C).map f = f ≫ B.a  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (A B : Coalgebra G)
+结构 态射
+  参数: (A B : 余algebra G)
   公理与运算 (2 个):
     - f : A.A ⟶ B.A
     - h : A.a ≫ (G : C ⥤ C).map f = f ≫ B.a  [默认: by cat_disch]
@@ -831,7 +831,7 @@ definition id
 
 中文:
 定义 id
-  签名: (A : Coalgebra G)
+  签名: (A : 余algebra G)
   定义体: 𝟙 A.A
 -/
 def id (A : Coalgebra G) : Hom A A where f := 𝟙 A.A
@@ -846,7 +846,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {P Q R : Coalgebra G} (f : Hom P Q) (g : Hom Q R)
+  签名: {P Q R : 余algebra G} (f : 态射 P Q) (g : 态射 Q R)
   定义体: f.f ≫ g.f
 -/
 def comp {P Q R : Coalgebra G} (f : Hom P Q) (g : Hom Q R) : Hom P R where f := f.f ≫ g.f
@@ -867,7 +867,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryStruct (Coalgebra G)
+  签名: CategoryStruct (余algebra G)
   定义体: Hom
   id := Hom.id
   comp := @Hom.comp _ _ _
@@ -892,8 +892,8 @@ lemma Hom.ext'
 @[simp]
 
 中文:
-引理 Hom.ext'
-  条件: (X Y : Coalgebra G) (f g : X ⟶ Y) (h : f.f = g.f)
+引理 态射.ext'
+  条件: (X Y : 余algebra G) (f g : X ⟶ Y) (h : f.f = g.f)
   结论: f = g
   证明: Hom.ext h
 
@@ -914,7 +914,7 @@ theorem comp_eq_comp
 
 中文:
 定理 comp_eq_comp
-  条件: {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'')
+  条件: {A A' A'' : 余algebra G} (f : A ⟶ A') (g : A' ⟶ A'')
   证明: rfl
 
 @[simp]
@@ -937,8 +937,8 @@ theorem id_eq_id
 
 中文:
 定理 id_eq_id
-  条件: (A : Coalgebra G)
-  结论: Coalgebra.Hom.id A = 𝟙 A
+  条件: (A : 余algebra G)
+  结论: 余algebra.态射.id A = 𝟙 A
   证明: rfl
 
 @[simp]
@@ -960,7 +960,7 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (A : Coalgebra G)
+  条件: (A : 余algebra G)
   结论: (𝟙 A : A ⟶ A).f = 𝟙 A.A
   证明: rfl
 
@@ -981,7 +981,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'')
+  条件: {A A' A'' : 余algebra G} (f : A ⟶ A') (g : A' ⟶ A'')
   结论: (f ≫ g).f = f.f ≫ g.f
   证明: rfl
 -/
@@ -997,7 +997,7 @@ instance eilenbergMoore
 
 中文:
 实例 eilenbergMoore
-  签名: : Category (Coalgebra G) where
+  签名: : 范畴 (余algebra G) where
 -/
 instance eilenbergMoore : Category (Coalgebra G) where
 
@@ -1021,7 +1021,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {A B : Coalgebra G} (h : A.A ≅ B.A)
+  签名: {A B : 余algebra G} (h : A.A ≅ B.A)
   定义体: { f := h.hom }
   inv :=
     { f := h.inv
@@ -1058,7 +1058,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Coalgebra G ⥤ C where
+  签名: : 余algebra G ⥤ C where
   定义体: A.A
   map f := f.f
 -/
@@ -1084,7 +1084,7 @@ definition cofree
 
 中文:
 定义 cofree
-  签名: : C ⥤ Coalgebra G where
+  签名: : C ⥤ 余algebra G where
   定义体: { A := G.obj X
       a := G.δ.app X
       coassoc := (G.coassoc _).symm }
@@ -1171,8 +1171,8 @@ theorem coalgebra_iso_of_iso
 
 中文:
 定理 coalgebra_iso_of_iso
-  条件: {A B : Coalgebra G} (f : A ⟶ B) [IsIso f.f]
-  结论: IsIso f
+  条件: {A B : 余algebra G} (f : A ⟶ B) [是同构 f.f]
+  结论: 是同构 f
   证明: ⟨⟨{ f := inv f.f
         h := by
           rw [IsIso.eq_inv_comp f.f]; rw [← f.h_assoc]
@@ -1198,7 +1198,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : G.forget.ReflectsIsomorphisms where
+  签名: : G.forget.反映同构 where
   定义体: coalgebra_iso_of_iso G f
 
 Depends on / 依赖: coalgebra_iso_of_iso
@@ -1215,7 +1215,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget G).Faithful where
+  签名: : (forget G).忠实 where
 -/
 instance forget_faithful : (forget G).Faithful where
 
@@ -1230,8 +1230,8 @@ theorem algebra_epi_of_epi
 
 中文:
 定理 algebra_epi_of_epi
-  条件: {X Y : Coalgebra G} (f : X ⟶ Y) [h : Epi f.f]
-  结论: Epi f
+  条件: {X Y : 余algebra G} (f : X ⟶ Y) [h : 满态射 f.f]
+  结论: 满态射 f
   证明: (forget G).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -1250,8 +1250,8 @@ theorem algebra_mono_of_mono
 
 中文:
 定理 algebra_mono_of_mono
-  条件: {X Y : Coalgebra G} (f : X ⟶ Y) [h : Mono f.f]
-  结论: Mono f
+  条件: {X Y : 余algebra G} (f : X ⟶ Y) [h : 单态射 f.f]
+  结论: 单态射 f
   证明: (forget G).mono_of_mono_map h
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -1269,7 +1269,7 @@ instance :
 
 中文:
 实例 :
-  签名: G.forget.IsLeftAdjoint
+  签名: G.forget.是左伴随
   定义体: ⟨_, ⟨G.adj⟩⟩
 
 Depends on / 依赖: G.adj

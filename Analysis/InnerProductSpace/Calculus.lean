@@ -99,7 +99,7 @@ theorem contDiff_inner
 中文:
 定理 contDiff_inner
   条件: {n}
-  结论: ContDiff 实数 n fun p : E × E => ⟪p.1, p.2⟫
+  结论: 连续可微 实数 n fun p : E × E => ⟪p.1, p.2⟫
   证明: isBoundedBilinearMap_inner.contDiff
 
 Depends on / 依赖: contDiff, isBoundedBilinearMap_inner, isBoundedBilinearMap_inner.contDiff
@@ -137,7 +137,7 @@ theorem differentiable_inner
 
 中文:
 定理 differentiable_inner
-  结论: Differentiable 实数 fun p : E × E => ⟪p.1, p.2⟫
+  结论: 可微 实数 fun p : E × E => ⟪p.1, p.2⟫
   证明: isBoundedBilinearMap_inner.differentiableAt
 
 Depends on / 依赖: differentiableAt, isBoundedBilinearMap_inner, isBoundedBilinearMap_inner.differentiableAt
@@ -205,8 +205,8 @@ theorem ContDiff.inner
   proof: contDiff_inner.comp (hf.prodMk hg)
 
 中文:
-定理 ContDiff.inner
-  条件: (hf : ContDiff 实数 n f) (hg : ContDiff 实数 n g)
+定理 连续可微.inner
+  条件: (hf : 连续可微 实数 n f) (hg : 连续可微 实数 n g)
   证明: contDiff_inner.comp (hf.prodMk hg)
 
 Depends on / 依赖: contDiff_inner, contDiff_inner.comp, hf.prodMk, prodMk
@@ -276,8 +276,8 @@ theorem HasFDerivAt.inner
 .comp x (hf.prodMk hg) .hasFDerivAt (f x, g x)
 
 中文:
-定理 HasFDerivAt.inner
-  条件: (hf : HasFDerivAt f f' x) (hg : HasFDerivAt g g' x)
+定理 在点处Fréchet可导.inner
+  条件: (hf : 在点处Fréchet可导 f f' x) (hg : 在点处Fréchet可导 g g' x)
   证明: by
   -- `by exact` to handle a tricky unification.
   exact isBoundedBilinearMap_inner (𝕜 := 𝕜) (E := E)
@@ -300,7 +300,7 @@ theorem HasDerivWithinAt.inner
 
 中文:
 定理 HasDerivWithinAt.inner
-  结论: {f g : 实数 -> E} {f' g' : E} {s : Set 实数} {x : 实数}
+  结论: {f g : 实数 -> E} {f' g' : E} {s : 集合 实数} {x : 实数}
   证明: by
   simpa using (hf.hasFDerivWithinAt.inner 𝕜 hg.hasFDerivWithinAt).hasDerivWithinAt
 
@@ -321,7 +321,7 @@ theorem HasDerivAt.inner
   simpa only [← hasDerivWithinAt_univ] using HasDerivWithinAt.inner 𝕜
 
 中文:
-定理 HasDerivAt.inner
+定理 在点处可导.inner
   条件: {f g : 实数 -> E} {f' g' : E} {x : 实数}
   证明: by
   simpa only [← hasDerivWithinAt_univ] using HasDerivWithinAt.inner 𝕜
@@ -396,8 +396,8 @@ theorem Differentiable.inner
   proof: fun x => (hf x).inner 𝕜 (hg x)
 
 中文:
-定理 Differentiable.inner
-  条件: (hf : Differentiable 实数 f) (hg : Differentiable 实数 g)
+定理 可微.inner
+  条件: (hf : 可微 实数 f) (hg : 可微 实数 g)
   证明: fun x => (hf x).inner 𝕜 (hg x)
 -/
 theorem Differentiable.inner (hf : Differentiable Real f) (hg : Differentiable Real g) :
@@ -459,7 +459,7 @@ theorem contDiff_norm_sq
 
 中文:
 定理 contDiff_norm_sq
-  结论: ContDiff 实数 n fun x : E => ‖x‖ ^ 2
+  结论: 连续可微 实数 n fun x : E => ‖x‖ ^ 2
   证明: by
   convert! (reCLM : 𝕜 ->L[Real] Real).contDiff.comp ((contDiff_id (E := E)).inner 𝕜 (contDiff_id (E := E)))
   exact (inner_self_eq_norm_sq _).symm
@@ -480,9 +480,9 @@ theorem ContDiff.norm_sq
   proof: (contDiff_norm_sq 𝕜).comp hf
 
 中文:
-定理 ContDiff.norm_sq
-  条件: (hf : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => ‖f x‖ ^ 2
+定理 连续可微.norm_sq
+  条件: (hf : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => ‖f x‖ ^ 2
   证明: (contDiff_norm_sq 𝕜).comp hf
 
 Depends on / 依赖: contDiff_norm_sq
@@ -691,9 +691,9 @@ theorem ContDiff.norm
   proof: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.norm 𝕜 (h0 x)
 
 中文:
-定理 ContDiff.norm
-  条件: (hf : ContDiff 实数 n f) (h0 : 对任意 x, f x != 0)
-  结论: ContDiff 实数 n fun y => ‖f y‖
+定理 连续可微.norm
+  条件: (hf : 连续可微 实数 n f) (h0 : 对任意 x, f x != 0)
+  结论: 连续可微 实数 n fun y => ‖f y‖
   证明: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.norm 𝕜 (h0 x)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, hf.contDiffAt.norm
@@ -710,8 +710,8 @@ theorem ContDiff.dist
   proof: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.dist 𝕜 hg.contDiffAt (hne x)
 
 中文:
-定理 ContDiff.dist
-  条件: (hf : ContDiff 实数 n f) (hg : ContDiff 实数 n g) (hne : 对任意 x, f x != g x)
+定理 连续可微.dist
+  条件: (hf : 连续可微 实数 n f) (hg : 连续可微 实数 n g) (hne : 对任意 x, f x != g x)
   证明: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.dist 𝕜 hg.contDiffAt (hne x)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, hf.contDiffAt.dist, hg.contDiffAt
@@ -807,8 +807,8 @@ theorem HasFDerivAt.norm_sq
   proof: (hasStrictFDerivAt_norm_sq _).hasFDerivAt.comp x hf
 
 中文:
-定理 HasFDerivAt.norm_sq
-  条件: {f : G -> F} {f' : G ->L[实数] F} (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.norm_sq
+  条件: {f : G -> F} {f' : G ->L[实数] F} (hf : 在点处Fréchet可导 f f' x)
   证明: (hasStrictFDerivAt_norm_sq _).hasFDerivAt.comp x hf
 
 Depends on / 依赖: hasFDerivAt, hasFDerivAt.comp, hasStrictFDerivAt_norm_sq
@@ -827,8 +827,8 @@ theorem HasDerivAt.norm_sq
   simpa using hf.hasFDerivAt.norm_sq.hasDerivAt
 
 中文:
-定理 HasDerivAt.norm_sq
-  条件: {f : 实数 -> F} {f' : F} {x : 实数} (hf : HasDerivAt f f' x)
+定理 在点处可导.norm_sq
+  条件: {f : 实数 -> F} {f' : F} {x : 实数} (hf : 在点处可导 f f' x)
   证明: by
   simpa using hf.hasFDerivAt.norm_sq.hasDerivAt
 
@@ -868,7 +868,7 @@ theorem HasDerivWithinAt.norm_sq
 
 中文:
 定理 HasDerivWithinAt.norm_sq
-  结论: {f : 实数 -> F} {f' : F} {s : Set 实数} {x : 实数}
+  结论: {f : 实数 -> F} {f' : F} {s : 集合 实数} {x : 实数}
   证明: by
   simpa using hf.hasFDerivWithinAt.norm_sq.hasDerivWithinAt
 
@@ -953,9 +953,9 @@ theorem Differentiable.norm_sq
   proof: fun x => (hf x).norm_sq 𝕜
 
 中文:
-定理 Differentiable.norm_sq
-  条件: (hf : Differentiable 实数 f)
-  结论: Differentiable 实数 fun y => ‖f y‖ ^ 2
+定理 可微.norm_sq
+  条件: (hf : 可微 实数 f)
+  结论: 可微 实数 fun y => ‖f y‖ ^ 2
   证明: fun x => (hf x).norm_sq 𝕜
 
 Depends on / 依赖: norm_sq
@@ -972,8 +972,8 @@ theorem Differentiable.norm
   proof: fun x => (hf x).norm 𝕜 (h0 x)
 
 中文:
-定理 Differentiable.norm
-  条件: (hf : Differentiable 实数 f) (h0 : 对任意 x, f x != 0)
+定理 可微.norm
+  条件: (hf : 可微 实数 f) (h0 : 对任意 x, f x != 0)
   证明: fun x => (hf x).norm 𝕜 (h0 x)
 -/
 theorem Differentiable.norm (hf : Differentiable Real f) (h0 : forall x, f x != 0) :
@@ -989,8 +989,8 @@ theorem Differentiable.dist
   (hf x).dist 𝕜 (hg x) (hne x)
 
 中文:
-定理 Differentiable.dist
-  结论: (hf : Differentiable 实数 f) (hg : Differentiable 实数 g)
+定理 可微.dist
+  结论: (hf : 可微 实数 f) (hg : 可微 实数 g)
   证明: fun x =>
   (hf x).dist 𝕜 (hg x) (hne x)
 -/
@@ -1192,7 +1192,7 @@ theorem differentiable_euclidean
 
 中文:
 定理 differentiable_euclidean
-  结论: Differentiable 𝕜 f ↔ 对任意 i, Differentiable 𝕜 fun x => f x i
+  结论: 可微 𝕜 f ↔ 对任意 i, 可微 𝕜 fun x => f x i
   证明: differentiable_piLp _
 
 Depends on / 依赖: differentiable_piLp
@@ -1311,7 +1311,7 @@ theorem contDiff_euclidean
 中文:
 定理 contDiff_euclidean
   条件: {n : WithTop 自然数∞}
-  结论: ContDiff 𝕜 n f ↔ 对任意 i, ContDiff 𝕜 n fun x => f x i
+  结论: 连续可微 𝕜 n f ↔ 对任意 i, 连续可微 𝕜 n fun x => f x i
   证明: contDiff_piLp _
 
 Depends on / 依赖: contDiff_piLp
@@ -1343,7 +1343,7 @@ theorem OpenPartialHomeomorph.contDiff_univUnitBall
 
 中文:
 定理 OpenPartialHomeomorph.contDiff_univUnitBall
-  结论: ContDiff 实数 n (univUnitBall : E -> E)
+  结论: 连续可微 实数 n (univUnitBall : E -> E)
   证明: by
   suffices ContDiff Real n fun x : E => (√(1 + ‖x‖ ^ 2 : Real))⁻¹ from this.smul contDiff_id
   have h : forall x : E, (0 : Real) < (1 : Real) + ‖x‖ ^ 2 := fun x => by positivity
@@ -1399,8 +1399,8 @@ theorem Homeomorph.contDiff_unitBall
   proof: OpenPartialHomeomorph.contDiff_univUnitBall
 
 中文:
-定理 Homeomorph.contDiff_unitBall
-  结论: ContDiff 实数 n fun x : E => (unitBall x : E)
+定理 同胚.contDiff_unitBall
+  结论: 连续可微 实数 n fun x : E => (unitBall x : E)
   证明: OpenPartialHomeomorph.contDiff_univUnitBall
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.contDiff_univUnitBall, contDiff_univUnitBall
@@ -1424,7 +1424,7 @@ theorem contDiff_unitBallBall
 中文:
 定理 contDiff_unitBallBall
   条件: (hr : 0 < r)
-  结论: ContDiff 实数 n (unitBallBall c r hr)
+  结论: 连续可微 实数 n (unitBallBall c r hr)
   证明: (contDiff_id.const_smul r).add contDiff_const
 
 Depends on / 依赖: const_smul, contDiff_const, contDiff_id, contDiff_id.const_smul
@@ -1444,7 +1444,7 @@ theorem contDiff_unitBallBall_symm
 中文:
 定理 contDiff_unitBallBall_symm
   条件: (hr : 0 < r)
-  结论: ContDiff 实数 n (unitBallBall c r hr).symm
+  结论: 连续可微 实数 n (unitBallBall c r hr).symm
   证明: (contDiff_id.sub contDiff_const).const_smul r⁻¹
 
 Depends on / 依赖: const_smul, contDiff_const, contDiff_id, contDiff_id.sub
@@ -1465,7 +1465,7 @@ theorem contDiff_univBall
 
 中文:
 定理 contDiff_univBall
-  结论: ContDiff 实数 n (univBall c r)
+  结论: 连续可微 实数 n (univBall c r)
   证明: by
   unfold univBall; split_ifs with h
   · exact (contDiff_unitBallBall h).comp contDiff_univUnitBall

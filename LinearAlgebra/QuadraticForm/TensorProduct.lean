@@ -89,7 +89,7 @@ theorem tensorDistrib_tmul
 
 中文:
 定理 tensorDistrib_tmul
-  结论: (Q₁ : QuadraticMap A M₁ N₁) (Q₂ : QuadraticMap R M₂ N₂) (m₁ : M₁)
+  结论: (Q₁ : 二次映射 A M₁ N₁) (Q₂ : 二次映射 R M₂ N₂) (m₁ : M₁)
   证明: letI : Invertible (2 : A) := (Invertible.map (algebraMap R A) 2).copy 2 (map_ofNat _ _).symm
 (BilinMap.tensorDistrib_tmul _ _ _ _ _ _).trans congr_arg₂ _
     (associated_eq_self_apply _ _ _) (associated_eq_self_apply _ _ _)
@@ -112,7 +112,7 @@ abbreviation tmul
 
 中文:
 缩写 tmul
-  签名: (Q₁ : QuadraticMap A M₁ N₁)
+  签名: (Q₁ : 二次映射 A M₁ N₁)
   定义体: tensorDistrib R A (Q₁ otimesₜ[R] Q₂)
 -/
 protected abbrev tmul (Q₁ : QuadraticMap A M₁ N₁)
@@ -135,7 +135,7 @@ theorem associated_tmul
 
 中文:
 定理 associated_tmul
-  结论: [Invertible (2 : A)]
+  结论: [可逆 (2 : A)]
   证明: by
   let : Invertible (2 : A) := (Invertible.map (algebraMap R A) 2).copy 2 (map_ofNat _ _).symm
   rw [QuadraticMap.tmul]; rw [BilinMap.tmul]
@@ -240,7 +240,7 @@ theorem associated_tmul
 
 中文:
 定理 associated_tmul
-  条件: [Invertible (2 : A)] (Q₁ : QuadraticForm A M₁) (Q₂ : QuadraticForm R M₂)
+  条件: [可逆 (2 : A)] (Q₁ : QuadraticForm A M₁) (Q₂ : QuadraticForm R M₂)
   证明: by
   rw [BilinForm.tmul]; rw [BilinForm.tensorDistrib]; rw [LinearMap.comp_apply]; rw [← BilinMap.tmul]; rw [← QuadraticMap.associated_tmul Q₁ Q₂]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.congrRight₂_apply]
   ext : 6
@@ -270,7 +270,7 @@ theorem polarBilin_tmul
 
 中文:
 定理 polarBilin_tmul
-  条件: [Invertible (2 : A)] (Q₁ : QuadraticForm A M₁) (Q₂ : QuadraticForm R M₂)
+  条件: [可逆 (2 : A)] (Q₁ : QuadraticForm A M₁) (Q₂ : QuadraticForm R M₂)
   证明: by
   simp_rw [← two_nsmul_associated A, ← two_nsmul_associated R, BilinForm.tmul, tmul_smul,
     ← smul_tmul', map_nsmul, associated_tmul]
@@ -338,7 +338,7 @@ theorem associated_baseChange
 
 中文:
 定理 associated_baseChange
-  条件: [Invertible (2 : A)] (Q : QuadraticForm R M₂)
+  条件: [可逆 (2 : A)] (Q : QuadraticForm R M₂)
   证明: by
   dsimp only [QuadraticForm.baseChange, LinearMap.baseChange]
   rw [associated_tmul (QuadraticMap.sq (R := A)) Q]; rw [associated_sq]
@@ -363,7 +363,7 @@ theorem polarBilin_baseChange
 
 中文:
 定理 polarBilin_baseChange
-  条件: [Invertible (2 : A)] (Q : QuadraticForm R M₂)
+  条件: [可逆 (2 : A)] (Q : QuadraticForm R M₂)
   证明: by
   rw [QuadraticForm.baseChange]; rw [BilinForm.baseChange]; rw [polarBilin_tmul]; rw [BilinForm.tmul]; rw [← map_smul]; rw [smul_tmul']; rw [← two_nsmul_associated R]; rw [coe_associatedHom]; rw [associated_sq]; rw [smul_comm]; rw [← smul_assoc]; rw [two_smul]; rw [invOf_two_add_invOf_two]; rw [o
 
@@ -404,7 +404,7 @@ theorem baseChange_ext
 中文:
 定理 baseChange_ext
   条件: ⦃Q₁ Q₂
-  结论: QuadraticMap A (A otimes[R] M₂) N₁⦄
+  结论: 二次映射 A (A otimes[R] M₂) N₁⦄
   证明: by
   replace h (a m) : Q₁ (a otimesₜ m) = Q₂ (a otimesₜ m) := by
     rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']; rw [QuadraticMap.map_smul]; rw [QuadraticMap.map_smul]; rw [h]

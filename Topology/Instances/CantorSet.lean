@@ -46,7 +46,7 @@ definition preCantorSet
 
 中文:
 定义 preCantorSet
-  签名: : 自然数 -> Set 实数
+  签名: : 自然数 -> 集合 实数
 -/
 noncomputable def preCantorSet : Nat -> Set Real
   | 0 => Set.Icc 0 1
@@ -62,7 +62,7 @@ lemma preCantorSet_zero
 
 中文:
 引理 preCantorSet_zero
-  结论: preCantorSet 0 = Set.Icc 0 1
+  结论: preCantorSet 0 = 集合.闭区间 0 1
   证明: rfl
 -/
 @[simp] lemma preCantorSet_zero : preCantorSet 0 = Set.Icc 0 1 := rfl
@@ -95,7 +95,7 @@ definition cantorSet
 
 中文:
 定义 cantorSet
-  签名: : Set 实数
+  签名: : 集合 实数
   定义体: ⋂ n, preCantorSet n
 
 Depends on / 依赖: preCantorSet
@@ -253,7 +253,7 @@ theorem preCantorSet_antitone
 
 中文:
 定理 preCantorSet_antitone
-  结论: Antitone preCantorSet
+  结论: 递减 preCantorSet
   证明: by
   refine antitone_nat_of_succ_le fun m => ?_
   induction m with grind [preCantorSet_zero, preCantorSet_succ]
@@ -276,9 +276,9 @@ lemma preCantorSet_subset_unitInterval
   exact preCantorSet_antitone (by simp)
 
 中文:
-引理 preCantorSet_subset_unitInterval
+引理 preCantorSet_subset_unit整数erval
   条件: {n : 自然数}
-  结论: preCantorSet n subseteq Set.Icc 0 1
+  结论: preCantorSet n subseteq 集合.闭区间 0 1
   证明: by
   rw [← preCantorSet_zero]
   exact preCantorSet_antitone (by simp)
@@ -298,8 +298,8 @@ lemma cantorSet_subset_unitInterval
   proof: Set.iInter_subset _ 0
 
 中文:
-引理 cantorSet_subset_unitInterval
-  结论: cantorSet subseteq Set.Icc 0 1
+引理 cantorSet_subset_unit整数erval
+  结论: cantorSet subseteq 集合.闭区间 0 1
   证明: Set.iInter_subset _ 0
 
 Depends on / 依赖: Set.iInter_subset, iInter_subset
@@ -370,7 +370,7 @@ lemma isClosed_preCantorSet
 中文:
 引理 isClosed_preCantorSet
   条件: (n : 自然数)
-  结论: IsClosed (preCantorSet n)
+  结论: 是闭集 (preCantorSet n)
   证明: by
   let f := Homeomorph.mulLeft₀ (1 / 3 : Real) (by simp)
   let g := (Homeomorph.addLeft (2 : Real)).trans f
@@ -402,7 +402,7 @@ lemma isClosed_cantorSet
 
 中文:
 引理 isClosed_cantorSet
-  结论: IsClosed cantorSet
+  结论: 是闭集 cantorSet
   证明: isClosed_iInter isClosed_preCantorSet
 
 Depends on / 依赖: isClosed_iInter, isClosed_preCantorSet
@@ -420,7 +420,7 @@ lemma isCompact_cantorSet
 
 中文:
 引理 isCompact_cantorSet
-  结论: IsCompact cantorSet
+  结论: 是紧集 cantorSet
   证明: isCompact_Icc.of_isClosed_subset isClosed_cantorSet cantorSet_subset_unitInterval
 
 Depends on / 依赖: cantorSet_subset_unitInterval, isClosed_cantorSet, isCompact_Icc, isCompact_Icc.of_isClosed_subset, of_isClosed_subset
@@ -455,7 +455,7 @@ theorem ofDigits_zero_two_sequence_mem_cantorSet
 
 中文:
 定理 ofDigits_zero_two_sequence_mem_cantorSet
-  结论: {a : 自然数 -> Fin 3}
+  结论: {a : 自然数 -> 有限集 3}
   证明: by
   simp only [cantorSet, Set.mem_iInter]
   intro i
@@ -506,7 +506,7 @@ theorem ofDigits_zero_two_sequence_unique
 
 中文:
 定理 ofDigits_zero_two_sequence_unique
-  结论: {a b : 自然数 -> Fin 3} (ha : 对任意 n, a n != 1) (hb : 对任意 n, b n != 1)
+  结论: {a b : 自然数 -> 有限集 3} (ha : 对任意 n, a n != 1) (hb : 对任意 n, b n != 1)
   证明: by
   by_contra! h
   rw [Function.ne_iff] at h
@@ -718,7 +718,7 @@ theorem ofDigits_bool_to_fin_three_mem_cantorSet
 
 中文:
 定理 ofDigits_bool_to_fin_three_mem_cantorSet
-  条件: (f : 自然数 -> 布尔)
+  条件: (f : 自然数 -> 布尔值)
   证明: ofDigits_zero_two_sequence_mem_cantorSet (by grind)
 
 Depends on / 依赖: ofDigits_zero_two_sequence_mem_cantorSet
@@ -982,8 +982,8 @@ definition cantorSetEquivNatToBool
     intro y
 
 中文:
-定义 cantorSetEquivNatToBool
-  签名: : cantorSet ≃ (自然数 -> 布尔) where
+定义 cantorSetEquiv自然数To布尔
+  签名: : cantorSet ≃ (自然数 -> 布尔值) where
   定义体: fun ⟨x, h⟩ => (cantorToBinary x).get
   invFun (y : Nat -> Bool) :=
     ⟨ofDigits (fun i => cond (y i) 2 0), ofDigits_bool_to_fin_three_mem_cantorSet y⟩
@@ -1027,8 +1027,8 @@ definition cantorSetHomeomorphNatToBool
     (Continuous.subtype_mk (Continuous.comp continuous_ofDigits (by fun_prop)) _)
 
 中文:
-定义 cantorSetHomeomorphNatToBool
-  签名: : cantorSet ≃ₜ (自然数 -> 布尔)
+定义 cantorSetHomeomorph自然数To布尔
+  签名: : cantorSet ≃ₜ (自然数 -> 布尔值)
   定义体: Homeomorph.symm Continuous.homeoOfEquivCompactToT2 (f := cantorSetEquivNatToBool.symm)
     (Continuous.subtype_mk (Continuous.comp continuous_ofDigits (by fun_prop)) _)
 
@@ -1047,8 +1047,8 @@ definition cantorSpaceHomeomorphNatToCantorSpace
   body: (Homeomorph.piCongrLeft Nat.pairEquiv.symm).trans Homeomorph.piCurry
 
 中文:
-定义 cantorSpaceHomeomorphNatToCantorSpace
-  签名: : (自然数 -> 布尔) ≃ₜ (自然数 -> 自然数 -> 布尔)
+定义 cantorSpaceHomeomorph自然数ToCantorSpace
+  签名: : (自然数 -> 布尔值) ≃ₜ (自然数 -> 自然数 -> 布尔值)
   定义体: (Homeomorph.piCongrLeft Nat.pairEquiv.symm).trans Homeomorph.piCurry
 
 Depends on / 依赖: Homeomorph, Homeomorph.piCongrLeft, Homeomorph.piCurry, Nat.pairEquiv.symm, pairEquiv, piCongrLeft, piCurry

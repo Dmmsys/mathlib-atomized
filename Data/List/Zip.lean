@@ -68,7 +68,7 @@ theorem zip_swap
 
 中文:
 定理 zip_swap
-  结论: 对任意 (l₁ : List α) (l₂ : List β), (zip l₁ l₂).map Prod.swap = zip l₂ l₁
+  结论: 对任意 (l₁ : 列表 α) (l₂ : 列表 β), (zip l₁ l₂).map 积类型.swap = zip l₂ l₁
 -/
 theorem zip_swap : forall (l₁ : List α) (l₂ : List β), (zip l₁ l₂).map Prod.swap = zip l₂ l₁
   | [], _ => zip_nil_right.symm
@@ -84,7 +84,7 @@ theorem forall_zipWith
   given: {f : α -> β -> γ} {p : γ -> Prop}
 
 中文:
-定理 forall_zipWith
+定理 对任意_zipWith
   条件: {f : α -> β -> γ} {p : γ -> 命题}
 -/
 theorem forall_zipWith {f : α -> β -> γ} {p : γ -> Prop} :
@@ -110,8 +110,8 @@ theorem unzip_swap
 
 中文:
 定理 unzip_swap
-  条件: (l : List (α × β))
-  结论: unzip (l.map Prod.swap) = (unzip l).swap
+  条件: (l : 列表 (α × β))
+  结论: unzip (l.map 积类型.swap) = (unzip l).swap
   证明: by
   simp only [unzip_eq_map, map_map]
   rfl
@@ -138,7 +138,7 @@ theorem zipWith_congr
 
 中文:
 定理 zipWith_congr
-  结论: (f g : α -> β -> γ) (la : List α) (lb : List β)
+  结论: (f g : α -> β -> γ) (la : 列表 α) (lb : 列表 β)
   证明: by
   induction h with
   | nil => rfl
@@ -260,7 +260,7 @@ theorem length_revzip
 
 中文:
 定理 length_revzip
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (revzip l) = length l
   证明: by
   simp only [revzip, length_zip, length_reverse, min_self]
@@ -286,7 +286,7 @@ theorem unzip_revzip
 
 中文:
 定理 unzip_revzip
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (revzip l).unzip = (l, l.reverse)
   证明: unzip_zip length_reverse.symm
 
@@ -312,8 +312,8 @@ theorem revzip_map_fst
 
 中文:
 定理 revzip_map_fst
-  条件: (l : List α)
-  结论: (revzip l).map Prod.fst = l
+  条件: (l : 列表 α)
+  结论: (revzip l).map 积类型.fst = l
   证明: by
   rw [← unzip_fst]; rw [unzip_revzip]
 
@@ -337,8 +337,8 @@ theorem revzip_map_snd
 
 中文:
 定理 revzip_map_snd
-  条件: (l : List α)
-  结论: (revzip l).map Prod.snd = l.reverse
+  条件: (l : 列表 α)
+  结论: (revzip l).map 积类型.snd = l.reverse
   证明: by
   rw [← unzip_snd]; rw [unzip_revzip]
 
@@ -360,7 +360,7 @@ theorem reverse_revzip
 
 中文:
 定理 reverse_revzip
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: reverse l.revzip = revzip l.reverse
   证明: by
   rw [← zip_unzip (revzip l).reverse]
@@ -383,8 +383,8 @@ theorem revzip_swap
 
 中文:
 定理 revzip_swap
-  条件: (l : List α)
-  结论: (revzip l).map Prod.swap = revzip l.reverse
+  条件: (l : 列表 α)
+  结论: (revzip l).map 积类型.swap = revzip l.reverse
   证明: by simp [revzip]
 
 Depends on / 依赖: revzip
@@ -409,7 +409,7 @@ theorem mem_zip_inits_tails
 
 中文:
 定理 mem_zip_inits_tails
-  条件: {l : List α} {init tail : List α}
+  条件: {l : 列表 α} {init tail : 列表 α}
   证明: by
   induction l generalizing init tail <;> simp_rw [tails, inits, zip_cons_cons]
   case nil => simp

@@ -119,7 +119,7 @@ definition HasDerivAtFilter
 
 中文:
 定义 HasDerivAtFilter
-  签名: (f : 𝕜 -> F) (f' : F) (L : Filter (𝕜 × 𝕜))
+  签名: (f : 𝕜 -> F) (f' : F) (L : 滤子 (𝕜 × 𝕜))
   定义体: HasFDerivAtFilter f (toSpanSingleton 𝕜 f') L
 
 Depends on / 依赖: HasFDerivAtFilter, toSpanSingleton
@@ -137,7 +137,7 @@ definition HasDerivWithinAt
 
 中文:
 定义 HasDerivWithinAt
-  签名: (f : 𝕜 -> F) (f' : F) (s : Set 𝕜) (x : 𝕜)
+  签名: (f : 𝕜 -> F) (f' : F) (s : 集合 𝕜) (x : 𝕜)
   定义体: HasDerivAtFilter f f' (𝓝[s] x ×ˢ pure x)
 
 Depends on / 依赖: HasDerivAtFilter
@@ -154,7 +154,7 @@ definition HasDerivAt
   body: HasDerivAtFilter f f' (𝓝 x ×ˢ pure x)
 
 中文:
-定义 HasDerivAt
+定义 在点处可导
   签名: (f : 𝕜 -> F) (f' : F) (x : 𝕜)
   定义体: HasDerivAtFilter f f' (𝓝 x ×ˢ pure x)
 
@@ -192,7 +192,7 @@ definition derivWithin
 
 中文:
 定义 derivWithin
-  签名: (f : 𝕜 -> F) (s : Set 𝕜) (x : 𝕜)
+  签名: (f : 𝕜 -> F) (s : 集合 𝕜) (x : 𝕜)
   定义体: fderivWithin 𝕜 f s x 1
 
 Depends on / 依赖: fderivWithin
@@ -338,7 +338,7 @@ alias ⟨HasFDerivAt.hasDerivAt, _⟩ := hasFDerivAt_iff_hasDerivAt
 中文:
 定理 hasFDerivAt_iff_hasDerivAt
   条件: {f' : 𝕜 ->L[𝕜] F}
-  结论: HasFDerivAt f f' x ↔ HasDerivAt f (f' 1) x
+  结论: 在点处Fréchet可导 f f' x ↔ 在点处可导 f (f' 1) x
   证明: hasFDerivAtFilter_iff_hasDerivAtFilter
 
 alias ⟨HasFDerivAt.hasDerivAt, _⟩ := hasFDerivAt_iff_hasDerivAt
@@ -497,7 +497,7 @@ theorem derivWithin_zero_of_not_accPt
 
 中文:
 定理 derivWithin_zero_of_not_accPt
-  条件: (h : ¬AccPt x (𝓟 s))
+  条件: (h : ¬聚点 x (𝓟 s))
   结论: derivWithin f s x = 0
   证明: by
   rw [derivWithin]; rw [fderivWithin_zero_of_not_accPt h]; rw [zero_apply]
@@ -606,7 +606,7 @@ theorem UniqueDiffWithinAt.eq_deriv
 
 中文:
 定理 UniqueDiffWithinAt.eq_deriv
-  结论: (s : Set 𝕜) (H : UniqueDiffWithinAt 𝕜 s x)
+  结论: (s : 集合 𝕜) (H : UniqueDiffWithinAt 𝕜 s x)
   证明: toSpanSingleton_inj.mp UniqueDiffWithinAt.eq H h h₁
 
 Depends on / 依赖: UniqueDiffWithinAt, UniqueDiffWithinAt.eq, toSpanSingleton_inj, toSpanSingleton_inj.mp
@@ -762,8 +762,8 @@ theorem HasDerivAt.isBigO_sub
   proof: h.hasFDerivAt.isBigO_sub
 
 中文:
-定理 HasDerivAt.isBigO_sub
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.isBigO_sub
+  条件: (h : 在点处可导 f f' x)
   结论: (f · - f x) =O[𝓝 x] (· - x)
   证明: h.hasFDerivAt.isBigO_sub
 
@@ -868,7 +868,7 @@ theorem HasStrictDerivAt.hasDerivAt
 中文:
 定理 HasStrictDerivAt.hasDerivAt
   条件: (h : HasStrictDerivAt f f' x)
-  结论: HasDerivAt f f' x
+  结论: 在点处可导 f f' x
   证明: h.hasStrictFDerivAt.hasFDerivAt
 
 Depends on / 依赖: h.hasStrictFDerivAt.hasFDerivAt, hasFDerivAt, hasStrictFDerivAt
@@ -886,7 +886,7 @@ theorem hasDerivWithinAt_congr_set'
 
 中文:
 定理 hasDerivWithinAt_congr_set'
-  条件: {s t : Set 𝕜} (y : 𝕜) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: {s t : 集合 𝕜} (y : 𝕜) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: hasFDerivWithinAt_congr_set' y h
 
 Depends on / 依赖: hasFDerivWithinAt_congr_set
@@ -909,7 +909,7 @@ alias ⟨HasDerivWithinAt.congr_set, _⟩ := hasDerivWithinAt_congr_set
 
 中文:
 定理 hasDerivWithinAt_congr_set
-  条件: {s t : Set 𝕜} (h : s =ᶠ[𝓝 x] t)
+  条件: {s t : 集合 𝕜} (h : s =ᶠ[𝓝 x] t)
   证明: hasFDerivWithinAt_congr_set h
 
 alias ⟨HasDerivWithinAt.congr_set, _⟩ := hasDerivWithinAt_congr_set
@@ -971,7 +971,7 @@ alias ⟨HasDerivWithinAt.Ici_of_Ioi, HasDerivWithinAt.Ioi_of_Ici⟩ := hasDeriv
 
 中文:
 定理 hasDerivWithinAt_Ioi_iff_Ici
-  条件: [PartialOrder 𝕜]
+  条件: [偏序 𝕜]
   证明: by
   rw [← Ici_sdiff_left]; rw [hasDerivWithinAt_sdiff_singleton]
 
@@ -1001,7 +1001,7 @@ alias ⟨HasDerivWithinAt.Iic_of_Iio, HasDerivWithinAt.Iio_of_Iic⟩ := hasDeriv
 
 中文:
 定理 hasDerivWithinAt_Iio_iff_Iic
-  条件: [PartialOrder 𝕜]
+  条件: [偏序 𝕜]
   证明: by
   rw [← Iic_sdiff_right]; rw [hasDerivWithinAt_sdiff_singleton]
 
@@ -1027,7 +1027,7 @@ alias ⟨HasDerivWithinAt.Ioi_of_Ioo, HasDerivWithinAt.Ioo_of_Ioi⟩ := HasDeriv
 
 中文:
 定理 HasDerivWithinAt.Ioi_iff_Ioo
-  条件: [LinearOrder 𝕜] [OrderClosedTopology 𝕜] {x y : 𝕜} (h : x < y)
+  条件: [线性序 𝕜] [OrderClosed拓扑 𝕜] {x y : 𝕜} (h : x < y)
   证明: hasFDerivWithinAt_inter Iio_mem_nhds h
 
 alias ⟨HasDerivWithinAt.Ioi_of_Ioo, HasDerivWithinAt.Ioo_of_Ioi⟩ := HasDerivWithinAt.Ioi_iff_Ioo
@@ -1123,8 +1123,8 @@ theorem HasDerivAt.hasDerivAtFilter
   proof: HasFDerivAt.hasFDerivAtFilter h hL
 
 中文:
-定理 HasDerivAt.hasDerivAtFilter
-  条件: (h : HasDerivAt f f' x) (hL : L <= 𝓝 x ×ˢ pure x)
+定理 在点处可导.hasDerivAtFilter
+  条件: (h : 在点处可导 f f' x) (hL : L <= 𝓝 x ×ˢ pure x)
   证明: HasFDerivAt.hasFDerivAtFilter h hL
 
 Depends on / 依赖: HasFDerivAt, HasFDerivAt.hasFDerivAtFilter, hasFDerivAtFilter
@@ -1143,8 +1143,8 @@ theorem HasDerivAt.hasDerivWithinAt
   proof: HasFDerivAt.hasFDerivWithinAt h
 
 中文:
-定理 HasDerivAt.hasDerivWithinAt
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.hasDerivWithinAt
+  条件: (h : 在点处可导 f f' x)
   结论: HasDerivWithinAt f f' s x
   证明: HasFDerivAt.hasFDerivWithinAt h
 
@@ -1184,8 +1184,8 @@ theorem HasDerivAt.differentiableAt
 @[simp]
 
 中文:
-定理 HasDerivAt.differentiableAt
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.differentiableAt
+  条件: (h : 在点处可导 f f' x)
   结论: DifferentiableAt 𝕜 f x
   证明: HasFDerivAt.differentiableAt h
 
@@ -1207,7 +1207,7 @@ theorem hasDerivWithinAt_univ
 
 中文:
 定理 hasDerivWithinAt_univ
-  结论: HasDerivWithinAt f f' univ x ↔ HasDerivAt f f' x
+  结论: HasDerivWithinAt f f' univ x ↔ 在点处可导 f f' x
   证明: hasFDerivWithinAt_univ
 
 Depends on / 依赖: hasFDerivWithinAt_univ
@@ -1225,8 +1225,8 @@ theorem HasDerivAt.unique
   proof: toSpanSingleton_inj.mp h₀.hasFDerivAt.unique h₁
 
 中文:
-定理 HasDerivAt.unique
-  条件: (h₀ : HasDerivAt f f₀' x) (h₁ : HasDerivAt f f₁' x)
+定理 在点处可导.unique
+  条件: (h₀ : 在点处可导 f f₀' x) (h₁ : 在点处可导 f f₁' x)
   结论: f₀' = f₁'
   证明: toSpanSingleton_inj.mp h₀.hasFDerivAt.unique h₁
 
@@ -1344,7 +1344,7 @@ theorem DifferentiableAt.hasDerivAt
 中文:
 定理 DifferentiableAt.hasDerivAt
   条件: (h : DifferentiableAt 𝕜 f x)
-  结论: HasDerivAt f (deriv f x) x
+  结论: 在点处可导 f (deriv f x) x
   证明: h.hasFDerivAt.hasDerivAt
 
 @[simp]
@@ -1367,7 +1367,7 @@ theorem hasDerivAt_deriv_iff
 
 中文:
 定理 hasDerivAt_deriv_iff
-  结论: HasDerivAt f (deriv f x) x ↔ DifferentiableAt 𝕜 f x
+  结论: 在点处可导 f (deriv f x) x ↔ DifferentiableAt 𝕜 f x
   证明: ⟨fun h => h.differentiableAt, fun h => h.hasDerivAt⟩
 
 @[simp]
@@ -1424,8 +1424,8 @@ theorem HasDerivAt.deriv
   proof: h.differentiableAt.hasDerivAt.unique h
 
 中文:
-定理 HasDerivAt.deriv
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.deriv
+  条件: (h : 在点处可导 f f' x)
   结论: deriv f x = f'
   证明: h.differentiableAt.hasDerivAt.unique h
 
@@ -1445,7 +1445,7 @@ theorem deriv_eq
 
 中文:
 定理 deriv_eq
-  条件: {f' : 𝕜 -> F} (h : 对任意 x, HasDerivAt f (f' x) x)
+  条件: {f' : 𝕜 -> F} (h : 对任意 x, 在点处可导 f (f' x) x)
   结论: deriv f = f'
   证明: funext fun x => (h x).deriv
 -/
@@ -1843,7 +1843,7 @@ theorem derivWithin_of_isOpen
 
 中文:
 定理 derivWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   结论: derivWithin f s x = deriv f x
   证明: derivWithin_of_mem_nhds (hs.mem_nhds hx)
 
@@ -1863,7 +1863,7 @@ lemma deriv_eqOn
 
 中文:
 引理 deriv_eqOn
-  条件: {f' : 𝕜 -> F} (hs : IsOpen s) (hf' : 对任意 x in s, HasDerivWithinAt f (f' x) s x)
+  条件: {f' : 𝕜 -> F} (hs : 是开集 s) (hf' : 对任意 x in s, HasDerivWithinAt f (f' x) s x)
   证明: fun x hx => by
   rw [← derivWithin_of_isOpen hs hx]; rw [(hf' _ hx).derivWithin <| hs.uniqueDiffWithinAt hx]
 
@@ -1884,7 +1884,7 @@ theorem deriv_mem_iff
 
 中文:
 定理 deriv_mem_iff
-  条件: {f : 𝕜 -> F} {s : Set F} {x : 𝕜}
+  条件: {f : 𝕜 -> F} {s : 集合 F} {x : 𝕜}
   证明: by
   by_cases hx : DifferentiableAt 𝕜 f x <;> simp [deriv_zero_of_not_differentiableAt, *]
 
@@ -1907,7 +1907,7 @@ theorem derivWithin_mem_iff
 
 中文:
 定理 derivWithin_mem_iff
-  条件: {f : 𝕜 -> F} {t : Set 𝕜} {s : Set F} {x : 𝕜}
+  条件: {f : 𝕜 -> F} {t : 集合 𝕜} {s : 集合 F} {x : 𝕜}
   证明: by
   by_cases hx : DifferentiableWithinAt 𝕜 f t x <;>
     simp [derivWithin_zero_of_not_differentiableWithinAt, *]
@@ -1932,7 +1932,7 @@ theorem differentiableWithinAt_Ioi_iff_Ici
 
 中文:
 定理 differentiableWithinAt_Ioi_iff_Ici
-  条件: [PartialOrder 𝕜]
+  条件: [偏序 𝕜]
   证明: ⟨fun h => h.hasDerivWithinAt.Ici_of_Ioi.differentiableWithinAt, fun h =>
     h.hasDerivWithinAt.Ioi_of_Ici.differentiableWithinAt⟩
 
@@ -1960,7 +1960,7 @@ theorem derivWithin_Ioi_eq_Ici
 
 中文:
 定理 derivWithin_Ioi_eq_Ici
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] (f : 实数 -> E)
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] (f : 实数 -> E)
   证明: by
   by_cases H : DifferentiableWithinAt Real f (Ioi x) x
   · have A := H.hasDerivWithinAt.Ici_of_Ioi
@@ -1993,8 +1993,8 @@ theorem Filter.EventuallyEq.hasDerivAtFilter_iff
   proof: h₀.hasFDerivAtFilter_iff (by simp [h₁])
 
 中文:
-定理 Filter.EventuallyEq.hasDerivAtFilter_iff
-  结论: (h₀ : Prod.map f₀ f₀ =ᶠ[L] Prod.map f₁ f₁)
+定理 滤子.EventuallyEq.hasDerivAtFilter_iff
+  结论: (h₀ : 积类型.map f₀ f₀ =ᶠ[L] 积类型.map f₁ f₁)
   证明: h₀.hasFDerivAtFilter_iff (by simp [h₁])
 
 Depends on / 依赖: hasFDerivAtFilter_iff
@@ -2110,7 +2110,7 @@ theorem Filter.EventuallyEq.hasDerivWithinAt_iff
   proof: ⟨fun h' => h'.congr_of_eventuallyEq h₁.symm hx.symm, fun h' => h'.congr_of_eventuallyEq h₁ hx⟩
 
 中文:
-定理 Filter.EventuallyEq.hasDerivWithinAt_iff
+定理 滤子.EventuallyEq.hasDerivWithinAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: ⟨fun h' => h'.congr_of_eventuallyEq h₁.symm hx.symm, fun h' => h'.congr_of_eventuallyEq h₁ hx⟩
 
@@ -2149,7 +2149,7 @@ theorem Filter.EventuallyEq.hasDerivWithinAt_iff_of_mem
   fun h' => h'.congr_of_eventuallyEq_of_mem h₁ hx⟩
 
 中文:
-定理 Filter.EventuallyEq.hasDerivWithinAt_iff_of_mem
+定理 滤子.EventuallyEq.hasDerivWithinAt_iff_of_mem
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : x in s)
   证明: ⟨fun h' => h'.congr_of_eventuallyEq_of_mem h₁.symm hx,
   fun h' => h'.congr_of_eventuallyEq_of_mem h₁ hx⟩
@@ -2209,9 +2209,9 @@ theorem HasDerivAt.congr_deriv
   proof: HasFDerivAt.congr_fderiv h congr_arg _ h'
 
 中文:
-定理 HasDerivAt.congr_deriv
-  条件: (h : HasDerivAt f f' x) (h' : f' = g')
-  结论: HasDerivAt f g' x
+定理 在点处可导.congr_deriv
+  条件: (h : 在点处可导 f f' x) (h' : f' = g')
+  结论: 在点处可导 f g' x
   证明: HasFDerivAt.congr_fderiv h congr_arg _ h'
 
 Depends on / 依赖: HasFDerivAt, HasFDerivAt.congr_fderiv, congr_arg, congr_fderiv
@@ -2247,8 +2247,8 @@ theorem HasDerivAt.congr_of_eventuallyEq
   proof: HasDerivAtFilter.congr_of_eventuallyEq h h₁.prodMap h₁.filter_mono pure_le_nhds _
 
 中文:
-定理 HasDerivAt.congr_of_eventuallyEq
-  条件: (h : HasDerivAt f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f)
+定理 在点处可导.congr_of_eventuallyEq
+  条件: (h : 在点处可导 f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f)
   证明: HasDerivAtFilter.congr_of_eventuallyEq h h₁.prodMap h₁.filter_mono pure_le_nhds _
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.congr_of_eventuallyEq, congr_of_eventuallyEq, filter_mono, prodMap, pure_le_nhds
@@ -2266,7 +2266,7 @@ theorem Filter.EventuallyEq.hasDerivAt_iff
   proof: ⟨fun h' => h'.congr_of_eventuallyEq h.symm, fun h' => h'.congr_of_eventuallyEq h⟩
 
 中文:
-定理 Filter.EventuallyEq.hasDerivAt_iff
+定理 滤子.EventuallyEq.hasDerivAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁)
   证明: ⟨fun h' => h'.congr_of_eventuallyEq h.symm, fun h' => h'.congr_of_eventuallyEq h⟩
 
@@ -2287,7 +2287,7 @@ theorem Filter.EventuallyEq.derivWithin_eq
   rw [hs.fderivWithin_eq hx]
 
 中文:
-定理 Filter.EventuallyEq.derivWithin_eq
+定理 滤子.EventuallyEq.derivWithin_eq
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: by
   unfold derivWithin
@@ -2309,7 +2309,7 @@ theorem Filter.EventuallyEq.derivWithin_eq_of_mem
   proof: hs.derivWithin_eq hs.self_of_nhdsWithin hx
 
 中文:
-定理 Filter.EventuallyEq.derivWithin_eq_of_mem
+定理 滤子.EventuallyEq.derivWithin_eq_of_mem
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (hx : x in s)
   证明: hs.derivWithin_eq hs.self_of_nhdsWithin hx
 
@@ -2328,7 +2328,7 @@ theorem Filter.EventuallyEq.derivWithin_eq_of_nhds
   proof: (hs.filter_mono nhdsWithin_le_nhds).derivWithin_eq hs.self_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.derivWithin_eq_of_nhds
+定理 滤子.EventuallyEq.derivWithin_eq_of_nhds
   条件: (hs : f₁ =ᶠ[𝓝 x] f)
   证明: (hs.filter_mono nhdsWithin_le_nhds).derivWithin_eq hs.self_of_nhds
 
@@ -2374,8 +2374,8 @@ lemma Set.EqOn.deriv
   exact derivWithin_congr hfg (hfg hx)
 
 中文:
-引理 Set.EqOn.deriv
-  条件: {f g : 𝕜 -> F} {s : Set 𝕜} (hfg : s.EqOn f g) (hs : IsOpen s)
+引理 集合.EqOn.deriv
+  条件: {f g : 𝕜 -> F} {s : 集合 𝕜} (hfg : s.EqOn f g) (hs : 是开集 s)
   证明: by
   intro x hx
   rw [← derivWithin_of_isOpen hs hx]; rw [← derivWithin_of_isOpen hs hx]
@@ -2401,7 +2401,7 @@ theorem Filter.EventuallyEq.deriv_eq
   rwa [Filter.EventuallyEq.fderiv_eq]
 
 中文:
-定理 Filter.EventuallyEq.deriv_eq
+定理 滤子.EventuallyEq.deriv_eq
   条件: (hL : f₁ =ᶠ[𝓝 x] f)
   结论: deriv f₁ x = deriv f x
   证明: by
@@ -2425,7 +2425,7 @@ lemma Filter.EventuallyEq.derivWithin'
 .fun_comp (fun a => a 1) exact h.fderivWithin' ht
 
 中文:
-引理 Filter.EventuallyEq.derivWithin'
+引理 滤子.EventuallyEq.derivWithin'
   条件: (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s)
   证明: by
   unfold derivWithin
@@ -2447,7 +2447,7 @@ lemma Filter.EventuallyEq.derivWithin
   proof: h.derivWithin' Subset.rfl
 
 中文:
-引理 Filter.EventuallyEq.derivWithin
+引理 滤子.EventuallyEq.derivWithin
   条件: (h : f₁ =ᶠ[𝓝[s] x] f)
   证明: h.derivWithin' Subset.rfl
 -/
@@ -2464,7 +2464,7 @@ theorem Filter.EventuallyEq.deriv
   proof: h.eventuallyEq_nhds.mono fun _ h => h.deriv_eq
 
 中文:
-定理 Filter.EventuallyEq.deriv
+定理 滤子.EventuallyEq.deriv
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   结论: deriv f₁ =ᶠ[𝓝 x] deriv f
   证明: h.eventuallyEq_nhds.mono fun _ h => h.deriv_eq
@@ -2485,7 +2485,7 @@ theorem Filter.EventuallyEq.nhdsNE_deriv
   apply Filter.EventuallyEq.deriv hy
 
 中文:
-定理 Filter.EventuallyEq.nhdsNE_deriv
+定理 滤子.EventuallyEq.nhdsNE_deriv
   条件: (h : f₁ =ᶠ[𝓝[!=] x] f)
   结论: deriv f₁ =ᶠ[𝓝[!=] x] deriv f
   证明: by
@@ -2554,7 +2554,7 @@ theorem hasDerivAt_id
 
 中文:
 定理 hasDerivAt_id
-  结论: HasDerivAt id 1 x
+  结论: 在点处可导 id 1 x
   证明: hasDerivAtFilter_id _
 
 Depends on / 依赖: hasDerivAtFilter_id
@@ -2572,7 +2572,7 @@ theorem hasDerivAt_id'
 
 中文:
 定理 hasDerivAt_id'
-  结论: HasDerivAt (fun x : 𝕜 => x) 1 x
+  结论: 在点处可导 (fun x : 𝕜 => x) 1 x
   证明: hasDerivAtFilter_id _
 
 Depends on / 依赖: hasDerivAtFilter_id
@@ -2757,7 +2757,7 @@ theorem hasDerivAtFilter_one
 
 中文:
 定理 hasDerivAtFilter_one
-  条件: [One F]
+  条件: [幺 F]
   结论: HasDerivAtFilter (1 : 𝕜 -> F) 0 L
   证明: hasDerivAtFilter_const _ _
 
@@ -2777,7 +2777,7 @@ theorem hasDerivAtFilter_natCast
 
 中文:
 定理 hasDerivAtFilter_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: HasDerivAtFilter (n : 𝕜 -> F) 0 L
   证明: hasDerivAtFilter_const _ _
 
@@ -2797,7 +2797,7 @@ theorem hasDerivAtFilter_intCast
 
 中文:
 定理 hasDerivAtFilter_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: HasDerivAtFilter (z : 𝕜 -> F) 0 L
   证明: hasDerivAtFilter_const _ _
 
@@ -2816,7 +2816,7 @@ theorem hasDerivAtFilter_ofNat
   proof: hasDerivAtFilter_const _ _
 
 中文:
-定理 hasDerivAtFilter_ofNat
+定理 hasDerivAtFilter_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: HasDerivAtFilter (of自然数(n) : 𝕜 -> F) 0 L
   证明: hasDerivAtFilter_const _ _
@@ -2873,7 +2873,7 @@ theorem hasStrictDerivAt_one
 
 中文:
 定理 hasStrictDerivAt_one
-  条件: [One F]
+  条件: [幺 F]
   结论: HasStrictDerivAt (1 : 𝕜 -> F) 0 x
   证明: hasStrictDerivAt_const _ _
 
@@ -2893,7 +2893,7 @@ theorem hasStrictDerivAt_natCast
 
 中文:
 定理 hasStrictDerivAt_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: HasStrictDerivAt (n : 𝕜 -> F) 0 x
   证明: hasStrictDerivAt_const _ _
 
@@ -2913,7 +2913,7 @@ theorem hasStrictDerivAt_intCast
 
 中文:
 定理 hasStrictDerivAt_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: HasStrictDerivAt (z : 𝕜 -> F) 0 x
   证明: hasStrictDerivAt_const _ _
 
@@ -2932,7 +2932,7 @@ theorem HasStrictDerivAt_ofNat
   proof: hasStrictDerivAt_const _ _
 
 中文:
-定理 HasStrictDerivAt_ofNat
+定理 HasStrictDerivAt_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: HasStrictDerivAt (of自然数(n) : 𝕜 -> F) 0 x
   证明: hasStrictDerivAt_const _ _
@@ -2989,7 +2989,7 @@ theorem hasDerivWithinAt_one
 
 中文:
 定理 hasDerivWithinAt_one
-  条件: [One F]
+  条件: [幺 F]
   结论: HasDerivWithinAt (1 : 𝕜 -> F) 0 s x
   证明: hasDerivWithinAt_const _ _ _
 
@@ -3009,7 +3009,7 @@ theorem hasDerivWithinAt_natCast
 
 中文:
 定理 hasDerivWithinAt_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: HasDerivWithinAt (n : 𝕜 -> F) 0 s x
   证明: hasDerivWithinAt_const _ _ _
 
@@ -3029,7 +3029,7 @@ theorem hasDerivWithinAt_intCast
 
 中文:
 定理 hasDerivWithinAt_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: HasDerivWithinAt (z : 𝕜 -> F) 0 s x
   证明: hasDerivWithinAt_const _ _ _
 
@@ -3048,7 +3048,7 @@ theorem hasDerivWithinAt_ofNat
   proof: hasDerivWithinAt_const _ _ _
 
 中文:
-定理 hasDerivWithinAt_ofNat
+定理 hasDerivWithinAt_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: HasDerivWithinAt (of自然数(n) : 𝕜 -> F) 0 s x
   证明: hasDerivWithinAt_const _ _ _
@@ -3070,7 +3070,7 @@ theorem hasDerivAt_const
 
 中文:
 定理 hasDerivAt_const
-  结论: HasDerivAt (fun _ => c) 0 x
+  结论: 在点处可导 (fun _ => c) 0 x
   证明: hasDerivAtFilter_const _ _
 
 @[simp]
@@ -3091,7 +3091,7 @@ theorem hasDerivAt_zero
 
 中文:
 定理 hasDerivAt_zero
-  结论: HasDerivAt (0 : 𝕜 -> F) 0 x
+  结论: 在点处可导 (0 : 𝕜 -> F) 0 x
   证明: hasDerivAtFilter_zero _
 
 Depends on / 依赖: hasDerivAtFilter_zero
@@ -3110,8 +3110,8 @@ theorem hasDerivAt_one
 
 中文:
 定理 hasDerivAt_one
-  条件: [One F]
-  结论: HasDerivAt (1 : 𝕜 -> F) 0 x
+  条件: [幺 F]
+  结论: 在点处可导 (1 : 𝕜 -> F) 0 x
   证明: hasDerivAt_const _ _
 
 Depends on / 依赖: hasDerivAt_const
@@ -3130,8 +3130,8 @@ theorem hasDerivAt_natCast
 
 中文:
 定理 hasDerivAt_natCast
-  条件: [自然数Cast F] (n : 自然数)
-  结论: HasDerivAt (n : 𝕜 -> F) 0 x
+  条件: [自然数嵌入 F] (n : 自然数)
+  结论: 在点处可导 (n : 𝕜 -> F) 0 x
   证明: hasDerivAt_const _ _
 
 Depends on / 依赖: hasDerivAt_const
@@ -3150,8 +3150,8 @@ theorem hasDerivAt_intCast
 
 中文:
 定理 hasDerivAt_intCast
-  条件: [整数Cast F] (z : 整数)
-  结论: HasDerivAt (z : 𝕜 -> F) 0 x
+  条件: [整数嵌入 F] (z : 整数)
+  结论: 在点处可导 (z : 𝕜 -> F) 0 x
   证明: hasDerivAt_const _ _
 
 Depends on / 依赖: hasDerivAt_const
@@ -3169,9 +3169,9 @@ theorem hasDerivAt_ofNat
   proof: hasDerivAt_const _ _
 
 中文:
-定理 hasDerivAt_ofNat
+定理 hasDerivAt_of自然数
   条件: (n : 自然数) [Of自然数 F n]
-  结论: HasDerivAt (of自然数(n) : 𝕜 -> F) 0 x
+  结论: 在点处可导 (of自然数(n) : 𝕜 -> F) 0 x
   证明: hasDerivAt_const _ _
 
 Depends on / 依赖: hasDerivAt_const
@@ -3260,7 +3260,7 @@ theorem deriv_one
 
 中文:
 定理 deriv_one
-  条件: [One F]
+  条件: [幺 F]
   结论: deriv (1 : 𝕜 -> F) = 0
   证明: funext fun _ => deriv_const _ _
 
@@ -3284,7 +3284,7 @@ theorem deriv_natCast
 
 中文:
 定理 deriv_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: deriv (n : 𝕜 -> F) = 0
   证明: funext fun _ => deriv_const _ _
 
@@ -3308,7 +3308,7 @@ theorem deriv_intCast
 
 中文:
 定理 deriv_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: deriv (z : 𝕜 -> F) = 0
   证明: funext fun _ => deriv_const _ _
 
@@ -3331,7 +3331,7 @@ theorem deriv_ofNat
 @[simp]
 
 中文:
-定理 deriv_ofNat
+定理 deriv_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: deriv (of自然数(n) : 𝕜 -> F) = 0
   证明: funext fun _ => deriv_const _ _
@@ -3381,7 +3381,7 @@ theorem derivWithin_const
 
 中文:
 定理 derivWithin_const
-  结论: derivWithin (Function.const 𝕜 c) s = 0
+  结论: derivWithin (函数.const 𝕜 c) s = 0
   证明: derivWithin_fun_const _ _
 
 @[simp]
@@ -3427,7 +3427,7 @@ theorem derivWithin_one
 
 中文:
 定理 derivWithin_one
-  条件: [One F]
+  条件: [幺 F]
   结论: derivWithin (1 : 𝕜 -> F) s = 0
   证明: derivWithin_const _ _
 
@@ -3451,7 +3451,7 @@ theorem derivWithin_natCast
 
 中文:
 定理 derivWithin_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: derivWithin (n : 𝕜 -> F) s = 0
   证明: derivWithin_const _ _
 
@@ -3476,7 +3476,7 @@ theorem derivWithin_intCast
 
 中文:
 定理 derivWithin_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: derivWithin (z : 𝕜 -> F) s = 0
   证明: derivWithin_const _ _
 
@@ -3498,7 +3498,7 @@ theorem derivWithin_ofNat
   proof: derivWithin_const _ _
 
 中文:
-定理 derivWithin_ofNat
+定理 derivWithin_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: derivWithin (of自然数(n) : 𝕜 -> F) s = 0
   证明: derivWithin_const _ _
@@ -3523,7 +3523,7 @@ theorem HasDerivAtFilter.tendsto_nhds
 
 中文:
 定理 HasDerivAtFilter.tendsto_nhds
-  结论: {L : Filter 𝕜} (hL : L <= 𝓝 x)
+  结论: {L : 滤子 𝕜} (hL : L <= 𝓝 x)
   证明: h.hasFDerivAtFilter.tendsto_nhds hL
 
 Depends on / 依赖: h.hasFDerivAtFilter.tendsto_nhds, hasFDerivAtFilter, tendsto_nhds
@@ -3562,8 +3562,8 @@ theorem HasDerivAt.continuousAt
   proof: HasDerivAtFilter.tendsto_nhds le_rfl h
 
 中文:
-定理 HasDerivAt.continuousAt
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.continuousAt
+  条件: (h : 在点处可导 f f' x)
   结论: ContinuousAt f x
   证明: HasDerivAtFilter.tendsto_nhds le_rfl h
 
@@ -3599,8 +3599,8 @@ theorem HasDerivAt.continuousOn
   proof: fun x hx => (hderiv x hx).continuousAt.continuousWithinAt
 
 中文:
-定理 HasDerivAt.continuousOn
-  条件: {f f' : 𝕜 -> F} (hderiv : 对任意 x in s, HasDerivAt f (f' x) x)
+定理 在点处可导.continuousOn
+  条件: {f f' : 𝕜 -> F} (hderiv : 对任意 x in s, 在点处可导 f (f' x) x)
   证明: fun x hx => (hderiv x hx).continuousAt.continuousWithinAt
 -/
 protected theorem HasDerivAt.continuousOn {f f' : 𝕜 -> F} (hderiv : forall x in s, HasDerivAt f (f' x) x) :
@@ -3620,8 +3620,8 @@ theorem HasDerivAt.le_of_lip'
   simpa using HasFDerivAt.le_of_lip' hf.hasFDerivAt hC₀ hlip
 
 中文:
-定理 HasDerivAt.le_of_lip'
-  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : HasDerivAt f f' x₀)
+定理 在点处可导.le_of_lip'
+  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : 在点处可导 f f' x₀)
   证明: by
   simpa using HasFDerivAt.le_of_lip' hf.hasFDerivAt hC₀ hlip
 
@@ -3642,8 +3642,8 @@ theorem HasDerivAt.le_of_lipschitzOn
   simpa using HasFDerivAt.le_of_lipschitzOn hf.hasFDerivAt hs hlip
 
 中文:
-定理 HasDerivAt.le_of_lipschitzOn
-  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : HasDerivAt f f' x₀)
+定理 在点处可导.le_of_lipschitzOn
+  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : 在点处可导 f f' x₀)
   证明: by
   simpa using HasFDerivAt.le_of_lipschitzOn hf.hasFDerivAt hs hlip
 
@@ -3663,8 +3663,8 @@ theorem HasDerivAt.le_of_lipschitz
   simpa using HasFDerivAt.le_of_lipschitz hf.hasFDerivAt hlip
 
 中文:
-定理 HasDerivAt.le_of_lipschitz
-  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : HasDerivAt f f' x₀)
+定理 在点处可导.le_of_lipschitz
+  结论: {f : 𝕜 -> F} {f' : F} {x₀ : 𝕜} (hf : 在点处可导 f f' x₀)
   证明: by
   simpa using HasFDerivAt.le_of_lipschitz hf.hasFDerivAt hlip
 
@@ -3707,7 +3707,7 @@ theorem norm_deriv_le_of_lipschitzOn
 
 中文:
 定理 norm_deriv_le_of_lipschitzOn
-  结论: {f : 𝕜 -> F} {x₀ : 𝕜} {s : Set 𝕜} (hs : s in 𝓝 x₀)
+  结论: {f : 𝕜 -> F} {x₀ : 𝕜} {s : 集合 𝕜} (hs : s in 𝓝 x₀)
   证明: by
   simpa [norm_deriv_eq_norm_fderiv] using norm_fderiv_le_of_lipschitzOn 𝕜 hs hlip
 
@@ -3765,8 +3765,8 @@ lemma HasDerivAt.comp_semilinear
   · rwa [← hasDeriv
 
 中文:
-引理 HasDerivAt.comp_semilinear
-  条件: (hf : HasDerivAt f f' x)
+引理 在点处可导.comp_semilinear
+  条件: (hf : 在点处可导 f f' x)
   证明: by
   have : RingHomIsometric σ' := .inv σ
   let R : 𝕜 ->SL[σ'] 𝕜 := ⟨σ'.toSemilinearMap, σ'.isometry.continuous⟩
@@ -3821,9 +3821,9 @@ lemma HasDerivAt.comp_ringHom
   proof: hf.comp_semilinear σ' ⟨σ.toSemilinearMap, σ.isometry.continuous⟩
 
 中文:
-引理 HasDerivAt.comp_ringHom
-  条件: (hf : HasDerivAt f f' x)
-  结论: HasDerivAt (σ ∘ f ∘ σ') (σ f') (σ x)
+引理 在点处可导.comp_ringHom
+  条件: (hf : 在点处可导 f f' x)
+  结论: 在点处可导 (σ ∘ f ∘ σ') (σ f') (σ x)
   证明: hf.comp_semilinear σ' ⟨σ.toSemilinearMap, σ.isometry.continuous⟩
 
 Depends on / 依赖: comp_semilinear, continuous, hf.comp_semilinear, isometry, isometry.continuous, toSemilinearMap

@@ -45,7 +45,7 @@ structure IsGroupLikeElem
     - comul_eq_tmul_self : comul a = a otimesₜ[R] a
 
 中文:
-结构 IsGroupLikeElem
+结构 是GroupLikeElem
   参数: (a : A)
   公理与运算 (2 个):
     - counit_eq_one : counit (R := R) a = 1
@@ -72,7 +72,7 @@ lemma isGroupLikeElem_self
 中文:
 引理 isGroupLikeElem_self
   条件: {r : R}
-  结论: IsGroupLikeElem R r ↔ r = 1
+  结论: 是GroupLikeElem R r ↔ r = 1
   证明: by
   simp +contextual [isGroupLikeElem_iff]
 -/
@@ -90,8 +90,8 @@ lemma IsGroupLikeElem.ne_zero
   rintro rfl; simpa using ha.counit_eq_one
 
 中文:
-引理 IsGroupLikeElem.ne_zero
-  条件: [Nontrivial R] (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.ne_zero
+  条件: [非平凡 R] (ha : 是GroupLikeElem R a)
   结论: a != 0
   证明: by
   rintro rfl; simpa using ha.counit_eq_one
@@ -111,8 +111,8 @@ lemma IsGroupLikeElem.map
   comul_eq_tmul_self := by rw [← CoalgHomClass.map_comp_comul_apply, ha.comul_eq_tmul_self]; simp
 
 中文:
-引理 IsGroupLikeElem.map
-  结论: [FunLike F A B] [CoalgHomClass F R A B] (f : F)
+引理 是GroupLikeElem.map
+  结论: [函数状 F A B] [余alg态射类 F R A B] (f : F)
   证明: by rw [CoalgHomClass.counit_comp_apply, ha.counit_eq_one]
   comul_eq_tmul_self := by rw [← CoalgHomClass.map_comp_comul_apply, ha.comul_eq_tmul_self]; simp
 
@@ -134,7 +134,7 @@ lemma isGroupLikeElem_map_equiv
 
 中文:
 引理 isGroupLikeElem_map_equiv
-  条件: [EquivLike F A B] [CoalgEquivClass F R A B] (f : F)
+  条件: [等价状 F A B] [余alg等价类 F R A B] (f : F)
   证明: (CoalgEquivClass.toCoalgEquiv f).symm_apply_apply a ▸ ha.map _
   mpr := .map f
 -/
@@ -157,11 +157,11 @@ structure GroupLike
     - isGroupLikeElem_val : IsGroupLikeElem R val
 
 中文:
-结构 GroupLike
+结构 群状
   参数: where
   公理与运算 (2 个):
     - val : A
-    - isGroupLikeElem_val : IsGroupLikeElem R val
+    - isGroupLikeElem_val : 是GroupLikeElem R val
 -/
 structure GroupLike where
   /-- The underlying element of a group-like element. -/
@@ -186,7 +186,7 @@ instance instCoeOut
 
 中文:
 实例 instCoeOut
-  签名: : CoeOut (GroupLike R A) A where coe
+  签名: : CoeOut (群状 R A) A where coe
   定义体: val
 -/
 instance instCoeOut : CoeOut (GroupLike R A) A where coe := val
@@ -201,7 +201,7 @@ lemma val_injective
 
 中文:
 引理 val_injective
-  结论: Injective (val : GroupLike R A -> A)
+  结论: 单射 (val : 群状 R A -> A)
   证明: by rintro ⟨a, ha⟩; congr!
 -/
 lemma val_injective : Injective (val : GroupLike R A -> A) := by rintro ⟨a, ha⟩; congr!
@@ -217,7 +217,7 @@ lemma val_inj
 
 中文:
 引理 val_inj
-  条件: {a b : GroupLike R A}
+  条件: {a b : 群状 R A}
   结论: a.val = b.val ↔ a = b
   证明: val_injective.eq_iff
 -/
@@ -239,7 +239,7 @@ definition valEquiv
 
 中文:
 定义 valEquiv
-  签名: : GroupLike R A ≃ Subtype (IsGroupLikeElem R : A -> 命题) where
+  签名: : 群状 R A ≃ 子类型 (是GroupLikeElem R : A -> 命题) where
   定义体: ⟨a.1, a.2⟩
   invFun a := ⟨a.1, a.2⟩
   left_inv _ := rfl
@@ -278,7 +278,7 @@ lemma linearIndepOn_isGroupLikeElem
 
 中文:
 引理 linearIndepOn_isGroupLikeElem
-  结论: LinearIndepOn R id {a : A | IsGroupLikeElem R a}
+  结论: LinearIndepOn R id {a : A | 是GroupLikeElem R a}
   证明: by
   classical
   -- We show that any finset `s` of group-like elements is linearly independent.
@@ -356,7 +356,7 @@ lemma linearIndep_groupLikeVal
 
 中文:
 引理 linearIndep_groupLikeVal
-  结论: LinearIndependent R (GroupLike.val (R := R) (A := A))
+  结论: LinearIndependent R (群状.val (R := R) (A := A))
   证明: by
   simpa using! (linearIndependent_equiv GroupLike.valEquiv).2 linearIndepOn_isGroupLikeElem
 

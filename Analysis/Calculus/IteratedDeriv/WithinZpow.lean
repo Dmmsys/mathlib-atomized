@@ -37,7 +37,7 @@ theorem iteratedDerivWithin_zpow
 
 中文:
 定理 iteratedDerivWithin_zpow
-  条件: (m : 整数) (k : 自然数) (hs : IsOpen s)
+  条件: (m : 整数) (k : 自然数) (hs : 是开集 s)
   证明: by
   apply Set.EqOn.trans (iteratedDerivWithin_of_isOpen_eq_iterate hs)
   intro t ht
@@ -65,7 +65,7 @@ theorem iteratedDerivWithin_one_div
 
 中文:
 定理 iteratedDerivWithin_one_div
-  条件: (k : 自然数) (hs : IsOpen s)
+  条件: (k : 自然数) (hs : 是开集 s)
   证明: by
   apply Set.EqOn.trans (iteratedDerivWithin_of_isOpen_eq_iterate hs)
   intro t ht

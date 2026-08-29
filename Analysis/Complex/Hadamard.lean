@@ -106,7 +106,7 @@ definition sSupNormIm
 
 中文:
 定义 sSupNormIm
-  签名: {E : 类型} [NormedAddCommGroup E]
+  签名: {E : 类型} [赋范交换加群 E]
   定义体: sSup ((norm ∘ f) '' re ⁻¹' {x})
 -/
 noncomputable def sSupNormIm {E : Type*} [NormedAddCommGroup E]
@@ -126,7 +126,7 @@ definition invInterpStrip
   body: (ε + sSupNormIm f 0) ^ (z - 1) * (ε + sSupNormIm f 1) ^ (-z)
 
 中文:
-定义 invInterpStrip
+定义 inv整数erpStrip
   签名: (ε : 实数)
   定义体: (ε + sSupNormIm f 0) ^ (z - 1) * (ε + sSupNormIm f 1) ^ (-z)
 
@@ -145,7 +145,7 @@ definition F
 
 中文:
 定义 F
-  签名: [NormedSpace Complex E] (ε : 实数)
+  签名: [赋范空间 复形 E] (ε : 实数)
   定义体: fun z => invInterpStrip f z ε • f z
 
 Depends on / 依赖: invInterpStrip
@@ -215,7 +215,7 @@ lemma norm_invInterpStrip
   simp
 
 中文:
-引理 norm_invInterpStrip
+引理 norm_inv整数erpStrip
   条件: {ε : 实数} (hε : ε > 0)
   证明: by
   simp only [invInterpStrip, norm_mul]
@@ -249,7 +249,7 @@ lemma diffContOnCl_invInterpStrip
   · apply Differen
 
 中文:
-引理 diffContOnCl_invInterpStrip
+引理 diffContOnCl_inv整数erpStrip
   条件: {ε : 实数} (hε : ε > 0)
   证明: by
   apply Differentiable.diffContOnCl
@@ -290,7 +290,7 @@ lemma norm_le_sSupNormIm
 
 中文:
 引理 norm_le_sSupNormIm
-  结论: (f : Complex -> E) (z : Complex) (hD : z in verticalClosedStrip 0 1)
+  结论: (f : 复形 -> E) (z : 复形) (hD : z in verticalClosedStrip 0 1)
   证明: by
   refine le_csSup ?_ ?_
   · revert hB; gcongr
@@ -319,7 +319,7 @@ lemma norm_lt_sSupNormIm_eps
 
 中文:
 引理 norm_lt_sSupNormIm_eps
-  结论: (f : Complex -> E) (ε : 实数) (hε : ε > 0) (z : Complex)
+  结论: (f : 复形 -> E) (ε : 实数) (hε : ε > 0) (z : 复形)
   证明: lt_add_of_pos_of_le hε (norm_le_sSupNormIm f z hD hB)
 
 Depends on / 依赖: lt_add_of_pos_of_le, norm_le_sSupNormIm
@@ -349,7 +349,7 @@ lemma F_BddAbove
 
 中文:
 引理 F_BddAbove
-  结论: (f : Complex -> E) (ε : 实数) (hε : ε > 0)
+  结论: (f : 复形 -> E) (ε : 实数) (hε : ε > 0)
   证明: by
   -- Rewriting goal
   simp only [F, comp_apply, invInterpStrip]
@@ -415,7 +415,7 @@ lemma F_edge_le_one
 
 中文:
 引理 F_edge_le_one
-  结论: (f : Complex -> E) (ε : 实数) (hε : ε > 0) (z : Complex)
+  结论: (f : 复形 -> E) (ε : 实数) (hε : ε > 0) (z : 复形)
   证明: by
   simp only [F, norm_smul, norm_invInterpStrip f z hε]
   rcases hz with hz0 | hz1
@@ -463,8 +463,8 @@ theorem norm_mul_invInterpStrip_le_one_of_mem_verticalClosedStrip
   obt
 
 中文:
-定理 norm_mul_invInterpStrip_le_one_of_mem_verticalClosedStrip
-  结论: (f : Complex -> E) (ε : 实数) (hε : 0 < ε)
+定理 norm_mul_inv整数erpStrip_le_one_of_mem_verticalClosedStrip
+  结论: (f : 复形 -> E) (ε : 实数) (hε : 0 < ε)
   证明: by
   apply PhragmenLindelof.vertical_strip
     (DiffContOnCl.smul (diffContOnCl_invInterpStrip f hε) hd) _
@@ -518,7 +518,7 @@ definition interpStrip
 
 中文:
 定义 interpStrip
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: if sSupNormIm f 0 = 0 ∨ sSupNormIm f 1 = 0
     then 0
     else sSupNormIm f 0 ^ (1 - z) * sSupNormIm f 1 ^ z
@@ -541,7 +541,7 @@ lemma interpStrip_eq_of_pos
 
 中文:
 引理 interpStrip_eq_of_pos
-  条件: (z : Complex) (h0 : 0 < sSupNormIm f 0) (h1 : 0 < sSupNormIm f 1)
+  条件: (z : 复形) (h0 : 0 < sSupNormIm f 0) (h1 : 0 < sSupNormIm f 1)
   证明: by
   simp only [ne_of_gt h0, ne_of_gt h1, interpStrip, if_false, or_false]
 
@@ -561,7 +561,7 @@ lemma interpStrip_eq_of_zero
 
 中文:
 引理 interpStrip_eq_of_zero
-  条件: (z : Complex) (h : sSupNormIm f 0 = 0 ∨ sSupNormIm f 1 = 0)
+  条件: (z : 复形) (h : sSupNormIm f 0 = 0 ∨ sSupNormIm f 1 = 0)
   证明: if_pos h
 
 Depends on / 依赖: if_pos
@@ -587,7 +587,7 @@ lemma interpStrip_eq_of_mem_verticalStrip
 
 中文:
 引理 interpStrip_eq_of_mem_verticalStrip
-  条件: (z : Complex) (hz : z in verticalStrip 0 1)
+  条件: (z : 复形) (hz : z in verticalStrip 0 1)
   证明: by
   by_cases! h : sSupNormIm f 0 = 0 ∨ sSupNormIm f 1 = 0
   · rw [interpStrip_eq_of_zero _ z h]
@@ -680,7 +680,7 @@ definition interpStrip'
 
 中文:
 定义 interpStrip'
-  签名: (f : Complex -> E) (l u : 实数) (z : Complex)
+  签名: (f : 复形 -> E) (l u : 实数) (z : 复形)
   定义体: if sSupNormIm f l = 0 ∨ sSupNormIm f u = 0
     then 0
     else sSupNormIm f l ^ (1 - ((z - l) / (u - l))) * sSupNormIm f u ^ ((z - l) / (u - l))
@@ -702,7 +702,7 @@ definition scale
 
 中文:
 定义 scale
-  签名: (f : Complex -> E) (l u : 实数)
+  签名: (f : 复形 -> E) (l u : 实数)
   定义体: fun z => f (l + z • (u - l))
 -/
 def scale (f : Complex -> E) (l u : Real) : Complex -> E := fun z => f (l + z • (u - l))
@@ -720,7 +720,7 @@ lemma scale_id_mem_verticalClosedStrip_of_mem_verticalClosedStrip
 
 中文:
 引理 scale_id_mem_verticalClosedStrip_of_mem_verticalClosedStrip
-  结论: {l u : 实数} (hul : l < u) {z : Complex}
+  结论: {l u : 实数} (hul : l < u) {z : 复形}
   证明: by
   simp only [verticalClosedStrip, mem_preimage, add_re, ofReal_re, mul_re, sub_re, sub_im,
     ofReal_im, sub_self, mul_zero, sub_zero, mem_Icc] at hz ⊢
@@ -747,7 +747,7 @@ lemma scale_bddAbove
 
 中文:
 引理 scale_bddAbove
-  结论: {f : Complex -> E} {l u : 实数} (hul : l < u)
+  结论: {f : 复形 -> E} {l u : 实数} (hul : l < u)
   证明: by
   refine hB.mono ?_
   rintro _ ⟨z, hz, rfl⟩
@@ -775,7 +775,7 @@ lemma scale_bound_left
 
 中文:
 引理 scale_bound_left
-  条件: {f : Complex -> E} {l u a : 实数} (ha : 对任意 z in re ⁻¹' {l}, ‖f z‖ <= a)
+  条件: {f : 复形 -> E} {l u a : 实数} (ha : 对任意 z in re ⁻¹' {l}, ‖f z‖ <= a)
   证明: by
   simp only [mem_preimage, mem_singleton_iff, scale, smul_eq_mul]
   intro z hz
@@ -802,7 +802,7 @@ lemma scale_bound_right
 
 中文:
 引理 scale_bound_right
-  条件: {f : Complex -> E} {l u b : 实数} (hb : 对任意 z in re ⁻¹' {u}, ‖f z‖ <= b)
+  条件: {f : 复形 -> E} {l u b : 实数} (hb : 对任意 z in re ⁻¹' {u}, ‖f z‖ <= b)
   证明: by
   simp only [scale, mem_preimage, mem_singleton_iff, smul_eq_mul]
   intro z hz
@@ -836,7 +836,7 @@ lemma sSupNormIm_scale_left
 
 中文:
 引理 sSupNormIm_scale_left
-  条件: (f : Complex -> E) {l u : 实数} (hul : l < u)
+  条件: (f : 复形 -> E) {l u : 实数} (hul : l < u)
   证明: by
   simp_rw [sSupNormIm, image_comp]
   have : scale f l u '' re ⁻¹' {0} = f '' re ⁻¹' {l} := by
@@ -892,7 +892,7 @@ lemma sSupNormIm_scale_right
 
 中文:
 引理 sSupNormIm_scale_right
-  条件: (f : Complex -> E) {l u : 实数} (hul : l < u)
+  条件: (f : 复形 -> E) {l u : 实数} (hul : l < u)
   证明: by
   simp_rw [sSupNormIm, image_comp]
   have : scale f l u '' re ⁻¹' {1} = f '' re ⁻¹' {u} := by
@@ -941,7 +941,7 @@ lemma interpStrip_scale
 
 中文:
 引理 interpStrip_scale
-  条件: (f : Complex -> E) {l u : 实数} (hul : l < u) (z : Complex)
+  条件: (f : 复形 -> E) {l u : 实数} (hul : l < u) (z : 复形)
   结论: interpStrip (scale f l u)
   证明: by
   simp only [interpStrip, interpStrip']
@@ -970,7 +970,7 @@ lemma norm_le_interpStrip_of_mem_verticalClosedStrip_eps
 
 中文:
 引理 norm_le_interpStrip_of_mem_verticalClosedStrip_eps
-  结论: (ε : 实数) (hε : ε > 0) (z : Complex)
+  结论: (ε : 实数) (hε : ε > 0) (z : 复形)
   证明: by
   simp only [norm_mul, ← ofReal_add, norm_cpow_eq_rpow_re_of_pos (sSupNormIm_eps_pos f hε _) _,
     sub_re, one_re]
@@ -1006,7 +1006,7 @@ lemma eventuallyle
 
 中文:
 引理 eventuallyle
-  结论: (z : Complex) (hB : BddAbove ((norm ∘ f) '' verticalClosedStrip 0 1))
+  结论: (z : 复形) (hB : BddAbove ((norm ∘ f) '' verticalClosedStrip 0 1))
   证明: by
   filter_upwards [self_mem_nhdsWithin] with ε (hε : 0 < ε) using
     norm_le_interpStrip_of_mem_verticalClosedStrip_eps f ε hε z hB hd
@@ -1039,7 +1039,7 @@ lemma norm_le_interpStrip_of_mem_verticalStrip_zero
 
 中文:
 引理 norm_le_interpStrip_of_mem_verticalStrip_zero
-  结论: (z : Complex)
+  结论: (z : 复形)
   证明: by
   apply tendsto_le_of_eventuallyLE _ _ (eventuallyle f z hB hd hz)
   · simp only [tendsto_const_nhds_iff]
@@ -1101,7 +1101,7 @@ lemma norm_le_interpStrip_of_mem_verticalClosedStrip₀₁
 
 中文:
 引理 norm_le_interpStrip_of_mem_verticalClosedStrip₀₁
-  结论: (f : Complex -> E) {z : Complex}
+  结论: (f : 复形 -> E) {z : 复形}
   证明: by
   apply le_on_closure (fun w hw => norm_le_interpStrip_of_mem_verticalStrip_zero f w hd hB hw)
     (Continuous.comp_continuousOn' continuous_norm hd.2)
@@ -1135,7 +1135,7 @@ lemma norm_le_interp_of_mem_verticalClosedStrip₀₁'
 
 中文:
 引理 norm_le_interp_of_mem_verticalClosedStrip₀₁'
-  结论: (f : Complex -> E) {z : Complex} {a b : 实数}
+  结论: (f : 复形 -> E) {z : 复形} {a b : 实数}
   证明: by
   have : ‖interpStrip f z‖ <= sSupNormIm f 0 ^ (1 - z.re) * sSupNormIm f 1 ^ z.re := by
     by_cases! h : sSupNormIm f 0 = 0 ∨ sSupNormIm f 1 = 0
@@ -1204,7 +1204,7 @@ lemma scale_id_mem_verticalStrip_of_mem_verticalStrip
 
 中文:
 引理 scale_id_mem_verticalStrip_of_mem_verticalStrip
-  结论: {l u : 实数} (hul : l < u) {z : Complex}
+  结论: {l u : 实数} (hul : l < u) {z : 复形}
   证明: by
   simp only [verticalStrip, mem_preimage, mem_Ioo] at hz
   simp only [verticalStrip, mem_preimage, add_re, ofReal_re, mul_re, sub_re, sub_im, ofReal_im,
@@ -1241,7 +1241,7 @@ lemma mem_verticalClosedStrip_of_scale_id_mem_verticalClosedStrip
 
 中文:
 引理 mem_verticalClosedStrip_of_scale_id_mem_verticalClosedStrip
-  结论: {z : Complex} {l u : 实数} (hul : l < u)
+  结论: {z : 复形} {l u : 实数} (hul : l < u)
   证明: by
   simp only [verticalClosedStrip, Complex.div_re, mem_preimage, sub_re, mem_Icc,
     sub_nonneg, tsub_le_iff_right, ofReal_re, ofReal_im, sub_im, sub_self, mul_zero, zero_div,
@@ -1286,7 +1286,7 @@ lemma scale_diffContOnCl
 
 中文:
 引理 scale_diffContOnCl
-  结论: {f : Complex -> E} {l u : 实数} (hul : l < u)
+  结论: {f : 复形 -> E} {l u : 实数} (hul : l < u)
   证明: by
   unfold scale
   apply DiffContOnCl.comp (s := verticalStrip l u) hd
@@ -1323,7 +1323,7 @@ lemma fun_arg_eq
 
 中文:
 引理 fun_arg_eq
-  条件: {l u : 实数} (hul : l < u) (z : Complex)
+  条件: {l u : 实数} (hul : l < u) (z : 复形)
   证明: by
   rw [sub_mul]; rw [div_mul_comm]; rw [div_self (by norm_cast; linarith)]; rw [div_mul_comm]; rw [div_self (by norm_cast; linarith)]
   simp
@@ -1347,7 +1347,7 @@ lemma bound_exp_eq
 
 中文:
 引理 bound_exp_eq
-  条件: {l u : 实数} (hul : l < u) (z : Complex)
+  条件: {l u : 实数} (hul : l < u) (z : 复形)
   证明: by
   norm_cast
   rw [Complex.div_re]; rw [Complex.normSq_ofReal]; rw [Complex.ofReal_re]; rw [Complex.ofReal_im]; rw [mul_div_assoc]; rw [div_mul_eq_div_div_swap]; rw [div_self (by norm_cast; linarith)]; rw [← div_eq_mul_one_div]
@@ -1412,7 +1412,7 @@ lemma norm_le_interp_of_mem_verticalClosedStrip'
 
 中文:
 引理 norm_le_interp_of_mem_verticalClosedStrip'
-  结论: {f : Complex -> E} {z : Complex} {a b l u : 实数}
+  结论: {f : 复形 -> E} {z : 复形} {a b l u : 实数}
   证明: by
   have hgoal := norm_le_interp_of_mem_verticalClosedStrip₀₁' (scale f l u)
     (mem_verticalClosedStrip_of_scale_id_mem_verticalClosedStrip hul hz) (scale_diffContOnCl hul hd)

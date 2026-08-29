@@ -54,7 +54,7 @@ theorem mod_eq_sub_mul_div
 
 中文:
 定理 mod_eq_sub_mul_div
-  条件: {R : 类型} [EuclideanDomain R] (a b : R)
+  条件: {R : 类型} [欧几里得整环 R] (a b : R)
   结论: a % b = a - b * (a / b)
   证明: calc
     a % b = b * (a / b) + a % b - b * (a / b) := (add_sub_cancel_left _ _).symm
@@ -479,7 +479,7 @@ theorem gcd_zero_right
 中文:
 定理 gcd_zero_right
   条件: (a : R)
-  结论: gcd a 0 = a
+  结论: 最大公约数 a 0 = a
   证明: by
   rw [gcd]
   split_ifs with h <;> simp only [h, zero_mod, gcd_zero_left]
@@ -504,7 +504,7 @@ theorem gcd_val
 中文:
 定理 gcd_val
   条件: (a b : R)
-  结论: gcd a b = gcd (b % a) a
+  结论: 最大公约数 a b = 最大公约数 (b % a) a
   证明: by
   rw [gcd]
   split_ifs with h <;> [simp only [h, mod_zero, gcd_zero_right]; rfl]
@@ -533,7 +533,7 @@ theorem gcd_dvd
 中文:
 定理 gcd_dvd
   条件: (a b : R)
-  结论: gcd a b ∣ a ∧ gcd a b ∣ b
+  结论: 最大公约数 a b ∣ a ∧ 最大公约数 a b ∣ b
   证明: GCD.induction a b
     (fun b => by
       rw [gcd_zero_left]
@@ -565,7 +565,7 @@ theorem gcd_dvd_left
 中文:
 定理 gcd_dvd_left
   条件: (a b : R)
-  结论: gcd a b ∣ a
+  结论: 最大公约数 a b ∣ a
   证明: (gcd_dvd a b).left
 
 Depends on / 依赖: gcd_dvd
@@ -585,7 +585,7 @@ theorem gcd_dvd_right
 中文:
 定理 gcd_dvd_right
   条件: (a b : R)
-  结论: gcd a b ∣ b
+  结论: 最大公约数 a b ∣ b
   证明: (gcd_dvd a b).right
 
 Depends on / 依赖: gcd_dvd
@@ -607,7 +607,7 @@ theorem gcd_eq_zero_iff
 中文:
 定理 gcd_eq_zero_iff
   条件: {a b : R}
-  结论: gcd a b = 0 ↔ a = 0 ∧ b = 0
+  结论: 最大公约数 a b = 0 ↔ a = 0 ∧ b = 0
   证明: ⟨fun h => by simpa [h] using gcd_dvd a b, by
     rintro ⟨rfl, rfl⟩
     exact gcd_zero_right _⟩
@@ -631,7 +631,7 @@ theorem dvd_gcd
 中文:
 定理 dvd_gcd
   条件: {a b c : R}
-  结论: c ∣ a -> c ∣ b -> c ∣ gcd a b
+  结论: c ∣ a -> c ∣ b -> c ∣ 最大公约数 a b
   证明: GCD.induction a b (fun _ _ H => by simpa only [gcd_zero_left] using H) fun a b _ IH ca cb => by
     rw [gcd_val]
     exact IH ((dvd_mod_iff ca).2 cb) ca
@@ -659,7 +659,7 @@ theorem gcd_eq_left
 中文:
 定理 gcd_eq_left
   条件: {a b : R}
-  结论: gcd a b = a ↔ a ∣ b
+  结论: 最大公约数 a b = a ↔ a ∣ b
   证明: ⟨fun h => by
     rw [← h]
     apply gcd_dvd_right, fun h => by rw [gcd_val, mod_eq_zero.2 h, gcd_zero_left]⟩
@@ -688,7 +688,7 @@ theorem gcd_one_left
 中文:
 定理 gcd_one_left
   条件: (a : R)
-  结论: gcd 1 a = 1
+  结论: 最大公约数 1 a = 1
   证明: gcd_eq_left.2 (one_dvd _)
 
 @[simp]
@@ -713,7 +713,7 @@ theorem gcd_self
 中文:
 定理 gcd_self
   条件: (a : R)
-  结论: gcd a a = a
+  结论: 最大公约数 a a = a
   证明: gcd_eq_left.2 dvd_rfl
 
 @[simp]
@@ -742,7 +742,7 @@ theorem xgcdAux_fst
 中文:
 定理 xgcdAux_fst
   条件: (x y : R)
-  结论: 对任意 s t s' t', (xgcdAux x s t y s' t').1 = gcd x y
+  结论: 对任意 s t s' t', (xgcdAux x s t y s' t').1 = 最大公约数 x y
   证明: GCD.induction x y
     (by
       intros
@@ -775,7 +775,7 @@ theorem xgcdAux_val
 中文:
 定理 xgcdAux_val
   条件: (x y : R)
-  结论: xgcdAux x 1 0 y 0 1 = (gcd x y, xgcd x y)
+  结论: xgcdAux x 1 0 y 0 1 = (最大公约数 x y, xgcd x y)
   证明: by
   rw [xgcd]; rw [← xgcdAux_fst x y 1 0 0 1]
 
@@ -859,7 +859,7 @@ theorem gcd_eq_gcd_ab
 中文:
 定理 gcd_eq_gcd_ab
   条件: (a b : R)
-  结论: (gcd a b : R) = a * gcdA a b + b * gcdB a b
+  结论: (最大公约数 a b : R) = a * gcdA a b + b * gcdB a b
   证明: by
   have :=
     @xgcdAux_P _ _ _ a b a b 1 0 0 1 (by dsimp [P]; rw [mul_one, mul_zero, add_zero])
@@ -896,7 +896,7 @@ theorem div_pow
 
 中文:
 定理 div_pow
-  条件: {R : 类型} [EuclideanDomain R] {a b : R} {n : 自然数} (hab : b ∣ a)
+  条件: {R : 类型} [欧几里得整环 R] {a b : R} {n : 自然数} (hab : b ∣ a)
   证明: by
   obtain ⟨c, rfl⟩ := hab
   obtain rfl | hb := eq_or_ne b 0
@@ -936,7 +936,7 @@ theorem dvd_lcm_left
 中文:
 定理 dvd_lcm_left
   条件: (x y : R)
-  结论: x ∣ lcm x y
+  结论: x ∣ 最小公倍数 x y
   证明: by_cases
     (fun hxy : gcd x y = 0 => by
       rw [lcm]; rw [hxy]; rw [div_zero]
@@ -974,7 +974,7 @@ theorem dvd_lcm_right
 中文:
 定理 dvd_lcm_right
   条件: (x y : R)
-  结论: y ∣ lcm x y
+  结论: y ∣ 最小公倍数 x y
   证明: by_cases
     (fun hxy : gcd x y = 0 => by
       rw [lcm]; rw [hxy]; rw [div_zero]
@@ -1017,7 +1017,7 @@ theorem lcm_dvd
 中文:
 定理 lcm_dvd
   条件: {x y z : R} (hxz : x ∣ z) (hyz : y ∣ z)
-  结论: lcm x y ∣ z
+  结论: 最小公倍数 x y ∣ z
   证明: by
   rw [lcm]
   by_cases hxy : gcd x y = 0
@@ -1073,7 +1073,7 @@ theorem lcm_dvd_iff
 中文:
 定理 lcm_dvd_iff
   条件: {x y z : R}
-  结论: lcm x y ∣ z ↔ x ∣ z ∧ y ∣ z
+  结论: 最小公倍数 x y ∣ z ↔ x ∣ z ∧ y ∣ z
   证明: ⟨fun hz => ⟨(dvd_lcm_left _ _).trans hz, (dvd_lcm_right _ _).trans hz⟩, fun ⟨hxz, hyz⟩ =>
     lcm_dvd hxz hyz⟩
 
@@ -1100,7 +1100,7 @@ theorem lcm_zero_left
 中文:
 定理 lcm_zero_left
   条件: (x : R)
-  结论: lcm 0 x = 0
+  结论: 最小公倍数 0 x = 0
   证明: by rw [lcm, zero_mul, zero_div]
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem lcm_zero_right
 中文:
 定理 lcm_zero_right
   条件: (x : R)
-  结论: lcm x 0 = 0
+  结论: 最小公倍数 x 0 = 0
   证明: by rw [lcm, mul_zero, zero_div]
 
 @[simp]
@@ -1155,7 +1155,7 @@ theorem lcm_eq_zero_iff
 中文:
 定理 lcm_eq_zero_iff
   条件: {x y : R}
-  结论: lcm x y = 0 ↔ x = 0 ∨ y = 0
+  结论: 最小公倍数 x y = 0 ↔ x = 0 ∨ y = 0
   证明: by
   constructor
   · intro hxy
@@ -1207,7 +1207,7 @@ theorem gcd_mul_lcm
 中文:
 定理 gcd_mul_lcm
   条件: (x y : R)
-  结论: gcd x y * lcm x y = x * y
+  结论: 最大公约数 x y * 最小公倍数 x y = x * y
   证明: by
   rw [lcm]; by_cases h : gcd x y = 0
   · rw [h, zero_mul]
@@ -1716,7 +1716,7 @@ abbreviation RingEquiv.euclideanDomain
     simpa using
 
 中文:
-缩写 RingEquiv.euclideanDomain
+缩写 环等价.euclideanDomain
   签名: (e : S ≃+* R)
   定义体: e.nontrivial
   quotient a b := e.symm (e a / e b)

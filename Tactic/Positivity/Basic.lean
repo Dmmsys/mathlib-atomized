@@ -82,7 +82,7 @@ lemma ite_nonneg_of_pos_of_nonneg
 
 中文:
 引理 ite_nonneg_of_pos_of_nonneg
-  条件: [Preorder α] (ha : 0 < a) (hb : 0 <= b)
+  条件: [预序 α] (ha : 0 < a) (hb : 0 <= b)
   结论: 0 <= ite p a b
   证明: ite_nonneg _ ha.le hb
 
@@ -102,7 +102,7 @@ lemma ite_nonneg_of_nonneg_of_pos
 
 中文:
 引理 ite_nonneg_of_nonneg_of_pos
-  条件: [Preorder α] (ha : 0 <= a) (hb : 0 < b)
+  条件: [预序 α] (ha : 0 <= a) (hb : 0 < b)
   结论: 0 <= ite p a b
   证明: ite_nonneg _ ha hb.le
 
@@ -138,7 +138,7 @@ lemma ite_ne_zero_of_pos_of_ne_zero
 
 中文:
 引理 ite_ne_zero_of_pos_of_ne_zero
-  条件: [Preorder α] (ha : 0 < a) (hb : b != 0)
+  条件: [预序 α] (ha : 0 < a) (hb : b != 0)
   证明: ite_ne_zero _ ha.ne' hb
 
 Depends on / 依赖: Set.subset_inter, U1.property, U1.val, U2.property, U2.val, ha.ne, ite_ne_zero, property, subset_inter
@@ -157,7 +157,7 @@ lemma ite_ne_zero_of_ne_zero_of_pos
 
 中文:
 引理 ite_ne_zero_of_ne_zero_of_pos
-  条件: [Preorder α] (ha : a != 0) (hb : 0 < b)
+  条件: [预序 α] (ha : a != 0) (hb : 0 < b)
   证明: ite_ne_zero _ ha hb.ne'
 
 Depends on / 依赖: Set.subset_univ, hb.ne, ite_ne_zero, subset_univ
@@ -229,7 +229,7 @@ lemma le_min_of_lt_of_le
 中文:
 引理 le_min_of_lt_of_le
   条件: (ha : a < b) (hb : a <= c)
-  结论: a <= min b c
+  结论: a <= 最小值 b c
   证明: le_min ha.le hb
 
 Depends on / 依赖: ha.le, le_min
@@ -247,7 +247,7 @@ lemma le_min_of_le_of_lt
 中文:
 引理 le_min_of_le_of_lt
   条件: (ha : a <= b) (hb : a < c)
-  结论: a <= min b c
+  结论: a <= 最小值 b c
   证明: le_min ha hb.le
 
 Depends on / 依赖: hb.le, le_min
@@ -265,7 +265,7 @@ lemma min_ne
 中文:
 引理 min_ne
   条件: (ha : a != c) (hb : b != c)
-  结论: min a b != c
+  结论: 最小值 a b != c
   证明: by grind
 -/
 lemma min_ne (ha : a != c) (hb : b != c) : min a b != c := by grind
@@ -282,7 +282,7 @@ lemma min_ne_of_ne_of_lt
 中文:
 引理 min_ne_of_ne_of_lt
   条件: (ha : a != c) (hb : c < b)
-  结论: min a b != c
+  结论: 最小值 a b != c
   证明: min_ne ha hb.ne'
 
 Depends on / 依赖: hb.ne, min_ne
@@ -300,7 +300,7 @@ lemma min_ne_of_lt_of_ne
 中文:
 引理 min_ne_of_lt_of_ne
   条件: (ha : c < a) (hb : b != c)
-  结论: min a b != c
+  结论: 最小值 a b != c
   证明: min_ne ha.ne' hb
 
 Depends on / 依赖: ha.ne, min_ne
@@ -319,7 +319,7 @@ lemma max_ne
 中文:
 引理 max_ne
   条件: (ha : a != c) (hb : b != c)
-  结论: max a b != c
+  结论: 最大值 a b != c
   证明: by grind
 -/
 lemma max_ne (ha : a != c) (hb : b != c) : max a b != c := by grind
@@ -737,7 +737,7 @@ definition evalIntDiv
     | .positive (pa : Q(0 
 
 中文:
-定义 evalIntDiv
+定义 eval整数Div
   签名: : PositivityExt where eval {u α} _ pα? e
   定义体: match pα? with | none => pure .none | some _ => do
   match u, α, e with
@@ -781,7 +781,7 @@ theorem pow_zero_pos
 
 中文:
 定理 pow_zero_pos
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α] [非平凡 α]
   证明: zero_lt_one.trans_le (pow_zero a).ge
 
 Depends on / 依赖: pow_zero, trans_le, zero_lt_one, zero_lt_one.trans_le
@@ -801,7 +801,7 @@ theorem pow_zero_ne_zero
 
 中文:
 定理 pow_zero_ne_zero
-  条件: [Semiring α] [Nontrivial α] (a : α)
+  条件: [半环 α] [非平凡 α] (a : α)
   结论: a ^ 0 != 0
   证明: pow_zero a ▸ one_ne_zero
 
@@ -897,7 +897,7 @@ theorem abs_pos_of_ne_zero
 
 中文:
 定理 abs_pos_of_ne_zero
-  结论: {α : 类型} [AddGroup α] [LinearOrder α]
+  结论: {α : 类型} [加法群 α] [线性序 α]
   证明: abs_pos.mpr
 
 Depends on / 依赖: abs_pos, abs_pos.mpr

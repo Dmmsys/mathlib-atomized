@@ -66,10 +66,10 @@ structure Pairing
 结构 Pairing
   参数: where
   公理与运算 (5 个):
-    - I : Set A.N
-    - II : Set A.N
+    - I : 集合 A.N
+    - II : 集合 A.N
     - inter : I inter II = ∅
-    - union : I union II = Set.univ
+    - union : I union II = 集合.univ
     - p : II ≃ I
 -/
 structure Pairing where
@@ -96,7 +96,7 @@ class IsProper
     - isUniquelyCodimOneFace((x : P.II)) : S.IsUniquelyCodimOneFace x.1.toS (P.p x).1.toS
 
 中文:
-类 IsProper
+类 是真
   参数: where
   公理与运算 (1 个):
     - isUniquelyCodimOneFace((x : P.II)) : S.IsUniquelyCodimOneFace x.1.toS (P.p x).1.toS
@@ -117,7 +117,7 @@ lemma isUniquelyCodimOneFace
 
 中文:
 引理 isUniquelyCodimOneFace
-  条件: [P.Is命题er] (x : P.II)
+  条件: [P.是真] (x : P.II)
   证明: IsProper.isUniquelyCodimOneFace x
 
 @[simp]
@@ -139,7 +139,7 @@ lemma dim_p
 
 中文:
 引理 dim_p
-  条件: [P.Is命题er] (x : P.II)
+  条件: [P.是真] (x : P.II)
   证明: (P.isUniquelyCodimOneFace x).dim_eq
 
 Depends on / 依赖: P.isUniquelyCodimOneFace, dim_eq, isUniquelyCodimOneFace
@@ -159,11 +159,11 @@ class IsInner
     - ne_last((x : P.II) {d : Nat} (hd : x.1.dim = d)) : (P.isUniquelyCodimOneFace x).index hd != Fin.last _
 
 中文:
-类 IsInner
-  参数: [P.Is命题er]
+类 是内积
+  参数: [P.是真]
   公理与运算 (2 个):
     - ne_zero((x : P.II) {d : 自然数} (hd : x.1.dim = d)) : (P.isUniquelyCodimOneFace x).index hd != 0
-    - ne_last((x : P.II) {d : 自然数} (hd : x.1.dim = d)) : (P.isUniquelyCodimOneFace x).index hd != Fin.last _
+    - ne_last((x : P.II) {d : 自然数} (hd : x.1.dim = d)) : (P.isUniquelyCodimOneFace x).index hd != 有限集.last _
 -/
 class IsInner [P.IsProper] : Prop where
   ne_zero (x : P.II) {d : Nat} (hd : x.1.dim = d) :
@@ -200,7 +200,7 @@ lemma AncestralRel.dim_le
 
 中文:
 引理 AncestralRel.dim_le
-  条件: [P.Is命题er] {x y : P.II} (hxy : P.AncestralRel x y)
+  条件: [P.是真] {x y : P.II} (hxy : P.AncestralRel x y)
   证明: by
   simpa only [(P.isUniquelyCodimOneFace y).dim_eq, Nat.lt_succ_iff] using
     SSet.N.dim_lt_of_lt hxy.2
@@ -223,11 +223,11 @@ class IsRegular
     - wf : WellFounded P.AncestralRel
 
 中文:
-类 IsRegular
-  参数: extends P.Is命题er
-  继承: P.IsProper
+类 是正则
+  参数: extends P.是真
+  继承: P.是真
   公理与运算 (1 个):
-    - wf : WellFounded P.AncestralRel
+    - wf : 良基 P.AncestralRel
 -/
 class IsRegular extends P.IsProper where
   wf : WellFounded P.AncestralRel
@@ -246,7 +246,7 @@ lemma wf
 
 中文:
 引理 wf
-  结论: WellFounded P.AncestralRel
+  结论: 良基 P.AncestralRel
   证明: IsRegular.wf
 
 Depends on / 依赖: IsRegular, IsRegular.wf
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsWellFounded _ P.AncestralRel
+  签名: 是良基 _ P.AncestralRel
   定义体: P.wf
 
 Depends on / 依赖: P.wf
@@ -288,7 +288,7 @@ lemma exists_or
   · exact ⟨⟨_, h⟩, Or.inl rfl⟩
 
 中文:
-引理 exists_or
+引理 存在_or
   条件: (x : A.N)
   证明: by
   have := Set.mem_univ x
@@ -352,7 +352,7 @@ lemma le
 
 中文:
 引理 le
-  条件: [P.Is命题er] (x : P.II)
+  条件: [P.是真] (x : P.II)
   证明: (P.isUniquelyCodimOneFace x).le
 
 Depends on / 依赖: P.isUniquelyCodimOneFace, isUniquelyCodimOneFace
@@ -371,7 +371,7 @@ lemma lt
 
 中文:
 引理 lt
-  条件: [P.Is命题er] (x : P.II)
+  条件: [P.是真] (x : P.II)
   证明: lt_of_le_of_ne' (P.le x) (P.ne _ _)
 
 Depends on / 依赖: P.le, P.ne, lt_of_le_of_ne
@@ -500,8 +500,8 @@ instance [P.IsProper]
     exact (P.isUniquelyCodimOneFace ⟨x, hx⟩).of_iso e.symm
 
 中文:
-实例 [P.IsProper]
-  签名: : (P.ofIso e hA).Is命题er where
+实例 [P.是真]
+  签名: : (P.ofIso e hA).是真 where
   定义体: by
     rintro ⟨x, hx⟩
     obtain ⟨x, rfl⟩ := (N.orderIsoOfIso e hA).symm.surjective x
@@ -534,8 +534,8 @@ instance [P.IsRegular]
     simpa [← P.ofIso_ancestralRel_iff e hA] using hf n
 
 中文:
-实例 [P.IsRegular]
-  签名: : (P.ofIso e hA).IsRegular where
+实例 [P.是正则]
+  签名: : (P.ofIso e hA).是正则 where
   定义体: by
     have hP := P.wf
     rw [wellFounded_iff_isEmpty_descending_chain] at hP ⊢
@@ -571,7 +571,7 @@ lemma ofIso_index
 
 中文:
 引理 ofIso_index
-  条件: (x : P.II) {d : 自然数} (hd : x.1.dim = d) [P.Is命题er]
+  条件: (x : P.II) {d : 自然数} (hd : x.1.dim = d) [P.是真]
   证明: by
   rw [← (P.isUniquelyCodimOneFace x).index_of_iso e.symm hd]
   congr
@@ -604,8 +604,8 @@ instance [P.IsProper]
     obtain ⟨a
 
 中文:
-实例 [P.IsProper]
-  签名: [P.IsInner]
+实例 [P.是真]
+  签名: [P.是内积]
   定义体: by
     rintro ⟨b, hb⟩ d hd
     obtain ⟨a, rfl⟩ := (N.orderIsoOfIso e hA).symm.surjective b

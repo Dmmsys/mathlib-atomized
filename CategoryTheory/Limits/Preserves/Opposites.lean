@@ -40,7 +40,7 @@ lemma preservesLimit_op
 
 中文:
 引理 preservesLimit_op
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [PreservesColimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [保持余极限 K.leftOp F]
   证明: ⟨isLimitConeRightOpOfCocone _ (isColimitOfPreserves F (isColimitCoconeLeftOpOfCone _ hc))⟩
 
 Depends on / 依赖: isColimitCoconeLeftOpOfCone, isColimitOfPreserves, isLimitConeRightOpOfCocone
@@ -60,7 +60,7 @@ lemma preservesLimit_of_op
 
 中文:
 引理 preservesLimit_of_op
-  条件: (K : J ⥤ C) (F : C ⥤ D) [PreservesColimit K.op F.op]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [保持余极限 K.op F.op]
   证明: ⟨isLimitOfOp (isColimitOfPreserves F.op (IsLimit.op hc))⟩
 
 Depends on / 依赖: F.op, IsLimit, IsLimit.op, isColimitOfPreserves, isLimitOfOp
@@ -79,7 +79,7 @@ lemma preservesLimit_leftOp
 
 中文:
 引理 preservesLimit_leftOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [PreservesColimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [保持余极限 K.leftOp F]
   证明: ⟨isLimitConeUnopOfCocone _ (isColimitOfPreserves F (isColimitCoconeLeftOpOfCone _ hc))⟩
 
 Depends on / 依赖: isColimitCoconeLeftOpOfCone, isColimitOfPreserves, isLimitConeUnopOfCocone
@@ -99,7 +99,7 @@ lemma preservesLimit_of_leftOp
 
 中文:
 引理 preservesLimit_of_leftOp
-  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [PreservesColimit K.op F.leftOp]
+  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [保持余极限 K.op F.leftOp]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ (isColimitOfPreserves F.leftOp (IsLimit.op hc))⟩
 
 Depends on / 依赖: F.leftOp, IsLimit, IsLimit.op, isColimitOfPreserves, isLimitOfCoconeLeftOpOfCone, leftOp
@@ -119,7 +119,7 @@ lemma preservesLimit_rightOp
 
 中文:
 引理 preservesLimit_rightOp
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [PreservesColimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [保持余极限 K.op F]
   证明: ⟨isLimitConeRightOpOfCocone _ (isColimitOfPreserves F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitOfPreserves, isLimitConeRightOpOfCocone
@@ -139,7 +139,7 @@ lemma preservesLimit_of_rightOp
 
 中文:
 引理 preservesLimit_of_rightOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [PreservesColimit K.leftOp F.rightOp]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [保持余极限 K.leftOp F.rightOp]
   证明: ⟨isLimitOfOp (isColimitOfPreserves F.rightOp (isColimitCoconeLeftOpOfCone _ hc))⟩
 
 Depends on / 依赖: F.rightOp, isColimitCoconeLeftOpOfCone, isColimitOfPreserves, isLimitOfOp, rightOp
@@ -159,7 +159,7 @@ lemma preservesLimit_unop
 
 中文:
 引理 preservesLimit_unop
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持余极限 K.op F]
   证明: ⟨isLimitConeUnopOfCocone _ (isColimitOfPreserves F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitOfPreserves, isLimitConeUnopOfCocone
@@ -179,7 +179,7 @@ lemma preservesLimit_of_unop
 
 中文:
 引理 preservesLimit_of_unop
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimit K.leftOp F.unop]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持余极限 K.leftOp F.unop]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ (isColimitOfPreserves F.unop (isColimitCoconeLeftOpOfCone _ hc))⟩
 
 Depends on / 依赖: F.unop, isColimitCoconeLeftOpOfCone, isColimitOfPreserves, isLimitOfCoconeLeftOpOfCone
@@ -199,7 +199,7 @@ lemma preservesColimit_op
 
 中文:
 引理 preservesColimit_op
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [PreservesLimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [保持极限 K.leftOp F]
   证明: ⟨isColimitCoconeRightOpOfCone _ (isLimitOfPreserves F (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: isColimitCoconeRightOpOfCone, isLimitConeLeftOpOfCocone, isLimitOfPreserves
@@ -219,7 +219,7 @@ lemma preservesColimit_of_op
 
 中文:
 引理 preservesColimit_of_op
-  条件: (K : J ⥤ C) (F : C ⥤ D) [PreservesLimit K.op F.op]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [保持极限 K.op F.op]
   证明: ⟨isColimitOfOp (isLimitOfPreserves F.op (IsColimit.op hc))⟩
 
 Depends on / 依赖: F.op, IsColimit, IsColimit.op, isColimitOfOp, isLimitOfPreserves
@@ -238,7 +238,7 @@ lemma preservesColimit_leftOp
 
 中文:
 引理 preservesColimit_leftOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [PreservesLimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [保持极限 K.leftOp F]
   证明: ⟨isColimitCoconeUnopOfCone _ (isLimitOfPreserves F (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: isColimitCoconeUnopOfCone, isLimitConeLeftOpOfCocone, isLimitOfPreserves
@@ -258,7 +258,7 @@ lemma preservesColimit_of_leftOp
 
 中文:
 引理 preservesColimit_of_leftOp
-  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [PreservesLimit K.op F.leftOp]
+  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [保持极限 K.op F.leftOp]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfPreserves F.leftOp (IsColimit.op hc))⟩
 
 Depends on / 依赖: F.leftOp, IsColimit, IsColimit.op, isColimitOfConeLeftOpOfCocone, isLimitOfPreserves, leftOp
@@ -278,7 +278,7 @@ lemma preservesColimit_rightOp
 
 中文:
 引理 preservesColimit_rightOp
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [PreservesLimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [保持极限 K.op F]
   证明: ⟨isColimitCoconeRightOpOfCone _ (isLimitOfPreserves F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitCoconeRightOpOfCone, isLimitOfPreserves
@@ -298,7 +298,7 @@ lemma preservesColimit_of_rightOp
 
 中文:
 引理 preservesColimit_of_rightOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [PreservesLimit K.leftOp F.rightOp]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [保持极限 K.leftOp F.rightOp]
   证明: ⟨isColimitOfOp (isLimitOfPreserves F.rightOp (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: F.rightOp, isColimitOfOp, isLimitConeLeftOpOfCocone, isLimitOfPreserves, rightOp
@@ -318,7 +318,7 @@ lemma preservesColimit_unop
 
 中文:
 引理 preservesColimit_unop
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持极限 K.op F]
   证明: ⟨isColimitCoconeUnopOfCone _ (isLimitOfPreserves F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitCoconeUnopOfCone, isLimitOfPreserves
@@ -338,7 +338,7 @@ lemma preservesColimit_of_unop
 
 中文:
 引理 preservesColimit_of_unop
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimit K.leftOp F.unop]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持极限 K.leftOp F.unop]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfPreserves F.unop (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: F.unop, isColimitOfConeLeftOpOfCocone, isLimitConeLeftOpOfCocone, isLimitOfPreserves
@@ -362,7 +362,7 @@ lemma preservesLimitsOfShape_op
 
 中文:
 引理 preservesLimitsOfShape_op
-  条件: (F : C ⥤ D) [PreservesColimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ D) [保持形状余极限 Jᵒᵖ F]
   证明: preservesLimit_op K F
 
 Depends on / 依赖: preservesLimit_op
@@ -380,7 +380,7 @@ lemma preservesLimitsOfShape_leftOp
 
 中文:
 引理 preservesLimitsOfShape_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesColimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持形状余极限 Jᵒᵖ F]
   证明: preservesLimit_leftOp K F
 
 Depends on / 依赖: preservesLimit_leftOp
@@ -398,7 +398,7 @@ lemma preservesLimitsOfShape_rightOp
 
 中文:
 引理 preservesLimitsOfShape_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesColimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持形状余极限 Jᵒᵖ F]
   证明: preservesLimit_rightOp K F
 
 Depends on / 依赖: preservesLimit_rightOp
@@ -416,7 +416,7 @@ lemma preservesLimitsOfShape_unop
 
 中文:
 引理 preservesLimitsOfShape_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持形状余极限 Jᵒᵖ F]
   证明: preservesLimit_unop K F
 
 Depends on / 依赖: preservesLimit_unop
@@ -434,7 +434,7 @@ lemma preservesColimitsOfShape_op
 
 中文:
 引理 preservesColimitsOfShape_op
-  条件: (F : C ⥤ D) [PreservesLimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ D) [保持形状极限 Jᵒᵖ F]
   证明: preservesColimit_op K F
 
 Depends on / 依赖: preservesColimit_op
@@ -452,7 +452,7 @@ lemma preservesColimitsOfShape_leftOp
 
 中文:
 引理 preservesColimitsOfShape_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesLimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持形状极限 Jᵒᵖ F]
   证明: preservesColimit_leftOp K F
 
 Depends on / 依赖: preservesColimit_leftOp
@@ -470,7 +470,7 @@ lemma preservesColimitsOfShape_rightOp
 
 中文:
 引理 preservesColimitsOfShape_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesLimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持形状极限 Jᵒᵖ F]
   证明: preservesColimit_rightOp K F
 
 Depends on / 依赖: preservesColimit_rightOp
@@ -488,7 +488,7 @@ lemma preservesColimitsOfShape_unop
 
 中文:
 引理 preservesColimitsOfShape_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持形状极限 Jᵒᵖ F]
   证明: preservesColimit_unop K F
 
 Depends on / 依赖: preservesColimit_unop
@@ -506,7 +506,7 @@ lemma preservesLimitsOfShape_of_op
 
 中文:
 引理 preservesLimitsOfShape_of_op
-  条件: (F : C ⥤ D) [PreservesColimitsOfShape Jᵒᵖ F.op]
+  条件: (F : C ⥤ D) [保持形状余极限 Jᵒᵖ F.op]
   证明: preservesLimit_of_op K F
 
 Depends on / 依赖: preservesLimit_of_op
@@ -524,7 +524,7 @@ lemma preservesLimitsOfShape_of_leftOp
 
 中文:
 引理 preservesLimitsOfShape_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesColimitsOfShape Jᵒᵖ F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持形状余极限 Jᵒᵖ F.leftOp]
   证明: preservesLimit_of_leftOp K F
 
 Depends on / 依赖: preservesLimit_of_leftOp
@@ -542,7 +542,7 @@ lemma preservesLimitsOfShape_of_rightOp
 
 中文:
 引理 preservesLimitsOfShape_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesColimitsOfShape Jᵒᵖ F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持形状余极限 Jᵒᵖ F.rightOp]
   证明: preservesLimit_of_rightOp K F
 
 Depends on / 依赖: preservesLimit_of_rightOp
@@ -560,7 +560,7 @@ lemma preservesLimitsOfShape_of_unop
 
 中文:
 引理 preservesLimitsOfShape_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimitsOfShape Jᵒᵖ F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持形状余极限 Jᵒᵖ F.unop]
   证明: preservesLimit_of_unop K F
 
 Depends on / 依赖: preservesLimit_of_unop
@@ -578,7 +578,7 @@ lemma preservesColimitsOfShape_of_op
 
 中文:
 引理 preservesColimitsOfShape_of_op
-  条件: (F : C ⥤ D) [PreservesLimitsOfShape Jᵒᵖ F.op]
+  条件: (F : C ⥤ D) [保持形状极限 Jᵒᵖ F.op]
   证明: preservesColimit_of_op K F
 
 Depends on / 依赖: preservesColimit_of_op
@@ -596,7 +596,7 @@ lemma preservesColimitsOfShape_of_leftOp
 
 中文:
 引理 preservesColimitsOfShape_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesLimitsOfShape Jᵒᵖ F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持形状极限 Jᵒᵖ F.leftOp]
   证明: preservesColimit_of_leftOp K F
 
 Depends on / 依赖: preservesColimit_of_leftOp
@@ -614,7 +614,7 @@ lemma preservesColimitsOfShape_of_rightOp
 
 中文:
 引理 preservesColimitsOfShape_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesLimitsOfShape Jᵒᵖ F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持形状极限 Jᵒᵖ F.rightOp]
   证明: preservesColimit_of_rightOp K F
 
 Depends on / 依赖: preservesColimit_of_rightOp
@@ -632,7 +632,7 @@ lemma preservesColimitsOfShape_of_unop
 
 中文:
 引理 preservesColimitsOfShape_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimitsOfShape Jᵒᵖ F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持形状极限 Jᵒᵖ F.unop]
   证明: preservesColimit_of_unop K F
 
 Depends on / 依赖: preservesColimit_of_unop
@@ -652,7 +652,7 @@ lemma preservesLimitsOfSize_op
 
 中文:
 引理 preservesLimitsOfSize_op
-  条件: (F : C ⥤ D) [PreservesColimitsOfSize.{w, w'} F]
+  条件: (F : C ⥤ D) [保持余limitsOfSize.{w, w'} F]
   证明: preservesLimitsOfShape_op _ _
 
 Depends on / 依赖: preservesLimitsOfShape_op
@@ -671,7 +671,7 @@ lemma preservesLimitsOfSize_leftOp
 
 中文:
 引理 preservesLimitsOfSize_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesColimitsOfSize.{w, w'} F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持余limitsOfSize.{w, w'} F]
   证明: preservesLimitsOfShape_leftOp _ _
 
 Depends on / 依赖: preservesLimitsOfShape_leftOp
@@ -690,7 +690,7 @@ lemma preservesLimitsOfSize_rightOp
 
 中文:
 引理 preservesLimitsOfSize_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesColimitsOfSize.{w, w'} F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持余limitsOfSize.{w, w'} F]
   证明: preservesLimitsOfShape_rightOp _ _
 
 Depends on / 依赖: preservesLimitsOfShape_rightOp
@@ -709,7 +709,7 @@ lemma preservesLimitsOfSize_unop
 
 中文:
 引理 preservesLimitsOfSize_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimitsOfSize.{w, w'} F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持余limitsOfSize.{w, w'} F]
   证明: preservesLimitsOfShape_unop _ _
 
 Depends on / 依赖: preservesLimitsOfShape_unop
@@ -728,7 +728,7 @@ lemma preservesColimitsOfSize_op
 
 中文:
 引理 preservesColimitsOfSize_op
-  条件: (F : C ⥤ D) [PreservesLimitsOfSize.{w, w'} F]
+  条件: (F : C ⥤ D) [保持LimitsOfSize.{w, w'} F]
   证明: preservesColimitsOfShape_op _ _
 
 Depends on / 依赖: preservesColimitsOfShape_op
@@ -747,7 +747,7 @@ lemma preservesColimitsOfSize_leftOp
 
 中文:
 引理 preservesColimitsOfSize_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesLimitsOfSize.{w, w'} F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持LimitsOfSize.{w, w'} F]
   证明: preservesColimitsOfShape_leftOp _ _
 
 Depends on / 依赖: preservesColimitsOfShape_leftOp
@@ -766,7 +766,7 @@ lemma preservesColimitsOfSize_rightOp
 
 中文:
 引理 preservesColimitsOfSize_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesLimitsOfSize.{w, w'} F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持LimitsOfSize.{w, w'} F]
   证明: preservesColimitsOfShape_rightOp _ _
 
 Depends on / 依赖: preservesColimitsOfShape_rightOp
@@ -785,7 +785,7 @@ lemma preservesColimitsOfSize_unop
 
 中文:
 引理 preservesColimitsOfSize_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimitsOfSize.{w, w'} F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持LimitsOfSize.{w, w'} F]
   证明: preservesColimitsOfShape_unop _ _
 
 Depends on / 依赖: preservesColimitsOfShape_unop
@@ -804,7 +804,7 @@ lemma preservesLimitsOfSize_of_op
 
 中文:
 引理 preservesLimitsOfSize_of_op
-  条件: (F : C ⥤ D) [PreservesColimitsOfSize.{w, w'} F.op]
+  条件: (F : C ⥤ D) [保持余limitsOfSize.{w, w'} F.op]
   证明: preservesLimitsOfShape_of_op _ _
 
 Depends on / 依赖: preservesLimitsOfShape_of_op
@@ -823,7 +823,7 @@ lemma preservesLimitsOfSize_of_leftOp
 
 中文:
 引理 preservesLimitsOfSize_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesColimitsOfSize.{w, w'} F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持余limitsOfSize.{w, w'} F.leftOp]
   证明: preservesLimitsOfShape_of_leftOp _ _
 
 Depends on / 依赖: preservesLimitsOfShape_of_leftOp
@@ -842,7 +842,7 @@ lemma preservesLimitsOfSize_of_rightOp
 
 中文:
 引理 preservesLimitsOfSize_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesColimitsOfSize.{w, w'} F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持余limitsOfSize.{w, w'} F.rightOp]
   证明: preservesLimitsOfShape_of_rightOp _ _
 
 Depends on / 依赖: preservesLimitsOfShape_of_rightOp
@@ -861,7 +861,7 @@ lemma preservesLimitsOfSize_of_unop
 
 中文:
 引理 preservesLimitsOfSize_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesColimitsOfSize.{w, w'} F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持余limitsOfSize.{w, w'} F.unop]
   证明: preservesLimitsOfShape_of_unop _ _
 
 Depends on / 依赖: preservesLimitsOfShape_of_unop
@@ -880,7 +880,7 @@ lemma preservesColimitsOfSize_of_op
 
 中文:
 引理 preservesColimitsOfSize_of_op
-  条件: (F : C ⥤ D) [PreservesLimitsOfSize.{w, w'} F.op]
+  条件: (F : C ⥤ D) [保持LimitsOfSize.{w, w'} F.op]
   证明: preservesColimitsOfShape_of_op _ _
 
 Depends on / 依赖: preservesColimitsOfShape_of_op
@@ -899,7 +899,7 @@ lemma preservesColimitsOfSize_of_leftOp
 
 中文:
 引理 preservesColimitsOfSize_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesLimitsOfSize.{w, w'} F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持LimitsOfSize.{w, w'} F.leftOp]
   证明: preservesColimitsOfShape_of_leftOp _ _
 
 Depends on / 依赖: preservesColimitsOfShape_of_leftOp
@@ -918,7 +918,7 @@ lemma preservesColimitsOfSize_of_rightOp
 
 中文:
 引理 preservesColimitsOfSize_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesLimitsOfSize.{w, w'} F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持LimitsOfSize.{w, w'} F.rightOp]
   证明: preservesColimitsOfShape_of_rightOp _ _
 
 Depends on / 依赖: preservesColimitsOfShape_of_rightOp
@@ -937,7 +937,7 @@ lemma preservesColimitsOfSize_of_unop
 
 中文:
 引理 preservesColimitsOfSize_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesLimitsOfSize.{w, w'} F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持LimitsOfSize.{w, w'} F.unop]
   证明: preservesColimitsOfShape_of_unop _ _
 
 Depends on / 依赖: preservesColimitsOfShape_of_unop
@@ -1272,7 +1272,7 @@ lemma preservesFiniteLimits_op
 
 中文:
 引理 preservesFiniteLimits_op
-  条件: (F : C ⥤ D) [PreservesFiniteColimits F]
+  条件: (F : C ⥤ D) [保持FiniteColimits F]
   证明: preservesLimitsOfShape_op J F
 
 Depends on / 依赖: preservesLimitsOfShape_op
@@ -1291,7 +1291,7 @@ lemma preservesFiniteLimits_leftOp
 
 中文:
 引理 preservesFiniteLimits_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteColimits F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteColimits F]
   证明: preservesLimitsOfShape_leftOp J F
 
 Depends on / 依赖: preservesLimitsOfShape_leftOp
@@ -1310,7 +1310,7 @@ lemma preservesFiniteLimits_rightOp
 
 中文:
 引理 preservesFiniteLimits_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteColimits F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteColimits F]
   证明: preservesLimitsOfShape_rightOp J F
 
 Depends on / 依赖: preservesLimitsOfShape_rightOp
@@ -1329,7 +1329,7 @@ lemma preservesFiniteLimits_unop
 
 中文:
 引理 preservesFiniteLimits_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteColimits F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteColimits F]
   证明: preservesLimitsOfShape_unop J F
 
 Depends on / 依赖: preservesLimitsOfShape_unop
@@ -1348,7 +1348,7 @@ lemma preservesFiniteColimits_op
 
 中文:
 引理 preservesFiniteColimits_op
-  条件: (F : C ⥤ D) [PreservesFiniteLimits F]
+  条件: (F : C ⥤ D) [保持FiniteLimits F]
   证明: preservesColimitsOfShape_op J F
 
 Depends on / 依赖: preservesColimitsOfShape_op
@@ -1367,7 +1367,7 @@ lemma preservesFiniteColimits_leftOp
 
 中文:
 引理 preservesFiniteColimits_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteLimits F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteLimits F]
   证明: preservesColimitsOfShape_leftOp J F
 
 Depends on / 依赖: preservesColimitsOfShape_leftOp
@@ -1386,7 +1386,7 @@ lemma preservesFiniteColimits_rightOp
 
 中文:
 引理 preservesFiniteColimits_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteLimits F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteLimits F]
   证明: preservesColimitsOfShape_rightOp J F
 
 Depends on / 依赖: preservesColimitsOfShape_rightOp
@@ -1405,7 +1405,7 @@ lemma preservesFiniteColimits_unop
 
 中文:
 引理 preservesFiniteColimits_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteLimits F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteLimits F]
   证明: preservesColimitsOfShape_unop J F
 
 Depends on / 依赖: preservesColimitsOfShape_unop
@@ -1424,7 +1424,7 @@ lemma preservesFiniteLimits_of_op
 
 中文:
 引理 preservesFiniteLimits_of_op
-  条件: (F : C ⥤ D) [PreservesFiniteColimits F.op]
+  条件: (F : C ⥤ D) [保持FiniteColimits F.op]
   证明: preservesLimitsOfShape_of_op J F
 
 Depends on / 依赖: preservesLimitsOfShape_of_op
@@ -1443,7 +1443,7 @@ lemma preservesFiniteLimits_of_leftOp
 
 中文:
 引理 preservesFiniteLimits_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteColimits F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteColimits F.leftOp]
   证明: preservesLimitsOfShape_of_leftOp J F
 
 Depends on / 依赖: preservesLimitsOfShape_of_leftOp
@@ -1462,7 +1462,7 @@ lemma preservesFiniteLimits_of_rightOp
 
 中文:
 引理 preservesFiniteLimits_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteColimits F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteColimits F.rightOp]
   证明: preservesLimitsOfShape_of_rightOp J F
 
 Depends on / 依赖: preservesLimitsOfShape_of_rightOp
@@ -1481,7 +1481,7 @@ lemma preservesFiniteLimits_of_unop
 
 中文:
 引理 preservesFiniteLimits_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteColimits F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteColimits F.unop]
   证明: preservesLimitsOfShape_of_unop J F
 
 Depends on / 依赖: preservesLimitsOfShape_of_unop
@@ -1500,7 +1500,7 @@ lemma preservesFiniteColimits_of_op
 
 中文:
 引理 preservesFiniteColimits_of_op
-  条件: (F : C ⥤ D) [PreservesFiniteLimits F.op]
+  条件: (F : C ⥤ D) [保持FiniteLimits F.op]
   证明: preservesColimitsOfShape_of_op J F
 
 Depends on / 依赖: preservesColimitsOfShape_of_op
@@ -1519,7 +1519,7 @@ lemma preservesFiniteColimits_of_leftOp
 
 中文:
 引理 preservesFiniteColimits_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteLimits F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteLimits F.leftOp]
   证明: preservesColimitsOfShape_of_leftOp J F
 
 Depends on / 依赖: preservesColimitsOfShape_of_leftOp
@@ -1538,7 +1538,7 @@ lemma preservesFiniteColimits_of_rightOp
 
 中文:
 引理 preservesFiniteColimits_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteLimits F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteLimits F.rightOp]
   证明: preservesColimitsOfShape_of_rightOp J F
 
 Depends on / 依赖: preservesColimitsOfShape_of_rightOp
@@ -1557,7 +1557,7 @@ lemma preservesFiniteColimits_of_unop
 
 中文:
 引理 preservesFiniteColimits_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteLimits F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteLimits F.unop]
   证明: preservesColimitsOfShape_of_unop J F
 
 Depends on / 依赖: preservesColimitsOfShape_of_unop
@@ -1578,7 +1578,7 @@ lemma preservesFiniteProducts_op
 
 中文:
 引理 preservesFiniteProducts_op
-  条件: (F : C ⥤ D) [PreservesFiniteCoproducts F]
+  条件: (F : C ⥤ D) [保持FiniteCoproducts F]
   证明: by
     apply +allowSynthFailures preservesLimitsOfShape_op
     exact preservesColimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1603,7 +1603,7 @@ lemma preservesFiniteProducts_leftOp
 
 中文:
 引理 preservesFiniteProducts_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteCoproducts F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteCoproducts F]
   证明: by
     apply +allowSynthFailures preservesLimitsOfShape_leftOp
     exact preservesColimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1628,7 +1628,7 @@ lemma preservesFiniteProducts_rightOp
 
 中文:
 引理 preservesFiniteProducts_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteCoproducts F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteCoproducts F]
   证明: by
     apply +allowSynthFailures preservesLimitsOfShape_rightOp
     exact preservesColimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1653,7 +1653,7 @@ lemma preservesFiniteProducts_unop
 
 中文:
 引理 preservesFiniteProducts_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteCoproducts F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteCoproducts F]
   证明: by
     apply +allowSynthFailures preservesLimitsOfShape_unop
     exact preservesColimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1678,7 +1678,7 @@ lemma preservesFiniteCoproducts_op
 
 中文:
 引理 preservesFiniteCoproducts_op
-  条件: (F : C ⥤ D) [PreservesFiniteProducts F]
+  条件: (F : C ⥤ D) [保持FiniteProducts F]
   证明: by
     apply +allowSynthFailures preservesColimitsOfShape_op
     exact preservesLimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1703,7 +1703,7 @@ lemma preservesFiniteCoproducts_leftOp
 
 中文:
 引理 preservesFiniteCoproducts_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [PreservesFiniteProducts F]
+  条件: (F : C ⥤ Dᵒᵖ) [保持FiniteProducts F]
   证明: by
     apply +allowSynthFailures preservesColimitsOfShape_leftOp
     exact preservesLimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1728,7 +1728,7 @@ lemma preservesFiniteCoproducts_rightOp
 
 中文:
 引理 preservesFiniteCoproducts_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [PreservesFiniteProducts F]
+  条件: (F : Cᵒᵖ ⥤ D) [保持FiniteProducts F]
   证明: by
     apply +allowSynthFailures preservesColimitsOfShape_rightOp
     exact preservesLimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1753,7 +1753,7 @@ lemma preservesFiniteCoproducts_unop
 
 中文:
 引理 preservesFiniteCoproducts_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [PreservesFiniteProducts F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [保持FiniteProducts F]
   证明: by
     apply +allowSynthFailures preservesColimitsOfShape_unop
     exact preservesLimitsOfShape_of_equiv (Discrete.opposite _).symm _
@@ -1776,7 +1776,7 @@ lemma reflectsLimit_op
 
 中文:
 引理 reflectsLimit_op
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [ReflectsColimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [反映余极限 K.leftOp F]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ isColimitOfReflects F (isColimitCoconeLeftOpOfCone _ hc)⟩
 
 Depends on / 依赖: isColimitCoconeLeftOpOfCone, isColimitOfReflects, isLimitOfCoconeLeftOpOfCone
@@ -1796,7 +1796,7 @@ lemma reflectsLimit_of_op
 
 中文:
 引理 reflectsLimit_of_op
-  条件: (K : J ⥤ C) (F : C ⥤ D) [ReflectsColimit K.op F.op]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [反映余极限 K.op F.op]
   证明: ⟨isLimitOfOp (isColimitOfReflects F.op (IsLimit.op hc))⟩
 
 Depends on / 依赖: F.op, IsLimit, IsLimit.op, isColimitOfReflects, isLimitOfOp
@@ -1815,7 +1815,7 @@ lemma reflectsLimit_leftOp
 
 中文:
 引理 reflectsLimit_leftOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [ReflectsColimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [反映余极限 K.leftOp F]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ isColimitOfReflects F hc.op⟩
 
 Depends on / 依赖: hc.op, isColimitOfReflects, isLimitOfCoconeLeftOpOfCone
@@ -1836,7 +1836,7 @@ lemma reflectsLimit_of_leftOp
 
 中文:
 引理 reflectsLimit_of_leftOp
-  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [ReflectsColimit K.op F.leftOp]
+  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [反映余极限 K.op F.leftOp]
   证明: ⟨isLimitOfOp
       isColimitOfReflects F.leftOp (isColimitOfConeRightOpOfCocone _ hc)⟩
 
@@ -1858,7 +1858,7 @@ lemma reflectsLimit_rightOp
 
 中文:
 引理 reflectsLimit_rightOp
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [ReflectsColimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [反映余极限 K.op F]
   证明: ⟨isLimitOfOp isColimitOfReflects F isColimitOfConeRightOpOfCocone _ hc⟩
 
 Depends on / 依赖: isColimitOfConeRightOpOfCocone, isColimitOfReflects, isLimitOfOp
@@ -1879,7 +1879,7 @@ lemma reflectsLimit_of_rightOp
 
 中文:
 引理 reflectsLimit_of_rightOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [ReflectsColimit K.leftOp F.rightOp]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [反映余极限 K.leftOp F.rightOp]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ isColimitOfReflects F.rightOp
       isColimitOfConeUnopOfCocone _ hc⟩
 
@@ -1901,7 +1901,7 @@ lemma reflectsLimit_unop
 
 中文:
 引理 reflectsLimit_unop
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsColimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映余极限 K.op F]
   证明: ⟨isLimitOfOp (isColimitOfReflects F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitOfReflects, isLimitOfOp
@@ -1920,7 +1920,7 @@ lemma reflectsLimit_of_unop
 
 中文:
 引理 reflectsLimit_of_unop
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsColimit K.leftOp F.unop]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映余极限 K.leftOp F.unop]
   证明: ⟨isLimitOfCoconeLeftOpOfCone _ (isColimitOfReflects F.unop (isColimitCoconeLeftOpOfCone _ hc))⟩
 
 Depends on / 依赖: F.unop, isColimitCoconeLeftOpOfCone, isColimitOfReflects, isLimitOfCoconeLeftOpOfCone
@@ -1940,7 +1940,7 @@ lemma reflectsColimit_op
 
 中文:
 引理 reflectsColimit_op
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [ReflectsLimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [反映极限 K.leftOp F]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfReflects F (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: isColimitOfConeLeftOpOfCocone, isLimitConeLeftOpOfCocone, isLimitOfReflects
@@ -1960,7 +1960,7 @@ lemma reflectsColimit_of_op
 
 中文:
 引理 reflectsColimit_of_op
-  条件: (K : J ⥤ C) (F : C ⥤ D) [ReflectsLimit K.op F.op]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [反映极限 K.op F.op]
   证明: ⟨isColimitOfOp (isLimitOfReflects F.op (IsColimit.op hc))⟩
 
 Depends on / 依赖: F.op, IsColimit, IsColimit.op, isColimitOfOp, isLimitOfReflects
@@ -1979,7 +1979,7 @@ lemma reflectsColimit_leftOp
 
 中文:
 引理 reflectsColimit_leftOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [ReflectsLimit K.leftOp F]
+  条件: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [反映极限 K.leftOp F]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfReflects F (isLimitOfCoconeUnopOfCone _ hc))⟩
 
 Depends on / 依赖: isColimitOfConeLeftOpOfCocone, isLimitOfCoconeUnopOfCone, isLimitOfReflects
@@ -1999,7 +1999,7 @@ lemma reflectsColimit_of_leftOp
 
 中文:
 引理 reflectsColimit_of_leftOp
-  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [ReflectsLimit K.op F.leftOp]
+  条件: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [反映极限 K.op F.leftOp]
   证明: ⟨isColimitOfOp (isLimitOfReflects F.leftOp <| isLimitOfCoconeRightOpOfCone _ hc)⟩
 
 Depends on / 依赖: F.leftOp, isColimitOfOp, isLimitOfCoconeRightOpOfCone, isLimitOfReflects, leftOp
@@ -2019,7 +2019,7 @@ lemma reflectsColimit_rightOp
 
 中文:
 引理 reflectsColimit_rightOp
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [ReflectsLimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [反映极限 K.op F]
   证明: ⟨isColimitOfOp (isLimitOfReflects F <| isLimitOfCoconeRightOpOfCone _ hc)⟩
 
 Depends on / 依赖: isColimitOfOp, isLimitOfCoconeRightOpOfCone, isLimitOfReflects
@@ -2038,7 +2038,7 @@ lemma reflectsColimit_of_rightOp
 
 中文:
 引理 reflectsColimit_of_rightOp
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [ReflectsLimit K.leftOp F.rightOp]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [反映极限 K.leftOp F.rightOp]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfReflects F.rightOp hc.op)⟩
 
 Depends on / 依赖: F.rightOp, hc.op, isColimitOfConeLeftOpOfCocone, isLimitOfReflects, rightOp
@@ -2058,7 +2058,7 @@ lemma reflectsColimit_unop
 
 中文:
 引理 reflectsColimit_unop
-  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsLimit K.op F]
+  条件: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映极限 K.op F]
   证明: ⟨isColimitOfOp (isLimitOfReflects F hc.op)⟩
 
 Depends on / 依赖: hc.op, isColimitOfOp, isLimitOfReflects
@@ -2077,7 +2077,7 @@ lemma reflectsColimit_of_unop
 
 中文:
 引理 reflectsColimit_of_unop
-  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsLimit K.leftOp F.unop]
+  条件: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映极限 K.leftOp F.unop]
   证明: ⟨isColimitOfConeLeftOpOfCocone _ (isLimitOfReflects F.unop (isLimitConeLeftOpOfCocone _ hc))⟩
 
 Depends on / 依赖: F.unop, isColimitOfConeLeftOpOfCocone, isLimitConeLeftOpOfCocone, isLimitOfReflects
@@ -2101,7 +2101,7 @@ lemma reflectsLimitsOfShape_op
 
 中文:
 引理 reflectsLimitsOfShape_op
-  条件: (F : C ⥤ D) [ReflectsColimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ D) [反映形状余极限 Jᵒᵖ F]
   证明: reflectsLimit_op K F
 
 Depends on / 依赖: reflectsLimit_op
@@ -2119,7 +2119,7 @@ lemma reflectsLimitsOfShape_leftOp
 
 中文:
 引理 reflectsLimitsOfShape_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [ReflectsColimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ Dᵒᵖ) [反映形状余极限 Jᵒᵖ F]
   证明: reflectsLimit_leftOp K F
 
 Depends on / 依赖: reflectsLimit_leftOp
@@ -2137,7 +2137,7 @@ lemma reflectsLimitsOfShape_rightOp
 
 中文:
 引理 reflectsLimitsOfShape_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [ReflectsColimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ D) [反映形状余极限 Jᵒᵖ F]
   证明: reflectsLimit_rightOp K F
 
 Depends on / 依赖: reflectsLimit_rightOp
@@ -2155,7 +2155,7 @@ lemma reflectsLimitsOfShape_unop
 
 中文:
 引理 reflectsLimitsOfShape_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsColimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映形状余极限 Jᵒᵖ F]
   证明: reflectsLimit_unop K F
 
 Depends on / 依赖: reflectsLimit_unop
@@ -2173,7 +2173,7 @@ lemma reflectsColimitsOfShape_op
 
 中文:
 引理 reflectsColimitsOfShape_op
-  条件: (F : C ⥤ D) [ReflectsLimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ D) [反映形状极限 Jᵒᵖ F]
   证明: reflectsColimit_op K F
 
 Depends on / 依赖: reflectsColimit_op
@@ -2191,7 +2191,7 @@ lemma reflectsColimitsOfShape_leftOp
 
 中文:
 引理 reflectsColimitsOfShape_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [ReflectsLimitsOfShape Jᵒᵖ F]
+  条件: (F : C ⥤ Dᵒᵖ) [反映形状极限 Jᵒᵖ F]
   证明: reflectsColimit_leftOp K F
 
 Depends on / 依赖: reflectsColimit_leftOp
@@ -2209,7 +2209,7 @@ lemma reflectsColimitsOfShape_rightOp
 
 中文:
 引理 reflectsColimitsOfShape_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [ReflectsLimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ D) [反映形状极限 Jᵒᵖ F]
   证明: reflectsColimit_rightOp K F
 
 Depends on / 依赖: reflectsColimit_rightOp
@@ -2227,7 +2227,7 @@ lemma reflectsColimitsOfShape_unop
 
 中文:
 引理 reflectsColimitsOfShape_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsLimitsOfShape Jᵒᵖ F]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映形状极限 Jᵒᵖ F]
   证明: reflectsColimit_unop K F
 
 Depends on / 依赖: reflectsColimit_unop
@@ -2245,7 +2245,7 @@ lemma reflectsLimitsOfShape_of_op
 
 中文:
 引理 reflectsLimitsOfShape_of_op
-  条件: (F : C ⥤ D) [ReflectsColimitsOfShape Jᵒᵖ F.op]
+  条件: (F : C ⥤ D) [反映形状余极限 Jᵒᵖ F.op]
   证明: reflectsLimit_of_op K F
 
 Depends on / 依赖: reflectsLimit_of_op
@@ -2263,7 +2263,7 @@ lemma reflectsLimitsOfShape_of_leftOp
 
 中文:
 引理 reflectsLimitsOfShape_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [ReflectsColimitsOfShape Jᵒᵖ F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [反映形状余极限 Jᵒᵖ F.leftOp]
   证明: reflectsLimit_of_leftOp K F
 
 Depends on / 依赖: reflectsLimit_of_leftOp
@@ -2281,7 +2281,7 @@ lemma reflectsLimitsOfShape_of_rightOp
 
 中文:
 引理 reflectsLimitsOfShape_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [ReflectsColimitsOfShape Jᵒᵖ F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [反映形状余极限 Jᵒᵖ F.rightOp]
   证明: reflectsLimit_of_rightOp K F
 
 Depends on / 依赖: reflectsLimit_of_rightOp
@@ -2299,7 +2299,7 @@ lemma reflectsLimitsOfShape_of_unop
 
 中文:
 引理 reflectsLimitsOfShape_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsColimitsOfShape Jᵒᵖ F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映形状余极限 Jᵒᵖ F.unop]
   证明: reflectsLimit_of_unop K F
 
 Depends on / 依赖: reflectsLimit_of_unop
@@ -2317,7 +2317,7 @@ lemma reflectsColimitsOfShape_of_op
 
 中文:
 引理 reflectsColimitsOfShape_of_op
-  条件: (F : C ⥤ D) [ReflectsLimitsOfShape Jᵒᵖ F.op]
+  条件: (F : C ⥤ D) [反映形状极限 Jᵒᵖ F.op]
   证明: reflectsColimit_of_op K F
 
 Depends on / 依赖: reflectsColimit_of_op
@@ -2335,7 +2335,7 @@ lemma reflectsColimitsOfShape_of_leftOp
 
 中文:
 引理 reflectsColimitsOfShape_of_leftOp
-  条件: (F : C ⥤ Dᵒᵖ) [ReflectsLimitsOfShape Jᵒᵖ F.leftOp]
+  条件: (F : C ⥤ Dᵒᵖ) [反映形状极限 Jᵒᵖ F.leftOp]
   证明: reflectsColimit_of_leftOp K F
 
 Depends on / 依赖: reflectsColimit_of_leftOp
@@ -2353,7 +2353,7 @@ lemma reflectsColimitsOfShape_of_rightOp
 
 中文:
 引理 reflectsColimitsOfShape_of_rightOp
-  条件: (F : Cᵒᵖ ⥤ D) [ReflectsLimitsOfShape Jᵒᵖ F.rightOp]
+  条件: (F : Cᵒᵖ ⥤ D) [反映形状极限 Jᵒᵖ F.rightOp]
   证明: reflectsColimit_of_rightOp K F
 
 Depends on / 依赖: reflectsColimit_of_rightOp
@@ -2371,7 +2371,7 @@ lemma reflectsColimitsOfShape_of_unop
 
 中文:
 引理 reflectsColimitsOfShape_of_unop
-  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [ReflectsLimitsOfShape Jᵒᵖ F.unop]
+  条件: (F : Cᵒᵖ ⥤ Dᵒᵖ) [反映形状极限 Jᵒᵖ F.unop]
   证明: reflectsColimit_of_unop K F
 
 Depends on / 依赖: reflectsColimit_of_unop

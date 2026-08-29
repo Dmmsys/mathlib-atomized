@@ -103,7 +103,7 @@ definition spanCoeffs
 
 中文:
 定义 spanCoeffs
-  签名: : Ideal (MvPolynomial (Vars k) k)
+  签名: : 理想 (多元多项式 (Vars k) k)
   定义体: Ideal.span Set.range fun fn : Monics k × Nat => (subProdXSubC fn.1).coeff fn.2
 
 Depends on / 依赖: Ideal.span, Monics, Set.range, subProdXSubC
@@ -125,7 +125,7 @@ definition finEquivRoots
 
 中文:
 定义 finEquivRoots
-  签名: {K} [Field K] [DecidableEq K] {i : k ->+* K} {f : Monics k}
+  签名: {K} [域 K] [DecidableEq K] {i : k ->+* K} {f : Monics k}
   定义体: .symm Finset.equivFinOfCardEq by
     rwa [splits_iff_card_roots,
       ← Multiset.card_toEnumFinset, f.2.natDegree_map] at hf
@@ -149,7 +149,7 @@ lemma Monics.splits_finsetProd
 
 中文:
 引理 Monics.splits_finsetProd
-  条件: {s : Finset (Monics k)} {f : Monics k} (hf : f in s)
+  条件: {s : 有限集 (Monics k)} {f : Monics k} (hf : f in s)
   证明: (splits_prod_iff fun j _ => map_ne_zero j.2.ne_zero).mp
     (by simpa [Polynomial.map_prod] using SplittingField.splits (∏ f in s, f.1)) f hf
 
@@ -172,7 +172,7 @@ definition toSplittingField
 
 中文:
 定义 toSplittingField
-  签名: (s : Finset (Monics k))
+  签名: (s : 有限集 (Monics k))
   定义体: MvPolynomial.aeval fun fi =>
     if hf : fi.1 in s then (finEquivRoots (Monics.splits_finsetProd hf) fi.2).1.1 else 37
 
@@ -199,7 +199,7 @@ theorem toSplittingField_coeff
 
 中文:
 定理 toSplittingField_coeff
-  条件: {s : Finset (Monics k)} {f} (h : f in s) (n)
+  条件: {s : 有限集 (Monics k)} {f} (h : f in s) (n)
   证明: by
   classical
   simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
@@ -268,7 +268,7 @@ definition maxIdeal
 
 中文:
 定义 maxIdeal
-  签名: : Ideal (MvPolynomial (Vars k) k)
+  签名: : 理想 (多元多项式 (Vars k) k)
   定义体: Classical.choose Ideal.exists_le_maximal _ spanCoeffs_ne_top k
 
 Depends on / 依赖: Classical, Classical.choose, Ideal.exists_le_maximal, exists_le_maximal, spanCoeffs_ne_top
@@ -286,7 +286,7 @@ instance maxIdeal.isMaximal
 
 中文:
 实例 maxIdeal.isMaximal
-  签名: : (maxIdeal k).IsMaximal
+  签名: : (maxIdeal k).是极大
   定义体: (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).1
 
 Depends on / 依赖: Classical, Classical.choose_spec, Ideal.exists_le_maximal, choose_spec, exists_le_maximal, spanCoeffs_ne_top
@@ -327,7 +327,7 @@ definition AlgebraicClosure
   body: MvPolynomial (Vars k) k ⧸ maxIdeal k
 
 中文:
-定义 AlgebraicClosure
+定义 代数闭包
   签名: : 类型u
   定义体: MvPolynomial (Vars k) k ⧸ maxIdeal k
 
@@ -355,7 +355,7 @@ __ : CommRing (AlgebraicClosure k) := inferInstanceAs CommRing (_ ⧸ _)
 
 中文:
 实例 :
-  签名: CommRing (AlgebraicClosure k)
+  签名: 交换环 (代数闭包 k)
   定义体: letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Nat); (· • · )
   zsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Int); (· • · )
 __ : CommRing (AlgebraicClosure k) := inferInstanceAs CommRing (_ ⧸ _)
@@ -377,7 +377,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: {R : 类型} [CommSemiring R] [Algebra R k]
+  签名: {R : 类型} [交换半环 R] [代数 R k]
   定义体: inferInstanceAs Algebra R (_ ⧸ _)
 
 Depends on / 依赖: Algebra
@@ -400,7 +400,7 @@ instance instGroupWithZero
 
 中文:
 实例 instGroupWithZero
-  签名: : GroupWithZero (AlgebraicClosure k)
+  签名: : 带零群 (代数闭包 k)
   定义体: inferInstanceAs GroupWithZero (_ ⧸ _)
 
 Depends on / 依赖: GroupWithZero
@@ -426,7 +426,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field (AlgebraicClosure k) where
+  签名: : 域 (代数闭包 k) where
   定义体: instCommRing _
   __ := instGroupWithZero _
   nnqsmul := (· • ·)
@@ -504,7 +504,7 @@ IsIntegral.isAlgebraic by
 
 中文:
 实例 isAlgebraic
-  签名: : Algebra.IsAlgebraic k (AlgebraicClosure k)
+  签名: : 代数.是代数 k (代数闭包 k)
   定义体: ⟨fun z =>
 IsIntegral.isAlgebraic by
       let ⟨p, hp⟩ := Ideal.Quotient.mk_surjective z
@@ -548,7 +548,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAlgClosure k (AlgebraicClosure k)
+  签名: 是AlgClosure k (代数闭包 k)
   定义体: .of_splits fun f hf _ => by
   rw [show f = (⟨f]; rw [hf⟩ : Monics k) from rfl]; rw [Monics.map_eq_prod]
   exact Splits.prod fun _ _ => (Splits.X_sub_C _).map _
@@ -569,7 +569,7 @@ instance isAlgClosed
 
 中文:
 实例 isAlgClosed
-  签名: : IsAlgClosed (AlgebraicClosure k)
+  签名: : 是代数闭 (代数闭包 k)
   定义体: IsAlgClosure.isAlgClosed k
 
 Depends on / 依赖: IsAlgClosure, IsAlgClosure.isAlgClosed, isAlgClosed
@@ -585,8 +585,8 @@ instance [CharZero
   body: charZero_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k)))
 
 中文:
-实例 [CharZero
-  签名: k] : CharZero (AlgebraicClosure k)
+实例 [特征零
+  签名: k] : 特征零 (代数闭包 k)
   定义体: charZero_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k)))
 
 Depends on / 依赖: AlgebraicClosure, RingHom, RingHom.injective, algebraMap, charZero_of_injective_algebraMap, injective
@@ -617,8 +617,8 @@ instance [Algebra.IsAlgebraic
   body: ⟨AlgebraicClosure.isAlgClosed E, Algebra.IsAlgebraic.trans K E (AlgebraicClosure E)⟩
 
 中文:
-实例 [Algebra.IsAlgebraic
-  签名: K E] : IsAlgClosure K (AlgebraicClosure E)
+实例 [代数.是代数
+  签名: K E] : 是AlgClosure K (代数闭包 E)
   定义体: ⟨AlgebraicClosure.isAlgClosed E, Algebra.IsAlgebraic.trans K E (AlgebraicClosure E)⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.trans, AlgebraicClosure, AlgebraicClosure.isAlgClosed, IsAlgebraic, isAlgClosed
@@ -637,7 +637,7 @@ theorem AdjoinSimple.normal_algebraicClosure
 
 中文:
 定理 AdjoinSimple.normal_algebraicClosure
-  条件: {x : L} (hx : Is整数egral K x)
+  条件: {x : L} (hx : 是整 K x)
   证明: have : Algebra.IsAlgebraic K K⟮x⟯ := isAlgebraic_adjoin_simple hx
   IsAlgClosure.normal _ _
 
@@ -659,7 +659,7 @@ theorem AdjoinDouble.normal_algebraicClosure
 
 中文:
 定理 AdjoinDouble.normal_algebraicClosure
-  结论: {x y : L} (hx : Is整数egral K x)
+  结论: {x y : L} (hx : 是整 K x)
   证明: have : Algebra.IsAlgebraic K K⟮x, y⟯ := isAlgebraic_adjoin_pair hx hy
   IsAlgClosure.normal _ _
 

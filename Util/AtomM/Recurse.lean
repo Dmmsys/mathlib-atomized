@@ -48,7 +48,7 @@ structure Recurse.Config
     - contextual : = false
 
 中文:
-结构 Recurse.Config
+结构 Recurse.余nfig
   参数: where
   公理与运算 (3 个):
     - red : = TransparencyMode.reducible
@@ -80,10 +80,10 @@ structure Recurse.Context
     - simp : Simp.Result -> MetaM Simp.Result
 
 中文:
-结构 Recurse.Context
+结构 Recurse.余ntext
   参数: where
   公理与运算 (2 个):
-    - ctx : Simp.Context
+    - ctx : Simp.余ntext
     - simp : Simp.Result -> MetaM Simp.Result
 -/
 structure Recurse.Context where
@@ -207,7 +207,7 @@ definition recurse
 
 中文:
 定义 recurse
-  签名: (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : 布尔)
+  签名: (s : IO.Ref State) (cfg : Recurse.余nfig) (wellBehavedDischarge : 布尔值)
   定义体: do
   RecurseM.run s cfg wellBehavedDischarge eval simp
  onSubexpressions eval tgt wellBehavedDischarge

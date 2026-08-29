@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedCategory SSet.{v} (SimplicialObject D)
+  签名: Enriched范畴 SSet.{v} (SimplicialObject D)
   定义体: inferInstanceAs (EnrichedCategory (_ ⥤ Type v) (_ ⥤ D))
 
 Depends on / 依赖: EnrichedCategory

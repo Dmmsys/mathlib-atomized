@@ -74,8 +74,8 @@ definition AddMonoidAlgebra.toDirectSum
   body: f.coeff.toDFinsupp
 
 中文:
-定义 AddMonoidAlgebra.toDirectSum
-  签名: [Semiring M] (f : AddMonoidAlgebra M ι)
+定义 加法幺半群代数.toDirectSum
+  签名: [半环 M] (f : 加法幺半群代数 M ι)
   定义体: f.coeff.toDFinsupp
 
 Depends on / 依赖: f.coeff.toDFinsupp, toDFinsupp
@@ -98,7 +98,7 @@ lemma AddMonoidAlgebra.toDirectSum_single
   proof: Finsupp.toDFinsupp_single i m
 
 中文:
-引理 AddMonoidAlgebra.toDirectSum_single
+引理 加法幺半群代数.toDirectSum_single
   条件: (i : ι) (m : M)
   结论: toDirectSum (single i m) = .of _ i m
   证明: Finsupp.toDFinsupp_single i m
@@ -121,7 +121,7 @@ definition DirectSum.toAddMonoidAlgebra
 @[simp]
 
 中文:
-定义 DirectSum.toAddMonoidAlgebra
+定义 直和.toAddMonoidAlgebra
   签名: (f : ⨁ _ : ι, M)
   定义体: .ofCoeff f.toFinsupp
 
@@ -144,7 +144,7 @@ theorem DirectSum.toAddMonoidAlgebra_of
 @[simp]
 
 中文:
-定理 DirectSum.toAddMonoidAlgebra_of
+定理 直和.toAddMonoidAlgebra_of
   条件: (i : ι) (m : M)
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_single i m
@@ -169,8 +169,8 @@ theorem AddMonoidAlgebra.toDirectSum_toAddMonoidAlgebra
 @[simp]
 
 中文:
-定理 AddMonoidAlgebra.toDirectSum_toAddMonoidAlgebra
-  条件: (f : AddMonoidAlgebra M ι)
+定理 加法幺半群代数.toDirectSum_toAddMonoidAlgebra
+  条件: (f : 加法幺半群代数 M ι)
   证明: by ext : 1; exact Finsupp.toDFinsupp_toFinsupp _
 
 @[simp]
@@ -190,7 +190,7 @@ theorem DirectSum.toAddMonoidAlgebra_toDirectSum
   proof: (DFinsupp.toFinsupp_toDFinsupp (show Π₀ _ : ι, M from f) :)
 
 中文:
-定理 DirectSum.toAddMonoidAlgebra_toDirectSum
+定理 直和.toAddMonoidAlgebra_toDirectSum
   条件: (f : ⨁ _ : ι, M)
   证明: (DFinsupp.toFinsupp_toDFinsupp (show Π₀ _ : ι, M from f) :)
 
@@ -225,8 +225,8 @@ theorem toDirectSum_zero
 
 中文:
 定理 toDirectSum_zero
-  条件: [Semiring M]
-  结论: (0 : AddMonoidAlgebra M ι).toDirectSum = 0
+  条件: [半环 M]
+  结论: (0 : 加法幺半群代数 M ι).toDirectSum = 0
   证明: Finsupp.toDFinsupp_zero
 
 @[simp]
@@ -249,7 +249,7 @@ theorem toDirectSum_add
 
 中文:
 定理 toDirectSum_add
-  条件: [Semiring M] (f g : AddMonoidAlgebra M ι)
+  条件: [半环 M] (f g : 加法幺半群代数 M ι)
   证明: Finsupp.toDFinsupp_add _ _
 
 @[simp]
@@ -273,7 +273,7 @@ theorem toDirectSum_natCast
 
 中文:
 定理 toDirectSum_natCast
-  条件: [DecidableEq ι] [AddMonoid ι] [Semiring M] (n : 自然数)
+  条件: [DecidableEq ι] [加法幺半群 ι] [半环 M] (n : 自然数)
   证明: Finsupp.toDFinsupp_single _ _
 
 @[simp]
@@ -296,8 +296,8 @@ theorem toDirectSum_ofNat
 @[simp]
 
 中文:
-定理 toDirectSum_ofNat
-  条件: [DecidableEq ι] [AddMonoid ι] [Semiring M] (n : 自然数) [n.AtLeastTwo]
+定理 toDirectSum_of自然数
+  条件: [DecidableEq ι] [加法幺半群 ι] [半环 M] (n : 自然数) [n.AtLeastTwo]
   证明: Finsupp.toDFinsupp_single _ _
 
 @[simp]
@@ -321,7 +321,7 @@ theorem toDirectSum_sub
 
 中文:
 定理 toDirectSum_sub
-  条件: [Ring M] (f g : AddMonoidAlgebra M ι)
+  条件: [环 M] (f g : 加法幺半群代数 M ι)
   证明: Finsupp.toDFinsupp_sub _ _
 
 @[simp]
@@ -345,7 +345,7 @@ theorem toDirectSum_neg
 
 中文:
 定理 toDirectSum_neg
-  条件: [Ring M] (f : AddMonoidAlgebra M ι)
+  条件: [环 M] (f : 加法幺半群代数 M ι)
   证明: Finsupp.toDFinsupp_neg _
 
 @[simp]
@@ -369,7 +369,7 @@ theorem toDirectSum_intCast
 
 中文:
 定理 toDirectSum_intCast
-  条件: [DecidableEq ι] [AddMonoid ι] [Ring M] (z : 整数)
+  条件: [DecidableEq ι] [加法幺半群 ι] [环 M] (z : 整数)
   证明: Finsupp.toDFinsupp_single _ _
 
 @[simp]
@@ -393,7 +393,7 @@ theorem toDirectSum_one
 
 中文:
 定理 toDirectSum_one
-  条件: [DecidableEq ι] [Zero ι] [Semiring M]
+  条件: [DecidableEq ι] [零 ι] [半环 M]
   证明: Finsupp.toDFinsupp_single _ _
 
 @[simp]
@@ -424,7 +424,7 @@ theorem toDirectSum_mul
 
 中文:
 定理 toDirectSum_mul
-  条件: [DecidableEq ι] [AddMonoid ι] [Semiring M] (f g : AddMonoidAlgebra M ι)
+  条件: [DecidableEq ι] [加法幺半群 ι] [半环 M] (f g : 加法幺半群代数 M ι)
   证明: by
   let to_hom : AddMonoidAlgebra M ι ->+ ⨁ _ : ι, M :=
   { toFun := toDirectSum
@@ -470,7 +470,7 @@ theorem toAddMonoidAlgebra_zero
 
 中文:
 定理 toAddMonoidAlgebra_zero
-  条件: [Semiring M] [对任意 m : M, Decidable (m != 0)]
+  条件: [半环 M] [对任意 m : M, 可判定 (m != 0)]
   证明: by simp [toAddMonoidAlgebra]
 
 @[simp]
@@ -494,7 +494,7 @@ theorem toAddMonoidAlgebra_add
 
 中文:
 定理 toAddMonoidAlgebra_add
-  条件: [Semiring M] [对任意 m : M, Decidable (m != 0)] (f g : ⨁ _ : ι, M)
+  条件: [半环 M] [对任意 m : M, 可判定 (m != 0)] (f g : ⨁ _ : ι, M)
   证明: by
   ext; simp [toAddMonoidAlgebra]
 
@@ -520,7 +520,7 @@ theorem toAddMonoidAlgebra_natCast
 
 中文:
 定理 toAddMonoidAlgebra_natCast
-  条件: [AddMonoid ι] [Semiring M] [对任意 m : M, Decidable (m != 0)] (n : 自然数)
+  条件: [加法幺半群 ι] [半环 M] [对任意 m : M, 可判定 (m != 0)] (n : 自然数)
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_single ..
 
@@ -544,8 +544,8 @@ theorem toAddMonoidAlgebra_ofNat
 @[simp]
 
 中文:
-定理 toAddMonoidAlgebra_ofNat
-  结论: [AddMonoid ι] [Semiring M] [对任意 m : M, Decidable (m != 0)] (n : 自然数)
+定理 toAddMonoidAlgebra_of自然数
+  结论: [加法幺半群 ι] [半环 M] [对任意 m : M, 可判定 (m != 0)] (n : 自然数)
   证明: toAddMonoidAlgebra_natCast _
 
 @[simp]
@@ -571,7 +571,7 @@ theorem toAddMonoidAlgebra_sub
 
 中文:
 定理 toAddMonoidAlgebra_sub
-  条件: [Ring M] [对任意 m : M, Decidable (m != 0)] (f g : ⨁ _ : ι, M)
+  条件: [环 M] [对任意 m : M, 可判定 (m != 0)] (f g : ⨁ _ : ι, M)
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_sub ..
 
@@ -597,7 +597,7 @@ theorem toAddMonoidAlgebra_neg
 
 中文:
 定理 toAddMonoidAlgebra_neg
-  条件: [Ring M] [对任意 m : M, Decidable (m != 0)] (f : ⨁ _ : ι, M)
+  条件: [环 M] [对任意 m : M, 可判定 (m != 0)] (f : ⨁ _ : ι, M)
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_neg ..
 
@@ -623,7 +623,7 @@ theorem toAddMonoidAlgebra_intCast
 
 中文:
 定理 toAddMonoidAlgebra_intCast
-  条件: [AddMonoid ι] [Ring M] [对任意 m : M, Decidable (m != 0)] (z : 整数)
+  条件: [加法幺半群 ι] [环 M] [对任意 m : M, 可判定 (m != 0)] (z : 整数)
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_single ..
 
@@ -649,7 +649,7 @@ theorem toAddMonoidAlgebra_one
 
 中文:
 定理 toAddMonoidAlgebra_one
-  条件: [Zero ι] [Semiring M] [对任意 m : M, Decidable (m != 0)]
+  条件: [零 ι] [半环 M] [对任意 m : M, 可判定 (m != 0)]
   证明: by
   ext : 1; exact DFinsupp.toFinsupp_single ..
 
@@ -676,7 +676,7 @@ theorem toAddMonoidAlgebra_mul
 
 中文:
 定理 toAddMonoidAlgebra_mul
-  结论: [AddMonoid ι] [Semiring M]
+  结论: [加法幺半群 ι] [半环 M]
   证明: by
   apply_fun AddMonoidAlgebra.toDirectSum
   · simp
@@ -716,7 +716,7 @@ definition addMonoidAlgebraEquivDirectSum
 
 中文:
 定义 addMonoidAlgebraEquivDirectSum
-  签名: [DecidableEq ι] [Semiring M] [对任意 m : M, Decidable (m != 0)]
+  签名: [DecidableEq ι] [半环 M] [对任意 m : M, 可判定 (m != 0)]
   定义体: AddMonoidAlgebra.toDirectSum
   invFun := DirectSum.toAddMonoidAlgebra
 
@@ -740,7 +740,7 @@ definition addMonoidAlgebraAddEquivDirectSum
 
 中文:
 定义 addMonoidAlgebraAddEquivDirectSum
-  签名: [DecidableEq ι] [Semiring M] [对任意 m : M, Decidable (m != 0)]
+  签名: [DecidableEq ι] [半环 M] [对任意 m : M, 可判定 (m != 0)]
   定义体: addMonoidAlgebraEquivDirectSum
   map_add' := AddMonoidAlgebra.toDirectSum_add
 
@@ -766,7 +766,7 @@ definition addMonoidAlgebraRingEquivDirectSum
 
 中文:
 定义 addMonoidAlgebraRingEquivDirectSum
-  签名: [DecidableEq ι] [AddMonoid ι] [Semiring M]
+  签名: [DecidableEq ι] [加法幺半群 ι] [半环 M]
   定义体: { (addMonoidAlgebraAddEquivDirectSum : AddMonoidAlgebra M ι ≃+ ⨁ _ : ι, M) with
     toFun := AddMonoidAlgebra.toDirectSum
     invFun := DirectSum.toAddMonoidAlgebra
@@ -798,7 +798,7 @@ definition addMonoidAlgebraAlgEquivDirectSum
 
 中文:
 定义 addMonoidAlgebraAlgEquivDirectSum
-  签名: [DecidableEq ι] [AddMonoid ι] [CommSemiring R] [Semiring A]
+  签名: [DecidableEq ι] [加法幺半群 ι] [交换半环 R] [半环 A]
   定义体: { (addMonoidAlgebraRingEquivDirectSum : AddMonoidAlgebra A ι ≃+* ⨁ _ : ι, A) with
     toFun := AddMonoidAlgebra.toDirectSum
     invFun := DirectSum.toAddMonoidAlgebra
@@ -828,8 +828,8 @@ theorem AddMonoidAlgebra.toDirectSum_pow
 @[simp]
 
 中文:
-定理 AddMonoidAlgebra.toDirectSum_pow
-  结论: [DecidableEq ι] [AddMonoid ι] [Semiring M]
+定理 加法幺半群代数.toDirectSum_pow
+  结论: [DecidableEq ι] [加法幺半群 ι] [半环 M]
   证明: by
   classical exact map_pow addMonoidAlgebraRingEquivDirectSum f n
 
@@ -853,8 +853,8 @@ theorem DirectSum.toAddMonoidAlgebra_pow
   exact map_pow addMonoidAlgebraRingEquivDirectSum.symm f n
 
 中文:
-定理 DirectSum.toAddMonoidAlgebra_pow
-  结论: [DecidableEq ι] [AddMonoid ι] [Semiring M]
+定理 直和.toAddMonoidAlgebra_pow
+  结论: [DecidableEq ι] [加法幺半群 ι] [半环 M]
   证明: by
   exact map_pow addMonoidAlgebraRingEquivDirectSum.symm f n
 

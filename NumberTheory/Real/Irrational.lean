@@ -105,9 +105,9 @@ theorem exists_rat_of_not_irrational
   grind [Irrational]
 
 中文:
-定理 exists_rat_of_not_irrational
+定理 存在_rat_of_not_irrational
   条件: {x : 实数} (hx : ¬ Irrational x)
-  结论: 存在 (q : Rat), x = q
+  结论: 存在 (q : 有理数), x = q
   证明: by
   grind [Irrational]
 
@@ -128,8 +128,8 @@ theorem Transcendental.irrational
   exact tr (isAlgebraic_algebraMap a)
 
 中文:
-定理 Transcendental.irrational
-  条件: {r : 实数} (tr : Transcendental Rat r)
+定理 超越.irrational
+  条件: {r : 实数} (tr : 超越 有理数 r)
   结论: Irrational r
   证明: by
   rintro ⟨a, rfl⟩
@@ -245,7 +245,7 @@ theorem irrational_sqrt_of_multiplicity_odd
 
 中文:
 定理 irrational_sqrt_of_multiplicity_odd
-  结论: (m : 整数) (hm : 0 < m) (p : 自然数) [hp : Fact p.Prime]
+  结论: (m : 整数) (hm : 0 < m) (p : 自然数) [hp : Fact p.素]
   证明: @irrational_nrt_of_n_not_dvd_multiplicity _ 2 _ (Ne.symm (ne_of_lt hm)) p hp
     (sq_sqrt (Int.cast_nonneg hm.le)) (by rw [Hpv]; exact one_ne_zero)
 
@@ -303,7 +303,7 @@ theorem irrational_sqrt_ratCast_iff_of_nonneg
 
 中文:
 定理 irrational_sqrt_ratCast_iff_of_nonneg
-  条件: {q : Rat} (hq : 0 <= q)
+  条件: {q : 有理数} (hq : 0 <= q)
   证明: by
   refine Iff.not (?_ : Exists _ ↔ Exists _)
   constructor
@@ -339,7 +339,7 @@ theorem irrational_sqrt_ratCast_iff
 
 中文:
 定理 irrational_sqrt_ratCast_iff
-  条件: {q : Rat}
+  条件: {q : 有理数}
   证明: by
   obtain hq | hq := le_or_gt 0 q
   · simp_rw [irrational_sqrt_ratCast_iff_of_nonneg hq, and_iff_left hq]
@@ -428,7 +428,7 @@ theorem irrational_sqrt_ofNat_iff
   proof: irrational_sqrt_natCast_iff
 
 中文:
-定理 irrational_sqrt_ofNat_iff
+定理 irrational_sqrt_of自然数_iff
   条件: {n : 自然数} [n.AtLeastTwo]
   证明: irrational_sqrt_natCast_iff
 
@@ -448,8 +448,8 @@ theorem Nat.Prime.irrational_sqrt
   proof: irrational_sqrt_natCast_iff.mpr hp.not_isSquare
 
 中文:
-定理 Nat.Prime.irrational_sqrt
-  条件: {p : 自然数} (hp : 自然数.Prime p)
+定理 自然数.素.irrational_sqrt
+  条件: {p : 自然数} (hp : 自然数.素 p)
   结论: Irrational (√p)
   证明: irrational_sqrt_natCast_iff.mpr hp.not_isSquare
 
@@ -521,7 +521,7 @@ theorem ne_rat
 
 中文:
 定理 ne_rat
-  条件: (h : Irrational x) (q : Rat)
+  条件: (h : Irrational x) (q : 有理数)
   结论: x != q
   证明: fun hq => h ⟨q, hq.symm⟩
 
@@ -622,7 +622,7 @@ theorem ne_ofNat
   proof: h.ne_nat n
 
 中文:
-定理 ne_ofNat
+定理 ne_of自然数
   条件: (h : Irrational x) (n : 自然数) [n.AtLeastTwo]
   结论: x != of自然数(n)
   证明: h.ne_nat n
@@ -645,8 +645,8 @@ theorem Rat.not_irrational
 @[simp]
 
 中文:
-定理 Rat.not_irrational
-  条件: (q : Rat)
+定理 有理数.not_irrational
+  条件: (q : 有理数)
   结论: ¬Irrational q
   证明: fun h => h ⟨q, rfl⟩
 
@@ -667,7 +667,7 @@ theorem Int.not_irrational
 @[simp]
 
 中文:
-定理 Int.not_irrational
+定理 整数.not_irrational
   条件: (m : 整数)
   结论: ¬Irrational m
   证明: fun h => h.ne_int m rfl
@@ -689,7 +689,7 @@ theorem Nat.not_irrational
   proof: fun h => h.ne_nat m rfl
 
 中文:
-定理 Nat.not_irrational
+定理 自然数.not_irrational
   条件: (m : 自然数)
   结论: ¬Irrational m
   证明: fun h => h.ne_nat m rfl
@@ -708,7 +708,7 @@ theorem not_irrational_ofNat
   proof: n.not_irrational
 
 中文:
-定理 not_irrational_ofNat
+定理 not_irrational_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ¬Irrational of自然数(n)
   证明: n.not_irrational
@@ -1329,7 +1329,7 @@ theorem mul_ratCast
 
 中文:
 定理 mul_ratCast
-  条件: (h : Irrational x) {q : Rat} (hq : q != 0)
+  条件: (h : Irrational x) {q : 有理数} (hq : q != 0)
   结论: Irrational (x * q)
   证明: of_mul_ratCast q⁻¹ by rwa [mul_assoc, ← cast_mul, mul_inv_cancel₀ hq, cast_one, mul_one]
 
@@ -1365,7 +1365,7 @@ theorem ratCast_mul
 
 中文:
 定理 ratCast_mul
-  条件: (h : Irrational x) {q : Rat} (hq : q != 0)
+  条件: (h : Irrational x) {q : 有理数} (hq : q != 0)
   结论: Irrational (q * x)
   证明: mul_comm x q ▸ h.mul_ratCast hq
 
@@ -1643,7 +1643,7 @@ theorem ratCast_div
 
 中文:
 定理 ratCast_div
-  条件: (h : Irrational x) {q : Rat} (hq : q != 0)
+  条件: (h : Irrational x) {q : 有理数} (hq : q != 0)
   结论: Irrational (q / x)
   证明: h.inv.ratCast_mul hq
 
@@ -1664,7 +1664,7 @@ theorem div_ratCast
 
 中文:
 定理 div_ratCast
-  条件: (h : Irrational x) {q : Rat} (hq : q != 0)
+  条件: (h : Irrational x) {q : 有理数} (hq : q != 0)
   结论: Irrational (x / q)
   证明: by
   rw [div_eq_mul_inv]; rw [← cast_inv]
@@ -2542,7 +2542,7 @@ theorem exists_irrational_btwn
   ⟨q + √2, irrational_sqrt_two.ratCast_add _, sub_lt_iff_lt_add.mp hq1, lt_sub_iff_add_lt.mp hq2⟩
 
 中文:
-定理 exists_irrational_btwn
+定理 存在_irrational_btwn
   条件: {x y : 实数} (h : x < y)
   结论: 存在 r, Irrational r ∧ x < r ∧ r < y
   证明: let ⟨q, ⟨hq1, hq2⟩⟩ := exists_rat_btwn ((sub_lt_sub_iff_right (√2)).mpr h)

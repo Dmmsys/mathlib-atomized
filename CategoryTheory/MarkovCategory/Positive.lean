@@ -60,10 +60,10 @@ class PositiveCategory
     - copy_comp_natural({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : Deterministic (f ≫ g)]) : f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
 
 中文:
-类 PositiveCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory C]
+类 正范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴 C]
   公理与运算 (1 个):
-    - copy_comp_natural({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : Deterministic (f ≫ g)]) : f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
+    - copy_comp_natural({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : 确定性 (f ≫ g)]) : f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
 -/
 class PositiveCategory (C : Type u) [Category.{v} C] [MonoidalCategory C] extends
     MarkovCategory C where

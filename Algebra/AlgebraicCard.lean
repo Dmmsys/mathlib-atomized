@@ -41,7 +41,7 @@ theorem infinite_of_charZero
 
 中文:
 定理 infinite_of_charZero
-  结论: (R A : 类型) [CommRing R] [Ring A] [Algebra R A]
+  结论: (R A : 类型) [交换环 R] [环 A] [代数 R A]
   证明: by
   let := MulActionWithZero.nontrivial R A
   exact infinite_of_injective_forall_mem Nat.cast_injective isAlgebraic_natCast
@@ -63,7 +63,7 @@ theorem aleph0_le_cardinalMk_of_charZero
 
 中文:
 定理 aleph0_le_cardinalMk_of_charZero
-  结论: (R A : 类型) [CommRing R] [Ring A]
+  结论: (R A : 类型) [交换环 R] [环 A]
   证明: infinite_iff.1 (Set.infinite_coe_iff.2 <| infinite_of_charZero R A)
 
 Depends on / 依赖: Set.infinite_coe_iff, infinite_coe_iff, infinite_iff, infinite_of_charZero
@@ -147,7 +147,7 @@ theorem cardinalMk_lift_of_infinite
 
 中文:
 定理 cardinalMk_lift_of_infinite
-  条件: [Infinite R]
+  条件: [无限 R]
   证明: ((cardinalMk_lift_le_max R A).trans_eq (max_eq_left <| aleph0_le_mk _)).antisymm
     lift_mk_le'.2 ⟨⟨fun x => ⟨algebraMap R A x, isAlgebraic_algebraMap _⟩, fun _ _ h =>
       FaithfulSMul.algebraMap_injective R A (Subtype.ext_iff.1 h)⟩⟩
@@ -178,7 +178,7 @@ theorem countable
 
 中文:
 定理 countable
-  结论: Set.Countable { x : A | IsAlgebraic R x }
+  结论: 集合.可数 { x : A | 是代数 R x }
   证明: by
   rw [← le_aleph0_iff_set_countable]; rw [← lift_le_aleph0]
   apply (cardinalMk_lift_le_max R A).trans
@@ -202,7 +202,7 @@ theorem cardinalMk_of_countable_of_charZero
 
 中文:
 定理 cardinalMk_of_countable_of_charZero
-  条件: [CharZero A]
+  条件: [特征零 A]
   证明: (Algebraic.countable R A).le_aleph0.antisymm (aleph0_le_cardinalMk_of_charZero R A)
 
 Depends on / 依赖: Algebraic, Algebraic.countable, aleph0_le_cardinalMk_of_charZero, antisymm, countable, le_aleph0, le_aleph0.antisymm
@@ -232,7 +232,7 @@ theorem cardinalMk_le_mul
 
 中文:
 定理 cardinalMk_le_mul
-  结论: #{ x : A // IsAlgebraic R x } <= #R[X] * ℵ₀
+  结论: #{ x : A // 是代数 R x } <= #R[X] * ℵ₀
   证明: by
   rw [← lift_id #_]; rw [← lift_id #R[X]]
   exact cardinalMk_lift_le_mul R A
@@ -260,7 +260,7 @@ theorem cardinalMk_le_max
 
 中文:
 定理 cardinalMk_le_max
-  结论: #{ x : A // IsAlgebraic R x } <= max #R ℵ₀
+  结论: #{ x : A // 是代数 R x } <= 最大值 #R ℵ₀
   证明: by
   rw [← lift_id #_]; rw [← lift_id #R]
   exact cardinalMk_lift_le_max R A
@@ -285,8 +285,8 @@ theorem cardinalMk_of_infinite
 
 中文:
 定理 cardinalMk_of_infinite
-  条件: [Infinite R]
-  结论: #{ x : A // IsAlgebraic R x } = #R
+  条件: [无限 R]
+  结论: #{ x : A // 是代数 R x } = #R
   证明: lift_inj.1 cardinalMk_lift_of_infinite R A
 
 Depends on / 依赖: cardinalMk_lift_of_infinite, lift_inj

@@ -44,7 +44,7 @@ theorem sup_product_left
 
 中文:
 定理 sup_product_left
-  条件: (s : Finset β) (t : Finset γ) (f : β × γ -> α)
+  条件: (s : 有限集 β) (t : 有限集 γ) (f : β × γ -> α)
   证明: eq_of_forall_ge_iff fun a => by simp [@forall_comm _ γ]
 
 @[to_dual inf_product_right]
@@ -67,7 +67,7 @@ theorem sup_product_right
 
 中文:
 定理 sup_product_right
-  条件: (s : Finset β) (t : Finset γ) (f : β × γ -> α)
+  条件: (s : 有限集 β) (t : 有限集 γ) (f : β × γ -> α)
   证明: by
   rw [sup_product_left]; rw [Finset.sup_comm]
 
@@ -96,7 +96,7 @@ lemma sup_prodMap
 
 中文:
 引理 sup_prodMap
-  条件: (hs : s.Nonempty) (ht : t.Nonempty) (f : ι -> α) (g : κ -> β)
+  条件: (hs : s.非空) (ht : t.非空) (f : ι -> α) (g : κ -> β)
   证明: eq_of_forall_ge_iff fun i => by
     obtain ⟨a, ha⟩ := hs
     obtain ⟨b, hb⟩ := ht
@@ -135,7 +135,7 @@ theorem sup_inf_sup
 
 中文:
 定理 sup_inf_sup
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> α) (g : κ -> α)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> α) (g : κ -> α)
   证明: by
   simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left, sup_product_left]
 
@@ -165,8 +165,8 @@ theorem sup'_product_left
 @[to_dual inf'_product_right]
 
 中文:
-定理 sup'_product_left
-  条件: {t : Finset γ} (h : (s ×ˢ t).Nonempty) (f : β × γ -> α)
+定理 上确界'_product_left
+  条件: {t : 有限集 γ} (h : (s ×ˢ t).非空) (f : β × γ -> α)
   证明: eq_of_forall_ge_iff fun a => by simp [@forall_comm _ γ]
 
 @[to_dual inf'_product_right]
@@ -186,8 +186,8 @@ theorem sup'_product_right
   rw [sup'_product_left]; rw [Finset.sup'_comm]
 
 中文:
-定理 sup'_product_right
-  条件: {t : Finset γ} (h : (s ×ˢ t).Nonempty) (f : β × γ -> α)
+定理 上确界'_product_right
+  条件: {t : 有限集 γ} (h : (s ×ˢ t).非空) (f : β × γ -> α)
   证明: by
   rw [sup'_product_left]; rw [Finset.sup'_comm]
 -/
@@ -215,7 +215,7 @@ lemma prodMk_sup'_sup'
 
 中文:
 引理 prodMk_sup'_sup'
-  条件: (hs : s.Nonempty) (ht : t.Nonempty) (f : ι -> α) (g : κ -> β)
+  条件: (hs : s.非空) (ht : t.非空) (f : ι -> α) (g : κ -> β)
   证明: eq_of_forall_ge_iff fun i => by
     obtain ⟨a, ha⟩ := hs
     obtain ⟨b, hb⟩ := ht
@@ -244,8 +244,8 @@ lemma sup'_prodMap
   proof: (prodMk_sup'_sup' _ _ _ _).symm
 
 中文:
-引理 sup'_prodMap
-  条件: (hst : (s ×ˢ t).Nonempty) (f : ι -> α) (g : κ -> β)
+引理 上确界'_prodMap
+  条件: (hst : (s ×ˢ t).非空) (f : ι -> α) (g : κ -> β)
   证明: (prodMk_sup'_sup' _ _ _ _).symm
 -/
 lemma sup'_prodMap (hst : (s ×ˢ t).Nonempty) (f : ι -> α) (g : κ -> β) :
@@ -271,7 +271,7 @@ theorem sup'_inf_sup'
   simp_rw [Finset.sup'_inf_distrib_right, Finset.sup'_inf_distrib_left, sup'_product_left]
 
 中文:
-定理 sup'_inf_sup'
+定理 上确界'_inf_sup'
   条件: (f : ι -> α) (g : κ -> α)
   证明: by
   simp_rw [Finset.sup'_inf_distrib_right, Finset.sup'_inf_distrib_left, sup'_product_left]

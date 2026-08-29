@@ -111,7 +111,7 @@ notation:max "⋀[" R "]^" n:arg => exteriorPower R n
 
 中文:
 缩写 exteriorPower
-  签名: : Submodule R (ExteriorAlgebra R M)
+  签名: : 子模 R (ExteriorAlgebra R M)
   定义体: LinearMap.range (ι R : M ->ₗ[R] ExteriorAlgebra R M) ^ n
 
 @[inherit_doc exteriorPower]
@@ -466,7 +466,7 @@ theorem isLocalHom_algebraMap
 
 中文:
 定理 isLocalHom_algebraMap
-  结论: IsLocalHom (algebraMap R (ExteriorAlgebra R M))
+  结论: 是Local态射 (algebraMap R (ExteriorAlgebra R M))
   证明: isLocalHom_of_leftInverse _ (algebraMap_leftInverse M)
 
 Depends on / 依赖: algebraMap_leftInverse, isLocalHom_of_leftInverse
@@ -486,7 +486,7 @@ theorem isUnit_algebraMap
 中文:
 定理 isUnit_algebraMap
   条件: (r : R)
-  结论: IsUnit (algebraMap R (ExteriorAlgebra R M) r) ↔ IsUnit r
+  结论: 是单位 (algebraMap R (ExteriorAlgebra R M) r) ↔ 是单位 r
   证明: isUnit_map_of_leftInverse _ (algebraMap_leftInverse M)
 
 Depends on / 依赖: algebraMap_leftInverse, isUnit_map_of_leftInverse
@@ -529,7 +529,7 @@ definition toTrivSqZeroExt
 
 中文:
 定义 toTrivSqZeroExt
-  签名: [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
+  签名: [模 Rᵐᵒᵖ M] [中心标量 R M]
   定义体: lift R ⟨TrivSqZeroExt.inrHom R M, fun m => TrivSqZeroExt.inr_mul_inr R m m⟩
 
 @[simp]
@@ -551,7 +551,7 @@ theorem toTrivSqZeroExt_ι
 
 中文:
 定理 toTrivSqZeroExt_ι
-  条件: [Module Rᵐᵒᵖ M] [IsCentralScalar R M] (x : M)
+  条件: [模 Rᵐᵒᵖ M] [中心标量 R M] (x : M)
   证明: lift_ι_apply _ _ _ _
 -/
 theorem toTrivSqZeroExt_ι [Module Rᵐᵒᵖ M] [IsCentralScalar R M] (x : M) :
@@ -595,7 +595,7 @@ theorem ι_leftInverse
 
 中文:
 定理 ι_leftInverse
-  结论: Function.LeftInverse ιInv (ι R : M -> ExteriorAlgebra R M)
+  结论: 函数.左逆 ιInv (ι R : M -> ExteriorAlgebra R M)
   证明: fun x => by
   simp [ιInv]
 -/
@@ -707,7 +707,7 @@ theorem ι_ne_one
 
 中文:
 定理 ι_ne_one
-  条件: [Nontrivial R] (x : M)
+  条件: [非平凡 R] (x : M)
   结论: ι R x != 1
   证明: by
   rw [← (algebraMap R (ExteriorAlgebra R M)).map_one]; rw [Ne]; rw [ι_eq_algebraMap_iff]
@@ -795,7 +795,7 @@ congr_arg (ι R (f 0) * ·) hn (fun i => f <| Fin.succ i) (i.pred h)
 
 中文:
 定理 ι_mul_prod_list
-  条件: {n : 自然数} (f : Fin n -> M) (i : Fin n)
+  条件: {n : 自然数} (f : 有限集 n -> M) (i : 有限集 n)
   证明: by
   induction n with
   | zero => exact i.elim0
@@ -897,8 +897,8 @@ theorem ιMulti_apply
 
 中文:
 定理 ιMulti_apply
-  条件: {n : 自然数} (v : Fin n -> M)
-  结论: ιMulti R n v = (List.ofFn fun i => ι R (v i)).prod
+  条件: {n : 自然数} (v : 有限集 n -> M)
+  结论: ιMulti R n v = (列表.ofFn fun i => ι R (v i)).乘积
   证明: rfl
 
 @[simp]
@@ -921,7 +921,7 @@ theorem ιMulti_zero_apply
 
 中文:
 定理 ιMulti_zero_apply
-  条件: (v : Fin 0 -> M)
+  条件: (v : 有限集 0 -> M)
   结论: ιMulti R 0 v = 1
   证明: by
   simp [ιMulti]
@@ -943,7 +943,7 @@ theorem ιMulti_succ_apply
 
 中文:
 定理 ιMulti_succ_apply
-  条件: {n : 自然数} (v : Fin n.succ -> M)
+  条件: {n : 自然数} (v : 有限集 n.succ -> M)
   证明: by
   simp [ιMulti, Matrix.vecTail]
 
@@ -983,7 +983,7 @@ lemma ιMulti_eq_zero_of_not_inj
 
 中文:
 引理 ιMulti_eq_zero_of_not_inj
-  条件: {n : 自然数} {v : Fin n -> M} (hv : ¬Function.Injective v)
+  条件: {n : 自然数} {v : 有限集 n -> M} (hv : ¬函数.单射 v)
   证明: (ιMulti R n).map_eq_zero_of_not_injective v hv
 
 Depends on / 依赖: map_eq_zero_of_not_injective
@@ -1007,7 +1007,7 @@ lemma ιMulti_mul_ιMulti
 
 中文:
 引理 ιMulti_mul_ιMulti
-  条件: {m n : 自然数} (a : Fin m -> M) (b : Fin n -> M)
+  条件: {m n : 自然数} (a : 有限集 m -> M) (b : 有限集 n -> M)
   证明: by
   simp only [ιMulti_apply]
   change _ = (List.ofFn ((ι R) ∘ Fin.append a b)).prod
@@ -1114,7 +1114,7 @@ abbreviation ιMulti_family
 
 中文:
 缩写 ιMulti_family
-  签名: (n : 自然数) {I : 类型} [LinearOrder I] (v : I -> M)
+  签名: (n : 自然数) {I : 类型} [线性序 I] (v : I -> M)
   定义体: ιMulti R n (v ∘ (Set.powersetCard.ofFinEmbEquiv.symm s))
 
 Depends on / 依赖: Set.powersetCard.ofFinEmbEquiv.symm, ofFinEmbEquiv, powersetCard
@@ -1141,7 +1141,7 @@ lemma ιMulti_family_mul_of_not_disjoint
 
 中文:
 引理 ιMulti_family_mul_of_not_disjoint
-  结论: {m n : 自然数} {I : 类型} [LinearOrder I] (v : I -> M)
+  结论: {m n : 自然数} {I : 类型} [线性序 I] (v : I -> M)
   证明: by
   rw [Finset.not_disjoint_iff] at h
   obtain ⟨i, his, hit⟩ := h
@@ -1183,7 +1183,7 @@ lemma ιMulti_family_mul_of_disjoint
 
 中文:
 引理 ιMulti_family_mul_of_disjoint
-  结论: {m n : 自然数} {I : 类型} [LinearOrder I] (v : I -> M)
+  结论: {m n : 自然数} {I : 类型} [线性序 I] (v : I -> M)
   证明: by
   simp only [ιMulti_family, ιMulti_mul_ιMulti]
   rw [← AlternatingMap.map_perm]; rw [permOfDisjoint]
@@ -1225,8 +1225,8 @@ instance [Nontrivial
   body: (algebraMap_leftInverse M).injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (ExteriorAlgebra R M)
+实例 [非平凡
+  签名: R] : 非平凡 (ExteriorAlgebra R M)
   定义体: (algebraMap_leftInverse M).injective.nontrivial
 
 Depends on / 依赖: algebraMap_leftInverse, injective, injective.nontrivial, nontrivial
@@ -1325,7 +1325,7 @@ theorem map_apply_ιMulti
 
 中文:
 定理 map_apply_ιMulti
-  条件: {n : 自然数} (f : M ->ₗ[R] N) (m : Fin n -> M)
+  条件: {n : 自然数} (f : M ->ₗ[R] N) (m : 有限集 n -> M)
   证明: by
   rw [ιMulti_apply]; rw [ιMulti_apply]; rw [map_list_prod]
   simp only [List.map_ofFn, Function.comp_def, map_apply_ι]
@@ -1446,7 +1446,7 @@ theorem toTrivSqZeroExt_comp_map
 
 中文:
 定理 toTrivSqZeroExt_comp_map
-  结论: [Module Rᵐᵒᵖ M] [IsCentralScalar R M] [Module Rᵐᵒᵖ N]
+  结论: [模 Rᵐᵒᵖ M] [中心标量 R M] [模 Rᵐᵒᵖ N]
   证明: by
   apply hom_ext
   apply LinearMap.ext
@@ -1540,7 +1540,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: {f : M ->ₗ[R] N} (hf : 存在 (g : N ->ₗ[R] M), g.comp f = LinearMap.id)
+  条件: {f : M ->ₗ[R] N} (hf : 存在 (g : N ->ₗ[R] M), g.comp f = 线性映射.id)
   证明: let ⟨_, hgf⟩ := hf; (leftInverse_map_iff.mpr (DFunLike.congr_fun hgf)).injective
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, injective, leftInverse_map_iff, leftInverse_map_iff.mpr
@@ -1598,7 +1598,7 @@ lemma map_injective_field
 
 中文:
 引理 map_injective_field
-  条件: {f : E ->ₗ[K] F} (hf : LinearMap.ker f = ⊥)
+  条件: {f : E ->ₗ[K] F} (hf : 线性映射.ker f = ⊥)
   证明: map_injective (LinearMap.exists_leftInverse_of_injective f hf)
 
 Depends on / 依赖: LinearMap, LinearMap.exists_leftInverse_of_injective, exists_leftInverse_of_injective, map_injective

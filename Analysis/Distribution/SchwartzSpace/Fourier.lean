@@ -115,7 +115,7 @@ instance instFourierTransform
 
 中文:
 实例 instFourierTransform
-  签名: : FourierTransform 𝓢(V, E) 𝓢(V, E) where
+  签名: : Fourier变换 𝓢(V, E) 𝓢(V, E) where
   定义体: fourierTransformCLM Complex f
 
 Depends on / 依赖: fourierTransformCLM
@@ -169,7 +169,7 @@ instance instContinuousFourier
 
 中文:
 实例 instContinuousFourier
-  签名: : ContinuousFourier 𝓢(V, E) 𝓢(V, E) where
+  签名: : 余ntinuousFourier 𝓢(V, E) 𝓢(V, E) where
   定义体: ContinuousLinearMap.continuous _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.continuous, continuous
@@ -285,7 +285,7 @@ instance instContinuousFourierInv
 
 中文:
 实例 instContinuousFourierInv
-  签名: : ContinuousFourierInv 𝓢(V, E) 𝓢(V, E) where
+  签名: : 余ntinuousFourierInv 𝓢(V, E) 𝓢(V, E) where
   定义体: ContinuousLinearMap.continuous _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.continuous, continuous
@@ -658,7 +658,7 @@ theorem integral_bilin_fourier_eq
 
 中文:
 定理 integral_bilin_fourier_eq
-  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L[Complex] F ->L[Complex] G)
+  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L[复形] F ->L[复形] G)
   证明: by
   simpa using! VectorFourier.integral_bilin_fourierIntegral_eq_flip M (L := innerₗ V)
     continuous_fourierChar continuous_inner f.integrable g.integrable
@@ -680,7 +680,7 @@ theorem integral_fourier_smul_eq
 
 中文:
 定理 integral_fourier_smul_eq
-  条件: (f : 𝓢(V, Complex)) (g : 𝓢(V, F))
+  条件: (f : 𝓢(V, 复形)) (g : 𝓢(V, F))
   证明: integral_bilin_fourier_eq f g (.lsmul Complex Complex)
 
 Depends on / 依赖: integral_bilin_fourier_eq
@@ -699,7 +699,7 @@ theorem integral_fourier_mul_eq
 
 中文:
 定理 integral_fourier_mul_eq
-  条件: (f : 𝓢(V, Complex)) (g : 𝓢(V, Complex))
+  条件: (f : 𝓢(V, 复形)) (g : 𝓢(V, 复形))
   证明: integral_bilin_fourier_eq f g (.mul Complex Complex)
 
 Depends on / 依赖: integral_bilin_fourier_eq
@@ -721,7 +721,7 @@ theorem integral_bilin_fourierInv_eq
 
 中文:
 定理 integral_bilin_fourierInv_eq
-  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L[Complex] F ->L[Complex] G)
+  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L[复形] F ->L[复形] G)
   证明: by
   convert! (integral_bilin_fourier_eq (𝓕⁻ f) (𝓕⁻ g) M).symm
   · exact (FourierTransform.fourier_fourierInv_eq g).symm
@@ -745,7 +745,7 @@ theorem integral_fourierInv_smul_eq
 
 中文:
 定理 integral_fourierInv_smul_eq
-  条件: (f : 𝓢(V, Complex)) (g : 𝓢(V, F))
+  条件: (f : 𝓢(V, 复形)) (g : 𝓢(V, F))
   证明: integral_bilin_fourierInv_eq f g (.lsmul Complex Complex)
 
 Depends on / 依赖: integral_bilin_fourierInv_eq
@@ -764,7 +764,7 @@ theorem integral_fourierInv_mul_eq
 
 中文:
 定理 integral_fourierInv_mul_eq
-  条件: (f : 𝓢(V, Complex)) (g : 𝓢(V, Complex))
+  条件: (f : 𝓢(V, 复形)) (g : 𝓢(V, 复形))
   证明: integral_bilin_fourierInv_eq f g (.mul Complex Complex)
 
 Depends on / 依赖: integral_bilin_fourierInv_eq
@@ -785,7 +785,7 @@ theorem integral_sesq_fourier_eq
 
 中文:
 定理 integral_sesq_fourier_eq
-  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L⋆[Complex] F ->L[Complex] G)
+  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L⋆[复形] F ->L[复形] G)
   证明: by
   simpa [fourierInv_coe] using! VectorFourier.integral_sesq_fourierIntegral_eq_neg_flip M
     (L := innerₗ V) continuous_fourierChar continuous_inner f.integrable g.integrable
@@ -808,7 +808,7 @@ theorem integral_sesq_fourier_fourier
 
 中文:
 定理 integral_sesq_fourier_fourier
-  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L⋆[Complex] F ->L[Complex] G)
+  条件: (f : 𝓢(V, E)) (g : 𝓢(V, F)) (M : E ->L⋆[复形] F ->L[复形] G)
   证明: by
   simpa using integral_sesq_fourier_eq f (𝓕 g) M
 

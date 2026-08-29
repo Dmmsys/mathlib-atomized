@@ -30,8 +30,8 @@ instance Real.instIsOrderBornology
   body: .of_isCompactIcc 0 (by simp [closedBall_eq_Icc]) (by simp [closedBall_eq_Icc])
 
 中文:
-实例 Real.instIsOrderBornology
-  签名: : IsOrderBornology 实数
+实例 实数.instIsOrderBornology
+  签名: : 是OrderBornology 实数
   定义体: .of_isCompactIcc 0 (by simp [closedBall_eq_Icc]) (by simp [closedBall_eq_Icc])
 
 Depends on / 依赖: closedBall_eq_Icc, of_isCompactIcc
@@ -51,7 +51,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology 实数>=0
+  签名: Order拓扑 实数>=0
   定义体: orderTopology_of_ordConnected (t := Ici 0)
 
 Depends on / 依赖: orderTopology_of_ordConnected
@@ -70,7 +70,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderBornology 实数>=0
+  签名: 是OrderBornology 实数>=0
   定义体: .of_isCompactIcc 0 (by simp) fun r => by
   obtain hr | hr := le_or_gt 0 r <;> simp [closedBall_zero_eq_Icc, *]
 

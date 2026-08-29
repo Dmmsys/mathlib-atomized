@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFibered (forget F)
+  签名: 是Fibered (forget F)
   定义体: IsFibered.of_exists_isStronglyCartesian (fun a _ f =>
     ⟨domainCartesianLift a.2 f, cartesianLift a.2 f, isStronglyCartesian_homCartesianLift a.2 f⟩)
 
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).Full
+  签名: (Fiber.inducedFunctor (comp_const F S)).满
   定义体: by
     have hf : (fiberInclusion.map f).base = 𝟙 S := by
       simpa using (IsHomLift.fac (forget F) (𝟙 S) (fiberInclusion.map f)).symm
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).Faithful
+  签名: (Fiber.inducedFunctor (comp_const F S)).忠实
   定义体: by
     intro f g heq
     replace heq := fiberInclusion.congr_map heq
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).EssSurj
+  签名: (Fiber.inducedFunctor (comp_const F S)).本质满射
   定义体: by
   apply essSurj_of_surj
   intro Y
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).IsEquivalence
+  签名: (Fiber.inducedFunctor (comp_const F S)).是等价
 -/
 noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).IsEquivalence where
 
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFibers (forget F)
+  签名: 有Fibers (forget F)
   定义体: F.obj ⟨op S⟩
   ι := ι F
   comp_const := comp_const F

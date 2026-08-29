@@ -145,7 +145,7 @@ lemma toNatTrans_congr
   proof: congr(($h).toNatTrans)
 
 中文:
-引理 toNatTrans_congr
+引理 to自然数Trans_congr
   条件: {C D : Cat.{v, u}} {F G : C ⟶ D} {η θ : F ⟶ G} (h : η = θ)
   证明: congr(($h).toNatTrans)
 
@@ -164,7 +164,7 @@ definition toNatTransExpr
   mapForallTelescope (fun e => mkAppM ``toNatTrans_congr #[e]) e
 
 中文:
-定义 toNatTransExpr
+定义 to自然数TransExpr
   签名: (e : Expr)
   定义体: do
   mapForallTelescope (fun e => mkAppM ``toNatTrans_congr #[e]) e

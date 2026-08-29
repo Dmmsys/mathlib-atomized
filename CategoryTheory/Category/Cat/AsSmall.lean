@@ -40,7 +40,7 @@ definition asSmallFunctor
 
 中文:
 定义 asSmallFunctor
-  签名: : Cat.{v, u} ⥤ Cat.{max w v u, max w v u} where
+  签名: : Cat.{v, u} ⥤ Cat.{最大值 w v u, 最大值 w v u} where
   定义体: .of AsSmall C
   map F := (AsSmall.down ⋙ F.toFunctor ⋙ AsSmall.up).toCatHom
 

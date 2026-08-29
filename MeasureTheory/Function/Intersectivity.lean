@@ -51,7 +51,7 @@ lemma bergelson'
 
 中文:
 引理 bergelson'
-  结论: {s : 自然数 -> Set α} (hs : 对任意 n, MeasurableSet (s n)) (hr₀ : r != 0)
+  结论: {s : 自然数 -> 集合 α} (hs : 对任意 n, 可测集 (s n)) (hr₀ : r != 0)
   证明: by
   -- We let `M f` be the set on which the norm of `f` exceeds its essential supremum, and `N` be the
   -- union of `M` of the finite products of the indicators of the `s n`.
@@ -150,7 +150,7 @@ refine ⟨_, ht.image (Infinite.natEmbedding _).injective.injOn, fun u hut hu =>
 
 中文:
 引理 bergelson
-  结论: [Infinite ι] {s : ι -> Set α} (hs : 对任意 i, MeasurableSet (s i)) (hr₀ : r != 0)
+  结论: [无限 ι] {s : ι -> 集合 α} (hs : 对任意 i, 可测集 (s i)) (hr₀ : r != 0)
   证明: by
   obtain ⟨t, ht, h⟩ := bergelson' (fun n => hs <| Infinite.natEmbedding _ n) hr₀ (fun n => hr _)
 refine ⟨_, ht.image (Infinite.natEmbedding _).injective.injOn, fun u hut hu =>

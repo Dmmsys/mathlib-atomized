@@ -29,7 +29,7 @@ instance IsSquare.decidablePred
 
 中文:
 实例 IsSquare.decidablePred
-  签名: [Mul α] [Fintype α] [DecidableEq α]
+  签名: [乘法 α] [有限类型 α] [DecidableEq α]
   定义体: fun _ => Fintype.decidableExistsFintype
 
 Depends on / 依赖: Fintype, Fintype.decidableExistsFintype, decidableExistsFintype
@@ -47,7 +47,7 @@ instance card_fin_two
 
 中文:
 实例 card_fin_two
-  签名: : Fact (Even (Fintype.card (Fin 2)))
+  签名: : Fact (Even (有限类型.card (有限集 2)))
   定义体: ⟨⟨1, rfl⟩⟩
 -/
 instance card_fin_two : Fact (Even (Fintype.card (Fin 2))) :=

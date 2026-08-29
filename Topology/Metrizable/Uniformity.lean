@@ -252,8 +252,8 @@ theorem UniformSpace.metrizable_uniformity
     separates `x` and `y`: `(x, y) ∉ U n`, or `0` if `x` is not separated from `y`. This functio
 
 中文:
-定理 UniformSpace.metrizable_uniformity
-  结论: (X : 类型) [UniformSpace X]
+定理 一致空间.metrizable_uniformity
+  结论: (X : 类型) [一致空间 X]
   证明: by
   classical
   /- Choose a fast decreasing antitone basis `U : ℕ → SetRel X X` of the uniformity filter `𝓤 X`.
@@ -336,7 +336,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev UniformSpace.pseudoMetricSpace (X : 类型) [UniformSpace X]
+  签名: abbrev 一致空间.pseudoMetricSpace (X : 类型) [一致空间 X]
   定义体: (UniformSpace.metrizable_uniformity X).choose.replaceUniformity
     congr_arg _ (UniformSpace.metrizable_uniformity X).choose_spec.symm
 -/
@@ -356,7 +356,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev UniformSpace.metricSpace (X : 类型) [UniformSpace X]
+  签名: abbrev 一致空间.metricSpace (X : 类型) [一致空间 X]
   定义体: @MetricSpace.ofT0PseudoMetricSpace X (UniformSpace.pseudoMetricSpace X) _
 -/
 protected noncomputable abbrev UniformSpace.metricSpace (X : Type*) [UniformSpace X]
@@ -372,8 +372,8 @@ theorem UniformSpace.metrizableSpace
   proof: inferInstance
 
 中文:
-定理 UniformSpace.metrizableSpace
-  条件: [UniformSpace X] [IsCountablyGenerated (𝓤 X)] [T0Space X]
+定理 一致空间.metrizableSpace
+  条件: [一致空间 X] [是余untablyGenerated (𝓤 X)] [T0空间 X]
   证明: inferInstance
 -/
 theorem UniformSpace.metrizableSpace [UniformSpace X] [IsCountablyGenerated (𝓤 X)] [T0Space X] :
@@ -394,7 +394,7 @@ example {X : Type*} [t : TopologicalSpace X] [t.PseudoMetrizableSpace] :
     t.pseudoMetrizableSpacePseudoMetric.toUniformS
 
 中文:
-缩写 TopologicalSpace.pseudoMetrizableSpacePseudoMetric
+缩写 拓扑空间.pseudoMetrizableSpacePseudoMetric
   签名: (X : 类型)
   定义体: letI := TopologicalSpace.pseudoMetrizableSpaceUniformity X
   haveI := TopologicalSpace.pseudoMetrizableSpaceUniformity_countably_generated X
@@ -429,8 +429,8 @@ example {X : Type*} [t : TopologicalSpace X] [t.MetrizableSpace] :
   with_reducible_and_instances rfl
 
 中文:
-缩写 TopologicalSpace.metrizableSpaceMetric
-  签名: (X : 类型) [TopologicalSpace X]
+缩写 拓扑空间.metrizableSpaceMetric
+  签名: (X : 类型) [拓扑空间 X]
   定义体: letI := pseudoMetrizableSpacePseudoMetric X
   .ofT0PseudoMetricSpace X
 

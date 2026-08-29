@@ -70,7 +70,7 @@ definition finiteExts
 
 中文:
 定义 finiteExts
-  签名: (K : 类型) [Field K] (L : 类型) [Field L] [Algebra K L]
+  签名: (K : 类型) [域 K] (L : 类型) [域 L] [代数 K L]
   定义体: {E | FiniteDimensional K E}
 
 Depends on / 依赖: FiniteDimensional
@@ -89,7 +89,7 @@ definition fixedByFinite
 
 中文:
 定义 fixedByFinite
-  签名: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  签名: (K L : 类型) [域 K] [域 L] [代数 K L]
   定义体: IntermediateField.fixingSubgroup '' finiteExts K L
 
 Depends on / 依赖: IntermediateField, IntermediateField.fixingSubgroup, finiteExts, fixingSubgroup
@@ -107,7 +107,7 @@ theorem top_fixedByFinite
 
 中文:
 定理 top_fixedByFinite
-  条件: {K L : 类型} [Field K] [Field L] [Algebra K L]
+  条件: {K L : 类型} [域 K] [域 L] [代数 K L]
   证明: ⟨⊥, IntermediateField.instFiniteSubtypeMemBot K, IntermediateField.fixingSubgroup_bot⟩
 
 Depends on / 依赖: IntermediateField, IntermediateField.fixingSubgroup_bot, IntermediateField.instFiniteSubtypeMemBot, fixingSubgroup_bot, instFiniteSubtypeMemBot
@@ -132,7 +132,7 @@ definition galBasis
 
 中文:
 定义 galBasis
-  签名: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  签名: (K L : 类型) [域 K] [域 L] [代数 K L]
   定义体: (fun g => g.carrier) '' fixedByFinite K L
   nonempty := ⟨⊤, ⊤, top_fixedByFinite, rfl⟩
   inter_sets := by
@@ -163,7 +163,7 @@ theorem mem_galBasis_iff
 
 中文:
 定理 mem_galBasis_iff
-  条件: (K L : 类型) [Field K] [Field L] [Algebra K L] (U : Set Gal(L/K))
+  条件: (K L : 类型) [域 K] [域 L] [代数 K L] (U : 集合 Gal(L/K))
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -196,7 +196,7 @@ definition galGroupBasis
 
 中文:
 定义 galGroupBasis
-  签名: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  签名: (K L : 类型) [域 K] [域 L] [代数 K L]
   定义体: galBasis K L
   one' := fun ⟨H, _, h2⟩ => h2 ▸ H.one_mem
   mul' {U} hU :=
@@ -253,7 +253,7 @@ instance krullTopology
 
 中文:
 实例 krullTopology
-  签名: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  签名: (K L : 类型) [域 K] [域 L] [代数 K L]
   定义体: GroupFilterBasis.topology (galGroupBasis K L)
 
 Depends on / 依赖: GroupFilterBasis, GroupFilterBasis.topology, galGroupBasis, topology
@@ -284,7 +284,7 @@ lemma krullTopology_mem_nhds_one_iff
 
 中文:
 引理 krullTopology_mem_nhds_one_iff
-  结论: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  结论: (K L : 类型) [域 K] [域 L] [代数 K L]
   证明: by
   rw [GroupFilterBasis.nhds_one_eq]
   constructor
@@ -321,7 +321,7 @@ lemma krullTopology_mem_nhds_one_iff_of_normal
 
 中文:
 引理 krullTopology_mem_nhds_one_iff_of_normal
-  结论: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  结论: (K L : 类型) [域 K] [域 L] [代数 K L]
   证明: by
   rw [krullTopology_mem_nhds_one_iff]
   refine ⟨fun ⟨E, _, hE⟩ => ?_, fun ⟨E, hE⟩ => ⟨E, hE.1, hE.2.2⟩⟩
@@ -357,8 +357,8 @@ theorem IntermediateField.fixingSubgroup_isOpen
   exact Subgroup.isOpen_of_mem_nhds _ h_nhds
 
 中文:
-定理 IntermediateField.fixingSubgroup_isOpen
-  结论: {K L : 类型} [Field K] [Field L] [Algebra K L]
+定理 中间域.fixingSubgroup_isOpen
+  结论: {K L : 类型} [域 K] [域 L] [代数 K L]
   证明: by
   have h_basis : E.fixingSubgroup.carrier in galGroupBasis K L :=
     ⟨E.fixingSubgroup, ⟨E, ‹_›, rfl⟩, rfl⟩
@@ -384,8 +384,8 @@ theorem IntermediateField.fixingSubgroup_isClosed
   proof: OpenSubgroup.isClosed ⟨E.fixingSubgroup, E.fixingSubgroup_isOpen⟩
 
 中文:
-定理 IntermediateField.fixingSubgroup_isClosed
-  结论: {K L : 类型} [Field K] [Field L] [Algebra K L]
+定理 中间域.fixingSubgroup_isClosed
+  结论: {K L : 类型} [域 K] [域 L] [代数 K L]
   证明: OpenSubgroup.isClosed ⟨E.fixingSubgroup, E.fixingSubgroup_isOpen⟩
 
 Depends on / 依赖: E.fixingSubgroup, E.fixingSubgroup_isOpen, OpenSubgroup, OpenSubgroup.isClosed, fixingSubgroup, fixingSubgroup_isOpen, isClosed
@@ -413,7 +413,7 @@ theorem krullTopology_t2
 
 中文:
 定理 krullTopology_t2
-  结论: {K L : 类型} [Field K] [Field L] [Algebra K L]
+  结论: {K L : 类型} [域 K] [域 L] [代数 K L]
   证明: { t2 := fun f g hfg => by
       let φ := f⁻¹ * g
       obtain ⟨x, hx⟩ := DFunLike.exists_ne hfg
@@ -490,7 +490,7 @@ theorem krullTopology_isTotallySeparated
 
 中文:
 定理 krullTopology_isTotallySeparated
-  结论: {K L : 类型} [Field K] [Field L] [Algebra K L]
+  结论: {K L : 类型} [域 K] [域 L] [代数 K L]
   证明: (totallySeparatedSpace_iff _).mp inferInstance
 
 Depends on / 依赖: totallySeparatedSpace_iff
@@ -515,7 +515,7 @@ instance krullTopology_discreteTopology_of_finiteDimensional
 
 中文:
 实例 krullTopology_discreteTopology_of_finiteDimensional
-  签名: (K L : 类型) [Field K] [Field L]
+  签名: (K L : 类型) [域 K] [域 L]
   定义体: by
   rw [discreteTopology_iff_isOpen_singleton_one]
   change IsOpen ((⊥ : Subgroup Gal(L/K)) : Set Gal(L/K))
@@ -550,8 +550,8 @@ theorem stabilizer_isOpen_of_isIntegral
   simpa using (forall_mem_adjoin_smul_eq_self_iff K (S := {x}) g).symm
 
 中文:
-定理 stabilizer_isOpen_of_isIntegral
-  条件: [Algebra.Is整数egral K L] (x : L)
+定理 stabilizer_isOpen_of_is整数egral
+  条件: [代数.是整 K L] (x : L)
   证明: by
   open IntermediateField in
   let E := adjoin K {x}

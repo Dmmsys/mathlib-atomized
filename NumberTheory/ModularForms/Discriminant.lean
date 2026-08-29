@@ -69,7 +69,7 @@ lemma csqrt_pow_24_eq
 
 中文:
 引理 csqrt_pow_24_eq
-  条件: {z : Complex} (hz : z != 0)
+  条件: {z : 复形} (hz : z != 0)
   结论: sqrt z ^ 24 = z ^ 12
   证明: by
   rw [sqrt_eq_exp hz]; rw [← exp_nat_mul]
@@ -502,7 +502,7 @@ lemma discriminant_cuspFunction_eqOn
 
 中文:
 引理 discriminant_cuspFunction_eqOn
-  结论: Set.EqOn (cuspFunction 1 Δ)
+  结论: 集合.EqOn (cuspFunction 1 Δ)
   证明: by
   intro q hq
   by_cases hq0 : q = 0
@@ -592,7 +592,7 @@ definition discriminant
 
 中文:
 定义 discriminant
-  签名: : CuspForm 𝒮ℒ 12 where
+  签名: : 尖点形式 𝒮ℒ 12 where
   定义体: Δ
   slash_action_eq' A hA := by
     obtain ⟨A, rfl⟩ := hA
@@ -648,7 +648,7 @@ lemma exp_decay_isBigO_discriminant
 
 中文:
 引理 exp_decay_isBigO_discriminant
-  条件: (f : CuspForm 𝒮ℒ k)
+  条件: (f : 尖点形式 𝒮ℒ k)
   证明: (CuspFormClass.exp_decay_atImInfty (h := 1) f one_pos one_mem_strictPeriods_SL).trans
     (by simpa using exp_isBigO_discriminant)
 

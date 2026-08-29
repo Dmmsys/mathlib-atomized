@@ -49,7 +49,7 @@ definition withWeakNamespace
 
 中文:
 定义 withWeakNamespace
-  签名: {α : Type} (ns : Name) (m : CommandElabM α)
+  签名: {α : 类型} (ns : Name) (m : CommandElabM α)
   定义体: do
   let old ← getCurrNamespace
   let ns := resolveNamespace old ns

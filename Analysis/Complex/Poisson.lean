@@ -41,7 +41,7 @@ definition herglotzRieszKernel
 
 中文:
 定义 herglotzRieszKernel
-  签名: (c w z : Complex)
+  签名: (c w z : 复形)
   定义体: ((z - c) + (w - c)) / ((z - c) - (w - c))
 -/
 noncomputable def herglotzRieszKernel (c w z : Complex) : Complex :=
@@ -57,7 +57,7 @@ lemma herglotzRieszKernel_def
 
 中文:
 引理 herglotzRieszKernel_def
-  条件: (c w z : Complex)
+  条件: (c w z : 复形)
   证明: by rfl
 -/
 lemma herglotzRieszKernel_def (c w z : Complex) :
@@ -75,7 +75,7 @@ lemma herglotzRieszKernel_fun_def
 
 中文:
 引理 herglotzRieszKernel_fun_def
-  条件: (c w : Complex)
+  条件: (c w : 复形)
   证明: by
   ext z
   exact herglotzRieszKernel_def c w z
@@ -98,7 +98,7 @@ lemma herglotzRieszKernel_add_const
 
 中文:
 引理 herglotzRieszKernel_add_const
-  条件: (c w z : Complex)
+  条件: (c w z : 复形)
   证明: by
   simp [herglotzRieszKernel_fun_def]
 
@@ -118,7 +118,7 @@ definition poissonKernel
 
 中文:
 定义 poissonKernel
-  签名: (c w z : Complex)
+  签名: (c w z : 复形)
   定义体: (‖z - c‖ ^ 2 - ‖w - c‖ ^ 2) / ‖(z - c) - (w - c)‖ ^ 2
 -/
 noncomputable def poissonKernel (c w z : Complex) : Real :=
@@ -134,7 +134,7 @@ lemma poissonKernel_def
 
 中文:
 引理 poissonKernel_def
-  条件: (c w z : Complex)
+  条件: (c w z : 复形)
   证明: by rfl
 -/
 lemma poissonKernel_def (c w z : Complex) :
@@ -154,7 +154,7 @@ lemma poissonKernel_eq_re_herglotzRieszKernel_aux
 
 中文:
 引理 poissonKernel_eq_re_herglotzRieszKernel_aux
-  条件: {a b : Complex}
+  条件: {a b : 复形}
   证明: by
   rw [div_re]; rw [normSq_eq_norm_sq (a - b)]; rw [← add_div]; rw [add_re]; rw [sub_re]; rw [add_im]; rw [sub_im]
   calc ((a.re + b.re) * (a.re - b.re) + (a.im + b.im) * (a.im - b.im)) / ‖a - b‖ ^ 2
@@ -182,7 +182,7 @@ lemma poissonKernel_eq_re_herglotzRieszKernel
 
 中文:
 引理 poissonKernel_eq_re_herglotzRieszKernel
-  条件: {c w : Complex}
+  条件: {c w : 复形}
   证明: by
   ext z
   rw [Function.comp_apply]; rw [poissonKernel]; rw [herglotzRieszKernel]; rw [poissonKernel_eq_re_herglotzRieszKernel_aux]
@@ -253,7 +253,7 @@ theorem re_herglotzRieszKernel_le
 
 中文:
 定理 re_herglotzRieszKernel_le
-  条件: {c z : Complex} (hz : z in sphere c R) (hw : w in ball c R)
+  条件: {c z : 复形} (hz : z in sphere c R) (hw : w in ball c R)
   证明: by
   obtain ⟨η₀, rfl, η₂⟩ : 0 < R ∧ R = ‖z - c‖ ∧ z - c != 0 := by
     grind [ball_eq_empty, mem_sphere, dist_eq_norm, norm_pos_iff]
@@ -334,7 +334,7 @@ theorem le_re_herglotzRieszKernel
 
 中文:
 定理 le_re_herglotzRieszKernel
-  条件: {c z : Complex} (hz : z in sphere c R) (hw : w in ball c R)
+  条件: {c z : 复形} (hz : z in sphere c R) (hw : w in ball c R)
   证明: by
   obtain ⟨η₀, rfl, η₂⟩ : 0 < R ∧ R = ‖z - c‖ ∧ z - c != 0 := by
     grind [ball_eq_empty, mem_sphere, dist_eq_norm, norm_pos_iff]
@@ -391,7 +391,7 @@ theorem re_circleAverage_herglotzRieszKernel_smul
 
 中文:
 定理 re_circleAverage_herglotzRieszKernel_smul
-  结论: {g : Complex -> 实数}
+  结论: {g : 复形 -> 实数}
   证明: by
   have h₁ : CircleIntegrable (fun ζ => (g ζ : Complex)) 0 R := by
     simp only [CircleIntegrable, intervalIntegrable_iff] at hg ⊢
@@ -464,7 +464,7 @@ lemma DiffContOnCl.circleAverage_re_smul_on_ball_zero
 
 中文:
 引理 DiffContOnCl.circleAverage_re_smul_on_ball_zero
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   -- Trivial case: nonpositive radius
   rcases le_or_gt R 0 with hR | hR
@@ -548,7 +548,7 @@ theorem DiffContOnCl.circleAverage_re_herglotzRieszKernel_smul
 
 中文:
 定理 DiffContOnCl.circleAverage_re_herglotzRieszKernel_smul
-  结论: [CompleteSpace E] {c : Complex}
+  结论: [完备空间 E] {c : 复形}
   证明: by
   rcases le_or_gt R 0 with hR | hR
   · simp_all [ball_eq_empty.2 hR]
@@ -580,7 +580,7 @@ theorem DiffContOnCl.circleAverage_re_herglotzRieszKernel_smul'
 
 中文:
 定理 DiffContOnCl.circleAverage_re_herglotzRieszKernel_smul'
-  结论: [CompleteSpace E] {c : Complex}
+  结论: [完备空间 E] {c : 复形}
   证明: hf.circleAverage_re_herglotzRieszKernel_smul hw
 
 Depends on / 依赖: circleAverage_re_herglotzRieszKernel_smul, hf.circleAverage_re_herglotzRieszKernel_smul
@@ -602,7 +602,7 @@ theorem DiffContOnCl.circleAverage_poissonKernel_smul
 
 中文:
 定理 DiffContOnCl.circleAverage_poissonKernel_smul
-  结论: [CompleteSpace E] {c : Complex}
+  结论: [完备空间 E] {c : 复形}
   证明: by
   simp_rw [poissonKernel_eq_re_herglotzRieszKernel]
   apply hf.circleAverage_re_herglotzRieszKernel_smul hw
@@ -626,7 +626,7 @@ theorem DiffContOnCl.circleAverage_poissonKernel_smul'
 
 中文:
 定理 DiffContOnCl.circleAverage_poissonKernel_smul'
-  结论: [CompleteSpace E] {c : Complex}
+  结论: [完备空间 E] {c : 复形}
   证明: by
   apply hf.circleAverage_poissonKernel_smul hw
 
@@ -656,7 +656,7 @@ lemma exists_ball_subset_forall_le_norm_circleMap_sub
   
 
 中文:
-引理 exists_ball_subset_forall_le_norm_circleMap_sub
+引理 存在_ball_subset_对任意_le_norm_circleMap_sub
   条件: (hw : w in ball c R)
   证明: by
   have : Disjoint {w} (ball c R)ᶜ := by simpa
@@ -783,7 +783,7 @@ theorem analyticOnNhd_circleAverage_herglotzRieszKernel_smul
 
 中文:
 定理 analyticOnNhd_circleAverage_herglotzRieszKernel_smul
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: (differentiableOn_circleAverage_herglotzRieszKernel_smul hg).analyticOnNhd isOpen_ball
 
 Depends on / 依赖: analyticOnNhd, differentiableOn_circleAverage_herglotzRieszKernel_smul, isOpen_ball

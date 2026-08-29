@@ -56,7 +56,7 @@ instance isMulCommutative
 
 中文:
 实例 isMulCommutative
-  签名: [对任意 i, Mul (f i)] [对任意 i, IsMulCommutative (f i)]
+  签名: [对任意 i, 乘法 (f i)] [对任意 i, 是MulCommutative (f i)]
   定义体: by ext; apply mul_comm'
 
 @[to_additive]
@@ -80,7 +80,7 @@ instance commMagma
 
 中文:
 实例 commMagma
-  签名: [对任意 i, CommMagma (f i)]
+  签名: [对任意 i, 交换原群 (f i)]
   定义体: by ext; apply mul_comm
 
 @[to_additive]
@@ -103,7 +103,7 @@ instance semigroup
 
 中文:
 实例 semigroup
-  签名: [对任意 i, Semigroup (f i)]
+  签名: [对任意 i, 半群 (f i)]
   定义体: by intros; ext; exact mul_assoc _ _ _
 
 @[to_additive]
@@ -123,7 +123,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: [对任意 i, CommSemigroup (f i)]
+  签名: [对任意 i, 交换半群 (f i)]
 
 Depends on / 依赖: Nonempty, Nonempty.of_image2_right, of_image2_right
 -/
@@ -143,7 +143,7 @@ instance mulOneClass
 
 中文:
 实例 mulOneClass
-  签名: [对任意 i, MulOneClass (f i)]
+  签名: [对任意 i, MulOne类 (f i)]
   定义体: by intros; ext; exact one_mul _
   mul_one := by intros; ext; exact mul_one _
 
@@ -168,7 +168,7 @@ instance invOneClass
 
 中文:
 实例 invOneClass
-  签名: [对任意 i, InvOneClass (f i)]
+  签名: [对任意 i, InvOne类 (f i)]
   定义体: by ext; exact inv_one
 
 @[to_additive]
@@ -195,7 +195,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: [对任意 i, Monoid (f i)]
+  签名: [对任意 i, 幺半群 (f i)]
   定义体: semigroup
   __ := mulOneClass
   npow := fun n x i => x i ^ n
@@ -223,7 +223,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: [对任意 i, CommMonoid (f i)]
+  签名: [对任意 i, 交换幺半群 (f i)]
 -/
 instance commMonoid [forall i, CommMonoid (f i)] : CommMonoid (forall i, f i) where
 
@@ -244,7 +244,7 @@ instance divInvMonoid
 
 中文:
 实例 divInvMonoid
-  签名: [对任意 i, DivInvMonoid (f i)]
+  签名: [对任意 i, 除逆幺半群 (f i)]
   定义体: fun z x i => x i ^ z
   div_eq_mul_inv := by intros; ext; exact div_eq_mul_inv _ _
   zpow_zero' := by intros; ext; exact DivInvMonoid.zpow_zero' _
@@ -273,7 +273,7 @@ instance divInvOneMonoid
 
 中文:
 实例 divInvOneMonoid
-  签名: [对任意 i, DivInvOneMonoid (f i)]
+  签名: [对任意 i, DivInvOne幺半群 (f i)]
   定义体: by ext; exact inv_one
 
 @[to_additive]
@@ -322,7 +322,7 @@ instance divisionMonoid
 
 中文:
 实例 divisionMonoid
-  签名: [对任意 i, DivisionMonoid (f i)]
+  签名: [对任意 i, Division幺半群 (f i)]
   定义体: divInvMonoid
   __ := involutiveInv
   mul_inv_rev := by intros; ext; exact mul_inv_rev _ _
@@ -351,7 +351,7 @@ instance divisionCommMonoid
 
 中文:
 实例 divisionCommMonoid
-  签名: [对任意 i, DivisionCommMonoid (f i)]
+  签名: [对任意 i, DivisionComm幺半群 (f i)]
   定义体: { divisionMonoid, commSemigroup with }
 
 @[to_additive]
@@ -374,7 +374,7 @@ instance group
 
 中文:
 实例 group
-  签名: [对任意 i, Group (f i)]
+  签名: [对任意 i, 群 (f i)]
   定义体: by intros; ext; exact inv_mul_cancel _
 
 @[to_additive]
@@ -395,7 +395,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: [对任意 i, CommGroup (f i)]
+  签名: [对任意 i, 交换群 (f i)]
   定义体: { group, commMonoid with }
 
 Depends on / 依赖: commMonoid
@@ -412,7 +412,7 @@ instance instIsLeftCancelMul
 
 中文:
 实例 instIsLeftCancelMul
-  签名: [对任意 i, Mul (f i)] [对任意 i, IsLeftCancelMul (f i)]
+  签名: [对任意 i, 乘法 (f i)] [对任意 i, 左乘消去 (f i)]
   定义体: funext fun _ => mul_left_cancel (congr_fun h _)
 -/
 @[to_additive] instance instIsLeftCancelMul [forall i, Mul (f i)] [forall i, IsLeftCancelMul (f i)] :
@@ -429,7 +429,7 @@ instance instIsRightCancelMul
 
 中文:
 实例 instIsRightCancelMul
-  签名: [对任意 i, Mul (f i)] [对任意 i, IsRightCancelMul (f i)]
+  签名: [对任意 i, 乘法 (f i)] [对任意 i, 右乘消去 (f i)]
   定义体: funext fun _ => mul_right_cancel (congr_fun h _)
 -/
 @[to_additive] instance instIsRightCancelMul [forall i, Mul (f i)] [forall i, IsRightCancelMul (f i)] :
@@ -445,7 +445,7 @@ instance instIsCancelMul
 
 中文:
 实例 instIsCancelMul
-  签名: [对任意 i, Mul (f i)] [对任意 i, IsCancelMul (f i)]
+  签名: [对任意 i, 乘法 (f i)] [对任意 i, 是消去乘法 (f i)]
 -/
 @[to_additive] instance instIsCancelMul [forall i, Mul (f i)] [forall i, IsCancelMul (f i)] :
     IsCancelMul (forall i, f i) where
@@ -463,7 +463,7 @@ instance leftCancelSemigroup
 
 中文:
 实例 leftCancelSemigroup
-  签名: [对任意 i, LeftCancelSemigroup (f i)]
+  签名: [对任意 i, 左消去半群 (f i)]
   定义体: { semigroup with mul_left_cancel := fun _ _ _ => mul_left_cancel }
 
 @[to_additive]
@@ -486,7 +486,7 @@ instance rightCancelSemigroup
 
 中文:
 实例 rightCancelSemigroup
-  签名: [对任意 i, RightCancelSemigroup (f i)]
+  签名: [对任意 i, 右消去半群 (f i)]
   定义体: { semigroup with mul_right_cancel := fun _ _ _ => mul_right_cancel }
 
 @[to_additive]
@@ -509,7 +509,7 @@ instance leftCancelMonoid
 
 中文:
 实例 leftCancelMonoid
-  签名: [对任意 i, LeftCancelMonoid (f i)]
+  签名: [对任意 i, 左消去幺半群 (f i)]
   定义体: { leftCancelSemigroup, monoid with }
 
 @[to_additive]
@@ -532,7 +532,7 @@ instance rightCancelMonoid
 
 中文:
 实例 rightCancelMonoid
-  签名: [对任意 i, RightCancelMonoid (f i)]
+  签名: [对任意 i, 右消去幺半群 (f i)]
   定义体: { rightCancelSemigroup, monoid with }
 
 @[to_additive]
@@ -555,7 +555,7 @@ instance cancelMonoid
 
 中文:
 实例 cancelMonoid
-  签名: [对任意 i, CancelMonoid (f i)]
+  签名: [对任意 i, 消去幺半群 (f i)]
   定义体: { leftCancelMonoid, rightCancelMonoid with }
 
 @[to_additive]
@@ -576,7 +576,7 @@ instance cancelCommMonoid
 
 中文:
 实例 cancelCommMonoid
-  签名: [对任意 i, CancelCommMonoid (f i)]
+  签名: [对任意 i, 消去交换幺半群 (f i)]
   定义体: { leftCancelMonoid, commMonoid with }
 
 Depends on / 依赖: commMonoid, leftCancelMonoid
@@ -604,8 +604,8 @@ theorem extend_one
 
 中文:
 定理 extend_one
-  条件: [One γ] (f : α -> β)
-  结论: Function.extend f (1 : α -> γ) (1 : β -> γ) = 1
+  条件: [幺 γ] (f : α -> β)
+  结论: 函数.extend f (1 : α -> γ) (1 : β -> γ) = 1
   证明: funext fun _ => by apply ite_self
 
 @[to_additive]
@@ -631,7 +631,7 @@ theorem extend_mul
 
 中文:
 定理 extend_mul
-  条件: [Mul γ] (f : α -> β) (g₁ g₂ : α -> γ) (e₁ e₂ : β -> γ)
+  条件: [乘法 γ] (f : α -> β) (g₁ g₂ : α -> γ) (e₁ e₂ : β -> γ)
   证明: by
   classical
   funext x
@@ -663,7 +663,7 @@ theorem extend_inv
 
 中文:
 定理 extend_inv
-  条件: [Inv γ] (f : α -> β) (g : α -> γ) (e : β -> γ)
+  条件: [取逆 γ] (f : α -> β) (g : α -> γ) (e : β -> γ)
   证明: by
   classical
   funext x
@@ -693,7 +693,7 @@ theorem extend_div
 
 中文:
 定理 extend_div
-  条件: [Div γ] (f : α -> β) (g₁ g₂ : α -> γ) (e₁ e₂ : β -> γ)
+  条件: [除法 γ] (f : α -> β) (g₁ g₂ : α -> γ) (e₁ e₂ : β -> γ)
   证明: by
   classical
   funext x
@@ -721,7 +721,7 @@ lemma comp_eq_const_iff
 
 中文:
 引理 comp_eq_const_iff
-  条件: (b : β) (f : α -> β) {g : β -> γ} (hg : Injective g)
+  条件: (b : β) (f : α -> β) {g : β -> γ} (hg : 单射 g)
   证明: hg.comp_left.eq_iff' rfl
 
 @[to_additive]
@@ -746,7 +746,7 @@ lemma comp_eq_one_iff
 
 中文:
 引理 comp_eq_one_iff
-  条件: [One β] [One γ] (f : α -> β) {g : β -> γ} (hg : Injective g) (hg0 : g 1 = 1)
+  条件: [幺 β] [幺 γ] (f : α -> β) {g : β -> γ} (hg : 单射 g) (hg0 : g 1 = 1)
   证明: by
   simpa [hg0, const_one] using comp_eq_const_iff 1 f hg
 
@@ -769,7 +769,7 @@ lemma comp_ne_one_iff
 
 中文:
 引理 comp_ne_one_iff
-  条件: [One β] [One γ] (f : α -> β) {g : β -> γ} (hg : Injective g) (hg0 : g 1 = 1)
+  条件: [幺 β] [幺 γ] (f : α -> β) {g : β -> γ} (hg : 单射 g) (hg0 : g 1 = 1)
   证明: (comp_eq_one_iff f hg hg0).ne
 
 Depends on / 依赖: comp_eq_one_iff
@@ -795,7 +795,7 @@ definition uniqueOfSurjectiveOne
 
 中文:
 定义 uniqueOfSurjectiveOne
-  签名: (α : 类型) {β : 类型} [One β] (h : Function.Surjective (1 : α -> β))
+  签名: (α : 类型) {β : 类型} [幺 β] (h : 函数.满射 (1 : α -> β))
   定义体: h.uniqueOfSurjectiveConst α (1 : β)
 
 @[to_additive]
@@ -816,8 +816,8 @@ theorem Subsingleton.pi_mulSingle_eq
   proof: funext fun j => by rw [Subsingleton.elim j i, Pi.mulSingle_eq_same]
 
 中文:
-定理 Subsingleton.pi_mulSingle_eq
-  结论: {α : 类型} [DecidableEq I] [Subsingleton I] [One α]
+定理 子单例.pi_mulSingle_eq
+  结论: {α : 类型} [DecidableEq I] [子单例 I] [幺 α]
   证明: funext fun j => by rw [Subsingleton.elim j i, Pi.mulSingle_eq_same]
 
 Depends on / 依赖: Pi.mulSingle_eq_same, Subsingleton, Subsingleton.elim, mulSingle_eq_same
@@ -844,8 +844,8 @@ theorem elim_one_one
 
 中文:
 定理 elim_one_one
-  条件: [One γ]
-  结论: Sum.elim (1 : α -> γ) (1 : β -> γ) = 1
+  条件: [幺 γ]
+  结论: 和.elim (1 : α -> γ) (1 : β -> γ) = 1
   证明: Sum.elim_const_const 1
 
 @[to_additive (attr := simp)]
@@ -869,7 +869,7 @@ theorem elim_mulSingle_one
 
 中文:
 定理 elim_mulSingle_one
-  条件: [DecidableEq α] [DecidableEq β] [One γ] (i : α) (c : γ)
+  条件: [DecidableEq α] [DecidableEq β] [幺 γ] (i : α) (c : γ)
   证明: by
   simp only [Pi.mulSingle, Sum.elim_update_left, elim_one_one]
 
@@ -895,7 +895,7 @@ theorem elim_one_mulSingle
 
 中文:
 定理 elim_one_mulSingle
-  条件: [DecidableEq α] [DecidableEq β] [One γ] (i : β) (c : γ)
+  条件: [DecidableEq α] [DecidableEq β] [幺 γ] (i : β) (c : γ)
   证明: by
   simp only [Pi.mulSingle, Sum.elim_update_right, elim_one_one]
 
@@ -921,8 +921,8 @@ theorem elim_inv_inv
 
 中文:
 定理 elim_inv_inv
-  条件: [Inv γ]
-  结论: Sum.elim a⁻¹ b⁻¹ = (Sum.elim a b)⁻¹
+  条件: [取逆 γ]
+  结论: 和.elim a⁻¹ b⁻¹ = (和.elim a b)⁻¹
   证明: (Sum.comp_elim Inv.inv a b).symm
 
 @[to_additive]
@@ -948,8 +948,8 @@ theorem elim_mul_mul
 
 中文:
 定理 elim_mul_mul
-  条件: [Mul γ]
-  结论: Sum.elim (a * a') (b * b') = Sum.elim a b * Sum.elim a' b'
+  条件: [乘法 γ]
+  结论: 和.elim (a * a') (b * b') = 和.elim a b * 和.elim a' b'
   证明: by
   ext x
   cases x <;> rfl
@@ -976,8 +976,8 @@ theorem elim_div_div
 
 中文:
 定理 elim_div_div
-  条件: [Div γ]
-  结论: Sum.elim (a / a') (b / b') = Sum.elim a b / Sum.elim a' b'
+  条件: [除法 γ]
+  结论: 和.elim (a / a') (b / b') = 和.elim a b / 和.elim a' b'
   证明: by
   ext x
   cases x <;> rfl

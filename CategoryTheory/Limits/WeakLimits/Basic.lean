@@ -53,11 +53,11 @@ structure IsWeakLimit
     - fac : forall (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j  [default: by cat_disch]
 
 中文:
-结构 IsWeakLimit
-  参数: (t : Cone F)
+结构 是WeakLimit
+  参数: (t : 锥 F)
   公理与运算 (2 个):
-    - lift : 对任意 s : Cone F, s.pt ⟶ t.pt
-    - fac : 对任意 (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j  [默认: by cat_disch]
+    - lift : 对任意 s : 锥 F, s.pt ⟶ t.pt
+    - fac : 对任意 (s : 锥 F) (j : J), lift s ≫ t.π.app j = s.π.app j  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -80,8 +80,8 @@ definition IsWeakLimit.retractOfIsLimit
   retract := l.hom_ext (fun _ => by rw [assoc, id_comp, l.fac t', l'.fac t])
 
 中文:
-定义 IsWeakLimit.retractOfIsLimit
-  签名: {t t' : Cone F} (l : IsLimit t) (l' : IsWeakLimit t')
+定义 是WeakLimit.retractOfIsLimit
+  签名: {t t' : 锥 F} (l : 是极限 t) (l' : 是WeakLimit t')
   定义体: l'.lift t
   r := l.lift t'
   retract := l.hom_ext (fun _ => by rw [assoc, id_comp, l.fac t', l'.fac t])
@@ -102,8 +102,8 @@ definition IsLimit.isWeakLimit
   fac := l.fac
 
 中文:
-定义 IsLimit.isWeakLimit
-  签名: {t : Cone F} (l : IsLimit t)
+定义 是极限.isWeakLimit
+  签名: {t : 锥 F} (l : 是极限 t)
   定义体: l.lift
   fac := l.fac
 
@@ -127,8 +127,8 @@ structure WeakLimitCone
 结构 WeakLimitCone
   参数: (F : J ⥤ C)
   公理与运算 (2 个):
-    - cone : Cone F
-    - isWeakLimit : IsWeakLimit cone
+    - cone : 锥 F
+    - isWeakLimit : 是WeakLimit cone
 -/
 structure WeakLimitCone (F : J ⥤ C) where
   /-- The cone itself -/
@@ -147,7 +147,7 @@ definition WeakLimitCone.ofLimitCone
 
 中文:
 定义 WeakLimitCone.ofLimitCone
-  签名: {F : J ⥤ C} (c : LimitCone F)
+  签名: {F : J ⥤ C} (c : 极限锥 F)
   定义体: c.cone
   isWeakLimit := c.isLimit.isWeakLimit
 
@@ -166,7 +166,7 @@ class HasWeakLimit
   (no additional axioms)
 
 中文:
-类 HasWeakLimit
+类 有WeakLimit
   参数: (F : J ⥤ C)
   (无附加公理)
 
@@ -192,9 +192,9 @@ theorem HasWeakLimit.mk
   proof: ⟨Nonempty.intro d⟩
 
 中文:
-定理 HasWeakLimit.mk
+定理 有WeakLimit.mk
   条件: {F : J ⥤ C} (d : WeakLimitCone F)
-  结论: HasWeakLimit F
+  结论: 有WeakLimit F
   证明: ⟨Nonempty.intro d⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -214,7 +214,7 @@ definition getWeakLimitCone
 
 中文:
 定义 getWeakLimitCone
-  签名: (F : J ⥤ C) [HasWeakLimit F]
+  签名: (F : J ⥤ C) [有WeakLimit F]
   定义体: Classical.choice HasWeakLimit.exists_weakLimitCone
 
 Depends on / 依赖: Classical, Classical.choice, HasWeakLimit, HasWeakLimit.exists_weakLimitCone, choice, exists_weakLimitCone
@@ -233,10 +233,10 @@ class HasWeakLimitsOfShape
     - hasWeakLimit : forall F : J ⥤ C, HasWeakLimit F  [default: by infer_instance]
 
 中文:
-类 HasWeakLimitsOfShape
+类 有WeakLimitsOfShape
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasWeakLimit : 对任意 F : J ⥤ C, HasWeakLimit F  [默认: by infer_instance]
+    - hasWeakLimit : 对任意 F : J ⥤ C, 有WeakLimit F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -259,7 +259,7 @@ definition weakLimit.cone
 
 中文:
 定义 weakLimit.cone
-  签名: (F : J ⥤ C) [HasWeakLimit F]
+  签名: (F : J ⥤ C) [有WeakLimit F]
   定义体: (getWeakLimitCone F).cone
 
 Depends on / 依赖: getWeakLimitCone
@@ -277,7 +277,7 @@ definition weakLimit
 
 中文:
 定义 weakLimit
-  签名: (F : J ⥤ C) [HasWeakLimit F]
+  签名: (F : J ⥤ C) [有WeakLimit F]
   定义体: (weakLimit.cone F).pt
 
 Depends on / 依赖: weakLimit, weakLimit.cone
@@ -297,7 +297,7 @@ definition weakLimit.π
 
 中文:
 定义 weakLimit.π
-  签名: (F : J ⥤ C) [HasWeakLimit F] (j : J)
+  签名: (F : J ⥤ C) [有WeakLimit F] (j : J)
   定义体: (weakLimit.cone F).π.app j
 
 @[reassoc]
@@ -322,7 +322,7 @@ theorem weakLimit.π_comp_eqToHom
 
 中文:
 定理 weakLimit.π_comp_eqToHom
-  条件: (F : J ⥤ C) [HasWeakLimit F] {j j' : J} (hj : j = j')
+  条件: (F : J ⥤ C) [有WeakLimit F] {j j' : J} (hj : j = j')
   证明: by
   subst hj
   simp
@@ -347,7 +347,7 @@ theorem weakLimit.cone_pt
 
 中文:
 定理 weakLimit.cone_pt
-  条件: {F : J ⥤ C} [HasWeakLimit F]
+  条件: {F : J ⥤ C} [有WeakLimit F]
   证明: rfl
 
 @[simp]
@@ -368,7 +368,7 @@ theorem weakLimit.cone_π
 
 中文:
 定理 weakLimit.cone_π
-  条件: {F : J ⥤ C} [HasWeakLimit F]
+  条件: {F : J ⥤ C} [有WeakLimit F]
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -387,7 +387,7 @@ theorem weakLimit.w
 
 中文:
 定理 weakLimit.w
-  条件: (F : J ⥤ C) [HasWeakLimit F] {j j' : J} (f : j ⟶ j')
+  条件: (F : J ⥤ C) [有WeakLimit F] {j j' : J} (f : j ⟶ j')
   证明: (weakLimit.cone F).w f
 
 Depends on / 依赖: P.isColimitCokernelCofork, epi_of_isColimit_cofork, infer_instance, isColimitCokernelCofork, weakLimit, weakLimit.cone
@@ -406,7 +406,7 @@ definition weakLimit.isWeakLimit
 
 中文:
 定义 weakLimit.isWeakLimit
-  签名: (F : J ⥤ C) [HasWeakLimit F]
+  签名: (F : J ⥤ C) [有WeakLimit F]
   定义体: (getWeakLimitCone F).isWeakLimit
 
 Depends on / 依赖: getWeakLimitCone, isWeakLimit
@@ -427,7 +427,7 @@ definition weakLimit.lift
 
 中文:
 定义 weakLimit.lift
-  签名: (F : J ⥤ C) [HasWeakLimit F] (c : Cone F)
+  签名: (F : J ⥤ C) [有WeakLimit F] (c : 锥 F)
   定义体: (weakLimit.isWeakLimit F).lift c
 
 @[simp]
@@ -451,7 +451,7 @@ theorem weakLimit.isWeakLimit_lift
 
 中文:
 定理 weakLimit.isWeakLimit_lift
-  条件: {F : J ⥤ C} [HasWeakLimit F] (c : Cone F)
+  条件: {F : J ⥤ C} [有WeakLimit F] (c : 锥 F)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -471,7 +471,7 @@ theorem weakLimit.lift_π
 
 中文:
 定理 weakLimit.lift_π
-  条件: {F : J ⥤ C} [HasWeakLimit F] (c : Cone F) (j : J)
+  条件: {F : J ⥤ C} [有WeakLimit F] (c : 锥 F) (j : J)
   证明: IsWeakLimit.fac _ c j
 
 Depends on / 依赖: IsWeakLimit, IsWeakLimit.fac
@@ -494,7 +494,7 @@ definition ofIsoWeakLimit
 
 中文:
 定义 ofIsoWeakLimit
-  签名: {r t : Cone F} (P : IsWeakLimit r) (i : r ≅ t)
+  签名: {r t : 锥 F} (P : 是WeakLimit r) (i : r ≅ t)
   定义体: P.lift s ≫ i.hom.hom
 
 Depends on / 依赖: P.lift, i.hom.hom
@@ -517,7 +517,7 @@ definition equivIsoWeakLimit
 
 中文:
 定义 equivIsoWeakLimit
-  签名: {r t : Cone F} (i : r ≅ t)
+  签名: {r t : 锥 F} (i : r ≅ t)
   定义体: h.ofIsoWeakLimit i
   invFun h := h.ofIsoWeakLimit i.symm
   left_inv _ := by simp [ofIsoWeakLimit]
@@ -546,7 +546,7 @@ theorem equivIsoWeakLimit_apply
 
 中文:
 定理 equivIsoWeakLimit_apply
-  条件: {r t : Cone F} (i : r ≅ t) (P : IsWeakLimit r)
+  条件: {r t : 锥 F} (i : r ≅ t) (P : 是WeakLimit r)
   证明: rfl
 
 @[simp]
@@ -566,7 +566,7 @@ theorem equivIsoWeakLimit_symm_apply
 
 中文:
 定理 equivIsoWeakLimit_symm_apply
-  条件: {r t : Cone F} (i : r ≅ t) (P : IsWeakLimit t)
+  条件: {r t : 锥 F} (i : r ≅ t) (P : 是WeakLimit t)
   证明: rfl
 -/
 theorem equivIsoWeakLimit_symm_apply {r t : Cone F} (i : r ≅ t) (P : IsWeakLimit t) :
@@ -585,7 +585,7 @@ definition liftConeMorphism
 
 中文:
 定义 liftConeMorphism
-  签名: {t : Cone F} (h : IsWeakLimit t) (s : Cone F)
+  签名: {t : 锥 F} (h : 是WeakLimit t) (s : 锥 F)
   定义体: h.lift s
 
 Depends on / 依赖: h.lift
@@ -607,7 +607,7 @@ definition mkOfConeMorphism
 
 中文:
 定义 mkOfConeMorphism
-  签名: {t : Cone F} (lift : 对任意 s : Cone F, s ⟶ t)
+  签名: {t : 锥 F} (lift : 对任意 s : 锥 F, s ⟶ t)
   定义体: (lift s).hom
 -/
 def mkOfConeMorphism {t : Cone F} (lift : forall s : Cone F, s ⟶ t) : IsWeakLimit t where
@@ -623,7 +623,7 @@ definition ofRightAdjoint
 
 中文:
 定义 ofRightAdjoint
-  签名: {left : Cone F ⥤ Cone G} {right : Cone G ⥤ Cone F}
+  签名: {left : 锥 F ⥤ 锥 G} {right : 锥 G ⥤ 锥 F}
   定义体: mkOfConeMorphism (fun s => adj.homEquiv s c (t.liftConeMorphism _))
 
 Depends on / 依赖: adj.homEquiv, homEquiv, liftConeMorphism, mkOfConeMorphism, t.liftConeMorphism
@@ -644,7 +644,7 @@ lemma iff_of_cone_equiv
 
 中文:
 引理 iff_of_cone_equiv
-  条件: {D : 类型} [Category* D] {G : K ⥤ D} (h : Cone G ≌ Cone F) {c : Cone G}
+  条件: {D : 类型} [范畴* D] {G : K ⥤ D} (h : 锥 G ≌ 锥 F) {c : 锥 G}
   证明: ⟨fun P => Nonempty.intro (IsWeakLimit.ofIsoWeakLimit
     (IsWeakLimit.ofRightAdjoint h.toAdjunction P.some) (h.unitIso.symm.app c)),
    fun P => Nonempty.intro (IsWeakLimit.ofRightAdjoint h.symm.toAdjunction P.some)⟩
@@ -667,7 +667,7 @@ lemma postcompose_hom_iff_of_iso
 
 中文:
 引理 postcompose_hom_iff_of_iso
-  条件: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F)
+  条件: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F)
   证明: iff_of_cone_equiv (Cone.postcomposeEquivalence α)
 
 Depends on / 依赖: Cone.postcomposeEquivalence, iff_of_cone_equiv, postcomposeEquivalence
@@ -686,7 +686,7 @@ lemma postcompose_inv_iff_of_iso
 
 中文:
 引理 postcompose_inv_iff_of_iso
-  条件: {F G : J ⥤ C} (α : F ≅ G) (c : Cone G)
+  条件: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 G)
   证明: postcompose_hom_iff_of_iso α.symm c
 
 Depends on / 依赖: postcompose_hom_iff_of_iso
@@ -705,7 +705,7 @@ lemma iff_of_natIso_of_iso
 
 中文:
 引理 iff_of_natIso_of_iso
-  结论: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) (d : Cone G)
+  结论: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F) (d : 锥 G)
   证明: (postcompose_hom_iff_of_iso α _).symm.trans (IsWeakLimit.equivIsoWeakLimit w).nonempty_congr
 
 Depends on / 依赖: IsWeakLimit, IsWeakLimit.equivIsoWeakLimit, equivIsoWeakLimit, nonempty_congr, postcompose_hom_iff_of_iso, symm.trans
@@ -732,8 +732,8 @@ theorem hasWeakLimit_of_iso
 
 中文:
 定理 hasWeakLimit_of_iso
-  条件: {F G : J ⥤ C} [HasWeakLimit F] (α : F ≅ G)
-  结论: HasWeakLimit G
+  条件: {F G : J ⥤ C} [有WeakLimit F] (α : F ≅ G)
+  结论: 有WeakLimit G
   证明: HasWeakLimit.mk
     { cone := (Cone.postcompose α.hom).obj (weakLimit.cone F)
       isWeakLimit :=
@@ -761,7 +761,7 @@ theorem hasWeakLimit_iff_of_iso
 中文:
 定理 hasWeakLimit_iff_of_iso
   条件: {F G : J ⥤ C} (α : F ≅ G)
-  结论: HasWeakLimit F ↔ HasWeakLimit G
+  结论: 有WeakLimit F ↔ 有WeakLimit G
   证明: ⟨fun _ => hasWeakLimit_of_iso α, fun _ => hasWeakLimit_of_iso α.symm⟩
 
 Depends on / 依赖: hasWeakLimit_of_iso

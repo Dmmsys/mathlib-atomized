@@ -78,10 +78,10 @@ structure Partition
     - sSup_eq' : sSup parts = s
 
 中文:
-结构 Partition
-  参数: [CompleteLattice α] (s : α)
+结构 分拆
+  参数: [完备格 α] (s : α)
   公理与运算 (4 个):
-    - parts : Set α
+    - parts : 集合 α
     - sSupIndep' : sSupIndep parts
     - bot_notMem' : ⊥ ∉ parts
     - sSup_eq' : sSup parts = s
@@ -118,7 +118,7 @@ initialize_simps_projections Partition (parts -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: {s : α} (P : Partition s)
+  签名: {s : α} (P : 分拆 s)
   定义体: P
 
 initialize_simps_projections Partition (parts -> coe, as_prefix coe)
@@ -176,8 +176,8 @@ lemma sSupIndep
 
 中文:
 引理 sSupIndep
-  条件: (P : Partition s)
-  结论: sSupIndep (P : Set α)
+  条件: (P : 分拆 s)
+  结论: sSupIndep (P : 集合 α)
   证明: P.sSupIndep'
 
 Depends on / 依赖: P.sSupIndep, sSupIndep
@@ -215,7 +215,7 @@ lemma pairwiseDisjoint
 
 中文:
 引理 pairwiseDisjoint
-  结论: Set.PairwiseDisjoint (P : Set α) id
+  结论: 集合.PairwiseDisjoint (P : 集合 α) id
   证明: P.sSupIndep'.pairwiseDisjoint
 
 Depends on / 依赖: P.sSupIndep, pairwiseDisjoint, sSupIndep
@@ -281,7 +281,7 @@ lemma sSup_eq
 
 中文:
 引理 sSup_eq
-  条件: (P : Partition s)
+  条件: (P : 分拆 s)
   结论: sSup P = s
   证明: P.sSup_eq'
 
@@ -306,7 +306,7 @@ lemma iSup_eq
 
 中文:
 引理 iSup_eq
-  条件: (P : Partition s)
+  条件: (P : 分拆 s)
   结论: ⨆ x in P, x = s
   证明: by
   simp_rw [← P.sSup_eq, sSup_eq_iSup]
@@ -329,7 +329,7 @@ lemma le_of_mem
 
 中文:
 引理 le_of_mem
-  条件: (P : Partition s) (hx : x in P)
+  条件: (P : 分拆 s) (hx : x in P)
   结论: x <= s
   证明: (le_sSup hx).trans_eq P.sSup_eq
 
@@ -351,8 +351,8 @@ lemma parts_nonempty
 
 中文:
 引理 parts_nonempty
-  条件: (P : Partition s) (hs : s != ⊥)
-  结论: (P : Set α).Nonempty
+  条件: (P : 分拆 s) (hs : s != ⊥)
+  结论: (P : 集合 α).非空
   证明: nonempty_iff_ne_empty.2 fun hP => by simp [← P.sSup_eq, hP, sSup_empty] at hs
 
 @[simp]
@@ -374,7 +374,7 @@ lemma bot_notMem
 
 中文:
 引理 bot_notMem
-  条件: (P : Partition s)
+  条件: (P : 分拆 s)
   结论: ⊥ ∉ P
   证明: P.bot_notMem'
 
@@ -440,7 +440,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (P : Partition s) (hst : s = t)
+  签名: (P : 分拆 s) (hst : s = t)
   定义体: P
   sSupIndep' := P.sSupIndep
   bot_notMem' := P.bot_notMem
@@ -486,7 +486,7 @@ definition partscopyEquiv
 
 中文:
 定义 partscopyEquiv
-  签名: (P : Partition s) (hst : s = t)
+  签名: (P : 分拆 s) (hst : s = t)
   定义体: Equiv.setCongr rfl
 
 Depends on / 依赖: Equiv.setCongr, setCongr
@@ -511,7 +511,7 @@ definition removeBot
 
 中文:
 定义 removeBot
-  签名: (P : Set α) (indep : _root_.sSupIndep P) (hsSup : sSup P = s)
+  签名: (P : 集合 α) (indep : _root_.sSupIndep P) (hsSup : sSup P = s)
   定义体: P \ {⊥}
   sSupIndep' := indep.mono sdiff_subset
   bot_notMem' := by simp
@@ -538,7 +538,7 @@ lemma mem_removeBot
 
 中文:
 引理 mem_removeBot
-  条件: (P : Set α) (indep : _root_.sSupIndep P) (hsSup : sSup P = s)
+  条件: (P : 集合 α) (indep : _root_.sSupIndep P) (hsSup : sSup P = s)
   证明: Iff.rfl
 
 @[simp]
@@ -563,7 +563,7 @@ obtain rfl := le_bot_iff.mp P.le_of_mem hxP
 
 中文:
 引理 notMem_of_bot
-  条件: (P : Partition (⊥ : α)) (x : α)
+  条件: (P : 分拆 (⊥ : α)) (x : α)
   结论: x ∉ P
   证明: by
   rintro hxP
@@ -588,7 +588,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Partition (⊥ : α))
+  签名: 唯一 (分拆 (⊥ : α))
   定义体: removeBot (∅ : Set α) sSupIndep_empty sSup_empty
   uniq P := by ext; simp
 
@@ -647,7 +647,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Partition s)
+  签名: 偏序 (分拆 s)
   定义体: forall ⦃x⦄, x in P -> exists y in Q, x <= y
   lt := _
   le_refl P x hx := ⟨x, hx, le_rfl⟩
@@ -702,7 +702,7 @@ lemma exists_le_of_mem_le
   proof: h hx
 
 中文:
-引理 exists_le_of_mem_le
+引理 存在_le_of_mem_le
   条件: (h : P <= Q) (hx : x in P)
   结论: 存在 y in Q, x <= y
   证明: h hx
@@ -724,7 +724,7 @@ lemma existsUnique_of_mem_le
   exact le_bot_iff.mp (this hxz hxy)
 
 中文:
-引理 existsUnique_of_mem_le
+引理 存在Unique_of_mem_le
   条件: (h : P <= Q) (hx : x in P)
   结论: 存在! y in Q, x <= y
   证明: by
@@ -754,7 +754,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: : OrderTop (Partition s) where
+  签名: : 有顶序 (分拆 s) where
   定义体: removeBot {s} (sSupIndep_singleton s) sSup_singleton
   le_top P x hxP := by simp [P.ne_bot_of_mem' hxP, P.le_of_mem hxP]
 
@@ -774,7 +774,7 @@ lemma top_def
 
 中文:
 引理 top_def
-  结论: (⊤ : Partition s) = removeBot {s} (sSupIndep_singleton s) sSup_singleton
+  结论: (⊤ : 分拆 s) = removeBot {s} (sSupIndep_singleton s) sSup_singleton
   证明: rfl
 -/
 lemma top_def : (⊤ : Partition s) = removeBot {s} (sSupIndep_singleton s) sSup_singleton := rfl
@@ -792,7 +792,7 @@ lemma parts_top
 中文:
 引理 parts_top
   条件: (hs : s != ⊥)
-  结论: ((⊤ : Partition s) : Set α) = {s}
+  结论: ((⊤ : 分拆 s) : 集合 α) = {s}
   证明: by
   simpa [top_def]
 -/
@@ -812,7 +812,7 @@ lemma mem_top_iff
 中文:
 引理 mem_top_iff
   条件: {a : α}
-  结论: a in (⊤ : Partition s) ↔ a = s ∧ a != ⊥
+  结论: a in (⊤ : 分拆 s) ↔ a = s ∧ a != ⊥
   证明: by
   rw [top_def]; rw [mem_removeBot]; rw [mem_singleton_iff]
 -/
@@ -829,7 +829,7 @@ lemma parts_top_subset
 
 中文:
 引理 parts_top_subset
-  结论: ((⊤ : Partition s) : Set α) subseteq {s}
+  结论: ((⊤ : 分拆 s) : 集合 α) subseteq {s}
   证明: by simp
 -/
 lemma parts_top_subset : ((⊤ : Partition s) : Set α) subseteq {s} := by simp
@@ -849,7 +849,7 @@ instance instSemilatticeInf
 
 中文:
 实例 instSemilatticeInf
-  签名: {α : 类型} [Order.Frame α] (s : α)
+  签名: {α : 类型} [Order.框架 α] (s : α)
   定义体: removeBot {a | exists p in P, exists q in Q, a = p ⊓ q} (by
       rw [sSupIndep_iff_pairwiseDisjoint]
       intro a ha a' ha' h
@@ -892,7 +892,7 @@ lemma mem_inf_iff
 
 中文:
 引理 mem_inf_iff
-  条件: {α : 类型} [Order.Frame α] {s a : α} {P Q : Partition s}
+  条件: {α : 类型} [Order.框架 α] {s a : α} {P Q : 分拆 s}
   证明: and_comm
 
 Depends on / 依赖: and_comm
@@ -918,7 +918,7 @@ lemma sUnion_eq
 
 中文:
 引理 sUnion_eq
-  条件: (P : Partition s)
+  条件: (P : 分拆 s)
   结论: ⋃₀ P = s
   证明: P.sSup_eq
 -/
@@ -936,7 +936,7 @@ lemma nonempty_of_mem
 中文:
 引理 nonempty_of_mem
   条件: (ht : t in P)
-  结论: t.Nonempty
+  结论: t.非空
   证明: notMem_singleton_empty.1 P.ne_bot_of_mem ht
 
 Depends on / 依赖: P.ne_bot_of_mem, ne_bot_of_mem, notMem_singleton_empty
@@ -990,7 +990,7 @@ lemma mem_iff_exists
   rwa [← P.sUnion_eq, mem_sUnion] at hx
 
 中文:
-引理 mem_iff_exists
+引理 mem_iff_存在
   结论: x in u ↔ 存在 t in P, x in t
   证明: by
   refine ⟨fun hx => ?_, fun ⟨t, htP, hxt⟩ => subset_of_mem htP hxt⟩
@@ -1137,7 +1137,7 @@ definition rep
 
 中文:
 定义 rep
-  签名: (P : Partition u) (ht : t in P)
+  签名: (P : 分拆 u) (ht : t in P)
   定义体: (P.nonempty_of_mem ht).some
 
 Depends on / 依赖: P.nonempty_of_mem, nonempty_of_mem
@@ -1193,8 +1193,8 @@ definition Rel
   body: exists t in P, a in t ∧ b in t
 
 中文:
-定义 Rel
-  签名: (P : Partition s) (a b : α)
+定义 关系
+  签名: (P : 分拆 s) (a b : α)
   定义体: exists t in P, a in t ∧ b in t
 -/
 def Rel (P : Partition s) (a b : α) : Prop :=
@@ -1216,7 +1216,7 @@ lemma rel_le_iff_le
 
 中文:
 引理 rel_le_iff_le
-  结论: P.Rel <= Q.Rel ↔ P <= Q
+  结论: P.关系 <= Q.关系 ↔ P <= Q
   证明: by
   refine ⟨fun h S hS => ?_, fun h a b ⟨t, ht, ha, hb⟩ => ?_⟩
   · obtain ⟨x, hxS⟩ := nonempty_of_mem hS
@@ -1247,8 +1247,8 @@ lemma Rel.exists
   proof: h
 
 中文:
-引理 Rel.exists
-  条件: (h : P.Rel x y)
+引理 关系.存在
+  条件: (h : P.关系 x y)
   结论: 存在 t in P, x in t ∧ y in t
   证明: h
 -/
@@ -1269,8 +1269,8 @@ lemma Rel.forall
 @[simp]
 
 中文:
-引理 Rel.forall
-  条件: (h : P.Rel x y) (ht : t in P)
+引理 关系.对任意
+  条件: (h : P.关系 x y) (ht : t in P)
   结论: x in t ↔ y in t
   证明: by
   obtain ⟨t, ht', hx, hy⟩ := h
@@ -1300,7 +1300,7 @@ lemma rel_rfl_iff
 
 中文:
 引理 rel_rfl_iff
-  结论: P.Rel x x ↔ x in u
+  结论: P.关系 x x ↔ x in u
   证明: by
   refine ⟨fun ⟨t, ht, hxP, _⟩ => subset_of_mem ht hxP, fun hx => ?_⟩
   obtain ⟨t, ⟨ht, hxt⟩, -⟩ := P.mem_iff_unique.mp hx
@@ -1330,9 +1330,9 @@ lemma Rel.symm
   proof: symm_of P.Rel h
 
 中文:
-引理 Rel.symm
-  条件: (h : P.Rel x y)
-  结论: P.Rel y x
+引理 关系.symm
+  条件: (h : P.关系 x y)
+  结论: P.关系 y x
   证明: symm_of P.Rel h
 -/
 @[symm] lemma Rel.symm (h : P.Rel x y) : P.Rel y x := symm_of P.Rel h
@@ -1347,7 +1347,7 @@ lemma rel_comm
 
 中文:
 引理 rel_comm
-  结论: P.Rel x y ↔ P.Rel y x
+  结论: P.关系 x y ↔ P.关系 y x
   证明: ⟨Rel.symm, Rel.symm⟩
 
 Depends on / 依赖: Rel.symm
@@ -1364,9 +1364,9 @@ lemma Rel.trans
   proof: trans_of P.Rel hxy hyz
 
 中文:
-引理 Rel.trans
-  条件: (hxy : P.Rel x y) (hyz : P.Rel y z)
-  结论: P.Rel x z
+引理 关系.trans
+  条件: (hxy : P.关系 x y) (hyz : P.关系 y z)
+  结论: P.关系 x z
   证明: trans_of P.Rel hxy hyz
 -/
 lemma Rel.trans (hxy : P.Rel x y) (hyz : P.Rel y z) : P.Rel x z := trans_of P.Rel hxy hyz
@@ -1383,8 +1383,8 @@ lemma Rel.left_mem
   exact subset_of_mem htP hxt
 
 中文:
-引理 Rel.left_mem
-  条件: (h : P.Rel x y)
+引理 关系.left_mem
+  条件: (h : P.关系 x y)
   结论: x in u
   证明: by
   obtain ⟨t, htP, hxt, -⟩ := h
@@ -1406,8 +1406,8 @@ lemma Rel.right_mem
   proof: h.symm.left_mem
 
 中文:
-引理 Rel.right_mem
-  条件: (h : P.Rel x y)
+引理 关系.right_mem
+  条件: (h : P.关系 x y)
   结论: y in u
   证明: h.symm.left_mem
 
@@ -1427,7 +1427,7 @@ lemma rep_rel
 中文:
 引理 rep_rel
   条件: (ht : t in P) (hx : x in t)
-  结论: P.Rel x (P.rep ht)
+  结论: P.关系 x (P.rep ht)
   证明: ⟨t, ht, hx, P.rep_mem ht⟩
 
 Depends on / 依赖: P.rep_mem, rep_mem
@@ -1448,7 +1448,7 @@ definition partOf
 
 中文:
 定义 partOf
-  签名: (P : Partition u) (a : α)
+  签名: (P : 分拆 u) (a : α)
   定义体: {b | P.Rel a b}
 
 Depends on / 依赖: P.Rel
@@ -1482,7 +1482,7 @@ lemma mem_partOf_iff
 
 中文:
 引理 mem_partOf_iff
-  结论: x in P.partOf y ↔ P.Rel y x
+  结论: x in P.partOf y ↔ P.关系 y x
   证明: Iff.rfl
 -/
 @[simp] lemma mem_partOf_iff : x in P.partOf y ↔ P.Rel y x := Iff.rfl
@@ -1610,7 +1610,7 @@ lemma mem_iff_exists_partOf
   proof: ⟨fun hs => ⟨P.rep hs, rep_mem_supp hs, partOf_rep hs⟩, fun ⟨_, hxu, h⟩ => h ▸ partOf_mem hxu⟩
 
 中文:
-引理 mem_iff_exists_partOf
+引理 mem_iff_存在_partOf
   结论: s in P ↔ 存在 x in u, partOf P x = s
   证明: ⟨fun hs => ⟨P.rep hs, rep_mem_supp hs, partOf_rep hs⟩, fun ⟨_, hxu, h⟩ => h ▸ partOf_mem hxu⟩
 
@@ -1633,7 +1633,7 @@ lemma partOf_nonempty_iff
 
 中文:
 引理 partOf_nonempty_iff
-  结论: (P.partOf x).Nonempty ↔ x in u
+  结论: (P.partOf x).非空 ↔ x in u
   证明: by
   refine ⟨fun ⟨y, hy⟩ => hy.left_mem, fun h => ?_⟩
   simpa [nonempty_iff_ne_empty] using P.ne_bot_of_mem (partOf_mem h)
@@ -1680,7 +1680,7 @@ lemma rel_iff_partOf_eq_partOf_of_mem
 
 中文:
 引理 rel_iff_partOf_eq_partOf_of_mem
-  条件: (P : Partition u) (hx : x in u) (hy : y in u)
+  条件: (P : 分拆 u) (hx : x in u) (hy : y in u)
   证明: by
   refine ⟨fun ⟨t, htP, hxt, hyt⟩ => eq_partOf_of_mem (P.partOf_mem hx) ?_,
     fun h => ⟨P.partOf x, P.partOf_mem hx, P.mem_partOf hx, h ▸ mem_partOf hy⟩⟩
@@ -1705,7 +1705,7 @@ lemma rel_iff_partOf_eq_partOf
 
 中文:
 引理 rel_iff_partOf_eq_partOf
-  条件: (P : Partition u)
+  条件: (P : 分拆 u)
   证明: by
   grind [rel_iff_partOf_eq_partOf_of_mem, Rel.left_mem, Rel.right_mem]
 
@@ -1737,12 +1737,12 @@ structure IsRepFun
     - apply_eq_apply : forall ⦃a b⦄, P.Rel a b -> f a = f b
 
 中文:
-结构 IsRepFun
-  参数: {u : Set α} (P : Partition u) (f : α -> α)
+结构 是RepFun
+  参数: {u : 集合 α} (P : 分拆 u) (f : α -> α)
   公理与运算 (3 个):
     - apply_of_notMem : 对任意 ⦃a⦄, a ∉ u -> f a = a
-    - rel_apply : 对任意 ⦃a⦄, a in u -> P.Rel a (f a)
-    - apply_eq_apply : 对任意 ⦃a b⦄, P.Rel a b -> f a = f b
+    - rel_apply : 对任意 ⦃a⦄, a in u -> P.关系 a (f a)
+    - apply_eq_apply : 对任意 ⦃a b⦄, P.关系 a b -> f a = f b
 -/
 structure IsRepFun {u : Set α} (P : Partition u) (f : α -> α) : Prop where
   /-- The function is the identity outside the support. -/
@@ -1767,7 +1767,7 @@ lemma apply_mem
 
 中文:
 引理 apply_mem
-  条件: (hf : IsRepFun P f) (ha : a in u)
+  条件: (hf : 是RepFun P f) (ha : a in u)
   结论: f a in u
   证明: (hf.rel_apply ha).right_mem
 
@@ -1790,7 +1790,7 @@ lemma image_subset
 
 中文:
 引理 image_subset
-  条件: (hf : IsRepFun P f) (hs : u subseteq s)
+  条件: (hf : 是RepFun P f) (hs : u subseteq s)
   结论: f '' s subseteq s
   证明: by
   rintro _ ⟨a, haS, rfl⟩
@@ -1817,8 +1817,8 @@ lemma mapsTo
 
 中文:
 引理 mapsTo
-  条件: (hf : IsRepFun P f) (hs : u subseteq s)
-  结论: Set.MapsTo f s s
+  条件: (hf : 是RepFun P f) (hs : u subseteq s)
+  结论: 集合.映射到 f s s
   证明: fun x h => hf.image_subset hs ⟨x, h, rfl⟩
 
 Depends on / 依赖: hf.image_subset, image_subset
@@ -1837,8 +1837,8 @@ lemma mapsTo_of_disjoint
 
 中文:
 引理 mapsTo_of_disjoint
-  条件: (hf : IsRepFun P f) (hs : Disjoint u s)
-  结论: Set.MapsTo f s s
+  条件: (hf : 是RepFun P f) (hs : Disjoint u s)
+  结论: 集合.映射到 f s s
   证明: fun _ h => (hf.apply_of_notMem <| hs.notMem_of_mem_right h).symm ▸ h
 
 Depends on / 依赖: apply_of_notMem, hf.apply_of_notMem, hs.notMem_of_mem_right, notMem_of_mem_right
@@ -1857,7 +1857,7 @@ lemma apply_mem_iff
 
 中文:
 引理 apply_mem_iff
-  条件: (hf : IsRepFun P f) (hs : u subseteq s)
+  条件: (hf : 是RepFun P f) (hs : u subseteq s)
   结论: f a in s ↔ a in s
   证明: .mem_iff mapsTo_of_disjoint hf hs.disjoint_compl_right hf.mapsTo hs
 
@@ -1882,8 +1882,8 @@ exact hab ▸ hb hf.apply_mem ha
 
 中文:
 引理 apply_eq_apply_iff_rel
-  条件: (hf : IsRepFun P f) (ha : a in u)
-  结论: f a = f b ↔ P.Rel a b
+  条件: (hf : 是RepFun P f) (ha : a in u)
+  结论: f a = f b ↔ P.关系 a b
   证明: by
   refine ⟨fun hab => (hf.rel_apply ha).trans ?_, (hf.apply_eq_apply ·)⟩
   rw [hab]; rw [P.rel_comm]
@@ -1918,8 +1918,8 @@ lemma apply_eq_apply_iff
 
 中文:
 引理 apply_eq_apply_iff
-  条件: (hf : IsRepFun P f)
-  结论: f a = f b ↔ a = b ∨ P.Rel a b
+  条件: (hf : 是RepFun P f)
+  结论: f a = f b ↔ a = b ∨ P.关系 a b
   证明: by
   simp only [or_iff_not_imp_left, ← ne_eq]
   refine ⟨fun hab hne => ?_, fun h => ?_⟩
@@ -1959,8 +1959,8 @@ lemma forall_apply_eq_apply_iff
 .symm exact hf.apply_of_notMem ha
 
 中文:
-引理 forall_apply_eq_apply_iff
-  条件: (hf : IsRepFun P f) (a)
+引理 对任意_apply_eq_apply_iff
+  条件: (hf : 是RepFun P f) (a)
   证明: by
   refine (em (a in u)).elim (fun ha => Or.inr fun b => ?_) (fun ha => Or.inl fun b => ?_)
   · rw [hf.apply_eq_apply_iff_rel ha]
@@ -1996,7 +1996,7 @@ lemma apply_eq_apply_iff'
 
 中文:
 引理 apply_eq_apply_iff'
-  条件: (hf : IsRepFun P f)
+  条件: (hf : 是RepFun P f)
   证明: by
   obtain h1 | h2 := hf.forall_apply_eq_apply_iff a
   · refine ⟨by grind, ?_⟩
@@ -2031,7 +2031,7 @@ lemma idem
 
 中文:
 引理 idem
-  条件: (hf : IsRepFun P f)
+  条件: (hf : 是RepFun P f)
   结论: f (f a) = f a
   证明: by
   obtain (ha | ha) := em (a in u)
@@ -2061,7 +2061,7 @@ theorem apply_apply
 
 中文:
 定理 apply_apply
-  条件: (hf : IsRepFun P f) (hg : IsRepFun P g) (x : α)
+  条件: (hf : 是RepFun P f) (hg : 是RepFun P g) (x : α)
   结论: f (g x) = f x
   证明: by
   obtain (hx | hx) := em (x in u)
@@ -2089,8 +2089,8 @@ lemma exists_extend_partial
   · simp only [hfdef, ha, ↓reduceDIte
 
 中文:
-引理 exists_extend_partial
-  结论: (P : Partition u) (f₀ : t -> α)
+引理 存在_extend_partial
+  结论: (P : 分拆 u) (f₀ : t -> α)
   证明: by
   classical
   set f : α -> α := fun a => if ha : a in u then
@@ -2136,8 +2136,8 @@ lemma exists_extend_partial'
   simpa using! exists_extend_partial P (fun x : t => x) (by simp) (by simp) (fun x y => h x.2 y.2)
 
 中文:
-引理 exists_extend_partial'
-  结论: (P : Partition u)
+引理 存在_extend_partial'
+  结论: (P : 分拆 u)
   证明: by
   simpa using! exists_extend_partial P (fun x : t => x) (by simp) (by simp) (fun x y => h x.2 y.2)
 
@@ -2160,8 +2160,8 @@ lemma nonempty
 
 中文:
 引理 nonempty
-  条件: (P : Partition u)
-  结论: 存在 f, IsRepFun P f
+  条件: (P : 分拆 u)
+  结论: 存在 f, 是RepFun P f
   证明: by
   obtain ⟨f, hf, -⟩ := exists_extend_partial' P (t := ∅) (by simp)
   exact ⟨f, hf⟩

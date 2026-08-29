@@ -49,7 +49,7 @@ definition lctxIsDefEq
 
 中文:
 定义 lctxIsDefEq
-  签名: : (l₁ l₂ : List (Option LocalDecl)) -> MetaM 布尔
+  签名: : (l₁ l₂ : 列表 (选项类型 LocalDecl)) -> MetaM 布尔值
 -/
 def lctxIsDefEq : (l₁ l₂ : List (Option LocalDecl)) -> MetaM Bool
   | none :: l₁, l₂ => lctxIsDefEq l₁ l₂
@@ -87,7 +87,7 @@ guard ← withNewMCtxDepth withReducib
 
 中文:
 定义 runAndFailIfNoProgress
-  签名: (goal : MVarId) (tacs : TacticM Unit)
+  签名: (goal : MVarId) (tacs : TacticM 单元)
   定义体: do
   let l ← run goal tacs
   try

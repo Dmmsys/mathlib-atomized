@@ -38,7 +38,7 @@ definition equivQuotientOrbitRel
 
 中文:
 定义 equivQuotientOrbitRel
-  签名: : ℙ k V ≃ Quotient (MulAction.orbitRel kˣ { v : V // v != 0 })
+  签名: : ℙ k V ≃ 商 (乘法作用.orbitRel kˣ { v : V // v != 0 })
   定义体: Quotient.congr (Equiv.refl _) (fun x y => (Units.orbitRel_nonZero_iff k V x y).symm)
 
 Depends on / 依赖: Equiv.refl, Quotient, Quotient.congr, Regular, Regular.of_sigmaCompactSpace_of_isLocallyFiniteMeasure, Units.orbitRel_nonZero_iff, of_sigmaCompactSpace_of_isLocallyFiniteMeasure, orbitRel_nonZero_iff
@@ -83,7 +83,7 @@ instance isEmpty_of_subsingleton
 
 中文:
 实例 isEmpty_of_subsingleton
-  签名: [Subsingleton V]
+  签名: [子单例 V]
   定义体: by
   have : IsEmpty { v : V // v != 0 } := ⟨fun v => v.2 (Subsingleton.elim v.1 0)⟩
   simpa using (nonZeroEquivProjectivizationProdUnits k V).symm.isEmpty
@@ -105,7 +105,7 @@ instance finite_of_finite
 
 中文:
 实例 finite_of_finite
-  签名: [Finite V]
+  签名: [有限 V]
   定义体: have : Finite (ℙ k V × kˣ) := Finite.of_equiv _ (nonZeroEquivProjectivizationProdUnits k V)
   Finite.prod_left kˣ
 
@@ -132,8 +132,8 @@ lemma finite_iff_of_finite
 
 中文:
 引理 finite_iff_of_finite
-  条件: [Finite k]
-  结论: Finite (ℙ k V) ↔ Finite V
+  条件: [有限 k]
+  结论: 有限 (ℙ k V) ↔ 有限 V
   证明: by
   classical
   refine ⟨fun h => ?_, fun h => inferInstance⟩
@@ -227,7 +227,7 @@ lemma card'
 
 中文:
 引理 card'
-  条件: [Finite V]
+  条件: [有限 V]
   结论: 自然数.card V = 自然数.card (ℙ k V) * (自然数.card k - 1) + 1
   证明: by
   rw [← card k V]
@@ -259,7 +259,7 @@ lemma card''
 
 中文:
 引理 card''
-  条件: [Finite k]
+  条件: [有限 k]
   结论: 自然数.card (ℙ k V) = (自然数.card V - 1) / (自然数.card k - 1)
   证明: by
   have : 1 < Nat.card k := Finite.one_lt_card
@@ -294,7 +294,7 @@ lemma card_of_finrank
 
 中文:
 引理 card_of_finrank
-  条件: [Finite k] {n : 自然数} (h : Module.finrank k V = n)
+  条件: [有限 k] {n : 自然数} (h : 模.finrank k V = n)
   证明: by
   wlog hf : Finite V
   · have : Infinite (ℙ k V) := by
@@ -342,7 +342,7 @@ lemma card_of_finrank_two
 
 中文:
 引理 card_of_finrank_two
-  条件: [Finite k] (h : Module.finrank k V = 2)
+  条件: [有限 k] (h : 模.finrank k V = 2)
   证明: by
   simp [card_of_finrank k V h]
 

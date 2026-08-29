@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (SingleObj α)
+  签名: 预加性 (SingleObj α)
   定义体: mul_add g f f'
   comp_add _ _ _ f g g' := add_mul g g' f
 

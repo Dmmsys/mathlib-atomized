@@ -283,7 +283,7 @@ instance instIsAtomic
 
 中文:
 实例 instIsAtomic
-  签名: : IsAtomic α where
+  签名: : 是原子的 α where
   定义体: by classical
     rw [or_iff_not_imp_left]
     intro hb
@@ -313,14 +313,14 @@ structure RootedTree
     - [isPredArchimedean : IsPredArchimedean α]
 
 中文:
-结构 RootedTree
+结构 有根树
   参数: where
   公理与运算 (5 个):
     - α : 类型
     - [semilatticeInf : SemilatticeInf α]
-    - [orderBot : OrderBot α]
-    - [predOrder : PredOrder α]
-    - [isPredArchimedean : IsPredArchimedean α]
+    - [orderBot : 有底序 α]
+    - [predOrder : Pred序 α]
+    - [isPredArchimedean : 是PredArchimedean α]
 -/
 structure RootedTree where
   /-- The type representing the elements in the tree. -/
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort RootedTree 类型
+  签名: CoeSort 有根树 类型
   定义体: ⟨RootedTree.α⟩
 
 Depends on / 依赖: RootedTree
@@ -367,7 +367,7 @@ definition SubRootedTree
 
 中文:
 定义 SubRootedTree
-  签名: (t : RootedTree)
+  签名: (t : 有根树)
   定义体: t
 -/
 def SubRootedTree (t : RootedTree) : Type* := t
@@ -382,7 +382,7 @@ definition SubRootedTree.root
 
 中文:
 定义 SubRootedTree.root
-  签名: {t : RootedTree} (v : SubRootedTree t)
+  签名: {t : 有根树} (v : SubRootedTree t)
   定义体: v
 -/
 def SubRootedTree.root {t : RootedTree} (v : SubRootedTree t) : t := v
@@ -398,8 +398,8 @@ definition RootedTree.subtree
 @[simp]
 
 中文:
-定义 RootedTree.subtree
-  签名: (t : RootedTree) (r : t)
+定义 有根树.subtree
+  签名: (t : 有根树) (r : t)
   定义体: r
 
 @[simp]
@@ -419,8 +419,8 @@ lemma RootedTree.root_subtree
 @[simp]
 
 中文:
-引理 RootedTree.root_subtree
-  条件: (t : RootedTree) (r : t)
+引理 有根树.root_subtree
+  条件: (t : 有根树) (r : t)
   结论: (t.subtree r).root = r
   证明: rfl
 
@@ -441,8 +441,8 @@ lemma RootedTree.subtree_root
 @[ext]
 
 中文:
-引理 RootedTree.subtree_root
-  条件: (t : RootedTree) (v : SubRootedTree t)
+引理 有根树.subtree_root
+  条件: (t : 有根树) (v : SubRootedTree t)
   结论: t.subtree v.root = v
   证明: rfl
 
@@ -461,7 +461,7 @@ lemma SubRootedTree.ext
 
 中文:
 引理 SubRootedTree.ext
-  结论: {t : RootedTree} {v₁ v₂ : SubRootedTree t}
+  结论: {t : 有根树} {v₁ v₂ : SubRootedTree t}
   证明: h
 -/
 lemma SubRootedTree.ext {t : RootedTree} {v₁ v₂ : SubRootedTree t}
@@ -482,7 +482,7 @@ lemma SubRootedTree.mem_iff
 
 中文:
 引理 SubRootedTree.mem_iff
-  条件: {t : RootedTree} {r : SubRootedTree t} {v : t}
+  条件: {t : 有根树} {r : SubRootedTree t} {v : t}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -504,7 +504,7 @@ definition SubRootedTree.coeTree
 
 中文:
 定义 SubRootedTree.coeTree
-  签名: {t : RootedTree} (r : SubRootedTree t)
+  签名: {t : 有根树} (r : SubRootedTree t)
   定义体: Set.Ici r.root
 
 Depends on / 依赖: MonomialOrder, MonomialOrder.leadingCoeff, Set.Ici, coeff_mul_of_degree_add, degree_mul_of_mul_leadingCoeff_ne_zero, hf.leadingCoeff_eq_one, hg.leadingCoeff_eq_one, leadingCoeff, leadingCoeff_eq_one, m.leadingCoeff, nontriviality, one_mul, one_ne_zero, r.root
@@ -527,7 +527,7 @@ lemma SubRootedTree.bot_mem_iff
 
 中文:
 引理 SubRootedTree.bot_mem_iff
-  条件: {t : RootedTree} (r : SubRootedTree t)
+  条件: {t : 有根树} (r : SubRootedTree t)
   证明: by
   simp [mem_iff]
 
@@ -546,8 +546,8 @@ definition RootedTree.subtrees
   body: {x | IsAtom x.root}
 
 中文:
-定义 RootedTree.subtrees
-  签名: (t : RootedTree)
+定义 有根树.subtrees
+  签名: (t : 有根树)
   定义体: {x | IsAtom x.root}
 
 Depends on / 依赖: IsAtom, x.root
@@ -600,7 +600,7 @@ lemma RootedTree.mem_subtrees_disjoint_iff
     contrapose h
 
 中文:
-引理 RootedTree.mem_subtrees_disjoint_iff
+引理 有根树.mem_subtrees_disjoint_iff
   结论: {t₁ t₂ : SubRootedTree t}
   证明: by
     intro nh
@@ -655,8 +655,8 @@ lemma RootedTree.subtrees_disjoint
   exact t₁.root_ne_bot_of_mem_subtrees ht₁ ha
 
 中文:
-引理 RootedTree.subtrees_disjoint
-  结论: t.subtrees.PairwiseDisjoint ((↑) : _ -> Set t)
+引理 有根树.subtrees_disjoint
+  结论: t.subtrees.PairwiseDisjoint ((↑) : _ -> 集合 t)
   证明: by
   intro t₁ ht₁ t₂ ht₂ h
   rw [Function.onFun_apply]; rw [Set.disjoint_left]
@@ -688,8 +688,8 @@ definition RootedTree.subtreeOf
 @[simp]
 
 中文:
-定义 RootedTree.subtreeOf
-  签名: (t : RootedTree) [DecidableEq t] (v : t)
+定义 有根树.subtreeOf
+  签名: (t : 有根树) [DecidableEq t] (v : t)
   定义体: t.subtree (IsPredArchimedean.findAtom v)
 
 @[simp]
@@ -710,7 +710,7 @@ lemma RootedTree.mem_subtreeOf
   simp [SubRootedTree.mem_iff, RootedTree.subtreeOf]
 
 中文:
-引理 RootedTree.mem_subtreeOf
+引理 有根树.mem_subtreeOf
   条件: [DecidableEq t] {v : t}
   证明: by
   simp [SubRootedTree.mem_iff, RootedTree.subtreeOf]
@@ -731,7 +731,7 @@ lemma RootedTree.subtreeOf_mem_subtrees
   simpa [RootedTree.subtrees, RootedTree.subtreeOf]
 
 中文:
-引理 RootedTree.subtreeOf_mem_subtrees
+引理 有根树.subtreeOf_mem_subtrees
   条件: [DecidableEq t] {v : t} (hr : v != ⊥)
   证明: by
   simpa [RootedTree.subtrees, RootedTree.subtreeOf]

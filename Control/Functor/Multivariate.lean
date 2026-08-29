@@ -37,7 +37,7 @@ class MvFunctor
     - map : forall {α β : TypeVec n}, α ⟹ β -> F α -> F β
 
 中文:
-类 MvFunctor
+类 Mv函子
   参数: {n : 自然数} (F : TypeVec n -> 类型)
   公理与运算 (1 个):
     - map : 对任意 {α β : TypeVec n}, α ⟹ β -> F α -> F β
@@ -144,8 +144,8 @@ class LawfulMvFunctor
     - forall : {α β γ : TypeVec n} (g : α ⟹ β) (h : β ⟹ γ) (x : F α), (h ⊚ g) < > x = h < > g < > x
 
 中文:
-类 LawfulMvFunctor
-  参数: {n : 自然数} (F : TypeVec n -> 类型) [MvFunctor F]
+类 LawfulMv函子
+  参数: {n : 自然数} (F : TypeVec n -> 类型) [Mv函子 F]
   公理与运算 (2 个):
     - id_map : 对任意 {α : TypeVec n} (x : F α), TypeVec.id < > x = x comp_map :
     - forall : {α β γ : TypeVec n} (g : α ⟹ β) (h : β ⟹ γ) (x : F α), (h ⊚ g) < > x = h < > g < > x
@@ -292,7 +292,7 @@ theorem exists_iff_exists_of_mono
     simp only [MvFunctor.map_map, h₀, LawfulMvFunctor.id_map, h₂]
 
 中文:
-定理 exists_iff_exists_of_mono
+定理 存在_iff_存在_of_mono
   结论: {P : F α -> 命题} {q : F β -> 命题}
   证明: by
   constructor <;> rintro ⟨u, h₂⟩
@@ -566,7 +566,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: {F F' : TypeVec.{u} n -> 类型} [MvFunctor F'] (eqv : 对任意 α, F α ≃ F' α)
+  签名: {F F' : TypeVec.{u} n -> 类型} [Mv函子 F'] (eqv : 对任意 α, F α ≃ F' α)
   定义体: (eqv _).symm f < > eqv _ x
 -/
 def ofEquiv {F F' : TypeVec.{u} n -> Type*} [MvFunctor F'] (eqv : forall α, F α ≃ F' α) :

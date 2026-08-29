@@ -53,7 +53,7 @@ theorem exists_lift_nhds
     domain of som
 
 中文:
-定理 exists_lift_nhds
+定理 存在_lift_nhds
   结论: {f : C(I × A, X)} {g : I × A -> E} (g_lifts : p ∘ g = f)
   证明: by
   -- For every `e : E`, upgrade `p` to a LocalHomeomorph `q e` around `e`.
@@ -228,8 +228,8 @@ theorem existsUnique_continuousMap_lifts
     DFunLike.ext _ _ f
 
 中文:
-定理 existsUnique_continuousMap_lifts
-  结论: [PathConnectedSpace A] [LocallyPathConnectedSpace A]
+定理 存在Unique_continuousMap_lifts
+  结论: [道路连通空间 A] [LocallyPathConnected空间 A]
   证明: by
   choose Γ Γ_0 Γ_lifts using ex
   let F (a : A) : E := Γ _ (somePath a₀ a).source 1
@@ -299,7 +299,7 @@ theorem exists_path_lifts
     (fun x => (U_open x).preimage γ.continuous) fun t _ => Set.mem_iUnion.2 ⟨γ t, mem_base _
 
 中文:
-定理 exists_path_lifts
+定理 存在_path_lifts
   结论: 存在 Γ : C(I, E), p ∘ Γ = γ ∧ Γ 0 = e
   证明: by
   let U x := (cov x).2.choose
@@ -416,7 +416,7 @@ lemma eq_liftPath_iff
 中文:
 引理 eq_liftPath_iff
   条件: {Γ : I -> E}
-  结论: Γ = cov.liftPath γ e γ_0 ↔ Continuous Γ ∧ p ∘ Γ = γ ∧ Γ 0 = e
+  结论: Γ = cov.liftPath γ e γ_0 ↔ 连续 Γ ∧ p ∘ Γ = γ ∧ Γ 0 = e
   证明: have lifts := cov.liftPath_lifts γ e γ_0
   have zero := cov.liftPath_zero γ e γ_0
   ⟨(· ▸ ⟨(cov.liftPath γ e γ_0).2, lifts, zero⟩), fun ⟨Γ_cont, Γ_lifts, Γ_0⟩ => cov.eq_of_comp_eq
@@ -491,7 +491,7 @@ refine .symm (cov.eq_liftPath_iff' _).mpr
 
 中文:
 引理 liftPath_trans
-  条件: {x y z : X} {e : E} (hpe : x = p e) (γ : Path x y) (γ' : Path y z)
+  条件: {x y z : X} {e : E} (hpe : x = p e) (γ : 道路 x y) (γ' : 道路 y z)
   证明: cov.liftPath γ e (γ.source.trans hpe)
     cov.liftPath (γ.trans γ') e (by simpa) = (⟨Γ, liftPath_zero .., rfl⟩ : Path e (Γ 1)).trans
       ⟨cov.liftPath γ' (Γ 1) (by simpa using congr($(cov.liftPath_lifts γ ..) 1).symm),
@@ -657,7 +657,7 @@ definition liftHomotopyRel
 
 中文:
 定义 liftHomotopyRel
-  签名: [PreconnectedSpace A]
+  签名: [预连通空间 A]
   定义体: have F_0 : forall a, F (0, a) = p (f₀' a) := fun a => (F.apply_zero a).trans (congr_fun h₀ a).symm
   have rel : forall t, forall a in S, cov.liftHomotopy F f₀' F_0 (t, a) = f₀' a := fun t a ha => by
     rw [liftHomotopy_apply]; rw [cov.const_of_comp (ContinuousMap.continuous _) _ t 0]
@@ -696,7 +696,7 @@ theorem homotopicRel_iff_comp
 
 中文:
 定理 homotopicRel_iff_comp
-  结论: [PreconnectedSpace A] {f₀ f₁ : C(A, E)} {S : Set A}
+  结论: [预连通空间 A] {f₀ f₁ : C(A, E)} {S : 集合 A}
   证明: ⟨fun ⟨F⟩ => ⟨F.compContinuousMap _⟩, fun ⟨F⟩ => ⟨cov.liftHomotopyRel F he rfl rfl⟩⟩
 
 Depends on / 依赖: F.compContinuousMap, compContinuousMap, cov.liftHomotopyRel, liftHomotopyRel
@@ -767,7 +767,7 @@ definition monodromy
 
 中文:
 定义 monodromy
-  签名: {x y : X} (γ : Path.Homotopic.Quotient x y)
+  签名: {x y : X} (γ : 道路.同伦.商 x y)
   定义体: fun e => γ.lift (fun γ : Path x y => ⟨cov.liftPath γ e (γ.source.trans e.2.symm) 1,
       congr($(cov.liftPath_lifts ..) 1).trans γ.target⟩)
     fun _ _ h => Subtype.ext (cov.liftPath_apply_one_eq_of_homotopicRel h ..)
@@ -794,7 +794,7 @@ definition liftPathQuotient
 
 中文:
 定义 liftPathQuotient
-  签名: {x y : X} (γ : Path.Homotopic.Quotient x y) (e : p ⁻¹' {x})
+  签名: {x y : X} (γ : 道路.同伦.商 x y) (e : p ⁻¹' {x})
   定义体: have he (γ : Path x y) : γ 0 = p (e : E) := by aesop
   let g (γ : Path x y) : Path.Homotopic.Quotient (e : E) (cov.liftPath γ (e : E) (he γ) 1) :=
     .mk ⟨cov.liftPath γ (e : E) (he γ), cov.liftPath_zero .., rfl⟩
@@ -830,7 +830,7 @@ theorem map_liftPathQuotient
 
 中文:
 定理 map_liftPathQuotient
-  条件: {x y : X} (γ : Path.Homotopic.Quotient x y) (e : p ⁻¹' {x})
+  条件: {x y : X} (γ : 道路.同伦.商 x y) (e : p ⁻¹' {x})
   证明: by
   obtain ⟨γ⟩ := γ
   refine congr_arg Path.Homotopic.Quotient.mk ?_
@@ -858,7 +858,7 @@ theorem monodromy_map
 
 中文:
 定理 monodromy_map
-  条件: {x y : E} (γ : Path.Homotopic.Quotient x y)
+  条件: {x y : E} (γ : 道路.同伦.商 x y)
   证明: Subtype.ext by
   obtain ⟨γ⟩ := γ
   exact congr($((cov.eq_liftPath_iff' _).mpr ⟨rfl, γ.source⟩) 1).symm.trans γ.target
@@ -883,7 +883,7 @@ theorem monodromy_eq_of_map_eq
 
 中文:
 定理 monodromy_eq_of_map_eq
-  结论: {x y : X} {γ : Path.Homotopic.Quotient x y}
+  结论: {x y : X} {γ : 道路.同伦.商 x y}
   证明: by
   convert ← cov.monodromy_map Γ
   exacts [ey.2, ex.2, ey.2, by rw [eq]; exact γ.cast_heq .., ey.2]
@@ -1018,7 +1018,7 @@ definition monodromyFunctor
 
 中文:
 定义 monodromyFunctor
-  签名: : FundamentalGroupoid X ⥤ Type _ where
+  签名: : FundamentalGroupoid X ⥤ 类型 _ where
   定义体: p ⁻¹' {x.as}
   map f := ↾(cov.monodromy f)
   map_id _ := by ext x : 3; simpa using! congr_fun cov.monodromy_refl x
@@ -1040,7 +1040,7 @@ theorem monodromy_bijective
 
 中文:
 定理 monodromy_bijective
-  条件: {x y : X} (γ : Path.Homotopic.Quotient x y)
+  条件: {x y : X} (γ : 道路.同伦.商 x y)
   证明: (isIso_iff_bijective _).mp (cov.monodromyFunctor.map_isIso _)
 
 Depends on / 依赖: cov.monodromyFunctor.map_isIso, isIso_iff_bijective, map_isIso, monodromyFunctor
@@ -1099,8 +1099,8 @@ theorem existsUnique_continuousMap_lifts
   let pγ' : Pat
 
 中文:
-定理 existsUnique_continuousMap_lifts
-  结论: [SimplyConnectedSpace A] [LocallyPathConnectedSpace A]
+定理 存在Unique_continuousMap_lifts
+  结论: [单连通空间 A] [LocallyPathConnected空间 A]
   证明: by
   refine cov.isLocalHomeomorph.existsUnique_continuousMap_lifts f a₀ e₀ he (fun γ γ_0 => ?_)
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
@@ -1140,7 +1140,7 @@ theorem existsUnique_continuousMap_lifts_of_range_le
   rw [(cov.eq_liftPath_iff' <| by simp [γ_0]; rw [he]).mp
 
 中文:
-定理 existsUnique_continuousMap_lifts_of_range_le
+定理 存在Unique_continuousMap_lifts_of_range_le
   证明: by
   refine cov.isLocalHomeomorph.existsUnique_continuousMap_lifts f a₀ e₀ he (fun γ γ_0 => ?_)
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
@@ -1191,8 +1191,8 @@ theorem IsCoveringMapOn.existsUnique_continuousMap_lifts
     (Subtype.ex
 
 中文:
-定理 IsCoveringMapOn.existsUnique_continuousMap_lifts
-  结论: [SimplyConnectedSpace A]
+定理 IsCoveringMapOn.存在Unique_continuousMap_lifts
+  结论: [单连通空间 A]
   证明: by
   obtain ⟨f, rfl⟩ : exists f' : C(A, s), f = .comp ⟨Subtype.val, by fun_prop⟩ f' :=
     ⟨⟨fun a => ⟨f a, hs a⟩, by fun_prop⟩, rfl⟩
@@ -1242,7 +1242,7 @@ theorem monodromy_toPermFiber
 
 中文:
 定理 monodromy_toPermFiber
-  条件: {x y : X} {γ : Path.Homotopic.Quotient x y} {e : p ⁻¹' {x}}
+  条件: {x y : X} {γ : 道路.同伦.商 x y} {e : p ⁻¹' {x}}
   证明: hp.isCoveringMap.monodromy
     monodromy γ (hp.toPermFiber x g e) = hp.toPermFiber y g (monodromy γ e) :=
   let Γ := hp.isCoveringMap.liftPathQuotient γ e
@@ -1277,7 +1277,7 @@ theorem commute_monodromyPerm_toPermFiber
 
 中文:
 定理 commute_monodromyPerm_toPermFiber
-  条件: {x : X} {γ : FundamentalGroup X x}
+  条件: {x : X} {γ : 基本群 X x}
   证明: by
   ext; exact congr($hp.monodromy_toPermFiber)
 
@@ -1305,7 +1305,7 @@ alias ⟨monodromy_ext, _⟩ := monodromy_ext_iff
 
 中文:
 定理 monodromy_ext_iff
-  条件: {x y : X} {γ γ' : Path.Homotopic.Quotient x y} (e : p ⁻¹' {x})
+  条件: {x y : X} {γ γ' : 道路.同伦.商 x y} (e : p ⁻¹' {x})
   证明: hp.isCoveringMap.monodromy
     monodromy γ e = monodromy γ' e ↔ monodromy γ = monodromy γ' where
   mp eq := by
@@ -1409,7 +1409,7 @@ theorem monodromyPerm_injective
 
 中文:
 定理 monodromyPerm_injective
-  条件: [SimplyConnectedSpace E]
+  条件: [单连通空间 E]
   证明: by
   let e : p⁻¹' {x} := ⟨(hp.surjective x).choose, (hp.surjective x).choose_spec⟩
   rw [← MonoidHom.ker_eq_bot_iff]; rw [hp.ker_monodromyPerm e]
@@ -1443,7 +1443,7 @@ definition fundamentalGroupToMulOpposite
 
 中文:
 定义 fundamentalGroupToMulOpposite
-  签名: : FundamentalGroup X x ->* Gᵐᵒᵖ where
+  签名: : 基本群 X x ->* Gᵐᵒᵖ where
   定义体: op hp.fiberEquivGroup e (hp.isCoveringMap.monodromy γ e)
   map_one' := by rw [FundamentalGroup.one_def, IsCoveringMap.monodromy_refl]; simp
   map_mul' γ γ' := by
@@ -1573,7 +1573,7 @@ theorem fundamentalGroupToMulOpposite_surjective
 
 中文:
 定理 fundamentalGroupToMulOpposite_surjective
-  条件: [PathConnectedSpace E]
+  条件: [道路连通空间 E]
   证明: by
   intro g
   set e' : p⁻¹' {x} := ⟨MulOpposite.unop g • (e : E), by
@@ -1615,7 +1615,7 @@ lemma fundamentalGroupToMulOpposite_injective
 
 中文:
 引理 fundamentalGroupToMulOpposite_injective
-  条件: [SimplyConnectedSpace E]
+  条件: [单连通空间 E]
   证明: by
   rw [← MonoidHom.ker_eq_bot_iff]; rw [ker_fundamentalGroupToMulOpposite]; rw [MonoidHom.ker_eq_bot_iff]
   exact hp.monodromyPerm_injective
@@ -1639,7 +1639,7 @@ definition fundamentalGroupEquiv
 
 中文:
 定义 fundamentalGroupEquiv
-  签名: [SimplyConnectedSpace E]
+  签名: [单连通空间 E]
   定义体: MulEquiv.ofBijective (hp.fundamentalGroupToMulOpposite e)
     ⟨hp.fundamentalGroupToMulOpposite_injective e,
      hp.fundamentalGroupToMulOpposite_surjective e⟩
@@ -1671,7 +1671,7 @@ theorem monodromy_toPermFiber
 
 中文:
 定理 monodromy_toPermFiber
-  条件: {x y : X} {γ : Path.Homotopic.Quotient x y} {e : p ⁻¹' {x}}
+  条件: {x y : X} {γ : 道路.同伦.商 x y} {e : p ⁻¹' {x}}
   证明: hp.isCoveringMap.monodromy
     monodromy γ (hp.toMultiplicative.toPermFiber x g e) =
       hp.toMultiplicative.toPermFiber y g (monodromy γ e) :=
@@ -1695,7 +1695,7 @@ theorem commute_monodromyPerm_toPermFiber
 
 中文:
 定理 commute_monodromyPerm_toPermFiber
-  条件: {x : X} {γ : FundamentalGroup X x}
+  条件: {x : X} {γ : 基本群 X x}
   证明: hp.toMultiplicative.commute_monodromyPerm_toPermFiber
 
 Depends on / 依赖: commute_monodromyPerm_toPermFiber, hp.toMultiplicative.commute_monodromyPerm_toPermFiber, toMultiplicative
@@ -1720,7 +1720,7 @@ alias ⟨monodromy_ext, _⟩ := monodromy_ext_iff
 
 中文:
 定理 monodromy_ext_iff
-  条件: {x y : X} {γ γ' : Path.Homotopic.Quotient x y} (e : p ⁻¹' {x})
+  条件: {x y : X} {γ γ' : 道路.同伦.商 x y} (e : p ⁻¹' {x})
   证明: hp.isCoveringMap.monodromy
     monodromy γ e = monodromy γ' e ↔ monodromy γ = monodromy γ' :=
   hp.toMultiplicative.monodromy_ext_iff e
@@ -1783,7 +1783,7 @@ theorem monodromyPerm_injective
 
 中文:
 定理 monodromyPerm_injective
-  条件: [SimplyConnectedSpace E]
+  条件: [单连通空间 E]
   证明: hp.toMultiplicative.monodromyPerm_injective
 
 Depends on / 依赖: hp.toMultiplicative.monodromyPerm_injective, monodromyPerm_injective, toMultiplicative
@@ -1802,7 +1802,7 @@ definition fundamentalGroupToMulOpposite
 
 中文:
 定义 fundamentalGroupToMulOpposite
-  签名: : FundamentalGroup X x ->* (Multiplicative G)ᵐᵒᵖ
+  签名: : 基本群 X x ->* (Multiplicative G)ᵐᵒᵖ
   定义体: hp.toMultiplicative.fundamentalGroupToMulOpposite e
 
 Depends on / 依赖: fundamentalGroupToMulOpposite, hp.toMultiplicative.fundamentalGroupToMulOpposite, toMultiplicative
@@ -1893,7 +1893,7 @@ theorem fundamentalGroupToMulOpposite_surjective
 
 中文:
 定理 fundamentalGroupToMulOpposite_surjective
-  条件: [PathConnectedSpace E]
+  条件: [道路连通空间 E]
   证明: hp.toMultiplicative.fundamentalGroupToMulOpposite_surjective e
 
 Depends on / 依赖: fundamentalGroupToMulOpposite_surjective, hp.toMultiplicative.fundamentalGroupToMulOpposite_surjective, toMultiplicative
@@ -1912,7 +1912,7 @@ lemma fundamentalGroupToMulOpposite_injective
 
 中文:
 引理 fundamentalGroupToMulOpposite_injective
-  条件: [SimplyConnectedSpace E]
+  条件: [单连通空间 E]
   证明: hp.toMultiplicative.fundamentalGroupToMulOpposite_injective e
 
 Depends on / 依赖: fundamentalGroupToMulOpposite_injective, hp.toMultiplicative.fundamentalGroupToMulOpposite_injective, toMultiplicative
@@ -1931,7 +1931,7 @@ definition fundamentalGroupEquiv
 
 中文:
 定义 fundamentalGroupEquiv
-  签名: [SimplyConnectedSpace E]
+  签名: [单连通空间 E]
   定义体: hp.toMultiplicative.fundamentalGroupEquiv e
 
 Depends on / 依赖: fundamentalGroupEquiv, hp.toMultiplicative.fundamentalGroupEquiv, toMultiplicative

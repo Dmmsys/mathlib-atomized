@@ -86,7 +86,7 @@ definition fibres
 
 中文:
 定义 fibres
-  签名: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  签名: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   定义体: {t : T | (π t).2 = none} union (⋃ (x : X), Set.range (σ x))
 
 @[simp, grind =]
@@ -108,7 +108,7 @@ lemma mem_fibres_iff
 
 中文:
 引理 mem_fibres_iff
-  条件: (π : T -> S × Option X) (σ : Option X -> S -> T) (t : T)
+  条件: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T) (t : T)
   证明: by
   simp [fibres]
 
@@ -136,7 +136,7 @@ lemma fibres_compl_eq_iUnion
 
 中文:
 引理 fibres_compl_eq_iUnion
-  结论: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  结论: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   证明: by
   ext x
   -- simp? says:
@@ -177,7 +177,7 @@ lemma fibres_closed
 
 中文:
 引理 fibres_closed
-  结论: [TopologicalSpace S] [TopologicalSpace T]
+  结论: [拓扑空间 S] [拓扑空间 T]
   证明: IsClosed.mk by
   rw [fibres_compl_eq_iUnion π σ hσ']
   refine isOpen_iUnion fun i => IsOpen.inter ?_ ?_
@@ -209,7 +209,7 @@ definition π_r
 
 中文:
 定义 π_r
-  签名: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  签名: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   定义体: fun x => π x
 
 @[grind =]
@@ -229,7 +229,7 @@ lemma π_r_apply
 
 中文:
 引理 π_r_apply
-  结论: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  结论: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   证明: rfl
 -/
 lemma π_r_apply (π : T -> S × Option X) (σ : Option X -> S -> T)
@@ -248,7 +248,7 @@ definition fibreIncl
 
 中文:
 定义 fibreIncl
-  签名: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  签名: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   定义体: Subtype.val
 
 @[grind =]
@@ -270,7 +270,7 @@ lemma fibreIncl_apply
 
 中文:
 引理 fibreIncl_apply
-  结论: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  结论: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   证明: rfl
 -/
 lemma fibreIncl_apply (π : T -> S × Option X) (σ : Option X -> S -> T)
@@ -320,7 +320,7 @@ definition coverToFun
 
 中文:
 定义 coverToFun
-  签名: {S T X Y : 类型} (i : Y -> T) (π : T -> S × Option X)
+  签名: {S T X Y : 类型} (i : Y -> T) (π : T -> S × 选项类型 X)
   定义体: Sum.elim (fun t => ⟨(t, t), rfl⟩) (fun xy => ⟨(i xy.val.1, i xy.val.2), xy.prop⟩)
 
 @[grind =]
@@ -342,7 +342,7 @@ lemma coverToFun_apply
 
 中文:
 引理 coverToFun_apply
-  结论: {S T X Y : 类型} (i : Y -> T) (π : T -> S × Option X)
+  结论: {S T X Y : 类型} (i : Y -> T) (π : T -> S × 选项类型 X)
   证明: rfl
 -/
 lemma coverToFun_apply {S T X Y : Type*} (i : Y -> T) (π : T -> S × Option X)
@@ -366,7 +366,7 @@ lemma coverToFun_surjective
 
 中文:
 引理 coverToFun_surjective
-  结论: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  结论: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   证明: by
   intro ⟨⟨⟨t, ht⟩, ⟨t', ht'⟩⟩, _⟩
   by_cases h : (π t).2 = none
@@ -396,7 +396,7 @@ definition sectionOfFibreIncl
 
 中文:
 定义 sectionOfFibreIncl
-  签名: (π : T -> S × Option X) (σ : Option X -> S -> T)
+  签名: (π : T -> S × 选项类型 X) (σ : 选项类型 X -> S -> T)
   定义体: fun s => ⟨⟨σ none s, by grind⟩, by grind⟩
 -/
 def sectionOfFibreIncl (π : T -> S × Option X) (σ : Option X -> S -> T)
@@ -434,7 +434,7 @@ lemma mem_S'_iff
 
 中文:
 引理 mem_S'_iff
-  条件: (π : T -> S × OnePoint X) (y : 对任意 x : OnePoint X, (Prod.snd ∘ π) ⁻¹' {x})
+  条件: (π : T -> S × OnePoint X) (y : 对任意 x : OnePoint X, (积类型.snd ∘ π) ⁻¹' {x})
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -493,7 +493,7 @@ lemma y_continuous
 
 中文:
 引理 y_continuous
-  结论: [TopologicalSpace S] [TopologicalSpace T]
+  结论: [拓扑空间 S] [拓扑空间 T]
   证明: continuous_fst.comp hπ.comp continuous_subtype_val.comp
     (continuous_apply _).comp (by fun_prop)
 
@@ -519,7 +519,7 @@ lemma y_surjective
 
 中文:
 引理 y_surjective
-  条件: (π : T -> S × OnePoint X) (hπ : π.Surjective)
+  条件: (π : T -> S × OnePoint X) (hπ : π.满射)
   证明: by
   intro s
   let p (s : S) (n : OnePoint X) : T := (hπ (s, n)).choose
@@ -549,7 +549,7 @@ have (x : OnePoint X) : CompactSpace (Prod.snd ∘ π) ⁻¹' {x} :=
 
 中文:
 引理 S'_compactSpace
-  结论: [TopologicalSpace S] [T2Space S] [TopologicalSpace T]
+  结论: [拓扑空间 S] [T2空间 S] [拓扑空间 T]
   证明: by
   rw [← isCompact_iff_compactSpace]; rw [show S' π =
     ⋂ (n : OnePoint X) (m : OnePoint X)]; rw [{x | (π (x n).val).1 = (π (x m).val).1} by aesop]
@@ -686,7 +686,7 @@ lemma aux
 
 中文:
 引理 aux
-  条件: {S T : LightProfinite} (π : T ⟶ S otimes 自然数union{∞}) [Epi π]
+  条件: {S T : LightProfinite} (π : T ⟶ S otimes 自然数union{∞}) [满态射 π]
   证明: by
   -- Construct the space `S'` space which has functions `σ'` we can plug into
   -- `fibres`.

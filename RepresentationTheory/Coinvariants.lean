@@ -60,7 +60,7 @@ definition Coinvariants.ker
 
 中文:
 定义 Coinvariants.ker
-  签名: : Submodule k V
+  签名: : 子模 k V
   定义体: Submodule.span k (Set.range fun (gv : G × V) => ρ gv.1 gv.2 - gv.2)
 
 Depends on / 依赖: Set.range, Submodule, Submodule.span
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (Coinvariants ρ)
+  签名: 加法交换群 (Coinvariants ρ)
   定义体: inferInstanceAs AddCommGroup (_ ⧸ _)
 
 Depends on / 依赖: AddCommGroup
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module k (Coinvariants ρ)
+  签名: 模 k (Coinvariants ρ)
   定义体: inferInstanceAs Module k (_ ⧸ _)
 
 Depends on / 依赖: Module
@@ -128,8 +128,8 @@ instance [Module.Finite
   body: inferInstanceAs Module.Finite k (V ⧸ Coinvariants.ker ρ)
 
 中文:
-实例 [Module.Finite
-  签名: k V] : Module.Finite k (Coinvariants ρ)
+实例 [模.有限
+  签名: k V] : 模.有限 k (Coinvariants ρ)
   定义体: inferInstanceAs Module.Finite k (V ⧸ Coinvariants.ker ρ)
 
 Depends on / 依赖: Coinvariants, Coinvariants.ker, Finite, Module, Module.Finite
@@ -248,7 +248,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk ρ)
+  结论: 函数.满射 (mk ρ)
   证明: Submodule.Quotient.mk_surjective _
 
 @[simp]
@@ -400,7 +400,7 @@ mem_ker_of_eq g (f x) _ by simpa using congr($((f.isIntertwining' g).symm) x)
 
 中文:
 定义 map
-  签名: (f : 整数ertwiningMap ρ τ)
+  签名: (f : 整数ertwining映射 ρ τ)
   定义体: lift _ (mk _ ∘ₗ f) fun g => LinearMap.ext fun x => (mk_eq_iff _).2
 mem_ker_of_eq g (f x) _ by simpa using congr($((f.isIntertwining' g).symm) x)
 
@@ -427,7 +427,7 @@ lemma map_comp_mk
 
 中文:
 引理 map_comp_mk
-  条件: (f : 整数ertwiningMap ρ τ)
+  条件: (f : 整数ertwining映射 ρ τ)
   结论: map ρ τ f ∘ₗ mk ρ = mk τ ∘ₗ f
   证明: rfl
 
@@ -449,7 +449,7 @@ lemma map_mk
 
 中文:
 引理 map_mk
-  条件: (f : 整数ertwiningMap ρ τ) (x : V)
+  条件: (f : 整数ertwining映射 ρ τ) (x : V)
   结论: map ρ τ f (mk _ x) = mk _ (f x)
   证明: rfl
 
@@ -473,7 +473,7 @@ lemma map_id
 中文:
 引理 map_id
   条件: (ρ : Representation k G V)
-  结论: map ρ ρ (整数ertwiningMap.id ρ) = LinearMap.id
+  结论: map ρ ρ (整数ertwining映射.id ρ) = 线性映射.id
   证明: by
   ext; rfl
 
@@ -493,7 +493,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: (φ : 整数ertwiningMap ρ τ) (ψ : 整数ertwiningMap τ υ)
+  条件: (φ : 整数ertwining映射 ρ τ) (ψ : 整数ertwining映射 τ υ)
   证明: hom_ext rfl
 
 Depends on / 依赖: hom_ext
@@ -605,7 +605,7 @@ abbreviation toCoinvariantsMkQ
 
 中文:
 缩写 toCoinvariantsMkQ
-  签名: : ρ.整数ertwiningMap (toCoinvariants ρ S) where
+  签名: : ρ.整数ertwining映射 (toCoinvariants ρ S) where
   定义体: Coinvariants.mk _
   isIntertwining' _ := rfl
 
@@ -627,7 +627,7 @@ exact (Coinvariants.mk_eq_iff _).2 mem_ker_of_eq g x _ rfl
 
 中文:
 实例 :
-  签名: IsTrivial ((toCoinvariants ρ S).comp S.subtype)
+  签名: 是平凡 ((toCoinvariants ρ S).comp S.subtype)
   定义体: by
     ext x
 exact (Coinvariants.mk_eq_iff _).2 mem_ker_of_eq g x _ rfl
@@ -1067,7 +1067,7 @@ definition coinvariantsShortComplex
 
 中文:
 定义 coinvariantsShortComplex
-  签名: : ShortComplex (Rep.{w} k G) where
+  签名: : 短复形 (Rep.{w} k G) where
   定义体: toCoinvariantsKer A S
   X₂ := A
   X₃ := toCoinvariants A S
@@ -1099,7 +1099,7 @@ lemma coinvariantsShortComplex_shortExact
 
 中文:
 引理 coinvariantsShortComplex_shortExact
-  结论: (coinvariantsShortComplex.{w} A S).ShortExact where
+  结论: (coinvariantsShortComplex.{w} A S).短正合 where
   证明: (forget₂ (Rep.{w} k G) (ModuleCat k)).reflects_exact_of_faithful _
     (ShortComplex.moduleCat_exact_iff _).2
     fun x hx => ⟨(⟨x, (Submodule.Quotient.mk_eq_zero _).1 hx⟩ : Representation.Coinvariants.ker <|
@@ -1135,7 +1135,7 @@ definition coinvariantsFunctor
 
 中文:
 定义 coinvariantsFunctor
-  签名: : Rep.{w} k G ⥤ ModuleCat k where
+  签名: : Rep.{w} k G ⥤ 模范畴 k where
   定义体: ModuleCat.of k A.ρ.Coinvariants
   map f := ModuleCat.ofHom (Representation.Coinvariants.map _ _ f.hom)
   map_id _ := by simp
@@ -1162,7 +1162,7 @@ definition coinvariantsMk
 
 中文:
 定义 coinvariantsMk
-  签名: : forget₂ (Rep k G) (ModuleCat k) ⟶ coinvariantsFunctor k G where
+  签名: : forget₂ (Rep k G) (模范畴 k) ⟶ coinvariantsFunctor k G where
   定义体: ModuleCat.ofHom Representation.Coinvariants.mk X.ρ
 
 Depends on / 依赖: Coinvariants, ModuleCat, ModuleCat.ofHom, Representation, Representation.Coinvariants.mk
@@ -1186,7 +1186,7 @@ lemma coinvariantsFunctor_hom_ext
 
 中文:
 引理 coinvariantsFunctor_hom_ext
-  结论: {M : ModuleCat k} {f g : (coinvariantsFunctor k G).obj A ⟶ M}
+  结论: {M : 模范畴 k} {f g : (coinvariantsFunctor k G).obj A ⟶ M}
   证明: (cancel_epi _).1 hfg
 
 Depends on / 依赖: cancel_epi
@@ -1205,7 +1205,7 @@ abbreviation desc
 
 中文:
 缩写 desc
-  签名: [B.ρ.IsTrivial] (f : A ⟶ B)
+  签名: [B.ρ.是平凡] (f : A ⟶ B)
   定义体: ModuleCat.ofHom Representation.Coinvariants.lift _ f.hom.toLinearMap by simp [f.hom.2]
 
 Depends on / 依赖: Coinvariants, ModuleCat, ModuleCat.ofHom, Representation, Representation.Coinvariants.lift, f.hom, f.hom.toLinearMap, toLinearMap
@@ -1225,7 +1225,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coinvariantsFunctor k G).Additive
+  签名: (coinvariantsFunctor k G).加性
 -/
 instance : (coinvariantsFunctor k G).Additive where
 /--
@@ -1237,7 +1237,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coinvariantsFunctor k G).Linear k
+  签名: (coinvariantsFunctor k G).线性 k
 -/
 instance : (coinvariantsFunctor k G).Linear k where
 
@@ -1282,7 +1282,7 @@ theorem coinvariantsAdjunction_homEquiv_apply_hom
 
 中文:
 定理 coinvariantsAdjunction_homEquiv_apply_hom
-  结论: {X : Rep.{w} k G} {Y : ModuleCat k}
+  结论: {X : Rep.{w} k G} {Y : 模范畴 k}
   证明: by
   rfl
 -/
@@ -1306,7 +1306,7 @@ theorem coinvariantsAdjunction_homEquiv_symm_apply_hom
 
 中文:
 定理 coinvariantsAdjunction_homEquiv_symm_apply_hom
-  结论: {X : Rep.{w} k G} {Y : ModuleCat k}
+  结论: {X : Rep.{w} k G} {Y : 模范畴 k}
   证明: by
   ext
   simp [coinvariantsAdjunction, Adjunction.homEquiv_symm_apply]
@@ -1328,7 +1328,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coinvariantsFunctor k G).PreservesZeroMorphisms
+  签名: (coinvariantsFunctor k G).保持ZeroMorphisms
 -/
 instance : (coinvariantsFunctor k G).PreservesZeroMorphisms where
 /--
@@ -1341,7 +1341,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coinvariantsFunctor k G).IsLeftAdjoint
+  签名: (coinvariantsFunctor k G).是左伴随
   定义体: (coinvariantsAdjunction k G).isLeftAdjoint
 
 Depends on / 依赖: coinvariantsAdjunction, isLeftAdjoint
@@ -1358,7 +1358,7 @@ abbreviation coinvariantsTensor
 
 中文:
 缩写 coinvariantsTensor
-  签名: : Rep k G ⥤ Rep k G ⥤ ModuleCat k
+  签名: : Rep k G ⥤ Rep k G ⥤ 模范畴 k
   定义体: (Functor.postcompose₂.obj (coinvariantsFunctor k G)).obj (MonoidalCategory.curriedTensor _)
 
 Depends on / 依赖: Functor, Functor.postcompose, MonoidalCategory, MonoidalCategory.curriedTensor, coinvariantsFunctor, curriedTensor
@@ -1420,7 +1420,7 @@ lemma coinvariantsTensor_hom_ext
 
 中文:
 引理 coinvariantsTensor_hom_ext
-  结论: {A B : Rep.{u} k G} {M : ModuleCat k}
+  结论: {A B : Rep.{u} k G} {M : 模范畴 k}
   证明: coinvariantsFunctor_hom_ext ModuleCat.hom_ext TensorProduct.ext hfg
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, TensorProduct, TensorProduct.ext, coinvariantsFunctor_hom_ext, hom_ext
@@ -1455,7 +1455,7 @@ definition quotientToCoinvariantsFunctor
 
 中文:
 定义 quotientToCoinvariantsFunctor
-  签名: (S : Subgroup G) [S.Normal]
+  签名: (S : 子群 G) [S.正规]
   定义体: X.quotientToCoinvariants S
   map {X Y} f := Rep.ofHom ⟨((coinvariantsFunctor k S).map ((resFunctor S.subtype).map f)).hom,
     fun g => QuotientGroup.induction_on g fun g => by ext; simp [hom_comm_apply]⟩

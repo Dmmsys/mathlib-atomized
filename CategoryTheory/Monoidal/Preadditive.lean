@@ -40,7 +40,7 @@ class MonoidalPreadditive
     - add_whiskerRight : forall {X Y Z : C} (f g : Y ⟶ Z), (f + g) ▷ X = f ▷ X + g ▷ X  [default: by cat_disch]
 
 中文:
-类 MonoidalPreadditive
+类 幺半群预加性
   参数: : 命题 where
   公理与运算 (4 个):
     - whiskerLeft_zero : 对任意 {X Y Z : C}, X ◁ (0 : Y ⟶ Z) = 0  [默认: by cat_disch]
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curriedTensor C).Additive
+  签名: (curriedTensor C).加性
 -/
 instance : (curriedTensor C).Additive where
 /--
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curriedTensor C).flip.Additive
+  签名: (curriedTensor C).flip.加性
 -/
 instance : (curriedTensor C).flip.Additive where
 
@@ -258,7 +258,7 @@ theorem monoidalPreadditive_of_faithful
 
 中文:
 定理 monoidalPreadditive_of_faithful
-  结论: {D} [Category* D] [Preadditive D] [MonoidalCategory D]
+  结论: {D} [范畴* D] [预加性 D] [幺半群范畴 D]
   证明: { whiskerLeft_zero := by
       intros
       apply F.map_injective
@@ -306,7 +306,7 @@ theorem whiskerLeft_sum
 
 中文:
 定理 whiskerLeft_sum
-  条件: (P : C) {Q R : C} {J : 类型} (s : Finset J) (g : J -> (Q ⟶ R))
+  条件: (P : C) {Q R : C} {J : 类型} (s : 有限集 J) (g : J -> (Q ⟶ R))
   证明: map_sum ((tensoringLeft C).obj P).mapAddHom g s
 
 Depends on / 依赖: mapAddHom, map_sum, tensoringLeft
@@ -325,7 +325,7 @@ theorem sum_whiskerRight
 
 中文:
 定理 sum_whiskerRight
-  条件: {Q R : C} {J : 类型} (s : Finset J) (g : J -> (Q ⟶ R)) (P : C)
+  条件: {Q R : C} {J : 类型} (s : 有限集 J) (g : J -> (Q ⟶ R)) (P : C)
   证明: map_sum ((tensoringRight C).obj P).mapAddHom g s
 
 Depends on / 依赖: mapAddHom, map_sum, tensoringRight
@@ -345,7 +345,7 @@ theorem tensor_sum
 
 中文:
 定理 tensor_sum
-  条件: {P Q R S : C} {J : 类型} (s : Finset J) (f : P ⟶ Q) (g : J -> (R ⟶ S))
+  条件: {P Q R S : C} {J : 类型} (s : 有限集 J) (f : P ⟶ Q) (g : J -> (R ⟶ S))
   证明: by
   simp only [tensorHom_def, whiskerLeft_sum, Preadditive.comp_sum]
 
@@ -366,7 +366,7 @@ theorem sum_tensor
 
 中文:
 定理 sum_tensor
-  条件: {P Q R S : C} {J : 类型} (s : Finset J) (f : P ⟶ Q) (g : J -> (R ⟶ S))
+  条件: {P Q R S : C} {J : 类型} (s : 有限集 J) (f : P ⟶ Q) (g : J -> (R ⟶ S))
   证明: by
   simp only [tensorHom_def, sum_whiskerRight, Preadditive.sum_comp]
 
@@ -415,7 +415,7 @@ definition leftDistributor
 
 中文:
 定义 leftDistributor
-  签名: {J : Type} [Finite J] (X : C) (f : J -> C)
+  签名: {J : 类型} [有限 J] (X : C) (f : J -> C)
   定义体: (tensorLeft X).mapBiproduct f
 
 Depends on / 依赖: mapBiproduct, tensorLeft
@@ -440,7 +440,7 @@ theorem leftDistributor_hom
 
 中文:
 定理 leftDistributor_hom
-  条件: {J : Type} [Fintype J] (X : C) (f : J -> C)
+  条件: {J : 类型} [有限类型 J] (X : C) (f : J -> C)
   证明: by
   classical
   ext
@@ -481,7 +481,7 @@ theorem leftDistributor_inv
 
 中文:
 定理 leftDistributor_inv
-  条件: {J : Type} [Fintype J] (X : C) (f : J -> C)
+  条件: {J : 类型} [有限类型 J] (X : C) (f : J -> C)
   证明: by
   classical
   ext
@@ -519,7 +519,7 @@ theorem leftDistributor_hom_comp_biproduct_π
 
 中文:
 定理 leftDistributor_hom_comp_biproduct_π
-  条件: {J : Type} [Finite J] (X : C) (f : J -> C) (j : J)
+  条件: {J : 类型} [有限 J] (X : C) (f : J -> C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -552,7 +552,7 @@ theorem biproduct_ι_comp_leftDistributor_hom
 
 中文:
 定理 biproduct_ι_comp_leftDistributor_hom
-  条件: {J : Type} [Finite J] (X : C) (f : J -> C) (j : J)
+  条件: {J : 类型} [有限 J] (X : C) (f : J -> C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -587,7 +587,7 @@ theorem leftDistributor_inv_comp_biproduct_π
 
 中文:
 定理 leftDistributor_inv_comp_biproduct_π
-  条件: {J : Type} [Finite J] (X : C) (f : J -> C) (j : J)
+  条件: {J : 类型} [有限 J] (X : C) (f : J -> C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -619,7 +619,7 @@ theorem biproduct_ι_comp_leftDistributor_inv
 
 中文:
 定理 biproduct_ι_comp_leftDistributor_inv
-  条件: {J : Type} [Finite J] (X : C) (f : J -> C) (j : J)
+  条件: {J : 类型} [有限 J] (X : C) (f : J -> C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -649,7 +649,7 @@ theorem leftDistributor_assoc
 
 中文:
 定理 leftDistributor_assoc
-  条件: {J : Type} [Finite J] (X Y : C) (f : J -> C)
+  条件: {J : 类型} [有限 J] (X Y : C) (f : J -> C)
   证明: by
   classical
   cases nonempty_fintype J
@@ -685,7 +685,7 @@ definition rightDistributor
 
 中文:
 定义 rightDistributor
-  签名: {J : Type} [Finite J] (f : J -> C) (X : C)
+  签名: {J : 类型} [有限 J] (f : J -> C) (X : C)
   定义体: (tensorRight X).mapBiproduct f
 
 Depends on / 依赖: mapBiproduct, tensorRight
@@ -710,7 +710,7 @@ theorem rightDistributor_hom
 
 中文:
 定理 rightDistributor_hom
-  条件: {J : Type} [Fintype J] (f : J -> C) (X : C)
+  条件: {J : 类型} [有限类型 J] (f : J -> C) (X : C)
   证明: by
   classical
   ext
@@ -750,7 +750,7 @@ theorem rightDistributor_inv
 
 中文:
 定理 rightDistributor_inv
-  条件: {J : Type} [Fintype J] (f : J -> C) (X : C)
+  条件: {J : 类型} [有限类型 J] (f : J -> C) (X : C)
   证明: by
   classical
   ext
@@ -786,7 +786,7 @@ theorem rightDistributor_hom_comp_biproduct_π
 
 中文:
 定理 rightDistributor_hom_comp_biproduct_π
-  条件: {J : Type} [Finite J] (f : J -> C) (X : C) (j : J)
+  条件: {J : 类型} [有限 J] (f : J -> C) (X : C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -819,7 +819,7 @@ theorem biproduct_ι_comp_rightDistributor_hom
 
 中文:
 定理 biproduct_ι_comp_rightDistributor_hom
-  条件: {J : Type} [Finite J] (f : J -> C) (X : C) (j : J)
+  条件: {J : 类型} [有限 J] (f : J -> C) (X : C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -854,7 +854,7 @@ theorem rightDistributor_inv_comp_biproduct_π
 
 中文:
 定理 rightDistributor_inv_comp_biproduct_π
-  条件: {J : Type} [Finite J] (f : J -> C) (X : C) (j : J)
+  条件: {J : 类型} [有限 J] (f : J -> C) (X : C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -887,7 +887,7 @@ theorem biproduct_ι_comp_rightDistributor_inv
 
 中文:
 定理 biproduct_ι_comp_rightDistributor_inv
-  条件: {J : Type} [Finite J] (f : J -> C) (X : C) (j : J)
+  条件: {J : 类型} [有限 J] (f : J -> C) (X : C) (j : J)
   证明: by
   classical
   cases nonempty_fintype J
@@ -919,7 +919,7 @@ theorem rightDistributor_assoc
 
 中文:
 定理 rightDistributor_assoc
-  条件: {J : Type} [Finite J] (f : J -> C) (X Y : C)
+  条件: {J : 类型} [有限 J] (f : J -> C) (X Y : C)
   证明: by
   classical
   cases nonempty_fintype J
@@ -961,7 +961,7 @@ theorem leftDistributor_rightDistributor_assoc
 
 中文:
 定理 leftDistributor_rightDistributor_assoc
-  结论: {J : Type _} [Finite J]
+  结论: {J : 类型 _} [有限 J]
   证明: by
   classical
   cases nonempty_fintype J
@@ -1008,7 +1008,7 @@ theorem leftDistributor_ext_left
 
 中文:
 定理 leftDistributor_ext_left
-  结论: {J : Type} [Finite J] {X Y : C} {f : J -> C} {g h : X otimes ⨁ f ⟶ Y}
+  结论: {J : 类型} [有限 J] {X Y : C} {f : J -> C} {g h : X otimes ⨁ f ⟶ Y}
   证明: by
   cases nonempty_fintype J
   apply (cancel_epi (leftDistributor X f).inv).mp
@@ -1041,7 +1041,7 @@ theorem leftDistributor_ext_right
 
 中文:
 定理 leftDistributor_ext_right
-  结论: {J : Type} [Finite J] {X Y : C} {f : J -> C} {g h : X ⟶ Y otimes ⨁ f}
+  结论: {J : 类型} [有限 J] {X Y : C} {f : J -> C} {g h : X ⟶ Y otimes ⨁ f}
   证明: by
   cases nonempty_fintype J
   apply (cancel_mono (leftDistributor Y f).hom).mp
@@ -1075,7 +1075,7 @@ theorem leftDistributor_ext₂_left
 
 中文:
 定理 leftDistributor_ext₂_left
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   apply (cancel_epi (α_ _ _ _).hom).mp
   ext
@@ -1109,7 +1109,7 @@ theorem leftDistributor_ext₂_right
 
 中文:
 定理 leftDistributor_ext₂_right
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   apply (cancel_mono (α_ _ _ _).inv).mp
   ext
@@ -1144,7 +1144,7 @@ theorem rightDistributor_ext_left
 
 中文:
 定理 rightDistributor_ext_left
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   cases nonempty_fintype J
   apply (cancel_epi (rightDistributor f X).inv).mp
@@ -1180,7 +1180,7 @@ theorem rightDistributor_ext_right
 
 中文:
 定理 rightDistributor_ext_right
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   cases nonempty_fintype J
   apply (cancel_mono (rightDistributor f Y).hom).mp
@@ -1215,7 +1215,7 @@ theorem rightDistributor_ext₂_left
 
 中文:
 定理 rightDistributor_ext₂_left
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   apply (cancel_epi (α_ _ _ _).inv).mp
   ext
@@ -1247,7 +1247,7 @@ theorem rightDistributor_ext₂_right
 
 中文:
 定理 rightDistributor_ext₂_right
-  结论: {J : Type} [Finite J]
+  结论: {J : 类型} [有限 J]
   证明: by
   apply (cancel_mono (α_ _ _ _).hom).mp
   ext

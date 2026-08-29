@@ -62,7 +62,7 @@ definition normalizer
 
 中文:
 定义 normalizer
-  签名: : LieSubmodule R L M where
+  签名: : Lie子模 R L M where
   定义体: {m | forall x : L, ⁅x, m⁆ in N}
   add_mem' hm₁ hm₂ x := by rw [lie_add]; exact N.add_mem' (hm₁ x) (hm₂ x)
   zero_mem' x := by simp
@@ -195,7 +195,7 @@ theorem monotone_normalizer
 
 中文:
 定理 monotone_normalizer
-  结论: Monotone (normalizer : LieSubmodule R L M -> LieSubmodule R L M)
+  结论: 递增 (normalizer : Lie子模 R L M -> Lie子模 R L M)
   证明: fun _ _ => normalizer_mono
 
 @[simp]
@@ -236,7 +236,7 @@ theorem top_lie_le_iff_le_normalizer
 
 中文:
 定理 top_lie_le_iff_le_normalizer
-  条件: (N' : LieSubmodule R L M)
+  条件: (N' : Lie子模 R L M)
   证明: by rw [lie_le_iff]; tauto
 
 Depends on / 依赖: lie_le_iff
@@ -370,7 +370,7 @@ definition normalizer
 
 中文:
 定义 normalizer
-  签名: : LieSubalgebra R L
+  签名: : Lie子代数 R L
   定义体: { H.toLieSubmodule.normalizer with
     lie_mem' := fun {y z} hy hz x => by
       rw [coe_bracket_of_module]; rw [mem_toLieSubmodule]; rw [leibniz_lie]; rw [← lie_skew y]; rw [← sub_eq_add_neg]
@@ -547,8 +547,8 @@ theorem exists_nested_lieIdeal_ofLe_normalizer
   exact fun x y hx hy => ideal_in_normalizer (h₂ hx) hy
 
 中文:
-定理 exists_nested_lieIdeal_ofLe_normalizer
-  结论: {K : LieSubalgebra R L} (h₁ : H <= K)
+定理 存在_nested_lieIdeal_ofLe_normalizer
+  结论: {K : Lie子代数 R L} (h₁ : H <= K)
   证明: by
   rw [exists_nested_lieIdeal_coe_eq_iff]
   exact fun x y hx hy => ideal_in_normalizer (h₂ hx) hy

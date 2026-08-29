@@ -86,7 +86,7 @@ theorem unique_of_type_equalizer
 
 中文:
 定理 unique_of_type_equalizer
-  条件: (t : IsLimit (Fork.ofι _ w)) (y : Y) (hy : g y = h y)
+  条件: (t : 是极限 (叉.ofι _ w)) (y : Y) (hy : g y = h y)
   证明: by
   let y' : PUnit ⟶ Y := ↾fun _ => y
   have hy' : y' ≫ g = y' ≫ h := by ext; exact hy
@@ -146,7 +146,7 @@ definition equalizerLimit
 
 中文:
 定义 equalizerLimit
-  签名: : Limits.LimitCone (parallelPair g h) where
+  签名: : Limits.极限锥 (parallelPair g h) where
   定义体: Fork.ofι (↾(Subtype.val : { x : Y // g x = h x } -> Y))
     (by ext x; exact x.prop)
   isLimit :=

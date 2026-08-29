@@ -68,7 +68,7 @@ exact prod_eq_zero hi by simp [*, -coe_biUnion]
 
 中文:
 引理 prod_indicator_biUnion_sub_indicator
-  条件: (hs : s.Nonempty) (S : ι -> Set α) (a : α)
+  条件: (hs : s.非空) (S : ι -> 集合 α) (a : α)
   证明: by
   by_cases ha : a in ⋃ i in s, S i
   · have ha' := ha
@@ -110,7 +110,7 @@ lemma indicator_biUnion_eq_sum_powerset
 
 中文:
 引理 indicator_biUnion_eq_sum_powerset
-  条件: (s : Finset ι) (S : ι -> Set α) (f : α -> G) (a : α)
+  条件: (s : 有限集 ι) (S : ι -> 集合 α) (f : α -> G) (a : α)
   证明: by
   classical
   by_cases ha : a in ⋃ i in s, S i; swap
@@ -176,7 +176,7 @@ lemma prod_indicator_biUnion_finset_sub_indicator
 
 中文:
 引理 prod_indicator_biUnion_finset_sub_indicator
-  条件: (hs : s.Nonempty) (S : ι -> Finset α) (a : α)
+  条件: (hs : s.非空) (S : ι -> 有限集 α) (a : α)
   证明: by
   convert! prod_indicator_biUnion_sub_indicator hs (fun i => S i) a
   simp
@@ -207,7 +207,7 @@ theorem inclusion_exclusion_sum_biUnion
 
 中文:
 定理 inclusion_exclusion_sum_biUnion
-  条件: (s : Finset ι) (S : ι -> Finset α) (f : α -> G)
+  条件: (s : 有限集 ι) (S : ι -> 有限集 α) (f : α -> G)
   证明: by
   classical
   rw [← sub_eq_zero]
@@ -265,7 +265,7 @@ theorem inclusion_exclusion_card_biUnion
 
 中文:
 定理 inclusion_exclusion_card_biUnion
-  条件: (s : Finset ι) (S : ι -> Finset α)
+  条件: (s : 有限集 ι) (S : ι -> 有限集 α)
   证明: by
   simpa using inclusion_exclusion_sum_biUnion (G := Int) s S (f := 1)
 
@@ -295,7 +295,7 @@ theorem inclusion_exclusion_sum_inf_compl
 
 中文:
 定理 inclusion_exclusion_sum_inf_compl
-  条件: (s : Finset ι) (S : ι -> Finset α) (f : α -> G)
+  条件: (s : 有限集 ι) (S : ι -> 有限集 α) (f : α -> G)
   证明: by
   classical
   calc
@@ -331,7 +331,7 @@ theorem inclusion_exclusion_card_inf_compl
 
 中文:
 定理 inclusion_exclusion_card_inf_compl
-  条件: (s : Finset ι) (S : ι -> Finset α)
+  条件: (s : 有限集 ι) (S : ι -> 有限集 α)
   证明: by
   simpa using inclusion_exclusion_sum_inf_compl (G := Int) s S (f := 1)
 

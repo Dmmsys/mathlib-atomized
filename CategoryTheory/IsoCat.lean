@@ -50,7 +50,7 @@ structure IsoCat
     - counit_eq : inverse ⋙ functor = 𝟭 D
 
 中文:
-结构 IsoCat
+结构 同构范畴
   参数: where
   公理与运算 (4 个):
     - functor : C ⥤ D
@@ -83,8 +83,8 @@ definition IsoCat.refl
   counit_eq := Functor.comp_id _
 
 中文:
-定义 IsoCat.refl
-  签名: : IsoCat C C where
+定义 同构范畴.refl
+  签名: : 同构范畴 C C where
   定义体: 𝟭 C
   inverse := 𝟭 C
   unit_eq := (Functor.comp_id _).symm
@@ -110,8 +110,8 @@ definition IsoCat.symm
   counit_eq := e.unit_eq.symm
 
 中文:
-定义 IsoCat.symm
-  签名: (e : IsoCat C D)
+定义 同构范畴.symm
+  签名: (e : 同构范畴 C D)
   定义体: e.inverse
   inverse := e.functor
   unit_eq := e.counit_eq.symm
@@ -142,8 +142,8 @@ definition IsoCat.trans
     rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
 
 中文:
-定义 IsoCat.trans
-  签名: (e : IsoCat C D) (f : IsoCat D E)
+定义 同构范畴.trans
+  签名: (e : 同构范畴 C D) (f : 同构范畴 D E)
   定义体: e.functor ⋙ f.functor
   inverse := f.inverse ⋙ e.inverse
   unit_eq := by
@@ -178,12 +178,12 @@ class IsIso
     - bijective_obj((F)) : F.obj.Bijective
 
 中文:
-类 IsIso
+类 是同构
   参数: (F : C ⥤ D)
   公理与运算 (3 个):
-    - faithful : F.Faithful  [默认: by infer_instance]
-    - full : F.Full  [默认: by infer_instance]
-    - bijective_obj((F)) : F.obj.Bijective
+    - faithful : F.忠实  [默认: by infer_instance]
+    - full : F.满  [默认: by infer_instance]
+    - bijective_obj((F)) : F.obj.双射
 -/
 protected class IsIso (F : C ⥤ D) : Prop where
   /-- A functor which is an isomorphism of categories is faithful. -/
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟭 C).IsIso
+  签名: (𝟭 C).是同构
   定义体: Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.IsEquivalence
+  签名: F.是等价
   定义体: ⟨fun Y => ⟨F.objEquiv.symm Y, ⟨eqToIso (by simp)⟩⟩⟩
 
 Depends on / 依赖: F.objEquiv.symm, eqToIso, objEquiv
@@ -346,7 +346,7 @@ definition asIsomorphism
 
 中文:
 定义 asIsomorphism
-  签名: : IsoCat C D where
+  签名: : 同构范畴 C D where
   定义体: F
   inverse := F.strictInv
   unit_eq :=
@@ -382,8 +382,8 @@ definition IsoCat.toEquivalence
   functor_unitIso_comp X := by simp [eqToHom_map]
 
 中文:
-定义 IsoCat.toEquivalence
-  签名: (e : IsoCat C D)
+定义 同构范畴.toEquivalence
+  签名: (e : 同构范畴 C D)
   定义体: e.functor
   inverse := e.inverse
   unitIso := eqToIso e.unit_eq
@@ -414,7 +414,7 @@ definition Equivalence.toIsoCat
   counit_eq := Functor.ext_of_iso e.counitIso (by simp [h'])
 
 中文:
-定义 Equivalence.toIsoCat
+定义 等价.toIsoCat
   签名: (e : C ≌ D)
   定义体: e.functor
   inverse := e.inverse
@@ -446,8 +446,8 @@ instance IsoCat.isIso_functor
       Functor.congr_obj e.counit_eq⟩
 
 中文:
-实例 IsoCat.isIso_functor
-  签名: (e : IsoCat C D)
+实例 同构范畴.isIso_functor
+  签名: (e : 同构范畴 C D)
   定义体: e.toEquivalence.faithful_functor
   full := e.toEquivalence.full_functor
   bijective_obj := Function.bijective_iff_has_inverse.mpr
@@ -474,8 +474,8 @@ instance [F.IsIso]
   body: F.asIsomorphism.symm.isIso_functor
 
 中文:
-实例 [F.IsIso]
-  签名: : F.strictInv.IsIso
+实例 [F.是同构]
+  签名: : F.strictInv.是同构
   定义体: F.asIsomorphism.symm.isIso_functor
 
 Depends on / 依赖: F.asIsomorphism.symm.isIso_functor, asIsomorphism, isIso_functor
@@ -491,8 +491,8 @@ instance [F.IsIso]
   body: (F.asIsomorphism.trans G.asIsomorphism).isIso_functor
 
 中文:
-实例 [F.IsIso]
-  签名: [G.IsIso]
+实例 [F.是同构]
+  签名: [G.是同构]
   定义体: (F.asIsomorphism.trans G.asIsomorphism).isIso_functor
 
 Depends on / 依赖: F.asIsomorphism.trans, G.asIsomorphism, asIsomorphism, isIso_functor

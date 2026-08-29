@@ -94,7 +94,7 @@ definition derivationToSquareZeroOfLift
 
 中文:
 定义 derivationToSquareZeroOfLift
-  签名: [IsScalarTower R A B] (hI : I ^ 2 = ⊥) (f : A ->ₐ[R] B)
+  签名: [标量塔 R A B] (hI : I ^ 2 = ⊥) (f : A ->ₐ[R] B)
   定义体: by
   refine
     { diffToIdealOfQuotientCompEq I f (IsScalarTower.toAlgHom R A B) ?_ with
@@ -143,7 +143,7 @@ theorem derivationToSquareZeroOfLift_apply
 
 中文:
 定理 derivationToSquareZeroOfLift_apply
-  结论: [IsScalarTower R A B] (f : A ->ₐ[R] B)
+  结论: [标量塔 R A B] (f : A ->ₐ[R] B)
   证明: rfl
 -/
 theorem derivationToSquareZeroOfLift_apply [IsScalarTower R A B] (f : A ->ₐ[R] B)
@@ -169,7 +169,7 @@ definition liftOfDerivationToSquareZero
 
 中文:
 定义 liftOfDerivationToSquareZero
-  签名: [IsScalarTower R A B] (hI : I ^ 2 = ⊥) (f : Derivation R A I)
+  签名: [标量塔 R A B] (hI : I ^ 2 = ⊥) (f : 导子 R A I)
   定义体: { ((I.restrictScalars R).subtype.comp f.toLinearMap + (IsScalarTower.toAlgHom R A B).toLinearMap :
       A ->ₗ[R] B) with
     toFun := fun x => f x + algebraMap A B x
@@ -213,7 +213,7 @@ theorem liftOfDerivationToSquareZero_mk_apply
 
 中文:
 定理 liftOfDerivationToSquareZero_mk_apply
-  条件: [IsScalarTower R A B] (d : Derivation R A I) (x : A)
+  条件: [标量塔 R A B] (d : 导子 R A I) (x : A)
   证明: by
   rw [liftOfDerivationToSquareZero_apply]; rw [map_add]; rw [Ideal.Quotient.eq_zero_iff_mem.mpr (d x).prop]; rw [zero_add]; rw [Ideal.Quotient.mk_algebraMap]
 
@@ -237,7 +237,7 @@ theorem liftOfDerivationToSquareZero_mk_apply'
 
 中文:
 定理 liftOfDerivationToSquareZero_mk_apply'
-  条件: (d : Derivation R A I) (x : A)
+  条件: (d : 导子 R A I) (x : A)
   证明: by
   simp only [Ideal.Quotient.eq_zero_iff_mem.mpr (d x).prop, zero_add]
 
@@ -266,7 +266,7 @@ definition derivationToSquareZeroEquivLift
 
 中文:
 定义 derivationToSquareZeroEquivLift
-  签名: [IsScalarTower R A B]
+  签名: [标量塔 R A B]
   定义体: by
   refine ⟨fun d => ⟨liftOfDerivationToSquareZero I hI d, ?_⟩, fun f =>
     (derivationToSquareZeroOfLift I hI f.1 f.2 :), ?_, ?_⟩

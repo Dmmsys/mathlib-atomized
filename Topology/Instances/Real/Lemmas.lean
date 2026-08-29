@@ -44,7 +44,7 @@ theorem Real.isTopologicalBasis_Ioo_rat
       simp 
 
 中文:
-定理 Real.isTopologicalBasis_Ioo_rat
+定理 实数.isTopologicalBasis_Ioo_rat
   证明: isTopologicalBasis_of_isOpen_of_nhds (by simp +contextual [isOpen_Ioo])
     fun a _ hav hv =>
     let ⟨_, _, ⟨hl, hu⟩, h⟩ := mem_nhds_iff_exists_Ioo_subset.mp (IsOpen.mem_nhds hv hav)
@@ -77,8 +77,8 @@ theorem Real.mem_closure_iff
   simp [mem_closure_iff_nhds_basis nhds_basis_ball, Real.dist_eq]
 
 中文:
-定理 Real.mem_closure_iff
-  条件: {s : Set 实数} {x : 实数}
+定理 实数.mem_closure_iff
+  条件: {s : 集合 实数} {x : 实数}
   证明: by
   simp [mem_closure_iff_nhds_basis nhds_basis_ball, Real.dist_eq]
 
@@ -99,8 +99,8 @@ theorem Real.uniformContinuous_inv
     ⟨δ, δ0, fun {a b} h => Hδ (H _ a.2) (H _ b.2) h⟩
 
 中文:
-定理 Real.uniformContinuous_inv
-  条件: (s : Set 实数) {r : 实数} (r0 : 0 < r) (H : 对任意 x in s, r <= |x|)
+定理 实数.uniformContinuous_inv
+  条件: (s : 集合 实数) {r : 实数} (r0 : 0 < r) (H : 对任意 x in s, r <= |x|)
   证明: Metric.uniformContinuous_iff.2 fun _ε ε0 =>
     let ⟨δ, δ0, Hδ⟩ := rat_inv_continuous_lemma abs ε0 r0
     ⟨δ, δ0, fun {a b} h => Hδ (H _ a.2) (H _ b.2) h⟩
@@ -123,8 +123,8 @@ theorem Real.uniformContinuous_abs
     ⟨ε, ε0, fun _ _ => lt_of_le_of_lt (abs_abs_sub_abs_le_abs_sub _ _)⟩
 
 中文:
-定理 Real.uniformContinuous_abs
-  结论: UniformContinuous (abs : 实数 -> 实数)
+定理 实数.uniformContinuous_abs
+  结论: 一致连续 (abs : 实数 -> 实数)
   证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨ε, ε0, fun _ _ => lt_of_le_of_lt (abs_abs_sub_abs_le_abs_sub _ _)⟩
 
@@ -143,8 +143,8 @@ theorem Real.continuous_inv
   proof: continuousOn_inv₀.domRestrict
 
 中文:
-定理 Real.continuous_inv
-  结论: Continuous fun a : { r : 实数 // r != 0 } => a.val⁻¹
+定理 实数.continuous_inv
+  结论: 连续 fun a : { r : 实数 // r != 0 } => a.val⁻¹
   证明: continuousOn_inv₀.domRestrict
 
 Depends on / 依赖: domRestrict
@@ -165,8 +165,8 @@ theorem Real.uniformContinuous_mul
       Hδ (H _ a.2).1 (H _ b.2).2 h₁ h₂⟩
 
 中文:
-定理 Real.uniformContinuous_mul
-  结论: (s : Set (实数 × 实数)) {r₁ r₂ : 实数}
+定理 实数.uniformContinuous_mul
+  结论: (s : 集合 (实数 × 实数)) {r₁ r₂ : 实数}
   证明: Metric.uniformContinuous_iff.2 fun _ε ε0 =>
     let ⟨δ, δ0, Hδ⟩ := rat_mul_continuous_lemma abs ε0
     ⟨δ, δ0, fun {a b} h =>
@@ -195,9 +195,9 @@ theorem Real.totallyBounded_ball
   rw [Real.ball_eq_Ioo]; apply totallyBounded_Ioo
 
 中文:
-定理 Real.totallyBounded_ball
+定理 实数.totallyBounded_ball
   条件: (x ε : 实数)
-  结论: TotallyBounded (ball x ε)
+  结论: 全有界 (ball x ε)
   证明: by
   rw [Real.ball_eq_Ioo]; apply totallyBounded_Ioo
 
@@ -220,8 +220,8 @@ theorem Real.subfield_eq_of_closed
   exact SubfieldClass.ratCast_mem K _
 
 中文:
-定理 Real.subfield_eq_of_closed
-  条件: {K : Subfield 实数} (hc : IsClosed (K : Set 实数))
+定理 实数.subfield_eq_of_closed
+  条件: {K : 子域 实数} (hc : 是闭集 (K : 集合 实数))
   结论: K = ⊤
   证明: by
   rw [SetLike.ext'_iff]; rw [Subfield.coe_top]; rw [← hc.closure_eq]
@@ -246,7 +246,7 @@ theorem Real.exists_seq_rat_strictMono_tendsto
   proof: Rat.denseRange_cast.exists_seq_strictMono_tendsto Rat.cast_strictMono.monotone x
 
 中文:
-定理 Real.exists_seq_rat_strictMono_tendsto
+定理 实数.存在_seq_rat_strictMono_tendsto
   条件: (x : 实数)
   证明: Rat.denseRange_cast.exists_seq_strictMono_tendsto Rat.cast_strictMono.monotone x
 
@@ -265,7 +265,7 @@ theorem Real.exists_seq_rat_strictAnti_tendsto
   proof: Rat.denseRange_cast.exists_seq_strictAnti_tendsto Rat.cast_strictMono.monotone x
 
 中文:
-定理 Real.exists_seq_rat_strictAnti_tendsto
+定理 实数.存在_seq_rat_strictAnti_tendsto
   条件: (x : 实数)
   证明: Rat.denseRange_cast.exists_seq_strictAnti_tendsto Rat.cast_strictMono.monotone x
 
@@ -291,7 +291,7 @@ theorem closure_ordConnected_inter_rat
 
 中文:
 定理 closure_ordConnected_inter_rat
-  条件: {s : Set 实数} (conn : s.OrdConnected) (nt : s.Nontrivial)
+  条件: {s : 集合 实数} (conn : s.序连通) (nt : s.非平凡)
   证明: (closure_mono inter_subset_left).antisymm isClosed_closure.closure_subset_iff.mpr fun x hx =>
     Real.mem_closure_iff.mpr fun ε ε_pos => by
       have ⟨z, hz, ne⟩ := nt.exists_ne x
@@ -332,7 +332,7 @@ alias Real.cobounded
 
 中文:
 定理 closure_of_rat_image_lt
-  条件: {q : Rat}
+  条件: {q : 有理数}
   证明: by
   convert! closure_ordConnected_inter_rat (ordConnected_Ioi (a := (q : Real))) _ using 1
   · congr!; aesop
@@ -380,8 +380,8 @@ theorem Periodic.compact_of_continuous
   exact isCompact_uIcc.image hf
 
 中文:
-定理 Periodic.compact_of_continuous
-  结论: [TopologicalSpace α] {f : 实数 -> α} {c : 实数} (hp : Periodic f c)
+定理 周期.compact_of_continuous
+  结论: [拓扑空间 α] {f : 实数 -> α} {c : 实数} (hp : 周期 f c)
   证明: by
   rw [← hp.image_uIcc hc 0]
   exact isCompact_uIcc.image hf
@@ -402,8 +402,8 @@ theorem Periodic.isBounded_of_continuous
   proof: (hp.compact_of_continuous hc hf).isBounded
 
 中文:
-定理 Periodic.isBounded_of_continuous
-  结论: [PseudoMetricSpace α] {f : 实数 -> α} {c : 实数}
+定理 周期.isBounded_of_continuous
+  结论: [伪度量空间 α] {f : 实数 -> α} {c : 实数}
   证明: (hp.compact_of_continuous hc hf).isBounded
 
 Depends on / 依赖: compact_of_continuous, hp.compact_of_continuous, isBounded
@@ -433,7 +433,7 @@ theorem Real.tendsto_atTop_csSup_of_monotoneOn_bddAbove_nat_Ici
   exact tendsto_atTop_ciSup h_mon h_bdd
 
 中文:
-定理 Real.tendsto_atTop_csSup_of_monotoneOn_bddAbove_nat_Ici
+定理 实数.tendsto_atTop_csSup_of_monotoneOn_bddAbove_nat_Ici
   结论: {f : 自然数 -> 实数} {k : 自然数}
   证明: by
   rw [← range_add_eq_image_Ici] at h_bdd
@@ -464,7 +464,7 @@ theorem Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
   exact tendsto_atTop_ciInf h_ant h_bdd
 
 中文:
-定理 Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
+定理 实数.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
   结论: {f : 自然数 -> 实数} {k : 自然数}
   证明: by
   rw [← range_add_eq_image_Ici] at h_bdd
@@ -495,7 +495,7 @@ theorem Real.isLUB_of_tendsto_monotone_bddAbove
   exact isLUB_ciSup h_bdd
 
 中文:
-定理 Real.isLUB_of_tendsto_monotone_bddAbove
+定理 实数.isLUB_of_tendsto_monotone_bddAbove
   结论: {f : ι -> 实数}
   证明: by
   rw [tendsto_nhds_unique h_tto (tendsto_atTop_ciSup h_mon h_bdd)]
@@ -520,7 +520,7 @@ theorem Real.isGLB_of_tendsto_antitone_bddBelow
   exact isGLB_ciInf h_bdd
 
 中文:
-定理 Real.isGLB_of_tendsto_antitone_bddBelow
+定理 实数.isGLB_of_tendsto_antitone_bddBelow
   结论: {f : ι -> 实数}
   证明: by
   rw [tendsto_nhds_unique h_tto (tendsto_atTop_ciInf h_ant h_bdd)]
@@ -546,7 +546,7 @@ theorem Real.isLUB_of_tendsto_monotoneOn_bddAbove_nat_Ici
   exact isLUB_csSup (image_nonempty.mpr nonempty_Ici) h_bdd
 
 中文:
-定理 Real.isLUB_of_tendsto_monotoneOn_bddAbove_nat_Ici
+定理 实数.isLUB_of_tendsto_monotoneOn_bddAbove_nat_Ici
   结论: {f : 自然数 -> 实数} {k : 自然数}
   证明: by
   rw [tendsto_nhds_unique h_tto
@@ -574,7 +574,7 @@ theorem Real.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici
   exact isGLB_csInf (image_nonempty.mpr nonempty_Ici) h_bdd
 
 中文:
-定理 Real.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici
+定理 实数.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici
   结论: {f : 自然数 -> 实数} {k : 自然数}
   证明: by
   rw [tendsto_nhds_unique h_tto

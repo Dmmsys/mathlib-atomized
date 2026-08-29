@@ -67,9 +67,9 @@ structure HasFiniteFPowerSeriesOnBall
     - finite : forall (m : Nat), n <= m -> p m = 0
 
 中文:
-结构 HasFiniteFPowerSeriesOnBall
+结构 有FiniteFPowerSeriesOnBall
   参数: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (x : E)
-  继承: HasFPowerSeriesOnBall f p x r
+  继承: 有FPowerSeriesOnBall f p x r
   公理与运算 (1 个):
     - finite : 对任意 (m : 自然数), n <= m -> p m = 0
 -/
@@ -90,7 +90,7 @@ theorem HasFiniteFPowerSeriesOnBall.mk'
   finite := finite
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.mk'
+定理 有FiniteFPowerSeriesOnBall.mk'
   结论: {f : E -> F} {p : FormalMultilinearSeries 𝕜 E F} {x : E}
   证明: p.radius_eq_top_of_eventually_eq_zero (Filter.eventually_atTop.mpr ⟨n, finite⟩) ▸ le_top
   r_pos := pos
@@ -196,7 +196,7 @@ definition CPolynomialOn
 
 中文:
 定义 CPolynomialOn
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: forall x, x in s -> CPolynomialAt 𝕜 f x
 
 Depends on / 依赖: CPolynomialAt
@@ -214,7 +214,7 @@ theorem HasFiniteFPowerSeriesOnBall.hasFiniteFPowerSeriesAt
   proof: ⟨r, hf⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.hasFiniteFPowerSeriesAt
+定理 有FiniteFPowerSeriesOnBall.hasFiniteFPowerSeriesAt
   证明: ⟨r, hf⟩
 -/
 theorem HasFiniteFPowerSeriesOnBall.hasFiniteFPowerSeriesAt
@@ -248,8 +248,8 @@ theorem HasFiniteFPowerSeriesOnBall.cpolynomialAt
   proof: hf.hasFiniteFPowerSeriesAt.cpolynomialAt
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.cpolynomialAt
-  条件: (hf : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.cpolynomialAt
+  条件: (hf : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: hf.hasFiniteFPowerSeriesAt.cpolynomialAt
 
 Depends on / 依赖: cpolynomialAt, hasFiniteFPowerSeriesAt, hf.hasFiniteFPowerSeriesAt.cpolynomialAt
@@ -291,7 +291,7 @@ theorem CPolynomialAt.analyticWithinAt
 
 中文:
 定理 CPolynomialAt.analyticWithinAt
-  条件: {s : Set E} (hf : CPolynomialAt 𝕜 f x)
+  条件: {s : 集合 E} (hf : CPolynomialAt 𝕜 f x)
   证明: hf.analyticAt.analyticWithinAt
 
 Depends on / 依赖: analyticAt, analyticWithinAt, hf.analyticAt.analyticWithinAt
@@ -311,7 +311,7 @@ theorem CPolynomialOn.analyticOnNhd
 
 中文:
 定理 CPolynomialOn.analyticOnNhd
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s)
   结论: AnalyticOnNhd 𝕜 f s
   证明: fun x hx => (hf x hx).analyticAt
 
@@ -331,7 +331,7 @@ theorem CPolynomialOn.analyticOn
 
 中文:
 定理 CPolynomialOn.analyticOn
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s)
   结论: AnalyticOn 𝕜 f s
   证明: hf.analyticOnNhd.analyticOn
 
@@ -349,8 +349,8 @@ theorem HasFiniteFPowerSeriesOnBall.congr
   proof: ⟨hf.1.congr hg, hf.finite⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.congr
-  结论: (hf : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.congr
+  结论: (hf : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: ⟨hf.1.congr hg, hf.finite⟩
 
 Depends on / 依赖: finite, hf.finite
@@ -368,7 +368,7 @@ theorem HasFiniteFPowerSeriesOnBall.of_le
   proof: ⟨h.toHasFPowerSeriesOnBall, fun i hi => h.finite i (hmn.trans hi)⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.of_le
+定理 有FiniteFPowerSeriesOnBall.of_le
   结论: {m n : 自然数}
   证明: ⟨h.toHasFPowerSeriesOnBall, fun i hi => h.finite i (hmn.trans hi)⟩
 
@@ -413,8 +413,8 @@ theorem HasFiniteFPowerSeriesOnBall.comp_sub
   proof: ⟨hf.1.comp_sub y, hf.finite⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.comp_sub
-  条件: (hf : HasFiniteFPowerSeriesOnBall f p x n r) (y : E)
+定理 有FiniteFPowerSeriesOnBall.comp_sub
+  条件: (hf : 有FiniteFPowerSeriesOnBall f p x n r) (y : E)
   证明: ⟨hf.1.comp_sub y, hf.finite⟩
 
 Depends on / 依赖: comp_sub, finite, hf.finite
@@ -432,8 +432,8 @@ theorem HasFiniteFPowerSeriesOnBall.mono
   proof: ⟨hf.1.mono r'_pos hr, hf.finite⟩
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.mono
-  结论: (hf : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.mono
+  结论: (hf : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: ⟨hf.1.mono r'_pos hr, hf.finite⟩
 
 Depends on / 依赖: _pos, finite, hf.finite
@@ -531,7 +531,7 @@ theorem CPolynomialOn.mono
 
 中文:
 定理 CPolynomialOn.mono
-  条件: {s t : Set E} (hf : CPolynomialOn 𝕜 f t) (hst : s subseteq t)
+  条件: {s t : 集合 E} (hf : CPolynomialOn 𝕜 f t) (hst : s subseteq t)
   证明: fun z hz => hf z (hst hz)
 -/
 theorem CPolynomialOn.mono {s t : Set E} (hf : CPolynomialOn 𝕜 f t) (hst : s subseteq t) :
@@ -548,7 +548,7 @@ theorem CPolynomialOn.congr'
 
 中文:
 定理 CPolynomialOn.congr'
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s) (hg : f =ᶠ[𝓝ˢ s] g)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s) (hg : f =ᶠ[𝓝ˢ s] g)
   证明: fun z hz => (hf z hz).congr (mem_nhdsSet_iff_forall.mp hg z hz)
 
 Depends on / 依赖: mem_nhdsSet_iff_forall, mem_nhdsSet_iff_forall.mp
@@ -567,7 +567,7 @@ theorem CPolynomialOn_congr'
 
 中文:
 定理 CPolynomialOn_congr'
-  条件: {s : Set E} (h : f =ᶠ[𝓝ˢ s] g)
+  条件: {s : 集合 E} (h : f =ᶠ[𝓝ˢ s] g)
   证明: ⟨fun hf => hf.congr' h, fun hg => hg.congr' h.symm⟩
 
 Depends on / 依赖: h.symm, hf.congr, hg.congr
@@ -587,7 +587,7 @@ theorem CPolynomialOn.congr
 
 中文:
 定理 CPolynomialOn.congr
-  结论: {s : Set E} (hs : IsOpen s) (hf : CPolynomialOn 𝕜 f s)
+  结论: {s : 集合 E} (hs : 是开集 s) (hf : CPolynomialOn 𝕜 f s)
   证明: hf.congr' mem_nhdsSet_iff_forall.mpr
     (fun _ hz => eventuallyEq_iff_exists_mem.mpr ⟨s, hs.mem_nhds hz, hg⟩)
 
@@ -608,7 +608,7 @@ theorem CPolynomialOn_congr
 
 中文:
 定理 CPolynomialOn_congr
-  条件: {s : Set E} (hs : IsOpen s) (h : s.EqOn f g)
+  条件: {s : 集合 E} (hs : 是开集 s) (h : s.EqOn f g)
   证明: ⟨fun hf => hf.congr hs h, fun hg => hg.congr hs h.symm⟩
 
 Depends on / 依赖: h.symm, hf.congr, hg.congr
@@ -628,7 +628,7 @@ theorem ContinuousLinearMap.comp_hasFiniteFPowerSeriesOnBall
     ext; exact map_zero g⟩
 
 中文:
-定理 ContinuousLinearMap.comp_hasFiniteFPowerSeriesOnBall
+定理 连续线性映射.comp_hasFiniteFPowerSeriesOnBall
   结论: (g : F ->L[𝕜] G)
   证明: ⟨g.comp_hasFPowerSeriesOnBall h.1, fun m hm => by
     rw [compFormalMultilinearSeries_apply]; rw [h.finite m hm]
@@ -655,8 +655,8 @@ theorem ContinuousLinearMap.comp_cpolynomialOn
   exact ⟨g.compFormalMultilinearSeries p, n, r, g.comp_hasFiniteFPowerSeriesOnBall hp⟩
 
 中文:
-定理 ContinuousLinearMap.comp_cpolynomialOn
-  结论: {s : Set E} (g : F ->L[𝕜] G)
+定理 连续线性映射.comp_cpolynomialOn
+  结论: {s : 集合 E} (g : F ->L[𝕜] G)
   证明: by
   rintro x hx
   rcases h x hx with ⟨p, n, r, hp⟩
@@ -681,7 +681,7 @@ theorem HasFiniteFPowerSeriesOnBall.eq_partialSum
                     rw [hf.finite _ (le_trans hm hN)]; rw [zero_apply]))
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.eq_partialSum
+定理 有FiniteFPowerSeriesOnBall.eq_partialSum
   证明: fun y hy m hm => (hf.hasSum hy).unique (hasSum_sum_of_ne_finset_zero
     (f := fun m => p m (fun _ => y)) (s := Finset.range m)
     (fun N hN => by simp only [Finset.mem_range, not_lt] at hN
@@ -709,7 +709,7 @@ theorem HasFiniteFPowerSeriesOnBall.eq_partialSum'
   rw [← (HasFiniteFPowerSeriesOnBall.eq_partialSum hf _ hy m hm)]; rw [add_sub_cancel]
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.eq_partialSum'
+定理 有FiniteFPowerSeriesOnBall.eq_partialSum'
   证明: by
   intro y hy m hm
   rw [Metric.mem_eball]; rw [edist_eq_enorm_sub]; rw [← mem_eball_zero_iff] at hy
@@ -738,7 +738,7 @@ theorem HasFiniteFPowerSeriesOnBall.eq_zero_of_bound_zero
   simp only [Finset.range_zero, Finset.sum_empty]
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.eq_zero_of_bound_zero
+定理 有FiniteFPowerSeriesOnBall.eq_zero_of_bound_zero
   证明: by
   intro y hy
   rw [hf.eq_partialSum' y hy 0 le_rfl]; rw [FormalMultilinearSeries.partialSum]
@@ -769,7 +769,7 @@ theorem HasFiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
     · rwa [Metric.mem_eball, edist_eq_enorm_sub,
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
+定理 有FiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
   结论: (hf : 对任意 y in Metric.eball x r, f y = 0)
   证明: by
   refine ⟨⟨?_, r_pos, ?_⟩, fun n _ => hp n⟩
@@ -830,7 +830,7 @@ theorem HasFiniteFPowerSeriesOnBall.eq_const_of_bound_one
   simp only [IsEmpty.forall_iff]
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.eq_const_of_bound_one
+定理 有FiniteFPowerSeriesOnBall.eq_const_of_bound_one
   证明: by
   intro y hy
   rw [hf.eq_partialSum' y hy 1 le_rfl]; rw [hf.eq_partialSum' x
@@ -880,7 +880,7 @@ theorem HasFiniteFPowerSeriesOnBall.continuousOn
   proof: hf.1.continuousOn
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.continuousOn
+定理 有FiniteFPowerSeriesOnBall.continuousOn
   证明: hf.1.continuousOn
 -/
 protected theorem HasFiniteFPowerSeriesOnBall.continuousOn
@@ -931,7 +931,7 @@ theorem CPolynomialOn.continuousOn
 
 中文:
 定理 CPolynomialOn.continuousOn
-  条件: {s : Set E} (hf : CPolynomialOn 𝕜 f s)
+  条件: {s : 集合 E} (hf : CPolynomialOn 𝕜 f s)
   证明: hf.analyticOnNhd.continuousOn
 -/
 protected theorem CPolynomialOn.continuousOn {s : Set E} (hf : CPolynomialOn 𝕜 f s) :
@@ -951,7 +951,7 @@ theorem CPolynomialOn.continuous
 中文:
 定理 CPolynomialOn.continuous
   条件: {f : E -> F} (fa : CPolynomialOn 𝕜 f univ)
-  结论: Continuous f
+  结论: 连续 f
   证明: by
   rw [← continuousOn_univ]; exact fa.continuousOn
 
@@ -1036,8 +1036,8 @@ theorem HasFiniteFPowerSeriesOnBall.sum
   proof: (h.hasSum hy).tsum_eq.symm
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.sum
-  结论: (h : HasFiniteFPowerSeriesOnBall f p x n r) {y : E}
+定理 有FiniteFPowerSeriesOnBall.求和
+  结论: (h : 有FiniteFPowerSeriesOnBall f p x n r) {y : E}
   证明: (h.hasSum hy).tsum_eq.symm
 
 Depends on / 依赖: h.hasSum, hasSum, tsum_eq, tsum_eq.symm
@@ -1321,8 +1321,8 @@ theorem HasFiniteFPowerSeriesOnBall.changeOrigin
       rw [mem_eball_
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.changeOrigin
-  结论: (hf : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.changeOrigin
+  结论: (hf : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: (tsub_le_tsub_right hf.r_le _).trans p.changeOrigin_radius
   r_pos := by simp [h]
   finite _ hm := p.changeOrigin_finite_of_finite hf.finite hm
@@ -1360,7 +1360,7 @@ theorem HasFiniteFPowerSeriesOnBall.cpolynomialAt_of_mem
   exact this.cpolynomialAt
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.cpolynomialAt_of_mem
+定理 有FiniteFPowerSeriesOnBall.cpolynomialAt_of_mem
   证明: by
   have : (‖y - x‖₊ : Real>=0∞) < r := by simpa [edist_eq_enorm_sub] using! h
   have := hf.changeOrigin this
@@ -1386,8 +1386,8 @@ theorem HasFiniteFPowerSeriesOnBall.cpolynomialOn
   proof: fun _y hy => hf.cpolynomialAt_of_mem hy
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.cpolynomialOn
-  条件: (hf : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.cpolynomialOn
+  条件: (hf : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: fun _y hy => hf.cpolynomialAt_of_mem hy
 
 Depends on / 依赖: cpolynomialAt_of_mem, hf.cpolynomialAt_of_mem
@@ -1411,7 +1411,7 @@ theorem isOpen_cpolynomialAt
 
 中文:
 定理 isOpen_cpolynomialAt
-  结论: IsOpen { x | CPolynomialAt 𝕜 f x }
+  结论: 是开集 { x | CPolynomialAt 𝕜 f x }
   证明: by
   rw [isOpen_iff_mem_nhds]
   rintro x ⟨p, n, r, hr⟩
@@ -1454,7 +1454,7 @@ theorem CPolynomialAt.exists_mem_nhds_cpolynomialOn
   proof: h.eventually_cpolynomialAt.exists_mem
 
 中文:
-定理 CPolynomialAt.exists_mem_nhds_cpolynomialOn
+定理 CPolynomialAt.存在_mem_nhds_cpolynomialOn
   条件: {f : E -> F} {x : E} (h : CPolynomialAt 𝕜 f x)
   证明: h.eventually_cpolynomialAt.exists_mem
 
@@ -1473,7 +1473,7 @@ theorem CPolynomialAt.exists_ball_cpolynomialOn
   proof: Metric.isOpen_iff.mp (isOpen_cpolynomialAt _ _) _ h
 
 中文:
-定理 CPolynomialAt.exists_ball_cpolynomialOn
+定理 CPolynomialAt.存在_ball_cpolynomialOn
   条件: {f : E -> F} {x : E} (h : CPolynomialAt 𝕜 f x)
   证明: Metric.isOpen_iff.mp (isOpen_cpolynomialAt _ _) _ h
 

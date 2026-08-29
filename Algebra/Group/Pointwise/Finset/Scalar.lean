@@ -77,7 +77,7 @@ scoped[Pointwise] attribute [instance] Finset.smul Finset.vadd
 
 中文:
 定义 smul
-  签名: : SMul (Finset α) (Finset β)
+  签名: : 标量乘法 (有限集 α) (有限集 β)
   定义体: ⟨image₂ (· • ·)⟩
 
 scoped[Pointwise] attribute [instance] Finset.smul Finset.vadd
@@ -98,7 +98,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  结论: s • t = (s ×ˢ t).image fun p : α × β => p.1 • p.2
+  结论: s • t = (s ×ˢ t).像 fun p : α × β => p.1 • p.2
   证明: rfl
 
 @[to_additive]
@@ -116,7 +116,7 @@ lemma image_smul_product
 
 中文:
 引理 image_smul_product
-  结论: ((s ×ˢ t).image fun x : α × β => x.fst • x.snd) = s • t
+  结论: ((s ×ˢ t).像 fun x : α × β => x.fst • x.snd) = s • t
   证明: rfl
 -/
 lemma image_smul_product : ((s ×ˢ t).image fun x : α × β => x.fst • x.snd) = s • t := rfl
@@ -154,8 +154,8 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (s : Finset α) (t : Finset β)
-  结论: ↑(s • t) = (s : Set α) • (t : Set β)
+  条件: (s : 有限集 α) (t : 有限集 β)
+  结论: ↑(s • t) = (s : 集合 α) • (t : 集合 β)
   证明: coe_image₂ ..
 -/
 lemma coe_smul (s : Finset α) (t : Finset β) : ↑(s • t) = (s : Set α) • (t : Set β) := coe_image₂ ..
@@ -208,8 +208,8 @@ lemma empty_smul
 
 中文:
 引理 empty_smul
-  条件: (t : Finset β)
-  结论: (∅ : Finset α) • t = ∅
+  条件: (t : 有限集 β)
+  结论: (∅ : 有限集 α) • t = ∅
   证明: image₂_empty_left
 
 @[to_additive (attr := simp)]
@@ -230,8 +230,8 @@ lemma smul_empty
 
 中文:
 引理 smul_empty
-  条件: (s : Finset α)
-  结论: s • (∅ : Finset β) = ∅
+  条件: (s : 有限集 α)
+  结论: s • (∅ : 有限集 β) = ∅
   证明: image₂_empty_right
 
 @[to_additive (attr := simp)]
@@ -271,7 +271,7 @@ lemma smul_nonempty_iff
 
 中文:
 引理 smul_nonempty_iff
-  结论: (s • t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s • t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[to_additive (attr := aesop safe apply (rule_sets := [finsetNonempty]))]
@@ -288,8 +288,8 @@ lemma Nonempty.smul
   proof: .image₂
 
 中文:
-引理 Nonempty.smul
-  结论: s.Nonempty -> t.Nonempty -> (s • t).Nonempty
+引理 非空.smul
+  结论: s.非空 -> t.非空 -> (s • t).非空
   证明: .image₂
 -/
 lemma Nonempty.smul : s.Nonempty -> t.Nonempty -> (s • t).Nonempty := .image₂
@@ -303,8 +303,8 @@ lemma Nonempty.of_smul_left
   proof: .of_image₂_left
 
 中文:
-引理 Nonempty.of_smul_left
-  结论: (s • t).Nonempty -> s.Nonempty
+引理 非空.of_smul_left
+  结论: (s • t).非空 -> s.非空
   证明: .of_image₂_left
 -/
 @[to_additive] lemma Nonempty.of_smul_left : (s • t).Nonempty -> s.Nonempty := .of_image₂_left
@@ -319,8 +319,8 @@ lemma Nonempty.of_smul_right
 @[to_additive]
 
 中文:
-引理 Nonempty.of_smul_right
-  结论: (s • t).Nonempty -> t.Nonempty
+引理 非空.of_smul_right
+  结论: (s • t).非空 -> t.非空
   证明: .of_image₂_right
 
 @[to_additive]
@@ -342,7 +342,7 @@ lemma smul_singleton
 中文:
 引理 smul_singleton
   条件: (b : β)
-  结论: s • ({b} : Finset β) = s.image (· • b)
+  结论: s • ({b} : 有限集 β) = s.像 (· • b)
   证明: image₂_singleton_right
 
 @[to_additive]
@@ -364,7 +364,7 @@ lemma singleton_smul_singleton
 中文:
 引理 singleton_smul_singleton
   条件: (a : α) (b : β)
-  结论: ({a} : Finset α) • ({b} : Finset β) = {a • b}
+  结论: ({a} : 有限集 α) • ({b} : 有限集 β) = {a • b}
   证明: image₂_singleton
 
 @[to_additive (attr := mono, gcongr)]
@@ -577,7 +577,7 @@ lemma subset_smul
 
 中文:
 引理 subset_smul
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   证明: subset_set_image₂
 -/
 lemma subset_smul {s : Set α} {t : Set β} :
@@ -606,7 +606,7 @@ scoped[Pointwise] attribute [instance] Finset.smulFinset Finset.vaddFinset
 
 中文:
 定义 smulFinset
-  签名: : SMul α (Finset β) where smul a
+  签名: : 标量乘法 α (有限集 β) where smul a
   定义体: image (a • ·)
 
 scoped[Pointwise] attribute [instance] Finset.smulFinset Finset.vaddFinset
@@ -625,7 +625,7 @@ lemma smul_finset_def
 
 中文:
 引理 smul_finset_def
-  结论: a • s = s.image (a • ·)
+  结论: a • s = s.像 (a • ·)
   证明: rfl
 -/
 @[to_additive] lemma smul_finset_def : a • s = s.image (a • ·) := rfl
@@ -642,7 +642,7 @@ lemma image_smul
 
 中文:
 引理 image_smul
-  结论: s.image (a • ·) = a • s
+  结论: s.像 (a • ·) = a • s
   证明: rfl
 
 @[to_additive]
@@ -688,8 +688,8 @@ lemma coe_smul_finset
 
 中文:
 引理 coe_smul_finset
-  条件: (a : α) (s : Finset β)
-  结论: ↑(a • s) = a • (↑s : Set β)
+  条件: (a : α) (s : 有限集 β)
+  结论: ↑(a • s) = a • (↑s : 集合 β)
   证明: coe_image
 
 Depends on / 依赖: coe_image
@@ -753,7 +753,7 @@ lemma smul_finset_empty
 中文:
 引理 smul_finset_empty
   条件: (a : α)
-  结论: a • (∅ : Finset β) = ∅
+  结论: a • (∅ : 有限集 β) = ∅
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -795,7 +795,7 @@ lemma smul_finset_nonempty
 
 中文:
 引理 smul_finset_nonempty
-  结论: (a • s).Nonempty ↔ s.Nonempty
+  结论: (a • s).非空 ↔ s.非空
   证明: image_nonempty
 
 @[to_additive (attr := aesop safe apply (rule_sets := [finsetNonempty]))]
@@ -817,9 +817,9 @@ lemma Nonempty.smul_finset
 @[to_additive (attr := simp)]
 
 中文:
-引理 Nonempty.smul_finset
-  条件: (hs : s.Nonempty)
-  结论: (a • s).Nonempty
+引理 非空.smul_finset
+  条件: (hs : s.非空)
+  结论: (a • s).非空
   证明: hs.image _
 
 @[to_additive (attr := simp)]
@@ -844,7 +844,7 @@ lemma singleton_smul
 中文:
 引理 singleton_smul
   条件: (a : α)
-  结论: ({a} : Finset α) • t = a • t
+  结论: ({a} : 有限集 α) • t = a • t
   证明: image₂_singleton_left
 
 @[to_additive (attr := mono, gcongr)]
@@ -888,7 +888,7 @@ lemma smul_finset_singleton
 中文:
 引理 smul_finset_singleton
   条件: (b : β)
-  结论: a • ({b} : Finset β) = {a • b}
+  结论: a • ({b} : 有限集 β) = {a • b}
   证明: image_singleton ..
 
 @[to_additive]
@@ -933,7 +933,7 @@ lemma smul_finset_insert
 
 中文:
 引理 smul_finset_insert
-  条件: (a : α) (b : β) (s : Finset β)
+  条件: (a : α) (b : β) (s : 有限集 β)
   结论: a • insert b s = insert (a • b) (a • s)
   证明: image_insert ..
 
@@ -980,7 +980,7 @@ lemma smul_finset_subset_smul
 
 中文:
 引理 smul_finset_subset_smul
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: a in s -> a • t subseteq s • t
   证明: image_subset_image₂_right
 
@@ -1000,7 +1000,7 @@ lemma biUnion_smul_finset
 
 中文:
 引理 biUnion_smul_finset
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: s.biUnion (· • t) = s • t
   证明: biUnion_image_left
 
@@ -1037,7 +1037,7 @@ scoped[Pointwise] attribute [instance] Finset.vsub
 
 中文:
 定义 vsub
-  签名: : VSub (Finset α) (Finset β)
+  签名: : 向量减法 (有限集 α) (有限集 β)
   定义体: ⟨image₂ (· -ᵥ ·)⟩
 
 scoped[Pointwise] attribute [instance] Finset.vsub
@@ -1116,8 +1116,8 @@ theorem coe_vsub
 
 中文:
 定理 coe_vsub
-  条件: (s t : Finset β)
-  结论: (↑(s -ᵥ t) : Set α) = (s : Set β) -ᵥ t
+  条件: (s t : 有限集 β)
+  结论: (↑(s -ᵥ t) : 集合 α) = (s : 集合 β) -ᵥ t
   证明: coe_image₂ _ _ _
 -/
 theorem coe_vsub (s t : Finset β) : (↑(s -ᵥ t) : Set α) = (s : Set β) -ᵥ t :=
@@ -1151,7 +1151,7 @@ theorem vsub_card_le
 
 中文:
 定理 vsub_card_le
-  结论: #(s -ᵥ t : Finset α) <= #s * #t
+  结论: #(s -ᵥ t : 有限集 α) <= #s * #t
   证明: card_image₂_le _ _ _
 
 @[simp]
@@ -1173,8 +1173,8 @@ theorem empty_vsub
 
 中文:
 定理 empty_vsub
-  条件: (t : Finset β)
-  结论: (∅ : Finset β) -ᵥ t = ∅
+  条件: (t : 有限集 β)
+  结论: (∅ : 有限集 β) -ᵥ t = ∅
   证明: image₂_empty_left
 
 @[simp]
@@ -1196,8 +1196,8 @@ theorem vsub_empty
 
 中文:
 定理 vsub_empty
-  条件: (s : Finset β)
-  结论: s -ᵥ (∅ : Finset β) = ∅
+  条件: (s : 有限集 β)
+  结论: s -ᵥ (∅ : 有限集 β) = ∅
   证明: image₂_empty_right
 
 @[simp]
@@ -1239,7 +1239,7 @@ theorem vsub_nonempty
 
 中文:
 定理 vsub_nonempty
-  结论: (s -ᵥ t : Finset α).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s -ᵥ t : 有限集 α).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -1257,8 +1257,8 @@ theorem Nonempty.vsub
   proof: Nonempty.image₂
 
 中文:
-定理 Nonempty.vsub
-  结论: s.Nonempty -> t.Nonempty -> (s -ᵥ t : Finset α).Nonempty
+定理 非空.vsub
+  结论: s.非空 -> t.非空 -> (s -ᵥ t : 有限集 α).非空
   证明: Nonempty.image₂
 
 Depends on / 依赖: Nonempty, Nonempty.image
@@ -1275,8 +1275,8 @@ theorem Nonempty.of_vsub_left
   proof: Nonempty.of_image₂_left
 
 中文:
-定理 Nonempty.of_vsub_left
-  结论: (s -ᵥ t : Finset α).Nonempty -> s.Nonempty
+定理 非空.of_vsub_left
+  结论: (s -ᵥ t : 有限集 α).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 Depends on / 依赖: Nonempty, Nonempty.of_image
@@ -1295,8 +1295,8 @@ theorem Nonempty.of_vsub_right
 @[simp]
 
 中文:
-定理 Nonempty.of_vsub_right
-  结论: (s -ᵥ t : Finset α).Nonempty -> t.Nonempty
+定理 非空.of_vsub_right
+  结论: (s -ᵥ t : 有限集 α).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 @[simp]
@@ -1319,7 +1319,7 @@ theorem vsub_singleton
 中文:
 定理 vsub_singleton
   条件: (b : β)
-  结论: s -ᵥ ({b} : Finset β) = s.image (· -ᵥ b)
+  结论: s -ᵥ ({b} : 有限集 β) = s.像 (· -ᵥ b)
   证明: image₂_singleton_right
 -/
 theorem vsub_singleton (b : β) : s -ᵥ ({b} : Finset β) = s.image (· -ᵥ b) :=
@@ -1337,7 +1337,7 @@ theorem singleton_vsub
 中文:
 定理 singleton_vsub
   条件: (a : β)
-  结论: ({a} : Finset β) -ᵥ t = t.image (a -ᵥ ·)
+  结论: ({a} : 有限集 β) -ᵥ t = t.像 (a -ᵥ ·)
   证明: image₂_singleton_left
 -/
 theorem singleton_vsub (a : β) : ({a} : Finset β) -ᵥ t = t.image (a -ᵥ ·) :=
@@ -1357,7 +1357,7 @@ theorem singleton_vsub_singleton
 中文:
 定理 singleton_vsub_singleton
   条件: (a b : β)
-  结论: ({a} : Finset β) -ᵥ {b} = {a -ᵥ b}
+  结论: ({a} : 有限集 β) -ᵥ {b} = {a -ᵥ b}
   证明: image₂_singleton
 
 @[mono, gcongr]
@@ -1510,7 +1510,7 @@ theorem subset_vsub
 
 中文:
 定理 subset_vsub
-  条件: {s t : Set β}
+  条件: {s t : 集合 β}
   证明: subset_set_image₂
 -/
 theorem subset_vsub {s t : Set β} :
@@ -1537,7 +1537,7 @@ theorem op_smul_finset_smul_eq_smul_smul_finset
 
 中文:
 定理 op_smul_finset_smul_eq_smul_smul_finset
-  结论: (a : α) (s : Finset β) (t : Finset γ)
+  结论: (a : α) (s : 有限集 β) (t : 有限集 γ)
   证明: by
   ext
   simp [mem_smul, mem_smul_finset, h]
@@ -1562,7 +1562,7 @@ theorem image_smul_comm
 
 中文:
 定理 image_smul_comm
-  结论: [DecidableEq β] [DecidableEq γ] [SMul α β] [SMul α γ] (f : β -> γ) (a : α)
+  结论: [DecidableEq β] [DecidableEq γ] [标量乘法 α β] [标量乘法 α γ] (f : β -> γ) (a : α)
   证明: image_comm
 
 Depends on / 依赖: image_comm
@@ -1594,7 +1594,7 @@ theorem toFinset_smul
 
 中文:
 定理 toFinset_smul
-  条件: (s : Set α) (t : Set β) [Fintype s] [Fintype t] [Fintype ↑(s • t)]
+  条件: (s : 集合 α) (t : 集合 β) [有限类型 s] [有限类型 t] [有限类型 ↑(s • t)]
   证明: toFinset_image2 _ _ _
 
 @[to_additive]
@@ -1615,8 +1615,8 @@ theorem Finite.toFinset_smul
   proof: Finite.toFinset_image2 _ _ _
 
 中文:
-定理 Finite.toFinset_smul
-  条件: (hs : s.Finite) (ht : t.Finite) (hf := hs.smul ht)
+定理 有限.toFinset_smul
+  条件: (hs : s.有限) (ht : t.有限) (hf := hs.smul ht)
   证明: Finite.toFinset_image2 _ _ _
 
 Depends on / 依赖: hs.smul
@@ -1644,7 +1644,7 @@ theorem toFinset_smul_set
 
 中文:
 定理 toFinset_smul_set
-  条件: (a : α) (s : Set β) [Fintype s] [Fintype ↑(a • s)]
+  条件: (a : α) (s : 集合 β) [有限类型 s] [有限类型 ↑(a • s)]
   证明: toFinset_image _ _
 
 @[to_additive]
@@ -1665,8 +1665,8 @@ theorem Finite.toFinset_smul_set
   proof: Finite.toFinset_image _ _ _
 
 中文:
-定理 Finite.toFinset_smul_set
-  条件: (hs : s.Finite) (hf : (a • s).Finite := hs.smul_set)
+定理 有限.toFinset_smul_set
+  条件: (hs : s.有限) (hf : (a • s).有限 := hs.smul_set)
   证明: Finite.toFinset_image _ _ _
 
 Depends on / 依赖: fast_instance, hs.smul_set, smul_set, toGroup
@@ -1692,7 +1692,7 @@ theorem toFinset_vsub
 
 中文:
 定理 toFinset_vsub
-  条件: (s t : Set β) [Fintype s] [Fintype t] [Fintype ↑(s -ᵥ t)]
+  条件: (s t : 集合 β) [有限类型 s] [有限类型 t] [有限类型 ↑(s -ᵥ t)]
   证明: toFinset_image2 _ _ _
 
 Depends on / 依赖: CommGroup, SetLike, SubgroupClass, toCommGroup, toFinset_image2
@@ -1710,8 +1710,8 @@ theorem Finite.toFinset_vsub
   proof: Finite.toFinset_image2 _ _ _
 
 中文:
-定理 Finite.toFinset_vsub
-  条件: (hs : s.Finite) (ht : t.Finite) (hf := hs.vsub ht)
+定理 有限.toFinset_vsub
+  条件: (hs : s.有限) (ht : t.有限) (hf := hs.vsub ht)
   证明: Finite.toFinset_image2 _ _ _
 
 Depends on / 依赖: hs.vsub

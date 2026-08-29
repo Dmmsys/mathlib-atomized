@@ -52,7 +52,7 @@ definition WSameSide
 
 中文:
 定义 WSameSide
-  签名: (s : AffineSubspace R P) (x y : P)
+  签名: (s : 仿射子空间 R P) (x y : P)
   定义体: existsᵉ (p₁ in s) (p₂ in s), SameRay R (x -ᵥ p₁) (y -ᵥ p₂)
 
 Depends on / 依赖: SameRay
@@ -70,7 +70,7 @@ definition SSameSide
 
 中文:
 定义 SSameSide
-  签名: (s : AffineSubspace R P) (x y : P)
+  签名: (s : 仿射子空间 R P) (x y : P)
   定义体: s.WSameSide x y ∧ x ∉ s ∧ y ∉ s
 
 Depends on / 依赖: WSameSide, s.WSameSide
@@ -88,7 +88,7 @@ definition WOppSide
 
 中文:
 定义 WOppSide
-  签名: (s : AffineSubspace R P) (x y : P)
+  签名: (s : 仿射子空间 R P) (x y : P)
   定义体: existsᵉ (p₁ in s) (p₂ in s), SameRay R (x -ᵥ p₁) (p₂ -ᵥ y)
 
 Depends on / 依赖: SameRay
@@ -106,7 +106,7 @@ definition SOppSide
 
 中文:
 定义 SOppSide
-  签名: (s : AffineSubspace R P) (x y : P)
+  签名: (s : 仿射子空间 R P) (x y : P)
   定义体: s.WOppSide x y ∧ x ∉ s ∧ y ∉ s
 
 Depends on / 依赖: WOppSide, s.WOppSide
@@ -128,7 +128,7 @@ theorem WSameSide.map
 
 中文:
 定理 WSameSide.map
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WSameSide x y) (f : P ->ᵃ[R] P')
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WSameSide x y) (f : P ->ᵃ[R] P')
   证明: by
   rcases h with ⟨p₁, hp₁, p₂, hp₂, h⟩
   refine ⟨f p₁, mem_map_of_mem f hp₁, f p₂, mem_map_of_mem f hp₂, ?_⟩
@@ -161,8 +161,8 @@ theorem _root_.Function.Injective.wSameSide_map_iff
   exa
 
 中文:
-定理 _root_.Function.Injective.wSameSide_map_iff
-  结论: {s : AffineSubspace R P} {x y : P}
+定理 _root_.函数.单射.wSameSide_map_iff
+  结论: {s : 仿射子空间 R P} {x y : P}
   证明: by
   refine ⟨fun h => ?_, fun h => h.map _⟩
   rcases h with ⟨fp₁, hfp₁, fp₂, hfp₂, h⟩
@@ -199,8 +199,8 @@ theorem _root_.Function.Injective.sSameSide_map_iff
 @[simp]
 
 中文:
-定理 _root_.Function.Injective.sSameSide_map_iff
-  结论: {s : AffineSubspace R P} {x y : P}
+定理 _root_.函数.单射.sSameSide_map_iff
+  结论: {s : 仿射子空间 R P} {x y : P}
   证明: by
   simp_rw [SSameSide, hf.wSameSide_map_iff, mem_map_iff_mem_of_injective hf]
 
@@ -225,8 +225,8 @@ theorem _root_.AffineEquiv.wSameSide_map_iff
 @[simp]
 
 中文:
-定理 _root_.AffineEquiv.wSameSide_map_iff
-  条件: {s : AffineSubspace R P} {x y : P} (f : P ≃ᵃ[R] P')
+定理 _root_.仿射等价.wSameSide_map_iff
+  条件: {s : 仿射子空间 R P} {x y : P} (f : P ≃ᵃ[R] P')
   证明: (show Function.Injective f.toAffineMap from f.injective).wSameSide_map_iff
 
 @[simp]
@@ -247,8 +247,8 @@ theorem _root_.AffineEquiv.sSameSide_map_iff
   proof: (show Function.Injective f.toAffineMap from f.injective).sSameSide_map_iff
 
 中文:
-定理 _root_.AffineEquiv.sSameSide_map_iff
-  条件: {s : AffineSubspace R P} {x y : P} (f : P ≃ᵃ[R] P')
+定理 _root_.仿射等价.sSameSide_map_iff
+  条件: {s : 仿射子空间 R P} {x y : P} (f : P ≃ᵃ[R] P')
   证明: (show Function.Injective f.toAffineMap from f.injective).sSameSide_map_iff
 
 Depends on / 依赖: Function, Function.Injective, Injective, f.injective, f.toAffineMap, injective, sSameSide_map_iff, toAffineMap
@@ -271,7 +271,7 @@ theorem WOppSide.map
 
 中文:
 定理 WOppSide.map
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WOppSide x y) (f : P ->ᵃ[R] P')
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WOppSide x y) (f : P ->ᵃ[R] P')
   证明: by
   rcases h with ⟨p₁, hp₁, p₂, hp₂, h⟩
   refine ⟨f p₁, mem_map_of_mem f hp₁, f p₂, mem_map_of_mem f hp₂, ?_⟩
@@ -304,8 +304,8 @@ theorem _root_.Function.Injective.wOppSide_map_iff
   exa
 
 中文:
-定理 _root_.Function.Injective.wOppSide_map_iff
-  结论: {s : AffineSubspace R P} {x y : P}
+定理 _root_.函数.单射.wOppSide_map_iff
+  结论: {s : 仿射子空间 R P} {x y : P}
   证明: by
   refine ⟨fun h => ?_, fun h => h.map _⟩
   rcases h with ⟨fp₁, hfp₁, fp₂, hfp₂, h⟩
@@ -342,8 +342,8 @@ theorem _root_.Function.Injective.sOppSide_map_iff
 @[simp]
 
 中文:
-定理 _root_.Function.Injective.sOppSide_map_iff
-  结论: {s : AffineSubspace R P} {x y : P}
+定理 _root_.函数.单射.sOppSide_map_iff
+  结论: {s : 仿射子空间 R P} {x y : P}
   证明: by
   simp_rw [SOppSide, hf.wOppSide_map_iff, mem_map_iff_mem_of_injective hf]
 
@@ -368,8 +368,8 @@ theorem _root_.AffineEquiv.wOppSide_map_iff
 @[simp]
 
 中文:
-定理 _root_.AffineEquiv.wOppSide_map_iff
-  条件: {s : AffineSubspace R P} {x y : P} (f : P ≃ᵃ[R] P')
+定理 _root_.仿射等价.wOppSide_map_iff
+  条件: {s : 仿射子空间 R P} {x y : P} (f : P ≃ᵃ[R] P')
   证明: (show Function.Injective f.toAffineMap from f.injective).wOppSide_map_iff
 
 @[simp]
@@ -390,8 +390,8 @@ theorem _root_.AffineEquiv.sOppSide_map_iff
   proof: (show Function.Injective f.toAffineMap from f.injective).sOppSide_map_iff
 
 中文:
-定理 _root_.AffineEquiv.sOppSide_map_iff
-  条件: {s : AffineSubspace R P} {x y : P} (f : P ≃ᵃ[R] P')
+定理 _root_.仿射等价.sOppSide_map_iff
+  条件: {s : 仿射子空间 R P} {x y : P} (f : P ≃ᵃ[R] P')
   证明: (show Function.Injective f.toAffineMap from f.injective).sOppSide_map_iff
 
 Depends on / 依赖: Function, Function.Injective, Injective, f.injective, f.toAffineMap, injective, sOppSide_map_iff, toAffineMap
@@ -410,7 +410,7 @@ theorem WSameSide.nonempty
 
 中文:
 定理 WSameSide.nonempty
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WSameSide x y)
   证明: ⟨h.choose, h.choose_spec.left⟩
 
 Depends on / 依赖: choose_spec, h.choose, h.choose_spec.left
@@ -429,7 +429,7 @@ theorem SSameSide.nonempty
 
 中文:
 定理 SSameSide.nonempty
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   证明: ⟨h.1.choose, h.1.choose_spec.left⟩
 
 Depends on / 依赖: choose_spec, choose_spec.left
@@ -448,7 +448,7 @@ theorem WOppSide.nonempty
 
 中文:
 定理 WOppSide.nonempty
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WOppSide x y)
   证明: ⟨h.choose, h.choose_spec.left⟩
 
 Depends on / 依赖: choose_spec, h.choose, h.choose_spec.left
@@ -467,7 +467,7 @@ theorem SOppSide.nonempty
 
 中文:
 定理 SOppSide.nonempty
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   证明: ⟨h.1.choose, h.1.choose_spec.left⟩
 
 Depends on / 依赖: choose_spec, choose_spec.left
@@ -486,7 +486,7 @@ theorem SSameSide.wSameSide
 
 中文:
 定理 SSameSide.wSameSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   证明: h.1
 -/
 theorem SSameSide.wSameSide {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y) :
@@ -504,7 +504,7 @@ theorem SSameSide.left_notMem
 
 中文:
 定理 SSameSide.left_notMem
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   结论: x ∉ s
   证明: h.2.1
 -/
@@ -522,7 +522,7 @@ theorem SSameSide.right_notMem
 
 中文:
 定理 SSameSide.right_notMem
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   结论: y ∉ s
   证明: h.2.2
 -/
@@ -539,7 +539,7 @@ theorem SOppSide.wOppSide
 
 中文:
 定理 SOppSide.wOppSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   证明: h.1
 -/
 theorem SOppSide.wOppSide {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y) :
@@ -557,7 +557,7 @@ theorem SOppSide.left_notMem
 
 中文:
 定理 SOppSide.left_notMem
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   结论: x ∉ s
   证明: h.2.1
 -/
@@ -575,7 +575,7 @@ theorem SOppSide.right_notMem
 
 中文:
 定理 SOppSide.right_notMem
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   结论: y ∉ s
   证明: h.2.2
 -/
@@ -596,7 +596,7 @@ alias ⟨WSameSide.symm, _⟩ := wSameSide_comm
 
 中文:
 定理 wSameSide_comm
-  条件: {s : AffineSubspace R P} {x y : P}
+  条件: {s : 仿射子空间 R P} {x y : P}
   结论: s.WSameSide x y ↔ s.WSameSide y x
   证明: ⟨fun ⟨p₁, hp₁, p₂, hp₂, h⟩ => ⟨p₂, hp₂, p₁, hp₁, h.symm⟩,
     fun ⟨p₁, hp₁, p₂, hp₂, h⟩ => ⟨p₂, hp₂, p₁, hp₁, h.symm⟩⟩
@@ -625,7 +625,7 @@ alias ⟨SSameSide.symm, _⟩ := sSameSide_comm
 
 中文:
 定理 sSameSide_comm
-  条件: {s : AffineSubspace R P} {x y : P}
+  条件: {s : 仿射子空间 R P} {x y : P}
   结论: s.SSameSide x y ↔ s.SSameSide y x
   证明: by
   rw [SSameSide]; rw [SSameSide]; rw [wSameSide_comm]; rw [and_comm (b := x ∉ s)]
@@ -657,7 +657,7 @@ theorem wOppSide_comm
 
 中文:
 定理 wOppSide_comm
-  条件: {s : AffineSubspace R P} {x y : P}
+  条件: {s : 仿射子空间 R P} {x y : P}
   结论: s.WOppSide x y ↔ s.WOppSide y x
   证明: by
   constructor
@@ -695,7 +695,7 @@ alias ⟨SOppSide.symm, _⟩ := sOppSide_comm
 
 中文:
 定理 sOppSide_comm
-  条件: {s : AffineSubspace R P} {x y : P}
+  条件: {s : 仿射子空间 R P} {x y : P}
   结论: s.SOppSide x y ↔ s.SOppSide y x
   证明: by
   rw [SOppSide]; rw [SOppSide]; rw [wOppSide_comm]; rw [and_comm (b := x ∉ s)]
@@ -721,7 +721,7 @@ theorem not_wSameSide_bot
 中文:
 定理 not_wSameSide_bot
   条件: (x y : P)
-  结论: ¬(⊥ : AffineSubspace R P).WSameSide x y
+  结论: ¬(⊥ : 仿射子空间 R P).WSameSide x y
   证明: fun ⟨_, h, _⟩ => h.elim
 
 Depends on / 依赖: h.elim
@@ -741,7 +741,7 @@ theorem not_sSameSide_bot
 中文:
 定理 not_sSameSide_bot
   条件: (x y : P)
-  结论: ¬(⊥ : AffineSubspace R P).SSameSide x y
+  结论: ¬(⊥ : 仿射子空间 R P).SSameSide x y
   证明: fun h => not_wSameSide_bot x y h.wSameSide
 
 Depends on / 依赖: h.wSameSide, not_wSameSide_bot, wSameSide
@@ -761,7 +761,7 @@ theorem not_wOppSide_bot
 中文:
 定理 not_wOppSide_bot
   条件: (x y : P)
-  结论: ¬(⊥ : AffineSubspace R P).WOppSide x y
+  结论: ¬(⊥ : 仿射子空间 R P).WOppSide x y
   证明: fun ⟨_, h, _⟩ => h.elim
 
 Depends on / 依赖: h.elim
@@ -783,7 +783,7 @@ theorem not_sOppSide_bot
 中文:
 定理 not_sOppSide_bot
   条件: (x y : P)
-  结论: ¬(⊥ : AffineSubspace R P).SOppSide x y
+  结论: ¬(⊥ : 仿射子空间 R P).SOppSide x y
   证明: fun h => not_wOppSide_bot x y h.wOppSide
 
 @[simp]
@@ -804,7 +804,7 @@ theorem wSameSide_self_iff
 
 中文:
 定理 wSameSide_self_iff
-  条件: {s : AffineSubspace R P} {x : P}
+  条件: {s : 仿射子空间 R P} {x : P}
   证明: ⟨fun h => h.nonempty, fun ⟨p, hp⟩ => ⟨p, hp, p, hp, SameRay.rfl⟩⟩
 
 Depends on / 依赖: SameRay, SameRay.rfl, h.nonempty, nonempty
@@ -823,7 +823,7 @@ theorem sSameSide_self_iff
 
 中文:
 定理 sSameSide_self_iff
-  条件: {s : AffineSubspace R P} {x : P}
+  条件: {s : 仿射子空间 R P} {x : P}
   证明: ⟨fun ⟨h, hx, _⟩ => ⟨wSameSide_self_iff.1 h, hx⟩, fun ⟨h, hx⟩ => ⟨wSameSide_self_iff.2 h, hx, hx⟩⟩
 
 Depends on / 依赖: wSameSide_self_iff
@@ -845,7 +845,7 @@ theorem wSameSide_of_left_mem
 
 中文:
 定理 wSameSide_of_left_mem
-  条件: {s : AffineSubspace R P} {x : P} (y : P) (hx : x in s)
+  条件: {s : 仿射子空间 R P} {x : P} (y : P) (hx : x in s)
   证明: by
   refine ⟨x, hx, x, hx, ?_⟩
   rw [vsub_self]
@@ -869,7 +869,7 @@ theorem wSameSide_of_right_mem
 
 中文:
 定理 wSameSide_of_right_mem
-  条件: {s : AffineSubspace R P} (x : P) {y : P} (hy : y in s)
+  条件: {s : 仿射子空间 R P} (x : P) {y : P} (hy : y in s)
   证明: (wSameSide_of_left_mem x hy).symm
 
 Depends on / 依赖: wSameSide_of_left_mem
@@ -891,7 +891,7 @@ theorem wOppSide_of_left_mem
 
 中文:
 定理 wOppSide_of_left_mem
-  条件: {s : AffineSubspace R P} {x : P} (y : P) (hx : x in s)
+  条件: {s : 仿射子空间 R P} {x : P} (y : P) (hx : x in s)
   证明: by
   refine ⟨x, hx, x, hx, ?_⟩
   rw [vsub_self]
@@ -915,7 +915,7 @@ theorem wOppSide_of_right_mem
 
 中文:
 定理 wOppSide_of_right_mem
-  条件: {s : AffineSubspace R P} (x : P) {y : P} (hy : y in s)
+  条件: {s : 仿射子空间 R P} (x : P) {y : P} (hy : y in s)
   证明: (wOppSide_of_left_mem x hy).symm
 
 Depends on / 依赖: wOppSide_of_left_mem
@@ -941,7 +941,7 @@ theorem wSameSide_vadd_left_iff
 
 中文:
 定理 wSameSide_vadd_left_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   constructor
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
@@ -975,7 +975,7 @@ theorem wSameSide_vadd_right_iff
 
 中文:
 定理 wSameSide_vadd_right_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [wSameSide_comm]; rw [wSameSide_vadd_left_iff hv]; rw [wSameSide_comm]
 
@@ -996,7 +996,7 @@ theorem sSameSide_vadd_left_iff
 
 中文:
 定理 sSameSide_vadd_left_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [SSameSide]; rw [SSameSide]; rw [wSameSide_vadd_left_iff hv]; rw [vadd_mem_iff_mem_of_mem_direction hv]
 
@@ -1017,7 +1017,7 @@ theorem sSameSide_vadd_right_iff
 
 中文:
 定理 sSameSide_vadd_right_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [sSameSide_comm]; rw [sSameSide_vadd_left_iff hv]; rw [sSameSide_comm]
 
@@ -1044,7 +1044,7 @@ theorem wOppSide_vadd_left_iff
 
 中文:
 定理 wOppSide_vadd_left_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   constructor
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
@@ -1078,7 +1078,7 @@ theorem wOppSide_vadd_right_iff
 
 中文:
 定理 wOppSide_vadd_right_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [wOppSide_comm]; rw [wOppSide_vadd_left_iff hv]; rw [wOppSide_comm]
 
@@ -1099,7 +1099,7 @@ theorem sOppSide_vadd_left_iff
 
 中文:
 定理 sOppSide_vadd_left_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [SOppSide]; rw [SOppSide]; rw [wOppSide_vadd_left_iff hv]; rw [vadd_mem_iff_mem_of_mem_direction hv]
 
@@ -1120,7 +1120,7 @@ theorem sOppSide_vadd_right_iff
 
 中文:
 定理 sOppSide_vadd_right_iff
-  条件: {s : AffineSubspace R P} {x y : P} {v : V} (hv : v in s.direction)
+  条件: {s : 仿射子空间 R P} {x y : P} {v : V} (hv : v in s.direction)
   证明: by
   rw [sOppSide_comm]; rw [sOppSide_vadd_left_iff hv]; rw [sOppSide_comm]
 
@@ -1143,7 +1143,7 @@ theorem wSameSide_smul_vsub_vadd_left
 
 中文:
 定理 wSameSide_smul_vsub_vadd_left
-  结论: {s : AffineSubspace R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
+  结论: {s : 仿射子空间 R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
   证明: by
   refine ⟨p₂, hp₂, p₁, hp₁, ?_⟩
   rw [vadd_vsub]
@@ -1167,7 +1167,7 @@ theorem wSameSide_smul_vsub_vadd_right
 
 中文:
 定理 wSameSide_smul_vsub_vadd_right
-  结论: {s : AffineSubspace R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
+  结论: {s : 仿射子空间 R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
   证明: (wSameSide_smul_vsub_vadd_left x hp₁ hp₂ ht).symm
 
 Depends on / 依赖: wSameSide_smul_vsub_vadd_left
@@ -1187,7 +1187,7 @@ theorem wSameSide_lineMap_left
 
 中文:
 定理 wSameSide_lineMap_left
-  结论: {s : AffineSubspace R P} {x : P} (y : P) (h : x in s) {t : R}
+  结论: {s : 仿射子空间 R P} {x : P} (y : P) (h : x in s) {t : R}
   证明: wSameSide_smul_vsub_vadd_left y h h ht
 
 Depends on / 依赖: wSameSide_smul_vsub_vadd_left
@@ -1207,7 +1207,7 @@ theorem wSameSide_lineMap_right
 
 中文:
 定理 wSameSide_lineMap_right
-  结论: {s : AffineSubspace R P} {x : P} (y : P) (h : x in s) {t : R}
+  结论: {s : 仿射子空间 R P} {x : P} (y : P) (h : x in s) {t : R}
   证明: (wSameSide_lineMap_left y h ht).symm
 
 Depends on / 依赖: wSameSide_lineMap_left
@@ -1229,7 +1229,7 @@ theorem wOppSide_smul_vsub_vadd_left
 
 中文:
 定理 wOppSide_smul_vsub_vadd_left
-  结论: {s : AffineSubspace R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
+  结论: {s : 仿射子空间 R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
   证明: by
   refine ⟨p₂, hp₂, p₁, hp₁, ?_⟩
   rw [vadd_vsub]; rw [← neg_neg t]; rw [neg_smul]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
@@ -1253,7 +1253,7 @@ theorem wOppSide_smul_vsub_vadd_right
 
 中文:
 定理 wOppSide_smul_vsub_vadd_right
-  结论: {s : AffineSubspace R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
+  结论: {s : 仿射子空间 R P} {p₁ p₂ : P} (x : P) (hp₁ : p₁ in s)
   证明: (wOppSide_smul_vsub_vadd_left x hp₁ hp₂ ht).symm
 
 Depends on / 依赖: wOppSide_smul_vsub_vadd_left
@@ -1273,7 +1273,7 @@ theorem wOppSide_lineMap_left
 
 中文:
 定理 wOppSide_lineMap_left
-  结论: {s : AffineSubspace R P} {x : P} (y : P) (h : x in s) {t : R}
+  结论: {s : 仿射子空间 R P} {x : P} (y : P) (h : x in s) {t : R}
   证明: wOppSide_smul_vsub_vadd_left y h h ht
 
 Depends on / 依赖: wOppSide_smul_vsub_vadd_left
@@ -1293,7 +1293,7 @@ theorem wOppSide_lineMap_right
 
 中文:
 定理 wOppSide_lineMap_right
-  结论: {s : AffineSubspace R P} {x : P} (y : P) (h : x in s) {t : R}
+  结论: {s : 仿射子空间 R P} {x : P} (y : P) (h : x in s) {t : R}
   证明: (wOppSide_lineMap_left y h ht).symm
 
 Depends on / 依赖: wOppSide_lineMap_left
@@ -1314,7 +1314,7 @@ theorem _root_.Wbtw.wSameSide₂₃
 
 中文:
 定理 _root_.Wbtw.wSameSide₂₃
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: by
   rcases h with ⟨t, ⟨ht0, -⟩, rfl⟩
   exact wSameSide_lineMap_left z hx ht0
@@ -1336,7 +1336,7 @@ theorem _root_.Wbtw.wSameSide₃₂
 
 中文:
 定理 _root_.Wbtw.wSameSide₃₂
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: (h.wSameSide₂₃ hx).symm
 
 Depends on / 依赖: h.wSameSide
@@ -1355,7 +1355,7 @@ theorem _root_.Wbtw.wSameSide₁₂
 
 中文:
 定理 _root_.Wbtw.wSameSide₁₂
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: h.symm.wSameSide₃₂ hz
 
 Depends on / 依赖: h.symm.wSameSide
@@ -1374,7 +1374,7 @@ theorem _root_.Wbtw.wSameSide₂₁
 
 中文:
 定理 _root_.Wbtw.wSameSide₂₁
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: h.symm.wSameSide₂₃ hz
 
 Depends on / 依赖: h.symm.wSameSide
@@ -1401,7 +1401,7 @@ theorem _root_.Wbtw.wOppSide₁₃
 
 中文:
 定理 _root_.Wbtw.wOppSide₁₃
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: by
   rcases h with ⟨t, ⟨ht0, ht1⟩, rfl⟩
   refine ⟨_, hy, _, hy, ?_⟩
@@ -1436,7 +1436,7 @@ theorem _root_.Wbtw.wOppSide₃₁
 
 中文:
 定理 _root_.Wbtw.wOppSide₃₁
-  结论: {s : AffineSubspace R P} {x y z : P} (h : Wbtw R x y z)
+  结论: {s : 仿射子空间 R P} {x y z : P} (h : Wbtw R x y z)
   证明: h.symm.wOppSide₁₃ hy
 
 Depends on / 依赖: h.symm.wOppSide
@@ -1465,7 +1465,7 @@ theorem wSameSide_of_vsub_eq_smul
 
 中文:
 定理 wSameSide_of_vsub_eq_smul
-  结论: {s : AffineSubspace R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
+  结论: {s : 仿射子空间 R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
   证明: by
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   rw [h₁]; rw [h₂]
@@ -1494,7 +1494,7 @@ theorem wOppSide_of_vsub_eq_smul
 
 中文:
 定理 wOppSide_of_vsub_eq_smul
-  结论: {s : AffineSubspace R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
+  结论: {s : 仿射子空间 R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
   证明: by
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   have h₂' : p₂ -ᵥ y = (-c₂) • m := by rw [← neg_vsub_eq_vsub_rev, h₂, neg_smul]
@@ -1521,7 +1521,7 @@ theorem sSameSide_of_vsub_eq_smul
 
 中文:
 定理 sSameSide_of_vsub_eq_smul
-  结论: {s : AffineSubspace R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
+  结论: {s : 仿射子空间 R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
   证明: ⟨wSameSide_of_vsub_eq_smul hp₁ hp₂ h₁ h₂ hc, hx, hy⟩
 
 Depends on / 依赖: wSameSide_of_vsub_eq_smul
@@ -1541,7 +1541,7 @@ theorem sOppSide_of_vsub_eq_smul
 
 中文:
 定理 sOppSide_of_vsub_eq_smul
-  结论: {s : AffineSubspace R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
+  结论: {s : 仿射子空间 R P} {x y p₁ p₂ : P} {m : V} {c₁ c₂ : R}
   证明: ⟨wOppSide_of_vsub_eq_smul hp₁ hp₂ h₁ h₂ hc, hx, hy⟩
 
 Depends on / 依赖: wOppSide_of_vsub_eq_smul
@@ -1577,7 +1577,7 @@ theorem wOppSide_self_iff
 
 中文:
 定理 wOppSide_self_iff
-  条件: {s : AffineSubspace R P} {x : P}
+  条件: {s : 仿射子空间 R P} {x : P}
   结论: s.WOppSide x x ↔ x in s
   证明: by
   constructor
@@ -1612,7 +1612,7 @@ theorem not_sOppSide_self
 
 中文:
 定理 not_sOppSide_self
-  条件: (s : AffineSubspace R P) (x : P)
+  条件: (s : 仿射子空间 R P) (x : P)
   结论: ¬s.SOppSide x x
   证明: by
   rw [SOppSide]
@@ -1642,8 +1642,8 @@ theorem wSameSide_iff_exists_left
     · refine Or.inr ⟨(r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.sm
 
 中文:
-定理 wSameSide_iff_exists_left
-  条件: {s : AffineSubspace R P} {x y p₁ : P} (h : p₁ in s)
+定理 wSameSide_iff_存在_left
+  条件: {s : 仿射子空间 R P} {x y p₁ : P} (h : p₁ in s)
   证明: by
   constructor
   · rintro ⟨p₁', hp₁', p₂', hp₂', h0 | h0 | ⟨r₁, r₂, hr₁, hr₂, hr⟩⟩
@@ -1685,8 +1685,8 @@ theorem wSameSide_iff_exists_right
   simp_rw [SameRay.sameRay_comm]
 
 中文:
-定理 wSameSide_iff_exists_right
-  条件: {s : AffineSubspace R P} {x y p₂ : P} (h : p₂ in s)
+定理 wSameSide_iff_存在_right
+  条件: {s : 仿射子空间 R P} {x y p₂ : P} (h : p₂ in s)
   证明: by
   rw [wSameSide_comm]; rw [wSameSide_iff_exists_left h]
   simp_rw [SameRay.sameRay_comm]
@@ -1710,8 +1710,8 @@ theorem sSameSide_iff_exists_left
   rw [or_iff_right hx]
 
 中文:
-定理 sSameSide_iff_exists_left
-  条件: {s : AffineSubspace R P} {x y p₁ : P} (h : p₁ in s)
+定理 sSameSide_iff_存在_left
+  条件: {s : 仿射子空间 R P} {x y p₁ : P} (h : p₁ in s)
   证明: by
   rw [SSameSide]; rw [and_comm]; rw [wSameSide_iff_exists_left h]; rw [and_assoc]; rw [and_congr_right_iff]
   intro hx
@@ -1736,8 +1736,8 @@ theorem sSameSide_iff_exists_right
   simp_rw [SameRay.sameRay_comm]
 
 中文:
-定理 sSameSide_iff_exists_right
-  条件: {s : AffineSubspace R P} {x y p₂ : P} (h : p₂ in s)
+定理 sSameSide_iff_存在_right
+  条件: {s : 仿射子空间 R P} {x y p₂ : P} (h : p₂ in s)
   证明: by
   rw [sSameSide_comm]; rw [sSameSide_iff_exists_left h]; rw [← and_assoc]; rw [and_comm (a := y ∉ s)]; rw [and_assoc]
   simp_rw [SameRay.sameRay_comm]
@@ -1767,8 +1767,8 @@ theorem wOppSide_iff_exists_left
     · refine Or.inr ⟨(-r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.s
 
 中文:
-定理 wOppSide_iff_exists_left
-  条件: {s : AffineSubspace R P} {x y p₁ : P} (h : p₁ in s)
+定理 wOppSide_iff_存在_left
+  条件: {s : 仿射子空间 R P} {x y p₁ : P} (h : p₁ in s)
   证明: by
   constructor
   · rintro ⟨p₁', hp₁', p₂', hp₂', h0 | h0 | ⟨r₁, r₂, hr₁, hr₂, hr⟩⟩
@@ -1818,8 +1818,8 @@ theorem wOppSide_iff_exists_right
  
 
 中文:
-定理 wOppSide_iff_exists_right
-  条件: {s : AffineSubspace R P} {x y p₂ : P} (h : p₂ in s)
+定理 wOppSide_iff_存在_right
+  条件: {s : 仿射子空间 R P} {x y p₂ : P} (h : p₂ in s)
   证明: by
   rw [wOppSide_comm]; rw [wOppSide_iff_exists_left h]
   constructor
@@ -1858,8 +1858,8 @@ theorem sOppSide_iff_exists_left
   rw [or_iff_right hx]
 
 中文:
-定理 sOppSide_iff_exists_left
-  条件: {s : AffineSubspace R P} {x y p₁ : P} (h : p₁ in s)
+定理 sOppSide_iff_存在_left
+  条件: {s : 仿射子空间 R P} {x y p₁ : P} (h : p₁ in s)
   证明: by
   rw [SOppSide]; rw [and_comm]; rw [wOppSide_iff_exists_left h]; rw [and_assoc]; rw [and_congr_right_iff]
   intro hx
@@ -1885,8 +1885,8 @@ theorem sOppSide_iff_exists_right
   rw [or_iff_right hy]
 
 中文:
-定理 sOppSide_iff_exists_right
-  条件: {s : AffineSubspace R P} {x y p₂ : P} (h : p₂ in s)
+定理 sOppSide_iff_存在_right
+  条件: {s : 仿射子空间 R P} {x y p₂ : P} (h : p₂ in s)
   证明: by
   rw [SOppSide]; rw [and_comm]; rw [wOppSide_iff_exists_right h]; rw [and_assoc]; rw [and_congr_right_iff]; rw [and_congr_right_iff]
   rintro _ hy
@@ -1917,7 +1917,7 @@ theorem WSameSide.trans
 
 中文:
 定理 WSameSide.trans
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WSameSide x y)
   证明: by
   rcases hxy with ⟨p₁, hp₁, p₂, hp₂, hxy⟩
   rw [wSameSide_iff_exists_left hp₂]; rw [or_iff_right hy] at hyz
@@ -1949,7 +1949,7 @@ theorem WSameSide.trans_sSameSide
 
 中文:
 定理 WSameSide.trans_sSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WSameSide x y)
   证明: hxy.trans hyz.1 hyz.2.1
 
 Depends on / 依赖: hxy.trans
@@ -1975,7 +1975,7 @@ theorem WSameSide.trans_wOppSide
 
 中文:
 定理 WSameSide.trans_wOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WSameSide x y)
   证明: by
   rcases hxy with ⟨p₁, hp₁, p₂, hp₂, hxy⟩
   rw [wOppSide_iff_exists_left hp₂]; rw [or_iff_right hy] at hyz
@@ -2007,7 +2007,7 @@ theorem WSameSide.trans_sOppSide
 
 中文:
 定理 WSameSide.trans_sOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WSameSide x y)
   证明: hxy.trans_wOppSide hyz.1 hyz.2.1
 
 Depends on / 依赖: hxy.trans_wOppSide, trans_wOppSide
@@ -2026,7 +2026,7 @@ theorem SSameSide.trans_wSameSide
 
 中文:
 定理 SSameSide.trans_wSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SSameSide x y)
   证明: (hyz.symm.trans_sSameSide hxy.symm).symm
 
 Depends on / 依赖: hxy.symm, hyz.symm.trans_sSameSide, trans_sSameSide
@@ -2045,7 +2045,7 @@ theorem SSameSide.trans
 
 中文:
 定理 SSameSide.trans
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SSameSide x y)
   证明: ⟨hxy.wSameSide.trans_sSameSide hyz, hxy.2.1, hyz.2.2⟩
 
 Depends on / 依赖: hxy.wSameSide.trans_sSameSide, trans_sSameSide, wSameSide
@@ -2064,7 +2064,7 @@ theorem SSameSide.trans_wOppSide
 
 中文:
 定理 SSameSide.trans_wOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SSameSide x y)
   证明: hxy.wSameSide.trans_wOppSide hyz hxy.2.2
 
 Depends on / 依赖: hxy.wSameSide.trans_wOppSide, trans_wOppSide, wSameSide
@@ -2083,7 +2083,7 @@ theorem SSameSide.trans_sOppSide
 
 中文:
 定理 SSameSide.trans_sOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SSameSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SSameSide x y)
   证明: ⟨hxy.trans_wOppSide hyz.1, hxy.2.1, hyz.2.2⟩
 
 Depends on / 依赖: hxy.trans_wOppSide, trans_wOppSide
@@ -2102,7 +2102,7 @@ theorem WOppSide.trans_wSameSide
 
 中文:
 定理 WOppSide.trans_wSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WOppSide x y)
   证明: (hyz.symm.trans_wOppSide hxy.symm hy).symm
 
 Depends on / 依赖: hxy.symm, hyz.symm.trans_wOppSide, trans_wOppSide
@@ -2121,7 +2121,7 @@ theorem WOppSide.trans_sSameSide
 
 中文:
 定理 WOppSide.trans_sSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WOppSide x y)
   证明: hxy.trans_wSameSide hyz.1 hyz.2.1
 
 Depends on / 依赖: hxy.trans_wSameSide, trans_wSameSide
@@ -2146,7 +2146,7 @@ theorem WOppSide.trans
 
 中文:
 定理 WOppSide.trans
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WOppSide x y)
   证明: by
   rcases hxy with ⟨p₁, hp₁, p₂, hp₂, hxy⟩
   rw [wOppSide_iff_exists_left hp₂]; rw [or_iff_right hy] at hyz
@@ -2178,7 +2178,7 @@ theorem WOppSide.trans_sOppSide
 
 中文:
 定理 WOppSide.trans_sOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.WOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.WOppSide x y)
   证明: hxy.trans hyz.1 hyz.2.1
 
 Depends on / 依赖: hxy.trans
@@ -2197,7 +2197,7 @@ theorem SOppSide.trans_wSameSide
 
 中文:
 定理 SOppSide.trans_wSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SOppSide x y)
   证明: (hyz.symm.trans_sOppSide hxy.symm).symm
 
 Depends on / 依赖: hxy.symm, hyz.symm.trans_sOppSide, trans_sOppSide
@@ -2216,7 +2216,7 @@ theorem SOppSide.trans_sSameSide
 
 中文:
 定理 SOppSide.trans_sSameSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SOppSide x y)
   证明: (hyz.symm.trans_sOppSide hxy.symm).symm
 
 Depends on / 依赖: hxy.symm, hyz.symm.trans_sOppSide, trans_sOppSide
@@ -2235,7 +2235,7 @@ theorem SOppSide.trans_wOppSide
 
 中文:
 定理 SOppSide.trans_wOppSide
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SOppSide x y)
   证明: (hyz.symm.trans_sOppSide hxy.symm).symm
 
 Depends on / 依赖: hxy.symm, hyz.symm.trans_sOppSide, trans_sOppSide
@@ -2254,7 +2254,7 @@ theorem SOppSide.trans
 
 中文:
 定理 SOppSide.trans
-  结论: {s : AffineSubspace R P} {x y z : P} (hxy : s.SOppSide x y)
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxy : s.SOppSide x y)
   证明: ⟨hxy.trans_wOppSide hyz.1, hxy.2.1, hyz.2.2⟩
 
 Depends on / 依赖: hxy.trans_wOppSide, trans_wOppSide
@@ -2282,7 +2282,7 @@ theorem wSameSide_and_wOppSide_iff
 
 中文:
 定理 wSameSide_and_wOppSide_iff
-  条件: {s : AffineSubspace R P} {x y : P}
+  条件: {s : 仿射子空间 R P} {x y : P}
   证明: by
   constructor
   · rintro ⟨hs, ho⟩
@@ -2323,7 +2323,7 @@ theorem WSameSide.not_sOppSide
 
 中文:
 定理 WSameSide.not_sOppSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WSameSide x y)
   证明: by
   intro ho
   have hxy := wSameSide_and_wOppSide_iff.1 ⟨h, ho.1⟩
@@ -2356,7 +2356,7 @@ theorem SSameSide.not_wOppSide
 
 中文:
 定理 SSameSide.not_wOppSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   证明: by
   intro ho
   have hxy := wSameSide_and_wOppSide_iff.1 ⟨h.1, ho⟩
@@ -2384,7 +2384,7 @@ theorem SSameSide.not_sOppSide
 
 中文:
 定理 SSameSide.not_sOppSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SSameSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SSameSide x y)
   证明: fun ho => h.not_wOppSide ho.1
 
 Depends on / 依赖: h.not_wOppSide, not_wOppSide
@@ -2403,7 +2403,7 @@ theorem WOppSide.not_sSameSide
 
 中文:
 定理 WOppSide.not_sSameSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.WOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.WOppSide x y)
   证明: fun hs => hs.not_wOppSide h
 
 Depends on / 依赖: hs.not_wOppSide, not_wOppSide
@@ -2422,7 +2422,7 @@ theorem SOppSide.not_wSameSide
 
 中文:
 定理 SOppSide.not_wSameSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   证明: fun hs => hs.not_sOppSide h
 
 Depends on / 依赖: hs.not_sOppSide, not_sOppSide
@@ -2441,7 +2441,7 @@ theorem SOppSide.not_sSameSide
 
 中文:
 定理 SOppSide.not_sSameSide
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   证明: fun hs => h.not_wSameSide hs.1
 
 Depends on / 依赖: h.not_wSameSide, not_wSameSide
@@ -2468,8 +2468,8 @@ theorem wOppSide_iff_exists_wbtw
     exact ⟨p₂, hp₂, wbtw_self_right _ _
 
 中文:
-定理 wOppSide_iff_exists_wbtw
-  条件: {s : AffineSubspace R P} {x y : P}
+定理 wOppSide_iff_存在_wbtw
+  条件: {s : 仿射子空间 R P} {x y : P}
   证明: by
   refine ⟨fun h => ?_, fun ⟨p, hp, h⟩ => h.wOppSide₁₃ hp⟩
   rcases h with ⟨p₁, hp₁, p₂, hp₂, h | h | ⟨r₁, r₂, hr₁, hr₂, h⟩⟩
@@ -2518,8 +2518,8 @@ theorem SOppSide.exists_sbtw
     exact h.2.2 hp
 
 中文:
-定理 SOppSide.exists_sbtw
-  条件: {s : AffineSubspace R P} {x y : P} (h : s.SOppSide x y)
+定理 SOppSide.存在_sbtw
+  条件: {s : 仿射子空间 R P} {x y : P} (h : s.SOppSide x y)
   证明: by
   obtain ⟨p, hp, hw⟩ := wOppSide_iff_exists_wbtw.1 h.wOppSide
   refine ⟨p, hp, hw, ?_, ?_⟩
@@ -2557,7 +2557,7 @@ theorem _root_.Sbtw.sOppSide_of_notMem_of_mem
 
 中文:
 定理 _root_.Sbtw.sOppSide_of_notMem_of_mem
-  结论: {s : AffineSubspace R P} {x y z : P}
+  结论: {s : 仿射子空间 R P} {x y z : P}
   证明: by
   refine ⟨h.wbtw.wOppSide₁₃ hy, hx, fun hz => hx ?_⟩
   rcases h with ⟨⟨t, ⟨ht0, ht1⟩, rfl⟩, hyx, hyz⟩
@@ -2595,7 +2595,7 @@ theorem sSameSide_smul_vsub_vadd_left
 
 中文:
 定理 sSameSide_smul_vsub_vadd_left
-  结论: {s : AffineSubspace R P} {x p₁ p₂ : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 R P} {x p₁ p₂ : P} (hx : x ∉ s)
   证明: by
   refine ⟨wSameSide_smul_vsub_vadd_left x hp₁ hp₂ ht.le, fun h => hx ?_, hx⟩
   rwa [vadd_mem_iff_mem_direction _ hp₂, s.direction.smul_mem_iff ht.ne.symm,
@@ -2619,7 +2619,7 @@ theorem sSameSide_smul_vsub_vadd_right
 
 中文:
 定理 sSameSide_smul_vsub_vadd_right
-  结论: {s : AffineSubspace R P} {x p₁ p₂ : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 R P} {x p₁ p₂ : P} (hx : x ∉ s)
   证明: (sSameSide_smul_vsub_vadd_left hx hp₁ hp₂ ht).symm
 
 Depends on / 依赖: sSameSide_smul_vsub_vadd_left
@@ -2639,7 +2639,7 @@ theorem sSameSide_lineMap_left
 
 中文:
 定理 sSameSide_lineMap_left
-  结论: {s : AffineSubspace R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
+  结论: {s : 仿射子空间 R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
   证明: sSameSide_smul_vsub_vadd_left hy hx hx ht
 
 Depends on / 依赖: sSameSide_smul_vsub_vadd_left
@@ -2659,7 +2659,7 @@ theorem sSameSide_lineMap_right
 
 中文:
 定理 sSameSide_lineMap_right
-  结论: {s : AffineSubspace R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
+  结论: {s : 仿射子空间 R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
   证明: (sSameSide_lineMap_left hx hy ht).symm
 
 Depends on / 依赖: sSameSide_lineMap_left
@@ -2681,7 +2681,7 @@ theorem sOppSide_smul_vsub_vadd_left
 
 中文:
 定理 sOppSide_smul_vsub_vadd_left
-  结论: {s : AffineSubspace R P} {x p₁ p₂ : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 R P} {x p₁ p₂ : P} (hx : x ∉ s)
   证明: by
   refine ⟨wOppSide_smul_vsub_vadd_left x hp₁ hp₂ ht.le, fun h => hx ?_, hx⟩
   rwa [vadd_mem_iff_mem_direction _ hp₂, s.direction.smul_mem_iff ht.ne,
@@ -2705,7 +2705,7 @@ theorem sOppSide_smul_vsub_vadd_right
 
 中文:
 定理 sOppSide_smul_vsub_vadd_right
-  结论: {s : AffineSubspace R P} {x p₁ p₂ : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 R P} {x p₁ p₂ : P} (hx : x ∉ s)
   证明: (sOppSide_smul_vsub_vadd_left hx hp₁ hp₂ ht).symm
 
 Depends on / 依赖: sOppSide_smul_vsub_vadd_left
@@ -2725,7 +2725,7 @@ theorem sOppSide_lineMap_left
 
 中文:
 定理 sOppSide_lineMap_left
-  结论: {s : AffineSubspace R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
+  结论: {s : 仿射子空间 R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
   证明: sOppSide_smul_vsub_vadd_left hy hx hx ht
 
 Depends on / 依赖: sOppSide_smul_vsub_vadd_left
@@ -2745,7 +2745,7 @@ theorem sOppSide_lineMap_right
 
 中文:
 定理 sOppSide_lineMap_right
-  结论: {s : AffineSubspace R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
+  结论: {s : 仿射子空间 R P} {x y : P} (hx : x in s) (hy : y ∉ s) {t : R}
   证明: (sOppSide_lineMap_left hx hy ht).symm
 
 Depends on / 依赖: sOppSide_lineMap_left
@@ -2772,7 +2772,7 @@ theorem setOfPred_wSameSide_eq_image2
 
 中文:
 定理 setOfPred_wSameSide_eq_image2
-  条件: {s : AffineSubspace R P} {x p : P} (hx : x ∉ s) (hp : p in s)
+  条件: {s : 仿射子空间 R P} {x p : P} (hx : x ∉ s) (hp : p in s)
   证明: by
   ext y
   simp_rw [Set.mem_ofPred, Set.mem_image2, Set.mem_Ici]
@@ -2824,7 +2824,7 @@ theorem setOfPred_sSameSide_eq_image2
 
 中文:
 定理 setOfPred_sSameSide_eq_image2
-  条件: {s : AffineSubspace R P} {x p : P} (hx : x ∉ s) (hp : p in s)
+  条件: {s : 仿射子空间 R P} {x p : P} (hx : x ∉ s) (hp : p in s)
   证明: by
   ext y
   simp_rw [Set.mem_ofPred, Set.mem_image2, Set.mem_Ioi]
@@ -2875,7 +2875,7 @@ theorem setOfPred_wOppSide_eq_image2
 
 中文:
 定理 setOfPred_wOppSide_eq_image2
-  条件: {s : AffineSubspace R P} {x p : P} (hx : x ∉ s) (hp : p in s)
+  条件: {s : 仿射子空间 R P} {x p : P} (hx : x ∉ s) (hp : p in s)
   证明: by
   ext y
   simp_rw [Set.mem_ofPred, Set.mem_image2, Set.mem_Iic]
@@ -2927,7 +2927,7 @@ theorem setOfPred_sOppSide_eq_image2
 
 中文:
 定理 setOfPred_sOppSide_eq_image2
-  条件: {s : AffineSubspace R P} {x p : P} (hx : x ∉ s) (hp : p in s)
+  条件: {s : 仿射子空间 R P} {x p : P} (hx : x ∉ s) (hp : p in s)
   证明: by
   ext y
   simp_rw [Set.mem_ofPred, Set.mem_image2, Set.mem_Iio]
@@ -2970,7 +2970,7 @@ theorem wOppSide_pointReflection
 
 中文:
 定理 wOppSide_pointReflection
-  条件: {s : AffineSubspace R P} {x : P} (y : P) (hx : x in s)
+  条件: {s : 仿射子空间 R P} {x : P} (y : P) (hx : x in s)
   证明: (wbtw_pointReflection R _ _).wOppSide₁₃ hx
 
 Depends on / 依赖: wbtw_pointReflection
@@ -2991,7 +2991,7 @@ theorem sOppSide_pointReflection
 
 中文:
 定理 sOppSide_pointReflection
-  条件: {s : AffineSubspace R P} {x y : P} (hx : x in s) (hy : y ∉ s)
+  条件: {s : 仿射子空间 R P} {x y : P} (hx : x in s) (hy : y ∉ s)
   证明: by
   refine (sbtw_pointReflection_of_ne R fun h => hy ?_).sOppSide_of_notMem_of_mem hy hx
   rwa [← h]
@@ -3028,7 +3028,7 @@ theorem isConnected_setOfPred_wSameSide
 
 中文:
 定理 isConnected_setOfPred_wSameSide
-  结论: {s : AffineSubspace 实数 P} (x : P)
+  结论: {s : 仿射子空间 实数 P} (x : P)
   证明: by
   obtain ⟨p, hp⟩ := h
   have : Nonempty s := ⟨⟨p, hp⟩⟩
@@ -3076,7 +3076,7 @@ alias isPreconnected_setOf_wSameSide :=
 
 中文:
 定理 isPreconnected_setOfPred_wSameSide
-  条件: (s : AffineSubspace 实数 P) (x : P)
+  条件: (s : 仿射子空间 实数 P) (x : P)
   证明: by
   rcases Set.eq_empty_or_nonempty (s : Set P) with (h | h)
   · rw [coe_eq_bot_iff] at h
@@ -3116,7 +3116,7 @@ theorem isConnected_setOfPred_sSameSide
 
 中文:
 定理 isConnected_setOfPred_sSameSide
-  结论: {s : AffineSubspace 实数 P} {x : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 实数 P} {x : P} (hx : x ∉ s)
   证明: by
   obtain ⟨p, hp⟩ := h
   have : Nonempty s := ⟨⟨p, hp⟩⟩
@@ -3157,7 +3157,7 @@ theorem isPreconnected_setOfPred_sSameSide
 
 中文:
 定理 isPreconnected_setOfPred_sSameSide
-  条件: (s : AffineSubspace 实数 P) (x : P)
+  条件: (s : 仿射子空间 实数 P) (x : P)
   证明: by
   rcases Set.eq_empty_or_nonempty (s : Set P) with (h | h)
   · rw [coe_eq_bot_iff] at h
@@ -3202,7 +3202,7 @@ theorem isConnected_setOfPred_wOppSide
 
 中文:
 定理 isConnected_setOfPred_wOppSide
-  条件: {s : AffineSubspace 实数 P} (x : P) (h : (s : Set P).Nonempty)
+  条件: {s : 仿射子空间 实数 P} (x : P) (h : (s : 集合 P).非空)
   证明: by
   obtain ⟨p, hp⟩ := h
   have : Nonempty s := ⟨⟨p, hp⟩⟩
@@ -3249,7 +3249,7 @@ alias isPreconnected_setOf_wOppSide := is
 
 中文:
 定理 isPreconnected_setOfPred_wOppSide
-  条件: (s : AffineSubspace 实数 P) (x : P)
+  条件: (s : 仿射子空间 实数 P) (x : P)
   证明: by
   rcases Set.eq_empty_or_nonempty (s : Set P) with (h | h)
   · rw [coe_eq_bot_iff] at h
@@ -3289,7 +3289,7 @@ theorem isConnected_setOfPred_sOppSide
 
 中文:
 定理 isConnected_setOfPred_sOppSide
-  结论: {s : AffineSubspace 实数 P} {x : P} (hx : x ∉ s)
+  结论: {s : 仿射子空间 实数 P} {x : P} (hx : x ∉ s)
   证明: by
   obtain ⟨p, hp⟩ := h
   have : Nonempty s := ⟨⟨p, hp⟩⟩
@@ -3330,7 +3330,7 @@ theorem isPreconnected_setOfPred_sOppSide
 
 中文:
 定理 isPreconnected_setOfPred_sOppSide
-  条件: (s : AffineSubspace 实数 P) (x : P)
+  条件: (s : 仿射子空间 实数 P) (x : P)
   证明: by
   rcases Set.eq_empty_or_nonempty (s : Set P) with (h | h)
   · rw [coe_eq_bot_iff] at h
@@ -3384,7 +3384,7 @@ lemma sSameSide_affineSpan_faceOpposite_of_sign_eq
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_of_sign_eq
-  结论: {w₁ w₂ : Fin (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
   证明: by
   have h0' : w₂ i != 0 := by intro h; simp_all
   refine ⟨?_, (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
@@ -3441,7 +3441,7 @@ lemma sOppSide_affineSpan_faceOpposite_of_pos_of_neg
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_of_pos_of_neg
-  结论: {w₁ w₂ : Fin (n + 1) -> R}
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R}
   证明: by
   let w₃ : Fin (n + 1) -> R := lineMap w₁ w₂ (w₁ i / (w₁ i - w₂ i))
   have hp : 0 < w₁ i - w₂ i := by grind
@@ -3494,7 +3494,7 @@ lemma sSameSide_affineSpan_faceOpposite_iff
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_iff
-  结论: {w₁ w₂ : Fin (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
   证明: by
   refine ⟨fun h => ?_, fun ⟨hs, h0⟩ => s.sSameSide_affineSpan_faceOpposite_of_sign_eq hw₁ hw₂ hs h0⟩
   have h0 : w₁ i != 0 :=
@@ -3545,7 +3545,7 @@ lemma sOppSide_affineSpan_faceOpposite_iff
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_iff
-  结论: {w₁ w₂ : Fin (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
   证明: by
   refine ⟨fun h => ?_, fun ⟨hs, h0⟩ => ?_⟩
   · have h0 : w₁ i != 0 :=
@@ -3597,7 +3597,7 @@ lemma wSameSide_affineSpan_faceOpposite_iff
 
 中文:
 引理 wSameSide_affineSpan_faceOpposite_iff
-  结论: {w₁ w₂ : Fin (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · by_cases h0 : w₁ i = 0
@@ -3650,7 +3650,7 @@ lemma wOppSide_affineSpan_faceOpposite_iff
 
 中文:
 引理 wOppSide_affineSpan_faceOpposite_iff
-  结论: {w₁ w₂ : Fin (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
+  结论: {w₁ w₂ : 有限集 (n + 1) -> R} (hw₁ : ∑ j, w₁ j = 1)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · by_cases h0 : w₁ i = 0
@@ -3701,7 +3701,7 @@ lemma sSameSide_affineSpan_faceOpposite_point_left_iff
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_point_left_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [← Finset.univ.affineCombination_piSingle R s.points (Finset.mem_univ i)]; rw [s.sSameSide_affineSpan_faceOpposite_iff (Fintype.sum_pi_single' _ _) hw]; rw [eq_comm]
   simp [sign_eq_one_iff]
@@ -3726,7 +3726,7 @@ lemma sSameSide_affineSpan_faceOpposite_point_right_iff
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_point_right_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [sSameSide_comm]; rw [s.sSameSide_affineSpan_faceOpposite_point_left_iff hw]
 
@@ -3750,7 +3750,7 @@ lemma sOppSide_affineSpan_faceOpposite_point_left_iff
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_point_left_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [← Finset.univ.affineCombination_piSingle R s.points (Finset.mem_univ i)]; rw [s.sOppSide_affineSpan_faceOpposite_iff (Fintype.sum_pi_single' _ _) hw]; rw [eq_comm]; rw [neg_eq_iff_eq_neg]
   simp [sign_eq_neg_one_iff]
@@ -3775,7 +3775,7 @@ lemma sOppSide_affineSpan_faceOpposite_point_right_iff
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_point_right_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [sOppSide_comm]; rw [s.sOppSide_affineSpan_faceOpposite_point_left_iff hw]
 
@@ -3799,7 +3799,7 @@ lemma wSameSide_affineSpan_faceOpposite_point_left_iff
 
 中文:
 引理 wSameSide_affineSpan_faceOpposite_point_left_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [← Finset.univ.affineCombination_piSingle R s.points (Finset.mem_univ i)]; rw [s.wSameSide_affineSpan_faceOpposite_iff (Fintype.sum_pi_single' _ _) hw]; rw [eq_comm]
   simp [sign_eq_one_iff, le_iff_eq_or_lt', or_comm]
@@ -3824,7 +3824,7 @@ lemma wSameSide_affineSpan_faceOpposite_point_right_iff
 
 中文:
 引理 wSameSide_affineSpan_faceOpposite_point_right_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [wSameSide_comm]; rw [s.wSameSide_affineSpan_faceOpposite_point_left_iff hw]
 
@@ -3848,7 +3848,7 @@ lemma wOppSide_affineSpan_faceOpposite_point_left_iff
 
 中文:
 引理 wOppSide_affineSpan_faceOpposite_point_left_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [← Finset.univ.affineCombination_piSingle R s.points (Finset.mem_univ i)]; rw [s.wOppSide_affineSpan_faceOpposite_iff (Fintype.sum_pi_single' _ _) hw]; rw [eq_comm]; rw [neg_eq_iff_eq_neg]
   simp [sign_eq_neg_one_iff, le_iff_eq_or_lt, or_comm]
@@ -3873,7 +3873,7 @@ lemma wOppSide_affineSpan_faceOpposite_point_right_iff
 
 中文:
 引理 wOppSide_affineSpan_faceOpposite_point_right_iff
-  结论: {w : Fin (n + 1) -> R}
+  结论: {w : 有限集 (n + 1) -> R}
   证明: by
   rw [wOppSide_comm]; rw [s.wOppSide_affineSpan_faceOpposite_point_left_iff hw]
 

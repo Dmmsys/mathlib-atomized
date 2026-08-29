@@ -59,7 +59,7 @@ definition extendFan
 
 中文:
 定义 extendFan
-  签名: {n : 自然数} {f : Fin (n + 1) -> C} (c₁ : Fan fun i : Fin n => f i.succ)
+  签名: {n : 自然数} {f : 有限集 (n + 1) -> C} (c₁ : Fan fun i : 有限集 n => f i.succ)
   定义体: Fan.mk c₂.pt
     (by
       refine Fin.cases ?_ ?_
@@ -98,7 +98,7 @@ definition extendFanIsLimit
 
 中文:
 定义 extendFanIsLimit
-  签名: {n : 自然数} (f : Fin (n + 1) -> C) {c₁ : Fan fun i : Fin n => f i.succ}
+  签名: {n : 自然数} (f : 有限集 (n + 1) -> C) {c₁ : Fan fun i : 有限集 n => f i.succ}
   定义体: by
     apply (BinaryFan.IsLimit.lift' t₂ (s.π.app ⟨0⟩) _).1
     apply t₁.lift ⟨_, Discrete.natTrans fun ⟨i⟩ => s.π.app ⟨i.succ⟩⟩
@@ -155,7 +155,7 @@ theorem hasProduct_fin
 
 中文:
 定理 hasProduct_fin
-  结论: 对任意 (n : 自然数) (f : Fin n -> C), HasProduct f
+  结论: 对任意 (n : 自然数) (f : 有限集 n -> C), HasProduct f
   证明: hasLimitsOfShape_of_equivalence (Discrete.equivalence.{0} finZeroEquiv'.symm)
     inferInstance
   | n + 1 => fun f =>
@@ -184,7 +184,7 @@ theorem hasFiniteProducts_of_has_binary_and_terminal
 
 中文:
 定理 hasFiniteProducts_of_has_binary_and_terminal
-  结论: HasFiniteProducts C
+  结论: 有FiniteProducts C
   证明: ⟨fun n => ⟨fun K => by
     let that : (Discrete.functor fun n => K.obj ⟨n⟩) ≅ K := Discrete.natIso fun ⟨_⟩ => Iso.refl _
     rw [← hasLimit_iff_of_iso that]
@@ -277,7 +277,7 @@ lemma Limits.PreservesFiniteProducts.of_preserves_binary_and_terminal
     apply preservesLimit_of_iso_diagram F that
 
 中文:
-引理 Limits.PreservesFiniteProducts.of_preserves_binary_and_terminal
+引理 Limits.保持FiniteProducts.of_preserves_binary_and_terminal
   证明: by
     refine ⟨fun {K} => ?_⟩
     let that : (Discrete.functor fun n => K.obj ⟨n⟩) ≅ K := Discrete.natIso fun ⟨i⟩ => Iso.refl _
@@ -318,7 +318,7 @@ definition extendCofan
 
 中文:
 定义 extendCofan
-  签名: {n : 自然数} {f : Fin (n + 1) -> C} (c₁ : Cofan fun i : Fin n => f i.succ)
+  签名: {n : 自然数} {f : 有限集 (n + 1) -> C} (c₁ : Cofan fun i : 有限集 n => f i.succ)
   定义体: Cofan.mk c₂.pt
     (by
       refine Fin.cases ?_ ?_
@@ -357,7 +357,7 @@ definition extendCofanIsColimit
 
 中文:
 定义 extendCofanIsColimit
-  签名: {n : 自然数} (f : Fin (n + 1) -> C) {c₁ : Cofan fun i : Fin n => f i.succ}
+  签名: {n : 自然数} (f : 有限集 (n + 1) -> C) {c₁ : Cofan fun i : 有限集 n => f i.succ}
   定义体: by
     apply (BinaryCofan.IsColimit.desc' t₂ (s.ι.app ⟨0⟩) _).1
     apply t₁.desc ⟨_, Discrete.natTrans fun i => s.ι.app ⟨i.as.succ⟩⟩
@@ -414,7 +414,7 @@ theorem hasCoproduct_fin
 
 中文:
 定理 hasCoproduct_fin
-  结论: 对任意 (n : 自然数) (f : Fin n -> C), HasCoproduct f
+  结论: 对任意 (n : 自然数) (f : 有限集 n -> C), HasCoproduct f
   证明: hasColimitsOfShape_of_equivalence (Discrete.equivalence.{0} finZeroEquiv'.symm)
     inferInstance
   | n + 1 => fun f =>
@@ -443,7 +443,7 @@ theorem hasFiniteCoproducts_of_has_binary_and_initial
 
 中文:
 定理 hasFiniteCoproducts_of_has_binary_and_initial
-  结论: HasFiniteCoproducts C
+  结论: 有FiniteCoproducts C
   证明: ⟨fun n => ⟨fun K => by
     let that : K ≅ Discrete.functor fun n => K.obj ⟨n⟩ := Discrete.natIso fun ⟨_⟩ => Iso.refl _
     rw [hasColimit_iff_of_iso that]
@@ -566,8 +566,8 @@ alias preservesFiniteCoproductsOfPreservesBinaryAndInitial :=
   PreservesFiniteCoprodu
 
 中文:
-引理 PreservesFiniteCoproducts.of_preserves_binary_and_initial
-  条件: (J : 类型) [Finite J]
+引理 保持FiniteCoproducts.of_preserves_binary_and_initial
+  条件: (J : 类型) [有限 J]
   证明: let ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
   have := preservesShape_fin_of_preserves_binary_and_initial F n
   preservesColimitsOfShape_of_equiv (Discrete.equivalence e).symm _

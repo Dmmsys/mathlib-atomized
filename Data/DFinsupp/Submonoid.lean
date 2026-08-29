@@ -45,7 +45,7 @@ theorem dfinsuppProd_mem
 
 中文:
 定理 dfinsuppProd_mem
-  结论: [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: prod_mem fun _ hi => h _ mem_support_iff.1 hi
 
 Depends on / 依赖: mem_support_iff, prod_mem
@@ -69,7 +69,7 @@ theorem dfinsuppSumAddHom_mem
 
 中文:
 定理 dfinsuppSumAddHom_mem
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] {S : 类型}
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] {S : 类型}
   证明: by
   classical
     rw [DFinsupp.sumAddHom_apply]
@@ -98,7 +98,7 @@ theorem AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom
     exact dfinsuppSumAddHom_mem _ v _ fun i _ => (le_iSup S i : S i <= _) (v i).prop
 
 中文:
-定理 AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom
+定理 加法子幺半群.iSup_eq_mrange_dfinsuppSumAddHom
   证明: by
   apply le_antisymm
   · apply iSup_le _
@@ -135,7 +135,7 @@ theorem AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom
     r
 
 中文:
-定理 AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom
+定理 加法子幺半群.bsupr_eq_mrange_dfinsuppSumAddHom
   结论: (p : ι -> 命题) [DecidablePred p]
   证明: by
   apply le_antisymm
@@ -172,8 +172,8 @@ theorem AddSubmonoid.mem_iSup_iff_exists_dfinsupp
   proof: SetLike.ext_iff.mp (AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom S) x
 
 中文:
-定理 AddSubmonoid.mem_iSup_iff_exists_dfinsupp
-  结论: [AddCommMonoid γ] (S : ι -> AddSubmonoid γ)
+定理 加法子幺半群.mem_iSup_iff_存在_dfinsupp
+  结论: [加法交换幺半群 γ] (S : ι -> 加法子幺半群 γ)
   证明: SetLike.ext_iff.mp (AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom S) x
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom, SetLike, SetLike.ext_iff.mp, ext_iff, iSup_eq_mrange_dfinsuppSumAddHom
@@ -194,8 +194,8 @@ theorem AddSubmonoid.mem_iSup_iff_exists_dfinsupp'
   rfl
 
 中文:
-定理 AddSubmonoid.mem_iSup_iff_exists_dfinsupp'
-  结论: [AddCommMonoid γ] (S : ι -> AddSubmonoid γ)
+定理 加法子幺半群.mem_iSup_iff_存在_dfinsupp'
+  结论: [加法交换幺半群 γ] (S : ι -> 加法子幺半群 γ)
   证明: by
   rw [AddSubmonoid.mem_iSup_iff_exists_dfinsupp]
   simp_rw [sumAddHom_apply]
@@ -219,7 +219,7 @@ theorem AddSubmonoid.mem_bsupr_iff_exists_dfinsupp
   proof: SetLike.ext_iff.mp (AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom p S) x
 
 中文:
-定理 AddSubmonoid.mem_bsupr_iff_exists_dfinsupp
+定理 加法子幺半群.mem_bsupr_iff_存在_dfinsupp
   结论: (p : ι -> 命题) [DecidablePred p]
   证明: SetLike.ext_iff.mp (AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom p S) x
 

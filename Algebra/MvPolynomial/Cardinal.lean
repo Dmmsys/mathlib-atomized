@@ -45,7 +45,7 @@ theorem cardinalMk_eq_max_lift
 
 中文:
 定理 cardinalMk_eq_max_lift
-  条件: [Nonempty σ] [Nontrivial R]
+  条件: [非空 σ] [非平凡 R]
   证明: by simp [sup_assoc]
 
 Depends on / 依赖: sup_assoc
@@ -68,8 +68,8 @@ theorem cardinalMk_eq_lift
 
 中文:
 定理 cardinalMk_eq_lift
-  条件: [IsEmpty σ]
-  结论: #(MvPolynomial σ R) = lift.{u} #R
+  条件: [是空 σ]
+  结论: #(多元多项式 σ R) = lift.{u} #R
   证明: by simp
 
 @[nontriviality]
@@ -88,8 +88,8 @@ theorem cardinalMk_eq_one
 
 中文:
 定理 cardinalMk_eq_one
-  条件: [Subsingleton R]
-  结论: #(MvPolynomial σ R) = 1
+  条件: [子单例 R]
+  结论: #(多元多项式 σ R) = 1
   证明: mk_eq_one _
 
 Depends on / 依赖: mk_eq_one
@@ -108,7 +108,7 @@ theorem cardinalMk_le_max_lift
 
 中文:
 定理 cardinalMk_le_max_lift
-  条件: {σ : 类型u} {R : 类型v} [CommSemiring R]
+  条件: {σ : 类型u} {R : 类型v} [交换半环 R]
   证明: by
   nontriviality R; cases isEmpty_or_nonempty σ <;> simp
 
@@ -134,8 +134,8 @@ theorem cardinalMk_eq_max
 
 中文:
 定理 cardinalMk_eq_max
-  条件: [Nonempty σ] [Nontrivial R]
-  结论: #(MvPolynomial σ R) = #R ⊔ #σ ⊔ ℵ₀
+  条件: [非空 σ] [非平凡 R]
+  结论: #(多元多项式 σ R) = #R ⊔ #σ ⊔ ℵ₀
   证明: by
   simp [sup_assoc]
 
@@ -155,8 +155,8 @@ theorem cardinalMk_eq
 
 中文:
 定理 cardinalMk_eq
-  条件: [IsEmpty σ]
-  结论: #(MvPolynomial σ R) = #R
+  条件: [是空 σ]
+  结论: #(多元多项式 σ R) = #R
   证明: by simp
 -/
 theorem cardinalMk_eq [IsEmpty σ] : #(MvPolynomial σ R) = #R := by simp
@@ -171,7 +171,7 @@ theorem cardinalMk_le_max
 
 中文:
 定理 cardinalMk_le_max
-  结论: #(MvPolynomial σ R) <= #R ⊔ #σ ⊔ ℵ₀
+  结论: #(多元多项式 σ R) <= #R ⊔ #σ ⊔ ℵ₀
   证明: cardinalMk_le_max_lift.trans by rw [lift_id, lift_id]
 
 Depends on / 依赖: cardinalMk_le_max_lift, cardinalMk_le_max_lift.trans, lift_id

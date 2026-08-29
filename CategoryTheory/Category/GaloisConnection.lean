@@ -77,7 +77,7 @@ theorem Adjunction.gc
   ⟨fun h => ((adj.homEquiv x y).toFun h.hom).le, fun h => ((adj.homEquiv x y).invFun h.hom).le⟩
 
 中文:
-定理 Adjunction.gc
+定理 伴随.gc
   条件: {L : X ⥤ Y} {R : Y ⥤ X} (adj : L ⊣ R)
   结论: GaloisConnection L.obj R.obj
   证明: fun x y =>

@@ -47,11 +47,11 @@ structure IsExpCmpFilter
     - isBigO_im_pow_re : forall n : Nat, (fun z : Complex => z.im ^ n) =O[l] fun z => Real.exp z.re
 
 中文:
-结构 IsExpCmpFilter
-  参数: (l : Filter Complex)
+结构 是ExpCmpFilter
+  参数: (l : 滤子 复形)
   公理与运算 (2 个):
-    - tendsto_re : Tendsto re l atTop
-    - isBigO_im_pow_re : 对任意 n : 自然数, (fun z : Complex => z.im ^ n) =O[l] fun z => 实数.exp z.re
+    - tendsto_re : 收敛 re l atTop
+    - isBigO_im_pow_re : 对任意 n : 自然数, (fun z : 复形 => z.im ^ n) =O[l] fun z => 实数.exp z.re
 -/
 structure IsExpCmpFilter (l : Filter Complex) : Prop where
   tendsto_re : Tendsto re l atTop
@@ -79,7 +79,7 @@ IsLittleO.isBigO
 
 中文:
 定理 of_isBigO_im_re_rpow
-  条件: (hre : Tendsto re l atTop) (r : 实数) (hr : im =O[l] fun z => z.re ^ r)
+  条件: (hre : 收敛 re l atTop) (r : 实数) (hr : im =O[l] fun z => z.re ^ r)
   证明: ⟨hre, fun n =>
 IsLittleO.isBigO
       calc
@@ -112,7 +112,7 @@ theorem of_isBigO_im_re_pow
 
 中文:
 定理 of_isBigO_im_re_pow
-  条件: (hre : Tendsto re l atTop) (n : 自然数) (hr : im =O[l] fun z => z.re ^ n)
+  条件: (hre : 收敛 re l atTop) (n : 自然数) (hr : im =O[l] fun z => z.re ^ n)
   证明: of_isBigO_im_re_rpow hre n mod_cast hr
 
 Depends on / 依赖: mod_cast, of_isBigO_im_re_rpow
@@ -132,7 +132,7 @@ theorem of_boundedUnder_abs_im
 
 中文:
 定理 of_boundedUnder_abs_im
-  结论: (hre : Tendsto re l atTop)
+  结论: (hre : 收敛 re l atTop)
   证明: of_isBigO_im_re_pow hre 0 by
     simpa only [pow_zero] using him.isBigO_const (f := im) one_ne_zero
 
@@ -153,7 +153,7 @@ theorem of_boundedUnder_im
 
 中文:
 定理 of_boundedUnder_im
-  结论: (hre : Tendsto re l atTop) (him_le : IsBoundedUnder (· <= ·) l im)
+  结论: (hre : 收敛 re l atTop) (him_le : IsBoundedUnder (· <= ·) l im)
   证明: of_boundedUnder_abs_im hre isBoundedUnder_le_abs.2 ⟨him_le, him_ge⟩
 
 Depends on / 依赖: him_ge, him_le, isBoundedUnder_le_abs, of_boundedUnder_abs_im
@@ -174,8 +174,8 @@ theorem eventually_ne
 
 中文:
 定理 eventually_ne
-  条件: (hl : IsExpCmpFilter l)
-  结论: 对任意ᶠ w : Complex in l, w != 0
+  条件: (hl : 是ExpCmpFilter l)
+  结论: 对任意ᶠ w : 复形 in l, w != 0
   证明: hl.tendsto_re.eventually_ne_atTop' _
 
 Depends on / 依赖: eventually_ne_atTop, hl.tendsto_re.eventually_ne_atTop, tendsto_re
@@ -194,8 +194,8 @@ theorem tendsto_abs_re
 
 中文:
 定理 tendsto_abs_re
-  条件: (hl : IsExpCmpFilter l)
-  结论: Tendsto (fun z : Complex => |z.re|) l atTop
+  条件: (hl : 是ExpCmpFilter l)
+  结论: 收敛 (fun z : 复形 => |z.re|) l atTop
   证明: tendsto_abs_atTop_atTop.comp hl.tendsto_re
 
 Depends on / 依赖: hl.tendsto_re, tendsto_abs_atTop_atTop, tendsto_abs_atTop_atTop.comp, tendsto_re
@@ -214,8 +214,8 @@ theorem tendsto_norm
 
 中文:
 定理 tendsto_norm
-  条件: (hl : IsExpCmpFilter l)
-  结论: Tendsto norm l atTop
+  条件: (hl : 是ExpCmpFilter l)
+  结论: 收敛 norm l atTop
   证明: tendsto_atTop_mono abs_re_le_norm hl.tendsto_abs_re
 
 Depends on / 依赖: abs_re_le_norm, hl.tendsto_abs_re, tendsto_abs_re, tendsto_atTop_mono
@@ -234,7 +234,7 @@ theorem isLittleO_log_re_re
 
 中文:
 定理 isLittleO_log_re_re
-  条件: (hl : IsExpCmpFilter l)
+  条件: (hl : 是ExpCmpFilter l)
   结论: (fun z => 实数.log z.re) =o[l] re
   证明: Real.isLittleO_log_id_atTop.comp_tendsto hl.tendsto_re
 
@@ -259,7 +259,7 @@ theorem isLittleO_im_pow_exp_re
 
 中文:
 定理 isLittleO_im_pow_exp_re
-  条件: (hl : IsExpCmpFilter l) (n : 自然数)
+  条件: (hl : 是ExpCmpFilter l) (n : 自然数)
   证明: flip IsLittleO.of_pow two_ne_zero
     calc
       (fun z : Complex => (z.im ^ n) ^ 2) = (fun z => z.im ^ (2 * n)) := by simp only [pow_mul']
@@ -291,7 +291,7 @@ theorem abs_im_pow_eventuallyLE_exp_re
 
 中文:
 定理 abs_im_pow_eventuallyLE_exp_re
-  条件: (hl : IsExpCmpFilter l) (n : 自然数)
+  条件: (hl : 是ExpCmpFilter l) (n : 自然数)
   证明: by
   simpa using! (hl.isLittleO_im_pow_exp_re n).bound zero_lt_one
 
@@ -318,7 +318,7 @@ theorem isLittleO_log_norm_re
 
 中文:
 定理 isLittleO_log_norm_re
-  条件: (hl : IsExpCmpFilter l)
+  条件: (hl : 是ExpCmpFilter l)
   结论: (fun z => 实数.log ‖z‖) =o[l] re
   证明: calc
     (fun z => Real.log ‖z‖) =O[l] fun z => Real.log (√2) + Real.log (max z.re |z.im|) :=
@@ -371,7 +371,7 @@ lemma isTheta_cpow_exp_re_mul_log
 
 中文:
 引理 isTheta_cpow_exp_re_mul_log
-  条件: (hl : IsExpCmpFilter l) (a : Complex)
+  条件: (hl : 是ExpCmpFilter l) (a : 复形)
   证明: calc
     (fun z => z ^ a) =Θ[l] (fun z : Complex => ‖z‖ ^ re a) :=
       isTheta_cpow_const_rpow fun _ _ => hl.eventually_ne
@@ -406,7 +406,7 @@ IsLittleO.of_norm_right by
 
 中文:
 定理 isLittleO_cpow_exp
-  条件: (hl : IsExpCmpFilter l) (a : Complex) {b : 实数} (hb : 0 < b)
+  条件: (hl : 是ExpCmpFilter l) (a : 复形) {b : 实数} (hb : 0 < b)
   证明: calc
     (fun z => z ^ a) =Θ[l] fun z => Real.exp (re a * Real.log ‖z‖) :=
       hl.isTheta_cpow_exp_re_mul_log a
@@ -444,7 +444,7 @@ theorem isLittleO_cpow_mul_exp
 
 中文:
 定理 isLittleO_cpow_mul_exp
-  条件: {b₁ b₂ : 实数} (hl : IsExpCmpFilter l) (hb : b₁ < b₂) (a₁ a₂ : Complex)
+  条件: {b₁ b₂ : 实数} (hl : 是ExpCmpFilter l) (hb : b₁ < b₂) (a₁ a₂ : 复形)
   证明: calc
     (fun z => z ^ a₁ * exp (b₁ * z)) =ᶠ[l] fun z => z ^ a₂ * exp (b₁ * z) * z ^ (a₁ - a₂) :=
       hl.eventually_ne.mono fun z hz => by
@@ -478,7 +478,7 @@ theorem isLittleO_exp_cpow
 
 中文:
 定理 isLittleO_exp_cpow
-  条件: (hl : IsExpCmpFilter l) (a : Complex) {b : 实数} (hb : b < 0)
+  条件: (hl : 是ExpCmpFilter l) (a : 复形) {b : 实数} (hb : b < 0)
   证明: by simpa using hl.isLittleO_cpow_mul_exp hb 0 a
 
 Depends on / 依赖: hl.isLittleO_cpow_mul_exp, isLittleO_cpow_mul_exp
@@ -497,7 +497,7 @@ theorem isLittleO_pow_mul_exp
 
 中文:
 定理 isLittleO_pow_mul_exp
-  条件: {b₁ b₂ : 实数} (hl : IsExpCmpFilter l) (hb : b₁ < b₂) (m n : 自然数)
+  条件: {b₁ b₂ : 实数} (hl : 是ExpCmpFilter l) (hb : b₁ < b₂) (m n : 自然数)
   证明: by
   simpa only [cpow_natCast] using hl.isLittleO_cpow_mul_exp hb m n
 
@@ -518,7 +518,7 @@ theorem isLittleO_zpow_mul_exp
 
 中文:
 定理 isLittleO_zpow_mul_exp
-  条件: {b₁ b₂ : 实数} (hl : IsExpCmpFilter l) (hb : b₁ < b₂) (m n : 整数)
+  条件: {b₁ b₂ : 实数} (hl : 是ExpCmpFilter l) (hb : b₁ < b₂) (m n : 整数)
   证明: by
   simpa only [cpow_intCast] using hl.isLittleO_cpow_mul_exp hb m n
 

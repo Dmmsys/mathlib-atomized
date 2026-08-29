@@ -54,7 +54,7 @@ class PreservesZeroMorphisms
     - map_zero : forall X Y : C, F.map (0 : X ⟶ Y) = 0  [default: by aesop]
 
 中文:
-类 PreservesZeroMorphisms
+类 保持ZeroMorphisms
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
     - map_zero : 对任意 X Y : C, F.map (0 : X ⟶ Y) = 0  [默认: by aesop]
@@ -74,7 +74,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: (F : C ⥤ D) [PreservesZeroMorphisms F] (X Y : C)
+  条件: (F : C ⥤ D) [保持ZeroMorphisms F] (X Y : C)
   证明: PreservesZeroMorphisms.map_zero _ _
 -/
 protected theorem map_zero (F : C ⥤ D) [PreservesZeroMorphisms F] (X Y : C) :
@@ -93,7 +93,7 @@ lemma map_isZero
 
 中文:
 引理 map_isZero
-  条件: (F : C ⥤ D) [PreservesZeroMorphisms F] {X : C} (hX : IsZero X)
+  条件: (F : C ⥤ D) [保持ZeroMorphisms F] {X : C} (hX : 是零 X)
   证明: by
   simp only [IsZero.iff_id_eq_zero] at hX ⊢
   rw [← F.map_id]; rw [hX]; rw [F.map_zero]
@@ -115,7 +115,7 @@ theorem zero_of_map_zero
 
 中文:
 定理 zero_of_map_zero
-  结论: (F : C ⥤ D) [PreservesZeroMorphisms F] [Faithful F] {X Y : C} (f : X ⟶ Y)
+  结论: (F : C ⥤ D) [保持ZeroMorphisms F] [忠实 F] {X Y : C} (f : X ⟶ Y)
   证明: F.map_injective h.trans Eq.symm F.map_zero _ _
 
 Depends on / 依赖: Eq.symm, F.map_injective, F.map_zero, h.trans, map_injective, map_zero
@@ -136,7 +136,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: (F : C ⥤ D) [PreservesZeroMorphisms F] [Faithful F] {X Y : C} {f : X ⟶ Y}
+  条件: (F : C ⥤ D) [保持ZeroMorphisms F] [忠实 F] {X Y : C} {f : X ⟶ Y}
   证明: ⟨F.zero_of_map_zero _, by
     rintro rfl
     exact F.map_zero _ _⟩
@@ -212,7 +212,7 @@ lemma preservesZeroMorphisms_of_iso
 
 中文:
 引理 preservesZeroMorphisms_of_iso
-  条件: {F₁ F₂ : C ⥤ D} [F₁.PreservesZeroMorphisms] (e : F₁ ≅ F₂)
+  条件: {F₁ F₂ : C ⥤ D} [F₁.保持ZeroMorphisms] (e : F₁ ≅ F₂)
   证明: by simp only [← cancel_epi (e.hom.app X), ← e.hom.naturality,
     F₁.map_zero, zero_comp, comp_zero]
 
@@ -256,7 +256,7 @@ omit [HasZeroMorphisms C] in
 
 中文:
 引理 whiskerRight_zero
-  条件: {F G : C ⥤ D} (H : D ⥤ E) [H.PreservesZeroMorphisms]
+  条件: {F G : C ⥤ D} (H : D ⥤ E) [H.保持ZeroMorphisms]
   证明: by cat_disch
 
 omit [HasZeroMorphisms C] in
@@ -277,8 +277,8 @@ lemma FullyFaithful.preservesZeroMorphisms
   ⟨fun _ _ => hF.map_preimage _⟩
 
 中文:
-引理 FullyFaithful.preservesZeroMorphisms
-  条件: (F : C ⥤ D) (hF : F.FullyFaithful)
+引理 满忠实.preservesZeroMorphisms
+  条件: (F : C ⥤ D) (hF : F.满忠实)
   证明: hF.hasZeroMorphisms
     F.PreservesZeroMorphisms :=
   letI : HasZeroMorphisms C := hF.hasZeroMorphisms
@@ -317,7 +317,7 @@ definition mapZeroObject
 
 中文:
 定义 mapZeroObject
-  签名: [PreservesZeroMorphisms F]
+  签名: [保持ZeroMorphisms F]
   定义体: 0
   inv := 0
   hom_inv_id := by rw [← F.map_id, id_zero, F.map_zero, zero_comp]
@@ -346,7 +346,7 @@ theorem preservesZeroMorphisms_of_map_zero_object
 中文:
 定理 preservesZeroMorphisms_of_map_zero_object
   条件: (i : F.obj 0 ≅ 0)
-  结论: PreservesZeroMorphisms F where
+  结论: 保持ZeroMorphisms F where
   证明: calc
       F.map (0 : X ⟶ Y) = F.map (0 : X ⟶ 0) ≫ F.map 0 := by rw [← Functor.map_comp, comp_zero]
       _ = F.map 0 ≫ (i.hom ≫ i.inv) ≫ F.map 0 := by rw [Iso.hom_inv_id, Category.id_comp]
@@ -386,7 +386,7 @@ lemma preservesTerminalObject_of_preservesZeroMorphisms
 
 中文:
 引理 preservesTerminalObject_of_preservesZeroMorphisms
-  条件: [PreservesZeroMorphisms F]
+  条件: [保持ZeroMorphisms F]
   证明: preservesTerminal_of_iso F
     F.mapIso HasZeroObject.zeroIsoTerminal.symm ≪≫ mapZeroObject F ≪≫ HasZeroObject.zeroIsoTerminal
 
@@ -409,7 +409,7 @@ lemma preservesInitialObject_of_preservesZeroMorphisms
 
 中文:
 引理 preservesInitialObject_of_preservesZeroMorphisms
-  条件: [PreservesZeroMorphisms F]
+  条件: [保持ZeroMorphisms F]
   证明: preservesInitial_of_iso F
     HasZeroObject.zeroIsoInitial.symm ≪≫
       (mapZeroObject F).symm ≪≫ (F.mapIso HasZeroObject.zeroIsoInitial.symm).symm
@@ -443,7 +443,7 @@ lemma preservesLimitsOfShape_of_isZero
 
 中文:
 引理 preservesLimitsOfShape_of_isZero
-  结论: PreservesLimitsOfShape J G where
+  结论: 保持形状极限 J G where
   证明: ⟨fun _ => ⟨by
     rw [Functor.isZero_iff] at hG
     exact IsLimit.ofIsZero _ ((K ⋙ G).isZero (fun X => hG _)) (hG _)⟩⟩
@@ -467,7 +467,7 @@ lemma preservesColimitsOfShape_of_isZero
 
 中文:
 引理 preservesColimitsOfShape_of_isZero
-  结论: PreservesColimitsOfShape J G where
+  结论: 保持形状余极限 J G where
   证明: ⟨fun _ => ⟨by
     rw [Functor.isZero_iff] at hG
     exact IsColimit.ofIsZero _ ((K ⋙ G).isZero (fun X => hG _)) (hG _)⟩⟩
@@ -489,7 +489,7 @@ lemma preservesLimitsOfSize_of_isZero
 
 中文:
 引理 preservesLimitsOfSize_of_isZero
-  结论: PreservesLimitsOfSize.{v, u} G where
+  结论: 保持LimitsOfSize.{v, u} G where
   证明: G.preservesLimitsOfShape_of_isZero hG _
 
 Depends on / 依赖: G.preservesLimitsOfShape_of_isZero, preservesLimitsOfShape_of_isZero
@@ -507,7 +507,7 @@ lemma preservesColimitsOfSize_of_isZero
 
 中文:
 引理 preservesColimitsOfSize_of_isZero
-  结论: PreservesColimitsOfSize.{v, u} G where
+  结论: 保持余limitsOfSize.{v, u} G where
   证明: G.preservesColimitsOfShape_of_isZero hG _
 
 Depends on / 依赖: G.preservesColimitsOfShape_of_isZero, preservesColimitsOfShape_of_isZero

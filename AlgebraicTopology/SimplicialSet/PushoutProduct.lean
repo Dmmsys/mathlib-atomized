@@ -50,7 +50,7 @@ definition ιIso
 
 中文:
 定义 ιIso
-  签名: : Arrow.mk (S.unionProd T).ι ≅ S.ι □ T.ι
+  签名: : 箭头.mk (S.unionProd T).ι ≅ S.ι □ T.ι
   定义体: Arrow.isoMk' _ _ (isPushout S T).isoPushout (Iso.refl _)
     (by
       apply (unionProd.isPushout S T).hom_ext <;>

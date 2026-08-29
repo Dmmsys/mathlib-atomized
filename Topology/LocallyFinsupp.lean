@@ -56,12 +56,12 @@ structure Function.locallyFinsuppWithin
     - supportLocallyFiniteWithinDomain' : forall z in U, exists t in 𝓝 z, Set.Finite (t inter toFun.support)
 
 中文:
-结构 Function.locallyFinsuppWithin
-  参数: [Zero Y]
+结构 函数.locallyFinsuppWithin
+  参数: [零 Y]
   公理与运算 (3 个):
     - toFun : X -> Y
     - supportWithinDomain' : toFun.support subseteq U
-    - supportLocallyFiniteWithinDomain' : 对任意 z in U, 存在 t in 𝓝 z, Set.Finite (t inter toFun.support)
+    - supportLocallyFiniteWithinDomain' : 对任意 z in U, 存在 t in 𝓝 z, 集合.有限 (t inter toFun.support)
 -/
 structure Function.locallyFinsuppWithin [Zero Y] where
   /-- A function `X → Y` -/
@@ -81,8 +81,8 @@ abbreviation Function.locallyFinsupp
   body: locallyFinsuppWithin (Set.univ : Set X) Y
 
 中文:
-缩写 Function.locallyFinsupp
-  签名: [Zero Y]
+缩写 函数.locallyFinsupp
+  签名: [零 Y]
   定义体: locallyFinsuppWithin (Set.univ : Set X) Y
 
 Depends on / 依赖: Set.univ, locallyFinsuppWithin
@@ -102,8 +102,8 @@ instance [Zero
         use Set.univ, univ_mem }
 
 中文:
-实例 [Zero
-  签名: Y] : Zero (locallyFinsuppWithin U Y) where
+实例 [零
+  签名: Y] : 零 (locallyFinsuppWithin U Y) where
   定义体: { toFun := fun _ => 0
       supportWithinDomain' := by simp
       supportLocallyFiniteWithinDomain' z hz := by
@@ -135,7 +135,7 @@ theorem supportDiscreteWithin_iff_locallyFiniteWithin
 
 中文:
 定理 supportDiscreteWithin_iff_locallyFiniteWithin
-  结论: [T1Space X] [Zero Y] {f : X -> Y}
+  结论: [T1空间 X] [零 Y] {f : X -> Y}
   证明: by
   have : f.support = (U \ {x | f x = (0 : X -> Y) x}) := by
     ext x
@@ -164,7 +164,7 @@ definition LocallyFiniteSupport
 
 中文:
 定义 LocallyFiniteSupport
-  签名: [Zero Y] (f : X -> Y)
+  签名: [零 Y] (f : X -> Y)
   定义体: forall z : X, exists t in 𝓝 z, Set.Finite (t inter f.support)
 
 Depends on / 依赖: Finite, Set.Finite, f.support, support
@@ -187,7 +187,7 @@ lemma LocallyFiniteSupport.iff_locallyFinite_support
 
 中文:
 引理 LocallyFiniteSupport.iff_locallyFinite_support
-  条件: [Zero Y] (f : X -> Y)
+  条件: [零 Y] (f : X -> Y)
   证明: by
   dsimp only [LocallyFinite]
   peel with z t ht
@@ -215,7 +215,7 @@ lemma LocallyFiniteSupport.locallyFinite_support
 
 中文:
 引理 LocallyFiniteSupport.locallyFinite_support
-  条件: [Zero Y] (f : X -> Y) (h : LocallyFiniteSupport f)
+  条件: [零 Y] (f : X -> Y) (h : LocallyFiniteSupport f)
   证明: (LocallyFiniteSupport.iff_locallyFinite_support f).mpr h
 
 Depends on / 依赖: LocallyFiniteSupport, LocallyFiniteSupport.iff_locallyFinite_support, iff_locallyFinite_support
@@ -239,7 +239,7 @@ lemma LocallyFiniteSupport.finite_inter_support_of_isCompact
 
 中文:
 引理 LocallyFiniteSupport.finite_inter_support_of_isCompact
-  结论: {W : Set X}
+  结论: {W : 集合 X}
   证明: by
   have := LocallyFinite.finite_nonempty_inter_compact
     (LocallyFiniteSupport.locallyFinite_support f h) hW
@@ -267,8 +267,8 @@ lemma Function.locallyFinsupp.locallyFiniteSupport
   proof: (f.supportLocallyFiniteWithinDomain' · (by trivial))
 
 中文:
-引理 Function.locallyFinsupp.locallyFiniteSupport
-  条件: [Zero Y] (f : locallyFinsupp X Y)
+引理 函数.locallyFinsupp.locallyFiniteSupport
+  条件: [零 Y] (f : locallyFinsupp X Y)
   证明: (f.supportLocallyFiniteWithinDomain' · (by trivial))
 
 Depends on / 依赖: f.supportLocallyFiniteWithinDomain, supportLocallyFiniteWithinDomain
@@ -291,8 +291,8 @@ instance [Zero
 @[simp]
 
 中文:
-实例 [Zero
-  签名: Y] : FunLike (locallyFinsuppWithin U Y) X Y where
+实例 [零
+  签名: Y] : 函数状 (locallyFinsuppWithin U Y) X Y where
   定义体: D.toFun
   coe_injective := fun ⟨_, _, _⟩ ⟨_, _, _⟩ => by simp
 
@@ -318,7 +318,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: [Zero Y] (c : locallyFinsuppWithin U Y)
+  条件: [零 Y] (c : locallyFinsuppWithin U Y)
   结论: c.toFun = ⇑c
   证明: rfl
 
@@ -337,7 +337,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  结论: [Zero Y] (f : X -> Y) (h : f.support subseteq U)
+  结论: [零 Y] (f : X -> Y) (h : f.support subseteq U)
   证明: rfl
 -/
 lemma coe_mk [Zero Y] (f : X -> Y) (h : f.support subseteq U)
@@ -354,7 +354,7 @@ abbreviation support
 
 中文:
 缩写 support
-  签名: [Zero Y] (D : locallyFinsuppWithin U Y)
+  签名: [零 Y] (D : locallyFinsuppWithin U Y)
   定义体: Function.support D
 
 Depends on / 依赖: Function, Function.support, support
@@ -371,7 +371,7 @@ lemma supportWithinDomain
 
 中文:
 引理 supportWithinDomain
-  条件: [Zero Y] (D : locallyFinsuppWithin U Y)
+  条件: [零 Y] (D : locallyFinsuppWithin U Y)
   证明: D.supportWithinDomain'
 
 Depends on / 依赖: D.supportWithinDomain, supportWithinDomain
@@ -391,7 +391,7 @@ lemma supportLocallyFiniteWithinDomain
 
 中文:
 引理 supportLocallyFiniteWithinDomain
-  条件: [Zero Y] (D : locallyFinsuppWithin U Y)
+  条件: [零 Y] (D : locallyFinsuppWithin U Y)
   证明: D.supportLocallyFiniteWithinDomain'
 
 @[ext]
@@ -412,7 +412,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} (h : 对任意 a, D₁ a = D₂ a)
+  条件: [零 Y] {D₁ D₂ : locallyFinsuppWithin U Y} (h : 对任意 a, D₁ a = D₂ a)
   证明: DFunLike.ext _ _ h
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -430,7 +430,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  条件: [Zero Y]
+  条件: [零 Y]
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -455,7 +455,7 @@ definition single
 
 中文:
 定义 single
-  签名: [DecidableEq X] [Zero Y] (x : X) (y : Y)
+  签名: [DecidableEq X] [零 Y] (x : X) (y : Y)
   定义体: Pi.single x y
   supportWithinDomain' z hz := by tauto
   supportLocallyFiniteWithinDomain' _ _ :=
@@ -480,7 +480,7 @@ lemma single_apply
 
 中文:
 引理 single_apply
-  条件: [DecidableEq X] [Zero Y] {x₁ x₂ : X} {y : Y}
+  条件: [DecidableEq X] [零 Y] {x₁ x₂ : X} {y : Y}
   证明: by
   simp_rw [DFunLike.coe, single, Pi.single_apply]
 -/
@@ -498,7 +498,7 @@ lemma single_zero
 
 中文:
 引理 single_zero
-  条件: [DecidableEq X] [Zero Y] {x : X}
+  条件: [DecidableEq X] [零 Y] {x : X}
   证明: by aesop
 -/
 @[simp] lemma single_zero [DecidableEq X] [Zero Y] {x : X} :
@@ -516,7 +516,7 @@ lemma coe_single
 
 中文:
 引理 coe_single
-  条件: [DecidableEq X] [Zero Y] {x : X} {y : Y}
+  条件: [DecidableEq X] [零 Y] {x : X} {y : Y}
   证明: by
   ext
   simp [Pi.single_apply]
@@ -544,7 +544,7 @@ lemma apply_eq_zero_of_notMem
 
 中文:
 引理 apply_eq_zero_of_notMem
-  结论: [Zero Y] {z : X} (D : locallyFinsuppWithin U Y)
+  结论: [零 Y] {z : X} (D : locallyFinsuppWithin U Y)
   证明: notMem_support.mp fun a => hz (D.supportWithinDomain a)
 
 Depends on / 依赖: D.supportWithinDomain, notMem_support, notMem_support.mp, supportWithinDomain
@@ -569,7 +569,7 @@ theorem eq_zero_codiscreteWithin
 
 中文:
 定理 eq_zero_codiscreteWithin
-  条件: [Zero Y] [T1Space X] (D : locallyFinsuppWithin U Y)
+  条件: [零 Y] [T1空间 X] (D : locallyFinsuppWithin U Y)
   证明: by
   apply codiscreteWithin_iff_locallyFiniteComplementWithin.2
   have : D.support = (U \ {x | D x = (0 : X -> Y) x}) := by
@@ -610,7 +610,7 @@ theorem discreteSupport
 
 中文:
 定理 discreteSupport
-  条件: [Zero Y] [T1Space X] (D : locallyFinsuppWithin U Y)
+  条件: [零 Y] [T1空间 X] (D : locallyFinsuppWithin U Y)
   证明: by
   have : D.support = {x | D x = 0}ᶜ inter U := by
     ext x
@@ -659,7 +659,7 @@ theorem closedSupport
 
 中文:
 定理 closedSupport
-  结论: [T1Space X] [Zero Y] (D : locallyFinsuppWithin U Y)
+  结论: [T1空间 X] [零 Y] (D : locallyFinsuppWithin U Y)
   证明: by
   convert!
     isClosed_sdiff_of_codiscreteWithin
@@ -697,7 +697,7 @@ theorem finiteSupport
 
 中文:
 定理 finiteSupport
-  结论: [T2Space X] [Zero Y] (D : locallyFinsuppWithin U Y)
+  结论: [T2空间 X] [零 Y] (D : locallyFinsuppWithin U Y)
   证明: (hU.of_isClosed_subset (D.closedSupport hU.isClosed)
     D.supportWithinDomain).finite D.discreteSupport
 
@@ -732,7 +732,7 @@ definition addSubmonoid
 
 中文:
 定义 addSubmonoid
-  签名: [AddMonoid Y]
+  签名: [加法幺半群 Y]
   定义体: {f | f.support subseteq U ∧ forall z in U, exists t in 𝓝 z, Set.Finite (t inter f.support)}
   zero_mem' := by
     simp only [support_subset_iff, ne_eq, mem_ofPred_eq, Pi.zero_apply, not_true_eq_false,
@@ -772,7 +772,7 @@ lemma memAddSubmonoid
 
 中文:
 引理 memAddSubmonoid
-  条件: [AddMonoid Y] (D : locallyFinsuppWithin U Y)
+  条件: [加法幺半群 Y] (D : locallyFinsuppWithin U Y)
   证明: ⟨D.supportWithinDomain, D.supportLocallyFiniteWithinDomain⟩
 -/
 protected lemma memAddSubmonoid [AddMonoid Y] (D : locallyFinsuppWithin U Y) :
@@ -792,7 +792,7 @@ definition addSubgroup
 
 中文:
 定义 addSubgroup
-  签名: [AddGroup Y]
+  签名: [加法群 Y]
   定义体: {f | f.support subseteq U ∧ forall z in U, exists t in 𝓝 z, Set.Finite (t inter f.support)}
   __ := locallyFinsuppWithin.addSubmonoid U
   neg_mem' {f} hf := by simp_all
@@ -812,7 +812,7 @@ lemma memAddSubgroup
 
 中文:
 引理 memAddSubgroup
-  条件: [AddGroup Y] (D : locallyFinsuppWithin U Y)
+  条件: [加法群 Y] (D : locallyFinsuppWithin U Y)
   证明: ⟨D.supportWithinDomain, D.supportLocallyFiniteWithinDomain⟩
 -/
 protected lemma memAddSubgroup [AddGroup Y] (D : locallyFinsuppWithin U Y) :
@@ -833,7 +833,7 @@ definition mk_of_mem_addSubmonoid
 
 中文:
 定义 mk_of_mem_addSubmonoid
-  签名: [AddMonoid Y] (f : X -> Y)
+  签名: [加法幺半群 Y] (f : X -> Y)
   定义体: ⟨f, hf.1, hf.2⟩
 -/
 def mk_of_mem_addSubmonoid [AddMonoid Y] (f : X -> Y)
@@ -849,8 +849,8 @@ instance [AddMonoid
   body: mk_of_mem_addSubmonoid 0 zero_mem _
 
 中文:
-实例 [AddMonoid
-  签名: Y] : Zero (locallyFinsuppWithin U Y) where
+实例 [加法幺半群
+  签名: Y] : 零 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubmonoid 0 zero_mem _
 
 Depends on / 依赖: mk_of_mem_addSubmonoid, zero_mem
@@ -867,8 +867,8 @@ instance [AddMonoid
   body: mk_of_mem_addSubmonoid (D₁ + D₂) add_mem D₁.memAddSubmonoid D₂.memAddSubmonoid
 
 中文:
-实例 [AddMonoid
-  签名: Y] : Add (locallyFinsuppWithin U Y) where
+实例 [加法幺半群
+  签名: Y] : 加法 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubmonoid (D₁ + D₂) add_mem D₁.memAddSubmonoid D₂.memAddSubmonoid
 
 Depends on / 依赖: add_mem, memAddSubmonoid, mk_of_mem_addSubmonoid
@@ -885,8 +885,8 @@ instance [AddMonoid
   body: mk_of_mem_addSubmonoid (n • D) nsmul_mem D.memAddSubmonoid n
 
 中文:
-实例 [AddMonoid
-  签名: Y] : SMul 自然数 (locallyFinsuppWithin U Y) where
+实例 [加法幺半群
+  签名: Y] : 标量乘法 自然数 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubmonoid (n • D) nsmul_mem D.memAddSubmonoid n
 
 Depends on / 依赖: D.memAddSubmonoid, memAddSubmonoid, mk_of_mem_addSubmonoid, nsmul_mem
@@ -910,7 +910,7 @@ definition mk_of_mem_addSubgroup
 
 中文:
 定义 mk_of_mem_addSubgroup
-  签名: [AddGroup Y] (f : X -> Y) (hf : f in locallyFinsuppWithin.addSubgroup U)
+  签名: [加法群 Y] (f : X -> Y) (hf : f in locallyFinsuppWithin.addSubgroup U)
   定义体: ⟨f, hf.1, hf.2⟩
 
 @[deprecated (since := "2026-03-06")] alias mk_of_mem := mk_of_mem_addSubgroup
@@ -929,8 +929,8 @@ instance [AddGroup
   body: mk_of_mem_addSubgroup (-D) neg_mem D.memAddSubgroup
 
 中文:
-实例 [AddGroup
-  签名: Y] : Neg (locallyFinsuppWithin U Y) where
+实例 [加法群
+  签名: Y] : 取负 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubgroup (-D) neg_mem D.memAddSubgroup
 
 Depends on / 依赖: D.memAddSubgroup, memAddSubgroup, mk_of_mem_addSubgroup, neg_mem
@@ -947,8 +947,8 @@ instance [AddGroup
   body: mk_of_mem_addSubgroup (D₁ - D₂) sub_mem D₁.memAddSubgroup D₂.memAddSubgroup
 
 中文:
-实例 [AddGroup
-  签名: Y] : Sub (locallyFinsuppWithin U Y) where
+实例 [加法群
+  签名: Y] : 减法 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubgroup (D₁ - D₂) sub_mem D₁.memAddSubgroup D₂.memAddSubgroup
 
 Depends on / 依赖: memAddSubgroup, mk_of_mem_addSubgroup, sub_mem
@@ -965,8 +965,8 @@ instance [AddGroup
   body: mk_of_mem_addSubgroup (n • D) zsmul_mem D.memAddSubgroup n
 
 中文:
-实例 [AddGroup
-  签名: Y] : SMul 整数 (locallyFinsuppWithin U Y) where
+实例 [加法群
+  签名: Y] : 标量乘法 整数 (locallyFinsuppWithin U Y) where
   定义体: mk_of_mem_addSubgroup (n • D) zsmul_mem D.memAddSubgroup n
 
 Depends on / 依赖: D.memAddSubgroup, memAddSubgroup, mk_of_mem_addSubgroup, zsmul_mem
@@ -984,7 +984,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  条件: [AddMonoid Y]
+  条件: [加法幺半群 Y]
   证明: rfl
 -/
 @[simp] lemma coe_zero [AddMonoid Y] :
@@ -999,7 +999,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: [AddMonoid Y] (D₁ D₂ : locallyFinsuppWithin U Y)
+  条件: [加法幺半群 Y] (D₁ D₂ : locallyFinsuppWithin U Y)
   证明: rfl
 -/
 @[simp] lemma coe_add [AddMonoid Y] (D₁ D₂ : locallyFinsuppWithin U Y) :
@@ -1014,7 +1014,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: [AddGroup Y] (D : locallyFinsuppWithin U Y)
+  条件: [加法群 Y] (D : locallyFinsuppWithin U Y)
   证明: rfl
 -/
 @[simp] lemma coe_neg [AddGroup Y] (D : locallyFinsuppWithin U Y) :
@@ -1029,7 +1029,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: [AddGroup Y] (D₁ D₂ : locallyFinsuppWithin U Y)
+  条件: [加法群 Y] (D₁ D₂ : locallyFinsuppWithin U Y)
   证明: rfl
 -/
 @[simp] lemma coe_sub [AddGroup Y] (D₁ D₂ : locallyFinsuppWithin U Y) :
@@ -1044,7 +1044,7 @@ lemma coe_nsmul
 
 中文:
 引理 coe_nsmul
-  条件: [AddMonoid Y] (D : locallyFinsuppWithin U Y) (n : 自然数)
+  条件: [加法幺半群 Y] (D : locallyFinsuppWithin U Y) (n : 自然数)
   证明: rfl
 -/
 @[simp] lemma coe_nsmul [AddMonoid Y] (D : locallyFinsuppWithin U Y) (n : Nat) :
@@ -1059,7 +1059,7 @@ lemma coe_zsmul
 
 中文:
 引理 coe_zsmul
-  条件: [AddGroup Y] (D : locallyFinsuppWithin U Y) (n : 整数)
+  条件: [加法群 Y] (D : locallyFinsuppWithin U Y) (n : 整数)
   证明: rfl
 -/
 @[simp] lemma coe_zsmul [AddGroup Y] (D : locallyFinsuppWithin U Y) (n : Int) :
@@ -1075,8 +1075,8 @@ instance [AddMonoid
     _ coe_injective coe_zero coe_add coe_nsmul
 
 中文:
-实例 [AddMonoid
-  签名: Y] : AddMonoid (locallyFinsuppWithin U Y)
+实例 [加法幺半群
+  签名: Y] : 加法幺半群 (locallyFinsuppWithin U Y)
   定义体: Injective.addMonoid (M₁ := locallyFinsuppWithin U Y) (M₂ := X -> Y)
     _ coe_injective coe_zero coe_add coe_nsmul
 
@@ -1096,8 +1096,8 @@ instance [AddCommMonoid
     _ coe_injective coe_zero coe_add coe_nsmul
 
 中文:
-实例 [AddCommMonoid
-  签名: Y] : AddCommMonoid (locallyFinsuppWithin U Y)
+实例 [加法交换幺半群
+  签名: Y] : 加法交换幺半群 (locallyFinsuppWithin U Y)
   定义体: Injective.addCommMonoid (M₁ := locallyFinsuppWithin U Y) (M₂ := X -> Y)
     _ coe_injective coe_zero coe_add coe_nsmul
 
@@ -1121,7 +1121,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  结论: [AddCommMonoid Y] {ι : 类型} {s : Finset ι}
+  结论: [加法交换幺半群 Y] {ι : 类型} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction with
@@ -1181,8 +1181,8 @@ instance [AddGroup
     _ coe_injective coe_zero coe_add coe_neg coe_sub coe_nsmul coe_zsmul
 
 中文:
-实例 [AddGroup
-  签名: Y] : AddGroup (locallyFinsuppWithin U Y)
+实例 [加法群
+  签名: Y] : 加法群 (locallyFinsuppWithin U Y)
   定义体: Injective.addGroup (M₁ := locallyFinsuppWithin U Y) (M₂ := X -> Y)
     _ coe_injective coe_zero coe_add coe_neg coe_sub coe_nsmul coe_zsmul
 
@@ -1202,7 +1202,7 @@ lemma support_neg
 
 中文:
 引理 support_neg
-  条件: [AddGroup Y] (D : locallyFinsuppWithin U Y)
+  条件: [加法群 Y] (D : locallyFinsuppWithin U Y)
   证明: by rw [support, coe_neg, Function.support_neg]
 -/
 @[simp] lemma support_neg [AddGroup Y] (D : locallyFinsuppWithin U Y) :
@@ -1218,8 +1218,8 @@ instance [AddCommGroup
     _ coe_injective coe_zero coe_add coe_neg coe_sub coe_nsmul coe_zsmul
 
 中文:
-实例 [AddCommGroup
-  签名: Y] : AddCommGroup (locallyFinsuppWithin U Y)
+实例 [加法交换群
+  签名: Y] : 加法交换群 (locallyFinsuppWithin U Y)
   定义体: Injective.addCommGroup (M₁ := locallyFinsuppWithin U Y) (M₂ := X -> Y)
     _ coe_injective coe_zero coe_add coe_neg coe_sub coe_nsmul coe_zsmul
 
@@ -1239,7 +1239,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: Y] [Zero Y] : LE (locallyFinsuppWithin U Y) where
+  签名: Y] [零 Y] : LE (locallyFinsuppWithin U Y) where
   定义体: fun D₁ D₂ => (D₁ : X -> Y) <= D₂
 -/
 instance [LE Y] [Zero Y] : LE (locallyFinsuppWithin U Y) where
@@ -1255,7 +1255,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: [LE Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y}
+  条件: [LE Y] [零 Y] {D₁ D₂ : locallyFinsuppWithin U Y}
   证明: ⟨(·),(·)⟩
 -/
 lemma le_def [LE Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} :
@@ -1273,7 +1273,7 @@ lemma single_nonneg
 
 中文:
 引理 single_nonneg
-  条件: [DecidableEq X] [Zero Y] [Preorder Y] {x : X} {y : Y}
+  条件: [DecidableEq X] [零 Y] [预序 Y] {x : X} {y : Y}
   证明: by
   simp only [le_def, coe_single]
   apply Pi.single_nonneg
@@ -1294,8 +1294,8 @@ instance [Preorder
   body: fun D₁ D₂ => (D₁ : X -> Y) < D₂
 
 中文:
-实例 [Preorder
-  签名: Y] [Zero Y] : LT (locallyFinsuppWithin U Y) where
+实例 [预序
+  签名: Y] [零 Y] : LT (locallyFinsuppWithin U Y) where
   定义体: fun D₁ D₂ => (D₁ : X -> Y) < D₂
 -/
 instance [Preorder Y] [Zero Y] : LT (locallyFinsuppWithin U Y) where
@@ -1311,7 +1311,7 @@ lemma lt_def
 
 中文:
 引理 lt_def
-  条件: [Preorder Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y}
+  条件: [预序 Y] [零 Y] {D₁ D₂ : locallyFinsuppWithin U Y}
   证明: ⟨(·),(·)⟩
 -/
 lemma lt_def [Preorder Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} :
@@ -1329,7 +1329,7 @@ lemma single_pos
 
 中文:
 引理 single_pos
-  条件: [DecidableEq X] [Zero Y] [Preorder Y] {x : X} {y : Y}
+  条件: [DecidableEq X] [零 Y] [预序 Y] {x : X} {y : Y}
   证明: by
   rw [lt_def]; rw [coe_single]
   exact Pi.single_pos
@@ -1391,7 +1391,7 @@ instance [SemilatticeSup
 
 中文:
 实例 [SemilatticeSup
-  签名: Y] [Zero Y] : Max (locallyFinsuppWithin U Y) where
+  签名: Y] [零 Y] : 最大值 (locallyFinsuppWithin U Y) where
   定义体: { toFun z := max (D₁ z) (D₂ z)
     supportWithinDomain' := by
       intro x
@@ -1435,7 +1435,7 @@ lemma max_apply
 
 中文:
 引理 max_apply
-  条件: [SemilatticeSup Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X}
+  条件: [SemilatticeSup Y] [零 Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X}
   证明: rfl
 -/
 lemma max_apply [SemilatticeSup Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X} :
@@ -1459,7 +1459,7 @@ instance [SemilatticeInf
 
 中文:
 实例 [SemilatticeInf
-  签名: Y] [Zero Y] : Min (locallyFinsuppWithin U Y) where
+  签名: Y] [零 Y] : 最小值 (locallyFinsuppWithin U Y) where
   定义体: { toFun z := min (D₁ z) (D₂ z)
     supportWithinDomain' := by
       intro x
@@ -1503,7 +1503,7 @@ lemma min_apply
 
 中文:
 引理 min_apply
-  条件: [SemilatticeInf Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X}
+  条件: [SemilatticeInf Y] [零 Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X}
   证明: rfl
 -/
 lemma min_apply [SemilatticeInf Y] [Zero Y] {D₁ D₂ : locallyFinsuppWithin U Y} {x : X} :
@@ -1529,8 +1529,8 @@ instance [Zero
   sup_le D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp
 
 中文:
-实例 [Zero
-  签名: Y] : Lattice (locallyFinsuppWithin U Y) where
+实例 [零
+  签名: Y] : 格 (locallyFinsuppWithin U Y) where
   定义体: by simp [le_def]
   le_trans D₁ D₂ D₃ h₁₂ h₂₃ := fun x => (h₁₂ x).trans (h₂₃ x)
   le_antisymm D₁ D₂ h₁₂ h₂₁ := by
@@ -1608,7 +1608,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (locallyFinsuppWithin U Y)
+  签名: 是OrderedAdd幺半群 (locallyFinsuppWithin U Y)
   定义体: fun _ _ _ _ => by simpa [le_def]
 
 Depends on / 依赖: le_def
@@ -1633,7 +1633,7 @@ theorem posPart_add
 
 中文:
 定理 posPart_add
-  条件: (f₁ f₂ : Function.locallyFinsuppWithin U Y)
+  条件: (f₁ f₂ : 函数.locallyFinsuppWithin U Y)
   证明: by
   repeat rw [posPart_def]
   intro x
@@ -1671,7 +1671,7 @@ theorem negPart_add
 
 中文:
 定理 negPart_add
-  条件: (f₁ f₂ : Function.locallyFinsuppWithin U Y)
+  条件: (f₁ f₂ : 函数.locallyFinsuppWithin U Y)
   证明: by
   repeat rw [negPart_def]
   intro x
@@ -1788,7 +1788,7 @@ lemma exists_single_le_pos
   · simpa [he, single_apply] using! h.le e
 
 中文:
-引理 exists_single_le_pos
+引理 存在_single_le_pos
   条件: [DecidableEq X] {D : locallyFinsupp X 整数} (h : 0 < D)
   证明: by
   obtain ⟨z, hz⟩ : exists z, D z != 0 := by simpa [D.ext_iff] using! (ne_of_lt h).symm
@@ -1832,7 +1832,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: [Zero Y] {V : Set X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
+  签名: [零 Y] {V : 集合 X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
   定义体: by
     classical
     exact fun z => if hz : z in V then D z else 0
@@ -1874,7 +1874,7 @@ lemma restrict_apply
 
 中文:
 引理 restrict_apply
-  条件: [Zero Y] {V : Set X} (D : locallyFinsuppWithin U Y) (h : V subseteq U) (z : X)
+  条件: [零 Y] {V : 集合 X} (D : locallyFinsuppWithin U Y) (h : V subseteq U) (z : X)
   证明: rfl
 -/
 lemma restrict_apply [Zero Y] {V : Set X} (D : locallyFinsuppWithin U Y) (h : V subseteq U) (z : X) :
@@ -1892,7 +1892,7 @@ lemma restrict_eqOn
 
 中文:
 引理 restrict_eqOn
-  条件: [Zero Y] {V : Set X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
+  条件: [零 Y] {V : 集合 X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
   证明: by
   intro _ _
   simp_all [restrict_apply]
@@ -1916,7 +1916,7 @@ lemma restrict_eqOn_compl
 
 中文:
 引理 restrict_eqOn_compl
-  条件: [Zero Y] {V : Set X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
+  条件: [零 Y] {V : 集合 X} (D : locallyFinsuppWithin U Y) (h : V subseteq U)
   证明: by
   intro _ hx
   simp_all
@@ -1939,7 +1939,7 @@ lemma restrict_zero
 
 中文:
 引理 restrict_zero
-  条件: [Zero Y] {U V : Set X} (hV : V subseteq U)
+  条件: [零 Y] {U V : 集合 X} (hV : V subseteq U)
   证明: by
   ext
   rw [restrict_apply]
@@ -1970,7 +1970,7 @@ definition restrictMonoidHom
 
 中文:
 定义 restrictMonoidHom
-  签名: [AddCommGroup Y] {V : Set X} (h : V subseteq U)
+  签名: [加法交换群 Y] {V : 集合 X} (h : V subseteq U)
   定义体: D.restrict h
   map_zero' := by
     ext x
@@ -2006,7 +2006,7 @@ lemma restrictMonoidHom_apply
 
 中文:
 引理 restrictMonoidHom_apply
-  结论: [AddCommGroup Y] {V : Set X} (D : locallyFinsuppWithin U Y)
+  结论: [加法交换群 Y] {V : 集合 X} (D : locallyFinsuppWithin U Y)
   证明: by rfl
 -/
 lemma restrictMonoidHom_apply [AddCommGroup Y] {V : Set X} (D : locallyFinsuppWithin U Y)
@@ -2035,7 +2035,7 @@ lemma sum_apply_smul_single_eq_self
 
 中文:
 引理 sum_apply_smul_single_eq_self
-  结论: [DecidableEq X] [AddCommMonoid Y] {U : Set X}
+  结论: [DecidableEq X] [加法交换幺半群 Y] {U : 集合 X}
   证明: by
   have : (fun x => (single x (F x)).restrict (subset_univ U)).support subseteq h.toFinset := by
     intro
@@ -2127,7 +2127,7 @@ definition restrictLatticeHom
 
 中文:
 定义 restrictLatticeHom
-  签名: [AddCommGroup Y] [Lattice Y] {V : Set X} (h : V subseteq U)
+  签名: [加法交换群 Y] [格 Y] {V : 集合 X} (h : V subseteq U)
   定义体: D.restrict h
   map_sup' D₁ D₂ := by
     ext x
@@ -2165,7 +2165,7 @@ lemma restrictLatticeHom_apply
 
 中文:
 引理 restrictLatticeHom_apply
-  结论: [AddCommGroup Y] [Lattice Y] {V : Set X}
+  结论: [加法交换群 Y] [格 Y] {V : 集合 X}
   证明: by rfl
 -/
 lemma restrictLatticeHom_apply [AddCommGroup Y] [Lattice Y] {V : Set X}
@@ -2184,7 +2184,7 @@ lemma restrict_posPart
 
 中文:
 引理 restrict_posPart
-  条件: {V : Set X} (D : locallyFinsuppWithin U 整数) (h : V subseteq U)
+  条件: {V : 集合 X} (D : locallyFinsuppWithin U 整数) (h : V subseteq U)
   证明: by
   ext x
   simp only [locallyFinsuppWithin.restrict_apply, locallyFinsuppWithin.posPart_apply]
@@ -2211,7 +2211,7 @@ lemma restrict_negPart
 
 中文:
 引理 restrict_negPart
-  条件: {V : Set X} (D : locallyFinsuppWithin U 整数) (h : V subseteq U)
+  条件: {V : 集合 X} (D : locallyFinsuppWithin U 整数) (h : V subseteq U)
   证明: by
   ext x
   simp only [locallyFinsuppWithin.restrict_apply, locallyFinsuppWithin.negPart_apply]
@@ -2240,7 +2240,7 @@ lemma disjoint_nhdsWithin_cofinite_of_mem
 
 中文:
 引理 disjoint_nhdsWithin_cofinite_of_mem
-  结论: [Zero Y]
+  结论: [零 Y]
   证明: by
   rw [disjoint_cofinite_right]
   obtain ⟨t, h₁t, h₂t⟩ := f.supportLocallyFiniteWithinDomain p hp
@@ -2267,7 +2267,7 @@ lemma _root_.Function.locallyFinsupp.disjoint_nhdsWithin_cofinite
   proof: disjoint_nhdsWithin_cofinite_of_mem f p (mem_univ _)
 
 中文:
-引理 _root_.Function.locallyFinsupp.disjoint_nhdsWithin_cofinite
+引理 _root_.函数.locallyFinsupp.disjoint_nhdsWithin_cofinite
   证明: disjoint_nhdsWithin_cofinite_of_mem f p (mem_univ _)
 
 Depends on / 依赖: disjoint_nhdsWithin_cofinite_of_mem, mem_univ

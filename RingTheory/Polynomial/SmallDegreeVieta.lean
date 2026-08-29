@@ -33,7 +33,7 @@ lemma eq_quadratic_of_degree_le_two
 
 中文:
 引理 eq_quadratic_of_degree_le_two
-  条件: [Semiring R] {p : R[X]} (hp : p.degree <= 2)
+  条件: [半环 R] {p : R[X]} (hp : p.degree <= 2)
   证明: by
   rw [p.as_sum_range_C_mul_X_pow'
     (Nat.lt_of_le_of_lt (natDegree_le_iff_degree_le.mpr hp) (Nat.lt_add_one 2))]
@@ -64,7 +64,7 @@ lemma eq_neg_mul_add_of_roots_quadratic_eq_pair
 
 中文:
 引理 eq_neg_mul_add_of_roots_quadratic_eq_pair
-  结论: [CommRing R] [IsDomain R] {a b c x1 x2 : R}
+  结论: [交换环 R] [是整环 R] {a b c x1 x2 : R}
   证明: by
   let p : R[X] := C a * X ^ 2 + C b * X + C c
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
@@ -100,7 +100,7 @@ lemma eq_mul_mul_of_roots_quadratic_eq_pair
 
 中文:
 引理 eq_mul_mul_of_roots_quadratic_eq_pair
-  结论: [CommRing R] [IsDomain R] {a b c x1 x2 : R}
+  结论: [交换环 R] [是整环 R] {a b c x1 x2 : R}
   证明: by
   let p : R[X] := C a * X ^ 2 + C b * X + C c
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
@@ -161,7 +161,7 @@ lemma eq_mul_mul_of_aroots_quadratic_eq_pair
 
 中文:
 引理 eq_mul_mul_of_aroots_quadratic_eq_pair
-  结论: [CommRing T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [交换环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [aroots_def]; rw [show map (algebraMap T S) (C a * X ^ 2 + C b * X + C c) = C ((algebraMap T S) a) *
     X ^ 2 + C ((algebraMap T S) b) * X + C ((algebraMap T S) c) by simp] at haroots
@@ -189,7 +189,7 @@ lemma roots_quadratic_eq_pair_iff_of_ne_zero
 
 中文:
 引理 roots_quadratic_eq_pair_iff_of_ne_zero
-  结论: [CommRing R] [IsDomain R] {a b c x1 x2 : R}
+  结论: [交换环 R] [是整环 R] {a b c x1 x2 : R}
   证明: have roots_of_ne_zero_of_vieta (hvieta : b = -a * (x1 + x2) ∧ c = a * x1 * x2) :
       (C a * X ^ 2 + C b * X + C c).roots = {x1, x2} := by
     suffices C a * X ^ 2 + C b * X + C c = C a * (X - C x1) * (X - C x2) by
@@ -225,7 +225,7 @@ lemma aroots_quadratic_eq_pair_iff_of_ne_zero
 
 中文:
 引理 aroots_quadratic_eq_pair_iff_of_ne_zero
-  结论: [CommRing T] [CommRing S] [IsDomain S]
+  结论: [交换环 T] [交换环 S] [是整环 S]
   证明: by
   rw [aroots_def]; rw [show map (algebraMap T S) (C a * X ^ 2 + C b * X + C c) = C ((algebraMap T S) a) *
     X ^ 2 + C ((algebraMap T S) b) * X + C ((algebraMap T S) c) by simp]
@@ -254,7 +254,7 @@ lemma roots_quadratic_eq_pair_iff_of_ne_zero'
 
 中文:
 引理 roots_quadratic_eq_pair_iff_of_ne_zero'
-  条件: [Field R] {a b c x1 x2 : R} (ha : a != 0)
+  条件: [域 R] {a b c x1 x2 : R} (ha : a != 0)
   证明: by
   rw [roots_quadratic_eq_pair_iff_of_ne_zero ha]
   grind
@@ -280,7 +280,7 @@ lemma aroots_quadratic_eq_pair_iff_of_ne_zero'
 
 中文:
 引理 aroots_quadratic_eq_pair_iff_of_ne_zero'
-  结论: [CommRing T] [Field S] [Algebra T S] {a b c : T}
+  结论: [交换环 T] [域 S] [代数 T S] {a b c : T}
   证明: by
   rw [aroots_def]; rw [show map (algebraMap T S) (C a * X ^ 2 + C b * X + C c) = C ((algebraMap T S) a) *
     X ^ 2 + C ((algebraMap T S) b) * X + C ((algebraMap T S) c) by simp]

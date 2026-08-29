@@ -61,7 +61,7 @@ definition Ultrafilter.mul
 
 中文:
 定义 Ultrafilter.mul
-  签名: {M} [Mul M]
+  签名: {M} [乘法 M]
   定义体: (· * ·) < > U <*> V
 -/
 def Ultrafilter.mul {M} [Mul M] : Mul (Ultrafilter M) where mul U V := (· * ·) < > U <*> V
@@ -82,7 +82,7 @@ theorem Ultrafilter.eventually_mul
 
 中文:
 定理 Ultrafilter.eventually_mul
-  条件: {M} [Mul M] (U V : Ultrafilter M) (p : M -> 命题)
+  条件: {M} [乘法 M] (U V : Ultrafilter M) (p : M -> 命题)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -108,7 +108,7 @@ Ultrafilter.coe_inj.mp
 
 中文:
 定义 Ultrafilter.semigroup
-  签名: {M} [Semigroup M]
+  签名: {M} [半群 M]
   定义体: { Ultrafilter.mul with
     mul_assoc := fun U V W =>
 Ultrafilter.coe_inj.mp
@@ -137,7 +137,7 @@ theorem Ultrafilter.continuous_mul_left
 
 中文:
 定理 Ultrafilter.continuous_mul_left
-  条件: {M} [Mul M] (V : Ultrafilter M)
+  条件: {M} [乘法 M] (V : Ultrafilter M)
   证明: ultrafilterBasis_is_basis.continuous_iff.2 Set.forall_mem_range.mpr fun s =>
     ultrafilter_isOpen_basic { m : M | forallᶠ m' in V, m * m' in s }
 
@@ -163,7 +163,7 @@ inductive FS
 
 中文:
 归纳类型 FS
-  参数: {M} [AddSemigroup M]
+  参数: {M} [加法半群 M]
   构造子 (3 个):
     - head': (a : Stream' M) : FS a a.head
     - tail': (a : Stream' M) (m : M) (h : FS a.tail m) : FS a m
@@ -190,7 +190,7 @@ inductive FP
 
 中文:
 归纳类型 FP
-  参数: {M} [Semigroup M]
+  参数: {M} [半群 M]
   构造子 (3 个):
     - head': (a : Stream' M) : FP a a.head
     - tail': (a : Stream' M) (m : M) (h : FP a.tail m) : FP a m
@@ -298,7 +298,7 @@ theorem FP.mul
 
 中文:
 定理 FP.mul
-  条件: {M} [Semigroup M] {a : Stream' M} {m : M} (hm : m in FP a)
+  条件: {M} [半群 M] {a : Stream' M} {m : M} (hm : m in FP a)
   证明: by
   induction hm with
   | head' a => exact ⟨1, fun m hm => FP.cons a m hm⟩
@@ -349,8 +349,8 @@ theorem exists_idempotent_ultrafilter_le_FP
   · apply
 
 中文:
-定理 exists_idempotent_ultrafilter_le_FP
-  条件: {M} [Semigroup M] (a : Stream' M)
+定理 存在_idempotent_ultrafilter_le_FP
+  条件: {M} [半群 M] (a : Stream' M)
   证明: by
   let S : Set (Ultrafilter M) := ⋂ n, { U | forallᶠ m in U, m in FP (a.drop n) }
   have h := exists_idempotent_in_compact_subsemigroup ?_ S ?_ ?_ ?_
@@ -405,8 +405,8 @@ theorem exists_FP_of_large
   `U
 
 中文:
-定理 exists_FP_of_large
-  结论: {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : Set M)
+定理 存在_FP_of_large
+  结论: {M} [半群 M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : 集合 M)
   证明: by
   /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
   `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
@@ -465,7 +465,7 @@ theorem FP_partition_regular
 
 中文:
 定理 FP_partition_regular
-  结论: {M} [Semigroup M] (a : Stream' M) (s : Set (Set M)) (sfin : s.Finite)
+  结论: {M} [半群 M] (a : Stream' M) (s : 集合 (集合 M)) (sfin : s.有限)
   证明: let ⟨U, idem, aU⟩ := exists_idempotent_ultrafilter_le_FP a
   let ⟨c, cs, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset aU scov)
   ⟨c, cs, exists_FP_of_large U idem c hc⟩
@@ -496,8 +496,8 @@ theorem exists_FP_of_finite_cover
 @[to_additive FS_iter_tail_sub_FS]
 
 中文:
-定理 exists_FP_of_finite_cover
-  结论: {M} [Semigroup M] [Nonempty M] (s : Set (Set M)) (sfin : s.Finite)
+定理 存在_FP_of_finite_cover
+  结论: {M} [半群 M] [非空 M] (s : 集合 (集合 M)) (sfin : s.有限)
   证明: let ⟨U, hU⟩ :=
     exists_idempotent_of_compact_t2_of_continuous_mul_left (@Ultrafilter.continuous_mul_left M _)
   let ⟨c, c_s, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset univ_mem scov)
@@ -533,7 +533,7 @@ theorem FP_drop_subset_FP
 
 中文:
 定理 FP_drop_subset_FP
-  条件: {M} [Semigroup M] (a : Stream' M) (n : 自然数)
+  条件: {M} [半群 M] (a : Stream' M) (n : 自然数)
   结论: FP (a.drop n) subseteq FP a
   证明: by
   induction n with
@@ -570,7 +570,7 @@ theorem FP.singleton
 
 中文:
 定理 FP.singleton
-  条件: {M} [Semigroup M] (a : Stream' M) (i : 自然数)
+  条件: {M} [半群 M] (a : Stream' M) (i : 自然数)
   结论: a.get i in FP a
   证明: by
   induction i generalizing a with
@@ -607,7 +607,7 @@ theorem FP.mul_two
 
 中文:
 定理 FP.mul_two
-  条件: {M} [Semigroup M] (a : Stream' M) (i j : 自然数) (ij : i < j)
+  条件: {M} [半群 M] (a : Stream' M) (i j : 自然数) (ij : i < j)
   证明: by
   refine FP_drop_subset_FP _ i ?_
   rw [← Stream'.head_drop]
@@ -650,7 +650,7 @@ theorem FP.finsetProd
 
 中文:
 定理 FP.finsetProd
-  条件: {M} [CommMonoid M] (a : Stream' M) (s : Finset 自然数) (hs : s.Nonempty)
+  条件: {M} [交换幺半群 M] (a : Stream' M) (s : 有限集 自然数) (hs : s.非空)
   证明: by
   refine FP_drop_subset_FP _ (s.min' hs) ?_
   induction s using Finset.eraseInduction with | H s ih => _

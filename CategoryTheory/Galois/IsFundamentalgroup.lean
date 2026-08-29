@@ -74,7 +74,7 @@ class IsNaturalSMul
     - naturality((g : G) {X Y : C} (f : X ⟶ Y) (x : F.obj X)) : F.map f (g • x) = g • F.map f x
 
 中文:
-类 IsNaturalSMul
+类 是自然数uralSMul
   参数: : 命题 where
   公理与运算 (1 个):
     - naturality((g : G) {X Y : C} (f : X ⟶ Y) (x : F.obj X)) : F.map f (g • x) = g • F.map f x
@@ -254,7 +254,7 @@ lemma toAut_continuous
 
 中文:
 引理 toAut_continuous
-  结论: [TopologicalSpace G] [IsTopologicalGroup G]
+  结论: [拓扑空间 G] [是拓扑群 G]
   证明: by
   apply continuous_of_continuousAt_one
   rw [continuousAt_def]; rw [map_one]
@@ -295,7 +295,7 @@ lemma action_ext_of_isGalois
 
 中文:
 引理 action_ext_of_isGalois
-  结论: {t : F ⟶ F} {X : C} [IsGalois X] {g : G} (x : F.obj X)
+  结论: {t : F ⟶ F} {X : C} [是Galois X] {g : G} (x : F.obj X)
   证明: by
   obtain ⟨φ, (rfl : F.map φ.hom y = x)⟩ := MulAction.exists_smul_eq (Aut X) y x
   have : Function.Injective (F.map φ.hom) :=
@@ -328,7 +328,7 @@ lemma toAut_surjective_isGalois
 
 中文:
 引理 toAut_surjective_isGalois
-  结论: (t : Aut F) (X : C) [IsGalois X]
+  结论: (t : Aut F) (X : C) [是Galois X]
   证明: by
   obtain ⟨a⟩ := nonempty_fiber_of_isConnected F X
   obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G a (t.hom.app X a)
@@ -358,7 +358,7 @@ lemma toAut_surjective_isGalois_finite_family
 
 中文:
 引理 toAut_surjective_isGalois_finite_family
-  结论: (t : Aut F) {ι : 类型} [Finite ι] (X : ι -> C)
+  结论: (t : Aut F) {ι : 类型} [有限 ι] (X : ι -> C)
   证明: by
   let x (i : ι) : F.obj (X i) := (nonempty_fiber_of_isConnected F (X i)).some
   let P : C := ∏ᶜ X
@@ -405,7 +405,7 @@ lemma toAut_surjective_of_isPretransitive
 
 中文:
 引理 toAut_surjective_of_isPretransitive
-  结论: [TopologicalSpace G] [IsTopologicalGroup G]
+  结论: [拓扑空间 G] [是拓扑群 G]
   证明: by
   intro t
   choose gi hgi using (fun X : PointedGaloisObject F => toAut_surjective_isGalois F G t X)
@@ -463,7 +463,7 @@ lemma isPretransitive_of_surjective
 
 中文:
 引理 isPretransitive_of_surjective
-  结论: (h : Function.Surjective (toAut F G)) (X : C)
+  结论: (h : 函数.满射 (toAut F G)) (X : C)
   证明: by
     obtain ⟨t, ht⟩ := MulAction.exists_smul_eq (Aut F) x y
     obtain ⟨g, rfl⟩ := h t
@@ -498,12 +498,12 @@ class IsFundamentalGroup
     - non_trivial'((g : G)) : (forall (X : C) (x : F.obj X), g • x = x) -> g = 1
 
 中文:
-类 IsFundamentalGroup
-  参数: [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
-  继承: IsNaturalSMul F G
+类 是基本群
+  参数: [拓扑空间 G] [是拓扑群 G] [紧空间 G]
+  继承: 是自然数uralSMul F G
   公理与运算 (3 个):
-    - transitive_of_isGalois((X : C) [IsGalois X]) : MulAction.IsPretransitive G (F.obj X)
-    - continuous_smul((X : C)) : ContinuousSMul G (F.obj X)
+    - transitive_of_isGalois((X : C) [是Galois X]) : 乘法作用.是Pretransitive G (F.obj X)
+    - continuous_smul((X : C)) : 连续标量乘法 G (F.obj X)
     - non_trivial'((g : G)) : (对任意 (X : C) (x : F.obj X), g • x = x) -> g = 1
 -/
 class IsFundamentalGroup [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] : Prop
@@ -557,7 +557,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFundamentalGroup F (Aut F)
+  签名: 是基本群 F (Aut F)
   定义体: (FunctorToFintypeCat.naturality F F g.hom f x).symm
   transitive_of_isGalois X := FiberFunctor.isPretransitive_of_isConnected F X
   continuous_smul X := continuousSMul_aut_fiber F X
@@ -588,7 +588,7 @@ lemma toAut_bijective
 
 中文:
 引理 toAut_bijective
-  结论: Function.Bijective (toAut F G) where
+  结论: 函数.双射 (toAut F G) where
   证明: toAut_injective_of_non_trivial F G IsFundamentalGroup.non_trivial'
   right := toAut_surjective_of_isPretransitive F G IsFundamentalGroup.transitive_of_isGalois
 
@@ -631,7 +631,7 @@ lemma toAut_isHomeomorph
 
 中文:
 引理 toAut_isHomeomorph
-  结论: IsHomeomorph (toAut F G)
+  结论: 是同胚 (toAut F G)
   证明: by
   rw [isHomeomorph_iff_continuous_bijective]
   exact ⟨toAut_continuous F G, toAut_bijective F G⟩
@@ -652,7 +652,7 @@ lemma toAutMulEquiv_isHomeomorph
 
 中文:
 引理 toAutMulEquiv_isHomeomorph
-  结论: IsHomeomorph (toAutMulEquiv F G)
+  结论: 是同胚 (toAutMulEquiv F G)
   证明: toAut_isHomeomorph F G
 
 Depends on / 依赖: toAut_isHomeomorph

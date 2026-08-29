@@ -109,7 +109,7 @@ structure BinaryBiconeMorphism
     - winr : A.inr ≫ hom = B.inr  [default: by cat_disch]
 
 中文:
-结构 BinaryBiconeMorphism
+结构 BinaryBicone态射
   参数: {P Q : C} (A B : BinaryBicone P Q)
   公理与运算 (5 个):
     - hom : A.pt ⟶ B.pt
@@ -177,7 +177,7 @@ theorem BinaryBiconeMorphism.ext
   congr
 
 中文:
-定理 BinaryBiconeMorphism.ext
+定理 BinaryBicone态射.ext
   结论: {P Q : C} {c c' : BinaryBicone P Q}
   证明: by
   cases f
@@ -305,7 +305,7 @@ instance functoriality_full
 
 中文:
 实例 functoriality_full
-  签名: [F.Full] [F.Faithful]
+  签名: [F.满] [F.忠实]
   定义体: ⟨{ hom := F.preimage t.hom
       winl := F.map_injective (by simpa using! t.winl)
       winr := F.map_injective (by simpa using! t.winr)
@@ -332,7 +332,7 @@ instance functoriality_faithful
 
 中文:
 实例 functoriality_faithful
-  签名: [F.Faithful]
+  签名: [F.忠实]
   定义体: BinaryBiconeMorphism.ext f g F.map_injective congr_arg BinaryBiconeMorphism.hom h
 
 Depends on / 依赖: BinaryBiconeMorphism, BinaryBiconeMorphism.ext, BinaryBiconeMorphism.hom, F.map_injective, congr_arg, map_injective
@@ -954,11 +954,11 @@ structure BinaryBicone.IsBilimit
     - isColimit : IsColimit b.toCocone
 
 中文:
-结构 BinaryBicone.IsBilimit
+结构 BinaryBicone.是Bilimit
   参数: {P Q : C} (b : BinaryBicone P Q)
   公理与运算 (2 个):
-    - isLimit : IsLimit b.toCone
-    - isColimit : IsColimit b.toCocone
+    - isLimit : 是极限 b.toCone
+    - isColimit : 是余极限 b.toCocone
 -/
 structure BinaryBicone.IsBilimit {P Q : C} (b : BinaryBicone P Q) where
   isLimit : IsLimit b.toCone
@@ -984,8 +984,8 @@ definition BinaryBicone.IsBilimit.ofIso
     exact BinaryCofan.
 
 中文:
-定义 BinaryBicone.IsBilimit.ofIso
-  签名: {P Q P' Q' : C} {b : BinaryBicone P Q} (hb : b.IsBilimit)
+定义 BinaryBicone.是Bilimit.ofIso
+  签名: {P Q P' Q' : C} {b : BinaryBicone P Q} (hb : b.是Bilimit)
   定义体: by
     refine (IsLimit.equivOfNatIsoOfIso (mapPairIso eP eQ) _ _ ?_).1 hb.isLimit
     exact BinaryFan.ext (Iso.refl _) (by simp [BinaryFan.fst])
@@ -1018,8 +1018,8 @@ definition BinaryBicone.IsBilimit.op
   isColimit := BinaryFan.IsLimit.op h.isLimit
 
 中文:
-定义 BinaryBicone.IsBilimit.op
-  签名: {P Q : C} {b : BinaryBicone P Q} (h : b.IsBilimit)
+定义 BinaryBicone.是Bilimit.op
+  签名: {P Q : C} {b : BinaryBicone P Q} (h : b.是Bilimit)
   定义体: BinaryCofan.IsColimit.op h.isColimit
   isColimit := BinaryFan.IsLimit.op h.isLimit
 -/
@@ -1099,7 +1099,7 @@ structure BinaryBiproductData
   参数: (P Q : C)
   公理与运算 (2 个):
     - bicone : BinaryBicone P Q
-    - isBilimit : bicone.IsBilimit
+    - isBilimit : bicone.是Bilimit
 -/
 structure BinaryBiproductData (P Q : C) where
   bicone : BinaryBicone P Q
@@ -1166,7 +1166,7 @@ class HasBinaryBiproduct
   (no additional axioms)
 
 中文:
-类 HasBinaryBiproduct
+类 有BinaryBiproduct
   参数: (P Q : C)
   (无附加公理)
 -/
@@ -1185,9 +1185,9 @@ theorem HasBinaryBiproduct.mk
   proof: ⟨Nonempty.intro d⟩
 
 中文:
-定理 HasBinaryBiproduct.mk
+定理 有BinaryBiproduct.mk
   条件: {P Q : C} (d : BinaryBiproductData P Q)
-  结论: HasBinaryBiproduct P Q
+  结论: 有BinaryBiproduct P Q
   证明: ⟨Nonempty.intro d⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -1205,7 +1205,7 @@ definition getBinaryBiproductData
 
 中文:
 定义 getBinaryBiproductData
-  签名: (P Q : C) [HasBinaryBiproduct P Q]
+  签名: (P Q : C) [有BinaryBiproduct P Q]
   定义体: Classical.choice HasBinaryBiproduct.exists_binary_biproduct
 
 Depends on / 依赖: Classical, Classical.choice, HasBinaryBiproduct, HasBinaryBiproduct.exists_binary_biproduct, choice, exists_binary_biproduct
@@ -1223,7 +1223,7 @@ definition BinaryBiproduct.bicone
 
 中文:
 定义 BinaryBiproduct.bicone
-  签名: (P Q : C) [HasBinaryBiproduct P Q]
+  签名: (P Q : C) [有BinaryBiproduct P Q]
   定义体: (getBinaryBiproductData P Q).bicone
 
 Depends on / 依赖: bicone, getBinaryBiproductData
@@ -1241,7 +1241,7 @@ definition BinaryBiproduct.isBilimit
 
 中文:
 定义 BinaryBiproduct.isBilimit
-  签名: (P Q : C) [HasBinaryBiproduct P Q]
+  签名: (P Q : C) [有BinaryBiproduct P Q]
   定义体: (getBinaryBiproductData P Q).isBilimit
 
 Depends on / 依赖: getBinaryBiproductData, isBilimit
@@ -1260,7 +1260,7 @@ definition BinaryBiproduct.isLimit
 
 中文:
 定义 BinaryBiproduct.isLimit
-  签名: (P Q : C) [HasBinaryBiproduct P Q]
+  签名: (P Q : C) [有BinaryBiproduct P Q]
   定义体: (getBinaryBiproductData P Q).isBilimit.isLimit
 
 Depends on / 依赖: getBinaryBiproductData, isBilimit, isBilimit.isLimit, isLimit
@@ -1279,7 +1279,7 @@ definition BinaryBiproduct.isColimit
 
 中文:
 定义 BinaryBiproduct.isColimit
-  签名: (P Q : C) [HasBinaryBiproduct P Q]
+  签名: (P Q : C) [有BinaryBiproduct P Q]
   定义体: (getBinaryBiproductData P Q).isBilimit.isColimit
 
 Depends on / 依赖: getBinaryBiproductData, isBilimit, isBilimit.isColimit, isColimit
@@ -1298,7 +1298,7 @@ lemma hasBinaryBiproduct_of_iso
 
 中文:
 引理 hasBinaryBiproduct_of_iso
-  结论: {P Q P' Q' : C} [HasBinaryBiproduct P Q]
+  结论: {P Q P' Q' : C} [有BinaryBiproduct P Q]
   证明: ⟨(getBinaryBiproductData P Q).ofIso eP eQ⟩
 
 Depends on / 依赖: getBinaryBiproductData
@@ -1326,10 +1326,10 @@ class HasBinaryBiproducts
     - has_binary_biproduct : forall P Q : C, HasBinaryBiproduct P Q
 
 中文:
-类 HasBinaryBiproducts
+类 有BinaryBiproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_binary_biproduct : 对任意 P Q : C, HasBinaryBiproduct P Q
+    - has_binary_biproduct : 对任意 P Q : C, 有BinaryBiproduct P Q
 -/
 class HasBinaryBiproducts : Prop where
   has_binary_biproduct : forall P Q : C, HasBinaryBiproduct P Q
@@ -1350,8 +1350,8 @@ theorem hasBinaryBiproducts_of_finite_biproducts
 
 中文:
 定理 hasBinaryBiproducts_of_finite_biproducts
-  条件: [HasFiniteBiproducts C]
-  结论: HasBinaryBiproducts C
+  条件: [有FiniteBiproducts C]
+  结论: 有BinaryBiproducts C
   证明: { has_binary_biproduct := fun P Q =>
       HasBinaryBiproduct.mk
         { bicone := (biproduct.bicone (pairFunction P Q)).toBinaryBicone
@@ -1374,8 +1374,8 @@ instance [HasBinaryBiproducts
   body: inferInstanceAs (HasBinaryBiproduct (op X.unop) (op Y.unop))
 
 中文:
-实例 [HasBinaryBiproducts
-  签名: C] : HasBinaryBiproducts Cᵒᵖ where
+实例 [有BinaryBiproducts
+  签名: C] : 有BinaryBiproducts Cᵒᵖ where
   定义体: inferInstanceAs (HasBinaryBiproduct (op X.unop) (op Y.unop))
 
 Depends on / 依赖: HasBinaryBiproduct, X.unop, Y.unop
@@ -1397,8 +1397,8 @@ instance HasBinaryBiproduct.hasLimit_pair
   body: HasLimit.mk ⟨_, BinaryBiproduct.isLimit P Q⟩
 
 中文:
-实例 HasBinaryBiproduct.hasLimit_pair
-  签名: [HasBinaryBiproduct P Q]
+实例 有BinaryBiproduct.hasLimit_pair
+  签名: [有BinaryBiproduct P Q]
   定义体: HasLimit.mk ⟨_, BinaryBiproduct.isLimit P Q⟩
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isLimit, HasLimit, HasLimit.mk, isLimit
@@ -1415,8 +1415,8 @@ instance HasBinaryBiproduct.hasColimit_pair
   body: HasColimit.mk ⟨_, BinaryBiproduct.isColimit P Q⟩
 
 中文:
-实例 HasBinaryBiproduct.hasColimit_pair
-  签名: [HasBinaryBiproduct P Q]
+实例 有BinaryBiproduct.hasColimit_pair
+  签名: [有BinaryBiproduct P Q]
   定义体: HasColimit.mk ⟨_, BinaryBiproduct.isColimit P Q⟩
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isColimit, HasColimit, HasColimit.mk, isColimit
@@ -1443,7 +1443,7 @@ definition biprodIso
 
 中文:
 定义 biprodIso
-  签名: (X Y : C) [HasBinaryBiproduct X Y]
+  签名: (X Y : C) [有BinaryBiproduct X Y]
   定义体: (IsLimit.conePointUniqueUpToIso (limit.isLimit _) (BinaryBiproduct.isLimit X Y)).trans
     IsColimit.coconePointUniqueUpToIso (BinaryBiproduct.isColimit X Y) (colimit.isColimit _)
 
@@ -1466,7 +1466,7 @@ notation:20 X " ⊞ " Y:20 => biprod X Y
 
 中文:
 缩写 biprod
-  签名: (X Y : C) [HasBinaryBiproduct X Y]
+  签名: (X Y : C) [有BinaryBiproduct X Y]
   定义体: (BinaryBiproduct.bicone X Y).pt
 
 @[inherit_doc biprod]
@@ -1490,7 +1490,7 @@ abbreviation biprod.fst
 
 中文:
 缩写 biprod.fst
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: (BinaryBiproduct.bicone X Y).fst
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone
@@ -1508,7 +1508,7 @@ abbreviation biprod.snd
 
 中文:
 缩写 biprod.snd
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: (BinaryBiproduct.bicone X Y).snd
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone
@@ -1526,7 +1526,7 @@ abbreviation biprod.inl
 
 中文:
 缩写 biprod.inl
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: (BinaryBiproduct.bicone X Y).inl
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone
@@ -1544,7 +1544,7 @@ abbreviation biprod.inr
 
 中文:
 缩写 biprod.inr
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: (BinaryBiproduct.bicone X Y).inr
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone
@@ -1631,7 +1631,7 @@ theorem biprod.inl_fst
 
 中文:
 定理 biprod.inl_fst
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: (BinaryBiproduct.bicone X Y).inl_fst
 
 @[reassoc]
@@ -1655,7 +1655,7 @@ theorem biprod.inl_snd
 
 中文:
 定理 biprod.inl_snd
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: (BinaryBiproduct.bicone X Y).inl_snd
 
 @[reassoc]
@@ -1679,7 +1679,7 @@ theorem biprod.inr_fst
 
 中文:
 定理 biprod.inr_fst
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: (BinaryBiproduct.bicone X Y).inr_fst
 
 @[reassoc]
@@ -1701,7 +1701,7 @@ theorem biprod.inr_snd
 
 中文:
 定理 biprod.inr_snd
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: (BinaryBiproduct.bicone X Y).inr_snd
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone, inr_snd
@@ -1720,7 +1720,7 @@ abbreviation biprod.lift
 
 中文:
 缩写 biprod.lift
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: BinaryFan.IsLimit.lift (BinaryBiproduct.isLimit X Y) f g
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isLimit, BinaryFan, BinaryFan.IsLimit.lift, IsLimit, isLimit
@@ -1740,7 +1740,7 @@ abbreviation biprod.desc
 
 中文:
 缩写 biprod.desc
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
   定义体: BinaryCofan.IsColimit.desc (BinaryBiproduct.isColimit X Y) f g
 
 @[reassoc (attr := simp)]
@@ -1763,7 +1763,7 @@ theorem biprod.lift_fst
 
 中文:
 定理 biprod.lift_fst
-  条件: {W X Y : C} [HasBinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
+  条件: {W X Y : C} [有BinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   证明: (BinaryBiproduct.isLimit X Y).fac _ ⟨WalkingPair.left⟩
 
 @[reassoc (attr := simp)]
@@ -1787,7 +1787,7 @@ theorem biprod.lift_snd
 
 中文:
 定理 biprod.lift_snd
-  条件: {W X Y : C} [HasBinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
+  条件: {W X Y : C} [有BinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   证明: (BinaryBiproduct.isLimit X Y).fac _ ⟨WalkingPair.right⟩
 
 @[reassoc (attr := simp)]
@@ -1811,7 +1811,7 @@ theorem biprod.inl_desc
 
 中文:
 定理 biprod.inl_desc
-  条件: {W X Y : C} [HasBinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
+  条件: {W X Y : C} [有BinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
   证明: (BinaryBiproduct.isColimit X Y).fac _ ⟨WalkingPair.left⟩
 
 @[reassoc (attr := simp)]
@@ -1833,7 +1833,7 @@ theorem biprod.inr_desc
 
 中文:
 定理 biprod.inr_desc
-  条件: {W X Y : C} [HasBinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
+  条件: {W X Y : C} [有BinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
   证明: (BinaryBiproduct.isColimit X Y).fac _ ⟨WalkingPair.right⟩
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isColimit, WalkingPair, WalkingPair.right, isColimit
@@ -1852,7 +1852,7 @@ instance biprod.mono_lift_of_mono_left
 
 中文:
 实例 biprod.mono_lift_of_mono_left
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: mono_of_mono_fac biprod.lift_fst _ _
 
 Depends on / 依赖: biprod, biprod.lift_fst, lift_fst, mono_of_mono_fac
@@ -1871,7 +1871,7 @@ instance biprod.mono_lift_of_mono_right
 
 中文:
 实例 biprod.mono_lift_of_mono_right
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: mono_of_mono_fac biprod.lift_snd _ _
 
 Depends on / 依赖: biprod, biprod.lift_snd, lift_snd, mono_of_mono_fac
@@ -1890,7 +1890,7 @@ instance biprod.epi_desc_of_epi_left
 
 中文:
 实例 biprod.epi_desc_of_epi_left
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
   定义体: epi_of_epi_fac biprod.inl_desc _ _
 
 Depends on / 依赖: biprod, biprod.inl_desc, epi_of_epi_fac, inl_desc
@@ -1909,7 +1909,7 @@ instance biprod.epi_desc_of_epi_right
 
 中文:
 实例 biprod.epi_desc_of_epi_right
-  签名: {W X Y : C} [HasBinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
+  签名: {W X Y : C} [有BinaryBiproduct X Y] (f : X ⟶ W) (g : Y ⟶ W)
   定义体: epi_of_epi_fac biprod.inr_desc _ _
 
 Depends on / 依赖: biprod, biprod.inr_desc, epi_of_epi_fac, inr_desc
@@ -1929,7 +1929,7 @@ abbreviation biprod.map
 
 中文:
 缩写 biprod.map
-  签名: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  签名: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   定义体: IsLimit.map (BinaryBiproduct.bicone W X).toCone (BinaryBiproduct.isLimit Y Z)
     (@mapPair _ _ (pair W X) (pair Y Z) f g)
 
@@ -1953,7 +1953,7 @@ abbreviation biprod.map'
 
 中文:
 缩写 biprod.map'
-  签名: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  签名: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   定义体: IsColimit.map (BinaryBiproduct.isColimit W X) (BinaryBiproduct.bicone Y Z).toCocone
     (@mapPair _ _ (pair W X) (pair Y Z) f g)
 
@@ -1979,7 +1979,7 @@ theorem biprod.hom_ext
 
 中文:
 定理 biprod.hom_ext
-  结论: {X Y Z : C} [HasBinaryBiproduct X Y] (f g : Z ⟶ X ⊞ Y)
+  结论: {X Y Z : C} [有BinaryBiproduct X Y] (f g : Z ⟶ X ⊞ Y)
   证明: BinaryFan.IsLimit.hom_ext (BinaryBiproduct.isLimit X Y) h₀ h₁
 
 @[ext]
@@ -2001,7 +2001,7 @@ theorem biprod.hom_ext'
 
 中文:
 定理 biprod.hom_ext'
-  结论: {X Y Z : C} [HasBinaryBiproduct X Y] (f g : X ⊞ Y ⟶ Z)
+  结论: {X Y Z : C} [有BinaryBiproduct X Y] (f g : X ⊞ Y ⟶ Z)
   证明: BinaryCofan.IsColimit.hom_ext (BinaryBiproduct.isColimit X Y) h₀ h₁
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isColimit, BinaryCofan, BinaryCofan.IsColimit.hom_ext, IsColimit, hom_ext, isColimit
@@ -2020,7 +2020,7 @@ definition biprod.isoProd
 
 中文:
 定义 biprod.isoProd
-  签名: (X Y : C) [HasBinaryBiproduct X Y]
+  签名: (X Y : C) [有BinaryBiproduct X Y]
   定义体: IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit X Y) (limit.isLimit _)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isLimit, IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, limit.isLimit
@@ -2041,7 +2041,7 @@ theorem biprod.isoProd_hom
 
 中文:
 定理 biprod.isoProd_hom
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
       ext <;> simp [biprod.isoProd]
 
@@ -2064,7 +2064,7 @@ theorem biprod.isoProd_inv
 
 中文:
 定理 biprod.isoProd_inv
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
   ext <;> simp [Iso.inv_comp_eq]
 
@@ -2084,7 +2084,7 @@ definition biprod.isoCoprod
 
 中文:
 定义 biprod.isoCoprod
-  签名: (X Y : C) [HasBinaryBiproduct X Y]
+  签名: (X Y : C) [有BinaryBiproduct X Y]
   定义体: IsColimit.coconePointUniqueUpToIso (BinaryBiproduct.isColimit X Y) (colimit.isColimit _)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isColimit, IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit
@@ -2105,7 +2105,7 @@ theorem biprod.isoCoprod_inv
 
 中文:
 定理 biprod.isoCoprod_inv
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
   ext <;> simp [biprod.isoCoprod]
 
@@ -2128,7 +2128,7 @@ theorem biprod_isoCoprod_hom
 
 中文:
 定理 biprod_isoCoprod_hom
-  条件: {X Y : C} [HasBinaryBiproduct X Y]
+  条件: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
   ext <;> simp [← Iso.eq_comp_inv]
 
@@ -2157,7 +2157,7 @@ theorem biprod.map_eq_map'
 
 中文:
 定理 biprod.map_eq_map'
-  结论: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z]
+  结论: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z]
   证明: by
   ext
   · simp only [mapPair_left, IsColimit.ι_map, IsLimit.map_π,
@@ -2200,7 +2200,7 @@ instance biprod.inl_mono
 
 中文:
 实例 biprod.inl_mono
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: IsSplitMono.mk' { retraction := biprod.fst }
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, biprod, biprod.fst, retraction
@@ -2219,7 +2219,7 @@ instance biprod.inr_mono
 
 中文:
 实例 biprod.inr_mono
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: IsSplitMono.mk' { retraction := biprod.snd }
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, biprod, biprod.snd, retraction
@@ -2238,7 +2238,7 @@ instance biprod.fst_epi
 
 中文:
 实例 biprod.fst_epi
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: IsSplitEpi.mk' { section_ := biprod.inl }
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, biprod, biprod.inl, section_
@@ -2258,7 +2258,7 @@ instance biprod.snd_epi
 
 中文:
 实例 biprod.snd_epi
-  签名: {X Y : C} [HasBinaryBiproduct X Y]
+  签名: {X Y : C} [有BinaryBiproduct X Y]
   定义体: IsSplitEpi.mk' { section_ := biprod.inr }
 
 @[reassoc (attr := simp)]
@@ -2281,7 +2281,7 @@ theorem biprod.map_fst
 
 中文:
 定理 biprod.map_fst
-  结论: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  结论: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   证明: IsLimit.map_π _ _ _ (⟨WalkingPair.left⟩ : Discrete WalkingPair)
 
 @[reassoc (attr := simp)]
@@ -2303,7 +2303,7 @@ theorem biprod.map_snd
 
 中文:
 定理 biprod.map_snd
-  结论: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  结论: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   证明: IsLimit.map_π _ _ _ (⟨WalkingPair.right⟩ : Discrete WalkingPair)
 
 Depends on / 依赖: Discrete, IsLimit, IsLimit.map_, WalkingPair, WalkingPair.right
@@ -2329,7 +2329,7 @@ theorem biprod.inl_map
 
 中文:
 定理 biprod.inl_map
-  结论: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  结论: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   证明: by
   rw [biprod.map_eq_map']
   exact IsColimit.ι_map (BinaryBiproduct.isColimit W X) _ _ ⟨WalkingPair.left⟩
@@ -2356,7 +2356,7 @@ theorem biprod.inr_map
 
 中文:
 定理 biprod.inr_map
-  结论: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ⟶ Y)
+  结论: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ⟶ Y)
   证明: by
   rw [biprod.map_eq_map']
   exact IsColimit.ι_map (BinaryBiproduct.isColimit W X) _ _ ⟨WalkingPair.right⟩
@@ -2382,7 +2382,7 @@ definition biprod.mapIso
 
 中文:
 定义 biprod.mapIso
-  签名: {W X Y Z : C} [HasBinaryBiproduct W X] [HasBinaryBiproduct Y Z] (f : W ≅ Y)
+  签名: {W X Y Z : C} [有BinaryBiproduct W X] [有BinaryBiproduct Y Z] (f : W ≅ Y)
   定义体: biprod.map f.hom g.hom
   inv := biprod.map f.inv g.inv
 
@@ -2403,7 +2403,7 @@ theorem biprod.conePointUniqueUpToIso_hom
 
 中文:
 定理 biprod.conePointUniqueUpToIso_hom
-  结论: (X Y : C) [HasBinaryBiproduct X Y] {b : BinaryBicone X Y}
+  结论: (X Y : C) [有BinaryBiproduct X Y] {b : BinaryBicone X Y}
   证明: rfl
 -/
 theorem biprod.conePointUniqueUpToIso_hom (X Y : C) [HasBinaryBiproduct X Y] {b : BinaryBicone X Y}
@@ -2427,7 +2427,7 @@ theorem biprod.conePointUniqueUpToIso_inv
 
 中文:
 定理 biprod.conePointUniqueUpToIso_inv
-  结论: (X Y : C) [HasBinaryBiproduct X Y] {b : BinaryBicone X Y}
+  结论: (X Y : C) [有BinaryBiproduct X Y] {b : BinaryBicone X Y}
   证明: by
   refine biprod.hom_ext' _ _ (hb.isLimit.hom_ext fun j => ?_) (hb.isLimit.hom_ext fun j => ?_)
   all_goals
@@ -2470,7 +2470,7 @@ definition biprod.uniqueUpToIso
 
 中文:
 定义 biprod.uniqueUpToIso
-  签名: (X Y : C) [HasBinaryBiproduct X Y] {b : BinaryBicone X Y}
+  签名: (X Y : C) [有BinaryBiproduct X Y] {b : BinaryBicone X Y}
   定义体: biprod.lift b.fst b.snd
   inv := biprod.desc b.inl b.inr
   hom_inv_id := by
@@ -2514,7 +2514,7 @@ have := (cancel_epi (inv biprod.inl : X ⊞ Y ⟶ X)).2 @biprod.inl_fst _ _ _ X 
 
 中文:
 定理 biprod.isIso_inl_iff_id_eq_fst_comp_inl
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: by
   constructor
   · intro h
@@ -2550,7 +2550,7 @@ instance biprod.map_epi
 
 中文:
 实例 biprod.map_epi
-  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Epi f]
+  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [满态射 f]
   定义体: by
   rw [show biprod.map f g =
     (biprod.isoCoprod _ _).hom ≫ coprod.map f g ≫ (biprod.isoCoprod _ _).inv by aesop]
@@ -2576,8 +2576,8 @@ instance prod.map_epi
   infer_instance
 
 中文:
-实例 prod.map_epi
-  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Epi f]
+实例 乘积.map_epi
+  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [满态射 f]
   定义体: by
   rw [show prod.map f g = (biprod.isoProd _ _).inv ≫ biprod.map f g ≫
     (biprod.isoProd _ _).hom by simp]
@@ -2605,7 +2605,7 @@ instance biprod.map_mono
 
 中文:
 实例 biprod.map_mono
-  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Mono f]
+  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [单态射 f]
   定义体: by
   rw [show biprod.map f g = (biprod.isoProd _ _).hom ≫ prod.map f g ≫
     (biprod.isoProd _ _).inv by aesop]
@@ -2632,7 +2632,7 @@ instance coprod.map_mono
 
 中文:
 实例 coprod.map_mono
-  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Mono f]
+  签名: {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [单态射 f]
   定义体: by
   rw [show coprod.map f g = (biprod.isoCoprod _ _).inv ≫ biprod.map f g ≫
     (biprod.isoCoprod _ _).hom by simp]
@@ -2664,7 +2664,7 @@ definition BinaryBicone.fstKernelFork
 
 中文:
 定义 BinaryBicone.fstKernelFork
-  签名: : KernelFork c.fst
+  签名: : 核叉 c.fst
   定义体: KernelFork.ofι c.inr c.inr_fst
 
 @[simp]
@@ -2702,7 +2702,7 @@ definition BinaryBicone.sndKernelFork
 
 中文:
 定义 BinaryBicone.sndKernelFork
-  签名: : KernelFork c.snd
+  签名: : 核叉 c.snd
   定义体: KernelFork.ofι c.inl c.inl_snd
 
 @[simp]
@@ -2740,7 +2740,7 @@ definition BinaryBicone.inlCokernelCofork
 
 中文:
 定义 BinaryBicone.inlCokernelCofork
-  签名: : CokernelCofork c.inl
+  签名: : 余核余叉 c.inl
   定义体: CokernelCofork.ofπ c.snd c.inl_snd
 
 @[simp]
@@ -2778,7 +2778,7 @@ definition BinaryBicone.inrCokernelCofork
 
 中文:
 定义 BinaryBicone.inrCokernelCofork
-  签名: : CokernelCofork c.inr
+  签名: : 余核余叉 c.inr
   定义体: CokernelCofork.ofπ c.fst c.inr_fst
 
 @[simp]
@@ -2818,7 +2818,7 @@ definition BinaryBicone.isLimitFstKernelFork
 
 中文:
 定义 BinaryBicone.isLimitFstKernelFork
-  签名: (i : IsLimit c.toCone)
+  签名: (i : 是极限 c.toCone)
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨s.ι ≫ c.snd, by apply BinaryFan.IsLimit.hom_ext i <;> simp, fun hm => by simp [← hm]⟩
 
@@ -2840,7 +2840,7 @@ definition BinaryBicone.isLimitSndKernelFork
 
 中文:
 定义 BinaryBicone.isLimitSndKernelFork
-  签名: (i : IsLimit c.toCone)
+  签名: (i : 是极限 c.toCone)
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨s.ι ≫ c.fst, by apply BinaryFan.IsLimit.hom_ext i <;> simp, fun hm => by simp [← hm]⟩
 
@@ -2862,7 +2862,7 @@ definition BinaryBicone.isColimitInlCokernelCofork
 
 中文:
 定义 BinaryBicone.isColimitInlCokernelCofork
-  签名: (i : IsColimit c.toCocone)
+  签名: (i : 是余极限 c.toCocone)
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨c.inr ≫ s.π, by apply BinaryCofan.IsColimit.hom_ext i <;> simp, fun hm => by simp [← hm]⟩
 
@@ -2885,7 +2885,7 @@ definition BinaryBicone.isColimitInrCokernelCofork
 
 中文:
 定义 BinaryBicone.isColimitInrCokernelCofork
-  签名: (i : IsColimit c.toCocone)
+  签名: (i : 是余极限 c.toCocone)
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨c.inl ≫ s.π, by apply BinaryCofan.IsColimit.hom_ext i <;> simp, fun hm => by simp [← hm]⟩
 
@@ -2914,7 +2914,7 @@ definition biprod.fstKernelFork
 
 中文:
 定义 biprod.fstKernelFork
-  签名: : KernelFork (biprod.fst : X ⊞ Y ⟶ X)
+  签名: : 核叉 (biprod.fst : X ⊞ Y ⟶ X)
   定义体: BinaryBicone.fstKernelFork _
 
 @[simp]
@@ -2935,7 +2935,7 @@ theorem biprod.fstKernelFork_ι
 
 中文:
 定理 biprod.fstKernelFork_ι
-  结论: Fork.ι (biprod.fstKernelFork X Y) = (biprod.inr : Y ⟶ X ⊞ Y)
+  结论: 叉.ι (biprod.fstKernelFork X Y) = (biprod.inr : Y ⟶ X ⊞ Y)
   证明: rfl
 -/
 theorem biprod.fstKernelFork_ι : Fork.ι (biprod.fstKernelFork X Y) = (biprod.inr : Y ⟶ X ⊞ Y) :=
@@ -2951,7 +2951,7 @@ definition biprod.isKernelFstKernelFork
 
 中文:
 定义 biprod.isKernelFstKernelFork
-  签名: : IsLimit (biprod.fstKernelFork X Y)
+  签名: : 是极限 (biprod.fstKernelFork X Y)
   定义体: BinaryBicone.isLimitFstKernelFork (BinaryBiproduct.isLimit _ _)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isLimitFstKernelFork, BinaryBiproduct, BinaryBiproduct.isLimit, Monoidal, functor, functor.Monoidal, isLimit, isLimitFstKernelFork
@@ -2971,7 +2971,7 @@ definition biprod.sndKernelFork
 
 中文:
 定义 biprod.sndKernelFork
-  签名: : KernelFork (biprod.snd : X ⊞ Y ⟶ Y)
+  签名: : 核叉 (biprod.snd : X ⊞ Y ⟶ Y)
   定义体: BinaryBicone.sndKernelFork _
 
 @[simp]
@@ -2992,7 +2992,7 @@ theorem biprod.sndKernelFork_ι
 
 中文:
 定理 biprod.sndKernelFork_ι
-  结论: Fork.ι (biprod.sndKernelFork X Y) = (biprod.inl : X ⟶ X ⊞ Y)
+  结论: 叉.ι (biprod.sndKernelFork X Y) = (biprod.inl : X ⟶ X ⊞ Y)
   证明: rfl
 
 Depends on / 依赖: IsMonoidal
@@ -3010,7 +3010,7 @@ definition biprod.isKernelSndKernelFork
 
 中文:
 定义 biprod.isKernelSndKernelFork
-  签名: : IsLimit (biprod.sndKernelFork X Y)
+  签名: : 是极限 (biprod.sndKernelFork X Y)
   定义体: BinaryBicone.isLimitSndKernelFork (BinaryBiproduct.isLimit _ _)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isLimitSndKernelFork, BinaryBiproduct, BinaryBiproduct.isLimit, isLimit, isLimitSndKernelFork
@@ -3030,7 +3030,7 @@ definition biprod.inlCokernelCofork
 
 中文:
 定义 biprod.inlCokernelCofork
-  签名: : CokernelCofork (biprod.inl : X ⟶ X ⊞ Y)
+  签名: : 余核余叉 (biprod.inl : X ⟶ X ⊞ Y)
   定义体: BinaryBicone.inlCokernelCofork _
 
 @[simp]
@@ -3051,7 +3051,7 @@ theorem biprod.inlCokernelCofork_π
 
 中文:
 定理 biprod.inlCokernelCofork_π
-  结论: Cofork.π (biprod.inlCokernelCofork X Y) = biprod.snd
+  结论: 余叉.π (biprod.inlCokernelCofork X Y) = biprod.snd
   证明: rfl
 -/
 theorem biprod.inlCokernelCofork_π : Cofork.π (biprod.inlCokernelCofork X Y) = biprod.snd :=
@@ -3067,7 +3067,7 @@ definition biprod.isCokernelInlCokernelFork
 
 中文:
 定义 biprod.isCokernelInlCokernelFork
-  签名: : IsColimit (biprod.inlCokernelCofork X Y)
+  签名: : 是余极限 (biprod.inlCokernelCofork X Y)
   定义体: BinaryBicone.isColimitInlCokernelCofork (BinaryBiproduct.isColimit _ _)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isColimitInlCokernelCofork, BinaryBiproduct, BinaryBiproduct.isColimit, isColimit, isColimitInlCokernelCofork
@@ -3087,7 +3087,7 @@ definition biprod.inrCokernelCofork
 
 中文:
 定义 biprod.inrCokernelCofork
-  签名: : CokernelCofork (biprod.inr : Y ⟶ X ⊞ Y)
+  签名: : 余核余叉 (biprod.inr : Y ⟶ X ⊞ Y)
   定义体: BinaryBicone.inrCokernelCofork _
 
 @[simp]
@@ -3108,7 +3108,7 @@ theorem biprod.inrCokernelCofork_π
 
 中文:
 定理 biprod.inrCokernelCofork_π
-  结论: Cofork.π (biprod.inrCokernelCofork X Y) = biprod.fst
+  结论: 余叉.π (biprod.inrCokernelCofork X Y) = biprod.fst
   证明: rfl
 -/
 theorem biprod.inrCokernelCofork_π : Cofork.π (biprod.inrCokernelCofork X Y) = biprod.fst :=
@@ -3124,7 +3124,7 @@ definition biprod.isCokernelInrCokernelFork
 
 中文:
 定义 biprod.isCokernelInrCokernelFork
-  签名: : IsColimit (biprod.inrCokernelCofork X Y)
+  签名: : 是余极限 (biprod.inrCokernelCofork X Y)
   定义体: BinaryBicone.isColimitInrCokernelCofork (BinaryBiproduct.isColimit _ _)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isColimitInrCokernelCofork, BinaryBiproduct, BinaryBiproduct.isColimit, isColimit, isColimitInrCokernelCofork
@@ -3523,7 +3523,7 @@ definition isoBiprodZero
 
 中文:
 定义 isoBiprodZero
-  签名: {X Y : C} [HasBinaryBiproduct X Y] (hY : IsZero Y)
+  签名: {X Y : C} [有BinaryBiproduct X Y] (hY : 是零 Y)
   定义体: biprod.inl
   inv := biprod.fst
   inv_hom_id := by
@@ -3563,7 +3563,7 @@ definition isoZeroBiprod
 
 中文:
 定义 isoZeroBiprod
-  签名: {X Y : C} [HasBinaryBiproduct X Y] (hY : IsZero X)
+  签名: {X Y : C} [有BinaryBiproduct X Y] (hY : 是零 X)
   定义体: biprod.inr
   inv := biprod.snd
   inv_hom_id := by
@@ -3605,7 +3605,7 @@ lemma biprod_isZero_iff
 
 中文:
 引理 biprod_isZero_iff
-  条件: (A B : C) [HasBinaryBiproduct A B]
+  条件: (A B : C) [有BinaryBiproduct A B]
   证明: by
   constructor
   · intro h

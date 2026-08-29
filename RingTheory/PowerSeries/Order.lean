@@ -55,7 +55,7 @@ theorem exists_coeff_ne_zero_iff_ne_zero
   simp
 
 中文:
-定理 exists_coeff_ne_zero_iff_ne_zero
+定理 存在_coeff_ne_zero_iff_ne_zero
   结论: (存在 n : 自然数, coeff n φ != 0) ↔ φ != 0
   证明: by
   contrapose!
@@ -169,7 +169,7 @@ theorem coe_toNat_order
   rw [ENat.natCast_toNat_eq_self.mpr (order_eq_top.not.mpr hf)]
 
 中文:
-定理 coe_toNat_order
+定理 coe_to自然数_order
   条件: {φ : R⟦X⟧} (hf : φ != 0)
   结论: φ.order.to自然数 = φ.order
   证明: by
@@ -278,7 +278,7 @@ theorem coeff_of_lt_order_toNat
     rwa [← coe_toNat_order h', ENat.natCast_lt_natCast]
 
 中文:
-定理 coeff_of_lt_order_toNat
+定理 coeff_of_lt_order_to自然数
   条件: (n : 自然数) (h : n < φ.order.to自然数)
   结论: coeff n φ = 0
   证明: by
@@ -464,7 +464,7 @@ theorem min_order_le_order_add
 中文:
 定理 min_order_le_order_add
   条件: (φ ψ : R⟦X⟧)
-  结论: min (order φ) (order ψ) <= order (φ + ψ)
+  结论: 最小值 (order φ) (order ψ) <= order (φ + ψ)
   证明: by
   refine le_order _ _ ?_
   simp +contextual [coeff_of_lt_order]
@@ -564,7 +564,7 @@ theorem le_order_map
 
 中文:
 定理 le_order_map
-  条件: {S : 类型} [Semiring S] (f : R ->+* S)
+  条件: {S : 类型} [半环 S] (f : R ->+* S)
   证明: le_order _ _ fun i hi => by simp [coeff_of_lt_order i hi]
 
 Depends on / 依赖: coeff_of_lt_order, le_order
@@ -685,7 +685,7 @@ alias order_mul_ge := le_order_mul
 
 中文:
 定理 le_order_prod
-  条件: {R : 类型} [CommSemiring R] {ι : 类型} (φ : ι -> R⟦X⟧) (s : Finset ι)
+  条件: {R : 类型} [交换半环 R] {ι : 类型} (φ : ι -> R⟦X⟧) (s : 有限集 ι)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -810,7 +810,7 @@ theorem order_monomial
 
 中文:
 定理 order_monomial
-  条件: (n : 自然数) (a : R) [Decidable (a = 0)]
+  条件: (n : 自然数) (a : R) [可判定 (a = 0)]
   证明: by
   split_ifs with h
   · rw [h, order_eq_top, map_zero]
@@ -914,7 +914,7 @@ theorem coeff_mul_one_sub_of_lt_order
 
 中文:
 定理 coeff_mul_one_sub_of_lt_order
-  结论: {R : 类型} [Ring R] {φ ψ : R⟦X⟧} (n : 自然数)
+  结论: {R : 类型} [环 R] {φ ψ : R⟦X⟧} (n : 自然数)
   证明: by
   simp [coeff_mul_of_lt_order h, mul_sub]
 
@@ -943,7 +943,7 @@ theorem coeff_mul_prod_one_sub_of_lt_order
 
 中文:
 定理 coeff_mul_prod_one_sub_of_lt_order
-  结论: {R ι : 类型} [CommRing R] (k : 自然数) (s : Finset ι)
+  结论: {R ι : 类型} [交换环 R] (k : 自然数) (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -984,7 +984,7 @@ theorem order_neg
 
 中文:
 定理 order_neg
-  条件: {R : 类型} [Ring R] (φ : PowerSeries R)
+  条件: {R : 类型} [环 R] (φ : 幂级数 R)
   结论: (-φ).order = φ.order
   证明: by
   by_contra! h
@@ -1191,7 +1191,7 @@ theorem order_eq_emultiplicity_X
 
 中文:
 定理 order_eq_emultiplicity_X
-  条件: {R : 类型} [Semiring R] (φ : R⟦X⟧)
+  条件: {R : 类型} [半环 R] (φ : R⟦X⟧)
   证明: by
   classical
   rcases eq_or_ne φ 0 with (rfl | hφ)
@@ -1277,7 +1277,7 @@ theorem order_zero_of_unit
 中文:
 定理 order_zero_of_unit
   条件: {f : R⟦X⟧}
-  结论: IsUnit f -> f.order = 0
+  结论: 是单位 f -> f.order = 0
   证明: by
   rintro ⟨⟨u, v, hu, hv⟩, hf⟩
   apply And.left
@@ -1555,7 +1555,7 @@ theorem order_prod
 
 中文:
 定理 order_prod
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R] [Nontrivial R] {ι : 类型}
+  结论: {R : 类型} [交换半环 R] [无零因子 R] [非平凡 R] {ι : 类型}
   证明: map_prod orderHom φ s
 
 Depends on / 依赖: map_prod, orderHom
@@ -1638,7 +1638,7 @@ theorem divXPowOrder_prod
 
 中文:
 定理 divXPowOrder_prod
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R] [Nontrivial R] {ι : 类型}
+  结论: {R : 类型} [交换半环 R] [无零因子 R] [非平凡 R] {ι : 类型}
   证明: map_prod divXPowOrderHom φ s
 
 Depends on / 依赖: divXPowOrderHom, map_prod

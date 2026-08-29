@@ -37,7 +37,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing PUnit where
+  签名: : 交换环 命题单元 where
   定义体: PUnit.commGroup
   __ := PUnit.addCommGroup
   left_distrib := by intros; rfl
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCancelMulZero PUnit
+  签名: 是乘零消去 命题单元
   定义体: by simp
   mul_right_cancel_of_ne_zero := by simp
 -/

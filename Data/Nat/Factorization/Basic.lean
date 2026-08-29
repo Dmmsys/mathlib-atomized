@@ -81,7 +81,7 @@ theorem factorization_eq_zero_iff_remainder
 
 中文:
 定理 factorization_eq_zero_iff_remainder
-  条件: {p r : 自然数} (i : 自然数) (pp : p.Prime) (hr0 : r != 0)
+  条件: {p r : 自然数} (i : 自然数) (pp : p.素) (hr0 : r != 0)
   证明: by
   refine ⟨factorization_eq_zero_of_remainder i, fun h => ?_⟩
   rw [factorization_eq_zero_iff] at h
@@ -162,7 +162,7 @@ lemma prod_factorization_eq_prod_primeFactors
 
 中文:
 引理 prod_factorization_eq_prod_primeFactors
-  条件: {β : 类型} [CommMonoid β] (f : 自然数 -> 自然数 -> β)
+  条件: {β : 类型} [交换幺半群 β] (f : 自然数 -> 自然数 -> β)
   证明: rfl
 -/
 lemma prod_factorization_eq_prod_primeFactors {β : Type*} [CommMonoid β] (f : Nat -> Nat -> β) :
@@ -178,7 +178,7 @@ lemma prod_primeFactors_prod_factorization
 
 中文:
 引理 prod_primeFactors_prod_factorization
-  条件: {β : 类型} [CommMonoid β] (f : 自然数 -> β)
+  条件: {β : 类型} [交换幺半群 β] (f : 自然数 -> β)
   证明: rfl
 -/
 lemma prod_primeFactors_prod_factorization {β : Type*} [CommMonoid β] (f : Nat -> β) :
@@ -196,8 +196,8 @@ theorem Prime.factorization_self
   proof: by simp [hp]
 
 中文:
-定理 Prime.factorization_self
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.factorization_self
+  条件: {p : 自然数} (hp : 素 p)
   结论: p.factorization p = 1
   证明: by simp [hp]
 -/
@@ -215,7 +215,7 @@ theorem factorization_pow_self
 
 中文:
 定理 factorization_pow_self
-  条件: {p n : 自然数} (hp : p.Prime)
+  条件: {p n : 自然数} (hp : p.素)
   结论: (p ^ n).factorization p = n
   证明: by
   simp [factorization_pow, Prime.factorization_self hp]
@@ -258,8 +258,8 @@ theorem Prime.eq_of_factorization_pos
   proof: by simpa [hp.factorization, single_apply] using h
 
 中文:
-定理 Prime.eq_of_factorization_pos
-  条件: {p q : 自然数} (hp : Prime p) (h : p.factorization q != 0)
+定理 素.eq_of_factorization_pos
+  条件: {p q : 自然数} (hp : 素 p) (h : p.factorization q != 0)
   证明: by simpa [hp.factorization, single_apply] using h
 
 Depends on / 依赖: factorization, hp.factorization, single_apply
@@ -281,7 +281,7 @@ theorem factorizationEquiv_inv_apply
 
 中文:
 定理 factorizationEquiv_inv_apply
-  条件: {f : 自然数 ->₀ 自然数} (hf : 对任意 p in f.support, Prime p)
+  条件: {f : 自然数 ->₀ 自然数} (hf : 对任意 p in f.support, 素 p)
   证明: factorizationEquiv_symm_apply_coe ⟨f, hf⟩
 
 Depends on / 依赖: factorizationEquiv_symm_apply_coe
@@ -302,7 +302,7 @@ theorem ordProj_of_not_prime
 
 中文:
 定理 ordProj_of_not_prime
-  条件: (n p : 自然数) (hp : ¬p.Prime)
+  条件: (n p : 自然数) (hp : ¬p.素)
   结论: ordProj[p] n = 1
   证明: by
   simp [hp]
@@ -322,7 +322,7 @@ theorem ordCompl_of_not_prime
 
 中文:
 定理 ordCompl_of_not_prime
-  条件: (n p : 自然数) (hp : ¬p.Prime)
+  条件: (n p : 自然数) (hp : ¬p.素)
   结论: ordCompl[p] n = n
   证明: by
   simp [hp]
@@ -676,8 +676,8 @@ theorem Prime.pow_dvd_iff_le_factorization
   rw [← factorization_le_iff_dvd (Nat.pow_pos pp.pos).ne' hn]; rw [pp.factorization_pow]; rw [single_le_iff]
 
 中文:
-定理 Prime.pow_dvd_iff_le_factorization
-  条件: {p k n : 自然数} (pp : Prime p) (hn : n != 0)
+定理 素.pow_dvd_iff_le_factorization
+  条件: {p k n : 自然数} (pp : 素 p) (hn : n != 0)
   证明: by
   rw [← factorization_le_iff_dvd (Nat.pow_pos pp.pos).ne' hn]; rw [pp.factorization_pow]; rw [single_le_iff]
 
@@ -697,8 +697,8 @@ theorem Prime.pow_dvd_iff_dvd_ordProj
   rw [pow_dvd_pow_iff_le_right pp.one_lt]; rw [pp.pow_dvd_iff_le_factorization hn]
 
 中文:
-定理 Prime.pow_dvd_iff_dvd_ordProj
-  条件: {p k n : 自然数} (pp : Prime p) (hn : n != 0)
+定理 素.pow_dvd_iff_dvd_ordProj
+  条件: {p k n : 自然数} (pp : 素 p) (hn : n != 0)
   证明: by
   rw [pow_dvd_pow_iff_le_right pp.one_lt]; rw [pp.pow_dvd_iff_le_factorization hn]
 
@@ -717,8 +717,8 @@ theorem Prime.dvd_iff_one_le_factorization
   proof: Iff.trans (by simp) (pp.pow_dvd_iff_le_factorization hn)
 
 中文:
-定理 Prime.dvd_iff_one_le_factorization
-  条件: {p n : 自然数} (pp : Prime p) (hn : n != 0)
+定理 素.dvd_iff_one_le_factorization
+  条件: {p n : 自然数} (pp : 素 p) (hn : n != 0)
   证明: Iff.trans (by simp) (pp.pow_dvd_iff_le_factorization hn)
 
 Depends on / 依赖: Iff.trans, pow_dvd_iff_le_factorization, pp.pow_dvd_iff_le_factorization
@@ -742,7 +742,7 @@ theorem exists_factorization_lt_of_lt
 @[simp]
 
 中文:
-定理 exists_factorization_lt_of_lt
+定理 存在_factorization_lt_of_lt
   条件: {a b : 自然数} (ha : a != 0) (hab : a < b)
   证明: by
   have hb : b != 0 := (ha.bot_lt.trans hab).ne'
@@ -809,7 +809,7 @@ theorem dvd_ordProj_of_dvd
 
 中文:
 定理 dvd_ordProj_of_dvd
-  条件: {n p : 自然数} (hn : n != 0) (pp : p.Prime) (h : p ∣ n)
+  条件: {n p : 自然数} (hn : n != 0) (pp : p.素) (h : p ∣ n)
   结论: p ∣ ordProj[p] n
   证明: dvd_pow_self p (Prime.factorization_pos_of_dvd pp hn h).ne'
 
@@ -832,7 +832,7 @@ theorem not_dvd_ordCompl
 
 中文:
 定理 not_dvd_ordCompl
-  条件: {n p : 自然数} (hp : Prime p) (hn : n != 0)
+  条件: {n p : 自然数} (hp : 素 p) (hn : n != 0)
   结论: ¬p ∣ ordCompl[p] n
   证明: by
   rw [Nat.Prime.dvd_iff_one_le_factorization hp (ordCompl_pos p hn).ne']
@@ -857,7 +857,7 @@ theorem coprime_ordCompl
 
 中文:
 定理 coprime_ordCompl
-  条件: {n p : 自然数} (hp : Prime p) (hn : n != 0)
+  条件: {n p : 自然数} (hp : 素 p) (hn : n != 0)
   结论: Coprime p (ordCompl[p] n)
   证明: (or_iff_left (not_dvd_ordCompl hp hn)).mp coprime_or_dvd_of_prime hp _
 
@@ -923,7 +923,7 @@ theorem ordProj_self_pow
 
 中文:
 定理 ordProj_self_pow
-  条件: {p k : 自然数} (hp : Prime p)
+  条件: {p k : 自然数} (hp : 素 p)
   结论: ordProj[p] (p ^ k) = p ^ k
   证明: by
   simp [hp]
@@ -946,7 +946,7 @@ theorem ordCompl_self_pow
 
 中文:
 定理 ordCompl_self_pow
-  条件: {p k : 自然数} (hp : Prime p)
+  条件: {p k : 自然数} (hp : 素 p)
   结论: ordCompl[p] (p ^ k) = 1
   证明: by
   apply Nat.eq_of_factorization_eq
@@ -973,7 +973,7 @@ theorem ordCompl_self_pow_mul
 
 中文:
 定理 ordCompl_self_pow_mul
-  条件: (n k : 自然数) {p : 自然数} (hp : Prime p)
+  条件: (n k : 自然数) {p : 自然数} (hp : 素 p)
   证明: by
   rw [ordCompl_mul]; rw [ordCompl_self_pow hp]; rw [one_mul]
 
@@ -1003,7 +1003,7 @@ theorem ordCompl_eq_self_iff_zero_or_not_dvd
 
 中文:
 定理 ordCompl_eq_self_iff_zero_or_not_dvd
-  条件: (n : 自然数) {p : 自然数} (hp : Prime p)
+  条件: (n : 自然数) {p : 自然数} (hp : 素 p)
   证明: by
   constructor
   · intro h
@@ -1043,7 +1043,7 @@ theorem ordCompl_pow_mul_of_not_dvd
 
 中文:
 定理 ordCompl_pow_mul_of_not_dvd
-  条件: {m : 自然数} (k : 自然数) {p : 自然数} (hp : p.Prime) (hm : ¬p ∣ m)
+  条件: {m : 自然数} (k : 自然数) {p : 自然数} (hp : p.素) (hm : ¬p ∣ m)
   证明: by
   rw [ordCompl_self_pow_mul m k hp]
   exact (ordCompl_eq_self_iff_zero_or_not_dvd m hp).mpr (Or.inr hm)
@@ -1066,7 +1066,7 @@ theorem ordCompl_pow_mul_eq_self_iff
 
 中文:
 定理 ordCompl_pow_mul_eq_self_iff
-  条件: (k m : 自然数) {p : 自然数} (hp : p.Prime)
+  条件: (k m : 自然数) {p : 自然数} (hp : p.素)
   证明: by
   rw [ordCompl_self_pow_mul m k hp]; rw [ordCompl_eq_self_iff_zero_or_not_dvd m hp]
 
@@ -1088,7 +1088,7 @@ theorem ordCompl_div_pow_of_dvd
 
 中文:
 定理 ordCompl_div_pow_of_dvd
-  条件: (k : 自然数) {x p : 自然数} (hp : p.Prime) (hx : p ^ k ∣ x)
+  条件: (k : 自然数) {x p : 自然数} (hp : p.素) (hx : p ^ k ∣ x)
   证明: by
   obtain ⟨m, rfl⟩ := hx
   rw [Nat.mul_div_cancel_left m (pow_pos hp.pos k)]; rw [← ordCompl_self_pow_mul m k hp]
@@ -1111,7 +1111,7 @@ theorem ordCompl_div_of_dvd
 
 中文:
 定理 ordCompl_div_of_dvd
-  条件: {x : 自然数} {p : 自然数} (hp : p.Prime) (hx : p ∣ x)
+  条件: {x : 自然数} {p : 自然数} (hp : p.素) (hx : p ∣ x)
   证明: by
   simpa [pow_one] using ordCompl_div_pow_of_dvd 1 hp (show p ^ 1 ∣ x by simpa)
 
@@ -1175,7 +1175,7 @@ theorem exists_eq_pow_mul_and_not_dvd
   ⟨_, a', h₂, h₁⟩
 
 中文:
-定理 exists_eq_pow_mul_and_not_dvd
+定理 存在_eq_pow_mul_and_not_dvd
   条件: {n : 自然数} (hn : n != 0) (p : 自然数) (hp : p != 1)
   证明: let ⟨a', h₁, h₂⟩ :=
     (Nat.finiteMultiplicity_iff.mpr ⟨hp, Nat.pos_of_ne_zero hn⟩).exists_eq_pow_mul_and_not_dvd
@@ -1199,7 +1199,7 @@ theorem exists_eq_two_pow_mul_odd
   ⟨k, m, not_even_iff_odd.1 (mt Even.two_dvd hm), hn⟩
 
 中文:
-定理 exists_eq_two_pow_mul_odd
+定理 存在_eq_two_pow_mul_odd
   条件: {n : 自然数} (hn : n != 0)
   证明: let ⟨k, m, hm, hn⟩ := exists_eq_pow_mul_and_not_dvd hn 2 (succ_ne_self 1)
   ⟨k, m, not_even_iff_odd.1 (mt Even.two_dvd hm), hn⟩
@@ -1543,7 +1543,7 @@ theorem prod_primeFactors_gcd_mul_prod_primeFactors_mul
 
 中文:
 定理 prod_primeFactors_gcd_mul_prod_primeFactors_mul
-  结论: {β : 类型} [CommMonoid β] (m n : 自然数)
+  结论: {β : 类型} [交换幺半群 β] (m n : 自然数)
   证明: by
   obtain rfl | hm₀ := eq_or_ne m 0
   · simp
@@ -1578,7 +1578,7 @@ alias setOf_pow_dvd_eq_Icc_factorization := setOfPred_pow_dvd_eq_Icc_factorizati
 
 中文:
 定理 setOfPred_pow_dvd_eq_Icc_factorization
-  条件: {n p : 自然数} (pp : p.Prime) (hn : n != 0)
+  条件: {n p : 自然数} (pp : p.素) (hn : n != 0)
   证明: by
   ext
   simp [one_le_iff_ne_zero, pp.pow_dvd_iff_le_factorization hn]
@@ -1612,7 +1612,7 @@ theorem Icc_factorization_eq_pow_dvd
 
 中文:
 定理 Icc_factorization_eq_pow_dvd
-  条件: (n : 自然数) {p : 自然数} (pp : Prime p)
+  条件: (n : 自然数) {p : 自然数} (pp : 素 p)
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp
@@ -1643,7 +1643,7 @@ theorem factorization_eq_card_pow_dvd
 
 中文:
 定理 factorization_eq_card_pow_dvd
-  条件: (n : 自然数) {p : 自然数} (pp : p.Prime)
+  条件: (n : 自然数) {p : 自然数} (pp : p.素)
   证明: by
   simp [← Icc_factorization_eq_pow_dvd n pp]
 
@@ -1668,7 +1668,7 @@ exact iff_of_true (lt_of_pow_dvd_right hn pp.two_le h1)
 
 中文:
 定理 Ico_filter_pow_dvd_eq
-  条件: {n p b : 自然数} (pp : p.Prime) (hn : n != 0) (hb : n <= p ^ b)
+  条件: {n p b : 自然数} (pp : p.素) (hn : n != 0) (hb : n <= p ^ b)
   证明: by
   ext x
   simp only [Finset.mem_filter, mem_Ico, mem_Icc, and_congr_left_iff, and_congr_right_iff]
@@ -1703,7 +1703,7 @@ theorem Ico_pow_dvd_eq_Ico_of_lt
 
 中文:
 定理 Ico_pow_dvd_eq_Ico_of_lt
-  条件: {n p b : 自然数} (pp : p.Prime) (hn : n != 0) (hb : n < p ^ b)
+  条件: {n p b : 自然数} (pp : p.素) (hn : n != 0) (hb : n < p ^ b)
   证明: by
   ext i
   simp only [Finset.mem_filter, mem_Ico, and_congr_left_iff, and_congr_right_iff]
@@ -1737,7 +1737,7 @@ theorem factorization_eq_card_pow_dvd_of_lt
 
 中文:
 定理 factorization_eq_card_pow_dvd_of_lt
-  条件: (hm : m.Prime) (hn : 0 < n) (hb : n < m ^ b)
+  条件: (hm : m.素) (hn : 0 < n) (hb : n < m ^ b)
   证明: by
   rwa [factorization_eq_card_pow_dvd n hm, Ico_pow_dvd_eq_Ico_of_lt hm (by lia)]
 
@@ -1812,7 +1812,7 @@ theorem eq_iff_prime_padicValNat_eq
     · simp [factorization_eq_zero_of_not_prime, pp]
 
 中文:
-定理 eq_iff_prime_padicValNat_eq
+定理 eq_iff_prime_padicVal自然数_eq
   条件: (a b : 自然数) (ha : a != 0) (hb : b != 0)
   证明: by
   constructor
@@ -1853,7 +1853,7 @@ theorem prod_pow_prime_padicValNat
     obtain ⟨hp1, hp2⟩ := Finset.mem_sdif
 
 中文:
-定理 prod_pow_prime_padicValNat
+定理 prod_pow_prime_padicVal自然数
   条件: (n : 自然数) (hn : n != 0) (m : 自然数) (pr : n < m)
   证明: by
   nth_rw 2 [← prod_factorization_pow_eq_self hn]
@@ -2028,7 +2028,7 @@ theorem exists_dvd_pow_iff
 exact Nat.primeFactors_mono h pow_ne_zero m hk
 
 中文:
-定理 exists_dvd_pow_iff
+定理 存在_dvd_pow_iff
   条件: {n k : 自然数} (hn : n != 0) (hk : k != 0)
   证明: by
 .mpr h⟩⟩ refine ⟨fun ⟨m, h⟩ => ?_, fun h => ⟨n, dvd_pow_self_iff hn hk
@@ -2097,7 +2097,7 @@ theorem Ioc_filter_dvd_card_eq_div
 中文:
 定理 Ioc_filter_dvd_card_eq_div
   条件: (n p : 自然数)
-  结论: #{x in Ioc 0 n | p ∣ x} = n / p
+  结论: #{x in 左开右闭区间 0 n | p ∣ x} = n / p
   证明: by
   induction n <;> simp [Nat.succ_div, add_ite, ← insert_Ioc_right_eq_Ioc_add_one, filter_insert,
     apply_ite card, *]
@@ -2170,7 +2170,7 @@ theorem exists_eq_pow_of_exponent_coprime_of_pow_eq_pow
    
 
 中文:
-定理 exists_eq_pow_of_exponent_coprime_of_pow_eq_pow
+定理 存在_eq_pow_of_exponent_coprime_of_pow_eq_pow
   证明: by
   by_cases ha0 : a = 0
   · symm at h
@@ -2233,7 +2233,7 @@ theorem exists_eq_pow_of_pow_eq_pow
     · exact gcd_div_gcd_div_gcd_of_pos_ri
 
 中文:
-定理 exists_eq_pow_of_pow_eq_pow
+定理 存在_eq_pow_of_pow_eq_pow
   证明: gcd m n; exists c, a = c ^ (n / g) ∧ b = c ^ (m / g) := by
   set g := gcd m n
   let m' := m / gcd m n

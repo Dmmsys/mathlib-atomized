@@ -41,11 +41,11 @@ class IsPreimmersion
     - isEmbedding((f)) : IsEmbedding f
 
 中文:
-类 IsPreimmersion
-  参数: {X Y : Scheme} (f : X ⟶ Y)
+类 是Preimmersion
+  参数: {X Y : 概形} (f : X ⟶ Y)
   继承: SurjectiveOnStalks f
   公理与运算 (1 个):
-    - isEmbedding((f)) : IsEmbedding f
+    - isEmbedding((f)) : 是嵌入 f
 
 Depends on / 依赖: IsPreimmersion, IsPreimmersion.isEmbedding, isEmbedding
 -/
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @IsPreimmersion
+  签名: IsZariskiLocalAtTarget @是Preimmersion
   定义体: isPreimmersion_eq_inf ▸ inferInstance
 
 Depends on / 依赖: isPreimmersion_eq_inf
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsPreimmersion
+  签名: MorphismProperty.是Multiplicative @是Preimmersion
   定义体: inferInstance
   comp_mem f g _ _ := ⟨g.isEmbedding.comp f.isEmbedding⟩
 -/
@@ -136,7 +136,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsPreimmersion f]
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是Preimmersion f]
   定义体: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
 
 Depends on / 依赖: IsStableUnderComposition, MorphismProperty, MorphismProperty.IsStableUnderComposition.comp_mem, comp_mem
@@ -164,7 +164,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsPreimmersion g]
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是Preimmersion g]
   证明: by
     have h := (f ≫ g).isEmbedding
     rwa [← g.isEmbedding.of_comp_iff]
@@ -195,7 +195,7 @@ theorem comp_iff
 
 中文:
 定理 comp_iff
-  条件: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsPreimmersion g]
+  条件: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是Preimmersion g]
   证明: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -216,7 +216,7 @@ lemma SpecMap_iff
 
 中文:
 引理 SpecMap_iff
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: by
   rw [← HasRingHomProperty.Spec_iff (P := @SurjectiveOnStalks)]; rw [isPreimmersion_iff]; rw [and_comm]
   rfl
@@ -239,7 +239,7 @@ lemma mk_SpecMap
 
 中文:
 引理 mk_SpecMap
-  结论: {R S : CommRingCat.{u}} {f : R ⟶ S}
+  结论: {R S : 交换环范畴.{u}} {f : R ⟶ S}
   证明: (SpecMap_iff f).mpr ⟨h₁, h₂⟩
 
 Depends on / 依赖: SpecMap_iff
@@ -261,7 +261,7 @@ lemma of_isLocalization
 
 中文:
 引理 of_isLocalization
-  结论: {R S : 类型u} [CommRing R] (M : Submonoid R) [CommRing S]
+  结论: {R S : 类型u} [交换环 R] (M : 子幺半群 R) [交换环 S]
   证明: IsPreimmersion.mk_SpecMap
     (PrimeSpectrum.localization_comap_isEmbedding (R := R) S M)
     (RingHom.surjectiveOnStalks_of_isLocalization (M := M) S)
@@ -293,7 +293,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @IsPreimmersion
+  签名: 是StableUnderBaseChange @是Preimmersion
   定义体: by
   refine .mk' fun X Y Z f g _ _ => ?_
   have := pullback_fst (P := @SurjectiveOnStalks) f g inferInstance
@@ -328,8 +328,8 @@ instance [IsPreimmersion
   body: MorphismProperty.pullback_fst f g inferInstance
 
 中文:
-实例 [IsPreimmersion
-  签名: g] : IsPreimmersion (Limits.pullback.fst f g)
+实例 [是Preimmersion
+  签名: g] : 是Preimmersion (Limits.pullback.fst f g)
   定义体: MorphismProperty.pullback_fst f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -347,8 +347,8 @@ instance [IsPreimmersion
   body: MorphismProperty.pullback_snd f g inferInstance
 
 中文:
-实例 [IsPreimmersion
-  签名: f] : IsPreimmersion (Limits.pullback.snd f g)
+实例 [是Preimmersion
+  签名: f] : 是Preimmersion (Limits.pullback.snd f g)
   定义体: MorphismProperty.pullback_snd f g inferInstance
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, MorphismProperty, MorphismProperty.pullback_snd, SimplexCategory, SimplexCategory.mkOfSucc_one_eq_, SimplexCategory.mkOfSucc_zero_eq_, StrictSegal, StrictSegal.spineEquiv, fin_cases, hY.spineEquiv, injective, map_comp_apply, op_comp, pullback_snd, spineEquiv

@@ -76,7 +76,7 @@ theorem map_mkQ_eq
 
 中文:
 定理 map_mkQ_eq
-  条件: {N₁ N₂ : Submodule R M} (h : N₁ <= N₂) (h' : N₂.FG)
+  条件: {N₁ N₂ : 子模 R M} (h : N₁ <= N₂) (h' : N₂.FG)
   证明: by
   constructor
   · intro hN
@@ -111,7 +111,7 @@ theorem map_mkQ_eq_top
 
 中文:
 定理 map_mkQ_eq_top
-  条件: {N : Submodule R M} [Module.Finite R M]
+  条件: {N : 子模 R M} [模.有限 R M]
   证明: by
   rw [← map_mkQ_eq (N₁ := N) le_top Module.Finite.fg_top]; rw [Submodule.map_top]; rw [Submodule.range_mkQ]
 
@@ -138,7 +138,7 @@ theorem map_tensorProduct_mk_eq_top
 
 中文:
 定理 map_tensorProduct_mk_eq_top
-  条件: {N : Submodule R M} [Module.Finite R M]
+  条件: {N : 子模 R M} [模.有限 R M]
   证明: by
   constructor
   · intro hN
@@ -181,7 +181,7 @@ theorem subsingleton_tensorProduct
 
 中文:
 定理 subsingleton_tensorProduct
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: by
   rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]; rw [← map_tensorProduct_mk_eq_top (M := M)]; rw [Submodule.map_bot]
 
@@ -204,7 +204,7 @@ theorem span_eq_top_of_tmul_eq_basis
 
 中文:
 定理 span_eq_top_of_tmul_eq_basis
-  结论: [Module.Finite R M] {ι}
+  结论: [模.有限 R M] {ι}
   证明: by
   rw [← map_tensorProduct_mk_eq_top]; rw [Submodule.map_span]; rw [← Submodule.restrictScalars_span R k
     Ideal.Quotient.mk_surjective]; rw [Submodule.restrictScalars_eq_top_iff]; rw [← b.span_eq]; rw [← Set.range_comp]
@@ -233,8 +233,8 @@ lemma Module.mem_support_iff_nontrivial_residueField_tensorProduct
   rw [e.nontrivial_congr]; rw [Module.mem_support_iff]; rw [(LocalizedModule.equivTensorProduct p.asIdeal.primeCompl M).nontrivial_congr]; rw [← not_iff_not]; rw [not_
 
 中文:
-引理 Module.mem_support_iff_nontrivial_residueField_tensorProduct
-  结论: [Module.Finite R M]
+引理 模.mem_support_iff_nontrivial_residueField_tensorProduct
+  结论: [模.有限 R M]
   证明: by
   let K := p.asIdeal.ResidueField
   let e := (AlgebraTensorModule.cancelBaseChange R (Localization.AtPrime p.asIdeal) K K M).symm
@@ -323,8 +323,8 @@ lemma exists_basis_of_basis_baseChange
     rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombinat
 
 中文:
-引理 exists_basis_of_basis_baseChange
-  结论: [Module.FinitePresentation R M]
+引理 存在_basis_of_basis_baseChange
+  结论: [模.有限呈现 R M]
   证明: by
   let bk : Basis ι k (k otimes[R] M) := Basis.mk hli (by rw [hsp])
   have : Finite ι := Module.Finite.finite_basis bk
@@ -399,8 +399,8 @@ lemma exists_basis_of_span_of_maximalIdeal_rTensor_injective
 
 
 中文:
-引理 exists_basis_of_span_of_maximalIdeal_rTensor_injective
-  结论: [Module.FinitePresentation R M]
+引理 存在_basis_of_span_of_maximalIdeal_rTensor_injective
+  结论: [模.有限呈现 R M]
   证明: by
   have := (map_tensorProduct_mk_eq_top (N := Submodule.span R (Set.range v))).mpr hv
   rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [eq_top_iff]; rw [← SetLike.coe_subset_coe]; rw [Submodule.top_coe] at this
@@ -433,8 +433,8 @@ lemma exists_basis_of_span_of_flat
     (Module.Flat.rTensor_preserves_injective_linearMap (𝔪).subtype Subtype.val_injective) v hv
 
 中文:
-引理 exists_basis_of_span_of_flat
-  结论: [Module.FinitePresentation R M] [Module.Flat R M]
+引理 存在_basis_of_span_of_flat
+  结论: [模.有限呈现 R M] [模.平坦 R M]
   证明: exists_basis_of_span_of_maximalIdeal_rTensor_injective
     (Module.Flat.rTensor_preserves_injective_linearMap (𝔪).subtype Subtype.val_injective) v hv
 
@@ -458,7 +458,7 @@ theorem free_of_maximalIdeal_rTensor_injective
 
 中文:
 定理 free_of_maximalIdeal_rTensor_injective
-  结论: [Module.FinitePresentation R M]
+  结论: [模.有限呈现 R M]
   证明: by
   obtain ⟨_, _, b, _⟩ := exists_basis_of_span_of_maximalIdeal_rTensor_injective H id (by simp)
   exact Free.of_basis b
@@ -488,8 +488,8 @@ theorem IsLocalRing.linearIndependent_of_flat
   have ⟨l, a, y, hay, hfa⟩ := Flat.isTrivialRelation_of_sum_sm
 
 中文:
-定理 IsLocalRing.linearIndependent_of_flat
-  结论: [Flat R M] {ι : 类型u} (v : ι -> M)
+定理 是局部环.linearIndependent_of_flat
+  结论: [平坦 R M] {ι : 类型u} (v : ι -> M)
   证明: by
   rw [linearIndependent_iff']; intro s f hfv i hi
   classical
@@ -556,8 +556,8 @@ theorem IsLocalRing.linearCombination_bijective_of_flat
 @[stacks 00NZ]
 
 中文:
-定理 IsLocalRing.linearCombination_bijective_of_flat
-  结论: [Module.Finite R M] [Flat R M] {ι : 类型u}
+定理 是局部环.linearCombination_bijective_of_flat
+  结论: [模.有限 R M] [平坦 R M] {ι : 类型u}
   证明: by
   use linearIndependent_of_flat _ h.1
   rw [← LinearMap.range_eq_top]; rw [range_linearCombination]
@@ -593,8 +593,8 @@ theorem free_of_flat_of_isLocalRing
 
 中文:
 定理 free_of_flat_of_isLocalRing
-  条件: [Module.Finite R P] [Flat R P]
-  结论: Free R P
+  条件: [模.有限 R P] [平坦 R P]
+  结论: 自由 R P
   证明: let w := Free.chooseBasis k (k otimes[R] P)
   have ⟨v, eq⟩ := (TensorProduct.mk_surjective R P k Quotient.mk_surjective).comp_left w
 .of_basis .mk (IsLocalRing.linearIndependent_of_flat _ (eq ▸ w.linearIndependent)) by
@@ -623,7 +623,7 @@ theorem free_of_lTensor_residueField_injective
 
 中文:
 定理 free_of_lTensor_residueField_injective
-  结论: (hg : Surjective g) (h : Exact f g)
+  结论: (hg : 满射 g) (h : 正合 f g)
   证明: by
   have := Module.finitePresentation_of_free_of_surjective g hg
     (by rw [h.linearMap_ker_eq, LinearMap.range_eq_map]; exact (Module.Finite.fg_top).map f)
@@ -664,8 +664,8 @@ theorem IsLocalRing.split_injective_iff_lTensor_residueField_injective
     -- By `Module.free_of
 
 中文:
-定理 IsLocalRing.split_injective_iff_lTensor_residueField_injective
-  结论: [IsLocalRing R]
+定理 是局部环.split_injective_iff_lTensor_residueField_injective
+  结论: [是局部环 R]
   证明: by
   constructor
   · intro ⟨l', hl⟩
@@ -749,7 +749,7 @@ theorem nonempty_basis_of_flat_of_finrank_eq
 
 中文:
 定理 nonempty_basis_of_flat_of_finrank_eq
-  结论: [Module.Finite R M] [Flat R M]
+  结论: [模.有限 R M] [平坦 R M]
   证明: by
   let := @Quotient.field
   /- For every maximal ideal `P`, `R⧸P ⊗[R] M` is an `n`-dimensional vector space over the field
@@ -794,7 +794,7 @@ theorem free_of_flat_of_finrank_eq
 
 中文:
 定理 free_of_flat_of_finrank_eq
-  结论: [Module.Finite R M] [Flat R M]
+  结论: [模.有限 R M] [平坦 R M]
   证明: have ⟨b⟩ := nonempty_basis_of_flat_of_finrank_eq R M n rk
   .of_basis b
 -/

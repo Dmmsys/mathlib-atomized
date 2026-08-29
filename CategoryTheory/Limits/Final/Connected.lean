@@ -43,7 +43,7 @@ lemma isConnected_iff_final_of_unique
 
 中文:
 引理 isConnected_iff_final_of_unique
-  条件: (F : C ⥤ Discrete T)
+  条件: (F : C ⥤ 离散 T)
   证明: by
   rw [← isConnected_iff_of_equivalence
     (Discrete.structuredArrowEquivalenceOfUnique F default)]
@@ -79,7 +79,7 @@ lemma isConnected_iff_initial_of_unique
 
 中文:
 引理 isConnected_iff_initial_of_unique
-  条件: (F : C ⥤ Discrete T)
+  条件: (F : C ⥤ 离散 T)
   证明: by
   rw [← isConnected_iff_of_equivalence
     (Discrete.costructuredArrowEquivalenceOfUnique F default)]
@@ -116,7 +116,7 @@ instance final_fst
 
 中文:
 实例 final_fst
-  签名: [IsConnected D]
+  签名: [是连通 D]
   定义体: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
     (prod.rightUnitorEquivalence.{0} C).functor).Final
 
@@ -136,7 +136,7 @@ instance final_snd
 
 中文:
 实例 final_snd
-  签名: [IsConnected C]
+  签名: [是连通 C]
   定义体: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Final
 
 Depends on / 依赖: Prod.braiding, Prod.fst, braiding, functor
@@ -155,7 +155,7 @@ instance initial_fst
 
 中文:
 实例 initial_fst
-  签名: [IsConnected D]
+  签名: [是连通 D]
   定义体: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
     (prod.rightUnitorEquivalence.{0} C).functor).Initial
 
@@ -175,7 +175,7 @@ instance initial_snd
 
 中文:
 实例 initial_snd
-  签名: [IsConnected C]
+  签名: [是连通 C]
   定义体: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Initial
 
 Depends on / 依赖: Initial, Prod.braiding, Prod.fst, braiding, functor

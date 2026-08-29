@@ -35,7 +35,7 @@ lemma prod_Icc_of_even_eq_range
 
 中文:
 引理 prod_Icc_of_even_eq_range
-  条件: {α : 类型} [CommGroup α] {f : 整数 -> α} (hf : f.Even) (N : 自然数)
+  条件: {α : 类型} [交换群 α] {f : 整数 -> α} (hf : f.Even) (N : 自然数)
   证明: by
   induction N with
   | zero => simp [sq]
@@ -65,7 +65,7 @@ lemma prod_Icc_eq_prod_Ico_mul
 
 中文:
 引理 prod_Icc_eq_prod_Ico_mul
-  结论: {α : 类型} [CommMonoid α] (f : 整数 -> α) {l u : 整数}
+  结论: {α : 类型} [交换幺半群 α] (f : 整数 -> α) {l u : 整数}
   证明: by
   simp [Icc_eq_cons_Ico h, mul_comm]
 
@@ -95,7 +95,7 @@ lemma prod_Icc_succ_eq_mul_endpoints
 
 中文:
 引理 prod_Icc_succ_eq_mul_endpoints
-  条件: {R : 类型} [CommGroup R] (f : 整数 -> R) {N : 自然数}
+  条件: {R : 类型} [交换群 R] (f : 整数 -> R) {N : 自然数}
   证明: by
   induction N
   · rw [Icc_succ_succ]
@@ -133,7 +133,7 @@ lemma prod_Ico_int_div
 
 中文:
 引理 prod_Ico_int_div
-  条件: (b : 自然数) {α : 类型} [CommGroup α] (f : 整数 -> α)
+  条件: (b : 自然数) {α : 类型} [交换群 α] (f : 整数 -> α)
   证明: by
   induction b with
   | zero => simp

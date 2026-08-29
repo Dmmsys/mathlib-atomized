@@ -50,7 +50,7 @@ lemma lTensor_shortComplex_exact
 
 中文:
 引理 lTensor_shortComplex_exact
-  条件: [Flat R M] (C : ShortComplex <| ModuleCat R) (hC : C.Exact)
+  条件: [平坦 R M] (C : 短复形 <| 模范畴 R) (hC : C.正合)
   证明: by C.map (tensorLeft M)
   rw [moduleCat_exact_iff_function_exact] at hC ⊢
   exact lTensor_exact M hC
@@ -74,7 +74,7 @@ lemma rTensor_shortComplex_exact
 
 中文:
 引理 rTensor_shortComplex_exact
-  条件: [Flat R M] (C : ShortComplex <| ModuleCat R) (hC : C.Exact)
+  条件: [平坦 R M] (C : 短复形 <| 模范畴 R) (hC : C.正合)
   证明: by C.map (tensorRight M)
   rw [moduleCat_exact_iff_function_exact] at hC ⊢
   exact rTensor_exact M hC
@@ -187,8 +187,8 @@ instance [Module.Flat
   infer_instance
 
 中文:
-实例 [Module.Flat
-  签名: R M] : PreservesFiniteLimits tensorLeft M
+实例 [模.平坦
+  签名: R M] : 保持FiniteLimits tensorLeft M
   定义体: by
   rw [← iff_preservesFiniteLimits_tensorLeft]
   infer_instance
@@ -234,8 +234,8 @@ instance [Module.Flat
   body: preservesFiniteLimits_of_natIso (BraidedCategory.tensorLeftIsoTensorRight M)
 
 中文:
-实例 [Module.Flat
-  签名: R M] : PreservesFiniteLimits (tensorRight M)
+实例 [模.平坦
+  签名: R M] : 保持FiniteLimits (tensorRight M)
   定义体: preservesFiniteLimits_of_natIso (BraidedCategory.tensorLeftIsoTensorRight M)
 
 Depends on / 依赖: BraidedCategory, BraidedCategory.tensorLeftIsoTensorRight, preservesFiniteLimits_of_natIso, tensorLeftIsoTensorRight

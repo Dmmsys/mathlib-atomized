@@ -46,7 +46,7 @@ theorem insert_def
 
 中文:
 定理 insert_def
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   结论: insert x s = { y | y = x ∨ y in s }
   证明: rfl
 
@@ -67,7 +67,7 @@ theorem subset_insert
 
 中文:
 定理 subset_insert
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   结论: s subseteq insert x s
   证明: fun _ => Or.inr
 
@@ -93,7 +93,7 @@ theorem mem_insert
 
 中文:
 定理 mem_insert
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   结论: x in insert x s
   证明: Or.inl rfl
 
@@ -113,7 +113,7 @@ theorem mem_insert_of_mem
 
 中文:
 定理 mem_insert_of_mem
-  条件: {x : α} {s : Set α} (y : α)
+  条件: {x : α} {s : 集合 α} (y : α)
   结论: x in s -> x in insert y s
   证明: Or.inr
 
@@ -133,7 +133,7 @@ theorem eq_or_mem_of_mem_insert
 
 中文:
 定理 eq_or_mem_of_mem_insert
-  条件: {x a : α} {s : Set α}
+  条件: {x a : α} {s : 集合 α}
   结论: x in insert a s -> x = a ∨ x in s
   证明: id
 -/
@@ -194,7 +194,7 @@ theorem mem_insert_iff
 
 中文:
 定理 mem_insert_iff
-  条件: {x a : α} {s : Set α}
+  条件: {x a : α} {s : 集合 α}
   结论: x in insert a s ↔ x = a ∨ x in s
   证明: Iff.rfl
 
@@ -217,7 +217,7 @@ theorem insert_eq_of_mem
 
 中文:
 定理 insert_eq_of_mem
-  条件: {a : α} {s : Set α} (h : a in s)
+  条件: {a : α} {s : 集合 α} (h : a in s)
   结论: insert a s = s
   证明: by grind
 -/
@@ -236,7 +236,7 @@ theorem ne_insert_of_notMem
 
 中文:
 定理 ne_insert_of_notMem
-  条件: {s : Set α} (t : Set α) {a : α}
+  条件: {s : 集合 α} (t : 集合 α) {a : α}
   结论: a ∉ s -> s != insert a t
   证明: by grind
 
@@ -376,7 +376,7 @@ theorem ssubset_iff_insert
 
 中文:
 定理 ssubset_iff_insert
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s ⊂ t ↔ 存在 a ∉ s, insert a s subseteq t
   证明: by grind
 -/
@@ -418,7 +418,7 @@ theorem ssubset_insert
 
 中文:
 定理 ssubset_insert
-  条件: {s : Set α} {a : α} (h : a ∉ s)
+  条件: {s : 集合 α} {a : α} (h : a ∉ s)
   结论: s ⊂ insert a s
   证明: by grind
 -/
@@ -436,7 +436,7 @@ theorem insert_comm
 
 中文:
 定理 insert_comm
-  条件: (a b : α) (s : Set α)
+  条件: (a b : α) (s : 集合 α)
   结论: insert a (insert b s) = insert b (insert a s)
   证明: by
   grind
@@ -455,7 +455,7 @@ theorem insert_idem
 
 中文:
 定理 insert_idem
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: insert a (insert a s) = insert a s
   证明: by grind
 -/
@@ -512,8 +512,8 @@ theorem insert_nonempty
 
 中文:
 定理 insert_nonempty
-  条件: (a : α) (s : Set α)
-  结论: (insert a s).Nonempty
+  条件: (a : α) (s : 集合 α)
+  结论: (insert a s).非空
   证明: ⟨a, mem_insert a s⟩
 
 Depends on / 依赖: mem_insert
@@ -534,7 +534,7 @@ theorem insert_inter_distrib
 
 中文:
 定理 insert_inter_distrib
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   证明: by grind
 -/
 theorem insert_inter_distrib (a : α) (s t : Set α) :
@@ -550,7 +550,7 @@ theorem insert_union_distrib
 
 中文:
 定理 insert_union_distrib
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   证明: by grind
 -/
 theorem insert_union_distrib (a : α) (s t : Set α) :
@@ -566,8 +566,8 @@ theorem forall_of_forall_insert
   proof: by grind
 
 中文:
-定理 forall_of_forall_insert
-  结论: {P : α -> 命题} {a : α} {s : Set α} (H : 对任意 x, x in insert a s -> P x)
+定理 对任意_of_对任意_insert
+  结论: {P : α -> 命题} {a : α} {s : 集合 α} (H : 对任意 x, x in insert a s -> P x)
   证明: by grind
 -/
 theorem forall_of_forall_insert {P : α -> Prop} {a : α} {s : Set α} (H : forall x, x in insert a s -> P x)
@@ -582,8 +582,8 @@ theorem forall_insert_of_forall
   proof: by grind
 
 中文:
-定理 forall_insert_of_forall
-  结论: {P : α -> 命题} {a : α} {s : Set α} (H : 对任意 x, x in s -> P x) (ha : P a)
+定理 对任意_insert_of_对任意
+  结论: {P : α -> 命题} {a : α} {s : 集合 α} (H : 对任意 x, x in s -> P x) (ha : P a)
   证明: by grind
 -/
 theorem forall_insert_of_forall {P : α -> Prop} {a : α} {s : Set α} (H : forall x, x in s -> P x) (ha : P a)
@@ -598,8 +598,8 @@ theorem exists_mem_insert
   proof: by grind
 
 中文:
-定理 exists_mem_insert
-  条件: {P : α -> 命题} {a : α} {s : Set α}
+定理 存在_mem_insert
+  条件: {P : α -> 命题} {a : α} {s : 集合 α}
   证明: by grind
 -/
 theorem exists_mem_insert {P : α -> Prop} {a : α} {s : Set α} :
@@ -614,8 +614,8 @@ theorem forall_mem_insert
   proof: by grind
 
 中文:
-定理 forall_mem_insert
-  条件: {P : α -> 命题} {a : α} {s : Set α}
+定理 对任意_mem_insert
+  条件: {P : α -> 命题} {a : α} {s : 集合 α}
   证明: by grind
 -/
 theorem forall_mem_insert {P : α -> Prop} {a : α} {s : Set α} :
@@ -659,7 +659,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulSingleton α (Set α)
+  签名: LawfulSingleton α (集合 α)
   定义体: ⟨fun x => Set.ext fun a => by
     simp only [mem_empty_iff_false, mem_insert_iff, or_false]
     exact Iff.rfl⟩
@@ -685,7 +685,7 @@ theorem singleton_def
 中文:
 定理 singleton_def
   条件: (a : α)
-  结论: ({a} : Set α) = insert a ∅
+  结论: ({a} : 集合 α) = insert a ∅
   证明: (insert_empty_eq a).symm
 
 @[simp, grind =, push]
@@ -708,7 +708,7 @@ theorem mem_singleton_iff
 中文:
 定理 mem_singleton_iff
   条件: {a b : α}
-  结论: a in ({b} : Set α) ↔ a = b
+  结论: a in ({b} : 集合 α) ↔ a = b
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -730,7 +730,7 @@ theorem notMem_singleton_iff
 中文:
 定理 notMem_singleton_iff
   条件: {a b : α}
-  结论: a ∉ ({b} : Set α) ↔ a != b
+  结论: a ∉ ({b} : 集合 α) ↔ a != b
   证明: Iff.rfl
 
 @[simp]
@@ -810,7 +810,7 @@ theorem mem_singleton
 中文:
 定理 mem_singleton
   条件: (a : α)
-  结论: a in ({a} : Set α)
+  结论: a in ({a} : 集合 α)
   证明: @rfl _ _
 -/
 theorem mem_singleton (a : α) : a in ({a} : Set α) :=
@@ -829,7 +829,7 @@ theorem eq_of_mem_singleton
 
 中文:
 定理 eq_of_mem_singleton
-  条件: {x y : α} (h : x in ({y} : Set α))
+  条件: {x y : α} (h : x in ({y} : 集合 α))
   结论: x = y
   证明: h
 
@@ -851,7 +851,7 @@ theorem singleton_eq_singleton_iff
 中文:
 定理 singleton_eq_singleton_iff
   条件: {x y : α}
-  结论: {x} = ({y} : Set α) ↔ x = y
+  结论: {x} = ({y} : 集合 α) ↔ x = y
   证明: Set.ext_iff.trans eq_iff_eq_cancel_left
 
 Depends on / 依赖: Set.ext_iff.trans, eq_iff_eq_cancel_left, ext_iff
@@ -870,7 +870,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Injective (singleton : α -> Set α)
+  结论: 单射 (singleton : α -> 集合 α)
   证明: fun _ _ =>
   singleton_eq_singleton_iff.mp
 -/
@@ -889,7 +889,7 @@ theorem mem_singleton_of_eq
 中文:
 定理 mem_singleton_of_eq
   条件: {x y : α} (H : x = y)
-  结论: x in ({y} : Set α)
+  结论: x in ({y} : 集合 α)
   证明: H
 -/
 theorem mem_singleton_of_eq {x y : α} (H : x = y) : x in ({y} : Set α) :=
@@ -908,8 +908,8 @@ theorem insert_eq
 
 中文:
 定理 insert_eq
-  条件: (x : α) (s : Set α)
-  结论: insert x s = ({x} : Set α) union s
+  条件: (x : α) (s : 集合 α)
+  结论: insert x s = ({x} : 集合 α) union s
   证明: rfl
 
 @[simp]
@@ -932,7 +932,7 @@ theorem singleton_nonempty
 中文:
 定理 singleton_nonempty
   条件: (a : α)
-  结论: ({a} : Set α).Nonempty
+  结论: ({a} : 集合 α).非空
   证明: ⟨a, rfl⟩
 
 @[simp]
@@ -955,7 +955,7 @@ theorem singleton_ne_empty
 中文:
 定理 singleton_ne_empty
   条件: (a : α)
-  结论: ({a} : Set α) != ∅
+  结论: ({a} : 集合 α) != ∅
   证明: (singleton_nonempty _).ne_empty
 
 @[simp]
@@ -978,7 +978,7 @@ theorem empty_ne_singleton
 中文:
 定理 empty_ne_singleton
   条件: (a : α)
-  结论: ∅ != ({a} : Set α)
+  结论: ∅ != ({a} : 集合 α)
   证明: (singleton_ne_empty a).symm
 
 Depends on / 依赖: ContMDiffVectorBundle, ContMDiffVectorBundle.of_le, le_top, of_le, singleton_ne_empty
@@ -998,7 +998,7 @@ theorem empty_ssubset_singleton
 
 中文:
 定理 empty_ssubset_singleton
-  结论: (∅ : Set α) ⊂ {a}
+  结论: (∅ : 集合 α) ⊂ {a}
   证明: (singleton_nonempty _).empty_ssubset
 
 @[simp, grind =]
@@ -1022,7 +1022,7 @@ theorem singleton_subset_iff
 
 中文:
 定理 singleton_subset_iff
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: {a} subseteq s ↔ a in s
   证明: forall_eq
 
@@ -1044,7 +1044,7 @@ theorem singleton_subset_singleton
 
 中文:
 定理 singleton_subset_singleton
-  结论: ({a} : Set α) subseteq {b} ↔ a = b
+  结论: ({a} : 集合 α) subseteq {b} ↔ a = b
   证明: by simp
 -/
 theorem singleton_subset_singleton : ({a} : Set α) subseteq {b} ↔ a = b := by simp
@@ -1129,7 +1129,7 @@ theorem singleton_inter_nonempty
 
 中文:
 定理 singleton_inter_nonempty
-  结论: ({a} inter s).Nonempty ↔ a in s
+  结论: ({a} inter s).非空 ↔ a in s
   证明: by
   simp only [Set.Nonempty, mem_inter_iff, mem_singleton_iff, exists_eq_left]
 
@@ -1154,7 +1154,7 @@ theorem inter_singleton_nonempty
 
 中文:
 定理 inter_singleton_nonempty
-  结论: (s inter {a}).Nonempty ↔ a in s
+  结论: (s inter {a}).非空 ↔ a in s
   证明: by
   rw [inter_comm]; rw [singleton_inter_nonempty]
 
@@ -1262,8 +1262,8 @@ theorem notMem_singleton_empty
 
 中文:
 定理 notMem_singleton_empty
-  条件: {s : Set α}
-  结论: s ∉ ({∅} : Set (Set α)) ↔ s.Nonempty
+  条件: {s : 集合 α}
+  结论: s ∉ ({∅} : 集合 (集合 α)) ↔ s.非空
   证明: nonempty_iff_ne_empty.symm
 
 Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
@@ -1318,7 +1318,7 @@ theorem eq_singleton_iff_nonempty_unique_mem
 
 中文:
 定理 eq_singleton_iff_nonempty_unique_mem
-  结论: s = {a} ↔ s.Nonempty ∧ 对任意 x in s, x = a
+  结论: s = {a} ↔ s.非空 ∧ 对任意 x in s, x = a
   证明: eq_singleton_iff_unique_mem.trans
     and_congr_left fun H => ⟨fun h' => ⟨_, h'⟩, fun ⟨x, h⟩ => H x h ▸ h⟩
 
@@ -1359,7 +1359,7 @@ alias setOf_mem_list_eq_replicate := ofPred_mem_list_eq_replicate
 
 中文:
 定理 ofPred_mem_list_eq_replicate
-  条件: {l : List α} {a : α}
+  条件: {l : 列表 α} {a : α}
   证明: by
   simpa +contextual [Set.ext_iff, iff_iff_implies_and_implies, forall_and, List.eq_replicate_iff,
     List.length_pos_iff_exists_mem] using ⟨fun _ _ => ⟨_, ‹_›⟩, fun x hx h => h _ hx ▸ hx⟩
@@ -1397,7 +1397,7 @@ alias setOf_mem_list_eq_singleton_of_nodup := ofPred_mem_list_eq_singleton_of_no
 
 中文:
 定理 ofPred_mem_list_eq_singleton_of_nodup
-  条件: {l : List α} (H : l.Nodup) {a : α}
+  条件: {l : 列表 α} (H : l.Nodup) {a : α}
   证明: by
   constructor
   · rw [ofPred_mem_list_eq_replicate]
@@ -1441,7 +1441,7 @@ theorem default_coe_singleton
 中文:
 定理 default_coe_singleton
   条件: (x : α)
-  结论: (default : ({x} : Set α)) = ⟨x, rfl⟩
+  结论: (default : ({x} : 集合 α)) = ⟨x, rfl⟩
   证明: rfl
 
 @[simp]
@@ -1461,7 +1461,7 @@ theorem subset_singleton_iff
 
 中文:
 定理 subset_singleton_iff
-  条件: {α : 类型} {s : Set α} {x : α}
+  条件: {α : 类型} {s : 集合 α} {x : α}
   结论: s subseteq {x} ↔ 对任意 y in s, y = x
   证明: Iff.rfl
 
@@ -1481,7 +1481,7 @@ theorem subset_singleton_iff_eq
 
 中文:
 定理 subset_singleton_iff_eq
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: s subseteq {x} ↔ s = ∅ ∨ s = {x}
   证明: by grind
 -/
@@ -1497,8 +1497,8 @@ theorem Nonempty.subset_singleton_iff
   proof: subset_singleton_iff_eq.trans or_iff_right h.ne_empty
 
 中文:
-定理 Nonempty.subset_singleton_iff
-  条件: (h : s.Nonempty)
+定理 非空.subset_singleton_iff
+  条件: (h : s.非空)
   结论: s subseteq {a} ↔ s = {a}
   证明: subset_singleton_iff_eq.trans or_iff_right h.ne_empty
 
@@ -1520,7 +1520,7 @@ theorem ssubset_singleton_iff
 
 中文:
 定理 ssubset_singleton_iff
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: s ⊂ {x} ↔ s = ∅
   证明: by
   rw [ssubset_iff_subset_ne]; rw [subset_singleton_iff_eq]; rw [or_and_right]; rw [and_not_self_iff]; rw [or_false]; rw [and_iff_left_iff_imp]
@@ -1543,7 +1543,7 @@ theorem eq_empty_of_ssubset_singleton
 
 中文:
 定理 eq_empty_of_ssubset_singleton
-  条件: {s : Set α} {x : α} (hs : s ⊂ {x})
+  条件: {s : 集合 α} {x : α} (hs : s ⊂ {x})
   结论: s = ∅
   证明: ssubset_singleton_iff.1 hs
 
@@ -1562,7 +1562,7 @@ theorem eq_of_nonempty_of_subsingleton
 
 中文:
 定理 eq_of_nonempty_of_subsingleton
-  结论: {α} [Subsingleton α] (s t : Set α) [Nonempty s]
+  结论: {α} [子单例 α] (s t : 集合 α) [非空 s]
   证明: Nonempty.of_subtype.eq_univ.trans Nonempty.of_subtype.eq_univ.symm
 
 Depends on / 依赖: Nonempty, Nonempty.of_subtype.eq_univ.symm, Nonempty.of_subtype.eq_univ.trans, eq_univ, of_subtype
@@ -1581,7 +1581,7 @@ theorem eq_of_nonempty_of_subsingleton'
 
 中文:
 定理 eq_of_nonempty_of_subsingleton'
-  结论: {α} [Subsingleton α] {s : Set α} (t : Set α)
+  结论: {α} [子单例 α] {s : 集合 α} (t : 集合 α)
   证明: have := hs.to_subtype; eq_of_nonempty_of_subsingleton s t
 
 Depends on / 依赖: eq_of_nonempty_of_subsingleton, hs.to_subtype, to_subtype
@@ -1599,8 +1599,8 @@ theorem Nonempty.eq_zero
   proof: eq_of_nonempty_of_subsingleton' {0} h
 
 中文:
-定理 Nonempty.eq_zero
-  条件: [Subsingleton α] [Zero α] {s : Set α} (h : s.Nonempty)
+定理 非空.eq_zero
+  条件: [子单例 α] [零 α] {s : 集合 α} (h : s.非空)
   证明: eq_of_nonempty_of_subsingleton' {0} h
 
 Depends on / 依赖: eq_of_nonempty_of_subsingleton
@@ -1617,8 +1617,8 @@ theorem Nonempty.eq_one
   proof: eq_of_nonempty_of_subsingleton' {1} h
 
 中文:
-定理 Nonempty.eq_one
-  条件: [Subsingleton α] [One α] {s : Set α} (h : s.Nonempty)
+定理 非空.eq_one
+  条件: [子单例 α] [幺 α] {s : 集合 α} (h : s.非空)
   证明: eq_of_nonempty_of_subsingleton' {1} h
 
 Depends on / 依赖: eq_of_nonempty_of_subsingleton
@@ -1682,7 +1682,7 @@ lemma disjoint_singleton
 
 中文:
 引理 disjoint_singleton
-  结论: Disjoint ({a} : Set α) {b} ↔ a != b
+  结论: Disjoint ({a} : 集合 α) {b} ↔ a != b
   证明: by
   simp
 
@@ -1778,7 +1778,7 @@ theorem insert_sdiff_eq_singleton
 
 中文:
 定理 insert_sdiff_eq_singleton
-  条件: {a : α} {s : Set α} (h : a ∉ s)
+  条件: {a : α} {s : 集合 α} (h : a ∉ s)
   结论: insert a s \ s = {a}
   证明: by grind
 
@@ -1869,7 +1869,7 @@ theorem pair_eq_singleton
 中文:
 定理 pair_eq_singleton
   条件: (a : α)
-  结论: ({a, a} : Set α) = {a}
+  结论: ({a, a} : 集合 α) = {a}
   证明: union_self _
 
 Depends on / 依赖: union_self
@@ -1889,7 +1889,7 @@ theorem pair_comm
 中文:
 定理 pair_comm
   条件: (a b : α)
-  结论: ({a, b} : Set α) = {b, a}
+  结论: ({a, b} : 集合 α) = {b, a}
   证明: union_comm _ _
 
 Depends on / 依赖: union_comm
@@ -1999,8 +1999,8 @@ theorem Nonempty.subset_pair_iff_eq
   rw [Set.subset_pair_iff_eq]; rw [or_iff_right]; exact hs.ne_empty
 
 中文:
-定理 Nonempty.subset_pair_iff_eq
-  条件: (hs : s.Nonempty)
+定理 非空.subset_pair_iff_eq
+  条件: (hs : s.非空)
   证明: by
   rw [Set.subset_pair_iff_eq]; rw [or_iff_right]; exact hs.ne_empty
 
@@ -2063,7 +2063,7 @@ lemma preimage_fst_singleton_eq_range
 
 中文:
 引理 preimage_fst_singleton_eq_range
-  结论: (Prod.fst ⁻¹' {a} : Set (α × β)) = range (a, ·)
+  结论: (积类型.fst ⁻¹' {a} : 集合 (α × β)) = range (a, ·)
   证明: by
   grind
 -/
@@ -2081,7 +2081,7 @@ lemma preimage_snd_singleton_eq_range
 
 中文:
 引理 preimage_snd_singleton_eq_range
-  结论: (Prod.snd ⁻¹' {b} : Set (α × β)) = range (·, b)
+  结论: (积类型.snd ⁻¹' {b} : 集合 (α × β)) = range (·, b)
   证明: by
   grind
 -/
@@ -2106,7 +2106,7 @@ instance decidableSingleton
 
 中文:
 实例 decidableSingleton
-  签名: [Decidable (a = b)]
+  签名: [可判定 (a = b)]
   定义体: inferInstanceAs (Decidable (a = b))
 
 Depends on / 依赖: Decidable
@@ -2128,9 +2128,9 @@ theorem Prop.compl_singleton
   proof: ext fun q => by simpa [@Iff.comm q] using not_iff
 
 中文:
-定理 Prop.compl_singleton
+定理 命题.compl_singleton
   条件: (p : 命题)
-  结论: ({p}ᶜ : Set 命题) = {¬p}
+  结论: ({p}ᶜ : 集合 命题) = {¬p}
   证明: ext fun q => by simpa [@Iff.comm q] using not_iff
 -/
 @[simp] theorem Prop.compl_singleton (p : Prop) : ({p}ᶜ : Set Prop) = {¬p} :=

@@ -75,7 +75,7 @@ definition toPowerSeries
 
 中文:
 定义 toPowerSeries
-  签名: : R⟦自然数⟧ ≃+* PowerSeries R where
+  签名: : R⟦自然数⟧ ≃+* 幂级数 R where
   定义体: PowerSeries.mk f.coeff
   invFun f := ⟨fun n => PowerSeries.coeff n f, .of_linearOrder _⟩
   left_inv f := by
@@ -146,7 +146,7 @@ theorem coeff_toPowerSeries_symm
 
 中文:
 定理 coeff_toPowerSeries_symm
-  条件: {f : PowerSeries R} {n : 自然数}
+  条件: {f : 幂级数 R} {n : 自然数}
   证明: rfl
 -/
 theorem coeff_toPowerSeries_symm {f : PowerSeries R} {n : Nat} :
@@ -167,7 +167,7 @@ definition ofPowerSeries
 
 中文:
 定义 ofPowerSeries
-  签名: : PowerSeries R ->+* R⟦Γ⟧
+  签名: : 幂级数 R ->+* R⟦Γ⟧
   定义体: (HahnSeries.embDomainRingHom (Nat.castAddMonoidHom Γ) Nat.strictMono_cast.injective fun _ _ =>
         Nat.cast_le).comp
     (RingEquiv.toRingHom toPowerSeries.symm)
@@ -191,7 +191,7 @@ theorem ofPowerSeries_injective
 
 中文:
 定理 ofPowerSeries_injective
-  结论: Function.Injective (ofPowerSeries Γ R)
+  结论: 函数.单射 (ofPowerSeries Γ R)
   证明: embDomain_injective.comp toPowerSeries.symm.injective
 
 Depends on / 依赖: embDomain_injective, embDomain_injective.comp, injective, toPowerSeries, toPowerSeries.symm.injective
@@ -210,7 +210,7 @@ theorem ofPowerSeries_apply
 
 中文:
 定理 ofPowerSeries_apply
-  条件: (x : PowerSeries R)
+  条件: (x : 幂级数 R)
   证明: rfl
 -/
 theorem ofPowerSeries_apply (x : PowerSeries R) :
@@ -234,7 +234,7 @@ theorem ofPowerSeries_apply_coeff
 
 中文:
 定理 ofPowerSeries_apply_coeff
-  条件: (x : PowerSeries R) (n : 自然数)
+  条件: (x : 幂级数 R) (n : 自然数)
   证明: by
   trans (embDomain (Nat.castOrderEmbedding (α := Γ)) (toPowerSeries.symm x)).coeff
     (Nat.castOrderEmbedding n)
@@ -275,7 +275,7 @@ theorem ofPowerSeries_C
 中文:
 定理 ofPowerSeries_C
   条件: (r : R)
-  结论: ofPowerSeries Γ R (PowerSeries.C r) = HahnSeries.C r
+  结论: ofPowerSeries Γ R (幂级数.C r) = Hahn级数.C r
   证明: by
   ext n
   simp only [ofPowerSeries_apply, C, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
@@ -321,7 +321,7 @@ theorem ofPowerSeries_X
 
 中文:
 定理 ofPowerSeries_X
-  结论: ofPowerSeries Γ R PowerSeries.X = single 1 1
+  结论: ofPowerSeries Γ R 幂级数.X = single 1 1
   证明: by
   ext n
   simp only [coeff_single, ofPowerSeries_apply]
@@ -358,7 +358,7 @@ theorem ofPowerSeries_X_pow
 
 中文:
 定理 ofPowerSeries_X_pow
-  条件: {R} [Semiring R] (n : 自然数)
+  条件: {R} [半环 R] (n : 自然数)
   证明: by
   simp
 -/
@@ -401,7 +401,7 @@ ref
 
 中文:
 定义 toMvPowerSeries
-  签名: {σ : 类型} [Finite σ]
+  签名: {σ : 类型} [有限 σ]
   定义体: f.coeff
   invFun f := ⟨(f : (σ ->₀ Nat) -> R), Set.isPWO_of_wellQuasiOrderedLE _⟩
   left_inv f := by
@@ -459,8 +459,8 @@ instance [NoZeroDivisors
   body: toMvPowerSeries.toMulEquiv.noZeroDivisors (A := R⟦σ ->₀ Nat⟧) (MvPowerSeries σ R)
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] : NoZeroDivisors (R⟦σ ->₀ 自然数⟧)
+实例 [无零因子
+  签名: R] : 无零因子 (R⟦σ ->₀ 自然数⟧)
   定义体: toMvPowerSeries.toMulEquiv.noZeroDivisors (A := R⟦σ ->₀ Nat⟧) (MvPowerSeries σ R)
 
 Depends on / 依赖: MvPowerSeries, noZeroDivisors, toMulEquiv, toMvPowerSeries, toMvPowerSeries.toMulEquiv.noZeroDivisors
@@ -523,7 +523,7 @@ definition toPowerSeriesAlg
 
 中文:
 定义 toPowerSeriesAlg
-  签名: : A⟦自然数⟧ ≃ₐ[R] PowerSeries A
+  签名: : A⟦自然数⟧ ≃ₐ[R] 幂级数 A
   定义体: { toPowerSeries with
     commutes' := fun r => by
       ext n
@@ -553,7 +553,7 @@ definition ofPowerSeriesAlg
 
 中文:
 定义 ofPowerSeriesAlg
-  签名: : PowerSeries A ->ₐ[R] A⟦Γ⟧
+  签名: : 幂级数 A ->ₐ[R] A⟦Γ⟧
   定义体: (HahnSeries.embDomainAlgHom (Nat.castAddMonoidHom Γ) Nat.strictMono_cast.injective fun _ _ =>
         Nat.cast_le).comp
     (AlgEquiv.toAlgHom (toPowerSeriesAlg R).symm)
@@ -575,7 +575,7 @@ instance powerSeriesAlgebra
 
 中文:
 实例 powerSeriesAlgebra
-  签名: {S : 类型} [CommSemiring S] [Algebra S (PowerSeries R)]
+  签名: {S : 类型} [交换半环 S] [代数 S (幂级数 R)]
   定义体: RingHom.toAlgebra (ofPowerSeries Γ R).comp (algebraMap S (PowerSeries R))
 
 Depends on / 依赖: CommSemigroup, CommSemigroup.mul_comm, PowerSeries, RingHom, RingHom.toAlgebra, algebraMap, mul_comm, ofPowerSeries, toAlgebra
@@ -618,7 +618,7 @@ theorem _root_.Polynomial.algebraMap_hahnSeries_apply
   proof: rfl
 
 中文:
-定理 _root_.Polynomial.algebraMap_hahnSeries_apply
+定理 _root_.多项式.algebraMap_hahnSeries_apply
   条件: (f : R[X])
   证明: rfl
 -/
@@ -634,7 +634,7 @@ theorem _root_.Polynomial.algebraMap_hahnSeries_injective
   proof: ofPowerSeries_injective.comp (Polynomial.coe_injective R)
 
 中文:
-定理 _root_.Polynomial.algebraMap_hahnSeries_injective
+定理 _root_.多项式.algebraMap_hahnSeries_injective
   证明: ofPowerSeries_injective.comp (Polynomial.coe_injective R)
 
 Depends on / 依赖: Polynomial, Polynomial.coe_injective, coe_injective, ofPowerSeries_injective, ofPowerSeries_injective.comp

@@ -36,7 +36,7 @@ definition nonunits
 
 中文:
 定义 nonunits
-  签名: (α : 类型) [Monoid α]
+  签名: (α : 类型) [幺半群 α]
   定义体: { a | ¬IsUnit a }
 
 @[simp]
@@ -58,8 +58,8 @@ theorem mem_nonunits_iff
 
 中文:
 定理 mem_nonunits_iff
-  条件: [Monoid α]
-  结论: a in nonunits α ↔ ¬IsUnit a
+  条件: [幺半群 α]
+  结论: a in nonunits α ↔ ¬是单位 a
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -78,7 +78,7 @@ theorem mul_mem_nonunits_right
 
 中文:
 定理 mul_mem_nonunits_right
-  条件: [CommMonoid α]
+  条件: [交换幺半群 α]
   结论: b in nonunits α -> a * b in nonunits α
   证明: mt isUnit_of_mul_isUnit_right
 
@@ -98,7 +98,7 @@ theorem mul_mem_nonunits_left
 
 中文:
 定理 mul_mem_nonunits_left
-  条件: [CommMonoid α]
+  条件: [交换幺半群 α]
   结论: a in nonunits α -> a * b in nonunits α
   证明: mt isUnit_of_mul_isUnit_left
 
@@ -120,7 +120,7 @@ theorem zero_mem_nonunits
 
 中文:
 定理 zero_mem_nonunits
-  条件: [MonoidWithZero α]
+  条件: [带零幺半群 α]
   结论: 0 in nonunits α ↔ (0 : α) != 1
   证明: not_congr isUnit_zero_iff
 
@@ -145,7 +145,7 @@ theorem one_notMem_nonunits
 
 中文:
 定理 one_notMem_nonunits
-  条件: [Monoid α]
+  条件: [幺半群 α]
   结论: (1 : α) ∉ nonunits α
   证明: not_not_intro isUnit_one
 
@@ -167,7 +167,7 @@ theorem map_mem_nonunits_iff
 
 中文:
 定理 map_mem_nonunits_iff
-  结论: [Monoid α] [Monoid β] [FunLike F α β] [MonoidHomClass F α β] (f : F)
+  结论: [幺半群 α] [幺半群 β] [函数状 F α β] [幺半群态射类 F α β] (f : F)
   证明: ⟨fun h ha => h ha.map f, fun h ha => h ha.of_map⟩
 
 Depends on / 依赖: ha.map, ha.of_map, of_map
@@ -187,8 +187,8 @@ theorem coe_subset_nonunits
 
 中文:
 定理 coe_subset_nonunits
-  条件: [Semiring α] {I : Ideal α} (h : I != ⊤)
-  结论: (I : Set α) subseteq nonunits α
+  条件: [半环 α] {I : 理想 α} (h : I != ⊤)
+  结论: (I : 集合 α) subseteq nonunits α
   证明: fun _x hx hu => h I.eq_top_of_isUnit_mem hx hu
 
 Depends on / 依赖: I.eq_top_of_isUnit_mem, eq_top_of_isUnit_mem
@@ -214,8 +214,8 @@ theorem exists_max_ideal_of_mem_nonunits
   exact Set.mem_singleton a
 
 中文:
-定理 exists_max_ideal_of_mem_nonunits
-  条件: [CommSemiring α] (h : a in nonunits α)
+定理 存在_max_ideal_of_mem_nonunits
+  条件: [交换半环 α] (h : a in nonunits α)
   证明: by
   have : Ideal.span ({a} : Set α) != ⊤ := by
     intro H
@@ -258,7 +258,7 @@ theorem inv_mem_of_isUnit
 
 中文:
 定理 inv_mem_of_isUnit
-  条件: [DivisionMonoid α] [SubmonoidClass C α] {S : C} {a : S} (ha : IsUnit a)
+  条件: [Division幺半群 α] [子幺半群类 C α] {S : C} {a : S} (ha : 是单位 a)
   证明: by
   obtain ⟨u, rfl⟩ := ha
   convert! u⁻¹.1.2
@@ -287,7 +287,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit a ↔ (a : α)⁻¹ in S where
+  结论: 是单位 a ↔ (a : α)⁻¹ in S where
   证明: inv_mem_of_isUnit
   mpr h := ⟨⟨a, ⟨_, h⟩, Subtype.ext (mul_inv_cancel _), Subtype.ext (inv_mul_cancel _)⟩, rfl⟩
 
@@ -333,7 +333,7 @@ theorem isUnit_iff_and
 
 中文:
 定理 isUnit_iff_and
-  结论: IsUnit a ↔ (a : α) != 0 ∧ (a : α)⁻¹ in S where
+  结论: 是单位 a ↔ (a : α) != 0 ∧ (a : α)⁻¹ in S where
   证明: ⟨(h.map <| subtype <| ofClass S).ne_zero, inv_mem_of_isUnit h⟩
   mpr h :=
     ⟨⟨a, ⟨_, h.2⟩, Subtype.ext (mul_inv_cancel₀ h.1), Subtype.ext (inv_mul_cancel₀ h.1)⟩, rfl⟩
@@ -358,7 +358,7 @@ theorem isUnit_iff_of_ne_zero
 中文:
 定理 isUnit_iff_of_ne_zero
   条件: (ha : (a : α) != 0)
-  结论: IsUnit a ↔ (a : α)⁻¹ in S
+  结论: 是单位 a ↔ (a : α)⁻¹ in S
   证明: by
   rw [isUnit_iff_and]; rw [and_iff_right ha]
 

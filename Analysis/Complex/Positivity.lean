@@ -42,7 +42,7 @@ theorem nonneg_of_iteratedDeriv_nonneg
 
 中文:
 定理 nonneg_of_iteratedDeriv_nonneg
-  结论: {f : Complex -> Complex} {c : Complex} {r : 实数}
+  结论: {f : 复形 -> 复形} {c : 复形} {r : 实数}
   证明: by
   have H := taylorSeries_eq_on_ball' hz₂ hf
   rw [← sub_nonneg] at hz₁
@@ -85,7 +85,7 @@ theorem nonneg_of_iteratedDeriv_nonneg
 
 中文:
 定理 nonneg_of_iteratedDeriv_nonneg
-  结论: {f : Complex -> Complex} (hf : Differentiable Complex f) {c : Complex}
+  结论: {f : 复形 -> 复形} (hf : 可微 复形 f) {c : 复形}
   证明: by
   refine hf.differentiableOn.nonneg_of_iteratedDeriv_nonneg (r := (z - c).re + 1) h hz ?_
   rw [← sub_nonneg] at hz
@@ -119,7 +119,7 @@ theorem apply_le_of_iteratedDeriv_nonneg
 
 中文:
 定理 apply_le_of_iteratedDeriv_nonneg
-  结论: {f : Complex -> Complex} {c : Complex} (hf : Differentiable Complex f)
+  结论: {f : 复形 -> 复形} {c : 复形} (hf : 可微 复形 f)
   证明: by
   have h' (n : Nat) : 0 <= iteratedDeriv n (f · - f c) c := by
     cases n with
@@ -159,7 +159,7 @@ theorem apply_le_of_iteratedDeriv_alternating
 
 中文:
 定理 apply_le_of_iteratedDeriv_alternating
-  结论: {f : Complex -> Complex} {c : Complex} (hf : Differentiable Complex f)
+  结论: {f : 复形 -> 复形} {c : 复形} (hf : 可微 复形 f)
   证明: by
   convert!
     apply_le_of_iteratedDeriv_nonneg (f := fun z => f (-z)) (hf.comp <| differentiable_neg)

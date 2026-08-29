@@ -28,7 +28,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing 实数>=0
+  签名: 对合环 实数>=0
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 实数>=0 实数
+  签名: 对合模 实数>=0 实数
   定义体: by simp only [star_trivial, forall_const]
 
 Depends on / 依赖: forall_const, star_trivial

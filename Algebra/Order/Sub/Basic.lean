@@ -355,7 +355,7 @@ abbreviation CanonicallyOrderedAddCommMonoid.toAddCancelCommMonoid
 
 中文:
 缩写 CanonicallyOrderedAddCommMonoid.toAddCancelCommMonoid
-  签名: : AddCancelCommMonoid α
+  签名: : 加法消去交换幺半群 α
   定义体: { (by infer_instance : AddCommMonoid α) with
     add_left_cancel := fun a b c h => by
       simpa only [add_tsub_cancel_left] using congr_arg (fun x => x - a) h }
@@ -412,7 +412,7 @@ theorem tsub_eq_tsub_min
 中文:
 定理 tsub_eq_tsub_min
   条件: (a b : α)
-  结论: a - b = a - min a b
+  结论: a - b = a - 最小值 a b
   证明: by
   rcases le_total a b with h | h
   · rw [min_eq_left h, tsub_self, tsub_eq_zero_of_le h]
@@ -650,7 +650,7 @@ lemma tsub_tsub_eq_min
 中文:
 引理 tsub_tsub_eq_min
   条件: (a b : α)
-  结论: a - (a - b) = min a b
+  结论: a - (a - b) = 最小值 a b
   证明: by
   rw [tsub_eq_tsub_min _ b]; rw [tsub_tsub_cancel_of_le (min_le_left a _)]
 
@@ -676,7 +676,7 @@ theorem tsub_add_eq_max
 
 中文:
 定理 tsub_add_eq_max
-  结论: a - b + b = max a b
+  结论: a - b + b = 最大值 a b
   证明: by
   rcases le_total a b with h | h
   · rw [max_eq_right h, tsub_eq_zero_of_le h, zero_add]
@@ -699,7 +699,7 @@ theorem add_tsub_eq_max
 
 中文:
 定理 add_tsub_eq_max
-  结论: a + (b - a) = max a b
+  结论: a + (b - a) = 最大值 a b
   证明: by rw [add_comm, max_comm, tsub_add_eq_max]
 
 Depends on / 依赖: add_comm, max_comm, tsub_add_eq_max
@@ -716,7 +716,7 @@ theorem tsub_min
 
 中文:
 定理 tsub_min
-  结论: a - min a b = a - b
+  结论: a - 最小值 a b = a - b
   证明: (tsub_eq_tsub_min a b).symm
 
 Depends on / 依赖: tsub_eq_tsub_min
@@ -735,7 +735,7 @@ theorem tsub_add_min
 
 中文:
 定理 tsub_add_min
-  结论: a - b + min a b = a
+  结论: a - b + 最小值 a b = a
   证明: by
   rw [← tsub_min]; rw [@tsub_add_cancel_of_le]
   apply min_le_left
@@ -763,7 +763,7 @@ lemma Even.tsub
 
 中文:
 引理 Even.tsub
-  条件: [AddLeftReflectLE α] {m n : α} (hm : Even m) (hn : Even n)
+  条件: [加法LeftReflectLE α] {m n : α} (hm : Even m) (hn : Even n)
   证明: by
   obtain ⟨a, rfl⟩ := hm
   obtain ⟨b, rfl⟩ := hn
@@ -802,7 +802,7 @@ abbreviation toSub
 
 中文:
 缩写 toSub
-  签名: : Sub α where
+  签名: : 减法 α where
   定义体: if h : y <= x then (exists_add_of_le h).choose else 0
 
 Depends on / 依赖: exists_add_of_le
@@ -833,7 +833,7 @@ theorem toOrderedSub
 
 中文:
 定理 toOrderedSub
-  条件: [AddRightReflectLE α]
+  条件: [加法RightReflectLE α]
   结论: OrderedSub α where
   证明: by
     change dite _ _ _ <= c ↔ _

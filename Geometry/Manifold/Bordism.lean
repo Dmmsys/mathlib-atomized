@@ -117,16 +117,16 @@ structure SingularManifold.{u}
 
 中文:
 结构 SingularManifold.{u}
-  参数: (X : 类型) [TopologicalSpace X] (k : WithTop 自然数∞)
+  参数: (X : 类型) [拓扑空间 X] (k : WithTop 自然数∞)
   公理与运算 (8 个):
     - M : 类型u
-    - [topSpaceM : TopologicalSpace M]
-    - [chartedSpace : ChartedSpace H M]
-    - [isManifold : IsManifold I k M]
-    - [compactSpace : CompactSpace M]
-    - [boundaryless : BoundarylessManifold I M]
+    - [topSpaceM : 拓扑空间 M]
+    - [chartedSpace : Charted空间 H M]
+    - [isManifold : 是流形 I k M]
+    - [compactSpace : 紧空间 M]
+    - [boundaryless : 无边界流形 I M]
     - f : M -> X
-    - hf : Continuous f
+    - hf : 连续 f
 -/
 structure SingularManifold.{u} (X : Type*) [TopologicalSpace X] (k : WithTop Nat∞)
     {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [FiniteDimensional Real E]
@@ -178,7 +178,7 @@ definition map.{u}
 
 中文:
 定义 map.{u}
-  签名: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y] {k : WithTop 自然数∞}
+  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y] {k : WithTop 自然数∞}
   定义体: s.M
   f := φ ∘ s.f
   hf := hφ.comp s.hf
@@ -206,7 +206,7 @@ lemma map_f
 
 中文:
 引理 map_f
-  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ)
+  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : 连续 φ)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -226,7 +226,7 @@ lemma map_M
 
 中文:
 引理 map_M
-  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ)
+  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : 连续 φ)
   证明: rfl
 -/
 lemma map_M (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ) :
@@ -321,7 +321,7 @@ lemma comap_M
 
 中文:
 引理 comap_M
-  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ)
+  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : 连续 φ)
   证明: by
   rfl
 
@@ -342,7 +342,7 @@ lemma comap_f
 
 中文:
 引理 comap_f
-  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ)
+  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : 连续 φ)
   证明: rfl
 -/
 lemma comap_f (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ) :
@@ -367,7 +367,7 @@ omit [CompactSpace M] [BoundarylessManifold I M] in
 
 中文:
 定义 empty.{u}
-  签名: (M : 类型u) [TopologicalSpace M] [ChartedSpace H M]
+  签名: (M : 类型u) [拓扑空间 M] [Charted空间 H M]
   定义体: M
   f x := (IsEmpty.false x).elim
   hf := by
@@ -398,7 +398,7 @@ lemma empty_M
 
 中文:
 引理 empty_M
-  条件: [IsEmpty M]
+  条件: [是空 M]
   结论: (empty X M I (k := k)).M = M
   证明: (rfl)
 -/
@@ -413,8 +413,8 @@ instance [IsEmpty
   body: inferInstanceAs IsEmpty M
 
 中文:
-实例 [IsEmpty
-  签名: M] : IsEmpty (SingularManifold.empty X M I (k := k)).M
+实例 [是空
+  签名: M] : 是空 (SingularManifold.empty X M I (k := k)).M
   定义体: inferInstanceAs IsEmpty M
 -/
 instance [IsEmpty M] : IsEmpty (SingularManifold.empty X M I (k := k)).M :=
@@ -433,7 +433,7 @@ definition toPUnit
 
 中文:
 定义 toPUnit
-  签名: : SingularManifold PUnit k I where
+  签名: : SingularManifold 命题单元 k I where
   定义体: M
   f := fun _ => PUnit.unit
   hf := continuous_const
@@ -456,8 +456,8 @@ definition prod
   hf := continuous_const
 
 中文:
-定义 prod
-  签名: (s : SingularManifold PUnit k I) (t : SingularManifold PUnit k I')
+定义 乘积
+  签名: (s : SingularManifold 命题单元 k I) (t : SingularManifold 命题单元 k I')
   定义体: s.M × t.M
   f := fun _ => PUnit.unit
   hf := continuous_const
@@ -483,7 +483,7 @@ definition sum
 @[simp, mfld_simps]
 
 中文:
-定义 sum
+定义 求和
   签名: (s t : SingularManifold X k I)
   定义体: s.M oplus t.M
   f := Sum.elim s.f t.f
@@ -511,7 +511,7 @@ lemma sum_M
 中文:
 引理 sum_M
   条件: (s t : SingularManifold X k I)
-  结论: (s.sum t).M = (s.M oplus t.M)
+  结论: (s.求和 t).M = (s.M oplus t.M)
   证明: (rfl)
 
 @[simp, mfld_simps]
@@ -531,7 +531,7 @@ lemma sum_f
 中文:
 引理 sum_f
   条件: (s t : SingularManifold X k I)
-  结论: (s.sum t).f = Sum.elim s.f t.f
+  结论: (s.求和 t).f = 和.elim s.f t.f
   证明: (rfl)
 -/
 lemma sum_f (s t : SingularManifold X k I) : (s.sum t).f = Sum.elim s.f t.f := (rfl)

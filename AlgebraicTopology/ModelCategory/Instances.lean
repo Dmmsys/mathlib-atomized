@@ -38,8 +38,8 @@ instance [CategoryWithWeakEquivalences
   infer_instance
 
 中文:
-实例 [CategoryWithWeakEquivalences
-  签名: C] [CategoryWithCofibrations C]
+实例 [带弱等价范畴
+  签名: C] [带余纤维化范畴 C]
   定义体: by
   dsimp [trivialCofibrations]
   infer_instance
@@ -64,8 +64,8 @@ instance [CategoryWithWeakEquivalences
   infer_instance
 
 中文:
-实例 [CategoryWithWeakEquivalences
-  签名: C] [CategoryWithFibrations C]
+实例 [带弱等价范畴
+  签名: C] [带纤维化范畴 C]
   定义体: by
   dsimp [trivialFibrations]
   infer_instance
@@ -92,8 +92,8 @@ instance [CategoryWithCofibrations
   body: (cofibration_iff _).2 ((cofibrations C).comp_mem _ _ hf.mem hg.mem)
 
 中文:
-实例 [CategoryWithCofibrations
-  签名: C] [(cofibrations C).IsStableUnderComposition]
+实例 [带余纤维化范畴
+  签名: C] [(cofibrations C).是StableUnderComposition]
   定义体: (cofibration_iff _).2 ((cofibrations C).comp_mem _ _ hf.mem hg.mem)
 
 Depends on / 依赖: cofibration_iff, cofibrations, comp_mem, hf.mem, hg.mem
@@ -111,8 +111,8 @@ instance [CategoryWithFibrations
   body: (fibration_iff _).2 ((fibrations C).comp_mem _ _ hf.mem hg.mem)
 
 中文:
-实例 [CategoryWithFibrations
-  签名: C] [(fibrations C).IsStableUnderComposition]
+实例 [带纤维化范畴
+  签名: C] [(fibrations C).是StableUnderComposition]
   定义体: (fibration_iff _).2 ((fibrations C).comp_mem _ _ hf.mem hg.mem)
 
 Depends on / 依赖: comp_mem, fibration_iff, fibrations, hf.mem, hg.mem
@@ -130,8 +130,8 @@ instance [CategoryWithWeakEquivalences
   body: (weakEquivalence_iff _).2 ((weakEquivalences C).comp_mem _ _ hf.mem hg.mem)
 
 中文:
-实例 [CategoryWithWeakEquivalences
-  签名: C] [(weakEquivalences C).IsStableUnderComposition]
+实例 [带弱等价范畴
+  签名: C] [(weakEquivalences C).是StableUnderComposition]
   定义体: (weakEquivalence_iff _).2 ((weakEquivalences C).comp_mem _ _ hf.mem hg.mem)
 
 Depends on / 依赖: comp_mem, hf.mem, hg.mem, weakEquivalence_iff, weakEquivalences
@@ -205,7 +205,7 @@ lemma weakEquivalence_postcomp_iff
 
 中文:
 引理 weakEquivalence_postcomp_iff
-  条件: [WeakEquivalence g]
+  条件: [弱等价 g]
   证明: ⟨fun _ => weakEquivalence_of_postcomp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: weakEquivalence_of_postcomp
@@ -224,7 +224,7 @@ lemma weakEquivalence_precomp_iff
 
 中文:
 引理 weakEquivalence_precomp_iff
-  条件: [WeakEquivalence f]
+  条件: [弱等价 f]
   证明: ⟨fun _ => weakEquivalence_of_precomp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: weakEquivalence_of_precomp
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: (trivialCofibrations C).IsStableUnderCobaseChange
+  签名: (trivialCofibrations C).是StableUnderCobaseChange
   定义体: by
   rw [← fibrations_llp]
   infer_instance
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrations C).IsStableUnderBaseChange
+  签名: (fibrations C).是StableUnderBaseChange
   定义体: by
   rw [← trivialCofibrations_rlp]
   infer_instance
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: (trivialCofibrations C).IsMultiplicative
+  签名: (trivialCofibrations C).是Multiplicative
   定义体: by
   rw [← fibrations_llp]
   infer_instance
@@ -408,7 +408,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrations C).IsMultiplicative
+  签名: (fibrations C).是Multiplicative
   定义体: by
   rw [← trivialCofibrations_rlp]
   infer_instance
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations C).IsStableUnderCobaseChange
+  签名: (cofibrations C).是StableUnderCobaseChange
   定义体: by
   rw [← trivialFibrations_llp]
   infer_instance
@@ -544,7 +544,7 @@ instance :
 
 中文:
 实例 :
-  签名: (trivialFibrations C).IsStableUnderBaseChange
+  签名: (trivialFibrations C).是StableUnderBaseChange
   定义体: by
   rw [← cofibrations_rlp]
   infer_instance
@@ -567,7 +567,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations C).IsMultiplicative
+  签名: (cofibrations C).是Multiplicative
   定义体: by
   rw [← trivialFibrations_llp]
   infer_instance
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: (trivialFibrations C).IsMultiplicative
+  签名: (trivialFibrations C).是Multiplicative
   定义体: by
   rw [← cofibrations_rlp]
   infer_instance
@@ -672,7 +672,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).IsStableUnderCobaseChange] [hg : Cofibration g] :
+  签名: C).是StableUnderCobaseChange] [hg : 余纤维化 g] :
   定义体: by
   rw [cofibration_iff] at hg ⊢
   exact MorphismProperty.of_isPushout (IsPushout.of_hasPushout f g) hg
@@ -696,7 +696,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).IsStableUnderCobaseChange] [hf : Cofibration f] :
+  签名: C).是StableUnderCobaseChange] [hf : 余纤维化 f] :
   定义体: by
   rw [cofibration_iff] at hf ⊢
   exact MorphismProperty.of_isPushout (IsPushout.of_hasPushout f g).flip hf
@@ -721,7 +721,7 @@ instance [(trivialCofibrations
 
 中文:
 实例 [(trivialCofibrations
-  签名: C).IsStableUnderCobaseChange]
+  签名: C).是StableUnderCobaseChange]
   定义体: by
   rw [weakEquivalence_iff]
   exact (MorphismProperty.of_isPushout (IsPushout.of_hasPushout f g)
@@ -748,7 +748,7 @@ instance [(trivialCofibrations
 
 中文:
 实例 [(trivialCofibrations
-  签名: C).IsStableUnderCobaseChange]
+  签名: C).是StableUnderCobaseChange]
   定义体: by
   rw [weakEquivalence_iff]
   exact (MorphismProperty.of_isPushout (IsPushout.of_hasPushout f g).flip
@@ -780,7 +780,7 @@ instance [(fibrations
 
 中文:
 实例 [(fibrations
-  签名: C).IsStableUnderBaseChange]
+  签名: C).是StableUnderBaseChange]
   定义体: by
   rw [fibration_iff] at hf ⊢
   exact MorphismProperty.of_isPullback (IsPullback.of_hasPullback f g) hf
@@ -804,7 +804,7 @@ instance [(fibrations
 
 中文:
 实例 [(fibrations
-  签名: C).IsStableUnderBaseChange]
+  签名: C).是StableUnderBaseChange]
   定义体: by
   rw [fibration_iff] at hg ⊢
   exact MorphismProperty.of_isPullback (IsPullback.of_hasPullback f g).flip hg
@@ -829,7 +829,7 @@ instance [(trivialFibrations
 
 中文:
 实例 [(trivialFibrations
-  签名: C).IsStableUnderBaseChange]
+  签名: C).是StableUnderBaseChange]
   定义体: by
   rw [weakEquivalence_iff]
   exact (MorphismProperty.of_isPullback (IsPullback.of_hasPullback f g)
@@ -856,7 +856,7 @@ instance [(trivialFibrations
 
 中文:
 实例 [(trivialFibrations
-  签名: C).IsStableUnderBaseChange]
+  签名: C).是StableUnderBaseChange]
   定义体: by
   rw [weakEquivalence_iff]
   exact (MorphismProperty.of_isPullback (IsPullback.of_hasPullback f g).flip
@@ -893,7 +893,7 @@ instance [IsWeakFactorizationSystem
   exact MorphismProperty.colimMap _ (fun ⟨i⟩ => h i)
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (cofibrations C) (trivialFibrations C)] :
   定义体: by
   simp only [cofibration_iff] at h ⊢
@@ -918,7 +918,7 @@ instance [IsWeakFactorizationSystem
     (fun ⟨i⟩ => mem_trivialCofibrations (f i))).2
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)]
   定义体: by
   rw [weakEquivalence_iff]
@@ -951,7 +951,7 @@ instance [IsWeakFactorizationSystem
   exact MorphismProperty.limMap _ (fun ⟨i⟩ => h i)
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)] :
   定义体: by
   simp only [fibration_iff] at h ⊢
@@ -976,7 +976,7 @@ instance [IsWeakFactorizationSystem
     (fun ⟨i⟩ => mem_trivialFibrations (f i))).2
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (cofibrations C) (trivialFibrations C)]
   定义体: by
   rw [weakEquivalence_iff]
@@ -1012,7 +1012,7 @@ instance [IsWeakFactorizationSystem
   rintro (_ | _) <;> assumption
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (cofibrations C) (trivialFibrations C)]
   定义体: by
   rw [cofibration_iff] at h₁ h₂ ⊢
@@ -1040,7 +1040,7 @@ instance [IsWeakFactorizationSystem
   rintro (_ | _) <;> assumption
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)]
   定义体: by
   rw [fibration_iff] at h₁ h₂ ⊢
@@ -1074,8 +1074,8 @@ instance [IsWeakFactorizationSystem
   simpa only [cofibration_iff] using this.1
 
 中文:
-实例 [IsWeakFactorizationSystem
-  签名: (trivialCofibrations C) (fibrations C)] [IsIso f] :
+实例 [是WeakFactorizationSystem
+  签名: (trivialCofibrations C) (fibrations C)] [是同构 f] :
   定义体: by
   have := (fibrations C).llp_of_isIso f
   rw [fibrations_llp] at this
@@ -1101,8 +1101,8 @@ instance [IsWeakFactorizationSystem
   simpa only [fibration_iff] using this.1
 
 中文:
-实例 [IsWeakFactorizationSystem
-  签名: (cofibrations C) (trivialFibrations C)] [IsIso f] :
+实例 [是WeakFactorizationSystem
+  签名: (cofibrations C) (trivialFibrations C)] [是同构 f] :
   定义体: by
   have := (cofibrations C).rlp_of_isIso f
   rw [cofibrations_rlp] at this
@@ -1128,7 +1128,7 @@ instance [IsWeakFactorizationSystem
   exact MorphismProperty.of_retract (RetractArrow.ofLeftLiftingProperty h.fac) h.hi.2
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)]
   定义体: by
   have h := MorphismProperty.factorizationData (trivialCofibrations C) (fibrations C) f
@@ -1157,7 +1157,7 @@ instance [IsWeakFactorizationSystem
     infer_instance
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)]
   定义体: by
     rw [← weakEquivalence_iff]
@@ -1184,7 +1184,7 @@ instance [IsWeakFactorizationSystem
     infer_instance)
 
 中文:
-实例 [IsWeakFactorizationSystem
+实例 [是WeakFactorizationSystem
   签名: (trivialCofibrations C) (fibrations C)]
   定义体: MorphismProperty.respectsIso_of_isStableUnderComposition (fun _ _ _ (_ : IsIso _) => by
     rw [← weakEquivalence_iff]
@@ -1212,7 +1212,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).ContainsIdentities] (X : C) :
+  签名: C).余ntainsIdentities] (X : C) :
   定义体: by
   rw [weakEquivalence_iff]
   apply id_mem
@@ -1243,7 +1243,7 @@ instance :
 
 中文:
 实例 :
-  签名: Cofibration h.i
+  签名: 余纤维化 h.i
   定义体: by
   simpa only [cofibration_iff] using h.hi
 
@@ -1263,7 +1263,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fibration h.p
+  签名: 纤维化 h.p
   定义体: by
   simpa only [fibration_iff] using h.hp.1
 
@@ -1283,7 +1283,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence h.p
+  签名: 弱等价 h.p
   定义体: by
   simpa only [weakEquivalence_iff] using h.hp.2
 
@@ -1309,7 +1309,7 @@ instance :
 
 中文:
 实例 :
-  签名: Cofibration h.i
+  签名: 余纤维化 h.i
   定义体: by
   simpa only [cofibration_iff] using h.hi.1
 
@@ -1329,7 +1329,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence h.i
+  签名: 弱等价 h.i
   定义体: by
   simpa only [weakEquivalence_iff] using h.hi.2
 
@@ -1349,7 +1349,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fibration h.p
+  签名: 纤维化 h.p
   定义体: by
   simpa only [fibration_iff] using h.hp
 

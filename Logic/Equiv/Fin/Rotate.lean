@@ -32,7 +32,7 @@ definition finRotate
 
 中文:
 定义 finRotate
-  签名: : 对任意 n, Equiv.Perm (Fin n)
+  签名: : 对任意 n, 等价.置换 (有限集 n)
 -/
 def finRotate : forall n, Equiv.Perm (Fin n)
   | 0 => Equiv.refl _
@@ -48,7 +48,7 @@ lemma finRotate_zero
 
 中文:
 引理 finRotate_zero
-  结论: finRotate 0 = Equiv.refl _
+  结论: finRotate 0 = 等价.refl _
   证明: rfl
 
 Depends on / 依赖: complEDS
@@ -136,7 +136,7 @@ theorem finRotate_last
 
 中文:
 定理 finRotate_last
-  结论: finRotate (n + 1) (Fin.last _) = 0
+  结论: finRotate (n + 1) (有限集.last _) = 0
   证明: finRotate_last'
 
 Depends on / 依赖: finRotate_last
@@ -162,8 +162,8 @@ theorem Fin.snoc_eq_cons_rotate
     rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_ir
 
 中文:
-定理 Fin.snoc_eq_cons_rotate
-  条件: {α : 类型} (v : Fin n -> α) (a : α)
+定理 有限集.snoc_eq_cons_rotate
+  条件: {α : 类型} (v : 有限集 n -> α) (a : α)
   证明: by
   ext ⟨i, h⟩
   by_cases h' : i < n
@@ -203,7 +203,7 @@ theorem finRotate_one
 
 中文:
 定理 finRotate_one
-  结论: finRotate 1 = Equiv.refl _
+  结论: finRotate 1 = 等价.refl _
   证明: Subsingleton.elim _ _
 
 @[simp]
@@ -234,7 +234,7 @@ theorem finRotate_apply
 
 中文:
 定理 finRotate_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: haveI
   证明: i.neZero; finRotate n i = i + 1 := by
   match n with
@@ -273,7 +273,7 @@ theorem finRotate_succ_apply
 
 中文:
 定理 finRotate_succ_apply
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: finRotate (n + 1) i = i + 1
   证明: by
   simp
@@ -312,7 +312,7 @@ theorem coe_finRotate_of_ne_last
 
 中文:
 定理 coe_finRotate_of_ne_last
-  条件: {i : Fin n.succ} (h : i != Fin.last n)
+  条件: {i : 有限集 n.succ} (h : i != 有限集.last n)
   证明: by
   rw [finRotate_apply]
   have : (i : Nat) < n := Fin.val_lt_last h
@@ -337,7 +337,7 @@ theorem coe_finRotate
 
 中文:
 定理 coe_finRotate
-  条件: (i : Fin n.succ)
+  条件: (i : 有限集 n.succ)
   证明: by
   rw [finRotate_apply]; rw [Fin.val_add_one i]
 
@@ -358,7 +358,7 @@ theorem lt_finRotate_iff_ne_last
 
 中文:
 定理 lt_finRotate_iff_ne_last
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: by
   simpa using Fin.lt_last_iff_ne_last
 
@@ -382,7 +382,7 @@ theorem lt_finRotate_iff_ne_neg_one
 
 中文:
 定理 lt_finRotate_iff_ne_neg_one
-  条件: [NeZero n] (i : Fin n)
+  条件: [NeZero n] (i : 有限集 n)
   证明: by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
   rw [lt_finRotate_iff_ne_last]; rw [ne_eq]; rw [not_iff_not]; rw [← Fin.neg_last]; rw [neg_neg]
@@ -413,7 +413,7 @@ lemma finRotate_symm_apply
 
 中文:
 引理 finRotate_symm_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: haveI
   证明: i.neZero; (finRotate _).symm i = i - 1 := by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero i.pos.ne'
@@ -442,7 +442,7 @@ lemma finRotate_succ_symm_apply
 
 中文:
 引理 finRotate_succ_symm_apply
-  条件: [NeZero n] (i : Fin n)
+  条件: [NeZero n] (i : 有限集 n)
   结论: (finRotate _).symm i = i - 1
   证明: by
   simp
@@ -461,7 +461,7 @@ lemma coe_finRotate_symm_of_ne_zero
 
 中文:
 引理 coe_finRotate_symm_of_ne_zero
-  条件: [NeZero n] {i : Fin n} (hi : i != 0)
+  条件: [NeZero n] {i : 有限集 n} (hi : i != 0)
   证明: by
   rwa [finRotate_symm_apply, Fin.val_sub_one_of_ne_zero]
 
@@ -485,7 +485,7 @@ theorem finRotate_symm_lt_iff_ne_zero
 
 中文:
 定理 finRotate_symm_lt_iff_ne_zero
-  条件: [NeZero n] (i : Fin n)
+  条件: [NeZero n] (i : 有限集 n)
   证明: by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
   refine ⟨ne_zero_of_lt, fun hi => ?_⟩
@@ -516,7 +516,7 @@ definition finCycle
 
 中文:
 定义 finCycle
-  签名: (k : Fin n)
+  签名: (k : 有限集 n)
   定义体: i + k
   invFun i := i - k
   left_inv i := by have := NeZero.of_pos k.pos; simp
@@ -547,7 +547,7 @@ lemma finCycle_eq_finRotate_iterate
 
 中文:
 引理 finCycle_eq_finRotate_iterate
-  条件: {k : Fin n}
+  条件: {k : 有限集 n}
   结论: finCycle k = (finRotate n)^[k.1]
   证明: by
   match n with

@@ -51,7 +51,7 @@ structure ChosenPullback
     - p₁ : pullback ⟶ X₁
     - p₂ : pullback ⟶ X₂
     - condition : p₁ ≫ f₁ = p₂ ≫ f₂
-    - isLimit : IsLimit (PullbackCone.mk _ _ condition)
+    - isLimit : 是极限 (PullbackCone.mk _ _ condition)
     - p : pullback ⟶ S  [默认: p₁ ≫ f₁]
     - hp₁ : p₁ ≫ f₁ = p  [默认: by cat_disch]
 -/
@@ -89,7 +89,7 @@ lemma isPullback
 
 中文:
 引理 isPullback
-  结论: IsPullback h.p₁ h.p₂ f₁ f₂ where
+  结论: 是拉回 h.p₁ h.p₂ f₁ f₂ where
   证明: h.condition
   isLimit' := ⟨h.isLimit⟩
 
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (h.LiftStruct g₁ g₂ b)
+  签名: 子单例 (h.LiftStruct g₁ g₂ b)
   定义体: by
     rintro ⟨f, f_p₁, f_p₂, _⟩ ⟨f', f'_p₁, f'_p₂, _⟩
     obtain rfl : f = f' := by cat_disch
@@ -297,7 +297,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty h.Diagonal
+  签名: 非空 h.Diagonal
   定义体: by apply LiftStruct.nonempty <;> cat_disch
 
 Depends on / 依赖: LiftStruct, LiftStruct.nonempty, cat_disch, nonempty
@@ -778,7 +778,7 @@ lemma exists_lift
   · rw [← w₁, ← w₁₂, Category.asso
 
 中文:
-引理 exists_lift
+引理 存在_lift
   结论: {Y : C} (g₁ : Y ⟶ X₁) (g₂ : Y ⟶ X₂) (g₃ : Y ⟶ X₃) (b : Y ⟶ S)
   证明: by
   obtain ⟨φ₁₂, w₁, w₂⟩ := h₁₂.isPullback.exists_lift g₁ g₂ (by cat_disch)
@@ -812,7 +812,7 @@ lemma isPullback₂
 
 中文:
 引理 isPullback₂
-  结论: IsPullback h.p₁₂ h.p₂₃ h₁₂.p₂ h₂₃.p₁
+  结论: 是拉回 h.p₁₂ h.p₂₃ h₁₂.p₂ h₂₃.p₁
   证明: h.chosenPullback.isPullback
 
 @[ext]
@@ -859,7 +859,7 @@ lemma isPullback₁
 
 中文:
 引理 isPullback₁
-  结论: IsPullback h.p₁₂ h.p₁₃ h₁₂.p₁ h₁₃.p₁
+  结论: 是拉回 h.p₁₂ h.p₁₃ h₁₂.p₁ h₁₃.p₁
   证明: .mk' (by simp) (fun _ _ _ h₁ h₂ => h.hom_ext (by simpa using h₁ =≫ h₁₂.p₁)
       (by simpa using h₁ =≫ h₁₂.p₂) (by simpa using h₂ =≫ h₁₃.p₂))
     (fun _ a b w => by
@@ -893,7 +893,7 @@ lemma isPullback₃
 
 中文:
 引理 isPullback₃
-  结论: IsPullback h.p₁₃ h.p₂₃ h₁₃.p₂ h₂₃.p₂
+  结论: 是拉回 h.p₁₃ h.p₂₃ h₁₃.p₂ h₂₃.p₂
   证明: .mk' (by simp) (fun _ _ _ h₁ h₂ => h.hom_ext (by simpa using h₁ =≫ h₁₃.p₁)
       (by simpa using h₂ =≫ h₂₃.p₁) (by simpa using h₁ =≫ h₁₃.p₂))
     (fun _ a b w => by

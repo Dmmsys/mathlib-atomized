@@ -30,9 +30,9 @@ theorem Set.star_mem_center
     simpa only [star_mul, star_star] using co
 
 中文:
-定理 Set.star_mem_center
-  条件: (ha : a in Set.center R)
-  结论: star a in Set.center R where
+定理 集合.star_mem_center
+  条件: (ha : a in 集合.center R)
+  结论: star a in 集合.center R where
   证明: by simpa only [star_mul, star_star] using! fun g =>
     congr_arg star ((mem_center_iff.1 ha).comm <| star g).symm
   left_assoc b c := by
@@ -62,7 +62,7 @@ theorem Set.star_centralizer
   conv_rhs => simp only [← image_star, forall_mem_image]
 
 中文:
-定理 Set.star_centralizer
+定理 集合.star_centralizer
   结论: star s.centralizer = (star s).centralizer
   证明: by
   simp_rw [centralizer, ← commute_iff_eq]
@@ -89,7 +89,7 @@ theorem Set.union_star_self_comm
   exact ⟨⟨hcomm, hcomm_star⟩, ⟨hcomm_star, hcomm⟩⟩
 
 中文:
-定理 Set.union_star_self_comm
+定理 集合.union_star_self_comm
   结论: (hcomm : 对任意 x in s, 对任意 y in s, y * x = x * y)
   证明: by
   change s union star s subseteq (s union star s).centralizer
@@ -116,8 +116,8 @@ theorem Set.star_mem_centralizer'
   proof: fun y hy => by simpa using congr_arg star (ha _ (h _ hy)).symm
 
 中文:
-定理 Set.star_mem_centralizer'
-  条件: (h : 对任意 a : R, a in s -> star a in s) (ha : a in Set.centralizer s)
+定理 集合.star_mem_centralizer'
+  条件: (h : 对任意 a : R, a in s -> star a in s) (ha : a in 集合.centralizer s)
   证明: fun y hy => by simpa using congr_arg star (ha _ (h _ hy)).symm
 
 Depends on / 依赖: congr_arg
@@ -137,8 +137,8 @@ theorem Set.star_mem_centralizer
     (fun _x hx => hx.elim (fun hx => Or.inr <| Set.star_mem_star.mpr hx) Or.inl) ha
 
 中文:
-定理 Set.star_mem_centralizer
-  条件: (ha : a in Set.centralizer (s union star s))
+定理 集合.star_mem_centralizer
+  条件: (ha : a in 集合.centralizer (s union star s))
   证明: Set.star_mem_centralizer'
     (fun _x hx => hx.elim (fun hx => Or.inr <| Set.star_mem_star.mpr hx) Or.inl) ha
 

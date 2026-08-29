@@ -43,7 +43,7 @@ definition IsInteger
   body: x in LinearMap.range f
 
 中文:
-定义 IsInteger
+定义 Is整数eger
   签名: (x : M')
   定义体: x in LinearMap.range f
 
@@ -61,7 +61,7 @@ lemma isInteger_zero
   proof: Submodule.zero_mem _
 
 中文:
-引理 isInteger_zero
+引理 is整数eger_zero
   结论: Is整数eger f (0 : M')
   证明: Submodule.zero_mem _
 
@@ -80,7 +80,7 @@ theorem isInteger_add
   proof: Submodule.add_mem _ hx hy
 
 中文:
-定理 isInteger_add
+定理 is整数eger_add
   条件: {x y : M'} (hx : Is整数eger f x) (hy : Is整数eger f y)
   结论: Is整数eger f (x + y)
   证明: Submodule.add_mem _ hx hy
@@ -103,7 +103,7 @@ theorem isInteger_smul
   rw [← hx]; rw [LinearMapClass.map_smul]
 
 中文:
-定理 isInteger_smul
+定理 is整数eger_smul
   条件: {a : R} {x : M'} (hx : Is整数eger f x)
   结论: Is整数eger f (a • x)
   证明: by
@@ -132,7 +132,7 @@ theorem exists_integer_multiple
   ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
 
 中文:
-定理 exists_integer_multiple
+定理 存在_integer_multiple
   条件: (x : M')
   结论: 存在 a : S, Is整数eger f (a.val • x)
   证明: let ⟨⟨Num, denom⟩, h⟩ := IsLocalizedModule.surj S f x
@@ -160,7 +160,7 @@ theorem exist_integer_multiples
 
 中文:
 定理 exist_integer_multiples
-  条件: {ι : 类型} (s : Finset ι) (g : ι -> M')
+  条件: {ι : 类型} (s : 有限集 ι) (g : ι -> M')
   证明: by
   classical
   choose sec hsec using (fun i => IsLocalizedModule.surj S f (g i))
@@ -196,7 +196,7 @@ theorem exist_integer_multiples_of_finite
 
 中文:
 定理 exist_integer_multiples_of_finite
-  条件: {ι : 类型} [Finite ι] (g : ι -> M')
+  条件: {ι : 类型} [有限 ι] (g : ι -> M')
   证明: by
   cases nonempty_fintype ι
   obtain ⟨b, hb⟩ := exist_integer_multiples S f Finset.univ g
@@ -220,7 +220,7 @@ theorem exist_integer_multiples_of_finset
 
 中文:
 定理 exist_integer_multiples_of_finset
-  条件: (s : Finset M')
+  条件: (s : 有限集 M')
   证明: exist_integer_multiples S f s id
 
 Depends on / 依赖: exist_integer_multiples
@@ -239,7 +239,7 @@ definition commonDenom
 
 中文:
 定义 commonDenom
-  签名: {ι : 类型} (s : Finset ι) (g : ι -> M')
+  签名: {ι : 类型} (s : 有限集 ι) (g : ι -> M')
   定义体: (exist_integer_multiples S f s g).choose
 
 Depends on / 依赖: exist_integer_multiples
@@ -259,7 +259,7 @@ definition integerMultiple
 
 中文:
 定义 integerMultiple
-  签名: {ι : 类型} (s : Finset ι) (g : ι -> M') (i : s)
+  签名: {ι : 类型} (s : 有限集 ι) (g : ι -> M') (i : s)
   定义体: ((exist_integer_multiples S f s g).choose_spec i i.prop).choose
 
 @[simp]
@@ -280,7 +280,7 @@ theorem map_integerMultiple
 
 中文:
 定理 map_integerMultiple
-  条件: {ι : 类型} (s : Finset ι) (g : ι -> M') (i : s)
+  条件: {ι : 类型} (s : 有限集 ι) (g : ι -> M') (i : s)
   证明: ((exist_integer_multiples S f s g).choose_spec _ i.prop).choose_spec
 
 Depends on / 依赖: choose_spec, exist_integer_multiples, i.prop
@@ -299,7 +299,7 @@ definition commonDenomOfFinset
 
 中文:
 定义 commonDenomOfFinset
-  签名: (s : Finset M')
+  签名: (s : 有限集 M')
   定义体: commonDenom S f s id
 
 Depends on / 依赖: commonDenom
@@ -316,8 +316,8 @@ definition finsetIntegerMultiple
   body: s.attach.image fun t => integerMultiple S f s id t
 
 中文:
-定义 finsetIntegerMultiple
-  签名: [DecidableEq M] (s : Finset M')
+定义 finset整数egerMultiple
+  签名: [DecidableEq M] (s : 有限集 M')
   定义体: s.attach.image fun t => integerMultiple S f s id t
 
 Depends on / 依赖: attach, integerMultiple, s.attach.image
@@ -345,8 +345,8 @@ theorem finsetIntegerMultiple_image
     exact ⟨_, ⟨⟨x, hx⟩, s.mem_attach _, rfl⟩, map_integerMultiple S f s id _⟩
 
 中文:
-定理 finsetIntegerMultiple_image
-  条件: [DecidableEq M] (s : Finset M')
+定理 finset整数egerMultiple_image
+  条件: [DecidableEq M] (s : 有限集 M')
   证明: by
   delta finsetIntegerMultiple commonDenom
   rw [Finset.coe_image]
@@ -388,8 +388,8 @@ theorem smul_mem_finsetIntegerMultiple_span
   replace hx : _ in y • Submodule.span R (s : Set M') :=
 
 中文:
-定理 smul_mem_finsetIntegerMultiple_span
-  结论: [DecidableEq M] (x : M) (s : Finset M')
+定理 smul_mem_finset整数egerMultiple_span
+  结论: [DecidableEq M] (x : M) (s : 有限集 M')
   证明: by
   let y : S := IsLocalizedModule.commonDenomOfFinset S f s
   have hx₁ : y • (s : Set M') = f '' _ :=

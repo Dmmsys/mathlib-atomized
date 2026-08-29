@@ -53,8 +53,8 @@ definition Subgroup.quotConjEquiv
     exact smul_mem_pointwise_smul_iff.symm
 
 中文:
-定义 Subgroup.quotConjEquiv
-  签名: (H K : Subgroup G) (g : ConjAct G)
+定义 子群.quotConjEquiv
+  签名: (H K : 子群 G) (g : ConjAct G)
   定义体: Quotient.congr (K.equivSMul g).toEquiv fun a b => by
     dsimp
     rw [← Quotient.eq'']; rw [← Quotient.eq'']; rw [QuotientGroup.eq]; rw [QuotientGroup.eq]; rw [mem_subgroupOf]; rw [mem_subgroupOf]; rw [← map_inv]; rw [← map_mul]; rw [equivSMul_apply_coe]
@@ -81,8 +81,8 @@ definition Subgroup.Commensurable
   body: H.relIndex K != 0 ∧ K.relIndex H != 0
 
 中文:
-定义 Subgroup.Commensurable
-  签名: (H K : Subgroup G)
+定义 子群.Commensurable
+  签名: (H K : 子群 G)
   定义体: H.relIndex K != 0 ∧ K.relIndex H != 0
 
 Depends on / 依赖: H.relIndex, K.relIndex, relIndex
@@ -106,7 +106,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: Commensurable H H
   证明: by simp [Commensurable]
 
@@ -128,7 +128,7 @@ theorem comm
 
 中文:
 定理 comm
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   结论: Commensurable H K ↔ Commensurable K H
   证明: and_comm
 
@@ -152,7 +152,7 @@ theorem symm
 
 中文:
 定理 symm
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   结论: Commensurable H K -> Commensurable K H
   证明: And.symm
 
@@ -175,7 +175,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: {H K L : Subgroup G} (hhk : Commensurable H K) (hkl : Commensurable K L)
+  条件: {H K L : 子群 G} (hhk : Commensurable H K) (hkl : Commensurable K L)
   证明: ⟨Subgroup.relIndex_ne_zero_trans hhk.1 hkl.1, Subgroup.relIndex_ne_zero_trans hkl.2 hhk.2⟩
 
 @[to_additive]
@@ -197,7 +197,7 @@ theorem equivalence
 
 中文:
 定理 equivalence
-  结论: Equivalence (@Commensurable G _)
+  结论: 等价 (@Commensurable G _)
   证明: ⟨Commensurable.refl, fun h => Commensurable.symm h, fun h₁ h₂ => Commensurable.trans h₁ h₂⟩
 
 Depends on / 依赖: Commensurable, Commensurable.refl, Commensurable.symm, Commensurable.trans
@@ -216,7 +216,7 @@ theorem commensurable_conj
 
 中文:
 定理 commensurable_conj
-  条件: {H K : Subgroup G} (g : ConjAct G)
+  条件: {H K : 子群 G} (g : ConjAct G)
   证明: and_congr (not_iff_not.mpr (Eq.congr_left (Nat.card_congr (quotConjEquiv H K g))))
     (not_iff_not.mpr (Eq.congr_left (Nat.card_congr (quotConjEquiv K H g))))
 
@@ -237,7 +237,7 @@ theorem conj
 
 中文:
 定理 conj
-  条件: {H K : Subgroup G} (h : Commensurable H K) (g : ConjAct G)
+  条件: {H K : 子群 G} (h : Commensurable H K) (g : ConjAct G)
   证明: (commensurable_conj g).mp h
 
 Depends on / 依赖: commensurable_conj
@@ -256,7 +256,7 @@ theorem commensurable_inv
 
 中文:
 定理 commensurable_inv
-  条件: (H : Subgroup G) (g : ConjAct G)
+  条件: (H : 子群 G) (g : ConjAct G)
   证明: by rw [commensurable_conj, inv_smul_smul]
 
 Depends on / 依赖: commensurable_conj, inv_smul_smul
@@ -279,7 +279,7 @@ definition commensurator'
 
 中文:
 定义 commensurator'
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: { g : ConjAct G | Commensurable (g • H) H }
   one_mem' := by rw [Set.mem_ofPred_eq, one_smul]
   mul_mem' ha hb := by
@@ -309,7 +309,7 @@ definition commensurator
 
 中文:
 定义 commensurator
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: (commensurator' H).comap ConjAct.toConjAct.toMonoidHom
 
 @[simp]
@@ -332,7 +332,7 @@ theorem commensurator'_mem_iff
 
 中文:
 定理 commensurator'_mem_iff
-  条件: (H : Subgroup G) (g : ConjAct G)
+  条件: (H : 子群 G) (g : ConjAct G)
   证明: Iff.rfl
 
 @[simp]
@@ -351,7 +351,7 @@ theorem commensurator_mem_iff
 
 中文:
 定理 commensurator_mem_iff
-  条件: (H : Subgroup G) (g : G)
+  条件: (H : 子群 G) (g : G)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -372,7 +372,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: {H K : Subgroup G} (hk : Commensurable H K)
+  条件: {H K : 子群 G} (hk : Commensurable H K)
   结论: commensurator H = commensurator K
   证明: Subgroup.ext fun x =>
     let hx := (commensurable_conj x).1 hk

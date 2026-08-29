@@ -115,7 +115,7 @@ lemma minimalFor_id
 
 中文:
 引理 minimalFor_id
-  结论: MinimalFor P id x ↔ Minimal P x
+  结论: MinimalFor P id x ↔ 极小 P x
   证明: .rfl
 
 @[to_dual (attr := simp)]
@@ -138,7 +138,7 @@ alias ⟨Minimal.of_dual, Minimal.dual⟩ := minimal_toDual
 
 中文:
 定理 minimal_toDual
-  结论: Minimal (fun x => P (ofDual x)) (toDual x) ↔ Maximal P x
+  结论: 极小 (fun x => P (ofDual x)) (toDual x) ↔ 极大 P x
   证明: Iff.rfl
 
 @[to_dual]
@@ -166,7 +166,7 @@ theorem minimal_false
 
 中文:
 定理 minimal_false
-  结论: ¬ Minimal (fun _ => False) x
+  结论: ¬ 极小 (fun _ => 假) x
   证明: by
   simp [Minimal]
 
@@ -188,7 +188,7 @@ theorem minimal_true
 
 中文:
 定理 minimal_true
-  结论: Minimal (fun _ => True) x ↔ IsMin x
+  结论: 极小 (fun _ => 真) x ↔ IsMin x
   证明: by
   simp [IsMin, Minimal]
 
@@ -213,7 +213,7 @@ theorem minimal_subtype
 
 中文:
 定理 minimal_subtype
-  条件: {x : Subtype Q}
+  条件: {x : 子类型 Q}
   证明: by
   obtain ⟨x, hx⟩ := x
   simp only [Minimal, Subtype.forall, Subtype.mk_le_mk, Pi.inf_apply, inf_Prop_eq]
@@ -245,8 +245,8 @@ theorem minimal_true_subtype
 
 中文:
 定理 minimal_true_subtype
-  条件: {x : Subtype P}
-  结论: Minimal (fun _ => True) x ↔ Minimal P x
+  条件: {x : 子类型 P}
+  结论: 极小 (fun _ => 真) x ↔ 极小 P x
   证明: by
   obtain ⟨x, hx⟩ := x
   simp [Minimal, hx]
@@ -270,7 +270,7 @@ theorem minimal_minimal
 
 中文:
 定理 minimal_minimal
-  结论: Minimal (Minimal P) x ↔ Minimal P x
+  结论: 极小 (极小 P) x ↔ 极小 P x
   证明: ⟨fun h => h.prop, fun h => ⟨h, fun _ hy hyx => h.le_of_le hy.prop hyx⟩⟩
 
 Depends on / 依赖: h.le_of_le, h.prop, hy.prop, le_of_le
@@ -297,7 +297,7 @@ theorem minimal_iff_isMin
 中文:
 定理 minimal_iff_isMin
   条件: (hP : 对任意 ⦃x y⦄, P y -> x <= y -> P x)
-  结论: Minimal P x ↔ P x ∧ IsMin x
+  结论: 极小 P x ↔ P x ∧ IsMin x
   证明: ⟨fun h => ⟨h.prop, fun _ h' => h.le_of_le (hP h.prop h') h'⟩, fun h => ⟨h.1, fun _ _ h' => h.2 h'⟩⟩
 
 @[to_dual]
@@ -320,9 +320,9 @@ theorem Minimal.mono
 @[to_dual]
 
 中文:
-定理 Minimal.mono
-  条件: (h : Minimal P x) (hle : Q <= P) (hQ : Q x)
-  结论: Minimal Q x
+定理 极小.mono
+  条件: (h : 极小 P x) (hle : Q <= P) (hQ : Q x)
+  结论: 极小 Q x
   证明: ⟨hQ, fun y hQy => h.le_of_le (hle y hQy)⟩
 
 @[to_dual]
@@ -345,9 +345,9 @@ theorem Minimal.and_right
 @[to_dual]
 
 中文:
-定理 Minimal.and_right
-  条件: (h : Minimal P x) (hQ : Q x)
-  结论: Minimal (fun x => P x ∧ Q x) x
+定理 极小.and_right
+  条件: (h : 极小 P x) (hQ : Q x)
+  结论: 极小 (fun x => P x ∧ Q x) x
   证明: h.mono (fun _ => And.left) ⟨h.prop, hQ⟩
 
 @[to_dual]
@@ -368,9 +368,9 @@ theorem Minimal.and_left
   proof: h.mono (fun _ => And.right) ⟨hQ, h.prop⟩
 
 中文:
-定理 Minimal.and_left
-  条件: (h : Minimal P x) (hQ : Q x)
-  结论: Minimal (fun x => (Q x ∧ P x)) x
+定理 极小.and_left
+  条件: (h : 极小 P x) (hQ : Q x)
+  结论: 极小 (fun x => (Q x ∧ P x)) x
   证明: h.mono (fun _ => And.right) ⟨hQ, h.prop⟩
 
 Depends on / 依赖: And.right, h.mono, h.prop
@@ -391,7 +391,7 @@ theorem minimal_eq_iff
 
 中文:
 定理 minimal_eq_iff
-  结论: Minimal (· = y) x ↔ x = y
+  结论: 极小 (· = y) x ↔ x = y
   证明: by
   simp +contextual [Minimal]
 
@@ -416,7 +416,7 @@ theorem not_minimal_iff
 中文:
 定理 not_minimal_iff
   条件: (hx : P x)
-  结论: ¬ Minimal P x ↔ 存在 y, P y ∧ y <= x ∧ ¬ (x <= y)
+  结论: ¬ 极小 P x ↔ 存在 y, P y ∧ y <= x ∧ ¬ (x <= y)
   证明: by
   simp [Minimal, hx]
 
@@ -443,9 +443,9 @@ theorem Minimal.or
 @[to_dual]
 
 中文:
-定理 Minimal.or
-  条件: (h : Minimal (fun x => P x ∨ Q x) x)
-  结论: Minimal P x ∨ Minimal Q x
+定理 极小.or
+  条件: (h : 极小 (fun x => P x ∨ Q x) x)
+  结论: 极小 P x ∨ 极小 Q x
   证明: by
   obtain ⟨h | h, hmin⟩ := h
   · exact .inl ⟨h, fun y hy hyx => hmin (Or.inl hy) hyx⟩
@@ -530,8 +530,8 @@ theorem minimal_iff_forall_lt
 @[to_dual maximalFor_iff_forall_gt]
 
 中文:
-定理 minimal_iff_forall_lt
-  结论: Minimal P x ↔ P x ∧ 对任意 ⦃y⦄, y < x -> ¬ P y
+定理 minimal_iff_对任意_lt
+  结论: 极小 P x ↔ P x ∧ 对任意 ⦃y⦄, y < x -> ¬ P y
   证明: by
   simp [Minimal, lt_iff_le_not_ge, imp.swap]
 
@@ -555,7 +555,7 @@ theorem minimalFor_iff_forall_lt
 @[to_dual not_prop_of_gt]
 
 中文:
-定理 minimalFor_iff_forall_lt
+定理 minimalFor_iff_对任意_lt
   结论: MinimalFor Q f i ↔ Q i ∧ 对任意 ⦃j⦄, f j < f i -> ¬ Q j
   证明: by
   simp [MinimalFor, lt_iff_le_not_ge, imp.swap]
@@ -580,8 +580,8 @@ theorem Minimal.not_prop_of_lt
 @[to_dual not_prop_of_gt]
 
 中文:
-定理 Minimal.not_prop_of_lt
-  条件: (h : Minimal P x) (hlt : y < x)
+定理 极小.not_prop_of_lt
+  条件: (h : 极小 P x) (hlt : y < x)
   结论: ¬ P y
   证明: (minimal_iff_forall_lt.1 h).2 hlt
 
@@ -630,8 +630,8 @@ theorem Minimal.not_lt
 @[to_dual not_gt]
 
 中文:
-定理 Minimal.not_lt
-  条件: (h : Minimal P x) (hy : P y)
+定理 极小.not_lt
+  条件: (h : 极小 P x) (hy : P y)
   结论: ¬(y < x)
   证明: fun hlt => h.not_prop_of_lt hlt hy
 
@@ -680,7 +680,7 @@ theorem minimal_le_iff
 
 中文:
 定理 minimal_le_iff
-  结论: Minimal (· <= y) x ↔ x <= y ∧ IsMin x
+  结论: 极小 (· <= y) x ↔ x <= y ∧ IsMin x
   证明: minimal_iff_isMin (fun _ _ h h' => h'.trans h)
 
 @[to_dual (attr := simp) maximal_gt_iff]
@@ -703,7 +703,7 @@ theorem minimal_lt_iff
 
 中文:
 定理 minimal_lt_iff
-  结论: Minimal (· < y) x ↔ x < y ∧ IsMin x
+  结论: 极小 (· < y) x ↔ x < y ∧ IsMin x
   证明: minimal_iff_isMin (fun _ _ h h' => h'.trans_lt h)
 
 @[to_dual not_maximal_iff_exists_gt]
@@ -730,9 +730,9 @@ alias ⟨exists_lt_of_not_minimal, _⟩ := not_minimal_iff_exists_lt
 @[to_dual]
 
 中文:
-定理 not_minimal_iff_exists_lt
+定理 not_minimal_iff_存在_lt
   条件: (hx : P x)
-  结论: ¬ Minimal P x ↔ 存在 y, y < x ∧ P y
+  结论: ¬ 极小 P x ↔ 存在 y, y < x ∧ P y
   证明: by
   simp_rw [not_minimal_iff hx, lt_iff_le_not_ge, and_comm]
 
@@ -765,7 +765,7 @@ exact h.not_lt hj hg ⟨j, hj, rfl⟩ ⟨i, h.prop, rfl⟩ lt_of_le_not_ge hle t
 
 中文:
 定理 MinimalFor.of_strictMonoOn_comp
-  结论: (hg : StrictMonoOn g (f '' Set.ofPred Q))
+  结论: (hg : StrictMonoOn g (f '' 集合.ofPred Q))
   证明: by
   refine ⟨h.prop, fun j hj hle => ?_⟩
   by_contra
@@ -794,7 +794,7 @@ theorem MinimalFor.minimal_of_strictMonoOn
 
 中文:
 定理 MinimalFor.minimal_of_strictMonoOn
-  结论: (hg : StrictMonoOn g (Set.ofPred P))
+  结论: (hg : StrictMonoOn g (集合.ofPred P))
   证明: minimalFor_id.mp .of_strictMonoOn_comp (Set.image_id _ ▸ hg) h
 
 @[to_dual]
@@ -822,7 +822,7 @@ exact h.not_lt hj hg ⟨i, h.prop, rfl⟩ ⟨j, hj, rfl⟩ lt_of_le_not_ge hle t
 
 中文:
 定理 MinimalFor.maximalFor_of_strictAntiOn_comp
-  结论: (hg : StrictAntiOn g (f '' Set.ofPred Q))
+  结论: (hg : StrictAntiOn g (f '' 集合.ofPred Q))
   证明: by
   refine ⟨h.prop, fun j hj hle => ?_⟩
   by_contra
@@ -849,7 +849,7 @@ theorem MinimalFor.maximal_of_strictAntiOn
 
 中文:
 定理 MinimalFor.maximal_of_strictAntiOn
-  结论: (hg : StrictAntiOn g (Set.ofPred P))
+  结论: (hg : StrictAntiOn g (集合.ofPred P))
   证明: maximalFor_id.mp MinimalFor.maximalFor_of_strictAntiOn_comp (Set.image_id _ ▸ hg) h
 
 Depends on / 依赖: MinimalFor, MinimalFor.maximalFor_of_strictAntiOn_comp, Set.image_id, image_id, maximalFor_id, maximalFor_id.mp, maximalFor_of_strictAntiOn_comp
@@ -876,7 +876,7 @@ lemma exists_minimalFor_of_wellFoundedLT
 @[to_dual]
 
 中文:
-引理 exists_minimalFor_of_wellFoundedLT
+引理 存在_minimalFor_of_wellFoundedLT
   条件: (P : ι -> 命题) (f : ι -> α) (hP : 存在 i, P i)
   证明: by
   simpa [not_lt_iff_le_imp_ge, InvImage]
@@ -904,9 +904,9 @@ lemma exists_minimal_of_wellFoundedLT
 @[to_dual exists_maximal_ge_of_wellFoundedGT]
 
 中文:
-引理 exists_minimal_of_wellFoundedLT
+引理 存在_minimal_of_wellFoundedLT
   条件: (P : α -> 命题) (hP : 存在 a, P a)
-  结论: 存在 a, Minimal P a
+  结论: 存在 a, 极小 P a
   证明: exists_minimalFor_of_wellFoundedLT P id hP
 
 @[to_dual exists_maximal_ge_of_wellFoundedGT]
@@ -929,7 +929,7 @@ lemma exists_minimal_le_of_wellFoundedLT
   exact ⟨b, hba, hb, fun c hc hcb => hbmin ⟨hcb.trans hba, hc⟩ hcb⟩
 
 中文:
-引理 exists_minimal_le_of_wellFoundedLT
+引理 存在_minimal_le_of_wellFoundedLT
   条件: (P : α -> 命题) (a : α) (ha : P a)
   证明: by
   obtain ⟨b, ⟨hba, hb⟩, hbmin⟩ :=
@@ -964,8 +964,8 @@ theorem Minimal.eq_of_ge
 @[to_dual (rename := hle -> hge) eq_of_ge]
 
 中文:
-定理 Minimal.eq_of_ge
-  条件: (hx : Minimal P x) (hy : P y) (hge : y <= x)
+定理 极小.eq_of_ge
+  条件: (hx : 极小 P x) (hy : P y) (hge : y <= x)
   结论: x = y
   证明: (hx.2 hy hge).antisymm hge
 
@@ -989,8 +989,8 @@ theorem Minimal.eq_of_le
 @[to_dual]
 
 中文:
-定理 Minimal.eq_of_le
-  条件: (hx : Minimal P x) (hy : P y) (hle : y <= x)
+定理 极小.eq_of_le
+  条件: (hx : 极小 P x) (hy : P y) (hle : y <= x)
   结论: y = x
   证明: (hx.eq_of_ge hy hle).symm
 
@@ -1014,7 +1014,7 @@ theorem minimal_iff
 
 中文:
 定理 minimal_iff
-  结论: Minimal P x ↔ P x ∧ 对任意 ⦃y⦄, P y -> y <= x -> x = y
+  结论: 极小 P x ↔ P x ∧ 对任意 ⦃y⦄, P y -> y <= x -> x = y
   证明: ⟨fun h => ⟨h.1, fun _ => h.eq_of_ge⟩, fun h => ⟨h.1, fun _ hy hle => (h.2 hy hle).le⟩⟩
 
 @[to_dual]
@@ -1036,8 +1036,8 @@ theorem minimal_mem_iff
 
 中文:
 定理 minimal_mem_iff
-  条件: {s : Set α}
-  结论: Minimal (· in s) x ↔ x in s ∧ 对任意 ⦃y⦄, y in s -> y <= x -> x = y
+  条件: {s : 集合 α}
+  结论: 极小 (· in s) x ↔ x in s ∧ 对任意 ⦃y⦄, y in s -> y <= x -> x = y
   证明: minimal_iff
 
 Depends on / 依赖: minimal_iff
@@ -1062,7 +1062,7 @@ theorem minimal_iff_eq
 中文:
 定理 minimal_iff_eq
   条件: (hy : P y) (hP : 对任意 ⦃x⦄, P x -> y <= x)
-  结论: Minimal P x ↔ x = y
+  结论: 极小 P x ↔ x = y
   证明: ⟨fun h => h.eq_of_ge hy (hP h.prop), by rintro rfl; exact ⟨hy, fun z hz _ => hP hz⟩⟩
 
 Depends on / 依赖: eq_of_ge, h.eq_of_ge, h.prop
@@ -1082,7 +1082,7 @@ theorem minimal_ge_iff
 
 中文:
 定理 minimal_ge_iff
-  结论: Minimal (y <= ·) x ↔ x = y
+  结论: 极小 (y <= ·) x ↔ x = y
   证明: minimal_iff_eq rfl.le fun _ => id
 
 @[to_dual]
@@ -1106,7 +1106,7 @@ theorem minimal_iff_minimal_of_imp_of_forall
   exact (h'.le_of_le hz (hzy.trans hyx)).trans hzy
 
 中文:
-定理 minimal_iff_minimal_of_imp_of_forall
+定理 minimal_iff_minimal_of_imp_of_对任意
   结论: (hPQ : 对任意 ⦃x⦄, Q x -> P x)
   证明: by
   refine ⟨fun h' => ⟨?_, fun y hy hyx => h'.le_of_le (hPQ hy) hyx⟩,
@@ -1146,8 +1146,8 @@ theorem Minimal.le
 @[to_dual]
 
 中文:
-定理 Minimal.le
-  条件: (h : Minimal P x) (hy : P y)
+定理 极小.le
+  条件: (h : 极小 P x) (hy : P y)
   结论: x <= y
   证明: le_of_not_gt (h.not_lt hy)
 
@@ -1195,8 +1195,8 @@ theorem Minimal.eq_of_superset
   proof: h.eq_of_ge ht hts
 
 中文:
-定理 Minimal.eq_of_superset
-  条件: (h : Minimal P s) (ht : P t) (hts : t subseteq s)
+定理 极小.eq_of_superset
+  条件: (h : 极小 P s) (ht : P t) (hts : t subseteq s)
   结论: s = t
   证明: h.eq_of_ge ht hts
 
@@ -1215,8 +1215,8 @@ theorem Maximal.eq_of_subset
   proof: h.eq_of_le ht hst
 
 中文:
-定理 Maximal.eq_of_subset
-  条件: (h : Maximal P s) (ht : P t) (hst : s subseteq t)
+定理 极大.eq_of_subset
+  条件: (h : 极大 P s) (ht : P t) (hst : s subseteq t)
   结论: s = t
   证明: h.eq_of_le ht hst
 
@@ -1235,8 +1235,8 @@ theorem Minimal.eq_of_subset
   proof: h.eq_of_le ht hts
 
 中文:
-定理 Minimal.eq_of_subset
-  条件: (h : Minimal P s) (ht : P t) (hts : t subseteq s)
+定理 极小.eq_of_subset
+  条件: (h : 极小 P s) (ht : P t) (hts : t subseteq s)
   结论: t = s
   证明: h.eq_of_le ht hts
 
@@ -1255,8 +1255,8 @@ theorem Maximal.eq_of_superset
   proof: h.eq_of_ge ht hst
 
 中文:
-定理 Maximal.eq_of_superset
-  条件: (h : Maximal P s) (ht : P t) (hst : s subseteq t)
+定理 极大.eq_of_superset
+  条件: (h : 极大 P s) (ht : P t) (hst : s subseteq t)
   结论: t = s
   证明: h.eq_of_ge ht hst
 
@@ -1275,7 +1275,7 @@ theorem minimal_subset_iff
 
 中文:
 定理 minimal_subset_iff
-  结论: Minimal P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> t subseteq s -> s = t
+  结论: 极小 P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> t subseteq s -> s = t
   证明: _root_.minimal_iff
 
 Depends on / 依赖: _root_, _root_.minimal_iff, minimal_iff
@@ -1293,7 +1293,7 @@ theorem maximal_subset_iff
 
 中文:
 定理 maximal_subset_iff
-  结论: Maximal P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> s subseteq t -> s = t
+  结论: 极大 P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> s subseteq t -> s = t
   证明: _root_.maximal_iff
 
 Depends on / 依赖: _root_, _root_.maximal_iff, maximal_iff
@@ -1311,7 +1311,7 @@ theorem minimal_subset_iff'
 
 中文:
 定理 minimal_subset_iff'
-  结论: Minimal P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> t subseteq s -> s subseteq t
+  结论: 极小 P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> t subseteq s -> s subseteq t
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1329,7 +1329,7 @@ theorem maximal_subset_iff'
 
 中文:
 定理 maximal_subset_iff'
-  结论: Maximal P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> s subseteq t -> t subseteq s
+  结论: 极大 P s ↔ P s ∧ 对任意 ⦃t⦄, P t -> s subseteq t -> t subseteq s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1349,7 +1349,7 @@ theorem not_minimal_subset_iff
 中文:
 定理 not_minimal_subset_iff
   条件: (hs : P s)
-  结论: ¬ Minimal P s ↔ 存在 t, t ⊂ s ∧ P t
+  结论: ¬ 极小 P s ↔ 存在 t, t ⊂ s ∧ P t
   证明: not_minimal_iff_exists_lt hs
 
 Depends on / 依赖: not_minimal_iff_exists_lt
@@ -1369,7 +1369,7 @@ theorem not_maximal_subset_iff
 中文:
 定理 not_maximal_subset_iff
   条件: (hs : P s)
-  结论: ¬ Maximal P s ↔ 存在 t, s ⊂ t ∧ P t
+  结论: ¬ 极大 P s ↔ 存在 t, s ⊂ t ∧ P t
   证明: not_maximal_iff_exists_gt hs
 
 Depends on / 依赖: not_maximal_iff_exists_gt
@@ -1386,8 +1386,8 @@ theorem Set.minimal_iff_forall_ssubset
   proof: minimal_iff_forall_lt
 
 中文:
-定理 Set.minimal_iff_forall_ssubset
-  结论: Minimal P s ↔ P s ∧ 对任意 ⦃t⦄, t ⊂ s -> ¬ P t
+定理 集合.minimal_iff_对任意_ssubset
+  结论: 极小 P s ↔ P s ∧ 对任意 ⦃t⦄, t ⊂ s -> ¬ P t
   证明: minimal_iff_forall_lt
 
 Depends on / 依赖: minimal_iff_forall_lt
@@ -1405,8 +1405,8 @@ theorem Minimal.not_prop_of_ssubset
   proof: (minimal_iff_forall_lt.1 h).2 ht
 
 中文:
-定理 Minimal.not_prop_of_ssubset
-  条件: (h : Minimal P s) (ht : t ⊂ s)
+定理 极小.not_prop_of_ssubset
+  条件: (h : 极小 P s) (ht : t ⊂ s)
   结论: ¬ P t
   证明: (minimal_iff_forall_lt.1 h).2 ht
 
@@ -1425,8 +1425,8 @@ theorem Minimal.not_ssubset
   proof: h.not_lt ht
 
 中文:
-定理 Minimal.not_ssubset
-  条件: (h : Minimal P s) (ht : P t)
+定理 极小.not_ssubset
+  条件: (h : 极小 P s) (ht : P t)
   结论: ¬ t ⊂ s
   证明: h.not_lt ht
 
@@ -1445,8 +1445,8 @@ theorem Maximal.mem_of_prop_insert
   proof: h.eq_of_subset hx (subset_insert _ _) ▸ mem_insert ..
 
 中文:
-定理 Maximal.mem_of_prop_insert
-  条件: (h : Maximal P s) (hx : P (insert x s))
+定理 极大.mem_of_prop_insert
+  条件: (h : 极大 P s) (hx : P (insert x s))
   结论: x in s
   证明: h.eq_of_subset hx (subset_insert _ _) ▸ mem_insert ..
 
@@ -1468,8 +1468,8 @@ theorem Minimal.notMem_of_prop_sdiff_singleton
 alias Minimal.notMem_of_prop_diff_singleton := Minimal.notMem_of_prop_sdiff_singleton
 
 中文:
-定理 Minimal.notMem_of_prop_sdiff_singleton
-  条件: (h : Minimal P s) (hx : P (s \ {x}))
+定理 极小.notMem_of_prop_sdiff_singleton
+  条件: (h : 极小 P s) (hx : P (s \ {x}))
   结论: x ∉ s
   证明: fun hxs => ((h.eq_of_superset hx sdiff_subset).subset hxs).2 rfl
 
@@ -1498,7 +1498,7 @@ theorem Set.minimal_iff_forall_sdiff_singleton
 alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_fora
 
 中文:
-定理 Set.minimal_iff_forall_sdiff_singleton
+定理 集合.minimal_iff_对任意_sdiff_singleton
   条件: (hP : 对任意 ⦃s t⦄, P t -> t subseteq s -> P s)
   证明: ⟨fun h => ⟨h.1, fun _ hx hP => h.notMem_of_prop_sdiff_singleton hP hx⟩,
     fun h => ⟨h.1, fun _ ht hts x hxs => by_contra fun hxt =>
@@ -1531,7 +1531,7 @@ theorem Set.exists_sdiff_singleton_of_not_minimal
 alias Set.exists_diff_singleton_of_not_minimal := Set.exists_sdiff_singleton_of_not_minimal
 
 中文:
-定理 Set.exists_sdiff_singleton_of_not_minimal
+定理 集合.存在_sdiff_singleton_of_not_minimal
   结论: (hP : 对任意 ⦃s t⦄, P t -> t subseteq s -> P s) (hs : P s)
   证明: by
   simpa [Set.minimal_iff_forall_sdiff_singleton hP, hs] using h
@@ -1557,8 +1557,8 @@ theorem Set.maximal_iff_forall_ssuperset
   proof: maximal_iff_forall_gt
 
 中文:
-定理 Set.maximal_iff_forall_ssuperset
-  结论: Maximal P s ↔ P s ∧ 对任意 ⦃t⦄, s ⊂ t -> ¬ P t
+定理 集合.maximal_iff_对任意_ssuperset
+  结论: 极大 P s ↔ P s ∧ 对任意 ⦃t⦄, s ⊂ t -> ¬ P t
   证明: maximal_iff_forall_gt
 
 Depends on / 依赖: maximal_iff_forall_gt
@@ -1576,8 +1576,8 @@ theorem Maximal.not_prop_of_ssuperset
   proof: (maximal_iff_forall_gt.1 h).2 ht
 
 中文:
-定理 Maximal.not_prop_of_ssuperset
-  条件: (h : Maximal P s) (ht : s ⊂ t)
+定理 极大.not_prop_of_ssuperset
+  条件: (h : 极大 P s) (ht : s ⊂ t)
   结论: ¬ P t
   证明: (maximal_iff_forall_gt.1 h).2 ht
 
@@ -1596,8 +1596,8 @@ theorem Maximal.not_ssuperset
   proof: h.not_gt ht
 
 中文:
-定理 Maximal.not_ssuperset
-  条件: (h : Maximal P s) (ht : P t)
+定理 极大.not_ssuperset
+  条件: (h : 极大 P s) (ht : P t)
   结论: ¬ s ⊂ t
   证明: h.not_gt ht
 
@@ -1618,7 +1618,7 @@ theorem Set.maximal_iff_forall_insert
     fun h => ⟨h.1, fun t ht hst x hxt => h.2 x (hP ht <| insert_subset hxt hst)⟩⟩
 
 中文:
-定理 Set.maximal_iff_forall_insert
+定理 集合.maximal_iff_对任意_insert
   条件: (hP : 对任意 ⦃s t⦄, P t -> s subseteq t -> P s)
   证明: by
   simp only [not_imp_not]
@@ -1643,7 +1643,7 @@ theorem Set.exists_insert_of_not_maximal
   simpa [Set.maximal_iff_forall_insert hP, hs] using h
 
 中文:
-定理 Set.exists_insert_of_not_maximal
+定理 集合.存在_insert_of_not_maximal
   结论: (hP : 对任意 ⦃s t⦄, P t -> s subseteq t -> P s) (hs : P s)
   证明: by
   simpa [Set.maximal_iff_forall_insert hP, hs] using h
@@ -1683,8 +1683,8 @@ theorem setOfPred_minimal_subset
 
 中文:
 定理 setOfPred_minimal_subset
-  条件: (s : Set α)
-  结论: {x | Minimal (· in s) x} subseteq s
+  条件: (s : 集合 α)
+  结论: {x | 极小 (· in s) x} subseteq s
   证明: sep_subset ..
 
 @[deprecated (since := "2026-07-09")] alias setOf_minimal_subset := setOfPred_minimal_subset
@@ -1714,9 +1714,9 @@ theorem Set.Subsingleton.minimal_mem_iff
 @[to_dual]
 
 中文:
-定理 Set.Subsingleton.minimal_mem_iff
-  条件: (h : s.Subsingleton)
-  结论: Minimal (· in s) x ↔ x in s
+定理 集合.子单例.minimal_mem_iff
+  条件: (h : s.子单例)
+  结论: 极小 (· in s) x ↔ x in s
   证明: by
   obtain (rfl | ⟨x, rfl⟩) := h.eq_empty_or_singleton <;> simp
 
@@ -1740,7 +1740,7 @@ theorem IsLeast.minimal
 中文:
 定理 IsLeast.minimal
   条件: (h : IsLeast s x)
-  结论: Minimal (· in s) x
+  结论: 极小 (· in s) x
   证明: ⟨h.1, fun _b hb _ => h.2 hb⟩
 -/
 theorem IsLeast.minimal (h : IsLeast s x) : Minimal (· in s) x :=
@@ -1765,7 +1765,7 @@ theorem IsLeast.minimal_iff
 中文:
 定理 IsLeast.minimal_iff
   条件: (h : IsLeast s a)
-  结论: Minimal (· in s) x ↔ x = a
+  结论: 极小 (· in s) x ↔ x = a
   证明: ⟨fun h' => h'.eq_of_ge h.1 (h.2 h'.prop), fun h' => h' ▸ h.minimal⟩
 
 Depends on / 依赖: eq_of_ge, h.minimal, minimal
@@ -2088,8 +2088,8 @@ theorem minimal_mem_image
 
 中文:
 定理 minimal_mem_image
-  条件: (f : α ↪o β) (hx : Minimal (· in s) x)
-  结论: Minimal (· in f '' s) (f x)
+  条件: (f : α ↪o β) (hx : 极小 (· in s) x)
+  结论: 极小 (· in f '' s) (f x)
   证明: _root_.minimal_mem_image_monotone (by simp [f.le_iff_le]) hx
 
 @[to_dual]
@@ -2114,7 +2114,7 @@ theorem minimal_mem_image_iff
 中文:
 定理 minimal_mem_image_iff
   条件: (ha : a in s)
-  结论: Minimal (· in f '' s) (f a) ↔ Minimal (· in s) a
+  结论: 极小 (· in f '' s) (f a) ↔ 极小 (· in s) a
   证明: _root_.minimal_mem_image_monotone_iff ha (by simp [f.le_iff_le])
 
 @[to_dual]
@@ -2177,7 +2177,7 @@ theorem minimal_apply_mem_iff
 
 中文:
 定理 minimal_apply_mem_iff
-  条件: (ht : t subseteq Set.range f)
+  条件: (ht : t subseteq 集合.range f)
   证明: by
   rw [← f.minimal_apply_mem_inter_range_iff]; rw [inter_eq_self_of_subset_left ht]
 
@@ -2206,7 +2206,7 @@ alias image_setOf_minimal := image_setOfPred_minimal
 
 中文:
 定理 image_setOfPred_minimal
-  结论: f '' {x | Minimal (· in s) x} = {x | Minimal (· in f '' s) x}
+  结论: f '' {x | 极小 (· in s) x} = {x | 极小 (· in f '' s) x}
   证明: _root_.image_monotone_setOfPred_minimal (by simp [f.le_iff_le])
 
 @[deprecated (since := "2026-07-09")]
@@ -2324,7 +2324,7 @@ theorem map_minimal_mem
 
 中文:
 定理 map_minimal_mem
-  条件: (f : s ≃o t) (hx : Minimal (· in s) x)
+  条件: (f : s ≃o t) (hx : 极小 (· in s) x)
   证明: by
   simpa only [show t = range (Subtype.val ∘ f) by simp, mem_univ, minimal_true_subtype, hx,
     true_imp_iff, image_univ] using! OrderEmbedding.minimal_mem_image
@@ -2475,7 +2475,7 @@ theorem minimal_mem_Icc
 中文:
 定理 minimal_mem_Icc
   条件: (hab : a <= b)
-  结论: Minimal (· in Icc a b) x ↔ x = a
+  结论: 极小 (· in 闭区间 a b) x ↔ x = a
   证明: minimal_iff_eq ⟨rfl.le, hab⟩ (fun _ => And.left)
 
 @[to_dual]
@@ -2498,7 +2498,7 @@ theorem minimal_mem_Ico
 中文:
 定理 minimal_mem_Ico
   条件: (hab : a < b)
-  结论: Minimal (· in Ico a b) x ↔ x = a
+  结论: 极小 (· in 左闭右开区间 a b) x ↔ x = a
   证明: minimal_iff_eq ⟨rfl.le, hab⟩ (fun _ => And.left)
 
 Depends on / 依赖: And.left, minimal_iff_eq, rfl.le

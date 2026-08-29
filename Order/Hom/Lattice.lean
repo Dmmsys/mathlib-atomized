@@ -47,8 +47,8 @@ structure SupHom
     - map_sup'((a b : α)) : toFun (a ⊔ b) = toFun a ⊔ toFun b
 
 中文:
-结构 SupHom
-  参数: (α β : 类型) [Max α] [Max β]
+结构 并态射
+  参数: (α β : 类型) [最大值 α] [最大值 β]
   公理与运算 (2 个):
     - toFun : α -> β
     - map_sup'((a b : α)) : toFun (a ⊔ b) = toFun a ⊔ toFun b
@@ -77,8 +77,8 @@ structure InfHom
     - map_inf'((a b : α)) : toFun (a ⊓ b) = toFun a ⊓ toFun b
 
 中文:
-结构 InfHom
-  参数: (α β : 类型) [Min α] [Min β]
+结构 交态射
+  参数: (α β : 类型) [最小值 α] [最小值 β]
   公理与运算 (2 个):
     - toFun : α -> β
     - map_inf'((a b : α)) : toFun (a ⊓ b) = toFun a ⊓ toFun b
@@ -104,9 +104,9 @@ structure LatticeHom
   (no additional axioms)
 
 中文:
-结构 LatticeHom
-  参数: (α β : 类型) [Lattice α] [Lattice β]
-  继承: SupHom α β, InfHom α β
+结构 格态射
+  参数: (α β : 类型) [格 α] [格 β]
+  继承: 并态射 α β, 交态射 α β
   (无附加公理)
 -/
 structure LatticeHom (α β : Type*) [Lattice α] [Lattice β] extends SupHom α β, InfHom α β where
@@ -127,8 +127,8 @@ class SupHomClass
     - map_sup((f : F) (a b : α)) : f (a ⊔ b) = f a ⊔ f b
 
 中文:
-类 SupHomClass
-  参数: (F α β : 类型) [Max α] [Max β] [FunLike F α β]
+类 并态射类
+  参数: (F α β : 类型) [最大值 α] [最大值 β] [函数状 F α β]
   公理与运算 (1 个):
     - map_sup((f : F) (a b : α)) : f (a ⊔ b) = f a ⊔ f b
 -/
@@ -150,8 +150,8 @@ class InfHomClass
     - map_inf((f : F) (a b : α)) : f (a ⊓ b) = f a ⊓ f b
 
 中文:
-类 InfHomClass
-  参数: (F α β : 类型) [Min α] [Min β] [FunLike F α β]
+类 交态射类
+  参数: (F α β : 类型) [最小值 α] [最小值 β] [函数状 F α β]
   公理与运算 (1 个):
     - map_inf((f : F) (a b : α)) : f (a ⊓ b) = f a ⊓ f b
 
@@ -171,9 +171,9 @@ class LatticeHomClass
   (no additional axioms)
 
 中文:
-类 LatticeHomClass
-  参数: (F α β : 类型) [Lattice α] [Lattice β] [FunLike F α β]
-  继承: SupHomClass F α β, InfHomClass F α β
+类 格态射类
+  参数: (F α β : 类型) [格 α] [格 β] [函数状 F α β]
+  继承: 并态射类 F α β, 交态射类 F α β
   (无附加公理)
 
 Depends on / 依赖: FiniteEtale, FiniteEtale.fiberIsoFiniteSpec, Functor, Functor.isEquivalence_of_iso, fiberIsoFiniteSpec, isEquivalence_of_iso
@@ -238,7 +238,7 @@ definition orderEmbeddingOfInjective
 
 中文:
 定义 orderEmbeddingOfInjective
-  签名: [SemilatticeInf α] [SemilatticeInf β] (f : F) [InfHomClass F α β]
+  签名: [SemilatticeInf α] [SemilatticeInf β] (f : F) [交态射类 F α β]
   定义体: OrderEmbedding.ofMapLEIff f (fun x y => by
     refine ⟨fun h => ?_, fun h => OrderHomClass.mono f h⟩
     rwa [← inf_eq_left, ← hf.eq_iff, map_inf, inf_eq_left])
@@ -265,8 +265,8 @@ instance [Max
   body: ⟨fun f => ⟨f, map_sup f⟩⟩
 
 中文:
-实例 [Max
-  签名: α] [Max β] [SupHomClass F α β] : CoeTC F (SupHom α β)
+实例 [最大值
+  签名: α] [最大值 β] [并态射类 F α β] : CoeTC F (并态射 α β)
   定义体: ⟨fun f => ⟨f, map_sup f⟩⟩
 
 Depends on / 依赖: map_sup
@@ -286,8 +286,8 @@ instance [Lattice
       map_inf' := map_inf f }⟩
 
 中文:
-实例 [Lattice
-  签名: α] [Lattice β] [LatticeHomClass F α β] : CoeTC F (LatticeHom α β)
+实例 [格
+  签名: α] [格 β] [格态射类 F α β] : CoeTC F (格态射 α β)
   定义体: ⟨fun f =>
     { toFun := f
       map_sup' := map_sup f
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (SupHom α β) α β
+  签名: 函数状 (并态射 α β) α β
   定义体: SupHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupHomClass (SupHom α β) α β
+  签名: 并态射类 (并态射 α β) α β
   定义体: SupHom.map_sup'
 
 Depends on / 依赖: SupHom, SupHom.map_sup, map_sup
@@ -369,7 +369,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (f : SupHom α β)
+  条件: (f : 并态射 α β)
   结论: f.toFun = f
   证明: rfl
 
@@ -411,7 +411,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : SupHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 并态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -438,7 +438,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : SupHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 并态射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   map_sup' := h.symm ▸ f.map_sup'
 
@@ -462,7 +462,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : SupHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 并态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 
@@ -483,7 +483,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : SupHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 并态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -508,7 +508,7 @@ definition id
 
 中文:
 定义 id
-  签名: : SupHom α α
+  签名: : 并态射 α α
   定义体: ⟨id, fun _ _ => rfl⟩
 
 @[to_dual]
@@ -529,7 +529,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SupHom α α)
+  签名: 可居 (并态射 α α)
   定义体: ⟨SupHom.id α⟩
 
 @[to_dual (attr := simp, norm_cast)]
@@ -550,7 +550,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(SupHom.id α) = id
+  结论: ⇑(并态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(SupHom.id α) = id :=
@@ -571,7 +571,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: SupHom.id α a = a
+  结论: 并态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : SupHom.id α a = a :=
@@ -592,7 +592,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : SupHom β γ) (g : SupHom α β)
+  签名: (f : 并态射 β γ) (g : 并态射 α β)
   定义体: f ∘ g
   map_sup' a b := by rw [comp_apply, map_sup, map_sup]; rfl
 
@@ -616,7 +616,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : SupHom β γ) (g : SupHom α β)
+  条件: (f : 并态射 β γ) (g : 并态射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -639,7 +639,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : SupHom β γ) (g : SupHom α β) (a : α)
+  条件: (f : 并态射 β γ) (g : 并态射 α β) (a : α)
   结论: (f.comp g) a = f (g a)
   证明: rfl
 
@@ -659,7 +659,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : SupHom γ δ) (g : SupHom β γ) (h : SupHom α β)
+  条件: (f : 并态射 γ δ) (g : 并态射 β γ) (h : 并态射 α β)
   证明: rfl
 -/
 theorem comp_assoc (f : SupHom γ δ) (g : SupHom β γ) (h : SupHom α β) :
@@ -677,8 +677,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : SupHom α β)
-  结论: f.comp (SupHom.id α) = f
+  条件: (f : 并态射 α β)
+  结论: f.comp (并态射.id α) = f
   证明: rfl
 -/
 @[to_dual (attr := simp)] theorem comp_id (f : SupHom α β) : f.comp (SupHom.id α) = f := rfl
@@ -696,8 +696,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : SupHom α β)
-  结论: (SupHom.id β).comp f = f
+  条件: (f : 并态射 α β)
+  结论: (并态射.id β).comp f = f
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -717,7 +717,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : SupHom β γ} {f : SupHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : 并态射 β γ} {f : 并态射 α β} (hf : 满射 f)
   证明: ⟨fun h => SupHom.ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[to_dual (attr := simp)]
@@ -740,7 +740,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : SupHom β γ} {f₁ f₂ : SupHom α β} (hg : Injective g)
+  条件: {g : 并态射 β γ} {f₁ f₂ : 并态射 α β} (hg : 单射 g)
   证明: ⟨fun h => SupHom.ext fun a => hg by rw [← SupHom.comp_apply, h, SupHom.comp_apply],
     congr_arg _⟩
 
@@ -793,7 +793,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (b : β)
-  结论: ⇑(const α b) = Function.const α b
+  结论: ⇑(const α b) = 函数.const α b
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -838,7 +838,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (SupHom α β)
+  签名: 最大值 (并态射 α β)
   定义体: ⟨fun f g =>
     ⟨f ⊔ g, fun a b => by
       rw [Pi.sup_apply]; rw [map_sup]; rw [map_sup]
@@ -867,7 +867,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SupHom α β)
+  签名: 偏序 (并态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 @[to_dual]
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (SupHom α β)
+  签名: SemilatticeSup (并态射 α β)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
 
 @[to_dual]
@@ -912,8 +912,8 @@ instance [Bot
 @[to_dual]
 
 中文:
-实例 [Bot
-  签名: β] : Bot (SupHom α β)
+实例 [底元素
+  签名: β] : 底元素 (并态射 α β)
   定义体: ⟨SupHom.const α ⊥⟩
 
 @[to_dual]
@@ -935,8 +935,8 @@ instance [Top
 @[to_dual]
 
 中文:
-实例 [Top
-  签名: β] : Top (SupHom α β)
+实例 [顶元素
+  签名: β] : 顶元素 (并态射 α β)
   定义体: ⟨SupHom.const α ⊤⟩
 
 @[to_dual]
@@ -958,8 +958,8 @@ instance [OrderBot
 @[to_dual]
 
 中文:
-实例 [OrderBot
-  签名: β] : OrderBot (SupHom α β)
+实例 [有底序
+  签名: β] : 有底序 (并态射 α β)
   定义体: OrderBot.lift ((↑) : _ -> α -> β) (fun _ _ => id) rfl
 
 @[to_dual]
@@ -981,8 +981,8 @@ instance [OrderTop
 @[to_dual]
 
 中文:
-实例 [OrderTop
-  签名: β] : OrderTop (SupHom α β)
+实例 [有顶序
+  签名: β] : 有顶序 (并态射 α β)
   定义体: OrderTop.lift ((↑) : _ -> α -> β) (fun _ _ => id) rfl
 
 @[to_dual]
@@ -1004,8 +1004,8 @@ instance [BoundedOrder
 @[to_dual (attr := simp)]
 
 中文:
-实例 [BoundedOrder
-  签名: β] : BoundedOrder (SupHom α β)
+实例 [有界序
+  签名: β] : 有界序 (并态射 α β)
   定义体: BoundedOrder.lift ((↑) : _ -> α -> β) (fun _ _ => id) rfl rfl
 
 @[to_dual (attr := simp)]
@@ -1029,7 +1029,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (f g : SupHom α β)
+  条件: (f g : 并态射 α β)
   结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
   证明: rfl
 
@@ -1052,8 +1052,8 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  条件: [Bot β]
-  结论: ⇑(⊥ : SupHom α β) = ⊥
+  条件: [底元素 β]
+  结论: ⇑(⊥ : 并态射 α β) = ⊥
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1075,8 +1075,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [Top β]
-  结论: ⇑(⊤ : SupHom α β) = ⊤
+  条件: [顶元素 β]
+  结论: ⇑(⊤ : 并态射 α β) = ⊤
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1098,7 +1098,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: (f g : SupHom α β) (a : α)
+  条件: (f g : 并态射 α β) (a : α)
   结论: (f ⊔ g) a = f a ⊔ g a
   证明: rfl
 
@@ -1121,8 +1121,8 @@ theorem bot_apply
 
 中文:
 定理 bot_apply
-  条件: [Bot β] (a : α)
-  结论: (⊥ : SupHom α β) a = ⊥
+  条件: [底元素 β] (a : α)
+  结论: (⊥ : 并态射 α β) a = ⊥
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1145,8 +1145,8 @@ theorem top_apply
 
 中文:
 定理 top_apply
-  条件: [Top β] (a : α)
-  结论: (⊤ : SupHom α β) a = ⊤
+  条件: [顶元素 β] (a : α)
+  结论: (⊤ : 并态射 α β) a = ⊤
   证明: rfl
 
 @[to_dual (attr := simp, gcongr) (reorder := toFun₁ toFun₂, map_sup₁ map_sup₂)
@@ -1267,7 +1267,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (LatticeHom α β) α β
+  签名: 函数状 (格态射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
 
@@ -1288,7 +1288,7 @@ instance :
 
 中文:
 实例 :
-  签名: LatticeHomClass (LatticeHom α β) α β
+  签名: 格态射类 (格态射 α β) α β
   定义体: f.map_sup'
   map_inf f := f.map_inf'
 
@@ -1309,7 +1309,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (f : LatticeHom α β)
+  条件: (f : 格态射 α β)
   结论: f.toFun = f
   证明: rfl
 -/
@@ -1326,7 +1326,7 @@ lemma coe_toSupHom
 
 中文:
 引理 coe_toSupHom
-  条件: (f : LatticeHom α β)
+  条件: (f : 格态射 α β)
   结论: ⇑f.toSupHom = f
   证明: rfl
 -/
@@ -1344,7 +1344,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (f : SupHom α β) (hf)
+  条件: (f : 并态射 α β) (hf)
   结论: ⇑(mk f hf) = f
   证明: rfl
 
@@ -1364,7 +1364,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : LatticeHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 格态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -1385,7 +1385,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : LatticeHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 格态射 α β) (f' : α -> β) (h : f' = f)
   定义体: { f.toSupHom.copy f' h, f.toInfHom.copy f' h with }
 
 @[simp]
@@ -1405,7 +1405,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : LatticeHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 格态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -1423,7 +1423,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : LatticeHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 格态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -1446,7 +1446,7 @@ definition id
 
 中文:
 定义 id
-  签名: : LatticeHom α α where
+  签名: : 格态射 α α where
   定义体: id
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -1468,7 +1468,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LatticeHom α α)
+  签名: 可居 (格态射 α α)
   定义体: ⟨LatticeHom.id α⟩
 
 @[simp, norm_cast]
@@ -1489,7 +1489,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(LatticeHom.id α) = id
+  结论: ⇑(格态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(LatticeHom.id α) = id :=
@@ -1510,7 +1510,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: LatticeHom.id α a = a
+  结论: 格态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : LatticeHom.id α a = a :=
@@ -1528,7 +1528,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : LatticeHom β γ) (g : LatticeHom α β)
+  签名: (f : 格态射 β γ) (g : 格态射 α β)
   定义体: { f.toSupHom.comp g.toSupHom, f.toInfHom.comp g.toInfHom with }
 
 @[simp]
@@ -1552,7 +1552,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β)
+  条件: (f : 格态射 β γ) (g : 格态射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -1575,7 +1575,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β) (a : α)
+  条件: (f : 格态射 β γ) (g : 格态射 α β) (a : α)
   结论: (f.comp g) a = f (g a)
   证明: rfl
 
@@ -1598,7 +1598,7 @@ theorem coe_comp_sup_hom'
 
 中文:
 定理 coe_comp_sup_hom'
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β)
+  条件: (f : 格态射 β γ) (g : 格态射 α β)
   证明: rfl
 
 @[to_dual]
@@ -1620,7 +1620,7 @@ theorem coe_comp_sup_hom
 
 中文:
 定理 coe_comp_sup_hom
-  条件: (f : LatticeHom β γ) (g : LatticeHom α β)
+  条件: (f : 格态射 β γ) (g : 格态射 α β)
   证明: rfl
 
 @[simp]
@@ -1642,7 +1642,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : LatticeHom γ δ) (g : LatticeHom β γ) (h : LatticeHom α β)
+  条件: (f : 格态射 γ δ) (g : 格态射 β γ) (h : 格态射 α β)
   证明: rfl
 
 @[simp]
@@ -1665,8 +1665,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : LatticeHom α β)
-  结论: f.comp (LatticeHom.id α) = f
+  条件: (f : 格态射 α β)
+  结论: f.comp (格态射.id α) = f
   证明: LatticeHom.ext fun _ => rfl
 
 @[simp]
@@ -1690,8 +1690,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : LatticeHom α β)
-  结论: (LatticeHom.id β).comp f = f
+  条件: (f : 格态射 α β)
+  结论: (格态射.id β).comp f = f
   证明: LatticeHom.ext fun _ => rfl
 
 @[simp]
@@ -1714,7 +1714,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : LatticeHom β γ} {f : LatticeHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : 格态射 β γ} {f : 格态射 α β} (hf : 满射 f)
   证明: ⟨fun h => LatticeHom.ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[simp]
@@ -1737,7 +1737,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : LatticeHom β γ} {f₁ f₂ : LatticeHom α β} (hg : Injective g)
+  条件: {g : 格态射 β γ} {f₁ f₂ : 格态射 α β} (hg : 单射 g)
   证明: ⟨fun h => LatticeHom.ext fun a => hg by rw [← LatticeHom.comp_apply, h, LatticeHom.comp_apply],
     congr_arg _⟩
 
@@ -1931,7 +1931,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : SupHom α β ≃ InfHom αᵒᵈ βᵒᵈ where
+  签名: : 并态射 α β ≃ 交态射 αᵒᵈ βᵒᵈ where
   定义体: ⟨f, f.map_sup'⟩
   invFun f := ⟨f, f.map_inf'⟩
 
@@ -1954,7 +1954,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: SupHom.dual (SupHom.id α) = InfHom.id _
+  结论: 并态射.dual (并态射.id α) = 交态射.id _
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1975,7 +1975,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : SupHom β γ) (f : SupHom α β)
+  条件: (g : 并态射 β γ) (f : 并态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1997,7 +1997,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: SupHom.dual.symm (InfHom.id _) = SupHom.id α
+  结论: 并态射.dual.symm (交态射.id _) = 并态射.id α
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -2016,7 +2016,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : InfHom βᵒᵈ γᵒᵈ) (f : InfHom αᵒᵈ βᵒᵈ)
+  条件: (g : 交态射 βᵒᵈ γᵒᵈ) (f : 交态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 
 Depends on / 依赖: WeaklyEtale
@@ -2045,7 +2045,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : LatticeHom α β ≃ LatticeHom αᵒᵈ βᵒᵈ where
+  签名: : 格态射 α β ≃ 格态射 αᵒᵈ βᵒᵈ where
   定义体: ⟨InfHom.dual f.toInfHom, f.map_sup'⟩
   invFun f := ⟨SupHom.dual.symm f.toInfHom, f.map_sup'⟩
 
@@ -2067,7 +2067,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: LatticeHom.dual (LatticeHom.id α) = LatticeHom.id _
+  结论: 格态射.dual (格态射.id α) = 格态射.id _
   证明: rfl
 
 @[simp]
@@ -2087,7 +2087,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : LatticeHom β γ) (f : LatticeHom α β)
+  条件: (g : 格态射 β γ) (f : 格态射 α β)
   证明: rfl
 
 @[simp]
@@ -2111,7 +2111,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: LatticeHom.dual.symm (LatticeHom.id _) = LatticeHom.id α
+  结论: 格态射.dual.symm (格态射.id _) = 格态射.id α
   证明: rfl
 
 @[simp]
@@ -2132,7 +2132,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : LatticeHom βᵒᵈ γᵒᵈ) (f : LatticeHom αᵒᵈ βᵒᵈ)
+  条件: (g : 格态射 βᵒᵈ γᵒᵈ) (f : 格态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.comp_assoc, algebraMap_eq, comp_assoc, of_algebraMap_eq
@@ -2161,7 +2161,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: : LatticeHom (α × β) α where
+  签名: : 格态射 (α × β) α where
   定义体: Prod.fst
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -2185,7 +2185,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: : LatticeHom (α × β) β where
+  签名: : 格态射 (α × β) β where
   定义体: Prod.snd
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -2207,7 +2207,7 @@ lemma coe_fst
 
 中文:
 引理 coe_fst
-  结论: ⇑(fst (α := α) (β := β)) = Prod.fst
+  结论: ⇑(fst (α := α) (β := β)) = 积类型.fst
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_fst : ⇑(fst (α := α) (β := β)) = Prod.fst := rfl
@@ -2221,7 +2221,7 @@ lemma coe_snd
 
 中文:
 引理 coe_snd
-  结论: ⇑(snd (α := α) (β := β)) = Prod.snd
+  结论: ⇑(snd (α := α) (β := β)) = 积类型.snd
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_snd : ⇑(snd (α := α) (β := β)) = Prod.snd := rfl
@@ -2306,7 +2306,7 @@ lemma coe_evalLatticeHom
 中文:
 引理 coe_evalLatticeHom
   条件: (i : ι)
-  结论: ⇑(evalLatticeHom (α := α) i) = Function.eval i
+  结论: ⇑(evalLatticeHom (α := α) i) = 函数.eval i
   证明: rfl
 
 Depends on / 依赖: Function, Function.eval

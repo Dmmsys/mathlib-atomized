@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: Encodable Rat
+  签名: 可编码 有理数
   定义体: Encodable.ofEquiv (Σ n : Int, { d : Nat // 0 < d ∧ n.natAbs.Coprime d })
     ⟨fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_of_ne_zero c, d⟩,
       fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_iff_ne_zero.mp c, d⟩,

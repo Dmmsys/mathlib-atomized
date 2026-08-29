@@ -64,7 +64,7 @@ include hv hm in
 
 中文:
 定理 disjoint_span_sum
-  结论: Disjoint (span R (range (u ∘ Sum.inl)))
+  结论: Disjoint (span R (range (u ∘ 和.inl)))
   证明: by
   rw [huv]; rw [disjoint_comm]
   refine Disjoint.mono_right (span_mono (range_comp_subset_range _ _)) ?_
@@ -176,7 +176,7 @@ theorem span_exact
 
 中文:
 定理 span_exact
-  结论: {β : 类型} {u : ι oplus β -> S.X₂} (huv : u ∘ Sum.inl = S.f ∘ v)
+  结论: {β : 类型} {u : ι oplus β -> S.X₂} (huv : u ∘ 和.inl = S.f ∘ v)
   证明: by
   intro m _
   have hgm : S.g m in span R (range (S.g ∘ u ∘ Sum.inr)) := hw mem_top
@@ -275,7 +275,7 @@ definition Basis.ofShortExact
 include hS'
 
 中文:
-定义 Basis.ofShortExact
+定义 基.ofShortExact
   定义体: Basis.mk (linearIndependent_shortExact hS' bN.linearIndependent bP.linearIndependent)
     (span_rightExact hS'.exact (le_of_eq (bN.span_eq.symm)) (le_of_eq (bP.span_eq.symm)) hS'.epi_g)
 
@@ -301,7 +301,7 @@ theorem free_shortExact
 
 中文:
 定理 free_shortExact
-  条件: [Module.Free R S.X₁] [Module.Free R S.X₃]
+  条件: [模.自由 R S.X₁] [模.自由 R S.X₃]
   证明: Module.Free.of_basis (Basis.ofShortExact hS' (Module.Free.chooseBasis R S.X₁)
     (Module.Free.chooseBasis R S.X₃))
 
@@ -325,7 +325,7 @@ theorem free_shortExact_rank_add
 
 中文:
 定理 free_shortExact_rank_add
-  结论: [Module.Free R S.X₁] [Module.Free R S.X₃]
+  结论: [模.自由 R S.X₁] [模.自由 R S.X₃]
   证明: by
   have := free_shortExact hS'
   rw [Module.Free.rank_eq_card_chooseBasisIndex]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₁]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₃]; rw [Cardinal.add_def]; rw [Cardinal.eq]
@@ -354,7 +354,7 @@ theorem free_shortExact_finrank_add
 
 中文:
 定理 free_shortExact_finrank_add
-  结论: {n p : 自然数} [Module.Free R S.X₁] [Module.Free R S.X₃]
+  结论: {n p : 自然数} [模.自由 R S.X₁] [模.自由 R S.X₃]
   证明: by
   apply finrank_eq_of_rank_eq
   rw [free_shortExact_rank_add hS']; rw [← hN]; rw [← hP]

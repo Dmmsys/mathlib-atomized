@@ -74,7 +74,7 @@ abbreviation AlgebraicIndepOn
 
 中文:
 缩写 AlgebraicIndepOn
-  签名: (s : Set ι)
+  签名: (s : 集合 ι)
   定义体: AlgebraicIndependent R fun i : s => x i
 
 Depends on / 依赖: AlgebraicIndependent
@@ -182,7 +182,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (f : ι' -> ι) (hf : Function.Injective f)
+  条件: (f : ι' -> ι) (hf : 函数.单射 f)
   结论: AlgebraicIndependent R (x ∘ f)
   证明: by
   intro p q
@@ -271,7 +271,7 @@ alias ⟨AlgebraicIndependent.of_subtype_range, _⟩ := algebraicIndependent_sub
 
 中文:
 定理 algebraicIndependent_subtype_range
-  条件: {ι} {f : ι -> A} (hf : Injective f)
+  条件: {ι} {f : ι -> A} (hf : 单射 f)
   证明: Iff.symm algebraicIndependent_equiv' (Equiv.ofInjective f hf) rfl
 
 alias ⟨AlgebraicIndependent.of_subtype_range, _⟩ := algebraicIndependent_subtype_range
@@ -294,7 +294,7 @@ theorem algebraicIndependent_image
 
 中文:
 定理 algebraicIndependent_image
-  条件: {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s)
+  条件: {ι} {s : 集合 ι} {f : ι -> A} (hf : 集合.单射限制 f s)
   证明: algebraicIndependent_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
 
 Depends on / 依赖: Equiv.Set.imageOfInjOn, algebraicIndependent_equiv, imageOfInjOn
@@ -316,7 +316,7 @@ lemma AlgebraicIndepOn.mono
 
 中文:
 引理 AlgebraicIndepOn.mono
-  条件: {s t : Set ι} (H : AlgebraicIndepOn R x t) (hst : s subseteq t)
+  条件: {s t : 集合 ι} (H : AlgebraicIndepOn R x t) (hst : s subseteq t)
   证明: by
   simpa [Function.comp] using! H.comp (Set.inclusion hst) (Set.inclusion_injective hst)
 
@@ -359,7 +359,7 @@ theorem mono
 
 中文:
 定理 mono
-  结论: {t s : Set A} (h : t subseteq s)
+  结论: {t s : 集合 A} (h : t subseteq s)
   证明: AlgebraicIndepOn.mono (x := id) hx h
 
 Depends on / 依赖: AlgebraicIndepOn, AlgebraicIndepOn.mono
@@ -387,7 +387,7 @@ definition aevalEquiv
 
 中文:
 定义 aevalEquiv
-  签名: : MvPolynomial ι R ≃ₐ[R] Algebra.adjoin R (range x)
+  签名: : 多元多项式 ι R ≃ₐ[R] 代数.adjoin R (range x)
   定义体: (AlgEquiv.ofInjective (aeval x) (algebraicIndependent_iff_injective_aeval.1 hx)).trans
     (Subalgebra.equivOfEq _ _ (Algebra.adjoin_range_eq_range_aeval R x).symm)
 
@@ -407,7 +407,7 @@ theorem algebraMap_aevalEquiv
 
 中文:
 定理 algebraMap_aevalEquiv
-  条件: (p : MvPolynomial ι R)
+  条件: (p : 多元多项式 ι R)
   证明: rfl
 -/
 theorem algebraMap_aevalEquiv (p : MvPolynomial ι R) :
@@ -426,7 +426,7 @@ definition repr
 
 中文:
 定义 repr
-  签名: : Algebra.adjoin R (range x) ->ₐ[R] MvPolynomial ι R
+  签名: : 代数.adjoin R (range x) ->ₐ[R] 多元多项式 ι R
   定义体: hx.aevalEquiv.symm
 
 @[simp]
@@ -467,7 +467,7 @@ theorem aeval_comp_repr
 
 中文:
 定理 aeval_comp_repr
-  结论: (aeval x).comp hx.repr = Subalgebra.val _
+  结论: (aeval x).comp hx.repr = 子代数.val _
   证明: AlgHom.ext hx.aeval_repr
 
 Depends on / 依赖: AlgHom, AlgHom.ext, aeval_repr, hx.aeval_repr
@@ -486,7 +486,7 @@ definition _root_.AlgebraicIndepOn.aevalEquiv
 
 中文:
 定义 _root_.AlgebraicIndepOn.aevalEquiv
-  签名: {s : Set ι} (hx : AlgebraicIndepOn R x s)
+  签名: {s : 集合 ι} (hx : AlgebraicIndepOn R x s)
   定义体: (AlgebraicIndependent.aevalEquiv hx).trans
     (Subalgebra.equivOfEq _ _ congr(Algebra.adjoin _ $(by aesop)))
 
@@ -532,7 +532,7 @@ theorem isTranscendenceBasis_iff_maximal
 
 中文:
 定理 isTranscendenceBasis_iff_maximal
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   证明: by
   rw [IsTranscendenceBasis]; rw [maximal_iff]; rw [Subtype.range_val]; rfl
 
@@ -600,7 +600,7 @@ alias ⟨IsTranscendenceBasis.of_subtype_range, _⟩ := isTranscendenceBasis_sub
 
 中文:
 定理 isTranscendenceBasis_subtype_range
-  条件: {ι} {f : ι -> A} (hf : Injective f)
+  条件: {ι} {f : ι -> A} (hf : 单射 f)
   证明: .symm isTranscendenceBasis_equiv' (Equiv.ofInjective f hf) rfl
 
 alias ⟨IsTranscendenceBasis.of_subtype_range, _⟩ := isTranscendenceBasis_subtype_range
@@ -623,7 +623,7 @@ theorem isTranscendenceBasis_image
 
 中文:
 定理 isTranscendenceBasis_image
-  条件: {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s)
+  条件: {ι} {s : 集合 ι} {f : ι -> A} (hf : 集合.单射限制 f s)
   证明: isTranscendenceBasis_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
 
 Depends on / 依赖: Equiv.Set.imageOfInjOn, imageOfInjOn, isTranscendenceBasis_equiv

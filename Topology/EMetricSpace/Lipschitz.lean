@@ -78,7 +78,7 @@ definition LipschitzOnWith
 
 中文:
 定义 LipschitzOnWith
-  签名: (K : 实数>=0) (f : α -> β) (s : Set α)
+  签名: (K : 实数>=0) (f : α -> β) (s : 集合 α)
   定义体: forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> edist (f x) (f y) <= K * edist x y
 -/
 def LipschitzOnWith (K : Real>=0) (f : α -> β) (s : Set α) :=
@@ -111,7 +111,7 @@ definition LocallyLipschitzOn
 
 中文:
 定义 LocallyLipschitzOn
-  签名: (s : Set α) (f : α -> β)
+  签名: (s : 集合 α) (f : α -> β)
   定义体: forall ⦃x⦄, x in s -> exists K, exists t in 𝓝[s] x, LipschitzOnWith K f t
 
 Depends on / 依赖: LipschitzOnWith
@@ -279,7 +279,7 @@ lemma lipschitzOnWith_restrict
 
 中文:
 引理 lipschitzOnWith_restrict
-  条件: {t : Set s}
+  条件: {t : 集合 s}
   证明: by
   simp [LipschitzOnWith]
 
@@ -345,8 +345,8 @@ lemma Set.MapsTo.lipschitzOnWith_iff_restrict
 alias ⟨LipschitzOnWith.mapsToRestrict, _⟩ := Set.MapsTo.lipschitzOnWith_iff_restrict
 
 中文:
-引理 Set.MapsTo.lipschitzOnWith_iff_restrict
-  条件: {t : Set β} (h : MapsTo f s t)
+引理 集合.映射到.lipschitzOnWith_iff_restrict
+  条件: {t : 集合 β} (h : 映射到 f s t)
   证明: _root_.lipschitzOnWith_iff_restrict
 
 alias ⟨LipschitzOnWith.mapsToRestrict, _⟩ := Set.MapsTo.lipschitzOnWith_iff_restrict
@@ -585,7 +585,7 @@ theorem ediam_image_le
 
 中文:
 定理 ediam_image_le
-  条件: (hf : LipschitzWith K f) (s : Set α)
+  条件: (hf : LipschitzWith K f) (s : 集合 α)
   证明: by
   apply Metric.ediam_le
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩
@@ -637,7 +637,7 @@ theorem uniformContinuous
 中文:
 定理 uniformContinuous
   条件: (hf : LipschitzWith K f)
-  结论: UniformContinuous f
+  结论: 一致连续 f
   证明: EMetric.uniformContinuous_iff.2 fun ε εpos =>
     ⟨ε / K, ENNReal.div_pos_iff.2 ⟨ne_of_gt εpos, ENNReal.coe_ne_top⟩, hf.edist_lt_of_edist_lt_div⟩
 -/
@@ -657,7 +657,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (hf : LipschitzWith K f)
-  结论: Continuous f
+  结论: 连续 f
   证明: hf.uniformContinuous.continuous
 -/
 protected theorem continuous (hf : LipschitzWith K f) : Continuous f :=
@@ -720,7 +720,7 @@ lemma zero_iff
 
 中文:
 引理 zero_iff
-  条件: {β : 类型} [EMetricSpace β] (f : α -> β)
+  条件: {β : 类型} [广义度量空间 β] (f : α -> β)
   结论: LipschitzWith 0 f ↔ 对任意 x y, f x = f y
   证明: by
   simp [LipschitzWith]
@@ -757,8 +757,8 @@ theorem subtype_val
 
 中文:
 定理 subtype_val
-  条件: (s : Set α)
-  结论: LipschitzWith 1 (Subtype.val : s -> α)
+  条件: (s : 集合 α)
+  结论: LipschitzWith 1 (子类型.val : s -> α)
   证明: LipschitzWith.of_edist_le fun _ _ => le_rfl
 -/
 protected theorem subtype_val (s : Set α) : LipschitzWith 1 (Subtype.val : s -> α) :=
@@ -791,7 +791,7 @@ theorem eval
 
 中文:
 定理 eval
-  条件: {α : ι -> 类型u} [对任意 i, PseudoEMetricSpace (α i)] [Fintype ι] (i : ι)
+  条件: {α : ι -> 类型u} [对任意 i, PseudoEMetric空间 (α i)] [有限类型 ι] (i : ι)
   证明: LipschitzWith.of_edist_le fun f g => by convert! edist_le_pi_edist f g i
 -/
 protected theorem eval {α : ι -> Type u} [forall i, PseudoEMetricSpace (α i)] [Fintype ι] (i : ι) :
@@ -808,7 +808,7 @@ theorem restrict
 
 中文:
 定理 restrict
-  条件: (hf : LipschitzWith K f) (s : Set α)
+  条件: (hf : LipschitzWith K f) (s : 集合 α)
   证明: fun x y => hf x y
 -/
 protected theorem restrict (hf : LipschitzWith K f) (s : Set α) :
@@ -852,7 +852,7 @@ theorem comp_lipschitzOnWith
 
 中文:
 定理 comp_lipschitzOnWith
-  结论: {Kf Kg : 实数>=0} {f : β -> γ} {g : α -> β} {s : Set α}
+  结论: {Kf Kg : 实数>=0} {f : β -> γ} {g : α -> β} {s : 集合 α}
   证明: lipschitzOnWith_iff_restrict.mpr hf.comp hg.to_restrict
 
 Depends on / 依赖: hf.comp, hg.to_restrict, lipschitzOnWith_iff_restrict, lipschitzOnWith_iff_restrict.mpr, to_restrict
@@ -871,7 +871,7 @@ theorem prod_fst
 
 中文:
 定理 prod_fst
-  结论: LipschitzWith 1 (@Prod.fst α β)
+  结论: LipschitzWith 1 (@积类型.fst α β)
   证明: LipschitzWith.of_edist_le fun _ _ => le_max_left _ _
 -/
 protected theorem prod_fst : LipschitzWith 1 (@Prod.fst α β) :=
@@ -887,7 +887,7 @@ theorem prod_snd
 
 中文:
 定理 prod_snd
-  结论: LipschitzWith 1 (@Prod.snd α β)
+  结论: LipschitzWith 1 (@积类型.snd α β)
   证明: LipschitzWith.of_edist_le fun _ _ => le_max_right _ _
 -/
 protected theorem prod_snd : LipschitzWith 1 (@Prod.snd α β) :=
@@ -931,7 +931,7 @@ theorem prodMk_left
 中文:
 定理 prodMk_left
   条件: (a : α)
-  结论: LipschitzWith 1 (Prod.mk a : β -> α × β)
+  结论: LipschitzWith 1 (积类型.mk a : β -> α × β)
   证明: by
   simpa only [max_eq_right zero_le_one] using! (LipschitzWith.const a).prodMk LipschitzWith.id
 -/
@@ -1043,7 +1043,7 @@ theorem mul_end
 
 中文:
 定理 mul_end
-  结论: {f g : Function.End α} {Kf Kg} (hf : LipschitzWith Kf f)
+  结论: {f g : 函数.End α} {Kf Kg} (hf : LipschitzWith Kf f)
   证明: hf.comp hg
 -/
 protected theorem mul_end {f g : Function.End α} {Kf Kg} (hf : LipschitzWith Kf f)
@@ -1059,7 +1059,7 @@ theorem list_prod
 
 中文:
 定理 list_prod
-  结论: (f : ι -> Function.End α) (K : ι -> 实数>=0)
+  结论: (f : ι -> 函数.End α) (K : ι -> 实数>=0)
 -/
 protected theorem list_prod (f : ι -> Function.End α) (K : ι -> Real>=0)
     (h : forall i, LipschitzWith (K i) (f i)) : forall l : List ι, LipschitzWith (l.map K).prod (l.map f).prod
@@ -1077,7 +1077,7 @@ theorem pow_end
 
 中文:
 定理 pow_end
-  条件: {f : Function.End α} {K} (h : LipschitzWith K f)
+  条件: {f : 函数.End α} {K} (h : LipschitzWith K f)
 -/
 protected theorem pow_end {f : Function.End α} {K} (h : LipschitzWith K f) :
     forall n : Nat, LipschitzWith (K ^ n) (f ^ n : Function.End α)
@@ -1105,7 +1105,7 @@ lemma zero_iff
 
 中文:
 引理 zero_iff
-  条件: {β : 类型} [EMetricSpace β] (f : α -> β)
+  条件: {β : 类型} [广义度量空间 β] (f : α -> β)
   证明: by
   simp [LipschitzOnWith]
 
@@ -1217,7 +1217,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : β -> γ} {t : Set β} {Kg : 实数>=0} (hg : LipschitzOnWith Kg g t)
+  结论: {g : β -> γ} {t : 集合 β} {Kg : 实数>=0} (hg : LipschitzOnWith Kg g t)
   证明: lipschitzOnWith_iff_restrict.mpr hg.to_restrict.comp (hf.mapsToRestrict hmaps)
 -/
 protected theorem comp {g : β -> γ} {t : Set β} {Kg : Real>=0} (hg : LipschitzOnWith Kg g t)
@@ -1266,7 +1266,7 @@ theorem ediam_image2_le
 
 中文:
 定理 ediam_image2_le
-  结论: (f : α -> β -> γ) {K₁ K₂ : 实数>=0} (s : Set α) (t : Set β)
+  结论: (f : α -> β -> γ) {K₁ K₂ : 实数>=0} (s : 集合 α) (t : 集合 β)
   证明: by
   simp only [Metric.ediam_le_iff, forall_mem_image2]
   intro a₁ ha₁ b₁ hb₁ a₂ ha₂ b₂ hb₂
@@ -1360,7 +1360,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: {f : α -> β} (hf : LocallyLipschitz f)
-  结论: Continuous f
+  结论: 连续 f
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -1453,7 +1453,7 @@ theorem prodMk_left
 中文:
 定理 prodMk_left
   条件: (a : α)
-  结论: LocallyLipschitz (Prod.mk a : β -> α × β)
+  结论: LocallyLipschitz (积类型.mk a : β -> α × β)
   证明: (LipschitzWith.prodMk_left a).locallyLipschitz
 -/
 protected theorem prodMk_left (a : α) : LocallyLipschitz (Prod.mk a : β -> α × β) :=
@@ -1504,7 +1504,7 @@ theorem mul_end
 
 中文:
 定理 mul_end
-  结论: {f g : Function.End α} (hf : LocallyLipschitz f)
+  结论: {f g : 函数.End α} (hf : LocallyLipschitz f)
   证明: hf.comp hg
 -/
 protected theorem mul_end {f g : Function.End α} (hf : LocallyLipschitz f)
@@ -1519,7 +1519,7 @@ theorem pow_end
 
 中文:
 定理 pow_end
-  条件: {f : Function.End α} (h : LocallyLipschitz f)
+  条件: {f : 函数.End α} (h : LocallyLipschitz f)
 -/
 protected theorem pow_end {f : Function.End α} (h : LocallyLipschitz f) :
     forall n : Nat, LocallyLipschitz (f ^ n : Function.End α)
@@ -1568,7 +1568,7 @@ theorem continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
 
 中文:
 定理 continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
-  结论: [PseudoEMetricSpace α]
+  结论: [PseudoEMetric空间 α]
   证明: by
   rintro ⟨x, y⟩ ⟨hx : x in s, hy : y in t⟩
   refine Metric.nhds_basis_closedEBall.tendsto_right_iff.2 fun ε (ε0 : 0 < ε) => ?_
@@ -1619,7 +1619,7 @@ theorem continuousOn_prod_of_continuousOn_lipschitzOnWith
 
 中文:
 定理 continuousOn_prod_of_continuousOn_lipschitzOnWith
-  结论: [PseudoEMetricSpace α]
+  结论: [PseudoEMetric空间 α]
   证明: continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
     f Subset.rfl subset_closure K ha hb
 
@@ -1645,7 +1645,7 @@ theorem continuous_prod_of_dense_continuous_lipschitzWith
 
 中文:
 定理 continuous_prod_of_dense_continuous_lipschitzWith
-  结论: [PseudoEMetricSpace α]
+  结论: [PseudoEMetric空间 α]
   证明: by
   simp only [← continuousOn_univ, ← univ_prod_univ, ← lipschitzOnWith_univ] at *
   exact continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith f (subset_univ _)
@@ -1671,7 +1671,7 @@ theorem continuous_prod_of_continuous_lipschitzWith
 
 中文:
 定理 continuous_prod_of_continuous_lipschitzWith
-  结论: [PseudoEMetricSpace α] [TopologicalSpace β]
+  结论: [PseudoEMetric空间 α] [拓扑空间 β]
   证明: continuous_prod_of_dense_continuous_lipschitzWith f K dense_univ (fun _ _ => ha _) hb
 
 Depends on / 依赖: continuous_prod_of_dense_continuous_lipschitzWith, dense_univ
@@ -1693,7 +1693,7 @@ theorem continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith'
 
 中文:
 定理 continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith'
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: have : ContinuousOn (f ∘ Prod.swap) (t ×ˢ s) :=
     continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith _ ht' htt' K hb ha
   this.comp continuous_swap.continuousOn (mapsTo_swap_prod _ _)
@@ -1721,7 +1721,7 @@ theorem continuousOn_prod_of_continuousOn_lipschitzOnWith'
 
 中文:
 定理 continuousOn_prod_of_continuousOn_lipschitzOnWith'
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: have : ContinuousOn (f ∘ Prod.swap) (t ×ˢ s) :=
     continuousOn_prod_of_continuousOn_lipschitzOnWith _ K hb ha
   this.comp continuous_swap.continuousOn (mapsTo_swap_prod _ _)
@@ -1748,7 +1748,7 @@ theorem continuous_prod_of_dense_continuous_lipschitzWith'
 
 中文:
 定理 continuous_prod_of_dense_continuous_lipschitzWith'
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: have : Continuous (f ∘ Prod.swap) :=
     continuous_prod_of_dense_continuous_lipschitzWith _ K ht hb ha
   this.comp continuous_swap
@@ -1775,7 +1775,7 @@ theorem continuous_prod_of_continuous_lipschitzWith'
 
 中文:
 定理 continuous_prod_of_continuous_lipschitzWith'
-  结论: [TopologicalSpace α] [PseudoEMetricSpace β]
+  结论: [拓扑空间 α] [PseudoEMetric空间 β]
   证明: have : Continuous (f ∘ Prod.swap) :=
     continuous_prod_of_continuous_lipschitzWith _ K hb ha
   this.comp continuous_swap

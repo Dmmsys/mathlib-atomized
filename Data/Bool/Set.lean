@@ -33,7 +33,7 @@ theorem univ_eq
 
 中文:
 定理 univ_eq
-  结论: (univ : Set 布尔) = {false, true}
+  结论: (univ : 集合 布尔值) = {false, true}
   证明: by grind
 
 @[simp, grind =]
@@ -54,7 +54,7 @@ theorem range_eq
 
 中文:
 定理 range_eq
-  条件: {α : 类型} (f : 布尔 -> α)
+  条件: {α : 类型} (f : 布尔值 -> α)
   结论: range f = {f false, f true}
   证明: by grind [cases Bool]
 
@@ -74,8 +74,8 @@ theorem compl_singleton
 
 中文:
 定理 compl_singleton
-  条件: (b : 布尔)
-  结论: ({b}ᶜ : Set 布尔) = {!b}
+  条件: (b : 布尔值)
+  结论: ({b}ᶜ : 集合 布尔值) = {!b}
   证明: by grind [cases Bool]
 -/
 theorem compl_singleton (b : Bool) : ({b}ᶜ : Set Bool) = {!b} := by grind [cases Bool]

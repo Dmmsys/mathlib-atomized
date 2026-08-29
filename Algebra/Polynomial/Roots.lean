@@ -93,7 +93,7 @@ theorem roots_def
 
 中文:
 定理 roots_def
-  条件: [DecidableEq R] (p : R[X]) [Decidable (p = 0)]
+  条件: [DecidableEq R] (p : R[X]) [可判定 (p = 0)]
   证明: by
   rename_i iR ip0
   obtain rfl := Subsingleton.elim iR (Classical.decEq R)
@@ -428,7 +428,7 @@ theorem mem_roots_map_of_injective
 
 中文:
 定理 mem_roots_map_of_injective
-  结论: [Semiring S] {p : S[X]} {f : S ->+* R}
+  结论: [半环 S] {p : S[X]} {f : S ->+* R}
   证明: by
   rw [mem_roots ((Polynomial.map_ne_zero_iff hf).mpr hp)]; rw [IsRoot]; rw [eval_map]
 
@@ -470,7 +470,7 @@ theorem card_le_degree_of_subset_roots
 
 中文:
 定理 card_le_degree_of_subset_roots
-  条件: {p : R[X]} {Z : Finset R} (h : Z.val subseteq p.roots)
+  条件: {p : R[X]} {Z : 有限集 R} (h : Z.val subseteq p.roots)
   证明: (Multiset.card_le_card (Finset.val_le_iff_val_subset.2 h)).trans (Polynomial.card_roots' p)
 
 Depends on / 依赖: Finset, Finset.val_le_iff_val_subset, Multiset, Multiset.card_le_card, Polynomial, Polynomial.card_roots, card_le_card, card_roots, val_le_iff_val_subset
@@ -496,7 +496,7 @@ theorem finite_setOfPred_isRoot
 中文:
 定理 finite_setOfPred_isRoot
   条件: {p : R[X]} (hp : p != 0)
-  结论: Set.Finite { x | IsRoot p x }
+  结论: 集合.有限 { x | IsRoot p x }
   证明: by
   classical
   simpa only [← Finset.setOfPred_mem, Multiset.mem_toFinset, mem_roots hp]
@@ -524,7 +524,7 @@ theorem eq_zero_of_infinite_isRoot
 
 中文:
 定理 eq_zero_of_infinite_isRoot
-  条件: (p : R[X]) (h : Set.Infinite { x | IsRoot p x })
+  条件: (p : R[X]) (h : 集合.无限 { x | IsRoot p x })
   结论: p = 0
   证明: not_imp_comm.mp finite_setOfPred_isRoot h
 
@@ -543,8 +543,8 @@ theorem exists_max_root
   proof: Set.exists_upper_bound_image _ _ finite_setOfPred_isRoot hp
 
 中文:
-定理 exists_max_root
-  条件: [LinearOrder R] (p : R[X]) (hp : p != 0)
+定理 存在_max_root
+  条件: [线性序 R] (p : R[X]) (hp : p != 0)
   结论: 存在 x₀, 对任意 x, p.IsRoot x -> x <= x₀
   证明: Set.exists_upper_bound_image _ _ finite_setOfPred_isRoot hp
 
@@ -563,8 +563,8 @@ theorem exists_min_root
   proof: Set.exists_lower_bound_image _ _ finite_setOfPred_isRoot hp
 
 中文:
-定理 exists_min_root
-  条件: [LinearOrder R] (p : R[X]) (hp : p != 0)
+定理 存在_min_root
+  条件: [线性序 R] (p : R[X]) (hp : p != 0)
   结论: 存在 x₀, 对任意 x, p.IsRoot x -> x₀ <= x
   证明: Set.exists_lower_bound_image _ _ finite_setOfPred_isRoot hp
 
@@ -586,7 +586,7 @@ theorem eq_of_infinite_eval_eq
 
 中文:
 定理 eq_of_infinite_eval_eq
-  条件: (p q : R[X]) (h : Set.Infinite { x | eval x p = eval x q })
+  条件: (p q : R[X]) (h : 集合.无限 { x | eval x p = eval x q })
   证明: by
   rw [← sub_eq_zero]
   apply eq_zero_of_infinite_isRoot
@@ -615,7 +615,7 @@ lemma tendstoCofinite_of_natDegree_ne_zero
 
 中文:
 引理 tendstoCofinite_of_natDegree_ne_zero
-  结论: {R : Type} [CommRing R] [IsDomain R] (p : R[X])
+  结论: {R : 类型} [交换环 R] [是整环 R] (p : R[X])
   证明: by
   rw [Filter.tendstoCofinite_iff_finite_preimage_singleton]
   intro x
@@ -1003,7 +1003,7 @@ theorem map_roots_comp_C_mul_X_add_C
 
 中文:
 定理 map_roots_comp_C_mul_X_add_C
-  条件: (p : R[X]) (a b : R) (ha : IsUnit a)
+  条件: (p : R[X]) (a b : R) (ha : 是单位 a)
   证明: by
   classical
   set f := fun x => a * x + b
@@ -1042,7 +1042,7 @@ theorem roots_comp_C_mul_X_add_C
 
 中文:
 定理 roots_comp_C_mul_X_add_C
-  条件: (p : R[X]) (a b : R) (ha : IsUnit a)
+  条件: (p : R[X]) (a b : R) (ha : 是单位 a)
   证明: by
   conv_rhs => rw [← p.map_roots_comp_C_mul_X_add_C a b ha]
   simp [← mul_assoc, Ring.inverse_mul_cancel a ha]
@@ -1151,7 +1151,7 @@ theorem roots_list_prod
 
 中文:
 定理 roots_list_prod
-  条件: (L : List R[X])
+  条件: (L : 列表 R[X])
   证明: List.recOn L (fun _ => roots_one) fun hd tl ih H => by
     rw [List.mem_cons]; rw [not_or] at H
     rw [List.prod_cons]; rw [roots_mul (mul_ne_zero (Ne.symm H.1) <| List.prod_ne_zero H.2)]; rw [←
@@ -1180,7 +1180,7 @@ theorem roots_multiset_prod
 中文:
 定理 roots_multiset_prod
   条件: (m : Multiset R[X])
-  结论: (0 : R[X]) ∉ m -> m.prod.roots = m.bind roots
+  结论: (0 : R[X]) ∉ m -> m.乘积.roots = m.bind roots
   证明: by
   rcases m with ⟨L⟩
   simpa only [Multiset.prod_coe, quot_mk_to_coe''] using! roots_list_prod L
@@ -1205,7 +1205,7 @@ theorem roots_prod
 
 中文:
 定理 roots_prod
-  条件: {ι : 类型} (f : ι -> R[X]) (s : Finset ι)
+  条件: {ι : 类型} (f : ι -> R[X]) (s : 有限集 ι)
   证明: by
   rcases s with ⟨m, hm⟩
   simpa [Multiset.prod_eq_zero_iff, Multiset.bind_map] using roots_multiset_prod (m.map f)
@@ -1344,8 +1344,8 @@ theorem roots_prod_X_sub_C
 
 中文:
 定理 roots_prod_X_sub_C
-  条件: (s : Finset R)
-  结论: (s.prod fun a => X - C a).roots = s.val
+  条件: (s : 有限集 R)
+  结论: (s.乘积 fun a => X - C a).roots = s.val
   证明: by
   apply (roots_prod (fun a => X - C a) s ?_).trans
   · simp_rw [roots_X_sub_C]
@@ -1381,7 +1381,7 @@ theorem roots_multiset_prod_X_sub_C
 中文:
 定理 roots_multiset_prod_X_sub_C
   条件: (s : Multiset R)
-  结论: (s.map fun a => X - C a).prod.roots = s
+  结论: (s.map fun a => X - C a).乘积.roots = s
   证明: by
   rw [roots_multiset_prod]; rw [Multiset.bind_map]
   · simp_rw [roots_X_sub_C]
@@ -1431,7 +1431,7 @@ theorem rightInverse_ofMultiset_roots
 
 中文:
 定理 rightInverse_ofMultiset_roots
-  结论: Function.RightInverse (α := R[X]) ofMultiset roots
+  结论: 函数.右逆 (α := R[X]) ofMultiset roots
   证明: roots_ofMultiset
 
 Depends on / 依赖: ofMultiset
@@ -1450,7 +1450,7 @@ theorem ofMultiset_injective
 
 中文:
 定理 ofMultiset_injective
-  结论: Function.Injective (ofMultiset (R := R))
+  结论: 函数.单射 (ofMultiset (R := R))
   证明: .injective rightInverse_ofMultiset_roots R
 -/
 theorem ofMultiset_injective : Function.Injective (ofMultiset (R := R)) :=
@@ -1500,7 +1500,7 @@ theorem roots_eq_of_degree_le_card_of_ne_zero
 
 中文:
 定理 roots_eq_of_degree_le_card_of_ne_zero
-  结论: {S : Finset R}
+  结论: {S : 有限集 R}
   证明: by
   refine (Multiset.eq_of_le_of_card_le ?_ ?_).symm
   · exact (Finset.val_le_iff_val_subset.mpr (fun x hx => (p.mem_roots hp).mpr (hS x hx)))
@@ -1524,7 +1524,7 @@ theorem roots_eq_of_degree_eq_card
 
 中文:
 定理 roots_eq_of_degree_eq_card
-  结论: {S : Finset R}
+  结论: {S : 有限集 R}
   证明: roots_eq_of_degree_le_card_of_ne_zero hS (by grind) (by contrapose! hcard; simp [hcard])
 
 Depends on / 依赖: contrapose, roots_eq_of_degree_le_card_of_ne_zero
@@ -1543,7 +1543,7 @@ theorem roots_eq_of_natDegree_le_card_of_ne_zero
 
 中文:
 定理 roots_eq_of_natDegree_le_card_of_ne_zero
-  结论: {S : Finset R}
+  结论: {S : 有限集 R}
   证明: roots_eq_of_degree_le_card_of_ne_zero hS (degree_le_of_natDegree_le hcard) hp
 
 Depends on / 依赖: degree_le_of_natDegree_le, roots_eq_of_degree_le_card_of_ne_zero
@@ -1640,7 +1640,7 @@ theorem nthRoots_zero_right
 
 中文:
 定理 nthRoots_zero_right
-  条件: {R} [CommRing R] [IsDomain R] (n : 自然数)
+  条件: {R} [交换环 R] [是整环 R] (n : 自然数)
   证明: by
   rw [nthRoots]; rw [C.map_zero]; rw [sub_zero]; rw [roots_pow]; rw [roots_X]; rw [Multiset.nsmul_singleton]
 
@@ -1740,7 +1740,7 @@ definition nthRootsFinset
 
 中文:
 定义 nthRootsFinset
-  签名: (n : 自然数) {R : 类型} (a : R) [CommRing R] [IsDomain R]
+  签名: (n : 自然数) {R : 类型} (a : R) [交换环 R] [是整环 R]
   定义体: haveI := Classical.decEq R
   Multiset.toFinset (nthRoots n a)
 
@@ -1764,7 +1764,7 @@ lemma nthRootsFinset_def
 
 中文:
 引理 nthRootsFinset_def
-  条件: (n : 自然数) {R : 类型} (a : R) [CommRing R] [IsDomain R] [DecidableEq R]
+  条件: (n : 自然数) {R : 类型} (a : R) [交换环 R] [是整环 R] [DecidableEq R]
   证明: by
   unfold nthRootsFinset
   convert! rfl
@@ -1844,7 +1844,7 @@ theorem map_mem_nthRootsFinset
 
 中文:
 定理 map_mem_nthRootsFinset
-  结论: {S F : 类型} [CommRing S] [IsDomain S] [FunLike F R S]
+  结论: {S F : 类型} [交换环 S] [是整环 S] [函数状 F R S]
   证明: by
   by_cases hn : n = 0
   · simp [hn] at hx
@@ -1873,7 +1873,7 @@ theorem map_mem_nthRootsFinset_one
 
 中文:
 定理 map_mem_nthRootsFinset_one
-  结论: {S F : 类型} [CommRing S] [IsDomain S] [FunLike F R S]
+  结论: {S F : 类型} [交换环 S] [是整环 S] [函数状 F R S]
   证明: by
   rw [← (map_one f)]
   exact map_mem_nthRootsFinset hx _
@@ -1995,7 +1995,7 @@ lemma nthRoots_two_one
 
 中文:
 引理 nthRoots_two_one
-  结论: Polynomial.nthRoots 2 (1 : R) = {-1,1}
+  结论: 多项式.nthRoots 2 (1 : R) = {-1,1}
   证明: by
   have h₁ : (X ^ 2 - C 1 : R[X]) = (X + C 1) * (X - C 1) := by simp [← sq_sub_sq]
   have h₂ : (X ^ 2 - C 1 : R[X]) != 0 := fun h => by simpa using congrArg (coeff · 0) h
@@ -2025,7 +2025,7 @@ theorem zero_of_eval_zero
 
 中文:
 定理 zero_of_eval_zero
-  条件: [Infinite R] (p : R[X]) (h : 对任意 x, p.eval x = 0)
+  条件: [无限 R] (p : R[X]) (h : 对任意 x, p.eval x = 0)
   结论: p = 0
   证明: by
   classical
@@ -2056,7 +2056,7 @@ theorem funext
 
 中文:
 定理 funext
-  条件: [Infinite R] {p q : R[X]} (ext : 对任意 r : R, p.eval r = q.eval r)
+  条件: [无限 R] {p q : R[X]} (ext : 对任意 r : R, p.eval r = q.eval r)
   结论: p = q
   证明: by
   rw [← sub_eq_zero]
@@ -2084,7 +2084,7 @@ abbreviation aroots
 
 中文:
 缩写 aroots
-  签名: (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S]
+  签名: (p : T[X]) (S) [交换环 S] [是整环 S] [代数 T S]
   定义体: (p.map (algebraMap T S)).roots
 
 Depends on / 依赖: algebraMap, p.map
@@ -2102,7 +2102,7 @@ theorem aroots_def
 
 中文:
 定理 aroots_def
-  条件: (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (p : T[X]) (S) [交换环 S] [是整环 S] [代数 T S]
   证明: rfl
 -/
 theorem aroots_def (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S] :
@@ -2120,7 +2120,7 @@ theorem mem_aroots'
 
 中文:
 定理 mem_aroots'
-  条件: [CommRing S] [IsDomain S] [Algebra T S] {p : T[X]} {a : S}
+  条件: [交换环 S] [是整环 S] [代数 T S] {p : T[X]} {a : S}
   证明: by
   rw [mem_roots']; rw [IsRoot.def]; rw [← eval₂_eq_eval_map]; rw [aeval_def]
 
@@ -2142,7 +2142,7 @@ theorem mem_aroots
 
 中文:
 定理 mem_aroots
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [mem_aroots']; rw [Polynomial.map_ne_zero_iff]
   exact FaithfulSMul.algebraMap_injective T S
@@ -2170,7 +2170,7 @@ theorem aroots_mul
 
 中文:
 定理 aroots_mul
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   suffices map (algebraMap T S) p * map (algebraMap T S) q != 0 by
     rw [aroots_def]; rw [Polynomial.map_mul]; rw [roots_mul this]
@@ -2203,7 +2203,7 @@ theorem aroots_X_sub_C
 
 中文:
 定理 aroots_X_sub_C
-  结论: [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [aroots_def]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]; rw [roots_X_sub_C]
 
@@ -2229,7 +2229,7 @@ theorem aroots_X
 
 中文:
 定理 aroots_X
-  条件: [CommRing S] [IsDomain S] [Algebra T S]
+  条件: [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [aroots_def]; rw [map_X]; rw [roots_X]
 
@@ -2256,7 +2256,7 @@ theorem aroots_C
 
 中文:
 定理 aroots_C
-  条件: [CommRing S] [IsDomain S] [Algebra T S] (a : T)
+  条件: [交换环 S] [是整环 S] [代数 T S] (a : T)
   结论: (C a).aroots S = 0
   证明: by
   rw [aroots_def]; rw [map_C]; rw [roots_C]
@@ -2283,7 +2283,7 @@ theorem aroots_zero
 
 中文:
 定理 aroots_zero
-  条件: (S) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (S) [交换环 S] [是整环 S] [代数 T S]
   结论: (0 : T[X]).aroots S = 0
   证明: by
   rw [← C_0]; rw [aroots_C]
@@ -2308,7 +2308,7 @@ theorem aroots_one
 
 中文:
 定理 aroots_one
-  条件: [CommRing S] [IsDomain S] [Algebra T S]
+  条件: [交换环 S] [是整环 S] [代数 T S]
   证明: aroots_C 1
 
 @[simp]
@@ -2333,7 +2333,7 @@ theorem aroots_neg
 
 中文:
 定理 aroots_neg
-  条件: [CommRing S] [IsDomain S] [Algebra T S] (p : T[X])
+  条件: [交换环 S] [是整环 S] [代数 T S] (p : T[X])
   证明: by
   rw [aroots]; rw [Polynomial.map_neg]; rw [roots_neg]
 
@@ -2361,7 +2361,7 @@ theorem aroots_C_mul
 
 中文:
 定理 aroots_C_mul
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [aroots_def]; rw [Polynomial.map_mul]; rw [map_C]; rw [roots_C_mul]
   rwa [map_ne_zero_iff]
@@ -2392,7 +2392,7 @@ theorem aroots_smul_nonzero
 
 中文:
 定理 aroots_smul_nonzero
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [smul_eq_C_mul]; rw [aroots_C_mul _ ha]
 
@@ -2417,7 +2417,7 @@ theorem aroots_pow
 
 中文:
 定理 aroots_pow
-  条件: [CommRing S] [IsDomain S] [Algebra T S] (p : T[X]) (n : 自然数)
+  条件: [交换环 S] [是整环 S] [代数 T S] (p : T[X]) (n : 自然数)
   证明: by
   rw [aroots_def]; rw [Polynomial.map_pow]; rw [roots_pow]
 
@@ -2438,7 +2438,7 @@ theorem aroots_X_pow
 
 中文:
 定理 aroots_X_pow
-  条件: [CommRing S] [IsDomain S] [Algebra T S] (n : 自然数)
+  条件: [交换环 S] [是整环 S] [代数 T S] (n : 自然数)
   证明: by
   rw [aroots_pow]; rw [aroots_X]
 
@@ -2461,7 +2461,7 @@ theorem aroots_C_mul_X_pow
 
 中文:
 定理 aroots_C_mul_X_pow
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [aroots_C_mul _ ha]; rw [aroots_X_pow]
 
@@ -2486,7 +2486,7 @@ theorem aroots_monomial
 
 中文:
 定理 aroots_monomial
-  结论: [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [← C_mul_X_pow_eq_monomial]; rw [aroots_C_mul_X_pow ha]
 
@@ -2510,7 +2510,7 @@ theorem aroots_map
 
 中文:
 定理 aroots_map
-  结论: (p : T[X]) [CommRing S] [Algebra T S] [Algebra S R] [Algebra T R]
+  结论: (p : T[X]) [交换环 S] [代数 T S] [代数 S R] [代数 T R]
   证明: by
   rw [aroots_def]; rw [aroots_def]; rw [map_map]; rw [IsScalarTower.algebraMap_eq T S R]
 
@@ -2532,7 +2532,7 @@ definition rootSet
 
 中文:
 定义 rootSet
-  签名: (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S]
+  签名: (p : T[X]) (S) [交换环 S] [是整环 S] [代数 T S]
   定义体: haveI := Classical.decEq S
   (p.aroots S).toFinset
 
@@ -2556,7 +2556,7 @@ theorem rootSet_def
 
 中文:
 定理 rootSet_def
-  条件: (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S] [DecidableEq S]
+  条件: (p : T[X]) (S) [交换环 S] [是整环 S] [代数 T S] [DecidableEq S]
   证明: by
   rw [rootSet]
   convert! rfl
@@ -2586,7 +2586,7 @@ theorem rootSet_C
 
 中文:
 定理 rootSet_C
-  条件: [CommRing S] [IsDomain S] [Algebra T S] (a : T)
+  条件: [交换环 S] [是整环 S] [代数 T S] (a : T)
   结论: (C a).rootSet S = ∅
   证明: by
   classical
@@ -2615,7 +2615,7 @@ theorem rootSet_zero
 
 中文:
 定理 rootSet_zero
-  条件: (S) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (S) [交换环 S] [是整环 S] [代数 T S]
   结论: (0 : T[X]).rootSet S = ∅
   证明: by
   rw [← C_0]; rw [rootSet_C]
@@ -2642,7 +2642,7 @@ theorem rootSet_one
 
 中文:
 定理 rootSet_one
-  条件: (S) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (S) [交换环 S] [是整环 S] [代数 T S]
   结论: (1 : T[X]).rootSet S = ∅
   证明: by
   rw [← C_1]; rw [rootSet_C]
@@ -2666,7 +2666,7 @@ theorem rootSet_neg
 
 中文:
 定理 rootSet_neg
-  条件: (p : T[X]) (S) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (p : T[X]) (S) [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [rootSet]; rw [aroots_neg]; rw [rootSet]
 
@@ -2686,7 +2686,7 @@ instance rootSetFintype
 
 中文:
 实例 rootSetFintype
-  签名: (p : T[X]) (S : 类型) [CommRing S] [IsDomain S] [Algebra T S]
+  签名: (p : T[X]) (S : 类型) [交换环 S] [是整环 S] [代数 T S]
   定义体: FinsetCoe.fintype _
 
 Depends on / 依赖: FinsetCoe, FinsetCoe.fintype, fintype
@@ -2705,7 +2705,7 @@ theorem rootSet_finite
 
 中文:
 定理 rootSet_finite
-  条件: (p : T[X]) (S : 类型) [CommRing S] [IsDomain S] [Algebra T S]
+  条件: (p : T[X]) (S : 类型) [交换环 S] [是整环 S] [代数 T S]
   证明: Set.toFinite _
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -2729,7 +2729,7 @@ theorem bUnion_roots_finite
 
 中文:
 定理 bUnion_roots_finite
-  结论: {R S : 类型} [Semiring R] [CommRing S] [IsDomain S] [DecidableEq S]
+  结论: {R S : 类型} [半环 R] [交换环 S] [是整环 S] [DecidableEq S]
   证明: Set.Finite.biUnion
     (by
       -- We prove that the set of polynomials under consideration is finite because its
@@ -2766,7 +2766,7 @@ theorem mem_rootSet'
 
 中文:
 定理 mem_rootSet'
-  条件: {p : T[X]} {S : 类型} [CommRing S] [IsDomain S] [Algebra T S] {a : S}
+  条件: {p : T[X]} {S : 类型} [交换环 S] [是整环 S] [代数 T S] {a : S}
   证明: by
   classical
   rw [rootSet_def]; rw [Finset.mem_coe]; rw [mem_toFinset]; rw [mem_aroots']
@@ -2789,7 +2789,7 @@ theorem mem_rootSet
 
 中文:
 定理 mem_rootSet
-  结论: {p : T[X]} {S : 类型} [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: {p : T[X]} {S : 类型} [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: by
   rw [mem_rootSet']; rw [Polynomial.map_ne_zero_iff (FaithfulSMul.algebraMap_injective T S)]
 
@@ -2809,7 +2809,7 @@ lemma mem_rootSet_of_ne
 
 中文:
 引理 mem_rootSet_of_ne
-  结论: {p : T[X]} {S : 类型} [IsDomain T] [CommRing S] [IsDomain S] [Algebra T S]
+  结论: {p : T[X]} {S : 类型} [是整环 T] [交换环 S] [是整环 S] [代数 T S]
   证明: mem_rootSet.trans and_iff_right hp
 
 Depends on / 依赖: and_iff_right, mem_rootSet, mem_rootSet.trans, star_smul, unop_injective, x.unop
@@ -2851,7 +2851,7 @@ theorem Monic.mem_rootSet
 
 中文:
 定理 Monic.mem_rootSet
-  结论: {p : T[X]} (hp : Monic p) {S : 类型} [CommRing S] [IsDomain S]
+  结论: {p : T[X]} (hp : Monic p) {S : 类型} [交换环 S] [是整环 S]
   证明: by
   simp [Polynomial.mem_rootSet', (hp.map (algebraMap T S)).ne_zero]
 
@@ -2874,7 +2874,7 @@ theorem rootSet_maps_to'
 
 中文:
 定理 rootSet_maps_to'
-  结论: {p : T[X]} {S S'} [CommRing S] [IsDomain S] [Algebra T S] [CommRing S']
+  结论: {p : T[X]} {S S'} [交换环 S] [是整环 S] [代数 T S] [交换环 S']
   证明: fun x hx => by
   rw [mem_rootSet'] at hx ⊢
   rw [aeval_algHom]; rw [AlgHom.comp_apply]; rw [hx.2]; rw [_root_.map_zero]
@@ -2899,7 +2899,7 @@ theorem ne_zero_of_mem_rootSet
 
 中文:
 定理 ne_zero_of_mem_rootSet
-  结论: {p : T[X]} [CommRing S] [IsDomain S] [Algebra T S] {a : S}
+  结论: {p : T[X]} [交换环 S] [是整环 S] [代数 T S] {a : S}
   证明: fun hf => by rwa [hf, rootSet_zero] at h
 
 Depends on / 依赖: rootSet_zero
@@ -2917,7 +2917,7 @@ theorem aeval_eq_zero_of_mem_rootSet
 
 中文:
 定理 aeval_eq_zero_of_mem_rootSet
-  结论: {p : T[X]} [CommRing S] [IsDomain S] [Algebra T S] {a : S}
+  结论: {p : T[X]} [交换环 S] [是整环 S] [代数 T S] {a : S}
   证明: (mem_rootSet'.1 hx).2
 
 Depends on / 依赖: mem_rootSet
@@ -2940,7 +2940,7 @@ lemma rootSet_mapsTo
 
 中文:
 引理 rootSet_mapsTo
-  结论: {p : T[X]} [IsDomain T] {S S' : 类型} [CommRing S] [IsDomain S] [Algebra T S]
+  结论: {p : T[X]} [是整环 T] {S S' : 类型} [交换环 S] [是整环 S] [代数 T S]
   证明: by
   refine rootSet_maps_to' (fun h₀ => ?_) f
   obtain rfl : p = 0 :=
@@ -2971,7 +2971,7 @@ theorem mem_rootSet_of_injective
 
 中文:
 定理 mem_rootSet_of_injective
-  结论: [CommRing S] {p : S[X]} [Algebra S R]
+  结论: [交换环 S] {p : S[X]} [代数 S R]
   证明: by
   classical
   exact Multiset.mem_toFinset.trans (mem_roots_map_of_injective h hp)
@@ -3020,7 +3020,7 @@ theorem smul_mem_rootSet
 
 中文:
 定理 smul_mem_rootSet
-  结论: [CommRing S] [Algebra S R] {G : 类型}
+  结论: [交换环 S] [代数 S R] {G : 类型}
   证明: by
   simp [mem_rootSet', aeval_smul, aeval_eq_zero_of_mem_rootSet hx, (mem_rootSet'.mp hx).1]
 
@@ -3044,7 +3044,7 @@ theorem smul_mem_rootSet_iff_of_isUnit
 
 中文:
 定理 smul_mem_rootSet_iff_of_isUnit
-  结论: [CommRing S] [Algebra S R] {G : 类型}
+  结论: [交换环 S] [代数 S R] {G : 类型}
   证明: by
   refine ⟨?_, smul_mem_rootSet g⟩
   obtain ⟨g, rfl⟩ := hg
@@ -3069,7 +3069,7 @@ theorem smul_mem_rootSet_iff
 
 中文:
 定理 smul_mem_rootSet_iff
-  结论: [CommRing S] [Algebra S R] {G : 类型}
+  结论: [交换环 S] [代数 S R] {G : 类型}
   证明: smul_mem_rootSet_iff_of_isUnit (Group.isUnit g)
 
 Depends on / 依赖: Group.isUnit, isUnit, smul_mem_rootSet_iff_of_isUnit
@@ -3092,8 +3092,8 @@ instance [CommRing
 @[simp]
 
 中文:
-实例 [CommRing
-  签名: S] [Algebra S R] (G
+实例 [交换环
+  签名: S] [代数 S R] (G
   定义体: ⟨g • x.1, smul_mem_rootSet g x.2⟩
   one_smul x := Subtype.ext (one_smul G x.1)
   mul_smul g h x := Subtype.ext (mul_smul g h x.1)
@@ -3120,7 +3120,7 @@ theorem rootSet.coe_smul
 
 中文:
 定理 rootSet.coe_smul
-  结论: [CommRing S] [Algebra S R] {G : 类型}
+  结论: [交换环 S] [代数 S R] {G : 类型}
   证明: rfl
 -/
 theorem rootSet.coe_smul [CommRing S] [Algebra S R] {G : Type*}
@@ -3137,8 +3137,8 @@ instance [CommRing
   body: Subtype.ext smul_comm _ _ _
 
 中文:
-实例 [CommRing
-  签名: S] [Algebra S R] (G H
+实例 [交换环
+  签名: S] [代数 S R] (G H
   定义体: Subtype.ext smul_comm _ _ _
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -3158,8 +3158,8 @@ instance [CommRing
   body: Subtype.ext smul_assoc _ _ _
 
 中文:
-实例 [CommRing
-  签名: S] [Algebra S R] (G H
+实例 [交换环
+  签名: S] [代数 S R] (G H
   定义体: Subtype.ext smul_assoc _ _ _
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -3190,7 +3190,7 @@ lemma eq_zero_of_natDegree_lt_card_of_eval_eq_zero
 
 中文:
 引理 eq_zero_of_natDegree_lt_card_of_eval_eq_zero
-  结论: {R} [CommRing R] [IsDomain R]
+  结论: {R} [交换环 R] [是整环 R]
   证明: by
   classical
   by_contra hp
@@ -3236,7 +3236,7 @@ lemma eq_of_natDegree_lt_card_of_eval_eq
 
 中文:
 引理 eq_of_natDegree_lt_card_of_eval_eq
-  结论: {R} [CommRing R] [IsDomain R]
+  结论: {R} [交换环 R] [是整环 R]
   证明: by
   rw [← sub_eq_zero]
   apply eq_zero_of_natDegree_lt_card_of_eval_eq_zero _ hf
@@ -3265,7 +3265,7 @@ lemma eq_zero_of_natDegree_lt_card_of_eval_eq_zero'
 
 中文:
 引理 eq_zero_of_natDegree_lt_card_of_eval_eq_zero'
-  结论: {R} [CommRing R] [IsDomain R]
+  结论: {R} [交换环 R] [是整环 R]
   证明: eq_zero_of_natDegree_lt_card_of_eval_eq_zero p Subtype.val_injective
     (fun i : s => heval i i.prop) (hcard.trans_eq (Fintype.card_coe s).symm)
 
@@ -3288,7 +3288,7 @@ lemma eq_of_natDegree_lt_card_of_eval_eq'
 
 中文:
 引理 eq_of_natDegree_lt_card_of_eval_eq'
-  结论: {R} [CommRing R] [IsDomain R]
+  结论: {R} [交换环 R] [是整环 R]
   证明: eq_of_natDegree_lt_card_of_eval_eq p q Subtype.val_injective
     (fun i : s => heval i i.prop) (hcard.trans_eq (Fintype.card_coe s).symm)
 
@@ -3314,7 +3314,7 @@ lemma eq_zero_of_forall_eval_zero_of_natDegree_lt_card
   · exact zero_of_eval_zero _ hf
 
 中文:
-引理 eq_zero_of_forall_eval_zero_of_natDegree_lt_card
+引理 eq_zero_of_对任意_eval_zero_of_natDegree_lt_card
   证明: by
   obtain hR | hR := finite_or_infinite R
   · have := Fintype.ofFinite R
@@ -3344,7 +3344,7 @@ lemma exists_eval_ne_zero_of_natDegree_lt_card
   exact eq_zero_of_forall_eval_zero_of_natDegree_lt_card f hf hfR
 
 中文:
-引理 exists_eval_ne_zero_of_natDegree_lt_card
+引理 存在_eval_ne_zero_of_natDegree_lt_card
   条件: (f : R[X]) (hf : f != 0) (hfR : f.natDegree < #R)
   证明: by
   contrapose! hf
@@ -3373,7 +3373,7 @@ theorem monic_multisetProd_X_sub_C
 中文:
 定理 monic_multisetProd_X_sub_C
   条件: (s : Multiset R)
-  结论: Monic (s.map fun a => X - C a).prod
+  结论: Monic (s.map fun a => X - C a).乘积
   证明: monic_multiset_prod_of_monic _ _ fun a _ => monic_X_sub_C a
 
 Depends on / 依赖: monic_X_sub_C, monic_multiset_prod_of_monic
@@ -3391,7 +3391,7 @@ theorem monic_prod_X_sub_C
 
 中文:
 定理 monic_prod_X_sub_C
-  条件: {α : 类型} (b : α -> R) (s : Finset α)
+  条件: {α : 类型} (b : α -> R) (s : 有限集 α)
   证明: monic_prod_of_monic _ _ fun a _ => monic_X_sub_C (b a)
 
 Depends on / 依赖: monic_X_sub_C, monic_prod_of_monic
@@ -3462,7 +3462,7 @@ theorem prod_multiset_X_sub_C_dvd
 中文:
 定理 prod_multiset_X_sub_C_dvd
   条件: (p : R[X])
-  结论: (p.roots.map fun a => X - C a).prod ∣ p
+  结论: (p.roots.map fun a => X - C a).乘积 ∣ p
   证明: by
   classical
   rw [← map_dvd_map _ (IsFractionRing.injective R <| FractionRing R)
@@ -3540,7 +3540,7 @@ theorem exists_prod_multiset_X_sub_C_mul
   · 
 
 中文:
-定理 exists_prod_multiset_X_sub_C_mul
+定理 存在_prod_multiset_X_sub_C_mul
   条件: (p : R[X])
   证明: by
   obtain ⟨q, he⟩ := p.prod_multiset_X_sub_C_dvd
@@ -3657,7 +3657,7 @@ theorem card_roots_le_one_of_irreducible
 
 中文:
 定理 card_roots_le_one_of_irreducible
-  条件: (hirr : Irreducible p)
+  条件: (hirr : 不可约 p)
   结论: p.roots.card <= 1
   证明: by
   obtain hp | ⟨x, hx⟩ := p.roots.empty_or_exists_mem
@@ -3689,7 +3689,7 @@ exact hdeg natDegree_eq_of_degree_eq_some
 
 中文:
 定理 roots_eq_zero_of_irreducible_of_natDegree_ne_one
-  结论: (hirr : Irreducible p)
+  结论: (hirr : 不可约 p)
   证明: by
   by_contra hroots
   have ⟨x, hx⟩ := exists_mem_of_ne_zero hroots
@@ -3796,7 +3796,7 @@ theorem eq_rootMultiplicity_map
 
 中文:
 定理 eq_rootMultiplicity_map
-  条件: {p : A[X]} {f : A ->+* B} (hf : Function.Injective f) (a : A)
+  条件: {p : A[X]} {f : A ->+* B} (hf : 函数.单射 f) (a : A)
   证明: by
   by_cases hp0 : p = 0; · simp only [hp0, rootMultiplicity_zero, Polynomial.map_zero]
   apply le_antisymm (le_rootMultiplicity_map ((Polynomial.map_ne_zero_iff hf).mpr hp0) a)
@@ -3827,7 +3827,7 @@ theorem count_map_roots
 
 中文:
 定理 count_map_roots
-  结论: [IsDomain A] [DecidableEq B] {p : A[X]} {f : A ->+* B} (hmap : map f p != 0)
+  结论: [是整环 A] [DecidableEq B] {p : A[X]} {f : A ->+* B} (hmap : map f p != 0)
   证明: by
   rw [le_rootMultiplicity_iff hmap]; rw [← Multiset.prod_replicate]; rw [←
     Multiset.map_replicate fun a => X - C a]
@@ -3864,7 +3864,7 @@ theorem count_map_roots_of_injective
 
 中文:
 定理 count_map_roots_of_injective
-  结论: [IsDomain A] [DecidableEq B] (p : A[X]) {f : A ->+* B}
+  结论: [是整环 A] [DecidableEq B] (p : A[X]) {f : A ->+* B}
   证明: by
   by_cases hp0 : p = 0
   · simp only [hp0, roots_zero, Multiset.map_zero, Multiset.count_zero, Polynomial.map_zero,
@@ -3895,7 +3895,7 @@ theorem map_roots_le
 
 中文:
 定理 map_roots_le
-  条件: [IsDomain A] [IsDomain B] {p : A[X]} {f : A ->+* B} (h : p.map f != 0)
+  条件: [是整环 A] [是整环 B] {p : A[X]} {f : A ->+* B} (h : p.map f != 0)
   证明: by
   classical
   exact Multiset.le_iff_count.2 fun b => by
@@ -3924,7 +3924,7 @@ theorem map_roots_le_of_injective
 
 中文:
 定理 map_roots_le_of_injective
-  结论: [IsDomain A] [IsDomain B] (p : A[X]) {f : A ->+* B}
+  结论: [是整环 A] [是整环 B] (p : A[X]) {f : A ->+* B}
   证明: by
   by_cases hp0 : p = 0
   · simp only [hp0, roots_zero, Multiset.map_zero, Polynomial.map_zero, le_rfl]
@@ -3951,7 +3951,7 @@ theorem card_roots_map_le_degree
 
 中文:
 定理 card_roots_map_le_degree
-  结论: {A B : 类型} [Semiring A] [CommRing B] [IsDomain B]
+  结论: {A B : 类型} [半环 A] [交换环 B] [是整环 B]
   证明: by
   by_cases hpm0 : p.map f = 0
   · simp [hp0, hpm0, zero_le_degree_iff]
@@ -3975,7 +3975,7 @@ theorem card_roots_map_le_natDegree
 
 中文:
 定理 card_roots_map_le_natDegree
-  结论: {A B : 类型} [Semiring A] [CommRing B] [IsDomain B]
+  结论: {A B : 类型} [半环 A] [交换环 B] [是整环 B]
   证明: .trans natDegree_map_le card_roots' _
 
 Depends on / 依赖: card_roots, natDegree_map_le
@@ -3997,7 +3997,7 @@ theorem ncard_rootSet_le
 
 中文:
 定理 ncard_rootSet_le
-  条件: (p : A[X]) (B : 类型) [CommRing B] [IsDomain B] [Algebra A B]
+  条件: (p : A[X]) (B : 类型) [交换环 B] [是整环 B] [代数 A B]
   证明: by
   classical
   grw [rootSet, Set.ncard_coe_finset, Multiset.toFinset_card_le]
@@ -4029,7 +4029,7 @@ exact Exists.imp (fun _ => And.right) Multiset.mem_map.mp h'
 
 中文:
 定理 filter_roots_map_range_eq_map_roots
-  结论: [IsDomain A] [IsDomain B] {f : A ->+* B}
+  结论: [是整环 A] [是整环 B] {f : A ->+* B}
   证明: by
   classical
   ext b
@@ -4066,7 +4066,7 @@ theorem card_roots_le_map
 
 中文:
 定理 card_roots_le_map
-  条件: [IsDomain A] [IsDomain B] {p : A[X]} {f : A ->+* B} (h : p.map f != 0)
+  条件: [是整环 A] [是整环 B] {p : A[X]} {f : A ->+* B} (h : p.map f != 0)
   证明: by
   rw [← p.roots.card_map f]
   exact Multiset.card_le_card (map_roots_le h)
@@ -4091,7 +4091,7 @@ theorem card_roots_le_map_of_injective
 
 中文:
 定理 card_roots_le_map_of_injective
-  结论: [IsDomain A] [IsDomain B] {p : A[X]} {f : A ->+* B}
+  结论: [是整环 A] [是整环 B] {p : A[X]} {f : A ->+* B}
   证明: by
   by_cases hp0 : p = 0
   · simp only [hp0, roots_zero, Polynomial.map_zero, Multiset.card_zero, le_rfl]
@@ -4117,7 +4117,7 @@ theorem roots_map_of_injective_of_card_eq_natDegree
 
 中文:
 定理 roots_map_of_injective_of_card_eq_natDegree
-  结论: [IsDomain A] [IsDomain B] {p : A[X]}
+  结论: [是整环 A] [是整环 B] {p : A[X]}
   证明: by
   apply Multiset.eq_of_le_of_card_le (map_roots_le_of_injective p hf)
   simpa only [Multiset.card_map, hroots] using card_roots_map_le_natDegree p
@@ -4141,7 +4141,7 @@ theorem roots_map_of_map_ne_zero_of_card_eq_natDegree
 
 中文:
 定理 roots_map_of_map_ne_zero_of_card_eq_natDegree
-  结论: [IsDomain A] [IsDomain B] {p : A[X]}
+  结论: [是整环 A] [是整环 B] {p : A[X]}
   证明: eq_of_le_of_card_le (map_roots_le h) by
     simpa only [Multiset.card_map, hroots] using card_roots_map_le_natDegree p
 
@@ -4163,7 +4163,7 @@ theorem Monic.roots_map_of_card_eq_natDegree
 
 中文:
 定理 Monic.roots_map_of_card_eq_natDegree
-  结论: [IsDomain A] [IsDomain B] {p : A[X]} (hm : p.Monic)
+  结论: [是整环 A] [是整环 B] {p : A[X]} (hm : p.Monic)
   证明: roots_map_of_map_ne_zero_of_card_eq_natDegree f (map_monic_ne_zero hm) hroots
 
 Depends on / 依赖: hroots, map_monic_ne_zero, roots_map_of_map_ne_zero_of_card_eq_natDegree

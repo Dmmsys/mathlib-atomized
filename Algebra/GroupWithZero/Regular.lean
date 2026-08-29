@@ -31,7 +31,7 @@ theorem IsLeftRegular.subsingleton
 中文:
 定理 IsLeftRegular.subsingleton
   条件: (h : IsLeftRegular (0 : R))
-  结论: Subsingleton R
+  结论: 子单例 R
   证明: ⟨fun a b => h Eq.trans (zero_mul a) (zero_mul b).symm⟩
 
 Depends on / 依赖: Eq.trans, zero_mul
@@ -51,7 +51,7 @@ theorem IsRightRegular.subsingleton
 中文:
 定理 IsRightRegular.subsingleton
   条件: (h : IsRightRegular (0 : R))
-  结论: Subsingleton R
+  结论: 子单例 R
   证明: ⟨fun a b => h Eq.trans (mul_zero a) (mul_zero b).symm⟩
 
 Depends on / 依赖: Eq.trans, mul_zero
@@ -69,9 +69,9 @@ theorem IsRegular.subsingleton
   proof: h.left.subsingleton
 
 中文:
-定理 IsRegular.subsingleton
-  条件: (h : IsRegular (0 : R))
-  结论: Subsingleton R
+定理 是正则.subsingleton
+  条件: (h : 是正则 (0 : R))
+  结论: 子单例 R
   证明: h.left.subsingleton
 
 Depends on / 依赖: h.left.subsingleton, subsingleton
@@ -89,7 +89,7 @@ theorem isLeftRegular_zero_iff_subsingleton
 
 中文:
 定理 isLeftRegular_zero_iff_subsingleton
-  结论: IsLeftRegular (0 : R) ↔ Subsingleton R
+  结论: IsLeftRegular (0 : R) ↔ 子单例 R
   证明: ⟨fun h => h.subsingleton, fun H a b _ => @Subsingleton.elim _ H a b⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, h.subsingleton, subsingleton
@@ -110,7 +110,7 @@ theorem not_isLeftRegular_zero_iff
 
 中文:
 定理 not_isLeftRegular_zero_iff
-  结论: ¬IsLeftRegular (0 : R) ↔ Nontrivial R
+  结论: ¬IsLeftRegular (0 : R) ↔ 非平凡 R
   证明: by
   rw [nontrivial_iff]; rw [not_iff_comm]; rw [isLeftRegular_zero_iff_subsingleton]; rw [subsingleton_iff]
   push Not
@@ -133,7 +133,7 @@ theorem isRightRegular_zero_iff_subsingleton
 
 中文:
 定理 isRightRegular_zero_iff_subsingleton
-  结论: IsRightRegular (0 : R) ↔ Subsingleton R
+  结论: IsRightRegular (0 : R) ↔ 子单例 R
   证明: ⟨fun h => h.subsingleton, fun H a b _ => @Subsingleton.elim _ H a b⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, h.subsingleton, subsingleton
@@ -154,7 +154,7 @@ theorem not_isRightRegular_zero_iff
 
 中文:
 定理 not_isRightRegular_zero_iff
-  结论: ¬IsRightRegular (0 : R) ↔ Nontrivial R
+  结论: ¬IsRightRegular (0 : R) ↔ 非平凡 R
   证明: by
   rw [nontrivial_iff]; rw [not_iff_comm]; rw [isRightRegular_zero_iff_subsingleton]; rw [subsingleton_iff]
   push Not
@@ -178,7 +178,7 @@ theorem isRegular_iff_subsingleton
 
 中文:
 定理 isRegular_iff_subsingleton
-  结论: IsRegular (0 : R) ↔ Subsingleton R
+  结论: 是正则 (0 : R) ↔ 子单例 R
   证明: ⟨fun h => h.left.subsingleton, fun h =>
     ⟨isLeftRegular_zero_iff_subsingleton.mpr h, isRightRegular_zero_iff_subsingleton.mpr h⟩⟩
 
@@ -203,7 +203,7 @@ theorem IsLeftRegular.ne_zero
 
 中文:
 定理 IsLeftRegular.ne_zero
-  条件: [Nontrivial R] (la : IsLeftRegular a)
+  条件: [非平凡 R] (la : IsLeftRegular a)
   结论: a != 0
   证明: by
   rintro rfl
@@ -234,7 +234,7 @@ theorem IsRightRegular.ne_zero
 
 中文:
 定理 IsRightRegular.ne_zero
-  条件: [Nontrivial R] (ra : IsRightRegular a)
+  条件: [非平凡 R] (ra : IsRightRegular a)
   结论: a != 0
   证明: by
   rintro rfl
@@ -260,8 +260,8 @@ theorem IsRegular.ne_zero
   proof: la.left.ne_zero
 
 中文:
-定理 IsRegular.ne_zero
-  条件: [Nontrivial R] (la : IsRegular a)
+定理 是正则.ne_zero
+  条件: [非平凡 R] (la : 是正则 a)
   结论: a != 0
   证明: la.left.ne_zero
 
@@ -281,7 +281,7 @@ theorem not_isLeftRegular_zero
 
 中文:
 定理 not_isLeftRegular_zero
-  条件: [nR : Nontrivial R]
+  条件: [nR : 非平凡 R]
   结论: ¬IsLeftRegular (0 : R)
   证明: not_isLeftRegular_zero_iff.mpr nR
 
@@ -301,7 +301,7 @@ theorem not_isRightRegular_zero
 
 中文:
 定理 not_isRightRegular_zero
-  条件: [nR : Nontrivial R]
+  条件: [nR : 非平凡 R]
   结论: ¬IsRightRegular (0 : R)
   证明: not_isRightRegular_zero_iff.mpr nR
 
@@ -321,8 +321,8 @@ theorem not_isRegular_zero
 
 中文:
 定理 not_isRegular_zero
-  条件: [Nontrivial R]
-  结论: ¬IsRegular (0 : R)
+  条件: [非平凡 R]
+  结论: ¬是正则 (0 : R)
   证明: fun h => IsRegular.ne_zero h rfl
 
 Depends on / 依赖: IsRegular, IsRegular.ne_zero, ne_zero
@@ -392,9 +392,9 @@ theorem IsRegular.of_ne_zero
 @[deprecated (since := "2026-01-21")] alias isRegular_of_ne_zero := IsRegular.of_ne_zero
 
 中文:
-定理 IsRegular.of_ne_zero
+定理 是正则.of_ne_zero
   条件: (a0 : a != 0)
-  结论: IsRegular a
+  结论: 是正则 a
   证明: ⟨fun _ _ => mul_left_cancel₀ a0, fun _ _ => mul_right_cancel₀ a0⟩
 
 @[deprecated (since := "2026-01-21")] alias isRegular_of_ne_zero := IsRegular.of_ne_zero
@@ -415,8 +415,8 @@ theorem isRegular_iff_ne_zero
 
 中文:
 定理 isRegular_iff_ne_zero
-  条件: [Nontrivial R]
-  结论: IsRegular a ↔ a != 0
+  条件: [非平凡 R]
+  结论: 是正则 a ↔ a != 0
   证明: ⟨IsRegular.ne_zero, .of_ne_zero⟩
 
 Depends on / 依赖: IsRegular, IsRegular.ne_zero, ne_zero, of_ne_zero

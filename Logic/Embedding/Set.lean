@@ -38,8 +38,8 @@ theorem Equiv.asEmbedding_range
   proof: Set.ext fun x => ⟨fun ⟨y, h⟩ => h ▸ Subtype.coe_prop (e y), fun hs => ⟨e.symm ⟨x, hs⟩, by simp⟩⟩
 
 中文:
-定理 Equiv.asEmbedding_range
-  条件: {α β : Sort _} {p : β -> 命题} (e : α ≃ Subtype p)
+定理 等价.asEmbedding_range
+  条件: {α β : 类型层 _} {p : β -> 命题} (e : α ≃ 子类型 p)
   证明: Set.ext fun x => ⟨fun ⟨y, h⟩ => h ▸ Subtype.coe_prop (e y), fun hs => ⟨e.symm ⟨x, hs⟩, by simp⟩⟩
 
 Depends on / 依赖: Set.ext, Subtype, Subtype.coe_prop, coe_prop, e.symm
@@ -67,7 +67,7 @@ definition optionElim
 
 中文:
 定义 optionElim
-  签名: {α β} (f : α ↪ β) (x : β) (h : x ∉ Set.range f)
+  签名: {α β} (f : α ↪ β) (x : β) (h : x ∉ 集合.range f)
   定义体: ⟨Option.elim' x f, Option.injective_iff.2 ⟨f.2, h⟩⟩
 
 Depends on / 依赖: Option.elim, Option.injective_iff, injective_iff
@@ -117,7 +117,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: {α β} (p : Set β) (f : α ↪ β) (H : 对任意 a, f a in p)
+  签名: {α β} (p : 集合 β) (f : α ↪ β) (H : 对任意 a, f a in p)
   定义体: ⟨fun a => ⟨f a, H a⟩, fun _ _ h => f.injective (congr_arg Subtype.val h)⟩
 
 @[simp]
@@ -157,7 +157,7 @@ definition image
   body: ⟨image f, f.2.image_injective⟩
 
 中文:
-定义 image
+定义 像
   签名: {α β} (f : α ↪ β)
   定义体: ⟨image f, f.2.image_injective⟩
 -/
@@ -184,7 +184,7 @@ definition embeddingOfSubset
 
 中文:
 定义 embeddingOfSubset
-  签名: {α} (s t : Set α) (h : s subseteq t)
+  签名: {α} (s t : 集合 α) (h : s subseteq t)
   定义体: ⟨fun x => ⟨x.1, h x.2⟩, fun ⟨x, hx⟩ ⟨y, hy⟩ h => by
     congr
     injection h⟩
@@ -320,7 +320,7 @@ definition Function.Embedding.sumSet
     simp
 
 中文:
-定义 Function.Embedding.sumSet
+定义 函数.嵌入.sumSet
   签名: (h : Disjoint s t)
   定义体: Sum.elim (↑) (↑)
   inj' := by
@@ -348,7 +348,7 @@ lemma Function.Embedding.coe_sumSet
   proof: rfl
 
 中文:
-引理 Function.Embedding.coe_sumSet
+引理 函数.嵌入.coe_sumSet
   条件: (h : Disjoint s t)
   证明: rfl
 -/
@@ -365,7 +365,7 @@ theorem Function.Embedding.sumSet_preimage_inl
   simp [Set.ext_iff]
 
 中文:
-定理 Function.Embedding.sumSet_preimage_inl
+定理 函数.嵌入.sumSet_preimage_inl
   条件: (h : Disjoint s t)
   证明: by
   simp [Set.ext_iff]
@@ -384,7 +384,7 @@ theorem Function.Embedding.sumSet_preimage_inr
   simp [Set.ext_iff]
 
 中文:
-定理 Function.Embedding.sumSet_preimage_inr
+定理 函数.嵌入.sumSet_preimage_inr
   条件: (h : Disjoint s t)
   证明: by
   simp [Set.ext_iff]
@@ -403,8 +403,8 @@ theorem Function.Embedding.sumSet_range
   simp [Set.ext_iff]
 
 中文:
-定理 Function.Embedding.sumSet_range
-  条件: {s t : Set α} (h : Disjoint s t)
+定理 函数.嵌入.sumSet_range
+  条件: {s t : 集合 α} (h : Disjoint s t)
   证明: by
   simp [Set.ext_iff]
 -/
@@ -427,8 +427,8 @@ definition Function.Embedding.sigmaSet
     rfl
 
 中文:
-定义 Function.Embedding.sigmaSet
-  签名: {s : ι -> Set α} (h : Pairwise (Disjoint on s))
+定义 函数.嵌入.sigmaSet
+  签名: {s : ι -> 集合 α} (h : 两两 (Disjoint on s))
   定义体: x.2.1
   inj' := by
     rintro ⟨i, x, hx⟩ ⟨j, -, hx'⟩ rfl
@@ -453,8 +453,8 @@ lemma Function.Embedding.coe_sigmaSet
   proof: rfl
 
 中文:
-引理 Function.Embedding.coe_sigmaSet
-  条件: {s : ι -> Set α} (h)
+引理 函数.嵌入.coe_sigmaSet
+  条件: {s : ι -> 集合 α} (h)
   证明: rfl
 -/
 @[norm_cast] lemma Function.Embedding.coe_sigmaSet {s : ι -> Set α} (h) :
@@ -470,8 +470,8 @@ theorem Function.Embedding.sigmaSet_preimage
   simp [Set.ext_iff]
 
 中文:
-定理 Function.Embedding.sigmaSet_preimage
-  结论: {s : ι -> Set α}
+定理 函数.嵌入.sigmaSet_preimage
+  结论: {s : ι -> 集合 α}
   证明: by
   simp [Set.ext_iff]
 -/
@@ -490,8 +490,8 @@ theorem Function.Embedding.sigmaSet_range
   simp [Set.ext_iff]
 
 中文:
-定理 Function.Embedding.sigmaSet_range
-  结论: {s : ι -> Set α}
+定理 函数.嵌入.sigmaSet_range
+  结论: {s : ι -> 集合 α}
   证明: by
   simp [Set.ext_iff]
 -/

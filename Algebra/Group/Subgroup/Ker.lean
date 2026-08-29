@@ -100,8 +100,8 @@ lemma subsingleton_coe_range
 
 中文:
 引理 subsingleton_coe_range
-  条件: [Subsingleton G] (f : G ->* N)
-  结论: (f.range : Set N).Subsingleton
+  条件: [子单例 G] (f : G ->* N)
+  结论: (f.range : 集合 N).子单例
   证明: Set.subsingleton_range f
 
 @[to_additive (attr := simp)]
@@ -126,7 +126,7 @@ theorem coe_range
 中文:
 定理 coe_range
   条件: (f : G ->* N)
-  结论: (f.range : Set N) = Set.range f
+  结论: (f.range : 集合 N) = 集合.range f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -174,7 +174,7 @@ theorem range_eq_map
 中文:
 定理 range_eq_map
   条件: (f : G ->* N)
-  结论: f.range = (⊤ : Subgroup G).map f
+  结论: f.range = (⊤ : 子群 G).map f
   证明: by ext; simp
 
 @[to_additive (attr := simp)]
@@ -221,8 +221,8 @@ instance _root_.Subgroup.range_isMulCommutative
 @[to_additive (attr := simp)]
 
 中文:
-实例 _root_.Subgroup.range_isMulCommutative
-  签名: {G : 类型} [Group G] [IsMulCommutative G]
+实例 _root_.子群.range_isMulCommutative
+  签名: {G : 类型} [群 G] [是MulCommutative G]
   定义体: range_eq_map f ▸ Subgroup.map_isMulCommutative ⊤ f
 
 @[to_additive (attr := simp)]
@@ -384,7 +384,7 @@ theorem rangeRestrict_surjective
 中文:
 定理 rangeRestrict_surjective
   条件: (f : G ->* N)
-  结论: Function.Surjective f.rangeRestrict
+  结论: 函数.满射 f.rangeRestrict
   证明: fun ⟨_, g, rfl⟩ => ⟨g, rfl⟩
 
 @[to_additive (attr := simp)]
@@ -408,7 +408,7 @@ lemma rangeRestrict_injective_iff
 中文:
 引理 rangeRestrict_injective_iff
   条件: {f : G ->* N}
-  结论: Injective f.rangeRestrict ↔ Injective f
+  结论: 单射 f.rangeRestrict ↔ 单射 f
   证明: by
   convert! Set.injective_codRestrict _
 
@@ -481,7 +481,7 @@ theorem range_eq_top
 
 中文:
 定理 range_eq_top
-  条件: {N} [Group N] {f : G ->* N}
+  条件: {N} [群 N] {f : G ->* N}
   证明: SetLike.ext'_iff.trans Iff.trans (by rw [coe_range, coe_top]) Set.range_eq_univ
 
 Depends on / 依赖: Iff.trans, Set.range_eq_univ, SetLike, SetLike.ext, _iff, _iff.trans, coe_range, coe_top, range_eq_univ
@@ -505,7 +505,7 @@ theorem range_eq_top_of_surjective
 
 中文:
 定理 range_eq_top_of_surjective
-  条件: {N} [Group N] (f : G ->* N) (hf : Function.Surjective f)
+  条件: {N} [群 N] (f : G ->* N) (hf : 函数.满射 f)
   证明: range_eq_top.2 hf
 
 @[to_additive (attr := simp)]
@@ -555,8 +555,8 @@ alias _root_.Subgroup.subtype_range := Subgroup.range_subtype
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.Subgroup.range_subtype
-  条件: (H : Subgroup G)
+定理 _root_.子群.range_subtype
+  条件: (H : 子群 G)
   结论: H.subtype.range = H
   证明: SetLike.coe_injective (coe_range _).trans Subtype.range_coe
 
@@ -585,8 +585,8 @@ theorem _root_.Subgroup.inclusion_range
 @[to_additive]
 
 中文:
-定理 _root_.Subgroup.inclusion_range
-  条件: {H K : Subgroup G} (h_le : H <= K)
+定理 _root_.子群.inclusion_range
+  条件: {H K : 子群 G} (h_le : H <= K)
   证明: Subgroup.ext fun g => Set.ext_iff.mp (Set.range_inclusion h_le) g
 
 @[to_additive]
@@ -611,7 +611,7 @@ theorem subgroupOf_range_eq_of_le
 
 中文:
 定理 subgroupOf_range_eq_of_le
-  结论: {G₁ G₂ : 类型} [Group G₁] [Group G₂] {K : Subgroup G₂}
+  结论: {G₁ G₂ : 类型} [群 G₁] [群 G₂] {K : 子群 G₂}
   证明: by
   ext k
   refine exists_congr ?_
@@ -646,7 +646,7 @@ definition ofLeftInverse
 
 中文:
 定义 ofLeftInverse
-  签名: {f : G ->* N} {g : N ->* G} (h : Function.LeftInverse g f)
+  签名: {f : G ->* N} {g : N ->* G} (h : 函数.左逆 g f)
   定义体: { f.rangeRestrict with
     toFun := f.rangeRestrict
     invFun := g ∘ f.range.subtype
@@ -681,7 +681,7 @@ theorem ofLeftInverse_apply
 
 中文:
 定理 ofLeftInverse_apply
-  条件: {f : G ->* N} {g : N ->* G} (h : Function.LeftInverse g f) (x : G)
+  条件: {f : G ->* N} {g : N ->* G} (h : 函数.左逆 g f) (x : G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -701,7 +701,7 @@ theorem ofLeftInverse_symm_apply
 
 中文:
 定理 ofLeftInverse_symm_apply
-  结论: {f : G ->* N} {g : N ->* G} (h : Function.LeftInverse g f)
+  结论: {f : G ->* N} {g : N ->* G} (h : 函数.左逆 g f)
   证明: rfl
 -/
 theorem ofLeftInverse_symm_apply {f : G ->* N} {g : N ->* G} (h : Function.LeftInverse g f)
@@ -726,7 +726,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: {f : G ->* N} (hf : Function.Injective f)
+  签名: {f : G ->* N} (hf : 函数.单射 f)
   定义体: MulEquiv.ofBijective (f.codRestrict f.range fun x => ⟨x, rfl⟩)
     ⟨fun _ _ h => hf (Subtype.ext_iff.mp h), by
       rintro ⟨x, y, rfl⟩
@@ -755,7 +755,7 @@ theorem ofInjective_apply
 
 中文:
 定理 ofInjective_apply
-  条件: {f : G ->* N} (hf : Function.Injective f) {x : G}
+  条件: {f : G ->* N} (hf : 函数.单射 f) {x : G}
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -777,7 +777,7 @@ theorem apply_ofInjective_symm
 
 中文:
 定理 apply_ofInjective_symm
-  条件: {f : G ->* N} (hf : Function.Injective f) (x : f.range)
+  条件: {f : G ->* N} (hf : 函数.单射 f) (x : f.range)
   证明: Subtype.ext_iff.1 (ofInjective hf).apply_symm_apply x
 
 @[simp]
@@ -820,7 +820,7 @@ theorem coe_toMultiplicative_range
 
 中文:
 定理 coe_toMultiplicative_range
-  条件: {A A' : 类型} [AddGroup A] [AddGroup A'] (f : A ->+ A')
+  条件: {A A' : 类型} [加法群 A] [加法群 A'] (f : A ->+ A')
   证明: rfl
 -/
 theorem coe_toMultiplicative_range {A A' : Type*} [AddGroup A] [AddGroup A'] (f : A ->+ A') :
@@ -884,7 +884,7 @@ theorem ker_toSubmonoid
 中文:
 定理 ker_toSubmonoid
   条件: (f : G ->* M)
-  结论: f.ker.toSubmonoid = MonoidHom.mker f
+  结论: f.ker.toSubmonoid = 幺半群态射.mker f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -964,7 +964,7 @@ theorem coe_ker
 中文:
 定理 coe_ker
   条件: (f : G ->* M)
-  结论: (f.ker : Set G) = (f : G -> M) ⁻¹' {1}
+  结论: (f.ker : 集合 G) = (f : G -> M) ⁻¹' {1}
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -988,7 +988,7 @@ theorem ker_toHomUnits
 
 中文:
 定理 ker_toHomUnits
-  条件: {M} [Monoid M] (f : G ->* M)
+  条件: {M} [幺半群 M] (f : G ->* M)
   结论: f.toHomUnits.ker = f.ker
   证明: by
   ext x
@@ -1071,7 +1071,7 @@ theorem comap_ker
 
 中文:
 定理 comap_ker
-  条件: {P : 类型} [MulOneClass P] (g : N ->* P) (f : G ->* N)
+  条件: {P : 类型} [MulOne类 P] (g : N ->* P) (f : G ->* N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1095,7 +1095,7 @@ theorem comap_bot
 中文:
 定理 comap_bot
   条件: (f : G ->* N)
-  结论: (⊥ : Subgroup N).comap f = f.ker
+  结论: (⊥ : 子群 N).comap f = f.ker
   证明: rfl
 
 @[to_additive]
@@ -1117,7 +1117,7 @@ theorem ker_le_comap
 
 中文:
 定理 ker_le_comap
-  条件: (f : G ->* N) (H : Subgroup N)
+  条件: (f : G ->* N) (H : 子群 N)
   结论: f.ker <= H.comap f
   证明: comap_mono bot_le
 
@@ -1176,7 +1176,7 @@ theorem ker_codRestrict
 
 中文:
 定理 ker_codRestrict
-  结论: {S} [SetLike S N] [SubmonoidClass S N] (f : G ->* N) (s : S)
+  结论: {S} [集合状 S N] [子幺半群类 S N] (f : G ->* N) (s : S)
   证明: SetLike.ext fun _x => Subtype.ext_iff
 
 @[to_additive (attr := simp)]
@@ -1246,7 +1246,7 @@ theorem ker_id
 
 中文:
 定理 ker_id
-  结论: (MonoidHom.id G).ker = ⊥
+  结论: (幺半群态射.id G).ker = ⊥
   证明: rfl
 
 Depends on / 依赖: Set.image_univ.symm, Set.range, Submonoid, image_univ
@@ -1315,7 +1315,7 @@ theorem ker_eq_bot_iff
 中文:
 定理 ker_eq_bot_iff
   条件: (f : G ->* M)
-  结论: f.ker = ⊥ ↔ Function.Injective f
+  结论: f.ker = ⊥ ↔ 函数.单射 f
   证明: ⟨fun h x y hxy => by rwa [eq_iff, h, mem_bot, inv_mul_eq_one, eq_comm] at hxy, fun h =>
     bot_unique fun _ hx => h (hx.trans f.map_one.symm)⟩
 
@@ -1339,7 +1339,7 @@ theorem ker_eq_bot
 
 中文:
 定理 ker_eq_bot
-  条件: (f : G ->* M) (hf : Function.Injective f)
+  条件: (f : G ->* M) (hf : 函数.单射 f)
   结论: f.ker = ⊥
   证明: f.ker_eq_bot_iff.mpr hf
 
@@ -1362,7 +1362,7 @@ lemma ker_comp_mulEquiv
 
 中文:
 引理 ker_comp_mulEquiv
-  条件: {P : 类型} [MulOneClass P] (g : N ->* P) (iso : G ≃* N)
+  条件: {P : 类型} [MulOne类 P] (g : N ->* P) (iso : G ≃* N)
   证明: by
   rw [← comap_ker]; rw [comap_equiv_eq_map_symm]
 
@@ -1385,7 +1385,7 @@ lemma ker_comp_of_injective
 
 中文:
 引理 ker_comp_of_injective
-  结论: {P : 类型} [MulOneClass P] (f : G ->* N) (g : N ->* P)
+  结论: {P : 类型} [MulOne类 P] (f : G ->* N) (g : N ->* P)
   证明: by
   rw [← comap_ker]; rw [g.ker_eq_bot hg]; rw [comap_bot]
 
@@ -1409,7 +1409,7 @@ lemma ker_mulEquiv_comp
 
 中文:
 引理 ker_mulEquiv_comp
-  条件: {P : 类型} [MulOneClass P] (f : G ->* N) (iso : N ≃* P)
+  条件: {P : 类型} [MulOne类 P] (f : G ->* N) (iso : N ≃* P)
   证明: ker_comp_of_injective f iso.toMonoidHom iso.injective
 
 @[to_additive (attr := simp)]
@@ -1433,8 +1433,8 @@ theorem _root_.Subgroup.ker_subtype
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.Subgroup.ker_subtype
-  条件: (H : Subgroup G)
+定理 _root_.子群.ker_subtype
+  条件: (H : 子群 G)
   结论: H.subtype.ker = ⊥
   证明: H.subtype.ker_eq_bot Subtype.coe_injective
 
@@ -1458,8 +1458,8 @@ theorem _root_.Subgroup.ker_inclusion
 @[to_additive ker_prod]
 
 中文:
-定理 _root_.Subgroup.ker_inclusion
-  条件: {H K : Subgroup G} (h : H <= K)
+定理 _root_.子群.ker_inclusion
+  条件: {H K : 子群 G} (h : H <= K)
   结论: (inclusion h).ker = ⊥
   证明: (inclusion h).ker_eq_bot (Set.inclusion_injective h)
 
@@ -1483,7 +1483,7 @@ theorem ker_prod
 
 中文:
 定理 ker_prod
-  条件: {M N : 类型} [MulOneClass M] [MulOneClass N] (f : G ->* M) (g : G ->* N)
+  条件: {M N : 类型} [MulOne类 M] [MulOne类 N] (f : G ->* M) (g : G ->* N)
   证明: SetLike.ext fun _ => Prod.mk_eq_one
 
 @[to_additive]
@@ -1556,7 +1556,7 @@ theorem coe_toMultiplicative_ker
 
 中文:
 定理 coe_toMultiplicative_ker
-  条件: {A A' : 类型} [AddGroup A] [AddZeroClass A'] (f : A ->+ A')
+  条件: {A A' : 类型} [加法群 A] [加法零类 A'] (f : A ->+ A')
   证明: rfl
 -/
 theorem coe_toMultiplicative_ker {A A' : Type*} [AddGroup A] [AddZeroClass A'] (f : A ->+ A') :
@@ -1630,8 +1630,8 @@ theorem eqOn_closure
 
 中文:
 定理 eqOn_closure
-  条件: {f g : G ->* M} {s : Set G} (h : Set.EqOn f g s)
-  结论: Set.EqOn f g (closure s)
+  条件: {f g : G ->* M} {s : 集合 G} (h : 集合.EqOn f g s)
+  结论: 集合.EqOn f g (closure s)
   证明: show closure s <= f.eqLocus g from (closure_le _).2 h
 
 @[to_additive]
@@ -1655,7 +1655,7 @@ theorem eq_of_eqOn_top
 
 中文:
 定理 eq_of_eqOn_top
-  条件: {f g : G ->* M} (h : Set.EqOn f g (⊤ : Subgroup G))
+  条件: {f g : G ->* M} (h : 集合.EqOn f g (⊤ : 子群 G))
   结论: f = g
   证明: ext fun _x => h trivial
 
@@ -1676,7 +1676,7 @@ theorem eq_of_eqOn_dense
 
 中文:
 定理 eq_of_eqOn_dense
-  条件: {s : Set G} (hs : closure s = ⊤) {f g : G ->* M} (h : s.EqOn f g)
+  条件: {s : 集合 G} (hs : closure s = ⊤) {f g : G ->* M} (h : s.EqOn f g)
   结论: f = g
   证明: eq_of_eqOn_top hs ▸ eqOn_closure h
 
@@ -1731,7 +1731,7 @@ theorem map_eq_bot_iff_of_injective
 
 中文:
 定理 map_eq_bot_iff_of_injective
-  条件: {f : G ->* N} (hf : Function.Injective f)
+  条件: {f : G ->* N} (hf : 函数.单射 f)
   证明: by rw [map_eq_bot_iff, f.ker_eq_bot hf, le_bot_iff]
 
 @[to_additive (attr := simp)]
@@ -1782,7 +1782,7 @@ theorem map_le_range
 
 中文:
 定理 map_le_range
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: map f H <= f.range
   证明: (range_eq_map f).symm ▸ map_mono le_top
 
@@ -1807,7 +1807,7 @@ theorem map_subtype_le
 
 中文:
 定理 map_subtype_le
-  条件: {H : Subgroup G} (K : Subgroup H)
+  条件: {H : 子群 G} (K : 子群 H)
   结论: K.map H.subtype <= H
   证明: (K.map_le_range H.subtype).trans_eq H.range_subtype
 
@@ -1832,7 +1832,7 @@ theorem ker_le_comap
 
 中文:
 定理 ker_le_comap
-  条件: (H : Subgroup N)
+  条件: (H : 子群 N)
   结论: f.ker <= comap f H
   证明: comap_bot f ▸ comap_mono bot_le
 
@@ -1858,7 +1858,7 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (H : Subgroup N)
+  条件: (H : 子群 N)
   结论: map f (comap f H) = f.range ⊓ H
   证明: SetLike.ext' by
     rw [coe_map]; rw [coe_comap]; rw [Set.image_preimage_eq_inter_range]; rw [coe_inf]; rw [coe_range]; rw [Set.inter_comm]
@@ -1890,7 +1890,7 @@ theorem comap_map_eq
 
 中文:
 定理 comap_map_eq
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: comap f (map f H) = H ⊔ f.ker
   证明: by
   refine le_antisymm ?_ (sup_le (le_comap_map _ _) (ker_le_comap _ _))
@@ -1924,7 +1924,7 @@ theorem map_comap_eq_self
 
 中文:
 定理 map_comap_eq_self
-  条件: {f : G ->* N} {H : Subgroup N} (h : H <= f.range)
+  条件: {f : G ->* N} {H : 子群 N} (h : H <= f.range)
   证明: by
   rwa [map_comap_eq, inf_eq_right]
 
@@ -1949,7 +1949,7 @@ theorem map_comap_eq_self_of_surjective
 
 中文:
 定理 map_comap_eq_self_of_surjective
-  条件: {f : G ->* N} (h : Function.Surjective f) (H : Subgroup N)
+  条件: {f : G ->* N} (h : 函数.满射 f) (H : 子群 N)
   证明: map_comap_eq_self (range_eq_top.2 h ▸ le_top)
 
 @[to_additive]
@@ -1973,7 +1973,7 @@ theorem comap_le_comap_of_le_range
 
 中文:
 定理 comap_le_comap_of_le_range
-  条件: {f : G ->* N} {K L : Subgroup N} (hf : K <= f.range)
+  条件: {f : G ->* N} {K L : 子群 N} (hf : K <= f.range)
   证明: ⟨(map_comap_eq_self hf).ge.trans ∘ map_le_iff_le_comap.mpr, comap_mono⟩
 
 @[to_additive]
@@ -1997,7 +1997,7 @@ theorem comap_le_comap_of_surjective
 
 中文:
 定理 comap_le_comap_of_surjective
-  条件: {f : G ->* N} {K L : Subgroup N} (hf : Function.Surjective f)
+  条件: {f : G ->* N} {K L : 子群 N} (hf : 函数.满射 f)
   证明: comap_le_comap_of_le_range (range_eq_top.2 hf ▸ le_top)
 
 @[to_additive]
@@ -2021,7 +2021,7 @@ theorem comap_lt_comap_of_surjective
 
 中文:
 定理 comap_lt_comap_of_surjective
-  条件: {f : G ->* N} {K L : Subgroup N} (hf : Function.Surjective f)
+  条件: {f : G ->* N} {K L : 子群 N} (hf : 函数.满射 f)
   证明: by simp_rw [lt_iff_le_not_ge, comap_le_comap_of_surjective hf]
 
 @[to_additive]
@@ -2045,8 +2045,8 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  条件: {f : G ->* N} (h : Function.Surjective f)
-  结论: Function.Injective (comap f)
+  条件: {f : G ->* N} (h : 函数.满射 f)
+  结论: 函数.单射 (comap f)
   证明: fun K L => by simp only [le_antisymm_iff, comap_le_comap_of_surjective h, imp_self]
 
 @[to_additive (attr := simp)]
@@ -2071,7 +2071,7 @@ theorem comap_eq_ker
 
 中文:
 定理 comap_eq_ker
-  条件: {f : G ->* N} {H : Subgroup N}
+  条件: {f : G ->* N} {H : 子群 N}
   结论: H.comap f = f.ker ↔ Disjoint H f.range
   证明: by
   rw [← H.ker_le_comap f |>.ge_iff_eq']; rw [← map_eq_bot_iff]; rw [map_comap_eq]; rw [disjoint_iff]; rw [inf_comm]
@@ -2097,7 +2097,7 @@ theorem comap_eq_ker_of_surjective
 
 中文:
 定理 comap_eq_ker_of_surjective
-  条件: {f : G ->* N} (hf : Surjective f) {H : Subgroup N}
+  条件: {f : G ->* N} (hf : 满射 f) {H : 子群 N}
   证明: by
   rw [comap_eq_ker]; rw [f.range_eq_top_of_surjective hf]; rw [disjoint_top]
 
@@ -2123,7 +2123,7 @@ theorem comap_map_eq_self
 
 中文:
 定理 comap_map_eq_self
-  条件: {f : G ->* N} {H : Subgroup G} (h : f.ker <= H)
+  条件: {f : G ->* N} {H : 子群 G} (h : f.ker <= H)
   证明: by
   rwa [comap_map_eq, sup_eq_left]
 
@@ -2148,7 +2148,7 @@ theorem comap_map_eq_self_of_injective
 
 中文:
 定理 comap_map_eq_self_of_injective
-  条件: {f : G ->* N} (h : Function.Injective f) (H : Subgroup G)
+  条件: {f : G ->* N} (h : 函数.单射 f) (H : 子群 G)
   证明: comap_map_eq_self ((ker_eq_bot _ h).symm ▸ bot_le)
 
 @[to_additive]
@@ -2174,7 +2174,7 @@ theorem map_le_map_iff
 
 中文:
 定理 map_le_map_iff
-  条件: {f : G ->* N} {H K : Subgroup G}
+  条件: {f : G ->* N} {H K : 子群 G}
   结论: H.map f <= K.map f ↔ H <= K ⊔ f.ker
   证明: by
   rw [map_le_iff_le_comap]; rw [comap_map_eq]
@@ -2200,7 +2200,7 @@ theorem map_le_map_iff'
 
 中文:
 定理 map_le_map_iff'
-  条件: {f : G ->* N} {H K : Subgroup G}
+  条件: {f : G ->* N} {H K : 子群 G}
   证明: by
   simp only [map_le_map_iff, sup_le_iff, le_sup_right, and_true]
 
@@ -2225,7 +2225,7 @@ theorem map_eq_map_iff
 
 中文:
 定理 map_eq_map_iff
-  条件: {f : G ->* N} {H K : Subgroup G}
+  条件: {f : G ->* N} {H K : 子群 G}
   证明: by simp only [le_antisymm_iff, map_le_map_iff']
 
 @[to_additive]
@@ -2249,7 +2249,7 @@ theorem map_eq_range_iff
 
 中文:
 定理 map_eq_range_iff
-  条件: {f : G ->* N} {H : Subgroup G}
+  条件: {f : G ->* N} {H : 子群 G}
   证明: by
   rw [f.range_eq_map]; rw [map_eq_map_iff]; rw [codisjoint_iff]; rw [top_sup_eq]
 
@@ -2274,7 +2274,7 @@ theorem map_le_map_iff_of_injective
 
 中文:
 定理 map_le_map_iff_of_injective
-  条件: {f : G ->* N} (hf : Function.Injective f) {H K : Subgroup G}
+  条件: {f : G ->* N} (hf : 函数.单射 f) {H K : 子群 G}
   证明: by rw [map_le_iff_le_comap, comap_map_eq_self_of_injective hf]
 
 @[to_additive (attr := simp)]
@@ -2295,7 +2295,7 @@ theorem map_subtype_le_map_subtype
 
 中文:
 定理 map_subtype_le_map_subtype
-  条件: {G' : Subgroup G} {H K : Subgroup G'}
+  条件: {G' : 子群 G} {H K : 子群 G'}
   证明: map_le_map_iff_of_injective G'.subtype_injective
 
 Depends on / 依赖: map_le_map_iff_of_injective, subtype_injective
@@ -2325,7 +2325,7 @@ definition MapSubtype.orderIso
 
 中文:
 定义 MapSubtype.orderIso
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: ⟨H'.map H.subtype, map_subtype_le H'⟩
   invFun sH' := sH'.1.subgroupOf H
   left_inv H' := comap_map_eq_self_of_injective H.subtype_injective H'
@@ -2356,7 +2356,7 @@ lemma MapSubtype.orderIso_symm_apply
 
 中文:
 引理 MapSubtype.orderIso_symm_apply
-  条件: (H : Subgroup G) (sH' : { H' : Subgroup G // H' <= H })
+  条件: (H : 子群 G) (sH' : { H' : 子群 G // H' <= H })
   证明: rfl
 
 @[to_additive]
@@ -2378,8 +2378,8 @@ lemma «forall»
 @[to_additive]
 
 中文:
-引理 «forall»
-  条件: {H : Subgroup G} {P : Subgroup H -> 命题}
+引理 «对任意»
+  条件: {H : 子群 G} {P : 子群 H -> 命题}
   证明: by
   simp [(MapSubtype.orderIso H).forall_congr_left]
 
@@ -2402,7 +2402,7 @@ theorem map_lt_map_iff_of_injective
 
 中文:
 定理 map_lt_map_iff_of_injective
-  条件: {f : G ->* N} (hf : Function.Injective f) {H K : Subgroup G}
+  条件: {f : G ->* N} (hf : 函数.单射 f) {H K : 子群 G}
   证明: lt_iff_lt_of_le_iff_le' (map_le_map_iff_of_injective hf) (map_le_map_iff_of_injective hf)
 
 @[to_additive (attr := simp)]
@@ -2426,7 +2426,7 @@ theorem map_subtype_lt_map_subtype
 
 中文:
 定理 map_subtype_lt_map_subtype
-  条件: {G' : Subgroup G} {H K : Subgroup G'}
+  条件: {G' : 子群 G} {H K : 子群 G'}
   证明: map_lt_map_iff_of_injective G'.subtype_injective
 
 @[to_additive]
@@ -2451,8 +2451,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : G ->* N} (h : Function.Injective f)
-  结论: Function.Injective (map f)
+  条件: {f : G ->* N} (h : 函数.单射 f)
+  结论: 函数.单射 (map f)
   证明: Function.LeftInverse.injective comap_map_eq_self_of_injective h
 
 @[to_additive]
@@ -2473,7 +2473,7 @@ theorem map_subtype_inj
 
 中文:
 定理 map_subtype_inj
-  条件: {H : Subgroup G} {K L : Subgroup H}
+  条件: {H : 子群 G} {K L : 子群 H}
   证明: (map_injective H.subtype_injective).eq_iff
 
 Depends on / 依赖: H.subtype_injective, eq_iff, map_injective, subtype_injective
@@ -2498,7 +2498,7 @@ theorem map_injective_of_ker_le
 
 中文:
 定理 map_injective_of_ker_le
-  结论: {H K : Subgroup G} (hH : f.ker <= H) (hK : f.ker <= K)
+  结论: {H K : 子群 G} (hH : f.ker <= H) (hK : f.ker <= K)
   证明: by
   apply_fun comap f at hf
   rwa [comap_map_eq, comap_map_eq, sup_of_le_left hH, sup_of_le_left hK] at hf
@@ -2550,7 +2550,7 @@ theorem closure_preimage_eq_top
 
 中文:
 定理 closure_preimage_eq_top
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure ((closure s).subtype ⁻¹' s) = ⊤
   证明: by
   simp
@@ -2575,7 +2575,7 @@ theorem comap_sup_eq_of_le_range
 
 中文:
 定理 comap_sup_eq_of_le_range
-  条件: {H K : Subgroup N} (hH : H <= f.range) (hK : K <= f.range)
+  条件: {H K : 子群 N} (hH : H <= f.range) (hK : K <= f.range)
   证明: map_injective_of_ker_le f ((ker_le_comap f H).trans le_sup_left) (ker_le_comap f (H ⊔ K))
     (by
       rw [map_comap_eq]; rw [map_sup]; rw [map_comap_eq]; rw [map_comap_eq]; rw [inf_eq_right.mpr hH]; rw [inf_eq_right.mpr hK]; rw [inf_eq_right.mpr (sup_le hH hK)])
@@ -2603,7 +2603,7 @@ theorem comap_sup_eq
 
 中文:
 定理 comap_sup_eq
-  条件: (H K : Subgroup N) (hf : Function.Surjective f)
+  条件: (H K : 子群 N) (hf : 函数.满射 f)
   证明: comap_sup_eq_of_le_range f (range_eq_top.2 hf ▸ le_top) (range_eq_top.2 hf ▸ le_top)
 
 @[to_additive]
@@ -2632,7 +2632,7 @@ theorem subgroupOf_sup
 
 中文:
 定理 subgroupOf_sup
-  条件: {A A' B : Subgroup G} (hA : A <= B) (hA' : A' <= B)
+  条件: {A A' B : 子群 G} (hA : A <= B) (hA' : A' <= B)
   证明: by
   refine
     map_injective_of_ker_le B.subtype (ker_le_comap _ _)
@@ -2665,7 +2665,7 @@ theorem codisjoint_subgroupOf_sup
 
 中文:
 定理 codisjoint_subgroupOf_sup
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   证明: by
   rw [codisjoint_iff]; rw [← subgroupOf_sup]; rw [subgroupOf_self]
   exacts [le_sup_left, le_sup_right]
@@ -2693,7 +2693,7 @@ lemma subgroupOf_map_powMonoidHom_eq_range
 
 中文:
 引理 subgroupOf_map_powMonoidHom_eq_range
-  条件: (S : Subgroup M) (n : 自然数)
+  条件: (S : 子群 M) (n : 自然数)
   证明: by
   ext : 1
   simp [mem_subgroupOf]

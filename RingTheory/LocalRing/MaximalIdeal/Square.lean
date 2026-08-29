@@ -33,7 +33,7 @@ lemma IsLocalRing.maximalIdeal_sq_lt_maximalIdeal
     exact Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator (IsNoetherian.noethe
 
 中文:
-引理 IsLocalRing.maximalIdeal_sq_lt_maximalIdeal
+引理 是局部环.maximalIdeal_sq_lt_maximalIdeal
   证明: by
   trans ¬ maximalIdeal R ^ 2 = maximalIdeal R
   · simp [lt_iff_le_and_ne, Ideal.pow_le_self]
@@ -64,7 +64,7 @@ lemma IsLocalRing.maximalIdeal_sq_lt_of_ringKrullDim_ne_zero
   (since := "2026-05-13")]
 
 中文:
-引理 IsLocalRing.maximalIdeal_sq_lt_of_ringKrullDim_ne_zero
+引理 是局部环.maximalIdeal_sq_lt_of_ringKrullDim_ne_zero
   条件: (h : ringKrullDim R != 0)
   证明: (maximalIdeal_sq_lt_maximalIdeal R).mpr (ringKrullDim_eq_zero_of_isField.mt h)
 
@@ -88,7 +88,7 @@ lemma IsLocalRing.maximalIdeal_sq_lt
   proof: IsLocalRing.maximalIdeal_sq_lt_of_ringKrullDim_ne_zero h.ne.symm
 
 中文:
-引理 IsLocalRing.maximalIdeal_sq_lt
+引理 是局部环.maximalIdeal_sq_lt
   条件: (h : 0 < ringKrullDim R)
   证明: IsLocalRing.maximalIdeal_sq_lt_of_ringKrullDim_ne_zero h.ne.symm
 

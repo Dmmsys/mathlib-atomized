@@ -313,7 +313,7 @@ definition Fan.IsLimit.mk
 alias mkFanLimit := Fan.IsLimit.mk
 
 中文:
-定义 Fan.IsLimit.mk
+定义 Fan.是极限.mk
   签名: {f : β -> C} (t : Fan f) (lift : 对任意 s : Fan f, s.pt ⟶ t.pt)
   定义体: { lift }
 
@@ -345,8 +345,8 @@ definition Fan.IsLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 Fan.IsLimit.lift
-  签名: {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
+定义 Fan.是极限.lift
+  签名: {F : β -> C} {c : Fan F} (hc : 是极限 c) {A : C}
   定义体: hc.lift (Fan.mk A f)
 
 @[deprecated (since := "2026-01-12")] alias Fan.IsLimit.desc := Fan.IsLimit.lift
@@ -373,8 +373,8 @@ lemma Fan.IsLimit.fac
 @[reassoc (attr := simp)]
 
 中文:
-引理 Fan.IsLimit.fac
-  结论: {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
+引理 Fan.是极限.fac
+  结论: {F : β -> C} {c : Fan F} (hc : 是极限 c) {A : C}
   证明: hc.fac (Fan.mk A f) ⟨i⟩
 
 @[reassoc (attr := simp)]
@@ -396,8 +396,8 @@ lemma Fan.IsLimit.lift_proj
   proof: hc.fac _ _
 
 中文:
-引理 Fan.IsLimit.lift_proj
-  结论: {X : β -> C} {c : Fan X} (d : Fan X) (hc : IsLimit c)
+引理 Fan.是极限.lift_proj
+  结论: {X : β -> C} {c : Fan X} (d : Fan X) (hc : 是极限 c)
   证明: hc.fac _ _
 
 Depends on / 依赖: hc.fac
@@ -415,8 +415,8 @@ lemma Fan.IsLimit.hom_ext
   proof: hc.hom_ext (fun ⟨i⟩ => h i)
 
 中文:
-引理 Fan.IsLimit.hom_ext
-  结论: {I : 类型} {F : I -> C} {c : Fan F} (hc : IsLimit c) {A : C}
+引理 Fan.是极限.hom_ext
+  结论: {I : 类型} {F : I -> C} {c : Fan F} (hc : 是极限 c) {A : C}
   证明: hc.hom_ext (fun ⟨i⟩ => h i)
 
 Depends on / 依赖: hc.hom_ext, hom_ext
@@ -440,7 +440,7 @@ definition Cofan.IsColimit.mk
 alias mkCofanColimit := Cofan.IsColimit.mk
 
 中文:
-定义 Cofan.IsColimit.mk
+定义 Cofan.是余极限.mk
   签名: {f : β -> C} (s : Cofan f) (desc : 对任意 t : Cofan f, s.pt ⟶ t.pt)
   定义体: { desc }
 
@@ -470,8 +470,8 @@ definition Cofan.IsColimit.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 Cofan.IsColimit.desc
-  签名: {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
+定义 Cofan.是余极限.desc
+  签名: {F : β -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
   定义体: hc.desc (Cofan.mk A f)
 
 @[reassoc (attr := simp)]
@@ -494,8 +494,8 @@ lemma Cofan.IsColimit.fac
 @[reassoc (attr := simp)]
 
 中文:
-引理 Cofan.IsColimit.fac
-  结论: {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
+引理 Cofan.是余极限.fac
+  结论: {F : β -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
   证明: hc.fac (Cofan.mk A f) ⟨i⟩
 
 @[reassoc (attr := simp)]
@@ -517,8 +517,8 @@ lemma Cofan.IsColimit.inj_desc
   proof: hc.fac _ _
 
 中文:
-引理 Cofan.IsColimit.inj_desc
-  结论: {X : β -> C} {c : Cofan X} (d : Cofan X) (hc : IsColimit c)
+引理 Cofan.是余极限.inj_desc
+  结论: {X : β -> C} {c : Cofan X} (d : Cofan X) (hc : 是余极限 c)
   证明: hc.fac _ _
 
 Depends on / 依赖: hc.fac
@@ -536,8 +536,8 @@ lemma Cofan.IsColimit.hom_ext
   proof: hc.hom_ext (fun ⟨i⟩ => h i)
 
 中文:
-引理 Cofan.IsColimit.hom_ext
-  结论: {I : 类型} {F : I -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
+引理 Cofan.是余极限.hom_ext
+  结论: {I : 类型} {F : I -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
   证明: hc.hom_ext (fun ⟨i⟩ => h i)
 
 Depends on / 依赖: hc.hom_ext, hom_ext
@@ -639,7 +639,7 @@ abbreviation Pi.π
   body: limit.π (Discrete.functor f) (Discrete.mk b)
 
 中文:
-缩写 Pi.π
+缩写 依赖函数类型.π
   签名: (f : β -> C) [HasProduct f] (b : β)
   定义体: limit.π (Discrete.functor f) (Discrete.mk b)
 
@@ -657,7 +657,7 @@ abbreviation Sigma.ι
   body: colimit.ι (Discrete.functor f) (Discrete.mk b)
 
 中文:
-缩写 Sigma.ι
+缩写 依赖和类型.ι
   签名: (f : β -> C) [HasCoproduct f] (b : β)
   定义体: colimit.ι (Discrete.functor f) (Discrete.mk b)
 
@@ -678,7 +678,7 @@ lemma Pi.hom_ext
   proof: limit.hom_ext (fun ⟨j⟩ => h j)
 
 中文:
-引理 Pi.hom_ext
+引理 依赖函数类型.hom_ext
   结论: {f : β -> C} [HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ f)
   证明: limit.hom_ext (fun ⟨j⟩ => h j)
 
@@ -700,7 +700,7 @@ lemma Sigma.hom_ext
   proof: colimit.hom_ext (fun ⟨j⟩ => h j)
 
 中文:
-引理 Sigma.hom_ext
+引理 依赖和类型.hom_ext
   结论: {f : β -> C} [HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶ X)
   证明: colimit.hom_ext (fun ⟨j⟩ => h j)
 
@@ -761,7 +761,7 @@ theorem Pi.π_comp_eqToHom
 @[reassoc (attr := simp)]
 
 中文:
-定理 Pi.π_comp_eqToHom
+定理 依赖函数类型.π_comp_eqToHom
   条件: {J : 类型} (f : J -> C) [HasProduct f] {j j' : J} (w : j = j')
   证明: by
   simp [*]
@@ -784,7 +784,7 @@ theorem Sigma.eqToHom_comp_ι
   simp
 
 中文:
-定理 Sigma.eqToHom_comp_ι
+定理 依赖和类型.eqToHom_comp_ι
   条件: {J : 类型} (f : J -> C) [HasCoproduct f] {j j' : J} (w : j = j')
   证明: by
   cases w
@@ -806,7 +806,7 @@ abbreviation Pi.lift
 @[reassoc, elementwise]
 
 中文:
-缩写 Pi.lift
+缩写 依赖函数类型.lift
   签名: {f : β -> C} [HasProduct f] {P : C} (p : 对任意 b, P ⟶ f b)
   定义体: limit.lift _ (Fan.mk P p)
 
@@ -828,8 +828,8 @@ theorem Pi.lift_π
   simp only [limit.lift_π, Fan.mk_π_app]
 
 中文:
-定理 Pi.lift_π
-  条件: {β : Type w} {f : β -> C} [HasProduct f] {P : C} (p : 对任意 b, P ⟶ f b) (b : β)
+定理 依赖函数类型.lift_π
+  条件: {β : 类型 w} {f : β -> C} [HasProduct f] {P : C} (p : 对任意 b, P ⟶ f b) (b : β)
   证明: by
   simp only [limit.lift_π, Fan.mk_π_app]
 
@@ -912,7 +912,7 @@ abbreviation Sigma.desc
 @[reassoc]
 
 中文:
-缩写 Sigma.desc
+缩写 依赖和类型.desc
   签名: {f : β -> C} [HasCoproduct f] {P : C} (p : 对任意 b, f b ⟶ P)
   定义体: colimit.desc _ (Cofan.mk P p)
 
@@ -934,8 +934,8 @@ theorem Sigma.ι_desc
   simp only [colimit.ι_desc, Cofan.mk_ι_app]
 
 中文:
-定理 Sigma.ι_desc
-  条件: {β : Type w} {f : β -> C} [HasCoproduct f] {P : C} (p : 对任意 b, f b ⟶ P) (b : β)
+定理 依赖和类型.ι_desc
+  条件: {β : 类型 w} {f : β -> C} [HasCoproduct f] {P : C} (p : 对任意 b, f b ⟶ P) (b : β)
   证明: by
   simp only [colimit.ι_desc, Cofan.mk_ι_app]
 
@@ -1039,7 +1039,7 @@ definition Cofan.isColimitTrans
 
 中文:
 定义 Cofan.isColimitTrans
-  签名: {X : α -> C} (c : Cofan X) (hc : IsColimit c)
+  签名: {X : α -> C} (c : Cofan X) (hc : 是余极限 c)
   定义体: by
   refine Cofan.IsColimit.mk _ ?_ ?_ ?_
   · exact fun t => hc.desc (Cofan.mk _ fun a => (hs a).desc (Cofan.mk t.pt (fun b => t.inj ⟨a, b⟩)))
@@ -1079,7 +1079,7 @@ definition Pi.map
 @[reassoc (attr := simp), elementwise nosimp]
 
 中文:
-定义 Pi.map
+定义 依赖函数类型.map
   签名: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: limMap (Discrete.natTrans fun X => p X.as)
 
@@ -1102,7 +1102,7 @@ lemma Pi.map_π
 @[simp]
 
 中文:
-引理 Pi.map_π
+引理 依赖函数类型.map_π
   条件: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b) (b : β)
   证明: by simp [Pi.map]
 
@@ -1125,9 +1125,9 @@ lemma Pi.map_id
   ext; simp
 
 中文:
-引理 Pi.map_id
+引理 依赖函数类型.map_id
   条件: {f : α -> C} [HasProduct f]
-  结论: Pi.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
+  结论: 依赖函数类型.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
   证明: by
   ext; simp
 -/
@@ -1144,7 +1144,7 @@ lemma Pi.map_comp_map
   ext; simp
 
 中文:
-引理 Pi.map_comp_map
+引理 依赖函数类型.map_comp_map
   结论: {f g h : α -> C} [HasProduct f] [HasProduct g] [HasProduct h]
   证明: by
   ext; simp
@@ -1164,7 +1164,7 @@ instance Pi.map_mono
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
 
 中文:
-实例 Pi.map_mono
+实例 依赖函数类型.map_mono
   签名: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: @Limits.limMap_mono _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
@@ -1187,7 +1187,7 @@ definition Pi.map'
 @[reassoc (attr := simp)]
 
 中文:
-定义 Pi.map'
+定义 依赖函数类型.map'
   签名: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
   定义体: Pi.lift (fun a => Pi.π _ _ ≫ q a)
 
@@ -1209,7 +1209,7 @@ lemma Pi.map'_comp_π
   proof: limit.lift_π _ _
 
 中文:
-引理 Pi.map'_comp_π
+引理 依赖函数类型.map'_comp_π
   结论: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
   证明: limit.lift_π _ _
 -/
@@ -1230,9 +1230,9 @@ lemma Pi.map'_id_id
 @[simp]
 
 中文:
-引理 Pi.map'_id_id
+引理 依赖函数类型.map'_id_id
   条件: {f : α -> C} [HasProduct f]
-  结论: Pi.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
+  结论: 依赖函数类型.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
   证明: by
   ext; simp
 
@@ -1251,7 +1251,7 @@ lemma Pi.map'_id
   proof: rfl
 
 中文:
-引理 Pi.map'_id
+引理 依赖函数类型.map'_id
   条件: {f g : α -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
   证明: rfl
 -/
@@ -1269,7 +1269,7 @@ lemma Pi.map'_comp_map'
   ext; simp
 
 中文:
-引理 Pi.map'_comp_map'
+引理 依赖函数类型.map'_comp_map'
   结论: {f : α -> C} {g : β -> C} {h : γ -> C} [HasProduct f] [HasProduct g]
   证明: by
   ext; simp
@@ -1290,7 +1290,7 @@ lemma Pi.map'_comp_map
   ext; simp
 
 中文:
-引理 Pi.map'_comp_map
+引理 依赖函数类型.map'_comp_map
   结论: {f : α -> C} {g h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
   证明: by
   ext; simp
@@ -1310,7 +1310,7 @@ lemma Pi.map_comp_map'
   ext; simp
 
 中文:
-引理 Pi.map_comp_map'
+引理 依赖函数类型.map_comp_map'
   结论: {f g : α -> C} {h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
   证明: by
   ext; simp
@@ -1330,7 +1330,7 @@ lemma Pi.map'_eq
   cat_disch
 
 中文:
-引理 Pi.map'_eq
+引理 依赖函数类型.map'_eq
   结论: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] {p p' : β -> α}
   证明: by
   cat_disch
@@ -1351,7 +1351,7 @@ definition Pi.mapIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 Pi.mapIso
+定义 依赖函数类型.mapIso
   签名: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b)
   定义体: lim.mapIso (Discrete.natIso fun X => p X.as)
 
@@ -1374,7 +1374,7 @@ lemma Pi.mapIso_hom_π
 @[reassoc (attr := simp)]
 
 中文:
-引理 Pi.mapIso_hom_π
+引理 依赖函数类型.mapIso_hom_π
   条件: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
   证明: limMap_π _ _
 
@@ -1394,7 +1394,7 @@ lemma Pi.mapIso_inv_π
   proof: limMap_π _ _
 
 中文:
-引理 Pi.mapIso_inv_π
+引理 依赖函数类型.mapIso_inv_π
   条件: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
   证明: limMap_π _ _
 -/
@@ -1411,7 +1411,7 @@ instance Pi.map_isIso
   body: inferInstanceAs (IsIso (Pi.mapIso (fun b => asIso (p b))).hom)
 
 中文:
-实例 Pi.map_isIso
+实例 依赖函数类型.map_isIso
   签名: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ⟶ g b)
   定义体: inferInstanceAs (IsIso (Pi.mapIso (fun b => asIso (p b))).hom)
 
@@ -1441,8 +1441,8 @@ definition Pi.cone
   π := Discrete.natTrans (fun _ => Pi.π _ _)
 
 中文:
-定义 Pi.cone
-  签名: : Cone X where
+定义 依赖函数类型.cone
+  签名: : 锥 X where
   定义体: ∏ᶜ (fun j => X.obj (Discrete.mk j))
   π := Discrete.natTrans (fun _ => Pi.π _ _)
 
@@ -1503,7 +1503,7 @@ definition Pi.isoLimit
 @[reassoc (attr := simp)]
 
 中文:
-定义 Pi.isoLimit
+定义 依赖函数类型.isoLimit
   签名: :
   定义体: IsLimit.conePointUniqueUpToIso (productIsProduct' X) (limit.isLimit X)
 
@@ -1527,7 +1527,7 @@ lemma Pi.isoLimit_inv_π
 @[reassoc (attr := simp)]
 
 中文:
-引理 Pi.isoLimit_inv_π
+引理 依赖函数类型.isoLimit_inv_π
   条件: (j : α)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
 
@@ -1549,7 +1549,7 @@ lemma Pi.isoLimit_hom_π
   proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
 中文:
-引理 Pi.isoLimit_hom_π
+引理 依赖函数类型.isoLimit_hom_π
   条件: (j : α)
   证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
@@ -1572,7 +1572,7 @@ definition Sigma.map
 @[reassoc (attr := simp)]
 
 中文:
-定义 Sigma.map
+定义 依赖和类型.map
   签名: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: colimMap (Discrete.natTrans fun X => p X.as)
 
@@ -1596,7 +1596,7 @@ lemma Sigma.ι_map
 @[simp]
 
 中文:
-引理 Sigma.ι_map
+引理 依赖和类型.ι_map
   条件: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b) (b : β)
   证明: by simp [Sigma.map]
 
@@ -1619,9 +1619,9 @@ lemma Sigma.map_id
   ext; simp
 
 中文:
-引理 Sigma.map_id
+引理 依赖和类型.map_id
   条件: {f : α -> C} [HasCoproduct f]
-  结论: Sigma.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f)
+  结论: 依赖和类型.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f)
   证明: by
   ext; simp
 -/
@@ -1638,7 +1638,7 @@ lemma Sigma.map_comp_map
   ext; simp
 
 中文:
-引理 Sigma.map_comp_map
+引理 依赖和类型.map_comp_map
   结论: {f g h : α -> C} [HasCoproduct f] [HasCoproduct g] [HasCoproduct h]
   证明: by
   ext; simp
@@ -1658,7 +1658,7 @@ instance Sigma.map_epi
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
 
 中文:
-实例 Sigma.map_epi
+实例 依赖和类型.map_epi
   签名: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: @Limits.colimMap_epi _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
@@ -1681,7 +1681,7 @@ definition Sigma.map'
 @[reassoc (attr := simp)]
 
 中文:
-定义 Sigma.map'
+定义 依赖和类型.map'
   签名: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : α -> β)
   定义体: Sigma.desc (fun a => q a ≫ Sigma.ι _ _)
 
@@ -1703,7 +1703,7 @@ lemma Sigma.ι_comp_map'
   proof: colimit.ι_desc _ _
 
 中文:
-引理 Sigma.ι_comp_map'
+引理 依赖和类型.ι_comp_map'
   结论: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
   证明: colimit.ι_desc _ _
 
@@ -1726,7 +1726,7 @@ lemma Sigma.map'_id_id
 @[simp]
 
 中文:
-引理 Sigma.map'_id_id
+引理 依赖和类型.map'_id_id
   条件: {f : α -> C} [HasCoproduct f]
   证明: by
   ext; simp
@@ -1749,7 +1749,7 @@ lemma Sigma.map'_id
   proof: rfl
 
 中文:
-引理 Sigma.map'_id
+引理 依赖和类型.map'_id
   条件: {f g : α -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
   证明: rfl
 -/
@@ -1767,7 +1767,7 @@ lemma Sigma.map'_comp_map'
   ext; simp
 
 中文:
-引理 Sigma.map'_comp_map'
+引理 依赖和类型.map'_comp_map'
   结论: {f : α -> C} {g : β -> C} {h : γ -> C} [HasCoproduct f] [HasCoproduct g]
   证明: by
   ext; simp
@@ -1788,7 +1788,7 @@ lemma Sigma.map'_comp_map
   ext; simp
 
 中文:
-引理 Sigma.map'_comp_map
+引理 依赖和类型.map'_comp_map
   结论: {f : α -> C} {g h : β -> C} [HasCoproduct f] [HasCoproduct g]
   证明: by
   ext; simp
@@ -1808,7 +1808,7 @@ lemma Sigma.map_comp_map'
   ext; simp
 
 中文:
-引理 Sigma.map_comp_map'
+引理 依赖和类型.map_comp_map'
   结论: {f g : α -> C} {h : β -> C} [HasCoproduct f] [HasCoproduct g]
   证明: by
   ext; simp
@@ -1828,7 +1828,7 @@ lemma Sigma.map'_eq
   cat_disch
 
 中文:
-引理 Sigma.map'_eq
+引理 依赖和类型.map'_eq
   结论: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
   证明: by
   cat_disch
@@ -1850,7 +1850,7 @@ definition Sigma.mapIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 Sigma.mapIso
+定义 依赖和类型.mapIso
   签名: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b)
   定义体: colim.mapIso (Discrete.natIso fun X => p X.as)
 
@@ -1873,7 +1873,7 @@ lemma Sigma.ι_mapIso_hom
 @[reassoc (attr := simp)]
 
 中文:
-引理 Sigma.ι_mapIso_hom
+引理 依赖和类型.ι_mapIso_hom
   条件: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
   证明: ι_colimMap _ _
 
@@ -1893,7 +1893,7 @@ lemma Sigma.ι_mapIso_inv
   proof: ι_colimMap _ _
 
 中文:
-引理 Sigma.ι_mapIso_inv
+引理 依赖和类型.ι_mapIso_inv
   条件: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
   证明: ι_colimMap _ _
 -/
@@ -1910,7 +1910,7 @@ instance Sigma.map_isIso
   body: inferInstanceAs (IsIso (Sigma.mapIso (fun b => asIso (p b))).hom)
 
 中文:
-实例 Sigma.map_isIso
+实例 依赖和类型.map_isIso
   签名: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ⟶ g b)
   定义体: inferInstanceAs (IsIso (Sigma.mapIso (fun b => asIso (p b))).hom)
 
@@ -1940,8 +1940,8 @@ definition Sigma.cocone
   ι := Discrete.natTrans (fun _ => Sigma.ι (fun j => X.obj ⟨j⟩) _)
 
 中文:
-定义 Sigma.cocone
-  签名: : Cocone X where
+定义 依赖和类型.cocone
+  签名: : 余锥 X where
   定义体: ∐ (fun j => X.obj (Discrete.mk j))
   ι := Discrete.natTrans (fun _ => Sigma.ι (fun j => X.obj ⟨j⟩) _)
 
@@ -2002,7 +2002,7 @@ definition Sigma.isoColimit
 @[reassoc (attr := simp)]
 
 中文:
-定义 Sigma.isoColimit
+定义 依赖和类型.isoColimit
   签名: :
   定义体: IsColimit.coconePointUniqueUpToIso (coproductIsCoproduct' X) (colimit.isColimit X)
 
@@ -2026,7 +2026,7 @@ lemma Sigma.ι_isoColimit_hom
 @[reassoc (attr := simp)]
 
 中文:
-引理 Sigma.ι_isoColimit_hom
+引理 依赖和类型.ι_isoColimit_hom
   条件: (j : α)
   证明: IsColimit.comp_coconePointUniqueUpToIso_hom (coproductIsCoproduct' X) _ _
 
@@ -2048,7 +2048,7 @@ lemma Sigma.ι_isoColimit_inv
   proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ _
 
 中文:
-引理 Sigma.ι_isoColimit_inv
+引理 依赖和类型.ι_isoColimit_inv
   条件: (j : α)
   证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ _
 
@@ -2074,7 +2074,7 @@ definition Pi.whiskerEquiv
   inv := Pi.map' e fun j => (w j).hom
 
 中文:
-定义 Pi.whiskerEquiv
+定义 依赖函数类型.whiskerEquiv
   签名: {J K : 类型} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : 对任意 j, g (e j) ≅ f j)
   定义体: Pi.map' e.symm fun k => (w (e.symm k)).inv ≫ eqToHom (by simp)
   inv := Pi.map' e fun j => (w j).hom
@@ -2100,7 +2100,7 @@ definition Sigma.whiskerEquiv
   inv := Sigma.map' e.symm fun k => eqToHom (by simp) ≫ (w (e.symm k)).hom
 
 中文:
-定义 Sigma.whiskerEquiv
+定义 依赖和类型.whiskerEquiv
   签名: {J K : 类型} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : 对任意 j, g (e j) ≅ f j)
   定义体: Sigma.map' e fun j => (w j).inv
   inv := Sigma.map' e.symm fun k => eqToHom (by simp) ≫ (w (e.symm k)).hom
@@ -2429,7 +2429,7 @@ lemma hasProducts_shrink
 
 中文:
 引理 hasProducts_shrink
-  条件: [HasProducts.{max w w'} C]
+  条件: [HasProducts.{最大值 w w'} C]
   结论: HasProducts.{w} C
   证明: fun J =>
   hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
@@ -2449,7 +2449,7 @@ lemma hasCoproducts_shrink
 
 中文:
 引理 hasCoproducts_shrink
-  条件: [HasCoproducts.{max w w'} C]
+  条件: [HasCoproducts.{最大值 w w'} C]
   结论: HasCoproducts.{w} C
   证明: fun J =>
   hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
@@ -2511,7 +2511,7 @@ theorem hasProducts_of_limit_fans
 
 中文:
 定理 hasProducts_of_limit_fans
-  结论: (lf : 对任意 {J : Type w} (f : J -> C), Fan f)
+  结论: (lf : 对任意 {J : 类型 w} (f : J -> C), Fan f)
   证明: fun _ : Type w =>
   { has_limit := fun F =>
       HasLimit.mk
@@ -2542,7 +2542,7 @@ theorem hasCoproducts_of_colimit_cofans
 
 中文:
 定理 hasCoproducts_of_colimit_cofans
-  结论: (cf : 对任意 {J : Type w} (f : J -> C), Cofan f)
+  结论: (cf : 对任意 {J : 类型 w} (f : J -> C), Cofan f)
   证明: fun _ : Type w =>
   { has_colimit := fun F =>
       HasColimit.mk
@@ -2695,7 +2695,7 @@ definition limitConeOfUnique
 
 中文:
 定义 limitConeOfUnique
-  签名: [Unique β] (f : β -> C)
+  签名: [唯一 β] (f : β -> C)
   定义体: { pt := f default
       π := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
         dsimp
@@ -2743,7 +2743,7 @@ definition productUniqueIso
 
 中文:
 定义 productUniqueIso
-  签名: [Unique β] (f : β -> C)
+  签名: [唯一 β] (f : β -> C)
   定义体: IsLimit.conePointUniqueUpToIso (limit.isLimit _) (limitConeOfUnique f).isLimit
 
 @[simp]
@@ -2767,8 +2767,8 @@ lemma productUniqueIso_hom
 
 中文:
 引理 productUniqueIso_hom
-  条件: [Unique β] (f : β -> C)
-  结论: (productUniqueIso f).hom = Pi.π f default
+  条件: [唯一 β] (f : β -> C)
+  结论: (productUniqueIso f).hom = 依赖函数类型.π f default
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -2791,7 +2791,7 @@ lemma productUniqueIso_inv_π
 
 中文:
 引理 productUniqueIso_inv_π
-  条件: [Unique β] (f : β -> C) (b : β)
+  条件: [唯一 β] (f : β -> C) (b : β)
   证明: by
   obtain rfl := Subsingleton.allEq b default
   simp [Iso.inv_comp_eq]
@@ -2821,7 +2821,7 @@ definition Fan.isLimitMkOfUnique
 
 中文:
 定义 Fan.isLimitMkOfUnique
-  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [Unique J]
+  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [唯一 J]
   定义体: by
   refine Fan.IsLimit.mk _ (fun s => s.proj default ≫ e.inv) (fun s j => ?_) fun s m hm => ?_
   · obtain rfl : j = default := Subsingleton.elim _ _
@@ -2859,7 +2859,7 @@ definition colimitCoconeOfUnique
 
 中文:
 定义 colimitCoconeOfUnique
-  签名: [Unique β] (f : β -> C)
+  签名: [唯一 β] (f : β -> C)
   定义体: { pt := f default
       ι := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
         dsimp
@@ -2906,7 +2906,7 @@ definition coproductUniqueIso
 
 中文:
 定义 coproductUniqueIso
-  签名: [Unique β] (f : β -> C)
+  签名: [唯一 β] (f : β -> C)
   定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (colimitCoconeOfUnique f).isColimit
 
 @[simp]
@@ -2929,7 +2929,7 @@ lemma coproductUniqueIso_inv
 
 中文:
 引理 coproductUniqueIso_inv
-  条件: [Unique β] (f : β -> C)
+  条件: [唯一 β] (f : β -> C)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -2954,7 +2954,7 @@ lemma ι_coproductUniqueIso_hom
 
 中文:
 引理 ι_coproductUniqueIso_hom
-  条件: [Unique β] (f : β -> C) (b : β)
+  条件: [唯一 β] (f : β -> C) (b : β)
   证明: by
   obtain rfl := Subsingleton.allEq b default
   symm
@@ -2986,7 +2986,7 @@ definition Cofan.isColimitMkOfUnique
 
 中文:
 定义 Cofan.isColimitMkOfUnique
-  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [Unique J]
+  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [唯一 J]
   定义体: by
   refine Cofan.IsColimit.mk _ (fun s => e.inv ≫ s.inj default) (fun s j => ?_) fun s m hm => ?_
   · obtain rfl : j = default := Subsingleton.elim _ _
@@ -3021,7 +3021,7 @@ definition Pi.reindex
   body: HasLimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
 
 中文:
-定义 Pi.reindex
+定义 依赖函数类型.reindex
   签名: : piObj (f ∘ ε) ≅ piObj f
   定义体: HasLimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
 
@@ -3048,9 +3048,9 @@ theorem Pi.reindex_hom_π
   exact limit.w (Discrete.fu
 
 中文:
-定理 Pi.reindex_hom_π
+定理 依赖函数类型.reindex_hom_π
   条件: (b : β)
-  结论: (Pi.reindex ε f).hom ≫ Pi.π f (ε b) = Pi.π (f ∘ ε) b
+  结论: (依赖函数类型.reindex ε f).hom ≫ 依赖函数类型.π f (ε b) = 依赖函数类型.π (f ∘ ε) b
   证明: by
   dsimp [Pi.reindex]
   simp only [HasLimit.isoOfEquivalence_hom_π, Discrete.equivalence_inverse, Discrete.functor_obj,
@@ -3079,9 +3079,9 @@ theorem Pi.reindex_inv_π
   simp [Iso.inv_comp_eq]
 
 中文:
-定理 Pi.reindex_inv_π
+定理 依赖函数类型.reindex_inv_π
   条件: (b : β)
-  结论: (Pi.reindex ε f).inv ≫ Pi.π (f ∘ ε) b = Pi.π f (ε b)
+  结论: (依赖函数类型.reindex ε f).inv ≫ 依赖函数类型.π (f ∘ ε) b = 依赖函数类型.π f (ε b)
   证明: by
   simp [Iso.inv_comp_eq]
 
@@ -3125,7 +3125,7 @@ definition Sigma.reindex
   body: HasColimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
 
 中文:
-定义 Sigma.reindex
+定义 依赖和类型.reindex
   签名: : sigmaObj (f ∘ ε) ≅ sigmaObj f
   定义体: HasColimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
 
@@ -3151,7 +3151,7 @@ theorem Sigma.ι_reindex_hom
   have h := colimit.w (
 
 中文:
-定理 Sigma.ι_reindex_hom
+定理 依赖和类型.ι_reindex_hom
   条件: (b : β)
   证明: by
   dsimp [Sigma.reindex]
@@ -3183,7 +3183,7 @@ theorem Sigma.ι_reindex_inv
   proof: by simp [Iso.comp_inv_eq]
 
 中文:
-定理 Sigma.ι_reindex_inv
+定理 依赖和类型.ι_reindex_inv
   条件: (b : β)
   证明: by simp [Iso.comp_inv_eq]
 
@@ -3231,8 +3231,8 @@ instance [HasLimit
     simpa using h =≫ Pi.π _ j
 
 中文:
-实例 [HasLimit
-  签名: F] [HasProduct F.obj] : Mono (Pi.lift (limit.π F)) where
+实例 [有极限
+  签名: F] [HasProduct F.obj] : 单态射 (依赖函数类型.lift (limit.π F)) where
   定义体: by
     refine limit.hom_ext fun j => ?_
     simpa using h =≫ Pi.π _ j
@@ -3255,8 +3255,8 @@ instance [HasColimit
     simpa using Sigma.ι _ j ≫= h
 
 中文:
-实例 [HasColimit
-  签名: F] [HasCoproduct F.obj] : Epi (Sigma.desc (colimit.ι F)) where
+实例 [有余极限
+  签名: F] [HasCoproduct F.obj] : 满态射 (依赖和类型.desc (colimit.ι F)) where
   定义体: by
     refine colimit.hom_ext fun j => ?_
     simpa using Sigma.ι _ j ≫= h
@@ -3286,7 +3286,7 @@ definition isLimitEquivFanOfIsThin
 
 中文:
 定义 isLimitEquivFanOfIsThin
-  签名: (c : Cone K)
+  签名: (c : 锥 K)
   定义体: Fan.IsLimit.mk _ (fun s => hc.lift { pt := s.pt, π.app j := s.proj j })
     (by subsingleton) (by subsingleton)
   invFun h := { lift s := Fan.IsLimit.lift h s.π.app }
@@ -3310,7 +3310,7 @@ definition isColimitEquivCofanOfIsThin
 
 中文:
 定义 isColimitEquivCofanOfIsThin
-  签名: (c : Cocone K)
+  签名: (c : 余锥 K)
   定义体: Cofan.IsColimit.mk _ (fun s => hc.desc { pt := s.pt, ι.app j := s.inj j })
     (by subsingleton) (by subsingleton)
   invFun h := { desc s := Cofan.IsColimit.desc h s.ι.app }
@@ -3343,8 +3343,8 @@ definition Fan.IsLimit.prod
     exact Fan.IsLimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
 
 中文:
-定义 Fan.IsLimit.prod
-  签名: (c : 对任意 i : ι, Fan (fun j : ι' => X i j)) (hc : 对任意 i : ι, IsLimit (c i))
+定义 Fan.是极限.乘积
+  签名: (c : 对任意 i : ι, Fan (fun j : ι' => X i j)) (hc : 对任意 i : ι, 是极限 (c i))
   定义体: by
   refine Fan.IsLimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
   · exact Fan.IsLimit.lift hc' fun i => Fan.IsLimit.lift (hc i) fun j => t.proj (i, j)
@@ -3377,8 +3377,8 @@ definition Cofan.IsColimit.prod
     exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i
 
 中文:
-定义 Cofan.IsColimit.prod
-  签名: (c : 对任意 i : ι, Cofan (fun j : ι' => X i j)) (hc : 对任意 i : ι, IsColimit (c i))
+定义 Cofan.是余极限.乘积
+  签名: (c : 对任意 i : ι, Cofan (fun j : ι' => X i j)) (hc : 对任意 i : ι, 是余极限 (c i))
   定义体: by
   refine Cofan.IsColimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
   · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
@@ -3412,7 +3412,7 @@ definition Pi.functor
   map {f g} t := Pi.map t
 
 中文:
-定义 Pi.functor
+定义 依赖函数类型.functor
   签名: [HasProductsOfShape α C]
   定义体: ∏ᶜ f
   map {f g} t := Pi.map t
@@ -3435,7 +3435,7 @@ definition Pi.functorπ
   body: Pi.π f a
 
 中文:
-定义 Pi.functorπ
+定义 依赖函数类型.functorπ
   签名: [HasProductsOfShape α C] (a : α)
   定义体: Pi.π f a
 -/
@@ -3504,7 +3504,7 @@ definition Pi.constCompPiIsoConst
   body: NatIso.ofComponents (fun _ => Iso.refl _)
 
 中文:
-定义 Pi.constCompPiIsoConst
+定义 依赖函数类型.constCompPiIsoConst
   签名: [HasProductsOfShape α C] {I : α -> 类型}
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
@@ -3529,7 +3529,7 @@ definition Sigma.functor
   map {f g} t := Sigma.map t
 
 中文:
-定义 Sigma.functor
+定义 依赖和类型.functor
   签名: [HasCoproductsOfShape α C]
   定义体: ∐ f
   map {f g} t := Sigma.map t
@@ -3550,7 +3550,7 @@ definition Sigma.functorι
   body: Sigma.ι f a
 
 中文:
-定义 Sigma.functorι
+定义 依赖和类型.functorι
   签名: [HasCoproductsOfShape α C] (a : α)
   定义体: Sigma.ι f a
 -/
@@ -3636,7 +3636,7 @@ definition Sigma.constCompSigmaIsoConst
   body: NatIso.ofComponents (fun _ => Iso.refl _)
 
 中文:
-定义 Sigma.constCompSigmaIsoConst
+定义 依赖和类型.constCompSigmaIsoConst
   签名: [HasCoproductsOfShape α C] {I : α -> 类型}
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 

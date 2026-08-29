@@ -35,7 +35,7 @@ theorem Directed.finset_le
 
 中文:
 定理 Directed.finset_le
-  结论: {r : α -> α -> 命题} [IsTrans α r] {ι} [hι : Nonempty ι] {f : ι -> α}
+  结论: {r : α -> α -> 命题} [是Trans α r] {ι} [hι : 非空 ι] {f : ι -> α}
   证明: show exists z, forall i in s.1, r (f i) (f z) from
     Multiset.induction_on s.1 (let ⟨z⟩ := hι; ⟨z, fun _ => by simp⟩)
       fun i _ ⟨j, H⟩ =>
@@ -63,8 +63,8 @@ theorem Finset.exists_le
   proof: directed_id.finset_le _
 
 中文:
-定理 Finset.exists_le
-  条件: [Nonempty α] [Preorder α] [IsDirectedOrder α] (s : Finset α)
+定理 有限集.存在_le
+  条件: [非空 α] [预序 α] [IsDirectedOrder α] (s : 有限集 α)
   证明: directed_id.finset_le _
 
 Depends on / 依赖: directed_id, directed_id.finset_le, finset_le

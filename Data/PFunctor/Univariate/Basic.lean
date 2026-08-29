@@ -40,7 +40,7 @@ structure PFunctor
     - B : A -> Type uB
 
 中文:
-结构 PFunctor
+结构 P函子
   参数: where
   公理与运算 (2 个):
     - A : 类型uA
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited PFunctor
+  签名: 可居 P函子
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance : Inhabited PFunctor :=
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun PFunctor.{uA, uB} (fun _ => 类型v -> Type (max v uA uB))
+  签名: CoeFun P函子.{uA, uB} (fun _ => 类型v -> 类型 (最大值 v uA uB))
   定义体: Obj
 -/
 instance : CoeFun PFunctor.{uA, uB} (fun _ => Type v -> Type (max v uA uB)) where
@@ -132,7 +132,7 @@ instance Obj.inhabited
 
 中文:
 实例 Obj.inhabited
-  签名: [Inhabited P.A] [Inhabited α]
+  签名: [可居 P.A] [可居 α]
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance Obj.inhabited [Inhabited P.A] [Inhabited α] : Inhabited (P α) :=
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor P.Obj
+  签名: 函子 P.Obj
   定义体: @map P
 -/
 instance : Functor P.Obj where map := @map P
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor (Obj.{v} P)
+  签名: Lawful函子 (Obj.{v} P)
   定义体: rfl
   id_map x := P.id_map x
 .symm comp_map f g x := P.map_map f g x
@@ -268,7 +268,7 @@ definition W
 
 中文:
 定义 W
-  签名: : Type (max uA uB)
+  签名: : 类型 (最大值 uA uB)
   定义体: WType P.B
 -/
 def W : Type (max uA uB) :=
@@ -387,7 +387,7 @@ definition Idx
 
 中文:
 定义 Idx
-  签名: : Type (max uA uB)
+  签名: : 类型 (最大值 uA uB)
   定义体: Σ x : P.A, P.B x
 -/
 def Idx : Type (max uA uB) :=
@@ -403,7 +403,7 @@ instance Idx.inhabited
 
 中文:
 实例 Idx.inhabited
-  签名: [Inhabited P.A] [Inhabited (P.B default)]
+  签名: [可居 P.A] [可居 (P.B default)]
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance Idx.inhabited [Inhabited P.A] [Inhabited (P.B default)] : Inhabited P.Idx :=
@@ -423,7 +423,7 @@ definition Obj.iget
 
 中文:
 定义 Obj.iget
-  签名: [DecidableEq P.A] {α} [Inhabited α] (x : P α) (i : P.Idx)
+  签名: [DecidableEq P.A] {α} [可居 α] (x : P α) (i : P.Idx)
   定义体: if h : i.1 = x.1 then x.2 (cast (congr_arg _ h) i.2) else default
 
 @[simp]
@@ -469,7 +469,7 @@ theorem iget_map
 
 中文:
 定理 iget_map
-  结论: [DecidableEq P.A] [Inhabited α] [Inhabited β] (x : P α)
+  结论: [DecidableEq P.A] [可居 α] [可居 β] (x : P α)
   证明: by
   simp only [Obj.iget, fst_map, *, dif_pos]
   cases x
@@ -500,7 +500,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁})
+  签名: (P₂ : P函子.{uA₂, uB₂}) (P₁ : P函子.{uA₁, uB₁})
   定义体: ⟨Σ a₂ : P₂.1, P₂.2 a₂ -> P₁.1, fun a₂a₁ => Σ u : P₂.2 a₂a₁.1, P₁.2 (a₂a₁.2 u)⟩
 -/
 def comp (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁}) :
@@ -517,7 +517,7 @@ definition comp.mk
 
 中文:
 定义 comp.mk
-  签名: (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁}) {α : 类型v} (x : P₂ (P₁ α))
+  签名: (P₂ : P函子.{uA₂, uB₂}) (P₁ : P函子.{uA₁, uB₁}) {α : 类型v} (x : P₂ (P₁ α))
   定义体: ⟨⟨x.1, Sigma.fst ∘ x.2⟩, fun a₂a₁ => (x.2 a₂a₁.1).2 a₂a₁.2⟩
 -/
 def comp.mk (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁}) {α : Type v} (x : P₂ (P₁ α)) :
@@ -534,7 +534,7 @@ definition comp.get
 
 中文:
 定义 comp.get
-  签名: (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁}) {α : 类型v} (x : comp P₂ P₁ α)
+  签名: (P₂ : P函子.{uA₂, uB₂}) (P₁ : P函子.{uA₁, uB₁}) {α : 类型v} (x : comp P₂ P₁ α)
   定义体: ⟨x.1.1, fun a₂ => ⟨x.1.2 a₂, fun a₁ => x.2 ⟨a₂, a₁⟩⟩⟩
 -/
 def comp.get (P₂ : PFunctor.{uA₂, uB₂}) (P₁ : PFunctor.{uA₁, uB₁}) {α : Type v} (x : comp P₂ P₁ α) :

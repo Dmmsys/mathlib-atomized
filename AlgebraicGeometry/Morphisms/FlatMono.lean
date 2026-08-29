@@ -35,8 +35,8 @@ lemma Flat.isIso_of_surjective_of_mono
 · exact inferInstanceAs IsIso (pullback.fst f f)
 
 中文:
-引理 Flat.isIso_of_surjective_of_mono
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Flat f]
+引理 平坦.isIso_of_surjective_of_mono
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [平坦 f]
   证明: by
   apply MorphismProperty.of_pullback_fst_of_descendsAlong
     (P := isomorphisms Scheme.{u}) (Q := @Surjective ⊓ @Flat ⊓ @QuasiCompact) (f := f) (g := f)
@@ -69,8 +69,8 @@ theorem IsOpenImmersion.of_flat_of_mono
 
 
 中文:
-定理 IsOpenImmersion.of_flat_of_mono
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Flat f]
+定理 是开浸入.of_flat_of_mono
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [平坦 f]
   证明: by
   wlog hf : Surjective f
   · let U : Y.Opens := ⟨Set.range f.base, f.isOpenMap.isOpen_range⟩

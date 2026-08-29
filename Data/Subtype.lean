@@ -49,7 +49,7 @@ theorem prop
 
 中文:
 定理 prop
-  条件: (x : Subtype p)
+  条件: (x : 子类型 p)
   结论: p x
   证明: x.2
 -/
@@ -66,7 +66,7 @@ theorem forall'
   proof: (@Subtype.forall _ _ fun x => q x.1 x.2).symm
 
 中文:
-定理 forall'
+定理 对任意'
   条件: {q : 对任意 x, p x -> 命题}
   结论: (对任意 x h, q x h) ↔ 对任意 x : { a // p a }, q x x.2
   证明: (@Subtype.forall _ _ fun x => q x.1 x.2).symm
@@ -84,7 +84,7 @@ theorem exists'
   proof: (@Subtype.exists _ _ fun x => q x.1 x.2).symm
 
 中文:
-定理 exists'
+定理 存在'
   条件: {q : 对任意 x, p x -> 命题}
   结论: (存在 x h, q x h) ↔ 存在 x : { a // p a }, q x x.2
   证明: (@Subtype.exists _ _ fun x => q x.1 x.2).symm
@@ -129,7 +129,7 @@ lemma heq_iff_coe_heq
 
 中文:
 引理 heq_iff_coe_heq
-  结论: {α β : Sort _} {p : α -> 命题} {q : β -> 命题} {a : {x // p x}}
+  结论: {α β : 类型层 _} {p : α -> 命题} {q : β -> 命题} {a : {x // p x}}
   证明: by grind
 
 @[simp]
@@ -240,7 +240,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective (fun (a : Subtype p) => (a : α))
+  结论: 单射 (fun (a : 子类型 p) => (a : α))
   证明: fun _ _ => Subtype.ext
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -257,7 +257,7 @@ theorem val_injective
 
 中文:
 定理 val_injective
-  结论: Injective (@val _ p)
+  结论: 单射 (@val _ p)
   证明: coe_injective
 -/
 @[simp] theorem val_injective : Injective (@val _ p) :=
@@ -274,7 +274,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {a b : Subtype p}
+  条件: {a b : 子类型 p}
   结论: (a : α) = b ↔ a = b
   证明: coe_injective.eq_iff
 
@@ -294,7 +294,7 @@ theorem val_inj
 
 中文:
 定理 val_inj
-  条件: {a b : Subtype p}
+  条件: {a b : 子类型 p}
   结论: a.val = b.val ↔ a = b
   证明: coe_inj
 
@@ -316,7 +316,7 @@ lemma coe_ne_coe
 
 中文:
 引理 coe_ne_coe
-  条件: {a b : Subtype p}
+  条件: {a b : 子类型 p}
   结论: (a : α) != b ↔ a != b
   证明: coe_injective.ne_iff
 
@@ -338,8 +338,8 @@ theorem _root_.exists_eq_subtype_mk_iff
 @[simp]
 
 中文:
-定理 _root_.exists_eq_subtype_mk_iff
-  条件: {a : Subtype p} {b : α}
+定理 _root_.存在_eq_subtype_mk_iff
+  条件: {a : 子类型 p} {b : α}
   证明: coe_eq_iff.symm
 
 @[simp]
@@ -360,8 +360,8 @@ theorem _root_.exists_subtype_mk_eq_iff
   proof: by grind
 
 中文:
-定理 _root_.exists_subtype_mk_eq_iff
-  条件: {a : Subtype p} {b : α}
+定理 _root_.存在_subtype_mk_eq_iff
+  条件: {a : 子类型 p} {b : α}
   证明: by grind
 -/
 theorem _root_.exists_subtype_mk_eq_iff {a : Subtype p} {b : α} :
@@ -376,7 +376,7 @@ theorem _root_.Function.extend_val_apply
   proof: val_injective.extend_apply g j ⟨b, hb⟩
 
 中文:
-定理 _root_.Function.extend_val_apply
+定理 _root_.函数.extend_val_apply
   结论: {p : β -> 命题} {g : {x // p x} -> γ} {j : β -> γ}
   证明: val_injective.extend_apply g j ⟨b, hb⟩
 
@@ -396,7 +396,7 @@ theorem _root_.Function.extend_val_apply'
   grind [Function.extend]
 
 中文:
-定理 _root_.Function.extend_val_apply'
+定理 _root_.函数.extend_val_apply'
   结论: {p : β -> 命题} {g : {x // p x} -> γ} {j : β -> γ}
   证明: by
   grind [Function.extend]
@@ -419,7 +419,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {α} {β : α -> 类型} (p : α -> 命题) (f : 对任意 x, β x) (x : Subtype p)
+  签名: {α} {β : α -> 类型} (p : α -> 命题) (f : 对任意 x, β x) (x : 子类型 p)
   定义体: f x
 
 @[simp, grind =]
@@ -439,7 +439,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: {α} {β : α -> 类型} (f : 对任意 x, β x) (p : α -> 命题) (x : Subtype p)
+  条件: {α} {β : α -> 类型} (f : 对任意 x, β x) (p : α -> 命题) (x : 子类型 p)
   证明: by
   rfl
 -/
@@ -473,7 +473,7 @@ theorem restrict_injective
 
 中文:
 定理 restrict_injective
-  条件: {α β} {f : α -> β} (p : α -> 命题) (h : Injective f)
+  条件: {α β} {f : α -> β} (p : α -> 命题) (h : 单射 f)
   证明: h.comp coe_injective
 
 Depends on / 依赖: coe_injective, h.comp
@@ -494,7 +494,7 @@ theorem surjective_restrict
 
 中文:
 定理 surjective_restrict
-  条件: {α} {β : α -> 类型} [ne : 对任意 a, Nonempty (β a)] (p : α -> 命题)
+  条件: {α} {β : α -> 类型} [ne : 对任意 a, 非空 (β a)] (p : α -> 命题)
   证明: by
   classical
   exact fun f => ⟨fun x => if h : p x then f ⟨x, h⟩ else Nonempty.some (ne x), by grind⟩
@@ -533,7 +533,7 @@ theorem coind_injective
 
 中文:
 定理 coind_injective
-  条件: {α β} {f : α -> β} {p : β -> 命题} (h : 对任意 a, p (f a)) (hf : Injective f)
+  条件: {α β} {f : α -> β} {p : β -> 命题} (h : 对任意 a, p (f a)) (hf : 单射 f)
   证明: fun x y hxy => hf by apply congr_arg Subtype.val hxy
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg
@@ -606,7 +606,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: {p : α -> 命题} {q : β -> 命题} {r : γ -> 命题} {x : Subtype p}
+  结论: {p : α -> 命题} {q : β -> 命题} {r : γ -> 命题} {x : 子类型 p}
   证明: rfl
 -/
 theorem map_comp {p : α -> Prop} {q : β -> Prop} {r : γ -> Prop} {x : Subtype p}
@@ -739,7 +739,7 @@ theorem equiv_iff
 
 中文:
 定理 equiv_iff
-  条件: [HasEquiv α] {p : α -> 命题} {s t : Subtype p}
+  条件: [HasEquiv α] {p : α -> 命题} {s t : 子类型 p}
   结论: s ≈ t ↔ (s : α) ≈ (t : α)
   证明: Iff.rfl
 
@@ -761,7 +761,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (s : Subtype p)
+  条件: (s : 子类型 p)
   结论: s ≈ s
   证明: Setoid.refl _
 -/
@@ -779,7 +779,7 @@ theorem symm
 
 中文:
 定理 symm
-  条件: {s t : Subtype p} (h : s ≈ t)
+  条件: {s t : 子类型 p} (h : s ≈ t)
   结论: t ≈ s
   证明: Setoid.symm h
 -/
@@ -797,7 +797,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: {s t u : Subtype p} (h₁ : s ≈ t) (h₂ : t ≈ u)
+  条件: {s t u : 子类型 p} (h₁ : s ≈ t) (h₂ : t ≈ u)
   结论: s ≈ u
   证明: Setoid.trans h₁ h₂
 -/
@@ -816,7 +816,7 @@ theorem equivalence
 中文:
 定理 equivalence
   条件: (p : α -> 命题)
-  结论: Equivalence (@HasEquiv.Equiv (Subtype p) _)
+  结论: 等价 (@HasEquiv.等价 (子类型 p) _)
   证明: .mk (Subtype.refl) (@Subtype.symm _ p _) (@Subtype.trans _ p _)
 
 Depends on / 依赖: Subtype, Subtype.refl, Subtype.symm, Subtype.trans
@@ -846,7 +846,7 @@ theorem coe_prop
 
 中文:
 定理 coe_prop
-  条件: {S : Set α} (a : { a // a in S })
+  条件: {S : 集合 α} (a : { a // a in S })
   结论: ↑a in S
   证明: a.prop
 
@@ -866,7 +866,7 @@ theorem val_prop
 
 中文:
 定理 val_prop
-  条件: {S : Set α} (a : { a // a in S })
+  条件: {S : 集合 α} (a : { a // a in S })
   结论: a.val in S
   证明: a.prop
 

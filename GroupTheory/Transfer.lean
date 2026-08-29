@@ -271,7 +271,7 @@ definition transferSet
 
 中文:
 定义 transferSet
-  签名: : Set G
+  签名: : 集合 G
   定义体: Set.range (transferFunction H g)
 
 Depends on / 依赖: Set.range, transferFunction
@@ -344,7 +344,7 @@ lemma transferTransversal_apply'
 
 中文:
 引理 transferTransversal_apply'
-  结论: (q : orbitRel.Quotient (zpowers g) (G ⧸ H))
+  结论: (q : orbitRel.商 (zpowers g) (G ⧸ H))
   证明: by
   rw [transferTransversal_apply]; rw [transferFunction_apply]; rw [← quotientEquivSigmaZMod_symm_apply]; rw [apply_symm_apply]
 
@@ -368,7 +368,7 @@ lemma transferTransversal_apply''
 
 中文:
 引理 transferTransversal_apply''
-  结论: (q : orbitRel.Quotient (zpowers g) (G ⧸ H))
+  结论: (q : orbitRel.商 (zpowers g) (G ⧸ H))
   证明: by
   rw [smul_apply_eq_smul_apply_inv_smul]; rw [transferTransversal_apply]; rw [transferFunction_apply]; rw [←
     mul_smul]; rw [← zpow_neg_one]; rw [← zpow_add]; rw [quotientEquivSigmaZMod_apply]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [← zpow_one_add]; rw [Int.cast_add]; rw [Int.cast_neg]; rw [I
@@ -766,7 +766,7 @@ alias transferSylow_restrict_eq_pow := transferSylow_domRestrict_eq_pow
 
 中文:
 定理 transferSylow_domRestrict_eq_pow
-  结论: ⇑((transferSylow P hP).domRestrict (P : Subgroup G)) =
+  结论: ⇑((transferSylow P hP).domRestrict (P : 子群 G)) =
   证明: funext fun g => transferSylow_eq_pow P hP g g.2
 
 @[deprecated (since := "2026-07-19")]
@@ -844,7 +844,7 @@ not_dvd_card_ker_transferSylow P hP h.trans card_dvd_of_le inf_le_left
 
 中文:
 定理 ker_transferSylow_disjoint
-  条件: (Q : Subgroup G) (hQ : IsPGroup p Q)
+  条件: (Q : 子群 G) (hQ : 是p群 p Q)
   证明: disjoint_iff.mpr
 card_eq_one.mp
       (hQ.to_le inf_le_right).card_eq_or_dvd.resolve_right fun h =>
@@ -888,7 +888,7 @@ theorem normalizer_le_centralizer
 
 中文:
 定理 normalizer_le_centralizer
-  条件: (hP : IsCyclic P)
+  条件: (hP : 是循环 P)
   证明: by
   subst hp
   by_cases hn : Nat.card G = 1
@@ -947,7 +947,7 @@ theorem isComplement'
 
 中文:
 定理 isComplement'
-  条件: (hP : IsCyclic P)
+  条件: (hP : 是循环 P)
   证明: by
   subst hp
   by_cases hn : Nat.card G = 1

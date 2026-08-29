@@ -41,8 +41,8 @@ theorem Module.Basis.ext_multilinear
     map_sum_finset, map_smul_univ, h]
 
 中文:
-定理 Module.Basis.ext_multilinear
-  结论: [Finite ι] {f g : MultilinearMap R M N} {ιM : ι -> 类型}
+定理 模.基.ext_multilinear
+  结论: [有限 ι] {f g : 多重线性映射 R M N} {ιM : ι -> 类型}
   证明: by
   cases nonempty_fintype ι
   classical
@@ -86,7 +86,7 @@ definition multilinearMap
 
 中文:
 定义 multilinearMap
-  签名: [Finite ι] [对任意 i, Finite (κ i)]
+  签名: [有限 ι] [对任意 i, 有限 (κ i)]
   定义体: have : Fintype ι := Fintype.ofFinite _
     have (i : ι) : Fintype (κ i) := Fintype.ofFinite _
     LinearEquiv.multilinearMapCongrLeft (fun i => (b i).repr.symm) ≪≫ₗ

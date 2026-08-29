@@ -133,7 +133,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: : CommGroup (Solution₁ d)
+  签名: : 交换群 (Solution₁ d)
   定义体: inferInstanceAs (CommGroup (unitary (Int√d)))
 
 Depends on / 依赖: CommGroup, unitary
@@ -151,7 +151,7 @@ instance instHasDistribNeg
 
 中文:
 实例 instHasDistribNeg
-  签名: : HasDistribNeg (Solution₁ d)
+  签名: : 有DistribNeg (Solution₁ d)
   定义体: inferInstanceAs (HasDistribNeg (unitary (Int√d)))
 
 Depends on / 依赖: HasDistribNeg, unitary
@@ -169,7 +169,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (Solution₁ d)
+  签名: : 可居 (Solution₁ d)
   定义体: inferInstanceAs (Inhabited (unitary (Int√d)))
 
 Depends on / 依赖: Inhabited, unitary
@@ -1040,7 +1040,7 @@ theorem exists_pos_variant
       simp only [neg_neg, inv_inv, neg_i
 
 中文:
-定理 exists_pos_variant
+定理 存在_pos_variant
   条件: (h₀ : 0 < d) (a : Solution₁ d)
   证明: by
   refine
@@ -1089,7 +1089,7 @@ theorem exists_of_not_isSquare
     rw [← sq_sqrt <| Int.cast_nonneg h₀.le]; rw [Int.cast_mul]; rw [← hx]; 
 
 中文:
-定理 exists_of_not_isSquare
+定理 存在_of_not_isSquare
   条件: (h₀ : 0 < d) (hd : ¬IsSquare d)
   证明: by
   let ξ : Real := √d
@@ -1176,7 +1176,7 @@ theorem exists_iff_not_isSquare
   simpa [hy, mul_self_pos.mp h₀, sub_eq_add_neg, eq_neg_self_iff] using Int.eq_of_mul_eq_one hxy
 
 中文:
-定理 exists_iff_not_isSquare
+定理 存在_iff_not_isSquare
   条件: (h₀ : 0 < d)
   证明: by
   refine ⟨?_, exists_of_not_isSquare h₀⟩
@@ -1207,7 +1207,7 @@ theorem exists_nontrivial_of_not_isSquare
     simp [hy] at H
 
 中文:
-定理 exists_nontrivial_of_not_isSquare
+定理 存在_nontrivial_of_not_isSquare
   条件: (h₀ : 0 < d) (hd : ¬IsSquare d)
   证明: by
   obtain ⟨x, y, prop, hy⟩ := exists_of_not_isSquare h₀ hd
@@ -1235,7 +1235,7 @@ theorem exists_pos_of_not_isSquare
   exact mul_pos h₀ (sq_pos_of_ne_zero hy)
 
 中文:
-定理 exists_pos_of_not_isSquare
+定理 存在_pos_of_not_isSquare
   条件: (h₀ : 0 < d) (hd : ¬IsSquare d)
   证明: by
   obtain ⟨x, y, h, hy⟩ := exists_of_not_isSquare h₀ hd
@@ -1392,7 +1392,7 @@ theorem exists_of_not_isSquare
     norm_cast
 
 中文:
-定理 exists_of_not_isSquare
+定理 存在_of_not_isSquare
   条件: (h₀ : 0 < d) (hd : ¬IsSquare d)
   证明: by
   obtain ⟨a, ha₁, ha₂⟩ := exists_pos_of_not_isSquare h₀ hd
@@ -1857,7 +1857,7 @@ theorem existsUnique_pos_generator
   · rw [← zpow_
 
 中文:
-定理 existsUnique_pos_generator
+定理 存在Unique_pos_generator
   条件: (h₀ : 0 < d) (hd : ¬IsSquare d)
   证明: by
   obtain ⟨a₁, ha₁⟩ := IsFundamental.exists_of_not_isSquare h₀ hd

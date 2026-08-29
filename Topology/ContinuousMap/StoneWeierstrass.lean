@@ -117,7 +117,7 @@ theorem polynomial_comp_attachBound
 
 中文:
 定理 polynomial_comp_attachBound
-  条件: (A : Subalgebra 实数 C(X, 实数)) (f : A) (g : 实数[X])
+  条件: (A : 子代数 实数 C(X, 实数)) (f : A) (g : 实数[X])
   证明: by
   ext
   simp only [Polynomial.aeval_subalgebra_coe, Polynomial.aeval_continuousMap_apply]
@@ -144,7 +144,7 @@ theorem polynomial_comp_attachBound_mem
 
 中文:
 定理 polynomial_comp_attachBound_mem
-  条件: (A : Subalgebra 实数 C(X, 实数)) (f : A) (g : 实数[X])
+  条件: (A : 子代数 实数 C(X, 实数)) (f : A) (g : 实数[X])
   证明: by
   rw [polynomial_comp_attachBound]
   apply SetLike.coe_mem
@@ -171,7 +171,7 @@ theorem comp_attachBound_mem_closure
 
 中文:
 定理 comp_attachBound_mem_closure
-  结论: (A : Subalgebra 实数 C(X, 实数)) (f : A)
+  结论: (A : 子代数 实数 C(X, 实数)) (f : A)
   证明: by
   -- `p` itself is in the closure of polynomials, by the Weierstrass theorem,
   have mem_closure : p in (polynomialFunctions (Set.Icc (-‖f‖) ‖f‖)).topologicalClosure :=
@@ -214,7 +214,7 @@ theorem abs_mem_subalgebra_closure
 
 中文:
 定理 abs_mem_subalgebra_closure
-  条件: (A : Subalgebra 实数 C(X, 实数)) (f : A)
+  条件: (A : 子代数 实数 C(X, 实数)) (f : A)
   证明: by
   let f' := attachBound (f : C(X, Real))
   let abs : C(Set.Icc (-‖f‖) ‖f‖, Real) := { toFun := fun x : Set.Icc (-‖f‖) ‖f‖ => |(x : Real)| }
@@ -249,7 +249,7 @@ theorem inf_mem_subalgebra_closure
 
 中文:
 定理 inf_mem_subalgebra_closure
-  条件: (A : Subalgebra 实数 C(X, 实数)) (f g : A)
+  条件: (A : 子代数 实数 C(X, 实数)) (f g : A)
   证明: by
   rw [inf_eq_half_smul_add_sub_abs_sub' Real]
   refine
@@ -290,7 +290,7 @@ theorem inf_mem_closed_subalgebra
 
 中文:
 定理 inf_mem_closed_subalgebra
-  结论: (A : Subalgebra 实数 C(X, 实数)) (h : IsClosed (A : Set C(X, 实数)))
+  结论: (A : 子代数 实数 C(X, 实数)) (h : 是闭集 (A : 集合 C(X, 实数)))
   证明: by
   convert! inf_mem_subalgebra_closure A f g
   apply SetLike.ext'
@@ -327,7 +327,7 @@ theorem sup_mem_subalgebra_closure
 
 中文:
 定理 sup_mem_subalgebra_closure
-  条件: (A : Subalgebra 实数 C(X, 实数)) (f g : A)
+  条件: (A : 子代数 实数 C(X, 实数)) (f g : A)
   证明: by
   rw [sup_eq_half_smul_add_add_abs_sub' Real]
   refine
@@ -366,7 +366,7 @@ theorem sup_mem_closed_subalgebra
 
 中文:
 定理 sup_mem_closed_subalgebra
-  结论: (A : Subalgebra 实数 C(X, 实数)) (h : IsClosed (A : Set C(X, 实数)))
+  结论: (A : 子代数 实数 C(X, 实数)) (h : 是闭集 (A : 集合 C(X, 实数)))
   证明: by
   convert! sup_mem_subalgebra_closure A f g
   apply SetLike.ext'
@@ -401,7 +401,7 @@ theorem sublattice_closure_eq_top
 
 中文:
 定理 sublattice_closure_eq_top
-  结论: (L : Set C(X, 实数)) (nA : L.Nonempty)
+  结论: (L : 集合 C(X, 实数)) (nA : L.非空)
   证明: by
   -- We start by boiling down to a statement about close approximation.
   rw [eq_top_iff]
@@ -528,7 +528,7 @@ theorem subalgebra_topologicalClosure_eq_top_of_separatesPoints
 
 中文:
 定理 subalgebra_topologicalClosure_eq_top_of_separatesPoints
-  结论: (A : Subalgebra 实数 C(X, 实数))
+  结论: (A : 子代数 实数 C(X, 实数))
   证明: by
   -- The closure of `A` is closed under taking `sup` and `inf`,
   -- and separates points strongly (since `A` does),
@@ -565,7 +565,7 @@ theorem continuousMap_mem_subalgebra_closure_of_separatesPoints
 
 中文:
 定理 continuousMap_mem_subalgebra_closure_of_separatesPoints
-  结论: (A : Subalgebra 实数 C(X, 实数))
+  结论: (A : 子代数 实数 C(X, 实数))
   证明: by
   rw [subalgebra_topologicalClosure_eq_top_of_separatesPoints A w]
   simp
@@ -592,8 +592,8 @@ theorem exists_mem_subalgebra_near_continuousMap_of_separatesPoints
   exact ⟨⟨g, m⟩, H⟩
 
 中文:
-定理 exists_mem_subalgebra_near_continuousMap_of_separatesPoints
-  结论: (A : Subalgebra 实数 C(X, 实数))
+定理 存在_mem_subalgebra_near_continuousMap_of_separatesPoints
+  结论: (A : 子代数 实数 C(X, 实数))
   证明: by
   have w :=
     mem_closure_iff_frequently.mp (continuousMap_mem_subalgebra_closure_of_separatesPoints A w f)
@@ -626,8 +626,8 @@ theorem exists_mem_subalgebra_near_continuous_of_separatesPoints
   rwa [norm_lt_iff _ pos] at b
 
 中文:
-定理 exists_mem_subalgebra_near_continuous_of_separatesPoints
-  结论: (A : Subalgebra 实数 C(X, 实数))
+定理 存在_mem_subalgebra_near_continuous_of_separatesPoints
+  结论: (A : 子代数 实数 C(X, 实数))
   证明: by
   obtain ⟨g, b⟩ := exists_mem_subalgebra_near_continuousMap_of_separatesPoints A w ⟨f, c⟩ ε pos
   use g
@@ -655,7 +655,7 @@ theorem exists_mem_subalgebra_near_continuous_of_isCompact_of_separatesPoints
   have hsep : AK.Separate
 
 中文:
-定理 exists_mem_subalgebra_near_continuous_of_isCompact_of_separatesPoints
+定理 存在_mem_subalgebra_near_continuous_of_isCompact_of_separatesPoints
   证明: by
   let restrict_on_K : C(X, Real) ->⋆ₐ[Real] C(K, Real) :=
     ContinuousMap.compStarAlgHom' Real Real ⟨(Subtype.val), continuous_subtype_val⟩
@@ -727,8 +727,8 @@ theorem Subalgebra.SeparatesPoints.rclike_to_real
     refine A.sub_mem
 
 中文:
-定理 Subalgebra.SeparatesPoints.rclike_to_real
-  结论: {A : StarSubalgebra 𝕜 C(X, 𝕜)}
+定理 子代数.SeparatesPoints.rclike_to_real
+  结论: {A : 对合子代数 𝕜 C(X, 𝕜)}
   证明: by
   intro x₁ x₂ hx
   -- Let `f` in the subalgebra `A` separate the points `x₁`, `x₂`
@@ -778,7 +778,7 @@ theorem ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoint
   -- in the closure o
 
 中文:
-定理 ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints
+定理 连续映射.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints
   证明: by
   rw [StarSubalgebra.eq_top_iff]
   -- Let `I` be the natural inclusion of `C(X, ℝ)` into `C(X, 𝕜)`
@@ -844,7 +844,7 @@ theorem polynomialFunctions.topologicalClosure
 
 中文:
 定理 polynomialFunctions.topologicalClosure
-  结论: (s : Set 实数)
+  结论: (s : 集合 实数)
   证明: ContinuousMap.subalgebra_topologicalClosure_eq_top_of_separatesPoints _
     (polynomialFunctions_separatesPoints s)
 
@@ -866,7 +866,7 @@ theorem polynomialFunctions.starClosure_topologicalClosure
 
 中文:
 定理 polynomialFunctions.starClosure_topologicalClosure
-  结论: {𝕜 : 类型} [RCLike 𝕜] (s : Set 𝕜)
+  结论: {𝕜 : 类型} [RCLike 𝕜] (s : 集合 𝕜)
   证明: ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints _
     (Subalgebra.separatesPoints_monotone le_sup_left (polynomialFunctions_separatesPoints s))
 
@@ -890,8 +890,8 @@ lemma ContinuousMap.elemental_id_eq_top
   exact Polynomial.toContinuousMap_X_eq_id.symm
 
 中文:
-引理 ContinuousMap.elemental_id_eq_top
-  条件: {𝕜 : 类型} [RCLike 𝕜] (s : Set 𝕜) [CompactSpace s]
+引理 连续映射.elemental_id_eq_top
+  条件: {𝕜 : 类型} [RCLike 𝕜] (s : 集合 𝕜) [紧空间 s]
   证明: by
   rw [StarAlgebra.elemental]; rw [← polynomialFunctions.starClosure_topologicalClosure]; rw [polynomialFunctions.starClosure_eq_adjoin_X]
   congr
@@ -924,8 +924,8 @@ theorem ContinuousMap.induction_on
     all_goals simpa only [to
 
 中文:
-定理 ContinuousMap.induction_on
-  结论: {𝕜 : 类型} [RCLike 𝕜] {s : Set 𝕜}
+定理 连续映射.induction_on
+  结论: {𝕜 : 类型} [RCLike 𝕜] {s : 集合 𝕜}
   证明: by
   refine closure (fun f hf => ?_) f
   rw [polynomialFunctions.starClosure_eq_adjoin_X] at hf
@@ -971,8 +971,8 @@ theorem ContinuousMap.induction_on_of_compact
 exact this.mp .of_forall h
 
 中文:
-定理 ContinuousMap.induction_on_of_compact
-  结论: {𝕜 : 类型} [RCLike 𝕜] {s : Set 𝕜} [CompactSpace s]
+定理 连续映射.induction_on_of_compact
+  结论: {𝕜 : 类型} [RCLike 𝕜] {s : 集合 𝕜} [紧空间 s]
   证明: by
   refine f.induction_on const id star_id add mul fun h f => frequently f ?_
   have := polynomialFunctions.starClosure_topologicalClosure s ▸ mem_top (x := f)
@@ -1009,8 +1009,8 @@ theorem ContinuousMap.algHom_ext_map_X
     (polynomialFunctions.le_equalizer s φ ψ h) (isClosed_eq hφ hψ)
 
 中文:
-定理 ContinuousMap.algHom_ext_map_X
-  结论: {A : 类型} [Semiring A]
+定理 连续映射.algHom_ext_map_X
+  结论: {A : 类型} [半环 A]
   证明: by
   suffices (⊤ : Subalgebra Real C(s, Real)) <= AlgHom.equalizer φ ψ from
     AlgHom.ext fun x => this (by trivial)
@@ -1047,8 +1047,8 @@ theorem ContinuousMap.starAlgHom_ext_map_X
     (polynomialFunctions.starClosure_le_equalizer s φ ψ h) (isClosed_
 
 中文:
-定理 ContinuousMap.starAlgHom_ext_map_X
-  结论: {𝕜 A : 类型} [RCLike 𝕜] [Ring A] [StarRing A]
+定理 连续映射.starAlgHom_ext_map_X
+  结论: {𝕜 A : 类型} [RCLike 𝕜] [环 A] [对合环 A]
   证明: by
   suffices (⊤ : StarSubalgebra 𝕜 C(s, 𝕜)) <= StarAlgHom.equalizer φ ψ from
     StarAlgHom.ext fun x => this mem_top
@@ -1091,7 +1091,7 @@ lemma adjoin_id_eq_span_one_union
 
 中文:
 引理 adjoin_id_eq_span_one_union
-  条件: (s : Set 𝕜)
+  条件: (s : 集合 𝕜)
   证明: by
   ext x
   rw [SetLike.mem_coe]; rw [SetLike.mem_coe]; rw [← StarAlgebra.adjoin_nonUnitalStarSubalgebra]; rw [← StarSubalgebra.mem_toSubalgebra]; rw [← Subalgebra.mem_toSubmodule]; rw [StarAlgebra.adjoin_nonUnitalStarSubalgebra_eq_span]; rw [span_union]; rw [span_eq_toSubmodule]
@@ -1118,7 +1118,7 @@ lemma adjoin_id_eq_span_one_add
 
 中文:
 引理 adjoin_id_eq_span_one_add
-  条件: (s : Set 𝕜)
+  条件: (s : 集合 𝕜)
   证明: by
   ext x
   rw [SetLike.mem_coe]; rw [← StarAlgebra.adjoin_nonUnitalStarSubalgebra]; rw [← StarSubalgebra.mem_toSubalgebra]; rw [← Subalgebra.mem_toSubmodule]; rw [StarAlgebra.adjoin_nonUnitalStarSubalgebra_eq_span]; rw [mem_sup]
@@ -1153,7 +1153,7 @@ lemma nonUnitalStarAlgebraAdjoin_id_subset_ker_evalStarAlgHom
 
 中文:
 引理 nonUnitalStarAlgebraAdjoin_id_subset_ker_evalStarAlgHom
-  条件: {s : Set 𝕜} (h0 : 0 in s)
+  条件: {s : 集合 𝕜} (h0 : 0 in s)
   证明: by
   intro f hf
   induction hf using adjoin_induction with
@@ -1204,7 +1204,7 @@ lemma ker_evalStarAlgHom_inter_adjoin_id
 
 中文:
 引理 ker_evalStarAlgHom_inter_adjoin_id
-  条件: (s : Set 𝕜) (h0 : 0 in s)
+  条件: (s : 集合 𝕜) (h0 : 0 in s)
   证明: by
   ext f
   constructor
@@ -1252,8 +1252,8 @@ theorem AlgHom.closure_ker_inter
     have : Tendsto (fun y => y - φ y • 
 
 中文:
-定理 AlgHom.closure_ker_inter
-  结论: {F S K A : 类型} [CommRing K] [Ring A] [Algebra K A]
+定理 代数态射.closure_ker_inter
+  结论: {F S K A : 类型} [交换环 K] [环 A] [代数 K A]
   证明: by
   refine subset_antisymm ?_ ?_
   · simpa only [ker_eq, (isClosed_singleton.preimage hφ).closure_eq]
@@ -1294,7 +1294,7 @@ lemma ker_evalStarAlgHom_eq_closure_adjoin_id
 
 中文:
 引理 ker_evalStarAlgHom_eq_closure_adjoin_id
-  条件: (s : Set 𝕜) (h0 : 0 in s) [CompactSpace s]
+  条件: (s : 集合 𝕜) (h0 : 0 in s) [紧空间 s]
   证明: by
   rw [← ker_evalStarAlgHom_inter_adjoin_id s h0]; rw [AlgHom.closure_ker_inter (φ := evalStarAlgHom 𝕜 𝕜 (X := s) ⟨0]; rw [h0⟩) (continuous_eval_const _) _]
   convert! (Set.univ_inter _).symm
@@ -1325,8 +1325,8 @@ lemma ContinuousMapZero.adjoin_id_dense
   rw [dense_iff_closure_eq]; rw [← isClosedEmbedding_toContinuousMap.injective.preimage_image (closure _)]; rw [← isClosedEmbedding_toContinuousMap.closure_image_eq]; rw [← coe_toContinuousMapHom]; rw [← NonUnitalStarSubalgebra.coe_map]; rw [NonUnitalStarAlgHom.map
 
 中文:
-引理 ContinuousMapZero.adjoin_id_dense
-  结论: (s : Set 𝕜) [Fact (0 in s)]
+引理 余ntinuousMapZero.adjoin_id_dense
+  结论: (s : 集合 𝕜) [Fact (0 in s)]
   证明: by
   have h0' : 0 in s := Fact.out
   rw [dense_iff_closure_eq]; rw [← isClosedEmbedding_toContinuousMap.injective.preimage_image (closure _)]; rw [← isClosedEmbedding_toContinuousMap.closure_image_eq]; rw [← coe_toContinuousMapHom]; rw [← NonUnitalStarSubalgebra.coe_map]; rw [NonUnitalStarAlgHom.map
@@ -1352,8 +1352,8 @@ lemma ContinuousMapZero.elemental_eq_top
   proof: SetLike.ext'_iff.mpr (adjoin_id_dense s).closure_eq
 
 中文:
-引理 ContinuousMapZero.elemental_eq_top
-  结论: {𝕜 : 类型} [RCLike 𝕜] (s : Set 𝕜) [Fact (0 in s)]
+引理 余ntinuousMapZero.elemental_eq_top
+  结论: {𝕜 : 类型} [RCLike 𝕜] (s : 集合 𝕜) [Fact (0 in s)]
   证明: SetLike.ext'_iff.mpr (adjoin_id_dense s).closure_eq
 
 Depends on / 依赖: SetLike, SetLike.ext, _iff, _iff.mpr, adjoin_id_dense, closure_eq
@@ -1383,8 +1383,8 @@ lemma ContinuousMapZero.induction_on
   | mu
 
 中文:
-引理 ContinuousMapZero.induction_on
-  结论: {s : Set 𝕜} [Fact (0 in s)]
+引理 余ntinuousMapZero.induction_on
+  结论: {s : 集合 𝕜} [Fact (0 in s)]
   证明: by
   refine closure (fun f hf => ?_) f
   induction hf using NonUnitalAlgebra.adjoin_induction with
@@ -1431,8 +1431,8 @@ theorem ContinuousMapZero.induction_on_of_compact
 .mp .of_forall h exact mem_closure_iff_frequently.mp this
 
 中文:
-定理 ContinuousMapZero.induction_on_of_compact
-  结论: {s : Set 𝕜} [Fact (0 in s)]
+定理 余ntinuousMapZero.induction_on_of_compact
+  结论: {s : 集合 𝕜} [Fact (0 in s)]
   证明: by
   refine f.induction_on zero id star_id add mul smul fun h f => frequently f ?_
   have := (ContinuousMapZero.adjoin_id_dense s).closure_eq ▸ Set.mem_univ (x := f)
@@ -1466,7 +1466,7 @@ lemma ContinuousMapZero.nonUnitalStarAlgHom_apply_mul_eq_zero
   | smul _ _ 
 
 中文:
-引理 ContinuousMapZero.nonUnitalStarAlgHom_apply_mul_eq_zero
+引理 余ntinuousMapZero.nonUnitalStarAlgHom_apply_mul_eq_zero
   结论: {𝕜 A : 类型}
   证明: by
   induction f using ContinuousMapZero.induction_on_of_compact with
@@ -1510,7 +1510,7 @@ lemma ContinuousMapZero.mul_nonUnitalStarAlgHom_apply_eq_zero
   | smul _ 
 
 中文:
-引理 ContinuousMapZero.mul_nonUnitalStarAlgHom_apply_eq_zero
+引理 余ntinuousMapZero.mul_nonUnitalStarAlgHom_apply_eq_zero
   结论: {𝕜 A : 类型}
   证明: by
   induction f using ContinuousMapZero.induction_on_of_compact with

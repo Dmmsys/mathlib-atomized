@@ -249,7 +249,7 @@ theorem _root_.Irreducible.hasSeparableContraction
     exact ⟨g, hgs, n, hge⟩
 
 中文:
-定理 _root_.Irreducible.hasSeparableContraction
+定理 _root_.不可约.hasSeparableContraction
   结论: (q : 自然数) [hF : ExpChar F q] {f : F[X]}
   证明: by
   cases hF
@@ -282,7 +282,7 @@ theorem contraction_degree_eq_or_insep
 
 中文:
 定理 contraction_degree_eq_or_insep
-  结论: [hq : NeZero q] [CharP F q] (g g' : F[X]) (m m' : 自然数)
+  结论: [hq : NeZero q] [特征p F q] (g g' : F[X]) (m m' : 自然数)
   证明: by
   wlog hm : m <= m'
   · exact (this q g' g m' m h_expand.symm hg' hg (le_of_not_ge hm)).symm

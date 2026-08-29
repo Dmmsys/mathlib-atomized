@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (SheafOfModules.{v} R)
+  签名: 交换 (模层.{v} R)
   定义体: by
   let adj := PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)
   exact abelianOfAdjunction _ _ (asIso (adj.counit)) adj

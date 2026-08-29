@@ -67,7 +67,7 @@ theorem setIntegral_congr_ae₀
   proof: integral_congr_ae ((ae_restrict_iff'₀ hs).2 h)
 
 中文:
-定理 setIntegral_congr_ae₀
+定理 set整数egral_congr_ae₀
   条件: (hs : NullMeasurableSet s μ) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
   证明: integral_congr_ae ((ae_restrict_iff'₀ hs).2 h)
 
@@ -86,8 +86,8 @@ theorem setIntegral_congr_ae
   proof: integral_congr_ae ((ae_restrict_iff' hs).2 h)
 
 中文:
-定理 setIntegral_congr_ae
-  条件: (hs : MeasurableSet s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
+定理 set整数egral_congr_ae
+  条件: (hs : 可测集 s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
   证明: integral_congr_ae ((ae_restrict_iff' hs).2 h)
 
 Depends on / 依赖: ae_restrict_iff, integral_congr_ae
@@ -105,7 +105,7 @@ theorem setIntegral_congr_fun₀
   proof: setIntegral_congr_ae₀ hs Eventually.of_forall h
 
 中文:
-定理 setIntegral_congr_fun₀
+定理 set整数egral_congr_fun₀
   条件: (hs : NullMeasurableSet s μ) (h : EqOn f g s)
   证明: setIntegral_congr_ae₀ hs Eventually.of_forall h
 
@@ -124,8 +124,8 @@ theorem setIntegral_congr_fun
   proof: setIntegral_congr_ae hs Eventually.of_forall h
 
 中文:
-定理 setIntegral_congr_fun
-  条件: (hs : MeasurableSet s) (h : EqOn f g s)
+定理 set整数egral_congr_fun
+  条件: (hs : 可测集 s) (h : EqOn f g s)
   证明: setIntegral_congr_ae hs Eventually.of_forall h
 
 Depends on / 依赖: Eventually, Eventually.of_forall, of_forall, setIntegral_congr_ae
@@ -145,7 +145,7 @@ theorem setIntegral_congr_set
   rw [Measure.restrict_congr_set hst]
 
 中文:
-定理 setIntegral_congr_set
+定理 set整数egral_congr_set
   条件: (hst : s =ᵐ[μ] t)
   结论: ∫ x in s, f x ∂μ = ∫ x in t, f x ∂μ
   证明: by
@@ -168,7 +168,7 @@ theorem setIntegral_union₀
 @[deprecated (since := "2026-03-04")] alias integral_union_ae := setIntegral_union₀
 
 中文:
-定理 setIntegral_union₀
+定理 set整数egral_union₀
   结论: (hst : AEDisjoint μ s t) (ht : NullMeasurableSet t μ)
   证明: by
   simp only [Measure.restrict_union₀ hst ht, integral_add_measure hfs hft]
@@ -193,8 +193,8 @@ theorem setIntegral_union
   proof: setIntegral_union₀ hst.aedisjoint ht.nullMeasurableSet hfs hft
 
 中文:
-定理 setIntegral_union
-  结论: (hst : Disjoint s t) (ht : MeasurableSet t) (hfs : 整数egrableOn f s μ)
+定理 set整数egral_union
+  结论: (hst : Disjoint s t) (ht : 可测集 t) (hfs : 整数egrableOn f s μ)
   证明: setIntegral_union₀ hst.aedisjoint ht.nullMeasurableSet hfs hft
 
 Depends on / 依赖: aedisjoint, hst.aedisjoint, ht.nullMeasurableSet, nullMeasurableSet
@@ -216,7 +216,7 @@ theorem setIntegral_sdiff₀
 @[deprecated (since := "2026-06-03")] alias setIntegral_diff₀ := setIntegral_sdiff₀
 
 中文:
-定理 setIntegral_sdiff₀
+定理 set整数egral_sdiff₀
   条件: (ht : NullMeasurableSet t μ) (hfs : 整数egrableOn f s μ) (hts : t subseteq s)
   证明: by
   rw [eq_sub_iff_add_eq]; rw [← setIntegral_union₀]; rw [sdiff_union_of_subset hts]
@@ -246,8 +246,8 @@ theorem setIntegral_sdiff
 @[deprecated (since := "2026-03-04")] alias integral_diff := setIntegral_sdiff
 
 中文:
-定理 setIntegral_sdiff
-  条件: (ht : MeasurableSet t) (hfs : 整数egrableOn f s μ) (hts : t subseteq s)
+定理 set整数egral_sdiff
+  条件: (ht : 可测集 t) (hfs : 整数egrableOn f s μ) (hts : t subseteq s)
   证明: setIntegral_sdiff₀ ht.nullMeasurableSet hfs hts
 
 @[deprecated (since := "2026-06-03")] alias setIntegral_diff := setIntegral_sdiff
@@ -309,7 +309,7 @@ theorem integral_inter_add_sdiff
 
 中文:
 定理 integral_inter_add_sdiff
-  条件: (ht : MeasurableSet t) (hfs : 整数egrableOn f s μ)
+  条件: (ht : 可测集 t) (hfs : 整数egrableOn f s μ)
   证明: integral_inter_add_sdiff₀ ht.nullMeasurableSet hfs
 
 @[deprecated (since := "2026-06-03")] alias integral_inter_add_diff := integral_inter_add_sdiff
@@ -339,7 +339,7 @@ theorem integral_biUnion_finset
 
 中文:
 定理 integral_biUnion_finset
-  结论: {ι : 类型} (t : Finset ι) {s : ι -> Set X}
+  结论: {ι : 类型} (t : 有限集 ι) {s : ι -> 集合 X}
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -380,7 +380,7 @@ theorem integral_iUnion_fintype
 
 中文:
 定理 integral_iUnion_fintype
-  结论: {ι : 类型} [Fintype ι] {s : ι -> Set X}
+  结论: {ι : 类型} [有限类型 ι] {s : ι -> 集合 X}
   证明: by
   convert! integral_biUnion_finset Finset.univ (fun i _ => hs i) _ fun i _ => hf i
   · simp
@@ -405,7 +405,7 @@ theorem setIntegral_empty
   rw [Measure.restrict_empty]; rw [integral_zero_measure]
 
 中文:
-定理 setIntegral_empty
+定理 set整数egral_empty
   结论: ∫ x in ∅, f x ∂μ = 0
   证明: by
   rw [Measure.restrict_empty]; rw [integral_zero_measure]
@@ -424,7 +424,7 @@ theorem setIntegral_univ
   proof: by rw [Measure.restrict_univ]
 
 中文:
-定理 setIntegral_univ
+定理 set整数egral_univ
   结论: ∫ x in univ, f x ∂μ = ∫ x, f x ∂μ
   证明: by rw [Measure.restrict_univ]
 
@@ -442,7 +442,7 @@ lemma integral_eq_setIntegral
   rw [← setIntegral_univ]; rw [← setIntegral_congr_set]; rwa [ae_eq_univ]
 
 中文:
-引理 integral_eq_setIntegral
+引理 integral_eq_set整数egral
   条件: (hs : 对任意ᵐ x ∂μ, x in s) (f : X -> E)
   证明: by
   rw [← setIntegral_univ]; rw [← setIntegral_congr_set]; rwa [ae_eq_univ]
@@ -466,7 +466,7 @@ theorem integral_add_compl₀
 
 中文:
 定理 integral_add_compl₀
-  条件: (hs : NullMeasurableSet s μ) (hfi : 整数egrable f μ)
+  条件: (hs : NullMeasurableSet s μ) (hfi : 可积 f μ)
   证明: by
   have := setIntegral_union₀ disjoint_compl_right.aedisjoint
     hs.compl hfi.integrableOn hfi.integrableOn
@@ -490,7 +490,7 @@ theorem integral_add_compl
 
 中文:
 定理 integral_add_compl
-  条件: (hs : MeasurableSet s) (hfi : 整数egrable f μ)
+  条件: (hs : 可测集 s) (hfi : 可积 f μ)
   证明: integral_add_compl₀ hs.nullMeasurableSet hfi
 
 Depends on / 依赖: hs.nullMeasurableSet, nullMeasurableSet
@@ -509,8 +509,8 @@ theorem setIntegral_compl₀
   rw [← integral_add_compl₀ (μ := μ) hs hfi]; rw [add_sub_cancel_left]
 
 中文:
-定理 setIntegral_compl₀
-  条件: (hs : NullMeasurableSet s μ) (hfi : 整数egrable f μ)
+定理 set整数egral_compl₀
+  条件: (hs : NullMeasurableSet s μ) (hfi : 可积 f μ)
   证明: by
   rw [← integral_add_compl₀ (μ := μ) hs hfi]; rw [add_sub_cancel_left]
 
@@ -529,8 +529,8 @@ theorem setIntegral_compl
   proof: setIntegral_compl₀ hs.nullMeasurableSet hfi
 
 中文:
-定理 setIntegral_compl
-  条件: (hs : MeasurableSet s) (hfi : 整数egrable f μ)
+定理 set整数egral_compl
+  条件: (hs : 可测集 s) (hfi : 可积 f μ)
   证明: setIntegral_compl₀ hs.nullMeasurableSet hfi
 
 Depends on / 依赖: hs.nullMeasurableSet, nullMeasurableSet
@@ -556,7 +556,7 @@ theorem integral_indicator
 
 中文:
 定理 integral_indicator
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   by_cases hfi : IntegrableOn f s μ; swap
   · rw [integral_undef hfi, integral_undef]
@@ -613,7 +613,7 @@ lemma integral_integral_indicator
 
 中文:
 引理 integral_integral_indicator
-  结论: {mY : MeasurableSpace Y} {ν : Measure Y} (f : X -> Y -> E)
+  结论: {mY : 可测空间 Y} {ν : 测度 Y} (f : X -> Y -> E)
   证明: by
   simp_rw [← integral_indicator hs, integral_indicator₂]
 
@@ -634,8 +634,8 @@ theorem setIntegral_indicator
   rw [integral_indicator ht]; rw [Measure.restrict_restrict ht]; rw [Set.inter_comm]
 
 中文:
-定理 setIntegral_indicator
-  条件: (ht : MeasurableSet t)
+定理 set整数egral_indicator
+  条件: (ht : 可测集 t)
   证明: by
   rw [integral_indicator ht]; rw [Measure.restrict_restrict ht]; rw [Set.inter_comm]
 
@@ -660,7 +660,7 @@ theorem integral_biUnion_eq_sum_powerset
 
 中文:
 定理 integral_biUnion_eq_sum_powerset
-  结论: {ι : 类型} {t : Finset ι} {s : ι -> Set X}
+  结论: {ι : 类型} {t : 有限集 ι} {s : ι -> 集合 X}
   证明: by
   simp_rw [← integral_smul, ← integral_indicator (Finset.measurableSet_biUnion _ hs)]
   have A (u) (hu : u in t.powerset.filter (·.Nonempty)) : MeasurableSet (⋂ i in u, s i) := by
@@ -708,8 +708,8 @@ theorem ofReal_setIntegral_one_of_measure_ne_top
     _ = μ s := setLIntegral_one _
 
 中文:
-定理 ofReal_setIntegral_one_of_measure_ne_top
-  结论: {X : 类型} {m : MeasurableSpace X}
+定理 of实数_set整数egral_one_of_measure_ne_top
+  结论: {X : 类型} {m : 可测空间 X}
   证明: calc
     ENNReal.ofReal (∫ _ in s, (1 : Real) ∂μ) = ENNReal.ofReal (∫ _ in s, ‖(1 : Real)‖ ∂μ) := by
       simp only [norm_one]
@@ -736,8 +736,8 @@ theorem ofReal_setIntegral_one
   proof: ofReal_setIntegral_one_of_measure_ne_top
 
 中文:
-定理 ofReal_setIntegral_one
-  结论: {X : 类型} {_ : MeasurableSpace X} (μ : Measure X)
+定理 of实数_set整数egral_one
+  结论: {X : 类型} {_ : 可测空间 X} (μ : 测度 X)
   证明: ofReal_setIntegral_one_of_measure_ne_top
 
 Depends on / 依赖: ofReal_setIntegral_one_of_measure_ne_top
@@ -755,8 +755,8 @@ theorem setIntegral_one_eq_measureReal
   proof: by simp
 
 中文:
-定理 setIntegral_one_eq_measureReal
-  结论: {X : 类型} {m : MeasurableSpace X}
+定理 set整数egral_one_eq_measure实数
+  结论: {X : 类型} {m : 可测空间 X}
   证明: by simp
 -/
 theorem setIntegral_one_eq_measureReal {X : Type*} {m : MeasurableSpace X}
@@ -776,8 +776,8 @@ theorem measureReal_biUnion_eq_sum_powerset
   simpa using (hf i hi).lt_top
 
 中文:
-定理 measureReal_biUnion_eq_sum_powerset
-  结论: {ι : 类型} {t : Finset ι} {s : ι -> Set X}
+定理 measure实数_biUnion_eq_sum_powerset
+  结论: {ι : 类型} {t : 有限集 ι} {s : ι -> 集合 X}
   证明: by
   simp_rw [← setIntegral_one_eq_measureReal]
   apply integral_biUnion_eq_sum_powerset hs
@@ -806,7 +806,7 @@ theorem integral_piecewise
 
 中文:
 定理 integral_piecewise
-  结论: [DecidablePred (· in s)] (hs : MeasurableSet s) (hf : 整数egrableOn f s μ)
+  结论: [DecidablePred (· in s)] (hs : 可测集 s) (hf : 整数egrableOn f s μ)
   证明: by
   rw [← Set.indicator_add_compl_eq_piecewise]; rw [integral_add' (hf.integrable_indicator hs) (hg.integrable_indicator hs.compl)]; rw [integral_indicator hs]; rw [integral_indicator hs.compl]
 
@@ -832,7 +832,7 @@ theorem tendsto_setIntegral_of_monotone₀
   rw [← with
 
 中文:
-定理 tendsto_setIntegral_of_monotone₀
+定理 tendsto_set整数egral_of_monotone₀
   证明: by
   refine .of_neBot_imp fun hne => ?_
   have := (atTop_neBot_iff.mp hne).2
@@ -877,7 +877,7 @@ theorem tendsto_setIntegral_of_monotone
   proof: tendsto_setIntegral_of_monotone₀ (hsm · |>.nullMeasurableSet) h_mono hfi
 
 中文:
-定理 tendsto_setIntegral_of_monotone
+定理 tendsto_set整数egral_of_monotone
   证明: tendsto_setIntegral_of_monotone₀ (hsm · |>.nullMeasurableSet) h_mono hfi
 
 Depends on / 依赖: h_mono, nullMeasurableSet
@@ -903,7 +903,7 @@ theorem tendsto_setIntegral_of_antitone
 convert! this.congr' (eventually_ge_atTop i₀).mono f
 
 中文:
-定理 tendsto_setIntegral_of_antitone
+定理 tendsto_set整数egral_of_antitone
   证明: by
   refine .of_neBot_imp fun hne => ?_
   have := (atTop_neBot_iff.mp hne).2
@@ -946,7 +946,7 @@ theorem hasSum_integral_iUnion_ae
 
 中文:
 定理 hasSum_integral_iUnion_ae
-  结论: {ι : 类型} [Countable ι] {s : ι -> Set X}
+  结论: {ι : 类型} [可数 ι] {s : ι -> 集合 X}
   证明: by
   simp only [IntegrableOn, Measure.restrict_iUnion_ae hd hm] at hfi ⊢
   exact hasSum_integral_measure hfi
@@ -971,7 +971,7 @@ theorem hasSum_integral_iUnion
 
 中文:
 定理 hasSum_integral_iUnion
-  结论: {ι : 类型} [Countable ι] {s : ι -> Set X}
+  结论: {ι : 类型} [可数 ι] {s : ι -> 集合 X}
   证明: hasSum_integral_iUnion_ae (fun i => (hm i).nullMeasurableSet) (hd.mono fun _ _ h => h.aedisjoint)
     hfi
 
@@ -994,7 +994,7 @@ theorem integral_iUnion
 
 中文:
 定理 integral_iUnion
-  结论: {ι : 类型} [Countable ι] {s : ι -> Set X} (hm : 对任意 i, MeasurableSet (s i))
+  结论: {ι : 类型} [可数 ι] {s : ι -> 集合 X} (hm : 对任意 i, 可测集 (s i))
   证明: (HasSum.tsum_eq (hasSum_integral_iUnion hm hd hfi)).symm
 
 Depends on / 依赖: HasSum, HasSum.tsum_eq, hasSum_integral_iUnion, tsum_eq
@@ -1014,7 +1014,7 @@ theorem integral_iUnion_ae
 
 中文:
 定理 integral_iUnion_ae
-  结论: {ι : 类型} [Countable ι] {s : ι -> Set X}
+  结论: {ι : 类型} [可数 ι] {s : ι -> 集合 X}
   证明: (HasSum.tsum_eq (hasSum_integral_iUnion_ae hm hd hfi)).symm
 
 Depends on / 依赖: HasSum, HasSum.tsum_eq, hasSum_integral_iUnion_ae, tsum_eq
@@ -1040,7 +1040,7 @@ theorem setIntegral_eq_zero_of_ae_eq_zero
     rw [EventuallyEq]; rw [ae_restrict_iff (hf.stronglyMeasurable_mk.measurableSet_eq_fun stronglyMea
 
 中文:
-定理 setIntegral_eq_zero_of_ae_eq_zero
+定理 set整数egral_eq_zero_of_ae_eq_zero
   条件: (ht_eq : 对任意ᵐ x ∂μ, x in t -> f x = 0)
   证明: by
   by_cases hf : AEStronglyMeasurable f (μ.restrict t); swap
@@ -1077,7 +1077,7 @@ theorem setIntegral_eq_zero_of_forall_eq_zero
   proof: setIntegral_eq_zero_of_ae_eq_zero (Eventually.of_forall ht_eq)
 
 中文:
-定理 setIntegral_eq_zero_of_forall_eq_zero
+定理 set整数egral_eq_zero_of_对任意_eq_zero
   条件: (ht_eq : 对任意 x in t, f x = 0)
   证明: setIntegral_eq_zero_of_ae_eq_zero (Eventually.of_forall ht_eq)
 
@@ -1096,7 +1096,7 @@ theorem frequently_ae_ne_zero_of_setIntegral_ne_zero
   proof: frequently_ae_ne_zero_of_integral_ne_zero hU
 
 中文:
-定理 frequently_ae_ne_zero_of_setIntegral_ne_zero
+定理 frequently_ae_ne_zero_of_set整数egral_ne_zero
   条件: (hU : ∫ x in t, f x ∂μ != 0)
   证明: frequently_ae_ne_zero_of_integral_ne_zero hU
 
@@ -1116,7 +1116,7 @@ theorem exists_ne_zero_of_setIntegral_ne_zero
   contrapose! hU; exact setIntegral_eq_zero_of_forall_eq_zero hU
 
 中文:
-定理 exists_ne_zero_of_setIntegral_ne_zero
+定理 存在_ne_zero_of_set整数egral_ne_zero
   条件: (hU : ∫ x in t, f x ∂μ != 0)
   证明: by
   contrapose! hU; exact setIntegral_eq_zero_of_forall_eq_zero hU
@@ -1221,7 +1221,7 @@ theorem integral_union_eq_left_of_forall₀
   proof: integral_union_eq_left_of_ae ((ae_restrict_iff'₀ ht).2 (Eventually.of_forall ht_eq))
 
 中文:
-定理 integral_union_eq_left_of_forall₀
+定理 integral_union_eq_left_of_对任意₀
   结论: {f : X -> E} (ht : NullMeasurableSet t μ)
   证明: integral_union_eq_left_of_ae ((ae_restrict_iff'₀ ht).2 (Eventually.of_forall ht_eq))
 
@@ -1240,8 +1240,8 @@ theorem integral_union_eq_left_of_forall
   proof: integral_union_eq_left_of_forall₀ ht.nullMeasurableSet ht_eq
 
 中文:
-定理 integral_union_eq_left_of_forall
-  结论: {f : X -> E} (ht : MeasurableSet t)
+定理 integral_union_eq_left_of_对任意
+  结论: {f : X -> E} (ht : 可测集 t)
   证明: integral_union_eq_left_of_forall₀ ht.nullMeasurableSet ht_eq
 
 Depends on / 依赖: ht.nullMeasurableSet, ht_eq, nullMeasurableSet
@@ -1266,7 +1266,7 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
       rw [setInt
 
 中文:
-定理 setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
+定理 set整数egral_eq_of_subset_of_ae_sdiff_eq_zero_aux
   结论: (hts : s subseteq t)
   证明: by
   let k := f ⁻¹' {0}
@@ -1325,7 +1325,7 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
     _ = ∫ x in s, f' x ∂μ 
 
 中文:
-定理 setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
+定理 set整数egral_eq_of_subset_of_ae_sdiff_eq_zero
   结论: (ht : NullMeasurableSet t μ) (hts : s subseteq t)
   证明: by
   by_cases h : IntegrableOn f t μ; swap
@@ -1374,8 +1374,8 @@ alias setIntegral_eq_of_subset_of_forall_diff_eq_zero :=
   setIntegral_eq_of_subset_of_forall_sdiff_eq_zero
 
 中文:
-定理 setIntegral_eq_of_subset_of_forall_sdiff_eq_zero
-  结论: (ht : MeasurableSet t) (hts : s subseteq t)
+定理 set整数egral_eq_of_subset_of_对任意_sdiff_eq_zero
+  结论: (ht : 可测集 t) (hts : s subseteq t)
   证明: setIntegral_eq_of_subset_of_ae_sdiff_eq_zero ht.nullMeasurableSet hts
     (Eventually.of_forall fun x hx => h't x hx)
 
@@ -1407,7 +1407,7 @@ theorem setIntegral_eq_integral_of_ae_compl_eq_zero
   filter_upwards [h] with x hx h'x using hx h'x.2
 
 中文:
-定理 setIntegral_eq_integral_of_ae_compl_eq_zero
+定理 set整数egral_eq_integral_of_ae_compl_eq_zero
   条件: (h : 对任意ᵐ x ∂μ, x ∉ s -> f x = 0)
   证明: by
   symm
@@ -1433,7 +1433,7 @@ theorem setIntegral_eq_integral_of_forall_compl_eq_zero
   proof: setIntegral_eq_integral_of_ae_compl_eq_zero (Eventually.of_forall h)
 
 中文:
-定理 setIntegral_eq_integral_of_forall_compl_eq_zero
+定理 set整数egral_eq_integral_of_对任意_compl_eq_zero
   条件: (h : 对任意 x, x ∉ s -> f x = 0)
   证明: setIntegral_eq_integral_of_ae_compl_eq_zero (Eventually.of_forall h)
 
@@ -1460,8 +1460,8 @@ theorem setIntegral_neg_eq_setIntegral_nonpos
   filter_upwa
 
 中文:
-定理 setIntegral_neg_eq_setIntegral_nonpos
-  结论: [PartialOrder E] {f : X -> E}
+定理 set整数egral_neg_eq_set整数egral_nonpos
+  结论: [偏序 E] {f : X -> E}
   证明: by
   have h_union : {x | f x <= 0} = {x | f x < 0} union {x | f x = 0} := by
     simp_rw [le_iff_lt_or_eq, ofPred_or]
@@ -1501,7 +1501,7 @@ theorem integral_norm_eq_pos_sub_neg
 
 中文:
 定理 integral_norm_eq_pos_sub_neg
-  条件: {f : X -> 实数} (hfi : 整数egrable f μ)
+  条件: {f : X -> 实数} (hfi : 可积 f μ)
   证明: have h_meas : NullMeasurableSet {x | 0 <= f x} μ :=
     aestronglyMeasurable_const.nullMeasurableSet_le hfi.1
   calc
@@ -1546,8 +1546,8 @@ theorem setIntegral_const
 @[simp]
 
 中文:
-定理 setIntegral_const
-  条件: [CompleteSpace E] (c : E)
+定理 set整数egral_const
+  条件: [完备空间 E] (c : E)
   结论: ∫ _ in s, c ∂μ = μ.real s • c
   证明: by
   rw [integral_const]; rw [measureReal_restrict_apply_univ]
@@ -1574,8 +1574,8 @@ theorem integral_indicator_const
 
 中文:
 定理 integral_indicator_const
-  条件: [CompleteSpace E] (e : E) ⦃s
-  结论: Set X⦄ (s_meas : MeasurableSet s) :
+  条件: [完备空间 E] (e : E) ⦃s
+  结论: 集合 X⦄ (s_meas : 可测集 s) :
   证明: by
   rw [integral_indicator s_meas]; rw [← setIntegral_const]
 
@@ -1600,7 +1600,7 @@ theorem integral_indicator_one
 中文:
 定理 integral_indicator_one
   条件: ⦃s
-  结论: Set X⦄ (hs : MeasurableSet s) :
+  结论: 集合 X⦄ (hs : 可测集 s) :
   证明: (integral_indicator_const 1 hs).trans ((smul_eq_mul ..).trans (mul_one _))
 
 Depends on / 依赖: integral_indicator_const, mul_one, smul_eq_mul
@@ -1621,8 +1621,8 @@ theorem setIntegral_indicatorConstLp
     _ = (μ.real (t inter s)) • e := by rw [integral_indicator_const _ ht, measureReal_restrict_apply ht]
 
 中文:
-定理 setIntegral_indicatorConstLp
-  结论: [CompleteSpace E]
+定理 set整数egral_indicatorConstLp
+  结论: [完备空间 E]
   证明: calc
     ∫ x in s, indicatorConstLp p ht hμt e x ∂μ = ∫ x in s, t.indicator (fun _ => e) x ∂μ := by
       rw [setIntegral_congr_ae hs (indicatorConstLp_coeFn.mono fun x hx _ => hx)]
@@ -1652,7 +1652,7 @@ theorem integral_indicatorConstLp
 
 中文:
 定理 integral_indicatorConstLp
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: calc
     ∫ x, indicatorConstLp p ht hμt e x ∂μ = ∫ x in univ, indicatorConstLp p ht hμt e x ∂μ := by
       rw [setIntegral_univ]
@@ -1681,8 +1681,8 @@ theorem setIntegral_map
   exact Measure.map_mono_of_aemeasurable Measure.restrict_le_self hg
 
 中文:
-定理 setIntegral_map
-  结论: {Y} [MeasurableSpace Y] {g : X -> Y} {f : Y -> E} {s : Set Y}
+定理 set整数egral_map
+  结论: {Y} [可测空间 Y] {g : X -> Y} {f : Y -> E} {s : 集合 Y}
   证明: by
   rw [Measure.restrict_map_of_aemeasurable hg hs]; rw [integral_map (hg.mono_measure Measure.restrict_le_self) (hf.mono_measure _)]
   exact Measure.map_mono_of_aemeasurable Measure.restrict_le_self hg
@@ -1705,8 +1705,8 @@ theorem _root_.MeasurableEmbedding.setIntegral_map
   rw [hf.restrict_map]; rw [hf.integral_map]
 
 中文:
-定理 _root_.MeasurableEmbedding.setIntegral_map
-  结论: {Y} {_ : MeasurableSpace Y} {f : X -> Y}
+定理 _root_.可测嵌入.set整数egral_map
+  结论: {Y} {_ : 可测空间 Y} {f : X -> Y}
   证明: by
   rw [hf.restrict_map]; rw [hf.integral_map]
 
@@ -1726,8 +1726,8 @@ theorem _root_.Topology.IsClosedEmbedding.setIntegral_map
   proof: hg.measurableEmbedding.setIntegral_map _ _
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.setIntegral_map
-  结论: [TopologicalSpace X] [BorelSpace X] {Y}
+定理 _root_.拓扑.是闭嵌入.set整数egral_map
+  结论: [拓扑空间 X] [Borel空间 X] {Y}
   证明: hg.measurableEmbedding.setIntegral_map _ _
 
 Depends on / 依赖: hg.measurableEmbedding.setIntegral_map, measurableEmbedding, setIntegral_map
@@ -1746,8 +1746,8 @@ theorem MeasurePreserving.setIntegral_preimage_emb
   proof: (h₁.restrict_preimage_emb h₂ s).integral_comp h₂ _
 
 中文:
-定理 MeasurePreserving.setIntegral_preimage_emb
-  结论: {Y} {_ : MeasurableSpace Y} {f : X -> Y} {ν}
+定理 保测.set整数egral_preimage_emb
+  结论: {Y} {_ : 可测空间 Y} {f : X -> Y} {ν}
   证明: (h₁.restrict_preimage_emb h₂ s).integral_comp h₂ _
 
 Depends on / 依赖: integral_comp, restrict_preimage_emb
@@ -1766,8 +1766,8 @@ theorem MeasurePreserving.setIntegral_image_emb
   proof: Eq.symm (h₁.restrict_image_emb h₂ s).integral_comp h₂ _
 
 中文:
-定理 MeasurePreserving.setIntegral_image_emb
-  结论: {Y} {_ : MeasurableSpace Y} {f : X -> Y} {ν}
+定理 保测.set整数egral_image_emb
+  结论: {Y} {_ : 可测空间 Y} {f : X -> Y} {ν}
   证明: Eq.symm (h₁.restrict_image_emb h₂ s).integral_comp h₂ _
 
 Depends on / 依赖: Eq.symm, integral_comp, restrict_image_emb
@@ -1786,8 +1786,8 @@ theorem setIntegral_map_equiv
   proof: e.measurableEmbedding.setIntegral_map f s
 
 中文:
-定理 setIntegral_map_equiv
-  条件: {Y} [MeasurableSpace Y] (e : X ≃ᵐ Y) (f : Y -> E) (s : Set Y)
+定理 set整数egral_map_equiv
+  条件: {Y} [可测空间 Y] (e : X ≃ᵐ Y) (f : Y -> E) (s : 集合 Y)
   证明: e.measurableEmbedding.setIntegral_map f s
 
 Depends on / 依赖: e.measurableEmbedding.setIntegral_map, measurableEmbedding, setIntegral_map
@@ -1808,7 +1808,7 @@ theorem norm_setIntegral_le_of_norm_le_const_ae
   simpa using norm_integral_le_of_norm_le_const hC
 
 中文:
-定理 norm_setIntegral_le_of_norm_le_const_ae
+定理 norm_set整数egral_le_of_norm_le_const_ae
   结论: {C : 实数} (hs : μ s < ∞)
   证明: by
   rw [← Measure.restrict_apply_univ] at *
@@ -1839,7 +1839,7 @@ theorem norm_setIntegral_le_of_norm_le_const_ae'
   
 
 中文:
-定理 norm_setIntegral_le_of_norm_le_const_ae'
+定理 norm_set整数egral_le_of_norm_le_const_ae'
   结论: {C : 实数} (hs : μ s < ∞)
   证明: by
   by_cases hfm : AEStronglyMeasurable f (μ.restrict s)
@@ -1883,7 +1883,7 @@ theorem norm_setIntegral_le_of_norm_le_const
   proof: norm_setIntegral_le_of_norm_le_const_ae' hs (Eventually.of_forall hC)
 
 中文:
-定理 norm_setIntegral_le_of_norm_le_const
+定理 norm_set整数egral_le_of_norm_le_const
   条件: {C : 实数} (hs : μ s < ∞) (hC : 对任意 x in s, ‖f x‖ <= C)
   证明: norm_setIntegral_le_of_norm_le_const_ae' hs (Eventually.of_forall hC)
 
@@ -1907,8 +1907,8 @@ theorem norm_integral_sub_setIntegral_le
   have h2 :
 
 中文:
-定理 norm_integral_sub_setIntegral_le
-  结论: [IsFiniteMeasure μ] {C : 实数}
+定理 norm_integral_sub_set整数egral_le
+  结论: [是有限测度 μ] {C : 实数}
   证明: by
   have h0 : ∫ (x : X), f x ∂μ - ∫ x in s, f x ∂μ = ∫ x in sᶜ, f x ∂μ := by
     rw [sub_eq_iff_eq_add]; rw [add_comm]; rw [integral_add_compl hs hf1]
@@ -1939,7 +1939,7 @@ theorem setIntegral_eq_zero_iff_of_nonneg_ae
   proof: integral_eq_zero_iff_of_nonneg_ae hf hfi
 
 中文:
-定理 setIntegral_eq_zero_iff_of_nonneg_ae
+定理 set整数egral_eq_zero_iff_of_nonneg_ae
   结论: {f : X -> 实数} (hf : 0 <=ᵐ[μ.restrict s] f)
   证明: integral_eq_zero_iff_of_nonneg_ae hf hfi
 
@@ -1961,7 +1961,7 @@ theorem setIntegral_pos_iff_support_of_nonneg_ae
   exact hfi.aestronglyMeasurable.aemeasurable.nullMeasurable (measurableSet_singleton 0).compl
 
 中文:
-定理 setIntegral_pos_iff_support_of_nonneg_ae
+定理 set整数egral_pos_iff_support_of_nonneg_ae
   结论: {f : X -> 实数} (hf : 0 <=ᵐ[μ.restrict s] f)
   证明: by
   rw [integral_pos_iff_support_of_nonneg_ae hf hfi]; rw [Measure.restrict_apply₀]
@@ -1990,7 +1990,7 @@ refine setLIntegral_mono_ae hfint.1.enorm ae_of_all _ fun x hx => ?_
       Real.nnnorm_of_nonn
 
 中文:
-定理 setIntegral_gt_gt
+定理 set整数egral_gt_gt
   结论: {R : 实数} {f : X -> 实数} (hR : 0 <= R)
   证明: by
   have : IntegrableOn (fun _ => R) {x | ↑R < f x} μ := by
@@ -2029,8 +2029,8 @@ theorem setIntegral_trim
   rwa [integral_trim hm hf_meas, restrict_trim hm μ]
 
 中文:
-定理 setIntegral_trim
-  结论: {X} {m m0 : MeasurableSpace X} {μ : Measure X} (hm : m <= m0) {f : X -> E}
+定理 set整数egral_trim
+  结论: {X} {m m0 : 可测空间 X} {μ : 测度 X} (hm : m <= m0) {f : X -> E}
   证明: by
   rwa [integral_trim hm hf_meas, restrict_trim hm μ]
 
@@ -2196,7 +2196,7 @@ theorem integral_Icc_eq_integral_Ioc
 
 中文:
 定理 integral_Icc_eq_integral_Ioc
-  结论: ∫ t in Icc x y, f t ∂μ = ∫ t in Ioc x y, f t ∂μ
+  结论: ∫ t in 闭区间 x y, f t ∂μ = ∫ t in 左开右闭区间 x y, f t ∂μ
   证明: integral_Icc_eq_integral_Ioc' measure_singleton x
 
 Depends on / 依赖: integral_Icc_eq_integral_Ioc, measure_singleton
@@ -2214,7 +2214,7 @@ theorem integral_Icc_eq_integral_Ico
 
 中文:
 定理 integral_Icc_eq_integral_Ico
-  结论: ∫ t in Icc x y, f t ∂μ = ∫ t in Ico x y, f t ∂μ
+  结论: ∫ t in 闭区间 x y, f t ∂μ = ∫ t in 左闭右开区间 x y, f t ∂μ
   证明: integral_Icc_eq_integral_Ico' measure_singleton y
 
 Depends on / 依赖: integral_Icc_eq_integral_Ico, measure_singleton
@@ -2232,7 +2232,7 @@ theorem integral_Ioc_eq_integral_Ioo
 
 中文:
 定理 integral_Ioc_eq_integral_Ioo
-  结论: ∫ t in Ioc x y, f t ∂μ = ∫ t in Ioo x y, f t ∂μ
+  结论: ∫ t in 左开右闭区间 x y, f t ∂μ = ∫ t in 开区间 x y, f t ∂μ
   证明: integral_Ioc_eq_integral_Ioo' measure_singleton y
 
 Depends on / 依赖: integral_Ioc_eq_integral_Ioo, measure_singleton
@@ -2250,7 +2250,7 @@ theorem integral_Ico_eq_integral_Ioo
 
 中文:
 定理 integral_Ico_eq_integral_Ioo
-  结论: ∫ t in Ico x y, f t ∂μ = ∫ t in Ioo x y, f t ∂μ
+  结论: ∫ t in 左闭右开区间 x y, f t ∂μ = ∫ t in 开区间 x y, f t ∂μ
   证明: integral_Ico_eq_integral_Ioo' measure_singleton x
 
 Depends on / 依赖: integral_Ico_eq_integral_Ioo, measure_singleton
@@ -2269,7 +2269,7 @@ theorem integral_Ico_eq_integral_Ioc
 
 中文:
 定理 integral_Ico_eq_integral_Ioc
-  结论: ∫ t in Ico x y, f t ∂μ = ∫ t in Ioc x y, f t ∂μ
+  结论: ∫ t in 左闭右开区间 x y, f t ∂μ = ∫ t in 左开右闭区间 x y, f t ∂μ
   证明: by
   rw [integral_Ico_eq_integral_Ioo]; rw [integral_Ioc_eq_integral_Ioo]
 
@@ -2289,7 +2289,7 @@ theorem integral_Icc_eq_integral_Ioo
 
 中文:
 定理 integral_Icc_eq_integral_Ioo
-  结论: ∫ t in Icc x y, f t ∂μ = ∫ t in Ioo x y, f t ∂μ
+  结论: ∫ t in 闭区间 x y, f t ∂μ = ∫ t in 开区间 x y, f t ∂μ
   证明: by
   rw [integral_Icc_eq_integral_Ico]; rw [integral_Ico_eq_integral_Ioo]
 
@@ -2308,7 +2308,7 @@ theorem integral_Iic_eq_integral_Iio
 
 中文:
 定理 integral_Iic_eq_integral_Iio
-  结论: ∫ t in Iic x, f t ∂μ = ∫ t in Iio x, f t ∂μ
+  结论: ∫ t in 左无界右闭区间 x, f t ∂μ = ∫ t in 左无界右开区间 x, f t ∂μ
   证明: integral_Iic_eq_integral_Iio' measure_singleton x
 
 Depends on / 依赖: integral_Iic_eq_integral_Iio, measure_singleton
@@ -2326,7 +2326,7 @@ theorem integral_Ici_eq_integral_Ioi
 
 中文:
 定理 integral_Ici_eq_integral_Ioi
-  结论: ∫ t in Ici x, f t ∂μ = ∫ t in Ioi x, f t ∂μ
+  结论: ∫ t in 左闭右无界区间 x, f t ∂μ = ∫ t in 左开右无界区间 x, f t ∂μ
   证明: integral_Ici_eq_integral_Ioi' measure_singleton x
 
 Depends on / 依赖: integral_Ici_eq_integral_Ioi, measure_singleton
@@ -2353,8 +2353,8 @@ theorem setIntegral_mono_set
   proof: integral_mono_measure (Measure.restrict_mono_ae hst) hf hfi
 
 中文:
-定理 setIntegral_mono_set
-  结论: [OrderClosedTopology E] (hfi : 整数egrableOn f t μ)
+定理 set整数egral_mono_set
+  结论: [OrderClosed拓扑 E] (hfi : 整数egrableOn f t μ)
   证明: integral_mono_measure (Measure.restrict_mono_ae hst) hf hfi
 
 Depends on / 依赖: Measure, Measure.restrict_mono_ae, integral_mono_measure, restrict_mono_ae
@@ -2373,8 +2373,8 @@ theorem setIntegral_le_integral
   proof: integral_mono_measure (Measure.restrict_le_self) hf hfi
 
 中文:
-定理 setIntegral_le_integral
-  条件: [OrderClosedTopology E] (hfi : 整数egrable f μ) (hf : 0 <=ᵐ[μ] f)
+定理 set整数egral_le_integral
+  条件: [OrderClosed拓扑 E] (hfi : 可积 f μ) (hf : 0 <=ᵐ[μ] f)
   证明: integral_mono_measure (Measure.restrict_le_self) hf hfi
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, integral_mono_measure, restrict_le_self
@@ -2401,7 +2401,7 @@ theorem setIntegral_mono_ae_restrict
   · simp [integral, hE]
 
 中文:
-定理 setIntegral_mono_ae_restrict
+定理 set整数egral_mono_ae_restrict
   条件: (h : f <=ᵐ[μ.restrict s] g)
   证明: by
   by_cases hE : CompleteSpace E
@@ -2426,7 +2426,7 @@ theorem setIntegral_mono_ae
   proof: setIntegral_mono_ae_restrict hf hg (ae_restrict_of_ae h)
 
 中文:
-定理 setIntegral_mono_ae
+定理 set整数egral_mono_ae
   条件: (h : f <=ᵐ[μ] g)
   结论: ∫ x in s, f x ∂μ <= ∫ x in s, g x ∂μ
   证明: setIntegral_mono_ae_restrict hf hg (ae_restrict_of_ae h)
@@ -2446,8 +2446,8 @@ theorem setIntegral_mono_on
     (by simp [hs, EventuallyLE, eventually_inf_principal, ae_of_all _ h])
 
 中文:
-定理 setIntegral_mono_on
-  条件: (hs : MeasurableSet s) (h : 对任意 x in s, f x <= g x)
+定理 set整数egral_mono_on
+  条件: (hs : 可测集 s) (h : 对任意 x in s, f x <= g x)
   证明: setIntegral_mono_ae_restrict hf hg
     (by simp [hs, EventuallyLE, eventually_inf_principal, ae_of_all _ h])
 
@@ -2468,8 +2468,8 @@ theorem setIntegral_mono_on_ae
   refine setIntegral_mono_ae_restrict hf hg ?_; rwa [EventuallyLE, ae_restrict_iff' hs]
 
 中文:
-定理 setIntegral_mono_on_ae
-  条件: (hs : MeasurableSet s) (h : 对任意ᵐ x ∂μ, x in s -> f x <= g x)
+定理 set整数egral_mono_on_ae
+  条件: (hs : 可测集 s) (h : 对任意ᵐ x ∂μ, x in s -> f x <= g x)
   证明: by
   refine setIntegral_mono_ae_restrict hf hg ?_; rwa [EventuallyLE, ae_restrict_iff' hs]
 
@@ -2493,7 +2493,7 @@ lemma setIntegral_mono_on_ae₀
   · exact measurableSet_to
 
 中文:
-引理 setIntegral_mono_on_ae₀
+引理 set整数egral_mono_on_ae₀
   条件: (hs : NullMeasurableSet s μ) (h : 对任意ᵐ x ∂μ, x in s -> f x <= g x)
   证明: by
   rw [setIntegral_congr_set hs.toMeasurable_ae_eq.symm]; rw [setIntegral_congr_set hs.toMeasurable_ae_eq.symm]
@@ -2525,7 +2525,7 @@ lemma setIntegral_mono_on₀
   proof: setIntegral_mono_on_ae₀ hf hg hs (Eventually.of_forall h)
 
 中文:
-引理 setIntegral_mono_on₀
+引理 set整数egral_mono_on₀
   条件: (hs : NullMeasurableSet s μ) (h : 对任意 x in s, f x <= g x)
   证明: setIntegral_mono_on_ae₀ hf hg hs (Eventually.of_forall h)
 
@@ -2545,7 +2545,7 @@ theorem setIntegral_mono
   proof: integral_mono hf hg h
 
 中文:
-定理 setIntegral_mono
+定理 set整数egral_mono
   条件: (h : f <= g)
   结论: ∫ x in s, f x ∂μ <= ∫ x in s, g x ∂μ
   证明: integral_mono hf hg h
@@ -2568,8 +2568,8 @@ theorem setIntegral_ge_of_const_le
   exact setIntegral_mono_on (integrableOn_const hμs) hfint hs hf
 
 中文:
-定理 setIntegral_ge_of_const_le
-  结论: [CompleteSpace E] {c : E} (hs : MeasurableSet s) (hμs : μ s != ∞)
+定理 set整数egral_ge_of_const_le
+  结论: [完备空间 E] {c : E} (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   rw [← setIntegral_const c]
   exact setIntegral_mono_on (integrableOn_const hμs) hfint hs hf
@@ -2592,8 +2592,8 @@ theorem setIntegral_ge_of_const_le_real
   simpa [mul_comm] using setIntegral_ge_of_const_le hs hμs hf hfint
 
 中文:
-定理 setIntegral_ge_of_const_le_real
-  结论: {f : X -> 实数} {c : 实数} (hs : MeasurableSet s) (hμs : μ s != ∞)
+定理 set整数egral_ge_of_const_le_real
+  结论: {f : X -> 实数} {c : 实数} (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   simpa [mul_comm] using setIntegral_ge_of_const_le hs hμs hf hfint
 
@@ -2620,7 +2620,7 @@ theorem setIntegral_nonneg_of_ae_restrict
   proof: integral_nonneg_of_ae hf
 
 中文:
-定理 setIntegral_nonneg_of_ae_restrict
+定理 set整数egral_nonneg_of_ae_restrict
   条件: (hf : 0 <=ᵐ[μ.restrict s] f)
   结论: 0 <= ∫ x in s, f x ∂μ
   证明: integral_nonneg_of_ae hf
@@ -2640,7 +2640,7 @@ theorem setIntegral_nonneg_of_ae
   proof: setIntegral_nonneg_of_ae_restrict (ae_restrict_of_ae hf)
 
 中文:
-定理 setIntegral_nonneg_of_ae
+定理 set整数egral_nonneg_of_ae
   条件: (hf : 0 <=ᵐ[μ] f)
   结论: 0 <= ∫ x in s, f x ∂μ
   证明: setIntegral_nonneg_of_ae_restrict (ae_restrict_of_ae hf)
@@ -2659,8 +2659,8 @@ theorem setIntegral_nonneg
   proof: setIntegral_nonneg_of_ae_restrict ((ae_restrict_iff' hs).mpr (ae_of_all μ hf))
 
 中文:
-定理 setIntegral_nonneg
-  条件: (hs : MeasurableSet s) (hf : 对任意 x, x in s -> 0 <= f x)
+定理 set整数egral_nonneg
+  条件: (hs : 可测集 s) (hf : 对任意 x, x in s -> 0 <= f x)
   证明: setIntegral_nonneg_of_ae_restrict ((ae_restrict_iff' hs).mpr (ae_of_all μ hf))
 
 Depends on / 依赖: ae_of_all, ae_restrict_iff, setIntegral_nonneg_of_ae_restrict
@@ -2678,8 +2678,8 @@ theorem setIntegral_nonneg_ae
   proof: setIntegral_nonneg_of_ae_restrict by rwa [EventuallyLE, ae_restrict_iff' hs]
 
 中文:
-定理 setIntegral_nonneg_ae
-  条件: (hs : MeasurableSet s) (hf : 对任意ᵐ x ∂μ, x in s -> 0 <= f x)
+定理 set整数egral_nonneg_ae
+  条件: (hs : 可测集 s) (hf : 对任意ᵐ x ∂μ, x in s -> 0 <= f x)
   证明: setIntegral_nonneg_of_ae_restrict by rwa [EventuallyLE, ae_restrict_iff' hs]
 
 Depends on / 依赖: EventuallyLE, ae_restrict_iff, setIntegral_nonneg_of_ae_restrict
@@ -2703,8 +2703,8 @@ theorem setIntegral_le_nonneg
       (indicator_le_indicator_nonneg s f)
 
 中文:
-定理 setIntegral_le_nonneg
-  结论: {s : Set X} (hs : MeasurableSet s) (hf : StronglyMeasurable f)
+定理 set整数egral_le_nonneg
+  结论: {s : 集合 X} (hs : 可测集 s) (hf : StronglyMeasurable f)
   证明: by
   rw [← integral_indicator hs]; rw [←
     integral_indicator (stronglyMeasurable_const.measurableSet_le hf)]
@@ -2734,7 +2734,7 @@ theorem setIntegral_nonpos_of_ae_restrict
   proof: integral_nonpos_of_ae hf
 
 中文:
-定理 setIntegral_nonpos_of_ae_restrict
+定理 set整数egral_nonpos_of_ae_restrict
   条件: (hf : f <=ᵐ[μ.restrict s] 0)
   结论: ∫ x in s, f x ∂μ <= 0
   证明: integral_nonpos_of_ae hf
@@ -2754,7 +2754,7 @@ theorem setIntegral_nonpos_of_ae
   proof: setIntegral_nonpos_of_ae_restrict (ae_restrict_of_ae hf)
 
 中文:
-定理 setIntegral_nonpos_of_ae
+定理 set整数egral_nonpos_of_ae
   条件: (hf : f <=ᵐ[μ] 0)
   结论: ∫ x in s, f x ∂μ <= 0
   证明: setIntegral_nonpos_of_ae_restrict (ae_restrict_of_ae hf)
@@ -2773,8 +2773,8 @@ theorem setIntegral_nonpos_ae
   proof: setIntegral_nonpos_of_ae_restrict by rwa [EventuallyLE, ae_restrict_iff' hs]
 
 中文:
-定理 setIntegral_nonpos_ae
-  条件: (hs : MeasurableSet s) (hf : 对任意ᵐ x ∂μ, x in s -> f x <= 0)
+定理 set整数egral_nonpos_ae
+  条件: (hs : 可测集 s) (hf : 对任意ᵐ x ∂μ, x in s -> f x <= 0)
   证明: setIntegral_nonpos_of_ae_restrict by rwa [EventuallyLE, ae_restrict_iff' hs]
 
 Depends on / 依赖: EventuallyLE, ae_restrict_iff, setIntegral_nonpos_of_ae_restrict
@@ -2792,8 +2792,8 @@ theorem setIntegral_nonpos
   proof: setIntegral_nonpos_ae hs ae_of_all μ hf
 
 中文:
-定理 setIntegral_nonpos
-  条件: (hs : MeasurableSet s) (hf : 对任意 x, x in s -> f x <= 0)
+定理 set整数egral_nonpos
+  条件: (hs : 可测集 s) (hf : 对任意 x, x in s -> f x <= 0)
   证明: setIntegral_nonpos_ae hs ae_of_all μ hf
 
 Depends on / 依赖: ae_of_all, setIntegral_nonpos_ae
@@ -2816,8 +2816,8 @@ theorem setIntegral_nonpos_le
       (hfi.indicator hs) (indicator_nonpos_le_indicator s f)
 
 中文:
-定理 setIntegral_nonpos_le
-  结论: {s : Set X} (hs : MeasurableSet s) (hf : StronglyMeasurable f)
+定理 set整数egral_nonpos_le
+  结论: {s : 集合 X} (hs : 可测集 s) (hf : StronglyMeasurable f)
   证明: by
   rw [← integral_indicator hs]; rw [←
     integral_indicator (hf.measurableSet_le stronglyMeasurable_const)]
@@ -2849,8 +2849,8 @@ lemma Integrable.measure_le_integral
     simpa using ENNReal.ofReal_le_ofReal (hs x hx)
 
 中文:
-引理 Integrable.measure_le_integral
-  结论: {f : X -> 实数} (f_int : 整数egrable f μ) (f_nonneg : 0 <=ᵐ[μ] f)
+引理 可积.measure_le_integral
+  结论: {f : X -> 实数} (f_int : 可积 f μ) (f_nonneg : 0 <=ᵐ[μ] f)
   证明: by
   rw [ofReal_integral_eq_lintegral_ofReal f_int f_nonneg]
   apply meas_le_lintegral₀
@@ -2886,7 +2886,7 @@ lemma integral_le_measure
 
 中文:
 引理 integral_le_measure
-  结论: {f : X -> 实数} {s : Set X}
+  结论: {f : X -> 实数} {s : 集合 X}
   证明: by
   by_cases H : Integrable f μ; swap
   · simp [integral_undef H]
@@ -2935,7 +2935,7 @@ lemma setIntegral_mono_of_nonneg
     · exact nullMeasurableSet_le aemeasurable_const hg.aemeas
 
 中文:
-引理 setIntegral_mono_of_nonneg
+引理 set整数egral_mono_of_nonneg
   结论: {g : X -> 实数} (hf : 对任意 x in s, 0 <= f x)
   证明: by
   by_cases h'f : AEStronglyMeasurable f (μ.restrict s); swap
@@ -2985,7 +2985,7 @@ theorem integrableOn_iUnion_of_summable_integral_norm
 
 中文:
 定理 integrableOn_iUnion_of_summable_integral_norm
-  结论: {f : X -> E} {s : ι -> Set X}
+  结论: {f : X -> E} {s : ι -> 集合 X}
   证明: by
   refine ⟨AEStronglyMeasurable.iUnion fun i => (hi i).1, (lintegral_iUnion_le _ _).trans_lt ?_⟩
   have B := fun i => lintegral_coe_eq_integral (fun x : X => ‖f x‖₊) (hi i).norm
@@ -3025,7 +3025,7 @@ theorem integrableOn_iUnion_of_summable_norm_restrict
 
 中文:
 定理 integrableOn_iUnion_of_summable_norm_restrict
-  结论: {f : C(X, E)} {s : ι -> Compacts X}
+  结论: {f : C(X, E)} {s : ι -> 余mpacts X}
   证明: by
   refine
     integrableOn_iUnion_of_summable_integral_norm
@@ -3058,7 +3058,7 @@ theorem integrable_of_summable_norm_restrict
 
 中文:
 定理 integrable_of_summable_norm_restrict
-  结论: {f : C(X, E)} {s : ι -> Compacts X}
+  结论: {f : C(X, E)} {s : ι -> 余mpacts X}
   证明: by
   simpa only [hs, integrableOn_univ] using integrableOn_iUnion_of_summable_norm_restrict hf
 
@@ -3099,7 +3099,7 @@ theorem Lp_toLp_restrict_add
 
 中文:
 定理 Lp_toLp_restrict_add
-  条件: (f g : Lp E p μ) (s : Set X)
+  条件: (f g : Lp E p μ) (s : 集合 X)
   证明: by
   ext1
   refine (ae_restrict_of_ae (Lp.coeFn_add f g)).mp ?_
@@ -3141,7 +3141,7 @@ theorem Lp_toLp_restrict_smul
 
 中文:
 定理 Lp_toLp_restrict_smul
-  条件: (c : 𝕜) (f : Lp F p μ) (s : Set X)
+  条件: (c : 𝕜) (f : Lp F p μ) (s : 集合 X)
   证明: by
   ext1
   refine (ae_restrict_of_ae (Lp.coeFn_smul c f)).mp ?_
@@ -3176,7 +3176,7 @@ theorem norm_Lp_toLp_restrict_le
 
 中文:
 定理 norm_Lp_toLp_restrict_le
-  条件: (s : Set X) (f : Lp E p μ)
+  条件: (s : 集合 X) (f : Lp E p μ)
   证明: by
   rw [Lp.norm_def]; rw [Lp.norm_def]; rw [eLpNorm_congr_ae (MemLp.coeFn_toLp _)]
   refine ENNReal.toReal_mono (Lp.eLpNorm_ne_top _) ?_
@@ -3204,7 +3204,7 @@ definition LpToLpRestrictCLM
 
 中文:
 定义 LpToLpRestrictCLM
-  签名: (μ : Measure X) (p : 实数>=0∞) [hp : Fact (1 <= p)] (s : Set X)
+  签名: (μ : 测度 X) (p : 实数>=0∞) [hp : Fact (1 <= p)] (s : 集合 X)
   定义体: @LinearMap.mkContinuous 𝕜 𝕜 (Lp F p μ) (Lp F p (μ.restrict s)) _ _ _ _ _ _ (RingHom.id 𝕜)
     ⟨⟨fun f => MemLp.toLp f ((Lp.memLp f).restrict s), fun f g => Lp_toLp_restrict_add f g s⟩,
       fun c f => Lp_toLp_restrict_smul c f s⟩
@@ -3232,7 +3232,7 @@ theorem LpToLpRestrictCLM_coeFn
 
 中文:
 定理 LpToLpRestrictCLM_coeFn
-  条件: [Fact (1 <= p)] (s : Set X) (f : Lp F p μ)
+  条件: [Fact (1 <= p)] (s : 集合 X) (f : Lp F p μ)
   证明: MemLp.coeFn_toLp ((Lp.memLp f).restrict s)
 
 @[continuity]
@@ -3260,8 +3260,8 @@ theorem continuous_setIntegral
   rw 
 
 中文:
-定理 continuous_setIntegral
-  条件: [NormedSpace 实数 E] (s : Set X)
+定理 continuous_set整数egral
+  条件: [赋范空间 实数 E] (s : 集合 X)
   证明: by
   have : Fact ((1 : Real>=0∞) <= 1) := ⟨le_rfl⟩
   have h_comp :
@@ -3305,8 +3305,8 @@ theorem Continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
     f_nonneg f_x
 
 中文:
-定理 Continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
-  结论: [IsFiniteMeasureOnCompacts μ]
+定理 连续.integral_pos_of_hasCompactSupport_nonneg_nonzero
+  结论: [紧集上有限测度 μ]
   证明: integral_pos_of_integrable_nonneg_nonzero f_cont (f_cont.integrable_of_hasCompactSupport f_comp)
     f_nonneg f_x
 
@@ -3337,7 +3337,7 @@ theorem MeasureTheory.setIntegral_support
 exact fun _ hx => notMem_support.mp notMem_of_mem_sdiff hx
 
 中文:
-定理 MeasureTheory.setIntegral_support
+定理 测度论.set整数egral_support
   结论: ∫ x in support F, F x ∂ν = ∫ x, F x ∂ν
   证明: by
   nth_rw 2 [← setIntegral_univ]
@@ -3364,8 +3364,8 @@ theorem MeasureTheory.setIntegral_tsupport
 exact fun _ hx => image_eq_zero_of_notMem_tsupport notMem_of_mem_sdiff hx
 
 中文:
-定理 MeasureTheory.setIntegral_tsupport
-  条件: [TopologicalSpace X]
+定理 测度论.set整数egral_tsupport
+  条件: [拓扑空间 X]
   证明: by
   nth_rw 2 [← setIntegral_univ]
   rw [setIntegral_eq_of_subset_of_forall_sdiff_eq_zero MeasurableSet.univ
@@ -3402,7 +3402,7 @@ theorem measure_le_lintegral_thickenedIndicatorAux
 
 中文:
 定理 measure_le_lintegral_thickenedIndicatorAux
-  结论: (μ : Measure X) {E : Set X}
+  结论: (μ : 测度 X) {E : 集合 X}
   证明: by
   convert_to lintegral μ (E.indicator fun _ => (1 : Real>=0∞)) <= lintegral μ (thickenedIndicatorAux δ E)
   · rw [lintegral_indicator E_mble]
@@ -3434,7 +3434,7 @@ theorem measure_le_lintegral_thickenedIndicator
 
 中文:
 定理 measure_le_lintegral_thickenedIndicator
-  结论: (μ : Measure X) {E : Set X}
+  结论: (μ : 测度 X) {E : 集合 X}
   证明: by
   convert! measure_le_lintegral_thickenedIndicatorAux μ E_mble δ
   dsimp
@@ -3477,8 +3477,8 @@ theorem Integrable.simpleFunc_mul
     SimpleFunc.coe_zero, Set.piecewise_eq_i
 
 中文:
-定理 Integrable.simpleFunc_mul
-  条件: (g : SimpleFunc X 实数) (hf : 整数egrable f μ)
+定理 可积.simpleFunc_mul
+  条件: (g : SimpleFunc X 实数) (hf : 可积 f μ)
   证明: by
   refine
     SimpleFunc.induction (fun c s hs => ?_)
@@ -3518,8 +3518,8 @@ theorem Integrable.simpleFunc_mul'
   rw [← SimpleFunc.coe_toLargerSpace_eq hm g]; exact hf.simpleFunc_mul (g.toLargerSpace hm)
 
 中文:
-定理 Integrable.simpleFunc_mul'
-  条件: (hm : m <= m0) (g : @SimpleFunc X m 实数) (hf : 整数egrable f μ)
+定理 可积.simpleFunc_mul'
+  条件: (hm : m <= m0) (g : @SimpleFunc X m 实数) (hf : 可积 f μ)
   证明: by
   rw [← SimpleFunc.coe_toLargerSpace_eq hm g]; exact hf.simpleFunc_mul (g.toLargerSpace hm)
 

@@ -45,7 +45,7 @@ PullbackCone.mk (e ≫ π₁) (e ≫ π₂) by
 
 中文:
 定理 hasLimit_cospan_of_hasLimit_pair_of_hasLimit_parallelPair
-  结论: {C : 类型u} [𝒞 : Category.{v} C]
+  结论: {C : 类型u} [𝒞 : 范畴.{v} C]
   证明: let π₁ : X ⨯ Y ⟶ X := prod.fst
   let π₂ : X ⨯ Y ⟶ Y := prod.snd
   let e := equalizer.ι (π₁ ≫ f) (π₂ ≫ g)
@@ -94,7 +94,7 @@ theorem hasPullbacks_of_hasBinaryProducts_of_hasEqualizers
 
 中文:
 定理 hasPullbacks_of_hasBinaryProducts_of_hasEqualizers
-  结论: (C : 类型u) [Category.{v} C]
+  结论: (C : 类型u) [范畴.{v} C]
   证明: { has_limit := fun F => hasLimit_of_iso (diagramIsoCospan F).symm }
 
 Depends on / 依赖: diagramIsoCospan, hasLimit_of_iso, has_limit
@@ -172,7 +172,7 @@ theorem hasPushouts_of_hasBinaryCoproducts_of_hasCoequalizers
 
 中文:
 定理 hasPushouts_of_hasBinaryCoproducts_of_hasCoequalizers
-  结论: (C : 类型u) [Category.{v} C]
+  结论: (C : 类型u) [范畴.{v} C]
   证明: hasPushouts_of_hasColimit_span C
 
 Depends on / 依赖: hasPushouts_of_hasColimit_span

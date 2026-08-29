@@ -41,13 +41,13 @@ class HasUpperLowerClosure
     - isOpen_lowerClosure : forall s : Set α, IsOpen s -> IsOpen (lowerClosure s : Set α)
 
 中文:
-类 HasUpperLowerClosure
-  参数: (α : 类型) [TopologicalSpace α] [Preorder α]
+类 有UpperLowerClosure
+  参数: (α : 类型) [拓扑空间 α] [预序 α]
   公理与运算 (4 个):
-    - isUpperSet_closure : 对任意 s : Set α, IsUpperSet s -> IsUpperSet (closure s)
-    - isLowerSet_closure : 对任意 s : Set α, IsLowerSet s -> IsLowerSet (closure s)
-    - isOpen_upperClosure : 对任意 s : Set α, IsOpen s -> IsOpen (upperClosure s : Set α)
-    - isOpen_lowerClosure : 对任意 s : Set α, IsOpen s -> IsOpen (lowerClosure s : Set α)
+    - isUpperSet_closure : 对任意 s : 集合 α, 是上集 s -> 是上集 (closure s)
+    - isLowerSet_closure : 对任意 s : 集合 α, 是下集 s -> 是下集 (closure s)
+    - isOpen_upperClosure : 对任意 s : 集合 α, 是开集 s -> 是开集 (upperClosure s : 集合 α)
+    - isOpen_lowerClosure : 对任意 s : 集合 α, 是开集 s -> 是开集 (lowerClosure s : 集合 α)
 -/
 class HasUpperLowerClosure (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where
   isUpperSet_closure : forall s : Set α, IsUpperSet s -> IsUpperSet (closure s)
@@ -88,8 +88,8 @@ theorem IsUpperSet.closure
   proof: HasUpperLowerClosure.isUpperSet_closure _
 
 中文:
-定理 IsUpperSet.closure
-  结论: IsUpperSet s -> IsUpperSet (closure s)
+定理 是上集.closure
+  结论: 是上集 s -> 是上集 (closure s)
   证明: HasUpperLowerClosure.isUpperSet_closure _
 -/
 protected theorem IsUpperSet.closure : IsUpperSet s -> IsUpperSet (closure s) :=
@@ -104,8 +104,8 @@ theorem IsLowerSet.closure
   proof: HasUpperLowerClosure.isLowerSet_closure _
 
 中文:
-定理 IsLowerSet.closure
-  结论: IsLowerSet s -> IsLowerSet (closure s)
+定理 是下集.closure
+  结论: 是下集 s -> 是下集 (closure s)
   证明: HasUpperLowerClosure.isLowerSet_closure _
 -/
 protected theorem IsLowerSet.closure : IsLowerSet s -> IsLowerSet (closure s) :=
@@ -120,8 +120,8 @@ theorem IsOpen.upperClosure
   proof: HasUpperLowerClosure.isOpen_upperClosure _
 
 中文:
-定理 IsOpen.upperClosure
-  结论: IsOpen s -> IsOpen (upperClosure s : Set α)
+定理 是开集.upperClosure
+  结论: 是开集 s -> 是开集 (upperClosure s : 集合 α)
   证明: HasUpperLowerClosure.isOpen_upperClosure _
 -/
 protected theorem IsOpen.upperClosure : IsOpen s -> IsOpen (upperClosure s : Set α) :=
@@ -136,8 +136,8 @@ theorem IsOpen.lowerClosure
   proof: HasUpperLowerClosure.isOpen_lowerClosure _
 
 中文:
-定理 IsOpen.lowerClosure
-  结论: IsOpen s -> IsOpen (lowerClosure s : Set α)
+定理 是开集.lowerClosure
+  结论: 是开集 s -> 是开集 (lowerClosure s : 集合 α)
   证明: HasUpperLowerClosure.isOpen_lowerClosure _
 -/
 protected theorem IsOpen.lowerClosure : IsOpen s -> IsOpen (lowerClosure s : Set α) :=
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasUpperLowerClosure αᵒᵈ
+  签名: 有UpperLowerClosure αᵒᵈ
   定义体: @IsLowerSet.closure α _ _ _
   isLowerSet_closure := @IsUpperSet.closure α _ _ _
   isOpen_upperClosure := @IsOpen.lowerClosure α _ _ _
@@ -182,9 +182,9 @@ theorem IsUpperSet.interior
   exact h.compl.closure
 
 中文:
-定理 IsUpperSet.interior
-  条件: (h : IsUpperSet s)
-  结论: IsUpperSet (interior s)
+定理 是上集.interior
+  条件: (h : 是上集 s)
+  结论: 是上集 (interior s)
   证明: by
   rw [← isLowerSet_compl]; rw [← closure_compl]
   exact h.compl.closure
@@ -203,9 +203,9 @@ theorem IsLowerSet.interior
   proof: h.toDual.interior
 
 中文:
-定理 IsLowerSet.interior
-  条件: (h : IsLowerSet s)
-  结论: IsLowerSet (interior s)
+定理 是下集.interior
+  条件: (h : 是下集 s)
+  结论: 是下集 (interior s)
   证明: h.toDual.interior
 -/
 protected theorem IsLowerSet.interior (h : IsLowerSet s) : IsLowerSet (interior s) :=
@@ -224,9 +224,9 @@ theorem Set.OrdConnected.interior
     (upperClosure s).upper.interior.ordConnected.inter (lowerClosure s).lower.interior.ordConnected
 
 中文:
-定理 Set.OrdConnected.interior
-  条件: (h : s.OrdConnected)
-  结论: (interior s).OrdConnected
+定理 集合.序连通.interior
+  条件: (h : s.序连通)
+  结论: (interior s).序连通
   证明: by
   rw [← h.upperClosure_inter_lowerClosure]; rw [interior_inter]
   exact

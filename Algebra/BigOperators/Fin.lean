@@ -46,7 +46,7 @@ theorem prod_range
 
 中文:
 定理 prod_range
-  条件: [CommMonoid M] {n : 自然数} (f : 自然数 -> M)
+  条件: [交换幺半群 M] {n : 自然数} (f : 自然数 -> M)
   证明: (Fin.prod_univ_eq_prod_range _ _).symm
 
 Depends on / 依赖: Fin.prod_univ_eq_prod_range, prod_univ_eq_prod_range
@@ -78,8 +78,8 @@ theorem prod_ofFn
 
 中文:
 定理 prod_ofFn
-  条件: (f : Fin n -> M)
-  结论: (List.ofFn f).prod = ∏ i, f i
+  条件: (f : 有限集 n -> M)
+  结论: (列表.ofFn f).乘积 = ∏ i, f i
   证明: by
   simp [prod_eq_multiset_prod]
 
@@ -103,8 +103,8 @@ theorem prod_univ_def
 
 中文:
 定理 prod_univ_def
-  条件: (f : Fin n -> M)
-  结论: ∏ i, f i = ((List.finRange n).map f).prod
+  条件: (f : 有限集 n -> M)
+  结论: ∏ i, f i = ((列表.finRange n).map f).乘积
   证明: by
   rw [← List.ofFn_eq_map]; rw [prod_ofFn]
 
@@ -126,7 +126,7 @@ theorem prod_univ_zero
 
 中文:
 定理 prod_univ_zero
-  条件: (f : Fin 0 -> M)
+  条件: (f : 有限集 0 -> M)
   结论: ∏ i, f i = 1
   证明: rfl
 -/
@@ -148,7 +148,7 @@ theorem prod_univ_succAbove
 
 中文:
 定理 prod_univ_succAbove
-  条件: (f : Fin (n + 1) -> M) (x : Fin (n + 1))
+  条件: (f : 有限集 (n + 1) -> M) (x : 有限集 (n + 1))
   证明: by
   rw [univ_succAbove n x]; rw [prod_cons]; rw [Finset.prod_map]; rw [coe_succAboveEmb]
 
@@ -172,7 +172,7 @@ theorem prod_univ_succ
 
 中文:
 定理 prod_univ_succ
-  条件: (f : Fin (n + 1) -> M)
+  条件: (f : 有限集 (n + 1) -> M)
   证明: prod_univ_succAbove f 0
 
 Depends on / 依赖: prod_univ_succAbove
@@ -198,7 +198,7 @@ theorem prod_univ_castSucc
 
 中文:
 定理 prod_univ_castSucc
-  条件: (f : Fin (n + 1) -> M)
+  条件: (f : 有限集 (n + 1) -> M)
   证明: by
   simpa [mul_comm] using prod_univ_succAbove f (last n)
 
@@ -225,8 +225,8 @@ theorem prod_univ_getElem
 
 中文:
 定理 prod_univ_getElem
-  条件: (l : List M)
-  结论: ∏ i : Fin l.length, l[i.1] = l.prod
+  条件: (l : 列表 M)
+  结论: ∏ i : 有限集 l.length, l[i.1] = l.乘积
   证明: by
   simp [Finset.prod_eq_multiset_prod]
 
@@ -251,7 +251,7 @@ theorem prod_univ_fun_getElem
 
 中文:
 定理 prod_univ_fun_getElem
-  条件: (l : List ι) (f : ι -> M)
+  条件: (l : 列表 ι) (f : ι -> M)
   证明: by
   simp [Finset.prod_eq_multiset_prod]
 
@@ -277,7 +277,7 @@ theorem prod_cons
 
 中文:
 定理 prod_cons
-  条件: (x : M) (f : Fin n -> M)
+  条件: (x : M) (f : 有限集 n -> M)
   证明: by
   simp_rw [prod_univ_succ, cons_zero, cons_succ]
 
@@ -303,7 +303,7 @@ theorem prod_snoc
 
 中文:
 定理 prod_snoc
-  条件: (x : M) (f : Fin n -> M)
+  条件: (x : M) (f : 有限集 n -> M)
   证明: by
   simp [prod_univ_castSucc]
 
@@ -329,7 +329,7 @@ theorem prod_univ_one
 
 中文:
 定理 prod_univ_one
-  条件: (f : Fin 1 -> M)
+  条件: (f : 有限集 1 -> M)
   结论: ∏ i, f i = f 0
   证明: by simp
 
@@ -352,7 +352,7 @@ theorem prod_univ_two
 
 中文:
 定理 prod_univ_two
-  条件: (f : Fin 2 -> M)
+  条件: (f : 有限集 2 -> M)
   结论: ∏ i, f i = f 0 * f 1
   证明: by
   simp [prod_univ_succ]
@@ -405,7 +405,7 @@ theorem prod_univ_three
 
 中文:
 定理 prod_univ_three
-  条件: (f : Fin 3 -> M)
+  条件: (f : 有限集 3 -> M)
   结论: ∏ i, f i = f 0 * f 1 * f 2
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_two]
@@ -435,7 +435,7 @@ theorem prod_univ_four
 
 中文:
 定理 prod_univ_four
-  条件: (f : Fin 4 -> M)
+  条件: (f : 有限集 4 -> M)
   结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_three]
@@ -465,7 +465,7 @@ theorem prod_univ_five
 
 中文:
 定理 prod_univ_five
-  条件: (f : Fin 5 -> M)
+  条件: (f : 有限集 5 -> M)
   结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_four]
@@ -495,7 +495,7 @@ theorem prod_univ_six
 
 中文:
 定理 prod_univ_six
-  条件: (f : Fin 6 -> M)
+  条件: (f : 有限集 6 -> M)
   结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_five]
@@ -525,7 +525,7 @@ theorem prod_univ_seven
 
 中文:
 定理 prod_univ_seven
-  条件: (f : Fin 7 -> M)
+  条件: (f : 有限集 7 -> M)
   结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 * f 6
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_six]
@@ -554,7 +554,7 @@ theorem prod_univ_eight
 
 中文:
 定理 prod_univ_eight
-  条件: (f : Fin 8 -> M)
+  条件: (f : 有限集 8 -> M)
   证明: by
   rw [prod_univ_castSucc]; rw [prod_univ_seven]
   rfl
@@ -583,7 +583,7 @@ theorem prod_const
 中文:
 定理 prod_const
   条件: (n : 自然数) (x : M)
-  结论: ∏ _i : Fin n, x = x ^ n
+  结论: ∏ _i : 有限集 n, x = x ^ n
   证明: by simp
 
 @[to_additive]
@@ -605,7 +605,7 @@ theorem prod_congr'
 
 中文:
 定理 prod_congr'
-  条件: {a b : 自然数} (f : Fin b -> M) (h : a = b)
+  条件: {a b : 自然数} (f : 有限集 b -> M) (h : a = b)
   证明: by
   subst h
   congr
@@ -634,7 +634,7 @@ theorem prod_univ_add
 
 中文:
 定理 prod_univ_add
-  条件: {a b : 自然数} (f : Fin (a + b) -> M)
+  条件: {a b : 自然数} (f : 有限集 (a + b) -> M)
   证明: by
   rw [Fintype.prod_equiv finSumFinEquiv.symm f fun i => f (finSumFinEquiv.toFun i)]
   · apply Fintype.prod_sum_type
@@ -666,7 +666,7 @@ theorem prod_trunc
 
 中文:
 定理 prod_trunc
-  条件: {a b : 自然数} (f : Fin (a + b) -> M) (hf : 对任意 j : Fin b, f (natAdd a j) = 1)
+  条件: {a b : 自然数} (f : 有限集 (a + b) -> M) (hf : 对任意 j : 有限集 b, f (natAdd a j) = 1)
   证明: by
   rw [prod_univ_add]; rw [Fintype.prod_eq_one _ hf]; rw [mul_one]
 
@@ -730,7 +730,7 @@ theorem prod_insertNth
 
 中文:
 定理 prod_insertNth
-  条件: i x (p : Fin n -> M)
+  条件: i x (p : 有限集 n -> M)
   结论: ∏ j, insertNth i x p j = x * ∏ j, p j
   证明: prod_insertNth_go n i.val i.isLt x p
 
@@ -754,7 +754,7 @@ theorem mul_prod_removeNth
 
 中文:
 定理 mul_prod_removeNth
-  条件: i (f : Fin (n + 1) -> M)
+  条件: i (f : 有限集 (n + 1) -> M)
   结论: f i * ∏ j, removeNth i f j = ∏ j, f j
   证明: by
   rw [← prod_insertNth]; rw [insertNth_self_removeNth]
@@ -786,7 +786,7 @@ theorem prod_Icc_cast
 
 中文:
 定理 prod_Icc_cast
-  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_finCongr_Icc]
 
@@ -812,7 +812,7 @@ theorem prod_Ico_cast
 
 中文:
 定理 prod_Ico_cast
-  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_finCongr_Ico]
 
@@ -838,7 +838,7 @@ theorem prod_Ioc_cast
 
 中文:
 定理 prod_Ioc_cast
-  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_finCongr_Ioc]
 
@@ -864,7 +864,7 @@ theorem prod_Ioo_cast
 
 中文:
 定理 prod_Ioo_cast
-  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_finCongr_Ioo]
 
@@ -890,7 +890,7 @@ theorem prod_uIcc_cast
 
 中文:
 定理 prod_uIcc_cast
-  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_finCongr_uIcc]
 
@@ -916,7 +916,7 @@ theorem prod_Ici_cast
 
 中文:
 定理 prod_Ici_cast
-  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_finCongr_Ici]
 
@@ -942,7 +942,7 @@ theorem prod_Ioi_cast
 
 中文:
 定理 prod_Ioi_cast
-  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_finCongr_Ioi]
 
@@ -968,7 +968,7 @@ theorem prod_Iic_cast
 
 中文:
 定理 prod_Iic_cast
-  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_finCongr_Iic]
 
@@ -992,7 +992,7 @@ theorem prod_Iio_cast
 
 中文:
 定理 prod_Iio_cast
-  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n = m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_finCongr_Iio]
 
@@ -1026,7 +1026,7 @@ theorem prod_Icc_castLE
 
 中文:
 定理 prod_Icc_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Icc]
 
@@ -1052,7 +1052,7 @@ theorem prod_Ico_castLE
 
 中文:
 定理 prod_Ico_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Ico]
 
@@ -1078,7 +1078,7 @@ theorem prod_Ioc_castLE
 
 中文:
 定理 prod_Ioc_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Ioc]
 
@@ -1104,7 +1104,7 @@ theorem prod_Ioo_castLE
 
 中文:
 定理 prod_Ioo_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Ioo]
 
@@ -1130,7 +1130,7 @@ theorem prod_uIcc_castLE
 
 中文:
 定理 prod_uIcc_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castLEEmb_uIcc]
 
@@ -1156,7 +1156,7 @@ theorem prod_Iic_castLE
 
 中文:
 定理 prod_Iic_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Iic]
 
@@ -1180,7 +1180,7 @@ theorem prod_Iio_castLE
 
 中文:
 定理 prod_Iio_castLE
-  条件: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  条件: (h : n <= m) (f : 有限集 m -> M) (a : 有限集 n)
   证明: by
   simp [← map_castLEEmb_Iio]
 
@@ -1212,7 +1212,7 @@ theorem prod_Icc_castAdd
 
 中文:
 定理 prod_Icc_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Icc]
 
@@ -1238,7 +1238,7 @@ theorem prod_Ico_castAdd
 
 中文:
 定理 prod_Ico_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Ico]
 
@@ -1264,7 +1264,7 @@ theorem prod_Ioc_castAdd
 
 中文:
 定理 prod_Ioc_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Ioc]
 
@@ -1290,7 +1290,7 @@ theorem prod_Ioo_castAdd
 
 中文:
 定理 prod_Ioo_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Ioo]
 
@@ -1316,7 +1316,7 @@ theorem prod_uIcc_castAdd
 
 中文:
 定理 prod_uIcc_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castAddEmb_uIcc]
 
@@ -1342,7 +1342,7 @@ theorem prod_Iic_castAdd
 
 中文:
 定理 prod_Iic_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Iic]
 
@@ -1366,7 +1366,7 @@ theorem prod_Iio_castAdd
 
 中文:
 定理 prod_Iio_castAdd
-  条件: (m : 自然数) (f : Fin (n + m) -> M) (a : Fin n)
+  条件: (m : 自然数) (f : 有限集 (n + m) -> M) (a : 有限集 n)
   证明: by
   simp [← map_castAddEmb_Iio]
 
@@ -1398,7 +1398,7 @@ theorem prod_Icc_castSucc
 
 中文:
 定理 prod_Icc_castSucc
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Icc]
 
@@ -1424,7 +1424,7 @@ theorem prod_Ico_castSucc
 
 中文:
 定理 prod_Ico_castSucc
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Ico]
 
@@ -1450,7 +1450,7 @@ theorem prod_Ioc_castSucc
 
 中文:
 定理 prod_Ioc_castSucc
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Ioc]
 
@@ -1476,7 +1476,7 @@ theorem prod_Ioo_castSucc
 
 中文:
 定理 prod_Ioo_castSucc
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Ioo]
 
@@ -1502,7 +1502,7 @@ theorem prod_uIcc_castSucc
 
 中文:
 定理 prod_uIcc_castSucc
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_uIcc]
 
@@ -1528,7 +1528,7 @@ theorem prod_Iic_castSucc
 
 中文:
 定理 prod_Iic_castSucc
-  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Iic]
 
@@ -1552,7 +1552,7 @@ theorem prod_Iio_castSucc
 
 中文:
 定理 prod_Iio_castSucc
-  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a : 有限集 n)
   证明: by
   simp [← map_castSuccEmb_Iio]
 
@@ -1584,7 +1584,7 @@ theorem prod_Icc_succ
 
 中文:
 定理 prod_Icc_succ
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_succEmb_Icc]
 
@@ -1610,7 +1610,7 @@ theorem prod_Ico_succ
 
 中文:
 定理 prod_Ico_succ
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_succEmb_Ico]
 
@@ -1636,7 +1636,7 @@ theorem prod_Ioc_succ
 
 中文:
 定理 prod_Ioc_succ
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_succEmb_Ioc]
 
@@ -1662,7 +1662,7 @@ theorem prod_Ioo_succ
 
 中文:
 定理 prod_Ioo_succ
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_succEmb_Ioo]
 
@@ -1688,7 +1688,7 @@ theorem prod_uIcc_succ
 
 中文:
 定理 prod_uIcc_succ
-  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a b : 有限集 n)
   证明: by
   simp [← map_succEmb_uIcc]
 
@@ -1714,7 +1714,7 @@ theorem prod_Ici_succ
 
 中文:
 定理 prod_Ici_succ
-  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a : 有限集 n)
   证明: by
   simp [← map_succEmb_Ici]
 
@@ -1740,7 +1740,7 @@ theorem prod_Ioi_succ
 
 中文:
 定理 prod_Ioi_succ
-  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  条件: (f : 有限集 (n + 1) -> M) (a : 有限集 n)
   证明: by
   simp [← map_succEmb_Ioi]
 
@@ -1764,7 +1764,7 @@ theorem prod_Ioi_zero
 
 中文:
 定理 prod_Ioi_zero
-  条件: (f : Fin (n + 1) -> M)
+  条件: (f : 有限集 (n + 1) -> M)
   证明: by
   simp [Ioi_zero_eq_map]
 
@@ -1810,7 +1810,7 @@ theorem prod_prod_eq_prod_triangle_mul
 
 中文:
 定理 prod_prod_eq_prod_triangle_mul
-  条件: (f : Fin (n + 1) -> Fin n -> M)
+  条件: (f : 有限集 (n + 1) -> 有限集 n -> M)
   证明: calc
   _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
     simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
@@ -1844,7 +1844,7 @@ theorem sum_pow_mul_eq_add_pow
 
 中文:
 定理 sum_pow_mul_eq_add_pow
-  条件: {n : 自然数} {R : 类型} [CommSemiring R] (a b : R)
+  条件: {n : 自然数} {R : 类型} [交换半环 R] (a b : R)
   证明: by
   simpa using Fintype.sum_pow_mul_eq_add_pow (Fin n) a b
 
@@ -1871,7 +1871,7 @@ lemma sum_neg_one_pow
 
 中文:
 引理 sum_neg_one_pow
-  条件: (R : 类型) [Ring R] (m : 自然数)
+  条件: (R : 类型) [环 R] (m : 自然数)
   证明: by
   induction m with
   | zero => simp
@@ -1912,7 +1912,7 @@ definition partialProd
 
 中文:
 定义 partialProd
-  签名: (f : Fin n -> M) (i : Fin (n + 1))
+  签名: (f : 有限集 n -> M) (i : 有限集 (n + 1))
   定义体: ((List.ofFn f).take i).prod
 
 @[to_additive (attr := simp)]
@@ -1936,7 +1936,7 @@ theorem partialProd_zero
 
 中文:
 定理 partialProd_zero
-  条件: (f : Fin n -> M)
+  条件: (f : 有限集 n -> M)
   结论: partialProd f 0 = 1
   证明: by simp [partialProd]
 
@@ -1960,7 +1960,7 @@ theorem partialProd_succ
 
 中文:
 定理 partialProd_succ
-  条件: (f : Fin n -> M) (j : Fin n)
+  条件: (f : 有限集 n -> M) (j : 有限集 n)
   证明: by
   simp [partialProd, List.take_add_one]
 
@@ -1987,7 +1987,7 @@ theorem partialProd_succ'
 
 中文:
 定理 partialProd_succ'
-  条件: (f : Fin (n + 1) -> M) (j : Fin (n + 1))
+  条件: (f : 有限集 (n + 1) -> M) (j : 有限集 (n + 1))
   证明: by
   simp [partialProd]
   rfl
@@ -2014,7 +2014,7 @@ lemma partialProd_init
 
 中文:
 引理 partialProd_init
-  条件: {f : Fin (n + 1) -> M} (i : Fin (n + 1))
+  条件: {f : 有限集 (n + 1) -> M} (i : 有限集 (n + 1))
   证明: i.inductionOn (by simp) fun i hi => by simp_all [init, partialProd_succ]
 
 @[to_additive]
@@ -2040,7 +2040,7 @@ theorem partialProd_left_inv
 
 中文:
 定理 partialProd_left_inv
-  条件: {G : 类型} [Group G] (f : Fin (n + 1) -> G)
+  条件: {G : 类型} [群 G] (f : 有限集 (n + 1) -> G)
   证明: funext fun x => Fin.inductionOn x (by simp) fun x hx => by
     simp only [Pi.smul_apply, smul_eq_mul] at hx ⊢
     rw [partialProd_succ]; rw [← mul_assoc]; rw [hx]; rw [mul_inv_cancel_left]
@@ -2069,7 +2069,7 @@ theorem partialProd_right_inv
 
 中文:
 定理 partialProd_right_inv
-  条件: {G : 类型} [Group G] (f : Fin n -> G) (i : Fin n)
+  条件: {G : 类型} [群 G] (f : 有限集 n -> G) (i : 有限集 n)
   证明: by
   rw [partialProd_succ]; rw [inv_mul_cancel_left]
 
@@ -2100,7 +2100,7 @@ lemma partialProd_contractNth
 
 中文:
 引理 partialProd_contractNth
-  结论: {G : 类型} [Monoid G] {n : 自然数}
+  结论: {G : 类型} [幺半群 G] {n : 自然数}
   证明: by
   ext i
   refine inductionOn i ?_ ?_
@@ -2164,7 +2164,7 @@ theorem inv_partialProd_mul_eq_contractNth
 
 中文:
 定理 inv_partialProd_mul_eq_contractNth
-  结论: {G : 类型} [Group G] (g : Fin (n + 1) -> G)
+  结论: {G : 类型} [群 G] (g : 有限集 (n + 1) -> G)
   证明: by
   rcases lt_trichotomy (k : Nat) j with (h | h | h)
   · rwa [succAbove_of_castSucc_lt, succAbove_of_castSucc_lt, partialProd_right_inv,
@@ -2273,7 +2273,7 @@ theorem finFunctionFinEquiv_apply
 
 中文:
 定理 finFunctionFinEquiv_apply
-  条件: {m n : 自然数} (f : Fin n -> Fin m)
+  条件: {m n : 自然数} (f : 有限集 n -> 有限集 m)
   证明: rfl
 -/
 theorem finFunctionFinEquiv_apply {m n : Nat} (f : Fin n -> Fin m) :
@@ -2293,7 +2293,7 @@ theorem finFunctionFinEquiv_single
 
 中文:
 定理 finFunctionFinEquiv_single
-  条件: {m n : 自然数} [NeZero m] (i : Fin n) (j : Fin m)
+  条件: {m n : 自然数} [NeZero m] (i : 有限集 n) (j : 有限集 m)
   证明: by
   rw [finFunctionFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
   rintro x hx
@@ -2325,7 +2325,7 @@ definition finPiFinEquiv
 
 中文:
 定义 finPiFinEquiv
-  签名: {m : 自然数} {n : Fin m -> 自然数}
+  签名: {m : 自然数} {n : 有限集 m -> 自然数}
   定义体: Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_pi, Fintype.card_fin])
     (fun f => ⟨∑ i, f i * ∏ j, n (Fin.castLE i.is_lt.le j), by
       induction m with
@@ -2395,7 +2395,7 @@ theorem finPiFinEquiv_apply
 
 中文:
 定理 finPiFinEquiv_apply
-  条件: {m : 自然数} {n : Fin m -> 自然数} (f : 对任意 i : Fin m, Fin (n i))
+  条件: {m : 自然数} {n : 有限集 m -> 自然数} (f : 对任意 i : 有限集 m, 有限集 (n i))
   证明: rfl
 -/
 theorem finPiFinEquiv_apply {m : Nat} {n : Fin m -> Nat} (f : forall i : Fin m, Fin (n i)) :
@@ -2414,7 +2414,7 @@ theorem finPiFinEquiv_single
 
 中文:
 定理 finPiFinEquiv_single
-  结论: {m : 自然数} {n : Fin m -> 自然数} [对任意 i, NeZero (n i)] (i : Fin m)
+  结论: {m : 自然数} {n : 有限集 m -> 自然数} [对任意 i, NeZero (n i)] (i : 有限集 m)
   证明: by
   rw [finPiFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
   rintro x hx
@@ -2447,7 +2447,7 @@ definition finSigmaFinEquiv
 
 中文:
 定义 finSigmaFinEquiv
-  签名: {m : 自然数} {n : Fin m -> 自然数}
+  签名: {m : 自然数} {n : 有限集 m -> 自然数}
   定义体: match m with
   | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simpa using Fin.isEmpty')
   | Nat.succ m =>
@@ -2490,7 +2490,7 @@ theorem finSigmaFinEquiv_apply
 
 中文:
 定理 finSigmaFinEquiv_apply
-  条件: {m : 自然数} {n : Fin m -> 自然数} (k : (i : Fin m) × Fin (n i))
+  条件: {m : 自然数} {n : 有限集 m -> 自然数} (k : (i : 有限集 m) × 有限集 (n i))
   证明: by
   induction m with
   | zero => exact k.fst.elim0
@@ -2537,7 +2537,7 @@ theorem finSigmaFinEquiv_one
 
 中文:
 定理 finSigmaFinEquiv_one
-  条件: {n : Fin 1 -> 自然数} (ij : (i : Fin 1) × Fin (n i))
+  条件: {n : 有限集 1 -> 自然数} (ij : (i : 有限集 1) × 有限集 (n i))
   证明: by
   rw [finSigmaFinEquiv_apply]; rw [add_eq_right]
   apply @Finset.sum_of_isEmpty _ _ _ _ (by simpa using Fin.isEmpty')
@@ -2575,7 +2575,7 @@ theorem prod_take_ofFn
 
 中文:
 定理 prod_take_ofFn
-  条件: {n : 自然数} (f : Fin n -> M) (i : 自然数)
+  条件: {n : 自然数} (f : 有限集 n -> M) (i : 自然数)
   证明: by
   induction i with
   | zero =>
@@ -2623,8 +2623,8 @@ theorem prod_ofFn
 
 中文:
 定理 prod_ofFn
-  条件: {n : 自然数} {f : Fin n -> M}
-  结论: (ofFn f).prod = ∏ i, f i
+  条件: {n : 自然数} {f : 有限集 n -> M}
+  结论: (ofFn f).乘积 = ∏ i, f i
   证明: Fin.prod_ofFn f
 
 Depends on / 依赖: Fin.prod_ofFn, prod_ofFn
@@ -2651,7 +2651,7 @@ alias alternatingSum_eq_finset_sum := alternat
 
 中文:
 定理 alternatingProd_eq_finsetProd
-  条件: {G : 类型} [DivisionCommMonoid G]
+  条件: {G : 类型} [DivisionComm幺半群 G]
   证明: congr_arg _ (alternatingProd_eq_finsetProd _)
     _ = ∏ i : Fin (L.length + 2), (g::h::L)[i] ^ (-1 : Int) ^ (i : Nat) := by
         { rw [Fin.prod_univ_succ, Fin.prod_univ_succ, mul_assoc]
@@ -2702,8 +2702,8 @@ lemma Fin.sum_neg_one_pow_eq_zero
   have h₂ : ∑ i : Fin
 
 中文:
-引理 Fin.sum_neg_one_pow_eq_zero
-  结论: {α : 类型} [AddCommGroup α]
+引理 有限集.sum_neg_one_pow_eq_zero
+  结论: {α : 类型} [加法交换群 α]
   证明: by
   have h₁ : ∑ i : Fin (n + 2), (-1 : Int) ^ i.val • d i =
       d 0 +

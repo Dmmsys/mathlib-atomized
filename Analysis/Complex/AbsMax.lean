@@ -114,7 +114,7 @@ theorem norm_max_aux₁
 
 中文:
 定理 norm_max_aux₁
-  结论: [CompleteSpace F] {f : Complex -> F} {z w : Complex}
+  结论: [完备空间 F] {f : 复形 -> F} {z w : 复形}
   证明: by
   -- Consider a circle of radius `r = dist w z`.
   set r : Real := dist w z
@@ -173,7 +173,7 @@ theorem norm_max_aux₂
 
 中文:
 定理 norm_max_aux₂
-  结论: {f : Complex -> F} {z w : Complex} (hd : DiffContOnCl Complex f (ball z (dist w z)))
+  结论: {f : 复形 -> F} {z w : 复形} (hd : DiffContOnCl 复形 f (ball z (dist w z)))
   证明: by
   set e : F ->L[Complex] F̂ := UniformSpace.Completion.toComplL
   have he : forall x, ‖e x‖ = ‖x‖ := UniformSpace.Completion.norm_coe
@@ -207,7 +207,7 @@ theorem norm_max_aux₃
 
 中文:
 定理 norm_max_aux₃
-  结论: {f : Complex -> F} {z w : Complex} {r : 实数} (hr : dist w z = r)
+  结论: {f : 复形 -> F} {z w : 复形} {r : 实数} (hr : dist w z = r)
   证明: by
   subst r
   rcases eq_or_ne w z with (rfl | hne); · rfl
@@ -289,7 +289,7 @@ theorem norm_eq_norm_of_isMaxOn_of_ball_subset
 
 中文:
 定理 norm_eq_norm_of_isMaxOn_of_ball_subset
-  结论: {f : E -> F} {s : Set E} {z w : E}
+  结论: {f : E -> F} {s : 集合 E} {z w : E}
   证明: norm_eqOn_closedBall_of_isMaxOn (hd.mono hsub) (hz.on_subset hsub) (mem_closedBall.2 le_rfl)
 
 Depends on / 依赖: hd.mono, hz.on_subset, le_rfl, mem_closedBall, norm_eqOn_closedBall_of_isMaxOn, on_subset
@@ -345,7 +345,7 @@ theorem isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
 
 中文:
 定理 isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
-  结论: {f : E -> F} {s : Set E}
+  结论: {f : E -> F} {s : 集合 E}
   证明: by
   refine isOpen_iff_mem_nhds.2 fun z hz => (eventually_eventually_nhds.2 hz.1).and ?_
   replace hd : forallᶠ w in 𝓝 z, DifferentiableAt Complex f w := hd.eventually_differentiableAt hz.1
@@ -380,7 +380,7 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
 
 中文:
 定理 norm_eqOn_of_isPreconnected_of_isMaxOn
-  结论: {f : E -> F} {U : Set E} {c : E}
+  结论: {f : E -> F} {U : 集合 E} {c : E}
   证明: by
   set V := U inter {z | IsMaxOn (norm ∘ f) U z}
   have hV : forall x in V, ‖f x‖ = ‖f c‖ := fun x hx => le_antisymm (hm hx.1) (hx.2 hcU)
@@ -420,7 +420,7 @@ theorem norm_eqOn_closure_of_isPreconnected_of_isMaxOn
 
 中文:
 定理 norm_eqOn_closure_of_isPreconnected_of_isMaxOn
-  结论: {f : E -> F} {U : Set E} {c : E}
+  结论: {f : E -> F} {U : 集合 E} {c : E}
   证明: (norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hd.differentiableOn hcU hm).of_subset_closure
     hd.continuousOn.norm continuousOn_const subset_closure Subset.rfl
 
@@ -462,7 +462,7 @@ eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add
 
 中文:
 定理 eqOn_of_isPreconnected_of_isMaxOn_norm
-  结论: {f : E -> F} {U : Set E} {c : E}
+  结论: {f : E -> F} {U : 集合 E} {c : E}
   证明: fun x hx =>
   have H₁ : ‖f x‖ = ‖f c‖ := norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hd hcU hm hx
   have H₂ : ‖f x + f c‖ = ‖f c + f c‖ :=
@@ -488,7 +488,7 @@ theorem eqOn_closure_of_isPreconnected_of_isMaxOn_norm
 
 中文:
 定理 eqOn_closure_of_isPreconnected_of_isMaxOn_norm
-  结论: {f : E -> F} {U : Set E} {c : E}
+  结论: {f : E -> F} {U : 集合 E} {c : E}
   证明: (eqOn_of_isPreconnected_of_isMaxOn_norm hc ho hd.differentiableOn hcU hm).of_subset_closure
     hd.continuousOn continuousOn_const subset_closure Subset.rfl
 
@@ -513,7 +513,7 @@ eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add, H₁
 
 中文:
 定理 eq_of_isMaxOn_of_ball_subset
-  结论: {f : E -> F} {s : Set E} {z w : E} (hd : DiffContOnCl Complex f s)
+  结论: {f : E -> F} {s : 集合 E} {z w : E} (hd : DiffContOnCl 复形 f s)
   证明: have H₁ : ‖f w‖ = ‖f z‖ := norm_eq_norm_of_isMaxOn_of_ball_subset hd hz hsub
   have H₂ : ‖f w + f z‖ = ‖f z + f z‖ :=
     norm_eq_norm_of_isMaxOn_of_ball_subset (hd.add_const _) hz.norm_add_self hsub
@@ -558,8 +558,8 @@ lemma eq_const_of_exists_max
     isOpen_ball h_an hv hv_max
 
 中文:
-引理 eq_const_of_exists_max
-  结论: {f : E -> F} {b : 实数} (h_an : DifferentiableOn Complex f (ball 0 b))
+引理 eq_const_of_存在_max
+  结论: {f : E -> F} {b : 实数} (h_an : DifferentiableOn 复形 f (ball 0 b))
   证明: Complex.eqOn_of_isPreconnected_of_isMaxOn_norm (convex_ball 0 b).isPreconnected
     isOpen_ball h_an hv hv_max
 
@@ -586,8 +586,8 @@ lemma eq_const_of_exists_le
   a
 
 中文:
-引理 eq_const_of_exists_le
-  结论: [命题erSpace E] {f : E -> F} {r b : 实数}
+引理 eq_const_of_存在_le
+  结论: [真空间 E] {f : E -> F} {r b : 实数}
   证明: by
 .exists_isMaxOn obtain ⟨x, hx_mem, hx_max⟩ := isCompact_closedBall (0 : E) r
     (nonempty_closedBall.mpr hr_nn)
@@ -657,7 +657,7 @@ theorem eventually_eq_or_eq_zero_of_isLocalMin_norm
 
 中文:
 定理 eventually_eq_or_eq_zero_of_isLocalMin_norm
-  结论: {f : E -> Complex} {c : E}
+  结论: {f : E -> 复形} {c : E}
   证明: by
   refine or_iff_not_imp_right.mpr fun h => ?_
   have h1 : forallᶠ z in 𝓝 c, f z != 0 := hf.self_of_nhds.continuousAt.eventually_ne h
@@ -702,8 +702,8 @@ theorem exists_mem_frontier_isMaxOn_norm
   rcases hwU with hwU | hwU; rotate
 
 中文:
-定理 exists_mem_frontier_isMaxOn_norm
-  结论: [FiniteDimensional Complex E] {f : E -> F} {U : Set E}
+定理 存在_mem_frontier_isMaxOn_norm
+  结论: [有限维 复形 E] {f : E -> F} {U : 集合 E}
   证明: by
   have hc : IsCompact (closure U) := hb.isCompact_closure
   obtain ⟨w, hwU, hle⟩ : exists w in closure U, IsMaxOn (norm ∘ f) (closure U) w :=
@@ -743,8 +743,8 @@ theorem norm_le_of_forall_mem_frontier_norm_le
     the function 
 
 中文:
-定理 norm_le_of_forall_mem_frontier_norm_le
-  结论: {f : E -> F} {U : Set E} (hU : IsBounded U)
+定理 norm_le_of_对任意_mem_frontier_norm_le
+  结论: {f : E -> F} {U : 集合 E} (hU : IsBounded U)
   证明: by
   rw [closure_eq_self_union_frontier]; rw [union_comm]; rw [mem_union] at hz
   rcases hz with hz | hz; · exact hC z hz
@@ -788,7 +788,7 @@ theorem eqOn_closure_of_eqOn_frontier
 
 中文:
 定理 eqOn_closure_of_eqOn_frontier
-  结论: {f g : E -> F} {U : Set E} (hU : IsBounded U)
+  结论: {f g : E -> F} {U : 集合 E} (hU : IsBounded U)
   证明: by
   suffices H : forall z in closure U, ‖(f - g) z‖ <= 0 by simpa [sub_eq_zero] using! H
   refine fun z hz => norm_le_of_forall_mem_frontier_norm_le hU (hf.sub hg) (fun w hw => ?_) hz
@@ -813,7 +813,7 @@ theorem eqOn_of_eqOn_frontier
 
 中文:
 定理 eqOn_of_eqOn_frontier
-  结论: {f g : E -> F} {U : Set E} (hU : IsBounded U) (hf : DiffContOnCl Complex f U)
+  结论: {f g : E -> F} {U : 集合 E} (hU : IsBounded U) (hf : DiffContOnCl 复形 f U)
   证明: (eqOn_closure_of_eqOn_frontier hU hf hg hfg).mono subset_closure
 
 Depends on / 依赖: eqOn_closure_of_eqOn_frontier, subset_closure

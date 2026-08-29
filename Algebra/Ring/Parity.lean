@@ -93,7 +93,7 @@ lemma IsSquare.zero
 
 中文:
 引理 IsSquare.zero
-  条件: [MulZeroClass α]
+  条件: [乘零类 α]
   结论: IsSquare (0 : α)
   证明: ⟨0, (mul_zero _).symm⟩
 -/
@@ -136,7 +136,7 @@ lemma Even.mul_left
 
 中文:
 引理 Even.mul_left
-  条件: [LeftDistribClass α] (ha : Even a) (b : α)
+  条件: [LeftDistrib类 α] (ha : Even a) (b : α)
   结论: Even (b * a)
   证明: by
   rcases ha with ⟨k, rfl⟩
@@ -162,7 +162,7 @@ lemma Even.mul_right
 
 中文:
 引理 Even.mul_right
-  条件: [RightDistribClass α] (ha : Even a) (b : α)
+  条件: [RightDistrib类 α] (ha : Even a) (b : α)
   结论: Even (a * b)
   证明: by
   rcases ha with ⟨k, rfl⟩
@@ -188,7 +188,7 @@ lemma even_iff_exists_two_mul
   proof: by simp [even_iff_exists_two_nsmul]
 
 中文:
-引理 even_iff_exists_two_mul
+引理 even_iff_存在_two_mul
   结论: Even a ↔ 存在 b, a = 2 * b
   证明: by simp [even_iff_exists_two_nsmul]
 
@@ -270,7 +270,7 @@ lemma range_two_mul
 
 中文:
 引理 range_two_mul
-  条件: (α) [NonAssocSemiring α]
+  条件: (α) [非结合半环 α]
   证明: by
   ext x
   simp [eq_comm, two_mul, Even]
@@ -342,7 +342,7 @@ lemma odd_iff_exists_bit1
 alias ⟨Odd.exists_bit1, _⟩ := odd_iff_exists_bit1
 
 中文:
-引理 odd_iff_exists_bit1
+引理 odd_iff_存在_bit1
   结论: Odd a ↔ 存在 b, a = 2 * b + 1
   证明: exists_congr fun b => by rw [two_mul]
 
@@ -364,7 +364,7 @@ lemma range_two_mul_add_one
 
 中文:
 引理 range_two_mul_add_one
-  条件: (α : 类型) [Semiring α]
+  条件: (α : 类型) [半环 α]
   证明: by ext x; simp [Odd, eq_comm]
 -/
 @[simp] lemma range_two_mul_add_one (α : Type*) [Semiring α] :
@@ -609,7 +609,7 @@ lemma Odd.map
 
 中文:
 引理 Odd.map
-  条件: [FunLike F α β] [RingHomClass F α β] (f : F)
+  条件: [函数状 F α β] [环态射类 F α β] (f : F)
   结论: Odd a -> Odd (f a)
   证明: by
   rintro ⟨a, rfl⟩; exact ⟨f a, by simp [two_mul]⟩
@@ -630,7 +630,7 @@ lemma Odd.natCast
 
 中文:
 引理 Odd.natCast
-  条件: {R : 类型} [Semiring R] {n : 自然数} (hn : Odd n)
+  条件: {R : 类型} [半环 R] {n : 自然数} (hn : Odd n)
   结论: Odd (n : R)
   证明: hn.map Nat.castRingHom R
 
@@ -708,7 +708,7 @@ have : a ^ 2 = b ^ 2 := add_right_cancel
 
 中文:
 引理 Odd.pow_add_pow_eq_zero
-  条件: [IsCancelAdd α] (hn : Odd n) (hab : a + b = 0)
+  条件: [是消去加法 α] (hn : Odd n) (hab : a + b = 0)
   证明: by
   obtain ⟨k, rfl⟩ := hn
   induction k with | zero => simpa | succ k ih => ?_
@@ -745,7 +745,7 @@ theorem Even.of_isUnit_two
 
 中文:
 定理 Even.of_isUnit_two
-  条件: (h : IsUnit (2 : α)) (a : α)
+  条件: (h : 是单位 (2 : α)) (a : α)
   结论: Even a
   证明: let ⟨u, hu⟩ := h; ⟨u⁻¹ * a, by rw [← mul_add, ← two_mul, ← hu, Units.inv_mul_cancel_left]⟩
 
@@ -767,8 +767,8 @@ theorem isUnit_two_iff_forall_even
   exact ⟨⟨2, a, ha, .trans (Commute.ofNat_right _ _).eq ha⟩, rfl⟩
 
 中文:
-定理 isUnit_two_iff_forall_even
-  结论: IsUnit (2 : α) ↔ 对任意 a : α, Even a
+定理 isUnit_two_iff_对任意_even
+  结论: 是单位 (2 : α) ↔ 对任意 a : α, Even a
   证明: by
   refine ⟨Even.of_isUnit_two, fun h => ?_⟩
   obtain ⟨a, ha⟩ := h 1
@@ -801,7 +801,7 @@ theorem Odd.of_isUnit_two
 
 中文:
 定理 Odd.of_isUnit_two
-  条件: (h : IsUnit (2 : α)) (a : α)
+  条件: (h : 是单位 (2 : α)) (a : α)
   结论: Odd a
   证明: by
   rw [← sub_add_cancel a 1]
@@ -1884,7 +1884,7 @@ lemma iterate_two_mul
 
 中文:
 引理 iterate_two_mul
-  条件: (hf : Involutive f) (n : 自然数)
+  条件: (hf : 对合 f) (n : 自然数)
   结论: f^[2 * n] = id
   证明: by
   rw [iterate_mul]; rw [involutive_iff_iter_2_eq_id.1 hf]; rw [iterate_id]
@@ -1906,7 +1906,7 @@ lemma iterate_two_mul_add_one
 
 中文:
 引理 iterate_two_mul_add_one
-  条件: (hf : Involutive f) (n : 自然数)
+  条件: (hf : 对合 f) (n : 自然数)
   结论: f^[2 * n + 1] = f
   证明: by
   rw [iterate_succ]; rw [hf.iterate_two_mul]; rw [id_comp]
@@ -1929,7 +1929,7 @@ lemma iterate_even
 
 中文:
 引理 iterate_even
-  条件: (hf : Involutive f) (hn : Even n)
+  条件: (hf : 对合 f) (hn : Even n)
   结论: f^[n] = id
   证明: by
   obtain ⟨m, rfl⟩ := hn
@@ -1954,7 +1954,7 @@ lemma iterate_odd
 
 中文:
 引理 iterate_odd
-  条件: (hf : Involutive f) (hn : Odd n)
+  条件: (hf : 对合 f) (hn : Odd n)
   结论: f^[n] = f
   证明: by
   obtain ⟨m, rfl⟩ := hn
@@ -1978,7 +1978,7 @@ lemma iterate_eq_self
 
 中文:
 引理 iterate_eq_self
-  条件: (hf : Involutive f) (hne : f != id)
+  条件: (hf : 对合 f) (hne : f != id)
   结论: f^[n] = f ↔ Odd n
   证明: ⟨fun H => not_even_iff_odd.1 fun hn => hne by rwa [hf.iterate_even hn, eq_comm] at H,
     hf.iterate_odd⟩
@@ -2000,7 +2000,7 @@ lemma iterate_eq_id
 
 中文:
 引理 iterate_eq_id
-  条件: (hf : Involutive f) (hne : f != id)
+  条件: (hf : 对合 f) (hne : f != id)
   结论: f^[n] = id ↔ Even n
   证明: ⟨fun H => not_odd_iff_even.1 fun hn => hne by rwa [hf.iterate_odd hn] at H, hf.iterate_even⟩
 

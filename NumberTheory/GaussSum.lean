@@ -78,7 +78,7 @@ definition gaussSum
 
 中文:
 定义 gaussSum
-  签名: (χ : MulChar R R') (ψ : AddChar R R')
+  签名: (χ : 乘法特征 R R') (ψ : 加法特征 R R')
   定义体: ∑ a, χ a * ψ a
 -/
 def gaussSum (χ : MulChar R R') (ψ : AddChar R R') : R' :=
@@ -97,7 +97,7 @@ theorem gaussSum_mulShift
 
 中文:
 定理 gaussSum_mulShift
-  条件: (χ : MulChar R R') (ψ : AddChar R R') (a : Rˣ)
+  条件: (χ : 乘法特征 R R') (ψ : 加法特征 R R') (a : Rˣ)
   证明: by
   simp only [gaussSum, mulShift_apply, Finset.mul_sum]
   simp_rw [← mul_assoc, ← map_mul]
@@ -122,7 +122,7 @@ theorem gaussSum_mulShift_eq
 
 中文:
 定理 gaussSum_mulShift_eq
-  条件: (χ : MulChar R R') (ψ : AddChar R R') (a : Rˣ)
+  条件: (χ : 乘法特征 R R') (ψ : 加法特征 R R') (a : Rˣ)
   证明: by
   rw [← gaussSum_mulShift χ ψ a]; rw [inv_apply_eq_inv]; rw [Ring.inverse_mul_cancel_left _ _ (a.isUnit.map χ)]
 
@@ -145,7 +145,7 @@ lemma star_gaussSum_eq
 
 中文:
 引理 star_gaussSum_eq
-  条件: (χ : MulChar R Complex) (ψ : AddChar R Complex)
+  条件: (χ : 乘法特征 R 复形) (ψ : 加法特征 R 复形)
   证明: calc
     _ = ∑ x, star (ψ x) * χ⁻¹ x := by simp [gaussSum, star_mul, MulChar.star_apply']
     _ = ∑ x, ψ⁻¹ x * χ⁻¹ x := by simp [← starRingEnd_apply, map_neg_eq_conj]
@@ -184,7 +184,7 @@ theorem gaussSum_one_one
 
 中文:
 定理 gaussSum_one_one
-  结论: gaussSum (1 : MulChar R R') (1 : AddChar R R') = 自然数.card Rˣ
+  结论: gaussSum (1 : 乘法特征 R R') (1 : 加法特征 R R') = 自然数.card Rˣ
   证明: by
   classical
   simp [gaussSum, MulChar.sum_one_eq_card_units]
@@ -206,7 +206,7 @@ theorem gaussSum_one_right
 
 中文:
 定理 gaussSum_one_right
-  条件: [IsDomain R'] {χ : MulChar R R'} (hχ : χ != 1)
+  条件: [是整环 R'] {χ : 乘法特征 R R'} (hχ : χ != 1)
   证明: by
   simpa [gaussSum] using MulChar.sum_eq_zero_of_ne_one hχ
 
@@ -240,7 +240,7 @@ theorem gaussSum_one_left
 
 中文:
 定理 gaussSum_one_left
-  条件: {ψ : AddChar R R'} (hψ : ψ != 1)
+  条件: {ψ : 加法特征 R R'} (hψ : ψ != 1)
   证明: by
   classical
   simp only [gaussSum, ← add_eq_zero_iff_eq_neg]
@@ -291,7 +291,7 @@ lemma gaussSum_mul
 
 中文:
 引理 gaussSum_mul
-  结论: {R : 类型u} [CommRing R] [Fintype R] {R' : 类型v} [CommRing R']
+  结论: {R : 类型u} [交换环 R] [有限类型 R] {R' : 类型v} [交换环 R']
   证明: by
   rw [gaussSum]; rw [gaussSum]; rw [sum_mul_sum]
   conv => enter [1, 2, x, 2, x_1]; rw [mul_mul_mul_comm]
@@ -331,7 +331,7 @@ lemma mul_gaussSum_inv_eq_gaussSum
 
 中文:
 引理 mul_gaussSum_inv_eq_gaussSum
-  条件: (χ : MulChar R R') (ψ : AddChar R R')
+  条件: (χ : 乘法特征 R R') (ψ : 加法特征 R R')
   证明: by
   rw [ψ.inv_mulShift]; rw [← Units.coe_neg_one]
   exact gaussSum_mulShift χ ψ (-1)
@@ -363,7 +363,7 @@ theorem gaussSum_mul_aux
 
 中文:
 定理 gaussSum_mul_aux
-  结论: {χ : MulChar R R'} (hχ : χ != 1) (ψ : AddChar R R')
+  结论: {χ : 乘法特征 R R'} (hχ : χ != 1) (ψ : 加法特征 R R')
   证明: by
   rcases eq_or_ne b 0 with hb | hb
   · -- case `b = 0`
@@ -397,7 +397,7 @@ theorem gaussSum_mul_gaussSum_eq_card
 
 中文:
 定理 gaussSum_mul_gaussSum_eq_card
-  结论: {χ : MulChar R R'} (hχ : χ != 1) {ψ : AddChar R R'}
+  结论: {χ : 乘法特征 R R'} (hχ : χ != 1) {ψ : 加法特征 R R'}
   证明: by
   simp only [gaussSum, AddChar.inv_apply, Finset.sum_mul, Finset.mul_sum, MulChar.inv_apply']
   conv =>
@@ -435,7 +435,7 @@ lemma gaussSum_mul_gaussSum_pow_orderOf_sub_one
 
 中文:
 引理 gaussSum_mul_gaussSum_pow_orderOf_sub_one
-  结论: {χ : MulChar R R'} {ψ : AddChar R R'}
+  结论: {χ : 乘法特征 R R'} {ψ : 加法特征 R R'}
   证明: by
   have h : χ ^ (orderOf χ - 1) = χ⁻¹ := by
     refine (inv_eq_of_mul_eq_one_right ?_).symm
@@ -462,7 +462,7 @@ lemma gaussSum_ne_zero_of_nontrivial
 
 中文:
 引理 gaussSum_ne_zero_of_nontrivial
-  结论: (h : (Fintype.card R : R') != 0) {χ : MulChar R R'}
+  结论: (h : (有限类型.card R : R') != 0) {χ : 乘法特征 R R'}
   证明: fun H => h.symm zero_mul (gaussSum χ⁻¹ _) ▸ H ▸ gaussSum_mul_gaussSum_eq_card hχ hψ
 
 Depends on / 依赖: gaussSum, gaussSum_mul_gaussSum_eq_card, h.symm, zero_mul
@@ -486,7 +486,7 @@ theorem gaussSum_sq
 
 中文:
 定理 gaussSum_sq
-  结论: {χ : MulChar R R'} (hχ₁ : χ != 1) (hχ₂ : IsQuadratic χ)
+  结论: {χ : 乘法特征 R R'} (hχ₁ : χ != 1) (hχ₂ : IsQuadratic χ)
   证明: by
   rw [pow_two]; rw [← gaussSum_mul_gaussSum_eq_card hχ₁ hψ]; rw [hχ₂.inv]; rw [mul_rotate']
   congr
@@ -529,7 +529,7 @@ theorem gaussSum_frob
 
 中文:
 定理 gaussSum_frob
-  条件: (χ : MulChar R R') (ψ : AddChar R R')
+  条件: (χ : 乘法特征 R R') (ψ : 加法特征 R R')
   证明: by
   rw [← frobenius_def]; rw [gaussSum]; rw [gaussSum]; rw [map_sum]
   simp_rw [pow_apply' χ fp.1.ne_zero, map_mul, frobenius_def]
@@ -553,8 +553,8 @@ theorem MulChar.IsQuadratic.gaussSum_frob
   rw [_root_.gaussSum_frob]; rw [pow_mulShift]; rw [hχ.pow_char p]; rw [← gaussSum_mulShift χ ψ hp.unit]; rw [← mul_assoc]; rw [hp.unit_spec]; rw [← pow_two]; rw [← pow_apply' _ two_ne_zero]; rw [hχ.sq_eq_one]; rw [← hp.unit_spec]; rw [one_apply_coe]; rw [one_mul]
 
 中文:
-定理 MulChar.IsQuadratic.gaussSum_frob
-  结论: (hp : IsUnit (p : R)) {χ : MulChar R R'}
+定理 乘法特征.IsQuadratic.gaussSum_frob
+  结论: (hp : 是单位 (p : R)) {χ : 乘法特征 R R'}
   证明: by
   rw [_root_.gaussSum_frob]; rw [pow_mulShift]; rw [hχ.pow_char p]; rw [← gaussSum_mulShift χ ψ hp.unit]; rw [← mul_assoc]; rw [hp.unit_spec]; rw [← pow_two]; rw [← pow_apply' _ two_ne_zero]; rw [hχ.sq_eq_one]; rw [← hp.unit_spec]; rw [one_apply_coe]; rw [one_mul]
 
@@ -578,8 +578,8 @@ theorem MulChar.IsQuadratic.gaussSum_frob_iter
     rw [pow_succ]; rw [pow_mul]; rw [ih]; rw [mul_pow]; rw [hχ.gaussSum_frob _ hp]; rw [← mul_assoc]; rw [pow_succ]; rw [map_mul]; rw [← pow_apply' χ fp.1.ne_zero ((p : R) ^ n)]; rw [hχ.pow_
 
 中文:
-定理 MulChar.IsQuadratic.gaussSum_frob_iter
-  结论: (n : 自然数) (hp : IsUnit (p : R)) {χ : MulChar R R'}
+定理 乘法特征.IsQuadratic.gaussSum_frob_iter
+  结论: (n : 自然数) (hp : 是单位 (p : R)) {χ : 乘法特征 R R'}
   证明: by
   induction n with
   | zero => rw [pow_zero, pow_one, pow_zero, MulChar.map_one, one_mul]
@@ -623,7 +623,7 @@ theorem Char.card_pow_char_pow
 
 中文:
 定理 Char.card_pow_char_pow
-  结论: {χ : MulChar R R'} (hχ : IsQuadratic χ) (ψ : AddChar R R') (p n : 自然数)
+  结论: {χ : 乘法特征 R R'} (hχ : IsQuadratic χ) (ψ : 加法特征 R R') (p n : 自然数)
   证明: by
   have : gaussSum χ ψ != 0 := by
     intro hf
@@ -665,7 +665,7 @@ theorem Char.card_pow_card
 
 中文:
 定理 Char.card_pow_card
-  结论: {F : 类型} [Field F] [Fintype F] {F' : 类型} [Field F'] [Fintype F']
+  结论: {F : 类型} [域 F] [有限类型 F] {F' : 类型} [域 F'] [有限类型 F']
   证明: by
   obtain ⟨n, hp, hc⟩ := FiniteField.card F (ringChar F)
   obtain ⟨n', hp', hc'⟩ := FiniteField.card F' (ringChar F')
@@ -731,7 +731,7 @@ theorem FiniteField.two_pow_card
 
 中文:
 定理 FiniteField.two_pow_card
-  条件: {F : 类型} [Fintype F] [Field F] (hF : ringChar F != 2)
+  条件: {F : 类型} [有限类型 F] [域 F] (hF : ringChar F != 2)
   证明: by
   have hp2 (n : Nat) : (2 ^ n : F) != 0 := pow_ne_zero n (Ring.two_ne_zero hF)
   obtain ⟨n, hp, hc⟩ := FiniteField.card F (ringChar F)

@@ -96,7 +96,7 @@ theorem equivalent_weightedSumSquares_of_isAlgClosed
 
 中文:
 定理 equivalent_weightedSumSquares_of_isAlgClosed
-  结论: [Invertible (2 : K)] {M : 类型}
+  结论: [可逆 (2 : K)] {M : 类型}
   证明: open scoped Classical in
   let ⟨w, ⟨hw₁⟩⟩ := Q.equivalent_weightedSumSquares_units_of_nondegenerate' hQ
   ⟨hw₁.trans (isometryEquivSumSquaresUnits w)⟩
@@ -122,7 +122,7 @@ theorem equivalent_of_isAlgClosed
 
 中文:
 定理 equivalent_of_isAlgClosed
-  结论: [Invertible (2 : K)] {M : 类型} [AddCommGroup M] [Module K M]
+  结论: [可逆 (2 : K)] {M : 类型} [加法交换群 M] [模 K M]
   证明: (Q₁.equivalent_weightedSumSquares_of_isAlgClosed hQ₁).trans
   (Q₂.equivalent_weightedSumSquares_of_isAlgClosed hQ₂).symm
 

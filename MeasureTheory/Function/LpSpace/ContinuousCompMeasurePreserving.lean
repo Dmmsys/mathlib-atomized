@@ -103,8 +103,8 @@ theorem Filter.Tendsto.compMeasurePreservingLp
   convert! this.comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.compMeasurePreservingLp
-  结论: {α : 类型} {l : Filter α}
+定理 滤子.收敛.compMeasurePreservingLp
+  结论: {α : 类型} {l : 滤子 α}
   证明: by
   have := (Lp.compMeasurePreserving_continuous μ ν E hp).tendsto ⟨f₀, g₀, hgm₀⟩
   replace hg : Tendsto (fun a => ⟨g a, hgm a⟩ : α -> {g : C(X, Y) // MeasurePreserving g μ ν})
@@ -198,8 +198,8 @@ theorem Continuous.compMeasurePreservingLp
     hf.continuousAt.compMeasurePreservingLp hg.continuousAt hgm hp
 
 中文:
-定理 Continuous.compMeasurePreservingLp
-  结论: (hf : Continuous f) (hg : Continuous g)
+定理 连续.compMeasurePreservingLp
+  结论: (hf : 连续 f) (hg : 连续 g)
   证明: continuous_iff_continuousAt.mpr fun _ =>
     hf.continuousAt.compMeasurePreservingLp hg.continuousAt hgm hp
 

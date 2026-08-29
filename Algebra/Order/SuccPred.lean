@@ -33,9 +33,9 @@ class SuccAddOrder
     - succ_eq_add_one((x : α)) : succ x = x + 1
 
 中文:
-类 SuccAddOrder
-  参数: (α : 类型) [Preorder α] [Add α] [One α]
-  继承: SuccOrder α
+类 SuccAdd序
+  参数: (α : 类型) [预序 α] [加法 α] [幺 α]
+  继承: Succ序 α
   公理与运算 (1 个):
     - succ_eq_add_one((x : α)) : succ x = x + 1
 -/
@@ -53,9 +53,9 @@ class PredSubOrder
     - pred_eq_sub_one((x : α)) : pred x = x - 1
 
 中文:
-类 PredSubOrder
-  参数: (α : 类型) [Preorder α] [Sub α] [One α]
-  继承: PredOrder α
+类 PredSub序
+  参数: (α : 类型) [预序 α] [减法 α] [幺 α]
+  继承: Pred序 α
   公理与运算 (1 个):
     - pred_eq_sub_one((x : α)) : pred x = x - 1
 -/
@@ -182,7 +182,7 @@ theorem add_one_le_iff
 
 中文:
 定理 add_one_le_iff
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: x + 1 <= y ↔ x < y
   证明: add_one_le_iff_of_not_isMax (not_isMax x)
 
@@ -237,7 +237,7 @@ theorem covBy_add_one
 
 中文:
 定理 covBy_add_one
-  条件: [NoMaxOrder α] (x : α)
+  条件: [NoMax序 α] (x : α)
   结论: x ⋖ x + 1
   证明: by
   rw [← succ_eq_add_one]
@@ -341,7 +341,7 @@ theorem le_sub_one_iff
 
 中文:
 定理 le_sub_one_iff
-  条件: [NoMinOrder α]
+  条件: [NoMin序 α]
   结论: x <= y - 1 ↔ x < y
   证明: le_sub_one_iff_of_not_isMin (not_isMin y)
 
@@ -396,7 +396,7 @@ theorem sub_one_covBy
 
 中文:
 定理 sub_one_covBy
-  条件: [NoMinOrder α] (x : α)
+  条件: [NoMin序 α] (x : α)
   结论: x - 1 ⋖ x
   证明: by
   rw [← pred_eq_sub_one]
@@ -428,7 +428,7 @@ theorem succ_iterate
 
 中文:
 定理 succ_iterate
-  条件: [AddMonoidWithOne α] [SuccAddOrder α] (x : α) (n : 自然数)
+  条件: [加法带幺幺半群 α] [SuccAdd序 α] (x : α) (n : 自然数)
   证明: by
   induction n with
   | zero =>
@@ -464,7 +464,7 @@ theorem pred_iterate
 
 中文:
 定理 pred_iterate
-  条件: [AddCommGroupWithOne α] [PredSubOrder α] (x : α) (n : 自然数)
+  条件: [加法交换带幺群 α] [PredSub序 α] (x : α) (n : 自然数)
   证明: by
   induction n with
   | zero =>
@@ -501,7 +501,7 @@ theorem not_isMax_zero
 
 中文:
 定理 not_isMax_zero
-  条件: [Zero α] [One α] [ZeroLEOneClass α] [NeZero (1 : α)]
+  条件: [零 α] [幺 α] [ZeroLEOne类 α] [NeZero (1 : α)]
   结论: ¬ IsMax (0 : α)
   证明: by
   rw [not_isMax_iff]
@@ -524,7 +524,7 @@ theorem one_le_iff_pos
 
 中文:
 定理 one_le_iff_pos
-  结论: [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
+  结论: [加法带幺幺半群 α] [ZeroLEOne类 α] [NeZero (1 : α)]
   证明: by
   rw [← succ_le_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
 
@@ -545,7 +545,7 @@ theorem one_le_iff_ne_zero
 
 中文:
 定理 one_le_iff_ne_zero
-  结论: [AddMonoidWithOne α] [NeZero (1 : α)]
+  结论: [加法带幺幺半群 α] [NeZero (1 : α)]
   证明: by
   rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
 
@@ -567,7 +567,7 @@ theorem covBy_iff_add_one_eq
 
 中文:
 定理 covBy_iff_add_one_eq
-  条件: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  条件: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: by
   rw [← succ_eq_add_one]
   exact succ_eq_iff_covBy.symm
@@ -591,7 +591,7 @@ theorem covBy_iff_sub_one_eq
 
 中文:
 定理 covBy_iff_sub_one_eq
-  条件: [Sub α] [One α] [PredSubOrder α] [NoMinOrder α]
+  条件: [减法 α] [幺 α] [PredSub序 α] [NoMin序 α]
   证明: by
   rw [← pred_eq_sub_one]
   exact pred_eq_iff_covBy.symm
@@ -615,7 +615,7 @@ theorem IsSuccPrelimit.add_one_lt
 
 中文:
 定理 IsSuccPrelimit.add_one_lt
-  结论: [Add α] [One α] [SuccAddOrder α]
+  结论: [加法 α] [幺 α] [SuccAdd序 α]
   证明: by
   rw [← succ_eq_add_one]
   exact hx.succ_lt hy
@@ -639,7 +639,7 @@ theorem IsPredPrelimit.lt_sub_one
 
 中文:
 定理 IsPredPrelimit.lt_sub_one
-  结论: [Sub α] [One α] [PredSubOrder α]
+  结论: [减法 α] [幺 α] [PredSub序 α]
   证明: by
   rw [← pred_eq_sub_one]
   exact hx.lt_pred hy
@@ -660,8 +660,8 @@ theorem IsSuccLimit.add_one_lt
   proof: hx.isSuccPrelimit.add_one_lt hy
 
 中文:
-定理 IsSuccLimit.add_one_lt
-  结论: [Add α] [One α] [SuccAddOrder α]
+定理 是SuccLimit.add_one_lt
+  结论: [加法 α] [幺 α] [SuccAdd序 α]
   证明: hx.isSuccPrelimit.add_one_lt hy
 
 Depends on / 依赖: add_one_lt, hx.isSuccPrelimit.add_one_lt, isSuccPrelimit
@@ -679,8 +679,8 @@ theorem IsPredLimit.lt_sub_one
   proof: hx.isPredPrelimit.lt_sub_one hy
 
 中文:
-定理 IsPredLimit.lt_sub_one
-  结论: [Sub α] [One α] [PredSubOrder α]
+定理 是PredLimit.lt_sub_one
+  结论: [减法 α] [幺 α] [PredSub序 α]
   证明: hx.isPredPrelimit.lt_sub_one hy
 
 Depends on / 依赖: hx.isPredPrelimit.lt_sub_one, isPredPrelimit, lt_sub_one
@@ -698,7 +698,7 @@ theorem IsSuccPrelimit.add_natCast_lt
 
 中文:
 定理 IsSuccPrelimit.add_natCast_lt
-  结论: [AddMonoidWithOne α] [SuccAddOrder α]
+  结论: [加法带幺幺半群 α] [SuccAdd序 α]
 -/
 theorem IsSuccPrelimit.add_natCast_lt [AddMonoidWithOne α] [SuccAddOrder α]
     (hx : IsSuccPrelimit x) (hy : y < x) : forall n : Nat, y + n < x
@@ -716,7 +716,7 @@ theorem IsPredPrelimit.lt_sub_natCast
 
 中文:
 定理 IsPredPrelimit.lt_sub_natCast
-  结论: [AddCommGroupWithOne α] [PredSubOrder α]
+  结论: [加法交换带幺群 α] [PredSub序 α]
 -/
 theorem IsPredPrelimit.lt_sub_natCast [AddCommGroupWithOne α] [PredSubOrder α]
     (hx : IsPredPrelimit x) (hy : x < y) : forall n : Nat, x < y - n
@@ -734,8 +734,8 @@ theorem IsSuccLimit.add_natCast_lt
   proof: hx.isSuccPrelimit.add_natCast_lt hy
 
 中文:
-定理 IsSuccLimit.add_natCast_lt
-  结论: [AddMonoidWithOne α] [SuccAddOrder α]
+定理 是SuccLimit.add_natCast_lt
+  结论: [加法带幺幺半群 α] [SuccAdd序 α]
   证明: hx.isSuccPrelimit.add_natCast_lt hy
 
 Depends on / 依赖: add_natCast_lt, hx.isSuccPrelimit.add_natCast_lt, isSuccPrelimit
@@ -753,8 +753,8 @@ theorem IsPredLimit.lt_sub_natCast
   proof: hx.isPredPrelimit.lt_sub_natCast hy
 
 中文:
-定理 IsPredLimit.lt_sub_natCast
-  结论: [AddCommGroupWithOne α] [PredSubOrder α]
+定理 是PredLimit.lt_sub_natCast
+  结论: [加法交换带幺群 α] [PredSub序 α]
   证明: hx.isPredPrelimit.lt_sub_natCast hy
 
 Depends on / 依赖: hx.isPredPrelimit.lt_sub_natCast, isPredPrelimit, lt_sub_natCast
@@ -773,8 +773,8 @@ theorem IsSuccLimit.natCast_lt
   simpa using hx.add_natCast_lt hx.pos
 
 中文:
-定理 IsSuccLimit.natCast_lt
-  结论: [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α]
+定理 是SuccLimit.natCast_lt
+  结论: [加法带幺幺半群 α] [SuccAdd序 α] [是BotZero类 α]
   证明: by
   simpa using hx.add_natCast_lt hx.pos
 
@@ -796,7 +796,7 @@ theorem not_isSuccLimit_natCast
 
 中文:
 定理 not_isSuccLimit_natCast
-  条件: [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α] (n : 自然数)
+  条件: [加法带幺幺半群 α] [SuccAdd序 α] [是BotZero类 α] (n : 自然数)
   证明: fun h => (h.natCast_lt n).false
 
 @[simp]
@@ -820,7 +820,7 @@ theorem not_isSuccPrelimit_add_one
 
 中文:
 定理 not_isSuccPrelimit_add_one
-  条件: (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  条件: (a : α) [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: succ_eq_add_one a ▸ not_isSuccPrelimit_succ a
 
 @[simp]
@@ -844,7 +844,7 @@ theorem not_isSuccLimit_add_one
 
 中文:
 定理 not_isSuccLimit_add_one
-  条件: (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
+  条件: (a : α) [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
   证明: succ_eq_add_one a ▸ not_isSuccLimit_succ a
 
 @[simp]
@@ -872,7 +872,7 @@ theorem succ_eq_zero
 
 中文:
 定理 succ_eq_zero
-  结论: [AddZeroClass α] [OrderBot α] [IsBotZeroClass α] [One α] [NoMaxOrder α]
+  结论: [加法零类 α] [有底序 α] [是BotZero类 α] [幺 α] [NoMax序 α]
   证明: by
   cases a
   · simp [bot_eq_zero]
@@ -989,7 +989,7 @@ theorem lt_add_one_iff
 
 中文:
 定理 lt_add_one_iff
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: x < y + 1 ↔ x <= y
   证明: lt_add_one_iff_of_not_isMax (not_isMax y)
 
@@ -1013,7 +1013,7 @@ theorem add_one_inj
 
 中文:
 定理 add_one_inj
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: x + 1 = y + 1 ↔ x = y
   证明: by
   simp [← succ_eq_add_one]
@@ -1038,7 +1038,7 @@ theorem lt_two_iff
 
 中文:
 定理 lt_two_iff
-  条件: [AddMonoidWithOne α] [SuccAddOrder α] [NoMaxOrder α]
+  条件: [加法带幺幺半群 α] [SuccAdd序 α] [NoMax序 α]
   结论: x < 2 ↔ x <= 1
   证明: by
   rw [← one_add_one_eq_two]; rw [lt_add_one_iff]
@@ -1108,7 +1108,7 @@ theorem Iio_one
 
 中文:
 定理 Iio_one
-  结论: Set.Iio (1 : α) = {0}
+  结论: 集合.左无界右开区间 (1 : α) = {0}
   证明: by
   ext; simp
 -/
@@ -1126,7 +1126,7 @@ theorem Iic_one
 
 中文:
 定理 Iic_one
-  结论: Set.Iic (1 : α) = {0, 1}
+  结论: 集合.左无界右闭区间 (1 : α) = {0, 1}
   证明: by
   ext; simp [le_one_iff]
 
@@ -1168,7 +1168,7 @@ theorem Iio_two
 
 中文:
 定理 Iio_two
-  结论: Set.Iio (2 : α) = {0, 1}
+  结论: 集合.左无界右开区间 (2 : α) = {0, 1}
   证明: by
   ext; simp [le_one_iff]
 
@@ -1188,7 +1188,7 @@ theorem Iic_two
 
 中文:
 定理 Iic_two
-  结论: Set.Iic (2 : α) = {0, 1, 2}
+  结论: 集合.左无界右闭区间 (2 : α) = {0, 1, 2}
   证明: by
   ext; simp [le_two_iff]
 
@@ -1266,7 +1266,7 @@ theorem sub_one_lt_iff
 
 中文:
 定理 sub_one_lt_iff
-  条件: [NoMinOrder α]
+  条件: [NoMin序 α]
   结论: x - 1 < y ↔ x <= y
   证明: sub_one_lt_iff_of_not_isMin (not_isMin x)
 
@@ -1288,7 +1288,7 @@ theorem lt_one_iff_nonpos
 
 中文:
 定理 lt_one_iff_nonpos
-  结论: [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
+  结论: [加法带幺幺半群 α] [ZeroLEOne类 α] [NeZero (1 : α)]
   证明: by
   rw [← lt_succ_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
 
@@ -1319,7 +1319,7 @@ lemma monotoneOn_of_le_add_one
 
 中文:
 引理 monotoneOn_of_le_add_one
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.succ_eq_add_one] using monotoneOn_of_le_succ hs (f := f)
 
@@ -1340,7 +1340,7 @@ lemma antitoneOn_of_add_one_le
 
 中文:
 引理 antitoneOn_of_add_one_le
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.succ_eq_add_one] using antitoneOn_of_succ_le hs (f := f)
 
@@ -1361,7 +1361,7 @@ lemma strictMonoOn_of_lt_add_one
 
 中文:
 引理 strictMonoOn_of_lt_add_one
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.succ_eq_add_one] using strictMonoOn_of_lt_succ hs (f := f)
 
@@ -1382,7 +1382,7 @@ lemma strictAntiOn_of_add_one_lt
 
 中文:
 引理 strictAntiOn_of_add_one_lt
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.succ_eq_add_one] using strictAntiOn_of_succ_lt hs (f := f)
 
@@ -1403,7 +1403,7 @@ lemma monotone_of_le_add_one
 
 中文:
 引理 monotone_of_le_add_one
-  结论: (对任意 a, ¬ IsMax a -> f a <= f (a + 1)) -> Monotone f
+  结论: (对任意 a, ¬ IsMax a -> f a <= f (a + 1)) -> 递增 f
   证明: by
   simpa [Order.succ_eq_add_one] using monotone_of_le_succ (f := f)
 
@@ -1423,7 +1423,7 @@ lemma antitone_of_add_one_le
 
 中文:
 引理 antitone_of_add_one_le
-  结论: (对任意 a, ¬ IsMax a -> f (a + 1) <= f a) -> Antitone f
+  结论: (对任意 a, ¬ IsMax a -> f (a + 1) <= f a) -> 递减 f
   证明: by
   simpa [Order.succ_eq_add_one] using antitone_of_succ_le (f := f)
 
@@ -1443,7 +1443,7 @@ lemma strictMono_of_lt_add_one
 
 中文:
 引理 strictMono_of_lt_add_one
-  结论: (对任意 a, ¬ IsMax a -> f a < f (a + 1)) -> StrictMono f
+  结论: (对任意 a, ¬ IsMax a -> f a < f (a + 1)) -> 严格递增 f
   证明: by
   simpa [Order.succ_eq_add_one] using strictMono_of_lt_succ (f := f)
 
@@ -1463,7 +1463,7 @@ lemma strictAnti_of_add_one_lt
 
 中文:
 引理 strictAnti_of_add_one_lt
-  结论: (对任意 a, ¬ IsMax a -> f (a + 1) < f a) -> StrictAnti f
+  结论: (对任意 a, ¬ IsMax a -> f (a + 1) < f a) -> 严格递减 f
   证明: by
   simpa [Order.succ_eq_add_one] using strictAnti_of_succ_lt (f := f)
 
@@ -1488,7 +1488,7 @@ lemma monotoneOn_of_sub_one_le
 
 中文:
 引理 monotoneOn_of_sub_one_le
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.pred_eq_sub_one] using monotoneOn_of_pred_le hs (f := f)
 
@@ -1509,7 +1509,7 @@ lemma antitoneOn_of_le_sub_one
 
 中文:
 引理 antitoneOn_of_le_sub_one
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.pred_eq_sub_one] using antitoneOn_of_le_pred hs (f := f)
 
@@ -1530,7 +1530,7 @@ lemma strictMonoOn_of_sub_one_lt
 
 中文:
 引理 strictMonoOn_of_sub_one_lt
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.pred_eq_sub_one] using strictMonoOn_of_pred_lt hs (f := f)
 
@@ -1551,7 +1551,7 @@ lemma strictAntiOn_of_lt_sub_one
 
 中文:
 引理 strictAntiOn_of_lt_sub_one
-  条件: (hs : s.OrdConnected)
+  条件: (hs : s.序连通)
   证明: by
   simpa [Order.pred_eq_sub_one] using strictAntiOn_of_lt_pred hs (f := f)
 
@@ -1572,7 +1572,7 @@ lemma monotone_of_sub_one_le
 
 中文:
 引理 monotone_of_sub_one_le
-  结论: (对任意 a, ¬ IsMin a -> f (a - 1) <= f a) -> Monotone f
+  结论: (对任意 a, ¬ IsMin a -> f (a - 1) <= f a) -> 递增 f
   证明: by
   simpa [Order.pred_eq_sub_one] using monotone_of_pred_le (f := f)
 
@@ -1592,7 +1592,7 @@ lemma antitone_of_le_sub_one
 
 中文:
 引理 antitone_of_le_sub_one
-  结论: (对任意 a, ¬ IsMin a -> f a <= f (a - 1)) -> Antitone f
+  结论: (对任意 a, ¬ IsMin a -> f a <= f (a - 1)) -> 递减 f
   证明: by
   simpa [Order.pred_eq_sub_one] using antitone_of_le_pred (f := f)
 
@@ -1612,7 +1612,7 @@ lemma strictMono_of_sub_one_lt
 
 中文:
 引理 strictMono_of_sub_one_lt
-  结论: (对任意 a, ¬ IsMin a -> f (a - 1) < f a) -> StrictMono f
+  结论: (对任意 a, ¬ IsMin a -> f (a - 1) < f a) -> 严格递增 f
   证明: by
   simpa [Order.pred_eq_sub_one] using strictMono_of_pred_lt (f := f)
 
@@ -1632,7 +1632,7 @@ lemma strictAnti_of_lt_sub_one
 
 中文:
 引理 strictAnti_of_lt_sub_one
-  结论: (对任意 a, ¬ IsMin a -> f a < f (a - 1)) -> StrictAnti f
+  结论: (对任意 a, ¬ IsMin a -> f a < f (a - 1)) -> 严格递减 f
   证明: by
   simpa [Order.pred_eq_sub_one] using strictAnti_of_lt_pred (f := f)
 

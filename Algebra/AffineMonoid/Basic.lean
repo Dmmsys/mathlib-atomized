@@ -26,7 +26,7 @@ class abbrev
 
 中文:
 类 abbrev
-  参数: IsAffineAddMonoid (M : 类型) [AddCommMonoid M]
+  参数: IsAffineAddMonoid (M : 类型) [加法交换幺半群 M]
   (无附加公理)
 
 Depends on / 依赖: AddMonoid, AddMonoid.FG, IsAddTorsionFree, IsCancelAdd
@@ -46,7 +46,7 @@ class abbrev
 
 中文:
 类 abbrev
-  参数: IsAffineMonoid (M : 类型) [CommMonoid M]
+  参数: IsAffineMonoid (M : 类型) [交换幺半群 M]
   (无附加公理)
 -/
 class abbrev IsAffineMonoid (M : Type*) [CommMonoid M] : Prop :=

@@ -314,7 +314,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvOneMonoid 实数>=0∞
+  签名: DivInvOne幺半群 实数>=0∞
   定义体: { (inferInstance : DivInvMonoid Real>=0∞) with
     inv_one := by simpa only [coe_inv one_ne_zero, coe_one] using coe_inj.2 inv_one }
 
@@ -1179,7 +1179,7 @@ theorem inv_strictAnti
 
 中文:
 定理 inv_strictAnti
-  结论: StrictAnti (Inv.inv : 实数>=0∞ -> 实数>=0∞)
+  结论: 严格递减 (取逆.inv : 实数>=0∞ -> 实数>=0∞)
   证明: by
   intro a b h
   lift a to Real>=0 using h.ne_top
@@ -1446,7 +1446,7 @@ definition _root_.OrderIso.invENNReal
 @[simp]
 
 中文:
-定义 _root_.OrderIso.invENNReal
+定义 _root_.OrderIso.invENN实数
   签名: : 实数>=0∞ ≃o 实数>=0∞ᵒᵈ where
   定义体: ENNReal.inv_le_inv
   toEquiv := (Equiv.inv Real>=0∞).trans OrderDual.toDual
@@ -1469,7 +1469,7 @@ theorem _root_.OrderIso.invENNReal_symm_apply
   proof: rfl
 
 中文:
-定理 _root_.OrderIso.invENNReal_symm_apply
+定理 _root_.OrderIso.invENN实数_symm_apply
   条件: (a : 实数>=0∞ᵒᵈ)
   证明: rfl
 -/
@@ -2125,7 +2125,7 @@ lemma exists_pos_mul_lt
   exact ENNReal.lt_add_right ha one_ne_zero
 
 中文:
-引理 exists_pos_mul_lt
+引理 存在_pos_mul_lt
   条件: (ha : a != ∞) (hb₀ : b != 0)
   结论: 存在 c, 0 < c ∧ c * a < b
   证明: by
@@ -2313,7 +2313,7 @@ theorem le_of_forall_nnreal_lt
   exact h r hr
 
 中文:
-定理 le_of_forall_nnreal_lt
+定理 le_of_对任意_nnreal_lt
   条件: {x y : 实数>=0∞} (h : 对任意 r : 实数>=0, ↑r < x -> ↑r <= y)
   结论: x <= y
   证明: by
@@ -2338,7 +2338,7 @@ lemma eq_of_forall_nnreal_le_iff
   proof: WithTop.eq_of_forall_coe_le_iff
 
 中文:
-引理 eq_of_forall_nnreal_le_iff
+引理 eq_of_对任意_nnreal_le_iff
   条件: {x y : 实数>=0∞}
   结论: (对任意 r : 实数>=0, ↑r <= x ↔ ↑r <= y) -> x = y
   证明: WithTop.eq_of_forall_coe_le_iff
@@ -2358,7 +2358,7 @@ lemma eq_of_forall_le_nnreal_iff
   proof: WithTop.eq_of_forall_le_coe_iff
 
 中文:
-引理 eq_of_forall_le_nnreal_iff
+引理 eq_of_对任意_le_nnreal_iff
   条件: {x y : 实数>=0∞}
   结论: (对任意 r : 实数>=0, x <= r ↔ y <= r) -> x = y
   证明: WithTop.eq_of_forall_le_coe_iff
@@ -2379,7 +2379,7 @@ theorem le_of_forall_pos_nnreal_lt
     (eq_zero_or_pos r).elim (fun h => h ▸ zero_le) fun h0 => h r h0 hr
 
 中文:
-定理 le_of_forall_pos_nnreal_lt
+定理 le_of_对任意_pos_nnreal_lt
   条件: {x y : 实数>=0∞} (h : 对任意 r : 实数>=0, 0 < r -> ↑r < x -> ↑r <= y)
   结论: x <= y
   证明: le_of_forall_nnreal_lt fun r hr =>
@@ -2401,7 +2401,7 @@ theorem eq_top_of_forall_nnreal_le
   proof: top_unique le_of_forall_nnreal_lt fun r _ => h r
 
 中文:
-定理 eq_top_of_forall_nnreal_le
+定理 eq_top_of_对任意_nnreal_le
   条件: {x : 实数>=0∞} (h : 对任意 r : 实数>=0, ↑r <= x)
   结论: x = ∞
   证明: top_unique le_of_forall_nnreal_lt fun r _ => h r
@@ -2884,7 +2884,7 @@ lemma exists_lt_mul_left
     (.inr <| by rintro rfl; simp at *)).1 hc⟩
 
 中文:
-引理 exists_lt_mul_left
+引理 存在_lt_mul_left
   条件: {a b c : 实数>=0∞} (hc : c < a * b)
   结论: 存在 a' < a, c < a' * b
   证明: by
@@ -2908,7 +2908,7 @@ lemma exists_lt_mul_right
   simp_rw [mul_comm a] at hc ⊢; exact exists_lt_mul_left hc
 
 中文:
-引理 exists_lt_mul_right
+引理 存在_lt_mul_right
   条件: {a b c : 实数>=0∞} (hc : c < a * b)
   结论: 存在 b' < b, c < a * b'
   证明: by
@@ -2931,7 +2931,7 @@ lemma mul_le_of_forall_lt
 exact le_trans hd.le h _ ha' _ hb'
 
 中文:
-引理 mul_le_of_forall_lt
+引理 mul_le_of_对任意_lt
   条件: {a b c : 实数>=0∞} (h : 对任意 a' < a, 对任意 b' < b, a' * b' <= c)
   结论: a * b <= c
   证明: by
@@ -2961,7 +2961,7 @@ exact mul_le_of_forall_lt fun a' ha' b' hb' => ENNReal.le_inv_iff_le_inv.1
     (ENNReal.mul_inv (Or.inr hb'.ne_top) (Or.inl ha'.ne_top)).symm
 
 中文:
-引理 le_mul_of_forall_lt
+引理 le_mul_of_对任意_lt
   结论: {a b c : 实数>=0∞} (h₁ : a != 0 ∨ b != ∞) (h₂ : a != ∞ ∨ b != 0)
   证明: by
   rw [← ENNReal.inv_le_inv]; rw [ENNReal.mul_inv h₁ h₂]
@@ -2996,7 +2996,7 @@ definition orderIsoIicOneBirational
 
 中文:
 定义 orderIsoIicOneBirational
-  签名: : 实数>=0∞ ≃o Iic (1 : 实数>=0∞)
+  签名: : 实数>=0∞ ≃o 左无界右闭区间 (1 : 实数>=0∞)
   定义体: by
   refine StrictMono.orderIsoOfRightInverse
     (fun x => ⟨(x⁻¹ + 1)⁻¹, ENNReal.inv_le_one.2 <| le_add_self⟩)
@@ -3025,7 +3025,7 @@ theorem orderIsoIicOneBirational_symm_apply
 
 中文:
 定理 orderIsoIicOneBirational_symm_apply
-  条件: (x : Iic (1 : 实数>=0∞))
+  条件: (x : 左无界右闭区间 (1 : 实数>=0∞))
   证明: rfl
 -/
 theorem orderIsoIicOneBirational_symm_apply (x : Iic (1 : Real>=0∞)) :
@@ -3080,7 +3080,7 @@ theorem orderIsoIicCoe_symm_apply_coe
 
 中文:
 定理 orderIsoIicCoe_symm_apply_coe
-  条件: (a : 实数>=0) (b : Iic a)
+  条件: (a : 实数>=0) (b : 左无界右闭区间 a)
   证明: rfl
 -/
 theorem orderIsoIicCoe_symm_apply_coe (a : Real>=0) (b : Iic a) :
@@ -3098,8 +3098,8 @@ definition orderIsoUnitIntervalBirational
 @[simp]
 
 中文:
-定义 orderIsoUnitIntervalBirational
-  签名: : 实数>=0∞ ≃o Icc (0 : 实数) 1
+定义 orderIsoUnit整数ervalBirational
+  签名: : 实数>=0∞ ≃o 闭区间 (0 : 实数) 1
   定义体: orderIsoIicOneBirational.trans (orderIsoIicCoe 1).trans (NNReal.orderIsoIccZeroCoe 1).symm
 
 @[simp]
@@ -3119,7 +3119,7 @@ theorem orderIsoUnitIntervalBirational_apply_coe
   proof: rfl
 
 中文:
-定理 orderIsoUnitIntervalBirational_apply_coe
+定理 orderIsoUnit整数ervalBirational_apply_coe
   条件: (x : 实数>=0∞)
   证明: rfl
 -/
@@ -3137,7 +3137,7 @@ theorem exists_inv_nat_lt
   proof: inv_inv a ▸ by simp only [ENNReal.inv_lt_inv, ENNReal.exists_nat_gt (inv_ne_top.2 h)]
 
 中文:
-定理 exists_inv_nat_lt
+定理 存在_inv_nat_lt
   条件: {a : 实数>=0∞} (h : a != 0)
   结论: 存在 n : 自然数, (n : 实数>=0∞)⁻¹ < a
   证明: inv_inv a ▸ by simp only [ENNReal.inv_lt_inv, ENNReal.exists_nat_gt (inv_ne_top.2 h)]
@@ -3159,7 +3159,7 @@ theorem exists_nat_pos_mul_gt
     rwa [← ENNReal.div_lt_iff (Or.inl ha) (Or.inr hb)]⟩
 
 中文:
-定理 exists_nat_pos_mul_gt
+定理 存在_nat_pos_mul_gt
   条件: (ha : a != 0) (hb : b != ∞)
   结论: 存在 n > 0, b < (n : 自然数) * a
   证明: let ⟨n, hn⟩ := ENNReal.exists_nat_gt (div_lt_top hb ha).ne
@@ -3183,7 +3183,7 @@ theorem exists_nat_mul_gt
   proof: (exists_nat_pos_mul_gt ha hb).imp fun _ => And.right
 
 中文:
-定理 exists_nat_mul_gt
+定理 存在_nat_mul_gt
   条件: (ha : a != 0) (hb : b != ∞)
   结论: 存在 n : 自然数, b < n * a
   证明: (exists_nat_pos_mul_gt ha hb).imp fun _ => And.right
@@ -3206,7 +3206,7 @@ theorem exists_nat_pos_inv_mul_lt
   exact div_lt_of_lt_mul' hn
 
 中文:
-定理 exists_nat_pos_inv_mul_lt
+定理 存在_nat_pos_inv_mul_lt
   条件: (ha : a != ∞) (hb : b != 0)
   证明: by
   rcases exists_nat_pos_mul_gt hb ha with ⟨n, npos, hn⟩
@@ -3236,7 +3236,7 @@ theorem exists_nnreal_pos_mul_lt
   simp [*, npos.ne']
 
 中文:
-定理 exists_nnreal_pos_mul_lt
+定理 存在_nnreal_pos_mul_lt
   条件: (ha : a != ∞) (hb : b != 0)
   结论: 存在 n > 0, ↑(n : 实数>=0) * a < b
   证明: by
@@ -3268,7 +3268,7 @@ theorem exists_inv_two_pow_lt
 @[simp, norm_cast]
 
 中文:
-定理 exists_inv_two_pow_lt
+定理 存在_inv_two_pow_lt
   条件: (ha : a != 0)
   结论: 存在 n : 自然数, 2⁻¹ ^ n < a
   证明: by
@@ -3464,7 +3464,7 @@ theorem exists_mem_Ico_zpow
     simpa onl
 
 中文:
-定理 exists_mem_Ico_zpow
+定理 存在_mem_Ico_zpow
   条件: {x y : 实数>=0∞} (hx : x != 0) (h'x : x != ∞) (hy : 1 < y) (h'y : y != ⊤)
   证明: by
   lift x to Real>=0 using h'x
@@ -3503,7 +3503,7 @@ theorem exists_mem_Ioc_zpow
     simpa onl
 
 中文:
-定理 exists_mem_Ioc_zpow
+定理 存在_mem_Ioc_zpow
   条件: {x y : 实数>=0∞} (hx : x != 0) (h'x : x != ∞) (hy : 1 < y) (h'y : y != ⊤)
   证明: by
   lift x to Real>=0 using h'x
@@ -3631,7 +3631,7 @@ theorem monotone_zpow
 中文:
 定理 monotone_zpow
   条件: {x : 实数>=0∞} (hx : 1 <= x)
-  结论: Monotone ((x ^ ·) : 整数 -> 实数>=0∞)
+  结论: 递增 ((x ^ ·) : 整数 -> 实数>=0∞)
   证明: fun _ _ h =>
   zpow_le_of_le hx h
 -/
@@ -3807,7 +3807,7 @@ lemma isUnit_iff
 
 中文:
 引理 isUnit_iff
-  结论: IsUnit a ↔ a != 0 ∧ a != ∞
+  结论: 是单位 a ↔ a != 0 ∧ a != ∞
   证明: by
   refine ⟨fun ha => ⟨ha.ne_zero, ?_⟩,
     fun ha => ⟨⟨a, a⁻¹, ENNReal.mul_inv_cancel ha.1 ha.2, ENNReal.inv_mul_cancel ha.1 ha.2⟩, rfl⟩⟩
@@ -3839,7 +3839,7 @@ definition mulLeftOrderIso
 
 中文:
 定义 mulLeftOrderIso
-  签名: (a : 实数>=0∞) (ha : IsUnit a)
+  签名: (a : 实数>=0∞) (ha : 是单位 a)
   定义体: ha.unit.mulLeft
   map_rel_iff' := by simp [ENNReal.mul_le_mul_iff_right, ha.ne_zero, (isUnit_iff.1 ha).2]
 
@@ -3862,7 +3862,7 @@ definition mulRightOrderIso
 
 中文:
 定义 mulRightOrderIso
-  签名: (a : 实数>=0∞) (ha : IsUnit a)
+  签名: (a : 实数>=0∞) (ha : 是单位 a)
   定义体: ha.unit.mulRight
   map_rel_iff' := by simp [ENNReal.mul_le_mul_iff_left, ha.ne_zero, (isUnit_iff.1 ha).2]
 
@@ -4015,7 +4015,7 @@ lemma sSup_div
 
 中文:
 引理 sSup_div
-  条件: (s : Set 实数>=0∞) (a : 实数>=0∞)
+  条件: (s : 集合 实数>=0∞) (a : 实数>=0∞)
   结论: sSup s / a = ⨆ b in s, b / a
   证明: sSup_mul ..
 
@@ -4040,7 +4040,7 @@ lemma mul_iInf'
 
 中文:
 引理 mul_iInf'
-  条件: (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = 0 -> Nonempty ι)
+  条件: (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = 0 -> 非空 ι)
   证明: by
   obtain rfl | ha₀ := eq_or_ne a 0
   · simp [h₀ rfl]
@@ -4074,7 +4074,7 @@ lemma iInf_mul'
 
 中文:
 引理 iInf_mul'
-  条件: (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = 0 -> Nonempty ι)
+  条件: (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = 0 -> 非空 ι)
   证明: by simpa only [mul_comm a] using mul_iInf' hinfty h₀
 
 Depends on / 依赖: hinfty, mul_comm, mul_iInf
@@ -4132,7 +4132,7 @@ lemma mul_iInf
 
 中文:
 引理 mul_iInf
-  条件: [Nonempty ι] (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
+  条件: [非空 ι] (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
   证明: mul_iInf' hinfty fun _ => ‹Nonempty ι›
 
 Depends on / 依赖: Nonempty, hinfty, mul_iInf
@@ -4150,7 +4150,7 @@ lemma iInf_mul
 
 中文:
 引理 iInf_mul
-  条件: [Nonempty ι] (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
+  条件: [非空 ι] (hinfty : a = ∞ -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
   证明: iInf_mul' hinfty fun _ => ‹Nonempty ι›
 
 Depends on / 依赖: Nonempty, hinfty, iInf_mul
@@ -4168,7 +4168,7 @@ lemma iInf_div'
 
 中文:
 引理 iInf_div'
-  条件: (hinfty : a = 0 -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = ∞ -> Nonempty ι)
+  条件: (hinfty : a = 0 -> ⨅ i, f i = 0 -> 存在 i, f i = 0) (h₀ : a = ∞ -> 非空 ι)
   证明: iInf_mul' (by simpa) (by simpa)
 
 Depends on / 依赖: iInf_mul
@@ -4206,7 +4206,7 @@ lemma iInf_div
 
 中文:
 引理 iInf_div
-  条件: [Nonempty ι] (hinfty : a = 0 -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
+  条件: [非空 ι] (hinfty : a = 0 -> ⨅ i, f i = 0 -> 存在 i, f i = 0)
   证明: iInf_div' hinfty fun _ => ‹Nonempty ι›
 
 Depends on / 依赖: Nonempty, hinfty, iInf_div
@@ -4262,7 +4262,7 @@ lemma inv_sInf
 
 中文:
 引理 inv_sInf
-  条件: (s : Set 实数>=0∞)
+  条件: (s : 集合 实数>=0∞)
   结论: (sInf s)⁻¹ = ⨆ a in s, a⁻¹
   证明: by simp [sInf_eq_iInf, inv_iInf]
 
@@ -4280,7 +4280,7 @@ lemma inv_sSup
 
 中文:
 引理 inv_sSup
-  条件: (s : Set 实数>=0∞)
+  条件: (s : 集合 实数>=0∞)
   结论: (sSup s)⁻¹ = ⨅ a in s, a⁻¹
   证明: by simp [sSup_eq_iSup, inv_iSup]
 
@@ -4407,7 +4407,7 @@ lemma smul_iSup
 
 中文:
 引理 smul_iSup
-  条件: {R} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (f : ι -> 实数>=0∞) (c : R)
+  条件: {R} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (f : ι -> 实数>=0∞) (c : R)
   证明: by
   simp only [← smul_one_mul c (f _), ← smul_one_mul c (iSup _), ENNReal.mul_iSup]
 
@@ -4430,7 +4430,7 @@ lemma smul_sSup
 
 中文:
 引理 smul_sSup
-  条件: {R} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (s : Set 实数>=0∞) (c : R)
+  条件: {R} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (s : 集合 实数>=0∞) (c : R)
   证明: by
   simp_rw [← smul_one_mul c (sSup s), ENNReal.mul_sSup, smul_one_mul]
 
@@ -4455,9 +4455,9 @@ theorem ofReal_inv_of_pos
     ← Real.toNNReal_inv]
 
 中文:
-定理 ofReal_inv_of_pos
+定理 of实数_inv_of_pos
   条件: {x : 实数} (hx : 0 < x)
-  结论: ENN实数.of实数 x⁻¹ = (ENN实数.of实数 x)⁻¹
+  结论: 广义非负实数.of实数 x⁻¹ = (广义非负实数.of实数 x)⁻¹
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← @coe_inv (Real.toNNReal x) (by simp [hx]), coe_inj,
     ← Real.toNNReal_inv]
@@ -4481,9 +4481,9 @@ theorem ofReal_inv_le
   · simp [ofReal_of_nonpos hx]
 
 中文:
-定理 ofReal_inv_le
+定理 of实数_inv_le
   条件: {x : 实数}
-  结论: ENN实数.of实数 x⁻¹ <= (ENN实数.of实数 x)⁻¹
+  结论: 广义非负实数.of实数 x⁻¹ <= (广义非负实数.of实数 x)⁻¹
   证明: by
   obtain hx | hx := lt_or_ge 0 x
   · simp [ofReal_inv_of_pos hx]
@@ -4508,7 +4508,7 @@ theorem ofReal_div_le
   exact ofReal_inv_le
 
 中文:
-定理 ofReal_div_le
+定理 of实数_div_le
   条件: {x y : 实数} (hy : 0 <= y)
   证明: by
   simp_rw [div_eq_mul_inv, ofReal_mul' (inv_nonneg.2 hy)]
@@ -4533,7 +4533,7 @@ theorem ofReal_div_of_pos
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [ofReal_mul' (inv_nonneg.2 hy.le)]; rw [ofReal_inv_of_pos hy]
 
 中文:
-定理 ofReal_div_of_pos
+定理 of实数_div_of_pos
   条件: {x y : 实数} (hy : 0 < y)
   证明: by
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [ofReal_mul' (inv_nonneg.2 hy.le)]; rw [ofReal_inv_of_pos hy]
@@ -4559,7 +4559,7 @@ theorem toNNReal_inv
     rw [← coe_inv ha]; rw [toNNReal_coe]; rw [toNNReal_coe]
 
 中文:
-定理 toNNReal_inv
+定理 toNN实数_inv
   条件: (a : 实数>=0∞)
   结论: a⁻¹.toNN实数 = a.toNN实数⁻¹
   证明: by
@@ -4587,7 +4587,7 @@ theorem toNNReal_div
   rw [div_eq_mul_inv]; rw [toNNReal_mul]; rw [toNNReal_inv]; rw [div_eq_mul_inv]
 
 中文:
-定理 toNNReal_div
+定理 toNN实数_div
   条件: (a b : 实数>=0∞)
   结论: (a / b).toNN实数 = a.toNN实数 / b.toNN实数
   证明: by
@@ -4607,7 +4607,7 @@ theorem toReal_inv
   simp only [ENNReal.toReal, toNNReal_inv, NNReal.coe_inv]
 
 中文:
-定理 toReal_inv
+定理 to实数_inv
   条件: (a : 实数>=0∞)
   结论: a⁻¹.to实数 = a.to实数⁻¹
   证明: by
@@ -4627,7 +4627,7 @@ theorem toReal_div
   rw [div_eq_mul_inv]; rw [toReal_mul]; rw [toReal_inv]; rw [div_eq_mul_inv]
 
 中文:
-定理 toReal_div
+定理 to实数_div
   条件: (a b : 实数>=0∞)
   结论: (a / b).to实数 = a.to实数 / b.to实数
   证明: by

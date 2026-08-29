@@ -112,7 +112,7 @@ definition HasProd
   body: Tendsto (fun s : Finset β => ∏ b in s, f b) L.filter (𝓝 a)
 
 中文:
-定义 HasProd
+定义 有积类型
   签名: (f : β -> α) (a : α) (L := unconditional β)
   定义体: Tendsto (fun s : Finset β => ∏ b in s, f b) L.filter (𝓝 a)
 
@@ -328,8 +328,8 @@ theorem HasProd.multipliable
 @[to_additive]
 
 中文:
-定理 HasProd.multipliable
-  条件: (h : HasProd f a L)
+定理 有积类型.multipliable
+  条件: (h : 有积类型 f a L)
   结论: Multipliable f L
   证明: ⟨a, h⟩
 
@@ -378,8 +378,8 @@ theorem Function.Injective.hasProd_map_iff
 @[to_additive]
 
 中文:
-定理 Function.Injective.hasProd_map_iff
-  条件: {L : SummationFilter γ} {g : γ -> β} (hg : Injective g)
+定理 函数.单射.hasProd_map_iff
+  条件: {L : SummationFilter γ} {g : γ -> β} (hg : 单射 g)
   证明: by
   simp [HasProd, Function.comp_def]
 
@@ -409,8 +409,8 @@ theorem Function.Injective.hasProd_comap_iff_of_hasSupport
 @[to_additive]
 
 中文:
-定理 Function.Injective.hasProd_comap_iff_of_hasSupport
-  结论: [L.HasSupport] {g : γ -> β}
+定理 函数.单射.hasProd_comap_iff_of_hasSupport
+  结论: [L.有Support] {g : γ -> β}
   证明: by
   simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
     Embedding.coeFn_mk, Function.comp_def]
@@ -450,8 +450,8 @@ theorem Function.Injective.hasProd_comap_iff
 @[to_additive]
 
 中文:
-定理 Function.Injective.hasProd_comap_iff
-  结论: {g : γ -> β} (hg : Injective g)
+定理 函数.单射.hasProd_comap_iff
+  结论: {g : γ -> β} (hg : 单射 g)
   证明: by
   simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
     Embedding.coeFn_mk, Function.comp_def]
@@ -485,8 +485,8 @@ theorem Function.Injective.hasProd_iff
 @[to_additive]
 
 中文:
-定理 Function.Injective.hasProd_iff
-  结论: {g : γ -> β} (hg : Injective g)
+定理 函数.单射.hasProd_iff
+  结论: {g : γ -> β} (hg : 单射 g)
   证明: by
   rw [← hg.hasProd_comap_iff hf]; rw [SummationFilter.comap_unconditional]
 
@@ -512,7 +512,7 @@ theorem hasProd_subtype_comap_iff_of_mulSupport_subset
 
 中文:
 定理 hasProd_subtype_comap_iff_of_mulSupport_subset
-  条件: {s : Set β} (hf : mulSupport f subseteq s)
+  条件: {s : 集合 β} (hf : mulSupport f subseteq s)
   证明: Subtype.coe_injective.hasProd_comap_iff by simpa using mulSupport_subset_iff'.1 hf
 
 @[to_additive]
@@ -537,7 +537,7 @@ theorem hasProd_subtype_iff_of_mulSupport_subset
 
 中文:
 定理 hasProd_subtype_iff_of_mulSupport_subset
-  条件: {s : Set β} (hf : mulSupport f subseteq s)
+  条件: {s : 集合 β} (hf : mulSupport f subseteq s)
   证明: by
   simpa using hasProd_subtype_comap_iff_of_mulSupport_subset hf (L := unconditional _)
 
@@ -566,7 +566,7 @@ theorem hasProd_fintype_support
 
 中文:
 定理 hasProd_fintype_support
-  结论: [Fintype β] (f : β -> α) (L : SummationFilter β) [L.HasSupport]
+  结论: [有限类型 β] (f : β -> α) (L : SummationFilter β) [L.有Support]
   证明: by
   apply tendsto_nhds_of_eventually_eq
   have h1 : ⋂ b in L.support, {s | b in s} in L.filter :=
@@ -604,7 +604,7 @@ theorem hasProd_fintype
 
 中文:
 定理 hasProd_fintype
-  条件: [Fintype β] (f : β -> α) (L := unconditional β) [L.LeAtTop]
+  条件: [有限类型 β] (f : β -> α) (L := unconditional β) [L.LeAtTop]
   证明: by
   simpa using hasProd_fintype_support f L
 
@@ -627,8 +627,8 @@ theorem Finset.hasProd_support
   simpa [prod_attach] using hasProd_fintype_support (f ∘ Subtype.val) L
 
 中文:
-定理 Finset.hasProd_support
-  结论: (s : Finset β) (f : β -> α) (L := unconditional (s : Set β))
+定理 有限集.hasProd_support
+  结论: (s : 有限集 β) (f : β -> α) (L := unconditional (s : 集合 β))
   证明: by
   simpa [prod_attach] using hasProd_fintype_support (f ∘ Subtype.val) L
 
@@ -653,8 +653,8 @@ theorem Finset.hasProd
   simpa [prod_attach, Embedding.subtype] using Finset.hasProd_support s f L
 
 中文:
-定理 Finset.hasProd
-  结论: (s : Finset β) (f : β -> α)
+定理 有限集.hasProd
+  结论: (s : 有限集 β) (f : β -> α)
   证明: by
   simpa [prod_attach, Embedding.subtype] using Finset.hasProd_support s f L
 -/
@@ -747,7 +747,7 @@ theorem multipliable_of_ne_finset_one
 
 中文:
 定理 multipliable_of_ne_finset_one
-  条件: (hf : 对任意 b ∉ s, f b = 1) [L.HasSupport]
+  条件: (hf : 对任意 b ∉ s, f b = 1) [L.有Support]
   证明: by
   classical
   exact (hasProd_prod_support_of_ne_finset_one (fun b _ hb => hf b hb)).multipliable
@@ -780,7 +780,7 @@ theorem Multipliable.hasProd
 中文:
 定理 Multipliable.hasProd
   条件: (ha : Multipliable f L)
-  结论: HasProd f (∏'[L] b, f b) L
+  结论: 有积类型 f (∏'[L] b, f b) L
   证明: by
   -- This is quite delicate because of the fiddly special-casing for finite products.
   classical
@@ -820,7 +820,7 @@ theorem HasProd.unique
 @[to_additive]
 
 中文:
-定理 HasProd.unique
+定理 有积类型.unique
   条件: {a₁ a₂ : α}
   证明: by
   exact tendsto_nhds_unique
@@ -846,8 +846,8 @@ theorem HasProd.tprod_eq
 @[to_additive]
 
 中文:
-定理 HasProd.tprod_eq
-  条件: (ha : HasProd f a L)
+定理 有积类型.tprod_eq
+  条件: (ha : 有积类型 f a L)
   结论: ∏'[L] b, f b = a
   证明: (Multipliable.hasProd ⟨a, ha⟩).unique ha
 

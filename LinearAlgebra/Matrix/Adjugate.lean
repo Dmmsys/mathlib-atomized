@@ -98,7 +98,7 @@ theorem cramerMap_is_linear
 中文:
 定理 cramerMap_is_linear
   条件: (i : n)
-  结论: IsLinearMap α fun b => cramerMap A b i
+  结论: 是线性映射 α fun b => cramerMap A b i
   证明: { map_add := det_updateCol_add _ _
     map_smul := det_updateCol_smul _ _ }
 
@@ -121,7 +121,7 @@ theorem cramer_is_linear
 
 中文:
 定理 cramer_is_linear
-  结论: IsLinearMap α (cramerMap A)
+  结论: 是线性映射 α (cramerMap A)
   证明: by
   constructor <;> intros <;> ext i
   · apply (cramerMap_is_linear A i).1
@@ -144,7 +144,7 @@ definition cramer
 
 中文:
 定义 cramer
-  签名: (A : Matrix n n α)
+  签名: (A : 矩阵 n n α)
   定义体: IsLinearMap.mk' (cramerMap A) (cramer_is_linear A)
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.mk, cramerMap, cramer_is_linear
@@ -213,7 +213,7 @@ theorem cramer_transpose_row_self
 中文:
 定理 cramer_transpose_row_self
   条件: (i : n)
-  结论: Aᵀ.cramer (A i) = Pi.single i A.det
+  结论: Aᵀ.cramer (A i) = 依赖函数类型.single i A.det
   证明: by
   ext j
   rw [cramer_apply]; rw [Pi.single_apply]
@@ -256,7 +256,7 @@ theorem cramer_row_self
 中文:
 定理 cramer_row_self
   条件: (i : n) (h : 对任意 j, b j = A j i)
-  结论: A.cramer b = Pi.single i A.det
+  结论: A.cramer b = 依赖函数类型.single i A.det
   证明: by
   rw [← transpose_transpose A]; rw [det_transpose]
   convert! cramer_transpose_row_self Aᵀ i
@@ -287,7 +287,7 @@ theorem cramer_one
 
 中文:
 定理 cramer_one
-  结论: cramer (1 : Matrix n n α) = 1
+  结论: cramer (1 : 矩阵 n n α) = 1
   证明: by
   ext i j
   convert! congr_fun (cramer_row_self (1 : Matrix n n α) (Pi.single i 1) i _) j
@@ -316,7 +316,7 @@ theorem cramer_smul
 
 中文:
 定理 cramer_smul
-  条件: (r : α) (A : Matrix n n α)
+  条件: (r : α) (A : 矩阵 n n α)
   证明: LinearMap.ext fun _ => funext fun _ => det_updateCol_smul_left _ _ _ _
 
 @[simp]
@@ -338,7 +338,7 @@ theorem cramer_subsingleton_apply
 
 中文:
 定理 cramer_subsingleton_apply
-  条件: [Subsingleton n] (A : Matrix n n α) (b : n -> α) (i : n)
+  条件: [子单例 n] (A : 矩阵 n n α) (b : n -> α) (i : n)
   证明: by rw [cramer_apply, det_eq_elem_of_subsingleton _ i, updateCol_self]
 
 Depends on / 依赖: cramer_apply, det_eq_elem_of_subsingleton, updateCol_self
@@ -361,8 +361,8 @@ theorem cramer_zero
 
 中文:
 定理 cramer_zero
-  条件: [Nontrivial n]
-  结论: cramer (0 : Matrix n n α) = 0
+  条件: [非平凡 n]
+  结论: cramer (0 : 矩阵 n n α) = 0
   证明: by
   ext i j
   obtain ⟨j', hj'⟩ : exists j', j' != j := exists_ne j
@@ -387,7 +387,7 @@ theorem sum_cramer
 
 中文:
 定理 sum_cramer
-  条件: {β} (s : Finset β) (f : β -> n -> α)
+  条件: {β} (s : 有限集 β) (f : β -> n -> α)
   证明: (map_sum (cramer A) ..).symm
 
 Depends on / 依赖: cramer, map_sum
@@ -412,7 +412,7 @@ theorem sum_cramer_apply
 
 中文:
 定理 sum_cramer_apply
-  条件: {β} (s : Finset β) (f : n -> β -> α) (i : n)
+  条件: {β} (s : 有限集 β) (f : n -> β -> α) (i : n)
   证明: calc
     (∑ x in s, cramer A (fun j => f j x) i) = (∑ x in s, cramer A fun j => f j x) i :=
       (Finset.sum_apply i s _).symm
@@ -446,7 +446,7 @@ theorem cramer_submatrix_equiv
 
 中文:
 定理 cramer_submatrix_equiv
-  条件: (A : Matrix m m α) (e : n ≃ m) (b : n -> α)
+  条件: (A : 矩阵 m m α) (e : n ≃ m) (b : n -> α)
   证明: by
   ext i
   simp_rw [Function.comp_apply, cramer_apply, updateCol_submatrix_equiv,
@@ -470,7 +470,7 @@ theorem cramer_reindex
 
 中文:
 定理 cramer_reindex
-  条件: (e : m ≃ n) (A : Matrix m m α) (b : n -> α)
+  条件: (e : m ≃ n) (A : 矩阵 m m α) (b : n -> α)
   证明: cramer_submatrix_equiv _ _ _
 
 Depends on / 依赖: cramer_submatrix_equiv
@@ -501,7 +501,7 @@ definition adjugate
 
 中文:
 定义 adjugate
-  签名: (A : Matrix n n α)
+  签名: (A : 矩阵 n n α)
   定义体: of fun i => cramer Aᵀ (Pi.single i 1)
 
 Depends on / 依赖: Pi.single, cramer, single
@@ -520,8 +520,8 @@ theorem adjugate_def
 
 中文:
 定理 adjugate_def
-  条件: (A : Matrix n n α)
-  结论: adjugate A = of fun i => cramer Aᵀ (Pi.single i 1)
+  条件: (A : 矩阵 n n α)
+  结论: adjugate A = of fun i => cramer Aᵀ (依赖函数类型.single i 1)
   证明: rfl
 -/
 theorem adjugate_def (A : Matrix n n α) : adjugate A = of fun i => cramer Aᵀ (Pi.single i 1) :=
@@ -538,7 +538,7 @@ theorem adjugate_apply
 
 中文:
 定理 adjugate_apply
-  条件: (A : Matrix n n α) (i j : n)
+  条件: (A : 矩阵 n n α) (i j : n)
   证明: by
   rw [adjugate_def]; rw [of_apply]; rw [cramer_apply]; rw [updateCol_transpose]; rw [det_transpose]
 
@@ -567,7 +567,7 @@ theorem adjugate_transpose
 
 中文:
 定理 adjugate_transpose
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: (adjugate A)ᵀ = adjugate Aᵀ
   证明: by
   ext i j
@@ -623,9 +623,9 @@ theorem IsSymm.adjugate
 @[simp]
 
 中文:
-定理 IsSymm.adjugate
-  条件: {A : Matrix n n α} (hA : A.IsSymm)
-  结论: A.adjugate.IsSymm
+定理 是Symm.adjugate
+  条件: {A : 矩阵 n n α} (hA : A.是Symm)
+  结论: A.adjugate.是Symm
   证明: by
   rw [IsSymm]; rw [Matrix.adjugate_transpose]; rw [hA.eq]
 
@@ -651,7 +651,7 @@ theorem adjugate_submatrix_equiv_self
 
 中文:
 定理 adjugate_submatrix_equiv_self
-  条件: (e : n ≃ m) (A : Matrix m m α)
+  条件: (e : n ≃ m) (A : 矩阵 m m α)
   证明: by
   ext i j
   have : (fun j => Pi.single i 1 <| e.symm j) = Pi.single (e i) 1 :=
@@ -677,7 +677,7 @@ theorem adjugate_reindex
 
 中文:
 定理 adjugate_reindex
-  条件: (e : m ≃ n) (A : Matrix m m α)
+  条件: (e : m ≃ n) (A : 矩阵 m m α)
   证明: adjugate_submatrix_equiv_self _ _
 
 Depends on / 依赖: adjugate_submatrix_equiv_self
@@ -706,7 +706,7 @@ theorem cramer_eq_adjugate_mulVec
 
 中文:
 定理 cramer_eq_adjugate_mulVec
-  条件: (A : Matrix n n α) (b : n -> α)
+  条件: (A : 矩阵 n n α) (b : n -> α)
   证明: by
   nth_rw 2 [← A.transpose_transpose]
   rw [← adjugate_transpose]; rw [adjugate_def]
@@ -745,7 +745,7 @@ theorem mul_adjugate_apply
 
 中文:
 定理 mul_adjugate_apply
-  条件: (A : Matrix n n α) (i j k)
+  条件: (A : 矩阵 n n α) (i j k)
   证明: by
   rw [← smul_eq_mul]; rw [adjugate]; rw [of_apply]; rw [← Pi.smul_apply]; rw [← map_smul]; rw [← Pi.single_smul']; rw [smul_eq_mul]; rw [mul_one]
 
@@ -770,8 +770,8 @@ theorem mul_adjugate
 
 中文:
 定理 mul_adjugate
-  条件: (A : Matrix n n α)
-  结论: A * adjugate A = A.det • (1 : Matrix n n α)
+  条件: (A : 矩阵 n n α)
+  结论: A * adjugate A = A.det • (1 : 矩阵 n n α)
   证明: by
   ext i j
   rw [mul_apply]; rw [Pi.smul_apply]; rw [Pi.smul_apply]; rw [one_apply]; rw [smul_eq_mul]; rw [mul_boole]
@@ -798,8 +798,8 @@ theorem adjugate_mul
 
 中文:
 定理 adjugate_mul
-  条件: (A : Matrix n n α)
-  结论: adjugate A * A = A.det • (1 : Matrix n n α)
+  条件: (A : 矩阵 n n α)
+  结论: adjugate A * A = A.det • (1 : 矩阵 n n α)
   证明: calc
     adjugate A * A = (Aᵀ * adjugate Aᵀ)ᵀ := by
       rw [← adjugate_transpose]; rw [← transpose_mul]; rw [transpose_transpose]
@@ -825,7 +825,7 @@ theorem adjugate_smul
 
 中文:
 定理 adjugate_smul
-  条件: (r : α) (A : Matrix n n α)
+  条件: (r : α) (A : 矩阵 n n α)
   证明: by
   rw [adjugate]; rw [adjugate]; rw [transpose_smul]; rw [cramer_smul]
   rfl
@@ -853,7 +853,7 @@ theorem mulVec_cramer
 
 中文:
 定理 mulVec_cramer
-  条件: (A : Matrix n n α) (b : n -> α)
+  条件: (A : 矩阵 n n α) (b : n -> α)
   结论: A *ᵥ cramer A b = A.det • b
   证明: by
   rw [cramer_eq_adjugate_mulVec]; rw [mulVec_mulVec]; rw [mul_adjugate]; rw [smul_mulVec]; rw [one_mulVec]
@@ -875,7 +875,7 @@ theorem det_eq_zero_of_mulVec_eq_zero_of_mem_nonZeroDivisors
 
 中文:
 定理 det_eq_zero_of_mulVec_eq_zero_of_mem_nonZeroDivisors
-  结论: {M : Matrix n n α} {v : n -> α}
+  结论: {M : 矩阵 n n α} {v : n -> α}
   证明: by
 .mp apply mul_right_mem_nonZeroDivisors_eq_zero_iff hi
   simpa [adjugate_mul, smul_mulVec] using congr((M.adjugate *ᵥ $h) i)
@@ -900,7 +900,7 @@ theorem adjugate_subsingleton
 
 中文:
 定理 adjugate_subsingleton
-  条件: [Subsingleton n] (A : Matrix n n α)
+  条件: [子单例 n] (A : 矩阵 n n α)
   结论: adjugate A = 1
   证明: by
   ext i j
@@ -925,7 +925,7 @@ theorem adjugate_eq_one_of_card_eq_one
 
 中文:
 定理 adjugate_eq_one_of_card_eq_one
-  条件: {A : Matrix n n α} (h : Fintype.card n = 1)
+  条件: {A : 矩阵 n n α} (h : 有限类型.card n = 1)
   证明: haveI : Subsingleton n := Fintype.card_le_one_iff_subsingleton.mp h.le
   adjugate_subsingleton _
 
@@ -956,8 +956,8 @@ theorem adjugate_zero
 
 中文:
 定理 adjugate_zero
-  条件: [Nontrivial n]
-  结论: adjugate (0 : Matrix n n α) = 0
+  条件: [非平凡 n]
+  结论: adjugate (0 : 矩阵 n n α) = 0
   证明: by
   ext i j
   obtain ⟨j', hj'⟩ : exists j', j' != j := exists_ne j
@@ -989,7 +989,7 @@ theorem adjugate_one
 
 中文:
 定理 adjugate_one
-  结论: adjugate (1 : Matrix n n α) = 1
+  结论: adjugate (1 : 矩阵 n n α) = 1
   证明: by
   ext
   simp [adjugate_def, Matrix.one_apply, Pi.single_apply, eq_comm]
@@ -1058,8 +1058,8 @@ theorem _root_.RingHom.map_adjugate
     map_updateRow]; rw [← R
 
 中文:
-定理 _root_.RingHom.map_adjugate
-  结论: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+定理 _root_.环态射.map_adjugate
+  结论: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   证明: by
   ext i k
   have : Pi.single i (1 : S) = f ∘ Pi.single i 1 := by
@@ -1088,8 +1088,8 @@ theorem _root_.AlgHom.map_adjugate
   proof: f.toRingHom.map_adjugate _
 
 中文:
-定理 _root_.AlgHom.map_adjugate
-  结论: {R A B : 类型} [CommSemiring R] [CommRing A] [CommRing B]
+定理 _root_.代数态射.map_adjugate
+  结论: {R A B : 类型} [交换半环 R] [交换环 A] [交换环 B]
   证明: f.toRingHom.map_adjugate _
 
 Depends on / 依赖: f.toRingHom.map_adjugate, map_adjugate, toRingHom
@@ -1115,8 +1115,8 @@ theorem det_adjugate
 
 中文:
 定理 det_adjugate
-  条件: (A : Matrix n n α)
-  结论: (adjugate A).det = A.det ^ (Fintype.card n - 1)
+  条件: (A : 矩阵 n n α)
+  结论: (adjugate A).det = A.det ^ (有限类型.card n - 1)
   证明: by
   -- get rid of the `- 1`
   rcases (Fintype.card n).eq_zero_or_pos with h_card | h_card
@@ -1156,7 +1156,7 @@ theorem adjugate_fin_zero
 
 中文:
 定理 adjugate_fin_zero
-  条件: (A : Matrix (Fin 0) (Fin 0) α)
+  条件: (A : 矩阵 (有限集 0) (有限集 0) α)
   结论: adjugate A = 0
   证明: Subsingleton.elim _ _
 
@@ -1179,7 +1179,7 @@ theorem adjugate_fin_one
 
 中文:
 定理 adjugate_fin_one
-  条件: (A : Matrix (Fin 1) (Fin 1) α)
+  条件: (A : 矩阵 (有限集 1) (有限集 1) α)
   结论: adjugate A = 1
   证明: adjugate_subsingleton A
 
@@ -1201,7 +1201,7 @@ theorem adjugate_fin_succ_eq_det_submatrix
 
 中文:
 定理 adjugate_fin_succ_eq_det_submatrix
-  条件: {n : 自然数} (A : Matrix (Fin n.succ) (Fin n.succ) α) (i j)
+  条件: {n : 自然数} (A : 矩阵 (有限集 n.succ) (有限集 n.succ) α) (i j)
   证明: by
   simp_rw [adjugate_apply, det_succ_row _ j, updateRow_self, submatrix_updateRow_succAbove]
   rw [Fintype.sum_eq_single i fun h hjk => ?_]; rw [Pi.single_eq_same]; rw [mul_one]
@@ -1230,7 +1230,7 @@ theorem adjugate_fin_two
 
 中文:
 定理 adjugate_fin_two
-  条件: (A : Matrix (Fin 2) (Fin 2) α)
+  条件: (A : 矩阵 (有限集 2) (有限集 2) α)
   证明: by
   ext i j
   rw [adjugate_fin_succ_eq_det_submatrix]
@@ -1280,7 +1280,7 @@ theorem adjugate_fin_three
 
 中文:
 定理 adjugate_fin_three
-  条件: (A : Matrix (Fin 3) (Fin 3) α)
+  条件: (A : 矩阵 (有限集 3) (有限集 3) α)
   证明: by
   ext i j
   rw [adjugate_fin_succ_eq_det_submatrix]; rw [det_fin_two]
@@ -1343,7 +1343,7 @@ theorem det_eq_sum_mul_adjugate_row
 
 中文:
 定理 det_eq_sum_mul_adjugate_row
-  条件: (A : Matrix n n α) (i : n)
+  条件: (A : 矩阵 n n α) (i : n)
   证明: by
   have : Nonempty n := ⟨i⟩
   obtain ⟨n', hn'⟩ := Nat.exists_eq_succ_of_ne_zero (Fintype.card_ne_zero : Fintype.card n != 0)
@@ -1378,7 +1378,7 @@ theorem det_eq_sum_mul_adjugate_col
 
 中文:
 定理 det_eq_sum_mul_adjugate_col
-  条件: (A : Matrix n n α) (j : n)
+  条件: (A : 矩阵 n n α) (j : n)
   证明: by
   simpa only [det_transpose, ← adjugate_transpose] using! det_eq_sum_mul_adjugate_row Aᵀ j
 
@@ -1402,7 +1402,7 @@ theorem adjugate_conjTranspose
 
 中文:
 定理 adjugate_conjTranspose
-  条件: [StarRing α] (A : Matrix n n α)
+  条件: [对合环 α] (A : 矩阵 n n α)
   结论: A.adjugateᴴ = adjugate Aᴴ
   证明: by
   dsimp only [conjTranspose]
@@ -1434,7 +1434,7 @@ theorem isRegular_of_isLeftRegular_det
 
 中文:
 定理 isRegular_of_isLeftRegular_det
-  条件: {A : Matrix n n α} (hA : IsLeftRegular A.det)
+  条件: {A : 矩阵 n n α} (hA : IsLeftRegular A.det)
   证明: by
   constructor
   · intro B C h
@@ -1477,7 +1477,7 @@ theorem adjugate_mul_distrib_aux
 
 中文:
 定理 adjugate_mul_distrib_aux
-  结论: (A B : Matrix n n α) (hA : IsLeftRegular A.det)
+  结论: (A B : 矩阵 n n α) (hA : IsLeftRegular A.det)
   证明: by
   have hAB : IsLeftRegular (A * B).det := by
     rw [det_mul]
@@ -1516,7 +1516,7 @@ theorem adjugate_mul_distrib
 
 中文:
 定理 adjugate_mul_distrib
-  条件: (A B : Matrix n n α)
+  条件: (A B : 矩阵 n n α)
   结论: adjugate (A * B) = adjugate B * adjugate A
   证明: by
   let g : Matrix n n α -> Matrix n n α[X] := fun M =>
@@ -1566,7 +1566,7 @@ theorem adjugate_pow
 
 中文:
 定理 adjugate_pow
-  条件: (A : Matrix n n α) (k : 自然数)
+  条件: (A : 矩阵 n n α) (k : 自然数)
   结论: adjugate (A ^ k) = adjugate A ^ k
   证明: by
   induction k with
@@ -1594,7 +1594,7 @@ theorem det_smul_adjugate_adjugate
 
 中文:
 定理 det_smul_adjugate_adjugate
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   证明: by
   have : A * (A.adjugate * A.adjugate.adjugate) =
       A * (A.det ^ (Fintype.card n - 1) • (1 : Matrix n n α)) := by
@@ -1629,7 +1629,7 @@ theorem adjugate_adjugate
 
 中文:
 定理 adjugate_adjugate
-  条件: (A : Matrix n n α) (h : Fintype.card n != 1)
+  条件: (A : 矩阵 n n α) (h : 有限类型.card n != 1)
   证明: by
   -- get rid of the `- 2`
   rcases h_card : Fintype.card n with _ | n'
@@ -1670,7 +1670,7 @@ theorem adjugate_adjugate'
 
 中文:
 定理 adjugate_adjugate'
-  条件: (A : Matrix n n α) [Nontrivial n]
+  条件: (A : 矩阵 n n α) [非平凡 n]
   证明: adjugate_adjugate _ Fintype.one_lt_card.ne'
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card.ne, adjugate_adjugate, one_lt_card

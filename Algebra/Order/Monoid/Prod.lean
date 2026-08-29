@@ -32,8 +32,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: α] [Preorder α] [IsOrderedMonoid α]
+实例 [交换幺半群
+  签名: α] [预序 α] [是Ordered幺半群 α]
   定义体: ⟨mul_le_mul_left h.1 _, mul_le_mul_left h.2 _⟩
 
 @[to_additive]
@@ -87,7 +87,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [LE β] [Mul α] [Mul β] [ExistsMulOfLE α] [ExistsMulOfLE β] :
+  签名: α] [LE β] [乘法 α] [乘法 β] [ExistsMulOfLE α] [ExistsMulOfLE β] :
   定义体: ⟨fun h =>
     let ⟨c, hc⟩ := exists_mul_of_le h.1
     let ⟨d, hd⟩ := exists_mul_of_le h.2
@@ -115,8 +115,8 @@ instance [Mul
   le_self_mul := fun _ _ => le_def.mpr ⟨le_self_mul, le_self_mul⟩
 
 中文:
-实例 [Mul
-  签名: α] [LE α] [CanonicallyOrderedMul α]
+实例 [乘法
+  签名: α] [LE α] [典范有序乘法 α]
   定义体: fun _ _ => le_def.mpr ⟨le_mul_self, le_mul_self⟩
   le_self_mul := fun _ _ => le_def.mpr ⟨le_self_mul, le_self_mul⟩
 
@@ -145,7 +145,7 @@ instance isOrderedMonoid
 
 中文:
 实例 isOrderedMonoid
-  签名: [CommMonoid α] [Preorder α] [MulLeftStrictMono α]
+  签名: [交换幺半群 α] [预序 α] [MulLeftStrictMono α]
   定义体: (le_iff.1 hxy).elim
     (fun hxy => left _ _ <| mul_lt_mul_left hxy _)
     (fun hxy => le_iff.2 <|
@@ -176,7 +176,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: [CommMonoid α] [PartialOrder α] [IsOrderedCancelMonoid α]
+  签名: [交换幺半群 α] [偏序 α] [是OrderedCancel幺半群 α]
   定义体: (le_iff.1 hxyz).elim
     (fun hxy => left _ _ <| lt_of_mul_lt_mul_left' hxy)
     (fun hxy => le_iff.2 <| Or.inr ⟨mul_left_cancel hxy.1, le_of_mul_le_mul_left' hxy.2⟩)

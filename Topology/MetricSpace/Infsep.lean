@@ -50,7 +50,7 @@ definition einfsep
 
 中文:
 定义 einfsep
-  签名: [EDist α] (s : Set α)
+  签名: [EDist α] (s : 集合 α)
   定义体: ⨅ (x in s) (y in s) (_ : x != y), edist x y
 -/
 noncomputable def einfsep [EDist α] (s : Set α) : Real>=0∞ :=
@@ -216,7 +216,7 @@ theorem nontrivial_of_einfsep_lt_top
 中文:
 定理 nontrivial_of_einfsep_lt_top
   条件: (hs : s.einfsep < ∞)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: by
   rcases einfsep_lt_top.1 hs with ⟨_, hx, _, hy, hxy, _⟩
   exact ⟨_, hx, _, hy, hxy⟩
@@ -239,7 +239,7 @@ theorem nontrivial_of_einfsep_ne_top
 中文:
 定理 nontrivial_of_einfsep_ne_top
   条件: (hs : s.einfsep != ∞)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: nontrivial_of_einfsep_lt_top (lt_top_iff_ne_top.mpr hs)
 
 Depends on / 依赖: lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, nontrivial_of_einfsep_lt_top
@@ -259,8 +259,8 @@ theorem Subsingleton.einfsep
   exact fun _ hx _ hy hxy => (hxy <| hs hx hy).elim
 
 中文:
-定理 Subsingleton.einfsep
-  条件: (hs : s.Subsingleton)
+定理 子单例.einfsep
+  条件: (hs : s.子单例)
   结论: s.einfsep = ∞
   证明: by
   rw [einfsep_top]
@@ -284,7 +284,7 @@ theorem le_einfsep_image_iff
 
 中文:
 定理 le_einfsep_image_iff
-  条件: {d} {f : β -> α} {s : Set β}
+  条件: {d} {f : β -> α} {s : 集合 β}
   结论: d <= einfsep (f '' s)
   证明: by
   simp_rw [le_einfsep_iff, forall_mem_image]
@@ -389,7 +389,7 @@ theorem einfsep_empty
 
 中文:
 定理 einfsep_empty
-  结论: (∅ : Set α).einfsep = ∞
+  结论: (∅ : 集合 α).einfsep = ∞
   证明: subsingleton_empty.einfsep
 
 @[simp]
@@ -410,7 +410,7 @@ theorem einfsep_singleton
 
 中文:
 定理 einfsep_singleton
-  结论: ({x} : Set α).einfsep = ∞
+  结论: ({x} : 集合 α).einfsep = ∞
   证明: subsingleton_singleton.einfsep
 
 Depends on / 依赖: einfsep, subsingleton_singleton, subsingleton_singleton.einfsep
@@ -428,7 +428,7 @@ theorem einfsep_iUnion_mem_option
 
 中文:
 定理 einfsep_iUnion_mem_option
-  条件: {ι : 类型} (o : Option ι) (s : ι -> Set α)
+  条件: {ι : 类型} (o : 选项类型 ι) (s : ι -> 集合 α)
   证明: by cases o <;> simp
 -/
 theorem einfsep_iUnion_mem_option {ι : Type*} (o : Option ι) (s : ι -> Set α) :
@@ -490,7 +490,7 @@ theorem le_einfsep_pair
 
 中文:
 定理 le_einfsep_pair
-  结论: edist x y ⊓ edist y x <= ({x, y} : Set α).einfsep
+  结论: edist x y ⊓ edist y x <= ({x, y} : 集合 α).einfsep
   证明: by
   simp_rw [le_einfsep_iff, inf_le_iff, mem_insert_iff, mem_singleton_iff]
   rintro a (rfl | rfl) b (rfl | rfl) hab <;> (try simp only [le_refl, true_or, or_true]) <;>
@@ -515,7 +515,7 @@ theorem einfsep_pair_le_left
 中文:
 定理 einfsep_pair_le_left
   条件: (hxy : x != y)
-  结论: ({x, y} : Set α).einfsep <= edist x y
+  结论: ({x, y} : 集合 α).einfsep <= edist x y
   证明: einfsep_le_edist_of_mem (mem_insert _ _) (mem_insert_of_mem _ (mem_singleton _)) hxy
 
 Depends on / 依赖: einfsep_le_edist_of_mem, mem_insert, mem_insert_of_mem, mem_singleton
@@ -536,7 +536,7 @@ theorem einfsep_pair_le_right
 中文:
 定理 einfsep_pair_le_right
   条件: (hxy : x != y)
-  结论: ({x, y} : Set α).einfsep <= edist y x
+  结论: ({x, y} : 集合 α).einfsep <= edist y x
   证明: by
   rw [pair_comm]; exact einfsep_pair_le_left hxy.symm
 
@@ -557,7 +557,7 @@ theorem einfsep_pair_eq_inf
 中文:
 定理 einfsep_pair_eq_inf
   条件: (hxy : x != y)
-  结论: ({x, y} : Set α).einfsep = edist x y ⊓ edist y x
+  结论: ({x, y} : 集合 α).einfsep = edist x y ⊓ edist y x
   证明: le_antisymm (le_inf (einfsep_pair_le_left hxy) (einfsep_pair_le_right hxy)) le_einfsep_pair
 
 Depends on / 依赖: einfsep_pair_le_left, einfsep_pair_le_right, le_antisymm, le_einfsep_pair, le_inf
@@ -605,8 +605,8 @@ theorem einfsep_of_fintype
 
 中文:
 定理 einfsep_of_fintype
-  条件: [Fintype s]
-  结论: s.einfsep = s.offDiag.toFinset.inf (uncurry edist)
+  条件: [有限类型 s]
+  结论: s.einfsep = s.offDiag.toFinset.下确界 (uncurry edist)
   证明: by
   refine eq_of_forall_le_iff fun _ => ?_
   simp_rw [le_einfsep_iff, imp_forall_iff, Finset.le_inf_iff, mem_toFinset, mem_offDiag,
@@ -632,9 +632,9 @@ theorem Finite.einfsep
     Prod.forall, uncurry_apply_pair, and_imp]
 
 中文:
-定理 Finite.einfsep
-  条件: (hs : s.Finite)
-  结论: s.einfsep = hs.offDiag.toFinset.inf (uncurry edist)
+定理 有限.einfsep
+  条件: (hs : s.有限)
+  结论: s.einfsep = hs.offDiag.toFinset.下确界 (uncurry edist)
   证明: by
   refine eq_of_forall_le_iff fun _ => ?_
   simp_rw [le_einfsep_iff, imp_forall_iff, Finset.le_inf_iff, Finite.mem_toFinset, mem_offDiag,
@@ -657,8 +657,8 @@ theorem Finset.coe_einfsep
   simp_rw [einfsep_of_fintype, ← Finset.coe_offDiag, Finset.toFinset_coe]
 
 中文:
-定理 Finset.coe_einfsep
-  条件: {s : Finset α}
+定理 有限集.coe_einfsep
+  条件: {s : 有限集 α}
   证明: by
   simp_rw [einfsep_of_fintype, ← Finset.coe_offDiag, Finset.toFinset_coe]
 
@@ -682,8 +682,8 @@ theorem Nontrivial.einfsep_exists_of_finite
   exact ⟨w.fst, hxy.1, w.snd, hxy.2.1, hxy.2.2, hed⟩
 
 中文:
-定理 Nontrivial.einfsep_exists_of_finite
-  条件: [Finite s] (hs : s.Nontrivial)
+定理 非平凡.einfsep_存在_of_finite
+  条件: [有限 s] (hs : s.非平凡)
   证明: by
   cases nonempty_fintype s
   simp_rw [einfsep_of_fintype]
@@ -711,8 +711,8 @@ theorem Finite.einfsep_exists_of_nontrivial
   hs.einfsep_exists_of_finite
 
 中文:
-定理 Finite.einfsep_exists_of_nontrivial
-  条件: (hsf : s.Finite) (hs : s.Nontrivial)
+定理 有限.einfsep_存在_of_nontrivial
+  条件: (hsf : s.有限) (hs : s.非平凡)
   证明: letI := hsf.fintype
   hs.einfsep_exists_of_finite
 
@@ -744,7 +744,7 @@ theorem einfsep_pair
 中文:
 定理 einfsep_pair
   条件: (hxy : x != y)
-  结论: ({x, y} : Set α).einfsep = edist x y
+  结论: ({x, y} : 集合 α).einfsep = edist x y
   证明: by
   nth_rw 1 [← min_self (edist x y)]
   convert! einfsep_pair_eq_inf hxy using 2
@@ -835,7 +835,7 @@ theorem le_einfsep_pi_of_le
 
 中文:
 定理 le_einfsep_pi_of_le
-  结论: {X : β -> 类型} [Fintype β] [对任意 b, PseudoEMetricSpace (X b)]
+  结论: {X : β -> 类型} [有限类型 β] [对任意 b, PseudoEMetric空间 (X b)]
   证明: by
   refine le_einfsep fun x hx y hy hxy => ?_
   rw [mem_univ_pi] at hx hy
@@ -872,7 +872,7 @@ theorem subsingleton_of_einfsep_eq_top
 中文:
 定理 subsingleton_of_einfsep_eq_top
   条件: (hs : s.einfsep = ∞)
-  结论: s.Subsingleton
+  结论: s.子单例
   证明: by
   rw [einfsep_top] at hs
   exact fun _ hx _ hy => of_not_not fun hxy => edist_ne_top _ _ (hs _ hx _ hy hxy)
@@ -893,7 +893,7 @@ theorem einfsep_eq_top_iff
 
 中文:
 定理 einfsep_eq_top_iff
-  结论: s.einfsep = ∞ ↔ s.Subsingleton
+  结论: s.einfsep = ∞ ↔ s.子单例
   证明: ⟨subsingleton_of_einfsep_eq_top, Subsingleton.einfsep⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.einfsep, einfsep, subsingleton_of_einfsep_eq_top
@@ -913,8 +913,8 @@ theorem Nontrivial.einfsep_ne_top
   exact subsingleton_of_einfsep_eq_top hs
 
 中文:
-定理 Nontrivial.einfsep_ne_top
-  条件: (hs : s.Nontrivial)
+定理 非平凡.einfsep_ne_top
+  条件: (hs : s.非平凡)
   结论: s.einfsep != ∞
   证明: by
   contrapose! hs
@@ -938,8 +938,8 @@ theorem Nontrivial.einfsep_lt_top
   exact hs.einfsep_ne_top
 
 中文:
-定理 Nontrivial.einfsep_lt_top
-  条件: (hs : s.Nontrivial)
+定理 非平凡.einfsep_lt_top
+  条件: (hs : s.非平凡)
   结论: s.einfsep < ∞
   证明: by
   rw [lt_top_iff_ne_top]
@@ -961,7 +961,7 @@ theorem einfsep_lt_top_iff
 
 中文:
 定理 einfsep_lt_top_iff
-  结论: s.einfsep < ∞ ↔ s.Nontrivial
+  结论: s.einfsep < ∞ ↔ s.非平凡
   证明: ⟨nontrivial_of_einfsep_lt_top, Nontrivial.einfsep_lt_top⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.einfsep_lt_top, einfsep_lt_top, nontrivial_of_einfsep_lt_top
@@ -979,7 +979,7 @@ theorem einfsep_ne_top_iff
 
 中文:
 定理 einfsep_ne_top_iff
-  结论: s.einfsep != ∞ ↔ s.Nontrivial
+  结论: s.einfsep != ∞ ↔ s.非平凡
   证明: ⟨nontrivial_of_einfsep_ne_top, Nontrivial.einfsep_ne_top⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.einfsep_ne_top, einfsep_ne_top, nontrivial_of_einfsep_ne_top
@@ -996,7 +996,7 @@ theorem le_einfsep_of_forall_dist_le
   proof: le_einfsep fun x hx y hy hxy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy hxy)
 
 中文:
-定理 le_einfsep_of_forall_dist_le
+定理 le_einfsep_of_对任意_dist_le
   条件: {d} (h : 对任意 x in s, 对任意 y in s, x != y -> d <= dist x y)
   证明: le_einfsep fun x hx y hy hxy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy hxy)
 
@@ -1029,7 +1029,7 @@ theorem einfsep_pos_of_finite
 
 中文:
 定理 einfsep_pos_of_finite
-  条件: [Finite s]
+  条件: [有限 s]
   结论: 0 < s.einfsep
   证明: by
   cases nonempty_fintype s
@@ -1061,7 +1061,7 @@ theorem relatively_discrete_of_finite
 
 中文:
 定理 relatively_discrete_of_finite
-  条件: [Finite s]
+  条件: [有限 s]
   证明: by
   rw [← einfsep_pos]
   exact einfsep_pos_of_finite
@@ -1084,8 +1084,8 @@ theorem Finite.einfsep_pos
   einfsep_pos_of_finite
 
 中文:
-定理 Finite.einfsep_pos
-  条件: (hs : s.Finite)
+定理 有限.einfsep_pos
+  条件: (hs : s.有限)
   结论: 0 < s.einfsep
   证明: letI := hs.fintype
   einfsep_pos_of_finite
@@ -1106,8 +1106,8 @@ theorem Finite.relatively_discrete
   relatively_discrete_of_finite
 
 中文:
-定理 Finite.relatively_discrete
-  条件: (hs : s.Finite)
+定理 有限.relatively_discrete
+  条件: (hs : s.有限)
   证明: letI := hs.fintype
   relatively_discrete_of_finite
 
@@ -1138,7 +1138,7 @@ definition infsep
 
 中文:
 定义 infsep
-  签名: [EDist α] (s : Set α)
+  签名: [EDist α] (s : 集合 α)
   定义体: ENNReal.toReal s.einfsep
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, einfsep, s.einfsep, toReal
@@ -1218,8 +1218,8 @@ theorem Subsingleton.infsep_zero
   proof: Set.infsep_zero.mpr Or.inr hs.einfsep
 
 中文:
-定理 Subsingleton.infsep_zero
-  条件: (hs : s.Subsingleton)
+定理 子单例.infsep_zero
+  条件: (hs : s.子单例)
   结论: s.infsep = 0
   证明: Set.infsep_zero.mpr Or.inr hs.einfsep
 
@@ -1243,7 +1243,7 @@ theorem nontrivial_of_infsep_pos
 中文:
 定理 nontrivial_of_infsep_pos
   条件: (hs : 0 < s.infsep)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: by
   contrapose hs
   rw [not_nontrivial_iff] at hs
@@ -1266,7 +1266,7 @@ theorem infsep_empty
 
 中文:
 定理 infsep_empty
-  结论: (∅ : Set α).infsep = 0
+  结论: (∅ : 集合 α).infsep = 0
   证明: subsingleton_empty.infsep_zero
 
 Depends on / 依赖: infsep_zero, subsingleton_empty, subsingleton_empty.infsep_zero
@@ -1284,7 +1284,7 @@ theorem infsep_singleton
 
 中文:
 定理 infsep_singleton
-  结论: ({x} : Set α).infsep = 0
+  结论: ({x} : 集合 α).infsep = 0
   证明: subsingleton_singleton.infsep_zero
 
 Depends on / 依赖: infsep_zero, subsingleton_singleton, subsingleton_singleton.infsep_zero
@@ -1303,7 +1303,7 @@ theorem infsep_pair_le_toReal_inf
   simp
 
 中文:
-定理 infsep_pair_le_toReal_inf
+定理 infsep_pair_le_to实数_inf
   条件: (hxy : x != y)
   证明: by
   simp_rw [infsep, einfsep_pair_eq_inf hxy]
@@ -1335,8 +1335,8 @@ theorem infsep_pair_eq_toReal
   · rw [infsep, einfsep_pair hxy]
 
 中文:
-定理 infsep_pair_eq_toReal
-  结论: ({x, y} : Set α).infsep = (edist x y).to实数
+定理 infsep_pair_eq_to实数
+  结论: ({x, y} : 集合 α).infsep = (edist x y).to实数
   证明: by
   by_cases hxy : x = y
   · rw [hxy]
@@ -1368,8 +1368,8 @@ theorem Nontrivial.le_infsep_iff
     ENNReal.ofReal_le_ofReal_iff dist_nonneg]
 
 中文:
-定理 Nontrivial.le_infsep_iff
-  条件: {d} (hs : s.Nontrivial)
+定理 非平凡.le_infsep_iff
+  条件: {d} (hs : s.非平凡)
   证明: by
   simp_rw [infsep, ← ENNReal.ofReal_le_iff_le_toReal hs.einfsep_ne_top, le_einfsep_iff, edist_dist,
     ENNReal.ofReal_le_ofReal_iff dist_nonneg]
@@ -1391,8 +1391,8 @@ theorem Nontrivial.infsep_lt_iff
   contrapose!; exact hs.le_infsep_iff
 
 中文:
-定理 Nontrivial.infsep_lt_iff
-  条件: {d} (hs : s.Nontrivial)
+定理 非平凡.infsep_lt_iff
+  条件: {d} (hs : s.非平凡)
   证明: by
   contrapose!; exact hs.le_infsep_iff
 
@@ -1411,8 +1411,8 @@ theorem Nontrivial.le_infsep
   proof: hs.le_infsep_iff.2 h
 
 中文:
-定理 Nontrivial.le_infsep
-  结论: {d} (hs : s.Nontrivial)
+定理 非平凡.le_infsep
+  结论: {d} (hs : s.非平凡)
   证明: hs.le_infsep_iff.2 h
 
 Depends on / 依赖: hs.le_infsep_iff, le_infsep_iff
@@ -1505,7 +1505,7 @@ theorem infsep_pair
 
 中文:
 定理 infsep_pair
-  结论: ({x, y} : Set α).infsep = dist x y
+  结论: ({x, y} : 集合 α).infsep = dist x y
   证明: by
   rw [infsep_pair_eq_toReal]; rw [edist_dist]
   exact ENNReal.toReal_ofReal dist_nonneg
@@ -1553,8 +1553,8 @@ theorem Nontrivial.infsep_anti
   proof: ENNReal.toReal_mono hs.einfsep_ne_top (einfsep_anti hst)
 
 中文:
-定理 Nontrivial.infsep_anti
-  条件: (hs : s.Nontrivial) (hst : s subseteq t)
+定理 非平凡.infsep_anti
+  条件: (hs : s.非平凡) (hst : s subseteq t)
   结论: t.infsep <= s.infsep
   证明: ENNReal.toReal_mono hs.einfsep_ne_top (einfsep_anti hst)
 
@@ -1581,7 +1581,7 @@ theorem infsep_eq_iInf
 
 中文:
 定理 infsep_eq_iInf
-  条件: [Decidable s.Nontrivial]
+  条件: [可判定 s.非平凡]
   证明: by
   split_ifs with hs
   · have hb : BddBelow (uncurry dist '' s.offDiag) := by
@@ -1617,8 +1617,8 @@ theorem Nontrivial.infsep_eq_iInf
   classical rw [Set.infsep_eq_iInf, if_pos hs]
 
 中文:
-定理 Nontrivial.infsep_eq_iInf
-  条件: (hs : s.Nontrivial)
+定理 非平凡.infsep_eq_iInf
+  条件: (hs : s.非平凡)
   证明: by
   classical rw [Set.infsep_eq_iInf, if_pos hs]
 
@@ -1645,7 +1645,7 @@ theorem infsep_of_fintype
 
 中文:
 定理 infsep_of_fintype
-  条件: [Decidable s.Nontrivial] [Fintype s]
+  条件: [可判定 s.非平凡] [有限类型 s]
   结论: s.infsep =
   证明: by
   split_ifs with hs
@@ -1676,8 +1676,8 @@ theorem Nontrivial.infsep_of_fintype
   classical rw [Set.infsep_of_fintype, dif_pos hs]
 
 中文:
-定理 Nontrivial.infsep_of_fintype
-  条件: [Fintype s] (hs : s.Nontrivial)
+定理 非平凡.infsep_of_fintype
+  条件: [有限类型 s] (hs : s.非平凡)
   证明: by
   classical rw [Set.infsep_of_fintype, dif_pos hs]
 
@@ -1702,8 +1702,8 @@ theorem Finite.infsep
     exact hs.infsep_zero
 
 中文:
-定理 Finite.infsep
-  条件: [Decidable s.Nontrivial] (hsf : s.Finite)
+定理 有限.infsep
+  条件: [可判定 s.非平凡] (hsf : s.有限)
   证明: by
   split_ifs with hs
   · refine eq_of_forall_le_iff fun _ => ?_
@@ -1734,8 +1734,8 @@ theorem Finite.infsep_of_nontrivial
   classical simp_rw [hsf.infsep, dif_pos hs]
 
 中文:
-定理 Finite.infsep_of_nontrivial
-  条件: (hsf : s.Finite) (hs : s.Nontrivial)
+定理 有限.infsep_of_nontrivial
+  条件: (hsf : s.有限) (hs : s.非平凡)
   证明: by
   classical simp_rw [hsf.infsep, dif_pos hs]
 
@@ -1760,9 +1760,9 @@ theorem _root_.Finset.coe_infsep
   · exact (not_nontrivial_iff.mp (H
 
 中文:
-定理 _root_.Finset.coe_infsep
-  条件: (s : Finset α)
-  结论: (s : Set α).infsep =
+定理 _root_.有限集.coe_infsep
+  条件: (s : 有限集 α)
+  结论: (s : 集合 α).infsep =
   证明: by
   have H : (s : Set α).Nontrivial ↔ s.offDiag.Nonempty := by
     rw [← Set.offDiag_nonempty]; rw [← Finset.coe_offDiag]; rw [Finset.coe_nonempty]
@@ -1790,8 +1790,8 @@ theorem _root_.Finset.coe_infsep_of_offDiag_nonempty
   rw [Finset.coe_infsep]; rw [dif_pos hs]
 
 中文:
-定理 _root_.Finset.coe_infsep_of_offDiag_nonempty
-  结论: {s : Finset α}
+定理 _root_.有限集.coe_infsep_of_offDiag_nonempty
+  结论: {s : 有限集 α}
   证明: by
   rw [Finset.coe_infsep]; rw [dif_pos hs]
 
@@ -1811,7 +1811,7 @@ theorem _root_.Finset.coe_infsep_of_offDiag_empty
   rw [Finset.coe_infsep]; rw [dif_neg hs]
 
 中文:
-定理 _root_.Finset.coe_infsep_of_offDiag_empty
+定理 _root_.有限集.coe_infsep_of_offDiag_empty
   证明: by
   rw [← Finset.not_nonempty_iff_eq_empty] at hs
   rw [Finset.coe_infsep]; rw [dif_neg hs]
@@ -1838,8 +1838,8 @@ theorem Nontrivial.infsep_exists_of_finite
   exact ⟨w.fst, hxy.1, w.snd, hxy.2.1, hxy.2.2, hed⟩
 
 中文:
-定理 Nontrivial.infsep_exists_of_finite
-  条件: [Finite s] (hs : s.Nontrivial)
+定理 非平凡.infsep_存在_of_finite
+  条件: [有限 s] (hs : s.非平凡)
   证明: by
   cases nonempty_fintype s
   simp_rw [hs.infsep_of_fintype]
@@ -1869,8 +1869,8 @@ theorem Finite.infsep_exists_of_nontrivial
   hs.infsep_exists_of_finite
 
 中文:
-定理 Finite.infsep_exists_of_nontrivial
-  条件: (hsf : s.Finite) (hs : s.Nontrivial)
+定理 有限.infsep_存在_of_nontrivial
+  条件: (hsf : s.有限) (hs : s.非平凡)
   证明: letI := hsf.fintype
   hs.infsep_exists_of_finite
 
@@ -1900,8 +1900,8 @@ theorem infsep_zero_iff_subsingleton_of_finite
 
 中文:
 定理 infsep_zero_iff_subsingleton_of_finite
-  条件: [Finite s]
-  结论: s.infsep = 0 ↔ s.Subsingleton
+  条件: [有限 s]
+  结论: s.infsep = 0 ↔ s.子单例
   证明: by
   rw [infsep_zero]; rw [einfsep_eq_top_iff]; rw [or_iff_right_iff_imp]
   exact fun H => (einfsep_pos_of_finite.ne' H).elim
@@ -1925,8 +1925,8 @@ theorem infsep_pos_iff_nontrivial_of_finite
 
 中文:
 定理 infsep_pos_iff_nontrivial_of_finite
-  条件: [Finite s]
-  结论: 0 < s.infsep ↔ s.Nontrivial
+  条件: [有限 s]
+  结论: 0 < s.infsep ↔ s.非平凡
   证明: by
   rw [infsep_pos]; rw [einfsep_lt_top_iff]; rw [and_iff_right_iff_imp]
   exact fun _ => einfsep_pos_of_finite
@@ -1948,9 +1948,9 @@ theorem Finite.infsep_zero_iff_subsingleton
   infsep_zero_iff_subsingleton_of_finite
 
 中文:
-定理 Finite.infsep_zero_iff_subsingleton
-  条件: (hs : s.Finite)
-  结论: s.infsep = 0 ↔ s.Subsingleton
+定理 有限.infsep_zero_iff_subsingleton
+  条件: (hs : s.有限)
+  结论: s.infsep = 0 ↔ s.子单例
   证明: letI := hs.fintype
   infsep_zero_iff_subsingleton_of_finite
 
@@ -1971,9 +1971,9 @@ theorem Finite.infsep_pos_iff_nontrivial
   infsep_pos_iff_nontrivial_of_finite
 
 中文:
-定理 Finite.infsep_pos_iff_nontrivial
-  条件: (hs : s.Finite)
-  结论: 0 < s.infsep ↔ s.Nontrivial
+定理 有限.infsep_pos_iff_nontrivial
+  条件: (hs : s.有限)
+  结论: 0 < s.infsep ↔ s.非平凡
   证明: letI := hs.fintype
   infsep_pos_iff_nontrivial_of_finite
 
@@ -1992,8 +1992,8 @@ theorem _root_.Finset.infsep_zero_iff_subsingleton
   proof: infsep_zero_iff_subsingleton_of_finite
 
 中文:
-定理 _root_.Finset.infsep_zero_iff_subsingleton
-  条件: (s : Finset α)
+定理 _root_.有限集.infsep_zero_iff_subsingleton
+  条件: (s : 有限集 α)
   证明: infsep_zero_iff_subsingleton_of_finite
 
 Depends on / 依赖: infsep_zero_iff_subsingleton_of_finite
@@ -2011,8 +2011,8 @@ theorem _root_.Finset.infsep_pos_iff_nontrivial
   proof: infsep_pos_iff_nontrivial_of_finite
 
 中文:
-定理 _root_.Finset.infsep_pos_iff_nontrivial
-  条件: (s : Finset α)
+定理 _root_.有限集.infsep_pos_iff_nontrivial
+  条件: (s : 有限集 α)
   证明: infsep_pos_iff_nontrivial_of_finite
 
 Depends on / 依赖: infsep_pos_iff_nontrivial_of_finite

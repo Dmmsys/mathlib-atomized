@@ -47,7 +47,7 @@ definition Squarefree
 
 中文:
 定义 Squarefree
-  签名: [Monoid R] (r : R)
+  签名: [幺半群 R] (r : R)
   定义体: forall x : R, x * x ∣ r -> IsUnit x
 
 Depends on / 依赖: IsUnit
@@ -67,7 +67,7 @@ theorem IsRelPrime.of_squarefree_mul
 
 中文:
 定理 IsRelPrime.of_squarefree_mul
-  条件: [CommMonoid R] {m n : R} (h : Squarefree (m * n))
+  条件: [交换幺半群 R] {m n : R} (h : Squarefree (m * n))
   证明: fun c hca hcb => h c (mul_dvd_mul hca hcb)
 
 @[simp]
@@ -89,8 +89,8 @@ theorem IsUnit.squarefree
   isUnit_of_mul_isUnit_left (isUnit_of_dvd_unit hdvd h)
 
 中文:
-定理 IsUnit.squarefree
-  条件: [CommMonoid R] {x : R} (h : IsUnit x)
+定理 是单位.squarefree
+  条件: [交换幺半群 R] {x : R} (h : 是单位 x)
   结论: Squarefree x
   证明: fun _ hdvd =>
   isUnit_of_mul_isUnit_left (isUnit_of_dvd_unit hdvd h)
@@ -111,7 +111,7 @@ theorem squarefree_one
 
 中文:
 定理 squarefree_one
-  条件: [CommMonoid R]
+  条件: [交换幺半群 R]
   结论: Squarefree (1 : R)
   证明: isUnit_one.squarefree
 
@@ -136,7 +136,7 @@ theorem not_squarefree_zero
 
 中文:
 定理 not_squarefree_zero
-  条件: [MonoidWithZero R] [Nontrivial R]
+  条件: [带零幺半群 R] [非平凡 R]
   结论: ¬Squarefree (0 : R)
   证明: by
   rw [Squarefree]; rw [not_forall]
@@ -162,7 +162,7 @@ theorem Squarefree.ne_zero
 
 中文:
 定理 Squarefree.ne_zero
-  条件: [MonoidWithZero R] [Nontrivial R] {m : R} (hm : Squarefree (m : R))
+  条件: [带零幺半群 R] [非平凡 R] {m : R} (hm : Squarefree (m : R))
   证明: by
   rintro rfl
   exact not_squarefree_zero hm
@@ -194,8 +194,8 @@ theorem Irreducible.squarefree
 @[simp]
 
 中文:
-定理 Irreducible.squarefree
-  条件: [CommMonoid R] {x : R} (h : Irreducible x)
+定理 不可约.squarefree
+  条件: [交换幺半群 R] {x : R} (h : 不可约 x)
   结论: Squarefree x
   证明: by
   rintro y ⟨z, hz⟩
@@ -225,8 +225,8 @@ theorem Prime.squarefree
   proof: h.irreducible.squarefree
 
 中文:
-定理 Prime.squarefree
-  条件: [CommMonoidWithZero R] [IsCancelMulZero R] {x : R} (h : Prime x)
+定理 素.squarefree
+  条件: [带零交换幺半群 R] [是乘零消去 R] {x : R} (h : 素 x)
   证明: h.irreducible.squarefree
 
 Depends on / 依赖: h.irreducible.squarefree, irreducible, squarefree
@@ -246,7 +246,7 @@ theorem Squarefree.of_mul_left
 
 中文:
 定理 Squarefree.of_mul_left
-  条件: [Monoid R] {m n : R} (hmn : Squarefree (m * n))
+  条件: [幺半群 R] {m n : R} (hmn : Squarefree (m * n))
   结论: Squarefree m
   证明: fun p hp => hmn p (dvd_mul_of_dvd_left hp n)
 
@@ -265,7 +265,7 @@ theorem Squarefree.of_mul_right
 
 中文:
 定理 Squarefree.of_mul_right
-  条件: [CommMonoid R] {m n : R} (hmn : Squarefree (m * n))
+  条件: [交换幺半群 R] {m n : R} (hmn : Squarefree (m * n))
   证明: fun p hp => hmn p (dvd_mul_of_dvd_right hp m)
 
 Depends on / 依赖: dvd_mul_of_dvd_right
@@ -283,7 +283,7 @@ theorem Squarefree.squarefree_of_dvd
 
 中文:
 定理 Squarefree.squarefree_of_dvd
-  条件: [Monoid R] {x y : R} (hdvd : x ∣ y) (hsq : Squarefree y)
+  条件: [幺半群 R] {x y : R} (hdvd : x ∣ y) (hsq : Squarefree y)
   证明: fun _ h => hsq _ (h.trans hdvd)
 
 Depends on / 依赖: h.trans
@@ -301,7 +301,7 @@ theorem Associated.squarefree_iff
 
 中文:
 定理 Associated.squarefree_iff
-  条件: [Monoid R] {x y : R} (h : Associated x y)
+  条件: [幺半群 R] {x y : R} (h : Associated x y)
   证明: ⟨fun hx => hx.squarefree_of_dvd h.dvd', fun hy => hy.squarefree_of_dvd h.dvd⟩
 
 Depends on / 依赖: h.dvd, hx.squarefree_of_dvd, hy.squarefree_of_dvd, squarefree_of_dvd
@@ -324,7 +324,7 @@ theorem Squarefree.eq_zero_or_one_of_pow_of_not_isUnit
 
 中文:
 定理 Squarefree.eq_zero_or_one_of_pow_of_not_isUnit
-  结论: [Monoid R] {x : R} {n : 自然数}
+  结论: [幺半群 R] {x : R} {n : 自然数}
   证明: by
   contrapose! h'
   replace h' : 2 <= n := by lia
@@ -354,7 +354,7 @@ theorem Squarefree.pow_dvd_of_pow_dvd
 
 中文:
 定理 Squarefree.pow_dvd_of_pow_dvd
-  结论: [Monoid R] {x y : R} {n : 自然数}
+  结论: [幺半群 R] {x y : R} {n : 自然数}
   证明: by
   by_cases hu : IsUnit x
   · exact (hu.pow n).dvd
@@ -384,7 +384,7 @@ theorem Squarefree.gcd_right
 中文:
 定理 Squarefree.gcd_right
   条件: (a : α) {b : α} (hb : Squarefree b)
-  结论: Squarefree (gcd a b)
+  结论: Squarefree (最大公约数 a b)
   证明: hb.squarefree_of_dvd (gcd_dvd_right _ _)
 
 Depends on / 依赖: gcd_dvd_right, hb.squarefree_of_dvd, squarefree_of_dvd
@@ -404,7 +404,7 @@ theorem Squarefree.gcd_left
 中文:
 定理 Squarefree.gcd_left
   条件: {a : α} (b : α) (ha : Squarefree a)
-  结论: Squarefree (gcd a b)
+  结论: Squarefree (最大公约数 a b)
   证明: ha.squarefree_of_dvd (gcd_dvd_left _ _)
 
 Depends on / 依赖: gcd_dvd_left, ha.squarefree_of_dvd, squarefree_of_dvd
@@ -429,7 +429,7 @@ theorem squarefree_iff_emultiplicity_le_one
 
 中文:
 定理 squarefree_iff_emultiplicity_le_one
-  条件: [CommMonoid R] (r : R)
+  条件: [交换幺半群 R] (r : R)
   证明: by
   refine forall_congr' fun a => ?_
   rw [← sq]; rw [pow_dvd_iff_le_emultiplicity]; rw [or_iff_not_imp_left]; rw [not_le]; rw [imp_congr _ Iff.rfl]
@@ -555,7 +555,7 @@ theorem squarefree_iff_irreducible_sq_not_dvd_of_exists_irreducible
   simp only [hr, not_true, false_or, and_false]
 
 中文:
-定理 squarefree_iff_irreducible_sq_not_dvd_of_exists_irreducible
+定理 squarefree_iff_irreducible_sq_not_dvd_of_存在_irreducible
   结论: {r : R}
   证明: by
   rw [irreducible_sq_not_dvd_iff_eq_zero_and_no_irreducibles_or_squarefree]; rw [← not_exists]
@@ -826,8 +826,8 @@ theorem Finset.squarefree_prod_of_pairwise_isCoprime
     · exact (hs.right i (by simp [hi]) fu
 
 中文:
-定理 Finset.squarefree_prod_of_pairwise_isCoprime
-  结论: {ι : 类型} {s : Finset ι}
+定理 有限集.squarefree_prod_of_pairwise_isCoprime
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -923,7 +923,7 @@ lemma _root_.exists_squarefree_dvd_pow_of_ne_zero
     · exact ⟨p, 1, hp.squarefree, dvd
 
 中文:
-引理 _root_.exists_squarefree_dvd_pow_of_ne_zero
+引理 _root_.存在_squarefree_dvd_pow_of_ne_zero
   条件: {x : R} (hx : x != 0)
   证明: by
   induction x using WfDvdMonoid.induction_on_irreducible with
@@ -970,7 +970,7 @@ theorem squarefree_iff_nodup_normalizedFactors
 
 中文:
 定理 squarefree_iff_nodup_normalizedFactors
-  结论: [NormalizationMonoid R] {x : R}
+  结论: [Normalization幺半群 R] {x : R}
   证明: by
   classical
   rw [squarefree_iff_emultiplicity_le_one]; rw [Multiset.nodup_iff_count_le_one]

@@ -43,7 +43,7 @@ structure RingInvo
 
 中文:
 结构 RingInvo
-  参数: [Semiring R]
+  参数: [半环 R]
   继承: R ≃+* Rᵐᵒᵖ
   公理与运算 (1 个):
     - involution' : 对任意 x, (toFun (toFun x).unop).unop = x
@@ -66,9 +66,9 @@ class RingInvoClass
     - involution : forall (f : F) (x), (f (f x).unop).unop = x
 
 中文:
-类 RingInvoClass
-  参数: (F R : 类型) [Semiring R] [EquivLike F R Rᵐᵒᵖ]
-  继承: RingEquivClass F R Rᵐᵒᵖ
+类 RingInvo类
+  参数: (F R : 类型) [半环 R] [等价状 F R Rᵐᵒᵖ]
+  继承: 环等价类 F R Rᵐᵒᵖ
   公理与运算 (1 个):
     - involution : 对任意 (f : F) (x), (f (f x).unop).unop = x
 -/
@@ -90,8 +90,8 @@ definition RingInvoClass.toRingInvo
   body: { (RingEquivClass.toRingEquiv f : R ≃+* Rᵐᵒᵖ) with involution' := RingInvoClass.involution f }
 
 中文:
-定义 RingInvoClass.toRingInvo
-  签名: {R} [Semiring R] [EquivLike F R Rᵐᵒᵖ] [RingInvoClass F R] (f : F)
+定义 RingInvo类.toRingInvo
+  签名: {R} [半环 R] [等价状 F R Rᵐᵒᵖ] [RingInvo类 F R] (f : F)
   定义体: { (RingEquivClass.toRingEquiv f : R ≃+* Rᵐᵒᵖ) with involution' := RingInvoClass.involution f }
 
 Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, RingInvoClass, RingInvoClass.involution, involution, toRingEquiv
@@ -113,7 +113,7 @@ instance [RingInvoClass
   body: ⟨RingInvoClass.toRingInvo⟩
 
 中文:
-实例 [RingInvoClass
+实例 [RingInvo类
   签名: F R] : CoeTC F (RingInvo R)
   定义体: ⟨RingInvoClass.toRingInvo⟩
 
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (RingInvo R) R Rᵐᵒᵖ
+  签名: 等价状 (RingInvo R) R Rᵐᵒᵖ
   定义体: f.toFun
   inv f := f.invFun
   coe_injective' e f h₁ h₂ := by
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: RingInvoClass (RingInvo R) R
+  签名: RingInvo类 (RingInvo R) R
   定义体: f.map_add'
   map_mul f := f.map_mul'
   involution f := f.involution'
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RingInvo R)
+  签名: 可居 (RingInvo R)
   定义体: ⟨RingInvo.id _⟩
 
 Depends on / 依赖: RingInvo, RingInvo.id

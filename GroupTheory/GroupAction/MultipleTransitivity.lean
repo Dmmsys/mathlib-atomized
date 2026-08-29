@@ -89,8 +89,8 @@ definition Function.Injective.mulActionHom_embedding
 @[to_additive (attr := simp)]
 
 中文:
-定义 Function.Injective.mulActionHom_embedding
-  签名: (hf : Function.Injective f)
+定义 函数.单射.mulActionHom_embedding
+  签名: (hf : 函数.单射 f)
   定义体: ⟨f.toFun ∘ x.toFun, hf.comp x.inj'⟩
   map_smul' m x := by ext; simp [f.map_smul']
 
@@ -114,7 +114,7 @@ theorem Function.Injective.mulActionHom_embedding_apply
 @[to_additive]
 
 中文:
-定理 Function.Injective.mulActionHom_embedding_apply
+定理 函数.单射.mulActionHom_embedding_apply
   证明: rfl
 
 @[to_additive]
@@ -138,7 +138,7 @@ theorem Function.Injective.mulActionHom_embedding_isInjective
   simp only [← hf.mulActionHom_embedding_apply, hxy]
 
 中文:
-定理 Function.Injective.mulActionHom_embedding_isInjective
+定理 函数.单射.mulActionHom_embedding_isInjective
   证明: by
   intro _ _ hxy
   ext
@@ -174,8 +174,8 @@ theorem Function.Bijective.mulActionHom_embedding_isBijective
   exact hfg (
 
 中文:
-定理 Function.Bijective.mulActionHom_embedding_isBijective
-  条件: (hf : Function.Bijective f)
+定理 函数.双射.mulActionHom_embedding_isBijective
+  条件: (hf : 函数.双射 f)
   证明: by
   refine ⟨hf.injective.mulActionHom_embedding_isInjective, ?_⟩
   intro y
@@ -274,7 +274,7 @@ theorem IsPretransitive.of_embedding
     
 
 中文:
-定理 IsPretransitive.of_embedding
+定理 是Pretransitive.of_embedding
   结论: {n : 类型}
   证明: by
     let aux (x : n ↪ β) : (n ↪ α) :=
@@ -313,7 +313,7 @@ theorem IsPretransitive.of_embedding_congr
   proof: isPretransitive_congr hσ hf.mulActionHom_embedding_isBijective
 
 中文:
-定理 IsPretransitive.of_embedding_congr
+定理 是Pretransitive.of_embedding_congr
   结论: {n : 类型}
   证明: isPretransitive_congr hσ hf.mulActionHom_embedding_isBijective
 
@@ -338,7 +338,7 @@ theorem is_zero_pretransitive
 
 中文:
 定理 is_zero_pretransitive
-  条件: {n : 类型} [IsEmpty n]
+  条件: {n : 类型} [是空 n]
   证明: inferInstance
 -/
 theorem is_zero_pretransitive {n : Type*} [IsEmpty n] :
@@ -381,7 +381,7 @@ definition _root_.MulActionHom.oneEmbeddingMap
 @[to_additive]
 
 中文:
-定义 _root_.MulActionHom.oneEmbeddingMap
+定义 _root_.乘法作用态射.oneEmbeddingMap
   签名: :
   定义体: {
   oneEmbeddingEquiv with
@@ -403,7 +403,7 @@ theorem _root_.MulActionHom.oneEmbeddingMap_bijective
   proof: oneEmbeddingEquiv.bijective
 
 中文:
-定理 _root_.MulActionHom.oneEmbeddingMap_bijective
+定理 _root_.乘法作用态射.oneEmbeddingMap_bijective
   证明: oneEmbeddingEquiv.bijective
 -/
 theorem _root_.MulActionHom.oneEmbeddingMap_bijective :
@@ -615,7 +615,7 @@ definition _root_.MulActionHom.embMap
   map_smul' _ _ := rfl
 
 中文:
-定义 _root_.MulActionHom.embMap
+定义 _root_.乘法作用态射.embMap
   签名: {m n : 类型} (e : m ↪ n)
   定义体: e.trans i
   map_smul' _ _ := rfl
@@ -753,7 +753,7 @@ theorem isPretransitive_iff
 
 中文:
 定理 isPretransitive_iff
-  条件: [IsPretransitive G α] {a b : α}
+  条件: [是Pretransitive G α] {a b : α}
   证明: let ⟨_, hg⟩ := exists_smul_eq G a b
   isPretransitive_iff_of_conj hg.symm
 
@@ -803,7 +803,7 @@ theorem isMultiplyPretransitive_iff
 
 中文:
 定理 isMultiplyPretransitive_iff
-  条件: [IsPretransitive G α] {n : 自然数} {a b : α}
+  条件: [是Pretransitive G α] {n : 自然数} {a b : α}
   证明: let ⟨_, hg⟩ := exists_smul_eq G a b
   isMultiplyPretransitive_iff_of_conj hg.symm
 
@@ -838,7 +838,7 @@ theorem isMultiplyPretransitive
 
 中文:
 定理 isMultiplyPretransitive
-  条件: [IsPretransitive G α] {n : 自然数} {a : α}
+  条件: [是Pretransitive G α] {n : 自然数} {a : α}
   证明: by
   refine ⟨fun hn => ⟨fun x y => ?_⟩, fun hn => ⟨fun x y => ?_⟩⟩
   · obtain ⟨g, hgxy⟩ := exists_smul_eq G (ofStabilizer.snoc x) (ofStabilizer.snoc y)
@@ -1109,8 +1109,8 @@ theorem exists_smul_eq_embedding
   exact ⟨σ, Function.Embedding.ext fun i => by simp [Function.Embedding.smul_apply, hσ]⟩
 
 中文:
-定理 exists_smul_eq_embedding
-  结论: {ι : 类型} [Finite ι] {β : 类型}
+定理 存在_smul_eq_embedding
+  结论: {ι : 类型} [有限 ι] {β : 类型}
   证明: by
   obtain ⟨σ, hσ⟩ := Equiv.Perm.exists_extending_pair x y x.injective y.injective
   exact ⟨σ, Function.Embedding.ext fun i => by simp [Function.Embedding.smul_apply, hσ]⟩
@@ -1157,7 +1157,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreprimitive (Perm α) α
+  签名: 是Preprimitive (置换 α) α
   定义体: isPreprimitive_of_is_two_pretransitive (isMultiplyPretransitive _ _)
 
 Depends on / 依赖: isMultiplyPretransitive, isPreprimitive_of_is_two_pretransitive
@@ -1183,7 +1183,7 @@ theorem eq_top_of_isMultiplyPretransitive
 
 中文:
 定理 eq_top_of_isMultiplyPretransitive
-  结论: [Finite α] {G : Subgroup (Equiv.Perm α)}
+  结论: [有限 α] {G : 子群 (等价.置换 α)}
   证明: by
   have := Fintype.ofFinite α
   simp only [Nat.card_eq_fintype_card] at hmt
@@ -1386,7 +1386,7 @@ theorem isTrivialBlock_of_isBlock
 
 中文:
 定理 isTrivialBlock_of_isBlock
-  条件: {B : Set α} (hB : IsBlock (alternatingGroup α) B)
+  条件: {B : 集合 α} (hB : IsBlock (alternatingGroup α) B)
   证明: by
   rcases le_or_gt (Nat.card α) 2 with h2 | h2
   · exact isTrivialBlock_of_card_le_two h2 B

@@ -94,7 +94,7 @@ definition toTemperedDistribution
 
 中文:
 定义 toTemperedDistribution
-  签名: : 𝓢'(E, Complex)
+  签名: : 𝓢'(E, 复形)
   定义体: toPointwiseConvergenceCLM _ _ _ _ (integralCLM Complex μ)
 
 Depends on / 依赖: integralCLM, toPointwiseConvergenceCLM
@@ -115,7 +115,7 @@ theorem toTemperedDistribution_apply
 
 中文:
 定理 toTemperedDistribution_apply
-  条件: (g : 𝓢(E, Complex))
+  条件: (g : 𝓢(E, 复形))
   证明: by
   rfl
 -/
@@ -141,7 +141,7 @@ definition toTemperedDistribution
 
 中文:
 定义 toTemperedDistribution
-  签名: {f : E -> F} (hf : f.HasTemperateGrowth)
+  签名: {f : E -> F} (hf : f.有TemperateGrowth)
   定义体: toPointwiseConvergenceCLM _ _ _ _ ((integralCLM Complex μ) ∘L (bilinLeftCLM (lsmul Complex Complex) hf))
 
 Depends on / 依赖: bilinLeftCLM, integralCLM, toPointwiseConvergenceCLM
@@ -161,7 +161,7 @@ theorem toTemperedDistribution_apply
 
 中文:
 定理 toTemperedDistribution_apply
-  条件: {f : E -> F} (hf : f.HasTemperateGrowth) (g : 𝓢(E, Complex))
+  条件: {f : E -> F} (hf : f.有TemperateGrowth) (g : 𝓢(E, 复形))
   证明: rfl
 -/
 theorem toTemperedDistribution_apply {f : E -> F} (hf : f.HasTemperateGrowth) (g : 𝓢(E, Complex)) :
@@ -191,7 +191,7 @@ fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Compl
 
 中文:
 定义 toTemperedDistributionCLM
-  签名: (μ : Measure E := by volume_tac) [hμ : μ.HasTemperateGrowth]
+  签名: (μ : 测度 E := by volume_tac) [hμ : μ.有TemperateGrowth]
   定义体: toPointwiseConvergenceCLM _ _ _ _ integralCLM Complex μ ∘L pairing (lsmul Complex Complex).flip f
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
@@ -221,7 +221,7 @@ theorem toTemperedDistributionCLM_apply_apply
 
 中文:
 定理 toTemperedDistributionCLM_apply_apply
-  结论: (μ : Measure E := by volume_tac)
+  结论: (μ : 测度 E := by volume_tac)
   证明: by
   simp [toTemperedDistributionCLM, comp_apply _]
 
@@ -268,7 +268,7 @@ theorem coe_apply
 
 中文:
 定理 coe_apply
-  条件: (f : 𝓢(E, F)) (g : 𝓢(E, Complex))
+  条件: (f : 𝓢(E, F)) (g : 𝓢(E, 复形))
   证明: toTemperedDistributionCLM_apply_apply volume f g
 
 Depends on / 依赖: toTemperedDistributionCLM_apply_apply, volume
@@ -392,7 +392,7 @@ theorem toTemperedDistribution_toLp_eq
 
 中文:
 定理 toTemperedDistribution_toLp_eq
-  结论: [SecondCountableTopology E] {p : 实数>=0∞} [hp : Fact (1 <= p)]
+  结论: [第二可数拓扑 E] {p : 实数>=0∞} [hp : Fact (1 <= p)]
   证明: by
   ext g
   simp only [Lp.toTemperedDistribution_apply, toTemperedDistributionCLM_apply_apply]
@@ -429,7 +429,7 @@ definition toTemperedDistributionCLM
 
 中文:
 定义 toTemperedDistributionCLM
-  签名: (μ : Measure E := by volume_tac) [μ.HasTemperateGrowth]
+  签名: (μ : 测度 E := by volume_tac) [μ.有TemperateGrowth]
   定义体: toTemperedDistribution
   map_add' f g := by simp [Lp.toTemperedDistribution]
   map_smul' a f := by simp [Lp.toTemperedDistribution]
@@ -547,7 +547,7 @@ definition smulLeftCLM
 
 中文:
 定义 smulLeftCLM
-  签名: (g : E -> Complex)
+  签名: (g : E -> 复形)
   定义体: PointwiseConvergenceCLM.precomp _ (SchwartzMap.smulLeftCLM Complex g)
 
 @[simp]
@@ -571,7 +571,7 @@ theorem smulLeftCLM_apply_apply
 
 中文:
 定理 smulLeftCLM_apply_apply
-  条件: (g : E -> Complex) (f : 𝓢'(E, F)) (f' : 𝓢(E, Complex))
+  条件: (g : E -> 复形) (f : 𝓢'(E, F)) (f' : 𝓢(E, 复形))
   证明: by
   rfl
 
@@ -596,7 +596,7 @@ theorem smulLeftCLM_const
 
 中文:
 定理 smulLeftCLM_const
-  条件: (c : Complex) (f : 𝓢'(E, F))
+  条件: (c : 复形) (f : 𝓢'(E, F))
   结论: smulLeftCLM F (fun _ : E => c) f = c • f
   证明: by
   ext1; simp
@@ -618,7 +618,7 @@ theorem smulLeftCLM_smulLeftCLM_apply
 
 中文:
 定理 smulLeftCLM_smulLeftCLM_apply
-  结论: {g₁ g₂ : E -> Complex} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 复形} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext; simp [hg₁, hg₂]
 -/
@@ -639,7 +639,7 @@ theorem smulLeftCLM_compL_smulLeftCLM
 
 中文:
 定理 smulLeftCLM_compL_smulLeftCLM
-  结论: {g₁ g₂ : E -> Complex} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 复形} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext1 f
   simp [hg₁, hg₂]
@@ -662,7 +662,7 @@ theorem smulLeftCLM_smul
 
 中文:
 定理 smulLeftCLM_smul
-  条件: {g : E -> Complex} (hg : g.HasTemperateGrowth) (c : Complex)
+  条件: {g : E -> 复形} (hg : g.有TemperateGrowth) (c : 复形)
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_smul hg]
@@ -686,7 +686,7 @@ theorem smulLeftCLM_add
 
 中文:
 定理 smulLeftCLM_add
-  结论: {g₁ g₂ : E -> Complex} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 复形} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_add hg₁ hg₂]
@@ -711,7 +711,7 @@ theorem smulLeftCLM_sub
 
 中文:
 定理 smulLeftCLM_sub
-  结论: {g₁ g₂ : E -> Complex} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 复形} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_sub hg₁ hg₂]
@@ -736,7 +736,7 @@ theorem smulLeftCLM_neg
 
 中文:
 定理 smulLeftCLM_neg
-  条件: {g : E -> Complex} (hg : g.HasTemperateGrowth)
+  条件: {g : E -> 复形} (hg : g.有TemperateGrowth)
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_neg hg]
@@ -760,7 +760,7 @@ theorem smulLeftCLM_sum
 
 中文:
 定理 smulLeftCLM_sum
-  条件: {g : ι -> E -> Complex} {s : Finset ι} (hg : 对任意 i in s, (g i).HasTemperateGrowth)
+  条件: {g : ι -> E -> 复形} {s : 有限集 ι} (hg : 对任意 i in s, (g i).有TemperateGrowth)
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_sum hg]
@@ -793,7 +793,7 @@ theorem _root_.MeasureTheory.Lp.toTemperedDistribution_smul_eq
   simp [hg, hg', hg₁, smul_smul, mul_comm]
 
 中文:
-定理 _root_.MeasureTheory.Lp.toTemperedDistribution_smul_eq
+定理 _root_.测度论.Lp.toTemperedDistribution_smul_eq
   结论: {p q r : 实数>=0∞} [p.HolderTriple q r]
   证明: by
   ext u
@@ -838,7 +838,7 @@ definition derivCLM
 
 中文:
 定义 derivCLM
-  签名: : 𝓢'(实数, F) ->L[Complex] 𝓢'(实数, F)
+  签名: : 𝓢'(实数, F) ->L[复形] 𝓢'(实数, F)
   定义体: PointwiseConvergenceCLM.precomp F (-SchwartzMap.derivCLM Complex Complex)
 
 @[simp]
@@ -859,7 +859,7 @@ theorem derivCLM_apply_apply
 
 中文:
 定理 derivCLM_apply_apply
-  条件: (f : 𝓢'(实数, F)) (g : 𝓢(实数, Complex))
+  条件: (f : 𝓢'(实数, F)) (g : 𝓢(实数, 复形))
   证明: rfl
 -/
 theorem derivCLM_apply_apply (f : 𝓢'(Real, F)) (g : 𝓢(Real, Complex)) :
@@ -940,7 +940,7 @@ theorem lineDerivOp_apply_apply
 
 中文:
 定理 lineDerivOp_apply_apply
-  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, Complex)) (m : E)
+  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, 复形)) (m : E)
   证明: rfl
 -/
 theorem lineDerivOp_apply_apply (f : 𝓢'(E, F)) (g : 𝓢(E, Complex)) (m : E) :
@@ -983,7 +983,7 @@ instance :
 
 中文:
 实例 :
-  签名: LineDerivSMul Complex E 𝓢'(E, F) 𝓢'(E, F)
+  签名: LineDerivSMul 复形 E 𝓢'(E, F) 𝓢'(E, F)
   定义体: (PointwiseConvergenceCLM.precomp F (-lineDerivOpCLM Complex 𝓢(E, Complex) m)).map_smul
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.precomp, lineDerivOpCLM, map_smul, precomp
@@ -1020,7 +1020,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousLineDeriv E 𝓢'(E, F) 𝓢'(E, F)
+  签名: 余ntinuousLineDeriv E 𝓢'(E, F) 𝓢'(E, F)
   定义体: (PointwiseConvergenceCLM.precomp F (-lineDerivOpCLM Complex 𝓢(E, Complex) m)).continuous
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.precomp, continuous, lineDerivOpCLM, precomp
@@ -1041,7 +1041,7 @@ theorem lineDerivOpCLM_eq
 中文:
 定理 lineDerivOpCLM_eq
   条件: (m : E)
-  结论: lineDerivOpCLM Complex 𝓢'(E, F) m =
+  结论: lineDerivOpCLM 复形 𝓢'(E, F) m =
   证明: rfl
 -/
 theorem lineDerivOpCLM_eq (m : E) : lineDerivOpCLM Complex 𝓢'(E, F) m =
@@ -1132,7 +1132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Laplacian 𝓢'(E, F) 𝓢'(E, F)
+  签名: Laplace算子 𝓢'(E, F) 𝓢'(E, F)
   定义体: LineDeriv.laplacianCLM Real E 𝓢'(E, F)
 
 @[simp]
@@ -1156,7 +1156,7 @@ theorem laplacianCLM_apply
 中文:
 定理 laplacianCLM_apply
   条件: (f : 𝓢'(E, F))
-  结论: laplacianCLM Complex E 𝓢'(E, F) f = Δ f
+  结论: laplacianCLM 复形 E 𝓢'(E, F) f = Δ f
   证明: by
   simp [laplacianCLM, laplacian]
 
@@ -1181,7 +1181,7 @@ theorem laplacian_eq_sum
 
 中文:
 定理 laplacian_eq_sum
-  条件: [Fintype ι] (b : OrthonormalBasis ι 实数 E) (f : 𝓢'(E, F))
+  条件: [有限类型 ι] (b : 正交标准基 ι 实数 E) (f : 𝓢'(E, F))
   证明: LineDeriv.laplacianCLM_eq_sum b f
 
 @[simp]
@@ -1205,7 +1205,7 @@ theorem laplacian_apply_apply
 
 中文:
 定理 laplacian_apply_apply
-  条件: (f : 𝓢'(E, F)) (u : 𝓢(E, Complex))
+  条件: (f : 𝓢'(E, F)) (u : 𝓢(E, 复形))
   结论: (Δ f) u = f (Δ u)
   证明: by
   simp [laplacian_eq_sum (stdOrthonormalBasis Real E),
@@ -1271,7 +1271,7 @@ instance instFourierTransform
 
 中文:
 实例 instFourierTransform
-  签名: : FourierTransform 𝓢'(E, F) 𝓢'(E, F) where
+  签名: : Fourier变换 𝓢'(E, F) 𝓢'(E, F) where
   定义体: PointwiseConvergenceCLM.precomp F (fourierCLM Complex 𝓢(E, Complex))
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.precomp, fourierCLM, precomp
@@ -1307,7 +1307,7 @@ instance instFourierSMul
 
 中文:
 实例 instFourierSMul
-  签名: : FourierSMul Complex 𝓢'(E, F) 𝓢'(E, F) where
+  签名: : FourierSMul 复形 𝓢'(E, F) 𝓢'(E, F) where
   定义体: (PointwiseConvergenceCLM.precomp F (fourierCLM Complex 𝓢(E, Complex))).map_smul
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.precomp, fourierCLM, map_smul, precomp
@@ -1327,7 +1327,7 @@ instance instContinuousFourier
 
 中文:
 实例 instContinuousFourier
-  签名: : ContinuousFourier 𝓢'(E, F) 𝓢'(E, F) where
+  签名: : 余ntinuousFourier 𝓢'(E, F) 𝓢'(E, F) where
   定义体: (PointwiseConvergenceCLM.precomp F (fourierCLM Complex 𝓢(E, Complex))).cont
 
 @[simp]
@@ -1358,7 +1358,7 @@ alias fourierTransform_apply := fourier_apply
 
 中文:
 定理 fourier_apply
-  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, Complex))
+  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, 复形))
   结论: 𝓕 f g = f (𝓕 g)
   证明: rfl
 
@@ -1428,7 +1428,7 @@ instance instFourierInvSMul
 
 中文:
 实例 instFourierInvSMul
-  签名: : FourierInvSMul Complex 𝓢'(E, F) 𝓢'(E, F) where
+  签名: : FourierInvSMul 复形 𝓢'(E, F) 𝓢'(E, F) where
   定义体: (PointwiseConvergenceCLM.precomp F (fourierInvCLM Complex 𝓢(E, Complex))).map_smul
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.precomp, fourierInvCLM, map_smul, precomp
@@ -1448,7 +1448,7 @@ instance instContinuousFourierInv
 
 中文:
 实例 instContinuousFourierInv
-  签名: : ContinuousFourierInv 𝓢'(E, F) 𝓢'(E, F) where
+  签名: : 余ntinuousFourierInv 𝓢'(E, F) 𝓢'(E, F) where
   定义体: (PointwiseConvergenceCLM.precomp F (fourierInvCLM Complex 𝓢(E, Complex))).cont
 
 @[simp]
@@ -1479,7 +1479,7 @@ alias fourierTransformInv_apply := fourie
 
 中文:
 定理 fourierInv_apply
-  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, Complex))
+  条件: (f : 𝓢'(E, F)) (g : 𝓢(E, 复形))
   结论: 𝓕⁻ f g = f (𝓕⁻ g)
   证明: rfl
 
@@ -1773,7 +1773,7 @@ theorem delta_apply
 
 中文:
 定理 delta_apply
-  条件: (x : E) (f : 𝓢(E, Complex))
+  条件: (x : E) (f : 𝓢(E, 复形))
   结论: delta x f = f x
   证明: rfl
 -/

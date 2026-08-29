@@ -376,7 +376,7 @@ mem_nonZeroDivisors_of_ne_zero Nat.cast_ne_zero.2 ((rootMultiplicity_pos h).2 hp
 
 中文:
 定理 derivative_rootMultiplicity_of_root
-  条件: [CharZero R] {p : R[X]} {t : R} (hpt : p.IsRoot t)
+  条件: [特征零 R] {p : R[X]} {t : R} (hpt : p.IsRoot t)
   证明: by
   by_cases h : p = 0
   · rw [h, map_zero, rootMultiplicity_zero]
@@ -405,7 +405,7 @@ theorem rootMultiplicity_sub_one_le_derivative_rootMultiplicity
 
 中文:
 定理 rootMultiplicity_sub_one_le_derivative_rootMultiplicity
-  条件: [CharZero R] (p : R[X]) (t : R)
+  条件: [特征零 R] (p : R[X]) (t : R)
   证明: by
   by_cases h : p.IsRoot t
   · exact (derivative_rootMultiplicity_of_root h).symm.le
@@ -480,7 +480,7 @@ exact not_isRoot_C _ _ C_ne_zero.mp hf0
 
 中文:
 定理 isRoot_of_isRoot_of_dvd_derivative_mul
-  结论: [CharZero R] {f g : R[X]} (hf0 : f != 0)
+  结论: [特征零 R] {f g : R[X]} (hf0 : f != 0)
   证明: by
   rcases hfd with ⟨r, hr⟩
   have hdf0 : derivative f != 0 := by
@@ -523,7 +523,7 @@ normUnit_mul_units u h := Units.ext by
 
 中文:
 实例 instNormalizationMonoid
-  签名: [NormalizationMonoid R]
+  签名: [Normalization幺半群 R]
   定义体: ⟨C ↑(normUnit p.leadingCoeff), C ↑(normUnit p.leadingCoeff)⁻¹, by
       rw [← map_mul]; rw [Units.mul_inv]; rw [C_1], by rw [← map_mul, Units.inv_mul, C_1]⟩
   normUnit_zero := Units.ext (by simp)
@@ -559,8 +559,8 @@ instance [StrongNormalizationMonoid
   normUnit_coe_units := normUnit_coe_units
 
 中文:
-实例 [StrongNormalizationMonoid
-  签名: R] : StrongNormalizationMonoid R[X] where
+实例 [StrongNormalization幺半群
+  签名: R] : StrongNormalization幺半群 R[X] where
   定义体: Units.ext
       (by
         dsimp
@@ -665,7 +665,7 @@ theorem roots_normalize
 
 中文:
 定理 roots_normalize
-  条件: {R} [CommRing R] [IsDomain R] [NormalizationMonoid R] {p : R[X]}
+  条件: {R} [交换环 R] [是整环 R] [Normalization幺半群 R] {p : R[X]}
   证明: by
   rw [normalize_apply]; rw [mul_comm]; rw [coe_normUnit]; rw [roots_C_mul _ (normUnit (leadingCoeff p)).ne_zero]
 
@@ -739,7 +739,7 @@ theorem degree_pos_of_ne_zero_of_nonunit
 
 中文:
 定理 degree_pos_of_ne_zero_of_nonunit
-  条件: (hp0 : p != 0) (hp : ¬IsUnit p)
+  条件: (hp0 : p != 0) (hp : ¬是单位 p)
   结论: 0 < degree p
   证明: lt_of_not_ge fun h => by
     rw [eq_C_of_degree_le_zero h] at hp0 hp
@@ -932,7 +932,7 @@ theorem isUnit_iff_degree_eq_zero
 
 中文:
 定理 isUnit_iff_degree_eq_zero
-  结论: IsUnit p ↔ degree p = 0
+  结论: 是单位 p ↔ degree p = 0
   证明: ⟨degree_eq_zero_of_isUnit, fun h =>
     have : degree p <= 0 := by simp [*]
     have hc : coeff p 0 != 0 := fun hc => by
@@ -1057,7 +1057,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div R[X]
+  签名: 除法 R[X]
   定义体: ⟨div⟩
 -/
 instance : Div R[X] :=
@@ -1073,7 +1073,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mod R[X]
+  签名: 取模 R[X]
   定义体: ⟨mod⟩
 -/
 instance : Mod R[X] :=
@@ -1218,7 +1218,7 @@ instance instEuclideanDomain
 
 中文:
 实例 instEuclideanDomain
-  签名: : EuclideanDomain R[X]
+  签名: : 欧几里得整环 R[X]
   定义体: { Polynomial.commRing,
     Polynomial.nontrivial with
     quotient := (· / ·)
@@ -1425,8 +1425,8 @@ theorem isUnit_map
 
 中文:
 定理 isUnit_map
-  条件: [Field k] (f : R ->+* k)
-  结论: IsUnit (p.map f) ↔ IsUnit p
+  条件: [域 k] (f : R ->+* k)
+  结论: 是单位 (p.map f) ↔ 是单位 p
   证明: by
   simp_rw [isUnit_iff_degree_eq_zero, degree_map]
 
@@ -1449,7 +1449,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  条件: [Field k] (f : R ->+* k)
+  条件: [域 k] (f : R ->+* k)
   结论: (p / q).map f = p.map f / q.map f
   证明: by
   if hq0 : q = 0 then simp [hq0]
@@ -1478,7 +1478,7 @@ theorem map_mod
 
 中文:
 定理 map_mod
-  条件: [Field k] (f : R ->+* k)
+  条件: [域 k] (f : R ->+* k)
   结论: (p % q).map f = p.map f % q.map f
   证明: by
   by_cases hq0 : q = 0
@@ -1514,7 +1514,7 @@ lemma natDegree_mod_lt
 
 中文:
 引理 natDegree_mod_lt
-  条件: [Field k] (p : k[X]) {q : k[X]} (hq : q.natDegree != 0)
+  条件: [域 k] (p : k[X]) {q : k[X]} (hq : q.natDegree != 0)
   证明: by
   have hq' : q.leadingCoeff != 0 := by
     rw [leadingCoeff_ne_zero]
@@ -1656,7 +1656,7 @@ theorem gcd_map
 
 中文:
 定理 gcd_map
-  条件: [Field k] [DecidableEq R] [DecidableEq k] (f : R ->+* k)
+  条件: [域 k] [DecidableEq R] [DecidableEq k] (f : R ->+* k)
   证明: GCD.induction p q (fun x => by simp_rw [Polynomial.map_zero, EuclideanDomain.gcd_zero_left])
     fun x y _ ih => by rw [gcd_val, ← map_mod, ih, ← gcd_val]
 
@@ -1680,7 +1680,7 @@ theorem eval₂_gcd_eq_zero
 
 中文:
 定理 eval₂_gcd_eq_zero
-  结论: [CommSemiring k] [DecidableEq R]
+  结论: [交换半环 k] [DecidableEq R]
   证明: by
   rw [EuclideanDomain.gcd_eq_gcd_ab f g]; rw [Polynomial.eval₂_add]; rw [Polynomial.eval₂_mul]; rw [Polynomial.eval₂_mul]; rw [hf]; rw [hg]; rw [zero_mul]; rw [zero_mul]; rw [zero_add]
 
@@ -1720,7 +1720,7 @@ theorem root_left_of_root_gcd
 
 中文:
 定理 root_left_of_root_gcd
-  结论: [CommSemiring k] [DecidableEq R] {ϕ : R ->+* k} {f g : R[X]} {α : k}
+  结论: [交换半环 k] [DecidableEq R] {ϕ : R ->+* k} {f g : R[X]} {α : k}
   证明: by
   obtain ⟨p, hp⟩ := EuclideanDomain.gcd_dvd_left f g
   rw [hp]; rw [Polynomial.eval₂_mul]; rw [hα]; rw [zero_mul]
@@ -1744,7 +1744,7 @@ theorem root_right_of_root_gcd
 
 中文:
 定理 root_right_of_root_gcd
-  结论: [CommSemiring k] [DecidableEq R] {ϕ : R ->+* k} {f g : R[X]} {α : k}
+  结论: [交换半环 k] [DecidableEq R] {ϕ : R ->+* k} {f g : R[X]} {α : k}
   证明: by
   obtain ⟨p, hp⟩ := EuclideanDomain.gcd_dvd_right f g
   rw [hp]; rw [Polynomial.eval₂_mul]; rw [hα]; rw [zero_mul]
@@ -1766,7 +1766,7 @@ theorem root_gcd_iff_root_left_right
 
 中文:
 定理 root_gcd_iff_root_left_right
-  结论: [CommSemiring k] [DecidableEq R]
+  结论: [交换半环 k] [DecidableEq R]
   证明: ⟨fun h => ⟨root_left_of_root_gcd h, root_right_of_root_gcd h⟩, fun h => eval₂_gcd_eq_zero h.1 h.2⟩
 
 Depends on / 依赖: root_left_of_root_gcd, root_right_of_root_gcd
@@ -1808,7 +1808,7 @@ theorem isCoprime_map
 
 中文:
 定理 isCoprime_map
-  条件: [Field k] (f : R ->+* k)
+  条件: [域 k] (f : R ->+* k)
   结论: IsCoprime (p.map f) (q.map f) ↔ IsCoprime p q
   证明: by
   classical
@@ -1831,7 +1831,7 @@ theorem mem_roots_map
 
 中文:
 定理 mem_roots_map
-  条件: [CommRing k] [IsDomain k] {f : R ->+* k} {x : k} (hp : p != 0)
+  条件: [交换环 k] [是整环 k] {f : R ->+* k} {x : k} (hp : p != 0)
   证明: by
   rw [mem_roots (map_ne_zero hp)]; rw [IsRoot]; rw [Polynomial.eval_map]
 
@@ -1853,7 +1853,7 @@ theorem rootSet_monomial
 
 中文:
 定理 rootSet_monomial
-  结论: [CommRing S] [IsDomain S] [Algebra R S] {n : 自然数} (hn : n != 0) {a : R}
+  结论: [交换环 S] [是整环 S] [代数 R S] {n : 自然数} (hn : n != 0) {a : R}
   证明: by
   classical
   rw [rootSet]; rw [aroots_monomial ha]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]; rw [Finset.coe_singleton]
@@ -1876,7 +1876,7 @@ theorem rootSet_C_mul_X_pow
 
 中文:
 定理 rootSet_C_mul_X_pow
-  结论: [CommRing S] [IsDomain S] [Algebra R S] {n : 自然数} (hn : n != 0) {a : R}
+  结论: [交换环 S] [是整环 S] [代数 R S] {n : 自然数} (hn : n != 0) {a : R}
   证明: by
   rw [C_mul_X_pow_eq_monomial]; rw [rootSet_monomial hn ha]
 
@@ -1898,7 +1898,7 @@ theorem rootSet_X_pow
 
 中文:
 定理 rootSet_X_pow
-  条件: [CommRing S] [IsDomain S] [Algebra R S] {n : 自然数} (hn : n != 0)
+  条件: [交换环 S] [是整环 S] [代数 R S] {n : 自然数} (hn : n != 0)
   证明: by
   rw [← one_mul (X ^ n : R[X]), ← C_1, rootSet_C_mul_X_pow hn]
   exact one_ne_zero
@@ -1924,7 +1924,7 @@ theorem rootSet_prod
 
 中文:
 定理 rootSet_prod
-  结论: [CommRing S] [IsDomain S] [Algebra R S] {ι : 类型} (f : ι -> R[X])
+  结论: [交换环 S] [是整环 S] [代数 R S] {ι : 类型} (f : ι -> R[X])
   证明: by
   classical
   simp only [rootSet, aroots, ← Finset.mem_coe]
@@ -2024,7 +2024,7 @@ theorem exists_root_of_degree_eq_one
     simp [roots_degree_eq_one h]⟩
 
 中文:
-定理 exists_root_of_degree_eq_one
+定理 存在_root_of_degree_eq_one
   条件: (h : degree p = 1)
   结论: 存在 x, IsRoot p x
   证明: ⟨-((p.coeff 1)⁻¹ * p.coeff 0), by
@@ -2261,7 +2261,7 @@ theorem dvd_C_mul
 中文:
 定理 dvd_C_mul
   条件: (ha : a != 0)
-  结论: p ∣ Polynomial.C a * q ↔ p ∣ q
+  结论: p ∣ 多项式.C a * q ↔ p ∣ q
   证明: ⟨fun ⟨r, hr⟩ =>
     ⟨C a⁻¹ * r, by
       rw [mul_left_comm p]; rw [← hr]; rw [← mul_assoc]; rw [← C.map_mul]; rw [inv_mul_cancel₀ ha]; rw [C.map_one]; rw [one_mul]⟩,
@@ -2315,7 +2315,7 @@ theorem map_dvd_map'
 
 中文:
 定理 map_dvd_map'
-  条件: [Field k] (f : R ->+* k) {x y : R[X]}
+  条件: [域 k] (f : R ->+* k) {x y : R[X]}
   结论: x.map f ∣ y.map f ↔ x ∣ y
   证明: by
   by_cases H : x = 0
@@ -2375,7 +2375,7 @@ theorem prime_of_degree_eq_one
 中文:
 定理 prime_of_degree_eq_one
   条件: (hp1 : degree p = 1)
-  结论: Prime p
+  结论: 素 p
   证明: by
   classical
   have : Prime (normalize p) :=
@@ -2404,7 +2404,7 @@ theorem irreducible_of_degree_eq_one
 中文:
 定理 irreducible_of_degree_eq_one
   条件: (hp1 : degree p = 1)
-  结论: Irreducible p
+  结论: 不可约 p
   证明: (prime_of_degree_eq_one hp1).irreducible
 
 Depends on / 依赖: irreducible, prime_of_degree_eq_one
@@ -2428,7 +2428,7 @@ theorem not_irreducible_C
 中文:
 定理 not_irreducible_C
   条件: (x : R)
-  结论: ¬Irreducible (C x)
+  结论: ¬不可约 (C x)
   证明: by
   by_cases H : x = 0
   · rw [H, C_0]
@@ -2456,7 +2456,7 @@ not_irreducible_C (p.coeff 0) this ▸ hp
 
 中文:
 定理 degree_pos_of_irreducible
-  条件: (hp : Irreducible p)
+  条件: (hp : 不可约 p)
   结论: 0 < p.degree
   证明: lt_of_not_ge fun hp0 =>
     have := eq_C_of_degree_le_zero hp0
@@ -2480,7 +2480,7 @@ theorem X_sub_C_mul_divByMonic_eq_sub_modByMonic
 
 中文:
 定理 X_sub_C_mul_divByMonic_eq_sub_modByMonic
-  条件: {K : 类型} [Ring K] (f : K[X]) (a : K)
+  条件: {K : 类型} [环 K] (f : K[X]) (a : K)
   证明: by
   rw [eq_sub_iff_add_eq]; rw [← eq_sub_iff_add_eq']; rw [modByMonic_eq_sub_mul_div]
 
@@ -2530,7 +2530,7 @@ theorem X_sub_C_dvd_derivative_of_X_sub_C_dvd_divByMonic
 
 中文:
 定理 X_sub_C_dvd_derivative_of_X_sub_C_dvd_divByMonic
-  结论: {K : 类型} [Field K] (f : K[X]) {a : K}
+  结论: {K : 类型} [域 K] (f : K[X]) {a : K}
   证明: by
   have key := divByMonic_add_X_sub_C_mul_derivative_divByMonic_eq_derivative f a
   have ⟨u,hu⟩ := hf
@@ -2562,7 +2562,7 @@ theorem isCoprime_of_is_root_of_eval_derivative_ne_zero
 
 中文:
 定理 isCoprime_of_is_root_of_eval_derivative_ne_zero
-  结论: {K : 类型} [Field K] (f : K[X]) (a : K)
+  结论: {K : 类型} [域 K] (f : K[X]) (a : K)
   证明: by
   refine Or.resolve_left
       (EuclideanDomain.dvd_or_coprime (X - C a) (f /ₘ (X - C a))
@@ -2597,7 +2597,7 @@ theorem irreducible_iff_degree_lt
 
 中文:
 定理 irreducible_iff_degree_lt
-  条件: (p : R[X]) (hp0 : p != 0) (hpu : ¬ IsUnit p)
+  条件: (p : R[X]) (hp0 : p != 0) (hpu : ¬ 是单位 p)
   证明: by
   rw [← irreducible_mul_leadingCoeff_inv]; rw [(monic_mul_leadingCoeff_inv hp0).irreducible_iff_degree_lt]
   · simp [hp0, natDegree_mul_leadingCoeff_inv]
@@ -2629,7 +2629,7 @@ theorem irreducible_iff_lt_natDegree_lt
 
 中文:
 定理 irreducible_iff_lt_natDegree_lt
-  条件: {p : R[X]} (hp0 : p != 0) (hpu : ¬ IsUnit p)
+  条件: {p : R[X]} (hp0 : p != 0) (hpu : ¬ 是单位 p)
   证明: by
   have : p * C (leadingCoeff p)⁻¹ != 1 := by
     contrapose hpu
@@ -2721,7 +2721,7 @@ theorem map_normalize
 
 中文:
 定理 map_normalize
-  条件: [DecidableEq R] [Field S] [DecidableEq S] (f : R ->+* S)
+  条件: [DecidableEq R] [域 S] [DecidableEq S] (f : R ->+* S)
   证明: by
   by_cases hp : p = 0
   · simp [hp]
@@ -2746,7 +2746,7 @@ theorem monic_mapAlg_iff
 
 中文:
 定理 monic_mapAlg_iff
-  条件: [Semiring S] [Nontrivial S] [Algebra R S] {p : R[X]}
+  条件: [半环 S] [非平凡 S] [代数 R S] {p : R[X]}
   证明: by
   simp [mapAlg_eq_map, monic_map_iff]
 
@@ -2816,7 +2816,7 @@ theorem natDegree_pos
 
 中文:
 定理 natDegree_pos
-  条件: (h : Irreducible f)
+  条件: (h : 不可约 f)
   结论: 0 < f.natDegree
   证明: Nat.pos_of_ne_zero fun H => by
   obtain ⟨x, hf⟩ := natDegree_eq_zero.1 H
@@ -2845,7 +2845,7 @@ theorem degree_pos
 
 中文:
 定理 degree_pos
-  条件: (h : Irreducible f)
+  条件: (h : 不可约 f)
   结论: 0 < f.degree
   证明: by
   rw [← natDegree_pos_iff_degree_pos]

@@ -42,7 +42,7 @@ instance [HasFiniteLimits
   body: inferInstance
 
 中文:
-实例 [HasFiniteLimits
+实例 [有有限极限
   签名: C] : AB5 (Ind C) where
   定义体: inferInstance
 -/
@@ -65,7 +65,7 @@ instance isGrothendieckAbelian_ind
 
 中文:
 实例 isGrothendieckAbelian_ind
-  签名: : IsGrothendieckAbelian.{u} (Ind C) where
+  签名: : 是GrothendieckAbelian.{u} (Ind C) where
   定义体: ⟨⟨_, Ind.isSeparator_range_yoneda⟩⟩
 
 Depends on / 依赖: Ind.isSeparator_range_yoneda, isSeparator_range_yoneda

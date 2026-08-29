@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (HahnEmbedding.Seed Rat M 实数)
+  签名: 非空 (HahnEmbedding.Seed 有理数 M 实数)
   定义体: by
   obtain ⟨strata⟩ : Nonempty (HahnEmbedding.ArchimedeanStrata Rat M) := inferInstance
   choose f hf using fun c => Archimedean.exists_orderAddMonoidHom_real_injective (strata.stratum c)

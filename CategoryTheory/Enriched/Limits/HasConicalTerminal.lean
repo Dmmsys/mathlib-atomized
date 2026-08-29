@@ -48,8 +48,8 @@ instance HasConicalProducts.hasConicalTerminal
   body: HasConicalLimitsOfShape.of_equiv V C emptyEquivalence.functor
 
 中文:
-实例 HasConicalProducts.hasConicalTerminal
-  签名: [HasConicalProducts.{w} V C]
+实例 有余nicalProducts.hasConicalTerminal
+  签名: [有余nicalProducts.{w} V C]
   定义体: HasConicalLimitsOfShape.of_equiv V C emptyEquivalence.functor
 
 Depends on / 依赖: HasConicalLimitsOfShape, HasConicalLimitsOfShape.of_equiv, emptyEquivalence, emptyEquivalence.functor, functor, of_equiv

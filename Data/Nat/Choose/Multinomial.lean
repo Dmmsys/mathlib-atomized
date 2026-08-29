@@ -272,7 +272,7 @@ theorem multinomial_congr_of_eq_on_inter
 
 中文:
 定理 multinomial_congr_of_eq_on_inter
-  结论: [DecidableEq α] {f g : α -> 自然数} {s t : Finset α}
+  结论: [DecidableEq α] {f g : α -> 自然数} {s t : 有限集 α}
   证明: by
   rw [← Nat.mul_right_inj (prod_ne_zero_iff.mpr (fun x _ => factorial_ne_zero (g x)))]; rw [multinomial_spec]; rw [prod_congr_of_eq_on_inter (g := fun a => (f a)!) (s₂ := s) (by aesop)
     (by aesop) (by aesop)]; rw [multinomial_spec s f]
@@ -299,7 +299,7 @@ theorem multinomial_congr_of_sdiff
 
 中文:
 定理 multinomial_congr_of_sdiff
-  结论: [DecidableEq α] {f g : α -> 自然数} {s t : Finset α}
+  结论: [DecidableEq α] {f g : α -> 自然数} {s t : 有限集 α}
   证明: multinomial_congr_of_eq_on_inter (by grind) hg (by grind)
 
 Depends on / 依赖: multinomial_congr_of_eq_on_inter
@@ -597,7 +597,7 @@ theorem multinomial_eq_of_support_subset
 
 中文:
 定理 multinomial_eq_of_support_subset
-  条件: {f : α ->₀ 自然数} {s : Finset α} (h : f.support subseteq s)
+  条件: {f : α ->₀ 自然数} {s : 有限集 α} (h : f.support subseteq s)
   证明: by
   simp only [Finsupp.multinomial_eq, Nat.multinomial]
   congr 1
@@ -778,7 +778,7 @@ lemma sum_pow_eq_sum_piAntidiag_of_commute
 
 中文:
 引理 sum_pow_eq_sum_piAntidiag_of_commute
-  结论: (s : Finset α) (f : α -> R)
+  结论: (s : 有限集 α) (f : α -> R)
   证明: by
   induction s using Finset.cons_induction generalizing n with
   | empty => cases n <;> simp
@@ -850,7 +850,7 @@ theorem sum_pow_of_commute
 
 中文:
 定理 sum_pow_of_commute
-  结论: (x : α -> R) (s : Finset α)
+  结论: (x : α -> R) (s : 有限集 α)
   证明: by
   induction s using Finset.induction with
   | empty =>
@@ -918,7 +918,7 @@ lemma sum_pow_eq_sum_piAntidiag
 
 中文:
 引理 sum_pow_eq_sum_piAntidiag
-  条件: (s : Finset α) (f : α -> R) (n : 自然数)
+  条件: (s : 有限集 α) (f : α -> R) (n : 自然数)
   证明: by
   simp_rw [← noncommProd_eq_prod]
   rw [← sum_pow_eq_sum_piAntidiag_of_commute _ _ fun _ _ _ _ _ => Commute.all ..]
@@ -1027,7 +1027,7 @@ theorem countPerms_coe_fill_of_notMem
 
 中文:
 定理 countPerms_coe_fill_of_notMem
-  条件: {m : Fin (n + 1)} {s : Sym α (n - m)} {x : α} (hx : x ∉ s)
+  条件: {m : 有限集 (n + 1)} {s : Sym α (n - m)} {x : α} (hx : x ∉ s)
   证明: by
   rw [Multiset.countPerms_filter_ne x]
   rw [← mem_coe] at hx
@@ -1068,8 +1068,8 @@ theorem Finsupp.multinomial_of_support_subset
   simp
 
 中文:
-定理 Finsupp.multinomial_of_support_subset
-  结论: {σ : 类型} {d : σ ->₀ 自然数} {s : Finset σ}
+定理 有限支撑.multinomial_of_support_subset
+  结论: {σ : 类型} {d : σ ->₀ 自然数} {s : 有限集 σ}
   证明: by
   rw [Nat.multinomial]; rw [Finsupp.multinomial]; rw [sum_of_support_subset _ h _ (by simp)]; rw [prod_of_support_subset _ h _ (by simp)]
   simp
@@ -1100,7 +1100,7 @@ lemma toFinsupp_sum
 
 中文:
 引理 toFinsupp_sum
-  条件: {α : 类型} [AddCommMonoid α] [DecidableEq α] (l : List α)
+  条件: {α : 类型} [加法交换幺半群 α] [DecidableEq α] (l : 列表 α)
   证明: by
   match l with
   | nil => simp
@@ -1130,7 +1130,7 @@ abbreviation multinomial
 
 中文:
 缩写 multinomial
-  签名: (l : List 自然数)
+  签名: (l : 列表 自然数)
   定义体: l.toFinsupp.multinomial
 
 Depends on / 依赖: l.toFinsupp.multinomial, multinomial, toFinsupp
@@ -1155,7 +1155,7 @@ theorem multinomial_cons
 
 中文:
 定理 multinomial_cons
-  条件: (x : 自然数) (l : List 自然数)
+  条件: (x : 自然数) (l : 列表 自然数)
   证明: by
   simp only [multinomial]
   rw [Finsupp.multinomial_update 0 (x :: l).toFinsupp]

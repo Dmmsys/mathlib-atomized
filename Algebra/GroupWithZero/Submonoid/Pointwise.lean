@@ -36,7 +36,7 @@ lemma smul_mem_pointwise_smul_iff₀
 
 中文:
 引理 smul_mem_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : Submonoid M) (x : M)
+  条件: (ha : a != 0) (S : 子幺半群 M) (x : M)
   证明: smul_mem_smul_set_iff₀ ha (S : Set M) x
 -/
 lemma smul_mem_pointwise_smul_iff₀ (ha : a != 0) (S : Submonoid M) (x : M) :
@@ -53,7 +53,7 @@ lemma mem_pointwise_smul_iff_inv_smul_mem₀
 
 中文:
 引理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: (ha : a != 0) (S : Submonoid M) (x : M)
+  条件: (ha : a != 0) (S : 子幺半群 M) (x : M)
   证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set M) x
 -/
 lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a != 0) (S : Submonoid M) (x : M) :
@@ -72,7 +72,7 @@ lemma mem_inv_pointwise_smul_iff₀
 
 中文:
 引理 mem_inv_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : Submonoid M) (x : M)
+  条件: (ha : a != 0) (S : 子幺半群 M) (x : M)
   证明: mem_inv_smul_set_iff₀ ha (S : Set M) x
 
 @[simp]
@@ -92,7 +92,7 @@ lemma pointwise_smul_le_pointwise_smul_iff₀
 
 中文:
 引理 pointwise_smul_le_pointwise_smul_iff₀
-  条件: (ha : a != 0) {S T : Submonoid M}
+  条件: (ha : a != 0) {S T : 子幺半群 M}
   证明: smul_set_subset_smul_set_iff₀ ha
 -/
 lemma pointwise_smul_le_pointwise_smul_iff₀ (ha : a != 0) {S T : Submonoid M} :
@@ -110,7 +110,7 @@ lemma pointwise_smul_le_iff₀
 
 中文:
 引理 pointwise_smul_le_iff₀
-  条件: (ha : a != 0) {S T : Submonoid M}
+  条件: (ha : a != 0) {S T : 子幺半群 M}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: smul_set_subset_iff₀ ha
 -/
@@ -128,7 +128,7 @@ lemma le_pointwise_smul_iff₀
 
 中文:
 引理 le_pointwise_smul_iff₀
-  条件: (ha : a != 0) {S T : Submonoid M}
+  条件: (ha : a != 0) {S T : 子幺半群 M}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: subset_smul_set_iff₀ ha
 -/
@@ -162,7 +162,7 @@ scoped[Pointwise] attribute [instance] Ad
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction M (AddSubmonoid A) where
+  签名: : 乘法作用 M (加法子幺半群 A) where
   定义体: S.map (DistribMulAction.toAddMonoidEnd _ A a)
   one_smul S :=
     (congr_arg (fun f : AddMonoid.End A => S.map f) (map_one _)).trans S.map_id
@@ -192,8 +192,8 @@ lemma coe_pointwise_smul
 
 中文:
 引理 coe_pointwise_smul
-  条件: (m : M) (S : AddSubmonoid A)
-  结论: ↑(m • S) = m • (S : Set A)
+  条件: (m : M) (S : 加法子幺半群 A)
+  结论: ↑(m • S) = m • (S : 集合 A)
   证明: rfl
 -/
 lemma coe_pointwise_smul (m : M) (S : AddSubmonoid A) : ↑(m • S) = m • (S : Set A) := rfl
@@ -209,7 +209,7 @@ lemma smul_mem_pointwise_smul
 
 中文:
 引理 smul_mem_pointwise_smul
-  条件: (a : A) (m : M) (S : AddSubmonoid A)
+  条件: (a : A) (m : M) (S : 加法子幺半群 A)
   结论: a in S -> m • a in m • S
   证明: (Set.smul_mem_smul_set : _ -> _ in m • (S : Set A))
 
@@ -229,8 +229,8 @@ lemma mem_smul_pointwise_iff_exists
 @[simp]
 
 中文:
-引理 mem_smul_pointwise_iff_exists
-  条件: (a : A) (m : M) (S : AddSubmonoid A)
+引理 mem_smul_pointwise_iff_存在
+  条件: (a : A) (m : M) (S : 加法子幺半群 A)
   证明: (Set.mem_smul_set : a in m • (S : Set A) ↔ _)
 
 @[simp]
@@ -254,7 +254,7 @@ lemma smul_bot
 中文:
 引理 smul_bot
   条件: (m : M)
-  结论: m • (⊥ : AddSubmonoid A) = ⊥
+  结论: m • (⊥ : 加法子幺半群 A) = ⊥
   证明: map_bot _
 
 Depends on / 依赖: map_bot
@@ -274,7 +274,7 @@ lemma smul_sup
 
 中文:
 引理 smul_sup
-  条件: (m : M) (S T : AddSubmonoid A)
+  条件: (m : M) (S T : 加法子幺半群 A)
   结论: m • (S ⊔ T) = m • S ⊔ m • T
   证明: map_sup _ _ _
 
@@ -297,7 +297,7 @@ lemma smul_closure
 
 中文:
 引理 smul_closure
-  条件: (m : M) (s : Set A)
+  条件: (m : M) (s : 集合 A)
   结论: m • closure s = closure (m • s)
   证明: AddMonoidHom.map_mclosure _ _
 
@@ -319,7 +319,7 @@ scoped[Pointwise] attribute [instance] AddSubmonoid.pointwise_isCentralScalar
 
 中文:
 引理 pointwise_isCentralScalar
-  条件: [DistribMulAction Mᵐᵒᵖ A] [IsCentralScalar M A]
+  条件: [分配乘法作用 Mᵐᵒᵖ A] [中心标量 M A]
   证明: ⟨fun _ S =>
 (congr_arg fun f : AddMonoid.End A => S.map f) AddMonoidHom.ext op_smul_eq_smul _⟩
 
@@ -351,7 +351,7 @@ lemma smul_mem_pointwise_smul_iff
 
 中文:
 引理 smul_mem_pointwise_smul_iff
-  条件: {S : AddSubmonoid A} {x : A}
+  条件: {S : 加法子幺半群 A} {x : A}
   结论: a • x in a • S ↔ x in S
   证明: smul_mem_smul_set_iff
 
@@ -370,7 +370,7 @@ lemma mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 引理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {S : AddSubmonoid A} {x : A}
+  条件: {S : 加法子幺半群 A} {x : A}
   证明: mem_smul_set_iff_inv_smul_mem
 
 Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
@@ -392,7 +392,7 @@ lemma mem_inv_pointwise_smul_iff
 
 中文:
 引理 mem_inv_pointwise_smul_iff
-  条件: {S : AddSubmonoid A} {x : A}
+  条件: {S : 加法子幺半群 A} {x : A}
   结论: x in a⁻¹ • S ↔ a • x in S
   证明: mem_inv_smul_set_iff
 
@@ -414,7 +414,7 @@ lemma pointwise_smul_le_pointwise_smul_iff
 
 中文:
 引理 pointwise_smul_le_pointwise_smul_iff
-  条件: {S T : AddSubmonoid A}
+  条件: {S T : 加法子幺半群 A}
   证明: smul_set_subset_smul_set_iff
 
 Depends on / 依赖: smul_set_subset_smul_set_iff
@@ -434,7 +434,7 @@ lemma pointwise_smul_le_iff
 
 中文:
 引理 pointwise_smul_le_iff
-  条件: {S T : AddSubmonoid A}
+  条件: {S T : 加法子幺半群 A}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: smul_set_subset_iff_subset_inv_smul_set
 
@@ -454,7 +454,7 @@ lemma le_pointwise_smul_iff
 
 中文:
 引理 le_pointwise_smul_iff
-  条件: {S T : AddSubmonoid A}
+  条件: {S T : 加法子幺半群 A}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: subset_smul_set_iff
 
@@ -479,7 +479,7 @@ lemma smul_mem_pointwise_smul_iff₀
 
 中文:
 引理 smul_mem_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : AddSubmonoid A) (x : A)
+  条件: (ha : a != 0) (S : 加法子幺半群 A) (x : A)
   证明: smul_mem_smul_set_iff₀ ha (S : Set A) x
 -/
 lemma smul_mem_pointwise_smul_iff₀ (ha : a != 0) (S : AddSubmonoid A) (x : A) :
@@ -496,7 +496,7 @@ lemma mem_pointwise_smul_iff_inv_smul_mem₀
 
 中文:
 引理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: (ha : a != 0) (S : AddSubmonoid A) (x : A)
+  条件: (ha : a != 0) (S : 加法子幺半群 A) (x : A)
   证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set A) x
 -/
 lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a != 0) (S : AddSubmonoid A) (x : A) :
@@ -515,7 +515,7 @@ lemma mem_inv_pointwise_smul_iff₀
 
 中文:
 引理 mem_inv_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : AddSubmonoid A) (x : A)
+  条件: (ha : a != 0) (S : 加法子幺半群 A) (x : A)
   证明: mem_inv_smul_set_iff₀ ha (S : Set A) x
 
 @[simp]

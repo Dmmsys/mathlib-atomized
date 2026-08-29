@@ -41,7 +41,7 @@ definition leftQuotient
 
 中文:
 定义 leftQuotient
-  签名: (x : List α)
+  签名: (x : 列表 α)
   定义体: { y | x ++ y in L }
 -/
 def leftQuotient (x : List α) : Language α := { y | x ++ y in L }
@@ -78,7 +78,7 @@ theorem leftQuotient_append
 
 中文:
 定理 leftQuotient_append
-  条件: (x y : List α)
+  条件: (x y : 列表 α)
   证明: by
   simp [leftQuotient, Language]
 
@@ -102,7 +102,7 @@ theorem mem_leftQuotient
 
 中文:
 定理 mem_leftQuotient
-  条件: (x y : List α)
+  条件: (x y : 列表 α)
   结论: y in L.leftQuotient x ↔ x ++ y in L
   证明: Iff.rfl
 
@@ -122,7 +122,7 @@ theorem leftQuotient_accepts_apply
 
 中文:
 定理 leftQuotient_accepts_apply
-  条件: (M : DFA α σ) (x : List α)
+  条件: (M : DFA α σ) (x : 列表 α)
   证明: by
   ext y
   simp [DFA.mem_accepts, DFA.mem_acceptsFrom, DFA.eval, DFA.evalFrom_of_append]
@@ -167,8 +167,8 @@ theorem IsRegular.finite_range_leftQuotient
     (Set.range_comp_subset_range M.eval M.acceptsFrom)
 
 中文:
-定理 IsRegular.finite_range_leftQuotient
-  条件: (h : L.IsRegular)
+定理 是正则.finite_range_leftQuotient
+  条件: (h : L.是正则)
   证明: by
   have ⟨σ, x, M, hM⟩ := h
   rw [← hM]; rw [leftQuotient_accepts]
@@ -203,7 +203,7 @@ definition toDFA
 
 中文:
 定义 toDFA
-  签名: : DFA α (Set.range L.leftQuotient) where
+  签名: : DFA α (集合.range L.leftQuotient) where
   定义体: by
     refine ⟨s.val.leftQuotient [a], ?_⟩
     obtain ⟨y, hy⟩ := s.prop
@@ -239,7 +239,7 @@ theorem mem_accept_toDFA
 
 中文:
 定理 mem_accept_toDFA
-  条件: (s : Set.range L.leftQuotient)
+  条件: (s : 集合.range L.leftQuotient)
   结论: s in L.toDFA.accept ↔ [] in s.val
   证明: Iff.rfl
 
@@ -260,7 +260,7 @@ theorem step_toDFA
 
 中文:
 定理 step_toDFA
-  条件: (s : Set.range L.leftQuotient) (a : α)
+  条件: (s : 集合.range L.leftQuotient) (a : α)
   证明: rfl
 -/
 theorem step_toDFA (s : Set.range L.leftQuotient) (a : α) :
@@ -329,8 +329,8 @@ theorem IsRegular.of_finite_range_leftQuotient
   proof: Language.isRegular_iff.mpr ⟨_, h.fintype, L.toDFA, by simp⟩
 
 中文:
-定理 IsRegular.of_finite_range_leftQuotient
-  条件: (h : Set.Finite (Set.range L.leftQuotient))
+定理 是正则.of_finite_range_leftQuotient
+  条件: (h : 集合.有限 (集合.range L.leftQuotient))
   证明: Language.isRegular_iff.mpr ⟨_, h.fintype, L.toDFA, by simp⟩
 
 Depends on / 依赖: L.toDFA, Language, Language.isRegular_iff.mpr, fintype, h.fintype, isRegular_iff

@@ -58,7 +58,7 @@ theorem exists_not_acc_lt_of_not_acc
   simpa only [and_comm]
 
 中文:
-定理 exists_not_acc_lt_of_not_acc
+定理 存在_not_acc_lt_of_not_acc
   条件: {α} {a : α} {r} (h : ¬Acc r a)
   结论: 存在 b, ¬Acc r b ∧ r b a
   证明: by
@@ -86,7 +86,7 @@ theorem not_acc_iff_exists_descending_chain
     (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1),
 
 中文:
-定理 not_acc_iff_exists_descending_chain
+定理 not_acc_iff_存在_descending_chain
   条件: {α} {r : α -> α -> 命题} {x : α}
   证明: let f : Nat -> {a : α // ¬Acc r a} :=
       Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
@@ -170,7 +170,7 @@ theorem asymm
 
 中文:
 定理 asymm
-  条件: (h : WellFounded r)
+  条件: (h : 良基 r)
   结论: Std.Asymm r
   证明: ⟨h.asymmetric⟩
 
@@ -193,7 +193,7 @@ theorem irrefl
 
 中文:
 定理 irrefl
-  条件: (h : WellFounded r)
+  条件: (h : 良基 r)
   结论: Std.Irrefl r
   证明: @Std.Asymm.irrefl α r h.asymm
 
@@ -212,7 +212,7 @@ instance [WellFoundedRelation
   body: WellFoundedRelation.wf.asymm
 
 中文:
-实例 [WellFoundedRelation
+实例 [良基关系
   签名: α] : Std.Asymm (α
   定义体: WellFoundedRelation.wf.asymm
 
@@ -232,8 +232,8 @@ theorem mono
 
 中文:
 定理 mono
-  条件: (hr : WellFounded r) (h : 对任意 a b, r' a b -> r a b)
-  结论: WellFounded r'
+  条件: (hr : 良基 r) (h : 对任意 a b, r' a b -> r a b)
+  结论: 良基 r'
   证明: Subrelation.wf (h _ _) hr
 
 Depends on / 依赖: Subrelation, Subrelation.wf
@@ -252,7 +252,7 @@ theorem onFun
 
 中文:
 定理 onFun
-  条件: {α β : Sort*} {r : β -> β -> 命题} {f : α -> β}
+  条件: {α β : 类型层*} {r : β -> β -> 命题} {f : α -> β}
   证明: InvImage.wf _
 
 Depends on / 依赖: InvImage, InvImage.wf
@@ -274,8 +274,8 @@ theorem _root_.Function.Injective.isWellOrder
   proof: hf.trichotomous_onFun r
 
 中文:
-定理 _root_.Function.Injective.isWellOrder
-  结论: (r : β -> β -> 命题) {f : α -> β} (hf : f.Injective)
+定理 _root_.函数.单射.isWellOrder
+  结论: (r : β -> β -> 命题) {f : α -> β} (hf : f.单射)
   证明: hf.trichotomous_onFun r
 
 Depends on / 依赖: hf.trichotomous_onFun, trichotomous_onFun
@@ -293,7 +293,7 @@ theorem has_min
 
 中文:
 定理 has_min
-  条件: {α} {r : α -> α -> 命题} (H : WellFounded r) (s : Set α)
+  条件: {α} {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α)
 -/
 theorem has_min {α} {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) :
     s.Nonempty -> exists a in s, forall x in s, ¬r x a
@@ -318,7 +318,7 @@ theorem not_rightTotal
 
 中文:
 定理 not_rightTotal
-  条件: (wf : WellFounded r) [Nonempty α]
+  条件: (wf : 良基 r) [非空 α]
   结论: ¬ Relator.RightTotal r
   证明: by
   intro h
@@ -351,7 +351,7 @@ theorem not_leftTotal
 
 中文:
 定理 not_leftTotal
-  条件: (wf : WellFounded (Function.swap r)) [Nonempty α]
+  条件: (wf : 良基 (函数.swap r)) [非空 α]
   证明: by
   intro h
   obtain ⟨a, -, ha⟩ := wf.has_min Set.univ Set.univ_nonempty
@@ -378,8 +378,8 @@ definition min
   body: Classical.choose (H.has_min s h)
 
 中文:
-定义 min
-  签名: {r : α -> α -> 命题} (H : WellFounded r) (s : Set α) (h : s.Nonempty)
+定义 最小值
+  签名: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) (h : s.非空)
   定义体: Classical.choose (H.has_min s h)
 
 Depends on / 依赖: Classical, Classical.choose, H.has_min, has_min
@@ -398,7 +398,7 @@ theorem min_mem
 
 中文:
 定理 min_mem
-  条件: {r : α -> α -> 命题} (H : WellFounded r) (s : Set α) (h : s.Nonempty)
+  条件: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) (h : s.非空)
   证明: let ⟨h, _⟩ := Classical.choose_spec (H.has_min s h)
   h
 
@@ -419,7 +419,7 @@ theorem prop_min
 
 中文:
 定理 prop_min
-  条件: {r : α -> α -> 命题} (H : WellFounded r) {p : α -> 命题} (h : 存在 a, p a)
+  条件: {r : α -> α -> 命题} (H : 良基 r) {p : α -> 命题} (h : 存在 a, p a)
   证明: H.min_mem {a | p a} h
 
 Depends on / 依赖: H.min_mem, min_mem
@@ -439,7 +439,7 @@ theorem not_lt_min
 
 中文:
 定理 not_lt_min
-  条件: {r : α -> α -> 命题} (H : WellFounded r) (s : Set α) {x} (hx : x in s)
+  条件: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) {x} (hx : x in s)
   证明: let ⟨_, h'⟩ := Classical.choose_spec (H.has_min s ⟨x, hx⟩)
   h' _ hx
 
@@ -459,8 +459,8 @@ theorem min_eq_of_forall_not_lt
   proof: Std.Trichotomous.trichotomous _ m (hrm _ <| wf.min_mem s _) (wf.not_lt_min s hms)
 
 中文:
-定理 min_eq_of_forall_not_lt
-  结论: [Std.Trichotomous r] (wf : WellFounded r) {s : Set α} {m : α}
+定理 min_eq_of_对任意_not_lt
+  结论: [Std.三歧 r] (wf : 良基 r) {s : 集合 α} {m : α}
   证明: Std.Trichotomous.trichotomous _ m (hrm _ <| wf.min_mem s _) (wf.not_lt_min s hms)
 
 Depends on / 依赖: Std.Trichotomous.trichotomous, Trichotomous, min_mem, not_lt_min, trichotomous, wf.min_mem, wf.not_lt_min
@@ -479,7 +479,7 @@ theorem notMem_of_lt_min
 
 中文:
 定理 notMem_of_lt_min
-  结论: {wf : WellFounded r} {s : Set α} {hs : s.Nonempty} {x : α}
+  结论: {wf : 良基 r} {s : 集合 α} {hs : s.非空} {x : α}
   证明: (wf.not_lt_min s · hx)
 
 Depends on / 依赖: not_lt_min, wf.not_lt_min
@@ -498,7 +498,7 @@ theorem mem_of_lt_min_compl
 
 中文:
 定理 mem_of_lt_min_compl
-  结论: {wf : WellFounded r} {s : Set α} {hs : sᶜ.Nonempty} {x : α}
+  结论: {wf : 良基 r} {s : 集合 α} {hs : sᶜ.非空} {x : α}
   证明: Set.notMem_compl_iff.mp notMem_of_lt_min hx
 
 Depends on / 依赖: Set.notMem_compl_iff.mp, notMem_compl_iff, notMem_of_lt_min
@@ -563,8 +563,8 @@ alias ⟨_root_.WellFoundedLT.exists_minimal, _⟩ := wellFoundedLT_iff_exists_m
 @[to_dual]
 
 中文:
-定理 wellFoundedLT_iff_exists_minimal
-  条件: [Preorder α]
+定理 wellFoundedLT_iff_存在_minimal
+  条件: [预序 α]
   证明: by
   simp only [isWellFounded_iff, wellFounded_iff_has_min, not_lt_iff_le_imp_ge, Minimal]
 
@@ -594,7 +594,7 @@ theorem minimal_wellFounded_lt_min
 
 中文:
 定理 minimal_wellFounded_lt_min
-  条件: [Preorder α] [WellFoundedLT α] {s : Set α} (h : s.Nonempty)
+  条件: [预序 α] [WellFoundedLT α] {s : 集合 α} (h : s.非空)
   证明: by
   grind [Minimal, lt_iff_le_not_ge, WellFounded.min]
 
@@ -616,7 +616,7 @@ theorem isWellOrder_iff_exists_not_lt_and_eq_or_gt
   · grind [h {a, b} <| by simp]
 
 中文:
-定理 isWellOrder_iff_exists_not_lt_and_eq_or_gt
+定理 isWellOrder_iff_存在_not_lt_and_eq_or_gt
   证明: by
   refine ⟨fun h s hs => ?_, fun h => { wf := ?_, trichotomous a b := ?_ }⟩
   · grind [h.wf.has_min, trichotomous_of r]
@@ -645,7 +645,7 @@ apply min_eq_of_forall_not_lt wf Set.mem_image_of_mem f min_mem wf.onFun s hne
 
 中文:
 定理 min_image
-  结论: {r : β -> β -> 命题} [Std.Trichotomous r] (wf : WellFounded r) (f : α -> β)
+  结论: {r : β -> β -> 命题} [Std.三歧 r] (wf : 良基 r) (f : α -> β)
   证明: by
 apply min_eq_of_forall_not_lt wf Set.mem_image_of_mem f min_mem wf.onFun s hne
   rintro _ ⟨a, has, rfl⟩
@@ -673,7 +673,7 @@ theorem not_rel_apply_succ
 
 中文:
 定理 not_rel_apply_succ
-  条件: [h : IsWellFounded α r] (f : 自然数 -> α)
+  条件: [h : 是良基 α r] (f : 自然数 -> α)
   结论: 存在 n, ¬ r (f (n + 1)) (f n)
   证明: by
   by_contra! hf
@@ -697,7 +697,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def sup {r : α -> α -> 命题} (wf : WellFounded r) (s : Set α)
+  签名: def 上确界 {r : α -> α -> 命题} (wf : 良基 r) (s : 集合 α)
   定义体: wf.min { x | forall a in s, r a x } h
 -/
 protected noncomputable def sup {r : α -> α -> Prop} (wf : WellFounded r) (s : Set α)
@@ -714,7 +714,7 @@ theorem lt_sup
 
 中文:
 定理 lt_sup
-  结论: {r : α -> α -> 命题} (wf : WellFounded r) {s : Set α} (h : Bounded r s) {x}
+  结论: {r : α -> α -> 命题} (wf : 良基 r) {s : 集合 α} (h : 有界 r s) {x}
   证明: min_mem wf { x | forall a in s, r a x } h x hx
 -/
 protected theorem lt_sup {r : α -> α -> Prop} (wf : WellFounded r) {s : Set α} (h : Bounded r s) {x}
@@ -738,8 +738,8 @@ theorem WellFounded.min_le
   proof: not_lt.1 h.not_lt_min _ hx
 
 中文:
-定理 WellFounded.min_le
-  结论: (h : WellFounded ((· < ·) : β -> β -> 命题))
+定理 良基.min_le
+  结论: (h : 良基 ((· < ·) : β -> β -> 命题))
   证明: not_lt.1 h.not_lt_min _ hx
 
 Depends on / 依赖: h.not_lt_min, not_lt, not_lt_min
@@ -768,7 +768,7 @@ theorem Set.range_injOn_strictMono
     have := 
 
 中文:
-定理 Set.range_injOn_strictMono
+定理 集合.range_injOn_strictMono
   条件: [WellFoundedLT β]
   证明: by
   intro f hf g hg hfg
@@ -811,7 +811,7 @@ theorem Set.range_injOn_strictAnti
   proof: fun _ hf _ hg => Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
 
 中文:
-定理 Set.range_injOn_strictAnti
+定理 集合.range_injOn_strictAnti
   条件: [WellFoundedGT β]
   证明: fun _ hf _ hg => Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
 
@@ -830,7 +830,7 @@ theorem StrictMono.range_inj
   proof: Set.range_injOn_strictMono.eq_iff hf hg
 
 中文:
-定理 StrictMono.range_inj
+定理 严格递增.range_inj
   结论: [WellFoundedLT β] {f g : β -> γ}
   证明: Set.range_injOn_strictMono.eq_iff hf hg
 
@@ -849,7 +849,7 @@ theorem StrictAnti.range_inj
   proof: Set.range_injOn_strictAnti.eq_iff hf hg
 
 中文:
-定理 StrictAnti.range_inj
+定理 严格递减.range_inj
   结论: [WellFoundedGT β] {f g : β -> γ}
   证明: Set.range_injOn_strictAnti.eq_iff hf hg
 
@@ -873,8 +873,8 @@ theorem StrictMono.id_le
   exact hm' _ (hf hm) hm
 
 中文:
-定理 StrictMono.id_le
-  条件: [WellFoundedLT β] {f : β -> β} (hf : StrictMono f)
+定理 严格递增.id_le
+  条件: [WellFoundedLT β] {f : β -> β} (hf : 严格递增 f)
   结论: id <= f
   证明: by
   rw [Pi.le_def]
@@ -900,8 +900,8 @@ theorem StrictMono.le_apply
   proof: hf.id_le x
 
 中文:
-定理 StrictMono.le_apply
-  条件: [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) {x}
+定理 严格递增.le_apply
+  条件: [WellFoundedLT β] {f : β -> β} (hf : 严格递增 f) {x}
   结论: x <= f x
   证明: hf.id_le x
 
@@ -920,8 +920,8 @@ theorem StrictMono.le_id
   proof: StrictMono.id_le (β := βᵒᵈ) hf.dual
 
 中文:
-定理 StrictMono.le_id
-  条件: [WellFoundedGT β] {f : β -> β} (hf : StrictMono f)
+定理 严格递增.le_id
+  条件: [WellFoundedGT β] {f : β -> β} (hf : 严格递增 f)
   结论: f <= id
   证明: StrictMono.id_le (β := βᵒᵈ) hf.dual
 
@@ -940,8 +940,8 @@ theorem StrictMono.apply_le
   proof: StrictMono.le_apply (β := βᵒᵈ) hf.dual
 
 中文:
-定理 StrictMono.apply_le
-  条件: [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) {x}
+定理 严格递增.apply_le
+  条件: [WellFoundedGT β] {f : β -> β} (hf : 严格递增 f) {x}
   结论: f x <= x
   证明: StrictMono.le_apply (β := βᵒᵈ) hf.dual
 
@@ -962,8 +962,8 @@ theorem StrictMono.not_bddAbove_range_of_wellFoundedLT
   exact ((hf.le_apply.trans_lt (hf hb)).trans_le <| ha (Set.mem_range_self _)).false
 
 中文:
-定理 StrictMono.not_bddAbove_range_of_wellFoundedLT
-  结论: {f : β -> β} [WellFoundedLT β] [NoMaxOrder β]
+定理 严格递增.not_bddAbove_range_of_wellFoundedLT
+  结论: {f : β -> β} [WellFoundedLT β] [NoMax序 β]
   证明: by
   rintro ⟨a, ha⟩
   obtain ⟨b, hb⟩ := exists_gt a
@@ -986,8 +986,8 @@ theorem StrictMono.not_bddBelow_range_of_wellFoundedGT
   proof: hf.dual.not_bddAbove_range_of_wellFoundedLT
 
 中文:
-定理 StrictMono.not_bddBelow_range_of_wellFoundedGT
-  结论: {f : β -> β} [WellFoundedGT β] [NoMinOrder β]
+定理 严格递增.not_bddBelow_range_of_wellFoundedGT
+  结论: {f : β -> β} [WellFoundedGT β] [NoMin序 β]
   证明: hf.dual.not_bddAbove_range_of_wellFoundedLT
 
 Depends on / 依赖: hf.dual.not_bddAbove_range_of_wellFoundedLT, not_bddAbove_range_of_wellFoundedLT
@@ -1016,7 +1016,7 @@ definition argmin
 
 中文:
 定义 argmin
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: WellFounded.min (InvImage.wf f wellFounded_lt) Set.univ Set.univ_nonempty
 
 Depends on / 依赖: InvImage, InvImage.wf, Set.univ, Set.univ_nonempty, WellFounded, WellFounded.min, univ_nonempty, wellFounded_lt
@@ -1035,7 +1035,7 @@ theorem not_lt_argmin
 
 中文:
 定理 not_lt_argmin
-  条件: [Nonempty α] (a : α)
+  条件: [非空 α] (a : α)
   结论: ¬f a < f (argmin f)
   证明: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) _ (Set.mem_univ a)
 
@@ -1056,7 +1056,7 @@ definition argminOn
 
 中文:
 定义 argminOn
-  签名: (s : Set α) (hs : s.Nonempty)
+  签名: (s : 集合 α) (hs : s.非空)
   定义体: WellFounded.min (InvImage.wf f wellFounded_lt) s hs
 
 @[simp]
@@ -1078,7 +1078,7 @@ theorem argminOn_mem
 
 中文:
 定理 argminOn_mem
-  条件: (s : Set α) (hs : s.Nonempty)
+  条件: (s : 集合 α) (hs : s.非空)
   结论: argminOn f s hs in s
   证明: WellFounded.min_mem _ _ _
 
@@ -1098,7 +1098,7 @@ theorem not_lt_argminOn
 
 中文:
 定理 not_lt_argminOn
-  条件: (s : Set α) {a : α} (ha : a in s)
+  条件: (s : 集合 α) {a : α} (ha : a in s)
   结论: ¬f a < f (argminOn f s ⟨a, ha⟩)
   证明: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) s ha
 
@@ -1124,7 +1124,7 @@ theorem argmin_le
 
 中文:
 定理 argmin_le
-  条件: (a : α) [Nonempty α]
+  条件: (a : α) [非空 α]
   结论: f (argmin f) <= f a
   证明: not_lt.mp not_lt_argmin f a
 
@@ -1143,7 +1143,7 @@ theorem isMinimalFor_argmin
 
 中文:
 定理 isMinimalFor_argmin
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: ⟨trivial, fun a _ _ => argmin_le f a⟩
 
 Depends on / 依赖: argmin_le
@@ -1162,7 +1162,7 @@ theorem argminOn_le
 
 中文:
 定理 argminOn_le
-  条件: (s : Set α) {a : α} (ha : a in s)
+  条件: (s : 集合 α) {a : α} (ha : a in s)
   证明: not_lt.mp not_lt_argminOn f s ha
 
 Depends on / 依赖: not_lt, not_lt.mp, not_lt_argminOn
@@ -1181,7 +1181,7 @@ theorem isMinimalFor_argminOn
 
 中文:
 定理 isMinimalFor_argminOn
-  条件: (s : Set α) (hs : s.Nonempty)
+  条件: (s : 集合 α) (hs : s.非空)
   证明: ⟨argminOn_mem f s hs, fun _ h _ => argminOn_le f s h⟩
 
 Depends on / 依赖: argminOn_le, argminOn_mem
@@ -1252,8 +1252,8 @@ theorem WellFounded.induction_bot'
   proof: (hwf.apply a).induction_bot' ih
 
 中文:
-定理 WellFounded.induction_bot'
-  结论: {α β} {r : α -> α -> 命题} (hwf : WellFounded r) {a bot : α}
+定理 良基.induction_bot'
+  结论: {α β} {r : α -> α -> 命题} (hwf : 良基 r) {a bot : α}
   证明: (hwf.apply a).induction_bot' ih
 
 Depends on / 依赖: hwf.apply, induction_bot
@@ -1272,8 +1272,8 @@ theorem WellFounded.induction_bot
   proof: hwf.induction_bot' ih
 
 中文:
-定理 WellFounded.induction_bot
-  结论: {α} {r : α -> α -> 命题} (hwf : WellFounded r) {a bot : α}
+定理 良基.induction_bot
+  结论: {α} {r : α -> α -> 命题} (hwf : 良基 r) {a bot : α}
   证明: hwf.induction_bot' ih
 
 Depends on / 依赖: hwf.induction_bot, induction_bot
@@ -1300,7 +1300,7 @@ definition WellFoundedLT.toOrderBot
 
 中文:
 定义 WellFoundedLT.toOrderBot
-  签名: (α) [LinearOrder α] [Nonempty α] [h : WellFoundedLT α]
+  签名: (α) [线性序 α] [非空 α] [h : WellFoundedLT α]
   定义体: h.wf.min _ Set.univ_nonempty
   bot_le a := h.wf.min_le (Set.mem_univ a)
 

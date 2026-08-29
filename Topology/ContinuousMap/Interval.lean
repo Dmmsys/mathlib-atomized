@@ -34,7 +34,7 @@ definition IccInclusionLeft
 
 中文:
 定义 IccInclusionLeft
-  签名: : C(Icc a b, Icc a c)
+  签名: : C(闭区间 a b, 闭区间 a c)
   定义体: .inclusion Icc_subset_Icc le_rfl Fact.out
 
 Depends on / 依赖: Fact.out, Icc_subset_Icc, inclusion, le_rfl
@@ -52,7 +52,7 @@ definition IccInclusionRight
 
 中文:
 定义 IccInclusionRight
-  签名: : C(Icc b c, Icc a c)
+  签名: : C(闭区间 b c, 闭区间 a c)
   定义体: .inclusion Icc_subset_Icc Fact.out le_rfl
 
 Depends on / 依赖: Fact.out, Icc_subset_Icc, inclusion, le_rfl
@@ -70,7 +70,7 @@ definition projIccCM
 
 中文:
 定义 projIccCM
-  签名: : C(α, Icc a b)
+  签名: : C(α, 闭区间 a b)
   定义体: ⟨projIcc a b Fact.out, continuous_projIcc⟩
 
 Depends on / 依赖: Fact.out, continuous_projIcc, projIcc
@@ -91,7 +91,7 @@ definition IccExtendCM
 
 中文:
 定义 IccExtendCM
-  签名: : C(C(Icc a b, E), C(α, E)) where
+  签名: : C(C(闭区间 a b, E), C(α, E)) where
   定义体: f.comp projIccCM
   continuous_toFun := continuous_precomp projIccCM
 
@@ -115,7 +115,7 @@ theorem IccExtendCM_of_mem
 
 中文:
 定理 IccExtendCM_of_mem
-  条件: {f : C(Icc a b, E)} {x : α} (hx : x in Icc a b)
+  条件: {f : C(闭区间 a b, E)} {x : α} (hx : x in 闭区间 a b)
   证明: by
   simp [IccExtendCM, projIccCM, projIcc, hx.1, hx.2]
 
@@ -142,7 +142,7 @@ definition concat
 
 中文:
 定义 concat
-  签名: (f : C(Icc a b, E)) (g : C(Icc b c, E))
+  签名: (f : C(闭区间 a b, E)) (g : C(闭区间 b c, E))
   定义体: by
   by_cases hb : f ⊤ = g ⊥
   · let h (t : α) : E := if t <= b then IccExtendCM f t else IccExtendCM g t
@@ -241,7 +241,7 @@ theorem concat_left
 
 中文:
 定理 concat_left
-  条件: (hb : f ⊤ = g ⊥) {t : Icc a c} (ht : t <= b)
+  条件: (hb : f ⊤ = g ⊥) {t : 闭区间 a c} (ht : t <= b)
   证明: by
   nth_rewrite 2 [← concat_comp_IccInclusionLeft hb]
   rfl
@@ -268,7 +268,7 @@ theorem concat_right
 
 中文:
 定理 concat_right
-  条件: (hb : f ⊤ = g ⊥) {t : Icc a c} (ht : b <= t)
+  条件: (hb : f ⊤ = g ⊥) {t : 闭区间 a c} (ht : b <= t)
   证明: by
   nth_rewrite 2 [← concat_comp_IccInclusionRight hb]
   rfl
@@ -296,7 +296,7 @@ theorem tendsto_concat
 
 中文:
 定理 tendsto_concat
-  结论: {ι : 类型} {p : Filter ι} {F : ι -> C(Icc a b, E)} {G : ι -> C(Icc b c, E)}
+  结论: {ι : 类型} {p : 滤子 ι} {F : ι -> C(闭区间 a b, E)} {G : ι -> C(闭区间 b c, E)}
   证明: by
   rw [tendsto_nhds_compactOpen] at hf hg ⊢
   rintro K hK U hU hfgU
@@ -393,7 +393,7 @@ theorem concatCM_left
 
 中文:
 定理 concatCM_left
-  结论: {x : Icc a c} (hx : x <= b)
+  结论: {x : 闭区间 a c} (hx : x <= b)
   证明: by
   exact concat_left fg.2 hx
 
@@ -417,7 +417,7 @@ theorem concatCM_right
 
 中文:
 定理 concatCM_right
-  结论: {x : Icc a c} (hx : b <= x)
+  结论: {x : 闭区间 a c} (hx : b <= x)
   证明: concat_right fg.2 hx
 
 Depends on / 依赖: concat_right

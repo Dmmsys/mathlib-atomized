@@ -47,7 +47,7 @@ instance monoidalCategoryStruct
 
 中文:
 实例 monoidalCategoryStruct
-  签名: : MonoidalCategoryStruct (对任意 i, C i) where
+  签名: : 幺半群范畴结构 (对任意 i, C i) where
   定义体: X i otimes Y i
   tensorHom f g i := f i otimesₘ g i
   whiskerLeft X _ _ f i := X i ◁ f i
@@ -264,7 +264,7 @@ instance monoidalCategory
 
 中文:
 实例 monoidalCategory
-  签名: : MonoidalCategory.{max w₁ v₁} (对任意 i, C i) where
+  签名: : 幺半群范畴.{最大值 w₁ v₁} (对任意 i, C i) where
   定义体: by ext i; simp [tensorHom_def, whiskerLeft]
 
 Depends on / 依赖: tensorHom_def, whiskerLeft
@@ -292,7 +292,7 @@ instance braidedCategory
 
 中文:
 实例 braidedCategory
-  签名: : BraidedCategory (对任意 i, C i) where
+  签名: : 辫范畴 (对任意 i, C i) where
   定义体: isoMk fun i => β_ (X i) (Y i)
   hexagon_forward X Y Z := by ext i; apply hexagon_forward
   hexagon_reverse X Y Z := by ext i; apply hexagon_reverse
@@ -381,7 +381,7 @@ instance symmetricCategory
 
 中文:
 实例 symmetricCategory
-  签名: : SymmetricCategory (对任意 i, C i) where
+  签名: : 对称范畴 (对任意 i, C i) where
   定义体: by ext i; apply symmetry
 
 Depends on / 依赖: symmetry
@@ -479,7 +479,7 @@ instance monoidalClosed
 
 中文:
 实例 monoidalClosed
-  签名: : MonoidalClosed (对任意 i, C i) where
+  签名: : 幺半群闭 (对任意 i, C i) where
   定义体: {
     rightAdj := ihom X
     adj.unit := closedUnit X
@@ -510,8 +510,8 @@ instance [forall
   signature: i, BraidedCategory (C i)] (i
 
 中文:
-实例 [forall
-  签名: i, BraidedCategory (C i)] (i
+实例 [对任意
+  签名: i, 辫范畴 (C i)] (i
 -/
 instance [forall i, BraidedCategory (C i)] (i : I) : (Pi.eval C i).Braided where
 
@@ -529,7 +529,7 @@ instance laxMonoidalPi'
 
 中文:
 实例 laxMonoidalPi'
-  签名: {D : 类型} [Category* D] [MonoidalCategory D] (F : 对任意 i : I, D ⥤ C i)
+  签名: {D : 类型} [范畴* D] [幺半群范畴 D] (F : 对任意 i : I, D ⥤ C i)
   定义体: fun i => Functor.LaxMonoidal.ε (F i)
   μ X Y := fun i => Functor.LaxMonoidal.μ (F i) X Y
 
@@ -557,7 +557,7 @@ instance opLaxMonoidalPi'
 
 中文:
 实例 opLaxMonoidalPi'
-  签名: {D : 类型} [Category* D] [MonoidalCategory D]
+  签名: {D : 类型} [范畴* D] [幺半群范畴 D]
   定义体: fun i => Functor.OplaxMonoidal.η (F i)
   δ X Y := fun i => Functor.OplaxMonoidal.δ (F i) X Y
   oplax_left_unitality X := by ext; simp
@@ -586,7 +586,7 @@ instance monoidalPi'
 
 中文:
 实例 monoidalPi'
-  签名: {D : 类型} [Category* D] [MonoidalCategory D]
+  签名: {D : 类型} [范畴* D] [幺半群范畴 D]
 -/
 instance monoidalPi' {D : Type*} [Category* D] [MonoidalCategory D]
     (F : forall i : I, D ⥤ C i) [forall i, (F i).Monoidal] :
@@ -601,8 +601,8 @@ instance [forall
   body: by intros; ext i; exact Functor.LaxBraided.braided _ _
 
 中文:
-实例 [forall
-  签名: i, BraidedCategory (C i)]
+实例 [对任意
+  签名: i, 辫范畴 (C i)]
   定义体: by intros; ext i; exact Functor.LaxBraided.braided _ _
 
 Depends on / 依赖: Functor, Functor.LaxBraided.braided, LaxBraided, braided, intros
@@ -621,8 +621,8 @@ instance [forall
   signature: i, BraidedCategory (C i)]
 
 中文:
-实例 [forall
-  签名: i, BraidedCategory (C i)]
+实例 [对任意
+  签名: i, 辫范畴 (C i)]
 -/
 instance [forall i, BraidedCategory (C i)]
     {D : Type*} [Category* D] [MonoidalCategory D] [BraidedCategory D]
@@ -643,7 +643,7 @@ instance laxMonoidalPi
 
 中文:
 实例 laxMonoidalPi
-  签名: {D : I -> 类型u₂} [对任意 i, Category.{v₂} (D i)]
+  签名: {D : I -> 类型u₂} [对任意 i, 范畴.{v₂} (D i)]
   定义体: fun i => Functor.LaxMonoidal.ε (F i)
   μ X Y := fun i => Functor.LaxMonoidal.μ (F i) (X i) (Y i)
 
@@ -672,7 +672,7 @@ instance opLaxMonoidalPi
 
 中文:
 实例 opLaxMonoidalPi
-  签名: {D : I -> 类型u₂} [对任意 i, Category.{v₂} (D i)]
+  签名: {D : I -> 类型u₂} [对任意 i, 范畴.{v₂} (D i)]
   定义体: fun i => Functor.OplaxMonoidal.η (F i)
   δ X Y := fun i => Functor.OplaxMonoidal.δ (F i) (X i) (Y i)
   oplax_left_unitality X := by ext; simp
@@ -701,7 +701,7 @@ instance monoidalPi
 
 中文:
 实例 monoidalPi
-  签名: {D : I -> 类型u₂} [对任意 i, Category.{v₂} (D i)]
+  签名: {D : I -> 类型u₂} [对任意 i, 范畴.{v₂} (D i)]
 -/
 instance monoidalPi {D : I -> Type u₂} [forall i, Category.{v₂} (D i)]
     [forall i, MonoidalCategory (D i)] (F : forall i : I, D i ⥤ C i)
@@ -717,8 +717,8 @@ instance [forall
   body: by intros; ext i; exact Functor.LaxBraided.braided _ _
 
 中文:
-实例 [forall
-  签名: i, BraidedCategory (C i)]
+实例 [对任意
+  签名: i, 辫范畴 (C i)]
   定义体: by intros; ext i; exact Functor.LaxBraided.braided _ _
 
 Depends on / 依赖: Functor, Functor.LaxBraided.braided, LaxBraided, braided, intros
@@ -738,8 +738,8 @@ instance [forall
   signature: i, BraidedCategory (C i)]
 
 中文:
-实例 [forall
-  签名: i, BraidedCategory (C i)]
+实例 [对任意
+  签名: i, 辫范畴 (C i)]
 -/
 instance [forall i, BraidedCategory (C i)]
     {D : I -> Type u₂} [forall i, Category.{v₂} (D i)]

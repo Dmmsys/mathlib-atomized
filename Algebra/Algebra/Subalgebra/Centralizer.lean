@@ -46,7 +46,7 @@ lemma le_centralizer_iff
 
 中文:
 引理 le_centralizer_iff
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   结论: S <= centralizer R T ↔ T <= centralizer R S
   证明: ⟨fun h t ht _ hs => (h hs t ht).symm, fun h s hs _ ht => (h ht s hs).symm⟩
 -/
@@ -64,7 +64,7 @@ lemma centralizer_coe_sup
 
 中文:
 引理 centralizer_coe_sup
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   证明: eq_of_forall_le_iff fun K => by
     simp_rw [le_centralizer_iff, sup_le_iff, le_inf_iff, K.le_centralizer_iff]
 
@@ -86,7 +86,7 @@ lemma centralizer_coe_iSup
 
 中文:
 引理 centralizer_coe_iSup
-  条件: {ι : Sort*} (S : ι -> Subalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> 子代数 R A)
   证明: eq_of_forall_le_iff fun K => by
     simp_rw [le_centralizer_iff, iSup_le_iff, le_iInf_iff, K.le_centralizer_iff]
 
@@ -268,7 +268,7 @@ lemma centralizer_coe_range_includeLeft_eq_center_tensorProduct
 
 中文:
 引理 centralizer_coe_range_includeLeft_eq_center_tensorProduct
-  条件: [Module.Free R B]
+  条件: [模.自由 R B]
   证明: by
   rw [← centralizer_univ]; rw [← Algebra.coe_top (R := R) (A := A)]; rw [← centralizer_coe_map_includeLeft_eq_center_tensorProduct R A B ⊤]
   ext
@@ -297,7 +297,7 @@ lemma centralizer_range_includeRight_eq_center_tensorProduct
 
 中文:
 引理 centralizer_range_includeRight_eq_center_tensorProduct
-  条件: [Module.Free R A]
+  条件: [模.自由 R A]
   证明: by
   rw [← centralizer_univ]; rw [← Algebra.coe_top (R := R) (A := B)]; rw [← centralizer_coe_map_includeRight_eq_center_tensorProduct R A B ⊤]
   ext
@@ -325,7 +325,7 @@ lemma centralizer_tensorProduct_eq_center_tensorProduct_left
 
 中文:
 引理 centralizer_tensorProduct_eq_center_tensorProduct_left
-  条件: [Module.Free R B]
+  条件: [模.自由 R B]
   证明: by
   rw [← centralizer_coe_range_includeLeft_eq_center_tensorProduct]
   simp [Algebra.TensorProduct.map_range]
@@ -351,7 +351,7 @@ lemma centralizer_tensorProduct_eq_center_tensorProduct_right
 
 中文:
 引理 centralizer_tensorProduct_eq_center_tensorProduct_right
-  条件: [Module.Free R A]
+  条件: [模.自由 R A]
   证明: by
   rw [← centralizer_range_includeRight_eq_center_tensorProduct]
   simp [Algebra.TensorProduct.map_range]

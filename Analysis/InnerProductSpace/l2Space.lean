@@ -157,7 +157,7 @@ instance instInnerProductSpace
 
 中文:
 实例 instInnerProductSpace
-  签名: : InnerProductSpace 𝕜 (lp G 2)
+  签名: : 内积空间 𝕜 (lp G 2)
   定义体: { lp.normedAddCommGroup (E := G) (p := 2) with
     inner := fun f g => ∑' i, ⟪f i, g i⟫
     norm_sq_eq_re_inner := fun f => by
@@ -500,7 +500,7 @@ theorem range_linearIsometry
 
 中文:
 定理 range_linearIsometry
-  条件: [对任意 i, CompleteSpace (G i)]
+  条件: [对任意 i, 完备空间 (G i)]
   证明: by
   classical
   refine le_antisymm ?_ ?_
@@ -552,12 +552,12 @@ structure IsHilbertSum
     - surjective_isometry : Function.Surjective OrthogonalFamily.linearIsometry
 
 中文:
-结构 IsHilbertSum
+结构 是HilbertSum
   参数: : 命题 where
   公理与运算 (3 个):
     - ofSurjective : :
     - OrthogonalFamily : OrthogonalFamily 𝕜 G V
-    - surjective_isometry : Function.Surjective OrthogonalFamily.linearIsometry
+    - surjective_isometry : 函数.满射 OrthogonalFamily.linearIsometry
 -/
 structure IsHilbertSum : Prop where
   ofSurjective ::
@@ -581,8 +581,8 @@ theorem IsHilbertSum.mk
         (eq_top_iff.mpr <| hVtotal.trans_eq hVortho.range_linearIsometry.symm) }
 
 中文:
-定理 IsHilbertSum.mk
-  结论: [对任意 i, CompleteSpace <| G i] (hVortho : OrthogonalFamily 𝕜 G V)
+定理 是HilbertSum.mk
+  结论: [对任意 i, 完备空间 <| G i] (hVortho : OrthogonalFamily 𝕜 G V)
   证明: { OrthogonalFamily := hVortho
     surjective_isometry := by
       rw [← LinearIsometry.coe_toLinearMap]
@@ -609,8 +609,8 @@ theorem IsHilbertSum.mkInternal
   proof: IsHilbertSum.mk hFortho (by simpa [subtypeₗᵢ_toLinearMap, range_subtype] using hFtotal)
 
 中文:
-定理 IsHilbertSum.mkInternal
-  结论: [对任意 i, CompleteSpace <| F i]
+定理 是HilbertSum.mk整数ernal
+  结论: [对任意 i, 完备空间 <| F i]
   证明: IsHilbertSum.mk hFortho (by simpa [subtypeₗᵢ_toLinearMap, range_subtype] using hFtotal)
 
 Depends on / 依赖: IsHilbertSum, IsHilbertSum.mk, hFortho, hFtotal, range_subtype
@@ -631,8 +631,8 @@ definition IsHilbertSum.linearIsometryEquiv
     LinearIsometryEquiv.ofSurjective hV.OrthogonalFamily.linearIsometry hV.surjective_isometry
 
 中文:
-定义 IsHilbertSum.linearIsometryEquiv
-  签名: (hV : IsHilbertSum 𝕜 G V)
+定义 是HilbertSum.linearIsometryEquiv
+  签名: (hV : 是HilbertSum 𝕜 G V)
   定义体: LinearIsometryEquiv.symm
     LinearIsometryEquiv.ofSurjective hV.OrthogonalFamily.linearIsometry hV.surjective_isometry
 
@@ -652,8 +652,8 @@ theorem IsHilbertSum.linearIsometryEquiv_symm_apply
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.linearIsometry_apply]
 
 中文:
-定理 IsHilbertSum.linearIsometryEquiv_symm_apply
-  结论: (hV : IsHilbertSum 𝕜 G V)
+定理 是HilbertSum.linearIsometryEquiv_symm_apply
+  结论: (hV : 是HilbertSum 𝕜 G V)
   证明: by
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.linearIsometry_apply]
 -/
@@ -671,8 +671,8 @@ theorem IsHilbertSum.hasSum_linearIsometryEquiv_symm
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.hasSum_linearIsometry]
 
 中文:
-定理 IsHilbertSum.hasSum_linearIsometryEquiv_symm
-  结论: (hV : IsHilbertSum 𝕜 G V)
+定理 是HilbertSum.hasSum_linearIsometryEquiv_symm
+  结论: (hV : 是HilbertSum 𝕜 G V)
   证明: by
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.hasSum_linearIsometry]
 -/
@@ -693,7 +693,7 @@ theorem IsHilbertSum.linearIsometryEquiv_symm_apply_single
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.linearIsometry_apply_single]
 
 中文:
-定理 IsHilbertSum.linearIsometryEquiv_symm_apply_single
+定理 是HilbertSum.linearIsometryEquiv_symm_apply_single
   证明: by
   simp [IsHilbertSum.linearIsometryEquiv, OrthogonalFamily.linearIsometry_apply_single]
 -/
@@ -711,7 +711,7 @@ theorem IsHilbertSum.linearIsometryEquiv_symm_apply_dfinsupp_sum_single
   simp only [map_dfinsuppSum, IsHilbertSum.linearIsometryEquiv_symm_apply_single]
 
 中文:
-定理 IsHilbertSum.linearIsometryEquiv_symm_apply_dfinsupp_sum_single
+定理 是HilbertSum.linearIsometryEquiv_symm_apply_dfinsupp_sum_single
   证明: by
   simp only [map_dfinsuppSum, IsHilbertSum.linearIsometryEquiv_symm_apply_single]
 -/
@@ -738,7 +738,7 @@ theorem IsHilbertSum.linearIsometryEquiv_apply_dfinsupp_sum_single
   simp +contextual [DFinsupp.sum, lp.single_apply]
 
 中文:
-定理 IsHilbertSum.linearIsometryEquiv_apply_dfinsupp_sum_single
+定理 是HilbertSum.linearIsometryEquiv_apply_dfinsupp_sum_single
   证明: by
   rw [← map_dfinsuppSum]
   rw [← hV.linearIsometryEquiv_symm_apply_dfinsupp_sum_single]
@@ -796,8 +796,8 @@ theorem Submodule.isHilbertSumOrthogonal
   rw [iSup_bool_eq]; rw [cond]; rw [c
 
 中文:
-定理 Submodule.isHilbertSumOrthogonal
-  条件: (K : Submodule 𝕜 E) [hK : CompleteSpace K]
+定理 子模.isHilbertSumOrthogonal
+  条件: (K : 子模 𝕜 E) [hK : 完备空间 K]
   证明: by
   have : forall b, CompleteSpace (↥(cond b K Kᗮ)) := by
     intro b
@@ -837,7 +837,7 @@ structure HilbertBasis
   (no additional axioms)
 
 中文:
-结构 HilbertBasis
+结构 Hilbert基
   参数: where ofRepr
   (无附加公理)
 -/
@@ -870,7 +870,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (HilbertBasis ι 𝕜 E) ι E where
+  签名: : 函数状 (Hilbert基 ι 𝕜 E) ι E where
   定义体: b.repr.symm (lp.single 2 i (1 : 𝕜))
   coe_injective
   | ⟨b₁⟩, ⟨b₂⟩, h => by
@@ -907,7 +907,7 @@ theorem repr_symm_single
 
 中文:
 定理 repr_symm_single
-  条件: [DecidableEq ι] (b : HilbertBasis ι 𝕜 E) (i : ι)
+  条件: [DecidableEq ι] (b : Hilbert基 ι 𝕜 E) (i : ι)
   证明: by
   dsimp +instances [instFunLike]
   convert! rfl
@@ -929,7 +929,7 @@ theorem repr_self
 
 中文:
 定理 repr_self
-  条件: [DecidableEq ι] (b : HilbertBasis ι 𝕜 E) (i : ι)
+  条件: [DecidableEq ι] (b : Hilbert基 ι 𝕜 E) (i : ι)
   证明: by
   simp only [LinearIsometryEquiv.apply_symm_apply, ← b.repr_symm_single]
 -/
@@ -952,7 +952,7 @@ theorem repr_apply_apply
 
 中文:
 定理 repr_apply_apply
-  条件: (b : HilbertBasis ι 𝕜 E) (v : E) (i : ι)
+  条件: (b : Hilbert基 ι 𝕜 E) (v : E) (i : ι)
   证明: by
   classical
   rw [← b.repr.inner_map_map (b i) v]; rw [b.repr_self]; rw [lp.inner_single_left]
@@ -983,7 +983,7 @@ theorem orthonormal
 
 中文:
 定理 orthonormal
-  条件: (b : HilbertBasis ι 𝕜 E)
+  条件: (b : Hilbert基 ι 𝕜 E)
   结论: Orthonormal 𝕜 b
   证明: by
   classical
@@ -1015,7 +1015,7 @@ suffices H : (fun i : ι => f i • b i) = fun b_1 : ι => b.repr.symm.toContinu
 
 中文:
 定理 hasSum_repr_symm
-  条件: (b : HilbertBasis ι 𝕜 E) (f : ℓ²(ι, 𝕜))
+  条件: (b : Hilbert基 ι 𝕜 E) (f : ℓ²(ι, 𝕜))
   证明: by
   classical
 suffices H : (fun i : ι => f i • b i) = fun b_1 : ι => b.repr.symm.toContinuousLinearEquiv
@@ -1053,7 +1053,7 @@ theorem hasSum_repr
 
 中文:
 定理 hasSum_repr
-  条件: (b : HilbertBasis ι 𝕜 E) (x : E)
+  条件: (b : Hilbert基 ι 𝕜 E) (x : E)
   证明: by simpa using b.hasSum_repr_symm (b.repr x)
 
 @[simp]
@@ -1081,7 +1081,7 @@ theorem dense_span
 
 中文:
 定理 dense_span
-  条件: (b : HilbertBasis ι 𝕜 E)
+  条件: (b : Hilbert基 ι 𝕜 E)
   证明: by
   rw [eq_top_iff]
   rintro x -
@@ -1118,7 +1118,7 @@ theorem hasSum_inner_mul_inner
 
 中文:
 定理 hasSum_inner_mul_inner
-  条件: (b : HilbertBasis ι 𝕜 E) (x y : E)
+  条件: (b : Hilbert基 ι 𝕜 E) (x y : E)
   证明: by
   convert! (b.hasSum_repr y).mapL (innerSL 𝕜 x) using 1
   ext i
@@ -1140,7 +1140,7 @@ theorem summable_inner_mul_inner
 
 中文:
 定理 summable_inner_mul_inner
-  条件: (b : HilbertBasis ι 𝕜 E) (x y : E)
+  条件: (b : Hilbert基 ι 𝕜 E) (x y : E)
   证明: (b.hasSum_inner_mul_inner x y).summable
 -/
 protected theorem summable_inner_mul_inner (b : HilbertBasis ι 𝕜 E) (x y : E) :
@@ -1157,7 +1157,7 @@ theorem tsum_inner_mul_inner
 
 中文:
 定理 tsum_inner_mul_inner
-  条件: (b : HilbertBasis ι 𝕜 E) (x y : E)
+  条件: (b : Hilbert基 ι 𝕜 E) (x y : E)
   证明: (b.hasSum_inner_mul_inner x y).tsum_eq
 -/
 protected theorem tsum_inner_mul_inner (b : HilbertBasis ι 𝕜 E) (x y : E) :
@@ -1182,7 +1182,7 @@ definition toOrthonormalBasis
 
 中文:
 定义 toOrthonormalBasis
-  签名: [Fintype ι] (b : HilbertBasis ι 𝕜 E)
+  签名: [有限类型 ι] (b : Hilbert基 ι 𝕜 E)
   定义体: OrthonormalBasis.mk b.orthonormal
     (by
       refine Eq.ge ?_
@@ -1211,7 +1211,7 @@ theorem coe_toOrthonormalBasis
 
 中文:
 定理 coe_toOrthonormalBasis
-  条件: [Fintype ι] (b : HilbertBasis ι 𝕜 E)
+  条件: [有限类型 ι] (b : Hilbert基 ι 𝕜 E)
   证明: OrthonormalBasis.coe_mk _ _
 
 Depends on / 依赖: OrthonormalBasis, OrthonormalBasis.coe_mk, coe_mk
@@ -1240,7 +1240,7 @@ definition toUnconditionalSchauderBasis
 
 中文:
 定义 toUnconditionalSchauderBasis
-  签名: (b : HilbertBasis ι 𝕜 E)
+  签名: (b : Hilbert基 ι 𝕜 E)
   定义体: b
   coord i := innerSL 𝕜 (b i)
   ortho i j := by
@@ -1275,7 +1275,7 @@ definition toSchauderBasis
 
 中文:
 定义 toSchauderBasis
-  签名: (b : HilbertBasis 自然数 𝕜 E)
+  签名: (b : Hilbert基 自然数 𝕜 E)
   定义体: ⇑b
   coord i := innerSL 𝕜 (b i)
   ortho := b.toUnconditionalSchauderBasis.ortho
@@ -1302,7 +1302,7 @@ theorem hasSum_orthogonalProjectionOnto
 
 中文:
 定理 hasSum_orthogonalProjectionOnto
-  结论: {U : Submodule 𝕜 E} [CompleteSpace U]
+  结论: {U : 子模 𝕜 E} [完备空间 U]
   证明: by
   simpa only [b.repr_apply_apply, inner_orthogonalProjectionOnto_eq_of_mem_left] using
     b.hasSum_repr (U.orthogonalProjectionOnto x)
@@ -1333,7 +1333,7 @@ Set.mem_iUnion_of_mem {i} Finset.mem_coe.mpr Finset.mem_image_of_mem _
 
 中文:
 定理 finite_spans_dense
-  条件: [DecidableEq E] (b : HilbertBasis ι 𝕜 E)
+  条件: [DecidableEq E] (b : Hilbert基 ι 𝕜 E)
   证明: eq_top_iff.mpr b.dense_span.ge.trans (by
     simp_rw [← Submodule.span_iUnion]
     exact topologicalClosure_mono (span_mono <| Set.range_subset_iff.mpr fun i =>
@@ -1366,7 +1366,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (hsp : ⊤ <= (span 𝕜 (Set.range v)).topologicalClosure)
+  签名: (hsp : ⊤ <= (span 𝕜 (集合.range v)).topologicalClosure)
   定义体: HilbertBasis.ofRepr (hv.isHilbertSum hsp).linearIsometryEquiv
 -/
 protected def mk (hsp : ⊤ <= (span 𝕜 (Set.range v)).topologicalClosure) : HilbertBasis ι 𝕜 E :=
@@ -1410,7 +1410,7 @@ apply funext Orthonormal.linearIsometryEquiv_symm_apply_single_one hv hsp
 
 中文:
 定理 coe_mk
-  条件: (hsp : ⊤ <= (span 𝕜 (Set.range v)).topologicalClosure)
+  条件: (hsp : ⊤ <= (span 𝕜 (集合.range v)).topologicalClosure)
   证明: by
   classical
 apply funext Orthonormal.linearIsometryEquiv_symm_apply_single_one hv hsp
@@ -1435,7 +1435,7 @@ definition mkOfOrthogonalEqBot
 
 中文:
 定义 mkOfOrthogonalEqBot
-  签名: (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥)
+  签名: (hsp : (span 𝕜 (集合.range v))ᗮ = ⊥)
   定义体: HilbertBasis.mk hv
     (by rw [← orthogonal_orthogonal_eq_closure, ← eq_top_iff, orthogonal_eq_top_iff, hsp])
 
@@ -1456,7 +1456,7 @@ theorem coe_mkOfOrthogonalEqBot
 
 中文:
 定理 coe_mkOfOrthogonalEqBot
-  条件: (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥)
+  条件: (hsp : (span 𝕜 (集合.range v))ᗮ = ⊥)
   证明: HilbertBasis.coe_mk hv _
 -/
 protected theorem coe_mkOfOrthogonalEqBot (hsp : (span 𝕜 (Set.range v))ᗮ = ⊥) :
@@ -1476,8 +1476,8 @@ definition _root_.OrthonormalBasis.toHilbertBasis
       @subset_closure E _ _
 
 中文:
-定义 _root_.OrthonormalBasis.toHilbertBasis
-  签名: [Fintype ι] (b : OrthonormalBasis ι 𝕜 E)
+定义 _root_.正交标准基.toHilbertBasis
+  签名: [有限类型 ι] (b : 正交标准基 ι 𝕜 E)
   定义体: HilbertBasis.mk b.orthonormal by
     simpa only [← OrthonormalBasis.coe_toBasis, b.toBasis.span_eq, eq_top_iff] using!
       @subset_closure E _ _
@@ -1500,8 +1500,8 @@ theorem _root_.OrthonormalBasis.coe_toHilbertBasis
   proof: HilbertBasis.coe_mk _ _
 
 中文:
-定理 _root_.OrthonormalBasis.coe_toHilbertBasis
-  条件: [Fintype ι] (b : OrthonormalBasis ι 𝕜 E)
+定理 _root_.正交标准基.coe_toHilbertBasis
+  条件: [有限类型 ι] (b : 正交标准基 ι 𝕜 E)
   证明: HilbertBasis.coe_mk _ _
 
 Depends on / 依赖: HilbertBasis, HilbertBasis.coe_mk, coe_mk
@@ -1523,8 +1523,8 @@ theorem _root_.Orthonormal.exists_hilbertBasis_extension
     hws, HilbertBasis.coe_mkOfOrthogona
 
 中文:
-定理 _root_.Orthonormal.exists_hilbertBasis_extension
-  结论: {s : Set E}
+定理 _root_.Orthonormal.存在_hilbertBasis_extension
+  结论: {s : 集合 E}
   证明: let ⟨w, hws, hw_ortho, hw_max⟩ := exists_maximal_orthonormal hs
   ⟨w, HilbertBasis.mkOfOrthogonalEqBot hw_ortho
     (by simpa only [Subtype.range_coe_subtype, Set.ofPred_mem_eq,
@@ -1554,8 +1554,8 @@ theorem _root_.exists_hilbertBasis
   ⟨w, hw, hw''⟩
 
 中文:
-定理 _root_.exists_hilbertBasis
-  结论: 存在 (w : Set E) (b : HilbertBasis w 𝕜 E), ⇑b = ((↑) : w -> E)
+定理 _root_.存在_hilbertBasis
+  结论: 存在 (w : 集合 E) (b : Hilbert基 w 𝕜 E), ⇑b = ((↑) : w -> E)
   证明: let ⟨w, hw, _, hw''⟩ := (orthonormal_empty 𝕜 E).exists_hilbertBasis_extension
   ⟨w, hw, hw''⟩
 

@@ -38,8 +38,8 @@ theorem complex_ofReal_eval_T
 @[simp, norm_cast]
 
 中文:
-定理 complex_ofReal_eval_T
-  结论: 对任意 (x : 实数) n, (((T 实数 n).eval x : 实数) : Complex) = (T Complex n).eval (x : Complex)
+定理 complex_of实数_eval_T
+  结论: 对任意 (x : 实数) n, (((T 实数 n).eval x : 实数) : 复形) = (T 复形 n).eval (x : 复形)
   证明: @algebraMap_eval_T Real Complex _ _ _
 
 @[simp, norm_cast]
@@ -61,8 +61,8 @@ theorem complex_ofReal_eval_U
 @[simp, norm_cast]
 
 中文:
-定理 complex_ofReal_eval_U
-  结论: 对任意 (x : 实数) n, (((U 实数 n).eval x : 实数) : Complex) = (U Complex n).eval (x : Complex)
+定理 complex_of实数_eval_U
+  结论: 对任意 (x : 实数) n, (((U 实数 n).eval x : 实数) : 复形) = (U 复形 n).eval (x : 复形)
   证明: @algebraMap_eval_U Real Complex _ _ _
 
 @[simp, norm_cast]
@@ -84,8 +84,8 @@ theorem complex_ofReal_eval_C
 @[simp, norm_cast]
 
 中文:
-定理 complex_ofReal_eval_C
-  结论: 对任意 (x : 实数) n, (((C 实数 n).eval x : 实数) : Complex) = (C Complex n).eval (x : Complex)
+定理 complex_of实数_eval_C
+  结论: 对任意 (x : 实数) n, (((C 实数 n).eval x : 实数) : 复形) = (C 复形 n).eval (x : 复形)
   证明: @algebraMap_eval_C Real Complex _ _ _
 
 @[simp, norm_cast]
@@ -105,8 +105,8 @@ theorem complex_ofReal_eval_S
   proof: @algebraMap_eval_S Real Complex _ _ _
 
 中文:
-定理 complex_ofReal_eval_S
-  结论: 对任意 (x : 实数) n, (((S 实数 n).eval x : 实数) : Complex) = (S Complex n).eval (x : Complex)
+定理 complex_of实数_eval_S
+  结论: 对任意 (x : 实数) n, (((S 实数 n).eval x : 实数) : 复形) = (S 复形 n).eval (x : 复形)
   证明: @algebraMap_eval_S Real Complex _ _ _
 
 Depends on / 依赖: algebraMap_eval_S
@@ -147,7 +147,7 @@ theorem T_complex_cos
 中文:
 定理 T_complex_cos
   条件: (n : 整数)
-  结论: (T Complex n).eval (cos θ) = cos (n * θ)
+  结论: (T 复形 n).eval (cos θ) = cos (n * θ)
   证明: by
   induction n using Polynomial.Chebyshev.induct with
   | zero => simp
@@ -199,7 +199,7 @@ theorem U_complex_cos
 中文:
 定理 U_complex_cos
   条件: (n : 整数)
-  结论: (U Complex n).eval (cos θ) * sin θ = sin ((n + 1) * θ)
+  结论: (U 复形 n).eval (cos θ) * sin θ = sin ((n + 1) * θ)
   证明: by
   induction n using Polynomial.Chebyshev.induct with
   | zero => simp
@@ -242,7 +242,7 @@ theorem C_two_mul_complex_cos
 中文:
 定理 C_two_mul_complex_cos
   条件: (n : 整数)
-  结论: (C Complex n).eval (2 * cos θ) = 2 * cos (n * θ)
+  结论: (C 复形 n).eval (2 * cos θ) = 2 * cos (n * θ)
   证明: by
   simp [C_eq_two_mul_T_comp_half_mul_X]
 
@@ -267,7 +267,7 @@ theorem S_two_mul_complex_cos
 中文:
 定理 S_two_mul_complex_cos
   条件: (n : 整数)
-  结论: (S Complex n).eval (2 * cos θ) * sin θ = sin ((n + 1) * θ)
+  结论: (S 复形 n).eval (2 * cos θ) * sin θ = sin ((n + 1) * θ)
   证明: by
   simp [S_eq_U_comp_half_mul_X]
 
@@ -297,7 +297,7 @@ theorem T_complex_cosh
 中文:
 定理 T_complex_cosh
   条件: (n : 整数)
-  结论: (T Complex n).eval (cosh θ) = cosh (n * θ)
+  结论: (T 复形 n).eval (cosh θ) = cosh (n * θ)
   证明: calc
   (T Complex n).eval (cosh θ)
   _ = (T Complex n).eval (cos (θ * I)) := by rw [cos_mul_I]
@@ -334,7 +334,7 @@ theorem U_complex_cosh
 中文:
 定理 U_complex_cosh
   条件: (n : 整数)
-  结论: (U Complex n).eval (cosh θ) * sinh θ = sinh ((n + 1) * θ)
+  结论: (U 复形 n).eval (cosh θ) * sinh θ = sinh ((n + 1) * θ)
   证明: calc
   (U Complex n).eval (cosh θ) * sinh θ
   _ = (U Complex n).eval (cos (θ * I)) * sin (θ * I) * (-I) := by simp [cos_mul_I, sin_mul_I, mul_assoc]
@@ -367,7 +367,7 @@ theorem C_two_mul_complex_cosh
 中文:
 定理 C_two_mul_complex_cosh
   条件: (n : 整数)
-  结论: (C Complex n).eval (2 * cosh θ) = 2 * cosh (n * θ)
+  结论: (C 复形 n).eval (2 * cosh θ) = 2 * cosh (n * θ)
   证明: by
   simp [C_eq_two_mul_T_comp_half_mul_X]
 
@@ -392,7 +392,7 @@ theorem S_two_mul_complex_cosh
 中文:
 定理 S_two_mul_complex_cosh
   条件: (n : 整数)
-  结论: (S Complex n).eval (2 * cosh θ) * sinh θ =
+  结论: (S 复形 n).eval (2 * cosh θ) * sinh θ =
   证明: by
   simp [S_eq_U_comp_half_mul_X]
 

@@ -77,11 +77,11 @@ structure Base
 结构 Base
   参数: (P : RootPairing ι R M N)
   公理与运算 (5 个):
-    - support : Finset ι
+    - support : 有限集 ι
     - linearIndepOn_root : LinearIndepOn R P.root support
     - linearIndepOn_coroot : LinearIndepOn R P.coroot support
-    - root_mem_or_neg_mem((i : ι)) : P.root i in AddSubmonoid.closure (P.root '' support) ∨ -P.root i in AddSubmonoid.closure (P.root '' support)
-    - coroot_mem_or_neg_mem((i : ι)) : P.coroot i in AddSubmonoid.closure (P.coroot '' support) ∨ -P.coroot i in AddSubmonoid.closure (P.coroot '' support)
+    - root_mem_or_neg_mem((i : ι)) : P.root i in 加法子幺半群.closure (P.root '' support) ∨ -P.root i in 加法子幺半群.closure (P.root '' support)
+    - coroot_mem_or_neg_mem((i : ι)) : P.coroot i in 加法子幺半群.closure (P.coroot '' support) ∨ -P.coroot i in 加法子幺半群.closure (P.coroot '' support)
 -/
 structure Base (P : RootPairing ι R M N) where
   /-- The indices of the simple roots / coroots. -/
@@ -113,8 +113,8 @@ lemma support_nonempty
 
 中文:
 引理 support_nonempty
-  条件: [Nonempty ι] [NeZero (2 : R)]
-  结论: b.support.Nonempty
+  条件: [非空 ι] [NeZero (2 : R)]
+  结论: b.support.非空
   证明: by
   by_contra! contra
   inhabit ι
@@ -176,7 +176,7 @@ lemma root_ne_neg_of_ne
 
 中文:
 引理 root_ne_neg_of_ne
-  结论: [Nontrivial R] {i j : ι}
+  结论: [非平凡 R] {i j : ι}
   证明: by
   classical
   intro contra
@@ -395,7 +395,7 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem_aux
 
 中文:
 引理 eq_one_or_neg_one_of_mem_support_of_smul_mem_aux
-  结论: [Finite ι]
+  结论: [有限 ι]
   证明: by
   obtain ⟨j, hj⟩ := ht
   obtain ⟨f, hf⟩ : exists f : b.support -> Int, P.coroot i = ∑ i, (t * f i) • P.coroot i := by
@@ -445,7 +445,7 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem
 
 中文:
 引理 eq_one_or_neg_one_of_mem_support_of_smul_mem
-  结论: [Finite ι]
+  结论: [有限 ι]
   证明: by
   obtain ⟨z, hz⟩ := b.eq_one_or_neg_one_of_mem_support_of_smul_mem_aux i h t ht
   replace ht : (z : R) • P.coroot i in range P.coroot := by
@@ -675,7 +675,7 @@ exact b.sub_notMem_range_root hi hj P.root_sub_root_mem_of_pairingIn_pos h hij
 
 中文:
 引理 pairingIn_le_zero_of_ne
-  结论: [IsDomain R] [P.IsCrystallographic] [Finite ι]
+  结论: [是整环 R] [P.IsCrystallographic] [有限 ι]
   证明: by
   by_contra! h
 exact b.sub_notMem_range_root hi hj P.root_sub_root_mem_of_pairingIn_pos h hij
@@ -873,7 +873,7 @@ lemma spanIntRootSupport
   simpa [Submodule.map_span, ← image_comp]
 
 中文:
-引理 spanIntRootSupport
+引理 span整数RootSupport
   证明: by
   refine Submodule.eq_top_iff'.mpr fun ⟨x, hx⟩ => ?_
   rw [← SetLike.mem_coe]; rw [← (injective_subtype (P.rootSpan Int)).mem_set_image]; rw [← Submodule.map_coe]
@@ -895,8 +895,8 @@ lemma linearIndependentInt
     b.linearIndepOn_root.restrict_scalars' Int
 
 中文:
-引理 linearIndependentInt
-  条件: [CharZero R]
+引理 linearIndependent整数
+  条件: [特征零 R]
   证明: ((P.rootSpan Int).subtype.linearIndependent_iff (by simp)).mp
     b.linearIndepOn_root.restrict_scalars' Int
 
@@ -918,8 +918,8 @@ definition toWeightBasisInt
     simp [this, range_comp]
 
 中文:
-定义 toWeightBasisInt
-  签名: [CharZero R]
+定义 toWeightBasis整数
+  签名: [特征零 R]
   定义体: Basis.mk b.linearIndependentInt by
     have : (fun i : b.support => P.rootSpanMem Int i) = P.rootSpanMem Int ∘ ((↑) : b.support -> ι) := rfl
     simp [this, range_comp]
@@ -942,8 +942,8 @@ lemma coe_toWeightBasisInt_apply
   simp [toWeightBasisInt]
 
 中文:
-引理 coe_toWeightBasisInt_apply
-  条件: [CharZero R] (i : b.support)
+引理 coe_toWeightBasis整数_apply
+  条件: [特征零 R] (i : b.support)
   证明: by
   simp [toWeightBasisInt]
 -/
@@ -968,7 +968,7 @@ lemma exists_root_eq_sum_nat_or_neg
    
 
 中文:
-引理 exists_root_eq_sum_nat_or_neg
+引理 存在_root_eq_sum_nat_or_neg
   条件: (i : ι)
   证明: by
   classical
@@ -1017,8 +1017,8 @@ exact P.ne_zero i by simp [hf', contra]
 · refine ⟨-Nat.
 
 中文:
-引理 exists_root_eq_sum_int
-  条件: [CharZero R] (i : ι)
+引理 存在_root_eq_sum_int
+  条件: [特征零 R] (i : ι)
   证明: by
   obtain ⟨f, hf, hf' | hf'⟩ := b.exists_root_eq_sum_nat_or_neg i
 · refine ⟨Nat.cast ∘ f, by simpa, Or.inl Pi.lt_def.mpr ⟨fun _ => by simp, ?_⟩, by simp [hf']⟩
@@ -1538,7 +1538,7 @@ lemma IsPos.exists_mem_support_pos_pairingIn
     exact Finset.sum_nonpos fun i _ => h₀.l
 
 中文:
-引理 IsPos.exists_mem_support_pos_pairingIn
+引理 IsPos.存在_mem_support_pos_pairingIn
   条件: [P.IsCrystallographic] {i : ι} (h₀ : b.IsPos i)
   证明: by
   by_contra! contra
@@ -1587,7 +1587,7 @@ lemma exists_mem_support_pos_pairingIn_ne_zero
     exact ⟨j, hj, by aesop⟩
 
 中文:
-引理 exists_mem_support_pos_pairingIn_ne_zero
+引理 存在_mem_support_pos_pairingIn_ne_zero
   条件: [P.IsCrystallographic] (i : ι)
   证明: by
   rcases IsPos.or_neg b i with hi | hi
@@ -1757,7 +1757,7 @@ lemma exists_eq_sum_and_forall_sum_mem_of_isPos
     · have : m = (⟨m, hm⟩ : Fin n).castSucc
 
 中文:
-引理 exists_eq_sum_and_forall_sum_mem_of_isPos
+引理 存在_eq_sum_and_对任意_sum_mem_of_isPos
   条件: {i : ι} (hi : b.IsPos i)
   证明: by
   apply hi.induction_on_add (fun j hj => ⟨1, ![j], by simpa⟩)
@@ -1931,8 +1931,8 @@ lemma forall_mem_support_invtSubmodule_iff
   exact Module.End.i
 
 中文:
-引理 forall_mem_support_invtSubmodule_iff
-  条件: (q : Submodule R M)
+引理 对任意_mem_support_invtSubmodule_iff
+  条件: (q : 子模 R M)
   证明: by
   refine ⟨fun hq i => ?_, fun hq i _ => hq i⟩
   let := P.indexNeg

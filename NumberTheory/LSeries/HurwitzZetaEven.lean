@@ -310,7 +310,7 @@ lemma continuousOn_evenKernel
 中文:
 引理 continuousOn_evenKernel
   条件: (a : UnitAddCircle)
-  结论: ContinuousOn (evenKernel a) (Ioi 0)
+  结论: ContinuousOn (evenKernel a) (左开右无界区间 0)
   证明: by
   induction a using QuotientAddGroup.induction_on with | H a' =>
   apply continuous_re.comp_continuousOn (f := fun x => (evenKernel a' x : Complex))
@@ -346,7 +346,7 @@ lemma continuousOn_cosKernel
 中文:
 引理 continuousOn_cosKernel
   条件: (a : UnitAddCircle)
-  结论: ContinuousOn (cosKernel a) (Ioi 0)
+  结论: ContinuousOn (cosKernel a) (左开右无界区间 0)
   证明: by
   induction a using QuotientAddGroup.induction_on with | H a' =>
   apply continuous_re.comp_continuousOn (f := fun x => (cosKernel a' x : Complex))
@@ -796,7 +796,7 @@ definition completedHurwitzZetaEven
 
 中文:
 定义 completedHurwitzZetaEven
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzEvenFEPair a).Λ (s / 2)) / 2
 
 Depends on / 依赖: hurwitzEvenFEPair
@@ -814,7 +814,7 @@ definition completedHurwitzZetaEven₀
 
 中文:
 定义 completedHurwitzZetaEven₀
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzEvenFEPair a).Λ₀ (s / 2)) / 2
 
 Depends on / 依赖: hurwitzEvenFEPair
@@ -837,7 +837,7 @@ lemma completedHurwitzZetaEven_eq
 
 中文:
 引理 completedHurwitzZetaEven_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [completedHurwitzZetaEven]; rw [WeakFEPair.Λ]; rw [sub_div]; rw [sub_div]
   congr 1
@@ -869,7 +869,7 @@ definition completedCosZeta
 
 中文:
 定义 completedCosZeta
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzEvenFEPair a).symm.Λ (s / 2)) / 2
 
 Depends on / 依赖: hurwitzEvenFEPair
@@ -887,7 +887,7 @@ definition completedCosZeta₀
 
 中文:
 定义 completedCosZeta₀
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: ((hurwitzEvenFEPair a).symm.Λ₀ (s / 2)) / 2
 
 Depends on / 依赖: hurwitzEvenFEPair
@@ -910,7 +910,7 @@ lemma completedCosZeta_eq
 
 中文:
 引理 completedCosZeta_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [completedCosZeta]; rw [WeakFEPair.Λ]; rw [sub_div]; rw [sub_div]
   congr 1
@@ -949,7 +949,7 @@ lemma completedHurwitzZetaEven_neg
 
 中文:
 引理 completedHurwitzZetaEven_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedHurwitzZetaEven]
 
@@ -975,7 +975,7 @@ lemma completedHurwitzZetaEven₀_neg
 
 中文:
 引理 completedHurwitzZetaEven₀_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedHurwitzZetaEven₀]
 
@@ -999,7 +999,7 @@ lemma completedCosZeta_neg
 
 中文:
 引理 completedCosZeta_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedCosZeta]
 
@@ -1023,7 +1023,7 @@ lemma completedCosZeta₀_neg
 
 中文:
 引理 completedCosZeta₀_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [completedCosZeta₀]
 -/
@@ -1042,7 +1042,7 @@ lemma completedHurwitzZetaEven_one_sub
 
 中文:
 引理 completedHurwitzZetaEven_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [completedHurwitzZetaEven]; rw [completedCosZeta]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smul]
 
@@ -1063,7 +1063,7 @@ lemma completedHurwitzZetaEven₀_one_sub
 
 中文:
 引理 completedHurwitzZetaEven₀_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation₀ (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smu
 
@@ -1084,7 +1084,7 @@ lemma completedCosZeta_one_sub
 
 中文:
 引理 completedCosZeta_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [← completedHurwitzZetaEven_one_sub]; rw [sub_sub_cancel]
 
@@ -1105,7 +1105,7 @@ lemma completedCosZeta₀_one_sub
 
 中文:
 引理 completedCosZeta₀_one_sub
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [← completedHurwitzZetaEven₀_one_sub]; rw [sub_sub_cancel]
 
@@ -1280,7 +1280,7 @@ lemma tendsto_div_two_punctured_nhds
 
 中文:
 引理 tendsto_div_two_punctured_nhds
-  条件: (a : Complex)
+  条件: (a : 复形)
   证明: le_of_eq ((Homeomorph.mulRight₀ _ (inv_ne_zero (two_ne_zero' Complex))).map_punctured_nhds_eq a)
 -/
 private lemma tendsto_div_two_punctured_nhds (a : Complex) :
@@ -1405,7 +1405,7 @@ lemma hasSum_int_completedCosZeta
 
 中文:
 引理 hasSum_int_completedCosZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   let c (n : Int) : Complex := cexp (2 * π * I * a * n) / 2
   have hF t (ht : 0 < t) : HasSum (fun n : Int => if n = 0 then 0 else c n * rexp (-π * n ^ 2 * t))
@@ -1453,7 +1453,7 @@ lemma hasSum_nat_completedCosZeta
 
 中文:
 引理 hasSum_nat_completedCosZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   have aux : ((|0| : Int) : Complex) ^ s = 0 := by
     rw [abs_zero]; rw [Int.cast_zero]; rw [zero_cpow (ne_zero_of_one_lt_re hs)]
@@ -1493,7 +1493,7 @@ lemma hasSum_int_completedHurwitzZetaEven
 
 中文:
 引理 hasSum_int_completedHurwitzZetaEven
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   have hF (t : Real) (ht : 0 < t) : HasSum (fun n : Int => if n + a = 0 then 0
       else (1 / 2 : Complex) * rexp (-π * (n + a) ^ 2 * t))
@@ -1610,7 +1610,7 @@ lemma hurwitzZetaEven_def_of_ne_or_ne
 
 中文:
 引理 hurwitzZetaEven_def_of_ne_or_ne
-  条件: {a : UnitAddCircle} {s : Complex} (h : a != 0 ∨ s != 0)
+  条件: {a : UnitAddCircle} {s : 复形} (h : a != 0 ∨ s != 0)
   证明: by
   rw [hurwitzZetaEven]
   rcases ne_or_eq s 0 with h' | rfl
@@ -1656,7 +1656,7 @@ lemma hurwitzZetaEven_neg
 
 中文:
 引理 hurwitzZetaEven_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [hurwitzZetaEven]
 
@@ -1708,7 +1708,7 @@ lemma differentiableAt_hurwitzZetaEven
 
 中文:
 引理 differentiableAt_hurwitzZetaEven
-  条件: (a : UnitAddCircle) {s : Complex} (hs' : s != 1)
+  条件: (a : UnitAddCircle) {s : 复形} (hs' : s != 1)
   证明: by
   have := differentiableAt_update_of_residue
     (fun t ht ht' => differentiableAt_completedHurwitzZetaEven a (Or.inl ht) ht')
@@ -1877,7 +1877,7 @@ lemma hasSum_int_hurwitzZetaEven
 
 中文:
 引理 hasSum_int_hurwitzZetaEven
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   rw [hurwitzZetaEven]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   have := (hasSum_int_completedHurwitzZetaEven a hs).div_const (GammaReal s)
@@ -1905,7 +1905,7 @@ lemma hasSum_nat_hurwitzZetaEven
 
 中文:
 引理 hasSum_nat_hurwitzZetaEven
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   refine (hasSum_int_hurwitzZetaEven a hs).nat_add_neg_add_one.congr_fun fun n => ?_
   simp [← abs_neg (n + 1 - a), -neg_sub, neg_sub', add_div]
@@ -1932,7 +1932,7 @@ lemma hasSum_nat_hurwitzZetaEven_of_mem_Icc
 
 中文:
 引理 hasSum_nat_hurwitzZetaEven_of_mem_Icc
-  条件: {a : 实数} (ha : a in Icc 0 1) {s : Complex} (hs : 1 < re s)
+  条件: {a : 实数} (ha : a in 闭区间 0 1) {s : 复形} (hs : 1 < re s)
   证明: by
   refine (hasSum_nat_hurwitzZetaEven a hs).congr_fun fun n => ?_
   congr 2 <;>
@@ -2002,7 +2002,7 @@ lemma cosZeta_neg
 
 中文:
 引理 cosZeta_neg
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp [cosZeta]
 
@@ -2054,7 +2054,7 @@ lemma differentiableAt_cosZeta
 
 中文:
 引理 differentiableAt_cosZeta
-  条件: (a : UnitAddCircle) {s : Complex} (hs' : s != 1 ∨ a != 0)
+  条件: (a : UnitAddCircle) {s : 复形} (hs' : s != 1 ∨ a != 0)
   证明: by
   rcases ne_or_eq s 1 with hs' | rfl
   · exact differentiableAt_update_of_residue (fun _ ht ht' =>
@@ -2106,7 +2106,7 @@ lemma hasSum_int_cosZeta
 
 中文:
 引理 hasSum_int_cosZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   rw [cosZeta]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   refine ((hasSum_int_completedCosZeta a hs).div_const (GammaReal s)).congr_fun fun n => ?_
@@ -2135,7 +2135,7 @@ lemma hasSum_nat_cosZeta
 
 中文:
 引理 hasSum_nat_cosZeta
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   have := (hasSum_int_cosZeta a hs).nat_add_neg
   simp_rw [abs_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero, Int.cast_zero,
@@ -2164,7 +2164,7 @@ lemma LSeriesHasSum_cos
 
 中文:
 引理 LSeriesHasSum_cos
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: (hasSum_nat_cosZeta a hs).congr_fun (LSeries.term_of_ne_zero' (ne_zero_of_one_lt_re hs) _)
 
 Depends on / 依赖: LSeries, LSeries.term_of_ne_zero, congr_fun, hasSum_nat_cosZeta, ne_zero_of_one_lt_re, term_of_ne_zero
@@ -2191,7 +2191,7 @@ lemma hurwitzZetaEven_one_sub
 
 中文:
 引理 hurwitzZetaEven_one_sub
-  结论: (a : UnitAddCircle) {s : Complex}
+  结论: (a : UnitAddCircle) {s : 复形}
   证明: by
   have : hurwitzZetaEven a (1 - s) = completedHurwitzZetaEven a (1 - s) * (GammaReal (1 - s))⁻¹ := by
     rw [hurwitzZetaEven_def_of_ne_or_ne]; rw [div_eq_mul_inv]
@@ -2225,7 +2225,7 @@ lemma cosZeta_one_sub
 
 中文:
 引理 cosZeta_one_sub
-  条件: (a : UnitAddCircle) {s : Complex} (hs : 对任意 (n : 自然数), s != 1 - n)
+  条件: (a : UnitAddCircle) {s : 复形} (hs : 对任意 (n : 自然数), s != 1 - n)
   证明: by
   rw [← GammaComplex]
   have : cosZeta a (1 - s) = completedCosZeta a (1 - s) * (GammaReal (1 - s))⁻¹ := by

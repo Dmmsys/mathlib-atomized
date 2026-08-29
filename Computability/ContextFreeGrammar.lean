@@ -42,11 +42,11 @@ structure ContextFreeRule
     - output : List (Symbol T N)
 
 中文:
-结构 ContextFreeRule
+结构 余ntextFreeRule
   参数: (T N : 类型)
   公理与运算 (2 个):
     - input : N
-    - output : List (Symbol T N)
+    - output : 列表 (Symbol T N)
 -/
 structure ContextFreeRule (T N : Type*) where
   /-- Input nonterminal a.k.a. left-hand side. -/
@@ -70,12 +70,12 @@ structure ContextFreeGrammar
     - rules : Finset (ContextFreeRule T NT)
 
 中文:
-结构 ContextFreeGrammar
+结构 余ntextFreeGrammar
   参数: (T : 类型)
   公理与运算 (3 个):
-    - NT : Type
+    - NT : 类型
     - initial : NT
-    - rules : Finset (ContextFreeRule T NT)
+    - rules : 有限集 (余ntextFreeRule T NT)
 -/
 structure ContextFreeGrammar (T : Type*) where
   /-- Type of nonterminals. -/
@@ -102,10 +102,10 @@ inductive Rewrites
 
 中文:
 归纳类型 Rewrites
-  参数: (r : ContextFreeRule T N)
+  参数: (r : 余ntextFreeRule T N)
   构造子 (2 个):
-    - head: (s : List (Symbol T N)) : r.Rewrites (Symbol.nonterminal r.input :: s) (r.output ++ s)
-    - cons: (x : Symbol T N) {s₁ s₂ : List (Symbol T N)} (hrs : Rewrites r s₁ s₂) : r.Rewrites (x :: s₁) (x :: s₂)
+    - head: (s : 列表 (Symbol T N)) : r.Rewrites (Symbol.nonterminal r.input :: s) (r.output ++ s)
+    - cons: (x : Symbol T N) {s₁ s₂ : 列表 (Symbol T N)} (hrs : Rewrites r s₁ s₂) : r.Rewrites (x :: s₁) (x :: s₂)
 -/
 inductive Rewrites (r : ContextFreeRule T N) : List (Symbol T N) -> List (Symbol T N) -> Prop
   /-- The replacement is at the start of the remaining string. -/
@@ -132,7 +132,7 @@ lemma Rewrites.exists_parts
     simp
 
 中文:
-引理 Rewrites.exists_parts
+引理 Rewrites.存在_parts
   条件: (hr : r.Rewrites u v)
   证明: by
   induction hr with
@@ -186,8 +186,8 @@ lemma rewrites_of_exists_parts
   | cons d l ih => exact Rewrites.cons d ih
 
 中文:
-引理 rewrites_of_exists_parts
-  条件: (r : ContextFreeRule T N) (p q : List (Symbol T N))
+引理 rewrites_of_存在_parts
+  条件: (r : 余ntextFreeRule T N) (p q : 列表 (Symbol T N))
   证明: by
   induction p with
   | nil => exact Rewrites.head q
@@ -253,7 +253,7 @@ lemma Rewrites.append_left
 
 中文:
 引理 Rewrites.append_left
-  条件: (hvw : r.Rewrites u v) (p : List (Symbol T N))
+  条件: (hvw : r.Rewrites u v) (p : 列表 (Symbol T N))
   证明: by
   rw [rewrites_iff] at *
   rcases hvw with ⟨x, y, hxy⟩
@@ -283,7 +283,7 @@ lemma Rewrites.append_right
 
 中文:
 引理 Rewrites.append_right
-  条件: (hvw : r.Rewrites u v) (p : List (Symbol T N))
+  条件: (hvw : r.Rewrites u v) (p : 列表 (Symbol T N))
   证明: by
   rw [rewrites_iff] at *
   rcases hvw with ⟨x, y, hxy⟩
@@ -313,7 +313,7 @@ definition Produces
 
 中文:
 定义 Produces
-  签名: (g : ContextFreeGrammar T) (u v : List (Symbol T g.NT))
+  签名: (g : 余ntextFreeGrammar T) (u v : 列表 (Symbol T g.NT))
   定义体: exists r in g.rules, r.Rewrites u v
 
 Depends on / 依赖: Rewrites, g.rules, r.Rewrites
@@ -331,7 +331,7 @@ abbreviation Derives
 
 中文:
 缩写 Derives
-  签名: (g : ContextFreeGrammar T)
+  签名: (g : 余ntextFreeGrammar T)
   定义体: Relation.ReflTransGen g.Produces
 
 Depends on / 依赖: Produces, ReflTransGen, Relation, Relation.ReflTransGen, g.Produces
@@ -350,7 +350,7 @@ definition Generates
 
 中文:
 定义 Generates
-  签名: (g : ContextFreeGrammar T) (s : List (Symbol T g.NT))
+  签名: (g : 余ntextFreeGrammar T) (s : 列表 (Symbol T g.NT))
   定义体: g.Derives [Symbol.nonterminal g.initial] s
 
 Depends on / 依赖: Derives, Symbol, Symbol.nonterminal, g.Derives, g.initial, initial, nonterminal
@@ -368,7 +368,7 @@ definition language
 
 中文:
 定义 language
-  签名: (g : ContextFreeGrammar T)
+  签名: (g : 余ntextFreeGrammar T)
   定义体: { w : List T | g.Generates (w.map Symbol.terminal) }
 
 Depends on / 依赖: Generates, Symbol, Symbol.terminal, g.Generates, terminal, w.map
@@ -391,7 +391,7 @@ lemma mem_language_iff
 
 中文:
 引理 mem_language_iff
-  条件: (g : ContextFreeGrammar T) (w : List T)
+  条件: (g : 余ntextFreeGrammar T) (w : 列表 T)
   证明: by
   rfl
 -/
@@ -413,7 +413,7 @@ lemma Derives.refl
 
 中文:
 引理 Derives.refl
-  条件: (w : List (Symbol T g.NT))
+  条件: (w : 列表 (Symbol T g.NT))
   结论: g.Derives w w
   证明: Relation.ReflTransGen.refl
 
@@ -435,7 +435,7 @@ lemma Produces.single
 
 中文:
 引理 Produces.single
-  条件: {v w : List (Symbol T g.NT)} (hvw : g.Produces v w)
+  条件: {v w : 列表 (Symbol T g.NT)} (hvw : g.Produces v w)
   结论: g.Derives v w
   证明: Relation.ReflTransGen.single hvw
 
@@ -457,7 +457,7 @@ lemma Derives.trans
 
 中文:
 引理 Derives.trans
-  条件: {u v w : List (Symbol T g.NT)} (huv : g.Derives u v) (hvw : g.Derives v w)
+  条件: {u v w : 列表 (Symbol T g.NT)} (huv : g.Derives u v) (hvw : g.Derives v w)
   证明: Relation.ReflTransGen.trans huv hvw
 
 Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.trans
@@ -476,7 +476,7 @@ lemma Derives.trans_produces
 
 中文:
 引理 Derives.trans_produces
-  结论: {u v w : List (Symbol T g.NT)}
+  结论: {u v w : 列表 (Symbol T g.NT)}
   证明: huv.trans hvw.single
 
 Depends on / 依赖: huv.trans, hvw.single, single
@@ -496,7 +496,7 @@ lemma Produces.trans_derives
 
 中文:
 引理 Produces.trans_derives
-  结论: {u v w : List (Symbol T g.NT)}
+  结论: {u v w : 列表 (Symbol T g.NT)}
   证明: huv.single.trans hvw
 
 Depends on / 依赖: huv.single.trans, single
@@ -516,7 +516,7 @@ lemma Derives.eq_or_head
 
 中文:
 引理 Derives.eq_or_head
-  条件: {u w : List (Symbol T g.NT)} (huw : g.Derives u w)
+  条件: {u w : 列表 (Symbol T g.NT)} (huw : g.Derives u w)
   证明: Relation.ReflTransGen.cases_head huw
 
 Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_head, cases_head
@@ -535,7 +535,7 @@ lemma derives_iff_eq_or_head
 
 中文:
 引理 derives_iff_eq_or_head
-  条件: {u w : List (Symbol T g.NT)}
+  条件: {u w : 列表 (Symbol T g.NT)}
   证明: Relation.ReflTransGen.cases_head_iff
 
 Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_head_iff, cases_head_iff
@@ -554,7 +554,7 @@ lemma Derives.eq_or_tail
 
 中文:
 引理 Derives.eq_or_tail
-  条件: {u w : List (Symbol T g.NT)} (huw : g.Derives u w)
+  条件: {u w : 列表 (Symbol T g.NT)} (huw : g.Derives u w)
   证明: Relation.ReflTransGen.cases_tail huw
 
 Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_tail, cases_tail
@@ -573,7 +573,7 @@ lemma derives_iff_eq_or_tail
 
 中文:
 引理 derives_iff_eq_or_tail
-  条件: {u w : List (Symbol T g.NT)}
+  条件: {u w : 列表 (Symbol T g.NT)}
   证明: Relation.ReflTransGen.cases_tail_iff g.Produces u w
 
 Depends on / 依赖: Produces, ReflTransGen, Relation, Relation.ReflTransGen.cases_tail_iff, cases_tail_iff, g.Produces
@@ -592,7 +592,7 @@ lemma Produces.append_left
 
 中文:
 引理 Produces.append_left
-  结论: {v w : List (Symbol T g.NT)}
+  结论: {v w : 列表 (Symbol T g.NT)}
   证明: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_left p⟩
 
 Depends on / 依赖: append_left, hrvw.append_left
@@ -612,7 +612,7 @@ lemma Produces.append_right
 
 中文:
 引理 Produces.append_right
-  结论: {v w : List (Symbol T g.NT)}
+  结论: {v w : 列表 (Symbol T g.NT)}
   证明: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_right p⟩
 
 Depends on / 依赖: append_right, hrvw.append_right
@@ -635,7 +635,7 @@ lemma Derives.append_left
 
 中文:
 引理 Derives.append_left
-  结论: {v w : List (Symbol T g.NT)}
+  结论: {v w : 列表 (Symbol T g.NT)}
   证明: by
   induction hvw with
   | refl => rfl
@@ -663,7 +663,7 @@ lemma Derives.append_right
 
 中文:
 引理 Derives.append_right
-  结论: {v w : List (Symbol T g.NT)}
+  结论: {v w : 列表 (Symbol T g.NT)}
   证明: by
   induction hvw with
   | refl => rfl
@@ -689,8 +689,8 @@ lemma Produces.exists_nonterminal_input_mem
   exact ⟨w, l, r.nonterminal_input_mem⟩
 
 中文:
-引理 Produces.exists_nonterminal_input_mem
-  条件: {u v : List (Symbol T g.NT)} (hguv : g.Produces u v)
+引理 Produces.存在_nonterminal_input_mem
+  条件: {u v : 列表 (Symbol T g.NT)} (hguv : g.Produces u v)
   证明: by
   obtain ⟨w, l, r⟩ := hguv
   exact ⟨w, l, r.nonterminal_input_mem⟩
@@ -748,7 +748,7 @@ lemma language_eq_zero_of_forall_input_ne_initial
   proof: by ext; simp +contextual [derives_nonterminal, hg]
 
 中文:
-引理 language_eq_zero_of_forall_input_ne_initial
+引理 language_eq_zero_of_对任意_input_ne_initial
   条件: (hg : 对任意 r in g.rules, r.input != g.initial)
   证明: by ext; simp +contextual [derives_nonterminal, hg]
 
@@ -792,7 +792,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: (r : ContextFreeRule T N)
+  签名: (r : 余ntextFreeRule T N)
   定义体: ⟨r.input, r.output.reverse⟩
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, WithBot, WithBot.coe_le_coe, coe_le_coe, coe_sup, output, r.input, r.output.reverse, reverse, simp_rw, sup_le_iff
@@ -810,7 +810,7 @@ lemma reverse_reverse
 
 中文:
 引理 reverse_reverse
-  条件: (r : ContextFreeRule T N)
+  条件: (r : 余ntextFreeRule T N)
   结论: r.reverse.reverse = r
   证明: by simp [reverse]
 -/
@@ -840,7 +840,7 @@ lemma reverse_involutive
 
 中文:
 引理 reverse_involutive
-  结论: Involutive (reverse : ContextFreeRule T N -> ContextFreeRule T N)
+  结论: 对合 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
   证明: reverse_reverse
 
 Depends on / 依赖: h.trans, le_sup, reverse_reverse
@@ -858,7 +858,7 @@ lemma reverse_bijective
 
 中文:
 引理 reverse_bijective
-  结论: Bijective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
+  结论: 双射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
   证明: reverse_involutive.bijective
 
 Depends on / 依赖: H.choose_spec, _of_le, bijective, choose_spec, le_antisymm, le_sup, reverse_involutive, reverse_involutive.bijective
@@ -876,7 +876,7 @@ lemma reverse_injective
 
 中文:
 引理 reverse_injective
-  结论: Injective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
+  结论: 单射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
   证明: reverse_bijective.injective
 
 Depends on / 依赖: _eq_of_forall, injective, reverse_bijective, reverse_bijective.injective
@@ -894,7 +894,7 @@ lemma reverse_surjective
 
 中文:
 引理 reverse_surjective
-  结论: Surjective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
+  结论: 满射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
   证明: reverse_bijective.surjective
 
 Depends on / 依赖: eq_of_forall_ge_iff, forall_and, or_imp, reverse_bijective, reverse_bijective.surjective, surjective
@@ -972,7 +972,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: (g : ContextFreeGrammar T)
+  签名: (g : 余ntextFreeGrammar T)
   定义体: ⟨g.NT, g.initial, g.rules.map (⟨ContextFreeRule.reverse, ContextFreeRule.reverse_injective⟩)⟩
 -/
 @[simps] def reverse (g : ContextFreeGrammar T) : ContextFreeGrammar T :=
@@ -990,7 +990,7 @@ lemma reverse_reverse
 
 中文:
 引理 reverse_reverse
-  条件: (g : ContextFreeGrammar T)
+  条件: (g : 余ntextFreeGrammar T)
   结论: g.reverse.reverse = g
   证明: by
   simp [reverse, Finset.map_map]
@@ -1008,7 +1008,7 @@ lemma reverse_involutive
 
 中文:
 引理 reverse_involutive
-  结论: Involutive (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
+  结论: 对合 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
   证明: reverse_reverse
 
 Depends on / 依赖: WithBot, WithBot.coe_eq_coe, coe_eq_coe, coe_sup, reverse_reverse, sup_image
@@ -1026,7 +1026,7 @@ lemma reverse_bijective
 
 中文:
 引理 reverse_bijective
-  结论: Bijective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
+  结论: 双射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
   证明: reverse_involutive.bijective
 
 Depends on / 依赖: _image, bijective, reverse_involutive, reverse_involutive.bijective
@@ -1044,7 +1044,7 @@ lemma reverse_injective
 
 中文:
 引理 reverse_injective
-  结论: Injective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
+  结论: 单射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
   证明: reverse_bijective.injective
 
 Depends on / 依赖: WithBot, WithBot.coe_eq_coe, coe_eq_coe, coe_sup, injective, reverse_bijective, reverse_bijective.injective, sup_map
@@ -1062,7 +1062,7 @@ lemma reverse_surjective
 
 中文:
 引理 reverse_surjective
-  结论: Surjective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
+  结论: 满射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
   证明: reverse_bijective.surjective
 
 Depends on / 依赖: _map, reverse_bijective, reverse_bijective.surjective, surjective

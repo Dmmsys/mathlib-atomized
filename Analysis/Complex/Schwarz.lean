@@ -76,7 +76,7 @@ theorem schwarz_aux
 
 中文:
 定理 schwarz_aux
-  结论: {f : Complex -> Complex} {c z : Complex} {R₁ R₂ : 实数} {n : 自然数}
+  结论: {f : 复形 -> 复形} {c z : 复形} {R₁ R₂ : 实数} {n : 自然数}
   证明: by
   -- By slightly reducing `R₁`, we can assume that `f` is differentiable on `closedBall c R₁`
   -- and it maps this ball to the closed ball in the codomain.
@@ -235,7 +235,7 @@ theorem dist_le_div_mul_dist_of_mapsTo_ball
 
 中文:
 定理 dist_le_div_mul_dist_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R₁))
+  结论: (hd : DifferentiableOn 复形 f (ball c R₁))
   证明: by
 .trans_eq ?_ refine dist_le_mul_div_pow_of_mapsTo_ball_of_isLittleO (n := 0) hd h_maps ?_ hz
   · simpa using hd.continuousOn.continuousAt
@@ -266,7 +266,7 @@ have : 0 <= R₂ := nonempty_closedBall.mp h_maps.nonempty nonempty_ball.mpr h�
 
 中文:
 定理 norm_fderiv_le_div_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R₁))
+  结论: (hd : DifferentiableOn 复形 f (ball c R₁))
   证明: by
 have : 0 <= R₂ := nonempty_closedBall.mp h_maps.nonempty nonempty_ball.mpr h₀
   refine norm_fderiv_le_of_lip' _ (by positivity) ?_
@@ -297,7 +297,7 @@ alias dist_le_dist_of_mapsTo_ball_self := dist_le_dist_of_mapsTo_ball
 
 中文:
 定理 dist_le_dist_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R))
+  结论: (hd : DifferentiableOn 复形 f (ball c R))
   证明: by
   simpa [(nonempty_ball.1 ⟨z, hz⟩).ne'] using dist_le_div_mul_dist_of_mapsTo_ball hd h_maps hz
 
@@ -325,7 +325,7 @@ theorem norm_fderiv_le_one_of_mapsTo_ball
 
 中文:
 定理 norm_fderiv_le_one_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R))
+  结论: (hd : DifferentiableOn 复形 f (ball c R))
   证明: by
   simpa [hR.ne'] using norm_fderiv_le_div_of_mapsTo_ball hd h_maps hR
 
@@ -350,7 +350,7 @@ alias norm_le_norm_of_mapsTo_ball_self := norm_le_norm_of_mapsTo_ball
 
 中文:
 定理 norm_le_norm_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball 0 R))
+  结论: (hd : DifferentiableOn 复形 f (ball 0 R))
   证明: by
   simpa [h₀] using dist_le_dist_of_mapsTo_ball hd (by rwa [h₀]) (mem_ball_zero_iff.mpr hz)
 
@@ -386,7 +386,7 @@ theorem norm_deriv_le_div_of_mapsTo_ball
 
 中文:
 定理 norm_deriv_le_div_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R₁))
+  结论: (hd : DifferentiableOn 复形 f (ball c R₁))
   证明: by
   rw [norm_deriv_eq_norm_fderiv]
   exact norm_fderiv_le_div_of_mapsTo_ball hd h_maps h₀
@@ -409,7 +409,7 @@ theorem norm_deriv_le_one_of_mapsTo_ball
 
 中文:
 定理 norm_deriv_le_one_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R))
+  结论: (hd : DifferentiableOn 复形 f (ball c R))
   证明: (norm_deriv_le_div_of_mapsTo_ball hd h_maps h₀).trans_eq (div_self h₀.ne')
 
 Depends on / 依赖: div_self, h_maps, norm_deriv_le_div_of_mapsTo_ball, trans_eq
@@ -433,7 +433,7 @@ theorem norm_dslope_le_div_of_mapsTo_ball
 
 中文:
 定理 norm_dslope_le_div_of_mapsTo_ball
-  结论: (hd : DifferentiableOn Complex f (ball c R₁))
+  结论: (hd : DifferentiableOn 复形 f (ball c R₁))
   证明: by
   rcases eq_or_ne z c with rfl | hne
   · simpa using norm_deriv_le_div_of_mapsTo_ball hd h_maps (by simpa using hz)
@@ -472,7 +472,7 @@ theorem affine_of_mapsTo_ball_of_norm_dslope_eq_div
 
 中文:
 定理 affine_of_mapsTo_ball_of_norm_dslope_eq_div
-  结论: [StrictConvexSpace 实数 E]
+  结论: [严格凸空间 实数 E]
   证明: by
   set e : E ->L[Complex] UniformSpace.Completion E := UniformSpace.Completion.toComplL
   set g := dslope (e ∘ f) c
@@ -533,7 +533,7 @@ theorem affine_of_mapsTo_ball_of_exists_norm_dslope_eq_div'
   ⟨dslope f c z₀, h_eq, affine_of_mapsTo_ball_of_norm_dslope_eq_div hd h_maps h_z₀ h_eq⟩
 
 中文:
-定理 affine_of_mapsTo_ball_of_exists_norm_dslope_eq_div'
+定理 affine_of_mapsTo_ball_of_存在_norm_dslope_eq_div'
   证明: let ⟨z₀, h_z₀, h_eq⟩ := h_z₀
   ⟨dslope f c z₀, h_eq, affine_of_mapsTo_ball_of_norm_dslope_eq_div hd h_maps h_z₀ h_eq⟩
 

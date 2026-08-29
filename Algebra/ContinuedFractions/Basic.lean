@@ -58,7 +58,7 @@ structure GenContFract.Pair
     - b : α
 
 中文:
-结构 GenContFract.Pair
+结构 GenContFract.对
   参数: where
   公理与运算 (2 个):
     - a : α
@@ -89,7 +89,7 @@ instance [Repr
 
 中文:
 实例 [Repr
-  签名: α] : Repr (Pair α)
+  签名: α] : Repr (对 α)
   定义体: ⟨fun p _ => "(a : " ++ repr p.a ++ ", b : " ++ repr p.b ++ ")"⟩
 -/
 instance [Repr α] : Repr (Pair α) :=
@@ -105,7 +105,7 @@ definition map
 
 中文:
 定义 map
-  签名: {β : 类型} (f : α -> β) (gp : Pair α)
+  签名: {β : 类型} (f : α -> β) (gp : 对 α)
   定义体: ⟨f gp.a, f gp.b⟩
 
 Depends on / 依赖: gp.a, gp.b, ringChar
@@ -130,7 +130,7 @@ definition coeFn
 
 中文:
 定义 coeFn
-  签名: : Pair α -> Pair β
+  签名: : 对 α -> 对 β
   定义体: map (↑)
 -/
 def coeFn : Pair α -> Pair β := map (↑)
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Pair α) (Pair β)
+  签名: Coe (对 α) (对 β)
   定义体: ⟨coeFn⟩
 
 @[simp, norm_cast]
@@ -168,7 +168,7 @@ theorem coe_toPair
 中文:
 定理 coe_toPair
   条件: {a b : α}
-  结论: (↑(Pair.mk a b) : Pair β) = Pair.mk (a : β) (b : β)
+  结论: (↑(对.mk a b) : 对 β) = 对.mk (a : β) (b : β)
   证明: rfl
 -/
 theorem coe_toPair {a b : α} : (↑(Pair.mk a b) : Pair β) = Pair.mk (a : β) (b : β) := rfl
@@ -226,7 +226,7 @@ definition ofInteger
   body: ⟨a, Stream'.Seq.nil⟩
 
 中文:
-定义 ofInteger
+定义 of整数eger
   签名: (a : α)
   定义体: ⟨a, Stream'.Seq.nil⟩
 
@@ -244,8 +244,8 @@ instance [Inhabited
   body: ⟨ofInteger default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (GenContFract α)
+实例 [可居
+  签名: α] : 可居 (GenContFract α)
   定义体: ⟨ofInteger default⟩
 
 Depends on / 依赖: ofInteger
@@ -428,7 +428,7 @@ definition SimpContFract
 
 中文:
 定义 SimpContFract
-  签名: [One α]
+  签名: [幺 α]
   定义体: { g : GenContFract α // g.IsSimpContFract }
 
 Depends on / 依赖: GenContFract, IsSimpContFract, g.IsSimpContFract
@@ -450,7 +450,7 @@ definition ofInteger
   body: ⟨GenContFract.ofInteger a, fun n aₙ h => by cases h⟩
 
 中文:
-定义 ofInteger
+定义 of整数eger
   签名: (a : α)
   定义体: ⟨GenContFract.ofInteger a, fun n aₙ h => by cases h⟩
 
@@ -469,7 +469,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SimpContFract α)
+  签名: 可居 (SimpContFract α)
   定义体: ⟨ofInteger 1⟩
 
 Depends on / 依赖: ofInteger
@@ -508,7 +508,7 @@ definition SimpContFract.IsContFract
 
 中文:
 定义 SimpContFract.IsContFract
-  签名: [One α] [Zero α] [LT α]
+  签名: [幺 α] [零 α] [LT α]
   定义体: forall (n : Nat) (bₙ : α),
     (↑s : GenContFract α).partDens.get? n = some bₙ -> 0 < bₙ
 
@@ -530,7 +530,7 @@ definition ContFract
 
 中文:
 定义 ContFract
-  签名: [One α] [Zero α] [LT α]
+  签名: [幺 α] [零 α] [LT α]
   定义体: { s : SimpContFract α // s.IsContFract }
 
 Depends on / 依赖: IsContFract, SimpContFract, s.IsContFract
@@ -553,7 +553,7 @@ definition ofInteger
   body: ⟨SimpContFract.ofInteger a, fun n bₙ h => by cases h⟩
 
 中文:
-定义 ofInteger
+定义 of整数eger
   签名: (a : α)
   定义体: ⟨SimpContFract.ofInteger a, fun n bₙ h => by cases h⟩
 
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ContFract α)
+  签名: 可居 (ContFract α)
   定义体: ⟨ofInteger 0⟩
 
 Depends on / 依赖: ofInteger
@@ -687,7 +687,7 @@ definition nextConts
 
 中文:
 定义 nextConts
-  签名: (a b : K) (ppred pred : Pair K)
+  签名: (a b : K) (ppred pred : 对 K)
   定义体: ⟨nextNum a b ppred.a pred.a, nextDen a b ppred.b pred.b⟩
 
 Depends on / 依赖: nextDen, nextNum, ppred.a, ppred.b, pred.a, pred.b
@@ -795,7 +795,7 @@ definition convs'Aux
 
 中文:
 定义 convs'Aux
-  签名: : Stream'.Seq (Pair K) -> 自然数 -> K
+  签名: : Stream'.序列 (对 K) -> 自然数 -> K
 -/
 def convs'Aux : Stream'.Seq (Pair K) -> Nat -> K
   | _, 0 => 0

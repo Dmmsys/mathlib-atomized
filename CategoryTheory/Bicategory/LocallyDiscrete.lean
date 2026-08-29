@@ -131,8 +131,8 @@ instance [Inhabited
   body: ⟨⟨default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (LocallyDiscrete C)
+实例 [可居
+  签名: C] : 可居 (LocallyDiscrete C)
   定义体: ⟨⟨default⟩⟩
 -/
 instance [Inhabited C] : Inhabited (LocallyDiscrete C) :=
@@ -179,7 +179,7 @@ lemma id_as
 中文:
 引理 id_as
   条件: (a : LocallyDiscrete C)
-  结论: (𝟙 a : Discrete (a.as ⟶ a.as)).as = 𝟙 a.as
+  结论: (𝟙 a : 离散 (a.as ⟶ a.as)).as = 𝟙 a.as
   证明: rfl
 
 @[simp]
@@ -266,7 +266,7 @@ rightUnitor f := eqToIso by apply Discrete.e
 
 中文:
 实例 locallyDiscreteBicategory
-  签名: : Bicategory (LocallyDiscrete C) where
+  签名: : 双范畴 (LocallyDiscrete C) where
   定义体: eqToHom (congr_arg₂ (· ≫ ·) rfl (LocallyDiscrete.eq_of_hom η))
   whiskerRight η _ := eqToHom (congr_arg₂ (· ≫ ·) (LocallyDiscrete.eq_of_hom η) rfl)
 associator f g h := eqToIso by apply Discrete.ext; simp
@@ -320,7 +320,7 @@ abbreviation IsLocallyDiscrete
 
 中文:
 缩写 IsLocallyDiscrete
-  签名: (B : 类型) [Bicategory B]
+  签名: (B : 类型) [双范畴 B]
   定义体: forall (b c : B), IsDiscrete (b ⟶ c)
 
 Depends on / 依赖: IsDiscrete
@@ -426,8 +426,8 @@ lemma CategoryTheory.LocallyDiscrete.eqToHom_toLoc
   subst h; rfl
 
 中文:
-引理 CategoryTheory.LocallyDiscrete.eqToHom_toLoc
-  结论: {C : 类型u} [Category.{v} C] {a b : C}
+引理 范畴论.LocallyDiscrete.eqToHom_toLoc
+  结论: {C : 类型u} [范畴.{v} C] {a b : C}
   证明: by
   subst h; rfl
 -/
@@ -444,8 +444,8 @@ lemma CategoryTheory.CommSq.toLoc
   proof: ⟨by simp only [← Quiver.Hom.comp_toLoc, h.w]⟩
 
 中文:
-引理 CategoryTheory.CommSq.toLoc
-  结论: {C : 类型} [Category C] {X₁ X₂ X₃ X₄ : C}
+引理 范畴论.交换Sq.toLoc
+  结论: {C : 类型} [范畴 C] {X₁ X₂ X₃ X₄ : C}
   证明: ⟨by simp only [← Quiver.Hom.comp_toLoc, h.w]⟩
 
 Depends on / 依赖: Quiver, Quiver.Hom.comp_toLoc, comp_toLoc

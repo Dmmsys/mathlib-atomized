@@ -85,10 +85,10 @@ class IsFilteredOrEmpty
     - cocone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
 
 中文:
-类 IsFilteredOrEmpty
+类 是FilteredOrEmpty
   参数: : 命题 where
   公理与运算 (2 个):
-    - cocone_objs : 对任意 X Y : C, 存在 (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), True
+    - cocone_objs : 对任意 X Y : C, 存在 (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), 真
     - cocone_maps : 对任意 ⦃X Y : C⦄ (f g : X ⟶ Y), 存在 (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
 -/
 class IsFilteredOrEmpty : Prop where
@@ -115,11 +115,11 @@ class IsFiltered
     - [nonempty : Nonempty C]
 
 中文:
-类 IsFiltered
-  参数: : 命题 extends IsFilteredOrEmpty C where
-  继承: IsFilteredOrEmpty C
+类 是Filtered
+  参数: : 命题 extends 是FilteredOrEmpty C where
+  继承: 是FilteredOrEmpty C
   公理与运算 (1 个):
-    - [nonempty : Nonempty C]
+    - [nonempty : 非空 C]
 -/
 class IsFiltered : Prop extends IsFilteredOrEmpty C where
   /-- a filtered category must be non-empty -/
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiltered (Discrete PUnit)
+  签名: 是Filtered (离散 命题单元)
   定义体: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
   cocone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by subsingleton⟩
 -/
@@ -184,7 +184,7 @@ definition max
   body: (IsFilteredOrEmpty.cocone_objs j j').choose
 
 中文:
-定义 max
+定义 最大值
   签名: (j j' : C)
   定义体: (IsFilteredOrEmpty.cocone_objs j j').choose
 
@@ -301,7 +301,7 @@ lemma isDirectedOrder
 
 中文:
 引理 isDirectedOrder
-  条件: (α : 类型u) [Preorder α] [IsFiltered α]
+  条件: (α : 类型u) [预序 α] [是Filtered α]
   证明: ⟨max i j, leOfHom (leftToMax i j), leOfHom (rightToMax i j)⟩
 
 Depends on / 依赖: leOfHom, leftToMax, rightToMax
@@ -336,7 +336,7 @@ theorem of_right_adjoint
 中文:
 定理 of_right_adjoint
   条件: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  结论: IsFilteredOrEmpty D
+  结论: 是FilteredOrEmpty D
   证明: { cocone_objs := fun X Y =>
       ⟨R.obj (max (L.obj X) (L.obj Y)),
         h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
@@ -365,8 +365,8 @@ theorem of_isRightAdjoint
 
 中文:
 定理 of_isRightAdjoint
-  条件: (R : C ⥤ D) [R.IsRightAdjoint]
-  结论: IsFilteredOrEmpty D
+  条件: (R : C ⥤ D) [R.是右伴随]
+  结论: 是FilteredOrEmpty D
   证明: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, of_right_adjoint
@@ -386,7 +386,7 @@ theorem of_equivalence
 中文:
 定理 of_equivalence
   条件: (h : C ≌ D)
-  结论: IsFilteredOrEmpty D
+  结论: 是FilteredOrEmpty D
   证明: of_right_adjoint h.symm.toAdjunction
 
 Depends on / 依赖: h.symm.toAdjunction, of_right_adjoint, toAdjunction
@@ -425,9 +425,9 @@ theorem sup_objs_exists
     · exact ⟨(w' (Finset.mem_of
 
 中文:
-定理 sup_objs_exists
-  条件: (O : Finset C)
-  结论: 存在 S : C, 对任意 {X}, X in O -> Nonempty (X ⟶ S)
+定理 sup_objs_存在
+  条件: (O : 有限集 C)
+  结论: 存在 S : C, 对任意 {X}, X in O -> 非空 (X ⟶ S)
   证明: by
   classical
   induction O using Finset.induction with
@@ -473,7 +473,7 @@ theorem sup_exists
     refine ⟨coeq (f ≫ T' mY) (T' mX)
 
 中文:
-定理 sup_exists
+定理 sup_存在
   证明: by
   classical
   induction H using Finset.induction with
@@ -521,7 +521,7 @@ definition sup
   body: (sup_exists O H).choose
 
 中文:
-定义 sup
+定义 上确界
   签名: : C
   定义体: (sup_exists O H).choose
 
@@ -589,7 +589,7 @@ theorem cocone_nonempty
 中文:
 定理 cocone_nonempty
   条件: (F : J ⥤ C)
-  结论: Nonempty (Cocone F)
+  结论: 非空 (余锥 F)
   证明: by
   classical
   let O := Finset.univ.image F.obj
@@ -649,7 +649,7 @@ theorem of_right_adjoint
 中文:
 定理 of_right_adjoint
   条件: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  结论: IsFiltered D
+  结论: 是Filtered D
   证明: { IsFilteredOrEmpty.of_right_adjoint h with
     nonempty := IsFiltered.nonempty.map R.obj }
 
@@ -670,8 +670,8 @@ theorem of_isRightAdjoint
 
 中文:
 定理 of_isRightAdjoint
-  条件: (R : C ⥤ D) [R.IsRightAdjoint]
-  结论: IsFiltered D
+  条件: (R : C ⥤ D) [R.是右伴随]
+  结论: 是Filtered D
   证明: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, of_right_adjoint
@@ -693,7 +693,7 @@ omit [IsFiltered C] in
 中文:
 定理 of_equivalence
   条件: (h : C ≌ D)
-  结论: IsFiltered D
+  结论: 是Filtered D
   证明: of_right_adjoint h.symm.toAdjunction
 
 omit [IsFiltered C] in
@@ -716,7 +716,7 @@ lemma iff_of_equivalence
 中文:
 引理 iff_of_equivalence
   条件: (e : C ≌ D)
-  结论: IsFiltered C ↔ IsFiltered D
+  结论: 是Filtered C ↔ 是Filtered D
   证明: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
 
 Depends on / 依赖: e.symm, of_equivalence
@@ -749,7 +749,7 @@ theorem of_cocone_nonempty
 
 中文:
 定理 of_cocone_nonempty
-  结论: (h : 对任意 {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+  结论: (h : 对任意 {J : 类型 w} [小范畴 J] [有限范畴 J] (F : J ⥤ C),
   证明: by
   have : Nonempty C := by
     obtain ⟨c⟩ := h (Functor.empty _)
@@ -791,8 +791,8 @@ theorem of_hasFiniteColimits
 
 中文:
 定理 of_hasFiniteColimits
-  条件: [HasFiniteColimits C]
-  结论: IsFiltered C
+  条件: [有有限余极限 C]
+  结论: 是Filtered C
   证明: of_cocone_nonempty.{v} C fun F => ⟨colimit.cocone F⟩
 
 Depends on / 依赖: cocone, colimit, colimit.cocone, of_cocone_nonempty
@@ -811,8 +811,8 @@ theorem of_isTerminal
 
 中文:
 定理 of_isTerminal
-  条件: {X : C} (h : IsTerminal X)
-  结论: IsFiltered C
+  条件: {X : C} (h : 是终止 X)
+  结论: 是Filtered C
   证明: of_cocone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.from _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
 
 Depends on / 依赖: h.from, h.hom_ext, hom_ext, of_cocone_nonempty
@@ -833,7 +833,7 @@ theorem iff_cocone_nonempty
 
 中文:
 定理 iff_cocone_nonempty
-  结论: IsFiltered C ↔
+  结论: 是Filtered C ↔
   证明: ⟨fun _ _ _ _ F => cocone_nonempty F, of_cocone_nonempty C⟩
 
 Depends on / 依赖: cocone_nonempty, of_cocone_nonempty
@@ -1245,7 +1245,7 @@ lemma wideSpan
 
 中文:
 引理 wideSpan
-  条件: {I : 类型} [Finite I] {i : C} {j : I -> C} (f : 对任意 x, i ⟶ j x)
+  条件: {I : 类型} [有限 I] {i : C} {j : I -> C} (f : 对任意 x, i ⟶ j x)
   证明: by
   have : IsFiltered C := { nonempty := ⟨i⟩ }
   classical
@@ -1280,10 +1280,10 @@ class IsCofilteredOrEmpty
     - cone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
 
 中文:
-类 IsCofilteredOrEmpty
+类 是余filteredOrEmpty
   参数: : 命题 where
   公理与运算 (2 个):
-    - cone_objs : 对任意 X Y : C, 存在 (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), True
+    - cone_objs : 对任意 X Y : C, 存在 (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), 真
     - cone_maps : 对任意 ⦃X Y : C⦄ (f g : X ⟶ Y), 存在 (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
 -/
 class IsCofilteredOrEmpty : Prop where
@@ -1310,11 +1310,11 @@ class IsCofiltered
     - [nonempty : Nonempty C]
 
 中文:
-类 IsCofiltered
-  参数: : 命题 extends IsCofilteredOrEmpty C where
-  继承: IsCofilteredOrEmpty C
+类 是余filtered
+  参数: : 命题 extends 是余filteredOrEmpty C where
+  继承: 是余filteredOrEmpty C
   公理与运算 (1 个):
-    - [nonempty : Nonempty C]
+    - [nonempty : 非空 C]
 
 Depends on / 依赖: HasCountableLimits, hasFiniteLimits_of_hasCountableLimits
 -/
@@ -1363,7 +1363,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofiltered (Discrete PUnit)
+  签名: 是余filtered (离散 命题单元)
   定义体: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
   cone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by
     apply ULift.ext
@@ -1393,7 +1393,7 @@ definition min
   body: (IsCofilteredOrEmpty.cone_objs j j').choose
 
 中文:
-定义 min
+定义 最小值
   签名: (j j' : C)
   定义体: (IsCofilteredOrEmpty.cone_objs j j').choose
 
@@ -1536,7 +1536,7 @@ theorem _root_.CategoryTheory.Functor.ranges_directed
     convert! Set.range_comp_subset_range _ _
 
 中文:
-定理 _root_.CategoryTheory.Functor.ranges_directed
+定理 _root_.范畴论.函子.ranges_directed
   条件: (F : C ⥤ 类型) (j : C)
   证明: fun ⟨i, ij⟩ ⟨k, kj⟩ => by
   let ⟨l, li, lk, e⟩ := cospan ij kj
@@ -1611,7 +1611,7 @@ theorem of_left_adjoint
 中文:
 定理 of_left_adjoint
   条件: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  结论: IsCofilteredOrEmpty D
+  结论: 是余filteredOrEmpty D
   证明: { cone_objs := fun X Y =>
       ⟨L.obj (min (R.obj X) (R.obj Y)), (h.homEquiv _ X).symm (minToLeft _ _),
         (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
@@ -1640,8 +1640,8 @@ theorem of_isLeftAdjoint
 
 中文:
 定理 of_isLeftAdjoint
-  条件: (L : C ⥤ D) [L.IsLeftAdjoint]
-  结论: IsCofilteredOrEmpty D
+  条件: (L : C ⥤ D) [L.是左伴随]
+  结论: 是余filteredOrEmpty D
   证明: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, HasCountableColimits, hasCountableCoproducts_of_hasCountableColimits, ofIsLeftAdjoint, of_left_adjoint
@@ -1661,7 +1661,7 @@ theorem of_equivalence
 中文:
 定理 of_equivalence
   条件: (h : C ≌ D)
-  结论: IsCofilteredOrEmpty D
+  结论: 是余filteredOrEmpty D
   证明: of_left_adjoint h.toAdjunction
 
 Depends on / 依赖: h.toAdjunction, hasFiniteCoproducts_of_hasCountableCoproducts, of_left_adjoint, toAdjunction
@@ -1700,9 +1700,9 @@ theorem inf_objs_exists
     · exact ⟨minToRight _ _ ≫
 
 中文:
-定理 inf_objs_exists
-  条件: (O : Finset C)
-  结论: 存在 S : C, 对任意 {X}, X in O -> Nonempty (S ⟶ X)
+定理 inf_objs_存在
+  条件: (O : 有限集 C)
+  结论: 存在 S : C, 对任意 {X}, X in O -> 非空 (S ⟶ X)
   证明: by
   classical
   induction O using Finset.induction with
@@ -1748,7 +1748,7 @@ theorem inf_exists
     refine ⟨eq (T' mX ≫ f) (T' mY), 
 
 中文:
-定理 inf_exists
+定理 inf_存在
   证明: by
   classical
   induction H using Finset.induction with
@@ -1796,7 +1796,7 @@ definition inf
   body: (inf_exists O H).choose
 
 中文:
-定义 inf
+定义 下确界
   签名: : C
   定义体: (inf_exists O H).choose
 
@@ -1865,7 +1865,7 @@ theorem cone_nonempty
 中文:
 定理 cone_nonempty
   条件: (F : J ⥤ C)
-  结论: Nonempty (Cone F)
+  结论: 非空 (锥 F)
   证明: by
   classical
   let O := Finset.univ.image F.obj
@@ -1928,7 +1928,7 @@ theorem of_left_adjoint
 中文:
 定理 of_left_adjoint
   条件: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  结论: IsCofiltered D
+  结论: 是余filtered D
   证明: { IsCofilteredOrEmpty.of_left_adjoint h with
     nonempty := IsCofiltered.nonempty.map L.obj }
 
@@ -1949,8 +1949,8 @@ theorem of_isLeftAdjoint
 
 中文:
 定理 of_isLeftAdjoint
-  条件: (L : C ⥤ D) [L.IsLeftAdjoint]
-  结论: IsCofiltered D
+  条件: (L : C ⥤ D) [L.是左伴随]
+  结论: 是余filtered D
   证明: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, ofIsLeftAdjoint, of_left_adjoint
@@ -1972,7 +1972,7 @@ omit [IsCofiltered C] in
 中文:
 定理 of_equivalence
   条件: (h : C ≌ D)
-  结论: IsCofiltered D
+  结论: 是余filtered D
   证明: of_left_adjoint h.toAdjunction
 
 omit [IsCofiltered C] in
@@ -1997,7 +1997,7 @@ omit [IsCofiltered C] in
 中文:
 引理 iff_of_equivalence
   条件: (e : C ≌ D)
-  结论: IsCofiltered C ↔ IsCofiltered D
+  结论: 是余filtered C ↔ 是余filtered D
   证明: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
 
 omit [IsCofiltered C] in
@@ -2024,7 +2024,7 @@ lemma wideCospan
 
 中文:
 引理 wideCospan
-  结论: [IsCofilteredOrEmpty C]
+  结论: [是余filteredOrEmpty C]
   证明: by
   have : IsCofiltered C := { nonempty := ⟨i⟩ }
   classical
@@ -2071,7 +2071,7 @@ theorem of_cone_nonempty
 
 中文:
 定理 of_cone_nonempty
-  结论: (h : 对任意 {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+  结论: (h : 对任意 {J : 类型 w} [小范畴 J] [有限范畴 J] (F : J ⥤ C),
   证明: by
   have : Nonempty C := by
     obtain ⟨c⟩ := h (Functor.empty _)
@@ -2113,8 +2113,8 @@ theorem of_hasFiniteLimits
 
 中文:
 定理 of_hasFiniteLimits
-  条件: [HasFiniteLimits C]
-  结论: IsCofiltered C
+  条件: [有有限极限 C]
+  结论: 是余filtered C
   证明: of_cone_nonempty.{v} C fun F => ⟨limit.cone F⟩
 
 Depends on / 依赖: limit.cone, of_cone_nonempty
@@ -2134,7 +2134,7 @@ theorem of_isInitial
 中文:
 定理 of_isInitial
   条件: {X : C} (h : IsInitial X)
-  结论: IsCofiltered C
+  结论: 是余filtered C
   证明: of_cone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.to _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
 
 Depends on / 依赖: h.hom_ext, h.to, hom_ext, of_cone_nonempty
@@ -2155,7 +2155,7 @@ theorem iff_cone_nonempty
 
 中文:
 定理 iff_cone_nonempty
-  结论: IsCofiltered C ↔
+  结论: 是余filtered C ↔
   证明: ⟨fun _ _ _ _ F => cone_nonempty F, of_cone_nonempty C⟩
 
 Depends on / 依赖: cone_nonempty, of_cone_nonempty
@@ -2186,7 +2186,7 @@ instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty
 
 中文:
 实例 isCofilteredOrEmpty_op_of_isFilteredOrEmpty
-  签名: [IsFilteredOrEmpty C]
+  签名: [是FilteredOrEmpty C]
   定义体: ⟨op (IsFiltered.max X.unop Y.unop), (IsFiltered.leftToMax _ _).op,
       (IsFiltered.rightToMax _ _).op, trivial⟩
   cone_maps X Y f g :=
@@ -2216,7 +2216,7 @@ instance isCofiltered_op_of_isFiltered
 
 中文:
 实例 isCofiltered_op_of_isFiltered
-  签名: [IsFiltered C]
+  签名: [是Filtered C]
   定义体: letI : Nonempty C := IsFiltered.nonempty; inferInstance
 
 Depends on / 依赖: IsFiltered, IsFiltered.nonempty, Nonempty, nonempty
@@ -2238,7 +2238,7 @@ instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty
 
 中文:
 实例 isFilteredOrEmpty_op_of_isCofilteredOrEmpty
-  签名: [IsCofilteredOrEmpty C]
+  签名: [是余filteredOrEmpty C]
   定义体: ⟨op (IsCofiltered.min X.unop Y.unop), (IsCofiltered.minToLeft X.unop Y.unop).op,
       (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
   cocone_maps X Y f g :=
@@ -2268,7 +2268,7 @@ instance isFiltered_op_of_isCofiltered
 
 中文:
 实例 isFiltered_op_of_isCofiltered
-  签名: [IsCofiltered C]
+  签名: [是余filtered C]
   定义体: letI : Nonempty C := IsCofiltered.nonempty; inferInstance
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.nonempty, Nonempty, nonempty
@@ -2287,8 +2287,8 @@ lemma isCofilteredOrEmpty_of_isFilteredOrEmpty_op
 
 中文:
 引理 isCofilteredOrEmpty_of_isFilteredOrEmpty_op
-  条件: [IsFilteredOrEmpty Cᵒᵖ]
-  结论: IsCofilteredOrEmpty C
+  条件: [是FilteredOrEmpty Cᵒᵖ]
+  结论: 是余filteredOrEmpty C
   证明: IsCofilteredOrEmpty.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.of_equivalence, of_equivalence, opOpEquivalence
@@ -2307,8 +2307,8 @@ lemma isFilteredOrEmpty_of_isCofilteredOrEmpty_op
 
 中文:
 引理 isFilteredOrEmpty_of_isCofilteredOrEmpty_op
-  条件: [IsCofilteredOrEmpty Cᵒᵖ]
-  结论: IsFilteredOrEmpty C
+  条件: [是余filteredOrEmpty Cᵒᵖ]
+  结论: 是FilteredOrEmpty C
   证明: IsFilteredOrEmpty.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.of_equivalence, of_equivalence, opOpEquivalence
@@ -2327,8 +2327,8 @@ lemma isCofiltered_of_isFiltered_op
 
 中文:
 引理 isCofiltered_of_isFiltered_op
-  条件: [IsFiltered Cᵒᵖ]
-  结论: IsCofiltered C
+  条件: [是Filtered Cᵒᵖ]
+  结论: 是余filtered C
   证明: IsCofiltered.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, of_equivalence, opOpEquivalence
@@ -2347,8 +2347,8 @@ lemma isFiltered_of_isCofiltered_op
 
 中文:
 引理 isFiltered_of_isCofiltered_op
-  条件: [IsCofiltered Cᵒᵖ]
-  结论: IsFiltered C
+  条件: [是余filtered Cᵒᵖ]
+  结论: 是Filtered C
   证明: IsFiltered.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, of_equivalence, opOpEquivalence
@@ -2366,7 +2366,7 @@ lemma isCofiltered_op_iff_isFiltered
 
 中文:
 引理 isCofiltered_op_iff_isFiltered
-  结论: IsCofiltered Cᵒᵖ ↔ IsFiltered C
+  结论: 是余filtered Cᵒᵖ ↔ 是Filtered C
   证明: ⟨fun _ => isFiltered_of_isCofiltered_op _, fun _ => inferInstance⟩
 
 Depends on / 依赖: isFiltered_of_isCofiltered_op
@@ -2384,7 +2384,7 @@ lemma isFiltered_op_iff_isCofiltered
 
 中文:
 引理 isFiltered_op_iff_isCofiltered
-  结论: IsFiltered Cᵒᵖ ↔ IsCofiltered C
+  结论: 是Filtered Cᵒᵖ ↔ 是余filtered C
   证明: ⟨fun _ => isCofiltered_of_isFiltered_op _, fun _ => inferInstance⟩
 
 Depends on / 依赖: isCofiltered_of_isFiltered_op
@@ -2405,8 +2405,8 @@ instance [IsFiltered
   body: IsFiltered.of_equivalence ULift.equivalence
 
 中文:
-实例 [IsFiltered
-  签名: C] : IsFiltered (ULift.{u₂} C)
+实例 [是Filtered
+  签名: C] : 是Filtered (类型层提升.{u₂} C)
   定义体: IsFiltered.of_equivalence ULift.equivalence
 
 Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, ULift.equivalence, equivalence, of_equivalence
@@ -2423,8 +2423,8 @@ instance [IsCofiltered
   body: IsCofiltered.of_equivalence ULift.equivalence
 
 中文:
-实例 [IsCofiltered
-  签名: C] : IsCofiltered (ULift.{u₂} C)
+实例 [是余filtered
+  签名: C] : 是余filtered (类型层提升.{u₂} C)
   定义体: IsCofiltered.of_equivalence ULift.equivalence
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, ULift.equivalence, equivalence, of_equivalence
@@ -2441,8 +2441,8 @@ instance [IsFiltered
   body: IsFiltered.of_equivalence ULiftHom.equiv
 
 中文:
-实例 [IsFiltered
-  签名: C] : IsFiltered (ULiftHom C)
+实例 [是Filtered
+  签名: C] : 是Filtered (ULiftHom C)
   定义体: IsFiltered.of_equivalence ULiftHom.equiv
 
 Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, ULiftHom, ULiftHom.equiv, of_equivalence
@@ -2459,8 +2459,8 @@ instance [IsCofiltered
   body: IsCofiltered.of_equivalence ULiftHom.equiv
 
 中文:
-实例 [IsCofiltered
-  签名: C] : IsCofiltered (ULiftHom C)
+实例 [是余filtered
+  签名: C] : 是余filtered (ULiftHom C)
   定义体: IsCofiltered.of_equivalence ULiftHom.equiv
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, ULiftHom, ULiftHom.equiv, of_equivalence
@@ -2477,8 +2477,8 @@ instance [IsFiltered
   body: IsFiltered.of_equivalence AsSmall.equiv
 
 中文:
-实例 [IsFiltered
-  签名: C] : IsFiltered (AsSmall C)
+实例 [是Filtered
+  签名: C] : 是Filtered (AsSmall C)
   定义体: IsFiltered.of_equivalence AsSmall.equiv
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, IsFiltered, IsFiltered.of_equivalence, of_equivalence
@@ -2495,8 +2495,8 @@ instance [IsCofiltered
   body: IsCofiltered.of_equivalence AsSmall.equiv
 
 中文:
-实例 [IsCofiltered
-  签名: C] : IsCofiltered (AsSmall C)
+实例 [是余filtered
+  签名: C] : 是余filtered (AsSmall C)
   定义体: IsCofiltered.of_equivalence AsSmall.equiv
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, IsCofiltered, IsCofiltered.of_equivalence, of_equivalence
@@ -2523,8 +2523,8 @@ instance [forall
     funext fun s => by simp [coeq_condition (f s) (g s)]⟩
 
 中文:
-实例 [forall
-  签名: i, IsFilteredOrEmpty (I i)] : IsFilteredOrEmpty (对任意 i, I i) where
+实例 [对任意
+  签名: i, 是FilteredOrEmpty (I i)] : 是FilteredOrEmpty (对任意 i, I i) where
   定义体: ⟨fun s => max (k s) (l s), fun s => leftToMax (k s) (l s),
     fun s => rightToMax (k s) (l s), trivial⟩
   cocone_maps k l f g := ⟨fun s => coeq (f s) (g s), fun s => coeqHom (f s) (g s),
@@ -2547,8 +2547,8 @@ instance [forall
   signature: i, IsFiltered (I i)] : IsFiltered (forall i, I i) where
 
 中文:
-实例 [forall
-  签名: i, IsFiltered (I i)] : IsFiltered (对任意 i, I i) where
+实例 [对任意
+  签名: i, 是Filtered (I i)] : 是Filtered (对任意 i, I i) where
 -/
 instance [forall i, IsFiltered (I i)] : IsFiltered (forall i, I i) where
 
@@ -2565,8 +2565,8 @@ instance [forall
     funext fun s => by simp [eq_condition (f s) (g s)]⟩
 
 中文:
-实例 [forall
-  签名: i, IsCofilteredOrEmpty (I i)] : IsCofilteredOrEmpty (对任意 i, I i) where
+实例 [对任意
+  签名: i, 是余filteredOrEmpty (I i)] : 是余filteredOrEmpty (对任意 i, I i) where
   定义体: ⟨fun s => min (k s) (l s), fun s => minToLeft (k s) (l s),
     fun s => minToRight (k s) (l s), trivial⟩
   cone_maps k l f g := ⟨fun s => eq (f s) (g s), fun s => eqHom (f s) (g s),
@@ -2589,8 +2589,8 @@ instance [forall
   signature: i, IsCofiltered (I i)] : IsCofiltered (forall i, I i) where
 
 中文:
-实例 [forall
-  签名: i, IsCofiltered (I i)] : IsCofiltered (对任意 i, I i) where
+实例 [对任意
+  签名: i, 是余filtered (I i)] : 是余filtered (对任意 i, I i) where
 -/
 instance [forall i, IsCofiltered (I i)] : IsCofiltered (forall i, I i) where
 
@@ -2614,8 +2614,8 @@ instance [IsFilteredOrEmpty
     by simp [coeq_condition]⟩
 
 中文:
-实例 [IsFilteredOrEmpty
-  签名: C] [IsFilteredOrEmpty D] : IsFilteredOrEmpty (C × D) where
+实例 [是FilteredOrEmpty
+  签名: C] [是FilteredOrEmpty D] : 是FilteredOrEmpty (C × D) where
   定义体: ⟨(max k.1 l.1, max k.2 l.2), (leftToMax k.1 l.1, leftToMax k.2 l.2),
     (rightToMax k.1 l.1, rightToMax k.2 l.2), trivial⟩
   cocone_maps k l f g := ⟨(coeq f.1 g.1, coeq f.2 g.2), (coeqHom f.1 g.1, coeqHom f.2 g.2),
@@ -2638,8 +2638,8 @@ instance [IsFiltered
   signature: C] [IsFiltered D] : IsFiltered (C × D) where
 
 中文:
-实例 [IsFiltered
-  签名: C] [IsFiltered D] : IsFiltered (C × D) where
+实例 [是Filtered
+  签名: C] [是Filtered D] : 是Filtered (C × D) where
 -/
 instance [IsFiltered C] [IsFiltered D] : IsFiltered (C × D) where
 
@@ -2657,8 +2657,8 @@ instance [IsCofilteredOrEmpty
     by simp [eq_condition]⟩
 
 中文:
-实例 [IsCofilteredOrEmpty
-  签名: C] [IsCofilteredOrEmpty D] : IsCofilteredOrEmpty (C × D) where
+实例 [是余filteredOrEmpty
+  签名: C] [是余filteredOrEmpty D] : 是余filteredOrEmpty (C × D) where
   定义体: ⟨(min k.1 l.1, min k.2 l.2), (minToLeft k.1 l.1, minToLeft k.2 l.2),
     (minToRight k.1 l.1, minToRight k.2 l.2), trivial⟩
   cone_maps k l f g := ⟨(eq f.1 g.1, eq f.2 g.2), (eqHom f.1 g.1, eqHom f.2 g.2),
@@ -2681,8 +2681,8 @@ instance [IsCofiltered
   signature: C] [IsCofiltered D] : IsCofiltered (C × D) where
 
 中文:
-实例 [IsCofiltered
-  签名: C] [IsCofiltered D] : IsCofiltered (C × D) where
+实例 [是余filtered
+  签名: C] [是余filtered D] : 是余filtered (C × D) where
 -/
 instance [IsCofiltered C] [IsCofiltered D] : IsCofiltered (C × D) where
 

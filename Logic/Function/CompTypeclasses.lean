@@ -36,7 +36,7 @@ class CompTriple
     - comp_eq : ψ.comp φ = χ
 
 中文:
-类 CompTriple
+类 余mpTriple
   参数: {M N P : 类型} (φ : M -> N) (ψ : N -> P) (χ : outParam (M -> P))
   公理与运算 (1 个):
     - comp_eq : ψ.comp φ = χ
@@ -59,7 +59,7 @@ class IsId
     - eq_id : σ = id
 
 中文:
-类 IsId
+类 是Id
   参数: {M : 类型} (σ : M -> M)
   公理与运算 (1 个):
     - eq_id : σ = id
@@ -80,7 +80,7 @@ instance instComp_id
 
 中文:
 实例 instComp_id
-  签名: {N P : 类型} {φ : N -> N} [IsId φ] {ψ : N -> P}
+  签名: {N P : 类型} {φ : N -> N} [是Id φ] {ψ : N -> P}
   定义体: by simp only [IsId.eq_id, Function.comp_id]
 
 Depends on / 依赖: Function, Function.comp_id, IsId.eq_id, comp_id, eq_id
@@ -99,7 +99,7 @@ instance instId_comp
 
 中文:
 实例 instId_comp
-  签名: {M N : 类型} {φ : M -> N} {ψ : N -> N} [IsId ψ]
+  签名: {M N : 类型} {φ : M -> N} {ψ : N -> N} [是Id ψ]
   定义体: by simp only [IsId.eq_id, Function.id_comp]
 
 Depends on / 依赖: Function, Function.id_comp, IsId.eq_id, eq_id, id_comp

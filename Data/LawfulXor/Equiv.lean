@@ -55,7 +55,7 @@ theorem xor_symm
 
 中文:
 定理 xor_symm
-  结论: (Equiv.xor a).symm = Equiv.xor a
+  结论: (等价.xor a).symm = 等价.xor a
   证明: rfl
 -/
 @[simp] theorem xor_symm : (Equiv.xor a).symm = Equiv.xor a := rfl
@@ -72,7 +72,7 @@ theorem xor_involutive
 中文:
 定理 xor_involutive
   条件: (a : α)
-  结论: Function.Involutive (Equiv.xor a)
+  结论: 函数.对合 (等价.xor a)
   证明: xor_right_involutive a
 
 Depends on / 依赖: xor_right_involutive
@@ -89,7 +89,7 @@ theorem xor_zero
 
 中文:
 定理 xor_zero
-  结论: Equiv.xor (0 : α) = 1
+  结论: 等价.xor (0 : α) = 1
   证明: Equiv.ext zero_xor
 -/
 @[simp] theorem xor_zero : Equiv.xor (0 : α) = 1 := Equiv.ext zero_xor
@@ -104,7 +104,7 @@ theorem xor_eq_one_iff
 
 中文:
 定理 xor_eq_one_iff
-  结论: Equiv.xor a = 1 ↔ a = 0
+  结论: 等价.xor a = 1 ↔ a = 0
   证明: Equiv.coe_inj.symm.trans xor_left_eq_id_iff
 -/
 @[simp] theorem xor_eq_one_iff : Equiv.xor a = 1 ↔ a = 0 :=
@@ -120,7 +120,7 @@ theorem isFixedPt_xor
 
 中文:
 定理 isFixedPt_xor
-  结论: Function.IsFixedPt (Equiv.xor a) b ↔ a = 0
+  结论: 函数.IsFixedPt (等价.xor a) b ↔ a = 0
   证明: isFixedPt_xor_left_iff
 
 Depends on / 依赖: isFixedPt_xor_left_iff
@@ -137,7 +137,7 @@ theorem xor_trans_xor
 
 中文:
 定理 xor_trans_xor
-  结论: (Equiv.xor b).trans (Equiv.xor a) = Equiv.xor (a ^^^ b)
+  结论: (等价.xor b).trans (等价.xor a) = 等价.xor (a ^^^ b)
   证明: Equiv.ext (.symm <| xor_assoc a b ·)
 -/
 @[simp] theorem xor_trans_xor : (Equiv.xor b).trans (Equiv.xor a) = Equiv.xor (a ^^^ b) :=

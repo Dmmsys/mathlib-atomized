@@ -126,7 +126,7 @@ lemma homologyFunctorFactorsh_hom_app_quotient_obj
 
 中文:
 引理 homologyFunctorFactorsh_hom_app_quotient_obj
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: HomologicalComplexUpToQuasiIso.homologyFunctorFactorsh_hom_app_quotient_obj ..
 
 @[reassoc]
@@ -151,7 +151,7 @@ lemma homologyFunctorFactorsh_inv_app_quotient_obj
 
 中文:
 引理 homologyFunctorFactorsh_inv_app_quotient_obj
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: HomologicalComplexUpToQuasiIso.homologyFunctorFactorsh_inv_app_quotient_obj ..
 
 Depends on / 依赖: HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.homologyFunctorFactorsh_inv_app_quotient_obj, homologyFunctorFactorsh_inv_app_quotient_obj
@@ -183,7 +183,7 @@ lemma isIso_Qh_map_iff
 
 中文:
 引理 isIso_Qh_map_iff
-  条件: {X Y : HomotopyCategory C (ComplexShape.up 整数)} (f : X ⟶ Y)
+  条件: {X Y : HomotopyCategory C (余mplexShape.up 整数)} (f : X ⟶ Y)
   证明: by
   constructor
   · intro hf
@@ -223,7 +223,7 @@ lemma isIso_iff
 
 中文:
 引理 isIso_iff
-  条件: {K L : DerivedCategory C} (f : K ⟶ L)
+  条件: {K L : 导出范畴 C} (f : K ⟶ L)
   证明: by
   refine ⟨fun hf n => inferInstance, fun hf => ?_⟩
   refine ((MorphismProperty.isomorphisms (DerivedCategory C)).arrow_iso_iff
@@ -358,7 +358,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: (T : Triangle (DerivedCategory C))
+  签名: (T : Triangle (导出范畴 C))
   定义体: (homologyFunctor C 0).shiftMap T.mor₃ n₀ n₁ (by rw [add_comm 1, h])
 
 Depends on / 依赖: T.mor, T.obj, add_comm, homologyFunctor, isStrictlyGE_iff, isZero_single_obj_X, shiftMap

@@ -120,8 +120,8 @@ theorem Orientation.measure_orthonormalBasis
   rw [A]; rw [parallelepiped_comp_equ
 
 中文:
-定理 Orientation.measure_orthonormalBasis
-  结论: (o : Orientation 实数 F (Fin n))
+定理 定向.measure_orthonormalBasis
+  结论: (o : 定向 实数 F (有限集 n))
   证明: by
   have e : ι ≃ Fin n := by
     refine Fintype.equivFinOfCardEq ?_
@@ -157,8 +157,8 @@ theorem Orientation.measure_eq_volume
   sim
 
 中文:
-定理 Orientation.measure_eq_volume
-  条件: (o : Orientation 实数 F (Fin n))
+定理 定向.measure_eq_volume
+  条件: (o : 定向 实数 F (有限集 n))
   证明: by
   have A : o.volumeForm.measure (stdOrthonormalBasis Real F).toBasis.parallelepiped = 1 :=
     Orientation.measure_orthonormalBasis o (stdOrthonormalBasis Real F)
@@ -191,8 +191,8 @@ theorem OrthonormalBasis.volume_parallelepiped
   exact o.measure_orthonormalBasis b
 
 中文:
-定理 OrthonormalBasis.volume_parallelepiped
-  条件: (b : OrthonormalBasis ι 实数 F)
+定理 正交标准基.volume_parallelepiped
+  条件: (b : 正交标准基 ι 实数 F)
   证明: by
   have : Fact (finrank Real F = finrank Real F) := ⟨rfl⟩
   let o := (stdOrthonormalBasis Real F).toBasis.orientation
@@ -219,8 +219,8 @@ theorem OrthonormalBasis.addHaar_eq_volume
   exact b.volume_parallelepiped
 
 中文:
-定理 OrthonormalBasis.addHaar_eq_volume
-  结论: {ι F : 类型} [Fintype ι] [NormedAddCommGroup F]
+定理 正交标准基.addHaar_eq_volume
+  结论: {ι F : 类型} [有限类型 ι] [赋范交换加群 F]
   证明: by
   rw [Basis.addHaar_eq_iff]
   exact b.volume_parallelepiped
@@ -243,8 +243,8 @@ definition OrthonormalBasis.measurableEquiv
   body: b.repr.toHomeomorph.toMeasurableEquiv
 
 中文:
-定义 OrthonormalBasis.measurableEquiv
-  签名: (b : OrthonormalBasis ι 实数 F)
+定义 正交标准基.measurableEquiv
+  签名: (b : 正交标准基 ι 实数 F)
   定义体: b.repr.toHomeomorph.toMeasurableEquiv
 
 Depends on / 依赖: b.repr.toHomeomorph.toMeasurableEquiv, toHomeomorph, toMeasurableEquiv
@@ -265,8 +265,8 @@ theorem OrthonormalBasis.measurePreserving_measurableEquiv
   exact b.addHaar_eq_volume.symm
 
 中文:
-定理 OrthonormalBasis.measurePreserving_measurableEquiv
-  条件: (b : OrthonormalBasis ι 实数 F)
+定理 正交标准基.measurePreserving_measurableEquiv
+  条件: (b : 正交标准基 ι 实数 F)
   证明: by
   convert! (b.measurableEquiv.symm.measurable.measurePreserving _).symm
   rw [← (EuclideanSpace.basisFun ι Real).addHaar_eq_volume]
@@ -291,8 +291,8 @@ theorem OrthonormalBasis.measurePreserving_repr
   proof: b.measurePreserving_measurableEquiv
 
 中文:
-定理 OrthonormalBasis.measurePreserving_repr
-  条件: (b : OrthonormalBasis ι 实数 F)
+定理 正交标准基.measurePreserving_repr
+  条件: (b : 正交标准基 ι 实数 F)
   证明: b.measurePreserving_measurableEquiv
 
 Depends on / 依赖: b.measurePreserving_measurableEquiv, measurePreserving_measurableEquiv
@@ -309,8 +309,8 @@ theorem OrthonormalBasis.measurePreserving_repr_symm
   proof: b.measurePreserving_measurableEquiv.symm
 
 中文:
-定理 OrthonormalBasis.measurePreserving_repr_symm
-  条件: (b : OrthonormalBasis ι 实数 F)
+定理 正交标准基.measurePreserving_repr_symm
+  条件: (b : 正交标准基 ι 实数 F)
   证明: b.measurePreserving_measurableEquiv.symm
 
 Depends on / 依赖: b.measurePreserving_measurableEquiv.symm, measurePreserving_measurableEquiv
@@ -360,7 +360,7 @@ theorem PiLp.volume_preserving_ofLp
 
 中文:
 定理 PiLp.volume_preserving_ofLp
-  结论: MeasurePreserving (@ofLp 2 (ι -> 实数))
+  结论: 保测 (@ofLp 2 (ι -> 实数))
   证明: EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp ι
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp, volume_preserving_symm_measurableEquiv_toLp
@@ -378,7 +378,7 @@ theorem PiLp.volume_preserving_toLp
 
 中文:
 定理 PiLp.volume_preserving_toLp
-  结论: MeasurePreserving (@toLp 2 (ι -> 实数))
+  结论: 保测 (@toLp 2 (ι -> 实数))
   证明: (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp ι).symm
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp, volume_preserving_symm_measurableEquiv_toLp
@@ -397,7 +397,7 @@ lemma volume_euclideanSpace_eq_dirac
 
 中文:
 引理 volume_euclideanSpace_eq_dirac
-  条件: [IsEmpty ι]
+  条件: [是空 ι]
   证明: by
   rw [← (PiLp.volume_preserving_toLp ι).map_eq]; rw [volume_pi_eq_dirac 0]; rw [map_dirac]; rw [toLp_zero]
 
@@ -545,7 +545,7 @@ theorem WithLp.volume_preserving_ofLp
 
 中文:
 定理 WithLp.volume_preserving_ofLp
-  结论: MeasurePreserving (@ofLp 2 (U × V))
+  结论: 保测 (@ofLp 2 (U × V))
   证明: volume_preserving_symm_measurableEquiv_toLp_prod U V
 
 Depends on / 依赖: volume_preserving_symm_measurableEquiv_toLp_prod
@@ -563,7 +563,7 @@ theorem WithLp.volume_preserving_toLp
 
 中文:
 定理 WithLp.volume_preserving_toLp
-  结论: MeasurePreserving (@toLp 2 (U × V))
+  结论: 保测 (@toLp 2 (U × V))
   证明: (volume_preserving_symm_measurableEquiv_toLp_prod U V).symm
 
 Depends on / 依赖: volume_preserving_symm_measurableEquiv_toLp_prod
@@ -588,8 +588,8 @@ theorem MeasureTheory.volume_eq_of_finrank_eq_one
     let f : Real ≃ₗᵢ[Real] E := (LinearIsometryEquiv.toSpanUn
 
 中文:
-定理 MeasureTheory.volume_eq_of_finrank_eq_one
-  结论: (h : Module.finrank 实数 E = 1) {v : E}
+定理 测度论.volume_eq_of_finrank_eq_one
+  结论: (h : 模.finrank 实数 E = 1) {v : E}
   证明: calc
   volume = ((volume : Measure Real).map (‖v‖⁻¹ • ·)).map (· • v) := by
     have hv' : Submodule.span Real {‖v‖⁻¹ • v} = ⊤ := by

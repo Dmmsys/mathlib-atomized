@@ -61,8 +61,8 @@ structure NonUnitalRingHom
   (no additional axioms)
 
 中文:
-结构 NonUnitalRingHom
-  参数: (α β : 类型) [NonUnitalNonAssocSemiring α]
+结构 非幺环态射
+  参数: (α β : 类型) [非幺非结合半环 α]
   继承: α ->ₙ* β, α ->+ β
   (无附加公理)
 -/
@@ -92,9 +92,9 @@ class NonUnitalRingHomClass
   (no additional axioms)
 
 中文:
-类 NonUnitalRingHomClass
-  参数: (F : 类型) (α β : outParam 类型) [NonUnitalNonAssocSemiring α]
-  继承: MulHomClass F α β, AddMonoidHomClass F α β
+类 非幺环态射类
+  参数: (F : 类型) (α β : outParam 类型) [非幺非结合半环 α]
+  继承: 乘法态射类 F α β, 加法幺半群态射类 F α β
   (无附加公理)
 -/
 class NonUnitalRingHomClass (F : Type*) (α β : outParam Type*) [NonUnitalNonAssocSemiring α]
@@ -116,7 +116,7 @@ definition NonUnitalRingHomClass.toNonUnitalRingHom
   body: { (f : α ->ₙ* β), (f : α ->+ β) with }
 
 中文:
-定义 NonUnitalRingHomClass.toNonUnitalRingHom
+定义 非幺环态射类.toNonUnitalRingHom
   签名: (f : F)
   定义体: { (f : α ->ₙ* β), (f : α ->+ β) with }
 -/
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (α ->ₙ+* β) α β
+  签名: 函数状 (α ->ₙ+* β) α β
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -199,7 +199,7 @@ initialize_simps_projections NonUnitalRingHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: NonUnitalRingHomClass (α ->ₙ+* β) α β
+  签名: 非幺环态射类 (α ->ₙ+* β) α β
   定义体: NonUnitalRingHom.map_add'
   map_zero := NonUnitalRingHom.map_zero'
   map_mul f := f.map_mul'
@@ -406,7 +406,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f : α ->ₙ+* β) (h₁ h₂ h₃)
-  结论: NonUnitalRingHom.mk (MulHom.mk f h₁) h₂ h₃ = f
+  结论: 非幺环态射.mk (乘法半群态射.mk f h₁) h₂ h₃ = f
   证明: ext fun _ => rfl
 -/
 theorem mk_coe (f : α ->ₙ+* β) (h₁ h₂ h₃) : NonUnitalRingHom.mk (MulHom.mk f h₁) h₂ h₃ = f :=
@@ -422,7 +422,7 @@ theorem coe_addMonoidHom_injective
 
 中文:
 定理 coe_addMonoidHom_injective
-  结论: Injective fun f : α ->ₙ+* β => (f : α ->+ β)
+  结论: 单射 fun f : α ->ₙ+* β => (f : α ->+ β)
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -440,7 +440,7 @@ theorem coe_mulHom_injective
 
 中文:
 定理 coe_mulHom_injective
-  结论: Injective fun f : α ->ₙ+* β => (f : α ->ₙ* β)
+  结论: 单射 fun f : α ->ₙ+* β => (f : α ->ₙ* β)
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -467,7 +467,7 @@ definition id
 
 中文:
 定义 id
-  签名: (α : 类型) [NonUnitalNonAssocSemiring α]
+  签名: (α : 类型) [非幺非结合半环 α]
   定义体: x
   map_mul' _ _ := rfl
   map_zero' := rfl
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (α ->ₙ+* β)
+  签名: 零 (α ->ₙ+* β)
   定义体: ⟨{ toFun := 0, map_mul' := fun _ _ => (mul_zero (0 : β)).symm, map_zero' := rfl,
       map_add' := fun _ _ => (add_zero (0 : β)).symm }⟩
 
@@ -512,7 +512,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->ₙ+* β)
+  签名: 可居 (α ->ₙ+* β)
   定义体: ⟨0⟩
 
 @[simp]
@@ -579,7 +579,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : α)
-  结论: NonUnitalRingHom.id α x = x
+  结论: 非幺环态射.id α x = x
   证明: rfl
 
 @[simp]
@@ -600,7 +600,7 @@ theorem coe_addMonoidHom_id
 
 中文:
 定理 coe_addMonoidHom_id
-  结论: (NonUnitalRingHom.id α : α ->+ α) = AddMonoidHom.id α
+  结论: (非幺环态射.id α : α ->+ α) = 加法幺半群态射.id α
   证明: rfl
 
 @[simp]
@@ -619,7 +619,7 @@ theorem coe_mulHom_id
 
 中文:
 定理 coe_mulHom_id
-  结论: (NonUnitalRingHom.id α : α ->ₙ* α) = MulHom.id α
+  结论: (非幺环态射.id α : α ->ₙ* α) = 乘法半群态射.id α
   证明: rfl
 -/
 theorem coe_mulHom_id : (NonUnitalRingHom.id α : α ->ₙ* α) = MulHom.id α :=
@@ -659,7 +659,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {δ} {_ : NonUnitalNonAssocSemiring δ} (f : α ->ₙ+* β) (g : β ->ₙ+* γ)
+  结论: {δ} {_ : 非幺非结合半环 δ} (f : α ->ₙ+* β) (g : β ->ₙ+* γ)
   证明: rfl
 
 @[simp]
@@ -829,7 +829,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->ₙ+* β)
-  结论: f.comp (NonUnitalRingHom.id α) = f
+  结论: f.comp (非幺环态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -850,7 +850,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->ₙ+* β)
-  结论: (NonUnitalRingHom.id β).comp f = f
+  结论: (非幺环态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 Depends on / 依赖: gluedCoverT
@@ -874,7 +874,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero (α ->ₙ+* α)
+  签名: 带零幺半群 (α ->ₙ+* α)
   定义体: NonUnitalRingHom.id α
   mul := comp
   mul_one := comp_id
@@ -906,7 +906,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : α ->ₙ+* α) = NonUnitalRingHom.id α
+  结论: (1 : α ->ₙ+* α) = 非幺环态射.id α
   证明: rfl
 
 @[simp]
@@ -993,7 +993,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->ₙ+* γ} {f : α ->ₙ+* β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->ₙ+* γ} {f : α ->ₙ+* β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 (NonUnitalRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[simp]
@@ -1015,7 +1015,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->ₙ+* γ} {f₁ f₂ : α ->ₙ+* β} (hg : Injective g)
+  条件: {g : β ->ₙ+* γ} {f₁ f₂ : α ->ₙ+* β} (hg : 单射 g)
   证明: ⟨fun h => ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: comp_apply
@@ -1040,8 +1040,8 @@ structure RingHom
   (no additional axioms)
 
 中文:
-结构 RingHom
-  参数: (α : 类型) (β : 类型) [NonAssocSemiring α] [NonAssocSemiring β]
+结构 环态射
+  参数: (α : 类型) (β : 类型) [非结合半环 α] [非结合半环 β]
   (无附加公理)
 -/
 structure RingHom (α : Type*) (β : Type*) [NonAssocSemiring α] [NonAssocSemiring β] extends
@@ -1078,9 +1078,9 @@ class RingHomClass
   (no additional axioms)
 
 中文:
-类 RingHomClass
+类 环态射类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: MonoidHomClass F α β, AddMonoidHomClass F α β, MonoidWithZeroHomClass F α β
+  继承: 幺半群态射类 F α β, 加法幺半群态射类 F α β, 带零幺半群态射类 F α β
   (无附加公理)
 -/
 class RingHomClass (F : Type*) (α β : outParam Type*)
@@ -1104,7 +1104,7 @@ definition RingHomClass.toRingHom
   body: { (f : α ->* β), (f : α ->+ β) with }
 
 中文:
-定义 RingHomClass.toRingHom
+定义 环态射类.toRingHom
   签名: (f : F)
   定义体: { (f : α ->* β), (f : α ->+ β) with }
 -/
@@ -1161,7 +1161,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->+* β) α β where
+  签名: : 函数状 (α ->+* β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -1196,7 +1196,7 @@ initialize_simps_projections RingHom (toFun -> apply)
 
 中文:
 实例 instRingHomClass
-  签名: : RingHomClass (α ->+* β) α β where
+  签名: : 环态射类 (α ->+* β) α β where
   定义体: RingHom.map_add'
   map_zero := RingHom.map_zero'
   map_mul f := f.map_mul'
@@ -1270,7 +1270,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [FunLike F α β] [RingHomClass F α β] (f : F)
+  条件: {F : 类型} [函数状 F α β] [环态射类 F α β] (f : F)
   证明: rfl
 -/
 theorem coe_coe {F : Type*} [FunLike F α β] [RingHomClass F α β] (f : F) :
@@ -1573,7 +1573,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f : α ->+* β) (h₁ h₂ h₃ h₄)
-  结论: RingHom.mk ⟨⟨f, h₁⟩, h₂⟩ h₃ h₄ = f
+  结论: 环态射.mk ⟨⟨f, h₁⟩, h₂⟩ h₃ h₄ = f
   证明: ext fun _ => rfl
 -/
 theorem mk_coe (f : α ->+* β) (h₁ h₂ h₃ h₄) : RingHom.mk ⟨⟨f, h₁⟩, h₂⟩ h₃ h₄ = f :=
@@ -1590,7 +1590,7 @@ ext DFunLike.congr_fun (F := α ->+ β) h
 
 中文:
 定理 coe_addMonoidHom_injective
-  结论: Injective (fun f : α ->+* β => (f : α ->+ β))
+  结论: 单射 (fun f : α ->+* β => (f : α ->+ β))
   证明: fun _ _ h =>
 ext DFunLike.congr_fun (F := α ->+ β) h
 -/
@@ -1607,7 +1607,7 @@ theorem coe_monoidHom_injective
 
 中文:
 定理 coe_monoidHom_injective
-  结论: Injective (fun f : α ->+* β => (f : α ->* β))
+  结论: 单射 (fun f : α ->+* β => (f : α ->* β))
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -1738,7 +1738,7 @@ include f in
 
 中文:
 定理 map_one_ne_zero
-  条件: [Nontrivial β]
+  条件: [非平凡 β]
   结论: f 1 != 0
   证明: mt f.codomain_trivial_iff_map_one_eq_zero.mpr zero_ne_one
 
@@ -1761,8 +1761,8 @@ theorem domain_nontrivial
 
 中文:
 定理 domain_nontrivial
-  条件: [Nontrivial β]
-  结论: Nontrivial α
+  条件: [非平凡 β]
+  结论: 非平凡 α
   证明: ⟨⟨1, 0, mt (fun h => show f 1 = 0 by rw [h, map_zero]) f.map_one_ne_zero⟩⟩
 
 Depends on / 依赖: f.map_one_ne_zero, map_one_ne_zero, map_zero
@@ -1782,8 +1782,8 @@ theorem codomain_trivial
 
 中文:
 定理 codomain_trivial
-  条件: (f : α ->+* β) [h : Subsingleton α]
-  结论: Subsingleton β
+  条件: (f : α ->+* β) [h : 子单例 α]
+  结论: 子单例 β
   证明: (subsingleton_or_nontrivial β).resolve_right fun _ =>
     not_nontrivial_iff_subsingleton.mpr h f.domain_nontrivial
 
@@ -1806,7 +1806,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  条件: [NonAssocRing α] [NonAssocRing β] (f : α ->+* β) (x : α)
+  条件: [非结合环 α] [非结合环 β] (f : α ->+* β) (x : α)
   结论: f (-x) = -f x
   证明: map_neg f x
 
@@ -1825,7 +1825,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  条件: [NonAssocRing α] [NonAssocRing β] (f : α ->+* β) (x y : α)
+  条件: [非结合环 α] [非结合环 β] (f : α ->+* β) (x y : α)
   证明: map_sub f x y
 -/
 protected theorem map_sub [NonAssocRing α] [NonAssocRing β] (f : α ->+* β) (x y : α) :
@@ -1842,7 +1842,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: [NonAssocSemiring α] [NonAssocRing β] (f : α ->* β)
+  签名: [非结合半环 α] [非结合环 β] (f : α ->* β)
   定义体: { AddMonoidHom.mk' f map_add, f with }
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, map_add
@@ -1869,7 +1869,7 @@ definition id
 
 中文:
 定义 id
-  签名: (α : 类型) [NonAssocSemiring α]
+  签名: (α : 类型) [非结合半环 α]
   定义体: x
   map_zero' := rfl
   map_one' := rfl
@@ -1895,7 +1895,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->+* α)
+  签名: 可居 (α ->+* α)
   定义体: ⟨id α⟩
 
 @[simp, norm_cast]
@@ -1916,7 +1916,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(RingHom.id α) = _root_.id
+  结论: ⇑(环态射.id α) = _root_.id
   证明: rfl
 
 @[simp]
@@ -1938,7 +1938,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : α)
-  结论: RingHom.id α x = x
+  结论: 环态射.id α x = x
   证明: rfl
 
 @[simp]
@@ -1959,7 +1959,7 @@ theorem coe_addMonoidHom_id
 
 中文:
 定理 coe_addMonoidHom_id
-  结论: (id α : α ->+ α) = AddMonoidHom.id α
+  结论: (id α : α ->+ α) = 加法幺半群态射.id α
   证明: rfl
 
 @[simp]
@@ -1978,7 +1978,7 @@ theorem coe_monoidHom_id
 
 中文:
 定理 coe_monoidHom_id
-  结论: (id α : α ->* α) = MonoidHom.id α
+  结论: (id α : α ->* α) = 幺半群态射.id α
   证明: rfl
 -/
 theorem coe_monoidHom_id : (id α : α ->* α) = MonoidHom.id α :=
@@ -2018,7 +2018,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: {δ} {_ : NonAssocSemiring δ} (f : α ->+* β) (g : β ->+* γ) (h : γ ->+* δ)
+  条件: {δ} {_ : 非结合半环 δ} (f : α ->+* β) (g : β ->+* γ) (h : γ ->+* δ)
   证明: rfl
 
 @[simp]
@@ -2123,7 +2123,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (α ->+* α) where one
+  签名: : 幺 (α ->+* α) where one
   定义体: id _
 -/
 instance instOne : One (α ->+* α) where one := id _
@@ -2137,7 +2137,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (α ->+* α) where mul
+  签名: : 乘法 (α ->+* α) where mul
   定义体: comp
 -/
 instance instMul : Mul (α ->+* α) where mul := comp
@@ -2222,7 +2222,7 @@ npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 
 中文:
 实例 instMonoid
-  签名: : Monoid (α ->+* α) where
+  签名: : 幺半群 (α ->+* α) where
   定义体: comp_id
   one_mul := id_comp
   mul_assoc _ _ _ := comp_assoc _ _ _
@@ -2272,7 +2272,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->+* γ} {f : α ->+* β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->+* γ} {f : α ->+* β} (hf : 满射 f)
   证明: ⟨fun h => RingHom.ext hf.forall.2 (RingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[simp]
@@ -2294,7 +2294,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->+* γ} {f₁ f₂ : α ->+* β} (hg : Injective g)
+  条件: {g : β ->+* γ} {f₁ f₂ : α ->+* β} (hg : 单射 g)
   证明: ⟨fun h => RingHom.ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: RingHom, RingHom.ext, comp_apply
@@ -2318,7 +2318,7 @@ lemma RingHom.map_pow
   proof: map_pow f a
 
 中文:
-引理 RingHom.map_pow
+引理 环态射.map_pow
   条件: (f : α ->+* β) (a)
   结论: 对任意 n : 自然数, f (a ^ n) = f a ^ n
   证明: map_pow f a

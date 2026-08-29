@@ -43,12 +43,12 @@ structure FiniteGaloisIntermediateField
     - [isGalois : IsGalois k toIntermediateField]
 
 中文:
-结构 FiniteGaloisIntermediateField
-  参数: extends 整数ermediateField k K
-  继承: IntermediateField k K
+结构 有限Galois中间域
+  参数: extends 中间域 k K
+  继承: 中间域 k K
   公理与运算 (2 个):
-    - [finiteDimensional : FiniteDimensional k to整数ermediateField]
-    - [isGalois : IsGalois k to整数ermediateField]
+    - [finiteDimensional : 有限维 k to整数ermediateField]
+    - [isGalois : 是Galois k to整数ermediateField]
 -/
 structure FiniteGaloisIntermediateField extends IntermediateField k K where
   [finiteDimensional : FiniteDimensional k toIntermediateField]
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (FiniteGalois整数ermediateField k K) (整数ermediateField k K)
+  签名: Coe (有限Galois中间域 k K) (中间域 k K)
   定义体: toIntermediateField
 
 Depends on / 依赖: toIntermediateField
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (FiniteGalois整数ermediateField k K) (Type _)
+  签名: CoeSort (有限Galois中间域 k K) (类型 _)
   定义体: L.toIntermediateField
 
 Depends on / 依赖: L.toIntermediateField, toIntermediateField
@@ -111,7 +111,7 @@ lemma val_injective
 
 中文:
 引理 val_injective
-  结论: Function.Injective (to整数ermediateField (k := k) (K := K))
+  结论: 函数.单射 (to整数ermediateField (k := k) (K := K))
   证明: by
   rintro ⟨⟩ ⟨⟩ eq
   simpa only [mk.injEq] using eq
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (FiniteGalois整数ermediateField k K)
+  签名: 最大值 (有限Galois中间域 k K)
   定义体: .mk L₁ ⊔ L₂
 -/
 instance : Max (FiniteGaloisIntermediateField k K) where
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (FiniteGalois整数ermediateField k K)
+  签名: 最小值 (有限Galois中间域 k K)
   定义体: .mk L₁ ⊓ L₂
 -/
 instance : Min (FiniteGaloisIntermediateField k K) where
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (FiniteGalois整数ermediateField k K)
+  签名: 偏序 (有限Galois中间域 k K)
   定义体: PartialOrder.lift _ val_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, val_injective
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (FiniteGalois整数ermediateField k K)
+  签名: 格 (有限Galois中间域 k K)
   定义体: val_injective.lattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: lattice, val_injective, val_injective.lattice
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (FiniteGalois整数ermediateField k K)
+  签名: 有底序 (有限Galois中间域 k K)
   定义体: .mk ⊥
   bot_le _ := bot_le (α := IntermediateField _ _)
 
@@ -249,7 +249,7 @@ lemma le_iff
 
 中文:
 引理 le_iff
-  条件: (L₁ L₂ : FiniteGalois整数ermediateField k K)
+  条件: (L₁ L₂ : 有限Galois中间域 k K)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -275,7 +275,7 @@ IntermediateField.finiteDimensional_adjoin fun z _ =>
 
 中文:
 定义 adjoin
-  签名: [IsGalois k K] (s : Set K) [Finite s]
+  签名: [是Galois k K] (s : 集合 K) [有限 s]
   定义体: {
   normalClosure k (IntermediateField.adjoin k (s : Set K)) K with
   finiteDimensional :=
@@ -305,7 +305,7 @@ lemma adjoin_val
 
 中文:
 引理 adjoin_val
-  条件: [IsGalois k K] (s : Set K) [Finite s]
+  条件: [是Galois k K] (s : 集合 K) [有限 s]
   证明: rfl
 -/
 lemma adjoin_val [IsGalois k K] (s : Set K) [Finite s] :
@@ -324,7 +324,7 @@ lemma subset_adjoin
 
 中文:
 引理 subset_adjoin
-  条件: [IsGalois k K] (s : Set K) [Finite s]
+  条件: [是Galois k K] (s : 集合 K) [有限 s]
   证明: (IntermediateField.subset_adjoin k s).trans (IntermediateField.le_normalClosure _)
 
 Depends on / 依赖: IntermediateField, IntermediateField.le_normalClosure, IntermediateField.subset_adjoin, le_normalClosure, subset_adjoin
@@ -347,7 +347,7 @@ theorem adjoin_simple_le_iff
 
 中文:
 定理 adjoin_simple_le_iff
-  条件: [IsGalois k K] {x : K} {L : FiniteGalois整数ermediateField k K}
+  条件: [是Galois k K] {x : K} {L : 有限Galois中间域 k K}
   证明: by
   simp only [le_iff, adjoin_val, IntermediateField.normalClosure_le_iff_of_normal,
     IntermediateField.adjoin_le_iff, Set.singleton_subset_iff, SetLike.mem_coe]
@@ -376,7 +376,7 @@ theorem adjoin_map
 
 中文:
 定理 adjoin_map
-  条件: [IsGalois k K] (f : K ->ₐ[k] K) (s : Set K) [Finite s]
+  条件: [是Galois k K] (f : K ->ₐ[k] K) (s : 集合 K) [有限 s]
   证明: by
   apply val_injective; dsimp [adjoin_val]
   rw [← IntermediateField.adjoin_map]; rw [IntermediateField.normalClosure_map_eq]
@@ -404,7 +404,7 @@ theorem adjoin_simple_map_algHom
 
 中文:
 定理 adjoin_simple_map_algHom
-  条件: [IsGalois k K] (f : K ->ₐ[k] K) (x : K)
+  条件: [是Galois k K] (f : K ->ₐ[k] K) (x : K)
   证明: by
   simpa only [Set.image_singleton] using adjoin_map f { x }
 
@@ -432,7 +432,7 @@ nonrec lemma mem_fixingSubgroup_iff (α : Gal(K/k)) (L : FiniteGaloisIntermediat
 
 中文:
 定理 adjoin_simple_map_algEquiv
-  条件: [IsGalois k K] (f : Gal(K/k)) (x : K)
+  条件: [是Galois k K] (f : Gal(K/k)) (x : K)
   证明: adjoin_simple_map_algHom (f : K ->ₐ[k] K) x
 
 nonrec lemma mem_fixingSubgroup_iff (α : Gal(K/k)) (L : FiniteGaloisIntermediateField k K) :

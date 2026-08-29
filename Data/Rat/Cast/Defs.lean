@@ -47,7 +47,7 @@ lemma cast_natCast
 中文:
 引理 cast_natCast
   条件: (n : 自然数)
-  结论: ((n : Rat>=0) : α) = n
+  结论: ((n : 有理数>=0) : α) = n
   证明: by simp [cast_def]
 -/
 @[simp, norm_cast] lemma cast_natCast (n : Nat) : ((n : Rat>=0) : α) = n := by simp [cast_def]
@@ -61,7 +61,7 @@ lemma cast_ofNat
   proof: cast_natCast _
 
 中文:
-引理 cast_ofNat
+引理 cast_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: cast_natCast _
 -/
@@ -78,7 +78,7 @@ lemma cast_zero
 
 中文:
 引理 cast_zero
-  结论: ((0 : Rat>=0) : α) = 0
+  结论: ((0 : 有理数>=0) : α) = 0
   证明: (cast_natCast _).trans Nat.cast_zero
 -/
 @[simp, norm_cast] lemma cast_zero : ((0 : Rat>=0) : α) = 0 := (cast_natCast _).trans Nat.cast_zero
@@ -92,7 +92,7 @@ lemma cast_one
 
 中文:
 引理 cast_one
-  结论: ((1 : Rat>=0) : α) = 1
+  结论: ((1 : 有理数>=0) : α) = 1
   证明: (cast_natCast _).trans Nat.cast_one
 -/
 @[simp, norm_cast] lemma cast_one : ((1 : Rat>=0) : α) = 1 := (cast_natCast _).trans Nat.cast_one
@@ -109,7 +109,7 @@ lemma cast_commute
 
 中文:
 引理 cast_commute
-  条件: (q : Rat>=0) (a : α)
+  条件: (q : 有理数>=0) (a : α)
   结论: Commute (↑q) a
   证明: by
   simpa only [cast_def] using (q.num.cast_commute a).div_left (q.den.cast_commute a)
@@ -130,7 +130,7 @@ lemma commute_cast
 
 中文:
 引理 commute_cast
-  条件: (a : α) (q : Rat>=0)
+  条件: (a : α) (q : 有理数>=0)
   结论: Commute a q
   证明: (cast_commute ..).symm
 
@@ -149,7 +149,7 @@ lemma cast_comm
 
 中文:
 引理 cast_comm
-  条件: (q : Rat>=0) (a : α)
+  条件: (q : 有理数>=0) (a : α)
   结论: q * a = a * q
   证明: cast_commute _ _
 
@@ -174,7 +174,7 @@ lemma cast_divNat_of_ne_zero
     obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Ra
 
 中文:
-引理 cast_divNat_of_ne_zero
+引理 cast_div自然数_of_ne_zero
   条件: (a : 自然数) {b : 自然数} (hb : (b : α) != 0)
   证明: by
   rcases e : divNat a b with ⟨⟨n, d, h, c⟩, hn⟩
@@ -296,7 +296,7 @@ lemma cast_inv_of_ne_zero
 中文:
 引理 cast_inv_of_ne_zero
   条件: (hq : (q.num : α) != 0)
-  结论: (q⁻¹ : Rat>=0) = (q⁻¹ : α)
+  结论: (q⁻¹ : 有理数>=0) = (q⁻¹ : α)
   证明: by
   rw [inv_def]; rw [cast_divNat_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]
 
@@ -362,7 +362,7 @@ theorem cast_intCast
 中文:
 定理 cast_intCast
   条件: (n : 整数)
-  结论: ((n : Rat) : α) = n
+  结论: ((n : 有理数) : α) = n
   证明: (cast_def _).trans show (n / (1 : Nat) : α) = n by rw [Nat.cast_one, div_one]
 
 @[simp, norm_cast]
@@ -386,7 +386,7 @@ theorem cast_natCast
 中文:
 定理 cast_natCast
   条件: (n : 自然数)
-  结论: ((n : Rat) : α) = n
+  结论: ((n : 有理数) : α) = n
   证明: by
   rw [← Int.cast_natCast]; rw [cast_intCast]; rw [Int.cast_natCast]
 
@@ -408,7 +408,7 @@ lemma cast_ofNat
 @[simp, norm_cast]
 
 中文:
-引理 cast_ofNat
+引理 cast_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: by
   simp [cast_def]
@@ -432,7 +432,7 @@ theorem cast_zero
 
 中文:
 定理 cast_zero
-  结论: ((0 : Rat) : α) = 0
+  结论: ((0 : 有理数) : α) = 0
   证明: (cast_intCast _).trans Int.cast_zero
 
 @[simp, norm_cast]
@@ -453,7 +453,7 @@ theorem cast_one
 
 中文:
 定理 cast_one
-  结论: ((1 : Rat) : α) = 1
+  结论: ((1 : 有理数) : α) = 1
   证明: (cast_intCast _).trans Int.cast_one
 
 Depends on / 依赖: Int.cast_one, cast_intCast, cast_one
@@ -473,7 +473,7 @@ theorem cast_commute
 
 中文:
 定理 cast_commute
-  条件: (r : Rat) (a : α)
+  条件: (r : 有理数) (a : α)
   结论: Commute (↑r) a
   证明: by
   simpa only [cast_def] using (r.1.cast_commute a).div_left (r.2.cast_commute a)
@@ -494,7 +494,7 @@ theorem cast_comm
 
 中文:
 定理 cast_comm
-  条件: (r : Rat) (a : α)
+  条件: (r : 有理数) (a : α)
   结论: (r : α) * a = a * r
   证明: (cast_commute r a).eq
 
@@ -516,7 +516,7 @@ theorem commute_cast
 
 中文:
 定理 commute_cast
-  条件: (a : α) (r : Rat)
+  条件: (a : α) (r : 有理数)
   结论: Commute a r
   证明: (r.cast_commute a).symm
 
@@ -547,7 +547,7 @@ lemma cast_divInt_of_ne_zero
     have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast
 
 中文:
-引理 cast_divInt_of_ne_zero
+引理 cast_div整数_of_ne_zero
   条件: (a : 整数) {b : 整数} (b0 : (b : α) != 0)
   结论: (a /. b : α) = a / b
   证明: by
@@ -624,7 +624,7 @@ lemma cast_add_of_ne_zero
 
 中文:
 引理 cast_add_of_ne_zero
-  条件: {q r : Rat} (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
+  条件: {q r : 有理数} (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
   证明: by
   rw [add_def']; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm r.num]; rw [(Nat.cast_commute _ _).div_add_div (Nat.commute_cast _ _) hq hr]
   · push_cast
@@ -653,7 +653,7 @@ lemma cast_neg
 
 中文:
 引理 cast_neg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ↑(-q) = (-q : α)
   证明: by simp [cast_def, neg_div]
 -/
@@ -783,7 +783,7 @@ lemma map_nnratCast
 
 中文:
 引理 map_nnratCast
-  结论: [DivisionSemiring α] [DivisionSemiring β] [RingHomClass F α β] (f : F)
+  结论: [除半环 α] [除半环 β] [环态射类 F α β] (f : F)
   证明: by simp_rw [NNRat.cast_def, map_div₀, map_natCast]
 
 @[simp]
@@ -804,7 +804,7 @@ lemma eq_nnratCast
 
 中文:
 引理 eq_nnratCast
-  条件: [DivisionSemiring α] [FunLike F Rat>=0 α] [RingHomClass F Rat>=0 α] (f : F) (q : Rat>=0)
+  条件: [除半环 α] [函数状 F 有理数>=0 α] [环态射类 F 有理数>=0 α] (f : F) (q : 有理数>=0)
   证明: by rw [← map_nnratCast f, NNRat.cast_id]
 
 @[simp]
@@ -825,7 +825,7 @@ theorem map_ratCast
 
 中文:
 定理 map_ratCast
-  条件: [DivisionRing α] [DivisionRing β] [RingHomClass F α β] (f : F) (q : Rat)
+  条件: [除环 α] [除环 β] [环态射类 F α β] (f : F) (q : 有理数)
   证明: by rw [cast_def, map_div₀, map_intCast, map_natCast, cast_def]
 
 Depends on / 依赖: cast_def, map_intCast, map_natCast
@@ -843,7 +843,7 @@ lemma eq_ratCast
 
 中文:
 引理 eq_ratCast
-  条件: [DivisionRing α] [FunLike F Rat α] [RingHomClass F Rat α] (f : F) (q : Rat)
+  条件: [除环 α] [函数状 F 有理数 α] [环态射类 F 有理数 α] (f : F) (q : 有理数)
   证明: by rw [← map_ratCast f, Rat.cast_id]
 -/
 @[simp] lemma eq_ratCast [DivisionRing α] [FunLike F Rat α] [RingHomClass F Rat α] (f : F) (q : Rat) :
@@ -896,7 +896,7 @@ lemma ext_nnrat
 
 中文:
 引理 ext_nnrat
-  结论: {f g : Rat>=0 ->*₀ M₀} (h : f.comp (.ofClass (自然数.castRingHom Rat>=0)) =
+  结论: {f g : 有理数>=0 ->*₀ M₀} (h : f.comp (.ofClass (自然数.castRingHom 有理数>=0)) =
   证明: ext_nnrat' DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, ext_nnrat
@@ -976,7 +976,7 @@ theorem ext_rat
 
 中文:
 定理 ext_rat
-  结论: {f g : Rat ->*₀ M₀}
+  结论: {f g : 有理数 ->*₀ M₀}
   证明: ext_rat' DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, ext_rat
@@ -1033,8 +1033,8 @@ RingHom.congr_fun
       ((f : Rat ->+* R).comp (Int.castRingHom Rat)).ext_int ((g : Rat ->+* R).comp (Int.castRingHom Rat))
 
 中文:
-定理 RingHom.ext_rat
-  条件: {R : 类型} [Semiring R] [FunLike F Rat R] [RingHomClass F Rat R] (f g : F)
+定理 环态射.ext_rat
+  条件: {R : 类型} [半环 R] [函数状 F 有理数 R] [环态射类 F 有理数 R] (f g : F)
   证明: MonoidWithZeroHomClass.ext_rat'
 RingHom.congr_fun
       ((f : Rat ->+* R).comp (Int.castRingHom Rat)).ext_int ((g : Rat ->+* R).comp (Int.castRingHom Rat))
@@ -1057,7 +1057,7 @@ instance NNRat.subsingleton_ringHom
 
 中文:
 实例 NNRat.subsingleton_ringHom
-  签名: {R : 类型} [Semiring R]
+  签名: {R : 类型} [半环 R]
   定义体: MonoidWithZeroHomClass.ext_nnrat' by simp
 
 Depends on / 依赖: MonoidWithZeroHomClass, MonoidWithZeroHomClass.ext_nnrat, ext_nnrat
@@ -1074,8 +1074,8 @@ instance Rat.subsingleton_ringHom
   body: ⟨RingHom.ext_rat⟩
 
 中文:
-实例 Rat.subsingleton_ringHom
-  签名: {R : 类型} [Semiring R]
+实例 有理数.subsingleton_ringHom
+  签名: {R : 类型} [半环 R]
   定义体: ⟨RingHom.ext_rat⟩
 
 Depends on / 依赖: RingHom, RingHom.ext_rat, ext_rat

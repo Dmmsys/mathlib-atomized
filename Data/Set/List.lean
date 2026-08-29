@@ -80,7 +80,7 @@ theorem range_list_map_coe
 
 中文:
 定理 range_list_map_coe
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: range (map ((↑) : s -> α)) = { l | 对任意 x in l, x in s }
   证明: by
   rw [range_list_map]; rw [Subtype.range_coe]
@@ -203,7 +203,7 @@ theorem range_list_getI
 
 中文:
 定理 range_list_getI
-  条件: [Inhabited α] (l : List α)
+  条件: [可居 α] (l : 列表 α)
   证明: by
   unfold List.getI
   simp
@@ -228,7 +228,7 @@ instance List.canLift
     exact fun a ha => CanLift.prf a (H a ha)
 
 中文:
-实例 List.canLift
+实例 列表.canLift
   签名: (c) (p) [CanLift α β c p]
   定义体: by
     rw [← Set.mem_range]; rw [Set.range_list_map]

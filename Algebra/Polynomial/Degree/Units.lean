@@ -44,7 +44,7 @@ lemma natDegree_eq_zero_of_isUnit
 
 中文:
 引理 natDegree_eq_zero_of_isUnit
-  条件: (h : IsUnit p)
+  条件: (h : 是单位 p)
   结论: natDegree p = 0
   证明: by
   nontriviality R
@@ -76,7 +76,7 @@ lemma degree_eq_zero_of_isUnit
 
 中文:
 引理 degree_eq_zero_of_isUnit
-  条件: [Nontrivial R] (h : IsUnit p)
+  条件: [非平凡 R] (h : 是单位 p)
   结论: degree p = 0
   证明: (natDegree_eq_zero_iff_degree_le_zero.mp <| natDegree_eq_zero_of_isUnit h).antisymm
     (zero_le_degree_iff.mpr h.ne_zero)
@@ -101,7 +101,7 @@ lemma degree_coe_units
 
 中文:
 引理 degree_coe_units
-  条件: [Nontrivial R] (u : R[X]ˣ)
+  条件: [非平凡 R] (u : R[X]ˣ)
   结论: degree (u : R[X]) = 0
   证明: degree_eq_zero_of_isUnit ⟨u, rfl⟩
 
@@ -124,7 +124,7 @@ lemma isUnit_iff
 
 中文:
 引理 isUnit_iff
-  结论: IsUnit p ↔ 存在 r : R, IsUnit r ∧ C r = p
+  结论: 是单位 p ↔ 存在 r : R, 是单位 r ∧ C r = p
   证明: ⟨fun hp =>
     ⟨p.coeff 0,
       let h := eq_C_of_natDegree_eq_zero (natDegree_eq_zero_of_isUnit hp)
@@ -156,7 +156,7 @@ lemma not_isUnit_of_degree_pos
 中文:
 引理 not_isUnit_of_degree_pos
   条件: (p : R[X]) (hpl : 0 < p.degree)
-  结论: ¬ IsUnit p
+  结论: ¬ 是单位 p
   证明: by
   cases subsingleton_or_nontrivial R
   · simp [Subsingleton.elim p 0] at hpl
@@ -183,7 +183,7 @@ lemma not_isUnit_of_natDegree_pos
 中文:
 引理 not_isUnit_of_natDegree_pos
   条件: (p : R[X]) (hpl : 0 < p.natDegree)
-  结论: ¬ IsUnit p
+  结论: ¬ 是单位 p
   证明: not_isUnit_of_degree_pos _ (natDegree_pos_iff_degree_pos.mp hpl)
 
 Depends on / 依赖: natDegree_pos_iff_degree_pos, natDegree_pos_iff_degree_pos.mp, not_isUnit_of_degree_pos
@@ -228,7 +228,7 @@ theorem coeff_coe_units_zero_ne_zero
 
 中文:
 定理 coeff_coe_units_zero_ne_zero
-  条件: [Nontrivial R] (u : R[X]ˣ)
+  条件: [非平凡 R] (u : R[X]ˣ)
   结论: coeff (u : R[X]) 0 != 0
   证明: by
   conv in 0 => rw [← natDegree_coe_units u]
@@ -261,7 +261,7 @@ lemma Monic.C_dvd_iff_isUnit
 中文:
 引理 Monic.C_dvd_iff_isUnit
   条件: {a : R}
-  结论: C a ∣ p ↔ IsUnit a where
+  结论: C a ∣ p ↔ 是单位 a where
   证明: isUnit_iff_dvd_one.mpr hp.coeff_natDegree ▸ (C_dvd_iff_dvd_coeff _ _).mp h p.natDegree
   mpr ha := (ha.map C).dvd
 
@@ -282,7 +282,7 @@ lemma Monic.degree_pos_of_not_isUnit
 
 中文:
 引理 Monic.degree_pos_of_not_isUnit
-  条件: (hu : ¬IsUnit p)
+  条件: (hu : ¬是单位 p)
   结论: 0 < degree p
   证明: hp.degree_pos.mpr fun hp' => (hp' ▸ hu) isUnit_one
 
@@ -302,7 +302,7 @@ lemma Monic.natDegree_pos_of_not_isUnit
 
 中文:
 引理 Monic.natDegree_pos_of_not_isUnit
-  条件: (hu : ¬IsUnit p)
+  条件: (hu : ¬是单位 p)
   结论: 0 < natDegree p
   证明: hp.natDegree_pos.mpr fun hp' => (hp' ▸ hu) isUnit_one
 
@@ -325,7 +325,7 @@ lemma degree_pos_of_not_isUnit_of_dvd_monic
 
 中文:
 引理 degree_pos_of_not_isUnit_of_dvd_monic
-  条件: (ha : ¬IsUnit a) (hap : a ∣ p)
+  条件: (ha : ¬是单位 a) (hap : a ∣ p)
   结论: 0 < degree a
   证明: by
   contrapose! ha with h
@@ -350,7 +350,7 @@ lemma natDegree_pos_of_not_isUnit_of_dvd_monic
 
 中文:
 引理 natDegree_pos_of_not_isUnit_of_dvd_monic
-  条件: (ha : ¬IsUnit a) (hap : a ∣ p)
+  条件: (ha : ¬是单位 a) (hap : a ∣ p)
   结论: 0 < natDegree a
   证明: natDegree_pos_iff_degree_pos.mpr degree_pos_of_not_isUnit_of_dvd_monic hp ha hap
 

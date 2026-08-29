@@ -61,7 +61,7 @@ abbreviation CotangentSpace
 
 中文:
 缩写 CotangentSpace
-  签名: : Type _
+  签名: : 类型 _
   定义体: S otimes[P.Ring] Ω[P.Ring⁄R]
 
 Depends on / 依赖: P.Ring, otimes
@@ -82,7 +82,7 @@ definition cotangentComplex
 
 中文:
 定义 cotangentComplex
-  签名: : P.Cotangent ->ₗ[S] P.CotangentSpace
+  签名: : P.余切 ->ₗ[S] P.CotangentSpace
   定义体: letI f : P.Cotangent ≃ₗ[P.Ring] P.ker.Cotangent :=
     { __ := AddEquiv.refl _, map_smul' := Cotangent.val_smul' }
   (kerCotangentToTensor R P.Ring S ∘ₗ f).extendScalarsOfSurjective P.algebraMap_surjective
@@ -126,8 +126,8 @@ lemma Cotangent.mk_C_mem_ker_cotangentComplex
   simp [this]
 
 中文:
-引理 Cotangent.mk_C_mem_ker_cotangentComplex
-  结论: {σ : 类型} (G : Generators R S σ)
+引理 余切.mk_C_mem_ker_cotangentComplex
+  结论: {σ : 类型} (G : 生成元 R S σ)
   证明: by
   have : D R G.toExtension.Ring (C r) = 0 := Derivation.map_algebraMap ..
   simp [this]
@@ -289,7 +289,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Hom P P')
+  签名: (f : 态射 P P')
   定义体: by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
   haveI : IsScalarTower P.Ring S S' := IsScalarTower.of_algebraMap_eq' rfl
@@ -323,7 +323,7 @@ lemma map_tmul
 
 中文:
 引理 map_tmul
-  条件: (f : Hom P P') (x y)
+  条件: (f : 态射 P P') (x y)
   证明: by
   simp only [CotangentSpace.map, AlgHom.toRingHom_eq_coe, LinearMap.liftBaseChange_tmul,
     LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply, map_D, mk_apply]
@@ -352,7 +352,7 @@ lemma map_tmul_eq_tmul_map
 
 中文:
 引理 map_tmul_eq_tmul_map
-  条件: (f : P.Hom P') (x : S) (y : Ω[P.Ring⁄R])
+  条件: (f : P.态射 P') (x : S) (y : Ω[P.环⁄R])
   证明: f.toAlgHom.toAlgebra
     (CotangentSpace.map f) (x otimesₜ[P.Ring] y) =
       (algebraMap S S') x otimesₜ[P'.Ring] KaehlerDifferential.map _ _ _ _ y := by
@@ -399,7 +399,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: (f : Hom P P') (g : Hom P' P'')
+  条件: (f : 态射 P P') (g : 态射 P' P'')
   证明: by
   ext x
   induction x using TensorProduct.induction_on with
@@ -442,7 +442,7 @@ lemma map_comp_apply
 
 中文:
 引理 map_comp_apply
-  条件: (f : Hom P P') (g : Hom P' P'') (x)
+  条件: (f : 态射 P P') (g : 态射 P' P'') (x)
   证明: DFunLike.congr_fun (map_comp f g) x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp
@@ -463,7 +463,7 @@ lemma map_cotangentComplex
 
 中文:
 引理 map_cotangentComplex
-  条件: (f : Hom P P') (x)
+  条件: (f : 态射 P P') (x)
   证明: by
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
   rw [cotangentComplex_mk]; rw [map_tmul]; rw [map_one]; rw [Cotangent.map_mk]; rw [cotangentComplex_mk]
@@ -486,7 +486,7 @@ lemma map_comp_cotangentComplex
 
 中文:
 引理 map_comp_cotangentComplex
-  条件: (f : Hom P P')
+  条件: (f : 态射 P P')
   证明: by
   ext x; exact map_cotangentComplex f x
 
@@ -513,8 +513,8 @@ lemma Hom.sub_aux
   let := ((algebraMap
 
 中文:
-引理 Hom.sub_aux
-  条件: (f g : Hom P P') (x y)
+引理 态射.sub_aux
+  条件: (f g : 态射 P P') (x y)
   证明: ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
     f.toAlgHom (x * y) - g.toAlgHom (x * y) -
         (P'.σ ((algebraMap P.Ring S') x) * (f.toAlgHom y - g.toAlgHom y) +
@@ -565,8 +565,8 @@ definition Hom.subToKer
     sub_self, toAlgHom_apply]
 
 中文:
-定义 Hom.subToKer
-  签名: (f g : Hom P P')
+定义 态射.subToKer
+  签名: (f g : 态射 P P')
   定义体: by
   refine ((f.toAlgHom.toLinearMap - g.toAlgHom.toLinearMap).codRestrict
     (P'.ker.restrictScalars R) ?_)
@@ -601,8 +601,8 @@ definition Hom.sub
   h
 
 中文:
-定义 Hom.sub
-  签名: (f g : Hom P P')
+定义 态射.sub
+  签名: (f g : 态射 P P')
   定义体: by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
   haveI : IsScalarTower P.Ring S S' := IsScalarTower.of_algebraMap_eq' rfl
@@ -651,8 +651,8 @@ lemma Hom.sub_one_tmul
 @[simp]
 
 中文:
-引理 Hom.sub_one_tmul
-  条件: (f g : Hom P P') (x)
+引理 态射.sub_one_tmul
+  条件: (f g : 态射 P P') (x)
   证明: by
   simp only [sub, LinearMap.liftBaseChange_tmul, Derivation.liftKaehlerDifferential_comp_D,
     Derivation.mk_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply,
@@ -680,8 +680,8 @@ lemma Hom.sub_tmul
     Derivation.mk_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply]
 
 中文:
-引理 Hom.sub_tmul
-  条件: (f g : Hom P P') (r x)
+引理 态射.sub_tmul
+  条件: (f g : 态射 P P') (r x)
   证明: by
   simp only [sub, LinearMap.liftBaseChange_tmul, Derivation.liftKaehlerDifferential_comp_D,
     Derivation.mk_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply]
@@ -711,7 +711,7 @@ lemma CotangentSpace.map_sub_map
 
 中文:
 引理 CotangentSpace.map_sub_map
-  条件: (f g : Hom P P')
+  条件: (f g : 态射 P P')
   证明: by
   ext x
   induction x using TensorProduct.induction_on with
@@ -761,8 +761,8 @@ lemma Cotangent.map_sub_map
   simp only [val_sub, val_mk, map_sub, AddSubgroupClass.co
 
 中文:
-引理 Cotangent.map_sub_map
-  条件: (f g : Hom P P')
+引理 余切.map_sub_map
+  条件: (f g : 态射 P P')
   证明: by
   ext x
   obtain ⟨x, rfl⟩ := mk_surjective x
@@ -814,7 +814,7 @@ lemma toKaehler_surjective
 
 中文:
 引理 toKaehler_surjective
-  结论: Function.Surjective P.toKaehler
+  结论: 函数.满射 P.toKaehler
   证明: mapBaseChange_surjective _ _ _ P.algebraMap_surjective
 
 Depends on / 依赖: P.algebraMap_surjective, algebraMap_surjective, mapBaseChange_surjective
@@ -832,7 +832,7 @@ lemma exact_cotangentComplex_toKaehler
 
 中文:
 引理 exact_cotangentComplex_toKaehler
-  结论: Function.Exact P.cotangentComplex P.toKaehler
+  结论: 函数.正合 P.cotangentComplex P.toKaehler
   证明: exact_kerCotangentToTensor_mapBaseChange _ _ _ P.algebraMap_surjective
 
 Depends on / 依赖: P.algebraMap_surjective, algebraMap_surjective, exact_kerCotangentToTensor_mapBaseChange
@@ -851,7 +851,7 @@ definition H1Cotangent
 
 中文:
 定义 H1Cotangent
-  签名: : Type _
+  签名: : 类型 _
   定义体: LinearMap.ker P.cotangentComplex
 -/
 protected def H1Cotangent : Type _ := LinearMap.ker P.cotangentComplex
@@ -901,7 +901,7 @@ lemma H1Cotangent.val_smul
 
 中文:
 引理 H1Cotangent.val_smul
-  结论: {R₀} [CommRing R₀] [Algebra R₀ S] [Module R₀ P.Cotangent]
+  结论: {R₀} [交换环 R₀] [代数 R₀ S] [模 R₀ P.余切]
   证明: rfl
 -/
 @[simp] lemma H1Cotangent.val_smul {R₀} [CommRing R₀] [Algebra R₀ S] [Module R₀ P.Cotangent]
@@ -928,7 +928,7 @@ lemma subsingleton_h1Cotangent
 
 中文:
 引理 subsingleton_h1Cotangent
-  条件: (P : Extension R S)
+  条件: (P : 扩张 R S)
   证明: by
   delta Extension.H1Cotangent
   rw [← LinearMap.ker_eq_bot]; rw [Submodule.eq_bot_iff]; rw [subsingleton_iff_forall_eq 0]; rw [Subtype.forall']
@@ -952,7 +952,7 @@ definition h1Cotangentι
 
 中文:
 定义 h1Cotangentι
-  签名: : P.H1Cotangent ->ₗ[S] P.Cotangent
+  签名: : P.H1Cotangent ->ₗ[S] P.余切
   定义体: Submodule.subtype _
 -/
 @[simps!] noncomputable def h1Cotangentι : P.H1Cotangent ->ₗ[S] P.Cotangent := Submodule.subtype _
@@ -967,7 +967,7 @@ lemma h1Cotangentι_injective
 
 中文:
 引理 h1Cotangentι_injective
-  结论: Function.Injective P.h1Cotangentι
+  结论: 函数.单射 P.h1Cotangentι
   证明: Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
@@ -1003,7 +1003,7 @@ lemma exact_hCotangentι_cotangentComplex
 
 中文:
 引理 exact_hCotangentι_cotangentComplex
-  结论: Function.Exact h1Cotangentι P.cotangentComplex
+  结论: 函数.正合 h1Cotangentι P.cotangentComplex
   证明: by
   rw [LinearMap.exact_iff]
   exact (Submodule.range_subtype _).symm
@@ -1033,7 +1033,7 @@ definition H1Cotangent.map
 
 中文:
 定义 H1Cotangent.map
-  签名: (f : Hom P P')
+  签名: (f : 态射 P P')
   定义体: by
   refine (Cotangent.map f).restrict (p := LinearMap.ker P.cotangentComplex)
     (q := (LinearMap.ker P'.cotangentComplex).restrictScalars S) fun x hx => ?_
@@ -1069,7 +1069,7 @@ lemma H1Cotangent.map_eq
 
 中文:
 引理 H1Cotangent.map_eq
-  条件: (f g : Hom P P')
+  条件: (f g : 态射 P P')
   结论: map f = map g
   证明: by
   ext x
@@ -1098,7 +1098,7 @@ lemma H1Cotangent.map_id
 
 中文:
 引理 H1Cotangent.map_id
-  结论: map (.id P) = LinearMap.id
+  结论: map (.id P) = 线性映射.id
   证明: by ext; simp
 -/
 @[simp] lemma H1Cotangent.map_id : map (.id P) = LinearMap.id := by ext; simp
@@ -1143,7 +1143,7 @@ lemma H1Cotangent.map_comp_apply
 
 中文:
 引理 H1Cotangent.map_comp_apply
-  条件: (f : Hom P P') (g : Hom P' P'') (x : P.H1Cotangent)
+  条件: (f : 态射 P P') (g : 态射 P' P'') (x : P.H1Cotangent)
   证明: congr($(H1Cotangent.map_comp f g) x)
 
 Depends on / 依赖: H1Cotangent, H1Cotangent.map_comp, map_comp
@@ -1171,7 +1171,7 @@ definition H1Cotangent.equiv
 
 中文:
 定义 H1Cotangent.equiv
-  签名: {P₁ P₂ : Extension R S} (f₁ : P₁.Hom P₂) (f₂ : P₂.Hom P₁)
+  签名: {P₁ P₂ : 扩张 R S} (f₁ : P₁.态射 P₂) (f₂ : P₂.态射 P₁)
   定义体: map f₁
   invFun := map f₂
   left_inv x :=
@@ -1201,8 +1201,8 @@ lemma Cotangent.map_comp_h1Cotangentι
   proof: rfl
 
 中文:
-引理 Cotangent.map_comp_h1Cotangentι
-  条件: (f : P.Hom P')
+引理 余切.map_comp_h1Cotangentι
+  条件: (f : P.态射 P')
   证明: rfl
 -/
 lemma Cotangent.map_comp_h1Cotangentι (f : P.Hom P') :
@@ -1225,7 +1225,7 @@ definition cotangentSpaceBasis
 
 中文:
 定义 cotangentSpaceBasis
-  签名: : Basis ι S P.toExtension.CotangentSpace
+  签名: : 基 ι S P.toExtension.CotangentSpace
   定义体: (mvPolynomialBasis _ _).baseChange (R := P.Ring) _
 
 Depends on / 依赖: P.Ring, baseChange, mvPolynomialBasis
@@ -1317,7 +1317,7 @@ definition cotangentRestrict
 
 中文:
 定义 cotangentRestrict
-  签名: {σ : 类型} {u : σ -> ι} (hu : Function.Injective u)
+  签名: {σ : 类型} {u : σ -> ι} (hu : 函数.单射 u)
   定义体: Finsupp.lcomapDomain u hu ∘ₗ P.cotangentSpaceBasis.repr.toLinearMap ∘ₗ
     P.toExtension.cotangentComplex
 
@@ -1346,7 +1346,7 @@ universe w' u' v'
 
 中文:
 引理 cotangentRestrict_mk
-  条件: {σ : 类型} {u : σ -> ι} (hu : Function.Injective u) (x : P.ker)
+  条件: {σ : 类型} {u : σ -> ι} (hu : 函数.单射 u) (x : P.ker)
   证明: by
   ext j
   simp only [cotangentRestrict, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
@@ -1403,7 +1403,7 @@ lemma repr_CotangentSpaceMap
 
 中文:
 引理 repr_CotangentSpaceMap
-  条件: (f : Hom P P') (i j)
+  条件: (f : 态射 P P') (i j)
   证明: by
   rw [cotangentSpaceBasis_apply]
   simp only [toExtension]
@@ -1492,8 +1492,8 @@ instance [Algebra.FinitePresentation
   rw [LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKae
 
 中文:
-实例 [Algebra.FinitePresentation
-  签名: R S] : Module.FinitePresentation S Ω[S⁄R]
+实例 [代数.有限呈现
+  签名: R S] : 模.有限呈现 S Ω[S⁄R]
   定义体: by
   let P := Algebra.Presentation.ofFinitePresentation R S
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance
@@ -1524,8 +1524,8 @@ definition Generators.H1Cotangent.equiv
     (Generators.defaultHom P P').toExtensionHom (Generators.defaultHom P' P).toExtensionHom
 
 中文:
-定义 Generators.H1Cotangent.equiv
-  签名: (P : Generators R S ι) (P' : Generators R S ι')
+定义 生成元.H1Cotangent.equiv
+  签名: (P : 生成元 R S ι) (P' : 生成元 R S ι')
   定义体: Extension.H1Cotangent.equiv
     (Generators.defaultHom P P').toExtensionHom (Generators.defaultHom P' P).toExtensionHom
 
@@ -1552,7 +1552,7 @@ abbreviation H1Cotangent
 
 中文:
 缩写 H1Cotangent
-  签名: : Type _
+  签名: : 类型 _
   定义体: (Generators.self R S).toExtension.H1Cotangent
 
 Depends on / 依赖: Generators, Generators.self, H1Cotangent, toExtension, toExtension.H1Cotangent
@@ -1627,8 +1627,8 @@ abbreviation Generators.equivH1Cotangent
   body: Generators.H1Cotangent.equiv _ _
 
 中文:
-缩写 Generators.equivH1Cotangent
-  签名: (P : Generators R S ι)
+缩写 生成元.equivH1Cotangent
+  签名: (P : 生成元 R S ι)
   定义体: Generators.H1Cotangent.equiv _ _
 
 Depends on / 依赖: Generators, Generators.H1Cotangent.equiv, H1Cotangent
@@ -1656,8 +1656,8 @@ instance [FinitePresentation
   rw [Module.finite_de
 
 中文:
-实例 [FinitePresentation
-  签名: R S] [Module.Projective S Ω[S⁄R]] :
+实例 [有限呈现
+  签名: R S] [模.投射 S Ω[S⁄R]] :
   定义体: by
   let P := Algebra.Presentation.ofFinitePresentation R S
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance

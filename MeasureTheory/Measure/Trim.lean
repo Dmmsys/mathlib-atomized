@@ -44,8 +44,8 @@ definition Measure.trim
 @[simp]
 
 中文:
-定义 Measure.trim
-  签名: {m m0 : MeasurableSpace α} (μ : @Measure α m0) (hm : m <= m0)
+定义 测度.trim
+  签名: {m m0 : 可测空间 α} (μ : @测度 α m0) (hm : m <= m0)
   定义体: @OuterMeasure.toMeasure α m μ.toOuterMeasure (hm.trans (le_toOuterMeasure_caratheodory μ))
 
 @[simp]
@@ -68,7 +68,7 @@ theorem trim_eq_self
 
 中文:
 定理 trim_eq_self
-  条件: [MeasurableSpace α] {μ : Measure α}
+  条件: [可测空间 α] {μ : 测度 α}
   结论: μ.trim le_rfl = μ
   证明: by
   simp [Measure.trim]
@@ -93,7 +93,7 @@ theorem toOuterMeasure_trim_eq_trim_toOuterMeasure
 
 中文:
 定理 toOuterMeasure_trim_eq_trim_toOuterMeasure
-  条件: (μ : Measure α) (hm : m <= m0)
+  条件: (μ : 测度 α) (hm : m <= m0)
   证明: by
   rw [Measure.trim]; rw [toMeasure_toOuterMeasure (ms := m)]
 
@@ -119,7 +119,7 @@ theorem zero_trim
 中文:
 定理 zero_trim
   条件: (hm : m <= m0)
-  结论: (0 : Measure α).trim hm = (0 : @Measure α m)
+  结论: (0 : 测度 α).trim hm = (0 : @测度 α m)
   证明: by
   simp [Measure.trim, @OuterMeasure.toMeasure_zero _ m]
 
@@ -140,7 +140,7 @@ theorem trim_measurableSet_eq
 
 中文:
 定理 trim_measurableSet_eq
-  条件: (hm : m <= m0) (hs : @MeasurableSet α m s)
+  条件: (hm : m <= m0) (hs : @可测集 α m s)
   结论: μ.trim hm s = μ s
   证明: by
   rw [Measure.trim]; rw [toMeasure_apply (ms := m) _ _ hs]; rw [Measure.coe_toOuterMeasure]
@@ -189,7 +189,7 @@ lemma trim_eq_map
 中文:
 引理 trim_eq_map
   条件: (hm : m <= m0)
-  结论: μ.trim hm = @Measure.map _ _ _ m id μ
+  结论: μ.trim hm = @测度.map _ _ _ m id μ
   证明: by
   refine @Measure.ext α m _ _ (fun s hs => ?_)
   rw [Measure.map_apply (measurable_id'' hm) hs]; rw [trim_measurableSet_eq hm hs]; rw [Set.preimage_id]
@@ -214,7 +214,7 @@ lemma map_trim_comap
 
 中文:
 引理 map_trim_comap
-  条件: {f : α -> β} (hf : Measurable f)
+  条件: {f : α -> β} (hf : 可测 f)
   证明: by
   ext s hs
   rw [Measure.map_apply hf hs]; rw [Measure.map_apply _ hs]; rw [trim_measurableSet_eq]
@@ -241,7 +241,7 @@ lemma trim_comap_apply
 
 中文:
 引理 trim_comap_apply
-  条件: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
+  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [← map_trim_comap hf]; rw [Measure.map_apply (Measurable.of_comap_le le_rfl) hs]
 
@@ -262,7 +262,7 @@ lemma ae_map_iff_ae_trim
 
 中文:
 引理 ae_map_iff_ae_trim
-  结论: {f : α -> β} (hf : Measurable f)
+  结论: {f : α -> β} (hf : 可测 f)
   证明: by
   rw [← map_trim_comap hf]; rw [ae_map_iff (Measurable.of_comap_le le_rfl).aemeasurable hp]
 
@@ -284,7 +284,7 @@ lemma trim_add
 
 中文:
 引理 trim_add
-  条件: {ν : Measure α} (hm : m <= m0)
+  条件: {ν : 测度 α} (hm : m <= m0)
   结论: (μ + ν).trim hm = μ.trim hm + ν.trim hm
   证明: @Measure.ext _ m _ _ (fun s hs => by simp [trim_measurableSet_eq hm hs])
 
@@ -344,7 +344,7 @@ theorem ae_of_ae_trim
 
 中文:
 定理 ae_of_ae_trim
-  条件: (hm : m <= m0) {μ : Measure α} {P : α -> 命题} (h : 对任意ᵐ x ∂μ.trim hm, P x)
+  条件: (hm : m <= m0) {μ : 测度 α} {P : α -> 命题} (h : 对任意ᵐ x ∂μ.trim hm, P x)
   证明: measure_eq_zero_of_trim_eq_zero hm h
 
 Depends on / 依赖: measure_eq_zero_of_trim_eq_zero
@@ -403,7 +403,7 @@ theorem trim_trim
 
 中文:
 定理 trim_trim
-  条件: {m₁ m₂ : MeasurableSpace α} {hm₁₂ : m₁ <= m₂} {hm₂ : m₂ <= m0}
+  条件: {m₁ m₂ : 可测空间 α} {hm₁₂ : m₁ <= m₂} {hm₂ : m₂ <= m0}
   证明: by
   refine @Measure.ext _ m₁ _ _ (fun t ht => ?_)
   rw [trim_measurableSet_eq hm₁₂ ht]; rw [trim_measurableSet_eq (hm₁₂.trans hm₂) ht]; rw [trim_measurableSet_eq hm₂ (hm₁₂ t ht)]
@@ -427,7 +427,7 @@ theorem restrict_trim
 
 中文:
 定理 restrict_trim
-  条件: (hm : m <= m0) (μ : Measure α) (hs : @MeasurableSet α m s)
+  条件: (hm : m <= m0) (μ : 测度 α) (hs : @可测集 α m s)
   证明: by
   refine @Measure.ext _ m _ _ (fun t ht => ?_)
   rw [@Measure.restrict_apply α m _ _ _ ht]; rw [trim_measurableSet_eq hm ht]; rw [Measure.restrict_apply (hm t ht)]; rw [trim_measurableSet_eq hm (@MeasurableSet.inter α m t s ht hs)]
@@ -449,7 +449,7 @@ theorem measure_spanningSets_trim_lt_top
 
 中文:
 定理 measure_spanningSets_trim_lt_top
-  结论: (hm : m <= m0) (μ : Measure α) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m0) (μ : 测度 α) [σ有限 (μ.trim hm)]
   证明: (le_trim hm).trans_lt (measure_spanningSets_lt_top (μ.trim hm) n)
 
 Depends on / 依赖: le_trim, measure_spanningSets_lt_top, trans_lt
@@ -475,7 +475,7 @@ instance isFiniteMeasure_trim
 
 中文:
 实例 isFiniteMeasure_trim
-  签名: (hm : m <= m0) [IsFiniteMeasure μ]
+  签名: (hm : m <= m0) [是有限测度 μ]
   定义体: by
     rw [trim_measurableSet_eq hm (@MeasurableSet.univ _ m)]
     exact measure_lt_top _ _
@@ -503,7 +503,7 @@ theorem sigmaFiniteTrim_mono
 
 中文:
 定理 sigmaFiniteTrim_mono
-  结论: {m m₂ m0 : MeasurableSpace α} {μ : Measure α} (hm : m <= m0)
+  结论: {m m₂ m0 : 可测空间 α} {μ : 测度 α} (hm : m <= m0)
   证明: by
   have : SigmaFinite ((μ.trim hm).trim hm₂) := by simpa [trim_trim]
   exact ⟨⟨
@@ -534,8 +534,8 @@ lemma SigmaFinite.of_trim
   exact sigmaFiniteTrim_mono le_rfl hm
 
 中文:
-引理 SigmaFinite.of_trim
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α} (hm : m <= m0)
+引理 σ有限.of_trim
+  结论: {m m0 : 可测空间 α} {μ : 测度 α} (hm : m <= m0)
   证明: by
   rw [← trim_eq_self (μ := μ)]
   exact sigmaFiniteTrim_mono le_rfl hm
@@ -561,7 +561,7 @@ theorem sigmaFinite_trim_bot_iff
 
 中文:
 定理 sigmaFinite_trim_bot_iff
-  结论: SigmaFinite (μ.trim bot_le) ↔ IsFiniteMeasure μ
+  结论: σ有限 (μ.trim bot_le) ↔ 是有限测度 μ
   证明: by
   rw [sigmaFinite_bot_iff]
   refine ⟨fun h => ⟨?_⟩, fun h => ⟨?_⟩⟩ <;> have h_univ := h.measure_univ_lt_top
@@ -588,8 +588,8 @@ lemma Measure.AbsolutelyContinuous.trim
   exact hμν hsν
 
 中文:
-引理 Measure.AbsolutelyContinuous.trim
-  条件: {ν : Measure α} (hμν : μ ≪ ν) (hm : m <= m0)
+引理 测度.AbsolutelyContinuous.trim
+  条件: {ν : 测度 α} (hμν : μ ≪ ν) (hm : m <= m0)
   证明: by
   refine Measure.AbsolutelyContinuous.mk (fun s hs hsν => ?_)
   rw [trim_measurableSet_eq hm hs] at hsν ⊢
@@ -615,7 +615,7 @@ theorem _root_.ae_eq_trim_of_measurable
 
 中文:
 定理 _root_.ae_eq_trim_of_measurable
-  结论: {α β} {m m0 : MeasurableSpace α} {μ : Measure α}
+  结论: {α β} {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   rwa [Filter.EventuallyEq, ae_iff, trim_measurableSet_eq hm _]
   measurability

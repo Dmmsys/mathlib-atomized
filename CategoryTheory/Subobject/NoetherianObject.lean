@@ -54,7 +54,7 @@ definition isNoetherianObject
 
 中文:
 定义 isNoetherianObject
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => WellFoundedGT (Subobject X)
 
 Depends on / 依赖: Subobject, WellFoundedGT
@@ -271,7 +271,7 @@ lemma isNoetherianObject_of_isZero
 
 中文:
 引理 isNoetherianObject_of_isZero
-  条件: (hX : IsZero X)
+  条件: (hX : 是零 X)
   结论: IsNoetherianObject X
   证明: by
   rw [isNoetherianObject_iff_monotone_chain_condition]
@@ -298,8 +298,8 @@ instance [HasZeroObject
     exact isNoetherianObject_of_isZero (isZero_zero C)⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : (isNoetherianObject (C := C)).ContainsZero where
+实例 [有ZeroObject
+  签名: C] : (isNoetherianObject (C := C)).余ntainsZero where
   定义体: ⟨0, isZero_zero _, by
     rw [← isNoetherianObject.is_iff]
     exact isNoetherianObject_of_isZero (isZero_zero C)⟩
@@ -326,7 +326,7 @@ lemma isNoetherianObject_of_mono
 
 中文:
 引理 isNoetherianObject_of_mono
-  条件: (i : X ⟶ Y) [Mono i] [IsNoetherianObject Y]
+  条件: (i : X ⟶ Y) [单态射 i] [IsNoetherianObject Y]
   证明: by
   rw [isNoetherianObject_iff_monotone_chain_condition]
   intro f
@@ -356,7 +356,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isNoetherianObject (C := C)).IsClosedUnderSubobjects
+  签名: (isNoetherianObject (C := C)).是ClosedUnderSubobjects
   定义体: by
     rw [← isNoetherianObject.is_iff] at hY ⊢
     exact isNoetherianObject_of_mono f

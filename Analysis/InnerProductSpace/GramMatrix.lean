@@ -48,7 +48,7 @@ definition gram
 
 中文:
 定义 gram
-  签名: (𝕜 : 类型) [Inner 𝕜 E] (v : n -> E)
+  签名: (𝕜 : 类型) [内积 𝕜 E] (v : n -> E)
   定义体: of fun i j => ⟪v i, v j⟫_𝕜
 
 @[simp]
@@ -66,7 +66,7 @@ lemma gram_apply
 
 中文:
 引理 gram_apply
-  条件: [Inner 𝕜 E] (v : n -> E) (i j : n)
+  条件: [内积 𝕜 E] (v : n -> E) (i j : n)
   证明: rfl
 -/
 lemma gram_apply [Inner 𝕜 E] (v : n -> E) (i j : n) :
@@ -146,7 +146,7 @@ lemma submatrix_gram
 
 中文:
 引理 submatrix_gram
-  条件: (v : n -> E) {m : Set n} (f : m -> n)
+  条件: (v : n -> E) {m : 集合 n} (f : m -> n)
   证明: rfl
 -/
 lemma submatrix_gram (v : n -> E) {m : Set n} (f : m -> n) :
@@ -187,7 +187,7 @@ theorem star_dotProduct_gram_mulVec
 
 中文:
 定理 star_dotProduct_gram_mulVec
-  条件: [Fintype n] (v : n -> E) (x y : n -> 𝕜)
+  条件: [有限类型 n] (v : n -> E) (x y : n -> 𝕜)
   证明: by
   trans ∑ i, ∑ j, conj (x i) * y j * ⟪v i, v j⟫_𝕜
   · simp_rw [dotProduct, mul_assoc, ← Finset.mul_sum, mulVec, dotProduct, mul_comm, ← star_def,
@@ -284,7 +284,7 @@ theorem linearIndependent_of_det_gram_ne_zero
 
 中文:
 定理 linearIndependent_of_det_gram_ne_zero
-  结论: [Fintype n] [DecidableEq n] {v : n -> E}
+  结论: [有限类型 n] [DecidableEq n] {v : n -> E}
   证明: linearIndependent_of_posDef_gram (posSemidef_gram 𝕜 v).posDef_iff_det_ne_zero.mpr h
 
 Depends on / 依赖: linearIndependent_of_posDef_gram, posDef_iff_det_ne_zero, posDef_iff_det_ne_zero.mpr, posSemidef_gram
@@ -369,7 +369,7 @@ omit [Finite n] in
 
 中文:
 定理 det_gram_ne_zero_iff_linearIndependent
-  条件: [Fintype n] [DecidableEq n] {v : n -> E}
+  条件: [有限类型 n] [DecidableEq n] {v : n -> E}
   证明: by
   rw [← posDef_gram_iff_linearIndependent]; rw [(posSemidef_gram 𝕜 v).posDef_iff_det_ne_zero]
 
@@ -398,7 +398,7 @@ omit [Finite n] in
 
 中文:
 定理 gram_eq_conjTranspose_mul
-  条件: {ι : 类型} [Fintype ι] (b : OrthonormalBasis ι 𝕜 E) (v : n -> E)
+  条件: {ι : 类型} [有限类型 ι] (b : 正交标准基 ι 𝕜 E) (v : n -> E)
   证明: of fun i j => b.repr (v j) i
     gram 𝕜 v = mᴴ * m := by
   ext i j
@@ -460,7 +460,7 @@ theorem posSemidef_opNorm_smul_gram_sub_gram
 
 中文:
 定理 posSemidef_opNorm_smul_gram_sub_gram
-  结论: {F} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  结论: {F} [赋范交换加群 F] [内积空间 𝕜 F]
   证明: by
   refine ⟨(isHermitian_gram 𝕜 v).smul (((Pi.isSelfAdjoint.mpr (congrFun rfl)).apply f).pow 2)
 .sub (isHermitian_gram 𝕜 (f ∘ v)), fun c => ?_⟩

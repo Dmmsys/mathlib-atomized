@@ -98,7 +98,7 @@ lemma bot_apply
 中文:
 引理 bot_apply
   条件: (f : Y ⟶ X)
-  结论: (⊥ : Presieve X) f ↔ False
+  结论: (⊥ : Presieve X) f ↔ 假
   证明: .rfl
 -/
 lemma bot_apply (f : Y ⟶ X) : (⊥ : Presieve X) f ↔ False :=
@@ -385,7 +385,7 @@ class HasPullbacks
     - hasPullback((f) {Z : C} {h : Z ⟶ X}) : R h -> Limits.HasPullback h f
 
 中文:
-类 HasPullbacks
+类 有Pullbacks
   参数: (R : Presieve X) {Y : C} (f : Y ⟶ X)
   公理与运算 (1 个):
     - hasPullback((f) {Z : C} {h : Z ⟶ X}) : R h -> Limits.HasPullback h f
@@ -404,7 +404,7 @@ instance [HasPullbacks
   body: inferInstance
 
 中文:
-实例 [HasPullbacks
+实例 [有Pullbacks
   签名: C] (R
   定义体: inferInstance
 -/
@@ -427,7 +427,7 @@ inductive pullbackArrows
 
 中文:
 归纳类型 pullbackArrows
-  参数: (R : Presieve X) [R.HasPullbacks f]
+  参数: (R : Presieve X) [R.有Pullbacks f]
   构造子 (1 个):
     - mk: (Z : C) (h : Z ⟶ X) (hRh : R h) : haveI := R.hasPullback f hRh pullbackArrows _ (pullback.snd h f)
 
@@ -651,7 +651,7 @@ lemma exists_eq_ofArrows
   exact le_antisymm (fun Z g hg => .mk (⟨⟨_, _⟩, hg⟩ : ι)) fun Z g ⟨x⟩ => x.2
 
 中文:
-引理 exists_eq_ofArrows
+引理 存在_eq_ofArrows
   条件: (R : Presieve X)
   证明: by
   let ι := { x : Σ Z, (Z ⟶ X) // R x.2 }
@@ -867,7 +867,7 @@ lemma ofArrows_of_unique
 
 中文:
 引理 ofArrows_of_unique
-  条件: {X : C} {ι : 类型} [Unique ι] {Y : ι -> C} (f : 对任意 i, Y i ⟶ X)
+  条件: {X : C} {ι : 类型} [唯一 ι] {Y : ι -> C} (f : 对任意 i, Y i ⟶ X)
   证明: by
   refine le_antisymm ?_ fun Y _ ⟨⟩ => ⟨default⟩
   rw [ofArrows_le_iff]
@@ -898,7 +898,7 @@ theorem ofArrows_pUnit
 
 中文:
 定理 ofArrows_pUnit
-  结论: (ofArrows _ fun _ : PUnit.{w + 1} => f) = singleton f
+  结论: (ofArrows _ fun _ : 命题单元.{w + 1} => f) = singleton f
   证明: by
   rw [ofArrows_of_unique]
 
@@ -922,7 +922,7 @@ lemma ofArrows_of_isEmpty
 
 中文:
 引理 ofArrows_of_isEmpty
-  条件: {X : C} {ι : 类型} [IsEmpty ι] {Y : ι -> C} (f : 对任意 i, Y i ⟶ X)
+  条件: {X : C} {ι : 类型} [是空 ι] {Y : ι -> C} (f : 对任意 i, Y i ⟶ X)
   证明: by
   rw [eq_bot_iff]; rw [ofArrows_le_iff]
   simp
@@ -1165,7 +1165,7 @@ lemma monotone_pushforward
 
 中文:
 引理 monotone_pushforward
-  结论: Monotone (pushforward f)
+  结论: 递增 (pushforward f)
   证明: (galoisConnection_pushforward_pullback f).monotone_l
 
 Depends on / 依赖: galoisConnection_pushforward_pullback, monotone_l
@@ -1183,7 +1183,7 @@ lemma monotone_pullback
 
 中文:
 引理 monotone_pullback
-  结论: Monotone (pullback f)
+  结论: 递增 (pullback f)
   证明: (galoisConnection_pushforward_pullback f).monotone_u
 
 Depends on / 依赖: galoisConnection_pushforward_pullback, monotone_u
@@ -1409,7 +1409,7 @@ class HasPairwisePullbacks
     - has_pullbacks : forall {Y Z} {f : Y ⟶ X} (_ : R f) {g : Z ⟶ X} (_ : R g), HasPullback f g
 
 中文:
-类 HasPairwisePullbacks
+类 有PairwisePullbacks
   参数: (R : Presieve X)
   公理与运算 (1 个):
     - has_pullbacks : 对任意 {Y Z} {f : Y ⟶ X} (_ : R f) {g : Z ⟶ X} (_ : R g), HasPullback f g
@@ -1878,7 +1878,7 @@ lemma map_monotone
 
 中文:
 引理 map_monotone
-  结论: Monotone (map (X := X) F)
+  结论: 递增 (map (X := X) F)
   证明: (galoisConnection_map_functorPullback _ _).monotone_l
 
 @[gcongr]
@@ -1901,7 +1901,7 @@ lemma functorPullback_monotone
 中文:
 引理 functorPullback_monotone
   条件: {X : C}
-  结论: Monotone (Presieve.functorPullback (X := X) F)
+  结论: 递增 (Presieve.functorPullback (X := X) F)
   证明: (galoisConnection_map_functorPullback F X).monotone_u
 
 @[simp]
@@ -1946,7 +1946,7 @@ definition uncurry
 
 中文:
 定义 uncurry
-  签名: : Set (Σ Y, Y ⟶ X)
+  签名: : 集合 (Σ Y, Y ⟶ X)
   定义体: { u | s u.snd }
 
 Depends on / 依赖: u.snd
@@ -2003,7 +2003,7 @@ theorem uncurry_pullbackArrows
 
 中文:
 定理 uncurry_pullbackArrows
-  条件: [HasPullbacks C] {B : C} (b : B ⟶ X)
+  条件: [有Pullbacks C] {B : C} (b : B ⟶ X)
   证明: by
   ext ⟨Z, v⟩; constructor
   · rintro ⟨Y, u, hu⟩; exact ⟨⟨Y, u⟩, hu, rfl⟩
@@ -2130,8 +2130,8 @@ structure Sieve
     - downward_closed : forall {Y Z f} (_ : arrows f) (g : Z ⟶ Y), arrows (g ≫ f)
 
 中文:
-结构 Sieve
-  参数: {C : 类型u₁} [Category.{v₁} C] (X : C)
+结构 筛
+  参数: {C : 类型u₁} [范畴.{v₁} C] (X : C)
   公理与运算 (2 个):
     - arrows : Presieve X
     - downward_closed : 对任意 {Y Z f} (_ : arrows f) (g : Z ⟶ Y), arrows (g ≫ f)
@@ -2156,7 +2156,7 @@ initialize_simps_projections Sieve (arrows -> apply)
 
 中文:
 实例 :
-  签名: CoeFun (Sieve X) fun _ => Presieve X
+  签名: CoeFun (筛 X) fun _ => Presieve X
   定义体: ⟨Sieve.arrows⟩
 
 initialize_simps_projections Sieve (arrows -> apply)
@@ -2186,7 +2186,7 @@ theorem arrows_ext
 
 中文:
 定理 arrows_ext
-  结论: 对任意 {R S : Sieve X}, R.arrows = S.arrows -> R = S
+  结论: 对任意 {R S : 筛 X}, R.arrows = S.arrows -> R = S
   证明: by
   rintro ⟨_, _⟩ ⟨_, _⟩ rfl
   rfl
@@ -2209,7 +2209,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {R S : Sieve X} (h : 对任意 ⦃Y⦄ (f : Y ⟶ X), R f ↔ S f)
+  条件: {R S : 筛 X} (h : 对任意 ⦃Y⦄ (f : Y ⟶ X), R f ↔ S f)
   结论: R = S
   证明: arrows_ext funext fun _ => funext fun f => propext h f
 -/
@@ -2230,8 +2230,8 @@ definition sup
     exact ⟨S, hS, S.downward_closed hf _⟩
 
 中文:
-定义 sup
-  签名: (𝒮 : Set (Sieve X))
+定义 上确界
+  签名: (𝒮 : 集合 (筛 X))
   定义体: exists S in 𝒮, Sieve.arrows S f
   downward_closed {_ _ f} hf _ := by
     obtain ⟨S, hS, hf⟩ := hf
@@ -2253,8 +2253,8 @@ definition inf
   downward_closed {_ _ _} hf g S H := S.downward_closed (hf S H) g
 
 中文:
-定义 inf
-  签名: (𝒮 : Set (Sieve X))
+定义 下确界
+  签名: (𝒮 : 集合 (筛 X))
   定义体: forall S in 𝒮, Sieve.arrows S f
   downward_closed {_ _ _} hf g S H := S.downward_closed (hf S H) g
 -/
@@ -2273,7 +2273,7 @@ definition union
 
 中文:
 定义 union
-  签名: (S R : Sieve X)
+  签名: (S R : 筛 X)
   定义体: S f ∨ R f
   downward_closed := by rintro _ _ _ (h | h) g <;> simp [h]
 -/
@@ -2294,7 +2294,7 @@ definition inter
 
 中文:
 定义 inter
-  签名: (S R : Sieve X)
+  签名: (S R : 筛 X)
   定义体: S f ∧ R f
   downward_closed := by
     rintro _ _ _ ⟨h₁, h₂⟩ g
@@ -2326,7 +2326,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Sieve X)
+  签名: 完备格 (筛 X)
   定义体: forall ⦃Y⦄ (f : Y ⟶ X), S f -> R f
   le_refl _ _ _ := id
   le_trans _ _ _ S₁₂ S₂₃ _ _ h := S₂₃ _ (S₁₂ _ h)
@@ -2380,7 +2380,7 @@ instance sieveInhabited
 
 中文:
 实例 sieveInhabited
-  签名: : Inhabited (Sieve X)
+  签名: : 可居 (筛 X)
   定义体: ⟨⊤⟩
 
 @[simp]
@@ -2401,7 +2401,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: {Ss : Set (Sieve X)} {Y} (f : Y ⟶ X)
+  条件: {Ss : 集合 (筛 X)} {Y} (f : Y ⟶ X)
   证明: Iff.rfl
 
 @[simp]
@@ -2426,7 +2426,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: {Ss : Set (Sieve X)} {Y} (f : Y ⟶ X)
+  条件: {Ss : 集合 (筛 X)} {Y} (f : Y ⟶ X)
   证明: by
   simp [sSup, Sieve.sup]
 
@@ -2452,7 +2452,7 @@ theorem inter_apply
 
 中文:
 定理 inter_apply
-  条件: {R S : Sieve X} {Y} (f : Y ⟶ X)
+  条件: {R S : 筛 X} {Y} (f : Y ⟶ X)
   结论: (R ⊓ S) f ↔ R f ∧ S f
   证明: Iff.rfl
 
@@ -2475,7 +2475,7 @@ theorem union_apply
 
 中文:
 定理 union_apply
-  条件: {R S : Sieve X} {Y} (f : Y ⟶ X)
+  条件: {R S : 筛 X} {Y} (f : Y ⟶ X)
   结论: (R ⊔ S) f ↔ R f ∨ S f
   证明: Iff.rfl
 
@@ -2498,7 +2498,7 @@ theorem top_apply
 中文:
 定理 top_apply
   条件: (f : Y ⟶ X)
-  结论: (⊤ : Sieve X) f
+  结论: (⊤ : 筛 X) f
   证明: trivial
 
 @[simp]
@@ -2521,7 +2521,7 @@ theorem bot_apply
 中文:
 定理 bot_apply
   条件: (f : Y ⟶ X)
-  结论: (⊥ : Sieve X) f ↔ False
+  结论: (⊥ : 筛 X) f ↔ 假
   证明: .rfl
 
 @[simp]
@@ -2540,7 +2540,7 @@ lemma arrows_top
 
 中文:
 引理 arrows_top
-  结论: (⊤ : Sieve X).arrows = ⊤
+  结论: (⊤ : 筛 X).arrows = ⊤
   证明: rfl
 -/
 lemma arrows_top : (⊤ : Sieve X).arrows = ⊤ := rfl
@@ -2558,7 +2558,7 @@ lemma arrows_eq_top_iff
 
 中文:
 引理 arrows_eq_top_iff
-  条件: {S : Sieve X}
+  条件: {S : 筛 X}
   结论: S.arrows = ⊤ ↔ S = ⊤
   证明: ⟨fun h => arrows_ext (h ▸ arrows_top), fun h => h ▸ arrows_top⟩
 
@@ -2580,7 +2580,7 @@ lemma arrows_bot
 
 中文:
 引理 arrows_bot
-  结论: (⊥ : Sieve X).arrows = ⊥
+  结论: (⊥ : 筛 X).arrows = ⊥
   证明: rfl
 -/
 lemma arrows_bot : (⊥ : Sieve X).arrows = ⊥ := rfl
@@ -2596,7 +2596,7 @@ lemma arrows_eq_bot_iff
 
 中文:
 引理 arrows_eq_bot_iff
-  条件: {S : Sieve X}
+  条件: {S : 筛 X}
   结论: S.arrows = ⊥ ↔ S = ⊥
   证明: ⟨fun h => arrows_ext (h ▸ arrows_bot), fun h => h ▸ arrows_bot⟩
 
@@ -2615,7 +2615,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (Sieve X)
+  签名: 非平凡 (筛 X)
   定义体: ⟨⊤, ⊥, fun h => by simp [← bot_apply (𝟙 X), ← h]⟩
 
 Depends on / 依赖: bot_apply
@@ -2694,7 +2694,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (S : Presieve X) (R : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> Sieve Y)
+  签名: (S : Presieve X) (R : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> 筛 Y)
   定义体: S.bind fun _ _ h => R h
   downward_closed := by
     rintro Y Z f ⟨W, f, h, hh, hf, rfl⟩ g
@@ -2718,7 +2718,7 @@ abbreviation BindStruct
 
 中文:
 缩写 BindStruct
-  签名: (S : Presieve X) (R : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> Sieve Y)
+  签名: (S : Presieve X) (R : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> 筛 Y)
   定义体: Presieve.BindStruct S (fun _ _ hf => R hf) h
 
 Depends on / 依赖: BindStruct, Presieve, Presieve.BindStruct
@@ -2742,7 +2742,7 @@ theorem generate_le_iff
 
 中文:
 定理 generate_le_iff
-  条件: (R : Presieve X) (S : Sieve X)
+  条件: (R : Presieve X) (S : 筛 X)
   结论: generate R <= S ↔ R <= S
   证明: ⟨fun H _ _ hg => H _ ⟨_, 𝟙 _, _, hg, id_comp _⟩, fun ss Y f => by
     rintro ⟨Z, f, g, hg, rfl⟩
@@ -2768,7 +2768,7 @@ definition giGenerate
 
 中文:
 定义 giGenerate
-  签名: : GaloisInsertion (generate : Presieve X -> Sieve X) arrows where
+  签名: : Galois嵌入 (generate : Presieve X -> 筛 X) arrows where
   定义体: generate_le_iff
   choice 𝒢 _ := generate 𝒢
   choice_eq _ _ := rfl
@@ -2820,7 +2820,7 @@ theorem generate_sieve
 
 中文:
 定理 generate_sieve
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   结论: generate S = S
   证明: giGenerate.l_u_eq S
 
@@ -2844,7 +2844,7 @@ theorem generate_mono
 
 中文:
 定理 generate_mono
-  结论: Monotone (generate : Presieve X -> Sieve X)
+  结论: 递增 (generate : Presieve X -> 筛 X)
   证明: giGenerate.gc.monotone_l
 
 @[gcongr]
@@ -2864,7 +2864,7 @@ theorem arrows_mono
 
 中文:
 定理 arrows_mono
-  结论: Monotone (arrows : Sieve X -> Presieve X)
+  结论: 递增 (arrows : 筛 X -> Presieve X)
   证明: giGenerate.gc.monotone_u
 
 Depends on / 依赖: giGenerate, giGenerate.gc.monotone_u, monotone_u
@@ -2903,7 +2903,7 @@ theorem generate_of_contains_isSplitEpi
 
 中文:
 定理 generate_of_contains_isSplitEpi
-  条件: {R : Presieve X} (f : Y ⟶ X) [IsSplitEpi f] (hf : R f)
+  条件: {R : Presieve X} (f : Y ⟶ X) [是分裂满态射 f] (hf : R f)
   证明: by
   rw [← id_mem_iff_eq_top]
   exact ⟨_, section_ f, f, hf, by simp⟩
@@ -2930,7 +2930,7 @@ theorem generate_of_singleton_isSplitEpi
 
 中文:
 定理 generate_of_singleton_isSplitEpi
-  条件: (f : Y ⟶ X) [IsSplitEpi f]
+  条件: (f : Y ⟶ X) [是分裂满态射 f]
   证明: generate_of_contains_isSplitEpi f (Presieve.singleton_self _)
 
 @[simp]
@@ -3030,7 +3030,7 @@ lemma comp_mem_iff
 
 中文:
 引理 comp_mem_iff
-  条件: (i : X ⟶ Y) (f : Y ⟶ Z) [IsIso i] (S : Sieve Z)
+  条件: (i : X ⟶ Y) (f : Y ⟶ Z) [是同构 i] (S : 筛 Z)
   证明: by
   refine ⟨fun H => ?_, fun H => S.downward_closed H _⟩
   convert! S.downward_closed H (inv i)
@@ -3058,7 +3058,7 @@ abbreviation ofArrows
 
 中文:
 缩写 ofArrows
-  签名: : Sieve X
+  签名: : 筛 X
   定义体: generate (Presieve.ofArrows Y f)
 
 Depends on / 依赖: Presieve, Presieve.ofArrows, generate, ofArrows
@@ -3130,7 +3130,7 @@ lemma ofArrows.exists
   exact ⟨i, h, rfl⟩
 
 中文:
-引理 ofArrows.exists
+引理 ofArrows.存在
   结论: 存在 (i : I) (h : W ⟶ Y i), g = h ≫ f i
   证明: by
   obtain ⟨_, h, _, ⟨i⟩, rfl⟩ := hg
@@ -3246,7 +3246,7 @@ lemma ofArrows_category
 
 中文:
 引理 ofArrows_category
-  条件: {S : C} (R : Sieve S)
+  条件: {S : C} (R : 筛 S)
   证明: by
   rw [ofArrows_category']; rw [generate_sieve]
 
@@ -3265,8 +3265,8 @@ lemma exists_eq_ofArrows
   proof: ⟨_, _, _, (ofArrows_category R).symm⟩
 
 中文:
-引理 exists_eq_ofArrows
-  条件: (R : Sieve X)
+引理 存在_eq_ofArrows
+  条件: (R : 筛 X)
   证明: ⟨_, _, _, (ofArrows_category R).symm⟩
 
 Depends on / 依赖: ofArrows_category
@@ -3380,7 +3380,7 @@ lemma ofArrows_eq_ofObjects
 
 中文:
 引理 ofArrows_eq_ofObjects
-  结论: {X : C} (hX : IsTerminal X)
+  结论: {X : C} (hX : 是终止 X)
   证明: by
   refine le_antisymm (ofArrows_le_ofObjects Y f) (fun W g => ?_)
   rw [mem_ofArrows_iff]; rw [mem_ofObjects_iff]
@@ -3439,7 +3439,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: (h : Y ⟶ X) (S : Sieve X)
+  签名: (h : Y ⟶ X) (S : 筛 X)
   定义体: S (sl ≫ h)
   downward_closed g := by simp [g]
 
@@ -3484,7 +3484,7 @@ theorem pullback_top
 中文:
 定理 pullback_top
   条件: {f : Y ⟶ X}
-  结论: (⊤ : Sieve X).pullback f = ⊤
+  结论: (⊤ : 筛 X).pullback f = ⊤
   证明: top_unique fun _ _ => id
 
 Depends on / 依赖: top_unique
@@ -3504,7 +3504,7 @@ theorem pullback_comp
 
 中文:
 定理 pullback_comp
-  条件: {f : Y ⟶ X} {g : Z ⟶ Y} (S : Sieve X)
+  条件: {f : Y ⟶ X} {g : Z ⟶ Y} (S : 筛 X)
   证明: by simp [Sieve.ext_iff]
 
 @[simp]
@@ -3525,7 +3525,7 @@ theorem pullback_inter
 
 中文:
 定理 pullback_inter
-  条件: {f : Y ⟶ X} (S R : Sieve X)
+  条件: {f : Y ⟶ X} (S R : 筛 X)
   证明: by simp [Sieve.ext_iff]
 
 Depends on / 依赖: Sieve.ext_iff, ext_iff
@@ -3605,7 +3605,7 @@ theorem pullback_eq_top_of_mem
 
 中文:
 定理 pullback_eq_top_of_mem
-  条件: (S : Sieve X) {f : Y ⟶ X}
+  条件: (S : 筛 X) {f : Y ⟶ X}
   结论: S f -> S.pullback f = ⊤
   证明: (mem_iff_pullback_eq_top f).1
 
@@ -3689,7 +3689,7 @@ lemma ofObjects_id
 中文:
 引理 ofObjects_id
   条件: (X : C)
-  结论: Sieve.ofObjects id X = ⊤
+  结论: 筛.ofObjects id X = ⊤
   证明: Sieve.pullback_ofObjects_eq_top _ (𝟙 _)
 
 Depends on / 依赖: Sieve.pullback_ofObjects_eq_top, pullback_ofObjects_eq_top
@@ -3712,7 +3712,7 @@ definition pushforward
 
 中文:
 定义 pushforward
-  签名: (f : Y ⟶ X) (R : Sieve Y)
+  签名: (f : Y ⟶ X) (R : 筛 Y)
   定义体: exists g, g ≫ f = gf ∧ R g
   downward_closed := fun ⟨j, k, z⟩ h => ⟨h ≫ j, by simp [k], by simp [z]⟩
 -/
@@ -3730,7 +3730,7 @@ theorem pushforward_apply_comp
 
 中文:
 定理 pushforward_apply_comp
-  条件: {R : Sieve Y} {Z : C} {g : Z ⟶ Y} (hg : R g) (f : Y ⟶ X)
+  条件: {R : 筛 Y} {Z : C} {g : Z ⟶ Y} (hg : R g) (f : Y ⟶ X)
   证明: ⟨g, rfl, hg⟩
 -/
 theorem pushforward_apply_comp {R : Sieve Y} {Z : C} {g : Z ⟶ Y} (hg : R g) (f : Y ⟶ X) :
@@ -3749,7 +3749,7 @@ theorem pushforward_comp
 
 中文:
 定理 pushforward_comp
-  条件: {f : Y ⟶ X} {g : Z ⟶ Y} (R : Sieve Z)
+  条件: {f : Y ⟶ X} {g : Z ⟶ Y} (R : 筛 Z)
   证明: Sieve.ext fun W h =>
     ⟨fun ⟨f₁, hq, hf₁⟩ => ⟨f₁ ≫ g, by simpa, f₁, rfl, hf₁⟩, fun ⟨y, hy, z, hR, hz⟩ =>
       ⟨z, by rw [← Category.assoc, hR]; tauto⟩⟩
@@ -3774,7 +3774,7 @@ theorem galoisConnection
 中文:
 定理 galoisConnection
   条件: (f : Y ⟶ X)
-  结论: GaloisConnection (Sieve.pushforward f) (Sieve.pullback f)
+  结论: GaloisConnection (筛.pushforward f) (筛.pullback f)
   证明: fun _ _ => ⟨fun hR _ g hg => hR _ ⟨g, rfl, hg⟩, fun hS _ _ ⟨h, hg, hh⟩ => hg ▸ hS h hh⟩
 -/
 theorem galoisConnection (f : Y ⟶ X) : GaloisConnection (Sieve.pushforward f) (Sieve.pullback f) :=
@@ -3792,7 +3792,7 @@ theorem pullback_monotone
 中文:
 定理 pullback_monotone
   条件: (f : Y ⟶ X)
-  结论: Monotone (Sieve.pullback f)
+  结论: 递增 (筛.pullback f)
   证明: (galoisConnection f).monotone_u
 
 Depends on / 依赖: galoisConnection, monotone_u
@@ -3812,7 +3812,7 @@ theorem pushforward_monotone
 中文:
 定理 pushforward_monotone
   条件: (f : Y ⟶ X)
-  结论: Monotone (Sieve.pushforward f)
+  结论: 递增 (筛.pushforward f)
   证明: (galoisConnection f).monotone_l
 
 Depends on / 依赖: galoisConnection, monotone_l
@@ -3831,7 +3831,7 @@ theorem le_pushforward_pullback
 
 中文:
 定理 le_pushforward_pullback
-  条件: (f : Y ⟶ X) (R : Sieve Y)
+  条件: (f : Y ⟶ X) (R : 筛 Y)
   结论: R <= (R.pushforward f).pullback f
   证明: (galoisConnection f).le_u_l _
 
@@ -3851,7 +3851,7 @@ theorem pullback_pushforward_le
 
 中文:
 定理 pullback_pushforward_le
-  条件: (f : Y ⟶ X) (R : Sieve X)
+  条件: (f : Y ⟶ X) (R : 筛 X)
   结论: (R.pullback f).pushforward f <= R
   证明: (galoisConnection f).l_u_le _
 
@@ -3872,7 +3872,7 @@ theorem pushforward_union
 
 中文:
 定理 pushforward_union
-  条件: {f : Y ⟶ X} (S R : Sieve Y)
+  条件: {f : Y ⟶ X} (S R : 筛 Y)
   证明: (galoisConnection f).l_sup
 
 @[simp]
@@ -3898,7 +3898,7 @@ lemma pullback_bot
 中文:
 引理 pullback_bot
   条件: (f : Y ⟶ X)
-  结论: (⊥ : Sieve X).pullback f = ⊥
+  结论: (⊥ : 筛 X).pullback f = ⊥
   证明: rfl
 
 @[simp]
@@ -3919,7 +3919,7 @@ lemma pushforward_bot
 中文:
 引理 pushforward_bot
   条件: (f : Y ⟶ X)
-  结论: (⊥ : Sieve Y).pushforward f = ⊥
+  结论: (⊥ : 筛 Y).pushforward f = ⊥
   证明: (galoisConnection f).l_bot
 
 Depends on / 依赖: galoisConnection, l_bot
@@ -3939,7 +3939,7 @@ lemma pushforward_eq_bot_iff
 
 中文:
 引理 pushforward_eq_bot_iff
-  条件: {f : Y ⟶ X} {S : Sieve Y}
+  条件: {f : Y ⟶ X} {S : 筛 Y}
   结论: S.pushforward f = ⊥ ↔ S = ⊥
   证明: by
   simp [(galoisConnection f).l_eq_bot]
@@ -3961,7 +3961,7 @@ theorem pushforward_le_bind_of_mem
 
 中文:
 定理 pushforward_le_bind_of_mem
-  结论: (S : Presieve X) (R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> Sieve Y)
+  结论: (S : Presieve X) (R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> 筛 Y)
   证明: by
   rintro Z _ ⟨g, rfl, hg⟩
   exact ⟨_, g, f, h, hg, rfl⟩
@@ -3983,7 +3983,7 @@ theorem le_pullback_bind
 
 中文:
 定理 le_pullback_bind
-  结论: (S : Presieve X) (R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> Sieve Y) (f : Y ⟶ X)
+  结论: (S : Presieve X) (R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> 筛 Y) (f : Y ⟶ X)
   证明: by
   rw [← galoisConnection f]
   apply pushforward_le_bind_of_mem
@@ -4009,7 +4009,7 @@ definition galoisCoinsertionOfMono
 
 中文:
 定义 galoisCoinsertionOfMono
-  签名: (f : Y ⟶ X) [Mono f]
+  签名: (f : Y ⟶ X) [单态射 f]
   定义体: by
   apply (galoisConnection f).toGaloisCoinsertion
   rintro S Z g ⟨g₁, hf, hg₁⟩
@@ -4038,7 +4038,7 @@ definition galoisInsertionOfIsSplitEpi
 
 中文:
 定义 galoisInsertionOfIsSplitEpi
-  签名: (f : Y ⟶ X) [IsSplitEpi f]
+  签名: (f : Y ⟶ X) [是分裂满态射 f]
   定义体: by
   apply (galoisConnection f).toGaloisInsertion
   intro S Z g hg
@@ -4069,7 +4069,7 @@ theorem pullbackArrows_comm
 
 中文:
 定理 pullbackArrows_comm
-  条件: {X Y : C} (f : Y ⟶ X) (R : Presieve X) [R.HasPullbacks f]
+  条件: {X Y : C} (f : Y ⟶ X) (R : Presieve X) [R.有Pullbacks f]
   证明: by
   ext W g
   constructor
@@ -4103,7 +4103,7 @@ lemma pullback_arrows
 
 中文:
 引理 pullback_arrows
-  条件: {X Y : C} (f : X ⟶ Y) (S : Sieve Y)
+  条件: {X Y : C} (f : X ⟶ Y) (S : 筛 Y)
   证明: rfl
 -/
 lemma pullback_arrows {X Y : C} (f : X ⟶ Y) (S : Sieve Y) :
@@ -4120,7 +4120,7 @@ lemma pushforward_arrows
 
 中文:
 引理 pushforward_arrows
-  条件: {X Y : C} (f : X ⟶ Y) (S : Sieve X)
+  条件: {X Y : C} (f : X ⟶ Y) (S : 筛 X)
   证明: rfl
 -/
 lemma pushforward_arrows {X Y : C} (f : X ⟶ Y) (S : Sieve X) :
@@ -4176,7 +4176,7 @@ definition functorPullback
 
 中文:
 定义 functorPullback
-  签名: (R : Sieve (F.obj X))
+  签名: (R : 筛 (F.obj X))
   定义体: Presieve.functorPullback F R
   downward_closed := by
     intro _ _ f hf g
@@ -4209,7 +4209,7 @@ theorem functorPullback_arrows
 
 中文:
 定理 functorPullback_arrows
-  条件: (R : Sieve (F.obj X))
+  条件: (R : 筛 (F.obj X))
   证明: rfl
 
 @[simp]
@@ -4232,7 +4232,7 @@ theorem functorPullback_id
 
 中文:
 定理 functorPullback_id
-  条件: (R : Sieve X)
+  条件: (R : 筛 X)
   结论: R.functorPullback (𝟭 _) = R
   证明: by
   ext
@@ -4254,7 +4254,7 @@ theorem functorPullback_comp
 
 中文:
 定理 functorPullback_comp
-  条件: (R : Sieve ((F ⋙ G).obj X))
+  条件: (R : 筛 ((F ⋙ G).obj X))
   证明: by
   ext
   rfl
@@ -4303,7 +4303,7 @@ lemma functorPullback_pullback
 
 中文:
 引理 functorPullback_pullback
-  条件: {X Y : C} (f : X ⟶ Y) (S : Sieve (F.obj Y))
+  条件: {X Y : C} (f : X ⟶ Y) (S : 筛 (F.obj Y))
   证明: by
   ext
   simp
@@ -4368,7 +4368,7 @@ definition functorPushforward
 
 中文:
 定义 functorPushforward
-  签名: (R : Sieve X)
+  签名: (R : 筛 X)
   定义体: R.arrows.functorPushforward F
   downward_closed := by
     intro _ _ f h g
@@ -4455,7 +4455,7 @@ theorem functorPushforward_id
 
 中文:
 定理 functorPushforward_id
-  条件: (R : Sieve X)
+  条件: (R : 筛 X)
   结论: R.functorPushforward (𝟭 _) = R
   证明: by
   ext X f
@@ -4489,7 +4489,7 @@ theorem functorPushforward_comp
 
 中文:
 定理 functorPushforward_comp
-  条件: (R : Sieve X)
+  条件: (R : 筛 X)
   证明: by
   ext
   simp [R.arrows.functorPushforward_comp F G]
@@ -4557,7 +4557,7 @@ lemma functorPushforward_le_iff_le_functorPullback
 
 中文:
 引理 functorPushforward_le_iff_le_functorPullback
-  条件: {X : C} (S : Sieve X) (R : Sieve (F.obj X))
+  条件: {X : C} (S : 筛 X) (R : 筛 (F.obj X))
   证明: (Sieve.functor_galoisConnection F X).le_iff_le
 
 Depends on / 依赖: Sieve.functor_galoisConnection, functor_galoisConnection, le_iff_le
@@ -4614,7 +4614,7 @@ theorem le_functorPushforward_pullback
 
 中文:
 定理 le_functorPushforward_pullback
-  条件: (R : Sieve X)
+  条件: (R : 筛 X)
   证明: (functor_galoisConnection F X).le_u_l _
 
 Depends on / 依赖: functor_galoisConnection, le_u_l
@@ -4633,7 +4633,7 @@ theorem functorPullback_pushforward_le
 
 中文:
 定理 functorPullback_pushforward_le
-  条件: (R : Sieve (F.obj X))
+  条件: (R : 筛 (F.obj X))
   证明: (functor_galoisConnection F X).l_u_le _
 
 Depends on / 依赖: functor_galoisConnection, l_u_le
@@ -4652,7 +4652,7 @@ theorem functorPushforward_union
 
 中文:
 定理 functorPushforward_union
-  条件: (S R : Sieve X)
+  条件: (S R : 筛 X)
   证明: (functor_galoisConnection F X).l_sup
 
 Depends on / 依赖: functor_galoisConnection, l_sup
@@ -4671,7 +4671,7 @@ theorem functorPullback_union
 
 中文:
 定理 functorPullback_union
-  条件: (S R : Sieve (F.obj X))
+  条件: (S R : 筛 (F.obj X))
   证明: rfl
 -/
 theorem functorPullback_union (S R : Sieve (F.obj X)) :
@@ -4690,7 +4690,7 @@ theorem functorPullback_inter
 
 中文:
 定理 functorPullback_inter
-  条件: (S R : Sieve (F.obj X))
+  条件: (S R : 筛 (F.obj X))
   证明: rfl
 
 @[simp]
@@ -4714,7 +4714,7 @@ theorem functorPushforward_bot
 中文:
 定理 functorPushforward_bot
   条件: (F : C ⥤ D) (X : C)
-  结论: (⊥ : Sieve X).functorPushforward F = ⊥
+  结论: (⊥ : 筛 X).functorPushforward F = ⊥
   证明: (functor_galoisConnection F X).l_bot
 
 @[simp]
@@ -4742,7 +4742,7 @@ theorem functorPushforward_top
 中文:
 定理 functorPushforward_top
   条件: (F : C ⥤ D) (X : C)
-  结论: (⊤ : Sieve X).functorPushforward F = ⊤
+  结论: (⊤ : 筛 X).functorPushforward F = ⊤
   证明: by
   refine (generate_sieve _).symm.trans ?_
   apply generate_of_contains_isSplitEpi (𝟙 (F.obj X))
@@ -4772,7 +4772,7 @@ theorem functorPullback_bot
 中文:
 定理 functorPullback_bot
   条件: (F : C ⥤ D) (X : C)
-  结论: (⊥ : Sieve (F.obj X)).functorPullback F = ⊥
+  结论: (⊥ : 筛 (F.obj X)).functorPullback F = ⊥
   证明: rfl
 
 @[simp]
@@ -4793,7 +4793,7 @@ theorem functorPullback_top
 中文:
 定理 functorPullback_top
   条件: (F : C ⥤ D) (X : C)
-  结论: (⊤ : Sieve (F.obj X)).functorPullback F = ⊤
+  结论: (⊤ : 筛 (F.obj X)).functorPullback F = ⊤
   证明: rfl
 -/
 theorem functorPullback_top (F : C ⥤ D) (X : C) : (⊤ : Sieve (F.obj X)).functorPullback F = ⊤ :=
@@ -4809,7 +4809,7 @@ theorem image_mem_functorPushforward
 
 中文:
 定理 image_mem_functorPushforward
-  条件: (R : Sieve X) {V} {f : V ⟶ X} (h : R f)
+  条件: (R : 筛 X) {V} {f : V ⟶ X} (h : R f)
   证明: ⟨V, f, 𝟙 _, h, by simp⟩
 -/
 theorem image_mem_functorPushforward (R : Sieve X) {V} {f : V ⟶ X} (h : R f) :
@@ -4829,7 +4829,7 @@ lemma functorPushforward_pullback_le
 
 中文:
 引理 functorPushforward_pullback_le
-  条件: {X Y : C} (f : Y ⟶ X) (S : Sieve X)
+  条件: {X Y : C} (f : Y ⟶ X) (S : 筛 X)
   证明: by
   rw [Sieve.functorPushforward_le_iff_le_functorPullback]; rw [Sieve.functorPullback_pullback]
   apply Sieve.pullback_monotone
@@ -4857,7 +4857,7 @@ definition essSurjFullFunctorGaloisInsertion
 
 中文:
 定义 essSurjFullFunctorGaloisInsertion
-  签名: [F.EssSurj] [F.Full] (X : C)
+  签名: [F.本质满射] [F.满] (X : C)
   定义体: by
   apply (functor_galoisConnection F X).toGaloisInsertion
   intro S Y f hf
@@ -4889,7 +4889,7 @@ definition fullyFaithfulFunctorGaloisCoinsertion
 
 中文:
 定义 fullyFaithfulFunctorGaloisCoinsertion
-  签名: [F.Full] [F.Faithful] (X : C)
+  签名: [F.满] [F.忠实] (X : C)
   定义体: by
   apply (functor_galoisConnection F X).toGaloisCoinsertion
   rintro S Y f ⟨Z, g, h, h₁, h₂⟩
@@ -4918,7 +4918,7 @@ lemma functorPullback_functorPushforward_eq
 
 中文:
 引理 functorPullback_functorPushforward_eq
-  条件: {X : C} {S : Sieve X} [F.Full] [F.Faithful]
+  条件: {X : C} {S : 筛 X} [F.满] [F.忠实]
   证明: (Sieve.fullyFaithfulFunctorGaloisCoinsertion _ _).u_l_eq _
 
 Depends on / 依赖: Sieve.fullyFaithfulFunctorGaloisCoinsertion, fullyFaithfulFunctorGaloisCoinsertion, u_l_eq
@@ -4946,7 +4946,7 @@ lemma functorPushforward_functor
 
 中文:
 引理 functorPushforward_functor
-  条件: (S : Sieve X) (e : C ≌ D)
+  条件: (S : 筛 X) (e : C ≌ D)
   证明: by
   ext Y iYX
   constructor
@@ -4979,7 +4979,7 @@ lemma mem_functorPushforward_functor
 
 中文:
 引理 mem_functorPushforward_functor
-  条件: {Y : D} {S : Sieve X} {e : C ≌ D} {f : Y ⟶ e.functor.obj X}
+  条件: {Y : D} {S : 筛 X} {e : C ≌ D} {f : Y ⟶ e.functor.obj X}
   证明: congr($(S.functorPushforward_functor e).arrows f)
 
 Depends on / 依赖: S.functorPushforward_functor, arrows, functorPushforward_functor
@@ -5000,7 +5000,7 @@ lemma functorPushforward_inverse
 
 中文:
 引理 functorPushforward_inverse
-  条件: {X : D} (S : Sieve X) (e : C ≌ D)
+  条件: {X : D} (S : 筛 X) (e : C ≌ D)
   证明: Sieve.functorPushforward_functor S e.symm
 
 @[simp]
@@ -5022,7 +5022,7 @@ lemma mem_functorPushforward_inverse
 
 中文:
 引理 mem_functorPushforward_inverse
-  条件: {X : D} {S : Sieve X} {e : C ≌ D} {f : Y ⟶ e.inverse.obj X}
+  条件: {X : D} {S : 筛 X} {e : C ≌ D} {f : Y ⟶ e.inverse.obj X}
   证明: congr($(S.functorPushforward_inverse e).arrows f)
 
 Depends on / 依赖: S.functorPushforward_inverse, arrows, functorPushforward_inverse
@@ -5043,7 +5043,7 @@ lemma functorPushforward_equivalence_eq_pullback
 
 中文:
 引理 functorPushforward_equivalence_eq_pullback
-  条件: {U : C} (S : Sieve U)
+  条件: {U : C} (S : 筛 U)
   证明: by ext; simp
 -/
 lemma functorPushforward_equivalence_eq_pullback {U : C} (S : Sieve U) :
@@ -5060,7 +5060,7 @@ lemma pullback_functorPushforward_equivalence_eq
 
 中文:
 引理 pullback_functorPushforward_equivalence_eq
-  条件: {X : C} (S : Sieve X)
+  条件: {X : C} (S : 筛 X)
   证明: by ext; simp
 -/
 lemma pullback_functorPushforward_equivalence_eq {X : C} (S : Sieve X) :
@@ -5084,7 +5084,7 @@ lemma mem_functorPushforward_iff_of_full
 
 中文:
 引理 mem_functorPushforward_iff_of_full
-  条件: [F.Full] {X Y : C} (R : Sieve X) (f : F.obj Y ⟶ F.obj X)
+  条件: [F.满] {X Y : C} (R : 筛 X) (f : F.obj Y ⟶ F.obj X)
   证明: by
   refine ⟨fun ⟨Z, g, h, hg, hcomp⟩ => ?_, fun ⟨g, hcomp, hg⟩ => ?_⟩
   · obtain ⟨h', hh'⟩ := F.map_surjective h
@@ -5119,7 +5119,7 @@ lemma mem_functorPushforward_iff_of_full_of_faithful
 
 中文:
 引理 mem_functorPushforward_iff_of_full_of_faithful
-  结论: [F.Full] [F.Faithful]
+  结论: [F.满] [F.忠实]
   证明: by
   rw [Sieve.mem_functorPushforward_iff_of_full]
   refine ⟨fun ⟨g, hcomp, hg⟩ => ?_, fun hf => ⟨f, rfl, hf⟩⟩
@@ -5172,7 +5172,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: (S : Sieve X)
+  签名: (S : 筛 X)
   定义体: { g : Y.unop ⟶ X // S g }
   map f := ↾fun g => ⟨f.unop ≫ g.1, downward_closed _ g.2 _⟩
 
@@ -5196,7 +5196,7 @@ definition natTransOfLe
 
 中文:
 定义 natTransOfLe
-  签名: {S T : Sieve X} (h : S <= T)
+  签名: {S T : 筛 X} (h : S <= T)
   定义体: ↾fun f => ⟨f.1, h _ f.2⟩
 -/
 def natTransOfLe {S T : Sieve X} (h : S <= T) : S.functor ⟶ T.functor where
@@ -5214,7 +5214,7 @@ definition functorInclusion
 
 中文:
 定义 functorInclusion
-  签名: (S : Sieve X)
+  签名: (S : 筛 X)
   定义体: ↾fun f => f.1
 -/
 def functorInclusion (S : Sieve X) : S.functor ⟶ yoneda.obj X where
@@ -5234,7 +5234,7 @@ definition toFunctor
 
 中文:
 定义 toFunctor
-  签名: (S : Sieve X) {Y : C} (f : Y ⟶ X) (hf : S f)
+  签名: (S : 筛 X) {Y : C} (f : Y ⟶ X) (hf : S f)
   定义体: ↾fun g => ⟨g ≫ f, S.downward_closed hf g⟩
 
 Depends on / 依赖: S.downward_closed, downward_closed
@@ -5252,7 +5252,7 @@ theorem natTransOfLe_comm
 
 中文:
 定理 natTransOfLe_comm
-  条件: {S T : Sieve X} (h : S <= T)
+  条件: {S T : 筛 X} (h : S <= T)
   证明: rfl
 -/
 theorem natTransOfLe_comm {S T : Sieve X} (h : S <= T) :
@@ -5275,7 +5275,7 @@ instance functorInclusion_is_mono
 
 中文:
 实例 functorInclusion_is_mono
-  签名: : Mono S.functorInclusion
+  签名: : 单态射 S.functorInclusion
   定义体: ⟨fun f g h => by
     ext Y y
     simpa [Subtype.ext_iff] using congr_hom (NatTrans.congr_app h Y) y⟩
@@ -5370,7 +5370,7 @@ instance functorInclusion_top_isIso
 
 中文:
 实例 functorInclusion_top_isIso
-  签名: : IsIso (⊤ : Sieve X).functorInclusion
+  签名: : 是同构 (⊤ : 筛 X).functorInclusion
   定义体: ⟨⟨{ app := fun _ => ↾fun a => ⟨a, ⟨⟩⟩ }, rfl, rfl⟩⟩
 -/
 instance functorInclusion_top_isIso : IsIso (⊤ : Sieve X).functorInclusion :=
@@ -5386,7 +5386,7 @@ abbreviation uliftFunctor
 
 中文:
 缩写 uliftFunctor
-  签名: (S : Sieve X)
+  签名: (S : 筛 X)
   定义体: S.functor ⋙ CategoryTheory.uliftFunctor
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftFunctor, S.functor, functor, uliftFunctor
@@ -5405,8 +5405,8 @@ definition uliftNatTransOfLe
   body: ↾fun f => ⟨f.down.1, h _ f.down.2⟩
 
 中文:
-定义 uliftNatTransOfLe
-  签名: {S T : Sieve X} (h : S <= T)
+定义 ulift自然数TransOfLe
+  签名: {S T : 筛 X} (h : S <= T)
   定义体: ↾fun f => ⟨f.down.1, h _ f.down.2⟩
 
 Depends on / 依赖: f.down
@@ -5427,7 +5427,7 @@ definition uliftFunctorInclusion
 
 中文:
 定义 uliftFunctorInclusion
-  签名: (S : Sieve X)
+  签名: (S : 筛 X)
   定义体: Functor.whiskerRight S.functorInclusion CategoryTheory.uliftFunctor
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftFunctor, Functor, Functor.whiskerRight, S.functorInclusion, functorInclusion, uliftFunctor, whiskerRight
@@ -5449,7 +5449,7 @@ definition toUliftFunctor
 
 中文:
 定义 toUliftFunctor
-  签名: (S : Sieve X) {Y : C} (f : Y ⟶ X) (hf : S f)
+  签名: (S : 筛 X) {Y : C} (f : Y ⟶ X) (hf : S f)
   定义体: ↾fun g => ⟨g.down ≫ f, S.downward_closed hf g.down⟩
 
 Depends on / 依赖: S.downward_closed, downward_closed, g.down
@@ -5467,8 +5467,8 @@ theorem uliftNatTransOfLe_comm
   proof: rfl
 
 中文:
-定理 uliftNatTransOfLe_comm
-  条件: {S T : Sieve X} (h : S <= T)
+定理 ulift自然数TransOfLe_comm
+  条件: {S T : 筛 X} (h : S <= T)
   证明: rfl
 -/
 theorem uliftNatTransOfLe_comm {S T : Sieve X} (h : S <= T) :
@@ -5490,7 +5490,7 @@ instance uliftFunctorInclusion_is_mono
 
 中文:
 实例 uliftFunctorInclusion_is_mono
-  签名: (S : Sieve X)
+  签名: (S : 筛 X)
   定义体: ⟨fun _ _ h => by
     ext Y y
     refine ULift.ext _ _ (Subtype.ext_iff.2 ?_)
@@ -5521,7 +5521,7 @@ definition sieveOfUliftSubfunctor
 
 中文:
 定义 sieveOfUliftSubfunctor
-  签名: {R : Cᵒᵖ ⥤ Type max w v₁} (f : R ⟶ uliftYoneda.{w}.obj X)
+  签名: {R : Cᵒᵖ ⥤ 类型 最大值 w v₁} (f : R ⟶ uliftYoneda.{w}.obj X)
   定义体: exists t, f.app (Opposite.op Y) t = { down := g }
   downward_closed := by
     intro Y Z _ ⟨t, ht⟩ g
@@ -5551,7 +5551,7 @@ theorem sieveOfUliftSubfunctor_uliftFunctorInclusion
 
 中文:
 定理 sieveOfUliftSubfunctor_uliftFunctorInclusion
-  条件: {S : Sieve X}
+  条件: {S : 筛 X}
   证明: by
   cat_disch
 
@@ -5571,7 +5571,7 @@ instance uliftFunctorInclusion_top_isIso
 
 中文:
 实例 uliftFunctorInclusion_top_isIso
-  签名: : IsIso (Sieve.uliftFunctorInclusion.{w} (⊤ : Sieve X))
+  签名: : 是同构 (筛.uliftFunctorInclusion.{w} (⊤ : 筛 X))
   定义体: ⟨⟨{ app := fun _ => ↾fun a => ⟨a.down, ⟨⟩⟩ }, rfl, rfl⟩⟩
 
 Depends on / 依赖: a.down
@@ -5637,7 +5637,7 @@ definition shrinkFunctor
 
 中文:
 定义 shrinkFunctor
-  签名: [LocallySmall.{w} C] {X : C} (S : Sieve X)
+  签名: [LocallySmall.{w} C] {X : C} (S : 筛 X)
   定义体: { f | S (shrinkYonedaObjObjEquiv f) }
   map {Y Z} g f hf := by
     simpa [shrinkYonedaObjObjEquiv_obj_map] using S.downward_closed hf _
@@ -5674,7 +5674,7 @@ definition shrinkFunctorUliftFunctorIso
 
 中文:
 定义 shrinkFunctorUliftFunctorIso
-  签名: [LocallySmall.{w} C] [LocallySmall.{max w' w} C]
+  签名: [LocallySmall.{w} C] [LocallySmall.{最大值 w' w} C]
   定义体: NatIso.ofComponents
     (fun X => Equiv.toIso
       (.trans Equiv.ulift
@@ -5715,7 +5715,7 @@ lemma shrinkFunctorUliftFunctorIso_inv_ι
 
 中文:
 引理 shrinkFunctorUliftFunctorIso_inv_ι
-  条件: [LocallySmall.{w} C] [LocallySmall.{max w' w} C]
+  条件: [LocallySmall.{w} C] [LocallySmall.{最大值 w' w} C]
   证明: rfl
 -/
 lemma shrinkFunctorUliftFunctorIso_inv_ι [LocallySmall.{w} C] [LocallySmall.{max w' w} C] :
@@ -5772,7 +5772,7 @@ lemma Presieve.functorPullback_arrows
 
 中文:
 引理 Presieve.functorPullback_arrows
-  条件: {X : C} (S : Sieve (F.obj X))
+  条件: {X : C} (S : 筛 (F.obj X))
   证明: rfl
 -/
 lemma Presieve.functorPullback_arrows {X : C} (S : Sieve (F.obj X)) :

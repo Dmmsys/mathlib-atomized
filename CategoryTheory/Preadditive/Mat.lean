@@ -78,8 +78,8 @@ structure Mat_
 结构 Mat_
   参数: where
   公理与运算 (3 个):
-    - ι : Type
-    - [fintype : Fintype ι]
+    - ι : 类型
+    - [fintype : 有限类型 ι]
     - X : ι -> C
 -/
 structure Mat_ where
@@ -104,7 +104,7 @@ definition Hom
   body: DMatrix M.ι N.ι fun i j => M.X i ⟶ N.X j
 
 中文:
-定义 Hom
+定义 态射
   签名: (M N : Mat_ C)
   定义体: DMatrix M.ι N.ι fun i j => M.X i ⟶ N.X j
 
@@ -144,7 +144,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N K : Mat_ C} (f : Hom M N) (g : Hom N K)
+  签名: {M N K : Mat_ C} (f : 态射 M N) (g : 态射 N K)
   定义体: fun i k =>
   ∑ j : N.ι, f i j ≫ g j k
 -/
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{v₁} (Mat_ C)
+  签名: 范畴.{v₁} (Mat_ C)
   定义体: Hom
   id := Hom.id
   comp f g := f.comp g
@@ -289,7 +289,7 @@ theorem id_apply_self
 中文:
 定理 id_apply_self
   条件: (M : Mat_ C) (i : M.ι)
-  结论: (𝟙 M : Hom M M) i i = 𝟙 _
+  结论: (𝟙 M : 态射 M M) i i = 𝟙 _
   证明: by simp [id_apply]
 
 @[simp]
@@ -312,7 +312,7 @@ theorem id_apply_of_ne
 中文:
 定理 id_apply_of_ne
   条件: (M : Mat_ C) (i j : M.ι) (h : i != j)
-  结论: (𝟙 M : Hom M M) i j = 0
+  结论: (𝟙 M : 态射 M M) i j = 0
   证明: by
   simp [id_apply, h]
 
@@ -398,7 +398,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Mat_ C)
+  签名: 预加性 (Mat_ C)
   定义体: by ext; simp [Finset.sum_add_distrib]
   comp_add M N K f g g' := by ext; simp [Finset.sum_add_distrib]
 
@@ -428,7 +428,7 @@ instance hasFiniteBiproducts
 
 中文:
 实例 hasFiniteBiproducts
-  签名: : HasFiniteBiproducts (Mat_ C) where
+  签名: : 有FiniteBiproducts (Mat_ C) where
   定义体: { has_biproduct := fun f =>
         hasBiproduct_of_total
           { pt := ⟨Σ j, (f j).ι, fun p => (f p.1).X p.2⟩
@@ -528,7 +528,7 @@ definition mapMat_
 
 中文:
 定义 mapMat_
-  签名: (F : C ⥤ D) [Functor.Additive F]
+  签名: (F : C ⥤ D) [函子.加性 F]
   定义体: ⟨M.ι, fun i => F.obj (M.X i)⟩
   map f i j := F.map (f i j)
 
@@ -590,7 +590,7 @@ definition mapMatComp
 
 中文:
 定义 mapMatComp
-  签名: {E : 类型} [Category.{v₁} E] [Preadditive E] (F : C ⥤ D) [Functor.Additive F]
+  签名: {E : 类型} [范畴.{v₁} E] [预加性 E] (F : C ⥤ D) [函子.加性 F]
   定义体: NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
     classical
     ext
@@ -652,7 +652,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embedding C).Faithful
+  签名: (embedding C).忠实
   定义体: congr_fun (congr_fun h PUnit.unit) PUnit.unit
 
 Depends on / 依赖: PUnit.unit, congr_fun
@@ -670,7 +670,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embedding C).Full
+  签名: (embedding C).满
   定义体: ⟨f PUnit.unit PUnit.unit, rfl⟩
 
 Depends on / 依赖: PUnit.unit
@@ -686,7 +686,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Additive (embedding C)
+  签名: 函子.加性 (embedding C)
 -/
 instance : Functor.Additive (embedding C) where
 
@@ -701,8 +701,8 @@ instance [Inhabited
   body: ⟨(embedding C).obj default⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (Mat_ C)
+实例 [可居
+  签名: C] : 可居 (Mat_ C)
   定义体: ⟨(embedding C).obj default⟩
 
 Depends on / 依赖: embedding
@@ -794,7 +794,7 @@ definition additiveObjIsoBiproduct
 
 中文:
 定义 additiveObjIsoBiproduct
-  签名: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C)
+  签名: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C)
   定义体: F.mapIso (isoBiproductEmbedding M) ≪≫ F.mapBiproduct _
 
 Depends on / 依赖: F.mapBiproduct, F.mapIso, isoBiproductEmbedding, mapBiproduct, mapIso
@@ -820,7 +820,7 @@ lemma additiveObjIsoBiproduct_hom_π
 
 中文:
 引理 additiveObjIsoBiproduct_hom_π
-  条件: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι)
+  条件: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C) (i : M.ι)
   证明: by
   dsimp [additiveObjIsoBiproduct]
   rw [biproduct.lift_π]; rw [Category.assoc]
@@ -852,7 +852,7 @@ lemma ι_additiveObjIsoBiproduct_inv
 
 中文:
 引理 ι_additiveObjIsoBiproduct_inv
-  条件: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι)
+  条件: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C) (i : M.ι)
   证明: by
   dsimp [additiveObjIsoBiproduct, Functor.mapBiproduct, Functor.mapBicone]
   simp only [biproduct.ι_desc, biproduct.ι_desc_assoc, ← F.map_comp]
@@ -886,7 +886,7 @@ theorem additiveObjIsoBiproduct_naturality
 
 中文:
 定理 additiveObjIsoBiproduct_naturality
-  结论: (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
+  结论: (F : Mat_ C ⥤ D) [函子.加性 F] {M N : Mat_ C}
   证明: by
   classical
   ext i : 1
@@ -927,7 +927,7 @@ theorem additiveObjIsoBiproduct_naturality'
 
 中文:
 定理 additiveObjIsoBiproduct_naturality'
-  结论: (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
+  结论: (F : Mat_ C ⥤ D) [函子.加性 F] {M N : Mat_ C}
   证明: by
   rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [additiveObjIsoBiproduct_naturality]
 
@@ -961,7 +961,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (F : C ⥤ D) [Functor.Additive F]
+  签名: (F : C ⥤ D) [函子.加性 F]
   定义体: ⨁ fun i => F.obj (X.X i)
   map f := biproduct.matrix fun i j => F.map (f i j)
   map_id X := by
@@ -992,7 +992,7 @@ instance lift_additive
 
 中文:
 实例 lift_additive
-  签名: (F : C ⥤ D) [Functor.Additive F]
+  签名: (F : C ⥤ D) [函子.加性 F]
 -/
 instance lift_additive (F : C ⥤ D) [Functor.Additive F] : Functor.Additive (lift F) where
 
@@ -1013,7 +1013,7 @@ definition embeddingLiftIso
 
 中文:
 定义 embeddingLiftIso
-  签名: (F : C ⥤ D) [Functor.Additive F]
+  签名: (F : C ⥤ D) [函子.加性 F]
   定义体: NatIso.ofComponents
     (fun X =>
       { hom := biproduct.desc fun _ => 𝟙 (F.obj X)
@@ -1046,7 +1046,7 @@ definition liftUnique
 
 中文:
 定义 liftUnique
-  签名: (F : C ⥤ D) [Functor.Additive F] (L : Mat_ C ⥤ D) [Functor.Additive L]
+  签名: (F : C ⥤ D) [函子.加性 F] (L : Mat_ C ⥤ D) [函子.加性 L]
   定义体: NatIso.ofComponents
     (fun M =>
       additiveObjIsoBiproduct L M ≪≫
@@ -1090,7 +1090,7 @@ definition ext
 
 中文:
 定义 ext
-  签名: {F G : Mat_ C ⥤ D} [Functor.Additive F] [Functor.Additive G]
+  签名: {F G : Mat_ C ⥤ D} [函子.加性 F] [函子.加性 G]
   定义体: liftUnique (embedding C ⋙ G) _ α ≪≫ (liftUnique _ _ (Iso.refl _)).symm
 
 Depends on / 依赖: Iso.refl, embedding, liftUnique
@@ -1111,7 +1111,7 @@ definition equivalenceSelfOfHasFiniteBiproductsAux
 
 中文:
 定义 equivalenceSelfOfHasFiniteBiproductsAux
-  签名: [HasFiniteBiproducts C]
+  签名: [有FiniteBiproducts C]
   定义体: Functor.rightUnitor _ ≪≫
     (Functor.leftUnitor _).symm ≪≫
       Functor.isoWhiskerRight (embeddingLiftIso _).symm _ ≪≫ Functor.associator _ _ _
@@ -1140,7 +1140,7 @@ definition equivalenceSelfOfHasFiniteBiproducts
 
 中文:
 定义 equivalenceSelfOfHasFiniteBiproducts
-  签名: (C : Type (u₁ + 1)) [LargeCategory C] [Preadditive C]
+  签名: (C : 类型 (u₁ + 1)) [大范畴 C] [预加性 C]
   定义体: Equivalence.mk
     (-- I suspect this is already an adjoint equivalence, but it seems painful to verify.
       lift
@@ -1172,7 +1172,7 @@ theorem equivalenceSelfOfHasFiniteBiproducts_functor
 
 中文:
 定理 equivalenceSelfOfHasFiniteBiproducts_functor
-  结论: {C : Type (u₁ + 1)} [LargeCategory C]
+  结论: {C : 类型 (u₁ + 1)} [大范畴 C]
   证明: rfl
 
 @[simp]
@@ -1193,7 +1193,7 @@ theorem equivalenceSelfOfHasFiniteBiproducts_inverse
 
 中文:
 定理 equivalenceSelfOfHasFiniteBiproducts_inverse
-  结论: {C : Type (u₁ + 1)} [LargeCategory C]
+  结论: {C : 类型 (u₁ + 1)} [大范畴 C]
   证明: rfl
 -/
 theorem equivalenceSelfOfHasFiniteBiproducts_inverse {C : Type (u₁ + 1)} [LargeCategory C]
@@ -1306,7 +1306,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (M : Mat R) (i j : M)
-  结论: (𝟙 M : Matrix M M R) i j = if i = j then 1 else 0
+  结论: (𝟙 M : 矩阵 M M R) i j = if i = j then 1 else 0
   证明: rfl
 
 @[simp]
@@ -1329,7 +1329,7 @@ theorem id_apply_self
 中文:
 定理 id_apply_self
   条件: (M : Mat R) (i : M)
-  结论: (𝟙 M : Matrix M M R) i i = 1
+  结论: (𝟙 M : 矩阵 M M R) i i = 1
   证明: by simp [id_apply]
 
 @[simp]
@@ -1352,7 +1352,7 @@ theorem id_apply_of_ne
 中文:
 定理 id_apply_of_ne
   条件: (M : Mat R) (i j : M) (h : i != j)
-  结论: (𝟙 M : Matrix M M R) i j = 0
+  结论: (𝟙 M : 矩阵 M M R) i j = 0
   证明: by
   simp [id_apply, h]
 
@@ -1473,7 +1473,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceSingleObjInverse R).Faithful
+  签名: (equivalenceSingleObjInverse R).忠实
   定义体: by
     ext
     apply_fun MulOpposite.unop using MulOpposite.unop_injective
@@ -1497,7 +1497,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceSingleObjInverse R).Full
+  签名: (equivalenceSingleObjInverse R).满
   定义体: ⟨fun i j => MulOpposite.op (f i j), rfl⟩
 
 Depends on / 依赖: MulOpposite, MulOpposite.op
@@ -1518,7 +1518,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceSingleObjInverse R).EssSurj
+  签名: (equivalenceSingleObjInverse R).本质满射
   定义体: ⟨{ ι := X
         X := fun _ => PUnit.unit }, ⟨eqToIso (by cases X; congr)⟩⟩
 
@@ -1538,7 +1538,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceSingleObjInverse R).IsEquivalence
+  签名: (equivalenceSingleObjInverse R).是等价
 -/
 instance : (equivalenceSingleObjInverse R).IsEquivalence where
 
@@ -1595,7 +1595,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Mat R)
+  签名: 预加性 (Mat R)
 -/
 instance : Preadditive (Mat R) where
 

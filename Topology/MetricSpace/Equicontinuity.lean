@@ -52,7 +52,7 @@ theorem equicontinuousAt_iff_right
 
 中文:
 定理 equicontinuousAt_iff_right
-  条件: {ι : 类型} [TopologicalSpace β] {F : ι -> β -> α} {x₀ : β}
+  条件: {ι : 类型} [拓扑空间 β] {F : ι -> β -> α} {x₀ : β}
   证明: uniformity_basis_dist.equicontinuousAt_iff_right
 
 Depends on / 依赖: equicontinuousAt_iff_right, uniformity_basis_dist, uniformity_basis_dist.equicontinuousAt_iff_right
@@ -71,7 +71,7 @@ theorem equicontinuousAt_iff
 
 中文:
 定理 equicontinuousAt_iff
-  条件: {ι : 类型} [PseudoMetricSpace β] {F : ι -> β -> α} {x₀ : β}
+  条件: {ι : 类型} [伪度量空间 β] {F : ι -> β -> α} {x₀ : β}
   证明: nhds_basis_ball.equicontinuousAt_iff uniformity_basis_dist
 
 Depends on / 依赖: equicontinuousAt_iff, nhds_basis_ball, nhds_basis_ball.equicontinuousAt_iff, uniformity_basis_dist
@@ -98,7 +98,7 @@ theorem equicontinuousAt_iff_pair
 
 中文:
 定理 equicontinuousAt_iff_pair
-  结论: {ι : 类型} [TopologicalSpace β] {F : ι -> β -> α}
+  结论: {ι : 类型} [拓扑空间 β] {F : ι -> β -> α}
   证明: by
   rw [equicontinuousAt_iff_pair]
   constructor <;> intro H
@@ -132,7 +132,7 @@ theorem uniformEquicontinuous_iff_right
 
 中文:
 定理 uniformEquicontinuous_iff_right
-  条件: {ι : 类型} [UniformSpace β] {F : ι -> β -> α}
+  条件: {ι : 类型} [一致空间 β] {F : ι -> β -> α}
   证明: uniformity_basis_dist.uniformEquicontinuous_iff_right
 
 Depends on / 依赖: uniformEquicontinuous_iff_right, uniformity_basis_dist, uniformity_basis_dist.uniformEquicontinuous_iff_right
@@ -151,7 +151,7 @@ theorem uniformEquicontinuous_iff
 
 中文:
 定理 uniformEquicontinuous_iff
-  条件: {ι : 类型} [PseudoMetricSpace β] {F : ι -> β -> α}
+  条件: {ι : 类型} [伪度量空间 β] {F : ι -> β -> α}
   证明: uniformity_basis_dist.uniformEquicontinuous_iff uniformity_basis_dist
 
 Depends on / 依赖: uniformEquicontinuous_iff, uniformity_basis_dist, uniformity_basis_dist.uniformEquicontinuous_iff
@@ -174,7 +174,7 @@ theorem equicontinuousAt_of_continuity_modulus
 
 中文:
 定理 equicontinuousAt_of_continuity_modulus
-  结论: {ι : 类型} [TopologicalSpace β] {x₀ : β}
+  结论: {ι : 类型} [拓扑空间 β] {x₀ : β}
   证明: by
   rw [Metric.equicontinuousAt_iff_right]
   intro ε ε0
@@ -207,7 +207,7 @@ theorem uniformEquicontinuous_of_continuity_modulus
 
 中文:
 定理 uniformEquicontinuous_of_continuity_modulus
-  结论: {ι : 类型} [PseudoMetricSpace β] (b : 实数 -> 实数)
+  结论: {ι : 类型} [伪度量空间 β] (b : 实数 -> 实数)
   证明: by
   rw [Metric.uniformEquicontinuous_iff]
   intro ε ε0
@@ -243,7 +243,7 @@ theorem equicontinuous_of_continuity_modulus
 
 中文:
 定理 equicontinuous_of_continuity_modulus
-  结论: {ι : 类型} [PseudoMetricSpace β] (b : 实数 -> 实数)
+  结论: {ι : 类型} [伪度量空间 β] (b : 实数 -> 实数)
   证明: (uniformEquicontinuous_of_continuity_modulus b b_lim F H).equicontinuous
 
 Depends on / 依赖: b_lim, equicontinuous, uniformEquicontinuous_of_continuity_modulus

@@ -112,7 +112,7 @@ lemma fwdDiff_smul
 
 中文:
 引理 fwdDiff_smul
-  条件: {R : 类型} [Ring R] [Module R G] (f : M -> R) (g : M -> G)
+  条件: {R : 类型} [环 R] [模 R G] (f : M -> R) (g : M -> G)
   证明: by
   ext y
   simp only [fwdDiff, Pi.smul_apply', Pi.add_apply, smul_sub, sub_smul]
@@ -138,7 +138,7 @@ lemma fwdDiff_const_smul
 
 中文:
 引理 fwdDiff_const_smul
-  条件: {R : 类型} [Monoid R] [DistribMulAction R G] (r : R) (f : M -> G)
+  条件: {R : 类型} [幺半群 R] [分配乘法作用 R G] (r : R) (f : M -> G)
   证明: funext fun _ => (smul_sub ..).symm
 -/
 @[simp] lemma fwdDiff_const_smul {R : Type*} [Monoid R] [DistribMulAction R G] (r : R) (f : M -> G) :
@@ -157,7 +157,7 @@ lemma fwdDiff_smul_const
 
 中文:
 引理 fwdDiff_smul_const
-  条件: {R : 类型} [Ring R] [Module R G] (f : M -> R) (g : G)
+  条件: {R : 类型} [环 R] [模 R G] (f : M -> R) (g : G)
   证明: by
   ext y
   simp only [fwdDiff, Pi.smul_apply', sub_smul]
@@ -197,7 +197,7 @@ definition fwdDiffₗ
 
 中文:
 定义 fwdDiffₗ
-  签名: : Module.End 整数 (M -> G) where
+  签名: : 模.End 整数 (M -> G) where
   定义体: fwdDiff h
   map_add' := fwdDiff_add h
   map_smul' := fwdDiff_const_smul h
@@ -257,7 +257,7 @@ definition shiftₗ
 
 中文:
 定义 shiftₗ
-  签名: : Module.End 整数 (M -> G)
+  签名: : 模.End 整数 (M -> G)
   定义体: fwdDiffₗ M G h + 1
 -/
 def shiftₗ : Module.End Int (M -> G) := fwdDiffₗ M G h + 1
@@ -325,7 +325,7 @@ lemma fwdDiff_finsetSum
 
 中文:
 引理 fwdDiff_finsetSum
-  条件: {α : 类型} (s : Finset α) (f : α -> M -> G)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> M -> G)
   证明: map_sum (fwdDiffₗ M G h) f s
 
 @[deprecated (since := "2026-04-08")] alias fwdDiff_finset_sum := fwdDiff_finsetSum
@@ -368,7 +368,7 @@ lemma fwdDiff_iter_const_smul
 
 中文:
 引理 fwdDiff_iter_const_smul
-  结论: {R : 类型} [Monoid R] [DistribMulAction R G]
+  结论: {R : 类型} [幺半群 R] [分配乘法作用 R G]
   证明: by
   induction n generalizing f with
   | zero => simp only [iterate_zero, id_eq]
@@ -393,7 +393,7 @@ lemma fwdDiff_iter_finsetSum
 
 中文:
 引理 fwdDiff_iter_finsetSum
-  条件: {α : 类型} (s : Finset α) (f : α -> M -> G) (n : 自然数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> M -> G) (n : 自然数)
   证明: by
   simpa only [coe_fwdDiffₗ_pow] using map_sum (fwdDiffₗ M G h ^ n) f s
 
@@ -627,7 +627,7 @@ lemma fwdDiff_addChar_eq
 
 中文:
 引理 fwdDiff_addChar_eq
-  结论: {M R : 类型} [AddCommMonoid M] [Ring R]
+  结论: {M R : 类型} [加法交换幺半群 M] [环 R]
   证明: by
   induction n generalizing x with
   | zero => simp
@@ -759,7 +759,7 @@ theorem Polynomial.fwdDiff_iter_degree_eq_factorial
   rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_it
 
 中文:
-定理 Polynomial.fwdDiff_iter_degree_eq_factorial
+定理 多项式.fwdDiff_iter_degree_eq_factorial
   条件: (P : R[X])
   证明: funext fun x => by
   simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
@@ -787,7 +787,7 @@ theorem Polynomial.fwdDiff_iter_eq_zero_of_degree_lt
   simp [fwdDiff_iter_eq_sum_shift]
 
 中文:
-定理 Polynomial.fwdDiff_iter_eq_zero_of_degree_lt
+定理 多项式.fwdDiff_iter_eq_zero_of_degree_lt
   条件: {P : R[X]} {n : 自然数} (hP : P.natDegree < n)
   证明: funext fun x => by
   obtain ⟨j, rfl⟩ := Nat.exists_eq_add_of_lt hP
@@ -813,7 +813,7 @@ theorem Polynomial.fwdDiff_iter_degree_add_one_eq_zero
   exact Polynomial.fwdDiff_iter_eq_zero_of_degree_lt hP
 
 中文:
-定理 Polynomial.fwdDiff_iter_degree_add_one_eq_zero
+定理 多项式.fwdDiff_iter_degree_add_one_eq_zero
   条件: (P : R[X])
   证明: by
   have hP : P.natDegree < P.natDegree + 1 := Nat.lt_succ_self P.natDegree

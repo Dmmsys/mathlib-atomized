@@ -77,7 +77,7 @@ definition mapIsLimitOfPreservesOfIsLimit
 
 中文:
 定义 mapIsLimitOfPreservesOfIsLimit
-  签名: [PreservesLimit (pair X Y) G] (l : IsLimit (BinaryFan.mk f g))
+  签名: [保持极限 (pair X Y) G] (l : 是极限 (BinaryFan.mk f g))
   定义体: isLimitMapConeBinaryFanEquiv G f g (isLimitOfPreserves G l)
 
 Depends on / 依赖: isLimitMapConeBinaryFanEquiv, isLimitOfPreserves
@@ -96,7 +96,7 @@ definition isLimitOfReflectsOfMapIsLimit
 
 中文:
 定义 isLimitOfReflectsOfMapIsLimit
-  签名: [ReflectsLimit (pair X Y) G]
+  签名: [反映极限 (pair X Y) G]
   定义体: isLimitOfReflects G ((isLimitMapConeBinaryFanEquiv G f g).symm l)
 
 Depends on / 依赖: isLimitMapConeBinaryFanEquiv, isLimitOfReflects
@@ -118,7 +118,7 @@ definition isLimitOfHasBinaryProductOfPreservesLimit
 
 中文:
 定义 isLimitOfHasBinaryProductOfPreservesLimit
-  签名: [PreservesLimit (pair X Y) G]
+  签名: [保持极限 (pair X Y) G]
   定义体: mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd X Y)
 
 Depends on / 依赖: mapIsLimitOfPreservesOfIsLimit, prodIsProd
@@ -136,7 +136,7 @@ instance [PreservesLimit
   body: ⟨_, isLimitOfHasBinaryProductOfPreservesLimit G X Y⟩
 
 中文:
-实例 [PreservesLimit
+实例 [保持极限
   签名: (pair X Y) G] :
   定义体: ⟨_, isLimitOfHasBinaryProductOfPreservesLimit G X Y⟩
 
@@ -162,7 +162,7 @@ lemma PreservesLimitPair.of_iso_prod_comparison
 
 中文:
 引理 PreservesLimitPair.of_iso_prod_comparison
-  条件: [i : IsIso (prodComparison G X Y)]
+  条件: [i : 是同构 (prodComparison G X Y)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone (prodIsProd X Y)
   apply (isLimitMapConeBinaryFanEquiv _ _ _).symm _
@@ -285,7 +285,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (prodComparison G X Y)
+  签名: 是同构 (prodComparison G X Y)
   定义体: by
   rw [← PreservesLimitPair.iso_hom]
   infer_instance
@@ -374,7 +374,7 @@ definition mapIsColimitOfPreservesOfIsColimit
 
 中文:
 定义 mapIsColimitOfPreservesOfIsColimit
-  签名: [PreservesColimit (pair X Y) G]
+  签名: [保持余极限 (pair X Y) G]
   定义体: isColimitMapCoconeBinaryCofanEquiv G f g (isColimitOfPreserves G l)
 
 Depends on / 依赖: isColimitMapCoconeBinaryCofanEquiv, isColimitOfPreserves
@@ -393,7 +393,7 @@ definition isColimitOfReflectsOfMapIsColimit
 
 中文:
 定义 isColimitOfReflectsOfMapIsColimit
-  签名: [ReflectsColimit (pair X Y) G]
+  签名: [反映余极限 (pair X Y) G]
   定义体: isColimitOfReflects G ((isColimitMapCoconeBinaryCofanEquiv G f g).symm l)
 
 Depends on / 依赖: isColimitMapCoconeBinaryCofanEquiv, isColimitOfReflects
@@ -415,7 +415,7 @@ definition isColimitOfHasBinaryCoproductOfPreservesColimit
 
 中文:
 定义 isColimitOfHasBinaryCoproductOfPreservesColimit
-  签名: [PreservesColimit (pair X Y) G]
+  签名: [保持余极限 (pair X Y) G]
   定义体: mapIsColimitOfPreservesOfIsColimit G _ _ (coprodIsCoprod X Y)
 
 Depends on / 依赖: coprodIsCoprod, mapIsColimitOfPreservesOfIsColimit
@@ -440,7 +440,7 @@ lemma PreservesColimitPair.of_iso_coprod_comparison
 
 中文:
 引理 PreservesColimitPair.of_iso_coprod_comparison
-  条件: [i : IsIso (coprodComparison G X Y)]
+  条件: [i : 是同构 (coprodComparison G X Y)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone (coprodIsCoprod X Y)
   apply (isColimitMapCoconeBinaryCofanEquiv _ _ _).symm _
@@ -510,7 +510,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (coprodComparison G X Y)
+  签名: 是同构 (coprodComparison G X Y)
   定义体: by
   rw [← PreservesColimitPair.iso_hom]
   infer_instance

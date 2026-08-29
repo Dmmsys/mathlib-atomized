@@ -40,7 +40,7 @@ definition homotopyPToId
 
 中文:
 定义 homotopyPToId
-  签名: : 对任意 q : 自然数, Homotopy (P q : K[X] ⟶ _) (𝟙 _)
+  签名: : 对任意 q : 自然数, 同伦 (P q : K[X] ⟶ _) (𝟙 _)
 -/
 noncomputable def homotopyPToId : forall q : Nat, Homotopy (P q : K[X] ⟶ _) (𝟙 _)
   | 0 => Homotopy.refl _
@@ -122,7 +122,7 @@ definition homotopyPInftyToId
 
 中文:
 定义 homotopyPInftyToId
-  签名: : Homotopy (PInfty : K[X] ⟶ _) (𝟙 _) where
+  签名: : 同伦 (PInfty : K[X] ⟶ _) (𝟙 _) where
   定义体: (homotopyPToId X (j + 1)).hom i j
   zero i j hij := Homotopy.zero _ i j hij
   comm n := by
@@ -165,7 +165,7 @@ definition homotopyEquivNormalizedMooreComplexAlternatingFaceMapComplex
 
 中文:
 定义 homotopyEquivNormalizedMooreComplexAlternatingFaceMapComplex
-  签名: {A : 类型} [Category* A]
+  签名: {A : 类型} [范畴* A]
   定义体: inclusionOfMooreComplexMap Y
   inv := PInftyToNormalizedMooreComplex Y
   homotopyHomInvId := Homotopy.ofEq (splitMonoInclusionOfMooreComplexMap Y).id

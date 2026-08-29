@@ -219,7 +219,7 @@ definition deriveNat
   pure ⟨lit, proof⟩
 
 中文:
-定义 deriveNat
+定义 derive自然数
   签名: {α : Q(类型u)} (e : Q($α))
   定义体: do
   let .isNat _ lit proof ← derive e | failure
@@ -244,7 +244,7 @@ definition deriveInt
   pure ⟨lit, proof⟩
 
 中文:
-定义 deriveInt
+定义 derive整数
   签名: {α : Q(类型u)} (e : Q($α))
   定义体: do
   let some ⟨_, lit, proof⟩ := (← derive e).toInt | failure
@@ -294,7 +294,7 @@ definition deriveBool
   pure ⟨b, prf⟩
 
 中文:
-定义 deriveBool
+定义 derive布尔
   签名: (p : Q(命题))
   定义体: do
   let .isBool b prf ← derive q($p) | failure
@@ -319,7 +319,7 @@ definition deriveBoolOfIff
   | false => return ⟨false, q((Iff.not $hp).mp $pb)⟩
 
 中文:
-定义 deriveBoolOfIff
+定义 derive布尔OfIff
   签名: (p p' : Q(命题)) (hp : Q($p ↔ $p'))
   定义体: do
   let ⟨b, pb⟩ ← deriveBool p
@@ -392,7 +392,7 @@ definition NormNums.erase
 
 中文:
 定义 NormNums.erase
-  签名: {m : Type -> Type} [Monad m] [MonadError m] (d : NormNums) (declName : Name)
+  签名: {m : 类型 -> 类型} [单子 m] [MonadError m] (d : NormNums) (declName : Name)
   定义体: do
   unless d.tree.values.any (·.name == declName) && ! d.erased.contains declName
   do
@@ -516,7 +516,7 @@ definition deriveSimp
 
 中文:
 定义 deriveSimp
-  签名: (ctx : Simp.Context) (useSimp := true) (e : Expr)
+  签名: (ctx : Simp.余ntext) (useSimp := true) (e : Expr)
   定义体: (·.1) < > Simp.main e ctx (methods := methods useSimp)
 
 Depends on / 依赖: Result, Simp.Result

@@ -44,8 +44,8 @@ structure IsClub
     - isCofinal : IsCofinal s
 
 中文:
-结构 IsClub
-  参数: {α : 类型} [LinearOrder α] (s : Set α)
+结构 是Club
+  参数: {α : 类型} [线性序 α] (s : 集合 α)
   公理与运算 (2 个):
     - dirSupClosed : DirSupClosed s
     - isCofinal : IsCofinal s
@@ -74,8 +74,8 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
-  结论: IsClub s
+  条件: [是空 α] {s : 集合 α}
+  结论: 是Club s
   证明: ⟨.of_isEmpty, .of_isEmpty⟩
 
 @[simp]
@@ -96,7 +96,7 @@ theorem univ
 
 中文:
 定理 univ
-  结论: IsClub (α := α) .univ
+  结论: 是Club (α := α) .univ
   证明: ⟨.univ, .univ⟩
 -/
 protected theorem univ : IsClub (α := α) .univ :=
@@ -113,8 +113,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: [Nonempty α] (hs : IsClub s)
-  结论: s.Nonempty
+  条件: [非空 α] (hs : 是Club s)
+  结论: s.非空
   证明: hs.isCofinal.nonempty
 -/
 protected theorem nonempty [Nonempty α] (hs : IsClub s) : s.Nonempty :=
@@ -130,7 +130,7 @@ theorem _root_.isClub_empty_iff
 
 中文:
 定理 _root_.isClub_empty_iff
-  结论: IsClub (α := α) ∅ ↔ IsEmpty α
+  结论: 是Club (α := α) ∅ ↔ 是空 α
   证明: ⟨fun h => isCofinal_empty_iff.1 h.isCofinal, fun _ => .of_isEmpty⟩
 
 Depends on / 依赖: IsEmpty
@@ -149,8 +149,8 @@ theorem union
 
 中文:
 定理 union
-  条件: (hs : IsClub s) (ht : IsClub t)
-  结论: IsClub (s union t)
+  条件: (hs : 是Club s) (ht : 是Club t)
+  结论: 是Club (s union t)
   证明: ⟨hs.dirSupClosed.union ht.dirSupClosed, hs.isCofinal.mono Set.subset_union_left⟩
 -/
 protected theorem union (hs : IsClub s) (ht : IsClub t) : IsClub (s union t) :=
@@ -167,7 +167,7 @@ theorem isLUB_mem
 
 中文:
 定理 isLUB_mem
-  条件: (hs : IsClub s) (ht : t subseteq s) (ht₀ : t.Nonempty) (hx : IsLUB t x)
+  条件: (hs : 是Club s) (ht : t subseteq s) (ht₀ : t.非空) (hx : IsLUB t x)
   结论: x in s
   证明: hs.dirSupClosed ht ht₀ (.of_linearOrder _) hx
 
@@ -186,7 +186,7 @@ theorem csSup_mem
 
 中文:
 定理 csSup_mem
-  结论: {α} [ConditionallyCompleteLinearOrder α] {s t : Set α}
+  结论: {α} [条件完备线性序 α] {s t : 集合 α}
   证明: hs.isLUB_mem ht ht₀ (isLUB_csSup ht₀ ht₁)
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_zmultiples_iff.mp, AddSubgroup.zmultiples_zero_eq_bot, Real.dist_eq, Submodule, Subsingleton, Subsingleton.discreteTopology, abs_mul, discreteTopology, discreteTopology_iff_isOpen_singleton_zero, dist_eq, eq_or_ne, hs.isLUB_mem, isLUB_csSup, isLUB_mem, isOpen_ball, isOpen_induced_iff, mem_zmultiples_iff, zmultiples_zero_eq_bot
@@ -207,8 +207,8 @@ theorem sInter_of_orderTop
   exact fun x hx => (hs x hx).isCofinal.top_mem
 
 中文:
-定理 sInter_of_orderTop
-  条件: {s : Set (Set α)} [OrderTop α] (hs : 对任意 x in s, IsClub x)
+定理 s整数er_of_orderTop
+  条件: {s : 集合 (集合 α)} [有顶序 α] (hs : 对任意 x in s, 是Club x)
   证明: by
   refine ⟨.sInter fun x hx => (hs x hx).dirSupClosed, ?_⟩
   rw [isCofinal_iff_top_mem]; rw [mem_sInter]
@@ -233,8 +233,8 @@ theorem iInter_of_orderTop
   exact .sInter_of_orderTop (by simpa)
 
 中文:
-定理 iInter_of_orderTop
-  条件: {ι : 类型} {f : ι -> Set α} [OrderTop α] (hs : 对任意 i, IsClub (f i))
+定理 i整数er_of_orderTop
+  条件: {ι : 类型} {f : ι -> 集合 α} [有顶序 α] (hs : 对任意 i, 是Club (f i))
   证明: by
   rw [← sInter_range]
   exact .sInter_of_orderTop (by simpa)
@@ -259,8 +259,8 @@ theorem sInter_of_cof_le_one
   · cases one_lt_cof.not_ge hα
 
 中文:
-定理 sInter_of_cof_le_one
-  条件: {s : Set (Set α)} (hα : cof α <= 1) (hs : 对任意 x in s, IsClub x)
+定理 s整数er_of_cof_le_one
+  条件: {s : 集合 (集合 α)} (hα : cof α <= 1) (hs : 对任意 x in s, 是Club x)
   证明: by
   cases isEmpty_or_nonempty α; · simp
   cases topOrderOrNoTopOrder α
@@ -287,8 +287,8 @@ theorem iInter_of_cof_le_one
   exact .sInter_of_cof_le_one hα (by simpa)
 
 中文:
-定理 iInter_of_cof_le_one
-  条件: {ι : 类型} {f : ι -> Set α} (hα : cof α <= 1) (hs : 对任意 i, IsClub (f i))
+定理 i整数er_of_cof_le_one
+  条件: {ι : 类型} {f : ι -> 集合 α} (hα : cof α <= 1) (hs : 对任意 i, 是Club (f i))
   证明: by
   rw [← sInter_range]
   exact .sInter_of_cof_le_one hα (by simpa)
@@ -321,8 +321,8 @@ theorem sInter
   let g : Nat -> α := Nat.rec a fun _ IH => sS
 
 中文:
-定理 sInter
-  结论: {s : Set (Set α)} (hα : cof α != ℵ₀) (hsα : #s < cof α)
+定理 集合交集
+  结论: {s : 集合 (集合 α)} (hα : cof α != ℵ₀) (hsα : #s < cof α)
   证明: by
   cases isEmpty_or_nonempty α; · simp
   obtain hα | hα := hα.lt_or_gt
@@ -364,8 +364,8 @@ theorem iInter
   exact mk_range_le_lift.trans_lt hι
 
 中文:
-定理 iInter
-  结论: {ι : 类型u} {f : ι -> Set α} (hα : cof α != ℵ₀)
+定理 i整数er
+  结论: {ι : 类型u} {f : ι -> 集合 α} (hα : cof α != ℵ₀)
   证明: by
   rw [← sInter_range]
   refine IsClub.sInter hα ?_ (by simpa)
@@ -394,8 +394,8 @@ theorem sInter_of_countable
     rwa [le_aleph0_iff_set_countable]
 
 中文:
-定理 sInter_of_countable
-  结论: {s : Set (Set α)} (hα : cof α != ℵ₀) (hsα : s.Countable)
+定理 s整数er_of_countable
+  结论: {s : 集合 (集合 α)} (hα : cof α != ℵ₀) (hsα : s.可数)
   证明: by
   obtain hα | hα := hα.lt_or_gt
   · apply IsClub.sInter_of_cof_le_one _ hs
@@ -425,8 +425,8 @@ theorem iInter_of_countable
   simpa
 
 中文:
-定理 iInter_of_countable
-  结论: {ι : Sort*} {f : ι -> Set α} [Countable ι] (hα : cof α != ℵ₀)
+定理 i整数er_of_countable
+  结论: {ι : 类型层*} {f : ι -> 集合 α} [可数 ι] (hα : cof α != ℵ₀)
   证明: by
   rw [← sInter_range]
   apply IsClub.sInter_of_countable hα (countable_range f)
@@ -452,8 +452,8 @@ theorem inter
 
 中文:
 定理 inter
-  条件: (hα : cof α != ℵ₀) (hs : IsClub s) (ht : IsClub t)
-  结论: IsClub (s inter t)
+  条件: (hα : cof α != ℵ₀) (hs : 是Club s) (ht : 是Club t)
+  结论: 是Club (s inter t)
   证明: by
   simpa [hs, ht] using IsClub.sInter_of_countable (s := {s, t}) hα
 -/
@@ -470,9 +470,9 @@ theorem _root_.Order.IsNormal.isClub_range
   proof: ⟨hf.dirSupClosed_range, fun x => ⟨_, ⟨x, rfl⟩, hf.strictMono.le_apply⟩⟩
 
 中文:
-定理 _root_.Order.IsNormal.isClub_range
-  条件: {f : α -> α} (hf : IsNormal f)
-  结论: IsClub (.range f)
+定理 _root_.Order.是正规.isClub_range
+  条件: {f : α -> α} (hf : 是正规 f)
+  结论: 是Club (.range f)
   证明: ⟨hf.dirSupClosed_range, fun x => ⟨_, ⟨x, rfl⟩, hf.strictMono.le_apply⟩⟩
 
 Depends on / 依赖: dirSupClosed_range, hf.dirSupClosed_range, hf.strictMono.le_apply, le_apply, strictMono
@@ -496,8 +496,8 @@ theorem _root_.Order.IsNormal.isClub_fixedPoints
       rw [noTopOrder_iff_noMaxOrder]
 
 中文:
-定理 _root_.Order.IsNormal.isClub_fixedPoints
-  条件: {f : α -> α} (hα : cof α != ℵ₀) (hf : IsNormal f)
+定理 _root_.Order.是正规.isClub_fixedPoints
+  条件: {f : α -> α} (hα : cof α != ℵ₀) (hf : 是正规 f)
   证明: by
   cases isEmpty_or_nonempty α; · simp
   refine ⟨fun s hs hs₀ _ a ha => (hf.map_isLUB ha hs₀).unique ?_, fun a => ?_⟩
@@ -535,7 +535,7 @@ theorem _root_.Order.isNormal_enum_iff_isClub
 
 中文:
 定理 _root_.Order.isNormal_enum_iff_isClub
-  结论: [IsRegularCardinalOrder α]
+  结论: [是RegularCardinal序 α]
   证明: by
   simp_rw [isClub_iff, hs, and_true, isNormal_enum_iff_dirSupClosed]
 
@@ -555,7 +555,7 @@ theorem isNormal_enum
 
 中文:
 定理 isNormal_enum
-  条件: [IsRegularCardinalOrder α] {s : Set α} (hs : IsClub s)
+  条件: [是RegularCardinal序 α] {s : 集合 α} (hs : 是Club s)
   证明: isNormal_enum_iff_isClub.2 hs
 
 Depends on / 依赖: isNormal_enum_iff_isClub
@@ -581,7 +581,7 @@ definition IsStationary
 
 中文:
 定义 IsStationary
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall ⦃t⦄, IsClub t -> (s inter t).Nonempty
 
 Depends on / 依赖: IsClub, Nonempty
@@ -602,7 +602,7 @@ theorem not_isStationary_iff
 
 中文:
 定理 not_isStationary_iff
-  结论: ¬ IsStationary s ↔ 存在 t, IsClub t ∧ Disjoint s t
+  结论: ¬ IsStationary s ↔ 存在 t, 是Club t ∧ Disjoint s t
   证明: by
   simp [IsStationary, disjoint_iff, not_nonempty_iff_eq_empty]
 
@@ -647,7 +647,7 @@ theorem IsStationary.nonempty
 中文:
 定理 IsStationary.nonempty
   条件: (hs : IsStationary s)
-  结论: s.Nonempty
+  结论: s.非空
   证明: by
   simpa using hs .univ
 -/
@@ -668,7 +668,7 @@ theorem isStationary_univ_iff
 
 中文:
 定理 isStationary_univ_iff
-  结论: IsStationary (.univ (α := α)) ↔ Nonempty α
+  结论: IsStationary (.univ (α := α)) ↔ 非空 α
   证明: by
   simp [IsStationary, ← not_imp_not (b := IsClub _), not_nonempty_iff_eq_empty,
     isClub_empty_iff]
@@ -695,7 +695,7 @@ theorem IsStationary.univ
 
 中文:
 定理 IsStationary.univ
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: IsStationary (.univ (α := α))
   证明: isStationary_univ_iff.2 ‹_›
 
@@ -719,7 +719,7 @@ theorem not_isStationary_empty
 
 中文:
 定理 not_isStationary_empty
-  结论: ¬ IsStationary (∅ : Set α)
+  结论: ¬ IsStationary (∅ : 集合 α)
   证明: by
   intro h
   simpa using h .univ
@@ -742,7 +742,7 @@ theorem not_isStationary_of_isEmpty
 
 中文:
 定理 not_isStationary_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: ¬ IsStationary s
   证明: s.eq_empty_of_isEmpty ▸ not_isStationary_empty
 
@@ -807,7 +807,7 @@ theorem isStationary_sUnion_iff_of_cof_le_one
 
 中文:
 定理 isStationary_sUnion_iff_of_cof_le_one
-  条件: {s : Set (Set α)} (hα : cof α <= 1)
+  条件: {s : 集合 (集合 α)} (hα : cof α <= 1)
   证明: by
     contrapose! h
     simp_rw [not_isStationary_iff] at h ⊢
@@ -846,7 +846,7 @@ theorem isStationary_iUnion_iff_of_cof_le_one
 
 中文:
 定理 isStationary_iUnion_iff_of_cof_le_one
-  条件: {ι : Sort*} {f : ι -> Set α} (hα : cof α <= 1)
+  条件: {ι : 类型层*} {f : ι -> 集合 α} (hα : cof α <= 1)
   证明: by
   rw [← sUnion_range]; rw [isStationary_sUnion_iff_of_cof_le_one hα]
   simp
@@ -868,7 +868,7 @@ theorem isStationary_sUnion_iff_of_orderTop
 
 中文:
 定理 isStationary_sUnion_iff_of_orderTop
-  条件: [OrderTop α] {s : Set (Set α)}
+  条件: [有顶序 α] {s : 集合 (集合 α)}
   证明: isStationary_sUnion_iff_of_cof_le_one (by simp)
 
 Depends on / 依赖: isStationary_sUnion_iff_of_cof_le_one
@@ -887,7 +887,7 @@ theorem isStationary_iUnion_iff_of_orderTop
 
 中文:
 定理 isStationary_iUnion_iff_of_orderTop
-  条件: [OrderTop α] {ι : Sort*} {f : ι -> Set α}
+  条件: [有顶序 α] {ι : 类型层*} {f : ι -> 集合 α}
   证明: isStationary_iUnion_iff_of_cof_le_one (by simp)
 
 Depends on / 依赖: isStationary_iUnion_iff_of_cof_le_one
@@ -909,8 +909,8 @@ theorem IsClub.isStationary
   proof: fun _ ht => (hs.inter hα ht).nonempty
 
 中文:
-定理 IsClub.isStationary
-  条件: [Nonempty α] (hα : cof α != ℵ₀) (hs : IsClub s)
+定理 是Club.isStationary
+  条件: [非空 α] (hα : cof α != ℵ₀) (hs : 是Club s)
   结论: IsStationary s
   证明: fun _ ht => (hs.inter hα ht).nonempty
 
@@ -937,7 +937,7 @@ theorem isStationary_sUnion_iff
 
 中文:
 定理 isStationary_sUnion_iff
-  条件: {s : Set (Set α)} (hα : cof α != ℵ₀) (hsα : #s < cof α)
+  条件: {s : 集合 (集合 α)} (hα : cof α != ℵ₀) (hsα : #s < cof α)
   证明: by
     contrapose! h
     simp_rw [not_isStationary_iff] at h ⊢
@@ -976,7 +976,7 @@ theorem isStationary_iUnion_iff
 
 中文:
 定理 isStationary_iUnion_iff
-  结论: {ι : 类型u} {f : ι -> Set α} (hα : cof α != ℵ₀)
+  结论: {ι : 类型u} {f : ι -> 集合 α} (hα : cof α != ℵ₀)
   证明: by
   rw [← sUnion_range]; rw [isStationary_sUnion_iff hα]
   · simp
@@ -1007,7 +1007,7 @@ theorem isStationary_sUnion_iff_of_countable
 
 中文:
 定理 isStationary_sUnion_iff_of_countable
-  结论: {s : Set (Set α)} (hα : cof α != ℵ₀)
+  结论: {s : 集合 (集合 α)} (hα : cof α != ℵ₀)
   证明: by
   obtain hα | hα := hα.lt_or_gt
   · apply isStationary_sUnion_iff_of_cof_le_one
@@ -1037,7 +1037,7 @@ theorem isStationary_iUnion_iff_of_countable
 
 中文:
 定理 isStationary_iUnion_iff_of_countable
-  结论: {ι : Sort*} {f : ι -> Set α} [Countable ι]
+  结论: {ι : 类型层*} {f : ι -> 集合 α} [可数 ι]
   证明: by
   rw [← sUnion_range]; rw [isStationary_sUnion_iff_of_countable hα (countable_range f)]
   simp

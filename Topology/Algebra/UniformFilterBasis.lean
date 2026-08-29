@@ -42,7 +42,7 @@ definition uniformSpace
 
 中文:
 定义 uniformSpace
-  签名: : UniformSpace G
+  签名: : 一致空间 G
   定义体: @IsTopologicalAddGroup.rightUniformSpace G _ B.topology B.isTopologicalAddGroup
 -/
 protected def uniformSpace : UniformSpace G :=
@@ -58,7 +58,7 @@ theorem isUniformAddGroup
 
 中文:
 定理 isUniformAddGroup
-  结论: @IsUniformAddGroup G B.uniformSpace _
+  结论: @是UniformAdd群 G B.uniformSpace _
   证明: @isUniformAddGroup_of_addCommGroup G _ B.topology B.isTopologicalAddGroup
 -/
 protected theorem isUniformAddGroup : @IsUniformAddGroup G B.uniformSpace _ :=
@@ -79,7 +79,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {F : Filter G}
+  条件: {F : 滤子 G}
   证明: by
   let := B.uniformSpace
   have := B.isUniformAddGroup

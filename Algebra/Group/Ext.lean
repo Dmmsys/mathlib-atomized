@@ -52,9 +52,9 @@ theorem Monoid.ext
   have : m₁.n
 
 中文:
-定理 Monoid.ext
+定理 幺半群.ext
   条件: {M : 类型u} ⦃m₁ m₂
-  结论: Monoid M⦄
+  结论: 幺半群 M⦄
   证明: by
   have : m₁.toMulOneClass = m₂.toMulOneClass := MulOneClass.ext h_mul
   have h₁ : m₁.one = m₂.one := congr_arg (·.one) this
@@ -93,7 +93,7 @@ theorem CommMonoid.toMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-定理 CommMonoid.toMonoid_injective
+定理 交换幺半群.toMonoid_injective
   条件: {M : 类型u}
   证明: by
   rintro ⟨⟩ ⟨⟩ h
@@ -119,9 +119,9 @@ theorem CommMonoid.ext
 @[to_additive]
 
 中文:
-定理 CommMonoid.ext
+定理 交换幺半群.ext
   条件: {M : 类型} ⦃m₁ m₂
-  结论: CommMonoid M⦄
+  结论: 交换幺半群 M⦄
   证明: CommMonoid.toMonoid_injective Monoid.ext h_mul
 
 @[to_additive]
@@ -146,7 +146,7 @@ theorem LeftCancelMonoid.toMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-定理 LeftCancelMonoid.toMonoid_injective
+定理 左消去幺半群.toMonoid_injective
   条件: {M : 类型u}
   证明: by
   rintro @⟨@⟨⟩⟩ @⟨@⟨⟩⟩ h
@@ -174,9 +174,9 @@ theorem LeftCancelMonoid.ext
 @[to_additive]
 
 中文:
-定理 LeftCancelMonoid.ext
+定理 左消去幺半群.ext
   条件: {M : 类型u} ⦃m₁ m₂
-  结论: LeftCancelMonoid M⦄
+  结论: 左消去幺半群 M⦄
   证明: LeftCancelMonoid.toMonoid_injective Monoid.ext h_mul
 
 @[to_additive]
@@ -202,7 +202,7 @@ theorem RightCancelMonoid.toMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-定理 RightCancelMonoid.toMonoid_injective
+定理 右消去幺半群.toMonoid_injective
   条件: {M : 类型u}
   证明: by
   rintro @⟨@⟨⟩⟩ @⟨@⟨⟩⟩ h
@@ -230,9 +230,9 @@ theorem RightCancelMonoid.ext
 @[to_additive]
 
 中文:
-定理 RightCancelMonoid.ext
+定理 右消去幺半群.ext
   条件: {M : 类型u} ⦃m₁ m₂
-  结论: RightCancelMonoid M⦄
+  结论: 右消去幺半群 M⦄
   证明: RightCancelMonoid.toMonoid_injective Monoid.ext h_mul
 
 @[to_additive]
@@ -258,7 +258,7 @@ theorem CancelMonoid.toLeftCancelMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-定理 CancelMonoid.toLeftCancelMonoid_injective
+定理 消去幺半群.toLeftCancelMonoid_injective
   条件: {M : 类型u}
   证明: by
   rintro ⟨⟩ ⟨⟩ h
@@ -284,9 +284,9 @@ theorem CancelMonoid.ext
 @[to_additive]
 
 中文:
-定理 CancelMonoid.ext
+定理 消去幺半群.ext
   条件: {M : 类型} ⦃m₁ m₂
-  结论: CancelMonoid M⦄
+  结论: 消去幺半群 M⦄
   证明: CancelMonoid.toLeftCancelMonoid_injective LeftCancelMonoid.ext h_mul
 
 @[to_additive]
@@ -314,7 +314,7 @@ exact congrArg (fun m : Monoid M => (letI := m; HMul.hMul : M -> M -> M))
 @[to_additive]
 
 中文:
-定理 CancelMonoid.toRightCancelMonoid_injective
+定理 消去幺半群.toRightCancelMonoid_injective
   条件: {M : 类型u}
   证明: by
   intro m₁ m₂ h
@@ -347,7 +347,7 @@ theorem CancelCommMonoid.toCommMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-定理 CancelCommMonoid.toCommMonoid_injective
+定理 消去交换幺半群.toCommMonoid_injective
   条件: {M : 类型u}
   证明: by
   rintro @⟨@⟨@⟨⟩⟩⟩ @⟨@⟨@⟨⟩⟩⟩ h
@@ -373,9 +373,9 @@ theorem CancelCommMonoid.ext
 @[to_additive (attr := ext)]
 
 中文:
-定理 CancelCommMonoid.ext
+定理 消去交换幺半群.ext
   条件: {M : 类型} ⦃m₁ m₂
-  结论: CancelCommMonoid M⦄
+  结论: 消去交换幺半群 M⦄
   证明: CancelCommMonoid.toCommMonoid_injective CommMonoid.ext h_mul
 
 @[to_additive (attr := ext)]
@@ -406,9 +406,9 @@ theorem DivInvMonoid.ext
     
 
 中文:
-定理 DivInvMonoid.ext
+定理 除逆幺半群.ext
   条件: {M : 类型} ⦃m₁ m₂
-  结论: DivInvMonoid M⦄
+  结论: 除逆幺半群 M⦄
   证明: by
   have h_mon := Monoid.ext h_mul
   have h₁ : m₁.one = m₂.one := congr_arg (·.one) h_mon
@@ -454,9 +454,9 @@ lemma Group.toDivInvMonoid_injective
 @[to_additive (attr := ext)]
 
 中文:
-引理 Group.toDivInvMonoid_injective
+引理 群.toDivInvMonoid_injective
   条件: {G : 类型}
-  结论: Injective (@Group.toDivInvMonoid G)
+  结论: 单射 (@群.toDivInvMonoid G)
   证明: by
   rintro ⟨⟩ ⟨⟩ ⟨⟩; rfl
 
@@ -483,9 +483,9 @@ theorem Group.ext
       (DivInvMonoid.ext h_
 
 中文:
-定理 Group.ext
+定理 群.ext
   条件: {G : 类型} ⦃g₁ g₂
-  结论: Group G⦄
+  结论: 群 G⦄
   证明: by
   have h₁ : g₁.one = g₂.one := congr_arg (·.one) (Monoid.ext h_mul)
   let f : @MonoidHom G G g₁.toMulOne g₂.toMulOne :=
@@ -523,9 +523,9 @@ lemma CommGroup.toGroup_injective
 @[to_additive (attr := ext)]
 
 中文:
-引理 CommGroup.toGroup_injective
+引理 交换群.toGroup_injective
   条件: {G : 类型}
-  结论: Injective (@CommGroup.toGroup G)
+  结论: 单射 (@交换群.toGroup G)
   证明: by
   rintro ⟨⟩ ⟨⟩ ⟨⟩; rfl
 
@@ -545,9 +545,9 @@ theorem CommGroup.ext
   proof: CommGroup.toGroup_injective Group.ext h_mul
 
 中文:
-定理 CommGroup.ext
+定理 交换群.ext
   条件: {G : 类型} ⦃g₁ g₂
-  结论: CommGroup G⦄
+  结论: 交换群 G⦄
   证明: CommGroup.toGroup_injective Group.ext h_mul
 
 Depends on / 依赖: HMul.hMul

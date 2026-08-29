@@ -63,7 +63,7 @@ theorem finite_of_compactSpace_of_t2Space
 
 中文:
 定理 finite_of_compactSpace_of_t2Space
-  条件: [IsArtinianRing R]
+  条件: [是Artin环 R]
   证明: by
   obtain ⟨n, hn⟩ := IsArtinianRing.isNilpotent_jacobson_bot (R := R)
   have H : (∏ p : PrimeSpectrum R, p.asIdeal) ^ n = ⊥ := by
@@ -108,9 +108,9 @@ lemma Ideal.isOpen_of_isMaximal
   I.toAddSubgroup.isOpen_of_isClosed_of_finiteIndex (inferInstanceAs (IsClosed (X := R) I))
 
 中文:
-引理 Ideal.isOpen_of_isMaximal
-  条件: (I : Ideal R) [I.IsMaximal]
-  结论: IsOpen (X := R) I
+引理 理想.isOpen_of_isMaximal
+  条件: (I : 理想 R) [I.是极大]
+  结论: 是开集 (X := R) I
   证明: have : I.toAddSubgroup.FiniteIndex :=
     @AddSubgroup.finiteIndex_of_finite_quotient _ _ _
       (inferInstanceAs (Finite (R ⧸ I)))
@@ -135,8 +135,8 @@ lemma Ideal.isOpen_pow_of_isMaximal
     (Ideal.isCompact_of_fg (IsNoetherian.noetherian _)).isClosed
 
 中文:
-引理 Ideal.isOpen_pow_of_isMaximal
-  条件: (I : Ideal R) [I.IsMaximal] (n : 自然数)
+引理 理想.isOpen_pow_of_isMaximal
+  条件: (I : 理想 R) [I.是极大] (n : 自然数)
   证明: have : (I ^ n).toAddSubgroup.FiniteIndex :=
     @AddSubgroup.finiteIndex_of_finite_quotient _ _ _
       (Ideal.finite_quotient_pow (IsNoetherian.noetherian _) _)
@@ -191,7 +191,7 @@ lemma isOpen_maximalIdeal
 
 中文:
 引理 isOpen_maximalIdeal
-  结论: IsOpen (X := R) ↑(maximalIdeal R)
+  结论: 是开集 (X := R) ↑(maximalIdeal R)
   证明: Ideal.isOpen_of_isMaximal _
 
 Depends on / 依赖: maximalIdeal
@@ -209,7 +209,7 @@ instance finite_residueField_of_compactSpace
 
 中文:
 实例 finite_residueField_of_compactSpace
-  签名: : Finite (ResidueField R)
+  签名: : 有限 (ResidueField R)
   定义体: inferInstanceAs (Finite (R ⧸ _))
 
 Depends on / 依赖: Finite
@@ -231,7 +231,7 @@ lemma isOpen_iff_finite_quotient
 
 中文:
 引理 isOpen_iff_finite_quotient
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: by
   refine ⟨AddSubgroup.quotient_finite_of_isOpen I.toAddSubgroup, fun H => ?_⟩
   obtain ⟨n, hn⟩ := exists_maximalIdeal_pow_le_of_isArtinianRing_quotient I
@@ -264,7 +264,7 @@ lemma IsDedekindDomain.isOpen_of_ne_bot
     ?_ (IsNoetherianRing.isClosed
 
 中文:
-引理 IsDedekindDomain.isOpen_of_ne_bot
+引理 是Dedekind整环.isOpen_of_ne_bot
   证明: by
   rw [← Ideal.finprod_heightOneSpectrum_factorization hI]; rw [finprod_eq_finsetProd_of_mulSupport_subset _
       (s := (Ideal.hasFiniteMulSupport hI).toFinset) (by simp)]
@@ -296,7 +296,7 @@ lemma IsDedekindDomain.isOpen_iff
   exact hR (Finite.isField_of_domain R)
 
 中文:
-引理 IsDedekindDomain.isOpen_iff
+引理 是Dedekind整环.isOpen_iff
   证明: by
   refine ⟨?_, IsDedekindDomain.isOpen_of_ne_bot⟩
   rintro H rfl
@@ -321,7 +321,7 @@ lemma IsDiscreteValuationRing.isOpen_iff
   proof: IsDedekindDomain.isOpen_iff (not_isField R)
 
 中文:
-引理 IsDiscreteValuationRing.isOpen_iff
+引理 是离散赋值环.isOpen_iff
   证明: IsDedekindDomain.isOpen_iff (not_isField R)
 -/
 lemma IsDiscreteValuationRing.isOpen_iff

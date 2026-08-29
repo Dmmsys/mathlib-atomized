@@ -103,7 +103,7 @@ theorem aeval_algebraMap_eq_zero_iff
 
 中文:
 定理 aeval_algebraMap_eq_zero_iff
-  结论: [IsDomain A] [IsTorsionFree A B] [Nontrivial B] (x : A)
+  结论: [是整环 A] [是无挠 A B] [非平凡 B] (x : A)
   证明: by
   rw [aeval_algebraMap_apply]; rw [Algebra.algebraMap_eq_smul_one]; rw [smul_eq_zero]; rw [iff_false_intro (one_ne_zero' B)]; rw [or_false]
 
@@ -160,7 +160,7 @@ theorem aeval_coe
 
 中文:
 定理 aeval_coe
-  条件: (S : Subalgebra R A) (x : S) (p : R[X])
+  条件: (S : 子代数 R A) (x : S) (p : R[X])
   结论: aeval (x : A) p = aeval x p
   证明: aeval_algebraMap_apply A x p
 

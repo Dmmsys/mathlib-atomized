@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans M (ModEq p)
+  签名: 是Trans M (ModEq p)
   定义体: ⟨fun _ _ _ => .trans⟩
 
 @[simp]
@@ -508,7 +508,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {N F : 类型} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+  结论: {N F : 类型} [加法交换幺半群 N] [函数状 F M N] [加法幺半群态射类 F M N]
   证明: by
   rw [modEq_iff_nsmul] at *
   rcases h with ⟨m, n, h⟩
@@ -539,7 +539,7 @@ theorem map_modEq_iff
 
 中文:
 定理 map_modEq_iff
-  结论: {N F : 类型} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+  结论: {N F : 类型} [加法交换幺半群 N] [函数状 F M N] [加法幺半群态射类 F M N]
   证明: by
   simp only [modEq_iff_nsmul, ← map_nsmul, ← map_add, hf.eq_iff]
 
@@ -565,7 +565,7 @@ alias ⟨ModEq.nsmul_cancel, _⟩ := nsmul_modEq_nsmul
 
 中文:
 定理 nsmul_modEq_nsmul
-  条件: [IsAddTorsionFree M] {n : 自然数} (hn : n != 0)
+  条件: [是加法无挠 M] {n : 自然数} (hn : n != 0)
   证明: by
   simp only [modEq_iff_nsmul, ← mul_nsmul _ n, mul_nsmul' _ n, ← nsmul_add, nsmul_right_inj hn]
 
@@ -1059,7 +1059,7 @@ alias ⟨ModEq.zsmul_cancel, _⟩ := zsmul_modEq_zsmul
 
 中文:
 定理 zsmul_modEq_zsmul
-  条件: [IsAddTorsionFree G] (hn : z != 0)
+  条件: [是加法无挠 G] (hn : z != 0)
   证明: by
   simp [modEq_iff_zsmul, ← zsmul_sub, zsmul_comm, zsmul_right_inj hn]
 

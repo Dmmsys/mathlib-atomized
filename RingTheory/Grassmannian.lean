@@ -74,12 +74,12 @@ structure Grassmannian
     - rankAtStalk_eq : forall p, rankAtStalk (R := R) (M ⧸ toSubmodule) p = k
 
 中文:
-结构 Grassmannian
-  参数: extends Submodule R M
-  继承: Submodule R M
+结构 Grassmann流形
+  参数: extends 子模 R M
+  继承: 子模 R M
   公理与运算 (3 个):
-    - finite_quotient : Module.Finite R (M ⧸ toSubmodule)
-    - projective_quotient : Projective R (M ⧸ toSubmodule)
+    - finite_quotient : 模.有限 R (M ⧸ toSubmodule)
+    - projective_quotient : 投射 R (M ⧸ toSubmodule)
     - rankAtStalk_eq : 对任意 p, rankAtStalk (R := R) (M ⧸ toSubmodule) p = k
 -/
 @[stacks 089R] structure Grassmannian extends Submodule R M where
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut G(k, M; R) (Submodule R M)
+  签名: CoeOut G(k, M; R) (子模 R M)
   定义体: ⟨toSubmodule⟩
 
 Depends on / 依赖: toSubmodule
@@ -125,7 +125,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {N₁ N₂ : G(k, M; R)} (h : (N₁ : Submodule R M) = N₂)
+  条件: {N₁ N₂ : G(k, M; R)} (h : (N₁ : 子模 R M) = N₂)
   结论: N₁ = N₂
   证明: by
   cases N₁; cases N₂; congr 1
@@ -177,7 +177,7 @@ theorem baseChangeMkQ_surjective
 
 中文:
 定理 baseChangeMkQ_surjective
-  结论: Function.Surjective (baseChangeMkQ B N)
+  结论: 函数.满射 (baseChangeMkQ B N)
   证明: (LinearMap.baseChange_surjective B (Submodule.mkQ_surjective _)).comp
     (cancelBaseChange R A B B M).symm.surjective
 
@@ -286,7 +286,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (A : CommAlgCat R) (N : G(k, A otimes[R] M; A))
+  条件: (A : 交换Alg范畴 R) (N : G(k, A otimes[R] M; A))
   证明: by
   ext : 1
   exact (ker_baseChange_comp_cancelBaseChange_symm N.mkQ).trans N.toSubmodule.ker_mkQ
@@ -371,7 +371,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : CommAlgCat.{w, u} R ⥤ Type (max v w) where
+  签名: : 交换Alg范畴.{w, u} R ⥤ 类型 (最大值 v w) where
   定义体: G(k, (A otimes[R] M); A)
   map f := ↾map f.hom
   map_id A := by ext N : 1; exact map_id k A N

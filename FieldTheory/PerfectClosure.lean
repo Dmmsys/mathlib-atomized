@@ -71,10 +71,10 @@ inductive PerfectClosure.R
     - intro: forall n x, PerfectClosure.R (n, x) (n + 1, frobenius K p x)
 
 中文:
-归纳类型 PerfectClosure.R
+归纳类型 完美闭包.R
   参数: : 自然数 × K -> 自然数 × K -> 命题
   构造子 (1 个):
-    - intro: 对任意 n x, PerfectClosure.R (n, x) (n + 1, frobenius K p x)
+    - intro: 对任意 n x, 完美闭包.R (n, x) (n + 1, frobenius K p x)
 -/
 inductive PerfectClosure.R : Nat × K -> Nat × K -> Prop
   | intro : forall n x, PerfectClosure.R (n, x) (n + 1, frobenius K p x)
@@ -88,7 +88,7 @@ definition PerfectClosure
   body: Quot (PerfectClosure.R K p)
 
 中文:
-定义 PerfectClosure
+定义 完美闭包
   签名: : 类型u
   定义体: Quot (PerfectClosure.R K p)
 
@@ -135,7 +135,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk K p)
+  结论: 函数.满射 (mk K p)
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -177,7 +177,7 @@ theorem quot_mk_eq_mk
 中文:
 定理 quot_mk_eq_mk
   条件: (x : 自然数 × K)
-  结论: (Quot.mk (R K p) x : PerfectClosure K p) = mk K p x
+  结论: (商.mk (R K p) x : 完美闭包 K p) = mk K p x
   证明: rfl
 -/
 theorem quot_mk_eq_mk (x : Nat × K) : (Quot.mk (R K p) x : PerfectClosure K p) = mk K p x :=
@@ -197,7 +197,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: {L : 类型} (x : PerfectClosure K p) (f : 自然数 × K -> L)
+  签名: {L : 类型} (x : 完美闭包 K p) (f : 自然数 × K -> L)
   定义体: Quot.liftOn x f hf
 
 @[simp]
@@ -221,7 +221,7 @@ theorem liftOn_mk
 
 中文:
 定理 liftOn_mk
-  条件: {L : Sort _} (f : 自然数 × K -> L) (hf : 对任意 x y, R K p x y -> f x = f y) (x : 自然数 × K)
+  条件: {L : 类型层 _} (f : 自然数 × K -> L) (hf : 对任意 x y, R K p x y -> f x = f y) (x : 自然数 × K)
   证明: rfl
 
 @[elab_as_elim]
@@ -241,7 +241,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: (x : PerfectClosure K p) {q : PerfectClosure K p -> 命题}
+  结论: (x : 完美闭包 K p) {q : 完美闭包 K p -> 命题}
   证明: Quot.inductionOn x h
 
 Depends on / 依赖: Quot.inductionOn, inductionOn
@@ -333,7 +333,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (PerfectClosure K p)
+  签名: : 乘法 (完美闭包 K p)
   定义体: ⟨Quot.lift
       (fun x : Nat × K =>
         Quot.lift
@@ -390,7 +390,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid (PerfectClosure K p)
+  签名: : 交换幺半群 (完美闭包 K p)
   定义体: { (inferInstance : Mul (PerfectClosure K p)) with
     mul_assoc := fun e f g =>
       Quot.inductionOn e fun ⟨m, x⟩ =>
@@ -434,7 +434,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : PerfectClosure K p) = mk K p (0, 1)
+  结论: (1 : 完美闭包 K p) = mk K p (0, 1)
   证明: rfl
 -/
 theorem one_def : (1 : PerfectClosure K p) = mk K p (0, 1) :=
@@ -450,7 +450,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (PerfectClosure K p)
+  签名: : 可居 (完美闭包 K p)
   定义体: ⟨1⟩
 -/
 instance instInhabited : Inhabited (PerfectClosure K p) :=
@@ -537,7 +537,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (PerfectClosure K p)
+  签名: : 加法 (完美闭包 K p)
   定义体: ⟨Quot.lift
       (fun x : Nat × K =>
         Quot.lift
@@ -592,7 +592,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (PerfectClosure K p)
+  签名: : 取负 (完美闭包 K p)
   定义体: ⟨Quot.lift (fun x : Nat × K => mk K p (x.1, -x.2)) fun x y (H : R K p x y) =>
       match x, y, H with
 | _, _, R.intro n x => Quot.sound by rw [← map_neg]; apply R.intro⟩
@@ -635,7 +635,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (PerfectClosure K p)
+  签名: : 零 (完美闭包 K p)
   定义体: ⟨mk K p (0, 0)⟩
 -/
 instance instZero : Zero (PerfectClosure K p) :=
@@ -651,7 +651,7 @@ theorem zero_def
 
 中文:
 定理 zero_def
-  结论: (0 : PerfectClosure K p) = mk K p (0, 0)
+  结论: (0 : 完美闭包 K p) = mk K p (0, 0)
   证明: rfl
 -/
 theorem zero_def : (0 : PerfectClosure K p) = mk K p (0, 0) :=
@@ -777,7 +777,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (PerfectClosure K p)
+  签名: : 加法交换群 (完美闭包 K p)
   定义体: { (inferInstance : Add (PerfectClosure K p)),
     (inferInstance : Neg (PerfectClosure K p)) with
     add_assoc := fun e f g =>
@@ -831,7 +831,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (PerfectClosure K p)
+  签名: : 交换环 (完美闭包 K p)
   定义体: { instAddCommGroup K p, AddMonoidWithOne.unary,
     (inferInstance : CommMonoid (PerfectClosure K p)) with
     zero_mul := fun a => by
@@ -991,7 +991,7 @@ theorem natCast
 中文:
 定理 natCast
   条件: (n x : 自然数)
-  结论: (x : PerfectClosure K p) = mk K p (n, x)
+  结论: (x : 完美闭包 K p) = mk K p (n, x)
   证明: by
   induction n with
   | zero =>
@@ -1031,7 +1031,7 @@ theorem intCast
 中文:
 定理 intCast
   条件: (x : 整数)
-  结论: (x : PerfectClosure K p) = mk K p (0, x)
+  结论: (x : 完美闭包 K p) = mk K p (0, x)
   证明: by
   cases x <;> simp [natCast K p 0]
 
@@ -1057,7 +1057,7 @@ theorem natCast_eq_iff
 中文:
 定理 natCast_eq_iff
   条件: (x y : 自然数)
-  结论: (x : PerfectClosure K p) = y ↔ (x : K) = y
+  结论: (x : 完美闭包 K p) = y ↔ (x : K) = y
   证明: by
   constructor <;> intro H
   · rw [natCast K p 0, natCast K p 0, mk_eq_iff] at H
@@ -1086,7 +1086,7 @@ instance instCharP
 
 中文:
 实例 instCharP
-  签名: : CharP (PerfectClosure K p) p
+  签名: : 特征p (完美闭包 K p) p
   定义体: by
   constructor; intro x; rw [← CharP.cast_eq_zero_iff K]
   rw [← Nat.cast_zero]; rw [natCast_eq_iff]; rw [Nat.cast_zero]
@@ -1136,7 +1136,7 @@ definition of
 
 中文:
 定义 of
-  签名: : K ->+* PerfectClosure K p where
+  签名: : K ->+* 完美闭包 K p where
   定义体: mk _ _ (0, x)
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -1182,7 +1182,7 @@ instance instReduced
 
 中文:
 实例 instReduced
-  签名: : IsReduced (PerfectClosure K p) where
+  签名: : 是既约 (完美闭包 K p) where
   定义体: induction_on x fun x ⟨n, h⟩ => by
     replace h : mk K p x ^ p ^ n = 0 := by
       rw [← Nat.sub_add_cancel ((n.lt_pow_self (Fact.out : p.Prime).one_lt).le)]; rw [pow_add]; rw [h]; rw [mul_zero]
@@ -1215,7 +1215,7 @@ instance instPerfectRing
 
 中文:
 实例 instPerfectRing
-  签名: : PerfectRing (PerfectClosure K p) p where
+  签名: : 完美环 (完美闭包 K p) p where
   定义体: by
     simp_rw [← frobenius_def]
     let f : PerfectClosure K p -> PerfectClosure K p := fun e =>
@@ -1283,7 +1283,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (L : 类型v) [CommSemiring L] [CharP L p] [PerfectRing L p]
+  签名: (L : 类型v) [交换半环 L] [特征p L p] [完美环 L p]
   定义体: { toFun := by
         refine fun e => liftOn e (fun x => (frobeniusEquiv L p).symm^[x.1] (f x.2)) ?_
         rintro - - ⟨n, x⟩
@@ -1339,7 +1339,7 @@ theorem eq_iff
 
 中文:
 定理 eq_iff
-  条件: [CommRing K] [IsReduced K] (p : 自然数) [Fact p.Prime] [CharP K p] (x y : 自然数 × K)
+  条件: [交换环 K] [是既约 K] (p : 自然数) [Fact p.素] [特征p K p] (x y : 自然数 × K)
   证明: (mk_eq_iff K p x y).trans
 ⟨fun ⟨z, H⟩ => (frobenius_inj K p).iterate z by simpa only [add_comm, iterate_add] using! H,
       fun H => ⟨0, H⟩⟩
@@ -1361,8 +1361,8 @@ instance [CommRing
   body: ⟨0, 1, fun H => zero_ne_one ((eq_iff _ _ _ _).1 H)⟩
 
 中文:
-实例 [CommRing
-  签名: K] [IsReduced K] (p
+实例 [交换环
+  签名: K] [是既约 K] (p
   定义体: ⟨0, 1, fun H => zero_ne_one ((eq_iff _ _ _ _).1 H)⟩
 
 Depends on / 依赖: eq_iff, zero_ne_one
@@ -1393,7 +1393,7 @@ Quot.sound by
 
 中文:
 实例 instInv
-  签名: : Inv (PerfectClosure K p)
+  签名: : 取逆 (完美闭包 K p)
   定义体: ⟨Quot.lift (fun x : Nat × K => Quot.mk (R K p) (x.1, x.2⁻¹)) fun x y (H : R K p x y) =>
       match x, y, H with
       | _, _, R.intro n x =>
@@ -1450,7 +1450,7 @@ instance instDivisionRing
 
 中文:
 实例 instDivisionRing
-  签名: : DivisionRing (PerfectClosure K p) where
+  签名: : 除环 (完美闭包 K p) where
   定义体: induction_on e fun ⟨m, x⟩ H => by
     have := mt (eq_iff _ _ _ _).2 H
     rw [mk_inv]; rw [mk_mul_mk]
@@ -1485,7 +1485,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field (PerfectClosure K p)
+  签名: : 域 (完美闭包 K p)
   定义体: { (inferInstance : DivisionRing (PerfectClosure K p)),
     (inferInstance : CommRing (PerfectClosure K p)) with }
 
@@ -1505,7 +1505,7 @@ instance instPerfectField
 
 中文:
 实例 instPerfectField
-  签名: : PerfectField (PerfectClosure K p)
+  签名: : 完美域 (完美闭包 K p)
   定义体: PerfectRing.toPerfectField _ p
 
 Depends on / 依赖: PerfectRing, PerfectRing.toPerfectField, toPerfectField

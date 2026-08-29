@@ -80,7 +80,7 @@ structure IntFractPair
     - fr : K
 
 中文:
-结构 IntFractPair
+结构 整数FractPair
   参数: where
   公理与运算 (2 个):
     - b : 整数
@@ -125,7 +125,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Inhabited K]
+  签名: [可居 K]
   定义体: ⟨⟨0, default⟩⟩
 -/
 instance inhabited [Inhabited K] : Inhabited (IntFractPair K) :=
@@ -321,7 +321,7 @@ definition of
 
 中文:
 定义 of
-  签名: [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K)
+  签名: [除环 K] [线性序 K] [Floor环 K] (v : K)
   定义体: let ⟨h, s⟩ := IntFractPair.seq1 v -- get the sequence of integer and fractional parts.
   ⟨h.b, -- the head is just the first integer part
     s.map fun p => ⟨1, p.b⟩⟩ -- the sequence consists of the remaining integer parts as the partial

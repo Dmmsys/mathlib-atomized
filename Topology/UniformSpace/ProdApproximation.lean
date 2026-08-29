@@ -44,8 +44,8 @@ lemma exists_finite_sum_smul_approximation_of_mem_uniformity
   obtain ⟨n, U, v, hv⟩ := exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagona
 
 中文:
-引理 exists_finite_sum_smul_approximation_of_mem_uniformity
-  结论: [TopologicalSpace R]
+引理 存在_finite_sum_smul_approximation_of_mem_uniformity
+  结论: [拓扑空间 R]
   证明: by
   have hS' : {(f, g) | forall y, (f y, g y) in S} in 𝓤 C(Y, V) :=
     (mem_compactConvergence_entourage_iff _).mpr
@@ -79,8 +79,8 @@ lemma exists_finite_sum_mul_approximation_of_mem_uniformity
   proof: exists_finite_sum_smul_approximation_of_mem_uniformity f hS
 
 中文:
-引理 exists_finite_sum_mul_approximation_of_mem_uniformity
-  结论: [Ring R] [UniformSpace R]
+引理 存在_finite_sum_mul_approximation_of_mem_uniformity
+  结论: [环 R] [一致空间 R]
   证明: exists_finite_sum_smul_approximation_of_mem_uniformity f hS
 
 Depends on / 依赖: exists_finite_sum_smul_approximation_of_mem_uniformity
@@ -223,7 +223,7 @@ lemma denseRange_tensorHom
 
 中文:
 引理 denseRange_tensorHom
-  结论: [CompactSpace X] [T2Space X] [CompactSpace Y]
+  结论: [紧空间 X] [T2空间 X] [紧空间 Y]
   证明: by
   let : UniformSpace R := IsTopologicalAddGroup.rightUniformSpace R
   let : IsUniformAddGroup R := isUniformAddGroup_of_addCommGroup

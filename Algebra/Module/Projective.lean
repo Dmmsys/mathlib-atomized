@@ -78,10 +78,10 @@ class Module.Projective
     - out : exists s : P ->ₗ[R] P ->₀ R, Function.LeftInverse (Finsupp.linearCombination R id) s
 
 中文:
-类 Module.Projective
-  参数: (R : 类型) [Semiring R] (P : 类型) [AddCommMonoid P] [Module R P]
+类 模.投射
+  参数: (R : 类型) [半环 R] (P : 类型) [加法交换幺半群 P] [模 R P]
   公理与运算 (1 个):
-    - out : 存在 s : P ->ₗ[R] P ->₀ R, Function.LeftInverse (Finsupp.linearCombination R id) s
+    - out : 存在 s : P ->ₗ[R] P ->₀ R, 函数.左逆 (有限支撑.linearCombination R id) s
 -/
 class Module.Projective (R : Type*) [Semiring R] (P : Type*) [AddCommMonoid P] [Module R P] :
     Prop where
@@ -144,7 +144,7 @@ theorem projective_lifting_property
 
 中文:
 定理 projective_lifting_property
-  结论: [h : Projective R P] (f : M ->ₗ[R] N) (g : P ->ₗ[R] N)
+  结论: [h : 投射 R P] (f : M ->ₗ[R] N) (g : P ->ₗ[R] N)
   证明: by
   /-
     Here's the first step of the proof.
@@ -182,8 +182,8 @@ theorem _root_.LinearMap.exists_rightInverse_of_surjective
   proof: projective_lifting_property f (.id : P ->ₗ[R] P) (LinearMap.range_eq_top.1 hf_surj)
 
 中文:
-定理 _root_.LinearMap.exists_rightInverse_of_surjective
-  结论: [Projective R P]
+定理 _root_.线性映射.存在_rightInverse_of_surjective
+  结论: [投射 R P]
   证明: projective_lifting_property f (.id : P ->ₗ[R] P) (LinearMap.range_eq_top.1 hf_surj)
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_top, hf_surj, projective_lifting_property, range_eq_top
@@ -203,8 +203,8 @@ theorem _root_.Function.Surjective.surjective_linearMapComp_left
 f.exists_rightInverse_of_surjective range_eq_top_of_surjective f hf_surj
 
 中文:
-定理 _root_.Function.Surjective.surjective_linearMapComp_left
-  结论: [Projective R P]
+定理 _root_.函数.满射.surjective_linearMapComp_left
+  结论: [投射 R P]
   证明: surjective_comp_left_of_exists_rightInverse
 f.exists_rightInverse_of_surjective range_eq_top_of_surjective f hf_surj
 
@@ -225,8 +225,8 @@ theorem Projective.of_lifting_property''
     (linearCombination_surjective _ Function.surjective_id)
 
 中文:
-定理 Projective.of_lifting_property''
-  结论: {R : 类型u} [Semiring R] {P : 类型v} [AddCommMonoid P]
+定理 投射.of_lifting_property''
+  结论: {R : 类型u} [半环 R] {P : 类型v} [加法交换幺半群 P]
   证明: projective_def'.2 huniv (Finsupp.linearCombination R (id : P -> P))
     (linearCombination_surjective _ Function.surjective_id)
 
@@ -255,8 +255,8 @@ instance [Projective
   rw [LinearMap.comp_coprod]; rw [hg₁]; rw [hg₂]; rw [LinearMap.coprod_inl_inr]
 
 中文:
-实例 [Projective
-  签名: R P] [Projective R Q] : Projective R (P × Q)
+实例 [投射
+  签名: R P] [投射 R Q] : 投射 R (P × Q)
   定义体: by
   refine .of_lifting_property'' fun f hf => ?_
   rcases projective_lifting_property f (.inl _ _ _) hf with ⟨g₁, hg₁⟩
@@ -291,7 +291,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : 对任意 i : ι, Projective R (A i)] : Projective R (Π₀ i, A i)
+  签名: : 对任意 i : ι, 投射 R (A i)] : 投射 R (Π₀ i, A i)
   定义体: .of_lifting_property'' fun f hf => by
     classical
       choose g hg using fun i => projective_lifting_property f (DFinsupp.lsingle i) hf
@@ -328,9 +328,9 @@ theorem Projective.of_basis
   exact b
 
 中文:
-定理 Projective.of_basis
-  条件: {ι : 类型} (b : Basis ι R P)
-  结论: Projective R P
+定理 投射.of_basis
+  条件: {ι : 类型} (b : 基 ι R P)
+  结论: 投射 R P
   证明: by
   -- need P →ₗ (P →₀ R) for definition of projective.
   -- get it from `ι → (P →₀ R)` coming from `b`.
@@ -365,8 +365,8 @@ theorem Projective.of_split
   rw [LinearMap.comp_apply]; rw [← LinearMap.comp_apply]; rw [hg]; rw [← LinearMap.comp_apply]; rw [H]; rw [LinearMap.id_apply]
 
 中文:
-定理 Projective.of_split
-  结论: [Module.Projective R M]
+定理 投射.of_split
+  结论: [模.投射 R M]
   证明: by
   obtain ⟨g, hg⟩ := projective_lifting_property (Finsupp.linearCombination R id) s
     (fun x => ⟨Finsupp.single x 1, by simp⟩)
@@ -397,8 +397,8 @@ theorem Projective.of_equiv
     map_smul' := fun r v => by ext i; simp [e₁, e₂.sym
 
 中文:
-定理 Projective.of_equiv
-  结论: {R S} [Semiring R] [Semiring S] {M N}
+定理 投射.of_equiv
+  结论: {R S} [半环 R] [半环 S] {M N}
   证明: by
   let e₁ : R ≃+* S := RingHomInvPair.toRingEquiv σ σ'
   obtain ⟨f, hf⟩ := ‹Projective R M›
@@ -435,8 +435,8 @@ theorem Projective.of_equiv'
 @[deprecated (since := "2026-02-14")] alias Projective.of_ringEquiv := Projective.of_equiv
 
 中文:
-定理 Projective.of_equiv'
-  结论: [Module.Projective R M]
+定理 投射.of_equiv'
+  结论: [模.投射 R M]
   证明: .of_equiv e
 
 @[deprecated (since := "2026-02-14")] alias Projective.of_ringEquiv := Projective.of_equiv
@@ -458,8 +458,8 @@ instance [Projective
   body: Projective.of_equiv' ULift.moduleEquiv.symm
 
 中文:
-实例 [Projective
-  签名: R M] : Projective R (ULift.{w} M)
+实例 [投射
+  签名: R M] : 投射 R (类型层提升.{w} M)
   定义体: Projective.of_equiv' ULift.moduleEquiv.symm
 
 Depends on / 依赖: Projective, Projective.of_equiv, ULift.moduleEquiv.symm, moduleEquiv, of_equiv
@@ -477,9 +477,9 @@ theorem Projective.of_ulift
   proof: Projective.of_equiv' ULift.moduleEquiv
 
 中文:
-定理 Projective.of_ulift
-  条件: [Projective R (ULift.{w} M)]
-  结论: Projective R M
+定理 投射.of_ulift
+  条件: [投射 R (类型层提升.{w} M)]
+  结论: 投射 R M
   证明: Projective.of_equiv' ULift.moduleEquiv
 
 Depends on / 依赖: Projective, Projective.of_equiv, ULift.moduleEquiv, moduleEquiv, of_equiv
@@ -497,7 +497,7 @@ instance [Small.{w}
 
 中文:
 实例 [Small.{w}
-  签名: M] [Projective R M] : Projective R (Shrink.{w} M)
+  签名: M] [投射 R M] : 投射 R (Shrink.{w} M)
   定义体: Projective.of_equiv' (Shrink.linearEquiv R M).symm
 
 Depends on / 依赖: Projective, Projective.of_equiv, Shrink, Shrink.linearEquiv, linearEquiv, of_equiv
@@ -515,9 +515,9 @@ theorem Projective.of_shrink
   proof: Projective.of_equiv' (Shrink.linearEquiv R M)
 
 中文:
-定理 Projective.of_shrink
-  条件: [Small.{w} M] [Projective R (Shrink.{w} M)]
-  结论: Projective R M
+定理 投射.of_shrink
+  条件: [Small.{w} M] [投射 R (Shrink.{w} M)]
+  结论: 投射 R M
   证明: Projective.of_equiv' (Shrink.linearEquiv R M)
 
 Depends on / 依赖: Projective, Projective.of_equiv, Shrink, Shrink.linearEquiv, linearEquiv, of_equiv
@@ -534,8 +534,8 @@ theorem Projective.iff_split_of_projective
   proof: ⟨fun _ => projective_lifting_property _ _ hs, fun ⟨i, H⟩ => Projective.of_split i s H⟩
 
 中文:
-定理 Projective.iff_split_of_projective
-  结论: [Module.Projective R M] (s : M ->ₗ[R] P)
+定理 投射.iff_split_of_projective
+  结论: [模.投射 R M] (s : M ->ₗ[R] P)
   证明: ⟨fun _ => projective_lifting_property _ _ hs, fun ⟨i, H⟩ => Projective.of_split i s H⟩
 
 Depends on / 依赖: Projective, Projective.of_split, of_split, projective_lifting_property
@@ -568,9 +568,9 @@ theorem Projective.iff_split'
     e.symm.toLinearMap 
 
 中文:
-定理 Projective.iff_split'
+定理 投射.iff_split'
   条件: [Small.{w} R] [Small.{w} P]
-  结论: Module.Projective R P ↔
+  结论: 模.投射 R P ↔
   证明: by
   let e : (Shrink.{w, v} P ->₀ Shrink.{w, u} R) ≃ₗ[R] P ->₀ R :=
     Finsupp.mapDomain.linearEquiv _ R (equivShrink P).symm ≪≫ₗ
@@ -602,8 +602,8 @@ theorem Projective.iff_split
   proof: Projective.iff_split'.{max u v}
 
 中文:
-定理 Projective.iff_split
-  结论: Module.Projective R P ↔
+定理 投射.iff_split
+  结论: 模.投射 R P ↔
   证明: Projective.iff_split'.{max u v}
 
 Depends on / 依赖: Projective, Projective.iff_split, iff_split
@@ -629,8 +629,8 @@ instance Projective.tensorProduct
     · exact (AlgebraTen
 
 中文:
-实例 Projective.tensorProduct
-  签名: [hM : Module.Projective R M] [hN : Module.Projective R₀ N]
+实例 投射.tensorProduct
+  签名: [hM : 模.投射 R M] [hN : 模.投射 R₀ N]
   定义体: by
   obtain ⟨sM, hsM⟩ := hM
   obtain ⟨sN, hsN⟩ := hN
@@ -673,8 +673,8 @@ theorem Projective.of_lifting_property'
   exact ⟨e.toLinearMap ∘ₗ g, hg⟩
 
 中文:
-定理 Projective.of_lifting_property'
-  结论: {R : 类型u} [Semiring R] {P : 类型v}
+定理 投射.of_lifting_property'
+  结论: {R : 类型u} [半环 R] {P : 类型v}
   证明: by
   refine of_lifting_property'' (fun p hp => ?_)
   let e := Finsupp.mapRange.linearEquiv (α := P) (Shrink.linearEquiv R R)
@@ -709,8 +709,8 @@ theorem Projective.of_lifting_property
   exact ⟨e.toLinearMap ∘ₗ g, hg⟩
 
 中文:
-定理 Projective.of_lifting_property
-  结论: {R : 类型u} [Ring R] {P : 类型v} [AddCommGroup P]
+定理 投射.of_lifting_property
+  结论: {R : 类型u} [环 R] {P : 类型v} [加法交换群 P]
   证明: by
   refine of_lifting_property'' (fun p hp => ?_)
   let e := Finsupp.mapRange.linearEquiv (α := P) (Shrink.linearEquiv R R)
@@ -753,8 +753,8 @@ theorem Projective.directSum_iff
     exact Projective.of_equiv' e.symm
 
 中文:
-定理 Projective.directSum_iff
-  结论: Projective R (⨁ i, M i) ↔ 对任意 (i : ι), Projective R (M i)
+定理 投射.directSum_iff
+  结论: 投射 R (⨁ i, M i) ↔ 对任意 (i : ι), 投射 R (M i)
   证明: by
   classical
   refine ⟨fun H i => ?_, fun H => ?_⟩
@@ -780,8 +780,8 @@ instance Projective.directSum
   body: directSum_iff.mpr ‹_›
 
 中文:
-实例 Projective.directSum
-  签名: [对任意 (i : ι), Projective R (M i)]
+实例 投射.directSum
+  签名: [对任意 (i : ι), 投射 R (M i)]
   定义体: directSum_iff.mpr ‹_›
 
 Depends on / 依赖: directSum_iff, directSum_iff.mpr

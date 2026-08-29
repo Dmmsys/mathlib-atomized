@@ -40,7 +40,7 @@ theorem Even.all
 
 中文:
 定理 Even.all
-  条件: [Semiring R] [Invertible (2 : R)] (a : R)
+  条件: [半环 R] [可逆 (2 : R)] (a : R)
   结论: Even a
   证明: .of_isUnit_two (isUnit_of_invertible _) _
 
@@ -62,7 +62,7 @@ theorem Odd.all
 
 中文:
 定理 Odd.all
-  条件: [Ring R] [Invertible (2 : R)] (a : R)
+  条件: [环 R] [可逆 (2 : R)] (a : R)
   结论: Odd a
   证明: .of_isUnit_two (isUnit_of_invertible _) _
 
@@ -86,7 +86,7 @@ theorem not_ringChar_dvd_of_invertible
 
 中文:
 定理 not_ringChar_dvd_of_invertible
-  条件: {t : 自然数} [Invertible (t : R)] [Nontrivial R]
+  条件: {t : 自然数} [可逆 (t : R)] [非平凡 R]
   证明: by
   rw [← ringChar.spec]; rw [← Ne]
   exact Invertible.ne_zero (t : R)
@@ -109,7 +109,7 @@ theorem CharP.intCast_mul_natCast_gcdA_eq_gcd
   rw [← Nat.gcd_eq_gcd_ab]
 
 中文:
-定理 CharP.intCast_mul_natCast_gcdA_eq_gcd
+定理 特征p.intCast_mul_natCast_gcdA_eq_gcd
   条件: (n : 自然数)
   证明: by
   suffices ↑(n * n.gcdA p + p * n.gcdB p : Int) = ((n.gcd p : Int) : R) by simpa using this
@@ -131,7 +131,7 @@ theorem CharP.natCast_gcdA_mul_intCast_eq_gcd
   proof: .eq.trans CharP.intCast_mul_natCast_gcdA_eq_gcd n Nat.commute_cast _ _
 
 中文:
-定理 CharP.natCast_gcdA_mul_intCast_eq_gcd
+定理 特征p.natCast_gcdA_mul_intCast_eq_gcd
   条件: (n : 自然数)
   证明: .eq.trans CharP.intCast_mul_natCast_gcdA_eq_gcd n Nat.commute_cast _ _
 
@@ -181,7 +181,7 @@ theorem invOf_eq_of_coprime
 
 中文:
 定理 invOf_eq_of_coprime
-  条件: {n : 自然数} [Invertible (n : R)] (h : n.Coprime p)
+  条件: {n : 自然数} [可逆 (n : R)] (h : n.Coprime p)
   证明: by
   let : Invertible (n : R) := invertibleOfCoprime h
   convert! (rfl : ⅟(n : R) = _)
@@ -209,9 +209,9 @@ theorem CharP.isUnit_natCast_iff
     isUnit_of_invertible _
 
 中文:
-定理 CharP.isUnit_natCast_iff
-  条件: {n : 自然数} (hp : p.Prime)
-  结论: IsUnit (n : R) ↔ ¬p ∣ n where
+定理 特征p.isUnit_natCast_iff
+  条件: {n : 自然数} (hp : p.素)
+  结论: 是单位 (n : R) ↔ ¬p ∣ n where
   证明: by
     have := CharP.nontrivial_of_char_ne_one (R := R) hp.ne_one
     rw [← CharP.cast_eq_zero_iff (R := R)]
@@ -240,8 +240,8 @@ theorem CharP.isUnit_ofNat_iff
   proof: CharP.isUnit_natCast_iff hp
 
 中文:
-定理 CharP.isUnit_ofNat_iff
-  条件: {n : 自然数} [n.AtLeastTwo] (hp : p.Prime)
+定理 特征p.isUnit_of自然数_iff
+  条件: {n : 自然数} [n.AtLeastTwo] (hp : p.素)
   证明: CharP.isUnit_natCast_iff hp
 
 Depends on / 依赖: CharP.isUnit_natCast_iff, isUnit_natCast_iff
@@ -263,9 +263,9 @@ theorem CharP.isUnit_intCast_iff
   · simp [CharP.isUnit_natCast_iff hp, Int.dvd_neg, Int.ofNat_dvd]
 
 中文:
-定理 CharP.isUnit_intCast_iff
-  条件: {z : 整数} (hp : p.Prime)
-  结论: IsUnit (z : R) ↔ ¬↑p ∣ z
+定理 特征p.isUnit_intCast_iff
+  条件: {z : 整数} (hp : p.素)
+  结论: 是单位 (z : R) ↔ ¬↑p ∣ z
   证明: by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · simp [CharP.isUnit_natCast_iff hp, Int.ofNat_dvd]
@@ -317,7 +317,7 @@ definition invertibleOfCharPNotDvd
 
 中文:
 定义 invertibleOfCharPNotDvd
-  签名: {p : 自然数} [CharP K p] {t : 自然数} (not_dvd : ¬p ∣ t)
+  签名: {p : 自然数} [特征p K p] {t : 自然数} (not_dvd : ¬p ∣ t)
   定义体: invertibleOfNonzero fun h => not_dvd ((CharP.cast_eq_zero_iff K p t).mp h)
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, cast_eq_zero_iff, invertibleOfNonzero, not_dvd
@@ -337,7 +337,7 @@ instance invertibleOfPos
 
 中文:
 实例 invertibleOfPos
-  签名: [CharZero K] (n : 自然数) [NeZero n]
+  签名: [特征零 K] (n : 自然数) [NeZero n]
   定义体: invertibleOfNonzero NeZero.out
 
 Depends on / 依赖: NeZero, NeZero.out, invertibleOfNonzero
@@ -380,7 +380,7 @@ instance invertibleTwo
 
 中文:
 实例 invertibleTwo
-  签名: : Invertible (2 : K)
+  签名: : 可逆 (2 : K)
   定义体: invertibleOfNonzero (mod_cast (by decide : 2 != 0))
 
 Depends on / 依赖: invertibleOfNonzero, mod_cast
@@ -398,7 +398,7 @@ instance invertibleThree
 
 中文:
 实例 invertibleThree
-  签名: : Invertible (3 : K)
+  签名: : 可逆 (3 : K)
   定义体: invertibleOfNonzero (mod_cast (by decide : 3 != 0))
 
 Depends on / 依赖: invertibleOfNonzero, mod_cast

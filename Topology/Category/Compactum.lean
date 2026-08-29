@@ -110,7 +110,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Compactum ⥤ Type _
+  签名: : Compactum ⥤ 类型 _
   定义体: Monad.forget _
 
 Depends on / 依赖: Monad.forget, forget
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: forget.Faithful
+  签名: forget.忠实
   定义体: show (Monad.forget _).Faithful from inferInstance
 
 Depends on / 依赖: Faithful, Monad.forget, forget
@@ -164,7 +164,7 @@ definition free
 
 中文:
 定义 free
-  签名: : Type _ ⥤ Compactum
+  签名: : 类型 _ ⥤ Compactum
   定义体: Monad.free _
 
 Depends on / 依赖: Monad.free
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory Compactum (· ⟶ ·)
+  签名: 余ncrete范畴 Compactum (· ⟶ ·)
   定义体: f
   ofHom f := f
 -/
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits Compactum
+  签名: 有极限 Compactum
   定义体: hasLimits_of_hasLimits_createsLimits forget
 
 Depends on / 依赖: forget, hasLimits_of_hasLimits_createsLimits
@@ -417,7 +417,7 @@ theorem isClosed_iff
 
 中文:
 定理 isClosed_iff
-  条件: {X : Compactum} (S : Set X)
+  条件: {X : Compactum} (S : 集合 X)
   证明: by
   rw [← isOpen_compl_iff]
   constructor
@@ -466,7 +466,7 @@ definition basic
 
 中文:
 定义 basic
-  签名: {X : Compactum} (A : Set X)
+  签名: {X : Compactum} (A : 集合 X)
   定义体: { F | A in F }
 -/
 private def basic {X : Compactum} (A : Set X) : Set (Ultrafilter X) :=
@@ -483,7 +483,7 @@ definition cl
 
 中文:
 定义 cl
-  签名: {X : Compactum} (A : Set X)
+  签名: {X : Compactum} (A : 集合 X)
   定义体: X.str '' basic A
 -/
 private def cl {X : Compactum} (A : Set X) : Set X :=
@@ -507,7 +507,7 @@ theorem basic_inter
 
 中文:
 定理 basic_inter
-  条件: {X : Compactum} (A B : Set X)
+  条件: {X : Compactum} (A B : 集合 X)
   结论: basic (A inter B) = basic A inter basic B
   证明: by
   ext G
@@ -539,7 +539,7 @@ theorem subset_cl
 
 中文:
 定理 subset_cl
-  条件: {X : Compactum} (A : Set X)
+  条件: {X : Compactum} (A : 集合 X)
   结论: A subseteq cl A
   证明: fun a ha =>
   ⟨X.incl a, ha, by simp⟩
@@ -566,7 +566,7 @@ theorem cl_cl
 
 中文:
 定理 cl_cl
-  条件: {X : Compactum} (A : Set X)
+  条件: {X : Compactum} (A : 集合 X)
   结论: cl (cl A) subseteq cl A
   证明: by
   rintro _ ⟨F, hF, rfl⟩
@@ -653,8 +653,8 @@ theorem isClosed_cl
 
 中文:
 定理 isClosed_cl
-  条件: {X : Compactum} (A : Set X)
-  结论: IsClosed (cl A)
+  条件: {X : Compactum} (A : 集合 X)
+  结论: 是闭集 (cl A)
   证明: by
   rw [isClosed_iff]
   intro F hF
@@ -843,7 +843,7 @@ theorem cl_eq_closure
 
 中文:
 定理 cl_eq_closure
-  条件: {X : Compactum} (A : Set X)
+  条件: {X : Compactum} (A : 集合 X)
   结论: cl A = closure A
   证明: by
   ext
@@ -888,7 +888,7 @@ theorem continuous_of_hom
 中文:
 定理 continuous_of_hom
   条件: {X Y : Compactum} (f : X ⟶ Y)
-  结论: Continuous f
+  结论: 连续 f
   证明: by
   rw [continuous_iff_ultrafilter]
   intro x g h
@@ -927,7 +927,7 @@ definition ofTopologicalSpace
 
 中文:
 定义 ofTopologicalSpace
-  签名: (X : 类型) [TopologicalSpace X] [CompactSpace X]
+  签名: (X : 类型) [拓扑空间 X] [紧空间 X]
   定义体: X
   a := ↾Ultrafilter.lim
   unit := by
@@ -983,7 +983,7 @@ definition homOfContinuous
 
 中文:
 定义 homOfContinuous
-  签名: {X Y : Compactum} (f : X -> Y) (cont : Continuous f)
+  签名: {X Y : Compactum} (f : X -> Y) (cont : 连续 f)
   定义体: { f := ↾f
     h := by
       rw [continuous_iff_ultrafilter] at cont
@@ -1042,7 +1042,7 @@ instance full
 
 中文:
 实例 full
-  签名: : compactumToCompHaus.{u}.Full where
+  签名: : compactumToCompHaus.{u}.满 where
   定义体: ⟨Compactum.homOfContinuous f.1 f.hom.hom.2, rfl⟩
 
 Depends on / 依赖: Compactum, Compactum.homOfContinuous, f.hom.hom, homOfContinuous
@@ -1065,7 +1065,7 @@ instance faithful
 
 中文:
 实例 faithful
-  签名: : compactumToCompHaus.Faithful where
+  签名: : compactumToCompHaus.忠实 where
   定义体: by
     intro _ _ _ _ h
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` gets confused by coercion using forget.
@@ -1145,7 +1145,7 @@ instance essSurj
 
 中文:
 实例 essSurj
-  签名: : compactumToCompHaus.EssSurj
+  签名: : compactumToCompHaus.本质满射
   定义体: { mem_essImage := fun X => ⟨Compactum.ofTopologicalSpace X,
       ⟨isoOfTopologicalSpace⟩⟩ }
 
@@ -1164,7 +1164,7 @@ instance isEquivalence
 
 中文:
 实例 isEquivalence
-  签名: : compactumToCompHaus.IsEquivalence where
+  签名: : compactumToCompHaus.是等价 where
 -/
 instance isEquivalence : compactumToCompHaus.IsEquivalence where
 

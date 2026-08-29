@@ -56,7 +56,7 @@ definition thickening
 
 中文:
 定义 thickening
-  签名: (δ : 实数) (E : Set α)
+  签名: (δ : 实数) (E : 集合 α)
   定义体: { x : α | infEDist x E < ENNReal.ofReal δ }
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, infEDist, ofReal
@@ -77,7 +77,7 @@ alias mem_thickening_iff_infEdist_lt := mem_thickening_iff_infEDist_lt
 
 中文:
 定理 mem_thickening_iff_infEDist_lt
-  结论: x in thickening δ s ↔ infEDist x s < ENN实数.of实数 δ
+  结论: x in thickening δ s ↔ infEDist x s < 广义非负实数.of实数 δ
   证明: Iff.rfl
 
 @[deprecated (since := "2026-01-08")]
@@ -108,7 +108,7 @@ alias eventually_notMe
 
 中文:
 引理 eventually_notMem_thickening_of_infEDist_pos
-  条件: {E : Set α} {x : α} (h : x ∉ closure E)
+  条件: {E : 集合 α} {x : α} (h : x ∉ closure E)
   证明: by
   obtain ⟨ε, ⟨ε_pos, ε_lt⟩⟩ := exists_real_pos_lt_infEDist_of_notMem_closure h
   filter_upwards [eventually_lt_nhds ε_pos] with δ hδ
@@ -144,7 +144,7 @@ alias thickening_eq_preimage_infEdist := thickening_eq_preimage_infEDist
 
 中文:
 定理 thickening_eq_preimage_infEDist
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: rfl
 
 @[deprecated (since := "2026-01-08")]
@@ -168,8 +168,8 @@ theorem isOpen_thickening
 
 中文:
 定理 isOpen_thickening
-  条件: {δ : 实数} {E : Set α}
-  结论: IsOpen (thickening δ E)
+  条件: {δ : 实数} {E : 集合 α}
+  结论: 是开集 (thickening δ E)
   证明: Continuous.isOpen_preimage continuous_infEDist _ isOpen_Iio
 
 Depends on / 依赖: Continuous, Continuous.isOpen_preimage, continuous_infEDist, isOpen_Iio, isOpen_preimage
@@ -192,7 +192,7 @@ theorem thickening_empty
 中文:
 定理 thickening_empty
   条件: (δ : 实数)
-  结论: thickening δ (∅ : Set α) = ∅
+  结论: thickening δ (∅ : 集合 α) = ∅
   证明: by
   simp only [thickening, ofPred_false, infEDist_empty, not_top_lt]
 
@@ -212,7 +212,7 @@ theorem thickening_of_nonpos
 
 中文:
 定理 thickening_of_nonpos
-  条件: (hδ : δ <= 0) (s : Set α)
+  条件: (hδ : δ <= 0) (s : 集合 α)
   结论: thickening δ s = ∅
   证明: eq_empty_of_forall_notMem fun _ => ((ENNReal.ofReal_of_nonpos hδ).trans_le bot_le).not_gt
 
@@ -234,7 +234,7 @@ theorem thickening_mono
 
 中文:
 定理 thickening_mono
-  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : Set α)
+  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : 集合 α)
   证明: preimage_mono (Iio_subset_Iio (ENNReal.ofReal_le_ofReal hle))
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, Iio_subset_Iio, ofReal_le_ofReal, preimage_mono
@@ -253,7 +253,7 @@ theorem thickening_subset_of_subset
 
 中文:
 定理 thickening_subset_of_subset
-  条件: (δ : 实数) {E₁ E₂ : Set α} (h : E₁ subseteq E₂)
+  条件: (δ : 实数) {E₁ E₂ : 集合 α} (h : E₁ subseteq E₂)
   证明: fun _ hx => lt_of_le_of_lt (infEDist_anti h) hx
 
 Depends on / 依赖: infEDist_anti, lt_of_le_of_lt
@@ -270,8 +270,8 @@ theorem mem_thickening_iff_exists_edist_lt
   proof: infEDist_lt_iff
 
 中文:
-定理 mem_thickening_iff_exists_edist_lt
-  条件: {δ : 实数} (E : Set α) (x : α)
+定理 mem_thickening_iff_存在_edist_lt
+  条件: {δ : 实数} (E : 集合 α) (x : α)
   证明: infEDist_lt_iff
 
 Depends on / 依赖: infEDist_lt_iff
@@ -290,7 +290,7 @@ theorem frontier_thickening_subset
 
 中文:
 定理 frontier_thickening_subset
-  条件: (E : Set α) {δ : 实数}
+  条件: (E : 集合 α) {δ : 实数}
   证明: frontier_lt_subset_eq continuous_infEDist continuous_const
 
 Depends on / 依赖: continuous_const, continuous_infEDist, frontier_lt_subset_eq
@@ -317,7 +317,7 @@ theorem frontier_thickening_disjoint
 
 中文:
 定理 frontier_thickening_disjoint
-  条件: (A : Set α)
+  条件: (A : 集合 α)
   证明: by
   refine (pairwise_disjoint_on _).2 fun r₁ r₂ hr => ?_
   rcases le_total r₁ 0 with h₁ | h₁
@@ -354,7 +354,7 @@ simpa only [edist_comm] using le_trans hy Metric.infEDist_le_edist_of_mem x_in_E
 
 中文:
 引理 subset_compl_thickening_compl_thickening_self
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: by
   intro x x_in_E
   simp only [thickening, mem_compl_iff, mem_ofPred_eq, not_lt]
@@ -384,7 +384,7 @@ lemma thickening_compl_thickening_self_subset_compl
 
 中文:
 引理 thickening_compl_thickening_self_subset_compl
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: by
   apply compl_subset_compl.mp
   simpa only [compl_compl] using subset_compl_thickening_compl_thickening_self δ E
@@ -408,7 +408,7 @@ theorem mem_thickening_iff_infDist_lt
 
 中文:
 定理 mem_thickening_iff_infDist_lt
-  条件: {E : Set X} {x : X} (h : E.Nonempty)
+  条件: {E : 集合 X} {x : X} (h : E.非空)
   证明: lt_ofReal_iff_toReal_lt (infEDist_ne_top h)
 
 Depends on / 依赖: infEDist_ne_top, lt_ofReal_iff_toReal_lt
@@ -433,7 +433,7 @@ theorem mem_thickening_iff
 
 中文:
 定理 mem_thickening_iff
-  条件: {E : Set X} {x : X}
+  条件: {E : 集合 X} {x : X}
   结论: x in thickening δ E ↔ 存在 z in E, dist x z < δ
   证明: by
   have key_iff : forall z : X, edist x z < ENNReal.ofReal δ ↔ dist x z < δ := fun z => by
@@ -464,7 +464,7 @@ theorem thickening_singleton
 中文:
 定理 thickening_singleton
   条件: (δ : 实数) (x : X)
-  结论: thickening δ ({x} : Set X) = ball x δ
+  结论: thickening δ ({x} : 集合 X) = ball x δ
   证明: by
   ext
   simp [mem_thickening_iff]
@@ -485,7 +485,7 @@ theorem ball_subset_thickening
 
 中文:
 定理 ball_subset_thickening
-  条件: {x : X} {E : Set X} (hx : x in E) (δ : 实数)
+  条件: {x : X} {E : 集合 X} (hx : x in E) (δ : 实数)
   证明: Subset.trans (by simp) (thickening_subset_of_subset δ <| singleton_subset_iff.mpr hx)
 
 Depends on / 依赖: Subset, Subset.trans, singleton_subset_iff, singleton_subset_iff.mpr, thickening_subset_of_subset
@@ -508,7 +508,7 @@ theorem thickening_eq_biUnion_ball
 
 中文:
 定理 thickening_eq_biUnion_ball
-  条件: {δ : 实数} {E : Set X}
+  条件: {δ : 实数} {E : 集合 X}
   结论: thickening δ E = ⋃ x in E, ball x δ
   证明: by
   ext x
@@ -537,8 +537,8 @@ theorem _root_.Bornology.IsBounded.thickening
       _ <= δ + diam E := by grw [(mem_thickening_iff_infDist_lt ⟨x, h
 
 中文:
-定理 _root_.Bornology.IsBounded.thickening
-  条件: {δ : 实数} {E : Set X} (h : IsBounded E)
+定理 _root_.有界结构.IsBounded.thickening
+  条件: {δ : 实数} {E : 集合 X} (h : IsBounded E)
   证明: by
   rcases E.eq_empty_or_nonempty with rfl | ⟨x, hx⟩
   · simp
@@ -576,7 +576,7 @@ definition cthickening
 
 中文:
 定义 cthickening
-  签名: (δ : 实数) (E : Set α)
+  签名: (δ : 实数) (E : 集合 α)
   定义体: { x : α | infEDist x E <= ENNReal.ofReal δ }
 
 @[simp]
@@ -597,7 +597,7 @@ theorem mem_cthickening_iff
 
 中文:
 定理 mem_cthickening_iff
-  结论: x in cthickening δ s ↔ infEDist x s <= ENN实数.of实数 δ
+  结论: x in cthickening δ s ↔ infEDist x s <= 广义非负实数.of实数 δ
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -622,7 +622,7 @@ alias eventually_no
 
 中文:
 引理 eventually_notMem_cthickening_of_infEDist_pos
-  条件: {E : Set α} {x : α} (h : x ∉ closure E)
+  条件: {E : 集合 α} {x : α} (h : x ∉ closure E)
   证明: by
   obtain ⟨ε, ⟨ε_pos, ε_lt⟩⟩ := exists_real_pos_lt_infEDist_of_notMem_closure h
   filter_upwards [eventually_lt_nhds ε_pos] with δ hδ
@@ -655,7 +655,7 @@ theorem mem_cthickening_of_edist_le
 
 中文:
 定理 mem_cthickening_of_edist_le
-  结论: (x y : α) (δ : 实数) (E : Set α) (h : y in E)
+  结论: (x y : α) (δ : 实数) (E : 集合 α) (h : y in E)
   证明: (infEDist_le_edist_of_mem h).trans h'
 
 Depends on / 依赖: infEDist_le_edist_of_mem
@@ -677,7 +677,7 @@ theorem mem_cthickening_of_dist_le
 
 中文:
 定理 mem_cthickening_of_dist_le
-  结论: {α : 类型} [PseudoMetricSpace α] (x y : α) (δ : 实数) (E : Set α)
+  结论: {α : 类型} [伪度量空间 α] (x y : α) (δ : 实数) (E : 集合 α)
   证明: by
   apply mem_cthickening_of_edist_le x y δ E h
   rw [edist_dist]
@@ -704,7 +704,7 @@ alias cthickening_eq_preimage_infEdist := cthickening_eq_preimage_infEDist
 
 中文:
 定理 cthickening_eq_preimage_infEDist
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: rfl
 
 @[deprecated (since := "2026-01-08")]
@@ -728,8 +728,8 @@ theorem isClosed_cthickening
 
 中文:
 定理 isClosed_cthickening
-  条件: {δ : 实数} {E : Set α}
-  结论: IsClosed (cthickening δ E)
+  条件: {δ : 实数} {E : 集合 α}
+  结论: 是闭集 (cthickening δ E)
   证明: IsClosed.preimage continuous_infEDist isClosed_Iic
 
 Depends on / 依赖: IsClosed, IsClosed.preimage, continuous_infEDist, isClosed_Iic, preimage
@@ -752,7 +752,7 @@ theorem cthickening_empty
 中文:
 定理 cthickening_empty
   条件: (δ : 实数)
-  结论: cthickening δ (∅ : Set α) = ∅
+  结论: cthickening δ (∅ : 集合 α) = ∅
   证明: by
   simp only [cthickening, ENNReal.ofReal_ne_top, ofPred_false, infEDist_empty, top_le_iff]
 
@@ -774,7 +774,7 @@ theorem cthickening_of_nonpos
 
 中文:
 定理 cthickening_of_nonpos
-  条件: {δ : 实数} (hδ : δ <= 0) (E : Set α)
+  条件: {δ : 实数} (hδ : δ <= 0) (E : 集合 α)
   结论: cthickening δ E = closure E
   证明: by
   ext x
@@ -799,7 +799,7 @@ theorem cthickening_zero
 
 中文:
 定理 cthickening_zero
-  条件: (E : Set α)
+  条件: (E : 集合 α)
   结论: cthickening 0 E = closure E
   证明: cthickening_of_nonpos le_rfl E
 
@@ -820,8 +820,8 @@ theorem cthickening_max_zero
 
 中文:
 定理 cthickening_max_zero
-  条件: (δ : 实数) (E : Set α)
-  结论: cthickening (max 0 δ) E = cthickening δ E
+  条件: (δ : 实数) (E : 集合 α)
+  结论: cthickening (最大值 0 δ) E = cthickening δ E
   证明: by
   cases le_total δ 0 <;> simp [cthickening_of_nonpos, *]
 
@@ -842,7 +842,7 @@ theorem cthickening_mono
 
 中文:
 定理 cthickening_mono
-  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : Set α)
+  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : 集合 α)
   证明: preimage_mono (Iic_subset_Iic.mpr (ENNReal.ofReal_le_ofReal hle))
 
 @[simp]
@@ -866,7 +866,7 @@ theorem cthickening_singleton
 
 中文:
 定理 cthickening_singleton
-  条件: {α : 类型} [PseudoMetricSpace α] (x : α) {δ : 实数} (hδ : 0 <= δ)
+  条件: {α : 类型} [伪度量空间 α] (x : α) {δ : 实数} (hδ : 0 <= δ)
   证明: by
   ext y
   simp [cthickening, edist_dist, ENNReal.ofReal_le_ofReal_iff hδ]
@@ -891,7 +891,7 @@ theorem closedBall_subset_cthickening_singleton
 
 中文:
 定理 closedBall_subset_cthickening_singleton
-  条件: {α : 类型} [PseudoMetricSpace α] (x : α) (δ : 实数)
+  条件: {α : 类型} [伪度量空间 α] (x : α) (δ : 实数)
   证明: by
   rcases lt_or_ge δ 0 with (hδ | hδ)
   · simp only [closedBall_eq_empty.mpr hδ, empty_subset]
@@ -915,7 +915,7 @@ theorem cthickening_subset_of_subset
 
 中文:
 定理 cthickening_subset_of_subset
-  条件: (δ : 实数) {E₁ E₂ : Set α} (h : E₁ subseteq E₂)
+  条件: (δ : 实数) {E₁ E₂ : 集合 α} (h : E₁ subseteq E₂)
   证明: fun _ hx => le_trans (infEDist_anti h) hx
 
 Depends on / 依赖: infEDist_anti, le_trans
@@ -934,7 +934,7 @@ theorem cthickening_subset_thickening
 
 中文:
 定理 cthickening_subset_thickening
-  条件: {δ₁ : 实数>=0} {δ₂ : 实数} (hlt : (δ₁ : 实数) < δ₂) (E : Set α)
+  条件: {δ₁ : 实数>=0} {δ₂ : 实数} (hlt : (δ₁ : 实数) < δ₂) (E : 集合 α)
   证明: fun _ hx =>
   hx.out.trans_lt ((ENNReal.ofReal_lt_ofReal_iff (lt_of_le_of_lt δ₁.prop hlt)).mpr hlt)
 -/
@@ -953,7 +953,7 @@ theorem cthickening_subset_thickening'
 
 中文:
 定理 cthickening_subset_thickening'
-  条件: {δ₁ δ₂ : 实数} (δ₂_pos : 0 < δ₂) (hlt : δ₁ < δ₂) (E : Set α)
+  条件: {δ₁ δ₂ : 实数} (δ₂_pos : 0 < δ₂) (hlt : δ₁ < δ₂) (E : 集合 α)
   证明: fun _ hx =>
   lt_of_le_of_lt hx.out ((ENNReal.ofReal_lt_ofReal_iff δ₂_pos).mpr hlt)
 -/
@@ -975,7 +975,7 @@ theorem thickening_subset_cthickening
 
 中文:
 定理 thickening_subset_cthickening
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   结论: thickening δ E subseteq cthickening δ E
   证明: by
   intro x hx
@@ -999,7 +999,7 @@ theorem thickening_subset_cthickening_of_le
 
 中文:
 定理 thickening_subset_cthickening_of_le
-  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : Set α)
+  条件: {δ₁ δ₂ : 实数} (hle : δ₁ <= δ₂) (E : 集合 α)
   证明: (thickening_subset_cthickening δ₁ E).trans (cthickening_mono hle E)
 
 Depends on / 依赖: cthickening_mono, thickening_subset_cthickening
@@ -1021,8 +1021,8 @@ theorem _root_.Bornology.IsBounded.cthickening
     ((lt_add_one _).trans_le (le_max_left _ _)) _
 
 中文:
-定理 _root_.Bornology.IsBounded.cthickening
-  结论: {α : 类型} [PseudoMetricSpace α] {δ : 实数} {E : Set α}
+定理 _root_.有界结构.IsBounded.cthickening
+  结论: {α : 类型} [伪度量空间 α] {δ : 实数} {E : 集合 α}
   证明: by
   have : IsBounded (thickening (max (δ + 1) 1) E) := h.thickening
   apply this.subset
@@ -1046,7 +1046,7 @@ theorem _root_.IsCompact.cthickening
   proof: isCompact_of_isClosed_isBounded isClosed_cthickening hs.isBounded.cthickening
 
 中文:
-定理 _root_.IsCompact.cthickening
+定理 _root_.是紧集.cthickening
   证明: isCompact_of_isClosed_isBounded isClosed_cthickening hs.isBounded.cthickening
 -/
 protected theorem _root_.IsCompact.cthickening
@@ -1065,7 +1065,7 @@ theorem thickening_subset_interior_cthickening
 
 中文:
 定理 thickening_subset_interior_cthickening
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: (subset_interior_iff_isOpen.mpr isOpen_thickening).trans
     (interior_mono (thickening_subset_cthickening δ E))
 
@@ -1086,7 +1086,7 @@ theorem closure_thickening_subset_cthickening
 
 中文:
 定理 closure_thickening_subset_cthickening
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   证明: (closure_mono (thickening_subset_cthickening δ E)).trans isClosed_cthickening.closure_subset
 
 Depends on / 依赖: closure_mono, closure_subset, isClosed_cthickening, isClosed_cthickening.closure_subset, thickening_subset_cthickening
@@ -1108,7 +1108,7 @@ theorem closure_subset_cthickening
 
 中文:
 定理 closure_subset_cthickening
-  条件: (δ : 实数) (E : Set α)
+  条件: (δ : 实数) (E : 集合 α)
   结论: closure E subseteq cthickening δ E
   证明: by
   rw [← cthickening_of_nonpos (min_le_right δ 0)]
@@ -1132,7 +1132,7 @@ theorem closure_subset_thickening
 
 中文:
 定理 closure_subset_thickening
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   证明: by
   rw [← cthickening_zero]
   exact cthickening_subset_thickening' δ_pos δ_pos E
@@ -1155,7 +1155,7 @@ theorem self_subset_thickening
 
 中文:
 定理 self_subset_thickening
-  条件: {δ : 实数} (δ_pos : 0 < δ) (E : Set α)
+  条件: {δ : 实数} (δ_pos : 0 < δ) (E : 集合 α)
   结论: E subseteq thickening δ E
   证明: (@subset_closure _ _ E).trans (closure_subset_thickening δ_pos E)
 
@@ -1175,7 +1175,7 @@ theorem self_subset_cthickening
 
 中文:
 定理 self_subset_cthickening
-  条件: {δ : 实数} (E : Set α)
+  条件: {δ : 实数} (E : 集合 α)
   结论: E subseteq cthickening δ E
   证明: subset_closure.trans (closure_subset_cthickening δ E)
 
@@ -1195,7 +1195,7 @@ theorem thickening_mem_nhdsSet
 
 中文:
 定理 thickening_mem_nhdsSet
-  条件: (E : Set α) {δ : 实数} (hδ : 0 < δ)
+  条件: (E : 集合 α) {δ : 实数} (hδ : 0 < δ)
   结论: thickening δ E in 𝓝ˢ E
   证明: isOpen_thickening.mem_nhdsSet.2 self_subset_thickening hδ E
 
@@ -1217,7 +1217,7 @@ theorem cthickening_mem_nhdsSet
 
 中文:
 定理 cthickening_mem_nhdsSet
-  条件: (E : Set α) {δ : 实数} (hδ : 0 < δ)
+  条件: (E : 集合 α) {δ : 实数} (hδ : 0 < δ)
   结论: cthickening δ E in 𝓝ˢ E
   证明: mem_of_superset (thickening_mem_nhdsSet E hδ) (thickening_subset_cthickening _ _)
 
@@ -1242,7 +1242,7 @@ theorem thickening_union
 
 中文:
 定理 thickening_union
-  条件: (δ : 实数) (s t : Set α)
+  条件: (δ : 实数) (s t : 集合 α)
   证明: by
   simp_rw [thickening, infEDist_union, min_lt_iff, ofPred_or]
 
@@ -1268,7 +1268,7 @@ theorem cthickening_union
 
 中文:
 定理 cthickening_union
-  条件: (δ : 实数) (s t : Set α)
+  条件: (δ : 实数) (s t : 集合 α)
   证明: by
   simp_rw [cthickening, infEDist_union, min_le_iff, ofPred_or]
 
@@ -1292,7 +1292,7 @@ theorem thickening_iUnion
 
 中文:
 定理 thickening_iUnion
-  条件: (δ : 实数) (f : ι -> Set α)
+  条件: (δ : 实数) (f : ι -> 集合 α)
   证明: by
   simp_rw [thickening, infEDist_iUnion, iInf_lt_iff, ofPred_exists]
 
@@ -1312,7 +1312,7 @@ lemma thickening_biUnion
 
 中文:
 引理 thickening_biUnion
-  条件: {ι : 类型} (δ : 实数) (f : ι -> Set α) (I : Set ι)
+  条件: {ι : 类型} (δ : 实数) (f : ι -> 集合 α) (I : 集合 ι)
   证明: by simp only [thickening_iUnion]
 
 Depends on / 依赖: thickening_iUnion
@@ -1394,7 +1394,7 @@ theorem diam_cthickening_le
 
 中文:
 定理 diam_cthickening_le
-  条件: {α : 类型} [PseudoMetricSpace α] (s : Set α) (hε : 0 <= ε)
+  条件: {α : 类型} [伪度量空间 α] (s : 集合 α) (hε : 0 <= ε)
   证明: by
   lift ε to Real>=0 using hε
   refine (toReal_le_add' (ediam_cthickening_le _) ?_ ?_).trans_eq ?_
@@ -1428,7 +1428,7 @@ theorem diam_thickening_le
 
 中文:
 定理 diam_thickening_le
-  条件: {α : 类型} [PseudoMetricSpace α] (s : Set α) (hε : 0 <= ε)
+  条件: {α : 类型} [伪度量空间 α] (s : 集合 α) (hε : 0 <= ε)
   证明: by
   by_cases hs : IsBounded s
   · exact (diam_mono (thickening_subset_cthickening _ _) hs.cthickening).trans
@@ -1570,7 +1570,7 @@ lemma thickening_nonempty_iff
 
 中文:
 引理 thickening_nonempty_iff
-  结论: (thickening ε s).Nonempty ↔ 0 < ε ∧ s.Nonempty
+  结论: (thickening ε s).非空 ↔ 0 < ε ∧ s.非空
   证明: by
   simp [nonempty_iff_ne_empty]
 -/
@@ -1594,8 +1594,8 @@ theorem _root_.Disjoint.exists_thickenings
   rw [← NNReal.coe_two]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal] at 
 
 中文:
-定理 _root_.Disjoint.exists_thickenings
-  结论: (hst : Disjoint s t) (hs : IsCompact s)
+定理 _root_.Disjoint.存在_thickenings
+  结论: (hst : Disjoint s t) (hs : 是紧集 s)
   证明: by
   obtain ⟨r, hr, h⟩ := exists_pos_forall_lt_edist hs ht hst
   refine ⟨r / 2, half_pos (NNReal.coe_pos.2 hr), ?_⟩
@@ -1635,8 +1635,8 @@ theorem _root_.Disjoint.exists_cthickenings
     exact cthickening_subset_thickening' hδ (half_lt_self hδ) _
 
 中文:
-定理 _root_.Disjoint.exists_cthickenings
-  结论: (hst : Disjoint s t) (hs : IsCompact s)
+定理 _root_.Disjoint.存在_cthickenings
+  结论: (hst : Disjoint s t) (hs : 是紧集 s)
   证明: by
   obtain ⟨δ, hδ, h⟩ := hst.exists_thickenings hs ht
   refine ⟨δ / 2, half_pos hδ, h.mono ?_ ?_⟩ <;>
@@ -1661,8 +1661,8 @@ theorem _root_.IsCompact.exists_cthickening_subset_open
 ⟨h.1, disjoint_compl_right_iff_subset.1 h.2.mono_right self_subset_cthickening _⟩
 
 中文:
-定理 _root_.IsCompact.exists_cthickening_subset_open
-  结论: (hs : IsCompact s) (ht : IsOpen t)
+定理 _root_.是紧集.存在_cthickening_subset_open
+  结论: (hs : 是紧集 s) (ht : 是开集 t)
   证明: (hst.disjoint_compl_right.exists_cthickenings hs ht.isClosed_compl).imp fun _ h =>
 ⟨h.1, disjoint_compl_right_iff_subset.1 h.2.mono_right self_subset_cthickening _⟩
 
@@ -1687,8 +1687,8 @@ theorem _root_.IsCompact.exists_isCompact_cthickening
   exact K_compact.of_isClosed_subset isClosed_cthickening (hδ.trans interior_subset)
 
 中文:
-定理 _root_.IsCompact.exists_isCompact_cthickening
-  条件: [LocallyCompactSpace α] (hs : IsCompact s)
+定理 _root_.是紧集.存在_isCompact_cthickening
+  条件: [局部紧空间 α] (hs : 是紧集 s)
   证明: by
   rcases exists_compact_superset hs with ⟨K, K_compact, hK⟩
   rcases hs.exists_cthickening_subset_open isOpen_interior hK with ⟨δ, δpos, hδ⟩
@@ -1714,8 +1714,8 @@ theorem _root_.IsCompact.exists_thickening_subset_open
   ⟨δ, h₀, (thickening_subset_cthickening _ _).trans hδ⟩
 
 中文:
-定理 _root_.IsCompact.exists_thickening_subset_open
-  结论: (hs : IsCompact s) (ht : IsOpen t)
+定理 _root_.是紧集.存在_thickening_subset_open
+  结论: (hs : 是紧集 s) (ht : 是开集 t)
   证明: let ⟨δ, h₀, hδ⟩ := hs.exists_cthickening_subset_open ht hst
   ⟨δ, h₀, (thickening_subset_cthickening _ _).trans hδ⟩
 
@@ -1737,7 +1737,7 @@ theorem hasBasis_nhdsSet_thickening
 
 中文:
 定理 hasBasis_nhdsSet_thickening
-  条件: {K : Set α} (hK : IsCompact K)
+  条件: {K : 集合 α} (hK : 是紧集 K)
   证明: (hasBasis_nhdsSet K).to_hasBasis' (fun _U hU => hK.exists_thickening_subset_open hU.1 hU.2)
     fun _ => thickening_mem_nhdsSet K
 
@@ -1759,7 +1759,7 @@ theorem hasBasis_nhdsSet_cthickening
 
 中文:
 定理 hasBasis_nhdsSet_cthickening
-  条件: {K : Set α} (hK : IsCompact K)
+  条件: {K : 集合 α} (hK : 是紧集 K)
   证明: (hasBasis_nhdsSet K).to_hasBasis' (fun _U hU => hK.exists_cthickening_subset_open hU.1 hU.2)
     fun _ => cthickening_mem_nhdsSet K
 
@@ -1787,8 +1787,8 @@ theorem cthickening_eq_iInter_cthickening'
     rcases hs (δ + η) (lt_add_of_pos_right _ (NNRe
 
 中文:
-定理 cthickening_eq_iInter_cthickening'
-  结论: {δ : 实数} (s : Set 实数) (hsδ : s subseteq Ioi δ)
+定理 cthickening_eq_i整数er_cthickening'
+  结论: {δ : 实数} (s : 集合 实数) (hsδ : s subseteq 左开右无界区间 δ)
   证明: by
   apply Subset.antisymm
   · exact subset_iInter₂ fun _ hε => cthickening_mono (le_of_lt (hsδ hε)) E
@@ -1828,8 +1828,8 @@ theorem cthickening_eq_iInter_cthickening
   exact fun _ hε => nonempty_Ioc.mpr hε
 
 中文:
-定理 cthickening_eq_iInter_cthickening
-  条件: {δ : 实数} (E : Set α)
+定理 cthickening_eq_i整数er_cthickening
+  条件: {δ : 实数} (E : 集合 α)
   证明: by
   apply cthickening_eq_iInter_cthickening' (Ioi δ) rfl.subset
   simp_rw [inter_eq_right.mpr Ioc_subset_Ioi_self]
@@ -1858,8 +1858,8 @@ theorem cthickening_eq_iInter_thickening'
     exact iInter₂_mon
 
 中文:
-定理 cthickening_eq_iInter_thickening'
-  结论: {δ : 实数} (δ_nn : 0 <= δ) (s : Set 实数) (hsδ : s subseteq Ioi δ)
+定理 cthickening_eq_i整数er_thickening'
+  结论: {δ : 实数} (δ_nn : 0 <= δ) (s : 集合 实数) (hsδ : s subseteq 左开右无界区间 δ)
   证明: by
   refine (subset_iInter₂ fun ε hε => ?_).antisymm ?_
   · obtain ⟨ε', -, hε'⟩ := hs ε (hsδ hε)
@@ -1892,8 +1892,8 @@ theorem cthickening_eq_iInter_thickening
   exact fun _ hε => nonempty_Ioc.mpr hε
 
 中文:
-定理 cthickening_eq_iInter_thickening
-  条件: {δ : 实数} (δ_nn : 0 <= δ) (E : Set α)
+定理 cthickening_eq_i整数er_thickening
+  条件: {δ : 实数} (δ_nn : 0 <= δ) (E : 集合 α)
   证明: by
   apply cthickening_eq_iInter_thickening' δ_nn (Ioi δ) rfl.subset
   simp_rw [inter_eq_right.mpr Ioc_subset_Ioi_self]
@@ -1918,8 +1918,8 @@ theorem cthickening_eq_iInter_thickening''
   exact le_max_left _ _
 
 中文:
-定理 cthickening_eq_iInter_thickening''
-  条件: (δ : 实数) (E : Set α)
+定理 cthickening_eq_i整数er_thickening''
+  条件: (δ : 实数) (E : 集合 α)
   证明: by
   rw [← cthickening_max_zero]; rw [cthickening_eq_iInter_thickening]
   exact le_max_left _ _
@@ -1947,8 +1947,8 @@ theorem closure_eq_iInter_cthickening'
   · exact subset_iInter₂ fun ε _ => closure_subset_cthickening ε
 
 中文:
-定理 closure_eq_iInter_cthickening'
-  结论: (E : Set α) (s : Set 实数)
+定理 closure_eq_i整数er_cthickening'
+  结论: (E : 集合 α) (s : 集合 实数)
   证明: by
   by_cases hs₀ : s subseteq Ioi 0
   · rw [← cthickening_zero]
@@ -1983,8 +1983,8 @@ theorem closure_eq_iInter_cthickening
   exact cthickening_eq_iInter_cthickening E
 
 中文:
-定理 closure_eq_iInter_cthickening
-  条件: (E : Set α)
+定理 closure_eq_i整数er_cthickening
+  条件: (E : 集合 α)
   证明: by
   rw [← cthickening_zero]
   exact cthickening_eq_iInter_cthickening E
@@ -2007,8 +2007,8 @@ theorem closure_eq_iInter_thickening'
   apply cthickening_eq_iInter_thickening' le_rfl _ hs₀ hs
 
 中文:
-定理 closure_eq_iInter_thickening'
-  结论: (E : Set α) (s : Set 实数) (hs₀ : s subseteq Ioi 0)
+定理 closure_eq_i整数er_thickening'
+  结论: (E : 集合 α) (s : 集合 实数) (hs₀ : s subseteq 左开右无界区间 0)
   证明: by
   rw [← cthickening_zero]
   apply cthickening_eq_iInter_thickening' le_rfl _ hs₀ hs
@@ -2031,8 +2031,8 @@ theorem closure_eq_iInter_thickening
   exact cthickening_eq_iInter_thickening rfl.ge E
 
 中文:
-定理 closure_eq_iInter_thickening
-  条件: (E : Set α)
+定理 closure_eq_i整数er_thickening
+  条件: (E : 集合 α)
   证明: by
   rw [← cthickening_zero]
   exact cthickening_eq_iInter_thickening rfl.ge E
@@ -2054,7 +2054,7 @@ theorem frontier_cthickening_subset
 
 中文:
 定理 frontier_cthickening_subset
-  条件: (E : Set α) {δ : 实数}
+  条件: (E : 集合 α) {δ : 实数}
   证明: frontier_le_subset_eq continuous_infEDist continuous_const
 
 Depends on / 依赖: continuous_const, continuous_infEDist, frontier_le_subset_eq
@@ -2075,7 +2075,7 @@ theorem closedBall_subset_cthickening
 
 中文:
 定理 closedBall_subset_cthickening
-  结论: {α : 类型} [PseudoMetricSpace α] {x : α} {E : Set α}
+  结论: {α : 类型} [伪度量空间 α] {x : α} {E : 集合 α}
   证明: by
   refine (closedBall_subset_cthickening_singleton _ _).trans (cthickening_subset_of_subset _ ?_)
   simpa using hx
@@ -2100,7 +2100,7 @@ theorem cthickening_subset_iUnion_closedBall_of_lt
 
 中文:
 定理 cthickening_subset_iUnion_closedBall_of_lt
-  结论: {α : 类型} [PseudoMetricSpace α] (E : Set α)
+  结论: {α : 类型} [伪度量空间 α] (E : 集合 α)
   证明: by
   refine (cthickening_subset_thickening' hδ₀ hδδ' E).trans fun x hx => ?_
   obtain ⟨y, hy₁, hy₂⟩ := mem_thickening_iff.mp hx
@@ -2128,8 +2128,8 @@ theorem _root_.IsCompact.cthickening_eq_biUnion_closedBall
   obtain ⟨y, yE, hy⟩ : exists y in E, infEDist x E = edist x y := hE.exists_infEDist_eq_e
 
 中文:
-定理 _root_.IsCompact.cthickening_eq_biUnion_closedBall
-  结论: {α : 类型} [PseudoMetricSpace α]
+定理 _root_.是紧集.cthickening_eq_biUnion_closedBall
+  结论: {α : 类型} [伪度量空间 α]
   证明: by
   rcases eq_empty_or_nonempty E with (rfl | hne)
   · simp only [cthickening_empty, biUnion_empty]
@@ -2169,7 +2169,7 @@ theorem cthickening_eq_biUnion_closedBall
 
 中文:
 定理 cthickening_eq_biUnion_closedBall
-  结论: {α : 类型} [PseudoMetricSpace α] [命题erSpace α]
+  结论: {α : 类型} [伪度量空间 α] [真空间 α]
   证明: by
   rcases eq_empty_or_nonempty E with (rfl | hne)
   · simp only [cthickening_empty, biUnion_empty, closure_empty]
@@ -2281,7 +2281,7 @@ theorem thickening_thickening_subset
 
 中文:
 定理 thickening_thickening_subset
-  条件: (ε δ : 实数) (s : Set α)
+  条件: (ε δ : 实数) (s : 集合 α)
   证明: by
   obtain hε | hε := le_total ε 0
   · simp only [thickening_of_nonpos hε, empty_subset]
@@ -2324,7 +2324,7 @@ theorem thickening_cthickening_subset
 
 中文:
 定理 thickening_cthickening_subset
-  条件: (ε : 实数) (hδ : 0 <= δ) (s : Set α)
+  条件: (ε : 实数) (hδ : 0 <= δ) (s : 集合 α)
   证明: by
   obtain hε | hε := le_total ε 0
   · simp only [thickening_of_nonpos hε, empty_subset]
@@ -2365,7 +2365,7 @@ theorem cthickening_thickening_subset
 
 中文:
 定理 cthickening_thickening_subset
-  条件: (hε : 0 <= ε) (δ : 实数) (s : Set α)
+  条件: (hε : 0 <= ε) (δ : 实数) (s : 集合 α)
   证明: by
   obtain hδ | hδ := le_total δ 0
   · simp only [thickening_of_nonpos hδ, cthickening_empty, empty_subset]
@@ -2398,7 +2398,7 @@ theorem cthickening_cthickening_subset
 
 中文:
 定理 cthickening_cthickening_subset
-  条件: (hε : 0 <= ε) (hδ : 0 <= δ) (s : Set α)
+  条件: (hε : 0 <= ε) (hδ : 0 <= δ) (s : 集合 α)
   证明: by
   intro x
   simp_rw [mem_cthickening_iff, ENNReal.ofReal_add hε hδ]
@@ -2425,7 +2425,7 @@ theorem frontier_cthickening_disjoint
 
 中文:
 定理 frontier_cthickening_disjoint
-  条件: (A : Set α)
+  条件: (A : 集合 α)
   证明: fun r₁ r₂ hr =>
   ((disjoint_singleton.2 <| by simpa).preimage _).mono (frontier_cthickening_subset _)
     (frontier_cthickening_subset _)
@@ -2478,7 +2478,7 @@ theorem tendsto_nhdsSet
 
 中文:
 定理 tendsto_nhdsSet
-  条件: {f : β -> α} (hs₁ : IsCompact s) (hs₂ : Set.Nonempty s)
+  条件: {f : β -> α} (hs₁ : 是紧集 s) (hs₂ : 集合.非空 s)
   证明: by
   rw [(hasBasis_nhdsSet_thickening hs₁).tendsto_right_iff]
   congrm (forall ε hε, ?_)
@@ -2503,7 +2503,7 @@ theorem mem_nhdsSet_iff
 
 中文:
 定理 mem_nhdsSet_iff
-  条件: {t : Set α} (hs : IsCompact s)
+  条件: {t : 集合 α} (hs : 是紧集 s)
   证明: by
   rw [(hasBasis_nhdsSet_thickening hs).mem_iff]
 
@@ -2587,7 +2587,7 @@ theorem IsCompact.exists_thickening_image_subset
   · rintro s t ⟨ε₁, hε₁, V₁, hV₁, hV₁thickening⟩
 
 中文:
-定理 IsCompact.exists_thickening_image_subset
+定理 是紧集.存在_thickening_image_subset
   证明: by
   apply hK.induction_on (p := fun K => exists ε > 0, exists V in 𝓝ˢ K, thickening ε (f '' V) subseteq U)
   · use 1, by positivity, ∅, by simp, by simp

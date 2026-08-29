@@ -506,7 +506,7 @@ lemma f_int_ofNat
   rw [f_int]; rw [f_nat]; rw [Int.ofNat_eq_natCast]; rw [Int.cast_natCast]; rw [abs_of_nonneg (by positivity)]
 
 中文:
-引理 f_int_ofNat
+引理 f_int_of自然数
   条件: (k : 自然数) {a : 实数} (ha : 0 <= a) (t : 实数) (n : 自然数)
   证明: by
   rw [f_int]; rw [f_nat]; rw [Int.ofNat_eq_natCast]; rw [Int.cast_natCast]; rw [abs_of_nonneg (by positivity)]
@@ -628,7 +628,7 @@ lemma F_int_eq_of_mem_Icc
 
 中文:
 引理 F_int_eq_of_mem_Icc
-  条件: (k : 自然数) {a : 实数} (ha : a in Icc 0 1) {t : 实数} (ht : 0 < t)
+  条件: (k : 自然数) {a : 实数} (ha : a in 闭区间 0 1) {t : 实数} (ht : 0 < t)
   证明: by
   simp only [F_int, F_nat, Function.Periodic.lift_coe]
   convert!

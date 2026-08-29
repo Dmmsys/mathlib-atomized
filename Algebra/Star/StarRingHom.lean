@@ -48,8 +48,8 @@ structure NonUnitalStarRingHom
     - map_star' : forall a : A, toFun (star a) = star (toFun a)
 
 中文:
-结构 NonUnitalStarRingHom
-  参数: (A B : 类型) [NonUnitalNonAssocSemiring A]
+结构 非幺对合环态射
+  参数: (A B : 类型) [非幺非结合半环 A]
   继承: A ->ₙ+* B
   公理与运算 (1 个):
     - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
@@ -79,9 +79,9 @@ class NonUnitalStarRingHomClass
   (no additional axioms)
 
 中文:
-类 NonUnitalStarRingHomClass
+类 非幺对合环态射类
   参数: (F : 类型) (A B : outParam 类型)
-  继承: StarHomClass F A B
+  继承: 对合态射类 F A B
   (无附加公理)
 -/
 class NonUnitalStarRingHomClass (F : Type*) (A B : outParam Type*)
@@ -109,7 +109,7 @@ definition toNonUnitalStarRingHom
 
 中文:
 定义 toNonUnitalStarRingHom
-  签名: [NonUnitalStarRingHomClass F A B] (f : F)
+  签名: [非幺对合环态射类 F A B] (f : F)
   定义体: { (f : A ->ₙ+* B) with
     map_star' := map_star f }
 
@@ -128,7 +128,7 @@ instance [NonUnitalStarRingHomClass
   body: ⟨toNonUnitalStarRingHom⟩
 
 中文:
-实例 [NonUnitalStarRingHomClass
+实例 [非幺对合环态射类
   签名: F A B] : CoeHead F (A ->⋆ₙ+* B)
   定义体: ⟨toNonUnitalStarRingHom⟩
 
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->⋆ₙ+* B) A B
+  签名: 函数状 (A ->⋆ₙ+* B) A B
   定义体: f.toFun
   coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
 
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalRingHomClass (A ->⋆ₙ+* B) A B
+  签名: 非幺环态射类 (A ->⋆ₙ+* B) A B
   定义体: f.map_mul'
   map_add f := f.map_add'
   map_zero f := f.map_zero'
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalStarRingHomClass (A ->⋆ₙ+* B) A B
+  签名: 非幺对合环态射类 (A ->⋆ₙ+* B) A B
   定义体: f.map_star'
 
 Depends on / 依赖: f.map_star, map_star
@@ -250,7 +250,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  结论: {F : 类型} [FunLike F A B] [NonUnitalRingHomClass F A B]
+  结论: {F : 类型} [函数状 F A B] [非幺环态射类 F A B]
   证明: rfl
 
 @[simp]
@@ -458,7 +458,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(NonUnitalStarRingHom.id A) = id
+  结论: ⇑(非幺对合环态射.id A) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(NonUnitalStarRingHom.id A) = id :=
@@ -574,7 +574,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->⋆ₙ+* B)
-  结论: (NonUnitalStarRingHom.id _).comp f = f
+  结论: (非幺对合环态射.id _).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -595,7 +595,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : A ->⋆ₙ+* B)
-  结论: f.comp (NonUnitalStarRingHom.id _) = f
+  结论: f.comp (非幺对合环态射.id _) = f
   证明: ext fun _ => rfl
 -/
 theorem comp_id (f : A ->⋆ₙ+* B) : f.comp (NonUnitalStarRingHom.id _) = f :=
@@ -617,7 +617,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (A ->⋆ₙ+* A)
+  签名: 幺半群 (A ->⋆ₙ+* A)
   定义体: comp
   mul_assoc := comp_assoc
   one := NonUnitalStarRingHom.id A
@@ -687,7 +687,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (A ->⋆ₙ+* B)
+  签名: 零 (A ->⋆ₙ+* B)
   定义体: ⟨{ (0 : NonUnitalRingHom A B) with map_star' := by simp }⟩
 
 Depends on / 依赖: NonUnitalRingHom, map_star
@@ -705,7 +705,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ->⋆ₙ+* B)
+  签名: 可居 (A ->⋆ₙ+* B)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (A ->⋆ₙ+* B) :=
@@ -724,7 +724,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero (A ->⋆ₙ+* A)
+  签名: 带零幺半群 (A ->⋆ₙ+* A)
   定义体: fun _ => ext fun _ => rfl
   mul_zero := fun f => ext fun _ => map_zero f
 
@@ -787,8 +787,8 @@ structure StarRingEquiv
     - map_star' : forall a : A, toFun (star a) = star (toFun a)
 
 中文:
-结构 StarRingEquiv
-  参数: (A B : 类型) [Add A] [Add B] [Mul A] [Mul B] [Star A] [Star B]
+结构 对合环等价
+  参数: (A B : 类型) [加法 A] [加法 B] [乘法 A] [乘法 B] [对合 A] [对合 B]
   继承: A ≃+* B
   公理与运算 (1 个):
     - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
@@ -815,9 +815,9 @@ class StarRingEquivClass
     - map_star : forall (f : F) (a : A), f (star a) = star (f a)
 
 中文:
-类 StarRingEquivClass
+类 对合环等价类
   参数: (F : 类型) (A B : outParam 类型)
-  继承: RingEquivClass F A B
+  继承: 环等价类 F A B
   公理与运算 (1 个):
     - map_star : 对任意 (f : F) (a : A), f (star a) = star (f a)
 -/
@@ -854,7 +854,7 @@ definition toStarRingEquiv
 
 中文:
 定义 toStarRingEquiv
-  签名: {F A B : 类型} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
+  签名: {F A B : 类型} [加法 A] [乘法 A] [对合 A] [加法 B] [乘法 B] [对合 B]
   定义体: { (RingEquivClass.toRingEquiv f : A ≃+* B) with
     map_star' := map_star f }
 
@@ -875,7 +875,7 @@ instance instCoeHead
 
 中文:
 实例 instCoeHead
-  签名: {F A B : 类型} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
+  签名: {F A B : 类型} [加法 A] [乘法 A] [对合 A] [加法 B] [乘法 B] [对合 B]
   定义体: ⟨toStarRingEquiv⟩
 
 Depends on / 依赖: toStarRingEquiv
@@ -909,7 +909,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A ≃⋆+* B) A B
+  签名: 等价状 (A ≃⋆+* B) A B
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -942,7 +942,7 @@ instance :
 
 中文:
 实例 :
-  签名: RingEquivClass (A ≃⋆+* B) A B
+  签名: 环等价类 (A ≃⋆+* B) A B
   定义体: f.map_mul'
   map_add f := f.map_add'
 
@@ -962,7 +962,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRingEquivClass (A ≃⋆+* B) A B
+  签名: 对合环等价类 (A ≃⋆+* B) A B
   定义体: map_star'
 
 Depends on / 依赖: map_star
@@ -981,7 +981,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ≃⋆+* B) A B
+  签名: 函数状 (A ≃⋆+* B) A B
   定义体: f.toFun
   coe_injective := DFunLike.coe_injective
 
@@ -1091,7 +1091,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ≃⋆+* A)
+  签名: 可居 (A ≃⋆+* A)
   定义体: ⟨refl⟩
 
 @[simp]
@@ -1180,7 +1180,7 @@ theorem invFun_eq_symm
 中文:
 定理 invFun_eq_symm
   条件: {e : A ≃⋆+* B}
-  结论: EquivLike.inv e = e.symm
+  结论: 等价状.inv e = e.symm
   证明: rfl
 
 @[simp]
@@ -1216,7 +1216,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (A ≃⋆+* B) -> B ≃⋆+* A)
+  结论: 函数.双射 (symm : (A ≃⋆+* B) -> B ≃⋆+* A)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -1305,7 +1305,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (StarRingEquiv.refl : A ≃⋆+* A).symm = StarRingEquiv.refl
+  结论: (对合环等价.refl : A ≃⋆+* A).symm = 对合环等价.refl
   证明: rfl
 -/
 theorem refl_symm : (StarRingEquiv.refl : A ≃⋆+* A).symm = StarRingEquiv.refl :=
@@ -1470,7 +1470,7 @@ theorem leftInverse_symm
 中文:
 定理 leftInverse_symm
   条件: (e : A ≃⋆+* B)
-  结论: Function.LeftInverse e.symm e
+  结论: 函数.左逆 e.symm e
   证明: e.left_inv
 
 Depends on / 依赖: e.left_inv, left_inv
@@ -1490,7 +1490,7 @@ theorem rightInverse_symm
 中文:
 定理 rightInverse_symm
   条件: (e : A ≃⋆+* B)
-  结论: Function.RightInverse e.symm e
+  结论: 函数.右逆 e.symm e
   证明: e.right_inv
 
 Depends on / 依赖: e.right_inv, right_inv
@@ -1560,7 +1560,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : F) (hf : Function.Bijective f)
+  签名: (f : F) (hf : 函数.双射 f)
   定义体: { RingEquiv.ofBijective f (hf : Function.Bijective (f : A -> B)) with
     toFun := f
     map_star' := map_star f }
@@ -1585,7 +1585,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  条件: {f : F} (hf : Function.Bijective f)
+  条件: {f : F} (hf : 函数.双射 f)
   证明: rfl
 -/
 theorem coe_ofBijective {f : F} (hf : Function.Bijective f) :
@@ -1602,7 +1602,7 @@ theorem ofBijective_apply
 
 中文:
 定理 ofBijective_apply
-  条件: {f : F} (hf : Function.Bijective f) (a : A)
+  条件: {f : F} (hf : 函数.双射 f) (a : A)
   证明: rfl
 -/
 theorem ofBijective_apply {f : F} (hf : Function.Bijective f) (a : A) :

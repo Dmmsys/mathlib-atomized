@@ -56,8 +56,8 @@ theorem Real.sInf_smul_of_nonneg
   · rw [Real.sInf_
 
 中文:
-定理 Real.sInf_smul_of_nonneg
-  条件: (ha : 0 <= a) (s : Set 实数)
+定理 实数.sInf_smul_of_nonneg
+  条件: (ha : 0 <= a) (s : 集合 实数)
   结论: sInf (a • s) = a • sInf s
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
@@ -92,7 +92,7 @@ theorem Real.smul_iInf_of_nonneg
   proof: (Real.sInf_smul_of_nonneg ha _).symm.trans congr_arg sInf (range_comp _ _).symm
 
 中文:
-定理 Real.smul_iInf_of_nonneg
+定理 实数.smul_iInf_of_nonneg
   条件: (ha : 0 <= a) (f : ι -> 实数)
   结论: (a • ⨅ i, f i) = ⨅ i, a • f i
   证明: (Real.sInf_smul_of_nonneg ha _).symm.trans congr_arg sInf (range_comp _ _).symm
@@ -120,8 +120,8 @@ theorem Real.sSup_smul_of_nonneg
   · rw [Real.sSup_
 
 中文:
-定理 Real.sSup_smul_of_nonneg
-  条件: (ha : 0 <= a) (s : Set 实数)
+定理 实数.sSup_smul_of_nonneg
+  条件: (ha : 0 <= a) (s : 集合 实数)
   结论: sSup (a • s) = a • sSup s
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
@@ -156,7 +156,7 @@ theorem Real.smul_iSup_of_nonneg
   proof: (Real.sSup_smul_of_nonneg ha _).symm.trans congr_arg sSup (range_comp _ _).symm
 
 中文:
-定理 Real.smul_iSup_of_nonneg
+定理 实数.smul_iSup_of_nonneg
   条件: (ha : 0 <= a) (f : ι -> 实数)
   结论: (a • ⨆ i, f i) = ⨆ i, a • f i
   证明: (Real.sSup_smul_of_nonneg ha _).symm.trans congr_arg sSup (range_comp _ _).symm
@@ -189,8 +189,8 @@ theorem Real.sInf_smul_of_nonpos
   · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs 
 
 中文:
-定理 Real.sInf_smul_of_nonpos
-  条件: (ha : a <= 0) (s : Set 实数)
+定理 实数.sInf_smul_of_nonpos
+  条件: (ha : a <= 0) (s : 集合 实数)
   结论: sInf (a • s) = a • sSup s
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
@@ -224,7 +224,7 @@ theorem Real.smul_iSup_of_nonpos
   proof: (Real.sInf_smul_of_nonpos ha _).symm.trans congr_arg sInf (range_comp _ _).symm
 
 中文:
-定理 Real.smul_iSup_of_nonpos
+定理 实数.smul_iSup_of_nonpos
   条件: (ha : a <= 0) (f : ι -> 实数)
   结论: (a • ⨆ i, f i) = ⨅ i, a • f i
   证明: (Real.sInf_smul_of_nonpos ha _).symm.trans congr_arg sInf (range_comp _ _).symm
@@ -251,8 +251,8 @@ theorem Real.sSup_smul_of_nonpos
   · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs 
 
 中文:
-定理 Real.sSup_smul_of_nonpos
-  条件: (ha : a <= 0) (s : Set 实数)
+定理 实数.sSup_smul_of_nonpos
+  条件: (ha : a <= 0) (s : 集合 实数)
   结论: sSup (a • s) = a • sInf s
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
@@ -286,7 +286,7 @@ theorem Real.smul_iInf_of_nonpos
   proof: (Real.sSup_smul_of_nonpos ha _).symm.trans congr_arg sSup (range_comp _ _).symm
 
 中文:
-定理 Real.smul_iInf_of_nonpos
+定理 实数.smul_iInf_of_nonpos
   条件: (ha : a <= 0) (f : ι -> 实数)
   结论: (a • ⨅ i, f i) = ⨆ i, a • f i
   证明: (Real.sSup_smul_of_nonpos ha _).symm.trans congr_arg sSup (range_comp _ _).symm
@@ -315,7 +315,7 @@ theorem Real.mul_iInf_of_nonneg
   proof: Real.smul_iInf_of_nonneg ha f
 
 中文:
-定理 Real.mul_iInf_of_nonneg
+定理 实数.mul_iInf_of_nonneg
   条件: (ha : 0 <= r) (f : ι -> 实数)
   结论: (r * ⨅ i, f i) = ⨅ i, r * f i
   证明: Real.smul_iInf_of_nonneg ha f
@@ -335,7 +335,7 @@ theorem Real.mul_iSup_of_nonneg
   proof: Real.smul_iSup_of_nonneg ha f
 
 中文:
-定理 Real.mul_iSup_of_nonneg
+定理 实数.mul_iSup_of_nonneg
   条件: (ha : 0 <= r) (f : ι -> 实数)
   结论: (r * ⨆ i, f i) = ⨆ i, r * f i
   证明: Real.smul_iSup_of_nonneg ha f
@@ -355,7 +355,7 @@ theorem Real.mul_iInf_of_nonpos
   proof: Real.smul_iInf_of_nonpos ha f
 
 中文:
-定理 Real.mul_iInf_of_nonpos
+定理 实数.mul_iInf_of_nonpos
   条件: (ha : r <= 0) (f : ι -> 实数)
   结论: (r * ⨅ i, f i) = ⨆ i, r * f i
   证明: Real.smul_iInf_of_nonpos ha f
@@ -375,7 +375,7 @@ theorem Real.mul_iSup_of_nonpos
   proof: Real.smul_iSup_of_nonpos ha f
 
 中文:
-定理 Real.mul_iSup_of_nonpos
+定理 实数.mul_iSup_of_nonpos
   条件: (ha : r <= 0) (f : ι -> 实数)
   结论: (r * ⨆ i, f i) = ⨅ i, r * f i
   证明: Real.smul_iSup_of_nonpos ha f
@@ -396,7 +396,7 @@ theorem Real.iInf_mul_of_nonneg
   simp only [Real.mul_iInf_of_nonneg ha, mul_comm]
 
 中文:
-定理 Real.iInf_mul_of_nonneg
+定理 实数.iInf_mul_of_nonneg
   条件: (ha : 0 <= r) (f : ι -> 实数)
   结论: (⨅ i, f i) * r = ⨅ i, f i * r
   证明: by
@@ -418,7 +418,7 @@ theorem Real.iSup_mul_of_nonneg
   simp only [Real.mul_iSup_of_nonneg ha, mul_comm]
 
 中文:
-定理 Real.iSup_mul_of_nonneg
+定理 实数.iSup_mul_of_nonneg
   条件: (ha : 0 <= r) (f : ι -> 实数)
   结论: (⨆ i, f i) * r = ⨆ i, f i * r
   证明: by
@@ -440,7 +440,7 @@ theorem Real.iInf_mul_of_nonpos
   simp only [Real.mul_iInf_of_nonpos ha, mul_comm]
 
 中文:
-定理 Real.iInf_mul_of_nonpos
+定理 实数.iInf_mul_of_nonpos
   条件: (ha : r <= 0) (f : ι -> 实数)
   结论: (⨅ i, f i) * r = ⨆ i, f i * r
   证明: by
@@ -462,7 +462,7 @@ theorem Real.iSup_mul_of_nonpos
   simp only [Real.mul_iSup_of_nonpos ha, mul_comm]
 
 中文:
-定理 Real.iSup_mul_of_nonpos
+定理 实数.iSup_mul_of_nonpos
   条件: (ha : r <= 0) (f : ι -> 实数)
   结论: (⨆ i, f i) * r = ⨅ i, f i * r
   证明: by

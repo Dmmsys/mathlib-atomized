@@ -216,7 +216,7 @@ theorem surjective_unpair
 
 中文:
 定理 surjective_unpair
-  结论: Surjective unpair
+  结论: 满射 unpair
   证明: pairEquiv.symm.surjective
 
 @[simp]
@@ -501,7 +501,7 @@ theorem pair_lt_max_add_one_sq
 中文:
 定理 pair_lt_max_add_one_sq
   条件: (m n : 自然数)
-  结论: pair m n < (max m n + 1) ^ 2
+  结论: pair m n < (最大值 m n + 1) ^ 2
   证明: by
   simp only [pair, Nat.pow_two, Nat.mul_add, Nat.add_mul, Nat.mul_one, Nat.one_mul, Nat.add_assoc]
   split_ifs <;> simp [Nat.le_of_lt, not_lt.1, *] <;> lia
@@ -529,7 +529,7 @@ theorem max_sq_add_min_le_pair
 中文:
 定理 max_sq_add_min_le_pair
   条件: (m n : 自然数)
-  结论: max m n ^ 2 + min m n <= pair m n
+  结论: 最大值 m n ^ 2 + 最小值 m n <= pair m n
   证明: by
   rw [pair]
   rcases lt_or_ge m n with h | h
@@ -618,7 +618,7 @@ theorem iSup_unpair
 
 中文:
 定理 iSup_unpair
-  条件: {α} [CompleteLattice α] (f : 自然数 -> 自然数 -> α)
+  条件: {α} [完备格 α] (f : 自然数 -> 自然数 -> α)
   证明: by
   rw [← (iSup_prod : ⨆ i : Nat × Nat]; rw [f i.1 i.2 = _)]; rw [← Nat.surjective_unpair.iSup_comp]
 
@@ -644,7 +644,7 @@ theorem iUnion_unpair_prod
 
 中文:
 定理 iUnion_unpair_prod
-  条件: {α β} {s : 自然数 -> Set α} {t : 自然数 -> Set β}
+  条件: {α β} {s : 自然数 -> 集合 α} {t : 自然数 -> 集合 β}
   证明: by
   rw [← Set.iUnion_prod]
   exact surjective_unpair.iUnion_comp (fun x => s x.fst ×ˢ t x.snd)
@@ -666,7 +666,7 @@ theorem iUnion_unpair
 
 中文:
 定理 iUnion_unpair
-  条件: {α} (f : 自然数 -> 自然数 -> Set α)
+  条件: {α} (f : 自然数 -> 自然数 -> 集合 α)
   证明: iSup_unpair f
 
 Depends on / 依赖: iSup_unpair
@@ -684,8 +684,8 @@ theorem iInter_unpair
   proof: iInf_unpair f
 
 中文:
-定理 iInter_unpair
-  条件: {α} (f : 自然数 -> 自然数 -> Set α)
+定理 i整数er_unpair
+  条件: {α} (f : 自然数 -> 自然数 -> 集合 α)
   证明: iInf_unpair f
 
 Depends on / 依赖: iInf_unpair

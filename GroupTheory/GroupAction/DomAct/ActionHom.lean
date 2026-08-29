@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (α ->[N] β)
+  签名: 标量乘法 Mᵈᵐᵃ (α ->[N] β)
   定义体: f.comp (SMulCommClass.toMulActionHom _ _ (mk.symm c))
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.toMulActionHom, f.comp, mk.symm, toMulActionHom
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (A ->+[N] B)
+  签名: 标量乘法 Mᵈᵐᵃ (A ->+[N] B)
   定义体: f.comp (SMulCommClass.toDistribMulActionHom _ _ (mk.symm c))
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.toDistribMulActionHom, f.comp, mk.symm, toDistribMulActionHom

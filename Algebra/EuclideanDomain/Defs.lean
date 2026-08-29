@@ -89,16 +89,16 @@ class EuclideanDomain
     - mul_left_not_lt : forall (a) {b}, b != 0 -> ¬r (a * b) a
 
 中文:
-类 EuclideanDomain
+类 欧几里得整环
   参数: (R : 类型u)
-  继承: CommRing R, Nontrivial R
+  继承: 交换环 R, 非平凡 R
   公理与运算 (8 个):
     - quotient : R -> R -> R
     - quotient_zero : 对任意 a, quotient a 0 = 0
     - remainder : R -> R -> R
     - quotient_mul_add_remainder_eq : 对任意 a b, b * quotient a b + remainder a b = a
     - r : R -> R -> 命题
-    - r_wellFounded : WellFounded r
+    - r_wellFounded : 良基 r
     - remainder_lt : 对任意 (a) {b}, b != 0 -> r (remainder a b) b
     - mul_left_not_lt : 对任意 (a) {b}, b != 0 -> ¬r (a * b) a
 -/
@@ -157,7 +157,7 @@ instance isWellFounded
 
 中文:
 实例 isWellFounded
-  签名: : IsWellFounded R (· ≺ ·) where
+  签名: : 是良基 R (· ≺ ·) where
   定义体: r_wellFounded
 
 Depends on / 依赖: r_wellFounded
@@ -441,7 +441,7 @@ termination_by a
 @[simp]
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: (a b : R)
   定义体: if a0 : a = 0 then b
   else
@@ -475,7 +475,7 @@ theorem gcd_zero_left
 中文:
 定理 gcd_zero_left
   条件: (a : R)
-  结论: gcd 0 a = a
+  结论: 最大公约数 0 a = a
   证明: by
   rw [gcd]
   exact if_pos rfl
@@ -722,7 +722,7 @@ definition lcm
   body: x * y / gcd x y
 
 中文:
-定义 lcm
+定义 最小公倍数
   签名: (x y : R)
   定义体: x * y / gcd x y
 -/

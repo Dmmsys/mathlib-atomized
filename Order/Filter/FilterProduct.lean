@@ -53,7 +53,7 @@ inv_zero := coe_eq.2 by simp only [Function.comp_def, inv_zero, EventuallyEq.rfl
 
 中文:
 实例 instGroupWithZero
-  签名: [GroupWithZero β]
+  签名: [带零群 β]
   定义体: instDivInvMonoid
   __ := instMonoidWithZero
 mul_inv_cancel f := inductionOn f fun f hf => coe_eq.2 (φ.em fun y => f y = 0).elim
@@ -82,7 +82,7 @@ instance instDivisionSemiring
 
 中文:
 实例 instDivisionSemiring
-  签名: [DivisionSemiring β]
+  签名: [除半环 β]
   定义体: instSemiring
   __ := instGroupWithZero
   nnqsmul := _
@@ -109,7 +109,7 @@ instance instDivisionRing
 
 中文:
 实例 instDivisionRing
-  签名: [DivisionRing β]
+  签名: [除环 β]
   定义体: instRing
   __ := instDivisionSemiring
   qsmul := _
@@ -134,7 +134,7 @@ instance instSemifield
 
 中文:
 实例 instSemifield
-  签名: [Semifield β]
+  签名: [半域 β]
   定义体: instCommSemiring
   __ := instDivisionSemiring
 
@@ -155,7 +155,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: [Field β]
+  签名: [域 β]
   定义体: instCommRing
   __ := instDivisionRing
 
@@ -177,7 +177,7 @@ theorem coe_lt
 
 中文:
 定理 coe_lt
-  条件: [Preorder β] {f g : α -> β}
+  条件: [预序 β] {f g : α -> β}
   结论: (f : β*) < g ↔ 对任意* x, f x < g x
   证明: by
   simp only [lt_iff_le_not_ge, eventually_and, coe_le, eventually_not, EventuallyLE]
@@ -198,7 +198,7 @@ theorem coe_pos
 
 中文:
 定理 coe_pos
-  条件: [Preorder β] [Zero β] {f : α -> β}
+  条件: [预序 β] [零 β] {f : α -> β}
   结论: 0 < (f : β*) ↔ 对任意* x, 0 < f x
   证明: coe_lt
 
@@ -220,7 +220,7 @@ theorem const_lt
 
 中文:
 定理 const_lt
-  条件: [Preorder β] {x y : β}
+  条件: [预序 β] {x y : β}
   结论: x < y -> (↑x : β*) < ↑y
   证明: coe_lt.mpr ∘ liftRel_const
 
@@ -243,7 +243,7 @@ theorem const_lt_iff
 
 中文:
 定理 const_lt_iff
-  条件: [Preorder β] {x y : β}
+  条件: [预序 β] {x y : β}
   结论: (↑x : β*) < ↑y ↔ x < y
   证明: coe_lt.trans liftRel_const_iff
 
@@ -265,7 +265,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: [Preorder β]
+  条件: [预序 β]
   结论: ((· < ·) : β* -> β* -> 命题) = LiftRel (· < ·)
   证明: by
   ext ⟨f⟩ ⟨g⟩
@@ -288,7 +288,7 @@ inductionOn₂ f g fun _f _g => eventually_or.1 Eventually.of_forall fun _x => t
 
 中文:
 实例 total
-  签名: [LE β] [@Std.Total β (· <= ·)]
+  签名: [LE β] [@Std.全 β (· <= ·)]
   定义体: ⟨fun f g =>
 inductionOn₂ f g fun _f _g => eventually_or.1 Eventually.of_forall fun _x => total_of _ _ _⟩
 
@@ -309,7 +309,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: [LinearOrder β]
+  签名: [线性序 β]
   定义体: Lattice.toLinearOrder _
 
 Depends on / 依赖: Lattice, Lattice.toLinearOrder, toLinearOrder
@@ -330,7 +330,7 @@ coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_
 
 中文:
 实例 instIsStrictOrderedRing
-  签名: [Semiring β] [PartialOrder β] [IsStrictOrderedRing β]
+  签名: [半环 β] [偏序 β] [是StrictOrdered环 β]
   定义体: inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
 coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_lt_mul_of_pos_left
   mul_lt_mul_of_pos_right x := inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
@@ -361,8 +361,8 @@ theorem max_def
 
 中文:
 定理 max_def
-  条件: [LinearOrder β] (x y : β*)
-  结论: max x y = map₂ max x y
+  条件: [线性序 β] (x y : β*)
+  结论: 最大值 x y = map₂ 最大值 x y
   证明: inductionOn₂ x y fun a b => by
     rcases le_total (a : β*) b with h | h
     · rw [max_eq_right h, map₂_coe, coe_eq]
@@ -396,8 +396,8 @@ theorem min_def
 
 中文:
 定理 min_def
-  条件: [K : LinearOrder β] (x y : β*)
-  结论: min x y = map₂ min x y
+  条件: [K : 线性序 β] (x y : β*)
+  结论: 最小值 x y = map₂ 最小值 x y
   证明: inductionOn₂ x y fun a b => by
     rcases le_total (a : β*) b with h | h
     · rw [min_eq_left h, map₂_coe, coe_eq]
@@ -427,7 +427,7 @@ theorem abs_def
 
 中文:
 定理 abs_def
-  条件: [AddCommGroup β] [LinearOrder β] (x : β*)
+  条件: [加法交换群 β] [线性序 β] (x : β*)
   证明: inductionOn x fun _a => rfl
 
 @[simp]
@@ -453,8 +453,8 @@ theorem const_max
 
 中文:
 定理 const_max
-  条件: [LinearOrder β] (x y : β)
-  结论: (↑(max x y : β) : β*) = max ↑x ↑y
+  条件: [线性序 β] (x y : β)
+  结论: (↑(最大值 x y : β) : β*) = 最大值 ↑x ↑y
   证明: by
   rw [max_def]; rw [map₂_const]
 
@@ -480,8 +480,8 @@ theorem const_min
 
 中文:
 定理 const_min
-  条件: [LinearOrder β] (x y : β)
-  结论: (↑(min x y : β) : β*) = min ↑x ↑y
+  条件: [线性序 β] (x y : β)
+  结论: (↑(最小值 x y : β) : β*) = 最小值 ↑x ↑y
   证明: by
   rw [min_def]; rw [map₂_const]
 
@@ -504,7 +504,7 @@ theorem const_abs
 
 中文:
 定理 const_abs
-  条件: [AddCommGroup β] [LinearOrder β] (x : β)
+  条件: [加法交换群 β] [线性序 β] (x : β)
   证明: by
   rw [abs_def]; rw [map_const]
 

@@ -86,7 +86,7 @@ definition sectionsSubmodule
 
 中文:
 定义 sectionsSubmodule
-  签名: : Submodule R (对任意 j, F.obj j)
+  签名: : 子模 R (对任意 j, F.obj j)
   定义体: { AddGrpCat.sectionsAddSubgroup.{v, w}
       (F ⋙ forget₂ (ModuleCat R) AddCommGrpCat.{w} ⋙
           forget₂ AddCommGrpCat AddGrpCat.{w}) with
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (F ⋙ forget (ModuleCat R)).sections
+  签名: 加法交换幺半群 (F ⋙ forget (模范畴 R)).sections
   定义体: inferInstanceAs AddCommMonoid (sectionsSubmodule F)
 
 Depends on / 依赖: AddCommMonoid, sectionsSubmodule
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (F ⋙ forget (ModuleCat R)).sections
+  签名: 模 R (F ⋙ forget (模范畴 R)).sections
   定义体: inferInstanceAs Module R (sectionsSubmodule F)
 
 Depends on / 依赖: Module, sectionsSubmodule
@@ -269,7 +269,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: ModuleCat.of R (Types.Small.limitCone.{v, w} (F ⋙ forget _)).pt
   π :=
     { app j := ofHom (limitπLinearMap F j)
@@ -307,7 +307,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone.{t, v, w} F)
+  签名: : 是极限 (limitCone.{t, v, w} F)
   定义体: by
   refine IsLimit.ofFaithful (forget (ModuleCat R)) (Types.Small.limitConeIsLimit.{v, w} _)
     (fun s => ofHom ⟨⟨(Types.Small.limitConeIsLimit.{v, w} _).lift
@@ -349,7 +349,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: HasLimit.mk {
     cone := limitCone F
     isLimit := limitConeIsLimit F
@@ -373,7 +373,7 @@ lemma hasLimitsOfShape
 中文:
 引理 hasLimitsOfShape
   条件: [Small.{w} J]
-  结论: HasLimitsOfShape J (ModuleCat.{w} R) where
+  结论: 有形状极限 J (模范畴.{w} R) where
 -/
 lemma hasLimitsOfShape [Small.{w} J] : HasLimitsOfShape J (ModuleCat.{w} R) where
 
@@ -389,7 +389,7 @@ lemma hasLimitsOfSize
 中文:
 引理 hasLimitsOfSize
   条件: [UnivLE.{v, w}]
-  结论: HasLimitsOfSize.{t, v} (ModuleCat.{w} R) where
+  结论: 有LimitsOfSize.{t, v} (模范畴.{w} R) where
   证明: hasLimitsOfShape
 
 Depends on / 依赖: hasLimitsOfShape
@@ -407,7 +407,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits (ModuleCat.{w} R)
+  签名: : 有极限 (模范畴.{w} R)
   定义体: ModuleCat.hasLimitsOfSize.{w, w, w, u}
 
 Depends on / 依赖: ModuleCat, ModuleCat.hasLimitsOfSize, hasLimitsOfSize
@@ -540,7 +540,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget (ModuleCat.{w} R))
+  签名: : PreservesLimits (forget (模范畴.{w} R))
   定义体: ModuleCat.forget_preservesLimitsOfSize.{w, w}
 
 Depends on / 依赖: G.isFinite, ModuleCat, ModuleCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize, isFinite
@@ -640,7 +640,7 @@ definition directLimitDiagram
 
 中文:
 定义 directLimitDiagram
-  签名: : ι ⥤ ModuleCat R where
+  签名: : ι ⥤ 模范畴 R where
   定义体: ModuleCat.of R (G i)
   map hij := ofHom (f _ _ hij.le)
   map_id i := by
@@ -684,7 +684,7 @@ definition directLimitCocone
 
 中文:
 定义 directLimitCocone
-  签名: : Cocone (directLimitDiagram G f) where
+  签名: : 余锥 (directLimitDiagram G f) where
   定义体: ModuleCat.of R DirectLimit G f
   ι :=
     { app := fun x => ofHom (Module.DirectLimit.of R ι G f x)
@@ -726,7 +726,7 @@ definition directLimitIsColimit
 
 中文:
 定义 directLimitIsColimit
-  签名: : IsColimit (directLimitCocone G f) where
+  签名: : 是余极限 (directLimitCocone G f) where
   定义体: ofHom
     Module.DirectLimit.lift R ι G f (fun i => (s.ι.app i).hom) fun i j h x => by
       simp only [Functor.const_obj_obj]

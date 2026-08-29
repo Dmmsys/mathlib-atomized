@@ -80,7 +80,7 @@ class IsRightDerivabilityStructure
     - guitartExact' : TwoSquare.GuitartExact ((Φ.catCommSq W₁.Q W₂.Q).iso).hom
 
 中文:
-类 IsRightDerivabilityStructure
+类 是RightDerivabilityStructure
   参数: : 命题 where
   公理与运算 (2 个):
     - hasRightResolutions : Φ.HasRightResolutions  [默认: by infer_instance]
@@ -171,7 +171,7 @@ instance guitartExact_of_isRightDerivabilityStructure'
 
 中文:
 实例 guitartExact_of_isRightDerivabilityStructure'
-  签名: [h : Φ.IsRightDerivabilityStructure]
+  签名: [h : Φ.是RightDerivabilityStructure]
   定义体: by
   simpa only [Φ.isRightDerivabilityStructure_iff L₁ L₂ F e] using h
 
@@ -191,7 +191,7 @@ instance guitartExact_of_isRightDerivabilityStructure
 
 中文:
 实例 guitartExact_of_isRightDerivabilityStructure
-  签名: [Φ.IsRightDerivabilityStructure]
+  签名: [Φ.是RightDerivabilityStructure]
   定义体: guitartExact_of_isRightDerivabilityStructure' _ _ _ _ _
 
 Depends on / 依赖: guitartExact_of_isRightDerivabilityStructure
@@ -209,8 +209,8 @@ instance [W₁.ContainsIdentities]
   body: fun X₂ => ⟨RightResolution.mk (𝟙 X₂) (W₁.id_mem X₂)⟩
 
 中文:
-实例 [W₁.ContainsIdentities]
-  签名: : (LocalizerMorphism.id W₁).HasRightResolutions
+实例 [W₁.余ntainsIdentities]
+  签名: : (Localizer态射.id W₁).HasRightResolutions
   定义体: fun X₂ => ⟨RightResolution.mk (𝟙 X₂) (W₁.id_mem X₂)⟩
 
 Depends on / 依赖: RightResolution, RightResolution.mk, id_mem
@@ -232,8 +232,8 @@ instance [W₁.ContainsIdentities]
   exact TwoSquare.guitartExact_id W₁.Q
 
 中文:
-实例 [W₁.ContainsIdentities]
-  签名: : (LocalizerMorphism.id W₁).IsRightDerivabilityStructure
+实例 [W₁.余ntainsIdentities]
+  签名: : (Localizer态射.id W₁).是RightDerivabilityStructure
   定义体: by
   rw [(LocalizerMorphism.id W₁).isRightDerivabilityStructure_iff W₁.Q W₁.Q (𝟭 W₁.Localization)
     (Iso.refl _)]
@@ -259,7 +259,7 @@ class IsLeftDerivabilityStructure
     - guitartExact' : TwoSquare.GuitartExact ((Φ.catCommSq W₁.Q W₂.Q).iso).inv
 
 中文:
-类 IsLeftDerivabilityStructure
+类 是LeftDerivabilityStructure
   参数: : 命题 where
   公理与运算 (2 个):
     - hasLeftResolutions : Φ.HasLeftResolutions  [默认: by infer_instance]
@@ -356,7 +356,7 @@ instance guitartExact_of_isLeftDerivabilityStructure'
 
 中文:
 实例 guitartExact_of_isLeftDerivabilityStructure'
-  签名: [h : Φ.IsLeftDerivabilityStructure]
+  签名: [h : Φ.是LeftDerivabilityStructure]
   定义体: by
   simpa only [Φ.isLeftDerivabilityStructure_iff L₁ L₂ F e] using h
 
@@ -376,7 +376,7 @@ instance guitartExact_of_isLeftDerivabilityStructure
 
 中文:
 实例 guitartExact_of_isLeftDerivabilityStructure
-  签名: [Φ.IsLeftDerivabilityStructure]
+  签名: [Φ.是LeftDerivabilityStructure]
   定义体: guitartExact_of_isLeftDerivabilityStructure' _ _ _ _ _
 
 Depends on / 依赖: guitartExact_of_isLeftDerivabilityStructure
@@ -394,8 +394,8 @@ instance [W₁.ContainsIdentities]
   body: fun X₂ => ⟨LeftResolution.mk (𝟙 X₂) (W₁.id_mem X₂)⟩
 
 中文:
-实例 [W₁.ContainsIdentities]
-  签名: : (LocalizerMorphism.id W₁).HasLeftResolutions
+实例 [W₁.余ntainsIdentities]
+  签名: : (Localizer态射.id W₁).HasLeftResolutions
   定义体: fun X₂ => ⟨LeftResolution.mk (𝟙 X₂) (W₁.id_mem X₂)⟩
 
 Depends on / 依赖: LeftResolution, LeftResolution.mk, id_mem
@@ -417,8 +417,8 @@ instance [W₁.ContainsIdentities]
   exact TwoSquare.guitartExact_id' W₁.Q
 
 中文:
-实例 [W₁.ContainsIdentities]
-  签名: : (LocalizerMorphism.id W₁).IsLeftDerivabilityStructure
+实例 [W₁.余ntainsIdentities]
+  签名: : (Localizer态射.id W₁).是LeftDerivabilityStructure
   定义体: by
   rw [(LocalizerMorphism.id W₁).isLeftDerivabilityStructure_iff W₁.Q W₁.Q (𝟭 W₁.Localization)
     (Iso.refl _)]
@@ -485,8 +485,8 @@ instance [Φ.IsLeftDerivabilityStructure]
   rwa [← isLeftDerivabilityStructure_iff_op]
 
 中文:
-实例 [Φ.IsLeftDerivabilityStructure]
-  签名: : Φ.op.IsRightDerivabilityStructure
+实例 [Φ.是LeftDerivabilityStructure]
+  签名: : Φ.op.是RightDerivabilityStructure
   定义体: by
   rwa [← isLeftDerivabilityStructure_iff_op]
 
@@ -505,8 +505,8 @@ instance [Φ.IsRightDerivabilityStructure]
   rwa [← isRightDerivabilityStructure_iff_op]
 
 中文:
-实例 [Φ.IsRightDerivabilityStructure]
-  签名: : Φ.op.IsLeftDerivabilityStructure
+实例 [Φ.是RightDerivabilityStructure]
+  签名: : Φ.op.是LeftDerivabilityStructure
   定义体: by
   rwa [← isRightDerivabilityStructure_iff_op]
 

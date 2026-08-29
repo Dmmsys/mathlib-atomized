@@ -124,7 +124,7 @@ lemma continuous_charFun
 
 中文:
 引理 continuous_charFun
-  结论: Continuous (charFun μ)
+  结论: 连续 (charFun μ)
   证明: by
   refine contDiff_zero.1 (contDiff_charFun ?_)
   simpa using by fun_prop
@@ -149,7 +149,7 @@ theorem iteratedFDeriv_charFun
 
 中文:
 定理 iteratedFDeriv_charFun
-  条件: {n : 自然数} {t : E} (hint : MemLp id n μ) (x : Fin n -> E)
+  条件: {n : 自然数} {t : E} (hint : MemLp id n μ) (x : 有限集 n -> E)
   证明: by
   have h : innerₗ E = (innerSL Real).toLinearMap₁₂ := rfl
   have hint' (k : Nat) (hk : k <= (n : Nat∞)) : Integrable (fun x => ‖x‖ ^ k * ‖(1 : E -> Complex) x‖) μ := by
@@ -291,7 +291,7 @@ lemma taylorWithinEval_charFun_two_zero
 
 中文:
 引理 taylorWithinEval_charFun_two_zero
-  结论: (hX : AEMeasurable X P)
+  结论: (hX : 几乎处处可测 X P)
   证明: by
   have : IsProbabilityMeasure (P.map X) := Measure.isProbabilityMeasure_map hX
   convert! taylorWithinEval_charFun_zero hint t with x
@@ -331,7 +331,7 @@ lemma taylorWithinEval_charFun_two_zero'
 
 中文:
 引理 taylorWithinEval_charFun_two_zero'
-  结论: (hX : AEMeasurable X P)
+  结论: (hX : 几乎处处可测 X P)
   证明: by
   rw [taylorWithinEval_charFun_two_zero hX]; rw [h0]; rw [h1]
   · simp
@@ -370,7 +370,7 @@ refine contDiff_charFun
 
 中文:
 引理 taylor_charFun_two
-  条件: (hX : AEMeasurable X P) (h0 : P[X] = 0) (h1 : P[X ^ 2] = 1)
+  条件: (hX : 几乎处处可测 X P) (h0 : P[X] = 0) (h1 : P[X ^ 2] = 1)
   证明: by
   simp_rw [← taylorWithinEval_charFun_two_zero' (by fun_prop) h0 h1]
   convert! taylor_isLittleO_univ ?_

@@ -42,7 +42,7 @@ definition parallel.aux2
 
 中文:
 定义 parallel.aux2
-  签名: : List (Computation α) -> α oplus (List (Computation α))
+  签名: : 列表 (Computation α) -> α oplus (列表 (Computation α))
   定义体: List.foldr
     (fun c o =>
       match o with
@@ -298,7 +298,7 @@ theorem exists_of_mem_parallel
   let F : List (Computation α) -> α oplus (List (Computati
 
 中文:
-定理 exists_of_mem_parallel
+定理 存在_of_mem_parallel
   条件: {S : WSeq (Computation α)} {a} (h : a in parallel S)
   证明: by
   suffices
@@ -502,7 +502,7 @@ definition parallelRec
 
 中文:
 定义 parallelRec
-  签名: {S : WSeq (Computation α)} (C : α -> Sort v) (H : 对任意 s in S, 对任意 a in s, C a) {a}
+  签名: {S : WSeq (Computation α)} (C : α -> 类型层 v) (H : 对任意 s in S, 对任意 a in s, C a) {a}
   定义体: by
   let T : WSeq (Computation (α × Computation α)) := S.map fun c => c.map fun a => (a, c)
   have : S = T.map (map fun c => c.1) := by
@@ -615,7 +615,7 @@ theorem parallel_congr_lem
 
 中文:
 定理 parallel_congr_lem
-  条件: {S T : WSeq (Computation α)} {a} (H : S.LiftRel Equiv T)
+  条件: {S T : WSeq (Computation α)} {a} (H : S.LiftRel 等价 T)
   证明: ⟨fun h1 _ tT =>
     let ⟨_, sS, se⟩ := WSeq.exists_of_liftRel_right H tT
     (promises_congr se _).1 (h1 _ sS),

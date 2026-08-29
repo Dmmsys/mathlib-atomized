@@ -58,7 +58,7 @@ class MonoCoprod
 类 MonoCoprod
   参数: : 命题 where
   公理与运算 (1 个):
-    - binaryCofan_inl : 对任意 ⦃A B : C⦄ (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl
+    - binaryCofan_inl : 对任意 ⦃A B : C⦄ (c : BinaryCofan A B) (_ : 是余极限 c), 单态射 c.inl
 -/
 class MonoCoprod : Prop where
   /-- the left inclusion of a colimit binary cofan is mono -/
@@ -91,7 +91,7 @@ theorem binaryCofan_inr
 
 中文:
 定理 binaryCofan_inr
-  条件: {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsColimit c)
+  条件: {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : 是余极限 c)
   证明: by
   have hc' : IsColimit (BinaryCofan.mk c.inr c.inl) :=
     BinaryCofan.IsColimit.mk _
@@ -135,7 +135,7 @@ theorem mono_inl_iff
 
 中文:
 定理 mono_inl_iff
-  条件: {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂)
+  条件: {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : 是余极限 c₁) (hc₂ : 是余极限 c₂)
   证明: by
   suffices
     forall (c₁ c₂ : BinaryCofan A B) (_ : IsColimit c₁) (_ : IsColimit c₂) (_ : Mono c₁.inl),
@@ -170,7 +170,7 @@ theorem mk'
 
 中文:
 定理 mk'
-  条件: (h : 对任意 A B : C, 存在 (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl)
+  条件: (h : 对任意 A B : C, 存在 (c : BinaryCofan A B) (_ : 是余极限 c), 单态射 c.inl)
   结论: MonoCoprod C
   证明: ⟨fun A B c' hc' => by
     obtain ⟨c, hc₁, hc₂⟩ := h A B
@@ -283,7 +283,7 @@ definition isColimitBinaryCofanSum
 
 中文:
 定义 isColimitBinaryCofanSum
-  签名: : IsColimit (binaryCofanSum c c₁ c₂ hc₁ hc₂)
+  签名: : 是余极限 (binaryCofanSum c c₁ c₂ hc₁ hc₂)
   定义体: BinaryCofan.IsColimit.mk _ (fun f₁ f₂ => Cofan.IsColimit.desc hc (fun i => match i with
       | Sum.inl i₁ => c₁.inj i₁ ≫ f₁
       | Sum.inr i₂ => c₂.inj i₂ ≫ f₂))
@@ -428,7 +428,7 @@ lemma mono_of_injective_aux
 
 中文:
 引理 mono_of_injective_aux
-  结论: (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
+  结论: (hι : 函数.单射 ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
   证明: by
   classical
   let e := ((Equiv.ofInjective ι hι).sumCongr (Equiv.refl _)).trans (Equiv.Set.sumCompl _)
@@ -464,7 +464,7 @@ lemma mono_of_injective
 
 中文:
 引理 mono_of_injective
-  条件: [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)]
+  条件: [HasCoproduct (fun (k : ((集合.range ι)ᶜ : 集合 I)) => X k.1)]
   证明: mono_of_injective_aux X ι hι c c₁ hc hc₁ _ (colimit.isColimit _)
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, mono_of_injective_aux
@@ -548,7 +548,7 @@ lemma mono_inj
 
 中文:
 引理 mono_inj
-  结论: (c : Cofan X) (h : IsColimit c) (i : I)
+  结论: (c : Cofan X) (h : 是余极限 c) (i : I)
   证明: by
   let ι : Unit -> I := fun _ => i
   have hι : Function.Injective ι := fun _ _ _ => rfl

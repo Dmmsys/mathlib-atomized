@@ -73,7 +73,7 @@ definition contractLeftAux
 
 中文:
 定义 contractLeftAux
-  签名: (d : Module.Dual R M)
+  签名: (d : 模.对偶 R M)
   定义体: haveI v_mul := (Algebra.lmul R (CliffordAlgebra Q)).toLinearMap ∘ₗ ι Q
   d.smulRight (LinearMap.fst _ (CliffordAlgebra Q) (CliffordAlgebra Q)) -
     v_mul.compl₂ (LinearMap.snd _ (CliffordAlgebra Q) _)
@@ -129,7 +129,7 @@ definition contractLeft
 
 中文:
 定义 contractLeft
-  签名: : Module.Dual R M ->ₗ[R] CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q where
+  签名: : 模.对偶 R M ->ₗ[R] CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q where
   定义体: foldr' Q (contractLeftAux Q d) (contractLeftAux_contractLeftAux Q d) 0
   map_add' d₁ d₂ :=
     LinearMap.ext fun x => by
@@ -173,7 +173,7 @@ definition contractRight
 
 中文:
 定义 contractRight
-  签名: : CliffordAlgebra Q ->ₗ[R] Module.Dual R M ->ₗ[R] CliffordAlgebra Q
+  签名: : CliffordAlgebra Q ->ₗ[R] 模.对偶 R M ->ₗ[R] CliffordAlgebra Q
   定义体: LinearMap.flip (LinearMap.compl₂ (LinearMap.compr₂ contractLeft reverse) reverse)
 
 Depends on / 依赖: LinearMap, LinearMap.compl, LinearMap.compr, LinearMap.flip, contractLeft, reverse
@@ -763,7 +763,7 @@ theorem changeForm.associated_neg_proof
 
 中文:
 定理 changeForm.associated_neg_proof
-  条件: [Invertible (2 : R)]
+  条件: [可逆 (2 : R)]
   证明: by
   simp [QuadraticMap.toQuadraticMap_associated]
 
@@ -900,7 +900,7 @@ theorem changeForm_contractLeft
 
 中文:
 定理 changeForm_contractLeft
-  条件: (d : Module.Dual R M) (x : CliffordAlgebra Q)
+  条件: (d : 模.对偶 R M) (x : CliffordAlgebra Q)
   证明: by
   induction x using CliffordAlgebra.left_induction with
   | algebraMap => simp only [contractLeft_algebraMap, changeForm_algebraMap, map_zero]
@@ -1109,7 +1109,7 @@ Assistance investigating this would be appreciated. -/
 
 中文:
 定义 equivExterior
-  签名: [Invertible (2 : R)]
+  签名: [可逆 (2 : R)]
   定义体: changeFormEquiv changeForm.associated_neg_proof
 
 #adaptation_note /-- As of nightly-2026-04-29, the simpNF linter is failing here.
@@ -1133,8 +1133,8 @@ instance [Nontrivial
   body: (equivExterior Q).symm.injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] [Invertible (2 : R)] :
+实例 [非平凡
+  签名: R] [可逆 (2 : R)] :
   定义体: (equivExterior Q).symm.injective.nontrivial
 
 Depends on / 依赖: equivExterior, injective, nontrivial, symm.injective.nontrivial

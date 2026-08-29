@@ -199,7 +199,7 @@ theorem LinearDisjoint.of_subsingleton
 
 中文:
 定理 LinearDisjoint.of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: A.LinearDisjoint B
   证明: Submodule.LinearDisjoint.of_subsingleton
 
@@ -220,7 +220,7 @@ theorem LinearDisjoint.of_subsingleton_top
 
 中文:
 定理 LinearDisjoint.of_subsingleton_top
-  条件: [Subsingleton S]
+  条件: [子单例 S]
   结论: A.LinearDisjoint B
   证明: Submodule.LinearDisjoint.of_subsingleton_top
 -/
@@ -273,7 +273,7 @@ theorem map
 
 中文:
 定理 map
-  结论: (H : A.LinearDisjoint B) {T : Type w} [Semiring T] [Algebra R T]
+  结论: (H : A.LinearDisjoint B) {T : 类型 w} [半环 T] [代数 R T]
   证明: Submodule.LinearDisjoint.map H f hf
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.map
@@ -296,7 +296,7 @@ theorem bot_left
 
 中文:
 定理 bot_left
-  结论: (⊥ : Subalgebra R S).LinearDisjoint B
+  结论: (⊥ : 子代数 R S).LinearDisjoint B
   证明: by
   rw [Subalgebra.LinearDisjoint]; rw [Algebra.toSubmodule_bot]
   exact Submodule.LinearDisjoint.one_left _
@@ -346,7 +346,7 @@ change Function.Injective
 
 中文:
 定理 include_range
-  结论: (A : 类型v) [Semiring A] (B : Type w) [Semiring B]
+  结论: (A : 类型v) [半环 A] (B : 类型 w) [半环 B]
   证明: by
   rw [Subalgebra.LinearDisjoint]; rw [Submodule.linearDisjoint_iff]
 change Function.Injective
@@ -425,7 +425,7 @@ theorem linearDisjoint_iff_injective
 
 中文:
 定理 linearDisjoint_iff_injective
-  结论: A.LinearDisjoint B ↔ Function.Injective (A.mulMap B)
+  结论: A.LinearDisjoint B ↔ 函数.单射 (A.mulMap B)
   证明: by
   rw [linearDisjoint_iff]; rw [Submodule.linearDisjoint_iff]
   rfl
@@ -540,7 +540,7 @@ definition basisOfBasisRight
 
 中文:
 定义 basisOfBasisRight
-  签名: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R B)
+  签名: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R B)
   定义体: (b.baseChange A).map (H.mulMapLeftOfSupEqTop H').toLinearEquiv
 
 @[simp]
@@ -565,7 +565,7 @@ theorem algebraMap_basisOfBasisRight_apply
 
 中文:
 定理 algebraMap_basisOfBasisRight_apply
-  条件: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R B) (i : ι)
+  条件: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R B) (i : ι)
   证明: by
   simp [basisOfBasisRight]
 
@@ -608,7 +608,7 @@ theorem algebraMap_basisOfBasisRight_repr_apply
 
 中文:
 定理 algebraMap_basisOfBasisRight_repr_apply
-  结论: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R B)
+  结论: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R B)
   证明: by
   simp [basisOfBasisRight, Algebra.algebraMap_eq_smul_one]
 
@@ -631,7 +631,7 @@ theorem leftMulMatrix_basisOfBasisRight_algebraMap
 
 中文:
 定理 leftMulMatrix_basisOfBasisRight_algebraMap
-  结论: (H' : A ⊔ B = ⊤) {ι : 类型} [Fintype ι]
+  结论: (H' : A ⊔ B = ⊤) {ι : 类型} [有限类型 ι]
   证明: by
   ext
   simp [Algebra.leftMulMatrix_eq_repr_mul, ← H.algebraMap_basisOfBasisRight_repr_apply H']
@@ -657,7 +657,7 @@ definition basisOfBasisLeft
 
 中文:
 定义 basisOfBasisLeft
-  签名: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R A)
+  签名: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R A)
   定义体: (b.baseChange B).map (H.symm.mulMapLeftOfSupEqTop (by rwa [sup_comm])).toLinearEquiv
 
 @[simp]
@@ -679,7 +679,7 @@ theorem basisOfBasisLeft_apply
 
 中文:
 定理 basisOfBasisLeft_apply
-  条件: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R A) (i : ι)
+  条件: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R A) (i : ι)
   证明: H.symm.algebraMap_basisOfBasisRight_apply (by rwa [sup_comm]) b i
 
 Depends on / 依赖: H.symm.algebraMap_basisOfBasisRight_apply, algebraMap_basisOfBasisRight_apply, sup_comm
@@ -700,7 +700,7 @@ include H in
 
 中文:
 定理 basisOfBasisLeft_repr_apply
-  结论: (H' : A ⊔ B = ⊤) {ι : 类型} (b : Basis ι R A)
+  结论: (H' : A ⊔ B = ⊤) {ι : 类型} (b : 基 ι R A)
   证明: H.symm.algebraMap_basisOfBasisRight_repr_apply (by rwa [sup_comm]) b x i
 
 include H in
@@ -726,8 +726,8 @@ include H in
 
 中文:
 定理 sup_free_of_free
-  条件: [Module.Free R A] [Module.Free R B]
-  结论: Module.Free R ↥(A ⊔ B)
+  条件: [模.自由 R A] [模.自由 R B]
+  结论: 模.自由 R ↥(A ⊔ B)
   证明: Module.Free.of_equiv H.mulMap.toLinearEquiv
 
 include H in
@@ -749,8 +749,8 @@ theorem isDomain
 
 中文:
 定理 isDomain
-  条件: [IsDomain S]
-  结论: IsDomain (A otimes[R] B)
+  条件: [是整环 S]
+  结论: 是整环 (A otimes[R] B)
   证明: H.injective.isDomain (A.mulMap B).toRingHom
 
 Depends on / 依赖: A.mulMap, H.injective.isDomain, injective, isDomain, mulMap, toRingHom
@@ -770,7 +770,7 @@ theorem isDomain_of_injective
 
 中文:
 定理 isDomain_of_injective
-  结论: [IsDomain S] {A B : 类型} [Semiring A] [Semiring B]
+  结论: [是整环 S] {A B : 类型} [半环 A] [半环 B]
   证明: have := H.isDomain
   (Algebra.TensorProduct.congr
     (AlgEquiv.ofInjective fa hfa) (AlgEquiv.ofInjective fb hfb)).toMulEquiv.isDomain
@@ -853,7 +853,7 @@ theorem linearIndependent_left_op_of_flat
 
 中文:
 定理 linearIndependent_left_op_of_flat
-  结论: (H : A.LinearDisjoint B) [Module.Flat R B]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R B]
   证明: by
   have h := Submodule.LinearDisjoint.linearIndependent_left_of_flat H ha
   rwa [mulLeftMap_ker_eq_bot_iff_linearIndependent_op] at h
@@ -878,7 +878,7 @@ theorem of_basis_left_op
 
 中文:
 定理 of_basis_left_op
-  结论: {ι : 类型} (a : Basis ι R A)
+  结论: {ι : 类型} (a : 基 ι R A)
   证明: by
   rw [← mulLeftMap_ker_eq_bot_iff_linearIndependent_op] at H
   exact Submodule.LinearDisjoint.of_basis_left _ _ a H
@@ -939,7 +939,7 @@ theorem linearIndependent_right_of_flat
 
 中文:
 定理 linearIndependent_right_of_flat
-  结论: (H : A.LinearDisjoint B) [Module.Flat R A]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R A]
   证明: by
   have h := Submodule.LinearDisjoint.linearIndependent_right_of_flat H hb
   rwa [mulRightMap_ker_eq_bot_iff_linearIndependent] at h
@@ -964,7 +964,7 @@ theorem of_basis_right
 
 中文:
 定理 of_basis_right
-  结论: {ι : 类型} (b : Basis ι R B)
+  结论: {ι : 类型} (b : 基 ι R B)
   证明: by
   rw [← mulRightMap_ker_eq_bot_iff_linearIndependent] at H
   exact Submodule.LinearDisjoint.of_basis_right _ _ b H
@@ -987,7 +987,7 @@ theorem linearIndependent_left_of_flat_of_commute
 
 中文:
 定理 linearIndependent_left_of_flat_of_commute
-  结论: (H : A.LinearDisjoint B) [Module.Flat R B]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R B]
   证明: (H.symm_of_commute hc).linearIndependent_right_of_flat ha
 
 Depends on / 依赖: H.symm_of_commute, linearIndependent_right_of_flat, symm_of_commute
@@ -1007,7 +1007,7 @@ theorem of_basis_left_of_commute
 
 中文:
 定理 of_basis_left_of_commute
-  结论: {ι : 类型} (a : Basis ι R A)
+  结论: {ι : 类型} (a : 基 ι R A)
   证明: (of_basis_right B A a H).symm_of_commute fun _ _ => (hc _ _).symm
 
 Depends on / 依赖: of_basis_right, symm_of_commute
@@ -1028,7 +1028,7 @@ theorem linearIndependent_mul_of_flat_left
 
 中文:
 定理 linearIndependent_mul_of_flat_left
-  结论: (H : A.LinearDisjoint B) [Module.Flat R A]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R A]
   证明: Submodule.LinearDisjoint.linearIndependent_mul_of_flat_left H ha hb
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.linearIndependent_mul_of_flat_left, linearIndependent_mul_of_flat_left
@@ -1049,7 +1049,7 @@ theorem linearIndependent_mul_of_flat_right
 
 中文:
 定理 linearIndependent_mul_of_flat_right
-  结论: (H : A.LinearDisjoint B) [Module.Flat R B]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R B]
   证明: Submodule.LinearDisjoint.linearIndependent_mul_of_flat_right H ha hb
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.linearIndependent_mul_of_flat_right, linearIndependent_mul_of_flat_right
@@ -1091,7 +1091,7 @@ theorem of_basis_mul
 
 中文:
 定理 of_basis_mul
-  结论: {κ ι : 类型} (a : Basis κ R A) (b : Basis ι R B)
+  结论: {κ ι : 类型} (a : 基 κ R A) (b : 基 ι R B)
   证明: Submodule.LinearDisjoint.of_basis_mul _ _ a b H
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.of_basis_mul, of_basis_mul
@@ -1117,7 +1117,7 @@ theorem of_le_left_of_flat
 
 中文:
 定理 of_le_left_of_flat
-  结论: {A' : Subalgebra R S}
+  结论: {A' : 子代数 R S}
   证明: Submodule.LinearDisjoint.of_le_left_of_flat H h
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.of_le_left_of_flat, of_le_left_of_flat
@@ -1136,7 +1136,7 @@ theorem of_le_right_of_flat
 
 中文:
 定理 of_le_right_of_flat
-  结论: {B' : Subalgebra R S}
+  结论: {B' : 子代数 R S}
   证明: Submodule.LinearDisjoint.of_le_right_of_flat H h
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.of_le_right_of_flat, of_le_right_of_flat
@@ -1155,7 +1155,7 @@ theorem of_le_of_flat_right
 
 中文:
 定理 of_le_of_flat_right
-  结论: {A' B' : Subalgebra R S}
+  结论: {A' B' : 子代数 R S}
   证明: (H.of_le_left_of_flat ha).of_le_right_of_flat hb
 
 Depends on / 依赖: H.of_le_left_of_flat, of_le_left_of_flat, of_le_right_of_flat
@@ -1174,7 +1174,7 @@ theorem of_le_of_flat_left
 
 中文:
 定理 of_le_of_flat_left
-  结论: {A' B' : Subalgebra R S}
+  结论: {A' B' : 子代数 R S}
   证明: (H.of_le_right_of_flat hb).of_le_left_of_flat ha
 
 Depends on / 依赖: H.of_le_right_of_flat, of_le_left_of_flat, of_le_right_of_flat
@@ -1199,7 +1199,7 @@ theorem rank_inf_eq_one_of_commute_of_flat_of_inj
 
 中文:
 定理 rank_inf_eq_one_of_commute_of_flat_of_inj
-  结论: (hf : Module.Flat R A ∨ Module.Flat R B)
+  结论: (hf : 模.平坦 R A ∨ 模.平坦 R B)
   证明: by
   nontriviality R
   refine le_antisymm (Submodule.LinearDisjoint.rank_inf_le_one_of_commute_of_flat H hf hc) ?_
@@ -1234,7 +1234,7 @@ theorem rank_inf_eq_one_of_commute_of_flat_left_of_inj
 
 中文:
 定理 rank_inf_eq_one_of_commute_of_flat_left_of_inj
-  结论: [Module.Flat R A]
+  结论: [模.平坦 R A]
   证明: H.rank_inf_eq_one_of_commute_of_flat_of_inj (Or.inl ‹_›) hc hinj
 
 Depends on / 依赖: H.rank_inf_eq_one_of_commute_of_flat_of_inj, Or.inl, rank_inf_eq_one_of_commute_of_flat_of_inj
@@ -1254,7 +1254,7 @@ theorem rank_inf_eq_one_of_commute_of_flat_right_of_inj
 
 中文:
 定理 rank_inf_eq_one_of_commute_of_flat_right_of_inj
-  结论: [Module.Flat R B]
+  结论: [模.平坦 R B]
   证明: H.rank_inf_eq_one_of_commute_of_flat_of_inj (Or.inr ‹_›) hc hinj
 
 Depends on / 依赖: H.rank_inf_eq_one_of_commute_of_flat_of_inj, Or.inr, rank_inf_eq_one_of_commute_of_flat_of_inj
@@ -1278,7 +1278,7 @@ theorem rank_eq_one_of_commute_of_flat_of_self_of_inj
 
 中文:
 定理 rank_eq_one_of_commute_of_flat_of_self_of_inj
-  结论: (H : A.LinearDisjoint A) [Module.Flat R A]
+  结论: (H : A.LinearDisjoint A) [模.平坦 R A]
   证明: by
   rw [← inf_of_le_left (le_refl A)] at hc ⊢
   exact H.rank_inf_eq_one_of_commute_of_flat_left_of_inj hc hinj
@@ -1317,7 +1317,7 @@ theorem trace_algebraMap
 
 中文:
 定理 trace_algebraMap
-  结论: (H : A.LinearDisjoint B) (H' : A ⊔ B = ⊤) [Module.Free R B]
+  结论: (H : A.LinearDisjoint B) (H' : A ⊔ B = ⊤) [模.自由 R B]
   证明: by
   simp_rw [Algebra.trace_eq_matrix_trace (Module.Free.chooseBasis R B),
     Algebra.trace_eq_matrix_trace (H.basisOfBasisRight H' (Module.Free.chooseBasis R B)),
@@ -1347,7 +1347,7 @@ theorem norm_algebraMap
 
 中文:
 定理 norm_algebraMap
-  结论: (H : A.LinearDisjoint B) (H' : A ⊔ B = ⊤) [Module.Free R B]
+  结论: (H : A.LinearDisjoint B) (H' : A ⊔ B = ⊤) [模.自由 R B]
   证明: by
   simp_rw [Algebra.norm_eq_matrix_det (Module.Free.chooseBasis R B),
     Algebra.norm_eq_matrix_det (H.basisOfBasisRight H' (Module.Free.chooseBasis R B)),
@@ -1372,7 +1372,7 @@ theorem linearIndependent_left_of_flat
 
 中文:
 定理 linearIndependent_left_of_flat
-  结论: (H : A.LinearDisjoint B) [Module.Flat R B]
+  结论: (H : A.LinearDisjoint B) [模.平坦 R B]
   证明: H.linearIndependent_left_of_flat_of_commute ha fun _ _ => mul_comm _ _
 
 Depends on / 依赖: H.linearIndependent_left_of_flat_of_commute, linearIndependent_left_of_flat_of_commute, mul_comm
@@ -1392,7 +1392,7 @@ theorem of_basis_left
 
 中文:
 定理 of_basis_left
-  结论: {ι : 类型} (a : Basis ι R A)
+  结论: {ι : 类型} (a : 基 ι R A)
   证明: of_basis_left_of_commute A B a H fun _ _ => mul_comm _ _
 
 Depends on / 依赖: mul_comm, of_basis_left_of_commute
@@ -1417,8 +1417,8 @@ theorem exists_field_of_isDomain_of_injective
 
 
 中文:
-定理 exists_field_of_isDomain_of_injective
-  结论: (A : 类型v) [CommRing A] (B : Type w) [CommRing B]
+定理 存在_field_of_isDomain_of_injective
+  结论: (A : 类型v) [交换环 A] (B : 类型 w) [交换环 B]
   证明: let K := FractionRing (A otimes[R] B)
   let i := IsScalarTower.toAlgHom R (A otimes[R] B) K
   have hi : Function.Injective i := IsFractionRing.injective (A otimes[R] B) K
@@ -1461,7 +1461,7 @@ theorem of_isField
 
 中文:
 定理 of_isField
-  条件: (H : IsField (A otimes[R] B))
+  条件: (H : 是域 (A otimes[R] B))
   结论: A.LinearDisjoint B
   证明: by
   nontriviality S
@@ -1494,7 +1494,7 @@ theorem of_isField'
 
 中文:
 定理 of_isField'
-  结论: {A : 类型v} [Ring A] {B : Type w} [Ring B]
+  结论: {A : 类型v} [环 A] {B : 类型 w} [环 B]
   证明: by
   apply of_isField
   exact Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa)
@@ -1526,7 +1526,7 @@ theorem _root_.Algebra.TensorProduct.not_isField_of_transcendental
   have hb : Function.Injective (algebraMap R B) := Algebra.injective_of_transcende
 
 中文:
-定理 _root_.Algebra.TensorProduct.not_isField_of_transcendental
+定理 _root_.代数.张量积.not_isField_of_transcendental
   证明: fun H => by
   let := H.toField
   obtain ⟨a, hta⟩ := ‹Algebra.Transcendental R A›
@@ -1596,7 +1596,7 @@ theorem _root_.Algebra.TensorProduct.isAlgebraic_of_isField
   exact Algebra.TensorProduct.not_isField_of_transcendental R A B H
 
 中文:
-定理 _root_.Algebra.TensorProduct.isAlgebraic_of_isField
+定理 _root_.代数.张量积.isAlgebraic_of_isField
   证明: by
   by_contra! h
   simp_rw [← Algebra.transcendental_iff_not_isAlgebraic] at h
@@ -1629,7 +1629,7 @@ include H in
 
 中文:
 定理 rank_inf_eq_one_of_flat_of_inj
-  结论: (hf : Module.Flat R A ∨ Module.Flat R B)
+  结论: (hf : 模.平坦 R A ∨ 模.平坦 R B)
   证明: H.rank_inf_eq_one_of_commute_of_flat_of_inj hf (fun _ _ => mul_comm _ _) hinj
 
 include H in
@@ -1653,7 +1653,7 @@ include H in
 
 中文:
 定理 rank_inf_eq_one_of_flat_left_of_inj
-  结论: [Module.Flat R A]
+  结论: [模.平坦 R A]
   证明: H.rank_inf_eq_one_of_commute_of_flat_left_of_inj (fun _ _ => mul_comm _ _) hinj
 
 include H in
@@ -1675,7 +1675,7 @@ theorem rank_inf_eq_one_of_flat_right_of_inj
 
 中文:
 定理 rank_inf_eq_one_of_flat_right_of_inj
-  结论: [Module.Flat R B]
+  结论: [模.平坦 R B]
   证明: H.rank_inf_eq_one_of_commute_of_flat_right_of_inj (fun _ _ => mul_comm _ _) hinj
 
 Depends on / 依赖: H.rank_inf_eq_one_of_commute_of_flat_right_of_inj, mul_comm, rank_inf_eq_one_of_commute_of_flat_right_of_inj
@@ -1696,7 +1696,7 @@ include H in
 
 中文:
 定理 rank_eq_one_of_flat_of_self_of_inj
-  结论: (H : A.LinearDisjoint A) [Module.Flat R A]
+  结论: (H : A.LinearDisjoint A) [模.平坦 R A]
   证明: H.rank_eq_one_of_commute_of_flat_of_self_of_inj (fun _ _ => mul_comm _ _) hinj
 
 include H in
@@ -1722,7 +1722,7 @@ include H in
 
 中文:
 定理 rank_sup_of_free
-  条件: [Module.Free R A] [Module.Free R B]
+  条件: [模.自由 R A] [模.自由 R B]
   证明: by
   nontriviality R
   rw [← rank_tensorProduct']; rw [H.mulMap.toLinearEquiv.rank_eq]
@@ -1748,7 +1748,7 @@ theorem finrank_sup_of_free
 
 中文:
 定理 finrank_sup_of_free
-  条件: [Module.Free R A] [Module.Free R B]
+  条件: [模.自由 R A] [模.自由 R B]
   证明: by
   simpa only [map_mul] using! congr(Cardinal.toNat $(H.rank_sup_of_free))
 
@@ -1775,7 +1775,7 @@ theorem of_finrank_sup_of_free
 
 中文:
 定理 of_finrank_sup_of_free
-  结论: [Module.Free R A] [Module.Free R B]
+  结论: [模.自由 R A] [模.自由 R B]
   证明: by
   nontriviality R
   rw [← Module.finrank_tensorProduct] at H
@@ -1817,7 +1817,7 @@ theorem adjoin_rank_eq_rank_left
 
 中文:
 定理 adjoin_rank_eq_rank_left
-  结论: [Module.Free R A] [Module.Flat R B]
+  结论: [模.自由 R A] [模.平坦 R B]
   证明: by
   rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex R A]; rw [A.adjoin_eq_span_basis B (Module.Free.chooseBasis R A)]
   change Module.rank B (Submodule.span B (Set.range (A.val ∘ Module.Free.chooseBasis R A))) = _
@@ -1844,7 +1844,7 @@ theorem adjoin_rank_eq_rank_right
 
 中文:
 定理 adjoin_rank_eq_rank_right
-  结论: [Module.Free R B] [Module.Flat R A]
+  结论: [模.自由 R B] [模.平坦 R A]
   证明: H.symm.adjoin_rank_eq_rank_left
 
 Depends on / 依赖: H.symm.adjoin_rank_eq_rank_left, adjoin_rank_eq_rank_left
@@ -1874,7 +1874,7 @@ theorem of_finrank_coprime_of_free
 
 中文:
 定理 of_finrank_coprime_of_free
-  结论: [Module.Free R A] [Module.Free R B]
+  结论: [模.自由 R A] [模.自由 R B]
   证明: by
   nontriviality R
   by_cases h1 : Module.finrank R A = 0
@@ -1929,7 +1929,7 @@ theorem of_linearDisjoint_finite_left
 
 中文:
 定理 of_linearDisjoint_finite_left
-  结论: [Algebra.Is整数egral R A]
+  结论: [代数.是整 R A]
   证明: by
   rw [linearDisjoint_iff]; rw [Submodule.linearDisjoint_iff]
   intro x y hxy
@@ -1977,7 +1977,7 @@ theorem of_linearDisjoint_finite_right
 
 中文:
 定理 of_linearDisjoint_finite_right
-  结论: [Algebra.Is整数egral R B]
+  结论: [代数.是整 R B]
   证明: (of_linearDisjoint_finite_left B A fun B' hB' _ => (H B' hB').symm).symm
 
 Depends on / 依赖: of_linearDisjoint_finite_left

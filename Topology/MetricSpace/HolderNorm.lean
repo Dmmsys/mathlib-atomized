@@ -230,7 +230,7 @@ lemma eHolderNorm_const
 中文:
 引理 eHolderNorm_const
   条件: (r : 实数>=0) (c : Y)
-  结论: eHolderNorm r (Function.const X c) = 0
+  结论: eHolderNorm r (函数.const X c) = 0
   证明: by
   rw [eHolderNorm]; rw [← ENNReal.bot_eq_zero]; rw [iInf₂_eq_bot]
   exact fun C' hC' => ⟨0, .const, hC'⟩
@@ -254,7 +254,7 @@ lemma eHolderNorm_zero
 
 中文:
 引理 eHolderNorm_zero
-  条件: [Zero Y] (r : 实数>=0)
+  条件: [零 Y] (r : 实数>=0)
   结论: eHolderNorm r (0 : X -> Y) = 0
   证明: eHolderNorm_const X r 0
 
@@ -279,7 +279,7 @@ lemma nnHolderNorm_const
 中文:
 引理 nnHolderNorm_const
   条件: (r : 实数>=0) (c : Y)
-  结论: nnHolderNorm r (Function.const X c) = 0
+  结论: nnHolderNorm r (函数.const X c) = 0
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [← ENNReal.coe_le_coe]; rw [ENNReal.coe_zero]; rw [← eHolderNorm_const X r c]
   exact coe_nnHolderNorm_le_eHolderNorm
@@ -303,7 +303,7 @@ lemma nnHolderNorm_zero
 
 中文:
 引理 nnHolderNorm_zero
-  条件: [Zero Y] (r : 实数>=0)
+  条件: [零 Y] (r : 实数>=0)
   结论: nnHolderNorm r (0 : X -> Y) = 0
   证明: nnHolderNorm_const X r 0
 
@@ -326,7 +326,7 @@ lemma eHolderNorm_of_isEmpty
 
 中文:
 引理 eHolderNorm_of_isEmpty
-  条件: [hX : IsEmpty X]
+  条件: [hX : 是空 X]
   证明: by
   rw [eHolderNorm]; rw [← ENNReal.bot_eq_zero]; rw [iInf₂_eq_bot]
   exact fun ε hε => ⟨0, .of_isEmpty, hε⟩
@@ -369,7 +369,7 @@ lemma memHolder_const
 中文:
 引理 memHolder_const
   条件: {c : Y}
-  结论: MemHolder r (Function.const X c)
+  结论: MemHolder r (函数.const X c)
   证明: (HolderWith.const (C := 0)).memHolder
 
 Depends on / 依赖: HolderWith, HolderWith.const, memHolder
@@ -415,7 +415,7 @@ lemma memHolder_zero
 
 中文:
 引理 memHolder_zero
-  条件: [Zero Y]
+  条件: [零 Y]
   结论: MemHolder r (0 : X -> Y)
   证明: memHolder_const
 
@@ -442,7 +442,7 @@ holderOnWith_univ.1 (holderOnWith_univ.2 hf).of_le (fun x _ y _ => hC' x y) hs�
 
 中文:
 引理 MemHolder.of_le
-  结论: {X : 类型} [PseudoMetricSpace X] [hX : BoundedSpace X]
+  结论: {X : 类型} [伪度量空间 X] [hX : 有界空间 X]
   证明: by
   obtain ⟨C, hf⟩ := hf
   obtain ⟨C', hC'⟩ := Metric.boundedSpace_iff_edist.1 hX
@@ -505,8 +505,8 @@ lemma HolderOnWith.exists_holderOnWith_of_le
   exact MemHolder.of_le hf hs
 
 中文:
-引理 HolderOnWith.exists_holderOnWith_of_le
-  结论: {X : 类型} [PseudoMetricSpace X]
+引理 HolderOnWith.存在_holderOnWith_of_le
+  结论: {X : 类型} [伪度量空间 X]
   证明: by
   simp_rw [← HolderWith.restrict_iff] at *
   have : BoundedSpace A := boundedSpace_val_set_iff.2 hA
@@ -535,8 +535,8 @@ lemma HolderOnWith.exists_holderOnWith_of_le'
   exact MemHolder.of_le hf hs
 
 中文:
-引理 HolderOnWith.exists_holderOnWith_of_le'
-  结论: {D s : 实数>=0} {A : Set X}
+引理 HolderOnWith.存在_holderOnWith_of_le'
+  结论: {D s : 实数>=0} {A : 集合 X}
   证明: by
   simp_rw [← HolderWith.restrict_iff] at *
   let := PseudoEMetricSpace.toPseudoMetricSpace
@@ -568,8 +568,8 @@ lemma HolderOnWith.exists_holderOnWith_of_le_of_le
   exact ⟨max C₁ C₂, hf₁.of_le_of_le hf₂ hrs hst⟩
 
 中文:
-引理 HolderOnWith.exists_holderOnWith_of_le_of_le
-  结论: {s t : 实数>=0} {A : Set X}
+引理 HolderOnWith.存在_holderOnWith_of_le_of_le
+  结论: {s t : 实数>=0} {A : 集合 X}
   证明: by
   obtain ⟨C₁, hf₁⟩ := hf₁
   obtain ⟨C₂, hf₂⟩ := hf₂
@@ -790,7 +790,7 @@ lemma MemHolder.comp
 
 中文:
 引理 MemHolder.comp
-  结论: {r s : 实数>=0} {Z : 类型} [MetricSpace Z] {f : Z -> X} {g : X -> Y}
+  结论: {r s : 实数>=0} {Z : 类型} [度量空间 Z] {f : Z -> X} {g : X -> Y}
   证明: (hg.holderWith.comp hf.holderWith).memHolder
 
 Depends on / 依赖: hf.holderWith, hg.holderWith.comp, holderWith, memHolder
@@ -857,7 +857,7 @@ lemma MemHolder.smul
 
 中文:
 引理 MemHolder.smul
-  结论: {𝕜} [SeminormedRing 𝕜] [Module 𝕜 Y] [IsBoundedSMul 𝕜 Y]
+  结论: {𝕜} [Seminormed环 𝕜] [模 𝕜 Y] [是BoundedSMul 𝕜 Y]
   证明: (hf.holderWith.smul c).memHolder
 
 Depends on / 依赖: hf.holderWith.smul, holderWith, memHolder
@@ -879,7 +879,7 @@ lemma MemHolder.smul_iff
 
 中文:
 引理 MemHolder.smul_iff
-  结论: {𝕜} [SeminormedRing 𝕜] [Module 𝕜 Y] [NormSMulClass 𝕜 Y]
+  结论: {𝕜} [Seminormed环 𝕜] [模 𝕜 Y] [NormSMul类 𝕜 Y]
   证明: by
   refine ⟨fun ⟨h, hh⟩ => ⟨h * ‖c‖₊⁻¹, ?_⟩, .smul⟩
   rw [← HolderWith.smul_iff _ hc]; rw [inv_mul_cancel_right₀ hc]
@@ -904,7 +904,7 @@ lemma MemHolder.nsmul
 
 中文:
 引理 MemHolder.nsmul
-  条件: [NormedSpace 实数 Y] (n : 自然数) (hf : MemHolder r f)
+  条件: [赋范空间 实数 Y] (n : 自然数) (hf : MemHolder r f)
   证明: by
   simp [← Nat.cast_smul_eq_nsmul (R := Real), hf.smul]
 
@@ -983,7 +983,7 @@ lemma eHolderNorm_smul
 
 中文:
 引理 eHolderNorm_smul
-  条件: {α} [NormedRing α] [Module α Y] [NormSMulClass α Y] (c : α)
+  条件: {α} [赋范环 α] [模 α Y] [NormSMul类 α Y] (c : α)
   证明: by
   by_cases hc : ‖c‖₊ = 0
   · rw [nnnorm_eq_zero] at hc
@@ -1024,7 +1024,7 @@ lemma MemHolder.nnHolderNorm_smul
 
 中文:
 引理 MemHolder.nnHolderNorm_smul
-  结论: {α} [NormedRing α] [Module α Y] [NormSMulClass α Y]
+  结论: {α} [赋范环 α] [模 α Y] [NormSMul类 α Y]
   证明: by
   rw [← ENNReal.coe_inj]; rw [coe_mul]; rw [hf.coe_nnHolderNorm_eq_eHolderNorm]; rw [hf.smul.coe_nnHolderNorm_eq_eHolderNorm]; rw [eHolderNorm_smul]
 
@@ -1046,7 +1046,7 @@ lemma eHolderNorm_nsmul
 
 中文:
 引理 eHolderNorm_nsmul
-  条件: [NormedSpace 实数 Y] (n : 自然数)
+  条件: [赋范空间 实数 Y] (n : 自然数)
   证明: by
   simp [← Nat.cast_smul_eq_nsmul (R := Real), eHolderNorm_smul]
 
@@ -1067,7 +1067,7 @@ lemma MemHolder.nnHolderNorm_nsmul
 
 中文:
 引理 MemHolder.nnHolderNorm_nsmul
-  条件: [NormedSpace 实数 Y] (n : 自然数) (hf : MemHolder r f)
+  条件: [赋范空间 实数 Y] (n : 自然数) (hf : MemHolder r f)
   证明: by
   simp [← Nat.cast_smul_eq_nsmul (R := Real), hf.nnHolderNorm_smul]
 

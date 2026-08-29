@@ -66,7 +66,7 @@ theorem dist_eq
 中文:
 定理 dist_eq
   条件: (z w : ℍ)
-  结论: dist z w = 2 * arsinh (dist (z : Complex) w / (2 * √(z.im * w.im)))
+  结论: dist z w = 2 * arsinh (dist (z : 复形) w / (2 * √(z.im * w.im)))
   证明: rfl
 -/
 theorem dist_eq (z w : ℍ) : dist z w = 2 * arsinh (dist (z : Complex) w / (2 * √(z.im * w.im))) :=
@@ -183,7 +183,7 @@ theorem cosh_dist
 中文:
 定理 cosh_dist
   条件: (z w : ℍ)
-  结论: cosh (dist z w) = 1 + dist (z : Complex) w ^ 2 / (2 * z.im * w.im)
+  结论: cosh (dist z w) = 1 + dist (z : 复形) w ^ 2 / (2 * z.im * w.im)
   证明: by
   rw [dist_eq]; rw [cosh_two_mul]; rw [cosh_sq']; rw [add_assoc]; rw [← two_mul]; rw [sinh_arsinh]; rw [div_pow]; rw [mul_pow]; rw [sq_sqrt]; rw [sq (2 : Real)]; rw [mul_assoc]; rw [← mul_div_assoc]; rw [mul_assoc]; rw [mul_div_mul_left] <;> positivity
 
@@ -350,7 +350,7 @@ theorem dist_le_dist_coe_div_sqrt
 中文:
 定理 dist_le_dist_coe_div_sqrt
   条件: (z w : ℍ)
-  结论: dist z w <= dist (z : Complex) w / √(z.im * w.im)
+  结论: dist z w <= dist (z : 复形) w / √(z.im * w.im)
   证明: by
   rw [dist_le_iff_le_sinh]; rw [← div_mul_eq_div_div_swap]; rw [self_le_sinh_iff]
   positivity
@@ -379,7 +379,7 @@ definition metricSpaceAux
 
 中文:
 定义 metricSpaceAux
-  签名: : MetricSpace ℍ where
+  签名: : 度量空间 ℍ where
   定义体: dist
   dist_self z := by rw [dist_eq, dist_self, zero_div, arsinh_zero, mul_zero]
   dist_comm := UpperHalfPlane.dist_comm
@@ -529,7 +529,7 @@ theorem dist_coe_center_sq
 中文:
 定理 dist_coe_center_sq
   条件: (z w : ℍ) (r : 实数)
-  结论: dist (z : Complex) (w.center r) ^ 2 =
+  结论: dist (z : 复形) (w.center r) ^ 2 =
   证明: by
   have H : 2 * z.im * w.im != 0 := by positivity
   simp only [Complex.dist_eq, Complex.sq_norm, normSq_apply, coe_re, coe_im, center_re, center_im,
@@ -560,7 +560,7 @@ theorem dist_coe_center
 中文:
 定理 dist_coe_center
   条件: (z w : ℍ) (r : 实数)
-  结论: dist (z : Complex) (w.center r) =
+  结论: dist (z : 复形) (w.center r) =
   证明: by
   rw [← sqrt_sq dist_nonneg]; rw [dist_coe_center_sq]
 
@@ -864,7 +864,7 @@ theorem dist_coe_le
 中文:
 定理 dist_coe_le
   条件: (z w : ℍ)
-  结论: dist (z : Complex) w <= w.im * (实数.exp (dist z w) - 1)
+  结论: dist (z : 复形) w <= w.im * (实数.exp (dist z w) - 1)
   证明: calc
     dist (z : Complex) w <= dist (z : Complex) (w.center (dist z w)) + dist (w : Complex) (w.center (dist z w)) :=
       dist_triangle_right _ _ _
@@ -896,7 +896,7 @@ _ <= dist (z : Complex) w := sub_le_iff_le_add.2 dist_triangle _ _ _
 中文:
 定理 le_dist_coe
   条件: (z w : ℍ)
-  结论: w.im * (1 - 实数.exp (-dist z w)) <= dist (z : Complex) w
+  结论: w.im * (1 - 实数.exp (-dist z w)) <= dist (z : 复形) w
   证明: calc
     w.im * (1 - Real.exp (-dist z w)) =
         dist (z : Complex) (w.center (dist z w)) - dist (w : Complex) (w.center (dist z w)) := by
@@ -926,7 +926,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace ℍ
+  签名: 度量空间 ℍ
   定义体: metricSpaceAux.replaceTopology by
     refine le_antisymm (continuous_id_iff_le.1 ?_) ?_
     · refine (@continuous_iff_continuous_dist ℍ ℍ metricSpaceAux.toPseudoMetricSpace _ _).2 ?_
@@ -969,7 +969,7 @@ _ <= w.im := sub_le_comm.1
 
 中文:
 定理 im_pos_of_dist_center_le
-  结论: {z : ℍ} {r : 实数} {w : Complex}
+  结论: {z : ℍ} {r : 实数} {w : 复形}
   证明: calc
     0 < z.im * (Real.cosh r - Real.sinh r) := mul_pos z.im_pos (sub_pos.2 <| sinh_lt_cosh _)
     _ = (z.center r).im - z.im * Real.sinh r := mul_sub _ _ _
@@ -1109,7 +1109,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace ℍ
+  签名: 真空间 ℍ
   定义体: by
   refine ⟨fun z r => ?_⟩
   rw [isEmbedding_coe.isCompact_iff (f := ((↑) : ℍ -> Complex))]; rw [image_coe_closedBall]
@@ -1137,7 +1137,7 @@ theorem isometry_vertical_line
 中文:
 定理 isometry_vertical_line
   条件: (a : 实数)
-  结论: Isometry fun y => mk ⟨a, exp y⟩ (exp_pos y)
+  结论: 等距 fun y => mk ⟨a, exp y⟩ (exp_pos y)
   证明: by
   refine Isometry.of_dist_eq fun y₁ y₂ => ?_
   rw [dist_of_re_eq]
@@ -1162,7 +1162,7 @@ theorem isometry_real_vadd
 中文:
 定理 isometry_real_vadd
   条件: (a : 实数)
-  结论: Isometry (a +ᵥ · : ℍ -> ℍ)
+  结论: 等距 (a +ᵥ · : ℍ -> ℍ)
   证明: Isometry.of_dist_eq fun y₁ y₂ => by simp only [dist_eq, coe_vadd, vadd_im, dist_add_left]
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, coe_vadd, dist_add_left, dist_eq, of_dist_eq, vadd_im
@@ -1186,7 +1186,7 @@ theorem isometry_pos_mul
 中文:
 定理 isometry_pos_mul
   条件: (a : { x : 实数 // 0 < x })
-  结论: Isometry (a • · : ℍ -> ℍ)
+  结论: 等距 (a • · : ℍ -> ℍ)
   证明: by
   refine Isometry.of_dist_eq fun y₁ y₂ => ?_
   simp only [dist_eq, coe_pos_real_smul, pos_real_im]; congr 2
@@ -1216,7 +1216,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIsometricSMul SL(2, 实数) ℍ
+  签名: 是是ometricSMul SL(2, 实数) ℍ
   定义体: ⟨fun g => by
     have h₀ : Isometry (fun z => ModularGroup.S • z : ℍ -> ℍ) :=
       Isometry.of_dist_eq fun y₁ y₂ => by

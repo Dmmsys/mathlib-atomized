@@ -103,7 +103,7 @@ exact dif_neg fun h => hp.ne_top h.symm.trans comap_top
 
 中文:
 定理 inertiaDeg'_of_subsingleton
-  条件: [hp : p.IsMaximal] [hQ : Subsingleton (S ⧸ P)]
+  条件: [hp : p.是极大] [hQ : 子单例 (S ⧸ P)]
   证明: by
   have := Ideal.Quotient.subsingleton_iff.mp hQ
   subst this
@@ -161,7 +161,7 @@ theorem inertiaDeg'_pos
 
 中文:
 定理 inertiaDeg'_pos
-  条件: [p.IsMaximal] [Module.Finite R S] [P.LiesOver p]
+  条件: [p.是极大] [模.有限 R S] [P.LiesOver p]
   结论: 0 < inertiaDeg' p P
   证明: have : Nontrivial (S ⧸ P) := Quotient.nontrivial_of_liesOver_of_isPrime P p
   finrank_pos.trans_eq (inertiaDeg'_algebraMap p P).symm
@@ -184,7 +184,7 @@ theorem inertiaDeg'_pos'
 
 中文:
 定理 inertiaDeg'_pos'
-  条件: [P.IsPrime] [Module.Finite R S] [P.LiesOver p]
+  条件: [P.是素] [模.有限 R S] [P.LiesOver p]
   结论: 0 < inertiaDeg' p P
   证明: have : p.IsPrime := Ideal.over_def P p ▸ inferInstance
   Module.finrank_pos.trans_eq (inertiaDeg'_algebraMap p P).symm
@@ -209,7 +209,7 @@ theorem inertiaDeg'_ne_zero
 
 中文:
 定理 inertiaDeg'_ne_zero
-  条件: [p.IsMaximal] [Module.Finite R S] [P.LiesOver p]
+  条件: [p.是极大] [模.有限 R S] [P.LiesOver p]
   证明: (Nat.ne_of_lt (inertiaDeg'_pos p P)).symm
 
 @[deprecated (since := "2026-07-03")] alias inertiaDeg_ne_zero := inertiaDeg'_ne_zero
@@ -235,7 +235,7 @@ lemma inertiaDeg'_comap_eq
 
 中文:
 引理 inertiaDeg'_comap_eq
-  条件: (e : S ≃ₐ[R] S₁) (P : Ideal S₁)
+  条件: (e : S ≃ₐ[R] S₁) (P : 理想 S₁)
   证明: by
   have he : (P.comap e).comap (algebraMap R S) = p ↔ P.comap (algebraMap R S₁) = p := by
     rw [← comap_coe e]; rw [comap_comap]; rw [← e.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
@@ -269,7 +269,7 @@ lemma inertiaDeg'_map_eq
 
 中文:
 引理 inertiaDeg'_map_eq
-  结论: (P : Ideal S)
+  结论: (P : 理想 S)
   证明: by
   rw [show P.map e = _ from map_comap_of_equiv (RingEquivClass.toRingEquiv e : S ≃+* S₁)]
   exact p.inertiaDeg'_comap_eq (AlgEquivClass.toAlgEquiv e).symm P
@@ -301,7 +301,7 @@ theorem inertiaDeg'_bot
 
 中文:
 定理 inertiaDeg'_bot
-  结论: [Nontrivial R] [IsDomain S] [Algebra.Is整数egral R S]
+  结论: [非平凡 R] [是整环 S] [代数.是整 R S]
   证明: by
   rw [inertiaDeg']; rw [dif_pos (over_def P (⊥ : Ideal R)).symm]
   replace hP : P = ⊥ := eq_bot_of_liesOver_bot R P
@@ -338,7 +338,7 @@ have : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ Q) := IsScalarTower.of_algebraMa
 
 中文:
 定理 inertiaDeg'_le_inertiaDeg'
-  结论: {T : 类型} [CommRing T] [Algebra R T] [Algebra S T]
+  结论: {T : 类型} [交换环 T] [代数 R T] [代数 S T]
   证明: by
   have : Q.LiesOver p := LiesOver.trans Q P p
   rw [inertiaDeg'_algebraMap]; rw [inertiaDeg'_algebraMap]
@@ -378,7 +378,7 @@ lemma absNorm_eq_pow_inertiaDeg'_of_liesOver
 
 中文:
 引理 absNorm_eq_pow_inertiaDeg'_of_liesOver
-  结论: {S : 类型} [CommRing S] [IsDedekindDomain S]
+  结论: {S : 类型} [交换环 S] [是Dedekind整环 S]
   证明: by
   have : p.IsMaximal := hp.isMaximal hp_ne_bot
   simpa [absNorm_apply, Submodule.cardQuot_apply] using Module.natCard_eq_pow_finrank (K := S ⧸ p)
@@ -410,7 +410,7 @@ lemma absNorm_eq_pow_inertiaDeg
 
 中文:
 引理 absNorm_eq_pow_inertiaDeg
-  结论: [IsDedekindDomain R] [Module.Free 整数 R] [Module.Finite 整数 R] {p : 整数}
+  结论: [是Dedekind整环 R] [模.自由 整数 R] [模.有限 整数 R] {p : 整数}
   证明: by
   simpa using absNorm_eq_pow_inertiaDeg'_of_liesOver P (span {p})
     (by rwa [span_singleton_prime hp.ne_zero]) (by simpa using hp.ne_zero)
@@ -433,7 +433,7 @@ lemma absNorm_eq_pow_inertiaDeg'
 
 中文:
 引理 absNorm_eq_pow_inertiaDeg'
-  结论: [IsDedekindDomain R] [Module.Free 整数 R] [Module.Finite 整数 R] {p : 自然数}
+  结论: [是Dedekind整环 R] [模.自由 整数 R] [模.有限 整数 R] {p : 自然数}
   证明: absNorm_eq_pow_inertiaDeg P (Nat.prime_iff_prime_int.mp hp)
 -/
 lemma absNorm_eq_pow_inertiaDeg' [IsDedekindDomain R] [Module.Free Int R] [Module.Finite Int R] {p : Nat}
@@ -464,7 +464,7 @@ theorem inertiaDeg'_algebra_tower
 
 中文:
 定理 inertiaDeg'_algebra_tower
-  结论: (p : Ideal R) (P : Ideal S) (I : Ideal T) [p.IsMaximal]
+  结论: (p : 理想 R) (P : 理想 S) (I : 理想 T) [p.是极大]
   证明: by
   have h₁ := P.over_def p
   have h₂ := I.over_def P

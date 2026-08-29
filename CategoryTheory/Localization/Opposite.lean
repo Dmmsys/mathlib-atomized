@@ -46,7 +46,7 @@ definition StrictUniversalPropertyFixedTarget.op
 
 中文:
 定义 StrictUniversalPropertyFixedTarget.op
-  签名: {E : 类型} [Category* E]
+  签名: {E : 类型} [范畴* E]
   定义体: h.inverts.op
   lift F hF := (h.lift F.rightOp hF.rightOp).leftOp
   fac F hF := by
@@ -82,7 +82,7 @@ instance isLocalization_op
 
 中文:
 实例 isLocalization_op
-  签名: : W.Q.op.IsLocalization W.op
+  签名: : W.Q.op.是Localization W.op
   定义体: Functor.IsLocalization.mk' W.Q.op W.op (strictUniversalPropertyFixedTargetQ W _).op
     (strictUniversalPropertyFixedTargetQ W _).op
 
@@ -109,8 +109,8 @@ instance IsLocalization.op
     (NatIso.op (Localization.qCompEquivalenceFromModelFunctorIso L W).symm)
 
 中文:
-实例 IsLocalization.op
-  签名: : L.op.IsLocalization W.op
+实例 是Localization.op
+  签名: : L.op.是Localization W.op
   定义体: IsLocalization.of_equivalence_target W.Q.op W.op L.op (Localization.equivalenceFromModel L W).op
     (NatIso.op (Localization.qCompEquivalenceFromModelFunctorIso L W).symm)
 
@@ -136,8 +136,8 @@ instance IsLocalization.unop
       have := Localizatio
 
 中文:
-实例 IsLocalization.unop
-  签名: (L : Cᵒᵖ ⥤ Dᵒᵖ) (W : Morphism命题erty Cᵒᵖ)
+实例 是Localization.unop
+  签名: (L : Cᵒᵖ ⥤ Dᵒᵖ) (W : MorphismProperty Cᵒᵖ)
   定义体: have : CatCommSq (opOpEquivalence C).functor L.op L.unop
     (opOpEquivalence D).functor := ⟨Iso.refl _⟩
   of_equivalences L.op W.op L.unop W.unop
@@ -171,8 +171,8 @@ lemma IsLocalization.op_iff
     fun _ => inferInstance⟩
 
 中文:
-引理 IsLocalization.op_iff
-  条件: (L : C ⥤ D) (W : Morphism命题erty C)
+引理 是Localization.op_iff
+  条件: (L : C ⥤ D) (W : MorphismProperty C)
   证明: ⟨fun _ => inferInstanceAs (L.op.unop.IsLocalization W.op.unop),
     fun _ => inferInstance⟩
 

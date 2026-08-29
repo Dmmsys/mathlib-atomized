@@ -65,7 +65,7 @@ theorem Shortlex.of_length_lt
 
 中文:
 定理 Shortlex.of_length_lt
-  条件: {s t : List α} (h : s.length < t.length)
+  条件: {s t : 列表 α} (h : s.length < t.length)
   结论: Shortlex r s t
   证明: Prod.Lex.left _ _ h
 
@@ -87,7 +87,7 @@ theorem Shortlex.of_lex
 
 中文:
 定理 Shortlex.of_lex
-  条件: {s t : List α} (len_eq : s.length = t.length) (h_lex : List.Lex r s t)
+  条件: {s t : 列表 α} (len_eq : s.length = t.length) (h_lex : 列表.Lex r s t)
   证明: by
   apply Prod.lex_def.mpr
   right
@@ -111,7 +111,7 @@ theorem shortlex_def
 
 中文:
 定理 shortlex_def
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   证明: Prod.lex_def
 
 Depends on / 依赖: Prod.lex_def, lex_def
@@ -130,7 +130,7 @@ theorem shortlex_iff_lex
 
 中文:
 定理 shortlex_iff_lex
-  条件: {s t : List α} (h : s.length = t.length)
+  条件: {s t : 列表 α} (h : s.length = t.length)
   证明: by
   simp [shortlex_def, h]
 
@@ -155,7 +155,7 @@ alias ⟨Shortlex.of_cons, Shortlex.cons⟩ := shortlex_cons_iff
 
 中文:
 定理 shortlex_cons_iff
-  条件: [Std.Irrefl r] {a : α} {s t : List α}
+  条件: [Std.Irrefl r] {a : α} {s t : 列表 α}
   证明: by
   simp only [shortlex_def, length_cons, add_lt_add_iff_right, add_left_inj, List.lex_cons_iff]
 
@@ -184,7 +184,7 @@ theorem not_shortlex_nil_right
 
 中文:
 定理 not_shortlex_nil_right
-  条件: {s : List α}
+  条件: {s : 列表 α}
   结论: ¬ Shortlex r s []
   证明: by
   simp [shortlex_def]
@@ -203,7 +203,7 @@ theorem shortlex_nil_or_eq_nil
 
 中文:
 定理 shortlex_nil_or_eq_nil
-  结论: 对任意 s : List α, Shortlex r [] s ∨ s = []
+  结论: 对任意 s : 列表 α, Shortlex r [] s ∨ s = []
 -/
 theorem shortlex_nil_or_eq_nil : forall s : List α, Shortlex r [] s ∨ s = []
   | [] => .inr rfl
@@ -247,7 +247,7 @@ instance trichotomous
 
 中文:
 实例 trichotomous
-  签名: [Std.Trichotomous r]
+  签名: [Std.三歧 r]
   定义体: ⟨(InvImage.trichotomous (by simp [Function.Injective])).trichotomous⟩
 
 Depends on / 依赖: Function, Function.Injective, Injective, InvImage, InvImage.trichotomous, trichotomous
@@ -295,7 +295,7 @@ theorem append_right
 
 中文:
 定理 append_right
-  条件: {s₁ s₂ : List α} (t : List α) (h : Shortlex r s₁ s₂)
+  条件: {s₁ s₂ : 列表 α} (t : 列表 α) (h : Shortlex r s₁ s₂)
   证明: by
   rcases shortlex_def.mp h with h1 | h2
   · apply of_length_lt
@@ -348,7 +348,7 @@ theorem append_left
 
 中文:
 定理 append_left
-  条件: {t₁ t₂ : List α} (h : Shortlex r t₁ t₂) (s : List α)
+  条件: {t₁ t₂ : 列表 α} (h : Shortlex r t₁ t₂) (s : 列表 α)
   证明: by
   rcases shortlex_def.mp h with h1 | h2
   · apply of_length_lt
@@ -405,7 +405,7 @@ theorem _root_.Acc.shortlex
 
 中文:
 定理 _root_.Acc.shortlex
-  结论: {a : α} {b : List α} (aca : Acc r a)
+  结论: {a : α} {b : 列表 α} (aca : Acc r a)
   证明: by
   induction aca generalizing b with
   | intro xa _ iha =>
@@ -462,8 +462,8 @@ exact Acc.intro _ fun _ ylt => (not_shortlex_nil_right ylt).elim
 
 中文:
 定理 wf
-  条件: (h : WellFounded r)
-  结论: WellFounded (Shortlex r)
+  条件: (h : 良基 r)
+  结论: 良基 (Shortlex r)
   证明: .intro fun a => by
   induction len_a : a.length using Nat.caseStrongRecOn generalizing a with
   | zero =>

@@ -100,7 +100,7 @@ definition yonedaRing
 
 中文:
 定义 yonedaRing
-  签名: : RingObjCat C ⥤ Cᵒᵖ ⥤ RingCat.{v} where
+  签名: : RingObj范畴 C ⥤ Cᵒᵖ ⥤ 环范畴.{v} where
   定义体: yonedaRingObj R.X
   map f :=
     { app X := RingCat.ofHom
@@ -135,7 +135,7 @@ definition yonedaCommRingObj
 
 中文:
 定义 yonedaCommRingObj
-  签名: (R : C) [CommRingObj R]
+  签名: (R : C) [交换RingObj R]
   定义体: .of (X.unop ⟶ R)
   map f := CommRingCat.ofHom ((yonedaRingObj R).map f).hom
 
@@ -157,7 +157,7 @@ lemma yonedaCommRingObj_map_apply
 
 中文:
 引理 yonedaCommRingObj_map_apply
-  条件: {R : C} [CommRingObj R] {X Y : Cᵒᵖ} (f : X ⟶ Y) (x : X.unop ⟶ R)
+  条件: {R : C} [交换RingObj R] {X Y : Cᵒᵖ} (f : X ⟶ Y) (x : X.unop ⟶ R)
   证明: rfl
 -/
 lemma yonedaCommRingObj_map_apply {R : C} [CommRingObj R] {X Y : Cᵒᵖ} (f : X ⟶ Y) (x : X.unop ⟶ R) :
@@ -186,7 +186,7 @@ definition yonedaCommRing
 
 中文:
 定义 yonedaCommRing
-  签名: : CommRingObjCat C ⥤ Cᵒᵖ ⥤ CommRingCat.{v} where
+  签名: : 交换RingObj范畴 C ⥤ Cᵒᵖ ⥤ 交换环范畴.{v} where
   定义体: yonedaCommRingObj R.X
   map f :=
     { app X := CommRingCat.ofHom
@@ -221,7 +221,7 @@ lemma yonedaCommRing_map_app_apply
 
 中文:
 引理 yonedaCommRing_map_app_apply
-  结论: {R₁ R₂ : CommRingObjCat C} (f : R₁ ⟶ R₂)
+  结论: {R₁ R₂ : 交换RingObj范畴 C} (f : R₁ ⟶ R₂)
   证明: rfl
 -/
 lemma yonedaCommRing_map_app_apply {R₁ R₂ : CommRingObjCat C} (f : R₁ ⟶ R₂)

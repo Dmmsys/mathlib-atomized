@@ -71,7 +71,7 @@ definition WeakBilin
 
 中文:
 定义 WeakBilin
-  签名: [CommSemiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [AddCommMonoid F] [Module 𝕜 F]
+  签名: [交换半环 𝕜] [加法交换幺半群 E] [模 𝕜 E] [加法交换幺半群 F] [模 𝕜 F]
   定义体: E
 -/
 def WeakBilin [CommSemiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [AddCommMonoid F] [Module 𝕜 F]
@@ -93,7 +93,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [CommSemiring 𝕜] [AddCommGroup E] [Module 𝕜 E] [AddCommMonoid F]
+  签名: [交换半环 𝕜] [加法交换群 E] [模 𝕜 E] [加法交换幺半群 F]
   定义体: inferInstanceAs AddCommGroup E
 
 Depends on / 依赖: AddCommGroup
@@ -111,8 +111,8 @@ instance [CommSemiring
   body: inferInstance
 
 中文:
-实例 [CommSemiring
-  签名: 𝕜] [AddCommMonoid E] [Module 𝕜 E] [AddCommMonoid F] [Module 𝕜 F]
+实例 [交换半环
+  签名: 𝕜] [加法交换幺半群 E] [模 𝕜 E] [加法交换幺半群 F] [模 𝕜 F]
   定义体: inferInstance
 -/
 instance [CommSemiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [AddCommMonoid F] [Module 𝕜 F]
@@ -129,7 +129,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [CommSemiring 𝕜] [CommSemiring 𝕝] [AddCommMonoid E] [Module 𝕜 E]
+  签名: [交换半环 𝕜] [交换半环 𝕝] [加法交换幺半群 E] [模 𝕜 E]
   定义体: inferInstanceAs IsScalarTower 𝕝 𝕜 E
 
 Depends on / 依赖: IsScalarTower
@@ -156,7 +156,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (WeakBilin B)
+  签名: : 拓扑空间 (WeakBilin B)
   定义体: TopologicalSpace.induced (fun x y => B x y) Pi.topologicalSpace
 
 Depends on / 依赖: Pi.topologicalSpace, TopologicalSpace, TopologicalSpace.induced, induced, topologicalSpace
@@ -176,7 +176,7 @@ theorem coeFn_continuous
 
 中文:
 定理 coeFn_continuous
-  结论: Continuous fun (x : WeakBilin B) y => B x y
+  结论: 连续 fun (x : WeakBilin B) y => B x y
   证明: continuous_induced_dom
 
 @[fun_prop]
@@ -199,7 +199,7 @@ theorem eval_continuous
 中文:
 定理 eval_continuous
   条件: (y : F)
-  结论: Continuous fun x : WeakBilin B => B x y
+  结论: 连续 fun x : WeakBilin B => B x y
   证明: (continuous_pi_iff.mp (coeFn_continuous B)) y
 
 Depends on / 依赖: coeFn_continuous, continuous_pi_iff, continuous_pi_iff.mp
@@ -217,7 +217,7 @@ theorem continuous_of_continuous_eval
 
 中文:
 定理 continuous_of_continuous_eval
-  结论: [TopologicalSpace α] {g : α -> WeakBilin B}
+  结论: [拓扑空间 α] {g : α -> WeakBilin B}
   证明: continuous_induced_rng.2 (continuous_pi_iff.mpr h)
 
 Depends on / 依赖: continuous_induced_rng, continuous_pi_iff, continuous_pi_iff.mpr
@@ -236,7 +236,7 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: {B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜} (hB : Function.Injective B)
+  条件: {B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜} (hB : 函数.单射 B)
   证明: Function.Injective.isEmbedding_induced LinearMap.coe_injective.comp hB
 
 Depends on / 依赖: Function, Function.Injective.isEmbedding_induced, Injective, LinearMap, LinearMap.coe_injective.comp, coe_injective, isEmbedding_induced
@@ -256,8 +256,8 @@ theorem tendsto_iff_forall_eval_tendsto
   rfl
 
 中文:
-定理 tendsto_iff_forall_eval_tendsto
-  结论: {l : Filter α} {f : α -> WeakBilin B} {x : WeakBilin B}
+定理 tendsto_iff_对任意_eval_tendsto
+  结论: {l : 滤子 α} {f : α -> WeakBilin B} {x : WeakBilin B}
   证明: by
   rw [← tendsto_pi_nhds]; rw [(isEmbedding hB).tendsto_nhds_iff]
   rfl
@@ -287,7 +287,7 @@ instance instContinuousAdd
 
 中文:
 实例 instContinuousAdd
-  签名: [ContinuousAdd 𝕜]
+  签名: [连续加法 𝕜]
   定义体: by
   refine ⟨continuous_induced_rng.2 ?_⟩
   refine
@@ -321,7 +321,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: [ContinuousSMul 𝕜 𝕜]
+  签名: [连续标量乘法 𝕜 𝕜]
   定义体: by
   refine ⟨continuous_induced_rng.2 ?_⟩
   refine cast (congr_arg _ ?_) (continuous_fst.fun_smul ((coeFn_continuous B).comp continuous_snd))
@@ -349,7 +349,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: [ContinuousAdd 𝕜] [ContinuousConstSMul 𝕜 𝕜]
+  签名: [连续加法 𝕜] [连续常数标量乘法 𝕜 𝕜]
   定义体: ⟨B.flip f, by fun_prop⟩
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -389,7 +389,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: [ContinuousAdd 𝕜]
+  签名: [连续加法 𝕜]
   定义体: by infer_instance
   continuous_neg := by
     refine continuous_induced_rng.2 (continuous_pi_iff.mpr fun y => ?_)

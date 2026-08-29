@@ -47,10 +47,10 @@ class IsKInjective
     - nonempty_homotopy_zero({K : CochainComplex C Int} (f : K ⟶ L)) : K.Acyclic -> Nonempty (Homotopy f 0)
 
 中文:
-类 IsKInjective
-  参数: (L : CochainComplex C 整数)
+类 是KInjective
+  参数: (L : 上链复形 C 整数)
   公理与运算 (1 个):
-    - nonempty_homotopy_zero({K : CochainComplex C 整数} (f : K ⟶ L)) : K.Acyclic -> Nonempty (Homotopy f 0)
+    - nonempty_homotopy_zero({K : 上链复形 C 整数} (f : K ⟶ L)) : K.非循环 -> 非空 (同伦 f 0)
 
 Depends on / 依赖: IsKInjective, IsKInjective.nonempty_homotopy_zero, nonempty_homotopy_zero
 -/
@@ -76,8 +76,8 @@ lemma _root_.HomotopyEquiv.isKInjective
         (((IsKInjective.homotopyZero (f ≫ e.inv) hK).compRight e.hom).trans (.ofEq (by simp)))⟩
 
 中文:
-引理 _root_.HomotopyEquiv.isKInjective
-  结论: {L₁ L₂ : CochainComplex C 整数}
+引理 _root_.同伦等价.isKInjective
+  结论: {L₁ L₂ : 上链复形 C 整数}
   证明: ⟨Homotopy.trans (Homotopy.trans (.ofEq (by simp))
       ((e.homotopyInvHomId.symm.compLeft f).trans (.ofEq (by simp))))
         (((IsKInjective.homotopyZero (f ≫ e.inv) hK).compRight e.hom).trans (.ofEq (by simp)))⟩
@@ -102,7 +102,7 @@ lemma isKInjective_of_iso
 
 中文:
 引理 isKInjective_of_iso
-  结论: {L₁ L₂ : CochainComplex C 整数} (e : L₁ ≅ L₂)
+  结论: {L₁ L₂ : 上链复形 C 整数} (e : L₁ ≅ L₂)
   证明: (HomotopyEquiv.ofIso e).isKInjective
 
 Depends on / 依赖: HomotopyEquiv, HomotopyEquiv.ofIso, isKInjective
@@ -122,7 +122,7 @@ lemma isKInjective_iff_of_iso
 
 中文:
 引理 isKInjective_iff_of_iso
-  条件: {L₁ L₂ : CochainComplex C 整数} (e : L₁ ≅ L₂)
+  条件: {L₁ L₂ : 上链复形 C 整数} (e : L₁ ≅ L₂)
   证明: ⟨fun _ => isKInjective_of_iso e, fun _ => isKInjective_of_iso e.symm⟩
 
 Depends on / 依赖: e.symm, isKInjective_of_iso
@@ -146,7 +146,7 @@ lemma isKInjective_iff_rightOrthogonal
 
 中文:
 引理 isKInjective_iff_rightOrthogonal
-  条件: (L : CochainComplex C 整数)
+  条件: (L : 上链复形 C 整数)
   证明: by
   refine ⟨fun _ K f hK => ?_,
       fun hL => ⟨fun {K} f hK => ⟨HomotopyCategory.homotopyOfEq _ _ ?_⟩⟩⟩
@@ -179,8 +179,8 @@ lemma IsKInjective.rightOrthogonal
   rwa [← isKInjective_iff_rightOrthogonal]
 
 中文:
-引理 IsKInjective.rightOrthogonal
-  条件: (L : CochainComplex C 整数) [L.IsKInjective]
+引理 是KInjective.rightOrthogonal
+  条件: (L : 上链复形 C 整数) [L.是KInjective]
   证明: by
   rwa [← isKInjective_iff_rightOrthogonal]
 
@@ -209,7 +209,7 @@ lemma isKInjective_shift_iff
 
 中文:
 引理 isKInjective_shift_iff
-  条件: (L : CochainComplex C 整数) (n : 整数)
+  条件: (L : 上链复形 C 整数) (n : 整数)
   证明: ⟨fun _ => isKInjective_of_iso (show L⟦n⟧⟦-n⟧ ≅ L from (shiftEquiv _ n).unitIso.symm.app L),
     fun _ => inferInstance⟩
 
@@ -237,7 +237,7 @@ lemma isKInjective_of_injective_aux
 
 中文:
 引理 isKInjective_of_injective_aux
-  结论: {K L : CochainComplex C 整数}
+  结论: {K L : 上链复形 C 整数}
   证明: by
   subst hnm
   let u := f.f (n + 1) - α.v (n + 1) n (by lia) ≫ L.d n (n + 1) -
@@ -296,7 +296,7 @@ lemma isKInjective_of_injective
 
 中文:
 引理 isKInjective_of_injective
-  结论: (L : CochainComplex C 整数) (d : 整数)
+  结论: (L : 上链复形 C 整数) (d : 整数)
   证明: by
     /- The strategy of the proof is express the `0`-cocycle in `Cochain K L 0`
     corresponding to `f` as the coboundary of a `-1`-cochain. An approximate
@@ -353,8 +353,8 @@ lemma IsKInjective.eq_δ_of_cocycle
 
 
 中文:
-引理 IsKInjective.eq_δ_of_cocycle
-  结论: {K L : CochainComplex C 整数} {n : 整数}
+引理 是KInjective.eq_δ_of_cocycle
+  结论: {K L : 上链复形 C 整数} {n : 整数}
   证明: by
   obtain ⟨φ, hφ⟩ := (Cocycle.equivHom ..).surjective (z.rightShift n 0 (zero_add n))
   rw [Cocycle.ext_iff] at hφ
@@ -393,8 +393,8 @@ lemma IsKInjective.eq_δ_of_cocycle'
   exact ⟨z.1.comp β (by lia), by simp [δ_comp z.1 β _ _ 0 _ hm rfl (by simp), hβ]⟩
 
 中文:
-引理 IsKInjective.eq_δ_of_cocycle'
-  结论: {K L : CochainComplex C 整数} {n : 整数}
+引理 是KInjective.eq_δ_of_cocycle'
+  结论: {K L : 上链复形 C 整数} {n : 整数}
   证明: by
   obtain ⟨β, hβ⟩ :=
     IsKInjective.eq_δ_of_cocycle (Cocycle.ofHom (𝟙 L)) hL (-1) (by simp)

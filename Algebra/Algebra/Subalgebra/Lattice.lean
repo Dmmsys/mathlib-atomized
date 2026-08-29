@@ -40,7 +40,7 @@ algebraMap_mem' := fun r => Subsemiring.subset_closure Or.inl ⟨r, rfl⟩ }
 
 中文:
 定义 adjoin
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { Subsemiring.closure (Set.range (algebraMap R A) union s) with
 algebraMap_mem' := fun r => Subsemiring.subset_closure Or.inl ⟨r, rfl⟩ }
 
@@ -65,7 +65,7 @@ Subsemiring.closure_le.2 Set.union_subset S.range_subset H⟩
 
 中文:
 定理 gc
-  结论: GaloisConnection (adjoin R : Set A -> Subalgebra R A) (↑)
+  结论: GaloisConnection (adjoin R : 集合 A -> 子代数 R A) (↑)
   证明: fun s S =>
   ⟨fun H => le_trans (le_trans Set.subset_union_right Subsemiring.subset_closure) H,
    fun H => show Subsemiring.closure (Set.range (algebraMap R A) union s) <= S.toSubsemiring from
@@ -89,7 +89,7 @@ le_l_u S := (Algebra.gc (S : Set A) (adjoin R S)).1 le_rfl
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (adjoin R : Set A -> Subalgebra R A) (↑) where
+  签名: : Galois嵌入 (adjoin R : 集合 A -> 子代数 R A) (↑) where
   定义体: (adjoin R s).copy s le_antisymm (Algebra.gc.le_u_l s) hs
   gc := Algebra.gc
 le_l_u S := (Algebra.gc (S : Set A) (adjoin R S)).1 le_rfl
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subalgebra R A)
+  签名: 完备格 (子代数 R A)
   定义体: GaloisInsertion.liftCompleteLattice Algebra.gi
   bot := (Algebra.ofId R A).range
   bot_le _S := fun _a ⟨_r, hr⟩ => hr ▸ algebraMap_mem _ _
@@ -142,8 +142,8 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: (S T : Subalgebra R A)
-  结论: S ⊔ T = adjoin R (S union T : Set A)
+  条件: (S T : 子代数 R A)
+  结论: S ⊔ T = adjoin R (S union T : 集合 A)
   证明: rfl
 -/
 theorem sup_def (S T : Subalgebra R A) : S ⊔ T = adjoin R (S union T : Set A) := rfl
@@ -161,8 +161,8 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (S : Set (Subalgebra R A))
-  结论: sSup S = adjoin R (⋃₀ (SetLike.coe '' S))
+  条件: (S : 集合 (子代数 R A))
+  结论: sSup S = adjoin R (⋃₀ (集合状.coe '' S))
   证明: rfl
 
 @[simp, norm_cast]
@@ -182,7 +182,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: (↑(⊤ : Subalgebra R A) : Set A) = Set.univ
+  结论: (↑(⊤ : 子代数 R A) : 集合 A) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -204,7 +204,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : A}
-  结论: x in (⊤ : Subalgebra R A)
+  结论: x in (⊤ : 子代数 R A)
   证明: Set.mem_univ x
 
 @[simp]
@@ -226,7 +226,7 @@ theorem top_toSubmodule
 
 中文:
 定理 top_toSubmodule
-  结论: Subalgebra.toSubmodule (⊤ : Subalgebra R A) = ⊤
+  结论: 子代数.toSubmodule (⊤ : 子代数 R A) = ⊤
   证明: rfl
 
 @[simp]
@@ -246,7 +246,7 @@ theorem top_toSubsemiring
 
 中文:
 定理 top_toSubsemiring
-  结论: (⊤ : Subalgebra R A).toSubsemiring = ⊤
+  结论: (⊤ : 子代数 R A).toSubsemiring = ⊤
   证明: rfl
 
 @[simp]
@@ -266,7 +266,7 @@ theorem top_toSubring
 
 中文:
 定理 top_toSubring
-  条件: {R A : 类型} [CommRing R] [Ring A] [Algebra R A]
+  条件: {R A : 类型} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 
 @[simp]
@@ -288,8 +288,8 @@ theorem toSubmodule_eq_top
 
 中文:
 定理 toSubmodule_eq_top
-  条件: {S : Subalgebra R A}
-  结论: Subalgebra.toSubmodule S = ⊤ ↔ S = ⊤
+  条件: {S : 子代数 R A}
+  结论: 子代数.toSubmodule S = ⊤ ↔ S = ⊤
   证明: Subalgebra.toSubmodule.injective.eq_iff' top_toSubmodule
 
 @[simp]
@@ -313,7 +313,7 @@ theorem toSubsemiring_eq_top
 
 中文:
 定理 toSubsemiring_eq_top
-  条件: {S : Subalgebra R A}
+  条件: {S : 子代数 R A}
   结论: S.toSubsemiring = ⊤ ↔ S = ⊤
   证明: Subalgebra.toSubsemiring_injective.eq_iff' top_toSubsemiring
 
@@ -335,7 +335,7 @@ theorem toSubring_eq_top
 
 中文:
 定理 toSubring_eq_top
-  条件: {R A : 类型} [CommRing R] [Ring A] [Algebra R A] {S : Subalgebra R A}
+  条件: {R A : 类型} [交换环 R] [环 A] [代数 R A] {S : 子代数 R A}
   证明: Subalgebra.toSubring_injective.eq_iff' top_toSubring
 
 Depends on / 依赖: Subalgebra, Subalgebra.toSubring_injective.eq_iff, eq_iff, toSubring_injective, top_toSubring
@@ -355,7 +355,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : Subalgebra R A}
+  条件: {S T : 子代数 R A}
   结论: 对任意 {x : A}, x in S -> x in S ⊔ T
   证明: have : S <= S ⊔ T := le_sup_left; (this ·)
 
@@ -375,7 +375,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : Subalgebra R A}
+  条件: {S T : 子代数 R A}
   结论: 对任意 {x : A}, x in T -> x in S ⊔ T
   证明: have : T <= S ⊔ T := le_sup_right; (this ·)
 
@@ -395,7 +395,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : Subalgebra R A} {x y : A} (hx : x in S) (hy : y in T)
+  条件: {S T : 子代数 R A} {x y : A} (hx : x in S) (hy : y in T)
   结论: x * y in S ⊔ T
   证明: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
@@ -415,7 +415,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (f : A ->ₐ[R] B) (S T : Subalgebra R A)
+  条件: (f : A ->ₐ[R] B) (S T : 子代数 R A)
   结论: (S ⊔ T).map f = S.map f ⊔ T.map f
   证明: (Subalgebra.gc_map_comap f).l_sup
 
@@ -436,7 +436,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (f : A ->ₐ[R] B) (hf : Function.Injective f) (S T : Subalgebra R A)
+  条件: (f : A ->ₐ[R] B) (hf : 函数.单射 f) (S T : 子代数 R A)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[simp, norm_cast]
@@ -460,8 +460,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (S T : Subalgebra R A)
-  结论: (↑(S ⊓ T) : Set A) = (S inter T : Set A)
+  条件: (S T : 子代数 R A)
+  结论: (↑(S ⊓ T) : 集合 A) = (S inter T : 集合 A)
   证明: rfl
 
 @[simp]
@@ -480,7 +480,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {S T : Subalgebra R A} {x : A}
+  条件: {S T : 子代数 R A} {x : A}
   结论: x in S ⊓ T ↔ x in S ∧ x in T
   证明: Iff.rfl
 
@@ -502,7 +502,7 @@ theorem inf_toSubmodule
 
 中文:
 定理 inf_toSubmodule
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   证明: rfl
 
 @[simp]
@@ -523,7 +523,7 @@ theorem inf_toSubsemiring
 
 中文:
 定理 inf_toSubsemiring
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   证明: rfl
 
 @[simp]
@@ -551,7 +551,7 @@ theorem sup_toSubsemiring
 
 中文:
 定理 sup_toSubsemiring
-  条件: (S T : Subalgebra R A)
+  条件: (S T : 子代数 R A)
   证明: by
   rw [← S.toSubsemiring.closure_eq]; rw [← T.toSubsemiring.closure_eq]; rw [← Subsemiring.closure_union]
   simp_rw [sup_def, adjoin_toSubsemiring, Subalgebra.coe_toSubsemiring]
@@ -587,8 +587,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Subalgebra R A))
-  结论: (↑(sInf S) : Set A) = ⋂ s in S, ↑s
+  条件: (S : 集合 (子代数 R A))
+  结论: (↑(sInf S) : 集合 A) = ⋂ s in S, ↑s
   证明: sInf_image
 
 @[simp]
@@ -613,7 +613,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Subalgebra R A)} {x : A}
+  条件: {S : 集合 (子代数 R A)} {x : A}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simp only [← SetLike.mem_coe, coe_sInf, Set.mem_iInter₂]
@@ -638,7 +638,7 @@ theorem sInf_toSubmodule
 
 中文:
 定理 sInf_toSubmodule
-  条件: (S : Set (Subalgebra R A))
+  条件: (S : 集合 (子代数 R A))
   证明: SetLike.coe_injective by simp
 
 @[simp]
@@ -660,7 +660,7 @@ theorem sInf_toSubsemiring
 
 中文:
 定理 sInf_toSubsemiring
-  条件: (S : Set (Subalgebra R A))
+  条件: (S : 集合 (子代数 R A))
   证明: SetLike.coe_injective by simp
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -688,7 +688,7 @@ theorem sSup_toSubsemiring
 
 中文:
 定理 sSup_toSubsemiring
-  条件: (S : Set (Subalgebra R A)) (hS : S.Nonempty)
+  条件: (S : 集合 (子代数 R A)) (hS : S.非空)
   证明: by
   have h : toSubsemiring '' S = Subsemiring.closure '' SetLike.coe '' S := by
     rw [Set.image_image]
@@ -729,8 +729,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Subalgebra R A}
-  结论: (↑(⨅ i, S i) : Set A) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子代数 R A}
+  结论: (↑(⨅ i, S i) : 集合 A) = ⋂ i, S i
   证明: by
   simp [iInf]
 
@@ -752,7 +752,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Subalgebra R A} {x : A}
+  条件: {ι : 类型层*} {S : ι -> 子代数 R A} {x : A}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -774,7 +774,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : A ->ₐ[R] B) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -800,7 +800,7 @@ theorem iInf_toSubmodule
 
 中文:
 定理 iInf_toSubmodule
-  条件: {ι : Sort*} (S : ι -> Subalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> 子代数 R A)
   证明: SetLike.coe_injective by simp
 
 @[simp]
@@ -825,7 +825,7 @@ theorem iInf_toSubsemiring
 
 中文:
 定理 iInf_toSubsemiring
-  条件: {ι : Sort*} (S : ι -> Subalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> 子代数 R A)
   证明: by
   simp only [iInf, sInf_toSubsemiring, ← Set.range_comp, Function.comp_def]
 
@@ -849,7 +849,7 @@ theorem iSup_toSubsemiring
 
 中文:
 定理 iSup_toSubsemiring
-  条件: {ι : Sort*} [Nonempty ι] (S : ι -> Subalgebra R A)
+  条件: {ι : 类型层*} [非空 ι] (S : ι -> 子代数 R A)
   证明: by
   simp only [iSup, Set.range_nonempty, sSup_toSubsemiring, ← Set.range_comp, Function.comp_def]
 
@@ -871,7 +871,7 @@ lemma mem_iSup_of_mem
 
 中文:
 引理 mem_iSup_of_mem
-  条件: {ι : Sort*} {S : ι -> Subalgebra R A} (i : ι) {x : A} (hx : x in S i)
+  条件: {ι : 类型层*} {S : ι -> 子代数 R A} (i : ι) {x : A} (hx : x in S i)
   证明: le_iSup S i hx
 
 @[elab_as_elim]
@@ -900,7 +900,7 @@ lemma iSup_induction
 
 中文:
 引理 iSup_induction
-  结论: {ι : Sort*} (S : ι -> Subalgebra R A) {motive : A -> 命题}
+  结论: {ι : 类型层*} (S : ι -> 子代数 R A) {motive : A -> 命题}
   证明: by
   let T : Subalgebra R A :=
   { carrier := {x | motive x}
@@ -942,7 +942,7 @@ theorem iSup_induction'
 
 中文:
 定理 iSup_induction'
-  结论: {ι : Sort*} (S : ι -> Subalgebra R A) {motive : 对任意 x, (x in ⨆ i, S i) -> 命题}
+  结论: {ι : 类型层*} (S : ι -> 子代数 R A) {motive : 对任意 x, (x in ⨆ i, S i) -> 命题}
   证明: by
   refine Exists.elim ?_ fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
   exact iSup_induction S (motive := fun x' => exists h, motive x' h) mem
@@ -973,7 +973,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subalgebra R A)
+  签名: 可居 (子代数 R A)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Subalgebra R A) := ⟨⊥⟩
@@ -990,7 +990,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : A}
-  结论: x in (⊥ : Subalgebra R A) ↔ x in Set.range (algebraMap R A)
+  结论: x in (⊥ : 子代数 R A) ↔ x in 集合.range (algebraMap R A)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1009,7 +1009,7 @@ theorem toSubmodule_bot
 
 中文:
 定理 toSubmodule_bot
-  结论: Subalgebra.toSubmodule (⊥ : Subalgebra R A) = 1
+  结论: 子代数.toSubmodule (⊥ : 子代数 R A) = 1
   证明: Submodule.one_eq_range.symm
 
 @[simp, norm_cast]
@@ -1032,7 +1032,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Subalgebra R A) : Set A) = Set.range (algebraMap R A)
+  结论: ((⊥ : 子代数 R A) : 集合 A) = 集合.range (algebraMap R A)
   证明: rfl
 
 @[simp]
@@ -1051,7 +1051,7 @@ theorem toSubring_bot
 
 中文:
 定理 toSubring_bot
-  条件: (A : 类型) [CommRing A] (R : Subring A)
+  条件: (A : 类型) [交换环 A] (R : 子环 A)
   证明: by
   aesop (add norm Subalgebra.mem_carrier.symm)
 
@@ -1073,7 +1073,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: {S : Subalgebra R A}
+  条件: {S : 子代数 R A}
   结论: S = ⊤ ↔ 对任意 x : A, x in S
   证明: ⟨fun h x => by rw [h]; exact mem_top, fun h => by
     ext x; exact ⟨fun _ => mem_top, fun _ => h x⟩⟩
@@ -1095,7 +1095,7 @@ theorem _root_.AlgHom.range_eq_top
 @[simp]
 
 中文:
-定理 _root_.AlgHom.range_eq_top
+定理 _root_.代数态射.range_eq_top
   条件: (f : A ->ₐ[R] B)
   证明: Algebra.eq_top_iff
 
@@ -1120,7 +1120,7 @@ theorem range_ofId
 
 中文:
 定理 range_ofId
-  结论: (Algebra.ofId R A).range = ⊥
+  结论: (代数.ofId R A).range = ⊥
   证明: rfl
 
 @[simp]
@@ -1140,7 +1140,7 @@ theorem range_id
 
 中文:
 定理 range_id
-  结论: (AlgHom.id R A).range = ⊤
+  结论: (代数态射.id R A).range = ⊤
   证明: SetLike.coe_injective Set.range_id
 
 @[simp]
@@ -1165,7 +1165,7 @@ theorem map_top
 中文:
 定理 map_top
   条件: (f : A ->ₐ[R] B)
-  结论: (⊤ : Subalgebra R A).map f = f.range
+  结论: (⊤ : 子代数 R A).map f = f.range
   证明: SetLike.coe_injective Set.image_univ
 
 @[simp]
@@ -1191,7 +1191,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : A ->ₐ[R] B)
-  结论: (⊥ : Subalgebra R A).map f = ⊥
+  结论: (⊥ : 子代数 R A).map f = ⊥
   证明: Subalgebra.toSubmodule_injective by
     simpa only [Subalgebra.map_toSubmodule, toSubmodule_bot] using Submodule.map_one _
 
@@ -1216,7 +1216,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : A ->ₐ[R] B)
-  结论: (⊤ : Subalgebra R B).comap f = ⊤
+  结论: (⊤ : 子代数 R B).comap f = ⊤
   证明: eq_top_iff.2 fun _x => mem_top
 
 Depends on / 依赖: eq_top_iff, mem_top
@@ -1234,7 +1234,7 @@ definition toTop
 
 中文:
 定义 toTop
-  签名: : A ->ₐ[R] (⊤ : Subalgebra R A)
+  签名: : A ->ₐ[R] (⊤ : 子代数 R A)
   定义体: (AlgHom.id R A).codRestrict ⊤ fun _ => mem_top
 
 Depends on / 依赖: AlgHom, AlgHom.id, codRestrict, mem_top
@@ -1282,7 +1282,7 @@ theorem bijective_algebraMap_iff
 
 中文:
 定理 bijective_algebraMap_iff
-  结论: {R A : 类型} [Field R] [Semiring A] [Nontrivial A]
+  结论: {R A : 类型} [域 R] [半环 A] [非平凡 A]
   证明: ⟨fun h => surjective_algebraMap_iff.1 h.2, fun h =>
     ⟨(algebraMap R A).injective, surjective_algebraMap_iff.2 h⟩⟩
 
@@ -1307,7 +1307,7 @@ definition botEquivOfInjective
 
 中文:
 定义 botEquivOfInjective
-  签名: (h : Function.Injective (algebraMap R A))
+  签名: (h : 函数.单射 (algebraMap R A))
   定义体: AlgEquiv.symm
     AlgEquiv.ofBijective (Algebra.ofId R _)
       ⟨fun _x _y hxy => h (congr_arg Subtype.val hxy :), fun ⟨_y, x, hx⟩ => ⟨x, Subtype.ext hx⟩⟩
@@ -1337,7 +1337,7 @@ definition botEquiv
 
 中文:
 定义 botEquiv
-  签名: (F R : 类型) [Field F] [Semiring R] [Nontrivial R] [Algebra F R]
+  签名: (F R : 类型) [域 F] [半环 R] [非平凡 R] [代数 F R]
   定义体: botEquivOfInjective (RingHom.injective _)
 
 Depends on / 依赖: RingHom, RingHom.injective, botEquivOfInjective, injective
@@ -1370,7 +1370,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Subalgebra R A) ≃ₐ[R] A
+  签名: : (⊤ : 子代数 R A) ≃ₐ[R] A
   定义体: AlgEquiv.ofAlgHom (Subalgebra.val ⊤) toTop rfl rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Subalgebra, Subalgebra.val, ofAlgHom
@@ -1391,8 +1391,8 @@ instance _root_.AlgHom.subsingleton
       hx ▸ (f.commutes _).trans (g.commutes _).symm⟩
 
 中文:
-实例 _root_.AlgHom.subsingleton
-  签名: [Subsingleton (Subalgebra R A)]
+实例 _root_.代数态射.subsingleton
+  签名: [子单例 (子代数 R A)]
   定义体: ⟨fun f g =>
     AlgHom.ext fun a =>
       have : a in (⊥ : Subalgebra R A) := Subsingleton.elim (⊤ : Subalgebra R A) ⊥ ▸ mem_top
@@ -1417,8 +1417,8 @@ instance _root_.AlgEquiv.subsingleton_left
   body: ⟨fun f g => AlgEquiv.ext fun x => AlgHom.ext_iff.mp (Subsingleton.elim f.toAlgHom g.toAlgHom) x⟩
 
 中文:
-实例 _root_.AlgEquiv.subsingleton_left
-  签名: [Subsingleton (Subalgebra R A)]
+实例 _root_.代数等价.subsingleton_left
+  签名: [子单例 (子代数 R A)]
   定义体: ⟨fun f g => AlgEquiv.ext fun x => AlgHom.ext_iff.mp (Subsingleton.elim f.toAlgHom g.toAlgHom) x⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext, AlgHom, AlgHom.ext_iff.mp, Subsingleton, Subsingleton.elim, ext_iff, f.toAlgHom, g.toAlgHom, toAlgHom
@@ -1436,8 +1436,8 @@ instance _root_.AlgEquiv.subsingleton_right
   body: ⟨fun f g => by rw [← f.symm_symm, Subsingleton.elim f.symm g.symm, g.symm_symm]⟩
 
 中文:
-实例 _root_.AlgEquiv.subsingleton_right
-  签名: [Subsingleton (Subalgebra R B)]
+实例 _root_.代数等价.subsingleton_right
+  签名: [子单例 (子代数 R B)]
   定义体: ⟨fun f g => by rw [← f.symm_symm, Subsingleton.elim f.symm g.symm, g.symm_symm]⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, f.symm, f.symm_symm, g.symm, g.symm_symm, symm_symm
@@ -1461,7 +1461,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Subalgebra R R)
+  签名: 唯一 (子代数 R R)
   定义体: { (inferInstance : Inhabited (Subalgebra R R)) with
     uniq := by
       intro S
@@ -1495,7 +1495,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: (A : 类型) [CommSemiring A] [Algebra R A]
+  条件: (A : 类型) [交换半环 A] [代数 R A]
   结论: center R A = ⊤
   证明: SetLike.coe_injective (Set.center_eq_univ A)
 
@@ -1522,7 +1522,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   结论: centralizer R s = ⊤ ↔ s subseteq center R A
   证明: SetLike.ext'_iff.trans Set.centralizer_eq_top_iff_subset
 
@@ -1602,7 +1602,7 @@ theorem eqOn_sup
 
 中文:
 定理 eqOn_sup
-  条件: {φ ψ : F} {S T : Subalgebra R A} (hS : Set.EqOn φ ψ S) (hT : Set.EqOn φ ψ T)
+  条件: {φ ψ : F} {S T : 子代数 R A} (hS : 集合.EqOn φ ψ S) (hT : 集合.EqOn φ ψ T)
   证明: by
   rw [← AlgHom.coe_coe φ]; rw [← AlgHom.coe_coe ψ]; rw [← le_equalizer] at hS hT ⊢
   exact sup_le hS hT
@@ -1624,7 +1624,7 @@ theorem ext_on_codisjoint
 
 中文:
 定理 ext_on_codisjoint
-  结论: {φ ψ : F} {S T : Subalgebra R A} (hST : Codisjoint S T)
+  结论: {φ ψ : F} {S T : 子代数 R A} (hST : Codisjoint S T)
   证明: DFunLike.ext _ _ fun _ => eqOn_sup hS hT hST.eq_top.symm ▸ trivial
 
 Depends on / 依赖: DFunLike, DFunLike.ext, eqOn_sup, eq_top, hST.eq_top.symm
@@ -1654,7 +1654,7 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (f : A ->ₐ[R] B) (S : Subalgebra R B)
+  条件: (f : A ->ₐ[R] B) (S : 子代数 R B)
   结论: (S.comap f).map f = S ⊓ f.range
   证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
 
@@ -1727,7 +1727,7 @@ definition saturation
 
 中文:
 定义 saturation
-  签名: (s : Subalgebra R S) (M : Submonoid S) (H : M <= s.toSubmonoid)
+  签名: (s : 子代数 R S) (M : 子幺半群 S) (H : M <= s.toSubmonoid)
   定义体: { x | exists m in M, m * x in s }
   mul_mem' := by
     intro a b ⟨m, hm, ha⟩ ⟨n, hn, hb⟩
@@ -1928,7 +1928,7 @@ theorem mem_adjoin_of_mem
 
 中文:
 定理 mem_adjoin_of_mem
-  条件: {s : Set A} {x : A} (hx : x in s)
+  条件: {s : 集合 A} {x : A} (hx : x in s)
   结论: x in adjoin R s
   证明: subset_adjoin hx
 
@@ -1956,8 +1956,8 @@ class CoeAdjoinAux
   (no additional axioms)
 
 中文:
-类 CoeAdjoinAux
-  参数: (x : α) (s : Set α)
+类 余eAdjoinAux
+  参数: (x : α) (s : 集合 α)
   (无附加公理)
 
 Depends on / 依赖: Set.mem_singleton, mem_singleton
@@ -1989,7 +1989,7 @@ theorem adjoin_le
 
 中文:
 定理 adjoin_le
-  条件: {S : Subalgebra R A} (H : s subseteq S)
+  条件: {S : 子代数 R A} (H : s subseteq S)
   结论: adjoin R s <= S
   证明: Algebra.gc.l_le H
 
@@ -2009,7 +2009,7 @@ theorem adjoin_singleton_le
 
 中文:
 定理 adjoin_singleton_le
-  条件: {S : Subalgebra R A} {a : A} (H : a in S)
+  条件: {S : 子代数 R A} {a : A} (H : a in S)
   结论: R[a] <= S
   证明: adjoin_le (Set.singleton_subset_iff.mpr H)
 
@@ -2028,7 +2028,7 @@ theorem adjoin_eq_sInf
 
 中文:
 定理 adjoin_eq_sInf
-  结论: adjoin R s = sInf { p : Subalgebra R A | s subseteq p }
+  结论: adjoin R s = sInf { p : 子代数 R A | s subseteq p }
   证明: le_antisymm (le_sInf fun _ h => adjoin_le h) (sInf_le subset_adjoin)
 
 Depends on / 依赖: adjoin_le, le_antisymm, le_sInf, sInf_le, subset_adjoin
@@ -2049,7 +2049,7 @@ theorem adjoin_le_iff
 
 中文:
 定理 adjoin_le_iff
-  条件: {S : Subalgebra R A}
+  条件: {S : 子代数 R A}
   结论: adjoin R s <= S ↔ s subseteq S
   证明: Algebra.gc _ _
 
@@ -2092,7 +2092,7 @@ theorem adjoin_eq_of_le
 
 中文:
 定理 adjoin_eq_of_le
-  条件: (S : Subalgebra R A) (h₁ : s subseteq S) (h₂ : S <= adjoin R s)
+  条件: (S : 子代数 R A) (h₁ : s subseteq S) (h₂ : S <= adjoin R s)
   结论: adjoin R s = S
   证明: le_antisymm (adjoin_le h₁) h₂
 
@@ -2112,7 +2112,7 @@ theorem adjoin_eq
 
 中文:
 定理 adjoin_eq
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   结论: adjoin R ↑S = S
   证明: adjoin_eq_of_le _ (Set.Subset.refl _) subset_adjoin
 
@@ -2131,7 +2131,7 @@ theorem adjoin_iUnion
 
 中文:
 定理 adjoin_iUnion
-  条件: {α : 类型} (s : α -> Set A)
+  条件: {α : 类型} (s : α -> 集合 A)
   证明: (@Algebra.gc R A _ _ _).l_iSup
 
 Depends on / 依赖: Algebra, Algebra.gc, l_iSup
@@ -2152,7 +2152,7 @@ theorem adjoin_attach_biUnion
 
 中文:
 定理 adjoin_attach_biUnion
-  条件: [DecidableEq A] {α : 类型} {s : Finset α} (f : s -> Finset A)
+  条件: [DecidableEq A] {α : 类型} {s : 有限集 α} (f : s -> 有限集 A)
   证明: by simp [adjoin_iUnion]
 
 @[elab_as_elim]
@@ -2221,7 +2221,7 @@ theorem adjoin_induction₂
 
 中文:
 定理 adjoin_induction₂
-  结论: {s : Set A} {p : (x y : A) -> x in adjoin R s -> y in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : (x y : A) -> x in adjoin R s -> y in adjoin R s -> 命题}
   证明: by
   induction hy using adjoin_induction with
   | mem z hz => induction hx using adjoin_induction with
@@ -2279,7 +2279,7 @@ theorem adjoin_adjoin_coe_preimage
 
 中文:
 定理 adjoin_adjoin_coe_preimage
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   结论: adjoin R (((↑) : adjoin R s -> A) ⁻¹' s) = ⊤
   证明: by
   refine eq_top_iff.2 fun ⟨x, hx⟩ =>
@@ -2310,7 +2310,7 @@ theorem adjoin_union
 
 中文:
 定理 adjoin_union
-  条件: (s t : Set A)
+  条件: (s t : 集合 A)
   结论: adjoin R (s union t) = adjoin R s ⊔ adjoin R t
   证明: (Algebra.gc : GaloisConnection _ ((↑) : Subalgebra R A -> Set A)).l_sup
 
@@ -2334,7 +2334,7 @@ theorem adjoin_empty
 
 中文:
 定理 adjoin_empty
-  结论: adjoin R (∅ : Set A) = ⊥
+  结论: adjoin R (∅ : 集合 A) = ⊥
   证明: Algebra.gc.l_bot
 
 @[simp]
@@ -2354,7 +2354,7 @@ theorem adjoin_univ
 
 中文:
 定理 adjoin_univ
-  结论: adjoin R (Set.univ : Set A) = ⊤
+  结论: adjoin R (集合.univ : 集合 A) = ⊤
   证明: Algebra.gi.l_top
 
 Depends on / 依赖: Algebra, Algebra.gi.l_top, l_top
@@ -2474,7 +2474,7 @@ theorem adjoin_insert_algebraMap
 
 中文:
 定理 adjoin_insert_algebraMap
-  条件: (x : R) (s : Set A)
+  条件: (x : R) (s : 集合 A)
   证明: by
   rw [Set.insert_eq]; rw [adjoin_union]
   simp
@@ -2502,7 +2502,7 @@ theorem adjoin_insert_natCast
 
 中文:
 定理 adjoin_insert_natCast
-  条件: (n : 自然数) (s : Set A)
+  条件: (n : 自然数) (s : 集合 A)
   结论: adjoin R (insert (n : A) s) = adjoin R s
   证明: mod_cast adjoin_insert_algebraMap (n : R) s
 
@@ -2527,7 +2527,7 @@ theorem adjoin_insert_zero
 
 中文:
 定理 adjoin_insert_zero
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: adjoin R (insert 0 s) = adjoin R s
   证明: mod_cast adjoin_insert_natCast R 0 s
 
@@ -2550,7 +2550,7 @@ theorem adjoin_insert_one
 
 中文:
 定理 adjoin_insert_one
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: adjoin R (insert 1 s) = adjoin R s
   证明: mod_cast adjoin_insert_natCast R 1 s
 
@@ -2579,7 +2579,7 @@ theorem adjoin_eq_span
 
 中文:
 定理 adjoin_eq_span
-  结论: Subalgebra.toSubmodule (adjoin R s) = span R (Submonoid.closure s)
+  结论: 子代数.toSubmodule (adjoin R s) = span R (子幺半群.closure s)
   证明: by
   apply le_antisymm
   · intro r hr
@@ -2638,8 +2638,8 @@ theorem span_le_adjoin
 
 中文:
 定理 span_le_adjoin
-  条件: (s : Set A)
-  结论: span R s <= Subalgebra.toSubmodule (adjoin R s)
+  条件: (s : 集合 A)
+  结论: span R s <= 子代数.toSubmodule (adjoin R s)
   证明: span_le.mpr subset_adjoin
 
 Depends on / 依赖: span_le, span_le.mpr, subset_adjoin
@@ -2658,7 +2658,7 @@ theorem adjoin_toSubmodule_le
 
 中文:
 定理 adjoin_toSubmodule_le
-  条件: {s : Set A} {t : Submodule R A}
+  条件: {s : 集合 A} {t : 子模 R A}
   证明: by
   rw [adjoin_eq_span]; rw [span_le]
 
@@ -2680,7 +2680,7 @@ theorem adjoin_eq_span_of_subset
 
 中文:
 定理 adjoin_eq_span_of_subset
-  条件: {s : Set A} (hs : ↑(Submonoid.closure s) subseteq (span R s : Set A))
+  条件: {s : 集合 A} (hs : ↑(子幺半群.closure s) subseteq (span R s : 集合 A))
   证明: le_antisymm ((adjoin_toSubmodule_le R).mpr hs) (span_le_adjoin R s)
 
 @[simp]
@@ -2703,8 +2703,8 @@ theorem adjoin_span
 
 中文:
 定理 adjoin_span
-  条件: {s : Set A}
-  结论: adjoin R (Submodule.span R s : Set A) = adjoin R s
+  条件: {s : 集合 A}
+  结论: adjoin R (子模.span R s : 集合 A) = adjoin R s
   证明: le_antisymm (adjoin_le (span_le_adjoin _ _)) (adjoin_mono Submodule.subset_span)
 
 Depends on / 依赖: Submodule, Submodule.subset_span, adjoin_le, adjoin_mono, le_antisymm, span_le_adjoin, subset_span
@@ -2725,7 +2725,7 @@ theorem adjoin_image
 
 中文:
 定理 adjoin_image
-  条件: (f : A ->ₐ[R] B) (s : Set A)
+  条件: (f : A ->ₐ[R] B) (s : 集合 A)
   结论: adjoin R (f '' s) = (adjoin R s).map f
   证明: eq_of_forall_ge_iff fun t => by simp [Subalgebra.map_le, adjoin_le_iff]
 
@@ -2807,7 +2807,7 @@ lemma adjoin_le_centralizer_centralizer
 
 中文:
 引理 adjoin_le_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: adjoin_le Set.subset_centralizer_centralizer
 
 Depends on / 依赖: Set.subset_centralizer_centralizer, adjoin_le, subset_centralizer_centralizer
@@ -2828,7 +2828,7 @@ theorem isMulCommutative_adjoin
 
 中文:
 定理 isMulCommutative_adjoin
-  条件: {s : Set A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  条件: {s : 集合 A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   证明: have := adjoin_le_centralizer_centralizer R s
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -2877,7 +2877,7 @@ abbreviation adjoinCommSemiringOfComm
 
 中文:
 缩写 adjoinCommSemiringOfComm
-  签名: {s : Set A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  签名: {s : 集合 A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   定义体: have := isMulCommutative_adjoin R hcomm
   inferInstance
 
@@ -2898,7 +2898,7 @@ instance instIsMulCommutative_adjoin
 
 中文:
 实例 instIsMulCommutative_adjoin
-  签名: {S : 类型} [SetLike S A] [MulMemClass S A] (s : S)
+  签名: {S : 类型} [集合状 S A] [MulMem类 S A] (s : S)
   定义体: isMulCommutative_adjoin R fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 Depends on / 依赖: isMulCommutative_adjoin, setLike_mul_comm
@@ -2923,8 +2923,8 @@ lemma commute_of_mem_adjoin_of_forall_mem_commute
   | mul y z _ _ hy hz => exact hy.mul_right hz
 
 中文:
-引理 commute_of_mem_adjoin_of_forall_mem_commute
-  结论: {a b : A} {s : Set A}
+引理 commute_of_mem_adjoin_of_对任意_mem_commute
+  结论: {a b : A} {s : 集合 A}
   证明: by
   induction hb using adjoin_induction with
   | mem x hx => exact h x hx
@@ -3083,7 +3083,7 @@ theorem adjoin_insert_intCast
 
 中文:
 定理 adjoin_insert_intCast
-  条件: (n : 整数) (s : Set A)
+  条件: (n : 整数) (s : 集合 A)
   结论: adjoin R (insert (n : A) s) = adjoin R s
   证明: by
   simpa using adjoin_insert_algebraMap (n : R) s
@@ -3105,7 +3105,7 @@ theorem adjoin_eq_ring_closure
 
 中文:
 定理 adjoin_eq_ring_closure
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: .symm Subring.closure_eq_of_le (by simp [adjoin]) fun x hx =>
     Subsemiring.closure_induction Subring.subset_closure (Subring.zero_mem _) (Subring.one_mem _)
       (fun _ _ _ _ => Subring.add_mem _) (fun _ _ _ _ => Subring.mul_mem _) hx
@@ -3129,7 +3129,7 @@ theorem mem_adjoin_iff
 
 中文:
 定理 mem_adjoin_iff
-  条件: {s : Set A} {x : A}
+  条件: {s : 集合 A} {x : A}
   证明: by
   rw [← Subalgebra.mem_toSubring]; rw [adjoin_eq_ring_closure]
 
@@ -3156,7 +3156,7 @@ abbreviation adjoinCommRingOfComm
 
 中文:
 缩写 adjoinCommRingOfComm
-  签名: {s : Set A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  签名: {s : 集合 A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   定义体: have := isMulCommutative_adjoin R hcomm
   inferInstance
 
@@ -3190,7 +3190,7 @@ theorem map_adjoin
 
 中文:
 定理 map_adjoin
-  条件: (φ : A ->ₐ[R] B) (s : Set A)
+  条件: (φ : A ->ₐ[R] B) (s : 集合 A)
   结论: (adjoin R s).map φ = adjoin R (φ '' s)
   证明: (adjoin_image _ _ _).symm
 
@@ -3233,7 +3233,7 @@ theorem adjoin_le_equalizer
 
 中文:
 定理 adjoin_le_equalizer
-  条件: (φ₁ φ₂ : A ->ₐ[R] B) {s : Set A} (h : s.EqOn φ₁ φ₂)
+  条件: (φ₁ φ₂ : A ->ₐ[R] B) {s : 集合 A} (h : s.EqOn φ₁ φ₂)
   证明: adjoin_le h
 
 Depends on / 依赖: adjoin_le
@@ -3253,7 +3253,7 @@ theorem ext_of_adjoin_eq_top
 
 中文:
 定理 ext_of_adjoin_eq_top
-  条件: {s : Set A} (h : adjoin R s = ⊤) ⦃φ₁ φ₂
+  条件: {s : 集合 A} (h : adjoin R s = ⊤) ⦃φ₁ φ₂
   结论: A ->ₐ[R] B⦄
   证明: ext fun _x => adjoin_le_equalizer φ₁ φ₂ hs h.symm ▸ trivial
 
@@ -3275,7 +3275,7 @@ theorem eqOn_adjoin_iff
 
 中文:
 定理 eqOn_adjoin_iff
-  条件: {φ ψ : A ->ₐ[R] B} {s : Set A}
+  条件: {φ ψ : A ->ₐ[R] B} {s : 集合 A}
   证明: by
   have (S : Set A) : S <= equalizer φ ψ ↔ Set.EqOn φ ψ S := Iff.rfl
   simp only [← this, SetLike.coe_subset_coe, adjoin_le_iff]
@@ -3300,7 +3300,7 @@ theorem adjoin_ext
 
 中文:
 定理 adjoin_ext
-  条件: {s : Set A} ⦃φ₁ φ₂
+  条件: {s : 集合 A} ⦃φ₁ φ₂
   结论: adjoin R s ->ₐ[R] B⦄
   证明: ext fun ⟨x, hx⟩ => adjoin_induction h (fun _ => φ₂.commutes _ ▸ φ₁.commutes _)
     (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· + ·) h₁ h₂ <;> rw [← map_add] <;> rfl)
@@ -3326,7 +3326,7 @@ theorem ext_of_eq_adjoin
 
 中文:
 定理 ext_of_eq_adjoin
-  条件: {S : Subalgebra R A} {s : Set A} (hS : S = adjoin R s) ⦃φ₁ φ₂
+  条件: {S : 子代数 R A} {s : 集合 A} (hS : S = adjoin R s) ⦃φ₁ φ₂
   结论: S ->ₐ[R] B⦄
   证明: by
   subst hS; exact adjoin_ext h
@@ -3347,8 +3347,8 @@ theorem _root_.Algebra.forall_mem_adjoin_smul_eq_self_iff
   proof: AlgHom.eqOn_adjoin_iff (φ := MulSemiringAction.toAlgHom R A m) (ψ := .id R A)
 
 中文:
-定理 _root_.Algebra.forall_mem_adjoin_smul_eq_self_iff
-  结论: (S : Set A) {M : 类型} [Monoid M]
+定理 _root_.代数.对任意_mem_adjoin_smul_eq_self_iff
+  结论: (S : 集合 A) {M : 类型} [幺半群 M]
   证明: AlgHom.eqOn_adjoin_iff (φ := MulSemiringAction.toAlgHom R A m) (ψ := .id R A)
 
 Depends on / 依赖: AlgHom, AlgHom.eqOn_adjoin_iff, MulSemiringAction, MulSemiringAction.toAlgHom, eqOn_adjoin_iff, toAlgHom
@@ -3372,8 +3372,8 @@ theorem Algebra.adjoin_nat
     (Subsemiring.closure_le.2 subset_adjoin : Subsemiring.closure s <= (adjoin Nat s).toSubsemiring)
 
 中文:
-定理 Algebra.adjoin_nat
-  条件: {R : 类型} [Semiring R] (s : Set R)
+定理 代数.adjoin_nat
+  条件: {R : 类型} [半环 R] (s : 集合 R)
   证明: le_antisymm (adjoin_le Subsemiring.subset_closure)
     (Subsemiring.closure_le.2 subset_adjoin : Subsemiring.closure s <= (adjoin Nat s).toSubsemiring)
 
@@ -3394,8 +3394,8 @@ theorem Algebra.adjoin_int
     (Subring.closure_le.2 subset_adjoin : Subring.closure s <= (adjoin Int s).toSubring)
 
 中文:
-定理 Algebra.adjoin_int
-  条件: {R : 类型} [Ring R] (s : Set R)
+定理 代数.adjoin_int
+  条件: {R : 类型} [环 R] (s : 集合 R)
   证明: le_antisymm (adjoin_le Subring.subset_closure)
     (Subring.closure_le.2 subset_adjoin : Subring.closure s <= (adjoin Int s).toSubring)
 
@@ -3415,8 +3415,8 @@ definition Subsemiring.closureEquivAdjoinNat
   body: Subalgebra.equivOfEq (subalgebraOfSubsemiring <| Subsemiring.closure s) _ (adjoin_nat s).symm
 
 中文:
-定义 Subsemiring.closureEquivAdjoinNat
-  签名: {R : 类型} [Semiring R] (s : Set R)
+定义 子半环.closureEquivAdjoin自然数
+  签名: {R : 类型} [半环 R] (s : 集合 R)
   定义体: Subalgebra.equivOfEq (subalgebraOfSubsemiring <| Subsemiring.closure s) _ (adjoin_nat s).symm
 
 Depends on / 依赖: Subalgebra, Subalgebra.equivOfEq, Subsemiring, Subsemiring.closure, adjoin_nat, closure, equivOfEq, subalgebraOfSubsemiring
@@ -3434,8 +3434,8 @@ definition Subring.closureEquivAdjoinInt
   body: Subalgebra.equivOfEq (subalgebraOfSubring <| Subring.closure s) _ (adjoin_int s).symm
 
 中文:
-定义 Subring.closureEquivAdjoinInt
-  签名: {R : 类型} [Ring R] (s : Set R)
+定义 子环.closureEquivAdjoin整数
+  签名: {R : 类型} [环 R] (s : 集合 R)
   定义体: Subalgebra.equivOfEq (subalgebraOfSubring <| Subring.closure s) _ (adjoin_int s).symm
 
 Depends on / 依赖: Subalgebra, Subalgebra.equivOfEq, Subring, Subring.closure, adjoin_int, closure, equivOfEq, subalgebraOfSubring
@@ -3461,8 +3461,8 @@ theorem Submonoid.adjoin_eq_span_of_eq_span
   exact (span_le.mpr <| span_subset_span _ _ _).antisymm (span_mono subset_span)
 
 中文:
-定理 Submonoid.adjoin_eq_span_of_eq_span
-  结论: [Semiring F] [Module F K] [IsScalarTower F E K]
+定理 子幺半群.adjoin_eq_span_of_eq_span
+  结论: [半环 F] [模 F K] [标量塔 F E K]
   证明: by
   rw [adjoin_eq_span]; rw [L.closure_eq]; rw [h]
   exact (span_le.mpr <| span_subset_span _ _ _).antisymm (span_mono subset_span)
@@ -3486,8 +3486,8 @@ theorem Subalgebra.adjoin_eq_span_of_eq_span
   proof: L.toSubmonoid.adjoin_eq_span_of_eq_span F E (congr_arg ((↑) : _ -> Set K) h)
 
 中文:
-定理 Subalgebra.adjoin_eq_span_of_eq_span
-  条件: {S : Set K} (h : toSubmodule L = span F S)
+定理 子代数.adjoin_eq_span_of_eq_span
+  条件: {S : 集合 K} (h : toSubmodule L = span F S)
   证明: L.toSubmonoid.adjoin_eq_span_of_eq_span F E (congr_arg ((↑) : _ -> Set K) h)
 
 Depends on / 依赖: L.toSubmonoid.adjoin_eq_span_of_eq_span, adjoin_eq_span_of_eq_span, congr_arg, toSubmonoid
@@ -3511,7 +3511,7 @@ lemma NonUnitalAlgebra.adjoin_le_algebra_adjoin
 
 中文:
 引理 NonUnitalAlgebra.adjoin_le_algebra_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: adjoin_le Algebra.subset_adjoin
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, adjoin_le, subset_adjoin
@@ -3530,8 +3530,8 @@ lemma Algebra.adjoin_nonUnitalSubalgebra
     (adjoin_le <| (NonUnitalAlgebra.subset_adjoin R).trans subset_adjoin)
 
 中文:
-引理 Algebra.adjoin_nonUnitalSubalgebra
-  条件: (s : Set A)
+引理 代数.adjoin_nonUnitalSubalgebra
+  条件: (s : 集合 A)
   证明: le_antisymm
     (adjoin_le <| NonUnitalAlgebra.adjoin_le_algebra_adjoin R s)
     (adjoin_le <| (NonUnitalAlgebra.subset_adjoin R).trans subset_adjoin)
@@ -3566,7 +3566,7 @@ definition toNonUnitalSubalgebraOrderEmbedding
 
 中文:
 定义 toNonUnitalSubalgebraOrderEmbedding
-  签名: : Subalgebra R A ↪o NonUnitalSubalgebra R A where
+  签名: : 子代数 R A ↪o NonUnital子代数 R A where
   定义体: toNonUnitalSubalgebra
   inj' := toNonUnitalSubalgebra_injective
   map_rel_iff' := by simp [SetLike.le_def]
@@ -3593,7 +3593,7 @@ alias ⟨_, toNonUnitalSubalgebra_mono⟩ := toNonUnitalSubalgebra_le_toNonUnita
 
 中文:
 引理 toNonUnitalSubalgebra_le_toNonUnitalSubalgebra
-  条件: {S T : Subalgebra R A}
+  条件: {S T : 子代数 R A}
   证明: toNonUnitalSubalgebraOrderEmbedding.le_iff_le
 
 alias ⟨_, toNonUnitalSubalgebra_mono⟩ := toNonUnitalSubalgebra_le_toNonUnitalSubalgebra
@@ -3628,7 +3628,7 @@ theorem comap_map_eq
 
 中文:
 定理 comap_map_eq
-  条件: (f : A ->ₐ[R] B) (S : Subalgebra R A)
+  条件: (f : A ->ₐ[R] B) (S : 子代数 R A)
   证明: by
   apply le_antisymm
   · intro x hx
@@ -3668,7 +3668,7 @@ theorem comap_map_eq_self
 
 中文:
 定理 comap_map_eq_self
-  结论: {f : A ->ₐ[R] B} {S : Subalgebra R A}
+  结论: {f : A ->ₐ[R] B} {S : 子代数 R A}
   证明: by
   convert! comap_map_eq f S
   rwa [left_eq_sup, Algebra.adjoin_le_iff]

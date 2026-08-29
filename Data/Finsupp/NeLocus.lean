@@ -178,7 +178,7 @@ theorem nonempty_neLocus_iff
 中文:
 定理 nonempty_neLocus_iff
   条件: {f g : α ->₀ N}
-  结论: (f.neLocus g).Nonempty ↔ f != g
+  结论: (f.neLocus g).非空 ↔ f != g
   证明: Finset.nonempty_iff_ne_empty.trans neLocus_eq_empty.not
 
 Depends on / 依赖: Finset, Finset.nonempty_iff_ne_empty.trans, neLocus_eq_empty, neLocus_eq_empty.not, nonempty_iff_ne_empty
@@ -271,7 +271,7 @@ theorem subset_mapRange_neLocus
 
 中文:
 定理 subset_mapRange_neLocus
-  结论: [DecidableEq N] [Zero N] [DecidableEq M] [Zero M] (f g : α ->₀ N)
+  结论: [DecidableEq N] [零 N] [DecidableEq M] [零 M] (f g : α ->₀ N)
   证明: fun x => by simpa only [mem_neLocus, mapRange_apply, not_imp_not] using congr_arg F
 
 Depends on / 依赖: congr_arg, mapRange_apply, mem_neLocus, not_imp_not
@@ -292,7 +292,7 @@ theorem zipWith_neLocus_eq_left
 
 中文:
 定理 zipWith_neLocus_eq_left
-  结论: [DecidableEq N] [Zero M] [DecidableEq P] [Zero P] [Zero N]
+  结论: [DecidableEq N] [零 M] [DecidableEq P] [零 P] [零 N]
   证明: by
   ext
   simpa only [mem_neLocus] using! (hF _).ne_iff
@@ -318,7 +318,7 @@ theorem zipWith_neLocus_eq_right
 
 中文:
 定理 zipWith_neLocus_eq_right
-  结论: [DecidableEq M] [Zero M] [DecidableEq P] [Zero P] [Zero N]
+  结论: [DecidableEq M] [零 M] [DecidableEq P] [零 P] [零 N]
   证明: by
   ext
   simpa only [mem_neLocus] using! (hF _).ne_iff
@@ -344,7 +344,7 @@ theorem mapRange_neLocus_eq
 
 中文:
 定理 mapRange_neLocus_eq
-  结论: [DecidableEq N] [DecidableEq M] [Zero M] [Zero N] (f g : α ->₀ N)
+  结论: [DecidableEq N] [DecidableEq M] [零 M] [零 N] (f g : α ->₀ N)
   证明: by
   ext
   simpa only [mem_neLocus] using! hF.ne_iff
@@ -374,7 +374,7 @@ theorem neLocus_add_left
 
 中文:
 定理 neLocus_add_left
-  条件: [AddLeftCancelMonoid N] (f g h : α ->₀ N)
+  条件: [加法左消去幺半群 N] (f g h : α ->₀ N)
   证明: zipWith_neLocus_eq_left _ _ _ _ add_right_injective
 
 @[simp]
@@ -396,7 +396,7 @@ theorem neLocus_add_right
 
 中文:
 定理 neLocus_add_right
-  条件: [AddRightCancelMonoid N] (f g h : α ->₀ N)
+  条件: [加法右消去幺半群 N] (f g h : α ->₀ N)
   证明: zipWith_neLocus_eq_right _ _ _ _ add_left_injective
 
 Depends on / 依赖: add_left_injective, zipWith_neLocus_eq_right

@@ -38,7 +38,7 @@ definition liftQ₂
 
 中文:
 定义 liftQ₂
-  签名: (M' : Submodule R M) (N' : Submodule S N) (f : M ->ₛₗ[ρ] N ->ₛₗ[σ] P)
+  签名: (M' : 子模 R M) (N' : 子模 S N) (f : M ->ₛₗ[ρ] N ->ₛₗ[σ] P)
   定义体: have : forall n in N', n in (M'.liftQ f hM').flip.ker := fun n hn => by
     simp_rw [LinearMap.mem_ker, LinearMap.ext_iff, LinearMap.flip_apply, Submodule.Quotient.forall,
       Submodule.liftQ_apply, ← f.flip_apply, show f.flip n = 0 from hN' hn, LinearMap.zero_apply,
@@ -67,7 +67,7 @@ lemma liftQ₂_mk
 
 中文:
 引理 liftQ₂_mk
-  结论: {M' : Submodule R M} {N' : Submodule S N} {f : M ->ₛₗ[ρ] N ->ₛₗ[σ] P}
+  结论: {M' : 子模 R M} {N' : 子模 S N} {f : M ->ₛₗ[ρ] N ->ₛₗ[σ] P}
   证明: rfl
 -/
 lemma liftQ₂_mk {M' : Submodule R M} {N' : Submodule S N} {f : M ->ₛₗ[ρ] N ->ₛₗ[σ] P}

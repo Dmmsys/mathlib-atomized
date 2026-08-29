@@ -46,7 +46,7 @@ theorem lintegral_inv_eq_self
 
 中文:
 定理 lintegral_inv_eq_self
-  条件: [IsInvInvariant μ] (f : G -> 实数>=0∞)
+  条件: [是InvInvariant μ] (f : G -> 实数>=0∞)
   证明: by
   simpa using (lintegral_map_equiv f (μ := μ) <| MeasurableEquiv.inv G).symm
 
@@ -79,7 +79,7 @@ theorem lintegral_mul_left_eq_self
 
 中文:
 定理 lintegral_mul_left_eq_self
-  条件: [IsMulLeftInvariant μ] (f : G -> 实数>=0∞) (g : G)
+  条件: [是MulLeftInvariant μ] (f : G -> 实数>=0∞) (g : G)
   证明: by
   convert! (lintegral_map_equiv f <| MeasurableEquiv.mulLeft g).symm
   simp [map_mul_left_eq_self μ g]
@@ -110,7 +110,7 @@ theorem lintegral_mul_right_eq_self
 
 中文:
 定理 lintegral_mul_right_eq_self
-  条件: [IsMulRightInvariant μ] (f : G -> 实数>=0∞) (g : G)
+  条件: [是MulRightInvariant μ] (f : G -> 实数>=0∞) (g : G)
   证明: by
   convert! (lintegral_map_equiv f <| MeasurableEquiv.mulRight g).symm using 1
   simp [map_mul_right_eq_self μ g]
@@ -138,7 +138,7 @@ theorem lintegral_div_right_eq_self
 
 中文:
 定理 lintegral_div_right_eq_self
-  条件: [IsMulRightInvariant μ] (f : G -> 实数>=0∞) (g : G)
+  条件: [是MulRightInvariant μ] (f : G -> 实数>=0∞) (g : G)
   证明: by
   simp_rw [div_eq_mul_inv, lintegral_mul_right_eq_self f g⁻¹]
 
@@ -162,7 +162,7 @@ theorem lintegral_div_left_eq_self
 
 中文:
 定理 lintegral_div_left_eq_self
-  结论: [IsMulLeftInvariant μ] [MeasurableInv G] [IsInvInvariant μ]
+  结论: [是MulLeftInvariant μ] [MeasurableInv G] [是InvInvariant μ]
   证明: by
   simp_rw [div_eq_mul_inv, lintegral_inv_eq_self (f <| g * ·), lintegral_mul_left_eq_self]
 
@@ -195,7 +195,7 @@ theorem lintegral_eq_zero_of_isMulLeftInvariant
 
 中文:
 定理 lintegral_eq_zero_of_isMulLeftInvariant
-  结论: [Regular μ] [NeZero μ] {f : G -> 实数>=0∞}
+  结论: [正则 μ] [NeZero μ] {f : G -> 实数>=0∞}
   证明: by
   rw [lintegral_eq_zero_iff hf.measurable]; rw [hf.ae_eq_iff_eq μ continuous_zero]
 

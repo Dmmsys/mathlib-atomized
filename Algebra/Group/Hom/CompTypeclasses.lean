@@ -50,8 +50,8 @@ class CompTriple
     - comp_eq : ψ.comp φ = χ
 
 中文:
-类 CompTriple
-  参数: {M N P : 类型} [Monoid M] [Monoid N] [Monoid P]
+类 余mpTriple
+  参数: {M N P : 类型} [幺半群 M] [幺半群 N] [幺半群 P]
   公理与运算 (1 个):
     - comp_eq : ψ.comp φ = χ
 -/
@@ -76,10 +76,10 @@ class IsId
     - eq_id : σ = MonoidHom.id M
 
 中文:
-类 IsId
+类 是Id
   参数: (σ : M ->* M)
   公理与运算 (1 个):
-    - eq_id : σ = MonoidHom.id M
+    - eq_id : σ = 幺半群态射.id M
 -/
 class IsId (σ : M ->* M) : Prop where
   eq_id : σ = MonoidHom.id M
@@ -94,7 +94,7 @@ instance instIsId
 
 中文:
 实例 instIsId
-  签名: {M : 类型} [Monoid M]
+  签名: {M : 类型} [幺半群 M]
   定义体: rfl
 -/
 instance instIsId {M : Type*} [Monoid M] : IsId (MonoidHom.id M) where
@@ -113,7 +113,7 @@ instance instComp_id
 
 中文:
 实例 instComp_id
-  签名: {N P : 类型} [Monoid N] [Monoid P]
+  签名: {N P : 类型} [幺半群 N] [幺半群 P]
   定义体: by simp only [IsId.eq_id, MonoidHom.comp_id]
 
 Depends on / 依赖: IsId.eq_id, MonoidHom, MonoidHom.comp_id, comp_id, eq_id
@@ -133,7 +133,7 @@ instance instId_comp
 
 中文:
 实例 instId_comp
-  签名: {M N : 类型} [Monoid M] [Monoid N]
+  签名: {M N : 类型} [幺半群 M] [幺半群 N]
   定义体: by simp only [IsId.eq_id, MonoidHom.id_comp]
 
 Depends on / 依赖: IsId.eq_id, MonoidHom, MonoidHom.id_comp, eq_id, id_comp
@@ -153,7 +153,7 @@ lemma comp_inv
 
 中文:
 引理 comp_inv
-  结论: {φ : M ->* N} {ψ : N ->* M} (h : Function.RightInverse φ ψ)
+  结论: {φ : M ->* N} {ψ : N ->* M} (h : 函数.右逆 φ ψ)
   证明: by simp only [IsId.eq_id, ← DFunLike.coe_fn_eq, coe_comp, h.id, coe_id]
 
 Depends on / 依赖: DFunLike, DFunLike.coe_fn_eq, IsId.eq_id, coe_comp, coe_fn_eq, coe_id, eq_id, h.id
@@ -173,7 +173,7 @@ instance instRootCompTriple
 
 中文:
 实例 instRootCompTriple
-  签名: {φ : M ->* N} {ψ : N ->* P} {χ : M ->* P} [κ : CompTriple φ ψ χ]
+  签名: {φ : M ->* N} {ψ : N ->* P} {χ : M ->* P} [κ : 余mpTriple φ ψ χ]
   定义体: by rw [← MonoidHom.coe_comp, κ.comp_eq]
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_comp, coe_comp, comp_eq
@@ -232,7 +232,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {Q : 类型} [Monoid Q]
+  结论: {Q : 类型} [幺半群 Q]
   证明: by
   constructor <;>
   · rintro ⟨h⟩

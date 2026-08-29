@@ -39,7 +39,7 @@ definition measurableEquivPi
 
 中文:
 定义 measurableEquivPi
-  签名: : Complex ≃ᵐ (Fin 2 -> 实数)
+  签名: : 复形 ≃ᵐ (有限集 2 -> 实数)
   定义体: basisOneI.equivFun.toContinuousLinearEquiv.toHomeomorph.toMeasurableEquiv
 
 @[simp]
@@ -62,7 +62,7 @@ theorem measurableEquivPi_apply
 
 中文:
 定理 measurableEquivPi_apply
-  条件: (a : Complex)
+  条件: (a : 复形)
   证明: rfl
 
 @[simp]
@@ -81,7 +81,7 @@ theorem measurableEquivPi_symm_apply
 
 中文:
 定理 measurableEquivPi_symm_apply
-  条件: (p : (Fin 2) -> 实数)
+  条件: (p : (有限集 2) -> 实数)
   证明: rfl
 -/
 theorem measurableEquivPi_symm_apply (p : (Fin 2) -> Real) :
@@ -98,8 +98,8 @@ definition measurableEquivRealProd
 @[simp]
 
 中文:
-定义 measurableEquivRealProd
-  签名: : Complex ≃ᵐ 实数 × 实数
+定义 measurableEquiv实数Prod
+  签名: : 复形 ≃ᵐ 实数 × 实数
   定义体: equivRealProdCLM.toHomeomorph.toMeasurableEquiv
 
 @[simp]
@@ -122,8 +122,8 @@ theorem measurableEquivRealProd_apply
 @[simp]
 
 中文:
-定理 measurableEquivRealProd_apply
-  条件: (a : Complex)
+定理 measurableEquiv实数Prod_apply
+  条件: (a : 复形)
   结论: measurableEquiv实数Prod a = (a.re, a.im)
   证明: rfl
 
@@ -141,7 +141,7 @@ theorem measurableEquivRealProd_symm_apply
   proof: rfl
 
 中文:
-定理 measurableEquivRealProd_symm_apply
+定理 measurableEquiv实数Prod_symm_apply
   条件: (p : 实数 × 实数)
   证明: rfl
 -/
@@ -160,7 +160,7 @@ theorem volume_preserving_equiv_pi
 
 中文:
 定理 volume_preserving_equiv_pi
-  结论: MeasurePreserving measurableEquivPi
+  结论: 保测 measurableEquivPi
   证明: by
   convert! (measurableEquivPi.symm.measurable.measurePreserving volume).symm
   rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar]; rw [measurableEquivPi]; rw [Homeomorph.toMeasurableEquiv_symm_coe]; rw [ContinuousLinearEquiv.coe_symm_toHomeomorph]; rw [
@@ -182,7 +182,7 @@ theorem volume_preserving_equiv_real_prod
 
 中文:
 定理 volume_preserving_equiv_real_prod
-  结论: MeasurePreserving measurableEquiv实数Prod
+  结论: 保测 measurableEquiv实数Prod
   证明: (volume_preserving_finTwoArrow Real).comp volume_preserving_equiv_pi
 
 Depends on / 依赖: volume_preserving_equiv_pi, volume_preserving_finTwoArrow

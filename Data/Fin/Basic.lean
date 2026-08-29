@@ -42,7 +42,7 @@ theorem Nat.forall_lt_iff_fin
   proof: .symm Fin.forall_iff
 
 中文:
-定理 Nat.forall_lt_iff_fin
+定理 自然数.对任意_lt_iff_fin
   条件: {n : 自然数} {p : 对任意 k, k < n -> 命题}
   证明: .symm Fin.forall_iff
 
@@ -61,7 +61,7 @@ theorem Nat.exists_lt_iff_fin
   proof: .symm Fin.exists_iff
 
 中文:
-定理 Nat.exists_lt_iff_fin
+定理 自然数.存在_lt_iff_fin
   条件: {n : 自然数} {p : 对任意 k, k < n -> 命题}
   证明: .symm Fin.exists_iff
 
@@ -81,7 +81,7 @@ definition finZeroElim
 
 中文:
 定义 finZeroElim
-  签名: {α : Fin 0 -> Sort*} (x : Fin 0)
+  签名: {α : 有限集 0 -> 类型层*} (x : 有限集 0)
   定义体: x.elim0
 
 Depends on / 依赖: x.elim0
@@ -140,7 +140,7 @@ definition rec0
 
 中文:
 定义 rec0
-  签名: {α : Fin 0 -> Sort*} (i : Fin 0)
+  签名: {α : 有限集 0 -> 类型层*} (i : 有限集 0)
   定义体: absurd i.2 (Nat.not_lt_zero _)
 
 Depends on / 依赖: Nat.not_lt_zero, absurd, not_lt_zero
@@ -159,7 +159,7 @@ theorem val_injective
 
 中文:
 定理 val_injective
-  结论: Function.Injective (@Fin.val n)
+  结论: 函数.单射 (@有限集.val n)
   证明: @Fin.eq_of_val_eq n
 
 Depends on / 依赖: Fin.eq_of_val_eq, eq_of_val_eq
@@ -177,7 +177,7 @@ lemma size_positive
 
 中文:
 引理 size_positive
-  结论: Fin n -> 0 < n
+  结论: 有限集 n -> 0 < n
   证明: Fin.pos
 
 Depends on / 依赖: Fin.pos
@@ -195,7 +195,7 @@ lemma size_positive'
 
 中文:
 引理 size_positive'
-  条件: [Nonempty (Fin n)]
+  条件: [非空 (有限集 n)]
   结论: 0 < n
   证明: ‹Nonempty (Fin n)›.elim Fin.pos
 
@@ -215,7 +215,7 @@ theorem prop
 
 中文:
 定理 prop
-  条件: (a : Fin n)
+  条件: (a : 有限集 n)
   结论: a.val < n
   证明: a.2
 -/
@@ -234,7 +234,7 @@ lemma lt_last_iff_ne_last
 
 中文:
 引理 lt_last_iff_ne_last
-  条件: {a : Fin (n + 1)}
+  条件: {a : 有限集 (n + 1)}
   结论: a < last n ↔ a != last n
   证明: by
   simp [Fin.lt_iff_le_and_ne, le_last]
@@ -255,7 +255,7 @@ lemma ne_zero_of_lt
 
 中文:
 引理 ne_zero_of_lt
-  条件: {a b : Fin (n + 1)} (hab : a < b)
+  条件: {a b : 有限集 (n + 1)} (hab : a < b)
   结论: b != 0
   证明: Fin.ne_of_gt Fin.lt_of_le_of_lt a.zero_le hab
 
@@ -275,7 +275,7 @@ lemma ne_last_of_lt
 
 中文:
 引理 ne_last_of_lt
-  条件: {a b : Fin (n + 1)} (hab : a < b)
+  条件: {a b : 有限集 (n + 1)} (hab : a < b)
   结论: a != last n
   证明: Fin.ne_of_lt Fin.lt_of_lt_of_le hab b.le_last
 
@@ -296,7 +296,7 @@ lemma ne_last_of_ne_last_of_le
 
 中文:
 引理 ne_last_of_ne_last_of_le
-  条件: {a b : Fin (n + 1)} (hb : b != last n) (hab : a <= b)
+  条件: {a b : 有限集 (n + 1)} (hb : b != last n) (hab : a <= b)
   证明: by
   intro rfl
   exact Nat.not_lt_of_le hab (lt_last_iff_ne_last.mpr hb)
@@ -320,7 +320,7 @@ lemma val_sub_lt_of_lt_of_le
 
 中文:
 引理 val_sub_lt_of_lt_of_le
-  条件: {a b : Fin n} (ha : a.val < m) (hab : b <= a)
+  条件: {a b : 有限集 n} (ha : a.val < m) (hab : b <= a)
   证明: by
   rw [Fin.sub_val_of_le hab]
   exact sub_lt_of_lt ha
@@ -344,7 +344,7 @@ lemma sub_ne_last_of_ne_last_of_le
 
 中文:
 引理 sub_ne_last_of_ne_last_of_le
-  条件: {a b : Fin (n + 1)} (ha : a != last n) (hab : b <= a)
+  条件: {a b : 有限集 (n + 1)} (ha : a != last n) (hab : b <= a)
   证明: by
   rw [← lt_last_iff_ne_last]; rw [lt_def]
   exact val_sub_lt_of_lt_of_le (val_lt_last ha) hab
@@ -369,7 +369,7 @@ definition equivSubtype
 
 中文:
 定义 equivSubtype
-  签名: : Fin n ≃ { i // i < n } where
+  签名: : 有限集 n ≃ { i // i < n } where
   定义体: ⟨a.1, a.2⟩
   invFun a := ⟨a.1, a.2⟩
 -/
@@ -388,7 +388,7 @@ lemma neZero
 
 中文:
 引理 neZero
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   结论: NeZero n
   证明: ⟨Nat.ne_zero_of_lt i.isLt⟩
 
@@ -410,7 +410,7 @@ theorem val_eq_val
 
 中文:
 定理 val_eq_val
-  条件: (a b : Fin n)
+  条件: (a b : 有限集 n)
   结论: (a : 自然数) = b ↔ a = b
   证明: Fin.ext_iff.symm
 
@@ -430,7 +430,7 @@ theorem ne_iff_vne
 
 中文:
 定理 ne_iff_vne
-  条件: (a b : Fin n)
+  条件: (a b : 有限集 n)
   结论: a != b ↔ a.1 != b.1
   证明: Fin.ext_iff.not
 
@@ -471,7 +471,7 @@ theorem heq_fun_iff
 
 中文:
 定理 heq_fun_iff
-  条件: {α : Sort*} {k l : 自然数} (h : k = l) {f : Fin k -> α} {g : Fin l -> α}
+  条件: {α : 类型层*} {k l : 自然数} (h : k = l) {f : 有限集 k -> α} {g : 有限集 l -> α}
   证明: by
   subst h
   simp [funext_iff]
@@ -494,7 +494,7 @@ theorem heq_fun₂_iff
 
 中文:
 定理 heq_fun₂_iff
-  结论: {α : Sort*} {k l k' l' : 自然数} (h : k = l) (h' : k' = l')
+  结论: {α : 类型层*} {k l k' l' : 自然数} (h : k = l) (h' : k' = l')
   证明: by
   subst h
   subst h'
@@ -519,7 +519,7 @@ theorem heq_ext_iff
 
 中文:
 定理 heq_ext_iff
-  条件: {k l : 自然数} (h : k = l) {i : Fin k} {j : Fin l}
+  条件: {k l : 自然数} (h : k = l) {i : 有限集 k} {j : 有限集 l}
   证明: by
   subst h
   simp [val_eq_val]
@@ -556,7 +556,7 @@ theorem le_iff_val_le_val
 
 中文:
 定理 le_iff_val_le_val
-  条件: {a b : Fin n}
+  条件: {a b : 有限集 n}
   结论: a <= b ↔ (a : 自然数) <= b
   证明: Iff.rfl
 
@@ -578,7 +578,7 @@ theorem val_fin_lt
 
 中文:
 定理 val_fin_lt
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: (a : 自然数) < (b : 自然数) ↔ a < b
   证明: Iff.rfl
 
@@ -600,7 +600,7 @@ theorem val_fin_le
 
 中文:
 定理 val_fin_le
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: (a : 自然数) <= (b : 自然数) ↔ a <= b
   证明: Iff.rfl
 
@@ -620,8 +620,8 @@ theorem min_val
 
 中文:
 定理 min_val
-  条件: {a : Fin n}
-  结论: min (a : 自然数) n = a
+  条件: {a : 有限集 n}
+  结论: 最小值 (a : 自然数) n = a
   证明: by simp
 -/
 theorem min_val {a : Fin n} : min (a : Nat) n = a := by simp
@@ -637,8 +637,8 @@ theorem max_val
 
 中文:
 定理 max_val
-  条件: {a : Fin n}
-  结论: max (a : 自然数) n = n
+  条件: {a : 有限集 n}
+  结论: 最大值 (a : 自然数) n = n
   证明: by simp
 -/
 theorem max_val {a : Fin n} : max (a : Nat) n = n := by simp
@@ -674,7 +674,7 @@ theorem mk_zero'
 中文:
 定理 mk_zero'
   条件: (n : 自然数) [NeZero n]
-  结论: (⟨0, pos_of_neZero n⟩ : Fin n) = 0
+  结论: (⟨0, pos_of_neZero n⟩ : 有限集 n) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -694,7 +694,7 @@ theorem val_pos_iff
 
 中文:
 定理 val_pos_iff
-  条件: [NeZero n] {a : Fin n}
+  条件: [NeZero n] {a : 有限集 n}
   结论: 0 < a.val ↔ 0 < a
   证明: by
   rw [← val_fin_lt]; rw [val_zero]
@@ -716,7 +716,7 @@ theorem pos_iff_ne_zero'
 
 中文:
 定理 pos_iff_ne_zero'
-  条件: [NeZero n] (a : Fin n)
+  条件: [NeZero n] (a : 有限集 n)
   结论: 0 < a ↔ a != 0
   证明: by
   rw [← val_pos_iff]; rw [Nat.pos_iff_ne_zero]; rw [val_ne_zero_iff]
@@ -737,7 +737,7 @@ lemma cast_eq_self
 
 中文:
 引理 cast_eq_self
-  条件: (a : Fin n)
+  条件: (a : 有限集 n)
   结论: a.cast rfl = a
   证明: rfl
 -/
@@ -774,7 +774,7 @@ lemma cast_injective
 中文:
 引理 cast_injective
   条件: {k l : 自然数} (h : k = l)
-  结论: Injective (Fin.cast h)
+  结论: 单射 (有限集.cast h)
   证明: fun a b hab => by simpa [← val_eq_val] using hab
 
 Depends on / 依赖: val_eq_val
@@ -846,7 +846,7 @@ theorem coe_int_sub_eq_ite
 
 中文:
 定理 coe_int_sub_eq_ite
-  条件: {n : 自然数} (u v : Fin n)
+  条件: {n : 自然数} (u v : 有限集 n)
   证明: by
   rw [Fin.sub_def]
   split
@@ -876,7 +876,7 @@ theorem coe_int_sub_eq_mod
 
 中文:
 定理 coe_int_sub_eq_mod
-  条件: {n : 自然数} (u v : Fin n)
+  条件: {n : 自然数} (u v : 有限集 n)
   证明: by
   rw [coe_int_sub_eq_ite]
   split
@@ -906,7 +906,7 @@ theorem coe_int_add_eq_ite
 
 中文:
 定理 coe_int_add_eq_ite
-  条件: {n : 自然数} (u v : Fin n)
+  条件: {n : 自然数} (u v : 有限集 n)
   证明: by
   rw [Fin.add_def]
   split
@@ -933,7 +933,7 @@ theorem coe_int_add_eq_mod
 
 中文:
 定理 coe_int_add_eq_mod
-  条件: {n : 自然数} (u v : Fin n)
+  条件: {n : 自然数} (u v : 有限集 n)
   证明: by
   omega
 -/
@@ -978,7 +978,7 @@ theorem val_one'
 中文:
 定理 val_one'
   条件: (n : 自然数) [NeZero n]
-  结论: ((1 : Fin n) : 自然数) = 1 % n
+  结论: ((1 : 有限集 n) : 自然数) = 1 % n
   证明: rfl
 -/
 theorem val_one' (n : Nat) [NeZero n] : ((1 : Fin n) : Nat) = 1 % n :=
@@ -995,7 +995,7 @@ theorem nontrivial_iff_two_le
 
 中文:
 定理 nontrivial_iff_two_le
-  结论: Nontrivial (Fin n) ↔ 2 <= n
+  结论: 非平凡 (有限集 n) ↔ 2 <= n
   证明: by
   simp [← not_subsingleton_iff_nontrivial, subsingleton_iff_le_one]; lia
 
@@ -1043,8 +1043,8 @@ theorem exists_ne_and_ne_of_two_lt
       lia
 
 中文:
-定理 exists_ne_and_ne_of_two_lt
-  条件: (i j : Fin n) (h : 2 < n)
+定理 存在_ne_and_ne_of_two_lt
+  条件: (i j : 有限集 n) (h : 2 < n)
   结论: 存在 k, k != i ∧ k != j
   证明: by
   have : NeZero n := ⟨by lia⟩
@@ -1114,7 +1114,7 @@ theorem default_eq_zero
 中文:
 定理 default_eq_zero
   条件: (n : 自然数) [NeZero n]
-  结论: (default : Fin n) = 0
+  结论: (default : 有限集 n) = 0
   证明: rfl
 -/
 theorem default_eq_zero (n : Nat) [NeZero n] : (default : Fin n) = 0 :=
@@ -1133,7 +1133,7 @@ theorem val_add_eq_ite
 
 中文:
 定理 val_add_eq_ite
-  条件: {n : 自然数} (a b : Fin n)
+  条件: {n : 自然数} (a b : 有限集 n)
   证明: by
   rw [Fin.val_add]; rw [Nat.add_mod_eq_ite]; rw [Nat.mod_eq_of_lt (show ↑a < n from a.2)]; rw [Nat.mod_eq_of_lt (show ↑b < n from b.2)]
 
@@ -1155,7 +1155,7 @@ theorem val_add_eq_of_add_lt
 
 中文:
 定理 val_add_eq_of_add_lt
-  条件: {n : 自然数} {a b : Fin n} (huv : a.val + b.val < n)
+  条件: {n : 自然数} {a b : 有限集 n} (huv : a.val + b.val < n)
   证明: by
   rw [val_add]
   simp [Nat.mod_eq_of_lt huv]
@@ -1178,7 +1178,7 @@ lemma intCast_val_sub_eq_sub_add_ite
 
 中文:
 引理 intCast_val_sub_eq_sub_add_ite
-  条件: {n : 自然数} (a b : Fin n)
+  条件: {n : 自然数} (a b : 有限集 n)
   证明: by
   split <;> fin_omega
 
@@ -1200,7 +1200,7 @@ lemma sub_val_lt_sub
 
 中文:
 引理 sub_val_lt_sub
-  条件: {n : 自然数} {i j : Fin n} (hij : i <= j)
+  条件: {n : 自然数} {i j : 有限集 n} (hij : i <= j)
   结论: (j - i).val < n - i.val
   证明: by
   simp [sub_val_of_le hij, Nat.sub_lt_sub_right hij j.isLt]
@@ -1224,7 +1224,7 @@ lemma castLT_sub_nezero
 
 中文:
 引理 castLT_sub_nezero
-  条件: {n : 自然数} {i j : Fin n} (hij : i < j)
+  条件: {n : 自然数} {i j : 有限集 n} (hij : i < j)
   证明: neZero_iff.mpr (by lia)
     (j - i).castLT (sub_val_lt_sub (Fin.le_of_lt hij)) != 0 := by
   refine Ne.symm (ne_of_val_ne ?_)
@@ -1257,7 +1257,7 @@ lemma one_le_of_ne_zero
 
 中文:
 引理 one_le_of_ne_zero
-  条件: {n : 自然数} {k : Fin n}
+  条件: {n : 自然数} {k : 有限集 n}
   证明: k.neZero
     (hk : k != 0) -> 1 <= k := by
   have : NeZero n := k.neZero
@@ -1295,7 +1295,7 @@ lemma val_sub_one_of_ne_zero
 
 中文:
 引理 val_sub_one_of_ne_zero
-  条件: {i : Fin n}
+  条件: {i : 有限集 n}
   证明: i.neZero
     (hi : i != 0) -> (i - 1).val = i - 1 := by
   have := i.neZero
@@ -1331,9 +1331,9 @@ theorem ofNat_eq_cast
   proof: rfl
 
 中文:
-定理 ofNat_eq_cast
+定理 of自然数_eq_cast
   条件: (n : 自然数) [NeZero n] (a : 自然数)
-  结论: Fin.of自然数 n a = (a : Fin n)
+  结论: 有限集.of自然数 n a = (a : 有限集 n)
   证明: rfl
 -/
 theorem ofNat_eq_cast (n : Nat) [NeZero n] (a : Nat) : Fin.ofNat n a = (a : Fin n) :=
@@ -1351,7 +1351,7 @@ lemma val_natCast
 中文:
 引理 val_natCast
   条件: (a n : 自然数) [NeZero n]
-  结论: (a : Fin n).val = a % n
+  结论: (a : 有限集 n).val = a % n
   证明: rfl
 -/
 @[simp] lemma val_natCast (a n : Nat) [NeZero n] : (a : Fin n).val = a % n := rfl
@@ -1368,7 +1368,7 @@ theorem val_cast_of_lt
 中文:
 定理 val_cast_of_lt
   条件: {n : 自然数} [NeZero n] {a : 自然数} (h : a < n)
-  结论: (a : Fin n).val = a
+  结论: (a : 有限集 n).val = a
   证明: Nat.mod_eq_of_lt h
 
 Depends on / 依赖: Nat.mod_eq_of_lt, mod_eq_of_lt
@@ -1389,7 +1389,7 @@ Fin.ext val_cast_of_lt a.isLt
 
 中文:
 定理 cast_val_eq_self
-  条件: {n : 自然数} (a : Fin n)
+  条件: {n : 自然数} (a : 有限集 n)
   证明: a.neZero
     (a.val : Fin n) = a :=
   have := a.neZero
@@ -1414,7 +1414,7 @@ lemma natCast_self
 中文:
 引理 natCast_self
   条件: (n : 自然数) [NeZero n]
-  结论: (n : Fin n) = 0
+  结论: (n : 有限集 n) = 0
   证明: by ext; simp
 -/
 @[simp high] lemma natCast_self (n : Nat) [NeZero n] : (n : Fin n) = 0 := by ext; simp
@@ -1432,7 +1432,7 @@ lemma natCast_eq_zero
 中文:
 引理 natCast_eq_zero
   条件: {a n : 自然数} [NeZero n]
-  结论: (a : Fin n) = 0 ↔ n ∣ a
+  结论: (a : 有限集 n) = 0 ↔ n ∣ a
   证明: by
   simp [Fin.ext_iff, Nat.dvd_iff_mod_eq_zero]
 -/
@@ -1454,7 +1454,7 @@ lemma natCast_zero
 中文:
 引理 natCast_zero
   条件: {n : 自然数} [NeZero n]
-  结论: ((0 : 自然数) : Fin n) = 0
+  结论: ((0 : 自然数) : 有限集 n) = 0
   证明: by
   simp
 
@@ -1476,7 +1476,7 @@ theorem natCast_eq_last
 中文:
 定理 natCast_eq_last
   条件: (n)
-  结论: (n : Fin (n + 1)) = Fin.last n
+  结论: (n : 有限集 (n + 1)) = 有限集.last n
   证明: by ext; simp
 -/
 theorem natCast_eq_last (n) : (n : Fin (n + 1)) = Fin.last n := by ext; simp
@@ -1544,7 +1544,7 @@ theorem le_val_last
 
 中文:
 定理 le_val_last
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: i <= n
   证明: by
   rw [Fin.natCast_eq_last]
@@ -1572,7 +1572,7 @@ lemma natCast_le_natCast
 中文:
 引理 natCast_le_natCast
   条件: (han : a <= n) (hbn : b <= n)
-  结论: (a : Fin (n + 1)) <= b ↔ a <= b
+  结论: (a : 有限集 (n + 1)) <= b ↔ a <= b
   证明: by
   rw [← Nat.lt_succ_iff] at han hbn
   simp [le_iff_val_le_val, -val_fin_le, Nat.mod_eq_of_lt, han, hbn]
@@ -1596,7 +1596,7 @@ lemma natCast_lt_natCast
 中文:
 引理 natCast_lt_natCast
   条件: (han : a <= n) (hbn : b <= n)
-  结论: (a : Fin (n + 1)) < b ↔ a < b
+  结论: (a : 有限集 (n + 1)) < b ↔ a < b
   证明: by
   rw [← Nat.lt_succ_iff] at han hbn; simp [lt_def, Nat.mod_eq_of_lt, han, hbn]
 
@@ -1617,7 +1617,7 @@ lemma natCast_mono
 中文:
 引理 natCast_mono
   条件: (hbn : b <= n) (hab : a <= b)
-  结论: (a : Fin (n + 1)) <= b
+  结论: (a : 有限集 (n + 1)) <= b
   证明: (natCast_le_natCast (hab.trans hbn) hbn).2 hab
 
 Depends on / 依赖: hab.trans, natCast_le_natCast
@@ -1639,7 +1639,7 @@ lemma natCast_strictMono
 中文:
 引理 natCast_strictMono
   条件: (hbn : b <= n) (hab : a < b)
-  结论: (a : Fin (n + 1)) < b
+  结论: (a : 有限集 (n + 1)) < b
   证明: (natCast_lt_natCast (hab.le.trans hbn) hbn).2 hab
 
 @[simp]
@@ -1704,8 +1704,8 @@ theorem modNat_rev
       rw [Nat.mul_sub
 
 中文:
-定理 modNat_rev
-  条件: (i : Fin (m * n))
+定理 mod自然数_rev
+  条件: (i : 有限集 (m * n))
   结论: i.rev.mod自然数 = i.mod自然数.rev
   证明: by
   ext
@@ -1754,7 +1754,7 @@ lemma strong_induction_on
 
 中文:
 引理 strong_induction_on
-  结论: {n : 自然数} {motive : Fin n -> 命题}
+  结论: {n : 自然数} {motive : 有限集 n -> 命题}
   证明: by
   obtain ⟨i, hi⟩ := i
   induction i using Nat.strong_induction_on with
@@ -1793,7 +1793,7 @@ theorem liftFun_iff_succ
 
 中文:
 定理 liftFun_iff_succ
-  条件: {α : 类型} (r : α -> α -> 命题) [IsTrans α r] {f : Fin (n + 1) -> α}
+  条件: {α : 类型} (r : α -> α -> 命题) [是Trans α r] {f : 有限集 (n + 1) -> α}
   证明: by
   constructor
   · intro H i
@@ -1836,7 +1836,7 @@ theorem eq_zero
 
 中文:
 定理 eq_zero
-  条件: (n : Fin 1)
+  条件: (n : 有限集 1)
   结论: n = 0
   证明: Subsingleton.elim _ _
 
@@ -1857,7 +1857,7 @@ lemma eq_one_of_ne_zero
 
 中文:
 引理 eq_one_of_ne_zero
-  条件: (i : Fin 2) (hi : i != 0)
+  条件: (i : 有限集 2) (hi : i != 0)
   结论: i = 1
   证明: by lia
 
@@ -1880,7 +1880,7 @@ theorem coe_neg_one
 
 中文:
 定理 coe_neg_one
-  结论: ↑(-1 : Fin (n + 1)) = n
+  结论: ↑(-1 : 有限集 (n + 1)) = n
   证明: by
   cases n
   · simp
@@ -1906,8 +1906,8 @@ theorem last_sub
 
 中文:
 定理 last_sub
-  条件: (i : Fin (n + 1))
-  结论: last n - i = Fin.rev i
+  条件: (i : 有限集 (n + 1))
+  结论: last n - i = 有限集.rev i
   证明: Fin.ext by rw [coe_sub_iff_le.2 i.le_last, val_last, val_rev, Nat.succ_sub_succ_eq_sub]
 
 Depends on / 依赖: Fin.ext, Nat.succ_sub_succ_eq_sub, coe_sub_iff_le, i.le_last, le_last, succ_sub_succ_eq_sub, val_last, val_rev
@@ -1927,7 +1927,7 @@ theorem add_one_le_of_lt
 
 中文:
 定理 add_one_le_of_lt
-  条件: {n : 自然数} {a b : Fin (n + 1)} (h : a < b)
+  条件: {n : 自然数} {a b : 有限集 (n + 1)} (h : a < b)
   结论: a + 1 <= b
   证明: by
   cases n <;> fin_omega
@@ -1951,8 +1951,8 @@ theorem exists_eq_add_of_le
   simp [Fin.ext_iff, Fin.val_add, ← hk, Nat.mod_eq_of_lt b.is_lt]
 
 中文:
-定理 exists_eq_add_of_le
-  条件: {n : 自然数} {a b : Fin n} (h : a <= b)
+定理 存在_eq_add_of_le
+  条件: {n : 自然数} {a b : 有限集 n} (h : a <= b)
   结论: 存在 k <= b, b = a + k
   证明: by
   obtain ⟨k, hk⟩ : exists k : Nat, (b : Nat) = a + k := Nat.exists_eq_add_of_le h
@@ -1983,8 +1983,8 @@ theorem exists_eq_add_of_lt
   simp [Fin.ext_iff, Fin.val_add, ← hk, Nat.mod_eq_of_lt b.is_lt]
 
 中文:
-定理 exists_eq_add_of_lt
-  条件: {n : 自然数} {a b : Fin (n + 1)} (h : a < b)
+定理 存在_eq_add_of_lt
+  条件: {n : 自然数} {a b : 有限集 (n + 1)} (h : a < b)
   证明: by
   cases n
   · lia
@@ -2015,7 +2015,7 @@ lemma pos_of_ne_zero
 
 中文:
 引理 pos_of_ne_zero
-  条件: {n : 自然数} {a : Fin (n + 1)} (h : a != 0)
+  条件: {n : 自然数} {a : 有限集 (n + 1)} (h : a != 0)
   结论: 0 < a
   证明: Nat.pos_of_ne_zero (val_ne_of_ne h)
 
@@ -2036,7 +2036,7 @@ lemma sub_succ_le_sub_of_le
 
 中文:
 引理 sub_succ_le_sub_of_le
-  条件: {n : 自然数} {u v : Fin (n + 2)} (h : u < v)
+  条件: {n : 自然数} {u v : 有限集 (n + 2)} (h : u < v)
   结论: v - (u + 1) < v - u
   证明: by
   fin_omega
@@ -2081,7 +2081,7 @@ theorem coe_ofNat_eq_mod
   proof: rfl
 
 中文:
-定理 coe_ofNat_eq_mod
+定理 coe_of自然数_eq_mod
   条件: (m n : 自然数) [NeZero m]
   证明: rfl
 -/
@@ -2101,7 +2101,7 @@ theorem val_add_one_of_lt'
 
 中文:
 定理 val_add_one_of_lt'
-  条件: {n : 自然数} {i : Fin n} (h : i + 1 < n)
+  条件: {n : 自然数} {i : 有限集 n} (h : i + 1 < n)
   证明: i.neZero
     (i + 1).val = i.val + 1 := by
   simpa [add_def] using Nat.mod_eq_of_lt (by lia)

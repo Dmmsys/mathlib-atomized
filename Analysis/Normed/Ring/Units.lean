@@ -121,7 +121,7 @@ theorem isOpen
 
 中文:
 定理 isOpen
-  结论: IsOpen { x : R | IsUnit x }
+  结论: 是开集 { x : R | 是单位 x }
   证明: by
   nontriviality R
   rw [Metric.isOpen_iff]
@@ -148,9 +148,9 @@ theorem nhds
   proof: IsOpen.mem_nhds Units.isOpen x.isUnit
 
 中文:
-定理 nhds
+定理 邻域滤子
   条件: (x : Rˣ)
-  结论: { x : R | IsUnit x } in 𝓝 (x : R)
+  结论: { x : R | 是单位 x } in 𝓝 (x : R)
   证明: IsOpen.mem_nhds Units.isOpen x.isUnit
 -/
 protected theorem nhds (x : Rˣ) : { x : R | IsUnit x } in 𝓝 (x : R) :=
@@ -189,7 +189,7 @@ theorem isClosed
 
 中文:
 定理 isClosed
-  结论: IsClosed (nonunits R)
+  结论: 是闭集 (nonunits R)
   证明: Units.isOpen.isClosed_compl
 -/
 protected theorem isClosed : IsClosed (nonunits R) :=
@@ -214,7 +214,7 @@ theorem inverse_one_sub
 中文:
 定理 inverse_one_sub
   条件: (t : R) (h : ‖t‖ < 1)
-  结论: inverse (1 - t) = ↑(Units.oneSub t h)⁻¹
+  结论: inverse (1 - t) = ↑(单位群.oneSub t h)⁻¹
   证明: by
   rw [← inverse_unit (Units.oneSub t h)]; rw [Units.val_oneSub]
 
@@ -553,7 +553,7 @@ theorem isOpenEmbedding_val
 
 中文:
 定理 isOpenEmbedding_val
-  结论: IsOpenEmbedding (val : Rˣ -> R) where
+  结论: 是开嵌入 (val : Rˣ -> R) where
   证明: isEmbedding_val_mk'
     (fun _ ⟨u, hu⟩ => hu ▸ (inverse_continuousAt u).continuousWithinAt) Ring.inverse_unit
   isOpen_range := Units.isOpen
@@ -575,7 +575,7 @@ theorem isOpenMap_val
 
 中文:
 定理 isOpenMap_val
-  结论: IsOpenMap (val : Rˣ -> R)
+  结论: 是开映射 (val : Rˣ -> R)
   证明: isOpenEmbedding_val.isOpenMap
 
 Depends on / 依赖: isOpenEmbedding_val, isOpenEmbedding_val.isOpenMap, isOpenMap
@@ -600,7 +600,7 @@ I.eq_top_iff_one.mpr by
 
 中文:
 定理 eq_top_of_norm_lt_one
-  条件: (I : Ideal R) {x : R} (hxI : x in I) (hx : ‖1 - x‖ < 1)
+  条件: (I : 理想 R) {x : R} (hxI : x in I) (hx : ‖1 - x‖ < 1)
   结论: I = ⊤
   证明: let u := Units.oneSub (1 - x) hx
 I.eq_top_iff_one.mpr by
@@ -626,7 +626,7 @@ theorem closure_ne_top
 
 中文:
 定理 closure_ne_top
-  条件: (I : Ideal R) (hI : I != ⊤)
+  条件: (I : 理想 R) (hI : I != ⊤)
   结论: I.closure != ⊤
   证明: by
   have h := closure_minimal (coe_subset_nonunits hI) nonunits.isClosed
@@ -648,8 +648,8 @@ theorem IsMaximal.closure_eq
   proof: (hI.eq_of_le (I.closure_ne_top hI.ne_top) subset_closure).symm
 
 中文:
-定理 IsMaximal.closure_eq
-  条件: {I : Ideal R} (hI : I.IsMaximal)
+定理 是极大.closure_eq
+  条件: {I : 理想 R} (hI : I.是极大)
   结论: I.closure = I
   证明: (hI.eq_of_le (I.closure_ne_top hI.ne_top) subset_closure).symm
 
@@ -667,8 +667,8 @@ instance IsMaximal.isClosed
   body: isClosed_of_closure_subset Eq.subset congr_arg ((↑) : Ideal R -> Set R) hI.closure_eq
 
 中文:
-实例 IsMaximal.isClosed
-  签名: {I : Ideal R} [hI : I.IsMaximal]
+实例 是极大.isClosed
+  签名: {I : 理想 R} [hI : I.是极大]
   定义体: isClosed_of_closure_subset Eq.subset congr_arg ((↑) : Ideal R -> Set R) hI.closure_eq
 
 Depends on / 依赖: Eq.subset, closure_eq, congr_arg, hI.closure_eq, isClosed_of_closure_subset, subset

@@ -38,7 +38,7 @@ definition piFinset
 
 中文:
 定义 piFinset
-  签名: (t : 对任意 a, Finset (δ a))
+  签名: (t : 对任意 a, 有限集 (δ a))
   定义体: (Finset.univ.pi t).map ⟨fun f a => f a (mem_univ a), fun _ _ =>
     by simp +contextual [funext_iff]⟩
 
@@ -72,7 +72,7 @@ theorem mem_piFinset
 
 中文:
 定理 mem_piFinset
-  条件: {t : 对任意 a, Finset (δ a)} {f : 对任意 a, δ a}
+  条件: {t : 对任意 a, 有限集 (δ a)} {f : 对任意 a, δ a}
   结论: f in piFinset t ↔ 对任意 a, f a in t a
   证明: by
   constructor
@@ -111,7 +111,7 @@ theorem coe_piFinset
 
 中文:
 定理 coe_piFinset
-  条件: (t : 对任意 a, Finset (δ a))
+  条件: (t : 对任意 a, 有限集 (δ a))
   证明: Set.ext fun x => by
     rw [Set.mem_univ_pi]
     exact Fintype.mem_piFinset
@@ -136,7 +136,7 @@ theorem piFinset_subset
 
 中文:
 定理 piFinset_subset
-  条件: (t₁ t₂ : 对任意 a, Finset (δ a)) (h : 对任意 a, t₁ a subseteq t₂ a)
+  条件: (t₁ t₂ : 对任意 a, 有限集 (δ a)) (h : 对任意 a, t₁ a subseteq t₂ a)
   证明: fun _ hg => mem_piFinset.2 fun a => h a mem_piFinset.1 hg a
 
 @[simp]
@@ -182,8 +182,8 @@ theorem piFinset_empty
 
 中文:
 定理 piFinset_empty
-  条件: [Nonempty α]
-  结论: piFinset (fun _ => ∅ : 对任意 i, Finset (δ i)) = ∅
+  条件: [非空 α]
+  结论: piFinset (fun _ => ∅ : 对任意 i, 有限集 (δ i)) = ∅
   证明: by simp
 
 @[simp]
@@ -204,7 +204,7 @@ alias ⟨_, Aesop.piFinset_nonempty_of_forall_nonempty⟩ := piFinset_nonempty
 
 中文:
 引理 piFinset_nonempty
-  结论: (piFinset s).Nonempty ↔ 对任意 a, (s a).Nonempty
+  结论: (piFinset s).非空 ↔ 对任意 a, (s a).非空
   证明: by simp [piFinset]
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -228,8 +228,8 @@ lemma _root_.Finset.Nonempty.piFinset_const
 @[simp]
 
 中文:
-引理 _root_.Finset.Nonempty.piFinset_const
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {s : Finset β}
+引理 _root_.有限集.非空.piFinset_const
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {s : 有限集 β}
   证明: piFinset_nonempty.2 fun _ => hs
 
 @[simp]
@@ -253,7 +253,7 @@ lemma piFinset_of_isEmpty
 
 中文:
 引理 piFinset_of_isEmpty
-  条件: [IsEmpty α] (s : 对任意 a, Finset (γ a))
+  条件: [是空 α] (s : 对任意 a, 有限集 (γ a))
   结论: piFinset s = univ
   证明: eq_univ_of_forall fun _ => by simp
 
@@ -277,7 +277,7 @@ theorem piFinset_singleton
 中文:
 定理 piFinset_singleton
   条件: (f : 对任意 i, δ i)
-  结论: piFinset (fun i => {f i} : 对任意 i, Finset (δ i)) = {f}
+  结论: piFinset (fun i => {f i} : 对任意 i, 有限集 (δ i)) = {f}
   证明: ext fun _ => by grind
 -/
 theorem piFinset_singleton (f : forall i, δ i) : piFinset (fun i => {f i} : forall i, Finset (δ i)) = {f} :=
@@ -294,7 +294,7 @@ theorem piFinset_subsingleton
 
 中文:
 定理 piFinset_subsingleton
-  条件: {f : 对任意 i, Finset (δ i)} (hf : 对任意 i, (f i : Set (δ i)).Subsingleton)
+  条件: {f : 对任意 i, 有限集 (δ i)} (hf : 对任意 i, (f i : 集合 (δ i)).子单例)
   证明: fun _ ha _ hb =>
   funext fun _ => hf _ (mem_piFinset.1 ha _) (mem_piFinset.1 hb _)
 -/
@@ -314,7 +314,7 @@ theorem piFinset_disjoint_of_disjoint
 
 中文:
 定理 piFinset_disjoint_of_disjoint
-  结论: (t₁ t₂ : 对任意 a, Finset (δ a)) {a : α}
+  结论: (t₁ t₂ : 对任意 a, 有限集 (δ a)) {a : α}
   证明: disjoint_iff_ne.2 fun f₁ hf₁ f₂ hf₂ eq₁₂ =>
     disjoint_iff_ne.1 h (f₁ a) (mem_piFinset.1 hf₁ a) (f₂ a) (mem_piFinset.1 hf₂ a)
       (congr_fun eq₁₂ a)
@@ -338,7 +338,7 @@ lemma piFinset_image
 
 中文:
 引理 piFinset_image
-  条件: [对任意 a, DecidableEq (δ a)] (f : 对任意 a, γ a -> δ a) (s : 对任意 a, Finset (γ a))
+  条件: [对任意 a, DecidableEq (δ a)] (f : 对任意 a, γ a -> δ a) (s : 对任意 a, 有限集 (γ a))
   证明: by
   ext; simp only [mem_piFinset, mem_image, Classical.skolem, forall_and, funext_iff]
 
@@ -358,7 +358,7 @@ lemma eval_image_piFinset_subset
 
 中文:
 引理 eval_image_piFinset_subset
-  条件: (t : 对任意 a, Finset (δ a)) (a : α) [DecidableEq (δ a)]
+  条件: (t : 对任意 a, 有限集 (δ a)) (a : α) [DecidableEq (δ a)]
   证明: image_subset_iff.2 fun _x hx => mem_piFinset.1 hx _
 
 Depends on / 依赖: Function, Function.update, h_if, image_subset_iff, mem_piFinset, split_ifs, update
@@ -379,7 +379,7 @@ lemma eval_image_piFinset
 
 中文:
 引理 eval_image_piFinset
-  结论: (t : 对任意 a, Finset (δ a)) (a : α) [DecidableEq (δ a)]
+  结论: (t : 对任意 a, 有限集 (δ a)) (a : α) [DecidableEq (δ a)]
   证明: by
   refine (eval_image_piFinset_subset _ _).antisymm fun x h => mem_image.2 ?_
   choose f hf using ht
@@ -407,7 +407,7 @@ lemma eval_image_piFinset_const
 
 中文:
 引理 eval_image_piFinset_const
-  条件: {β} [DecidableEq β] (t : Finset β) (a : α)
+  条件: {β} [DecidableEq β] (t : 有限集 β) (a : α)
   证明: by
   obtain rfl | ht := t.eq_empty_or_nonempty
   · have : Nonempty α := ⟨a⟩
@@ -436,7 +436,7 @@ lemma piFinset_inter
 
 中文:
 引理 piFinset_inter
-  条件: (s t : 对任意 a, Finset (δ a))
+  条件: (s t : 对任意 a, 有限集 (δ a))
   证明: by
   grind
 -/
@@ -455,7 +455,7 @@ lemma filter_piFinset_of_notMem
 
 中文:
 引理 filter_piFinset_of_notMem
-  条件: (t : 对任意 a, Finset (δ a)) (a : α) (x : δ a) (hx : x ∉ t a)
+  条件: (t : 对任意 a, 有限集 (δ a)) (a : α) (x : δ a) (hx : x ∉ t a)
   证明: by
   grind
 -/
@@ -474,7 +474,7 @@ lemma piFinset_update_eq_filter_piFinset_mem
 
 中文:
 引理 piFinset_update_eq_filter_piFinset_mem
-  结论: (s : 对任意 i, Finset (δ i)) (i : α) {t : Finset (δ i)}
+  结论: (s : 对任意 i, 有限集 (δ i)) (i : α) {t : 有限集 (δ i)}
   证明: by
   grind
 -/
@@ -493,7 +493,7 @@ lemma piFinset_update_singleton_eq_filter_piFinset_eq
 
 中文:
 引理 piFinset_update_singleton_eq_filter_piFinset_eq
-  结论: (s : 对任意 i, Finset (δ i)) (i : α) {a : δ i}
+  结论: (s : 对任意 i, 有限集 (δ i)) (i : α) {a : δ i}
   证明: by
   grind
 -/
@@ -517,8 +517,8 @@ instance Pi.instFintype
 @[simp]
 
 中文:
-实例 Pi.instFintype
-  签名: {α : 类型} {β : α -> 类型} [DecidableEq α] [Fintype α]
+实例 依赖函数类型.instFintype
+  签名: {α : 类型} {β : α -> 类型} [DecidableEq α] [有限类型 α]
   定义体: ⟨Fintype.piFinset fun _ => univ, by simp⟩
 
 @[simp]
@@ -539,8 +539,8 @@ theorem Fintype.piFinset_univ
   proof: rfl
 
 中文:
-定理 Fintype.piFinset_univ
-  结论: {α : 类型} {β : α -> 类型} [DecidableEq α] [Fintype α]
+定理 有限类型.piFinset_univ
+  结论: {α : 类型} {β : α -> 类型} [DecidableEq α] [有限类型 α]
   证明: rfl
 
 Depends on / 依赖: _update, h_terminated
@@ -561,8 +561,8 @@ instance _root_.Function.Embedding.fintype
   classical exact Fintype.ofEquiv _ (Equiv.subtypeInjectiveEquivEmbedding α β)
 
 中文:
-实例 _root_.Function.Embedding.fintype
-  签名: {α β} [Fintype α] [Fintype β]
+实例 _root_.函数.嵌入.fintype
+  签名: {α β} [有限类型 α] [有限类型 β]
   定义体: by
   classical exact Fintype.ofEquiv _ (Equiv.subtypeInjectiveEquivEmbedding α β)
 
@@ -582,8 +582,8 @@ instance RelHom.instFintype
     (fun f => ⟨f.1, f.2⟩) (fun f => ⟨f.1, f.2⟩) (fun _ => rfl) (fun _ => rfl)
 
 中文:
-实例 RelHom.instFintype
-  签名: {α β} [Fintype α] [Fintype β] [DecidableEq α] {r : α -> α -> 命题}
+实例 关系态射.instFintype
+  签名: {α β} [有限类型 α] [有限类型 β] [DecidableEq α] {r : α -> α -> 命题}
   定义体: Fintype.ofEquiv {f : α -> β // forall {x y}, r x y -> s (f x) (f y)} Equiv.mk
     (fun f => ⟨f.1, f.2⟩) (fun f => ⟨f.1, f.2⟩) (fun _ => rfl) (fun _ => rfl)
 
@@ -605,8 +605,8 @@ instance RelEmbedding.instFintype
 @[simp]
 
 中文:
-实例 RelEmbedding.instFintype
-  签名: {α β} [Fintype α] [Fintype β]
+实例 关系嵌入.instFintype
+  签名: {α β} [有限类型 α] [有限类型 β]
   定义体: Fintype.ofInjective _ RelEmbedding.toEmbedding_injective
 
 @[simp]
@@ -628,8 +628,8 @@ theorem Finset.univ_pi_univ
   ext; simp
 
 中文:
-定理 Finset.univ_pi_univ
-  结论: {α : 类型} {β : α -> 类型} [DecidableEq α] [Fintype α]
+定理 有限集.univ_pi_univ
+  结论: {α : 类型} {β : α -> 类型} [DecidableEq α] [有限类型 α]
   证明: by
   ext; simp
 -/
@@ -653,7 +653,7 @@ lemma piFinset_filter_const
 
 中文:
 引理 piFinset_filter_const
-  条件: [DecidableEq ι] [Fintype ι]
+  条件: [DecidableEq ι] [有限类型 ι]
   证明: by aesop
 -/
 lemma piFinset_filter_const [DecidableEq ι] [Fintype ι] :
@@ -669,7 +669,7 @@ lemma piDiag_subset_piFinset
 
 中文:
 引理 piDiag_subset_piFinset
-  条件: [DecidableEq ι] [Fintype ι]
+  条件: [DecidableEq ι] [有限类型 ι]
   证明: by simp [← piFinset_filter_const]
 
 Depends on / 依赖: piFinset_filter_const
@@ -711,9 +711,9 @@ theorem Finite.pi
     apply Finset.finite_toSet
 
 中文:
-定理 Finite.pi
-  条件: (ht : 对任意 i, (t i).Finite)
-  结论: (pi univ t).Finite
+定理 有限.pi
+  条件: (ht : 对任意 i, (t i).有限)
+  结论: (pi univ t).有限
   证明: by
   cases nonempty_fintype ι
   lift t to forall d, Finset (κ d) using ht
@@ -741,9 +741,9 @@ lemma Finite.pi'
   simpa [Set.pi] using Finite.pi ht
 
 中文:
-引理 Finite.pi'
-  条件: (ht : 对任意 i, (t i).Finite)
-  结论: {f : 对任意 i, κ i | 对任意 i, f i in t i}.Finite
+引理 有限.pi'
+  条件: (ht : 对任意 i, (t i).有限)
+  结论: {f : 对任意 i, κ i | 对任意 i, f i in t i}.有限
   证明: by
   simpa [Set.pi] using Finite.pi ht
 
@@ -767,8 +767,8 @@ theorem forall_finite_image_eval_iff
 @[simp]
 
 中文:
-定理 forall_finite_image_eval_iff
-  条件: {δ : 类型} [Finite δ] {κ : δ -> 类型} {s : Set (对任意 d, κ d)}
+定理 对任意_finite_image_eval_iff
+  条件: {δ : 类型} [有限 δ] {κ : δ -> 类型} {s : 集合 (对任意 d, κ d)}
   证明: ⟨fun h => (Finite.pi h).subset subset_pi_eval_image _ _, fun h _ => h.image _⟩
 
 @[simp]
@@ -794,7 +794,7 @@ lemma iUnion_cons
 
 中文:
 引理 iUnion_cons
-  条件: {n : 自然数} (f : Fin n -> Set α) (s : Set α)
+  条件: {n : 自然数} (f : 有限集 n -> 集合 α) (s : 集合 α)
   证明: by
   ext
   simp [Fin.exists_iff_succ]
@@ -821,7 +821,7 @@ lemma iUnion_snoc
 
 中文:
 引理 iUnion_snoc
-  条件: {n : 自然数} (f : Fin n -> Set α) (s : Set α)
+  条件: {n : 自然数} (f : 有限集 n -> 集合 α) (s : 集合 α)
   证明: by
   ext
   simp [Fin.exists_iff_castSucc, or_comm]
@@ -845,7 +845,7 @@ lemma iUnion_fin_add_one_eq_iUnion_succ
 
 中文:
 引理 iUnion_fin_add_one_eq_iUnion_succ
-  条件: {n : 自然数} (f : Fin (n + 1) -> Set α)
+  条件: {n : 自然数} (f : 有限集 (n + 1) -> 集合 α)
   证明: by
   cases f using Fin.consCases
   simp [Function.comp_def]
@@ -869,7 +869,7 @@ lemma iUnion_fin_add_one_eq_iUnion_castSucc
 
 中文:
 引理 iUnion_fin_add_one_eq_iUnion_castSucc
-  条件: {n : 自然数} (f : Fin (n + 1) -> Set α)
+  条件: {n : 自然数} (f : 有限集 (n + 1) -> 集合 α)
   证明: by
   cases f using Fin.snocCases
   simp [Function.comp_def]

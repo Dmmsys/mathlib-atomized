@@ -52,7 +52,7 @@ definition contractLeft
 
 中文:
 定义 contractLeft
-  签名: : Module.Dual R M otimes[R] M ->ₗ[R] R
+  签名: : 模.对偶 R M otimes[R] M ->ₗ[R] R
   定义体: (uncurry _ _ _ _).toFun LinearMap.id
 
 Depends on / 依赖: LinearMap, LinearMap.id, uncurry
@@ -70,7 +70,7 @@ definition contractRight
 
 中文:
 定义 contractRight
-  签名: : M otimes[R] Module.Dual R M ->ₗ[R] R
+  签名: : M otimes[R] 模.对偶 R M ->ₗ[R] R
   定义体: (uncurry _ _ _ _).toFun (LinearMap.flip LinearMap.id)
 
 Depends on / 依赖: LinearMap, LinearMap.flip, LinearMap.id, uncurry
@@ -89,7 +89,7 @@ definition dualTensorHom
 
 中文:
 定义 dualTensorHom
-  签名: : Module.Dual R M otimes[R] N ->ₗ[R] M ->ₗ[R] N
+  签名: : 模.对偶 R M otimes[R] N ->ₗ[R] M ->ₗ[R] N
   定义体: let M' := Module.Dual R M
   (uncurry (.id R) M' N (M ->ₗ[R] N) : _ -> M' otimes N ->ₗ[R] M ->ₗ[R] N) LinearMap.smulRightₗ
 
@@ -115,7 +115,7 @@ theorem contractLeft_apply
 
 中文:
 定理 contractLeft_apply
-  条件: (f : Module.Dual R M) (m : M)
+  条件: (f : 模.对偶 R M) (m : M)
   结论: contractLeft R M (f otimesₜ m) = f m
   证明: rfl
 
@@ -138,7 +138,7 @@ theorem contractRight_apply
 
 中文:
 定理 contractRight_apply
-  条件: (f : Module.Dual R M) (m : M)
+  条件: (f : 模.对偶 R M) (m : M)
   结论: contractRight R M (m otimesₜ f) = f m
   证明: rfl
 
@@ -158,7 +158,7 @@ theorem dualTensorHom_apply
 
 中文:
 定理 dualTensorHom_apply
-  条件: (f : Module.Dual R M) (m : M) (n : N)
+  条件: (f : 模.对偶 R M) (m : M) (n : N)
   证明: rfl
 -/
 theorem dualTensorHom_apply (f : Module.Dual R M) (m : M) (n : N) :
@@ -225,7 +225,7 @@ theorem transpose_dualTensorHom
 
 中文:
 定理 transpose_dualTensorHom
-  条件: (f : Module.Dual R M) (m : M)
+  条件: (f : 模.对偶 R M) (m : M)
   证明: by
   ext f' m'
   simp only [Dual.transpose_apply, coe_comp, Function.comp_apply, dualTensorHom_apply,
@@ -262,7 +262,7 @@ theorem dualTensorHom_prodMap_zero
 
 中文:
 定理 dualTensorHom_prodMap_zero
-  条件: (f : Module.Dual R M) (p : P)
+  条件: (f : 模.对偶 R M) (p : P)
   证明: by
   ext <;>
     simp only [coe_comp, coe_inl, Function.comp_apply, prodMap_apply, dualTensorHom_apply,
@@ -293,7 +293,7 @@ theorem zero_prodMap_dualTensorHom
 
 中文:
 定理 zero_prodMap_dualTensorHom
-  条件: (g : Module.Dual R N) (q : Q)
+  条件: (g : 模.对偶 R N) (q : Q)
   证明: by
   ext <;>
     simp only [coe_comp, coe_inr, Function.comp_apply, prodMap_apply, dualTensorHom_apply,
@@ -322,7 +322,7 @@ theorem map_dualTensorHom
 
 中文:
 定理 map_dualTensorHom
-  条件: (f : Module.Dual R M) (p : P) (g : Module.Dual R N) (q : Q)
+  条件: (f : 模.对偶 R M) (p : P) (g : 模.对偶 R N) (q : Q)
   证明: by
   ext m n
   simp only [compr₂ₛₗ_apply, mk_apply, map_tmul, dualTensorHom_apply, dualDistrib_apply,
@@ -352,7 +352,7 @@ theorem comp_dualTensorHom
 
 中文:
 定理 comp_dualTensorHom
-  条件: (f : Module.Dual R M) (n : N) (g : Module.Dual R N) (p : P)
+  条件: (f : 模.对偶 R M) (n : N) (g : 模.对偶 R N) (p : P)
   证明: by
   ext m
   simp only [coe_comp, Function.comp_apply, dualTensorHom_apply, map_smul, LinearMap.smul_apply]
@@ -383,7 +383,7 @@ theorem toMatrix_dualTensorHom
 
 中文:
 定理 toMatrix_dualTensorHom
-  结论: {m : 类型} {n : 类型} [Fintype m] [Finite n] [DecidableEq m]
+  结论: {m : 类型} {n : 类型} [有限类型 m] [有限 n] [DecidableEq m]
   证明: by
   ext i' j'
   by_cases hij : i = i' ∧ j = j'
@@ -448,8 +448,8 @@ theorem Module.Finite.of_one_mem_range_dualTensorHom
   proof: (finite_projective_of_one_mem_range_dualTensorHom h).1
 
 中文:
-定理 Module.Finite.of_one_mem_range_dualTensorHom
-  结论: Module.Finite R M
+定理 模.有限.of_one_mem_range_dualTensorHom
+  结论: 模.有限 R M
   证明: (finite_projective_of_one_mem_range_dualTensorHom h).1
 
 Depends on / 依赖: finite_projective_of_one_mem_range_dualTensorHom
@@ -466,8 +466,8 @@ theorem Module.Projective.of_one_mem_range_dualTensorHom
   proof: (finite_projective_of_one_mem_range_dualTensorHom h).2
 
 中文:
-定理 Module.Projective.of_one_mem_range_dualTensorHom
-  结论: Module.Projective R M
+定理 模.投射.of_one_mem_range_dualTensorHom
+  结论: 模.投射 R M
   证明: (finite_projective_of_one_mem_range_dualTensorHom h).2
 
 Depends on / 依赖: finite_projective_of_one_mem_range_dualTensorHom
@@ -498,7 +498,7 @@ definition dualTensorHomEquivOfBasis
 
 中文:
 定义 dualTensorHomEquivOfBasis
-  签名: : Module.Dual R M otimes[R] N ≃ₗ[R] M ->ₗ[R] N
+  签名: : 模.对偶 R M otimes[R] N ≃ₗ[R] M ->ₗ[R] N
   定义体: LinearEquiv.ofLinearMap (dualTensorHom R M N)
     (∑ i, TensorProduct.mk R _ N (b.dualBasis i) ∘ₗ (LinearMap.applyₗ (R := R) (b i)))
     (by
@@ -555,7 +555,7 @@ theorem dualTensorHomEquivOfBasis_apply
 
 中文:
 定理 dualTensorHomEquivOfBasis_apply
-  条件: (x : Module.Dual R M otimes[R] N)
+  条件: (x : 模.对偶 R M otimes[R] N)
   证明: rfl
 
 @[simp]
@@ -598,7 +598,7 @@ theorem dualTensorHomEquivOfBasis_symm_cancel_left
 
 中文:
 定理 dualTensorHomEquivOfBasis_symm_cancel_left
-  条件: (x : Module.Dual R M otimes[R] N)
+  条件: (x : 模.对偶 R M otimes[R] N)
   证明: by
   rw [← dualTensorHomEquivOfBasis_apply b]; rw [LinearEquiv.symm_apply_apply dualTensorHomEquivOfBasis (N := N) b]
 
@@ -649,7 +649,7 @@ theorem dualTensorHom_bijective
 
 中文:
 定理 dualTensorHom_bijective
-  条件: [Module.Finite R M] [Projective R M]
+  条件: [模.有限 R M] [投射 R M]
   证明: by
   obtain ⟨n, f, g, -, -, eq⟩ := Finite.exists_comp_eq_id_of_projective R M
   constructor
@@ -683,7 +683,7 @@ theorem dualTensorHom_self_right
 
 中文:
 定理 dualTensorHom_self_right
-  结论: dualTensorHom R M R = TensorProduct.rid R (Dual R M)
+  结论: dualTensorHom R M R = 张量积.rid R (对偶 R M)
   证明: by
   ext; simp
 -/
@@ -701,7 +701,7 @@ theorem dualTensorHom_self_right_bijective
 
 中文:
 定理 dualTensorHom_self_right_bijective
-  结论: Function.Bijective (dualTensorHom R M R)
+  结论: 函数.双射 (dualTensorHom R M R)
   证明: by
   simpa only [dualTensorHom_self_right] using! LinearEquiv.bijective _
 -/
@@ -745,7 +745,7 @@ theorem dualTensorHom_finsupp_bijective
 
 中文:
 定理 dualTensorHom_finsupp_bijective
-  结论: (fin : Finite ι ∨ Module.Finite R M)
+  结论: (fin : 有限 ι ∨ 模.有限 R M)
   证明: by
   classical rw [dualTensorHom_finsupp, coe_comp]
   refine .comp ?_ ((Finsupp.mapRange_bijective _ (map_zero _) h).comp (LinearEquiv.bijective _))
@@ -814,7 +814,7 @@ theorem dualTensorHom_fun_bijective
 
 中文:
 定理 dualTensorHom_fun_bijective
-  条件: [Finite ι] (h : Function.Bijective (dualTensorHom R M N))
+  条件: [有限 ι] (h : 函数.双射 (dualTensorHom R M N))
   证明: dualTensorHom_bijective_of_comp_eq_id_right
     (Finsupp.linearEquivFunOnFinite R N ι).symm
     (Finsupp.linearEquivFunOnFinite ..).toLinearMap (by ext; simp)
@@ -841,7 +841,7 @@ dualTensorHom_bijective_of_comp_eq_id_right g f eq
 
 中文:
 定理 dualTensorHom_bijective_of_finite_projective_right
-  条件: [Module.Finite R N] [Projective R N]
+  条件: [模.有限 R N] [投射 R N]
   证明: have ⟨_n, f, g, _, _, eq⟩ := Finite.exists_comp_eq_id_of_projective R N
 dualTensorHom_bijective_of_comp_eq_id_right g f eq
     dualTensorHom_fun_bijective dualTensorHom_self_right_bijective
@@ -866,7 +866,7 @@ dualTensorHom_bijective_of_comp_eq_id_right _ _ eq
 
 中文:
 定理 dualTensorHom_bijective_of_finite_left_projective_right
-  结论: [Module.Finite R M]
+  结论: [模.有限 R M]
   证明: have ⟨f, eq⟩ := projective_def'.mp ‹Projective R N›
 dualTensorHom_bijective_of_comp_eq_id_right _ _ eq
     dualTensorHom_finsupp_bijective (.inr ‹_›) dualTensorHom_self_right_bijective
@@ -893,7 +893,7 @@ definition dualTensorHomEquiv
 
 中文:
 定义 dualTensorHomEquiv
-  签名: [Module.Finite R M] [Projective R M]
+  签名: [模.有限 R M] [投射 R M]
   定义体: .ofBijective _ (dualTensorHom_bijective ..)
 
 Depends on / 依赖: dualTensorHom_bijective, ofBijective
@@ -1218,7 +1218,7 @@ definition dualDistribInvOfBasis
 
 中文:
 定义 dualDistribInvOfBasis
-  签名: (b : Basis ι R M) (c : Basis κ R N)
+  签名: (b : 基 ι R M) (c : 基 κ R N)
   定义体: ∑ i, ∑ j,
     (ringLmapEquivSelf R Nat _).symm (b.dualBasis i otimesₜ c.dualBasis j) ∘ₗ
       applyₗ (c j) ∘ₗ applyₗ (b i) ∘ₗ lcurry (.id R) M N R
@@ -1245,7 +1245,7 @@ theorem dualDistribInvOfBasis_apply
 
 中文:
 定理 dualDistribInvOfBasis_apply
-  条件: (b : Basis ι R M) (c : Basis κ R N) (f : Dual R (M otimes[R] N))
+  条件: (b : 基 ι R M) (c : 基 κ R N) (f : 对偶 R (M otimes[R] N))
   证明: by
   simp [dualDistribInvOfBasis]
 
@@ -1272,7 +1272,7 @@ theorem dualDistrib_dualDistribInvOfBasis_left_inverse
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_left_inverse
-  条件: (b : Basis ι R M) (c : Basis κ R N)
+  条件: (b : 基 ι R M) (c : 基 κ R N)
   证明: by
   apply (b.tensorProduct c).dualBasis.ext
   rintro ⟨i, j⟩
@@ -1315,7 +1315,7 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_right_inverse
-  条件: (b : Basis ι R M) (c : Basis κ R N)
+  条件: (b : 基 ι R M) (c : 基 κ R N)
   证明: by
   apply (b.dualBasis.tensorProduct c.dualBasis).ext
   rintro ⟨i, j⟩
@@ -1355,7 +1355,7 @@ definition dualDistribEquivOfBasis
 
 中文:
 定义 dualDistribEquivOfBasis
-  签名: (b : Basis ι R M) (c : Basis κ R N)
+  签名: (b : 基 ι R M) (c : 基 κ R N)
   定义体: by
   refine LinearEquiv.ofLinearMap (dualDistrib R M N) (dualDistribInvOfBasis b c) ?_ ?_
   · exact dualDistrib_dualDistribInvOfBasis_left_inverse _ _
@@ -1388,7 +1388,7 @@ definition dualDistribEquiv
 
 中文:
 定义 dualDistribEquiv
-  签名: : Dual R M otimes[R] Dual R N ≃ₗ[R] Dual R (M otimes[R] N)
+  签名: : 对偶 R M otimes[R] 对偶 R N ≃ₗ[R] 对偶 R (M otimes[R] N)
   定义体: dualDistribEquivOfBasis (Module.Free.chooseBasis R M) (Module.Free.chooseBasis R N)
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, dualDistribEquivOfBasis

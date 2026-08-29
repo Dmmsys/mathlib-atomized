@@ -40,8 +40,8 @@ theorem IsUpperSet.smul_subset
 @[to_additive]
 
 中文:
-定理 IsUpperSet.smul_subset
-  条件: (hs : IsUpperSet s) (hx : 1 <= x)
+定理 是上集.smul_subset
+  条件: (hs : 是上集 s) (hx : 1 <= x)
   结论: x • s subseteq s
   证明: smul_set_subset_iff.2 fun _ => hs le_mul_of_one_le_left' hx
 
@@ -63,8 +63,8 @@ theorem IsLowerSet.smul_subset
   proof: smul_set_subset_iff.2 fun _ => hs mul_le_of_le_one_left' hx
 
 中文:
-定理 IsLowerSet.smul_subset
-  条件: (hs : IsLowerSet s) (hx : x <= 1)
+定理 是下集.smul_subset
+  条件: (hs : 是下集 s) (hx : x <= 1)
   结论: x • s subseteq s
   证明: smul_set_subset_iff.2 fun _ => hs mul_le_of_le_one_left' hx
 
@@ -92,9 +92,9 @@ theorem IsUpperSet.smul
 @[to_additive]
 
 中文:
-定理 IsUpperSet.smul
-  条件: (hs : IsUpperSet s)
-  结论: IsUpperSet (a • s)
+定理 是上集.smul
+  条件: (hs : 是上集 s)
+  结论: 是上集 (a • s)
   证明: hs.image OrderIso.mulLeft _
 
 @[to_additive]
@@ -116,9 +116,9 @@ theorem IsLowerSet.smul
 @[to_additive]
 
 中文:
-定理 IsLowerSet.smul
-  条件: (hs : IsLowerSet s)
-  结论: IsLowerSet (a • s)
+定理 是下集.smul
+  条件: (hs : 是下集 s)
+  结论: 是下集 (a • s)
   证明: hs.image OrderIso.mulLeft _
 
 @[to_additive]
@@ -142,9 +142,9 @@ theorem Set.OrdConnected.smul
 @[to_additive]
 
 中文:
-定理 Set.OrdConnected.smul
-  条件: (hs : s.OrdConnected)
-  结论: (a • s).OrdConnected
+定理 集合.序连通.smul
+  条件: (hs : s.序连通)
+  结论: (a • s).序连通
   证明: by
   rw [← hs.upperClosure_inter_lowerClosure]; rw [smul_set_inter]
   exact (upperClosure _).upper.smul.ordConnected.inter (lowerClosure _).lower.smul.ordConnected
@@ -172,9 +172,9 @@ theorem IsUpperSet.mul_left
 @[to_additive]
 
 中文:
-定理 IsUpperSet.mul_left
-  条件: (ht : IsUpperSet t)
-  结论: IsUpperSet (s * t)
+定理 是上集.mul_left
+  条件: (ht : 是上集 t)
+  结论: 是上集 (s * t)
   证明: by
   rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
   exact isUpperSet_iUnion₂ fun x _ => ht.smul
@@ -202,9 +202,9 @@ theorem IsUpperSet.mul_right
 @[to_additive]
 
 中文:
-定理 IsUpperSet.mul_right
-  条件: (hs : IsUpperSet s)
-  结论: IsUpperSet (s * t)
+定理 是上集.mul_right
+  条件: (hs : 是上集 s)
+  结论: 是上集 (s * t)
   证明: by
   rw [mul_comm]
   exact hs.mul_left
@@ -230,9 +230,9 @@ theorem IsLowerSet.mul_left
 @[to_additive]
 
 中文:
-定理 IsLowerSet.mul_left
-  条件: (ht : IsLowerSet t)
-  结论: IsLowerSet (s * t)
+定理 是下集.mul_left
+  条件: (ht : 是下集 t)
+  结论: 是下集 (s * t)
   证明: ht.toDual.mul_left
 
 @[to_additive]
@@ -254,9 +254,9 @@ theorem IsLowerSet.mul_right
 @[to_additive]
 
 中文:
-定理 IsLowerSet.mul_right
-  条件: (hs : IsLowerSet s)
-  结论: IsLowerSet (s * t)
+定理 是下集.mul_right
+  条件: (hs : 是下集 s)
+  结论: 是下集 (s * t)
   证明: hs.toDual.mul_right
 
 @[to_additive]
@@ -277,8 +277,8 @@ theorem IsUpperSet.inv
 @[to_additive]
 
 中文:
-定理 IsUpperSet.inv
-  结论: {α : 类型} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
+定理 是上集.inv
+  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
   证明: fun _ _ h => hs inv_le_inv' h
 
 @[to_additive]
@@ -300,8 +300,8 @@ theorem IsLowerSet.inv
 @[to_additive]
 
 中文:
-定理 IsLowerSet.inv
-  结论: {α : 类型} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
+定理 是下集.inv
+  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
   证明: fun _ _ h => hs inv_le_inv' h
 
 @[to_additive]
@@ -325,8 +325,8 @@ theorem IsUpperSet.div_left
 @[to_additive]
 
 中文:
-定理 IsUpperSet.div_left
-  结论: {α : 类型} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
+定理 是上集.div_left
+  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
   证明: by
   rw [div_eq_mul_inv]
   exact ht.inv.mul_left
@@ -355,9 +355,9 @@ theorem IsUpperSet.div_right
 @[to_additive]
 
 中文:
-定理 IsUpperSet.div_right
-  条件: (hs : IsUpperSet s)
-  结论: IsUpperSet (s / t)
+定理 是上集.div_right
+  条件: (hs : 是上集 s)
+  结论: 是上集 (s / t)
   证明: by
   rw [div_eq_mul_inv]
   exact hs.mul_right
@@ -382,8 +382,8 @@ theorem IsLowerSet.div_left
 @[to_additive]
 
 中文:
-定理 IsLowerSet.div_left
-  结论: {α : 类型} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
+定理 是下集.div_left
+  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
   证明: ht.toDual.div_left
 
 @[to_additive]
@@ -404,9 +404,9 @@ theorem IsLowerSet.div_right
   proof: hs.toDual.div_right
 
 中文:
-定理 IsLowerSet.div_right
-  条件: (hs : IsLowerSet s)
-  结论: IsLowerSet (s / t)
+定理 是下集.div_right
+  条件: (hs : 是下集 s)
+  结论: 是下集 (s / t)
   证明: hs.toDual.div_right
 
 Depends on / 依赖: div_right, hs.toDual.div_right, toDual
@@ -428,7 +428,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (UpperSet α)
+  签名: 幺 (上集 α)
   定义体: ⟨Ici 1⟩
 
 @[to_additive]
@@ -449,7 +449,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (UpperSet α)
+  签名: 乘法 (上集 α)
   定义体: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
 
 @[to_additive]
@@ -472,7 +472,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (UpperSet α)
+  签名: 除法 (上集 α)
   定义体: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
 
 @[to_additive]
@@ -496,7 +496,7 @@ omit [IsOrderedMonoid α] in
 
 中文:
 实例 :
-  签名: SMul α (UpperSet α)
+  签名: 标量乘法 α (上集 α)
   定义体: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
 
 omit [IsOrderedMonoid α] in
@@ -519,7 +519,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : UpperSet α) : Set α) = Set.Ici 1
+  结论: ((1 : 上集 α) : 集合 α) = 集合.左闭右无界区间 1
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -541,8 +541,8 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (s t : UpperSet α)
-  结论: (↑(s * t) : Set α) = s * t
+  条件: (s t : 上集 α)
+  结论: (↑(s * t) : 集合 α) = s * t
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -565,8 +565,8 @@ omit [IsOrderedMonoid α] in
 
 中文:
 定理 coe_div
-  条件: (s t : UpperSet α)
-  结论: (↑(s / t) : Set α) = s / t
+  条件: (s t : 上集 α)
+  结论: (↑(s / t) : 集合 α) = s / t
   证明: rfl
 
 omit [IsOrderedMonoid α] in
@@ -589,7 +589,7 @@ theorem Ici_one
 
 中文:
 定理 Ici_one
-  结论: Ici (1 : α) = 1
+  结论: 左闭右无界区间 (1 : α) = 1
   证明: rfl
 
 @[to_additive]
@@ -610,7 +610,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction α (UpperSet α)
+  签名: 乘法作用 α (上集 α)
   定义体: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
 
 @[to_additive]
@@ -633,7 +633,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: : CommSemigroup (UpperSet α)
+  签名: : 交换半群 (上集 α)
   定义体: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (UpperSet α)) with }
 
 @[to_additive]
@@ -660,7 +660,7 @@ theorem one_mul
 
 中文:
 定理 one_mul
-  条件: (s : UpperSet α)
+  条件: (s : 上集 α)
   结论: 1 * s = s
   证明: SetLike.coe_injective
 (subset_mul_right _ self_mem_Ici).antisymm' by
@@ -690,7 +690,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (UpperSet α)
+  签名: 交换幺半群 (上集 α)
   定义体: { UpperSet.commSemigroup with
     one_mul := private one_mul
     mul_one := fun s => by
@@ -723,7 +723,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (LowerSet α)
+  签名: 幺 (下集 α)
   定义体: ⟨Iic 1⟩
 
 @[to_additive]
@@ -744,7 +744,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (LowerSet α)
+  签名: 乘法 (下集 α)
   定义体: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
 
 @[to_additive]
@@ -767,7 +767,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (LowerSet α)
+  签名: 除法 (下集 α)
   定义体: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
 
 @[to_additive]
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul α (LowerSet α)
+  签名: 标量乘法 α (下集 α)
   定义体: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -812,8 +812,8 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (s t : LowerSet α)
-  结论: (↑(s * t) : Set α) = s * t
+  条件: (s t : 下集 α)
+  结论: (↑(s * t) : 集合 α) = s * t
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -836,8 +836,8 @@ omit [IsOrderedMonoid α] in
 
 中文:
 定理 coe_div
-  条件: (s t : LowerSet α)
-  结论: (↑(s / t) : Set α) = s / t
+  条件: (s t : 下集 α)
+  结论: (↑(s / t) : 集合 α) = s / t
   证明: rfl
 
 omit [IsOrderedMonoid α] in
@@ -860,7 +860,7 @@ theorem Iic_one
 
 中文:
 定理 Iic_one
-  结论: Iic (1 : α) = 1
+  结论: 左无界右闭区间 (1 : α) = 1
   证明: rfl
 
 @[to_additive]
@@ -881,7 +881,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction α (LowerSet α)
+  签名: 乘法作用 α (下集 α)
   定义体: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
 
 @[to_additive]
@@ -904,7 +904,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: : CommSemigroup (LowerSet α)
+  签名: : 交换半群 (下集 α)
   定义体: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (LowerSet α)) with }
 
 @[to_additive]
@@ -931,7 +931,7 @@ theorem one_mul
 
 中文:
 定理 one_mul
-  条件: (s : LowerSet α)
+  条件: (s : 下集 α)
   结论: 1 * s = s
   证明: SetLike.coe_injective
 (subset_mul_right _ self_mem_Iic).antisymm' by
@@ -961,7 +961,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (LowerSet α)
+  签名: 交换幺半群 (下集 α)
   定义体: { LowerSet.commSemigroup with
     one_mul := private one_mul
     mul_one := fun s => by
@@ -996,7 +996,7 @@ omit [IsOrderedMonoid α] in
 
 中文:
 定理 upperClosure_one
-  结论: upperClosure (1 : Set α) = 1
+  结论: upperClosure (1 : 集合 α) = 1
   证明: upperClosure_singleton _
 
 omit [IsOrderedMonoid α] in
@@ -1021,7 +1021,7 @@ theorem lowerClosure_one
 
 中文:
 定理 lowerClosure_one
-  结论: lowerClosure (1 : Set α) = 1
+  结论: lowerClosure (1 : 集合 α) = 1
   证明: lowerClosure_singleton _
 
 @[to_additive (attr := simp)]

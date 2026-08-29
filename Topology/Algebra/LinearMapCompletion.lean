@@ -237,7 +237,7 @@ lemma fromCompletion_unique
 
 中文:
 引理 fromCompletion_unique
-  结论: (f : α ->SL[σ] β) (g : Completion α ->SL[σ] β)
+  结论: (f : α ->SL[σ] β) (g : 完备化 α ->SL[σ] β)
   证明: by
   ext; simp [coe_fromCompletion, extension_unique f.uniformContinuous g.uniformContinuous h]
 

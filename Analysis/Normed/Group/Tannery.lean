@@ -43,7 +43,7 @@ le_of_tendsto (tendsto_norm.comp (hab k)) h
 
 中文:
 引理 tendsto_tsum_of_dominated_convergence
-  结论: {α β G : 类型} {𝓕 : Filter α}
+  结论: {α β G : 类型} {𝓕 : 滤子 α}
   证明: by
   -- WLOG β is nonempty
   rcases isEmpty_or_nonempty β

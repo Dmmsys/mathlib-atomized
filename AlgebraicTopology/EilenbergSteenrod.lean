@@ -49,10 +49,10 @@ structure HomologyPretheory
 结构 HomologyPretheory
   公理与运算 (5 个):
     - Hₚ((i : ι)) : TopPair.{u} ⥤ C
-    - H((i : ι)) : TopCat.{u} ⥤ C
+    - H((i : ι)) : 顶元素范畴.{u} ⥤ C
     - iso((i : ι)) : H i ≅ incl ⋙ Hₚ i
     - δ((i j : ι)) : Hₚ i ⟶ proj₂ ⋙ H j
-    - shape_δ((i j : ι) (h : ¬ c.Rel i j)) : δ i j = 0  [默认: by cat_disch]
+    - shape_δ((i j : ι) (h : ¬ c.关系 i j)) : δ i j = 0  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -88,7 +88,7 @@ structure Hom
     - w((i j : ι)) : HP.δ i j ≫ proj₂.whiskerLeft (hom j) = homₚ i ≫ HP'.δ i j  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (HP HP' : HomologyPretheory.{u} C c)
   公理与运算 (4 个):
     - homₚ((i : ι)) : HP.Hₚ i ⟶ HP'.Hₚ i
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (HomologyPretheory.{u} C c)
+  签名: 范畴 (HomologyPretheory.{u} C c)
   定义体: HomologyPretheory.Hom
   id _ := { homₚ _ := 𝟙 _ }
   comp f g := { homₚ _ := f.homₚ _ ≫ g.homₚ _ }
@@ -155,8 +155,8 @@ lemma Hom.iso_comm_app
   proof: congr($(f.iso_comm _).app _)
 
 中文:
-引理 Hom.iso_comm_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
+引理 态射.iso_comm_app
+  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
   证明: congr($(f.iso_comm _).app _)
 
 Depends on / 依赖: f.iso_comm, iso_comm
@@ -181,7 +181,7 @@ lemma Hom.w_app
 @[reassoc]
 
 中文:
-引理 Hom.w_app
+引理 态射.w_app
   条件: (f : HP ⟶ HP') (i j : ι) (X : TopPair.{u})
   证明: congr($(f.w _ _).app _)
 
@@ -225,7 +225,7 @@ lemma iso_homₚ_inv_hom_app
 
 中文:
 引理 iso_homₚ_inv_hom_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
+  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
   证明: congr($(iso_homₚ_inv_hom _ _).app _)
 
 @[reassoc (attr := simp)]
@@ -266,7 +266,7 @@ lemma inv_hom_iso_homₚ_app
 
 中文:
 引理 inv_hom_iso_homₚ_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
+  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
   证明: congr($(inv_hom_iso_homₚ _ _).app _)
 -/
 lemma inv_hom_iso_homₚ_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
@@ -334,10 +334,10 @@ class IsHomotopyInvariant
     - map_eq_of_homotopy((HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : Homotopy f g) (i : ι)) : (HP.Hₚ i).map f = (HP.Hₚ i).map g  [default: by cat_disch]
 
 中文:
-类 IsHomotopyInvariant
+类 是HomotopyInvariant
   参数: (HP : HomologyPretheory.{u} C c)
   公理与运算 (1 个):
-    - map_eq_of_homotopy((HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : Homotopy f g) (i : ι)) : (HP.Hₚ i).map f = (HP.Hₚ i).map g  [默认: by cat_disch]
+    - map_eq_of_homotopy((HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : 同伦 f g) (i : ι)) : (HP.Hₚ i).map f = (HP.Hₚ i).map g  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -360,7 +360,7 @@ abbreviation isHomotopyInvariant
 
 中文:
 缩写 isHomotopyInvariant
-  签名: : Object命题erty (HomologyPretheory.{u} C c)
+  签名: : ObjectProperty (HomologyPretheory.{u} C c)
   定义体: IsHomotopyInvariant
 
 @[simp]
@@ -381,7 +381,7 @@ lemma isHomotopyInvariant_iff
 
 中文:
 引理 isHomotopyInvariant_iff
-  结论: isHomotopyInvariant C c HP ↔ IsHomotopyInvariant HP
+  结论: isHomotopyInvariant C c HP ↔ 是HomotopyInvariant HP
   证明: .rfl
 -/
 lemma isHomotopyInvariant_iff : isHomotopyInvariant C c HP ↔ IsHomotopyInvariant HP := .rfl
@@ -398,7 +398,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderIsomorphisms (isHomotopyInvariant.{u} C c)
+  签名: 在同构下封闭 (isHomotopyInvariant.{u} C c)
   定义体: ⟨fun F _ => by
     simp only [← cancel_epi ((e.hom.homₚ _).app _), ← NatTrans.naturality,
       map_eq_of_homotopy _ F _]⟩

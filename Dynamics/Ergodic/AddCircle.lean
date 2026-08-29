@@ -54,8 +54,8 @@ theorem ae_empty_or_univ_of_forall_vadd_ae_eq_self
     there exists a point `d` of positive density. Let `Iⱼ` be the sequence of
 
 中文:
-定理 ae_empty_or_univ_of_forall_vadd_ae_eq_self
-  结论: {s : Set <| AddCircle T}
+定理 ae_empty_or_univ_of_对任意_vadd_ae_eq_self
+  结论: {s : 集合 <| AddCircle T}
   证明: by
   /- Sketch of proof:
     Assume `T = 1` for simplicity and let `μ` be the Haar measure. We may assume `s` has positive
@@ -134,7 +134,7 @@ theorem ergodic_zsmul
 中文:
 定理 ergodic_zsmul
   条件: {n : 整数} (hn : 1 < |n|)
-  结论: Ergodic fun y : AddCircle T => n • y
+  结论: 遍历 fun y : AddCircle T => n • y
   证明: { measurePreserving_zsmul volume (abs_pos.mp <| lt_trans zero_lt_one hn) with
     aeconst_set := fun s hs hs' => by
       let u : Nat -> AddCircle T := fun j => ↑((↑1 : Real) / ↑(n.natAbs ^ j) * T)
@@ -173,7 +173,7 @@ theorem ergodic_nsmul
 中文:
 定理 ergodic_nsmul
   条件: {n : 自然数} (hn : 1 < n)
-  结论: Ergodic fun y : AddCircle T => n • y
+  结论: 遍历 fun y : AddCircle T => n • y
   证明: ergodic_zsmul (by simp [hn] : 1 < |(n : Int)|)
 
 Depends on / 依赖: ergodic_zsmul
@@ -198,7 +198,7 @@ theorem ergodic_zsmul_add
 中文:
 定理 ergodic_zsmul_add
   条件: (x : AddCircle T) {n : 整数} (h : 1 < |n|)
-  结论: Ergodic fun y => n • y + x
+  结论: 遍历 fun y => n • y + x
   证明: by
   set f : AddCircle T -> AddCircle T := fun y => n • y + x
   let e : AddCircle T ≃ᵐ AddCircle T := MeasurableEquiv.addLeft (DivisibleBy.div x <| n - 1)
@@ -237,7 +237,7 @@ theorem ergodic_nsmul_add
 中文:
 定理 ergodic_nsmul_add
   条件: (x : AddCircle T) {n : 自然数} (h : 1 < n)
-  结论: Ergodic fun y => n • y + x
+  结论: 遍历 fun y => n • y + x
   证明: ergodic_zsmul_add x (by simp [h] : 1 < |(n : Int)|)
 
 Depends on / 依赖: ergodic_zsmul_add

@@ -246,7 +246,7 @@ lemma normalizer_eq_self_of_engel_le
 
 中文:
 引理 normalizer_eq_self_of_engel_le
-  结论: [IsArtinian R L]
+  结论: [是Artin R L]
   证明: by
   set N := normalizer H
   apply le_antisymm _ (le_normalizer H)
@@ -318,8 +318,8 @@ lemma isNilpotent_of_forall_le_engel
   obtain ⟨n, hn⟩ := mo
 
 中文:
-引理 isNilpotent_of_forall_le_engel
-  结论: [IsNoetherian R L]
+引理 isNilpotent_of_对任意_le_engel
+  结论: [是Noether R L]
   证明: by
   rw [LieAlgebra.isNilpotent_iff_forall (R := R)]
   intro x

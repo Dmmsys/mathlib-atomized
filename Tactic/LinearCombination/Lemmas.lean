@@ -38,7 +38,7 @@ theorem add_eq_eq
 
 中文:
 定理 add_eq_eq
-  条件: [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
+  条件: [加法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
   结论: a₁ + a₂ = b₁ + b₂
   证明: p₁ ▸ p₂ ▸ rfl
 -/
@@ -54,7 +54,7 @@ theorem add_le_eq
 
 中文:
 定理 add_le_eq
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: p₂ ▸ add_le_add_left p₁ b₂
 
 Depends on / 依赖: add_le_add_left
@@ -73,7 +73,7 @@ theorem add_eq_le
 
 中文:
 定理 add_eq_le
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: p₁ ▸ add_le_add_right p₂ b₁
 
 Depends on / 依赖: add_le_add_right
@@ -92,7 +92,7 @@ theorem add_lt_eq
 
 中文:
 定理 add_lt_eq
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: p₂ ▸ add_lt_add_left p₁ b₂
 
 Depends on / 依赖: add_lt_add_left
@@ -111,7 +111,7 @@ theorem add_eq_lt
 
 中文:
 定理 add_eq_lt
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] {a₁ b₁ a₂ b₂ : α}
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α] {a₁ b₁ a₂ b₂ : α}
   证明: p₁ ▸ add_lt_add_right p₂ b₁
 
 Depends on / 依赖: add_lt_add_right
@@ -132,7 +132,7 @@ theorem mul_eq_const
 
 中文:
 定理 mul_eq_const
-  条件: [Mul α] (p : a = b) (c : α)
+  条件: [乘法 α] (p : a = b) (c : α)
   结论: a * c = b * c
   证明: p ▸ rfl
 -/
@@ -148,7 +148,7 @@ theorem mul_le_const
 
 中文:
 定理 mul_le_const
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α]
   证明: mul_le_mul_of_nonneg_right p ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_right
@@ -168,7 +168,7 @@ theorem mul_lt_const
 
 中文:
 定理 mul_lt_const
-  结论: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: [半环 α] [偏序 α] [是StrictOrdered环 α]
   证明: mul_lt_mul_of_pos_right p ha
 
 Depends on / 依赖: mul_lt_mul_of_pos_right
@@ -188,7 +188,7 @@ theorem mul_lt_const_weak
 
 中文:
 定理 mul_lt_const_weak
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α]
   证明: mul_le_mul_of_nonneg_right p.le ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_right, p.le
@@ -209,7 +209,7 @@ theorem mul_const_eq
 
 中文:
 定理 mul_const_eq
-  条件: [Mul α] (p : b = c) (a : α)
+  条件: [乘法 α] (p : b = c) (a : α)
   结论: a * b = a * c
   证明: p ▸ rfl
 -/
@@ -225,7 +225,7 @@ theorem mul_const_le
 
 中文:
 定理 mul_const_le
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α]
   证明: mul_le_mul_of_nonneg_left p ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_left
@@ -245,7 +245,7 @@ theorem mul_const_lt
 
 中文:
 定理 mul_const_lt
-  结论: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: [半环 α] [偏序 α] [是StrictOrdered环 α]
   证明: mul_lt_mul_of_pos_left p ha
 
 Depends on / 依赖: mul_lt_mul_of_pos_left
@@ -265,7 +265,7 @@ theorem mul_const_lt_weak
 
 中文:
 定理 mul_const_lt_weak
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α]
   证明: mul_le_mul_of_nonneg_left p.le ha
 
 Depends on / 依赖: mul_le_mul_of_nonneg_left, p.le
@@ -287,7 +287,7 @@ theorem smul_eq_const
 
 中文:
 定理 smul_eq_const
-  条件: [SMul K α] (p : t = s) (c : α)
+  条件: [标量乘法 K α] (p : t = s) (c : α)
   结论: t • c = s • c
   证明: p ▸ rfl
 -/
@@ -303,7 +303,7 @@ theorem smul_le_const
 
 中文:
 定理 smul_le_const
-  结论: [Ring K] [PartialOrder K] [IsOrderedRing K]
+  结论: [环 K] [偏序 K] [是Ordered环 K]
   证明: smul_le_smul_of_nonneg_right p ha
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right
@@ -324,7 +324,7 @@ theorem smul_lt_const
 
 中文:
 定理 smul_lt_const
-  结论: [Ring K] [PartialOrder K] [IsOrderedRing K]
+  结论: [环 K] [偏序 K] [是Ordered环 K]
   证明: smul_lt_smul_of_pos_right p ha
 
 Depends on / 依赖: smul_lt_smul_of_pos_right
@@ -345,7 +345,7 @@ theorem smul_lt_const_weak
 
 中文:
 定理 smul_lt_const_weak
-  结论: [Ring K] [PartialOrder K] [IsOrderedRing K]
+  结论: [环 K] [偏序 K] [是Ordered环 K]
   证明: smul_le_smul_of_nonneg_right p.le ha
 
 Depends on / 依赖: p.le, smul_le_smul_of_nonneg_right
@@ -367,7 +367,7 @@ theorem smul_const_eq
 
 中文:
 定理 smul_const_eq
-  条件: [SMul K α] (p : b = c) (s : K)
+  条件: [标量乘法 K α] (p : b = c) (s : K)
   结论: s • b = s • c
   证明: p ▸ rfl
 -/
@@ -383,7 +383,7 @@ theorem smul_const_le
 
 中文:
 定理 smul_const_le
-  结论: [Semiring K] [PartialOrder K]
+  结论: [半环 K] [偏序 K]
   证明: smul_le_smul_of_nonneg_left p hs
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left
@@ -404,7 +404,7 @@ theorem smul_const_lt
 
 中文:
 定理 smul_const_lt
-  结论: [Semiring K] [PartialOrder K]
+  结论: [半环 K] [偏序 K]
   证明: smul_lt_smul_of_pos_left p hs
 
 Depends on / 依赖: smul_lt_smul_of_pos_left
@@ -425,7 +425,7 @@ theorem smul_const_lt_weak
 
 中文:
 定理 smul_const_lt_weak
-  结论: [Semiring K] [PartialOrder K]
+  结论: [半环 K] [偏序 K]
   证明: smul_le_smul_of_nonneg_left p.le hs
 
 Depends on / 依赖: p.le, smul_le_smul_of_nonneg_left
@@ -448,7 +448,7 @@ theorem div_eq_const
 
 中文:
 定理 div_eq_const
-  条件: [Div α] (p : a = b) (c : α)
+  条件: [除法 α] (p : a = b) (c : α)
   结论: a / c = b / c
   证明: p ▸ rfl
 -/
@@ -464,7 +464,7 @@ theorem div_le_const
 
 中文:
 定理 div_le_const
-  结论: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
   证明: div_le_div_of_nonneg_right p ha
 
 Depends on / 依赖: div_le_div_of_nonneg_right
@@ -483,7 +483,7 @@ theorem div_lt_const
 
 中文:
 定理 div_lt_const
-  结论: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
   证明: div_lt_div_of_pos_right p ha
 
 Depends on / 依赖: div_lt_div_of_pos_right
@@ -502,7 +502,7 @@ theorem div_lt_const_weak
 
 中文:
 定理 div_lt_const_weak
-  结论: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
   证明: div_le_div_of_nonneg_right p.le ha
 
 Depends on / 依赖: div_le_div_of_nonneg_right, p.le
@@ -525,7 +525,7 @@ theorem eq_of_eq
 
 中文:
 定理 eq_of_eq
-  条件: [Add α] [IsRightCancelAdd α] (p : (a : α) = b) (H : a' + b = b' + a)
+  条件: [加法 α] [是右消去加法 α] (p : (a : α) = b) (H : a' + b = b' + a)
   证明: by
   rw [p] at H
   exact add_right_cancel H
@@ -548,7 +548,7 @@ theorem le_of_le
 
 中文:
 定理 le_of_le
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   grw [← add_le_add_iff_right b, H, p]
 
@@ -570,7 +570,7 @@ theorem le_of_eq
 
 中文:
 定理 le_of_eq
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   rwa [p, add_le_add_iff_right] at H
 
@@ -591,7 +591,7 @@ theorem le_of_lt
 
 中文:
 定理 le_of_lt
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: le_of_le p.le H
 
 Depends on / 依赖: le_of_le, p.le
@@ -612,7 +612,7 @@ theorem lt_of_le
 
 中文:
 定理 lt_of_le
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   grw [p] at H; simpa using H
 -/
@@ -632,7 +632,7 @@ theorem lt_of_eq
 
 中文:
 定理 lt_of_eq
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   rwa [p, add_lt_add_iff_right] at H
 
@@ -657,7 +657,7 @@ alias ⟨eq_rearrange, _⟩ := sub_eq_zero
 
 中文:
 定理 lt_of_lt
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   grw [← add_lt_add_iff_right b, H]
   gcongr
@@ -684,7 +684,7 @@ theorem le_rearrange
 
 中文:
 定理 le_rearrange
-  结论: {α : 类型} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: {α : 类型} [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: sub_nonpos.mp h
 
 Depends on / 依赖: sub_nonpos, sub_nonpos.mp
@@ -703,7 +703,7 @@ theorem lt_rearrange
 
 中文:
 定理 lt_rearrange
-  结论: {α : 类型} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: {α : 类型} [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: sub_neg.mp h
 
 Depends on / 依赖: sub_neg, sub_neg.mp
@@ -723,7 +723,7 @@ theorem eq_of_add_pow
 
 中文:
 定理 eq_of_add_pow
-  结论: [Ring α] [NoZeroDivisors α] (n : 自然数) (p : (a : α) = b)
+  结论: [环 α] [无零因子 α] (n : 自然数) (p : (a : α) = b)
   证明: by
   rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
 
@@ -776,11 +776,11 @@ inductive WithStrictness
 
 中文:
 归纳类型 WithStrictness
-  参数: : Type
+  参数: : 类型
   构造子 (3 个):
     - eq: Ineq.WithStrictness
     - le: Ineq.WithStrictness
-    - lt: (strict : 布尔) : Ineq.WithStrictness
+    - lt: (strict : 布尔值) : Ineq.WithStrictness
 -/
 protected inductive WithStrictness : Type
   | eq : Ineq.WithStrictness
@@ -881,7 +881,7 @@ definition relImpRelData
 
 中文:
 定义 relImpRelData
-  签名: : Ineq -> Ineq -> Option (Name × Ineq)
+  签名: : Ineq -> Ineq -> 选项类型 (Name × Ineq)
 -/
 def relImpRelData : Ineq -> Ineq -> Option (Name × Ineq)
   | eq, eq => some (``eq_of_eq, eq)

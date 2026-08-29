@@ -64,7 +64,7 @@ lemma mem_iSup_of_directed
 
 中文:
 引理 mem_iSup_of_directed
-  条件: {ι : Sort*} {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M}
+  条件: {ι : 类型层*} {S : ι -> 子半群 M} (hS : Directed (· <= ·) S) {x : M}
   证明: by
   refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
   suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
@@ -104,7 +104,7 @@ theorem mem_biSup_of_directedOn
 
 中文:
 定理 mem_biSup_of_directedOn
-  结论: {ι : 类型} {p : ι -> 命题} {S : ι -> Subsemigroup M}
+  结论: {ι : 类型} {p : ι -> 命题} {S : ι -> 子半群 M}
   证明: by
   rw [iSup_subtype']; rw [mem_iSup_of_directed]
   · simp
@@ -139,7 +139,7 @@ theorem mem_iSup_prop
 
 中文:
 定理 mem_iSup_prop
-  条件: {p : 命题} {S : p -> Subsemigroup M} {x : M}
+  条件: {p : 命题} {S : p -> 子半群 M} {x : M}
   证明: by
   by_cases h : p
   · simp +contextual [h]
@@ -166,7 +166,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  条件: {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S)
+  条件: {S : ι -> 子半群 M} (hS : Directed (· <= ·) S)
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 Depends on / 依赖: Set.ext, mem_iSup_of_directed
@@ -193,7 +193,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {S : ι -> Subsemigroup M}
+  结论: {S : ι -> 子半群 M}
   证明: by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
@@ -228,7 +228,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 @[to_additive]
@@ -254,7 +254,7 @@ theorem mem_sSup_of_directed_on
 
 中文:
 定理 mem_sSup_of_directed_on
-  条件: {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S) {x : M}
+  条件: {S : 集合 (子半群 M)} (hS : DirectedOn (· <= ·) S) {x : M}
   证明: by
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists, exists_prop]
 
@@ -279,7 +279,7 @@ theorem coe_sSup_of_directed_on
 
 中文:
 定理 coe_sSup_of_directed_on
-  条件: {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S)
+  条件: {S : 集合 (子半群 M)} (hS : DirectedOn (· <= ·) S)
   证明: Set.ext fun x => by simp [mem_sSup_of_directed_on hS]
 
 @[to_additive]
@@ -306,7 +306,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : Subsemigroup M}
+  条件: {S T : 子半群 M}
   结论: 对任意 {x : M}, x in S -> x in S ⊔ T
   证明: by
   have : S <= S ⊔ T := le_sup_left
@@ -336,7 +336,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : Subsemigroup M}
+  条件: {S T : 子半群 M}
   结论: 对任意 {x : M}, x in T -> x in S ⊔ T
   证明: by
   have : T <= S ⊔ T := le_sup_right
@@ -364,7 +364,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : Subsemigroup M} {x y : M} (hx : x in S) (hy : y in T)
+  条件: {S T : 子半群 M} {x y : M} (hx : x in S) (hy : y in T)
   结论: x * y in S ⊔ T
   证明: mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
@@ -391,7 +391,7 @@ theorem mem_iSup_of_mem
 
 中文:
 定理 mem_iSup_of_mem
-  条件: {S : ι -> Subsemigroup M} (i : ι)
+  条件: {S : ι -> 子半群 M} (i : ι)
   结论: 对任意 {x : M}, x in S i -> x in iSup S
   证明: by
   have : S i <= iSup S := le_iSup _ _
@@ -418,7 +418,7 @@ theorem mem_sSup_of_mem
 
 中文:
 定理 mem_sSup_of_mem
-  条件: {S : Set (Subsemigroup M)} {s : Subsemigroup M} (hs : s in S)
+  条件: {S : 集合 (子半群 M)} {s : 子半群 M} (hs : s in S)
   证明: by
   have : s <= sSup S := le_sSup hs
   tauto
@@ -451,7 +451,7 @@ theorem iSup_induction
 
 中文:
 定理 iSup_induction
-  结论: (S : ι -> Subsemigroup M) {C : M -> 命题} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i)
+  结论: (S : ι -> 子半群 M) {C : M -> 命题} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i)
   证明: by
   rw [iSup_eq_closure] at hx₁
   refine closure_induction (fun x₂ hx₂ => ?_) (fun x y _ _ => mul x y) hx₁
@@ -486,7 +486,7 @@ theorem iSup_induction'
 
 中文:
 定理 iSup_induction'
-  结论: (S : ι -> Subsemigroup M) {C : 对任意 x, (x in ⨆ i, S i) -> 命题}
+  结论: (S : ι -> 子半群 M) {C : 对任意 x, (x in ⨆ i, S i) -> 命题}
   证明: by
   refine Exists.elim ?_ fun (hx₁' : x₁ in ⨆ i, S i) (hc : C x₁ hx₁') => hc
   refine @iSup_induction _ _ _ S (fun x' => exists hx'', C x' hx'') _ hx₁

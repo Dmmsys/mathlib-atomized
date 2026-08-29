@@ -40,7 +40,7 @@ definition adjoin.powerBasisAux
 
 中文:
 定义 adjoin.powerBasisAux
-  签名: {x : S} (hx : Is整数egral K x)
+  签名: {x : S} (hx : 是整 K x)
   定义体: by
   have hST : Function.Injective (algebraMap (K[(x : S)]) S) := Subtype.coe_injective
   have hx' :
@@ -90,7 +90,7 @@ definition adjoin.powerBasis
 
 中文:
 定义 adjoin.powerBasis
-  签名: {x : S} (hx : Is整数egral K x)
+  签名: {x : S} (hx : 是整 K x)
   定义体: ⟨x, subset_adjoin (Set.mem_singleton x)⟩
   dim := (minpoly K x).natDegree
   basis := adjoin.powerBasisAux hx
@@ -113,7 +113,7 @@ definition _root_.PowerBasis.ofAdjoinEqTop
 
 中文:
 定义 _root_.PowerBasis.ofAdjoinEqTop
-  签名: {x : S} (hx : Is整数egral K x)
+  签名: {x : S} (hx : 是整 K x)
   定义体: (adjoin.powerBasis hx).map ((Subalgebra.equivOfEq _ _ hx').trans Subalgebra.topEquiv)
 
 Depends on / 依赖: Subalgebra, Subalgebra.equivOfEq, Subalgebra.topEquiv, adjoin, adjoin.powerBasis, equivOfEq, powerBasis, topEquiv
@@ -134,7 +134,7 @@ theorem _root_.PowerBasis.ofAdjoinEqTop_gen
 
 中文:
 定理 _root_.PowerBasis.ofAdjoinEqTop_gen
-  结论: {x : S} (hx : Is整数egral K x)
+  结论: {x : S} (hx : 是整 K x)
   证明: rfl
 -/
 theorem _root_.PowerBasis.ofAdjoinEqTop_gen {x : S} (hx : IsIntegral K x)
@@ -152,7 +152,7 @@ theorem _root_.PowerBasis.ofAdjoinEqTop_dim
 
 中文:
 定理 _root_.PowerBasis.ofAdjoinEqTop_dim
-  结论: {x : S} (hx : Is整数egral K x)
+  结论: {x : S} (hx : 是整 K x)
   证明: rfl
 -/
 theorem _root_.PowerBasis.ofAdjoinEqTop_dim {x : S} (hx : IsIntegral K x)
@@ -191,8 +191,8 @@ theorem repr_gen_pow_isIntegral
   have hlt : Q.natDegree < 
 
 中文:
-定理 repr_gen_pow_isIntegral
-  结论: (hB : Is整数egral R B.gen)
+定理 repr_gen_pow_is整数egral
+  结论: (hB : 是整 R B.gen)
   证明: by
   intro i
   nontriviality S
@@ -248,8 +248,8 @@ theorem repr_mul_isIntegral
     Finsupp
 
 中文:
-定理 repr_mul_isIntegral
-  结论: (hB : Is整数egral R B.gen) {x y : A}
+定理 repr_mul_is整数egral
+  结论: (hB : 是整 R B.gen) {x y : A}
   证明: by
   intro i
   rw [← B.basis.sum_repr x]; rw [← B.basis.sum_repr y]; rw [Finset.sum_mul_sum]; rw [← Finset.sum_product']; rw [map_sum]; rw [Finset.sum_apply']
@@ -289,8 +289,8 @@ theorem repr_pow_isIntegral
   
 
 中文:
-定理 repr_pow_isIntegral
-  结论: (hB : Is整数egral R B.gen) {x : A}
+定理 repr_pow_is整数egral
+  结论: (hB : 是整 R B.gen) {x : A}
   证明: by
   nontriviality A using Subsingleton.elim (x ^ n) 0, isIntegral_zero
   revert hx
@@ -337,7 +337,7 @@ theorem toMatrix_isIntegral
   rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R K S];
 
 中文:
-定理 toMatrix_isIntegral
+定理 toMatrix_is整数egral
   结论: {B B' : PowerBasis K S} {P : R[X]} (h : aeval B.gen P = B'.gen)
   证明: by
   intro i j

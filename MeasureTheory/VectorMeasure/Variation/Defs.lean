@@ -53,7 +53,7 @@ lemma isSigmaSubadditiveSetFun_enorm
 
 中文:
 引理 isSigmaSubadditiveSetFun_enorm
-  条件: (μ : VectorMeasure X V)
+  条件: (μ : 向量测度 X V)
   证明: by
   intro s hs
   have hmeas : forall i, MeasurableSet (s i).val := fun i => (s i).prop
@@ -77,7 +77,7 @@ definition variation
 
 中文:
 定义 variation
-  签名: (μ : VectorMeasure X V)
+  签名: (μ : 向量测度 X V)
   定义体: preVariation (‖μ ·‖ₑ) (isSigmaSubadditiveSetFun_enorm μ) (by simp)
 
 Depends on / 依赖: isSigmaSubadditiveSetFun_enorm, preVariation
@@ -95,7 +95,7 @@ definition ennrealVariation
 
 中文:
 定义 ennrealVariation
-  签名: (μ : VectorMeasure X V)
+  签名: (μ : 向量测度 X V)
   定义体: μ.variation.toENNRealVectorMeasure
 
 Depends on / 依赖: toENNRealVectorMeasure, variation, variation.toENNRealVectorMeasure

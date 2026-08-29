@@ -82,11 +82,11 @@ structure IsSmoothEmbedding
     - isEmbedding : IsEmbedding f
 
 中文:
-结构 IsSmoothEmbedding
+结构 是光滑嵌入
   参数: (f : M -> N)
   公理与运算 (2 个):
-    - isImmersion : IsImmersion I J n f
-    - isEmbedding : IsEmbedding f
+    - isImmersion : 是Immersion I J n f
+    - isEmbedding : 是嵌入 f
 -/
 structure IsSmoothEmbedding (f : M -> N) where
   isImmersion : IsImmersion I J n f
@@ -107,8 +107,8 @@ lemma id
 
 中文:
 引理 id
-  条件: [IsManifold I n M]
-  结论: IsSmoothEmbedding I I n (@id M)
+  条件: [是流形 I n M]
+  结论: 是光滑嵌入 I I n (@id M)
   证明: ⟨.id, .id⟩
 -/
 protected lemma id [IsManifold I n M] : IsSmoothEmbedding I I n (@id M) := ⟨.id, .id⟩
@@ -146,7 +146,7 @@ lemma of_opens
 
 中文:
 引理 of_opens
-  条件: [IsManifold I n M] (s : TopologicalSpace.Opens M)
+  条件: [是流形 I n M] (s : 拓扑空间.Opens M)
   证明: by
   rw [isSmoothEmbedding_iff]
   exact ⟨IsImmersion.of_opens s, IsEmbedding.subtypeVal⟩
@@ -167,7 +167,7 @@ lemma _root_.ModelWithCorners.isSmoothEmbedding
   proof: ⟨I.isImmersion, I.isClosedEmbedding.isEmbedding⟩
 
 中文:
-引理 _root_.ModelWithCorners.isSmoothEmbedding
+引理 _root_.带角模型.isSmoothEmbedding
   条件: {n : 自然数}
   证明: ⟨I.isImmersion, I.isClosedEmbedding.isEmbedding⟩
 -/
@@ -185,7 +185,7 @@ lemma sumInl
 
 中文:
 引理 sumInl
-  结论: {M' : 类型} [TopologicalSpace M'] [ChartedSpace H M']
+  结论: {M' : 类型} [拓扑空间 M'] [Charted空间 H M']
   证明: ⟨IsImmersionOfComplement.sumInl.isImmersion, Topology.IsEmbedding.inl⟩
 
 Depends on / 依赖: IsEmbedding, IsImmersionOfComplement, IsImmersionOfComplement.sumInl.isImmersion, Topology, Topology.IsEmbedding.inl, isImmersion, sumInl
@@ -204,7 +204,7 @@ lemma sumInr
 
 中文:
 引理 sumInr
-  结论: {M' : 类型} [TopologicalSpace M'] [ChartedSpace H M']
+  结论: {M' : 类型} [拓扑空间 M'] [Charted空间 H M']
   证明: ⟨IsImmersionOfComplement.sumInr.isImmersion, Topology.IsEmbedding.inr⟩
 
 Depends on / 依赖: IsEmbedding, IsImmersionOfComplement, IsImmersionOfComplement.sumInr.isImmersion, Topology, Topology.IsEmbedding.inr, isImmersion, sumInr
@@ -223,7 +223,7 @@ lemma contMDiff
 
 中文:
 引理 contMDiff
-  条件: (hf : IsSmoothEmbedding I J n f)
+  条件: (hf : 是光滑嵌入 I J n f)
   证明: hf.isImmersion.contMDiff
 
 Depends on / 依赖: contMDiff, hf.isImmersion.contMDiff, isImmersion

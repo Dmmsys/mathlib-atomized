@@ -116,7 +116,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (SMulMemClass.subtype S' : S' -> M) = Subtype.val
+  结论: (SMulMem类.subtype S' : S' -> M) = 子类型.val
   证明: rfl
 -/
 protected theorem coe_subtype : (SMulMemClass.subtype S' : S' -> M) = Subtype.val :=
@@ -211,7 +211,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (Submodule.subtype p : p -> M) = Subtype.val
+  结论: (子模.subtype p : p -> M) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (Submodule.subtype p : p -> M) = Subtype.val :=
@@ -227,7 +227,7 @@ theorem injective_subtype
 
 中文:
 定理 injective_subtype
-  结论: Injective p.subtype
+  结论: 单射 p.subtype
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -246,7 +246,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: (x : ι -> p) (s : Finset ι)
+  条件: (x : ι -> p) (s : 有限集 ι)
   结论: ↑(∑ i in s, x i) = ∑ i in s, (x i : M)
   证明: map_sum p.subtype _ _
 
@@ -268,8 +268,8 @@ instance [AddAction
   body: AddSubmonoid.instAddActionSubtypeMem p
 
 中文:
-实例 [AddAction
-  签名: M α] : AddAction p α
+实例 [加法作用
+  签名: M α] : 加法作用 p α
   定义体: AddSubmonoid.instAddActionSubtypeMem p
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.instAddActionSubtypeMem, instAddActionSubtypeMem
@@ -314,7 +314,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   定义体: f.comp p.subtype
 
 @[simp]
@@ -335,7 +335,7 @@ theorem domRestrict_apply
 
 中文:
 定理 domRestrict_apply
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M) (x : p)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M) (x : p)
   证明: rfl
 -/
 theorem domRestrict_apply (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M) (x : p) :
@@ -352,7 +352,7 @@ lemma coe_domRestrict
 
 中文:
 引理 coe_domRestrict
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   证明: rfl
 -/
 lemma coe_domRestrict (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M) :
@@ -372,7 +372,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (p : Submodule R₂ M₂) (f : M ->ₛₗ[σ₁₂] M₂) (h : 对任意 c, f c in p)
+  签名: (p : 子模 R₂ M₂) (f : M ->ₛₗ[σ₁₂] M₂) (h : 对任意 c, f c in p)
   定义体: ⟨f c, h c⟩
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
@@ -397,7 +397,7 @@ theorem codRestrict_apply
 
 中文:
 定理 codRestrict_apply
-  条件: (p : Submodule R₂ M₂) (f : M ->ₛₗ[σ₁₂] M₂) {h} (x : M)
+  条件: (p : 子模 R₂ M₂) (f : M ->ₛₗ[σ₁₂] M₂) {h} (x : M)
   证明: rfl
 
 @[simp]
@@ -419,7 +419,7 @@ theorem comp_codRestrict
 
 中文:
 定理 comp_codRestrict
-  条件: (p : Submodule R₃ M₃) (h : 对任意 b, g b in p)
+  条件: (p : 子模 R₃ M₃) (h : 对任意 b, g b in p)
   证明: rfl
 
 @[simp]
@@ -441,7 +441,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: (p : Submodule R₂ M₂) (h : 对任意 b, f b in p)
+  条件: (p : 子模 R₂ M₂) (h : 对任意 b, f b in p)
   证明: rfl
 
 @[simp]
@@ -461,7 +461,7 @@ theorem domRestrict_comp_codRestrict
 
 中文:
 定理 domRestrict_comp_codRestrict
-  结论: (g : M₂ ->ₛₗ[σ₂₃] M₃) (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂)
+  结论: (g : M₂ ->ₛₗ[σ₂₃] M₃) (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R₂ M₂)
   证明: rfl
 -/
 theorem domRestrict_comp_codRestrict (g : M₂ ->ₛₗ[σ₂₃] M₃) (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂)
@@ -556,7 +556,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂} (hf : 对任意 x in p, f x in q)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) {p : 子模 R M} {q : 子模 R₂ M₂} (hf : 对任意 x in p, f x in q)
   定义体: (f.domRestrict p).codRestrict q SetLike.forall.2 hf
 
 @[simp]
@@ -580,7 +580,7 @@ theorem coe_restrict_apply
 
 中文:
 定理 coe_restrict_apply
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 
 @[deprecated coe_restrict_apply (since := "2026-05-13")]
@@ -600,7 +600,7 @@ theorem restrict_coe_apply
 
 中文:
 定理 restrict_coe_apply
-  结论: (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: (f : M ->ₛₗ[σ₁₂] M₂) {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem restrict_coe_apply (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂}
@@ -617,7 +617,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem restrict_apply {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
@@ -660,7 +660,7 @@ lemma restrict_comp
 
 中文:
 引理 restrict_comp
-  结论: {p : Submodule R M} {p₂ : Submodule R₂ M₂} {p₃ : Submodule R₃ M₃}
+  结论: {p : 子模 R M} {p₂ : 子模 R₂ M₂} {p₃ : 子模 R₃ M₃}
   证明: rfl
 
 Depends on / 依赖: hg.comp
@@ -703,7 +703,7 @@ lemma restrict_commute
 
 中文:
 引理 restrict_commute
-  结论: {f g : M ->ₗ[R] M} (h : Commute f g) {p : Submodule R M}
+  结论: {f g : M ->ₗ[R] M} (h : Commute f g) {p : 子模 R M}
   证明: by
   change (f ∘ₗ g).restrict (hf.comp hg) = (g ∘ₗ f).restrict (hg.comp hf)
   congr 1
@@ -726,7 +726,7 @@ theorem subtype_comp_restrict
 
 中文:
 定理 subtype_comp_restrict
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem subtype_comp_restrict {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
@@ -743,7 +743,7 @@ theorem restrict_eq_codRestrict_domRestrict
 
 中文:
 定理 restrict_eq_codRestrict_domRestrict
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M}
   证明: rfl
 -/
 theorem restrict_eq_codRestrict_domRestrict {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M}
@@ -761,7 +761,7 @@ theorem restrict_eq_domRestrict_codRestrict
 
 中文:
 定理 restrict_eq_domRestrict_codRestrict
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M}
   证明: rfl
 -/
 theorem restrict_eq_domRestrict_codRestrict {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M}
@@ -781,7 +781,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) (b : M)
+  条件: (t : 有限集 ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) (b : M)
   证明: _root_.map_sum ((AddMonoidHom.eval b).comp toAddMonoidHom') f _
 
 @[simp, norm_cast]
@@ -807,7 +807,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: {ι : 类型} (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂)
+  条件: {ι : 类型} (t : 有限集 ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂)
   证明: _root_.map_sum
     (show AddMonoidHom (M ->ₛₗ[σ₁₂] M₂) (M -> M₂)
       from { toFun := DFunLike.coe,
@@ -837,8 +837,8 @@ theorem _root_.Module.End.submodule_pow_eq_zero_of_pow_eq_zero
   simpa using hg
 
 中文:
-定理 _root_.Module.End.submodule_pow_eq_zero_of_pow_eq_zero
-  结论: {N : Submodule R M}
+定理 _root_.模.End.submodule_pow_eq_zero_of_pow_eq_zero
+  结论: {N : 子模 R M}
   证明: by
   ext m
   have hg : N.subtype.comp (g ^ k) m = 0 := by
@@ -872,8 +872,8 @@ theorem _root_.Module.End.pow_apply_mem_of_forall_mem
     simpa only [iterate_succ, coe_comp, Function.comp_apply, restrict_apply] using! ih _ (h _ hx)
 
 中文:
-定理 _root_.Module.End.pow_apply_mem_of_forall_mem
-  结论: {p : Submodule R M} (n : 自然数)
+定理 _root_.模.End.pow_apply_mem_of_对任意_mem
+  结论: {p : 子模 R M} (n : 自然数)
   证明: by
   induction n generalizing x with
   | zero => simpa
@@ -901,8 +901,8 @@ theorem _root_.Module.End.pow_restrict
   simp [Module.End.coe_pow, this.iterate_right _ _]
 
 中文:
-定理 _root_.Module.End.pow_restrict
-  结论: {p : Submodule R M} (n : 自然数) (h : 对任意 x in p, f' x in p)
+定理 _root_.模.End.pow_restrict
+  结论: {p : 子模 R M} (n : 自然数) (h : 对任意 x in p, f' x in p)
   证明: by
   ext x
   have : Semiconj (↑) (f'.restrict h) f' := fun _ => coe_restrict_apply _ _
@@ -941,7 +941,7 @@ definition domRestrict'
 
 中文:
 定义 domRestrict'
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: φ.domRestrict p
   map_add' := by simp [LinearMap.ext_iff]
   map_smul' := by simp [LinearMap.ext_iff]
@@ -966,7 +966,7 @@ theorem domRestrict'_apply
 
 中文:
 定理 domRestrict'_apply
-  条件: (f : M ->ₗ[R] M₂) (p : Submodule R M) (x : p)
+  条件: (f : M ->ₗ[R] M₂) (p : 子模 R M) (x : p)
   证明: rfl
 -/
 theorem domRestrict'_apply (f : M ->ₗ[R] M₂) (p : Submodule R M) (x : p) :
@@ -1057,7 +1057,7 @@ theorem inclusion_injective
 中文:
 定理 inclusion_injective
   条件: (h : p <= p')
-  结论: Function.Injective (inclusion h)
+  结论: 函数.单射 (inclusion h)
   证明: fun _ _ h =>
   Subtype.val_injective (Subtype.mk.inj h)
 -/
@@ -1076,7 +1076,7 @@ theorem subtype_comp_inclusion
 
 中文:
 定理 subtype_comp_inclusion
-  条件: (p q : Submodule R M) (h : p <= q)
+  条件: (p q : 子模 R M) (h : p <= q)
   证明: rfl
 -/
 theorem subtype_comp_inclusion (p q : Submodule R M) (h : p <= q) :

@@ -43,7 +43,7 @@ definition addAllowedUnusedTactic
 
 中文:
 定义 addAllowedUnusedTactic
-  签名: {m : Type -> Type} [Monad m] [MonadEnv m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadEnv m]
   定义体: stxNodes.foldM (init := ()) fun _ d => modifyEnv (allowedUnusedTacticExt.addEntry · d)
 
 Depends on / 依赖: addEntry, allowedUnusedTacticExt, allowedUnusedTacticExt.addEntry, modifyEnv, stxNodes, stxNodes.foldM

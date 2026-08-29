@@ -36,7 +36,7 @@ theorem isDedekindDomainDvr.of_formallyUnramified
 
 中文:
 定理 isDedekindDomainDvr.of_formallyUnramified
-  结论: IsDedekindDomainDvr B where
+  结论: 是DedekindDomainDvr B where
   证明: IsNoetherianRing.of_finite A B
   is_dvr_at_nonzero_prime := by
     intro q hq hqp
@@ -78,7 +78,7 @@ theorem isDedekindDomain.of_formallyUnramified
 
 中文:
 定理 isDedekindDomain.of_formallyUnramified
-  结论: IsDedekindDomain B
+  结论: 是Dedekind整环 B
   证明: have := isDedekindDomainDvr.of_formallyUnramified A B
   inferInstance
 

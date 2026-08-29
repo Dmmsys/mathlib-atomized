@@ -48,8 +48,8 @@ theorem Complex.hasSum_cos'
   simp_rw [← mul_comm 2 _] at th
 
 中文:
-定理 Complex.hasSum_cos'
-  条件: (z : Complex)
+定理 复形.hasSum_cos'
+  条件: (z : 复形)
   证明: by
   rw [Complex.cos]; rw [Complex.exp_eq_exp_Complex]
   have := ((expSeries_div_hasSum_exp (z * Complex.I)).add
@@ -92,8 +92,8 @@ theorem Complex.hasSum_sin'
   simp_rw 
 
 中文:
-定理 Complex.hasSum_sin'
-  条件: (z : Complex)
+定理 复形.hasSum_sin'
+  条件: (z : 复形)
   证明: by
   rw [Complex.sin]; rw [Complex.exp_eq_exp_Complex]
   have := (((expSeries_div_hasSum_exp (-z * Complex.I)).sub
@@ -132,8 +132,8 @@ theorem Complex.hasSum_cos
   simp_rw [mul_pow, pow_mul, Complex.I_sq, mul_comm]
 
 中文:
-定理 Complex.hasSum_cos
-  条件: (z : Complex)
+定理 复形.hasSum_cos
+  条件: (z : 复形)
   证明: by
   convert! Complex.hasSum_cos' z using 1
   simp_rw [mul_pow, pow_mul, Complex.I_sq, mul_comm]
@@ -157,8 +157,8 @@ theorem Complex.hasSum_sin
     div_self Complex.I_ne_zero, mul_comm _ ((-1 : Complex) ^ _), mul_one_div, mul_div_assoc, mul_assoc]
 
 中文:
-定理 Complex.hasSum_sin
-  条件: (z : Complex)
+定理 复形.hasSum_sin
+  条件: (z : 复形)
   证明: by
   convert! Complex.hasSum_sin' z using 1
   simp_rw [mul_pow, pow_succ, pow_mul, Complex.I_sq, ← mul_assoc, mul_div_assoc, div_right_comm,
@@ -181,8 +181,8 @@ theorem Complex.cos_eq_tsum'
   proof: (Complex.hasSum_cos' z).tsum_eq.symm
 
 中文:
-定理 Complex.cos_eq_tsum'
-  条件: (z : Complex)
+定理 复形.cos_eq_tsum'
+  条件: (z : 复形)
   证明: (Complex.hasSum_cos' z).tsum_eq.symm
 
 Depends on / 依赖: Complex.hasSum_cos, hasSum_cos, tsum_eq, tsum_eq.symm
@@ -200,8 +200,8 @@ theorem Complex.sin_eq_tsum'
   proof: (Complex.hasSum_sin' z).tsum_eq.symm
 
 中文:
-定理 Complex.sin_eq_tsum'
-  条件: (z : Complex)
+定理 复形.sin_eq_tsum'
+  条件: (z : 复形)
   证明: (Complex.hasSum_sin' z).tsum_eq.symm
 
 Depends on / 依赖: Complex.hasSum_sin, hasSum_sin, tsum_eq, tsum_eq.symm
@@ -219,8 +219,8 @@ theorem Complex.cos_eq_tsum
   proof: (Complex.hasSum_cos z).tsum_eq.symm
 
 中文:
-定理 Complex.cos_eq_tsum
-  条件: (z : Complex)
+定理 复形.cos_eq_tsum
+  条件: (z : 复形)
   证明: (Complex.hasSum_cos z).tsum_eq.symm
 
 Depends on / 依赖: Complex.hasSum_cos, hasSum_cos, tsum_eq, tsum_eq.symm
@@ -238,8 +238,8 @@ theorem Complex.sin_eq_tsum
   proof: (Complex.hasSum_sin z).tsum_eq.symm
 
 中文:
-定理 Complex.sin_eq_tsum
-  条件: (z : Complex)
+定理 复形.sin_eq_tsum
+  条件: (z : 复形)
   证明: (Complex.hasSum_sin z).tsum_eq.symm
 
 Depends on / 依赖: Complex.hasSum_sin, hasSum_sin, tsum_eq, tsum_eq.symm
@@ -257,7 +257,7 @@ theorem Real.hasSum_cos
   proof: mod_cast Complex.hasSum_cos r
 
 中文:
-定理 Real.hasSum_cos
+定理 实数.hasSum_cos
   条件: (r : 实数)
   证明: mod_cast Complex.hasSum_cos r
 
@@ -276,7 +276,7 @@ theorem Real.hasSum_sin
   proof: mod_cast Complex.hasSum_sin r
 
 中文:
-定理 Real.hasSum_sin
+定理 实数.hasSum_sin
   条件: (r : 实数)
   证明: mod_cast Complex.hasSum_sin r
 
@@ -296,7 +296,7 @@ theorem Real.cos_eq_tsum
   proof: (Real.hasSum_cos r).tsum_eq.symm
 
 中文:
-定理 Real.cos_eq_tsum
+定理 实数.cos_eq_tsum
   条件: (r : 实数)
   结论: 实数.cos r = ∑' n : 自然数, (-1) ^ n * r ^ (2 * n) / ↑(2 * n)!
   证明: (Real.hasSum_cos r).tsum_eq.symm
@@ -315,7 +315,7 @@ theorem Real.sin_eq_tsum
   proof: (Real.hasSum_sin r).tsum_eq.symm
 
 中文:
-定理 Real.sin_eq_tsum
+定理 实数.sin_eq_tsum
   条件: (r : 实数)
   证明: (Real.hasSum_sin r).tsum_eq.symm
 
@@ -344,7 +344,7 @@ lemma hasSum_cosh
 
 中文:
 引理 hasSum_cosh
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: HasSum (fun n => z ^ (2 * n) / ↑(2 * n)!) (cosh z)
   证明: by
   simpa [mul_assoc, cos_mul_I] using hasSum_cos' (z * I)
@@ -367,7 +367,7 @@ lemma hasSum_sinh
 
 中文:
 引理 hasSum_sinh
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: HasSum (fun n => z ^ (2 * n + 1) / ↑(2 * n + 1)!) (sinh z)
   证明: by
   simpa [mul_assoc, sin_mul_I, neg_pow z, pow_add, pow_mul, neg_mul, neg_div]
@@ -390,7 +390,7 @@ lemma cosh_eq_tsum
 
 中文:
 引理 cosh_eq_tsum
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: cosh z = ∑' n, z ^ (2 * n) / ↑(2 * n)!
   证明: z.hasSum_cosh.tsum_eq.symm
 
@@ -409,7 +409,7 @@ lemma sinh_eq_tsum
 
 中文:
 引理 sinh_eq_tsum
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: sinh z = ∑' n, z ^ (2 * n + 1) / ↑(2 * n + 1)!
   证明: z.hasSum_sinh.tsum_eq.symm
 

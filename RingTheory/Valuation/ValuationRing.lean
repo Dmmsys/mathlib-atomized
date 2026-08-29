@@ -61,8 +61,8 @@ class PreValuationRing
     - cond' : forall a b : A, exists c : A, a * c = b ∨ b * c = a
 
 中文:
-类 PreValuationRing
-  参数: (A : 类型u) [Mul A]
+类 PreValuation环
+  参数: (A : 类型u) [乘法 A]
   公理与运算 (1 个):
     - cond' : 对任意 a b : A, 存在 c : A, a * c = b ∨ b * c = a
 -/
@@ -78,8 +78,8 @@ lemma PreValuationRing.cond
   proof: @PreValuationRing.cond' A _ _ _ _
 
 中文:
-引理 PreValuationRing.cond
-  条件: {A : 类型u} [Mul A] [PreValuationRing A] (a b : A)
+引理 PreValuation环.cond
+  条件: {A : 类型u} [乘法 A] [PreValuation环 A] (a b : A)
   证明: @PreValuationRing.cond' A _ _ _ _
 
 Depends on / 依赖: PreValuationRing, PreValuationRing.cond
@@ -97,9 +97,9 @@ class ValuationRing
   (no additional axioms)
 
 中文:
-类 ValuationRing
-  参数: (A : 类型u) [CommRing A] [IsDomain A]
-  继承: PreValuationRing A
+类 赋值环
+  参数: (A : 类型u) [交换环 A] [是整环 A]
+  继承: PreValuation环 A
   (无附加公理)
 
 Depends on / 依赖: PreValuationRing, PreValuationRing.cond
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ValueGroup A K)
+  签名: 可居 (ValueGroup A K)
   定义体: ⟨Quotient.mk'' 0⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -205,7 +205,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ValueGroup A K)
+  签名: 零 (ValueGroup A K)
   定义体: ⟨Quotient.mk'' 0⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (ValueGroup A K)
+  签名: 幺 (ValueGroup A K)
   定义体: ⟨Quotient.mk'' 1⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (ValueGroup A K)
+  签名: 乘法 (ValueGroup A K)
   定义体: Mul.mk fun x y =>
     Quotient.liftOn₂' x y (fun a b => Quotient.mk'' <| a * b)
       (by
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (ValueGroup A K)
+  签名: 取逆 (ValueGroup A K)
   定义体: Inv.mk fun x =>
     Quotient.liftOn' x (fun a => Quotient.mk'' a⁻¹)
       (by
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (ValueGroup A K)
+  签名: 非平凡 (ValueGroup A K)
   定义体: ⟨0, 1, fun c => by
     obtain ⟨d, hd⟩ := Quotient.exact' c
     apply_fun fun t => d⁻¹ • t at hd
@@ -405,7 +405,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder (ValueGroup A K) where
+  签名: : 线性序 (ValueGroup A K) where
   定义体: by rintro ⟨⟩; use 1; rw [one_smul]
   le_trans := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩ ⟨e, rfl⟩ ⟨f, rfl⟩; use e * f; rw [mul_smul]
   le_antisymm := by
@@ -542,7 +542,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation K (ValueGroup A K) where
+  签名: : 赋值 K (ValueGroup A K) where
   定义体: Quotient.mk''
   map_zero' := rfl
   map_one' := rfl
@@ -634,7 +634,7 @@ definition equivInteger
         map
 
 中文:
-定义 equivInteger
+定义 equiv整数eger
   签名: : A ≃+* (valuation A K).integer
   定义体: RingEquiv.ofBijective
     (show A ->ₙ+* (valuation A K).integer from
@@ -673,7 +673,7 @@ theorem coe_equivInteger_apply
   proof: rfl
 
 中文:
-定理 coe_equivInteger_apply
+定理 coe_equiv整数eger_apply
   条件: (a : A)
   结论: (equiv整数eger A K a : K) = algebraMap A K a
   证明: rfl
@@ -737,7 +737,7 @@ instance le_total_ideal
 
 中文:
 实例 le_total_ideal
-  签名: : @Std.Total (Ideal A) (· <= ·)
+  签名: : @Std.全 (理想 A) (· <= ·)
   定义体: by
   constructor; intro α β
   by_cases! h : forall x : A, x in α -> x in β
@@ -777,7 +777,7 @@ instance [DecidableLE
 
 中文:
 实例 [DecidableLE
-  签名: (Ideal A)] : LinearOrder (Ideal A)
+  签名: (理想 A)] : 线性序 (理想 A)
   定义体: Lattice.toLinearOrder (Ideal A)
 
 Depends on / 依赖: Lattice, Lattice.toLinearOrder, toLinearOrder
@@ -805,8 +805,8 @@ theorem _root_.PreValuationRing.iff_dvd_total
   · obtain ⟨c, rfl⟩ | ⟨c, rfl⟩ := H.total a b <;> use c <;> simp
 
 中文:
-定理 _root_.PreValuationRing.iff_dvd_total
-  条件: [Semigroup R]
+定理 _root_.PreValuation环.iff_dvd_total
+  条件: [半群 R]
   证明: by
   refine ⟨fun H => ⟨fun a b => ?_⟩, fun H => ⟨fun a b => ?_⟩⟩
   · obtain ⟨c, rfl | rfl⟩ := PreValuationRing.cond a b <;> simp
@@ -834,8 +834,8 @@ theorem _root_.PreValuationRing.iff_ideal_total
   exact this.symm
 
 中文:
-定理 _root_.PreValuationRing.iff_ideal_total
-  条件: [CommRing R]
+定理 _root_.PreValuation环.iff_ideal_total
+  条件: [交换环 R]
   证明: by
   classical
   refine ⟨fun _ => ⟨le_total⟩, fun H => PreValuationRing.iff_dvd_total.mpr ⟨fun a b => ?_⟩⟩
@@ -866,7 +866,7 @@ theorem dvd_total
 
 中文:
 定理 dvd_total
-  条件: [Semigroup R] [h : PreValuationRing R] (x y : R)
+  条件: [半群 R] [h : PreValuation环 R] (x y : R)
   结论: x ∣ y ∨ y ∣ x
   证明: (PreValuationRing.iff_dvd_total.mp h).total x y
 
@@ -891,7 +891,7 @@ theorem iff_dvd_total
 
 中文:
 定理 iff_dvd_total
-  结论: ValuationRing R ↔ @Std.Total R (· ∣ ·)
+  结论: 赋值环 R ↔ @Std.全 R (· ∣ ·)
   证明: Iff.trans (⟨fun inst => inst.toPreValuationRing, fun _ => .mk⟩)
     PreValuationRing.iff_dvd_total
 
@@ -912,7 +912,7 @@ theorem iff_ideal_total
 
 中文:
 定理 iff_ideal_total
-  结论: ValuationRing R ↔ @Std.Total (Ideal R) (· <= ·)
+  结论: 赋值环 R ↔ @Std.全 (理想 R) (· <= ·)
   证明: Iff.trans (⟨fun inst => inst.toPreValuationRing, fun _ => .mk⟩)
     PreValuationRing.iff_ideal_total
 
@@ -936,8 +936,8 @@ theorem unique_irreducible
 
 中文:
 定理 unique_irreducible
-  条件: [PreValuationRing R] ⦃p q
-  结论: R⦄ (hp : Irreducible p)
+  条件: [PreValuation环 R] ⦃p q
+  结论: R⦄ (hp : 不可约 p)
   证明: by
   have := dvd_total p q
   rw [Irreducible.dvd_comm hp hq]; rw [or_self_iff] at this
@@ -968,7 +968,7 @@ theorem iff_isInteger_or_isInteger
 ⟨s, eq_inv_of_mul_eq_one_left by r
 
 中文:
-定理 iff_isInteger_or_isInteger
+定理 iff_is整数eger_or_is整数eger
   证明: by
   constructor
   · intro H x
@@ -1015,8 +1015,8 @@ theorem isInteger_or_isInteger
   proof: (iff_isInteger_or_isInteger R K).mp h x
 
 中文:
-定理 isInteger_or_isInteger
-  条件: [h : ValuationRing R] (x : K)
+定理 is整数eger_or_is整数eger
+  条件: [h : 赋值环 R] (x : K)
   证明: (iff_isInteger_or_isInteger R K).mp h x
 
 Depends on / 依赖: iff_isInteger_or_isInteger
@@ -1063,7 +1063,7 @@ theorem iff_local_bezout_domain
 
 中文:
 定理 iff_local_bezout_domain
-  结论: ValuationRing R ↔ IsLocalRing R ∧ IsBezout R
+  结论: 赋值环 R ↔ 是局部环 R ∧ 是Bezout R
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => inferInstance⟩
 -/
 theorem iff_local_bezout_domain : ValuationRing R ↔ IsLocalRing R ∧ IsBezout R :=
@@ -1084,7 +1084,7 @@ theorem TFAE
 
 中文:
 定理 TFAE
-  条件: (R : 类型u) [CommRing R] [IsDomain R]
+  条件: (R : 类型u) [交换环 R] [是整环 R]
   证明: by
   tfae_have 1 ↔ 2 := iff_isInteger_or_isInteger R _
   tfae_have 1 ↔ 3 := iff_dvd_total
@@ -1117,8 +1117,8 @@ theorem _root_.Function.Surjective.preValuationRing
     exacts [⟨f c, Or.inl <| (map_mul _ _ _).symm⟩, ⟨f c, Or.inr <| (map_mul _ _ _).symm⟩]⟩
 
 中文:
-定理 _root_.Function.Surjective.preValuationRing
-  结论: {R S : 类型} [Mul R] [PreValuationRing R]
+定理 _root_.函数.满射.preValuationRing
+  结论: {R S : 类型} [乘法 R] [PreValuation环 R]
   证明: ⟨fun a b => by
     obtain ⟨⟨a, rfl⟩, ⟨b, rfl⟩⟩ := hf a, hf b
     obtain ⟨c, rfl | rfl⟩ := PreValuationRing.cond a b
@@ -1144,8 +1144,8 @@ theorem _root_.Function.Surjective.valuationRing
   .mk
 
 中文:
-定理 _root_.Function.Surjective.valuationRing
-  结论: {R S : 类型} [NonAssocSemiring R]
+定理 _root_.函数.满射.valuationRing
+  结论: {R S : 类型} [非结合半环 R]
   证明: have : PreValuationRing S := Function.Surjective.preValuationRing (R := R) f hf
   .mk
 
@@ -1178,7 +1178,7 @@ lemma _root_.isFractionRing_of_exists_eq_algebraMap_or_inv_eq_algebraMap_of_inje
   · refine ⟨⟨0, 1⟩, by simpa [h0, eq_comm] usi
 
 中文:
-引理 _root_.isFractionRing_of_exists_eq_algebraMap_or_inv_eq_algebraMap_of_injective
+引理 _root_.isFractionRing_of_存在_eq_algebraMap_or_inv_eq_algebraMap_of_injective
   证明: by
   have : IsDomain 𝒪 := hinj.isDomain
   have := (faithfulSMul_iff_algebraMap_injective ..).2 hinj
@@ -1219,8 +1219,8 @@ lemma _root_.Valuation.Integers.isFractionRing
     hv.eq_algebraMap_or_inv_eq_algebraMap hv.hom_inj
 
 中文:
-引理 _root_.Valuation.Integers.isFractionRing
-  条件: {v : Valuation K Γ} (hv : v.整数egers 𝒪)
+引理 _root_.赋值.整数egers.isFractionRing
+  条件: {v : 赋值 K Γ} (hv : v.整数egers 𝒪)
   证明: isFractionRing_of_exists_eq_algebraMap_or_inv_eq_algebraMap_of_injective
     hv.eq_algebraMap_or_inv_eq_algebraMap hv.hom_inj
 
@@ -1240,8 +1240,8 @@ instance instIsFractionRingInteger
   body: (Valuation.integer.integers v).isFractionRing
 
 中文:
-实例 instIsFractionRingInteger
-  签名: (v : Valuation K Γ)
+实例 instIsFractionRing整数eger
+  签名: (v : 赋值 K Γ)
   定义体: (Valuation.integer.integers v).isFractionRing
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers, isFractionRing
@@ -1267,7 +1267,7 @@ theorem of_integers
 
 中文:
 定理 of_integers
-  条件: (v : Valuation K Γ) (hh : v.整数egers 𝒪)
+  条件: (v : 赋值 K Γ) (hh : v.整数egers 𝒪)
   证明: hh.hom_inj.isDomain
     ValuationRing 𝒪 := by
   have := hh.hom_inj.isDomain
@@ -1302,8 +1302,8 @@ instance instValuationRingInteger
   body: of_integers (v := v) (Valuation.integer.integers v)
 
 中文:
-实例 instValuationRingInteger
-  签名: (v : Valuation K Γ)
+实例 instValuationRing整数eger
+  签名: (v : 赋值 K Γ)
   定义体: of_integers (v := v) (Valuation.integer.integers v)
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers, of_integers
@@ -1325,7 +1325,7 @@ theorem isFractionRing_iff
 
 中文:
 定理 isFractionRing_iff
-  条件: [IsDomain 𝒪] [ValuationRing 𝒪]
+  条件: [是整环 𝒪] [赋值环 𝒪]
   证明: by
   refine ⟨fun h => ⟨fun x => ?_, IsFractionRing.injective _ _⟩, fun h => ?_⟩
   · obtain (⟨a, e⟩ | ⟨a, e⟩) := isInteger_or_isInteger 𝒪 x

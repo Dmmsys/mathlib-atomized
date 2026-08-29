@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (LocallyConstant (∅ : Set (I -> 布尔)) 整数)
+  签名: 子单例 (局部常数 (∅ : 集合 (I -> 布尔值)) 整数)
   定义体: subsingleton_iff.mpr (fun _ _ => LocallyConstant.ext isEmptyElim)
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.ext, isEmptyElim, subsingleton_iff, subsingleton_iff.mpr
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty { l // Products.isGood (∅ : Set (I -> 布尔)) l }
+  签名: 是空 { l // Products.isGood (∅ : 集合 (I -> 布尔值)) l }
   定义体: isEmpty_iff.mpr fun ⟨l, hl⟩ => hl by
     rw [subsingleton_iff.mp inferInstance (Products.eval ∅ l) 0]
     exact Submodule.zero_mem _
@@ -83,7 +83,7 @@ theorem GoodProducts.linearIndependentEmpty
 
 中文:
 定理 GoodProducts.linearIndependentEmpty
-  条件: {I} [LinearOrder I]
+  条件: {I} [线性序 I]
   证明: linearIndependent_empty_type
 
 Depends on / 依赖: linearIndependent_empty_type
@@ -123,7 +123,7 @@ theorem Products.lt_nil_empty
 
 中文:
 定理 Products.lt_nil_empty
-  条件: {I} [LinearOrder I]
+  条件: {I} [线性序 I]
   结论: { m : Products I | m < Products.nil } = ∅
   证明: by
   ext ⟨m, hm⟩
@@ -153,7 +153,7 @@ theorem Products.isGood_nil
 
 中文:
 定理 Products.isGood_nil
-  条件: {I} [LinearOrder I]
+  条件: {I} [线性序 I]
   证明: by
   intro h
   simp [Products.eval, Products.nil] at h
@@ -182,7 +182,7 @@ theorem Products.span_nil_eq_top
 
 中文:
 定理 Products.span_nil_eq_top
-  条件: {I} [LinearOrder I]
+  条件: {I} [线性序 I]
   证明: by
   rw [Set.image_singleton]; rw [eq_top_iff]
   intro f _
@@ -227,7 +227,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique { l // Products.isGood ({fun _ => false} : Set (I -> 布尔)) l }
+  签名: 唯一 { l // Products.isGood ({fun _ => false} : 集合 (I -> 布尔值)) l }
   定义体: ⟨Products.nil, Products.isGood_nil⟩
   uniq := by
     intro ⟨⟨l, hl⟩, hll⟩
@@ -269,7 +269,7 @@ theorem GoodProducts.linearIndependentSingleton
 
 中文:
 定理 GoodProducts.linearIndependentSingleton
-  条件: {I} [LinearOrder I]
+  条件: {I} [线性序 I]
   证明: .of_subsingleton default by simp [eval, Products.eval, Products.nil, default]
 
 Depends on / 依赖: Products, Products.eval, Products.nil, of_subsingleton
@@ -325,7 +325,7 @@ definition smaller
 
 中文:
 定义 smaller
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: (πs C o) '' (range (π C (ord I · < o)))
 -/
 noncomputable def smaller (o : Ordinal) : Set (LocallyConstant C Int) :=
@@ -346,7 +346,7 @@ definition range_equiv_smaller_toFun
 
 中文:
 定义 range_equiv_smaller_toFun
-  签名: (o : Ordinal) (x : range (π C (ord I · < o)))
+  签名: (o : 序数) (x : range (π C (ord I · < o)))
   定义体: ⟨πs C o ↑x, x.val, x.property, rfl⟩
 
 Depends on / 依赖: property, x.property, x.val
@@ -372,7 +372,7 @@ theorem range_equiv_smaller_toFun_bijective
 
 中文:
 定理 range_equiv_smaller_toFun_bijective
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   证明: by
   dsimp +unfoldPartialApp [range_equiv_smaller_toFun]
   refine ⟨fun a b hab => ?_, fun ⟨a, b, hb⟩ => ?_⟩
@@ -409,7 +409,7 @@ definition range_equiv_smaller
 
 中文:
 定义 range_equiv_smaller
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: Equiv.ofBijective (range_equiv_smaller_toFun C o) (range_equiv_smaller_toFun_bijective C o)
 
 Depends on / 依赖: Equiv.ofBijective, ofBijective, range_equiv_smaller_toFun, range_equiv_smaller_toFun_bijective
@@ -427,7 +427,7 @@ theorem smaller_factorization
 
 中文:
 定理 smaller_factorization
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   证明: by rfl
 -/
 theorem smaller_factorization (o : Ordinal) :
@@ -447,7 +447,7 @@ theorem linearIndependent_iff_smaller
 
 中文:
 定理 linearIndependent_iff_smaller
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   证明: by
   rw [GoodProducts.linearIndependent_iff_range]; rw [← LinearMap.linearIndependent_iff (πs C o)
     (LinearMap.ker_eq_bot_of_injective (injective_πs _ _))]; rw [← smaller_factorization C o]
@@ -482,7 +482,7 @@ theorem smaller_mono
 
 中文:
 定理 smaller_mono
-  条件: {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
+  条件: {o₁ o₂ : 序数} (h : o₁ <= o₂)
   结论: smaller C o₁ subseteq smaller C o₂
   证明: by
   rintro f ⟨g, hg, rfl⟩

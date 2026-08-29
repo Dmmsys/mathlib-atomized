@@ -118,7 +118,7 @@ abbreviation IsZariskiLocalAtTarget
 
 中文:
 缩写 IsZariskiLocalAtTarget
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: P.IsLocalAtTarget Scheme.zariskiPrecoverage
 
 Depends on / 依赖: IsLocalAtTarget, P.IsLocalAtTarget, Scheme, Scheme.zariskiPrecoverage, zariskiPrecoverage
@@ -143,7 +143,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  结论: {P : Morphism命题erty Scheme} [P.RespectsIso]
+  结论: {P : MorphismProperty 概形} [P.RespectsIso]
   证明: by
   refine .mk_of_iff_of_zeroHypercover fun {X Y} f 𝒰 => ?_
   refine ⟨fun hf i => (P.arrow_mk_iso_iff (morphismRestrictOpensRange _ _)).mp (restrict _ _ hf),
@@ -176,7 +176,7 @@ lemma of_isPullback
 
 中文:
 引理 of_isPullback
-  结论: {UX UY : Scheme.{u}} {iY : UY ⟶ Y} [IsOpenImmersion iY]
+  结论: {UX UY : 概形.{u}} {iY : UY ⟶ Y} [是开浸入 iY]
   证明: MorphismProperty.IsLocalAtTarget.of_isPullback (Y.affineCover.add iY) .none h H
 
 Depends on / 依赖: IsLocalAtTarget, MorphismProperty, MorphismProperty.IsLocalAtTarget.of_isPullback, Y.affineCover.add, affineCover, of_isPullback
@@ -321,7 +321,7 @@ lemma of_range_subset_iSup
 
 中文:
 引理 of_range_subset_iSup
-  结论: [P.RespectsRight @IsOpenImmersion] {ι : 类型} (U : ι -> Y.Opens)
+  结论: [P.RespectsRight @是开浸入] {ι : 类型} (U : ι -> Y.Opens)
   证明: by
   let g : X ⟶ (⨆ i, U i : Y.Opens) := IsOpenImmersion.lift (Scheme.Opens.ι _) f (by simpa using H)
   rw [← IsOpenImmersion.lift_fac (⨆ i]; rw [U i).ι f (by simpa using H)]
@@ -363,7 +363,7 @@ lemma of_forall_exists_morphismRestrict
   simpa using ⟨x, hxU x⟩
 
 中文:
-引理 of_forall_exists_morphismRestrict
+引理 of_对任意_存在_morphismRestrict
   条件: (H : 对任意 x, 存在 U : Y.Opens, x in U ∧ P (f ∣_ U))
   结论: P f
   证明: by
@@ -393,7 +393,7 @@ lemma of_forall_source_exists_preimage
     exact P.of_postcomp (f ∣_ U x) (U x).ι (inferInstance : IsOpenImmersion _) (by simp [h₂])
 
 中文:
-引理 of_forall_source_exists_preimage
+引理 of_对任意_source_存在_preimage
   证明: by
   choose U h₁ h₂ using hX
   apply IsZariskiLocalAtTarget.of_range_subset_iSup U
@@ -435,7 +435,7 @@ lemma coprodMap
 
 中文:
 引理 coprodMap
-  条件: {X Y X' Y' : Scheme.{u}} (f : X ⟶ X') (g : Y ⟶ Y') (hf : P f) (hg : P g)
+  条件: {X Y X' Y' : 概形.{u}} (f : X ⟶ X') (g : Y ⟶ Y') (hf : P f) (hg : P g)
   证明: by
   refine IsZariskiLocalAtTarget.of_openCover (coprodOpenCover.{_, 0} _ _) ?_
   rintro (⟨⟨⟩⟩ | ⟨⟨⟩⟩)
@@ -472,7 +472,7 @@ abbreviation IsZariskiLocalAtSource
 
 中文:
 缩写 IsZariskiLocalAtSource
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: P.IsLocalAtSource Scheme.zariskiPrecoverage
 
 Depends on / 依赖: IsLocalAtSource, P.IsLocalAtSource, Scheme, Scheme.zariskiPrecoverage, zariskiPrecoverage
@@ -498,7 +498,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  结论: {P : Morphism命题erty Scheme} [P.RespectsIso]
+  结论: {P : MorphismProperty 概形} [P.RespectsIso]
   证明: by
   refine .mk_of_iff_of_zeroHypercover fun {X Y} f 𝒰 => ⟨fun hf i => ?_, fun hf => ?_⟩
   · rw [← IsOpenImmersion.isoOfRangeEq_hom_fac (𝒰.f i) (Scheme.Opens.ι _)
@@ -536,7 +536,7 @@ lemma comp
 
 中文:
 引理 comp
-  条件: {UX : Scheme.{u}} (H : P f) (i : UX ⟶ X) [IsOpenImmersion i]
+  条件: {UX : 概形.{u}} (H : P f) (i : UX ⟶ X) [是开浸入 i]
   证明: (P.iff_of_zeroHypercover_source (X.affineCover.add i)).mp H .none
 
 Depends on / 依赖: P.iff_of_zeroHypercover_source, X.affineCover.add, affineCover, iff_of_zeroHypercover_source
@@ -555,7 +555,7 @@ instance respectsLeft_isOpenImmersion
 
 中文:
 实例 respectsLeft_isOpenImmersion
-  签名: {P : Morphism命题erty Scheme}
+  签名: {P : MorphismProperty 概形}
   定义体: IsZariskiLocalAtSource.comp hf i
 
 Depends on / 依赖: IsZariskiLocalAtSource, IsZariskiLocalAtSource.comp
@@ -673,7 +673,7 @@ lemma of_isOpenImmersion
 
 中文:
 引理 of_isOpenImmersion
-  条件: [P.ContainsIdentities] [IsOpenImmersion f]
+  条件: [P.余ntainsIdentities] [是开浸入 f]
   结论: P f
   证明: Category.comp_id f ▸ comp (P.id_mem Y) f
 
@@ -701,7 +701,7 @@ lemma isZariskiLocalAtTarget
 
 中文:
 引理 isZariskiLocalAtTarget
-  结论: [P.IsMultiplicative]
+  结论: [P.是Multiplicative]
   证明: by
   refine .mk_of_iff_of_zeroHypercover fun {X Y} f 𝒰 => ⟨fun hf i => ?_, fun h => ?_⟩
   · apply hP _ (𝒰.f i)
@@ -739,7 +739,7 @@ lemma sigmaDesc
 
 中文:
 引理 sigmaDesc
-  结论: {X : Scheme.{u}} {ι : 类型v} [Small.{u} ι] {Y : ι -> Scheme.{u}}
+  结论: {X : 概形.{u}} {ι : 类型v} [Small.{u} ι] {Y : ι -> 概形.{u}}
   证明: by
   rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) (Scheme.IsLocallyDirected.openCover _)]
   exact fun i => by simp [hf]
@@ -788,7 +788,7 @@ lemma iff_exists_resLE
     exact MorphismProperty.RespectsRight.postcomp (Q := @IsO
 
 中文:
-引理 iff_exists_resLE
+引理 iff_存在_resLE
   结论: [IsZariskiLocalAtTarget P]
   证明: by
   refine ⟨fun hf x => ⟨⊤, ⊤, trivial, by simp, resLE _ hf⟩, fun hf => ?_⟩
@@ -849,7 +849,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {P Q : AffineTargetMorphism命题erty}
+  结论: {P Q : AffineTargetMorphismProperty}
   证明: by
   delta AffineTargetMorphismProperty; ext; exact H _
 
@@ -869,7 +869,7 @@ definition of
 
 中文:
 定义 of
-  签名: (P : Morphism命题erty Scheme)
+  签名: (P : MorphismProperty 概形)
   定义体: fun _ _ f _ => P f
 -/
 def of (P : MorphismProperty Scheme) : AffineTargetMorphismProperty :=
@@ -885,7 +885,7 @@ definition toProperty
 
 中文:
 定义 toProperty
-  签名: (P : AffineTargetMorphism命题erty)
+  签名: (P : AffineTargetMorphismProperty)
   定义体: fun _ _ f => exists h, @P _ _ f h
 -/
 def toProperty (P : AffineTargetMorphismProperty) :
@@ -902,7 +902,7 @@ theorem toProperty_apply
 
 中文:
 定理 toProperty_apply
-  结论: (P : AffineTargetMorphism命题erty)
+  结论: (P : AffineTargetMorphismProperty)
   证明: by
   delta AffineTargetMorphismProperty.toProperty; simp [*]
 
@@ -992,7 +992,7 @@ theorem respectsIso_mk
 
 中文:
 定理 respectsIso_mk
-  结论: {P : AffineTargetMorphism命题erty}
+  结论: {P : AffineTargetMorphismProperty}
   证明: by
   apply MorphismProperty.RespectsIso.mk
   · rintro X Y Z e f ⟨a, h⟩; exact ⟨a, h₁ e f h⟩
@@ -1047,12 +1047,12 @@ class IsLocal
     - of_basicOpenCover : forall {X Y : Scheme} [IsAffine Y] (f : X ⟶ Y) (s : Finset Γ(Y, ⊤)) (_ : Ideal.span (s : Set Γ(Y, ⊤)) = ⊤), (forall r : s, P (f ∣_ Y.basicOpen r.1)) -> P f
 
 中文:
-类 IsLocal
-  参数: (P : AffineTargetMorphism命题erty)
+类 是Local
+  参数: (P : AffineTargetMorphismProperty)
   公理与运算 (3 个):
-    - respectsIso : P.to命题erty.RespectsIso
-    - to_basicOpen : 对任意 {X Y : Scheme} [IsAffine Y] (f : X ⟶ Y) (r : Γ(Y, ⊤)), P f -> P (f ∣_ Y.basicOpen r)
-    - of_basicOpenCover : 对任意 {X Y : Scheme} [IsAffine Y] (f : X ⟶ Y) (s : Finset Γ(Y, ⊤)) (_ : Ideal.span (s : Set Γ(Y, ⊤)) = ⊤), (对任意 r : s, P (f ∣_ Y.basicOpen r.1)) -> P f
+    - respectsIso : P.toProperty.RespectsIso
+    - to_basicOpen : 对任意 {X Y : 概形} [是仿射 Y] (f : X ⟶ Y) (r : Γ(Y, ⊤)), P f -> P (f ∣_ Y.basicOpen r)
+    - of_basicOpenCover : 对任意 {X Y : 概形} [是仿射 Y] (f : X ⟶ Y) (s : 有限集 Γ(Y, ⊤)) (_ : 理想.span (s : 集合 Γ(Y, ⊤)) = ⊤), (对任意 r : s, P (f ∣_ Y.basicOpen r.1)) -> P f
 -/
 class IsLocal (P : AffineTargetMorphismProperty) : Prop where
   /-- `P` as a morphism property respects isomorphisms -/
@@ -1086,8 +1086,8 @@ definition IsStableUnderBaseChange
     {f' : Z ⟶ Y} {g' : Z ⟶ X}, IsPullback g' f' f g -> P g -> P g'
 
 中文:
-定义 IsStableUnderBaseChange
-  签名: (P : AffineTargetMorphism命题erty)
+定义 是StableUnderBaseChange
+  签名: (P : AffineTargetMorphismProperty)
   定义体: forall ⦃Z X Y S : Scheme⦄ [IsAffine S] [IsAffine X] {f : X ⟶ S} {g : Y ⟶ S}
     {f' : Z ⟶ Y} {g' : Z ⟶ X}, IsPullback g' f' f g -> P g -> P g'
 
@@ -1109,8 +1109,8 @@ lemma IsStableUnderBaseChange.mk
   exact H f g hg
 
 中文:
-引理 IsStableUnderBaseChange.mk
-  结论: (P : AffineTargetMorphism命题erty) [P.to命题erty.RespectsIso]
+引理 是StableUnderBaseChange.mk
+  结论: (P : AffineTargetMorphismProperty) [P.toProperty.RespectsIso]
   证明: by
   intro Z X Y S _ _ f g f' g' h hg
   rw [← P.cancel_left_of_respectsIso h.isoPullback.inv]; rw [h.isoPullback_inv_fst]
@@ -1139,7 +1139,7 @@ definition targetAffineLocally
 
 中文:
 定义 targetAffineLocally
-  签名: (P : AffineTargetMorphism命题erty)
+  签名: (P : AffineTargetMorphismProperty)
   定义体: fun {X Y : Scheme} (f : X ⟶ Y) => forall U : Y.affineOpens, P (f ∣_ U)
 
 Depends on / 依赖: Scheme, Y.affineOpens, affineOpens
@@ -1199,10 +1199,10 @@ class HasAffineProperty
     - eq_targetAffineLocally' : P = targetAffineLocally Q
 
 中文:
-类 HasAffineProperty
-  参数: (P : Morphism命题erty Scheme)
+类 有AffineProperty
+  参数: (P : MorphismProperty 概形)
   公理与运算 (2 个):
-    - isLocal_affineProperty : Q.IsLocal
+    - isLocal_affineProperty : Q.是Local
     - eq_targetAffineLocally' : P = targetAffineLocally Q
 -/
 class HasAffineProperty (P : MorphismProperty Scheme)
@@ -1254,7 +1254,7 @@ lemma of_isZariskiLocalAtTarget
 
 中文:
 引理 of_isZariskiLocalAtTarget
-  结论: (P : Morphism命题erty Scheme.{u})
+  结论: (P : MorphismProperty 概形.{u})
   证明: inferInstance
   eq_targetAffineLocally' := by
     ext X Y f
@@ -1289,7 +1289,7 @@ lemma copy
 
 中文:
 引理 copy
-  结论: {P P'} {Q Q'} [HasAffine命题erty P Q]
+  结论: {P P'} {Q Q'} [有AffineProperty P Q]
   证明: e' ▸ isLocal_affineProperty P
   eq_targetAffineLocally' := e' ▸ e.symm ▸ eq_targetAffineLocally P
 
@@ -1313,7 +1313,7 @@ theorem of_isPullback
 
 中文:
 定理 of_isPullback
-  结论: {UX UY : Scheme.{u}} [IsAffine UY] {iY : UY ⟶ Y} [IsOpenImmersion iY]
+  结论: {UX UY : 概形.{u}} [是仿射 UY] {iY : UY ⟶ Y} [是开浸入 iY]
   证明: letI := isLocal_affineProperty P
   of_targetAffineLocally_of_isPullback h (eq_targetAffineLocally (P := P) ▸ hf)
 
@@ -1462,7 +1462,7 @@ theorem iff_of_openCover
 
 中文:
 定理 iff_of_openCover
-  条件: (𝒰 : Y.OpenCover) [对任意 i, IsAffine (𝒰.X i)]
+  条件: (𝒰 : Y.OpenCover) [对任意 i, 是仿射 (𝒰.X i)]
   证明: by
   let := isLocal_affineProperty P
   rw [iff_of_iSup_eq_top (P := P)
@@ -1496,7 +1496,7 @@ theorem iff_of_isAffine
 
 中文:
 定理 iff_of_isAffine
-  条件: [IsAffine Y]
+  条件: [是仿射 Y]
   结论: P f ↔ Q f
   证明: by
   let := isLocal_affineProperty P
@@ -1545,7 +1545,7 @@ theorem iff
 
 中文:
 定理 iff
-  条件: {P : Morphism命题erty Scheme} {Q : AffineTargetMorphism命题erty}
+  条件: {P : MorphismProperty 概形} {Q : AffineTargetMorphismProperty}
   证明: ⟨fun _ => ⟨inferInstance, ext fun _ _ _ => iff_of_isAffine.symm⟩,
     fun ⟨_, e⟩ => e ▸ of_isZariskiLocalAtTarget P⟩
 -/
@@ -1571,7 +1571,7 @@ theorem pullback_fst_of_right
 
 中文:
 定理 pullback_fst_of_right
-  结论: (hP' : Q.IsStableUnderBaseChange)
+  结论: (hP' : Q.是StableUnderBaseChange)
   证明: by
   let := isLocal_affineProperty P
   rw [iff_of_openCover (P := P) X.affineCover]
@@ -1610,7 +1610,7 @@ theorem isStableUnderBaseChange
 
 中文:
 定理 isStableUnderBaseChange
-  条件: (hP' : Q.IsStableUnderBaseChange)
+  条件: (hP' : Q.是StableUnderBaseChange)
   证明: MorphismProperty.IsStableUnderBaseChange.mk'
     (fun X Y S f g _ H => by
       rw [P.iff_of_zeroHypercover_target (S.affineCover.pullback₁ f)]
@@ -1702,7 +1702,7 @@ lemma hasOfPostcompProperty_isOpenImmersion_of_morphismRestrict
 
 中文:
 引理 hasOfPostcompProperty_isOpenImmersion_of_morphismRestrict
-  结论: (P : Morphism命题erty Scheme)
+  结论: (P : MorphismProperty 概形)
   证明: by
     have : (f ≫ g) ⁻¹ᵁ g.opensRange = ⊤ := by simp
     have : f = X.topIso.inv ≫ (X.isoOfEq this).inv ≫ (f ≫ g) ∣_ g.opensRange ≫

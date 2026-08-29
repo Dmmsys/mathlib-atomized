@@ -171,7 +171,7 @@ lemma toProd_injective
 
 中文:
 引理 toProd_injective
-  结论: (toProd : Unitization R A -> R × A).Injective
+  结论: (toProd : Unitization R A -> R × A).单射
   证明: equiv.injective
 
 Depends on / 依赖: equiv.injective, injective
@@ -189,7 +189,7 @@ lemma toProd_surjective
 
 中文:
 引理 toProd_surjective
-  结论: (toProd : Unitization R A -> R × A).Surjective
+  结论: (toProd : Unitization R A -> R × A).满射
   证明: equiv.surjective
 
 Depends on / 依赖: equiv.surjective, surjective
@@ -207,7 +207,7 @@ lemma toProd_bijective
 
 中文:
 引理 toProd_bijective
-  结论: (toProd : Unitization R A -> R × A).Bijective
+  结论: (toProd : Unitization R A -> R × A).双射
   证明: equiv.bijective
 
 Depends on / 依赖: bijective, equiv.bijective
@@ -225,7 +225,7 @@ lemma mk_injective
 
 中文:
 引理 mk_injective
-  结论: (mk : R × A -> Unitization R A).Injective
+  结论: (mk : R × A -> Unitization R A).单射
   证明: equiv.symm.injective
 
 Depends on / 依赖: equiv.symm.injective, injective
@@ -243,7 +243,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: (mk : R × A -> Unitization R A).Surjective
+  结论: (mk : R × A -> Unitization R A).满射
   证明: equiv.symm.surjective
 
 Depends on / 依赖: equiv.symm.surjective, surjective
@@ -263,7 +263,7 @@ lemma mk_bijective
 
 中文:
 引理 mk_bijective
-  结论: (mk : R × A -> Unitization R A).Bijective
+  结论: (mk : R × A -> Unitization R A).双射
   证明: equiv.symm.bijective
 
 @[simp]
@@ -304,7 +304,7 @@ definition inl
 
 中文:
 定义 inl
-  签名: [Zero A] (r : R)
+  签名: [零 A] (r : R)
   定义体: mk (r, 0)
 -/
 def inl [Zero A] (r : R) : Unitization R A :=
@@ -322,7 +322,7 @@ definition inr
 
 中文:
 定义 inr
-  签名: [Zero R] (a : A)
+  签名: [零 R] (a : A)
   定义体: mk (0, a)
 -/
 def inr [Zero R] (a : A) : Unitization R A :=
@@ -337,7 +337,7 @@ instance [Zero
   body: inr
 
 中文:
-实例 [Zero
+实例 [零
   签名: R] : Coe A (Unitization R A) where
   定义体: inr
 -/
@@ -362,7 +362,7 @@ theorem fst_inl
 
 中文:
 定理 fst_inl
-  条件: [Zero A] (r : R)
+  条件: [零 A] (r : R)
   结论: (inl r : Unitization R A).fst = r
   证明: rfl
 
@@ -383,7 +383,7 @@ theorem snd_inl
 
 中文:
 定理 snd_inl
-  条件: [Zero A] (r : R)
+  条件: [零 A] (r : R)
   结论: (inl r : Unitization R A).snd = 0
   证明: rfl
 -/
@@ -410,7 +410,7 @@ theorem fst_inr
 
 中文:
 定理 fst_inr
-  条件: [Zero R] (a : A)
+  条件: [零 R] (a : A)
   结论: (a : Unitization R A).fst = 0
   证明: rfl
 
@@ -431,7 +431,7 @@ theorem snd_inr
 
 中文:
 定理 snd_inr
-  条件: [Zero R] (a : A)
+  条件: [零 R] (a : A)
   结论: (a : Unitization R A).snd = a
   证明: rfl
 -/
@@ -451,8 +451,8 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  条件: [Zero A]
-  结论: Function.Injective (inl : R -> Unitization R A)
+  条件: [零 A]
+  结论: 函数.单射 (inl : R -> Unitization R A)
   证明: Function.LeftInverse.injective (g := Prod.fst ∘ toProd) fst_inl _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, Prod.fst, fst_inl, injective, toProd
@@ -471,8 +471,8 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  条件: [Zero R]
-  结论: Function.Injective ((↑) : A -> Unitization R A)
+  条件: [零 R]
+  结论: 函数.单射 ((↑) : A -> Unitization R A)
   证明: Function.LeftInverse.injective (g := Prod.snd ∘ toProd) snd_inr _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, Prod.snd, injective, snd_inr, toProd
@@ -490,7 +490,7 @@ theorem inr_inj
 
 中文:
 定理 inr_inj
-  条件: [Zero R] {x y : A}
+  条件: [零 R] {x y : A}
   证明: inr_injective.eq_iff
 -/
 @[simp, norm_cast] theorem inr_inj [Zero R] {x y : A} :
@@ -506,7 +506,7 @@ theorem inl_inj
 
 中文:
 定理 inl_inj
-  条件: [Zero A] {x y : R}
+  条件: [零 A] {x y : R}
   证明: inl_injective.eq_iff
 -/
 @[simp] theorem inl_inj [Zero A] {x y : R} :
@@ -523,7 +523,7 @@ instance instNontrivialLeft
 
 中文:
 实例 instNontrivialLeft
-  签名: {𝕜 A} [Nontrivial 𝕜] [Nonempty A]
+  签名: {𝕜 A} [非平凡 𝕜] [非空 A]
   定义体: equiv.nontrivial
 
 Depends on / 依赖: equiv.nontrivial, nontrivial
@@ -542,7 +542,7 @@ instance instNontrivialRight
 
 中文:
 实例 instNontrivialRight
-  签名: {𝕜 A} [Nonempty 𝕜] [Nontrivial A]
+  签名: {𝕜 A} [非空 𝕜] [非平凡 A]
   定义体: equiv.nontrivial
 
 Depends on / 依赖: equiv.nontrivial, nontrivial
@@ -572,7 +572,7 @@ instance instCanLift
 
 中文:
 实例 instCanLift
-  签名: [Zero R]
+  签名: [零 R]
   定义体: ⟨x.snd, Unitization.ext (hx ▸ fst_inr R x.snd) rfl⟩
 
 Depends on / 依赖: Unitization, Unitization.ext, fst_inr, x.snd
@@ -590,7 +590,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited R] [Inhabited A]
+  签名: [可居 R] [可居 A]
   定义体: equiv.inhabited
 
 Depends on / 依赖: equiv.inhabited, inhabited
@@ -608,7 +608,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero R] [Zero A]
+  签名: [零 R] [零 A]
   定义体: equiv.zero
 
 Depends on / 依赖: equiv.zero
@@ -626,7 +626,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [Add R] [Add A]
+  签名: [加法 R] [加法 A]
   定义体: equiv.add
 
 Depends on / 依赖: equiv.add
@@ -644,7 +644,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [Sub R] [Sub A]
+  签名: [减法 R] [减法 A]
   定义体: equiv.sub
 
 Depends on / 依赖: equiv.sub
@@ -662,7 +662,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [Neg R] [Neg A]
+  签名: [取负 R] [取负 A]
   定义体: equiv.Neg
 
 Depends on / 依赖: equiv.Neg
@@ -680,7 +680,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul S R] [SMul S A]
+  签名: [标量乘法 S R] [标量乘法 S A]
   定义体: equiv.smul S
 
 Depends on / 依赖: equiv.smul
@@ -698,7 +698,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: [AddSemigroup R] [AddSemigroup A]
+  签名: [加法半群 R] [加法半群 A]
   定义体: fast_instance% equiv.addSemigroup
 
 Depends on / 依赖: addSemigroup, equiv.addSemigroup, fast_instance
@@ -716,7 +716,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: [AddZeroClass R] [AddZeroClass A]
+  签名: [加法零类 R] [加法零类 A]
   定义体: fast_instance% equiv.addZeroClass
 
 Depends on / 依赖: addZeroClass, equiv.addZeroClass, fast_instance
@@ -734,7 +734,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid R] [AddMonoid A]
+  签名: [加法幺半群 R] [加法幺半群 A]
   定义体: fast_instance% equiv.addMonoid
 
 Depends on / 依赖: addMonoid, equiv.addMonoid, fast_instance
@@ -752,7 +752,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: [AddGroup R] [AddGroup A]
+  签名: [加法群 R] [加法群 A]
   定义体: fast_instance% equiv.addGroup
 
 Depends on / 依赖: addGroup, equiv.addGroup, fast_instance
@@ -770,7 +770,7 @@ instance instAddCommSemigroup
 
 中文:
 实例 instAddCommSemigroup
-  签名: [AddCommSemigroup R] [AddCommSemigroup A]
+  签名: [加法交换半群 R] [加法交换半群 A]
   定义体: fast_instance% equiv.addCommSemigroup
 
 Depends on / 依赖: addCommSemigroup, equiv.addCommSemigroup, fast_instance
@@ -789,7 +789,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid R] [AddCommMonoid A]
+  签名: [加法交换幺半群 R] [加法交换幺半群 A]
   定义体: fast_instance% equiv.addCommMonoid
 
 Depends on / 依赖: addCommMonoid, equiv.addCommMonoid, fast_instance
@@ -809,7 +809,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup R] [AddCommGroup A]
+  签名: [加法交换群 R] [加法交换群 A]
   定义体: fast_instance% equiv.addCommGroup
 
 @[simp]
@@ -833,7 +833,7 @@ theorem toProd_zero
 
 中文:
 定理 toProd_zero
-  条件: [Zero R] [Zero A]
+  条件: [零 R] [零 A]
   结论: (0 : Unitization R A).toProd = 0
   证明: rfl
 
@@ -855,7 +855,7 @@ theorem toProd_add
 
 中文:
 定理 toProd_add
-  条件: [Add R] [Add A] (x₁ x₂ : Unitization R A)
+  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
   证明: rfl
 
 @[simp]
@@ -878,7 +878,7 @@ theorem toProd_neg
 
 中文:
 定理 toProd_neg
-  条件: [Neg R] [Neg A] (x : Unitization R A)
+  条件: [取负 R] [取负 A] (x : Unitization R A)
   结论: (-x).toProd = -x.toProd
   证明: rfl
 
@@ -898,7 +898,7 @@ theorem toProd_smul
 
 中文:
 定理 toProd_smul
-  条件: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
+  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
   证明: rfl
 -/
 theorem toProd_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) :
@@ -915,7 +915,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMul T S]
+  签名: [标量乘法 T R] [标量乘法 T A] [标量乘法 S R] [标量乘法 S A] [标量乘法 T S]
   定义体: equiv.isScalarTower T S
 
 Depends on / 依赖: equiv.isScalarTower, isScalarTower
@@ -934,7 +934,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMulCommClass T S R]
+  签名: [标量乘法 T R] [标量乘法 T A] [标量乘法 S R] [标量乘法 S A] [标量交换类 T S R]
   定义体: equiv.smulCommClass T S
 
 Depends on / 依赖: equiv.smulCommClass, smulCommClass
@@ -953,7 +953,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul S R] [SMul S A] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ A] [IsCentralScalar S R]
+  签名: [标量乘法 S R] [标量乘法 S A] [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ A] [中心标量 S R]
   定义体: equiv.isCentralScalar S
 
 Depends on / 依赖: equiv.isCentralScalar, isCentralScalar
@@ -972,7 +972,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid S] [MulAction S R] [MulAction S A]
+  签名: [幺半群 S] [乘法作用 S R] [乘法作用 S A]
   定义体: fast_instance% equiv.mulAction S
 
 Depends on / 依赖: equiv.mulAction, fast_instance, mulAction
@@ -990,7 +990,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid S] [AddMonoid R] [AddMonoid A] [DistribMulAction S R]
+  签名: [幺半群 S] [加法幺半群 R] [加法幺半群 A] [分配乘法作用 S R]
   定义体: fast_instance% equiv.distribMulAction S
 
 Depends on / 依赖: distribMulAction, equiv.distribMulAction, fast_instance
@@ -1009,7 +1009,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A]
+  签名: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [模 S R] [模 S A]
   定义体: fast_instance% equiv.module S
 
 Depends on / 依赖: equiv.module, fast_instance, module
@@ -1032,7 +1032,7 @@ definition addEquiv
 
 中文:
 定义 addEquiv
-  签名: [Add R] [Add A]
+  签名: [加法 R] [加法 A]
   定义体: equiv
   map_add' _ _ := rfl
 -/
@@ -1052,7 +1052,7 @@ lemma toEquiv_addEquiv
 
 中文:
 引理 toEquiv_addEquiv
-  条件: [Add R] [Add A]
+  条件: [加法 R] [加法 A]
   结论: (addEquiv R A).toEquiv = equiv
   证明: rfl
 -/
@@ -1075,7 +1075,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A]
+  签名: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [模 S R] [模 S A]
   定义体: addEquiv R A
   map_smul' _ _ := rfl
 
@@ -1101,7 +1101,7 @@ lemma toAddEquiv_linearEquiv
 
 中文:
 引理 toAddEquiv_linearEquiv
-  结论: [Semiring S] [AddCommMonoid R] [AddCommMonoid A]
+  结论: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A]
   证明: rfl
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem fst_zero
 
 中文:
 定理 fst_zero
-  条件: [Zero R] [Zero A]
+  条件: [零 R] [零 A]
   结论: (0 : Unitization R A).fst = 0
   证明: rfl
 
@@ -1147,7 +1147,7 @@ theorem snd_zero
 
 中文:
 定理 snd_zero
-  条件: [Zero R] [Zero A]
+  条件: [零 R] [零 A]
   结论: (0 : Unitization R A).snd = 0
   证明: rfl
 
@@ -1170,7 +1170,7 @@ theorem fst_add
 
 中文:
 定理 fst_add
-  条件: [Add R] [Add A] (x₁ x₂ : Unitization R A)
+  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
   结论: (x₁ + x₂).fst = x₁.fst + x₂.fst
   证明: rfl
 
@@ -1193,7 +1193,7 @@ theorem snd_add
 
 中文:
 定理 snd_add
-  条件: [Add R] [Add A] (x₁ x₂ : Unitization R A)
+  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
   结论: (x₁ + x₂).snd = x₁.snd + x₂.snd
   证明: rfl
 
@@ -1216,7 +1216,7 @@ theorem fst_neg
 
 中文:
 定理 fst_neg
-  条件: [Neg R] [Neg A] (x : Unitization R A)
+  条件: [取负 R] [取负 A] (x : Unitization R A)
   结论: (-x).fst = -x.fst
   证明: rfl
 
@@ -1239,7 +1239,7 @@ theorem snd_neg
 
 中文:
 定理 snd_neg
-  条件: [Neg R] [Neg A] (x : Unitization R A)
+  条件: [取负 R] [取负 A] (x : Unitization R A)
   结论: (-x).snd = -x.snd
   证明: rfl
 
@@ -1262,7 +1262,7 @@ theorem fst_smul
 
 中文:
 定理 fst_smul
-  条件: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
+  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
   结论: (s • x).fst = s • x.fst
   证明: rfl
 
@@ -1283,7 +1283,7 @@ theorem snd_smul
 
 中文:
 定理 snd_smul
-  条件: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
+  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
   结论: (s • x).snd = s • x.snd
   证明: rfl
 -/
@@ -1308,7 +1308,7 @@ theorem inl_zero
 
 中文:
 定理 inl_zero
-  条件: [Zero R] [Zero A]
+  条件: [零 R] [零 A]
   结论: (inl 0 : Unitization R A) = 0
   证明: rfl
 
@@ -1330,7 +1330,7 @@ theorem inl_add
 
 中文:
 定理 inl_add
-  条件: [Add R] [AddZeroClass A] (r₁ r₂ : R)
+  条件: [加法 R] [加法零类 A] (r₁ r₂ : R)
   证明: Unitization.ext rfl (add_zero 0).symm
 
 @[simp]
@@ -1355,7 +1355,7 @@ theorem inl_neg
 
 中文:
 定理 inl_neg
-  条件: [Neg R] [AddGroup A] (r : R)
+  条件: [取负 R] [加法群 A] (r : R)
   结论: (inl (-r) : Unitization R A) = -inl r
   证明: Unitization.ext rfl neg_zero.symm
 
@@ -1379,7 +1379,7 @@ theorem inl_sub
 
 中文:
 定理 inl_sub
-  条件: [AddGroup R] [AddGroup A] (r₁ r₂ : R)
+  条件: [加法群 R] [加法群 A] (r₁ r₂ : R)
   证明: Unitization.ext rfl (sub_zero 0).symm
 
 @[simp]
@@ -1401,7 +1401,7 @@ theorem inl_smul
 
 中文:
 定理 inl_smul
-  条件: [Zero A] [SMul S R] [SMulZeroClass S A] (s : S) (r : R)
+  条件: [零 A] [标量乘法 S R] [SMulZero类 S A] (s : S) (r : R)
   证明: Unitization.ext rfl (smul_zero s).symm
 
 Depends on / 依赖: Unitization, Unitization.ext, smul_zero
@@ -1430,7 +1430,7 @@ theorem inr_zero
 
 中文:
 定理 inr_zero
-  条件: [Zero R] [Zero A]
+  条件: [零 R] [零 A]
   结论: ↑(0 : A) = (0 : Unitization R A)
   证明: rfl
 
@@ -1453,7 +1453,7 @@ theorem inr_add
 
 中文:
 定理 inr_add
-  条件: [AddZeroClass R] [Add A] (m₁ m₂ : A)
+  条件: [加法零类 R] [加法 A] (m₁ m₂ : A)
   结论: (↑(m₁ + m₂) : Unitization R A) = m₁ + m₂
   证明: Unitization.ext (add_zero 0).symm rfl
 
@@ -1478,7 +1478,7 @@ theorem inr_neg
 
 中文:
 定理 inr_neg
-  条件: [AddGroup R] [Neg A] (m : A)
+  条件: [加法群 R] [取负 A] (m : A)
   结论: (↑(-m) : Unitization R A) = -m
   证明: Unitization.ext neg_zero.symm rfl
 
@@ -1503,7 +1503,7 @@ theorem inr_sub
 
 中文:
 定理 inr_sub
-  条件: [AddGroup R] [AddGroup A] (m₁ m₂ : A)
+  条件: [加法群 R] [加法群 A] (m₁ m₂ : A)
   结论: (↑(m₁ - m₂) : Unitization R A) = m₁ - m₂
   证明: Unitization.ext (sub_zero 0).symm rfl
 
@@ -1525,7 +1525,7 @@ theorem inr_smul
 
 中文:
 定理 inr_smul
-  条件: [Zero R] [SMulZeroClass S R] [SMul S A] (r : S) (m : A)
+  条件: [零 R] [SMulZero类 S R] [标量乘法 S A] (r : S) (m : A)
   证明: Unitization.ext (smul_zero _).symm rfl
 
 Depends on / 依赖: Unitization, Unitization.ext, smul_zero
@@ -1546,7 +1546,7 @@ theorem inl_fst_add_inr_snd_eq
 
 中文:
 定理 inl_fst_add_inr_snd_eq
-  条件: [AddZeroClass R] [AddZeroClass A] (x : Unitization R A)
+  条件: [加法零类 R] [加法零类 A] (x : Unitization R A)
   证明: Unitization.ext (add_zero x.fst) (zero_add x.snd)
 
 Depends on / 依赖: Unitization, Unitization.ext, add_zero, x.fst, x.snd, zero_add
@@ -1572,7 +1572,7 @@ theorem ind
 
 中文:
 定理 ind
-  结论: {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitization R A -> 命题}
+  结论: {R A} [加法零类 R] [加法零类 A] {P : Unitization R A -> 命题}
   证明: inl_fst_add_inr_snd_eq x ▸ inl_add_inr x.fst x.snd
 
 @[ext]
@@ -1595,7 +1595,7 @@ theorem linearMap_ext
 
 中文:
 定理 linearMap_ext
-  结论: {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
+  结论: {N} [交换半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [加法交换幺半群 N]
   证明: .injective (linearEquiv S R A).arrowCongr (.refl ..)
     LinearMap.prod_ext (LinearMap.ext hl) (LinearMap.ext hr)
 
@@ -1649,7 +1649,7 @@ lemma inrHom_injective
 
 中文:
 引理 inrHom_injective
-  结论: Function.Injective (inrHom S R A)
+  结论: 函数.单射 (inrHom S R A)
   证明: Unitization.inr_injective
 
 Depends on / 依赖: Unitization, Unitization.inr_injective, inr_injective
@@ -1702,7 +1702,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One R] [Zero A]
+  签名: [幺 R] [零 A]
   定义体: ⟨.mk (1, 0)⟩
 -/
 instance instOne [One R] [Zero A] : One (Unitization R A) :=
@@ -1720,7 +1720,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul R] [Add A] [Mul A] [SMul R A]
+  签名: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A]
   定义体: ⟨fun x y => .mk (x.fst * y.fst, x.fst • y.snd + y.fst • x.snd + x.snd * y.snd)⟩
 
 @[simp]
@@ -1744,7 +1744,7 @@ theorem fst_one
 
 中文:
 定理 fst_one
-  条件: [One R] [Zero A]
+  条件: [幺 R] [零 A]
   结论: (1 : Unitization R A).fst = 1
   证明: rfl
 
@@ -1767,7 +1767,7 @@ theorem snd_one
 
 中文:
 定理 snd_one
-  条件: [One R] [Zero A]
+  条件: [幺 R] [零 A]
   结论: (1 : Unitization R A).snd = 0
   证明: rfl
 
@@ -1789,7 +1789,7 @@ theorem fst_mul
 
 中文:
 定理 fst_mul
-  条件: [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A)
+  条件: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A] (x₁ x₂ : Unitization R A)
   证明: rfl
 
 @[simp]
@@ -1809,7 +1809,7 @@ theorem snd_mul
 
 中文:
 定理 snd_mul
-  条件: [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A)
+  条件: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A] (x₁ x₂ : Unitization R A)
   证明: rfl
 -/
 theorem snd_mul [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A) :
@@ -1834,7 +1834,7 @@ theorem inl_one
 
 中文:
 定理 inl_one
-  条件: [One R] [Zero A]
+  条件: [幺 R] [零 A]
   结论: (inl 1 : Unitization R A) = 1
   证明: rfl
 
@@ -1854,7 +1854,7 @@ theorem inl_mul
 
 中文:
 定理 inl_mul
-  条件: [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R)
+  条件: [乘法 R] [非幺非结合半环 A] [SMulZero类 R A] (r₁ r₂ : R)
   证明: Unitization.ext rfl by simp
 
 Depends on / 依赖: Unitization, Unitization.ext
@@ -1873,7 +1873,7 @@ theorem inl_mul_inl
 
 中文:
 定理 inl_mul_inl
-  条件: [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R)
+  条件: [乘法 R] [非幺非结合半环 A] [SMulZero类 R A] (r₁ r₂ : R)
   证明: (inl_mul A r₁ r₂).symm
 
 Depends on / 依赖: inl_mul
@@ -1899,7 +1899,7 @@ theorem inr_mul
 
 中文:
 定理 inr_mul
-  条件: [MulZeroClass R] [AddZeroClass A] [Mul A] [SMulWithZero R A] (a₁ a₂ : A)
+  条件: [乘零类 R] [加法零类 A] [乘法 A] [带零标量乘法 R A] (a₁ a₂ : A)
   证明: Unitization.ext (mul_zero _).symm by simp
 
 Depends on / 依赖: Unitization, Unitization.ext, mul_zero
@@ -1923,7 +1923,7 @@ theorem inl_mul_inr
 
 中文:
 定理 inl_mul_inr
-  结论: [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
+  结论: [乘零类 R] [非幺非结合半环 A] [SMulZero类 R A] (r : R)
   证明: Unitization.ext (mul_zero r) by simp
 
 @[norm_cast]
@@ -1945,7 +1945,7 @@ theorem inr_mul_inl
 
 中文:
 定理 inr_mul_inl
-  结论: [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
+  结论: [乘零类 R] [非幺非结合半环 A] [SMulZero类 R A] (r : R)
   证明: Unitization.ext (zero_mul r) by simp
 
 Depends on / 依赖: Unitization, Unitization.ext, zero_mul
@@ -1967,7 +1967,7 @@ mul_one x := Unitization.ext (mul_one x.fst) by simp }
 
 中文:
 实例 instMulOneClass
-  签名: [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
+  签名: [幺半群 R] [非幺非结合半环 A] [分配乘法作用 R A]
   定义体: fast_instance%
   { Unitization.instOne, Unitization.instMul with
 one_mul x := Unitization.ext (one_mul x.fst) by simp
@@ -2000,7 +2000,7 @@ right
 
 中文:
 实例 instNonAssocSemiring
-  签名: [Semiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: [半环 R] [非幺非结合半环 A] [模 R A]
   定义体: fast_instance%
   { Unitization.instMulOneClass,
     Unitization.instAddCommMonoid with
@@ -2042,7 +2042,7 @@ mul_assoc x y z := Unitization.ext (mul_assoc ..) by
 
 中文:
 实例 instMonoid
-  签名: [CommMonoid R] [NonUnitalSemiring A] [DistribMulAction R A]
+  签名: [交换幺半群 R] [非幺半环 A] [分配乘法作用 R A]
   定义体: fast_instance%
   { Unitization.instMulOneClass with
 mul_assoc x y z := Unitization.ext (mul_assoc ..) by
@@ -2073,7 +2073,7 @@ mul_comm _ _ := Unitization.ext (mul_comm ..) by simp [add_comm, mul_comm] }
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid R] [NonUnitalCommSemiring A] [DistribMulAction R A]
+  签名: [交换幺半群 R] [非幺交换半环 A] [分配乘法作用 R A]
   定义体: fast_instance%
   { Unitization.instMonoid with
 mul_comm _ _ := Unitization.ext (mul_comm ..) by simp [add_comm, mul_comm] }
@@ -2097,7 +2097,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [CommSemiring R] [NonUnitalSemiring A] [Module R A] [IsScalarTower R A A]
+  签名: [交换半环 R] [非幺半环 A] [模 R A] [标量塔 R A A]
   定义体: fast_instance%
   { Unitization.instMonoid, Unitization.instNonAssocSemiring with }
 
@@ -2119,7 +2119,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺交换半环 A] [模 R A]
   定义体: fast_instance%
   { Unitization.instCommMonoid, Unitization.instNonAssocSemiring with }
 
@@ -2141,7 +2141,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
+  签名: [交换环 R] [非幺非结合环 A] [模 R A]
   定义体: fast_instance%
   { Unitization.instAddCommGroup, Unitization.instNonAssocSemiring with }
 
@@ -2163,7 +2163,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [CommRing R] [NonUnitalRing A] [Module R A] [IsScalarTower R A A]
+  签名: [交换环 R] [非幺环 A] [模 R A] [标量塔 R A A]
   定义体: fast_instance%
   { Unitization.instAddCommGroup, Unitization.instSemiring with }
 
@@ -2185,7 +2185,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R] [NonUnitalCommRing A] [Module R A] [IsScalarTower R A A]
+  签名: [交换环 R] [非幺交换环 A] [模 R A] [标量塔 R A A]
   定义体: fast_instance%
   { Unitization.instAddCommGroup, Unitization.instCommSemiring with }
 
@@ -2214,7 +2214,7 @@ definition inlRingHom
 
 中文:
 定义 inlRingHom
-  签名: [Semiring R] [NonUnitalSemiring A] [Module R A]
+  签名: [半环 R] [非幺半环 A] [模 R A]
   定义体: inl
   map_one' := inl_one A
   map_mul' := inl_mul A
@@ -2249,7 +2249,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: [Star R] [Star A]
+  签名: [对合 R] [对合 A]
   定义体: ⟨fun ra => .mk (star ra.fst, star ra.snd)⟩
 
 @[simp]
@@ -2273,7 +2273,7 @@ theorem fst_star
 
 中文:
 定理 fst_star
-  条件: [Star R] [Star A] (x : Unitization R A)
+  条件: [对合 R] [对合 A] (x : Unitization R A)
   结论: (star x).fst = star x.fst
   证明: rfl
 
@@ -2296,7 +2296,7 @@ theorem snd_star
 
 中文:
 定理 snd_star
-  条件: [Star R] [Star A] (x : Unitization R A)
+  条件: [对合 R] [对合 A] (x : Unitization R A)
   结论: (star x).snd = star x.snd
   证明: rfl
 
@@ -2318,7 +2318,7 @@ theorem inl_star
 
 中文:
 定理 inl_star
-  条件: [Star R] [AddMonoid A] [StarAddMonoid A] (r : R)
+  条件: [对合 R] [加法幺半群 A] [StarAdd幺半群 A] (r : R)
   证明: Unitization.ext rfl (by simp only [snd_star, star_zero, snd_inl])
 
 @[simp, norm_cast]
@@ -2340,7 +2340,7 @@ theorem inr_star
 
 中文:
 定理 inr_star
-  条件: [AddMonoid R] [StarAddMonoid R] [Star A] (a : A)
+  条件: [加法幺半群 R] [StarAdd幺半群 R] [对合 A] (a : A)
   证明: Unitization.ext (by simp only [fst_star, star_zero, fst_inr]) rfl
 
 Depends on / 依赖: Unitization, Unitization.ext, fst_inr, fst_star, star_zero
@@ -2360,7 +2360,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: [AddMonoid R] [AddMonoid A] [StarAddMonoid R] [StarAddMonoid A]
+  签名: [加法幺半群 R] [加法幺半群 A] [StarAdd幺半群 R] [StarAdd幺半群 A]
   定义体: Unitization.ext (star_star x.fst) (star_star x.snd)
   star_add x y := Unitization.ext (star_add x.fst y.fst) (star_add x.snd y.snd)
 
@@ -2381,7 +2381,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: [CommSemiring R] [StarRing R] [AddCommMonoid A] [StarAddMonoid A]
+  签名: [交换半环 R] [对合环 R] [加法交换幺半群 A] [StarAdd幺半群 A]
   定义体: Unitization.ext (by simp) (by simp)
 
 Depends on / 依赖: Unitization, Unitization.ext
@@ -2403,7 +2403,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: [CommSemiring R] [StarRing R] [NonUnitalNonAssocSemiring A] [StarRing A]
+  签名: [交换半环 R] [对合环 R] [非幺非结合半环 A] [对合环 A]
   定义体: fast_instance%
   { Unitization.instStarAddMonoid with
     star_mul x y := Unitization.ext
@@ -2445,7 +2445,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra S (Unitization R A) where
+  签名: : 代数 S (Unitization R A) where
   定义体: (Unitization.inlRingHom R A).comp (algebraMap S R)
   commutes' := fun s x => by
     induction x with
@@ -2587,7 +2587,7 @@ definition inrNonUnitalAlgHom
 
 中文:
 定义 inrNonUnitalAlgHom
-  签名: (R A : 类型) [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  签名: (R A : 类型) [交换半环 R] [非幺半环 A] [模 R A]
   定义体: (↑)
   map_smul' := inr_smul R
   map_zero' := inr_zero R
@@ -2616,7 +2616,7 @@ definition inrNonUnitalStarAlgHom
 
 中文:
 定义 inrNonUnitalStarAlgHom
-  签名: (R A : 类型) [CommSemiring R] [StarAddMonoid R]
+  签名: (R A : 类型) [交换半环 R] [StarAdd幺半群 R]
   定义体: inrNonUnitalAlgHom R A
   map_star' := inr_star
 
@@ -2641,7 +2641,7 @@ definition inrRangeEquiv
 
 中文:
 定义 inrRangeEquiv
-  签名: (R A : 类型) [CommSemiring R] [StarAddMonoid R] [NonUnitalSemiring A]
+  签名: (R A : 类型) [交换半环 R] [StarAdd幺半群 R] [非幺半环 A]
   定义体: StarAlgEquiv.ofLeftInverse' (g := fun a => a.snd) (snd_inr R ·)
 
 Depends on / 依赖: StarAlgEquiv, StarAlgEquiv.ofLeftInverse, a.snd, ofLeftInverse, snd_inr
@@ -2754,7 +2754,7 @@ definition _root_.NonUnitalAlgHom.toAlgHom
         simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_
 
 中文:
-定义 _root_.NonUnitalAlgHom.toAlgHom
+定义 _root_.非幺Alg态射.toAlgHom
   签名: (φ : A ->ₙₐ[R] C)
   定义体: fun x => algebraMap R C x.fst + φ x.snd
   map_one' := by simp only [fst_one, map_one, snd_one, φ.map_zero, add_zero]
@@ -2856,7 +2856,7 @@ lemma _root_.NonUnitalAlgHom.toAlgHom_zero
   simp
 
 中文:
-引理 _root_.NonUnitalAlgHom.toAlgHom_zero
+引理 _root_.非幺Alg态射.toAlgHom_zero
   证明: by
   ext
   simp
@@ -3052,7 +3052,7 @@ lemma starMap_injective
 
 中文:
 引理 starMap_injective
-  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Injective φ)
+  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : 函数.单射 φ)
   证明: by
   intro x y h
   ext
@@ -3083,7 +3083,7 @@ lemma starMap_surjective
 
 中文:
 引理 starMap_surjective
-  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Surjective φ)
+  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : 函数.满射 φ)
   证明: by
   intro x
   induction x using Unitization.ind with
@@ -3136,7 +3136,7 @@ lemma starMap_id
 
 中文:
 引理 starMap_id
-  结论: starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Unitization R B)
+  结论: starMap (非幺StarAlg态射.id R B) = StarAlg态射.id R (Unitization R B)
   证明: by
   ext; all_goals simp
 
@@ -3217,7 +3217,7 @@ alias ⟨_root_.IsStarNormal.of_inr, _⟩ := isStarNormal_inr
 
 中文:
 引理 isStarNormal_inr
-  结论: IsStarNormal (a : Unitization R A) ↔ IsStarNormal a
+  结论: 是StarNormal (a : Unitization R A) ↔ 是StarNormal a
   证明: by
   simp only [isStarNormal_iff, commute_iff_eq, ← inr_star, ← inr_mul, inr_injective.eq_iff]
 
@@ -3241,7 +3241,7 @@ instance instIsStarNormal
 
 中文:
 实例 instIsStarNormal
-  签名: (a : A) [IsStarNormal a]
+  签名: (a : A) [是StarNormal a]
   定义体: isStarNormal_inr.mpr ‹_›
 
 Depends on / 依赖: isStarNormal_inr, isStarNormal_inr.mpr
@@ -3268,7 +3268,7 @@ alias ⟨_, IsIdempotentElem.inr⟩ := isIdempotentElem_inr_iff
 
 中文:
 引理 isIdempotentElem_inr_iff
-  结论: (R : 类型) {A : 类型} [MulZeroClass R]
+  结论: (R : 类型) {A : 类型} [乘零类 R]
   证明: by
   simp only [IsIdempotentElem, ← inr_mul, inr_injective.eq_iff]
 
@@ -3300,7 +3300,7 @@ protected alias ⟨_root_.IsStarProjection.of_inr, _root_.IsStarProjection.inr�
 
 中文:
 引理 isStarProjection_inr_iff
-  结论: {R A : 类型} [Semiring R] [StarRing R] [NonUnitalSemiring A]
+  结论: {R A : 类型} [半环 R] [对合环 R] [非幺半环 A]
   证明: by
   simp [isStarProjection_iff]
 

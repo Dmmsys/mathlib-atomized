@@ -62,7 +62,7 @@ definition constCone
 
 中文:
 定义 constCone
-  签名: : Cone ((Functor.const J).obj X) where
+  签名: : 锥 ((函子.const J).obj X) where
   定义体: X
   π := 𝟙 _
 -/
@@ -83,7 +83,7 @@ definition constCocone
 
 中文:
 定义 constCocone
-  签名: : Cocone ((Functor.const J).obj X) where
+  签名: : 余锥 ((函子.const J).obj X) where
   定义体: X
   ι := 𝟙 _
 -/
@@ -111,7 +111,7 @@ definition isLimitConstCone
 
 中文:
 定义 isLimitConstCone
-  签名: : IsLimit (constCone J X) where
+  签名: : 是极限 (constCone J X) where
   定义体: s.π.app (Classical.arbitrary _)
   fac s j := by
     dsimp
@@ -149,7 +149,7 @@ definition isColimitConstCocone
 
 中文:
 定义 isColimitConstCocone
-  签名: : IsColimit (constCocone J X) where
+  签名: : 是余极限 (constCocone J X) where
   定义体: s.ι.app (Classical.arbitrary _)
   fac s j := by
     dsimp
@@ -179,7 +179,7 @@ instance hasLimit_const_of_isConnected
 
 中文:
 实例 hasLimit_const_of_isConnected
-  签名: : HasLimit ((Functor.const J).obj X)
+  签名: : 有极限 ((函子.const J).obj X)
   定义体: ⟨_, isLimitConstCone J X⟩
 
 Depends on / 依赖: isLimitConstCone
@@ -197,7 +197,7 @@ instance hasColimit_const_of_isConnected
 
 中文:
 实例 hasColimit_const_of_isConnected
-  签名: : HasColimit ((Functor.const J).obj X)
+  签名: : 有余极限 ((函子.const J).obj X)
   定义体: ⟨_, isColimitConstCocone J X⟩
 
 Depends on / 依赖: isColimitConstCocone
@@ -227,8 +227,8 @@ definition Cone.isLimitOfIsIsoLimMapπ
   co
 
 中文:
-定义 Cone.isLimitOfIsIsoLimMapπ
-  签名: {F : J ⥤ C} [HasLimit F] (c : Cone F)
+定义 锥.isLimitOfIsIsoLimMapπ
+  签名: {F : J ⥤ C} [有极限 F] (c : 锥 F)
   定义体: by
   refine IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext ((asIso (limMap c.π)).symm ≪≫
     (limit.isLimit _).conePointUniqueUpToIso (isLimitConstCone J c.pt)) ?_)
@@ -266,8 +266,8 @@ theorem IsLimit.isIso_limMap_π
   co
 
 中文:
-定理 IsLimit.isIso_limMap_π
-  条件: {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
+定理 是极限.isIso_limMap_π
+  条件: {F : J ⥤ C} [有极限 F] {c : 锥 F} (hc : 是极限 c)
   证明: by
   suffices limMap c.π = ((limit.isLimit _).conePointUniqueUpToIso (isLimitConstCone J c.pt) ≪≫
       hc.conePointUniqueUpToIso (limit.isLimit _)).hom by
@@ -299,8 +299,8 @@ theorem Cone.isLimit_iff_isIso_limMap_π
   proof: ⟨fun ⟨h⟩ => IsLimit.isIso_limMap_π h, fun _ => ⟨c.isLimitOfIsIsoLimMapπ⟩⟩
 
 中文:
-定理 Cone.isLimit_iff_isIso_limMap_π
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F)
+定理 锥.isLimit_iff_isIso_limMap_π
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F)
   证明: ⟨fun ⟨h⟩ => IsLimit.isIso_limMap_π h, fun _ => ⟨c.isLimitOfIsIsoLimMapπ⟩⟩
 
 Depends on / 依赖: IsLimit, IsLimit.isIso_limMap_, c.isLimitOfIsIsoLimMap
@@ -320,8 +320,8 @@ definition Cocone.isColimitOfIsIsoColimMapι
     (colimit.isColimit _).coconePointUniqueUpToIso (isColimitConstCocone J c.pt)) (by simp))
 
 中文:
-定义 Cocone.isColimitOfIsIsoColimMapι
-  签名: {F : J ⥤ C} [HasColimit F] (c : Cocone F)
+定义 余锥.isColimitOfIsIsoColimMapι
+  签名: {F : J ⥤ C} [有余极限 F] (c : 余锥 F)
   定义体: IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext (asIso (colimMap c.ι) ≪≫
     (colimit.isColimit _).coconePointUniqueUpToIso (isColimitConstCocone J c.pt)) (by simp))
 
@@ -348,8 +348,8 @@ theorem IsColimit.isIso_colimMap_ι
     colimit.comp_coconePointUn
 
 中文:
-定理 IsColimit.isIso_colimMap_ι
-  条件: {F : J ⥤ C} [HasColimit F] {c : Cocone F} (hc : IsColimit c)
+定理 是余极限.isIso_colimMap_ι
+  条件: {F : J ⥤ C} [有余极限 F] {c : 余锥 F} (hc : 是余极限 c)
   证明: by
   suffices colimMap c.ι = ((colimit.isColimit _).coconePointUniqueUpToIso hc ≪≫
       (isColimitConstCocone J c.pt).coconePointUniqueUpToIso (colimit.isColimit _)).hom by
@@ -380,8 +380,8 @@ theorem Cocone.isColimit_iff_isIso_colimMap_ι
   proof: ⟨fun ⟨h⟩ => IsColimit.isIso_colimMap_ι h, fun _ => ⟨c.isColimitOfIsIsoColimMapι⟩⟩
 
 中文:
-定理 Cocone.isColimit_iff_isIso_colimMap_ι
-  条件: {F : J ⥤ C} [HasColimit F] (c : Cocone F)
+定理 余锥.isColimit_iff_isIso_colimMap_ι
+  条件: {F : J ⥤ C} [有余极限 F] (c : 余锥 F)
   证明: ⟨fun ⟨h⟩ => IsColimit.isIso_colimMap_ι h, fun _ => ⟨c.isColimitOfIsIsoColimMapι⟩⟩
 
 Depends on / 依赖: IsColimit, IsColimit.isIso_colimMap_, c.isColimitOfIsIsoColimMap
@@ -472,7 +472,7 @@ instance parallelPairInhabited
 
 中文:
 实例 parallelPairInhabited
-  签名: : Inhabited WalkingParallelPair
+  签名: : 可居 WalkingParallelPair
   定义体: ⟨WalkingParallelPair.one⟩
 
 Depends on / 依赖: WalkingParallelPair, WalkingParallelPair.one
@@ -495,7 +495,7 @@ instance parallel_pair_connected
 
 中文:
 实例 parallel_pair_connected
-  签名: : IsConnected WalkingParallelPair
+  签名: : 是连通 WalkingParallelPair
   定义体: by
   apply IsConnected.of_induct
   · introv _ t
@@ -575,7 +575,7 @@ definition forgetCone
 
 中文:
 定义 forgetCone
-  签名: {X : C} {K : J ⥤ C} (s : Cone (K ⋙ prod.functor.obj X))
+  签名: {X : C} {K : J ⥤ C} (s : 锥 (K ⋙ 乘积.functor.obj X))
   定义体: s.pt
   π := s.π ≫ γ₂ X
 
@@ -606,7 +606,7 @@ lemma prod_preservesConnectedLimits
 
 中文:
 引理 prod_preservesConnectedLimits
-  条件: [IsConnected J] (X : C)
+  条件: [是连通 J] (X : C)
   证明: { preserves := fun {c} l => ⟨{
           lift := fun s =>
             prod.lift (s.π.app (Classical.arbitrary _) ≫ Limits.prod.fst) (l.lift (forgetCone s))

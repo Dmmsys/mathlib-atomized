@@ -64,9 +64,9 @@ structure Unique
     - uniq : forall a : α, a = default
 
 中文:
-结构 Unique
-  参数: (α : Sort u)
-  继承: Inhabited α
+结构 唯一
+  参数: (α : 类型层 u)
+  继承: 可居 α
   公理与运算 (1 个):
     - uniq : 对任意 a : α, a = default
 -/
@@ -87,9 +87,9 @@ theorem unique_iff_existsUnique
    fun ⟨a, _, h⟩ => ⟨⟨⟨a⟩, fun _ => h _ trivial⟩⟩⟩
 
 中文:
-定理 unique_iff_existsUnique
-  条件: (α : Sort u)
-  结论: Nonempty (Unique α) ↔ 存在! _ : α, True
+定理 unique_iff_存在Unique
+  条件: (α : 类型层 u)
+  结论: 非空 (唯一 α) ↔ 存在! _ : α, 真
   证明: ⟨fun ⟨u⟩ => ⟨u.default, trivial, fun a _ => u.uniq a⟩,
    fun ⟨a, _, h⟩ => ⟨⟨⟨a⟩, fun _ => h _ trivial⟩⟩⟩
 
@@ -111,7 +111,7 @@ theorem unique_subtype_iff_existsUnique
       exact he b hb⟩⟩⟩
 
 中文:
-定理 unique_subtype_iff_existsUnique
+定理 unique_subtype_iff_存在Unique
   条件: {α} (p : α -> 命题)
   证明: ⟨fun ⟨u⟩ => ⟨u.default.1, u.default.2, fun a h => congr_arg Subtype.val (u.uniq ⟨a, h⟩)⟩,
    fun ⟨a, ha, he⟩ => ⟨⟨⟨⟨a, ha⟩⟩, fun ⟨b, hb⟩ => by
@@ -138,7 +138,7 @@ abbreviation uniqueOfSubsingleton
 
 中文:
 缩写 uniqueOfSubsingleton
-  签名: {α : Sort*} [Subsingleton α] (a : α)
+  签名: {α : 类型层*} [子单例 α] (a : α)
   定义体: a
   uniq _ := Subsingleton.elim _ _
 -/
@@ -158,8 +158,8 @@ instance PUnit.instUnique
 @[simp]
 
 中文:
-实例 PUnit.instUnique
-  签名: : Unique PUnit.{u} where
+实例 命题单元.instUnique
+  签名: : 唯一 命题单元.{u} where
   定义体: PUnit.unit
   uniq x := ext x _
 
@@ -181,8 +181,8 @@ theorem PUnit.default_eq_unit
   proof: rfl
 
 中文:
-定理 PUnit.default_eq_unit
-  结论: (default : PUnit) = PUnit.unit
+定理 命题单元.default_eq_unit
+  结论: (default : 命题单元) = 命题单元.unit
   证明: rfl
 -/
 theorem PUnit.default_eq_unit : (default : PUnit) = PUnit.unit :=
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique True
+  签名: 唯一 真
   定义体: uniqueProp trivial
 
 Depends on / 依赖: uniqueProp
@@ -289,7 +289,7 @@ theorem forall_iff
   proof: ⟨fun h => h _, fun h x => by rwa [Unique.eq_default x]⟩
 
 中文:
-定理 forall_iff
+定理 对任意_iff
   条件: {p : α -> 命题}
   结论: (对任意 a, p a) ↔ p default
   证明: ⟨fun h => h _, fun h x => by rwa [Unique.eq_default x]⟩
@@ -309,9 +309,9 @@ theorem exists_iff
   proof: ⟨fun ⟨a, ha⟩ => eq_default a ▸ ha, Exists.intro default⟩
 
 中文:
-定理 exists_iff
+定理 存在_iff
   条件: {p : α -> 命题}
-  结论: Exists p ↔ p default
+  结论: 存在 p ↔ p default
   证明: ⟨fun ⟨a, ha⟩ => eq_default a ▸ ha, Exists.intro default⟩
 
 Depends on / 依赖: Exists, Exists.intro, add_mul, eq_default, mul_pow, pow_ne_zero, right_ne_zero_of_mul
@@ -333,7 +333,7 @@ theorem subsingleton_unique'
 
 中文:
 定理 subsingleton_unique'
-  结论: 对任意 h₁ h₂ : Unique α, h₁ = h₂
+  结论: 对任意 h₁ h₂ : 唯一 α, h₁ = h₂
 
 Depends on / 依赖: Iff.intro, fermatLastTheoremWith, h.fermatLastTheoremWith
 -/
@@ -350,7 +350,7 @@ instance subsingleton_unique
 
 中文:
 实例 subsingleton_unique
-  签名: : Subsingleton (Unique α)
+  签名: : 子单例 (唯一 α)
   定义体: ⟨Unique.subsingleton_unique'⟩
 
 Depends on / 依赖: Int.reduceAdd, Nat.isUnit_iff, Nat.reduceAdd, OfNat.ofNat_ne_one, Unique, Unique.subsingleton_unique, _iff_fermatLastTheoremWith, fermatLastTheoremFor_iff_int, fermatLastTheoremWith, isUnit_iff, isUnit_pow_i, ne_eq, not_false_eq_true, ofNat_ne_one, one_pow, pow_zero, reduceAdd, subsingleton_unique, tfae_have
@@ -368,7 +368,7 @@ abbreviation mk'
 
 中文:
 缩写 mk'
-  签名: (α : Sort u) [h₁ : Inhabited α] [Subsingleton α]
+  签名: (α : 类型层 u) [h₁ : 可居 α] [子单例 α]
   定义体: { h₁ with uniq := fun _ => Subsingleton.elim _ _ }
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -391,8 +391,8 @@ theorem nonempty_unique
 
 中文:
 定理 nonempty_unique
-  条件: (α : Sort u) [Subsingleton α] [Nonempty α]
-  结论: Nonempty (Unique α)
+  条件: (α : 类型层 u) [子单例 α] [非空 α]
+  结论: 非空 (唯一 α)
   证明: by
   inhabit α
   exact ⟨Unique.mk' α⟩
@@ -414,7 +414,7 @@ theorem unique_iff_subsingleton_and_nonempty
 
 中文:
 定理 unique_iff_subsingleton_and_nonempty
-  条件: (α : Sort u)
+  条件: (α : 类型层 u)
   证明: ⟨fun ⟨u⟩ => by constructor <;> exact inferInstance,
    fun ⟨hs, hn⟩ => nonempty_unique α⟩
 
@@ -437,8 +437,8 @@ theorem Pi.default_def
   proof: rfl
 
 中文:
-定理 Pi.default_def
-  条件: {β : α -> Sort v} [对任意 a, Inhabited (β a)]
+定理 依赖函数类型.default_def
+  条件: {β : α -> 类型层 v} [对任意 a, 可居 (β a)]
   证明: rfl
 -/
 theorem Pi.default_def {β : α -> Sort v} [forall a, Inhabited (β a)] :
@@ -454,8 +454,8 @@ theorem Pi.default_apply
   proof: rfl
 
 中文:
-定理 Pi.default_apply
-  条件: {β : α -> Sort v} [对任意 a, Inhabited (β a)] (a : α)
+定理 依赖函数类型.default_apply
+  条件: {β : α -> 类型层 v} [对任意 a, 可居 (β a)] (a : α)
   证明: rfl
 -/
 theorem Pi.default_apply {β : α -> Sort v} [forall a, Inhabited (β a)] (a : α) :
@@ -471,8 +471,8 @@ instance Pi.unique
   body: fun _ => funext fun _ => Unique.eq_default _
 
 中文:
-实例 Pi.unique
-  签名: {β : α -> Sort v} [对任意 a, Unique (β a)]
+实例 依赖函数类型.unique
+  签名: {β : α -> 类型层 v} [对任意 a, 唯一 (β a)]
   定义体: fun _ => funext fun _ => Unique.eq_default _
 
 Depends on / 依赖: Unique, Unique.eq_default, eq_default
@@ -490,8 +490,8 @@ instance Pi.uniqueOfIsEmpty
   uniq _ := funext isEmptyElim
 
 中文:
-实例 Pi.uniqueOfIsEmpty
-  签名: [IsEmpty α] (β : α -> Sort v)
+实例 依赖函数类型.uniqueOfIsEmpty
+  签名: [是空 α] (β : α -> 类型层 v)
   定义体: isEmptyElim
   uniq _ := funext isEmptyElim
 
@@ -511,7 +511,7 @@ theorem eq_const_of_subsingleton
 
 中文:
 定理 eq_const_of_subsingleton
-  条件: {β : Sort*} [Subsingleton α] (f : α -> β) (a : α)
+  条件: {β : 类型层*} [子单例 α] (f : α -> β) (a : α)
   证明: funext fun x => Subsingleton.elim x a ▸ rfl
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -531,8 +531,8 @@ theorem eq_const_of_unique
 
 中文:
 定理 eq_const_of_unique
-  条件: {β : Sort*} [Unique α] (f : α -> β)
-  结论: f = Function.const α (f default)
+  条件: {β : 类型层*} [唯一 α] (f : α -> β)
+  结论: f = 函数.const α (f default)
   证明: eq_const_of_subsingleton ..
 
 Depends on / 依赖: eq_const_of_subsingleton
@@ -550,7 +550,7 @@ theorem heq_const_of_unique
 
 中文:
 定理 heq_const_of_unique
-  条件: [Unique α] {β : α -> Sort v} (f : 对任意 a, β a)
+  条件: [唯一 α] {β : α -> 类型层 v} (f : 对任意 a, β a)
   证明: (Function.hfunext rfl) fun i _ _ => by rw [Subsingleton.elim i default]; rfl
 
 Depends on / 依赖: Function, Function.hfunext, Subsingleton, Subsingleton.elim, hfunext
@@ -573,9 +573,9 @@ theorem Injective.subsingleton
   proof: ⟨fun _ _ => hf Subsingleton.elim _ _⟩
 
 中文:
-定理 Injective.subsingleton
-  条件: (hf : Injective f) [Subsingleton β]
-  结论: Subsingleton α
+定理 单射.subsingleton
+  条件: (hf : 单射 f) [子单例 β]
+  结论: 子单例 α
   证明: ⟨fun _ _ => hf Subsingleton.elim _ _⟩
 -/
 protected theorem Injective.subsingleton (hf : Injective f) [Subsingleton β] : Subsingleton α :=
@@ -591,9 +591,9 @@ theorem Surjective.subsingleton
   proof: ⟨hf.forall₂.2 fun x y => congr_arg f Subsingleton.elim x y⟩
 
 中文:
-定理 Surjective.subsingleton
-  条件: [Subsingleton α] (hf : Surjective f)
-  结论: Subsingleton β
+定理 满射.subsingleton
+  条件: [子单例 α] (hf : 满射 f)
+  结论: 子单例 β
   证明: ⟨hf.forall₂.2 fun x y => congr_arg f Subsingleton.elim x y⟩
 -/
 protected theorem Surjective.subsingleton [Subsingleton α] (hf : Surjective f) : Subsingleton β :=
@@ -611,8 +611,8 @@ definition Surjective.unique
   body: @Unique.mk' _ ⟨f default⟩ hf.subsingleton
 
 中文:
-定义 Surjective.unique
-  签名: {α : Sort u} (f : α -> β) (hf : Surjective f) [Unique.{u} α]
+定义 满射.unique
+  签名: {α : 类型层 u} (f : α -> β) (hf : 满射 f) [唯一.{u} α]
   定义体: @Unique.mk' _ ⟨f default⟩ hf.subsingleton
 -/
 protected def Surjective.unique {α : Sort u} (f : α -> β) (hf : Surjective f) [Unique.{u} α] :
@@ -630,8 +630,8 @@ definition Injective.unique
   body: @Unique.mk' _ _ hf.subsingleton
 
 中文:
-定义 Injective.unique
-  签名: [Inhabited α] [Subsingleton β] (hf : Injective f)
+定义 单射.unique
+  签名: [可居 α] [子单例 β] (hf : 单射 f)
   定义体: @Unique.mk' _ _ hf.subsingleton
 -/
 protected def Injective.unique [Inhabited α] [Subsingleton β] (hf : Injective f) : Unique α :=
@@ -648,7 +648,7 @@ definition Surjective.uniqueOfSurjectiveConst
   body: @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ => rfl) b
 
 中文:
-定义 Surjective.uniqueOfSurjectiveConst
+定义 满射.uniqueOfSurjectiveConst
   签名: (α : 类型) {β : 类型} (b : β)
   定义体: @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ => rfl) b
 
@@ -678,7 +678,7 @@ definition uniqueElim
 
 中文:
 定义 uniqueElim
-  签名: [Unique ι] (x : α (default : ι)) (i : ι)
+  签名: [唯一 ι] (x : α (default : ι)) (i : ι)
   定义体: by
   rw [Unique.eq_default i]
   exact x
@@ -705,7 +705,7 @@ theorem uniqueElim_default
 
 中文:
 定理 uniqueElim_default
-  条件: {_ : Unique ι} (x : α (default : ι))
+  条件: {_ : 唯一 ι} (x : α (default : ι))
   结论: uniqueElim x (default : ι) = x
   证明: rfl
 
@@ -725,7 +725,7 @@ theorem uniqueElim_const
 
 中文:
 定理 uniqueElim_const
-  条件: {β : Sort*} {_ : Unique ι} (x : β) (i : ι)
+  条件: {β : 类型层*} {_ : 唯一 ι} (x : β) (i : ι)
   证明: rfl
 -/
 theorem uniqueElim_const {β : Sort*} {_ : Unique ι} (x : β) (i : ι) :
@@ -748,9 +748,9 @@ theorem Unique.bijective
   refine ⟨default, ?_, ?_⟩ <;> intro x <;> simp
 
 中文:
-定理 Unique.bijective
-  条件: {A B} [Unique A] [Unique B] {f : A -> B}
-  结论: Function.Bijective f
+定理 唯一.bijective
+  条件: {A B} [唯一 A] [唯一 B] {f : A -> B}
+  结论: 函数.双射 f
   证明: by
   rw [Function.bijective_iff_has_inverse]
   refine ⟨default, ?_, ?_⟩ <;> intro x <;> simp
@@ -777,7 +777,7 @@ theorem subsingleton_iff_isEmpty
 中文:
 定理 subsingleton_iff_isEmpty
   条件: {α : 类型u}
-  结论: Subsingleton (Option α) ↔ IsEmpty α
+  结论: 子单例 (选项类型 α) ↔ 是空 α
   证明: ⟨fun h => ⟨fun x => Option.noConfusion rfl (heq_of_eq (@Subsingleton.elim _ h x none))⟩,
    fun h => ⟨fun x y =>
      Option.casesOn x (Option.casesOn y rfl fun x => h.elim x) fun x => h.elim x⟩⟩
@@ -806,7 +806,7 @@ instance Unique.subtypeEq
   uniq := fun ⟨x, hx⟩ => by congr
 
 中文:
-实例 Unique.subtypeEq
+实例 唯一.subtypeEq
   签名: (y : α)
   定义体: ⟨y, rfl⟩
   uniq := fun ⟨x, hx⟩ => by congr
@@ -825,7 +825,7 @@ instance Unique.subtypeEq'
   uniq := fun ⟨x, hx⟩ => by subst hx; congr
 
 中文:
-实例 Unique.subtypeEq'
+实例 唯一.subtypeEq'
   签名: (y : α)
   定义体: ⟨y, rfl⟩
   uniq := fun ⟨x, hx⟩ => by subst hx; congr
@@ -845,8 +845,8 @@ instance Fin.instUnique
   body: Subsingleton.elim _ _
 
 中文:
-实例 Fin.instUnique
-  签名: : Unique (Fin 1) where uniq _
+实例 有限集.instUnique
+  签名: : 唯一 (有限集 1) where uniq _
   定义体: Subsingleton.elim _ _
 
 Depends on / 依赖: FermatLastTheoremWith, IsIntegrallyClosed, IsIntegrallyClosed.pow_dvd_pow_iff, Subsingleton, Subsingleton.elim, classical, eq_a, eq_b, eq_c, gcd_dvd_left, gcd_dvd_right, gcd_ne_zero_of_left, heq.symm, mul_add, mul_ne_zero_iff, mul_pow, pow_dvd_pow_iff

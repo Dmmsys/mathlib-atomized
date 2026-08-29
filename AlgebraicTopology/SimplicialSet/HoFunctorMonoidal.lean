@@ -48,7 +48,7 @@ definition tensor
 
 中文:
 定义 tensor
-  签名: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  签名: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   定义体: (e₁.edge, e₂.edge)
   src_eq := Prod.ext e₁.src_eq e₂.src_eq
   tgt_eq := Prod.ext e₁.tgt_eq e₂.tgt_eq
@@ -122,7 +122,7 @@ lemma map_tensorHom
 
 中文:
 引理 map_tensorHom
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   证明: rfl
 
 @[simp]
@@ -145,7 +145,7 @@ lemma map_whiskerRight
 
 中文:
 引理 map_whiskerRight
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   证明: rfl
 
 @[simp]
@@ -168,7 +168,7 @@ lemma map_whiskerLeft
 
 中文:
 引理 map_whiskerLeft
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   证明: rfl
 
 @[simp]
@@ -191,7 +191,7 @@ lemma map_associator_hom
 
 中文:
 引理 map_associator_hom
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂} (e₂ : Edge y y')
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂} (e₂ : 边 y y')
   证明: rfl
 
 @[simp]
@@ -214,7 +214,7 @@ lemma map_fst
 
 中文:
 引理 map_fst
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   证明: rfl
 
 @[simp]
@@ -234,7 +234,7 @@ lemma map_snd
 
 中文:
 引理 map_snd
-  结论: {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
+  结论: {x x' : X _⦋0⦌₂} (e₁ : 边 x x') {y y' : Y _⦋0⦌₂}
   证明: rfl
 -/
 lemma map_snd {x x' : X _⦋0⦌₂} (e₁ : Edge x x') {y y' : Y _⦋0⦌₂}
@@ -254,7 +254,7 @@ definition CompStruct.tensor
   d₁ := Prod.ext hx.d₁ hy.d₁
 
 中文:
-定义 CompStruct.tensor
+定义 余mpStruct.tensor
   定义体: (hx.simplex, hy.simplex)
   d₂ := Prod.ext hx.d₂ hy.d₂
   d₀ := Prod.ext hx.d₀ hy.d₀
@@ -291,7 +291,7 @@ definition isoTerminal
 
 中文:
 定义 isoTerminal
-  签名: (X : Truncated.{u} 2) [Unique (X _⦋0⦌₂)] [Subsingleton (X _⦋1⦌₂)]
+  签名: (X : Truncated.{u} 2) [唯一 (X _⦋0⦌₂)] [子单例 (X _⦋1⦌₂)]
   定义体: IsTerminal.uniqueUpToIso (isTerminal _) Cat.chosenTerminalIsTerminal
 
 Depends on / 依赖: Cat.chosenTerminalIsTerminal, IsTerminal, IsTerminal.uniqueUpToIso, chosenTerminalIsTerminal, isTerminal, uniqueUpToIso
@@ -382,7 +382,7 @@ lemma functor_map
 
 中文:
 引理 functor_map
-  结论: {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁)
+  结论: {x₀ x₁ : X _⦋0⦌₂} (e : 边 x₀ x₁)
   证明: rfl
 -/
 lemma functor_map {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁)
@@ -473,7 +473,7 @@ lemma inverse_map_mkHom_homMk_id
 
 中文:
 引理 inverse_map_mkHom_homMk_id
-  条件: {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁) (y : Y _⦋0⦌₂)
+  条件: {x₀ x₁ : X _⦋0⦌₂} (e : 边 x₀ x₁) (y : Y _⦋0⦌₂)
   证明: rfl
 -/
 lemma inverse_map_mkHom_homMk_id {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁) (y : Y _⦋0⦌₂) :
@@ -491,7 +491,7 @@ lemma inverse_map_mkHom_id_homMk
 
 中文:
 引理 inverse_map_mkHom_id_homMk
-  条件: (x : X _⦋0⦌₂) {y₀ y₁ : Y _⦋0⦌₂} (e : Edge y₀ y₁)
+  条件: (x : X _⦋0⦌₂) {y₀ y₁ : Y _⦋0⦌₂} (e : 边 y₀ y₁)
   证明: rfl
 -/
 lemma inverse_map_mkHom_id_homMk (x : X _⦋0⦌₂) {y₀ y₁ : Y _⦋0⦌₂} (e : Edge y₀ y₁) :
@@ -508,7 +508,7 @@ lemma inverse_map_mkHom_homMk_homMk
 
 中文:
 引理 inverse_map_mkHom_homMk_homMk
-  结论: {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁)
+  结论: {x₀ x₁ : X _⦋0⦌₂} (e : 边 x₀ x₁)
   证明: homMk_comp_homMk ((Edge.CompStruct.compId e).tensor (Edge.CompStruct.idComp e'))
 
 Depends on / 依赖: CompStruct, Edge.CompStruct.compId, Edge.CompStruct.idComp, compId, homMk_comp_homMk, idComp, tensor
@@ -1007,7 +1007,7 @@ lemma left_unitality
 
 中文:
 引理 left_unitality
-  条件: [Unique (X _⦋0⦌₂)] [Subsingleton (X _⦋1⦌₂)]
+  条件: [唯一 (X _⦋0⦌₂)] [子单例 (X _⦋1⦌₂)]
   证明: by
   rw [inverse_comp_mapHomotopyCategory_snd]
   rfl
@@ -1033,7 +1033,7 @@ lemma right_unitality
 
 中文:
 引理 right_unitality
-  条件: [Unique (Y _⦋0⦌₂)] [Subsingleton (Y _⦋1⦌₂)]
+  条件: [唯一 (Y _⦋0⦌₂)] [子单例 (Y _⦋1⦌₂)]
   证明: by
   rw [inverse_comp_mapHomotopyCategory_fst]
   rfl
@@ -1063,7 +1063,7 @@ definition associativity'Iso
         rw [Category.comp_id]; rw [Category.id_comp]; rw [← prod_id]; rw [inverse_map_mkHom_id_homMk]; rw [inverse_map_mkHom_id_homMk]; rw [Categor
 
 中文:
-定义 associativity'Iso
+定义 associativity'同构
   签名: :
   定义体: Functor.fullyFaithfulCurry₃.preimageIso
     (mkNatIso (fun x => mkNatIso (fun y => mkNatIso (fun z => Iso.refl _)
@@ -1226,7 +1226,7 @@ instance :
 
 中文:
 实例 :
-  签名: hoFunctor₂.{u}.Monoidal
+  签名: hoFunctor₂.{u}.幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := (HomotopyCategory.isoTerminal _).symm
       μIso X Y := (iso X Y).symm
@@ -1257,7 +1257,7 @@ instance hoFunctor.monoidal
 
 中文:
 实例 hoFunctor.monoidal
-  签名: : hoFunctor.{u}.Monoidal
+  签名: : hoFunctor.{u}.幺半群
   定义体: inferInstanceAs (truncation 2 ⋙ hoFunctor₂).Monoidal
 
 Depends on / 依赖: Monoidal, truncation

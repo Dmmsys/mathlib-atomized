@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrder 整数
+  签名: 条件完备线性序 整数
   定义体: instLinearOrder
   __ := LinearOrder.toLattice
   sSup s :=
@@ -93,7 +93,7 @@ theorem csSup_eq_greatestOfBdd
 
 中文:
 定理 csSup_eq_greatestOfBdd
-  结论: {s : Set 整数} [DecidablePred (· in s)] (b : 整数) (Hb : 对任意 z in s, z <= b)
+  结论: {s : 集合 整数} [DecidablePred (· in s)] (b : 整数) (Hb : 对任意 z in s, z <= b)
   证明: by
   have : s.Nonempty ∧ BddAbove s := ⟨Hinh, b, Hb⟩
   simp only [sSup, dif_pos this]
@@ -120,7 +120,7 @@ theorem csSup_empty
 
 中文:
 定理 csSup_empty
-  结论: sSup (∅ : Set 整数) = 0
+  结论: sSup (∅ : 集合 整数) = 0
   证明: dif_neg (by simp)
 
 Depends on / 依赖: dif_neg
@@ -139,7 +139,7 @@ theorem csSup_of_not_bddAbove
 
 中文:
 定理 csSup_of_not_bddAbove
-  条件: {s : Set 整数} (h : ¬BddAbove s)
+  条件: {s : 集合 整数} (h : ¬BddAbove s)
   结论: sSup s = 0
   证明: dif_neg (by simp [h])
 
@@ -164,7 +164,7 @@ theorem csInf_eq_leastOfBdd
 
 中文:
 定理 csInf_eq_leastOfBdd
-  结论: {s : Set 整数} [DecidablePred (· in s)] (b : 整数) (Hb : 对任意 z in s, b <= z)
+  结论: {s : 集合 整数} [DecidablePred (· in s)] (b : 整数) (Hb : 对任意 z in s, b <= z)
   证明: by
   have : s.Nonempty ∧ BddBelow s := ⟨Hinh, b, Hb⟩
   simp only [sInf, dif_pos this]
@@ -191,7 +191,7 @@ theorem csInf_empty
 
 中文:
 定理 csInf_empty
-  结论: sInf (∅ : Set 整数) = 0
+  结论: sInf (∅ : 集合 整数) = 0
   证明: dif_neg (by simp)
 
 Depends on / 依赖: dif_neg
@@ -210,7 +210,7 @@ theorem csInf_of_not_bddBelow
 
 中文:
 定理 csInf_of_not_bddBelow
-  条件: {s : Set 整数} (h : ¬BddBelow s)
+  条件: {s : 集合 整数} (h : ¬BddBelow s)
   结论: sInf s = 0
   证明: dif_neg (by simp [h])
 
@@ -232,7 +232,7 @@ theorem csSup_mem
 
 中文:
 定理 csSup_mem
-  条件: {s : Set 整数} (h1 : s.Nonempty) (h2 : BddAbove s)
+  条件: {s : 集合 整数} (h1 : s.非空) (h2 : BddAbove s)
   结论: sSup s in s
   证明: by
   convert! (greatestOfBdd _ (Classical.choose_spec h2) h1).2.1
@@ -257,7 +257,7 @@ theorem csInf_mem
 
 中文:
 定理 csInf_mem
-  条件: {s : Set 整数} (h1 : s.Nonempty) (h2 : BddBelow s)
+  条件: {s : 集合 整数} (h1 : s.非空) (h2 : BddBelow s)
   结论: sInf s in s
   证明: by
   convert! (leastOfBdd _ (Classical.choose_spec h2) h1).2.1

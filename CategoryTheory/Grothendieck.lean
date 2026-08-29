@@ -100,7 +100,7 @@ structure Hom
     - fiber : (F.map base).toFunctor.obj X.fiber ⟶ Y.fiber
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : Grothendieck F)
   公理与运算 (2 个):
     - base : X.base ⟶ Y.base
@@ -127,7 +127,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {X Y : Grothendieck F} (f g : Hom X Y) (w_base : f.base = g.base)
+  结论: {X Y : Grothendieck F} (f g : 态射 X Y) (w_base : f.base = g.base)
   证明: by
   cases f; cases g
   congr
@@ -179,7 +179,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : Grothendieck F} (f : Hom X Y) (g : Hom Y Z)
+  签名: {X Y Z : Grothendieck F} (f : 态射 X Y) (g : 态射 Y Z)
   定义体: f.base ≫ g.base
   fiber :=
     eqToHom (by simp) ≫ ((F.map g.base).toFunctor).map f.fiber ≫ g.fiber
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Grothendieck F)
+  签名: 范畴 (Grothendieck F)
   定义体: Grothendieck.Hom X Y
   id X := Grothendieck.id X
   comp f g := Grothendieck.comp f g
@@ -690,7 +690,7 @@ theorem map_id_eq
 
 中文:
 定理 map_id_eq
-  结论: map (𝟙 F) = Functor.id (Grothendieck <| F)
+  结论: map (𝟙 F) = 函子.id (Grothendieck <| F)
   证明: by
   fapply Functor.ext
   · intro X
@@ -1162,7 +1162,7 @@ definition preNatIso
     (fun f => by fapply Grothendieck.ext <;> simp)
 
 中文:
-定义 preNatIso
+定义 pre自然数Iso
   签名: {G H : D ⥤ C} (α : G ≅ H)
   定义体: NatIso.ofComponents
     (fun X => (transportIso ⟨G.obj X.base, X.fiber⟩ (α.app X.base)).symm)
@@ -1225,7 +1225,7 @@ lemma pre_comp_map_assoc
 
 中文:
 引理 pre_comp_map_assoc
-  结论: (G : D ⥤ C) {H : C ⥤ Cat} (α : F ⟶ H) {E : 类型} [Category* E]
+  结论: (G : D ⥤ C) {H : C ⥤ Cat} (α : F ⟶ H) {E : 类型} [范畴* E]
   证明: rfl
 -/
 lemma pre_comp_map_assoc (G : D ⥤ C) {H : C ⥤ Cat} (α : F ⟶ H) {E : Type*} [Category* E]
@@ -1450,7 +1450,7 @@ definition ιNatTrans
     exact Grothendieck.ext _ _ (by simp) (by simp [eqToHom_map])
 
 中文:
-定义 ιNatTrans
+定义 ι自然数Trans
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: ⟨f, 𝟙 _⟩
   naturality _ _ _ := by

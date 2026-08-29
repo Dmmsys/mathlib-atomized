@@ -43,7 +43,7 @@ instance instBialgebra
 
 中文:
 实例 instBialgebra
-  签名: : Bialgebra R (SymmetricAlgebra R M)
+  签名: : 双代数 R (SymmetricAlgebra R M)
   定义体: .ofAlgHom
     (lift <| (TensorProduct.mk R _ _).flip 1 ∘ₗ ι R M + TensorProduct.mk R _ _ 1 ∘ₗ ι R M)
     algebraMapInv
@@ -126,7 +126,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: : Coalgebra.IsCocomm R (SymmetricAlgebra R M) where
+  签名: : 余algebra.是余comm R (SymmetricAlgebra R M) where
   定义体: by
     have h : (Algebra.TensorProduct.comm R (SymmetricAlgebra R M)
           (SymmetricAlgebra R M)).toAlgHom.comp (Bialgebra.comulAlgHom R _) =

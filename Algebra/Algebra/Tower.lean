@@ -56,7 +56,7 @@ commutes' r := LinearMap.ext algebraMap_smul A r
 
 中文:
 定义 lsmul
-  签名: : A ->ₐ[R] Module.End B M where
+  签名: : A ->ₐ[R] 模.End B M where
   定义体: DistribSMul.toLinearMap B M
   map_one' := LinearMap.ext fun _ => one_smul A _
 map_mul' a b := LinearMap.ext smul_assoc a b
@@ -149,7 +149,7 @@ theorem algebraMap_smul
 
 中文:
 定理 algebraMap_smul
-  条件: [SMul R M] [IsScalarTower R A M] (r : R) (x : M)
+  条件: [标量乘法 R M] [标量塔 R A M] (r : R) (x : M)
   证明: by
   rw [Algebra.algebraMap_eq_smul_one]; rw [smul_assoc]; rw [one_smul]
 
@@ -170,7 +170,7 @@ theorem of_algebraMap_smul
 
 中文:
 定理 of_algebraMap_smul
-  条件: [SMul R M] (h : 对任意 (r : R) (x : M), algebraMap R A r • x = r • x)
+  条件: [标量乘法 R M] (h : 对任意 (r : R) (x : M), algebraMap R A r • x = r • x)
   证明: by rw [Algebra.smul_def, mul_smul, h]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, mul_smul, smul_def
@@ -218,7 +218,7 @@ theorem of_algebraMap_eq
 
 中文:
 定理 of_algebraMap_eq
-  结论: [Algebra R A]
+  结论: [代数 R A]
   证明: ⟨fun x y z => by simp_rw [Algebra.smul_def, map_mul, mul_assoc, h]⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, map_mul, mul_assoc, simp_rw, smul_def
@@ -237,7 +237,7 @@ theorem of_algebraMap_eq'
 
 中文:
 定理 of_algebraMap_eq'
-  结论: [Algebra R A]
+  结论: [代数 R A]
   证明: of_algebraMap_eq RingHom.ext_iff.1 h
 
 Depends on / 依赖: RingHom, RingHom.ext_iff, ext_iff, of_algebraMap_eq
@@ -308,8 +308,8 @@ theorem Algebra.ext
     simpa only [@Algebra.smul_def _ _ _ _ h1, @Algebra.smul_def _ _ _ _ h2, mul_one] using h r 1
 
 中文:
-定理 Algebra.ext
-  结论: {S : 类型u} {A : 类型v} [CommSemiring S] [Semiring A] (h1 h2 : Algebra S A)
+定理 代数.ext
+  结论: {S : 类型u} {A : 类型v} [交换半环 S] [半环 A] (h1 h2 : 代数 S A)
   证明: Algebra.algebra_ext _ _ fun r => by
     simpa only [@Algebra.smul_def _ _ _ _ h1, @Algebra.smul_def _ _ _ _ h2, mul_one] using h r 1
 -/
@@ -331,7 +331,7 @@ theorem _root_.AlgHom.map_algebraMap
   rw [algebraMap_apply R S A r]; rw [f.commutes]; rw [← algebraMap_apply R S B]
 
 中文:
-定理 _root_.AlgHom.map_algebraMap
+定理 _root_.代数态射.map_algebraMap
   条件: (f : A ->ₐ[S] B) (r : R)
   证明: by
   rw [algebraMap_apply R S A r]; rw [f.commutes]; rw [← algebraMap_apply R S B]
@@ -354,7 +354,7 @@ theorem _root_.AlgHom.comp_algebraMap_of_tower
   proof: RingHom.ext (AlgHom.map_algebraMap f)
 
 中文:
-定理 _root_.AlgHom.comp_algebraMap_of_tower
+定理 _root_.代数态射.comp_algebraMap_of_tower
   条件: (f : A ->ₐ[S] B)
   证明: RingHom.ext (AlgHom.map_algebraMap f)
 
@@ -532,7 +532,7 @@ definition extendScalarsOfSurjective
 
 中文:
 定义 extendScalarsOfSurjective
-  签名: (h : Function.Surjective (algebraMap R S))
+  签名: (h : 函数.满射 (algebraMap R S))
   定义体: { f with commutes' := by simp [h.forall, ← IsScalarTower.algebraMap_apply] }
   invFun := restrictScalars R
 
@@ -556,7 +556,7 @@ lemma restrictScalars_extendScalarsOfSurjective
 
 中文:
 引理 restrictScalars_extendScalarsOfSurjective
-  结论: (h : Function.Surjective (algebraMap R S))
+  结论: (h : 函数.满射 (algebraMap R S))
   证明: rfl
 -/
 lemma restrictScalars_extendScalarsOfSurjective (h : Function.Surjective (algebraMap R S))
@@ -577,7 +577,7 @@ definition extendScalarsHomOfSurjective
 
 中文:
 定义 extendScalarsHomOfSurjective
-  签名: (h : Function.Surjective (algebraMap R S))
+  签名: (h : 函数.满射 (algebraMap R S))
   定义体: extendScalarsOfSurjective h
   map_mul' _ _ := rfl
 
@@ -907,7 +907,7 @@ definition extendScalarsOfSurjective
 
 中文:
 定义 extendScalarsOfSurjective
-  签名: (h : Function.Surjective (algebraMap R S))
+  签名: (h : 函数.满射 (algebraMap R S))
   定义体: { f with commutes' := (f.toAlgHom.extendScalarsOfSurjective h).commutes' }
   invFun := AlgEquiv.restrictScalars R
 
@@ -930,7 +930,7 @@ lemma coe_extendScalarsOfSurjective
 
 中文:
 引理 coe_extendScalarsOfSurjective
-  结论: (h : Function.Surjective (algebraMap R S))
+  结论: (h : 函数.满射 (algebraMap R S))
   证明: rfl
 
 @[simp]
@@ -951,7 +951,7 @@ lemma restrictScalars_extendScalarsOfSurjective
 
 中文:
 引理 restrictScalars_extendScalarsOfSurjective
-  结论: (h : Function.Surjective (algebraMap R S))
+  结论: (h : 函数.满射 (algebraMap R S))
   证明: rfl
 
 @[simp]
@@ -971,7 +971,7 @@ lemma extendScalarsOfSurjective_symm
 
 中文:
 引理 extendScalarsOfSurjective_symm
-  结论: (h : Function.Surjective (algebraMap R S))
+  结论: (h : 函数.满射 (algebraMap R S))
   证明: rfl
 -/
 lemma extendScalarsOfSurjective_symm (h : Function.Surjective (algebraMap R S))
@@ -994,7 +994,7 @@ definition extendScalarsHomOfSurjective
 
 中文:
 定义 extendScalarsHomOfSurjective
-  签名: (h : Function.Surjective ⇑(algebraMap R S))
+  签名: (h : 函数.满射 ⇑(algebraMap R S))
   定义体: extendScalarsOfSurjective h
   map_mul' _ _ := rfl
 
@@ -1018,7 +1018,7 @@ lemma toMonoidHom_symm_extendScalarsHomOfSurjective
 
 中文:
 引理 toMonoidHom_symm_extendScalarsHomOfSurjective
-  条件: (h : Function.Surjective (algebraMap R S))
+  条件: (h : 函数.满射 (algebraMap R S))
   证明: rfl
 
 Depends on / 依赖: restrictScalarsHom
@@ -1053,7 +1053,7 @@ theorem restrictScalars_span
 
 中文:
 定理 restrictScalars_span
-  条件: (hsur : Function.Surjective (algebraMap R A)) (X : Set M)
+  条件: (hsur : 函数.满射 (algebraMap R A)) (X : 集合 M)
   证明: by
   refine ((span_le_restrictScalars R A X).antisymm fun m hm => ?_).symm
   refine span_induction subset_span (zero_mem _) (fun _ _ _ _ => add_mem) (fun a m _ hm => ?_) hm
@@ -1079,7 +1079,7 @@ theorem coe_span_eq_span_of_surjective
 
 中文:
 定理 coe_span_eq_span_of_surjective
-  条件: (h : Function.Surjective (algebraMap R A)) (s : Set M)
+  条件: (h : 函数.满射 (algebraMap R A)) (s : 集合 M)
   证明: congr_arg ((↑) : Submodule R M -> Set M) (Submodule.restrictScalars_span R A h s)
 
 Depends on / 依赖: Submodule, Submodule.restrictScalars_span, congr_arg, restrictScalars_span
@@ -1153,7 +1153,7 @@ theorem smul_mem_span_smul_of_mem
 
 中文:
 定理 smul_mem_span_smul_of_mem
-  结论: {s : Set S} {t : Set A} {k : S} (hks : k in span R s) {x : A}
+  结论: {s : 集合 S} {t : 集合 A} {k : S} (hks : k in span R s) {x : A}
   证明: span_induction (fun _ hc => subset_span <| Set.smul_mem_smul hc hx)
     (by rw [zero_smul]; exact zero_mem _)
     (fun c₁ c₂ _ _ ih₁ ih₂ => by rw [add_smul]; exact add_mem ih₁ ih₂)
@@ -1181,7 +1181,7 @@ theorem span_smul_of_span_eq_top
 
 中文:
 定理 span_smul_of_span_eq_top
-  条件: {s : Set S} (hs : span R s = ⊤) (t : Set A)
+  条件: {s : 集合 S} (hs : span R s = ⊤) (t : 集合 A)
   证明: le_antisymm
     (span_le.2 fun _x ⟨p, _hps, _q, hqt, hpqx⟩ => hpqx ▸ (span S t).smul_mem p (subset_span hqt))
     fun _ hp => closure_induction (hx := hp) (zero_mem _) (fun _ _ _ _ => add_mem) fun s0 y hy => by
@@ -1213,7 +1213,7 @@ theorem smul_mem_span_smul'
 
 中文:
 定理 smul_mem_span_smul'
-  结论: {s : Set S} (hs : span R s = ⊤) {t : Set A} {k : S} {x : A}
+  结论: {s : 集合 S} (hs : span R s = ⊤) {t : 集合 A} {k : S} {x : A}
   证明: by
   rw [span_smul_of_span_eq_top hs] at hx ⊢; exact (span S t).smul_mem k hx
 
@@ -1235,7 +1235,7 @@ theorem smul_mem_span_smul
 
 中文:
 定理 smul_mem_span_smul
-  结论: {s : Set S} (hs : span R s = ⊤) {t : Set A} {k : S} {x : A}
+  结论: {s : 集合 S} (hs : span R s = ⊤) {t : 集合 A} {k : S} {x : A}
   证明: by
   rw [span_smul_of_span_eq_top hs]
   exact (span S t).smul_mem k (span_le_restrictScalars R S t hx)
@@ -1264,7 +1264,7 @@ theorem span_algebraMap_image
 
 中文:
 定理 span_algebraMap_image
-  条件: (a : Set R)
+  条件: (a : 集合 R)
   证明: (Submodule.span_image <| Algebra.linearMap R S).trans rfl
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Submodule, Submodule.span_image, linearMap, span_image
@@ -1283,7 +1283,7 @@ theorem span_algebraMap_image_of_tower
 
 中文:
 定理 span_algebraMap_image_of_tower
-  结论: {S T : 类型} [CommSemiring S] [Semiring T] [Module R S]
+  结论: {S T : 类型} [交换半环 S] [半环 T] [模 R S]
   证明: (Submodule.span_image <| (Algebra.linearMap S T).restrictScalars R).trans rfl
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Submodule, Submodule.span_image, linearMap, restrictScalars, span_image
@@ -1306,7 +1306,7 @@ theorem map_mem_span_algebraMap_image
 
 中文:
 定理 map_mem_span_algebraMap_image
-  结论: {S T : 类型} [CommSemiring S] [Semiring T] [Algebra R S]
+  结论: {S T : 类型} [交换半环 S] [半环 T] [代数 R S]
   证明: by
   rw [span_algebraMap_image_of_tower]; rw [mem_map]
   exact ⟨x, hx, rfl⟩
@@ -1343,7 +1343,7 @@ theorem lsmul_injective
 
 中文:
 定理 lsmul_injective
-  条件: [Module.IsTorsionFree A M] {x : A} (hx : x != 0)
+  条件: [模.是无挠 A M] {x : A} (hx : x != 0)
   证明: smul_right_injective M hx
 
 Depends on / 依赖: smul_right_injective
@@ -1368,8 +1368,8 @@ theorem Algebra.algebraMapSubmonoid_map_map
   proof: algebraMapSubmonoid_map_eq _ (IsScalarTower.toAlgHom R A B)
 
 中文:
-定理 Algebra.algebraMapSubmonoid_map_map
-  结论: {R A B : 类型} [CommSemiring R] [CommSemiring A]
+定理 代数.algebraMapSubmonoid_map_map
+  结论: {R A B : 类型} [交换半环 R] [交换半环 A]
   证明: algebraMapSubmonoid_map_eq _ (IsScalarTower.toAlgHom R A B)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, algebraMapSubmonoid_map_eq, toAlgHom

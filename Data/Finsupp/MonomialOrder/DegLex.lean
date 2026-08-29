@@ -69,7 +69,7 @@ theorem toDegLex_injective
 
 中文:
 定理 toDegLex_injective
-  结论: Function.Injective (toDegLex (α := α))
+  结论: 函数.单射 (toDegLex (α := α))
   证明: fun _ _ => _root_.id
 
 Depends on / 依赖: _root_, _root_.id
@@ -120,7 +120,7 @@ theorem ofDegLex_injective
 
 中文:
 定理 ofDegLex_injective
-  结论: Function.Injective (ofDegLex (α := α))
+  结论: 函数.单射 (ofDegLex (α := α))
   证明: fun _ _ => _root_.id
 
 Depends on / 依赖: _root_, _root_.id
@@ -222,7 +222,7 @@ definition DegLex.rec
 
 中文:
 定义 DegLex.rec
-  签名: {β : DegLex α -> Sort*} (h : 对任意 a, β (toDegLex a))
+  签名: {β : DegLex α -> 类型层*} (h : 对任意 a, β (toDegLex a))
   定义体: fun a => h (ofDegLex a)
 -/
 protected def DegLex.rec {β : DegLex α -> Sort*} (h : forall a, β (toDegLex a)) :
@@ -238,7 +238,7 @@ lemma DegLex.forall_iff
   proof: Iff.rfl
 
 中文:
-引理 DegLex.forall_iff
+引理 DegLex.对任意_iff
   条件: {p : DegLex α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (toDegLex a)
   证明: Iff.rfl
@@ -254,7 +254,7 @@ lemma DegLex.exists_iff
   proof: Iff.rfl
 
 中文:
-引理 DegLex.exists_iff
+引理 DegLex.存在_iff
   条件: {p : DegLex α -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (toDegLex a)
   证明: Iff.rfl
@@ -270,7 +270,7 @@ instance [AddCommMonoid
   body: ofDegLex.addCommMonoid
 
 中文:
-实例 [AddCommMonoid
+实例 [加法交换幺半群
   签名: α] :
   定义体: ofDegLex.addCommMonoid
 
@@ -289,7 +289,7 @@ theorem toDegLex_add
 
 中文:
 定理 toDegLex_add
-  条件: [AddCommMonoid α] (a b : α)
+  条件: [加法交换幺半群 α] (a b : α)
   证明: rfl
 -/
 theorem toDegLex_add [AddCommMonoid α] (a b : α) :
@@ -305,7 +305,7 @@ theorem ofDegLex_add
 
 中文:
 定理 ofDegLex_add
-  条件: [AddCommMonoid α] (a b : DegLex α)
+  条件: [加法交换幺半群 α] (a b : DegLex α)
   证明: rfl
 -/
 theorem ofDegLex_add [AddCommMonoid α] (a b : DegLex α) :
@@ -466,7 +466,7 @@ instance isStrictOrder
 
 中文:
 实例 isStrictOrder
-  签名: : IsStrictOrder (DegLex (α ->₀ 自然数)) (· < ·) where
+  签名: : 是Strict序 (DegLex (α ->₀ 自然数)) (· < ·) where
   定义体: fun a => by simp [lt_def]
   trans := by
     intro a b c hab hbc
@@ -505,7 +505,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (DegLex (α ->₀ 自然数))
+  签名: 线性序 (DegLex (α ->₀ 自然数))
   定义体: fast_instance% LinearOrder.lift'
     (fun (f : DegLex (α ->₀ Nat)) => toLex ((ofDegLex f).degree, toLex (ofDegLex f)))
     (fun f g => by simp)
@@ -570,7 +570,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedCancelAddMonoid (DegLex (α ->₀ 自然数))
+  签名: 是OrderedCancelAdd幺半群 (DegLex (α ->₀ 自然数))
   定义体: by
     rw [le_iff] at h ⊢
     simpa only [ofDegLex_add, map_add, add_lt_add_iff_left, add_right_inj, toLex_add,
@@ -603,7 +603,7 @@ theorem single_strictAnti
 
 中文:
 定理 single_strictAnti
-  结论: StrictAnti (fun (a : α) => toDegLex (single a 1))
+  结论: 严格递减 (fun (a : α) => toDegLex (single a 1))
   证明: by
   intro _ _ h
   simp only [lt_iff, ofDegLex_toDegLex, degree_single, lt_self_iff_false, Lex.single_lt_iff, h,
@@ -626,7 +626,7 @@ theorem single_antitone
 
 中文:
 定理 single_antitone
-  结论: Antitone (fun (a : α) => toDegLex (single a 1))
+  结论: 递减 (fun (a : α) => toDegLex (single a 1))
   证明: single_strictAnti.antitone
 
 Depends on / 依赖: antitone, single_strictAnti, single_strictAnti.antitone
@@ -719,7 +719,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (DegLex (α ->₀ 自然数)) where
+  签名: : 有底序 (DegLex (α ->₀ 自然数)) where
   定义体: toDegLex (0 : α ->₀ Nat)
   bot_le x := by
     simp only [le_iff, ofDegLex_toDegLex, toLex_zero, map_zero]

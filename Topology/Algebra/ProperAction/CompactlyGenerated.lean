@@ -81,8 +81,8 @@ lemma MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
   have hU : IsCompact U := hK.image continu
 
 中文:
-引理 MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
-  条件: [ContinuousSMul G X]
+引理 乘法作用.properSMul_iff_isCompact_setOfPred_inter_nonempty
+  条件: [连续标量乘法 G X]
   证明: by
   refine ⟨fun h => ProperSMul.isCompact_setOfPred_inter_nonempty, fun h => ⟨?_⟩⟩
   refine isProperMap_iff_isCompact_preimage.mpr ⟨by fun_prop, fun {K} hK => ?_⟩
@@ -136,7 +136,7 @@ theorem properlyDiscontinuousSMul_iff_properSMul
 
 中文:
 定理 properlyDiscontinuousSMul_iff_properSMul
-  条件: [DiscreteTopology G] [ContinuousConstSMul G X]
+  条件: [离散拓扑 G] [连续常数标量乘法 G X]
   证明: by
   have : ContinuousSMul G X := ⟨continuous_prod_of_discrete_left.mpr continuous_const_smul⟩
   simp only [MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty, isCompact_iff_finite]

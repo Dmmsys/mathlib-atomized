@@ -41,7 +41,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def badVertices (ε : 实数) (s t : Finset α)
+  签名: def badVertices (ε : 实数) (s t : 有限集 α)
   定义体: {x in s | #{y in t | G.Adj x y} < (G.edgeDensity s t - ε) * #t}
 -/
 private noncomputable def badVertices (ε : Real) (s t : Finset α) : Finset α :=
@@ -123,7 +123,7 @@ lemma card_badVertices_le
 
 中文:
 引理 card_badVertices_le
-  条件: (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t)
+  条件: (dst : 2 * ε <= G.edgeDensity s t) (hst : G.是一致 ε s t)
   证明: by
   have hε : ε <= 1 := (le_mul_of_one_le_left hst.pos.le (by simp)).trans
     (dst.trans <| mod_cast edgeDensity_le_one _ _ _)

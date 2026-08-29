@@ -59,7 +59,7 @@ theorem Prod.mk_dvd_mk
   proof: prod_dvd_iff
 
 中文:
-定理 Prod.mk_dvd_mk
+定理 积类型.mk_dvd_mk
   条件: {x₁ y₁ : G₁} {x₂ y₂ : G₂}
   证明: prod_dvd_iff
 
@@ -83,8 +83,8 @@ instance [DecompositionMonoid
     exact ⟨(a₁, a₂), (a₁', a₂'), ⟨h₁, h₂⟩, ⟨h₁', h₂'⟩, Prod.ext eq₁ eq₂⟩
 
 中文:
-实例 [DecompositionMonoid
-  签名: G₁] [DecompositionMonoid G₂] : DecompositionMonoid (G₁ × G₂) where
+实例 [分解幺半群
+  签名: G₁] [分解幺半群 G₂] : 分解幺半群 (G₁ × G₂) where
   定义体: by
     simp_rw [prod_dvd_iff] at h ⊢
     obtain ⟨a₁, a₁', h₁, h₁', eq₁⟩ := DecompositionMonoid.primal a.1 h.1
@@ -136,8 +136,8 @@ instance [forall
     exact ⟨a₁, a₂, h₁, h₂, funext eq⟩
 
 中文:
-实例 [forall
-  签名: i, DecompositionMonoid (G i)] : DecompositionMonoid (对任意 i, G i) where
+实例 [对任意
+  签名: i, 分解幺半群 (G i)] : 分解幺半群 (对任意 i, G i) where
   定义体: by
     simp_rw [pi_dvd_iff] at h ⊢
     choose a₁ a₂ h₁ h₂ eq using fun i => DecompositionMonoid.primal _ (h i)

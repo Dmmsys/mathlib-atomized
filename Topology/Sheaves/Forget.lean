@@ -57,7 +57,7 @@ theorem isSheaf_iff_isSheaf_comp'
 
 中文:
 定理 isSheaf_iff_isSheaf_comp'
-  结论: {C : 类型u₁} [Category.{v₁} C] {D : 类型u₂} [Category.{v₂} D]
+  结论: {C : 类型u₁} [范畴.{v₁} C] {D : 类型u₂} [范畴.{v₂} D]
   证明: Presheaf.isSheaf_iff_isSheaf_comp _ F G
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_isSheaf_comp, isSheaf_iff_isSheaf_comp
@@ -77,7 +77,7 @@ theorem isSheaf_iff_isSheaf_comp
 
 中文:
 定理 isSheaf_iff_isSheaf_comp
-  结论: {C : 类型u₁} [Category.{v} C] {D : 类型u₂} [Category.{v} D]
+  结论: {C : 类型u₁} [范畴.{v} C] {D : 类型u₂} [范畴.{v} D]
   证明: isSheaf_iff_isSheaf_comp' G F
 
 Depends on / 依赖: isSheaf_iff_isSheaf_comp

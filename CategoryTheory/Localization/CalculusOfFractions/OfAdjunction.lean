@@ -56,7 +56,7 @@ lemma hasLeftCalculusOfFractions
 
 中文:
 引理 hasLeftCalculusOfFractions
-  结论: (adj : G ⊣ F) (W : Morphism命题erty C₁)
+  结论: (adj : G ⊣ F) (W : MorphismProperty C₁)
   证明: by
     obtain ⟨T, s, _, f, rfl⟩ := φ.cases
     dsimp
@@ -103,7 +103,7 @@ lemma hasRightCalculusOfFractions
 
 中文:
 引理 hasRightCalculusOfFractions
-  结论: (adj : F ⊣ G) (W : Morphism命题erty C₁)
+  结论: (adj : F ⊣ G) (W : MorphismProperty C₁)
   证明: have := hasLeftCalculusOfFractions adj.op W.op hW.op (fun _ => hW' _)
   inferInstanceAs W.op.unop.HasRightCalculusOfFractions
 

@@ -42,7 +42,7 @@ theorem mem_sections
 
 中文:
 定理 mem_sections
-  条件: {L : List (List α)} {f}
+  条件: {L : 列表 (列表 α)} {f}
   结论: f in sections L ↔ Forall₂ (· in ·) f L
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -82,7 +82,7 @@ theorem mem_sections_length
 
 中文:
 定理 mem_sections_length
-  条件: {L : List (List α)} {f} (h : f in sections L)
+  条件: {L : 列表 (列表 α)} {f} (h : f in sections L)
   结论: length f = length L
   证明: (mem_sections.1 h).length_eq
 

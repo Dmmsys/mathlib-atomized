@@ -60,8 +60,8 @@ structure NonUnitalStarAlgHom
     - map_star' : forall a : A, toFun (star a) = star (toFun a)
 
 中文:
-结构 NonUnitalStarAlgHom
-  参数: (R A B : 类型) [Monoid R] [NonUnitalNonAssocSemiring A]
+结构 非幺StarAlg态射
+  参数: (R A B : 类型) [幺半群 R] [非幺非结合半环 A]
   继承: A ->ₙₐ[R] B
   公理与运算 (1 个):
     - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
@@ -102,7 +102,7 @@ definition toNonUnitalStarAlgHom
 
 中文:
 定义 toNonUnitalStarAlgHom
-  签名: [StarHomClass F A B] (f : F)
+  签名: [对合态射类 F A B] (f : F)
   定义体: { (f : A ->ₙₐ[R] B) with
     map_star' := map_star f }
 
@@ -121,7 +121,7 @@ instance [StarHomClass
   body: ⟨toNonUnitalStarAlgHom⟩
 
 中文:
-实例 [StarHomClass
+实例 [对合态射类
   签名: F A B] : CoeTC F (A ->⋆ₙₐ[R] B)
   定义体: ⟨toNonUnitalStarAlgHom⟩
 
@@ -139,8 +139,8 @@ instance [StarHomClass
   body: NonUnitalStarRingHomClass.mk
 
 中文:
-实例 [StarHomClass
-  签名: F A B] : NonUnitalStarRingHomClass F A B
+实例 [对合态射类
+  签名: F A B] : 非幺对合环态射类 F A B
   定义体: NonUnitalStarRingHomClass.mk
 
 Depends on / 依赖: NonUnitalStarRingHomClass, NonUnitalStarRingHomClass.mk
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->⋆ₙₐ[R] B) A B
+  签名: 函数状 (A ->⋆ₙₐ[R] B) A B
   定义体: f.toFun
   coe_injective := by rintro ⟨⟨⟨⟨f, _⟩, _⟩, _⟩, _⟩ ⟨⟨⟨⟨g, _⟩, _⟩, _⟩, _⟩ h; congr
 
@@ -223,7 +223,7 @@ initialize_simps_projections NonUnitalStarAlgHom
 
 中文:
 实例 :
-  签名: StarHomClass (A ->⋆ₙₐ[R] B) A B
+  签名: 对合态射类 (A ->⋆ₙₐ[R] B) A B
   定义体: f.map_star'
 
 initialize_simps_projections NonUnitalStarAlgHom
@@ -252,7 +252,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  结论: {F : 类型} [FunLike F A B] [NonUnitalAlgHomClass F R A B]
+  结论: {F : 类型} [函数状 F A B] [NonUnitalAlgHomClass F R A B]
   证明: rfl
 
 @[simp]
@@ -480,7 +480,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(NonUnitalStarAlgHom.id R A) = id
+  结论: ⇑(非幺StarAlg态射.id R A) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(NonUnitalStarAlgHom.id R A) = id :=
@@ -602,7 +602,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->⋆ₙₐ[R] B)
-  结论: (NonUnitalStarAlgHom.id _ _).comp f = f
+  结论: (非幺StarAlg态射.id _ _).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -623,7 +623,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : A ->⋆ₙₐ[R] B)
-  结论: f.comp (NonUnitalStarAlgHom.id _ _) = f
+  结论: f.comp (非幺StarAlg态射.id _ _) = f
   证明: ext fun _ => rfl
 -/
 theorem comp_id (f : A ->⋆ₙₐ[R] B) : f.comp (NonUnitalStarAlgHom.id _ _) = f :=
@@ -645,7 +645,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (A ->⋆ₙₐ[R] A)
+  签名: 幺半群 (A ->⋆ₙₐ[R] A)
   定义体: comp
   mul_assoc := comp_assoc
   one := NonUnitalStarAlgHom.id R A
@@ -715,7 +715,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (A ->⋆ₙₐ[R] B)
+  签名: 零 (A ->⋆ₙₐ[R] B)
   定义体: ⟨{ (0 : NonUnitalAlgHom (MonoidHom.id R) A B) with map_star' := by simp }⟩
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, NonUnitalAlgHom, map_star
@@ -733,7 +733,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ->⋆ₙₐ[R] B)
+  签名: 可居 (A ->⋆ₙₐ[R] B)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (A ->⋆ₙₐ[R] B) :=
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero (A ->⋆ₙₐ[R] A)
+  签名: 带零幺半群 (A ->⋆ₙₐ[R] A)
   定义体: { (inferInstance : Monoid (A ->⋆ₙₐ[R] A)),
     (inferInstance : Zero (A ->⋆ₙₐ[R] A)) with
     zero_mul := fun _ => ext fun _ => rfl
@@ -928,9 +928,9 @@ structure StarAlgHom
     - map_star' : forall x : A, toFun (star x) = star (toFun x)
 
 中文:
-结构 StarAlgHom
-  参数: (R A B : 类型) [CommSemiring R] [Semiring A] [Algebra R A] [Star A]
-  继承: AlgHom R A B
+结构 StarAlg态射
+  参数: (R A B : 类型) [交换半环 R] [半环 A] [代数 R A] [对合 A]
+  继承: 代数态射 R A B
   公理与运算 (1 个):
     - map_star' : 对任意 x : A, toFun (star x) = star (toFun x)
 -/
@@ -1015,7 +1015,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->⋆ₐ[R] B) A B
+  签名: 函数状 (A ->⋆ₐ[R] B) A B
   定义体: f.toFun
   coe_injective := by rintro ⟨⟨⟨⟨⟨f, _⟩, _⟩, _⟩, _⟩, _⟩ ⟨⟨⟨⟨⟨g, _⟩, _⟩, _⟩, _⟩, _⟩ h; congr
 
@@ -1039,7 +1039,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlgHomClass (A ->⋆ₐ[R] B) R A B
+  签名: 代数态射类 (A ->⋆ₐ[R] B) R A B
   定义体: f.map_mul'
   map_one f := f.map_one'
   map_add f := f.map_add'
@@ -1067,7 +1067,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarHomClass (A ->⋆ₐ[R] B) A B
+  签名: 对合态射类 (A ->⋆ₐ[R] B) A B
   定义体: f.map_star'
 
 @[simp]
@@ -1090,7 +1090,7 @@ initialize_simps_projections StarAlgHom (toFun -> apply)
 
 中文:
 定理 coe_coe
-  结论: {F : 类型} [FunLike F A B] [AlgHomClass F R A B]
+  结论: {F : 类型} [函数状 F A B] [代数态射类 F R A B]
   证明: rfl
 
 initialize_simps_projections StarAlgHom (toFun -> apply)
@@ -1350,7 +1350,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(StarAlgHom.id R A) = id
+  结论: ⇑(StarAlg态射.id R A) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(StarAlgHom.id R A) = id :=
@@ -1370,7 +1370,7 @@ definition ofId
 
 中文:
 定义 ofId
-  签名: (R A : 类型) [CommSemiring R] [StarRing R] [Semiring A] [StarMul A]
+  签名: (R A : 类型) [交换半环 R] [对合环 R] [半环 A] [StarMul A]
   定义体: { Algebra.ofId R A with
     toFun := algebraMap R A
     map_star' := by simp [Algebra.algebraMap_eq_smul_one] }
@@ -1395,7 +1395,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ->⋆ₐ[R] A)
+  签名: 可居 (A ->⋆ₐ[R] A)
   定义体: ⟨StarAlgHom.id R A⟩
 
 Depends on / 依赖: StarAlgHom, StarAlgHom.id
@@ -1517,7 +1517,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->⋆ₐ[R] B)
-  结论: (StarAlgHom.id _ _).comp f = f
+  结论: (StarAlg态射.id _ _).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1538,7 +1538,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : A ->⋆ₐ[R] B)
-  结论: f.comp (StarAlgHom.id _ _) = f
+  结论: f.comp (StarAlg态射.id _ _) = f
   证明: ext fun _ => rfl
 -/
 theorem comp_id (f : A ->⋆ₐ[R] B) : f.comp (StarAlgHom.id _ _) = f :=
@@ -1558,7 +1558,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (A ->⋆ₐ[R] A)
+  签名: 幺半群 (A ->⋆ₐ[R] A)
   定义体: comp
   mul_assoc := comp_assoc
   one := StarAlgHom.id R A
@@ -1684,7 +1684,7 @@ definition prod
     map_star' := fun x => by simp [map_star, Prod.ext_iff] }
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : A ->⋆ₙₐ[R] B) (g : A ->⋆ₙₐ[R] C)
   定义体: { f.toNonUnitalAlgHom.prod g.toNonUnitalAlgHom with
     map_star' := fun x => by simp [map_star, Prod.ext_iff] }
@@ -1709,7 +1709,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : A ->⋆ₙₐ[R] B) (g : A ->⋆ₙₐ[R] C)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -1733,7 +1733,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : A ->⋆ₙₐ[R] B) (g : A ->⋆ₙₐ[R] C)
-  结论: (fst R B C).comp (prod f g) = f
+  结论: (fst R B C).comp (乘积 f g) = f
   证明: by
   ext; rfl
 
@@ -1758,7 +1758,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : A ->⋆ₙₐ[R] B) (g : A ->⋆ₙₐ[R] C)
-  结论: (snd R B C).comp (prod f g) = g
+  结论: (snd R B C).comp (乘积 f g) = g
   证明: by
   ext; rfl
 
@@ -1778,7 +1778,7 @@ theorem prod_fst_snd
 
 中文:
 定理 prod_fst_snd
-  结论: prod (fst R A B) (snd R A B) = 1
+  结论: 乘积 (fst R A B) (snd R A B) = 1
   证明: DFunLike.coe_injective Function.prod_fst_snd
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.prod_fst_snd, coe_injective, prod_fst_snd
@@ -1828,8 +1828,8 @@ definition _root_.Pi.evalNonUnitalStarAlgHom
     map_star' _ := rfl }
 
 中文:
-定义 _root_.Pi.evalNonUnitalStarAlgHom
-  签名: (R : 类型) (A : ι -> 类型) (j : ι) [Monoid R]
+定义 _root_.依赖函数类型.evalNonUnitalStarAlgHom
+  签名: (R : 类型) (A : ι -> 类型) (j : ι) [幺半群 R]
   定义体: { Pi.evalMulHom A j, Pi.evalAddHom A j with
     map_smul' _ _ := rfl
     map_zero' := rfl
@@ -1857,8 +1857,8 @@ definition _root_.Pi.evalStarAlgHom
     commutes' _ := rfl }
 
 中文:
-定义 _root_.Pi.evalStarAlgHom
-  签名: (R : 类型) (A : ι -> 类型) (j : ι) [CommSemiring R]
+定义 _root_.依赖函数类型.evalStarAlgHom
+  签名: (R : 类型) (A : ι -> 类型) (j : ι) [交换半环 R]
   定义体: { Pi.evalNonUnitalStarAlgHom R A j, Pi.evalRingHom A j with
     commutes' _ := rfl }
 
@@ -1968,7 +1968,7 @@ theorem coe_inr
 
 中文:
 定理 coe_inr
-  结论: (inr R A B : B -> A × B) = Prod.mk 0
+  结论: (inr R A B : B -> A × B) = 积类型.mk 0
   证明: rfl
 
 Depends on / 依赖: GeometricallyConnected, Surjective
@@ -2056,7 +2056,7 @@ definition prod
   body: { f.toAlgHom.prod g.toAlgHom with map_star' := fun x => by simp [Prod.star_def, map_star] }
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : A ->⋆ₐ[R] B) (g : A ->⋆ₐ[R] C)
   定义体: { f.toAlgHom.prod g.toAlgHom with map_star' := fun x => by simp [Prod.star_def, map_star] }
 
@@ -2079,7 +2079,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : A ->⋆ₐ[R] B) (g : A ->⋆ₐ[R] C)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -2103,7 +2103,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : A ->⋆ₐ[R] B) (g : A ->⋆ₐ[R] C)
-  结论: (fst R B C).comp (prod f g) = f
+  结论: (fst R B C).comp (乘积 f g) = f
   证明: by
   ext; rfl
 
@@ -2128,7 +2128,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : A ->⋆ₐ[R] B) (g : A ->⋆ₐ[R] C)
-  结论: (snd R B C).comp (prod f g) = g
+  结论: (snd R B C).comp (乘积 f g) = g
   证明: by
   ext; rfl
 
@@ -2148,7 +2148,7 @@ theorem prod_fst_snd
 
 中文:
 定理 prod_fst_snd
-  结论: prod (fst R A B) (snd R A B) = 1
+  结论: 乘积 (fst R A B) (snd R A B) = 1
   证明: DFunLike.coe_injective Function.prod_fst_snd
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.prod_fst_snd, coe_injective, prod_fst_snd
@@ -2193,8 +2193,8 @@ structure StarAlgEquiv
     - map_smul' : forall (r : R) (a : A), toFun (r • a) = r • toFun a
 
 中文:
-结构 StarAlgEquiv
-  参数: (R A B : 类型) [Add A] [Add B] [Mul A] [Mul B] [SMul R A] [SMul R B]
+结构 StarAlg等价
+  参数: (R A B : 类型) [加法 A] [加法 B] [乘法 A] [乘法 B] [标量乘法 R A] [标量乘法 R B]
   继承: A ≃⋆+* B
   公理与运算 (1 个):
     - map_smul' : 对任意 (r : R) (a : A), toFun (r • a) = r • toFun a
@@ -2222,9 +2222,9 @@ class NonUnitalAlgEquivClass
   (no additional axioms)
 
 中文:
-类 NonUnitalAlgEquivClass
+类 非幺Alg等价类
   参数: (F : 类型) (R A B : outParam 类型)
-  继承: RingEquivClass F A B, MulActionSemiHomClass F (@id R) A B
+  继承: 环等价类 F A B, MulActionSemi态射类 F (@id R) A B
   (无附加公理)
 -/
 class NonUnitalAlgEquivClass (F : Type*) (R A B : outParam Type*)
@@ -2262,7 +2262,7 @@ definition toStarAlgEquiv
 
 中文:
 定义 toStarAlgEquiv
-  签名: {F R A B : 类型} [Add A] [Mul A] [SMul R A] [Star A] [Add B] [Mul B] [SMul R B]
+  签名: {F R A B : 类型} [加法 A] [乘法 A] [标量乘法 R A] [对合 A] [加法 B] [乘法 B] [标量乘法 R B]
   定义体: { (RingEquivClass.toRingEquiv f : A ≃+* B) with
     map_star' := map_star f
     map_smul' := map_smul f }
@@ -2286,7 +2286,7 @@ instance instCoeHead
 
 中文:
 实例 instCoeHead
-  签名: {F R A B : 类型} [Add A] [Mul A] [SMul R A] [Star A] [Add B] [Mul B]
+  签名: {F R A B : 类型} [加法 A] [乘法 A] [标量乘法 R A] [对合 A] [加法 B] [乘法 B]
   定义体: ⟨toStarAlgEquiv⟩
 
 Depends on / 依赖: GeometricallyIntegral, GeometricallyIrreducible, toStarAlgEquiv
@@ -2322,7 +2322,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A ≃⋆ₐ[R] B) A B
+  签名: 等价状 (A ≃⋆ₐ[R] B) A B
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -2356,7 +2356,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalAlgEquivClass (A ≃⋆ₐ[R] B) R A B
+  签名: 非幺Alg等价类 (A ≃⋆ₐ[R] B) R A B
   定义体: f.map_mul'
   map_add f := f.map_add'
   map_smulₛₗ := map_smul'
@@ -2378,7 +2378,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRingEquivClass (A ≃⋆ₐ[R] B) A B
+  签名: 对合环等价类 (A ≃⋆ₐ[R] B) A B
   定义体: f.map_star'
 
 Depends on / 依赖: f.map_star, map_star
@@ -2399,7 +2399,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ≃⋆ₐ[R] B) A B
+  签名: 函数状 (A ≃⋆ₐ[R] B) A B
   定义体: f.toFun
   coe_injective := DFunLike.coe_injective
 
@@ -2512,7 +2512,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ≃⋆ₐ[R] A)
+  签名: 可居 (A ≃⋆ₐ[R] A)
   定义体: ⟨.refl R A⟩
 
 @[simp]
@@ -2531,7 +2531,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: ⇑(StarAlgEquiv.refl R A) = id
+  结论: ⇑(StarAlg等价.refl R A) = id
   证明: rfl
 -/
 theorem coe_refl : ⇑(StarAlgEquiv.refl R A) = id :=
@@ -2586,7 +2586,7 @@ theorem invFun_eq_symm
 中文:
 定理 invFun_eq_symm
   条件: {e : A ≃⋆ₐ[R] B}
-  结论: EquivLike.inv e = e.symm
+  结论: 等价状.inv e = e.symm
   证明: rfl
 
 @[simp]
@@ -2662,7 +2662,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (A ≃⋆ₐ[R] B) -> B ≃⋆ₐ[R] A)
+  结论: 函数.双射 (symm : (A ≃⋆ₐ[R] B) -> B ≃⋆ₐ[R] A)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2758,7 +2758,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (StarAlgEquiv.refl R A).symm = .refl R A
+  结论: (StarAlg等价.refl R A).symm = .refl R A
   证明: rfl
 
 @[simp]
@@ -2969,7 +2969,7 @@ theorem leftInverse_symm
 中文:
 定理 leftInverse_symm
   条件: (e : A ≃⋆ₐ[R] B)
-  结论: Function.LeftInverse e.symm e
+  结论: 函数.左逆 e.symm e
   证明: e.left_inv
 
 Depends on / 依赖: e.left_inv, left_inv
@@ -2989,7 +2989,7 @@ theorem rightInverse_symm
 中文:
 定理 rightInverse_symm
   条件: (e : A ≃⋆ₐ[R] B)
-  结论: Function.RightInverse e.symm e
+  结论: 函数.右逆 e.symm e
   证明: e.right_inv
 
 Depends on / 依赖: GeometricallyIrreducible, GeometricallyIrreducible.iff_geometricallyIrreducible_fiber, Nonempty, Scheme, Scheme.Hom.fiberToSpecResidueField, Set.nonempty, e.right_inv, fiberHomeo, fiberToSpecResidueField, g.fiberToSpecResidueField, geometrically_iff_of_isClosedUnderIsomorphisms, geometrically_iff_of_isClosedUnderIsomorphisms.mpr, iff_geometricallyIrreducible_fiber, nonempty, nonempty_congr, pullback, pullback.map, right_inv
@@ -3103,7 +3103,7 @@ theorem toAlgEquiv_trans
 
 中文:
 定理 toAlgEquiv_trans
-  结论: {C : 类型} [Semiring C] [Algebra R C] [Star C] (f : A ≃⋆ₐ[R] B)
+  结论: {C : 类型} [半环 C] [代数 R C] [对合 C] (f : A ≃⋆ₐ[R] B)
   证明: rfl
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_isPullback, isPullback_morphismRestrict, of_isPullback
@@ -3123,7 +3123,7 @@ theorem toAlgEquiv_injective
 
 中文:
 定理 toAlgEquiv_injective
-  结论: Function.Injective (toAlgEquiv (R := R) (A := A) (B := B))
+  结论: 函数.单射 (toAlgEquiv (R := R) (A := A) (B := B))
   证明: fun _ _ h => ext AlgEquiv.congr_fun h
 
 @[simp]
@@ -3144,7 +3144,7 @@ theorem toAlgEquiv_refl
 
 中文:
 定理 toAlgEquiv_refl
-  结论: (StarAlgEquiv.refl R A).toAlgEquiv = AlgEquiv.refl
+  结论: (StarAlg等价.refl R A).toAlgEquiv = 代数等价.refl
   证明: rfl
 
 Depends on / 依赖: GeometricallyReduced, GeometricallyReduced.geometrically_isReduced, geometrically_isReduced, of_hasPullback
@@ -3321,7 +3321,7 @@ lemma toNonUnitalStarAlgHom_refl
 
 中文:
 引理 toNonUnitalStarAlgHom_refl
-  结论: (StarAlgEquiv.refl R A₁).toNonUnitalStarAlgHom = .id R A₁
+  结论: (StarAlg等价.refl R A₁).toNonUnitalStarAlgHom = .id R A₁
   证明: rfl
 
 @[simp]
@@ -3420,7 +3420,7 @@ theorem arrowCongr'_refl
 
 中文:
 定理 arrowCongr'_refl
-  结论: arrowCongr' (.refl _ _) (.refl _ _) = Equiv.refl (A₁ ->⋆ₙₐ[R] A₂)
+  结论: arrowCongr' (.refl _ _) (.refl _ _) = 等价.refl (A₁ ->⋆ₙₐ[R] A₂)
   证明: rfl
 
 @[simp]
@@ -3644,7 +3644,7 @@ lemma toStarAlgHom_refl
 
 中文:
 引理 toStarAlgHom_refl
-  结论: (StarAlgEquiv.refl R A₁).toStarAlgHom = .id R A₁
+  结论: (StarAlg等价.refl R A₁).toStarAlgHom = .id R A₁
   证明: rfl
 
 @[simp]
@@ -3741,7 +3741,7 @@ theorem arrowCongr_refl
 
 中文:
 定理 arrowCongr_refl
-  结论: arrowCongr (.refl _ _) (.refl _ _) = Equiv.refl (A₁ ->⋆ₐ[R] A₂)
+  结论: arrowCongr (.refl _ _) (.refl _ _) = 等价.refl (A₁ ->⋆ₐ[R] A₂)
   证明: rfl
 
 @[simp]
@@ -3809,7 +3809,7 @@ definition ofStarAlgHom
 
 中文:
 定义 ofStarAlgHom
-  签名: {R A B : 类型} [CommSemiring R]
+  签名: {R A B : 类型} [交换半环 R]
   定义体: { f with
     toFun := f
     invFun := g
@@ -3919,7 +3919,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : F) (hf : Function.Bijective f)
+  签名: (f : F) (hf : 函数.双射 f)
   定义体: {
     RingEquiv.ofBijective f
       (hf : Function.Bijective (f : A -> B)) with
@@ -3950,7 +3950,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  条件: {f : F} (hf : Function.Bijective f)
+  条件: {f : F} (hf : 函数.双射 f)
   证明: rfl
 -/
 theorem coe_ofBijective {f : F} (hf : Function.Bijective f) :
@@ -3967,7 +3967,7 @@ theorem ofBijective_apply
 
 中文:
 定理 ofBijective_apply
-  条件: {f : F} (hf : Function.Bijective f) (a : A)
+  条件: {f : F} (hf : 函数.双射 f) (a : A)
   证明: rfl
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom_comp, Spec.map_comp, map_comp, ofHom_comp, specOverSpec_over
@@ -3998,7 +3998,7 @@ inv_mul_cancel f := ext symm_apply_apply f
 
 中文:
 实例 aut
-  签名: : Group (R ≃⋆ₐ[S] R) where
+  签名: : 群 (R ≃⋆ₐ[S] R) where
   定义体: .refl _ _
   mul a b := b.trans a
   one_mul _ := rfl

@@ -83,7 +83,7 @@ structure Octahedron
     - mem : Triangle.mk m₁ m₃ (w₂₃ ≫ v₁₂⟦1⟧') in distTriang C
 
 中文:
-结构 Octahedron
+结构 八面体
   公理与运算 (7 个):
     - m₁ : Z₁₂ ⟶ Z₁₃
     - m₃ : Z₁₃ ⟶ Z₂₃
@@ -338,7 +338,7 @@ structure Octahedron'
     - mem : Triangle.mk m₁ m₃ (v₂₃ ≫ w₁₂) in distTriang C
 
 中文:
-结构 Octahedron'
+结构 八面体'
   公理与运算 (7 个):
     - m₁ : Z₁₂ ⟶ Z₁₃
     - m₃ : Z₁₃ ⟶ Z₂₃
@@ -518,10 +518,10 @@ class IsTriangulated
     - octahedron_axiom : forall {X₁ X₂ X₃ Z₁₂ Z₂₃ Z₁₃ : C} {u₁₂ : X₁ ⟶ X₂} {u₂₃ : X₂ ⟶ X₃} {u₁₃ : X₁ ⟶ X₃} (comm : u₁₂ ≫ u₂₃ = u₁₃) {v₁₂ : X₂ ⟶ Z₁₂} {w₁₂ : Z₁₂ ⟶ X₁⟦(1 : Int)⟧} (h₁₂ : Triangle.mk u₁₂ v₁₂ w₁₂ in distTriang C) {v₂₃ : X₃ ⟶ Z₂₃} {w₂₃ : Z₂₃ ⟶ X₂⟦(1 : Int)⟧} (h₂₃ : Triangle.mk u₂₃ v₂₃ w₂₃ in distTriang C) {v₁₃ : X₃ ⟶ Z₁₃} {w₁₃ : Z₁₃ ⟶ X₁⟦(1 : Int)⟧} (h₁₃ : Triangle.mk u₁₃ v₁₃ w₁₃ in distTriang C), Nonempty (Octahedron comm h₁₂ h₂₃ h₁₃)
 
 中文:
-类 IsTriangulated
+类 是三角
   参数: : 命题 where
   公理与运算 (1 个):
-    - octahedron_axiom : 对任意 {X₁ X₂ X₃ Z₁₂ Z₂₃ Z₁₃ : C} {u₁₂ : X₁ ⟶ X₂} {u₂₃ : X₂ ⟶ X₃} {u₁₃ : X₁ ⟶ X₃} (comm : u₁₂ ≫ u₂₃ = u₁₃) {v₁₂ : X₂ ⟶ Z₁₂} {w₁₂ : Z₁₂ ⟶ X₁⟦(1 : 整数)⟧} (h₁₂ : Triangle.mk u₁₂ v₁₂ w₁₂ in distTriang C) {v₂₃ : X₃ ⟶ Z₂₃} {w₂₃ : Z₂₃ ⟶ X₂⟦(1 : 整数)⟧} (h₂₃ : Triangle.mk u₂₃ v₂₃ w₂₃ in distTriang C) {v₁₃ : X₃ ⟶ Z₁₃} {w₁₃ : Z₁₃ ⟶ X₁⟦(1 : 整数)⟧} (h₁₃ : Triangle.mk u₁₃ v₁₃ w₁₃ in distTriang C), Nonempty (Octahedron comm h₁₂ h₂₃ h₁₃)
+    - octahedron_axiom : 对任意 {X₁ X₂ X₃ Z₁₂ Z₂₃ Z₁₃ : C} {u₁₂ : X₁ ⟶ X₂} {u₂₃ : X₂ ⟶ X₃} {u₁₃ : X₁ ⟶ X₃} (comm : u₁₂ ≫ u₂₃ = u₁₃) {v₁₂ : X₂ ⟶ Z₁₂} {w₁₂ : Z₁₂ ⟶ X₁⟦(1 : 整数)⟧} (h₁₂ : Triangle.mk u₁₂ v₁₂ w₁₂ in distTriang C) {v₂₃ : X₃ ⟶ Z₂₃} {w₂₃ : Z₂₃ ⟶ X₂⟦(1 : 整数)⟧} (h₂₃ : Triangle.mk u₂₃ v₂₃ w₂₃ in distTriang C) {v₁₃ : X₃ ⟶ Z₁₃} {w₁₃ : Z₁₃ ⟶ X₁⟦(1 : 整数)⟧} (h₁₃ : Triangle.mk u₁₃ v₁₃ w₁₃ in distTriang C), 非空 (八面体 comm h₁₂ h₂₃ h₁₃)
 -/
 class IsTriangulated : Prop where
   /-- the octahedron axiom (TR 4) -/
@@ -544,8 +544,8 @@ definition Triangulated.someOctahedron
   body: (IsTriangulated.octahedron_axiom comm h₁₂ h₂₃ h₁₃).some
 
 中文:
-定义 Triangulated.someOctahedron
-  签名: [IsTriangulated C]
+定义 三角.someOctahedron
+  签名: [是三角 C]
   定义体: (IsTriangulated.octahedron_axiom comm h₁₂ h₂₃ h₁₃).some
 -/
 @[no_expose] def Triangulated.someOctahedron [IsTriangulated C]
@@ -574,8 +574,8 @@ definition Triangulated.someOctahedron'
   have
 
 中文:
-定义 Triangulated.someOctahedron'
-  签名: [IsTriangulated C]
+定义 三角.someOctahedron'
+  签名: [是三角 C]
   定义体: by
   let o := someOctahedron comm (rot_of_distTriang _ h₁₂) (rot_of_distTriang _ h₂₃)
     (rot_of_distTriang _ h₁₃)
@@ -640,7 +640,7 @@ lemma IsTriangulated.mk'
       u₁₂ u₂₃ _ rfl e₁ e₂ e₃ comm₁₂ comm₂₃ v₁₂ w₁₂ h₁₂ v₂₃ w₂₃ h₂₃ v₁₃ w₁₃ h₁₃ H.some⟩
 
 中文:
-引理 IsTriangulated.mk'
+引理 是三角.mk'
   结论: (h : 对任意 ⦃X₁' X₂' X₃' : C⦄ (u₁₂' : X₁' ⟶ X₂') (u₂₃' : X₂' ⟶ X₃'),
   证明: by
     obtain ⟨X₁, X₂, X₃, Z₁₂, Z₂₃, Z₁₃, u₁₂, u₂₃, e₁, e₂, e₃, comm₁₂, comm₂₃,

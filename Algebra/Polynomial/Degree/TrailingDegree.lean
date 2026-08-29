@@ -68,7 +68,7 @@ theorem trailingDegree_lt_wf
 
 中文:
 定理 trailingDegree_lt_wf
-  结论: WellFounded fun p q : R[X] => trailingDegree p < trailingDegree q
+  结论: 良基 fun p q : R[X] => trailingDegree p < trailingDegree q
   证明: InvImage.wf trailingDegree wellFounded_lt
 
 Depends on / 依赖: InvImage, InvImage.wf, trailingDegree, wellFounded_lt
@@ -392,7 +392,7 @@ theorem natTrailingDegree_eq_of_trailingDegree_eq
 
 中文:
 定理 natTrailingDegree_eq_of_trailingDegree_eq
-  结论: [Semiring S] {q : S[X]}
+  结论: [半环 S] {q : S[X]}
   证明: by
   unfold natTrailingDegree
   rw [h]
@@ -1499,7 +1499,7 @@ theorem natTrailingDegree_mul
 
 中文:
 定理 natTrailingDegree_mul
-  条件: [NoZeroDivisors R] (hp : p != 0) (hq : q != 0)
+  条件: [无零因子 R] (hp : p != 0) (hq : q != 0)
   证明: natTrailingDegree_mul'
     (mul_ne_zero (mt trailingCoeff_eq_zero.mp hp) (mt trailingCoeff_eq_zero.mp hq))
 

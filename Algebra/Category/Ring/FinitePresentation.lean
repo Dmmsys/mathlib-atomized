@@ -50,7 +50,7 @@ lemma RingHom.EssFiniteType.exists_comp_map_eq_of_isColimit
   let D : MulticospanI
 
 中文:
-引理 RingHom.EssFiniteType.exists_comp_map_eq_of_isColimit
+引理 环态射.EssFiniteType.存在_comp_map_eq_of_isColimit
   结论: (hf : f.hom.EssFiniteType)
   证明: by
   classical
@@ -109,8 +109,8 @@ lemma RingHom.EssFiniteType.exists_eq_comp_ι_app_of_isColimit
       exists π : P ⟶ S, iP ≫ π = f ∧ Function.Surject
 
 中文:
-引理 RingHom.EssFiniteType.exists_eq_comp_ι_app_of_isColimit
-  结论: (hf : f.hom.FinitePresentation)
+引理 环态射.EssFiniteType.存在_eq_comp_ι_app_of_isColimit
+  结论: (hf : f.hom.有限呈现)
   证明: by
   classical
   have hc' := isColimitOfPreserves (forget _) hc
@@ -201,7 +201,7 @@ lemma CommRingCat.preservesColimit_coyoneda_of_finitePresentation
       (PreservesColimit.
 
 中文:
-引理 CommRingCat.preservesColimit_coyoneda_of_finitePresentation
+引理 交换环范畴.preservesColimit_coyoneda_of_finitePresentation
   证明: by
   constructor
   intro c hc
@@ -242,7 +242,7 @@ lemma CommRingCat.preservesFilteredColimits_coyoneda
   proof: ⟨fun _ _ _ => ⟨preservesColimit_coyoneda_of_finitePresentation R S hS _⟩⟩
 
 中文:
-引理 CommRingCat.preservesFilteredColimits_coyoneda
+引理 交换环范畴.preservesFilteredColimits_coyoneda
   结论: (S : Under R)
   证明: ⟨fun _ _ _ => ⟨preservesColimit_coyoneda_of_finitePresentation R S hS _⟩⟩
 
@@ -264,8 +264,8 @@ lemma CommRingCat.isFinitelyPresentable_under
   exact preservesFilteredColimits_coyoneda R S hS
 
 中文:
-引理 CommRingCat.isFinitelyPresentable_under
-  条件: (S : Under R) (hS : S.hom.hom.FinitePresentation)
+引理 交换环范畴.isFinitelyPresentable_under
+  条件: (S : Under R) (hS : S.hom.hom.有限呈现)
   证明: by
   rw [isFinitelyPresentable_iff_preservesFilteredColimits]
   exact preservesFilteredColimits_coyoneda R S hS
@@ -287,8 +287,8 @@ lemma CommRingCat.isFinitelyPresentable_hom
   proof: isFinitelyPresentable_under R (Under.mk f) hf
 
 中文:
-引理 CommRingCat.isFinitelyPresentable_hom
-  结论: {S : CommRingCat.{u}} (f : R ⟶ S)
+引理 交换环范畴.isFinitelyPresentable_hom
+  结论: {S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: isFinitelyPresentable_under R (Under.mk f) hf
 
 Depends on / 依赖: Under.mk, isFinitelyPresentable_under

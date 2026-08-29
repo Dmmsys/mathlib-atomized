@@ -79,7 +79,7 @@ theorem optionCongr_refl
 
 中文:
 定理 optionCongr_refl
-  结论: optionCongr (Equiv.refl α) = Equiv.refl _
+  结论: optionCongr (等价.refl α) = 等价.refl _
   证明: ext congr_fun Option.map_id
 
 @[simp, grind =]
@@ -487,7 +487,7 @@ theorem optionCongr_injective
 
 中文:
 定理 optionCongr_injective
-  结论: Function.Injective (optionCongr : α ≃ β -> Option α ≃ Option β)
+  结论: 函数.单射 (optionCongr : α ≃ β -> 选项类型 α ≃ 选项类型 β)
   证明: Function.LeftInverse.injective removeNone_optionCongr
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, removeNone_optionCongr
@@ -843,7 +843,7 @@ theorem optionEquivSumPUnit_none
 中文:
 定理 optionEquivSumPUnit_none
   条件: {α}
-  结论: optionEquivSumPUnit α none = Sum.inr PUnit.unit
+  结论: optionEquivSumPUnit α none = 和.inr 命题单元.unit
   证明: rfl
 
 @[simp]
@@ -866,7 +866,7 @@ theorem optionEquivSumPUnit_some
 中文:
 定理 optionEquivSumPUnit_some
   条件: {α} (a)
-  结论: optionEquivSumPUnit α (some a) = Sum.inl a
+  结论: optionEquivSumPUnit α (some a) = 和.inl a
   证明: rfl
 
 @[simp]
@@ -889,7 +889,7 @@ theorem optionEquivSumPUnit_coe
 中文:
 定理 optionEquivSumPUnit_coe
   条件: {α} (a : α)
-  结论: optionEquivSumPUnit α a = Sum.inl a
+  结论: optionEquivSumPUnit α a = 和.inl a
   证明: rfl
 
 @[simp]
@@ -912,7 +912,7 @@ theorem optionEquivSumPUnit_symm_inl
 中文:
 定理 optionEquivSumPUnit_symm_inl
   条件: {α} (a)
-  结论: (optionEquivSumPUnit α).symm (Sum.inl a) = a
+  结论: (optionEquivSumPUnit α).symm (和.inl a) = a
   证明: rfl
 
 @[simp]
@@ -933,7 +933,7 @@ theorem optionEquivSumPUnit_symm_inr
 中文:
 定理 optionEquivSumPUnit_symm_inr
   条件: {α} (a)
-  结论: (optionEquivSumPUnit α).symm (Sum.inr a) = none
+  结论: (optionEquivSumPUnit α).symm (和.inr a) = none
   证明: rfl
 -/
 theorem optionEquivSumPUnit_symm_inr {α} (a) : (optionEquivSumPUnit α).symm (Sum.inr a) = none :=

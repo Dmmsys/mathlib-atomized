@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace Ordinal.{u}
+  签名: 拓扑空间 序数.{u}
   定义体: Preorder.topology Ordinal.{u}
 
 Depends on / 依赖: CompactSpace, Ordinal, Preorder, Preorder.topology, ProperSpace, proper_of_compact, topology
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology Ordinal.{u}
+  签名: Order拓扑 序数.{u}
   定义体: ⟨rfl⟩
 
 @[deprecated SuccOrder.isOpen_singleton_iff (since := "2026-01-20")]
@@ -90,7 +90,7 @@ theorem isOpen_singleton_iff
 
 中文:
 定理 isOpen_singleton_iff
-  结论: IsOpen ({a} : Set Ordinal) ↔ ¬ IsSuccLimit a
+  结论: 是开集 ({a} : 集合 序数) ↔ ¬ 是SuccLimit a
   证明: SuccOrder.isOpen_singleton_iff
 
 @[deprecated SuccOrder.nhds_eq_pure (since := "2026-01-20")]
@@ -113,7 +113,7 @@ theorem nhds_eq_pure
 
 中文:
 定理 nhds_eq_pure
-  结论: 𝓝 a = pure a ↔ ¬ IsSuccLimit a
+  结论: 𝓝 a = pure a ↔ ¬ 是SuccLimit a
   证明: SuccOrder.nhds_eq_pure
 
 @[deprecated SuccOrder.isOpen_iff (since := "2026-01-20")]
@@ -134,7 +134,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  结论: IsOpen s ↔ 对任意 o in s, IsSuccLimit o -> 存在 a < o, Set.Ioo a o subseteq s
+  结论: 是开集 s ↔ 对任意 o in s, 是SuccLimit o -> 存在 a < o, 集合.开区间 a o subseteq s
   证明: SuccOrder.isOpen_iff
 
 Depends on / 依赖: SuccOrder, SuccOrder.isOpen_iff, isOpen_iff
@@ -161,7 +161,7 @@ theorem mem_closure_tfae
 
 中文:
 定理 mem_closure_tfae
-  条件: (a : Ordinal.{u}) (s : Set Ordinal)
+  条件: (a : 序数.{u}) (s : 集合 序数)
   证明: by
   tfae_have 1 -> 2 := by
     simpa only [mem_closure_iff_nhdsWithin_neBot, inter_comm s, nhdsWithin_inter',
@@ -241,7 +241,7 @@ theorem mem_iff_iSup_of_isClosed
 
 中文:
 定理 mem_iff_iSup_of_isClosed
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: by
   rw [← mem_closure_iff_iSup]; rw [hs.closure_eq]
 
@@ -307,7 +307,7 @@ theorem mem_closed_iff_bsup
 
 中文:
 定理 mem_closed_iff_bsup
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: by
   rw [← mem_closure_iff_bsup]; rw [hs.closure_eq]
 
@@ -411,7 +411,7 @@ theorem isSuccLimit_of_mem_frontier
 中文:
 定理 isSuccLimit_of_mem_frontier
   条件: (ha : a in frontier s)
-  结论: IsSuccLimit a
+  结论: 是SuccLimit a
   证明: SuccOrder.isSuccLimit_of_mem_frontier ha
 
 @[deprecated isNormal_enum_iff_dirSupClosed (since := "2026-05-25")]
@@ -491,7 +491,7 @@ definition IsAcc
 
 中文:
 定义 IsAcc
-  签名: (o : Ordinal) (S : Set Ordinal)
+  签名: (o : 序数) (S : 集合 序数)
   定义体: AccPt o (𝓟 S)
 -/
 def IsAcc (o : Ordinal) (S : Set Ordinal) : Prop :=
@@ -512,7 +512,7 @@ definition IsClosedBelow
 
 中文:
 定义 IsClosedBelow
-  签名: (S : Set Ordinal) (o : Ordinal)
+  签名: (S : 集合 序数) (o : 序数)
   定义体: IsClosed (Iio o ↓inter S)
 
 @[deprecated SuccOrder.accPt_principal (since := "2026-05-24")]
@@ -538,7 +538,7 @@ theorem isAcc_iff
 
 中文:
 定理 isAcc_iff
-  条件: (o : Ordinal) (S : Set Ordinal)
+  条件: (o : 序数) (S : 集合 序数)
   结论: o.IsAcc S ↔
   证明: by
   apply SuccOrder.accPt_principal.trans
@@ -565,8 +565,8 @@ theorem IsAcc.forall_lt
 @[deprecated AccPt.not_isMin (since := "2026-05-24")]
 
 中文:
-定理 IsAcc.forall_lt
-  条件: {o : Ordinal} {S : Set Ordinal} (h : o.IsAcc S)
+定理 IsAcc.对任意_lt
+  条件: {o : 序数} {S : 集合 序数} (h : o.IsAcc S)
   证明: ((isAcc_iff _ _).mp h).2
 
 @[deprecated AccPt.not_isMin (since := "2026-05-24")]
@@ -589,7 +589,7 @@ theorem IsAcc.pos
 
 中文:
 定理 IsAcc.pos
-  条件: {o : Ordinal} {S : Set Ordinal} (h : o.IsAcc S)
+  条件: {o : 序数} {S : 集合 序数} (h : o.IsAcc S)
   证明: pos_iff_ne_zero.mpr ((isAcc_iff _ _).mp h).1
 
 @[deprecated AccPt.isSuccLimit (since := "2026-05-24")]
@@ -613,8 +613,8 @@ theorem IsAcc.isSuccLimit
 
 中文:
 定理 IsAcc.isSuccLimit
-  条件: {o : Ordinal} {S : Set Ordinal} (h : o.IsAcc S)
-  结论: IsSuccLimit o
+  条件: {o : 序数} {S : 集合 序数} (h : o.IsAcc S)
+  结论: 是SuccLimit o
   证明: AccPt.isSuccLimit h
 
 @[deprecated AccPt.mono (since := "2026-05-24")]
@@ -638,7 +638,7 @@ theorem IsAcc.mono
 
 中文:
 定理 IsAcc.mono
-  条件: {o : Ordinal} {S T : Set Ordinal} (h : S subseteq T) (ho : o.IsAcc S)
+  条件: {o : 序数} {S T : 集合 序数} (h : S subseteq T) (ho : o.IsAcc S)
   结论: o.IsAcc T
   证明: AccPt.mono ho (monotone_principal h)
 
@@ -662,7 +662,7 @@ theorem IsAcc.inter_Ioo_nonempty
 
 中文:
 定理 IsAcc.inter_Ioo_nonempty
-  结论: {o : Ordinal} {S : Set Ordinal} (hS : o.IsAcc S)
+  结论: {o : 序数} {S : 集合 序数} (hS : o.IsAcc S)
   证明: hS.forall_lt p hp
 
 @[deprecated IsOpenEmbedding.accPt_comap_iff (since := "2026-03-30")]
@@ -686,7 +686,7 @@ theorem accPt_subtype
 
 中文:
 定理 accPt_subtype
-  条件: {p o : Ordinal} (S : Set Ordinal) (hpo : p < o)
+  条件: {p o : 序数} (S : 集合 序数) (hpo : p < o)
   证明: by
   rw [← comap_principal]; rw [isOpen_Iio.isOpenEmbedding_subtypeVal.accPt_comap_iff]
 
@@ -717,7 +717,7 @@ alias ⟨IsClosedBelow.forall_lt, _⟩ := isClosedBelow_iff
 
 中文:
 定理 isClosedBelow_iff
-  条件: {S : Set Ordinal} {o : Ordinal}
+  条件: {S : 集合 序数} {o : 序数}
   结论: IsClosedBelow S o ↔
   证明: by
   simp [IsClosedBelow, IsAcc, isClosed_iff_accPt, ← comap_principal,
@@ -753,8 +753,8 @@ exact fun p plto pAcc C CmemS => (h C CmemS).forall_lt p plto
 @[deprecated isClosed_iInter (since := "2026-05-24")]
 
 中文:
-定理 IsClosedBelow.sInter
-  结论: {o : Ordinal} {S : Set (Set Ordinal)}
+定理 IsClosedBelow.集合交集
+  结论: {o : 序数} {S : 集合 (集合 序数)}
   证明: by
   rw [isClosedBelow_iff]
 exact fun p plto pAcc C CmemS => (h C CmemS).forall_lt p plto
@@ -780,8 +780,8 @@ theorem IsClosedBelow.iInter
   proof: IsClosedBelow.sInter fun _ ⟨i, hi⟩ => hi ▸ (h i)
 
 中文:
-定理 IsClosedBelow.iInter
-  结论: {ι : 类型u} {f : ι -> Set Ordinal} {o : Ordinal}
+定理 IsClosedBelow.i整数er
+  结论: {ι : 类型u} {f : ι -> 集合 序数} {o : 序数}
   证明: IsClosedBelow.sInter fun _ ⟨i, hi⟩ => hi ▸ (h i)
 
 Depends on / 依赖: IsClosedBelow, IsClosedBelow.sInter, sInter

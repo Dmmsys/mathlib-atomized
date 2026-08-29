@@ -91,7 +91,7 @@ refine ⟨.of_closure (dense_pi univ fun i _ => (h i).1).closure.mono ?_, fun i 
 
 中文:
 定理 UniqueDiffWithinAt.univ_pi
-  结论: {s : 对任意 i, Set (E i)} {x : 对任意 i, E i}
+  结论: {s : 对任意 i, 集合 (E i)} {x : 对任意 i, E i}
   证明: by
   classical
   simp only [uniqueDiffWithinAt_iff, closure_pi_set] at h ⊢
@@ -124,7 +124,7 @@ theorem UniqueDiffOn.univ_pi
 
 中文:
 定理 UniqueDiffOn.univ_pi
-  条件: {s : 对任意 i, Set (E i)} (h : 对任意 i, UniqueDiffOn 𝕜 (s i))
+  条件: {s : 对任意 i, 集合 (E i)} (h : 对任意 i, UniqueDiffOn 𝕜 (s i))
   证明: fun _x hx => .univ_pi fun i => h i _ hx i (mem_univ i)
 
 Depends on / 依赖: mem_univ, univ_pi
@@ -183,7 +183,7 @@ theorem UniqueDiffOn.pi
 中文:
 定理 UniqueDiffOn.pi
   条件: (h : 对任意 i in I, UniqueDiffOn 𝕜 (s i))
-  结论: UniqueDiffOn 𝕜 (Set.pi I s)
+  结论: UniqueDiffOn 𝕜 (集合.pi I s)
   证明: fun x hx => UniqueDiffWithinAt.pi fun i hi => h i hi (x i) (hx i hi)
 
 Depends on / 依赖: UniqueDiffWithinAt, UniqueDiffWithinAt.pi

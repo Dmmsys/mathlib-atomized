@@ -54,7 +54,7 @@ abbreviation Orientation
   body: Module.Ray R (M [⋀^ι]->ₗ[R] R)
 
 中文:
-缩写 Orientation
+缩写 定向
   定义体: Module.Ray R (M [⋀^ι]->ₗ[R] R)
 
 Depends on / 依赖: Module, Module.Ray
@@ -71,10 +71,10 @@ class Module.Oriented
     - positiveOrientation : Orientation R M ι
 
 中文:
-类 Module.Oriented
+类 模.有向
   参数: where
   公理与运算 (1 个):
-    - positiveOrientation : Orientation R M ι
+    - positiveOrientation : 定向 R M ι
 -/
 class Module.Oriented where
   /-- Fix a positive orientation. -/
@@ -95,7 +95,7 @@ definition Orientation.map
 @[simp]
 
 中文:
-定义 Orientation.map
+定义 定向.map
   签名: (e : M ≃ₗ[R] N)
   定义体: Module.Ray.map AlternatingMap.domLCongr R R ι R e
 
@@ -118,7 +118,7 @@ theorem Orientation.map_apply
 @[simp]
 
 中文:
-定理 Orientation.map_apply
+定理 定向.map_apply
   条件: (e : M ≃ₗ[R] N) (v : M [⋀^ι]->ₗ[R] R) (hv : v != 0)
   证明: rfl
 
@@ -142,8 +142,8 @@ theorem Orientation.map_refl
 @[simp]
 
 中文:
-定理 Orientation.map_refl
-  结论: (Orientation.map ι <| LinearEquiv.refl R M) = Equiv.refl _
+定理 定向.map_refl
+  结论: (定向.map ι <| 线性等价.refl R M) = 等价.refl _
   证明: by
   rw [Orientation.map]; rw [AlternatingMap.domLCongr_refl]; rw [Module.Ray.map_refl]
 
@@ -164,7 +164,7 @@ theorem Orientation.map_symm
   proof: rfl
 
 中文:
-定理 Orientation.map_symm
+定理 定向.map_symm
   条件: (e : M ≃ₗ[R] N)
   证明: rfl
 -/
@@ -186,7 +186,7 @@ definition Orientation.reindex
 @[simp]
 
 中文:
-定义 Orientation.reindex
+定义 定向.reindex
   签名: (e : ι ≃ ι')
   定义体: Module.Ray.map AlternatingMap.domDomCongrₗ R e
 
@@ -209,7 +209,7 @@ theorem Orientation.reindex_apply
 @[simp]
 
 中文:
-定理 Orientation.reindex_apply
+定理 定向.reindex_apply
   条件: (e : ι ≃ ι') (v : M [⋀^ι]->ₗ[R] R) (hv : v != 0)
   证明: rfl
 
@@ -233,8 +233,8 @@ theorem Orientation.reindex_refl
 @[simp]
 
 中文:
-定理 Orientation.reindex_refl
-  结论: (Orientation.reindex R M <| Equiv.refl ι) = Equiv.refl _
+定理 定向.reindex_refl
+  结论: (定向.reindex R M <| 等价.refl ι) = 等价.refl _
   证明: by
   rw [Orientation.reindex]; rw [AlternatingMap.domDomCongrₗ_refl]; rw [Module.Ray.map_refl]
 
@@ -255,7 +255,7 @@ theorem Orientation.reindex_symm
   proof: rfl
 
 中文:
-定理 Orientation.reindex_symm
+定理 定向.reindex_symm
   条件: (e : ι ≃ ι')
   证明: rfl
 -/
@@ -283,8 +283,8 @@ theorem Orientation.map_positiveOrientation_of_isEmpty
 @[simp]
 
 中文:
-定理 Orientation.map_positiveOrientation_of_isEmpty
-  条件: [IsEmpty ι] (f : M ≃ₗ[R] N)
+定理 定向.map_positiveOrientation_of_isEmpty
+  条件: [是空 ι] (f : M ≃ₗ[R] N)
   证明: rfl
 
 @[simp]
@@ -309,8 +309,8 @@ theorem Orientation.map_of_isEmpty
   simp only [LinearEquiv.coe_coe, eq_iff_true_of_subsingleton]
 
 中文:
-定理 Orientation.map_of_isEmpty
-  条件: [IsEmpty ι] (x : Orientation R M ι) (f : M ≃ₗ[R] M)
+定理 定向.map_of_isEmpty
+  条件: [是空 ι] (x : 定向 R M ι) (f : M ≃ₗ[R] M)
   证明: by
   induction x using Module.Ray.ind with | h g hg =>
   rw [Orientation.map_apply]
@@ -351,8 +351,8 @@ theorem Orientation.map_neg
 @[simp]
 
 中文:
-定理 Orientation.map_neg
-  条件: {ι : 类型} (f : M ≃ₗ[R] N) (x : Orientation R M ι)
+定理 定向.map_neg
+  条件: {ι : 类型} (f : M ≃ₗ[R] N) (x : 定向 R M ι)
   证明: Module.Ray.map_neg _ x
 
 @[simp]
@@ -371,8 +371,8 @@ theorem Orientation.reindex_neg
   proof: Module.Ray.map_neg _ x
 
 中文:
-定理 Orientation.reindex_neg
-  条件: {ι ι' : 类型} (e : ι ≃ ι') (x : Orientation R M ι)
+定理 定向.reindex_neg
+  条件: {ι ι' : 类型} (e : ι ≃ ι') (x : 定向 R M ι)
   证明: Module.Ray.map_neg _ x
 -/
 protected theorem Orientation.reindex_neg {ι ι' : Type*} (e : ι ≃ ι') (x : Orientation R M ι) :
@@ -397,7 +397,7 @@ theorem map_orientation_eq_det_inv_smul
 
 中文:
 定理 map_orientation_eq_det_inv_smul
-  结论: [Finite ι] (e : Basis ι R M) (x : Orientation R M ι)
+  结论: [有限 ι] (e : 基 ι R M) (x : 定向 R M ι)
   证明: by
   cases nonempty_fintype ι
   let := Classical.decEq ι
@@ -426,7 +426,7 @@ definition orientation
 
 中文:
 定义 orientation
-  签名: (e : Basis ι R M)
+  签名: (e : 基 ι R M)
   定义体: rayOfNeZero R _ e.det_ne_zero
 -/
 protected def orientation (e : Basis ι R M) : Orientation R M ι :=
@@ -443,7 +443,7 @@ theorem orientation_map
 
 中文:
 定理 orientation_map
-  条件: (e : Basis ι R M) (f : M ≃ₗ[R] N)
+  条件: (e : 基 ι R M) (f : M ≃ₗ[R] N)
   证明: by
   simp_rw [Basis.orientation, Orientation.map_apply, Basis.det_map']
 
@@ -464,7 +464,7 @@ theorem orientation_reindex
 
 中文:
 定理 orientation_reindex
-  条件: (e : Basis ι R M) (eι : ι ≃ ι')
+  条件: (e : 基 ι R M) (eι : ι ≃ ι')
   证明: by
   simp_rw [Basis.orientation, Orientation.reindex_apply, Basis.det_reindex']
 
@@ -490,7 +490,7 @@ theorem orientation_unitsSMul
 
 中文:
 定理 orientation_unitsSMul
-  条件: (e : Basis ι R M) (w : ι -> Units R)
+  条件: (e : 基 ι R M) (w : ι -> 单位群 R)
   证明: by
   rw [Basis.orientation]; rw [Basis.orientation]; rw [smul_rayOfNeZero]; rw [ray_eq_iff]; rw [e.det.eq_smul_basis_det (e.unitsSMul w)]; rw [det_unitsSMul_self]; rw [Units.smul_def]; rw [smul_smul]
   norm_cast
@@ -522,7 +522,7 @@ theorem orientation_isEmpty
 
 中文:
 定理 orientation_isEmpty
-  条件: [IsEmpty ι] (b : Basis ι R M)
+  条件: [是空 ι] (b : 基 ι R M)
   证明: by
   rw [Basis.orientation]
   congr
@@ -566,7 +566,7 @@ theorem eq_or_eq_neg_of_isEmpty
 
 中文:
 定理 eq_or_eq_neg_of_isEmpty
-  条件: [IsEmpty ι] (o : Orientation R M ι)
+  条件: [是空 ι] (o : 定向 R M ι)
   证明: by
   induction o using Module.Ray.ind with | h x hx =>
   dsimp [positiveOrientation]
@@ -612,7 +612,7 @@ theorem orientation_eq_iff_det_pos
 
 中文:
 定理 orientation_eq_iff_det_pos
-  条件: (e₁ e₂ : Basis ι R M)
+  条件: (e₁ e₂ : 基 ι R M)
   证明: calc
     e₁.orientation = e₂.orientation ↔ SameRay R e₁.det e₂.det := ray_eq_iff _ _
     _ ↔ SameRay R (e₁.det e₂ • e₂.det) e₂.det := by rw [← e₁.det.eq_smul_basis_det e₂]
@@ -642,7 +642,7 @@ theorem orientation_eq_or_eq_neg
 
 中文:
 定理 orientation_eq_or_eq_neg
-  条件: (e : Basis ι R M) (x : Orientation R M ι)
+  条件: (e : 基 ι R M) (x : 定向 R M ι)
   证明: by
   induction x using Module.Ray.ind with | h x hx =>
   rw [← x.map_basis_ne_zero_iff e] at hx
@@ -671,7 +671,7 @@ theorem orientation_ne_iff_eq_neg
 
 中文:
 定理 orientation_ne_iff_eq_neg
-  条件: (e : Basis ι R M) (x : Orientation R M ι)
+  条件: (e : 基 ι R M) (x : 定向 R M ι)
   证明: ⟨fun h => (e.orientation_eq_or_eq_neg x).resolve_left h, fun h =>
     h.symm ▸ (Module.Ray.ne_neg_self e.orientation).symm⟩
 
@@ -693,7 +693,7 @@ theorem orientation_comp_linearEquiv_eq_iff_det_pos
 
 中文:
 定理 orientation_comp_linearEquiv_eq_iff_det_pos
-  条件: (e : Basis ι R M) (f : M ≃ₗ[R] M)
+  条件: (e : 基 ι R M) (f : M ≃ₗ[R] M)
   证明: by
   rw [orientation_map]; rw [e.map_orientation_eq_det_inv_smul]; rw [units_inv_smul]; rw [units_smul_eq_self_iff]; rw [LinearEquiv.coe_det]
 
@@ -714,7 +714,7 @@ theorem orientation_comp_linearEquiv_eq_neg_iff_det_neg
 
 中文:
 定理 orientation_comp_linearEquiv_eq_neg_iff_det_neg
-  条件: (e : Basis ι R M) (f : M ≃ₗ[R] M)
+  条件: (e : 基 ι R M) (f : M ≃ₗ[R] M)
   证明: by
   rw [orientation_map]; rw [e.map_orientation_eq_det_inv_smul]; rw [units_inv_smul]; rw [units_smul_eq_neg_iff]; rw [LinearEquiv.coe_det]
 
@@ -739,7 +739,7 @@ theorem orientation_neg_single
 
 中文:
 定理 orientation_neg_single
-  条件: (e : Basis ι R M) (i : ι)
+  条件: (e : 基 ι R M) (i : ι)
   证明: by
   rw [orientation_unitsSMul]; rw [Finset.prod_update_of_mem (Finset.mem_univ _)]
   simp
@@ -762,7 +762,7 @@ definition adjustToOrientation
 
 中文:
 定义 adjustToOrientation
-  签名: [Nonempty ι] (e : Basis ι R M) (x : Orientation R M ι)
+  签名: [非空 ι] (e : 基 ι R M) (x : 定向 R M ι)
   定义体: haveI := Classical.decEq (Orientation R M ι)
   if e.orientation = x then e else e.unitsSMul (Function.update 1 (Classical.arbitrary ι) (-1))
 
@@ -790,7 +790,7 @@ theorem orientation_adjustToOrientation
 
 中文:
 定理 orientation_adjustToOrientation
-  结论: [Nonempty ι] (e : Basis ι R M)
+  结论: [非空 ι] (e : 基 ι R M)
   证明: by
   rw [adjustToOrientation]
   split_ifs with h
@@ -822,7 +822,7 @@ theorem adjustToOrientation_apply_eq_or_eq_neg
 
 中文:
 定理 adjustToOrientation_apply_eq_or_eq_neg
-  结论: [Nonempty ι] (e : Basis ι R M)
+  结论: [非空 ι] (e : 基 ι R M)
   证明: by
   rw [adjustToOrientation]
   split_ifs with h
@@ -860,7 +860,7 @@ theorem det_adjustToOrientation
 
 中文:
 定理 det_adjustToOrientation
-  结论: [Nonempty ι] (e : Basis ι R M)
+  结论: [非空 ι] (e : 基 ι R M)
   证明: by
   dsimp [Basis.adjustToOrientation]
   split_ifs
@@ -901,7 +901,7 @@ theorem abs_det_adjustToOrientation
 
 中文:
 定理 abs_det_adjustToOrientation
-  结论: [Nonempty ι] (e : Basis ι R M)
+  结论: [非空 ι] (e : 基 ι R M)
   证明: by
   rcases e.det_adjustToOrientation x with h | h <;> simp [h]
 
@@ -941,7 +941,7 @@ theorem eq_or_eq_neg
 
 中文:
 定理 eq_or_eq_neg
-  结论: [FiniteDimensional R M] (x₁ x₂ : Orientation R M ι)
+  结论: [有限维 R M] (x₁ x₂ : 定向 R M ι)
   证明: by
   have e := (finBasis R M).reindex (Fintype.equivFinOfCardEq h).symm
   let := Classical.decEq ι
@@ -968,7 +968,7 @@ theorem ne_iff_eq_neg
 
 中文:
 定理 ne_iff_eq_neg
-  结论: [FiniteDimensional R M] (x₁ x₂ : Orientation R M ι)
+  结论: [有限维 R M] (x₁ x₂ : 定向 R M ι)
   证明: ⟨fun hn => (eq_or_eq_neg x₁ x₂ h).resolve_left hn, fun he =>
     he.symm ▸ (Module.Ray.ne_neg_self x₂).symm⟩
 
@@ -990,7 +990,7 @@ theorem map_eq_det_inv_smul
 
 中文:
 定理 map_eq_det_inv_smul
-  结论: [FiniteDimensional R M] (x : Orientation R M ι) (f : M ≃ₗ[R] M)
+  结论: [有限维 R M] (x : 定向 R M ι) (f : M ≃ₗ[R] M)
   证明: haveI e := (finBasis R M).reindex (Fintype.equivFinOfCardEq h).symm
   e.map_orientation_eq_det_inv_smul x f
 
@@ -1015,7 +1015,7 @@ theorem map_eq_iff_det_pos
 
 中文:
 定理 map_eq_iff_det_pos
-  结论: [FiniteDimensional R M] (x : Orientation R M ι) (f : M ≃ₗ[R] M)
+  结论: [有限维 R M] (x : 定向 R M ι) (f : M ≃ₗ[R] M)
   证明: by
   cases isEmpty_or_nonempty ι
   · have H : finrank R M = 0 := h.symm.trans Fintype.card_eq_zero
@@ -1049,7 +1049,7 @@ theorem map_eq_neg_iff_det_neg
 
 中文:
 定理 map_eq_neg_iff_det_neg
-  结论: (x : Orientation R M ι) (f : M ≃ₗ[R] M)
+  结论: (x : 定向 R M ι) (f : M ≃ₗ[R] M)
   证明: by
   cases isEmpty_or_nonempty ι
   · have H : finrank R M = 0 := h.symm.trans Fintype.card_eq_zero
@@ -1083,7 +1083,7 @@ definition someBasis
 
 中文:
 定义 someBasis
-  签名: [Nonempty ι] [DecidableEq ι] [FiniteDimensional R M] (x : Orientation R M ι)
+  签名: [非空 ι] [DecidableEq ι] [有限维 R M] (x : 定向 R M ι)
   定义体: ((finBasis R M).reindex (Fintype.equivFinOfCardEq h).symm).adjustToOrientation x
 
 Depends on / 依赖: Fintype, Fintype.equivFinOfCardEq, adjustToOrientation, equivFinOfCardEq, finBasis, reindex
@@ -1104,7 +1104,7 @@ theorem someBasis_orientation
 
 中文:
 定理 someBasis_orientation
-  结论: [Nonempty ι] [DecidableEq ι] [FiniteDimensional R M]
+  结论: [非空 ι] [DecidableEq ι] [有限维 R M]
   证明: Basis.orientation_adjustToOrientation _ _
 
 Depends on / 依赖: Basis.orientation_adjustToOrientation, orientation_adjustToOrientation

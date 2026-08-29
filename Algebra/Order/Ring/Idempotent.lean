@@ -32,8 +32,8 @@ instance [CommMonoid
   body: ⟨(a.1.2, a.1.1), (mul_comm ..).trans a.2.1, (add_comm ..).trans a.2.2⟩
 
 中文:
-实例 [CommMonoid
-  签名: R] [AddCommMonoid R] :
+实例 [交换幺半群
+  签名: R] [加法交换幺半群 R] :
   定义体: ⟨(a.1.2, a.1.1), (mul_comm ..).trans a.2.1, (add_comm ..).trans a.2.2⟩
 
 Depends on / 依赖: add_comm, mul_comm
@@ -54,7 +54,7 @@ lemma eq_of_mul_eq_add_eq_one
 
 中文:
 引理 eq_of_mul_eq_add_eq_one
-  结论: [NonAssocSemiring R] (a : R) {b c : R}
+  结论: [非结合半环 R] (a : R) {b c : R}
   证明: calc b = (a + c) * b := by rw [add_ac, one_mul]
        _ = c * (a + b) := by rw [add_mul, mul, mul_add]
        _ = c := by rw [add_ab, mul_one]
@@ -144,7 +144,7 @@ le_antisymm a b hab hba := mul_eq_zero_add_eq_one_ext_left by rw [← hab, mul_c
 
 中文:
 实例 :
-  签名: PartialOrder {a : R × R // a.1 * a.2 = 0 ∧ a.1 + a.2 = 1}
+  签名: 偏序 {a : R × R // a.1 * a.2 = 0 ∧ a.1 + a.2 = 1}
   定义体: a.1.1 * b.1.1 = a.1.1
   le_refl a := (IsIdempotentElem.of_mul_add a.2.1 a.2.2).1
   le_trans a b c hab hbc := show _ = _ by rw [← hab, mul_assoc, hbc]
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanAlgebra {a : R × R // a.1 * a.2 = 0 ∧ a.1 + a.2 = 1}
+  签名: 布尔代数 {a : R × R // a.1 * a.2 = 0 ∧ a.1 + a.2 = 1}
   定义体: (aᶜ ⊔ bᶜ)ᶜ
   inf_le_left a b := by simp_rw [(· <= ·), (· ⊔ ·), (·ᶜ), SemilatticeSup.sup,
     mul_right_comm, (IsIdempotentElem.of_mul_add a.2.1 a.2.2).1.eq]
@@ -278,7 +278,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice {a : R // IsIdempotentElem a}
+  签名: 格 {a : R // IsIdempotentElem a}
   定义体: inferInstance
   sup a b := ⟨_, a.2.add_sub_mul b.2⟩
   le_sup_left a b := show _ = _ by
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanAlgebra {a : R // IsIdempotentElem a}
+  签名: 布尔代数 {a : R // IsIdempotentElem a}
   定义体: .ofInfSupLe fun a b c => Eq.le Subtype.ext by
     simp_rw [(· ⊔ ·), (· ⊓ ·), SemilatticeSup.sup, SemilatticeInf.inf, Lattice.inf,
       SemilatticeInf.inf, mul_sub, mul_add, mul_mul_mul_comm]

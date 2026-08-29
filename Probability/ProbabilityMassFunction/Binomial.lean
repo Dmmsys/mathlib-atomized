@@ -85,7 +85,7 @@ theorem binomial_apply
 
 中文:
 定理 binomial_apply
-  条件: (p : 实数>=0) (h : p <= 1) (n : 自然数) (i : Fin (n + 1))
+  条件: (p : 实数>=0) (h : p <= 1) (n : 自然数) (i : 有限集 (n + 1))
   证明: by
   simp [binomial]
 

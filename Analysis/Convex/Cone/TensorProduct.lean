@@ -74,7 +74,7 @@ lemma basis_coord_mem_dual
 
 中文:
 引理 basis_coord_mem_dual
-  结论: {ι : 类型} (b : Basis ι R M) (C : PointedCone R M)
+  结论: {ι : 类型} (b : 基 ι R M) (C : PointedCone R M)
   证明: by
   classical
   refine dual_le_dual hC ?_
@@ -179,7 +179,7 @@ theorem minTensorProduct_eq_max_of_simplicial_generating_right
 
 中文:
 定理 minTensorProduct_eq_max_of_simplicial_generating_right
-  结论: (C₁ : 命题erCone 实数 F)
+  结论: (C₁ : ProperCone 实数 F)
   证明: by
   rw [← minTensorProduct_comm]; rw [← maxTensorProduct_comm]; rw [minTensorProduct_eq_max_of_simplicial_generating_left C₂ C₁ h₂_simp h₂_gen]
 

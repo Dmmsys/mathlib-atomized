@@ -285,7 +285,7 @@ definition ofNerve₂
 
 中文:
 定义 ofNerve₂
-  签名: (C : 类型u) [Category.{u} C]
+  签名: (C : 类型u) [范畴.{u} C]
   定义体: ReflQuiv.isoOfEquiv.{u, u} OneTruncation₂.nerveEquiv
     (fun _ _ => OneTruncation₂.nerveHomEquiv) nerveHomEquiv_id
 
@@ -309,7 +309,7 @@ lemma nerve_hom_ext
 
 中文:
 引理 nerve_hom_ext
-  结论: {X : (SSet.Truncated 2)} {C : 类型u} [Category.{u} C]
+  结论: {X : (SSet.Truncated 2)} {C : 类型u} [范畴.{u} C]
   证明: SSet.Truncated.IsStrictSegal.hom_ext (fun f => by
     obtain ⟨x₀, x₁, f, rfl⟩ := Truncated.Edge.exists_of_simplex f
     simpa using congr_arg Truncated.Edge.edge (ReflPrefunctor.congr_hom h f))
@@ -378,7 +378,7 @@ lemma map_map_of_eq.{w}
 
 中文:
 引理 map_map_of_eq.{w}
-  结论: {C : 类型u} [Category.{v} C] (V : Cᵒᵖ ⥤ Type w) {X Y Z : C}
+  结论: {C : 类型u} [范畴.{v} C] (V : Cᵒᵖ ⥤ 类型 w) {X Y Z : C}
   证明: by
   rintro rfl
   simp
@@ -626,7 +626,7 @@ inductive HoRel₂
 归纳类型 HoRel₂
   参数: : HomRel (Cat.FreeRefl (OneTruncation₂ V)) where
   构造子 (1 个):
-    - of_compStruct: {x₀ x₁ x₂ : V _⦋0⦌₂} {e₀₁ : Truncated.Edge x₀ x₁} {e₁₂ : Truncated.Edge x₁ x₂} {e₀₂ : Truncated.Edge x₀ x₂} (h : Truncated.Edge.CompStruct e₀₁ e₁₂ e₀₂) : HoRel₂ ((Cat.FreeRefl.quotientFunctor (OneTruncation₂ V)).map (Quiver.Hom.toPath e₀₁ ≫ Quiver.Hom.toPath e₁₂)) ((Cat.FreeRefl.quotientFunctor (OneTruncation₂ V)).map (Quiver.Hom.toPath e₀₂))
+    - of_compStruct: {x₀ x₁ x₂ : V _⦋0⦌₂} {e₀₁ : Truncated.边 x₀ x₁} {e₁₂ : Truncated.边 x₁ x₂} {e₀₂ : Truncated.边 x₀ x₂} (h : Truncated.边.余mpStruct e₀₁ e₁₂ e₀₂) : HoRel₂ ((Cat.FreeRefl.quotientFunctor (OneTruncation₂ V)).map (箭图.态射.toPath e₀₁ ≫ 箭图.态射.toPath e₁₂)) ((Cat.FreeRefl.quotientFunctor (OneTruncation₂ V)).map (箭图.态射.toPath e₀₂))
 -/
 inductive HoRel₂ : HomRel (Cat.FreeRefl (OneTruncation₂ V)) where
   | of_compStruct {x₀ x₁ x₂ : V _⦋0⦌₂} {e₀₁ : Truncated.Edge x₀ x₁}
@@ -695,7 +695,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotientFunctor V).Full
+  签名: (quotientFunctor V).满
   定义体: Quotient.full_functor _
 
 Depends on / 依赖: Quotient, Quotient.full_functor, full_functor
@@ -735,7 +735,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk (V := V))
+  结论: 函数.满射 (mk (V := V))
   证明: by
   rintro ⟨⟨x⟩⟩
   exact ⟨x, rfl⟩
@@ -814,7 +814,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {x₀ x₁ : V _⦋0⦌₂} (e : Edge x₀ x₁)
+  签名: {x₀ x₁ : V _⦋0⦌₂} (e : 边 x₀ x₁)
   定义体: (quotientFunctor V).map (Cat.FreeRefl.homMk e)
 
 Depends on / 依赖: Cat.FreeRefl.homMk, FreeRefl, quotientFunctor
@@ -836,7 +836,7 @@ lemma congr_arrowMk_homMk
 
 中文:
 引理 congr_arrowMk_homMk
-  结论: {x₀ x₁ : V _⦋0⦌₂} (e : Edge x₀ x₁)
+  结论: {x₀ x₁ : V _⦋0⦌₂} (e : 边 x₀ x₁)
   证明: by
   obtain rfl : x₀ = y₀ := by rw [← e.src_eq, ← e'.src_eq, h]
   obtain rfl : x₁ = y₁ := by rw [← e.tgt_eq, ← e'.tgt_eq, h]
@@ -896,7 +896,7 @@ lemma homMk_comp_homMk
 
 中文:
 引理 homMk_comp_homMk
-  结论: {x₀ x₁ x₂ : V _⦋0⦌₂} {e₀₁ : Edge x₀ x₁} {e₁₂ : Edge x₁ x₂}
+  结论: {x₀ x₁ x₂ : V _⦋0⦌₂} {e₀₁ : 边 x₀ x₁} {e₁₂ : 边 x₁ x₂}
   证明: by
   simpa [homMk] using! CategoryTheory.Quotient.sound _
     (OneTruncation₂.HoRel₂.of_compStruct h)
@@ -920,7 +920,7 @@ definition morphismPropertyHomMk
 
 中文:
 定义 morphismPropertyHomMk
-  签名: : Morphism命题erty V.HomotopyCategory
+  签名: : MorphismProperty V.HomotopyCategory
   定义体: .ofHoms (fun (e : Σ (x y : V _⦋0⦌₂), Edge x y) => homMk e.2.2)
 
 Depends on / 依赖: ofHoms
@@ -941,7 +941,7 @@ lemma morphismPropertyHomMk_of_edge
 
 中文:
 引理 morphismPropertyHomMk_of_edge
-  条件: {x y : V _⦋0⦌₂} (e : Edge x y)
+  条件: {x y : V _⦋0⦌₂} (e : 边 x y)
   证明: by
   dsimp only [morphismPropertyHomMk]
   rw [MorphismProperty.ofHoms_iff]
@@ -1036,7 +1036,7 @@ lemma morphismProperty_eq_top
 
 中文:
 引理 morphismProperty_eq_top
-  结论: {W : Morphism命题erty V.HomotopyCategory}
+  结论: {W : MorphismProperty V.HomotopyCategory}
   证明: le_antisymm (by simp) (by
     rw [← multiplicativeClosure_morphismPropertyHomMk]; rw [MorphismProperty.multiplicativeClosure_le_iff]
     rintro _ _ _ ⟨_, _, e⟩
@@ -1127,7 +1127,7 @@ lemma lift_map_homMk
 
 中文:
 引理 lift_map_homMk
-  条件: {x y : V _⦋0⦌₂} (e : Edge x y)
+  条件: {x y : V _⦋0⦌₂} (e : 边 x y)
   证明: Category.id_comp _
 
 Depends on / 依赖: Category, Category.id_comp, id_comp
@@ -1161,7 +1161,7 @@ definition mkNatTrans
     exact this.symm.le f (by simp)
 
 中文:
-定义 mkNatTrans
+定义 mk自然数Trans
   签名: : F ⟶ G where
   定义体: φ _
   naturality _ _ f := by
@@ -1188,7 +1188,7 @@ lemma mkNatTrans_app_mk
   proof: rfl
 
 中文:
-引理 mkNatTrans_app_mk
+引理 mk自然数Trans_app_mk
   条件: (v : V _⦋0⦌₂)
   证明: rfl
 -/
@@ -1214,7 +1214,7 @@ definition mkNatIso
   body: NatIso.ofComponents (fun _ => iso _) (fun f => (mkNatTrans _ hiso).naturality f)
 
 中文:
-定义 mkNatIso
+定义 mk自然数Iso
   签名: : F ≅ G
   定义体: NatIso.ofComponents (fun _ => iso _) (fun f => (mkNatTrans _ hiso).naturality f)
 
@@ -1235,7 +1235,7 @@ lemma mkNatIso_hom_app_mk
   proof: rfl
 
 中文:
-引理 mkNatIso_hom_app_mk
+引理 mk自然数Iso_hom_app_mk
   条件: (v : V _⦋0⦌₂)
   证明: rfl
 -/
@@ -1254,7 +1254,7 @@ lemma mkNatIso_inv_app_mk
   proof: rfl
 
 中文:
-引理 mkNatIso_inv_app_mk
+引理 mk自然数Iso_inv_app_mk
   条件: (v : V _⦋0⦌₂)
   证明: rfl
 -/
@@ -1313,7 +1313,7 @@ instance subsingleton_hom
 
 中文:
 实例 subsingleton_hom
-  签名: (X : Truncated.{u} 2) [Unique (X _⦋0⦌₂)] [Subsingleton (X _⦋1⦌₂)]
+  签名: (X : Truncated.{u} 2) [唯一 (X _⦋0⦌₂)] [子单例 (X _⦋1⦌₂)]
   定义体: letI : Unique (OneTruncation₂ X) := inferInstanceAs (Unique (X _⦋0⦌₂))
   letI (x y : (OneTruncation₂ X)) : Subsingleton (x ⟶ y) :=
     inferInstanceAs (Subsingleton <| X.Edge _ _)
@@ -1344,7 +1344,7 @@ definition isTerminal
 
 中文:
 定义 isTerminal
-  签名: (X : Truncated.{u} 2) [Unique (X _⦋0⦌₂)] [Subsingleton (X _⦋1⦌₂)]
+  签名: (X : Truncated.{u} 2) [唯一 (X _⦋0⦌₂)] [子单例 (X _⦋1⦌₂)]
   定义体: letI : IsDiscrete (X.HomotopyCategory) := { eq_of_hom := by subsingleton }
   Cat.isTerminalOfUniqueOfIsDiscrete
 
@@ -1427,7 +1427,7 @@ lemma mapHomotopyCategory_homMk
 
 中文:
 引理 mapHomotopyCategory_homMk
-  条件: {x y : V _⦋0⦌₂} (e : Edge x y)
+  条件: {x y : V _⦋0⦌₂} (e : 边 x y)
   证明: rfl
 -/
 lemma mapHomotopyCategory_homMk {x y : V _⦋0⦌₂} (e : Edge x y) :
@@ -1491,7 +1491,7 @@ theorem HomotopyCategory.lift_unique'
 
 中文:
 定理 HomotopyCategory.lift_unique'
-  结论: (V : SSet.Truncated.{u} 2) {D : 类型} [Category* D]
+  结论: (V : SSet.Truncated.{u} 2) {D : 类型} [范畴* D]
   证明: Quotient.lift_unique' _ _ _ h
 
 Depends on / 依赖: Quotient, Quotient.lift_unique, lift_unique
@@ -1549,7 +1549,7 @@ instance instUniqueOneTruncation₂DeltaZero
 
 中文:
 实例 instUniqueOneTruncation₂DeltaZero
-  签名: : Unique (OneTruncation₂ ((truncation 2).obj Δ[0]))
+  签名: : 唯一 (OneTruncation₂ ((truncation 2).obj Δ[0]))
   定义体: inferInstanceAs (Unique (ULift.{_, 0} (⦋0⦌ ⟶ ⦋0⦌)))
 
 Depends on / 依赖: Unique
@@ -1580,7 +1580,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique ((truncation.{u} 2).obj Δ[0]).HomotopyCategory
+  签名: 唯一 ((truncation.{u} 2).obj Δ[0]).HomotopyCategory
   定义体: inferInstanceAs (Unique <| CategoryTheory.Quotient _)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient, Quotient, Unique
@@ -1600,7 +1600,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscrete ((truncation.{u} 2).obj Δ[0]).HomotopyCategory
+  签名: 是离散 ((truncation.{u} 2).obj Δ[0]).HomotopyCategory
   定义体: inferInstanceAs (Subsingleton ((_ : CategoryTheory.Quotient _) ⟶ _))
   eq_of_hom _ := by subsingleton
 
@@ -1621,7 +1621,7 @@ definition isTerminalHoFunctorDeltaZero
 
 中文:
 定义 isTerminalHoFunctorDeltaZero
-  签名: : IsTerminal (hoFunctor.{u}.obj (Δ[0]))
+  签名: : 是终止 (hoFunctor.{u}.obj (Δ[0]))
   定义体: Cat.isTerminalOfUniqueOfIsDiscrete
 
 Depends on / 依赖: Cat.isTerminalOfUniqueOfIsDiscrete, isTerminalOfUniqueOfIsDiscrete
@@ -1660,7 +1660,7 @@ instance hoFunctor.preservesTerminal
 
 中文:
 实例 hoFunctor.preservesTerminal
-  签名: : PreservesLimit (empty.{0} SSet) hoFunctor
+  签名: : 保持极限 (empty.{0} SSet) hoFunctor
   定义体: preservesTerminal_of_iso hoFunctor hoFunctor.terminalIso
 
 Depends on / 依赖: hoFunctor, hoFunctor.terminalIso, preservesTerminal_of_iso, terminalIso

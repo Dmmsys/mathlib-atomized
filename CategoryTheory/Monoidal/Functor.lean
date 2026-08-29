@@ -78,7 +78,7 @@ class LaxMonoidal
     - right_unitality((F)) : forall X : C, (ρ_ (F.obj X)).hom = F.obj X ◁ ε ≫ μ X (𝟙_ C) ≫ F.map (ρ_ X).hom  [default: by cat_disch]
 
 中文:
-类 LaxMonoidal
+类 松弛幺半群
   参数: (F : C ⥤ D)
   公理与运算 (7 个):
     - ε((F)) : 𝟙_ D ⟶ F.obj (𝟙_ C)
@@ -403,7 +403,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : C ⥤ D} (hF : F.LaxMonoidal) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
+  签名: {F : C ⥤ D} (hF : F.松弛幺半群) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
   定义体: ε'
   μ := μ'
 
@@ -466,7 +466,7 @@ definition ofTensorHom
 
 中文:
 定义 ofTensorHom
-  签名: : F.LaxMonoidal where
+  签名: : F.松弛幺半群 where
   定义体: ε
   μ := μ
   μ_natural_left := fun f X' => by
@@ -505,7 +505,7 @@ instance id
 
 中文:
 实例 id
-  签名: : (𝟭 C).LaxMonoidal where
+  签名: : (𝟭 C).松弛幺半群 where
   定义体: 𝟙 _
   μ _ _ := 𝟙 _
 -/
@@ -537,7 +537,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: : (F ⋙ G).LaxMonoidal where
+  签名: : (F ⋙ G).松弛幺半群 where
   定义体: ε G ≫ G.map (ε F)
   μ X Y := μ G _ _ ≫ G.map (μ F X Y)
   μ_natural_left _ _ := by
@@ -584,7 +584,7 @@ class OplaxMonoidal
     - oplax_right_unitality((F)) : forall X : C, (ρ_ (F.obj X)).inv = F.map (ρ_ X).inv ≫ δ X (𝟙_ C) ≫ F.obj X ◁ η  [default: by cat_disch]
 
 中文:
-类 OplaxMonoidal
+类 反松弛幺半群
   参数: (F : C ⥤ D)
   公理与运算 (7 个):
     - η((F)) : F.obj (𝟙_ C) ⟶ 𝟙_ D
@@ -868,7 +868,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : C ⥤ D} (hF : F.OplaxMonoidal) (η' : F.obj (𝟙_ C) ⟶ 𝟙_ D)
+  签名: {F : C ⥤ D} (hF : F.反松弛幺半群) (η' : F.obj (𝟙_ C) ⟶ 𝟙_ D)
   定义体: η'
   δ := δ'
 
@@ -894,7 +894,7 @@ instance id
 
 中文:
 实例 id
-  签名: : (𝟭 C).OplaxMonoidal where
+  签名: : (𝟭 C).反松弛幺半群 where
   定义体: 𝟙 _
   δ _ _ := 𝟙 _
 -/
@@ -925,7 +925,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: : (F ⋙ G).OplaxMonoidal where
+  签名: : (F ⋙ G).反松弛幺半群 where
   定义体: G.map (η F) ≫ η G
   δ X Y := G.map (δ F X Y) ≫ δ G _ _
   δ_natural_left {X Y} f X' := by
@@ -973,9 +973,9 @@ class Monoidal
     - δ_μ((F) (X Y : C)) : δ X Y ≫ μ X Y = 𝟙 _  [default: by cat_disch]
 
 中文:
-类 Monoidal
+类 幺半群
   参数: (F : C ⥤ D)
-  继承: F.LaxMonoidal, F.OplaxMonoidal
+  继承: F.松弛幺半群, F.反松弛幺半群
   公理与运算 (4 个):
     - ε_η((F)) : ε ≫ η = 𝟙 _  [默认: by cat_disch]
     - η_ε((F)) : η ≫ ε = 𝟙 _  [默认: by cat_disch]
@@ -1050,7 +1050,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (ε F)
+  签名: 是同构 (ε F)
   定义体: (εIso F).isIso_hom
 
 Depends on / 依赖: isIso_hom
@@ -1066,7 +1066,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (η F)
+  签名: 是同构 (η F)
   定义体: (εIso F).isIso_inv
 
 Depends on / 依赖: isIso_inv
@@ -1654,7 +1654,7 @@ lemma inv_η
 
 中文:
 引理 inv_η
-  结论: CategoryTheory.inv (η F) = ε F
+  结论: 范畴论.inv (η F) = ε F
   证明: by
   rw [← εIso_hom]; rw [← Iso.comp_inv_eq_id]; rw [εIso_inv]; rw [IsIso.inv_hom_id]
 -/
@@ -1671,7 +1671,7 @@ lemma inv_ε
 
 中文:
 引理 inv_ε
-  结论: CategoryTheory.inv (ε F) = η F
+  结论: 范畴论.inv (ε F) = η F
   证明: by simp [← inv_η]
 -/
 @[simp] lemma inv_ε : CategoryTheory.inv (ε F) = η F := by simp [← inv_η]
@@ -1690,7 +1690,7 @@ lemma inv_μ
 中文:
 引理 inv_μ
   条件: (X Y : C)
-  结论: CategoryTheory.inv (μ F X Y) = δ F X Y
+  结论: 范畴论.inv (μ F X Y) = δ F X Y
   证明: by
   rw [← Monoidal.μIso_inv]; rw [← CategoryTheory.IsIso.inv_eq_inv]
   simp only [IsIso.inv_inv, IsIso.Iso.inv_inv, μIso_hom]
@@ -1711,7 +1711,7 @@ lemma inv_δ
 中文:
 引理 inv_δ
   条件: (X Y : C)
-  结论: CategoryTheory.inv (δ F X Y) = μ F X Y
+  结论: 范畴论.inv (δ F X Y) = μ F X Y
   证明: by simp [← inv_μ]
 -/
 @[simp] lemma inv_δ (X Y : C) : CategoryTheory.inv (δ F X Y) = μ F X Y := by simp [← inv_μ]
@@ -1728,7 +1728,7 @@ definition μNatIso
   body: NatIso.ofComponents (fun _ => μIso F _ _)
 
 中文:
-定义 μNatIso
+定义 μ自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun _ => μIso F _ _)
 
@@ -1793,7 +1793,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟭 C).Monoidal
+  签名: (𝟭 C).幺半群
 -/
 instance : (𝟭 C).Monoidal where
 
@@ -1812,8 +1812,8 @@ instance [F.Monoidal]
   δ_μ _ _ := by simp
 
 中文:
-实例 [F.Monoidal]
-  签名: [G.Monoidal]
+实例 [F.幺半群]
+  签名: [G.幺半群]
   定义体: by simp
   η_ε := by simp
   μ_δ _ _ := by simp
@@ -1845,7 +1845,7 @@ lemma toLaxMonoidal_injective
 
 中文:
 引理 toLaxMonoidal_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: by
   intro a b eq
   ext1
@@ -1893,7 +1893,7 @@ lemma toOplaxMonoidal_injective
 
 中文:
 引理 toOplaxMonoidal_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: by
   intro a b eq
   ext1
@@ -1937,7 +1937,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : C ⥤ D} (hF : F.Monoidal) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
+  签名: {F : C ⥤ D} (hF : F.幺半群) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
   定义体: hF.toLaxMonoidal.copy ε' μ' hε hμ
   __ := hF.toOplaxMonoidal.copy η' δ' hη hδ
 
@@ -1970,7 +1970,7 @@ structure CoreMonoidal
     - right_unitality : forall X : C, (ρ_ (F.obj X)).hom = F.obj X ◁ εIso.hom ≫ (μIso X (𝟙_ C)).hom ≫ F.map (ρ_ X).hom  [default: by cat_disch]
 
 中文:
-结构 CoreMonoidal
+结构 余reMonoidal
   参数: where
   公理与运算 (7 个):
     - εIso : 𝟙_ D ≅ F.obj (𝟙_ C)
@@ -2100,7 +2100,7 @@ definition toLaxMonoidal
 
 中文:
 定义 toLaxMonoidal
-  签名: : F.LaxMonoidal where
+  签名: : F.松弛幺半群 where
   定义体: h.εIso.hom
   μ X Y := (h.μIso X Y).hom
   left_unitality := h.left_unitality
@@ -2131,7 +2131,7 @@ definition toOplaxMonoidal
 
 中文:
 定义 toOplaxMonoidal
-  签名: : F.OplaxMonoidal where
+  签名: : F.反松弛幺半群 where
   定义体: h.εIso.inv
   δ X Y := (h.μIso X Y).inv
   δ_natural_left _ _ := by
@@ -2169,7 +2169,7 @@ definition toMonoidal
 
 中文:
 定义 toMonoidal
-  签名: : F.Monoidal where
+  签名: : F.幺半群 where
   定义体: h.toLaxMonoidal
   toOplaxMonoidal := h.toOplaxMonoidal
 
@@ -2192,7 +2192,7 @@ definition ofLaxMonoidal
 
 中文:
 定义 ofLaxMonoidal
-  签名: [F.LaxMonoidal] [IsIso (ε F)] [对任意 X Y, IsIso (μ F X Y)]
+  签名: [F.松弛幺半群] [是同构 (ε F)] [对任意 X Y, 是同构 (μ F X Y)]
   定义体: asIso (ε F)
   μIso X Y := asIso (μ F X Y)
 -/
@@ -2219,7 +2219,7 @@ definition ofOplaxMonoidal
 
 中文:
 定义 ofOplaxMonoidal
-  签名: [F.OplaxMonoidal] [IsIso (η F)] [对任意 X Y, IsIso (δ F X Y)]
+  签名: [F.反松弛幺半群] [是同构 (η F)] [对任意 X Y, 是同构 (δ F X Y)]
   定义体: (asIso (η F)).symm
   μIso X Y := (asIso (δ F X Y)).symm
   associativity X Y Z := by
@@ -2249,7 +2249,7 @@ definition Monoidal.ofLaxMonoidal
   body: (CoreMonoidal.ofLaxMonoidal F).toMonoidal
 
 中文:
-定义 Monoidal.ofLaxMonoidal
+定义 幺半群.ofLaxMonoidal
   定义体: (CoreMonoidal.ofLaxMonoidal F).toMonoidal
 
 Depends on / 依赖: CoreMonoidal, CoreMonoidal.ofLaxMonoidal, ofLaxMonoidal, toMonoidal
@@ -2269,7 +2269,7 @@ definition Monoidal.ofOplaxMonoidal
   body: (CoreMonoidal.ofOplaxMonoidal F).toMonoidal
 
 中文:
-定义 Monoidal.ofOplaxMonoidal
+定义 幺半群.ofOplaxMonoidal
   定义体: (CoreMonoidal.ofOplaxMonoidal F).toMonoidal
 
 Depends on / 依赖: CoreMonoidal, CoreMonoidal.ofOplaxMonoidal, ofOplaxMonoidal, toMonoidal
@@ -2300,7 +2300,7 @@ instance :
 
 中文:
 实例 :
-  签名: (prod F G).LaxMonoidal
+  签名: (乘积 F G).松弛幺半群
   定义体: ε F ×ₘ ε G
   μ X Y := μ F _ _ ×ₘ μ G _ _
 -/
@@ -2318,7 +2318,7 @@ lemma prod_ε_fst
 
 中文:
 引理 prod_ε_fst
-  结论: (ε (prod F G)).1 = ε F
+  结论: (ε (乘积 F G)).1 = ε F
   证明: rfl
 -/
 @[simp] lemma prod_ε_fst : (ε (prod F G)).1 = ε F := rfl
@@ -2332,7 +2332,7 @@ lemma prod_ε_snd
 
 中文:
 引理 prod_ε_snd
-  结论: (ε (prod F G)).2 = ε G
+  结论: (ε (乘积 F G)).2 = ε G
   证明: rfl
 -/
 @[simp] lemma prod_ε_snd : (ε (prod F G)).2 = ε G := rfl
@@ -2348,7 +2348,7 @@ lemma prod_μ_fst
 中文:
 引理 prod_μ_fst
   条件: (X Y : C × E)
-  结论: (μ (prod F G) X Y).1 = μ F _ _
+  结论: (μ (乘积 F G) X Y).1 = μ F _ _
   证明: rfl
 -/
 @[simp] lemma prod_μ_fst (X Y : C × E) : (μ (prod F G) X Y).1 = μ F _ _ := rfl
@@ -2364,7 +2364,7 @@ lemma prod_μ_snd
 中文:
 引理 prod_μ_snd
   条件: (X Y : C × E)
-  结论: (μ (prod F G) X Y).2 = μ G _ _
+  结论: (μ (乘积 F G) X Y).2 = μ G _ _
   证明: rfl
 -/
 @[simp] lemma prod_μ_snd (X Y : C × E) : (μ (prod F G) X Y).2 = μ G _ _ := rfl
@@ -2388,7 +2388,7 @@ instance :
 
 中文:
 实例 :
-  签名: (prod F G).OplaxMonoidal
+  签名: (乘积 F G).反松弛幺半群
   定义体: η F ×ₘ η G
   δ X Y := δ F _ _ ×ₘ δ G _ _
 -/
@@ -2406,7 +2406,7 @@ lemma prod_η_fst
 
 中文:
 引理 prod_η_fst
-  结论: (η (prod F G)).1 = η F
+  结论: (η (乘积 F G)).1 = η F
   证明: rfl
 -/
 @[simp] lemma prod_η_fst : (η (prod F G)).1 = η F := rfl
@@ -2420,7 +2420,7 @@ lemma prod_η_snd
 
 中文:
 引理 prod_η_snd
-  结论: (η (prod F G)).2 = η G
+  结论: (η (乘积 F G)).2 = η G
   证明: rfl
 -/
 @[simp] lemma prod_η_snd : (η (prod F G)).2 = η G := rfl
@@ -2436,7 +2436,7 @@ lemma prod_δ_fst
 中文:
 引理 prod_δ_fst
   条件: (X Y : C × E)
-  结论: (δ (prod F G) X Y).1 = δ F _ _
+  结论: (δ (乘积 F G) X Y).1 = δ F _ _
   证明: rfl
 -/
 @[simp] lemma prod_δ_fst (X Y : C × E) : (δ (prod F G) X Y).1 = δ F _ _ := rfl
@@ -2452,7 +2452,7 @@ lemma prod_δ_snd
 中文:
 引理 prod_δ_snd
   条件: (X Y : C × E)
-  结论: (δ (prod F G) X Y).2 = δ G _ _
+  结论: (δ (乘积 F G) X Y).2 = δ G _ _
   证明: rfl
 -/
 @[simp] lemma prod_δ_snd (X Y : C × E) : (δ (prod F G) X Y).2 = δ G _ _ := rfl
@@ -2471,8 +2471,8 @@ instance [F.Monoidal]
   δ_μ _ _ := by ext <;> apply Monoidal.δ_μ
 
 中文:
-实例 [F.Monoidal]
-  签名: [G.Monoidal]
+实例 [F.幺半群]
+  签名: [G.幺半群]
   定义体: by ext <;> apply Monoidal.ε_η
   η_ε := by ext <;> apply Monoidal.η_ε
   μ_δ _ _ := by ext <;> apply Monoidal.μ_δ
@@ -2501,7 +2501,7 @@ instance :
 
 中文:
 实例 :
-  签名: (diag C).Monoidal
+  签名: (diag C).幺半群
   定义体: CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -2593,8 +2593,8 @@ instance LaxMonoidal.prod'
   body: inferInstanceAs (diag C ⋙ prod F G).LaxMonoidal
 
 中文:
-实例 LaxMonoidal.prod'
-  签名: : (prod' F G).LaxMonoidal
+实例 松弛幺半群.乘积'
+  签名: : (乘积' F G).松弛幺半群
   定义体: inferInstanceAs (diag C ⋙ prod F G).LaxMonoidal
 
 Depends on / 依赖: LaxMonoidal, cat_disch
@@ -2615,8 +2615,8 @@ lemma prod'_ε_fst
   rfl
 
 中文:
-引理 prod'_ε_fst
-  结论: (ε (prod' F G)).1 = ε F
+引理 乘积'_ε_fst
+  结论: (ε (乘积' F G)).1 = ε F
   证明: by
   change _ ≫ F.map (𝟙 _) = _
   rw [Functor.map_id]; rw [Category.comp_id]
@@ -2642,8 +2642,8 @@ lemma prod'_ε_snd
   rfl
 
 中文:
-引理 prod'_ε_snd
-  结论: (ε (prod' F G)).2 = ε G
+引理 乘积'_ε_snd
+  结论: (ε (乘积' F G)).2 = ε G
   证明: by
   change _ ≫ G.map (𝟙 _) = _
   rw [Functor.map_id]; rw [Category.comp_id]
@@ -2668,9 +2668,9 @@ lemma prod'_μ_fst
   rfl
 
 中文:
-引理 prod'_μ_fst
+引理 乘积'_μ_fst
   条件: (X Y : C)
-  结论: (μ (prod' F G) X Y).1 = μ F X Y
+  结论: (μ (乘积' F G) X Y).1 = μ F X Y
   证明: by
   change _ ≫ F.map (𝟙 _) = _
   rw [Functor.map_id]; rw [Category.comp_id]
@@ -2695,9 +2695,9 @@ lemma prod'_μ_snd
   rfl
 
 中文:
-引理 prod'_μ_snd
+引理 乘积'_μ_snd
   条件: (X Y : C)
-  结论: (μ (prod' F G) X Y).2 = μ G X Y
+  结论: (μ (乘积' F G) X Y).2 = μ G X Y
   证明: by
   change _ ≫ G.map (𝟙 _) = _
   rw [Functor.map_id]; rw [Category.comp_id]
@@ -2723,8 +2723,8 @@ instance OplaxMonoidal.prod'
   body: inferInstanceAs (diag C ⋙ prod F G).OplaxMonoidal
 
 中文:
-实例 OplaxMonoidal.prod'
-  签名: : (prod' F G).OplaxMonoidal
+实例 反松弛幺半群.乘积'
+  签名: : (乘积' F G).反松弛幺半群
   定义体: inferInstanceAs (diag C ⋙ prod F G).OplaxMonoidal
 
 Depends on / 依赖: OplaxMonoidal
@@ -2745,8 +2745,8 @@ lemma prod'_η_fst
   rfl
 
 中文:
-引理 prod'_η_fst
-  结论: (η (prod' F G)).1 = η F
+引理 乘积'_η_fst
+  结论: (η (乘积' F G)).1 = η F
   证明: by
   change F.map (𝟙 _) ≫ _ = _
   rw [Functor.map_id]; rw [Category.id_comp]
@@ -2770,8 +2770,8 @@ lemma prod'_η_snd
   rfl
 
 中文:
-引理 prod'_η_snd
-  结论: (η (prod' F G)).2 = η G
+引理 乘积'_η_snd
+  结论: (η (乘积' F G)).2 = η G
   证明: by
   change G.map (𝟙 _) ≫ _ = _
   rw [Functor.map_id]; rw [Category.id_comp]
@@ -2798,9 +2798,9 @@ lemma prod'_δ_fst
   rfl
 
 中文:
-引理 prod'_δ_fst
+引理 乘积'_δ_fst
   条件: (X Y : C)
-  结论: (δ (prod' F G) X Y).1 = δ F X Y
+  结论: (δ (乘积' F G) X Y).1 = δ F X Y
   证明: by
   change F.map (𝟙 _) ≫ _ = _
   rw [Functor.map_id]; rw [Category.id_comp]
@@ -2827,9 +2827,9 @@ lemma prod'_δ_snd
   rfl
 
 中文:
-引理 prod'_δ_snd
+引理 乘积'_δ_snd
   条件: (X Y : C)
-  结论: (δ (prod' F G) X Y).2 = δ G X Y
+  结论: (δ (乘积' F G) X Y).2 = δ G X Y
   证明: by
   change G.map (𝟙 _) ≫ _ = _
   rw [Functor.map_id]; rw [Category.id_comp]
@@ -2863,8 +2863,8 @@ instance Monoidal.prod'
     · simp only [CategoryTheo
 
 中文:
-实例 Monoidal.prod'
-  签名: [F.Monoidal] [G.Monoidal]
+实例 幺半群.乘积'
+  签名: [F.幺半群] [G.幺半群]
   定义体: by
     ext
     · simp only [CategoryTheory.prod_comp_fst, prod'_ε_fst, prod'_η_fst, ε_η,
@@ -2936,7 +2936,7 @@ definition rightAdjointLaxMonoidal
 
 中文:
 定义 rightAdjointLaxMonoidal
-  签名: : G.LaxMonoidal where
+  签名: : G.松弛幺半群 where
   定义体: adj.homEquiv _ _ (η F)
   μ X Y := adj.homEquiv _ _ (δ F _ _ ≫ (adj.counit.app X otimesₘ adj.counit.app Y))
   μ_natural_left {X Y} f X' := by
@@ -2988,8 +2988,8 @@ class IsMonoidal
     - leftAdjoint_μ((X Y : D)) : μ G X Y = adj.unit.app _ ≫ G.map (δ F _ _ ≫ (adj.counit.app X otimesₘ adj.counit.app Y))  [default: by cat_disch]
 
 中文:
-类 IsMonoidal
-  参数: [G.LaxMonoidal]
+类 是幺半群
+  参数: [G.松弛幺半群]
   公理与运算 (2 个):
     - leftAdjoint_ε : ε G = adj.unit.app _ ≫ G.map (η F)  [默认: by cat_disch]
     - leftAdjoint_μ((X Y : D)) : μ G X Y = adj.unit.app _ ≫ G.map (δ F _ _ ≫ (adj.counit.app X otimesₘ adj.counit.app Y))  [默认: by cat_disch]
@@ -3138,7 +3138,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Adjunction.id (C := C)).IsMonoidal
+  签名: (伴随.id (C := C)).是幺半群
 
 Depends on / 依赖: IsMonoidal
 -/
@@ -3203,7 +3203,7 @@ definition leftAdjointOplaxMonoidal
 
 中文:
 定义 leftAdjointOplaxMonoidal
-  签名: : F.OplaxMonoidal where
+  签名: : F.反松弛幺半群 where
   定义体: (adj.homEquiv _ _).symm (ε G)
   δ X Y := (adj.homEquiv _ _).symm ((adj.unit.app X otimesₘ adj.unit.app Y) ≫ μ G _ _)
   δ_natural_left _ _ := by
@@ -3295,7 +3295,7 @@ definition laxMonoidalEquivOplaxMonoidal
 
 中文:
 定义 laxMonoidalEquivOplaxMonoidal
-  签名: : G.LaxMonoidal ≃ F.OplaxMonoidal where
+  签名: : G.松弛幺半群 ≃ F.反松弛幺半群 where
   定义体: adj.leftAdjointOplaxMonoidal
   invFun _ := adj.rightAdjointLaxMonoidal
   left_inv _ := by
@@ -3387,8 +3387,8 @@ instance [e.inverse.Monoidal]
   body: inferInstanceAs (e.inverse.Monoidal)
 
 中文:
-实例 [e.inverse.Monoidal]
-  签名: : e.symm.functor.Monoidal
+实例 [e.inverse.幺半群]
+  签名: : e.symm.functor.幺半群
   定义体: inferInstanceAs (e.inverse.Monoidal)
 
 Depends on / 依赖: Monoidal, e.inverse.Monoidal, inverse
@@ -3403,8 +3403,8 @@ instance [e.functor.Monoidal]
   body: inferInstanceAs (e.functor.Monoidal)
 
 中文:
-实例 [e.functor.Monoidal]
-  签名: : e.symm.inverse.Monoidal
+实例 [e.functor.幺半群]
+  签名: : e.symm.inverse.幺半群
   定义体: inferInstanceAs (e.functor.Monoidal)
 
 Depends on / 依赖: Monoidal, e.functor.Monoidal, functor
@@ -3429,7 +3429,7 @@ definition inverseMonoidal
 
 中文:
 定义 inverseMonoidal
-  签名: [e.functor.Monoidal]
+  签名: [e.functor.幺半群]
   定义体: by
   letI := e.toAdjunction.rightAdjointLaxMonoidal
   have : IsIso (LaxMonoidal.ε e.inverse) := by
@@ -3459,8 +3459,8 @@ abbreviation IsMonoidal
   body: e.toAdjunction.IsMonoidal
 
 中文:
-缩写 IsMonoidal
-  签名: [e.functor.Monoidal] [e.inverse.Monoidal]
+缩写 是幺半群
+  签名: [e.functor.幺半群] [e.inverse.幺半群]
   定义体: e.toAdjunction.IsMonoidal
 
 Depends on / 依赖: IsMonoidal, e.toAdjunction.IsMonoidal, toAdjunction
@@ -3820,7 +3820,7 @@ instance :
 
 中文:
 实例 :
-  签名: (refl (C := C)).functor.Monoidal
+  签名: (refl (C := C)).functor.幺半群
   定义体: inferInstanceAs (𝟭 C).Monoidal
 
 Depends on / 依赖: Monoidal, functor, functor.Monoidal
@@ -3836,7 +3836,7 @@ instance :
 
 中文:
 实例 :
-  签名: (refl (C := C)).inverse.Monoidal
+  签名: (refl (C := C)).inverse.幺半群
   定义体: inferInstanceAs (𝟭 C).Monoidal
 
 Depends on / 依赖: Monoidal, inverse, inverse.Monoidal
@@ -3853,7 +3853,7 @@ instance isMonoidal_refl
 
 中文:
 实例 isMonoidal_refl
-  签名: : (Equivalence.refl (C := C)).IsMonoidal
+  签名: : (等价.refl (C := C)).是幺半群
   定义体: inferInstanceAs (Adjunction.id (C := C)).IsMonoidal
 
 Depends on / 依赖: IsMonoidal
@@ -3880,7 +3880,7 @@ instance isMonoidal_symm
 
 中文:
 实例 isMonoidal_symm
-  签名: : e.symm.IsMonoidal where
+  签名: : e.symm.是幺半群 where
   定义体: by
     simp only [toAdjunction]
     dsimp [symm]
@@ -3917,8 +3917,8 @@ instance [e'.functor.Monoidal]
   body: inferInstanceAs (e.functor ⋙ e'.functor).Monoidal
 
 中文:
-实例 [e'.functor.Monoidal]
-  签名: : (e.trans e').functor.Monoidal
+实例 [e'.functor.幺半群]
+  签名: : (e.trans e').functor.幺半群
   定义体: inferInstanceAs (e.functor ⋙ e'.functor).Monoidal
 
 Depends on / 依赖: Monoidal, e.functor, functor
@@ -3935,8 +3935,8 @@ instance [e'.inverse.Monoidal]
   body: inferInstanceAs (e'.inverse ⋙ e.inverse).Monoidal
 
 中文:
-实例 [e'.inverse.Monoidal]
-  签名: : (e.trans e').inverse.Monoidal
+实例 [e'.inverse.幺半群]
+  签名: : (e.trans e').inverse.幺半群
   定义体: inferInstanceAs (e'.inverse ⋙ e.inverse).Monoidal
 
 Depends on / 依赖: Monoidal, e.inverse, inverse
@@ -3958,7 +3958,7 @@ instance isMonoidal_trans
 
 中文:
 实例 isMonoidal_trans
-  签名: [e'.functor.Monoidal] [e'.inverse.Monoidal] [e'.IsMonoidal]
+  签名: [e'.functor.幺半群] [e'.inverse.幺半群] [e'.是幺半群]
   定义体: by
   dsimp [Equivalence.IsMonoidal]
   rw [trans_toAdjunction]
@@ -3989,11 +3989,11 @@ structure LaxMonoidalFunctor
     - laxMonoidal : toFunctor.LaxMonoidal  [default: by infer_instance]
 
 中文:
-结构 LaxMonoidalFunctor
+结构 松弛幺半群函子
   参数: extends C ⥤ D
   继承: C ⥤ D
   公理与运算 (1 个):
-    - laxMonoidal : toFunctor.LaxMonoidal  [默认: by infer_instance]
+    - laxMonoidal : toFunctor.松弛幺半群  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -4018,7 +4018,7 @@ definition of
 
 中文:
 定义 of
-  签名: (F : C ⥤ D) [F.LaxMonoidal]
+  签名: (F : C ⥤ D) [F.松弛幺半群]
   定义体: F
 -/
 def of (F : C ⥤ D) [F.LaxMonoidal] : LaxMonoidalFunctor C D where
@@ -4049,7 +4049,7 @@ definition coreMonoidalTransport
 
 中文:
 定义 coreMonoidalTransport
-  签名: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G)
+  签名: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G)
   定义体: εIso F ≪≫ i.app _
   μIso X Y := tensorIso (i.symm.app _) (i.symm.app _) ≪≫ μIso F X Y ≪≫ i.app _
   μIso_hom_natural_left _ _ := by simp [NatTrans.whiskerRight_app_tensor_app_assoc]
@@ -4108,7 +4108,7 @@ definition transport
 
 中文:
 定义 transport
-  签名: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G)
+  签名: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G)
   定义体: (coreMonoidalTransport i).toMonoidal
 
 @[reassoc]
@@ -4134,7 +4134,7 @@ lemma transport_ε
 
 中文:
 引理 transport_ε
-  条件: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G)
+  条件: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G)
   结论: letI
   证明: transport i
     LaxMonoidal.ε G = LaxMonoidal.ε F ≫ i.hom.app (𝟙_ C) :=
@@ -4164,7 +4164,7 @@ lemma transport_η
 
 中文:
 引理 transport_η
-  条件: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G)
+  条件: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G)
   结论: letI
   证明: transport i
     OplaxMonoidal.η G = i.inv.app (𝟙_ C) ≫ OplaxMonoidal.η F :=
@@ -4194,7 +4194,7 @@ lemma transport_μ
 
 中文:
 引理 transport_μ
-  条件: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G) (X Y : C)
+  条件: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G) (X Y : C)
   结论: letI
   证明: transport i
     LaxMonoidal.μ G X Y = (i.inv.app X otimesₘ i.inv.app Y) ≫ LaxMonoidal.μ F X Y ≫ i.hom.app (X otimes Y) :=
@@ -4223,7 +4223,7 @@ lemma transport_δ
 
 中文:
 引理 transport_δ
-  条件: {F G : C ⥤ D} [F.Monoidal] (i : F ≅ G) (X Y : C)
+  条件: {F G : C ⥤ D} [F.幺半群] (i : F ≅ G) (X Y : C)
   结论: letI
   证明: transport i
     OplaxMonoidal.δ G X Y =

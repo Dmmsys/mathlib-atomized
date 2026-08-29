@@ -309,7 +309,7 @@ lemma mk_eq
 
 中文:
 引理 mk_eq
-  结论: mk R R M N = TensorProduct.mk R M N
+  结论: mk R R M N = 张量积.mk R M N
   证明: rfl
 -/
 lemma mk_eq : mk R R M N = TensorProduct.mk R M N := rfl
@@ -554,7 +554,7 @@ theorem map_eq
 中文:
 定理 map_eq
   条件: (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q)
-  结论: map f g = TensorProduct.map f g
+  结论: map f g = 张量积.map f g
   证明: rfl
 -/
 theorem map_eq (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q) : map f g = TensorProduct.map f g := rfl
@@ -1167,7 +1167,7 @@ theorem rid_eq_rid
 
 中文:
 定理 rid_eq_rid
-  结论: AlgebraTensorModule.rid R R M = TensorProduct.rid R M
+  结论: AlgebraTensorModule.rid R R M = 张量积.rid R M
   证明: rfl
 -/
 theorem rid_eq_rid : AlgebraTensorModule.rid R R M = TensorProduct.rid R M := rfl
@@ -1313,7 +1313,7 @@ theorem assoc_eq
 
 中文:
 定理 assoc_eq
-  结论: assoc R R R M P Q = TensorProduct.assoc R M P Q
+  结论: assoc R R R M P Q = 张量积.assoc R M P Q
   证明: rfl
 -/
 theorem assoc_eq : assoc R R R M P Q = TensorProduct.assoc R M P Q := rfl
@@ -1328,7 +1328,7 @@ theorem rTensor_tensor
 
 中文:
 定理 rTensor_tensor
-  条件: [Module R P'] [IsScalarTower R A P'] (g : P ->ₗ[A] P')
+  条件: [模 R P'] [标量塔 R A P'] (g : P ->ₗ[A] P')
   证明: TensorProduct.ext LinearMap.ext fun _ => ext fun _ _ => rfl
 
 Depends on / 依赖: LinearMap, LinearMap.ext, TensorProduct, TensorProduct.ext
@@ -1626,7 +1626,7 @@ theorem leftComm_eq
 
 中文:
 定理 leftComm_eq
-  结论: leftComm R R M P Q = TensorProduct.leftComm R M P Q
+  结论: leftComm R R M P Q = 张量积.leftComm R M P Q
   证明: rfl
 -/
 theorem leftComm_eq : leftComm R R M P Q = TensorProduct.leftComm R M P Q := rfl
@@ -1741,8 +1741,8 @@ theorem rightComm_eq
 
 中文:
 定理 rightComm_eq
-  条件: [Module R P]
-  结论: rightComm R R R M P Q = TensorProduct.rightComm R M P Q
+  条件: [模 R P]
+  结论: rightComm R R R M P Q = 张量积.rightComm R M P Q
   证明: rfl
 -/
 theorem rightComm_eq [Module R P] : rightComm R R R M P Q = TensorProduct.rightComm R M P Q := rfl
@@ -1873,7 +1873,7 @@ definition uliftEquiv
 
 中文:
 定义 uliftEquiv
-  签名: : ULift.{u₁} (M otimes[R] N) ≃ₗ[A] ULift.{u₂} M otimes[ULift.{u₃} R] ULift.{u₄} N
+  签名: : 类型层提升.{u₁} (M otimes[R] N) ≃ₗ[A] 类型层提升.{u₂} M otimes[类型层提升.{u₃} R] 类型层提升.{u₄} N
   定义体: ULift.moduleEquiv ≪≫ₗ
     AlgebraTensorModule.congr ULift.moduleEquiv.symm ULift.moduleEquiv.symm ≪≫ₗ
     (equivOfCompatibleSMul _ _ _ _ _)
@@ -1900,7 +1900,7 @@ lemma down_uliftEquiv_symm_tmul
 
 中文:
 引理 down_uliftEquiv_symm_tmul
-  条件: (m : ULift M) (n : ULift N)
+  条件: (m : 类型层提升 M) (n : 类型层提升 N)
   证明: rfl
 
 @[simp]
@@ -2147,7 +2147,7 @@ lemma baseChange_baseChange
 
 中文:
 引理 baseChange_baseChange
-  结论: {A B : 类型} [CommSemiring A] [Algebra R A]
+  结论: {A B : 类型} [交换半环 A] [代数 R A]
   证明: by
   ext; simp
 -/
@@ -2171,7 +2171,7 @@ lemma baseChange_one
 
 中文:
 引理 baseChange_one
-  结论: (1 : Module.End R M).baseChange A = 1
+  结论: (1 : 模.End R M).baseChange A = 1
   证明: baseChange_id
 
 Depends on / 依赖: baseChange_id
@@ -2189,7 +2189,7 @@ lemma baseChange_mul
 
 中文:
 引理 baseChange_mul
-  条件: (f g : Module.End R M)
+  条件: (f g : 模.End R M)
   证明: by
   ext; simp
 -/
@@ -2238,8 +2238,8 @@ definition _root_.Module.End.baseChangeHom
   body: .ofLinearMap (LinearMap.baseChangeHom _ _ _ _) (baseChange_one _ _) baseChange_mul
 
 中文:
-定义 _root_.Module.End.baseChangeHom
-  签名: : Module.End R M ->ₐ[R] Module.End A (A otimes[R] M)
+定义 _root_.模.End.baseChangeHom
+  签名: : 模.End R M ->ₐ[R] 模.End A (A otimes[R] M)
   定义体: .ofLinearMap (LinearMap.baseChangeHom _ _ _ _) (baseChange_one _ _) baseChange_mul
 
 Depends on / 依赖: LinearMap, LinearMap.baseChangeHom, baseChangeHom, baseChange_mul, baseChange_one, ofLinearMap
@@ -2257,7 +2257,7 @@ lemma baseChange_pow
 
 中文:
 引理 baseChange_pow
-  条件: (f : Module.End R M) (n : 自然数)
+  条件: (f : 模.End R M) (n : 自然数)
   证明: map_pow (Module.End.baseChangeHom _ _ _) f n
 
 Depends on / 依赖: Module, Module.End.baseChangeHom, baseChangeHom, map_pow
@@ -2277,7 +2277,7 @@ definition _root_.LinearEquiv.baseChange
 @[simp]
 
 中文:
-定义 _root_.LinearEquiv.baseChange
+定义 _root_.线性等价.baseChange
   签名: (e : M ≃ₗ[R] N)
   定义体: AlgebraTensorModule.congr (.refl _ _) e
 
@@ -2298,7 +2298,7 @@ theorem _root_.LinearEquiv.coe_baseChange
   proof: rfl
 
 中文:
-定理 _root_.LinearEquiv.coe_baseChange
+定理 _root_.线性等价.coe_baseChange
   条件: (f : M ≃ₗ[R] N)
   证明: rfl
 -/
@@ -2315,7 +2315,7 @@ lemma _root_.LinearEquiv.baseChange_tmul
   proof: rfl
 
 中文:
-引理 _root_.LinearEquiv.baseChange_tmul
+引理 _root_.线性等价.baseChange_tmul
   条件: {e : M ≃ₗ[R] N} (a : A) (m : M)
   证明: rfl
 -/
@@ -2334,7 +2334,7 @@ lemma _root_.LinearEquiv.baseChange_symm_tmul
 @[simp]
 
 中文:
-引理 _root_.LinearEquiv.baseChange_symm_tmul
+引理 _root_.线性等价.baseChange_symm_tmul
   条件: {e : M ≃ₗ[R] N} (a : A) (n : N)
   证明: rfl
 
@@ -2355,7 +2355,7 @@ theorem _root_.LinearEquiv.baseChange_one
   simp [← LinearEquiv.coe_toLinearMap]
 
 中文:
-定理 _root_.LinearEquiv.baseChange_one
+定理 _root_.线性等价.baseChange_one
   证明: by
   ext x
   simp [← LinearEquiv.coe_toLinearMap]
@@ -2379,7 +2379,7 @@ theorem _root_.LinearEquiv.baseChange_trans
     LinearEquiv.coe_trans, baseChange_eq_ltensor, lTensor_comp_apply]
 
 中文:
-定理 _root_.LinearEquiv.baseChange_trans
+定理 _root_.线性等价.baseChange_trans
   条件: (e : M ≃ₗ[R] N) (f : N ≃ₗ[R] P)
   证明: by
   ext x
@@ -2404,7 +2404,7 @@ theorem _root_.LinearEquiv.baseChange_mul
   simp [LinearEquiv.mul_eq_trans, LinearEquiv.baseChange_trans]
 
 中文:
-定理 _root_.LinearEquiv.baseChange_mul
+定理 _root_.线性等价.baseChange_mul
   条件: (e : M ≃ₗ[R] M) (f : M ≃ₗ[R] M)
   证明: by
   simp [LinearEquiv.mul_eq_trans, LinearEquiv.baseChange_trans]
@@ -2428,7 +2428,7 @@ theorem _root_.LinearEquiv.baseChange_symm
     baseChange_eq_ltensor, ← lTensor_comp_apply]
 
 中文:
-定理 _root_.LinearEquiv.baseChange_symm
+定理 _root_.线性等价.baseChange_symm
   条件: (e : M ≃ₗ[R] N)
   证明: by
   ext x
@@ -2454,7 +2454,7 @@ theorem _root_.LinearEquiv.baseChange_inv
   proof: LinearEquiv.baseChange_symm R A M M e
 
 中文:
-定理 _root_.LinearEquiv.baseChange_inv
+定理 _root_.线性等价.baseChange_inv
   条件: (e : M ≃ₗ[R] M)
   证明: LinearEquiv.baseChange_symm R A M M e
 
@@ -2477,7 +2477,7 @@ lemma _root_.LinearEquiv.baseChange_pow
     simp [pow_succ, LinearEquiv.baseChange_mul, h]
 
 中文:
-引理 _root_.LinearEquiv.baseChange_pow
+引理 _root_.线性等价.baseChange_pow
   条件: (f : M ≃ₗ[R] M) (n : 自然数)
   证明: by
   induction n with
@@ -2509,7 +2509,7 @@ lemma _root_.LinearEquiv.baseChange_zpow
     simp only [zpow_sub_one, LinearEquiv.baseChange_mul, h, LinearEquiv.baseChange_inv]
 
 中文:
-引理 _root_.LinearEquiv.baseChange_zpow
+引理 _root_.线性等价.baseChange_zpow
   条件: (f : M ≃ₗ[R] M) (n : 整数)
   证明: by
   induction n with
@@ -2635,7 +2635,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: : Submodule A (A otimes[R] M)
+  签名: : 子模 A (A otimes[R] M)
   定义体: LinearMap.range (p.subtype.baseChange A)
 
 Depends on / 依赖: LinearMap, LinearMap.range, baseChange, p.subtype.baseChange, subtype
@@ -2676,7 +2676,7 @@ lemma baseChange_eq_span
 
 中文:
 引理 baseChange_eq_span
-  结论: p.baseChange A = span A (p.map (TensorProduct.mk R A M 1))
+  结论: p.baseChange A = span A (p.map (张量积.mk R A M 1))
   证明: by
   refine le_antisymm ?_ ?_
   · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
@@ -2708,7 +2708,7 @@ lemma baseChange_bot
 
 中文:
 引理 baseChange_bot
-  结论: (⊥ : Submodule R M).baseChange A = ⊥
+  结论: (⊥ : 子模 R M).baseChange A = ⊥
   证明: by simp [baseChange_eq_span]
 
 @[simp]
@@ -2730,7 +2730,7 @@ lemma baseChange_top
 
 中文:
 引理 baseChange_top
-  结论: (⊤ : Submodule R M).baseChange A = ⊤
+  结论: (⊤ : 子模 R M).baseChange A = ⊤
   证明: by
   rw [eq_top_iff]; rw [← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..)]
   exact span_le.2 fun _ ⟨a, m, h⟩ => h ▸ tmul_mem_baseChange_of_mem _ trivial
@@ -2783,7 +2783,7 @@ lemma baseChange_span
 
 中文:
 引理 baseChange_span
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   rw [baseChange_eq_span]; rw [map_span]; rw [span_span_of_tower]
 
@@ -2837,7 +2837,7 @@ lemma toBaseChange_surjective
 
 中文:
 引理 toBaseChange_surjective
-  结论: Function.Surjective (p.toBaseChange A)
+  结论: 函数.满射 (p.toBaseChange A)
   证明: LinearMap.surjective_rangeRestrict _
 
 Depends on / 依赖: LinearMap, LinearMap.surjective_rangeRestrict, surjective_rangeRestrict

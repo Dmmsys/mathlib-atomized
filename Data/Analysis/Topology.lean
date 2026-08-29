@@ -49,7 +49,7 @@ structure Ctop
 结构 Ctop
   参数: (α σ : 类型)
   公理与运算 (6 个):
-    - f : σ -> Set α
+    - f : σ -> 集合 α
     - top : α -> σ
     - top_mem : 对任意 x : α, x in f (top x)
     - inter : 对任意 (a b) (x : α), x in f a inter f b -> σ
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Ctop α (Set α))
+  签名: 可居 (Ctop α (集合 α))
   定义体: ⟨{ f := id
       top := singleton
       top_mem := mem_singleton
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Ctop α σ) fun _ => σ -> Set α
+  签名: CoeFun (Ctop α σ) fun _ => σ -> 集合 α
   定义体: ⟨Ctop.f⟩
 
 Depends on / 依赖: Ctop.f
@@ -249,7 +249,7 @@ theorem mem_nhds_toTopsp
 
 中文:
 定理 mem_nhds_toTopsp
-  条件: (F : Ctop α σ) {s : Set α} {a : α}
+  条件: (F : Ctop α σ) {s : 集合 α} {a : α}
   证明: (@TopologicalSpace.IsTopologicalBasis.mem_nhds_iff _ F.toTopsp _ _ _
         F.toTopsp_isTopologicalBasis).trans <|
     ⟨fun ⟨_, ⟨x, rfl⟩, h⟩ => ⟨x, h⟩, fun ⟨x, h⟩ => ⟨_, ⟨x, rfl⟩, h⟩⟩
@@ -276,8 +276,8 @@ structure Ctop.Realizer
     - eq : F.toTopsp = T
 
 中文:
-结构 Ctop.Realizer
-  参数: (α) [T : TopologicalSpace α]
+结构 Ctop.实数izer
+  参数: (α) [T : 拓扑空间 α]
   公理与运算 (3 个):
     - σ : 类型
     - F : Ctop α σ
@@ -301,7 +301,7 @@ definition Ctop.toRealizer
   body: @Ctop.Realizer.mk _ F.toTopsp σ F rfl
 
 中文:
-定义 Ctop.toRealizer
+定义 Ctop.to实数izer
   签名: (F : Ctop α σ)
   定义体: @Ctop.Realizer.mk _ F.toTopsp σ F rfl
 -/
@@ -324,7 +324,7 @@ theorem is_basis
 
 中文:
 定理 is_basis
-  条件: [T : TopologicalSpace α] (F : 实数izer α)
+  条件: [T : 拓扑空间 α] (F : 实数izer α)
   证明: by
   have := toTopsp_isTopologicalBasis F.F; rwa [F.eq] at this
 -/
@@ -343,7 +343,7 @@ theorem mem_nhds
 
 中文:
 定理 mem_nhds
-  条件: [T : TopologicalSpace α] (F : 实数izer α) {s : Set α} {a : α}
+  条件: [T : 拓扑空间 α] (F : 实数izer α) {s : 集合 α} {a : α}
   证明: by
   have := @mem_nhds_toTopsp _ _ F.F s a; rwa [F.eq] at this
 -/
@@ -361,7 +361,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: [TopologicalSpace α] (F : 实数izer α) {s : Set α}
+  条件: [拓扑空间 α] (F : 实数izer α) {s : 集合 α}
   证明: isOpen_iff_mem_nhds.trans forall₂_congr fun _a _h => F.mem_nhds
 
 Depends on / 依赖: F.mem_nhds, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.trans, mem_nhds
@@ -385,7 +385,7 @@ F.isOpen_iff.trans
 
 中文:
 定理 isClosed_iff
-  条件: [TopologicalSpace α] (F : 实数izer α) {s : Set α}
+  条件: [拓扑空间 α] (F : 实数izer α) {s : 集合 α}
   证明: isOpen_compl_iff.symm.trans
 F.isOpen_iff.trans
       forall_congr' fun a =>
@@ -414,7 +414,7 @@ theorem mem_interior_iff
 
 中文:
 定理 mem_interior_iff
-  条件: [TopologicalSpace α] (F : 实数izer α) {s : Set α} {a : α}
+  条件: [拓扑空间 α] (F : 实数izer α) {s : 集合 α} {a : α}
   证明: mem_interior_iff_mem_nhds.trans F.mem_nhds
 
 Depends on / 依赖: F.mem_nhds, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.trans, mem_nhds
@@ -434,8 +434,8 @@ theorem isOpen
 
 中文:
 定理 isOpen
-  条件: [TopologicalSpace α] (F : 实数izer α) (s : F.σ)
-  结论: IsOpen (F.F s)
+  条件: [拓扑空间 α] (F : 实数izer α) (s : F.σ)
+  结论: 是开集 (F.F s)
   证明: isOpen_iff_nhds.2 fun a m => by simpa using F.mem_nhds.2 ⟨s, m, Subset.refl _⟩
 -/
 protected theorem isOpen [TopologicalSpace α] (F : Realizer α) (s : F.σ) : IsOpen (F.F s) :=
@@ -454,7 +454,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: [T : TopologicalSpace α] {σ : 类型} {F : Ctop α σ}
+  结论: [T : 拓扑空间 α] {σ : 类型} {F : Ctop α σ}
   证明: by
   refine TopologicalSpace.ext_nhds fun x => ?_
   ext s
@@ -478,7 +478,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [T : TopologicalSpace α] {σ : 类型} {F : Ctop α σ} (H₁ : 对任意 a, IsOpen (F a))
+  结论: [T : 拓扑空间 α] {σ : 类型} {F : Ctop α σ} (H₁ : 对任意 a, 是开集 (F a))
   证明: ext' fun a s => ⟨H₂ a s, fun ⟨_b, h₁, h₂⟩ => mem_nhds_iff.2 ⟨_, h₂, H₁ _, h₁⟩⟩
 
 Depends on / 依赖: mem_nhds_iff
@@ -616,7 +616,7 @@ definition nhds
       inf_le_right := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inte
 
 中文:
-定义 nhds
+定义 邻域滤子
   签名: (F : 实数izer α) (a : α)
   定义体: ⟨{ s : F.σ // a in F.F s },
     { f := fun s => F.F s.1
@@ -653,7 +653,7 @@ theorem nhds_σ
 中文:
 定理 nhds_σ
   条件: (F : 实数izer α) (a : α)
-  结论: (F.nhds a).σ = { s : F.σ // a in F.F s }
+  结论: (F.邻域滤子 a).σ = { s : F.σ // a in F.F s }
   证明: rfl
 
 @[simp]
@@ -673,7 +673,7 @@ theorem nhds_F
 中文:
 定理 nhds_F
   条件: (F : 实数izer α) (a : α) (s)
-  结论: (F.nhds a).F s = F.F s.1
+  结论: (F.邻域滤子 a).F s = F.F s.1
   证明: rfl
 -/
 theorem nhds_F (F : Realizer α) (a : α) (s) : (F.nhds a).F s = F.F s.1 := rfl
@@ -688,7 +688,7 @@ theorem tendsto_nhds_iff
 
 中文:
 定理 tendsto_nhds_iff
-  条件: {m : β -> α} {f : Filter β} (F : f.实数izer) (R : 实数izer α) {a : α}
+  条件: {m : β -> α} {f : 滤子 β} (F : f.实数izer) (R : 实数izer α) {a : α}
   证明: (F.tendsto_iff _ (R.nhds a)).trans Subtype.forall
 
 Depends on / 依赖: F.tendsto_iff, R.nhds, Subtype, Subtype.forall, tendsto_iff
@@ -710,11 +710,11 @@ structure LocallyFinite.Realizer
     - sets : forall x : α, Fintype { i | (f i inter F.F (bas x)).Nonempty }
 
 中文:
-结构 LocallyFinite.Realizer
-  参数: [TopologicalSpace α] (F : Ctop.实数izer α) (f : β -> Set α)
+结构 局部有限.实数izer
+  参数: [拓扑空间 α] (F : Ctop.实数izer α) (f : β -> 集合 α)
   公理与运算 (2 个):
     - bas : 对任意 a, { s // a in F.F s }
-    - sets : 对任意 x : α, Fintype { i | (f i inter F.F (bas x)).Nonempty }
+    - sets : 对任意 x : α, 有限类型 { i | (f i inter F.F (bas x)).非空 }
 -/
 structure LocallyFinite.Realizer [TopologicalSpace α] (F : Ctop.Realizer α) (f : β -> Set α) where
   bas : forall a, { s // a in F.F s }
@@ -730,8 +730,8 @@ theorem LocallyFinite.Realizer.to_locallyFinite
   ⟨_, F.mem_nhds.2 ⟨(R.bas a).1, (R.bas a).2, Subset.rfl⟩, have := R.sets a; Set.toFinite _⟩
 
 中文:
-定理 LocallyFinite.Realizer.to_locallyFinite
-  结论: [TopologicalSpace α] {F : Ctop.实数izer α}
+定理 局部有限.实数izer.to_locallyFinite
+  结论: [拓扑空间 α] {F : Ctop.实数izer α}
   证明: fun a =>
   ⟨_, F.mem_nhds.2 ⟨(R.bas a).1, (R.bas a).2, Subset.rfl⟩, have := R.sets a; Set.toFinite _⟩
 -/
@@ -757,8 +757,8 @@ Finite.fintype
    
 
 中文:
-定理 locallyFinite_iff_exists_realizer
-  结论: [TopologicalSpace α] (F : Ctop.实数izer α)
+定理 locallyFinite_iff_存在_realizer
+  结论: [拓扑空间 α] (F : Ctop.实数izer α)
   证明: ⟨fun h =>
     let ⟨g, h₁⟩ := Classical.axiom_of_choice h
     let ⟨g₂, h₂⟩ :=
@@ -796,8 +796,8 @@ instance [TopologicalSpace
   body: (locallyFinite_iff_exists_realizer _).1 locallyFinite_of_finite _
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Finite β] (F
+实例 [拓扑空间
+  签名: α] [有限 β] (F
   定义体: (locallyFinite_iff_exists_realizer _).1 locallyFinite_of_finite _
 
 Depends on / 依赖: locallyFinite_iff_exists_realizer, locallyFinite_of_finite
@@ -815,8 +815,8 @@ definition Compact.Realizer
   body: forall {f : Filter α} (F : f.Realizer) (x : F.σ), f != ⊥ -> F.F x subseteq s -> { a // a in s ∧ 𝓝 a ⊓ f != ⊥ }
 
 中文:
-定义 Compact.Realizer
-  签名: [TopologicalSpace α] (s : Set α)
+定义 紧.实数izer
+  签名: [拓扑空间 α] (s : 集合 α)
   定义体: forall {f : Filter α} (F : f.Realizer) (x : F.σ), f != ⊥ -> F.F x subseteq s -> { a // a in s ∧ 𝓝 a ⊓ f != ⊥ }
 
 Depends on / 依赖: Filter, Realizer, f.Realizer, subseteq
@@ -836,8 +836,8 @@ instance [TopologicalSpace
     exact fun s _ => ⟨x, hF.trans s.empty_subset⟩⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: α] : Inhabited (Compact.实数izer (∅ : Set α))
+实例 [拓扑空间
+  签名: α] : 可居 (紧.实数izer (∅ : 集合 α))
   定义体: ⟨fun {f} F x h hF => by
     suffices f = ⊥ from absurd this h
     rw [← F.eq]; rw [eq_bot_iff]

@@ -48,7 +48,7 @@ inferInstanceAs IsOpenImmersion (F.map f).left
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: have {i j} (f : i ⟶ j) : IsOpenImmersion ((F ⋙ Over.forget S).map f) :=
 inferInstanceAs IsOpenImmersion (F.map f).left
   have : ((F ⋙ Over.forget S) ⋙ Scheme.forget).IsLocallyDirected := ‹_›
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesColimit F (Morphism命题erty.Over.forget P ⊤ S)
+  签名: 创造余极限 F (MorphismProperty.Over.forget P ⊤ S)
   定义体: by
   have : HasColimit (F ⋙ MorphismProperty.Over.forget P ⊤ S) :=
     hasColimit_of_created _ (Over.forget S)
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: hasColimit_of_created _ (MorphismProperty.Over.forget P ⊤ S)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, SimplicialObject, SimplicialObject.Truncated.skAdj.coreflective, Truncated, coreflective, forget, hasColimit_of_created
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F (Morphism命题erty.Over.forget P ⊤ S)
+  签名: 保持余极限 F (MorphismProperty.Over.forget P ⊤ S)
   定义体: -- this is only `inferInstance` with the local instances above
   inferInstance
 -/
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteCoproducts (P.Over ⊤ S)
+  签名: 有FiniteCoproducts (P.Over ⊤ S)
   定义体: inferInstance
 -/
 instance : HasFiniteCoproducts (P.Over ⊤ S) where
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteCoproducts (P.CostructuredArrow ⊤ Scheme.Spec S)
+  签名: 有FiniteCoproducts (P.CostructuredArrow ⊤ 概形.Spec S)
   定义体: by
     have : (MorphismProperty.commaObj Scheme.Spec (.fromPUnit S) P).IsClosedUnderColimitsOfShape
         (Discrete (Fin n)) :=

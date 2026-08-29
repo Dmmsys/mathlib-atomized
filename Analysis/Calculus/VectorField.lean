@@ -83,7 +83,7 @@ definition lieBracketWithin
 
 中文:
 定义 lieBracketWithin
-  签名: (V W : E -> E) (s : Set E) (x : E)
+  签名: (V W : E -> E) (s : 集合 E) (x : E)
   定义体: fderivWithin 𝕜 W s x (V x) - fderivWithin 𝕜 V s x (W x)
 
 Depends on / 依赖: fderivWithin
@@ -877,8 +877,8 @@ lemma _root_.ContDiff.lieBracket_vectorField
   proof: contDiff_iff_contDiffAt.2 (fun _ => hV.contDiffAt.lieBracket_vectorField hW.contDiffAt hmn)
 
 中文:
-引理 _root_.ContDiff.lieBracket_vectorField
-  结论: {m n : 自然数∞ω} (hV : ContDiff 𝕜 n V)
+引理 _root_.连续可微.lieBracket_vectorField
+  结论: {m n : 自然数∞ω} (hV : 连续可微 𝕜 n V)
   证明: contDiff_iff_contDiffAt.2 (fun _ => hV.contDiffAt.lieBracket_vectorField hW.contDiffAt hmn)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, hV.contDiffAt.lieBracket_vectorField, hW.contDiffAt, lieBracket_vectorField
@@ -985,7 +985,7 @@ theorem lieBracketWithin_of_isOpen
 
 中文:
 定理 lieBracketWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   证明: lieBracketWithin_of_mem_nhds (hs.mem_nhds hx)
 
 Depends on / 依赖: hs.mem_nhds, lieBracketWithin_of_mem_nhds, mem_nhds
@@ -1128,7 +1128,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq
   simp only [lieBracketWithin, hV.fderivWithin_eq hxV, hW.fderivWithin_eq hxW, hxV, hxW]
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField_eq
   证明: by
   simp only [lieBracketWithin, hV.fderivWithin_eq hxV, hW.fderivWithin_eq hxW, hxV, hxW]
 
@@ -1148,7 +1148,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_mem
     hW (mem_of_mem_nhdsWithin hx hW :)
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_mem
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField_eq_of_mem
   证明: hV.lieBracketWithin_vectorField_eq (mem_of_mem_nhdsWithin hx hV :)
     hW (mem_of_mem_nhdsWithin hx hW :)
 
@@ -1171,7 +1171,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField'
   simp [lieBracketWithin, hV', hW', hV, hW]
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField'
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField'
   证明: by
   filter_upwards [hV.fderivWithin' ht (𝕜 := 𝕜), hW.fderivWithin' ht (𝕜 := 𝕜), hV, hW]
     with x hV' hW' hV hW
@@ -1194,7 +1194,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField
   proof: hV.lieBracketWithin_vectorField' hW Subset.rfl
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField
   证明: hV.lieBracketWithin_vectorField' hW Subset.rfl
 -/
 protected theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField
@@ -1212,7 +1212,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_insert
     (subset_insert x s))
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_insert
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField_eq_of_insert
   证明: by
   apply mem_of_mem_nhdsWithin (mem_insert x s) (hV.lieBracketWithin_vectorField' hW
     (subset_insert x s))
@@ -1232,7 +1232,7 @@ theorem _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_nhds
     (hW.filter_mono nhdsWithin_le_nhds) hW.self_of_nhds
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracketWithin_vectorField_eq_nhds
+定理 _root_.滤子.EventuallyEq.lieBracketWithin_vectorField_eq_nhds
   证明: (hV.filter_mono nhdsWithin_le_nhds).lieBracketWithin_vectorField_eq hV.self_of_nhds
     (hW.filter_mono nhdsWithin_le_nhds) hW.self_of_nhds
 
@@ -1293,7 +1293,7 @@ theorem _root_.Filter.EventuallyEq.lieBracket_vectorField_eq
   rw [← lieBracketWithin_univ]; rw [← lieBracketWithin_univ]; rw [hV.lieBracketWithin_vectorField_eq_nhds hW]
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracket_vectorField_eq
+定理 _root_.滤子.EventuallyEq.lieBracket_vectorField_eq
   证明: by
   rw [← lieBracketWithin_univ]; rw [← lieBracketWithin_univ]; rw [hV.lieBracketWithin_vectorField_eq_nhds hW]
 
@@ -1314,7 +1314,7 @@ theorem _root_.Filter.EventuallyEq.lieBracket_vectorField
   exact hVy.lieBracket_vectorField_eq hWy
 
 中文:
-定理 _root_.Filter.EventuallyEq.lieBracket_vectorField
+定理 _root_.滤子.EventuallyEq.lieBracket_vectorField
   证明: by
   filter_upwards [hV.eventuallyEq_nhds, hW.eventuallyEq_nhds] with y hVy hWy
   exact hVy.lieBracket_vectorField_eq hWy
@@ -1475,7 +1475,7 @@ definition pullbackWithin
 
 中文:
 定义 pullbackWithin
-  签名: (f : E -> F) (V : F -> F) (s : Set E) (x : E)
+  签名: (f : E -> F) (V : F -> F) (s : 集合 E) (x : E)
   定义体: (fderivWithin 𝕜 f s x).inverse (V (f x))
 
 Depends on / 依赖: fderivWithin, inverse
@@ -1493,7 +1493,7 @@ lemma pullbackWithin_eq
 
 中文:
 引理 pullbackWithin_eq
-  条件: {f : E -> F} {V : F -> F} {s : Set E}
+  条件: {f : E -> F} {V : F -> F} {s : 集合 E}
   证明: rfl
 -/
 lemma pullbackWithin_eq {f : E -> F} {V : F -> F} {s : Set E} :
@@ -1676,7 +1676,7 @@ lemma _root_.exists_continuousLinearEquiv_fderivWithin_symm_eq
     have : ContinuousWithinAt (fderivWithi
 
 中文:
-引理 _root_.exists_continuousLinearEquiv_fderivWithin_symm_eq
+引理 _root_.存在_continuousLinearEquiv_fderivWithin_symm_eq
   证明: by
   classical
   rcases hf with ⟨M, hM⟩
@@ -1753,7 +1753,7 @@ lemma DifferentiableWithinAt.pullbackWithin
 
 中文:
 引理 DifferentiableWithinAt.pullbackWithin
-  结论: {f : E -> F} {V : F -> F} {s : Set E} {t : Set F} {x : E}
+  结论: {f : E -> F} {V : F -> F} {s : 集合 E} {t : 集合 F} {x : E}
   证明: by
   rcases exists_continuousLinearEquiv_fderivWithin_symm_eq hf hf' hs hx
     with ⟨M, -, M_symm_smooth, hM, -⟩
@@ -1791,7 +1791,7 @@ lemma _root_.exists_continuousLinearEquiv_fderiv_symm_eq
   exact exists_continuousLinearEquiv_fderivWithin_symm_eq h'f hf uniqueDiffOn_univ (mem_univ _)
 
 中文:
-引理 _root_.exists_continuousLinearEquiv_fderiv_symm_eq
+引理 _root_.存在_continuousLinearEquiv_fderiv_symm_eq
   证明: by
   simp only [← fderivWithin_univ, ← contDiffWithinAt_univ, ← nhdsWithin_univ] at hf h'f ⊢
   exact exists_continuousLinearEquiv_fderivWithin_symm_eq h'f hf uniqueDiffOn_univ (mem_univ _)

@@ -363,7 +363,7 @@ theorem bddAbove_rayleighQuotient
 
 中文:
 定理 bddAbove_rayleighQuotient
-  结论: BddAbove (Set.range fun x => |T.rayleighQuotient x|)
+  结论: BddAbove (集合.range fun x => |T.rayleighQuotient x|)
   证明: ⟨‖T‖, fun _ ⟨y, h⟩ => h ▸ T.rayleighQuotient_le_norm y⟩
 
 Depends on / 依赖: T.rayleighQuotient_le_norm, rayleighQuotient_le_norm
@@ -474,7 +474,7 @@ theorem rayleighQuotient_le_of_norm_mem_resolventSet
 
 中文:
 定理 rayleighQuotient_le_of_norm_mem_resolventSet
-  结论: [Nontrivial E]
+  结论: [非平凡 E]
   证明: by
   by_cases hT0 : T = 0
   · simp [hT0, spectrum.mem_resolventSet_iff] at hT'
@@ -511,7 +511,7 @@ obtain ⟨ε', hε'0, hε'⟩ := (-T).rayleighQuotient_le_of_norm_mem_resolventS
 
 中文:
 定理 abs_rayleighQuotient_le_of_norm_mem_resolventSet
-  结论: [Nontrivial E]
+  结论: [非平凡 E]
   证明: by
   obtain ⟨ε, hε0, hε⟩ := T.rayleighQuotient_le_of_norm_mem_resolventSet hT'
 obtain ⟨ε', hε'0, hε'⟩ := (-T).rayleighQuotient_le_of_norm_mem_resolventSet by
@@ -545,7 +545,7 @@ theorem spectralRadius_eq_nnnorm
 
 中文:
 定理 spectralRadius_eq_nnnorm
-  条件: [CompleteSpace E] (hT : IsSelfAdjoint T)
+  条件: [完备空间 E] (hT : IsSelfAdjoint T)
   证明: by
   nontriviality E
   apply le_antisymm (spectrum.spectralRadius_le_nnnorm T)
@@ -587,7 +587,7 @@ theorem _root_.LinearMap.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
   rw [smul_apply]; rw [ContinuousLinearMap.comp_apply]; rw [fderivInnerCLM_apply]; rw [ContinuousLinearMap.prod_apply]; rw [innerSL_apply_apply]; rw [id]; rw [ContinuousLinearMap.id_apply]; rw [hT.apply_clm x₀ y];
 
 中文:
-定理 _root_.LinearMap.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
+定理 _root_.线性映射.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
   结论: {T : F ->L[实数] F}
   证明: by
   convert! T.hasStrictFDerivAt.inner Real (hasStrictFDerivAt_id x₀) using 1
@@ -892,7 +892,7 @@ theorem hasEigenvalue_iSup_of_finiteDimensional
 
 中文:
 定理 hasEigenvalue_iSup_of_finiteDimensional
-  条件: [Nontrivial E] (hT : T.IsSymmetric)
+  条件: [非平凡 E] (hT : T.IsSymmetric)
   证明: by
   have := FiniteDimensional.proper_rclike 𝕜 E
   let T' := hT.toSelfAdjoint
@@ -936,7 +936,7 @@ theorem hasEigenvalue_iInf_of_finiteDimensional
 
 中文:
 定理 hasEigenvalue_iInf_of_finiteDimensional
-  条件: [Nontrivial E] (hT : T.IsSymmetric)
+  条件: [非平凡 E] (hT : T.IsSymmetric)
   证明: by
   have := FiniteDimensional.proper_rclike 𝕜 E
   let T' := hT.toSelfAdjoint

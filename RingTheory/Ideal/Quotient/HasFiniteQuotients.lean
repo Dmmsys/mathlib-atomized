@@ -38,10 +38,10 @@ class Ring.HasFiniteQuotients
     - finiteQuotient({I : Ideal R}) : I != ⊥ -> Finite (R ⧸ I)
 
 中文:
-类 Ring.HasFiniteQuotients
-  参数: (R : 类型) [CommRing R]
+类 环.有FiniteQuotients
+  参数: (R : 类型) [交换环 R]
   公理与运算 (1 个):
-    - finiteQuotient({I : Ideal R}) : I != ⊥ -> Finite (R ⧸ I)
+    - finiteQuotient({I : 理想 R}) : I != ⊥ -> 有限 (R ⧸ I)
 -/
 class Ring.HasFiniteQuotients (R : Type*) [CommRing R] : Prop where
   finiteQuotient {I : Ideal R} : I != ⊥ -> Finite (R ⧸ I)
@@ -59,8 +59,8 @@ instance [Finite
   body: fun _ => Quotient.finite _
 
 中文:
-实例 [Finite
-  签名: R] : Ring.HasFiniteQuotients R where
+实例 [有限
+  签名: R] : 环.有FiniteQuotients R where
   定义体: fun _ => Quotient.finite _
 
 Depends on / 依赖: Quotient, Quotient.finite, finite
@@ -83,7 +83,7 @@ Ideal.Quotient.maximal_of_isField P Finite.isField_of_domain (R ⧸ P)
 
 中文:
 定理 maximalOfPrime
-  条件: {P : Ideal R} [P.IsPrime] (hp : P != ⊥)
+  条件: {P : 理想 R} [P.是素] (hp : P != ⊥)
   证明: have : Finite (R ⧸ P) := finiteQuotient hp
 Ideal.Quotient.maximal_of_isField P Finite.isField_of_domain (R ⧸ P)
 
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: DimensionLEOne R
+  签名: 维数不超过一 R
   定义体: fun h _ => maximalOfPrime h
 
 Depends on / 依赖: maximalOfPrime
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNoetherianRing R
+  签名: 是Noether环 R
   定义体: by
   refine (isNoetherianRing_iff_ideal_fg R).mpr fun I => ?_
   by_cases hI : I = 0
@@ -163,8 +163,8 @@ instance [IsDomain
     infer_instance
 
 中文:
-实例 [IsDomain
-  签名: R] [PerfectField (FractionRing R)] (P
+实例 [是整环
+  签名: R] [完美域 (FractionRing R)] (P
   定义体: by
   rcases eq_or_ne P ⊥ with rfl | hP
   · exact PerfectField.of_ringEquiv (FractionRing.algEquiv R _).toRingEquiv
@@ -194,7 +194,7 @@ theorem cardQuot_pos
 
 中文:
 定理 cardQuot_pos
-  条件: (I : Ideal R) (hI : I != ⊥)
+  条件: (I : 理想 R) (hI : I != ⊥)
   结论: 0 < I.cardQuot
   证明: by
   have := finiteQuotient hI
@@ -226,7 +226,7 @@ theorem finite_setOfPred_mem
 中文:
 定理 finite_setOfPred_mem
   条件: (x : R) (hx : x != 0)
-  结论: {I : Ideal R | x in I}.Finite
+  结论: {I : 理想 R | x in I}.有限
   证明: by
   have := finiteQuotient (mt Ideal.span_singleton_eq_bot.mp hx)
   have : {I | Ideal.comap (Ideal.Quotient.mk (Ideal.span {x})) ⊥ <= I}.Finite :=
@@ -266,7 +266,7 @@ theorem finite_cardQuot_le
 中文:
 定理 finite_cardQuot_le
   条件: (B : 自然数)
-  结论: {I : Ideal R | I.cardQuot <= B}.Finite
+  结论: {I : 理想 R | I.cardQuot <= B}.有限
   证明: by
   classical
   rcases finite_or_infinite R
@@ -316,7 +316,7 @@ theorem finite_absNorm_le
 
 中文:
 定理 finite_absNorm_le
-  条件: [IsDedekindDomain R] [Module.Free 整数 R] (B : 自然数)
+  条件: [是Dedekind整环 R] [模.自由 整数 R] (B : 自然数)
   证明: finite_cardQuot_le B
 
 Depends on / 依赖: finite_cardQuot_le
@@ -357,7 +357,7 @@ theorem finite_absNorm_heightOneSpectrum_le
 
 中文:
 定理 finite_absNorm_heightOneSpectrum_le
-  条件: [IsDedekindDomain R] [Module.Free 整数 R] (B : 自然数)
+  条件: [是Dedekind整环 R] [模.自由 整数 R] (B : 自然数)
   证明: finite_cardQuot_heightOneSpectrum_le B
 
 Depends on / 依赖: finite_cardQuot_heightOneSpectrum_le
@@ -393,8 +393,8 @@ instance [IsDedekindDomain
   body: ⟨Ring.HasFiniteQuotients.finite_absNorm_heightOneSpectrum_le⟩
 
 中文:
-实例 [IsDedekindDomain
-  签名: R] [Module.Free 整数 R] :
+实例 [是Dedekind整环
+  签名: R] [模.自由 整数 R] :
   定义体: ⟨Ring.HasFiniteQuotients.finite_absNorm_heightOneSpectrum_le⟩
 
 Depends on / 依赖: HasFiniteQuotients, Ring.HasFiniteQuotients.finite_absNorm_heightOneSpectrum_le, finite_absNorm_heightOneSpectrum_le
@@ -420,7 +420,7 @@ have : Finite (R ⧸ J) := finiteQuotient Ideal.under_ne_bot R hI
 
 中文:
 定理 of_module_finite
-  结论: (S : 类型) [CommRing S] [IsDomain S]
+  结论: (S : 类型) [交换环 S] [是整环 S]
   证明: by
     obtain hR | hR := subsingleton_or_nontrivial R
     · have : Finite S := Module.finite_of_finite R
@@ -458,7 +458,7 @@ exact inferInstanceAs Finite (Int ⧸ Ideal.span {n})
 
 中文:
 实例 :
-  签名: HasFiniteQuotients 整数
+  签名: 有FiniteQuotients 整数
   定义体: by
     obtain ⟨n, rfl⟩ := Submodule.IsPrincipal.principal I
     have : NeZero n := ⟨by simpa using hI⟩
@@ -481,8 +481,8 @@ instance [IsDomain
   body: .of_module_finite Int R
 
 中文:
-实例 [IsDomain
-  签名: R] [Module.Finite 整数 R] : HasFiniteQuotients R
+实例 [是整环
+  签名: R] [模.有限 整数 R] : 有FiniteQuotients R
   定义体: .of_module_finite Int R
 
 Depends on / 依赖: of_module_finite

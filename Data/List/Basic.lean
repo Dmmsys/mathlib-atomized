@@ -52,7 +52,7 @@ instance uniqueOfIsEmpty
 
 中文:
 实例 uniqueOfIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: { instInhabitedList with
     uniq := fun l =>
       match l with
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.LawfulIdentity (α := List α) Append.append []
+  签名: Std.LawfulIdentity (α := 列表 α) Append.append []
   定义体: nil_append
   right_id := append_nil
 
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Associative (α := List α) Append.append
+  签名: Std.结合 (α := 列表 α) Append.append
   定义体: append_assoc
 
 Depends on / 依赖: Append, Append.append, append
@@ -119,7 +119,7 @@ theorem cons_injective
 中文:
 定理 cons_injective
   条件: {a : α}
-  结论: Injective (cons a)
+  结论: 单射 (cons a)
   证明: fun _ _ => tail_eq_of_cons_eq
 -/
 @[simp] theorem cons_injective {a : α} : Injective (cons a) := fun _ _ => tail_eq_of_cons_eq
@@ -134,7 +134,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Injective fun a : α => [a]
+  结论: 单射 fun a : α => [a]
   证明: fun _ _ h => (cons_eq_cons.1 h).1
 
 Depends on / 依赖: cons_eq_cons
@@ -154,7 +154,7 @@ theorem setOfPred_mem_cons
 
 中文:
 定理 setOfPred_mem_cons
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   结论: { x | x in a :: l } = insert a { x | x in l }
   证明: Set.ext fun _ => mem_cons
 
@@ -180,7 +180,7 @@ theorem _root_.Decidable.List.eq_or_ne_mem_of_mem
   · exact ((List.mem_cons.1 h).elim Or.inl (fun h => Or.inr ⟨hab, h⟩))
 
 中文:
-定理 _root_.Decidable.List.eq_or_ne_mem_of_mem
+定理 _root_.可判定.列表.eq_or_ne_mem_of_mem
   结论: [DecidableEq α]
   证明: by
   by_cases hab : a = b
@@ -234,7 +234,7 @@ theorem mem_map_of_injective
 
 中文:
 定理 mem_map_of_injective
-  条件: {f : α -> β} (H : Injective f) {a : α} {l : List α}
+  条件: {f : α -> β} (H : 单射 f) {a : α} {l : 列表 α}
   证明: ⟨fun m => let ⟨_, m', e⟩ := exists_of_mem_map m; H e ▸ m', mem_map_of_mem⟩
 
 @[simp]
@@ -255,7 +255,7 @@ theorem _root_.Function.Involutive.exists_mem_and_apply_eq_iff
   proof: ⟨by rintro ⟨y, h, rfl⟩; rwa [hf y], fun h => ⟨f x, h, hf _⟩⟩
 
 中文:
-定理 _root_.Function.Involutive.exists_mem_and_apply_eq_iff
+定理 _root_.函数.对合.存在_mem_and_apply_eq_iff
   结论: {f : α -> α}
   证明: ⟨by rintro ⟨y, h, rfl⟩; rwa [hf y], fun h => ⟨f x, h, hf _⟩⟩
 -/
@@ -273,7 +273,7 @@ theorem mem_map_of_involutive
 
 中文:
 定理 mem_map_of_involutive
-  条件: {f : α -> α} (hf : Involutive f) {a : α} {l : List α}
+  条件: {f : α -> α} (hf : 对合 f) {a : α} {l : 列表 α}
   证明: by rw [mem_map, hf.exists_mem_and_apply_eq_iff]
 
 Depends on / 依赖: exists_mem_and_apply_eq_iff, hf.exists_mem_and_apply_eq_iff, mem_map
@@ -296,7 +296,7 @@ theorem length_pos_iff_ne_nil
 
 中文:
 定理 length_pos_iff_ne_nil
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: 0 < length l ↔ l != []
   证明: ⟨ne_nil_of_length_pos, length_pos_of_ne_nil⟩
 
@@ -314,9 +314,9 @@ theorem exists_of_length_succ
   statement: forall l : List α, l.length = n + 1 -> exists h t, l = h :: t
 
 中文:
-定理 exists_of_length_succ
+定理 存在_of_length_succ
   条件: {n}
-  结论: 对任意 l : List α, l.length = n + 1 -> 存在 h t, l = h :: t
+  结论: 对任意 l : 列表 α, l.length = n + 1 -> 存在 h t, l = h :: t
 -/
 theorem exists_of_length_succ {n} : forall l : List α, l.length = n + 1 -> exists h t, l = h :: t
 | [], H => absurd H.symm succ_ne_zero n
@@ -333,7 +333,7 @@ theorem length_eq_succ_iff
 
 中文:
 定理 length_eq_succ_iff
-  条件: {n} {l : List α}
+  条件: {n} {l : 列表 α}
   证明: by
   grind [cases List]
 -/
@@ -362,7 +362,7 @@ lemma length_injective_iff
 
 中文:
 引理 length_injective_iff
-  结论: Injective (List.length : List α -> 自然数) ↔ Subsingleton α
+  结论: 单射 (列表.length : 列表 α -> 自然数) ↔ 子单例 α
   证明: by
   constructor
   · intro h; refine ⟨fun x y => ?_⟩; (suffices [x] = [y] by simpa using this); apply h; rfl
@@ -401,8 +401,8 @@ lemma length_injective
 
 中文:
 引理 length_injective
-  条件: [Subsingleton α]
-  结论: Injective (length : List α -> 自然数)
+  条件: [子单例 α]
+  结论: 单射 (length : 列表 α -> 自然数)
   证明: length_injective_iff.mpr inferInstance
 
 Depends on / 依赖: length_injective_iff, length_injective_iff.mpr
@@ -421,7 +421,7 @@ theorem length_eq_two
 
 中文:
 定理 length_eq_two
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: l.length = 2 ↔ 存在 a b, l = [a, b]
   证明: ⟨fun _ => let [a, b] := l; ⟨a, b, rfl⟩, fun ⟨_, _, e⟩ => e ▸ rfl⟩
 -/
@@ -440,7 +440,7 @@ theorem length_eq_two'
 
 中文:
 定理 length_eq_two'
-  条件: {l : List α} (h : l != [])
+  条件: {l : 列表 α} (h : l != [])
   结论: l.length = 2 ↔ l = [l.head h, l.getLast h]
   证明: by
   rw [length_eq_two]; grind
@@ -461,7 +461,7 @@ theorem length_eq_three
 
 中文:
 定理 length_eq_three
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: l.length = 3 ↔ 存在 a b c, l = [a, b, c]
   证明: ⟨fun _ => let [a, b, c] := l; ⟨a, b, c, rfl⟩, fun ⟨_, _, _, e⟩ => e ▸ rfl⟩
 -/
@@ -479,7 +479,7 @@ theorem length_eq_four
 
 中文:
 定理 length_eq_four
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: l.length = 4 ↔ 存在 a b c d, l = [a, b, c, d]
   证明: ⟨fun _ => let [a, b, c, d] := l; ⟨a, b, c, d, rfl⟩, fun ⟨_, _, _, _, e⟩ => e ▸ rfl⟩
 -/
@@ -497,7 +497,7 @@ instance instSingletonList
 
 中文:
 实例 instSingletonList
-  签名: : Singleton α (List α)
+  签名: : 单例 α (列表 α)
   定义体: ⟨fun x => [x]⟩
 -/
 instance instSingletonList : Singleton α (List α) := ⟨fun x => [x]⟩
@@ -512,7 +512,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : Insert α (List α)
+  签名: α] : Insert α (列表 α)
   定义体: ⟨List.insert⟩
 
 Depends on / 依赖: List.insert, insert
@@ -530,7 +530,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : LawfulSingleton α (List α)
+  签名: α] : LawfulSingleton α (列表 α)
   定义体: { insert_empty_eq := fun x =>
       show (if x in ([] : List α) then [] else [x]) = [x] from if_neg not_mem_nil }
 
@@ -552,7 +552,7 @@ theorem singleton_eq
 中文:
 定理 singleton_eq
   条件: (x : α)
-  结论: ({x} : List α) = [x]
+  结论: ({x} : 列表 α) = [x]
   证明: rfl
 -/
 theorem singleton_eq (x : α) : ({x} : List α) = [x] :=
@@ -568,7 +568,7 @@ theorem insert_neg
 
 中文:
 定理 insert_neg
-  条件: [DecidableEq α] {x : α} {l : List α} (h : x ∉ l)
+  条件: [DecidableEq α] {x : α} {l : 列表 α} (h : x ∉ l)
   证明: insert_of_not_mem h
 
 Depends on / 依赖: insert_of_not_mem
@@ -588,7 +588,7 @@ theorem insert_pos
 
 中文:
 定理 insert_pos
-  条件: [DecidableEq α] {x : α} {l : List α} (h : x in l)
+  条件: [DecidableEq α] {x : α} {l : 列表 α} (h : x in l)
   结论: Insert.insert x l = l
   证明: insert_of_mem h
 
@@ -611,7 +611,7 @@ theorem doubleton_eq
 中文:
 定理 doubleton_eq
   条件: [DecidableEq α] {x y : α} (h : x != y)
-  结论: ({x, y} : List α) = [x, y]
+  结论: ({x, y} : 列表 α) = [x, y]
   证明: by
   rw [insert_neg]; rw [singleton_eq]
   rwa [singleton_eq, mem_singleton]
@@ -632,8 +632,8 @@ theorem forall_mem_of_forall_mem_cons
   proof: (forall_mem_cons.1 h).2
 
 中文:
-定理 forall_mem_of_forall_mem_cons
-  条件: {p : α -> 命题} {a : α} {l : List α} (h : 对任意 x in a :: l, p x)
+定理 对任意_mem_of_对任意_mem_cons
+  条件: {p : α -> 命题} {a : α} {l : 列表 α} (h : 对任意 x in a :: l, p x)
   证明: (forall_mem_cons.1 h).2
 
 Depends on / 依赖: forall_mem_cons
@@ -651,8 +651,8 @@ theorem exists_mem_cons_of
   proof: ⟨a, mem_cons_self, h⟩
 
 中文:
-定理 exists_mem_cons_of
-  条件: {p : α -> 命题} {a : α} (l : List α) (h : p a)
+定理 存在_mem_cons_of
+  条件: {p : α -> 命题} {a : α} (l : 列表 α) (h : p a)
   结论: 存在 x in a :: l, p x
   证明: ⟨a, mem_cons_self, h⟩
 
@@ -671,8 +671,8 @@ theorem exists_mem_cons_of_exists
   proof: fun ⟨x, xl, px⟩ => ⟨x, mem_cons_of_mem _ xl, px⟩
 
 中文:
-定理 exists_mem_cons_of_exists
-  条件: {p : α -> 命题} {a : α} {l : List α}
+定理 存在_mem_cons_of_存在
+  条件: {p : α -> 命题} {a : α} {l : 列表 α}
   结论: (存在 x in l, p x) ->
   证明: fun ⟨x, xl, px⟩ => ⟨x, mem_cons_of_mem _ xl, px⟩
 
@@ -692,8 +692,8 @@ theorem or_exists_of_exists_mem_cons
   proof: by grind
 
 中文:
-定理 or_exists_of_exists_mem_cons
-  条件: {p : α -> 命题} {a : α} {l : List α}
+定理 or_存在_of_存在_mem_cons
+  条件: {p : α -> 命题} {a : α} {l : 列表 α}
   结论: (存在 x in a :: l, p x) ->
   证明: by grind
 -/
@@ -709,8 +709,8 @@ theorem exists_mem_cons_iff
   proof: by grind
 
 中文:
-定理 exists_mem_cons_iff
-  条件: (p : α -> 命题) (a : α) (l : List α)
+定理 存在_mem_cons_iff
+  条件: (p : α -> 命题) (a : α) (l : 列表 α)
   证明: by grind
 -/
 theorem exists_mem_cons_iff (p : α -> Prop) (a : α) (l : List α) :
@@ -727,7 +727,7 @@ theorem cons_subset_of_subset_of_mem
 
 中文:
 定理 cons_subset_of_subset_of_mem
-  结论: {a : α} {l m : List α}
+  结论: {a : α} {l m : 列表 α}
   证明: cons_subset.2 ⟨ainm, lsubm⟩
 
 Depends on / 依赖: cons_subset
@@ -746,7 +746,7 @@ theorem append_subset_of_subset_of_subset
 
 中文:
 定理 append_subset_of_subset_of_subset
-  条件: {l₁ l₂ l : List α} (l₁subl : l₁ subseteq l) (l₂subl : l₂ subseteq l)
+  条件: {l₁ l₂ l : 列表 α} (l₁subl : l₁ subseteq l) (l₂subl : l₂ subseteq l)
   证明: fun _ h => (mem_append.1 h).elim (@l₁subl _) (@l₂subl _)
 
 Depends on / 依赖: mem_append
@@ -768,7 +768,7 @@ theorem map_subset_iff
 
 中文:
 定理 map_subset_iff
-  条件: {l₁ l₂ : List α} (f : α -> β) (h : Injective f)
+  条件: {l₁ l₂ : 列表 α} (f : α -> β) (h : 单射 f)
   证明: by
   refine ⟨?_, map_subset f⟩; intro h2 x hx
   rcases mem_map.1 (h2 (mem_map_of_mem hx)) with ⟨x', hx', hxx'⟩
@@ -811,8 +811,8 @@ theorem append_eq_has_append
 
 中文:
 定理 append_eq_has_append
-  条件: {L₁ L₂ : List α}
-  结论: List.append L₁ L₂ = L₁ ++ L₂
+  条件: {L₁ L₂ : 列表 α}
+  结论: 列表.append L₁ L₂ = L₁ ++ L₂
   证明: rfl
 -/
 theorem append_eq_has_append {L₁ L₂ : List α} : List.append L₁ L₂ = L₁ ++ L₂ :=
@@ -829,8 +829,8 @@ theorem append_right_injective
 
 中文:
 定理 append_right_injective
-  条件: (s : List α)
-  结论: Injective fun t => s ++ t
+  条件: (s : 列表 α)
+  结论: 单射 fun t => s ++ t
   证明: fun _ _ => append_cancel_left
 
 Depends on / 依赖: append_cancel_left
@@ -849,8 +849,8 @@ theorem append_left_injective
 
 中文:
 定理 append_left_injective
-  条件: (t : List α)
-  结论: Injective fun s => s ++ t
+  条件: (t : 列表 α)
+  结论: 单射 fun s => s ++ t
   证明: fun _ _ => append_cancel_right
 
 Depends on / 依赖: append_cancel_right
@@ -870,7 +870,7 @@ theorem eq_replicate_length
 中文:
 定理 eq_replicate_length
   条件: {a : α}
-  结论: 对任意 {l : List α}, l = replicate l.length a ↔ 对任意 b in l, b = a
+  结论: 对任意 {l : 列表 α}, l = replicate l.length a ↔ 对任意 b in l, b = a
 -/
 theorem eq_replicate_length {a : α} : forall {l : List α}, l = replicate l.length a ↔ forall b in l, b = a
   | [] => by simp
@@ -930,7 +930,7 @@ theorem subset_singleton_iff
 
 中文:
 定理 subset_singleton_iff
-  条件: {a : α} {L : List α}
+  条件: {a : α} {L : 列表 α}
   结论: L subseteq [a] ↔ 存在 n, L = replicate n a
   证明: by
   simp only [eq_replicate_iff, subset_def, mem_singleton, exists_eq_left']
@@ -952,7 +952,7 @@ theorem replicate_right_injective
 中文:
 定理 replicate_right_injective
   条件: {n : 自然数} (hn : n != 0)
-  结论: Injective (@replicate α n)
+  结论: 单射 (@replicate α n)
   证明: fun _ _ h => (eq_replicate_iff.1 h).2 _ mem_replicate.2 ⟨hn, rfl⟩
 
 Depends on / 依赖: eq_replicate_iff, mem_replicate
@@ -1009,7 +1009,7 @@ theorem replicate_left_injective
 中文:
 定理 replicate_left_injective
   条件: (a : α)
-  结论: Injective (replicate · a)
+  结论: 单射 (replicate · a)
   证明: LeftInverse.injective (length_replicate (n := ·))
 
 Depends on / 依赖: LeftInverse, LeftInverse.injective, injective, length_replicate
@@ -1056,7 +1056,7 @@ theorem head?_flatten_replicate
 
 中文:
 定理 head?_flatten_replicate
-  条件: {n : 自然数} (h : n != 0) (l : List α)
+  条件: {n : 自然数} (h : n != 0) (l : 列表 α)
   证明: by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero h
   induction l <;> simp [replicate]
@@ -1082,7 +1082,7 @@ theorem getLast?_flatten_replicate
 
 中文:
 定理 getLast?_flatten_replicate
-  条件: {n : 自然数} (h : n != 0) (l : List α)
+  条件: {n : 自然数} (h : n != 0) (l : 列表 α)
   证明: by
   rw [← List.head?_reverse]; rw [← List.head?_reverse]; rw [List.reverse_flatten]; rw [List.map_replicate]; rw [List.reverse_replicate]; rw [head?_flatten_replicate h]
 
@@ -1105,7 +1105,7 @@ theorem mem_pure
 中文:
 定理 mem_pure
   条件: (x y : α)
-  结论: x in (pure y : List α) ↔ x = y
+  结论: x in (pure y : 列表 α) ↔ x = y
   证明: by simp
 -/
 theorem mem_pure (x y : α) : x in (pure y : List α) ↔ x = y := by simp
@@ -1124,7 +1124,7 @@ theorem bind_eq_flatMap
 
 中文:
 定理 bind_eq_flatMap
-  条件: {α β} (f : α -> List β) (l : List α)
+  条件: {α β} (f : α -> 列表 β) (l : 列表 α)
   结论: l >>= f = l.flatMap f
   证明: rfl
 -/
@@ -1146,7 +1146,7 @@ theorem reverse_cons'
 
 中文:
 定理 reverse_cons'
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: reverse (a :: l) = concat (reverse l) a
   证明: by
   simp only [reverse_cons, concat_eq_append]
@@ -1170,7 +1170,7 @@ theorem reverse_concat'
 
 中文:
 定理 reverse_concat'
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   结论: (l ++ [a]).reverse = a :: l.reverse
   证明: by
   rw [reverse_append]; rfl
@@ -1195,7 +1195,7 @@ theorem reverse_involutive
 
 中文:
 定理 reverse_involutive
-  结论: Involutive (@reverse α)
+  结论: 对合 (@reverse α)
   证明: reverse_reverse
 
 @[simp]
@@ -1216,7 +1216,7 @@ theorem reverse_injective
 
 中文:
 定理 reverse_injective
-  结论: Injective (@reverse α)
+  结论: 单射 (@reverse α)
   证明: reverse_involutive.injective
 
 Depends on / 依赖: injective, reverse_involutive, reverse_involutive.injective
@@ -1234,7 +1234,7 @@ theorem reverse_surjective
 
 中文:
 定理 reverse_surjective
-  结论: Surjective (@reverse α)
+  结论: 满射 (@reverse α)
   证明: reverse_involutive.surjective
 
 Depends on / 依赖: reverse_involutive, reverse_involutive.surjective, surjective
@@ -1252,7 +1252,7 @@ theorem reverse_bijective
 
 中文:
 定理 reverse_bijective
-  结论: Bijective (@reverse α)
+  结论: 双射 (@reverse α)
   证明: reverse_involutive.bijective
 
 Depends on / 依赖: bijective, reverse_involutive, reverse_involutive.bijective
@@ -1272,7 +1272,7 @@ theorem concat_eq_reverse_cons
 
 中文:
 定理 concat_eq_reverse_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: concat l a = reverse (a :: reverse l)
   证明: by
   grind
@@ -1291,7 +1291,7 @@ theorem map_reverseAux
 
 中文:
 定理 map_reverseAux
-  条件: (f : α -> β) (l₁ l₂ : List α)
+  条件: (f : α -> β) (l₁ l₂ : 列表 α)
   证明: by
   simp only [reverseAux_eq, map_append, map_reverse]
 
@@ -1355,7 +1355,7 @@ theorem getLast_append_singleton
 
 中文:
 定理 getLast_append_singleton
-  条件: {a : α} (l : List α)
+  条件: {a : α} (l : 列表 α)
   证明: by
   simp
 -/
@@ -1374,7 +1374,7 @@ theorem getLast_append_of_right_ne_nil
 
 中文:
 定理 getLast_append_of_right_ne_nil
-  条件: (l₁ l₂ : List α) (h : l₂ != [])
+  条件: (l₁ l₂ : 列表 α) (h : l₂ != [])
   证明: by
   induction l₁ with grind
 -/
@@ -1396,7 +1396,7 @@ theorem getLast_concat'
 
 中文:
 定理 getLast_concat'
-  条件: {a : α} (l : List α)
+  条件: {a : α} (l : 列表 α)
   结论: getLast (concat l a) (by simp) = a
   证明: by
   simp
@@ -1433,7 +1433,7 @@ theorem dropLast_append_getLast
 
 中文:
 定理 dropLast_append_getLast
-  结论: 对任意 {l : List α} (h : l != []), dropLast l ++ [getLast l h] = l
+  结论: 对任意 {l : 列表 α} (h : l != []), dropLast l ++ [getLast l h] = l
 -/
 theorem dropLast_append_getLast : forall {l : List α} (h : l != []), dropLast l ++ [getLast l h] = l
   | [], h => absurd rfl h
@@ -1453,7 +1453,7 @@ theorem getLast_congr
 
 中文:
 定理 getLast_congr
-  条件: {l₁ l₂ : List α} (h₁ : l₁ != []) (h₂ : l₂ != []) (h₃ : l₁ = l₂)
+  条件: {l₁ l₂ : 列表 α} (h₁ : l₁ != []) (h₂ : l₂ != []) (h₃ : l₁ = l₂)
   证明: by subst l₁; rfl
 -/
 theorem getLast_congr {l₁ l₂ : List α} (h₁ : l₁ != []) (h₂ : l₂ != []) (h₃ : l₁ = l₂) :
@@ -1493,7 +1493,7 @@ theorem mem_getLast?_eq_getLast
 
 中文:
 定理 mem_getLast?_eq_getLast
-  结论: 对任意 {l : List α} {x : α}, x in l.getLast? -> 存在 h, x = getLast l h
+  结论: 对任意 {l : 列表 α} {x : α}, x in l.getLast? -> 存在 h, x = getLast l h
 -/
 theorem mem_getLast?_eq_getLast : forall {l : List α} {x : α}, x in l.getLast? -> exists h, x = getLast l h
   | [], x, hx
@@ -1509,7 +1509,7 @@ theorem getLast?_eq_getLast_of_ne_nil
 
 中文:
 定理 getLast?_eq_getLast_of_ne_nil
-  结论: 对任意 {l : List α} (h : l != []), l.getLast? = some (l.getLast h)
+  结论: 对任意 {l : 列表 α} (h : l != []), l.getLast? = some (l.getLast h)
 -/
 theorem getLast?_eq_getLast_of_ne_nil : forall {l : List α} (h : l != []), l.getLast? = some (l.getLast h)
   | [], h => (h rfl).elim
@@ -1527,7 +1527,7 @@ theorem mem_getLast?_cons
 中文:
 定理 mem_getLast?_cons
   条件: {x y : α}
-  结论: 对任意 {l : List α}, x in l.getLast? -> x in (y :: l).getLast?
+  结论: 对任意 {l : 列表 α}, x in l.getLast? -> x in (y :: l).getLast?
 -/
 theorem mem_getLast?_cons {x y : α} : forall {l : List α}, x in l.getLast? -> x in (y :: l).getLast?
   | [], _ => by contradiction
@@ -1542,7 +1542,7 @@ theorem dropLast_append_getLast?
 
 中文:
 定理 dropLast_append_getLast?
-  结论: 对任意 {l : List α}, 对任意 a in l.getLast?, dropLast l ++ [a] = l
+  结论: 对任意 {l : 列表 α}, 对任意 a in l.getLast?, dropLast l ++ [a] = l
 -/
 theorem dropLast_append_getLast? : forall {l : List α}, forall a in l.getLast?, dropLast l ++ [a] = l
   | [], a, ha => (Option.not_mem_none a ha).elim
@@ -1561,8 +1561,8 @@ theorem getLastI_eq_getLast?_getD
 
 中文:
 定理 getLastI_eq_getLast?_getD
-  条件: [Inhabited α]
-  结论: 对任意 l : List α, l.getLastI = l.getLast?.getD default
+  条件: [可居 α]
+  结论: 对任意 l : 列表 α, l.getLastI = l.getLast?.getD default
 -/
 theorem getLastI_eq_getLast?_getD [Inhabited α] : forall l : List α, l.getLastI = l.getLast?.getD default
   | [] => by simp [getLastI]
@@ -1583,8 +1583,8 @@ theorem getLastI_eq_getLast?
 
 中文:
 定理 getLastI_eq_getLast?
-  条件: [Inhabited α]
-  结论: 对任意 l : List α, l.getLastI = l.getLast?.getD default
+  条件: [可居 α]
+  结论: 对任意 l : 列表 α, l.getLastI = l.getLast?.getD default
   证明: getLastI_eq_getLast?_getD
 
 Depends on / 依赖: _getD, getLastI_eq_getLast
@@ -1617,7 +1617,7 @@ theorem getLast?_append_of_ne_nil
 
 中文:
 定理 getLast?_append_of_ne_nil
-  条件: (l₁ : List α)
+  条件: (l₁ : 列表 α)
 -/
 theorem getLast?_append_of_ne_nil (l₁ : List α) :
     forall {l₂ : List α} (_ : l₂ != []), getLast? (l₁ ++ l₂) = getLast? l₂
@@ -1634,7 +1634,7 @@ theorem mem_getLast?_append_of_mem_getLast?
 
 中文:
 定理 mem_getLast?_append_of_mem_getLast?
-  条件: {l₁ l₂ : List α} {x : α} (h : x in l₂.getLast?)
+  条件: {l₁ l₂ : 列表 α} {x : α} (h : x in l₂.getLast?)
   证明: by grind
 -/
 theorem mem_getLast?_append_of_mem_getLast? {l₁ l₂ : List α} {x : α} (h : x in l₂.getLast?) :
@@ -1711,8 +1711,8 @@ theorem head!_nil
 
 中文:
 定理 head!_nil
-  条件: [Inhabited α]
-  结论: ([] : List α).head! = default
+  条件: [可居 α]
+  结论: ([] : 列表 α).head! = default
   证明: rfl
 -/
 theorem head!_nil [Inhabited α] : ([] : List α).head! = default := rfl
@@ -1727,7 +1727,7 @@ theorem head_eq_getElem_zero
 
 中文:
 定理 head_eq_getElem_zero
-  条件: {l : List α} (hl : l != [])
+  条件: {l : 列表 α} (hl : l != [])
   证明: (getElem_zero _).symm
 
 Depends on / 依赖: getElem_zero
@@ -1750,7 +1750,7 @@ theorem head!_eq_head?_getD
 
 中文:
 定理 head!_eq_head?_getD
-  条件: [Inhabited α] (l : List α)
+  条件: [可居 α] (l : 列表 α)
   结论: head! l = (head? l).getD default
   证明: by
   cases l <;> rfl
@@ -1772,7 +1772,7 @@ theorem head!_eq_head?
 
 中文:
 定理 head!_eq_head?
-  条件: [Inhabited α] (l : List α)
+  条件: [可居 α] (l : 列表 α)
   结论: head! l = (head? l).getD default
   证明: head!_eq_head?_getD l
 -/
@@ -1790,8 +1790,8 @@ theorem surjective_head!
 
 中文:
 定理 surjective_head!
-  条件: [Inhabited α]
-  结论: Surjective (@head! α _)
+  条件: [可居 α]
+  结论: 满射 (@head! α _)
   证明: fun x => ⟨[x], rfl⟩
 -/
 theorem surjective_head! [Inhabited α] : Surjective (@head! α _) := fun x => ⟨[x], rfl⟩
@@ -1806,7 +1806,7 @@ theorem surjective_head?
 
 中文:
 定理 surjective_head?
-  结论: Surjective (@head? α)
+  结论: 满射 (@head? α)
   证明: Option.forall.2 ⟨⟨[], rfl⟩, fun x => ⟨[x], rfl⟩⟩
 -/
 theorem surjective_head? : Surjective (@head? α) :=
@@ -1821,7 +1821,7 @@ theorem surjective_tail
 
 中文:
 定理 surjective_tail
-  结论: Surjective (@tail α)
+  结论: 满射 (@tail α)
 -/
 theorem surjective_tail : Surjective (@tail α)
   | [] => ⟨[], rfl⟩
@@ -1838,7 +1838,7 @@ theorem eq_cons_of_mem_head?
 中文:
 定理 eq_cons_of_mem_head?
   条件: {x : α}
-  结论: 对任意 {l : List α}, x in l.head? -> l = x :: tail l
+  结论: 对任意 {l : 列表 α}, x in l.head? -> l = x :: tail l
 -/
 theorem eq_cons_of_mem_head? {x : α} : forall {l : List α}, x in l.head? -> l = x :: tail l
   | [], h => (Option.not_mem_none _ h).elim
@@ -1859,7 +1859,7 @@ theorem head!_cons
 
 中文:
 定理 head!_cons
-  条件: [Inhabited α] (a : α) (l : List α)
+  条件: [可居 α] (a : α) (l : 列表 α)
   结论: head! (a :: l) = a
   证明: rfl
 
@@ -1881,7 +1881,7 @@ theorem head!_append
 
 中文:
 定理 head!_append
-  条件: [Inhabited α] (t : List α) {s : List α} (h : s != [])
+  条件: [可居 α] (t : 列表 α) {s : 列表 α} (h : s != [])
   证明: by
   induction s
   · contradiction
@@ -1904,7 +1904,7 @@ theorem mem_head?_append_of_mem_head?
 
 中文:
 定理 mem_head?_append_of_mem_head?
-  条件: {s t : List α} {x : α} (h : x in s.head?)
+  条件: {s t : 列表 α} {x : α} (h : x in s.head?)
   证明: by
   grind [Option.mem_def]
 
@@ -1937,7 +1937,7 @@ theorem tail_append_singleton_of_ne_nil
 
 中文:
 定理 tail_append_singleton_of_ne_nil
-  条件: {a : α} {l : List α} (h : l != nil)
+  条件: {a : α} {l : 列表 α} (h : l != nil)
   证明: by grind
 -/
 theorem tail_append_singleton_of_ne_nil {a : α} {l : List α} (h : l != nil) :
@@ -1954,7 +1954,7 @@ theorem cons_head?_tail
 
 中文:
 定理 cons_head?_tail
-  结论: 对任意 {l : List α} {a : α}, a in head? l -> a :: tail l = l
+  结论: 对任意 {l : 列表 α} {a : α}, a in head? l -> a :: tail l = l
   证明: by simpa using h
     simp [this]
 -/
@@ -1974,8 +1974,8 @@ theorem head!_mem_head?
 
 中文:
 定理 head!_mem_head?
-  条件: [Inhabited α]
-  结论: 对任意 {l : List α}, l != [] -> head! l in head? l
+  条件: [可居 α]
+  结论: 对任意 {l : 列表 α}, l != [] -> head! l in head? l
 -/
 theorem head!_mem_head? [Inhabited α] : forall {l : List α}, l != [] -> head! l in head? l
   | [], h => by contradiction
@@ -1992,7 +1992,7 @@ theorem cons_head!_tail
 
 中文:
 定理 cons_head!_tail
-  条件: [Inhabited α] {l : List α} (h : l != [])
+  条件: [可居 α] {l : 列表 α} (h : l != [])
   结论: head! l :: tail l = l
   证明: cons_head?_tail (head!_mem_head? h)
 -/
@@ -2012,7 +2012,7 @@ theorem head!_mem_self
 
 中文:
 定理 head!_mem_self
-  条件: [Inhabited α] {l : List α} (h : l != nil)
+  条件: [可居 α] {l : 列表 α} (h : l != nil)
   结论: l.head! in l
   证明: by
   have h' : l.head! in l.head! :: l.tail := mem_cons_self
@@ -2033,7 +2033,7 @@ theorem get_eq_getElem?
 
 中文:
 定理 get_eq_getElem?
-  条件: (l : List α) (i : Fin l.length)
+  条件: (l : 列表 α) (i : 有限集 l.length)
   证明: by
   simp
 -/
@@ -2052,8 +2052,8 @@ theorem exists_mem_iff_getElem
   exact ⟨fun ⟨_x, ⟨i, hi, hix⟩, hxp⟩ => ⟨i, hi, hix ▸ hxp⟩, fun ⟨i, hi, hp⟩ => ⟨_, ⟨i, hi, rfl⟩, hp⟩⟩
 
 中文:
-定理 exists_mem_iff_getElem
-  条件: {l : List α} {p : α -> 命题}
+定理 存在_mem_iff_getElem
+  条件: {l : 列表 α} {p : α -> 命题}
   证明: by
   simp only [mem_iff_getElem]
   exact ⟨fun ⟨_x, ⟨i, hi, hix⟩, hxp⟩ => ⟨i, hi, hix ▸ hxp⟩, fun ⟨i, hi, hp⟩ => ⟨_, ⟨i, hi, rfl⟩, hp⟩⟩
@@ -2074,8 +2074,8 @@ theorem exists_mem_iff_get
   proof: exists_mem_iff_getElem.trans ⟨fun ⟨i, hi, h⟩ => ⟨⟨i, hi⟩, h⟩, fun ⟨i, h⟩ => ⟨i, i.isLt, h⟩⟩
 
 中文:
-定理 exists_mem_iff_get
-  条件: {l : List α} {p : α -> 命题}
+定理 存在_mem_iff_get
+  条件: {l : 列表 α} {p : α -> 命题}
   证明: exists_mem_iff_getElem.trans ⟨fun ⟨i, hi, h⟩ => ⟨⟨i, hi⟩, h⟩, fun ⟨i, h⟩ => ⟨i, i.isLt, h⟩⟩
 
 Depends on / 依赖: exists_mem_iff_getElem, exists_mem_iff_getElem.trans, i.isLt
@@ -2094,8 +2094,8 @@ theorem forall_mem_iff_getElem
   simp [mem_iff_getElem, @forall_comm α]
 
 中文:
-定理 forall_mem_iff_getElem
-  条件: {l : List α} {p : α -> 命题}
+定理 对任意_mem_iff_getElem
+  条件: {l : 列表 α} {p : α -> 命题}
   证明: by
   simp [mem_iff_getElem, @forall_comm α]
 
@@ -2116,8 +2116,8 @@ theorem forall_mem_iff_get
 @[simp]
 
 中文:
-定理 forall_mem_iff_get
-  条件: {l : List α} {p : α -> 命题}
+定理 对任意_mem_iff_get
+  条件: {l : 列表 α} {p : α -> 命题}
   证明: forall_mem_iff_getElem.trans ⟨fun h i => h i i.isLt, fun h i hi => h ⟨i, hi⟩⟩
 
 @[simp]
@@ -2142,8 +2142,8 @@ theorem get_surjective_iff
 
 中文:
 定理 get_surjective_iff
-  条件: {l : List α}
-  结论: l.get.Surjective ↔ (对任意 x, x in l)
+  条件: {l : 列表 α}
+  结论: l.get.满射 ↔ (对任意 x, x in l)
   证明: forall_congr' fun _ => mem_iff_get.symm
 
 @[simp]
@@ -2166,7 +2166,7 @@ theorem getElem_fin_surjective_iff
 
 中文:
 定理 getElem_fin_surjective_iff
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: get_surjective_iff
 
 @[simp]
@@ -2193,8 +2193,8 @@ refine ⟨fun h x => mem_iff_getElem?.mpr h x, fun h x => ?_⟩
 
 中文:
 定理 getElem?_surjective_iff
-  条件: {l : List α}
-  结论: (fun (n : 自然数) => l[n]?).Surjective ↔ (对任意 x, x in l)
+  条件: {l : 列表 α}
+  结论: (fun (n : 自然数) => l[n]?).满射 ↔ (对任意 x, x in l)
   证明: by
 refine ⟨fun h x => mem_iff_getElem?.mpr h x, fun h x => ?_⟩
   cases x with
@@ -2218,7 +2218,7 @@ theorem get_tail
 
 中文:
 定理 get_tail
-  结论: (l : List α) (i) (h : i < l.tail.length)
+  结论: (l : 列表 α) (i) (h : i < l.tail.length)
   证明: by
   simp
 
@@ -2240,7 +2240,7 @@ theorem getElem_mem_tail
 
 中文:
 定理 getElem_mem_tail
-  条件: {k : 自然数} (l : List α) (h : k != 0) (hk : k < l.length)
+  条件: {k : 自然数} (l : 列表 α) (h : k != 0) (hk : k < l.length)
   证明: by
   cases l <;> grind
 -/
@@ -2303,7 +2303,7 @@ lemma sublist_singleton
 
 中文:
 引理 sublist_singleton
-  条件: {l : List α} {a : α}
+  条件: {l : 列表 α} {a : α}
   结论: l <+ [a] ↔ l = [] ∨ l = [a]
   证明: by
   constructor <;> rintro (_ | _) <;> aesop
@@ -2321,7 +2321,7 @@ theorem Sublist.antisymm
   proof: s₁.eq_of_length_le s₂.length_le
 
 中文:
-定理 Sublist.antisymm
+定理 子表.antisymm
   条件: (s₁ : l₁ <+ l₂) (s₂ : l₂ <+ l₁)
   结论: l₁ = l₂
   证明: s₁.eq_of_length_le s₂.length_le
@@ -2342,7 +2342,7 @@ theorem Sublist.of_cons_of_ne
   | _, .cons _ h => h
 
 中文:
-定理 Sublist.of_cons_of_ne
+定理 子表.of_cons_of_ne
   条件: {a b} (h₁ : a != b) (h₂ : a :: l₁ <+ b :: l₂)
   结论: a :: l₁ <+ l₂
   证明: match h₁, h₂ with
@@ -2368,7 +2368,7 @@ theorem idxOf_cons_eq
 
 中文:
 定理 idxOf_cons_eq
-  条件: {a b : α} (l : List α)
+  条件: {a b : α} (l : 列表 α)
   结论: b = a -> idxOf a (b :: l) = 0
 -/
 theorem idxOf_cons_eq {a b : α} (l : List α) : b = a -> idxOf a (b :: l) = 0
@@ -2387,7 +2387,7 @@ theorem idxOf_cons_ne
 
 中文:
 定理 idxOf_cons_ne
-  条件: {a b : α} (l : List α) (h : b != a)
+  条件: {a b : α} (l : 列表 α) (h : b != a)
   结论: idxOf a (b :: l) = succ (idxOf a l)
   证明: by
   simp [idxOf_cons, beq_false_of_ne h]
@@ -2411,7 +2411,7 @@ theorem idxOf_eq_length_iff
 
 中文:
 定理 idxOf_eq_length_iff
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   结论: idxOf a l = length l ↔ a ∉ l
   证明: by
   grind
@@ -2433,7 +2433,7 @@ theorem idxOf_of_notMem
 
 中文:
 定理 idxOf_of_notMem
-  条件: {l : List α} {a : α}
+  条件: {l : 列表 α} {a : α}
   结论: a ∉ l -> idxOf a l = length l
   证明: idxOf_eq_length_iff.2
 
@@ -2455,7 +2455,7 @@ theorem idxOf_eq_zero_iff_eq_nil_or_head_eq
 
 中文:
 定理 idxOf_eq_zero_iff_eq_nil_or_head_eq
-  条件: {l : List α} (a : α)
+  条件: {l : 列表 α} (a : α)
   证明: by
   cases l
   · simp
@@ -2478,7 +2478,7 @@ theorem idxOf_eq_zero_iff_head_eq
 
 中文:
 定理 idxOf_eq_zero_iff_head_eq
-  条件: {l : List α} (hl : l != []) {a : α}
+  条件: {l : 列表 α} (hl : l != []) {a : α}
   证明: by
   simp [hl, idxOf_eq_zero_iff_eq_nil_or_head_eq, head?_eq_some_head]
 
@@ -2654,7 +2654,7 @@ theorem mem_take_iff_idxOf_lt
 
 中文:
 定理 mem_take_iff_idxOf_lt
-  条件: {a : α} {n : 自然数} {l : List α} (ha : a in l)
+  条件: {a : α} {n : 自然数} {l : 列表 α} (ha : a in l)
   证明: by
   rw [l.take_prefix n |>.mem_iff_idxOf_lt_length]
   grind
@@ -2677,7 +2677,7 @@ theorem mem_dropLast_iff_idxOf_lt
 
 中文:
 定理 mem_dropLast_iff_idxOf_lt
-  条件: {l : List α} {a : α} (ha : a in l)
+  条件: {l : 列表 α} {a : α} (ha : a in l)
   证明: by
   rw [dropLast_eq_take]; rw [mem_take_iff_idxOf_lt ha]
 
@@ -2699,7 +2699,7 @@ theorem succ_idxOf_lt_length_of_mem_dropLast
 
 中文:
 定理 succ_idxOf_lt_length_of_mem_dropLast
-  条件: {l : List α} {a : α} (ha : a in l.dropLast)
+  条件: {l : 列表 α} {a : α} (ha : a in l.dropLast)
   证明: by
   have := idxOf_lt_length_of_mem ha
   grind [IsPrefix.idxOf_eq_of_mem]
@@ -2723,7 +2723,7 @@ theorem idxOf_getLast
 
 中文:
 定理 idxOf_getLast
-  条件: {l : List α} (hl : l != []) (hl' : l.getLast hl ∉ l.dropLast)
+  条件: {l : 列表 α} (hl : l != []) (hl' : l.getLast hl ∉ l.dropLast)
   证明: Nat.le_antisymm (Nat.le_pred_of_lt <| l.idxOf_lt_length_of_mem <| getLast_mem hl) by
     contrapose hl'
     rwa [mem_dropLast_iff_idxOf_lt <| getLast_mem hl, ← Nat.not_le]
@@ -2753,7 +2753,7 @@ theorem getElem?_length
 
 中文:
 定理 getElem?_length
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l[l.length]? = none
   证明: getElem?_eq_none (Nat.le_refl _)
 -/
@@ -2787,7 +2787,7 @@ theorem get_length_sub_one
 
 中文:
 定理 get_length_sub_one
-  条件: {l : List α} (h : l.length - 1 < l.length)
+  条件: {l : 列表 α} (h : l.length - 1 < l.length)
   证明: (getLast_eq_getElem _).symm
 
 Depends on / 依赖: getLast_eq_getElem
@@ -2808,7 +2808,7 @@ theorem ext_getElem?'
 
 中文:
 定理 ext_getElem?'
-  条件: {l₁ l₂ : List α} (h' : 对任意 n < max l₁.length l₂.length, l₁[n]? = l₂[n]?)
+  条件: {l₁ l₂ : 列表 α} (h' : 对任意 n < 最大值 l₁.length l₂.length, l₁[n]? = l₂[n]?)
   证明: by
   apply ext_getElem?
   grind
@@ -2835,7 +2835,7 @@ theorem ext_get_iff
 
 中文:
 定理 ext_get_iff
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   证明: by
   constructor
   · rintro rfl
@@ -2864,7 +2864,7 @@ theorem ext_getElem?_iff'
 
 中文:
 定理 ext_getElem?_iff'
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: l₁ = l₂ ↔
   证明: ⟨by rintro rfl _ _; rfl, ext_getElem?'⟩
 -/
@@ -2882,7 +2882,7 @@ theorem ext_getElem!
 
 中文:
 定理 ext_getElem!
-  条件: [Inhabited α] (hl : length l₁ = length l₂) (h : 对任意 n : 自然数, l₁[n]! = l₂[n]!)
+  条件: [可居 α] (hl : length l₁ = length l₂) (h : 对任意 n : 自然数, l₁[n]! = l₂[n]!)
   证明: ext_getElem hl fun n h₁ h₂ => by simpa only [← getElem!_pos] using h n
 -/
 theorem ext_getElem! [Inhabited α] (hl : length l₁ = length l₂) (h : forall n : Nat, l₁[n]! = l₂[n]!) :
@@ -2905,7 +2905,7 @@ theorem idxOf_get
 
 中文:
 定理 idxOf_get
-  条件: [BEq α] [LawfulBEq α] {a : α} {l : List α} (h)
+  条件: [BEq α] [LawfulBEq α] {a : α} {l : 列表 α} (h)
   结论: get l ⟨idxOf a l, h⟩ = a
   证明: by
   simp
@@ -2927,7 +2927,7 @@ theorem getElem?_idxOf
 
 中文:
 定理 getElem?_idxOf
-  条件: [BEq α] [LawfulBEq α] {a : α} {l : List α} (h : a in l)
+  条件: [BEq α] [LawfulBEq α] {a : α} {l : 列表 α} (h : a in l)
   证明: by
   rw [getElem?_eq_getElem (idxOf_lt_length_iff.2 h)]; rw [getElem_idxOf]
 -/
@@ -2948,7 +2948,7 @@ theorem idxOf_inj
 
 中文:
 定理 idxOf_inj
-  条件: [BEq α] [LawfulBEq α] {l : List α} {x y : α} (hx : x in l)
+  条件: [BEq α] [LawfulBEq α] {l : 列表 α} {x y : α} (hx : x in l)
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ rfl⟩
   rw [← getElem_idxOf (idxOf_lt_length_iff.mpr hx)]
@@ -2973,7 +2973,7 @@ theorem get_reverse'
 
 中文:
 定理 get_reverse'
-  条件: (l : List α) (n) (hn')
+  条件: (l : 列表 α) (n) (hn')
   证明: by
   simp
 -/
@@ -2993,7 +2993,7 @@ theorem eq_cons_of_length_one
 
 中文:
 定理 eq_cons_of_length_one
-  条件: {l : List α} (h : l.length = 1)
+  条件: {l : 列表 α} (h : l.length = 1)
   结论: l = [l.get ⟨0, by lia⟩]
   证明: by
   refine ext_get (by convert! h) (by grind)
@@ -3016,7 +3016,7 @@ theorem getElem_set_of_ne
 
 中文:
 定理 getElem_set_of_ne
-  结论: {l : List α} {i j : 自然数} (h : i != j) (a : α)
+  结论: {l : 列表 α} {i j : 自然数} (h : i != j) (a : α)
   证明: by
   simp [h]
 -/
@@ -3043,7 +3043,7 @@ theorem flatMap_pure_eq_map
 
 中文:
 定理 flatMap_pure_eq_map
-  条件: (f : α -> β) (l : List α)
+  条件: (f : α -> β) (l : 列表 α)
   结论: l.flatMap (pure ∘ f) = map f l
   证明: .symm map_eq_flatMap ..
 
@@ -3062,7 +3062,7 @@ theorem flatMap_congr
 
 中文:
 定理 flatMap_congr
-  条件: {l : List α} {f g : α -> List β} (h : 对任意 x in l, f x = g x)
+  条件: {l : 列表 α} {f g : α -> 列表 β} (h : 对任意 x in l, f x = g x)
   证明: (congr_arg List.flatten <| map_congr_left h :)
 
 Depends on / 依赖: List.flatten, congr_arg, flatten, map_congr_left
@@ -3083,7 +3083,7 @@ theorem infix_flatMap_of_mem
 
 中文:
 定理 infix_flatMap_of_mem
-  条件: {a : α} {as : List α} (h : a in as) (f : α -> List α)
+  条件: {a : α} {as : 列表 α} (h : a in as) (f : α -> 列表 α)
   证明: infix_of_mem_flatten (mem_map_of_mem h)
 
 @[simp]
@@ -3106,7 +3106,7 @@ theorem map_eq_map
 
 中文:
 定理 map_eq_map
-  条件: {α β} (f : α -> β) (l : List α)
+  条件: {α β} (f : α -> β) (l : 列表 α)
   结论: f < > l = map f l
   证明: rfl
 -/
@@ -3124,7 +3124,7 @@ theorem comp_map
 
 中文:
 定理 comp_map
-  条件: (h : β -> γ) (g : α -> β) (l : List α)
+  条件: (h : β -> γ) (g : α -> β) (l : 列表 α)
   结论: map (h ∘ g) l = map h (map g l)
   证明: map_map.symm
 
@@ -3176,8 +3176,8 @@ nonrec theorem _root_.Function.Involutive.list_map {f : α -> α}
 @[simp]
 
 中文:
-定理 _root_.Function.LeftInverse.list_map
-  条件: {f : α -> β} {g : β -> α} (h : LeftInverse f g)
+定理 _root_.函数.左逆.list_map
+  条件: {f : α -> β} {g : β -> α} (h : 左逆 f g)
   证明: h.list_map
 
 nonrec theorem _root_.Function.Involutive.list_map {f : α -> α}
@@ -3275,8 +3275,8 @@ theorem _root_.Function.Injective.list_map
   given: {f : α -> β} (h : Injective f)
 
 中文:
-定理 _root_.Function.Injective.list_map
-  条件: {f : α -> β} (h : Injective f)
+定理 _root_.函数.单射.list_map
+  条件: {f : α -> β} (h : 单射 f)
 -/
 theorem _root_.Function.Injective.list_map {f : α -> β} (h : Injective f) :
     Injective (map f)
@@ -3302,7 +3302,7 @@ theorem map_injective_iff
 中文:
 定理 map_injective_iff
   条件: {f : α -> β}
-  结论: Injective (map f) ↔ Injective f
+  结论: 单射 (map f) ↔ 单射 f
   证明: by
   refine ⟨fun h x y hxy => ?_, (·.list_map)⟩
   suffices [x] = [y] by simpa using this
@@ -3328,8 +3328,8 @@ theorem _root_.Function.Surjective.list_map
 @[simp]
 
 中文:
-定理 _root_.Function.Surjective.list_map
-  条件: {f : α -> β} (h : Surjective f)
+定理 _root_.函数.满射.list_map
+  条件: {f : α -> β} (h : 满射 f)
   证明: let ⟨_, h⟩ := h.hasRightInverse; h.list_map.surjective
 
 @[simp]
@@ -3356,7 +3356,7 @@ theorem map_surjective_iff
 中文:
 定理 map_surjective_iff
   条件: {f : α -> β}
-  结论: Surjective (map f) ↔ Surjective f
+  结论: 满射 (map f) ↔ 满射 f
   证明: by
   refine ⟨fun h x => ?_, (·.list_map)⟩
   let ⟨[y], hxy⟩ := h [x]
@@ -3381,9 +3381,9 @@ theorem _root_.Function.Bijective.list_map
 @[simp]
 
 中文:
-定理 _root_.Function.Bijective.list_map
-  条件: {f : α -> β} (h : Bijective f)
-  结论: Bijective (map f)
+定理 _root_.函数.双射.list_map
+  条件: {f : α -> β} (h : 双射 f)
+  结论: 双射 (map f)
   证明: ⟨h.1.list_map, h.2.list_map⟩
 
 @[simp]
@@ -3407,7 +3407,7 @@ theorem map_bijective_iff
 中文:
 定理 map_bijective_iff
   条件: {f : α -> β}
-  结论: Bijective (map f) ↔ Bijective f
+  结论: 双射 (map f) ↔ 双射 f
   证明: by
   simp_rw [Function.Bijective, map_injective_iff, map_surjective_iff]
 
@@ -3428,7 +3428,7 @@ theorem eq_of_mem_map_const
 
 中文:
 定理 eq_of_mem_map_const
-  条件: {b₁ b₂ : β} {l : List α} (h : b₁ in map (const α b₂) l)
+  条件: {b₁ b₂ : β} {l : 列表 α} (h : b₁ in map (const α b₂) l)
   证明: by rw [map_const] at h; exact eq_of_mem_replicate h
 
 Depends on / 依赖: eq_of_mem_replicate, map_const
@@ -3448,7 +3448,7 @@ lemma eq_nil_or_concat'
 
 中文:
 引理 eq_nil_or_concat'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l = [] ∨ 存在 L b, l = L ++ [b]
   证明: by
   simpa using l.eq_nil_or_concat
@@ -3474,7 +3474,7 @@ theorem foldl_ext
 
 中文:
 定理 foldl_ext
-  条件: (f g : α -> β -> α) (a : α) {l : List β} (H : 对任意 a : α, 对任意 b in l, f a b = g a b)
+  条件: (f g : α -> β -> α) (a : α) {l : 列表 β} (H : 对任意 a : α, 对任意 b in l, f a b = g a b)
   证明: by
   induction l generalizing a with
   | nil => rfl
@@ -3505,7 +3505,7 @@ theorem foldr_ext
 
 中文:
 定理 foldr_ext
-  条件: (f g : α -> β -> β) (b : β) {l : List α} (H : 对任意 a in l, 对任意 b : β, f a b = g a b)
+  条件: (f g : α -> β -> β) (b : β) {l : 列表 α} (H : 对任意 a in l, 对任意 b : β, f a b = g a b)
   证明: by
   induction l with | nil => rfl | cons hd tl ih => ?_
   simp only [mem_cons, or_imp, forall_and, forall_eq] at H
@@ -3570,7 +3570,7 @@ theorem foldl_fixed'
 中文:
 定理 foldl_fixed'
   条件: {f : α -> β -> α} {a : α} (hf : 对任意 b, f a b = a)
-  结论: 对任意 l : List β, foldl f a l = a
+  结论: 对任意 l : 列表 β, foldl f a l = a
 -/
 theorem foldl_fixed' {f : α -> β -> α} {a : α} (hf : forall b, f a b = a) : forall l : List β, foldl f a l = a
   | [] => rfl
@@ -3587,7 +3587,7 @@ theorem foldr_fixed'
 中文:
 定理 foldr_fixed'
   条件: {f : α -> β -> β} {b : β} (hf : 对任意 a, f a b = b)
-  结论: 对任意 l : List α, foldr f b l = b
+  结论: 对任意 l : 列表 α, foldr f b l = b
 -/
 theorem foldr_fixed' {f : α -> β -> β} {b : β} (hf : forall a, f a b = b) : forall l : List α, foldr f b l = b
   | [] => rfl
@@ -3608,7 +3608,7 @@ theorem foldl_fixed
 中文:
 定理 foldl_fixed
   条件: {a : α}
-  结论: 对任意 l : List β, foldl (fun a _ => a) a l = a
+  结论: 对任意 l : 列表 β, foldl (fun a _ => a) a l = a
   证明: foldl_fixed' fun _ => rfl
 
 @[simp]
@@ -3631,7 +3631,7 @@ theorem foldr_fixed
 中文:
 定理 foldr_fixed
   条件: {b : β}
-  结论: 对任意 l : List α, foldr (fun _ b => b) b l = b
+  结论: 对任意 l : 列表 α, foldr (fun _ b => b) b l = b
   证明: foldr_fixed' fun _ => rfl
 
 Depends on / 依赖: foldr_fixed
@@ -3651,7 +3651,7 @@ theorem reverse_foldl
 
 中文:
 定理 reverse_foldl
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: reverse (foldl (fun t h => h :: t) [] l) = l
   证明: by
   simp
@@ -3671,7 +3671,7 @@ theorem foldl_hom₂
 
 中文:
 定理 foldl_hom₂
-  结论: (l : List ι) (f : α -> β -> γ) (op₁ : α -> ι -> α) (op₂ : β -> ι -> β)
+  结论: (l : 列表 ι) (f : α -> β -> γ) (op₁ : α -> ι -> α) (op₂ : β -> ι -> β)
   证明: Eq.symm by
     revert a b
     induction l <;> intros <;> [rfl; simp only [*, foldl]]
@@ -3697,7 +3697,7 @@ theorem foldr_hom₂
 
 中文:
 定理 foldr_hom₂
-  结论: (l : List ι) (f : α -> β -> γ) (op₁ : ι -> α -> α) (op₂ : ι -> β -> β)
+  结论: (l : 列表 ι) (f : α -> β -> γ) (op₁ : ι -> α -> α) (op₂ : ι -> β -> β)
   证明: by
   revert a
   induction l <;> intros <;> [rfl; simp only [*, foldr]]
@@ -3726,7 +3726,7 @@ theorem injective_foldl_comp
 
 中文:
 定理 injective_foldl_comp
-  结论: {l : List (α -> α)} {f : α -> α}
+  结论: {l : 列表 (α -> α)} {f : α -> α}
   证明: by
   induction l generalizing f with
   | nil => exact hf
@@ -3763,7 +3763,7 @@ lemma append_cons_inj_of_notMem
 
 中文:
 引理 append_cons_inj_of_notMem
-  结论: {x₁ x₂ z₁ z₂ : List α} {a₁ a₂ : α}
+  结论: {x₁ x₂ z₁ z₂ : 列表 α} {a₁ a₂ : α}
   证明: by
   constructor
   · simp only [append_eq_append_iff, cons_eq_append_iff, cons_eq_cons]
@@ -3859,7 +3859,7 @@ theorem length_eq_length_filter_add
 
 中文:
 定理 length_eq_length_filter_add
-  条件: {l : List (α)} (f : α -> 布尔)
+  条件: {l : 列表 (α)} (f : α -> 布尔值)
   证明: by
   simp_rw [← List.countP_eq_length_filter, l.length_eq_countP_add_countP f, Bool.not_eq_true,
     Bool.decide_eq_false]
@@ -3886,7 +3886,7 @@ theorem filterMap_eq_flatMap_toList
 
 中文:
 定理 filterMap_eq_flatMap_toList
-  条件: (f : α -> Option β) (l : List α)
+  条件: (f : α -> 选项类型 β) (l : 列表 α)
   证明: by
   induction l with | nil => ?_ | cons a l ih => ?_ <;> simp [filterMap_cons]
   rcases f a <;> simp [ih]
@@ -3912,7 +3912,7 @@ theorem filterMap_congr
 
 中文:
 定理 filterMap_congr
-  结论: {f g : α -> Option β} {l : List α}
+  结论: {f g : α -> 选项类型 β} {l : 列表 α}
   证明: by
   induction l <;> simp_all [filterMap_cons]
 
@@ -3940,8 +3940,8 @@ theorem filterMap_eq_map_iff_forall_eq_some
 @[simp]
 
 中文:
-定理 filterMap_eq_map_iff_forall_eq_some
-  条件: {f : α -> Option β} {g : α -> β} {l : List α}
+定理 filterMap_eq_map_iff_对任意_eq_some
+  条件: {f : α -> 选项类型 β} {g : α -> β} {l : 列表 α}
   证明: by
     induction l with | nil => simp | cons a l ih => ?_
     rcases ha : f a with - | b
@@ -3978,7 +3978,7 @@ lemma filterMap_none
 
 中文:
 引理 filterMap_none
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   induction l <;> simp [*]
 -/
@@ -4023,7 +4023,7 @@ theorem filter_eq_foldr
 
 中文:
 定理 filter_eq_foldr
-  条件: (p : α -> 布尔) (l : List α)
+  条件: (p : α -> 布尔值) (l : 列表 α)
   证明: by
   induction l <;> simp [*, filter]; rfl
 
@@ -4049,7 +4049,7 @@ theorem filter_subset_self
 
 中文:
 定理 filter_subset_self
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: filter p l subseteq l
   证明: filter_sublist.subset
 
@@ -4135,8 +4135,8 @@ theorem monotone_filter_right
 
 中文:
 定理 monotone_filter_right
-  条件: (l : List α) ⦃p q
-  结论: α -> 布尔⦄
+  条件: (l : 列表 α) ⦃p q
+  结论: α -> 布尔值⦄
   证明: by
   induction l with grind
 -/
@@ -4155,7 +4155,7 @@ lemma map_filter
 
 中文:
 引理 map_filter
-  结论: {f : α -> β} (hf : Injective f) (l : List α)
+  结论: {f : α -> β} (hf : 单射 f) (l : 列表 α)
   证明: by
   simp [comp_def, filter_map, hf.eq_iff]
 
@@ -4179,7 +4179,7 @@ lemma filter_attach'
 
 中文:
 引理 filter_attach'
-  条件: (l : List α) (p : {a // a in l} -> 布尔) [DecidableEq α]
+  条件: (l : 列表 α) (p : {a // a in l} -> 布尔值) [DecidableEq α]
   证明: by
   classical
   refine map_injective_iff.2 Subtype.coe_injective ?_
@@ -4206,7 +4206,7 @@ lemma filter_attach
 
 中文:
 引理 filter_attach
-  条件: (l : List α) (p : α -> 布尔)
+  条件: (l : 列表 α) (p : α -> 布尔值)
   证明: map_injective_iff.2 Subtype.coe_injective by
     simp_rw [map_map, comp_def, Subtype.map, id, ← Function.comp_apply (g := Subtype.val),
       ← filter_map, attach_map_subtype_val]
@@ -4234,7 +4234,7 @@ lemma filter_comm
 
 中文:
 引理 filter_comm
-  条件: (q) (l : List α)
+  条件: (q) (l : 列表 α)
   结论: filter p (filter q l) = filter q (filter p l)
   证明: by
   simp [Bool.and_comm]
@@ -4259,7 +4259,7 @@ theorem filter_true
 
 中文:
 定理 filter_true
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by induction l <;> simp [*, filter]
 
 @[simp]
@@ -4280,7 +4280,7 @@ theorem filter_false
 
 中文:
 定理 filter_false
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by induction l <;> simp [*, filter]
 
 Depends on / 依赖: filter
@@ -4307,7 +4307,7 @@ theorem length_eraseP_add_one
 
 中文:
 定理 length_eraseP_add_one
-  条件: {l : List α} {a} (al : a in l) (pa : p a)
+  条件: {l : 列表 α} {a} (al : a in l) (pa : p a)
   证明: by grind
 -/
 theorem length_eraseP_add_one {l : List α} {a} (al : a in l) (pa : p a) :
@@ -4333,7 +4333,7 @@ theorem length_erase_add_one
 
 中文:
 定理 length_erase_add_one
-  条件: {a : α} {l : List α} (h : a in l)
+  条件: {a : α} {l : 列表 α} (h : a in l)
   证明: by
   rw [erase_eq_eraseP]; rw [length_eraseP_add_one h BEq.rfl]
 
@@ -4355,7 +4355,7 @@ theorem map_erase
 
 中文:
 定理 map_erase
-  条件: [BEq β] [LawfulBEq β] {f : α -> β} (finj : Injective f) {a : α} (l : List α)
+  条件: [BEq β] [LawfulBEq β] {f : α -> β} (finj : 单射 f) {a : α} (l : 列表 α)
   证明: by
   have : (a == ·) = (f a == f ·) := by ext b; simp [finj.eq_iff]
   rw [erase_eq_eraseP]; rw [erase_eq_eraseP]; rw [eraseP_map]; rw [this]; rfl
@@ -4378,7 +4378,7 @@ theorem map_foldl_erase
 
 中文:
 定理 map_foldl_erase
-  条件: [BEq β] [LawfulBEq β] {f : α -> β} (finj : Injective f) {l₁ l₂ : List α}
+  条件: [BEq β] [LawfulBEq β] {f : α -> β} (finj : 单射 f) {l₁ l₂ : 列表 α}
   证明: by
   induction l₂ generalizing l₁ <;> [rfl; simp only [foldl_cons, map_erase finj, *]]
 
@@ -4401,7 +4401,7 @@ theorem erase_getElem
 
 中文:
 定理 erase_getElem
-  条件: [BEq ι] [LawfulBEq ι] {l : List ι} {i : 自然数} (hi : i < l.length)
+  条件: [BEq ι] [LawfulBEq ι] {l : 列表 ι} {i : 自然数} (hi : i < l.length)
   证明: by
   induction l generalizing i with
   | nil => simp
@@ -4425,7 +4425,7 @@ theorem length_eraseIdx_add_one
 
 中文:
 定理 length_eraseIdx_add_one
-  条件: {l : List ι} {i : 自然数} (h : i < l.length)
+  条件: {l : 列表 ι} {i : 自然数} (h : i < l.length)
   证明: by grind
 -/
 theorem length_eraseIdx_add_one {l : List ι} {i : Nat} (h : i < l.length) :
@@ -4544,9 +4544,9 @@ theorem forall_cons
   statement: forall l : List α, Forall p (x :: l) ↔ p x ∧ Forall p l
 
 中文:
-定理 forall_cons
+定理 对任意_cons
   条件: (p : α -> 命题) (x : α)
-  结论: 对任意 l : List α, Forall p (x :: l) ↔ p x ∧ Forall p l
+  结论: 对任意 l : 列表 α, 任意 p (x :: l) ↔ p x ∧ 任意 p l
 -/
 theorem forall_cons (p : α -> Prop) (x : α) : forall l : List α, Forall p (x :: l) ↔ p x ∧ Forall p l
   | [] => (and_iff_left_of_imp fun _ => trivial).symm
@@ -4562,9 +4562,9 @@ theorem forall_append
   statement: forall {xs ys : List α},
 
 中文:
-定理 forall_append
+定理 对任意_append
   条件: {p : α -> 命题}
-  结论: 对任意 {xs ys : List α},
+  结论: 对任意 {xs ys : 列表 α},
 -/
 theorem forall_append {p : α -> Prop} : forall {xs ys : List α},
     Forall p (xs ++ ys) ↔ Forall p xs ∧ Forall p ys
@@ -4579,8 +4579,8 @@ theorem forall_iff_forall_mem
   statement: forall {l : List α}, Forall p l ↔ forall x in l, p x
 
 中文:
-定理 forall_iff_forall_mem
-  结论: 对任意 {l : List α}, Forall p l ↔ 对任意 x in l, p x
+定理 对任意_iff_对任意_mem
+  结论: 对任意 {l : 列表 α}, 任意 p l ↔ 对任意 x in l, p x
 -/
 theorem forall_iff_forall_mem : forall {l : List α}, Forall p l ↔ forall x in l, p x
   | [] => (iff_true_intro <| forall_mem_nil _).symm
@@ -4595,9 +4595,9 @@ theorem Forall.imp
   statement: forall {l : List α}, Forall p l -> Forall q l
 
 中文:
-定理 Forall.imp
+定理 任意.imp
   条件: (h : 对任意 x, p x -> q x)
-  结论: 对任意 {l : List α}, Forall p l -> Forall q l
+  结论: 对任意 {l : 列表 α}, 任意 p l -> 任意 q l
 -/
 theorem Forall.imp (h : forall x, p x -> q x) : forall {l : List α}, Forall p l -> Forall q l
   | [] => id
@@ -4618,9 +4618,9 @@ theorem forall_map_iff
   induction l <;> simp [*]
 
 中文:
-定理 forall_map_iff
+定理 对任意_map_iff
   条件: {p : β -> 命题} (f : α -> β)
-  结论: Forall p (l.map f) ↔ Forall (p ∘ f) l
+  结论: 任意 p (l.map f) ↔ 任意 (p ∘ f) l
   证明: by
   induction l <;> simp [*]
 -/
@@ -4643,7 +4643,7 @@ theorem get_attach
 
 中文:
 定理 get_attach
-  条件: (l : List α) (i)
+  条件: (l : 列表 α) (i)
   证明: by simp
 -/
 theorem get_attach (l : List α) (i) :
@@ -4665,7 +4665,7 @@ theorem disjoint_pmap
 
 中文:
 定理 disjoint_pmap
-  结论: {p : α -> 命题} {f : 对任意 a : α, p a -> β} {s t : List α}
+  结论: {p : α -> 命题} {f : 对任意 a : α, p a -> β} {s t : 列表 α}
   证明: by
   simp only [Disjoint, mem_pmap]
   rintro b ⟨a, ha, rfl⟩ ⟨a', ha', ha''⟩
@@ -4698,7 +4698,7 @@ alias Disjoint.map := disjoint_map
 
 中文:
 定理 disjoint_map
-  结论: {f : α -> β} {s t : List α} (hf : Function.Injective f)
+  结论: {f : α -> β} {s t : 列表 α} (hf : 函数.单射 f)
   证明: by
   rw [← pmap_eq_map (fun _ _ => trivial)]; rw [← pmap_eq_map (fun _ _ => trivial)]
   exact disjoint_pmap _ _ (fun _ _ _ _ h' => hf h') h
@@ -4725,7 +4725,7 @@ theorem Disjoint.of_map
 
 中文:
 定理 Disjoint.of_map
-  条件: {f : α -> β} {s t : List α} (h : Disjoint (s.map f) (t.map f))
+  条件: {f : α -> β} {s t : 列表 α} (h : Disjoint (s.map f) (t.map f))
   证明: fun _a has hat =>
   h (mem_map_of_mem has) (mem_map_of_mem hat)
 -/
@@ -4743,7 +4743,7 @@ theorem Disjoint.map_iff
 
 中文:
 定理 Disjoint.map_iff
-  条件: {f : α -> β} {s t : List α} (hf : Function.Injective f)
+  条件: {f : α -> β} {s t : 列表 α} (hf : 函数.单射 f)
   证明: ⟨fun h => h.of_map, fun h => h.map hf⟩
 
 Depends on / 依赖: h.map, h.of_map, of_map
@@ -4762,8 +4762,8 @@ theorem Perm.disjoint_left
   simp_rw [List.disjoint_left, p.mem_iff]
 
 中文:
-定理 Perm.disjoint_left
-  条件: {l₁ l₂ l : List α} (p : List.Perm l₁ l₂)
+定理 置换.disjoint_left
+  条件: {l₁ l₂ l : 列表 α} (p : 列表.置换 l₁ l₂)
   证明: by
   simp_rw [List.disjoint_left, p.mem_iff]
 
@@ -4785,8 +4785,8 @@ theorem Perm.disjoint_right
 @[simp]
 
 中文:
-定理 Perm.disjoint_right
-  条件: {l₁ l₂ l : List α} (p : List.Perm l₁ l₂)
+定理 置换.disjoint_right
+  条件: {l₁ l₂ l : 列表 α} (p : 列表.置换 l₁ l₂)
   证明: by
   simp_rw [List.disjoint_right, p.mem_iff]
 
@@ -4812,7 +4812,7 @@ theorem disjoint_reverse_left
 
 中文:
 定理 disjoint_reverse_left
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: Disjoint l₁.reverse l₂ ↔ Disjoint l₁ l₂
   证明: .disjoint_left reverse_perm _
 
@@ -4835,7 +4835,7 @@ theorem disjoint_reverse_right
 
 中文:
 定理 disjoint_reverse_right
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: Disjoint l₁ l₂.reverse ↔ Disjoint l₁ l₂
   证明: .disjoint_right reverse_perm _
 
@@ -4860,7 +4860,7 @@ lemma lookup_graph
 
 中文:
 引理 lookup_graph
-  条件: (f : α -> β) {a : α} {as : List α} (h : a in as)
+  条件: (f : α -> β) {a : α} {as : 列表 α} (h : a in as)
   证明: by
   induction as with grind
 -/
@@ -4914,7 +4914,7 @@ lemma left_le_of_mem_range'
 
 中文:
 引理 left_le_of_mem_range'
-  条件: {a b s x : 自然数} (hx : x in List.range' a b s)
+  条件: {a b s x : 自然数} (hx : x in 列表.range' a b s)
   结论: a <= x
   证明: by
   obtain ⟨i, _, rfl⟩ := List.mem_range'.mp hx

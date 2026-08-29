@@ -51,7 +51,7 @@ definition IsThickening
 
 中文:
 定义 IsThickening
-  签名: (c u : Set X)
+  签名: (c u : 集合 X)
   定义体: exists (x : X) (uc s : SetRel X X),
     IsOpen uc ∧ uc in 𝓤 X ∧ c = closure (ball x uc) ∧
     ball x (s ○ uc ○ s) subseteq u ∧ s in 𝓤 X
@@ -78,7 +78,7 @@ theorem urysohns_main
 
 中文:
 定理 urysohns_main
-  条件: {c u : Set X} (IsThickeningcu : IsThickening c u)
+  条件: {c u : 集合 X} (IsThickeningcu : IsThickening c u)
   证明: by
   obtain ⟨x, uc, s, huc, ucu, rfl, hn, hs⟩ := IsThickeningcu
   obtain ⟨(ds : SetRel X X), hdsu, hdso, -, hdsd⟩ := comp_open_symm_mem_uniformity_sets hs

@@ -48,7 +48,7 @@ definition PreservesImage.iso
 
 中文:
 定义 PreservesImage.iso
-  签名: : F.obj (Abelian.image f) ≅ Abelian.image (F.map f)
+  签名: : F.obj (交换.像 f) ≅ 交换.像 (F.map f)
   定义体: PreservesKernel.iso F _ ≪≫ kernel.mapIso _ _ (Iso.refl _) (PreservesCokernel.iso F _) (by simp)
 
 @[reassoc (attr := simp)]
@@ -166,7 +166,7 @@ definition PreservesCoimage.iso
 
 中文:
 定义 PreservesCoimage.iso
-  签名: : F.obj (Abelian.coimage f) ≅ Abelian.coimage (F.map f)
+  签名: : F.obj (交换.coimage f) ≅ 交换.coimage (F.map f)
   定义体: PreservesCokernel.iso F _ ≪≫ cokernel.mapIso _ _ (PreservesKernel.iso F _) (Iso.refl _) (by simp)
 
 @[reassoc (attr := simp)]

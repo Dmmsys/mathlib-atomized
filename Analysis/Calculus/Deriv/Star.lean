@@ -84,8 +84,8 @@ protected nonrec theorem HasStrictDerivAt.star (h : HasStrictDerivAt f f' x) :
   HasDerivAtFilter.star h
 
 中文:
-定理 HasDerivAt.star
-  条件: (h : HasDerivAt f f' x)
+定理 在点处可导.star
+  条件: (h : 在点处可导 f f' x)
   证明: HasDerivAtFilter.star h
 
 protected nonrec theorem HasStrictDerivAt.star (h : HasStrictDerivAt f f' x) :
@@ -181,8 +181,8 @@ lemma HasDerivAt.star_conj
   simp
 
 中文:
-引理 HasDerivAt.star_conj
-  条件: {f : 𝕜 -> F} {f' : F} (hf : HasDerivAt f f' x)
+引理 在点处可导.star_conj
+  条件: {f : 𝕜 -> F} {f' : F} (hf : 在点处可导 f f' x)
   证明: by
   rw [hasDerivAt_iff_hasFDerivAt]
   convert! hf.hasFDerivAt.star_star
@@ -232,8 +232,8 @@ lemma HasDerivAt.conj_conj
   proof: hf.star_conj
 
 中文:
-引理 HasDerivAt.conj_conj
-  条件: {f : 𝕜 -> 𝕜} {f' : 𝕜} (hf : HasDerivAt f f' x)
+引理 在点处可导.conj_conj
+  条件: {f : 𝕜 -> 𝕜} {f' : 𝕜} (hf : 在点处可导 f f' x)
   证明: hf.star_conj
 
 Depends on / 依赖: hf.star_conj, star_conj

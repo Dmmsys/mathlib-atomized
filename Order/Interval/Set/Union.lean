@@ -37,7 +37,7 @@ theorem Ioc_subset_biUnion_Ioc
 
 中文:
 定理 Ioc_subset_biUnion_Ioc
-  条件: {X : 类型} [LinearOrder X] (N : 自然数) (a : 自然数 -> X)
+  条件: {X : 类型} [线性序 X] (N : 自然数) (a : 自然数 -> X)
   证明: by
   induction N with
   | zero => simp
@@ -73,7 +73,7 @@ theorem Ico_subset_biUnion_Ico
 
 中文:
 定理 Ico_subset_biUnion_Ico
-  条件: {X : 类型} [LinearOrder X] (N : 自然数) (a : 自然数 -> X)
+  条件: {X : 类型} [线性序 X] (N : 自然数) (a : 自然数 -> X)
   证明: by
   induction N with
   | zero => simp

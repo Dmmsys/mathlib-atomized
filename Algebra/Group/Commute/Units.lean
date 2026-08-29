@@ -200,7 +200,7 @@ definition Units.leftOfMul
     rw [← this.units_inv_right.right_comm]; rw [← hc.eq]; rw [hu]; rw [u.mul_inv]
 
 中文:
-定义 Units.leftOfMul
+定义 单位群.leftOfMul
   签名: (u : Mˣ) (a b : M) (hu : a * b = u) (hc : Commute a b)
   定义体: a
   inv := b * ↑u⁻¹
@@ -231,7 +231,7 @@ definition Units.rightOfMul
 @[to_additive]
 
 中文:
-定义 Units.rightOfMul
+定义 单位群.rightOfMul
   签名: (u : Mˣ) (a b : M) (hu : a * b = u) (hc : Commute a b)
   定义体: u.leftOfMul b a (hc.eq ▸ hu) hc.symm
 
@@ -258,7 +258,7 @@ theorem Commute.isUnit_mul_iff
 中文:
 定理 Commute.isUnit_mul_iff
   条件: (h : Commute a b)
-  结论: IsUnit (a * b) ↔ IsUnit a ∧ IsUnit b
+  结论: 是单位 (a * b) ↔ 是单位 a ∧ 是单位 b
   证明: ⟨fun ⟨u, hu⟩ => ⟨(u.leftOfMul a b hu.symm h).isUnit, (u.rightOfMul a b hu.symm h).isUnit⟩,
   fun H => H.1.mul H.2⟩
 
@@ -283,7 +283,7 @@ theorem isUnit_mul_self_iff
 
 中文:
 定理 isUnit_mul_self_iff
-  结论: IsUnit (a * a) ↔ IsUnit a
+  结论: 是单位 (a * a) ↔ 是单位 a
   证明: (Commute.refl a).isUnit_mul_iff.trans and_self_iff
 
 @[to_additive (attr := simp)]
@@ -353,7 +353,7 @@ definition Units.ofPow
     (Commute.self_pow _ _)
 
 中文:
-定义 Units.ofPow
+定义 单位群.ofPow
   签名: (u : Mˣ) (x : M) {n : 自然数} (hn : n != 0) (hu : x ^ n = u)
   定义体: u.leftOfMul x (x ^ (n - 1))
     (by rwa [← _root_.pow_succ', Nat.sub_add_cancel (Nat.succ_le_of_lt <| Nat.pos_of_ne_zero hn)])
@@ -380,7 +380,7 @@ lemma isUnit_pow_iff
 中文:
 引理 isUnit_pow_iff
   条件: (hn : n != 0)
-  结论: IsUnit (a ^ n) ↔ IsUnit a
+  结论: 是单位 (a ^ n) ↔ 是单位 a
   证明: ⟨fun ⟨u, hu⟩ => (u.ofPow a hn hu.symm).isUnit, IsUnit.pow n⟩
 
 @[to_additive]
@@ -399,7 +399,7 @@ lemma isUnit_pow_succ_iff
 
 中文:
 引理 isUnit_pow_succ_iff
-  结论: IsUnit (a ^ (n + 1)) ↔ IsUnit a
+  结论: 是单位 (a ^ (n + 1)) ↔ 是单位 a
   证明: isUnit_pow_iff n.succ_ne_zero
 
 Depends on / 依赖: isUnit_pow_iff, n.succ_ne_zero, succ_ne_zero
@@ -418,7 +418,7 @@ lemma isUnit_pow_iff_of_not_isUnit
 
 中文:
 引理 isUnit_pow_iff_of_not_isUnit
-  条件: (hx : ¬ IsUnit a) {n : 自然数}
+  条件: (hx : ¬ 是单位 a) {n : 自然数}
   证明: by
   rcases n with (_ | n) <;>
   simp [hx]
@@ -441,7 +441,7 @@ definition Units.ofPowEqOne
 @[to_additive (attr := simp)]
 
 中文:
-定义 Units.ofPowEqOne
+定义 单位群.ofPowEqOne
   签名: (a : M) (n : 自然数) (ha : a ^ n = 1) (hn : n != 0)
   定义体: Units.ofPow 1 a hn ha
 
@@ -463,7 +463,7 @@ lemma Units.pow_ofPowEqOne
 @[to_additive]
 
 中文:
-引理 Units.pow_ofPowEqOne
+引理 单位群.pow_ofPowEqOne
   条件: (ha : a ^ n = 1) (hn : n != 0)
   证明: Units.ext by simp [ha]
 
@@ -487,9 +487,9 @@ lemma IsUnit.of_pow_eq_one
 @[to_additive]
 
 中文:
-引理 IsUnit.of_pow_eq_one
+引理 是单位.of_pow_eq_one
   条件: (ha : a ^ n = 1) (hn : n != 0)
-  结论: IsUnit a
+  结论: 是单位 a
   证明: (Units.ofPowEqOne _ n ha hn).isUnit
 
 @[to_additive]
@@ -512,7 +512,7 @@ lemma _root_.Units.commute_iff_inv_mul_cancel
 @[to_additive]
 
 中文:
-引理 _root_.Units.commute_iff_inv_mul_cancel
+引理 _root_.单位群.commute_iff_inv_mul_cancel
   条件: {u : Mˣ} {a : M}
   证明: by
   rw [mul_assoc]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [eq_comm]; rw [Commute]; rw [SemiconjBy]
@@ -538,7 +538,7 @@ lemma _root_.Units.commute_iff_inv_mul_cancel_assoc
 @[to_additive]
 
 中文:
-引理 _root_.Units.commute_iff_inv_mul_cancel_assoc
+引理 _root_.单位群.commute_iff_inv_mul_cancel_assoc
   条件: {u : Mˣ} {a : M}
   证明: by
   rw [u.commute_iff_inv_mul_cancel]; rw [mul_assoc]
@@ -564,7 +564,7 @@ lemma _root_.Units.commute_iff_mul_inv_cancel
 @[to_additive]
 
 中文:
-引理 _root_.Units.commute_iff_mul_inv_cancel
+引理 _root_.单位群.commute_iff_mul_inv_cancel
   条件: {u : Mˣ} {a : M}
   证明: by
   rw [Units.mul_inv_eq_iff_eq_mul]; rw [Commute]; rw [SemiconjBy]
@@ -588,7 +588,7 @@ lemma _root_.Units.commute_iff_mul_inv_cancel_assoc
   rw [u.commute_iff_mul_inv_cancel]; rw [mul_assoc]
 
 中文:
-引理 _root_.Units.commute_iff_mul_inv_cancel_assoc
+引理 _root_.单位群.commute_iff_mul_inv_cancel_assoc
   条件: {u : Mˣ} {a : M}
   证明: by
   rw [u.commute_iff_mul_inv_cancel]; rw [mul_assoc]
@@ -619,7 +619,7 @@ lemma div_eq_div_iff_of_isUnit
 
 中文:
 引理 div_eq_div_iff_of_isUnit
-  条件: (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hbd : Commute b d) (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← (hb.mul hd).mul_left_inj]; rw [← mul_assoc]; rw [hb.div_mul_cancel]; rw [← mul_assoc]; rw [hbd.right_comm]; rw [hd.div_mul_cancel]
 
@@ -645,7 +645,7 @@ lemma mul_inv_eq_mul_inv_iff_of_isUnit
 
 中文:
 引理 mul_inv_eq_mul_inv_iff_of_isUnit
-  条件: (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hbd : Commute b d) (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← div_eq_mul_inv]; rw [← div_eq_mul_inv]; rw [hbd.div_eq_div_iff_of_isUnit hb hd]
 
@@ -669,7 +669,7 @@ lemma inv_mul_eq_inv_mul_iff_of_isUnit
 
 中文:
 引理 inv_mul_eq_inv_mul_iff_of_isUnit
-  条件: (hbd : Commute b d) (hb : IsUnit b) (hd : IsUnit d)
+  条件: (hbd : Commute b d) (hb : 是单位 b) (hd : 是单位 d)
   证明: by
   rw [← (hd.mul hb).mul_right_inj]; rw [← mul_assoc]; rw [mul_assoc d]; rw [hb.mul_inv_cancel]; rw [mul_one]; rw [← mul_assoc]; rw [mul_assoc d]; rw [hbd.symm.left_comm]; rw [hd.mul_inv_cancel]; rw [mul_one]
 

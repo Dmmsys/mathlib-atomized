@@ -95,7 +95,7 @@ abbreviation weakEqualizer.fork
 
 中文:
 缩写 weakEqualizer.fork
-  签名: : Fork f g
+  签名: : 叉 f g
   定义体: weakLimit.cone (parallelPair f g)
 
 @[simp]
@@ -176,7 +176,7 @@ definition weakEqualizerIsWeakEqualizer
 
 中文:
 定义 weakEqualizerIsWeakEqualizer
-  签名: : IsWeakLimit (Fork.ofι (weakEqualizer.ι f g)
+  签名: : 是WeakLimit (叉.ofι (weakEqualizer.ι f g)
   定义体: IsWeakLimit.ofIsoWeakLimit (weakLimit.isWeakLimit _) (Fork.ext (Iso.refl _) (by simp))
 
 Depends on / 依赖: Fork.ext, IsWeakLimit, IsWeakLimit.ofIsoWeakLimit, Iso.refl, isWeakLimit, ofIsoWeakLimit, weakLimit, weakLimit.isWeakLimit
@@ -305,8 +305,8 @@ WalkingParallelPair.casesOn j (fac s) by
         simp [← Category.assoc, fac] }
 
 中文:
-定义 Fork.IsWeakLimit.mk
-  签名: (t : Fork f g) (lift : 对任意 s : Fork f g, s.pt ⟶ t.pt)
+定义 叉.是WeakLimit.mk
+  签名: (t : 叉 f g) (lift : 对任意 s : 叉 f g, s.pt ⟶ t.pt)
   定义体: { lift
     fac s j :=
 WalkingParallelPair.casesOn j (fac s) by
@@ -330,8 +330,8 @@ definition Fork.IsWeakLimit.mk'
   body: Fork.IsWeakLimit.mk t (fun s => (create s).1) (fun s => (create s).2)
 
 中文:
-定义 Fork.IsWeakLimit.mk'
-  签名: {X Y : C} {f g : X ⟶ Y} (t : Fork f g)
+定义 叉.是WeakLimit.mk'
+  签名: {X Y : C} {f g : X ⟶ Y} (t : 叉 f g)
   定义体: Fork.IsWeakLimit.mk t (fun s => (create s).1) (fun s => (create s).2)
 
 Depends on / 依赖: Fork.IsWeakLimit.mk, IsWeakLimit, create

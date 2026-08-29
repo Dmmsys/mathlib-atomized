@@ -242,7 +242,7 @@ theorem AntisymmRel.trans
 
 中文:
 定理 AntisymmRel.trans
-  条件: [IsTrans α r] (hab : AntisymmRel r a b) (hbc : AntisymmRel r b c)
+  条件: [是Trans α r] (hab : AntisymmRel r a b) (hbc : AntisymmRel r b c)
   证明: ⟨_root_.trans hab.1 hbc.1, _root_.trans hbc.2 hab.2⟩
 
 Depends on / 依赖: _root_, _root_.trans
@@ -260,8 +260,8 @@ instance [IsTrans
   body: .trans
 
 中文:
-实例 [IsTrans
-  签名: α r] : IsTrans α (AntisymmRel r) where
+实例 [是Trans
+  签名: α r] : 是Trans α (AntisymmRel r) where
   定义体: .trans
 -/
 instance [IsTrans α r] : IsTrans α (AntisymmRel r) where
@@ -303,7 +303,7 @@ alias ⟨AntisymmRel.eq, _⟩ := antisymmRel_iff_eq
 
 中文:
 定理 antisymmRel_iff_eq
-  条件: [Std.Refl r] [Std.Antisymm r]
+  条件: [Std.Refl r] [Std.反对称 r]
   结论: AntisymmRel r a b ↔ a = b
   证明: antisymm_iff
 
@@ -400,7 +400,7 @@ definition AntisymmRel.setoid
 
 中文:
 定义 AntisymmRel.setoid
-  签名: : Setoid α
+  签名: : 集合等价关系 α
   定义体: ⟨AntisymmRel r, .refl r, .symm, .trans⟩
 
 Depends on / 依赖: AntisymmRel
@@ -418,7 +418,7 @@ definition Antisymmetrization
 
 中文:
 定义 Antisymmetrization
-  签名: : Type _
+  签名: : 类型 _
   定义体: Quotient AntisymmRel.setoid α r
 
 Depends on / 依赖: AntisymmRel, AntisymmRel.setoid, Quotient, setoid
@@ -473,8 +473,8 @@ instance [Inhabited
   body: inferInstanceAs Inhabited (Quotient _)
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Antisymmetrization α r)
+实例 [可居
+  签名: α] : 可居 (Antisymmetrization α r)
   定义体: inferInstanceAs Inhabited (Quotient _)
 
 Depends on / 依赖: Inhabited, Quotient
@@ -493,8 +493,8 @@ instance [Subsingleton
 @[elab_as_elim]
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Antisymmetrization α r)
+实例 [子单例
+  签名: α] : 子单例 (Antisymmetrization α r)
   定义体: inferInstanceAs Subsingleton (Quotient _)
 
 @[elab_as_elim]
@@ -1054,8 +1054,8 @@ theorem AntisymmRel.image
   proof: ⟨hf h.1, hf h.2⟩
 
 中文:
-定理 AntisymmRel.image
-  条件: (h : AntisymmRel (· <= ·) a b) {f : α -> β} (hf : Monotone f)
+定理 AntisymmRel.像
+  条件: (h : AntisymmRel (· <= ·) a b) {f : α -> β} (hf : 递增 f)
   证明: ⟨hf h.1, hf h.2⟩
 -/
 theorem AntisymmRel.image (h : AntisymmRel (· <= ·) a b) {f : α -> β} (hf : Monotone f) :
@@ -1078,7 +1078,7 @@ h₁.1.trans_lt h.trans_le h₂.2⟩
 
 中文:
 实例 instPartialOrderAntisymmetrization
-  签名: : PartialOrder (Antisymmetrization α (· <= ·)) where
+  签名: : 偏序 (Antisymmetrization α (· <= ·)) where
   定义体: Quotient.lift₂ (· <= ·) fun (_ _ _ _ : α) h₁ h₂ =>
 propext ⟨fun h => h₁.2.trans h.trans h₂.1, fun h => h₁.1.trans h.trans h₂.2⟩
   lt :=
@@ -1252,7 +1252,7 @@ le_total := fun a b => Quotient.inductionOn₂' a b total_of (· <= ·),
 
 中文:
 实例 [DecidableLE
-  签名: α] [DecidableLT α] [@Std.Total α (· <= ·)] :
+  签名: α] [DecidableLT α] [@Std.全 α (· <= ·)] :
   定义体: { instPartialOrderAntisymmetrization with
 le_total := fun a b => Quotient.inductionOn₂' a b total_of (· <= ·),
     toDecidableLE := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance,
@@ -1370,7 +1370,7 @@ theorem toAntisymmetrization_mono
 
 中文:
 定理 toAntisymmetrization_mono
-  结论: Monotone (toAntisymmetrization (α := α) (· <= ·))
+  结论: 递增 (toAntisymmetrization (α := α) (· <= ·))
   证明: fun _ _ => id
 -/
 theorem toAntisymmetrization_mono : Monotone (toAntisymmetrization (α := α) (· <= ·)) :=
@@ -1407,7 +1407,7 @@ definition OrderHom.antisymmetrization
 @[simp]
 
 中文:
-定义 OrderHom.antisymmetrization
+定义 序态射.antisymmetrization
   签名: (f : α ->o β)
   定义体: ⟨Quotient.map' f liftFun_antisymmRel f, fun a b => Quotient.inductionOn₂' a b f.mono⟩
 
@@ -1427,7 +1427,7 @@ theorem OrderHom.coe_antisymmetrization
   proof: rfl
 
 中文:
-定理 OrderHom.coe_antisymmetrization
+定理 序态射.coe_antisymmetrization
   条件: (f : α ->o β)
   证明: rfl
 -/
@@ -1446,7 +1446,7 @@ theorem OrderHom.antisymmetrization_apply
 @[simp]
 
 中文:
-定理 OrderHom.antisymmetrization_apply
+定理 序态射.antisymmetrization_apply
   条件: (f : α ->o β) (a : Antisymmetrization α (· <= ·))
   证明: rfl
 
@@ -1466,7 +1466,7 @@ theorem OrderHom.antisymmetrization_apply_mk
   proof: @Quotient.map_mk _ _ (_root_.id _) (_root_.id _) f (liftFun_antisymmRel f) _
 
 中文:
-定理 OrderHom.antisymmetrization_apply_mk
+定理 序态射.antisymmetrization_apply_mk
   条件: (f : α ->o β) (a : α)
   证明: @Quotient.map_mk _ _ (_root_.id _) (_root_.id _) f (liftFun_antisymmRel f) _
 
@@ -1612,7 +1612,7 @@ theorem Relation.SymmGen.of_lt
   proof: h.le.symmGen
 
 中文:
-定理 Relation.SymmGen.of_lt
+定理 关系.SymmGen.of_lt
   条件: (h : a < b)
   结论: SymmGen (· <= ·) a b
   证明: h.le.symmGen
@@ -1635,7 +1635,7 @@ alias _root_.LT.lt.symmGen_symm := SymmGen.of_gt
 @[trans]
 
 中文:
-定理 Relation.SymmGen.of_gt
+定理 关系.SymmGen.of_gt
   条件: (h : b < a)
   结论: SymmGen (· <= ·) a b
   证明: h.le.symmGen_symm
@@ -1666,7 +1666,7 @@ theorem Relation.SymmGen.of_symmGen_of_antisymmRel
 alias Relation.SymmGen.trans_antisymmRel := SymmGen.of_symmGen_of_antisymmRel
 
 中文:
-定理 Relation.SymmGen.of_symmGen_of_antisymmRel
+定理 关系.SymmGen.of_symmGen_of_antisymmRel
   证明: by
   obtain (h | h) := h₁
   · exact (h.trans h₂.le).symmGen
@@ -1717,7 +1717,7 @@ theorem Relation.SymmGen.of_antisymmRel_of_symmGen
 alias AntisymmRel.trans_symmGen := SymmGen.of_antisymmRel_of_symmGen
 
 中文:
-定理 Relation.SymmGen.of_antisymmRel_of_symmGen
+定理 关系.SymmGen.of_antisymmRel_of_symmGen
   证明: (h₂.symm.trans_antisymmRel h₁.symm).symm
 
 alias AntisymmRel.trans_symmGen := SymmGen.of_antisymmRel_of_symmGen

@@ -333,7 +333,7 @@ definition awayToSection
 
 中文:
 定义 awayToSection
-  签名: : CommRingCat.of (Away 𝒜 f) ⟶ Γ(Proj 𝒜, basicOpen 𝒜 f)
+  签名: : 交换环范畴.of (Away 𝒜 f) ⟶ Γ(Proj 𝒜, basicOpen 𝒜 f)
   定义体: ProjectiveSpectrum.Proj.awayToSection ..
 
 Depends on / 依赖: ProjectiveSpectrum, ProjectiveSpectrum.Proj.awayToSection, awayToSection
@@ -465,7 +465,7 @@ definition basicOpenIsoAway
 
 中文:
 定义 basicOpenIsoAway
-  签名: : CommRingCat.of (Away 𝒜 f) ≅ Γ(Proj 𝒜, basicOpen 𝒜 f)
+  签名: : 交换环范畴.of (Away 𝒜 f) ≅ Γ(Proj 𝒜, basicOpen 𝒜 f)
   定义体: have : IsIso (awayToSection 𝒜 f) := by
     have := basicOpenToSpec_app_top 𝒜 f
     rw [← Iso.inv_comp_eq]; rw [Iso.eq_comp_inv] at this
@@ -532,7 +532,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (Proj.awayι 𝒜 f f_deg hm)
+  签名: 是开浸入 (Proj.awayι 𝒜 f f_deg hm)
   定义体: IsOpenImmersion.comp _ _
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.comp
@@ -576,7 +576,7 @@ lemma isAffineOpen_basicOpen
 
 中文:
 引理 isAffineOpen_basicOpen
-  结论: IsAffineOpen (basicOpen 𝒜 f)
+  结论: 是仿射开集 (basicOpen 𝒜 f)
   证明: by
   rw [← opensRange_awayι 𝒜 f f_deg hm]
   exact isAffineOpen_opensRange (awayι _ _ _ _)

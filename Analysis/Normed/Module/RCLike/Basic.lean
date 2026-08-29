@@ -119,7 +119,7 @@ theorem ContinuousLinearEquiv.coord_norm'
 @[deprecated (since := "2026-02-01")] alias coord_norm' := ContinuousLinearEquiv.coord_norm'
 
 中文:
-定理 ContinuousLinearEquiv.coord_norm'
+定理 连续线性等价.coord_norm'
   条件: {x : E} (h : x != 0)
   证明: by
   simp only [norm_smul, RCLike.norm_coe_norm, coord_norm, mul_inv_cancel₀ (mt norm_eq_zero.mp h)]
@@ -153,7 +153,7 @@ theorem LinearMap.bound_of_sphere_bound
   have r_ne_ze
 
 中文:
-定理 LinearMap.bound_of_sphere_bound
+定理 线性映射.bound_of_sphere_bound
   结论: {r : 实数} (r_pos : 0 < r) (c : 实数) (f : E ->ₗ[𝕜] 𝕜)
   证明: by
   by_cases z_zero : z = 0
@@ -199,7 +199,7 @@ theorem LinearMap.bound_of_ball_bound'
   proof: f.bound_of_sphere_bound r_pos c (fun z hz => h z hz.le) z
 
 中文:
-定理 LinearMap.bound_of_ball_bound'
+定理 线性映射.bound_of_ball_bound'
   结论: {r : 实数} (r_pos : 0 < r) (c : 实数) (f : E ->ₗ[𝕜] 𝕜)
   证明: f.bound_of_sphere_bound r_pos c (fun z hz => h z hz.le) z
 
@@ -225,7 +225,7 @@ theorem ContinuousLinearMap.opNorm_bound_of_ball_bound
   exact fun z hz => h z hz
 
 中文:
-定理 ContinuousLinearMap.opNorm_bound_of_ball_bound
+定理 连续线性映射.opNorm_bound_of_ball_bound
   结论: {r : 实数} (r_pos : 0 < r) (c : 实数)
   证明: by
   apply ContinuousLinearMap.opNorm_le_bound
@@ -291,8 +291,8 @@ theorem NormedSpace.sphere_nonempty_rclike
   (NormedSpace.sphere_nonempty.mpr hr).coe_sort
 
 中文:
-定理 NormedSpace.sphere_nonempty_rclike
-  条件: [Nontrivial E] {r : 实数} (hr : 0 <= r)
+定理 赋范空间.sphere_nonempty_rclike
+  条件: [非平凡 E] {r : 实数} (hr : 0 <= r)
   证明: letI : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
   (NormedSpace.sphere_nonempty.mpr hr).coe_sort
 

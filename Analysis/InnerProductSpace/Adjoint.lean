@@ -489,7 +489,7 @@ theorem _root_.LinearMap.IsSymmetric.clm_adjoint_eq
   rwa [eq_comm, eq_adjoint_iff A A]
 
 中文:
-定理 _root_.LinearMap.IsSymmetric.clm_adjoint_eq
+定理 _root_.线性映射.IsSymmetric.clm_adjoint_eq
   条件: {A : E ->L[𝕜] E} (hA : A.IsSymmetric)
   证明: by
   rwa [eq_comm, eq_adjoint_iff A A]
@@ -543,8 +543,8 @@ theorem _root_.Submodule.adjoint_subtypeL
   simp [eq_adjoint_iff]
 
 中文:
-定理 _root_.Submodule.adjoint_subtypeL
-  条件: (U : Submodule 𝕜 E) [CompleteSpace U]
+定理 _root_.子模.adjoint_subtypeL
+  条件: (U : 子模 𝕜 E) [完备空间 U]
   证明: by
   symm
   simp [eq_adjoint_iff]
@@ -569,8 +569,8 @@ theorem _root_.Submodule.adjoint_orthogonalProjectionOnto
   Submodule.adjoint_orthogonalProjectionOnto
 
 中文:
-定理 _root_.Submodule.adjoint_orthogonalProjectionOnto
-  条件: (U : Submodule 𝕜 E) [CompleteSpace U]
+定理 _root_.子模.adjoint_orthogonalProjectionOnto
+  条件: (U : 子模 𝕜 E) [完备空间 U]
   证明: by
   rw [← U.adjoint_subtypeL]; rw [adjoint_adjoint]
 
@@ -684,7 +684,7 @@ theorem forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
 omit [CompleteSpace E] in
 
 中文:
-定理 forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
+定理 对任意_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
   证明: by
   have hb : BddBelow (Set.range fun w : A.range => ‖y - w‖) := ⟨0, by rintro - ⟨_, rfl⟩; positivity⟩
   rw [← A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero y x]; rw [le_antisymm_iff]; rw [and_iff_left (ciInf_le hb ⟨A x]; rw [x]; rw [rfl⟩)]; rw [le_ciInf_iff hb]
@@ -715,7 +715,7 @@ theorem ker_le_ker_iff_range_le_range
 
 中文:
 定理 ker_le_ker_iff_range_le_range
-  结论: [FiniteDimensional 𝕜 E] {T U : E ->L[𝕜] E}
+  结论: [有限维 𝕜 E] {T U : E ->L[𝕜] E}
   证明: by
   refine ⟨fun h => ?_, LinearMap.ker_le_ker_of_range hT hU⟩
   have := FiniteDimensional.complete 𝕜 E
@@ -832,7 +832,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (E ->L[𝕜] E)
+  签名: 对合 (E ->L[𝕜] E)
   定义体: ⟨adjoint⟩
 
 Depends on / 依赖: adjoint
@@ -886,7 +886,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (E ->L[𝕜] E)
+  签名: 对合环 (E ->L[𝕜] E)
   定义体: ⟨map_add adjoint⟩
 
 Depends on / 依赖: adjoint, map_add
@@ -904,7 +904,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 𝕜 (E ->L[𝕜] E)
+  签名: 对合模 𝕜 (E ->L[𝕜] E)
   定义体: ⟨map_smulₛₗ adjoint⟩
 
 Depends on / 依赖: adjoint
@@ -1039,7 +1039,7 @@ instance :
 
 中文:
 实例 :
-  签名: CStarRing (E ->L[𝕜] E)
+  签名: CStar环 (E ->L[𝕜] E)
   定义体: le_of_eq Eq.symm norm_adjoint_comp_self x
 
 Depends on / 依赖: Eq.symm, le_of_eq, norm_adjoint_comp_self
@@ -1165,7 +1165,7 @@ lemma _root_.InnerProductSpace.adjoint_rankOne
   simp [rankOne_def', adjoint_comp, ← adjoint_innerSL_apply]
 
 中文:
-引理 _root_.InnerProductSpace.adjoint_rankOne
+引理 _root_.内积空间.adjoint_rankOne
   条件: (x : E) (y : F)
   证明: by
   simp [rankOne_def', adjoint_comp, ← adjoint_innerSL_apply]
@@ -1184,8 +1184,8 @@ lemma _root_.InnerProductSpace.rankOne_comp
   simp_rw [rankOne_def', comp_assoc, innerSL_apply_comp]
 
 中文:
-引理 _root_.InnerProductSpace.rankOne_comp
-  结论: {E G : 类型} [SeminormedAddCommGroup E]
+引理 _root_.内积空间.rankOne_comp
+  结论: {E G : 类型} [SeminormedAddComm群 E]
   证明: by
   simp_rw [rankOne_def', comp_assoc, innerSL_apply_comp]
 
@@ -1319,7 +1319,7 @@ theorem _root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric
     ext fun x => ext_inner_right 𝕜 fun y => (A.adjoint_inner_left y x).symm ▸ (hA x y).symm⟩
 
 中文:
-定理 _root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric
+定理 _root_.连续线性映射.isSelfAdjoint_iff_isSymmetric
   条件: {A : E ->L[𝕜] E}
   证明: ⟨fun hA => hA.isSymmetric, fun hA =>
     ext fun x => ext_inner_right 𝕜 fun y => (A.adjoint_inner_left y x).symm ▸ (hA x y).symm⟩
@@ -1341,7 +1341,7 @@ theorem _root_.LinearMap.IsSymmetric.isSelfAdjoint
   rwa [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA
 
 中文:
-定理 _root_.LinearMap.IsSymmetric.isSelfAdjoint
+定理 _root_.线性映射.IsSymmetric.isSelfAdjoint
   结论: {A : E ->L[𝕜] E}
   证明: by
   rwa [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA
@@ -1449,8 +1449,8 @@ lemma IsStarNormal.adjoint_apply_eq_zero_iff
   simp_rw [← norm_eq_zero (E := E), ← isStarNormal_iff_norm_eq_adjoint.mp hT]
 
 中文:
-引理 IsStarNormal.adjoint_apply_eq_zero_iff
-  条件: (hT : IsStarNormal T) (x : E)
+引理 是StarNormal.adjoint_apply_eq_zero_iff
+  条件: (hT : 是StarNormal T) (x : E)
   证明: by
   simp_rw [← norm_eq_zero (E := E), ← isStarNormal_iff_norm_eq_adjoint.mp hT]
 
@@ -1471,8 +1471,8 @@ theorem IsStarNormal.ker_adjoint_eq_ker
   proof: Submodule.ext hT.adjoint_apply_eq_zero_iff
 
 中文:
-定理 IsStarNormal.ker_adjoint_eq_ker
-  条件: (hT : IsStarNormal T)
+定理 是StarNormal.ker_adjoint_eq_ker
+  条件: (hT : 是StarNormal T)
   证明: Submodule.ext hT.adjoint_apply_eq_zero_iff
 
 Depends on / 依赖: Submodule, Submodule.ext, adjoint_apply_eq_zero_iff, hT.adjoint_apply_eq_zero_iff
@@ -1491,8 +1491,8 @@ theorem IsStarNormal.orthogonal_range
   proof: T.orthogonal_range ▸ hT.ker_adjoint_eq_ker
 
 中文:
-定理 IsStarNormal.orthogonal_range
-  条件: (hT : IsStarNormal T)
+定理 是StarNormal.orthogonal_range
+  条件: (hT : 是StarNormal T)
   结论: T.rangeᗮ = T.ker
   证明: T.orthogonal_range ▸ hT.ker_adjoint_eq_ker
 
@@ -1611,7 +1611,7 @@ theorem IsStarProjection.ext_iff
 alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
 
 中文:
-定理 IsStarProjection.ext_iff
+定理 是StarProjection.ext_iff
   结论: {S : E ->L[𝕜] E}
   证明: by
   simpa using hS.isSymmetricProjection.ext_iff hT.isSymmetricProjection
@@ -1636,7 +1636,7 @@ theorem _root_.InnerProductSpace.isStarProjection_rankOne_self
   proof: (isSymmetricProjection_rankOne_self hx).isStarProjection
 
 中文:
-定理 _root_.InnerProductSpace.isStarProjection_rankOne_self
+定理 _root_.内积空间.isStarProjection_rankOne_self
   条件: {x : E} (hx : ‖x‖ = 1)
   证明: (isSymmetricProjection_rankOne_self hx).isStarProjection
 
@@ -1658,7 +1658,7 @@ theorem orthogonal_mem_invtSubmodule
 
 中文:
 定理 orthogonal_mem_invtSubmodule
-  结论: {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
+  结论: {T : E ->L[𝕜] E} {U : 子模 𝕜 E}
   证明: by
   simp only [mem_invtSubmodule_iff_forall_mem_of_mem, coe_coe, mem_orthogonal] at h ⊢
   grind [T.adjoint_inner_left]
@@ -1683,7 +1683,7 @@ theorem mem_invtSubmodule_adjoint_iff
 
 中文:
 定理 mem_invtSubmodule_adjoint_iff
-  结论: {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
+  结论: {T : E ->L[𝕜] E} {U : 子模 𝕜 E}
   证明: orthogonal_mem_invtSubmodule
   mpr := by simpa using orthogonal_mem_invtSubmodule (T := T.adjoint) (U := Uᗮ)
 
@@ -1709,7 +1709,7 @@ theorem isStarProjection_starProjection
 
 中文:
 定理 isStarProjection_starProjection
-  结论: [CompleteSpace E] {U : Submodule 𝕜 E}
+  结论: [完备空间 E] {U : 子模 𝕜 E}
   证明: ⟨U.isIdempotentElem_starProjection, isSelfAdjoint_starProjection U⟩
 
 Depends on / 依赖: U.isIdempotentElem_starProjection, isIdempotentElem_starProjection, isSelfAdjoint_starProjection
@@ -1731,7 +1731,7 @@ theorem isStarProjection_iff_eq_starProjection_range
 
 中文:
 定理 isStarProjection_iff_eq_starProjection_range
-  条件: [CompleteSpace E] {p : E ->L[𝕜] E}
+  条件: [完备空间 E] {p : E ->L[𝕜] E}
   证明: by
   simp_rw [p.isStarProjection_iff_isSymmetricProjection.eq,
     LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range, coe_inj]
@@ -1755,7 +1755,7 @@ lemma isStarProjection_iff_eq_starProjection
 
 中文:
 引理 isStarProjection_iff_eq_starProjection
-  条件: [CompleteSpace E] {p : E ->L[𝕜] E}
+  条件: [完备空间 E] {p : E ->L[𝕜] E}
   证明: ⟨fun h => ⟨p.range, isStarProjection_iff_eq_starProjection_range.mp h⟩,
     by rintro ⟨_, _, rfl⟩; simp⟩
 
@@ -1942,7 +1942,7 @@ theorem _root_.ContinuousLinearMap.adjoint_toLinearMap
   rfl
 
 中文:
-定理 _root_.ContinuousLinearMap.adjoint_toLinearMap
+定理 _root_.连续线性映射.adjoint_toLinearMap
   条件: (A : E ->L[𝕜] F)
   证明: FiniteDimensional.complete 𝕜 E
     haveI := FiniteDimensional.complete 𝕜 F
@@ -2398,7 +2398,7 @@ theorem eq_adjoint_iff_basis
 
 中文:
 定理 eq_adjoint_iff_basis
-  结论: {ι₁ : 类型} {ι₂ : 类型} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F)
+  结论: {ι₁ : 类型} {ι₂ : 类型} (b₁ : 基 ι₁ 𝕜 E) (b₂ : 基 ι₂ 𝕜 F)
   证明: by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   refine Basis.ext b₁ fun i₁ => ?_
@@ -2425,7 +2425,7 @@ theorem eq_adjoint_iff_basis_left
 
 中文:
 定理 eq_adjoint_iff_basis_left
-  条件: {ι : 类型} (b : Basis ι 𝕜 E) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
+  条件: {ι : 类型} (b : 基 ι 𝕜 E) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
   证明: by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => Basis.ext b fun i => ?_⟩
   exact ext_inner_right 𝕜 fun y => by simp only [h i, adjoint_inner_left]
@@ -2450,7 +2450,7 @@ theorem eq_adjoint_iff_basis_right
 
 中文:
 定理 eq_adjoint_iff_basis_right
-  条件: {ι : 类型} (b : Basis ι 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
+  条件: {ι : 类型} (b : 基 ι 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
   证明: by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   ext x
@@ -2474,7 +2474,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (E ->ₗ[𝕜] E)
+  签名: 对合 (E ->ₗ[𝕜] E)
   定义体: ⟨adjoint⟩
 
 Depends on / 依赖: adjoint
@@ -2528,7 +2528,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (E ->ₗ[𝕜] E)
+  签名: 对合环 (E ->ₗ[𝕜] E)
   定义体: ⟨map_add adjoint⟩
 
 Depends on / 依赖: adjoint, map_add
@@ -2546,7 +2546,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 𝕜 (E ->ₗ[𝕜] E)
+  签名: 对合模 𝕜 (E ->ₗ[𝕜] E)
   定义体: ⟨map_smulₛₗ adjoint⟩
 
 Depends on / 依赖: adjoint
@@ -2870,7 +2870,7 @@ theorem _root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff
   rfl
 
 中文:
-定理 _root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff
+定理 _root_.连续线性映射.isSelfAdjoint_toLinearMap_iff
   条件: (T : E ->L[𝕜] E)
   证明: FiniteDimensional.complete 𝕜 E
     IsSelfAdjoint T.toLinearMap ↔ IsSelfAdjoint T := by
@@ -2956,7 +2956,7 @@ theorem IsStarProjection.ext_iff
 alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
 
 中文:
-定理 IsStarProjection.ext_iff
+定理 是StarProjection.ext_iff
   结论: {S T : E ->ₗ[𝕜] E}
   证明: by
   have := FiniteDimensional.complete 𝕜 E
@@ -3028,8 +3028,8 @@ theorem _root_.Module.End.mem_invtSubmodule_adjoint_iff
   ContinuousLinearMap.mem_invtSubmodule_adjoint_iff
 
 中文:
-定理 _root_.Module.End.mem_invtSubmodule_adjoint_iff
-  条件: {T : E ->ₗ[𝕜] E} {U : Submodule 𝕜 E}
+定理 _root_.模.End.mem_invtSubmodule_adjoint_iff
+  条件: {T : E ->ₗ[𝕜] E} {U : 子模 𝕜 E}
   证明: have := FiniteDimensional.complete 𝕜 E
   ContinuousLinearMap.mem_invtSubmodule_adjoint_iff
 
@@ -3142,7 +3142,7 @@ lemma _root_.LinearIsometryEquiv.adjoint_eq_symm
 omit [CompleteSpace H] [CompleteSpace K] in
 
 中文:
-引理 _root_.LinearIsometryEquiv.adjoint_eq_symm
+引理 _root_.线性等距等价.adjoint_eq_symm
   条件: (e : H ≃ₗᵢ[𝕜] K)
   证明: calc
     _ = adjoint (e : H ->L[𝕜] K) ∘L e ∘L (e.symm : K ->L[𝕜] H) := by simp
@@ -3173,7 +3173,7 @@ theorem _root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm
 @[simp]
 
 中文:
-定理 _root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm
+定理 _root_.线性等距等价.adjoint_toLinearMap_eq_symm
   证明: have := FiniteDimensional.complete 𝕜 H
   have := FiniteDimensional.complete 𝕜 K
   congr($e.adjoint_eq_symm)
@@ -3199,7 +3199,7 @@ lemma _root_.LinearIsometryEquiv.star_eq_symm
   proof: e.adjoint_eq_symm
 
 中文:
-引理 _root_.LinearIsometryEquiv.star_eq_symm
+引理 _root_.线性等距等价.star_eq_symm
   条件: (e : H ≃ₗᵢ[𝕜] H)
   证明: e.adjoint_eq_symm
 
@@ -3370,7 +3370,7 @@ theorem conjStarAlgEquiv_trans
 
 中文:
 定理 conjStarAlgEquiv_trans
-  结论: {G : 类型} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+  结论: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
   证明: rfl
 -/
 theorem conjStarAlgEquiv_trans {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
@@ -3628,8 +3628,8 @@ lemma Matrix.toLin_conjTranspose
     orthonormal_iff_ite.mp v₁.orthonormal, orthonormal_iff_ite.mp v₂.orthonormal]
 
 中文:
-引理 Matrix.toLin_conjTranspose
-  条件: (A : Matrix m n 𝕜)
+引理 矩阵.toLin_conjTranspose
+  条件: (A : 矩阵 m n 𝕜)
   证明: by
 .mpr fun i j => ?_ refine eq_adjoint_iff_basis v₂.toBasis v₁.toBasis _ _
   simp_rw [toLin_self]
@@ -3654,7 +3654,7 @@ lemma LinearMap.toMatrix_adjoint
   proof: .injective by simp [toLin_conjTranspose] toLin v₂.toBasis v₁.toBasis
 
 中文:
-引理 LinearMap.toMatrix_adjoint
+引理 线性映射.toMatrix_adjoint
   条件: (f : E ->ₗ[𝕜] F)
   证明: .injective by simp [toLin_conjTranspose] toLin v₂.toBasis v₁.toBasis
 
@@ -3678,8 +3678,8 @@ definition LinearMap.toMatrixOrthonormal
     map_star' := LinearMap.toMatrix_adjoint v₁ v₁ }
 
 中文:
-定义 LinearMap.toMatrixOrthonormal
-  签名: : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] Matrix n n 𝕜
+定义 线性映射.toMatrixOrthonormal
+  签名: : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] 矩阵 n n 𝕜
   定义体: { LinearMap.toMatrix v₁.toBasis v₁.toBasis with
     map_mul' := LinearMap.toMatrix_mul v₁.toBasis
     map_star' := LinearMap.toMatrix_adjoint v₁ v₁ }
@@ -3702,7 +3702,7 @@ lemma LinearMap.toMatrixOrthonormal_apply_apply
     _ = ⟪v₁ i, f (v₁ j)⟫_𝕜 := v₁.repr_apply_apply ..
 
 中文:
-引理 LinearMap.toMatrixOrthonormal_apply_apply
+引理 线性映射.toMatrixOrthonormal_apply_apply
   条件: (f : E ->ₗ[𝕜] E) (i j : n)
   证明: calc
     _ = v₁.repr (f (v₁ j)) i := f.toMatrix_apply ..
@@ -3729,7 +3729,7 @@ lemma LinearMap.toMatrixOrthonormal_reindex
       _ = toMatrixOrthonormal v₁ f (e.symm i) (e.symm j) := Eq.symm (f.toMatrix_apply ..)
 
 中文:
-引理 LinearMap.toMatrixOrthonormal_reindex
+引理 线性映射.toMatrixOrthonormal_reindex
   条件: (e : n ≃ m) (f : E ->ₗ[𝕜] E)
   证明: Matrix.ext fun i j =>
     calc toMatrixOrthonormal (v₁.reindex e) f i j
@@ -3758,8 +3758,8 @@ theorem Matrix.toEuclideanLin_conjTranspose_eq_adjoint
   proof: A.toLin_conjTranspose (EuclideanSpace.basisFun n 𝕜) (EuclideanSpace.basisFun m 𝕜)
 
 中文:
-定理 Matrix.toEuclideanLin_conjTranspose_eq_adjoint
-  条件: (A : Matrix m n 𝕜)
+定理 矩阵.toEuclideanLin_conjTranspose_eq_adjoint
+  条件: (A : 矩阵 m n 𝕜)
   证明: A.toLin_conjTranspose (EuclideanSpace.basisFun n 𝕜) (EuclideanSpace.basisFun m 𝕜)
 
 Depends on / 依赖: A.toLin_conjTranspose, EuclideanSpace, EuclideanSpace.basisFun, basisFun, toLin_conjTranspose
@@ -3780,7 +3780,7 @@ theorem LinearIsometry.adjoint_comp_self
   proof: f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp f.isometry
 
 中文:
-定理 LinearIsometry.adjoint_comp_self
+定理 线性等距.adjoint_comp_self
   结论: {E E' : 类型}
   证明: f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp f.isometry
 
@@ -3807,7 +3807,7 @@ theorem LinearIsometry.adjoint_comp_self'
   exact congr($(f.adjoint_comp_self) x)
 
 中文:
-定理 LinearIsometry.adjoint_comp_self'
+定理 线性等距.adjoint_comp_self'
   结论: {E E' : 类型}
   证明: by
   have := FiniteDimensional.complete 𝕜 E

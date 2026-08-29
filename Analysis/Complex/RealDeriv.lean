@@ -80,8 +80,8 @@ theorem HasDerivAt.real_of_complex
   have C : HasFDerivAt re reCLM
 
 中文:
-定理 HasDerivAt.real_of_complex
-  条件: (h : HasDerivAt e e' z)
+定理 在点处可导.real_of_complex
+  条件: (h : 在点处可导 e e' z)
   证明: by
   have A : HasFDerivAt ((↑) : Real -> Complex) ofRealCLM z := ofRealCLM.hasFDerivAt
   have B :
@@ -116,7 +116,7 @@ theorem ContDiffAt.real_of_complex
 
 中文:
 定理 ContDiffAt.real_of_complex
-  条件: {n : WithTop 自然数∞} (h : ContDiffAt Complex n e z)
+  条件: {n : WithTop 自然数∞} (h : ContDiffAt 复形 n e z)
   证明: by
   have A : ContDiffAt Real n ((↑) : Real -> Complex) z := ofRealCLM.contDiff.contDiffAt
   have B : ContDiffAt Real n e z := h.restrict_scalars Real
@@ -141,8 +141,8 @@ theorem ContDiff.real_of_complex
   proof: contDiff_iff_contDiffAt.2 fun _ => h.contDiffAt.real_of_complex
 
 中文:
-定理 ContDiff.real_of_complex
-  条件: {n : WithTop 自然数∞} (h : ContDiff Complex n e)
+定理 连续可微.real_of_complex
+  条件: {n : WithTop 自然数∞} (h : 连续可微 复形 n e)
   证明: contDiff_iff_contDiffAt.2 fun _ => h.contDiffAt.real_of_complex
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, h.contDiffAt.real_of_complex, real_of_complex
@@ -163,8 +163,8 @@ theorem HasStrictDerivAt.complexToReal_fderiv'
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasStrictFDerivAt.restrictScalars Real
 
 中文:
-定理 HasStrictDerivAt.complexToReal_fderiv'
-  结论: {f : Complex -> E} {x : Complex} {f' : E}
+定理 HasStrictDerivAt.complexTo实数_fderiv'
+  结论: {f : 复形 -> E} {x : 复形} {f' : E}
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasStrictFDerivAt.restrictScalars Real
 
@@ -185,8 +185,8 @@ theorem HasDerivAt.complexToReal_fderiv'
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasFDerivAt.restrictScalars Real
 
 中文:
-定理 HasDerivAt.complexToReal_fderiv'
-  条件: {f : Complex -> E} {x : Complex} {f' : E} (h : HasDerivAt f f' x)
+定理 在点处可导.complexTo实数_fderiv'
+  条件: {f : 复形 -> E} {x : 复形} {f' : E} (h : 在点处可导 f f' x)
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasFDerivAt.restrictScalars Real
 
@@ -206,8 +206,8 @@ theorem HasDerivWithinAt.complexToReal_fderiv'
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasFDerivWithinAt.restrictScalars Real
 
 中文:
-定理 HasDerivWithinAt.complexToReal_fderiv'
-  结论: {f : Complex -> E} {s : Set Complex} {x : Complex} {f' : E}
+定理 HasDerivWithinAt.complexTo实数_fderiv'
+  结论: {f : 复形 -> E} {s : 集合 复形} {x : 复形} {f' : E}
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton'] using h.hasFDerivWithinAt.restrictScalars Real
 
@@ -228,8 +228,8 @@ theorem HasStrictDerivAt.complexToReal_fderiv
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasStrictFDerivAt.restrictScalars Real
 
 中文:
-定理 HasStrictDerivAt.complexToReal_fderiv
-  条件: {f : Complex -> Complex} {f' x : Complex} (h : HasStrictDerivAt f f' x)
+定理 HasStrictDerivAt.complexTo实数_fderiv
+  条件: {f : 复形 -> 复形} {f' x : 复形} (h : HasStrictDerivAt f f' x)
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasStrictFDerivAt.restrictScalars Real
 
@@ -249,8 +249,8 @@ theorem HasDerivAt.complexToReal_fderiv
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasFDerivAt.restrictScalars Real
 
 中文:
-定理 HasDerivAt.complexToReal_fderiv
-  条件: {f : Complex -> Complex} {f' x : Complex} (h : HasDerivAt f f' x)
+定理 在点处可导.complexTo实数_fderiv
+  条件: {f : 复形 -> 复形} {f' x : 复形} (h : 在点处可导 f f' x)
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasFDerivAt.restrictScalars Real
 
@@ -270,8 +270,8 @@ theorem HasDerivWithinAt.complexToReal_fderiv
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasFDerivWithinAt.restrictScalars Real
 
 中文:
-定理 HasDerivWithinAt.complexToReal_fderiv
-  结论: {f : Complex -> Complex} {s : Set Complex} {f' x : Complex}
+定理 HasDerivWithinAt.complexTo实数_fderiv
+  结论: {f : 复形 -> 复形} {s : 集合 复形} {f' x : 复形}
   证明: by
   simpa only [Complex.restrictScalars_toSpanSingleton] using h.hasFDerivWithinAt.restrictScalars Real
 
@@ -292,9 +292,9 @@ theorem HasDerivAt.comp_ofReal
   simpa only [ofRealCLM_apply, ofReal_one, mul_one] using! hf.comp z ofRealCLM.hasDerivAt
 
 中文:
-定理 HasDerivAt.comp_ofReal
-  条件: (hf : HasDerivAt e e' ↑z)
-  结论: HasDerivAt (fun y : 实数 => e ↑y) e' z
+定理 在点处可导.comp_of实数
+  条件: (hf : 在点处可导 e e' ↑z)
+  结论: 在点处可导 (fun y : 实数 => e ↑y) e' z
   证明: by
   simpa only [ofRealCLM_apply, ofReal_one, mul_one] using! hf.comp z ofRealCLM.hasDerivAt
 
@@ -314,8 +314,8 @@ theorem HasDerivAt.ofReal_comp
     ofRealCLM.hasDerivAt.scomp z hf
 
 中文:
-定理 HasDerivAt.ofReal_comp
-  条件: {f : 实数 -> 实数} {u : 实数} (hf : HasDerivAt f u z)
+定理 在点处可导.of实数_comp
+  条件: {f : 实数 -> 实数} {u : 实数} (hf : 在点处可导 f u z)
   证明: by
   simpa only [ofRealCLM_apply, ofReal_one, real_smul, mul_one] using!
     ofRealCLM.hasDerivAt.scomp z hf
@@ -340,8 +340,8 @@ theorem HasDerivWithinAt.ofReal_comp
 @[fun_prop]
 
 中文:
-定理 HasDerivWithinAt.ofReal_comp
-  结论: {f : 实数 -> 实数} {s : Set 实数} {u : 实数}
+定理 HasDerivWithinAt.of实数_comp
+  结论: {f : 实数 -> 实数} {s : 集合 实数} {u : 实数}
   证明: by
   simpa only [Function.comp_apply, ofRealCLM_apply] using!
     ofRealCLM.hasFDerivAt.comp_hasDerivWithinAt z hf
@@ -367,8 +367,8 @@ lemma Complex.differentiable_re
 @[fun_prop]
 
 中文:
-引理 Complex.differentiable_re
-  结论: Differentiable 实数 Complex.re
+引理 复形.differentiable_re
+  结论: 可微 实数 复形.re
   证明: reCLM.differentiable
 
 @[fun_prop]
@@ -389,8 +389,8 @@ lemma Complex.differentiable_im
 @[fun_prop]
 
 中文:
-引理 Complex.differentiable_im
-  结论: Differentiable 实数 Complex.im
+引理 复形.differentiable_im
+  结论: 可微 实数 复形.im
   证明: imCLM.differentiable
 
 @[fun_prop]
@@ -409,8 +409,8 @@ lemma Complex.differentiable_ofReal
   proof: ofRealCLM.differentiable
 
 中文:
-引理 Complex.differentiable_ofReal
-  结论: Differentiable 实数 Complex.of实数
+引理 复形.differentiable_of实数
+  结论: 可微 实数 复形.of实数
   证明: ofRealCLM.differentiable
 
 Depends on / 依赖: differentiable, ofRealCLM, ofRealCLM.differentiable
@@ -428,8 +428,8 @@ lemma Complex.differentiable_conj
   proof: conjCLE.differentiable
 
 中文:
-引理 Complex.differentiable_conj
-  结论: Differentiable 实数 (conj : Complex -> Complex)
+引理 复形.differentiable_conj
+  结论: 可微 实数 (conj : 复形 -> 复形)
   证明: conjCLE.differentiable
 
 Depends on / 依赖: conjCLE, conjCLE.differentiable, differentiable
@@ -451,9 +451,9 @@ lemma Differentiable.real_of_complex
 @[fun_prop]
 
 中文:
-引理 Differentiable.real_of_complex
-  条件: (hf : Differentiable Complex f)
-  结论: Differentiable 实数 f
+引理 可微.real_of_complex
+  条件: (hf : 可微 复形 f)
+  结论: 可微 实数 f
   证明: hf.restrictScalars (𝕜 := Real)
 
 @[fun_prop]
@@ -477,7 +477,7 @@ lemma DifferentiableAt.real_of_complex
 
 中文:
 引理 DifferentiableAt.real_of_complex
-  条件: (hf : DifferentiableAt Complex f z)
+  条件: (hf : DifferentiableAt 复形 f z)
   结论: DifferentiableAt 实数 f z
   证明: hf.restrictScalars (𝕜 := Real)
 
@@ -501,7 +501,7 @@ lemma DifferentiableWithinAt.real_of_complex
 
 中文:
 引理 DifferentiableWithinAt.real_of_complex
-  条件: (hf : DifferentiableWithinAt Complex f s z)
+  条件: (hf : DifferentiableWithinAt 复形 f s z)
   证明: hf.restrictScalars (𝕜 := Real)
 
 @[fun_prop]
@@ -524,7 +524,7 @@ lemma DifferentiableOn.real_of_complex
 
 中文:
 引理 DifferentiableOn.real_of_complex
-  条件: (hf : DifferentiableOn Complex f s)
+  条件: (hf : DifferentiableOn 复形 f s)
   结论: DifferentiableOn 实数 f s
   证明: hf.restrictScalars (𝕜 := Real)
 

@@ -38,7 +38,7 @@ theorem ker_rangeRestrict
 中文:
 定理 ker_rangeRestrict
   条件: (f : A ->ₐ[R] B)
-  结论: RingHom.ker f.rangeRestrict = RingHom.ker f
+  结论: 环态射.ker f.rangeRestrict = 环态射.ker f
   证明: Ideal.ext fun _ => Subtype.ext_iff
 
 Depends on / 依赖: Ideal.ext, Subtype, Subtype.ext_iff, ext_iff
@@ -155,7 +155,7 @@ definition FixedPoints.subsemiring
 
 中文:
 定义 FixedPoints.subsemiring
-  签名: : Subsemiring B' where
+  签名: : 子半环 B' where
   定义体: FixedPoints.addSubmonoid G B'
   __ := FixedPoints.submonoid G B'
 
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass G (FixedPoints.subsemiring B' G) B'
+  签名: 标量交换类 G (FixedPoints.subsemiring B' G) B'
   定义体: inferInstanceAs (SMulCommClass G (FixedPoints.submonoid G B') B')
 
 Depends on / 依赖: FixedPoints, FixedPoints.submonoid, SMulCommClass, submonoid
@@ -194,7 +194,7 @@ definition FixedPoints.subring
 
 中文:
 定义 FixedPoints.subring
-  签名: : Subring B where
+  签名: : 子环 B where
   定义体: FixedPoints.addSubgroup G B
   __ := FixedPoints.submonoid G B
 
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass G (FixedPoints.subring B G) B
+  签名: 标量交换类 G (FixedPoints.subring B G) B
   定义体: inferInstanceAs (SMulCommClass G (FixedPoints.subsemiring B G) B)
 
 Depends on / 依赖: FixedPoints, FixedPoints.subsemiring, SMulCommClass, subsemiring
@@ -233,7 +233,7 @@ definition FixedPoints.subalgebra
 
 中文:
 定义 FixedPoints.subalgebra
-  签名: : Subalgebra A B' where
+  签名: : 子代数 A B' where
   定义体: FixedPoints.subsemiring B' G
   algebraMap_mem' r g := smul_algebraMap g r
 
@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass G (FixedPoints.subalgebra A B' G) B'
+  签名: 标量交换类 G (FixedPoints.subalgebra A B' G) B'
   定义体: inferInstanceAs (SMulCommClass G (FixedPoints.subsemiring B' G) B')
 
 Depends on / 依赖: FixedPoints, FixedPoints.subsemiring, SMulCommClass, subsemiring

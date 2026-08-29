@@ -45,7 +45,7 @@ definition affineSegment
 
 中文:
 定义 affineSegment
-  签名: [Ring R] [PartialOrder R] [AddCommGroup V] [Module R V]
+  签名: [环 R] [偏序 R] [加法交换群 V] [模 R V]
   定义体: lineMap x y '' Set.Icc (0 : R) 1
 
 Depends on / 依赖: Set.Icc, lineMap
@@ -522,8 +522,8 @@ lemma Convex.mem_of_wbtw
   proof: hs.segment_subset h₀ h₂ h₀₁₂.mem_segment
 
 中文:
-引理 Convex.mem_of_wbtw
-  结论: {p₀ p₁ p₂ : V} {s : Set V} (hs : Convex R s) (h₀₁₂ : Wbtw R p₀ p₁ p₂)
+引理 凸.mem_of_wbtw
+  结论: {p₀ p₁ p₂ : V} {s : 集合 V} (hs : 凸 R s) (h₀₁₂ : Wbtw R p₀ p₁ p₂)
   证明: hs.segment_subset h₀ h₂ h₀₁₂.mem_segment
 
 Depends on / 依赖: hs.segment_subset, mem_segment, segment_subset
@@ -598,8 +598,8 @@ lemma AffineSubspace.mem_of_wbtw
   proof: by obtain ⟨ε, -, rfl⟩ := hxyz; exact lineMap_mem _ hx hz
 
 中文:
-引理 AffineSubspace.mem_of_wbtw
-  结论: {s : AffineSubspace R P} {x y z : P} (hxyz : Wbtw R x y z)
+引理 仿射子空间.mem_of_wbtw
+  结论: {s : 仿射子空间 R P} {x y z : P} (hxyz : Wbtw R x y z)
   证明: by obtain ⟨ε, -, rfl⟩ := hxyz; exact lineMap_mem _ hx hz
 
 Depends on / 依赖: lineMap_mem
@@ -643,8 +643,8 @@ theorem Function.Injective.wbtw_map_iff
   rwa [Wbtw, ← affineSegment_image, hf.mem_set_image] at h
 
 中文:
-定理 Function.Injective.wbtw_map_iff
-  条件: {x y z : P} {f : P ->ᵃ[R] P'} (hf : Function.Injective f)
+定理 函数.单射.wbtw_map_iff
+  条件: {x y z : P} {f : P ->ᵃ[R] P'} (hf : 函数.单射 f)
   证明: by
   refine ⟨fun h => ?_, fun h => h.map _⟩
   rwa [Wbtw, ← affineSegment_image, hf.mem_set_image] at h
@@ -666,8 +666,8 @@ theorem Function.Injective.sbtw_map_iff
   simp_rw [Sbtw, hf.wbtw_map_iff, hf.ne_iff]
 
 中文:
-定理 Function.Injective.sbtw_map_iff
-  条件: {x y z : P} {f : P ->ᵃ[R] P'} (hf : Function.Injective f)
+定理 函数.单射.sbtw_map_iff
+  条件: {x y z : P} {f : P ->ᵃ[R] P'} (hf : 函数.单射 f)
   证明: by
   simp_rw [Sbtw, hf.wbtw_map_iff, hf.ne_iff]
 
@@ -690,8 +690,8 @@ lemma Set.InjOn.wbtw_map_iff
     at h
 
 中文:
-引理 Set.InjOn.wbtw_map_iff
-  结论: {x y z : P} {f : P ->ᵃ[R] P'} {s : AffineSubspace R P}
+引理 集合.单射限制.wbtw_map_iff
+  结论: {x y z : P} {f : P ->ᵃ[R] P'} {s : 仿射子空间 R P}
   证明: by
   refine ⟨fun h => ?_, fun h => h.map _⟩
   rwa [Wbtw, ← affineSegment_image, hf.mem_image_iff
@@ -720,8 +720,8 @@ lemma Set.InjOn.sbtw_map_iff
 @[simp]
 
 中文:
-引理 Set.InjOn.sbtw_map_iff
-  结论: {x y z : P} {f : P ->ᵃ[R] P'} {s : AffineSubspace R P}
+引理 集合.单射限制.sbtw_map_iff
+  结论: {x y z : P} {f : P ->ᵃ[R] P'} {s : 仿射子空间 R P}
   证明: by
   simp_rw [Sbtw, hf.wbtw_map_iff hx hy hz, hf.ne_iff hy hx, hf.ne_iff hy hz]
 
@@ -749,7 +749,7 @@ theorem AffineEquiv.wbtw_map_iff
 @[simp]
 
 中文:
-定理 AffineEquiv.wbtw_map_iff
+定理 仿射等价.wbtw_map_iff
   条件: {x y z : P} (f : P ≃ᵃ[R] P')
   证明: by
   have : Function.Injective f.toAffineMap := f.injective
@@ -781,7 +781,7 @@ theorem AffineEquiv.sbtw_map_iff
 @[simp]
 
 中文:
-定理 AffineEquiv.sbtw_map_iff
+定理 仿射等价.sbtw_map_iff
   条件: {x y z : P} (f : P ≃ᵃ[R] P')
   证明: by
   have : Function.Injective f.toAffineMap := f.injective
@@ -1847,7 +1847,7 @@ theorem wbtw_zero_one_iff
 中文:
 定理 wbtw_zero_one_iff
   条件: {x : R}
-  结论: Wbtw R 0 x 1 ↔ x in Set.Icc (0 : R) 1
+  结论: Wbtw R 0 x 1 ↔ x in 集合.闭区间 (0 : R) 1
   证明: by
   rw [Wbtw]; rw [affineSegment]; rw [Set.mem_image]
   simp_rw [lineMap_apply_ring]
@@ -1879,7 +1879,7 @@ omit [IsOrderedRing R] in
 中文:
 定理 wbtw_one_zero_iff
   条件: {x : R}
-  结论: Wbtw R 1 x 0 ↔ x in Set.Icc (0 : R) 1
+  结论: Wbtw R 1 x 0 ↔ x in 集合.闭区间 (0 : R) 1
   证明: by
   rw [wbtw_comm]; rw [wbtw_zero_one_iff]
 
@@ -1911,7 +1911,7 @@ theorem sbtw_zero_one_iff
 中文:
 定理 sbtw_zero_one_iff
   条件: {x : R}
-  结论: Sbtw R 0 x 1 ↔ x in Set.Ioo (0 : R) 1
+  结论: Sbtw R 0 x 1 ↔ x in 集合.开区间 (0 : R) 1
   证明: by
   rw [Sbtw]; rw [wbtw_zero_one_iff]; rw [Set.mem_Icc]; rw [Set.mem_Ioo]
   exact
@@ -1942,7 +1942,7 @@ theorem sbtw_one_zero_iff
 中文:
 定理 sbtw_one_zero_iff
   条件: {x : R}
-  结论: Sbtw R 1 x 0 ↔ x in Set.Ioo (0 : R) 1
+  结论: Sbtw R 1 x 0 ↔ x in 集合.开区间 (0 : R) 1
   证明: by
   rw [sbtw_comm]; rw [sbtw_zero_one_iff]
 
@@ -2570,7 +2570,7 @@ theorem Sbtw.affineCombination_of_mem_affineSpan_pair
 
 中文:
 定理 Sbtw.affineCombination_of_mem_affineSpan_pair
-  结论: [IsDomain R] [IsTorsionFree R V]
+  结论: [是整环 R] [是无挠 R V]
   证明: by
   rw [affineCombination_mem_affineSpan_pair ha hw hw₁ hw₂] at h
   rcases h with ⟨r, hr⟩
@@ -2623,8 +2623,8 @@ lemma closedInterior_eq_affineSegment
     rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_un
 
 中文:
-引理 closedInterior_eq_affineSegment
-  条件: (s : Simplex R P 1)
+引理 closed整数erior_eq_affineSegment
+  条件: (s : 单纯形 R P 1)
   证明: by
   ext p
   constructor
@@ -2666,8 +2666,8 @@ lemma mem_closedInterior_iff_wbtw
   rw [closedInterior_eq_affineSegment]; rw [Wbtw]
 
 中文:
-引理 mem_closedInterior_iff_wbtw
-  条件: {s : Simplex R P 1} {p : P}
+引理 mem_closed整数erior_iff_wbtw
+  条件: {s : 单纯形 R P 1} {p : P}
   证明: by
   rw [closedInterior_eq_affineSegment]; rw [Wbtw]
 
@@ -2692,8 +2692,8 @@ lemma closedInterior_face_eq_affineSegment
       simp [max_eq_left hji.le, min_eq_right 
 
 中文:
-引理 closedInterior_face_eq_affineSegment
-  结论: {n : 自然数} (s : Simplex R P n) {i j : Fin (n + 1)}
+引理 closed整数erior_face_eq_affineSegment
+  结论: {n : 自然数} (s : 单纯形 R P n) {i j : 有限集 (n + 1)}
   证明: by
   have h' : affineSegment R (s.points i) (s.points j) =
       affineSegment R (s.points (min i j)) (s.points (max i j)) := by
@@ -2732,8 +2732,8 @@ lemma mem_closedInterior_face_iff_wbtw
   rw [s.closedInterior_face_eq_affineSegment h]; rw [Wbtw]
 
 中文:
-引理 mem_closedInterior_face_iff_wbtw
-  结论: {n : 自然数} (s : Simplex R P n) {p : P} {i j : Fin (n + 1)}
+引理 mem_closed整数erior_face_iff_wbtw
+  结论: {n : 自然数} (s : 单纯形 R P n) {p : P} {i j : 有限集 (n + 1)}
   证明: by
   rw [s.closedInterior_face_eq_affineSegment h]; rw [Wbtw]
 
@@ -2763,7 +2763,7 @@ lemma interior_eq_image_Ioo
 
 中文:
 引理 interior_eq_image_Ioo
-  条件: (s : Simplex R P 1)
+  条件: (s : 单纯形 R P 1)
   证明: by
   ext p
   constructor
@@ -2807,7 +2807,7 @@ lemma mem_interior_iff_sbtw
 
 中文:
 引理 mem_interior_iff_sbtw
-  条件: [IsDomain R] [IsTorsionFree R V] {s : Simplex R P 1} {p : P}
+  条件: [是整环 R] [是无挠 R V] {s : 单纯形 R P 1} {p : P}
   证明: by
   rw [interior_eq_image_Ioo]; rw [sbtw_iff_mem_image_Ioo_and_ne]
   simp [s.independent.injective.ne (by decide : (0 : Fin 2) != 1)]
@@ -2836,7 +2836,7 @@ lemma mem_interior_face_iff_sbtw
 
 中文:
 引理 mem_interior_face_iff_sbtw
-  结论: [IsDomain R] [IsTorsionFree R V] {n : 自然数}
+  结论: [是整环 R] [是无挠 R V] {n : 自然数}
   证明: by
   have h' : Sbtw R (s.points i) p (s.points j) ↔
       Sbtw R (s.points (min i j)) p (s.points (max i j)) := by
@@ -2979,7 +2979,7 @@ theorem sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair
 
 中文:
 定理 sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair
-  结论: [IsTorsionFree R V]
+  结论: [是无挠 R V]
   证明: by
   have h₁₃ : i₁ != i₃ := by
     rintro rfl
@@ -3476,8 +3476,8 @@ lemma AffineSubspace.right_mem_of_wbtw
   simpa [hε] using lineMap_mem ε⁻¹ hx hy
 
 中文:
-引理 AffineSubspace.right_mem_of_wbtw
-  结论: {s : AffineSubspace R P} (hxyz : Wbtw R x y z) (hx : x in s)
+引理 仿射子空间.right_mem_of_wbtw
+  结论: {s : 仿射子空间 R P} (hxyz : Wbtw R x y z) (hx : x in s)
   证明: by
   obtain ⟨ε, -, rfl⟩ := hxyz
   have hε : ε != 0 := by rintro rfl; simp at hxy
@@ -3904,7 +3904,7 @@ theorem Wbtw.collinear
 中文:
 定理 Wbtw.collinear
   条件: {x y z : P} (h : Wbtw R x y z)
-  结论: Collinear R ({x, y, z} : Set P)
+  结论: Collinear R ({x, y, z} : 集合 P)
   证明: by
   have : {y, x, z} = {x, y, z} := Set.insert_comm y x {z}
   simpa [this] using collinear_insert_of_mem_affineSpan_pair (mem_affineSpan h)
@@ -3933,7 +3933,7 @@ theorem Collinear.wbtw_or_wbtw_or_wbtw
 
 中文:
 定理 Collinear.wbtw_or_wbtw_or_wbtw
-  条件: {x y z : P} (h : Collinear R ({x, y, z} : Set P))
+  条件: {x y z : P} (h : Collinear R ({x, y, z} : 集合 P))
   证明: by
   rw [collinear_iff_of_mem (Set.mem_insert _ _)] at h
   rcases h with ⟨v, h⟩

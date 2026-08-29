@@ -48,9 +48,9 @@ class IsCompatibleWithTriangulation
     - compatible_with_triangulation((T₁ T₂ : Triangle C) (_ : T₁ in distTriang C) (_ : T₂ in distTriang C) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : W a) (_ : W b) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁)) : exists (c : T₁.obj₃ ⟶ T₂.obj₃) (_ : W c), (T₁.mor₂ ≫ c = b ≫ T₂.mor₂) ∧ (T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃)
 
 中文:
-类 IsCompatibleWithTriangulation
-  参数: (W : Morphism命题erty C)
-  继承: W.IsCompatibleWithShift Int
+类 是余mpatibleWithTriangulation
+  参数: (W : MorphismProperty C)
+  继承: W.是余mpatibleWithShift 整数
   公理与运算 (1 个):
     - compatible_with_triangulation((T₁ T₂ : Triangle C) (_ : T₁ in distTriang C) (_ : T₂ in distTriang C) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : W a) (_ : W b) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁)) : 存在 (c : T₁.obj₃ ⟶ T₂.obj₃) (_ : W c), (T₁.mor₂ ≫ c = b ≫ T₂.mor₂) ∧ (T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃)
 -/
@@ -79,7 +79,7 @@ definition essImageDistTriang
 
 中文:
 定义 essImageDistTriang
-  签名: : Set (Triangle D)
+  签名: : 集合 (Triangle D)
   定义体: {T | exists (T' : Triangle C) (_ : T ≅ L.mapTriangle.obj T'), T' in distTriang C}
 
 Depends on / 依赖: L.mapTriangle.obj, Triangle, distTriang, mapTriangle
@@ -123,7 +123,7 @@ lemma contractible_mem_essImageDistTriang
 
 中文:
 引理 contractible_mem_essImageDistTriang
-  结论: [EssSurj L] [HasZeroObject D]
+  结论: [本质满射 L] [有ZeroObject D]
   证明: by
   refine ⟨contractibleTriangle (L.objPreimage X), ?_, contractible_distinguished _⟩
   exact ((contractibleTriangleFunctor D).mapIso (L.objObjPreimageIso X)).symm ≪≫
@@ -155,7 +155,7 @@ lemma rotate_essImageDistTriang
 
 中文:
 引理 rotate_essImageDistTriang
-  结论: [Preadditive D] [L.Additive]
+  结论: [预加性 D] [L.加性]
   证明: by
   constructor
   · rintro ⟨T', e', hT'⟩
@@ -390,7 +390,7 @@ definition pretriangulated
 
 中文:
 定义 pretriangulated
-  签名: : Pretriangulated D where
+  签名: : 预三角 D where
   定义体: L.essImageDistTriang
   isomorphic_distinguished _ hT₁ _ e := L.essImageDistTriang_mem_of_iso e hT₁
   contractible_distinguished :=
@@ -450,7 +450,7 @@ lemma isTriangulated
 
 中文:
 引理 isTriangulated
-  条件: [Pretriangulated D] [L.IsTriangulated] [IsTriangulated C]
+  条件: [预三角 D] [L.是三角] [是三角 C]
   证明: by
   have := essSurj_mapComposableArrows L W 2
   exact isTriangulated_of_essSurj_mapComposableArrows_two L
@@ -478,7 +478,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pretriangulated W.Localization
+  签名: 预三角 W.Localization
   定义体: pretriangulated W.Q W
 
 Depends on / 依赖: pretriangulated
@@ -494,8 +494,8 @@ instance [IsTriangulated
   body: isTriangulated W.Q W
 
 中文:
-实例 [IsTriangulated
-  签名: C] : IsTriangulated W.Localization
+实例 [是三角
+  签名: C] : 是三角 W.Localization
   定义体: isTriangulated W.Q W
 
 Depends on / 依赖: isTriangulated
@@ -520,7 +520,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pretriangulated W.Localization'
+  签名: 预三角 W.Localization'
   定义体: pretriangulated W.Q' W
 
 Depends on / 依赖: pretriangulated
@@ -536,8 +536,8 @@ instance [IsTriangulated
   body: isTriangulated W.Q' W
 
 中文:
-实例 [IsTriangulated
-  签名: C] : IsTriangulated W.Localization'
+实例 [是三角
+  签名: C] : 是三角 W.Localization'
   定义体: isTriangulated W.Q' W
 
 Depends on / 依赖: isTriangulated

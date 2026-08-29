@@ -38,7 +38,7 @@ lemma not_irreducible_pow
 
 中文:
 引理 not_irreducible_pow
-  结论: 对任意 {n : 自然数}, n != 1 -> ¬ Irreducible (x ^ n)
+  结论: 对任意 {n : 自然数}, n != 1 -> ¬ 不可约 (x ^ n)
   证明: h₂ (pow_succ _ _)
     rw [isUnit_pow_iff n.succ_ne_zero]; rw [or_self] at this
     exact h₁ (this.pow _)
@@ -76,7 +76,7 @@ lemma irreducible_units_mul
 中文:
 引理 irreducible_units_mul
   条件: (u : Mˣ)
-  结论: Irreducible (u * y) ↔ Irreducible y
+  结论: 不可约 (u * y) ↔ 不可约 y
   证明: by
   simp only [irreducible_iff, Units.isUnit_units_mul, and_congr_right_iff]
   refine fun _ => ⟨fun h A B HAB => ?_, fun h A B HAB => ?_⟩
@@ -114,8 +114,8 @@ lemma irreducible_isUnit_mul
 
 中文:
 引理 irreducible_isUnit_mul
-  条件: (h : IsUnit x)
-  结论: Irreducible (x * y) ↔ Irreducible y
+  条件: (h : 是单位 x)
+  结论: 不可约 (x * y) ↔ 不可约 y
   证明: let ⟨x, ha⟩ := h
   ha ▸ irreducible_units_mul x
 
@@ -148,7 +148,7 @@ lemma irreducible_mul_units
 中文:
 引理 irreducible_mul_units
   条件: (u : Mˣ)
-  结论: Irreducible (y * u) ↔ Irreducible y
+  结论: 不可约 (y * u) ↔ 不可约 y
   证明: by
   simp only [irreducible_iff, Units.isUnit_mul_units, and_congr_right_iff]
   refine fun _ => ⟨fun h A B HAB => ?_, fun h A B HAB => ?_⟩
@@ -186,8 +186,8 @@ lemma irreducible_mul_isUnit
 
 中文:
 引理 irreducible_mul_isUnit
-  条件: (h : IsUnit x)
-  结论: Irreducible (y * x) ↔ Irreducible y
+  条件: (h : 是单位 x)
+  结论: 不可约 (y * x) ↔ 不可约 y
   证明: let ⟨x, hx⟩ := h
   hx ▸ irreducible_mul_units x
 
@@ -251,8 +251,8 @@ lemma MulEquiv.irreducible_iff
   simp [_root_.irreducible_iff, (EquivLike.surjective f).forall, ← map_mul, -isUnit_map_iff]
 
 中文:
-引理 MulEquiv.irreducible_iff
-  结论: Irreducible (f x) ↔ Irreducible x
+引理 乘法等价.irreducible_iff
+  结论: 不可约 (f x) ↔ 不可约 x
   证明: by
   simp [_root_.irreducible_iff, (EquivLike.surjective f).forall, ← map_mul, -isUnit_map_iff]
 
@@ -285,8 +285,8 @@ lemma Irreducible.of_map
 @[to_additive]
 
 中文:
-引理 Irreducible.of_map
-  结论: [FunLike F M N] [MonoidHomClass F M N] [IsLocalHom f]
+引理 不可约.of_map
+  结论: [函数状 F M N] [幺半群态射类 F M N] [是Local态射 f]
   证明: hfx.not_isUnit hu.map f
   isUnit_or_isUnit := by
     rintro p q rfl; exact (hfx.isUnit_or_isUnit <| map_mul f p q).imp (.of_map f _) (.of_map f _)
@@ -317,8 +317,8 @@ lemma Irreducible.not_isSquare
 @[to_additive]
 
 中文:
-引理 Irreducible.not_isSquare
-  条件: (ha : Irreducible x)
+引理 不可约.not_isSquare
+  条件: (ha : 不可约 x)
   结论: ¬IsSquare x
   证明: by
   rw [isSquare_iff_exists_sq]
@@ -347,7 +347,7 @@ lemma IsSquare.not_irreducible
 中文:
 引理 IsSquare.not_irreducible
   条件: (ha : IsSquare x)
-  结论: ¬Irreducible x
+  结论: ¬不可约 x
   证明: fun h => h.not_isSquare ha
 
 Depends on / 依赖: h.not_isSquare, not_isSquare

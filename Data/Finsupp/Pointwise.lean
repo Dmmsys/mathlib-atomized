@@ -48,7 +48,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (α ->₀ β)
+  签名: 乘法 (α ->₀ β)
   定义体: ⟨zipWith (· * ·) (mul_zero 0)⟩
 
 Depends on / 依赖: Mcongr, PFunctor, PFunctor.M.dest, Quot.factor_mk_eq, Quot.lift, Quot.mk, abs_map, comp_map, factor_mk_eq, mul_zero, zipWith
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulZeroClass (α ->₀ β)
+  签名: 乘零类 (α ->₀ β)
   定义体: DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulZeroClass, coe_injective, coe_mul, coe_zero, mulZeroClass
@@ -212,8 +212,8 @@ instance [SemigroupWithZero
   body: DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
 
 中文:
-实例 [SemigroupWithZero
-  签名: β] : SemigroupWithZero (α ->₀ β)
+实例 [带零半群
+  签名: β] : 带零半群 (α ->₀ β)
   定义体: DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semigroupWithZero, coe_injective, coe_mul, coe_zero, semigroupWithZero
@@ -230,8 +230,8 @@ instance [NonUnitalNonAssocSemiring
   body: DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: β] : NonUnitalNonAssocSemiring (α ->₀ β)
+实例 [非幺非结合半环
+  签名: β] : 非幺非结合半环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.nonUnitalNonAssocSemiring, coe_add, coe_injective, coe_mul, coe_zero, nonUnitalNonAssocSemiring
@@ -248,8 +248,8 @@ instance [NonUnitalSemiring
   body: DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalSemiring
-  签名: β] : NonUnitalSemiring (α ->₀ β)
+实例 [非幺半环
+  签名: β] : 非幺半环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.nonUnitalSemiring, coe_add, coe_injective, coe_mul, coe_zero, nonUnitalSemiring
@@ -266,8 +266,8 @@ instance [NonUnitalCommSemiring
   body: DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: β] : NonUnitalCommSemiring (α ->₀ β)
+实例 [非幺交换半环
+  签名: β] : 非幺交换半环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.nonUnitalCommSemiring, coe_add, coe_injective, coe_mul, coe_zero, nonUnitalCommSemiring
@@ -285,8 +285,8 @@ instance [NonUnitalNonAssocRing
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: β] : NonUnitalNonAssocRing (α ->₀ β)
+实例 [非幺非结合环
+  签名: β] : 非幺非结合环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -306,8 +306,8 @@ instance [NonUnitalRing
     fun _ _ => rfl
 
 中文:
-实例 [NonUnitalRing
-  签名: β] : NonUnitalRing (α ->₀ β)
+实例 [非幺环
+  签名: β] : 非幺环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
 
@@ -327,8 +327,8 @@ instance [NonUnitalCommRing
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommRing
-  签名: β] : NonUnitalCommRing (α ->₀ β)
+实例 [非幺交换环
+  签名: β] : 非幺交换环 (α ->₀ β)
   定义体: DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -348,7 +348,7 @@ lemma pointwise_smul_support_finite
 
 中文:
 引理 pointwise_smul_support_finite
-  结论: [Zero γ] [SMulZeroClass β γ] (f : α -> β)
+  结论: [零 γ] [SMulZero类 β γ] (f : α -> β)
   证明: Set.Finite.subset g.hasFiniteSupport (by simp; grind [smul_zero])
 
 Depends on / 依赖: Finite, Set.Finite.subset, g.hasFiniteSupport, hasFiniteSupport, smul_zero, subset
@@ -371,7 +371,7 @@ abbreviation pointwiseScalar
 
 中文:
 缩写 pointwiseScalar
-  签名: [Zero γ] [SMulZeroClass β γ]
+  签名: [零 γ] [SMulZero类 β γ]
   定义体: Finsupp.ofSupportFinite (fun a => f a • g a) (pointwise_smul_support_finite ..)
 
 Depends on / 依赖: Finsupp, Finsupp.ofSupportFinite, ofSupportFinite, pointwise_smul_support_finite
@@ -391,7 +391,7 @@ instance pointwiseScalarSemiring
 
 中文:
 实例 pointwiseScalarSemiring
-  签名: [Semiring β]
+  签名: [半环 β]
   定义体: pointwiseScalar
 
 @[simp]
@@ -412,7 +412,7 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: [Semiring β] (f : α -> β) (g : α ->₀ β)
+  条件: [半环 β] (f : α -> β) (g : α ->₀ β)
   结论: ⇑(f • g) = f • ⇑g
   证明: rfl
 -/
@@ -429,7 +429,7 @@ instance pointwiseModule
 
 中文:
 实例 pointwiseModule
-  签名: [Semiring β]
+  签名: [半环 β]
   定义体: Function.Injective.module _ coeFnAddHom DFunLike.coe_injective coe_pointwise_smul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.Injective.module, Injective, coeFnAddHom, coe_injective, coe_pointwise_smul, module
@@ -446,8 +446,8 @@ instance [Semiring
   body: by ext; simp [mul_assoc]
 
 中文:
-实例 [Semiring
-  签名: β] : IsScalarTower β (α -> β) (α ->₀ β) where
+实例 [半环
+  签名: β] : 标量塔 β (α -> β) (α ->₀ β) where
   定义体: by ext; simp [mul_assoc]
 
 Depends on / 依赖: mul_assoc

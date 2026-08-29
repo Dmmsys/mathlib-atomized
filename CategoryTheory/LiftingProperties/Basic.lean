@@ -53,10 +53,10 @@ class HasLiftingProperty
     - sq_hasLift : forall {f : A ⟶ X} {g : B ⟶ Y} (sq : CommSq f i p g), sq.HasLift
 
 中文:
-类 HasLiftingProperty
+类 有LiftingProperty
   参数: : 命题 where
   公理与运算 (1 个):
-    - sq_hasLift : 对任意 {f : A ⟶ X} {g : B ⟶ Y} (sq : CommSq f i p g), sq.HasLift
+    - sq_hasLift : 对任意 {f : A ⟶ X} {g : B ⟶ Y} (sq : 交换Sq f i p g), sq.有Lift
 
 Depends on / 依赖: HasLiftingProperty, HasLiftingProperty.mk, sq_hasLift
 -/
@@ -91,8 +91,8 @@ theorem op
 
 中文:
 定理 op
-  条件: (h : HasLifting命题erty i p)
-  结论: HasLifting命题erty p.op i.op
+  条件: (h : 有LiftingProperty i p)
+  结论: 有LiftingProperty p.op i.op
   证明: ⟨fun {f} {g} sq => by
     simp only [CommSq.HasLift.iff_unop, Quiver.Hom.unop_op]
     infer_instance⟩
@@ -122,7 +122,7 @@ theorem unop
 
 中文:
 定理 unop
-  条件: {A B X Y : Cᵒᵖ} {i : A ⟶ B} {p : X ⟶ Y} (h : HasLifting命题erty i p)
+  条件: {A B X Y : Cᵒᵖ} {i : A ⟶ B} {p : X ⟶ Y} (h : 有LiftingProperty i p)
   证明: ⟨fun {f} {g} sq => by
     rw [CommSq.HasLift.iff_op]
     simp only [Quiver.Hom.op_unop]
@@ -152,7 +152,7 @@ theorem iff_op
 
 中文:
 定理 iff_op
-  结论: HasLifting命题erty i p ↔ HasLifting命题erty p.op i.op
+  结论: 有LiftingProperty i p ↔ 有LiftingProperty p.op i.op
   证明: ⟨op, unop⟩
 
 @[to_dual self]
@@ -206,7 +206,7 @@ instance of_comp_left
 
 中文:
 实例 of_comp_left
-  签名: [HasLifting命题erty i p] [HasLifting命题erty i' p]
+  签名: [有LiftingProperty i p] [有LiftingProperty i' p]
   定义体: ⟨fun {f} {g} sq => by
     have fac := sq.w
     rw [assoc] at fac
@@ -331,7 +331,7 @@ abbreviation LiftStruct
 
 中文:
 缩写 LiftStruct
-  签名: {f g : Arrow C} (φ : f ⟶ g)
+  签名: {f g : 箭头 C} (φ : f ⟶ g)
   定义体: (CommSq.mk φ.w).LiftStruct
 
 Depends on / 依赖: CommSq, CommSq.mk, LiftStruct

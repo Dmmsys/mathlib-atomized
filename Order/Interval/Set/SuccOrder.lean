@@ -34,7 +34,7 @@ lemma Iic.coe_succ_of_not_isMax
   exact lt_of_le_of_ne (α := Set.Iic j) le_top (by simpa using hi)
 
 中文:
-引理 Iic.coe_succ_of_not_isMax
+引理 左无界右闭区间.coe_succ_of_not_isMax
   证明: by
   rw [coe_succ_of_mem]
   apply Order.succ_le_of_lt
@@ -59,7 +59,7 @@ lemma Iic.succ_eq_of_not_isMax
   simp only [coe_succ_of_not_isMax hi]
 
 中文:
-引理 Iic.succ_eq_of_not_isMax
+引理 左无界右闭区间.succ_eq_of_not_isMax
   证明: by
   ext
   simp only [coe_succ_of_not_isMax hi]
@@ -85,7 +85,7 @@ lemma Ici.coe_pred_of_not_isMin
   exact lt_of_le_of_ne (α := Set.Ici j) bot_le (Ne.symm (by simpa using hi))
 
 中文:
-引理 Ici.coe_pred_of_not_isMin
+引理 左闭右无界区间.coe_pred_of_not_isMin
   证明: by
   rw [coe_pred_of_mem]
   apply Order.le_pred_of_lt
@@ -110,7 +110,7 @@ lemma Ici.pred_eq_of_not_isMin
   simp only [coe_pred_of_not_isMin hi]
 
 中文:
-引理 Ici.pred_eq_of_not_isMin
+引理 左闭右无界区间.pred_eq_of_not_isMin
   证明: by
   ext
   simp only [coe_pred_of_not_isMin hi]

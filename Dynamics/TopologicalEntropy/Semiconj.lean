@@ -76,7 +76,7 @@ lemma IsDynCoverOf.image
   rwa [h.preimage_dynEntourage V n]
 
 中文:
-引理 IsDynCoverOf.image
+引理 IsDynCoverOf.像
   条件: (h : Semiconj φ S T) (h' : IsDynCoverOf S F (map φ φ ⁻¹' V) n s)
   证明: by
   rintro _ ⟨x, hx, rfl⟩
@@ -107,8 +107,8 @@ lemma IsDynCoverOf.preimage
   -- element of `t`. This is complicated by the fact tha
 
 中文:
-引理 IsDynCoverOf.preimage
-  结论: (h : Semiconj φ S T) [V.IsSymm] {t : Finset Y}
+引理 IsDynCoverOf.原像
+  结论: (h : Semiconj φ S T) [V.是Symm] {t : 有限集 Y}
   证明: by
   classical
   rcases isEmpty_or_nonempty X with _ | _
@@ -155,7 +155,7 @@ lemma le_coverMincard_image
 
 中文:
 引理 le_coverMincard_image
-  条件: (h : Semiconj φ S T) (F : Set X) [V.IsSymm] (n : 自然数)
+  条件: (h : Semiconj φ S T) (F : 集合 X) [V.是Symm] (n : 自然数)
   证明: by
   rcases eq_top_or_lt_top (coverMincard T (φ '' F) V n) with h' | h'
   · exact h' ▸ le_top
@@ -193,7 +193,7 @@ lemma coverMincard_image_le
 
 中文:
 引理 coverMincard_image_le
-  条件: (h : Semiconj φ S T) (F : Set X) (V : SetRel Y Y) (n : 自然数)
+  条件: (h : Semiconj φ S T) (F : 集合 X) (V : SetRel Y Y) (n : 自然数)
   证明: by
   classical
   rcases eq_top_or_lt_top (coverMincard S F ((map φ φ) ⁻¹' V) n) with h' | h'
@@ -229,7 +229,7 @@ lemma le_coverEntropyEntourage_image
 
 中文:
 引理 le_coverEntropyEntourage_image
-  条件: (h : Semiconj φ S T) (F : Set X) [V.IsSymm]
+  条件: (h : Semiconj φ S T) (F : 集合 X) [V.是Symm]
   证明: expGrowthSup_monotone fun n => ENat.toENNReal_mono (le_coverMincard_image h F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthSup_monotone, le_coverMincard_image, toENNReal_mono
@@ -248,7 +248,7 @@ lemma le_coverEntropyInfEntourage_image
 
 中文:
 引理 le_coverEntropyInfEntourage_image
-  条件: (h : Semiconj φ S T) (F : Set X) [V.IsSymm]
+  条件: (h : Semiconj φ S T) (F : 集合 X) [V.是Symm]
   证明: expGrowthInf_monotone fun n => ENat.toENNReal_mono (le_coverMincard_image h F n)
 
 Depends on / 依赖: ENat.toENNReal_mono, expGrowthInf_monotone, le_coverMincard_image, toENNReal_mono
@@ -267,7 +267,7 @@ lemma coverEntropyEntourage_image_le
 
 中文:
 引理 coverEntropyEntourage_image_le
-  条件: (h : Semiconj φ S T) (F : Set X) (V : SetRel Y Y)
+  条件: (h : Semiconj φ S T) (F : 集合 X) (V : SetRel Y Y)
   证明: expGrowthSup_monotone fun n => ENat.toENNReal_mono (coverMincard_image_le h F V n)
 
 Depends on / 依赖: ENat.toENNReal_mono, coverMincard_image_le, expGrowthSup_monotone, toENNReal_mono
@@ -286,7 +286,7 @@ lemma coverEntropyInfEntourage_image_le
 
 中文:
 引理 coverEntropyInfEntourage_image_le
-  条件: (h : Semiconj φ S T) (F : Set X) (V : SetRel Y Y)
+  条件: (h : Semiconj φ S T) (F : 集合 X) (V : SetRel Y Y)
   证明: expGrowthInf_monotone fun n => ENat.toENNReal_mono (coverMincard_image_le h F V n)
 
 Depends on / 依赖: ENat.toENNReal_mono, coverMincard_image_le, expGrowthInf_monotone, toENNReal_mono
@@ -312,7 +312,7 @@ theorem coverEntropy_image_of_comap
 
 中文:
 定理 coverEntropy_image_of_comap
-  结论: (u : UniformSpace Y) {S : X -> X} {T : Y -> Y} {φ : X -> Y}
+  结论: (u : 一致空间 Y) {S : X -> X} {T : Y -> Y} {φ : X -> Y}
   证明: by
   let : UniformSpace X := comap φ u
   apply le_antisymm
@@ -360,7 +360,7 @@ theorem coverEntropyInf_image_of_comap
 
 中文:
 定理 coverEntropyInf_image_of_comap
-  结论: (u : UniformSpace Y) {S : X -> X} {T : Y -> Y} {φ : X -> Y}
+  结论: (u : 一致空间 Y) {S : X -> X} {T : Y -> Y} {φ : X -> Y}
   证明: by
   let : UniformSpace X := comap φ u
   apply le_antisymm
@@ -404,7 +404,7 @@ lemma coverEntropy_restrict_subset
 
 中文:
 引理 coverEntropy_restrict_subset
-  结论: [UniformSpace X] {T : X -> X} {F G : Set X} (hF : F subseteq G)
+  结论: [一致空间 X] {T : X -> X} {F G : 集合 X} (hF : F subseteq G)
   证明: by
   rw [← coverEntropy_image_of_comap _ hG.val_restrict_apply (val ⁻¹' F)]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
@@ -426,7 +426,7 @@ lemma coverEntropyInf_restrict_subset
 
 中文:
 引理 coverEntropyInf_restrict_subset
-  结论: [UniformSpace X] {T : X -> X} {F G : Set X} (hF : F subseteq G)
+  结论: [一致空间 X] {T : X -> X} {F G : 集合 X} (hF : F subseteq G)
   证明: by
   rw [← coverEntropyInf_image_of_comap _ hG.val_restrict_apply (val ⁻¹' F)]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
@@ -448,7 +448,7 @@ theorem coverEntropy_restrict
 
 中文:
 定理 coverEntropy_restrict
-  条件: [UniformSpace X] {T : X -> X} {F : Set X} (h : MapsTo T F F)
+  条件: [一致空间 X] {T : X -> X} {F : 集合 X} (h : 映射到 T F F)
   证明: by
   rw [← coverEntropy_restrict_subset Subset.rfl h]; rw [coe_preimage_self F]
 
@@ -470,7 +470,7 @@ theorem coverEntropy_image_le_of_uniformContinuous
 
 中文:
 定理 coverEntropy_image_le_of_uniformContinuous
-  结论: [UniformSpace X] [UniformSpace Y] {S : X -> X}
+  结论: [一致空间 X] [一致空间 Y] {S : X -> X}
   证明: by
   rw [coverEntropy_image_of_comap _ h F]
   exact coverEntropy_antitone S F (uniformContinuous_iff_le_comap.1 h')
@@ -495,7 +495,7 @@ theorem coverEntropyInf_image_le_of_uniformContinuous
 
 中文:
 定理 coverEntropyInf_image_le_of_uniformContinuous
-  结论: [UniformSpace X] [UniformSpace Y] {S : X -> X}
+  结论: [一致空间 X] [一致空间 Y] {S : X -> X}
   证明: by
   rw [coverEntropyInf_image_of_comap _ h F]
   exact coverEntropyInf_antitone S F (uniformContinuous_iff_le_comap.1 h')
@@ -524,7 +524,7 @@ lemma coverEntropy_image_le_of_uniformContinuousOn_invariant
 
 中文:
 引理 coverEntropy_image_le_of_uniformContinuousOn_invariant
-  结论: [UniformSpace X] [UniformSpace Y]
+  结论: [一致空间 X] [一致空间 Y]
   证明: by
   rw [← coverEntropy_restrict_subset hF hG]
   have hφ : Semiconj (G.domRestrict φ) (hG.restrict S G G) T := by
@@ -563,7 +563,7 @@ lemma coverEntropyInf_image_le_of_uniformContinuousOn_invariant
 
 中文:
 引理 coverEntropyInf_image_le_of_uniformContinuousOn_invariant
-  结论: [UniformSpace X] [UniformSpace Y]
+  结论: [一致空间 X] [一致空间 Y]
   证明: by
   rw [← coverEntropyInf_restrict_subset hF hG]
   have hφ : Semiconj (G.domRestrict φ) (hG.restrict S G G) T := by

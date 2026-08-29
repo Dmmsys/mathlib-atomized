@@ -78,7 +78,7 @@ definition externalCoveringNumber
 
 中文:
 定义 externalCoveringNumber
-  签名: (ε : 实数>=0) (A : Set X)
+  签名: (ε : 实数>=0) (A : 集合 X)
   定义体: ⨅ (C : Set X) (_ : IsCover ε A C), C.encard
 
 Depends on / 依赖: C.encard, IsCover, encard
@@ -99,7 +99,7 @@ definition coveringNumber
 
 中文:
 定义 coveringNumber
-  签名: (ε : 实数>=0) (A : Set X)
+  签名: (ε : 实数>=0) (A : 集合 X)
   定义体: ⨅ (C : Set X) (_ : C subseteq A) (_ : IsCover ε A C), C.encard
 
 Depends on / 依赖: C.encard, IsCover, encard, subseteq
@@ -120,7 +120,7 @@ definition packingNumber
 
 中文:
 定义 packingNumber
-  签名: (ε : 实数>=0) (A : Set X)
+  签名: (ε : 实数>=0) (A : 集合 X)
   定义体: ⨆ (C : Set X) (_ : C subseteq A) (_ : IsSeparated ε C), C.encard
 
 Depends on / 依赖: C.encard, IsSeparated, encard, subseteq
@@ -146,7 +146,7 @@ lemma externalCoveringNumber_empty
 中文:
 引理 externalCoveringNumber_empty
   条件: (ε : 实数>=0)
-  结论: externalCoveringNumber ε (∅ : Set X) = 0
+  结论: externalCoveringNumber ε (∅ : 集合 X) = 0
   证明: by
   simp [externalCoveringNumber]
 
@@ -172,7 +172,7 @@ lemma coveringNumber_empty
 中文:
 引理 coveringNumber_empty
   条件: (ε : 实数>=0)
-  结论: coveringNumber ε (∅ : Set X) = 0
+  结论: coveringNumber ε (∅ : 集合 X) = 0
   证明: by simp [coveringNumber]
 
 @[simp]
@@ -196,7 +196,7 @@ lemma packingNumber_empty
 中文:
 引理 packingNumber_empty
   条件: (ε : 实数>=0)
-  结论: packingNumber ε (∅ : Set X) = 0
+  结论: packingNumber ε (∅ : 集合 X) = 0
   证明: by simp [packingNumber]
 
 @[simp]
@@ -241,7 +241,7 @@ lemma externalCoveringNumber_pos_iff
 
 中文:
 引理 externalCoveringNumber_pos_iff
-  结论: 0 < externalCoveringNumber ε A ↔ A.Nonempty
+  结论: 0 < externalCoveringNumber ε A ↔ A.非空
   证明: by
   rw [← not_iff_not]
   simp [not_nonempty_iff_eq_empty]
@@ -291,7 +291,7 @@ lemma coveringNumber_pos_iff
 
 中文:
 引理 coveringNumber_pos_iff
-  结论: 0 < coveringNumber ε A ↔ A.Nonempty
+  结论: 0 < coveringNumber ε A ↔ A.非空
   证明: by
   rw [← not_iff_not]
   simp [not_nonempty_iff_eq_empty]
@@ -354,7 +354,7 @@ lemma packingNumber_pos_iff
 
 中文:
 引理 packingNumber_pos_iff
-  结论: 0 < packingNumber ε A ↔ A.Nonempty
+  结论: 0 < packingNumber ε A ↔ A.非空
   证明: by
   rw [← not_iff_not]
   simp [not_nonempty_iff_eq_empty]
@@ -377,7 +377,7 @@ lemma externalCoveringNumber_le_coveringNumber
 
 中文:
 引理 externalCoveringNumber_le_coveringNumber
-  条件: (ε : 实数>=0) (A : Set X)
+  条件: (ε : 实数>=0) (A : 集合 X)
   证明: by
   simp only [externalCoveringNumber, coveringNumber, le_iInf_iff]
   exact fun C _ hC_cover => iInf₂_le C hC_cover
@@ -432,8 +432,8 @@ lemma IsSeparated.encard_le_packingNumber
   proof: le_iSup₂_of_le C h_subset (le_iSup_of_le hC le_rfl)
 
 中文:
-引理 IsSeparated.encard_le_packingNumber
-  条件: (h_subset : C subseteq A) (hC : IsSeparated ε C)
+引理 是分离.encard_le_packingNumber
+  条件: (h_subset : C subseteq A) (hC : 是分离 ε C)
   证明: le_iSup₂_of_le C h_subset (le_iSup_of_le hC le_rfl)
 
 Depends on / 依赖: h_subset, le_iSup_of_le, le_rfl
@@ -452,7 +452,7 @@ lemma externalCoveringNumber_le_encard_self
 
 中文:
 引理 externalCoveringNumber_le_encard_self
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: externalCoveringNumber ε A <= A.encard
   证明: IsCover.externalCoveringNumber_le_encard (by simp)
 
@@ -472,7 +472,7 @@ lemma coveringNumber_le_encard_self
 
 中文:
 引理 coveringNumber_le_encard_self
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: coveringNumber ε A <= A.encard
   证明: IsCover.coveringNumber_le_encard (by simp) (by simp)
 
@@ -494,7 +494,7 @@ lemma packingNumber_le_encard_self
 
 中文:
 引理 packingNumber_le_encard_self
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: packingNumber ε A <= A.encard
   证明: by
   simp only [packingNumber, iSup_le_iff]
@@ -606,7 +606,7 @@ lemma externalCoveringNumber_zero
 
 中文:
 引理 externalCoveringNumber_zero
-  条件: {E : 类型} [EMetricSpace E] (A : Set E)
+  条件: {E : 类型} [广义度量空间 E] (A : 集合 E)
   证明: by
   refine le_antisymm (externalCoveringNumber_le_encard_self A) ?_
   refine le_iInf fun C => le_iInf fun hC₁ => ?_
@@ -640,7 +640,7 @@ lemma coveringNumber_zero
 
 中文:
 引理 coveringNumber_zero
-  条件: {E : 类型} [EMetricSpace E] (A : Set E)
+  条件: {E : 类型} [广义度量空间 E] (A : 集合 E)
   证明: by
   refine le_antisymm (coveringNumber_le_encard_self A) ?_
   rw [← externalCoveringNumber_zero]
@@ -667,7 +667,7 @@ lemma packingNumber_zero
 
 中文:
 引理 packingNumber_zero
-  条件: {E : 类型} [EMetricSpace E] (A : Set E)
+  条件: {E : 类型} [广义度量空间 E] (A : 集合 E)
   证明: le_antisymm (packingNumber_le_encard_self A) (le_iSup_of_le A (by simp))
 
 Depends on / 依赖: le_antisymm, le_iSup_of_le, packingNumber_le_encard_self
@@ -693,7 +693,7 @@ lemma coveringNumber_eq_one_of_ediam_le
 
 中文:
 引理 coveringNumber_eq_one_of_ediam_le
-  条件: (h_nonempty : A.Nonempty) (hA : ediam A <= ε)
+  条件: (h_nonempty : A.非空) (hA : ediam A <= ε)
   证明: by
   refine le_antisymm ?_ ?_
   · have ⟨a, ha⟩ := h_nonempty
@@ -729,7 +729,7 @@ lemma externalCoveringNumber_eq_one_of_ediam_le
 
 中文:
 引理 externalCoveringNumber_eq_one_of_ediam_le
-  结论: (h_nonempty : A.Nonempty)
+  结论: (h_nonempty : A.非空)
   证明: by
   refine le_antisymm ?_ ?_
   · exact (externalCoveringNumber_le_coveringNumber ε A).trans_eq
@@ -900,7 +900,7 @@ lemma exists_set_encard_eq_coveringNumber
   let h := ENat.exists_eq_iInf (fun C : {s : Set X /
 
 中文:
-引理 exists_set_encard_eq_coveringNumber
+引理 存在_set_encard_eq_coveringNumber
   条件: (h : coveringNumber ε A != ⊤)
   证明: by
   simp only [coveringNumber, ne_eq, iInf_eq_top, encard_eq_top_iff, not_forall, not_infinite] at h
@@ -938,7 +938,7 @@ definition minimalCover
 
 中文:
 定义 minimalCover
-  签名: (ε : 实数>=0) (A : Set X)
+  签名: (ε : 实数>=0) (A : 集合 X)
   定义体: if h : coveringNumber ε A != ⊤ then (exists_set_encard_eq_coveringNumber h).choose else ∅
 
 Depends on / 依赖: coveringNumber, exists_set_encard_eq_coveringNumber
@@ -1035,7 +1035,7 @@ lemma exists_set_encard_eq_packingNumber
     (f := fun C : { s : Set X // 
 
 中文:
-引理 exists_set_encard_eq_packingNumber
+引理 存在_set_encard_eq_packingNumber
   条件: (h : packingNumber ε A != ⊤)
   证明: by
   rcases Set.eq_empty_or_nonempty A with hA | hA
@@ -1079,7 +1079,7 @@ definition maximalSeparatedSet
 
 中文:
 定义 maximalSeparatedSet
-  签名: (ε : 实数>=0) (A : Set X)
+  签名: (ε : 实数>=0) (A : 集合 X)
   定义体: if h : packingNumber ε A != ⊤ then (exists_set_encard_eq_packingNumber h).choose else ∅
 
 Depends on / 依赖: exists_set_encard_eq_packingNumber, packingNumber
@@ -1227,7 +1227,7 @@ theorem packingNumber_two_mul_le_externalCoveringNumber
 
 中文:
 定理 packingNumber_two_mul_le_externalCoveringNumber
-  条件: (ε : 实数>=0) (A : Set X)
+  条件: (ε : 实数>=0) (A : 集合 X)
   证明: by
   simp only [packingNumber, ENNReal.coe_mul, ENNReal.coe_ofNat, externalCoveringNumber, le_iInf_iff,
     iSup_le_iff]
@@ -1276,7 +1276,7 @@ theorem coveringNumber_le_packingNumber
 
 中文:
 定理 coveringNumber_le_packingNumber
-  条件: (ε : 实数>=0) (A : Set X)
+  条件: (ε : 实数>=0) (A : 集合 X)
   证明: by
   by_cases! h_top : packingNumber ε A != ⊤
   · rw [← encard_maximalSeparatedSet h_top]
@@ -1306,7 +1306,7 @@ theorem coveringNumber_two_mul_le_externalCoveringNumber
 
 中文:
 定理 coveringNumber_two_mul_le_externalCoveringNumber
-  条件: (ε : 实数>=0) (A : Set X)
+  条件: (ε : 实数>=0) (A : 集合 X)
   证明: by
   rcases Set.eq_empty_or_nonempty A with rfl | h_nonempty
   · simp
@@ -1376,8 +1376,8 @@ lemma _root_.Isometry.coveringNumber_image'
     refine (iInf_le _ this)
 
 中文:
-引理 _root_.Isometry.coveringNumber_image'
-  条件: {f : X -> Y} (hf : Isometry f) (hf_inj : Set.InjOn f A)
+引理 _root_.等距.coveringNumber_image'
+  条件: {f : X -> Y} (hf : 等距 f) (hf_inj : 集合.单射限制 f A)
   证明: by
   refine le_antisymm ?_ ?_
   · simp only [coveringNumber, le_iInf_iff]
@@ -1426,8 +1426,8 @@ lemma _root_.Isometry.coveringNumber_image
   proof: hf.coveringNumber_image' hf.injective.injOn
 
 中文:
-引理 _root_.Isometry.coveringNumber_image
-  结论: {X : 类型} [EMetricSpace X]
+引理 _root_.等距.coveringNumber_image
+  结论: {X : 类型} [广义度量空间 X]
   证明: hf.coveringNumber_image' hf.injective.injOn
 
 Depends on / 依赖: coveringNumber_image, hf.coveringNumber_image, hf.injective.injOn, injective

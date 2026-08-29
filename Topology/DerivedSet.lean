@@ -36,8 +36,8 @@ theorem AccPt.map
   simpa [hf2.eq_iff] using! eventually_mem_nhdsWithin
 
 中文:
-定理 AccPt.map
-  结论: {β : 类型} [TopologicalSpace β] {F : Filter X} {x : X}
+定理 聚点.map
+  结论: {β : 类型} [拓扑空间 β] {F : 滤子 X} {x : X}
   证明: by
 .mono apply map_neBot (m := f) (hf := h)
   rw [Filter.map_inf hf2]
@@ -68,7 +68,7 @@ definition derivedSet
 
 中文:
 定义 derivedSet
-  签名: (A : Set X)
+  签名: (A : 集合 X)
   定义体: {x | AccPt x (𝓟 A)}
 
 @[simp]
@@ -87,8 +87,8 @@ lemma mem_derivedSet
 
 中文:
 引理 mem_derivedSet
-  条件: {A : Set X} {x : X}
-  结论: x in derivedSet A ↔ AccPt x (𝓟 A)
+  条件: {A : 集合 X} {x : X}
+  结论: x in derivedSet A ↔ 聚点 x (𝓟 A)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -108,7 +108,7 @@ lemma derivedSet_union
 
 中文:
 引理 derivedSet_union
-  条件: (A B : Set X)
+  条件: (A B : 集合 X)
   结论: derivedSet (A union B) = derivedSet A union derivedSet B
   证明: by
   ext x
@@ -131,7 +131,7 @@ lemma derivedSet_mono
 
 中文:
 引理 derivedSet_mono
-  条件: (A B : Set X) (h : A subseteq B)
+  条件: (A B : 集合 X) (h : A subseteq B)
   结论: derivedSet A subseteq derivedSet B
   证明: fun _ hx => hx.mono le_principal_iff.mpr mem_principal.mpr h
 
@@ -151,7 +151,7 @@ definition relDerivedSet
 
 中文:
 定义 relDerivedSet
-  签名: : Set X ->o Set X where
+  签名: : 集合 X ->o 集合 X where
   定义体: derivedSet s inter s
   monotone' s t h := Set.inter_subset_inter (derivedSet_mono s t h) h
 
@@ -172,7 +172,7 @@ lemma relDerivedSet_apply
 
 中文:
 引理 relDerivedSet_apply
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: relDerivedSet A = derivedSet A inter A
   证明: rfl
 -/
@@ -189,7 +189,7 @@ lemma relDerivedSet_subset
 
 中文:
 引理 relDerivedSet_subset
-  条件: {A : Set X}
+  条件: {A : 集合 X}
   结论: relDerivedSet A subseteq A
   证明: Set.inter_subset_right
 
@@ -212,8 +212,8 @@ theorem Continuous.image_derivedSet
   simp
 
 中文:
-定理 Continuous.image_derivedSet
-  结论: {β : 类型} [TopologicalSpace β] {A : Set X} {f : X -> β}
+定理 连续.image_derivedSet
+  结论: {β : 类型} [拓扑空间 β] {A : 集合 X} {f : X -> β}
   证明: by
   intro x hx
   simp only [Set.mem_image, mem_derivedSet] at hx
@@ -243,7 +243,7 @@ lemma derivedSet_subset_closure
 
 中文:
 引理 derivedSet_subset_closure
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: derivedSet A subseteq closure A
   证明: fun _ hx => mem_closure_iff_clusterPt.mpr hx.clusterPt
 
@@ -270,8 +270,8 @@ lemma isClosed_iff_derivedSet_subset
 
 中文:
 引理 isClosed_iff_derivedSet_subset
-  条件: (A : Set X)
-  结论: IsClosed A ↔ derivedSet A subseteq A where
+  条件: (A : 集合 X)
+  结论: 是闭集 A ↔ derivedSet A subseteq A where
   证明: derivedSet_subset_closure A
   mpr h := by
     rw [isClosed_iff_clusterPt]
@@ -303,8 +303,8 @@ lemma IsClosed.relDerivedSet_eq
   simpa using (isClosed_iff_derivedSet_subset A).mp hA
 
 中文:
-引理 IsClosed.relDerivedSet_eq
-  条件: {A : Set X} (hA : IsClosed A)
+引理 是闭集.relDerivedSet_eq
+  条件: {A : 集合 X} (hA : 是闭集 A)
   证明: by
   simpa using (isClosed_iff_derivedSet_subset A).mp hA
 
@@ -327,7 +327,7 @@ lemma closure_eq_self_union_derivedSet
 
 中文:
 引理 closure_eq_self_union_derivedSet
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   结论: closure A = A union derivedSet A
   证明: by
   ext
@@ -355,7 +355,7 @@ lemma derivedSet_closure
 
 中文:
 引理 derivedSet_closure
-  条件: [T1Space X] (A : Set X)
+  条件: [T1空间 X] (A : 集合 X)
   结论: derivedSet (closure A) = derivedSet A
   证明: by
   refine le_antisymm (fun x hx => ?_) (derivedSet_mono _ _ subset_closure)
@@ -389,8 +389,8 @@ lemma isClosed_derivedSet
 
 中文:
 引理 isClosed_derivedSet
-  条件: [T1Space X] (A : Set X)
-  结论: IsClosed (derivedSet A)
+  条件: [T1空间 X] (A : 集合 X)
+  结论: 是闭集 (derivedSet A)
   证明: by
   rw [← derivedSet_closure]; rw [isClosed_iff_derivedSet_subset]
   apply derivedSet_mono
@@ -414,7 +414,7 @@ lemma preperfect_iff_subset_derivedSet
 
 中文:
 引理 preperfect_iff_subset_derivedSet
-  条件: {U : Set X}
+  条件: {U : 集合 X}
   结论: Preperfect U ↔ U subseteq derivedSet U
   证明: Iff.rfl
 
@@ -435,7 +435,7 @@ lemma preperfect_iff_eq_relDerivedSet
 
 中文:
 引理 preperfect_iff_eq_relDerivedSet
-  条件: {U : Set X}
+  条件: {U : 集合 X}
   结论: Preperfect U ↔ U = relDerivedSet U
   证明: by
   simp [preperfect_iff_subset_derivedSet]
@@ -457,8 +457,8 @@ lemma perfect_iff_eq_derivedSet
 
 中文:
 引理 perfect_iff_eq_derivedSet
-  条件: {U : Set X}
-  结论: Perfect U ↔ U = derivedSet U
+  条件: {U : 集合 X}
+  结论: 完美 U ↔ U = derivedSet U
   证明: by
   rw [perfect_def]; rw [isClosed_iff_derivedSet_subset]; rw [preperfect_iff_subset_derivedSet]; rw [← subset_antisymm_iff]; rw [eq_comm]
 
@@ -487,8 +487,8 @@ lemma IsPreconnected.inter_derivedSet_nonempty
   · obtain ⟨x, hx⟩ := ha.left.exists
 
 中文:
-引理 IsPreconnected.inter_derivedSet_nonempty
-  结论: [T1Space X] {U : Set X} (hs : IsPreconnected U)
+引理 是预连通.inter_derivedSet_nonempty
+  结论: [T1空间 X] {U : 集合 X} (hs : 是预连通 U)
   证明: by
   by_cases hu : U.Nontrivial
   · apply isPreconnected_closed_iff.mp hs

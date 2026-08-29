@@ -32,7 +32,7 @@ definition nil
 
 中文:
 定义 nil
-  签名: (α : ι -> Sort*)
+  签名: (α : ι -> 类型层*)
   定义体: nofun
 -/
 def nil (α : ι -> Sort*) : (forall i in ([] : List ι), α i) :=
@@ -126,8 +126,8 @@ lemma _root_.Multiset.Pi.cons_coe
   proof: rfl
 
 中文:
-引理 _root_.Multiset.Pi.cons_coe
-  条件: {l : List ι} (a : α i) (f : 对任意 j in l, α j)
+引理 _root_.Multiset.依赖函数类型.cons_coe
+  条件: {l : 列表 ι} (a : α i) (f : 对任意 j in l, α j)
   证明: rfl
 -/
 @[simp] lemma _root_.Multiset.Pi.cons_coe {l : List ι} (a : α i) (f : forall j in l, α j) :
@@ -180,7 +180,7 @@ lemma forall_rel_cons_ext
   proof: Multiset.Pi.forall_rel_cons_ext (α := ι) (m := l) ha hf
 
 中文:
-引理 forall_rel_cons_ext
+引理 对任意_rel_cons_ext
   结论: {r : 对任意 ⦃i⦄, α i -> α i -> 命题} {a₁ a₂ : α i} {f₁ f₂ : 对任意 j in l, α j}
   证明: Multiset.Pi.forall_rel_cons_ext (α := ι) (m := l) ha hf
 
@@ -204,7 +204,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: : 对任意 l : List ι, (对任意 i, List (α i)) -> List (对任意 i, i in l -> α i)
+  签名: : 对任意 l : 列表 ι, (对任意 i, 列表 (α i)) -> 列表 (对任意 i, i in l -> α i)
 -/
 def pi : forall l : List ι, (forall i, List (α i)) -> List (forall i, i in l -> α i)
   | [], _ => [List.Pi.nil α]
@@ -220,7 +220,7 @@ lemma pi_nil
 
 中文:
 引理 pi_nil
-  条件: (t : 对任意 i, List (α i))
+  条件: (t : 对任意 i, 列表 (α i))
   证明: rfl
 -/
 @[simp] lemma pi_nil (t : forall i, List (α i)) :
@@ -237,7 +237,7 @@ lemma pi_cons
 
 中文:
 引理 pi_cons
-  条件: (i : ι) (l : List ι) (t : 对任意 j, List (α j))
+  条件: (i : ι) (l : 列表 ι) (t : 对任意 j, 列表 (α j))
   证明: rfl
 -/
 @[simp] lemma pi_cons (i : ι) (l : List ι) (t : forall j, List (α j)) :
@@ -263,7 +263,7 @@ lemma _root_.Multiset.pi_coe
 
 中文:
 引理 _root_.Multiset.pi_coe
-  条件: (l : List ι) (fs : 对任意 i, List (α i))
+  条件: (l : 列表 ι) (fs : 对任意 i, 列表 (α i))
   证明: by
   induction l with
   | nil =>
@@ -298,7 +298,7 @@ lemma mem_pi
 
 中文:
 引理 mem_pi
-  条件: {l : List ι} (fs : 对任意 i, List (α i)) (f : 对任意 i in l, α i)
+  条件: {l : 列表 ι} (fs : 对任意 i, 列表 (α i)) (f : 对任意 i in l, α i)
   证明: by
   simpa [Multiset.pi_coe] using! Multiset.mem_pi ↑l (fs ·) f
 

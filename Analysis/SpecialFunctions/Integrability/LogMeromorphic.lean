@@ -51,7 +51,7 @@ theorem MeromorphicOn.intervalIntegrable_log_norm
     rw [intervalIntegrable_congr_codisc
 
 中文:
-定理 MeromorphicOn.intervalIntegrable_log_norm
+定理 MeromorphicOn.interval整数egrable_log_norm
   条件: (hf : MeromorphicOn f [[a, b]])
   证明: by
   by_cases t₀ : forall u : [[a, b]], meromorphicOrderAt f u != ⊤
@@ -113,7 +113,7 @@ theorem MeromorphicOn.intervalIntegrable_posLog_norm
 alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := inter
 
 中文:
-定理 MeromorphicOn.intervalIntegrable_posLog_norm
+定理 MeromorphicOn.interval整数egrable_posLog_norm
   条件: (hf : MeromorphicOn f [[a, b]])
   证明: by
   simp_rw [← half_mul_log_add_log_abs, mul_add]
@@ -147,7 +147,7 @@ theorem _root_.MeromorphicOn.intervalIntegrable_log
   exact hf.intervalIntegrable_log_norm
 
 中文:
-定理 _root_.MeromorphicOn.intervalIntegrable_log
+定理 _root_.MeromorphicOn.interval整数egrable_log
   条件: {f : 实数 -> 实数} (hf : MeromorphicOn f [[a, b]])
   证明: by
   rw [(by aesop : log ∘ f = (log ‖f ·‖))]
@@ -169,7 +169,7 @@ theorem intervalIntegrable_log_sin
   proof: analyticOnNhd_sin.meromorphicOn.intervalIntegrable_log
 
 中文:
-定理 intervalIntegrable_log_sin
+定理 interval整数egrable_log_sin
   结论: 整数erval整数egrable (log ∘ sin) volume a b
   证明: analyticOnNhd_sin.meromorphicOn.intervalIntegrable_log
 
@@ -187,7 +187,7 @@ theorem intervalIntegrable_log_cos
   proof: analyticOnNhd_cos.meromorphicOn.intervalIntegrable_log
 
 中文:
-定理 intervalIntegrable_log_cos
+定理 interval整数egrable_log_cos
   结论: 整数erval整数egrable (log ∘ cos) volume a b
   证明: analyticOnNhd_cos.meromorphicOn.intervalIntegrable_log
 
@@ -222,7 +222,7 @@ theorem MeromorphicOn.circleIntegrable_log_norm
     apply CircleIntegrable.cong
 
 中文:
-定理 MeromorphicOn.circleIntegrable_log_norm
+定理 MeromorphicOn.circle整数egrable_log_norm
   条件: (hf : MeromorphicOn f (sphere c |R|))
   证明: by
   by_cases t₀ : forall u : (sphere c |R|), meromorphicOrderAt f u != ⊤
@@ -287,7 +287,7 @@ alias circleIntegrable_log_norm_meromorphicOn_of_nonneg :=
     MeromorphicOn.circleIntegrable_log_norm_of_nonneg
 
 中文:
-定理 MeromorphicOn.circleIntegrable_log_norm_of_nonneg
+定理 MeromorphicOn.circle整数egrable_log_norm_of_nonneg
   结论: (hf : MeromorphicOn f (sphere c R))
   证明: by
   rw [← abs_of_nonneg hR] at hf
@@ -323,8 +323,8 @@ theorem circleIntegrable_log_norm_factorizedRational
     ((analyticOnNhd_id.sub analyticOnNhd_const).meromorphicOn.circleIntegrable_log_norm).const_smul)
 
 中文:
-定理 circleIntegrable_log_norm_factorizedRational
-  条件: {R : 实数} {c : Complex} (D : Complex -> 整数)
+定理 circle整数egrable_log_norm_factorizedRational
+  条件: {R : 实数} {c : 复形} (D : 复形 -> 整数)
   证明: CircleIntegrable.finsum (fun _ =>
     ((analyticOnNhd_id.sub analyticOnNhd_const).meromorphicOn.circleIntegrable_log_norm).const_smul)
 
@@ -351,7 +351,7 @@ theorem MeromorphicOn.circleIntegrable_posLog_norm
 alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegra
 
 中文:
-定理 MeromorphicOn.circleIntegrable_posLog_norm
+定理 MeromorphicOn.circle整数egrable_posLog_norm
   条件: (hf : MeromorphicOn f (sphere c |R|))
   证明: by
   simp_rw [← half_mul_log_add_log_abs, mul_add]
@@ -389,7 +389,7 @@ alias circleIntegrable_posLog_norm_meromorphicOn_of_nonneg :=
     MeromorphicOn.circleIntegrable_posLog_norm_of_nonneg
 
 中文:
-定理 MeromorphicOn.circleIntegrable_posLog_norm_of_nonneg
+定理 MeromorphicOn.circle整数egrable_posLog_norm_of_nonneg
   结论: (hf : MeromorphicOn f (sphere c R))
   证明: by
   rw [← abs_of_nonneg hR] at hf

@@ -49,7 +49,7 @@ instance instIsStrictOrderedRing
 
 中文:
 实例 instIsStrictOrderedRing
-  签名: : IsStrictOrderedRing 整数
+  签名: : 是StrictOrdered环 整数
   定义体: .of_mul_pos @Int.mul_pos
 
 Depends on / 依赖: Int.mul_pos, mul_pos, of_mul_pos
@@ -70,7 +70,7 @@ lemma isCompl_even_odd
 
 中文:
 引理 isCompl_even_odd
-  结论: IsCompl { n : 整数 | Even n } { n | Odd n }
+  结论: 是补集 { n : 整数 | Even n } { n | Odd n }
   证明: by
   simp [← not_even_iff_odd, ← Set.compl_ofPred, isCompl_compl]
 
@@ -93,8 +93,8 @@ lemma _root_.Nat.cast_natAbs
   rw [← natCast_natAbs]; rw [Int.cast_natCast]
 
 中文:
-引理 _root_.Nat.cast_natAbs
-  条件: {α : 类型} [AddGroupWithOne α] (n : 整数)
+引理 _root_.自然数.cast_natAbs
+  条件: {α : 类型} [加法带幺群 α] (n : 整数)
   结论: (n.natAbs : α) = |n|
   证明: by
   rw [← natCast_natAbs]; rw [Int.cast_natCast]
@@ -162,8 +162,8 @@ theorem Nat.exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le
   rw [← Int.gcd_natCast_natCast]; rw [Int.gcd_dvd_iff] at dv
 
 中文:
-定理 Nat.exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le
-  结论: (p q n : 自然数) (dvd : p.gcd q ∣ n)
+定理 自然数.存在_add_mul_eq_of_gcd_dvd_of_mul_pred_le
+  结论: (p q n : 自然数) (dvd : p.最大公约数 q ∣ n)
   证明: by
   obtain _ | p := p
   · have ⟨b, eq⟩ := q.gcd_zero_left ▸ dvd

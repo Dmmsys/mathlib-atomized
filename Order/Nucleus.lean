@@ -40,9 +40,9 @@ structure Nucleus
     - le_apply'((x : X)) : x <= toFun x
 
 中文:
-结构 Nucleus
+结构 核
   参数: (X : 类型) [SemilatticeInf X]
-  继承: InfHom X X
+  继承: 交态射 X X
   公理与运算 (2 个):
     - idempotent'((x : X)) : toFun (toFun x) <= toFun x
     - le_apply'((x : X)) : x <= toFun x
@@ -69,9 +69,9 @@ class NucleusClass
     - le_apply((x : X) (f : F)) : x <= f x
 
 中文:
-类 NucleusClass
-  参数: (F X : 类型) [SemilatticeInf X] [FunLike F X X]
-  继承: InfHomClass F X X
+类 核类
+  参数: (F X : 类型) [SemilatticeInf X] [函数状 F X X]
+  继承: 交态射类 F X X
   公理与运算 (2 个):
     - idempotent((x : X) (f : F)) : f (f x) <= f x
     - le_apply((x : X) (f : F)) : x <= f x
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Nucleus X) X X
+  签名: 函数状 (核 X) X X
   定义体: x.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
 
@@ -118,7 +118,7 @@ definition Simps.apply
 
 中文:
 定义 Simps.apply
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: n
 -/
 def Simps.apply (n : Nucleus X) : X -> X := n
@@ -134,7 +134,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (n : Nucleus X)
+  条件: (n : 核 X)
   结论: n.toFun = n
   证明: rfl
 -/
@@ -150,7 +150,7 @@ lemma coe_toInfHom
 
 中文:
 引理 coe_toInfHom
-  条件: (n : Nucleus X)
+  条件: (n : 核 X)
   结论: ⇑n.toInfHom = n
   证明: rfl
 -/
@@ -168,7 +168,7 @@ initialize_simps_projections Nucleus (toFun -> apply)
 
 中文:
 引理 coe_mk
-  条件: (f : InfHom X X) (h1 h2)
+  条件: (f : 交态射 X X) (h1 h2)
   结论: ⇑(mk f h1 h2) = f
   证明: rfl
 
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: NucleusClass (Nucleus X) X
+  签名: 核类 (核 X) X
   定义体: idempotent' ..
   le_apply _ _ := le_apply' ..
   map_inf _ _ _ := map_inf' ..
@@ -212,7 +212,7 @@ definition toClosureOperator
 
 中文:
 定义 toClosureOperator
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: ClosureOperator.mk' n (OrderHomClass.mono n) n.le_apply' n.idempotent'
 
 Depends on / 依赖: ClosureOperator, ClosureOperator.mk, OrderHomClass, OrderHomClass.mono, idempotent, le_apply, n.idempotent, n.le_apply
@@ -265,7 +265,7 @@ lemma monotone
 
 中文:
 引理 monotone
-  结论: Monotone n
+  结论: 递增 n
   证明: n.toClosureOperator.monotone
 
 Depends on / 依赖: monotone, n.toClosureOperator.monotone, toClosureOperator
@@ -301,7 +301,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {m n : Nucleus X} (h : 对任意 a, m a = n a)
+  条件: {m n : 核 X} (h : 对任意 a, m a = n a)
   结论: m = n
   证明: DFunLike.ext m n h
 -/
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Nucleus X)
+  签名: 偏序 (核 X)
   定义体: .lift (⇑) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -364,7 +364,7 @@ lemma mk_le_mk
 
 中文:
 引理 mk_le_mk
-  结论: (toInfHom₁ toInfHom₂ : InfHom X X)
+  结论: (toInfHom₁ toInfHom₂ : 交态射 X X)
   证明: .rfl
 -/
 @[simp, gcongr] lemma mk_le_mk (toInfHom₁ toInfHom₂ : InfHom X X)
@@ -389,7 +389,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Nucleus X)
+  签名: 最小值 (核 X)
   定义体: {
     toFun := m ⊓ n
     map_inf' x y := by simp [inf_inf_inf_comm]
@@ -420,7 +420,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: (m n : Nucleus X)
+  条件: (m n : 核 X)
   结论: ⇑(m ⊓ n) = ⇑m ⊓ ⇑n
   证明: rfl
 -/
@@ -436,7 +436,7 @@ lemma inf_apply
 
 中文:
 引理 inf_apply
-  条件: (m n : Nucleus X) (x : X)
+  条件: (m n : 核 X) (x : X)
   结论: (m ⊓ n) x = m x ⊓ n x
   证明: rfl
 -/
@@ -452,7 +452,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (Nucleus X)
+  签名: SemilatticeInf (核 X)
   定义体: DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeInf, coe_inf, coe_injective, semilatticeInf
@@ -474,7 +474,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : OrderBot (Nucleus X) where
+  签名: : 有底序 (核 X) where
   定义体: x
   bot.idempotent' := by simp
   bot.le_apply' := by simp
@@ -498,7 +498,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ⇑(⊥ : Nucleus X) = id
+  结论: ⇑(⊥ : 核 X) = id
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : ⇑(⊥ : Nucleus X) = id := rfl
@@ -514,7 +514,7 @@ lemma bot_apply
 中文:
 引理 bot_apply
   条件: (x : X)
-  结论: (⊥ : Nucleus X) x = x
+  结论: (⊥ : 核 X) x = x
   证明: rfl
 -/
 @[simp] lemma bot_apply (x : X) : (⊥ : Nucleus X) x = x := rfl
@@ -531,7 +531,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopHomClass (Nucleus X) X X
+  签名: 顶元素态射类 (核 X) X X
   定义体: eq_top_iff.mpr le_apply
 
 Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, le_apply
@@ -552,7 +552,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (Nucleus X) where
+  签名: : 顶元素 (核 X) where
   定义体: ⊤
   top.idempotent' := by simp
   top.le_apply' := by simp
@@ -574,7 +574,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ⇑(⊤ : Nucleus X) = ⊤
+  结论: ⇑(⊤ : 核 X) = ⊤
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : ⇑(⊤ : Nucleus X) = ⊤ := rfl
@@ -590,7 +590,7 @@ lemma top_apply
 中文:
 引理 top_apply
   条件: (x : X)
-  结论: (⊤ : Nucleus X) x = ⊤
+  结论: (⊤ : 核 X) x = ⊤
   证明: rfl
 -/
 @[simp] lemma top_apply (x : X) : (⊤ : Nucleus X) x = ⊤ := rfl
@@ -606,7 +606,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (Nucleus X)
+  签名: 有界序 (核 X)
   定义体: le_apply
   le_top _ _ := by simp
 
@@ -637,7 +637,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Nucleus X)
+  签名: 下确界集 (核 X)
   定义体: { toFun x := ⨅ f in s, f x,
     map_inf' x y := by
       simp only [InfHomClass.map_inf, le_antisymm_iff, le_inf_iff, le_iInf_iff]
@@ -671,7 +671,7 @@ lemma sInf_apply
 
 中文:
 引理 sInf_apply
-  条件: (s : Set (Nucleus X)) (x : X)
+  条件: (s : 集合 (核 X)) (x : X)
   结论: sInf s x = ⨅ j in s, j x
   证明: rfl
 -/
@@ -689,7 +689,7 @@ lemma iInf_apply
 
 中文:
 引理 iInf_apply
-  条件: {ι : 类型} (f : ι -> (Nucleus X)) (x : X)
+  条件: {ι : 类型} (f : ι -> (核 X)) (x : X)
   结论: iInf f x = ⨅ j, f j x
   证明: by
   rw [iInf]; rw [sInf_apply]; rw [iInf_range]
@@ -708,7 +708,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (Nucleus X)
+  签名: 余mpleteSemilatticeInf (核 X)
   定义体: ⟨by simp +contextual [mem_lowerBounds, ← coe_le_coe, Pi.le_def, iInf_le_iff],
       by simp +contextual [mem_lowerBounds, mem_upperBounds, ← coe_le_coe, Pi.le_def]⟩
 
@@ -732,7 +732,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Nucleus X)
+  签名: 完备格 (核 X)
   定义体: inferInstance
   __ : OrderBot (Nucleus X) := inferInstance
   __ : OrderTop (Nucleus X) := inferInstance
@@ -795,7 +795,7 @@ lemma map_himp_apply
 
 中文:
 引理 map_himp_apply
-  条件: (n : Nucleus X) (x y : X)
+  条件: (n : 核 X) (x y : X)
   结论: n (x ⇨ n y) = x ⇨ n y
   证明: le_antisymm (map_himp_le.trans_eq <| by rw [n.idempotent]) n.le_apply
 
@@ -820,7 +820,7 @@ _ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le 
 
 中文:
 实例 :
-  签名: HImp (Nucleus X)
+  签名: HImp (核 X)
   定义体: { toFun x := ⨅ y >= x, m y ⇨ n y
     idempotent' x := le_iInf₂ fun y hy =>
       calc
@@ -868,7 +868,7 @@ lemma himp_apply
 
 中文:
 引理 himp_apply
-  条件: (m n : Nucleus X) (x : X)
+  条件: (m n : 核 X) (x : X)
   结论: (m ⇨ n) x = ⨅ y >= x, m y ⇨ n y
   证明: rfl
 -/
@@ -888,7 +888,7 @@ using ⟨fun h i => h i i le_rfl, fun h i j _ => (h j).trans' by gcongr⟩
 
 中文:
 实例 :
-  签名: HeytingAlgebra (Nucleus X)
+  签名: Heyting代数 (核 X)
   定义体: m ⇨ ⊥
   le_himp_iff _ n _ := by
     simpa [← coe_le_coe, Pi.le_def]
@@ -913,7 +913,7 @@ instance :
 
 中文:
 实例 :
-  签名: Order.Frame (Nucleus X)
+  签名: Order.框架 (核 X)
   定义体: Nucleus.instHeytingAlgebra
   __ := Nucleus.instCompleteLattice
 
@@ -958,7 +958,7 @@ gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) mem
 
 中文:
 定义 giAux
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: ⟨x, mem_range.2 hx.antisymm n.le_apply⟩
 gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) mem_range.1 y.2
   le_l_u x := le_apply
@@ -982,7 +982,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (range n)
+  签名: 完备格 (range n)
   定义体: n.giAux.liftCompleteLattice
 
 Depends on / 依赖: liftCompleteLattice, n.giAux.liftCompleteLattice
@@ -1004,7 +1004,7 @@ instance :
 
 中文:
 实例 :
-  签名: Frame (range n)
+  签名: 框架 (range n)
   定义体: .ofMinimalAxioms {
   inf_sSup_le_iSup_inf a s := by
     simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
@@ -1035,7 +1035,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: rangeFactorization n
   map_inf' a b := by ext; exact map_inf
   map_top' := by ext; exact map_top n
@@ -1059,7 +1059,7 @@ definition giRestrict
 
 中文:
 定义 giRestrict
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: n.giAux
 
 Depends on / 依赖: n.giAux

@@ -29,7 +29,7 @@ theorem mk_finsupp_lift_of_fintype
 
 中文:
 定理 mk_finsupp_lift_of_fintype
-  条件: (α : 类型u) (β : 类型v) [Fintype α] [Zero β]
+  条件: (α : 类型u) (β : 类型v) [有限类型 α] [零 β]
   证明: by
   simpa using (@Finsupp.equivFunOnFinite α β _ _).cardinal_eq
 
@@ -51,7 +51,7 @@ theorem mk_finsupp_of_fintype
 
 中文:
 定理 mk_finsupp_of_fintype
-  条件: (α β : 类型u) [Fintype α] [Zero β]
+  条件: (α β : 类型u) [有限类型 α] [零 β]
   证明: by simp
 
 @[simp]
@@ -77,7 +77,7 @@ theorem mk_finsupp_lift_of_infinite
 
 中文:
 定理 mk_finsupp_lift_of_infinite
-  条件: (α : 类型u) (β : 类型v) [Infinite α] [Zero β] [Nontrivial β]
+  条件: (α : 类型u) (β : 类型v) [无限 α] [零 β] [非平凡 β]
   证明: by
   apply le_antisymm
   · calc
@@ -115,7 +115,7 @@ theorem mk_finsupp_of_infinite
 
 中文:
 定理 mk_finsupp_of_infinite
-  条件: (α β : 类型u) [Infinite α] [Zero β] [Nontrivial β]
+  条件: (α β : 类型u) [无限 α] [零 β] [非平凡 β]
   证明: by simp
 
 @[simp]
@@ -140,7 +140,7 @@ theorem mk_finsupp_lift_of_infinite'
 
 中文:
 定理 mk_finsupp_lift_of_infinite'
-  条件: (α : 类型u) (β : 类型v) [Nonempty α] [Zero β] [Infinite β]
+  条件: (α : 类型u) (β : 类型v) [非空 α] [零 β] [无限 β]
   证明: by
   cases fintypeOrInfinite α
   · rw [mk_finsupp_lift_of_fintype]
@@ -170,7 +170,7 @@ theorem mk_finsupp_of_infinite'
 
 中文:
 定理 mk_finsupp_of_infinite'
-  条件: (α β : 类型u) [Nonempty α] [Zero β] [Infinite β]
+  条件: (α β : 类型u) [非空 α] [零 β] [无限 β]
   证明: by simp
 -/
 theorem mk_finsupp_of_infinite' (α β : Type u) [Nonempty α] [Zero β] [Infinite β] :
@@ -187,8 +187,8 @@ theorem mk_finsupp_nat
 
 中文:
 定理 mk_finsupp_nat
-  条件: (α : 类型u) [Nonempty α]
-  结论: #(α ->₀ 自然数) = max #α ℵ₀
+  条件: (α : 类型u) [非空 α]
+  结论: #(α ->₀ 自然数) = 最大值 #α ℵ₀
   证明: by simp
 -/
 theorem mk_finsupp_nat (α : Type u) [Nonempty α] : #(α ->₀ Nat) = max #α ℵ₀ := by simp
@@ -206,7 +206,7 @@ theorem mk_multiset_of_isEmpty
 
 中文:
 定理 mk_multiset_of_isEmpty
-  条件: (α : 类型u) [IsEmpty α]
+  条件: (α : 类型u) [是空 α]
   结论: #(Multiset α) = 1
   证明: Multiset.toFinsupp.toEquiv.cardinal_eq.trans (by simp)
 
@@ -231,8 +231,8 @@ theorem mk_multiset_of_nonempty
 
 中文:
 定理 mk_multiset_of_nonempty
-  条件: (α : 类型u) [Nonempty α]
-  结论: #(Multiset α) = max #α ℵ₀
+  条件: (α : 类型u) [非空 α]
+  结论: #(Multiset α) = 最大值 #α ℵ₀
   证明: by
   classical
   exact Multiset.toFinsupp.toEquiv.cardinal_eq.trans (mk_finsupp_nat α)
@@ -254,7 +254,7 @@ theorem mk_multiset_of_infinite
 
 中文:
 定理 mk_multiset_of_infinite
-  条件: (α : 类型u) [Infinite α]
+  条件: (α : 类型u) [无限 α]
   结论: #(Multiset α) = #α
   证明: by simp
 -/

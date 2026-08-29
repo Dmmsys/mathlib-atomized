@@ -42,7 +42,7 @@ theorem isIndObject_pi
 
 中文:
 定理 isIndObject_pi
-  结论: (h : 对任意 (g : α -> C), IsIndObject (∏ᶜ yoneda.obj ∘ g))
+  结论: (h : 对任意 (g : α -> C), 是IndObject (∏ᶜ yoneda.obj ∘ g))
   证明: by
   let F := fun a => (hf a).presentation.F ⋙ yoneda
   suffices (∏ᶜ f ≅ colimit (pointwiseProduct F)) from
@@ -70,7 +70,7 @@ theorem isIndObject_limit_of_discrete
 
 中文:
 定理 isIndObject_limit_of_discrete
-  结论: (h : 对任意 (g : α -> C), IsIndObject (∏ᶜ yoneda.obj ∘ g))
+  结论: (h : 对任意 (g : α -> C), 是IndObject (∏ᶜ yoneda.obj ∘ g))
   证明: IsIndObject.map (Pi.isoLimit _).hom (isIndObject_pi h _ (fun a => hF ⟨a⟩))
 
 Depends on / 依赖: IsIndObject, IsIndObject.map, Pi.isoLimit, isIndObject_pi, isoLimit
@@ -90,7 +90,7 @@ theorem isIndObject_limit_of_discrete_of_hasLimitsOfShape
 
 中文:
 定理 isIndObject_limit_of_discrete_of_hasLimitsOfShape
-  结论: [HasLimitsOfShape (Discrete α) C]
+  结论: [有形状极限 (离散 α) C]
   证明: isIndObject_limit_of_discrete (fun g => (isIndObject_limit_comp_yoneda (Discrete.functor g)).map
       (HasLimit.isoOfNatIso (Discrete.compNatIsoDiscrete g yoneda)).hom) F hF
 

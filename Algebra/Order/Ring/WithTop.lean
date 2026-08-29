@@ -35,7 +35,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: : MulZeroClass (WithTop α) where
+  签名: : 乘零类 (WithTop α) where
 -/
 instance instMulZeroClass : MulZeroClass (WithTop α) where
   mul
@@ -312,7 +312,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [NoZeroDivisors α]
+  签名: [无零因子 α]
   定义体: by
   refine ⟨fun h₁ => Decidable.byContradiction fun h₂ => ?_⟩
   rw [mul_def]; rw [if_neg h₂] at h₁
@@ -347,7 +347,7 @@ lemma mul_right_strictMono
 
 中文:
 引理 mul_right_strictMono
-  条件: [PosMulStrictMono α] (h₀ : 0 < a) (hinf : a != ⊤)
+  条件: [正乘严格递增 α] (h₀ : 0 < a) (hinf : a != ⊤)
   证明: by
   lift a to α using hinf
   rintro b c hbc
@@ -387,7 +387,7 @@ lemma mul_left_strictMono
 
 中文:
 引理 mul_left_strictMono
-  条件: [MulPosStrictMono α] (h₀ : 0 < a) (hinf : a != ⊤)
+  条件: [乘正严格递增 α] (h₀ : 0 < a) (hinf : a != ⊤)
   证明: by
   lift a to α using hinf
   rintro b c hbc
@@ -427,7 +427,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass α] [Nontrivial α]
+  签名: [乘零幺类 α] [非平凡 α]
   定义体: instMulZeroClass
   one_mul
     | ⊤ => mul_top (mt coe_eq_coe.1 one_ne_zero)
@@ -463,8 +463,8 @@ definition _root_.MonoidWithZeroHom.withTopMap
       rcases Decidable.eq_or_ne x 0 with (rfl | h
 
 中文:
-定义 _root_.MonoidWithZeroHom.withTopMap
-  签名: {R S : 类型} [MulZeroOneClass R] [DecidableEq R]
+定义 _root_.带零幺半群态射.withTopMap
+  签名: {R S : 类型} [乘零幺类 R] [DecidableEq R]
   定义体: { f.toZeroHom.withTopMap, f.toMonoidHom.toOneHom.withTopMap with
     toFun := WithTop.map f
     map_mul' := fun x y => by
@@ -507,7 +507,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero α] [NoZeroDivisors α]
+  签名: [带零半群 α] [无零因子 α]
   定义体: instMulZeroClass
   mul_assoc a b c := by
     rcases eq_or_ne a 0 with (rfl | ha); · simp only [zero_mul]
@@ -554,7 +554,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: : MonoidWithZero (WithTop α) where
+  签名: : 带零幺半群 (WithTop α) where
   定义体: instMulZeroOneClass
   __ := instSemigroupWithZero
   npow n a := match a, n with
@@ -653,7 +653,7 @@ lemma pow_lt_top_iff
 
 中文:
 引理 pow_lt_top_iff
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: x ^ n < ⊤ ↔ x < ⊤ ∨ n = 0
   证明: by
   simp_rw [WithTop.lt_top_iff_ne_top, pow_ne_top_iff]
@@ -708,7 +708,7 @@ lemma pow_lt_top
 
 中文:
 引理 pow_lt_top
-  条件: [Preorder α] (hx : x < ⊤)
+  条件: [预序 α] (hx : x < ⊤)
   结论: x ^ n < ⊤
   证明: pow_lt_top_iff.2 .inl hx
 
@@ -729,7 +729,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: [CommMonoidWithZero α] [NoZeroDivisors α] [Nontrivial α]
+  签名: [带零交换幺半群 α] [无零因子 α] [非平凡 α]
   定义体: instMonoidWithZero
   mul_comm a b := by simp_rw [mul_def]; exact if_congr or_comm rfl (Option.map₂_comm mul_comm)
 
@@ -759,7 +759,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring α] [PartialOrder α]
+  签名: [非幺非结合半环 α] [偏序 α]
   定义体: WithTop.addCommMonoid
   __ := WithTop.instMulZeroClass
   right_distrib a b c := by
@@ -806,7 +806,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [非结合半环 α] [偏序 α] [典范有序加法 α]
   定义体: instNonUnitalNonAssocSemiring
   __ := WithTop.instMulZeroOneClass
   __ := WithTop.addCommMonoidWithOne
@@ -830,7 +830,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [非幺半环 α] [偏序 α] [典范有序加法 α]
   定义体: WithTop.instNonUnitalNonAssocSemiring
   __ := WithTop.instSemigroupWithZero
 
@@ -853,7 +853,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [半环 α] [偏序 α] [典范有序加法 α]
   定义体: WithTop.instNonUnitalSemiring
   __ := WithTop.instMonoidWithZero
   __ := WithTop.addCommMonoidWithOne
@@ -877,7 +877,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [交换半环 α] [偏序 α] [典范有序加法 α]
   定义体: WithTop.instSemiring
   __ := WithTop.instCommMonoidWithZero
 
@@ -898,7 +898,7 @@ instance instIsOrderedRing
 
 中文:
 实例 instIsOrderedRing
-  签名: [CommSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [交换半环 α] [偏序 α] [典范有序加法 α]
   定义体: CanonicallyOrderedAdd.toIsOrderedRing
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toIsOrderedRing, toIsOrderedRing
@@ -918,7 +918,7 @@ definition _root_.RingHom.withTopMap
   body: { MonoidWithZeroHom.withTopMap f.toMonoidWithZeroHom hf, f.toAddMonoidHom.withTopMap with }
 
 中文:
-定义 _root_.RingHom.withTopMap
+定义 _root_.环态射.withTopMap
   签名: {R S : 类型}
   定义体: { MonoidWithZeroHom.withTopMap f.toMonoidWithZeroHom hf, f.toAddMonoidHom.withTopMap with }
 -/
@@ -992,7 +992,7 @@ lemma pow_right_strictMono
 
 中文:
 引理 pow_right_strictMono
-  结论: 对任意 {n : 自然数}, n != 0 -> StrictMono fun a : WithTop α => a ^ n
+  结论: 对任意 {n : 自然数}, n != 0 -> 严格递增 fun a : WithTop α => a ^ n
 -/
 protected lemma pow_right_strictMono : forall {n : Nat}, n != 0 -> StrictMono fun a : WithTop α => a ^ n
   | 0, h => absurd rfl h
@@ -1038,7 +1038,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulZeroClass (WithBot α)
+  签名: 乘零类 (WithBot α)
   定义体: inferInstanceAs MulZeroClass (WithTop α)
 
 Depends on / 依赖: MulZeroClass, WithTop
@@ -1296,7 +1296,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [NoZeroDivisors α]
+  签名: [无零因子 α]
   定义体: inferInstanceAs NoZeroDivisors (WithTop α)
 
 Depends on / 依赖: NoZeroDivisors, WithTop
@@ -1316,7 +1316,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass α] [Nontrivial α]
+  签名: [乘零幺类 α] [非平凡 α]
   定义体: inferInstanceAs MulZeroOneClass (WithTop α)
 
 Depends on / 依赖: MulZeroOneClass, WithTop
@@ -1334,7 +1334,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero α] [NoZeroDivisors α]
+  签名: [带零半群 α] [无零因子 α]
   定义体: inferInstanceAs SemigroupWithZero (WithTop α)
 
 Depends on / 依赖: SemigroupWithZero, WithTop
@@ -1356,7 +1356,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: : MonoidWithZero (WithBot α)
+  签名: : 带零幺半群 (WithBot α)
   定义体: inferInstanceAs MonoidWithZero (WithTop α)
 
 Depends on / 依赖: MonoidWithZero, WithTop
@@ -1393,7 +1393,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: [CommMonoidWithZero α] [NoZeroDivisors α] [Nontrivial α]
+  签名: [带零交换幺半群 α] [无零因子 α] [非平凡 α]
   定义体: inferInstanceAs CommMonoidWithZero (WithTop α)
 
 Depends on / 依赖: CommMonoidWithZero, WithTop
@@ -1412,7 +1412,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α]
+  签名: [交换半环 α] [偏序 α] [典范有序加法 α]
   定义体: inferInstanceAs CommSemiring (WithTop α)
 
 Depends on / 依赖: CommSemiring, WithTop
@@ -1442,8 +1442,8 @@ instance [MulZeroClass
     norm_cast at 
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [PosMulMono α] : PosMulMono (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [正乘递增 α] : 正乘递增 (WithBot α) where
   定义体: by
     rcases eq_or_ne x 0 with rfl | x0'
     · simp
@@ -1494,8 +1494,8 @@ instance [MulZeroClass
     norm_cast at 
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [MulPosMono α] : MulPosMono (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [乘正递增 α] : 乘正递增 (WithBot α) where
   定义体: by
     rcases eq_or_ne x 0 with rfl | x0'
     · simp
@@ -1543,8 +1543,8 @@ instance [MulZeroClass
     exact mul_lt_mul_of_pos_left h x0
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [PosMulStrictMono α] : PosMulStrictMono (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [正乘严格递增 α] : 正乘严格递增 (WithBot α) where
   定义体: by
     lift x to α using x0.ne_bot
     cases b
@@ -1585,8 +1585,8 @@ instance [MulZeroClass
     gcongr
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [MulPosStrictMono α] : MulPosStrictMono (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [乘正严格递增 α] : 乘正严格递增 (WithBot α) where
   定义体: by
     lift x to α using x0.ne_bot
     cases b
@@ -1631,8 +1631,8 @@ instance [MulZeroClass
     · exact WithBot.bot_lt_c
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [PosMulReflectLT α] : PosMulReflectLT (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [正乘反映严格偏序 α] : 正乘反映严格偏序 (WithBot α) where
   定义体: by
     intro ⟨x, x0⟩ a b h
     simp only at h
@@ -1688,8 +1688,8 @@ instance [MulZeroClass
     · exact WithBot.bot_lt_c
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [MulPosReflectLT α] : MulPosReflectLT (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [乘正反映严格偏序 α] : 乘正反映严格偏序 (WithBot α) where
   定义体: by
     intro ⟨x, x0⟩ a b h
     simp only at h
@@ -1744,8 +1744,8 @@ instance [MulZeroClass
     exact le_of_mul_le_mul_
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [PosMulReflectLE α] : PosMulReflectLE (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [正乘反映偏序 α] : 正乘反映偏序 (WithBot α) where
   定义体: by
     intro ⟨x, x0⟩ a b h
     simp only at h
@@ -1795,8 +1795,8 @@ instance [MulZeroClass
     exact le_of_mul_le_mul_
 
 中文:
-实例 [MulZeroClass
-  签名: α] [Preorder α] [MulPosReflectLE α] : MulPosReflectLE (WithBot α) where
+实例 [乘零类
+  签名: α] [预序 α] [乘正反映偏序 α] : 乘正反映偏序 (WithBot α) where
   定义体: by
     intro ⟨x, x0⟩ a b h
     simp only at h
@@ -1835,7 +1835,7 @@ instance instIsOrderedRing
 
 中文:
 实例 instIsOrderedRing
-  签名: [CommSemiring α] [PartialOrder α] [IsOrderedRing α]
+  签名: [交换半环 α] [偏序 α] [是Ordered环 α]
 -/
 instance instIsOrderedRing [CommSemiring α] [PartialOrder α] [IsOrderedRing α]
     [CanonicallyOrderedAdd α] [NoZeroDivisors α] [Nontrivial α] :

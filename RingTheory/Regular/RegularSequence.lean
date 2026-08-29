@@ -47,7 +47,7 @@ abbreviation ofList
 
 中文:
 缩写 ofList
-  签名: (rs : List R)
+  签名: (rs : 列表 R)
   定义体: span { r | r in rs }
 -/
 abbrev ofList (rs : List R) := span { r | r in rs }
@@ -63,7 +63,7 @@ lemma ofList_nil
 
 中文:
 引理 ofList_nil
-  结论: (ofList [] : Ideal R) = ⊥
+  结论: (ofList [] : 理想 R) = ⊥
   证明: have : { r | r in [] } = ∅ := Set.eq_empty_of_forall_notMem (fun _ => List.not_mem_nil)
   Eq.trans (congrArg span this) span_empty
 -/
@@ -82,7 +82,7 @@ lemma ofList_append
 
 中文:
 引理 ofList_append
-  条件: (rs₁ rs₂ : List R)
+  条件: (rs₁ rs₂ : 列表 R)
   证明: have : { r | r in rs₁ ++ rs₂ } = _ := Set.ext (fun _ => List.mem_append)
   Eq.trans (congrArg span this) (span_union _ _)
 -/
@@ -121,7 +121,7 @@ lemma ofList_cons
 
 中文:
 引理 ofList_cons
-  条件: (r : R) (rs : List R)
+  条件: (r : R) (rs : 列表 R)
   证明: Eq.trans (ofList_append [r] rs) (congrArg (· ⊔ _) (ofList_singleton r))
 -/
 @[simp] lemma ofList_cons (r : R) (rs : List R) :
@@ -139,7 +139,7 @@ lemma map_ofList
 
 中文:
 引理 map_ofList
-  条件: (f : R ->+* S) (rs : List R)
+  条件: (f : R ->+* S) (rs : 列表 R)
   证明: Eq.trans (map_span f { r | r in rs }) congrArg span
     Set.ext (fun _ => List.mem_map.symm)
 -/
@@ -159,7 +159,7 @@ lemma ofList_cons_smul
 
 中文:
 引理 ofList_cons_smul
-  结论: {R} [CommSemiring R] (r : R) (rs : List R) {M}
+  结论: {R} [交换半环 R] (r : R) (rs : 列表 R) {M}
   证明: by
   rw [ofList_cons]; rw [Submodule.sup_smul]; rw [Submodule.ideal_span_singleton_smul]
 
@@ -314,10 +314,10 @@ structure IsWeaklyRegular
     - regular_mod_prev : forall i (h : i < rs.length), IsSMulRegular (M ⧸ (ofList (rs.take i) • ⊤ : Submodule R M)) rs[i]
 
 中文:
-结构 IsWeaklyRegular
-  参数: (rs : List R)
+结构 是WeaklyRegular
+  参数: (rs : 列表 R)
   公理与运算 (1 个):
-    - regular_mod_prev : 对任意 i (h : i < rs.length), IsSMulRegular (M ⧸ (ofList (rs.take i) • ⊤ : Submodule R M)) rs[i]
+    - regular_mod_prev : 对任意 i (h : i < rs.length), IsSMulRegular (M ⧸ (ofList (rs.take i) • ⊤ : 子模 R M)) rs[i]
 -/
 structure IsWeaklyRegular (rs : List R) : Prop where
   regular_mod_prev : forall i (h : i < rs.length),
@@ -333,7 +333,7 @@ lemma isWeaklyRegular_iff_Fin
 
 中文:
 引理 isWeaklyRegular_iff_Fin
-  条件: (rs : List R)
+  条件: (rs : 列表 R)
   证明: Iff.trans (isWeaklyRegular_iff M rs) (Iff.symm Fin.forall_iff)
 
 Depends on / 依赖: Fin.forall_iff, Iff.symm, Iff.trans, forall_iff, isWeaklyRegular_iff
@@ -356,11 +356,11 @@ structure IsRegular
     - top_ne_smul : (⊤ : Submodule R M) != Ideal.ofList rs • ⊤
 
 中文:
-结构 IsRegular
-  参数: (rs : List R)
-  继承: IsWeaklyRegular M rs
+结构 是正则
+  参数: (rs : 列表 R)
+  继承: 是WeaklyRegular M rs
   公理与运算 (1 个):
-    - top_ne_smul : (⊤ : Submodule R M) != Ideal.ofList rs • ⊤
+    - top_ne_smul : (⊤ : 子模 R M) != 理想.ofList rs • ⊤
 -/
 structure IsRegular (rs : List R) : Prop extends IsWeaklyRegular M rs where
   top_ne_smul : (⊤ : Submodule R M) != Ideal.ofList rs • ⊤
@@ -390,7 +390,7 @@ lemma _root_.AddHom.map_smul_top_toAddSubgroup_of_surjective
       ideal_span_singleton_smul, pointwise_smul_toA
 
 中文:
-引理 _root_.AddHom.map_smul_top_toAddSubgroup_of_surjective
+引理 _root_.加法半群态射.map_smul_top_toAddSubgroup_of_surjective
   证明: by
   induction h with
   | nil =>
@@ -432,7 +432,7 @@ AddHom.map_smul_top_toAddSubgroup_of_surjective e.surjective
         List.forall₂_take i
 
 中文:
-引理 _root_.AddEquiv.isWeaklyRegular_congr
+引理 _root_.加法等价.isWeaklyRegular_congr
   结论: {e : M ≃+ M₂} {as bs}
   证明: by
   conv => congr <;> rw [isWeaklyRegular_iff_Fin]
@@ -466,8 +466,8 @@ lemma _root_.LinearEquiv.isWeaklyRegular_congr'
     List.forall₂_same.mpr fun r _ x => e.map_smul' r x
 
 中文:
-引理 _root_.LinearEquiv.isWeaklyRegular_congr'
-  条件: (e : M ≃ₛₗ[σ] M₂) (rs : List R)
+引理 _root_.线性等价.isWeaklyRegular_congr'
+  条件: (e : M ≃ₛₗ[σ] M₂) (rs : 列表 R)
   证明: e.toAddEquiv.isWeaklyRegular_congr List.forall₂_map_right_iff.mpr
     List.forall₂_same.mpr fun r _ x => e.map_smul' r x
 
@@ -487,8 +487,8 @@ lemma _root_.LinearEquiv.isWeaklyRegular_congr
   proof: Iff.trans (e.isWeaklyRegular_congr' rs) iff_of_eq congrArg _ rs.map_id
 
 中文:
-引理 _root_.LinearEquiv.isWeaklyRegular_congr
-  条件: [Module R M₂] (e : M ≃ₗ[R] M₂) (rs : List R)
+引理 _root_.线性等价.isWeaklyRegular_congr
+  条件: [模 R M₂] (e : M ≃ₗ[R] M₂) (rs : 列表 R)
   证明: Iff.trans (e.isWeaklyRegular_congr' rs) iff_of_eq congrArg _ rs.map_id
 
 Depends on / 依赖: Iff.trans, e.isWeaklyRegular_congr, iff_of_eq, isWeaklyRegular_congr, map_id, rs.map_id
@@ -510,7 +510,7 @@ let e' := QuotientAddGroup.congr _ _ e
   exact and_congr (e.isWeaklyRegular_congr h) e'.nontrivial_congr
 
 中文:
-引理 _root_.AddEquiv.isRegular_congr
+引理 _root_.加法等价.isRegular_congr
   结论: {e : M ≃+ M₂} {as bs}
   证明: by
   conv => congr <;> rw [isRegular_iff, ne_comm, ← Quotient.nontrivial_iff]
@@ -538,8 +538,8 @@ lemma _root_.LinearEquiv.isRegular_congr'
     List.forall₂_same.mpr fun r _ x => e.map_smul' r x
 
 中文:
-引理 _root_.LinearEquiv.isRegular_congr'
-  条件: (e : M ≃ₛₗ[σ] M₂) (rs : List R)
+引理 _root_.线性等价.isRegular_congr'
+  条件: (e : M ≃ₛₗ[σ] M₂) (rs : 列表 R)
   证明: e.toAddEquiv.isRegular_congr List.forall₂_map_right_iff.mpr
     List.forall₂_same.mpr fun r _ x => e.map_smul' r x
 
@@ -559,8 +559,8 @@ lemma _root_.LinearEquiv.isRegular_congr
   proof: Iff.trans (e.isRegular_congr' rs) iff_of_eq congrArg _ rs.map_id
 
 中文:
-引理 _root_.LinearEquiv.isRegular_congr
-  条件: [Module R M₂] (e : M ≃ₗ[R] M₂) (rs : List R)
+引理 _root_.线性等价.isRegular_congr
+  条件: [模 R M₂] (e : M ≃ₗ[R] M₂) (rs : 列表 R)
   证明: Iff.trans (e.isRegular_congr' rs) iff_of_eq congrArg _ rs.map_id
 
 Depends on / 依赖: Iff.trans, e.isRegular_congr, iff_of_eq, isRegular_congr, map_id, rs.map_id
@@ -582,7 +582,7 @@ lemma isWeaklyRegular_map_algebraMap_iff
 
 中文:
 引理 isWeaklyRegular_map_algebraMap_iff
-  结论: [CommRing R] [CommRing S]
+  结论: [交换环 R] [交换环 S]
   证明: (AddEquiv.refl M).isWeaklyRegular_congr List.forall₂_map_left_iff.mpr
     List.forall₂_same.mpr fun r _ => algebraMap_smul S r
 
@@ -613,7 +613,7 @@ and_congr ((quotEquivOfEqBot _ this).isSMulRegular_congr r)
 
 中文:
 引理 isWeaklyRegular_cons_iff
-  条件: (r : R) (rs : List R)
+  条件: (r : R) (rs : 列表 R)
   证明: have := Eq.trans (congrArg (· • ⊤) Ideal.ofList_nil) (bot_smul ⊤)
   let e i := quotOfListConsSMulTopEquivQuotSMulTopInner M r (rs.take i)
 Iff.trans (isWeaklyRegular_iff_Fin _ _) Iff.trans Fin.forall_iff_succ
@@ -645,7 +645,7 @@ Iff.symm isWeaklyRegular_map_algebraMap_iff (R ⧸ Ideal.span {r}) _ rs
 
 中文:
 引理 isWeaklyRegular_cons_iff'
-  条件: (r : R) (rs : List R)
+  条件: (r : R) (rs : 列表 R)
   证明: Iff.trans (isWeaklyRegular_cons_iff M r rs) and_congr_right'
 Iff.symm isWeaklyRegular_map_algebraMap_iff (R ⧸ Ideal.span {r}) _ rs
 
@@ -673,7 +673,7 @@ lemma isRegular_cons_iff
 
 中文:
 引理 isRegular_cons_iff
-  条件: (r : R) (rs : List R)
+  条件: (r : R) (rs : 列表 R)
   证明: by
   rw [isRegular_iff]; rw [isRegular_iff]; rw [isWeaklyRegular_cons_iff M r rs]; rw [ne_eq]; rw [top_eq_ofList_cons_smul_iff]; rw [and_assoc]
 
@@ -696,7 +696,7 @@ lemma isRegular_cons_iff'
 
 中文:
 引理 isRegular_cons_iff'
-  条件: (r : R) (rs : List R)
+  条件: (r : R) (rs : 列表 R)
   证明: by
   conv => congr <;> rw [isRegular_iff, ne_eq]
   rw [isWeaklyRegular_cons_iff']; rw [← restrictScalars_inj R (R ⧸ _)]; rw [← Ideal.map_ofList]; rw [← Ideal.Quotient.algebraMap_eq]; rw [Ideal.smul_restrictScalars]; rw [restrictScalars_top]; rw [top_eq_ofList_cons_smul_iff]; rw [and_assoc]
@@ -725,7 +725,7 @@ lemma nil
 
 中文:
 引理 nil
-  结论: IsWeaklyRegular M ([] : List R)
+  结论: 是WeaklyRegular M ([] : 列表 R)
   证明: .mk (False.elim <| Nat.not_lt_zero · ·)
 -/
 @[simp] lemma nil : IsWeaklyRegular M ([] : List R) :=
@@ -741,7 +741,7 @@ lemma cons
 
 中文:
 引理 cons
-  结论: {r : R} {rs : List R} (h1 : IsSMulRegular M r)
+  结论: {r : R} {rs : 列表 R} (h1 : IsSMulRegular M r)
   证明: (isWeaklyRegular_cons_iff M r rs).mpr ⟨h1, h2⟩
 
 Depends on / 依赖: isWeaklyRegular_cons_iff
@@ -760,7 +760,7 @@ lemma cons'
 
 中文:
 引理 cons'
-  结论: {r : R} {rs : List R} (h1 : IsSMulRegular M r)
+  结论: {r : R} {rs : 列表 R} (h1 : IsSMulRegular M r)
   证明: (isWeaklyRegular_cons_iff' M r rs).mpr ⟨h1, h2⟩
 
 Depends on / 依赖: isWeaklyRegular_cons_iff
@@ -943,7 +943,7 @@ refine Iff.symm Iff.trans (and_iff_right (.nil R M)) ?_
 
 中文:
 引理 isWeaklyRegular_append_iff
-  条件: (rs₁ rs₂ : List R)
+  条件: (rs₁ rs₂ : 列表 R)
   证明: by
   induction rs₁ generalizing M with
   | nil =>
@@ -980,7 +980,7 @@ Iff.symm isWeaklyRegular_map_algebraMap_iff (R ⧸ Ideal.ofList rs₁) _ rs₂
 
 中文:
 引理 isWeaklyRegular_append_iff'
-  条件: (rs₁ rs₂ : List R)
+  条件: (rs₁ rs₂ : 列表 R)
   证明: Iff.trans (isWeaklyRegular_append_iff M rs₁ rs₂) and_congr_right'
 Iff.symm isWeaklyRegular_map_algebraMap_iff (R ⧸ Ideal.ofList rs₁) _ rs₂
 
@@ -1013,8 +1013,8 @@ lemma nil
 
 中文:
 引理 nil
-  条件: [Nontrivial M]
-  结论: IsRegular M ([] : List R) where
+  条件: [非平凡 M]
+  结论: 是正则 M ([] : 列表 R) where
   证明: IsWeaklyRegular.nil R M
   top_ne_smul h := by
     rw [Ideal.ofList_nil]; rw [bot_smul]; rw [eq_comm]; rw [subsingleton_iff_bot_eq_top] at h
@@ -1038,7 +1038,7 @@ lemma cons
 
 中文:
 引理 cons
-  结论: {r : R} {rs : List R} (h1 : IsSMulRegular M r)
+  结论: {r : R} {rs : 列表 R} (h1 : IsSMulRegular M r)
   证明: (isRegular_cons_iff M r rs).mpr ⟨h1, h2⟩
 
 Depends on / 依赖: isRegular_cons_iff
@@ -1057,7 +1057,7 @@ lemma cons'
 
 中文:
 引理 cons'
-  结论: {r : R} {rs : List R} (h1 : IsSMulRegular M r)
+  结论: {r : R} {rs : 列表 R} (h1 : IsSMulRegular M r)
   证明: (isRegular_cons_iff' M r rs).mpr ⟨h1, h2⟩
 
 Depends on / 依赖: isRegular_cons_iff
@@ -1228,7 +1228,7 @@ lemma quot_ofList_smul_nontrivial
 
 中文:
 引理 quot_ofList_smul_nontrivial
-  结论: {rs : List R} (h : IsRegular M rs)
+  结论: {rs : 列表 R} (h : 是正则 M rs)
   证明: Submodule.Quotient.nontrivial_iff.mpr
     ne_top_of_le_ne_top h.top_ne_smul.symm (smul_mono_right _ le_top)
 
@@ -1251,8 +1251,8 @@ lemma nontrivial
 
 中文:
 引理 nontrivial
-  条件: {rs : List R} (h : IsRegular M rs)
-  结论: Nontrivial M
+  条件: {rs : 列表 R} (h : 是正则 M rs)
+  结论: 非平凡 M
   证明: haveI := quot_ofList_smul_nontrivial h ⊤
   (mkQ_surjective (Ideal.ofList rs • ⊤ : Submodule R M)).nontrivial
 
@@ -1297,7 +1297,7 @@ lemma _root_.IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal
     IsLocalRing.jacobson_eq_maximalIdeal (Module.annihilator R M) H ▸ h r hr
 
 中文:
-引理 _root_.IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal
+引理 _root_.是局部环.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal
   证明: have H h' := bot_ne_top.symm annihilator_eq_top_iff.mp
     Eq.trans annihilator_top h'
   isRegular_iff_isWeaklyRegular_of_subset_jacobson_annihilator fun r hr =>
@@ -1324,7 +1324,7 @@ lemma eq_nil_of_isRegular_on_artinian
 
 中文:
 引理 eq_nil_of_isRegular_on_artinian
-  条件: [IsArtinian R M]
+  条件: [是Artin R M]
 -/
 lemma eq_nil_of_isRegular_on_artinian [IsArtinian R M] :
     {rs : List R} -> IsRegular M rs -> rs = []
@@ -1349,8 +1349,8 @@ lemma IsWeaklyRegular.isWeaklyRegular_lTensor
     exact ((e.isWeaklyRegular_congr rs').mp ih).cons (h1.lTensor M₂)
 
 中文:
-引理 IsWeaklyRegular.isWeaklyRegular_lTensor
-  结论: [Module.Flat R M₂]
+引理 是WeaklyRegular.isWeaklyRegular_lTensor
+  结论: [模.平坦 R M₂]
   证明: by
   induction h with
   | nil N => exact nil R (M₂ otimes[R] N)
@@ -1383,8 +1383,8 @@ lemma IsWeaklyRegular.isWeaklyRegular_rTensor
     exact ((e.isWeaklyRegular_congr rs').mp ih).cons (h1.rTensor M₂)
 
 中文:
-引理 IsWeaklyRegular.isWeaklyRegular_rTensor
-  结论: [Module.Flat R M₂]
+引理 是WeaklyRegular.isWeaklyRegular_rTensor
+  结论: [模.平坦 R M₂]
   证明: by
   induction h with
   | nil N => exact nil R (N otimes[R] M₂)
@@ -1473,8 +1473,8 @@ lemma IsWeaklyRegular.swap
 · refine le_of_eq_of_le ?_ smul_top_inf_eq_smul_of_isSMulRegular_on_qu
 
 中文:
-引理 IsWeaklyRegular.swap
-  结论: {a b : R} (h1 : IsWeaklyRegular M [a, b])
+引理 是WeaklyRegular.swap
+  结论: {a b : R} (h1 : 是WeaklyRegular M [a, b])
   证明: by
   rw [isWeaklyRegular_cons_iff]; rw [isWeaklyRegular_singleton_iff] at h1 ⊢
   obtain ⟨ha, hb⟩ := h1
@@ -1515,8 +1515,8 @@ lemma IsWeaklyRegular.prototype_perm
     (h₁₂ : rs₁ ~ rs₂) (H₁ : rs₀ ++ rs₁ <+~ rs) (H₃ : rs₀ ++ rs₂ <+~ rs)
 
 中文:
-引理 IsWeaklyRegular.prototype_perm
-  结论: {rs : List R} (h : IsWeaklyRegular M rs)
+引理 是WeaklyRegular.prototype_perm
+  结论: {rs : 列表 R} (h : 是WeaklyRegular M rs)
   证明: have H := LinearEquiv.isWeaklyRegular_congr quotEquivOfEqBot _
     Eq.trans (congrArg (· • ⊤) Ideal.ofList_nil) (bot_smul ⊤)
 (H rs').mp (aux [] h'' (.refl rs) (h''.symm.subperm)) (H rs).mpr h
@@ -1574,8 +1574,8 @@ lemma IsWeaklyRegular.of_perm_of_subset_jacobson_annihilator
           -- typechecking is much slower without 
 
 中文:
-引理 IsWeaklyRegular.of_perm_of_subset_jacobson_annihilator
-  结论: [IsNoetherian R M]
+引理 是WeaklyRegular.of_perm_of_subset_jacobson_annihilator
+  结论: [是Noether R M]
   证明: h1.prototype_perm h2 fun r _ _ h h' =>
     eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator
       (IsNoetherian.noetherian _) h'
@@ -1615,8 +1615,8 @@ top_ne_ideal_smul_of_le_jacobson_annihilator
       Ideal.span_le.mpr (h3 · <| h2.mem_iff.mpr ·)⟩
 
 中文:
-引理 IsRegular.of_perm_of_subset_jacobson_annihilator
-  结论: [IsNoetherian R M]
+引理 是正则.of_perm_of_subset_jacobson_annihilator
+  结论: [是Noether R M]
   证明: ⟨h1.toIsWeaklyRegular.of_perm_of_subset_jacobson_annihilator h2 h3,
     letI := h1.nontrivial
 top_ne_ideal_smul_of_le_jacobson_annihilator
@@ -1641,7 +1641,7 @@ lemma _root_.IsLocalRing.isWeaklyRegular_of_perm_of_subset_maximalIdeal
     IsLocalRing.maximalIdeal_le_jacobson _ (h3 r hr)
 
 中文:
-引理 _root_.IsLocalRing.isWeaklyRegular_of_perm_of_subset_maximalIdeal
+引理 _root_.是局部环.isWeaklyRegular_of_perm_of_subset_maximalIdeal
   证明: IsWeaklyRegular.of_perm_of_subset_jacobson_annihilator h1 h2 fun r hr =>
     IsLocalRing.maximalIdeal_le_jacobson _ (h3 r hr)
 
@@ -1669,8 +1669,8 @@ lemma _root_.IsLocalRing.isRegular_of_perm
   · refine ne_
 
 中文:
-引理 _root_.IsLocalRing.isRegular_of_perm
-  结论: [IsLocalRing R] [IsNoetherian R M]
+引理 _root_.是局部环.isRegular_of_perm
+  结论: [是局部环 R] [是Noether R M]
   证明: by
   obtain ⟨h3, h4⟩ := h1
   refine ⟨IsLocalRing.isWeaklyRegular_of_perm_of_subset_maximalIdeal h3 h2 ?_, ?_⟩
@@ -1735,8 +1735,8 @@ lemma RingTheory.Sequence.IsRegular.of_isWeaklyRegular_of_mem_maximalIdeal
     ((Ideal.span_le.mpr mem).trans (maximalIdeal_le_jacobson _))⟩
 
 中文:
-引理 RingTheory.Sequence.IsRegular.of_isWeaklyRegular_of_mem_maximalIdeal
-  结论: {rs : List R}
+引理 RingTheory.序列.是正则.of_isWeaklyRegular_of_mem_maximalIdeal
+  结论: {rs : 列表 R}
   证明: ⟨reg, Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator
     ((Ideal.span_le.mpr mem).trans (maximalIdeal_le_jacobson _))⟩
 

@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: Measure.IsAddHaarMeasure volume (G := 实数 × 实数)
+  签名: 测度.是加法Haar测度 volume (G := 实数 × 实数)
   定义体: Measure.prod.instIsAddHaarMeasure _ _
 -/
 instance : Measure.IsAddHaarMeasure volume (G := Real × Real) :=
@@ -302,7 +302,7 @@ theorem integral_comp_polarCoord_symm
 
 中文:
 定理 integral_comp_polarCoord_symm
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   symm
   calc
@@ -409,7 +409,7 @@ theorem polarCoord_apply
 
 中文:
 定理 polarCoord_apply
-  条件: (a : Complex)
+  条件: (a : 复形)
   证明: by
   simp_rw [Complex.norm_def, Complex.normSq_apply, ← pow_two]
   rfl
@@ -431,7 +431,7 @@ theorem polarCoord_source
 
 中文:
 定理 polarCoord_source
-  结论: Complex.polarCoord.source = slitPlane
+  结论: 复形.polarCoord.source = slitPlane
   证明: rfl
 -/
 protected theorem polarCoord_source : Complex.polarCoord.source = slitPlane := rfl
@@ -487,7 +487,7 @@ theorem measurableEquivRealProd_symm_polarCoord_symm_apply
   proof: rfl
 
 中文:
-定理 measurableEquivRealProd_symm_polarCoord_symm_apply
+定理 measurableEquiv实数Prod_symm_polarCoord_symm_apply
   条件: (p : 实数 × 实数)
   证明: rfl
 
@@ -525,7 +525,7 @@ theorem integral_comp_polarCoord_symm
 
 中文:
 定理 integral_comp_polarCoord_symm
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   rw [← (Complex.volume_preserving_equiv_real_prod.symm).integral_comp
     measurableEquivRealProd.symm.measurableEmbedding]; rw [← integral_comp_polarCoord_symm]
@@ -551,7 +551,7 @@ theorem lintegral_comp_polarCoord_symm
 
 中文:
 定理 lintegral_comp_polarCoord_symm
-  条件: (f : Complex -> 实数>=0∞)
+  条件: (f : 复形 -> 实数>=0∞)
   证明: by
   rw [← (volume_preserving_equiv_real_prod.symm).lintegral_comp_emb
     measurableEquivRealProd.symm.measurableEmbedding]; rw [← lintegral_comp_polarCoord_symm]
@@ -644,7 +644,7 @@ theorem hasFDerivAt_pi_polarCoord_symm
 
 中文:
 定理 hasFDerivAt_pi_polarCoord_symm
-  条件: [Finite ι] (p : ι -> 实数 × 实数)
+  条件: [有限 ι] (p : ι -> 实数 × 实数)
   证明: by
   have := Fintype.ofFinite ι
   rw [fderivPiPolarCoordSymm]; rw [hasFDerivAt_pi]
@@ -668,7 +668,7 @@ theorem measurableSet_pi_polarCoord_target
 
 中文:
 定理 measurableSet_pi_polarCoord_target
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: MeasurableSet.univ_pi fun _ => polarCoord.open_target.measurableSet
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ_pi, measurableSet, open_target, polarCoord, polarCoord.open_target.measurableSet, univ_pi
@@ -737,7 +737,7 @@ theorem integral_comp_pi_polarCoord_symm
 
 中文:
 定理 integral_comp_pi_polarCoord_symm
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set pi_polarCoord_symm_target_ae_eq_univ]
   convert!
@@ -771,8 +771,8 @@ theorem Complex.integral_comp_pi_polarCoord_symm
   exact integral_comp_pi_polarCoord_symm (f ∘ e)
 
 中文:
-定理 Complex.integral_comp_pi_polarCoord_symm
-  结论: {E : 类型} [NormedAddCommGroup E]
+定理 复形.integral_comp_pi_polarCoord_symm
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   let e := MeasurableEquiv.piCongrRight (fun _ : ι => measurableEquivRealProd.symm)
   have := volume_preserving_pi (fun _ : ι => Complex.volume_preserving_equiv_real_prod.symm)
@@ -836,8 +836,8 @@ theorem Complex.lintegral_comp_pi_polarCoord_symm
   exact lintegral_comp_pi_polarCoord_symm (f ∘ 
 
 中文:
-定理 Complex.lintegral_comp_pi_polarCoord_symm
-  条件: (f : (ι -> Complex) -> 实数>=0∞)
+定理 复形.lintegral_comp_pi_polarCoord_symm
+  条件: (f : (ι -> 复形) -> 实数>=0∞)
   证明: by
   let e := MeasurableEquiv.piCongrRight (fun _ : ι => measurableEquivRealProd.symm)
   have := volume_preserving_pi (fun _ : ι => Complex.volume_preserving_equiv_real_prod.symm)

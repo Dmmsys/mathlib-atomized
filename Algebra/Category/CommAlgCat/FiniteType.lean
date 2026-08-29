@@ -59,7 +59,7 @@ structure FGAlgCatSkeleton
   参数: : 类型u where
   公理与运算 (2 个):
     - n : 自然数
-    - I : Ideal (MvPolynomial (Fin n) R)
+    - I : 理想 (多元多项式 (有限集 n) R)
 -/
 structure FGAlgCatSkeleton : Type u where
   /-- The number of generators. -/
@@ -96,8 +96,8 @@ lemma Algebra.FiniteType.exists_fgAlgCatSkeleton
   exact ⟨⟨n, RingHom.ker f⟩, ⟨(Ideal.quotientKerAlgEquivOfSurjective hf).symm⟩⟩
 
 中文:
-引理 Algebra.FiniteType.exists_fgAlgCatSkeleton
-  结论: (A : 类型v) [CommRing A] [Algebra R A]
+引理 代数.有限型.存在_fgAlgCatSkeleton
+  结论: (A : 类型v) [交换环 A] [代数 R A]
   证明: by
   obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp h
   exact ⟨⟨n, RingHom.ker f⟩, ⟨(Ideal.quotientKerAlgEquivOfSurjective hf).symm⟩⟩
@@ -122,8 +122,8 @@ lemma RingHom.FiniteType.exists_smallRepr
   exact ⟨T, e.symm.toRingEquiv, e.symm.toAlgHom.comp_algebraMap.symm⟩
 
 中文:
-引理 RingHom.FiniteType.exists_smallRepr
-  结论: {S : 类型v} [CommRing S] {f : R ->+* S}
+引理 环态射.有限型.存在_smallRepr
+  结论: {S : 类型v} [交换环 S] {f : R ->+* S}
   证明: by
   algebraize [f]
   obtain ⟨T, ⟨e⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R S
@@ -150,7 +150,7 @@ ULift.algEquiv.symm.toAlgHom.comp f.hom.hom.comp ULift.algEquiv.toAlgHom
 
 中文:
 定义 FGAlgCat.uliftFunctor
-  签名: : FGAlgCat.{v} R ⥤ FGAlgCat.{max v w} R where
+  签名: : FGAlgCat.{v} R ⥤ FGAlgCat.{最大值 v w} R where
   定义体: ⟨.of R ULift A.1, .equiv inferInstance ULift.algEquiv.symm⟩
 map {A B} f := ConcreteCategory.ofHom
 ULift.algEquiv.symm.toAlgHom.comp f.hom.hom.comp ULift.algEquiv.toAlgHom
@@ -173,7 +173,7 @@ definition FGAlgCat.fullyFaithfulUliftFunctor
 
 中文:
 定义 FGAlgCat.fullyFaithfulUliftFunctor
-  签名: : (FGAlgCat.uliftFunctor R).FullyFaithful where
+  签名: : (FGAlgCat.uliftFunctor R).满忠实 where
   定义体: ConcreteCategory.ofHom ULift.algEquiv.toAlgHom.comp
       f.hom.hom.comp ULift.algEquiv.symm.toAlgHom
 
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FGAlgCat.uliftFunctor R).Full
+  签名: (FGAlgCat.uliftFunctor R).满
   定义体: (FGAlgCat.fullyFaithfulUliftFunctor R).full
 
 Depends on / 依赖: FGAlgCat, FGAlgCat.fullyFaithfulUliftFunctor, fullyFaithfulUliftFunctor
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FGAlgCat.uliftFunctor R).Faithful
+  签名: (FGAlgCat.uliftFunctor R).忠实
   定义体: (FGAlgCat.fullyFaithfulUliftFunctor R).faithful
 
 Depends on / 依赖: FGAlgCat, FGAlgCat.fullyFaithfulUliftFunctor, faithful, fullyFaithfulUliftFunctor
@@ -285,7 +285,7 @@ definition FGAlgCat.equivUnder
 
 中文:
 定义 FGAlgCat.equivUnder
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: ⟨(commAlgCatEquivUnder R).functor.obj A.obj,
     (RingHom.finiteType_algebraMap (A := R) (B := A.obj)).mpr A.2⟩
   functor.map {A B} f := ⟨(commAlgCatEquivUnder R).functor.map f.hom, trivial, trivial⟩
@@ -319,7 +319,7 @@ lemma essentiallySmall_of_le
 
 中文:
 引理 essentiallySmall_of_le
-  条件: (hQ : Q <= toMorphism命题erty FiniteType) (R : CommRingCat.{u})
+  条件: (hQ : Q <= toMorphismProperty 有限型) (R : 交换环范畴.{u})
   证明: essentiallySmall_of_fully_faithful
     (MorphismProperty.Comma.changeProp _ _ hQ
       le_rfl le_rfl ⋙ (FGAlgCat.equivUnder R).inverse)

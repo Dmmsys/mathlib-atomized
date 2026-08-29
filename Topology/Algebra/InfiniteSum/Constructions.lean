@@ -51,7 +51,7 @@ theorem hasProd_pi_single
 中文:
 定理 hasProd_pi_single
   条件: [DecidableEq β] (b : β) (a : α)
-  结论: HasProd (Pi.mulSingle b a) a
+  结论: 有积类型 (依赖函数类型.mulSingle b a) a
   证明: by
   convert! hasProd_ite_eq (L := .unconditional β) b a
   simp [Pi.mulSingle_apply]
@@ -82,7 +82,7 @@ theorem tprod_pi_single
 中文:
 定理 tprod_pi_single
   条件: [DecidableEq β] (b : β) (a : α)
-  结论: ∏' b', Pi.mulSingle b a b' = a
+  结论: ∏' b', 依赖函数类型.mulSingle b a b' = a
   证明: by
   rw [tprod_eq_mulSingle b]
   · simp
@@ -111,7 +111,7 @@ lemma tprod_setProd_singleton_left
 
 中文:
 引理 tprod_setProd_singleton_left
-  条件: (b : β) (t : Set γ) (f : β × γ -> α)
+  条件: (b : β) (t : 集合 γ) (f : β × γ -> α)
   证明: by
   rw [tprod_congr_set_coe _ Set.singleton_prod]; rw [tprod_image _ (Prod.mk_right_injective b).injOn]
 
@@ -137,7 +137,7 @@ lemma tprod_setProd_singleton_right
 
 中文:
 引理 tprod_setProd_singleton_right
-  条件: (s : Set β) (c : γ) (f : β × γ -> α)
+  条件: (s : 集合 β) (c : γ) (f : β × γ -> α)
   证明: by
   rw [tprod_congr_set_coe _ Set.prod_singleton]; rw [tprod_image _ (Prod.mk_left_injective c).injOn]
 
@@ -186,8 +186,8 @@ theorem HasProd.prodMk
   simp [HasProd, ← prod_mk_prod, Filter.Tendsto.prodMk_nhds hf hg]
 
 中文:
-定理 HasProd.prodMk
-  结论: {f : β -> α} {g : β -> γ} {a : α} {b : γ} (hf : HasProd f a L)
+定理 有积类型.prodMk
+  结论: {f : β -> α} {g : β -> γ} {a : α} {b : γ} (hf : 有积类型 f a L)
   证明: by
   simp [HasProd, ← prod_mk_prod, Filter.Tendsto.prodMk_nhds hf hg]
 
@@ -221,8 +221,8 @@ lemma HasProd.sum
   simpa [Tendsto, ← Filter.map_ma
 
 中文:
-引理 HasProd.sum
-  结论: {α β M : 类型} [CommMonoid M] [TopologicalSpace M] [ContinuousMul M]
+引理 有积类型.求和
+  结论: {α β M : 类型} [交换幺半群 M] [拓扑空间 M] [连续乘法 M]
   证明: by
   have : Tendsto ((∏ b in ·, f b) ∘ sumEquiv.symm) (atTop.map sumEquiv) (nhds (a * b)) := by
     rw [Finset.sumEquiv.map_atTop]; rw [← prod_atTop_atTop_eq]
@@ -257,7 +257,7 @@ lemma Multipliable.tprod_sum
 
 中文:
 引理 Multipliable.tprod_sum
-  结论: {α β M : 类型} [CommMonoid M] [TopologicalSpace M]
+  结论: {α β M : 类型} [交换幺半群 M] [拓扑空间 M]
   证明: (h₁.hasProd.sum h₂.hasProd).tprod_eq
 
 @[to_additive]
@@ -277,8 +277,8 @@ lemma Multipliable.sum
   proof: ⟨_, .sum h₁.hasProd h₂.hasProd⟩
 
 中文:
-引理 Multipliable.sum
-  结论: {α β M : 类型} [CommMonoid M] [TopologicalSpace M] [ContinuousMul M]
+引理 Multipliable.求和
+  结论: {α β M : 类型} [交换幺半群 M] [拓扑空间 M] [连续乘法 M]
   证明: ⟨_, .sum h₁.hasProd h₂.hasProd⟩
 
 Depends on / 依赖: hasProd
@@ -312,7 +312,7 @@ theorem HasProd.sigma
   have : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in
 
 中文:
-定理 HasProd.sigma
+定理 有积类型.sigma
   结论: {γ : β -> 类型} {f : (Σ b : β, γ b) -> α} {g : β -> α} {a : α}
   证明: by
   classical
@@ -360,8 +360,8 @@ theorem HasProd.prod_fiberwise
 @[to_additive]
 
 中文:
-定理 HasProd.prod_fiberwise
-  结论: {f : β × γ -> α} {g : β -> α} {a : α} (ha : HasProd f a)
+定理 有积类型.prod_fiberwise
+  结论: {f : β × γ -> α} {g : β -> α} {a : α} (ha : 有积类型 f a)
   证明: HasProd.sigma ((Equiv.sigmaEquivProd β γ).hasProd_iff.2 ha) hf
 
 @[to_additive]
@@ -410,7 +410,7 @@ theorem HasProd.sigma_of_hasProd
 @[to_additive]
 
 中文:
-定理 HasProd.sigma_of_hasProd
+定理 有积类型.sigma_of_hasProd
   结论: {γ : β -> 类型} {f : (Σ b : β, γ b) -> α} {g : β -> α}
   证明: by simpa [(hf'.hasProd.sigma hf).unique ha] using hf'.hasProd
 
@@ -504,7 +504,7 @@ theorem Multipliable.tprod_comm'
 
 中文:
 定理 Multipliable.tprod_comm'
-  结论: {f : β -> γ -> α} (h : Multipliable (Function.uncurry f))
+  结论: {f : β -> γ -> α} (h : Multipliable (函数.uncurry f))
   证明: by
   rw [← h.tprod_prod_uncurry h₁]; rw [← h.prod_symm.tprod_prod_uncurry h₂]; rw [← (Equiv.prodComm γ β).tprod_eq (uncurry f)]
   rfl
@@ -540,7 +540,7 @@ theorem HasProd.of_sigma
     have A
 
 中文:
-定理 HasProd.of_sigma
+定理 有积类型.of_sigma
   结论: {γ : β -> 类型} {f : (Σ b : β, γ b) -> α} {g : β -> α} {a : α}
   证明: by
   classical
@@ -665,7 +665,7 @@ lemma Multipliable.prod
 @[to_additive]
 
 中文:
-引理 Multipliable.prod
+引理 Multipliable.乘积
   条件: {f : β × γ -> α} (h : Multipliable f)
   证明: ((Equiv.sigmaEquivProd β γ).multipliable_iff.mpr h).sigma
 
@@ -688,8 +688,8 @@ lemma HasProd.tprod_fiberwise
     fun _ => ((hf.multipliable.subtype _).hasProd_iff).mpr rfl
 
 中文:
-引理 HasProd.tprod_fiberwise
-  条件: [T2Space α] {f : β -> α} {a : α} (hf : HasProd f a) (g : β -> γ)
+引理 有积类型.tprod_fiberwise
+  条件: [T2空间 α] {f : β -> α} {a : α} (hf : 有积类型 f a) (g : β -> γ)
   证明: (((Equiv.sigmaFiberEquiv g).hasProd_iff).mpr hf).sigma
     fun _ => ((hf.multipliable.subtype _).hasProd_iff).mpr rfl
 
@@ -759,7 +759,7 @@ theorem Multipliable.tprod_comm
 
 中文:
 定理 Multipliable.tprod_comm
-  条件: {f : β -> γ -> α} (h : Multipliable (Function.uncurry f))
+  条件: {f : β -> γ -> α} (h : Multipliable (函数.uncurry f))
   证明: h.tprod_comm' h.prod_factor h.prod_symm.prod_factor
 -/
 protected theorem Multipliable.tprod_comm {f : β -> γ -> α} (h : Multipliable (Function.uncurry f)) :
@@ -788,7 +788,7 @@ theorem Pi.hasProd
 @[to_additive]
 
 中文:
-定理 Pi.hasProd
+定理 依赖函数类型.hasProd
   条件: {f : ι -> 对任意 x, X x} {g : 对任意 x, X x}
   证明: by
   simp only [HasProd, tendsto_pi_nhds, Finset.prod_apply]
@@ -814,7 +814,7 @@ theorem Pi.multipliable
 @[to_additive]
 
 中文:
-定理 Pi.multipliable
+定理 依赖函数类型.multipliable
   条件: {f : ι -> 对任意 x, X x}
   证明: by
   simp only [Multipliable, Pi.hasProd, Classical.skolem]
@@ -838,7 +838,7 @@ theorem tprod_apply
 
 中文:
 定理 tprod_apply
-  结论: [L.NeBot] [对任意 x, T2Space (X x)] {f : ι -> 对任意 x, X x} {x : α}
+  结论: [L.NeBot] [对任意 x, T2空间 (X x)] {f : ι -> 对任意 x, X x} {x : α}
   证明: (Pi.hasProd.mp hf.hasProd x).tprod_eq.symm
 
 Depends on / 依赖: Pi.hasProd.mp, hasProd, hf.hasProd, tprod_eq, tprod_eq.symm
@@ -1038,7 +1038,7 @@ theorem tsum_op
 
 中文:
 定理 tsum_op
-  条件: [T2Space α]
+  条件: [T2空间 α]
   结论: ∑'[L] x, op (f x) = op (∑'[L] x, f x)
   证明: (opHomeomorph.isClosedEmbedding.map_tsum f (g := opAddEquiv)).symm
 
@@ -1058,7 +1058,7 @@ theorem tsum_unop
 
 中文:
 定理 tsum_unop
-  条件: [T2Space α] {f : β -> αᵐᵒᵖ}
+  条件: [T2空间 α] {f : β -> αᵐᵒᵖ}
   结论: ∑'[L] x, unop (f x) = unop (∑'[L] x, f x)
   证明: op_injective tsum_op.symm
 
@@ -1132,7 +1132,7 @@ theorem Summable.ofStar
 
 中文:
 定理 Summable.ofStar
-  条件: (hf : Summable (fun b => Star.star (f b)) L)
+  条件: (hf : Summable (fun b => 对合.star (f b)) L)
   结论: Summable f L
   证明: by
   simpa only [star_star] using hf.star
@@ -1197,7 +1197,7 @@ theorem tsum_star
 
 中文:
 定理 tsum_star
-  条件: [T2Space α]
+  条件: [T2空间 α]
   结论: star (∑'[L] b, f b) = ∑'[L] b, star (f b)
   证明: Function.LeftInverse.map_tsum (g := starAddEquiv) f continuous_star continuous_star star_star
 

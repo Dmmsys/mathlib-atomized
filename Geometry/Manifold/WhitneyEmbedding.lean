@@ -114,7 +114,7 @@ theorem embeddingPiTangent_injOn
 
 中文:
 定理 embeddingPiTangent_injOn
-  结论: InjOn f.embeddingPiTangent s
+  结论: 单射限制 f.embeddingPiTangent s
   证明: by
   intro x hx y _ h
   simp only [embeddingPiTangent_coe, funext_iff] at h
@@ -145,7 +145,7 @@ theorem embeddingPiTangent_injective
 
 中文:
 定理 embeddingPiTangent_injective
-  条件: (f : SmoothBumpCovering ι I M)
+  条件: (f : 光滑凸覆盖 ι I M)
   证明: injOn_univ.1 f.embeddingPiTangent_injOn
 
 Depends on / 依赖: embeddingPiTangent_injOn, f.embeddingPiTangent_injOn, injOn_univ

@@ -53,7 +53,7 @@ structure BicartesianSq
 中文:
 结构 BicartesianSq
   参数: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
-  继承: IsPullback f g h i, IsPushout f g h i
+  继承: 是拉回 f g h i, 是推出 f g h i
   (无附加公理)
 -/
 structure BicartesianSq {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z) : Prop
@@ -113,7 +113,7 @@ theorem zero_left
 中文:
 定理 zero_left
   条件: (X : C)
-  结论: IsPullback (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
+  结论: 是拉回 (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
   证明: { w := by simp
     isLimit' :=
       ⟨{ lift := fun _ => 0
@@ -147,7 +147,7 @@ theorem zero_top
 中文:
 定理 zero_top
   条件: (X : C)
-  结论: IsPullback (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
+  结论: 是拉回 (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
   证明: (zero_left X).flip
 
 Depends on / 依赖: A.hom, A.prop, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsPushout, IsPushout.of_hasPushout, IsStableUnderCobaseChangeAlong, IsStableUnderCobaseChangeAlong.of_isPushout, hasPushout, of_hasPushout, of_isPushout, pushout, pushout.inr, zero_left
@@ -170,7 +170,7 @@ theorem zero_right
 中文:
 定理 zero_right
   条件: (X : C)
-  结论: IsPullback (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
+  结论: 是拉回 (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
   证明: of_iso_pullback (by simp) ((zeroProdIso X).symm ≪≫ (pullbackZeroZeroIso _ _).symm)
     (by simp [eq_iff_true_of_subsingleton]) (by simp)
 
@@ -194,7 +194,7 @@ theorem zero_bot
 中文:
 定理 zero_bot
   条件: (X : C)
-  结论: IsPullback (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
+  结论: 是拉回 (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
   证明: (zero_right X).flip
 
 Depends on / 依赖: zero_right
@@ -216,7 +216,7 @@ theorem of_isBilimit
 
 中文:
 定理 of_isBilimit
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   convert! IsPullback.of_is_product' h.isLimit HasZeroObject.zeroIsTerminal
     <;> subsingleton
@@ -241,7 +241,7 @@ theorem of_has_biproduct
 
 中文:
 定理 of_has_biproduct
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: of_isBilimit (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_isBilimit
@@ -262,7 +262,7 @@ theorem inl_snd'
 
 中文:
 定理 inl_snd'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   refine of_right ?_ (by simp) (of_isBilimit h)
   simp
@@ -296,7 +296,7 @@ theorem inl_snd
 
 中文:
 定理 inl_snd
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: inl_snd' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inl_snd, isBilimit
@@ -318,7 +318,7 @@ theorem inr_fst'
 
 中文:
 定理 inr_fst'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   apply flip
   refine of_bot ?_ (by simp) (of_isBilimit h)
@@ -354,7 +354,7 @@ theorem inr_fst
 
 中文:
 定理 inr_fst
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: inr_fst' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inr_fst, isBilimit
@@ -375,7 +375,7 @@ theorem of_is_bilimit'
 
 中文:
 定理 of_is_bilimit'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   refine IsPullback.of_right ?_ (by simp) (IsPullback.inl_snd' h).flip
   simp
@@ -397,7 +397,7 @@ theorem of_hasBinaryBiproduct
 
 中文:
 定理 of_hasBinaryBiproduct
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_is_bilimit
@@ -416,7 +416,7 @@ instance hasPullback_biprod_fst_biprod_snd
 
 中文:
 实例 hasPullback_biprod_fst_biprod_snd
-  签名: [HasBinaryBiproduct X Y]
+  签名: [有BinaryBiproduct X Y]
   定义体: HasLimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
 
 Depends on / 依赖: HasLimit, HasLimit.mk, isLimit, of_hasBinaryBiproduct
@@ -435,7 +435,7 @@ definition pullbackBiprodInlBiprodInr
 
 中文:
 定义 pullbackBiprodInlBiprodInr
-  签名: [HasBinaryBiproduct X Y]
+  签名: [有BinaryBiproduct X Y]
   定义体: limit.isoLimitCone ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
 
 Depends on / 依赖: isLimit, isoLimitCone, limit.isoLimitCone, of_hasBinaryBiproduct
@@ -497,7 +497,7 @@ theorem zero_right
 中文:
 定理 zero_right
   条件: (X : C)
-  结论: IsPushout (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
+  结论: 是推出 (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
   证明: { w := by simp
     isColimit' :=
       ⟨{ desc := fun _ => 0
@@ -534,7 +534,7 @@ theorem zero_bot
 中文:
 定理 zero_bot
   条件: (X : C)
-  结论: IsPushout (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
+  结论: 是推出 (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
   证明: (zero_right X).flip
 
 Depends on / 依赖: zero_right
@@ -557,7 +557,7 @@ theorem zero_left
 中文:
 定理 zero_left
   条件: (X : C)
-  结论: IsPushout (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
+  结论: 是推出 (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
   证明: of_iso_pushout (by simp) ((coprodZeroIso X).symm ≪≫ (pushoutZeroZeroIso _ _).symm) (by simp)
     (by simp [eq_iff_true_of_subsingleton])
 
@@ -581,7 +581,7 @@ theorem zero_top
 中文:
 定理 zero_top
   条件: (X : C)
-  结论: IsPushout (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
+  结论: 是推出 (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
   证明: (zero_left X).flip
 
 Depends on / 依赖: zero_left
@@ -604,7 +604,7 @@ theorem of_isBilimit
 
 中文:
 定理 of_isBilimit
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   convert! IsPushout.of_is_coproduct' h.isColimit HasZeroObject.zeroIsInitial
     <;> subsingleton
@@ -629,7 +629,7 @@ theorem of_has_biproduct
 
 中文:
 定理 of_has_biproduct
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: of_isBilimit (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_isBilimit
@@ -651,7 +651,7 @@ theorem inl_snd'
 
 中文:
 定理 inl_snd'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   apply flip
   refine of_left ?_ (by simp) (of_isBilimit h)
@@ -675,7 +675,7 @@ theorem inl_snd
 
 中文:
 定理 inl_snd
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: inl_snd' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inl_snd, isBilimit
@@ -696,7 +696,7 @@ theorem inr_fst'
 
 中文:
 定理 inr_fst'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   refine of_top ?_ (by simp) (of_isBilimit h)
   simp
@@ -718,7 +718,7 @@ theorem inr_fst
 
 中文:
 定理 inr_fst
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: inr_fst' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inr_fst, isBilimit
@@ -739,7 +739,7 @@ theorem of_is_bilimit'
 
 中文:
 定理 of_is_bilimit'
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: by
   refine IsPushout.of_left ?_ (by simp) (IsPushout.inl_snd' h)
   simp
@@ -761,7 +761,7 @@ theorem of_hasBinaryBiproduct
 
 中文:
 定理 of_hasBinaryBiproduct
-  条件: (X Y : C) [HasBinaryBiproduct X Y]
+  条件: (X Y : C) [有BinaryBiproduct X Y]
   证明: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_is_bilimit
@@ -780,7 +780,7 @@ instance hasPushout_biprod_fst_biprod_snd
 
 中文:
 实例 hasPushout_biprod_fst_biprod_snd
-  签名: [HasBinaryBiproduct X Y]
+  签名: [有BinaryBiproduct X Y]
   定义体: HasColimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
 
 Depends on / 依赖: HasColimit, HasColimit.mk, isColimit, of_hasBinaryBiproduct
@@ -799,7 +799,7 @@ definition pushoutBiprodFstBiprodSnd
 
 中文:
 定义 pushoutBiprodFstBiprodSnd
-  签名: [HasBinaryBiproduct X Y]
+  签名: [有BinaryBiproduct X Y]
   定义体: colimit.isoColimitCocone ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isColimit, isoColimitCocone, of_hasBinaryBiproduct
@@ -827,7 +827,7 @@ theorem of_isPullback_isPushout
 
 中文:
 定理 of_isPullback_isPushout
-  条件: (p₁ : IsPullback f g h i) (p₂ : IsPushout f g h i)
+  条件: (p₁ : 是拉回 f g h i) (p₂ : 是推出 f g h i)
   证明: BicartesianSq.mk p₁ p₂.isColimit'
 
 Depends on / 依赖: BicartesianSq, BicartesianSq.mk, isColimit
@@ -869,7 +869,7 @@ theorem of_is_biproduct₁
 
 中文:
 定理 of_is_biproduct₁
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: of_isPullback_isPushout (IsPullback.of_isBilimit h) (IsPushout.of_is_bilimit' h)
 
 Depends on / 依赖: F.map_injective, IsPullback, IsPullback.of_isBilimit, IsPushout, IsPushout.of_is_bilimit, map_injective, of_isBilimit, of_isPullback_isPushout, of_is_bilimit
@@ -888,7 +888,7 @@ theorem of_is_biproduct₂
 
 中文:
 定理 of_is_biproduct₂
-  条件: {b : BinaryBicone X Y} (h : b.IsBilimit)
+  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
   证明: of_isPullback_isPushout (IsPullback.of_is_bilimit' h) (IsPushout.of_isBilimit h)
 
 Depends on / 依赖: IsPullback, IsPullback.of_is_bilimit, IsPushout, IsPushout.of_isBilimit, of_isBilimit, of_isPullback_isPushout, of_is_bilimit
@@ -919,7 +919,7 @@ theorem of_has_biproduct₁
 
 中文:
 定理 of_has_biproduct₁
-  条件: [HasBinaryBiproduct X Y]
+  条件: [有BinaryBiproduct X Y]
   证明: by
   convert! of_is_biproduct₁ (BinaryBiproduct.isBilimit X Y)
 
@@ -951,7 +951,7 @@ theorem of_has_biproduct₂
 
 中文:
 定理 of_has_biproduct₂
-  条件: [HasBinaryBiproduct X Y]
+  条件: [有BinaryBiproduct X Y]
   证明: by
   convert! of_is_biproduct₂ (BinaryBiproduct.isBilimit X Y)
 

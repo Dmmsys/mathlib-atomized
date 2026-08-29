@@ -233,8 +233,8 @@ theorem IsSymm.eq_iff
 alias IsSymm.ortho_comm := IsSymm.eq_iff
 
 中文:
-定理 IsSymm.eq_iff
-  条件: (H : B.IsSymm) {x y : M}
+定理 是Symm.eq_iff
+  条件: (H : B.是Symm) {x y : M}
   结论: B x y = 0 ↔ B y x = 0
   证明: LinearMap.IsSymm.eq_iff (isSymm_iff.1 H)
 
@@ -259,7 +259,7 @@ definition iIsOrtho
 
 中文:
 定义 iIsOrtho
-  签名: {n : Type w} (B : BilinForm R M) (v : n -> M)
+  签名: {n : 类型 w} (B : BilinForm R M) (v : n -> M)
   定义体: B.IsOrthoᵢ v
 
 Depends on / 依赖: B.IsOrtho
@@ -277,7 +277,7 @@ theorem iIsOrtho_def
 
 中文:
 定理 iIsOrtho_def
-  条件: {n : Type w} {B : BilinForm R M} {v : n -> M}
+  条件: {n : 类型 w} {B : BilinForm R M} {v : n -> M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -374,7 +374,7 @@ theorem linearIndependent_of_iIsOrtho
 
 中文:
 定理 linearIndependent_of_iIsOrtho
-  结论: {n : Type w} {B : BilinForm K V} {v : n -> V}
+  结论: {n : 类型 w} {B : BilinForm K V} {v : n -> V}
   证明: by
   rw [linearIndependent_iff']
   intro s w hs i hi
@@ -412,7 +412,7 @@ definition orthogonal
 
 中文:
 定义 orthogonal
-  签名: (B : BilinForm R M) (N : Submodule R M)
+  签名: (B : BilinForm R M) (N : 子模 R M)
   定义体: N.orthogonalBilin B
 
 Depends on / 依赖: N.orthogonalBilin, orthogonalBilin
@@ -432,7 +432,7 @@ theorem mem_orthogonal_iff
 
 中文:
 定理 mem_orthogonal_iff
-  条件: {N : Submodule R M} {m : M}
+  条件: {N : 子模 R M} {m : M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -522,7 +522,7 @@ lemma orthogonal_top_eq_bot
 
 中文:
 引理 orthogonal_top_eq_bot
-  条件: (hB : B.Nondegenerate)
+  条件: (hB : B.非退化)
   证明: (Submodule.eq_bot_iff _).mpr fun x hx => hB.2 x (by simpa using! hx)
 
 Depends on / 依赖: Submodule, Submodule.eq_bot_iff, eq_bot_iff
@@ -643,7 +643,7 @@ theorem iIsOrtho.not_isOrtho_basis_self_of_nondegenerate
 
 中文:
 定理 iIsOrtho.not_isOrtho_basis_self_of_nondegenerate
-  结论: {n : Type w} [Nontrivial R]
+  结论: {n : 类型 w} [非平凡 R]
   证明: h.not_isOrtho_basis_self_of_separatingLeft hB.1 i
 
 Depends on / 依赖: h.not_isOrtho_basis_self_of_separatingLeft, not_isOrtho_basis_self_of_separatingLeft
@@ -663,7 +663,7 @@ theorem iIsOrtho.nondegenerate_iff_not_isOrtho_basis_self
 
 中文:
 定理 iIsOrtho.nondegenerate_iff_not_isOrtho_basis_self
-  结论: {n : Type w} [IsDomain R]
+  结论: {n : 类型 w} [是整环 R]
   证明: ⟨hO.not_isOrtho_basis_self_of_nondegenerate, hO.nondegenerate_of_not_isOrtho_basis_self _⟩
 
 Depends on / 依赖: hO.nondegenerate_of_not_isOrtho_basis_self, hO.not_isOrtho_basis_self_of_nondegenerate, nondegenerate_of_not_isOrtho_basis_self, not_isOrtho_basis_self_of_nondegenerate
@@ -692,7 +692,7 @@ theorem toLin_restrict_ker_eq_inf_ker
 
 中文:
 定理 toLin_restrict_ker_eq_inf_ker
-  条件: (B : BilinForm K V) (W : Subspace K V)
+  条件: (B : BilinForm K V) (W : 子空间 K V)
   证明: by
   ext x; constructor <;> intro hx
   · rcases hx with ⟨⟨x, hx⟩, hker, rfl⟩
@@ -726,7 +726,7 @@ theorem toLin_restrict_ker_eq_inf_orthogonal
 
 中文:
 定理 toLin_restrict_ker_eq_inf_orthogonal
-  条件: (B : BilinForm K V) (W : Subspace K V) (b : B.IsRefl)
+  条件: (B : BilinForm K V) (W : 子空间 K V) (b : B.IsRefl)
   证明: by
   rw [orthogonal_top_eq_ker b]
   exact toLin_restrict_ker_eq_inf_ker ..
@@ -796,7 +796,7 @@ lemma ker_restrict_eq_of_codisjoint
 
 中文:
 引理 ker_restrict_eq_of_codisjoint
-  结论: {p q : Submodule R M} (hpq : Codisjoint p q)
+  结论: {p q : 子模 R M} (hpq : Codisjoint p q)
   证明: by
   ext ⟨z, hz⟩
   simp only [LinearMap.mem_ker, Submodule.mem_comap, Submodule.coe_subtype]
@@ -837,7 +837,7 @@ exact b₁ w v hv' w hw
 
 中文:
 引理 inf_orthogonal_self_le_ker_restrict
-  条件: {W : Submodule R M} (b₁ : B.IsRefl)
+  条件: {W : 子模 R M} (b₁ : B.IsRefl)
   证明: by
   rintro v ⟨hv : v in W, hv' : v in B.orthogonal W⟩
   simp only [Submodule.mem_map, mem_ker, restrict_apply, Submodule.coe_subtype, Subtype.exists,
@@ -878,7 +878,7 @@ theorem finrank_add_finrank_orthogonal'
 
 中文:
 定理 finrank_add_finrank_orthogonal'
-  条件: (W : Submodule K V)
+  条件: (W : 子模 K V)
   证明: by
   rw [← toLin_restrict_ker_eq_inf_ker _ _]; rw [←
     toLin_restrict_range_dualCoannihilator_eq_orthogonal _ _]; rw [finrank_map_subtype_eq]
@@ -909,7 +909,7 @@ theorem finrank_add_finrank_orthogonal
 
 中文:
 定理 finrank_add_finrank_orthogonal
-  条件: (b₁ : B.IsRefl) (W : Submodule K V)
+  条件: (b₁ : B.IsRefl) (W : 子模 K V)
   证明: by
   rw [orthogonal_top_eq_ker b₁]
   exact finrank_add_finrank_orthogonal' _
@@ -935,7 +935,7 @@ lemma finrank_orthogonal
 
 中文:
 引理 finrank_orthogonal
-  条件: (hB : B.Nondegenerate) (W : Submodule K V)
+  条件: (hB : B.非退化) (W : 子模 K V)
   证明: by
   have := finrank_add_finrank_orthogonal' (B := B) W
   rw [hB.ker_eq_bot]; rw [inf_bot_eq]; rw [finrank_bot]; rw [add_zero] at this
@@ -962,7 +962,7 @@ lemma orthogonal_orthogonal
 
 中文:
 引理 orthogonal_orthogonal
-  条件: (hB : B.Nondegenerate) (hB₀ : B.IsRefl) (W : Submodule K V)
+  条件: (hB : B.非退化) (hB₀ : B.IsRefl) (W : 子模 K V)
   证明: by
   apply (eq_of_le_of_finrank_le (LinearMap.BilinForm.le_orthogonal_orthogonal hB₀) _).symm
   simp only [finrank_orthogonal hB]
@@ -1097,7 +1097,7 @@ lemma orthogonal_eq_top_iff
 
 中文:
 引理 orthogonal_eq_top_iff
-  条件: (b₁ : B.IsRefl) (b₂ : (B.restrict W).Nondegenerate)
+  条件: (b₁ : B.IsRefl) (b₂ : (B.restrict W).非退化)
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
   have := (B.isCompl_orthogonal_of_restrict_nondegenerate b₁ b₂).inf_eq_bot
@@ -1183,7 +1183,7 @@ obtain ⟨y, hy, z, hz, rfl⟩ := Submodul
 
 中文:
 定理 restrict_nondegenerate_orthogonal_spanSingleton
-  结论: (B : BilinForm K V) (b₁ : B.Nondegenerate)
+  结论: (B : BilinForm K V) (b₁ : B.非退化)
   证明: by
   have (n : V) : n in K ∙ x ⊔ B.orthogonal (K ∙ x) :=
     (span_singleton_sup_orthogonal_eq_top hx).symm ▸ Submodule.mem_top

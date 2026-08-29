@@ -40,8 +40,8 @@ theorem Complex.subfield_eq_of_closed
     simp_rw [← SetLike.coe_se
 
 中文:
-定理 Complex.subfield_eq_of_closed
-  条件: {K : Subfield Complex} (hc : IsClosed (K : Set Complex))
+定理 复形.subfield_eq_of_closed
+  条件: {K : 子域 复形} (hc : 是闭集 (K : 集合 复形))
   证明: by
   suffices range (ofReal : Real -> Complex) subseteq K by
     rw [range_subset_iff]; rw [← coe_algebraMap] at this
@@ -88,8 +88,8 @@ theorem Complex.uniformContinuous_ringHom_eq_id_or_conj
   have ui : IsUniformIn
 
 中文:
-定理 Complex.uniformContinuous_ringHom_eq_id_or_conj
-  结论: (K : Subfield Complex) {ψ : K ->+* Complex}
+定理 复形.uniformContinuous_ringHom_eq_id_or_conj
+  结论: (K : 子域 复形) {ψ : K ->+* 复形}
   证明: by
   let : IsTopologicalDivisionRing Complex := IsTopologicalDivisionRing.mk
   let : IsTopologicalRing K.topologicalClosure :=

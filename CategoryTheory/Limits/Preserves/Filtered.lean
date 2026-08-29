@@ -60,10 +60,10 @@ class PreservesFilteredColimitsOfSize
     - preserves_filtered_colimits : forall (J : Type w) [Category.{w'} J] [IsFiltered J], PreservesColimitsOfShape J F
 
 中文:
-类 PreservesFilteredColimitsOfSize
+类 保持FilteredColimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves_filtered_colimits : 对任意 (J : Type w) [Category.{w'} J] [IsFiltered J], PreservesColimitsOfShape J F
+    - preserves_filtered_colimits : 对任意 (J : 类型 w) [范畴.{w'} J] [是Filtered J], 保持形状余极限 J F
 -/
 class PreservesFilteredColimitsOfSize (F : C ⥤ D) : Prop where
   preserves_filtered_colimits :
@@ -200,7 +200,7 @@ class ReflectsFilteredColimitsOfSize
 类 ReflectsFilteredColimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects_filtered_colimits : 对任意 (J : Type w) [Category.{w'} J] [IsFiltered J], ReflectsColimitsOfShape J F
+    - reflects_filtered_colimits : 对任意 (J : 类型 w) [范畴.{w'} J] [是Filtered J], 反映形状余极限 J F
 -/
 class ReflectsFilteredColimitsOfSize (F : C ⥤ D) : Prop where
   reflects_filtered_colimits :
@@ -338,10 +338,10 @@ class PreservesCofilteredLimitsOfSize
     - preserves_cofiltered_limits : forall (J : Type w) [Category.{w'} J] [IsCofiltered J], PreservesLimitsOfShape J F
 
 中文:
-类 PreservesCofilteredLimitsOfSize
+类 保持余filteredLimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves_cofiltered_limits : 对任意 (J : Type w) [Category.{w'} J] [IsCofiltered J], PreservesLimitsOfShape J F
+    - preserves_cofiltered_limits : 对任意 (J : 类型 w) [范畴.{w'} J] [是余filtered J], 保持形状极限 J F
 -/
 class PreservesCofilteredLimitsOfSize (F : C ⥤ D) : Prop where
   preserves_cofiltered_limits :
@@ -478,7 +478,7 @@ class ReflectsCofilteredLimitsOfSize
 类 ReflectsCofilteredLimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects_cofiltered_limits : 对任意 (J : Type w) [Category.{w'} J] [IsCofiltered J], ReflectsLimitsOfShape J F
+    - reflects_cofiltered_limits : 对任意 (J : 类型 w) [范畴.{w'} J] [是余filtered J], 反映形状极限 J F
 -/
 class ReflectsCofilteredLimitsOfSize (F : C ⥤ D) : Prop where
   reflects_cofiltered_limits :

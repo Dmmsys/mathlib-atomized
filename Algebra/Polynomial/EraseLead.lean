@@ -230,7 +230,7 @@ theorem self_sub_monomial_natDegree_leadingCoeff
 
 中文:
 定理 self_sub_monomial_natDegree_leadingCoeff
-  条件: {R : 类型} [Ring R] (f : R[X])
+  条件: {R : 类型} [环 R] (f : R[X])
   证明: (eq_sub_iff_add_eq.mpr (eraseLead_add_monomial_natDegree_leadingCoeff f)).symm
 
 @[simp]
@@ -253,7 +253,7 @@ theorem self_sub_C_mul_X_pow
 
 中文:
 定理 self_sub_C_mul_X_pow
-  条件: {R : 类型} [Ring R] (f : R[X])
+  条件: {R : 类型} [环 R] (f : R[X])
   证明: by
   rw [C_mul_X_pow_eq_monomial]; rw [self_sub_monomial_natDegree_leadingCoeff]
 
@@ -1170,7 +1170,7 @@ lemma eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero
 
 中文:
 引理 eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero
-  结论: {R : 类型} [Ring R] [NoZeroDivisors R]
+  结论: {R : 类型} [环 R] [无零因子 R]
   证明: by
   -- if `P = 0` this is trivial
   by_cases hp : P = 0
@@ -1311,7 +1311,7 @@ theorem mono_map_natDegree_eq
 
 中文:
 定理 mono_map_natDegree_eq
-  结论: {S F : 类型} [Semiring S]
+  结论: {S F : 类型} [半环 S]
   证明: by
   refine induction_with_natDegree_le (fun p => (φ p).natDegree = fu p.natDegree)
     p.natDegree (by simp [fu0]) ?_ ?_ _ rfl.le
@@ -1354,7 +1354,7 @@ theorem map_natDegree_eq_sub
 
 中文:
 定理 map_natDegree_eq_sub
-  结论: {S F : 类型} [Semiring S]
+  结论: {S F : 类型} [半环 S]
   证明: mono_map_natDegree_eq k (fun j => j - k) (by simp_all)
     (@fun _ _ h => (tsub_lt_tsub_iff_right h).mpr)
     (φ_k _) φ_mon
@@ -1381,7 +1381,7 @@ theorem map_natDegree_eq_natDegree
 
 中文:
 定理 map_natDegree_eq_natDegree
-  结论: {S F : 类型} [Semiring S]
+  结论: {S F : 类型} [半环 S]
   证明: (map_natDegree_eq_sub (fun _ h => (Nat.not_lt_zero _ h).elim) (by simpa)).trans
     p.natDegree.sub_zero
 
@@ -1410,7 +1410,7 @@ theorem card_support_eq'
 
 中文:
 定理 card_support_eq'
-  结论: {n : 自然数} (k : Fin n -> 自然数) (x : Fin n -> R) (hk : Function.Injective k)
+  结论: {n : 自然数} (k : 有限集 n -> 自然数) (x : 有限集 n -> R) (hk : 函数.单射 k)
   证明: by
   suffices (∑ i, C (x i) * X ^ k i).support = image k univ by
     rw [this]; rw [univ.card_image_of_injective hk]; rw [card_fin]

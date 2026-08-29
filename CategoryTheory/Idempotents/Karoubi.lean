@@ -120,7 +120,7 @@ structure Hom
     - comm : P.p ≫ f ≫ Q.p = f  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (P Q : Karoubi C)
   公理与运算 (2 个):
     - f : P.X ⟶ Q.X
@@ -145,7 +145,7 @@ instance [Preadditive
 @[reassoc (attr := simp)]
 
 中文:
-实例 [Preadditive
+实例 [预加性
   签名: C] (P Q
   定义体: ⟨⟨0, by rw [zero_comp, comp_zero]⟩⟩
 
@@ -171,7 +171,7 @@ theorem p_comp
 
 中文:
 定理 p_comp
-  条件: {P Q : Karoubi C} (f : Hom P Q)
+  条件: {P Q : Karoubi C} (f : 态射 P Q)
   结论: P.p ≫ f.f = f.f
   证明: by
   rw [← f.comm]; rw [← assoc]; rw [P.idem]
@@ -198,7 +198,7 @@ theorem comp_p
 
 中文:
 定理 comp_p
-  条件: {P Q : Karoubi C} (f : Hom P Q)
+  条件: {P Q : Karoubi C} (f : 态射 P Q)
   结论: f.f ≫ Q.p = f.f
   证明: by
   rw [← f.comm]; rw [assoc]; rw [assoc]; rw [Q.idem]
@@ -222,7 +222,7 @@ theorem p_comm
 
 中文:
 定理 p_comm
-  条件: {P Q : Karoubi C} (f : Hom P Q)
+  条件: {P Q : Karoubi C} (f : 态射 P Q)
   结论: P.p ≫ f.f = f.f ≫ Q.p
   证明: by rw [p_comp, comp_p]
 
@@ -240,7 +240,7 @@ theorem comp_proof
 
 中文:
 定理 comp_proof
-  条件: {P Q R : Karoubi C} (g : Hom Q R) (f : Hom P Q)
+  条件: {P Q R : Karoubi C} (g : 态射 Q R) (f : 态射 P Q)
   证明: by simp
 -/
 theorem comp_proof {P Q R : Karoubi C} (g : Hom Q R) (f : Hom P Q) :
@@ -260,7 +260,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Karoubi C)
+  签名: 范畴 (Karoubi C)
   定义体: Karoubi.Hom
   id P := ⟨P.p, by repeat' rw [P.idem]⟩
   comp f g := ⟨f.f ≫ g.f, Karoubi.comp_proof g f⟩
@@ -372,7 +372,7 @@ theorem id_f
 中文:
 定理 id_f
   条件: {P : Karoubi C}
-  结论: Hom.f (𝟙 P) = P.p
+  结论: 态射.f (𝟙 P) = P.p
   证明: rfl
 -/
 theorem id_f {P : Karoubi C} : Hom.f (𝟙 P) = P.p := rfl
@@ -499,7 +499,7 @@ definition fullyFaithfulToKaroubi
 
 中文:
 定义 fullyFaithfulToKaroubi
-  签名: : (toKaroubi C).FullyFaithful where
+  签名: : (toKaroubi C).满忠实 where
   定义体: f.f
 -/
 def fullyFaithfulToKaroubi : (toKaroubi C).FullyFaithful where
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toKaroubi C).Full
+  签名: (toKaroubi C).满
   定义体: (fullyFaithfulToKaroubi C).full
 
 Depends on / 依赖: fullyFaithfulToKaroubi
@@ -532,7 +532,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toKaroubi C).Faithful
+  签名: (toKaroubi C).忠实
   定义体: (fullyFaithfulToKaroubi C).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulToKaroubi
@@ -554,7 +554,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [Preadditive C] {P Q : Karoubi C}
+  签名: [预加性 C] {P Q : Karoubi C}
   定义体: ⟨f.f + g.f, by rw [add_comp, comp_add, f.comm, g.comm]⟩
 
 @[simps neg]
@@ -577,7 +577,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [Preadditive C] {P Q : Karoubi C}
+  签名: [预加性 C] {P Q : Karoubi C}
   定义体: ⟨-f.f, by simpa only [neg_comp, comp_neg, neg_inj] using f.comm⟩
 
 @[simps zero]
@@ -598,7 +598,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Preadditive C] {P Q : Karoubi C}
+  签名: [预加性 C] {P Q : Karoubi C}
   定义体: ⟨0, by simp only [comp_zero, zero_comp]⟩
 
 Depends on / 依赖: comp_zero, zero_comp
@@ -632,7 +632,7 @@ instance instAddCommGroupHom
 
 中文:
 实例 instAddCommGroupHom
-  签名: [Preadditive C] {P Q : Karoubi C}
+  签名: [预加性 C] {P Q : Karoubi C}
   定义体: by
     ext
     apply zero_add
@@ -685,7 +685,7 @@ theorem hom_eq_zero_iff
 
 中文:
 定理 hom_eq_zero_iff
-  条件: [Preadditive C] {P Q : Karoubi C} {f : P ⟶ Q}
+  条件: [预加性 C] {P Q : Karoubi C} {f : P ⟶ Q}
   结论: f = 0 ↔ f.f = 0
   证明: hom_ext_iff
 
@@ -710,7 +710,7 @@ definition inclusionHom
 
 中文:
 定义 inclusionHom
-  签名: [Preadditive C] (P Q : Karoubi C)
+  签名: [预加性 C] (P Q : Karoubi C)
   定义体: f.f
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -733,7 +733,7 @@ theorem sum_hom
 
 中文:
 定理 sum_hom
-  条件: [Preadditive C] {P Q : Karoubi C} {α : 类型} (s : Finset α) (f : α -> (P ⟶ Q))
+  条件: [预加性 C] {P Q : Karoubi C} {α : 类型} (s : 有限集 α) (f : α -> (P ⟶ Q))
   证明: map_sum (inclusionHom P Q) f s
 
 Depends on / 依赖: inclusionHom, map_sum
@@ -753,8 +753,8 @@ instance [Preadditive
   body: by infer_instance
 
 中文:
-实例 [Preadditive
-  签名: C] : Preadditive (Karoubi C) where
+实例 [预加性
+  签名: C] : 预加性 (Karoubi C) where
   定义体: by infer_instance
 
 Depends on / 依赖: WidePullbackShape, WidePullbackShape.Hom.id, infer_instance
@@ -770,8 +770,8 @@ instance [Preadditive
   signature: C] : Functor.Additive (toKaroubi C) where
 
 中文:
-实例 [Preadditive
-  签名: C] : Functor.Additive (toKaroubi C) where
+实例 [预加性
+  签名: C] : 函子.加性 (toKaroubi C) where
 
 Depends on / 依赖: eq_iff_true_of_subsingleton, intros
 -/
@@ -798,7 +798,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIdempotentComplete (Karoubi C)
+  签名: 是IdempotentComplete (Karoubi C)
   定义体: by
   refine ⟨?_⟩
   intro P p hp
@@ -835,8 +835,8 @@ instance [IsIdempotentComplete
           inv := ⟨e, by simp [Category.assoc, h₁, ← h₂]⟩ }⟩
 
 中文:
-实例 [IsIdempotentComplete
-  签名: C] : (toKaroubi C).EssSurj
+实例 [是IdempotentComplete
+  签名: C] : (toKaroubi C).本质满射
   定义体: ⟨fun P => by
     rcases IsIdempotentComplete.idempotents_split P.X P.p P.idem with ⟨Y, i, e, ⟨h₁, h₂⟩⟩
     use Y
@@ -865,7 +865,7 @@ instance toKaroubi_isEquivalence
 
 中文:
 实例 toKaroubi_isEquivalence
-  签名: [IsIdempotentComplete C]
+  签名: [是IdempotentComplete C]
 -/
 instance toKaroubi_isEquivalence [IsIdempotentComplete C] : (toKaroubi C).IsEquivalence where
 
@@ -879,7 +879,7 @@ definition toKaroubiEquivalence
 
 中文:
 定义 toKaroubiEquivalence
-  签名: [IsIdempotentComplete C]
+  签名: [是IdempotentComplete C]
   定义体: (toKaroubi C).asEquivalence
 
 Depends on / 依赖: WidePushoutShape, WidePushoutShape.Hom.id, asEquivalence, toKaroubi
@@ -897,7 +897,7 @@ instance toKaroubiEquivalence_functor_additive
 
 中文:
 实例 toKaroubiEquivalence_functor_additive
-  签名: [Preadditive C] [IsIdempotentComplete C]
+  签名: [预加性 C] [是IdempotentComplete C]
   定义体: inferInstanceAs (toKaroubi C).Additive
 
 Depends on / 依赖: Additive, eq_iff_true_of_subsingleton, toKaroubi
@@ -1094,7 +1094,7 @@ theorem zsmul_hom
 
 中文:
 定理 zsmul_hom
-  条件: [Preadditive C] {P Q : Karoubi C} (n : 整数) (f : P ⟶ Q)
+  条件: [预加性 C] {P Q : Karoubi C} (n : 整数) (f : P ⟶ Q)
   结论: (n • f).f = n • f.f
   证明: map_zsmul (inclusionHom P Q) n f
 
@@ -1141,7 +1141,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toKaroubi C).PreservesEpimorphisms
+  签名: (toKaroubi C).保持Epimorphisms
   定义体: ⟨fun g h eq => by
     ext
     rw [← cancel_epi f]
@@ -1169,7 +1169,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toKaroubi C).PreservesMonomorphisms
+  签名: (toKaroubi C).保持Monomorphisms
   定义体: ⟨fun g h eq => by
     ext
     rw [← cancel_mono f]

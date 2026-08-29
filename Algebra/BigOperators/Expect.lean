@@ -66,8 +66,8 @@ definition Finset.expect
   body: (#s : Rat>=0)⁻¹ • ∑ i in s, f i
 
 中文:
-定义 Finset.expect
-  签名: [AddCommMonoid M] [Module Rat>=0 M] (s : Finset ι) (f : ι -> M)
+定义 有限集.expect
+  签名: [加法交换幺半群 M] [模 有理数>=0 M] (s : 有限集 ι) (f : ι -> M)
   定义体: (#s : Rat>=0)⁻¹ • ∑ i in s, f i
 -/
 def Finset.expect [AddCommMonoid M] [Module Rat>=0 M] (s : Finset ι) (f : ι -> M) : M :=
@@ -143,8 +143,8 @@ lemma expect_univ
 
 中文:
 引理 expect_univ
-  条件: [Fintype ι]
-  结论: 𝔼 i, f i = (∑ i, f i) /Rat Fintype.card ι
+  条件: [有限类型 ι]
+  结论: 𝔼 i, f i = (∑ i, f i) /有理数 有限类型.card ι
   证明: by
   rw [expect]; rw [card_univ]
 
@@ -200,7 +200,7 @@ lemma expect_const_zero
 
 中文:
 引理 expect_const_zero
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: 𝔼 _i in s, (0 : M) = 0
   证明: by simp [expect]
 
@@ -219,7 +219,7 @@ lemma expect_congr
 
 中文:
 引理 expect_congr
-  条件: {t : Finset ι} (hst : s = t) (h : 对任意 i in t, f i = g i)
+  条件: {t : 有限集 ι} (hst : s = t) (h : 对任意 i in t, f i = g i)
   证明: by rw [expect, expect, sum_congr hst h, hst]
 
 Depends on / 依赖: expect, sum_congr
@@ -257,7 +257,7 @@ lemma expect_sum_comm
 
 中文:
 引理 expect_sum_comm
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> κ -> M)
   证明: by
   simpa only [expect, smul_sum] using sum_comm
 
@@ -278,7 +278,7 @@ lemma expect_comm
 
 中文:
 引理 expect_comm
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> κ -> M)
   证明: by
   rw [expect]; rw [expect]; rw [← expect_sum_comm]; rw [← expect_sum_comm]; rw [expect]; rw [expect]; rw [smul_comm]; rw [sum_comm]
 
@@ -319,7 +319,7 @@ lemma exists_ne_zero_of_expect_ne_zero
   contrapose! h; exact expect_eq_zero h
 
 中文:
-引理 exists_ne_zero_of_expect_ne_zero
+引理 存在_ne_zero_of_expect_ne_zero
   条件: (h : 𝔼 i in s, f i != 0)
   结论: 存在 i in s, f i != 0
   证明: by
@@ -341,7 +341,7 @@ lemma expect_add_distrib
 
 中文:
 引理 expect_add_distrib
-  条件: (s : Finset ι) (f g : ι -> M)
+  条件: (s : 有限集 ι) (f g : ι -> M)
   证明: by
   simp [expect, sum_add_distrib]
 
@@ -402,7 +402,7 @@ lemma expect_ite_zero
 
 中文:
 引理 expect_ite_zero
-  结论: (s : Finset ι) (p : ι -> 命题) [DecidablePred p]
+  结论: (s : 有限集 ι) (p : ι -> 命题) [DecidablePred p]
   证明: by
   split_ifs <;> simp [expect, sum_ite_zero _ _ h, *]
 
@@ -429,7 +429,7 @@ lemma expect_ite_mem
 
 中文:
 引理 expect_ite_mem
-  条件: (s t : Finset ι) (f : ι -> M)
+  条件: (s t : 有限集 ι) (f : ι -> M)
   证明: by
   obtain hst | hst := (s inter t).eq_empty_or_nonempty
   · simp [expect, hst]
@@ -645,7 +645,7 @@ lemma expect_product
 
 中文:
 引理 expect_product
-  条件: (s : Finset ι) (t : Finset κ) (f : ι × κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι × κ -> M)
   证明: by
   simp only [expect, card_product, sum_product, smul_sum, mul_inv, mul_smul, Nat.cast_mul]
 
@@ -668,7 +668,7 @@ lemma expect_product'
 
 中文:
 引理 expect_product'
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> κ -> M)
   证明: by
   simp only [expect, card_product, sum_product', smul_sum, mul_inv, mul_smul, Nat.cast_mul]
 
@@ -692,7 +692,7 @@ lemma expect_image
 
 中文:
 引理 expect_image
-  条件: [DecidableEq ι] {m : κ -> ι} (hm : (t : Set κ).InjOn m)
+  条件: [DecidableEq ι] {m : κ -> ι} (hm : (t : 集合 κ).单射限制 m)
   证明: by
   simp_rw [expect, card_image_of_injOn hm, sum_image hm]
 
@@ -714,7 +714,7 @@ lemma expect_inv_index
 
 中文:
 引理 expect_inv_index
-  条件: [DecidableEq ι] [InvolutiveInv ι] (s : Finset ι) (f : ι -> M)
+  条件: [DecidableEq ι] [InvolutiveInv ι] (s : 有限集 ι) (f : ι -> M)
   证明: expect_image inv_injective.injOn
 -/
 @[simp] lemma expect_inv_index [DecidableEq ι] [InvolutiveInv ι] (s : Finset ι) (f : ι -> M) :
@@ -730,7 +730,7 @@ lemma expect_neg_index
 
 中文:
 引理 expect_neg_index
-  条件: [DecidableEq ι] [InvolutiveNeg ι] (s : Finset ι) (f : ι -> M)
+  条件: [DecidableEq ι] [InvolutiveNeg ι] (s : 有限集 ι) (f : ι -> M)
   证明: expect_image neg_injective.injOn
 -/
 @[simp] lemma expect_neg_index [DecidableEq ι] [InvolutiveNeg ι] (s : Finset ι) (f : ι -> M) :
@@ -749,7 +749,7 @@ lemma _root_.map_expect
 
 中文:
 引理 _root_.map_expect
-  结论: {F : 类型} [FunLike F M N] [LinearMapClass F Rat>=0 M N]
+  结论: {F : 类型} [函数状 F M N] [线性映射类 F 有理数>=0 M N]
   证明: by simp only [expect, map_smul, map_sum]
 
 @[simp]
@@ -776,7 +776,7 @@ lemma card_smul_expect
 
 中文:
 引理 card_smul_expect
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: #s • 𝔼 i in s, f i = ∑ i in s, f i
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
@@ -801,8 +801,8 @@ lemma _root_.Fintype.card_smul_expect
   proof: Finset.card_smul_expect _ _
 
 中文:
-引理 _root_.Fintype.card_smul_expect
-  条件: [Fintype ι] (f : ι -> M)
+引理 _root_.有限类型.card_smul_expect
+  条件: [有限类型 ι] (f : ι -> M)
   证明: Finset.card_smul_expect _ _
 -/
 @[simp] lemma _root_.Fintype.card_smul_expect [Fintype ι] (f : ι -> M) :
@@ -821,7 +821,7 @@ lemma expect_const
 
 中文:
 引理 expect_const
-  条件: (hs : s.Nonempty) (a : M)
+  条件: (hs : s.非空) (a : M)
   结论: 𝔼 _i in s, a = a
   证明: by
   rw [expect]; rw [sum_const]; rw [← Nat.cast_smul_eq_nsmul Rat>=0]; rw [inv_smul_smul₀]
@@ -842,7 +842,7 @@ lemma smul_expect
 
 中文:
 引理 smul_expect
-  结论: {G : 类型} [DistribSMul G M] [SMulCommClass G Rat>=0 M] (a : G)
+  结论: {G : 类型} [分配标量乘法 G M] [标量交换类 G 有理数>=0 M] (a : G)
   证明: by
   simp only [expect, smul_sum, smul_comm]
 
@@ -870,7 +870,7 @@ lemma expect_sub_distrib
 
 中文:
 引理 expect_sub_distrib
-  条件: (s : Finset ι) (f g : ι -> M)
+  条件: (s : 有限集 ι) (f g : ι -> M)
   证明: by
   simp only [expect, sum_sub_distrib, smul_sub]
 
@@ -895,7 +895,7 @@ lemma expect_neg_distrib
 
 中文:
 引理 expect_neg_distrib
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: 𝔼 i in s, -f i = -𝔼 i in s, f i
   证明: by
   simp [expect]
@@ -920,7 +920,7 @@ lemma card_mul_expect
 
 中文:
 引理 card_mul_expect
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   证明: by rw [← nsmul_eq_mul, card_smul_expect]
 -/
 @[simp] lemma card_mul_expect (s : Finset ι) (f : ι -> M) :
@@ -935,8 +935,8 @@ lemma _root_.Fintype.card_mul_expect
   proof: Finset.card_mul_expect _ _
 
 中文:
-引理 _root_.Fintype.card_mul_expect
-  条件: [Fintype ι] (f : ι -> M)
+引理 _root_.有限类型.card_mul_expect
+  条件: [有限类型 ι] (f : ι -> M)
   证明: Finset.card_mul_expect _ _
 -/
 @[simp] lemma _root_.Fintype.card_mul_expect [Fintype ι] (f : ι -> M) :
@@ -952,7 +952,7 @@ lemma expect_mul
 
 中文:
 引理 expect_mul
-  条件: [IsScalarTower Rat>=0 M M] (s : Finset ι) (f : ι -> M) (a : M)
+  条件: [标量塔 有理数>=0 M M] (s : 有限集 ι) (f : ι -> M) (a : M)
   证明: by rw [expect, expect, smul_mul_assoc, sum_mul]
 
 Depends on / 依赖: expect, smul_mul_assoc, sum_mul
@@ -970,7 +970,7 @@ lemma mul_expect
 
 中文:
 引理 mul_expect
-  条件: [SMulCommClass Rat>=0 M M] (s : Finset ι) (f : ι -> M) (a : M)
+  条件: [标量交换类 有理数>=0 M M] (s : 有限集 ι) (f : ι -> M) (a : M)
   证明: by rw [expect, expect, mul_smul_comm, mul_sum]
 
 Depends on / 依赖: expect, mul_smul_comm, mul_sum
@@ -989,7 +989,7 @@ lemma expect_mul_expect
 
 中文:
 引理 expect_mul_expect
-  结论: [IsScalarTower Rat>=0 M M] [SMulCommClass Rat>=0 M M] (s : Finset ι)
+  结论: [标量塔 有理数>=0 M M] [标量交换类 有理数>=0 M M] (s : 有限集 ι)
   证明: by
   simp_rw [expect_mul, mul_expect]
 
@@ -1016,7 +1016,7 @@ lemma expect_pow
 
 中文:
 引理 expect_pow
-  条件: (s : Finset ι) (f : ι -> M) (n : 自然数)
+  条件: (s : 有限集 ι) (f : ι -> M) (n : 自然数)
   证明: by
   rw [expect]; rw [smul_pow]; rw [sum_pow']; rw [expect]; rw [Fintype.card_piFinset_const]; rw [inv_pow]; rw [Nat.cast_pow]
 
@@ -1042,7 +1042,7 @@ lemma expect_indicator_one
 
 中文:
 引理 expect_indicator_one
-  条件: [Fintype ι] (s : Finset ι)
+  条件: [有限类型 ι] (s : 有限集 ι)
   证明: by
   classical simp [expect, sum_indicator_eq_sum_inter, dens, div_eq_inv_mul, NNRat.smul_def]
 -/
@@ -1063,7 +1063,7 @@ lemma expect_boole_mul
 
 中文:
 引理 expect_boole_mul
-  条件: [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι -> K) (i : ι)
+  条件: [有限类型 ι] [非空 ι] [DecidableEq ι] (f : ι -> K) (i : ι)
   证明: by
   simp_rw [expect_univ, ite_mul, zero_mul, sum_ite_eq, if_pos (mem_univ _)]
   rw [← @NNRat.cast_natCast K]; rw [← NNRat.smul_def]; rw [inv_smul_smul₀]
@@ -1088,7 +1088,7 @@ lemma expect_boole_mul'
 
 中文:
 引理 expect_boole_mul'
-  条件: [Fintype ι] [Nonempty ι] [DecidableEq ι] (f : ι -> K) (i : ι)
+  条件: [有限类型 ι] [非空 ι] [DecidableEq ι] (f : ι -> K) (i : ι)
   证明: by
   simp_rw [@eq_comm _ _ i, expect_boole_mul]
 
@@ -1109,7 +1109,7 @@ lemma expect_eq_sum_div_card
 
 中文:
 引理 expect_eq_sum_div_card
-  条件: (s : Finset ι) (f : ι -> K)
+  条件: (s : 有限集 ι) (f : ι -> K)
   证明: by
   rw [expect]; rw [NNRat.smul_def]; rw [div_eq_inv_mul]; rw [NNRat.cast_inv]; rw [NNRat.cast_natCast]
 
@@ -1128,8 +1128,8 @@ lemma _root_.Fintype.expect_eq_sum_div_card
   proof: Finset.expect_eq_sum_div_card _ _
 
 中文:
-引理 _root_.Fintype.expect_eq_sum_div_card
-  条件: [Fintype ι] (f : ι -> K)
+引理 _root_.有限类型.expect_eq_sum_div_card
+  条件: [有限类型 ι] (f : ι -> K)
   证明: Finset.expect_eq_sum_div_card _ _
 
 Depends on / 依赖: Finset, Finset.expect_eq_sum_div_card, expect_eq_sum_div_card
@@ -1149,7 +1149,7 @@ lemma expect_div
 
 中文:
 引理 expect_div
-  条件: (s : Finset ι) (f : ι -> K) (a : K)
+  条件: (s : 有限集 ι) (f : ι -> K) (a : K)
   结论: (𝔼 i in s, f i) / a = 𝔼 i in s, f i / a
   证明: by
   simp_rw [div_eq_mul_inv, expect_mul]
@@ -1171,7 +1171,7 @@ lemma expect_apply
 
 中文:
 引理 expect_apply
-  结论: {α : 类型} {π : α -> 类型} [对任意 a, CommSemiring (π a)]
+  结论: {α : 类型} {π : α -> 类型} [对任意 a, 交换半环 (π a)]
   证明: by simp [expect]
 -/
 @[simp] lemma expect_apply {α : Type*} {π : α -> Type*} [forall a, CommSemiring (π a)]
@@ -1195,7 +1195,7 @@ lemma coe_expect
 
 中文:
 引理 coe_expect
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: 𝔼 i in s, f i = 𝔼 i in s, (f i : N)
   证明: map_expect (algebraMap _ _) _ _
 
@@ -1223,7 +1223,7 @@ lemma expect_bijective
 
 中文:
 引理 expect_bijective
-  结论: (e : ι -> κ) (he : Bijective e) (f : ι -> M) (g : κ -> M)
+  结论: (e : ι -> κ) (he : 双射 e) (f : ι -> M) (g : κ -> M)
   证明: expect_nbij e (fun _ _ => mem_univ _) (fun i _ => h i) he.injective.injOn by
     simpa using he.surjective
 
@@ -1263,7 +1263,7 @@ lemma expect_const
 
 中文:
 引理 expect_const
-  条件: [Nonempty ι] (a : M)
+  条件: [非空 ι] (a : M)
   结论: 𝔼 _i : ι, a = a
   证明: Finset.expect_const univ_nonempty _
 
@@ -1305,7 +1305,7 @@ lemma expect_ite_mem
 
 中文:
 引理 expect_ite_mem
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   证明: by
   simp [Finset.expect_ite_mem, dens]
 -/
@@ -1393,7 +1393,7 @@ lemma expect_one
 
 中文:
 引理 expect_one
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: 𝔼 _i : ι, (1 : M) = 1
   证明: expect_const _
 
@@ -1411,7 +1411,7 @@ lemma expect_mul_expect
 
 中文:
 引理 expect_mul_expect
-  结论: [IsScalarTower Rat>=0 M M] [SMulCommClass Rat>=0 M M] (f : ι -> M)
+  结论: [标量塔 有理数>=0 M M] [标量交换类 有理数>=0 M M] (f : ι -> M)
   证明: Finset.expect_mul_expect ..
 
 Depends on / 依赖: Finset, Finset.expect_mul_expect, expect_mul_expect

@@ -43,7 +43,7 @@ definition I
 
 中文:
 定义 I
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: .ofHoms (fun n => ∂Δ[n].ι)
 
 Depends on / 依赖: ofHoms
@@ -77,7 +77,7 @@ definition J
 
 中文:
 定义 J
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: ⨆ n, .ofHoms (fun (i : Fin (n + 2)) => Λ[n + 1, i].ι)
 
 Depends on / 依赖: ofHoms
@@ -99,7 +99,7 @@ lemma horn_ι_mem_J
 
 中文:
 引理 horn_ι_mem_J
-  条件: (n : 自然数) [NeZero n] (i : Fin (n + 1))
+  条件: (n : 自然数) [NeZero n] (i : 有限集 (n + 1))
   证明: by
   obtain _ | n := n
   · exact (NeZero.ne 0 rfl).elim
@@ -224,7 +224,7 @@ lemma cofibration_iff
 
 中文:
 引理 cofibration_iff
-  结论: Cofibration f ↔ Mono f
+  结论: 余纤维化 f ↔ 单态射 f
   证明: by
   rw [HomotopicalAlgebra.cofibration_iff]
   rfl
@@ -247,7 +247,7 @@ lemma fibration_iff
 
 中文:
 引理 fibration_iff
-  结论: Fibration f ↔ J.rlp f
+  结论: 纤维化 f ↔ J.rlp f
   证明: by
   rw [HomotopicalAlgebra.fibration_iff]
   rfl
@@ -268,7 +268,7 @@ instance mono_of_cofibration
 
 中文:
 实例 mono_of_cofibration
-  签名: [Cofibration f]
+  签名: [余纤维化 f]
   定义体: by rwa [← cofibration_iff]
 
 Depends on / 依赖: cofibration_iff
@@ -286,8 +286,8 @@ lemma cofibration_of_mono
 
 中文:
 引理 cofibration_of_mono
-  条件: [Mono f]
-  结论: Cofibration f
+  条件: [单态射 f]
+  结论: 余纤维化 f
   证明: by rwa [cofibration_iff]
 
 Depends on / 依赖: cofibration_iff
@@ -306,7 +306,7 @@ instance [hf
 
 中文:
 实例 [hf
-  签名: : Fibration f] {n : 自然数} (i : Fin (n + 2)) :
+  签名: : 纤维化 f] {n : 自然数} (i : 有限集 (n + 2)) :
   定义体: by
   rw [fibration_iff] at hf
   exact hf _ (horn_ι_mem_J _ _)
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrations SSet.{u}).IsMultiplicative
+  签名: (fibrations SSet.{u}).是Multiplicative
   定义体: by
   rw [fibrations_eq]
   infer_instance
@@ -353,7 +353,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrations SSet.{u}).IsStableUnderRetracts
+  签名: (fibrations SSet.{u}).是StableUnderRetracts
   定义体: by
   rw [fibrations_eq]
   infer_instance
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations SSet.{u}).IsMultiplicative
+  签名: (cofibrations SSet.{u}).是Multiplicative
   定义体: by
   rw [cofibrations_eq]
   infer_instance
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations SSet.{u}).IsStableUnderRetracts
+  签名: (cofibrations SSet.{u}).是StableUnderRetracts
   定义体: by
   rw [cofibrations_eq]
   infer_instance
@@ -467,7 +467,7 @@ lemma exists_lift
   exact ⟨sq.lift, fun j hj => by simp [← ι_ι_assoc i j hj], by simp⟩
 
 中文:
-引理 exists_lift
+引理 存在_lift
   证明: by
   have sq : CommSq hf.desc Λ[n + 1, i].ι p b :=
     ⟨horn.hom_ext' (fun j hj => by simpa using comm j hj)⟩
@@ -522,7 +522,7 @@ lemma δ_lift
 
 中文:
 引理 δ_lift
-  条件: (j : Fin (n + 2)) (hj : j != i := by grind)
+  条件: (j : 有限集 (n + 2)) (hj : j != i := by grind)
   证明: ((hf.exists_lift p b comm).choose_spec).1 j hj
 
 @[reassoc (attr := simp)]

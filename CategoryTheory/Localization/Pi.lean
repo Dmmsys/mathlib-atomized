@@ -46,7 +46,7 @@ instance pi
 
 中文:
 实例 pi
-  签名: {J : Type w} [Finite J] {C : J -> 类型u₁} {D : J -> 类型u₂}
+  签名: {J : 类型 w} [有限 J] {C : J -> 类型u₁} {D : J -> 类型u₂}
   定义体: by
   revert J
   apply Finite.induction_empty_option

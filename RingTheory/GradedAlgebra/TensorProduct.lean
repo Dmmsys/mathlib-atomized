@@ -48,7 +48,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: : GradedAlgebra fun i => (𝒜 i).baseChange S where
+  签名: : 分次代数 fun i => (𝒜 i).baseChange S where
   定义体: tmul_mem_baseChange_of_mem _ one_mem_graded 𝒜
   mul_mem i j := by
     suffices h : ((𝒜 i).baseChange S).map₂ (Algebra.lmul S (S otimes[R] A)) ((𝒜 j).baseChange S) <=
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring ((𝒜 0).baseChange S)
+  签名: 半环 ((𝒜 0).baseChange S)
   定义体: GradeZero.instSemiring fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instSemiring, baseChange, instSemiring
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra S ((𝒜 0).baseChange S)
+  签名: 代数 S ((𝒜 0).baseChange S)
   定义体: GradeZero.instAlgebra fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instAlgebra, baseChange, instAlgebra
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring ((𝒜 0).baseChange S)
+  签名: 交换半环 ((𝒜 0).baseChange S)
   定义体: GradeZero.instCommSemiring fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instCommSemiring, baseChange, instCommSemiring
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra ((𝒜 0).baseChange S) (S otimes[R] A)
+  签名: 代数 ((𝒜 0).baseChange S) (S otimes[R] A)
   定义体: GradeZero.instAlgebraSubtypeMemOfNat fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instAlgebraSubtypeMemOfNat, baseChange, instAlgebraSubtypeMemOfNat
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring ((𝒜 0).baseChange S)
+  签名: 环 ((𝒜 0).baseChange S)
   定义体: GradeZero.instRing fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instRing, baseChange, instRing
@@ -227,7 +227,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing ((𝒜 0).baseChange S)
+  签名: 交换环 ((𝒜 0).baseChange S)
   定义体: GradeZero.instCommRing fun i => (𝒜 i).baseChange S
 
 Depends on / 依赖: GradeZero, GradeZero.instCommRing, baseChange, instCommRing

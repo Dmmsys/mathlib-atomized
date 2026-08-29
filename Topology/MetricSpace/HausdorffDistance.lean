@@ -82,7 +82,7 @@ definition infEDist
 
 中文:
 定义 infEDist
-  签名: (x : α) (s : Set α)
+  签名: (x : α) (s : 集合 α)
   定义体: ⨅ y in s, edist x y
 
 @[simp]
@@ -167,7 +167,7 @@ theorem infEDist_iUnion
 
 中文:
 定理 infEDist_iUnion
-  条件: (f : ι -> Set α) (x : α)
+  条件: (f : ι -> 集合 α) (x : α)
   结论: infEDist x (⋃ i, f i) = ⨅ i, infEDist x (f i)
   证明: iInf_iUnion f _
 
@@ -186,7 +186,7 @@ lemma infEDist_biUnion
 
 中文:
 引理 infEDist_biUnion
-  条件: {ι : 类型} (f : ι -> Set α) (I : Set ι) (x : α)
+  条件: {ι : 类型} (f : ι -> 集合 α) (I : 集合 ι) (x : α)
   证明: by simp only [infEDist_iUnion]
 
 Depends on / 依赖: infEDist_iUnion
@@ -393,7 +393,7 @@ theorem continuous_infEDist
 
 中文:
 定理 continuous_infEDist
-  结论: Continuous fun x => infEDist x s
+  结论: 连续 fun x => infEDist x s
   证明: continuous_of_le_add_edist 1 (by simp) by
     simp only [one_mul, infEDist_le_infEDist_add_edist, forall₂_true_iff]
 
@@ -487,7 +487,7 @@ theorem mem_iff_infEDist_zero_of_closed
 
 中文:
 定理 mem_iff_infEDist_zero_of_closed
-  条件: (h : IsClosed s)
+  条件: (h : 是闭集 s)
   结论: x in s ↔ infEDist x s = 0
   证明: by
   rw [← mem_closure_iff_infEDist_zero]; rw [h.closure_eq]
@@ -508,7 +508,7 @@ theorem infEDist_pos_iff_notMem_closure
 
 中文:
 定理 infEDist_pos_iff_notMem_closure
-  条件: {x : α} {E : Set α}
+  条件: {x : α} {E : 集合 α}
   证明: by
   rw [mem_closure_iff_infEDist_zero]; rw [pos_iff_ne_zero]
 
@@ -529,7 +529,7 @@ theorem infEDist_closure_pos_iff_notMem_closure
 
 中文:
 定理 infEDist_closure_pos_iff_notMem_closure
-  条件: {x : α} {E : Set α}
+  条件: {x : α} {E : 集合 α}
   证明: by
   rw [infEDist_closure]; rw [infEDist_pos_iff_notMem_closure]
 
@@ -551,8 +551,8 @@ theorem exists_real_pos_lt_infEDist_of_notMem_closure
   exact ⟨ε, ⟨ENNReal.ofReal_pos.mp ε_pos, ε_lt⟩⟩
 
 中文:
-定理 exists_real_pos_lt_infEDist_of_notMem_closure
-  条件: {x : α} {E : Set α} (h : x ∉ closure E)
+定理 存在_real_pos_lt_infEDist_of_notMem_closure
+  条件: {x : α} {E : 集合 α} (h : x ∉ closure E)
   证明: by
   rw [← infEDist_pos_iff_notMem_closure]; rw [ENNReal.lt_iff_exists_real_btwn] at h
   rcases h with ⟨ε, ⟨_, ⟨ε_pos, ε_lt⟩⟩⟩
@@ -619,7 +619,7 @@ theorem infEDist_image
 
 中文:
 定理 infEDist_image
-  条件: (hΦ : Isometry Φ)
+  条件: (hΦ : 等距 Φ)
   结论: infEDist (Φ x) (Φ '' t) = infEDist x t
   证明: by
   simp only [infEDist, iInf_image, hΦ.edist_eq]
@@ -642,7 +642,7 @@ theorem infEDist_smul
 
 中文:
 定理 infEDist_smul
-  条件: {M} [SMul M α] [IsIsometricSMul M α] (c : M) (x : α) (s : Set α)
+  条件: {M} [标量乘法 M α] [是是ometricSMul M α] (c : M) (x : α) (s : 集合 α)
   证明: infEDist_image (isometry_smul _ _)
 
 Depends on / 依赖: infEDist_image, isometry_smul
@@ -665,8 +665,8 @@ theorem _root_.IsOpen.exists_iUnion_isClosed
     have : infEDist x Uᶜ != 0 := ((ENNReal.pow_pos a_p
 
 中文:
-定理 _root_.IsOpen.exists_iUnion_isClosed
-  条件: {U : Set α} (hU : IsOpen U)
+定理 _root_.是开集.存在_iUnion_isClosed
+  条件: {U : 集合 α} (hU : 是开集 U)
   证明: by
   obtain ⟨a, a_pos, a_lt_one⟩ : exists a : Real>=0∞, 0 < a ∧ a < 1 := exists_between zero_lt_one
   let F := fun n : Nat => (fun x => infEDist x Uᶜ) ⁻¹' Ici (a ^ n)
@@ -712,8 +712,8 @@ theorem _root_.IsCompact.exists_infEDist_eq_edist
   exact ⟨y, ys, le_antisymm (infEDist_le_edist_of_mem ys) (by rwa [le_infEDist])⟩
 
 中文:
-定理 _root_.IsCompact.exists_infEDist_eq_edist
-  条件: (hs : IsCompact s) (hne : s.Nonempty) (x : α)
+定理 _root_.是紧集.存在_infEDist_eq_edist
+  条件: (hs : 是紧集 s) (hne : s.非空) (x : α)
   证明: by
   have A : Continuous fun y => edist x y := by fun_prop
   obtain ⟨y, ys, hy⟩ := hs.exists_isMinOn hne A.continuousOn
@@ -743,8 +743,8 @@ theorem exists_pos_forall_lt_edist
   rcases ENNReal.lt_iff_exists_
 
 中文:
-定理 exists_pos_forall_lt_edist
-  条件: (hs : IsCompact s) (ht : IsClosed t) (hst : Disjoint s t)
+定理 存在_pos_对任意_lt_edist
+  条件: (hs : 是紧集 s) (ht : 是闭集 t) (hst : Disjoint s t)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hne)
   · use 1
@@ -779,7 +779,7 @@ theorem infEDist_prod
 
 中文:
 定理 infEDist_prod
-  条件: (x : α × β) (s : Set α) (t : Set β)
+  条件: (x : α × β) (s : 集合 α) (t : 集合 β)
   证明: by
   simp_rw +singlePass [infEDist, Prod.edist_eq, iInf_prod, Set.mem_prod, iInf_and, iInf_sup_eq,
     sup_iInf_eq, iInf_sup_eq, sup_iInf_eq]
@@ -946,7 +946,7 @@ theorem exists_edist_lt_of_hausdorffEDist_lt
       _ < r := H
 
 中文:
-定理 exists_edist_lt_of_hausdorffEDist_lt
+定理 存在_edist_lt_of_hausdorffEDist_lt
   条件: {r : 实数>=0∞} (h : x in s) (H : hausdorffEDist s t < r)
   证明: infEDist_lt_iff.mp
     calc
@@ -1012,7 +1012,7 @@ theorem hausdorffEDist_image
 
 中文:
 定理 hausdorffEDist_image
-  条件: (h : Isometry Φ)
+  条件: (h : 等距 Φ)
   证明: by
   simp only [hausdorffEDist_def, iSup_image, infEDist_image h]
 
@@ -1039,7 +1039,7 @@ theorem hausdorffEDist_le_ediam
 
 中文:
 定理 hausdorffEDist_le_ediam
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   rcases hs with ⟨x, xs⟩
   rcases ht with ⟨y, yt⟩
@@ -1244,8 +1244,8 @@ theorem _root_.IsClosed.hausdorffEDist_zero_iff
   rw [hausdorffEDist_zero_iff_closure_eq_closure]; rw [hs.closure_eq]; rw [ht.closure_eq]
 
 中文:
-定理 _root_.IsClosed.hausdorffEDist_zero_iff
-  条件: (hs : IsClosed s) (ht : IsClosed t)
+定理 _root_.是闭集.hausdorffEDist_zero_iff
+  条件: (hs : 是闭集 s) (ht : 是闭集 t)
   证明: by
   rw [hausdorffEDist_zero_iff_closure_eq_closure]; rw [hs.closure_eq]; rw [ht.closure_eq]
 
@@ -1269,7 +1269,7 @@ theorem hausdorffEDist_empty
 
 中文:
 定理 hausdorffEDist_empty
-  条件: (ne : s.Nonempty)
+  条件: (ne : s.非空)
   结论: hausdorffEDist s ∅ = ∞
   证明: by
   rcases ne with ⟨x, xs⟩
@@ -1293,7 +1293,7 @@ theorem nonempty_of_hausdorffEDist_ne_top
 
 中文:
 定理 nonempty_of_hausdorffEDist_ne_top
-  条件: (hs : s.Nonempty) (fin : hausdorffEDist s t != ⊤)
+  条件: (hs : s.非空) (fin : hausdorffEDist s t != ⊤)
   证明: t.eq_empty_or_nonempty.resolve_left fun ht => fin (ht.symm ▸ hausdorffEDist_empty hs)
 
 Depends on / 依赖: eq_empty_or_nonempty, hausdorffEDist_empty, ht.symm, resolve_left, t.eq_empty_or_nonempty.resolve_left
@@ -1383,7 +1383,7 @@ constructor <;> refine fun i x hx => (iInf_le _ i).trans le_iSup_of_le i ?_
 
 中文:
 定理 hausdorffEDist_iUnion_le
-  条件: {ι : Sort*} {s t : ι -> Set α}
+  条件: {ι : 类型层*} {s t : ι -> 集合 α}
   证明: by
   simp_rw [hausdorffEDist, max_le_iff, iSup_iUnion, iSup_le_iff, infEDist_iUnion]
 constructor <;> refine fun i x hx => (iInf_le _ i).trans le_iSup_of_le i ?_
@@ -1411,7 +1411,7 @@ theorem hausdorffEDist_union_le
 
 中文:
 定理 hausdorffEDist_union_le
-  条件: {s₁ s₂ t₁ t₂ : Set α}
+  条件: {s₁ s₂ t₁ t₂ : 集合 α}
   证明: by
   simp_rw [union_eq_iUnion, sup_eq_iSup]
   convert! hausdorffEDist_iUnion_le with (_ | _)
@@ -1436,7 +1436,7 @@ theorem hausdorffEDist_prod_le
 
 中文:
 定理 hausdorffEDist_prod_le
-  条件: {s₁ t₁ : Set α} {s₂ t₂ : Set β}
+  条件: {s₁ t₁ : 集合 α} {s₂ t₂ : 集合 β}
   证明: by
   refine le_of_forall_ge fun _ _ => ?_
   simp_all only [hausdorffEDist, infEDist_prod, max_le_iff, iSup_le_iff, mem_prod, true_and,
@@ -1590,7 +1590,7 @@ definition infDist
 
 中文:
 定义 infDist
-  签名: (x : α) (s : Set α)
+  签名: (x : α) (s : 集合 α)
   定义体: ENNReal.toReal (infEDist x s)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, infEDist, toReal
@@ -1674,7 +1674,7 @@ lemma isGLB_infDist
 
 中文:
 引理 isGLB_infDist
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: IsGLB ((dist x ·) '' s) (infDist x s)
   证明: by
   simpa [infDist_eq_iInf, sInf_image']
@@ -1704,7 +1704,7 @@ alias infEdist_ne_top := infEDist_ne_top
 
 中文:
 定理 infEDist_ne_top
-  条件: (h : s.Nonempty)
+  条件: (h : s.非空)
   结论: infEDist x s != ∞
   证明: by
   rcases h with ⟨y, hy⟩
@@ -1831,7 +1831,7 @@ theorem infDist_le_infDist_of_subset
 
 中文:
 定理 infDist_le_infDist_of_subset
-  条件: (h : s subseteq t) (hs : s.Nonempty)
+  条件: (h : s subseteq t) (hs : s.非空)
   结论: infDist x t <= infDist x s
   证明: ENNReal.toReal_mono (infEDist_ne_top hs) (infEDist_anti h)
 
@@ -1853,7 +1853,7 @@ lemma le_infDist
 
 中文:
 引理 le_infDist
-  条件: {r : 实数} (hs : s.Nonempty)
+  条件: {r : 实数} (hs : s.非空)
   结论: r <= infDist x s ↔ 对任意 ⦃y⦄, y in s -> r <= dist x y
   证明: by
   simp_rw [infDist, ← ENNReal.ofReal_le_iff_le_toReal (infEDist_ne_top hs), le_infEDist,
@@ -1877,7 +1877,7 @@ theorem infDist_lt_iff
 
 中文:
 定理 infDist_lt_iff
-  条件: {r : 实数} (hs : s.Nonempty)
+  条件: {r : 实数} (hs : s.非空)
   结论: infDist x s < r ↔ 存在 y in s, dist x y < r
   证明: by
   simp [← not_le, le_infDist hs]
@@ -2060,7 +2060,7 @@ theorem uniformContinuous_infDist_pt
 
 中文:
 定理 uniformContinuous_infDist_pt
-  结论: UniformContinuous (infDist · s)
+  结论: 一致连续 (infDist · s)
   证明: (lipschitz_infDist_pt s).uniformContinuous
 
 Depends on / 依赖: lipschitz_infDist_pt, uniformContinuous
@@ -2080,7 +2080,7 @@ theorem continuous_infDist_pt
 
 中文:
 定理 continuous_infDist_pt
-  结论: Continuous (infDist · s)
+  结论: 连续 (infDist · s)
   证明: (uniformContinuous_infDist_pt s).continuous
 
 Depends on / 依赖: continuous, uniformContinuous_infDist_pt
@@ -2147,7 +2147,7 @@ theorem mem_closure_iff_infDist_zero
 
 中文:
 定理 mem_closure_iff_infDist_zero
-  条件: (h : s.Nonempty)
+  条件: (h : s.非空)
   结论: x in closure s ↔ infDist x s = 0
   证明: by
   simp [mem_closure_iff_infEDist_zero, infDist, ENNReal.toReal_eq_zero_iff, infEDist_ne_top h]
@@ -2167,7 +2167,7 @@ theorem infDist_pos_iff_notMem_closure
 
 中文:
 定理 infDist_pos_iff_notMem_closure
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   证明: (mem_closure_iff_infDist_zero hs).not.trans infDist_nonneg.lt_iff_ne'.symm
 
 Depends on / 依赖: infDist_nonneg, infDist_nonneg.lt_iff_ne, lt_iff_ne, mem_closure_iff_infDist_zero, not.trans
@@ -2185,8 +2185,8 @@ theorem _root_.IsClosed.mem_iff_infDist_zero
   proof: by rw [← mem_closure_iff_infDist_zero hs, h.closure_eq]
 
 中文:
-定理 _root_.IsClosed.mem_iff_infDist_zero
-  条件: (h : IsClosed s) (hs : s.Nonempty)
+定理 _root_.是闭集.mem_iff_infDist_zero
+  条件: (h : 是闭集 s) (hs : s.非空)
   证明: by rw [← mem_closure_iff_infDist_zero hs, h.closure_eq]
 
 Depends on / 依赖: closure_eq, h.closure_eq, mem_closure_iff_infDist_zero
@@ -2204,8 +2204,8 @@ theorem _root_.IsClosed.notMem_iff_infDist_pos
   simp [h.mem_iff_infDist_zero hs, infDist_nonneg.lt_iff_ne']
 
 中文:
-定理 _root_.IsClosed.notMem_iff_infDist_pos
-  条件: (h : IsClosed s) (hs : s.Nonempty)
+定理 _root_.是闭集.notMem_iff_infDist_pos
+  条件: (h : 是闭集 s) (hs : s.非空)
   证明: by
   simp [h.mem_iff_infDist_zero hs, infDist_nonneg.lt_iff_ne']
 
@@ -2257,7 +2257,7 @@ theorem infDist_image
 
 中文:
 定理 infDist_image
-  条件: (hΦ : Isometry Φ)
+  条件: (hΦ : 等距 Φ)
   结论: infDist (Φ x) (Φ '' t) = infDist x t
   证明: by
   simp [infDist, infEDist_image hΦ]
@@ -2313,8 +2313,8 @@ theorem _root_.IsCompact.exists_infDist_eq_dist
   ⟨y, hys, by rw [infDist, dist_edist, hy]⟩
 
 中文:
-定理 _root_.IsCompact.exists_infDist_eq_dist
-  条件: (h : IsCompact s) (hne : s.Nonempty) (x : α)
+定理 _root_.是紧集.存在_infDist_eq_dist
+  条件: (h : 是紧集 s) (hne : s.非空) (x : α)
   证明: let ⟨y, hys, hy⟩ := h.exists_infEDist_eq_edist hne x
   ⟨y, hys, by rw [infDist, dist_edist, hy]⟩
 
@@ -2340,8 +2340,8 @@ theorem _root_.IsClosed.exists_infDist_eq_dist
   obtain ⟨y, ⟨hys, -⟩, hyd⟩ : exists y in t, i
 
 中文:
-定理 _root_.IsClosed.exists_infDist_eq_dist
-  结论: [命题erSpace α] (h : IsClosed s) (hne : s.Nonempty)
+定理 _root_.是闭集.存在_infDist_eq_dist
+  结论: [真空间 α] (h : 是闭集 s) (hne : s.非空)
   证明: by
   rcases hne with ⟨z, hz⟩
   rw [← infDist_inter_closedBall_of_mem hz]
@@ -2372,8 +2372,8 @@ theorem exists_mem_closure_infDist_eq_dist
   simpa only [infDist_closure] using isClosed_closure.exists_infDist_eq_dist hne.closure x
 
 中文:
-定理 exists_mem_closure_infDist_eq_dist
-  条件: [命题erSpace α] (hne : s.Nonempty) (x : α)
+定理 存在_mem_closure_infDist_eq_dist
+  条件: [真空间 α] (hne : s.非空) (x : α)
   证明: by
   simpa only [infDist_closure] using isClosed_closure.exists_infDist_eq_dist hne.closure x
 
@@ -2397,7 +2397,7 @@ definition infNndist
 
 中文:
 定义 infNndist
-  签名: (x : α) (s : Set α)
+  签名: (x : α) (s : 集合 α)
   定义体: ENNReal.toNNReal (infEDist x s)
 
 @[simp]
@@ -2435,7 +2435,7 @@ theorem lipschitz_infNndist_pt
 
 中文:
 定理 lipschitz_infNndist_pt
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: LipschitzWith 1 fun x => infNndist x s
   证明: LipschitzWith.of_le_add fun _ _ => infDist_le_infDist_add_dist
 
@@ -2455,8 +2455,8 @@ theorem uniformContinuous_infNndist_pt
 
 中文:
 定理 uniformContinuous_infNndist_pt
-  条件: (s : Set α)
-  结论: UniformContinuous fun x => infNndist x s
+  条件: (s : 集合 α)
+  结论: 一致连续 fun x => infNndist x s
   证明: (lipschitz_infNndist_pt s).uniformContinuous
 
 Depends on / 依赖: lipschitz_infNndist_pt, uniformContinuous
@@ -2477,8 +2477,8 @@ theorem continuous_infNndist_pt
 
 中文:
 定理 continuous_infNndist_pt
-  条件: (s : Set α)
-  结论: Continuous fun x => infNndist x s
+  条件: (s : 集合 α)
+  结论: 连续 fun x => infNndist x s
   证明: (uniformContinuous_infNndist_pt s).continuous
 
 Depends on / 依赖: continuous, uniformContinuous_infNndist_pt
@@ -2498,7 +2498,7 @@ definition hausdorffDist
 
 中文:
 定义 hausdorffDist
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: ENNReal.toReal (hausdorffEDist s t)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, hausdorffEDist, toReal
@@ -2542,7 +2542,7 @@ theorem hausdorffEDist_ne_top_of_nonempty_of_bounded
 
 中文:
 定理 hausdorffEDist_ne_top_of_nonempty_of_bounded
-  结论: (hs : s.Nonempty) (ht : t.Nonempty)
+  结论: (hs : s.非空) (ht : t.非空)
   证明: by
   rcases hs with ⟨cs, hcs⟩
   rcases ht with ⟨ct, hct⟩
@@ -2763,7 +2763,7 @@ theorem hausdorffDist_le_diam
 
 中文:
 定理 hausdorffDist_le_diam
-  结论: (hs : s.Nonempty) (bs : IsBounded s) (ht : t.Nonempty)
+  结论: (hs : s.非空) (bs : IsBounded s) (ht : t.非空)
   证明: by
   rcases hs with ⟨x, xs⟩
   rcases ht with ⟨y, yt⟩
@@ -2817,7 +2817,7 @@ theorem exists_dist_lt_of_hausdorffDist_lt
   rcases exists_edist_lt_of_hausdorffEDist_lt h this with ⟨
 
 中文:
-定理 exists_dist_lt_of_hausdorffDist_lt
+定理 存在_dist_lt_of_hausdorffDist_lt
   结论: {r : 实数} (h : x in s) (H : hausdorffDist s t < r)
   证明: by
   have r0 : 0 < r := lt_of_le_of_lt hausdorffDist_nonneg H
@@ -2850,7 +2850,7 @@ theorem exists_dist_lt_of_hausdorffDist_lt'
   simpa [dist_comm] using exists_dist_lt_of_hausdorffDist_lt h H fin
 
 中文:
-定理 exists_dist_lt_of_hausdorffDist_lt'
+定理 存在_dist_lt_of_hausdorffDist_lt'
   结论: {r : 实数} (h : y in t) (H : hausdorffDist s t < r)
   证明: by
   rw [hausdorffDist_comm] at H
@@ -2906,7 +2906,7 @@ theorem hausdorffDist_image
 
 中文:
 定理 hausdorffDist_image
-  条件: (h : Isometry Φ)
+  条件: (h : 等距 Φ)
   证明: by
   simp [hausdorffDist, hausdorffEDist_image h]
 
@@ -3093,8 +3093,8 @@ theorem _root_.IsClosed.hausdorffDist_zero_iff_eq
 @[simp]
 
 中文:
-定理 _root_.IsClosed.hausdorffDist_zero_iff_eq
-  结论: (hs : IsClosed s) (ht : IsClosed t)
+定理 _root_.是闭集.hausdorffDist_zero_iff_eq
+  结论: (hs : 是闭集 s) (ht : 是闭集 t)
   证明: by
   simp [← _root_.IsClosed.hausdorffEDist_zero_iff hs ht, hausdorffDist, ENNReal.toReal_eq_zero_iff,
     fin]

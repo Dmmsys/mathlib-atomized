@@ -58,7 +58,7 @@ theorem cyclotomic_comp_X_add_one_isEisensteinAt
 
 中文:
 定理 cyclotomic_comp_X_add_one_isEisensteinAt
-  条件: [hp : Fact p.Prime]
+  条件: [hp : Fact p.素]
   证明: by
   refine Monic.isEisensteinAt_of_mem_of_notMem ?_
       (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
@@ -115,7 +115,7 @@ theorem cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt
 
 中文:
 定理 cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt
-  条件: [hp : Fact p.Prime] (n : 自然数)
+  条件: [hp : Fact p.素] (n : 自然数)
   证明: by
   refine Monic.isEisensteinAt_of_mem_of_notMem ?_
       (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
@@ -294,7 +294,7 @@ theorem mem_adjoin_of_dvd_coeff_of_dvd_aeval
 
 中文:
 定理 mem_adjoin_of_dvd_coeff_of_dvd_aeval
-  结论: {A B : 类型} [CommSemiring A] [Ring B]
+  结论: {A B : 类型} [交换半环 A] [环 B]
   证明: by
   choose! f hf using hQ
   rw [aeval_eq_sum_range]; rw [sum_range] at hz

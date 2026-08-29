@@ -90,13 +90,13 @@ structure SpectralSequenceDataCore
     - le₀₁((r : 整数) (pq : κ) (hr : r₀ <= r := by lia)) : i₀ r pq <= i₁ pq
     - le₁₂((pq : κ)) : i₁ pq <= i₂ pq
     - le₂₃((r : 整数) (pq : κ) (hr : r₀ <= r := by lia)) : i₂ pq <= i₃ r pq
-    - hc((r : 整数) (pq pq' : κ) (hpq : (c r).Rel pq pq') (hr : r₀ <= r := by lia)) : deg pq + 1 = deg pq'
-    - hc₀₂((r : 整数) (pq pq' : κ) (hpq : (c r).Rel pq pq') (hr : r₀ <= r := by lia)) : i₀ r pq = i₂ pq'
-    - hc₁₃((r : 整数) (pq pq' : κ) (hpq : (c r).Rel pq pq') (hr : r₀ <= r := by lia)) : i₁ pq = i₃ r pq'
+    - hc((r : 整数) (pq pq' : κ) (hpq : (c r).关系 pq pq') (hr : r₀ <= r := by lia)) : deg pq + 1 = deg pq'
+    - hc₀₂((r : 整数) (pq pq' : κ) (hpq : (c r).关系 pq pq') (hr : r₀ <= r := by lia)) : i₀ r pq = i₂ pq'
+    - hc₁₃((r : 整数) (pq pq' : κ) (hpq : (c r).关系 pq pq') (hr : r₀ <= r := by lia)) : i₁ pq = i₃ r pq'
     - antitone_i₀((r r' : 整数) (pq : κ) (hr : r₀ <= r := by lia) (hrr' : r <= r' := by lia)) : i₀ r' pq <= i₀ r pq
     - monotone_i₃((r r' : 整数) (pq : κ) (hr : r₀ <= r := by lia) (hrr' : r <= r' := by lia)) : i₃ r pq <= i₃ r' pq
-    - i₀_prev((r r' : 整数) (pq pq' : κ) (hpq : (c r).Rel pq pq') (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : i₀ r' pq = i₁ pq'
-    - i₃_next((r r' : 整数) (pq pq' : κ) (hpq : (c r).Rel pq pq') (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : i₃ r' pq' = i₂ pq
+    - i₀_prev((r r' : 整数) (pq pq' : κ) (hpq : (c r).关系 pq pq') (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : i₀ r' pq = i₁ pq'
+    - i₃_next((r r' : 整数) (pq pq' : κ) (hpq : (c r).关系 pq pq') (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : i₃ r' pq' = i₂ pq
 -/
 structure SpectralSequenceDataCore where
   /-- The cohomological degree of objects in the pages -/
@@ -376,7 +376,7 @@ definition coreE₂CohomologicalNat
   hc r pq pq' hpq hr := by simp only [ComplexShape.spectralSequenceNat_rel_iff] at 
 
 中文:
-定义 coreE₂CohomologicalNat
+定义 coreE₂Cohomological自然数
   签名: :
   定义体: pq.1 + pq.2
   i₀ r pq hr := (pq.2 - r + 2 :)
@@ -519,7 +519,7 @@ definition coreE₂HomologicalNat
     simp only [ComplexShape.spectralSequenceNat_rel_if
 
 中文:
-定义 coreE₂HomologicalNat
+定义 coreE₂Homological自然数
   签名: :
   定义体: - pq.1 - pq.2
   i₀ r pq hr := (-pq.2 - r + 2 :)
@@ -582,11 +582,11 @@ class HasSpectralSequence
     - isZero_H_obj_mk₁_i₃_le((r r' : Int) (pq : κ) (hpq : forall (pq' : κ), ¬ ((c r).Rel pq' pq)) (n : Int) (hn : n = data.deg pq - 1) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : IsZero ((X.H n).obj (mk₁ (homOfLE (data.i₃_le r r' pq))))
 
 中文:
-类 HasSpectralSequence
+类 有谱序列
   参数: : 命题 where
   公理与运算 (2 个):
-    - isZero_H_obj_mk₁_i₀_le((r r' : 整数) (pq : κ) (hpq : 对任意 (pq' : κ), ¬ ((c r).Rel pq pq')) (n : 整数) (hn : n = data.deg pq + 1) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : IsZero ((X.H n).obj (mk₁ (homOfLE (data.i₀_le r r' pq))))
-    - isZero_H_obj_mk₁_i₃_le((r r' : 整数) (pq : κ) (hpq : 对任意 (pq' : κ), ¬ ((c r).Rel pq' pq)) (n : 整数) (hn : n = data.deg pq - 1) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : IsZero ((X.H n).obj (mk₁ (homOfLE (data.i₃_le r r' pq))))
+    - isZero_H_obj_mk₁_i₀_le((r r' : 整数) (pq : κ) (hpq : 对任意 (pq' : κ), ¬ ((c r).关系 pq pq')) (n : 整数) (hn : n = data.deg pq + 1) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : 是零 ((X.H n).obj (mk₁ (homOfLE (data.i₀_le r r' pq))))
+    - isZero_H_obj_mk₁_i₃_le((r r' : 整数) (pq : κ) (hpq : 对任意 (pq' : κ), ¬ ((c r).关系 pq' pq)) (n : 整数) (hn : n = data.deg pq - 1) (hrr' : r + 1 = r' := by lia) (hr : r₀ <= r := by lia)) : 是零 ((X.H n).obj (mk₁ (homOfLE (data.i₃_le r r' pq))))
 
 Depends on / 依赖: IsZero, data.deg, data.i, homOfLE
 -/
@@ -758,11 +758,11 @@ class IsFirstQuadrant
     - isZero₂((i j : EInt) (hij : i <= j) (n : Int) (hi : n < i)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
 
 中文:
-类 IsFirstQuadrant
+类 是FirstQuadrant
   参数: : 命题 where
   公理与运算 (2 个):
-    - isZero₁((i j : E整数) (hij : i <= j) (hj : j <= (0 : 整数)) (n : 整数)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
-    - isZero₂((i j : E整数) (hij : i <= j) (n : 整数) (hi : n < i)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
+    - isZero₁((i j : E整数) (hij : i <= j) (hj : j <= (0 : 整数)) (n : 整数)) : 是零 ((Y.H n).obj (mk₁ (homOfLE hij)))
+    - isZero₂((i j : E整数) (hij : i <= j) (n : 整数) (hi : n < i)) : 是零 ((Y.H n).obj (mk₁ (homOfLE hij)))
 -/
 class IsFirstQuadrant : Prop where
   isZero₁ (i j : EInt) (hij : i <= j) (hj : j <= (0 : Int)) (n : Int) :
@@ -826,7 +826,7 @@ instance :
 
 中文:
 实例 :
-  签名: Y.HasSpectralSequence coreE₂Cohomological自然数
+  签名: Y.有谱序列 coreE₂Cohomological自然数
   定义体: by
     rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
     apply isZero₁_of_isFirstQuadrant
@@ -872,11 +872,11 @@ class IsThirdQuadrant
     - isZero₂((i j : EInt) (hij : i <= j) (n : Int) (hj : j <= n)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
 
 中文:
-类 IsThirdQuadrant
+类 是ThirdQuadrant
   参数: where
   公理与运算 (2 个):
-    - isZero₁((i j : E整数) (hij : i <= j) (hi : (0 : 整数) < i) (n : 整数)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
-    - isZero₂((i j : E整数) (hij : i <= j) (n : 整数) (hj : j <= n)) : IsZero ((Y.H n).obj (mk₁ (homOfLE hij)))
+    - isZero₁((i j : E整数) (hij : i <= j) (hi : (0 : 整数) < i) (n : 整数)) : 是零 ((Y.H n).obj (mk₁ (homOfLE hij)))
+    - isZero₂((i j : E整数) (hij : i <= j) (n : 整数) (hj : j <= n)) : 是零 ((Y.H n).obj (mk₁ (homOfLE hij)))
 -/
 class IsThirdQuadrant where
   isZero₁ (i j : EInt) (hij : i <= j) (hi : (0 : Int) < i) (n : Int) :
@@ -940,7 +940,7 @@ instance :
 
 中文:
 实例 :
-  签名: Y.HasSpectralSequence coreE₂Homological自然数
+  签名: Y.有谱序列 coreE₂Homological自然数
   定义体: by
     rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
     apply isZero₂_of_isThirdQuadrant

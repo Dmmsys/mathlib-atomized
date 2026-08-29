@@ -63,17 +63,17 @@ structure AttachCells
 结构 AttachCells
   参数: where
   公理与运算 (11 个):
-    - ι : Type w
+    - ι : 类型 w
     - π : ι -> α
     - cofan₁ : Cofan (fun i => A (π i))
     - cofan₂ : Cofan (fun i => B (π i))
-    - isColimit₁ : IsColimit cofan₁
-    - isColimit₂ : IsColimit cofan₂
+    - isColimit₁ : 是余极限 cofan₁
+    - isColimit₂ : 是余极限 cofan₂
     - m : cofan₁.pt ⟶ cofan₂.pt
     - hm((i : ι)) : cofan₁.inj i ≫ m = g (π i) ≫ cofan₂.inj i  [默认: by cat_disch]
     - g₁ : cofan₁.pt ⟶ X₁
     - g₂ : cofan₂.pt ⟶ X₂
-    - isPushout : IsPushout g₁ m f g₂
+    - isPushout : 是推出 g₁ m f g₂
 
 Depends on / 依赖: cat_disch
 -/
@@ -237,7 +237,7 @@ definition ofArrowIso
 
 中文:
 定义 ofArrowIso
-  签名: {Y₁ Y₂ : C} {f' : Y₁ ⟶ Y₂} (e : Arrow.mk f ≅ Arrow.mk f')
+  签名: {Y₁ Y₂ : C} {f' : Y₁ ⟶ Y₂} (e : 箭头.mk f ≅ 箭头.mk f')
   定义体: c.ι
   π := c.π
   cofan₁ := c.cofan₁
@@ -284,7 +284,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: {ι' : Type w'} (e : ι' ≃ c.ι)
+  签名: {ι' : 类型 w'} (e : ι' ≃ c.ι)
   定义体: ι'
   π i' := c.π (e i')
   cofan₁ := Cofan.mk c.cofan₁.pt (fun i' => c.cofan₁.inj (e i'))

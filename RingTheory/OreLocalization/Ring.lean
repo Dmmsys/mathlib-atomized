@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring R[S⁻¹]
+  签名: 半环 R[S⁻¹]
   定义体: (inferInstance : MonoidWithZero (R[S⁻¹]))
   __ := (inferInstance : AddCommMonoid (R[S⁻¹]))
   left_distrib := OreLocalization.left_distrib
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R[S⁻¹] X[S⁻¹]
+  签名: 模 R[S⁻¹] X[S⁻¹]
   定义体: OreLocalization.add_smul
   zero_smul := OreLocalization.zero_smul
 
@@ -424,7 +424,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring R[S⁻¹]
+  签名: 环 R[S⁻¹]
   定义体: (inferInstance : Semiring R[S⁻¹])
   __ := (inferInstance : AddGroup R[S⁻¹])
 
@@ -523,7 +523,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivisionRing R[R⁰⁻¹]
+  签名: 除环 R[R⁰⁻¹]
   定义体: OreLocalization.mul_inv_cancel
   inv_zero := OreLocalization.inv_zero
   nnqsmul := _
@@ -558,7 +558,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring R[S⁻¹]
+  签名: 交换半环 R[S⁻¹]
   定义体: (inferInstance : Semiring R[S⁻¹])
   __ := (inferInstance : CommMonoid R[S⁻¹])
 
@@ -585,7 +585,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing R[S⁻¹]
+  签名: 交换环 R[S⁻¹]
   定义体: (inferInstance : Ring R[S⁻¹])
   __ := (inferInstance : CommMonoid R[S⁻¹])
 -/
@@ -613,7 +613,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field R[R⁰⁻¹]
+  签名: 域 R[R⁰⁻¹]
   定义体: (inferInstance : DivisionRing R[R⁰⁻¹])
   __ := (inferInstance : CommMonoid R[R⁰⁻¹])
 

@@ -52,7 +52,7 @@ theorem isPrimePow_def
 
 中文:
 定理 isPrimePow_def
-  结论: IsPrimePow n ↔ 存在 (p : R) (k : 自然数), Prime p ∧ 0 < k ∧ p ^ k = n
+  结论: IsPrimePow n ↔ 存在 (p : R) (k : 自然数), 素 p ∧ 0 < k ∧ p ^ k = n
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -72,7 +72,7 @@ theorem isPrimePow_iff_pow_succ
 
 中文:
 定理 isPrimePow_iff_pow_succ
-  结论: IsPrimePow n ↔ 存在 (p : R) (k : 自然数), Prime p ∧ p ^ (k + 1) = n
+  结论: IsPrimePow n ↔ 存在 (p : R) (k : 自然数), 素 p ∧ p ^ (k + 1) = n
   证明: (isPrimePow_def _).trans
     ⟨fun ⟨p, k, hp, hk, hn⟩ => ⟨p, k - 1, hp, by rwa [Nat.sub_add_cancel hk]⟩, fun ⟨_, _, hp, hn⟩ =>
       ⟨_, _, hp, Nat.succ_pos', hn⟩⟩
@@ -99,7 +99,7 @@ theorem not_isPrimePow_zero
 
 中文:
 定理 not_isPrimePow_zero
-  条件: [IsReduced R]
+  条件: [是既约 R]
   结论: ¬IsPrimePow (0 : R)
   证明: by
   simp only [isPrimePow_def, not_exists, not_and', and_imp]
@@ -131,7 +131,7 @@ alias IsPrimePow.not_unit := IsPrimePow.not_isUnit
 中文:
 定理 IsPrimePow.not_isUnit
   条件: {n : R} (h : IsPrimePow n)
-  结论: ¬IsUnit n
+  结论: ¬是单位 n
   证明: let ⟨_p, _k, hp, hk, hn⟩ := h
   hn ▸ (isUnit_pow_iff hk.ne').not.mpr hp.not_isUnit
 
@@ -157,8 +157,8 @@ theorem IsUnit.not_isPrimePow
   proof: fun h' => h'.not_isUnit h
 
 中文:
-定理 IsUnit.not_isPrimePow
-  条件: {n : R} (h : IsUnit n)
+定理 是单位.not_isPrimePow
+  条件: {n : R} (h : 是单位 n)
   结论: ¬IsPrimePow n
   证明: fun h' => h'.not_isUnit h
 
@@ -194,8 +194,8 @@ theorem Prime.isPrimePow
   proof: ⟨p, 1, hp, zero_lt_one, by simp⟩
 
 中文:
-定理 Prime.isPrimePow
-  条件: {p : R} (hp : Prime p)
+定理 素.isPrimePow
+  条件: {p : R} (hp : 素 p)
   结论: IsPrimePow p
   证明: ⟨p, 1, hp, zero_lt_one, by simp⟩
 
@@ -239,7 +239,7 @@ theorem IsPrimePow.ne_zero
 
 中文:
 定理 IsPrimePow.ne_zero
-  条件: [IsReduced R] {n : R} (h : IsPrimePow n)
+  条件: [是既约 R] {n : R} (h : IsPrimePow n)
   结论: n != 0
   证明: fun t =>
   not_isPrimePow_zero (t ▸ h)
@@ -282,7 +282,7 @@ theorem isPrimePow_nat_iff
 中文:
 定理 isPrimePow_nat_iff
   条件: (n : 自然数)
-  结论: IsPrimePow n ↔ 存在 p k : 自然数, 自然数.Prime p ∧ 0 < k ∧ p ^ k = n
+  结论: IsPrimePow n ↔ 存在 p k : 自然数, 自然数.素 p ∧ 0 < k ∧ p ^ k = n
   证明: by
   simp only [isPrimePow_def, Nat.prime_iff]
 
@@ -301,8 +301,8 @@ theorem Nat.Prime.isPrimePow
   proof: _root_.Prime.isPrimePow (prime_iff.mp hp)
 
 中文:
-定理 Nat.Prime.isPrimePow
-  条件: {p : 自然数} (hp : p.Prime)
+定理 自然数.素.isPrimePow
+  条件: {p : 自然数} (hp : p.素)
   结论: IsPrimePow p
   证明: _root_.Prime.isPrimePow (prime_iff.mp hp)
 

@@ -151,7 +151,7 @@ instance PrincipalIdeals.normal
 
 中文:
 实例 PrincipalIdeals.normal
-  签名: : (toPrincipalIdeal R K).range.Normal
+  签名: : (toPrincipalIdeal R K).range.正规
   定义体: Subgroup.normal_of_isMulCommutative _
 
 Depends on / 依赖: Subgroup, Subgroup.normal_of_isMulCommutative, normal_of_isMulCommutative
@@ -505,7 +505,7 @@ theorem ClassGroup.equiv_mk
 
 中文:
 定理 ClassGroup.equiv_mk
-  结论: (K' : 类型) [Field K'] [Algebra R K'] [IsFractionRing R K']
+  结论: (K' : 类型) [域 K'] [代数 R K'] [IsFractionRing R K']
   证明: by
   -- `simp` can't apply `ClassGroup.mk_def` and `rw` can't unfold `ClassGroup`.
   rw [ClassGroup.equiv]; rw [ClassGroup.mk_def]
@@ -537,7 +537,7 @@ theorem ClassGroup.mk_canonicalEquiv
 
 中文:
 定理 ClassGroup.mk_canonicalEquiv
-  结论: (K' : 类型) [Field K'] [Algebra R K'] [IsFractionRing R K']
+  结论: (K' : 类型) [域 K'] [代数 R K'] [IsFractionRing R K']
   证明: by
   rw [ClassGroup.mk_def]; rw [ClassGroup.mk_def]; rw [← MonoidHom.comp_apply (Units.map _)]; rw [← Units.map_comp]; rw [← RingEquiv.coe_monoidHom_trans]; rw [FractionalIdeal.canonicalEquiv_trans_canonicalEquiv]
 
@@ -565,7 +565,7 @@ definition FractionalIdeal.mk0
 
 中文:
 定义 FractionalIdeal.mk0
-  签名: [IsDedekindDomain R]
+  签名: [是Dedekind整环 R]
   定义体: Units.mk0 I (coeIdeal_ne_zero.mpr <| mem_nonZeroDivisors_iff_ne_zero.mp I.2)
   map_one' := by simp
   map_mul' x y := by simp
@@ -591,7 +591,7 @@ theorem FractionalIdeal.coe_mk0
 
 中文:
 定理 FractionalIdeal.coe_mk0
-  条件: [IsDedekindDomain R] (I : (Ideal R)⁰)
+  条件: [是Dedekind整环 R] (I : (理想 R)⁰)
   证明: rfl
 -/
 theorem FractionalIdeal.coe_mk0 [IsDedekindDomain R] (I : (Ideal R)⁰) :
@@ -610,7 +610,7 @@ theorem FractionalIdeal.canonicalEquiv_mk0
 
 中文:
 定理 FractionalIdeal.canonicalEquiv_mk0
-  结论: [IsDedekindDomain R] (K' : 类型) [Field K']
+  结论: [是Dedekind整环 R] (K' : 类型) [域 K']
   证明: by
   simp only [FractionalIdeal.coe_mk0, FractionalIdeal.canonicalEquiv_coeIdeal]
 
@@ -635,7 +635,7 @@ theorem FractionalIdeal.map_canonicalEquiv_mk0
 
 中文:
 定理 FractionalIdeal.map_canonicalEquiv_mk0
-  结论: [IsDedekindDomain R] (K' : 类型) [Field K']
+  结论: [是Dedekind整环 R] (K' : 类型) [域 K']
   证明: Units.ext (FractionalIdeal.canonicalEquiv_mk0 K K' I)
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.canonicalEquiv_mk0, Units.ext, canonicalEquiv_mk0
@@ -658,7 +658,7 @@ definition ClassGroup.mk0
 
 中文:
 定义 ClassGroup.mk0
-  签名: [IsDedekindDomain R]
+  签名: [是Dedekind整环 R]
   定义体: (ClassGroup.mk (FractionRing R)).comp (FractionalIdeal.mk0 (FractionRing R))
 
 @[simp]
@@ -680,7 +680,7 @@ theorem ClassGroup.mk_mk0
 
 中文:
 定理 ClassGroup.mk_mk0
-  条件: [IsDedekindDomain R] (I : (Ideal R)⁰)
+  条件: [是Dedekind整环 R] (I : (理想 R)⁰)
   证明: by
   rw [ClassGroup.mk0]; rw [MonoidHom.comp_apply]; rw [← ClassGroup.mk_canonicalEquiv K (FractionRing R)]; rw [FractionalIdeal.map_canonicalEquiv_mk0]
 
@@ -702,7 +702,7 @@ theorem ClassGroup.mk0_eq_quotientMk
 
 中文:
 定理 ClassGroup.mk0_eq_quotientMk
-  条件: [IsDedekindDomain R] (I : (Ideal R)⁰)
+  条件: [是Dedekind整环 R] (I : (理想 R)⁰)
   证明: (ClassGroup.mk_mk0 (K := FractionRing R) I).symm.trans (ClassGroup.Quot_mk_eq_mk _).symm
 
 @[simp]
@@ -728,7 +728,7 @@ theorem ClassGroup.equiv_mk0
 
 中文:
 定理 ClassGroup.equiv_mk0
-  条件: [IsDedekindDomain R] (I : (Ideal R)⁰)
+  条件: [是Dedekind整环 R] (I : (理想 R)⁰)
   证明: by
   rw [ClassGroup.mk0]; rw [MonoidHom.comp_apply]; rw [ClassGroup.equiv_mk]
   congr 1
@@ -759,8 +759,8 @@ theorem ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring
     · rintro
 
 中文:
-定理 ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring
-  条件: [IsDedekindDomain R] {I J : (Ideal R)⁰}
+定理 ClassGroup.mk0_eq_mk0_iff_存在_fraction_ring
+  条件: [是Dedekind整环 R] {I J : (理想 R)⁰}
   证明: by
   refine (ClassGroup.equiv K).injective.eq_iff.symm.trans ?_
   simp only [ClassGroup.equiv_mk0, QuotientGroup.mk'_eq_mk', mem_principal_ideals_iff,
@@ -805,7 +805,7 @@ theorem ClassGroup.mk0_eq_mk0_iff
 
 中文:
 定理 ClassGroup.mk0_eq_mk0_iff
-  条件: [IsDedekindDomain R] {I J : (Ideal R)⁰}
+  条件: [是Dedekind整环 R] {I J : (理想 R)⁰}
   证明: by
   refine (ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring (FractionRing R)).trans ⟨?_, ?_⟩
   · rintro ⟨z, hz, h⟩
@@ -922,7 +922,7 @@ theorem ClassGroup.mk0_integralRep
 
 中文:
 定理 ClassGroup.mk0_integralRep
-  结论: [IsDedekindDomain R]
+  结论: [是Dedekind整环 R]
   证明: by
   rw [← ClassGroup.mk_mk0 (FractionRing R)]; rw [eq_comm]; rw [ClassGroup.mk_eq_mk]
   have fd_ne_zero : (algebraMap R (FractionRing R)) I.1.den != 0 := by
@@ -956,7 +956,7 @@ theorem ClassGroup.mk0_surjective
 
 中文:
 定理 ClassGroup.mk0_surjective
-  条件: [IsDedekindDomain R]
+  条件: [是Dedekind整环 R]
   证明: by
   rintro ⟨I⟩
   refine ⟨⟨ClassGroup.integralRep I.1, ClassGroup.integralRep_mem_nonZeroDivisors I.ne_zero⟩, ?_⟩
@@ -1026,7 +1026,7 @@ theorem FractionalIdeal.isPrincipal.of_isPrincipal_pow_of_coprime
 
 中文:
 定理 FractionalIdeal.isPrincipal.of_isPrincipal_pow_of_coprime
-  结论: [IsDedekindDomain R]
+  结论: [是Dedekind整环 R]
   证明: by
   obtain (rfl | ⟨u, rfl⟩) := GroupWithZero.eq_zero_or_unit I
   · simp [bot_isPrincipal]
@@ -1059,7 +1059,7 @@ theorem ClassGroup.isPrincipal_coeSubmodule_of_isUnit
 
 中文:
 定理 ClassGroup.isPrincipal_coeSubmodule_of_isUnit
-  结论: [Subsingleton (ClassGroup R)]
+  结论: [子单例 (ClassGroup R)]
   证明: by
   rcases hI with ⟨I, rfl⟩
   rw [← ClassGroup.mk_eq_one_iff]; rw [Subsingleton.elim (ClassGroup.mk K I) 1]
@@ -1087,7 +1087,7 @@ theorem ClassGroup.isPrincipal_of_isUnit_coeIdeal
 
 中文:
 定理 ClassGroup.isPrincipal_of_isUnit_coeIdeal
-  结论: [Subsingleton (ClassGroup R)]
+  结论: [子单例 (ClassGroup R)]
   证明: by
   have hsub :
       ((I : FractionalIdeal R⁰ K) : Submodule R K).IsPrincipal :=
@@ -1116,7 +1116,7 @@ theorem ClassGroup.mk0_eq_one_iff
 
 中文:
 定理 ClassGroup.mk0_eq_one_iff
-  条件: [IsDedekindDomain R] {I : Ideal R} (hI : I in (Ideal R)⁰)
+  条件: [是Dedekind整环 R] {I : 理想 R} (hI : I in (理想 R)⁰)
   证明: ClassGroup.mk_eq_one_iff.trans (coeSubmodule_isPrincipal R _)
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk_eq_one_iff.trans, coeSubmodule_isPrincipal, mk_eq_one_iff
@@ -1139,8 +1139,8 @@ theorem Ideal.IsPrincipal.of_isPrincipal_pow_of_coprime
 
 
 中文:
-定理 Ideal.IsPrincipal.of_isPrincipal_pow_of_coprime
-  结论: [IsDedekindDomain R]
+定理 理想.是Principal.of_isPrincipal_pow_of_coprime
+  结论: [是Dedekind整环 R]
   证明: by
   by_cases hI0 : I = 0
   · simp [hI0, bot_isPrincipal]
@@ -1175,7 +1175,7 @@ exact nonZeroDivisors.coe_ne_zer
 
 中文:
 定理 ClassGroup.mk0_eq_mk0_inv_iff
-  条件: [IsDedekindDomain R] {I J : (Ideal R)⁰}
+  条件: [是Dedekind整环 R] {I J : (理想 R)⁰}
   证明: by
   rw [eq_inv_iff_mul_eq_one]; rw [← map_mul]; rw [ClassGroup.mk0_eq_one_iff]; rw [Submodule.isPrincipal_iff]; rw [Submonoid.coe_mul]
   refine ⟨fun ⟨a, ha⟩ => ⟨a, ?_, ha⟩, fun ⟨a, _, ha⟩ => ⟨a, ha⟩⟩
@@ -1207,8 +1207,8 @@ instance [IsPrincipalIdealRing
     exact ClassGroup.mk_eq_one_iff.mpr (I : FractionalIdeal R⁰ (FractionRing R)).isPrincipal
 
 中文:
-实例 [IsPrincipalIdealRing
-  签名: R] : Fintype (ClassGroup R) where
+实例 [是主理想环
+  签名: R] : 有限类型 (ClassGroup R) where
   定义体: {1}
   complete := by
     refine ClassGroup.induction (R := R) (FractionRing R) (fun I => ?_)
@@ -1237,8 +1237,8 @@ theorem card_classGroup_eq_one
 
 中文:
 定理 card_classGroup_eq_one
-  条件: [IsPrincipalIdealRing R]
-  结论: Fintype.card (ClassGroup R) = 1
+  条件: [是主理想环 R]
+  结论: 有限类型.card (ClassGroup R) = 1
   证明: by
   rw [Fintype.card_eq_one_iff]
   use 1
@@ -1271,7 +1271,7 @@ theorem card_classGroup_eq_one_iff
 
 中文:
 定理 card_classGroup_eq_one_iff
-  条件: [IsDedekindDomain R] [Fintype (ClassGroup R)]
+  条件: [是Dedekind整环 R] [有限类型 (ClassGroup R)]
   证明: by
   constructor; swap; · intros; convert! card_classGroup_eq_one (R := R)
   rw [Fintype.card_eq_one_iff]
@@ -1314,7 +1314,7 @@ theorem FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal
 
 中文:
 定理 FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal
-  结论: {S L : 类型} [CommRing S]
+  结论: {S L : 类型} [交换环 S]
   证明: by
   ext I
   simp only [MulEquiv.toMonoidHom_eq_coe, Subgroup.mem_map, MonoidHom.mem_range,
@@ -1369,7 +1369,7 @@ definition ClassGroup.mulEquiv
 
 中文:
 定义 ClassGroup.mulEquiv
-  签名: {R' : 类型} [CommRing R'] [IsDomain R'] (g : R ≃+* R')
+  签名: {R' : 类型} [交换环 R'] [是整环 R'] (g : R ≃+* R')
   定义体: (ClassGroup.equiv (R := R) (FractionRing R)).trans
     ((QuotientGroup.congr (toPrincipalIdeal R (FractionRing R)).range
         (toPrincipalIdeal R' (FractionRing R')).range

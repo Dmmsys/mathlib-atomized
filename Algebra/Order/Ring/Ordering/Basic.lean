@@ -88,7 +88,7 @@ theorem toSubsemiring_mono
 
 中文:
 定理 toSubsemiring_mono
-  结论: Monotone (toSubsemiring : RingPreordering R -> _)
+  结论: 递增 (toSubsemiring : RingPreordering R -> _)
   证明: fun _ _ => id
 
 @[mono]
@@ -109,7 +109,7 @@ theorem toSubsemiring_strictMono
 
 中文:
 定理 toSubsemiring_strictMono
-  结论: StrictMono (toSubsemiring : RingPreordering R -> _)
+  结论: 严格递增 (toSubsemiring : RingPreordering R -> _)
   证明: fun _ _ => id
 
 @[aesop unsafe 90% apply (rule_sets := [SetLike])]
@@ -163,7 +163,7 @@ theorem inv_mem
 
 中文:
 定理 inv_mem
-  条件: {F : 类型} [Field F] {P : RingPreordering F} {a : F} (ha : a in P)
+  条件: {F : 类型} [域 F] {P : RingPreordering F} {a : F} (ha : a in P)
   证明: by
   have mem : a * (a⁻¹ * a⁻¹) in P := by aesop
   field_simp at mem
@@ -190,7 +190,7 @@ theorem mem_of_isSumSq
 
 中文:
 定理 mem_of_isSumSq
-  条件: {x : R} (hx : IsSumSq x)
+  条件: {x : R} (hx : 是SumSq x)
   结论: x in P
   证明: by
   induction hx using IsSumSq.rec' <;> aesop
@@ -218,7 +218,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: {R : 类型} [CommRing R] (P : Set R)
+  签名: {R : 类型} [交换环 R] (P : 集合 R)
   定义体: P
   add_mem' {x y} := by simpa using add
   mul_mem' {x y} := by simpa using mul
@@ -308,7 +308,7 @@ theorem one_notMem_support
 
 中文:
 定理 one_notMem_support
-  条件: [P.HasIdealSupport]
+  条件: [P.有IdealSupport]
   结论: 1 ∉ P.support
   证明: by
   simpa using one_notMem_supportAddSubgroup P
@@ -349,7 +349,7 @@ theorem support_ne_top
 
 中文:
 定理 support_ne_top
-  条件: [P.HasIdealSupport]
+  条件: [P.有IdealSupport]
   结论: P.support != ⊤
   证明: by
   apply_fun Submodule.toAddSubgroup
@@ -371,8 +371,8 @@ theorem IsOrdering.mk'
   mem_or_mem' := h
 
 中文:
-定理 IsOrdering.mk'
-  结论: [HasMemOrNegMem P]
+定理 是Ordering.mk'
+  结论: [有MemOrNegMem P]
   证明: support_ne_top P
   mem_or_mem' := h
 
@@ -399,7 +399,7 @@ theorem smul_mem
 
 中文:
 定理 smul_mem
-  结论: [P.HasIdealSupport]
+  结论: [P.有IdealSupport]
   证明: by
   rw [hasIdealSupport_iff] at ‹P.HasIdealSupport›
   simp [*]
@@ -423,7 +423,7 @@ theorem neg_smul_mem
 
 中文:
 定理 neg_smul_mem
-  结论: [P.HasIdealSupport]
+  结论: [P.有IdealSupport]
   证明: by
   rw [hasIdealSupport_iff] at ‹P.HasIdealSupport›
   simp [*]
@@ -457,8 +457,8 @@ theorem hasIdealSupport_of_isUnit_two
 
 中文:
 定理 hasIdealSupport_of_isUnit_two
-  条件: (h : IsUnit (2 : R))
-  结论: P.HasIdealSupport
+  条件: (h : 是单位 (2 : R))
+  结论: P.有IdealSupport
   证明: by
   rw [hasIdealSupport_iff]
   intro x a _ _
@@ -493,7 +493,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Fact (IsUnit (2 : R))] : P.HasIdealSupport
+  签名: : Fact (是单位 (2 : R))] : P.有IdealSupport
   定义体: hasIdealSupport_of_isUnit_two h.out
 
 Depends on / 依赖: h.out, hasIdealSupport_of_isUnit_two
@@ -565,7 +565,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.HasIdealSupport
+  签名: P.有IdealSupport
   定义体: by simp [supportAddSubgroup_eq_bot]
 
 Depends on / 依赖: supportAddSubgroup_eq_bot
@@ -601,7 +601,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.support.IsPrime
+  签名: P.support.是素
   定义体: by simpa using Ideal.isPrime_bot
 
 Depends on / 依赖: Ideal.isPrime_bot, isPrime_bot

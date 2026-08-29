@@ -63,7 +63,7 @@ definition quotientTensorQuotientEquiv
 
 中文:
 定义 quotientTensorQuotientEquiv
-  签名: (m : Submodule R M) (n : Submodule R N)
+  签名: (m : 子模 R M) (n : 子模 R N)
   定义体: LinearEquiv.ofLinearMap
     (lift <| Submodule.liftQ _ (LinearMap.flip <| Submodule.liftQ _
       ((mk R (M := M) (N := N)).flip.compr₂ (Submodule.mkQ _)) fun x hx => by
@@ -158,7 +158,7 @@ definition quotientTensorEquiv
 
 中文:
 定义 quotientTensorEquiv
-  签名: (m : Submodule R M)
+  签名: (m : 子模 R M)
   定义体: congr (LinearEquiv.refl _ _) ((Submodule.quotEquivOfEqBot _ rfl).symm) ≪≫ₗ
   quotientTensorQuotientEquiv (N := N) m ⊥ ≪≫ₗ
   Submodule.Quotient.equiv _ _ (LinearEquiv.refl _ _) (by
@@ -189,7 +189,7 @@ lemma quotientTensorEquiv_apply_tmul_mk
 
 中文:
 引理 quotientTensorEquiv_apply_tmul_mk
-  条件: (m : Submodule R M) (x : M) (y : N)
+  条件: (m : 子模 R M) (x : M) (y : N)
   证明: rfl
 
 @[simp]
@@ -210,7 +210,7 @@ lemma quotientTensorEquiv_symm_apply_mk_tmul
 
 中文:
 引理 quotientTensorEquiv_symm_apply_mk_tmul
-  条件: (m : Submodule R M) (x : M) (y : N)
+  条件: (m : 子模 R M) (x : M) (y : N)
   证明: rfl
 -/
 lemma quotientTensorEquiv_symm_apply_mk_tmul (m : Submodule R M) (x : M) (y : N) :
@@ -233,7 +233,7 @@ definition tensorQuotientEquiv
 
 中文:
 定义 tensorQuotientEquiv
-  签名: (n : Submodule R N)
+  签名: (n : 子模 R N)
   定义体: congr ((Submodule.quotEquivOfEqBot _ rfl).symm) (LinearEquiv.refl _ _) ≪≫ₗ
   quotientTensorQuotientEquiv (⊥ : Submodule R M) n ≪≫ₗ
   Submodule.Quotient.equiv _ _ (LinearEquiv.refl _ _) (by simp [range_map_eq_span_tmul])
@@ -262,7 +262,7 @@ lemma tensorQuotientEquiv_apply_mk_tmul
 
 中文:
 引理 tensorQuotientEquiv_apply_mk_tmul
-  条件: (n : Submodule R N) (x : M) (y : N)
+  条件: (n : 子模 R N) (x : M) (y : N)
   证明: rfl
 
 @[simp]
@@ -283,7 +283,7 @@ lemma tensorQuotientEquiv_symm_apply_tmul_mk
 
 中文:
 引理 tensorQuotientEquiv_symm_apply_tmul_mk
-  条件: (n : Submodule R N) (x : M) (y : N)
+  条件: (n : 子模 R N) (x : M) (y : N)
   证明: rfl
 -/
 lemma tensorQuotientEquiv_symm_apply_tmul_mk (n : Submodule R N) (x : M) (y : N) :
@@ -305,7 +305,7 @@ definition quotTensorEquivQuotSMul
 
 中文:
 定义 quotTensorEquivQuotSMul
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: quotientTensorEquiv M I ≪≫ₗ
   (Submodule.Quotient.equiv _ _ (TensorProduct.lid R M) <| by
     rw [← LinearMap.range_comp]; rw [← (Submodule.topEquiv.lTensor I).range_comp]; rw [Submodule.smul_eq_map₂]; rw [map₂_eq_range_lift_comp_mapIncl]
@@ -333,7 +333,7 @@ definition tensorQuotEquivQuotSMul
 
 中文:
 定义 tensorQuotEquivQuotSMul
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: TensorProduct.comm _ _ _ ≪≫ₗ quotTensorEquivQuotSMul M I
 
 @[simp]
@@ -362,7 +362,7 @@ lemma quotTensorEquivQuotSMul_mk_tmul
 
 中文:
 引理 quotTensorEquivQuotSMul_mk_tmul
-  条件: (I : Ideal R) (r : R) (x : M)
+  条件: (I : 理想 R) (r : R) (x : M)
   证明: (quotTensorEquivQuotSMul M I).eq_symm_apply.mp
     Eq.trans (congrArg (· otimesₜ[R] x) <|
         Eq.trans (congrArg (Ideal.Quotient.mk I)
@@ -397,7 +397,7 @@ lemma quotTensorEquivQuotSMul_mk_one_tmul
 
 中文:
 引理 quotTensorEquivQuotSMul_mk_one_tmul
-  条件: (I : Ideal R) (x : M)
+  条件: (I : 理想 R) (x : M)
   证明: by
   rw [← RingHom.map_one (Ideal.Quotient.mk I)]; rw [TensorProduct.quotTensorEquivQuotSMul_mk_tmul]
   simp
@@ -421,7 +421,7 @@ lemma quotTensorEquivQuotSMul_comp_mkQ_rTensor
 
 中文:
 引理 quotTensorEquivQuotSMul_comp_mkQ_rTensor
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: TensorProduct.ext' (quotTensorEquivQuotSMul_mk_tmul I)
 
 @[simp]
@@ -444,7 +444,7 @@ lemma quotTensorEquivQuotSMul_symm_mk
 
 中文:
 引理 quotTensorEquivQuotSMul_symm_mk
-  条件: (I : Ideal R) (x : M)
+  条件: (I : 理想 R) (x : M)
   证明: rfl
 -/
 lemma quotTensorEquivQuotSMul_symm_mk (I : Ideal R) (x : M) :
@@ -461,7 +461,7 @@ lemma quotTensorEquivQuotSMul_symm_comp_mkQ
 
 中文:
 引理 quotTensorEquivQuotSMul_symm_comp_mkQ
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: LinearMap.ext (quotTensorEquivQuotSMul_symm_mk I)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, quotTensorEquivQuotSMul_symm_mk
@@ -484,7 +484,7 @@ lemma quotTensorEquivQuotSMul_comp_mk
 
 中文:
 引理 quotTensorEquivQuotSMul_comp_mk
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: Eq.symm (LinearEquiv.toLinearMap_symm_comp_eq _ _).mp
     quotTensorEquivQuotSMul_symm_comp_mkQ I
 
@@ -509,7 +509,7 @@ lemma tensorQuotEquivQuotSMul_tmul_mk
 
 中文:
 引理 tensorQuotEquivQuotSMul_tmul_mk
-  条件: (I : Ideal R) (x : M) (r : R)
+  条件: (I : 理想 R) (x : M) (r : R)
   证明: quotTensorEquivQuotSMul_mk_tmul I r x
 
 Depends on / 依赖: quotTensorEquivQuotSMul_mk_tmul
@@ -531,7 +531,7 @@ lemma tensorQuotEquivQuotSMul_comp_mkQ_lTensor
 
 中文:
 引理 tensorQuotEquivQuotSMul_comp_mkQ_lTensor
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: TensorProduct.ext' (tensorQuotEquivQuotSMul_tmul_mk I)
 
 @[simp]
@@ -554,7 +554,7 @@ lemma tensorQuotEquivQuotSMul_symm_mk
 
 中文:
 引理 tensorQuotEquivQuotSMul_symm_mk
-  条件: (I : Ideal R) (x : M)
+  条件: (I : 理想 R) (x : M)
   证明: rfl
 -/
 lemma tensorQuotEquivQuotSMul_symm_mk (I : Ideal R) (x : M) :
@@ -571,7 +571,7 @@ lemma tensorQuotEquivQuotSMul_symm_comp_mkQ
 
 中文:
 引理 tensorQuotEquivQuotSMul_symm_comp_mkQ
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: LinearMap.ext (tensorQuotEquivQuotSMul_symm_mk I)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, tensorQuotEquivQuotSMul_symm_mk
@@ -592,7 +592,7 @@ lemma tensorQuotEquivQuotSMul_comp_mk
 
 中文:
 引理 tensorQuotEquivQuotSMul_comp_mk
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: Eq.symm (LinearEquiv.toLinearMap_symm_comp_eq _ _).mp
     tensorQuotEquivQuotSMul_symm_comp_mkQ I
 
@@ -619,8 +619,8 @@ definition _root_.Ideal.qoutMapEquivTensorQout
     congr
 
 中文:
-定义 _root_.Ideal.qoutMapEquivTensorQout
-  签名: {I : Ideal R}
+定义 _root_.理想.qoutMapEquivTensorQout
+  签名: {I : 理想 R}
   定义体: LinearEquiv.symm tensorQuotEquivQuotSMul S I ≪≫ₗ Submodule.quotEquivOfEq _ _ (by simp)
     ≪≫ₗ Submodule.Quotient.restrictScalarsEquiv R _
   map_smul' := by
@@ -651,7 +651,7 @@ definition tensorQuotMapSMulEquivTensorQuot
 
 中文:
 定义 tensorQuotMapSMulEquivTensorQuot
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: (tensorQuotEquivQuotSMul (S otimes[R] M) (I.map (algebraMap R S))).symm ≪≫ₗ
     TensorProduct.comm S (S otimes[R] M) _ ≪≫ₗ AlgebraTensorModule.cancelBaseChange R S S _ M ≪≫ₗ
       AlgebraTensorModule.congr (I.qoutMapEquivTensorQout S) (LinearEquiv.refl R M) ≪≫ₗ
@@ -697,7 +697,7 @@ definition tensorQuotientEquiv
 
 中文:
 定义 tensorQuotientEquiv
-  签名: (n : Submodule B N)
+  签名: (n : 子模 B N)
   定义体: TensorProduct.tensorQuotientEquiv M (n.restrictScalars R)
   map_smul' m x := by
     simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe]
@@ -736,7 +736,7 @@ lemma tensorQuotientEquiv_apply_tmul
 
 中文:
 引理 tensorQuotientEquiv_apply_tmul
-  条件: (n : Submodule B N) (x : M) (y : N)
+  条件: (n : 子模 B N) (x : M) (y : N)
   证明: rfl
 
 @[simp]
@@ -757,7 +757,7 @@ lemma tensorQuotientEquiv_symm_apply_mk_tmul
 
 中文:
 引理 tensorQuotientEquiv_symm_apply_mk_tmul
-  条件: (n : Submodule B N) (x : M) (y : N)
+  条件: (n : 子模 B N) (x : M) (y : N)
   证明: rfl
 -/
 lemma tensorQuotientEquiv_symm_apply_mk_tmul (n : Submodule B N) (x : M) (y : N) :

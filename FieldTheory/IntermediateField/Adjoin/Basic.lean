@@ -37,7 +37,7 @@ lemma restrictScalars_le_iff
 
 中文:
 引理 restrictScalars_le_iff
-  结论: (K : 类型) {L E : 类型} [Field K] [Field L]
+  结论: (K : 类型) {L E : 类型} [域 K] [域 L]
   证明: .rfl
 -/
 lemma restrictScalars_le_iff (K : Type*) {L E : Type*} [Field K] [Field L]
@@ -60,7 +60,7 @@ lemma FG.of_restrictScalars
 
 中文:
 引理 FG.of_restrictScalars
-  结论: {K L E : 类型} [Field K] [Field L] [Field E]
+  结论: {K L E : 类型} [域 K] [域 L] [域 E]
   证明: by
   obtain ⟨s, hs⟩ := H
   refine ⟨s, le_antisymm ?_ ?_⟩
@@ -169,8 +169,8 @@ theorem forall_mem_adjoin_smul_eq_self_iff
     adjoin_le_iff (T := FixedBy.intermediateField F E m)
 
 中文:
-定理 forall_mem_adjoin_smul_eq_self_iff
-  结论: {M : 类型} [Monoid M] [MulSemiringAction M E]
+定理 对任意_mem_adjoin_smul_eq_self_iff
+  结论: {M : 类型} [幺半群 M] [MulSemiring作用 M E]
   证明: by
   simpa [-adjoin_le_iff, Set.subset_def, SetLike.le_def, FixedBy.intermediateField_mem_iff] using
     adjoin_le_iff (T := FixedBy.intermediateField F E m)
@@ -205,7 +205,7 @@ instance finiteDimensional_sup
 
 中文:
 实例 finiteDimensional_sup
-  签名: [FiniteDimensional K E1] [FiniteDimensional K E2]
+  签名: [有限维 K E1] [有限维 K E2]
   定义体: by
   let g := Algebra.TensorProduct.productMap E1.val E2.val
   suffices g.range = (E1 ⊔ E2).toSubalgebra by
@@ -302,7 +302,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  条件: [Nonempty ι] (dir : Directed (· <= ·) t)
+  条件: [非空 ι] (dir : Directed (· <= ·) t)
   证明: let M : IntermediateField K L :=
     { __ := Subalgebra.copy _ _ (Subalgebra.coe_iSup_of_directed dir).symm
       inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
@@ -367,7 +367,7 @@ instance finiteDimensional_iSup_of_finite
 
 中文:
 实例 finiteDimensional_iSup_of_finite
-  签名: [h : Finite ι] [对任意 i, FiniteDimensional K (t i)]
+  签名: [h : 有限 ι] [对任意 i, 有限维 K (t i)]
   定义体: by
   rw [← iSup_univ]
   induction Set.univ, Set.finite_univ (α := ι) using Set.Finite.induction_on with
@@ -488,7 +488,7 @@ theorem adjoin_rank_le_of_isAlgebraic
 
 中文:
 定理 adjoin_rank_le_of_isAlgebraic
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: by
   have h : (adjoin E (L.toSubalgebra : Set K)).toSubalgebra =
       Algebra.adjoin E (L.toSubalgebra : Set K) :=
@@ -517,7 +517,7 @@ theorem adjoin_rank_le_of_isAlgebraic_left
 
 中文:
 定理 adjoin_rank_le_of_isAlgebraic_left
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: adjoin_rank_le_of_isAlgebraic E L (Or.inl halg)
 
 Depends on / 依赖: Or.inl, adjoin_rank_le_of_isAlgebraic
@@ -537,7 +537,7 @@ theorem adjoin_rank_le_of_isAlgebraic_right
 
 中文:
 定理 adjoin_rank_le_of_isAlgebraic_right
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: adjoin_rank_le_of_isAlgebraic E L (Or.inr halg)
 
 Depends on / 依赖: Or.inr, adjoin_rank_le_of_isAlgebraic
@@ -598,7 +598,7 @@ theorem adjoin_finset_isCompactElement
 
 中文:
 定理 adjoin_finset_isCompactElement
-  条件: (S : Finset E)
+  条件: (S : 有限集 E)
   证明: by
   rw [← biSup_adjoin_simple]
   simp_rw [Finset.mem_coe, ← Finset.sup_eq_iSup]
@@ -623,7 +623,7 @@ theorem adjoin_finite_isCompactElement
 
 中文:
 定理 adjoin_finite_isCompactElement
-  条件: {S : Set E} (h : S.Finite)
+  条件: {S : 集合 E} (h : S.有限)
   结论: IsCompactElement (adjoin F S)
   证明: Finite.coe_toFinset h ▸ adjoin_finset_isCompactElement h.toFinset
 
@@ -646,7 +646,7 @@ le_antisymm (adjoin_le_iff.mpr le_rfl) subset_adjoin F (s : Set E)⟩⟩⟩
 
 中文:
 实例 :
-  签名: IsCompactlyGenerated (整数ermediateField F E)
+  签名: 是余mpactlyGenerated (中间域 F E)
   定义体: ⟨fun s =>
     ⟨(fun x => F⟮x⟯) '' s,
       ⟨by rintro t ⟨x, _, rfl⟩; exact adjoin_simple_isCompactElement x,
@@ -674,8 +674,8 @@ theorem exists_finset_of_mem_iSup
   exact this hx
 
 中文:
-定理 exists_finset_of_mem_iSup
-  结论: {ι : 类型} {f : ι -> 整数ermediateField F E} {x : E}
+定理 存在_finset_of_mem_iSup
+  结论: {ι : 类型} {f : ι -> 中间域 F E} {x : E}
   证明: by
   have := (adjoin_simple_isCompactElement x).exists_finset_of_le_iSup (IntermediateField F E) f
   simp only [adjoin_simple_le_iff] at this
@@ -700,8 +700,8 @@ theorem exists_finset_of_mem_supr'
   exact SetLike.le_def.mp (le_iSup_of_le ⟨i, x, h⟩ (by simp)) (mem_adjoin_simple_self F x)
 
 中文:
-定理 exists_finset_of_mem_supr'
-  结论: {ι : 类型} {f : ι -> 整数ermediateField F E} {x : E}
+定理 存在_finset_of_mem_supr'
+  结论: {ι : 类型} {f : ι -> 中间域 F E} {x : E}
   证明: by
   refine exists_finset_of_mem_iSup (SetLike.le_def.mp (iSup_le fun i x h => ?_) hx)
   exact SetLike.le_def.mp (le_iSup_of_le ⟨i, x, h⟩ (by simp)) (mem_adjoin_simple_self F x)
@@ -728,8 +728,8 @@ theorem exists_finset_of_mem_supr''
  
 
 中文:
-定理 exists_finset_of_mem_supr''
-  结论: {ι : 类型} {f : ι -> 整数ermediateField F E}
+定理 存在_finset_of_mem_supr''
+  结论: {ι : 类型} {f : ι -> 中间域 F E}
   证明: by
   refine exists_finset_of_mem_iSup (SetLike.le_def.mp (iSup_le (fun i x1 hx1 => ?_)) hx)
   refine SetLike.le_def.mp (le_iSup_of_le ⟨i, x1, hx1⟩ ?_)
@@ -766,8 +766,8 @@ theorem exists_finset_of_mem_adjoin
   exact subset_adjoin F _ ⟨_, h, 
 
 中文:
-定理 exists_finset_of_mem_adjoin
-  条件: {S : Set E} {x : E} (hx : x in adjoin F S)
+定理 存在_finset_of_mem_adjoin
+  条件: {S : 集合 E} {x : E} (hx : x in adjoin F S)
   证明: by
   simp_rw [← biSup_adjoin_simple S, ← iSup_subtype''] at hx
   obtain ⟨s, hx'⟩ := exists_finset_of_mem_iSup hx
@@ -815,7 +815,7 @@ theorem rank_eq_one_iff
 
 中文:
 定理 rank_eq_one_iff
-  结论: Module.rank F K = 1 ↔ K = ⊥
+  结论: 模.rank F K = 1 ↔ K = ⊥
   证明: by
   rw [← toSubalgebra_inj]; rw [← rank_eq_rank_subalgebra]; rw [Subalgebra.rank_eq_one_iff]; rw [bot_toSubalgebra]
 
@@ -865,7 +865,7 @@ theorem rank_bot
 
 中文:
 定理 rank_bot
-  结论: Module.rank F (⊥ : 整数ermediateField F E) = 1
+  结论: 模.rank F (⊥ : 中间域 F E) = 1
   证明: by
   rw [rank_eq_one_iff]
 
@@ -886,7 +886,7 @@ theorem finrank_bot
 
 中文:
 定理 finrank_bot
-  结论: finrank F (⊥ : 整数ermediateField F E) = 1
+  结论: finrank F (⊥ : 中间域 F E) = 1
   证明: by
   rw [finrank_eq_one_iff]
 -/
@@ -906,7 +906,7 @@ theorem rank_bot'
 
 中文:
 定理 rank_bot'
-  结论: Module.rank (⊥ : 整数ermediateField F E) E = Module.rank F E
+  结论: 模.rank (⊥ : 中间域 F E) E = 模.rank F E
   证明: by
   rw [← rank_mul_rank F (⊥ : IntermediateField F E) E]; rw [IntermediateField.rank_bot]; rw [one_mul]
 
@@ -926,7 +926,7 @@ theorem finrank_bot'
 
 中文:
 定理 finrank_bot'
-  结论: finrank (⊥ : 整数ermediateField F E) E = finrank F E
+  结论: finrank (⊥ : 中间域 F E) E = finrank F E
   证明: congr(Cardinal.toNat $(rank_bot'))
 
 Depends on / 依赖: Cardinal, Cardinal.toNat, rank_bot
@@ -946,7 +946,7 @@ theorem rank_top
 
 中文:
 定理 rank_top
-  结论: Module.rank (⊤ : 整数ermediateField F E) E = 1
+  结论: 模.rank (⊤ : 中间域 F E) E = 1
   证明: Subalgebra.bot_eq_top_iff_rank_eq_one.mp top_le_iff.mp fun x _ => ⟨⟨x, trivial⟩, rfl⟩
 
 @[simp]
@@ -965,7 +965,7 @@ theorem finrank_top
 
 中文:
 定理 finrank_top
-  结论: finrank (⊤ : 整数ermediateField F E) E = 1
+  结论: finrank (⊤ : 中间域 F E) E = 1
   证明: rank_eq_one_iff_finrank_eq_one.mp IntermediateField.rank_top
 -/
 protected theorem finrank_top : finrank (⊤ : IntermediateField F E) E = 1 :=
@@ -981,7 +981,7 @@ theorem rank_top'
 
 中文:
 定理 rank_top'
-  结论: Module.rank F (⊤ : 整数ermediateField F E) = Module.rank F E
+  结论: 模.rank F (⊤ : 中间域 F E) = 模.rank F E
   证明: rank_top F E
 -/
 @[simp] theorem rank_top' : Module.rank F (⊤ : IntermediateField F E) = Module.rank F E :=
@@ -997,7 +997,7 @@ theorem finrank_top'
 
 中文:
 定理 finrank_top'
-  结论: finrank F (⊤ : 整数ermediateField F E) = finrank F E
+  结论: finrank F (⊤ : 中间域 F E) = finrank F E
   证明: finrank_top F E
 -/
 @[simp] theorem finrank_top' : finrank F (⊤ : IntermediateField F E) = finrank F E :=
@@ -1018,7 +1018,7 @@ lemma finrank_eq_one_iff_eq_top
 
 中文:
 引理 finrank_eq_one_iff_eq_top
-  条件: {K : 整数ermediateField F E}
+  条件: {K : 中间域 F E}
   证明: by
   refine ⟨?_, (· ▸ IntermediateField.finrank_top)⟩
   rw [← Subalgebra.bot_eq_top_iff_finrank_eq_one]; rw [← top_le_iff]; rw [← top_le_iff]
@@ -1071,7 +1071,7 @@ theorem isSimpleOrder_of_finrank_prime
 
 中文:
 定理 isSimpleOrder_of_finrank_prime
-  条件: (hp : 自然数.Prime (Module.finrank F E))
+  条件: (hp : 自然数.素 (模.finrank F E))
   证明: by
   refine { toNontrivial := ?_, eq_bot_or_eq_top := ?_ }
   · exact ⟨⊥, ⊤, fun h => Nat.prime_one_false (bot_eq_top_iff_finrank_eq_one.mp h ▸ hp)⟩
@@ -1099,7 +1099,7 @@ theorem rank_adjoin_eq_one_iff
 
 中文:
 定理 rank_adjoin_eq_one_iff
-  结论: Module.rank F (adjoin F S) = 1 ↔ S subseteq (⊥ : 整数ermediateField F E)
+  结论: 模.rank F (adjoin F S) = 1 ↔ S subseteq (⊥ : 中间域 F E)
   证明: Iff.trans rank_eq_one_iff adjoin_eq_bot_iff
 
 Depends on / 依赖: Iff.trans, adjoin_eq_bot_iff, rank_eq_one_iff
@@ -1136,7 +1136,7 @@ theorem finrank_adjoin_eq_one_iff
 
 中文:
 定理 finrank_adjoin_eq_one_iff
-  结论: finrank F (adjoin F S) = 1 ↔ S subseteq (⊥ : 整数ermediateField F E)
+  结论: finrank F (adjoin F S) = 1 ↔ S subseteq (⊥ : 中间域 F E)
   证明: Iff.trans finrank_eq_one_iff adjoin_eq_bot_iff
 
 Depends on / 依赖: Iff.trans, adjoin_eq_bot_iff, finrank_eq_one_iff
@@ -1176,7 +1176,7 @@ theorem bot_eq_top_of_rank_adjoin_eq_one
 
 中文:
 定理 bot_eq_top_of_rank_adjoin_eq_one
-  条件: (h : 对任意 x : E, Module.rank F F⟮x⟯ = 1)
+  条件: (h : 对任意 x : E, 模.rank F F⟮x⟯ = 1)
   证明: by
   ext y
   rw [iff_true_right IntermediateField.mem_top]
@@ -1227,7 +1227,7 @@ theorem subsingleton_of_rank_adjoin_eq_one
 
 中文:
 定理 subsingleton_of_rank_adjoin_eq_one
-  条件: (h : 对任意 x : E, Module.rank F F⟮x⟯ = 1)
+  条件: (h : 对任意 x : E, 模.rank F F⟮x⟯ = 1)
   证明: subsingleton_of_bot_eq_top (bot_eq_top_of_rank_adjoin_eq_one h)
 
 Depends on / 依赖: bot_eq_top_of_rank_adjoin_eq_one, subsingleton_of_bot_eq_top
@@ -1267,7 +1267,7 @@ theorem bot_eq_top_of_finrank_adjoin_le_one
 
 中文:
 定理 bot_eq_top_of_finrank_adjoin_le_one
-  结论: [FiniteDimensional F E]
+  结论: [有限维 F E]
   证明: by
   apply bot_eq_top_of_finrank_adjoin_eq_one
   exact fun x => by linarith [h x, show 0 < finrank F F⟮x⟯ from finrank_pos]
@@ -1289,7 +1289,7 @@ theorem subsingleton_of_finrank_adjoin_le_one
 
 中文:
 定理 subsingleton_of_finrank_adjoin_le_one
-  结论: [FiniteDimensional F E]
+  结论: [有限维 F E]
   证明: subsingleton_of_bot_eq_top (bot_eq_top_of_finrank_adjoin_le_one h)
 
 Depends on / 依赖: bot_eq_top_of_finrank_adjoin_le_one, subsingleton_of_bot_eq_top
@@ -1380,7 +1380,7 @@ definition adjoinRootEquivAdjoin
 
 中文:
 定义 adjoinRootEquivAdjoin
-  签名: (h : Is整数egral F α)
+  签名: (h : 是整 F α)
   定义体: AlgEquiv.ofBijective
     (AdjoinRoot.liftAlgHom (minpoly F α) _ (AdjoinSimple.gen F α) (aeval_gen_minpoly F α))
     (by
@@ -1430,7 +1430,7 @@ theorem adjoinRootEquivAdjoin_apply_root
 
 中文:
 定理 adjoinRootEquivAdjoin_apply_root
-  条件: (h : Is整数egral F α)
+  条件: (h : 是整 F α)
   证明: AdjoinRoot.lift_root (aeval_gen_minpoly F α)
 
 @[simp]
@@ -1453,7 +1453,7 @@ theorem adjoinRootEquivAdjoin_symm_apply_gen
 
 中文:
 定理 adjoinRootEquivAdjoin_symm_apply_gen
-  条件: (h : Is整数egral F α)
+  条件: (h : 是整 F α)
   证明: by
   rw [AlgEquiv.symm_apply_eq]; rw [adjoinRootEquivAdjoin_apply_root]
 
@@ -1474,7 +1474,7 @@ theorem adjoin_root_eq_top
 
 中文:
 定理 adjoin_root_eq_top
-  条件: (p : K[X]) [Fact (Irreducible p)]
+  条件: (p : K[X]) [Fact (不可约 p)]
   结论: K⟮AdjoinRoot.root p⟯ = ⊤
   证明: (eq_adjoin_of_eq_algebra_adjoin K _ ⊤ (AdjoinRoot.adjoinRoot_eq_top (f := p)).symm).symm
 
@@ -1499,7 +1499,7 @@ definition powerBasisAux
 
 中文:
 定义 powerBasisAux
-  签名: {x : L} (hx : Is整数egral K x)
+  签名: {x : L} (hx : 是整 K x)
   定义体: (AdjoinRoot.powerBasis (minpoly.ne_zero hx)).basis
 .map (adjoinRootEquivAdjoin K hx).toLinearEquiv
 .reindex (finCongr rfl)
@@ -1530,7 +1530,7 @@ definition adjoin.powerBasis
 
 中文:
 定义 adjoin.powerBasis
-  签名: {x : L} (hx : Is整数egral K x)
+  签名: {x : L} (hx : 是整 K x)
   定义体: AdjoinSimple.gen K x
   dim := (minpoly K x).natDegree
   basis := powerBasisAux hx
@@ -1557,8 +1557,8 @@ theorem adjoin.finiteDimensional
 
 中文:
 定理 adjoin.finiteDimensional
-  条件: {x : L} (hx : Is整数egral K x)
-  结论: FiniteDimensional K K⟮x⟯
+  条件: {x : L} (hx : 是整 K x)
+  结论: 有限维 K K⟮x⟯
   证明: (adjoin.powerBasis hx).finite
 
 Depends on / 依赖: adjoin, adjoin.powerBasis, finite, powerBasis
@@ -1577,8 +1577,8 @@ theorem isAlgebraic_adjoin_simple
 
 中文:
 定理 isAlgebraic_adjoin_simple
-  条件: {x : L} (hx : Is整数egral K x)
-  结论: Algebra.IsAlgebraic K K⟮x⟯
+  条件: {x : L} (hx : 是整 K x)
+  结论: 代数.是代数 K K⟮x⟯
   证明: have := adjoin.finiteDimensional hx; Algebra.IsAlgebraic.of_finite K K⟮x⟯
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.of_finite, IsAlgebraic, adjoin, adjoin.finiteDimensional, finiteDimensional, of_finite
@@ -1601,7 +1601,7 @@ theorem adjoin.finrank
 
 中文:
 定理 adjoin.finrank
-  条件: {x : L} (hx : Is整数egral K x)
+  条件: {x : L} (hx : 是整 K x)
   证明: by
   rw [PowerBasis.finrank (adjoin.powerBasis hx :)]
   rfl
@@ -1624,7 +1624,7 @@ theorem adjoin_eq_top_of_adjoin_eq_top
 
 中文:
 定理 adjoin_eq_top_of_adjoin_eq_top
-  结论: [Algebra E K] [IsScalarTower F E K]
+  结论: [代数 E K] [标量塔 F E K]
   证明: restrictScalars_injective F by
     rw [restrictScalars_top]; rw [← top_le_iff]; rw [← hprim]; rw [adjoin_le_iff]; rw [coe_restrictScalars]; rw [← adjoin_le_iff]
 
@@ -1652,7 +1652,7 @@ theorem adjoin_minpoly_coeff_of_exists_primitive_element
   have dvd_g : minp
 
 中文:
-定理 adjoin_minpoly_coeff_of_exists_primitive_element
+定理 adjoin_minpoly_coeff_of_存在_primitive_element
   证明: by
   set g := (minpoly K α).map (algebraMap K E)
   set K' : IntermediateField F E := adjoin F g.coeffs
@@ -1705,7 +1705,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite F (⊥ : 整数ermediateField F E)
+  签名: 模.有限 F (⊥ : 中间域 F E)
   定义体: Subalgebra.finite_bot
 
 Depends on / 依赖: Subalgebra, Subalgebra.finite_bot, finite_bot
@@ -1729,7 +1729,7 @@ theorem exists_lt_finrank_of_infinite_dimensional
       exact topEquiv.toLinearEquiv.fin
 
 中文:
-定理 exists_lt_finrank_of_infinite_dimensional
+定理 存在_lt_finrank_of_infinite_dimensional
   证明: by
   induction n with
   | zero => exact ⟨⊥, Subalgebra.finite_bot, finrank_pos⟩
@@ -1773,7 +1773,7 @@ theorem _root_.minpoly.degree_dvd
 
 中文:
 定理 _root_.minpoly.degree_dvd
-  条件: {x : L} (hx : Is整数egral K x)
+  条件: {x : L} (hx : 是整 K x)
   证明: by
   rw [dvd_iff_exists_eq_mul_left]; rw [← IntermediateField.adjoin.finrank hx]
   use finrank K⟮x⟯ L
@@ -1804,8 +1804,8 @@ theorem _root_.Polynomial.Irreducible.natDegree_dvd_finrank
 
 
 中文:
-定理 _root_.Polynomial.Irreducible.natDegree_dvd_finrank
-  结论: {f : K[X]} (hi : Irreducible f)
+定理 _root_.多项式.不可约.natDegree_dvd_finrank
+  结论: {f : K[X]} (hi : 不可约 f)
   证明: by
   have := hi.degree_pos.ne'
   rw [← f.degree_map (algebraMap K L)] at this
@@ -1845,7 +1845,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsAlgebraic K (⊥ : 整数ermediateField K L)
+  签名: 代数.是代数 K (⊥ : 中间域 K L)
   定义体: by
     intro ⟨x, hx⟩
     obtain ⟨c, rfl⟩ := hx
@@ -1872,7 +1872,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsAlgebraic (⊤ : 整数ermediateField K L) L
+  签名: 代数.是代数 (⊤ : 中间域 K L) L
   定义体: by
     intro x
     let xt : (⊤ : IntermediateField K L) := ⟨x, mem_top⟩
@@ -1903,7 +1903,7 @@ theorem isAlgebraic_iSup
 
 中文:
 定理 isAlgebraic_iSup
-  结论: {ι : 类型} {t : ι -> 整数ermediateField K L}
+  结论: {ι : 类型} {t : ι -> 中间域 K L}
   证明: by
   constructor
   rintro ⟨x, hx⟩
@@ -1937,7 +1937,7 @@ theorem isAlgebraic_adjoin
 
 中文:
 定理 isAlgebraic_adjoin
-  条件: {S : Set L} (hS : 对任意 x in S, Is整数egral K x)
+  条件: {S : 集合 L} (hS : 对任意 x in S, 是整 K x)
   证明: by
   rw [← biSup_adjoin_simple]; rw [← iSup_subtype'']
   exact isAlgebraic_iSup fun x => isAlgebraic_adjoin_simple (hS x x.2)
@@ -1962,7 +1962,7 @@ theorem finiteDimensional_adjoin
 
 中文:
 定理 finiteDimensional_adjoin
-  条件: {S : Set L} [Finite S] (hS : 对任意 x in S, Is整数egral K x)
+  条件: {S : 集合 L} [有限 S] (hS : 对任意 x in S, 是整 K x)
   证明: by
   rw [← biSup_adjoin_simple]; rw [← iSup_subtype'']
   have (x : S) := adjoin.finiteDimensional (hS x.1 x.2)
@@ -1989,8 +1989,8 @@ definition algHomAdjoinIntegralEquiv
       rw [adjoin.powerBasis_gen]; rw [minpoly_gen]; rw [Equiv.refl_apply])
 
 中文:
-定义 algHomAdjoinIntegralEquiv
-  签名: (h : Is整数egral F α)
+定义 algHomAdjoin整数egralEquiv
+  签名: (h : 是整 F α)
   定义体: (adjoin.powerBasis h).liftEquiv'.trans
     ((Equiv.refl _).subtypeEquiv fun x => by
       rw [adjoin.powerBasis_gen]; rw [minpoly_gen]; rw [Equiv.refl_apply])
@@ -2013,8 +2013,8 @@ lemma algHomAdjoinIntegralEquiv_symm_apply_gen
     rw [adjoin.powerBasis_gen]; rw [minpoly_gen]; exact (mem_aroots.mp x.2).2
 
 中文:
-引理 algHomAdjoinIntegralEquiv_symm_apply_gen
-  结论: (h : Is整数egral F α)
+引理 algHomAdjoin整数egralEquiv_symm_apply_gen
+  结论: (h : 是整 F α)
   证明: (adjoin.powerBasis h).lift_gen x.val by
     rw [adjoin.powerBasis_gen]; rw [minpoly_gen]; exact (mem_aroots.mp x.2).2
 
@@ -2037,8 +2037,8 @@ definition fintypeOfAlgHomAdjoinIntegral
   body: PowerBasis.AlgHom.fintype (adjoin.powerBasis h)
 
 中文:
-定义 fintypeOfAlgHomAdjoinIntegral
-  签名: (h : Is整数egral F α)
+定义 fintypeOfAlgHomAdjoin整数egral
+  签名: (h : 是整 F α)
   定义体: PowerBasis.AlgHom.fintype (adjoin.powerBasis h)
 
 Depends on / 依赖: AlgHom, PowerBasis, PowerBasis.AlgHom.fintype, adjoin, adjoin.powerBasis, fintype, powerBasis
@@ -2060,7 +2060,7 @@ theorem card_algHom_adjoin_integral
 
 中文:
 定理 card_algHom_adjoin_integral
-  结论: (h : Is整数egral F α) (h_sep : IsSeparable F α)
+  结论: (h : 是整 F α) (h_sep : 是可分 F α)
   证明: by
   let _ : Fintype (F⟮α⟯ ->ₐ[F] K) := fintypeOfAlgHomAdjoinIntegral F h
   rw [Nat.card_eq_fintype_card]; rw [AlgHom.card_of_powerBasis] <;>
@@ -2095,7 +2095,7 @@ theorem _root_.Polynomial.irreducible_comp
     -- Needed to speci
 
 中文:
-定理 _root_.Polynomial.irreducible_comp
+定理 _root_.多项式.irreducible_comp
   结论: {f g : K[X]} (hfm : f.Monic) (hgm : g.Monic)
   证明: by
   have hf' : natDegree f != 0 :=
@@ -2174,7 +2174,7 @@ theorem eq_of_root
 
 中文:
 定理 eq_of_root
-  结论: {x y : L} (hx : IsAlgebraic K x)
+  结论: {x y : L} (hx : 是代数 K x)
   证明: ((eq_iff_aeval_minpoly_eq_zero hx.isIntegral).mpr h_ev).symm
 
 Depends on / 依赖: eq_iff_aeval_minpoly_eq_zero, h_ev, hx.isIntegral, isIntegral
@@ -2196,7 +2196,7 @@ exact (adjoinRootEquivAdjoin K hx.isIntegral).symm.trans
 
 中文:
 定义 algEquiv
-  签名: {x y : L} (hx : IsAlgebraic K x)
+  签名: {x y : L} (hx : 是代数 K x)
   定义体: by
   have hy : IsAlgebraic K y := ⟨minpoly K x, ne_zero hx.isIntegral, (h_mp ▸ aeval _ _)⟩
 exact (adjoinRootEquivAdjoin K hx.isIntegral).symm.trans
@@ -2222,7 +2222,7 @@ theorem algEquiv_apply
 
 中文:
 定理 algEquiv_apply
-  条件: {x y : L} (hx : IsAlgebraic K x) (h_mp : minpoly K x = minpoly K y)
+  条件: {x y : L} (hx : 是代数 K x) (h_mp : minpoly K x = minpoly K y)
   证明: by
   have hy : IsAlgebraic K y := ⟨minpoly K x, ne_zero hx.isIntegral, (h_mp ▸ aeval _ _)⟩
   rw [algEquiv]; rw [trans_apply]; rw [← adjoinRootEquivAdjoin_apply_root K hx.isIntegral]; rw [symm_apply_apply]; rw [trans_apply]; rw [AdjoinRoot.algEquivOfEq_root]; rw [adjoinRootEquivAdjoin_apply_root K hy
@@ -2387,7 +2387,7 @@ theorem lift_cardinalMk_adjoin_le
 
 中文:
 定理 lift_cardinalMk_adjoin_le
-  条件: {E : 类型v} [Field E] [Algebra F E] (s : Set E)
+  条件: {E : 类型v} [域 E] [代数 F E] (s : 集合 E)
   证明: by
   rw [show ↥(adjoin F s) = (adjoin F s).toSubfield from rfl]; rw [adjoin_toSubfield]
   apply (Cardinal.lift_le.mpr (Subfield.cardinalMk_closure_le_max _)).trans
@@ -2416,7 +2416,7 @@ theorem cardinalMk_adjoin_le
 
 中文:
 定理 cardinalMk_adjoin_le
-  条件: {E : 类型u} [Field E] [Algebra F E] (s : Set E)
+  条件: {E : 类型u} [域 E] [代数 F E] (s : 集合 E)
   证明: by
   simpa using lift_cardinalMk_adjoin_le F s
 
@@ -2442,7 +2442,7 @@ theorem isAlgebraic_adjoin_pair
 
 中文:
 定理 isAlgebraic_adjoin_pair
-  条件: (hx : Is整数egral K x) (hy : Is整数egral K y)
+  条件: (hx : 是整 K x) (hy : 是整 K y)
   证明: by
   apply IntermediateField.isAlgebraic_adjoin
   simp [hx, hy]
@@ -2468,7 +2468,7 @@ theorem finiteDimensional_adjoin_pair
 
 中文:
 定理 finiteDimensional_adjoin_pair
-  条件: (hx : Is整数egral K x) (hy : Is整数egral K y)
+  条件: (hx : 是整 K x) (hy : 是整 K y)
   证明: by
   have := adjoin.finiteDimensional hx
   have := adjoin.finiteDimensional hy

@@ -45,11 +45,11 @@ structure ClosedSubgroup
     - isClosed' : IsClosed carrier
 
 中文:
-结构 ClosedSubgroup
-  参数: (G : 类型u) [Group G] [TopologicalSpace G]
-  继承: Subgroup G
+结构 闭子群
+  参数: (G : 类型u) [群 G] [拓扑空间 G]
+  继承: 子群 G
   公理与运算 (1 个):
-    - isClosed' : IsClosed carrier
+    - isClosed' : 是闭集 carrier
 -/
 structure ClosedSubgroup (G : Type u) [Group G] [TopologicalSpace G] extends Subgroup G where
   isClosed' : IsClosed carrier
@@ -66,10 +66,10 @@ structure ClosedAddSubgroup
     - isClosed' : IsClosed carrier
 
 中文:
-结构 ClosedAddSubgroup
-  参数: (G : 类型u) [AddGroup G] [TopologicalSpace G]
+结构 ClosedAdd子群
+  参数: (G : 类型u) [加法群 G] [拓扑空间 G]
   公理与运算 (1 个):
-    - isClosed' : IsClosed carrier
+    - isClosed' : 是闭集 carrier
 -/
 structure ClosedAddSubgroup (G : Type u) [AddGroup G] [TopologicalSpace G] extends
     AddSubgroup G where
@@ -99,7 +99,7 @@ theorem toSubgroup_injective
 
 中文:
 定理 toSubgroup_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun A B h => by
   ext
   rw [h]
@@ -124,7 +124,7 @@ coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 
 中文:
 实例 :
-  签名: SetLike (ClosedSubgroup G) G
+  签名: 集合状 (闭子群 G) G
   定义体: U.1
 coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 -/
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ClosedSubgroup G)
+  签名: 偏序 (闭子群 G)
   定义体: .ofSetLike (ClosedSubgroup G) G
 
 @[to_additive]
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (ClosedSubgroup G) G
+  签名: 子群类 (闭子群 G) G
   定义体: Subsemigroup.mul_mem' _
   one_mem U := U.one_mem'
   inv_mem := Subgroup.inv_mem' _
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (ClosedSubgroup G) (Subgroup G)
+  签名: Coe (闭子群 G) (子群 G)
   定义体: toSubgroup
 
 @[to_additive]
@@ -216,7 +216,7 @@ instance instInfClosedSubgroup
 
 中文:
 实例 instInfClosedSubgroup
-  签名: : Min (ClosedSubgroup G)
+  签名: : 最小值 (闭子群 G)
   定义体: ⟨fun U V => ⟨U ⊓ V, U.isClosed'.inter V.isClosed'⟩⟩
 
 @[to_additive]
@@ -239,7 +239,7 @@ instance instSemilatticeInfClosedSubgroup
 
 中文:
 实例 instSemilatticeInfClosedSubgroup
-  签名: : SemilatticeInf (ClosedSubgroup G)
+  签名: : SemilatticeInf (闭子群 G)
   定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 @[to_additive]
@@ -259,7 +259,7 @@ instance [CompactSpace
   body: isCompact_iff_compactSpace.mp (IsClosed.isCompact H.isClosed')
 
 中文:
-实例 [CompactSpace
+实例 [紧空间
   签名: G] (H
   定义体: isCompact_iff_compactSpace.mp (IsClosed.isCompact H.isClosed')
 
@@ -294,7 +294,7 @@ lemma normalCore_isClosed
 
 中文:
 引理 normalCore_isClosed
-  条件: (H : Subgroup G) (h : IsClosed (H : Set G))
+  条件: (H : 子群 G) (h : 是闭集 (H : 集合 G))
   证明: by
   rw [normalCore_eq_iInf_comap_conj]
   push_cast
@@ -328,7 +328,7 @@ lemma isOpen_of_isClosed_of_finiteIndex
 
 中文:
 引理 isOpen_of_isClosed_of_finiteIndex
-  结论: (H : Subgroup G) [H.FiniteIndex]
+  结论: (H : 子群 G) [H.FiniteIndex]
   证明: by
   rw [← QuotientGroup.t1Space_iff] at h
   rw [← QuotientGroup.discreteTopology_iff]

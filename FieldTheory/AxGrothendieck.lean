@@ -59,7 +59,7 @@ theorem ax_grothendieck_of_locally_finite
 
 中文:
 定理 ax_grothendieck_of_locally_finite
-  结论: {ι K R : 类型} [Field K] [Finite K] [CommRing R]
+  结论: {ι K R : 类型} [域 K] [有限 K] [交换环 R]
   证明: by
   have is_int : forall x : R, IsIntegral K x := fun x => isAlgebraic_iff_isIntegral.1
     (alg.isAlgebraic x)
@@ -134,7 +134,7 @@ definition genericPolyMapSurjOnOfInjOn
 
 中文:
 定义 genericPolyMapSurjOnOfInjOn
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: let l1 : ι -> Language.ring.Formula ((Σ i : ι, mons i) oplus (Fin 2 × ι)) :=
     fun i =>
       (termOfFreeCommRing (genericPolyMap mons i)).relabel
@@ -254,7 +254,7 @@ theorem ACF_models_genericPolyMapSurjOnOfInjOn_of_prime
 
 中文:
 定理 ACF_models_genericPolyMapSurjOnOfInjOn_of_prime
-  结论: [Finite ι]
+  结论: [有限 ι]
   证明: by
   have : Fact p.Prime := ⟨hp⟩
   let := compatibleRingOfRing (AlgebraicClosure (ZMod p))
@@ -339,7 +339,7 @@ theorem ax_grothendieck_of_definable
 
 中文:
 定理 ax_grothendieck_of_definable
-  结论: [CompatibleRing K] {c : Set K}
+  结论: [余mpatible环 K] {c : 集合 K}
   证明: by
   let := Fintype.ofFinite ι
   let p : Nat := ringChar K
@@ -421,7 +421,7 @@ theorem ax_grothendieck_univ
 
 中文:
 定理 ax_grothendieck_univ
-  条件: (p : ι -> MvPolynomial ι K)
+  条件: (p : ι -> 多元多项式 ι K)
   证明: by
   simpa using ax_grothendieck_zeroLocus 0 p
 

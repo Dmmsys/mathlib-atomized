@@ -54,7 +54,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [Finite X]
+  签名: (X : 类型) [有限 X]
   定义体: ⟨X, inferInstance⟩
 -/
 abbrev of (X : Type*) [Finite X] : FintypeCat :=
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited FintypeCat
+  签名: 可居 FintypeCat
   定义体: ⟨of PEmpty⟩
 
 Depends on / 依赖: PEmpty
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: incl.Full
+  签名: incl.满
   定义体: ObjectProperty.full_ι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.full_
@@ -169,7 +169,7 @@ example : ConcreteCategory FintypeCat
 
 中文:
 实例 :
-  签名: incl.Faithful
+  签名: incl.忠实
   定义体: ObjectProperty.faithful_ι _
 
 example : ConcreteCategory FintypeCat
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget FintypeCat).Full
+  签名: (forget FintypeCat).满
   定义体: inferInstanceAs FintypeCat.incl.Full
 
 @[simp]
@@ -601,7 +601,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Skeleton
+  签名: 可居 Skeleton
   定义体: ⟨mk 0⟩
 -/
 instance : Inhabited Skeleton :=
@@ -662,7 +662,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory Skeleton.{u}
+  签名: 小范畴 Skeleton.{u}
   定义体: ULift.{u} (Fin X.len) -> ULift.{u} (Fin Y.len)
   id _ := id
   comp f g := g ∘ f
@@ -759,7 +759,7 @@ instance :
 
 中文:
 实例 :
-  签名: incl.Full
+  签名: incl.满
   定义体: ⟨_, rfl⟩
 -/
 instance : incl.Full where map_surjective _ := ⟨_, rfl⟩
@@ -775,7 +775,7 @@ instance :
 
 中文:
 实例 :
-  签名: incl.Faithful
+  签名: incl.忠实
   定义体: by
     simpa using TypeCat.homEquiv.symm.injective (InducedCategory.homEquiv.symm.injective h)
 
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: incl.EssSurj
+  签名: incl.本质满射
   定义体: Functor.EssSurj.mk fun X =>
     letI := X.fintype
     let F := Fintype.equivFin X
@@ -831,7 +831,7 @@ instance :
 
 中文:
 实例 :
-  签名: incl.IsEquivalence
+  签名: incl.是等价
 -/
 noncomputable instance : incl.IsEquivalence where
 
@@ -895,7 +895,7 @@ lemma isSkeleton
 
 中文:
 引理 isSkeleton
-  结论: IsSkeletonOf FintypeCat Skeleton Skeleton.incl where
+  结论: 是SkeletonOf FintypeCat Skeleton Skeleton.incl where
   证明: Skeleton.is_skeletal
   eqv := by infer_instance
 
@@ -1075,7 +1075,7 @@ instance :
 
 中文:
 实例 :
-  签名: uSwitch.IsEquivalence
+  签名: uSwitch.是等价
   定义体: uSwitchEquivalence.isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, uSwitchEquivalence, uSwitchEquivalence.isEquivalence_functor

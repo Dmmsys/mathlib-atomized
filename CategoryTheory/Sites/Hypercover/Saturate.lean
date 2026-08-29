@@ -36,7 +36,7 @@ structure Relation
     - w : fst ≫ E.f i = snd ≫ E.f j
 
 中文:
-结构 Relation
+结构 关系
   参数: {S : C} (E : PreZeroHypercover S) (i j : E.I₀)
   公理与运算 (4 个):
     - obj : C
@@ -161,7 +161,7 @@ definition toSaturateOfHasPullbacks
 
 中文:
 定义 toSaturateOfHasPullbacks
-  签名: {S : C} (E : PreZeroHypercover S) [E.HasPullbacks]
+  签名: {S : C} (E : PreZeroHypercover S) [E.有Pullbacks]
   定义体: i
   h₀ i := 𝟙 _
   s₁ {i j} k := ⟨pullback (E.f i) (E.f j), _, _, pullback.condition⟩
@@ -282,7 +282,7 @@ definition fromSaturateToSaturateHomotopy
 
 中文:
 定义 fromSaturateToSaturateHomotopy
-  签名: : PreOneHypercover.Homotopy
+  签名: : PreOneHypercover.同伦
   定义体: ⟨pullback (E.f i) (E.f i), pullback.fst _ _, pullback.snd _ _, pullback.condition⟩
   a i := pullback.diagonal (E.f i)
   wl i := by simp

@@ -81,24 +81,24 @@ structure SnakeInput
     - mono_L₂_f : Mono L₂.f
 
 中文:
-结构 SnakeInput
+结构 蛇输入
   参数: where
   公理与运算 (15 个):
-    - L₀ : ShortComplex C
-    - L₁ : ShortComplex C
-    - L₂ : ShortComplex C
-    - L₃ : ShortComplex C
+    - L₀ : 短复形 C
+    - L₁ : 短复形 C
+    - L₂ : 短复形 C
+    - L₃ : 短复形 C
     - v₀₁ : L₀ ⟶ L₁
     - v₁₂ : L₁ ⟶ L₂
     - v₂₃ : L₂ ⟶ L₃
     - w₀₂ : v₀₁ ≫ v₁₂ = 0  [默认: by cat_disch]
     - w₁₃ : v₁₂ ≫ v₂₃ = 0  [默认: by cat_disch]
-    - h₀ : IsLimit (KernelFork.ofι _ w₀₂)
-    - h₃ : IsColimit (CokernelCofork.ofπ _ w₁₃)
-    - L₁_exact : L₁.Exact
-    - epi_L₁_g : Epi L₁.g
-    - L₂_exact : L₂.Exact
-    - mono_L₂_f : Mono L₂.f
+    - h₀ : 是极限 (核叉.ofι _ w₀₂)
+    - h₃ : 是余极限 (余核余叉.ofπ _ w₁₃)
+    - L₁_exact : L₁.正合
+    - epi_L₁_g : 满态射 L₁.g
+    - L₂_exact : L₂.正合
+    - mono_L₂_f : 单态射 L₂.f
 
 Depends on / 依赖: cat_disch
 -/
@@ -163,7 +163,7 @@ definition op
 
 中文:
 定义 op
-  签名: : SnakeInput Cᵒᵖ where
+  签名: : 蛇输入 Cᵒᵖ where
   定义体: S.L₃.op
   L₁ := S.L₂.op
   L₂ := S.L₁.op
@@ -309,7 +309,7 @@ definition h₀τ₁
 
 中文:
 定义 h₀τ₁
-  签名: : IsLimit (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)
+  签名: : 是极限 (核叉.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)
   定义体: isLimitForkMapOfIsLimit' π₁ S.w₀₂ S.h₀
 
 Depends on / 依赖: isLimitForkMapOfIsLimit
@@ -327,7 +327,7 @@ definition h₀τ₂
 
 中文:
 定义 h₀τ₂
-  签名: : IsLimit (KernelFork.ofι S.v₀₁.τ₂ S.w₀₂_τ₂)
+  签名: : 是极限 (核叉.ofι S.v₀₁.τ₂ S.w₀₂_τ₂)
   定义体: isLimitForkMapOfIsLimit' π₂ S.w₀₂ S.h₀
 
 Depends on / 依赖: isLimitForkMapOfIsLimit
@@ -345,7 +345,7 @@ definition h₀τ₃
 
 中文:
 定义 h₀τ₃
-  签名: : IsLimit (KernelFork.ofι S.v₀₁.τ₃ S.w₀₂_τ₃)
+  签名: : 是极限 (核叉.ofι S.v₀₁.τ₃ S.w₀₂_τ₃)
   定义体: isLimitForkMapOfIsLimit' π₃ S.w₀₂ S.h₀
 
 Depends on / 依赖: isLimitForkMapOfIsLimit
@@ -363,7 +363,7 @@ instance mono_v₀₁_τ₁
 
 中文:
 实例 mono_v₀₁_τ₁
-  签名: : Mono S.v₀₁.τ₁
+  签名: : 单态射 S.v₀₁.τ₁
   定义体: mono_of_isLimit_fork S.h₀τ₁
 
 Depends on / 依赖: mono_of_isLimit_fork
@@ -379,7 +379,7 @@ instance mono_v₀₁_τ₂
 
 中文:
 实例 mono_v₀₁_τ₂
-  签名: : Mono S.v₀₁.τ₂
+  签名: : 单态射 S.v₀₁.τ₂
   定义体: mono_of_isLimit_fork S.h₀τ₂
 
 Depends on / 依赖: mono_of_isLimit_fork
@@ -395,7 +395,7 @@ instance mono_v₀₁_τ₃
 
 中文:
 实例 mono_v₀₁_τ₃
-  签名: : Mono S.v₀₁.τ₃
+  签名: : 单态射 S.v₀₁.τ₃
   定义体: mono_of_isLimit_fork S.h₀τ₃
 
 Depends on / 依赖: mono_of_isLimit_fork
@@ -412,7 +412,7 @@ lemma exact_C₁_up
 
 中文:
 引理 exact_C₁_up
-  结论: (ShortComplex.mk S.v₀₁.τ₁ S.v₁₂.τ₁
+  结论: (短复形.mk S.v₀₁.τ₁ S.v₁₂.τ₁
   证明: exact_of_f_is_kernel _ S.h₀τ₁
 
 Depends on / 依赖: exact_of_f_is_kernel
@@ -431,7 +431,7 @@ lemma exact_C₂_up
 
 中文:
 引理 exact_C₂_up
-  结论: (ShortComplex.mk S.v₀₁.τ₂ S.v₁₂.τ₂
+  结论: (短复形.mk S.v₀₁.τ₂ S.v₁₂.τ₂
   证明: exact_of_f_is_kernel _ S.h₀τ₂
 
 Depends on / 依赖: exact_of_f_is_kernel
@@ -450,7 +450,7 @@ lemma exact_C₃_up
 
 中文:
 引理 exact_C₃_up
-  结论: (ShortComplex.mk S.v₀₁.τ₃ S.v₁₂.τ₃
+  结论: (短复形.mk S.v₀₁.τ₃ S.v₁₂.τ₃
   证明: exact_of_f_is_kernel _ S.h₀τ₃
 
 Depends on / 依赖: exact_of_f_is_kernel
@@ -473,7 +473,7 @@ instance mono_L₀_f
 
 中文:
 实例 mono_L₀_f
-  签名: [Mono S.L₁.f]
+  签名: [单态射 S.L₁.f]
   定义体: by
   have : Mono (S.L₀.f ≫ S.v₀₁.τ₂) := by
     rw [← S.v₀₁.comm₁₂]
@@ -498,7 +498,7 @@ definition h₃τ₁
 
 中文:
 定义 h₃τ₁
-  签名: : IsColimit (CokernelCofork.ofπ S.v₂₃.τ₁ S.w₁₃_τ₁)
+  签名: : 是余极限 (余核余叉.ofπ S.v₂₃.τ₁ S.w₁₃_τ₁)
   定义体: isColimitCoforkMapOfIsColimit' π₁ S.w₁₃ S.h₃
 
 Depends on / 依赖: isColimitCoforkMapOfIsColimit
@@ -516,7 +516,7 @@ definition h₃τ₂
 
 中文:
 定义 h₃τ₂
-  签名: : IsColimit (CokernelCofork.ofπ S.v₂₃.τ₂ S.w₁₃_τ₂)
+  签名: : 是余极限 (余核余叉.ofπ S.v₂₃.τ₂ S.w₁₃_τ₂)
   定义体: isColimitCoforkMapOfIsColimit' π₂ S.w₁₃ S.h₃
 
 Depends on / 依赖: isColimitCoforkMapOfIsColimit
@@ -534,7 +534,7 @@ definition h₃τ₃
 
 中文:
 定义 h₃τ₃
-  签名: : IsColimit (CokernelCofork.ofπ S.v₂₃.τ₃ S.w₁₃_τ₃)
+  签名: : 是余极限 (余核余叉.ofπ S.v₂₃.τ₃ S.w₁₃_τ₃)
   定义体: isColimitCoforkMapOfIsColimit' π₃ S.w₁₃ S.h₃
 
 Depends on / 依赖: isColimitCoforkMapOfIsColimit
@@ -552,7 +552,7 @@ instance epi_v₂₃_τ₁
 
 中文:
 实例 epi_v₂₃_τ₁
-  签名: : Epi S.v₂₃.τ₁
+  签名: : 满态射 S.v₂₃.τ₁
   定义体: epi_of_isColimit_cofork S.h₃τ₁
 
 Depends on / 依赖: epi_of_isColimit_cofork
@@ -568,7 +568,7 @@ instance epi_v₂₃_τ₂
 
 中文:
 实例 epi_v₂₃_τ₂
-  签名: : Epi S.v₂₃.τ₂
+  签名: : 满态射 S.v₂₃.τ₂
   定义体: epi_of_isColimit_cofork S.h₃τ₂
 
 Depends on / 依赖: epi_of_isColimit_cofork
@@ -584,7 +584,7 @@ instance epi_v₂₃_τ₃
 
 中文:
 实例 epi_v₂₃_τ₃
-  签名: : Epi S.v₂₃.τ₃
+  签名: : 满态射 S.v₂₃.τ₃
   定义体: epi_of_isColimit_cofork S.h₃τ₃
 
 Depends on / 依赖: epi_of_isColimit_cofork
@@ -601,7 +601,7 @@ lemma exact_C₁_down
 
 中文:
 引理 exact_C₁_down
-  结论: (ShortComplex.mk S.v₁₂.τ₁ S.v₂₃.τ₁
+  结论: (短复形.mk S.v₁₂.τ₁ S.v₂₃.τ₁
   证明: exact_of_g_is_cokernel _ S.h₃τ₁
 
 Depends on / 依赖: exact_of_g_is_cokernel
@@ -620,7 +620,7 @@ lemma exact_C₂_down
 
 中文:
 引理 exact_C₂_down
-  结论: (ShortComplex.mk S.v₁₂.τ₂ S.v₂₃.τ₂
+  结论: (短复形.mk S.v₁₂.τ₂ S.v₂₃.τ₂
   证明: exact_of_g_is_cokernel _ S.h₃τ₂
 
 Depends on / 依赖: exact_of_g_is_cokernel
@@ -639,7 +639,7 @@ lemma exact_C₃_down
 
 中文:
 引理 exact_C₃_down
-  结论: (ShortComplex.mk S.v₁₂.τ₃ S.v₂₃.τ₃
+  结论: (短复形.mk S.v₁₂.τ₃ S.v₂₃.τ₃
   证明: exact_of_g_is_cokernel _ S.h₃τ₃
 
 Depends on / 依赖: exact_of_g_is_cokernel
@@ -662,7 +662,7 @@ instance epi_L₃_g
 
 中文:
 实例 epi_L₃_g
-  签名: [Epi S.L₂.g]
+  签名: [满态射 S.L₂.g]
   定义体: by
   have : Epi (S.v₂₃.τ₂ ≫ S.L₃.g) := by
     rw [S.v₂₃.comm₂₃]
@@ -693,7 +693,7 @@ lemma L₀_exact
 
 中文:
 引理 L₀_exact
-  结论: S.L₀.Exact
+  结论: S.L₀.正合
   证明: by
   rw [ShortComplex.exact_iff_exact_up_to_refinements]
   intro A x₂ hx₂
@@ -726,7 +726,7 @@ lemma L₃_exact
 
 中文:
 引理 L₃_exact
-  结论: S.L₃.Exact
+  结论: S.L₃.正合
   证明: S.op.L₀_exact.unop
 
 Depends on / 依赖: S.op.L, _exact.unop
@@ -839,7 +839,7 @@ definition L₀'
 
 中文:
 定义 L₀'
-  签名: : ShortComplex C where
+  签名: : 短复形 C where
   定义体: S.L₁.X₁
   X₂ := S.P
   X₃ := S.L₀.X₃
@@ -891,7 +891,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi S.L₀'.g
+  签名: 满态射 S.L₀'.g
   定义体: by dsimp only [L₀']; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -908,8 +908,8 @@ instance [Mono
   body: mono_of_mono_fac (show S.L₀'.f ≫ pullback.fst _ _ = S.L₁.f by simp [L₀'])
 
 中文:
-实例 [Mono
-  签名: S.L₁.f] : Mono S.L₀'.f
+实例 [单态射
+  签名: S.L₁.f] : 单态射 S.L₀'.f
   定义体: mono_of_mono_fac (show S.L₀'.f ≫ pullback.fst _ _ = S.L₁.f by simp [L₀'])
 
 Depends on / 依赖: mono_of_mono_fac, pullback, pullback.fst
@@ -934,7 +934,7 @@ lemma L₀'_exact
 
 中文:
 引理 L₀'_exact
-  结论: S.L₀'.Exact
+  结论: S.L₀'.正合
   证明: by
   rw [ShortComplex.exact_iff_exact_up_to_refinements]
   intro A x₂ hx₂
@@ -1142,7 +1142,7 @@ definition L₁'
 
 中文:
 定义 L₁'
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk _ _ S.L₀_g_δ
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk
@@ -1161,7 +1161,7 @@ definition L₂'
 
 中文:
 定义 L₂'
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk _ _ S.δ_L₃_f
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk
@@ -1187,7 +1187,7 @@ lemma L₁'_exact
 
 中文:
 引理 L₁'_exact
-  结论: S.L₁'.Exact
+  结论: S.L₁'.正合
   证明: by
   rw [ShortComplex.exact_iff_exact_up_to_refinements]
   intro A₀ x₃ hx₃
@@ -1228,7 +1228,7 @@ definition PIsoUnopOpP'
 
 中文:
 定义 PIsoUnopOpP'
-  签名: : S.P ≅ Opposite.unop S.op.P'
+  签名: : S.P ≅ 对偶.unop S.op.P'
   定义体: pullbackIsoUnopPushout _ _
 
 Depends on / 依赖: pullbackIsoUnopPushout
@@ -1245,7 +1245,7 @@ definition P'IsoUnopOpP
 
 中文:
 定义 P'IsoUnopOpP
-  签名: : S.P' ≅ Opposite.unop S.op.P
+  签名: : S.P' ≅ 对偶.unop S.op.P
   定义体: pushoutIsoUnopPullback _ _
 -/
 noncomputable def P'IsoUnopOpP : S.P' ≅ Opposite.unop S.op.P := pushoutIsoUnopPullback _ _
@@ -1305,7 +1305,7 @@ lemma L₂'_exact
 
 中文:
 引理 L₂'_exact
-  结论: S.L₂'.Exact
+  结论: S.L₂'.正合
   证明: by
   rw [← exact_op_iff]; rw [exact_iff_of_iso S.L₂'OpIso]
   exact S.op.L₁'_exact
@@ -1346,7 +1346,7 @@ lemma snake_lemma
 
 中文:
 引理 snake_lemma
-  结论: S.composableArrows.Exact
+  结论: S.composableArrows.正合
   证明: exact_of_δ₀ S.L₀_exact.exact_toComposableArrows
     (exact_of_δ₀ S.L₁'_exact.exact_toComposableArrows
     (exact_of_δ₀ S.L₂'_exact.exact_toComposableArrows
@@ -1406,8 +1406,8 @@ theorem mono_δ
 
 中文:
 定理 mono_δ
-  条件: (h₀ : IsZero S.L₀.X₂)
-  结论: Mono S.δ
+  条件: (h₀ : 是零 S.L₀.X₂)
+  结论: 单态射 S.δ
   证明: (S.L₁'.exact_iff_mono (IsZero.eq_zero_of_src h₀ S.L₁'.f)).1 S.L₁'_exact
 
 Depends on / 依赖: IsZero, IsZero.eq_zero_of_src, _exact, eq_zero_of_src, exact_iff_mono
@@ -1426,8 +1426,8 @@ theorem epi_δ
 
 中文:
 定理 epi_δ
-  条件: (h₃ : IsZero S.L₃.X₂)
-  结论: Epi S.δ
+  条件: (h₃ : 是零 S.L₃.X₂)
+  结论: 满态射 S.δ
   证明: (S.L₂'.exact_iff_epi (IsZero.eq_zero_of_tgt h₃ S.L₂'.g)).1 S.L₂'_exact
 
 Depends on / 依赖: IsZero, IsZero.eq_zero_of_tgt, _exact, eq_zero_of_tgt, exact_iff_epi
@@ -1446,8 +1446,8 @@ theorem isIso_δ
 
 中文:
 定理 isIso_δ
-  条件: (h₀ : IsZero S.L₀.X₂) (h₃ : IsZero S.L₃.X₂)
-  结论: IsIso S.δ
+  条件: (h₀ : 是零 S.L₀.X₂) (h₃ : 是零 S.L₃.X₂)
+  结论: 是同构 S.δ
   证明: @Balanced.isIso_of_mono_of_epi _ _ _ _ _ S.δ (S.mono_δ h₀) (S.epi_δ h₃)
 
 Depends on / 依赖: Balanced, Balanced.isIso_of_mono_of_epi, S.epi_, S.mono_, isIso_of_mono_of_epi
@@ -1465,7 +1465,7 @@ definition δIso
 
 中文:
 定义 δIso
-  签名: (h₀ : IsZero S.L₀.X₂) (h₃ : IsZero S.L₃.X₂)
+  签名: (h₀ : 是零 S.L₀.X₂) (h₃ : 是零 S.L₃.X₂)
   定义体: @asIso _ _ _ _ S.δ (SnakeInput.isIso_δ S h₀ h₃)
 
 Depends on / 依赖: SnakeInput, SnakeInput.isIso_
@@ -1495,7 +1495,7 @@ structure Hom
     - comm₂₃ : f₂ ≫ S₂.v₂₃ = S₁.v₂₃ ≫ f₃  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (7 个):
     - f₀ : S₁.L₀ ⟶ S₂.L₀
@@ -1540,7 +1540,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Hom S S where
+  签名: : 态射 S S where
   定义体: 𝟙 _
   f₁ := 𝟙 _
   f₂ := 𝟙 _
@@ -1572,7 +1572,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : Hom S₁ S₂) (g : Hom S₂ S₃)
+  签名: (f : 态射 S₁ S₂) (g : 态射 S₂ S₃)
   定义体: f.f₀ ≫ g.f₀
   f₁ := f.f₁ ≫ g.f₁
   f₂ := f.f₂ ≫ g.f₂
@@ -1604,7 +1604,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SnakeInput C)
+  签名: 范畴 (蛇输入 C)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -1626,7 +1626,7 @@ lemma id_f₀
 
 中文:
 引理 id_f₀
-  结论: Hom.f₀ (𝟙 S) = 𝟙 _
+  结论: 态射.f₀ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_f₀ : Hom.f₀ (𝟙 S) = 𝟙 _ := rfl
@@ -1640,7 +1640,7 @@ lemma id_f₁
 
 中文:
 引理 id_f₁
-  结论: Hom.f₁ (𝟙 S) = 𝟙 _
+  结论: 态射.f₁ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_f₁ : Hom.f₁ (𝟙 S) = 𝟙 _ := rfl
@@ -1654,7 +1654,7 @@ lemma id_f₂
 
 中文:
 引理 id_f₂
-  结论: Hom.f₂ (𝟙 S) = 𝟙 _
+  结论: 态射.f₂ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_f₂ : Hom.f₂ (𝟙 S) = 𝟙 _ := rfl
@@ -1668,7 +1668,7 @@ lemma id_f₃
 
 中文:
 引理 id_f₃
-  结论: Hom.f₃ (𝟙 S) = 𝟙 _
+  结论: 态射.f₃ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_f₃ : Hom.f₃ (𝟙 S) = 𝟙 _ := rfl
@@ -1749,7 +1749,7 @@ definition functorL₀
 
 中文:
 定义 functorL₀
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₀
   map f := f.f₀
 -/
@@ -1770,7 +1770,7 @@ definition functorL₁
 
 中文:
 定义 functorL₁
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₁
   map f := f.f₁
 -/
@@ -1791,7 +1791,7 @@ definition functorL₂
 
 中文:
 定义 functorL₂
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₂
   map f := f.f₂
 -/
@@ -1812,7 +1812,7 @@ definition functorL₃
 
 中文:
 定义 functorL₃
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₃
   map f := f.f₃
 -/
@@ -1838,7 +1838,7 @@ definition functorP
 
 中文:
 定义 functorP
-  签名: : SnakeInput C ⥤ C where
+  签名: : 蛇输入 C ⥤ C where
   定义体: S.P
   map f := pullback.map _ _ _ _ f.f₁.τ₂ f.f₀.τ₃ f.f₁.τ₃ f.f₁.comm₂₃.symm
       (congr_arg ShortComplex.Hom.τ₃ f.comm₀₁.symm)
@@ -1947,7 +1947,7 @@ definition functorL₁'
 
 中文:
 定义 functorL₁'
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₁'
   map f :=
     { τ₁ := f.f₀.τ₂
@@ -1984,7 +1984,7 @@ definition functorL₂'
 
 中文:
 定义 functorL₂'
-  签名: : SnakeInput C ⥤ ShortComplex C where
+  签名: : 蛇输入 C ⥤ 短复形 C where
   定义体: S.L₂'
   map f :=
     { τ₁ := f.f₀.τ₃
@@ -2017,7 +2017,7 @@ definition composableArrowsFunctor
 
 中文:
 定义 composableArrowsFunctor
-  签名: : SnakeInput C ⥤ ComposableArrows C 5 where
+  签名: : 蛇输入 C ⥤ ComposableArrows C 5 where
   定义体: S.composableArrows
   map f := ComposableArrows.homMk₅ f.f₀.τ₁ f.f₀.τ₂ f.f₀.τ₃ f.f₃.τ₁ f.f₃.τ₂ f.f₃.τ₃
     f.f₀.comm₁₂.symm f.f₀.comm₂₃.symm (naturality_δ f) f.f₃.comm₁₂.symm f.f₃.comm₂₃.symm

@@ -37,7 +37,7 @@ theorem algebra_adjoin_le_adjoin
 
 中文:
 定理 algebra_adjoin_le_adjoin
-  结论: Algebra.adjoin F S <= (adjoin F S).toSubalgebra
+  结论: 代数.adjoin F S <= (adjoin F S).toSubalgebra
   证明: Algebra.adjoin_le (subset_adjoin _ _)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le, adjoin_le, subset_adjoin
@@ -64,7 +64,7 @@ theorem coe_algebraMap
 
 中文:
 定理 coe_algebraMap
-  条件: (x : Algebra.adjoin F S)
+  条件: (x : 代数.adjoin F S)
   证明: rfl
 
 @[simp]
@@ -138,7 +138,7 @@ theorem adjoin_eq_algebra_adjoin
 
 中文:
 定理 adjoin_eq_algebra_adjoin
-  条件: (inv_mem : 对任意 x in Algebra.adjoin F S, x⁻¹ in Algebra.adjoin F S)
+  条件: (inv_mem : 对任意 x in 代数.adjoin F S, x⁻¹ in 代数.adjoin F S)
   证明: le_antisymm
     (show adjoin F S <=
         { Algebra.adjoin F S with
@@ -172,7 +172,7 @@ theorem eq_adjoin_of_eq_algebra_adjoin
 
 中文:
 定理 eq_adjoin_of_eq_algebra_adjoin
-  结论: (K : 整数ermediateField F E)
+  结论: (K : 中间域 F E)
   证明: by
   apply toSubalgebra_injective
   rw [h]
@@ -201,7 +201,7 @@ theorem adjoin_eq_top_of_algebra
 
 中文:
 定理 adjoin_eq_top_of_algebra
-  条件: (hS : Algebra.adjoin F S = ⊤)
+  条件: (hS : 代数.adjoin F S = ⊤)
   结论: adjoin F S = ⊤
   证明: top_le_iff.mp (hS.symm.trans_le <| algebra_adjoin_le_adjoin F S)
 
@@ -275,8 +275,8 @@ lemma fg_top
 
 中文:
 引理 fg_top
-  条件: [Algebra.EssFiniteType F E]
-  结论: (⊤ : 整数ermediateField F E).FG
+  条件: [代数.EssFiniteType F E]
+  结论: (⊤ : 中间域 F E).FG
   证明: by
   rwa [fg_top_iff]
 
@@ -300,7 +300,7 @@ lemma essFiniteType_iff
 
 中文:
 引理 essFiniteType_iff
-  条件: {K : 整数ermediateField F E}
+  条件: {K : 中间域 F E}
   证明: by
   suffices (exists s : Finset E, (s : Set E) subseteq K ∧ adjoin F ↑s = K) ↔
       exists t : Finset E, adjoin F ↑t = K by
@@ -328,8 +328,8 @@ theorem _root_.Field.fg_iff_essFiniteType
   proof: Field.fg_iff_fg_top_bot.trans fg_top_iff
 
 中文:
-定理 _root_.Field.fg_iff_essFiniteType
-  结论: Field.FG F ↔ Algebra.EssFiniteType (⊥ : Subfield F) F
+定理 _root_.域.fg_iff_essFiniteType
+  结论: 域.FG F ↔ 代数.EssFiniteType (⊥ : 子域 F) F
   证明: Field.fg_iff_fg_top_bot.trans fg_top_iff
 
 Depends on / 依赖: Field.fg_iff_fg_top_bot.trans, fg_iff_fg_top_bot, fg_top_iff
@@ -357,8 +357,8 @@ theorem AdjoinSimple.isIntegral_gen
   rw [isIntegral_algebraMap_iff (algebraMap F⟮α⟯ E).injective]
 
 中文:
-定理 AdjoinSimple.isIntegral_gen
-  结论: Is整数egral F (AdjoinSimple.gen F α) ↔ Is整数egral F α
+定理 AdjoinSimple.is整数egral_gen
+  结论: 是整 F (AdjoinSimple.gen F α) ↔ 是整 F α
   证明: by
   conv_rhs => rw [← AdjoinSimple.algebraMap_gen F α]
   rw [isIntegral_algebraMap_iff (algebraMap F⟮α⟯ E).injective]
@@ -382,7 +382,7 @@ theorem adjoin_toSubalgebra_of_isAlgebraic
 
 中文:
 定理 adjoin_toSubalgebra_of_isAlgebraic
-  条件: {S : Set E} (hS : 对任意 x in S, IsAlgebraic F x)
+  条件: {S : 集合 E} (hS : 对任意 x in S, 是代数 F x)
   证明: adjoin_eq_algebra_adjoin _ _ fun _ =>
     (Algebra.IsIntegral.adjoin fun x hx => (hS x hx).isIntegral).inv_mem
 
@@ -405,7 +405,7 @@ theorem adjoin_simple_toSubalgebra_of_isAlgebraic
 
 中文:
 定理 adjoin_simple_toSubalgebra_of_isAlgebraic
-  条件: (hα : IsAlgebraic F α)
+  条件: (hα : 是代数 F α)
   证明: adjoin_toSubalgebra_of_isAlgebraic by simpa
 
 @[simp]
@@ -427,7 +427,7 @@ theorem adjoin_toSubalgebra
 
 中文:
 定理 adjoin_toSubalgebra
-  条件: [Algebra.IsAlgebraic F E] (S : Set E)
+  条件: [代数.是代数 F E] (S : 集合 E)
   证明: adjoin_toSubalgebra_of_isAlgebraic fun x _ => Algebra.IsAlgebraic.isAlgebraic x
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, adjoin_toSubalgebra_of_isAlgebraic, isAlgebraic
@@ -449,7 +449,7 @@ alias ⟨_root_.Algebra.adjoin_eq_top_of_intermediateField, _⟩ := adjoin_eq_to
 
 中文:
 定理 adjoin_eq_top_iff_of_isAlgebraic
-  条件: {S : Set E} (hS : 对任意 x in S, IsAlgebraic F x)
+  条件: {S : 集合 E} (hS : 对任意 x in S, 是代数 F x)
   证明: by
   rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic hS]; rw [← IntermediateField.toSubalgebra_inj]; rw [IntermediateField.top_toSubalgebra]
 
@@ -478,7 +478,7 @@ alias ⟨_root_.Algebra.adjoin_eq_top_of_primitive_element, _⟩ :=
 
 中文:
 定理 adjoin_simple_eq_top_iff_of_isAlgebraic
-  条件: {x : E} (hx : IsAlgebraic F x)
+  条件: {x : E} (hx : 是代数 F x)
   证明: adjoin_eq_top_iff_of_isAlgebraic (by simp [hx])
 
 alias ⟨_root_.Algebra.adjoin_eq_top_of_primitive_element, _⟩ :=
@@ -505,7 +505,7 @@ theorem adjoin_eq_top_iff
 
 中文:
 定理 adjoin_eq_top_iff
-  条件: [Algebra.IsAlgebraic F E] {S : Set E}
+  条件: [代数.是代数 F E] {S : 集合 E}
   证明: adjoin_eq_top_iff_of_isAlgebraic (fun x _ => Algebra.IsAlgebraic.isAlgebraic x)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, adjoin_eq_top_iff_of_isAlgebraic, isAlgebraic
@@ -528,7 +528,7 @@ lemma _root_.Algebra.finite_of_essFiniteType_of_isAlgebraic
   exact Algebra.IsIntegral.finite
 
 中文:
-引理 _root_.Algebra.finite_of_essFiniteType_of_isAlgebraic
+引理 _root_.代数.finite_of_essFiniteType_of_isAlgebraic
   证明: by
   obtain ⟨s, hs⟩ := fg_top F E
   have : Algebra.FiniteType F E := by
@@ -565,7 +565,7 @@ definition RingHom.adjoinAlgebraMapOfAlgebra
     (Algebra.RingHom.adjoinAlgebraMap b)
 
 中文:
-定义 RingHom.adjoinAlgebraMapOfAlgebra
+定义 环态射.adjoinAlgebraMapOfAlgebra
   签名: :
   定义体: RingHom.comp (Subalgebra.inclusion <|
     algebra_adjoin_le_adjoin A {((algebraMap B C) b)}).toRingHom
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (A[b]) A⟮(algebraMap B C) b⟯
+  签名: 代数 (A[b]) A⟮(algebraMap B C) b⟯
   定义体: RingHom.toAlgebra (RingHom.adjoinAlgebraMapOfAlgebra _)
 
 Depends on / 依赖: RingHom, RingHom.adjoinAlgebraMapOfAlgebra, RingHom.toAlgebra, adjoinAlgebraMapOfAlgebra, toAlgebra
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower (A[b]) A⟮(algebraMap B C) b⟯ C
+  签名: 标量塔 (A[b]) A⟮(algebraMap B C) b⟯ C
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -653,7 +653,7 @@ theorem sup_toSubalgebra_of_isAlgebraic_right
 
 中文:
 定理 sup_toSubalgebra_of_isAlgebraic_right
-  条件: [Algebra.IsAlgebraic K E2]
+  条件: [代数.是代数 K E2]
   证明: by
   have : (adjoin E1 (E2 : Set L)).toSubalgebra = _ := adjoin_toSubalgebra_of_isAlgebraic fun x h =>
     IsAlgebraic.tower_top _ (isAlgebraic_iff.mp (Algebra.IsAlgebraic.isAlgebraic (⟨x, h⟩ : E2)))
@@ -686,7 +686,7 @@ theorem sup_toSubalgebra_of_isAlgebraic_left
 
 中文:
 定理 sup_toSubalgebra_of_isAlgebraic_left
-  条件: [Algebra.IsAlgebraic K E1]
+  条件: [代数.是代数 K E1]
   证明: by
   have := sup_toSubalgebra_of_isAlgebraic_right E2 E1
   rwa [sup_comm (a := E1), sup_comm (a := E1.toSubalgebra)]
@@ -729,7 +729,7 @@ theorem sup_toSubalgebra_of_left
 
 中文:
 定理 sup_toSubalgebra_of_left
-  条件: [FiniteDimensional K E1]
+  条件: [有限维 K E1]
   证明: sup_toSubalgebra_of_isAlgebraic_left E1 E2
 
 Depends on / 依赖: sup_toSubalgebra_of_isAlgebraic_left
@@ -748,7 +748,7 @@ theorem sup_toSubalgebra_of_right
 
 中文:
 定理 sup_toSubalgebra_of_right
-  条件: [FiniteDimensional K E2]
+  条件: [有限维 K E2]
   证明: sup_toSubalgebra_of_isAlgebraic_right E1 E2
 
 Depends on / 依赖: sup_toSubalgebra_of_isAlgebraic_right
@@ -780,7 +780,7 @@ theorem adjoin_intermediateField_toSubalgebra_of_isAlgebraic
 
 中文:
 定理 adjoin_intermediateField_toSubalgebra_of_isAlgebraic
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: by
   let i := IsScalarTower.toAlgHom F E K
   let E' := i.fieldRange
@@ -815,7 +815,7 @@ theorem adjoin_intermediateField_toSubalgebra_of_isAlgebraic_left
 
 中文:
 定理 adjoin_intermediateField_toSubalgebra_of_isAlgebraic_left
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: adjoin_intermediateField_toSubalgebra_of_isAlgebraic E L (Or.inl halg)
 
 Depends on / 依赖: Or.inl, adjoin_intermediateField_toSubalgebra_of_isAlgebraic
@@ -835,7 +835,7 @@ theorem adjoin_intermediateField_toSubalgebra_of_isAlgebraic_right
 
 中文:
 定理 adjoin_intermediateField_toSubalgebra_of_isAlgebraic_right
-  结论: (L : 整数ermediateField F K)
+  结论: (L : 中间域 F K)
   证明: adjoin_intermediateField_toSubalgebra_of_isAlgebraic E L (Or.inr halg)
 
 Depends on / 依赖: Or.inr, adjoin_intermediateField_toSubalgebra_of_isAlgebraic
@@ -868,7 +868,7 @@ theorem fg_of_fg_toSubalgebra
 
 中文:
 定理 fg_of_fg_toSubalgebra
-  条件: (S : 整数ermediateField F E) (h : S.toSubalgebra.FG)
+  条件: (S : 中间域 F E) (h : S.toSubalgebra.FG)
   结论: S.FG
   证明: by
   obtain ⟨t, ht⟩ := h
@@ -891,7 +891,7 @@ theorem fg_of_noetherian
 
 中文:
 定理 fg_of_noetherian
-  条件: (S : 整数ermediateField F E) [IsNoetherian F E]
+  条件: (S : 中间域 F E) [是Noether F E]
   结论: S.FG
   证明: S.fg_of_fg_toSubalgebra S.toSubalgebra.fg_of_noetherian
 
@@ -911,7 +911,7 @@ theorem induction_on_adjoin
 
 中文:
 定理 induction_on_adjoin
-  结论: [FiniteDimensional F E] (P : 整数ermediateField F E -> 命题)
+  结论: [有限维 F E] (P : 中间域 F E -> 命题)
   证明: letI : IsNoetherian F E := IsNoetherian.iff_fg.2 inferInstance
   induction_on_adjoin_fg P base ih K K.fg_of_noetherian
 
@@ -947,7 +947,7 @@ theorem algHom_fieldRange_eq_of_comp_eq
 
 中文:
 定理 algHom_fieldRange_eq_of_comp_eq
-  条件: (h : RingHom.comp f (algebraMap A K) = (g : A ->+* L))
+  条件: (h : 环态射.comp f (algebraMap A K) = (g : A ->+* L))
   证明: by
   apply IntermediateField.toSubfield_injective
   simp_rw [AlgHom.fieldRange_toSubfield, IntermediateField.adjoin_toSubfield]
@@ -1005,7 +1005,7 @@ theorem liftAlgHom_fieldRange
 
 中文:
 定理 liftAlgHom_fieldRange
-  条件: (hg : Function.Injective g)
+  条件: (hg : 函数.单射 g)
   证明: algHom_fieldRange_eq_of_comp_eq (by ext; simp)
 
 Depends on / 依赖: algHom_fieldRange_eq_of_comp_eq
@@ -1024,7 +1024,7 @@ theorem liftAlgHom_fieldRange_eq_of_range_eq
 
 中文:
 定理 liftAlgHom_fieldRange_eq_of_range_eq
-  结论: (hg : Function.Injective g)
+  结论: (hg : 函数.单射 g)
   证明: algHom_fieldRange_eq_of_comp_eq_of_range_eq (by ext; simp) hs
 
 Depends on / 依赖: algHom_fieldRange_eq_of_comp_eq_of_range_eq

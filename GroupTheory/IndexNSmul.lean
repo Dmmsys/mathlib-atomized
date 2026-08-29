@@ -49,7 +49,7 @@ lemma index_range_nsmul
 
 中文:
 引理 index_range_nsmul
-  条件: [Free 整数 M] [Module.Finite 整数 M] (n : 自然数)
+  条件: [自由 整数 M] [模.有限 整数 M] (n : 自然数)
   证明: calc
     _ = (nsmulAddMonoidHom (α := (Fin (finrank Int M) -> Int)) n).range.index := by
       simpa [AddEquiv.map_range_nsmulAddMonoidHom]
@@ -84,7 +84,7 @@ lemma relIndex_map_nsmul
 
 中文:
 引理 relIndex_map_nsmul
-  结论: (n : 自然数) (S : AddSubgroup M) [Free 整数 ↥S.to整数Submodule]
+  结论: (n : 自然数) (S : 加法子群 M) [自由 整数 ↥S.to整数Submodule]
   证明: by
   simpa only [relIndex, addSubgroupOf_map_nsmulAddMonoidHom_eq_range]
     using! index_range_nsmul S.toIntSubmodule n
@@ -107,7 +107,7 @@ lemma distribSMulToLinearMap_injective_of_isTorsionFree
 
 中文:
 引理 distribSMulToLinearMap_injective_of_isTorsionFree
-  条件: [IsTorsionFree 整数 M] {n : 自然数} (hn : n != 0)
+  条件: [是无挠 整数 M] {n : 自然数} (hn : n != 0)
   证明: LinearMap.ker_eq_bot.mp (Submodule.eq_bot_iff _).mpr fun x hx => by simp_all
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mp, Submodule, Submodule.eq_bot_iff, eq_bot_iff, ker_eq_bot
@@ -126,7 +126,7 @@ lemma nsmulAddMonoidHom_injective_of_isTorsionFree
 
 中文:
 引理 nsmulAddMonoidHom_injective_of_isTorsionFree
-  条件: [IsTorsionFree 整数 M] {n : 自然数} (hn : n != 0)
+  条件: [是无挠 整数 M] {n : 自然数} (hn : n != 0)
   证明: (AddMonoidHom.ker_eq_bot_iff _).mp (eq_bot_iff_forall _).mpr fun x hx => by simp_all
 -/
 lemma nsmulAddMonoidHom_injective_of_isTorsionFree [IsTorsionFree Int M] {n : Nat} (hn : n != 0) :
@@ -149,7 +149,7 @@ refine Submod
 
 中文:
 引理 finrank_eq_of_finiteIndex
-  结论: [Module.Finite 整数 M] [IsTorsionFree 整数 M] (A : AddSubgroup M)
+  结论: [模.有限 整数 M] [是无挠 整数 M] (A : 加法子群 M)
   证明: by
   refine le_antisymm A.toIntSubmodule.finrank_le ?_
   have : finrank Int (DistribSMul.toLinearMap Int M A.index).range = finrank Int M :=
@@ -185,7 +185,7 @@ lemma finrank_eq_of_isFiniteRelIndex
 
 中文:
 引理 finrank_eq_of_isFiniteRelIndex
-  结论: {A B : AddSubgroup M} [Module.Finite 整数 B] [IsTorsionFree 整数 B]
+  结论: {A B : 加法子群 M} [模.有限 整数 B] [是无挠 整数 B]
   证明: by
   have : (A.addSubgroupOf B).FiniteIndex := IsFiniteRelIndex.to_finiteIndex_addSubgroupOf
   rw [← finrank_eq_of_finiteIndex (A.addSubgroupOf B)]

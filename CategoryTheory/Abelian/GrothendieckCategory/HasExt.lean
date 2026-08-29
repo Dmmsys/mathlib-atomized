@@ -41,7 +41,7 @@ instance IsGrothendieckAbelian.hasExt
   body: hasExt_of_enoughInjectives _
 
 中文:
-实例 IsGrothendieckAbelian.hasExt
+实例 是GrothendieckAbelian.hasExt
   定义体: hasExt_of_enoughInjectives _
 
 Depends on / 依赖: hasExt_of_enoughInjectives

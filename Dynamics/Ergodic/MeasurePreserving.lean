@@ -51,10 +51,10 @@ structure MeasurePreserving
     - map_eq : map f μa = μb
 
 中文:
-结构 MeasurePreserving
+结构 保测
   参数: (f : α -> β)
   公理与运算 (2 个):
-    - measurable : Measurable f
+    - measurable : 可测 f
     - map_eq : map f μa = μb
 
 Depends on / 依赖: Measurable, Measure, map_eq, measurable, protected, volume_tac
@@ -72,7 +72,7 @@ theorem _root_.Measurable.measurePreserving
   proof: ⟨h, rfl⟩
 
 中文:
-定理 _root_.Measurable.measurePreserving
+定理 _root_.可测.measurePreserving
   证明: ⟨h, rfl⟩
 -/
 protected theorem _root_.Measurable.measurePreserving
@@ -92,8 +92,8 @@ theorem id
 
 中文:
 定理 id
-  条件: (μ : Measure α)
-  结论: MeasurePreserving id μ μ
+  条件: (μ : 测度 α)
+  结论: 保测 id μ μ
   证明: ⟨measurable_id, map_id⟩
 -/
 protected theorem id (μ : Measure α) : MeasurePreserving id μ μ :=
@@ -110,8 +110,8 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  条件: {f : α -> β} (hf : MeasurePreserving f μa μb)
-  结论: AEMeasurable f μa
+  条件: {f : α -> β} (hf : 保测 f μa μb)
+  结论: 几乎处处可测 f μa
   证明: hf.1.aemeasurable
 -/
 protected theorem aemeasurable {f : α -> β} (hf : MeasurePreserving f μa μb) : AEMeasurable f μa :=
@@ -132,7 +132,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: {f f' : α -> β} (hf : MeasurePreserving f μa μb) (hf' : Measurable f')
+  结论: {f f' : α -> β} (hf : 保测 f μa μb) (hf' : 可测 f')
   证明: by
   refine ⟨hf', ?_⟩
   rw [Measure.map_congr h.symm]
@@ -157,7 +157,7 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [IsEmpty β] (f : α -> β) (μa : Measure α) (μb : Measure β)
+  条件: [是空 β] (f : α -> β) (μa : 测度 α) (μb : 测度 β)
   证明: ⟨measurable_of_subsingleton_codomain _, Subsingleton.elim _ _⟩
 
 Depends on / 依赖: IsScalarTower, Subsingleton, Subsingleton.elim, measurable_of_subsingleton_codomain
@@ -177,7 +177,7 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (e : α ≃ᵐ β) {μa : Measure α} {μb : Measure β} (h : MeasurePreserving e μa μb)
+  条件: (e : α ≃ᵐ β) {μa : 测度 α} {μb : 测度 β} (h : 保测 e μa μb)
   证明: ⟨e.symm.measurable, by
     rw [← h.map_eq]; rw [map_map e.symm.measurable e.measurable]; rw [e.symm_comp_self]; rw [map_id]⟩
 
@@ -198,7 +198,7 @@ theorem restrict_preimage
 
 中文:
 定理 restrict_preimage
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) {s : Set β}
+  结论: {f : α -> β} (hf : 保测 f μa μb) {s : 集合 β}
   证明: ⟨hf.measurable, by rw [← hf.map_eq, restrict_map hf.measurable hs]⟩
 
 Depends on / 依赖: hf.map_eq, hf.measurable, map_eq, measurable, restrict_map
@@ -217,7 +217,7 @@ theorem restrict_preimage_emb
 
 中文:
 定理 restrict_preimage_emb
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb)
+  结论: {f : α -> β} (hf : 保测 f μa μb)
   证明: ⟨hf.measurable, by rw [← hf.map_eq, h₂.restrict_map]⟩
 
 Depends on / 依赖: hf.map_eq, hf.measurable, map_eq, measurable, restrict_map
@@ -238,7 +238,7 @@ theorem restrict_image_emb
 
 中文:
 定理 restrict_image_emb
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) (h₂ : MeasurableEmbedding f)
+  结论: {f : α -> β} (hf : 保测 f μa μb) (h₂ : 可测嵌入 f)
   证明: by
   simpa only [Set.preimage_image_eq _ h₂.injective] using hf.restrict_preimage_emb h₂ (f '' s)
 
@@ -259,7 +259,7 @@ theorem aemeasurable_comp_iff
 
 中文:
 定理 aemeasurable_comp_iff
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb)
+  结论: {f : α -> β} (hf : 保测 f μa μb)
   证明: by
   rw [← hf.map_eq]; rw [h₂.aemeasurable_map_iff]
 
@@ -279,7 +279,7 @@ theorem quasiMeasurePreserving
 
 中文:
 定理 quasiMeasurePreserving
-  条件: {f : α -> β} (hf : MeasurePreserving f μa μb)
+  条件: {f : α -> β} (hf : 保测 f μa μb)
   证明: ⟨hf.1, hf.2.absolutelyContinuous⟩
 -/
 protected theorem quasiMeasurePreserving {f : α -> β} (hf : MeasurePreserving f μa μb) :
@@ -296,7 +296,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : β -> γ} {f : α -> β} (hg : MeasurePreserving g μb μc)
+  结论: {g : β -> γ} {f : α -> β} (hg : 保测 g μb μc)
   证明: ⟨hg.1.comp hf.1, by rw [← map_map hg.1 hf.1, hf.2, hg.2]⟩
 -/
 protected theorem comp {g : β -> γ} {f : α -> β} (hg : MeasurePreserving g μb μc)
@@ -313,7 +313,7 @@ theorem map_of_comp
 
 中文:
 定理 map_of_comp
-  结论: {f : α -> β} {g : β -> γ} (hgf : MeasurePreserving (g ∘ f) μa μc)
+  结论: {f : α -> β} {g : β -> γ} (hgf : 保测 (g ∘ f) μa μc)
   证明: ⟨hg, (map_map hg hf).trans hgf.map_eq⟩
 -/
 protected theorem map_of_comp {f : α -> β} {g : β -> γ} (hgf : MeasurePreserving (g ∘ f) μa μc)
@@ -376,7 +376,7 @@ theorem comp_left_iff
 
 中文:
 定理 comp_left_iff
-  条件: {g : α -> β} {e : β ≃ᵐ γ} (h : MeasurePreserving e μb μc)
+  条件: {g : α -> β} {e : β ≃ᵐ γ} (h : 保测 e μb μc)
   证明: by
   refine ⟨fun hg => ?_, fun hg => h.comp hg⟩
   convert! (MeasurePreserving.symm e h).comp hg
@@ -401,7 +401,7 @@ theorem comp_right_iff
 
 中文:
 定理 comp_right_iff
-  条件: {g : α -> β} {e : γ ≃ᵐ α} (h : MeasurePreserving e μc μa)
+  条件: {g : α -> β} {e : γ ≃ᵐ α} (h : 保测 e μc μa)
   证明: by
   refine ⟨fun hg => ?_, fun hg => hg.comp h⟩
   convert! hg.comp (MeasurePreserving.symm e h)
@@ -423,7 +423,7 @@ theorem sigmaFinite
 
 中文:
 定理 sigmaFinite
-  条件: {f : α -> β} (hf : MeasurePreserving f μa μb) [SigmaFinite μb]
+  条件: {f : α -> β} (hf : 保测 f μa μb) [σ有限 μb]
   证明: SigmaFinite.of_map μa hf.aemeasurable (by rwa [hf.map_eq])
 -/
 protected theorem sigmaFinite {f : α -> β} (hf : MeasurePreserving f μa μb) [SigmaFinite μb] :
@@ -442,7 +442,7 @@ theorem sfinite
 
 中文:
 定理 sfinite
-  条件: {f : α -> β} (hf : MeasurePreserving f μa μb) [SFinite μa]
+  条件: {f : α -> β} (hf : 保测 f μa μb) [SFinite μa]
   证明: by
   rw [← hf.map_eq]
   infer_instance
@@ -464,7 +464,7 @@ theorem measure_preimage
 
 中文:
 定理 measure_preimage
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) {s : Set β}
+  结论: {f : α -> β} (hf : 保测 f μa μb) {s : 集合 β}
   证明: by
   rw [← hf.map_eq] at hs ⊢
   rw [map_apply₀ hf.1.aemeasurable hs]
@@ -486,8 +486,8 @@ theorem measureReal_preimage
   simp [measureReal_def, measure_preimage hf hs]
 
 中文:
-定理 measureReal_preimage
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) {s : Set β}
+定理 measure实数_preimage
+  结论: {f : α -> β} (hf : 保测 f μa μb) {s : 集合 β}
   证明: by
   simp [measureReal_def, measure_preimage hf hs]
 
@@ -508,7 +508,7 @@ theorem measure_preimage_emb
 
 中文:
 定理 measure_preimage_emb
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb)
+  结论: {f : α -> β} (hf : 保测 f μa μb)
   证明: by
   rw [← hf.map_eq]; rw [hfe.map_apply]
 
@@ -528,7 +528,7 @@ theorem measure_preimage_equiv
 
 中文:
 定理 measure_preimage_equiv
-  条件: {f : α ≃ᵐ β} (hf : MeasurePreserving f μa μb) (s : Set β)
+  条件: {f : α ≃ᵐ β} (hf : 保测 f μa μb) (s : 集合 β)
   证明: measure_preimage_emb hf f.measurableEmbedding s
 
 Depends on / 依赖: f.measurableEmbedding, measurableEmbedding, measure_preimage_emb
@@ -549,7 +549,7 @@ theorem measure_preimage_le
 
 中文:
 定理 measure_preimage_le
-  条件: {f : α -> β} (hf : MeasurePreserving f μa μb) (s : Set β)
+  条件: {f : α -> β} (hf : 保测 f μa μb) (s : 集合 β)
   证明: by
   rw [← hf.map_eq]
   exact le_map_apply hf.aemeasurable _
@@ -571,7 +571,7 @@ theorem preimage_null
 
 中文:
 定理 preimage_null
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) {s : Set β}
+  结论: {f : α -> β} (hf : 保测 f μa μb) {s : 集合 β}
   证明: hf.quasiMeasurePreserving.preimage_null hs
 
 Depends on / 依赖: hf.quasiMeasurePreserving.preimage_null, preimage_null, quasiMeasurePreserving
@@ -592,7 +592,7 @@ theorem aeconst_comp
 
 中文:
 定理 aeconst_comp
-  结论: [MeasurableSingletonClass γ] {f : α -> β} (hf : MeasurePreserving f μa μb)
+  结论: [MeasurableSingleton类 γ] {f : α -> β} (hf : 保测 f μa μb)
   证明: exists_congr fun s => and_congr_left fun hs => by
     simp only [Filter.mem_map, mem_ae_iff, ← hf.measure_preimage (hg hs.measurableSet).compl,
       preimage_comp, preimage_compl]
@@ -616,7 +616,7 @@ theorem aeconst_preimage
 
 中文:
 定理 aeconst_preimage
-  结论: {f : α -> β} (hf : MeasurePreserving f μa μb) {s : Set β}
+  结论: {f : α -> β} (hf : 保测 f μa μb) {s : 集合 β}
   证明: aeconst_comp hf hs.mem
 
 Depends on / 依赖: aeconst_comp, hs.mem
@@ -637,7 +637,7 @@ theorem add_measure
 
 中文:
 定理 add_measure
-  结论: {f μa' μb'} (hf : MeasurePreserving f μa μb)
+  结论: {f μa' μb'} (hf : 保测 f μa μb)
   证明: hf.measurable
   map_eq := by rw [Measure.map_add _ _ hf.measurable, hf.map_eq, hf'.map_eq]
 
@@ -659,7 +659,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] {f : α -> β}
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] {f : α -> β}
   证明: hf.measurable
   map_eq := by rw [Measure.map_smul, hf.map_eq]
 
@@ -681,7 +681,7 @@ theorem iterate
 
 中文:
 定理 iterate
-  条件: (hf : MeasurePreserving f μ μ)
+  条件: (hf : 保测 f μ μ)
 
 Depends on / 依赖: MulAction, toMulAction
 -/
@@ -746,8 +746,8 @@ theorem exists_mem_iterate_mem_of_measure_univ_lt_mul_measure
   o
 
 中文:
-定理 exists_mem_iterate_mem_of_measure_univ_lt_mul_measure
-  结论: (hf : MeasurePreserving f μ μ)
+定理 存在_mem_iterate_mem_of_measure_univ_lt_mul_measure
+  结论: (hf : 保测 f μ μ)
   证明: by
   have A : forall m, NullMeasurableSet (f^[m] ⁻¹' s) μ := fun m =>
     hs.preimage (hf.iterate m).quasiMeasurePreserving
@@ -784,8 +784,8 @@ theorem exists_mem_iterate_mem
   exact ⟨x, hx, m, hm.1.ne', hmx⟩
 
 中文:
-定理 exists_mem_iterate_mem
-  结论: [IsFiniteMeasure μ] (hf : MeasurePreserving f μ μ)
+定理 存在_mem_iterate_mem
+  结论: [是有限测度 μ] (hf : 保测 f μ μ)
   证明: by
   rcases ENNReal.exists_nat_mul_gt hs' (measure_ne_top μ (Set.univ : Set α)) with ⟨N, hN⟩
   rcases hf.exists_mem_iterate_mem_of_measure_univ_lt_mul_measure hs hN with ⟨x, hx, m, hm, hmx⟩
@@ -812,7 +812,7 @@ lemma measurePreserving_subtype_coe
 
 中文:
 引理 measurePreserving_subtype_coe
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: measurable_subtype_coe
   map_eq := map_comap_subtype_coe hs _
 
@@ -835,7 +835,7 @@ theorem measurePreserving_symm
 
 中文:
 定理 measurePreserving_symm
-  条件: (μ : Measure α) (e : α ≃ᵐ β)
+  条件: (μ : 测度 α) (e : α ≃ᵐ β)
   证明: (e.measurable.measurePreserving μ).symm _
 
 Depends on / 依赖: e.measurable.measurePreserving, measurable, measurePreserving

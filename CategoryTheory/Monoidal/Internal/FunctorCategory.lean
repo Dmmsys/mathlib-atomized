@@ -147,7 +147,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Mon (C ⥤ D) ⥤ C ⥤ Mon D where
+  签名: : 幺半群 (C ⥤ D) ⥤ C ⥤ 幺半群 D where
   定义体: functorObj A.X
   map f :=
   { app := fun X =>
@@ -184,7 +184,7 @@ definition inverseObj
 
 中文:
 定义 inverseObj
-  签名: (F : C ⥤ Mon D)
+  签名: (F : C ⥤ 幺半群 D)
   定义体: F ⋙ Mon.forget D
   mon :=
   { one := { app X := η[(F.obj X).X] }
@@ -216,7 +216,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (C ⥤ Mon D) ⥤ Mon (C ⥤ D) where
+  签名: : (C ⥤ 幺半群 D) ⥤ 幺半群 (C ⥤ D) where
   定义体: inverseObj
   map α := .mk'
     { app := fun X => (α.app X).hom
@@ -247,7 +247,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (Mon (C ⥤ D)) ≅ functor ⋙ inverse
+  签名: : 𝟭 (幺半群 (C ⥤ D)) ≅ functor ⋙ inverse
   定义体: NatIso.ofComponents (fun A =>
   { hom := .mk' { app := fun _ => 𝟙 _ }
     inv := .mk' { app := fun _ => 𝟙 _ } })
@@ -274,7 +274,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ Mon D)
+  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ 幺半群 D)
   定义体: NatIso.ofComponents (fun A =>
     NatIso.ofComponents (fun X => { hom := { hom := 𝟙 _ }, inv := { hom := 𝟙 _ } }))
 
@@ -308,7 +308,7 @@ definition monFunctorCategoryEquivalence
 
 中文:
 定义 monFunctorCategoryEquivalence
-  签名: : Mon (C ⥤ D) ≌ C ⥤ Mon D where
+  签名: : 幺半群 (C ⥤ D) ≌ C ⥤ 幺半群 D where
   定义体: functor
   inverse := inverse
   unitIso := unitIso
@@ -344,7 +344,7 @@ definition functorObjObj
 
 中文:
 定义 functorObjObj
-  签名: (A : C ⥤ D) [ComonObj A] (X : C)
+  签名: (A : C ⥤ D) [余monObj A] (X : C)
   定义体: A.obj X
   comon :=
   { counit := ε[A].app X
@@ -386,7 +386,7 @@ definition functorObj
 
 中文:
 定义 functorObj
-  签名: (A : (C ⥤ D)) [ComonObj A]
+  签名: (A : (C ⥤ D)) [余monObj A]
   定义体: functorObjObj A
   map f :=
     { hom := A.map f
@@ -428,7 +428,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Comon (C ⥤ D) ⥤ C ⥤ Comon D where
+  签名: : 余mon (C ⥤ D) ⥤ C ⥤ 余mon D where
   定义体: functorObj A.X
   map f :=
   { app := fun X =>
@@ -463,7 +463,7 @@ definition inverseObj
 
 中文:
 定义 inverseObj
-  签名: (F : C ⥤ Comon D)
+  签名: (F : C ⥤ 余mon D)
   定义体: F ⋙ Comon.forget D
   comon :=
   { counit := { app X := ε[(F.obj X).X] }
@@ -499,7 +499,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (C ⥤ Comon D) ⥤ Comon (C ⥤ D) where
+  签名: : (C ⥤ 余mon D) ⥤ 余mon (C ⥤ D) where
   定义体: inverseObj
   map α :=
     { hom :=
@@ -535,7 +535,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (Comon (C ⥤ D)) ≅ functor ⋙ inverse
+  签名: : 𝟭 (余mon (C ⥤ D)) ≅ functor ⋙ inverse
   定义体: NatIso.ofComponents (fun A =>
     { hom := .mk' { app := fun _ => 𝟙 _ }
       inv := .mk' { app := fun _ => 𝟙 _ } })
@@ -563,7 +563,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ Comon D)
+  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ 余mon D)
   定义体: NatIso.ofComponents (fun A =>
     NatIso.ofComponents (fun X => { hom := { hom := 𝟙 _ }, inv := { hom := 𝟙 _ } }))
 
@@ -599,7 +599,7 @@ definition comonFunctorCategoryEquivalence
 
 中文:
 定义 comonFunctorCategoryEquivalence
-  签名: : Comon (C ⥤ D) ≌ C ⥤ Comon D where
+  签名: : 余mon (C ⥤ D) ≌ C ⥤ 余mon D where
   定义体: functor
   inverse := inverse
   unitIso := unitIso
@@ -642,7 +642,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : CommMon (C ⥤ D) ⥤ C ⥤ CommMon D where
+  签名: : 交换幺半群 (C ⥤ D) ⥤ C ⥤ 交换幺半群 D where
   定义体: { obj X :=
         { ((monFunctorCategoryEquivalence C D).functor.obj A.toMon).obj X with
           comm := { mul_comm := congr_app (IsCommMonObj.mul_comm A.X) X } }
@@ -682,7 +682,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (C ⥤ CommMon D) ⥤ CommMon (C ⥤ D) where
+  签名: : (C ⥤ 交换幺半群 D) ⥤ 交换幺半群 (C ⥤ D) where
   定义体: { (monFunctorCategoryEquivalence C D).inverse.obj (F ⋙ CommMon.forget₂Mon D) with
       comm := { mul_comm := by ext X; exact IsCommMonObj.mul_comm (F.obj X).X } }
   map α :=
@@ -711,7 +711,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (CommMon (C ⥤ D)) ≅ functor ⋙ inverse
+  签名: : 𝟭 (交换幺半群 (C ⥤ D)) ≅ functor ⋙ inverse
   定义体: NatIso.ofComponents (fun A => CommMon.mkIso (Iso.refl _))
 
 Depends on / 依赖: CommMon, CommMon.mkIso, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -733,7 +733,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ CommMon D)
+  签名: : inverse ⋙ functor ≅ 𝟭 (C ⥤ 交换幺半群 D)
   定义体: NatIso.ofComponents (fun A => NatIso.ofComponents (fun X => Iso.refl _))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -764,7 +764,7 @@ definition commMonFunctorCategoryEquivalence
 
 中文:
 定义 commMonFunctorCategoryEquivalence
-  签名: : CommMon (C ⥤ D) ≌ C ⥤ CommMon D where
+  签名: : 交换幺半群 (C ⥤ D) ≌ C ⥤ 交换幺半群 D where
   定义体: functor
   inverse := inverse
   unitIso := unitIso

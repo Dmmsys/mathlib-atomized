@@ -108,7 +108,7 @@ definition padicValInt
   body: padicValNat p z.natAbs
 
 中文:
-定义 padicValInt
+定义 padicVal整数
   签名: (p : 自然数) (z : 整数)
   定义体: padicValNat p z.natAbs
 
@@ -278,7 +278,7 @@ definition padicValRat
 
 中文:
 定义 padicValRat
-  签名: (p : 自然数) (q : Rat)
+  签名: (p : 自然数) (q : 有理数)
   定义体: padicValInt p q.num - padicValNat p q.den
 
 Depends on / 依赖: padicValInt, padicValNat, q.den, q.num
@@ -296,7 +296,7 @@ lemma padicValRat_def
 
 中文:
 引理 padicValRat_def
-  条件: (p : 自然数) (q : Rat)
+  条件: (p : 自然数) (q : 有理数)
   证明: rfl
 -/
 lemma padicValRat_def (p : Nat) (q : Rat) :
@@ -321,7 +321,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: padicValRat p (-q) = padicValRat p q
   证明: by
   simp [padicValRat, padicValInt]
@@ -416,7 +416,7 @@ theorem multiplicity_sub_multiplicity
 
 中文:
 定理 multiplicity_sub_multiplicity
-  条件: {q : Rat} (hp : p != 1) (hq : q != 0)
+  条件: {q : 有理数} (hp : p != 1) (hq : q != 0)
   证明: by
   rw [padicValRat]; rw [padicValInt.of_ne_one_ne_zero hp (Rat.num_ne_zero.2 hq)]; rw [padicValNat_def' hp q.den_ne_zero]
 
@@ -523,8 +523,8 @@ theorem padicValNat_self
   simp
 
 中文:
-定理 padicValNat_self
-  条件: [Fact p.Prime]
+定理 padicVal自然数_self
+  条件: [Fact p.素]
   结论: padicVal自然数 p p = 1
   证明: by
   rw [padicValNat_def (@Fact.out p.Prime).ne_zero]
@@ -547,8 +547,8 @@ theorem one_le_padicValNat_of_dvd
     ← pow_dvd_iff_le_emultiplicity, pow_one]
 
 中文:
-定理 one_le_padicValNat_of_dvd
-  条件: {n : 自然数} [hp : Fact p.Prime] (hn : n != 0) (div : p ∣ n)
+定理 one_le_padicVal自然数_of_dvd
+  条件: {n : 自然数} [hp : Fact p.素] (hn : n != 0) (div : p ∣ n)
   证明: by
   rwa [← ENat.natCast_le_natCast, padicValNat_eq_emultiplicity hn,
     ← pow_dvd_iff_le_emultiplicity, pow_one]
@@ -570,8 +570,8 @@ theorem dvd_iff_padicValNat_ne_zero
     Classical.not_not.1 (mt padicValNat.eq_zero_of_not_dvd h)⟩
 
 中文:
-定理 dvd_iff_padicValNat_ne_zero
-  条件: {p n : 自然数} [Fact p.Prime] (hn0 : n != 0)
+定理 dvd_iff_padicVal自然数_ne_zero
+  条件: {p n : 自然数} [Fact p.素] (hn0 : n != 0)
   证明: ⟨fun h => one_le_iff_ne_zero.mp (one_le_padicValNat_of_dvd hn0 h), fun h =>
     Classical.not_not.1 (mt padicValNat.eq_zero_of_not_dvd h)⟩
 
@@ -625,7 +625,7 @@ theorem defn
 
 中文:
 定理 defn
-  结论: (p : 自然数) [hp : Fact p.Prime] {q : Rat} {n d : 整数} (hqz : q != 0)
+  结论: (p : 自然数) [hp : Fact p.素] {q : 有理数} {n d : 整数} (hqz : q != 0)
   证明: by
   have hd : d != 0 := Rat.mk_denom_ne_zero_of_ne_zero hqz qdf
   let ⟨c, hc1, hc2⟩ := Rat.num_den_mk hd qdf
@@ -662,7 +662,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: {q r : Rat} (hq : q != 0) (hr : r != 0)
+  条件: {q r : 有理数} (hq : q != 0) (hr : r != 0)
   证明: by
   have : q * r = (q.num * r.num) /. (q.den * r.den) := by
     rw [Rat.mul_eq_mkRat]; rw [Rat.mkRat_eq_divInt]; rw [Nat.cast_mul]
@@ -701,7 +701,7 @@ theorem pow
 
 中文:
 定理 pow
-  条件: (q : Rat) {k : 自然数}
+  条件: (q : 有理数) {k : 自然数}
   证明: by
   obtain rfl | hq := eq_or_ne q 0
   · cases k <;> simp
@@ -734,7 +734,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: padicValRat p q⁻¹ = -padicValRat p q
   证明: by
   by_cases hq : q = 0
@@ -762,7 +762,7 @@ theorem zpow
 
 中文:
 定理 zpow
-  条件: (q : Rat) {k : 整数}
+  条件: (q : 有理数) {k : 整数}
   证明: by
   induction k using Int.negInduction <;> simp
 -/
@@ -781,7 +781,7 @@ theorem div
 
 中文:
 定理 div
-  条件: {q r : Rat} (hq : q != 0) (hr : r != 0)
+  条件: {q r : 有理数} (hq : q != 0) (hr : r != 0)
   证明: by
   rw [div_eq_mul_inv]; rw [padicValRat.mul hq (inv_ne_zero hr)]; rw [padicValRat.inv r]; rw [sub_eq_add_neg]
 -/
@@ -844,7 +844,7 @@ theorem le_padicValRat_add_of_le
 
 中文:
 定理 le_padicValRat_add_of_le
-  结论: {q r : Rat} (hqr : q + r != 0)
+  结论: {q r : 有理数} (hqr : q + r != 0)
   证明: if hq : q = 0 then by simpa [hq] using h
   else
     if hr : r = 0 then by simp [hr]
@@ -893,7 +893,7 @@ theorem min_le_padicValRat_add
 
 中文:
 定理 min_le_padicValRat_add
-  条件: {q r : Rat} (hqr : q + r != 0)
+  条件: {q r : 有理数} (hqr : q + r != 0)
   证明: (le_total (padicValRat p q) (padicValRat p r)).elim
   (fun h => by rw [min_eq_left h]; exact le_padicValRat_add_of_le hqr h)
   (fun h => by rw [min_eq_right h, add_comm]; exact le_padicValRat_add_of_le (by rwa [add_comm]) h)
@@ -921,7 +921,7 @@ lemma add_eq_min
 
 中文:
 引理 add_eq_min
-  结论: {q r : Rat} (hqr : q + r != 0) (hq : q != 0) (hr : r != 0)
+  结论: {q r : 有理数} (hqr : q + r != 0) (hq : q != 0) (hr : r != 0)
   证明: by
   have h1 := min_le_padicValRat_add (p := p) hqr
   have h2 := min_le_padicValRat_add (p := p) (ne_of_eq_of_ne (add_neg_cancel_right q r) hq)
@@ -952,7 +952,7 @@ lemma add_eq_of_lt
 
 中文:
 引理 add_eq_of_lt
-  结论: {q r : Rat} (hqr : q + r != 0)
+  结论: {q r : 有理数} (hqr : q + r != 0)
   证明: by
   rw [add_eq_min hqr hq hr (ne_of_lt hval)]; rw [min_eq_left (le_of_lt hval)]
 
@@ -973,7 +973,7 @@ lemma lt_add_of_lt
 
 中文:
 引理 lt_add_of_lt
-  结论: {q r₁ r₂ : Rat} (hqr : r₁ + r₂ != 0)
+  结论: {q r₁ r₂ : 有理数} (hqr : r₁ + r₂ != 0)
   证明: lt_of_lt_of_le (lt_min hval₁ hval₂) (padicValRat.min_le_padicValRat_add hqr)
 
 Depends on / 依赖: lt_min, lt_of_lt_of_le, min_le_padicValRat_add, padicValRat, padicValRat.min_le_padicValRat_add
@@ -996,7 +996,7 @@ lemma self_pow_inv
 中文:
 引理 self_pow_inv
   条件: (r : 自然数)
-  结论: padicValRat p ((p : Rat) ^ r)⁻¹ = -r
+  结论: padicValRat p ((p : 有理数) ^ r)⁻¹ = -r
   证明: by
   rw [padicValRat.inv]; rw [neg_inj]; rw [padicValRat.pow p]; rw [padicValRat.self hp.elim.one_lt]; rw [mul_one]
 
@@ -1024,7 +1024,7 @@ theorem sum_pos_of_pos
 
 中文:
 定理 sum_pos_of_pos
-  结论: {n : 自然数} {F : 自然数 -> Rat} (hF : 对任意 i, i < n -> 0 < padicValRat p (F i))
+  结论: {n : 自然数} {F : 自然数 -> 有理数} (hF : 对任意 i, i < n -> 0 < padicValRat p (F i))
   证明: by
   induction n with
   | zero => exact False.elim (hn0 rfl)
@@ -1069,7 +1069,7 @@ theorem lt_sum_of_lt
 
 中文:
 定理 lt_sum_of_lt
-  结论: {p j : 自然数} [hp : Fact (自然数.Prime p)] {F : 自然数 -> Rat} {S : Finset 自然数}
+  结论: {p j : 自然数} [hp : Fact (自然数.素 p)] {F : 自然数 -> 有理数} {S : 有限集 自然数}
   证明: by
   induction hS using Finset.Nonempty.cons_induction with
   | singleton k =>
@@ -1269,7 +1269,7 @@ theorem dvd_of_one_le_padicValNat
   exact lt_irrefl 0 (lt_of_lt_of_le zero_lt_one hp)
 
 中文:
-定理 dvd_of_one_le_padicValNat
+定理 dvd_of_one_le_padicVal自然数
   条件: {n : 自然数} (hp : 1 <= padicVal自然数 p n)
   结论: p ∣ n
   证明: by
@@ -1294,7 +1294,7 @@ theorem padicValNat_dvd_iff_le_of_ne_one
   rw [pow_dvd_iff_le_emultiplicity]; rw [← padicValNat_eq_emultiplicity_of_ne_one hp ha]; rw [Nat.cast_le]
 
 中文:
-定理 padicValNat_dvd_iff_le_of_ne_one
+定理 padicVal自然数_dvd_iff_le_of_ne_one
   条件: {p : 自然数} (hp : p != 1) {a n : 自然数} (ha : a != 0)
   证明: by
   rw [pow_dvd_iff_le_emultiplicity]; rw [← padicValNat_eq_emultiplicity_of_ne_one hp ha]; rw [Nat.cast_le]
@@ -1314,8 +1314,8 @@ theorem padicValNat_dvd_iff_le
   proof: padicValNat_dvd_iff_le_of_ne_one hp.out.ne_one ha
 
 中文:
-定理 padicValNat_dvd_iff_le
-  条件: [hp : Fact p.Prime] {a n : 自然数} (ha : a != 0)
+定理 padicVal自然数_dvd_iff_le
+  条件: [hp : Fact p.素] {a n : 自然数} (ha : a != 0)
   证明: padicValNat_dvd_iff_le_of_ne_one hp.out.ne_one ha
 
 Depends on / 依赖: hp.out.ne_one, ne_one, padicValNat_dvd_iff_le_of_ne_one
@@ -1336,7 +1336,7 @@ theorem padicValNat_dvd_iff_of_ne_one
   · rw [padicValNat_dvd_iff_le_of_ne_one hp ha, or_iff_right ha]
 
 中文:
-定理 padicValNat_dvd_iff_of_ne_one
+定理 padicVal自然数_dvd_iff_of_ne_one
   条件: {p : 自然数} (hp : p != 1) (n a : 自然数)
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
@@ -1360,8 +1360,8 @@ theorem padicValNat_dvd_iff
   proof: padicValNat_dvd_iff_of_ne_one hp.out.ne_one n a
 
 中文:
-定理 padicValNat_dvd_iff
-  条件: (n : 自然数) [hp : Fact p.Prime] (a : 自然数)
+定理 padicVal自然数_dvd_iff
+  条件: (n : 自然数) [hp : Fact p.素] (a : 自然数)
   证明: padicValNat_dvd_iff_of_ne_one hp.out.ne_one n a
 
 Depends on / 依赖: hp.out.ne_one, ne_one, padicValNat_dvd_iff_of_ne_one
@@ -1381,8 +1381,8 @@ theorem pow_succ_padicValNat_not_dvd
   exact Nat.lt_succ_self _
 
 中文:
-定理 pow_succ_padicValNat_not_dvd
-  条件: {n : 自然数} [hp : Fact p.Prime] (hn : n != 0)
+定理 pow_succ_padicVal自然数_not_dvd
+  条件: {n : 自然数} [hp : Fact p.素] (hn : n != 0)
   证明: by
   rw [padicValNat_dvd_iff_le hn]; rw [not_le]
   exact Nat.lt_succ_self _
@@ -1404,8 +1404,8 @@ theorem padicValNat_primes
     (not_congr (Iff.symm (prime_dvd_prime_iff_eq hp.1 hq.1))).mp ne
 
 中文:
-定理 padicValNat_primes
-  条件: {q : 自然数} [hp : Fact p.Prime] [hq : Fact q.Prime] (ne : p != q)
+定理 padicVal自然数_primes
+  条件: {q : 自然数} [hp : Fact p.素] [hq : Fact q.素] (ne : p != q)
   证明: @padicValNat.eq_zero_of_not_dvd p q
     (not_congr (Iff.symm (prime_dvd_prime_iff_eq hp.1 hq.1))).mp ne
 
@@ -1426,8 +1426,8 @@ theorem padicValNat_prime_prime_pow
   rw [padicValNat.pow _]; rw [padicValNat_primes ne]; rw [mul_zero]
 
 中文:
-定理 padicValNat_prime_prime_pow
-  结论: {q : 自然数} [hp : Fact p.Prime] [hq : Fact q.Prime]
+定理 padicVal自然数_prime_prime_pow
+  结论: {q : 自然数} [hp : Fact p.素] [hq : Fact q.素]
   证明: by
   rw [padicValNat.pow _]; rw [padicValNat_primes ne]; rw [mul_zero]
 
@@ -1447,8 +1447,8 @@ theorem padicValNat_mul_pow_left
   rw [padicValNat.mul (NeZero.ne' (p ^ n)).symm (NeZero.ne' (q ^ m)).symm]; rw [padicValNat.prime_pow]; rw [padicValNat_prime_prime_pow m ne]; rw [add_zero]
 
 中文:
-定理 padicValNat_mul_pow_left
-  结论: {q : 自然数} [hp : Fact p.Prime] [hq : Fact q.Prime]
+定理 padicVal自然数_mul_pow_left
+  结论: {q : 自然数} [hp : Fact p.素] [hq : Fact q.素]
   证明: by
   rw [padicValNat.mul (NeZero.ne' (p ^ n)).symm (NeZero.ne' (q ^ m)).symm]; rw [padicValNat.prime_pow]; rw [padicValNat_prime_prime_pow m ne]; rw [add_zero]
 
@@ -1469,8 +1469,8 @@ theorem padicValNat_mul_pow_right
   exact padicValNat_mul_pow_left m n ne
 
 中文:
-定理 padicValNat_mul_pow_right
-  结论: {q : 自然数} [hp : Fact p.Prime] [hq : Fact q.Prime]
+定理 padicVal自然数_mul_pow_right
+  结论: {q : 自然数} [hp : Fact p.素] [hq : Fact q.素]
   证明: by
   rw [mul_comm (p ^ n) (q ^ m)]
   exact padicValNat_mul_pow_left m n ne
@@ -1498,7 +1498,7 @@ lemma padicValNat_le_nat_log
   exact Nat.le_log_of_pow_le p.one_lt_succ_succ (le_of_dvd n.succ_pos pow_padicValNat_dvd)
 
 中文:
-引理 padicValNat_le_nat_log
+引理 padicVal自然数_le_nat_log
   条件: (n : 自然数)
   结论: padicVal自然数 p n <= 自然数.log p n
   证明: by
@@ -1537,8 +1537,8 @@ lemma padicValNat_add_le_self
       _ 
 
 中文:
-引理 padicValNat_add_le_self
-  条件: {a : 自然数} [hp : Fact p.Prime] (ha : p < a)
+引理 padicVal自然数_add_le_self
+  条件: {a : 自然数} [hp : Fact p.素] (ha : p < a)
   证明: by
   by_cases dvd : p ∣ a
   · rcases dvd with ⟨k, hk⟩
@@ -1577,8 +1577,8 @@ lemma nat_log_eq_padicValNat_iff
   exact fun _ => Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr hn) pow_padicValNat_dvd
 
 中文:
-引理 nat_log_eq_padicValNat_iff
-  条件: {n : 自然数} [hp : Fact (自然数.Prime p)] (hn : n != 0)
+引理 nat_log_eq_padicVal自然数_iff
+  条件: {n : 自然数} [hp : Fact (自然数.素 p)] (hn : n != 0)
   证明: by
   rw [Nat.log_eq_iff (Or.inr ⟨(Nat.Prime.one_lt' p).out]; rw [by lia⟩)]; rw [and_iff_right_iff_imp]
   exact fun _ => Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr hn) pow_padicValNat_dvd
@@ -1606,7 +1606,7 @@ lemma Nat.log_ne_padicValNat_succ
   -- TODO(kmill): Why is this `p := 2` necess
 
 中文:
-引理 Nat.log_ne_padicValNat_succ
+引理 自然数.log_ne_padicVal自然数_succ
   条件: {n : 自然数} (hn : n != 0)
   结论: log 2 n != padicVal自然数 2 (n + 1)
   证明: by
@@ -1643,8 +1643,8 @@ lemma Nat.max_log_padicValNat_succ_eq_log_succ
     (pow_log_le_self p 
 
 中文:
-引理 Nat.max_log_padicValNat_succ_eq_log_succ
-  条件: (n : 自然数) [hp : Fact p.Prime]
+引理 自然数.max_log_padicVal自然数_succ_eq_log_succ
+  条件: (n : 自然数) [hp : Fact p.素]
   证明: by
   apply le_antisymm (max_le (le_log_of_pow_le hp.out.one_lt (pow_log_le_add_one p n))
     (padicValNat_le_nat_log (n + 1)))
@@ -1679,7 +1679,7 @@ theorem range_pow_padicValNat_subset_divisors
   exact ⟨(pow_dvd_pow p <| by lia).trans pow_padicValNat_dvd, hn⟩
 
 中文:
-定理 range_pow_padicValNat_subset_divisors
+定理 range_pow_padicVal自然数_subset_divisors
   条件: {n : 自然数} (hn : n != 0)
   证明: by
   intro t ht
@@ -1715,8 +1715,8 @@ theorem range_pow_padicValNat_subset_divisors'
   exact (Nat.one_lt_pow k.
 
 中文:
-定理 range_pow_padicValNat_subset_divisors'
-  条件: {n : 自然数} [hp : Fact p.Prime]
+定理 range_pow_padicVal自然数_subset_divisors'
+  条件: {n : 自然数} [hp : Fact p.素]
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp
@@ -1752,8 +1752,8 @@ theorem padicValNat_factorial_mul
   exact Prime.emultiplicity_factorial_mul hp.out
 
 中文:
-定理 padicValNat_factorial_mul
-  条件: (n : 自然数) [hp : Fact p.Prime]
+定理 padicVal自然数_factorial_mul
+  条件: (n : 自然数) [hp : Fact p.素]
   证明: by
   apply Nat.cast_injective (R := Nat∞)
   rw [padicValNat_eq_emultiplicity <| factorial_ne_zero (p * n)]; rw [Nat.cast_add]; rw [padicValNat_eq_emultiplicity factorial_ne_zero n]
@@ -1776,7 +1776,7 @@ theorem padicValNat_eq_zero_of_mem_Ioo
   proof: padicValNat.eq_zero_of_not_dvd not_dvd_of_lt_of_lt_mul_succ hm.1 hm.2
 
 中文:
-定理 padicValNat_eq_zero_of_mem_Ioo
+定理 padicVal自然数_eq_zero_of_mem_Ioo
   结论: {m k : 自然数}
   证明: padicValNat.eq_zero_of_not_dvd not_dvd_of_lt_of_lt_mul_succ hm.1 hm.2
 
@@ -1799,8 +1799,8 @@ theorem padicValNat_factorial_mul_add
     rw [add_succ]; rw [factorial_succ]; rw [padicValNat.mul (succ_ne_zero (p * m + n)) factorial_ne_zero (p * m + _)]; rw [hn lt_of_succ_lt h]; rw [← add_succ]; rw [padicValNat_eq_zero_of_mem_Ioo ⟨(Nat.lt_add_of_pos_right <| succ_pos n
 
 中文:
-定理 padicValNat_factorial_mul_add
-  条件: {n : 自然数} (m : 自然数) [hp : Fact p.Prime] (h : n < p)
+定理 padicVal自然数_factorial_mul_add
+  条件: {n : 自然数} (m : 自然数) [hp : Fact p.素] (h : n < p)
   证明: by
   induction n with
   | zero => rw [add_zero]
@@ -1827,8 +1827,8 @@ theorem padicValNat_mul_div_factorial
   exact (padicValNat_factorial_mul_add (n / p) <| mod_lt n hp.out.pos).symm
 
 中文:
-定理 padicValNat_mul_div_factorial
-  条件: (n : 自然数) [hp : Fact p.Prime]
+定理 padicVal自然数_mul_div_factorial
+  条件: (n : 自然数) [hp : Fact p.素]
   证明: by
   nth_rw 2 [← div_add_mod n p]
   exact (padicValNat_factorial_mul_add (n / p) <| mod_lt n hp.out.pos).symm
@@ -1849,8 +1849,8 @@ theorem padicValNat_factorial
       Prime.emultiplicity_factorial hp.out hnb)
 
 中文:
-定理 padicValNat_factorial
-  条件: {n b : 自然数} [hp : Fact p.Prime] (hnb : log p n < b)
+定理 padicVal自然数_factorial
+  条件: {n b : 自然数} [hp : Fact p.素] (hnb : log p n < b)
   证明: by
   exact_mod_cast ((padicValNat_eq_emultiplicity (p := p) <| factorial_ne_zero _) ▸
       Prime.emultiplicity_factorial hp.out hnb)
@@ -1874,8 +1874,8 @@ theorem sub_one_mul_padicValNat_factorial
   rw [Nat.succ_eq_add_one]; rw [← Finset.sum_Ico_add' _ 0 _ 1]; rw [Ico_zero_eq_range]; rw [← sub_one_mul_sum_log_div_pow_eq_sub_sum_digits]; rw [Nat.succ_eq_add_one]
 
 中文:
-定理 sub_one_mul_padicValNat_factorial
-  条件: [hp : Fact p.Prime] (n : 自然数)
+定理 sub_one_mul_padicVal自然数_factorial
+  条件: [hp : Fact p.素] (n : 自然数)
   证明: by
   rw [padicValNat_factorial <| lt_succ_of_lt <| lt_add_one (log p n)]
   nth_rw 2 [← zero_add 1]
@@ -1905,8 +1905,8 @@ theorem sub_one_mul_padicValNat_factorial_lt_of_ne_zero
     ⟨_, List.getLast_mem hnil, Nat.pos_of_ne_zero (Nat.getLast_digit_ne_zero p hn)⟩
 
 中文:
-定理 sub_one_mul_padicValNat_factorial_lt_of_ne_zero
-  条件: [hp : Fact p.Prime] {n : 自然数} (hn : n != 0)
+定理 sub_one_mul_padicVal自然数_factorial_lt_of_ne_zero
+  条件: [hp : Fact p.素] {n : 自然数} (hn : n != 0)
   证明: by
   rw [sub_one_mul_padicValNat_factorial n]
   refine Nat.sub_lt_self ?_ (digit_sum_le p n)
@@ -1937,8 +1937,8 @@ theorem padicValNat_factorial_lt_of_ne_zero
   exact le_sub_one_of_lt (Nat.Prime.one_lt hp.elim)
 
 中文:
-定理 padicValNat_factorial_lt_of_ne_zero
-  条件: [hp : Fact p.Prime] {n : 自然数} (hn : n != 0)
+定理 padicVal自然数_factorial_lt_of_ne_zero
+  条件: [hp : Fact p.素] {n : 自然数} (hn : n != 0)
   证明: by
   apply lt_of_le_of_lt _ (sub_one_mul_padicValNat_factorial_lt_of_ne_zero p hn)
   conv_lhs => rw [← one_mul (padicValNat p n !)]
@@ -1967,8 +1967,8 @@ theorem padicValNat_factorial_le
   · exact le_of_lt (padicValNat_factorial_lt_of_ne_zero p hn)
 
 中文:
-定理 padicValNat_factorial_le
-  条件: [hp : Fact p.Prime] (n : 自然数)
+定理 padicVal自然数_factorial_le
+  条件: [hp : Fact p.素] (n : 自然数)
   结论: padicVal自然数 p n.factorial <= n
   证明: by
   by_cases hn : n = 0
@@ -1995,8 +1995,8 @@ theorem padicValNat_choose
     Prime.emultiplicity_choose hp.out hkn hnb
 
 中文:
-定理 padicValNat_choose
-  条件: {n k b : 自然数} [hp : Fact p.Prime] (hkn : k <= n) (hnb : log p n < b)
+定理 padicVal自然数_choose
+  条件: {n k b : 自然数} [hp : Fact p.素] (hkn : k <= n) (hnb : log p n < b)
   证明: by
   exact_mod_cast (padicValNat_eq_emultiplicity (p := p) <| (choose_ne_zero hkn)) ▸
     Prime.emultiplicity_choose hp.out hkn hnb
@@ -2019,8 +2019,8 @@ theorem padicValNat_choose'
     Nat.le_add_left k n) ▸ Prime.emultiplicity_choose' hp.out hnb
 
 中文:
-定理 padicValNat_choose'
-  条件: {n k b : 自然数} [hp : Fact p.Prime] (hnb : log p (n + k) < b)
+定理 padicVal自然数_choose'
+  条件: {n k b : 自然数} [hp : Fact p.素] (hnb : log p (n + k) < b)
   证明: by
   exact_mod_cast (padicValNat_eq_emultiplicity (p := p) <| choose_ne_zero <|
     Nat.le_add_left k n) ▸ Prime.emultiplicity_choose' hp.out hnb
@@ -2045,8 +2045,8 @@ theorem sub_one_mul_padicValNat_choose_eq_sub_sum_digits'
  
 
 中文:
-定理 sub_one_mul_padicValNat_choose_eq_sub_sum_digits'
-  条件: {k n : 自然数} [hp : Fact p.Prime]
+定理 sub_one_mul_padicVal自然数_choose_eq_sub_sum_digits'
+  条件: {k n : 自然数} [hp : Fact p.素]
   证明: by
   have h : k <= n + k := by exact Nat.le_add_left k n
   simp only [Nat.choose_eq_factorial_div_factorial h]
@@ -2077,8 +2077,8 @@ theorem sub_one_mul_padicValNat_choose_eq_sub_sum_digits
   all_goals lia
 
 中文:
-定理 sub_one_mul_padicValNat_choose_eq_sub_sum_digits
-  结论: {k n : 自然数} [hp : Fact p.Prime]
+定理 sub_one_mul_padicVal自然数_choose_eq_sub_sum_digits
+  结论: {k n : 自然数} [hp : Fact p.素]
   证明: by
   convert! @sub_one_mul_padicValNat_choose_eq_sub_sum_digits' _ _ _ ‹_›
   all_goals lia
@@ -2107,7 +2107,7 @@ theorem padicValInt_dvd_iff_of_ne_one
   rw [padicValInt]; rw [← Int.natAbs_eq_zero]; rw [← padicValNat_dvd_iff_of_ne_one hp]; rw [← Int.natCast_dvd]; rw [Int.natCast_pow]
 
 中文:
-定理 padicValInt_dvd_iff_of_ne_one
+定理 padicVal整数_dvd_iff_of_ne_one
   条件: (hp : p != 1) (n : 自然数) (a : 整数)
   证明: by
   rw [padicValInt]; rw [← Int.natAbs_eq_zero]; rw [← padicValNat_dvd_iff_of_ne_one hp]; rw [← Int.natCast_dvd]; rw [Int.natCast_pow]
@@ -2127,8 +2127,8 @@ theorem padicValInt_dvd_iff
   proof: padicValInt_dvd_iff_of_ne_one hp.out.ne_one n a
 
 中文:
-定理 padicValInt_dvd_iff
-  条件: [hp : Fact p.Prime] (n : 自然数) (a : 整数)
+定理 padicVal整数_dvd_iff
+  条件: [hp : Fact p.素] (n : 自然数) (a : 整数)
   证明: padicValInt_dvd_iff_of_ne_one hp.out.ne_one n a
 
 Depends on / 依赖: hp.out.ne_one, ne_one, padicValInt_dvd_iff_of_ne_one
@@ -2151,7 +2151,7 @@ theorem padicValInt_dvd
   exact Or.inr le_rfl
 
 中文:
-定理 padicValInt_dvd
+定理 padicVal整数_dvd
   条件: (a : 整数)
   结论: (p : 整数) ^ padicVal整数 p a ∣ a
   证明: by
@@ -2178,8 +2178,8 @@ theorem padicValInt_self
   proof: padicValInt.self hp.out.one_lt
 
 中文:
-定理 padicValInt_self
-  条件: [hp : Fact p.Prime]
+定理 padicVal整数_self
+  条件: [hp : Fact p.素]
   结论: padicVal整数 p p = 1
   证明: padicValInt.self hp.out.one_lt
 
@@ -2199,8 +2199,8 @@ theorem padicValInt.mul
   rw [Int.natAbs_mul]; rw [padicValNat.mul] <;> rwa [Int.natAbs_ne_zero]
 
 中文:
-定理 padicValInt.mul
-  条件: [hp : Fact p.Prime] {a b : 整数} (ha : a != 0) (hb : b != 0)
+定理 padicVal整数.mul
+  条件: [hp : Fact p.素] {a b : 整数} (ha : a != 0) (hb : b != 0)
   证明: by
   simp_rw [padicValInt]
   rw [Int.natAbs_mul]; rw [padicValNat.mul] <;> rwa [Int.natAbs_ne_zero]
@@ -2223,8 +2223,8 @@ theorem padicValInt_mul_eq_succ
   simp only [padicValInt.of_nat, padicValNat_self]
 
 中文:
-定理 padicValInt_mul_eq_succ
-  条件: [hp : Fact p.Prime] (a : 整数) (ha : a != 0)
+定理 padicVal整数_mul_eq_succ
+  条件: [hp : Fact p.素] (a : 整数) (ha : a != 0)
   证明: by
   rw [padicValInt.mul ha (Int.natCast_ne_zero.mpr hp.out.ne_zero)]
   simp only [padicValInt.of_nat, padicValNat_self]

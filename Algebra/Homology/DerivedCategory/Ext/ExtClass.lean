@@ -347,7 +347,7 @@ lemma extClass_naturality
 
 中文:
 引理 extClass_naturality
-  结论: {S₁ S₂ : ShortComplex C}
+  结论: {S₁ S₂ : 短复形 C}
   证明: by
   let := HasDerivedCategory.standard C
   ext

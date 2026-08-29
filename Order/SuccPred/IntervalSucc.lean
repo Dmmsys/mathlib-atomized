@@ -49,7 +49,7 @@ apply subset_antisymm
 
 中文:
 定理 biUnion_Ici_Ico_map_succ
-  结论: [SuccOrder α] [IsSuccArchimedean α] [LinearOrder β] {f : α -> β}
+  结论: [Succ序 α] [是SuccArchimedean α] [线性序 β] {f : α -> β}
   证明: by
 apply subset_antisymm
 .trans Ico_subset_Ici_self iUnion₂_subset fun i hi => Ico_subset_Ico_left (hf i hi)
@@ -88,7 +88,7 @@ apply subset_antisymm
 
 中文:
 定理 biUnion_Ici_Ioc_map_succ
-  结论: [SuccOrder α] [IsSuccArchimedean α] [LinearOrder β] {f : α -> β}
+  结论: [Succ序 α] [是SuccArchimedean α] [线性序 β] {f : α -> β}
   证明: by
 apply subset_antisymm
 .trans Ioc_subset_Ioi_self iUnion₂_subset fun i hi => Ioc_subset_Ioc_left (hf i hi)
@@ -120,7 +120,7 @@ theorem iUnion_Ico_map_succ_eq_Ici
 
 中文:
 定理 iUnion_Ico_map_succ_eq_Ici
-  结论: [OrderBot α] [SuccOrder α] [IsSuccArchimedean α] [LinearOrder β]
+  结论: [有底序 α] [Succ序 α] [是SuccArchimedean α] [线性序 β]
   证明: by
   simpa using biUnion_Ici_Ico_map_succ (f := f) (a := ⊥) (by simpa) (by simpa)
 
@@ -142,7 +142,7 @@ theorem iUnion_Ioc_map_succ_eq_Ioi
 
 中文:
 定理 iUnion_Ioc_map_succ_eq_Ioi
-  结论: [OrderBot α] [SuccOrder α] [IsSuccArchimedean α] [LinearOrder β]
+  结论: [有底序 α] [Succ序 α] [是SuccArchimedean α] [线性序 β]
   证明: by
   simpa using biUnion_Ici_Ioc_map_succ (f := f) (a := ⊥) (by simpa) (by simpa)
 
@@ -173,7 +173,7 @@ theorem biUnion_Ico_Ioc_map_succ
 
 中文:
 定理 biUnion_Ico_Ioc_map_succ
-  结论: [SuccOrder α] [IsSuccArchimedean α] [LinearOrder β] {f : α -> β}
+  结论: [Succ序 α] [是SuccArchimedean α] [线性序 β] {f : α -> β}
   证明: by
   rcases le_total n m with hnm | hmn
   · rw [Ico_eq_empty_of_le hnm, Ioc_eq_empty_of_le (hf hnm), biUnion_empty]
@@ -212,7 +212,7 @@ h₂.not_ge h₁.trans hf succ_le_of_lt hmn
 
 中文:
 定理 pairwise_disjoint_on_Ioc_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: (pairwise_disjoint_on _).2 fun _ _ hmn =>
     disjoint_iff_inf_le.mpr fun _ ⟨⟨_, h₁⟩, ⟨h₂, _⟩⟩ =>
 h₂.not_ge h₁.trans hf succ_le_of_lt hmn
@@ -237,7 +237,7 @@ h₁.not_ge (hf <| succ_le_of_lt hmn).trans h₂
 
 中文:
 定理 pairwise_disjoint_on_Ico_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: (pairwise_disjoint_on _).2 fun _ _ hmn =>
     disjoint_iff_inf_le.mpr fun _ ⟨⟨_, h₁⟩, ⟨h₂, _⟩⟩ =>
 h₁.not_ge (hf <| succ_le_of_lt hmn).trans h₂
@@ -260,7 +260,7 @@ theorem pairwise_disjoint_on_Ioo_succ
 
 中文:
 定理 pairwise_disjoint_on_Ioo_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: hf.pairwise_disjoint_on_Ico_succ.mono fun _ _ h => h.mono Ioo_subset_Ico_self Ioo_subset_Ico_self
 
 Depends on / 依赖: Ioo_subset_Ico_self, h.mono, hf.pairwise_disjoint_on_Ico_succ.mono, pairwise_disjoint_on_Ico_succ
@@ -280,7 +280,7 @@ theorem pairwise_disjoint_on_Ioc_pred
 
 中文:
 定理 pairwise_disjoint_on_Ioc_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: by
   simpa using! hf.dual.pairwise_disjoint_on_Ico_succ
 
@@ -301,7 +301,7 @@ theorem pairwise_disjoint_on_Ico_pred
 
 中文:
 定理 pairwise_disjoint_on_Ico_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: by
   simpa using! hf.dual.pairwise_disjoint_on_Ioc_succ
 
@@ -322,7 +322,7 @@ theorem pairwise_disjoint_on_Ioo_pred
 
 中文:
 定理 pairwise_disjoint_on_Ioo_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: by
   simpa using! hf.dual.pairwise_disjoint_on_Ioo_succ
 
@@ -348,7 +348,7 @@ theorem pairwise_disjoint_on_Ioc_succ
 
 中文:
 定理 pairwise_disjoint_on_Ioc_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ioc_pred
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ioc_pred, pairwise_disjoint_on_Ioc_pred
@@ -367,7 +367,7 @@ theorem pairwise_disjoint_on_Ico_succ
 
 中文:
 定理 pairwise_disjoint_on_Ico_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ico_pred
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ico_pred, pairwise_disjoint_on_Ico_pred
@@ -386,7 +386,7 @@ theorem pairwise_disjoint_on_Ioo_succ
 
 中文:
 定理 pairwise_disjoint_on_Ioo_succ
-  条件: [SuccOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Succ序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ioo_pred
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ioo_pred, pairwise_disjoint_on_Ioo_pred
@@ -405,7 +405,7 @@ theorem pairwise_disjoint_on_Ioc_pred
 
 中文:
 定理 pairwise_disjoint_on_Ioc_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ioc_succ
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ioc_succ, pairwise_disjoint_on_Ioc_succ
@@ -424,7 +424,7 @@ theorem pairwise_disjoint_on_Ico_pred
 
 中文:
 定理 pairwise_disjoint_on_Ico_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ico_succ
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ico_succ, pairwise_disjoint_on_Ico_succ
@@ -443,7 +443,7 @@ theorem pairwise_disjoint_on_Ioo_pred
 
 中文:
 定理 pairwise_disjoint_on_Ioo_pred
-  条件: [PredOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+  条件: [Pred序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.pairwise_disjoint_on_Ioo_succ
 
 Depends on / 依赖: dual_left, hf.dual_left.pairwise_disjoint_on_Ioo_succ, pairwise_disjoint_on_Ioo_succ

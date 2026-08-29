@@ -403,7 +403,7 @@ theorem trans_ofSet
 
 中文:
 定理 trans_ofSet
-  条件: {s : Set Y} (hs : IsOpen s)
+  条件: {s : 集合 Y} (hs : 是开集 s)
   结论: e.trans (ofSet s hs) = e.restr (e ⁻¹' s)
   证明: OpenPartialHomeomorph.ext _ _ (fun _ => rfl) (fun _ => rfl) by
     rw [trans_source]; rw [restr_source]; rw [ofSet_source]; rw [← preimage_interior]; rw [hs.interior_eq]
@@ -424,7 +424,7 @@ theorem trans_of_set'
 
 中文:
 定理 trans_of_set'
-  条件: {s : Set Y} (hs : IsOpen s)
+  条件: {s : 集合 Y} (hs : 是开集 s)
   证明: by rw [trans_ofSet, restr_source_inter]
 
 Depends on / 依赖: restr_source_inter, trans_ofSet
@@ -444,7 +444,7 @@ theorem ofSet_trans
 
 中文:
 定理 ofSet_trans
-  条件: {s : Set X} (hs : IsOpen s)
+  条件: {s : 集合 X} (hs : 是开集 s)
   结论: (ofSet s hs).trans e = e.restr s
   证明: OpenPartialHomeomorph.ext _ _ (fun _ => rfl) (fun _ => rfl)
     by simp [hs.interior_eq, inter_comm]
@@ -468,7 +468,7 @@ theorem ofSet_trans'
 
 中文:
 定理 ofSet_trans'
-  条件: {s : Set X} (hs : IsOpen s)
+  条件: {s : 集合 X} (hs : 是开集 s)
   证明: by
   rw [ofSet_trans]; rw [restr_source_inter]
 
@@ -493,7 +493,7 @@ theorem ofSet_trans_ofSet
 
 中文:
 定理 ofSet_trans_ofSet
-  条件: {s : Set X} (hs : IsOpen s) {s' : Set X} (hs' : IsOpen s')
+  条件: {s : 集合 X} (hs : 是开集 s) {s' : 集合 X} (hs' : 是开集 s')
   证明: by
   rw [(ofSet s hs).trans_ofSet hs']
   ext <;> simp [hs'.interior_eq]
@@ -517,7 +517,7 @@ theorem restr_trans
 
 中文:
 定理 restr_trans
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: (e.restr s).trans e' = (e.trans e').restr s
   证明: toPartialEquiv_injective
     PartialEquiv.restr_trans e.toPartialEquiv e'.toPartialEquiv (interior s)
@@ -646,7 +646,7 @@ theorem symm_trans_restr
 
 中文:
 定理 symm_trans_restr
-  条件: (e' : OpenPartialHomeomorph X Y) (hs : IsOpen s)
+  条件: (e' : OpenPartialHomeomorph X Y) (hs : 是开集 s)
   证明: by
   have ht : IsOpen (e'.target inter e'.symm ⁻¹' s) := by
     rw [← image_source_inter_eq']

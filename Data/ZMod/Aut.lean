@@ -36,7 +36,7 @@ definition AddAutEquivUnits
 
 中文:
 定义 AddAutEquivUnits
-  签名: : AddAut (ZMod n) ≃+ Additive (ZMod n)ˣ
+  签名: : AddAut (ZMod n) ≃+ 加性 (ZMod n)ˣ
   定义体: have h (f : AddAut (ZMod n)) (x : ZMod n) : f 1 * x = f x := by
     rw [mul_comm]; rw [← x.intCast_zmod_cast]; rw [← zsmul_eq_mul]; rw [← map_zsmul]; rw [zsmul_one]
   { toFun f := .ofMul <| Units.mkOfMulEqOne (f 1) ((-f) 1) ((h f _).trans (f.apply_neg_self _ _))

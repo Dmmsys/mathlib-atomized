@@ -44,8 +44,8 @@ definition prod
   map f := ↾fun a => (F.map f a.1, G.map f a.2)
 
 中文:
-定义 prod
-  签名: : C ⥤ Type w where
+定义 乘积
+  签名: : C ⥤ 类型 w where
   定义体: F.obj a × G.obj a
   map f := ↾fun a => (F.map f a.1, G.map f a.2)
 
@@ -68,8 +68,8 @@ definition prod.fst
   body: ↾fun a => a.1
 
 中文:
-定义 prod.fst
-  签名: : prod F G ⟶ F where
+定义 乘积.fst
+  签名: : 乘积 F G ⟶ F where
   定义体: ↾fun a => a.1
 -/
 def prod.fst : prod F G ⟶ F where
@@ -86,8 +86,8 @@ definition prod.snd
   body: ↾fun a => a.2
 
 中文:
-定义 prod.snd
-  签名: : prod F G ⟶ G where
+定义 乘积.snd
+  签名: : 乘积 F G ⟶ G where
   定义体: ↾fun a => a.2
 -/
 def prod.snd : prod F G ⟶ G where
@@ -106,8 +106,8 @@ definition prod.lift
   body: ↾fun y => ⟨τ₁.app x y, τ₂.app x y⟩
 
 中文:
-定义 prod.lift
-  签名: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
+定义 乘积.lift
+  签名: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
   定义体: ↾fun y => ⟨τ₁.app x y, τ₂.app x y⟩
 -/
 def prod.lift {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
@@ -125,8 +125,8 @@ lemma prod.lift_fst
   proof: rfl
 
 中文:
-引理 prod.lift_fst
-  条件: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
+引理 乘积.lift_fst
+  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
   证明: rfl
 -/
 lemma prod.lift_fst {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
@@ -143,8 +143,8 @@ lemma prod.lift_snd
   proof: rfl
 
 中文:
-引理 prod.lift_snd
-  条件: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
+引理 乘积.lift_snd
+  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
   证明: rfl
 -/
 lemma prod.lift_snd {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
@@ -189,7 +189,7 @@ definition binaryProductLimit
 
 中文:
 定义 binaryProductLimit
-  签名: : IsLimit (binaryProductCone F G) where
+  签名: : 是极限 (binaryProductCone F G) where
   定义体: prod.lift s.fst s.snd
   fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
   uniq _ _ h := by
@@ -216,7 +216,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: : Limits.LimitCone (pair F G)
+  签名: : Limits.极限锥 (pair F G)
   定义体: ⟨_, binaryProductLimit F G⟩
 
 Depends on / 依赖: binaryProductLimit
@@ -234,7 +234,7 @@ definition binaryProductIso
 
 中文:
 定义 binaryProductIso
-  签名: : F ⨯ G ≅ prod F G
+  签名: : F ⨯ G ≅ 乘积 F G
   定义体: limit.isoLimitCone (binaryProductLimitCone F G)
 
 Depends on / 依赖: binaryProductLimitCone, isoLimitCone, limit.isoLimitCone
@@ -310,7 +310,7 @@ lemma binaryProductIso_inv_comp_fst_apply
 
 中文:
 引理 binaryProductIso_inv_comp_fst_apply
-  条件: (a : C) (z : (prod F G).obj a)
+  条件: (a : C) (z : (乘积 F G).obj a)
   证明: congr_hom (congr_app (binaryProductIso_inv_comp_fst F G) a) z
 
 Depends on / 依赖: binaryProductIso, inv.app
@@ -355,7 +355,7 @@ lemma binaryProductIso_inv_comp_snd_apply
 
 中文:
 引理 binaryProductIso_inv_comp_snd_apply
-  条件: (a : C) (z : (prod F G).obj a)
+  条件: (a : C) (z : (乘积 F G).obj a)
   证明: congr_hom (congr_app (binaryProductIso_inv_comp_snd F G) a) z
 
 Depends on / 依赖: binaryProductIso, inv.app
@@ -448,7 +448,7 @@ lemma prod_ext
 
 中文:
 引理 prod_ext
-  条件: {a : C} (z w : (prod F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2)
+  条件: {a : C} (z w : (乘积 F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2)
   证明: Prod.ext h1 h2
 
 Depends on / 依赖: Prod.ext
@@ -536,7 +536,7 @@ definition coprod
 
 中文:
 定义 coprod
-  签名: : C ⥤ Type w where
+  签名: : C ⥤ 类型 w where
   定义体: F.obj a oplus G.obj a
   map f := ↾(Sum.map (F.map f) (G.map f))
   map_id _ := by ext ⟨⟩ <;> simp
@@ -605,7 +605,7 @@ definition coprod.desc
 
 中文:
 定义 coprod.desc
-  签名: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
+  签名: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
   定义体: ↾(Sum.elim (τ₁.app a) (τ₂.app a))
   naturality _ _ _ := by ext ⟨⟩ <;> simp
 
@@ -629,7 +629,7 @@ lemma coprod.desc_inl
 
 中文:
 引理 coprod.desc_inl
-  条件: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
+  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
   证明: rfl
 
 @[simp]
@@ -648,7 +648,7 @@ lemma coprod.desc_inr
 
 中文:
 引理 coprod.desc_inr
-  条件: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
+  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
   证明: rfl
 -/
 lemma coprod.desc_inr {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F) :
@@ -694,7 +694,7 @@ definition binaryCoproductColimit
 
 中文:
 定义 binaryCoproductColimit
-  签名: : IsColimit (binaryCoproductCocone F G) where
+  签名: : 是余极限 (binaryCoproductCocone F G) where
   定义体: coprod.desc s.inl s.inr
   fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
   uniq _ _ h := by
@@ -720,7 +720,7 @@ definition binaryCoproductColimitCocone
 
 中文:
 定义 binaryCoproductColimitCocone
-  签名: : Limits.ColimitCocone (pair F G)
+  签名: : Limits.余极限余锥 (pair F G)
   定义体: ⟨_, binaryCoproductColimit F G⟩
 
 Depends on / 依赖: binaryCoproductColimit

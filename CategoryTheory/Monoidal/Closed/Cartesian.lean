@@ -37,7 +37,7 @@ instance CartesianMonoidalCategory.isLeftAdjoint_prod_functor
   body: Functor.isLeftAdjoint_of_iso (CartesianMonoidalCategory.tensorLeftIsoProd A)
 
 中文:
-实例 CartesianMonoidalCategory.isLeftAdjoint_prod_functor
+实例 CartesianMonoidal范畴.isLeftAdjoint_prod_functor
   定义体: Functor.isLeftAdjoint_of_iso (CartesianMonoidalCategory.tensorLeftIsoProd A)
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.tensorLeftIsoProd, Functor, Functor.isLeftAdjoint_of_iso, isLeftAdjoint_of_iso, tensorLeftIsoProd
@@ -87,7 +87,7 @@ definition internalizeHom
 
 中文:
 定义 internalizeHom
-  签名: {C : 类型u} [Category.{v} C] [CartesianMonoidalCategory C] {A Y : C} [Closed A]
+  签名: {C : 类型u} [范畴.{v} C] [CartesianMonoidal范畴 C] {A Y : C} [闭 A]
   定义体: MonoidalClosed.curry (fst _ _ ≫ f)
 
 Depends on / 依赖: MonoidalClosed, MonoidalClosed.curry
@@ -152,7 +152,7 @@ definition mulZero
 
 中文:
 定义 mulZero
-  签名: [BraidedCategory C] {I : C} (t : IsInitial I)
+  签名: [辫范畴 C] {I : C} (t : IsInitial I)
   定义体: β_ _ _ ≪≫ zeroMul t
 
 Depends on / 依赖: zeroMul
@@ -174,7 +174,7 @@ definition powZero
 
 中文:
 定义 powZero
-  签名: [BraidedCategory C] {I : C} (t : IsInitial I) [MonoidalClosed C]
+  签名: [辫范畴 C] {I : C} (t : IsInitial I) [幺半群闭 C]
   定义体: default
   inv := curry ((mulZero t).hom ≫ t.to _)
   hom_inv_id := by
@@ -205,7 +205,7 @@ theorem strict_initial
 中文:
 定理 strict_initial
   条件: {I : C} (t : IsInitial I) (f : A ⟶ I)
-  结论: IsIso f
+  结论: 是同构 f
   证明: by
   have : Mono f := by
     rw [← lift_snd (𝟙 A) f]; rw [← zeroMul_hom t]
@@ -254,8 +254,8 @@ theorem initial_mono
 
 中文:
 定理 initial_mono
-  条件: {I : C} (B : C) (t : IsInitial I) [MonoidalClosed C]
-  结论: Mono (t.to B)
+  条件: {I : C} (B : C) (t : IsInitial I) [幺半群闭 C]
+  结论: 单态射 (t.to B)
   证明: ⟨fun g h _ => by
     have := strict_initial t g
     have := strict_initial t h
@@ -278,8 +278,8 @@ instance Initial.mono_to
   body: initial_mono B initialIsInitial
 
 中文:
-实例 Initial.mono_to
-  签名: [HasInitial C] (B : C) [MonoidalClosed C]
+实例 初始.mono_to
+  签名: [HasInitial C] (B : C) [幺半群闭 C]
   定义体: initial_mono B initialIsInitial
 
 Depends on / 依赖: initialIsInitial, initial_mono
@@ -310,7 +310,7 @@ definition cartesianClosedOfEquiv
 
 中文:
 定义 cartesianClosedOfEquiv
-  签名: (e : C ≌ D) [MonoidalClosed C]
+  签名: (e : C ≌ D) [幺半群闭 C]
   定义体: letI : e.inverse.Monoidal := .ofChosenFiniteProducts _
   MonoidalClosed.ofEquiv e.inverse e.symm.toAdjunction
 

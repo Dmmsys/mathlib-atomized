@@ -42,7 +42,7 @@ theorem MemLp.eLpNorm_lt_top
 
 中文:
 定理 MemLp.eLpNorm_lt_top
-  条件: [TopologicalSpace ε] {f : α -> ε} (hfp : MemLp f p μ)
+  条件: [拓扑空间 ε] {f : α -> ε} (hfp : MemLp f p μ)
   证明: hfp.2
 
 @[aesop (rule_sets := [finiteness]) unsafe 95% apply]
@@ -62,7 +62,7 @@ theorem MemLp.eLpNorm_ne_top
 
 中文:
 定理 MemLp.eLpNorm_ne_top
-  条件: [TopologicalSpace ε] {f : α -> ε} (hfp : MemLp f p μ)
+  条件: [拓扑空间 ε] {f : α -> ε} (hfp : MemLp f p μ)
   证明: hfp.2.ne
 -/
 theorem MemLp.eLpNorm_ne_top [TopologicalSpace ε] {f : α -> ε} (hfp : MemLp f p μ) :
@@ -220,7 +220,7 @@ theorem memLp_zero_iff_aestronglyMeasurable
 
 中文:
 定理 memLp_zero_iff_aestronglyMeasurable
-  条件: [TopologicalSpace ε] {f : α -> ε}
+  条件: [拓扑空间 ε] {f : α -> ε}
   证明: by simp [MemLp, eLpNorm_exponent_zero]
 
 Depends on / 依赖: eLpNorm_exponent_zero
@@ -433,7 +433,7 @@ theorem eLpNorm'_measure_zero_of_exponent_zero
 中文:
 定理 eLpNorm'_measure_zero_of_exponent_zero
   条件: {f : α -> ε}
-  结论: eLpNorm' f 0 (0 : Measure α) = 1
+  结论: eLpNorm' f 0 (0 : 测度 α) = 1
   证明: by
   simp [eLpNorm']
 -/
@@ -474,7 +474,7 @@ theorem eLpNormEssSup_measure_zero
 中文:
 定理 eLpNormEssSup_measure_zero
   条件: {f : α -> ε}
-  结论: eLpNormEssSup f (0 : Measure α) = 0
+  结论: eLpNormEssSup f (0 : 测度 α) = 0
   证明: by
   simp [eLpNormEssSup]
 
@@ -504,7 +504,7 @@ theorem eLpNorm_measure_zero
 中文:
 定理 eLpNorm_measure_zero
   条件: {f : α -> ε}
-  结论: eLpNorm f p (0 : Measure α) = 0
+  结论: eLpNorm f p (0 : 测度 α) = 0
   证明: by
   by_cases h0 : p = 0
   · simp [h0]
@@ -540,7 +540,7 @@ lemma memLp_measure_zero
 中文:
 引理 memLp_measure_zero
   条件: {f : α -> ε}
-  结论: MemLp f p (0 : Measure α)
+  结论: MemLp f p (0 : 测度 α)
   证明: by
   simp [MemLp]
 
@@ -570,7 +570,7 @@ theorem eLpNorm'_neg
 
 中文:
 定理 eLpNorm'_neg
-  条件: (f : α -> F) (q : 实数) (μ : Measure α)
+  条件: (f : α -> F) (q : 实数) (μ : 测度 α)
   结论: eLpNorm' (-f) q μ = eLpNorm' f q μ
   证明: by
   simp [eLpNorm'_eq_lintegral_enorm]
@@ -599,7 +599,7 @@ theorem eLpNorm_neg
 
 中文:
 定理 eLpNorm_neg
-  条件: (f : α -> F) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> F) (p : 实数>=0∞) (μ : 测度 α)
   结论: eLpNorm (-f) p μ = eLpNorm f p μ
   证明: by
   by_cases h0 : p = 0
@@ -627,7 +627,7 @@ lemma eLpNorm_sub_comm
 
 中文:
 引理 eLpNorm_sub_comm
-  条件: (f g : α -> E) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f g : α -> E) (p : 实数>=0∞) (μ : 测度 α)
   证明: by simp [← eLpNorm_neg (f := f - g)]
 
 Depends on / 依赖: eLpNorm_neg
@@ -731,7 +731,7 @@ theorem eLpNorm'_const'
 
 中文:
 定理 eLpNorm'_const'
-  条件: [IsFiniteMeasure μ] (c : F) (hc_ne_zero : c != 0) (hq_ne_zero : q != 0)
+  条件: [是有限测度 μ] (c : F) (hc_ne_zero : c != 0) (hq_ne_zero : q != 0)
   证明: by
   rw [eLpNorm'_eq_lintegral_enorm]; rw [lintegral_const]; rw [ENNReal.mul_rpow_of_ne_top _ (by finiteness)]
   · congr
@@ -781,7 +781,7 @@ theorem eLpNorm'_const_of_isProbabilityMeasure
 
 中文:
 定理 eLpNorm'_const_of_isProbabilityMeasure
-  条件: (c : ε) (hq_pos : 0 < q) [IsProbabilityMeasure μ]
+  条件: (c : ε) (hq_pos : 0 < q) [是概率测度 μ]
   证明: by simp [eLpNorm'_const c hq_pos, measure_univ]
 -/
 theorem eLpNorm'_const_of_isProbabilityMeasure (c : ε) (hq_pos : 0 < q) [IsProbabilityMeasure μ] :
@@ -918,7 +918,7 @@ theorem memLp_const_enorm
 
 中文:
 定理 memLp_const_enorm
-  条件: {c : ε'} (hc : ‖c‖ₑ != ⊤) [IsFiniteMeasure μ]
+  条件: {c : ε'} (hc : ‖c‖ₑ != ⊤) [是有限测度 μ]
   证明: by
   refine ⟨aestronglyMeasurable_const, ?_⟩
   by_cases h0 : p = 0
@@ -951,7 +951,7 @@ theorem memLp_const
 
 中文:
 定理 memLp_const
-  条件: (c : E) [IsFiniteMeasure μ]
+  条件: (c : E) [是有限测度 μ]
   结论: MemLp (fun _ : α => c) p μ
   证明: memLp_const_enorm enorm_ne_top
 
@@ -1551,7 +1551,7 @@ theorem eLpNorm_le_of_ae_enorm_bound
 
 中文:
 定理 eLpNorm_le_of_ae_enorm_bound
-  结论: {ε} [TopologicalSpace ε] [ESeminormedAddMonoid ε]
+  结论: {ε} [拓扑空间 ε] [ESeminormedAdd幺半群 ε]
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -1701,7 +1701,7 @@ theorem eLpNorm_indicator_sub_indicator
 
 中文:
 定理 eLpNorm_indicator_sub_indicator
-  条件: (s t : Set α) (f : α -> E)
+  条件: (s t : 集合 α) (f : α -> E)
   证明: eLpNorm_congr_norm_ae ae_of_all _ fun x => by simp [Set.apply_indicator_symmDiff norm_neg]
 
 @[simp]
@@ -1839,7 +1839,7 @@ lemma eLpNorm_ofReal
   proof: eLpNorm_congr_enorm_ae hf.mono fun _x hx => Real.enorm_ofReal_of_nonneg hx
 
 中文:
-引理 eLpNorm_ofReal
+引理 eLpNorm_of实数
   条件: (f : α -> 实数) (hf : 对任意ᵐ x ∂μ, 0 <= f x)
   证明: eLpNorm_congr_enorm_ae hf.mono fun _x hx => Real.enorm_ofReal_of_nonneg hx
 
@@ -1988,7 +1988,7 @@ theorem memLp_congr_ae
 
 中文:
 定理 memLp_congr_ae
-  条件: [TopologicalSpace ε] {f g : α -> ε} (hfg : f =ᵐ[μ] g)
+  条件: [拓扑空间 ε] {f g : α -> ε} (hfg : f =ᵐ[μ] g)
   证明: by
   simp only [MemLp, eLpNorm_congr_ae hfg, aestronglyMeasurable_congr hfg]
 
@@ -2008,7 +2008,7 @@ theorem MemLp.ae_eq
 
 中文:
 定理 MemLp.ae_eq
-  条件: [TopologicalSpace ε] {f g : α -> ε} (hfg : f =ᵐ[μ] g) (hf_Lp : MemLp f p μ)
+  条件: [拓扑空间 ε] {f g : α -> ε} (hfg : f =ᵐ[μ] g) (hf_Lp : MemLp f p μ)
   证明: (memLp_congr_ae hfg).1 hf_Lp
 
 Depends on / 依赖: hf_Lp, memLp_congr_ae
@@ -2240,7 +2240,7 @@ apply (memLp_const_enorm hC).of_le_enorm (ε' := Real>=0∞) hf hfC.mono fun _x 
 
 中文:
 定理 MemLp.of_enorm_bound
-  结论: [IsFiniteMeasure μ] {f : α -> ε} (hf : AEStronglyMeasurable f μ)
+  结论: [是有限测度 μ] {f : α -> ε} (hf : AEStronglyMeasurable f μ)
   证明: by
 apply (memLp_const_enorm hC).of_le_enorm (ε' := Real>=0∞) hf hfC.mono fun _x hx => ?_
   rw [enorm_eq_self]; exact hx
@@ -2262,7 +2262,7 @@ theorem MemLp.of_bound
 
 中文:
 定理 MemLp.of_bound
-  结论: [IsFiniteMeasure μ] {f : α -> E} (hf : AEStronglyMeasurable f μ) (C : 实数)
+  结论: [是有限测度 μ] {f : α -> E} (hf : AEStronglyMeasurable f μ) (C : 实数)
   证明: (memLp_const C).of_le hf (hfC.mono fun _x hx => le_trans hx (le_abs_self _))
 
 Depends on / 依赖: hfC.mono, le_abs_self, le_trans, memLp_const, of_le
@@ -2285,7 +2285,7 @@ theorem memLp_of_bounded
 
 中文:
 定理 memLp_of_bounded
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: have ha : forallᵐ x ∂μ, a <= f x := h.mono fun ω h => h.1
   have hb : forallᵐ x ∂μ, f x <= b := h.mono fun ω h => h.2
   (memLp_const (max |a| |b|)).mono' hX (by filter_upwards [ha, hb] with x using abs_le_max_abs_abs)
@@ -2436,7 +2436,7 @@ exact ENNReal.essSup_restrict_eq_of_support_subset fun x hx => hsf enorm_ne_zero
 
 中文:
 定理 eLpNorm_restrict_eq_of_support_subset
-  条件: {s : Set α} {f : α -> ε} (hsf : f.support subseteq s)
+  条件: {s : 集合 α} {f : α -> ε} (hsf : f.support subseteq s)
   证明: by
   by_cases hp0 : p = 0
   · simp [hp0]
@@ -2476,7 +2476,7 @@ theorem MemLp.restrict
 
 中文:
 定理 MemLp.restrict
-  条件: (s : Set α) {f : α -> ε} (hf : MemLp f p μ)
+  条件: (s : 集合 α) {f : α -> ε} (hf : MemLp f p μ)
   证明: hf.mono_measure Measure.restrict_le_self
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, hf.mono_measure, mono_measure, restrict_le_self
@@ -2635,7 +2635,7 @@ theorem eLpNorm_smul_measure_le
 
 中文:
 定理 eLpNorm_smul_measure_le
-  条件: (c : 实数>=0∞) (f : α -> ε) (p : 实数>=0∞) (μ : Measure α)
+  条件: (c : 实数>=0∞) (f : α -> ε) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   rcases eq_or_ne c 0 with rfl | hc
   · simp
@@ -2778,7 +2778,7 @@ theorem MemLp.of_measure_le_smul
 
 中文:
 定理 MemLp.of_measure_le_smul
-  结论: {μ' : Measure α} {c : 实数>=0∞} (hc : c != ∞)
+  结论: {μ' : 测度 α} {c : 实数>=0∞} (hc : c != ∞)
   证明: by
   refine ⟨hf.1.mono_ac (Measure.absolutelyContinuous_of_le_smul hμ'_le), ?_⟩
   grw [eLpNorm_le_of_measure_le_smul hμ'_le]
@@ -2824,7 +2824,7 @@ theorem eLpNorm_one_add_measure
 
 中文:
 定理 eLpNorm_one_add_measure
-  条件: (f : α -> ε) (μ ν : Measure α)
+  条件: (f : α -> ε) (μ ν : 测度 α)
   证明: by
   simp_rw [eLpNorm_one_eq_lintegral_enorm]
   rw [lintegral_add_measure _ μ ν]
@@ -2847,7 +2847,7 @@ theorem eLpNorm_le_add_measure_right
 
 中文:
 定理 eLpNorm_le_add_measure_right
-  条件: (f : α -> ε) (μ ν : Measure α) {p : 实数>=0∞}
+  条件: (f : α -> ε) (μ ν : 测度 α) {p : 实数>=0∞}
   证明: by
   grw [← Measure.le_add_right le_rfl]
 
@@ -2868,7 +2868,7 @@ theorem eLpNorm_le_add_measure_left
 
 中文:
 定理 eLpNorm_le_add_measure_left
-  条件: (f : α -> ε) (μ ν : Measure α) {p : 实数>=0∞}
+  条件: (f : α -> ε) (μ ν : 测度 α) {p : 实数>=0∞}
   证明: by
   grw [← Measure.le_add_left le_rfl]
 
@@ -2910,7 +2910,7 @@ lemma eLpNormEssSup_count
 
 中文:
 引理 eLpNormEssSup_count
-  条件: [MeasurableSingletonClass α] (f : α -> ε)
+  条件: [MeasurableSingleton类 α] (f : α -> ε)
   证明: essSup_count _
 -/
 @[simp] lemma eLpNormEssSup_count [MeasurableSingletonClass α] (f : α -> ε) :
@@ -3206,7 +3206,7 @@ lemma eLpNorm_lt_top_of_finite
 
 中文:
 引理 eLpNorm_lt_top_of_finite
-  条件: [Finite α] [IsFiniteMeasure μ]
+  条件: [有限 α] [是有限测度 μ]
   结论: eLpNorm f p μ < ∞
   证明: by
   obtain rfl | hp₀ := eq_or_ne p 0
@@ -3241,7 +3241,7 @@ lemma MemLp.of_discrete
 
 中文:
 引理 MemLp.of_discrete
-  条件: [DiscreteMeasurableSpace α] [Finite α] [IsFiniteMeasure μ]
+  条件: [DiscreteMeasurable空间 α] [有限 α] [是有限测度 μ]
   证明: let ⟨C, hC⟩ := Finite.exists_le (‖f ·‖₊); .of_bound .of_discrete C .of_forall hC
 -/
 @[simp] lemma MemLp.of_discrete [DiscreteMeasurableSpace α] [Finite α] [IsFiniteMeasure μ] :
@@ -3260,7 +3260,7 @@ lemma eLpNorm_of_isEmpty
 
 中文:
 引理 eLpNorm_of_isEmpty
-  条件: [IsEmpty α] (f : α -> ε) (p : 实数>=0∞)
+  条件: [是空 α] (f : α -> ε) (p : 实数>=0∞)
   结论: eLpNorm f p μ = 0
   证明: by
   simp [Subsingleton.elim f 0]
@@ -3336,7 +3336,7 @@ theorem enorm_ae_le_eLpNormEssSup
 
 中文:
 定理 enorm_ae_le_eLpNormEssSup
-  条件: {_ : MeasurableSpace α} (f : α -> ε) (μ : Measure α)
+  条件: {_ : 可测空间 α} (f : α -> ε) (μ : 测度 α)
   证明: ENNReal.ae_le_essSup fun x => ‖f x‖ₑ
 
 @[simp]
@@ -3417,7 +3417,7 @@ theorem eLpNormEssSup_map_measure
 
 中文:
 定理 eLpNormEssSup_map_measure
-  结论: (hg : AEStronglyMeasurable g (Measure.map f μ))
+  结论: (hg : AEStronglyMeasurable g (测度.map f μ))
   证明: essSup_map_measure hg.enorm hf
 
 Depends on / 依赖: essSup_map_measure, hg.enorm
@@ -3443,7 +3443,7 @@ theorem eLpNorm_map_measure
 
 中文:
 定理 eLpNorm_map_measure
-  结论: (hg : AEStronglyMeasurable g (Measure.map f μ))
+  结论: (hg : AEStronglyMeasurable g (测度.map f μ))
   证明: by
   by_cases hp_zero : p = 0
   · simp only [hp_zero, eLpNorm_exponent_zero]
@@ -3476,7 +3476,7 @@ theorem memLp_map_measure_iff
 
 中文:
 定理 memLp_map_measure_iff
-  结论: (hg : AEStronglyMeasurable g (Measure.map f μ))
+  结论: (hg : AEStronglyMeasurable g (测度.map f μ))
   证明: by
   simp [MemLp, eLpNorm_map_measure hg hf, hg.comp_aemeasurable hf, hg]
 
@@ -3496,7 +3496,7 @@ theorem MemLp.comp_of_map
 
 中文:
 定理 MemLp.comp_of_map
-  条件: (hg : MemLp g p (Measure.map f μ)) (hf : AEMeasurable f μ)
+  条件: (hg : MemLp g p (测度.map f μ)) (hf : 几乎处处可测 f μ)
   证明: (memLp_map_measure_iff hg.aestronglyMeasurable hf).1 hg
 
 Depends on / 依赖: aestronglyMeasurable, hg.aestronglyMeasurable, memLp_map_measure_iff
@@ -3515,7 +3515,7 @@ theorem eLpNorm_comp_measurePreserving
 
 中文:
 定理 eLpNorm_comp_measurePreserving
-  结论: {ν : MeasureTheory.Measure β} (hg : AEStronglyMeasurable g ν)
+  结论: {ν : 测度论.测度 β} (hg : AEStronglyMeasurable g ν)
   证明: Eq.symm hf.map_eq ▸ eLpNorm_map_measure (hf.map_eq ▸ hg) hf.aemeasurable
 
 Depends on / 依赖: Eq.symm, aemeasurable, eLpNorm_map_measure, hf.aemeasurable, hf.map_eq, map_eq
@@ -3536,7 +3536,7 @@ theorem AEEqFun.eLpNorm_compMeasurePreserving
 
 中文:
 定理 AEEqFun.eLpNorm_compMeasurePreserving
-  结论: {ν : MeasureTheory.Measure β} (g : β ->ₘ[ν] E)
+  结论: {ν : 测度论.测度 β} (g : β ->ₘ[ν] E)
   证明: by
   rw [eLpNorm_congr_ae (g.coeFn_compMeasurePreserving _)]
   exact eLpNorm_comp_measurePreserving g.aestronglyMeasurable hf
@@ -3559,7 +3559,7 @@ theorem MemLp.comp_measurePreserving
 
 中文:
 定理 MemLp.comp_measurePreserving
-  结论: {ν : MeasureTheory.Measure β} (hg : MemLp g p ν)
+  结论: {ν : 测度论.测度 β} (hg : MemLp g p ν)
   证明: .comp_of_map (hf.map_eq.symm ▸ hg) hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, comp_of_map, hf.aemeasurable, hf.map_eq.symm, map_eq
@@ -3577,8 +3577,8 @@ theorem _root_.MeasurableEmbedding.eLpNormEssSup_map_measure
   proof: hf.essSup_map_measure
 
 中文:
-定理 _root_.MeasurableEmbedding.eLpNormEssSup_map_measure
-  条件: (hf : MeasurableEmbedding f)
+定理 _root_.可测嵌入.eLpNormEssSup_map_measure
+  条件: (hf : 可测嵌入 f)
   证明: hf.essSup_map_measure
 
 Depends on / 依赖: essSup_map_measure, hf.essSup_map_measure
@@ -3602,8 +3602,8 @@ theorem _root_.MeasurableEmbedding.eLpNorm_map_measure
   · simp [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_zero hp, hf.lintegral_map]
 
 中文:
-定理 _root_.MeasurableEmbedding.eLpNorm_map_measure
-  条件: (hf : MeasurableEmbedding f)
+定理 _root_.可测嵌入.eLpNorm_map_measure
+  条件: (hf : 可测嵌入 f)
   证明: by
   by_cases hp_zero : p = 0
   · simp only [hp_zero, eLpNorm_exponent_zero]
@@ -3633,8 +3633,8 @@ theorem _root_.MeasurableEmbedding.memLp_map_measure_iff
   simp_rw [MemLp, hf.aestronglyMeasurable_map_iff, hf.eLpNorm_map_measure]
 
 中文:
-定理 _root_.MeasurableEmbedding.memLp_map_measure_iff
-  条件: (hf : MeasurableEmbedding f)
+定理 _root_.可测嵌入.memLp_map_measure_iff
+  条件: (hf : 可测嵌入 f)
   证明: by
   simp_rw [MemLp, hf.aestronglyMeasurable_map_iff, hf.eLpNorm_map_measure]
 
@@ -3653,7 +3653,7 @@ theorem _root_.MeasurableEquiv.memLp_map_measure_iff
   proof: f.measurableEmbedding.memLp_map_measure_iff
 
 中文:
-定理 _root_.MeasurableEquiv.memLp_map_measure_iff
+定理 _root_.可测等价.memLp_map_measure_iff
   条件: (f : α ≃ᵐ β)
   证明: f.measurableEmbedding.memLp_map_measure_iff
 
@@ -3795,7 +3795,7 @@ theorem _root_.Continuous.memLp_top_of_hasCompactSupport
   exact (hf.stronglyMeasurable_of_hasCompactSupport h'f).aestronglyMeasurable
 
 中文:
-定理 _root_.Continuous.memLp_top_of_hasCompactSupport
+定理 _root_.连续.memLp_top_of_hasCompactSupport
   证明: by
   borelize E
   rcases hf.bounded_above_of_compact_support h'f with ⟨C, hC⟩

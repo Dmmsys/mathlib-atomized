@@ -81,7 +81,7 @@ theorem iIndepFun.condExp_natural_ae_eq_of_lt
 
 中文:
 定理 iIndepFun.condExp_natural_ae_eq_of_lt
-  结论: [SecondCountableTopology β] [CompleteSpace β]
+  结论: [第二可数拓扑 β] [完备空间 β]
   证明: by
   have : IsProbabilityMeasure μ := hfi.isProbabilityMeasure
   exact condExp_indep_eq (hf j).measurable.comap_le (Filtration.le _ _)
@@ -109,7 +109,7 @@ theorem iIndepSet.condExp_indicator_filtrationOfSet_ae_eq
 
 中文:
 定理 iIndepSet.condExp_indicator_filtrationOfSet_ae_eq
-  结论: (hsm : 对任意 n, MeasurableSet (s n))
+  结论: (hsm : 对任意 n, 可测集 (s n))
   证明: by
   rw [Filtration.filtrationOfSet_eq_natural (β := fun _ => Real) hsm]
   refine (iIndepFun.condExp_natural_ae_eq_of_lt _ hs.iIndepFun_indicator hij).trans ?_
@@ -142,7 +142,7 @@ theorem measure_limsup_eq_one
 
 中文:
 定理 measure_limsup_eq_one
-  结论: {s : 自然数 -> Set Ω} (hsm : 对任意 n, MeasurableSet (s n)) (hs : iIndepSet s μ)
+  结论: {s : 自然数 -> 集合 Ω} (hsm : 对任意 n, 可测集 (s n)) (hs : iIndepSet s μ)
   证明: by
   have : IsProbabilityMeasure μ := hs.isProbabilityMeasure
   rw [measure_congr (eventuallyEq_set.2 (ae_mem_limsup_atTop_iff μ <|

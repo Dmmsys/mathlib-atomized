@@ -74,8 +74,8 @@ theorem exists_sum
   simp
 
 中文:
-定理 exists_sum
-  条件: {γ : α oplus β -> Sort*} (p : (对任意 ab, γ ab) -> 命题)
+定理 存在_sum
+  条件: {γ : α oplus β -> 类型层*} (p : (对任意 ab, γ ab) -> 命题)
   证明: by
   rw [← not_forall_not]; rw [forall_sum]
   simp
@@ -97,7 +97,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Function.Injective (inl : α -> α oplus β)
+  结论: 函数.单射 (inl : α -> α oplus β)
   证明: fun _ _ => inl.inj
 
 Depends on / 依赖: inl.inj
@@ -114,7 +114,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Function.Injective (inr : β -> α oplus β)
+  结论: 函数.单射 (inr : β -> α oplus β)
   证明: fun _ _ => inr.inj
 
 Depends on / 依赖: inr.inj
@@ -131,7 +131,7 @@ theorem sum_rec_congr
 
 中文:
 定理 sum_rec_congr
-  结论: (P : α oplus β -> Sort*) (f : 对任意 i, P (inl i)) (g : 对任意 i, P (inr i))
+  结论: (P : α oplus β -> 类型层*) (f : 对任意 i, P (inl i)) (g : 对任意 i, P (inr i))
   证明: by cases h; rfl
 -/
 theorem sum_rec_congr (P : α oplus β -> Sort*) (f : forall i, P (inl i)) (g : forall i, P (inr i))
@@ -553,7 +553,7 @@ lemma rec_update_left
 
 中文:
 引理 rec_update_left
-  结论: {γ : α oplus β -> Sort*} [DecidableEq α] [DecidableEq β]
+  结论: {γ : α oplus β -> 类型层*} [DecidableEq α] [DecidableEq β]
   证明: Function.rec_update Sum.inl_injective (Sum.rec · g) (fun _ _ => rfl) (fun
     | _, _, .inl _, h => (h _ rfl).elim
     | _, _, .inr _, _ => rfl) _ _ _
@@ -584,7 +584,7 @@ lemma rec_update_right
 
 中文:
 引理 rec_update_right
-  结论: {γ : α oplus β -> Sort*} [DecidableEq α] [DecidableEq β]
+  结论: {γ : α oplus β -> 类型层*} [DecidableEq α] [DecidableEq β]
   证明: Function.rec_update Sum.inr_injective (Sum.rec f) (fun _ _ => rfl) (fun
     | _, _, .inr _, h => (h _ rfl).elim
     | _, _, .inl _, _ => rfl) _ _ _
@@ -613,7 +613,7 @@ lemma elim_update_left
 
 中文:
 引理 elim_update_left
-  结论: {γ : Sort*} [DecidableEq α] [DecidableEq β]
+  结论: {γ : 类型层*} [DecidableEq α] [DecidableEq β]
   证明: rec_update_left _ _ _ _
 
 @[simp]
@@ -638,7 +638,7 @@ lemma elim_update_right
 
 中文:
 引理 elim_update_right
-  结论: {γ : Sort*} [DecidableEq α] [DecidableEq β]
+  结论: {γ : 类型层*} [DecidableEq α] [DecidableEq β]
   证明: rec_update_right _ _ _ _
 
 @[simp]
@@ -663,7 +663,7 @@ theorem swap_leftInverse
 
 中文:
 定理 swap_leftInverse
-  结论: Function.LeftInverse (@swap α β) swap
+  结论: 函数.左逆 (@swap α β) swap
   证明: swap_swap
 
 @[simp]
@@ -686,7 +686,7 @@ mk_iff_of_inductive_prop Sum.LiftRel Sum.liftRel_iff
 
 中文:
 定理 swap_rightInverse
-  结论: Function.RightInverse (@swap α β) swap
+  结论: 函数.右逆 (@swap α β) swap
   证明: swap_swap
 
 mk_iff_of_inductive_prop Sum.LiftRel Sum.liftRel_iff
@@ -811,7 +811,7 @@ theorem exists_of_isLeft_left
   grind
 
 中文:
-定理 exists_of_isLeft_left
+定理 存在_of_isLeft_left
   条件: (h₁ : LiftRel r s x y) (h₂ : x.isLeft)
   证明: by
   grind
@@ -829,7 +829,7 @@ theorem exists_of_isLeft_right
   proof: exists_of_isLeft_left h₁ ((isLeft_congr h₁).mpr h₂)
 
 中文:
-定理 exists_of_isLeft_right
+定理 存在_of_isLeft_right
   条件: (h₁ : LiftRel r s x y) (h₂ : y.isLeft)
   证明: exists_of_isLeft_left h₁ ((isLeft_congr h₁).mpr h₂)
 
@@ -848,7 +848,7 @@ theorem exists_of_isRight_left
   grind
 
 中文:
-定理 exists_of_isRight_left
+定理 存在_of_isRight_left
   条件: (h₁ : LiftRel r s x y) (h₂ : x.isRight)
   证明: by
   grind
@@ -866,7 +866,7 @@ theorem exists_of_isRight_right
   proof: exists_of_isRight_left h₁ ((isRight_congr h₁).mpr h₂)
 
 中文:
-定理 exists_of_isRight_right
+定理 存在_of_isRight_right
   条件: (h₁ : LiftRel r s x y) (h₂ : y.isRight)
   证明: exists_of_isRight_left h₁ ((isRight_congr h₁).mpr h₂)
 
@@ -892,8 +892,8 @@ theorem Injective.sumElim
   statement: {γ : Sort*} {f : α -> γ} {g : β -> γ} (hf : Injective f) (hg : Injective g)
 
 中文:
-定理 Injective.sumElim
-  结论: {γ : Sort*} {f : α -> γ} {g : β -> γ} (hf : Injective f) (hg : Injective g)
+定理 单射.sumElim
+  结论: {γ : 类型层*} {f : α -> γ} {g : β -> γ} (hf : 单射 f) (hg : 单射 g)
 -/
 theorem Injective.sumElim {γ : Sort*} {f : α -> γ} {g : β -> γ} (hf : Injective f) (hg : Injective g)
     (hfg : forall a b, f a != g b) : Injective (Sum.elim f g)
@@ -910,8 +910,8 @@ theorem Injective.sumMap
   given: {f : α -> β} {g : α' -> β'} (hf : Injective f) (hg : Injective g)
 
 中文:
-定理 Injective.sumMap
-  条件: {f : α -> β} {g : α' -> β'} (hf : Injective f) (hg : Injective g)
+定理 单射.sumMap
+  条件: {f : α -> β} {g : α' -> β'} (hf : 单射 f) (hg : 单射 g)
 -/
 theorem Injective.sumMap {f : α -> β} {g : α' -> β'} (hf : Injective f) (hg : Injective g) :
     Injective (Sum.map f g)
@@ -931,8 +931,8 @@ theorem Surjective.sumMap
     ⟨inr x, congr_arg inr hx⟩
 
 中文:
-定理 Surjective.sumMap
-  条件: {f : α -> β} {g : α' -> β'} (hf : Surjective f) (hg : Surjective g)
+定理 满射.sumMap
+  条件: {f : α -> β} {g : α' -> β'} (hf : 满射 f) (hg : 满射 g)
   证明: hf y
     ⟨inl x, congr_arg inl hx⟩
   | inr y =>
@@ -957,8 +957,8 @@ theorem Bijective.sumMap
   proof: ⟨hf.injective.sumMap hg.injective, hf.surjective.sumMap hg.surjective⟩
 
 中文:
-定理 Bijective.sumMap
-  条件: {f : α -> β} {g : α' -> β'} (hf : Bijective f) (hg : Bijective g)
+定理 双射.sumMap
+  条件: {f : α -> β} {g : α' -> β'} (hf : 双射 f) (hg : 双射 g)
   证明: ⟨hf.injective.sumMap hg.injective, hf.surjective.sumMap hg.surjective⟩
 
 Depends on / 依赖: hf.injective.sumMap, hf.surjective.sumMap, hg.injective, hg.surjective, injective, sumMap, surjective
@@ -987,7 +987,7 @@ theorem elim_injective
 
 中文:
 定理 elim_injective
-  条件: {γ : Sort*} {f : α -> γ} {g : β -> γ}
+  条件: {γ : 类型层*} {f : α -> γ} {g : β -> γ}
   证明: ⟨h.comp inl_injective, h.comp inr_injective, fun _ _ => h.ne inl_ne_inr⟩
   mpr | ⟨hf, hg, hfg⟩ => hf.sumElim hg hfg
 
@@ -1013,7 +1013,7 @@ theorem elim_injective'
 
 中文:
 定理 elim_injective'
-  条件: {γ : Sort*} {f : α -> γ}
+  条件: {γ : 类型层*} {f : α -> γ}
   证明: fun g₁ g₂ hg => funext fun b => by simpa using congr_fun hg (Sum.inr b)
 
 @[simp]
@@ -1204,7 +1204,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Function.Injective (PSum.inl : α -> α oplus' β)
+  结论: 函数.单射 (PSum.inl : α -> α oplus' β)
   证明: fun _ _ => inl.inj
 
 Depends on / 依赖: inl.inj
@@ -1221,7 +1221,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Function.Injective (PSum.inr : β -> α oplus' β)
+  结论: 函数.单射 (PSum.inr : β -> α oplus' β)
   证明: fun _ _ => inr.inj
 
 Depends on / 依赖: inr.inj

@@ -86,7 +86,7 @@ lemma isSquare_iff_exists_mul_self
 alias ⟨IsSquare.exists_mul_self, _⟩ := isSquare_iff_exists_mul_self
 
 中文:
-引理 isSquare_iff_exists_mul_self
+引理 isSquare_iff_存在_mul_self
   条件: (a : α)
   结论: IsSquare a ↔ 存在 r, a = r * r
   证明: .rfl
@@ -207,7 +207,7 @@ lemma even_ofMul_iff
 中文:
 引理 even_ofMul_iff
   条件: {a : α}
-  结论: Even (Additive.ofMul a) ↔ IsSquare a
+  结论: Even (加性.ofMul a) ↔ IsSquare a
   证明: Iff.rfl
 
 @[simp]
@@ -228,7 +228,7 @@ lemma isSquare_toMul_iff
 
 中文:
 引理 isSquare_toMul_iff
-  条件: {a : Additive α}
+  条件: {a : 加性 α}
   结论: IsSquare (a.toMul) ↔ Even a
   证明: Iff.rfl
 
@@ -245,7 +245,7 @@ instance Additive.instDecidablePredEven
   body: fun _ => decidable_of_iff _ isSquare_toMul_iff
 
 中文:
-实例 Additive.instDecidablePredEven
+实例 加性.instDecidablePredEven
   签名: [DecidablePred (IsSquare : α -> 命题)]
   定义体: fun _ => decidable_of_iff _ isSquare_toMul_iff
 
@@ -337,7 +337,7 @@ grind_pattern Even.zero => Even (0 : α)
 
 中文:
 引理 IsSquare.one
-  条件: [MulOneClass α]
+  条件: [MulOne类 α]
   结论: IsSquare (1 : α)
   证明: ⟨1, (mul_one _).symm⟩
 
@@ -390,7 +390,7 @@ lemma isSquare_subset_image_isSquare
 
 中文:
 引理 isSquare_subset_image_isSquare
-  条件: {f : F} (hf : Function.Surjective f)
+  条件: {f : F} (hf : 函数.满射 f)
   证明: fun b ⟨s, _⟩ => by
   rcases hf s with ⟨r, rfl⟩
   exact ⟨r * r, by simp [*]⟩
@@ -420,7 +420,7 @@ lemma isSquare_iff_exists_sq
 alias ⟨IsSquare.exists_sq, _⟩ := isSquare_iff_exists_sq
 
 中文:
-引理 isSquare_iff_exists_sq
+引理 isSquare_iff_存在_sq
   条件: (a : α)
   结论: IsSquare a ↔ 存在 r, a = r ^ 2
   证明: by simp [IsSquare, pow_two]
@@ -523,7 +523,7 @@ lemma IsSquare.mul
 
 中文:
 引理 IsSquare.mul
-  条件: [CommSemigroup α] {a b : α}
+  条件: [交换半群 α] {a b : α}
   结论: IsSquare a -> IsSquare b -> IsSquare (a * b)
   证明: fun ⟨r, _⟩ ⟨s, _⟩ => ⟨r * s, by simp_all [mul_mul_mul_comm]⟩
 
@@ -601,7 +601,7 @@ lemma IsSquare.div
 
 中文:
 引理 IsSquare.div
-  条件: [DivisionCommMonoid α] {a b : α} (ha : IsSquare a) (hb : IsSquare b)
+  条件: [DivisionComm幺半群 α] {a b : α} (ha : IsSquare a) (hb : IsSquare b)
   证明: by aesop (add simp div_eq_mul_inv)
 
 @[to_additive (attr := simp, aesop unsafe 90%) Even.zsmul_left]
@@ -629,7 +629,7 @@ example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k 
 
 中文:
 引理 Even.isSquare_zpow
-  条件: [Group α] {n : 整数}
+  条件: [群 α] {n : 整数}
   结论: Even n -> 对任意 a : α, IsSquare (a ^ n)
   证明: by
   aesop (add simp zpow_add)

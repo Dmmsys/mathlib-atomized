@@ -91,7 +91,7 @@ theorem iff_characterModule_baer
 
 中文:
 定理 iff_characterModule_baer
-  结论: Flat R M ↔ Baer R (CharacterModule M)
+  结论: 平坦 R M ↔ Baer R (CharacterModule M)
   证明: by
   rw [equiv_iff (N := ULift.{u} M) ULift.moduleEquiv.symm]; rw [iff_characterModule_injective]; rw [← Baer.iff_injective]; rw [Baer.congr (CharacterModule.congr ULift.moduleEquiv)]
 
@@ -202,7 +202,7 @@ lemma iff_lift_lsmul_comp_subtype_injective
 
 中文:
 引理 iff_lift_lsmul_comp_subtype_injective
-  结论: Flat R M ↔ 对任意 ⦃I : Ideal R⦄, I.FG ->
+  结论: 平坦 R M ↔ 对任意 ⦃I : 理想 R⦄, I.FG ->
   证明: by
   simp [iff_rTensor_injective, ← lid_comp_rTensor]
 

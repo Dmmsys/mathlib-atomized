@@ -45,10 +45,10 @@ class HasProd
     - exists_prod : exists ρ : VectorMeasure (X × Y) G, forall (s : Set X) (t : Set Y), MeasurableSet s -> MeasurableSet t -> ρ (s ×ˢ t) = B (μ s) (ν t)
 
 中文:
-类 HasProd
-  参数: (μ : VectorMeasure X E) (ν : VectorMeasure Y F) (B : E ->L[实数] F ->L[实数] G)
+类 有积类型
+  参数: (μ : 向量测度 X E) (ν : 向量测度 Y F) (B : E ->L[实数] F ->L[实数] G)
   公理与运算 (1 个):
-    - exists_prod : 存在 ρ : VectorMeasure (X × Y) G, 对任意 (s : Set X) (t : Set Y), MeasurableSet s -> MeasurableSet t -> ρ (s ×ˢ t) = B (μ s) (ν t)
+    - exists_prod : 存在 ρ : 向量测度 (X × Y) G, 对任意 (s : 集合 X) (t : 集合 Y), 可测集 s -> 可测集 t -> ρ (s ×ˢ t) = B (μ s) (ν t)
 -/
 class HasProd (μ : VectorMeasure X E) (ν : VectorMeasure Y F) (B : E ->L[Real] F ->L[Real] G) : Prop where
   exists_prod : exists ρ : VectorMeasure (X × Y) G, forall (s : Set X) (t : Set Y),
@@ -63,8 +63,8 @@ definition prod
   body: open scoped Classical in if h : HasProd μ ν B then h.exists_prod.choose else 0
 
 中文:
-定义 prod
-  签名: (μ : VectorMeasure X E) (ν : VectorMeasure Y F) (B : E ->L[实数] F ->L[实数] G)
+定义 乘积
+  签名: (μ : 向量测度 X E) (ν : 向量测度 Y F) (B : E ->L[实数] F ->L[实数] G)
   定义体: open scoped Classical in if h : HasProd μ ν B then h.exists_prod.choose else 0
 
 Depends on / 依赖: Classical, HasProd, exists_prod, h.exists_prod.choose, scoped
@@ -84,7 +84,7 @@ lemma prod_eq_zero_of_not_hasProd
 
 中文:
 引理 prod_eq_zero_of_not_hasProd
-  条件: (h : ¬HasProd μ ν B)
+  条件: (h : ¬有积类型 μ ν B)
   证明: by
   grind [HasProd, prod]
 
@@ -113,7 +113,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  条件: [h : HasProd μ ν B] {s : Set X} {t : Set Y}
+  条件: [h : 有积类型 μ ν B] {s : 集合 X} {t : 集合 Y}
   证明: by
   rcases eq_or_ne s ∅ with rfl | hs
   · simp
@@ -154,9 +154,9 @@ lemma HasProd.flip
     simp
 
 中文:
-引理 HasProd.flip
-  条件: [HasProd μ ν B]
-  结论: HasProd ν μ B.flip where
+引理 有积类型.flip
+  条件: [有积类型 μ ν B]
+  结论: 有积类型 ν μ B.flip where
   证明: by
     refine ⟨(μ.prod ν B).map Prod.swap, fun s t hs ht => ?_⟩
     rw [map_apply _ (by fun_prop) (hs.prod ht)]
@@ -182,7 +182,7 @@ omit [NormedSpace Real F] in
 
 中文:
 引理 hasProd_flip_iff
-  结论: HasProd ν μ B.flip ↔ HasProd μ ν B
+  结论: 有积类型 ν μ B.flip ↔ 有积类型 μ ν B
   证明: ⟨fun h => by simpa using HasProd.flip (μ := ν) (ν := μ) (B := B.flip), fun h => HasProd.flip⟩
 
 omit [NormedSpace Real F] in
@@ -210,7 +210,7 @@ theorem stronglyMeasurable_vectorMeasure_prodMk_left
 
 中文:
 定理 stronglyMeasurable_vectorMeasure_prodMk_left
-  结论: {s : Set (X × Y)}
+  结论: {s : 集合 (X × Y)}
   证明: by
   induction s, hs
     using MeasurableSpace.induction_on_inter generateFrom_prod.symm isPiSystem_prod with
@@ -255,7 +255,7 @@ theorem integrable_vectorMeasure_prodMk_left
 
 中文:
 定理 integrable_vectorMeasure_prodMk_left
-  结论: [IsFiniteMeasure μ.variation]
+  结论: [是有限测度 μ.variation]
   证明: by
   refine Integrable.of_bound (μ := μ.variation) ?_ ν.bound ?_
   · exact (stronglyMeasurable_vectorMeasure_prodMk_left hs).aestronglyMeasurable
@@ -340,8 +340,8 @@ instance [CompleteSpace
       of_if, integral_indicator hs, ContinuousLinearMap.flip_apply, hs, restrict_apply]
 
 中文:
-实例 [CompleteSpace
-  签名: G] [IsFiniteMeasure μ.variation] : HasProd μ ν B where
+实例 [完备空间
+  签名: G] [是有限测度 μ.variation] : 有积类型 μ ν B where
   定义体: by
     classical
     refine ⟨prodOfIsFiniteMeasureLeft μ ν B, fun s t hs ht => ?_⟩
@@ -366,7 +366,7 @@ instance [CompleteSpace
   body: hasProd_flip_iff.1 inferInstance
 
 中文:
-实例 [CompleteSpace
+实例 [完备空间
   签名: G] [h
   定义体: hasProd_flip_iff.1 inferInstance
 
@@ -389,8 +389,8 @@ lemma prod_eq_of_forall_apply_prod
     rw [prod_apply]; rw [hρ _ _ hs ht]
 
 中文:
-引理 prod_eq_of_forall_apply_prod
-  结论: {ρ : VectorMeasure (X × Y) G} (hρ : 对任意 (s : Set X) (t : Set Y),
+引理 prod_eq_of_对任意_apply_prod
+  结论: {ρ : 向量测度 (X × Y) G} (hρ : 对任意 (s : 集合 X) (t : 集合 Y),
   证明: by
   have : HasProd μ ν B := ⟨ρ, hρ⟩
   apply ext_of_generateFrom _ _ generateFrom_prod.symm isPiSystem_prod
@@ -424,7 +424,7 @@ lemma prod_apply_eq_integral
 
 中文:
 引理 prod_apply_eq_integral
-  结论: [CompleteSpace G] [IsFiniteMeasure μ.variation]
+  结论: [完备空间 G] [是有限测度 μ.variation]
   证明: by
   have : μ.prod ν B = prodOfIsFiniteMeasureLeft μ ν B := by
     classical
@@ -456,7 +456,7 @@ lemma prod_flip_apply_eq_integral
 
 中文:
 引理 prod_flip_apply_eq_integral
-  结论: [CompleteSpace G] [IsFiniteMeasure μ.variation]
+  结论: [完备空间 G] [是有限测度 μ.variation]
   证明: by
   simp [prod_apply_eq_integral hs]
 
@@ -482,7 +482,7 @@ lemma variation_prod_le
 
 中文:
 引理 variation_prod_le
-  条件: [CompleteSpace G] [IsFiniteMeasure μ.variation] [SFinite ν.variation]
+  条件: [完备空间 G] [是有限测度 μ.variation] [SFinite ν.variation]
   证明: by
   apply variation_le_of_forall_enorm_le (fun s hs => ?_)
   rw [prod_apply_eq_integral hs]
@@ -513,8 +513,8 @@ instance [CompleteSpace
   exact isFiniteMeasure_of_le _ variation_prod_le
 
 中文:
-实例 [CompleteSpace
-  签名: G] [IsFiniteMeasure μ.variation] [IsFiniteMeasure ν.variation] :
+实例 [完备空间
+  签名: G] [是有限测度 μ.variation] [是有限测度 ν.variation] :
   定义体: by
   have : IsFiniteMeasure (‖B‖ₑ • μ.variation.prod ν.variation) := by
     simp only [enorm_eq_nnnorm, Measure.coe_nnreal_smul]

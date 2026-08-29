@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (DerivedCategory C)
+  签名: 线性 R (导出范畴 C)
   定义体: Localization.linear R (DerivedCategory.Qh : _ ⥤ DerivedCategory C)
     (HomotopyCategory.quasiIso C _)
 
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Linear R (DerivedCategory.Qh : _ ⥤ DerivedCategory C)
+  签名: 函子.线性 R (导出范畴.Qh : _ ⥤ 导出范畴 C)
   定义体: Localization.functor_linear _ _ _
 
 Depends on / 依赖: Localization, Localization.functor_linear, functor_linear
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Linear R (DerivedCategory.Q : _ ⥤ DerivedCategory C)
+  签名: 函子.线性 R (导出范畴.Q : _ ⥤ 导出范畴 C)
   定义体: Functor.linear_of_iso _ (quotientCompQhIso C)
 
 Depends on / 依赖: Functor, Functor.linear_of_iso, linear_of_iso, quotientCompQhIso

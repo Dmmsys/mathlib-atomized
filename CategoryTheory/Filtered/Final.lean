@@ -55,8 +55,8 @@ theorem Functor.final_of_isFiltered_structuredArrow
   proof: IsFiltered.isConnected _
 
 中文:
-定理 Functor.final_of_isFiltered_structuredArrow
-  条件: [对任意 d, IsFiltered (StructuredArrow d F)]
+定理 函子.final_of_isFiltered_structuredArrow
+  条件: [对任意 d, 是Filtered (结构化箭头 d F)]
   证明: IsFiltered.isConnected _
 
 Depends on / 依赖: IsFiltered, IsFiltered.isConnected, isConnected
@@ -73,7 +73,7 @@ theorem Functor.initial_of_isCofiltered_costructuredArrow
   proof: IsCofiltered.isConnected _
 
 中文:
-定理 Functor.initial_of_isCofiltered_costructuredArrow
+定理 函子.initial_of_isCofiltered_costructuredArrow
   证明: IsCofiltered.isConnected _
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.isConnected, isConnected
@@ -98,8 +98,8 @@ theorem isFiltered_structuredArrow_of_isFiltered_of_exists
         
 
 中文:
-定理 isFiltered_structuredArrow_of_isFiltered_of_exists
-  结论: [IsFilteredOrEmpty C] (d : D)
+定理 isFiltered_structuredArrow_of_isFiltered_of_存在
+  结论: [是FilteredOrEmpty C] (d : D)
   证明: by
   have : Nonempty (StructuredArrow d F) := by
     obtain ⟨c, ⟨f⟩⟩ := h₁
@@ -143,8 +143,8 @@ theorem isCofiltered_costructuredArrow_of_isCofiltered_of_exists
   · obtain ⟨c, ⟨t⟩⟩ := h
 
 中文:
-定理 isCofiltered_costructuredArrow_of_isCofiltered_of_exists
-  结论: [IsCofilteredOrEmpty C] (d : D)
+定理 isCofiltered_costructuredArrow_of_isCofiltered_of_存在
+  结论: [是余filteredOrEmpty C] (d : D)
   证明: by
   suffices IsFiltered (CostructuredArrow F d)ᵒᵖ from isCofiltered_of_isFiltered_op _
   suffices IsFiltered (StructuredArrow (op d) F.op) from
@@ -180,7 +180,7 @@ theorem exists_eq_of_isCofiltered_costructuredArrow
   exact ⟨W.left, p₁.left, p₂.left, (CostructuredArrow.w p₁).trans (CostructuredArrow.w p₂).symm⟩
 
 中文:
-定理 exists_eq_of_isCofiltered_costructuredArrow
+定理 存在_eq_of_isCofiltered_costructuredArrow
   结论: {d : D}
   证明: by
   obtain ⟨W, p₁, p₂, -⟩ := IsCofilteredOrEmpty.cone_objs
@@ -208,8 +208,8 @@ theorem Functor.final_of_exists_of_isFiltered
   exact fun d => isFiltered_structuredArrow_of_isFiltered_of_exists F d (h₁ d) h₂
 
 中文:
-定理 Functor.final_of_exists_of_isFiltered
-  结论: [IsFilteredOrEmpty C]
+定理 函子.final_of_存在_of_isFiltered
+  结论: [是FilteredOrEmpty C]
   证明: by
   suffices forall d, IsFiltered (StructuredArrow d F) from final_of_isFiltered_structuredArrow F
   exact fun d => isFiltered_structuredArrow_of_isFiltered_of_exists F d (h₁ d) h₂
@@ -232,8 +232,8 @@ theorem Functor.final_const_of_isTerminal
     (fun {_ c} _ _ => ⟨c, 𝟙 _, hX.hom_ext _ _⟩)
 
 中文:
-定理 Functor.final_const_of_isTerminal
-  条件: [IsFiltered C] {X : D} (hX : IsTerminal X)
+定理 函子.final_const_of_isTerminal
+  条件: [是Filtered C] {X : D} (hX : 是终止 X)
   证明: Functor.final_of_exists_of_isFiltered _ (fun _ => ⟨IsFiltered.nonempty.some, ⟨hX.from _⟩⟩)
     (fun {_ c} _ _ => ⟨c, 𝟙 _, hX.hom_ext _ _⟩)
 
@@ -253,8 +253,8 @@ theorem Functor.final_const_terminal
   proof: Functor.final_const_of_isTerminal terminalIsTerminal
 
 中文:
-定理 Functor.final_const_terminal
-  条件: [IsFiltered C] [HasTerminal D]
+定理 函子.final_const_terminal
+  条件: [是Filtered C] [有终止 D]
   证明: Functor.final_const_of_isTerminal terminalIsTerminal
 
 Depends on / 依赖: Functor, Functor.final_const_of_isTerminal, final_const_of_isTerminal, terminalIsTerminal
@@ -275,8 +275,8 @@ theorem Functor.initial_of_exists_of_isCofiltered
   exact fun d => isCofiltered_costructuredArrow_of_isCofiltered_of_exists F d (h₁ d) h₂
 
 中文:
-定理 Functor.initial_of_exists_of_isCofiltered
-  结论: [IsCofilteredOrEmpty C]
+定理 函子.initial_of_存在_of_isCofiltered
+  结论: [是余filteredOrEmpty C]
   证明: by
   suffices forall d, IsCofiltered (CostructuredArrow F d) from
     initial_of_isCofiltered_costructuredArrow F
@@ -301,8 +301,8 @@ theorem Functor.initial_const_of_isInitial
     (fun {_ c} _ _ => ⟨c, 𝟙 _, hX.hom_ext _ _⟩)
 
 中文:
-定理 Functor.initial_const_of_isInitial
-  条件: [IsCofiltered C] {X : D} (hX : IsInitial X)
+定理 函子.initial_const_of_isInitial
+  条件: [是余filtered C] {X : D} (hX : IsInitial X)
   证明: Functor.initial_of_exists_of_isCofiltered _ (fun _ => ⟨IsCofiltered.nonempty.some, ⟨hX.to _⟩⟩)
     (fun {_ c} _ _ => ⟨c, 𝟙 _, hX.hom_ext _ _⟩)
 
@@ -322,8 +322,8 @@ theorem Functor.initial_const_initial
   proof: Functor.initial_const_of_isInitial initialIsInitial
 
 中文:
-定理 Functor.initial_const_initial
-  条件: [IsCofiltered C] [HasInitial D]
+定理 函子.initial_const_initial
+  条件: [是余filtered C] [HasInitial D]
   证明: Functor.initial_const_of_isInitial initialIsInitial
 
 Depends on / 依赖: Functor, Functor.initial_const_of_isInitial, initialIsInitial, initial_const_of_isInitial
@@ -347,8 +347,8 @@ theorem IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful
     refine ⟨_, F.pre
 
 中文:
-定理 IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful
-  结论: [IsFilteredOrEmpty D] [F.Full]
+定理 是FilteredOrEmpty.of_存在_of_isFiltered_of_fullyFaithful
+  结论: [是FilteredOrEmpty D] [F.满]
   证明: by
     obtain ⟨c₀, ⟨f⟩⟩ := h (IsFiltered.max (F.obj c) (F.obj c'))
     exact ⟨c₀, F.preimage (IsFiltered.leftToMax _ _ ≫ f),
@@ -383,8 +383,8 @@ theorem IsCofilteredOrEmpty.of_exists_of_isCofiltered_of_fullyFaithful
   exact ⟨op c, ⟨f.op⟩⟩
 
 中文:
-定理 IsCofilteredOrEmpty.of_exists_of_isCofiltered_of_fullyFaithful
-  结论: [IsCofilteredOrEmpty D]
+定理 是余filteredOrEmpty.of_存在_of_isCofiltered_of_fullyFaithful
+  结论: [是余filteredOrEmpty D]
   证明: by
   suffices IsFilteredOrEmpty Cᵒᵖ from isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
   refine IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful F.op (fun d => ?_)
@@ -413,8 +413,8 @@ theorem IsFiltered.of_exists_of_isFiltered_of_fullyFaithful
       exact ⟨c⟩ }
 
 中文:
-定理 IsFiltered.of_exists_of_isFiltered_of_fullyFaithful
-  结论: [IsFiltered D] [F.Full] [F.Faithful]
+定理 是Filtered.of_存在_of_isFiltered_of_fullyFaithful
+  结论: [是Filtered D] [F.满] [F.忠实]
   证明: { IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful F h with
     nonempty := by
       have : Nonempty D := IsFiltered.nonempty
@@ -444,8 +444,8 @@ theorem IsCofiltered.of_exists_of_isCofiltered_of_fullyFaithful
       exact ⟨c⟩ }
 
 中文:
-定理 IsCofiltered.of_exists_of_isCofiltered_of_fullyFaithful
-  结论: [IsCofiltered D] [F.Full]
+定理 是余filtered.of_存在_of_isCofiltered_of_fullyFaithful
+  结论: [是余filtered D] [F.满]
   证明: { IsCofilteredOrEmpty.of_exists_of_isCofiltered_of_fullyFaithful F h with
     nonempty := by
       have : Nonempty D := IsCofiltered.nonempty
@@ -476,8 +476,8 @@ theorem Functor.final_of_exists_of_isFiltered_of_fullyFaithful
   simp [reassoc_of% (IsFiltered.coeq_condit
 
 中文:
-定理 Functor.final_of_exists_of_isFiltered_of_fullyFaithful
-  结论: [IsFilteredOrEmpty D] [F.Full]
+定理 函子.final_of_存在_of_isFiltered_of_fullyFaithful
+  结论: [是FilteredOrEmpty D] [F.满]
   证明: by
   have := IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful F h
   refine Functor.final_of_exists_of_isFiltered F h (fun {d c} s s' => ?_)
@@ -508,8 +508,8 @@ theorem Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful
   exact ⟨op c, ⟨f.op⟩⟩
 
 中文:
-定理 Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful
-  结论: [IsCofilteredOrEmpty D] [F.Full]
+定理 函子.initial_of_存在_of_isCofiltered_of_fullyFaithful
+  结论: [是余filteredOrEmpty D] [F.满]
   证明: by
   suffices Final F.op from initial_of_final_op _
   refine Functor.final_of_exists_of_isFiltered_of_fullyFaithful F.op (fun d => ?_)
@@ -535,8 +535,8 @@ instance IsFiltered.under
     (fun s s' => IsFilteredOrEmpty.cocone_maps s s')
 
 中文:
-实例 IsFiltered.under
-  签名: [IsFilteredOrEmpty C] (c : C)
+实例 是Filtered.under
+  签名: [是FilteredOrEmpty C] (c : C)
   定义体: isFiltered_structuredArrow_of_isFiltered_of_exists _ c ⟨c, ⟨𝟙 _⟩⟩
     (fun s s' => IsFilteredOrEmpty.cocone_maps s s')
 
@@ -556,8 +556,8 @@ instance IsCofiltered.over
     (fun s s' => IsCofilteredOrEmpty.cone_maps s s')
 
 中文:
-实例 IsCofiltered.over
-  签名: [IsCofilteredOrEmpty C] (c : C)
+实例 是余filtered.over
+  签名: [是余filteredOrEmpty C] (c : C)
   定义体: isCofiltered_costructuredArrow_of_isCofiltered_of_exists _ c ⟨c, ⟨𝟙 _⟩⟩
     (fun s s' => IsCofilteredOrEmpty.cone_maps s s')
 
@@ -584,7 +584,7 @@ instance Under.final_forget
 
 中文:
 实例 Under.final_forget
-  签名: [IsFilteredOrEmpty C] (c : C)
+  签名: [是FilteredOrEmpty C] (c : C)
   定义体: final_of_exists_of_isFiltered _
     (fun c' => ⟨mk (IsFiltered.leftToMax c c'), ⟨IsFiltered.rightToMax c c'⟩⟩)
     (fun {_} {x} s s' => by
@@ -620,7 +620,7 @@ instance Over.initial_forget
 
 中文:
 实例 Over.initial_forget
-  签名: [IsCofilteredOrEmpty C] (c : C)
+  签名: [是余filteredOrEmpty C] (c : C)
   定义体: initial_of_exists_of_isCofiltered _
     (fun c' => ⟨mk (IsCofiltered.minToLeft c c'), ⟨IsCofiltered.minToRight c c'⟩⟩)
     (fun {_} {x} s s' => by
@@ -658,8 +658,8 @@ theorem Functor.Final.exists_coeq_of_locally_small
   refine ⟨IsFiltered.coeq t₁ 
 
 中文:
-定理 Functor.Final.exists_coeq_of_locally_small
-  结论: [IsFilteredOrEmpty C] [Final F] {d : D} {c : C}
+定理 函子.终.存在_coeq_of_locally_small
+  结论: [是FilteredOrEmpty C] [终 F] {d : D} {c : C}
   证明: by
   have : colimit.ι (F ⋙ coyoneda.obj (op d)) c s = colimit.ι (F ⋙ coyoneda.obj (op d)) c s' := by
     apply (Final.colimitCompCoyonedaIso F d).toEquiv.injective
@@ -699,8 +699,8 @@ theorem Functor.final_iff_of_isFiltered
     let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂} D 
 
 中文:
-定理 Functor.final_iff_of_isFiltered
-  条件: [IsFilteredOrEmpty C]
+定理 函子.final_iff_of_isFiltered
+  条件: [是FilteredOrEmpty C]
   证明: by
   refine ⟨fun hF => ⟨?_, ?_⟩, fun h => final_of_exists_of_isFiltered F h.1 h.2⟩
   · intro d
@@ -743,8 +743,8 @@ theorem Functor.initial_iff_of_isCofiltered
     obtain ⟨c', t, ht⟩ := h₂ (Quiver.Hom.
 
 中文:
-定理 Functor.initial_iff_of_isCofiltered
-  条件: [IsCofilteredOrEmpty C]
+定理 函子.initial_iff_of_isCofiltered
+  条件: [是余filteredOrEmpty C]
   证明: by
   refine ⟨fun hF => ?_, fun h => initial_of_exists_of_isCofiltered F h.1 h.2⟩
   obtain ⟨h₁, h₂⟩ := F.op.final_iff_of_isFiltered.mp inferInstance
@@ -779,8 +779,8 @@ theorem Functor.Final.exists_coeq
   proof: ((final_iff_of_isFiltered F).1 inferInstance).2 s s'
 
 中文:
-定理 Functor.Final.exists_coeq
-  结论: [IsFilteredOrEmpty C] [Final F] {d : D} {c : C}
+定理 函子.终.存在_coeq
+  结论: [是FilteredOrEmpty C] [终 F] {d : D} {c : C}
   证明: ((final_iff_of_isFiltered F).1 inferInstance).2 s s'
 
 Depends on / 依赖: final_iff_of_isFiltered
@@ -798,8 +798,8 @@ theorem Functor.Initial.exists_eq
   proof: ((initial_iff_of_isCofiltered F).1 inferInstance).2 s s'
 
 中文:
-定理 Functor.Initial.exists_eq
-  结论: [IsCofilteredOrEmpty C] [Initial F] {d : D} {c : C}
+定理 函子.初始.存在_eq
+  结论: [是余filteredOrEmpty C] [初始 F] {d : D} {c : C}
   证明: ((initial_iff_of_isCofiltered F).1 inferInstance).2 s s'
 
 Depends on / 依赖: initial_iff_of_isCofiltered
@@ -820,8 +820,8 @@ theorem Functor.final_iff_isFiltered_structuredArrow
   exact fun h d => isFiltered_structuredArrow_of_isFiltered_of_exists F d (h.1 d) h.2
 
 中文:
-定理 Functor.final_iff_isFiltered_structuredArrow
-  条件: [IsFilteredOrEmpty C]
+定理 函子.final_iff_isFiltered_structuredArrow
+  条件: [是FilteredOrEmpty C]
   证明: by
   refine ⟨?_, fun h => final_of_isFiltered_structuredArrow F⟩
   rw [final_iff_of_isFiltered]
@@ -847,8 +847,8 @@ theorem Functor.initial_iff_isCofiltered_costructuredArrow
   exact fun h d => isCofiltered_costructuredArrow_of_isCofiltered_of_exists F d (h.1 d) h.2
 
 中文:
-定理 Functor.initial_iff_isCofiltered_costructuredArrow
-  条件: [IsCofilteredOrEmpty C]
+定理 函子.initial_iff_isCofiltered_costructuredArrow
+  条件: [是余filteredOrEmpty C]
   证明: by
   refine ⟨?_, fun h => initial_of_isCofiltered_costructuredArrow F⟩
   rw [initial_iff_of_isCofiltered]
@@ -875,7 +875,7 @@ instance [IsFilteredOrEmpty
   apply IsFiltered.of_equivalence (StructuredArrow.ofDiagEquivalence X).symm
 
 中文:
-实例 [IsFilteredOrEmpty
+实例 [是FilteredOrEmpty
   签名: C] (X
   定义体: by
   have : forall Y, IsFiltered (StructuredArrow Y (Under.forget X.1)) := by
@@ -900,8 +900,8 @@ instance Functor.final_diag_of_isFiltered
   body: final_of_isFiltered_structuredArrow _
 
 中文:
-实例 Functor.final_diag_of_isFiltered
-  签名: [IsFilteredOrEmpty C]
+实例 函子.final_diag_of_isFiltered
+  签名: [是FilteredOrEmpty C]
   定义体: final_of_isFiltered_structuredArrow _
 
 Depends on / 依赖: final_of_isFiltered_structuredArrow
@@ -920,9 +920,9 @@ theorem IsFilteredOrEmpty.isSiftedOrEmpty
   proof: Functor.final_diag_of_isFiltered
 
 中文:
-定理 IsFilteredOrEmpty.isSiftedOrEmpty
-  条件: [IsFilteredOrEmpty C]
-  结论: IsSiftedOrEmpty C
+定理 是FilteredOrEmpty.isSiftedOrEmpty
+  条件: [是FilteredOrEmpty C]
+  结论: 是SiftedOrEmpty C
   证明: Functor.final_diag_of_isFiltered
 
 Depends on / 依赖: Functor, Functor.final_diag_of_isFiltered, final_diag_of_isFiltered
@@ -941,9 +941,9 @@ theorem IsFiltered.isSifted
   statement: IsSifted C where
 
 中文:
-定理 IsFiltered.isSifted
-  条件: [IsFiltered C]
-  结论: IsSifted C where
+定理 是Filtered.isSifted
+  条件: [是Filtered C]
+  结论: 是Sifted C where
 -/
 theorem IsFiltered.isSifted [IsFiltered C] : IsSifted C where
 
@@ -960,7 +960,7 @@ instance [IsCofilteredOrEmpty
   apply IsCofiltered.of_equivalence (CostructuredArrow.ofDiagEquivalence X).symm
 
 中文:
-实例 [IsCofilteredOrEmpty
+实例 [是余filteredOrEmpty
   签名: C] (X
   定义体: by
   have : forall Y, IsCofiltered (CostructuredArrow (Over.forget X.1) Y) := by
@@ -985,8 +985,8 @@ instance Functor.initial_diag_of_isFiltered
   body: initial_of_isCofiltered_costructuredArrow _
 
 中文:
-实例 Functor.initial_diag_of_isFiltered
-  签名: [IsCofilteredOrEmpty C]
+实例 函子.initial_diag_of_isFiltered
+  签名: [是余filteredOrEmpty C]
   定义体: initial_of_isCofiltered_costructuredArrow _
 
 Depends on / 依赖: initial_of_isCofiltered_costructuredArrow
@@ -1008,8 +1008,8 @@ theorem Functor.final_of_isFiltered_of_pUnit
     apply Subsingleton.elim
 
 中文:
-定理 Functor.final_of_isFiltered_of_pUnit
-  条件: [IsFiltered C] (F : C ⥤ Discrete PUnit)
+定理 函子.final_of_isFiltered_of_pUnit
+  条件: [是Filtered C] (F : C ⥤ 离散 命题单元)
   证明: by
   refine final_of_exists_of_isFiltered F (fun _ => ?_) (fun {_} {c} _ _ => ?_)
   · use Classical.choice IsFiltered.nonempty
@@ -1041,8 +1041,8 @@ theorem Functor.initial_of_isCofiltered_pUnit
     apply Subsingleton.elim
 
 中文:
-定理 Functor.initial_of_isCofiltered_pUnit
-  条件: [IsCofiltered C] (F : C ⥤ Discrete PUnit)
+定理 函子.initial_of_isCofiltered_pUnit
+  条件: [是余filtered C] (F : C ⥤ 离散 命题单元)
   证明: by
   refine initial_of_exists_of_isCofiltered F (fun _ => ?_) (fun {_} {c} _ _ => ?_)
   · use Classical.choice IsCofiltered.nonempty
@@ -1072,8 +1072,8 @@ instance StructuredArrow.final_proj_of_isFiltered
   exact (final_comp (Under.forget X) T).out _
 
 中文:
-实例 StructuredArrow.final_proj_of_isFiltered
-  签名: [IsFilteredOrEmpty C]
+实例 结构化箭头.final_proj_of_isFiltered
+  签名: [是FilteredOrEmpty C]
   定义体: by
   refine ⟨fun X => ?_⟩
   rw [isConnected_iff_of_equivalence (ofStructuredArrowProjEquivalence T Y X)]
@@ -1100,7 +1100,7 @@ instance CostructuredArrow.initial_proj_of_isCofiltered
 
 中文:
 实例 CostructuredArrow.initial_proj_of_isCofiltered
-  签名: [IsCofilteredOrEmpty C]
+  签名: [是余filteredOrEmpty C]
   定义体: by
   refine ⟨fun X => ?_⟩
   rw [isConnected_iff_of_equivalence (ofCostructuredArrowProjEquivalence T Y X)]
@@ -1126,8 +1126,8 @@ instance StructuredArrow.final_map₂_id
   apply final_of_natIso (map₂IsoPreEquivalenceInverseCompProj d e u α).symm
 
 中文:
-实例 StructuredArrow.final_map₂_id
-  签名: [IsFiltered C] {E : 类型u₃} [Category.{v₃} E]
+实例 结构化箭头.final_map₂_id
+  签名: [是Filtered C] {E : 类型u₃} [范畴.{v₃} E]
   定义体: by
   have : IsFiltered (StructuredArrow e (T ⋙ S)) :=
     (T ⋙ S).final_iff_isFiltered_structuredArrow.mp inferInstance e
@@ -1156,8 +1156,8 @@ instance StructuredArrow.final_map
   apply final_of_natIso (mapIsoMap₂ f).symm
 
 中文:
-实例 StructuredArrow.final_map
-  签名: [IsFiltered C] {S S' : D} (f : S ⟶ S') (T : C ⥤ D) [T.Final]
+实例 结构化箭头.final_map
+  签名: [是Filtered C] {S S' : D} (f : S ⟶ S') (T : C ⥤ D) [T.终]
   定义体: by
   have := NatIso.isIso_of_isIso_app (𝟙 T)
   have : (map₂ (F := 𝟭 C) (G := 𝟭 D) f (𝟙 T)).Final := by
@@ -1183,8 +1183,8 @@ instance StructuredArrow.final_post
   apply final_of_natIso (postIsoMap₂ X T S).symm
 
 中文:
-实例 StructuredArrow.final_post
-  签名: [IsFiltered C] {E : 类型u₃} [Category.{v₃} E] (X : D)
+实例 结构化箭头.final_post
+  签名: [是Filtered C] {E : 类型u₃} [范畴.{v₃} E] (X : D)
   定义体: by
   apply final_of_natIso (postIsoMap₂ X T S).symm
 
@@ -1207,7 +1207,7 @@ instance CostructuredArrow.initial_map₂_id
 
 中文:
 实例 CostructuredArrow.initial_map₂_id
-  签名: [IsCofiltered C] {E : 类型u₃} [Category.{v₃} E]
+  签名: [是余filtered C] {E : 类型u₃} [范畴.{v₃} E]
   定义体: by
   have := (T ⋙ S).initial_iff_isCofiltered_costructuredArrow.mp inferInstance e
   apply initial_of_natIso (map₂IsoPreEquivalenceInverseCompProj T S d e u).symm
@@ -1231,7 +1231,7 @@ instance CostructuredArrow.initial_post
 
 中文:
 实例 CostructuredArrow.initial_post
-  签名: [IsCofiltered C] {E : 类型u₃} [Category.{v₃} E] (X : D)
+  签名: [是余filtered C] {E : 类型u₃} [范畴.{v₃} E] (X : D)
   定义体: by
   apply initial_of_natIso (postIsoMap₂ X T S).symm
 
@@ -1264,7 +1264,7 @@ instance final_eval
 
 中文:
 实例 final_eval
-  签名: [对任意 s, IsFiltered (I s)] (s : α)
+  签名: [对任意 s, 是Filtered (I s)] (s : α)
   定义体: by
   classical
   apply Functor.final_of_exists_of_isFiltered
@@ -1307,7 +1307,7 @@ instance initial_eval
 
 中文:
 实例 initial_eval
-  签名: [对任意 s, IsCofiltered (I s)] (s : α)
+  签名: [对任意 s, 是余filtered (I s)] (s : α)
   定义体: by
   classical
   apply Functor.initial_of_exists_of_isCofiltered
@@ -1349,7 +1349,7 @@ instance final_fst
 
 中文:
 实例 final_fst
-  签名: [IsFiltered D]
+  签名: [是Filtered D]
   定义体: inferInstance
 -/
 instance final_fst [IsFiltered D] : (Prod.fst C D).Final := inferInstance
@@ -1364,7 +1364,7 @@ instance final_snd
 
 中文:
 实例 final_snd
-  签名: [IsFiltered C]
+  签名: [是Filtered C]
   定义体: inferInstance
 -/
 instance final_snd [IsFiltered C] : (Prod.snd C D).Final := inferInstance
@@ -1379,7 +1379,7 @@ instance initial_fst
 
 中文:
 实例 initial_fst
-  签名: [IsCofiltered D]
+  签名: [是余filtered D]
   定义体: inferInstance
 -/
 instance initial_fst [IsCofiltered D] : (Prod.fst C D).Initial := inferInstance
@@ -1394,7 +1394,7 @@ instance initial_snd
 
 中文:
 实例 initial_snd
-  签名: [IsCofiltered C]
+  签名: [是余filtered C]
   定义体: inferInstance
 -/
 instance initial_snd [IsCofiltered C] : (Prod.snd C D).Initial := inferInstance
@@ -1428,8 +1428,8 @@ lemma Monotone.final_functor_iff
       exact ⟨c, 𝟙 _, rfl⟩
 
 中文:
-引理 Monotone.final_functor_iff
-  结论: {J₁ J₂ : 类型} [Preorder J₁] [Preorder J₂]
+引理 递增.final_functor_iff
+  结论: {J₁ J₂ : 类型} [预序 J₁] [预序 J₂]
   证明: by
   rw [Functor.final_iff_of_isFiltered]
   constructor
@@ -1483,8 +1483,8 @@ lemma Monotone.initial_functor_iff
       exact ⟨ c, 𝟙 _, rfl⟩
 
 中文:
-引理 Monotone.initial_functor_iff
-  结论: {J₁ J₂ : 类型} [Preorder J₁] [Preorder J₂]
+引理 递增.initial_functor_iff
+  结论: {J₁ J₂ : 类型} [预序 J₁] [预序 J₂]
   证明: by
   rw [Functor.initial_iff_of_isCofiltered]
   constructor

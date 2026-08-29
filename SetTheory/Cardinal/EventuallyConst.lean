@@ -41,7 +41,7 @@ refine ⟨i, fun j hij => (hf hij).antisymm' (hf (hi _ ⟨⟨f j, j, rfl⟩, rfl
 
 中文:
 定理 of_not_isCofinal_rangeSplitting
-  结论: [Nonempty α] (hf : Monotone f)
+  结论: [非空 α] (hf : 递增 f)
   证明: by
   rw [eventuallyConst_atTop]
   obtain ⟨i, hi⟩ := not_isCofinal_iff.1 hf'
@@ -73,7 +73,7 @@ theorem of_monotone_of_lt_cof
 
 中文:
 定理 of_monotone_of_lt_cof
-  条件: (hf : Monotone f) (hα : lift.{u} #β < lift.{v} (cof α))
+  条件: (hf : 递增 f) (hα : lift.{u} #β < lift.{v} (cof α))
   证明: by
   have : Nonempty α := by by_contra!; simp at hα
   refine .of_not_isCofinal_rangeSplitting hf ?_
@@ -103,7 +103,7 @@ theorem of_antitone_of_lt_cof
 
 中文:
 定理 of_antitone_of_lt_cof
-  条件: (hf : Antitone f) (hα : lift.{u} #β < lift.{v} (cof α))
+  条件: (hf : 递减 f) (hα : lift.{u} #β < lift.{v} (cof α))
   证明: .of_monotone_of_lt_cof (β := βᵒᵈ) hf.dual_right hα
 
 Depends on / 依赖: dual_right, hf.dual_right, of_monotone_of_lt_cof
@@ -130,7 +130,7 @@ theorem eventuallyConst_of_monotone
 
 中文:
 定理 eventuallyConst_of_monotone
-  条件: (hf : Monotone f)
+  条件: (hf : 递增 f)
   结论: atTop.EventuallyConst f
   证明: by
   refine .of_monotone_of_lt_cof hf ?_
@@ -153,7 +153,7 @@ theorem eventuallyConst_of_antitone
 
 中文:
 定理 eventuallyConst_of_antitone
-  条件: (hf : Antitone f)
+  条件: (hf : 递减 f)
   结论: atTop.EventuallyConst f
   证明: eventuallyConst_of_monotone (β := βᵒᵈ) hf
 
@@ -180,7 +180,7 @@ theorem eventuallyConst_of_monotone
 
 中文:
 定理 eventuallyConst_of_monotone
-  条件: (hf : Monotone f)
+  条件: (hf : 递增 f)
   结论: atTop.EventuallyConst f
   证明: by
   refine .of_monotone_of_lt_cof hf ?_
@@ -203,7 +203,7 @@ theorem eventuallyConst_of_antitone
 
 中文:
 定理 eventuallyConst_of_antitone
-  条件: (hf : Antitone f)
+  条件: (hf : 递减 f)
   结论: atTop.EventuallyConst f
   证明: eventuallyConst_of_monotone (β := βᵒᵈ) hf
 

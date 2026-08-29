@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder αᵐᵒᵖ
+  签名: 预序 αᵐᵒᵖ
   定义体: Preorder.lift unop
 -/
 @[to_additive] instance : Preorder αᵐᵒᵖ := Preorder.lift unop
@@ -82,8 +82,8 @@ instance [PartialOrder
   body: PartialOrder.lift _ unop_injective
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder αᵐᵒᵖ
+实例 [偏序
+  签名: α] : 偏序 αᵐᵒᵖ
   定义体: PartialOrder.lift _ unop_injective
 -/
 @[to_additive] instance [PartialOrder α] : PartialOrder αᵐᵒᵖ := PartialOrder.lift _ unop_injective
@@ -100,8 +100,8 @@ instance [IsOrderedMonoid
   body: mul_le_mul_right (by simpa) c.unop
 
 中文:
-实例 [IsOrderedMonoid
-  签名: α] : IsOrderedMonoid αᵐᵒᵖ where
+实例 [是Ordered幺半群
+  签名: α] : 是Ordered幺半群 αᵐᵒᵖ where
   定义体: mul_le_mul_right (by simpa) c.unop
 -/
 @[to_additive] instance [IsOrderedMonoid α] : IsOrderedMonoid αᵐᵒᵖ where
@@ -186,8 +186,8 @@ instance [IsOrderedAddMonoid
   body: add_le_add_left (by simpa) c.unop
 
 中文:
-实例 [IsOrderedAddMonoid
-  签名: α] : IsOrderedAddMonoid αᵐᵒᵖ where
+实例 [是OrderedAdd幺半群
+  签名: α] : 是OrderedAdd幺半群 αᵐᵒᵖ where
   定义体: add_le_add_left (by simpa) c.unop
 
 Depends on / 依赖: add_le_add_left, c.unop
@@ -277,8 +277,8 @@ instance [IsOrderedMonoid
   body: mul_le_mul_left (by simpa) c.unop
 
 中文:
-实例 [IsOrderedMonoid
-  签名: α] : IsOrderedMonoid αᵃᵒᵖ where
+实例 [是Ordered幺半群
+  签名: α] : 是Ordered幺半群 αᵃᵒᵖ where
   定义体: mul_le_mul_left (by simpa) c.unop
 
 Depends on / 依赖: c.unop, mul_le_mul_left

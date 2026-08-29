@@ -149,8 +149,8 @@ theorem exists_seq
   have hV_closed (n : Nat) : IsClosed (V n : Set X) 
 
 中文:
-定理 exists_seq
-  结论: {S : End 𝕜 X} (hS_not_surj : ¬ (S : X -> X).Surjective)
+定理 存在_seq
+  结论: {S : End 𝕜 X} (hS_not_surj : ¬ (S : X -> X).满射)
   证明: by
   -- Construct the sequence of submodules `V n := (S ^ n).range`, and show that they are closed.
   let V (n : Nat) : Submodule 𝕜 X := S.iterateRange n

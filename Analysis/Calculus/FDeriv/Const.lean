@@ -45,7 +45,7 @@ theorem hasFDerivAtFilter_const
 
 中文:
 定理 hasFDerivAtFilter_const
-  条件: (c : F) (L : Filter (E × E))
+  条件: (c : F) (L : 滤子 (E × E))
   证明: .of_isLittleOTVS (IsLittleOTVS.zero _ _).congr_left fun _ => by simp
 
 Depends on / 依赖: IsLittleOTVS, IsLittleOTVS.zero, congr_left, of_isLittleOTVS
@@ -64,7 +64,7 @@ theorem hasFDerivAtFilter_zero
 
 中文:
 定理 hasFDerivAtFilter_zero
-  条件: (L : Filter (E × E))
+  条件: (L : 滤子 (E × E))
   证明: hasFDerivAtFilter_const _ _
 
 Depends on / 依赖: hasFDerivAtFilter_const
@@ -82,7 +82,7 @@ theorem hasFDerivAtFilter_one
 
 中文:
 定理 hasFDerivAtFilter_one
-  条件: [One F] (L : Filter (E × E))
+  条件: [幺 F] (L : 滤子 (E × E))
   证明: hasFDerivAtFilter_const _ _
 
 Depends on / 依赖: hasFDerivAtFilter_const
@@ -100,7 +100,7 @@ theorem hasFDerivAtFilter_natCast
 
 中文:
 定理 hasFDerivAtFilter_natCast
-  条件: [自然数Cast F] (n : 自然数) (L : Filter (E × E))
+  条件: [自然数嵌入 F] (n : 自然数) (L : 滤子 (E × E))
   证明: hasFDerivAtFilter_const _ _
 
 Depends on / 依赖: hasFDerivAtFilter_const
@@ -119,7 +119,7 @@ theorem hasFDerivAtFilter_intCast
 
 中文:
 定理 hasFDerivAtFilter_intCast
-  条件: [整数Cast F] (z : 整数) (L : Filter (E × E))
+  条件: [整数嵌入 F] (z : 整数) (L : 滤子 (E × E))
   证明: hasFDerivAtFilter_const _ _
 
 Depends on / 依赖: hasFDerivAtFilter_const
@@ -139,8 +139,8 @@ theorem hasFDerivAtFilter_ofNat
 @[fun_prop]
 
 中文:
-定理 hasFDerivAtFilter_ofNat
-  条件: (n : 自然数) [Of自然数 F n] (L : Filter (E × E))
+定理 hasFDerivAtFilter_of自然数
+  条件: (n : 自然数) [Of自然数 F n] (L : 滤子 (E × E))
   证明: hasFDerivAtFilter_const _ _
 
 @[fun_prop]
@@ -211,7 +211,7 @@ theorem hasStrictFDerivAt_one
 
 中文:
 定理 hasStrictFDerivAt_one
-  条件: [One F] (x : E)
+  条件: [幺 F] (x : E)
   证明: hasStrictFDerivAt_const _ _
 
 @[fun_prop]
@@ -234,7 +234,7 @@ theorem hasStrictFDerivAt_natCast
 
 中文:
 定理 hasStrictFDerivAt_natCast
-  条件: [自然数Cast F] (n : 自然数) (x : E)
+  条件: [自然数嵌入 F] (n : 自然数) (x : E)
   证明: hasStrictFDerivAt_const _ _
 
 @[fun_prop]
@@ -257,7 +257,7 @@ theorem hasStrictFDerivAt_intCast
 
 中文:
 定理 hasStrictFDerivAt_intCast
-  条件: [整数Cast F] (z : 整数) (x : E)
+  条件: [整数嵌入 F] (z : 整数) (x : E)
   证明: hasStrictFDerivAt_const _ _
 
 @[fun_prop]
@@ -279,7 +279,7 @@ theorem hasStrictFDerivAt_ofNat
 @[fun_prop]
 
 中文:
-定理 hasStrictFDerivAt_ofNat
+定理 hasStrictFDerivAt_of自然数
   条件: (n : 自然数) [Of自然数 F n] (x : E)
   证明: hasStrictFDerivAt_const _ _
 
@@ -303,7 +303,7 @@ theorem hasFDerivWithinAt_const
 
 中文:
 定理 hasFDerivWithinAt_const
-  条件: (c : F) (x : E) (s : Set E)
+  条件: (c : F) (x : E) (s : 集合 E)
   证明: hasFDerivAtFilter_const _ _
 
 @[fun_prop]
@@ -327,7 +327,7 @@ theorem hasFDerivWithinAt_zero
 
 中文:
 定理 hasFDerivWithinAt_zero
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   证明: hasFDerivWithinAt_const _ _ _
 
 @[fun_prop]
@@ -350,7 +350,7 @@ theorem hasFDerivWithinAt_one
 
 中文:
 定理 hasFDerivWithinAt_one
-  条件: [One F] (x : E) (s : Set E)
+  条件: [幺 F] (x : E) (s : 集合 E)
   证明: hasFDerivWithinAt_const _ _ _
 
 @[fun_prop]
@@ -373,7 +373,7 @@ theorem hasFDerivWithinAt_natCast
 
 中文:
 定理 hasFDerivWithinAt_natCast
-  条件: [自然数Cast F] (n : 自然数) (x : E) (s : Set E)
+  条件: [自然数嵌入 F] (n : 自然数) (x : E) (s : 集合 E)
   证明: hasFDerivWithinAt_const _ _ _
 
 @[fun_prop]
@@ -397,7 +397,7 @@ theorem hasFDerivWithinAt_intCast
 
 中文:
 定理 hasFDerivWithinAt_intCast
-  条件: [整数Cast F] (z : 整数) (x : E) (s : Set E)
+  条件: [整数嵌入 F] (z : 整数) (x : E) (s : 集合 E)
   证明: hasFDerivWithinAt_const _ _ _
 
 @[fun_prop]
@@ -420,8 +420,8 @@ theorem hasFDerivWithinAt_ofNat
 @[fun_prop]
 
 中文:
-定理 hasFDerivWithinAt_ofNat
-  条件: (n : 自然数) [Of自然数 F n] (x : E) (s : Set E)
+定理 hasFDerivWithinAt_of自然数
+  条件: (n : 自然数) [Of自然数 F n] (x : E) (s : 集合 E)
   证明: hasFDerivWithinAt_const _ _ _
 
 @[fun_prop]
@@ -447,7 +447,7 @@ theorem hasFDerivAt_const
 中文:
 定理 hasFDerivAt_const
   条件: (c : F) (x : E)
-  结论: HasFDerivAt (fun _ => c) (0 : E ->L[𝕜] F) x
+  结论: 在点处Fréchet可导 (fun _ => c) (0 : E ->L[𝕜] F) x
   证明: hasFDerivAtFilter_const _ _
 
 @[fun_prop]
@@ -493,7 +493,7 @@ theorem hasFDerivAt_one
 
 中文:
 定理 hasFDerivAt_one
-  条件: [One F] (x : E)
+  条件: [幺 F] (x : E)
   证明: hasFDerivAt_const _ _
 
 @[fun_prop]
@@ -516,7 +516,7 @@ theorem hasFDerivAt_natCast
 
 中文:
 定理 hasFDerivAt_natCast
-  条件: [自然数Cast F] (n : 自然数) (x : E)
+  条件: [自然数嵌入 F] (n : 自然数) (x : E)
   证明: hasFDerivAt_const _ _
 
 @[fun_prop]
@@ -539,7 +539,7 @@ theorem hasFDerivAt_intCast
 
 中文:
 定理 hasFDerivAt_intCast
-  条件: [整数Cast F] (z : 整数) (x : E)
+  条件: [整数嵌入 F] (z : 整数) (x : E)
   证明: hasFDerivAt_const _ _
 
 @[fun_prop]
@@ -561,7 +561,7 @@ theorem hasFDerivAt_ofNat
 @[simp, fun_prop]
 
 中文:
-定理 hasFDerivAt_ofNat
+定理 hasFDerivAt_of自然数
   条件: (n : 自然数) [Of自然数 F n] (x : E)
   证明: hasFDerivAt_const _ _
 
@@ -633,7 +633,7 @@ theorem differentiableAt_one
 
 中文:
 定理 differentiableAt_one
-  条件: [One F] (x : E)
+  条件: [幺 F] (x : E)
   证明: differentiableAt_const _
 
 @[simp, fun_prop]
@@ -656,7 +656,7 @@ theorem differentiableAt_natCast
 
 中文:
 定理 differentiableAt_natCast
-  条件: [自然数Cast F] (n : 自然数) (x : E)
+  条件: [自然数嵌入 F] (n : 自然数) (x : E)
   证明: differentiableAt_const _
 
 @[simp, fun_prop]
@@ -679,7 +679,7 @@ theorem differentiableAt_intCast
 
 中文:
 定理 differentiableAt_intCast
-  条件: [整数Cast F] (z : 整数) (x : E)
+  条件: [整数嵌入 F] (z : 整数) (x : E)
   证明: differentiableAt_const _
 
 @[simp low, fun_prop]
@@ -701,7 +701,7 @@ theorem differentiableAt_ofNat
 @[fun_prop]
 
 中文:
-定理 differentiableAt_ofNat
+定理 differentiableAt_of自然数
   条件: (n : 自然数) [Of自然数 F n] (x : E)
   证明: differentiableAt_const _
 
@@ -771,7 +771,7 @@ theorem differentiableWithinAt_one
 
 中文:
 定理 differentiableWithinAt_one
-  条件: [One F]
+  条件: [幺 F]
   证明: differentiableWithinAt_const _
 
 @[fun_prop]
@@ -794,7 +794,7 @@ theorem differentiableWithinAt_natCast
 
 中文:
 定理 differentiableWithinAt_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   证明: differentiableWithinAt_const _
 
 @[fun_prop]
@@ -817,7 +817,7 @@ theorem differentiableWithinAt_intCast
 
 中文:
 定理 differentiableWithinAt_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   证明: differentiableWithinAt_const _
 
 @[fun_prop]
@@ -837,7 +837,7 @@ theorem differentiableWithinAt_ofNat
   proof: differentiableWithinAt_const _
 
 中文:
-定理 differentiableWithinAt_ofNat
+定理 differentiableWithinAt_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   证明: differentiableWithinAt_const _
 
@@ -920,7 +920,7 @@ theorem fderivWithin_const
 中文:
 定理 fderivWithin_const
   条件: (c : F)
-  结论: fderivWithin 𝕜 (Function.const E c) s = 0
+  结论: fderivWithin 𝕜 (函数.const E c) s = 0
   证明: fderivWithin_fun_const c
 
 @[simp]
@@ -966,7 +966,7 @@ theorem fderivWithin_one
 
 中文:
 定理 fderivWithin_one
-  条件: [One F]
+  条件: [幺 F]
   结论: fderivWithin 𝕜 (1 : E -> F) s = 0
   证明: fderivWithin_const _
 
@@ -990,7 +990,7 @@ theorem fderivWithin_natCast
 
 中文:
 定理 fderivWithin_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: fderivWithin 𝕜 (n : E -> F) s = 0
   证明: fderivWithin_const _
 
@@ -1015,7 +1015,7 @@ theorem fderivWithin_intCast
 
 中文:
 定理 fderivWithin_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: fderivWithin 𝕜 (z : E -> F) s = 0
   证明: fderivWithin_const _
 
@@ -1037,7 +1037,7 @@ theorem fderivWithin_ofNat
   proof: fderivWithin_const _
 
 中文:
-定理 fderivWithin_ofNat
+定理 fderivWithin_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: fderivWithin 𝕜 (of自然数(n) : E -> F) s = 0
   证明: fderivWithin_const _
@@ -1115,7 +1115,7 @@ theorem fderiv_const
 中文:
 定理 fderiv_const
   条件: (c : F)
-  结论: fderiv 𝕜 (Function.const E c) = 0
+  结论: fderiv 𝕜 (函数.const E c) = 0
   证明: fderiv_fun_const c
 
 @[simp]
@@ -1161,7 +1161,7 @@ theorem fderiv_one
 
 中文:
 定理 fderiv_one
-  条件: [One F]
+  条件: [幺 F]
   结论: fderiv 𝕜 (1 : E -> F) = 0
   证明: fderiv_const _
 
@@ -1185,7 +1185,7 @@ theorem fderiv_natCast
 
 中文:
 定理 fderiv_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   结论: fderiv 𝕜 (n : E -> F) = 0
   证明: fderiv_const _
 
@@ -1209,7 +1209,7 @@ theorem fderiv_intCast
 
 中文:
 定理 fderiv_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   结论: fderiv 𝕜 (z : E -> F) = 0
   证明: fderiv_const _
 
@@ -1232,7 +1232,7 @@ theorem fderiv_ofNat
 @[simp, fun_prop]
 
 中文:
-定理 fderiv_ofNat
+定理 fderiv_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   结论: fderiv 𝕜 (of自然数(n) : E -> F) = 0
   证明: fderiv_const _
@@ -1259,7 +1259,7 @@ theorem differentiable_const
 中文:
 定理 differentiable_const
   条件: (c : F)
-  结论: Differentiable 𝕜 fun _ : E => c
+  结论: 可微 𝕜 fun _ : E => c
   证明: fun _ =>
   differentiableAt_const _
 
@@ -1302,7 +1302,7 @@ theorem differentiable_one
 
 中文:
 定理 differentiable_one
-  条件: [One F]
+  条件: [幺 F]
   证明: differentiable_const _
 
 @[simp, fun_prop]
@@ -1325,7 +1325,7 @@ theorem differentiable_natCast
 
 中文:
 定理 differentiable_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   证明: differentiable_const _
 
 @[simp, fun_prop]
@@ -1348,7 +1348,7 @@ theorem differentiable_intCast
 
 中文:
 定理 differentiable_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   证明: differentiable_const _
 
 @[simp low, fun_prop]
@@ -1370,7 +1370,7 @@ theorem differentiable_ofNat
 @[simp, fun_prop]
 
 中文:
-定理 differentiable_ofNat
+定理 differentiable_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   证明: differentiable_const _
 
@@ -1440,7 +1440,7 @@ theorem differentiableOn_one
 
 中文:
 定理 differentiableOn_one
-  条件: [One F]
+  条件: [幺 F]
   证明: differentiableOn_const _
 
 @[simp, fun_prop]
@@ -1463,7 +1463,7 @@ theorem differentiableOn_natCast
 
 中文:
 定理 differentiableOn_natCast
-  条件: [自然数Cast F] (n : 自然数)
+  条件: [自然数嵌入 F] (n : 自然数)
   证明: differentiableOn_const _
 
 @[simp, fun_prop]
@@ -1486,7 +1486,7 @@ theorem differentiableOn_intCast
 
 中文:
 定理 differentiableOn_intCast
-  条件: [整数Cast F] (z : 整数)
+  条件: [整数嵌入 F] (z : 整数)
   证明: differentiableOn_const _
 
 @[simp low, fun_prop]
@@ -1508,7 +1508,7 @@ theorem differentiableOn_ofNat
 @[fun_prop]
 
 中文:
-定理 differentiableOn_ofNat
+定理 differentiableOn_of自然数
   条件: (n : 自然数) [Of自然数 F n]
   证明: differentiableOn_const _
 
@@ -1567,7 +1567,7 @@ theorem hasFDerivWithinAt_of_subsingleton
 
 中文:
 定理 hasFDerivWithinAt_of_subsingleton
-  条件: [h : Subsingleton E] (f : E -> F) (s : Set E) (x : E)
+  条件: [h : 子单例 E] (f : E -> F) (s : 集合 E) (x : E)
   证明: by
   obtain rfl | ⟨a, rfl⟩ := s.eq_empty_or_singleton_of_subsingleton
   · simp
@@ -1598,7 +1598,7 @@ theorem hasFDerivAt_of_subsingleton
 
 中文:
 定理 hasFDerivAt_of_subsingleton
-  条件: [h : Subsingleton E] (f : E -> F) (x : E)
+  条件: [h : 子单例 E] (f : E -> F) (x : E)
   证明: by
   rw [← hasFDerivWithinAt_univ]; rw [subsingleton_univ.eq_singleton_of_mem (mem_univ x)]
   exact hasFDerivWithinAt_singleton f x
@@ -1626,8 +1626,8 @@ theorem differentiable_of_subsingleton
 
 中文:
 定理 differentiable_of_subsingleton
-  条件: [Subsingleton E] {f : E -> F}
-  结论: Differentiable 𝕜 f
+  条件: [子单例 E] {f : E -> F}
+  结论: 可微 𝕜 f
   证明: fun x => (hasFDerivAt_of_subsingleton f x (𝕜 := 𝕜)).differentiableAt
 
 @[nontriviality]
@@ -1650,7 +1650,7 @@ theorem differentiableWithinAt_of_subsingleton
 
 中文:
 定理 differentiableWithinAt_of_subsingleton
-  条件: [Subsingleton E]
+  条件: [子单例 E]
   证明: (differentiable_of_subsingleton x).differentiableWithinAt
 
 @[fun_prop]
@@ -1695,8 +1695,8 @@ theorem Set.Subsingleton.differentiableOn
   proof: hs.induction_on differentiableOn_empty fun _ => differentiableOn_singleton
 
 中文:
-定理 Set.Subsingleton.differentiableOn
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.differentiableOn
+  条件: (hs : s.子单例)
   结论: DifferentiableOn 𝕜 f s
   证明: hs.induction_on differentiableOn_empty fun _ => differentiableOn_singleton
 
@@ -1740,7 +1740,7 @@ lemma differentiableWithinAt_of_fderivWithin_injective
 
 中文:
 引理 differentiableWithinAt_of_fderivWithin_injective
-  条件: (hf : Injective (fderivWithin 𝕜 f s x))
+  条件: (hf : 单射 (fderivWithin 𝕜 f s x))
   证明: by
   nontriviality E
   contrapose hf
@@ -1768,7 +1768,7 @@ lemma differentiableAt_of_fderiv_injective
 
 中文:
 引理 differentiableAt_of_fderiv_injective
-  条件: (hf : Injective (fderiv 𝕜 f x))
+  条件: (hf : 单射 (fderiv 𝕜 f x))
   证明: by
   simp only [← differentiableWithinAt_univ, ← fderivWithin_univ] at hf ⊢
   exact differentiableWithinAt_of_fderivWithin_injective hf
@@ -1852,7 +1852,7 @@ theorem HasFDerivAt.of_notMem_tsupport
   proof: (HasStrictFDerivAt.of_notMem_tsupport 𝕜 h).hasFDerivAt
 
 中文:
-定理 HasFDerivAt.of_notMem_tsupport
+定理 在点处Fréchet可导.of_notMem_tsupport
   条件: (h : x ∉ tsupport f)
   证明: (HasStrictFDerivAt.of_notMem_tsupport 𝕜 h).hasFDerivAt
 
@@ -1872,7 +1872,7 @@ theorem HasFDerivWithinAt.of_notMem_tsupport
 
 中文:
 定理 HasFDerivWithinAt.of_notMem_tsupport
-  条件: {s : Set E} {x : E} (h : x ∉ tsupport f)
+  条件: {s : 集合 E} {x : E} (h : x ∉ tsupport f)
   证明: (HasFDerivAt.of_notMem_tsupport 𝕜 h).hasFDerivWithinAt
 
 Depends on / 依赖: HasFDerivAt, HasFDerivAt.of_notMem_tsupport, hasFDerivWithinAt, of_notMem_tsupport

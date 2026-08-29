@@ -45,8 +45,8 @@ theorem CompactSpace.uniformContinuous_of_continuous
   _ <= 𝓤 β := nhdsSet_diagonal_le_uniformity
 
 中文:
-定理 CompactSpace.uniformContinuous_of_continuous
-  结论: [CompactSpace α] {f : α -> β}
+定理 紧空间.uniformContinuous_of_continuous
+  结论: [紧空间 α] {f : α -> β}
   证明: calc map (Prod.map f f) (𝓤 α)
     = map (Prod.map f f) (𝓝ˢ (diagonal α)) := by rw [nhdsSet_diagonal_eq_uniformity]
   _ <= 𝓝ˢ (diagonal β) := (h.prodMap h).tendsto_nhdsSet mapsTo_prodMap_diagonal
@@ -74,8 +74,8 @@ theorem IsCompact.uniformContinuousOn_of_continuous
   exact CompactSpace.uniformContinuous_of_continuous hf
 
 中文:
-定理 IsCompact.uniformContinuousOn_of_continuous
-  结论: {s : Set α} {f : α -> β} (hs : IsCompact s)
+定理 是紧集.uniformContinuousOn_of_continuous
+  结论: {s : 集合 α} {f : α -> β} (hs : 是紧集 s)
   证明: by
   rw [uniformContinuousOn_iff_restrict]
   rw [isCompact_iff_compactSpace] at hs
@@ -105,8 +105,8 @@ theorem IsCompact.uniformContinuousAt_of_continuousAt
   apply mem_of_superset ((biInter_finset_mem 
 
 中文:
-定理 IsCompact.uniformContinuousAt_of_continuousAt
-  结论: {r : Set (β × β)} {s : Set α}
+定理 是紧集.uniformContinuousAt_of_continuousAt
+  结论: {r : 集合 (β × β)} {s : 集合 α}
   证明: by
   obtain ⟨t, ht, htsymm, htr⟩ := comp_symm_mem_uniformity_sets hr
   choose U hU T hT hb using fun a ha =>
@@ -145,7 +145,7 @@ theorem Continuous.uniformContinuous_of_tendsto_cocompact
 (hs.uniformContinuousAt_of_continuousAt f fun _ _ => 
 
 中文:
-定理 Continuous.uniformContinuous_of_tendsto_cocompact
+定理 连续.uniformContinuous_of_tendsto_cocompact
   结论: {f : α -> β} {x : β}
   证明: uniformContinuous_def.2 fun r hr => by
     obtain ⟨t, ht, htsymm, htr⟩ := comp_symm_mem_uniformity_sets hr
@@ -184,7 +184,7 @@ theorem HasCompactMulSupport.uniformContinuous_of_continuous
 
 中文:
 定理 HasCompactMulSupport.uniformContinuous_of_continuous
-  结论: {f : α -> β} [One β]
+  结论: {f : α -> β} [幺 β]
   证明: h2.uniformContinuous_of_tendsto_cocompact h1.is_one_at_infty
 
 Depends on / 依赖: h1.is_one_at_infty, h2.uniformContinuous_of_tendsto_cocompact, is_one_at_infty, uniformContinuous_of_tendsto_cocompact
@@ -208,7 +208,7 @@ theorem ContinuousOn.tendstoUniformly
 
 中文:
 定理 ContinuousOn.tendstoUniformly
-  结论: [LocallyCompactSpace α] [CompactSpace β] [UniformSpace γ]
+  结论: [局部紧空间 α] [紧空间 β] [一致空间 γ]
   证明: by
   rcases LocallyCompactSpace.local_compact_nhds _ _ hxU with ⟨K, hxK, hKU, hK⟩
   have : UniformContinuousOn ↿f (K ×ˢ univ) :=
@@ -239,8 +239,8 @@ theorem Continuous.tendstoUniformly
   this.tendstoUniformly hxK
 
 中文:
-定理 Continuous.tendstoUniformly
-  结论: [WeaklyLocallyCompactSpace α] [CompactSpace β] [UniformSpace γ]
+定理 连续.tendstoUniformly
+  结论: [WeaklyLocallyCompact空间 α] [紧空间 β] [一致空间 γ]
   证明: let ⟨K, hK, hxK⟩ := exists_compact_mem_nhds x
   have : UniformContinuousOn ↿f (K ×ˢ univ) :=
     IsCompact.uniformContinuousOn_of_continuous (hK.prod isCompact_univ) h.continuousOn
@@ -269,7 +269,7 @@ lemma IsCompact.mem_uniformity_of_prod
     refin
 
 中文:
-引理 IsCompact.mem_uniformity_of_prod
+引理 是紧集.mem_uniformity_of_prod
   证明: by
   apply hk.induction_on (p := fun t => exists v in 𝓝[s] q, forall p in v, forall x in t, (f p x, f q x) in u)
   · exact ⟨univ, univ_mem, by simp⟩
@@ -318,7 +318,7 @@ theorem CompactSpace.uniformEquicontinuous_of_equicontinuous
   exact CompactSpace.uniformContinuous_of_continuous h
 
 中文:
-定理 CompactSpace.uniformEquicontinuous_of_equicontinuous
+定理 紧空间.uniformEquicontinuous_of_equicontinuous
   结论: {ι : 类型} {F : ι -> β -> α}
   证明: by
   rw [equicontinuous_iff_continuous] at h

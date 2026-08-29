@@ -30,7 +30,7 @@ theorem coprime_list_prod_left_iff
 
 中文:
 定理 coprime_list_prod_left_iff
-  条件: {l : List 自然数} {k : 自然数}
+  条件: {l : 列表 自然数} {k : 自然数}
   证明: by
   induction l <;> simp [Nat.coprime_mul_iff_left, *]
 
@@ -51,7 +51,7 @@ theorem coprime_list_prod_right_iff
 
 中文:
 定理 coprime_list_prod_right_iff
-  条件: {k : 自然数} {l : List 自然数}
+  条件: {k : 自然数} {l : 列表 自然数}
   证明: by
   simp_rw [coprime_comm (n := k), coprime_list_prod_left_iff]
 
@@ -114,7 +114,7 @@ theorem coprime_prod_left_iff
 
 中文:
 定理 coprime_prod_left_iff
-  条件: {t : Finset ι} {s : ι -> 自然数} {x : 自然数}
+  条件: {t : 有限集 ι} {s : ι -> 自然数} {x : 自然数}
   证明: by
   simpa using coprime_multiset_prod_left_iff (m := t.val.map s)
 
@@ -135,7 +135,7 @@ theorem coprime_prod_right_iff
 
 中文:
 定理 coprime_prod_right_iff
-  条件: {x : 自然数} {t : Finset ι} {s : ι -> 自然数}
+  条件: {x : 自然数} {t : 有限集 ι} {s : ι -> 自然数}
   证明: by
   simpa using coprime_multiset_prod_right_iff (m := t.val.map s)
 
@@ -162,7 +162,7 @@ theorem coprime_fintype_prod_left_iff
 
 中文:
 定理 coprime_fintype_prod_left_iff
-  条件: [Fintype ι] {s : ι -> 自然数} {x : 自然数}
+  条件: [有限类型 ι] {s : ι -> 自然数} {x : 自然数}
   证明: by
   simp [coprime_prod_left_iff]
 
@@ -183,7 +183,7 @@ theorem coprime_fintype_prod_right_iff
 
 中文:
 定理 coprime_fintype_prod_right_iff
-  条件: [Fintype ι] {x : 自然数} {s : ι -> 自然数}
+  条件: [有限类型 ι] {x : 自然数} {s : ι -> 自然数}
   证明: by
   simp [coprime_prod_right_iff]
 

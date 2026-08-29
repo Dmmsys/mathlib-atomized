@@ -54,7 +54,7 @@ definition formPerm
 
 中文:
 定义 formPerm
-  签名: : Equiv.Perm α
+  签名: : 等价.置换 α
   定义体: (zipWith Equiv.swap l l.tail).prod
 
 @[simp]
@@ -77,7 +77,7 @@ theorem formPerm_nil
 
 中文:
 定理 formPerm_nil
-  结论: formPerm ([] : List α) = 1
+  结论: formPerm ([] : 列表 α) = 1
   证明: rfl
 
 @[simp]
@@ -119,7 +119,7 @@ theorem formPerm_cons_cons
 
 中文:
 定理 formPerm_cons_cons
-  条件: (x y : α) (l : List α)
+  条件: (x y : α) (l : 列表 α)
   证明: rfl
 -/
 theorem formPerm_cons_cons (x y : α) (l : List α) :
@@ -138,7 +138,7 @@ theorem formPerm_pair
 中文:
 定理 formPerm_pair
   条件: (x y : α)
-  结论: formPerm [x, y] = Equiv.swap x y
+  结论: formPerm [x, y] = 等价.swap x y
   证明: rfl
 -/
 theorem formPerm_pair (x y : α) : formPerm [x, y] = Equiv.swap x y :=
@@ -153,7 +153,7 @@ theorem mem_or_mem_of_zipWith_swap_prod_ne
 
 中文:
 定理 mem_or_mem_of_zipWith_swap_prod_ne
-  结论: 对任意 {l l' : List α} {x : α},
+  结论: 对任意 {l l' : 列表 α} {x : α},
 -/
 theorem mem_or_mem_of_zipWith_swap_prod_ne : forall {l l' : List α} {x : α},
     (zipWith Equiv.swap l l').prod x != x -> x in l ∨ x in l'
@@ -177,7 +177,7 @@ theorem zipWith_swap_prod_support'
 
 中文:
 定理 zipWith_swap_prod_support'
-  条件: (l l' : List α)
+  条件: (l l' : 列表 α)
   证明: fun _ h => by
   simpa using mem_or_mem_of_zipWith_swap_prod_ne h
 
@@ -200,7 +200,7 @@ theorem zipWith_swap_prod_support
 
 中文:
 定理 zipWith_swap_prod_support
-  条件: [Fintype α] (l l' : List α)
+  条件: [有限类型 α] (l l' : 列表 α)
   证明: by
   intro x hx
   have hx' : x in { x | (zipWith Equiv.swap l l').prod x != x } := by simpa using hx
@@ -251,7 +251,7 @@ theorem support_formPerm_le
 
 中文:
 定理 support_formPerm_le
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: support (formPerm l) <= l.toFinset
   证明: by
   intro x hx
@@ -433,7 +433,7 @@ theorem formPerm_cons_concat_apply_last
 
 中文:
 定理 formPerm_cons_concat_apply_last
-  条件: (x y : α) (xs : List α)
+  条件: (x y : α) (xs : 列表 α)
   证明: by
   induction xs generalizing x y with
   | nil => simp
@@ -463,7 +463,7 @@ theorem formPerm_apply_getLast
 
 中文:
 定理 formPerm_apply_getLast
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   证明: by
   induction xs using List.reverseRecOn generalizing x <;> simp
 
@@ -487,7 +487,7 @@ theorem formPerm_apply_getElem_length
 
 中文:
 定理 formPerm_apply_getElem_length
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   证明: by
   rw [getElem_cons_length rfl]; rw [formPerm_apply_getLast]
 
@@ -507,7 +507,7 @@ theorem formPerm_apply_head
 
 中文:
 定理 formPerm_apply_head
-  条件: (x y : α) (xs : List α) (h : Nodup (x :: y :: xs))
+  条件: (x y : α) (xs : 列表 α) (h : Nodup (x :: y :: xs))
   证明: by simp [formPerm_apply_of_notMem h.notMem]
 
 Depends on / 依赖: formPerm_apply_of_notMem, h.notMem, notMem
@@ -529,7 +529,7 @@ theorem formPerm_apply_getElem_zero
 
 中文:
 定理 formPerm_apply_getElem_zero
-  条件: (l : List α) (h : Nodup l) (hl : 1 < l.length)
+  条件: (l : 列表 α) (h : Nodup l) (hl : 1 < l.length)
   证明: by
   rcases l with (_ | ⟨x, _ | ⟨y, tl⟩⟩)
   · simp at hl
@@ -584,7 +584,7 @@ theorem formPerm_apply_lt_getElem
 
 中文:
 定理 formPerm_apply_lt_getElem
-  条件: (xs : List α) (h : Nodup xs) (n : 自然数) (hn : n + 1 < xs.length)
+  条件: (xs : 列表 α) (h : Nodup xs) (n : 自然数) (hn : n + 1 < xs.length)
   证明: by
   induction n generalizing xs with
   | zero => simpa using formPerm_apply_getElem_zero _ h _
@@ -634,7 +634,7 @@ theorem formPerm_apply_getElem
 
 中文:
 定理 formPerm_apply_getElem
-  条件: (xs : List α) (w : Nodup xs) (i : 自然数) (h : i < xs.length)
+  条件: (xs : 列表 α) (w : Nodup xs) (i : 自然数) (h : i < xs.length)
   证明: by
   rcases xs with - | ⟨x, xs⟩
   · simp at h
@@ -681,7 +681,7 @@ theorem support_formPerm_of_nodup'
 
 中文:
 定理 support_formPerm_of_nodup'
-  条件: (l : List α) (h : Nodup l) (h' : 对任意 x : α, l != [x])
+  条件: (l : 列表 α) (h : Nodup l) (h' : 对任意 x : α, l != [x])
   证明: by
   apply _root_.le_antisymm
   · exact support_formPerm_le' l
@@ -724,7 +724,7 @@ theorem support_formPerm_of_nodup
 
 中文:
 定理 support_formPerm_of_nodup
-  条件: [Fintype α] (l : List α) (h : Nodup l) (h' : 对任意 x : α, l != [x])
+  条件: [有限类型 α] (l : 列表 α) (h : Nodup l) (h' : 对任意 x : α, l != [x])
   证明: by
   rw [← Finset.coe_inj]
   convert! support_formPerm_of_nodup' _ h h'
@@ -756,7 +756,7 @@ theorem formPerm_rotate_one
 
 中文:
 定理 formPerm_rotate_one
-  条件: (l : List α) (h : Nodup l)
+  条件: (l : 列表 α) (h : Nodup l)
   结论: formPerm (l.rotate 1) = formPerm l
   证明: by
   have h' : Nodup (l.rotate 1) := by simpa using h
@@ -795,7 +795,7 @@ theorem formPerm_rotate
 
 中文:
 定理 formPerm_rotate
-  条件: (l : List α) (h : Nodup l) (n : 自然数)
+  条件: (l : 列表 α) (h : Nodup l) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -827,7 +827,7 @@ theorem formPerm_eq_of_isRotated
 
 中文:
 定理 formPerm_eq_of_isRotated
-  条件: {l l' : List α} (hd : Nodup l) (h : l ~r l')
+  条件: {l l' : 列表 α} (hd : Nodup l) (h : l ~r l')
   证明: by
   obtain ⟨n, rfl⟩ := h
   exact (formPerm_rotate l hd n).symm
@@ -848,7 +848,7 @@ theorem formPerm_append_pair
 
 中文:
 定理 formPerm_append_pair
-  结论: 对任意 (l : List α) (a b : α),
+  结论: 对任意 (l : 列表 α) (a b : α),
 -/
 theorem formPerm_append_pair : forall (l : List α) (a b : α),
     formPerm (l ++ [a, b]) = formPerm (l ++ [a]) * Equiv.swap a b
@@ -866,7 +866,7 @@ theorem formPerm_reverse
 
 中文:
 定理 formPerm_reverse
-  结论: 对任意 l : List α, formPerm l.reverse = (formPerm l)⁻¹
+  结论: 对任意 l : 列表 α, formPerm l.reverse = (formPerm l)⁻¹
 -/
 theorem formPerm_reverse : forall l : List α, formPerm l.reverse = (formPerm l)⁻¹
   | [] => rfl
@@ -889,7 +889,7 @@ theorem formPerm_pow_apply_getElem
 
 中文:
 定理 formPerm_pow_apply_getElem
-  条件: (l : List α) (w : Nodup l) (n : 自然数) (i : 自然数) (h : i < l.length)
+  条件: (l : 列表 α) (w : Nodup l) (n : 自然数) (i : 自然数) (h : i < l.length)
   证明: by
   induction n with
   | zero => simp [Nat.mod_eq_of_lt h]
@@ -920,7 +920,7 @@ theorem formPerm_pow_apply_head
 
 中文:
 定理 formPerm_pow_apply_head
-  条件: (x : α) (l : List α) (h : Nodup (x :: l)) (n : 自然数)
+  条件: (x : α) (l : 列表 α) (h : Nodup (x :: l)) (n : 自然数)
   证明: by
   convert! formPerm_pow_apply_getElem _ h n 0 (Nat.succ_pos _)
   simp
@@ -949,7 +949,7 @@ theorem formPerm_ext_iff
 
 中文:
 定理 formPerm_ext_iff
-  结论: {x y x' y' : α} {l l' : List α} (hd : Nodup (x :: y :: l))
+  结论: {x y x' y' : α} {l l' : 列表 α} (hd : Nodup (x :: y :: l))
   证明: by
   refine ⟨fun h => ?_, fun hr => formPerm_eq_of_isRotated hd hr⟩
   rw [Equiv.Perm.ext_iff] at h
@@ -1125,7 +1125,7 @@ theorem formPerm_eq_formPerm_iff
 
 中文:
 定理 formPerm_eq_formPerm_iff
-  条件: {l l' : List α} (hl : l.Nodup) (hl' : l'.Nodup)
+  条件: {l l' : 列表 α} (hl : l.Nodup) (hl' : l'.Nodup)
   证明: by
   rcases l with (_ | ⟨x, _ | ⟨y, l⟩⟩)
   · suffices l'.length <= 1 ↔ l' = nil ∨ l'.length <= 1 by
@@ -1174,7 +1174,7 @@ theorem form_perm_zpow_apply_mem_imp_mem
 
 中文:
 定理 form_perm_zpow_apply_mem_imp_mem
-  条件: (l : List α) (x : α) (hx : x in l) (n : 整数)
+  条件: (l : 列表 α) (x : α) (hx : x in l) (n : 整数)
   证明: by
   by_cases h : (l.formPerm ^ n) x = x
   · simpa [h] using hx

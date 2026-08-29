@@ -42,7 +42,7 @@ lemma finite_of_span_finite_eq_top_finsupp
 
 中文:
 引理 finite_of_span_finite_eq_top_finsupp
-  结论: [Nontrivial M] {ι : 类型} {s : Set (ι ->₀ M)}
+  结论: [非平凡 M] {ι : 类型} {s : 集合 (ι ->₀ M)}
   证明: suffices ⋃ i in s, i.support = .univ from
     .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
   have ⟨x, hx⟩ := exists_ne (0 : M)
@@ -84,7 +84,7 @@ lemma basis_finite_of_finite_spans
 
 中文:
 引理 basis_finite_of_finite_spans
-  结论: [Nontrivial R] {s : Set M} (hs : s.Finite)
+  结论: [非平凡 R] {s : 集合 M} (hs : s.有限)
   证明: by
   have := congr(($hsspan).map b.repr.toLinearMap)
   rw [← span_image]; rw [Submodule.map_top]; rw [LinearEquiv.range] at this
@@ -123,7 +123,7 @@ theorem union_support_maximal_linearIndependent_eq_range_basis
 
 中文:
 定理 union_support_maximal_linearIndependent_eq_range_basis
-  结论: {ι : Type w} (b : Basis ι R M)
+  结论: {ι : 类型 w} (b : 基 ι R M)
   证明: by
   -- If that's not the case,
   by_contra h
@@ -187,7 +187,7 @@ theorem infinite_basis_le_maximal_linearIndependent'
 
 中文:
 定理 infinite_basis_le_maximal_linearIndependent'
-  结论: {ι : Type w} (b : Basis ι R M) [Infinite ι]
+  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι]
   证明: by
   let Φ := fun k : κ => (b.repr (v k)).support
   have w₁ : #ι <= #(Set.range Φ) := by
@@ -219,7 +219,7 @@ theorem infinite_basis_le_maximal_linearIndependent
 
 中文:
 定理 infinite_basis_le_maximal_linearIndependent
-  结论: {ι : Type w} (b : Basis ι R M) [Infinite ι]
+  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι]
   证明: Cardinal.lift_le.mp (infinite_basis_le_maximal_linearIndependent' b v i m)
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le.mp, infinite_basis_le_maximal_linearIndependent, lift_le

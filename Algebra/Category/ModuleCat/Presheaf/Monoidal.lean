@@ -109,7 +109,7 @@ definition tensorObj
 
 中文:
 定义 tensorObj
-  签名: : PresheafOfModules (R ⋙ forget₂ _ _) where
+  签名: : 预模层 (R ⋙ forget₂ _ _) where
   定义体: M₁.obj X otimes M₂.obj X
   map f := tensorObjMap M₁ M₂ f
   map_id X := ModuleCat.MonoidalCategory.tensor_ext (by
@@ -406,7 +406,7 @@ lemma whiskerRight_app
 
 中文:
 引理 whiskerRight_app
-  条件: (f : M₁ ⟶ M₂) (M₃ : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) (X : Cᵒᵖ)
+  条件: (f : M₁ ⟶ M₂) (M₃ : 预模层.{u} (R ⋙ forget₂ _ _)) (X : Cᵒᵖ)
   证明: rfl
 
 Depends on / 依赖: ModuleCat, R.obj, f.app

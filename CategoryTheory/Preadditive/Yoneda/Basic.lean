@@ -95,7 +95,7 @@ definition preadditiveYoneda
 
 中文:
 定义 preadditiveYoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ AddCommGrpCat.{v} where
+  签名: : C ⥤ Cᵒᵖ ⥤ 加法交换群范畴.{v} where
   定义体: preadditiveYonedaObj Y ⋙ forget₂ _ _
   map f :=
     { app := fun _ => AddCommGrpCat.ofHom
@@ -172,7 +172,7 @@ AddCommGrpCat.ext fun _ => Eq.sym
 
 中文:
 定义 preadditiveCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ AddCommGrpCat.{v} where
+  签名: : Cᵒᵖ ⥤ C ⥤ 加法交换群范畴.{v} where
   定义体: preadditiveCoyonedaObj (unop X) ⋙ forget₂ _ _
   map f :=
     { app := fun _ => AddCommGrpCat.ofHom
@@ -306,7 +306,7 @@ instance full_preadditiveYoneda
 
 中文:
 实例 full_preadditiveYoneda
-  签名: : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ AddCommGrpCat).Full
+  签名: : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ 加法交换群范畴).满
   定义体: let _ : Functor.Full (preadditiveYoneda ⋙
       (whiskeringRight Cᵒᵖ AddCommGrpCat (Type v)).obj (forget AddCommGrpCat)) :=
     Yoneda.yoneda_full
@@ -337,7 +337,7 @@ instance full_preadditiveCoyoneda
 
 中文:
 实例 full_preadditiveCoyoneda
-  签名: : (preadditiveCoyoneda : Cᵒᵖ ⥤ C ⥤ AddCommGrpCat).Full
+  签名: : (preadditiveCoyoneda : Cᵒᵖ ⥤ C ⥤ 加法交换群范畴).满
   定义体: let _ : Functor.Full (preadditiveCoyoneda ⋙
       (whiskeringRight C AddCommGrpCat (Type v)).obj (forget AddCommGrpCat)) :=
     Coyoneda.coyoneda_full
@@ -363,7 +363,7 @@ instance faithful_preadditiveYoneda
 
 中文:
 实例 faithful_preadditiveYoneda
-  签名: : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ AddCommGrpCat).Faithful
+  签名: : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ 加法交换群范畴).忠实
   定义体: Functor.Faithful.of_comp_eq whiskering_preadditiveYoneda
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_eq, of_comp_eq, whiskering_preadditiveYoneda
@@ -430,8 +430,8 @@ definition _root_.AddCommGrpCat.preadditiveCoyonedaIso
   body: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => AddCommGrpCat.homAddEquiv.toAddCommGrpIso
 
 中文:
-定义 _root_.AddCommGrpCat.preadditiveCoyonedaIso
-  签名: : preadditiveCoyoneda ≅ AddCommGrpCat.coyoneda
+定义 _root_.加法交换群范畴.preadditiveCoyonedaIso
+  签名: : preadditiveCoyoneda ≅ 加法交换群范畴.coyoneda
   定义体: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => AddCommGrpCat.homAddEquiv.toAddCommGrpIso
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.homAddEquiv.toAddCommGrpIso, NatIso, NatIso.ofComponents, homAddEquiv, ofComponents, toAddCommGrpIso

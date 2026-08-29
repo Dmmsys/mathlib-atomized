@@ -66,12 +66,12 @@ structure Partition
     - independent : forall s in parts, IsAntichain G.Adj s
 
 中文:
-结构 Partition
+结构 分拆
   参数: where
   公理与运算 (3 个):
-    - parts : Set (Set V)
-    - isPartition : Setoid.IsPartition parts
-    - independent : 对任意 s in parts, IsAntichain G.Adj s
+    - parts : 集合 (集合 V)
+    - isPartition : 集合等价关系.IsPartition parts
+    - independent : 对任意 s in parts, IsAntichain G.伴随 s
 -/
 structure Partition where
   /-- A set of subsets of the vertices `V` of `G`. -/
@@ -90,8 +90,8 @@ definition Partition.PartsCardLe
   body: exists h : P.parts.Finite, h.toFinset.card <= n
 
 中文:
-定义 Partition.PartsCardLe
-  签名: {G : SimpleGraph V} (P : G.Partition) (n : 自然数)
+定义 分拆.PartsCardLe
+  签名: {G : 简单图 V} (P : G.分拆) (n : 自然数)
   定义体: exists h : P.parts.Finite, h.toFinset.card <= n
 
 Depends on / 依赖: Finite, P.parts.Finite, h.toFinset.card, toFinset
@@ -205,7 +205,7 @@ theorem partOfVertex_ne_of_adj
 
 中文:
 定理 partOfVertex_ne_of_adj
-  条件: {v w : V} (h : G.Adj v w)
+  条件: {v w : V} (h : G.伴随 v w)
   结论: P.partOfVertex v != P.partOfVertex w
   证明: by
   intro hn
@@ -235,7 +235,7 @@ definition toColoring
 
 中文:
 定义 toColoring
-  签名: : G.Coloring P.parts
+  签名: : G.染色 P.parts
   定义体: Coloring.mk (fun v => ⟨P.partOfVertex v, P.partOfVertex_mem v⟩) fun hvw => by
     rw [Ne]; rw [Subtype.mk_eq_mk]
     exact P.partOfVertex_ne_of_adj hvw
@@ -259,7 +259,7 @@ definition toColoring'
 
 中文:
 定义 toColoring'
-  签名: : G.Coloring (Set V)
+  签名: : G.染色 (集合 V)
   定义体: Coloring.mk P.partOfVertex fun hvw => P.partOfVertex_ne_of_adj hvw
 
 Depends on / 依赖: Coloring, Coloring.mk, P.partOfVertex, P.partOfVertex_ne_of_adj, partOfVertex, partOfVertex_ne_of_adj
@@ -278,8 +278,8 @@ theorem colorable
 
 中文:
 定理 colorable
-  条件: [Fintype P.parts]
-  结论: G.Colorable (Fintype.card P.parts)
+  条件: [有限类型 P.parts]
+  结论: G.Colorable (有限类型.card P.parts)
   证明: P.toColoring.colorable
 
 Depends on / 依赖: P.toColoring.colorable, colorable, toColoring
@@ -306,8 +306,8 @@ definition Coloring.toPartition
     apply C.isIndepSet_colorClass
 
 中文:
-定义 Coloring.toPartition
-  签名: {α : 类型v} (C : G.Coloring α)
+定义 染色.toPartition
+  签名: {α : 类型v} (C : G.染色 α)
   定义体: C.colorClasses
   isPartition := C.colorClasses_isPartition
   independent := by
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Partition G)
+  签名: 可居 (分拆 G)
   定义体: ⟨G.selfColoring.toPartition⟩
 
 Depends on / 依赖: G.selfColoring.toPartition, selfColoring, toPartition

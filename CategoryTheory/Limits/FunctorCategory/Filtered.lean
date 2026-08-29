@@ -32,8 +32,8 @@ instance [HasFilteredColimitsOfSize.{w',
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasFilteredColimitsOfSize.{w',
-  签名: w} C] : HasFilteredColimitsOfSize.{w', w} (K ⥤ C)
+实例 [有FilteredColimitsOfSize.{w',
+  签名: w} C] : 有FilteredColimitsOfSize.{w', w} (K ⥤ C)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasFilteredColimitsOfSize.{w', w} C] : HasFilteredColimitsOfSize.{w', w} (K ⥤ C) :=
@@ -48,8 +48,8 @@ instance [HasCofilteredLimitsOfSize.{w',
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasCofilteredLimitsOfSize.{w',
-  签名: w} C] : HasCofilteredLimitsOfSize.{w', w} (K ⥤ C)
+实例 [有余filteredLimitsOfSize.{w',
+  签名: w} C] : 有余filteredLimitsOfSize.{w', w} (K ⥤ C)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasCofilteredLimitsOfSize.{w', w} C] : HasCofilteredLimitsOfSize.{w', w} (K ⥤ C) :=

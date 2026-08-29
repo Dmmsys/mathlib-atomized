@@ -45,7 +45,7 @@ lemma isCardinalPresentable
 
 中文:
 引理 isCardinalPresentable
-  条件: (hX : HasCardinalLT X κ) [Fact κ.IsRegular]
+  条件: (hX : HasCardinalLT X κ) [Fact κ.是正则]
   证明: ⟨fun {F} => ⟨fun {c} hc => ⟨by
       have := isFiltered_of_isCardinalFiltered J κ
       refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f g h => ?_)
@@ -92,7 +92,7 @@ abbreviation Set
   body: { A : Set X // HasCardinalLT A κ }
 
 中文:
-缩写 Set
+缩写 集合
   定义体: { A : Set X // HasCardinalLT A κ }
 -/
 protected abbrev Set := { A : Set X // HasCardinalLT A κ }
@@ -113,7 +113,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: κ.IsRegular] :
+  签名: κ.是正则] :
   定义体: isCardinalFiltered_preorder _ _
     (fun ι A hι => ⟨⟨⋃ (i : ι), (A i).val,
       hasCardinalLT_iUnion _
@@ -140,7 +140,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: κ.IsRegular] :
+  签名: κ.是正则] :
   定义体: isFiltered_of_isCardinalFiltered _ κ
 
 Depends on / 依赖: isFiltered_of_isCardinalFiltered
@@ -164,7 +164,7 @@ lemma isFiltered_of_aleph0_le
 
 中文:
 引理 isFiltered_of_aleph0_le
-  条件: (hκ : Cardinal.aleph0 <= κ)
+  条件: (hκ : 基数.aleph0 <= κ)
   证明: ⟨⟨∅, hasCardinalLT_of_finite _ _ hκ⟩⟩
   toIsFilteredOrEmpty := by
     have : IsDirectedOrder (HasCardinalLT.Set X κ) :=
@@ -196,7 +196,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : HasCardinalLT.Set X κ ⥤ 类型u
+  签名: : HasCardinalLT.集合 X κ ⥤ 类型u
   定义体: Monotone.functor (f := Subtype.val) (by tauto) ⋙ Set.functorToTypes (X := X)
 
 Depends on / 依赖: Monotone, Monotone.functor, Set.functorToTypes, Subtype, Subtype.val, functor, functorToTypes
@@ -217,7 +217,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone (Set.functor X κ) where
+  签名: : 余锥 (集合.functor X κ) where
   定义体: X
   ι.app _ := ↾(Subtype.val)
 -/
@@ -286,7 +286,7 @@ lemma isCardinalPresentable_iff
 
 中文:
 引理 isCardinalPresentable_iff
-  条件: (κ : Cardinal.{u}) [Fact κ.IsRegular]
+  条件: (κ : 基数.{u}) [Fact κ.是正则]
   证明: by
   refine ⟨fun _ => ?_, fun hX => hX.isCardinalPresentable⟩
   have := preservesColimitsOfShape_of_isCardinalPresentable X κ
@@ -374,7 +374,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallyPresentable.{u} (类型u)
+  签名: 是LocallyPresentable.{u} (类型u)
   定义体: ⟨_, Cardinal.fact_isRegular_aleph0, inferInstance⟩
 
 Depends on / 依赖: Cardinal, Cardinal.fact_isRegular_aleph0, fact_isRegular_aleph0

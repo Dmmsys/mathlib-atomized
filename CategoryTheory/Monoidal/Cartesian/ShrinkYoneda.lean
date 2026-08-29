@@ -75,7 +75,7 @@ definition shrinkYonedaMonObjObjEquiv
 
 中文:
 定义 shrinkYonedaMonObjObjEquiv
-  签名: {M : Mon C} {Y : Cᵒᵖ}
+  签名: {M : 幺半群 C} {Y : Cᵒᵖ}
   定义体: Shrink.mulEquiv
 
 Depends on / 依赖: Shrink, Shrink.mulEquiv, mulEquiv
@@ -117,7 +117,7 @@ lemma shrinkYonedaMonObjObjEquiv_symm_comp
 
 中文:
 引理 shrinkYonedaMonObjObjEquiv_symm_comp
-  条件: {M : Mon C} {Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ M.X)
+  条件: {M : 幺半群 C} {Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ M.X)
   证明: (shrinkYonedaMon_obj_map_shrinkYonedaMonObjObjEquiv_symm g.op f).symm
 
 Depends on / 依赖: g.op, shrinkYonedaMon_obj_map_shrinkYonedaMonObjObjEquiv_symm
@@ -186,7 +186,7 @@ definition shrinkYonedaGrpObjObjEquiv
 
 中文:
 定义 shrinkYonedaGrpObjObjEquiv
-  签名: {M : Grp C} {Y : Cᵒᵖ}
+  签名: {M : 群 C} {Y : Cᵒᵖ}
   定义体: Shrink.mulEquiv
 
 Depends on / 依赖: Shrink, Shrink.mulEquiv, mulEquiv
@@ -228,7 +228,7 @@ lemma shrinkYonedaGrpObjObjEquiv_symm_comp
 
 中文:
 引理 shrinkYonedaGrpObjObjEquiv_symm_comp
-  条件: {M : Grp C} {Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ M.X)
+  条件: {M : 群 C} {Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ M.X)
   证明: (shrinkYonedaGrp_obj_map_shrinkYonedaGrpObjObjEquiv_symm g.op f).symm
 
 Depends on / 依赖: g.op, shrinkYonedaGrp_obj_map_shrinkYonedaGrpObjObjEquiv_symm

@@ -38,8 +38,8 @@ lemma LinearMap.isSymm_iff_basis
       (by simp : y in Submodu
 
 中文:
-引理 LinearMap.isSymm_iff_basis
-  条件: {ι : 类型} (b : Basis ι R M)
+引理 线性映射.isSymm_iff_basis
+  条件: {ι : 类型} (b : 基 ι R M)
   证明: h.eq _ _
   mpr := by
     refine fun h => ⟨fun x y => ?_⟩
@@ -80,8 +80,8 @@ lemma LinearMap.isSymm_iff_isHermitian_toMatrix
   simp [Eq.comm]
 
 中文:
-引理 LinearMap.isSymm_iff_isHermitian_toMatrix
-  结论: B.IsSymm ↔ (toMatrix₂ b b B).IsHermitian
+引理 线性映射.isSymm_iff_isHermitian_toMatrix
+  结论: B.是Symm ↔ (toMatrix₂ b b B).IsHermitian
   证明: by
   rw [isSymm_iff_basis b]; rw [Matrix.IsHermitian.ext_iff]; rw [forall_comm]
   simp [Eq.comm]
@@ -145,7 +145,7 @@ lemma LinearMap.isPosSemidef_iff_posSemidef_toMatrix
   
 
 中文:
-引理 LinearMap.isPosSemidef_iff_posSemidef_toMatrix
+引理 线性映射.isPosSemidef_iff_posSemidef_toMatrix
   证明: by
   rw [isPosSemidef_def]; rw [Matrix.posSemidef_iff_dotProduct_mulVec]
   apply and_congr (B.isSymm_iff_isHermitian_toMatrix b)

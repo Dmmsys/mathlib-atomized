@@ -62,7 +62,7 @@ theorem of_isSeparable_aux
 
 中文:
 定理 of_isSeparable_aux
-  条件: [Algebra.IsSeparable K L] [EssFiniteType K L]
+  条件: [代数.是可分 K L] [EssFiniteType K L]
   证明: by
   -- We already know that for field extensions
   -- IsSeparable + EssFiniteType => FormallyUnramified + Finite
@@ -126,8 +126,8 @@ lemma of_isSeparable
 
 中文:
 引理 of_isSeparable
-  条件: [Algebra.IsSeparable K L]
-  结论: FormallyEtale K L
+  条件: [代数.是可分 K L]
+  结论: 形式平展 K L
   证明: by
   -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`.
   refine FormallyEtale.iff_comp_bijective.mpr fun B _ _ I h => ?_
@@ -229,7 +229,7 @@ instance [EssFiniteType
 
 中文:
 实例 [EssFiniteType
-  签名: K A] [FormallyEtale K A] (p
+  签名: K A] [形式平展 K A] (p
   定义体: by
   have := Algebra.FormallyUnramified.finite_of_free K A
   have : IsArtinianRing A := isArtinian_of_tower K inferInstance
@@ -269,7 +269,7 @@ lemma of_formallyUnramified_of_field
 
 中文:
 引理 of_formallyUnramified_of_field
-  条件: [EssFiniteType K A] [FormallyUnramified K A]
+  条件: [EssFiniteType K A] [形式非分歧 K A]
   证明: by
   have := FormallyUnramified.isReduced_of_field K A
   have : IsArtinianRing A := .of_finite K A
@@ -326,7 +326,7 @@ theorem iff_exists_algEquiv_prod
     let v (i : MaximalSpectrum A) : A := (IsArtinianRing.equivPi A).symm (Pi.single i 1)
 
 中文:
-定理 iff_exists_algEquiv_prod
+定理 iff_存在_algEquiv_prod
   条件: [EssFiniteType K A]
   证明: by
   classical
@@ -376,7 +376,7 @@ definition equivPiOfIsSepClosed
 
 中文:
 定义 equivPiOfIsSepClosed
-  签名: [EssFiniteType K A] [FormallyEtale K A] [IsSepClosed K]
+  签名: [EssFiniteType K A] [形式平展 K A] [是SepClosed K]
   定义体: haveI := Algebra.FormallyUnramified.finite_of_free K A
   haveI : IsArtinianRing A := isArtinian_of_tower K inferInstance
   haveI := FormallyUnramified.isReduced_of_field K A
@@ -417,7 +417,7 @@ lemma equivPiOfIsSepClosed_self_apply
 
 中文:
 引理 equivPiOfIsSepClosed_self_apply
-  条件: [IsSepClosed K] (x : K) (p : PrimeSpectrum K)
+  条件: [是SepClosed K] (x : K) (p : 素谱 K)
   证明: by
   let := Ideal.Quotient.field p.asIdeal
   dsimp [equivPiOfIsSepClosed]
@@ -457,7 +457,7 @@ lemma equivPiOfIsSepClosed_comap
 
 中文:
 引理 equivPiOfIsSepClosed_comap
-  结论: {B : 类型} [CommRing B] [EssFiniteType K A] [FormallyEtale K A]
+  结论: {B : 类型} [交换环 B] [EssFiniteType K A] [形式平展 K A]
   证明: by
   dsimp [equivPiOfIsSepClosed]
   simp only [Equiv.piCongrLeft_symm_apply, AlgEquiv.piCongrRight_apply,
@@ -502,7 +502,7 @@ theorem Algebra.Etale.iff_exists_algEquiv_prod
       ((Function.surjectiv
 
 中文:
-定理 Algebra.Etale.iff_exists_algEquiv_prod
+定理 代数.平展.iff_存在_algEquiv_prod
   证明: by
   constructor
   · intro H

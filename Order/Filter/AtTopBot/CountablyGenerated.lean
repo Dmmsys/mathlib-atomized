@@ -49,7 +49,7 @@ instance instIsCountablyGeneratedAtTopProd
 
 中文:
 实例 instIsCountablyGeneratedAtTopProd
-  签名: [Preorder α] [IsCountablyGenerated (atTop : Filter α)]
+  签名: [预序 α] [是余untablyGenerated (atTop : 滤子 α)]
   定义体: by
   rw [← prod_atTop_atTop_eq]
   infer_instance
@@ -74,7 +74,7 @@ instance instIsCountablyGeneratedAtBotProd
 
 中文:
 实例 instIsCountablyGeneratedAtBotProd
-  签名: [Preorder α] [IsCountablyGenerated (atBot : Filter α)]
+  签名: [预序 α] [是余untablyGenerated (atBot : 滤子 α)]
   定义体: by
   rw [← prod_atBot_atBot_eq]
   infer_instance
@@ -97,7 +97,7 @@ instance _root_.OrderDual.instIsCountablyGeneratedAtTop
 
 中文:
 实例 _root_.OrderDual.instIsCountablyGeneratedAtTop
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ‹_›
 -/
 instance _root_.OrderDual.instIsCountablyGeneratedAtTop [Preorder α]
@@ -113,7 +113,7 @@ instance _root_.OrderDual.instIsCountablyGeneratedAtBot
 
 中文:
 实例 _root_.OrderDual.instIsCountablyGeneratedAtBot
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ‹_›
 -/
 instance _root_.OrderDual.instIsCountablyGeneratedAtBot [Preorder α]
@@ -129,7 +129,7 @@ lemma atTop_countable_basis
 
 中文:
 引理 atTop_countable_basis
-  条件: [Preorder α] [IsDirectedOrder α] [Nonempty α] [Countable α]
+  条件: [预序 α] [IsDirectedOrder α] [非空 α] [可数 α]
   证明: { atTop_basis with countable := to_countable _ }
 
 Depends on / 依赖: atTop_basis, countable, to_countable
@@ -148,7 +148,7 @@ lemma atBot_countable_basis
 
 中文:
 引理 atBot_countable_basis
-  条件: [Preorder α] [IsCodirectedOrder α] [Nonempty α] [Countable α]
+  条件: [预序 α] [IsCodirectedOrder α] [非空 α] [可数 α]
   证明: { atBot_basis with countable := to_countable _ }
 
 Depends on / 依赖: atBot_basis, countable, to_countable
@@ -169,8 +169,8 @@ theorem exists_seq_tendsto
   exact ⟨x, h.tendsto hx⟩
 
 中文:
-定理 exists_seq_tendsto
-  条件: (f : Filter α) [IsCountablyGenerated f] [NeBot f]
+定理 存在_seq_tendsto
+  条件: (f : 滤子 α) [是余untablyGenerated f] [NeBot f]
   证明: by
   obtain ⟨B, h⟩ := f.exists_antitone_basis
   choose x hx using fun n => Filter.nonempty_of_mem (h.mem n)
@@ -198,8 +198,8 @@ theorem exists_seq_monotone_tendsto_atTop_atTop
   refine ⟨xs, ?_
 
 中文:
-定理 exists_seq_monotone_tendsto_atTop_atTop
-  结论: (α : 类型) [Preorder α] [Nonempty α]
+定理 存在_seq_monotone_tendsto_atTop_atTop
+  结论: (α : 类型) [预序 α] [非空 α]
   证明: by
   obtain ⟨ys, h⟩ := exists_seq_tendsto (atTop : Filter α)
   choose c hleft hright using exists_ge_ge (α := α)
@@ -233,8 +233,8 @@ theorem exists_seq_antitone_tendsto_atTop_atBot
   proof: exists_seq_monotone_tendsto_atTop_atTop αᵒᵈ
 
 中文:
-定理 exists_seq_antitone_tendsto_atTop_atBot
-  结论: (α : 类型) [Preorder α] [Nonempty α]
+定理 存在_seq_antitone_tendsto_atTop_atBot
+  结论: (α : 类型) [预序 α] [非空 α]
   证明: exists_seq_monotone_tendsto_atTop_atTop αᵒᵈ
 
 Depends on / 依赖: exists_seq_monotone_tendsto_atTop_atTop
@@ -261,7 +261,7 @@ theorem tendsto_iff_seq_tendsto
 
 中文:
 定理 tendsto_iff_seq_tendsto
-  条件: {f : α -> β} {k : Filter α} {l : Filter β} [k.IsCountablyGenerated]
+  条件: {f : α -> β} {k : 滤子 α} {l : 滤子 β} [k.是余untablyGenerated]
   证明: by
   refine ⟨fun h x hx => h.comp hx, fun H s hs => ?_⟩
   contrapose! H
@@ -294,7 +294,7 @@ theorem tendsto_of_seq_tendsto
 
 中文:
 定理 tendsto_of_seq_tendsto
-  条件: {f : α -> β} {k : Filter α} {l : Filter β} [k.IsCountablyGenerated]
+  条件: {f : α -> β} {k : 滤子 α} {l : 滤子 β} [k.是余untablyGenerated]
   证明: tendsto_iff_seq_tendsto.2
 
 Depends on / 依赖: tendsto_iff_seq_tendsto
@@ -314,7 +314,7 @@ theorem eventually_iff_seq_eventually
 
 中文:
 定理 eventually_iff_seq_eventually
-  结论: {ι : 类型} {l : Filter ι} {p : ι -> 命题}
+  结论: {ι : 类型} {l : 滤子 ι} {p : ι -> 命题}
   证明: by
   simpa using tendsto_iff_seq_tendsto (f := id) (l := 𝓟 {x | p x})
 
@@ -337,7 +337,7 @@ theorem frequently_iff_seq_frequently
 
 中文:
 定理 frequently_iff_seq_frequently
-  结论: {ι : 类型} {l : Filter ι} {p : ι -> 命题}
+  结论: {ι : 类型} {l : 滤子 ι} {p : ι -> 命题}
   证明: by
   simp only [Filter.Frequently, eventually_iff_seq_eventually (l := l)]
   push Not; rfl
@@ -363,8 +363,8 @@ theorem exists_seq_forall_of_frequently
   exact ⟨x ∘ n_to_n, h_tendsto, h_freq⟩
 
 中文:
-定理 exists_seq_forall_of_frequently
-  结论: {ι : 类型} {l : Filter ι} {p : ι -> 命题}
+定理 存在_seq_对任意_of_frequently
+  结论: {ι : 类型} {l : 滤子 ι} {p : ι -> 命题}
   证明: by
   rw [frequently_iff_seq_frequently] at h
   obtain ⟨x, hx_tendsto, hx_freq⟩ := h
@@ -391,8 +391,8 @@ lemma frequently_iff_seq_forall
 hnsl.frequently Frequently.of_forall hpns⟩
 
 中文:
-引理 frequently_iff_seq_forall
-  结论: {ι : 类型} {l : Filter ι} {p : ι -> 命题}
+引理 frequently_iff_seq_对任意
+  结论: {ι : 类型} {l : 滤子 ι} {p : ι -> 命题}
   证明: ⟨exists_seq_forall_of_frequently, fun ⟨_ns, hnsl, hpns⟩ =>
 hnsl.frequently Frequently.of_forall hpns⟩
 
@@ -420,7 +420,7 @@ theorem tendsto_of_subseq_tendsto
 
 中文:
 定理 tendsto_of_subseq_tendsto
-  结论: {ι : 类型} {x : ι -> α} {f : Filter α} {l : Filter ι}
+  结论: {ι : 类型} {x : ι -> α} {f : 滤子 α} {l : 滤子 ι}
   证明: by
   contrapose! hxy
   obtain ⟨s, hs, hfreq⟩ : exists s in f, existsᶠ n in l, x n ∉ s := by
@@ -456,8 +456,8 @@ theorem exists_seq_comp_tendsto
   exact ⟨θ, (tendsto_inf.1 hθ).2, tendsto_comap_iff.1 (tendsto_inf.1 hθ).1⟩
 
 中文:
-定理 exists_seq_comp_tendsto
-  结论: {ι : 类型} {g : Filter ι} [IsCountablyGenerated g] {u : ι -> α}
+定理 存在_seq_comp_tendsto
+  结论: {ι : 类型} {g : 滤子 ι} [是余untablyGenerated g] {u : ι -> α}
   证明: by
   rw [← Filter.push_pull']; rw [map_neBot_iff] at hx
   obtain ⟨θ, hθ⟩ := exists_seq_tendsto (comap u f ⊓ g)
@@ -486,7 +486,7 @@ theorem subseq_tendsto_of_neBot
 
 中文:
 定理 subseq_tendsto_of_neBot
-  结论: {f : Filter α} [IsCountablyGenerated f] {u : 自然数 -> α}
+  结论: {f : 滤子 α} [是余untablyGenerated f] {u : 自然数 -> α}
   证明: by
   obtain ⟨φ, hφ⟩ := exists_seq_comp_tendsto hx
   obtain ⟨ψ, hψ, hψφ⟩ : exists ψ : Nat -> Nat, StrictMono ψ ∧ StrictMono (φ ∘ ψ) :=

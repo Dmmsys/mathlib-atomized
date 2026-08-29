@@ -29,7 +29,7 @@ theorem isUnit_iff_abs_eq
 中文:
 定理 isUnit_iff_abs_eq
   条件: {x : 整数}
-  结论: IsUnit x ↔ abs x = 1
+  结论: 是单位 x ↔ abs x = 1
   证明: by
   rw [isUnit_iff_natAbs_eq]; rw [abs_eq_natAbs]; rw [← Int.ofNat_one]; rw [natCast_inj]
 
@@ -51,7 +51,7 @@ theorem isUnit_sq
 
 中文:
 定理 isUnit_sq
-  条件: {a : 整数} (ha : IsUnit a)
+  条件: {a : 整数} (ha : 是单位 a)
   结论: a ^ 2 = 1
   证明: by rw [sq, isUnit_mul_self ha]
 

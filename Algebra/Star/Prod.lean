@@ -34,8 +34,8 @@ instance [Star
   body: Prod.ext (star_trivial _) (star_trivial _)
 
 中文:
-实例 [Star
-  签名: R] [Star S] [TrivialStar R] [TrivialStar S] : TrivialStar (R × S) where
+实例 [对合
+  签名: R] [对合 S] [TrivialStar R] [TrivialStar S] : TrivialStar (R × S) where
   定义体: Prod.ext (star_trivial _) (star_trivial _)
 
 Depends on / 依赖: Prod.ext, star_trivial
@@ -70,8 +70,8 @@ instance [Mul
   body: Prod.ext (star_mul _ _) (star_mul _ _)
 
 中文:
-实例 [Mul
-  签名: R] [Mul S] [StarMul R] [StarMul S] : StarMul (R × S) where
+实例 [乘法
+  签名: R] [乘法 S] [StarMul R] [StarMul S] : StarMul (R × S) where
   定义体: Prod.ext (star_mul _ _) (star_mul _ _)
 
 Depends on / 依赖: Prod.ext, star_mul
@@ -88,8 +88,8 @@ instance [AddMonoid
   body: Prod.ext (star_add _ _) (star_add _ _)
 
 中文:
-实例 [AddMonoid
-  签名: R] [AddMonoid S] [StarAddMonoid R] [StarAddMonoid S] :
+实例 [加法幺半群
+  签名: R] [加法幺半群 S] [StarAdd幺半群 R] [StarAdd幺半群 S] :
   定义体: Prod.ext (star_add _ _) (star_add _ _)
 -/
 instance [AddMonoid R] [AddMonoid S] [StarAddMonoid R] [StarAddMonoid S] :
@@ -106,8 +106,8 @@ instance [NonUnitalNonAssocSemiring
     (inferInstance : StarMul (R × S)) with }
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] [NonUnitalNonAssocSemiring S] [StarRing R] [StarRing S] :
+实例 [非幺非结合半环
+  签名: R] [非幺非结合半环 S] [对合环 R] [对合环 S] :
   定义体: { (inferInstance : StarAddMonoid (R × S)),
     (inferInstance : StarMul (R × S)) with }
 
@@ -133,8 +133,8 @@ theorem Units.embed_product_star
   proof: rfl
 
 中文:
-定理 Units.embed_product_star
-  条件: [Monoid R] [StarMul R] (u : Rˣ)
+定理 单位群.embed_product_star
+  条件: [幺半群 R] [StarMul R] (u : Rˣ)
   证明: rfl
 -/
 theorem Units.embed_product_star [Monoid R] [StarMul R] (u : Rˣ) :

@@ -51,7 +51,7 @@ definition IsVisible
 
 中文:
 定义 IsVisible
-  签名: (s : Set P) (x y : P)
+  签名: (s : 集合 P) (x y : P)
   定义体: forall ⦃z⦄, z in s -> ¬ Sbtw 𝕜 x z y
 
 @[simp, refl]
@@ -172,7 +172,7 @@ obtain hwi | hwi : w i = 1 ∨ w i < 1 := eq_or_lt_of_le (single_le_sum hw₀ hi
 
 中文:
 引理 IsVisible.of_convexHull_of_pos
-  结论: {ι : 类型} {t : Finset ι} {a : ι -> V} {w : ι -> 𝕜}
+  结论: {ι : 类型} {t : 有限集 ι} {a : ι -> V} {w : ι -> 𝕜}
   证明: by
   classical
 obtain hwi | hwi : w i = 1 ∨ w i < 1 := eq_or_lt_of_le (single_le_sum hw₀ hi).trans_eq hw₁
@@ -274,8 +274,8 @@ lemma IsOpen.eq_of_isVisible_of_left_mem
   proof: hsxy.eq_of_mem_interior (by simpa [hs.interior_eq])
 
 中文:
-引理 IsOpen.eq_of_isVisible_of_left_mem
-  条件: (hs : IsOpen s) (hsxy : IsVisible 𝕜 s x y) (hy : y in s)
+引理 是开集.eq_of_isVisible_of_left_mem
+  条件: (hs : 是开集 s) (hsxy : IsVisible 𝕜 s x y) (hy : y in s)
   证明: hsxy.eq_of_mem_interior (by simpa [hs.interior_eq])
 
 Depends on / 依赖: eq_of_mem_interior, hs.interior_eq, hsxy.eq_of_mem_interior, interior_eq
@@ -343,8 +343,8 @@ lemma IsClosed.exists_wbtw_isVisible
     (isClosed_Ici.inter <| hs.preimage l
 
 中文:
-引理 IsClosed.exists_wbtw_isVisible
-  条件: (hs : IsClosed s) (hy : y in s) (x : V)
+引理 是闭集.存在_wbtw_isVisible
+  条件: (hs : 是闭集 s) (hy : y in s) (x : V)
   证明: by
   let t : Set Real := Ici 0 inter lineMap x y ⁻¹' s
   have ht₁ : 1 in t := by simpa [t]
@@ -389,8 +389,8 @@ lemma IsClosed.convexHull_subset_affineSpan_isVisible
      
 
 中文:
-引理 IsClosed.convexHull_subset_affineSpan_isVisible
-  结论: (hs : IsClosed (convexHull 实数 s))
+引理 是闭集.convexHull_subset_affineSpan_isVisible
+  结论: (hs : 是闭集 (convexHull 实数 s))
   证明: by
   rintro y hy
   obtain ⟨z, hz, hxzy, hxz⟩ := hs.exists_wbtw_isVisible hy x
@@ -430,7 +430,7 @@ exact (subset_convexHull ..).trans h
 
 中文:
 引理 rank_le_card_isVisible
-  条件: (hs : IsClosed (convexHull 实数 s)) (hx : x ∉ convexHull 实数 s)
+  条件: (hs : 是闭集 (convexHull 实数 s)) (hx : x ∉ convexHull 实数 s)
   证明: by
   calc
     Module.rank Real (span Real (-x +ᵥ s)) <=

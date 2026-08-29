@@ -75,7 +75,7 @@ theorem AffineMap.map_midpoint
 @[simp]
 
 中文:
-定理 AffineMap.map_midpoint
+定理 仿射映射.map_midpoint
   条件: (f : P ->ᵃ[R] P') (a b : P)
   证明: f.apply_lineMap a b _
 
@@ -97,7 +97,7 @@ theorem AffineEquiv.map_midpoint
   proof: f.apply_lineMap a b _
 
 中文:
-定理 AffineEquiv.map_midpoint
+定理 仿射等价.map_midpoint
   条件: (f : P ≃ᵃ[R] P') (a b : P)
   证明: f.apply_lineMap a b _
 
@@ -119,7 +119,7 @@ theorem AffineEquiv.pointReflection_midpoint_left
 @[simp]
 
 中文:
-定理 AffineEquiv.pointReflection_midpoint_left
+定理 仿射等价.pointReflection_midpoint_left
   条件: (x y : P)
   证明: by
   rw [midpoint]; rw [pointReflection_apply]; rw [lineMap_apply]; rw [vadd_vsub]; rw [vadd_vadd]; rw [← add_smul]; rw [← two_mul]; rw [mul_invOf_self]; rw [one_smul]; rw [vsub_vadd]
@@ -143,7 +143,7 @@ theorem Equiv.pointReflection_midpoint_left
   rw [midpoint]; rw [pointReflection_apply]; rw [lineMap_apply]; rw [vadd_vsub]; rw [vadd_vadd]; rw [← add_smul]; rw [← two_mul]; rw [mul_invOf_self]; rw [one_smul]; rw [vsub_vadd]
 
 中文:
-定理 Equiv.pointReflection_midpoint_left
+定理 等价.pointReflection_midpoint_left
   条件: (x y : P)
   证明: by
   rw [midpoint]; rw [pointReflection_apply]; rw [lineMap_apply]; rw [vadd_vsub]; rw [vadd_vadd]; rw [← add_smul]; rw [← two_mul]; rw [mul_invOf_self]; rw [one_smul]; rw [vsub_vadd]
@@ -188,7 +188,7 @@ theorem AffineEquiv.pointReflection_midpoint_right
 @[simp]
 
 中文:
-定理 AffineEquiv.pointReflection_midpoint_right
+定理 仿射等价.pointReflection_midpoint_right
   条件: (x y : P)
   证明: by
   rw [midpoint_comm]; rw [AffineEquiv.pointReflection_midpoint_left]
@@ -212,7 +212,7 @@ theorem Equiv.pointReflection_midpoint_right
   rw [midpoint_comm]; rw [Equiv.pointReflection_midpoint_left]
 
 中文:
-定理 Equiv.pointReflection_midpoint_right
+定理 等价.pointReflection_midpoint_right
   条件: (x y : P)
   证明: by
   rw [midpoint_comm]; rw [Equiv.pointReflection_midpoint_left]
@@ -740,7 +740,7 @@ theorem midpoint_eq_iff'
 中文:
 定理 midpoint_eq_iff'
   条件: {x y z : P}
-  结论: midpoint R x y = z ↔ Equiv.pointReflection z x = y
+  结论: midpoint R x y = z ↔ 等价.pointReflection z x = y
   证明: midpoint_eq_iff
 
 Depends on / 依赖: midpoint_eq_iff
@@ -760,7 +760,7 @@ theorem midpoint_unique
 
 中文:
 定理 midpoint_unique
-  条件: (R' : 类型) [Ring R'] [Invertible (2 : R')] [Module R' V] (x y : P)
+  条件: (R' : 类型) [环 R'] [可逆 (2 : R')] [模 R' V] (x y : P)
   证明: (midpoint_eq_iff' R).2 (midpoint_eq_iff' R').1 rfl
 
 @[simp]

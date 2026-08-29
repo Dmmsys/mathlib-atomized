@@ -59,7 +59,7 @@ refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
 
 中文:
 引理 restrict_aux
-  结论: Bijective (p.compl₁₂ i j)
+  结论: 双射 (p.compl₁₂ i j)
   证明: by
 refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
   · replace hm : i m in j.range.dualAnnihilator.map (p.toPerfPair.symm : Dual R N ->ₗ[R] M) := by
@@ -99,8 +99,8 @@ lemma IsPerfPair.restrict
   bijective_right := p.flip.restrict_aux j i hj hi hij.flip
 
 中文:
-引理 IsPerfPair.restrict
-  结论: (p.compl₁₂ i j).IsPerfPair where
+引理 是PerfPair.restrict
+  结论: (p.compl₁₂ i j).是PerfPair where
   证明: p.restrict_aux i j hi hj hij
   bijective_right := p.flip.restrict_aux j i hj hi hij.flip
 
@@ -222,8 +222,8 @@ lemma IsPerfPair.restrictScalars
     p.flip.restrictScalars_surjective_aux j i h₂ fun m n => hp n m⟩
 
 中文:
-引理 IsPerfPair.restrictScalars
-  结论: (hi : Injective i) (hj : Injective j)
+引理 是PerfPair.restrictScalars
+  结论: (hi : 单射 i) (hj : 单射 j)
   证明: ⟨p.restrictScalars_injective_aux i j hi hN hp,
     p.restrictScalars_surjective_aux i j h₁ hp⟩
   bijective_right := ⟨p.flip.restrictScalars_injective_aux j i hj hM fun m n => hp n m,
@@ -272,7 +272,7 @@ let b : Basis _ L M := Basis.mk hv₃ by rw [← hv₂, Subtype.range_coe_subtyp
 have :
 
 中文:
-引理 exists_basis_basis_of_span_eq_top_of_mem_algebraMap
+引理 存在_basis_basis_of_span_eq_top_of_mem_algebraMap
   证明: by
   classical
   have : IsReflexive L M := .of_isPerfPair p
@@ -415,7 +415,7 @@ lemma IsPerfPair.restrictScalars_of_field
     ((LinearMap.range i).inclusionSpan L ∘ₗ i
 
 中文:
-引理 IsPerfPair.restrictScalars_of_field
+引理 是PerfPair.restrictScalars_of_field
   证明: by
   have : (p.compl₁₂ (span L <| .range i).subtype (span L <| .range j).subtype).IsPerfPair :=
     .restrict _ _ _ (by simp) (by simp) (by simpa)

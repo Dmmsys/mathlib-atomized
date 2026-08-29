@@ -75,7 +75,7 @@ definition moduleSpecΓFunctor
 
 中文:
 定义 moduleSpecΓFunctor
-  签名: : (Spec (.of R)).Modules ⥤ ModuleCat R
+  签名: : (Spec (.of R)).Modules ⥤ 模范畴 R
   定义体: modulesSpecToSheaf ⋙ TopCat.Sheaf.forget _ _ ⋙ (evaluation _ _).obj (.op ⊤)
 
 Depends on / 依赖: TopCat, TopCat.Sheaf.forget, evaluation, forget, modulesSpecToSheaf
@@ -100,7 +100,7 @@ definition SpecModulesToSheafFullyFaithful
 
 中文:
 定义 SpecModulesToSheafFullyFaithful
-  签名: : (modulesSpecToSheaf (R := R)).FullyFaithful where
+  签名: : (modulesSpecToSheaf (R := R)).满忠实 where
   定义体: ⟨fun U => ModuleCat.ofHom ⟨(f.1.app U).hom.toAddHom, by
     intro t m
     apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: (modulesSpecToSheaf (R := R)).Faithful
+  签名: (modulesSpecToSheaf (R := R)).忠实
   定义体: SpecModulesToSheafFullyFaithful.faithful
 
 Depends on / 依赖: Faithful, SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.faithful, faithful
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: (modulesSpecToSheaf (R := R)).Full
+  签名: (modulesSpecToSheaf (R := R)).满
   定义体: SpecModulesToSheafFullyFaithful.full
 
 Depends on / 依赖: SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.full
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R Γ(M, U)
+  签名: 模 R Γ(M, U)
   定义体: inferInstanceAs Module R ((modulesSpecToSheaf.obj M).obj.obj (.op U))
 
 Depends on / 依赖: Module, modulesSpecToSheaf, modulesSpecToSheaf.obj, obj.obj
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R Γ(Spec R, U) Γ(M, U)
+  签名: 标量塔 R Γ(Spec R, U) Γ(M, U)
   定义体: IsScalarTower.of_compHom R Γ(Spec R, U) Γ(M, U)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_compHom, of_compHom
@@ -271,7 +271,7 @@ lemma isUnit_algebraMap_end_of_le_basicOpen
 
 中文:
 引理 isUnit_algebraMap_end_of_le_basicOpen
-  条件: (f : R) (hf : U <= PrimeSpectrum.basicOpen f)
+  条件: (f : R) (hf : U <= 素谱.basicOpen f)
   证明: by
   rw [Module.End.isUnit_iff]
   have : ⇑((algebraMap R (Module.End ↑R ↑Γ(M, U))) f) =
@@ -307,7 +307,7 @@ lemma isSMulRegular_of_le_basicOpen
 
 中文:
 引理 isSMulRegular_of_le_basicOpen
-  条件: {f : R} (hle : U <= PrimeSpectrum.basicOpen f)
+  条件: {f : R} (hle : U <= 素谱.basicOpen f)
   证明: by
   intro x y hxy
   have := M.isUnit_algebraMap_end_of_le_basicOpen _ hle
@@ -340,7 +340,7 @@ lemma restrictAppIso_smul_Spec
 
 中文:
 引理 restrictAppIso_smul_Spec
-  结论: {S : CommRingCat.{u}} (f : R ⟶ S)
+  结论: {S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: by
   rw [smul_Spec_def]; rw [smul_Spec_def]
   simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
@@ -461,7 +461,7 @@ theorem toOpen_res
 
 中文:
 定理 toOpen_res
-  条件: (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
+  条件: (U V : Opens (素谱.顶元素 R)) (i : V ⟶ U)
   证明: rfl
 -/
 theorem toOpen_res (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U) :
@@ -486,7 +486,7 @@ definition toStalk
 
 中文:
 定义 toStalk
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: ModuleCat.ofHom (StructureSheaf.toStalkₗ ..)
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, StructureSheaf, StructureSheaf.toStalk
@@ -513,7 +513,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def map {M N : ModuleCat R} (f : M ⟶ N)
+  签名: def map {M N : 模范畴 R} (f : M ⟶ N)
   定义体: SpecModulesToSheafFullyFaithful.preimage ⟨(modulesSpecToSheafIso M).hom ≫
     { app U := ModuleCat.ofHom (StructureSheaf.comapₗ f.hom _ _ .rfl) } ≫
     (modulesSpecToSheafIso N).inv⟩
@@ -538,7 +538,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: {M : ModuleCat R}
+  条件: {M : 模范畴 R}
   结论: tilde.map (𝟙 M) = 𝟙 _
   证明: by
   ext p x
@@ -566,7 +566,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {M N P : ModuleCat R} (f : M ⟶ N) (g : N ⟶ P)
+  条件: {M N P : 模范畴 R} (f : M ⟶ N) (g : N ⟶ P)
   证明: by
   ext p x
   exact Subtype.ext (funext
@@ -599,7 +599,7 @@ lemma toOpen_map_app
 
 中文:
 引理 toOpen_map_app
-  结论: {M N : ModuleCat R} (f : M ⟶ N)
+  结论: {M N : 模范畴 R} (f : M ⟶ N)
   证明: by
   ext x; exact Subtype.ext (funext fun y => IsLocalizedModule.map_apply y.1.asIdeal.primeCompl
     (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
@@ -648,7 +648,7 @@ instance isIso_toOpen_top
 
 中文:
 实例 isIso_toOpen_top
-  签名: {M : ModuleCat R}
+  签名: {M : 模范畴 R}
   定义体: by
   rw [toOpen]; rw [isIso_comp_right_iff]; rw [ConcreteCategory.isIso_iff_bijective]
   exact StructureSheaf.toOpenₗ_top_bijective
@@ -674,7 +674,7 @@ alias isUnit_algebraMap_end_basicOpen := Scheme.Modules.isUnit_algebraMap_end_of
 
 中文:
 定义 isoTop
-  签名: (M : ModuleCat R)
+  签名: (M : 模范畴 R)
   定义体: asIso (toOpen M ⊤)
 
 @[deprecated (since := "2026-05-30")]
@@ -707,7 +707,7 @@ definition Scheme.Modules.fromTildeΓ
           ((modulesSpecTo
 
 中文:
-定义 Scheme.Modules.fromTildeΓ
+定义 概形.Modules.fromTildeΓ
   签名: (M : (Spec (.of R)).Modules)
   定义体: SpecModulesToSheafFullyFaithful.preimage
     ⟨TopCat.Sheaf.restrictHomEquivHom _ _ isBasis_basic_opens
@@ -768,7 +768,7 @@ lemma Scheme.Modules.toOpen_fromTildeΓ_app
   simp only [fromTildeΓ, ind
 
 中文:
-引理 Scheme.Modules.toOpen_fromTildeΓ_app
+引理 概形.Modules.toOpen_fromTildeΓ_app
   条件: (M : (Spec (.of R)).Modules) (U)
   证明: by
   wlog hU : U = PrimeSpectrum.basicOpen 1 generalizing U
@@ -813,7 +813,7 @@ definition Scheme.Modules.fromTildeΓNatTrans
     apply IsLocalizedModule.ext (.powers (M := R) r.uno
 
 中文:
-定义 Scheme.Modules.fromTildeΓNatTrans
+定义 概形.Modules.fromTildeΓ自然数Trans
   签名: :
   定义体: fromTildeΓ
   naturality {M N} f := by
@@ -857,7 +857,7 @@ definition tilde.toTildeΓNatIso
   body: NatIso.ofComponents tilde.isoTop fun f => (tilde.toOpen_map_app f _).symm
 
 中文:
-定义 tilde.toTildeΓNatIso
+定义 tilde.toTildeΓ自然数Iso
   签名: : 𝟭 _ ≅ tilde.functor R ⋙ moduleSpecΓFunctor
   定义体: NatIso.ofComponents tilde.isoTop fun f => (tilde.toOpen_map_app f _).symm
 
@@ -938,7 +938,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (tilde.adjunction (R := R)).unit
+  签名: 是同构 (tilde.adjunction (R := R)).unit
   定义体: by
   dsimp [tilde.adjunction]; infer_instance
 
@@ -957,7 +957,7 @@ definition tilde.fullyFaithfulFunctor
 
 中文:
 定义 tilde.fullyFaithfulFunctor
-  签名: : (tilde.functor R).FullyFaithful
+  签名: : (tilde.functor R).满忠实
   定义体: tilde.adjunction.fullyFaithfulLOfIsIsoUnit
 
 Depends on / 依赖: adjunction, fullyFaithfulLOfIsIsoUnit, tilde.adjunction.fullyFaithfulLOfIsIsoUnit
@@ -975,7 +975,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tilde.functor R).Full
+  签名: (tilde.functor R).满
   定义体: tilde.fullyFaithfulFunctor.full
 
 Depends on / 依赖: fullyFaithfulFunctor, tilde.fullyFaithfulFunctor.full
@@ -991,7 +991,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tilde.functor R).Faithful
+  签名: (tilde.functor R).忠实
   定义体: tilde.fullyFaithfulFunctor.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulFunctor, tilde.fullyFaithfulFunctor.faithful
@@ -1007,7 +1007,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tilde.functor R).IsLeftAdjoint
+  签名: (tilde.functor R).是左伴随
   定义体: tilde.adjunction.isLeftAdjoint
 
 Depends on / 依赖: adjunction, isLeftAdjoint, tilde.adjunction.isLeftAdjoint
@@ -1024,7 +1024,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tilde.functor R).Additive
+  签名: (tilde.functor R).加性
   定义体: have := Limits.preservesBinaryBiproducts_of_preservesBinaryCoproducts (tilde.functor R)
   Functor.additive_of_preservesBinaryBiproducts _
 
@@ -1143,7 +1143,7 @@ definition tildeSelf
 
 中文:
 定义 tildeSelf
-  签名: : tilde (ModuleCat.of R R) ≅ SheafOfModules.unit.{u} _
+  签名: : tilde (模范畴.of R R) ≅ 模层.unit.{u} _
   定义体: .refl _
 -/
 def tildeSelf : tilde (ModuleCat.of R R) ≅ SheafOfModules.unit.{u} _ := .refl _
@@ -1158,7 +1158,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (Scheme.Modules.fromTildeΓ (SheafOfModules.unit.{u} (Spec R).ringCatSheaf))
+  签名: 是同构 (概形.Modules.fromTildeΓ (模层.unit.{u} (Spec R).ringCatSheaf))
   定义体: isIso_fromTildeΓ_iff.mpr ⟨_, ⟨tildeSelf⟩⟩
 
 Depends on / 依赖: _iff.mpr, tildeSelf
@@ -1220,7 +1220,7 @@ definition presentationTilde
 
 中文:
 定义 presentationTilde
-  签名: (s : Set M) (hs : Submodule.span R s = ⊤)
+  签名: (s : 集合 M) (hs : 子模.span R s = ⊤)
   定义体: by
   haveI H₁ : Function.Exact
       (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
@@ -1261,7 +1261,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tilde M).IsQuasicoherent
+  签名: (tilde M).是Quasicoherent
   定义体: (presentationTilde.{u} _ .univ (by simp) _ (Submodule.span_eq _)).isQuasicoherent
 
 Depends on / 依赖: Submodule, Submodule.span_eq, isQuasicoherent, presentationTilde, span_eq
@@ -1279,7 +1279,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((tilde.functor R).obj M).IsQuasicoherent
+  签名: ((tilde.functor R).obj M).是Quasicoherent
   定义体: inferInstanceAs (tilde M).IsQuasicoherent
 
 Depends on / 依赖: IsQuasicoherent
@@ -1303,7 +1303,7 @@ let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ 
 
 中文:
 引理 isIso_fromTildeΓ_of_presentation
-  条件: (M : (Spec R).Modules) (P : M.Presentation)
+  条件: (M : (Spec R).Modules) (P : M.呈现)
   证明: by
   rw [isIso_fromTildeΓ_iff]
 let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
@@ -1341,7 +1341,7 @@ abbreviation IsLocalizing
 
 中文:
 缩写 IsLocalizing
-  签名: (M : TopCat.Sheaf (ModuleCat R) (Spec R))
+  签名: (M : 顶元素范畴.层 (模范畴 R) (Spec R))
   定义体: forall f : R, IsLocalizedModule (.powers f) (M.obj.map (basicOpen f).leTop.op).hom
 
 Depends on / 依赖: IsLocalizedModule, M.obj.map, basicOpen, leTop.op, powers
@@ -1363,7 +1363,7 @@ theorem isLocalizing_of_iso
 
 中文:
 定理 isLocalizing_of_iso
-  结论: {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N)
+  结论: {M N : 顶元素范畴.层 (模范畴 R) (Spec R)} (φ : M ≅ N)
   证明: by
   intro f
   rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
@@ -1389,7 +1389,7 @@ theorem isLocalizing_iff_of_iso
 
 中文:
 定理 isLocalizing_iff_of_iso
-  条件: {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N)
+  条件: {M N : 顶元素范畴.层 (模范畴 R) (Spec R)} (φ : M ≅ N)
   证明: ⟨fun h => isLocalizing_of_iso φ h, fun h => isLocalizing_of_iso φ.symm h⟩
 
 Depends on / 依赖: isLocalizing_of_iso
@@ -1412,7 +1412,7 @@ theorem isLocalizing_of_isIso_app_top
 
 中文:
 定理 isLocalizing_of_isIso_app_top
-  结论: {M N : TopCat.Sheaf (ModuleCat.{u} R) (Spec R)} {φ : M ⟶ N}
+  结论: {M N : 顶元素范畴.层 (模范畴.{u} R) (Spec R)} {φ : M ⟶ N}
   证明: by
   refine TopCat.Sheaf.isIso_iff_isIso_basis (φ := φ) isBasis_basic_opens (fun f => ?_)
   refine ModuleCat.isIso_of_isLocalizedModule_comp (hM f) ?_
@@ -1445,7 +1445,7 @@ theorem isLocalizing_tilde
 
 中文:
 定理 isLocalizing_tilde
-  条件: (M : ModuleCat R)
+  条件: (M : 模范畴 R)
   证明: by
   intro f
   -- We can't rewrite with `tilde.toOpen_res` below, because of def-eq abuse between
@@ -1584,7 +1584,7 @@ theorem isIso_fromTildeΓ_pushforward
 
 中文:
 定理 isIso_fromTildeΓ_pushforward
-  条件: (M : (Spec S).Modules) [h : IsIso M.fromTildeΓ]
+  条件: (M : (Spec S).Modules) [h : 是同构 M.fromTildeΓ]
   证明: by
   simp_all only [isIso_fromTildeΓ_iff_isLocalizing]
   exact isLocalizing_pushforward_of_isLocalizing φ h
@@ -1612,8 +1612,8 @@ instance Scheme.Modules.isQuasicoherent_restrictFunctor
     ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCa
 
 中文:
-实例 Scheme.Modules.isQuasicoherent_restrictFunctor
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y)
+实例 概形.Modules.isQuasicoherent_restrictFunctor
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y)
   定义体: by
   let α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
   have hα : IsIso α := NatIso.isIso_of_isIso_app _
@@ -1648,8 +1648,8 @@ definition Scheme.Modules.presentationRestrict
   pres.map (Scheme.Modules.restrictFunctor.{u} f) (Scheme.Modules.restrictUnitIso _).symm
 
 中文:
-定义 Scheme.Modules.presentationRestrict
-  签名: {X Y : Scheme.{u}} (f : Y ⟶ X)
+定义 概形.Modules.presentationRestrict
+  签名: {X Y : 概形.{u}} (f : Y ⟶ X)
   定义体: have : PreservesColimitsOfSize.{u, u} (Scheme.Modules.restrictFunctor f) :=
     inferInstance
   pres.map (Scheme.Modules.restrictFunctor.{u} f) (Scheme.Modules.restrictUnitIso _).symm
@@ -1677,8 +1677,8 @@ lemma Scheme.Modules.exists_isOpenCover_presentation
   · let u := X.homOfLE (U := i.2) (V := W i.1) 
 
 中文:
-引理 Scheme.Modules.exists_isOpenCover_presentation
-  结论: {X : Scheme.{u}} (M : X.Modules)
+引理 概形.Modules.存在_isOpenCover_presentation
+  结论: {X : 概形.{u}} (M : X.Modules)
   证明: by
   obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
   choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
@@ -1724,8 +1724,8 @@ exact SheafOfModules.Presentation.ofIsIso.{u, u, u} ((restrictFunctorComp _ _).a
     (presentationRestrict (hU' i).isoSpec.inv (pres i))
 
 中文:
-引理 Scheme.Modules.exists_affineOpenCover_presentation
-  结论: {X : Scheme.{u}} (M : X.Modules)
+引理 概形.Modules.存在_affineOpenCover_presentation
+  结论: {X : 概形.{u}} (M : X.Modules)
   证明: by
   obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
   refine ⟨Scheme.AffineOpenCover.ofIsOpenCover _ hU hU', fun i => ⟨?_⟩⟩
@@ -2072,7 +2072,7 @@ instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent
     PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i
 
 中文:
-实例 Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent
+实例 概形.Modules.isIso_fromTildeΓ_of_isQuasicoherent
   签名: (M : (Spec R).Modules)
   定义体: by
   rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux]

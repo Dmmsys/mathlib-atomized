@@ -38,7 +38,7 @@ lemma Forall₂.prod_le_prod'
 
 中文:
 引理 Forall₂.prod_le_prod'
-  结论: [Preorder M] [MulRightMono M]
+  结论: [预序 M] [MulRightMono M]
   证明: by
   induction h with
   | nil => rfl
@@ -79,8 +79,8 @@ lemma Sublist.prod_le_prod'
 @[to_additive sum_le_sum]
 
 中文:
-引理 Sublist.prod_le_prod'
-  结论: [Preorder M] [MulRightMono M]
+引理 子表.prod_le_prod'
+  结论: [预序 M] [MulRightMono M]
   证明: by
   induction h with
   | slnil => rfl
@@ -121,7 +121,7 @@ hall.prod_le_prod'.trans hsub.prod_le_prod' h₁
 
 中文:
 引理 SublistForall₂.prod_le_prod'
-  结论: [Preorder M]
+  结论: [预序 M]
   证明: let ⟨_, hall, hsub⟩ := sublistForall₂_iff.1 h
 hall.prod_le_prod'.trans hsub.prod_le_prod' h₁
 
@@ -149,7 +149,7 @@ lemma prod_le_prod'
 
 中文:
 引理 prod_le_prod'
-  结论: [Preorder M] [MulRightMono M]
+  结论: [预序 M] [MulRightMono M]
   证明: Forall₂.prod_le_prod' by simpa
 
 @[to_additive sum_lt_sum]
@@ -182,7 +182,7 @@ lemma prod_lt_prod'
 
 中文:
 引理 prod_lt_prod'
-  结论: [Preorder M] [MulLeftStrictMono M]
+  结论: [预序 M] [MulLeftStrictMono M]
   证明: by
   induction l with
   | nil => simp at h₂
@@ -224,7 +224,7 @@ lemma prod_lt_prod_of_ne_nil
 
 中文:
 引理 prod_lt_prod_of_ne_nil
-  结论: [Preorder M] [MulLeftStrictMono M]
+  结论: [预序 M] [MulLeftStrictMono M]
   证明: (prod_lt_prod' f g fun i hi => (hlt i hi).le)
     (exists_mem_of_ne_nil l hl).imp fun i hi => ⟨hi, hlt i hi⟩
 
@@ -253,7 +253,7 @@ lemma prod_le_pow_card
 
 中文:
 引理 prod_le_pow_card
-  结论: [Preorder M] [MulRightMono M]
+  结论: [预序 M] [MulRightMono M]
   证明: by
   simpa only [map_id', map_const', prod_replicate] using prod_le_prod' h
 
@@ -279,7 +279,7 @@ lemma pow_card_le_prod
 
 中文:
 引理 pow_card_le_prod
-  结论: [Preorder M] [MulRightMono M]
+  结论: [预序 M] [MulRightMono M]
   证明: @prod_le_pow_card Mᵒᵈ _ _ _ _ l n h
 
 @[to_additive exists_lt_of_sum_lt]
@@ -305,8 +305,8 @@ lemma exists_lt_of_prod_lt'
 @[to_additive exists_le_of_sum_le]
 
 中文:
-引理 exists_lt_of_prod_lt'
-  结论: [LinearOrder M] [MulRightMono M]
+引理 存在_lt_of_prod_lt'
+  结论: [线性序 M] [MulRightMono M]
   证明: by
   contrapose! h
   exact prod_le_prod' h
@@ -335,8 +335,8 @@ lemma exists_le_of_prod_le'
 @[to_additive sum_nonneg]
 
 中文:
-引理 exists_le_of_prod_le'
-  结论: [LinearOrder M] [MulLeftStrictMono M]
+引理 存在_le_of_prod_le'
+  结论: [线性序 M] [MulLeftStrictMono M]
   证明: by
   contrapose! h
   exact prod_lt_prod_of_ne_nil hl _ _ h
@@ -372,7 +372,7 @@ lemma one_le_prod_of_one_le
 
 中文:
 引理 one_le_prod_of_one_le
-  结论: [Preorder M] [MulLeftMono M] {l : List M}
+  结论: [预序 M] [MulLeftMono M] {l : 列表 M}
   证明: by
   -- We don't use `pow_card_le_prod` to avoid assumption
   -- [CovariantClass M M (Function.swap (· * ·)) (· ≤ ·)]
@@ -411,7 +411,7 @@ lemma max_prod_le
 
 中文:
 引理 max_prod_le
-  结论: (l : List α) (f g : α -> M) [LinearOrder M]
+  结论: (l : 列表 α) (f g : α -> M) [线性序 M]
   证明: by
   rw [max_le_iff]
   constructor <;> apply List.prod_le_prod' <;> intros
@@ -445,7 +445,7 @@ lemma prod_min_le
 
 中文:
 引理 prod_min_le
-  结论: [LinearOrder M] [MulLeftMono M]
+  结论: [线性序 M] [MulLeftMono M]
   证明: by
   rw [le_min_iff]
   constructor <;> apply List.prod_le_prod' <;> intros
@@ -480,8 +480,8 @@ lemma monotone_prod_take
 
 中文:
 引理 monotone_prod_take
-  条件: (L : List M)
-  结论: Monotone fun i => (L.take i).prod
+  条件: (L : 列表 M)
+  结论: 递增 fun i => (L.take i).乘积
   证明: by
   refine monotone_nat_of_le_succ fun n => ?_
   rcases lt_or_ge n L.length with h | h
@@ -518,8 +518,8 @@ theorem le_prod_of_mem
 
 中文:
 定理 le_prod_of_mem
-  条件: {xs : List M} {x : M} (h₁ : x in xs)
-  结论: x <= xs.prod
+  条件: {xs : 列表 M} {x : M} (h₁ : x in xs)
+  结论: x <= xs.乘积
   证明: by
   induction xs with
   | nil => simp at h₁
@@ -704,7 +704,7 @@ lemma sum_le_foldr_max
 
 中文:
 引理 sum_le_foldr_max
-  结论: [AddZeroClass M] [Zero N] [LinearOrder N] (f : M -> N) (h0 : f 0 <= 0)
+  结论: [加法零类 M] [零 N] [线性序 N] (f : M -> N) (h0 : f 0 <= 0)
   证明: by
   induction l with
   | nil => simpa using h0
@@ -734,7 +734,7 @@ lemma one_lt_prod_of_one_lt
 
 中文:
 引理 one_lt_prod_of_one_lt
-  条件: [CommMonoid M] [Preorder M] [IsOrderedMonoid M]
+  条件: [交换幺半群 M] [预序 M] [是Ordered幺半群 M]
 -/
 lemma one_lt_prod_of_one_lt [CommMonoid M] [Preorder M] [IsOrderedMonoid M] :
     forall l : List M, (forall x in l, (1 : M) < x) -> l != [] -> 1 < l.prod
@@ -767,7 +767,7 @@ lemma single_le_prod
 
 中文:
 引理 single_le_prod
-  结论: [CommMonoid M] [Preorder M] [IsOrderedMonoid M]
+  结论: [交换幺半群 M] [预序 M] [是Ordered幺半群 M]
   证明: by
   induction l
   · simp
@@ -801,7 +801,7 @@ lemma all_one_of_le_one_le_of_prod_eq_one
 
 中文:
 引理 all_one_of_le_one_le_of_prod_eq_one
-  结论: [CommMonoid M] [PartialOrder M] [IsOrderedMonoid M]
+  结论: [交换幺半群 M] [偏序 M] [是Ordered幺半群 M]
   证明: _root_.le_antisymm (hl₂ ▸ single_le_prod hl₁ _ hx) (hl₁ x hx)
 
 Depends on / 依赖: _root_, _root_.le_antisymm, le_antisymm, single_le_prod
@@ -823,7 +823,7 @@ lemma prod_eq_one_iff
 
 中文:
 引理 prod_eq_one_iff
-  结论: [CommMonoid M] [PartialOrder M] [IsOrderedMonoid M]
+  结论: [交换幺半群 M] [偏序 M] [是Ordered幺半群 M]
   证明: ⟨all_one_of_le_one_le_of_prod_eq_one fun _ _ => one_le, fun h => by
     rw [List.eq_replicate_iff.2 ⟨_]; rw [h⟩]; rw [prod_replicate]; rw [one_pow]
     · exact (length l)

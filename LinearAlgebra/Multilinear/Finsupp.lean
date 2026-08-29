@@ -114,7 +114,7 @@ theorem freeFinsuppEquiv_apply
 
 中文:
 定理 freeFinsuppEquiv_apply
-  结论: [Fintype ι']
+  结论: [有限类型 ι']
   证明: by
   induction f using Finsupp.induction_linear with
   | zero => simp

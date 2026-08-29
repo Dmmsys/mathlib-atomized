@@ -60,7 +60,7 @@ theorem posLog_apply
 
 中文:
 定理 posLog_apply
-  结论: log⁺ x = max 0 (log x)
+  结论: log⁺ x = 最大值 0 (log x)
   证明: rfl
 -/
 theorem posLog_apply : log⁺ x = max 0 (log x) := rfl
@@ -75,7 +75,7 @@ theorem posLog_def
 
 中文:
 定理 posLog_def
-  结论: log⁺ = max 0 (log ·)
+  结论: log⁺ = 最大值 0 (log ·)
   证明: rfl
 -/
 theorem posLog_def : log⁺ = max 0 (log ·) := rfl
@@ -317,7 +317,7 @@ theorem posLog_eq_log_max_one
 中文:
 定理 posLog_eq_log_max_one
   条件: (hx : 0 <= x)
-  结论: log⁺ x = log (max 1 x)
+  结论: log⁺ x = log (最大值 1 x)
   证明: by
   grind [le_abs, posLog_eq_log, log_one, max_eq_left, log_nonpos, posLog_apply]
 
@@ -346,7 +346,7 @@ theorem monotoneOn_posLog
 
 中文:
 定理 monotoneOn_posLog
-  结论: MonotoneOn log⁺ (Set.Ici 0)
+  结论: MonotoneOn log⁺ (集合.左闭右无界区间 0)
   证明: by
   intro x hx y hy hxy
   simp only [posLog, le_sup_iff, sup_le_iff, le_refl, true_and]
@@ -449,7 +449,7 @@ theorem continuous_posLog
 
 中文:
 定理 continuous_posLog
-  结论: Continuous log⁺
+  结论: 连续 log⁺
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -557,7 +557,7 @@ theorem posLog_prod
 
 中文:
 定理 posLog_prod
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   证明: by
   classical
   induction s using Finset.induction with
@@ -606,7 +606,7 @@ theorem posLog_sum
 
 中文:
 定理 posLog_sum
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   证明: by
   -- Trivial case: empty sum
   by_cases! hs : s = ∅
@@ -655,7 +655,7 @@ lemma posLog_norm_sum_le
 
 中文:
 引理 posLog_norm_sum_le
-  结论: {E : 类型} [SeminormedAddCommGroup E] {α : 类型} (s : Finset α)
+  结论: {E : 类型} [SeminormedAddComm群 E] {α : 类型} (s : 有限集 α)
   证明: by
   grw [norm_sum_le, posLog_sum]
 
@@ -697,7 +697,7 @@ lemma posLog_norm_add_le
 
 中文:
 引理 posLog_norm_add_le
-  条件: {E : 类型} [SeminormedAddCommGroup E] (a b : E)
+  条件: {E : 类型} [SeminormedAddComm群 E] (a b : E)
   证明: by
   grw [norm_add_le, posLog_add, add_rotate]
 

@@ -53,7 +53,7 @@ rw [← Int.natAbs_mul]; apply Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpmn
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
-  结论: {p : 自然数} (p_prime : 自然数.Prime p) {m n : 整数}
+  结论: {p : 自然数} (p_prime : 自然数.素 p) {m n : 整数}
   证明: have hpm' : p ^ k ∣ m.natAbs := Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpm
 have hpn' : p ^ l ∣ n.natAbs := Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpn
   have hpmn' : p ^ (k + l + 1) ∣ m.natAbs * n.natAbs := by
@@ -84,8 +84,8 @@ theorem Prime.dvd_natAbs_of_coe_dvd_sq
   rwa [sq, ← natAbs_mul, ← natCast_dvd, ← sq]
 
 中文:
-定理 Prime.dvd_natAbs_of_coe_dvd_sq
-  条件: {p : 自然数} (hp : p.Prime) (k : 整数) (h : (p : 整数) ∣ k ^ 2)
+定理 素.dvd_natAbs_of_coe_dvd_sq
+  条件: {p : 自然数} (hp : p.素) (k : 整数) (h : (p : 整数) ∣ k ^ 2)
   证明: by
   apply @Nat.Prime.dvd_of_dvd_pow _ _ 2 hp
   rwa [sq, ← natAbs_mul, ← natCast_dvd, ← sq]

@@ -37,8 +37,8 @@ structure AlgEquiv
     - commutes' : forall r : R, toFun (algebraMap R A r) = algebraMap R B r
 
 中文:
-结构 AlgEquiv
-  参数: (R : 类型u) (A : 类型v) (B : Type w) [CommSemiring R] [Semiring A] [Semiring B]
+结构 代数等价
+  参数: (R : 类型u) (A : 类型v) (B : 类型 w) [交换半环 R] [半环 A] [半环 B]
   继承: A ≃ B, A ≃* B, A ≃+ B, A ≃+* B
   公理与运算 (1 个):
     - commutes' : 对任意 r : R, toFun (algebraMap R A r) = algebraMap R B r
@@ -67,9 +67,9 @@ class AlgEquivClass
     - commutes : forall (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
 
 中文:
-类 AlgEquivClass
-  参数: (F : 类型) (R A B : outParam 类型) [CommSemiring R] [Semiring A]
-  继承: RingEquivClass F A B
+类 代数等价类
+  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R] [半环 A]
+  继承: 环等价类 F A B
   公理与运算 (1 个):
     - commutes : 对任意 (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
 -/
@@ -105,7 +105,7 @@ definition toAlgEquiv
 
 中文:
 定义 toAlgEquiv
-  签名: {F R A B : 类型} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A]
+  签名: {F R A B : 类型} [交换半环 R] [半环 A] [半环 B] [代数 R A]
   定义体: { (f : A ≃ B), (RingEquivClass.toRingEquiv f : A ≃+* B) with commutes' := commutes f }
 
 Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, commutes, toRingEquiv
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A₁ ≃ₐ[R] A₂) A₁ A₂
+  签名: 等价状 (A₁ ≃ₐ[R] A₂) A₁ A₂
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A₁ ≃ₐ[R] A₂) A₁ A₂
+  签名: 函数状 (A₁ ≃ₐ[R] A₂) A₁ A₂
   定义体: DFunLike.coe
   coe_injective := DFunLike.coe_injective
 
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlgEquivClass (A₁ ≃ₐ[R] A₂) R A₁ A₂
+  签名: 代数等价类 (A₁ ≃ₐ[R] A₂) R A₁ A₂
   定义体: f.map_add'
   map_mul f := f.map_mul'
   commutes f := f.commutes'
@@ -358,7 +358,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂] (f : F)
+  条件: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂] (f : F)
   证明: rfl
 -/
 protected theorem coe_coe {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂] (f : F) :
@@ -375,7 +375,7 @@ theorem coe_fun_injective
 
 中文:
 定理 coe_fun_injective
-  结论: @Function.Injective (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => (e : A₁ -> A₂)
+  结论: @函数.单射 (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => (e : A₁ -> A₂)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -529,7 +529,7 @@ theorem coe_ringEquiv_injective
 
 中文:
 定理 coe_ringEquiv_injective
-  结论: Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+* A₂)
+  结论: 函数.单射 ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+* A₂)
   证明: fun _ _ h => ext RingEquiv.congr_fun h
 
 Depends on / 依赖: RingEquiv, RingEquiv.congr_fun, congr_fun
@@ -637,7 +637,7 @@ theorem coe_toAlgHom
 
 中文:
 定理 coe_toAlgHom
-  结论: DFunLike.coe e.toAlgHom = e
+  结论: 依赖函数状.coe e.toAlgHom = e
   证明: rfl
 -/
 theorem coe_toAlgHom : DFunLike.coe e.toAlgHom = e := rfl
@@ -657,7 +657,7 @@ theorem coe_toAlgHom_injective
 
 中文:
 定理 coe_toAlgHom_injective
-  结论: Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ[R] A₂)
+  结论: 函数.单射 ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ[R] A₂)
   证明: fun _ _ h => ext AlgHom.congr_fun h
 
 @[deprecated (since := "2026-05-05")] alias coe_algHom := coe_toAlgHom
@@ -743,7 +743,7 @@ theorem bijective
 
 中文:
 定理 bijective
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: EquivLike.bijective e
 -/
 protected theorem bijective : Function.Bijective e :=
@@ -759,7 +759,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: EquivLike.injective e
 -/
 protected theorem injective : Function.Injective e :=
@@ -775,7 +775,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: EquivLike.surjective e
 -/
 protected theorem surjective : Function.Surjective e :=
@@ -815,7 +815,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A₁ ≃ₐ[R] A₁)
+  签名: 可居 (A₁ ≃ₐ[R] A₁)
   定义体: ⟨refl⟩
 -/
 instance : Inhabited (A₁ ≃ₐ[R] A₁) :=
@@ -831,7 +831,7 @@ lemma refl_toAlgHom
 
 中文:
 引理 refl_toAlgHom
-  结论: (refl : A₁ ≃ₐ[R] A₁) = AlgHom.id R A₁
+  结论: (refl : A₁ ≃ₐ[R] A₁) = 代数态射.id R A₁
   证明: rfl
 -/
 @[simp, norm_cast] lemma refl_toAlgHom : (refl : A₁ ≃ₐ[R] A₁) = AlgHom.id R A₁ := rfl
@@ -847,7 +847,7 @@ lemma refl_toRingHom
 
 中文:
 引理 refl_toRingHom
-  结论: (refl : A₁ ≃ₐ[R] A₁) = RingHom.id A₁
+  结论: (refl : A₁ ≃ₐ[R] A₁) = 环态射.id A₁
   证明: rfl
 
 @[simp]
@@ -944,7 +944,7 @@ theorem coe_apply_coe_coe_symm_apply
 
 中文:
 定理 coe_apply_coe_coe_symm_apply
-  结论: {F : 类型} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
+  结论: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂]
   证明: EquivLike.right_inv f x
 
 @[simp]
@@ -967,7 +967,7 @@ theorem coe_coe_symm_apply_coe_apply
 
 中文:
 定理 coe_coe_symm_apply_coe_apply
-  结论: {F : 类型} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
+  结论: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂]
   证明: EquivLike.left_inv f x
 
 Depends on / 依赖: EquivLike, EquivLike.left_inv, left_inv
@@ -1031,7 +1031,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
+  结论: 函数.双射 (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -1104,7 +1104,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).symm = AlgEquiv.refl
+  结论: (代数等价.refl : A₁ ≃ₐ[R] A₁).symm = 代数等价.refl
   证明: rfl
 -/
 theorem refl_symm : (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).symm = AlgEquiv.refl :=
@@ -1300,7 +1300,7 @@ theorem comp_symm
 中文:
 定理 comp_symm
   条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: AlgHom.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂
+  结论: 代数态射.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = 代数态射.id R A₂
   证明: by
   ext
   simp
@@ -1326,7 +1326,7 @@ theorem symm_comp
 中文:
 定理 symm_comp
   条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: AlgHom.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁
+  结论: 代数态射.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = 代数态射.id R A₁
   证明: by
   ext
   simp
@@ -1347,7 +1347,7 @@ theorem leftInverse_symm
 中文:
 定理 leftInverse_symm
   条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: Function.LeftInverse e.symm e
+  结论: 函数.左逆 e.symm e
   证明: e.left_inv
 
 Depends on / 依赖: e.left_inv, left_inv
@@ -1367,7 +1367,7 @@ theorem rightInverse_symm
 中文:
 定理 rightInverse_symm
   条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: Function.RightInverse e.symm e
+  结论: 函数.右逆 e.symm e
   证明: e.right_inv
 
 Depends on / 依赖: GradeZero, GradeZero.monoid, Monoid, e.right_inv, monoid, right_inv
@@ -1386,7 +1386,7 @@ lemma image_symm_eq_preimage
 
 中文:
 引理 image_symm_eq_preimage
-  条件: (e : A₁ ≃ₐ[R] A₂) (s : Set A₂)
+  条件: (e : A₁ ≃ₐ[R] A₂) (s : 集合 A₂)
   结论: e.symm '' s = e ⁻¹' s
   证明: e.toLinearEquiv.image_symm_eq_preimage _
 
@@ -1708,7 +1708,7 @@ theorem arrowCongr_refl
 
 中文:
 定理 arrowCongr_refl
-  结论: arrowCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ->ₐ[R] A₂)
+  结论: arrowCongr 代数等价.refl 代数等价.refl = 等价.refl (A₁ ->ₐ[R] A₂)
   证明: rfl
 
 @[simp]
@@ -1818,7 +1818,7 @@ theorem equivCongr_refl
 
 中文:
 定理 equivCongr_refl
-  结论: equivCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ≃ₐ[R] A₁')
+  结论: equivCongr 代数等价.refl 代数等价.refl = 等价.refl (A₁ ≃ₐ[R] A₁')
   证明: rfl
 
 @[simp]
@@ -1884,7 +1884,7 @@ definition ofAlgHom
 
 中文:
 定义 ofAlgHom
-  签名: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = AlgHom.id R A₂)
+  签名: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = 代数态射.id R A₂)
   定义体: { f with
     toFun := f
     invFun := g
@@ -1983,7 +1983,7 @@ theorem toLinearEquiv_refl
 
 中文:
 定理 toLinearEquiv_refl
-  结论: (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = LinearEquiv.refl R A₁
+  结论: (代数等价.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = 线性等价.refl R A₁
   证明: rfl
 
 @[simp]
@@ -2086,7 +2086,7 @@ theorem toLinearEquiv_injective
 
 中文:
 定理 toLinearEquiv_injective
-  结论: Function.Injective (toLinearEquiv : _ -> A₁ ≃ₗ[R] A₂)
+  结论: 函数.单射 (toLinearEquiv : _ -> A₁ ≃ₗ[R] A₂)
   证明: fun _ _ h => ext LinearEquiv.congr_fun h
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.congr_fun, congr_fun
@@ -2203,7 +2203,7 @@ ext LinearMap.congr_fun h
 
 中文:
 定理 toLinearMap_injective
-  结论: Function.Injective (toLinearMap : _ -> A₁ ->ₗ[R] A₂)
+  结论: 函数.单射 (toLinearMap : _ -> A₁ ->ₗ[R] A₂)
   证明: fun _ _ h =>
 ext LinearMap.congr_fun h
 
@@ -2299,7 +2299,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
+  签名: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
   定义体: { RingEquiv.ofBijective (f : A₁ ->+* A₂) hf, f with }
 
 @[simp]
@@ -2320,7 +2320,7 @@ lemma coe_ofBijective
 
 中文:
 引理 coe_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
   证明: rfl
 -/
 lemma coe_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) :
@@ -2338,7 +2338,7 @@ lemma ofBijective_apply
 
 中文:
 引理 ofBijective_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (a : A₁)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (a : A₁)
   证明: rfl
 
 @[simp]
@@ -2359,7 +2359,7 @@ lemma toLinearMap_ofBijective
 
 中文:
 引理 toLinearMap_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
   证明: rfl
 
 @[simp]
@@ -2378,7 +2378,7 @@ lemma toAlgHom_ofBijective
 
 中文:
 引理 toAlgHom_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
   证明: rfl
 -/
 lemma toAlgHom_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) :
@@ -2396,7 +2396,7 @@ lemma ofBijective_apply_symm_apply
 
 中文:
 引理 ofBijective_apply_symm_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₂)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (x : A₂)
   证明: (ofBijective f hf).apply_symm_apply x
 
 @[simp]
@@ -2418,7 +2418,7 @@ lemma ofBijective_symm_apply_apply
 
 中文:
 引理 ofBijective_symm_apply_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₁)
+  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (x : A₁)
   证明: (ofBijective f hf).symm_apply_apply x
 
 Depends on / 依赖: ofBijective, symm_apply_apply
@@ -2600,7 +2600,7 @@ inv_mul_cancel ϕ := ext symm_apply_apply ϕ
 
 中文:
 实例 aut
-  签名: : Group (A₁ ≃ₐ[R] A₁) where
+  签名: : 群 (A₁ ≃ₐ[R] A₁) where
   定义体: ψ.trans ϕ
   mul_assoc _ _ _ := rfl
   one := refl
@@ -2768,7 +2768,7 @@ theorem autCongr_refl
 
 中文:
 定理 autCongr_refl
-  结论: autCongr AlgEquiv.refl = MulEquiv.refl (A₁ ≃ₐ[R] A₁)
+  结论: autCongr 代数等价.refl = 乘法等价.refl (A₁ ≃ₐ[R] A₁)
   证明: rfl
 
 @[simp]
@@ -2834,7 +2834,7 @@ instance applyMulSemiringAction
 
 中文:
 实例 applyMulSemiringAction
-  签名: : MulSemiringAction (A₁ ≃ₐ[R] A₁) A₁ where
+  签名: : MulSemiring作用 (A₁ ≃ₐ[R] A₁) A₁ where
   定义体: (· <| ·)
   smul_zero := map_zero
   smul_add := map_add
@@ -2883,7 +2883,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (A₁ ≃ₐ[R] A₁) A₁
+  签名: : 忠实标量乘法 (A₁ ≃ₐ[R] A₁) A₁
   定义体: ⟨AlgEquiv.ext⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext
@@ -2901,7 +2901,7 @@ instance apply_smulCommClass
 
 中文:
 实例 apply_smulCommClass
-  签名: {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁]
+  签名: {S} [标量乘法 S R] [标量乘法 S A₁] [标量塔 S R A₁]
   定义体: (e.toLinearEquiv.map_smul_of_tower r a).symm
 
 Depends on / 依赖: e.toLinearEquiv.map_smul_of_tower, map_smul_of_tower, toLinearEquiv
@@ -2920,7 +2920,7 @@ instance apply_smulCommClass'
 
 中文:
 实例 apply_smulCommClass'
-  签名: {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁]
+  签名: {S} [标量乘法 S R] [标量乘法 S A₁] [标量塔 S R A₁]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -2945,7 +2945,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (A₁ ≃ₐ[R] A₁) A₁ˣ
+  签名: MulDistribMul作用 (A₁ ≃ₐ[R] A₁) A₁ˣ
   定义体: fun f => Units.map f
   one_smul := fun x => by ext; rfl
   mul_smul := fun x y z => by ext; rfl
@@ -2996,7 +2996,7 @@ lemma _root_.MulSemiringAction.toRingEquiv_algEquiv
 @[simp]
 
 中文:
-引理 _root_.MulSemiringAction.toRingEquiv_algEquiv
+引理 _root_.MulSemiring作用.toRingEquiv_algEquiv
   条件: (σ : A₁ ≃ₐ[R] A₁)
   证明: rfl
 
@@ -3040,7 +3040,7 @@ definition toAlgHomHom
 
 中文:
 定义 toAlgHomHom
-  签名: (R A) [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: (R A) [交换半环 R] [半环 A] [代数 R A]
   定义体: AlgEquiv.toAlgHom
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -3063,7 +3063,7 @@ definition toLinearMapHom
 
 中文:
 定义 toLinearMapHom
-  签名: (R A) [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: (R A) [交换半环 R] [半环 A] [代数 R A]
   定义体: AlgHom.toEnd.comp (toAlgHomHom R A)
 
 Depends on / 依赖: AlgHom, AlgHom.toEnd.comp, toAlgHomHom
@@ -3130,7 +3130,7 @@ definition algHomUnitsEquiv
 
 中文:
 定义 algHomUnitsEquiv
-  签名: (R S : 类型) [CommSemiring R] [Semiring S] [Algebra R S]
+  签名: (R S : 类型) [交换半环 R] [半环 S] [代数 R S]
   定义体: fun f =>
     { (f : S ->ₐ[R] S) with
       invFun := ↑(f⁻¹)
@@ -3157,8 +3157,8 @@ instance _root_.Finite.algEquiv
   body: Finite.of_injective _ AlgEquiv.coe_toAlgHom_injective
 
 中文:
-实例 _root_.Finite.algEquiv
-  签名: [Finite (A₁ ->ₐ[R] A₂)]
+实例 _root_.有限.algEquiv
+  签名: [有限 (A₁ ->ₐ[R] A₂)]
   定义体: Finite.of_injective _ AlgEquiv.coe_toAlgHom_injective
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom_injective, Finite, Finite.of_injective, coe_toAlgHom_injective, of_injective
@@ -3179,7 +3179,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom e.toAlgHom
+  签名: 是Local态射 e.toAlgHom
   定义体: by
   have : IsLocalHom e.toRingEquiv := inferInstance
   exact ⟨this.map_nonunit⟩
@@ -3212,8 +3212,8 @@ definition toNatAlgEquiv
 @[simp]
 
 中文:
-定义 toNatAlgEquiv
-  签名: [Semiring R] [Semiring S] (f : R ≃+* S)
+定义 to自然数AlgEquiv
+  签名: [半环 R] [半环 S] (f : R ≃+* S)
   定义体: f
   __ := f.toRingHom.toNatAlgHom
 
@@ -3233,8 +3233,8 @@ lemma coe_toNatAlgEquiv
   proof: rfl
 
 中文:
-引理 coe_toNatAlgEquiv
-  条件: [Semiring R] [Semiring S] (f : R ≃+* S)
+引理 coe_to自然数AlgEquiv
+  条件: [半环 R] [半环 S] (f : R ≃+* S)
   证明: rfl
 -/
 lemma coe_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
@@ -3251,8 +3251,8 @@ lemma toAlgHom_toNatAlgEquiv
 @[simp]
 
 中文:
-引理 toAlgHom_toNatAlgEquiv
-  条件: [Semiring R] [Semiring S] (f : R ≃+* S)
+引理 toAlgHom_to自然数AlgEquiv
+  条件: [半环 R] [半环 S] (f : R ≃+* S)
   证明: rfl
 
 @[simp]
@@ -3270,8 +3270,8 @@ lemma symm_toNatAlgEquiv
   proof: rfl
 
 中文:
-引理 symm_toNatAlgEquiv
-  条件: [Semiring R] [Semiring S] (f : R ≃+* S)
+引理 symm_to自然数AlgEquiv
+  条件: [半环 R] [半环 S] (f : R ≃+* S)
   证明: rfl
 -/
 lemma symm_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
@@ -3290,8 +3290,8 @@ definition equivNatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
 中文:
-定义 equivNatAlgEquiv
-  签名: [Semiring R] [Semiring S]
+定义 equiv自然数AlgEquiv
+  签名: [半环 R] [半环 S]
   定义体: toNatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
@@ -3310,8 +3310,8 @@ lemma toNatAlgEquiv_injective
   proof: (equivNatAlgEquiv R S).injective
 
 中文:
-引理 toNatAlgEquiv_injective
-  条件: [Semiring R] [Semiring S]
+引理 to自然数AlgEquiv_injective
+  条件: [半环 R] [半环 S]
   证明: (equivNatAlgEquiv R S).injective
 
 Depends on / 依赖: equivNatAlgEquiv, injective
@@ -3334,8 +3334,8 @@ definition toIntAlgEquiv
 @[simp]
 
 中文:
-定义 toIntAlgEquiv
-  签名: [Ring R] [Ring S] (f : R ≃+* S)
+定义 to整数AlgEquiv
+  签名: [环 R] [环 S] (f : R ≃+* S)
   定义体: f
   __ := f.toRingHom.toIntAlgHom
 
@@ -3355,8 +3355,8 @@ lemma coe_toIntAlgEquiv
   proof: rfl
 
 中文:
-引理 coe_toIntAlgEquiv
-  条件: [Ring R] [Ring S] (f : R ≃+* S)
+引理 coe_to整数AlgEquiv
+  条件: [环 R] [环 S] (f : R ≃+* S)
   证明: rfl
 -/
 lemma coe_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
@@ -3373,8 +3373,8 @@ lemma toAlgHom_toIntAlgEquiv
 @[simp]
 
 中文:
-引理 toAlgHom_toIntAlgEquiv
-  条件: [Ring R] [Ring S] (f : R ≃+* S)
+引理 toAlgHom_to整数AlgEquiv
+  条件: [环 R] [环 S] (f : R ≃+* S)
   证明: rfl
 
 @[simp]
@@ -3392,8 +3392,8 @@ lemma symm_toIntAlgEquiv
   proof: rfl
 
 中文:
-引理 symm_toIntAlgEquiv
-  条件: [Ring R] [Ring S] (f : R ≃+* S)
+引理 symm_to整数AlgEquiv
+  条件: [环 R] [环 S] (f : R ≃+* S)
   证明: rfl
 -/
 lemma symm_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
@@ -3412,8 +3412,8 @@ definition equivIntAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
 中文:
-定义 equivIntAlgEquiv
-  签名: [Ring R] [Ring S]
+定义 equiv整数AlgEquiv
+  签名: [环 R] [环 S]
   定义体: toIntAlgEquiv
   invFun := AlgEquiv.toRingEquiv
 
@@ -3432,8 +3432,8 @@ lemma toIntAlgEquiv_injective
   proof: (equivIntAlgEquiv R S).injective
 
 中文:
-引理 toIntAlgEquiv_injective
-  条件: [Ring R] [Ring S]
+引理 to整数AlgEquiv_injective
+  条件: [环 R] [环 S]
   证明: (equivIntAlgEquiv R S).injective
 
 Depends on / 依赖: equivIntAlgEquiv, injective
@@ -3486,7 +3486,7 @@ theorem toAlgEquiv_injective
 
 中文:
 定理 toAlgEquiv_injective
-  条件: [FaithfulSMul G A]
+  条件: [忠实标量乘法 G A]
   证明: fun _ _ h =>
   eq_of_smul_eq_smul fun r => AlgEquiv.ext_iff.1 h r
 -/
@@ -3547,8 +3547,8 @@ instance [Subsingleton
 @[simp]
 
 中文:
-实例 [Subsingleton
-  签名: S] [Subsingleton T] : Unique (S ≃ₐ[R] T) where
+实例 [子单例
+  签名: S] [子单例 T] : 唯一 (S ≃ₐ[R] T) where
   定义体: AlgEquiv.ofAlgHom default default
     (AlgHom.ext fun _ => Subsingleton.elim _ _)
     (AlgHom.ext fun _ => Subsingleton.elim _ _)
@@ -3574,8 +3574,8 @@ lemma AlgEquiv.default_apply
   proof: rfl
 
 中文:
-引理 AlgEquiv.default_apply
-  条件: [Subsingleton S] [Subsingleton T] (x : S)
+引理 代数等价.default_apply
+  条件: [子单例 S] [子单例 T] (x : S)
   证明: rfl
 -/
 lemma AlgEquiv.default_apply [Subsingleton S] [Subsingleton T] (x : S) :
@@ -3598,8 +3598,8 @@ definition ULift.algEquiv
 @[simp]
 
 中文:
-定义 ULift.algEquiv
-  签名: {R : 类型u} {A : 类型v} [CommSemiring R] [Semiring A] [Algebra R A]
+定义 类型层提升.algEquiv
+  签名: {R : 类型u} {A : 类型v} [交换半环 R] [半环 A] [代数 R A]
   定义体: ULift.ringEquiv
   commutes' _ := rfl
 
@@ -3622,8 +3622,8 @@ lemma ULift.down_algEquiv_symm_apply
   proof: rfl
 
 中文:
-引理 ULift.down_algEquiv_symm_apply
-  结论: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+引理 类型层提升.down_algEquiv_symm_apply
+  结论: {R A : 类型} [交换半环 R] [半环 A] [代数 R A]
   证明: rfl
 -/
 lemma ULift.down_algEquiv_symm_apply {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
@@ -3651,7 +3651,7 @@ definition AlgHom.ulift
 @[simp]
 
 中文:
-定义 AlgHom.ulift
+定义 代数态射.ulift
   签名: (f : S ->ₐ[R] T)
   定义体: AlgHom.comp ULift.algEquiv.symm.toAlgHom (f.comp ULift.algEquiv.toAlgHom)
   commutes' _ := by simp
@@ -3675,8 +3675,8 @@ lemma AlgHom.down_ulift_apply
   proof: rfl
 
 中文:
-引理 AlgHom.down_ulift_apply
-  条件: (f : S ->ₐ[R] T) (x : ULift S)
+引理 代数态射.down_ulift_apply
+  条件: (f : S ->ₐ[R] T) (x : 类型层提升 S)
   证明: rfl
 -/
 lemma AlgHom.down_ulift_apply (f : S ->ₐ[R] T) (x : ULift S) :
@@ -3692,8 +3692,8 @@ lemma AlgHom.ulift_apply
   proof: rfl
 
 中文:
-引理 AlgHom.ulift_apply
-  条件: (f : S ->ₐ[R] T) (x : ULift S)
+引理 代数态射.ulift_apply
+  条件: (f : S ->ₐ[R] T) (x : 类型层提升 S)
   证明: rfl
 -/
 lemma AlgHom.ulift_apply (f : S ->ₐ[R] T) (x : ULift S) :
@@ -3717,7 +3717,7 @@ definition LinearEquiv.algEquivOfRing
     (algebraMap R A) (e.symm (e 1 * 
 
 中文:
-定义 LinearEquiv.algEquivOfRing
+定义 线性等价.algEquivOfRing
   定义体: Algebra.ofId R A
   invFun x := e.symm (e 1 * x)
   left_inv x := calc
@@ -3781,7 +3781,7 @@ theorem conjAlgEquiv_apply
 
 中文:
 定理 conjAlgEquiv_apply
-  条件: (e : M₁ ≃ₗ[S] M₂) (f : Module.End S M₁)
+  条件: (e : M₁ ≃ₗ[S] M₂) (f : 模.End S M₁)
   证明: rfl
 -/
 theorem conjAlgEquiv_apply (e : M₁ ≃ₗ[S] M₂) (f : Module.End S M₁) :

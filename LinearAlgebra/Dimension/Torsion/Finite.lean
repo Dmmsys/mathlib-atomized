@@ -27,8 +27,8 @@ theorem Module.IsTorsion.rank_eq_zero
   simpa [← map_smul, zero_notMem_nonZeroDivisors, hf] using @h (f 1)
 
 中文:
-定理 Module.IsTorsion.rank_eq_zero
-  结论: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+定理 模.是挠.rank_eq_zero
+  结论: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: by
   by_contra! h'
   obtain ⟨f, hf⟩ := by rwa [← Cardinal.one_le_iff_ne_zero, one_le_rank_iff] at h'
@@ -51,8 +51,8 @@ theorem Module.IsTorsion.finrank_eq_zero
   proof: finrank_eq_zero_of_rank_eq_zero h.rank_eq_zero
 
 中文:
-定理 Module.IsTorsion.finrank_eq_zero
-  结论: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+定理 模.是挠.finrank_eq_zero
+  结论: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: finrank_eq_zero_of_rank_eq_zero h.rank_eq_zero
 
 Depends on / 依赖: finrank_eq_zero_of_rank_eq_zero, h.rank_eq_zero, rank_eq_zero
@@ -76,8 +76,8 @@ lemma Module.rank_eq_zero_iff_isTorsion
 rank_eq_zero_iff_isTorsion := Module.rank_eq_zero_iff_isTorsion
 
 中文:
-引理 Module.rank_eq_zero_iff_isTorsion
-  结论: Module.rank R M = 0 ↔ Module.IsTorsion R M
+引理 模.rank_eq_zero_iff_isTorsion
+  结论: 模.rank R M = 0 ↔ 模.是挠 R M
   证明: by
   simp [IsTorsion, rank_eq_zero_iff]
 
@@ -102,8 +102,8 @@ theorem Module.finrank_eq_zero_iff_isTorsion
   simp [← rank_eq_zero_iff_isTorsion (R := R), ← finrank_eq_rank]
 
 中文:
-定理 Module.finrank_eq_zero_iff_isTorsion
-  条件: [StrongRankCondition R] [Module.Finite R M]
+定理 模.finrank_eq_zero_iff_isTorsion
+  条件: [StrongRankCondition R] [模.有限 R M]
   证明: by
   simp [← rank_eq_zero_iff_isTorsion (R := R), ← finrank_eq_rank]
 

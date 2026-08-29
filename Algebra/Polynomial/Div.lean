@@ -378,7 +378,7 @@ theorem degree_modByMonic_lt
 
 中文:
 定理 degree_modByMonic_lt
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: Classical.decEq R
     if h : degree q <= degree p ∧ p != 0 then by
       have _wf := div_wf_lemma ⟨h.1, h.2⟩ hq
@@ -631,7 +631,7 @@ theorem modByMonic_eq_self_iff
 
 中文:
 定理 modByMonic_eq_self_iff
-  条件: [Nontrivial R] (hq : Monic q)
+  条件: [非平凡 R] (hq : Monic q)
   结论: p %ₘ q = p ↔ degree p < degree q
   证明: ⟨fun h => h ▸ degree_modByMonic_lt _ hq, fun h => by
     have : ¬degree q <= degree p := not_le_of_gt h
@@ -714,7 +714,7 @@ theorem natDegree_modByMonic_le
 
 中文:
 定理 natDegree_modByMonic_le
-  条件: (p : Polynomial R) {g : Polynomial R} (hg : g.Monic)
+  条件: (p : 多项式 R) {g : 多项式 R} (hg : g.Monic)
   证明: natDegree_le_natDegree (degree_modByMonic_le p hg)
 
 Depends on / 依赖: degree_modByMonic_le, natDegree_le_natDegree
@@ -890,7 +890,7 @@ theorem divByMonic_eq_zero_iff
 
 中文:
 定理 divByMonic_eq_zero_iff
-  条件: [Nontrivial R] (hq : Monic q)
+  条件: [非平凡 R] (hq : Monic q)
   结论: p /ₘ q = 0 ↔ degree p < degree q
   证明: ⟨fun h => by
     have := modByMonic_add_div p q
@@ -1166,7 +1166,7 @@ theorem map_mod_divByMonic
 
 中文:
 定理 map_mod_divByMonic
-  条件: [Ring S] (f : R ->+* S) (hq : Monic q)
+  条件: [环 S] (f : R ->+* S) (hq : Monic q)
   证明: by
   nontriviality S
   have : Nontrivial R := f.domain_nontrivial
@@ -1203,7 +1203,7 @@ theorem map_divByMonic
 
 中文:
 定理 map_divByMonic
-  条件: [Ring S] (f : R ->+* S) (hq : Monic q)
+  条件: [环 S] (f : R ->+* S) (hq : Monic q)
   证明: (map_mod_divByMonic f hq).1
 
 Depends on / 依赖: map_mod_divByMonic
@@ -1222,7 +1222,7 @@ theorem map_modByMonic
 
 中文:
 定理 map_modByMonic
-  条件: [Ring S] (f : R ->+* S) (hq : Monic q)
+  条件: [环 S] (f : R ->+* S) (hq : Monic q)
   证明: (map_mod_divByMonic f hq).2
 
 Depends on / 依赖: map_mod_divByMonic, odd_mul, odd_mul.mp
@@ -1338,7 +1338,7 @@ theorem map_dvd_map
 
 中文:
 定理 map_dvd_map
-  结论: [Ring S] (f : R ->+* S) (hf : Function.Injective f) {x y : R[X]}
+  结论: [环 S] (f : R ->+* S) (hf : 函数.单射 f) {x y : R[X]}
   证明: by
   rw [← modByMonic_eq_zero_iff_dvd hx]; rw [← modByMonic_eq_zero_iff_dvd (hx.map f)]; rw [←
     map_modByMonic f hx]
@@ -1860,7 +1860,7 @@ theorem exists_eq_pow_rootMultiplicity_mul_and_not_dvd
   apply (finiteMultiplicity_X_sub_C a hp).exists_eq_pow_mul_and_not_dvd
 
 中文:
-定理 exists_eq_pow_rootMultiplicity_mul_and_not_dvd
+定理 存在_eq_pow_rootMultiplicity_mul_and_not_dvd
   条件: (p : R[X]) (hp : p != 0) (a : R)
   证明: by
   classical
@@ -2036,7 +2036,7 @@ theorem eval₂_modByMonic_eq_self_of_root
 
 中文:
 定理 eval₂_modByMonic_eq_self_of_root
-  结论: [CommRing S] {f : R ->+* S} {p q : R[X]}
+  结论: [交换环 S] {f : R ->+* S} {p q : R[X]}
   证明: by
   rw [modByMonic_eq_sub_mul_div]; rw [eval₂_sub]; rw [eval₂_mul]; rw [hx]; rw [zero_mul]; rw [sub_zero]
 
@@ -2714,7 +2714,7 @@ lemma degree_eq_one_of_irreducible_of_root
 
 中文:
 引理 degree_eq_one_of_irreducible_of_root
-  条件: (hi : Irreducible p) {x : R} (hx : IsRoot p x)
+  条件: (hi : 不可约 p) {x : R} (hx : IsRoot p x)
   证明: let ⟨g, hg⟩ := dvd_iff_isRoot.2 hx
   have : IsUnit (X - C x) ∨ IsUnit g := hi.isUnit_or_isUnit hg
   this.elim
@@ -2744,7 +2744,7 @@ lemma _root_.Irreducible.not_isRoot_of_natDegree_ne_one
   proof: fun hr => hdeg natDegree_eq_of_degree_eq_some degree_eq_one_of_irreducible_of_root hi hr
 
 中文:
-引理 _root_.Irreducible.not_isRoot_of_natDegree_ne_one
+引理 _root_.不可约.not_isRoot_of_natDegree_ne_one
   证明: fun hr => hdeg natDegree_eq_of_degree_eq_some degree_eq_one_of_irreducible_of_root hi hr
 
 Depends on / 依赖: degree_eq_one_of_irreducible_of_root, natDegree_eq_of_degree_eq_some
@@ -2761,7 +2761,7 @@ lemma _root_.Irreducible.isRoot_eq_bot_of_natDegree_ne_one
   proof: le_bot_iff.mp fun _ => hi.not_isRoot_of_natDegree_ne_one hdeg
 
 中文:
-引理 _root_.Irreducible.isRoot_eq_bot_of_natDegree_ne_one
+引理 _root_.不可约.isRoot_eq_bot_of_natDegree_ne_one
   证明: le_bot_iff.mp fun _ => hi.not_isRoot_of_natDegree_ne_one hdeg
 
 Depends on / 依赖: hi.not_isRoot_of_natDegree_ne_one, le_bot_iff, le_bot_iff.mp, not_isRoot_of_natDegree_ne_one
@@ -2779,7 +2779,7 @@ lemma _root_.Irreducible.subsingleton_isRoot
     degree_eq_one_of_irreducible_of_root hi hx) hx
 
 中文:
-引理 _root_.Irreducible.subsingleton_isRoot
+引理 _root_.不可约.subsingleton_isRoot
   证明: fun _ hx => (subsingleton_isRoot_of_natDegree_eq_one <| natDegree_eq_of_degree_eq_some <|
     degree_eq_one_of_irreducible_of_root hi hx) hx
 
@@ -2904,7 +2904,7 @@ lemma associated_of_dvd_of_natDegree_le
 
 中文:
 引理 associated_of_dvd_of_natDegree_le
-  结论: {K} [Field K] {p q : K[X]} (hpq : p ∣ q) (hq : q != 0)
+  结论: {K} [域 K] {p q : K[X]} (hpq : p ∣ q) (hq : q != 0)
   证明: associated_of_dvd_of_natDegree_le_of_leadingCoeff hpq h₁
     (IsUnit.dvd (by rwa [← leadingCoeff_ne_zero, ← isUnit_iff_ne_zero] at hq))
 
@@ -2926,7 +2926,7 @@ lemma associated_of_dvd_of_degree_eq
 
 中文:
 引理 associated_of_dvd_of_degree_eq
-  结论: {K} [Field K] {p q : K[X]} (hpq : p ∣ q)
+  结论: {K} [域 K] {p q : K[X]} (hpq : p ∣ q)
   证明: (Classical.em (q = 0)).elim (fun hq => (show p = q by simpa [hq] using h₁) ▸ Associated.refl p)
     (associated_of_dvd_of_natDegree_le hpq · (natDegree_le_natDegree h₁.ge))
 
@@ -2948,7 +2948,7 @@ lemma eq_leadingCoeff_mul_of_monic_of_dvd_of_natDegree_le
 
 中文:
 引理 eq_leadingCoeff_mul_of_monic_of_dvd_of_natDegree_le
-  结论: {R} [CommSemiring R] {p q : R[X]}
+  结论: {R} [交换半环 R] {p q : R[X]}
   证明: by
   rw [mul_comm]; rw [← eq_mul_leadingCoeff_of_monic_of_dvd_of_natDegree_le hp hdvd hdeg]
 

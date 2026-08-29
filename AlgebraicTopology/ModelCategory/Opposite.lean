@@ -34,7 +34,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).HasTwoOutOfThree命题erty] :
+  签名: C).有TwoOutOfThreeProperty] :
   定义体: by
   rw [weakEquivalences_op]
   infer_instance
@@ -58,7 +58,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [weakEquivalences_op]
   infer_instance
@@ -82,7 +82,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [fibrations_op]
   infer_instance
@@ -106,7 +106,7 @@ instance [(fibrations
 
 中文:
 实例 [(fibrations
-  签名: C).IsStableUnderRetracts] :
+  签名: C).是StableUnderRetracts] :
   定义体: by
   rw [cofibrations_op]
   infer_instance
@@ -130,7 +130,7 @@ instance [(trivialCofibrations
 
 中文:
 实例 [(trivialCofibrations
-  签名: C).HasFactorization (fibrations C)] :
+  签名: C).有分解 (fibrations C)] :
   定义体: by
   rw [cofibrations_op]; rw [trivialFibrations_op]
   infer_instance
@@ -154,7 +154,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).HasFactorization (trivialFibrations C)] :
+  签名: C).有分解 (trivialFibrations C)] :
   定义体: by
   rw [trivialCofibrations_op]; rw [fibrations_op]
   infer_instance
@@ -177,7 +177,7 @@ instance :
 
 中文:
 实例 :
-  签名: ModelCategory Cᵒᵖ
+  签名: 模型范畴 Cᵒᵖ
   定义体: (HasLiftingProperty.iff_unop i p).2 inferInstance
   cm4b i p _ _ _ := (HasLiftingProperty.iff_unop i p).2 inferInstance
 

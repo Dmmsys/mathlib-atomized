@@ -42,8 +42,8 @@ definition UniqueFactorizationMonoid.toGCDMonoid
     rw [← mk_dvd_mk]
 
 中文:
-定义 UniqueFactorizationMonoid.toGCDMonoid
-  签名: (α : 类型) [CommMonoidWithZero α]
+定义 唯一分解幺半群.toGCDMonoid
+  签名: (α : 类型) [带零交换幺半群 α]
   定义体: Quot.out (Associates.mk a ⊓ Associates.mk b : Associates α)
   lcm a b := Quot.out (Associates.mk a ⊔ Associates.mk b : Associates α)
   gcd_dvd_left a b := by
@@ -92,7 +92,7 @@ gcd_dvd_left := fun a b => (out_dvd_iff a (Associates.mk a ⊓ Associates.mk b))
 (out_dvd_iff b (Asso
 
 中文:
-定义 UniqueFactorizationMonoid.toNormalizedGCDMonoid
+定义 唯一分解幺半群.toNormalizedGCDMonoid
   签名: (α : 类型)
   定义体: { ‹NormalizationMonoid α› with
     gcd := fun a b => (Associates.mk a ⊓ Associates.mk b).out
@@ -134,7 +134,7 @@ abbreviation UniqueFactorizationMonoid.toStrongNormalizedGCDMonoid
   __ := ‹StrongNormalizationMonoid α›
 
 中文:
-缩写 UniqueFactorizationMonoid.toStrongNormalizedGCDMonoid
+缩写 唯一分解幺半群.toStrongNormalizedGCDMonoid
   签名: (α : 类型)
   定义体: toNormalizedGCDMonoid α
   __ := ‹StrongNormalizationMonoid α›

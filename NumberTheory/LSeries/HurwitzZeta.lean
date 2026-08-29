@@ -56,7 +56,7 @@ definition hurwitzZeta
 
 中文:
 定义 hurwitzZeta
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: hurwitzZetaEven a s + hurwitzZetaOdd a s
 
 Depends on / 依赖: hurwitzZetaEven, hurwitzZetaOdd
@@ -76,7 +76,7 @@ lemma hurwitzZetaEven_eq
 
 中文:
 引理 hurwitzZetaEven_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp only [hurwitzZeta, hurwitzZetaEven_neg, hurwitzZetaOdd_neg]
   ring_nf
@@ -100,7 +100,7 @@ lemma hurwitzZetaOdd_eq
 
 中文:
 引理 hurwitzZetaOdd_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   simp only [hurwitzZeta, hurwitzZetaEven_neg, hurwitzZetaOdd_neg]
   ring_nf
@@ -122,7 +122,7 @@ lemma differentiableAt_hurwitzZeta
 
 中文:
 引理 differentiableAt_hurwitzZeta
-  条件: (a : UnitAddCircle) {s : Complex} (hs : s != 1)
+  条件: (a : UnitAddCircle) {s : 复形} (hs : s != 1)
   证明: (differentiableAt_hurwitzZetaEven a hs).add (differentiable_hurwitzZetaOdd a s)
 
 Depends on / 依赖: Icc_subset_Ici_iff, Ico_subset_Ici_self, Ico_subset_Ico_left, Logical, differentiableAt_hurwitzZetaEven, differentiable_hurwitzZetaOdd, equivalences, however, stated
@@ -147,7 +147,7 @@ lemma hasSum_hurwitzZeta_of_one_lt_re
 
 中文:
 引理 hasSum_hurwitzZeta_of_one_lt_re
-  条件: {a : 实数} (ha : a in Icc 0 1) {s : Complex} (hs : 1 < re s)
+  条件: {a : 实数} (ha : a in 闭区间 0 1) {s : 复形} (hs : 1 < re s)
   证明: by
   convert!
     (hasSum_nat_hurwitzZetaEven_of_mem_Icc ha hs).add (hasSum_nat_hurwitzZetaOdd_of_mem_Icc ha hs)
@@ -286,7 +286,7 @@ definition expZeta
 
 中文:
 定义 expZeta
-  签名: (a : UnitAddCircle) (s : Complex)
+  签名: (a : UnitAddCircle) (s : 复形)
   定义体: cosZeta a s + I * sinZeta a s
 
 Depends on / 依赖: cosZeta, sinZeta
@@ -306,7 +306,7 @@ lemma cosZeta_eq
 
 中文:
 引理 cosZeta_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [expZeta]; rw [expZeta]; rw [cosZeta_neg]; rw [sinZeta_neg]
   ring_nf
@@ -330,7 +330,7 @@ lemma sinZeta_eq
 
 中文:
 引理 sinZeta_eq
-  条件: (a : UnitAddCircle) (s : Complex)
+  条件: (a : UnitAddCircle) (s : 复形)
   证明: by
   rw [expZeta]; rw [expZeta]; rw [cosZeta_neg]; rw [sinZeta_neg]
   field
@@ -356,7 +356,7 @@ lemma hasSum_expZeta_of_one_lt_re
 
 中文:
 引理 hasSum_expZeta_of_one_lt_re
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: by
   convert! (hasSum_nat_cosZeta a hs).add ((hasSum_nat_sinZeta a hs).mul_left I) using 1
   ext1 n
@@ -385,7 +385,7 @@ lemma differentiableAt_expZeta
 
 中文:
 引理 differentiableAt_expZeta
-  条件: (a : UnitAddCircle) (s : Complex) (hs : s != 1 ∨ a != 0)
+  条件: (a : UnitAddCircle) (s : 复形) (hs : s != 1 ∨ a != 0)
   证明: by
   apply DifferentiableAt.add
   · exact differentiableAt_cosZeta a hs
@@ -429,7 +429,7 @@ lemma LSeriesHasSum_exp
 
 中文:
 引理 LSeriesHasSum_exp
-  条件: (a : 实数) {s : Complex} (hs : 1 < re s)
+  条件: (a : 实数) {s : 复形} (hs : 1 < re s)
   证明: (hasSum_expZeta_of_one_lt_re a hs).congr_fun
     (LSeries.term_of_ne_zero' (ne_zero_of_one_lt_re hs) _)
 
@@ -453,7 +453,7 @@ lemma hurwitzZeta_one_sub
 
 中文:
 引理 hurwitzZeta_one_sub
-  结论: (a : UnitAddCircle) {s : Complex}
+  结论: (a : UnitAddCircle) {s : 复形}
   证明: by
   rw [hurwitzZeta]; rw [hurwitzZetaEven_one_sub a hs hs']; rw [hurwitzZetaOdd_one_sub a hs]; rw [expZeta]; rw [expZeta]; rw [Complex.cos]; rw [Complex.sin]; rw [sinZeta_neg]; rw [cosZeta_neg]
   rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring
@@ -489,7 +489,7 @@ lemma expZeta_one_sub
 
 中文:
 引理 expZeta_one_sub
-  条件: (a : UnitAddCircle) {s : Complex} (hs : 对任意 (n : 自然数), s != 1 - n)
+  条件: (a : UnitAddCircle) {s : 复形} (hs : 对任意 (n : 自然数), s != 1 - n)
   证明: by
   have hs' (n : Nat) : s != -↑n := by
     convert! hs (n + 1) using 1

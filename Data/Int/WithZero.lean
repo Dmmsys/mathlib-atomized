@@ -56,7 +56,7 @@ definition toNNReal
     
 
 中文:
-定义 toNNReal
+定义 toNN实数
   签名: {e : 实数>=0} (he : e != 0)
   定义体: fun x => if hx : x = 0 then 0 else e ^ (WithZero.unzero hx).toAdd
   map_zero' := rfl
@@ -95,7 +95,7 @@ theorem toNNReal_pos_apply
   simp [toNNReal, hx]
 
 中文:
-定理 toNNReal_pos_apply
+定理 toNN实数_pos_apply
   条件: {e : 实数>=0} (he : e != 0) {x : 整数ᵐ⁰} (hx : x = 0)
   证明: by
   simp [toNNReal, hx]
@@ -117,7 +117,7 @@ theorem toNNReal_neg_apply
   simp [toNNReal, hx]
 
 中文:
-定理 toNNReal_neg_apply
+定理 toNN实数_neg_apply
   条件: {e : 实数>=0} (he : e != 0) {x : 整数ᵐ⁰} (hx : x != 0)
   证明: by
   simp [toNNReal, hx]
@@ -139,7 +139,7 @@ theorem toNNReal_ne_zero
   simp only [ne_eq, map_eq_zero, hm, not_false_eq_true]
 
 中文:
-定理 toNNReal_ne_zero
+定理 toNN实数_ne_zero
   条件: {e : 实数>=0} {m : 整数ᵐ⁰} (he : e != 0) (hm : m != 0)
   结论: toNN实数 he m != 0
   证明: by
@@ -160,7 +160,7 @@ theorem toNNReal_pos
   proof: (toNNReal_ne_zero he hm).pos
 
 中文:
-定理 toNNReal_pos
+定理 toNN实数_pos
   条件: {e : 实数>=0} {m : 整数ᵐ⁰} (he : e != 0) (hm : m != 0)
   结论: 0 < toNN实数 he m
   证明: (toNNReal_ne_zero he hm).pos
@@ -186,7 +186,7 @@ theorem toNNReal_strictMono
   · simp [toNNReal, he]
 
 中文:
-定理 toNNReal_strictMono
+定理 toNN实数_strictMono
   条件: {e : 实数>=0} (he : 1 < e)
   证明: by
   intro x y
@@ -221,7 +221,7 @@ theorem toNNReal_eq_one_iff
     rw [← WithZero.coe_unzero hm]; rw [h1]; rw [coe_one]
 
 中文:
-定理 toNNReal_eq_one_iff
+定理 toNN实数_eq_one_iff
   条件: {e : 实数>=0} (m : 整数ᵐ⁰) (he0 : e != 0) (he1 : e != 1)
   证明: by
   by_cases hm : m = 0
@@ -250,7 +250,7 @@ theorem toNNReal_lt_one_iff
   rw [← (toNNReal_strictMono he).lt_iff_lt]; rw [map_one]
 
 中文:
-定理 toNNReal_lt_one_iff
+定理 toNN实数_lt_one_iff
   条件: {e : 实数>=0} {m : 整数ᵐ⁰} (he : 1 < e)
   证明: by
   rw [← (toNNReal_strictMono he).lt_iff_lt]; rw [map_one]
@@ -271,7 +271,7 @@ theorem toNNReal_le_one_iff
   rw [← (toNNReal_strictMono he).le_iff_le]; rw [map_one]
 
 中文:
-定理 toNNReal_le_one_iff
+定理 toNN实数_le_one_iff
   条件: {e : 实数>=0} {m : 整数ᵐ⁰} (he : 1 < e)
   证明: by
   rw [← (toNNReal_strictMono he).le_iff_le]; rw [map_one]

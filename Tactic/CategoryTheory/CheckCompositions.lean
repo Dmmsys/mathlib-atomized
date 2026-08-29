@@ -39,7 +39,7 @@ definition forEachComposition
 
 中文:
 定义 forEachComposition
-  签名: (e : Expr) (f : Expr -> MetaM Unit)
+  签名: (e : Expr) (f : Expr -> MetaM 单元)
   定义体: do
   e.forEach (fun e => if e.isAppOfArity ``CategoryStruct.comp 7 then f e else pure ())
 -/
@@ -126,7 +126,7 @@ definition checkCompositionsTac
 
 中文:
 定义 checkCompositionsTac
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: withMainContext do
   let e ← getMainTarget
   checkCompositions e

@@ -45,9 +45,9 @@ structure FunctionData
     - lctx : LocalContext
     - insts : LocalInstances
     - fn : Expr
-    - args : Array Mor.Arg
+    - args : 数组 态射.Arg
     - mainVar : Expr
-    - mainArgs : Array 自然数
+    - mainArgs : 数组 自然数
 -/
 structure FunctionData where
   /-- local context where `mainVar` exists -/
@@ -661,7 +661,7 @@ definition FunctionData.decompositionOverArgs
 
 中文:
 定义 FunctionData.decompositionOverArgs
-  签名: (fData : FunctionData) (args : Array 自然数)
+  签名: (fData : FunctionData) (args : 数组 自然数)
   定义体: do
 
   unless isOrderedSubsetOf fData.mainArgs args do return none

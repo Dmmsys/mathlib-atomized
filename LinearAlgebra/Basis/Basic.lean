@@ -55,7 +55,7 @@ theorem repr_range
 
 中文:
 定理 repr_range
-  结论: LinearMap.range (b.repr : M ->ₗ[R] ι ->₀ R) = Finsupp.supported R R univ
+  结论: 线性映射.range (b.repr : M ->ₗ[R] ι ->₀ R) = 有限支撑.supported R R univ
   证明: by
   rw [LinearEquiv.range]; rw [Finsupp.supported_univ]
 
@@ -99,7 +99,7 @@ theorem repr_support_subset_of_mem_span
 
 中文:
 定理 repr_support_subset_of_mem_span
-  结论: (s : Set ι) {m : M}
+  结论: (s : 集合 ι) {m : M}
   证明: by
   rcases (Finsupp.mem_span_image_iff_linearCombination _).1 hm with ⟨l, hl, rfl⟩
   rwa [repr_linearCombination, ← Finsupp.mem_supported R l]
@@ -125,7 +125,7 @@ theorem mem_span_image
 
 中文:
 定理 mem_span_image
-  条件: {m : M} {s : Set ι}
+  条件: {m : M} {s : 集合 ι}
   结论: m in span R (b '' s) ↔ ↑(b.repr m).support subseteq s
   证明: ⟨repr_support_subset_of_mem_span _ _, fun h =>
     span_mono (Set.image_mono h) (mem_span_repr_support b _)⟩
@@ -150,7 +150,7 @@ theorem self_mem_span_image
 
 中文:
 定理 self_mem_span_image
-  条件: [Nontrivial R] {i : ι} {s : Set ι}
+  条件: [非平凡 R] {i : ι} {s : 集合 ι}
   证明: by
   simp [mem_span_image, Finsupp.support_single]
 
@@ -211,8 +211,8 @@ theorem _root_.Submodule.eq_top_iff_forall_basis_mem
   simpa using span_mono (R := R) h
 
 中文:
-定理 _root_.Submodule.eq_top_iff_forall_basis_mem
-  条件: {p : Submodule R M}
+定理 _root_.子模.eq_top_iff_对任意_basis_mem
+  条件: {p : 子模 R M}
   证明: by
   refine ⟨fun h => by simp [h], fun h => ?_⟩
   replace h : range b subseteq p := by rintro - ⟨i, rfl⟩; exact h i
@@ -240,8 +240,8 @@ theorem index_nonempty
 
 中文:
 定理 index_nonempty
-  条件: (b : Basis ι R M) [Nontrivial M]
-  结论: Nonempty ι
+  条件: (b : 基 ι R M) [非平凡 M]
+  结论: 非空 ι
   证明: by
   obtain ⟨x, y, ne⟩ : exists x y : M, x != y := Nontrivial.exists_pair_ne
   obtain ⟨i, _⟩ := not_forall.mp (mt b.ext_elem_iff.2 ne)
@@ -284,7 +284,7 @@ lemma linearIndepOn
 
 中文:
 引理 linearIndepOn
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   结论: LinearIndepOn R b s
   证明: b.linearIndependent.linearIndepOn s
 -/
@@ -302,7 +302,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial R] (i)
+  条件: [非平凡 R] (i)
   结论: b i != 0
   证明: b.linearIndependent.ne_zero i
 -/
@@ -381,7 +381,7 @@ theorem mk_repr
 
 中文:
 定理 mk_repr
-  结论: (Basis.mk hli hsp).repr x = hli.repr ⟨x, hsp Submodule.mem_top⟩
+  结论: (基.mk hli hsp).repr x = hli.repr ⟨x, hsp 子模.mem_top⟩
   证明: rfl
 -/
 theorem mk_repr : (Basis.mk hli hsp).repr x = hli.repr ⟨x, hsp Submodule.mem_top⟩ :=
@@ -401,7 +401,7 @@ theorem mk_apply
 中文:
 定理 mk_apply
   条件: (i : ι)
-  结论: Basis.mk hli hsp i = v i
+  结论: 基.mk hli hsp i = v i
   证明: show Finsupp.linearCombination _ v _ = v i by simp
 
 @[simp]
@@ -422,7 +422,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  结论: ⇑(Basis.mk hli hsp) = v
+  结论: ⇑(基.mk hli hsp) = v
   证明: funext (mk_apply _ _)
 
 Depends on / 依赖: mk_apply
@@ -448,7 +448,7 @@ theorem linearIndependent_coord
 
 中文:
 定理 linearIndependent_coord
-  条件: {R : 类型} [CommSemiring R] [Module R M] (b : Basis ι R M)
+  条件: {R : 类型} [交换半环 R] [模 R M] (b : 基 ι R M)
   证明: by
   classical
   refine linearIndependent_iff'ₛ.mpr fun s l₁ l₂ h j hj => ?_
@@ -478,7 +478,7 @@ theorem mk_coord_apply_eq
 中文:
 定理 mk_coord_apply_eq
   条件: (i : ι)
-  结论: (Basis.mk hli hsp).coord i (v i) = 1
+  结论: (基.mk hli hsp).coord i (v i) = 1
   证明: show hli.repr ⟨v i, Submodule.subset_span (mem_range_self i)⟩ i = 1 by simp [hli.repr_eq_single i]
 
 Depends on / 依赖: Submodule, Submodule.subset_span, hli.repr, hli.repr_eq_single, mem_range_self, repr_eq_single, subset_span
@@ -499,7 +499,7 @@ theorem mk_coord_apply_ne
 中文:
 定理 mk_coord_apply_ne
   条件: {i j : ι} (h : j != i)
-  结论: (Basis.mk hli hsp).coord i (v j) = 0
+  结论: (基.mk hli hsp).coord i (v j) = 0
   证明: show hli.repr ⟨v j, Submodule.subset_span (mem_range_self j)⟩ i = 0 by
     simp [hli.repr_eq_single j, h]
 
@@ -624,7 +624,7 @@ theorem coe_span_apply
 中文:
 定理 coe_span_apply
   条件: (i : ι)
-  结论: (Basis.span hli i : M) = v i
+  结论: (基.span hli i : M) = v i
   证明: by simp
 
 @[simp]
@@ -666,7 +666,7 @@ lemma span_neg
 
 中文:
 引理 span_neg
-  结论: {R M : 类型} [Ring R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [环 R] [加法交换群 M] [模 R M]
   证明: by
   ext; simp
 
@@ -701,8 +701,8 @@ theorem maximal
 
 中文:
 定理 maximal
-  条件: [Nontrivial R] (b : Basis ι R M)
-  结论: b.linearIndependent.Maximal
+  条件: [非平凡 R] (b : 基 ι R M)
+  结论: b.linearIndependent.极大
   证明: fun w hi h => by
   -- If `w` is strictly bigger than `range b`,
   apply le_antisymm h
@@ -747,7 +747,7 @@ instance uniqueBasis
 
 中文:
 实例 uniqueBasis
-  签名: [Subsingleton R]
+  签名: [子单例 R]
   定义体: ⟨⟨⟨default⟩⟩, fun ⟨b⟩ => by rw [Subsingleton.elim b]⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -775,7 +775,7 @@ definition singleton
 
 中文:
 定义 singleton
-  签名: (ι R : 类型) [Unique ι] [Semiring R]
+  签名: (ι R : 类型) [唯一 ι] [半环 R]
   定义体: ofRepr
     { toFun := fun x => Finsupp.single default x
       invFun := fun f => f default
@@ -806,8 +806,8 @@ theorem singleton_apply
 
 中文:
 定理 singleton_apply
-  条件: (ι R : 类型) [Unique ι] [Semiring R] (i)
-  结论: Basis.singleton ι R i = 1
+  条件: (ι R : 类型) [唯一 ι] [半环 R] (i)
+  结论: 基.singleton ι R i = 1
   证明: apply_eq_iff.mpr (by simp [Basis.singleton])
 
 Depends on / 依赖: Basis.singleton, apply_eq_iff, apply_eq_iff.mpr, singleton
@@ -829,7 +829,7 @@ theorem singleton_repr
 
 中文:
 定理 singleton_repr
-  条件: (ι R : 类型) [Unique ι] [Semiring R] (x i)
+  条件: (ι R : 类型) [唯一 ι] [半环 R] (x i)
   证明: by simp [Basis.singleton, Unique.eq_default i]
 
 @[simp]
@@ -851,7 +851,7 @@ theorem coe_singleton
 
 中文:
 定理 coe_singleton
-  条件: {ι R : 类型} [Unique ι] [Semiring R]
+  条件: {ι R : 类型} [唯一 ι] [半环 R]
   证明: by
   ext; simp
 -/
@@ -875,7 +875,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: [Subsingleton M] [IsEmpty ι]
+  签名: [子单例 M] [是空 ι]
   定义体: ofRepr 0
 -/
 protected def empty [Subsingleton M] [IsEmpty ι] : Basis ι R M :=
@@ -892,7 +892,7 @@ uniq := fun _ => congr_arg ofRepr Subsingleton.elim _ _
 
 中文:
 实例 emptyUnique
-  签名: [Subsingleton M] [IsEmpty ι]
+  签名: [子单例 M] [是空 ι]
   定义体: Basis.empty M
 uniq := fun _ => congr_arg ofRepr Subsingleton.elim _ _
 
@@ -918,7 +918,7 @@ lemma isTorsionFree
 
 中文:
 引理 isTorsionFree
-  条件: (b : Basis ι R M)
+  条件: (b : 基 ι R M)
   证明: b.repr.injective.moduleIsTorsionFree _ (by simp)
 -/
 protected lemma isTorsionFree (b : Basis ι R M) :
@@ -934,7 +934,7 @@ theorem smul_eq_zero
 
 中文:
 定理 smul_eq_zero
-  条件: [IsDomain R] (b : Basis ι R M) {c : R} {x : M}
+  条件: [是整环 R] (b : 基 ι R M) {c : R} {x : M}
   证明: by have := b.isTorsionFree; exact smul_eq_zero
 -/
 protected theorem smul_eq_zero [IsDomain R] (b : Basis ι R M) {c : R} {x : M} :
@@ -962,7 +962,7 @@ refine ⟨ofRepr LinearEquiv.symm
 
 中文:
 定理 basis_singleton_iff
-  结论: {R M : 类型} [Ring R] [IsDomain R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [环 R] [是整环 R] [加法交换群 M] [模 R M]
   证明: by
   constructor
   · rintro ⟨b⟩
@@ -1017,7 +1017,7 @@ lemma card_fintype
 
 中文:
 引理 card_fintype
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] [Fintype ι] (b : Basis ι R M)
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] [有限类型 ι] (b : 基 ι R M)
   证明: by
   classical
     calc

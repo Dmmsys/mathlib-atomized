@@ -35,7 +35,7 @@ definition powersetAux
 
 中文:
 定义 powersetAux
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: (sublists l).map (↑)
 
 Depends on / 依赖: sublists
@@ -56,7 +56,7 @@ theorem powersetAux_eq_map_coe
 
 中文:
 定理 powersetAux_eq_map_coe
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: powersetAux l = (sublists l).map (↑)
   证明: rfl
 
@@ -77,7 +77,7 @@ theorem mem_powersetAux
 
 中文:
 定理 mem_powersetAux
-  条件: {l : List α} {s}
+  条件: {l : 列表 α} {s}
   结论: s in powersetAux l ↔ s <= ↑l
   证明: Quotient.inductionOn s by simp [powersetAux_eq_map_coe, Subperm, and_comm]
 
@@ -96,7 +96,7 @@ definition powersetAux'
 
 中文:
 定义 powersetAux'
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: (sublists' l).map (↑)
 
 Depends on / 依赖: sublists
@@ -118,7 +118,7 @@ theorem powersetAux_perm_powersetAux'
 
 中文:
 定理 powersetAux_perm_powersetAux'
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: powersetAux l ~ powersetAux' l
   证明: by
   rw [powersetAux_eq_map_coe]; exact (sublists_perm_sublists' _).map _
@@ -163,7 +163,7 @@ theorem powersetAux'_cons
 
 中文:
 定理 powersetAux'_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   simp [powersetAux']
 -/
@@ -191,7 +191,7 @@ theorem powerset_aux'_perm
 
 中文:
 定理 powerset_aux'_perm
-  条件: {l₁ l₂ : List α} (p : l₁ ~ l₂)
+  条件: {l₁ l₂ : 列表 α} (p : l₁ ~ l₂)
   结论: powersetAux' l₁ ~ powersetAux' l₂
   证明: by
   induction p with
@@ -231,7 +231,7 @@ theorem powersetAux_perm
 
 中文:
 定理 powersetAux_perm
-  条件: {l₁ l₂ : List α} (p : l₁ ~ l₂)
+  条件: {l₁ l₂ : 列表 α} (p : l₁ ~ l₂)
   结论: powersetAux l₁ ~ powersetAux l₂
   证明: powersetAux_perm_powersetAux'.trans
     (powerset_aux'_perm p).trans powersetAux_perm_powersetAux'.symm
@@ -279,8 +279,8 @@ theorem powerset_coe
 
 中文:
 定理 powerset_coe
-  条件: (l : List α)
-  结论: @powerset α l = ((sublists l).map (↑) : List (Multiset α))
+  条件: (l : 列表 α)
+  结论: @powerset α l = ((sublists l).map (↑) : 列表 (Multiset α))
   证明: congr_arg ((↑) : List (Multiset α) -> Multiset (Multiset α)) powersetAux_eq_map_coe
 
 @[simp]
@@ -304,8 +304,8 @@ theorem powerset_coe'
 
 中文:
 定理 powerset_coe'
-  条件: (l : List α)
-  结论: @powerset α l = ((sublists' l).map (↑) : List (Multiset α))
+  条件: (l : 列表 α)
+  结论: @powerset α l = ((sublists' l).map (↑) : 列表 (Multiset α))
   证明: Quot.sound powersetAux_perm_powersetAux'
 
 @[simp]
@@ -531,7 +531,7 @@ theorem revzip_powersetAux
 
 中文:
 定理 revzip_powersetAux
-  条件: {l : List α} ⦃x⦄ (h : x in revzip (powersetAux l))
+  条件: {l : 列表 α} ⦃x⦄ (h : x in revzip (powersetAux l))
   结论: x.1 + x.2 = ↑l
   证明: by
   rw [revzip]; rw [powersetAux_eq_map_coe]; rw [← map_reverse]; rw [zip_map]; rw [← revzip]; rw [List.mem_map] at h
@@ -561,7 +561,7 @@ theorem revzip_powersetAux'
 
 中文:
 定理 revzip_powersetAux'
-  条件: {l : List α} ⦃x⦄ (h : x in revzip (powersetAux' l))
+  条件: {l : 列表 α} ⦃x⦄ (h : x in revzip (powersetAux' l))
   证明: by
   rw [revzip]; rw [powersetAux']; rw [← map_reverse]; rw [zip_map]; rw [← revzip]; rw [List.mem_map] at h
   simp only [Prod.map_apply, Prod.exists] at h
@@ -595,7 +595,7 @@ theorem revzip_powersetAux_lemma
 
 中文:
 定理 revzip_powersetAux_lemma
-  结论: {α : 类型} [DecidableEq α] (l : List α) {l' : List (Multiset α)}
+  结论: {α : 类型} [DecidableEq α] (l : 列表 α) {l' : 列表 (Multiset α)}
   证明: by
   have :
     Forall₂ (fun (p : Multiset α × Multiset α) (s : Multiset α) => p = (s, ↑l - s)) (revzip l')
@@ -634,7 +634,7 @@ theorem revzip_powersetAux_perm_aux'
 
 中文:
 定理 revzip_powersetAux_perm_aux'
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   have := Classical.decEq α
   rw [revzip_powersetAux_lemma l revzip_powersetAux]; rw [revzip_powersetAux_lemma l revzip_powersetAux']
@@ -663,7 +663,7 @@ theorem revzip_powersetAux_perm
 
 中文:
 定理 revzip_powersetAux_perm
-  条件: {l₁ l₂ : List α} (p : l₁ ~ l₂)
+  条件: {l₁ l₂ : 列表 α} (p : l₁ ~ l₂)
   证明: by
   have := Classical.decEq α
   simp only [fun l : List α => revzip_powersetAux_lemma l revzip_powersetAux, coe_eq_coe.2 p]
@@ -731,7 +731,7 @@ lemma powerset_injective
 
 中文:
 引理 powerset_injective
-  结论: Function.Injective (@Multiset.powerset α)
+  结论: 函数.单射 (@Multiset.powerset α)
   证明: by
   intro a₁ a₂ a
   exact le_antisymm
@@ -756,7 +756,7 @@ lemma powerset_strictMono
 
 中文:
 引理 powerset_strictMono
-  结论: StrictMono (@Multiset.powerset α)
+  结论: 严格递增 (@Multiset.powerset α)
   证明: strictMono_of_le_iff_le (fun _ _ => powerset_le_powerset_iff_le.symm)
 
 Depends on / 依赖: powerset_le_powerset_iff_le, powerset_le_powerset_iff_le.symm, strictMono_of_le_iff_le
@@ -774,7 +774,7 @@ lemma powerset_mono
 
 中文:
 引理 powerset_mono
-  结论: Monotone (@Multiset.powerset α)
+  结论: 递增 (@Multiset.powerset α)
   证明: powerset_strictMono.monotone
 
 Depends on / 依赖: monotone, powerset_strictMono, powerset_strictMono.monotone
@@ -795,7 +795,7 @@ definition powersetCardAux
 
 中文:
 定义 powersetCardAux
-  签名: (n : 自然数) (l : List α)
+  签名: (n : 自然数) (l : 列表 α)
   定义体: sublistsLenAux n l (↑) []
 
 Depends on / 依赖: sublistsLenAux
@@ -816,7 +816,7 @@ theorem powersetCardAux_eq_map_coe
 
 中文:
 定理 powersetCardAux_eq_map_coe
-  条件: {n} {l : List α}
+  条件: {n} {l : 列表 α}
   证明: by
   rw [powersetCardAux]; rw [sublistsLenAux_eq]; rw [append_nil]
 
@@ -845,7 +845,7 @@ theorem mem_powersetCardAux
 
 中文:
 定理 mem_powersetCardAux
-  条件: {n} {l : List α} {s}
+  条件: {n} {l : 列表 α} {s}
   结论: s in powersetCardAux n l ↔ s <= ↑l ∧ card s = n
   证明: Quotient.inductionOn s by
     simp only [quot_mk_to_coe, powersetCardAux_eq_map_coe, List.mem_map, mem_sublistsLen,
@@ -879,7 +879,7 @@ theorem powersetCardAux_zero
 
 中文:
 定理 powersetCardAux_zero
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: powersetCardAux 0 l = [0]
   证明: by
   simp [powersetCardAux_eq_map_coe]
@@ -926,7 +926,7 @@ theorem powersetCardAux_cons
 
 中文:
 定理 powersetCardAux_cons
-  条件: (n : 自然数) (a : α) (l : List α)
+  条件: (n : 自然数) (a : α) (l : 列表 α)
   证明: by
   simp [powersetCardAux_eq_map_coe]
 
@@ -957,7 +957,7 @@ theorem powersetCardAux_perm
 
 中文:
 定理 powersetCardAux_perm
-  条件: {n} {l₁ l₂ : List α} (p : l₁ ~ l₂)
+  条件: {n} {l₁ l₂ : 列表 α} (p : l₁ ~ l₂)
   证明: by
   induction n generalizing l₁ l₂ with | zero => simp | succ n IHn => ?_
   induction p with
@@ -1022,7 +1022,7 @@ theorem powersetCard_coe'
 
 中文:
 定理 powersetCard_coe'
-  条件: (n) (l : List α)
+  条件: (n) (l : 列表 α)
   结论: @powersetCard α n l = powersetCardAux n l
   证明: rfl
 -/
@@ -1041,7 +1041,7 @@ theorem powersetCard_coe
 
 中文:
 定理 powersetCard_coe
-  条件: (n) (l : List α)
+  条件: (n) (l : 列表 α)
   证明: congr_arg ((↑) : List (Multiset α) -> Multiset (Multiset α)) powersetCardAux_eq_map_coe
 
 @[simp]

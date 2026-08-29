@@ -58,8 +58,8 @@ lemma AddChar.tendsto_eval_one_sub_pow
   simpa only [AddChar.map_zero_eq_one, mul_one] using! fwdDiff_addChar_eq κ 0 1 n
 
 中文:
-引理 AddChar.tendsto_eval_one_sub_pow
-  条件: {κ : AddChar 整数_[p] R} (hκ : Continuous κ)
+引理 加法特征.tendsto_eval_one_sub_pow
+  条件: {κ : 加法特征 整数_[p] R} (hκ : 连续 κ)
   证明: by
   refine (PadicInt.fwdDiff_tendsto_zero ⟨κ, hκ⟩).congr fun n => ?_
   simpa only [AddChar.map_zero_eq_one, mul_one] using! fwdDiff_addChar_eq κ 0 1 n
@@ -89,7 +89,7 @@ definition addChar_of_value_at_one
 
 中文:
 定义 addChar_of_value_at_one
-  签名: (r : R) (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  签名: (r : R) (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   定义体: mahlerSeries (r ^ ·)
   map_zero_eq_one' := by
     rw [← Nat.cast_zero]; rw [mahlerSeries_apply_nat hr le_rfl]; rw [zero_add]; rw [Finset.sum_range_one]; rw [Nat.choose_self]; rw [pow_zero]; rw [one_smul]
@@ -129,7 +129,7 @@ lemma continuous_addChar_of_value_at_one
 
 中文:
 引理 continuous_addChar_of_value_at_one
-  条件: {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  条件: {r : R} (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   证明: map_continuous (mahlerSeries (r ^ ·))
 
 Depends on / 依赖: mahlerSeries, map_continuous
@@ -150,7 +150,7 @@ lemma coe_addChar_of_value_at_one
 
 中文:
 引理 coe_addChar_of_value_at_one
-  条件: {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  条件: {r : R} (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   证明: rfl
 
 @[simp]
@@ -172,7 +172,7 @@ lemma addChar_of_value_at_one_def
 
 中文:
 引理 addChar_of_value_at_one_def
-  条件: {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  条件: {r : R} (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   证明: by
   change mahlerSeries (r ^ ·) ↑(1 : Nat) = _
   rw [mahlerSeries_apply_nat hr le_rfl]; rw [Finset.sum_range_succ]; rw [Finset.sum_range_one]; rw [Nat.choose_zero_right]; rw [Nat.choose_self]; rw [one_smul]; rw [one_smul]; rw [pow_zero]; rw [pow_one]
@@ -194,7 +194,7 @@ lemma eq_addChar_of_value_at_one
 
 中文:
 引理 eq_addChar_of_value_at_one
-  结论: {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  结论: {r : R} (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   证明: denseRange_natCast.addChar_eq_of_eval_one_eq hκ (by fun_prop) (by simp [hκ'])
 
 Depends on / 依赖: addChar_eq_of_eval_one_eq, denseRange_natCast, denseRange_natCast.addChar_eq_of_eval_one_eq, fun_prop
@@ -243,7 +243,7 @@ lemma continuousAddCharEquiv_apply
 
 中文:
 引理 continuousAddCharEquiv_apply
-  条件: {κ : AddChar 整数_[p] R} (hκ : Continuous κ)
+  条件: {κ : 加法特征 整数_[p] R} (hκ : 连续 κ)
   证明: rfl
 -/
 @[simp] lemma continuousAddCharEquiv_apply {κ : AddChar Int_[p] R} (hκ : Continuous κ) :
@@ -260,7 +260,7 @@ lemma continuousAddCharEquiv_symm_apply
 
 中文:
 引理 continuousAddCharEquiv_symm_apply
-  条件: {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0))
+  条件: {r : R} (hr : 收敛 (r ^ ·) atTop (𝓝 0))
   证明: rfl
 -/
 @[simp] lemma continuousAddCharEquiv_symm_apply {r : R} (hr : Tendsto (r ^ ·) atTop (𝓝 0)) :
@@ -304,7 +304,7 @@ lemma continuousAddCharEquiv_of_norm_mul_apply
 
 中文:
 引理 continuousAddCharEquiv_of_norm_mul_apply
-  条件: {κ : AddChar 整数_[p] R} (hκ : Continuous κ)
+  条件: {κ : 加法特征 整数_[p] R} (hκ : 连续 κ)
   证明: rfl
 -/
 @[simp] lemma continuousAddCharEquiv_of_norm_mul_apply {κ : AddChar Int_[p] R} (hκ : Continuous κ) :

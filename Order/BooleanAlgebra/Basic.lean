@@ -1530,8 +1530,8 @@ instance Prod.instGeneralizedBooleanAlgebra
   inf_inf_sdiff _ _ := Prod.ext (inf_inf_sdiff _ _) (inf_inf_sdiff _ _)
 
 中文:
-实例 Prod.instGeneralizedBooleanAlgebra
-  签名: [Generalized布尔eanAlgebra β]
+实例 积类型.instGeneralized布尔eanAlgebra
+  签名: [Generalized布尔ean代数 β]
   定义体: Prod.ext (sup_inf_sdiff _ _) (sup_inf_sdiff _ _)
   inf_inf_sdiff _ _ := Prod.ext (inf_inf_sdiff _ _) (inf_inf_sdiff _ _)
 
@@ -1553,7 +1553,7 @@ instance Pi.instGeneralizedBooleanAlgebra
   inf_inf_sdiff := fun f g => funext fun a => inf_inf_sdiff (f a) (g a)
 
 中文:
-实例 Pi.instGeneralizedBooleanAlgebra
+实例 依赖函数类型.instGeneralized布尔eanAlgebra
   签名: {ι : 类型} {α : ι -> 类型}
   定义体: fun f g => funext fun a => sup_inf_sdiff (f a) (g a)
   inf_inf_sdiff := fun f g => funext fun a => inf_inf_sdiff (f a) (g a)
@@ -1589,8 +1589,8 @@ abbreviation GeneralizedBooleanAlgebra.toBooleanAlgebra
     rw [← inf_sdiff_assoc]; rw [inf_top_eq]
 
 中文:
-缩写 GeneralizedBooleanAlgebra.toBooleanAlgebra
-  签名: [Generalized布尔eanAlgebra α] [OrderTop α]
+缩写 Generalized布尔ean代数.to布尔eanAlgebra
+  签名: [Generalized布尔ean代数 α] [有顶序 α]
   定义体: ‹GeneralizedBooleanAlgebra α›
   __ := GeneralizedBooleanAlgebra.toOrderBot
   __ := ‹OrderTop α›
@@ -1692,7 +1692,7 @@ theorem isCompl_compl
 
 中文:
 定理 isCompl_compl
-  结论: IsCompl x xᶜ
+  结论: 是补集 x xᶜ
   证明: IsCompl.of_eq inf_compl_eq_bot' sup_compl_eq_top
 
 Depends on / 依赖: IsCompl, IsCompl.of_eq, inf_compl_eq_bot, of_eq, sup_compl_eq_top
@@ -1803,7 +1803,7 @@ theorem eq_compl_iff_isCompl
 
 中文:
 定理 eq_compl_iff_isCompl
-  结论: x = yᶜ ↔ IsCompl x y
+  结论: x = yᶜ ↔ 是补集 x y
   证明: ⟨fun h => by
     rw [h]
     exact isCompl_compl.symm, IsCompl.eq_compl⟩
@@ -1827,7 +1827,7 @@ theorem compl_eq_iff_isCompl
 
 中文:
 定理 compl_eq_iff_isCompl
-  结论: xᶜ = y ↔ IsCompl x y
+  结论: xᶜ = y ↔ 是补集 x y
   证明: ⟨fun h => by
     rw [← h]
     exact isCompl_compl, IsCompl.compl_eq⟩
@@ -1937,7 +1937,7 @@ theorem compl_involutive
 
 中文:
 定理 compl_involutive
-  结论: Function.Involutive (compl : α -> α)
+  结论: 函数.对合 (compl : α -> α)
   证明: compl_compl
 
 Depends on / 依赖: compl_compl
@@ -1955,7 +1955,7 @@ theorem compl_bijective
 
 中文:
 定理 compl_bijective
-  结论: Function.Bijective (compl : α -> α)
+  结论: 函数.双射 (compl : α -> α)
   证明: compl_involutive.bijective
 
 Depends on / 依赖: bijective, compl_involutive, compl_involutive.bijective
@@ -1973,7 +1973,7 @@ theorem compl_surjective
 
 中文:
 定理 compl_surjective
-  结论: Function.Surjective (compl : α -> α)
+  结论: 函数.满射 (compl : α -> α)
   证明: compl_involutive.surjective
 
 Depends on / 依赖: compl_involutive, compl_involutive.surjective, surjective
@@ -1993,7 +1993,7 @@ theorem compl_injective
 
 中文:
 定理 compl_injective
-  结论: Function.Injective (compl : α -> α)
+  结论: 函数.单射 (compl : α -> α)
   证明: compl_involutive.injective
 
 @[simp]
@@ -2034,8 +2034,8 @@ theorem IsCompl.compl_eq_iff
 @[simp]
 
 中文:
-定理 IsCompl.compl_eq_iff
-  条件: (h : IsCompl x y)
+定理 是补集.compl_eq_iff
+  条件: (h : 是补集 x y)
   结论: zᶜ = y ↔ z = x
   证明: h.compl_eq ▸ compl_inj_iff
 
@@ -2219,7 +2219,7 @@ theorem compl_lt_self
 
 中文:
 定理 compl_lt_self
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: xᶜ < x ↔ x = ⊤
   证明: by
   simpa using lt_compl_self (a := xᶜ)
@@ -2263,8 +2263,8 @@ instance OrderDual.instBooleanAlgebra
 @[simp]
 
 中文:
-实例 OrderDual.instBooleanAlgebra
-  签名: : 布尔eanAlgebra αᵒᵈ where
+实例 OrderDual.inst布尔eanAlgebra
+  签名: : 布尔代数 αᵒᵈ where
   定义体: instDistribLattice α
   __ := instHeytingAlgebra
   sdiff_eq _ _ := @himp_eq α _ _ _
@@ -2587,8 +2587,8 @@ instance Prod.instBooleanAlgebra
   top_le_sup_compl x := by constructor <;> simp
 
 中文:
-实例 Prod.instBooleanAlgebra
-  签名: [布尔eanAlgebra α] [布尔eanAlgebra β]
+实例 积类型.inst布尔eanAlgebra
+  签名: [布尔代数 α] [布尔代数 β]
   定义体: instDistribLattice α β
   __ := instHeytingAlgebra
   himp_eq x y := by ext <;> simp [himp_eq]
@@ -2621,8 +2621,8 @@ instance Pi.instBooleanAlgebra
   top_le_sup_compl _ _ := BooleanAlgebra.top_le_sup_compl _
 
 中文:
-实例 Pi.instBooleanAlgebra
-  签名: {ι : 类型u} {α : ι -> 类型v} [对任意 i, 布尔eanAlgebra (α i)]
+实例 依赖函数类型.inst布尔eanAlgebra
+  签名: {ι : 类型u} {α : ι -> 类型v} [对任意 i, 布尔代数 (α i)]
   定义体: instDistribLattice
   __ := instHeytingAlgebra
   sdiff_eq _ _ := funext fun _ => sdiff_eq
@@ -2656,8 +2656,8 @@ sup_inf_sdiff a b := hf by rw [map_sup, map_sdiff, map_inf, sup_inf_sdiff]
 inf_inf_sdiff a b := hf by rw [map_inf, map_sdiff, map_inf, inf_inf_sdiff, map_bot]
 
 中文:
-缩写 Function.Injective.generalizedBooleanAlgebra
-  签名: [Max α] [Min α]
+缩写 函数.单射.generalized布尔eanAlgebra
+  签名: [最大值 α] [最小值 α]
   定义体: hf.generalizedCoheytingAlgebra f le lt map_sup map_inf map_bot map_sdiff
   __ := hf.distribLattice f le lt map_sup map_inf
 sup_inf_sdiff a b := hf by rw [map_sup, map_sdiff, map_inf, sup_inf_sdiff]
@@ -2689,8 +2689,8 @@ bot_le _ := le.1 map_bot.le.trans bot_le
   top_le_sup_compl a
 
 中文:
-缩写 Function.Injective.booleanAlgebra
-  签名: [Max α] [Min α] [LE α] [LT α] [Top α] [Bot α]
+缩写 函数.单射.booleanAlgebra
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [顶元素 α] [底元素 α]
   定义体: hf.generalizedBooleanAlgebra f le lt map_sup map_inf map_bot map_sdiff
 le_top _ := le.1 (@le_top β _ _ _).trans map_top.ge
 bot_le _ := le.1 map_bot.le.trans bot_le
@@ -2733,8 +2733,8 @@ abbreviation generalizedBooleanAlgebra
   first | rfl | exact e.apply_symm_apply _
 
 中文:
-缩写 generalizedBooleanAlgebra
-  签名: [Generalized布尔eanAlgebra β]
+缩写 generalized布尔eanAlgebra
+  签名: [Generalized布尔ean代数 β]
   定义体: by
   let bot := e.bot
   let sdiff := e.sdiff
@@ -2765,7 +2765,7 @@ abbreviation booleanAlgebra
 
 中文:
 缩写 booleanAlgebra
-  签名: [布尔eanAlgebra β]
+  签名: [布尔代数 β]
   定义体: by
   let top := e.top
   let compl := e.compl

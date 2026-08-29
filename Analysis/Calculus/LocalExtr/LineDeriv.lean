@@ -34,7 +34,7 @@ theorem IsExtrFilter.hasLineDerivAt_eq_zero
 
 中文:
 定理 IsExtrFilter.hasLineDerivAt_eq_zero
-  结论: {l : Filter E} (h : IsExtrFilter f l a)
+  结论: {l : 滤子 E} (h : IsExtrFilter f l a)
   证明: IsLocalExtr.hasDerivAt_eq_zero (IsExtrFilter.comp_tendsto (by simpa using h) h') hd
 
 Depends on / 依赖: IsExtrFilter, IsExtrFilter.comp_tendsto, IsLocalExtr, IsLocalExtr.hasDerivAt_eq_zero, comp_tendsto, hasDerivAt_eq_zero
@@ -58,7 +58,7 @@ theorem IsExtrFilter.lineDeriv_eq_zero
 
 中文:
 定理 IsExtrFilter.lineDeriv_eq_zero
-  结论: {l : Filter E} (h : IsExtrFilter f l a)
+  结论: {l : 滤子 E} (h : IsExtrFilter f l a)
   证明: by
   classical
   exact if hd : LineDifferentiableAt Real f a b then

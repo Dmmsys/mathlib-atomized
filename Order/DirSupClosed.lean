@@ -44,7 +44,7 @@ definition DirSupClosedOn
 
 中文:
 定义 DirSupClosedOn
-  签名: (D : Set (Set α)) (s : Set α)
+  签名: (D : 集合 (集合 α)) (s : 集合 α)
   定义体: forall ⦃d⦄, d in D -> d subseteq s -> d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a⦄, IsLUB d a -> a in s
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty, subseteq
@@ -62,7 +62,7 @@ definition DirSupInaccOn
 
 中文:
 定义 DirSupInaccOn
-  签名: (D : Set (Set α)) (s : Set α)
+  签名: (D : 集合 (集合 α)) (s : 集合 α)
   定义体: forall ⦃d⦄, d in D -> d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a⦄, IsLUB d a -> a in s -> (d inter s).Nonempty
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty
@@ -80,7 +80,7 @@ definition DirSupClosed
 
 中文:
 定义 DirSupClosed
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall ⦃d⦄, d subseteq s -> d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a⦄, IsLUB d a -> a in s
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty, subseteq
@@ -98,7 +98,7 @@ definition DirSupInacc
 
 中文:
 定义 DirSupInacc
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall ⦃d⦄, d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a⦄, IsLUB d a -> a in s -> (d inter s).Nonempty
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty
@@ -182,7 +182,7 @@ theorem DirSupClosed.of_isEmpty
 
 中文:
 定理 DirSupClosed.of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
+  条件: [是空 α] {s : 集合 α}
   结论: DirSupClosed s
   证明: fun _ _ ⟨a, _⟩ => isEmptyElim a
 -/
@@ -200,7 +200,7 @@ theorem DirSupInacc.of_isEmpty
 
 中文:
 定理 DirSupInacc.of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
+  条件: [是空 α] {s : 集合 α}
   结论: DirSupInacc s
   证明: fun _ ⟨a, _⟩ => isEmptyElim a
 -/
@@ -218,7 +218,7 @@ theorem DirSupClosedOn.of_isEmpty
 
 中文:
 定理 DirSupClosedOn.of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
+  条件: [是空 α] {s : 集合 α}
   结论: DirSupClosedOn D s
   证明: by simp
 -/
@@ -236,7 +236,7 @@ theorem DirSupInaccOn.of_isEmpty
 
 中文:
 定理 DirSupInaccOn.of_isEmpty
-  条件: [IsEmpty α] {s : Set α}
+  条件: [是空 α] {s : 集合 α}
   结论: DirSupInaccOn D s
   证明: by simp
 
@@ -414,7 +414,7 @@ theorem DirSupClosed.empty
 
 中文:
 定理 DirSupClosed.empty
-  结论: DirSupClosed (∅ : Set α)
+  结论: DirSupClosed (∅ : 集合 α)
   证明: by simp [DirSupClosed]
 -/
 @[simp] theorem DirSupClosed.empty : DirSupClosed (∅ : Set α) := by simp [DirSupClosed]
@@ -428,7 +428,7 @@ theorem DirSupInacc.empty
 
 中文:
 定理 DirSupInacc.empty
-  结论: DirSupInacc (∅ : Set α)
+  结论: DirSupInacc (∅ : 集合 α)
   证明: by simp [DirSupInacc]
 -/
 @[simp] theorem DirSupInacc.empty : DirSupInacc (∅ : Set α) := by simp [DirSupInacc]
@@ -471,7 +471,7 @@ theorem DirSupClosed.univ
 
 中文:
 定理 DirSupClosed.univ
-  结论: DirSupClosed (univ : Set α)
+  结论: DirSupClosed (univ : 集合 α)
   证明: by simp [DirSupClosed]
 -/
 @[simp] theorem DirSupClosed.univ : DirSupClosed (univ : Set α) := by simp [DirSupClosed]
@@ -485,7 +485,7 @@ theorem DirSupInacc.univ
 
 中文:
 定理 DirSupInacc.univ
-  结论: DirSupInacc (univ : Set α)
+  结论: DirSupInacc (univ : 集合 α)
   证明: by simp [← compl_empty]
 -/
 @[simp] theorem DirSupInacc.univ : DirSupInacc (univ : Set α) := by simp [← compl_empty]
@@ -527,8 +527,8 @@ theorem DirSupClosedOn.sInter
   proof: fun _d hD hds hd hd' _a ha t ht => hs t ht hD (hds.trans fun _x hx => hx _ ht) hd hd' ha
 
 中文:
-定理 DirSupClosedOn.sInter
-  条件: {s : Set (Set α)} (hs : 对任意 x in s, DirSupClosedOn D x)
+定理 DirSupClosedOn.集合交集
+  条件: {s : 集合 (集合 α)} (hs : 对任意 x in s, DirSupClosedOn D x)
   证明: fun _d hD hds hd hd' _a ha t ht => hs t ht hD (hds.trans fun _x hx => hx _ ht) hd hd' ha
 
 Depends on / 依赖: hds.trans
@@ -547,8 +547,8 @@ theorem DirSupClosed.sInter
   simpa using DirSupClosedOn.sInter fun x hx => (hs x hx).dirSupClosedOn (D := .univ)
 
 中文:
-定理 DirSupClosed.sInter
-  条件: {s : Set (Set α)} (hs : 对任意 x in s, DirSupClosed x)
+定理 DirSupClosed.集合交集
+  条件: {s : 集合 (集合 α)} (hs : 对任意 x in s, DirSupClosed x)
   证明: by
   simpa using DirSupClosedOn.sInter fun x hx => (hs x hx).dirSupClosedOn (D := .univ)
 
@@ -571,8 +571,8 @@ theorem DirSupInaccOn.sUnion
   exact (hs x hx).compl
 
 中文:
-定理 DirSupInaccOn.sUnion
-  条件: {s : Set (Set α)} (hs : 对任意 x in s, DirSupInaccOn D x)
+定理 DirSupInaccOn.集合并集
+  条件: {s : 集合 (集合 α)} (hs : 对任意 x in s, DirSupInaccOn D x)
   证明: by
   rw [← dirSupClosedOn_compl]; rw [Set.compl_sUnion]
   apply DirSupClosedOn.sInter
@@ -598,8 +598,8 @@ theorem DirSupInacc.sUnion
   simpa using DirSupInaccOn.sUnion fun x hx => (hs x hx).dirSupInaccOn (D := .univ)
 
 中文:
-定理 DirSupInacc.sUnion
-  条件: {s : Set (Set α)} (hs : 对任意 x in s, DirSupInacc x)
+定理 DirSupInacc.集合并集
+  条件: {s : 集合 (集合 α)} (hs : 对任意 x in s, DirSupInacc x)
   证明: by
   simpa using DirSupInaccOn.sUnion fun x hx => (hs x hx).dirSupInaccOn (D := .univ)
 
@@ -620,8 +620,8 @@ theorem DirSupClosedOn.iInter
   exact DirSupClosedOn.sInter (by simpa)
 
 中文:
-定理 DirSupClosedOn.iInter
-  条件: {ι} {f : ι -> Set α} (hs : 对任意 i, DirSupClosedOn D (f i))
+定理 DirSupClosedOn.i整数er
+  条件: {ι} {f : ι -> 集合 α} (hs : 对任意 i, DirSupClosedOn D (f i))
   证明: by
   rw [← sInter_range f]
   exact DirSupClosedOn.sInter (by simpa)
@@ -644,8 +644,8 @@ theorem DirSupClosed.iInter
   exact DirSupClosed.sInter (by simpa)
 
 中文:
-定理 DirSupClosed.iInter
-  条件: {ι} {f : ι -> Set α} (hs : 对任意 i, DirSupClosed (f i))
+定理 DirSupClosed.i整数er
+  条件: {ι} {f : ι -> 集合 α} (hs : 对任意 i, DirSupClosed (f i))
   证明: by
   rw [← sInter_range f]
   exact DirSupClosed.sInter (by simpa)
@@ -669,7 +669,7 @@ theorem DirSupInaccOn.iUnion
 
 中文:
 定理 DirSupInaccOn.iUnion
-  条件: {ι} {f : ι -> Set α} (hs : 对任意 i, DirSupInaccOn D (f i))
+  条件: {ι} {f : ι -> 集合 α} (hs : 对任意 i, DirSupInaccOn D (f i))
   证明: by
   rw [← sUnion_range f]
   exact DirSupInaccOn.sUnion (by simpa)
@@ -693,7 +693,7 @@ theorem DirSupInacc.iUnion
 
 中文:
 定理 DirSupInacc.iUnion
-  条件: {ι} {f : ι -> Set α} (hs : 对任意 i, DirSupInacc (f i))
+  条件: {ι} {f : ι -> 集合 α} (hs : 对任意 i, DirSupInacc (f i))
   证明: by
   rw [← sUnion_range f]
   exact DirSupInacc.sUnion (by simpa)
@@ -813,7 +813,7 @@ exact this hDL ht hs hD hdu hd₀ hd₁ ha hdst
 
 中文:
 定理 DirSupClosedOn.union
-  结论: (hDL : IsLowerSet D)
+  结论: (hDL : 是下集 D)
   证明: by
   intro d hD hdu hd₀ hd₁ a ha
   have hdst : d inter s union d inter t = d := by grind
@@ -848,7 +848,7 @@ theorem DirSupInaccOn.inter
 
 中文:
 定理 DirSupInaccOn.inter
-  结论: (hDL : IsLowerSet D)
+  结论: (hDL : 是下集 D)
   证明: by
   rw [← dirSupClosedOn_compl]; rw [compl_inter]; exact hs.compl.union hDL ht.compl
 
@@ -962,7 +962,7 @@ theorem dirSupInaccOn_iff_inter_subset
 
 中文:
 定理 dirSupInaccOn_iff_inter_subset
-  条件: (hDL : IsLowerSet D)
+  条件: (hDL : 是下集 D)
   证明: .of_inter_subset
   mp h t hD ht₀ ht₁ a ha has := by
     by_contra! H
@@ -1015,8 +1015,8 @@ lemma IsUpperSet.dirSupClosed
   proof: fun _d hds ⟨_b, hb⟩ _ _a ha => hs (ha.1 hb) hds hb
 
 中文:
-引理 IsUpperSet.dirSupClosed
-  条件: (hs : IsUpperSet s)
+引理 是上集.dirSupClosed
+  条件: (hs : 是上集 s)
   结论: DirSupClosed s
   证明: fun _d hds ⟨_b, hb⟩ _ _a ha => hs (ha.1 hb) hds hb
 -/
@@ -1033,8 +1033,8 @@ lemma IsUpperSet.dirSupClosedOn
   proof: hs.dirSupClosed.dirSupClosedOn
 
 中文:
-引理 IsUpperSet.dirSupClosedOn
-  条件: (hs : IsUpperSet s)
+引理 是上集.dirSupClosedOn
+  条件: (hs : 是上集 s)
   结论: DirSupClosedOn D s
   证明: hs.dirSupClosed.dirSupClosedOn
 
@@ -1053,8 +1053,8 @@ lemma IsLowerSet.dirSupInacc
   proof: .of_compl hs.compl.dirSupClosed
 
 中文:
-引理 IsLowerSet.dirSupInacc
-  条件: (hs : IsLowerSet s)
+引理 是下集.dirSupInacc
+  条件: (hs : 是下集 s)
   结论: DirSupInacc s
   证明: .of_compl hs.compl.dirSupClosed
 
@@ -1073,8 +1073,8 @@ lemma IsLowerSet.dirSupInaccOn
   proof: .of_compl hs.compl.dirSupClosedOn
 
 中文:
-引理 IsLowerSet.dirSupInaccOn
-  条件: (hs : IsLowerSet s)
+引理 是下集.dirSupInaccOn
+  条件: (hs : 是下集 s)
   结论: DirSupInaccOn D s
   证明: .of_compl hs.compl.dirSupClosedOn
 
@@ -1162,7 +1162,7 @@ lemma dirSupClosed_Iic
 中文:
 引理 dirSupClosed_Iic
   条件: (a : α)
-  结论: DirSupClosed (Iic a)
+  结论: DirSupClosed (左无界右闭区间 a)
   证明: fun _d h _ _ _a ha => (isLUB_le_iff ha).2 h
 
 Depends on / 依赖: isLUB_le_iff
@@ -1182,7 +1182,7 @@ lemma dirSupClosedOn_Iic
 中文:
 引理 dirSupClosedOn_Iic
   条件: (a : α)
-  结论: DirSupClosedOn D (Iic a)
+  结论: DirSupClosedOn D (左无界右闭区间 a)
   证明: (dirSupClosed_Iic a).dirSupClosedOn
 
 Depends on / 依赖: dirSupClosedOn, dirSupClosed_Iic
@@ -1202,7 +1202,7 @@ lemma dirSupInacc_Iic
 中文:
 引理 dirSupInacc_Iic
   条件: (a : α)
-  结论: DirSupInacc (Iic a)
+  结论: DirSupInacc (左无界右闭区间 a)
   证明: (isLowerSet_Iic a).dirSupInacc
 
 Depends on / 依赖: dirSupInacc, isLowerSet_Iic
@@ -1222,7 +1222,7 @@ lemma dirSupInaccOn_Iic
 中文:
 引理 dirSupInaccOn_Iic
   条件: (a : α)
-  结论: DirSupInaccOn D (Iic a)
+  结论: DirSupInaccOn D (左无界右闭区间 a)
   证明: (isLowerSet_Iic a).dirSupInaccOn
 
 Depends on / 依赖: dirSupInaccOn, isLowerSet_Iic
@@ -1383,7 +1383,7 @@ lemma dirSupClosedOn_iff_forall_sSup
   simp [DirSupClosedOn, isLUB_iff_sSup_eq]
 
 中文:
-引理 dirSupClosedOn_iff_forall_sSup
+引理 dirSupClosedOn_iff_对任意_sSup
   结论: DirSupClosedOn D s ↔
   证明: by
   simp [DirSupClosedOn, isLUB_iff_sSup_eq]
@@ -1404,7 +1404,7 @@ lemma dirSupInaccOn_iff_forall_sSup
   simp [DirSupInaccOn, isLUB_iff_sSup_eq]
 
 中文:
-引理 dirSupInaccOn_iff_forall_sSup
+引理 dirSupInaccOn_iff_对任意_sSup
   结论: DirSupInaccOn D s ↔
   证明: by
   simp [DirSupInaccOn, isLUB_iff_sSup_eq]
@@ -1425,7 +1425,7 @@ lemma dirSupClosed_iff_forall_sSup
   simp [DirSupClosed, isLUB_iff_sSup_eq]
 
 中文:
-引理 dirSupClosed_iff_forall_sSup
+引理 dirSupClosed_iff_对任意_sSup
   结论: DirSupClosed s ↔
   证明: by
   simp [DirSupClosed, isLUB_iff_sSup_eq]
@@ -1446,7 +1446,7 @@ lemma dirSupInacc_iff_forall_sSup
   simp [DirSupInacc, isLUB_iff_sSup_eq]
 
 中文:
-引理 dirSupInacc_iff_forall_sSup
+引理 dirSupInacc_iff_对任意_sSup
   结论: DirSupInacc s ↔
   证明: by
   simp [DirSupInacc, isLUB_iff_sSup_eq]

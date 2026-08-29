@@ -97,7 +97,7 @@ theorem affineIndependent_of_subsingleton
 
 中文:
 定理 affineIndependent_of_subsingleton
-  条件: [Subsingleton ι] (p : ι -> P)
+  条件: [子单例 ι] (p : ι -> P)
   结论: AffineIndependent k p
   证明: fun _ _ h _ i hi => Fintype.eq_of_subsingleton_of_sum_eq h i hi
 
@@ -122,7 +122,7 @@ theorem affineIndependent_iff_of_fintype
 
 中文:
 定理 affineIndependent_iff_of_fintype
-  条件: [Fintype ι] (p : ι -> P)
+  条件: [有限类型 ι] (p : ι -> P)
   证明: by
   constructor
   · exact fun h w hw hs i => h Finset.univ w hw hs i (Finset.mem_univ _)
@@ -183,7 +183,7 @@ protected alias ⟨AffineIndependent.of_smul, AffineIndependent.smul⟩ := affin
 
 中文:
 引理 affineIndependent_smul
-  结论: {G : 类型} [Group G] [DistribMulAction G V]
+  结论: {G : 类型} [群 G] [分配乘法作用 G V]
   证明: by
   simp +contextual [AffineIndependent,
     ← smul_comm (α := V) a, ← smul_sum, smul_eq_zero_iff_eq]
@@ -287,7 +287,7 @@ theorem affineIndependent_set_iff_linearIndependent_vsub
 
 中文:
 定理 affineIndependent_set_iff_linearIndependent_vsub
-  条件: {s : Set P} {p₁ : P} (hp₁ : p₁ in s)
+  条件: {s : 集合 P} {p₁ : P} (hp₁ : p₁ in s)
   证明: by
   rw [affineIndependent_iff_linearIndependent_vsub k (fun p => p : s -> P) ⟨p₁]; rw [hp₁⟩]
   constructor
@@ -333,7 +333,7 @@ theorem linearIndependent_set_iff_affineIndependent_vadd_union_singleton
 
 中文:
 定理 linearIndependent_set_iff_affineIndependent_vadd_union_singleton
-  结论: {s : Set V}
+  结论: {s : 集合 V}
   证明: by
   rw [affineIndependent_set_iff_linearIndependent_vsub k
       (Set.mem_union_left _ (Set.mem_singleton p₁))]
@@ -440,7 +440,7 @@ theorem affineIndependent_iff_eq_of_fintype_affineCombination_eq
 
 中文:
 定理 affineIndependent_iff_eq_of_fintype_affineCombination_eq
-  条件: [Fintype ι] (p : ι -> P)
+  条件: [有限类型 ι] (p : ι -> P)
   证明: by
   rw [affineIndependent_iff_indicator_eq_of_affineCombination_eq]
   constructor
@@ -595,7 +595,7 @@ theorem AffineIndependent.injective
 
 中文:
 定理 AffineIndependent.injective
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   intro i j hij
   rw [affineIndependent_iff_linearIndependent_vsub _ _ j] at ha
@@ -672,7 +672,7 @@ theorem AffineIndependent.subtype
 
 中文:
 定理 AffineIndependent.subtype
-  条件: {p : ι -> P} (ha : AffineIndependent k p) (s : Set ι)
+  条件: {p : ι -> P} (ha : AffineIndependent k p) (s : 集合 ι)
   证明: ha.comp_embedding (Embedding.subtype _)
 
 Depends on / 依赖: pi.sigmaFinite, sigmaFinite
@@ -855,7 +855,7 @@ theorem AffineIndependent.mono
 
 中文:
 定理 AffineIndependent.mono
-  结论: {s t : Set P}
+  结论: {s t : 集合 P}
   证明: ha.comp_embedding (s.embeddingOfSubset t hs)
 -/
 protected theorem AffineIndependent.mono {s t : Set P}
@@ -1078,8 +1078,8 @@ theorem AffineMap.affineIndependent_iff
   proof: ⟨AffineIndependent.of_comp f, fun hai => AffineIndependent.map' hai f hf⟩
 
 中文:
-定理 AffineMap.affineIndependent_iff
-  条件: {p : ι -> P} (f : P ->ᵃ[k] P₂) (hf : Function.Injective f)
+定理 仿射映射.affineIndependent_iff
+  条件: {p : ι -> P} (f : P ->ᵃ[k] P₂) (hf : 函数.单射 f)
   证明: ⟨AffineIndependent.of_comp f, fun hai => AffineIndependent.map' hai f hf⟩
 
 Depends on / 依赖: AffineIndependent, AffineIndependent.map, AffineIndependent.of_comp, of_comp
@@ -1097,7 +1097,7 @@ theorem AffineEquiv.affineIndependent_iff
   proof: e.toAffineMap.affineIndependent_iff e.toEquiv.injective
 
 中文:
-定理 AffineEquiv.affineIndependent_iff
+定理 仿射等价.affineIndependent_iff
   条件: {p : ι -> P} (e : P ≃ᵃ[k] P₂)
   证明: e.toAffineMap.affineIndependent_iff e.toEquiv.injective
 
@@ -1119,8 +1119,8 @@ theorem AffineEquiv.affineIndependent_set_of_eq_iff
   simp [← e.affineIndependent_iff, this, affineIndependent_equiv]
 
 中文:
-定理 AffineEquiv.affineIndependent_set_of_eq_iff
-  条件: {s : Set P} (e : P ≃ᵃ[k] P₂)
+定理 仿射等价.affineIndependent_set_of_eq_iff
+  条件: {s : 集合 P} (e : P ≃ᵃ[k] P₂)
   证明: by
   have : e ∘ ((↑) : s -> P) = ((↑) : e '' s -> P₂) ∘ (e : P ≃ P₂).image s := rfl
   simp [← e.affineIndependent_iff, this, affineIndependent_equiv]
@@ -1151,7 +1151,7 @@ lemma AffineIndependent.inf_affineSpan_eq_affineSpan_inter
 
 中文:
 引理 AffineIndependent.inf_affineSpan_eq_affineSpan_inter
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   classical
   ext p'
@@ -1205,8 +1205,8 @@ theorem AffineIndependent.exists_mem_inter_of_exists_mem_inter_affineSpan
   simp [he, AffineSubspace.notMem_bot] at hp0'
 
 中文:
-定理 AffineIndependent.exists_mem_inter_of_exists_mem_inter_affineSpan
-  结论: [Nontrivial k] {p : ι -> P}
+定理 AffineIndependent.存在_mem_inter_of_存在_mem_inter_affineSpan
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   have hp0' : p0 in affineSpan k (p '' s1) ⊓ affineSpan k (p '' s2) := ⟨hp0s1, hp0s2⟩
   rw [ha.inf_affineSpan_eq_affineSpan_inter] at hp0'
@@ -1240,7 +1240,7 @@ theorem AffineIndependent.affineSpan_disjoint_of_disjoint
 
 中文:
 定理 AffineIndependent.affineSpan_disjoint_of_disjoint
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   refine Set.disjoint_left.2 fun p0 hp0s1 hp0s2 => ?_
   obtain ⟨i, hi⟩ := ha.exists_mem_inter_of_exists_mem_inter_affineSpan hp0s1 hp0s2
@@ -1277,7 +1277,7 @@ theorem AffineIndependent.mem_affineSpan_iff
 
 中文:
 定理 AffineIndependent.mem_affineSpan_iff
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   constructor
   · intro hs
@@ -1311,7 +1311,7 @@ alias AffineIndependent.notMem_affineSpan_diff := AffineIndependent.notMem_affin
 
 中文:
 定理 AffineIndependent.notMem_affineSpan_sdiff
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   simp [ha]
 
@@ -1341,7 +1341,7 @@ lemma AffineIndependent.injective_affineSpan_image
 
 中文:
 引理 AffineIndependent.injective_affineSpan_image
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   by_contra hn
   rw [not_injective_iff] at hn
@@ -1443,7 +1443,7 @@ lemma AffineIndependent.vectorSpan_image_eq_iff
 
 中文:
 引理 AffineIndependent.vectorSpan_image_eq_iff
-  结论: [Nontrivial k] {p : ι -> P}
+  结论: [非平凡 k] {p : ι -> P}
   证明: by
   constructor
   · intro h
@@ -1499,8 +1499,8 @@ theorem exists_nontrivial_relation_sum_zero_of_not_affine_ind
       vsub_eq_sub, Finset.weightedVSubOfPoint_apply, sub_ze
 
 中文:
-定理 exists_nontrivial_relation_sum_zero_of_not_affine_ind
-  结论: {t : Finset V}
+定理 存在_nontrivial_relation_sum_zero_of_not_affine_ind
+  结论: {t : 有限集 V}
   证明: by
   classical
     rw [affineIndependent_iff_of_fintype] at h
@@ -1608,7 +1608,7 @@ lemma AffineIndependent.eq_zero_of_sum_eq_zero_subtype
 
 中文:
 引理 AffineIndependent.eq_zero_of_sum_eq_zero_subtype
-  结论: {s : Finset V}
+  结论: {s : 有限集 V}
   证明: by
   rw [← sum_attach] at hw₀ hw₁
   exact fun x hx => hp.eq_zero_of_sum_eq_zero hw₀ hw₁ ⟨x, hx⟩ (mem_univ _)
@@ -1633,7 +1633,7 @@ lemma AffineIndependent.eq_of_sum_eq_sum_subtype
 
 中文:
 引理 AffineIndependent.eq_of_sum_eq_sum_subtype
-  结论: {s : Finset V}
+  结论: {s : 有限集 V}
   证明: by
   refine fun i hi => sub_eq_zero.1 (hp.eq_zero_of_sum_eq_zero_subtype (w := w₁ - w₂) ?_ ?_ _ hi) <;>
     simpa [sub_mul, sub_smul, sub_eq_zero]
@@ -1784,8 +1784,8 @@ theorem exists_subset_affineIndependent_affineSpan_eq_top
     have h0 : forall v : V, v in Basis.ofVecto
 
 中文:
-定理 exists_subset_affineIndependent_affineSpan_eq_top
-  结论: {s : Set P}
+定理 存在_subset_affineIndependent_affineSpan_eq_top
+  结论: {s : 集合 P}
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | ⟨p₁, hp₁⟩)
   · have p₁ : P := AddTorsor.nonempty.some
@@ -1845,8 +1845,8 @@ theorem exists_affineIndependent
   have hb₀ : forall v : V, v in b -> v != 0 := fun v hv => hb₃.ne_zero (⟨v, 
 
 中文:
-定理 exists_affineIndependent
-  条件: (s : Set P)
+定理 存在_affineIndependent
+  条件: (s : 集合 P)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | ⟨p, hp⟩)
   · exact ⟨∅, Set.empty_subset ∅, rfl, affineIndependent_of_subsingleton k _⟩
@@ -2023,7 +2023,7 @@ theorem affineIndependent_of_ne_of_mem_of_mem_of_notMem
 
 中文:
 定理 affineIndependent_of_ne_of_mem_of_mem_of_notMem
-  结论: {s : AffineSubspace k P} {p₁ p₂ p₃ : P}
+  结论: {s : 仿射子空间 k P} {p₁ p₂ p₃ : P}
   证明: by
   have ha : AffineIndependent k fun x : { x : Fin 3 // x != 2 } => ![p₁, p₂, p₃] x := by
     rw [← affineIndependent_equiv (finSuccAboveEquiv (2 : Fin 3))]
@@ -2065,7 +2065,7 @@ theorem affineIndependent_of_ne_of_mem_of_notMem_of_mem
 
 中文:
 定理 affineIndependent_of_ne_of_mem_of_notMem_of_mem
-  结论: {s : AffineSubspace k P} {p₁ p₂ p₃ : P}
+  结论: {s : 仿射子空间 k P} {p₁ p₂ p₃ : P}
   证明: by
   rw [← affineIndependent_equiv (Equiv.swap (1 : Fin 3) 2)]
   convert! affineIndependent_of_ne_of_mem_of_mem_of_notMem hp₁p₃ hp₁ hp₃ hp₂ using 1
@@ -2096,7 +2096,7 @@ theorem affineIndependent_of_ne_of_notMem_of_mem_of_mem
 
 中文:
 定理 affineIndependent_of_ne_of_notMem_of_mem_of_mem
-  结论: {s : AffineSubspace k P} {p₁ p₂ p₃ : P}
+  结论: {s : 仿射子空间 k P} {p₁ p₂ p₃ : P}
   证明: by
   rw [← affineIndependent_equiv (Equiv.swap (0 : Fin 3) 2)]
   convert! affineIndependent_of_ne_of_mem_of_mem_of_notMem hp₂p₃.symm hp₃ hp₂ hp₁ using 1

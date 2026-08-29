@@ -39,7 +39,7 @@ definition aeSeqSet
 
 中文:
 定义 aeSeqSet
-  签名: (hf : 对任意 i, AEMeasurable (f i) μ) (p : α -> (ι -> β) -> 命题)
+  签名: (hf : 对任意 i, 几乎处处可测 (f i) μ) (p : α -> (ι -> β) -> 命题)
   定义体: (toMeasurable μ { x | (forall i, f i x = (hf i).mk (f i) x) ∧ p x fun n => f n x }ᶜ)ᶜ
 
 Depends on / 依赖: toMeasurable
@@ -58,7 +58,7 @@ definition aeSeq
 
 中文:
 定义 aeSeq
-  签名: (hf : 对任意 i, AEMeasurable (f i) μ) (p : α -> (ι -> β) -> 命题)
+  签名: (hf : 对任意 i, 几乎处处可测 (f i) μ) (p : α -> (ι -> β) -> 命题)
   定义体: fun i x => ite (x in aeSeqSet hf p) ((hf i).mk (f i) x) (⟨f i x⟩ : Nonempty β).some
 
 Depends on / 依赖: Nonempty, aeSeqSet
@@ -83,7 +83,7 @@ theorem mk_eq_fun_of_mem_aeSeqSet
 
 中文:
 定理 mk_eq_fun_of_mem_aeSeqSet
-  结论: (hf : 对任意 i, AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
+  结论: (hf : 对任意 i, 几乎处处可测 (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
   证明: haveI h_ss : aeSeqSet hf p subseteq { x | forall i, f i x = (hf i).mk (f i) x } := by
     rw [aeSeqSet]; rw [← compl_compl { x | forall i]; rw [f i x = (hf i).mk (f i) x }]; rw [Set.compl_subset_compl]
     refine Set.Subset.trans (Set.compl_subset_compl.mpr fun x h => ?_) (subset_toMeasurable _ _)
@@ -110,7 +110,7 @@ theorem aeSeq_eq_mk_of_mem_aeSeqSet
 
 中文:
 定理 aeSeq_eq_mk_of_mem_aeSeqSet
-  结论: (hf : 对任意 i, AEMeasurable (f i) μ) {x : α}
+  结论: (hf : 对任意 i, 几乎处处可测 (f i) μ) {x : α}
   证明: by
   simp only [aeSeq, hx, if_true]
 
@@ -131,7 +131,7 @@ theorem aeSeq_eq_fun_of_mem_aeSeqSet
 
 中文:
 定理 aeSeq_eq_fun_of_mem_aeSeqSet
-  结论: (hf : 对任意 i, AEMeasurable (f i) μ) {x : α}
+  结论: (hf : 对任意 i, 几乎处处可测 (f i) μ) {x : α}
   证明: by
   simp only [aeSeq_eq_mk_of_mem_aeSeqSet hf hx i, mk_eq_fun_of_mem_aeSeqSet hf hx i]
 
@@ -156,7 +156,7 @@ theorem prop_of_mem_aeSeqSet
 
 中文:
 定理 prop_of_mem_aeSeqSet
-  条件: (hf : 对任意 i, AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
+  条件: (hf : 对任意 i, 几乎处处可测 (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
   证明: by
   simp only [aeSeq, hx, if_true]
   rw [funext fun n => mk_eq_fun_of_mem_aeSeqSet hf hx n]
@@ -191,7 +191,7 @@ theorem fun_prop_of_mem_aeSeqSet
 
 中文:
 定理 fun_prop_of_mem_aeSeqSet
-  条件: (hf : 对任意 i, AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
+  条件: (hf : 对任意 i, 几乎处处可测 (f i) μ) {x : α} (hx : x in aeSeqSet hf p)
   证明: by
   have h_eq : (fun n => f n x) = fun n => aeSeq hf p n x :=
     funext fun n => (aeSeq_eq_fun_of_mem_aeSeqSet hf hx n).symm
@@ -220,8 +220,8 @@ theorem aeSeqSet_measurableSet
 
 中文:
 定理 aeSeqSet_measurableSet
-  条件: {hf : 对任意 i, AEMeasurable (f i) μ}
-  结论: MeasurableSet (aeSeqSet hf p)
+  条件: {hf : 对任意 i, 几乎处处可测 (f i) μ}
+  结论: 可测集 (aeSeqSet hf p)
   证明: (measurableSet_toMeasurable _ _).compl
 
 Depends on / 依赖: measurableSet_toMeasurable
@@ -239,7 +239,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  条件: (hf : 对任意 i, AEMeasurable (f i) μ) (p : α -> (ι -> β) -> 命题) (i : ι)
+  条件: (hf : 对任意 i, 几乎处处可测 (f i) μ) (p : α -> (ι -> β) -> 命题) (i : ι)
   证明: Measurable.ite aeSeqSet_measurableSet (hf i).measurable_mk measurable_const' fun _ _ => rfl
 
 Depends on / 依赖: Measurable, Measurable.ite, aeSeqSet_measurableSet, measurable_const, measurable_mk
@@ -262,7 +262,7 @@ theorem measure_compl_aeSeqSet_eq_zero
 
 中文:
 定理 measure_compl_aeSeqSet_eq_zero
-  结论: [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: by
   rw [aeSeqSet]; rw [compl_compl]; rw [measure_toMeasurable]
   have hf_eq := fun i => (hf i).ae_eq_mk
@@ -290,7 +290,7 @@ theorem aeSeq_eq_mk_ae
 
 中文:
 定理 aeSeq_eq_mk_ae
-  结论: [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: have h_ss : aeSeqSet hf p subseteq { a : α | forall i, aeSeq hf p i a = (hf i).mk (f i) a } := fun x hx i =>
     by simp only [aeSeq, hx, if_true]
   (ae_iff.2 (measure_compl_aeSeqSet_eq_zero hf hp)).mono h_ss
@@ -315,7 +315,7 @@ theorem aeSeq_eq_fun_ae
 
 中文:
 定理 aeSeq_eq_fun_ae
-  结论: [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: haveI h_ss : { a : α | ¬forall i : ι, aeSeq hf p i a = f i a } subseteq (aeSeqSet hf p)ᶜ := fun _ =>
     mt fun hx i => aeSeq_eq_fun_of_mem_aeSeqSet hf hx i
   measure_mono_null h_ss (measure_compl_aeSeqSet_eq_zero hf hp)
@@ -338,7 +338,7 @@ theorem aeSeq_n_eq_fun_n_ae
 
 中文:
 定理 aeSeq_n_eq_fun_n_ae
-  结论: [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: ae_all_iff.mp (aeSeq_eq_fun_ae hf hp) n
 
 Depends on / 依赖: aeSeq_eq_fun_ae, ae_all_iff, ae_all_iff.mp
@@ -359,7 +359,7 @@ theorem iSup
 
 中文:
 定理 iSup
-  结论: [SupSet β] [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [上确界集 β] [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: by
   filter_upwards [aeSeq_eq_fun_ae hf hp] with x hx
   simp [iSup_apply, hx]
@@ -381,7 +381,7 @@ theorem iInf
 
 中文:
 定理 iInf
-  结论: [InfSet β] [Countable ι] (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: [下确界集 β] [可数 ι] (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: iSup (β := βᵒᵈ) hf hp
 -/
 theorem iInf [InfSet β] [Countable ι] (hf : forall i, AEMeasurable (f i) μ)

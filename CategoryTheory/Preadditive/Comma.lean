@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (u ⟶ v)
+  签名: 加法 (u ⟶ v)
   定义体: CommaMorphism.mk (α.left + β.left) (α.right + β.right) (by simp)
 
 @[simps!]
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (u ⟶ v)
+  签名: 减法 (u ⟶ v)
   定义体: CommaMorphism.mk (α.left - β.left) (α.right - β.right) (by simp)
 
 @[simps!]
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (u ⟶ v)
+  签名: 零 (u ⟶ v)
   定义体: CommaMorphism.mk 0 0
 
 @[simps!]
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (u ⟶ v)
+  签名: 取负 (u ⟶ v)
   定义体: CommaMorphism.mk (-α.left) (-α.right)
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.mk
@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (u ⟶ v)
+  签名: 加法交换群 (u ⟶ v)
   定义体: by ext <;> simp [add_assoc]
   zero_add _ := by cat_disch
   add_zero _ := by cat_disch
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Comma L R)
+  签名: 预加性 (交换a L R)
 -/
 instance : Preadditive (Comma L R) where
 
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Comma.fst L R).Additive
+  签名: (交换a.fst L R).加性
 -/
 instance : (Comma.fst L R).Additive where
 
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Comma.snd L R).Additive
+  签名: (交换a.snd L R).加性
 -/
 instance : (Comma.snd L R).Additive where
 
@@ -230,7 +230,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Arrow T)
+  签名: 预加性 (箭头 T)
   定义体: inferInstanceAs (Preadditive (Comma (𝟭 T) (𝟭 T)))
 
 Depends on / 依赖: Preadditive
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Arrow.leftFunc (C := T)).Additive
+  签名: (箭头.leftFunc (C := T)).加性
   定义体: inferInstanceAs ((Comma.fst (𝟭 T) (𝟭 T))).Additive
 
 Depends on / 依赖: Additive
@@ -265,7 +265,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Arrow.rightFunc (C := T)).Additive
+  签名: (箭头.rightFunc (C := T)).加性
   定义体: inferInstanceAs ((Comma.snd (𝟭 T) (𝟭 T))).Additive
 
 Depends on / 依赖: Additive
@@ -288,7 +288,7 @@ lemma Arrow.Hom.add_left
 @[simp]
 
 中文:
-引理 Arrow.Hom.add_left
+引理 箭头.态射.add_left
   条件: (α β : u ⟶ v)
   结论: (α + β).left = α.left + β.left
   证明: rfl
@@ -310,7 +310,7 @@ lemma Arrow.Hom.add_right
 @[simp]
 
 中文:
-引理 Arrow.Hom.add_right
+引理 箭头.态射.add_right
   条件: (α β : u ⟶ v)
   结论: (α + β).right = α.right + β.right
   证明: rfl
@@ -332,7 +332,7 @@ lemma Arrow.Hom.sub_left
 @[simp]
 
 中文:
-引理 Arrow.Hom.sub_left
+引理 箭头.态射.sub_left
   条件: (α β : u ⟶ v)
   结论: (α - β).left = α.left - β.left
   证明: rfl
@@ -354,7 +354,7 @@ lemma Arrow.Hom.sub_right
 @[simp]
 
 中文:
-引理 Arrow.Hom.sub_right
+引理 箭头.态射.sub_right
   条件: (α β : u ⟶ v)
   结论: (α - β).right = α.right - β.right
   证明: rfl
@@ -375,7 +375,7 @@ lemma Arrow.Hom.zero_left
 @[simp]
 
 中文:
-引理 Arrow.Hom.zero_left
+引理 箭头.态射.zero_left
   结论: (0 : u ⟶ v).left = 0
   证明: rfl
 
@@ -395,7 +395,7 @@ lemma Arrow.Hom.zero_right
 @[simp]
 
 中文:
-引理 Arrow.Hom.zero_right
+引理 箭头.态射.zero_right
   结论: (0 : u ⟶ v).right = 0
   证明: rfl
 
@@ -416,7 +416,7 @@ lemma Arrow.Hom.neg_left
 @[simp]
 
 中文:
-引理 Arrow.Hom.neg_left
+引理 箭头.态射.neg_left
   条件: (α : u ⟶ v)
   结论: (-α).left = -α.left
   证明: rfl
@@ -436,7 +436,7 @@ lemma Arrow.Hom.neg_right
   proof: rfl
 
 中文:
-引理 Arrow.Hom.neg_right
+引理 箭头.态射.neg_right
   条件: (α : u ⟶ v)
   结论: (-α).right = -α.right
   证明: rfl

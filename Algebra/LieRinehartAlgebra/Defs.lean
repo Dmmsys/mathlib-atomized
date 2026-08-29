@@ -37,8 +37,8 @@ class LieRinehartRing
     - leibniz_smul_right'((x y : L) (a : A)) : ⁅x, a • y⁆ = a • ⁅x, y⁆ + ⁅x, a⁆ • y
 
 中文:
-类 LieRinehartRing
-  参数: (A L : 类型) [CommRing A] [LieRing L]
+类 LieRinehart环
+  参数: (A L : 类型) [交换环 A] [Lie环 L]
   公理与运算 (3 个):
     - lie_smul_eq_mul'((a b : A) (x : L)) : ⁅a • x, b⁆ = a * ⁅x, b⁆
     - leibniz_mul_right'((x : L) (a b : A)) : ⁅x, a * b⁆ = a • ⁅x, b⁆ + ⁅x, a⁆ * b
@@ -59,8 +59,8 @@ class LieRinehartAlgebra
   (no additional axioms)
 
 中文:
-类 LieRinehartAlgebra
-  参数: (R A L : 类型) [CommRing A] [LieRing L]
+类 LieRinehart代数
+  参数: (R A L : 类型) [交换环 A] [Lie环 L]
   (无附加公理)
 -/
 class LieRinehartAlgebra (R A L : Type*) [CommRing A] [LieRing L]
@@ -85,8 +85,8 @@ lemma LieRinehartRing.lie_smul_eq_mul
   proof: LieRinehartRing.lie_smul_eq_mul' a b x
 
 中文:
-引理 LieRinehartRing.lie_smul_eq_mul
-  条件: [LieRinehartRing A₁ L₁] (a b : A₁) (x : L₁)
+引理 LieRinehart环.lie_smul_eq_mul
+  条件: [LieRinehart环 A₁ L₁] (a b : A₁) (x : L₁)
   证明: LieRinehartRing.lie_smul_eq_mul' a b x
 -/
 @[simp] lemma LieRinehartRing.lie_smul_eq_mul [LieRinehartRing A₁ L₁] (a b : A₁) (x : L₁) :
@@ -101,8 +101,8 @@ lemma LieRinehartRing.leibniz_mul_right
   proof: LieRinehartRing.leibniz_mul_right' x a b
 
 中文:
-引理 LieRinehartRing.leibniz_mul_right
-  条件: [LieRinehartRing A₁ L₁] (x : L₁) (a b : A₁)
+引理 LieRinehart环.leibniz_mul_right
+  条件: [LieRinehart环 A₁ L₁] (x : L₁) (a b : A₁)
   证明: LieRinehartRing.leibniz_mul_right' x a b
 -/
 @[simp] lemma LieRinehartRing.leibniz_mul_right [LieRinehartRing A₁ L₁] (x : L₁) (a b : A₁) :
@@ -117,8 +117,8 @@ lemma LieRinehartRing.leibniz_smul_right
   proof: LieRinehartRing.leibniz_smul_right' x y a
 
 中文:
-引理 LieRinehartRing.leibniz_smul_right
-  条件: [LieRinehartRing A₁ L₁] (x y : L₁) (a : A₁)
+引理 LieRinehart环.leibniz_smul_right
+  条件: [LieRinehart环 A₁ L₁] (x y : L₁) (a : A₁)
   证明: LieRinehartRing.leibniz_smul_right' x y a
 -/
 @[simp] lemma LieRinehartRing.leibniz_smul_right [LieRinehartRing A₁ L₁] (x y : L₁) (a : A₁) :
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRinehartRing A₁ (Derivation R A₁ A₁)
+  签名: LieRinehart环 A₁ (导子 R A₁ A₁)
   定义体: rfl
   leibniz_mul_right' _ _ _ := by simp; ring
   leibniz_smul_right' _ _ _ := by ext; simp [Derivation.commutator_apply]; ring
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRinehartAlgebra R A₁ (Derivation R A₁ A₁)
+  签名: LieRinehart代数 R A₁ (导子 R A₁ A₁)
 -/
 instance : LieRinehartAlgebra R A₁ (Derivation R A₁ A₁) where
 
@@ -173,7 +173,7 @@ structure Hom
     - apply_lie'((a : A₁) (x : L₁)) : σ ⁅x, a⁆ = ⁅toLieHom x, σ a⁆
 
 中文:
-结构 Hom
+结构 态射
   参数: (σ : A₁ ->ₐ[R] A₂) (L₁ L₂ : 类型)
   继承: L₁ ->ₗ⁅R⁆ L₂
   公理与运算 (2 个):
@@ -320,7 +320,7 @@ definition id
 
 中文:
 定义 id
-  签名: : L₁ ->ₗ⁅AlgHom.id R A₁⁆ L₁ where
+  签名: : L₁ ->ₗ⁅代数态射.id R A₁⁆ L₁ where
   定义体: LieHom.id
   map_smul_apply' _ _ := by simp
   apply_lie' _ _ := by simp
@@ -351,7 +351,7 @@ definition anchor
 
 中文:
 定义 anchor
-  签名: : L₁ ->ₗ⁅AlgHom.id R A₁⁆ Derivation R A₁ A₁ where
+  签名: : L₁ ->ₗ⁅代数态射.id R A₁⁆ 导子 R A₁ A₁ where
   定义体: .mk' (LieModule.toEnd R L₁ A₁ x) fun a b => by
     simp [mul_comm b]
   map_add' _ _ := by ext; simp
@@ -381,7 +381,7 @@ lemma anchor_derivation
 
 中文:
 引理 anchor_derivation
-  结论: anchor R A₁ (Derivation R A₁ A₁) = Hom.id
+  结论: anchor R A₁ (导子 R A₁ A₁) = 态射.id
   证明: rfl
 -/
 @[simp] lemma anchor_derivation : anchor R A₁ (Derivation R A₁ A₁) = Hom.id := rfl

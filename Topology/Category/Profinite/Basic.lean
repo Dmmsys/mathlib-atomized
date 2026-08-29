@@ -76,7 +76,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+  签名: (X : 类型) [拓扑空间 X] [紧空间 X] [T2空间 X]
   定义体: CompHausLike.of _ X
 
 Depends on / 依赖: CompHausLike, CompHausLike.of
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Profinite
+  签名: 可居 Profinite
   定义体: ⟨Profinite.of PEmpty⟩
 
 Depends on / 依赖: PEmpty, Profinite, Profinite.of
@@ -141,7 +141,7 @@ abbreviation Profinite.toTopCat
 
 中文:
 缩写 Profinite.toTopCat
-  签名: : Profinite ⥤ TopCat
+  签名: : Profinite ⥤ 顶元素范畴
   定义体: CompHausLike.compHausLikeToTop _
 
 Depends on / 依赖: CompHausLike, CompHausLike.compHausLikeToTop, compHausLikeToTop
@@ -291,7 +291,7 @@ theorem FintypeCat.discreteTopology
 中文:
 定理 FintypeCat.discreteTopology
   条件: (A : FintypeCat)
-  结论: DiscreteTopology A
+  结论: 离散拓扑 A
   证明: ⟨rfl⟩
 -/
 theorem FintypeCat.discreteTopology (A : FintypeCat) : DiscreteTopology A :=
@@ -335,7 +335,7 @@ definition FintypeCat.toProfiniteFullyFaithful
 
 中文:
 定义 FintypeCat.toProfiniteFullyFaithful
-  签名: : toProfinite.FullyFaithful where
+  签名: : toProfinite.满忠实 where
   定义体: InducedCategory.homMk ↾(f : _ -> _)
   map_preimage _ := rfl
   preimage_map _ := rfl
@@ -357,7 +357,7 @@ instance :
 
 中文:
 实例 :
-  签名: FintypeCat.toProfinite.Faithful
+  签名: FintypeCat.toProfinite.忠实
   定义体: FintypeCat.toProfiniteFullyFaithful.faithful
 
 Depends on / 依赖: FintypeCat, FintypeCat.toProfiniteFullyFaithful.faithful, faithful, toProfiniteFullyFaithful
@@ -374,7 +374,7 @@ instance :
 
 中文:
 实例 :
-  签名: FintypeCat.toProfinite.Full
+  签名: FintypeCat.toProfinite.满
   定义体: FintypeCat.toProfiniteFullyFaithful.full
 -/
 instance : FintypeCat.toProfinite.Full := FintypeCat.toProfiniteFullyFaithful.full
@@ -405,7 +405,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: {J : 类型v} [SmallCategory J] (F : J ⥤ Profinite.{max u v})
+  签名: {J : 类型v} [小范畴 J] (F : J ⥤ Profinite.{最大值 u v})
   定义体: { toTop := (CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).pt.toTop
       prop := by
         change TotallyDisconnectedSpace ({ u : forall j : J, F.obj j | _ } : Type _)
@@ -448,7 +448,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: {J : 类型v} [SmallCategory J] (F : J ⥤ Profinite.{max u v})
+  签名: {J : 类型v} [小范畴 J] (F : J ⥤ Profinite.{最大值 u v})
   定义体: InducedCategory.homMk
       ((CompHaus.limitConeIsLimit.{v, u} (F ⋙ profiniteToCompHaus)).lift
         (profiniteToCompHaus.mapCone S)).hom
@@ -502,7 +502,7 @@ instance toCompHaus.reflective
 
 中文:
 实例 toCompHaus.reflective
-  签名: : Reflective profiniteToCompHaus where
+  签名: : 反射 profiniteToCompHaus where
   定义体: CompHaus.toProfinite
   adj := Profinite.toProfiniteAdjToCompHaus
 
@@ -540,7 +540,7 @@ instance toTopCat.reflective
 
 中文:
 实例 toTopCat.reflective
-  签名: : Reflective Profinite.toTopCat
+  签名: : 反射 Profinite.toTopCat
   定义体: Reflective.comp profiniteToCompHaus compHausToTop
 
 Depends on / 依赖: Reflective, Reflective.comp, compHausToTop, profiniteToCompHaus
@@ -576,7 +576,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : Limits.HasLimits Profinite
+  签名: : Limits.有极限 Profinite
   定义体: hasLimits_of_hasLimits_createsLimits Profinite.toTopCat
 
 Depends on / 依赖: Profinite, Profinite.toTopCat, hasLimits_of_hasLimits_createsLimits, toTopCat
@@ -594,7 +594,7 @@ instance hasColimits
 
 中文:
 实例 hasColimits
-  签名: : Limits.HasColimits Profinite
+  签名: : Limits.有余极限 Profinite
   定义体: hasColimits_of_reflective profiniteToCompHaus
 
 Depends on / 依赖: hasColimits_of_reflective, profiniteToCompHaus
@@ -646,7 +646,7 @@ theorem epi_iff_surjective
 中文:
 定理 epi_iff_surjective
   条件: {X Y : Profinite.{u}} (f : X ⟶ Y)
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   constructor
   · dsimp [Function.Surjective]

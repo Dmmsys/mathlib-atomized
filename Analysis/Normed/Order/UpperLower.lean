@@ -54,8 +54,8 @@ theorem IsUpperSet.thickening'
 @[to_additive IsLowerSet.thickening]
 
 中文:
-定理 IsUpperSet.thickening'
-  条件: (hs : IsUpperSet s) (ε : 实数)
+定理 是上集.thickening'
+  条件: (hs : 是上集 s) (ε : 实数)
   证明: by
   rw [← ball_mul_one]
   exact hs.mul_left
@@ -81,8 +81,8 @@ theorem IsLowerSet.thickening'
 @[to_additive IsUpperSet.cthickening]
 
 中文:
-定理 IsLowerSet.thickening'
-  条件: (hs : IsLowerSet s) (ε : 实数)
+定理 是下集.thickening'
+  条件: (hs : 是下集 s) (ε : 实数)
   证明: by
   rw [← ball_mul_one]
   exact hs.mul_left
@@ -108,8 +108,8 @@ theorem IsUpperSet.cthickening'
 @[to_additive IsLowerSet.cthickening]
 
 中文:
-定理 IsUpperSet.cthickening'
-  条件: (hs : IsUpperSet s) (ε : 实数)
+定理 是上集.cthickening'
+  条件: (hs : 是上集 s) (ε : 实数)
   证明: by
   rw [cthickening_eq_iInter_thickening'']
   exact isUpperSet_iInter₂ fun δ _ => hs.thickening' _
@@ -133,8 +133,8 @@ theorem IsLowerSet.cthickening'
   exact isLowerSet_iInter₂ fun δ _ => hs.thickening' _
 
 中文:
-定理 IsLowerSet.cthickening'
-  条件: (hs : IsLowerSet s) (ε : 实数)
+定理 是下集.cthickening'
+  条件: (hs : 是下集 s) (ε : 实数)
   证明: by
   rw [cthickening_eq_iInter_thickening'']
   exact isLowerSet_iInter₂ fun δ _ => hs.thickening' _
@@ -154,7 +154,7 @@ lemma upperClosure_interior_subset'
 
 中文:
 引理 upperClosure_interior_subset'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: upperClosure_min (interior_mono subset_upperClosure) (upperClosure s).upper.interior
 -/
 @[to_additive upperClosure_interior_subset] lemma upperClosure_interior_subset' (s : Set α) :
@@ -171,7 +171,7 @@ lemma lowerClosure_interior_subset'
 
 中文:
 引理 lowerClosure_interior_subset'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: lowerClosure_min (interior_mono subset_lowerClosure) (lowerClosure s).lower.interior
 -/
 @[to_additive lowerClosure_interior_subset] lemma lowerClosure_interior_subset' (s : Set α) :
@@ -201,8 +201,8 @@ theorem IsUpperSet.mem_interior_of_forall_lt
     refine fun i => (hxy _).trans_le' (sub_le_iff_le_add'.1 <| (le_abs_self _).trans ?
 
 中文:
-定理 IsUpperSet.mem_interior_of_forall_lt
-  结论: (hs : IsUpperSet s) (hx : x in closure s)
+定理 是上集.mem_interior_of_对任意_lt
+  结论: (hs : 是上集 s) (hx : x in closure s)
   证明: by
   cases nonempty_fintype ι
   obtain ⟨ε, hε, hxy⟩ := Pi.exists_forall_pos_add_lt h
@@ -246,8 +246,8 @@ theorem IsLowerSet.mem_interior_of_forall_lt
       (lt_sub_iff_add_lt.2 <| hxy _).trans_le (sub_le_comm.1 <| (l
 
 中文:
-定理 IsLowerSet.mem_interior_of_forall_lt
-  结论: (hs : IsLowerSet s) (hx : x in closure s)
+定理 是下集.mem_interior_of_对任意_lt
+  结论: (hs : 是下集 s) (hx : x in closure s)
   证明: by
   cases nonempty_fintype ι
   obtain ⟨ε, hε, hxy⟩ := Pi.exists_forall_pos_add_lt h
@@ -324,7 +324,7 @@ lemma dist_mono_left_pi
 
 中文:
 引理 dist_mono_left_pi
-  结论: MonotoneOn (dist · y) (Ici y)
+  结论: MonotoneOn (dist · y) (左闭右无界区间 y)
   证明: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₁ i))]; rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₂ i))]
@@ -348,7 +348,7 @@ lemma dist_mono_right_pi
 
 中文:
 引理 dist_mono_right_pi
-  结论: MonotoneOn (dist x) (Ici x)
+  结论: MonotoneOn (dist x) (左闭右无界区间 x)
   证明: by
   simpa only [dist_comm] using dist_mono_left_pi (y := x)
 
@@ -370,7 +370,7 @@ lemma dist_anti_left_pi
 
 中文:
 引理 dist_anti_left_pi
-  结论: AntitoneOn (dist · y) (Iic y)
+  结论: AntitoneOn (dist · y) (左无界右闭区间 y)
   证明: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₂ i <= y i))]; rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₁ i <= y i))]
@@ -394,7 +394,7 @@ lemma dist_anti_right_pi
 
 中文:
 引理 dist_anti_right_pi
-  结论: AntitoneOn (dist x) (Iic x)
+  结论: AntitoneOn (dist x) (左无界右闭区间 x)
   证明: by
   simpa only [dist_comm] using dist_anti_left_pi (y := x)
 
@@ -441,8 +441,8 @@ theorem IsUpperSet.exists_subset_ball
   refine fun z hz => hs
 
 中文:
-定理 IsUpperSet.exists_subset_ball
-  条件: (hs : IsUpperSet s) (hx : x in closure s) (hδ : 0 < δ)
+定理 是上集.存在_subset_ball
+  条件: (hs : 是上集 s) (hx : x in closure s) (hδ : 0 < δ)
   证明: by
   refine ⟨x + const _ (3 / 4 * δ), closedBall_subset_closedBall' ?_, ?_⟩
   · grw [dist_self_add_left, ← const_def, pi_norm_const_le]
@@ -487,8 +487,8 @@ theorem IsLowerSet.exists_subset_ball
   refine fun z hz => hs
 
 中文:
-定理 IsLowerSet.exists_subset_ball
-  条件: (hs : IsLowerSet s) (hx : x in closure s) (hδ : 0 < δ)
+定理 是下集.存在_subset_ball
+  条件: (hs : 是下集 s) (hx : x in closure s) (hδ : 0 < δ)
   证明: by
   refine ⟨x - const _ (3 / 4 * δ), closedBall_subset_closedBall' ?_, ?_⟩
   · grw [dist_self_sub_left, ← const_def, pi_norm_const_le]
@@ -539,8 +539,8 @@ lemma IsClosed.upperClosure_pi
   exact ⟨b,
 
 中文:
-引理 IsClosed.upperClosure_pi
-  条件: (hs : IsClosed s) (hs' : BddBelow s)
+引理 是闭集.upperClosure_pi
+  条件: (hs : 是闭集 s) (hs' : BddBelow s)
   证明: by
   cases nonempty_fintype ι
   refine IsSeqClosed.isClosed fun f x hf hx => ?_
@@ -576,8 +576,8 @@ lemma IsClosed.lowerClosure_pi
   obtain ⟨b, hb, φ, hφ, hbf⟩ := tendsto_subseq_of_bounded (hs'.isBounded_inter bddBelow_Ici) fun n =>
 
 中文:
-引理 IsClosed.lowerClosure_pi
-  条件: (hs : IsClosed s) (hs' : BddAbove s)
+引理 是闭集.lowerClosure_pi
+  条件: (hs : 是闭集 s) (hs' : BddAbove s)
   证明: by
   cases nonempty_fintype ι
   refine IsSeqClosed.isClosed fun f x hf hx => ?_

@@ -55,7 +55,7 @@ definition coimageObjIso
 
 中文:
 定义 coimageObjIso
-  签名: : (Abelian.coimage α).obj X ≅ Abelian.coimage (α.app X)
+  签名: : (交换.coimage α).obj X ≅ 交换.coimage (α.app X)
   定义体: PreservesCokernel.iso ((evaluation C D).obj X) _ ≪≫
     cokernel.mapIso _ _ (PreservesKernel.iso ((evaluation C D).obj X) _) (Iso.refl _)
       (by
@@ -93,7 +93,7 @@ definition imageObjIso
 
 中文:
 定义 imageObjIso
-  签名: : (Abelian.image α).obj X ≅ Abelian.image (α.app X)
+  签名: : (交换.像 α).obj X ≅ 交换.像 (α.app X)
   定义体: PreservesKernel.iso ((evaluation C D).obj X) _ ≪≫
     kernel.mapIso _ _ (Iso.refl _) (PreservesCokernel.iso ((evaluation C D).obj X) _)
       (by
@@ -226,7 +226,7 @@ instance functorCategoryAbelian
 
 中文:
 实例 functorCategoryAbelian
-  签名: : Abelian (C ⥤ D)
+  签名: : 交换 (C ⥤ D)
   定义体: let _ : HasKernels (C ⥤ D) := inferInstance
   let _ : HasCokernels (C ⥤ D) := inferInstance
   Abelian.ofCoimageImageComparisonIsIso

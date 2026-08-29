@@ -57,11 +57,11 @@ structure Filtration
     - le' : forall i : ι, seq i <= m
 
 中文:
-结构 Filtration
-  参数: {Ω : 类型} (ι : 类型) [Preorder ι] (m : MeasurableSpace Ω)
+结构 滤子
+  参数: {Ω : 类型} (ι : 类型) [预序 ι] (m : 可测空间 Ω)
   公理与运算 (3 个):
-    - seq : ι -> MeasurableSpace Ω
-    - mono' : Monotone seq
+    - seq : ι -> 可测空间 Ω
+    - mono' : 递增 seq
     - le' : 对任意 i : ι, seq i <= m
 -/
 structure Filtration {Ω : Type*} (ι : Type*) [Preorder ι] (m : MeasurableSpace Ω) where
@@ -83,8 +83,8 @@ instance [Preorder
   body: ⟨fun f => f.seq⟩
 
 中文:
-实例 [Preorder
-  签名: ι] : CoeFun (Filtration ι m) fun _ => ι -> MeasurableSpace Ω
+实例 [预序
+  签名: ι] : CoeFun (滤子 ι m) fun _ => ι -> 可测空间 Ω
   定义体: ⟨fun f => f.seq⟩
 
 Depends on / 依赖: f.seq
@@ -107,7 +107,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {i j : ι} (f : Filtration ι m) (hij : i <= j)
+  条件: {i j : ι} (f : 滤子 ι m) (hij : i <= j)
   结论: f i <= f j
   证明: f.mono' hij
 -/
@@ -127,7 +127,7 @@ theorem le
 
 中文:
 定理 le
-  条件: (f : Filtration ι m) (i : ι)
+  条件: (f : 滤子 ι m) (i : ι)
   结论: f i <= m
   证明: f.le' i
 
@@ -149,7 +149,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : Filtration ι m} (h : (f : ι -> MeasurableSpace Ω) = g)
+  条件: {f g : 滤子 ι m} (h : (f : ι -> 可测空间 Ω) = g)
   结论: f = g
   证明: by
   cases f; cases g; congr
@@ -170,7 +170,7 @@ definition const
 
 中文:
 定义 const
-  签名: (m' : MeasurableSpace Ω) (hm' : m' <= m)
+  签名: (m' : 可测空间 Ω) (hm' : m' <= m)
   定义体: ⟨fun _ => m', monotone_const, fun _ => hm'⟩
 
 @[simp]
@@ -192,7 +192,7 @@ theorem const_apply
 
 中文:
 定理 const_apply
-  条件: {m' : MeasurableSpace Ω} {hm' : m' <= m} (i : ι)
+  条件: {m' : 可测空间 Ω} {hm' : m' <= m} (i : ι)
   结论: const ι m' hm' i = m'
   证明: rfl
 -/
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Filtration ι m)
+  签名: 可居 (滤子 ι m)
   定义体: ⟨const ι m le_rfl⟩
 
 Depends on / 依赖: le_rfl
@@ -227,7 +227,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Filtration ι m)
+  签名: LE (滤子 ι m)
   定义体: ⟨fun f g => forall i, f i <= g i⟩
 -/
 instance : LE (Filtration ι m) :=
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Filtration ι m)
+  签名: 底元素 (滤子 ι m)
   定义体: ⟨const ι ⊥ bot_le⟩
 
 Depends on / 依赖: bot_le
@@ -261,7 +261,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Filtration ι m)
+  签名: 顶元素 (滤子 ι m)
   定义体: ⟨const ι m le_rfl⟩
 
 Depends on / 依赖: le_rfl
@@ -285,7 +285,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Filtration ι m)
+  签名: 最大值 (滤子 ι m)
   定义体: ⟨fun f g =>
     { seq := fun i => f i ⊔ g i
       mono' := fun _ _ hij =>
@@ -315,7 +315,7 @@ theorem coeFn_sup
 
 中文:
 定理 coeFn_sup
-  条件: {f g : Filtration ι m}
+  条件: {f g : 滤子 ι m}
   结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
   证明: rfl
 -/
@@ -338,7 +338,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Filtration ι m)
+  签名: 最小值 (滤子 ι m)
   定义体: ⟨fun f g =>
     { seq := fun i => f i ⊓ g i
       mono' := fun _ _ hij =>
@@ -368,7 +368,7 @@ theorem coeFn_inf
 
 中文:
 定理 coeFn_inf
-  条件: {f g : Filtration ι m}
+  条件: {f g : 滤子 ι m}
   结论: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
   证明: rfl
 -/
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Filtration ι m)
+  签名: 上确界集 (滤子 ι m)
   定义体: ⟨fun s =>
     { seq := fun i => sSup ((fun f : Filtration ι m => f i) '' s)
       mono' := fun i j hij => by
@@ -434,7 +434,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (s : Set (Filtration ι m)) (i : ι)
+  条件: (s : 集合 (滤子 ι m)) (i : ι)
   证明: rfl
 -/
 theorem sSup_def (s : Set (Filtration ι m)) (i : ι) :
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Filtration ι m)
+  签名: 下确界集 (滤子 ι m)
   定义体: ⟨fun s =>
     { seq := fun i => if Set.Nonempty s then sInf ((fun f : Filtration ι m => f i) '' s) else m
       mono' := fun i j hij => by
@@ -496,7 +496,7 @@ theorem sInf_def
 
 中文:
 定理 sInf_def
-  条件: (s : Set (Filtration ι m)) (i : ι)
+  条件: (s : 集合 (滤子 ι m)) (i : ι)
   证明: rfl
 -/
 theorem sInf_def (s : Set (Filtration ι m)) (i : ι) :
@@ -515,7 +515,7 @@ le_antisymm _ _ h_fg h_gf := Filtration.ext funext fun i => (h_fg i).antisymm (h
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Filtration ι m) where
+  签名: : 偏序 (滤子 ι m) where
   定义体: le_rfl
   le_trans _ _ _ h_fg h_gh i := (h_fg i).trans (h_gh i)
 le_antisymm _ _ h_fg h_gf := Filtration.ext funext fun i => (h_fg i).antisymm (h_gf i)
@@ -547,7 +547,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (Filtration ι m) where
+  签名: : 完备格 (滤子 ι m) where
   定义体: (· ⊔ ·)
   le_sup_left _ _ _ := le_sup_left
   le_sup_right _ _ _ := le_sup_right
@@ -592,7 +592,7 @@ theorem measurableSet_of_filtration
 
 中文:
 定理 measurableSet_of_filtration
-  结论: [Preorder ι] {f : Filtration ι m} {s : Set Ω} {i : ι}
+  结论: [预序 ι] {f : 滤子 ι m} {s : 集合 Ω} {i : ι}
   证明: f.le i s hs
 
 Depends on / 依赖: f.le
@@ -611,10 +611,10 @@ class SigmaFiniteFiltration
     - SigmaFinite : forall i : ι, SigmaFinite (μ.trim (f.le i))
 
 中文:
-类 SigmaFiniteFiltration
-  参数: [Preorder ι] (μ : Measure Ω) (f : Filtration ι m)
+类 σ有限滤子
+  参数: [预序 ι] (μ : 测度 Ω) (f : 滤子 ι m)
   公理与运算 (1 个):
-    - SigmaFinite : 对任意 i : ι, SigmaFinite (μ.trim (f.le i))
+    - SigmaFinite : 对任意 i : ι, σ有限 (μ.trim (f.le i))
 -/
 class SigmaFiniteFiltration [Preorder ι] (μ : Measure Ω) (f : Filtration ι m) : Prop where
   SigmaFinite : forall i : ι, SigmaFinite (μ.trim (f.le i))
@@ -629,7 +629,7 @@ instance sigmaFinite_of_sigmaFiniteFiltration
 
 中文:
 实例 sigmaFinite_of_sigmaFiniteFiltration
-  签名: [Preorder ι] (μ : Measure Ω) (f : Filtration ι m)
+  签名: [预序 ι] (μ : 测度 Ω) (f : 滤子 ι m)
   定义体: hf.SigmaFinite _
 
 Depends on / 依赖: SigmaFinite, hf.SigmaFinite
@@ -651,8 +651,8 @@ theorem Integrable.uniformIntegrable_condExp_filtration
   proof: hg.uniformIntegrable_condExp f.le
 
 中文:
-定理 Integrable.uniformIntegrable_condExp_filtration
-  结论: [Preorder ι] {μ : Measure Ω}
+定理 可积.uniform整数egrable_condExp_filtration
+  结论: [预序 ι] {μ : 测度 Ω}
   证明: hg.uniformIntegrable_condExp f.le
 
 Depends on / 依赖: f.le, hg.uniformIntegrable_condExp, uniformIntegrable_condExp
@@ -671,8 +671,8 @@ theorem Filtration.condExp_condExp
   proof: condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)
 
 中文:
-定理 Filtration.condExp_condExp
-  结论: [Preorder ι] {E : 类型} [NormedAddCommGroup E]
+定理 滤子.condExp_condExp
+  结论: [预序 ι] {E : 类型} [赋范交换加群 E]
   证明: condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)
 
 Depends on / 依赖: condExp_condExp_of_le
@@ -698,7 +698,7 @@ definition filtrationOfSet
 
 中文:
 定义 filtrationOfSet
-  签名: {s : ι -> Set Ω} (hsm : 对任意 i, MeasurableSet (s i))
+  签名: {s : ι -> 集合 Ω} (hsm : 对任意 i, 可测集 (s i))
   定义体: MeasurableSpace.generateFrom {t | exists j <= i, s j = t}
   mono' _ _ hnm := MeasurableSpace.generateFrom_mono fun _ ⟨k, hk₁, hk₂⟩ => ⟨k, hk₁.trans hnm, hk₂⟩
   le' _ := MeasurableSpace.generateFrom_le fun _ ⟨k, _, hk₂⟩ => hk₂ ▸ hsm k
@@ -720,7 +720,7 @@ theorem measurableSet_filtrationOfSet
 
 中文:
 定理 measurableSet_filtrationOfSet
-  结论: {s : ι -> Set Ω} (hsm : 对任意 i, MeasurableSet[m] (s i)) (i : ι)
+  结论: {s : ι -> 集合 Ω} (hsm : 对任意 i, 可测集[m] (s i)) (i : ι)
   证明: MeasurableSpace.measurableSet_generateFrom ⟨j, hj, rfl⟩
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_generateFrom, measurableSet_generateFrom
@@ -739,7 +739,7 @@ theorem measurableSet_filtrationOfSet'
 
 中文:
 定理 measurableSet_filtrationOfSet'
-  结论: {s : ι -> Set Ω} (hsm : 对任意 n, MeasurableSet[m] (s n))
+  结论: {s : ι -> 集合 Ω} (hsm : 对任意 n, 可测集[m] (s n))
   证明: measurableSet_filtrationOfSet hsm i le_rfl
 
 Depends on / 依赖: le_rfl, measurableSet_filtrationOfSet
@@ -806,7 +806,7 @@ lemma rightCont_apply
 
 中文:
 引理 rightCont_apply
-  结论: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
+  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   simp +instances only [rightCont, OrderTopology.topology_eq_generate_intervals]
 
@@ -828,7 +828,7 @@ lemma rightCont_eq_of_nhdsGT_eq_bot
 
 中文:
 引理 rightCont_eq_of_nhdsGT_eq_bot
-  结论: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
+  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   rw [rightCont_apply]; rw [hi]; rw [neBot_iff]; rw [ne_self_iff_false]; rw [if_false]
 
@@ -852,7 +852,7 @@ lemma rightCont_eq_self
 
 中文:
 引理 rightCont_eq_self
-  条件: [LinearOrder ι] [SuccOrder ι] (𝓕 : Filtration ι m)
+  条件: [线性序 ι] [Succ序 ι] (𝓕 : 滤子 ι m)
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   ext _
@@ -876,7 +876,7 @@ lemma rightCont_eq_of_isMax
 
 中文:
 引理 rightCont_eq_of_isMax
-  条件: [PartialOrder ι] (𝓕 : Filtration ι m) {i : ι} (hi : IsMax i)
+  条件: [偏序 ι] (𝓕 : 滤子 ι m) {i : ι} (hi : IsMax i)
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   exact rightCont_eq_of_nhdsGT_eq_bot _ (hi.Ioi_eq ▸ nhdsWithin_empty i)
@@ -901,8 +901,8 @@ lemma rightCont_eq_of_exists_gt
 exact rightCont_eq_of_nhdsGT_eq_bot _ CovBy.nhdsGT hcov
 
 中文:
-引理 rightCont_eq_of_exists_gt
-  结论: [LinearOrder ι] (𝓕 : Filtration ι m) {i : ι}
+引理 rightCont_eq_of_存在_gt
+  结论: [线性序 ι] (𝓕 : 滤子 ι m) {i : ι}
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   obtain ⟨j, hij, hIoo⟩ := hi
@@ -930,7 +930,7 @@ lemma rightCont_eq_of_neBot_nhdsGT
 
 中文:
 引理 rightCont_eq_of_neBot_nhdsGT
-  结论: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
+  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
   证明: by
   rw [rightCont_apply]; rw [if_pos ‹(𝓝[>] i).NeBot›]
 
@@ -954,7 +954,7 @@ lemma rightCont_eq_of_not_isMax
 
 中文:
 引理 rightCont_eq_of_not_isMax
-  结论: [LinearOrder ι] [DenselyOrdered ι]
+  结论: [线性序 ι] [稠密序 ι]
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   have : (𝓝[>] i).NeBot := nhdsGT_neBot_of_exists_gt (not_isMax_iff.mp hi)
@@ -979,7 +979,7 @@ lemma rightCont_eq
 
 中文:
 引理 rightCont_eq
-  结论: [LinearOrder ι] [DenselyOrdered ι] [NoMaxOrder ι]
+  结论: [线性序 ι] [稠密序 ι] [NoMax序 ι]
   证明: 𝓕.rightCont_eq_of_not_isMax (not_isMax i)
 
 Depends on / 依赖: not_isMax, rightCont_eq_of_not_isMax
@@ -1007,7 +1007,7 @@ lemma le_rightCont
 
 中文:
 引理 le_rightCont
-  条件: (𝓕 : Filtration ι m)
+  条件: (𝓕 : 滤子 ι m)
   结论: 𝓕 <= 𝓕₊
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
@@ -1046,7 +1046,7 @@ lemma rightCont_self
 
 中文:
 引理 rightCont_self
-  条件: (𝓕 : Filtration ι m)
+  条件: (𝓕 : 滤子 ι m)
   结论: 𝓕₊₊ = 𝓕₊
   证明: by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
@@ -1088,8 +1088,8 @@ class IsRightContinuous
     - RC : 𝓕₊ <= 𝓕
 
 中文:
-类 IsRightContinuous
-  参数: (𝓕 : Filtration ι m)
+类 是RightContinuous
+  参数: (𝓕 : 滤子 ι m)
   公理与运算 (1 个):
     - RC : 𝓕₊ <= 𝓕
 -/
@@ -1106,8 +1106,8 @@ lemma IsRightContinuous.eq
   proof: (le_antisymm 𝓕.le_rightCont h.RC).symm
 
 中文:
-引理 IsRightContinuous.eq
-  条件: {𝓕 : Filtration ι m} [h : IsRightContinuous 𝓕]
+引理 是RightContinuous.eq
+  条件: {𝓕 : 滤子 ι m} [h : 是RightContinuous 𝓕]
   证明: (le_antisymm 𝓕.le_rightCont h.RC).symm
 
 Depends on / 依赖: h.RC, le_antisymm, le_rightCont
@@ -1126,8 +1126,8 @@ lemma IsRightContinuous.measurableSet
   proof: IsRightContinuous.eq (𝓕 := 𝓕) ▸ hs
 
 中文:
-引理 IsRightContinuous.measurableSet
-  结论: {𝓕 : Filtration ι m} [IsRightContinuous 𝓕] {i : ι}
+引理 是RightContinuous.measurableSet
+  结论: {𝓕 : 滤子 ι m} [是RightContinuous 𝓕] {i : ι}
   证明: IsRightContinuous.eq (𝓕 := 𝓕) ▸ hs
 
 Depends on / 依赖: IsRightContinuous, IsRightContinuous.eq
@@ -1221,7 +1221,7 @@ theorem filtrationOfSet_eq_natural
 
 中文:
 定理 filtrationOfSet_eq_natural
-  结论: [对任意 i, MulZeroOneClass (β i)] [对任意 i, Nontrivial (β i)]
+  结论: [对任意 i, 乘零幺类 (β i)] [对任意 i, 非平凡 (β i)]
   证明: by
   simp only [filtrationOfSet, natural, measurableSpace_iSup_eq, exists_prop, mk.injEq]
   ext1 i
@@ -1279,7 +1279,7 @@ definition limitProcess
 
 中文:
 定义 limitProcess
-  签名: (f : ι -> Ω -> E) (ℱ : Filtration ι m)
+  签名: (f : ι -> Ω -> E) (ℱ : 滤子 ι m)
   定义体: if h : exists g : Ω -> E,
     StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) then
   Classical.choose h else 0
@@ -1352,7 +1352,7 @@ theorem memLp_limitProcess_of_eLpNorm_bdd
 
 中文:
 定理 memLp_limitProcess_of_eLpNorm_bdd
-  结论: {R : 实数>=0} {p : 实数>=0∞} {F : 类型} [NormedAddCommGroup F]
+  结论: {R : 实数>=0} {p : 实数>=0∞} {F : 类型} [赋范交换加群 F]
   证明: by
   rw [limitProcess]
   split_ifs with h
@@ -1401,7 +1401,7 @@ definition piLE
 
 中文:
 定义 piLE
-  签名: : @Filtration (Π i, X i) ι _ pi where
+  签名: : @滤子 (Π i, X i) ι _ pi where
   定义体: pi.comap (restrictLe i)
   mono' i j hij := by
     simp only
@@ -1479,7 +1479,7 @@ definition piFinset
 
 中文:
 定义 piFinset
-  签名: : @Filtration (Π i, X i) (Finset ι) _ pi where
+  签名: : @滤子 (Π i, X i) (有限集 ι) _ pi where
   定义体: pi.comap s.restrict
   mono' s t hst := by
     simp only
@@ -1507,7 +1507,7 @@ lemma piFinset_eq_comap_restrict
 
 中文:
 引理 piFinset_eq_comap_restrict
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   证明: rfl
 
 Depends on / 依赖: domRestrict, pi.comap
@@ -1531,7 +1531,7 @@ mono' _ _ h := cylinderEvents_mono Set.compl_subset_compl_of_subset h
 
 中文:
 定义 cylinderEventsCompl
-  签名: : Filtration (Finset α)ᵒᵈ (.pi (X := fun _ : α => Ω)) where
+  签名: : 滤子 (有限集 α)ᵒᵈ (.pi (X := fun _ : α => Ω)) where
   定义体: cylinderEvents (↑(OrderDual.ofDual Λ))ᶜ
 mono' _ _ h := cylinderEvents_mono Set.compl_subset_compl_of_subset h
   le' _ := cylinderEvents_le_pi

@@ -58,7 +58,7 @@ definition IsSemisimple
   body: IsSemisimpleModule R[X] (AEval' f)
 
 中文:
-定义 IsSemisimple
+定义 是半单
   定义体: IsSemisimpleModule R[X] (AEval' f)
 
 Depends on / 依赖: IsSemisimpleModule
@@ -221,8 +221,8 @@ lemma isSemisimple_zero
 
 中文:
 引理 isSemisimple_zero
-  条件: [IsSemisimpleModule R M]
-  结论: IsSemisimple (0 : Module.End R M)
+  条件: [是半单模 R M]
+  结论: 是半单 (0 : 模.End R M)
   证明: by
   simpa [isSemisimple_iff] using exists_isCompl
 
@@ -246,8 +246,8 @@ lemma isSemisimple_id
 
 中文:
 引理 isSemisimple_id
-  条件: [IsSemisimpleModule R M]
-  结论: IsSemisimple (LinearMap.id : Module.End R M)
+  条件: [是半单模 R M]
+  结论: 是半单 (线性映射.id : 模.End R M)
   证明: by
   simpa [isSemisimple_iff] using exists_isCompl
 
@@ -267,7 +267,7 @@ lemma isSemisimple_neg
 
 中文:
 引理 isSemisimple_neg
-  结论: (-f).IsSemisimple ↔ f.IsSemisimple
+  结论: (-f).是半单 ↔ f.是半单
   证明: by
   simp [isSemisimple_iff, mem_invtSubmodule]
 -/
@@ -288,8 +288,8 @@ lemma _root_.LinearEquiv.isSemisimple_iff
     (Submodule.orderIsoMapComap e).complementedLattice_iff]
 
 中文:
-引理 _root_.LinearEquiv.isSemisimple_iff
-  结论: {M₂ : 类型} [AddCommGroup M₂] [Module R M₂]
+引理 _root_.线性等价.isSemisimple_iff
+  结论: {M₂ : 类型} [加法交换群 M₂] [模 R M₂]
   证明: by
   let e : AEval' f ≃ₗ[R[X]] AEval' g := LinearEquiv.ofAEval _ (e.trans (AEval'.of g)) fun x => by
     simpa [AEval'.X_smul_of] using LinearMap.congr_fun he x
@@ -319,7 +319,7 @@ lemma eq_zero_of_isNilpotent_isSemisimple
 
 中文:
 引理 eq_zero_of_isNilpotent_isSemisimple
-  条件: (hn : IsNilpotent f) (hs : f.IsSemisimple)
+  条件: (hn : 是幂零 f) (hs : f.是半单)
   结论: f = 0
   证明: by
   have ⟨n, h0⟩ := hn
@@ -430,8 +430,8 @@ lemma IsSemisimple.restrict
   exact (isSemisimpleModule_iff ..).mpr (e.complemente
 
 中文:
-引理 IsSemisimple.restrict
-  条件: {p : Submodule R M} (hp : p in f.invtSubmodule) (hf : f.IsSemisimple)
+引理 是半单.restrict
+  条件: {p : 子模 R M} (hp : p in f.invtSubmodule) (hf : f.是半单)
   证明: by
   rw [IsSemisimple] at hf ⊢
   let e : Submodule R[X] (AEval' (LinearMap.restrict f hp)) ≃o
@@ -462,8 +462,8 @@ lemma IsSemisimple.isFinitelySemisimple
 @[simp]
 
 中文:
-引理 IsSemisimple.isFinitelySemisimple
-  条件: (hf : f.IsSemisimple)
+引理 是半单.isFinitelySemisimple
+  条件: (hf : f.是半单)
   证明: isFinitelySemisimple_iff'.mp fun _ _ _ => hf.restrict _
 
 @[simp]
@@ -491,7 +491,7 @@ lemma isFinitelySemisimple_iff_isSemisimple
 
 中文:
 引理 isFinitelySemisimple_iff_isSemisimple
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: by
   refine ⟨fun hf => isSemisimple_iff.mpr fun p hp => ?_, IsSemisimple.isFinitelySemisimple⟩
   obtain ⟨q, -, hq₁, hq₂, hq₃⟩ :=
@@ -555,7 +555,7 @@ lemma IsFinitelySemisimple.restrict
 
 中文:
 引理 IsFinitelySemisimple.restrict
-  结论: {p : Submodule R M} (hp : p in f.invtSubmodule)
+  结论: {p : 子模 R M} (hp : p in f.invtSubmodule)
   证明: by
   intro q hq₁ hq₂
   have := invtSubmodule.map_subtype_mem_of_mem_invtSubmodule f hp hq₁
@@ -613,7 +613,7 @@ lemma IsSemisimple_smul
 
 中文:
 引理 IsSemisimple_smul
-  条件: (t : K) (h : f.IsSemisimple)
+  条件: (t : K) (h : f.是半单)
   证明: by
   wlog ht : t != 0; · simp [not_not.mp ht]
   rwa [IsSemisimple_smul_iff ht]
@@ -681,7 +681,7 @@ theorem IsSemisimple.minpoly_squarefree
     rw [isRadical_iff_span_singleton]; rw [span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
 
 中文:
-定理 IsSemisimple.minpoly_squarefree
+定理 是半单.minpoly_squarefree
   结论: Squarefree (minpoly K f)
   证明: IsRadical.squarefree (minpoly.ne_zero <| IsIntegral.isIntegral _) by
     rw [isRadical_iff_span_singleton]; rw [span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
@@ -707,9 +707,9 @@ have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
   isSemisimple_of_sq
 
 中文:
-定理 IsSemisimple.aeval
+定理 是半单.aeval
   条件: (p : K[X])
-  结论: (aeval f p).IsSemisimple
+  结论: (aeval f p).是半单
   证明: let R := K[X] ⧸ Ideal.span {minpoly K f}
   have : Module.Finite K R :=
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
@@ -739,7 +739,7 @@ theorem IsSemisimple.of_mem_adjoin_singleton
   rw [adjoin_singleton_eq_range_aeval] at ha; obtain ⟨p, rfl⟩ := ha; exact .aeval hf _
 
 中文:
-定理 IsSemisimple.of_mem_adjoin_singleton
+定理 是半单.of_mem_adjoin_singleton
   结论: {a : End K M}
   证明: by
   rw [adjoin_singleton_eq_range_aeval] at ha; obtain ⟨p, rfl⟩ := ha; exact .aeval hf _
@@ -760,9 +760,9 @@ theorem IsSemisimple.pow
   proof: .of_mem_adjoin_singleton hf (pow_mem (self_mem_adjoin_singleton _ _) _)
 
 中文:
-定理 IsSemisimple.pow
+定理 是半单.pow
   条件: (n : 自然数)
-  结论: (f ^ n).IsSemisimple
+  结论: (f ^ n).是半单
   证明: .of_mem_adjoin_singleton hf (pow_mem (self_mem_adjoin_singleton _ _) _)
 -/
 protected theorem IsSemisimple.pow (n : Nat) : (f ^ n).IsSemisimple :=
@@ -794,7 +794,7 @@ theorem IsSemisimple.of_mem_adjoin_pair
     (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsInt
 
 中文:
-定理 IsSemisimple.of_mem_adjoin_pair
+定理 是半单.of_mem_adjoin_pair
   条件: {a : End K M} (ha : a in K[f, g])
   证明: by
   let R := K[X] ⧸ Ideal.span {minpoly K f}
@@ -849,8 +849,8 @@ theorem IsSemisimple.add_of_commute
 comm hf hg add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
 
 中文:
-定理 IsSemisimple.add_of_commute
-  结论: (f + g).IsSemisimple
+定理 是半单.add_of_commute
+  结论: (f + g).是半单
   证明: .of_mem_adjoin_pair
 comm hf hg add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
 
@@ -869,8 +869,8 @@ theorem IsSemisimple.sub_of_commute
 comm hf hg sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
 
 中文:
-定理 IsSemisimple.sub_of_commute
-  结论: (f - g).IsSemisimple
+定理 是半单.sub_of_commute
+  结论: (f - g).是半单
   证明: .of_mem_adjoin_pair
 comm hf hg sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
 
@@ -889,8 +889,8 @@ theorem IsSemisimple.mul_of_commute
 comm hf hg mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
 
 中文:
-定理 IsSemisimple.mul_of_commute
-  结论: (f * g).IsSemisimple
+定理 是半单.mul_of_commute
+  结论: (f * g).是半单
   证明: .of_mem_adjoin_pair
 comm hf hg mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
 

@@ -68,8 +68,8 @@ definition IsUniform
   body: map X ℙ = ProbabilityTheory.cond μ s
 
 中文:
-定义 IsUniform
-  签名: (X : Ω -> E) (s : Set E) (ℙ : Measure Ω) (μ : Measure E := by volume_tac)
+定义 是一致
+  签名: (X : Ω -> E) (s : 集合 E) (ℙ : 测度 Ω) (μ : 测度 E := by volume_tac)
   定义体: map X ℙ = ProbabilityTheory.cond μ s
 
 Depends on / 依赖: ProbabilityTheory, ProbabilityTheory.cond, volume_tac
@@ -97,7 +97,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  结论: {X : Ω -> E} {s : Set E} (hns : μ s != 0) (hnt : μ s != ∞)
+  结论: {X : Ω -> E} {s : 集合 E} (hns : μ s != 0) (hnt : μ s != ∞)
   证明: by
   dsimp [IsUniform, ProbabilityTheory.cond] at hu
   by_contra h
@@ -133,7 +133,7 @@ theorem absolutelyContinuous
 
 中文:
 定理 absolutelyContinuous
-  条件: {X : Ω -> E} {s : Set E} (hu : IsUniform X s ℙ μ)
+  条件: {X : Ω -> E} {s : 集合 E} (hu : 是一致 X s ℙ μ)
   结论: map X ℙ ≪ μ
   证明: by
   rw [hu]; exact ProbabilityTheory.cond_absolutelyContinuous
@@ -155,7 +155,7 @@ theorem measure_preimage
 
 中文:
 定理 measure_preimage
-  结论: {X : Ω -> E} {s : Set E} (hns : μ s != 0) (hnt : μ s != ∞)
+  结论: {X : Ω -> E} {s : 集合 E} (hns : μ s != 0) (hnt : μ s != ∞)
   证明: by
   rwa [← map_apply_of_aemeasurable (hu.aemeasurable hns hnt) hA, hu, ProbabilityTheory.cond_apply',
     ENNReal.div_eq_inv_mul]
@@ -180,7 +180,7 @@ theorem isProbabilityMeasure
 
 中文:
 定理 isProbabilityMeasure
-  结论: {X : Ω -> E} {s : Set E} (hns : μ s != 0) (hnt : μ s != ∞)
+  结论: {X : Ω -> E} {s : 集合 E} (hns : μ s != 0) (hnt : μ s != ∞)
   证明: ⟨by
     have : X ⁻¹' Set.univ = Set.univ := Set.preimage_univ
     rw [← this]; rw [hu.measure_preimage hns hnt MeasurableSet.univ]; rw [Set.inter_univ]; rw [ENNReal.div_self hns hnt]⟩
@@ -205,7 +205,7 @@ theorem toMeasurable_iff
 
 中文:
 定理 toMeasurable_iff
-  条件: {X : Ω -> E} {s : Set E}
+  条件: {X : Ω -> E} {s : 集合 E}
   证明: by
   unfold IsUniform
   rw [ProbabilityTheory.cond_toMeasurable_eq]
@@ -227,7 +227,7 @@ theorem toMeasurable
 
 中文:
 定理 toMeasurable
-  条件: {X : Ω -> E} {s : Set E} (hu : IsUniform X s ℙ μ)
+  条件: {X : Ω -> E} {s : 集合 E} (hu : 是一致 X s ℙ μ)
   证明: toMeasurable_iff.mpr hu
 -/
 protected theorem toMeasurable {X : Ω -> E} {s : Set E} (hu : IsUniform X s ℙ μ) :
@@ -248,7 +248,7 @@ apply hasPDF_of_map_eq_withDensity (hu.aemeasurable hns hnt) (t.indicator ((μ t
 
 中文:
 定理 hasPDF
-  结论: {X : Ω -> E} {s : Set E} (hns : μ s != 0) (hnt : μ s != ∞)
+  结论: {X : Ω -> E} {s : 集合 E} (hns : μ s != 0) (hnt : μ s != ∞)
   证明: by
   let t := toMeasurable μ s
 apply hasPDF_of_map_eq_withDensity (hu.aemeasurable hns hnt) (t.indicator ((μ t)⁻¹ • 1))
@@ -280,7 +280,7 @@ theorem pdf_eq_zero_of_measure_eq_zero_or_top
 
 中文:
 定理 pdf_eq_zero_of_measure_eq_zero_or_top
-  结论: {X : Ω -> E} {s : Set E}
+  结论: {X : Ω -> E} {s : 集合 E}
   证明: by
   rcases hμs with H | H
   · simp only [IsUniform, ProbabilityTheory.cond, H, ENNReal.inv_zero, restrict_eq_zero.mpr H,
@@ -317,7 +317,7 @@ theorem pdf_eq
 
 中文:
 定理 pdf_eq
-  结论: {X : Ω -> E} {s : Set E} (hms : MeasurableSet s)
+  结论: {X : Ω -> E} {s : 集合 E} (hms : 可测集 s)
   证明: by
   by_cases hnt : μ s = ∞
   · simp [pdf_eq_zero_of_measure_eq_zero_or_top hu (Or.inr hnt), hnt]
@@ -353,8 +353,8 @@ theorem pdf_toReal_ae_eq
   proof: Filter.EventuallyEq.fun_comp (pdf_eq hms hX) ENNReal.toReal
 
 中文:
-定理 pdf_toReal_ae_eq
-  结论: {X : Ω -> E} {s : Set E} (hms : MeasurableSet s)
+定理 pdf_to实数_ae_eq
+  结论: {X : Ω -> E} {s : 集合 E} (hms : 可测集 s)
   证明: Filter.EventuallyEq.fun_comp (pdf_eq hms hX) ENNReal.toReal
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, EventuallyEq, Filter, Filter.EventuallyEq.fun_comp, fun_comp, pdf_eq, toReal
@@ -384,7 +384,7 @@ theorem mul_pdf_integrable
 
 中文:
 定理 mul_pdf_integrable
-  条件: (hcs : IsCompact s) (huX : IsUniform X s ℙ)
+  条件: (hcs : 是紧集 s) (huX : 是一致 X s ℙ)
   证明: by
   by_cases hnt : volume s = 0 ∨ volume s = ∞
   · have I : Integrable (fun x => x * ENNReal.toReal (0)) := by simp
@@ -434,7 +434,7 @@ theorem integral_eq
 
 中文:
 定理 integral_eq
-  条件: (huX : IsUniform X s ℙ)
+  条件: (huX : 是一致 X s ℙ)
   证明: by
   rw [← smul_eq_mul]; rw [← integral_smul_measure]
   dsimp only [IsUniform, ProbabilityTheory.cond] at huX
@@ -468,8 +468,8 @@ lemma IsUniform.cond
   proof: map_id
 
 中文:
-引理 IsUniform.cond
-  条件: {s : Set E}
+引理 是一致.cond
+  条件: {s : 集合 E}
   证明: map_id
 
 Depends on / 依赖: map_id
@@ -488,7 +488,7 @@ definition uniformPDF
 
 中文:
 定义 uniformPDF
-  签名: (s : Set E) (x : E) (μ : Measure E := by volume_tac)
+  签名: (s : 集合 E) (x : E) (μ : 测度 E := by volume_tac)
   定义体: s.indicator ((μ s)⁻¹ • (1 : E -> Real>=0∞)) x
 
 Depends on / 依赖: indicator, s.indicator, volume_tac
@@ -506,7 +506,7 @@ lemma uniformPDF_eq_pdf
 
 中文:
 引理 uniformPDF_eq_pdf
-  条件: {s : Set E} (hs : MeasurableSet s) (hu : pdf.IsUniform X s ℙ μ)
+  条件: {s : 集合 E} (hs : 可测集 s) (hu : pdf.是一致 X s ℙ μ)
   证明: (hu.pdf_eq hs).symm.trans (ae_eq_refl _)
 
 Depends on / 依赖: ae_eq_refl, hu.pdf_eq, pdf_eq, symm.trans
@@ -527,7 +527,7 @@ lemma uniformPDF_ite
 
 中文:
 引理 uniformPDF_ite
-  条件: {s : Set E} {x : E}
+  条件: {s : 集合 E} {x : E}
   证明: by
   norm_num [uniformPDF, Set.indicator]
 
@@ -565,7 +565,7 @@ definition uniformOfFinset
 
 中文:
 定义 uniformOfFinset
-  签名: (s : Finset α) (hs : s.Nonempty)
+  签名: (s : 有限集 α) (hs : s.非空)
   定义体: by
   classical
   refine ofFinset (fun a => if a in s then s.card⁻¹ else 0) s ?_ ?_
@@ -748,7 +748,7 @@ theorem toMeasure_uniformOfFinset_apply
 
 中文:
 定理 toMeasure_uniformOfFinset_apply
-  条件: [MeasurableSpace α] (ht : MeasurableSet t)
+  条件: [可测空间 α] (ht : 可测集 t)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply _ ht).trans (toOuterMeasure_uniformOfFinset_apply hs t)
 
 Depends on / 依赖: toMeasure_apply_eq_toOuterMeasure_apply, toOuterMeasure_uniformOfFinset_apply
@@ -773,7 +773,7 @@ definition uniformOfFintype
 
 中文:
 定义 uniformOfFintype
-  签名: (α : 类型) [Fintype α] [Nonempty α]
+  签名: (α : 类型) [有限类型 α] [非空 α]
   定义体: uniformOfFinset Finset.univ Finset.univ_nonempty
 
 Depends on / 依赖: Finset, Finset.univ, Finset.univ_nonempty, uniformOfFinset, univ_nonempty
@@ -799,7 +799,7 @@ theorem uniformOfFintype_apply
 中文:
 定理 uniformOfFintype_apply
   条件: (a : α)
-  结论: uniformOfFintype α a = (Fintype.card α : 实数>=0∞)⁻¹
+  结论: uniformOfFintype α a = (有限类型.card α : 实数>=0∞)⁻¹
   证明: by
   simp [uniformOfFintype, Finset.mem_univ, uniformOfFinset_apply]
 
@@ -821,7 +821,7 @@ theorem support_uniformOfFintype
 
 中文:
 定理 support_uniformOfFintype
-  条件: (α : 类型) [Fintype α] [Nonempty α]
+  条件: (α : 类型) [有限类型 α] [非空 α]
   证明: Set.ext fun x => by simp [mem_support_iff]
 
 Depends on / 依赖: Set.ext, mem_support_iff
@@ -863,7 +863,7 @@ theorem toOuterMeasure_uniformOfFintype_apply
 
 中文:
 定理 toOuterMeasure_uniformOfFintype_apply
-  条件: [Fintype s]
+  条件: [有限类型 s]
   证明: by
   classical
   rw [uniformOfFintype]; rw [toOuterMeasure_uniformOfFinset_apply]; rw [Fintype.card_subtype]; rw [Finset.card_univ]
@@ -887,7 +887,7 @@ theorem toMeasure_uniformOfFintype_apply
 
 中文:
 定理 toMeasure_uniformOfFintype_apply
-  条件: [MeasurableSpace α] (hs : MeasurableSet s) [Fintype s]
+  条件: [可测空间 α] (hs : 可测集 s) [有限类型 s]
   证明: by
   classical
   simp [uniformOfFintype, Fintype.card_subtype, hs]
@@ -1081,7 +1081,7 @@ theorem toMeasure_ofMultiset_apply
 
 中文:
 定理 toMeasure_ofMultiset_apply
-  条件: [MeasurableSpace α] (ht : MeasurableSet t)
+  条件: [可测空间 α] (ht : 可测集 t)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply _ ht).trans (toOuterMeasure_ofMultiset_apply hs t)
 
 Depends on / 依赖: toMeasure_apply_eq_toOuterMeasure_apply, toOuterMeasure_ofMultiset_apply

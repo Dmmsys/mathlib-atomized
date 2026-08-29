@@ -151,8 +151,8 @@ lemma exists_sum_four_nonneg
 .trans imagin
 
 中文:
-引理 exists_sum_four_nonneg
-  结论: {A : 类型} [NonUnitalCStarAlgebra A] [PartialOrder A]
+引理 存在_sum_four_nonneg
+  结论: {A : 类型} [非幺CStar代数 A] [偏序 A]
   证明: by
   use ![(realPart a)⁺, (imaginaryPart a)⁺, (realPart a)⁻, (imaginaryPart a)⁻]
   rw [← and_assoc]; rw [← forall_and]

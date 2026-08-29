@@ -34,7 +34,7 @@ instance isOrderedMonoid
 
 中文:
 实例 isOrderedMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: mul_le_mul_left h c
 
 @[to_additive]
@@ -56,7 +56,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedCancelMonoid α]
+  签名: [交换幺半群 α] [预序 α] [是OrderedCancel幺半群 α]
   定义体: le_of_mul_le_mul_left'
 
 Depends on / 依赖: le_of_mul_le_mul_left

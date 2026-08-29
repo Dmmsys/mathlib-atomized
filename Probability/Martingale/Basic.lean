@@ -57,8 +57,8 @@ definition Martingale
   body: StronglyAdapted ℱ f ∧ forall i j, i <= j -> μ[f j | ℱ i] =ᵐ[μ] f i
 
 中文:
-定义 Martingale
-  签名: (f : ι -> Ω -> E) (ℱ : Filtration ι m0) (μ : Measure Ω)
+定义 鞅
+  签名: (f : ι -> Ω -> E) (ℱ : 滤子 ι m0) (μ : 测度 Ω)
   定义体: StronglyAdapted ℱ f ∧ forall i j, i <= j -> μ[f j | ℱ i] =ᵐ[μ] f i
 
 Depends on / 依赖: StronglyAdapted
@@ -76,7 +76,7 @@ definition Supermartingale
 
 中文:
 定义 Supermartingale
-  签名: [LE E] (f : ι -> Ω -> E) (ℱ : Filtration ι m0) (μ : Measure Ω)
+  签名: [LE E] (f : ι -> Ω -> E) (ℱ : 滤子 ι m0) (μ : 测度 Ω)
   定义体: StronglyAdapted ℱ f ∧ (forall i j, i <= j -> μ[f j | ℱ i] <=ᵐ[μ] f i) ∧ forall i, Integrable (f i) μ
 
 Depends on / 依赖: Integrable, StronglyAdapted
@@ -94,7 +94,7 @@ definition Submartingale
 
 中文:
 定义 Submartingale
-  签名: [LE E] (f : ι -> Ω -> E) (ℱ : Filtration ι m0) (μ : Measure Ω)
+  签名: [LE E] (f : ι -> Ω -> E) (ℱ : 滤子 ι m0) (μ : 测度 Ω)
   定义体: StronglyAdapted ℱ f ∧ (forall i j, i <= j -> f i <=ᵐ[μ] μ[f j | ℱ i]) ∧ forall i, Integrable (f i) μ
 
 Depends on / 依赖: Integrable, StronglyAdapted
@@ -112,7 +112,7 @@ theorem martingale_const
 
 中文:
 定理 martingale_const
-  条件: (ℱ : Filtration ι m0) (μ : Measure Ω) [IsFiniteMeasure μ] (x : E)
+  条件: (ℱ : 滤子 ι m0) (μ : 测度 Ω) [是有限测度 μ] (x : E)
   证明: ⟨stronglyAdapted_const ℱ _, fun i j _ => by rw [condExp_const (ℱ.le _)]⟩
 
 Depends on / 依赖: condExp_const, stronglyAdapted_const
@@ -133,7 +133,7 @@ refine ⟨fun i => hf.mono ℱ.mono bot_le, fun i j _ => ?_⟩
 
 中文:
 定理 martingale_const_fun
-  结论: [OrderBot ι] (ℱ : Filtration ι m0) (μ : Measure Ω)
+  结论: [有底序 ι] (ℱ : 滤子 ι m0) (μ : 测度 Ω)
   证明: by
 refine ⟨fun i => hf.mono ℱ.mono bot_le, fun i j _ => ?_⟩
   rw [condExp_of_stronglyMeasurable (ℱ.le _) (hf.mono <| ℱ.mono bot_le) hfint]
@@ -159,8 +159,8 @@ theorem martingale_zero
 
 中文:
 定理 martingale_zero
-  条件: (ℱ : Filtration ι m0) (μ : Measure Ω)
-  结论: Martingale (0 : ι -> Ω -> E) ℱ μ
+  条件: (ℱ : 滤子 ι m0) (μ : 测度 Ω)
+  结论: 鞅 (0 : ι -> Ω -> E) ℱ μ
   证明: ⟨stronglyAdapted_zero E ℱ, fun i j _ => by simp⟩
 
 Depends on / 依赖: stronglyAdapted_zero
@@ -181,7 +181,7 @@ theorem stronglyAdapted
 
 中文:
 定理 stronglyAdapted
-  条件: (hf : Martingale f ℱ μ)
+  条件: (hf : 鞅 f ℱ μ)
   结论: StronglyAdapted ℱ f
   证明: hf.1
 -/
@@ -198,7 +198,7 @@ theorem stronglyMeasurable
 
 中文:
 定理 stronglyMeasurable
-  条件: (hf : Martingale f ℱ μ) (i : ι)
+  条件: (hf : 鞅 f ℱ μ) (i : ι)
   证明: hf.stronglyAdapted i
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Finite, Monoid, Monoid.exponent, Monoid.pow_exponent_eq_one, MonoidHom, MonoidHom.ext, S.subtype.comp, codRestrict, coe_injective, exponent, map_one, map_pow, mem_rootsOfUnity, of_injective, of_surjective, pow_exponent_eq_one, rootsOfUnity, subtype
@@ -218,7 +218,7 @@ theorem condExp_ae_eq
 
 中文:
 定理 condExp_ae_eq
-  条件: (hf : Martingale f ℱ μ) {i j : ι} (hij : i <= j)
+  条件: (hf : 鞅 f ℱ μ) {i j : ι} (hij : i <= j)
   结论: μ[f j | ℱ i] =ᵐ[μ] f i
   证明: hf.2 i j hij
 -/
@@ -238,8 +238,8 @@ theorem integrable
 
 中文:
 定理 integrable
-  条件: (hf : Martingale f ℱ μ) (i : ι)
-  结论: 整数egrable (f i) μ
+  条件: (hf : 鞅 f ℱ μ) (i : ι)
+  结论: 可积 (f i) μ
   证明: integrable_condExp.congr (hf.condExp_ae_eq (le_refl i))
 -/
 protected theorem integrable (hf : Martingale f ℱ μ) (i : ι) : Integrable (f i) μ :=
@@ -257,8 +257,8 @@ theorem setIntegral_eq
   filter_upwards [hf.2 i j hij] with _ heq _ using heq.symm
 
 中文:
-定理 setIntegral_eq
-  结论: [SigmaFiniteFiltration μ ℱ] (hf : Martingale f ℱ μ) {i j : ι} (hij : i <= j)
+定理 set整数egral_eq
+  结论: [σ有限滤子 μ ℱ] (hf : 鞅 f ℱ μ) {i j : ι} (hij : i <= j)
   证明: by
   rw [← setIntegral_condExp (ℱ.le i) (hf.integrable j) hs]
   refine setIntegral_congr_ae (ℱ.le i s hs) ?_
@@ -285,7 +285,7 @@ lemma congr
 
 中文:
 引理 congr
-  条件: (hf : Martingale f ℱ μ) (hg : StronglyAdapted ℱ g) (h_eq : 对任意 t, f t =ᵐ[μ] g t)
+  条件: (hf : 鞅 f ℱ μ) (hg : StronglyAdapted ℱ g) (h_eq : 对任意 t, f t =ᵐ[μ] g t)
   证明: by
   refine ⟨hg, fun i j hij => ?_⟩
   calc μ[g j | ℱ i] =ᵐ[μ] μ[f j | ℱ i] := (condExp_congr_ae (h_eq j)).symm
@@ -313,8 +313,8 @@ theorem add
 
 中文:
 定理 add
-  条件: (hf : Martingale f ℱ μ) (hg : Martingale g ℱ μ)
-  结论: Martingale (f + g) ℱ μ
+  条件: (hf : 鞅 f ℱ μ) (hg : 鞅 g ℱ μ)
+  结论: 鞅 (f + g) ℱ μ
   证明: by
   refine ⟨hf.stronglyAdapted.add hg.stronglyAdapted, fun i j hij => ?_⟩
   exact (condExp_add (hf.integrable j) (hg.integrable j) _).trans
@@ -338,8 +338,8 @@ theorem neg
 
 中文:
 定理 neg
-  条件: (hf : Martingale f ℱ μ)
-  结论: Martingale (-f) ℱ μ
+  条件: (hf : 鞅 f ℱ μ)
+  结论: 鞅 (-f) ℱ μ
   证明: ⟨hf.stronglyAdapted.neg, fun i j hij => (condExp_neg ..).trans (hf.2 i j hij).neg⟩
 
 Depends on / 依赖: condExp_neg, hf.stronglyAdapted.neg, stronglyAdapted
@@ -359,8 +359,8 @@ theorem sub
 
 中文:
 定理 sub
-  条件: (hf : Martingale f ℱ μ) (hg : Martingale g ℱ μ)
-  结论: Martingale (f - g) ℱ μ
+  条件: (hf : 鞅 f ℱ μ) (hg : 鞅 g ℱ μ)
+  结论: 鞅 (f - g) ℱ μ
   证明: by
   rw [sub_eq_add_neg]; exact hf.add hg.neg
 
@@ -383,8 +383,8 @@ theorem smul
 
 中文:
 定理 smul
-  条件: (c : 实数) (hf : Martingale f ℱ μ)
-  结论: Martingale (c • f) ℱ μ
+  条件: (c : 实数) (hf : 鞅 f ℱ μ)
+  结论: 鞅 (c • f) ℱ μ
   证明: by
   refine ⟨hf.stronglyAdapted.smul c, fun i j hij => ?_⟩
   refine (condExp_smul ..).trans ((hf.2 i j hij).mono fun x hx => ?_)
@@ -408,7 +408,7 @@ theorem supermartingale
 
 中文:
 定理 supermartingale
-  条件: [Preorder E] (hf : Martingale f ℱ μ)
+  条件: [预序 E] (hf : 鞅 f ℱ μ)
   结论: Supermartingale f ℱ μ
   证明: ⟨hf.1, fun i j hij => (hf.2 i j hij).le, fun i => hf.integrable i⟩
 
@@ -428,7 +428,7 @@ theorem submartingale
 
 中文:
 定理 submartingale
-  条件: [Preorder E] (hf : Martingale f ℱ μ)
+  条件: [预序 E] (hf : 鞅 f ℱ μ)
   结论: Submartingale f ℱ μ
   证明: ⟨hf.1, fun i j hij => (hf.2 i j hij).symm.le, fun i => hf.integrable i⟩
 
@@ -450,7 +450,7 @@ theorem martingale_iff
 
 中文:
 定理 martingale_iff
-  条件: [CompleteSpace E] [PartialOrder E]
+  条件: [完备空间 E] [偏序 E]
   证明: ⟨fun hf => ⟨hf.supermartingale, hf.submartingale⟩, fun ⟨hf₁, hf₂⟩ =>
     ⟨hf₁.1, fun i j hij => (hf₁.2.1 i j hij).antisymm (hf₂.2.1 i j hij)⟩⟩
 
@@ -471,7 +471,7 @@ theorem martingale_condExp
 
 中文:
 定理 martingale_condExp
-  结论: [CompleteSpace E] (f : Ω -> E) (ℱ : Filtration ι m0) (μ : Measure Ω)
+  结论: [完备空间 E] (f : Ω -> E) (ℱ : 滤子 ι m0) (μ : 测度 Ω)
   证明: ⟨fun _ => stronglyMeasurable_condExp, fun _ j hij => condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)⟩
 
 Depends on / 依赖: condExp_condExp_of_le, stronglyMeasurable_condExp
@@ -529,7 +529,7 @@ theorem integrable
 中文:
 定理 integrable
   条件: [LE E] (hf : Supermartingale f ℱ μ) (i : ι)
-  结论: 整数egrable (f i) μ
+  结论: 可积 (f i) μ
   证明: hf.2.2 i
 -/
 protected theorem integrable [LE E] (hf : Supermartingale f ℱ μ) (i : ι) : Integrable (f i) μ :=
@@ -566,8 +566,8 @@ theorem setIntegral_le
   filter_upwards [hf.2.1 i j hij] with _ heq using heq
 
 中文:
-定理 setIntegral_le
-  结论: [PartialOrder E] [IsOrderedAddMonoid E] [IsOrderedModule 实数 E]
+定理 set整数egral_le
+  结论: [偏序 E] [是OrderedAdd幺半群 E] [是Ordered模 实数 E]
   证明: by
   rw [← setIntegral_condExp (ℱ.le i) (hf.integrable j) hs]
   refine setIntegral_mono_ae integrable_condExp.integrableOn (hf.integrable i).integrableOn ?_
@@ -626,7 +626,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [Preorder E] [AddLeftMono E] (hf : Supermartingale f ℱ μ)
+  结论: [预序 E] [AddLeftMono E] (hf : Supermartingale f ℱ μ)
   证明: by
   refine ⟨hf.1.add hg.1, fun i j hij => ?_, fun i => (hf.2.2 i).add (hg.2.2 i)⟩
   refine (condExp_add (hf.integrable j) (hg.integrable j) _).le.trans ?_
@@ -654,7 +654,7 @@ theorem add_martingale
 
 中文:
 定理 add_martingale
-  结论: [Preorder E] [AddLeftMono E]
+  结论: [预序 E] [AddLeftMono E]
   证明: hf.add hg.supermartingale
 
 Depends on / 依赖: hf.add, hg.supermartingale, supermartingale
@@ -677,7 +677,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: [Preorder E] [AddLeftMono E] (hf : Supermartingale f ℱ μ)
+  条件: [预序 E] [AddLeftMono E] (hf : Supermartingale f ℱ μ)
   证明: by
   refine ⟨hf.1.neg, fun i j hij => ?_, fun i => (hf.2.2 i).neg⟩
   refine EventuallyLE.trans ?_ (condExp_neg ..).symm.le
@@ -744,7 +744,7 @@ theorem integrable
 中文:
 定理 integrable
   条件: [LE E] (hf : Submartingale f ℱ μ) (i : ι)
-  结论: 整数egrable (f i) μ
+  结论: 可积 (f i) μ
   证明: hf.2.2 i
 -/
 protected theorem integrable [LE E] (hf : Submartingale f ℱ μ) (i : ι) : Integrable (f i) μ :=
@@ -809,7 +809,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [Preorder E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
+  结论: [预序 E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
   证明: by
   refine ⟨hf.1.add hg.1, fun i j hij => ?_, fun i => (hf.2.2 i).add (hg.2.2 i)⟩
   refine EventuallyLE.trans ?_ (condExp_add (hf.integrable j) (hg.integrable j) _).symm.le
@@ -837,7 +837,7 @@ theorem add_martingale
 
 中文:
 定理 add_martingale
-  结论: [Preorder E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
+  结论: [预序 E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
   证明: hf.add hg.submartingale
 
 Depends on / 依赖: hf.add, hg.submartingale, submartingale
@@ -859,7 +859,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: [Preorder E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
+  条件: [预序 E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
   证明: by
   refine ⟨hf.1.neg, fun i j hij => (condExp_neg ..).le.trans ?_, fun i => (hf.2.2 i).neg⟩
   filter_upwards [hf.2.1 i j hij] with _ _
@@ -884,8 +884,8 @@ theorem setIntegral_le
   exact Supermartingale.setIntegral_le hf.neg hij hs
 
 中文:
-定理 setIntegral_le
-  结论: [PartialOrder E] [IsOrderedAddMonoid E] [IsOrderedModule 实数 E]
+定理 set整数egral_le
+  结论: [偏序 E] [是OrderedAdd幺半群 E] [是Ordered模 实数 E]
   证明: by
   rw [← neg_le_neg_iff]; rw [← integral_neg]; rw [← integral_neg]
   exact Supermartingale.setIntegral_le hf.neg hij hs
@@ -910,7 +910,7 @@ theorem sub_supermartingale
 
 中文:
 定理 sub_supermartingale
-  结论: [Preorder E] [AddLeftMono E]
+  结论: [预序 E] [AddLeftMono E]
   证明: by
   rw [sub_eq_add_neg]; exact hf.add hg.neg
 
@@ -930,7 +930,7 @@ theorem sub_martingale
 
 中文:
 定理 sub_martingale
-  结论: [Preorder E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
+  结论: [预序 E] [AddLeftMono E] (hf : Submartingale f ℱ μ)
   证明: hf.sub_supermartingale hg.supermartingale
 
 Depends on / 依赖: hf.sub_supermartingale, hg.supermartingale, sub_supermartingale, supermartingale
@@ -954,8 +954,8 @@ theorem sup
       (condExp_mon
 
 中文:
-定理 sup
-  结论: [Lattice E] [ContinuousSup E] [HasSolidNorm E] [IsOrderedAddMonoid E]
+定理 上确界
+  结论: [格 E] [余ntinuousSup E] [有Solid范数 E] [是OrderedAdd幺半群 E]
   证明: by
   refine ⟨fun i =>
     @StronglyMeasurable.sup _ _ _ _ (ℱ i) _ _ _ (hf.stronglyAdapted i) (hg.stronglyAdapted i),
@@ -989,7 +989,7 @@ theorem pos
 
 中文:
 定理 pos
-  结论: [Lattice E] [ContinuousSup E] [HasSolidNorm E] [IsOrderedAddMonoid E]
+  结论: [格 E] [余ntinuousSup E] [有Solid范数 E] [是OrderedAdd幺半群 E]
   证明: hf.sup (martingale_zero _ _ _).submartingale
 -/
 protected theorem pos [Lattice E] [ContinuousSup E] [HasSolidNorm E] [IsOrderedAddMonoid E]
@@ -1017,8 +1017,8 @@ theorem submartingale_of_setIntegral_le
     ((inte
 
 中文:
-定理 submartingale_of_setIntegral_le
-  结论: [SigmaFiniteFiltration μ ℱ]
+定理 submartingale_of_set整数egral_le
+  结论: [σ有限滤子 μ ℱ]
   证明: by
   refine ⟨hadp, fun i j hij => ?_, hint⟩
   suffices f i <=ᵐ[μ.trim (ℱ.le i)] μ[f j | ℱ i] by exact ae_le_of_ae_le_trim this
@@ -1063,7 +1063,7 @@ theorem submartingale_of_condExp_sub_nonneg
 
 中文:
 定理 submartingale_of_condExp_sub_nonneg
-  结论: [PartialOrder E] [IsOrderedAddMonoid E]
+  结论: [偏序 E] [是OrderedAdd幺半群 E]
   证明: by
   refine ⟨hadp, fun i j hij => ?_, hint⟩
   rw [← condExp_of_stronglyMeasurable (ℱ.le _) (hadp _) (hint _)]; rw [← eventually_sub_nonneg]
@@ -1093,7 +1093,7 @@ theorem Submartingale.condExp_sub_nonneg
 
 中文:
 定理 Submartingale.condExp_sub_nonneg
-  结论: [PartialOrder E] [IsOrderedAddMonoid E]
+  结论: [偏序 E] [是OrderedAdd幺半群 E]
   证明: by
   by_cases h : SigmaFinite (μ.trim (ℱ.le i))
   swap; · rw [condExp_of_not_sigmaFinite (ℱ.le i) h]
@@ -1122,7 +1122,7 @@ theorem submartingale_iff_condExp_sub_nonneg
 
 中文:
 定理 submartingale_iff_condExp_sub_nonneg
-  结论: [PartialOrder E] [IsOrderedAddMonoid E]
+  结论: [偏序 E] [是OrderedAdd幺半群 E]
   证明: ⟨fun h => ⟨h.stronglyAdapted, h.integrable, fun _ _ => h.condExp_sub_nonneg⟩,
    fun ⟨hadp, hint, h⟩ => submartingale_of_condExp_sub_nonneg hadp hint h⟩
 
@@ -1150,7 +1150,7 @@ theorem sub_submartingale
 
 中文:
 定理 sub_submartingale
-  结论: [CompleteSpace E] [Preorder E] [AddLeftMono E]
+  结论: [完备空间 E] [预序 E] [AddLeftMono E]
   证明: by
   rw [sub_eq_add_neg]; exact hf.add hg.neg
 
@@ -1170,7 +1170,7 @@ theorem sub_martingale
 
 中文:
 定理 sub_martingale
-  结论: [CompleteSpace E] [Preorder E] [AddLeftMono E]
+  结论: [完备空间 E] [预序 E] [AddLeftMono E]
   证明: hf.sub_submartingale hg.submartingale
 
 Depends on / 依赖: hf.sub_submartingale, hg.submartingale, sub_submartingale, submartingale
@@ -1223,7 +1223,7 @@ theorem smul_nonpos
 
 中文:
 定理 smul_nonpos
-  结论: [IsOrderedAddMonoid F] {f : ι -> Ω -> F} {c : 实数}
+  结论: [是OrderedAdd幺半群 F] {f : ι -> Ω -> F} {c : 实数}
   证明: by
   rw [← neg_neg c]; rw [neg_smul]
   exact (hf.smul_nonneg <| neg_nonneg.2 hc).neg
@@ -1320,8 +1320,8 @@ theorem submartingale_of_setIntegral_le_succ
   | step hk₁ hk₂ => exact hk₂.trans (hf _ s (𝒢.mono hk₁ _ hs))
 
 中文:
-定理 submartingale_of_setIntegral_le_succ
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> 实数}
+定理 submartingale_of_set整数egral_le_succ
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> 实数}
   证明: by
   refine submartingale_of_setIntegral_le hadp hint fun i j hij s hs => ?_
   induction hij with
@@ -1351,8 +1351,8 @@ theorem supermartingale_of_setIntegral_succ_le
   simpa only [integral_neg, Pi.neg_apply, neg_le_neg_iff]
 
 中文:
-定理 supermartingale_of_setIntegral_succ_le
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> 实数}
+定理 supermartingale_of_set整数egral_succ_le
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> 实数}
   证明: by
   rw [← neg_neg f]
   refine (submartingale_of_setIntegral_le_succ hadp.neg (fun i => (hint i).neg) ?_).neg
@@ -1393,7 +1393,7 @@ theorem submartingale_nat
 
 中文:
 定理 submartingale_nat
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E} (hadp : StronglyAdapted 𝒢 f)
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> E} (hadp : StronglyAdapted 𝒢 f)
   证明: by
   refine ⟨hadp, fun i j hij => ?_, hint⟩
   induction j, hij using Nat.le_induction with
@@ -1433,7 +1433,7 @@ theorem supermartingale_nat
 
 中文:
 定理 supermartingale_nat
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E} (hadp : StronglyAdapted 𝒢 f)
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> E} (hadp : StronglyAdapted 𝒢 f)
   证明: by
   rw [← neg_neg f]
   refine (submartingale_nat hadp.neg (fun i => (hint i).neg) fun i =>
@@ -1463,7 +1463,7 @@ theorem submartingale_of_condExp_sub_nonneg_nat
 
 中文:
 定理 submartingale_of_condExp_sub_nonneg_nat
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E}
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> E}
   证明: by
   refine submartingale_nat hadp hint fun i => ?_
   rw [← condExp_of_stronglyMeasurable (𝒢.le _) (hadp _) (hint _)]; rw [← eventually_sub_nonneg]
@@ -1491,7 +1491,7 @@ theorem supermartingale_of_condExp_sub_nonneg_nat
 
 中文:
 定理 supermartingale_of_condExp_sub_nonneg_nat
-  结论: [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E}
+  结论: [是有限测度 μ] {f : 自然数 -> Ω -> E}
   证明: by
   rw [← neg_neg f]
   refine (submartingale_of_condExp_sub_nonneg_nat hadp.neg (fun i => (hint i).neg) ?_).neg
@@ -1529,7 +1529,7 @@ congr_arg Germ.ofFun condExp_of_stronglyMeasurable (𝒢.le _) (hfadp _) hfmgle.
 
 中文:
 定理 Submartingale.zero_le_of_predictable
-  结论: [SigmaFiniteFiltration μ 𝒢] {f : 自然数 -> Ω -> E}
+  结论: [σ有限滤子 μ 𝒢] {f : 自然数 -> Ω -> E}
   证明: by
   induction n with
   | zero => rfl
@@ -1563,7 +1563,7 @@ theorem Supermartingale.le_zero_of_predictable
 
 中文:
 定理 Supermartingale.le_zero_of_predictable
-  结论: [SigmaFiniteFiltration μ 𝒢] {f : 自然数 -> Ω -> E}
+  结论: [σ有限滤子 μ 𝒢] {f : 自然数 -> Ω -> E}
   证明: by
   induction n with
   | zero => rfl
@@ -1603,7 +1603,7 @@ theorem martingale_nat
 
 中文:
 定理 martingale_nat
-  结论: [CompleteSpace E] [IsFiniteMeasure μ]
+  结论: [完备空间 E] [是有限测度 μ]
   证明: by
   refine ⟨hadp, fun i j hij => ?_⟩
   induction j, hij using Nat.le_induction with
@@ -1642,8 +1642,8 @@ refine martingale_nat hadp hint fun n => ae_eq_of_ae_eq_trim
   rw [← setIntegral_trim (𝒢.le n) (hadp n) ms]; rw [← setIntegral_trim (𝒢.le n)
 
 中文:
-定理 martingale_of_setIntegral_eq_succ
-  结论: [CompleteSpace E] [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E}
+定理 martingale_of_set整数egral_eq_succ
+  结论: [完备空间 E] [是有限测度 μ] {f : 自然数 -> Ω -> E}
   证明: by
 refine martingale_nat hadp hint fun n => ae_eq_of_ae_eq_trim
     ((hint n).trim (𝒢.le n) (hadp n)).ae_eq_of_forall_setIntegral_eq _ _
@@ -1674,7 +1674,7 @@ theorem martingale_of_condExp_sub_eq_zero_nat
 
 中文:
 定理 martingale_of_condExp_sub_eq_zero_nat
-  结论: [CompleteSpace E] [IsFiniteMeasure μ] {f : 自然数 -> Ω -> E}
+  结论: [完备空间 E] [是有限测度 μ] {f : 自然数 -> Ω -> E}
   证明: by
   refine martingale_nat hadp hint fun i => ?_
   rw [← condExp_of_stronglyMeasurable (𝒢.le _) (hadp _) (hint _)]; rw [eventuallyEq_comm]; rw [eventuallyEq_iff_sub]
@@ -1703,8 +1703,8 @@ theorem Martingale.eq_zero_of_predictable
       (hfmgle.integrable _))).symm.trans (hfmgle.2 k (k + 1) k.le_succ)).trans ih
 
 中文:
-定理 Martingale.eq_zero_of_predictable
-  结论: [CompleteSpace E] [SigmaFiniteFiltration μ 𝒢]
+定理 鞅.eq_zero_of_predictable
+  结论: [完备空间 E] [σ有限滤子 μ 𝒢]
   证明: by
   induction n with
   | zero => rfl
@@ -1738,7 +1738,7 @@ theorem Submartingale.zero_le_of_predictable'
 
 中文:
 定理 Submartingale.zero_le_of_predictable'
-  结论: [Preorder E] [SigmaFiniteFiltration μ 𝒢]
+  结论: [预序 E] [σ有限滤子 μ 𝒢]
   证明: zero_le_of_predictable hfmgle hf.measurable_add_one n
 
 Depends on / 依赖: hf.measurable_add_one, hfmgle, measurable_add_one, zero_le_of_predictable
@@ -1758,7 +1758,7 @@ theorem Supermartingale.le_zero_of_predictable'
 
 中文:
 定理 Supermartingale.le_zero_of_predictable'
-  结论: [Preorder E] [SigmaFiniteFiltration μ 𝒢]
+  结论: [预序 E] [σ有限滤子 μ 𝒢]
   证明: le_zero_of_predictable hfmgle hfadp.measurable_add_one n
 
 Depends on / 依赖: hfadp.measurable_add_one, hfmgle, le_zero_of_predictable, measurable_add_one
@@ -1777,8 +1777,8 @@ theorem Martingale.eq_zero_of_predictable'
   proof: eq_zero_of_predictable hfmgle hfadp.measurable_add_one n
 
 中文:
-定理 Martingale.eq_zero_of_predictable'
-  结论: [CompleteSpace E] [SigmaFiniteFiltration μ 𝒢]
+定理 鞅.eq_zero_of_predictable'
+  结论: [完备空间 E] [σ有限滤子 μ 𝒢]
   证明: eq_zero_of_predictable hfmgle hfadp.measurable_add_one n
 
 Depends on / 依赖: eq_zero_of_predictable, hfadp.measurable_add_one, hfmgle, measurable_add_one
@@ -1832,7 +1832,7 @@ theorem Submartingale.sum_smul_sub
 
 中文:
 定理 Submartingale.sum_smul_sub
-  结论: [IsFiniteMeasure μ] {R : 实数}
+  结论: [是有限测度 μ] {R : 实数}
   证明: by
   have hξbdd : forall i, exists C, forall ω, ‖ξ i ω‖ <= C := fun i =>
     ⟨R, fun ω => (abs_of_nonneg (hnonneg i ω)).trans_le (hbdd i ω)⟩
@@ -1884,7 +1884,7 @@ theorem Submartingale.sum_smul_sub'
 
 中文:
 定理 Submartingale.sum_smul_sub'
-  结论: [IsFiniteMeasure μ] {R : 实数} {ξ : 自然数 -> Ω -> 实数} {f : 自然数 -> Ω -> E}
+  结论: [是有限测度 μ] {R : 实数} {ξ : 自然数 -> Ω -> 实数} {f : 自然数 -> Ω -> E}
   证明: hf.sum_smul_sub hξ (fun _ => hbdd _) fun _ => hnonneg _
 
 Depends on / 依赖: hf.sum_smul_sub, hnonneg, sum_smul_sub
@@ -1905,7 +1905,7 @@ theorem Submartingale.sum_mul_sub
 
 中文:
 定理 Submartingale.sum_mul_sub
-  结论: [IsFiniteMeasure μ] {R : 实数} {ξ f : 自然数 -> Ω -> 实数}
+  结论: [是有限测度 μ] {R : 实数} {ξ f : 自然数 -> Ω -> 实数}
   证明: hf.sum_smul_sub hξ hbdd hnonneg
 
 Depends on / 依赖: hf.sum_smul_sub, hnonneg, sum_smul_sub
@@ -1926,7 +1926,7 @@ theorem Submartingale.sum_mul_sub'
 
 中文:
 定理 Submartingale.sum_mul_sub'
-  结论: [IsFiniteMeasure μ] {R : 实数} {ξ f : 自然数 -> Ω -> 实数}
+  结论: [是有限测度 μ] {R : 实数} {ξ f : 自然数 -> Ω -> 实数}
   证明: hf.sum_smul_sub' hξ hbdd hnonneg
 
 Depends on / 依赖: hf.sum_smul_sub, hnonneg, sum_smul_sub

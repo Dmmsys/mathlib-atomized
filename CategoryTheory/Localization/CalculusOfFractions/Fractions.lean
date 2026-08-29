@@ -615,8 +615,8 @@ lemma exists_leftFraction₂
       (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_
 
 中文:
-引理 exists_leftFraction₂
-  条件: [W.HasLeftCalculusOfFractions]
+引理 存在_leftFraction₂
+  条件: [W.有LeftCalculusOfFractions]
   证明: by
   obtain ⟨ψ₁, hψ₁⟩ := φ.fst.exists_leftFraction
   obtain ⟨ψ₂, hψ₂⟩ := φ.snd.exists_leftFraction
@@ -668,7 +668,7 @@ lemma exists_leftFraction₂
       hs := W.comp_
 
 中文:
-引理 exists_leftFraction₂
+引理 存在_leftFraction₂
   条件: {X Y : C} (f f' : L.obj X ⟶ L.obj Y)
   证明: by
   have ⟨φ, hφ⟩ := exists_leftFraction L W f
@@ -724,7 +724,7 @@ lemma exists_leftFraction₃
       f'' := β.f ≫
 
 中文:
-引理 exists_leftFraction₃
+引理 存在_leftFraction₃
   条件: {X Y : C} (f f' f'' : L.obj X ⟶ L.obj Y)
   证明: by
   obtain ⟨α, hα, hα'⟩ := exists_leftFraction₂ L W f f'
@@ -782,7 +782,7 @@ lemma Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
   simpa only [← F.map_comp, φ
 
 中文:
-引理 Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
+引理 函子.faithful_of_comp_of_hasLeftCalculusOfFractions
   证明: by
   have := Localization.essSurj L W
   refine F.faithful_of_comp_essSurj L (fun X₁ X₂ f g hfg => ?_)

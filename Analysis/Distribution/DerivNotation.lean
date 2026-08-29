@@ -46,7 +46,7 @@ class LineDeriv
 
 中文:
 类 LineDeriv
-  参数: (V : 类型u) (E : 类型v) (F : outParam (Type w))
+  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
   公理与运算 (1 个):
     - lineDerivOp : V -> E -> F
 -/
@@ -103,7 +103,7 @@ theorem iteratedLineDerivOp_fin_zero
 
 中文:
 定理 iteratedLineDerivOp_fin_zero
-  条件: (m : Fin 0 -> V) (f : E)
+  条件: (m : 有限集 0 -> V) (f : E)
   结论: ∂^{m} f = f
   证明: rfl
 
@@ -124,7 +124,7 @@ theorem iteratedLineDerivOp_one
 
 中文:
 定理 iteratedLineDerivOp_one
-  条件: (m : Fin 1 -> V) (f : E)
+  条件: (m : 有限集 1 -> V) (f : E)
   结论: ∂^{m} f = ∂_{m 0} f
   证明: rfl
 -/
@@ -141,7 +141,7 @@ theorem iteratedLineDerivOp_succ_left
 
 中文:
 定理 iteratedLineDerivOp_succ_left
-  条件: {n : 自然数} (m : Fin (n + 1) -> V) (f : E)
+  条件: {n : 自然数} (m : 有限集 (n + 1) -> V) (f : E)
   证明: rfl
 -/
 theorem iteratedLineDerivOp_succ_left {n : Nat} (m : Fin (n + 1) -> V) (f : E) :
@@ -166,7 +166,7 @@ theorem iteratedLineDerivOp_succ_right
 
 中文:
 定理 iteratedLineDerivOp_succ_right
-  条件: {n : 自然数} (m : Fin (n + 1) -> V) (f : E)
+  条件: {n : 自然数} (m : 有限集 (n + 1) -> V) (f : E)
   证明: by
   induction n with
   | zero => rfl
@@ -244,7 +244,7 @@ class LineDerivAdd
 
 中文:
 类 LineDerivAdd
-  参数: (V : 类型u) (E : 类型v) (F : outParam (Type w))
+  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
   公理与运算 (2 个):
     - lineDerivOp_add((v : V) (x y : E)) : ∂_{v} (x + y) = ∂_{v} x + ∂_{v} y
     - lineDerivOp_left_add((v w : V) (x : E)) : ∂_{v + w} x = ∂_{v} x + ∂_{w} x
@@ -265,7 +265,7 @@ class LineDerivSMul
 
 中文:
 类 LineDerivSMul
-  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (Type w))
+  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (类型 w))
   公理与运算 (1 个):
     - lineDerivOp_smul((v : V) (r : R) (x : E)) : ∂_{v} (r • x) = r • ∂_{v} x
 -/
@@ -284,7 +284,7 @@ class LineDerivLeftSMul
 
 中文:
 类 LineDerivLeftSMul
-  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (Type w))
+  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (类型 w))
   公理与运算 (1 个):
     - lineDerivOp_left_smul((r : R) (v : V) (x : E)) : ∂_{r • v} x = r • ∂_{v} x
 -/
@@ -302,10 +302,10 @@ class ContinuousLineDeriv
     - continuous_lineDerivOp((v : V)) : Continuous (∂_{v} : E -> F)
 
 中文:
-类 ContinuousLineDeriv
-  参数: (V : 类型u) (E : 类型v) (F : outParam (Type w))
+类 余ntinuousLineDeriv
+  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
   公理与运算 (1 个):
-    - continuous_lineDerivOp((v : V)) : Continuous (∂_{v} : E -> F)
+    - continuous_lineDerivOp((v : V)) : 连续 (∂_{v} : E -> F)
 -/
 class ContinuousLineDeriv (V : Type u) (E : Type v) (F : outParam (Type w))
     [TopologicalSpace E] [TopologicalSpace F] [LineDeriv V E F] where
@@ -388,7 +388,7 @@ theorem lineDerivOp_sum
 
 中文:
 定理 lineDerivOp_sum
-  条件: (v : V) (f : ι -> E) (s : Finset ι)
+  条件: (v : V) (f : ι -> E) (s : 有限集 ι)
   证明: map_sum (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) f s
 
 @[simp]
@@ -460,7 +460,7 @@ theorem lineDerivOp_left_sum
 
 中文:
 定理 lineDerivOp_left_sum
-  条件: (f : ι -> V) (x : E) (s : Finset ι)
+  条件: (f : ι -> V) (x : E) (s : 有限集 ι)
   证明: map_sum (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) f s
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_left_add, map_sum
@@ -628,7 +628,7 @@ theorem iteratedLineDerivOp_sum
 
 中文:
 定理 iteratedLineDerivOp_sum
-  条件: (f : ι -> E) (s : Finset ι)
+  条件: (f : ι -> E) (s : 有限集 ι)
   证明: map_sum (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) f s
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, iteratedLineDerivOp_add, map_sum
@@ -654,7 +654,7 @@ theorem iteratedLineDerivOp_smul
 
 中文:
 定理 iteratedLineDerivOp_smul
-  条件: [SMul R E] [LineDerivSMul R V E E] (r : R) (x : E)
+  条件: [标量乘法 R E] [LineDerivSMul R V E E] (r : R) (x : E)
   证明: by
   induction n with
   | zero =>
@@ -690,7 +690,7 @@ theorem continuous_iteratedLineDerivOp
 
 中文:
 定理 continuous_iteratedLineDerivOp
-  条件: [ContinuousLineDeriv V E E] {n : 自然数} (m : Fin n -> V)
+  条件: [余ntinuousLineDeriv V E E] {n : 自然数} (m : 有限集 n -> V)
   证明: by
   induction n with
   | zero =>
@@ -726,7 +726,7 @@ definition iteratedLineDerivOpCLM
 
 中文:
 定义 iteratedLineDerivOpCLM
-  签名: {n : 自然数} (m : Fin n -> V)
+  签名: {n : 自然数} (m : 有限集 n -> V)
   定义体: ∂^{m}
   map_add' := iteratedLineDerivOp_add m
   map_smul' := iteratedLineDerivOp_smul m
@@ -749,7 +749,7 @@ theorem iteratedLineDerivOpCLM_apply
 
 中文:
 定理 iteratedLineDerivOpCLM_apply
-  条件: {n : 自然数} (m : Fin n -> V) (x : E)
+  条件: {n : 自然数} (m : 有限集 n -> V) (x : E)
   证明: rfl
 -/
 theorem iteratedLineDerivOpCLM_apply {n : Nat} (m : Fin n -> V) (x : E) :
@@ -771,8 +771,8 @@ class Laplacian
     - laplacian : E -> F
 
 中文:
-类 Laplacian
-  参数: (E : 类型v) (F : outParam (Type w))
+类 Laplace算子
+  参数: (E : 类型v) (F : outParam (类型 w))
   公理与运算 (1 个):
     - laplacian : E -> F
 -/
@@ -890,7 +890,7 @@ theorem tensorLineDerivTwo_canonicalCovariantTensor_eq_sum
 
 中文:
 定理 tensorLineDerivTwo_canonicalCovariantTensor_eq_sum
-  结论: [Fintype ι] (v : OrthonormalBasis ι 实数 E)
+  结论: [有限类型 ι] (v : 正交标准基 ι 实数 E)
   证明: by
   simp [InnerProductSpace.canonicalCovariantTensor_eq_sum E v,
     tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp]
@@ -955,7 +955,7 @@ theorem laplacianCLM_eq_sum
 
 中文:
 定理 laplacianCLM_eq_sum
-  条件: [Fintype ι] (v : OrthonormalBasis ι 实数 E) (f : V₁)
+  条件: [有限类型 ι] (v : 正交标准基 ι 实数 E) (f : V₁)
   证明: by
   simp [laplacianCLM, ← tensorLineDerivTwo_canonicalCovariantTensor_eq_sum]
 

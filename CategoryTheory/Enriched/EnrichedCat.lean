@@ -96,7 +96,7 @@ definition of
 
 中文:
 定义 of
-  签名: (C : 类型u) [EnrichedCategory.{w} V C]
+  签名: (C : 类型u) [Enriched范畴.{w} V C]
   定义体: Bundled.of C
 
 Depends on / 依赖: Bundled, Bundled.of
@@ -162,7 +162,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: (F : EnrichedFunctor V C D)
+  签名: (F : Enriched函子 V C D)
   定义体: EnrichedFunctor.isoMk (EnrichedFunctor.id V C).forgetComp F ≪≫
     Functor.isoWhiskerRight (EnrichedFunctor.forgetId V C) _ ≪≫ Functor.leftUnitor F.forget
 
@@ -186,7 +186,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: (F : EnrichedFunctor V C D)
+  签名: (F : Enriched函子 V C D)
   定义体: EnrichedFunctor.isoMk F.forgetComp _ ≪≫
     Functor.isoWhiskerLeft _ (EnrichedFunctor.forgetId V D) ≪≫ Functor.rightUnitor F.forget
 
@@ -213,7 +213,7 @@ definition associator
 
 中文:
 定义 associator
-  签名: (F : EnrichedFunctor V C D) (G : EnrichedFunctor V D E)
+  签名: (F : Enriched函子 V C D) (G : Enriched函子 V D E)
   定义体: EnrichedFunctor.isoMk (F.comp V G).forgetComp H ≪≫
     Functor.isoWhiskerRight (F.forgetComp G) _ ≪≫
     Functor.associator _ _ _ ≪≫
@@ -248,7 +248,7 @@ lemma comp_whiskerRight
 
 中文:
 引理 comp_whiskerRight
-  结论: {F G H : EnrichedFunctor V C D} (α : F ⟶ G)
+  结论: {F G H : Enriched函子 V C D} (α : F ⟶ G)
   证明: by
   ext X
   simp only [whiskerRight_out_app, NatTrans.comp_app, EnrichedFunctor.category_comp_out,
@@ -281,7 +281,7 @@ lemma whisker_exchange
 
 中文:
 引理 whisker_exchange
-  结论: {F G : EnrichedFunctor V C D} {H I : EnrichedFunctor V D E}
+  结论: {F G : Enriched函子 V C D} {H I : Enriched函子 V D E}
   证明: by
   ext X
   simp only [EnrichedFunctor.forget_obj, EnrichedFunctor.comp_obj,
@@ -320,7 +320,7 @@ instance bicategory
 
 中文:
 实例 bicategory
-  签名: : Bicategory (EnrichedCat.{w, v, u} V) where
+  签名: : 双范畴 (EnrichedCat.{w, v, u} V) where
   定义体: EnrichedFunctor V C D
   id C := EnrichedFunctor.id V C
   comp F G := EnrichedFunctor.comp V F G

@@ -38,7 +38,7 @@ lemma cast_mem_Ioc_iff
 
 中文:
 引理 cast_mem_Ioc_iff
-  结论: ↑n in Set.Ioc a b ↔ n in Finset.Ioc ⌊a⌋ ⌊b⌋
+  结论: ↑n in 集合.左开右闭区间 a b ↔ n in 有限集.左开右闭区间 ⌊a⌋ ⌊b⌋
   证明: by
   simp [floor_lt, le_floor]
 
@@ -58,7 +58,7 @@ lemma cast_mem_Ico_iff
 
 中文:
 引理 cast_mem_Ico_iff
-  结论: ↑n in Set.Ico a b ↔ n in Finset.Ico ⌈a⌉ ⌈b⌉
+  结论: ↑n in 集合.左闭右开区间 a b ↔ n in 有限集.左闭右开区间 ⌈a⌉ ⌈b⌉
   证明: by
   simp [ceil_le, lt_ceil]
 
@@ -78,7 +78,7 @@ lemma cast_mem_Icc_iff
 
 中文:
 引理 cast_mem_Icc_iff
-  结论: ↑n in Set.Icc a b ↔ n in Finset.Icc ⌈a⌉ ⌊b⌋
+  结论: ↑n in 集合.闭区间 a b ↔ n in 有限集.闭区间 ⌈a⌉ ⌊b⌋
   证明: by
   simp [ceil_le, le_floor]
 
@@ -98,7 +98,7 @@ lemma cast_mem_Ioo_iff
 
 中文:
 引理 cast_mem_Ioo_iff
-  结论: ↑n in Set.Ioo a b ↔ n in Finset.Ioo ⌊a⌋ ⌈b⌉
+  结论: ↑n in 集合.开区间 a b ↔ n in 有限集.开区间 ⌊a⌋ ⌈b⌉
   证明: by
   simp [floor_lt, lt_ceil]
 
@@ -117,7 +117,7 @@ lemma cast_mem_Ioi_iff
 
 中文:
 引理 cast_mem_Ioi_iff
-  结论: ↑n in Set.Ioi a ↔ n in Set.Ioi ⌊a⌋
+  结论: ↑n in 集合.左开右无界区间 a ↔ n in 集合.左开右无界区间 ⌊a⌋
   证明: by simp [floor_lt]
 
 Depends on / 依赖: floor_lt
@@ -134,7 +134,7 @@ lemma cast_mem_Ici_iff
 
 中文:
 引理 cast_mem_Ici_iff
-  结论: ↑n in Set.Ici a ↔ n in Set.Ici ⌈a⌉
+  结论: ↑n in 集合.左闭右无界区间 a ↔ n in 集合.左闭右无界区间 ⌈a⌉
   证明: by simp [ceil_le]
 
 Depends on / 依赖: ceil_le
@@ -151,7 +151,7 @@ lemma cast_mem_Iic_iff
 
 中文:
 引理 cast_mem_Iic_iff
-  结论: ↑n in Set.Iic b ↔ n in Set.Iic ⌊b⌋
+  结论: ↑n in 集合.左无界右闭区间 b ↔ n in 集合.左无界右闭区间 ⌊b⌋
   证明: by simp [le_floor]
 
 Depends on / 依赖: le_floor
@@ -168,7 +168,7 @@ lemma cast_mem_Iio_iff
 
 中文:
 引理 cast_mem_Iio_iff
-  结论: ↑n in Set.Iio b ↔ n in Set.Iio ⌈b⌉
+  结论: ↑n in 集合.左无界右开区间 b ↔ n in 集合.左无界右开区间 ⌈b⌉
   证明: by simp [lt_ceil]
 
 Depends on / 依赖: lt_ceil
@@ -212,7 +212,7 @@ lemma cast_mem_Ioc_iff'
 
 中文:
 引理 cast_mem_Ioc_iff'
-  条件: [IsStrictOrderedRing α] (ha : 0 <= a)
+  条件: [是StrictOrdered环 α] (ha : 0 <= a)
   证明: by
   rcases le_or_gt 0 b with hb | hb
   · exact cast_mem_Ioc_iff ha hb
@@ -237,7 +237,7 @@ lemma cast_mem_Ico_iff
 
 中文:
 引理 cast_mem_Ico_iff
-  结论: ↑n in Set.Ico a b ↔ n in Finset.Ico ⌈a⌉₊ ⌈b⌉₊
+  结论: ↑n in 集合.左闭右开区间 a b ↔ n in 有限集.左闭右开区间 ⌈a⌉₊ ⌈b⌉₊
   证明: by
   simp [ceil_le, lt_ceil]
 
@@ -259,7 +259,7 @@ lemma cast_mem_Icc_iff
 中文:
 引理 cast_mem_Icc_iff
   条件: (hb : 0 <= b)
-  结论: ↑n in Set.Icc a b ↔ n in Finset.Icc ⌈a⌉₊ ⌊b⌋₊
+  结论: ↑n in 集合.闭区间 a b ↔ n in 有限集.闭区间 ⌈a⌉₊ ⌊b⌋₊
   证明: by
   simp [ceil_le, le_floor_iff hb]
 
@@ -281,7 +281,7 @@ lemma cast_mem_Ioo_iff
 中文:
 引理 cast_mem_Ioo_iff
   条件: (ha : 0 <= a)
-  结论: ↑n in Set.Ioo a b ↔ n in Finset.Ioo ⌊a⌋₊ ⌈b⌉₊
+  结论: ↑n in 集合.开区间 a b ↔ n in 有限集.开区间 ⌊a⌋₊ ⌈b⌉₊
   证明: by
   simp [floor_lt ha, lt_ceil]
 
@@ -303,7 +303,7 @@ lemma cast_mem_Iic_iff
 中文:
 引理 cast_mem_Iic_iff
   条件: (hb : 0 <= b)
-  结论: ↑n in Set.Iic b ↔ n in Finset.Iic ⌊b⌋₊
+  结论: ↑n in 集合.左无界右闭区间 b ↔ n in 有限集.左无界右闭区间 ⌊b⌋₊
   证明: by
   simp [le_floor_iff hb]
 
@@ -322,7 +322,7 @@ lemma cast_mem_Iio_iff
 
 中文:
 引理 cast_mem_Iio_iff
-  结论: ↑n in Set.Iio b ↔ n in Finset.Iio ⌈b⌉₊
+  结论: ↑n in 集合.左无界右开区间 b ↔ n in 有限集.左无界右开区间 ⌈b⌉₊
   证明: by simp [lt_ceil]
 
 Depends on / 依赖: lt_ceil
@@ -341,7 +341,7 @@ lemma cast_mem_Ioi_iff
 中文:
 引理 cast_mem_Ioi_iff
   条件: (ha : 0 <= a)
-  结论: ↑n in Set.Ioi a ↔ n in Set.Ioi ⌊a⌋₊
+  结论: ↑n in 集合.左开右无界区间 a ↔ n in 集合.左开右无界区间 ⌊a⌋₊
   证明: by simp [floor_lt ha]
 
 Depends on / 依赖: floor_lt
@@ -358,7 +358,7 @@ lemma cast_mem_Ici_iff
 
 中文:
 引理 cast_mem_Ici_iff
-  结论: ↑n in Set.Ici a ↔ n in Set.Ici ⌈a⌉₊
+  结论: ↑n in 集合.左闭右无界区间 a ↔ n in 集合.左闭右无界区间 ⌈a⌉₊
   证明: by simp [ceil_le]
 
 Depends on / 依赖: ceil_le

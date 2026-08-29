@@ -40,7 +40,7 @@ lemma fn_min_mul_fn_max
 中文:
 引理 fn_min_mul_fn_max
   条件: (f : α -> β) (a b : α)
-  结论: f (min a b) * f (max a b) = f a * f b
+  结论: f (最小值 a b) * f (最大值 a b) = f a * f b
   证明: by
   grind
 
@@ -63,7 +63,7 @@ lemma fn_max_mul_fn_min
 中文:
 引理 fn_max_mul_fn_min
   条件: (f : α -> β) (a b : α)
-  结论: f (max a b) * f (min a b) = f a * f b
+  结论: f (最大值 a b) * f (最小值 a b) = f a * f b
   证明: by
   grind
 -/
@@ -87,7 +87,7 @@ lemma min_mul_max
 中文:
 引理 min_mul_max
   条件: (a b : α)
-  结论: min a b * max a b = a * b
+  结论: 最小值 a b * 最大值 a b = a * b
   证明: fn_min_mul_fn_max id _ _
 
 @[to_additive (attr := simp)]
@@ -109,7 +109,7 @@ lemma max_mul_min
 中文:
 引理 max_mul_min
   条件: (a b : α)
-  结论: max a b * min a b = a * b
+  结论: 最大值 a b * 最小值 a b = a * b
   证明: fn_max_mul_fn_min id _ _
 
 Depends on / 依赖: fn_max_mul_fn_min
@@ -145,7 +145,7 @@ theorem min_mul_mul_left
 中文:
 定理 min_mul_mul_left
   条件: (a b c : α)
-  结论: min (a * b) (a * c) = a * min b c
+  结论: 最小值 (a * b) (a * c) = a * 最小值 b c
   证明: (monotone_id.const_mul' a).map_min.symm
 
 @[to_additive]
@@ -168,7 +168,7 @@ theorem max_mul_mul_left
 中文:
 定理 max_mul_mul_left
   条件: (a b c : α)
-  结论: max (a * b) (a * c) = a * max b c
+  结论: 最大值 (a * b) (a * c) = a * 最大值 b c
   证明: (monotone_id.const_mul' a).map_max.symm
 
 Depends on / 依赖: const_mul, map_max, map_max.symm, monotone_id, monotone_id.const_mul
@@ -197,7 +197,7 @@ theorem min_mul_mul_right
 中文:
 定理 min_mul_mul_right
   条件: (a b c : α)
-  结论: min (a * c) (b * c) = min a b * c
+  结论: 最小值 (a * c) (b * c) = 最小值 a b * c
   证明: (monotone_id.mul_const' c).map_min.symm
 
 @[to_additive]
@@ -220,7 +220,7 @@ theorem max_mul_mul_right
 中文:
 定理 max_mul_mul_right
   条件: (a b c : α)
-  结论: max (a * c) (b * c) = max a b * c
+  结论: 最大值 (a * c) (b * c) = 最大值 a b * c
   证明: (monotone_id.mul_const' c).map_max.symm
 
 Depends on / 依赖: map_max, map_max.symm, monotone_id, monotone_id.mul_const, mul_const

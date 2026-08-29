@@ -37,8 +37,8 @@ theorem exists_finsupp_of_mem_closure_range
     · si
 
 中文:
-定理 exists_finsupp_of_mem_closure_range
-  条件: (hx : x in closure (Set.range f))
+定理 存在_finsupp_of_mem_closure_range
+  条件: (hx : x in closure (集合.range f))
   证明: by
   classical
   induction hx using closure_induction with
@@ -78,8 +78,8 @@ theorem exists_of_mem_closure_range
   exact ⟨a, by simp⟩
 
 中文:
-定理 exists_of_mem_closure_range
-  条件: [Fintype ι] (hx : x in closure (Set.range f))
+定理 存在_of_mem_closure_range
+  条件: [有限类型 ι] (hx : x in closure (集合.range f))
   证明: by
   obtain ⟨a, rfl⟩ := exists_finsupp_of_mem_closure_range f x hx
   exact ⟨a, by simp⟩
@@ -138,7 +138,7 @@ theorem mem_closure_range_iff_of_fintype
 
 中文:
 定理 mem_closure_range_iff_of_fintype
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: by
   rw [Finsupp.equivFunOnFinite.symm.exists_congr_left]; rw [mem_closure_range_iff]
   simp
@@ -165,7 +165,7 @@ theorem mem_closure_iff_of_fintype
 
 中文:
 定理 mem_closure_iff_of_fintype
-  条件: {s : Set M} [Fintype s]
+  条件: {s : 集合 M} [有限类型 s]
   证明: by
   conv_lhs => rw [← Subtype.range_coe (s := s)]
   exact mem_closure_range_iff_of_fintype
@@ -189,7 +189,7 @@ theorem mem_closure_finset'
 
 中文:
 定理 mem_closure_finset'
-  条件: {s : Finset M}
+  条件: {s : 有限集 M}
   证明: mem_closure_iff_of_fintype
 
 Depends on / 依赖: mem_closure_iff_of_fintype

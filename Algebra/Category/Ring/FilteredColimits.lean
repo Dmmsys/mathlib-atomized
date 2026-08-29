@@ -80,7 +80,7 @@ abbreviation R
 
 中文:
 缩写 R
-  签名: : MonCat.{max v u}
+  签名: : 幺半群范畴.{最大值 v u}
   定义体: MonCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ SemiRingCat.{max v u} MonCat)
 
 Depends on / 依赖: FilteredColimits, MonCat, MonCat.FilteredColimits.colimit, SemiRingCat, colimit
@@ -105,7 +105,7 @@ instance colimitSemiring
 
 中文:
 实例 colimitSemiring
-  签名: : Semiring.{max v u} R.{v, u} F
+  签名: : 半环.{最大值 v u} R.{v, u} F
   定义体: { (R.{v, u} F).str,
     AddCommMonCat.FilteredColimits.colimitAddCommMonoid.{v, u}
       (F ⋙ forget₂ SemiRingCat AddCommMonCat.{max v u}) with
@@ -173,7 +173,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : SemiRingCat.{max v u}
+  签名: : Semi环范畴.{最大值 v u}
   定义体: SemiRingCat.of R.{v, u} F
 
 Depends on / 依赖: SemiRingCat, SemiRingCat.of
@@ -197,7 +197,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι :=
     { app := fun j => ofHom
@@ -366,7 +366,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit colimitCocone.{v, u} F where
+  签名: : 是余极限 colimitCocone.{v, u} F where
   定义体: ofHom
     { descAddMonoidHom t with
       map_one' := (descMonoidHom_apply_eq t 1).symm.trans (by simp)
@@ -429,7 +429,7 @@ instance forget_preservesFilteredColimits
 
 中文:
 实例 forget_preservesFilteredColimits
-  签名: : PreservesFilteredColimits (forget SemiRingCat.{u})
+  签名: : PreservesFilteredColimits (forget Semi环范畴.{u})
   定义体: Limits.comp_preservesFilteredColimits (forget₂ SemiRingCat MonCat) (forget MonCat.{u})
 
 Depends on / 依赖: Limits, Limits.comp_preservesFilteredColimits, MonCat, SemiRingCat, comp_preservesFilteredColimits, f.hom, forget
@@ -459,7 +459,7 @@ abbreviation R
 
 中文:
 缩写 R
-  签名: : SemiRingCat.{max v u}
+  签名: : Semi环范畴.{最大值 v u}
   定义体: SemiRingCat.FilteredColimits.colimit (F ⋙ forget₂ CommSemiRingCat SemiRingCat.{max v u})
 
 Depends on / 依赖: CommSemiRingCat, FilteredColimits, SemiRingCat, SemiRingCat.FilteredColimits.colimit, colimit
@@ -479,7 +479,7 @@ instance colimitCommSemiring
 
 中文:
 实例 colimitCommSemiring
-  签名: : CommSemiring.{max v u} R.{v, u} F
+  签名: : 交换半环.{最大值 v u} R.{v, u} F
   定义体: { (R F).semiring,
     CommMonCat.FilteredColimits.colimitCommMonoid
       (F ⋙ forget₂ CommSemiRingCat CommMonCat.{max v u}) with }
@@ -501,7 +501,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : CommSemiRingCat.{max v u}
+  签名: : 交换Semi环范畴.{最大值 v u}
   定义体: CommSemiRingCat.of R.{v, u} F
 
 Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.of
@@ -526,7 +526,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι :=
     { app := fun X => ofHom <| ((SemiRingCat.FilteredColimits.colimitCocone
@@ -560,7 +560,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit colimitCocone.{v, u} F
+  签名: : 是余极限 colimitCocone.{v, u} F
   定义体: isColimitOfReflects (forget₂ _ SemiRingCat)
     (SemiRingCat.FilteredColimits.colimitCoconeIsColimit
       (F ⋙ forget₂ CommSemiRingCat SemiRingCat))
@@ -648,7 +648,7 @@ abbreviation R
 
 中文:
 缩写 R
-  签名: : SemiRingCat.{max v u}
+  签名: : Semi环范畴.{最大值 v u}
   定义体: SemiRingCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ RingCat SemiRingCat.{max v u})
 
 Depends on / 依赖: FilteredColimits, RingCat, SemiRingCat, SemiRingCat.FilteredColimits.colimit, colimit
@@ -668,7 +668,7 @@ instance colimitRing
 
 中文:
 实例 colimitRing
-  签名: : Ring.{max v u} R.{v, u} F
+  签名: : 环.{最大值 v u} R.{v, u} F
   定义体: { (R F).semiring,
     AddCommGrpCat.FilteredColimits.colimitAddCommGroup.{v, u}
       (F ⋙ forget₂ RingCat AddCommGrpCat.{max v u}) with }
@@ -690,7 +690,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : RingCat.{max v u}
+  签名: : 环范畴.{最大值 v u}
   定义体: RingCat.of R.{v, u} F
 
 Depends on / 依赖: RingCat, RingCat.of
@@ -714,7 +714,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι :=
     { app := fun X => ofHom <| ((SemiRingCat.FilteredColimits.colimitCocone
@@ -746,7 +746,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit colimitCocone.{v, u} F
+  签名: : 是余极限 colimitCocone.{v, u} F
   定义体: isColimitOfReflects (forget₂ _ _)
     (SemiRingCat.FilteredColimits.colimitCoconeIsColimit
       (F ⋙ forget₂ RingCat SemiRingCat))
@@ -804,7 +804,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFilteredColimits (forget₂ RingCat AddCommGrpCat.{u})
+  签名: Limits.PreservesFilteredColimits (forget₂ 环范畴 加法交换群范畴.{u})
   定义体: { preservesColimit := fun {F} =>
         Limits.preservesColimit_of_preserves_colimit_cocone
           (RingCat.FilteredColimits.colimitCoconeIsColimit.{u, u} F)
@@ -831,7 +831,7 @@ instance forget_preservesFilteredColimits
 
 中文:
 实例 forget_preservesFilteredColimits
-  签名: : PreservesFilteredColimits (forget RingCat.{u})
+  签名: : PreservesFilteredColimits (forget 环范畴.{u})
   定义体: Limits.comp_preservesFilteredColimits (forget₂ RingCat SemiRingCat) (forget SemiRingCat.{u})
 
 Depends on / 依赖: Limits, Limits.comp_preservesFilteredColimits, RingCat, SemiRingCat, comp_preservesFilteredColimits, forget
@@ -861,7 +861,7 @@ abbreviation R
 
 中文:
 缩写 R
-  签名: : RingCat.{max v u}
+  签名: : 环范畴.{最大值 v u}
   定义体: RingCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ CommRingCat RingCat.{max v u})
 
 Depends on / 依赖: CommRingCat, FilteredColimits, RingCat, RingCat.FilteredColimits.colimit, colimit
@@ -881,7 +881,7 @@ instance colimitCommRing
 
 中文:
 实例 colimitCommRing
-  签名: : CommRing.{max v u} R.{v, u} F
+  签名: : 交换环.{最大值 v u} R.{v, u} F
   定义体: { (R.{v, u} F).ring,
     CommSemiRingCat.FilteredColimits.colimitCommSemiring
       (F ⋙ forget₂ CommRingCat CommSemiRingCat.{max v u}) with }
@@ -903,7 +903,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : CommRingCat.{max v u}
+  签名: : 交换环范畴.{最大值 v u}
   定义体: CommRingCat.of R.{v, u} F
 
 Depends on / 依赖: CommRingCat, CommRingCat.of
@@ -927,7 +927,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι :=
     { app := fun X => ofHom <| ((RingCat.FilteredColimits.colimitCocone
@@ -959,7 +959,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit colimitCocone.{v, u} F
+  签名: : 是余极限 colimitCocone.{v, u} F
   定义体: isColimitOfReflects (forget₂ _ _)
     (RingCat.FilteredColimits.colimitCoconeIsColimit
       (F ⋙ forget₂ CommRingCat RingCat))
@@ -1012,7 +1012,7 @@ omit [IsFiltered J] in
 
 中文:
 实例 forget_preservesFilteredColimits
-  签名: : PreservesFilteredColimits (forget CommRingCat.{u})
+  签名: : PreservesFilteredColimits (forget 交换环范畴.{u})
   定义体: Limits.comp_preservesFilteredColimits (forget₂ CommRingCat RingCat) (forget RingCat.{u})
 
 omit [IsFiltered J] in
@@ -1040,7 +1040,7 @@ lemma nontrivial
 
 中文:
 引理 nontrivial
-  结论: {F : J ⥤ CommRingCat.{v}} [IsFilteredOrEmpty J]
+  结论: {F : J ⥤ 交换环范畴.{v}} [是FilteredOrEmpty J]
   证明: by
   cases isEmpty_or_nonempty J
   · exact ((isColimitEquivIsInitialOfIsEmpty _ _ hc).to (.of (ULift Int))).hom.domain_nontrivial

@@ -63,7 +63,7 @@ definition pushFVarAliasInfo
 
 中文:
 定义 pushFVarAliasInfo
-  签名: {m : Type -> Type} [Monad m] [MonadInfoTree m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadInfoTree m]
   定义体: do
   for old in oldFVars, new in newFVars do
     if old != new then
@@ -128,7 +128,7 @@ definition evalIntrov
     evalTactic (← `(tactic| introv; intro _%$tk; introv $
 
 中文:
-定义 evalIntrov
+定义 eval整数rov
   签名: : Tactic
   定义体: fun stx => do
   match stx with
@@ -186,9 +186,9 @@ structure withResetServerInfo.Result
 
 中文:
 结构 withResetServerInfo.Result
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (3 个):
-    - result? : Option α
+    - result? : 选项类型 α
     - msgs : MessageLog
     - trees : PersistentArray InfoTree
 -/
@@ -216,7 +216,7 @@ Prod.snd < > MonadFinally.tryFinally' t fun result? => do
 
 中文:
 定义 withResetServerInfo
-  签名: {α : Type} (t : TacticM α)
+  签名: {α : 类型} (t : TacticM α)
   定义体: do
   let (savedMsgs, savedTrees) ← modifyGetThe Core.State fun st =>
     ((st.messages, st.infoState.trees), { st with messages := {}, infoState.trees := {} })

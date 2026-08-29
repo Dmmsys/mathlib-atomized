@@ -39,7 +39,7 @@ lemma measurable_sinc
 
 中文:
 引理 measurable_sinc
-  结论: Measurable sinc
+  结论: 可测 sinc
   证明: continuous_sinc.measurable
 
 @[fun_prop]
@@ -84,7 +84,7 @@ refine Integrable.mono' (g := fun _ => 1) (by fun_prop) (by fun_prop) ae_of_all 
 
 中文:
 引理 integrable_sinc
-  条件: {μ : Measure 实数} [IsFiniteMeasure μ]
+  条件: {μ : 测度 实数} [是有限测度 μ]
   证明: by
 refine Integrable.mono' (g := fun _ => 1) (by fun_prop) (by fun_prop) ae_of_all _ fun x => ?_
   rw [Real.norm_eq_abs]
@@ -115,9 +115,9 @@ theorem Measurable.sinc
 @[fun_prop]
 
 中文:
-定理 Measurable.sinc
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => sinc (f x)
+定理 可测.sinc
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => sinc (f x)
   证明: Real.measurable_sinc.comp hf
 
 @[fun_prop]
@@ -138,9 +138,9 @@ theorem AEMeasurable.sinc
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.sinc
-  条件: (hf : AEMeasurable f μ)
-  结论: AEMeasurable (fun x => sinc (f x)) μ
+定理 几乎处处可测.sinc
+  条件: (hf : 几乎处处可测 f μ)
+  结论: 几乎处处可测 (fun x => sinc (f x)) μ
   证明: Real.measurable_sinc.comp_aemeasurable hf
 
 @[fun_prop]
@@ -160,7 +160,7 @@ theorem MeasureTheory.StronglyMeasurable.sinc
 @[fun_prop]
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.sinc
+定理 测度论.StronglyMeasurable.sinc
   条件: (hf : StronglyMeasurable f)
   证明: Real.stronglyMeasurable_sinc.comp_measurable hf.measurable
 
@@ -182,7 +182,7 @@ theorem MeasureTheory.AEStronglyMeasurable.sinc
   exact hf.sinc
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.sinc
+定理 测度论.AEStronglyMeasurable.sinc
   条件: (hf : AEStronglyMeasurable f μ)
   证明: by
   rw [aestronglyMeasurable_iff_aemeasurable] at hf ⊢

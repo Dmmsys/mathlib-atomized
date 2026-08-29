@@ -44,7 +44,7 @@ class IsCompatibleWithShift
     - condition : forall (a : A) ⦃X Y : C⦄ (f g : X ⟶ Y), r f g -> r (f⟦a⟧') (g⟦a⟧')
 
 中文:
-类 IsCompatibleWithShift
+类 是余mpatibleWithShift
   参数: : 命题 where
   公理与运算 (1 个):
     - condition : 对任意 (a : A) ⦃X Y : C⦄ (f g : X ⟶ Y), r f g -> r (f⟦a⟧') (g⟦a⟧')
@@ -69,8 +69,8 @@ instance HasShift.quotient
     (fun _ => Quotient.lift.isLift _ _ _)
 
 中文:
-实例 HasShift.quotient
-  签名: [r.IsCompatibleWithShift A]
+实例 有Shift.quotient
+  签名: [r.是余mpatibleWithShift A]
   定义体: HasShift.induced (Quotient.functor r) A
     (fun a => Quotient.lift r (shiftFunctor C a ⋙ Quotient.functor r)
       (fun _ _ _ _ hfg => Quotient.sound r (HomRel.IsCompatibleWithShift.condition _ _ _ hfg)))
@@ -94,8 +94,8 @@ instance Quotient.functor_commShift
   body: Functor.CommShift.ofInduced _ _ _ _
 
 中文:
-实例 Quotient.functor_commShift
-  签名: [r.IsCompatibleWithShift A]
+实例 商.functor_commShift
+  签名: [r.是余mpatibleWithShift A]
   定义体: Functor.CommShift.ofInduced _ _ _ _
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.ofInduced, ofInduced
@@ -113,8 +113,8 @@ lemma Quotient.functor_obj_shift
   proof: rfl
 
 中文:
-引理 Quotient.functor_obj_shift
-  条件: [r.IsCompatibleWithShift A] (X : C) (n : A)
+引理 商.functor_obj_shift
+  条件: [r.是余mpatibleWithShift A] (X : C) (n : A)
   证明: rfl
 -/
 lemma Quotient.functor_obj_shift [r.IsCompatibleWithShift A] (X : C) (n : A) :

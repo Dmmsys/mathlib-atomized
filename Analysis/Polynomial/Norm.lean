@@ -212,7 +212,7 @@ lemma supNorm_X
 
 中文:
 引理 supNorm_X
-  条件: [NormOneClass A]
+  条件: [NormOne类 A]
   结论: (X : A[X]).supNorm = 1
   证明: by
   rw [← monomial_one_one_eq_X]; rw [supNorm_monomial]; rw [norm_one]
@@ -254,7 +254,7 @@ lemma exists_eq_supNorm
   simpa using! p.exists_eq_gaussNorm (SeminormedRing.toRingSeminorm A) 1
 
 中文:
-引理 exists_eq_supNorm
+引理 存在_eq_supNorm
   结论: 存在 i : 自然数, p.supNorm = ‖p.coeff i‖
   证明: by
   simpa using! p.exists_eq_gaussNorm (SeminormedRing.toRingSeminorm A) 1
@@ -274,7 +274,7 @@ lemma isGreatest_supNorm
 
 中文:
 引理 isGreatest_supNorm
-  结论: IsGreatest (Set.range (‖p.coeff ·‖)) p.supNorm
+  结论: IsGreatest (集合.range (‖p.coeff ·‖)) p.supNorm
   证明: ⟨by simpa [eq_comm] using exists_eq_supNorm p, by simpa [mem_upperBounds] using le_supNorm p⟩
 
 Depends on / 依赖: eq_comm, exists_eq_supNorm, le_supNorm, mem_upperBounds

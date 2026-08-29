@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg (sphere (0 : E) r)
+  签名: 连续取负 (sphere (0 : E) r)
   定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg (ball (0 : E) r)
+  签名: 连续取负 (ball (0 : E) r)
   定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg (closedBall (0 : E) r)
+  签名: 连续取负 (closedBall (0 : E) r)
   定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal

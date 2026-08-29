@@ -33,7 +33,7 @@ theorem sum_sym2_filter_not_isDiag
 
 中文:
 定理 sum_sym2_filter_not_isDiag
-  结论: {ι M} [LinearOrder ι] [AddCommMonoid M]
+  结论: {ι M} [线性序 ι] [加法交换幺半群 M]
   证明: by
   rw [Finset.offDiag_filter_lt_eq_filter_le]
   conv_rhs => rw [← Finset.sum_subtype_eq_sum_filter]
@@ -61,7 +61,7 @@ theorem sum_count_of_mem_sym
 
 中文:
 定理 sum_count_of_mem_sym
-  结论: {α} [DecidableEq α] {m : 自然数} {k : Sym α m} {s : Finset α}
+  结论: {α} [DecidableEq α] {m : 自然数} {k : Sym α m} {s : 有限集 α}
   证明: by
   simp_all
 -/

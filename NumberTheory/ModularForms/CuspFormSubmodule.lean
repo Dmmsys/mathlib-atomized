@@ -56,7 +56,7 @@ definition toModularFormₗ
 
 中文:
 定义 toModularFormₗ
-  签名: [Γ.HasDetOne]
+  签名: [Γ.有DetOne]
   定义体: ModularFormClass.modularForm
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -81,7 +81,7 @@ lemma toModularFormₗ_apply
 
 中文:
 引理 toModularFormₗ_apply
-  条件: [Γ.HasDetOne] (f : CuspForm Γ k) (z : ℍ)
+  条件: [Γ.有DetOne] (f : 尖点形式 Γ k) (z : ℍ)
   证明: rfl
 -/
 lemma toModularFormₗ_apply [Γ.HasDetOne] (f : CuspForm Γ k) (z : ℍ) :
@@ -97,7 +97,7 @@ lemma toModularFormₗ_eq_coe
 
 中文:
 引理 toModularFormₗ_eq_coe
-  条件: [Γ.HasDetOne] (f : CuspForm Γ k)
+  条件: [Γ.有DetOne] (f : 尖点形式 Γ k)
   证明: rfl
 -/
 lemma toModularFormₗ_eq_coe [Γ.HasDetOne] (f : CuspForm Γ k) :
@@ -113,7 +113,7 @@ lemma toModularFormₗ_injective
 
 中文:
 引理 toModularFormₗ_injective
-  条件: [Γ.HasDetOne]
+  条件: [Γ.有DetOne]
   证明: fun _ _ h => DFunLike.ext _ _ fun z => DFunLike.congr_fun h z
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext, congr_fun
@@ -136,7 +136,7 @@ definition cuspFormSubmodule
 
 中文:
 定义 cuspFormSubmodule
-  签名: (Γ : Subgroup (GL (Fin 2) 实数)) (k : 整数) [Γ.HasDetOne]
+  签名: (Γ : 子群 (GL (有限集 2) 实数)) (k : 整数) [Γ.有DetOne]
   定义体: LinearMap.range CuspForm.toModularFormₗ
 
 Depends on / 依赖: CuspForm, CuspForm.toModularForm, LinearMap, LinearMap.range
@@ -157,7 +157,7 @@ definition IsCuspForm
 
 中文:
 定义 IsCuspForm
-  签名: [Γ.HasDetOne] (f : ModularForm Γ k)
+  签名: [Γ.有DetOne] (f : 模形式 Γ k)
   定义体: f in cuspFormSubmodule Γ k
 
 @[simp]
@@ -178,7 +178,7 @@ lemma mem_cuspFormSubmodule_iff
 
 中文:
 引理 mem_cuspFormSubmodule_iff
-  条件: [Γ.HasDetOne] {f : ModularForm Γ k}
+  条件: [Γ.有DetOne] {f : 模形式 Γ k}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -195,8 +195,8 @@ definition CuspForm.equivCuspFormSubmodule
   body: LinearEquiv.ofInjective CuspForm.toModularFormₗ CuspForm.toModularFormₗ_injective
 
 中文:
-定义 CuspForm.equivCuspFormSubmodule
-  签名: (Γ : Subgroup (GL (Fin 2) 实数)) (k : 整数) [Γ.HasDetOne]
+定义 尖点形式.equivCuspFormSubmodule
+  签名: (Γ : 子群 (GL (有限集 2) 实数)) (k : 整数) [Γ.有DetOne]
   定义体: LinearEquiv.ofInjective CuspForm.toModularFormₗ CuspForm.toModularFormₗ_injective
 
 Depends on / 依赖: CuspForm, CuspForm.toModularForm, LinearEquiv, LinearEquiv.ofInjective, ofInjective
@@ -215,8 +215,8 @@ lemma CuspForm.isCuspForm_toModularFormₗ
   simp [← mem_cuspFormSubmodule_iff, ModularForm.cuspFormSubmodule]
 
 中文:
-引理 CuspForm.isCuspForm_toModularFormₗ
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetOne]
+引理 尖点形式.isCuspForm_toModularFormₗ
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetOne]
   证明: by
   simp [← mem_cuspFormSubmodule_iff, ModularForm.cuspFormSubmodule]
 
@@ -236,7 +236,7 @@ lemma isCuspForm_iff
 
 中文:
 引理 isCuspForm_iff
-  条件: [Γ.HasDetOne] (f : ModularForm Γ k)
+  条件: [Γ.有DetOne] (f : 模形式 Γ k)
   证明: ⟨fun ⟨g, hg⟩ _ => hg ▸ g.zero_at_cusps', fun h => ⟨⟨f, f.holo', h⟩, rfl⟩⟩
 
 Depends on / 依赖: f.holo, g.zero_at_cusps, zero_at_cusps
@@ -260,7 +260,7 @@ lemma isZeroAtImInfty_of_valueAtInfty_eq_zero
 
 中文:
 引理 isZeroAtImInfty_of_valueAtInfty_eq_zero
-  结论: {F : 类型} [FunLike F ℍ Complex]
+  结论: {F : 类型} [函数状 F ℍ 复形]
   证明: by
   have hh : 0 < Γ.strictWidthInfty := Γ.strictWidthInfty_pos_iff.mpr Fact.out
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
@@ -302,7 +302,7 @@ exact isZeroAtImInfty_of_valueAtInfty_eq_zero f by
 
 中文:
 引理 isZeroAt_of_coeffZero_eq_zero
-  结论: (f : ModularForm 𝒮ℒ k)
+  结论: (f : 模形式 𝒮ℒ k)
   证明: by
   rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
   rw [isZeroAt_iff_forall_SL2Z hc]
@@ -338,7 +338,7 @@ definition toCuspForm
 
 中文:
 定义 toCuspForm
-  签名: (f : ModularForm 𝒮ℒ k) (h : (qExpansion 1 f).coeff 0 = 0)
+  签名: (f : 模形式 𝒮ℒ k) (h : (qExpansion 1 f).coeff 0 = 0)
   定义体: { f with zero_at_cusps' := isZeroAt_of_coeffZero_eq_zero f h }
 
 @[simp]
@@ -359,7 +359,7 @@ lemma toCuspForm_apply
 
 中文:
 引理 toCuspForm_apply
-  结论: (f : ModularForm 𝒮ℒ k) (h : (qExpansion 1 f).coeff 0 = 0)
+  结论: (f : 模形式 𝒮ℒ k) (h : (qExpansion 1 f).coeff 0 = 0)
   证明: rfl
 -/
 lemma toCuspForm_apply (f : ModularForm 𝒮ℒ k) (h : (qExpansion 1 f).coeff 0 = 0)
@@ -380,7 +380,7 @@ lemma isCuspForm_iff_coeffZero_eq_zero
 
 中文:
 引理 isCuspForm_iff_coeffZero_eq_zero
-  条件: (f : ModularForm 𝒮ℒ k)
+  条件: (f : 模形式 𝒮ℒ k)
   证明: by
   refine ⟨fun ⟨g, hg⟩ => ?_, fun h => (isCuspForm_iff f).mpr (isZeroAt_of_coeffZero_eq_zero f h)⟩
   rw [← hg]; rw [qExpansion_coeff_zero one_pos
@@ -410,7 +410,7 @@ lemma sub_smul_isCuspForm
 
 中文:
 引理 sub_smul_isCuspForm
-  结论: (f g : ModularForm 𝒮ℒ k)
+  结论: (f g : 模形式 𝒮ℒ k)
   证明: by
   rw [isCuspForm_iff_coeffZero_eq_zero]; rw [FunLike.coe_sub]; rw [ModularForm.qExpansion_sub one_pos one_mem_strictPeriods_SL]; rw [FunLike.coe_smul]; rw [ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL]; rw [map_sub]; rw [PowerSeries.coeff_smul]
   simp [hg]

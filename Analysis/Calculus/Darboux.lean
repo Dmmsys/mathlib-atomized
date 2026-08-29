@@ -41,7 +41,7 @@ theorem exists_hasDerivWithinAt_eq_of_gt_of_lt
   obtain 
 
 中文:
-定理 exists_hasDerivWithinAt_eq_of_gt_of_lt
+定理 存在_hasDerivWithinAt_eq_of_gt_of_lt
   结论: (hab : a <= b)
   证明: by
   rcases hab.eq_or_lt with (rfl | hab')
@@ -100,7 +100,7 @@ theorem exists_hasDerivWithinAt_eq_of_lt_of_gt
   ⟨c, cmem, neg_injective hc⟩
 
 中文:
-定理 exists_hasDerivWithinAt_eq_of_lt_of_gt
+定理 存在_hasDerivWithinAt_eq_of_lt_of_gt
   结论: (hab : a <= b)
   证明: let ⟨c, cmem, hc⟩ :=
     exists_hasDerivWithinAt_eq_of_gt_of_lt hab (fun x hx => (hf x hx).neg) (neg_lt_neg hma)
@@ -133,8 +133,8 @@ theorem Set.OrdConnected.image_hasDerivWithinAt
       ⟨c, cmem,
 
 中文:
-定理 Set.OrdConnected.image_hasDerivWithinAt
-  结论: {s : Set 实数} (hs : OrdConnected s)
+定理 集合.序连通.image_hasDerivWithinAt
+  结论: {s : 集合 实数} (hs : 序连通 s)
   证明: by
   apply ordConnected_of_Ioo
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ - m ⟨hma, hmb⟩
@@ -171,8 +171,8 @@ theorem Set.OrdConnected.image_derivWithin
   proof: hs.image_hasDerivWithinAt fun x hx => (hf x hx).hasDerivWithinAt
 
 中文:
-定理 Set.OrdConnected.image_derivWithin
-  结论: {s : Set 实数} (hs : OrdConnected s)
+定理 集合.序连通.image_derivWithin
+  结论: {s : 集合 实数} (hs : 序连通 s)
   证明: hs.image_hasDerivWithinAt fun x hx => (hf x hx).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivWithinAt, hs.image_hasDerivWithinAt, image_hasDerivWithinAt
@@ -190,8 +190,8 @@ theorem Set.OrdConnected.image_deriv
   proof: hs.image_hasDerivWithinAt fun x hx => (hf x hx).hasDerivAt.hasDerivWithinAt
 
 中文:
-定理 Set.OrdConnected.image_deriv
-  结论: {s : Set 实数} (hs : OrdConnected s)
+定理 集合.序连通.image_deriv
+  结论: {s : 集合 实数} (hs : 序连通 s)
   证明: hs.image_hasDerivWithinAt fun x hx => (hf x hx).hasDerivAt.hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt, hasDerivAt.hasDerivWithinAt, hasDerivWithinAt, hs.image_hasDerivWithinAt, image_hasDerivWithinAt
@@ -209,8 +209,8 @@ theorem Convex.image_hasDerivWithinAt
   proof: (hs.ordConnected.image_hasDerivWithinAt hf).convex
 
 中文:
-定理 Convex.image_hasDerivWithinAt
-  结论: {s : Set 实数} (hs : Convex 实数 s)
+定理 凸.image_hasDerivWithinAt
+  结论: {s : 集合 实数} (hs : 凸 实数 s)
   证明: (hs.ordConnected.image_hasDerivWithinAt hf).convex
 
 Depends on / 依赖: convex, hs.ordConnected.image_hasDerivWithinAt, image_hasDerivWithinAt, ordConnected
@@ -228,8 +228,8 @@ theorem Convex.image_derivWithin
   proof: (hs.ordConnected.image_derivWithin hf).convex
 
 中文:
-定理 Convex.image_derivWithin
-  条件: {s : Set 实数} (hs : Convex 实数 s) (hf : DifferentiableOn 实数 f s)
+定理 凸.image_derivWithin
+  条件: {s : 集合 实数} (hs : 凸 实数 s) (hf : DifferentiableOn 实数 f s)
   证明: (hs.ordConnected.image_derivWithin hf).convex
 
 Depends on / 依赖: convex, hs.ordConnected.image_derivWithin, image_derivWithin, ordConnected
@@ -247,8 +247,8 @@ theorem Convex.image_deriv
   proof: (hs.ordConnected.image_deriv hf).convex
 
 中文:
-定理 Convex.image_deriv
-  条件: {s : Set 实数} (hs : Convex 实数 s) (hf : 对任意 x in s, DifferentiableAt 实数 f x)
+定理 凸.image_deriv
+  条件: {s : 集合 实数} (hs : 凸 实数 s) (hf : 对任意 x in s, DifferentiableAt 实数 f x)
   证明: (hs.ordConnected.image_deriv hf).convex
 
 Depends on / 依赖: convex, hs.ordConnected.image_deriv, image_deriv, ordConnected
@@ -267,7 +267,7 @@ theorem exists_hasDerivWithinAt_eq_of_ge_of_le
     (mem_image_of_mem _ (right_mem_Icc.2 hab)) ⟨hma, hmb⟩
 
 中文:
-定理 exists_hasDerivWithinAt_eq_of_ge_of_le
+定理 存在_hasDerivWithinAt_eq_of_ge_of_le
   结论: (hab : a <= b)
   证明: (ordConnected_Icc.image_hasDerivWithinAt hf).out (mem_image_of_mem _ (left_mem_Icc.2 hab))
     (mem_image_of_mem _ (right_mem_Icc.2 hab)) ⟨hma, hmb⟩
@@ -290,7 +290,7 @@ theorem exists_hasDerivWithinAt_eq_of_le_of_ge
     (mem_image_of_mem _ (right_mem_Icc.2 hab)) ⟨hma, hmb⟩
 
 中文:
-定理 exists_hasDerivWithinAt_eq_of_le_of_ge
+定理 存在_hasDerivWithinAt_eq_of_le_of_ge
   结论: (hab : a <= b)
   证明: (ordConnected_Icc.image_hasDerivWithinAt hf).out (mem_image_of_mem _ (left_mem_Icc.2 hab))
     (mem_image_of_mem _ (right_mem_Icc.2 hab)) ⟨hma, hmb⟩
@@ -316,8 +316,8 @@ theorem hasDerivWithinAt_forall_lt_or_forall_gt_of_forall_ne
     (mem_image_of_mem f' hb) ⟨hma, hmb⟩
 
 中文:
-定理 hasDerivWithinAt_forall_lt_or_forall_gt_of_forall_ne
-  结论: {s : Set 实数} (hs : Convex 实数 s)
+定理 hasDerivWithinAt_对任意_lt_or_对任意_gt_of_对任意_ne
+  结论: {s : 集合 实数} (hs : 凸 实数 s)
   证明: by
   contrapose! hf'
   rcases hf' with ⟨⟨b, hb, hmb⟩, ⟨a, ha, hma⟩⟩

@@ -131,7 +131,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: exists t : Finset A, Algebra.adjoin R ↑t = S
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Finset, adjoin
@@ -150,8 +150,8 @@ theorem fg_adjoin_finset
 
 中文:
 定理 fg_adjoin_finset
-  条件: (s : Finset A)
-  结论: (Algebra.adjoin R (↑s : Set A)).FG
+  条件: (s : 有限集 A)
+  结论: (代数.adjoin R (↑s : 集合 A)).FG
   证明: ⟨s, rfl⟩
 -/
 theorem fg_adjoin_finset (s : Finset A) : (Algebra.adjoin R (↑s : Set A)).FG :=
@@ -168,8 +168,8 @@ theorem fg_def
 
 中文:
 定理 fg_def
-  条件: {S : Subalgebra R A}
-  结论: S.FG ↔ 存在 t : Set A, Set.Finite t ∧ Algebra.adjoin R t = S
+  条件: {S : 子代数 R A}
+  结论: S.FG ↔ 存在 t : 集合 A, 集合.有限 t ∧ 代数.adjoin R t = S
   证明: Iff.symm Set.exists_finite_iff_finset
 
 Depends on / 依赖: Iff.symm, Set.exists_finite_iff_finset, exists_finite_iff_finset
@@ -187,7 +187,7 @@ theorem fg_bot
 
 中文:
 定理 fg_bot
-  结论: (⊥ : Subalgebra R A).FG
+  结论: (⊥ : 子代数 R A).FG
   证明: ⟨∅, Finset.coe_empty ▸ Algebra.adjoin_empty R A⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_empty, Finset, Finset.coe_empty, adjoin_empty, coe_empty
@@ -210,7 +210,7 @@ theorem fg_of_fg_toSubmodule
 
 中文:
 定理 fg_of_fg_toSubmodule
-  条件: {S : Subalgebra R A}
+  条件: {S : 子代数 R A}
   结论: S.toSubmodule.FG -> S.FG
   证明: fun ⟨t, ht⟩ => ⟨t, le_antisymm
 (Algebra.adjoin_le fun x hx => show x in Subalgebra.toSubmodule S from ht ▸ subset_span hx)
@@ -240,7 +240,7 @@ theorem fg_of_noetherian
 
 中文:
 定理 fg_of_noetherian
-  条件: [IsNoetherian R A] (S : Subalgebra R A)
+  条件: [是Noether R A] (S : 子代数 R A)
   结论: S.FG
   证明: fg_of_fg_toSubmodule (IsNoetherian.noetherian (Subalgebra.toSubmodule S))
 
@@ -263,8 +263,8 @@ theorem fg_of_submodule_fg
 
 中文:
 定理 fg_of_submodule_fg
-  条件: (h : (⊤ : Submodule R A).FG)
-  结论: (⊤ : Subalgebra R A).FG
+  条件: (h : (⊤ : 子模 R A).FG)
+  结论: (⊤ : 子代数 R A).FG
   证明: let ⟨s, hs⟩ := h
 ⟨s, toSubmodule.injective by
     rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← hs]; rw [span_le]
@@ -293,8 +293,8 @@ theorem FG.prod
       (Set.Finit
 
 中文:
-定理 FG.prod
-  条件: {S : Subalgebra R A} {T : Subalgebra R B} (hS : S.FG) (hT : T.FG)
+定理 FG.乘积
+  条件: {S : 子代数 R A} {T : 子代数 R B} (hS : S.FG) (hT : T.FG)
   证明: by
   obtain ⟨s, hs⟩ := fg_def.1 hS
   obtain ⟨t, ht⟩ := fg_def.1 hT
@@ -331,7 +331,7 @@ theorem FG.map
 
 中文:
 定理 FG.map
-  条件: {S : Subalgebra R A} (f : A ->ₐ[R] B) (hs : S.FG)
+  条件: {S : 子代数 R A} (f : A ->ₐ[R] B) (hs : S.FG)
   结论: (S.map f).FG
   证明: by
   let ⟨s, hs⟩ := hs
@@ -361,7 +361,7 @@ map_injective hf by
 
 中文:
 定理 fg_of_fg_map
-  结论: (S : Subalgebra R A) (f : A ->ₐ[R] B) (hf : Function.Injective f)
+  结论: (S : 子代数 R A) (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: let ⟨s, hs⟩ := hs
   ⟨s.preimage f fun _ _ _ _ h => hf h,
 map_injective hf by
@@ -396,8 +396,8 @@ fg_of_fg_map _ S.val Subtype.val_injective by
 
 中文:
 定理 fg_top
-  条件: (S : Subalgebra R A)
-  结论: (⊤ : Subalgebra R S).FG ↔ S.FG
+  条件: (S : 子代数 R A)
+  结论: (⊤ : 子代数 R S).FG ↔ S.FG
   证明: ⟨fun h => by
     rw [← S.range_val]; rw [← Algebra.map_top]
     exact FG.map _ h, fun h =>
@@ -432,7 +432,7 @@ theorem induction_on_adjoin
 
 中文:
 定理 induction_on_adjoin
-  结论: [IsNoetherian R A] (P : Subalgebra R A -> 命题) (base : P ⊥)
+  结论: [是Noether R A] (P : 子代数 R A -> 命题) (base : P ⊥)
   证明: by
   classical
   obtain ⟨t, rfl⟩ := S.fg_of_noetherian
@@ -467,8 +467,8 @@ theorem FG.sup
     (by rw [Algebra.adjoin_union, hs.2, hs'.2])⟩
 
 中文:
-定理 FG.sup
-  条件: {S S' : Subalgebra R A} (hS : Subalgebra.FG S) (hS' : Subalgebra.FG S')
+定理 FG.上确界
+  条件: {S S' : 子代数 R A} (hS : 子代数.FG S) (hS' : 子代数.FG S')
   证明: let ⟨s, hs⟩ := Subalgebra.fg_def.1 hS
   let ⟨s', hs'⟩ := Subalgebra.fg_def.1 hS'
   fg_def.mpr ⟨s union s', Set.Finite.union hs.1 hs'.1,
@@ -497,8 +497,8 @@ instance AlgHom.isNoetherianRing_range
   body: _root_.isNoetherianRing_range f.toRingHom
 
 中文:
-实例 AlgHom.isNoetherianRing_range
-  签名: (f : A ->ₐ[R] B) [IsNoetherianRing A]
+实例 代数态射.isNoetherianRing_range
+  签名: (f : A ->ₐ[R] B) [是Noether环 A]
   定义体: _root_.isNoetherianRing_range f.toRingHom
 
 Depends on / 依赖: _root_, _root_.isNoetherianRing_range, f.toRingHom, isNoetherianRing_range, toRingHom
@@ -525,7 +525,7 @@ theorem isNoetherianRing_of_fg
 
 中文:
 定理 isNoetherianRing_of_fg
-  条件: {S : Subalgebra R A} (HS : S.FG) [IsNoetherianRing R]
+  条件: {S : 子代数 R A} (HS : S.FG) [是Noether环 R]
   证明: let ⟨t, ht⟩ := HS
   ht ▸ (Algebra.adjoin_eq_range R (↑t : Set A)).symm ▸ AlgHom.isNoetherianRing_range _
 
@@ -547,7 +547,7 @@ theorem is_noetherian_subring_closure
 
 中文:
 定理 is_noetherian_subring_closure
-  条件: (s : Set R) (hs : s.Finite)
+  条件: (s : 集合 R) (hs : s.有限)
   证明: show IsNoetherianRing (subalgebraOfSubring (Subring.closure s)) from
     Algebra.adjoin_int s ▸ isNoetherianRing_of_fg (Subalgebra.fg_def.2 ⟨s, hs, rfl⟩)
 

@@ -158,7 +158,7 @@ alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
 
 中文:
 引理 not_disjoint_iff_nonempty_inter
-  结论: ¬ Disjoint s t ↔ (s inter t).Nonempty
+  结论: ¬ Disjoint s t ↔ (s inter t).非空
   证明: not_disjoint_iff
 
 alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
@@ -180,8 +180,8 @@ lemma disjoint_or_nonempty_inter
 
 中文:
 引理 disjoint_or_nonempty_inter
-  条件: (s t : Set α)
-  结论: Disjoint s t ∨ (s inter t).Nonempty
+  条件: (s t : 集合 α)
+  结论: Disjoint s t ∨ (s inter t).非空
   证明: (em _).imp_right not_disjoint_iff_nonempty_inter.1
 
 Depends on / 依赖: imp_right, not_disjoint_iff_nonempty_inter, stereographic
@@ -200,7 +200,7 @@ lemma disjoint_iff_forall_ne
 alias ⟨_root_.Disjoint.ne_of_mem, _⟩ := disjoint_iff_forall_ne
 
 中文:
-引理 disjoint_iff_forall_ne
+引理 disjoint_iff_对任意_ne
   结论: Disjoint s t ↔ 对任意 ⦃a⦄, a in s -> 对任意 ⦃b⦄, b in t -> a != b
   证明: by grind
 
@@ -322,7 +322,7 @@ lemma disjoint_empty
 
 中文:
 引理 disjoint_empty
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Disjoint s ∅
   证明: disjoint_bot_right
 -/
@@ -338,7 +338,7 @@ lemma empty_disjoint
 
 中文:
 引理 empty_disjoint
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Disjoint ∅ s
   证明: disjoint_bot_left
 -/
@@ -384,7 +384,7 @@ theorem disjoint_range_iff
 
 中文:
 定理 disjoint_range_iff
-  条件: {β γ : Sort*} {x : β -> α} {y : γ -> α}
+  条件: {β γ : 类型层*} {x : β -> α} {y : γ -> α}
   证明: by
   simp [Set.disjoint_iff_forall_ne]
 
@@ -453,7 +453,7 @@ theorem inter_left
 
 中文:
 定理 inter_left
-  条件: (u : Set α) (h : Disjoint s t)
+  条件: (u : 集合 α) (h : Disjoint s t)
   结论: Disjoint (s inter u) t
   证明: h.inf_left _
 
@@ -473,7 +473,7 @@ theorem inter_left'
 
 中文:
 定理 inter_left'
-  条件: (u : Set α) (h : Disjoint s t)
+  条件: (u : 集合 α) (h : Disjoint s t)
   结论: Disjoint (u inter s) t
   证明: h.inf_left' _
 
@@ -493,7 +493,7 @@ theorem inter_right
 
 中文:
 定理 inter_right
-  条件: (u : Set α) (h : Disjoint s t)
+  条件: (u : 集合 α) (h : Disjoint s t)
   结论: Disjoint s (t inter u)
   证明: h.inf_right _
 
@@ -513,7 +513,7 @@ theorem inter_right'
 
 中文:
 定理 inter_right'
-  条件: (u : Set α) (h : Disjoint s t)
+  条件: (u : 集合 α) (h : Disjoint s t)
   结论: Disjoint s (u inter t)
   证明: h.inf_right' _
 

@@ -27,8 +27,8 @@ theorem forall_mem_zipIdx
   simp only [forall_mem_iff_getElem, getElem_zipIdx, length_zipIdx]
 
 中文:
-定理 forall_mem_zipIdx
-  条件: {l : List α} {n : 自然数} {p : α × 自然数 -> 命题}
+定理 对任意_mem_zipIdx
+  条件: {l : 列表 α} {n : 自然数} {p : α × 自然数 -> 命题}
   证明: by
   simp only [forall_mem_iff_getElem, getElem_zipIdx, length_zipIdx]
 
@@ -47,8 +47,8 @@ theorem forall_mem_zipIdx'
   proof: forall_mem_zipIdx.trans by simp
 
 中文:
-定理 forall_mem_zipIdx'
-  条件: {l : List α} {p : α × 自然数 -> 命题}
+定理 对任意_mem_zipIdx'
+  条件: {l : 列表 α} {p : α × 自然数 -> 命题}
   证明: forall_mem_zipIdx.trans by simp
 
 Depends on / 依赖: forall_mem_zipIdx, forall_mem_zipIdx.trans
@@ -67,8 +67,8 @@ theorem exists_mem_zipIdx
   simp only [exists_mem_iff_getElem, getElem_zipIdx, length_zipIdx]
 
 中文:
-定理 exists_mem_zipIdx
-  条件: {l : List α} {n : 自然数} {p : α × 自然数 -> 命题}
+定理 存在_mem_zipIdx
+  条件: {l : 列表 α} {n : 自然数} {p : α × 自然数 -> 命题}
   证明: by
   simp only [exists_mem_iff_getElem, getElem_zipIdx, length_zipIdx]
 
@@ -87,8 +87,8 @@ theorem exists_mem_zipIdx'
   proof: exists_mem_zipIdx.trans by simp
 
 中文:
-定理 exists_mem_zipIdx'
-  条件: {l : List α} {p : α × 自然数 -> 命题}
+定理 存在_mem_zipIdx'
+  条件: {l : 列表 α} {p : α × 自然数 -> 命题}
   证明: exists_mem_zipIdx.trans by simp
 
 Depends on / 依赖: exists_mem_zipIdx, exists_mem_zipIdx.trans

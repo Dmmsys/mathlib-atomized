@@ -86,8 +86,8 @@ theorem exists_notMem_one_of_ne_bot
   proof: Set.not_subset.1 not_inv_le_one_of_ne_bot hI0 hI1
 
 中文:
-定理 exists_notMem_one_of_ne_bot
-  结论: [IsDedekindDomain A] {I : Ideal A} (hI0 : I != ⊥)
+定理 存在_notMem_one_of_ne_bot
+  结论: [是Dedekind整环 A] {I : 理想 A} (hI0 : I != ⊥)
   证明: Set.not_subset.1 not_inv_le_one_of_ne_bot hI0 hI1
 
 Depends on / 依赖: Set.not_subset, not_inv_le_one_of_ne_bot, not_subset
@@ -121,7 +121,7 @@ theorem dvd_span_singleton
 
 中文:
 定理 dvd_span_singleton
-  条件: {I : Ideal A} {x : A}
+  条件: {I : 理想 A} {x : A}
   结论: I ∣ span {x} ↔ x in I
   证明: dvd_iff_le.trans (span_le.trans Set.singleton_subset_iff)
 
@@ -147,8 +147,8 @@ theorem isPrime_of_prime
 
 中文:
 定理 isPrime_of_prime
-  条件: {P : Ideal A} (h : Prime P)
-  结论: IsPrime P
+  条件: {P : 理想 A} (h : 素 P)
+  结论: 是素 P
   证明: by
   refine ⟨?_, fun hxy => ?_⟩
   · rintro rfl
@@ -180,8 +180,8 @@ theorem prime_of_isPrime
 
 中文:
 定理 prime_of_isPrime
-  条件: {P : Ideal A} (hP : P != ⊥) (h : IsPrime P)
-  结论: Prime P
+  条件: {P : 理想 A} (hP : P != ⊥) (h : 是素 P)
+  结论: 素 P
   证明: by
   refine ⟨hP, mt isUnit_iff.mp h.ne_top, fun I J hIJ => ?_⟩
   simpa only [dvd_iff_le] using h.mul_le.mp (le_of_dvd hIJ)
@@ -202,7 +202,7 @@ theorem prime_of_mem_primesOver
 
 中文:
 定理 prime_of_mem_primesOver
-  结论: {R : 类型} [CommRing R] [Algebra R A] {p : Ideal R}
+  结论: {R : 类型} [交换环 R] [代数 R A] {p : 理想 R}
   证明: prime_of_isPrime (ne_bot_of_mem_primesOver hp hP) hP.1
 
 Depends on / 依赖: ne_bot_of_mem_primesOver, prime_of_isPrime
@@ -223,8 +223,8 @@ theorem prime_iff_isPrime
 
 中文:
 定理 prime_iff_isPrime
-  条件: {P : Ideal A} (hP : P != ⊥)
-  结论: Prime P ↔ IsPrime P
+  条件: {P : 理想 A} (hP : P != ⊥)
+  结论: 素 P ↔ 是素 P
   证明: ⟨isPrime_of_prime, prime_of_isPrime hP⟩
 
 Depends on / 依赖: isPrime_of_prime, prime_of_isPrime
@@ -246,8 +246,8 @@ theorem isPrime_iff_bot_or_prime
 
 中文:
 定理 isPrime_iff_bot_or_prime
-  条件: {P : Ideal A}
-  结论: IsPrime P ↔ P = ⊥ ∨ Prime P
+  条件: {P : 理想 A}
+  结论: 是素 P ↔ P = ⊥ ∨ 素 P
   证明: ⟨fun hp => (eq_or_ne P ⊥).imp_right fun hp0 => prime_of_isPrime hp0 hp, fun hp =>
     hp.elim (fun h => h.symm ▸ isPrime_bot) isPrime_of_prime⟩
 
@@ -277,7 +277,7 @@ theorem prime_span_singleton_iff
 中文:
 定理 prime_span_singleton_iff
   条件: {a : A}
-  结论: Prime (span {a}) ↔ Prime a
+  结论: 素 (span {a}) ↔ 素 a
   证明: by
   rcases eq_or_ne a 0 with rfl | ha
   · rw [Set.singleton_zero, span_zero, ← zero_eq_bot, ← not_iff_not]
@@ -306,7 +306,7 @@ theorem prime_generator_of_prime
 
 中文:
 定理 prime_generator_of_prime
-  条件: {P : Ideal A} (h : Prime P) [P.IsPrincipal]
+  条件: {P : 理想 A} (h : 素 P) [P.是Principal]
   证明: have : IsPrime P := isPrime_of_prime h
   prime_generator_of_isPrime _ h.ne_zero
 
@@ -342,7 +342,7 @@ theorem mem_primesOver_iff_mem_normalizedFactors
 
 中文:
 定理 mem_primesOver_iff_mem_normalizedFactors
-  结论: {p : Ideal R} [h : p.IsMaximal]
+  结论: {p : 理想 R} [h : p.是极大]
   证明: by
   rw [primesOver]; rw [Set.mem_ofPred_eq]; rw [mem_normalizedFactors_iff (map_ne_bot_of_ne_bot hp)]; rw [liesOver_iff]; rw [under_def]; rw [and_congr_right_iff]; rw [map_le_iff_le_comap]
   intro hP
@@ -369,7 +369,7 @@ theorem pow_right_strictAnti
 
 中文:
 定理 pow_right_strictAnti
-  条件: (I : Ideal A) (hI0 : I != ⊥) (hI1 : I != ⊤)
+  条件: (I : 理想 A) (hI0 : I != ⊥) (hI1 : I != ⊤)
   证明: strictAnti_nat_of_succ_lt fun e =>
     dvdNotUnit_iff_lt.mp ⟨pow_ne_zero _ hI0, I, mt isUnit_iff.mp hI1, pow_succ I e⟩
 
@@ -393,7 +393,7 @@ theorem pow_lt_self
 
 中文:
 定理 pow_lt_self
-  条件: (I : Ideal A) (hI0 : I != ⊥) (hI1 : I != ⊤) (e : 自然数) (he : 2 <= e)
+  条件: (I : 理想 A) (hI0 : I != ⊥) (hI1 : I != ⊤) (e : 自然数) (he : 2 <= e)
   证明: by
   convert! I.pow_right_strictAnti hI0 hI1 he
   dsimp only
@@ -416,8 +416,8 @@ theorem exists_mem_pow_notMem_pow_succ
   proof: SetLike.exists_of_lt (I.pow_right_strictAnti hI0 hI1 e.lt_succ_self)
 
 中文:
-定理 exists_mem_pow_notMem_pow_succ
-  条件: (I : Ideal A) (hI0 : I != ⊥) (hI1 : I != ⊤) (e : 自然数)
+定理 存在_mem_pow_notMem_pow_succ
+  条件: (I : 理想 A) (hI0 : I != ⊥) (hI1 : I != ⊤) (e : 自然数)
   证明: SetLike.exists_of_lt (I.pow_right_strictAnti hI0 hI1 e.lt_succ_self)
 
 Depends on / 依赖: I.pow_right_strictAnti, SetLike, SetLike.exists_of_lt, e.lt_succ_self, exists_of_lt, lt_succ_self, pow_right_strictAnti
@@ -444,7 +444,7 @@ theorem eq_prime_pow_of_succ_lt_of_le
 
 中文:
 定理 eq_prime_pow_of_succ_lt_of_le
-  结论: {P I : Ideal A} [P_prime : P.IsPrime] (hP : P != ⊥)
+  结论: {P I : 理想 A} [P_prime : P.是素] (hP : P != ⊥)
   证明: by
   refine le_antisymm hle ?_
   have P_prime' := prime_of_isPrime hP P_prime
@@ -477,7 +477,7 @@ theorem pow_succ_lt_pow
 
 中文:
 定理 pow_succ_lt_pow
-  条件: {P : Ideal A} [P_prime : P.IsPrime] (hP : P != ⊥) (i : 自然数)
+  条件: {P : 理想 A} [P_prime : P.是素] (hP : P != ⊥) (i : 自然数)
   证明: lt_of_le_of_ne (pow_le_pow_right (Nat.le_succ _))
     (mt (pow_inj_of_not_isUnit (mt isUnit_iff.mp P_prime.ne_top) hP).mp i.succ_ne_self)
 
@@ -502,7 +502,7 @@ theorem Associates.le_singleton_iff
 
 中文:
 定理 Associates.le_singleton_iff
-  条件: (x : A) (n : 自然数) (I : Ideal A)
+  条件: (x : A) (n : 自然数) (I : 理想 A)
   证明: by
   simp_rw [← Associates.dvd_eq_le, ← Associates.mk_pow, Associates.mk_dvd_mk,
     Ideal.dvd_span_singleton]
@@ -606,7 +606,7 @@ theorem exist_integer_multiples_notMem
 
 中文:
 定理 exist_integer_multiples_notMem
-  结论: {J : Ideal A} (hJ : J != ⊤) {ι : 类型} (s : Finset ι)
+  结论: {J : 理想 A} (hJ : J != ⊤) {ι : 类型} (s : 有限集 ι)
   证明: by
   -- Consider the fractional ideal `I` spanned by the `f`s.
   let I : FractionalIdeal A⁰ K := spanFinset A s f
@@ -665,7 +665,7 @@ lemma mul_iInf
 
 中文:
 引理 mul_iInf
-  条件: (I : Ideal A) {ι : 类型} [Nonempty ι] (J : ι -> Ideal A)
+  条件: (I : 理想 A) {ι : 类型} [非空 ι] (J : ι -> 理想 A)
   证明: by
   by_cases hI : I = 0
   · simp [hI]
@@ -700,7 +700,7 @@ lemma iInf_mul
 
 中文:
 引理 iInf_mul
-  条件: (I : Ideal A) {ι : 类型} [Nonempty ι] (J : ι -> Ideal A)
+  条件: (I : 理想 A) {ι : 类型} [非空 ι] (J : ι -> 理想 A)
   证明: by
   simp only [mul_iInf, mul_comm _ I]
 
@@ -723,7 +723,7 @@ lemma mul_inf
 
 中文:
 引理 mul_inf
-  条件: (I J K : Ideal A)
+  条件: (I J K : 理想 A)
   结论: I * (J ⊓ K) = I * J ⊓ I * K
   证明: by
   rw [inf_eq_iInf]; rw [mul_iInf]; rw [inf_eq_iInf]
@@ -747,7 +747,7 @@ lemma inf_mul
 
 中文:
 引理 inf_mul
-  条件: (I J K : Ideal A)
+  条件: (I J K : 理想 A)
   结论: (I ⊓ J) * K = I * K ⊓ J * K
   证明: by
   simp only [mul_inf, mul_comm _ K]
@@ -828,7 +828,7 @@ theorem sup_mul_inf
 
 中文:
 定理 sup_mul_inf
-  条件: (I J : Ideal A)
+  条件: (I J : 理想 A)
   结论: (I ⊔ J) * (I ⊓ J) = I * J
   证明: by
   let := UniqueFactorizationMonoid.toNormalizedGCDMonoid (Ideal A)
@@ -872,7 +872,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongNormalizedGCDMonoid (Ideal A)
+  签名: StrongNormalizedGCD幺半群 (理想 A)
   定义体: { strongNormalizationMonoid with
     gcd := (· ⊔ ·)
     gcd_dvd_left := fun _ _ => by simpa only [dvd_iff_le] using le_sup_left
@@ -913,8 +913,8 @@ theorem gcd_eq_sup
 
 中文:
 定理 gcd_eq_sup
-  条件: (I J : Ideal A)
-  结论: gcd I J = I ⊔ J
+  条件: (I J : 理想 A)
+  结论: 最大公约数 I J = I ⊔ J
   证明: rfl
 
 @[simp]
@@ -933,8 +933,8 @@ theorem lcm_eq_inf
 
 中文:
 定理 lcm_eq_inf
-  条件: (I J : Ideal A)
-  结论: lcm I J = I ⊓ J
+  条件: (I J : 理想 A)
+  结论: 最小公倍数 I J = I ⊓ J
   证明: rfl
 -/
 theorem lcm_eq_inf (I J : Ideal A) : lcm I J = I ⊓ J := rfl
@@ -951,8 +951,8 @@ theorem isCoprime_iff_gcd
 
 中文:
 定理 isCoprime_iff_gcd
-  条件: {I J : Ideal A}
-  结论: IsCoprime I J ↔ gcd I J = 1
+  条件: {I J : 理想 A}
+  结论: IsCoprime I J ↔ 最大公约数 I J = 1
   证明: by
   rw [isCoprime_iff_codisjoint]; rw [codisjoint_iff]; rw [one_eq_top]; rw [gcd_eq_sup]
 
@@ -1060,7 +1060,7 @@ alias _root_.prod_normalizedFactors_eq_self := prod_normalizedFactors_eq_self
 中文:
 定理 prod_normalizedFactors_eq_self
   条件: (hI : I != ⊥)
-  结论: (normalizedFactors I).prod = I
+  结论: (normalizedFactors I).乘积 = I
   证明: associated_iff_eq.1 (prod_normalizedFactors hI)
 
 @[deprecated (since := "2026-04-16")]
@@ -1162,7 +1162,7 @@ theorem irreducible_pow_sup
 
 中文:
 定理 irreducible_pow_sup
-  条件: (hI : I != ⊥) (hJ : Irreducible J) (n : 自然数)
+  条件: (hI : I != ⊥) (hJ : 不可约 J) (n : 自然数)
   证明: by
   rw [sup_eq_prod_inf_factors (pow_ne_zero n hJ.ne_zero) hI]; rw [min_comm]; rw [normalizedFactors_of_irreducible_pow hJ]; rw [normalize_eq J]; rw [replicate_inter]; rw [prod_replicate]
 
@@ -1194,7 +1194,7 @@ alias _root_.irreducible_pow_sup_of_le := irreducible_pow_sup_of_le
 
 中文:
 定理 irreducible_pow_sup_of_le
-  条件: (hJ : Irreducible J) (n : 自然数) (hn : n <= emultiplicity J I)
+  条件: (hJ : 不可约 J) (n : 自然数) (hn : n <= emultiplicity J I)
   证明: by
   by_cases hI : I = ⊥
   · simp_all
@@ -1235,7 +1235,7 @@ theorem irreducible_pow_sup_of_ge
 
 中文:
 定理 irreducible_pow_sup_of_ge
-  结论: (hI : I != ⊥) (hJ : Irreducible J) (n : 自然数)
+  结论: (hI : I != ⊥) (hJ : 不可约 J) (n : 自然数)
   证明: by
   rw [irreducible_pow_sup hI hJ]; rw [min_eq_left]
   · congr
@@ -1276,7 +1276,7 @@ theorem eq_prime_pow_mul_coprime
 
 中文:
 定理 eq_prime_pow_mul_coprime
-  结论: {I : Ideal T} (hI : I != ⊥)
+  结论: {I : 理想 T} (hI : I != ⊥)
   证明: by
   use (filter (¬ P = ·) (normalizedFactors I)).prod
   constructor
@@ -1312,7 +1312,7 @@ theorem map_prime_of_equiv
 
 中文:
 定理 map_prime_of_equiv
-  结论: {R : 类型} [CommRing R] [IsDedekindDomain R]
+  结论: {R : 类型} [交换环 R] [是Dedekind整环 R]
   证明: by
   rw [prime_iff_isPrime h] at hI
   exact (prime_iff_isPrime <| (I.map_eq_bot_iff_of_injective f.injective).not.2 h).2
@@ -1362,11 +1362,11 @@ structure HeightOneSpectrum
     - ne_bot : asIdeal != ⊥
 
 中文:
-结构 HeightOneSpectrum
+结构 高一谱
   参数: where
   公理与运算 (3 个):
-    - asIdeal : Ideal R
-    - isPrime : asIdeal.IsPrime
+    - asIdeal : 理想 R
+    - isPrime : asIdeal.是素
     - ne_bot : asIdeal != ⊥
 -/
 structure HeightOneSpectrum where
@@ -1390,7 +1390,7 @@ instance isMaximal
 
 中文:
 实例 isMaximal
-  签名: : v.asIdeal.IsMaximal
+  签名: : v.asIdeal.是极大
   定义体: v.isPrime.isMaximal v.ne_bot
 
 Depends on / 依赖: isMaximal, isPrime, ne_bot, v.isPrime.isMaximal, v.ne_bot
@@ -1407,7 +1407,7 @@ theorem prime
 
 中文:
 定理 prime
-  结论: Prime v.asIdeal
+  结论: 素 v.asIdeal
   证明: Ideal.prime_of_isPrime v.ne_bot v.isPrime
 
 Depends on / 依赖: Ideal.prime_of_isPrime, isPrime, ne_bot, prime_of_isPrime, v.isPrime, v.ne_bot
@@ -1426,7 +1426,7 @@ omit [IsDedekindDomain R] in
 
 中文:
 实例 :
-  签名: Coe (HeightOneSpectrum R) (Ideal R)
+  签名: Coe (高一谱 R) (理想 R)
   定义体: P.asIdeal
 
 omit [IsDedekindDomain R] in
@@ -1449,7 +1449,7 @@ alias asIdeal_inj := HeightOneSpectrum.ext
 
 中文:
 引理 asIdeal_injective
-  结论: (HeightOneSpectrum.asIdeal (R := R)).Injective
+  结论: (高一谱.asIdeal (R := R)).单射
   证明: fun ⦃_ _⦄ h => HeightOneSpectrum.ext h
 
 alias asIdeal_inj := HeightOneSpectrum.ext
@@ -1479,7 +1479,7 @@ definition ofPrime
 
 中文:
 定义 ofPrime
-  签名: {p : Ideal R} (hp : Prime p)
+  签名: {p : 理想 R} (hp : 素 p)
   定义体: ⟨p, Ideal.isPrime_of_prime hp, hp.ne_zero⟩
 
 @[simp]
@@ -1515,7 +1515,7 @@ theorem irreducible
 
 中文:
 定理 irreducible
-  结论: Irreducible v.asIdeal
+  结论: 不可约 v.asIdeal
   证明: UniqueFactorizationMonoid.irreducible_iff_prime.mpr v.prime
 
 Depends on / 依赖: UniqueFactorizationMonoid, UniqueFactorizationMonoid.irreducible_iff_prime.mpr, irreducible_iff_prime, v.prime
@@ -1533,7 +1533,7 @@ theorem associates_irreducible
 
 中文:
 定理 associates_irreducible
-  结论: Irreducible Associates.mk v.asIdeal
+  结论: 不可约 Associates.mk v.asIdeal
   证明: Associates.irreducible_mk.mpr v.irreducible
 
 Depends on / 依赖: Associates, Associates.irreducible_mk.mpr, irreducible, irreducible_mk, v.irreducible
@@ -1553,7 +1553,7 @@ definition equivMaximalSpectrum
 
 中文:
 定义 equivMaximalSpectrum
-  签名: (hR : ¬IsField R)
+  签名: (hR : ¬是域 R)
   定义体: ⟨v.asIdeal, v.isPrime.isMaximal v.ne_bot⟩
   invFun v :=
     ⟨v.asIdeal, v.isMaximal.isPrime, Ring.ne_bot_of_isMaximal_of_not_isField v.isMaximal hR⟩
@@ -1580,8 +1580,8 @@ theorem ideal_ne_top_iff_exists
     exact ⟨((equivMaximalSpectrum hR) P).asIdeal, ((equivMaximalSpectrum hR) P).isMaximal, hP⟩
 
 中文:
-定理 ideal_ne_top_iff_exists
-  条件: (hR : ¬IsField R) (I : Ideal R)
+定理 ideal_ne_top_iff_存在
+  条件: (hR : ¬是域 R) (I : 理想 R)
   证明: by
   rw [Ideal.ne_top_iff_exists_maximal]
   constructor
@@ -1613,7 +1613,7 @@ theorem isCoprime_of_ne
 
 中文:
 定理 isCoprime_of_ne
-  条件: (P Q : HeightOneSpectrum R) (hPQ : P != Q)
+  条件: (P Q : 高一谱 R) (hPQ : P != Q)
   结论: IsCoprime P.asIdeal Q.asIdeal
   证明: Ideal.isCoprime_iff_sup_eq.mpr (Ideal.IsMaximal.coprime_of_ne P.isMaximal Q.isMaximal
     (by simpa [HeightOneSpectrum.ext_iff] using hPQ))
@@ -1634,7 +1634,7 @@ theorem isCoprime_pow_of_ne
 
 中文:
 定理 isCoprime_pow_of_ne
-  条件: (P Q : HeightOneSpectrum R) (hPQ : P != Q) (n m : 自然数)
+  条件: (P Q : 高一谱 R) (hPQ : P != Q) (n m : 自然数)
   证明: Ideal.isCoprime_iff_sup_eq.mpr (Ideal.pow_sup_pow_eq_top (P.isCoprime_of_ne Q hPQ).sup_eq)
 
 Depends on / 依赖: Ideal.isCoprime_iff_sup_eq.mpr, Ideal.pow_sup_pow_eq_top, P.isCoprime_of_ne, isCoprime_iff_sup_eq, isCoprime_of_ne, pow_sup_pow_eq_top, sup_eq
@@ -1663,7 +1663,7 @@ theorem iInf_localization_eq_bot
 
 中文:
 定理 iInf_localization_eq_bot
-  条件: [Algebra R K] [hK : IsFractionRing R K]
+  条件: [代数 R K] [hK : IsFractionRing R K]
   证明: by
   ext x
   rw [Algebra.mem_iInf]
@@ -1710,7 +1710,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : R ->+* S) (hf : Function.Surjective f) (v : HeightOneSpectrum S)
+  签名: (f : R ->+* S) (hf : 函数.满射 f) (v : 高一谱 S)
   定义体: v.asIdeal.comap f
   isPrime := v.asIdeal.comap_isPrime f
   ne_bot := (Ideal.eq_bot_of_comap_eq_bot' hf).mt v.ne_bot
@@ -1772,8 +1772,8 @@ theorem RingEquiv.nontrivial_heightOneSpectrum
   proof: (equivOfRingEquiv e).surjective.nontrivial
 
 中文:
-定理 RingEquiv.nontrivial_heightOneSpectrum
-  结论: {R S : 类型} [CommRing R] [CommRing S]
+定理 环等价.nontrivial_heightOneSpectrum
+  结论: {R S : 类型} [交换环 R] [交换环 S]
   证明: (equivOfRingEquiv e).surjective.nontrivial
 
 Depends on / 依赖: equivOfRingEquiv, nontrivial, surjective, surjective.nontrivial
@@ -1816,7 +1816,7 @@ definition idealFactorsFunOfQuotHom
 
 中文:
 定义 idealFactorsFunOfQuotHom
-  签名: {f : R ⧸ I ->+* A ⧸ J} (hf : Function.Surjective f)
+  签名: {f : R ⧸ I ->+* A ⧸ J} (hf : 函数.满射 f)
   定义体: ⟨comap (Ideal.Quotient.mk J) (map f (map (Ideal.Quotient.mk I) X)), by
     have : RingHom.ker (Ideal.Quotient.mk J) <=
         comap (Ideal.Quotient.mk J) (map f (map (Ideal.Quotient.mk I) X)) :=
@@ -1934,7 +1934,7 @@ definition idealFactorsEquivOfQuotEquiv
 
 中文:
 定义 idealFactorsEquivOfQuotEquiv
-  签名: : { p : Ideal R | p ∣ I } ≃o { p : Ideal A | p ∣ J }
+  签名: : { p : 理想 R | p ∣ I } ≃o { p : 理想 A | p ∣ J }
   定义体: by
   have f_surj : Function.Surjective (f : R ⧸ I ->+* A ⧸ J) := f.surjective
   have fsym_surj : Function.Surjective (f.symm : A ⧸ J ->+* R ⧸ I) := f.symm.surjective
@@ -1996,7 +1996,7 @@ theorem idealFactorsEquivOfQuotEquiv_is_dvd_iso
 
 中文:
 定理 idealFactorsEquivOfQuotEquiv_is_dvd_iso
-  条件: {L M : Ideal R} (hL : L ∣ I) (hM : M ∣ I)
+  条件: {L M : 理想 R} (hL : L ∣ I) (hM : M ∣ I)
   证明: by
   suffices
     idealFactorsEquivOfQuotEquiv f ⟨M, hM⟩ <= idealFactorsEquivOfQuotEquiv f ⟨L, hL⟩ ↔
@@ -2190,8 +2190,8 @@ theorem Ring.DimensionLeOne.prime_le_prime_iff_eq
   proof: ⟨(hP.isMaximal hP0).eq_of_le hQ.ne_top, Eq.le⟩
 
 中文:
-定理 Ring.DimensionLeOne.prime_le_prime_iff_eq
-  结论: [Ring.DimensionLEOne R] {P Q : Ideal R}
+定理 环.DimensionLeOne.prime_le_prime_iff_eq
+  结论: [环.维数不超过一 R] {P Q : 理想 R}
   证明: ⟨(hP.isMaximal hP0).eq_of_le hQ.ne_top, Eq.le⟩
 
 Depends on / 依赖: Eq.le, eq_of_le, hP.isMaximal, hQ.ne_top, isMaximal, ne_top
@@ -2219,8 +2219,8 @@ theorem IsPrime.mul_mem_pow
   exact IsMaximal.mul_mem_pow I h
 
 中文:
-定理 IsPrime.mul_mem_pow
-  结论: (I : Ideal R) [hI : I.IsPrime] {a b : R} {n : 自然数}
+定理 是素.mul_mem_pow
+  结论: (I : 理想 R) [hI : I.是素] {a b : R} {n : 自然数}
   证明: by
   cases n; · simp
   by_cases hI0 : I = ⊥; · simpa [pow_succ, hI0] using h
@@ -2248,8 +2248,8 @@ theorem IsPrime.mem_pow_mul
   exact IsPrime.mul_mem_pow _ h
 
 中文:
-定理 IsPrime.mem_pow_mul
-  结论: (I : Ideal R) [hI : I.IsPrime] {a b : R} {n : 自然数}
+定理 是素.mem_pow_mul
+  结论: (I : 理想 R) [hI : I.是素] {a b : R} {n : 自然数}
   证明: by
   rw [mul_comm] at h
   rw [or_comm]
@@ -2276,7 +2276,7 @@ theorem count_normalizedFactors_eq
 
 中文:
 定理 count_normalizedFactors_eq
-  结论: {p x : Ideal R} [hp : p.IsPrime] {n : 自然数} (hle : x <= p ^ n)
+  结论: {p x : 理想 R} [hp : p.是素] {n : 自然数} (hle : x <= p ^ n)
   证明: count_normalizedFactors_eq' ((isPrime_iff_bot_or_prime.mp hp).imp_right Prime.irreducible)
     (normalize_eq _) (dvd_iff_le.mpr hle) (mt le_of_dvd hlt)
 
@@ -2428,7 +2428,7 @@ theorem le_mul_of_no_prime_factors
 
 中文:
 定理 le_mul_of_no_prime_factors
-  结论: {I J K : Ideal R}
+  结论: {I J K : 理想 R}
   证明: by
   simp only [← dvd_iff_le] at coprime hJ hK ⊢
   by_cases hJ0 : J = 0
@@ -2469,8 +2469,8 @@ theorem HeightOneSpectrum.inf_pow_eq_prod
     exact HeightOneSpectrum.isCoprime_pow_of_ne _ _ (coprime i hi j hj hij) _ _
 
 中文:
-定理 HeightOneSpectrum.inf_pow_eq_prod
-  结论: (s : Finset ι) (e : ι -> 自然数)
+定理 高一谱.inf_pow_eq_prod
+  结论: (s : 有限集 ι) (e : ι -> 自然数)
   证明: by
   rw [prod_eq_iInf_of_pairwise_isCoprime]
   · rw [Finset.inf_eq_iInf s fun i => (f i).asIdeal ^ e i]
@@ -2502,7 +2502,7 @@ theorem inf_pow_eq_prod_of_prime
 
 中文:
 定理 inf_pow_eq_prod_of_prime
-  结论: (s : Finset ι) (f : ι -> Ideal R)
+  结论: (s : 有限集 ι) (f : ι -> 理想 R)
   证明: by
   rw [prod_eq_iInf_of_pairwise_isCoprime]; rw [Finset.inf_eq_iInf s fun i => (f i) ^ e i]
   intro i hi j hj hij
@@ -2538,8 +2538,8 @@ definition HeightOneSpectrum.quotientEquivPiOfProdEq
       HeightOneSpectrum.isCoprime_pow_of_ne _ _ (coprime hij) _ _
 
 中文:
-定义 HeightOneSpectrum.quotientEquivPiOfProdEq
-  签名: [Fintype ι] (I : Ideal R)
+定义 高一谱.quotientEquivPiOfProdEq
+  签名: [有限类型 ι] (I : 理想 R)
   定义体: (Ideal.quotEquivOfEq
     (by simp [← prod_eq, Finset.inf_eq_iInf, Finset.mem_univ,
       ← HeightOneSpectrum.inf_pow_eq_prod _ _ _ (coprime.set_pairwise _)])).trans <|
@@ -2568,7 +2568,7 @@ definition quotientEquivPiOfProdEq
 
 中文:
 定义 quotientEquivPiOfProdEq
-  签名: {ι : 类型} [Fintype ι] (I : Ideal R) (P : ι -> Ideal R)
+  签名: {ι : 类型} [有限类型 ι] (I : 理想 R) (P : ι -> 理想 R)
   定义体: HeightOneSpectrum.quotientEquivPiOfProdEq I
     (fun i => ⟨P i, (isPrime_of_prime (prime i)), (prime i).ne_zero⟩) e (by grind) prod_eq
 
@@ -2595,7 +2595,7 @@ definition quotientEquivPiFactors
 
 中文:
 定义 quotientEquivPiFactors
-  签名: {I : Ideal R} (hI : I != ⊥)
+  签名: {I : 理想 R} (hI : I != ⊥)
   定义体: quotientEquivPiOfProdEq _ _ _
     (fun P : (factors I).toFinset => prime_of_factor _ (Multiset.mem_toFinset.mp P.prop))
     (fun _ _ hij => Subtype.coe_injective.ne hij)
@@ -2629,7 +2629,7 @@ theorem quotientEquivPiFactors_mk
 
 中文:
 定理 quotientEquivPiFactors_mk
-  条件: {I : Ideal R} (hI : I != ⊥) (x : R)
+  条件: {I : 理想 R} (hI : I != ⊥) (x : R)
   证明: rfl
 -/
 theorem quotientEquivPiFactors_mk {I : Ideal R} (hI : I != ⊥) (x : R) :
@@ -2648,7 +2648,7 @@ definition quotientEquivPiOfFinsetProdEq
 
 中文:
 定义 quotientEquivPiOfFinsetProdEq
-  签名: {ι : 类型} {s : Finset ι}
+  签名: {ι : 类型} {s : 有限集 ι}
   定义体: quotientEquivPiOfProdEq I (fun i : s => P i) (fun i : s => e i)
     (fun i => prime i i.2) (fun i j h => coprime i i.2 j j.2 (Subtype.coe_injective.ne h))
     (_root_.trans (Finset.prod_coe_sort s fun i => P i ^ e i) prod_eq)
@@ -2676,8 +2676,8 @@ theorem exists_representative_mod_finset
   exact ⟨z, fun i _hi => rfl⟩
 
 中文:
-定理 exists_representative_mod_finset
-  结论: {ι : 类型} {s : Finset ι}
+定理 存在_representative_mod_finset
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
   let f := quotientEquivPiOfFinsetProdEq _ P e prime coprime rfl
   obtain ⟨y, rfl⟩ := f.surjective x
@@ -2708,8 +2708,8 @@ theorem exists_forall_sub_mem_ideal
   exact ⟨y, fun i hi => Ideal.Quotient.eq.mp (hy i hi)⟩
 
 中文:
-定理 exists_forall_sub_mem_ideal
-  结论: {ι : 类型} {s : Finset ι} (P : ι -> Ideal R)
+定理 存在_对任意_sub_mem_ideal
+  结论: {ι : 类型} {s : 有限集 ι} (P : ι -> 理想 R)
   证明: by
   obtain ⟨y, hy⟩ :=
     exists_representative_mod_finset P e prime coprime fun i =>
@@ -2826,7 +2826,7 @@ theorem singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
 
 中文:
 定理 singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
-  结论: [NormalizationMonoid R]
+  结论: [Normalization幺半群 R]
   证明: by
   by_cases hb : b = 0
   · rw [span_singleton_eq_bot.mpr hb, bot_eq_zero, normalizedFactors_zero]
@@ -3058,7 +3058,7 @@ theorem count_span_normalizedFactors_eq
 
 中文:
 定理 count_span_normalizedFactors_eq
-  条件: {r X : R} (hr : r != 0) (hX : Prime X)
+  条件: {r X : R} (hr : r != 0) (hX : 素 X)
   证明: by
   have := emultiplicity_eq_emultiplicity_span (R := R) (a := X) (b := r)
   rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible hX) hr]; rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible ?_)]; rw [normalize_apply]; rw [normUnit_eq_one]; rw [Units.val_one]; rw [one_eq_top]
@@ -3142,7 +3142,7 @@ include hpb in
 
 中文:
 缩写 primesOverFinset
-  签名: : Finset (Ideal B)
+  签名: : 有限集 (理想 B)
   定义体: (factors (p.map (algebraMap A B))).toFinset
 
 @[deprecated (since := "2026-04-16")] alias _root_.primesOverFinset := primesOverFinset
@@ -3206,7 +3206,7 @@ alias _root_.mem_primesOverFinset_iff := mem_primesOverFinset_iff
 
 中文:
 定理 mem_primesOverFinset_iff
-  条件: {P : Ideal B}
+  条件: {P : 理想 B}
   结论: P in primesOverFinset p B ↔ P in primesOver p B
   证明: by
   rw [← Finset.mem_coe]; rw [coe_primesOverFinset hpb]
@@ -3237,8 +3237,8 @@ theorem IsLocalRing.primesOverFinset_eq
   rw [← Finset.coe_eq_singleton]; rw [IsDedekindDomain.coe_primesOverFinset hp0]; rw [IsLocalRing.primesOver_eq A hp0]
 
 中文:
-定理 IsLocalRing.primesOverFinset_eq
-  结论: [IsLocalRing A] [IsDedekindDomain A]
+定理 是局部环.primesOverFinset_eq
+  结论: [是局部环 A] [是Dedekind整环 A]
   证明: by
   have : IsDomain R := .of_faithfulSMul R A
   rw [← Finset.coe_eq_singleton]; rw [IsDedekindDomain.coe_primesOverFinset hp0]; rw [IsLocalRing.primesOver_eq A hp0]
@@ -3321,7 +3321,7 @@ definition under
 
 中文:
 定义 under
-  签名: {B : 类型} [CommRing B] [IsDomain B] [Algebra A B] [Algebra.Is整数egral A B]
+  签名: {B : 类型} [交换环 B] [是整环 B] [代数 A B] [代数.是整 A B]
   定义体: w.asIdeal.under A
   isPrime := .under A w.asIdeal
   ne_bot := mt Ideal.eq_bot_of_comap_eq_bot w.ne_bot
@@ -3359,7 +3359,7 @@ theorem primesOver_finite
 
 中文:
 定理 primesOver_finite
-  结论: (primesOver p B).Finite
+  结论: (primesOver p B).有限
   证明: by
   by_cases hpb : p = ⊥
   · rw [hpb] at hpm ⊢
@@ -3394,7 +3394,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (p.primesOver B)
+  签名: 有限类型 (p.primesOver B)
   定义体: Set.Finite.fintype (primesOver_finite p B)
 
 Depends on / 依赖: Finite, Set.Finite.fintype, fintype, primesOver_finite
@@ -3479,8 +3479,8 @@ lemma Algebra.IsIntegral.nontrivial_heightOneSpectrum
     exact ⟨⟨P, h
 
 中文:
-引理 Algebra.IsIntegral.nontrivial_heightOneSpectrum
-  结论: [IsDomain A] [Algebra R A]
+引理 代数.是整.nontrivial_heightOneSpectrum
+  结论: [是整环 A] [代数 R A]
   证明: by
   have := (FaithfulSMul.algebraMap_injective R A).isDomain
   let f (p : HeightOneSpectrum A) : HeightOneSpectrum R := p.under R

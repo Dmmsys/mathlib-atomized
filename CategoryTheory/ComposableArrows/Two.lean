@@ -159,8 +159,8 @@ instance [IsIso
   constructor <;> dsimp <;> infer_instance
 
 中文:
-实例 [IsIso
-  签名: g] : IsIso (twoδ₂Toδ₁ f g fg h)
+实例 [是同构
+  签名: g] : 是同构 (twoδ₂Toδ₁ f g fg h)
   定义体: by
   rw [isIso_iff₁]
   constructor <;> dsimp <;> infer_instance
@@ -183,8 +183,8 @@ instance [IsIso
   constructor <;> dsimp <;> infer_instance
 
 中文:
-实例 [IsIso
-  签名: f] : IsIso (twoδ₁Toδ₀ f g fg h)
+实例 [是同构
+  签名: f] : 是同构 (twoδ₁Toδ₀ f g fg h)
   定义体: by
   rw [isIso_iff₁]
   constructor <;> dsimp <;> infer_instance

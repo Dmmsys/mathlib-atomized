@@ -52,7 +52,7 @@ definition localEpi
 
 中文:
 定义 localEpi
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: fun _ _ f =>
   forall ⦃Z⦄, P Z -> Function.Injective fun (g : _ ⟶ Z) => f ≫ g
 
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.localEpi.IsMultiplicative
+  签名: P.localEpi.是Multiplicative
   定义体: by simpa using! Function.injective_id
   comp_mem f g hf hg T hT _ _ huv := hg hT (hf hT <| by simpa using huv)
 
@@ -97,7 +97,7 @@ lemma localEpi.of_epi
 
 中文:
 引理 localEpi.of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f]
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f]
   结论: P.localEpi f
   证明: by
   intro Z hZ u v huv
@@ -143,7 +143,7 @@ lemma localEpi_top_eq_epimorphisms
 
 中文:
 引理 localEpi_top_eq_epimorphisms
-  结论: (⊤ : Object命题erty C).localEpi = .epimorphisms C
+  结论: (⊤ : ObjectProperty C).localEpi = .epimorphisms C
   证明: by
   ext
   simp
@@ -162,7 +162,7 @@ lemma localEpi_antitone
 
 中文:
 引理 localEpi_antitone
-  结论: Antitone (localEpi (C := C))
+  结论: 递减 (localEpi (C := C))
   证明: fun _ _ hPQ _ _ _ hf _ hZ _ _ huv => hf (hPQ _ hZ) huv
 -/
 lemma localEpi_antitone : Antitone (localEpi (C := C)) :=
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.localEpi.HasOfPostcomp命题erty P.isLocal
+  签名: P.localEpi.有OfPostcompProperty P.isLocal
   定义体: by
     obtain ⟨u, rfl⟩ := (hg _ hT).surjective u
     obtain ⟨v, rfl⟩ := (hg _ hT).surjective v
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.localEpi.IsStableUnderCobaseChange
+  签名: P.localEpi.是StableUnderCobaseChange
   定义体: by
   refine .mk' fun X Y S f g _ hg T hT u v huv => ?_
   refine pushout.hom_ext (hg hT ?_) huv

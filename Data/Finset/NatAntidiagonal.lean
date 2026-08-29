@@ -46,7 +46,7 @@ instance instHasAntidiagonal
 
 中文:
 实例 instHasAntidiagonal
-  签名: : HasAntidiagonal 自然数 where
+  签名: : 有Antidiagonal 自然数 where
   定义体: ⟨Multiset.Nat.antidiagonal n, Multiset.Nat.nodup_antidiagonal n⟩
   mem_antidiagonal {n} {xy} := by
     rw [mem_def]; rw [Multiset.Nat.mem_antidiagonal]

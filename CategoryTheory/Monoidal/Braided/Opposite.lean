@@ -30,7 +30,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory Cᵒᵖ
+  签名: 辫范畴 Cᵒᵖ
   定义体: (β_ (unop Y) (unop X)).op
 -/
 instance : BraidedCategory Cᵒᵖ where
@@ -50,7 +50,7 @@ lemma unop_tensorμ
 
 中文:
 引理 unop_tensorμ
-  结论: {C : 类型} [Category* C] [MonoidalCategory C]
+  结论: {C : 类型} [范畴* C] [幺半群范畴 C]
   证明: by
   simp only [unop_tensorObj, tensorμ, unop_comp, unop_inv_associator, unop_whiskerLeft,
     unop_hom_associator, unop_whiskerRight, unop_hom_braiding, Category.assoc]
@@ -73,7 +73,7 @@ lemma op_tensorμ
 
 中文:
 引理 op_tensorμ
-  结论: {C : 类型} [Category* C] [MonoidalCategory C]
+  结论: {C : 类型} [范畴* C] [幺半群范畴 C]
   证明: by
   simp only [op_tensorObj, tensorμ, op_comp, op_inv_associator, op_whiskerLeft, op_hom_associator,
     op_whiskerRight, op_hom_braiding, Category.assoc]

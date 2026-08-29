@@ -69,7 +69,7 @@ theorem _zsmul_neg_trick
 
 中文:
 定理 _zsmul_neg_trick
-  条件: {G : 类型} [AddGroup G] (b : G) (n : 整数)
+  条件: {G : 类型} [加法群 G] (b : G) (n : 整数)
   证明: by
   rw [← neg_one_zsmul b]; rw [← add_zsmul]
 
@@ -90,7 +90,7 @@ theorem _neg_zsmul_trick
 
 中文:
 定理 _neg_zsmul_trick
-  条件: {G : 类型} [AddGroup G] (b : G) (n : 整数)
+  条件: {G : 类型} [加法群 G] (b : G) (n : 整数)
   证明: by
   rw [← neg_one_zsmul b]; rw [← add_zsmul]
 
@@ -112,7 +112,7 @@ theorem _neg_neg_trick
 
 中文:
 定理 _neg_neg_trick
-  条件: {G : 类型} [AddGroup G] (b : G)
+  条件: {G : 类型} [加法群 G] (b : G)
   证明: by
   have h : -b = (-1 : Int) • b := (neg_one_zsmul b).symm
   rw [h]; rw [← add_zsmul]; norm_num
@@ -135,7 +135,7 @@ theorem _add_zsmul_neg_trick
 
 中文:
 定理 _add_zsmul_neg_trick
-  条件: {G : 类型} [AddGroup G] (a b : G) (n : 整数)
+  条件: {G : 类型} [加法群 G] (a b : G) (n : 整数)
   证明: by
   rw [add_assoc]; rw [_zsmul_neg_trick]
 
@@ -156,7 +156,7 @@ theorem _add_neg_zsmul_trick
 
 中文:
 定理 _add_neg_zsmul_trick
-  条件: {G : 类型} [AddGroup G] (a b : G) (n : 整数)
+  条件: {G : 类型} [加法群 G] (a b : G) (n : 整数)
   证明: by
   rw [add_assoc]; rw [_neg_zsmul_trick]
 
@@ -177,7 +177,7 @@ theorem _add_neg_neg_trick
 
 中文:
 定理 _add_neg_neg_trick
-  条件: {G : 类型} [AddGroup G] (a b : G)
+  条件: {G : 类型} [加法群 G] (a b : G)
   证明: by
   rw [add_assoc]; rw [_neg_neg_trick]
 

@@ -86,8 +86,8 @@ abbreviation MvPolynomial
   body: AddMonoidAlgebra R (σ ->₀ Nat)
 
 中文:
-缩写 MvPolynomial
-  签名: (σ : 类型) (R : 类型) [CommSemiring R]
+缩写 多元多项式
+  签名: (σ : 类型) (R : 类型) [交换半环 R]
   定义体: AddMonoidAlgebra R (σ ->₀ Nat)
 
 Depends on / 依赖: AddMonoidAlgebra
@@ -130,7 +130,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : MvPolynomial σ R) = monomial 0 1
+  结论: (1 : 多元多项式 σ R) = monomial 0 1
   证明: rfl
 -/
 theorem one_def : (1 : MvPolynomial σ R) = monomial 0 1 := rfl
@@ -163,7 +163,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  结论: p * q = p.coeff.sum fun m a => q.coeff.sum fun n b => monomial (m + n) (a * b)
+  结论: p * q = p.coeff.求和 fun m a => q.coeff.求和 fun n b => monomial (m + n) (a * b)
   证明: AddMonoidAlgebra.mul_def ..
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.mul_def, mul_def
@@ -181,7 +181,7 @@ definition C
 
 中文:
 定义 C
-  签名: : R ->+* MvPolynomial σ R
+  签名: : R ->+* 多元多项式 σ R
   定义体: { singleZeroRingHom with toFun := monomial 0 }
 
 Depends on / 依赖: monomial, singleZeroRingHom
@@ -204,7 +204,7 @@ theorem algebraMap_eq
 
 中文:
 定理 algebraMap_eq
-  结论: algebraMap R (MvPolynomial σ R) = C
+  结论: algebraMap R (多元多项式 σ R) = C
   证明: rfl
 
 @[polynomial_pre]
@@ -223,7 +223,7 @@ theorem C_eq_algebraMap
 
 中文:
 定理 C_eq_algebraMap
-  结论: MvPolynomial.C = algebraMap R (MvPolynomial σ R)
+  结论: 多元多项式.C = algebraMap R (多元多项式 σ R)
   证明: rfl
 -/
 theorem C_eq_algebraMap : MvPolynomial.C = algebraMap R (MvPolynomial σ R) :=
@@ -242,7 +242,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: [Algebra R S₁] (r : R)
+  条件: [代数 R S₁] (r : R)
   证明: rfl
 -/
 theorem algebraMap_apply [Algebra R S₁] (r : R) :
@@ -322,7 +322,7 @@ theorem C_apply
 
 中文:
 定理 C_apply
-  结论: (C a : MvPolynomial σ R) = monomial 0 a
+  结论: (C a : 多元多项式 σ R) = monomial 0 a
   证明: rfl
 
 @[simp]
@@ -343,7 +343,7 @@ theorem C_0
 
 中文:
 定理 C_0
-  结论: C 0 = (0 : MvPolynomial σ R)
+  结论: C 0 = (0 : 多元多项式 σ R)
   证明: map_zero _
 
 @[simp]
@@ -363,7 +363,7 @@ theorem C_1
 
 中文:
 定理 C_1
-  结论: C 1 = (1 : MvPolynomial σ R)
+  结论: C 1 = (1 : 多元多项式 σ R)
   证明: rfl
 -/
 theorem C_1 : C 1 = (1 : MvPolynomial σ R) :=
@@ -412,7 +412,7 @@ theorem C_add
 
 中文:
 定理 C_add
-  结论: (C (a + a') : MvPolynomial σ R) = C a + C a'
+  结论: (C (a + a') : 多元多项式 σ R) = C a + C a'
   证明: by simp
 
 @[simp]
@@ -432,7 +432,7 @@ theorem C_mul
 
 中文:
 定理 C_mul
-  结论: (C (a * a') : MvPolynomial σ R) = C a * C a'
+  结论: (C (a * a') : 多元多项式 σ R) = C a * C a'
   证明: C_mul_monomial.symm
 
 @[simp]
@@ -457,7 +457,7 @@ theorem C_pow
 中文:
 定理 C_pow
   条件: (a : R) (n : 自然数)
-  结论: (C (a ^ n) : MvPolynomial σ R) = C a ^ n
+  结论: (C (a ^ n) : 多元多项式 σ R) = C a ^ n
   证明: map_pow _ _ _
 
 @[grind inj]
@@ -478,7 +478,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  条件: (σ : 类型) (R : 类型) [CommSemiring R]
+  条件: (σ : 类型) (R : 类型) [交换半环 R]
   证明: single_right_injective
 
 Depends on / 依赖: single_right_injective
@@ -500,7 +500,7 @@ theorem C_surjective
 
 中文:
 定理 C_surjective
-  条件: {R : 类型} [CommSemiring R] (σ : 类型) [IsEmpty σ]
+  条件: {R : 类型} [交换半环 R] (σ : 类型) [是空 σ]
   证明: fun p => ⟨p.coeff 0, by apply AddMonoidAlgebra.ext; ext; simp [C_apply, ← single_eq_monomial]⟩
 
 @[simp]
@@ -522,7 +522,7 @@ theorem C_inj
 
 中文:
 定理 C_inj
-  条件: {σ : 类型} (R : 类型) [CommSemiring R] (r s : R)
+  条件: {σ : 类型} (R : 类型) [交换半环 R] (r s : R)
   证明: (C_injective σ R).eq_iff
 
 Depends on / 依赖: C_injective, eq_iff
@@ -541,7 +541,7 @@ lemma C_eq_zero
 
 中文:
 引理 C_eq_zero
-  结论: (C a : MvPolynomial σ R) = 0 ↔ a = 0
+  结论: (C a : 多元多项式 σ R) = 0 ↔ a = 0
   证明: by rw [← map_zero C, C_inj]
 -/
 @[simp] lemma C_eq_zero : (C a : MvPolynomial σ R) = 0 ↔ a = 0 := by rw [← map_zero C, C_inj]
@@ -556,7 +556,7 @@ lemma C_ne_zero
 
 中文:
 引理 C_ne_zero
-  结论: (C a : MvPolynomial σ R) != 0 ↔ a != 0
+  结论: (C a : 多元多项式 σ R) != 0 ↔ a != 0
   证明: C_eq_zero.ne
 
 Depends on / 依赖: C_eq_zero, C_eq_zero.ne
@@ -574,7 +574,7 @@ instance nontrivial_of_nontrivial
 
 中文:
 实例 nontrivial_of_nontrivial
-  签名: (σ : 类型) (R : 类型) [CommSemiring R] [Nontrivial R]
+  签名: (σ : 类型) (R : 类型) [交换半环 R] [非平凡 R]
   定义体: inferInstanceAs (Nontrivial <| AddMonoidAlgebra R (σ ->₀ Nat))
 
 Depends on / 依赖: AddMonoidAlgebra, Nontrivial
@@ -593,7 +593,7 @@ instance infinite_of_infinite
 
 中文:
 实例 infinite_of_infinite
-  签名: (σ : 类型) (R : 类型) [CommSemiring R] [Infinite R]
+  签名: (σ : 类型) (R : 类型) [交换半环 R] [无限 R]
   定义体: Infinite.of_injective C (C_injective _ _)
 
 Depends on / 依赖: C_injective, Infinite, Infinite.of_injective, of_injective
@@ -613,7 +613,7 @@ instance infinite_of_nonempty
 
 中文:
 实例 infinite_of_nonempty
-  签名: (σ : 类型) (R : 类型) [Nonempty σ] [CommSemiring R]
+  签名: (σ : 类型) (R : 类型) [非空 σ] [交换半环 R]
   定义体: Infinite.of_injective ((fun s : σ ->₀ Nat => monomial s 1) ∘ Finsupp.single (Classical.arbitrary σ))
  (monomial_left_injective one_ne_zero).comp (Finsupp.single_injective _)
 
@@ -633,8 +633,8 @@ instance [NoZeroDivisors
   body: inferInstanceAs (NoZeroDivisors (AddMonoidAlgebra ..))
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] : NoZeroDivisors (MvPolynomial σ R)
+实例 [无零因子
+  签名: R] : 无零因子 (多元多项式 σ R)
   定义体: inferInstanceAs (NoZeroDivisors (AddMonoidAlgebra ..))
 
 Depends on / 依赖: AddMonoidAlgebra, NoZeroDivisors
@@ -651,8 +651,8 @@ instance [IsCancelAdd
   body: inferInstanceAs (IsCancelMulZero (AddMonoidAlgebra ..))
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsCancelMulZero R] : IsCancelMulZero (MvPolynomial σ R)
+实例 [是消去加法
+  签名: R] [是乘零消去 R] : 是乘零消去 (多元多项式 σ R)
   定义体: inferInstanceAs (IsCancelMulZero (AddMonoidAlgebra ..))
 
 Depends on / 依赖: AddMonoidAlgebra, IsCancelMulZero
@@ -668,8 +668,8 @@ instance [IsCancelAdd
   signature: R] [IsDomain R] : IsDomain (MvPolynomial σ R) where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsDomain R] : IsDomain (MvPolynomial σ R) where
+实例 [是消去加法
+  签名: R] [是整环 R] : 是整环 (多元多项式 σ R) where
 -/
 instance [IsCancelAdd R] [IsDomain R] : IsDomain (MvPolynomial σ R) where
 
@@ -686,7 +686,7 @@ theorem C_eq_coe_nat
 中文:
 定理 C_eq_coe_nat
   条件: (n : 自然数)
-  结论: (C ↑n : MvPolynomial σ R) = n
+  结论: (C ↑n : 多元多项式 σ R) = n
   证明: by
   induction n <;> simp [*]
 -/
@@ -703,7 +703,7 @@ theorem C_mul'
 
 中文:
 定理 C_mul'
-  结论: MvPolynomial.C a * p = a • p
+  结论: 多元多项式.C a * p = a • p
   证明: (Algebra.smul_def a p).symm
 
 Depends on / 依赖: Algebra, Algebra.smul_def, smul_def
@@ -722,7 +722,7 @@ theorem smul_eq_C_mul
 
 中文:
 定理 smul_eq_C_mul
-  条件: (p : MvPolynomial σ R) (a : R)
+  条件: (p : 多元多项式 σ R) (a : R)
   结论: a • p = C a * p
   证明: C_mul'.symm
 
@@ -742,7 +742,7 @@ theorem C_eq_smul_one
 
 中文:
 定理 C_eq_smul_one
-  结论: (C a : MvPolynomial σ R) = a • (1 : MvPolynomial σ R)
+  结论: (C a : 多元多项式 σ R) = a • (1 : 多元多项式 σ R)
   证明: by
   rw [← C_mul']; rw [mul_one]
 
@@ -761,7 +761,7 @@ theorem smul_monomial
 
 中文:
 定理 smul_monomial
-  条件: {S₁ : 类型} [SMulZeroClass S₁ R] (r : S₁)
+  条件: {S₁ : 类型} [SMulZero类 S₁ R] (r : S₁)
   证明: smul_single _ _ _
 
 Depends on / 依赖: smul_single
@@ -782,8 +782,8 @@ theorem X_injective
 
 中文:
 定理 X_injective
-  条件: [Nontrivial R]
-  结论: Function.Injective (X : σ -> MvPolynomial σ R)
+  条件: [非平凡 R]
+  结论: 函数.单射 (X : σ -> 多元多项式 σ R)
   证明: (monomial_left_injective one_ne_zero).comp (Finsupp.single_left_injective one_ne_zero)
 
 @[simp]
@@ -805,8 +805,8 @@ theorem X_inj
 
 中文:
 定理 X_inj
-  条件: [Nontrivial R] (m n : σ)
-  结论: X m = (X n : MvPolynomial σ R) ↔ m = n
+  条件: [非平凡 R] (m n : σ)
+  结论: X m = (X n : 多元多项式 σ R) ↔ m = n
   证明: X_injective.eq_iff
 
 Depends on / 依赖: X_injective, X_injective.eq_iff, eq_iff
@@ -868,7 +868,7 @@ definition monomialOneHom
 
 中文:
 定义 monomialOneHom
-  签名: : Multiplicative (σ ->₀ 自然数) ->* MvPolynomial σ R
+  签名: : Multiplicative (σ ->₀ 自然数) ->* 多元多项式 σ R
   定义体: AddMonoidAlgebra.of _ _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.of
@@ -889,7 +889,7 @@ theorem monomialOneHom_apply
 
 中文:
 定理 monomialOneHom_apply
-  结论: monomialOneHom R σ s = (monomial s 1 : MvPolynomial σ R)
+  结论: monomialOneHom R σ s = (monomial s 1 : 多元多项式 σ R)
   证明: rfl
 -/
 theorem monomialOneHom_apply : monomialOneHom R σ s = (monomial s 1 : MvPolynomial σ R) :=
@@ -906,7 +906,7 @@ theorem X_pow_eq_monomial
 
 中文:
 定理 X_pow_eq_monomial
-  结论: X n ^ e = monomial (Finsupp.single n e) (1 : R)
+  结论: X n ^ e = monomial (有限支撑.single n e) (1 : R)
   证明: by
   simp [X, monomial_pow]
 
@@ -926,7 +926,7 @@ theorem monomial_add_single
 
 中文:
 定理 monomial_add_single
-  结论: monomial (s + Finsupp.single n e) a = monomial s a * X n ^ e
+  结论: monomial (s + 有限支撑.single n e) a = monomial s a * X n ^ e
   证明: by
   rw [X_pow_eq_monomial]; rw [monomial_mul]; rw [mul_one]
 
@@ -946,7 +946,7 @@ theorem monomial_single_add
 
 中文:
 定理 monomial_single_add
-  结论: monomial (Finsupp.single n e + s) a = X n ^ e * monomial s a
+  结论: monomial (有限支撑.single n e + s) a = X n ^ e * monomial s a
   证明: by
   rw [X_pow_eq_monomial]; rw [monomial_mul]; rw [one_mul]
 
@@ -991,7 +991,7 @@ theorem C_mul_X_eq_monomial
 中文:
 定理 C_mul_X_eq_monomial
   条件: {s : σ} {a : R}
-  结论: C a * X s = monomial (Finsupp.single s 1) a
+  结论: C a * X s = monomial (有限支撑.single s 1) a
   证明: by
   rw [← C_mul_X_pow_eq_monomial]; rw [pow_one]
 
@@ -1039,7 +1039,7 @@ theorem monomial_zero'
 
 中文:
 定理 monomial_zero'
-  结论: (monomial (0 : σ ->₀ 自然数) : R -> MvPolynomial σ R) = C
+  结论: (monomial (0 : σ ->₀ 自然数) : R -> 多元多项式 σ R) = C
   证明: rfl
 
 @[simp]
@@ -1084,7 +1084,7 @@ theorem sum_monomial_eq
 
 中文:
 定理 sum_monomial_eq
-  结论: {A : 类型} [AddCommMonoid A] {u : σ ->₀ 自然数} {r : R} {b : (σ ->₀ 自然数) -> R -> A}
+  结论: {A : 类型} [加法交换幺半群 A] {u : σ ->₀ 自然数} {r : R} {b : (σ ->₀ 自然数) -> R -> A}
   证明: Finsupp.sum_single_index w
 
 @[simp]
@@ -1106,7 +1106,7 @@ theorem sum_C
 
 中文:
 定理 sum_C
-  条件: {A : 类型} [AddCommMonoid A] {b : (σ ->₀ 自然数) -> R -> A} (w : b 0 0 = 0)
+  条件: {A : 类型} [加法交换幺半群 A] {b : (σ ->₀ 自然数) -> R -> A} (w : b 0 0 = 0)
   证明: sum_monomial_eq w
 
 Depends on / 依赖: sum_monomial_eq
@@ -1125,7 +1125,7 @@ theorem monomial_sum_one
 
 中文:
 定理 monomial_sum_one
-  条件: {α : 类型} (s : Finset α) (f : α -> σ ->₀ 自然数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> σ ->₀ 自然数)
   证明: map_prod (monomialOneHom R σ) (fun i => Multiplicative.ofAdd (f i)) s
 
 Depends on / 依赖: Multiplicative, Multiplicative.ofAdd, map_prod, monomialOneHom
@@ -1146,7 +1146,7 @@ theorem monomial_sum_index
 
 中文:
 定理 monomial_sum_index
-  条件: {α : 类型} (s : Finset α) (f : α -> σ ->₀ 自然数) (a : R)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> σ ->₀ 自然数) (a : R)
   证明: by
   rw [← monomial_sum_one]; rw [C_mul']; rw [← (monomial _).map_smul]; rw [smul_eq_mul]; rw [mul_one]
 
@@ -1167,7 +1167,7 @@ theorem monomial_sum_prod
 
 中文:
 定理 monomial_sum_prod
-  条件: {α : 类型} (s : Finset α) (f : α -> σ ->₀ 自然数) (g : α -> R)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> σ ->₀ 自然数) (g : α -> R)
   证明: by
   simp_rw [monomial_sum_index, map_prod, ← Finset.prod_mul_distrib, C_mul_monomial, mul_one]
 
@@ -1187,7 +1187,7 @@ theorem monomial_finsupp_sum_index
 
 中文:
 定理 monomial_finsupp_sum_index
-  结论: {α β : 类型} [Zero β] (f : α ->₀ β) (g : α -> β -> σ ->₀ 自然数)
+  结论: {α β : 类型} [零 β] (f : α ->₀ β) (g : α -> β -> σ ->₀ 自然数)
   证明: monomial_sum_index _ _ _
 
 Depends on / 依赖: monomial_sum_index
@@ -1227,7 +1227,7 @@ theorem monomial_eq
 
 中文:
 定理 monomial_eq
-  结论: monomial s a = C a * (s.prod fun n e => X n ^ e : MvPolynomial σ R)
+  结论: monomial s a = C a * (s.乘积 fun n e => X n ^ e : 多元多项式 σ R)
   证明: by
   simp only [X_pow_eq_monomial, ← monomial_finsupp_sum_index, Finsupp.sum_single]
 
@@ -1274,7 +1274,7 @@ theorem prod_X_pow
 
 中文:
 定理 prod_X_pow
-  条件: (x : σ -> 自然数) (t : Finset σ)
+  条件: (x : σ -> 自然数) (t : 有限集 σ)
   证明: by
   rw [monomial_eq]; rw [C_1]; rw [one_mul]; rw [Finsupp.prod]; rw [Finset.prod_subset (support_indicator_subset _ _)]
   · exact Finset.prod_congr rfl (fun _ hi => by simp [Finsupp.indicator, hi])
@@ -1313,7 +1313,7 @@ theorem induction_on_monomial
 
 中文:
 定理 induction_on_monomial
-  结论: {motive : MvPolynomial σ R -> 命题}
+  结论: {motive : 多元多项式 σ R -> 命题}
   证明: by
   intro s a
   apply @Finsupp.induction σ Nat _ _ s
@@ -1361,7 +1361,7 @@ theorem induction_on'
 
 中文:
 定理 induction_on'
-  结论: {P : MvPolynomial σ R -> 命题} (p : MvPolynomial σ R)
+  结论: {P : 多元多项式 σ R -> 命题} (p : 多元多项式 σ R)
   证明: induction p
     (suffices P (MvPolynomial.monomial 0 0) by rwa [monomial_zero] at this
     show P (MvPolynomial.monomial 0 0) from monomial 0 0)
@@ -1393,7 +1393,7 @@ theorem monomial_add_induction_on
 
 中文:
 定理 monomial_add_induction_on
-  结论: {motive : MvPolynomial σ R -> 命题} (p : MvPolynomial σ R)
+  结论: {motive : 多元多项式 σ R -> 命题} (p : 多元多项式 σ R)
   证明: induction p (C_0.rec <| C 0) monomial_add
 
 Depends on / 依赖: C_0.rec, monomial_add
@@ -1417,7 +1417,7 @@ monomial_add a b f ha hb hf induction_on_monomial C mul_X a b
 
 中文:
 定理 induction_on''
-  结论: {motive : MvPolynomial σ R -> 命题} (p : MvPolynomial σ R)
+  结论: {motive : 多元多项式 σ R -> 命题} (p : 多元多项式 σ R)
   证明: monomial_add_induction_on p C fun a b f ha hb hf =>
 monomial_add a b f ha hb hf induction_on_monomial C mul_X a b
 
@@ -1451,7 +1451,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {motive : MvPolynomial σ R -> 命题} (p : MvPolynomial σ R)
+  结论: {motive : 多元多项式 σ R -> 命题} (p : 多元多项式 σ R)
   证明: induction_on'' p C (fun a b f _ha _hb hf hm => add (monomial a b) f hm hf) mul_X
 
 Depends on / 依赖: induction_on, monomial, mul_X
@@ -1478,7 +1478,7 @@ theorem ringHom_ext
 
 中文:
 定理 ringHom_ext
-  结论: {A : 类型} [Semiring A] {f g : MvPolynomial σ R ->+* A}
+  结论: {A : 类型} [半环 A] {f g : 多元多项式 σ R ->+* A}
   证明: by
   refine AddMonoidAlgebra.ringHom_ext' ?_ ?_
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): this has high priority, but Lean still chooses `RingHom.ext`, why?
@@ -1515,7 +1515,7 @@ theorem ringHom_ext'
 
 中文:
 定理 ringHom_ext'
-  结论: {A : 类型} [Semiring A] {f g : MvPolynomial σ R ->+* A}
+  结论: {A : 类型} [半环 A] {f g : 多元多项式 σ R ->+* A}
   证明: ringHom_ext (RingHom.ext_iff.1 hC) hX
 
 Depends on / 依赖: RingHom, RingHom.ext_iff, ext_iff, ringHom_ext
@@ -1534,7 +1534,7 @@ theorem hom_eq_hom
 
 中文:
 定理 hom_eq_hom
-  结论: [Semiring S₂] (f g : MvPolynomial σ R ->+* S₂) (hC : f.comp C = g.comp C)
+  结论: [半环 S₂] (f g : 多元多项式 σ R ->+* S₂) (hC : f.comp C = g.comp C)
   证明: RingHom.congr_fun (ringHom_ext' hC hX) p
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun, ringHom_ext
@@ -1553,7 +1553,7 @@ theorem is_id
 
 中文:
 定理 is_id
-  结论: (f : MvPolynomial σ R ->+* MvPolynomial σ R) (hC : f.comp C = C)
+  结论: (f : 多元多项式 σ R ->+* 多元多项式 σ R) (hC : f.comp C = C)
   证明: hom_eq_hom f (RingHom.id _) hC hX p
 
 Depends on / 依赖: RingHom, RingHom.id, hom_eq_hom
@@ -1576,7 +1576,7 @@ theorem algHom_ext'
 
 中文:
 定理 algHom_ext'
-  结论: {A B : 类型} [CommSemiring A] [CommSemiring B] [Algebra R A] [Algebra R B]
+  结论: {A B : 类型} [交换半环 A] [交换半环 B] [代数 R A] [代数 R B]
   证明: AlgHom.coe_ringHom_injective (MvPolynomial.ringHom_ext' (congr_arg AlgHom.toRingHom h₁) h₂)
 
 Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, AlgHom.toRingHom, MvPolynomial, MvPolynomial.ringHom_ext, coe_ringHom_injective, congr_arg, ringHom_ext, toRingHom
@@ -1605,7 +1605,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: {A : 类型} [Semiring A] [Algebra R A] {f g : MvPolynomial σ R ->ₐ[R] A}
+  结论: {A : 类型} [半环 A] [代数 R A] {f g : 多元多项式 σ R ->ₐ[R] A}
   证明: AddMonoidAlgebra.algHom_ext' (mulHom_ext' fun X : σ => MonoidHom.ext_mnat (hf X)) (by ext)
 
 @[simp]
@@ -1629,7 +1629,7 @@ theorem algHom_C
 
 中文:
 定理 algHom_C
-  条件: {A : 类型} [Semiring A] [Algebra R A] (f : MvPolynomial σ R ->ₐ[R] A) (r : R)
+  条件: {A : 类型} [半环 A] [代数 R A] (f : 多元多项式 σ R ->ₐ[R] A) (r : R)
   证明: f.commutes r
 
 @[simp]
@@ -1657,7 +1657,7 @@ theorem adjoin_range_X
 
 中文:
 定理 adjoin_range_X
-  结论: Algebra.adjoin R (range (X : σ -> MvPolynomial σ R)) = ⊤
+  结论: 代数.adjoin R (range (X : σ -> 多元多项式 σ R)) = ⊤
   证明: by
   set S := Algebra.adjoin R (range (X : σ -> MvPolynomial σ R))
   refine top_unique fun p hp => ?_; clear hp
@@ -1687,7 +1687,7 @@ theorem linearMap_ext
 
 中文:
 定理 linearMap_ext
-  结论: {M : 类型} [AddCommMonoid M] [Module R M] {f g : MvPolynomial σ R ->ₗ[R] M}
+  结论: {M : 类型} [加法交换幺半群 M] [模 R M] {f g : 多元多项式 σ R ->ₗ[R] M}
   证明: lhom_ext' h
 
 Depends on / 依赖: lhom_ext
@@ -1708,7 +1708,7 @@ definition support
 
 中文:
 定义 support
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: p.coeff.support
 
 Depends on / 依赖: p.coeff.support, support
@@ -1727,7 +1727,7 @@ theorem finsupp_support_eq_support
 
 中文:
 定理 finsupp_support_eq_support
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: p.coeff.support = p.support
   证明: rfl
 -/
@@ -1746,7 +1746,7 @@ theorem support_monomial
 
 中文:
 定理 support_monomial
-  条件: [h : Decidable (a = 0)]
+  条件: [h : 可判定 (a = 0)]
   证明: by
   rw [← Subsingleton.elim (Classical.decEq R a 0) h]
   rfl
@@ -1768,7 +1768,7 @@ lemma support_C
 
 中文:
 引理 support_C
-  条件: (c : R) [h : Decidable (c = 0)]
+  条件: (c : R) [h : 可判定 (c = 0)]
   证明: support_monomial
 
 Depends on / 依赖: support
@@ -1827,8 +1827,8 @@ theorem support_X
 
 中文:
 定理 support_X
-  条件: [Nontrivial R]
-  结论: (X n : MvPolynomial σ R).support = {Finsupp.single n 1}
+  条件: [非平凡 R]
+  结论: (X n : 多元多项式 σ R).support = {有限支撑.single n 1}
   证明: by
   classical rw [X, support_monomial, if_neg]; exact one_ne_zero
 
@@ -1851,7 +1851,7 @@ theorem support_X_pow
 
 中文:
 定理 support_X_pow
-  条件: [Nontrivial R] (s : σ) (n : 自然数)
+  条件: [非平凡 R] (s : σ) (n : 自然数)
   证明: by
   classical
     rw [X_pow_eq_monomial]; rw [support_monomial]; rw [if_neg (one_ne_zero' R)]
@@ -1878,7 +1878,7 @@ theorem support_zero
 
 中文:
 定理 support_zero
-  结论: (0 : MvPolynomial σ R).support = ∅
+  结论: (0 : 多元多项式 σ R).support = ∅
   证明: rfl
 
 @[simp]
@@ -1900,8 +1900,8 @@ lemma support_one
 
 中文:
 引理 support_one
-  条件: [Nontrivial R]
-  结论: (1 : MvPolynomial σ R).support = {0}
+  条件: [非平凡 R]
+  结论: (1 : 多元多项式 σ R).support = {0}
   证明: by
   classical
   simp [show support (1 : MvPolynomial σ R) = if (1 : R) = 0 then ∅ else {0} from rfl]
@@ -1922,7 +1922,7 @@ theorem support_smul
 
 中文:
 定理 support_smul
-  条件: {S₁ : 类型} [SMulZeroClass S₁ R] {a : S₁} {f : MvPolynomial σ R}
+  条件: {S₁ : 类型} [SMulZero类 S₁ R] {a : S₁} {f : 多元多项式 σ R}
   证明: Finsupp.support_smul
 
 Depends on / 依赖: Finsupp, Finsupp.support_smul, support_smul
@@ -1942,7 +1942,7 @@ theorem support_sum
 
 中文:
 定理 support_sum
-  条件: {α : 类型} [DecidableEq σ] {s : Finset α} {f : α -> MvPolynomial σ R}
+  条件: {α : 类型} [DecidableEq σ] {s : 有限集 α} {f : α -> 多元多项式 σ R}
   证明: by
   simpa [support, coeff, MvPolynomial] using Finsupp.support_finsetSum
 
@@ -1966,7 +1966,7 @@ definition coeff
 
 中文:
 定义 coeff
-  签名: (m : σ ->₀ 自然数) (p : MvPolynomial σ R)
+  签名: (m : σ ->₀ 自然数) (p : 多元多项式 σ R)
   定义体: @DFunLike.coe ((σ ->₀ Nat) ->₀ R) _ _ _ (AddMonoidAlgebra.coeff p) m
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeff, DFunLike, DFunLike.coe
@@ -1988,7 +1988,7 @@ theorem mem_support_iff
 
 中文:
 定理 mem_support_iff
-  条件: {p : MvPolynomial σ R} {m : σ ->₀ 自然数}
+  条件: {p : 多元多项式 σ R} {m : σ ->₀ 自然数}
   结论: m in p.support ↔ p.coeff m != 0
   证明: by
   simp [support, coeff]
@@ -2010,7 +2010,7 @@ theorem notMem_support_iff
 
 中文:
 定理 notMem_support_iff
-  条件: {p : MvPolynomial σ R} {m : σ ->₀ 自然数}
+  条件: {p : 多元多项式 σ R} {m : σ ->₀ 自然数}
   结论: m ∉ p.support ↔ p.coeff m = 0
   证明: by
   simp
@@ -2029,7 +2029,7 @@ theorem sum_def
 
 中文:
 定理 sum_def
-  条件: {A} [AddCommMonoid A] {p : MvPolynomial σ R} {b : (σ ->₀ 自然数) -> R -> A}
+  条件: {A} [加法交换幺半群 A] {p : 多元多项式 σ R} {b : (σ ->₀ 自然数) -> R -> A}
   证明: by
   simp [support, Finsupp.sum, coeff]
 
@@ -2049,7 +2049,7 @@ theorem support_mul
 
 中文:
 定理 support_mul
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R)
   证明: AddMonoidAlgebra.support_coeff_mul_subset p q
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.support_coeff_mul_subset, support_coeff_mul_subset
@@ -2072,7 +2072,7 @@ lemma disjoint_support_monomial
 
 中文:
 引理 disjoint_support_monomial
-  结论: {a : σ ->₀ 自然数} {p : MvPolynomial σ R} {s : R}
+  结论: {a : σ ->₀ 自然数} {p : 多元多项式 σ R} {s : R}
   证明: by
   classical
   simpa [support_monomial, hs] using notMem_support_iff.mp ha
@@ -2098,7 +2098,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (p q : MvPolynomial σ R)
+  条件: (p q : 多元多项式 σ R)
   结论: (对任意 m, coeff m p = coeff m q) -> p = q
   证明: fun h => AddMonoidAlgebra.ext by ext; exact h _
 
@@ -2121,7 +2121,7 @@ theorem coeff_add
 
 中文:
 定理 coeff_add
-  条件: (m : σ ->₀ 自然数) (p q : MvPolynomial σ R)
+  条件: (m : σ ->₀ 自然数) (p q : 多元多项式 σ R)
   证明: by simp [coeff, MvPolynomial]
 
 @[simp]
@@ -2144,7 +2144,7 @@ theorem coeff_smul
 
 中文:
 定理 coeff_smul
-  条件: {S₁ : 类型} [SMulZeroClass S₁ R] (m : σ ->₀ 自然数) (C : S₁) (p : MvPolynomial σ R)
+  条件: {S₁ : 类型} [SMulZero类 S₁ R] (m : σ ->₀ 自然数) (C : S₁) (p : 多元多项式 σ R)
   证明: AddMonoidAlgebra.coeff_smul_apply ..
 
 @[simp]
@@ -2170,7 +2170,7 @@ theorem coeff_zero
 中文:
 定理 coeff_zero
   条件: (m : σ ->₀ 自然数)
-  结论: coeff m (0 : MvPolynomial σ R) = 0
+  结论: coeff m (0 : 多元多项式 σ R) = 0
   证明: rfl
 
 @[simp]
@@ -2191,7 +2191,7 @@ theorem coeff_zero_X
 中文:
 定理 coeff_zero_X
   条件: (i : σ)
-  结论: coeff 0 (X i : MvPolynomial σ R) = 0
+  结论: coeff 0 (X i : 多元多项式 σ R) = 0
   证明: single_eq_of_ne' fun h => by cases Finsupp.single_eq_zero.1 h
 
 Depends on / 依赖: Finsupp, Finsupp.single_eq_zero, single_eq_of_ne, single_eq_zero
@@ -2213,7 +2213,7 @@ lemma coeff_addMonoidAlgebraMap
 
 中文:
 引理 coeff_addMonoidAlgebraMap
-  条件: (g : S₁ ->+ R) (φ : MvPolynomial σ S₁) (m)
+  条件: (g : S₁ ->+ R) (φ : 多元多项式 σ S₁) (m)
   证明: rfl
 
 @[deprecated (since := "2026-03-27")] alias coeff_mapRange := coeff_addMonoidAlgebraMap
@@ -2282,7 +2282,7 @@ theorem coeff_sum
 
 中文:
 定理 coeff_sum
-  条件: {X : 类型} (s : Finset X) (f : X -> MvPolynomial σ R) (m : σ ->₀ 自然数)
+  条件: {X : 类型} (s : 有限集 X) (f : X -> 多元多项式 σ R) (m : σ ->₀ 自然数)
   证明: map_sum (@coeffAddMonoidHom R σ _ _) _ s
 
 Depends on / 依赖: coeffAddMonoidHom, map_sum
@@ -2350,7 +2350,7 @@ theorem eq_monomial_of_support_subset_singleton
 
 中文:
 定理 eq_monomial_of_support_subset_singleton
-  结论: {φ : MvPolynomial σ R} {d₀ : σ ->₀ 自然数}
+  结论: {φ : 多元多项式 σ R} {d₀ : σ ->₀ 自然数}
   证明: by
   classical
   ext d
@@ -2445,7 +2445,7 @@ lemma eq_C_of_isEmpty
 
 中文:
 引理 eq_C_of_isEmpty
-  条件: [IsEmpty σ] (p : MvPolynomial σ R)
+  条件: [是空 σ] (p : 多元多项式 σ R)
   证明: by
   obtain ⟨x, rfl⟩ := C_surjective σ p
   simp
@@ -2471,7 +2471,7 @@ theorem coeff_one
 中文:
 定理 coeff_one
   条件: [DecidableEq σ] (m)
-  结论: coeff m (1 : MvPolynomial σ R) = if 0 = m then 1 else 0
+  结论: coeff m (1 : 多元多项式 σ R) = if 0 = m then 1 else 0
   证明: coeff_C m 1
 
 @[simp]
@@ -2496,7 +2496,7 @@ theorem coeff_zero_C
 中文:
 定理 coeff_zero_C
   条件: (a)
-  结论: coeff 0 (C a : MvPolynomial σ R) = a
+  结论: coeff 0 (C a : 多元多项式 σ R) = a
   证明: single_eq_same
 
 @[simp]
@@ -2517,7 +2517,7 @@ theorem coeff_zero_one
 
 中文:
 定理 coeff_zero_one
-  结论: coeff 0 (1 : MvPolynomial σ R) = 1
+  结论: coeff 0 (1 : 多元多项式 σ R) = 1
   证明: coeff_zero_C 1
 
 Depends on / 依赖: coeff_zero_C
@@ -2628,7 +2628,7 @@ theorem coeff_C_mul
 
 中文:
 定理 coeff_C_mul
-  条件: (m) (a : R) (p : MvPolynomial σ R)
+  条件: (m) (a : R) (p : 多元多项式 σ R)
   结论: coeff m (C a * p) = a * coeff m p
   证明: by
   classical
@@ -2656,7 +2656,7 @@ theorem coeff_mul
 
 中文:
 定理 coeff_mul
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R) (n : σ ->₀ 自然数)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R) (n : σ ->₀ 自然数)
   证明: AddMonoidAlgebra.coeff_mul_antidiag p q _ _ Finset.mem_antidiagonal
 
 @[simp]
@@ -2680,7 +2680,7 @@ theorem coeff_mul_monomial
 
 中文:
 定理 coeff_mul_monomial
-  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : MvPolynomial σ R)
+  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : 多元多项式 σ R)
   证明: coeff_mul_single_add ..
 
 @[simp]
@@ -2703,7 +2703,7 @@ theorem coeff_monomial_mul
 
 中文:
 定理 coeff_monomial_mul
-  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : MvPolynomial σ R)
+  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : 多元多项式 σ R)
   证明: coeff_single_mul_add ..
 
 @[simp]
@@ -2726,7 +2726,7 @@ theorem coeff_mul_X
 
 中文:
 定理 coeff_mul_X
-  条件: (m) (s : σ) (p : MvPolynomial σ R)
+  条件: (m) (s : σ) (p : 多元多项式 σ R)
   证明: (coeff_mul_monomial _ _ _ _).trans (mul_one _)
 
 @[simp]
@@ -2748,7 +2748,7 @@ theorem coeff_X_mul
 
 中文:
 定理 coeff_X_mul
-  条件: (m) (s : σ) (p : MvPolynomial σ R)
+  条件: (m) (s : σ) (p : 多元多项式 σ R)
   证明: (coeff_monomial_mul _ _ _ _).trans (one_mul _)
 
 Depends on / 依赖: coeff_monomial_mul, one_mul
@@ -2818,7 +2818,7 @@ theorem coeff_prod_X_pow
 
 中文:
 定理 coeff_prod_X_pow
-  条件: [DecidableEq σ] (d : σ ->₀ 自然数) (x : σ -> 自然数) (s : Finset σ)
+  条件: [DecidableEq σ] (d : σ ->₀ 自然数) (x : σ -> 自然数) (s : 有限集 σ)
   证明: by
   simp_rw [prod_X_pow x s, coeff_monomial, eq_comm]
 
@@ -2844,7 +2844,7 @@ theorem support_mul_X
 
 中文:
 定理 support_mul_X
-  条件: (s : σ) (p : MvPolynomial σ R)
+  条件: (s : σ) (p : 多元多项式 σ R)
   证明: AddMonoidAlgebra.support_coeff_mul_single p _ (by simp) _
 
 @[simp]
@@ -2868,7 +2868,7 @@ theorem support_X_mul
 
 中文:
 定理 support_X_mul
-  条件: (s : σ) (p : MvPolynomial σ R)
+  条件: (s : σ) (p : 多元多项式 σ R)
   证明: AddMonoidAlgebra.support_coeff_single_mul p _ (by simp) _
 
 @[simp]
@@ -2890,7 +2890,7 @@ theorem support_smul_eq
 
 中文:
 定理 support_smul_eq
-  结论: {S : 类型} [Semiring S] [IsDomain S] [Module S R]
+  结论: {S : 类型} [半环 S] [是整环 S] [模 S R]
   证明: Finsupp.support_smul_eq h
 
 Depends on / 依赖: Finsupp, Finsupp.support_smul_eq, support_smul_eq
@@ -2913,7 +2913,7 @@ theorem support_sdiff_support_subset_support_add
 
 中文:
 定理 support_sdiff_support_subset_support_add
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R)
   证明: by
   intro m hm
   simp only [Classical.not_not, mem_support_iff, Finset.mem_sdiff, Ne] at hm
@@ -2943,7 +2943,7 @@ theorem support_symmDiff_support_subset_support_add
 
 中文:
 定理 support_symmDiff_support_subset_support_add
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R)
   证明: by
   rw [symmDiff_def]; rw [Finset.sup_eq_union]
   apply Finset.union_subset
@@ -2980,7 +2980,7 @@ using Finset.add_subset_add_left support_mon
 
 中文:
 定理 coeff_mul_monomial'
-  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : MvPolynomial σ R)
+  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : 多元多项式 σ R)
   证明: by
   classical
   split_ifs with h
@@ -3020,7 +3020,7 @@ theorem coeff_monomial_mul'
 
 中文:
 定理 coeff_monomial_mul'
-  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : MvPolynomial σ R)
+  条件: (m) (s : σ ->₀ 自然数) (r : R) (p : 多元多项式 σ R)
   证明: by
   -- note that if we allow `R` to be non-commutative we will have to duplicate the proof above.
   rw [mul_comm]; rw [mul_comm r]
@@ -3045,7 +3045,7 @@ theorem coeff_mul_X'
 
 中文:
 定理 coeff_mul_X'
-  条件: [DecidableEq σ] (m) (s : σ) (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (m) (s : σ) (p : 多元多项式 σ R)
   证明: by
   refine (coeff_mul_monomial' _ _ _ _).trans ?_
   simp_rw [Finsupp.single_le_iff, Finsupp.mem_support_iff, Nat.succ_le_iff, pos_iff_ne_zero,
@@ -3072,7 +3072,7 @@ theorem coeff_X_mul'
 
 中文:
 定理 coeff_X_mul'
-  条件: [DecidableEq σ] (m) (s : σ) (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (m) (s : σ) (p : 多元多项式 σ R)
   证明: by
   refine (coeff_monomial_mul' _ _ _ _).trans ?_
   simp_rw [Finsupp.single_le_iff, Finsupp.mem_support_iff, Nat.succ_le_iff, pos_iff_ne_zero,
@@ -3099,7 +3099,7 @@ theorem eq_zero_iff
 
 中文:
 定理 eq_zero_iff
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   结论: p = 0 ↔ 对任意 d, coeff d p = 0
   证明: by
   rw [MvPolynomial.ext_iff]
@@ -3127,7 +3127,7 @@ theorem ne_zero_iff
 
 中文:
 定理 ne_zero_iff
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   结论: p != 0 ↔ 存在 d, coeff d p != 0
   证明: by
   rw [Ne]; rw [eq_zero_iff]
@@ -3157,7 +3157,7 @@ theorem X_ne_zero
 
 中文:
 定理 X_ne_zero
-  条件: [Nontrivial R] (s : σ)
+  条件: [非平凡 R] (s : σ)
   证明: by
   rw [ne_zero_iff]
   use Finsupp.single s 1
@@ -3186,7 +3186,7 @@ theorem support_eq_empty
 
 中文:
 定理 support_eq_empty
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   结论: p.support = ∅ ↔ p = 0
   证明: by simp [support]
 
@@ -3209,8 +3209,8 @@ lemma support_nonempty
 
 中文:
 引理 support_nonempty
-  条件: {p : MvPolynomial σ R}
-  结论: p.support.Nonempty ↔ p != 0
+  条件: {p : 多元多项式 σ R}
+  结论: p.support.非空 ↔ p != 0
   证明: by
   rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty]
 
@@ -3229,8 +3229,8 @@ theorem exists_coeff_ne_zero
   proof: ne_zero_iff.mp h
 
 中文:
-定理 exists_coeff_ne_zero
-  条件: {p : MvPolynomial σ R} (h : p != 0)
+定理 存在_coeff_ne_zero
+  条件: {p : 多元多项式 σ R} (h : p != 0)
   结论: 存在 d, coeff d p != 0
   证明: ne_zero_iff.mp h
 
@@ -3256,7 +3256,7 @@ theorem _root_.IsRegular.monomial
 @[simp]
 
 中文:
-定理 _root_.IsRegular.monomial
+定理 _root_.是正则.monomial
   结论: {m : σ ->₀ 自然数} {a : R}
   证明: by
   rw [← isLeftRegular_iff_isRegular]
@@ -3394,7 +3394,7 @@ theorem C_dvd_iff_dvd_coeff
 
 中文:
 定理 C_dvd_iff_dvd_coeff
-  条件: (r : R) (φ : MvPolynomial σ R)
+  条件: (r : R) (φ : 多元多项式 σ R)
   结论: C r ∣ φ ↔ 对任意 i, r ∣ φ.coeff i
   证明: by
   constructor
@@ -3445,7 +3445,7 @@ lemma isRegular_X
 
 中文:
 引理 isRegular_X
-  结论: IsRegular (X n : MvPolynomial σ R)
+  结论: 是正则 (X n : 多元多项式 σ R)
   证明: by
   suffices IsLeftRegular (X n : MvPolynomial σ R) from
 ⟨this, this.right_of_commute Commute.all _⟩
@@ -3472,7 +3472,7 @@ lemma isRegular_X_pow
 中文:
 引理 isRegular_X_pow
   条件: (k : 自然数)
-  结论: IsRegular (X n ^ k : MvPolynomial σ R)
+  结论: 是正则 (X n ^ k : 多元多项式 σ R)
   证明: isRegular_X.pow k
 -/
 @[simp] lemma isRegular_X_pow (k : Nat) : IsRegular (X n ^ k : MvPolynomial σ R) := isRegular_X.pow k
@@ -3487,7 +3487,7 @@ lemma isRegular_prod_X
 
 中文:
 引理 isRegular_prod_X
-  条件: (s : Finset σ)
+  条件: (s : 有限集 σ)
   证明: IsRegular.prod fun _ _ => isRegular_X
 -/
 @[simp] lemma isRegular_prod_X (s : Finset σ) :
@@ -3507,7 +3507,7 @@ definition coeffs
 
 中文:
 定义 coeffs
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: letI := Classical.decEq R
   Finset.image p.coeff p.support
 
@@ -3530,7 +3530,7 @@ lemma coeffs_zero
 
 中文:
 引理 coeffs_zero
-  结论: coeffs (0 : MvPolynomial σ R) = ∅
+  结论: coeffs (0 : 多元多项式 σ R) = ∅
   证明: rfl
 -/
 lemma coeffs_zero : coeffs (0 : MvPolynomial σ R) = ∅ :=
@@ -3551,7 +3551,7 @@ lemma coeffs_one
 
 中文:
 引理 coeffs_one
-  结论: coeffs (1 : MvPolynomial σ R) subseteq {1}
+  结论: coeffs (1 : 多元多项式 σ R) subseteq {1}
   证明: by
   classical
     rw [coeffs]; rw [Finset.image_subset_iff]
@@ -3581,7 +3581,7 @@ lemma coeffs_eq_empty_of_subsingleton
 
 中文:
 引理 coeffs_eq_empty_of_subsingleton
-  条件: [Subsingleton R] (p : MvPolynomial σ R)
+  条件: [子单例 R] (p : 多元多项式 σ R)
   结论: p.coeffs = ∅
   证明: by
   simpa [coeffs] using Subsingleton.eq_zero p
@@ -3608,8 +3608,8 @@ lemma coeffs_one_of_nontrivial
 
 中文:
 引理 coeffs_one_of_nontrivial
-  条件: [Nontrivial R]
-  结论: coeffs (1 : MvPolynomial σ R) = {1}
+  条件: [非平凡 R]
+  结论: coeffs (1 : 多元多项式 σ R) = {1}
   证明: by
   apply Finset.Subset.antisymm coeffs_one
   simp only [coeffs, Finset.singleton_subset_iff, Finset.mem_image]
@@ -3633,7 +3633,7 @@ lemma mem_coeffs_iff
 
 中文:
 引理 mem_coeffs_iff
-  条件: {p : MvPolynomial σ R} {c : R}
+  条件: {p : 多元多项式 σ R} {c : R}
   证明: by
   simp [coeffs, eq_comm, (Finset.mem_image)]
 
@@ -3654,7 +3654,7 @@ lemma coeff_mem_coeffs
 
 中文:
 引理 coeff_mem_coeffs
-  结论: {p : MvPolynomial σ R} (m : σ ->₀ 自然数)
+  结论: {p : 多元多项式 σ R} (m : σ ->₀ 自然数)
   证明: letI := Classical.decEq R
   Finset.mem_image_of_mem p.coeff (mem_support_iff.mpr h)
 
@@ -3679,7 +3679,7 @@ lemma zero_notMem_coeffs
 
 中文:
 引理 zero_notMem_coeffs
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: 0 ∉ p.coeffs
   证明: by
   intro hz
@@ -3765,7 +3765,7 @@ lemma coeffs_mul_X
 
 中文:
 引理 coeffs_mul_X
-  条件: (p : MvPolynomial σ R) (n : σ)
+  条件: (p : 多元多项式 σ R) (n : σ)
   结论: (p * X n).coeffs = p.coeffs
   证明: by
   aesop (add simp mem_coeffs_iff)
@@ -3790,7 +3790,7 @@ lemma coeffs_X_mul
 
 中文:
 引理 coeffs_X_mul
-  条件: (p : MvPolynomial σ R) (n : σ)
+  条件: (p : 多元多项式 σ R) (n : σ)
   结论: (X n * p).coeffs = p.coeffs
   证明: by
   aesop (add simp mem_coeffs_iff)
@@ -3815,7 +3815,7 @@ notMem_support_iff.mp h.notMem_of_mem_left_finset (mem_support_iff.mpr hne)
 
 中文:
 引理 coeffs_add
-  条件: [DecidableEq R] {p q : MvPolynomial σ R} (h : Disjoint p.support q.support)
+  条件: [DecidableEq R] {p q : 多元多项式 σ R} (h : Disjoint p.support q.support)
   证明: by
   ext r
   simp only [mem_coeffs_iff, mem_support_iff, coeff_add, ne_eq, Finset.mem_union]
@@ -3861,7 +3861,7 @@ definition constantCoeff
 
 中文:
 定义 constantCoeff
-  签名: : MvPolynomial σ R ->+* R where
+  签名: : 多元多项式 σ R ->+* R where
   定义体: coeff 0
   map_one' := by simp
   map_mul' := by classical simp [coeff_mul]
@@ -3885,7 +3885,7 @@ theorem constantCoeff_eq
 
 中文:
 定理 constantCoeff_eq
-  结论: (constantCoeff : MvPolynomial σ R -> R) = coeff 0
+  结论: (constantCoeff : 多元多项式 σ R -> R) = coeff 0
   证明: rfl
 -/
 theorem constantCoeff_eq : (constantCoeff : MvPolynomial σ R -> R) = coeff 0 :=
@@ -3906,7 +3906,7 @@ theorem constantCoeff_C
 中文:
 定理 constantCoeff_C
   条件: (r : R)
-  结论: constantCoeff (C r : MvPolynomial σ R) = r
+  结论: constantCoeff (C r : 多元多项式 σ R) = r
   证明: by
   simp [constantCoeff_eq]
 
@@ -3932,7 +3932,7 @@ theorem constantCoeff_X
 中文:
 定理 constantCoeff_X
   条件: (i : σ)
-  结论: constantCoeff (X i : MvPolynomial σ R) = 0
+  结论: constantCoeff (X i : 多元多项式 σ R) = 0
   证明: by
   simp [constantCoeff_eq]
 
@@ -3954,7 +3954,7 @@ theorem constantCoeff_smul
 
 中文:
 定理 constantCoeff_smul
-  条件: {R : 类型} [SMulZeroClass R S₁] (a : R) (f : MvPolynomial σ S₁)
+  条件: {R : 类型} [SMulZero类 R S₁] (a : R) (f : 多元多项式 σ S₁)
   证明: rfl
 -/
 theorem constantCoeff_smul {R : Type*} [SMulZeroClass R S₁] (a : R) (f : MvPolynomial σ S₁) :
@@ -3997,7 +3997,7 @@ theorem constantCoeff_comp_C
 
 中文:
 定理 constantCoeff_comp_C
-  结论: constantCoeff.comp (C : R ->+* MvPolynomial σ R) = RingHom.id R
+  结论: constantCoeff.comp (C : R ->+* 多元多项式 σ R) = 环态射.id R
   证明: by
   ext x
   exact constantCoeff_C σ x
@@ -4042,7 +4042,7 @@ theorem support_sum_monomial_coeff
 
 中文:
 定理 support_sum_monomial_coeff
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   apply AddMonoidAlgebra.ext; rw [AddMonoidAlgebra.coeff_sum]; exact Finsupp.sum_single _
 
@@ -4063,7 +4063,7 @@ theorem as_sum
 
 中文:
 定理 as_sum
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: p = ∑ v in p.support, monomial v (coeff v p)
   证明: (support_sum_monomial_coeff p).symm
 
@@ -4097,7 +4097,7 @@ definition coeffsIn
 
 中文:
 定义 coeffsIn
-  签名: : Submodule R (MvPolynomial σ S) where
+  签名: : 子模 R (多元多项式 σ S) where
   定义体: {p | forall i, p.coeff i in M}
   add_mem' := by simp +contextual [add_mem]
   zero_mem' := by simp
@@ -4367,7 +4367,7 @@ lemma coeffsIn_le
 
 中文:
 引理 coeffsIn_le
-  条件: {N : Submodule R (MvPolynomial σ S)}
+  条件: {N : 子模 R (多元多项式 σ S)}
   证明: by
   simp [coeffsIn_eq_span_monomial, Submodule.span_le, Set.subset_def,
     forall_comm (α := MvPolynomial σ S)]
@@ -4395,7 +4395,7 @@ lemma mem_coeffsIn_iff_coeffs_subset
 
 中文:
 引理 mem_coeffsIn_iff_coeffs_subset
-  结论: p in coeffsIn σ M ↔ (p.coeffs : Set S) subseteq M
+  结论: p in coeffsIn σ M ↔ (p.coeffs : 集合 S) subseteq M
   证明: by
   simp only [mem_coeffsIn, coeffs, Finset.coe_image, image_subset_iff]
   refine ⟨fun h x _ => h x, fun h i => ?_⟩
@@ -4440,7 +4440,7 @@ lemma coeffsIn_mul
 
 中文:
 引理 coeffsIn_mul
-  条件: (M N : Submodule R S)
+  条件: (M N : 子模 R S)
   结论: coeffsIn σ (M * N) = coeffsIn σ M * coeffsIn σ N
   证明: by
   classical
@@ -4479,7 +4479,7 @@ lemma coeffsIn_pow
 
 中文:
 引理 coeffsIn_pow
-  结论: 对任意 {n}, n != 0 -> 对任意 M : Submodule R S, coeffsIn σ (M ^ n) = coeffsIn σ M ^ n
+  结论: 对任意 {n}, n != 0 -> 对任意 M : 子模 R S, coeffsIn σ (M ^ n) = coeffsIn σ M ^ n
 -/
 lemma coeffsIn_pow : forall {n}, n != 0 -> forall M : Submodule R S, coeffsIn σ (M ^ n) = coeffsIn σ M ^ n
   | 1, _, M => by simp

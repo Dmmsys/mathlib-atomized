@@ -38,7 +38,7 @@ theorem iSup_iInf_eq_top_iff_pairwise
 
 中文:
 定理 iSup_iInf_eq_top_iff_pairwise
-  条件: {t : Finset ι} (h : t.Nonempty) (I : ι -> Ideal R)
+  条件: {t : 有限集 ι} (h : t.非空) (I : ι -> 理想 R)
   证明: by
   have : DecidableEq ι := Classical.decEq ι
   rw [eq_top_iff_one]; rw [Submodule.mem_iSup_finset_iff_exists_sum]

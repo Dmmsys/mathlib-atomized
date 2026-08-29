@@ -49,8 +49,8 @@ structure LatticeCon
 
 中文:
 结构 LatticeCon
-  参数: extends Setoid α
-  继承: Setoid α
+  参数: extends 集合等价关系 α
+  继承: 集合等价关系 α
   公理与运算 (2 个):
     - inf : 对任意 {w x y z}, r w x -> r y z -> r (w ⊓ y) (x ⊓ z)
     - sup : 对任意 {w x y z}, r w x -> r y z -> r (w ⊔ y) (x ⊔ z)
@@ -238,7 +238,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: [LatticeHomClass F α β] (f : F)
+  签名: [格态射类 F α β] (f : F)
   定义体: Setoid.ker f
   inf _ _ := by simp_all +instances only [Setoid.ker, onFun, map_inf]
   sup _ _ := by simp_all +instances only [Setoid.ker, onFun, map_sup]

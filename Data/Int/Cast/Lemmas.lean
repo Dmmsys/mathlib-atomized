@@ -42,7 +42,7 @@ definition ofNatHom
   body: Nat.castRingHom Int
 
 中文:
-定义 ofNatHom
+定义 of自然数Hom
   签名: : 自然数 ->+* 整数
   定义体: Nat.castRingHom Int
 
@@ -65,7 +65,7 @@ definition castAddHom
 
 中文:
 定义 castAddHom
-  签名: (α : 类型) [AddGroupWithOne α]
+  签名: (α : 类型) [加法带幺群 α]
   定义体: Int.cast
   map_zero' := cast_zero
   map_add' := cast_add
@@ -182,7 +182,7 @@ lemma cast_injective
 
 中文:
 引理 cast_injective
-  结论: Injective (整数.cast : 整数 -> α)
+  结论: 单射 (整数.cast : 整数 -> α)
   证明: fun _ _ => cast_inj.1
 
 Depends on / 依赖: cast_inj
@@ -422,7 +422,7 @@ theorem cast_dvd_cast
 
 中文:
 定理 cast_dvd_cast
-  条件: [Ring α] (m n : 整数) (h : m ∣ n)
+  条件: [环 α] (m n : 整数) (h : m ∣ n)
   结论: (m : α) ∣ (n : α)
   证明: map_dvd (Int.castRingHom α) h
 
@@ -672,7 +672,7 @@ theorem ext_int
 
 中文:
 定理 ext_int
-  条件: [AddMonoid A] {f g : 整数 ->+ A} (h1 : f 1 = g 1)
+  条件: [加法幺半群 A] {f g : 整数 ->+ A} (h1 : f 1 = g 1)
   结论: f = g
   证明: have : f.comp (Int.ofNatHom : Nat ->+ Int) = g.comp (Int.ofNatHom : Nat ->+ Int) := ext_nat' _ _ h1
   have this' : forall n : Nat, f n = g n := DFunLike.ext_iff.1 this
@@ -730,7 +730,7 @@ theorem ext_int
 
 中文:
 定理 ext_int
-  条件: [AddMonoid A] {f g : 整数 ≃+ A} (h1 : f 1 = g 1)
+  条件: [加法幺半群 A] {f g : 整数 ≃+ A} (h1 : f 1 = g 1)
   结论: f = g
   证明: toAddMonoidHom_injective AddMonoidHom.ext_int h1
 
@@ -751,7 +751,7 @@ theorem eq_intCast'
 
 中文:
 定理 eq_intCast'
-  结论: [AddGroupWithOne α] [FunLike F 整数 α] [AddMonoidHomClass F 整数 α]
+  结论: [加法带幺群 α] [函数状 F 整数 α] [加法幺半群态射类 F 整数 α]
   证明: DFunLike.ext_iff.1 (f : Int ->+ α).eq_intCastAddHom h₁
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, eq_intCastAddHom, ext_iff
@@ -773,7 +773,7 @@ theorem map_intCast'
 
 中文:
 定理 map_intCast'
-  结论: [AddGroupWithOne α] [AddGroupWithOne β] [FunLike F α β]
+  结论: [加法带幺群 α] [加法带幺群 β] [函数状 F α β]
   证明: eq_intCast' ((f : α ->+ β).comp <| Int.castAddHom _) (by simpa)
 
 @[simp]
@@ -794,8 +794,8 @@ theorem Int.castAddHom_int
   proof: ((AddMonoidHom.id Int).eq_intCastAddHom rfl).symm
 
 中文:
-定理 Int.castAddHom_int
-  结论: 整数.castAddHom 整数 = AddMonoidHom.id 整数
+定理 整数.castAddHom_int
+  结论: 整数.castAddHom 整数 = 加法幺半群态射.id 整数
   证明: ((AddMonoidHom.id Int).eq_intCastAddHom rfl).symm
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, eq_intCastAddHom
@@ -912,7 +912,7 @@ theorem ext_int'
 
 中文:
 定理 ext_int'
-  结论: [MonoidWithZero α] [FunLike F 整数 α] [MonoidWithZeroHomClass F 整数 α] {f g : F}
+  结论: [带零幺半群 α] [函数状 F 整数 α] [带零幺半群态射类 F 整数 α] {f g : F}
   证明: (DFunLike.ext _ _) fun n =>
     haveI :=
       DFunLike.congr_fun
@@ -1064,7 +1064,7 @@ lemma MonoidHom.apply_mint
   rw [← zpowersHom_symm_apply]; rw [← zpowersHom_apply]; rw [Equiv.apply_symm_apply]
 
 中文:
-引理 MonoidHom.apply_mint
+引理 幺半群态射.apply_mint
   条件: (f : Multiplicative 整数 ->* α) (n : Multiplicative 整数)
   证明: by
   rw [← zpowersHom_symm_apply]; rw [← zpowersHom_apply]; rw [Equiv.apply_symm_apply]
@@ -1086,7 +1086,7 @@ lemma AddMonoidHom.apply_int
   rw [← zmultiplesHom_symm_apply]; rw [← zmultiplesHom_apply]; rw [Equiv.apply_symm_apply]
 
 中文:
-引理 AddMonoidHom.apply_int
+引理 加法幺半群态射.apply_int
   条件: (f : 整数 ->+ β) (n : 整数)
   结论: f n = n • f 1
   证明: by
@@ -1233,7 +1233,7 @@ theorem eq_intCast
 
 中文:
 定理 eq_intCast
-  条件: [FunLike F 整数 α] [RingHomClass F 整数 α] (f : F) (n : 整数)
+  条件: [函数状 F 整数 α] [环态射类 F 整数 α] (f : F) (n : 整数)
   结论: f n = n
   证明: eq_intCast' f (map_one _) n
 
@@ -1256,7 +1256,7 @@ theorem map_intCast
 
 中文:
 定理 map_intCast
-  条件: [FunLike F α β] [RingHomClass F α β] (f : F) (n : 整数)
+  条件: [函数状 F α β] [环态射类 F α β] (f : F) (n : 整数)
   结论: f n = n
   证明: eq_intCast ((f : α ->+* β).comp (Int.castRingHom α)) n
 
@@ -1298,7 +1298,7 @@ theorem ext_int
 
 中文:
 定理 ext_int
-  条件: {R : 类型} [NonAssocSemiring R] (f g : 整数 ->+* R)
+  条件: {R : 类型} [非结合半环 R] (f g : 整数 ->+* R)
   结论: f = g
   证明: coe_addMonoidHom_injective AddMonoidHom.ext_int f.map_one.trans g.map_one.symm
 
@@ -1316,8 +1316,8 @@ instance Int.subsingleton_ringHom
   body: ⟨RingHom.ext_int⟩
 
 中文:
-实例 Int.subsingleton_ringHom
-  签名: {R : 类型} [NonAssocSemiring R]
+实例 整数.subsingleton_ringHom
+  签名: {R : 类型} [非结合半环 R]
   定义体: ⟨RingHom.ext_int⟩
 
 Depends on / 依赖: RingHom, RingHom.ext_int, ext_int
@@ -1339,8 +1339,8 @@ theorem Int.castRingHom_int
   proof: (RingHom.id Int).eq_intCast'.symm
 
 中文:
-定理 Int.castRingHom_int
-  结论: 整数.castRingHom 整数 = RingHom.id 整数
+定理 整数.castRingHom_int
+  结论: 整数.castRingHom 整数 = 环态射.id 整数
   证明: (RingHom.id Int).eq_intCast'.symm
 
 Depends on / 依赖: RingHom, RingHom.id, eq_intCast

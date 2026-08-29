@@ -109,7 +109,7 @@ theorem Eq.wcovBy
 @[to_dual self]
 
 中文:
-定理 Eq.wcovBy
+定理 相等.wcovBy
   条件: (h : a = b)
   结论: a ⩿ b
   证明: h ▸ WCovBy.rfl
@@ -365,7 +365,7 @@ theorem WCovBy.Ioo_eq
 中文:
 定理 WCovBy.Ioo_eq
   条件: (h : a ⩿ b)
-  结论: Ioo a b = ∅
+  结论: 开区间 a b = ∅
   证明: eq_empty_iff_forall_notMem.2 fun _ hx => h.2 hx.1 hx.2
 
 @[to_dual self]
@@ -388,7 +388,7 @@ theorem wcovBy_iff_Ioo_eq
 
 中文:
 定理 wcovBy_iff_Ioo_eq
-  结论: a ⩿ b ↔ a <= b ∧ Ioo a b = ∅
+  结论: a ⩿ b ↔ a <= b ∧ 开区间 a b = ∅
   证明: and_congr_right' by simp [eq_empty_iff_forall_notMem]
 
 @[to_dual of_le_of_le']
@@ -465,8 +465,8 @@ theorem WCovBy.image
 @[to_dual self]
 
 中文:
-定理 WCovBy.image
-  条件: (f : α ↪o β) (hab : a ⩿ b) (h : (range f).OrdConnected)
+定理 WCovBy.像
+  条件: (f : α ↪o β) (hab : a ⩿ b) (h : (range f).序连通)
   结论: f a ⩿ f b
   证明: by
   refine ⟨f.monotone hab.le, fun c ha hb => ?_⟩
@@ -496,8 +496,8 @@ theorem Set.OrdConnected.apply_wcovBy_apply_iff
 @[simp, to_dual self]
 
 中文:
-定理 Set.OrdConnected.apply_wcovBy_apply_iff
-  条件: (f : α ↪o β) (h : (range f).OrdConnected)
+定理 集合.序连通.apply_wcovBy_apply_iff
+  条件: (f : α ↪o β) (h : (range f).序连通)
   证明: ⟨fun h2 => h2.of_image f, fun hab => hab.image f h⟩
 
 @[simp, to_dual self]
@@ -521,7 +521,7 @@ theorem apply_wcovBy_apply_iff
 
 中文:
 定理 apply_wcovBy_apply_iff
-  条件: {E : 类型} [EquivLike E α β] [OrderIsoClass E α β] (e : E)
+  条件: {E : 类型} [等价状 E α β] [OrderIso类 E α β] (e : E)
   证明: (ordConnected_range (e : α ≃o β)).apply_wcovBy_apply_iff ((e : α ≃o β) : α ↪o β)
 
 @[simp, to_dual self]
@@ -698,7 +698,7 @@ theorem WCovBy.Icc_eq
 中文:
 定理 WCovBy.Icc_eq
   条件: (h : a ⩿ b)
-  结论: Icc a b = {a, b}
+  结论: 闭区间 a b = {a, b}
   证明: by
   ext c
   exact h.le_and_le_iff
@@ -722,7 +722,7 @@ theorem WCovBy.Ico_subset
 中文:
 定理 WCovBy.Ico_subset
   条件: (h : a ⩿ b)
-  结论: Ico a b subseteq {a}
+  结论: 左闭右开区间 a b subseteq {a}
   证明: by
   rw [← Icc_sdiff_right]; rw [h.Icc_eq]; rw [sdiff_singleton_subset_iff]; rw [pair_comm]
 
@@ -744,7 +744,7 @@ theorem WCovBy.Ioc_subset
 中文:
 定理 WCovBy.Ioc_subset
   条件: (h : a ⩿ b)
-  结论: Ioc a b subseteq {b}
+  结论: 左开右闭区间 a b subseteq {b}
   证明: by
   rw [← Icc_sdiff_left]; rw [h.Icc_eq]; rw [sdiff_singleton_subset_iff]
 
@@ -867,7 +867,7 @@ theorem not_covBy
 
 中文:
 定理 not_covBy
-  条件: [DenselyOrdered α]
+  条件: [稠密序 α]
   结论: ¬a ⋖ b
   证明: fun h =>
   let ⟨_, hc⟩ := exists_between h.1
@@ -889,8 +889,8 @@ theorem denselyOrdered_iff_forall_not_covBy
 @[to_dual self, simp]
 
 中文:
-定理 denselyOrdered_iff_forall_not_covBy
-  结论: DenselyOrdered α ↔ 对任意 a b : α, ¬a ⋖ b
+定理 denselyOrdered_iff_对任意_not_covBy
+  结论: 稠密序 α ↔ 对任意 a b : α, ¬a ⋖ b
   证明: ⟨fun h _ _ => @not_covBy _ _ _ _ h, fun h =>
 ⟨fun _ _ hab => exists_lt_lt_of_not_covBy hab h _ _⟩⟩
 
@@ -1004,7 +1004,7 @@ theorem not_covBy_iff_nonempty_Ioo
 中文:
 定理 not_covBy_iff_nonempty_Ioo
   条件: (h : a < b)
-  结论: ¬a ⋖ b ↔ (Ioo a b).Nonempty
+  结论: ¬a ⋖ b ↔ (开区间 a b).非空
   证明: not_covBy_iff h
 
 @[to_dual self]
@@ -1209,9 +1209,9 @@ theorem not_covBy_iff_exists_mem_Ioo
 @[to_dual self]
 
 中文:
-定理 not_covBy_iff_exists_mem_Ioo
+定理 not_covBy_iff_存在_mem_Ioo
   条件: (h : a < b)
-  结论: ¬a ⋖ b ↔ 存在 c, c in Set.Ioo a b
+  结论: ¬a ⋖ b ↔ 存在 c, c in 集合.开区间 a b
   证明: not_covBy_iff h
 
 @[to_dual self]
@@ -1389,7 +1389,7 @@ covBy_iff_wcovBy_and_not_le.trans and_congr_right fun h => h.wcovBy_iff_le.not.s
 
 中文:
 实例 :
-  签名: IsNonstrictStrictOrder α (· ⩿ ·) (· ⋖ ·)
+  签名: 是NonstrictStrict序 α (· ⩿ ·) (· ⋖ ·)
   定义体: ⟨fun _ _ =>
 covBy_iff_wcovBy_and_not_le.trans and_congr_right fun h => h.wcovBy_iff_le.not.symm⟩
 
@@ -1436,7 +1436,7 @@ theorem CovBy.Ioo_eq
 中文:
 定理 CovBy.Ioo_eq
   条件: (h : a ⋖ b)
-  结论: Ioo a b = ∅
+  结论: 开区间 a b = ∅
   证明: h.wcovBy.Ioo_eq
 
 @[to_dual self]
@@ -1459,7 +1459,7 @@ theorem covBy_iff_Ioo_eq
 
 中文:
 定理 covBy_iff_Ioo_eq
-  结论: a ⋖ b ↔ a < b ∧ Ioo a b = ∅
+  结论: a ⋖ b ↔ a < b ∧ 开区间 a b = ∅
   证明: and_congr_right' by simp [eq_empty_iff_forall_notMem]
 
 @[to_dual self]
@@ -1507,8 +1507,8 @@ theorem CovBy.image
 @[to_dual self]
 
 中文:
-定理 CovBy.image
-  条件: (f : α ↪o β) (hab : a ⋖ b) (h : (range f).OrdConnected)
+定理 CovBy.像
+  条件: (f : α ↪o β) (hab : a ⋖ b) (h : (range f).序连通)
   结论: f a ⋖ f b
   证明: (hab.wcovBy.image f h).covBy_of_lt f.strictMono hab.lt
 
@@ -1531,8 +1531,8 @@ theorem Set.OrdConnected.apply_covBy_apply_iff
 @[to_dual self, simp]
 
 中文:
-定理 Set.OrdConnected.apply_covBy_apply_iff
-  条件: (f : α ↪o β) (h : (range f).OrdConnected)
+定理 集合.序连通.apply_covBy_apply_iff
+  条件: (f : α ↪o β) (h : (range f).序连通)
   证明: ⟨CovBy.of_image f, fun hab => hab.image f h⟩
 
 @[to_dual self, simp]
@@ -1556,7 +1556,7 @@ theorem apply_covBy_apply_iff
 
 中文:
 定理 apply_covBy_apply_iff
-  条件: {E : 类型} [EquivLike E α β] [OrderIsoClass E α β] (e : E)
+  条件: {E : 类型} [等价状 E α β] [OrderIso类 E α β] (e : E)
   证明: (ordConnected_range (e : α ≃o β)).apply_covBy_apply_iff ((e : α ≃o β) : α ↪o β)
 
 @[to_dual none]
@@ -1769,7 +1769,7 @@ theorem CovBy.Ico_eq
 中文:
 定理 CovBy.Ico_eq
   条件: (h : a ⋖ b)
-  结论: Ico a b = {a}
+  结论: 左闭右开区间 a b = {a}
   证明: by
   rw [← Ioo_union_left h.lt]; rw [h.Ioo_eq]; rw [empty_union]
 
@@ -1795,7 +1795,7 @@ theorem CovBy.Icc_eq
 中文:
 定理 CovBy.Icc_eq
   条件: (h : a ⋖ b)
-  结论: Icc a b = {a, b}
+  结论: 闭区间 a b = {a, b}
   证明: h.wcovBy.Icc_eq
 
 @[to_dual]
@@ -1822,8 +1822,8 @@ theorem Set.Ico_eq_singleton_iff
 @[to_dual Ioc_eq_singleto
 
 中文:
-定理 Set.Ico_eq_singleton_iff
-  结论: Ico a b = {c} ↔ a = c ∧ a ⋖ b where
+定理 集合.Ico_eq_singleton_iff
+  结论: 左闭右开区间 a b = {c} ↔ a = c ∧ a ⋖ b where
   证明: by
     simp_rw [Set.ext_iff, mem_Ico, mem_singleton_iff] at h
     have ⟨hac, hcb⟩ := (h c).mpr rfl
@@ -1854,8 +1854,8 @@ lemma Set.Ico_eq_singleton_left_iff
   simp [Ico_eq_singleton_iff]
 
 中文:
-引理 Set.Ico_eq_singleton_left_iff
-  结论: Ico a b = {a} ↔ a ⋖ b
+引理 集合.Ico_eq_singleton_left_iff
+  结论: 左闭右开区间 a b = {a} ↔ a ⋖ b
   证明: by
   simp [Ico_eq_singleton_iff]
 
@@ -1931,7 +1931,7 @@ theorem CovBy.Ioi_eq
 中文:
 定理 CovBy.Ioi_eq
   条件: (h : a ⋖ b)
-  结论: Ioi a = Ici b
+  结论: 左开右无界区间 a = 左闭右无界区间 b
   证明: by
   rw [← Ioo_union_Ici_eq_Ioi h.lt]; rw [h.Ioo_eq]; rw [empty_union]
 
@@ -1958,7 +1958,7 @@ theorem CovBy.Iio_eq
 中文:
 定理 CovBy.Iio_eq
   条件: (h : a ⋖ b)
-  结论: Iio b = Iic a
+  结论: 左无界右开区间 b = 左无界右闭区间 a
   证明: by
   rw [← Iic_union_Ioo_eq_Iio h.lt]; rw [h.Ioo_eq]; rw [union_empty]
 
@@ -1984,7 +1984,7 @@ theorem CovBy.Ioo_eq_Ico
 中文:
 定理 CovBy.Ioo_eq_Ico
   条件: (h : a ⋖ b) (c : α)
-  结论: Ioo a c = Ico b c
+  结论: 开区间 a c = 左闭右开区间 b c
   证明: subset_antisymm (fun _x hx => ⟨h.ge_of_gt hx.1, hx.2⟩) Ico_subset_Ioo_left h.lt
 
 @[to_dual none]
@@ -2010,8 +2010,8 @@ theorem Set.Ioo_eq_singleton_iff
     rw [← Ioc_union_I
 
 中文:
-定理 Set.Ioo_eq_singleton_iff
-  结论: Ioo a b = {c} ↔ a ⋖ c ∧ c ⋖ b where
+定理 集合.Ioo_eq_singleton_iff
+  结论: 开区间 a b = {c} ↔ a ⋖ c ∧ c ⋖ b where
   证明: by
     simp_rw [Set.ext_iff, mem_Ioo, mem_singleton_iff] at h
     have ⟨hac, hcb⟩ := (h c).mpr rfl
@@ -2047,8 +2047,8 @@ theorem Set.Ioi_eq_singleton_iff
     cases b, hb using IsTop.rec; rwa [← Ioc
 
 中文:
-定理 Set.Ioi_eq_singleton_iff
-  结论: Ioi a = {b} ↔ IsTop b ∧ a ⋖ b where
+定理 集合.Ioi_eq_singleton_iff
+  结论: 左开右无界区间 a = {b} ↔ IsTop b ∧ a ⋖ b where
   证明: by
     simp_rw [Set.ext_iff, mem_Ioi, mem_singleton_iff] at h
     have hb : a < b := (h b).mpr rfl
@@ -2196,7 +2196,7 @@ lemma LT.lt.exists_disjoint_Iio_Ioi
   grind
 
 中文:
-引理 LT.lt.exists_disjoint_Iio_Ioi
+引理 LT.lt.存在_disjoint_Iio_Ioi
   条件: (h : a < b)
   证明: by
   grind
@@ -2219,7 +2219,7 @@ theorem wcovBy_iff
 
 中文:
 定理 wcovBy_iff
-  结论: 对任意 {a b : 布尔}, a ⩿ b ↔ a <= b
+  结论: 对任意 {a b : 布尔值}, a ⩿ b ↔ a <= b
   证明: by unfold WCovBy; decide
 -/
 @[simp] theorem wcovBy_iff : forall {a b : Bool}, a ⩿ b ↔ a <= b := by unfold WCovBy; decide
@@ -2233,7 +2233,7 @@ theorem covBy_iff
 
 中文:
 定理 covBy_iff
-  结论: 对任意 {a b : 布尔}, a ⋖ b ↔ a < b
+  结论: 对任意 {a b : 布尔值}, a ⋖ b ↔ a < b
   证明: by unfold CovBy; decide
 -/
 @[simp] theorem covBy_iff : forall {a b : Bool}, a ⋖ b ↔ a < b := by unfold CovBy; decide
@@ -2249,7 +2249,7 @@ instance instDecidableRelWCovBy
 
 中文:
 实例 instDecidableRelWCovBy
-  签名: : DecidableRel (· ⩿ · : 布尔 -> 布尔 -> 命题)
+  签名: : DecidableRel (· ⩿ · : 布尔值 -> 布尔值 -> 命题)
   定义体: fun _ _ =>
   decidable_of_iff _ wcovBy_iff.symm
 -/
@@ -2267,7 +2267,7 @@ instance instDecidableRelCovBy
 
 中文:
 实例 instDecidableRelCovBy
-  签名: : DecidableRel (· ⋖ · : 布尔 -> 布尔 -> 命题)
+  签名: : DecidableRel (· ⋖ · : 布尔值 -> 布尔值 -> 命题)
   定义体: fun _ _ =>
   decidable_of_iff _ covBy_iff.symm
 -/
@@ -2295,7 +2295,7 @@ lemma wcovBy_insert
 
 中文:
 引理 wcovBy_insert
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   结论: s ⩿ insert x s
   证明: by
   refine wcovBy_of_eq_or_eq (subset_insert x s) fun t hst h2t => ?_
@@ -2327,7 +2327,7 @@ lemma sdiff_singleton_wcovBy
 
 中文:
 引理 sdiff_singleton_wcovBy
-  条件: (s : Set α) (a : α)
+  条件: (s : 集合 α) (a : α)
   结论: s \ {a} ⩿ s
   证明: by
   by_cases ha : a in s
@@ -2373,7 +2373,7 @@ lemma empty_covBy_singleton
 中文:
 引理 empty_covBy_singleton
   条件: (a : α)
-  结论: ∅ ⋖ ({a} : Set α)
+  结论: ∅ ⋖ ({a} : 集合 α)
   证明: insert_empty_eq (β := Set α) a ▸ covBy_insert notMem_empty a
 -/
 @[simp] lemma empty_covBy_singleton (a : α) : ∅ ⋖ ({a} : Set α) :=
@@ -2408,7 +2408,7 @@ lemma _root_.CovBy.exists_set_insert
   ⟨a, ha, (hst.eq_of_not_ssuperset <| h.2 <| ssubset_insert ha).symm⟩
 
 中文:
-引理 _root_.CovBy.exists_set_insert
+引理 _root_.CovBy.存在_set_insert
   条件: (h : s ⋖ t)
   结论: 存在 a ∉ s, insert a s = t
   证明: let ⟨a, ha, hst⟩ := ssubset_iff_insert.1 h.lt
@@ -2432,7 +2432,7 @@ lemma _root_.CovBy.exists_set_sdiff_singleton
 sdiff_lt (singleton_subset_iff.2 ha) singleton_ne_empty _).symm⟩
 
 中文:
-引理 _root_.CovBy.exists_set_sdiff_singleton
+引理 _root_.CovBy.存在_set_sdiff_singleton
   条件: (h : s ⋖ t)
   结论: 存在 a in t, t \ {a} = s
   证明: let ⟨a, ha, hst⟩ := ssubset_iff_sdiff_singleton.1 h.lt
@@ -2455,7 +2455,7 @@ lemma covBy_iff_exists_insert
   proof: ⟨CovBy.exists_set_insert, by rintro ⟨a, ha, rfl⟩; exact covBy_insert ha⟩
 
 中文:
-引理 covBy_iff_exists_insert
+引理 covBy_iff_存在_insert
   结论: s ⋖ t ↔ 存在 a ∉ s, insert a s = t
   证明: ⟨CovBy.exists_set_insert, by rintro ⟨a, ha, rfl⟩; exact covBy_insert ha⟩
 
@@ -2473,7 +2473,7 @@ lemma covBy_iff_exists_sdiff_singleton
   proof: ⟨CovBy.exists_set_sdiff_singleton, by rintro ⟨a, ha, rfl⟩; exact sdiff_singleton_covBy ha⟩
 
 中文:
-引理 covBy_iff_exists_sdiff_singleton
+引理 covBy_iff_存在_sdiff_singleton
   结论: s ⋖ t ↔ 存在 a in t, t \ {a} = s
   证明: ⟨CovBy.exists_set_sdiff_singleton, by rintro ⟨a, ha, rfl⟩; exact sdiff_singleton_covBy ha⟩
 
@@ -2500,7 +2500,7 @@ lemma wcovBy_eq_reflGen_covBy
 
 中文:
 引理 wcovBy_eq_reflGen_covBy
-  条件: [PartialOrder α]
+  条件: [偏序 α]
   结论: (· ⩿ · : α -> α -> 命题) = ReflGen (· ⋖ ·)
   证明: by
   ext x y; simp_rw [wcovBy_iff_eq_or_covBy, @eq_comm _ x, reflGen_iff]
@@ -2521,7 +2521,7 @@ lemma transGen_wcovBy_eq_reflTransGen_covBy
 
 中文:
 引理 transGen_wcovBy_eq_reflTransGen_covBy
-  条件: [PartialOrder α]
+  条件: [偏序 α]
   证明: by
   rw [wcovBy_eq_reflGen_covBy]; rw [transGen_reflGen]
 
@@ -2542,7 +2542,7 @@ lemma reflTransGen_wcovBy_eq_reflTransGen_covBy
 
 中文:
 引理 reflTransGen_wcovBy_eq_reflTransGen_covBy
-  条件: [PartialOrder α]
+  条件: [偏序 α]
   证明: by
   rw [wcovBy_eq_reflGen_covBy]; rw [reflTransGen_reflGen]
 
@@ -2993,7 +2993,7 @@ lemma exists_forall_antisymmRel_of_covBy
   have 
 
 中文:
-引理 exists_forall_antisymmRel_of_covBy
+引理 存在_对任意_antisymmRel_of_covBy
   条件: (h : a ⋖ b)
   证明: by
   classical
@@ -3031,8 +3031,8 @@ lemma exists_forall_antisymmRel_of_wcovBy
     exact ⟨default, fun j hj => ⟨h.left j, h.right j⟩⟩
 
 中文:
-引理 exists_forall_antisymmRel_of_wcovBy
-  条件: [Nonempty ι] (h : a ⩿ b)
+引理 存在_对任意_antisymmRel_of_wcovBy
+  条件: [非空 ι] (h : a ⩿ b)
   证明: by
   rw [wcovBy_iff_covBy_or_le_and_le] at h
   obtain h | h := h
@@ -3069,7 +3069,7 @@ lemma wcovBy_iff_antisymmRel
 
 中文:
 引理 wcovBy_iff_antisymmRel
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   证明: by
   constructor
   · intro h
@@ -3160,7 +3160,7 @@ lemma exists_forall_eq_of_covBy
   exact ⟨i, fun j hj => AntisymmRel.eq (hi _ hj)⟩
 
 中文:
-引理 exists_forall_eq_of_covBy
+引理 存在_对任意_eq_of_covBy
   条件: (h : a ⋖ b)
   结论: 存在 i, 对任意 j != i, a j = b j
   证明: by
@@ -3185,8 +3185,8 @@ lemma exists_forall_eq_of_wcovBy
   exact ⟨i, fun j hj => AntisymmRel.eq (hi _ hj)⟩
 
 中文:
-引理 exists_forall_eq_of_wcovBy
-  条件: [Nonempty ι] (h : a ⩿ b)
+引理 存在_对任意_eq_of_wcovBy
+  条件: [非空 ι] (h : a ⩿ b)
   结论: 存在 i, 对任意 j != i, a j = b j
   证明: by
   obtain ⟨i, hi⟩ := exists_forall_antisymmRel_of_wcovBy h
@@ -3210,7 +3210,7 @@ lemma wcovBy_iff
 
 中文:
 引理 wcovBy_iff
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: a ⩿ b ↔ 存在 i, a i ⩿ b i ∧ 对任意 j != i, a j = b j
   证明: by
   simp [wcovBy_iff_antisymmRel]
@@ -3255,8 +3255,8 @@ lemma wcovBy_iff_exists_right_eq
     exact ⟨i, by simpa +contextual⟩
 
 中文:
-引理 wcovBy_iff_exists_right_eq
-  条件: [Nonempty ι] [DecidableEq ι]
+引理 wcovBy_iff_存在_right_eq
+  条件: [非空 ι] [DecidableEq ι]
   证明: by
   rw [wcovBy_iff]
   constructor
@@ -3291,7 +3291,7 @@ lemma covBy_iff_exists_right_eq
     exact ⟨i, by simpa +contextual⟩
 
 中文:
-引理 covBy_iff_exists_right_eq
+引理 covBy_iff_存在_right_eq
   条件: [DecidableEq ι]
   证明: by
   rw [covBy_iff]
@@ -3327,8 +3327,8 @@ lemma wcovBy_iff_exists_left_eq
     exact ⟨i, by simpa +contextual⟩
 
 中文:
-引理 wcovBy_iff_exists_left_eq
-  条件: [Nonempty ι] [DecidableEq ι]
+引理 wcovBy_iff_存在_left_eq
+  条件: [非空 ι] [DecidableEq ι]
   证明: by
   rw [wcovBy_iff]
   constructor
@@ -3363,7 +3363,7 @@ lemma covBy_iff_exists_left_eq
     exact ⟨i, by simpa +contextual⟩
 
 中文:
-引理 covBy_iff_exists_left_eq
+引理 covBy_iff_存在_left_eq
   条件: [DecidableEq ι]
   证明: by
   rw [covBy_iff]
@@ -3492,7 +3492,7 @@ theorem not_covBy_top
 
 中文:
 定理 not_covBy_top
-  条件: [NoMaxOrder α] {a : WithTop α}
+  条件: [NoMax序 α] {a : WithTop α}
   结论: ¬ a ⋖ ⊤
   证明: by
   simp [covBy_top_iff]
@@ -3569,7 +3569,7 @@ lemma exists_covBy_of_wellFoundedLT
   exact ⟨_, wellFounded_lt.min_mem (Ioi a) h, fun a' => wf.wf.not_lt_min (Ioi a)⟩
 
 中文:
-引理 exists_covBy_of_wellFoundedLT
+引理 存在_covBy_of_wellFoundedLT
   条件: [wf : WellFoundedLT α] ⦃a
   结论: α⦄ (h : ¬ IsMax a) :
   证明: by

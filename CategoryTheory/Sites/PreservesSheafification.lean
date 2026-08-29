@@ -64,7 +64,7 @@ class PreservesSheafification
     - le : J.W <= J.W.inverseImage ((whiskeringRight Cᵒᵖ A B).obj F)
 
 中文:
-类 PreservesSheafification
+类 保持层化
   参数: : 命题 where
   公理与运算 (1 个):
     - le : J.W <= J.W.inverseImage ((whiskeringRight Cᵒᵖ A B).obj F)
@@ -138,8 +138,8 @@ abbreviation Sheaf.composeAndSheafify
   body: sheafToPresheaf J A ⋙ (whiskeringRight _ _ _).obj F ⋙ presheafToSheaf J B
 
 中文:
-缩写 Sheaf.composeAndSheafify
-  签名: : Sheaf J A ⥤ Sheaf J B
+缩写 层.composeAndSheafify
+  签名: : 层 J A ⥤ 层 J B
   定义体: sheafToPresheaf J A ⋙ (whiskeringRight _ _ _).obj F ⋙ presheafToSheaf J B
 
 Depends on / 依赖: presheafToSheaf, sheafToPresheaf, whiskeringRight
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (toPresheafToSheafCompComposeAndSheafify J F)
+  签名: 是同构 (toPresheafToSheafCompComposeAndSheafify J F)
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: Localization.Lifting (presheafToSheaf J A) J.W
+  签名: Localization.提升 (presheafToSheaf J A) J.W
   定义体: ⟨presheafToSheafCompComposeAndSheafifyIso J F⟩
 
 Depends on / 依赖: presheafToSheafCompComposeAndSheafifyIso
@@ -278,7 +278,7 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions
     dsimp [
 
 中文:
-引理 GrothendieckTopology.preservesSheafification_iff_of_adjunctions
+引理 Grothendieck拓扑.preservesSheafification_iff_of_adjunctions
   证明: by
   simp only [← J.W_iff_isIso_map_of_adjunction adj₂]
   constructor
@@ -339,7 +339,7 @@ definition sheafComposeNatTrans
     grind
 
 中文:
-定义 sheafComposeNatTrans
+定义 sheafCompose自然数Trans
   签名: :
   定义体: (adj₂.homEquiv _ _).symm (whiskerRight (adj₁.unit.app P) F)
   naturality {P Q} f := by
@@ -379,7 +379,7 @@ lemma sheafComposeNatTrans_fac
     Adjunction.homEquiv_counit]
 
 中文:
-引理 sheafComposeNatTrans_fac
+引理 sheafCompose自然数Trans_fac
   条件: (P : Cᵒᵖ ⥤ A)
   证明: by
   simp [sheafComposeNatTrans, -ObjectProperty.ι_obj, -ObjectProperty.ι_map,
@@ -408,7 +408,7 @@ lemma sheafComposeNatTrans_app_uniq
   apply adj₂.homEquiv_unit
 
 中文:
-引理 sheafComposeNatTrans_app_uniq
+引理 sheafCompose自然数Trans_app_uniq
   结论: (P : Cᵒᵖ ⥤ A)
   证明: by
   apply (adj₂.homEquiv _ _).injective
@@ -443,7 +443,7 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions_of_hasShea
   rw [← J.W_iff_isIso_map_of_adjunction adj₂]; rw [← J.W_sheafToPresheaf_map_iff_isIso]; rw [← sheafComposeNatTrans_fac J F adj₁ adj₂]; rw [(W _).precomp_iff _ _ (J.W
 
 中文:
-引理 GrothendieckTopology.preservesSheafification_iff_of_adjunctions_of_hasSheafCompose
+引理 Grothendieck拓扑.preservesSheafification_iff_of_adjunctions_of_hasSheafCompose
   证明: by
   rw [J.preservesSheafification_iff_of_adjunctions F adj₁ adj₂]; rw [NatTrans.isIso_iff_isIso_app]
   apply forall_congr'
@@ -473,7 +473,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (sheafCompose自然数Trans J F adj₁ adj₂)
+  签名: 是同构 (sheafCompose自然数Trans J F adj₁ adj₂)
   定义体: by
   rw [← J.preservesSheafification_iff_of_adjunctions_of_hasSheafCompose]
   infer_instance
@@ -493,7 +493,7 @@ definition sheafComposeNatIso
   body: asIso (sheafComposeNatTrans J F adj₁ adj₂)
 
 中文:
-定义 sheafComposeNatIso
+定义 sheafCompose自然数Iso
   签名: :
   定义体: asIso (sheafComposeNatTrans J F adj₁ adj₂)
 
@@ -622,7 +622,7 @@ lemma sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
   convert! sheafComposeNatTrans_fac J F (plusPlusAdjunction J D) (plusPlusAdjunction
 
 中文:
-引理 sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
+引理 sheafToPresheaf_map_sheafCompose自然数Trans_eq_sheafifyCompIso_inv
   条件: (P : Cᵒᵖ ⥤ D)
   证明: by
   suffices (sheafComposeNatTrans J F (plusPlusAdjunction J D) (plusPlusAdjunction J E)).app P =
@@ -663,7 +663,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (sheafCompose自然数Trans J F (plusPlusAdjunction J D) (plusPlusAdjunction J E))
+  签名: 是同构 (sheafCompose自然数Trans J F (plusPlusAdjunction J D) (plusPlusAdjunction J E))
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
@@ -684,7 +684,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesSheafification J F
+  签名: 保持层化 J F
   定义体: by
   rw [preservesSheafification_iff_of_adjunctions_of_hasSheafCompose _ _
     (plusPlusAdjunction J D) (plusPlusAdjunction J E)]

@@ -66,7 +66,7 @@ abbreviation convexBodyLT
 
 中文:
 缩写 convexBodyLT
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: (Set.univ.pi (fun w : { w : InfinitePlace K // IsReal w } => ball 0 (f w))) ×ˢ
   (Set.univ.pi (fun w : { w : InfinitePlace K // IsComplex w } => ball 0 (f w)))
 
@@ -146,7 +146,7 @@ theorem convexBodyLT_convex
 
 中文:
 定理 convexBodyLT_convex
-  结论: Convex 实数 (convexBodyLT K f)
+  结论: 凸 实数 (convexBodyLT K f)
   证明: Convex.prod (convex_pi (fun _ _ => convex_ball _ _)) (convex_pi (fun _ _ => convex_ball _ _))
 
 Depends on / 依赖: Convex, Convex.prod, convex_ball, convex_pi
@@ -322,7 +322,7 @@ abbreviation convexBodyLT'
 
 中文:
 缩写 convexBodyLT'
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: (Set.univ.pi (fun w : { w : InfinitePlace K // IsReal w } => ball 0 (f w))) ×ˢ
   (Set.univ.pi (fun w : { w : InfinitePlace K // IsComplex w } =>
     if w = w₀ then {x | |x.re| < 1 ∧ |x.im| < (f w : Real) ^ 2} else ball 0 (f w)))
@@ -420,7 +420,7 @@ theorem convexBodyLT'_convex
 
 中文:
 定理 convexBodyLT'_convex
-  结论: Convex 实数 (convexBodyLT' K f w₀)
+  结论: 凸 实数 (convexBodyLT' K f w₀)
   证明: by
   refine Convex.prod (convex_pi (fun _ _ => convex_ball _ _)) (convex_pi (fun _ _ => ?_))
   split_ifs
@@ -811,7 +811,7 @@ abbreviation convexBodySum
 
 中文:
 缩写 convexBodySum
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: { x | convexBodySumFun x <= B }
 
 Depends on / 依赖: Std.Refl.refl, convexBodySumFun
@@ -925,7 +925,7 @@ theorem convexBodySum_convex
 
 中文:
 定理 convexBodySum_convex
-  结论: Convex 实数 (convexBodySum K B)
+  结论: 凸 实数 (convexBodySum K B)
   证明: by
   refine Convex_subadditive_le (fun _ _ => convexBodySumFun_add_le _ _) (fun c x h => ?_) B
   convert! le_of_eq (convexBodySumFun_smul c x)
@@ -954,7 +954,7 @@ theorem convexBodySum_isBounded
 
 中文:
 定理 convexBodySum_isBounded
-  结论: Bornology.IsBounded (convexBodySum K B)
+  结论: 有界结构.IsBounded (convexBodySum K B)
   证明: by
   classical
   refine Metric.isBounded_iff.mpr ⟨B + B, fun x hx y hy => ?_⟩
@@ -989,7 +989,7 @@ theorem convexBodySum_compact
 
 中文:
 定理 convexBodySum_compact
-  结论: IsCompact (convexBodySum K B)
+  结论: 是紧集 (convexBodySum K B)
   证明: by
   classical
   rw [Metric.isCompact_iff_isClosed_bounded]
@@ -1259,7 +1259,7 @@ theorem exists_ne_zero_mem_ideal_lt
   obtain ⟨⟨x, hx
 
 中文:
-定理 exists_ne_zero_mem_ideal_lt
+定理 存在_ne_zero_mem_ideal_lt
   条件: (h : minkowskiBound K I < volume (convexBodyLT K f))
   证明: by
   have h_fund := ZSpan.isAddFundamentalDomain' (fractionalIdealLatticeBasis K I) volume
@@ -1297,8 +1297,8 @@ theorem exists_ne_zero_mem_ideal_lt'
   obtain ⟨⟨x, hx
 
 中文:
-定理 exists_ne_zero_mem_ideal_lt'
-  结论: (w₀ : {w : InfinitePlace K // IsComplex w})
+定理 存在_ne_zero_mem_ideal_lt'
+  结论: (w₀ : {w : InfinitePlace K // 是复形 w})
   证明: by
   have h_fund := ZSpan.isAddFundamentalDomain' (fractionalIdealLatticeBasis K I) volume
   have : Countable (span Int (Set.range (fractionalIdealLatticeBasis K I))).toAddSubgroup := by
@@ -1335,7 +1335,7 @@ theorem exists_ne_zero_mem_ringOfIntegers_lt
   exact ⟨a, RingOfIntegers.coe_ne_zero_iff.mp h_nz, h_bd⟩
 
 中文:
-定理 exists_ne_zero_mem_ringOfIntegers_lt
+定理 存在_ne_zero_mem_ringOf整数egers_lt
   条件: (h : minkowskiBound K ↑1 < volume (convexBodyLT K f))
   证明: by
   obtain ⟨_, h_mem, h_nz, h_bd⟩ := exists_ne_zero_mem_ideal_lt K ↑1 h
@@ -1363,8 +1363,8 @@ theorem exists_ne_zero_mem_ringOfIntegers_lt'
   exact ⟨a, RingOfIntegers.coe_ne_zero_iff.mp h_nz, h_bd⟩
 
 中文:
-定理 exists_ne_zero_mem_ringOfIntegers_lt'
-  结论: (w₀ : {w : InfinitePlace K // IsComplex w})
+定理 存在_ne_zero_mem_ringOf整数egers_lt'
+  结论: (w₀ : {w : InfinitePlace K // 是复形 w})
   证明: by
   obtain ⟨_, h_mem, h_nz, h_bd⟩ := exists_ne_zero_mem_ideal_lt' K ↑1 w₀ h
   obtain ⟨a, rfl⟩ := (FractionalIdeal.mem_one_iff _).mp h_mem
@@ -1395,7 +1395,7 @@ theorem exists_primitive_element_lt_of_isReal
     simp_rw [Finset.notMem_erase, ite_false, 
 
 中文:
-定理 exists_primitive_element_lt_of_isReal
+定理 存在_primitive_element_lt_of_is实数
   结论: {w₀ : InfinitePlace K} (hw₀ : Is实数 w₀) {B : 实数>=0}
   证明: by
   classical
@@ -1440,8 +1440,8 @@ theorem exists_primitive_element_lt_of_isComplex
     simp_rw [Fi
 
 中文:
-定理 exists_primitive_element_lt_of_isComplex
-  结论: {w₀ : InfinitePlace K} (hw₀ : IsComplex w₀)
+定理 存在_primitive_element_lt_of_isComplex
+  结论: {w₀ : InfinitePlace K} (hw₀ : 是复形 w₀)
   证明: by
   classical
   have : minkowskiBound K ↑1 <
@@ -1501,7 +1501,7 @@ theorem exists_ne_zero_mem_ideal_of_norm_le
   have h2 : 0 <= B
 
 中文:
-定理 exists_ne_zero_mem_ideal_of_norm_le
+定理 存在_ne_zero_mem_ideal_of_norm_le
   结论: {B : 实数}
   证明: by
   have hB : 0 <= B := by
@@ -1560,7 +1560,7 @@ theorem exists_ne_zero_mem_ringOfIntegers_of_norm_le
   exact ⟨a, RingOfIntegers.coe_ne_zero_iff.mp h_nz, h_bd⟩
 
 中文:
-定理 exists_ne_zero_mem_ringOfIntegers_of_norm_le
+定理 存在_ne_zero_mem_ringOf整数egers_of_norm_le
   结论: {B : 实数}
   证明: by
   obtain ⟨_, h_mem, h_nz, h_bd⟩ := exists_ne_zero_mem_ideal_of_norm_le K ↑1 h

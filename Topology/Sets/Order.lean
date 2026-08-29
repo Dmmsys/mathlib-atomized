@@ -34,11 +34,11 @@ structure ClopenUpperSet
     - upper' : IsUpperSet carrier
 
 中文:
-结构 ClopenUpperSet
-  参数: (α : 类型) [TopologicalSpace α] [LE α]
+结构 既开又闭上集
+  参数: (α : 类型) [拓扑空间 α] [LE α]
   继承: Clopens α
   公理与运算 (1 个):
-    - upper' : IsUpperSet carrier
+    - upper' : 是上集 carrier
 -/
 structure ClopenUpperSet (α : Type*) [TopologicalSpace α] [LE α] extends Clopens α where
   upper' : IsUpperSet carrier
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (ClopenUpperSet α) α
+  签名: 集合状 (既开又闭上集 α) α
   定义体: s.carrier
   coe_injective s t h := by
     obtain ⟨⟨_, _⟩, _⟩ := s
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ClopenUpperSet α)
+  签名: 偏序 (既开又闭上集 α)
   定义体: .ofSetLike (ClopenUpperSet α) α
 
 Depends on / 依赖: ClopenUpperSet, ofSetLike
@@ -104,7 +104,7 @@ initialize_simps_projections ClopenUpperSet (carrier -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: (s : ClopenUpperSet α)
+  签名: (s : 既开又闭上集 α)
   定义体: s
 
 initialize_simps_projections ClopenUpperSet (carrier -> coe, as_prefix coe)
@@ -124,8 +124,8 @@ theorem upper
 
 中文:
 定理 upper
-  条件: (s : ClopenUpperSet α)
-  结论: IsUpperSet (s : Set α)
+  条件: (s : 既开又闭上集 α)
+  结论: 是上集 (s : 集合 α)
   证明: s.upper'
 
 Depends on / 依赖: s.upper
@@ -144,8 +144,8 @@ theorem isClopen
 
 中文:
 定理 isClopen
-  条件: (s : ClopenUpperSet α)
-  结论: IsClopen (s : Set α)
+  条件: (s : 既开又闭上集 α)
+  结论: IsClopen (s : 集合 α)
   证明: s.isClopen'
 
 Depends on / 依赖: isClopen, s.isClopen
@@ -167,7 +167,7 @@ definition toUpperSet
 
 中文:
 定义 toUpperSet
-  签名: (s : ClopenUpperSet α)
+  签名: (s : 既开又闭上集 α)
   定义体: ⟨s, s.upper⟩
 
 @[ext]
@@ -191,7 +191,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : ClopenUpperSet α} (h : (s : Set α) = t)
+  条件: {s t : 既开又闭上集 α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -213,7 +213,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (s : Clopens α) (h)
-  结论: (mk s h : Set α) = s
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 -/
 theorem coe_mk (s : Clopens α) (h) : (mk s h : Set α) = s :=
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (ClopenUpperSet α)
+  签名: 最大值 (既开又闭上集 α)
   定义体: ⟨fun s t => ⟨s.toClopens ⊔ t.toClopens, s.upper.union t.upper⟩⟩
 
 Depends on / 依赖: s.toClopens, s.upper.union, t.toClopens, t.upper, toClopens
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (ClopenUpperSet α)
+  签名: 最小值 (既开又闭上集 α)
   定义体: ⟨fun s t => ⟨s.toClopens ⊓ t.toClopens, s.upper.inter t.upper⟩⟩
 
 Depends on / 依赖: s.toClopens, s.upper.inter, t.toClopens, t.upper, toClopens
@@ -265,7 +265,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (ClopenUpperSet α)
+  签名: 顶元素 (既开又闭上集 α)
   定义体: ⟨⟨⊤, isUpperSet_univ⟩⟩
 
 Depends on / 依赖: isUpperSet_univ
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (ClopenUpperSet α)
+  签名: 底元素 (既开又闭上集 α)
   定义体: ⟨⟨⊥, isUpperSet_empty⟩⟩
 
 Depends on / 依赖: isUpperSet_empty
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (ClopenUpperSet α)
+  签名: 格 (既开又闭上集 α)
   定义体: SetLike.coe_injective.lattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.lattice, coe_injective, lattice
@@ -321,7 +321,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (ClopenUpperSet α)
+  签名: 有界序 (既开又闭上集 α)
   定义体: BoundedOrder.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl rfl
 
 @[simp]
@@ -345,8 +345,8 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (s t : ClopenUpperSet α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  条件: (s t : 既开又闭上集 α)
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: rfl
 
 @[simp]
@@ -368,8 +368,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (s t : ClopenUpperSet α)
-  结论: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+  条件: (s t : 既开又闭上集 α)
+  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
   证明: rfl
 
 @[simp]
@@ -390,7 +390,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: (↑(⊤ : ClopenUpperSet α) : Set α) = univ
+  结论: (↑(⊤ : 既开又闭上集 α) : 集合 α) = univ
   证明: rfl
 
 @[simp]
@@ -409,7 +409,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: (↑(⊥ : ClopenUpperSet α) : Set α) = ∅
+  结论: (↑(⊥ : 既开又闭上集 α) : 集合 α) = ∅
   证明: rfl
 -/
 theorem coe_bot : (↑(⊥ : ClopenUpperSet α) : Set α) = ∅ :=
@@ -425,7 +425,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ClopenUpperSet α)
+  签名: 可居 (既开又闭上集 α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (ClopenUpperSet α) :=

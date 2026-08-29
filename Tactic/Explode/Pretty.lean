@@ -38,7 +38,7 @@ definition padRight
 
 中文:
 定义 padRight
-  签名: (mds : List MessageData)
+  签名: (mds : 列表 MessageData)
   定义体: do
   -- 1. Find the max length of the word in a list
   let mut maxLength := 0

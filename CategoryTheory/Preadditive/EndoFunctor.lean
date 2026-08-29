@@ -49,7 +49,7 @@ instance Endofunctor.algebraPreadditive
 
 中文:
 实例 Endofunctor.algebraPreadditive
-  签名: : Preadditive (Endofunctor.Algebra F) where
+  签名: : 预加性 (Endofunctor.代数 F) where
   定义体: { add α β :=
         { f := α.f + β.f
           h := by simp only [Functor.map_add, add_comp, Endofunctor.Algebra.Hom.h, comp_add] }
@@ -104,8 +104,8 @@ instance Algebra.forget_additive
   signature: : (Endofunctor.Algebra.forget F).Additive where
 
 中文:
-实例 Algebra.forget_additive
-  签名: : (Endofunctor.Algebra.forget F).Additive where
+实例 代数.forget_additive
+  签名: : (Endofunctor.代数.forget F).加性 where
 -/
 instance Algebra.forget_additive : (Endofunctor.Algebra.forget F).Additive where
 
@@ -128,7 +128,7 @@ instance Endofunctor.coalgebraPreadditive
 
 中文:
 实例 Endofunctor.coalgebraPreadditive
-  签名: : Preadditive (Endofunctor.Coalgebra F) where
+  签名: : 预加性 (Endofunctor.余algebra F) where
   定义体: { add α β :=
         { f := α.f + β.f
           h := by simp only [Functor.map_add, comp_add, Endofunctor.Coalgebra.Hom.h, add_comp] }
@@ -183,8 +183,8 @@ instance Coalgebra.forget_additive
   signature: : (Endofunctor.Coalgebra.forget F).Additive where
 
 中文:
-实例 Coalgebra.forget_additive
-  签名: : (Endofunctor.Coalgebra.forget F).Additive where
+实例 余algebra.forget_additive
+  签名: : (Endofunctor.余algebra.forget F).加性 where
 -/
 instance Coalgebra.forget_additive : (Endofunctor.Coalgebra.forget F).Additive where
 

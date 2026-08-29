@@ -60,7 +60,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit a ↔ a = 1
+  结论: 是单位 a ↔ a = 1
   证明: by
   refine
     ⟨fun h => ?_, by
@@ -104,7 +104,7 @@ uniq a := Units.val_eq_one.mp isUnit_iff.mp a.isUnit
 
 中文:
 实例 :
-  签名: Unique Cardinal.{u}ˣ
+  签名: 唯一 基数.{u}ˣ
   定义体: 1
 uniq a := Units.val_eq_one.mp isUnit_iff.mp a.isUnit
 -/
@@ -126,7 +126,7 @@ theorem le_of_dvd
 
 中文:
 定理 le_of_dvd
-  条件: {a b : Cardinal} (hb : b != 0) (hdiv : a ∣ b)
+  条件: {a b : 基数} (hb : b != 0) (hdiv : a ∣ b)
   结论: a <= b
   证明: by
   obtain ⟨b, rfl⟩ := hdiv
@@ -185,7 +185,7 @@ theorem prime_of_aleph0_le
 中文:
 定理 prime_of_aleph0_le
   条件: (ha : ℵ₀ <= a)
-  结论: Prime a
+  结论: 素 a
   证明: by
   refine ⟨(aleph0_pos.trans_le ha).ne', ?_, fun b c hbc => ?_⟩
   · rw [isUnit_iff]
@@ -231,7 +231,7 @@ theorem not_irreducible_of_aleph0_le
 中文:
 定理 not_irreducible_of_aleph0_le
   条件: (ha : ℵ₀ <= a)
-  结论: ¬Irreducible a
+  结论: ¬不可约 a
   证明: by
   rw [irreducible_iff]; rw [not_and_or]
   refine Or.inr fun h => ?_
@@ -267,7 +267,7 @@ theorem nat_coe_dvd_iff
 
 中文:
 定理 nat_coe_dvd_iff
-  结论: (n : Cardinal) ∣ m ↔ n ∣ m
+  结论: (n : 基数) ∣ m ↔ n ∣ m
   证明: by
   refine ⟨?_, fun ⟨h, ht⟩ => ⟨h, mod_cast ht⟩⟩
   rintro ⟨k, hk⟩
@@ -308,7 +308,7 @@ theorem nat_is_prime_iff
 
 中文:
 定理 nat_is_prime_iff
-  结论: Prime (n : Cardinal) ↔ n.Prime
+  结论: 素 (n : 基数) ↔ n.素
   证明: by
   simp only [Prime, Nat.prime_iff]
   refine and_congr (by simp) (and_congr ?_ ⟨fun h b c hbc => ?_, fun h b c hbc => ?_⟩)
@@ -359,8 +359,8 @@ theorem is_prime_iff
 
 中文:
 定理 is_prime_iff
-  条件: {a : Cardinal}
-  结论: Prime a ↔ ℵ₀ <= a ∨ 存在 p : 自然数, a = p ∧ p.Prime
+  条件: {a : 基数}
+  结论: 素 a ↔ ℵ₀ <= a ∨ 存在 p : 自然数, a = p ∧ p.素
   证明: by
   rcases le_or_gt ℵ₀ a with h | h
   · simp [h]
@@ -394,7 +394,7 @@ theorem isPrimePow_iff
 
 中文:
 定理 isPrimePow_iff
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: IsPrimePow a ↔ ℵ₀ <= a ∨ 存在 n : 自然数, a = n ∧ IsPrimePow n
   证明: by
   by_cases h : ℵ₀ <= a

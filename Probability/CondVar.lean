@@ -89,7 +89,7 @@ lemma condVar_of_not_sigmaFinite
 
 中文:
 引理 condVar_of_not_sigmaFinite
-  条件: (hμm : ¬SigmaFinite (μ.trim hm))
+  条件: (hμm : ¬σ有限 (μ.trim hm))
   证明: by rw [condVar, condExp_of_not_sigmaFinite hm hμm]
 
 Depends on / 依赖: condExp_of_not_sigmaFinite, condVar
@@ -108,7 +108,7 @@ lemma condVar_of_sigmaFinite
 
 中文:
 引理 condVar_of_sigmaFinite
-  条件: [SigmaFinite (μ.trim hm)]
+  条件: [σ有限 (μ.trim hm)]
   证明: condExp_of_sigmaFinite _
 
 Depends on / 依赖: condExp_of_sigmaFinite
@@ -131,7 +131,7 @@ lemma condVar_of_stronglyMeasurable
 
 中文:
 引理 condVar_of_stronglyMeasurable
-  结论: [SigmaFinite (μ.trim hm)]
+  结论: [σ有限 (μ.trim hm)]
   证明: condExp_of_stronglyMeasurable _ ((hX.sub stronglyMeasurable_condExp).pow _) hXint
 
 Depends on / 依赖: condExp_of_stronglyMeasurable, hX.sub, stronglyMeasurable_condExp
@@ -151,7 +151,7 @@ lemma condVar_of_not_integrable
 
 中文:
 引理 condVar_of_not_integrable
-  条件: (hXint : ¬ 整数egrable (fun ω => (X ω - (μ[X | m]) ω) ^ 2) μ)
+  条件: (hXint : ¬ 可积 (fun ω => (X ω - (μ[X | m]) ω) ^ 2) μ)
   证明: condExp_of_not_integrable hXint
 
 Depends on / 依赖: condExp_of_not_integrable
@@ -265,7 +265,7 @@ lemma condVar_of_aestronglyMeasurable
 
 中文:
 引理 condVar_of_aestronglyMeasurable
-  结论: [hμm : SigmaFinite (μ.trim hm)]
+  结论: [hμm : σ有限 (μ.trim hm)]
   证明: condExp_of_aestronglyMeasurable' _ ((continuous_pow _).comp_aestronglyMeasurable
     (hX.sub stronglyMeasurable_condExp.aestronglyMeasurable)) hXint
 
@@ -287,7 +287,7 @@ lemma integrable_condVar
 
 中文:
 引理 integrable_condVar
-  结论: 整数egrable Var[X; μ | m] μ
+  结论: 可积 Var[X; μ | m] μ
   证明: integrable_condExp
 
 Depends on / 依赖: integrable_condExp
@@ -303,8 +303,8 @@ lemma setIntegral_condVar
   proof: setIntegral_condExp _ hX hs
 
 中文:
-引理 setIntegral_condVar
-  结论: [SigmaFinite (μ.trim hm)] (hX : 整数egrable ((X - μ[X | m]) ^ 2) μ)
+引理 set整数egral_condVar
+  结论: [σ有限 (μ.trim hm)] (hX : 可积 ((X - μ[X | m]) ^ 2) μ)
   证明: setIntegral_condExp _ hX hs
 
 Depends on / 依赖: setIntegral_condExp
@@ -334,7 +334,7 @@ lemma condVar_ae_eq_condExp_sq_sub_sq_condExp
 
 中文:
 引理 condVar_ae_eq_condExp_sq_sub_sq_condExp
-  条件: (hm : m <= m₀) [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+  条件: (hm : m <= m₀) [是有限测度 μ] (hX : MemLp X 2 μ)
   证明: by
   calc
     Var[X; μ | m]
@@ -379,7 +379,7 @@ lemma condVar_ae_le_condExp_sq
 
 中文:
 引理 condVar_ae_le_condExp_sq
-  条件: (hm : m <= m₀) [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+  条件: (hm : m <= m₀) [是有限测度 μ] (hX : MemLp X 2 μ)
   证明: by
   filter_upwards [condVar_ae_eq_condExp_sq_sub_sq_condExp hm hX] with ω hω
   dsimp at hω
@@ -410,7 +410,7 @@ lemma integral_condVar_add_variance_condExp
 
 中文:
 引理 integral_condVar_add_variance_condExp
-  结论: (hm : m <= m₀) [IsProbabilityMeasure μ]
+  结论: (hm : m <= m₀) [是概率测度 μ]
   证明: by
   calc
     μ[Var[X; μ | m]] + Var[μ[X | m]; μ]
@@ -502,7 +502,7 @@ lemma condVar_bot
 
 中文:
 引理 condVar_bot
-  条件: [IsProbabilityMeasure μ] (hX : AEMeasurable X μ)
+  条件: [是概率测度 μ] (hX : 几乎处处可测 X μ)
   证明: by
   simp [condVar_bot', average_eq_integral, variance_eq_integral hX]
 

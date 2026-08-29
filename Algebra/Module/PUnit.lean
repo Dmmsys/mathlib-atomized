@@ -34,7 +34,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: : SMul R PUnit
+  签名: : 标量乘法 R 命题单元
   定义体: ⟨fun _ _ => unit⟩
 
 @[to_additive (attr := simp)]
@@ -56,7 +56,7 @@ theorem smul_eq
 
 中文:
 定理 smul_eq
-  条件: {R : 类型} (y : PUnit) (r : R)
+  条件: {R : 类型} (y : 命题单元) (r : R)
   结论: r • y = unit
   证明: rfl
 
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCentralScalar R PUnit
+  签名: 中心标量 R 命题单元
   定义体: ⟨fun _ _ => rfl⟩
 
 @[to_additive]
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass R S PUnit
+  签名: 标量交换类 R S 命题单元
   定义体: ⟨fun _ _ _ => rfl⟩
 
 @[to_additive]
@@ -118,7 +118,7 @@ instance instIsScalarTowerOfSMul
 
 中文:
 实例 instIsScalarTowerOfSMul
-  签名: [SMul R S]
+  签名: [标量乘法 R S]
   定义体: ⟨fun _ _ _ => rfl⟩
 -/
 instance instIsScalarTowerOfSMul [SMul R S] : IsScalarTower R S PUnit :=
@@ -136,7 +136,7 @@ instance smulWithZero
 
 中文:
 实例 smulWithZero
-  签名: [Zero R]
+  签名: [零 R]
   定义体: PUnit.smul
   smul_zero := by subsingleton
   zero_smul := by subsingleton
@@ -160,7 +160,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [Monoid R]
+  签名: [幺半群 R]
   定义体: PUnit.smul
   one_smul := by subsingleton
   mul_smul := by subsingleton
@@ -184,7 +184,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid R]
+  签名: [幺半群 R]
   定义体: PUnit.mulAction
   smul_zero := by subsingleton
   smul_add := by subsingleton
@@ -208,7 +208,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: [Monoid R]
+  签名: [幺半群 R]
   定义体: PUnit.mulAction
   smul_mul := by subsingleton
   smul_one := by subsingleton
@@ -230,7 +230,7 @@ instance mulSemiringAction
 
 中文:
 实例 mulSemiringAction
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: { PUnit.distribMulAction, PUnit.mulDistribMulAction with }
 
 Depends on / 依赖: PUnit.distribMulAction, PUnit.mulDistribMulAction, distribMulAction, mulDistribMulAction
@@ -248,7 +248,7 @@ instance mulActionWithZero
 
 中文:
 实例 mulActionWithZero
-  签名: [MonoidWithZero R]
+  签名: [带零幺半群 R]
   定义体: { PUnit.mulAction, PUnit.smulWithZero with }
 
 Depends on / 依赖: PUnit.mulAction, PUnit.smulWithZero, mulAction, smulWithZero
@@ -270,7 +270,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: PUnit.distribMulAction
   add_smul := by subsingleton
   zero_smul := by subsingleton
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul PUnit R
+  签名: 标量乘法 命题单元 R
   定义体: x
 -/
 instance : SMul PUnit R where smul _ x := x
@@ -313,7 +313,7 @@ lemma smul_eq'
 
 中文:
 引理 smul_eq'
-  条件: (r : PUnit) (a : R)
+  条件: (r : 命题单元) (a : R)
   结论: r • a = a
   证明: rfl
 -/
@@ -328,8 +328,8 @@ instance [SMul
   body: ⟨by simp⟩
 
 中文:
-实例 [SMul
-  签名: R S] : SMulCommClass PUnit R S
+实例 [标量乘法
+  签名: R S] : 标量交换类 命题单元 R S
   定义体: ⟨by simp⟩
 -/
 @[to_additive] instance [SMul R S] : SMulCommClass PUnit R S := ⟨by simp⟩
@@ -342,8 +342,8 @@ instance [SMul
   body: ⟨by simp⟩
 
 中文:
-实例 [SMul
-  签名: R S] : IsScalarTower PUnit R S
+实例 [标量乘法
+  签名: R S] : 标量塔 命题单元 R S
   定义体: ⟨by simp⟩
 -/
 instance [SMul R S] : IsScalarTower PUnit R S := ⟨by simp⟩
@@ -360,7 +360,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction PUnit R
+  签名: 乘法作用 命题单元 R
   定义体: (inferInstance : SMul PUnit R)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -380,8 +380,8 @@ instance [Zero
   smul_zero _ := rfl
 
 中文:
-实例 [Zero
-  签名: R] : SMulZeroClass PUnit R where
+实例 [零
+  签名: R] : SMulZero类 命题单元 R where
   定义体: (inferInstance : SMul PUnit R)
   smul_zero _ := rfl
 -/
@@ -400,8 +400,8 @@ instance [AddMonoid
   smul_add _ _ _ := rfl
 
 中文:
-实例 [AddMonoid
-  签名: R] : DistribMulAction PUnit R where
+实例 [加法幺半群
+  签名: R] : 分配乘法作用 命题单元 R where
   定义体: (inferInstance : MulAction PUnit R)
   __ := (inferInstance : SMulZeroClass PUnit R)
   smul_add _ _ _ := rfl

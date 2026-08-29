@@ -40,8 +40,8 @@ theorem MulEquivClass.toMulEquiv_injective
   proof: fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃* β => e.toFun a) e
 
 中文:
-定理 MulEquivClass.toMulEquiv_injective
-  条件: [Mul α] [Mul β] [MulEquivClass F α β]
+定理 乘法等价类.toMulEquiv_injective
+  条件: [乘法 α] [乘法 β] [乘法等价类 F α β]
   证明: fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃* β => e.toFun a) e
 
 Depends on / 依赖: DFunLike, DFunLike.ext, congr_arg, e.toFun
@@ -63,7 +63,7 @@ let g : β ->* α := ⟨⟨e.symm, e.injective (e.right_inv ..).trans (map_one f
     .of_injective g (EquivLike.injective f)
 
 中文:
-定理 MulEquivClass.isDedekindFiniteMonoid_iff
+定理 乘法等价类.isDedekindFiniteMonoid_iff
   结论: [MulOne α] [MulOne β]
   证明: let e := MulEquivClass.toMulEquiv f
 let g : β ->* α := ⟨⟨e.symm, e.injective (e.right_inv ..).trans (map_one f).symm⟩, map_mul _⟩
@@ -96,7 +96,7 @@ definition ofUnique
 
 中文:
 定义 ofUnique
-  签名: {M N} [Unique M] [Unique N] [Mul M] [Mul N]
+  签名: {M N} [唯一 M] [唯一 N] [乘法 M] [乘法 N]
   定义体: { Equiv.ofUnique M N with map_mul' := fun _ _ => Subsingleton.elim _ _ }
 
 Depends on / 依赖: Equiv.ofUnique, Subsingleton, Subsingleton.elim, map_mul, ofUnique
@@ -126,7 +126,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: .funUnique ..
   map_mul' := by simp
 
@@ -161,7 +161,7 @@ definition arrowCongr
 
 中文:
 定义 arrowCongr
-  签名: {M N P Q : 类型} [Mul P] [Mul Q] (f : M ≃ N) (g : P ≃* Q)
+  签名: {M N P Q : 类型} [乘法 P] [乘法 Q] (f : M ≃ N) (g : P ≃* Q)
   定义体: g (h (f.symm n))
   invFun k m := g.symm (k (f m))
   left_inv h := by ext; simp
@@ -593,7 +593,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, Mul (Ms j)] [对任意 j, Mul (Ns j)]
+  签名: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, 乘法 (Ms j)] [对任意 j, 乘法 (Ns j)]
   定义体: { Equiv.piCongrRight fun j => (es j).toEquiv with
     toFun := fun x j => es j (x j),
     invFun := fun x j => (es j).symm (x j),
@@ -623,7 +623,7 @@ theorem piCongrRight_refl
 
 中文:
 定理 piCongrRight_refl
-  条件: {η : 类型} {Ms : η -> 类型} [对任意 j, Mul (Ms j)]
+  条件: {η : 类型} {Ms : η -> 类型} [对任意 j, 乘法 (Ms j)]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -644,7 +644,7 @@ theorem piCongrRight_symm
 
 中文:
 定理 piCongrRight_symm
-  结论: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, Mul (Ms j)] [对任意 j, Mul (Ns j)]
+  结论: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, 乘法 (Ms j)] [对任意 j, 乘法 (Ns j)]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -663,7 +663,7 @@ theorem piCongrRight_trans
 
 中文:
 定理 piCongrRight_trans
-  结论: {η : 类型} {Ms Ns Ps : η -> 类型} [对任意 j, Mul (Ms j)]
+  结论: {η : 类型} {Ms Ns Ps : η -> 类型} [对任意 j, 乘法 (Ms j)]
   证明: rfl
 -/
 theorem piCongrRight_trans {η : Type*} {Ms Ns Ps : η -> Type*} [forall j, Mul (Ms j)]
@@ -685,7 +685,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: {ι : 类型} (M : ι -> 类型) [对任意 j, Mul (M j)] [Unique ι]
+  签名: {ι : 类型} (M : ι -> 类型) [对任意 j, 乘法 (M j)] [唯一 ι]
   定义体: { Equiv.piUnique M with map_mul' := fun _ _ => Pi.mul_apply _ _ _ }
 
 Depends on / 依赖: Equiv.piUnique, Pi.mul_apply, map_mul, mul_apply, piUnique
@@ -715,7 +715,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : Perm G
+  签名: : 置换 G
   定义体: inv_involutive.toPerm _
 -/
 protected def inv : Perm G :=
@@ -734,7 +734,7 @@ theorem inv_symm
 
 中文:
 定理 inv_symm
-  结论: (Equiv.inv G).symm = Equiv.inv G
+  结论: (等价.inv G).symm = 等价.inv G
   证明: rfl
 -/
 theorem inv_symm : (Equiv.inv G).symm = Equiv.inv G := rfl

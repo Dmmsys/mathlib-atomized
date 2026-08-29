@@ -75,7 +75,7 @@ lemma LipschitzOnWith.cauchySeq_comp
 
 中文:
 引理 LipschitzOnWith.cauchySeq_comp
-  结论: {s : Set α} {f : α -> β} (hf : LipschitzOnWith K f s)
+  结论: {s : 集合 α} {f : α -> β} (hf : LipschitzOnWith K f s)
   证明: by
   rcases cauchySeq_iff_le_tendsto_0.1 hu with ⟨b, b_nonneg, hb, blim⟩
   refine cauchySeq_iff_le_tendsto_0.2 ⟨fun n => K * b n, ?_, ?_, ?_⟩
@@ -143,8 +143,8 @@ lemma LocallyLipschitzOn.exists_lipschitzOnWith_of_compact
   replace hf : forall x in s, exists ε > 0, exists K, LipschitzOnWith K 
 
 中文:
-引理 LocallyLipschitzOn.exists_lipschitzOnWith_of_compact
-  结论: {f : α -> β} {s : Set α}
+引理 LocallyLipschitzOn.存在_lipschitzOnWith_of_compact
+  结论: {f : α -> β} {s : 集合 α}
   证明: by
   /- `f` being locally Lipschitz on `s` means that it is continuous and that it is Lipschitz on a
   ball of some radius `ε x hx` within `s` with Lipschitz bound `K x hx` around every `x ∈ s`. -/

@@ -72,7 +72,7 @@ definition iIndepSets
 
 中文:
 定义 iIndepSets
-  签名: {_mΩ : MeasurableSpace Ω}
+  签名: {_mΩ : 可测空间 Ω}
   定义体: forall (s : Finset ι) {f : ι -> Set Ω} (_H : forall i, i in s -> f i in π i),
   forallᵐ a ∂μ, κ a (⋂ i in s, f i) = ∏ i in s, κ a (f i)
 
@@ -93,7 +93,7 @@ definition IndepSets
 
 中文:
 定义 IndepSets
-  签名: {_mΩ : MeasurableSpace Ω}
+  签名: {_mΩ : 可测空间 Ω}
   定义体: forall t1 t2 : Set Ω, t1 in s1 -> t2 in s2 -> (forallᵐ a ∂μ, κ a (t1 inter t2) = κ a t1 * κ a t2)
 
 Depends on / 依赖: volume_tac
@@ -112,7 +112,7 @@ definition iIndep
 
 中文:
 定义 iIndep
-  签名: (m : ι -> MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (κ : Kernel α Ω)
+  签名: (m : ι -> 可测空间 Ω) {_mΩ : 可测空间 Ω} (κ : 核 α Ω)
   定义体: iIndepSets (fun x => {s | MeasurableSet[m x] s}) κ μ
 
 Depends on / 依赖: MeasurableSet, iIndepSets, volume_tac
@@ -131,7 +131,7 @@ definition Indep
 
 中文:
 定义 Indep
-  签名: (m₁ m₂ : MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (κ : Kernel α Ω)
+  签名: (m₁ m₂ : 可测空间 Ω) {_mΩ : 可测空间 Ω} (κ : 核 α Ω)
   定义体: IndepSets {s | MeasurableSet[m₁] s} {s | MeasurableSet[m₂] s} κ μ
 
 Depends on / 依赖: IndepSets, MeasurableSet, volume_tac
@@ -150,7 +150,7 @@ definition iIndepSet
 
 中文:
 定义 iIndepSet
-  签名: {_mΩ : MeasurableSpace Ω} (s : ι -> Set Ω) (κ : Kernel α Ω)
+  签名: {_mΩ : 可测空间 Ω} (s : ι -> 集合 Ω) (κ : 核 α Ω)
   定义体: iIndep (m := fun i => generateFrom {s i}) κ μ
 
 Depends on / 依赖: generateFrom, iIndep, volume_tac
@@ -169,7 +169,7 @@ definition IndepSet
 
 中文:
 定义 IndepSet
-  签名: {_mΩ : MeasurableSpace Ω} (s t : Set Ω) (κ : Kernel α Ω)
+  签名: {_mΩ : 可测空间 Ω} (s t : 集合 Ω) (κ : 核 α Ω)
   定义体: Indep (generateFrom {s}) (generateFrom {t}) κ μ
 
 Depends on / 依赖: generateFrom, volume_tac
@@ -228,7 +228,7 @@ lemma indepSets_zero_left
 
 中文:
 引理 indepSets_zero_left
-  结论: IndepSets s1 s2 (0 : Kernel α Ω) μ
+  结论: IndepSets s1 s2 (0 : 核 α Ω) μ
   证明: by simp [IndepSets]
 -/
 @[simp] lemma indepSets_zero_left : IndepSets s1 s2 (0 : Kernel α Ω) μ := by simp [IndepSets]
@@ -258,7 +258,7 @@ lemma indep_zero_right
 
 中文:
 引理 indep_zero_right
-  结论: {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: by simp [Indep]
 -/
 @[simp] lemma indep_zero_right {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
@@ -274,7 +274,7 @@ lemma indep_zero_left
 
 中文:
 引理 indep_zero_left
-  条件: {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  条件: {m₁ m₂ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: by simp [Indep]
 -/
 @[simp] lemma indep_zero_left {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω} :
@@ -306,7 +306,7 @@ lemma indepSet_zero_right
 
 中文:
 引理 indepSet_zero_right
-  条件: {s t : Set Ω}
+  条件: {s t : 集合 Ω}
   结论: IndepSet s t κ 0
   证明: by simp [IndepSet]
 -/
@@ -324,8 +324,8 @@ lemma indepSet_zero_left
 
 中文:
 引理 indepSet_zero_left
-  条件: {s t : Set Ω}
-  结论: IndepSet s t (0 : Kernel α Ω) μ
+  条件: {s t : 集合 Ω}
+  结论: IndepSet s t (0 : 核 α Ω) μ
   证明: by
   simp [IndepSet]
 -/
@@ -444,7 +444,7 @@ alias ⟨Indep.congr, _⟩ := indep_congr
 
 中文:
 引理 indep_congr
-  结论: {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: indepSets_congr h
 
 alias ⟨Indep.congr, _⟩ := indep_congr
@@ -496,7 +496,7 @@ alias ⟨indepSet.congr, _⟩ := indepSet_congr
 
 中文:
 引理 indepSet_congr
-  条件: {s t : Set Ω} (h : κ =ᵐ[μ] η)
+  条件: {s t : 集合 Ω} (h : κ =ᵐ[μ] η)
   结论: IndepSet s t κ μ ↔ IndepSet s t η μ
   证明: indep_congr h
 
@@ -518,8 +518,8 @@ lemma iIndepSets.meas_biInter
   proof: h s hf
 
 中文:
-引理 iIndepSets.meas_biInter
-  结论: (h : iIndepSets π κ μ) (s : Finset ι)
+引理 iIndepSets.meas_bi整数er
+  结论: (h : iIndepSets π κ μ) (s : 有限集 ι)
   证明: h s hf
 -/
 lemma iIndepSets.meas_biInter (h : iIndepSets π κ μ) (s : Finset ι)
@@ -560,8 +560,8 @@ lemma iIndepSets.meas_iInter
   filter_upwards [h.meas_biInter Finset.univ (fun _i _ => hs _)] with a ha using by simp [← ha]
 
 中文:
-引理 iIndepSets.meas_iInter
-  条件: [Fintype ι] (h : iIndepSets π κ μ) (hs : 对任意 i, s i in π i)
+引理 iIndepSets.meas_i整数er
+  条件: [有限类型 ι] (h : iIndepSets π κ μ) (hs : 对任意 i, s i in π i)
   证明: by
   filter_upwards [h.meas_biInter Finset.univ (fun _i _ => hs _)] with a ha using by simp [← ha]
 -/
@@ -613,8 +613,8 @@ lemma iIndep.meas_biInter
   proof: hμ _ hs
 
 中文:
-引理 iIndep.meas_biInter
-  条件: (hμ : iIndep m κ μ) (hs : 对任意 i, i in S -> MeasurableSet[m i] (s i))
+引理 iIndep.meas_bi整数er
+  条件: (hμ : iIndep m κ μ) (hs : 对任意 i, i in S -> 可测集[m i] (s i))
   证明: hμ _ hs
 -/
 lemma iIndep.meas_biInter (hμ : iIndep m κ μ) (hs : forall i, i in S -> MeasurableSet[m i] (s i)) :
@@ -633,8 +633,8 @@ lemma iIndep.meas_iInter
 @[nontriviality, simp]
 
 中文:
-引理 iIndep.meas_iInter
-  条件: [Fintype ι] (h : iIndep m κ μ) (hs : 对任意 i, MeasurableSet[m i] (s i))
+引理 iIndep.meas_i整数er
+  条件: [有限类型 ι] (h : iIndep m κ μ) (hs : 对任意 i, 可测集[m i] (s i))
   证明: by
   filter_upwards [h.meas_biInter (fun i (_ : i in Finset.univ) => hs _)] with a ha
   simp [← ha]
@@ -663,7 +663,7 @@ lemma iIndepSets.of_subsingleton
 
 中文:
 引理 iIndepSets.of_subsingleton
-  结论: [Subsingleton ι] {m : ι -> Set (Set Ω)} {κ : Kernel α Ω}
+  结论: [子单例 ι] {m : ι -> 集合 (集合 Ω)} {κ : 核 α Ω}
   证明: by
   rintro s f hf
   obtain rfl | ⟨i, rfl⟩ : s = ∅ ∨ exists i, s = {i} := by
@@ -690,7 +690,7 @@ lemma iIndep.of_subsingleton
 
 中文:
 引理 iIndep.of_subsingleton
-  结论: [Subsingleton ι] {m : ι -> MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: [子单例 ι] {m : ι -> 可测空间 Ω} {κ : 核 α Ω}
   证明: by simp [iIndep]
 -/
 lemma iIndep.of_subsingleton [Subsingleton ι] {m : ι -> MeasurableSpace Ω} {κ : Kernel α Ω}
@@ -715,7 +715,7 @@ lemma iIndepSets.precomp
 
 中文:
 引理 iIndepSets.precomp
-  条件: (hg : Function.Injective g) (h : iIndepSets π κ μ)
+  条件: (hg : 函数.单射 g) (h : iIndepSets π κ μ)
   证明: by
   intro s f hf
   let f' := Function.extend g f fun _ => ∅
@@ -752,7 +752,7 @@ lemma iIndepSets.of_precomp
 
 中文:
 引理 iIndepSets.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndepSets (π ∘ g) κ μ)
+  条件: (hg : 函数.满射 g) (h : iIndepSets (π ∘ g) κ μ)
   证明: by
   obtain ⟨g', hg'⟩ := hg.hasRightInverse
   convert! h.precomp hg'.injective
@@ -774,7 +774,7 @@ lemma iIndepSets_precomp_of_bijective
 
 中文:
 引理 iIndepSets_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: ⟨.of_precomp hg.surjective, .precomp hg.injective⟩
 
 Depends on / 依赖: hg.injective, hg.surjective, injective, of_precomp, precomp, surjective
@@ -793,7 +793,7 @@ lemma iIndep.precomp
 
 中文:
 引理 iIndep.precomp
-  条件: (hg : Function.Injective g) (h : iIndep m κ μ)
+  条件: (hg : 函数.单射 g) (h : iIndep m κ μ)
   证明: (iIndepSets.precomp hg h :)
 -/
 lemma iIndep.precomp (hg : Function.Injective g) (h : iIndep m κ μ) :
@@ -810,7 +810,7 @@ lemma iIndep.of_precomp
 
 中文:
 引理 iIndep.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndep (m ∘ g) κ μ)
+  条件: (hg : 函数.满射 g) (h : iIndep (m ∘ g) κ μ)
   证明: iIndepSets.of_precomp hg h
 -/
 lemma iIndep.of_precomp (hg : Function.Surjective g) (h : iIndep (m ∘ g) κ μ) :
@@ -827,7 +827,7 @@ lemma iIndep_precomp_of_bijective
 
 中文:
 引理 iIndep_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: ⟨.of_precomp hg.surjective, .precomp hg.injective⟩
 
 Depends on / 依赖: hg.injective, hg.surjective, injective, of_precomp, precomp, surjective
@@ -846,7 +846,7 @@ lemma iIndepSet.precomp
 
 中文:
 引理 iIndepSet.precomp
-  条件: (hg : Function.Injective g) (h : iIndepSet s κ μ)
+  条件: (hg : 函数.单射 g) (h : iIndepSet s κ μ)
   证明: iIndep.precomp hg h
 -/
 lemma iIndepSet.precomp (hg : Function.Injective g) (h : iIndepSet s κ μ) :
@@ -863,7 +863,7 @@ lemma iIndepSet.of_precomp
 
 中文:
 引理 iIndepSet.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndepSet (s ∘ g) κ μ)
+  条件: (hg : 函数.满射 g) (h : iIndepSet (s ∘ g) κ μ)
   证明: iIndep.of_precomp hg h
 -/
 lemma iIndepSet.of_precomp (hg : Function.Surjective g) (h : iIndepSet (s ∘ g) κ μ) :
@@ -880,7 +880,7 @@ lemma iIndepSet_precomp_of_bijective
 
 中文:
 引理 iIndepSet_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: ⟨.of_precomp hg.surjective, .precomp hg.injective⟩
 
 Depends on / 依赖: hg.injective, hg.surjective, injective, of_precomp, precomp, surjective
@@ -911,7 +911,7 @@ theorem IndepSets.symm
 
 中文:
 定理 IndepSets.symm
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω} {μ : Measure α}
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω} {μ : 测度 α}
   证明: by
   intro t1 t2 ht1 ht2
   filter_upwards [h t2 t1 ht2 ht1] with a ha
@@ -937,7 +937,7 @@ theorem Indep.symm
 
 中文:
 定理 Indep.symm
-  结论: {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: {m₁ m₂ : 可测空间 Ω} {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: IndepSets.symm h
 -/
 theorem Indep.symm {m₁ m₂ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
@@ -963,7 +963,7 @@ theorem indep_bot_right
 
 中文:
 定理 indep_bot_right
-  结论: (m' : MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω}
+  结论: (m' : 可测空间 Ω) {_mΩ : 可测空间 Ω}
   证明: by
   intro s t _ ht
   rw [Set.mem_ofPred_eq]; rw [MeasurableSpace.measurableSet_bot_iff] at ht
@@ -998,7 +998,7 @@ theorem indep_bot_left
 
 中文:
 定理 indep_bot_left
-  结论: (m' : MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω}
+  结论: (m' : 可测空间 Ω) {_mΩ : 可测空间 Ω}
   证明: (indep_bot_right m').symm
 
 Depends on / 依赖: indep_bot_right
@@ -1019,7 +1019,7 @@ theorem indepSet_empty_right
 
 中文:
 定理 indepSet_empty_right
-  结论: {_mΩ : MeasurableSpace Ω}
+  结论: {_mΩ : 可测空间 Ω}
   证明: by
   simp only [IndepSet, generateFrom_singleton_empty]
   exact indep_bot_right _
@@ -1042,7 +1042,7 @@ theorem indepSet_empty_left
 
 中文:
 定理 indepSet_empty_left
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: (indepSet_empty_right s).symm
 
 Depends on / 依赖: indepSet_empty_right
@@ -1062,7 +1062,7 @@ theorem indepSets_of_indepSets_of_le_left
 
 中文:
 定理 indepSets_of_indepSets_of_le_left
-  结论: {s₁ s₂ s₃ : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s₁ s₂ s₃ : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 => h_indep t1 t2 (Set.mem_of_subset_of_mem h31 ht1) ht2
 
 Depends on / 依赖: Set.mem_of_subset_of_mem, h_indep, mem_of_subset_of_mem
@@ -1082,7 +1082,7 @@ theorem indepSets_of_indepSets_of_le_right
 
 中文:
 定理 indepSets_of_indepSets_of_le_right
-  结论: {s₁ s₂ s₃ : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s₁ s₂ s₃ : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 => h_indep t1 t2 ht1 (Set.mem_of_subset_of_mem h32 ht2)
 
 Depends on / 依赖: Set.mem_of_subset_of_mem, h_indep, mem_of_subset_of_mem
@@ -1102,7 +1102,7 @@ theorem indep_of_indep_of_le_left
 
 中文:
 定理 indep_of_indep_of_le_left
-  结论: {m₁ m₂ m₃ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ m₃ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 => h_indep t1 t2 (h31 _ ht1) ht2
 
 Depends on / 依赖: h_indep
@@ -1122,7 +1122,7 @@ theorem indep_of_indep_of_le_right
 
 中文:
 定理 indep_of_indep_of_le_right
-  结论: {m₁ m₂ m₃ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ m₃ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 => h_indep t1 t2 ht1 (h32 _ ht2)
 
 Depends on / 依赖: h_indep
@@ -1142,7 +1142,7 @@ theorem indep_of_indep_of_le
 
 中文:
 定理 indep_of_indep_of_le
-  结论: {m₁ m₂ m₃ m₄ : MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ m₃ m₄ : 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: indep_of_indep_of_le_left (indep_of_indep_of_le_right h_indep h42) h31
 
 Depends on / 依赖: h_indep, indep_of_indep_of_le_left, indep_of_indep_of_le_right
@@ -1163,7 +1163,7 @@ theorem iIndep_of_iIndep_of_le
 
 中文:
 定理 iIndep_of_iIndep_of_le
-  结论: {m₁ m₂ : ι -> MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m₁ m₂ : ι -> 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: fun s t ht => h_indep s fun i hi => h_le i (t i) ht i hi
 
 Depends on / 依赖: h_indep, h_le
@@ -1189,7 +1189,7 @@ theorem IndepSets.union
 
 中文:
 定理 IndepSets.union
-  结论: {s₁ s₂ s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s₁ s₂ s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   intro t1 t2 ht1 ht2
   rcases (Set.mem_union _ _ _).mp ht1 with ht1₁ | ht1₂
@@ -1221,7 +1221,7 @@ theorem IndepSets.union_iff
 
 中文:
 定理 IndepSets.union_iff
-  结论: {s₁ s₂ s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s₁ s₂ s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: ⟨fun h =>
     ⟨indepSets_of_indepSets_of_le_left h Set.subset_union_left,
       indepSets_of_indepSets_of_le_left h Set.subset_union_right⟩,
@@ -1249,7 +1249,7 @@ theorem IndepSets.iUnion
 
 中文:
 定理 IndepSets.iUnion
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   intro t1 t2 ht1 ht2
   rw [Set.mem_iUnion] at ht1
@@ -1278,7 +1278,7 @@ theorem IndepSets.biUnion
 
 中文:
 定理 IndepSets.biUnion
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   intro t1 t2 ht1 ht2
   simp_rw [Set.mem_iUnion] at ht1
@@ -1303,7 +1303,7 @@ theorem IndepSets.inter
 
 中文:
 定理 IndepSets.inter
-  结论: {s₁ s' : Set (Set Ω)} (s₂ : Set (Set Ω)) {_mΩ : MeasurableSpace Ω}
+  结论: {s₁ s' : 集合 (集合 Ω)} (s₂ : 集合 (集合 Ω)) {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 => h₁ t1 t2 ((Set.mem_inter_iff _ _ _).mp ht1).left ht2
 -/
 theorem IndepSets.inter {s₁ s' : Set (Set Ω)} (s₂ : Set (Set Ω)) {_mΩ : MeasurableSpace Ω}
@@ -1321,8 +1321,8 @@ theorem IndepSets.iInter
   intro t1 t2 ht1 ht2; obtain ⟨n, h⟩ := h; exact h t1 t2 (Set.mem_iInter.mp ht1 n) ht2
 
 中文:
-定理 IndepSets.iInter
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+定理 IndepSets.i整数er
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   intro t1 t2 ht1 ht2; obtain ⟨n, h⟩ := h; exact h t1 t2 (Set.mem_iInter.mp ht1 n) ht2
 -/
@@ -1343,8 +1343,8 @@ theorem IndepSets.bInter
   exact h t1 t2 (Set.biInter_subset_of_mem hn ht1) ht2
 
 中文:
-定理 IndepSets.bInter
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+定理 IndepSets.b整数er
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   intro t1 t2 ht1 ht2
   rcases h with ⟨n, hn, h⟩
@@ -1368,7 +1368,7 @@ theorem iIndep_comap_mem_iff
 
 中文:
 定理 iIndep_comap_mem_iff
-  结论: {f : ι -> Set Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {f : ι -> 集合 Ω} {_mΩ : 可测空间 Ω}
   证明: by
   simp_rw [← generateFrom_singleton, iIndepSet]
 
@@ -1393,7 +1393,7 @@ theorem iIndepSets_singleton_iff
 
 中文:
 定理 iIndepSets_singleton_iff
-  结论: {s : ι -> Set Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {s : ι -> 集合 Ω} {_mΩ : 可测空间 Ω}
   证明: by
   refine ⟨fun h S => h S (fun i _ => rfl), fun h S f hf => ?_⟩
   filter_upwards [h S] with a ha
@@ -1422,7 +1422,7 @@ theorem indepSets_singleton_iff
 
 中文:
 定理 indepSets_singleton_iff
-  结论: {s t : Set Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {s t : 集合 Ω} {_mΩ : 可测空间 Ω}
   证明: ⟨fun h => h s t rfl rfl,
    fun h s1 t1 hs1 ht1 => by rwa [Set.mem_singleton_iff.mp hs1, Set.mem_singleton_iff.mp ht1]⟩
 
@@ -1461,7 +1461,7 @@ theorem iIndepSets.indepSets
 
 中文:
 定理 iIndepSets.indepSets
-  结论: {s : ι -> Set (Set Ω)} {_mΩ : MeasurableSpace Ω}
+  结论: {s : ι -> 集合 (集合 Ω)} {_mΩ : 可测空间 Ω}
   证明: by
   classical
   intro t₁ t₂ ht₁ ht₂
@@ -1498,7 +1498,7 @@ theorem iIndep.indep
 
 中文:
 定理 iIndep.indep
-  结论: {m : ι -> MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
+  结论: {m : ι -> 可测空间 Ω} {_mΩ : 可测空间 Ω}
   证明: iIndepSets.indepSets h_indep hij
 -/
 theorem iIndep.indep {m : ι -> MeasurableSpace Ω} {_mΩ : MeasurableSpace Ω}
@@ -1533,7 +1533,7 @@ theorem iIndep.iIndepSets
 
 中文:
 定理 iIndep.iIndepSets
-  结论: {_mΩ : MeasurableSpace Ω}
+  结论: {_mΩ : 可测空间 Ω}
   证明: fun S f hfs =>
   h_indep S fun x hxS =>
     ((hms x).symm ▸ measurableSet_generateFrom (hfs x hxS) : MeasurableSet[m x] (f x))
@@ -1557,7 +1557,7 @@ theorem Indep.indepSets
 
 中文:
 定理 Indep.indepSets
-  结论: {_mΩ : MeasurableSpace Ω}
+  结论: {_mΩ : 可测空间 Ω}
   证明: fun t1 t2 ht1 ht2 =>
   h_indep t1 t2 (measurableSet_generateFrom ht1) (measurableSet_generateFrom ht2)
 -/
@@ -1594,7 +1594,7 @@ theorem IndepSets.indep_aux
 
 中文:
 定理 IndepSets.indep_aux
-  结论: {m₂ m : MeasurableSpace Ω}
+  结论: {m₂ m : 可测空间 Ω}
   证明: by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp
@@ -1647,7 +1647,7 @@ theorem IndepSets.indep
 
 中文:
 定理 IndepSets.indep
-  结论: {m1 m2 m : MeasurableSpace Ω} {κ : Kernel α Ω} {μ : Measure α}
+  结论: {m1 m2 m : 可测空间 Ω} {κ : 核 α Ω} {μ : 测度 α}
   证明: by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp
@@ -1702,7 +1702,7 @@ theorem IndepSets.indep'
 
 中文:
 定理 IndepSets.indep'
-  结论: {_mΩ : MeasurableSpace Ω}
+  结论: {_mΩ : 可测空间 Ω}
   证明: hyp.indep (generateFrom_le hp1m) (generateFrom_le hp2m) hp1 hp2 rfl rfl
 -/
 theorem IndepSets.indep' {_mΩ : MeasurableSpace Ω}
@@ -1728,8 +1728,8 @@ theorem indepSets_piiUnionInter_of_disjoint
     have hgm : forall i in p1 union p2, g i 
 
 中文:
-定理 indepSets_piiUnionInter_of_disjoint
-  结论: {s : ι -> Set (Set Ω)}
+定理 indepSets_piiUnion整数er_of_disjoint
+  结论: {s : ι -> 集合 (集合 Ω)}
   证明: by
   rintro t1 t2 ⟨p1, hp1, f1, ht1_m, ht1_eq⟩ ⟨p2, hp2, f2, ht2_m, ht2_eq⟩
   classical
@@ -1795,7 +1795,7 @@ theorem iIndepSet.indep_generateFrom_of_disjoint
 
 中文:
 定理 iIndepSet.indep_generateFrom_of_disjoint
-  结论: {s : ι -> Set Ω}
+  结论: {s : ι -> 集合 Ω}
   证明: by
   rcases eq_or_ne μ 0 with rfl | hμ
   · simp
@@ -1840,7 +1840,7 @@ theorem indep_iSup_of_disjoint
 
 中文:
 定理 indep_iSup_of_disjoint
-  结论: {m : ι -> MeasurableSpace Ω}
+  结论: {m : ι -> 可测空间 Ω}
   证明: by
   rcases eq_or_ne μ 0 with rfl | hμ
   · simp
@@ -1883,7 +1883,7 @@ theorem indep_iSup_of_directed_le
 
 中文:
 定理 indep_iSup_of_directed_le
-  结论: {Ω} {m : ι -> MeasurableSpace Ω} {m' m0 : MeasurableSpace Ω}
+  结论: {Ω} {m : ι -> 可测空间 Ω} {m' m0 : 可测空间 Ω}
   证明: by
   let p : ι -> Set (Set Ω) := fun n => { t | MeasurableSet[m n] t }
   have hp : forall n, IsPiSystem (p n) := fun n => @isPiSystem_measurableSet Ω (m n)
@@ -1930,7 +1930,7 @@ theorem iIndepSet.indep_generateFrom_lt
 
 中文:
 定理 iIndepSet.indep_generateFrom_lt
-  结论: [Preorder ι] {s : ι -> Set Ω}
+  结论: [预序 ι] {s : ι -> 集合 Ω}
   证明: by
   convert!
     iIndepSet.indep_generateFrom_of_disjoint hsm hs { i } {j | j < i}
@@ -1959,7 +1959,7 @@ theorem iIndepSet.indep_generateFrom_le
 
 中文:
 定理 iIndepSet.indep_generateFrom_le
-  结论: [Preorder ι] {s : ι -> Set Ω}
+  结论: [预序 ι] {s : ι -> 集合 Ω}
   证明: by
   convert!
     iIndepSet.indep_generateFrom_of_disjoint hsm hs { k } {j | j <= i}
@@ -1984,7 +1984,7 @@ theorem iIndepSet.indep_generateFrom_le_nat
 
 中文:
 定理 iIndepSet.indep_generateFrom_le_nat
-  结论: {s : 自然数 -> Set Ω}
+  结论: {s : 自然数 -> 集合 Ω}
   证明: iIndepSet.indep_generateFrom_le hsm hs _ n.lt_succ_self
 -/
 theorem iIndepSet.indep_generateFrom_le_nat {s : Nat -> Set Ω}
@@ -2002,7 +2002,7 @@ theorem indep_iSup_of_monotone
 
 中文:
 定理 indep_iSup_of_monotone
-  结论: [SemilatticeSup ι] {Ω} {m : ι -> MeasurableSpace Ω}
+  结论: [SemilatticeSup ι] {Ω} {m : ι -> 可测空间 Ω}
   证明: indep_iSup_of_directed_le h_indep h_le h_le' (Monotone.directed_le hm)
 
 Depends on / 依赖: Monotone, Monotone.directed_le, directed_le, h_indep, h_le, indep_iSup_of_directed_le
@@ -2024,7 +2024,7 @@ theorem indep_iSup_of_antitone
 
 中文:
 定理 indep_iSup_of_antitone
-  结论: [SemilatticeInf ι] {Ω} {m : ι -> MeasurableSpace Ω}
+  结论: [SemilatticeInf ι] {Ω} {m : ι -> 可测空间 Ω}
   证明: indep_iSup_of_directed_le h_indep h_le h_le' hm.directed_le
 
 Depends on / 依赖: directed_le, h_indep, h_le, hm.directed_le, indep_iSup_of_directed_le
@@ -2053,8 +2053,8 @@ theorem iIndepSets.piiUnionInter_of_notMem
     rcases Finset.
 
 中文:
-定理 iIndepSets.piiUnionInter_of_notMem
-  结论: {π : ι -> Set (Set Ω)} {a : ι} {S : Finset ι}
+定理 iIndepSets.piiUnion整数er_of_notMem
+  结论: {π : ι -> 集合 (集合 Ω)} {a : ι} {S : 有限集 ι}
   证明: by
   rintro t1 t2 ⟨s, hs_mem, ft1, hft1_mem, ht1_eq⟩ ht2_mem_pia
   rw [Finset.coe_subset] at hs_mem
@@ -2115,7 +2115,7 @@ theorem iIndepSets.iIndep
 
 中文:
 定理 iIndepSets.iIndep
-  结论: (m : ι -> MeasurableSpace Ω)
+  结论: (m : ι -> 可测空间 Ω)
   证明: by
   classical
   rcases eq_or_ne μ 0 with rfl | hμ
@@ -2185,7 +2185,7 @@ theorem iIndepSet_iff_iIndepSets_singleton
 
 中文:
 定理 iIndepSet_iff_iIndepSets_singleton
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: ⟨iIndep.iIndepSets fun _ => rfl,
     iIndepSets.iIndep _ (fun i => generateFrom_le <| by rintro t (rfl : t = _); exact hf _) _
       (fun _ => IsPiSystem.singleton _) fun _ => rfl⟩
@@ -2208,8 +2208,8 @@ theorem iIndepSet.meas_biInter
   proof: iIndep.iIndepSets (fun _ => rfl) h _ (by simp)
 
 中文:
-定理 iIndepSet.meas_biInter
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+定理 iIndepSet.meas_bi整数er
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: iIndep.iIndepSets (fun _ => rfl) h _ (by simp)
 -/
 theorem iIndepSet.meas_biInter {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
@@ -2226,8 +2226,8 @@ theorem iIndepSet_iff_meas_biInter
   proof: (iIndepSet_iff_iIndepSets_singleton hf).trans iIndepSets_singleton_iff
 
 中文:
-定理 iIndepSet_iff_meas_biInter
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+定理 iIndepSet_iff_meas_bi整数er
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: (iIndepSet_iff_iIndepSets_singleton hf).trans iIndepSets_singleton_iff
 
 Depends on / 依赖: iIndepSet_iff_iIndepSets_singleton, iIndepSets_singleton_iff
@@ -2247,7 +2247,7 @@ theorem iIndepSets.iIndepSet_of_mem
 
 中文:
 定理 iIndepSets.iIndepSet_of_mem
-  结论: {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: {_mΩ : 可测空间 Ω} {κ : 核 α Ω}
   证明: (iIndepSet_iff_meas_biInter hf).2 fun _t => hπ.meas_biInter _ fun _i _ => hfπ _
 -/
 theorem iIndepSets.iIndepSet_of_mem {_mΩ : MeasurableSpace Ω} {κ : Kernel α Ω}
@@ -2272,7 +2272,7 @@ theorem indepSet_iff_indepSets_singleton
 
 中文:
 定理 indepSet_iff_indepSets_singleton
-  结论: {m0 : MeasurableSpace Ω} (hs_meas : MeasurableSet s)
+  结论: {m0 : 可测空间 Ω} (hs_meas : 可测集 s)
   证明: ⟨Indep.indepSets, fun h =>
     IndepSets.indep
       (generateFrom_le fun u hu => by rwa [Set.mem_singleton_iff.mp hu])
@@ -2301,7 +2301,7 @@ theorem indepSet_iff_measure_inter_eq_mul
 
 中文:
 定理 indepSet_iff_measure_inter_eq_mul
-  结论: {_m0 : MeasurableSpace Ω} (hs_meas : MeasurableSet s)
+  结论: {_m0 : 可测空间 Ω} (hs_meas : 可测集 s)
   证明: (indepSet_iff_indepSets_singleton hs_meas ht_meas κ μ).trans indepSets_singleton_iff
 
 Depends on / 依赖: hs_meas, ht_meas, indepSet_iff_indepSets_singleton, indepSets_singleton_iff
@@ -2322,7 +2322,7 @@ theorem IndepSet.measure_inter_eq_mul
 
 中文:
 定理 IndepSet.measure_inter_eq_mul
-  结论: {_m0 : MeasurableSpace Ω} (κ : Kernel α Ω) (μ : Measure α)
+  结论: {_m0 : 可测空间 Ω} (κ : 核 α Ω) (μ : 测度 α)
   证明: Indep.indepSets h _ _ (by simp) (by simp)
 -/
 theorem IndepSet.measure_inter_eq_mul {_m0 : MeasurableSpace Ω} (κ : Kernel α Ω) (μ : Measure α)
@@ -2339,7 +2339,7 @@ theorem IndepSets.indepSet_of_mem
 
 中文:
 定理 IndepSets.indepSet_of_mem
-  结论: {_m0 : MeasurableSpace Ω} (hs : s in S) (ht : t in T)
+  结论: {_m0 : 可测空间 Ω} (hs : s in S) (ht : t in T)
   证明: (indepSet_iff_measure_inter_eq_mul hs_meas ht_meas κ μ).mpr (h_indep s t hs ht)
 -/
 theorem IndepSets.indepSet_of_mem {_m0 : MeasurableSpace Ω} (hs : s in S) (ht : t in T)
@@ -2366,7 +2366,7 @@ theorem Indep.indepSet_of_measurableSet
 
 中文:
 定理 Indep.indepSet_of_measurableSet
-  结论: {m₁ m₂ _ : MeasurableSpace Ω} {κ : Kernel α Ω}
+  结论: {m₁ m₂ _ : 可测空间 Ω} {κ : 核 α Ω}
   证明: by
   refine fun s' t' hs' ht' => h_indep s' t' ?_ ?_
   · induction s', hs' using generateFrom_induction with
@@ -2404,8 +2404,8 @@ theorem indep_iff_forall_indepSet
       (measurableSet_generateFrom (Set.mem_singleton t))⟩
 
 中文:
-定理 indep_iff_forall_indepSet
-  结论: (m₁ m₂ : MeasurableSpace Ω) {_m0 : MeasurableSpace Ω}
+定理 indep_iff_对任意_indepSet
+  结论: (m₁ m₂ : 可测空间 Ω) {_m0 : 可测空间 Ω}
   证明: ⟨fun h => fun _s _t hs ht => h.indepSet_of_measurableSet hs ht, fun h s t hs ht =>
     h s t hs ht s t (measurableSet_generateFrom (Set.mem_singleton s))
       (measurableSet_generateFrom (Set.mem_singleton t))⟩

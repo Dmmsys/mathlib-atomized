@@ -55,7 +55,7 @@ theorem isUnit_of_eventually_isUnit
 
 中文:
 定理 isUnit_of_eventually_isUnit
-  结论: {x : Πʳ i, [R i, B i]_[𝓕]} (hx : 对任意 i, IsUnit (x i))
+  结论: {x : Πʳ i, [R i, B i]_[𝓕]} (hx : 对任意 i, 是单位 (x i))
   证明: by
   rw [isUnit_iff_exists]
   use .mk (fun i => (hx i).unit.inv) (by
@@ -93,7 +93,7 @@ theorem eventually_isUnit_of_isUnit
 
 中文:
 定理 eventually_isUnit_of_isUnit
-  条件: {x : Πʳ i, [R i, B i]_[𝓕]} (hx : IsUnit x)
+  条件: {x : Πʳ i, [R i, B i]_[𝓕]} (hx : 是单位 x)
   证明: by
   simp only [isUnit_iff_exists, RestrictedProduct.ext_iff, ← forall_and] at hx
   simp only [isUnit_iff_exists]
@@ -167,7 +167,7 @@ definition mkUnit
 
 中文:
 定义 mkUnit
-  签名: (x : Π i, (R i)ˣ) (hx : 对任意ᶠ i in 𝓕, x i in (Submonoid.ofClass (B i)).units)
+  签名: (x : Π i, (R i)ˣ) (hx : 对任意ᶠ i in 𝓕, x i in (子幺半群.ofClass (B i)).units)
   定义体: ⟨fun i => (x i).1, by filter_upwards [hx] using fun i hi => hi.1⟩
   inv := ⟨fun i => (x i)⁻¹.1, by filter_upwards [hx] using fun i hi => hi.2⟩
   val_inv := by ext; simp
@@ -197,7 +197,7 @@ definition unitsEquiv
 
 中文:
 定义 unitsEquiv
-  签名: : Πʳ i, [R i, B i]_[𝓕]ˣ ≃* Πʳ i, [(R i)ˣ, (Submonoid.ofClass (B i)).units]_[𝓕] where
+  签名: : Πʳ i, [R i, B i]_[𝓕]ˣ ≃* Πʳ i, [(R i)ˣ, (子幺半群.ofClass (B i)).units]_[𝓕] where
   定义体: ⟨coeUnits x, by filter_upwards [x.val.2, x.inv.2] using fun i hi hi' => ⟨hi, hi'⟩⟩
   invFun y := mkUnit y.1 y.2
   left_inv _ := rfl

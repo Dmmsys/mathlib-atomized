@@ -46,8 +46,8 @@ lemma IsCompact.exists_clusterPt
   proof: hs hf
 
 中文:
-引理 IsCompact.exists_clusterPt
-  条件: (hs : IsCompact s) {f : Filter X} [NeBot f] (hf : f <= 𝓟 s)
+引理 是紧集.存在_clusterPt
+  条件: (hs : 是紧集 s) {f : 滤子 X} [NeBot f] (hf : f <= 𝓟 s)
   证明: hs hf
 -/
 lemma IsCompact.exists_clusterPt (hs : IsCompact s) {f : Filter X} [NeBot f] (hf : f <= 𝓟 s) :
@@ -62,8 +62,8 @@ lemma IsCompact.exists_mapClusterPt
   proof: hs hf
 
 中文:
-引理 IsCompact.exists_mapClusterPt
-  结论: {ι : 类型} (hs : IsCompact s) {f : Filter ι} [NeBot f]
+引理 是紧集.存在_mapClusterPt
+  结论: {ι : 类型} (hs : 是紧集 s) {f : 滤子 ι} [NeBot f]
   证明: hs hf
 -/
 lemma IsCompact.exists_mapClusterPt {ι : Type*} (hs : IsCompact s) {f : Filter ι} [NeBot f]
@@ -80,8 +80,8 @@ lemma IsCompact.exists_clusterPt_of_frequently
   ⟨a, has, ha.mono inf_le_left⟩
 
 中文:
-引理 IsCompact.exists_clusterPt_of_frequently
-  结论: {l : Filter X} (hs : IsCompact s)
+引理 是紧集.存在_clusterPt_of_frequently
+  结论: {l : 滤子 X} (hs : 是紧集 s)
   证明: let ⟨a, has, ha⟩ := @hs _ (frequently_mem_iff_neBot.mp hl) inf_le_right
   ⟨a, has, ha.mono inf_le_left⟩
 
@@ -101,8 +101,8 @@ lemma IsCompact.exists_mapClusterPt_of_frequently
   proof: hs.exists_clusterPt_of_frequently hf
 
 中文:
-引理 IsCompact.exists_mapClusterPt_of_frequently
-  结论: {l : Filter ι} {f : ι -> X} (hs : IsCompact s)
+引理 是紧集.存在_mapClusterPt_of_frequently
+  结论: {l : 滤子 ι} {f : ι -> X} (hs : 是紧集 s)
   证明: hs.exists_clusterPt_of_frequently hf
 
 Depends on / 依赖: exists_clusterPt_of_frequently, hs.exists_clusterPt_of_frequently
@@ -123,8 +123,8 @@ theorem IsCompact.compl_mem_sets
   exact @hs _ hf inf_le_right
 
 中文:
-定理 IsCompact.compl_mem_sets
-  条件: (hs : IsCompact s) {f : Filter X} (hf : 对任意 x in s, sᶜ in 𝓝 x ⊓ f)
+定理 是紧集.compl_mem_sets
+  条件: (hs : 是紧集 s) {f : 滤子 X} (hf : 对任意 x in s, sᶜ in 𝓝 x ⊓ f)
   证明: by
   contrapose! hf
   simp only [notMem_iff_inf_principal_compl, compl_compl, inf_assoc] at hf ⊢
@@ -153,8 +153,8 @@ theorem IsCompact.compl_mem_sets_of_nhdsWithin
   exact h₂ (h₁ hs)
 
 中文:
-定理 IsCompact.compl_mem_sets_of_nhdsWithin
-  结论: (hs : IsCompact s) {f : Filter X}
+定理 是紧集.compl_mem_sets_of_nhdsWithin
+  结论: (hs : 是紧集 s) {f : 滤子 X}
   证明: by
   refine hs.compl_mem_sets fun x hx => ?_
   rcases hf x hx with ⟨t, ht, hst⟩
@@ -189,8 +189,8 @@ theorem IsCompact.induction_on
   rwa [← compl_compl s]
 
 中文:
-定理 IsCompact.induction_on
-  结论: (hs : IsCompact s) {p : Set X -> 命题} (he : p ∅)
+定理 是紧集.induction_on
+  结论: (hs : 是紧集 s) {p : 集合 X -> 命题} (he : p ∅)
   证明: by
   let f : Filter X := comk p he (fun _t ht _s hsub => hmono hsub ht) (fun _s hs _t ht => hunion hs ht)
   have : sᶜ in f := hs.compl_mem_sets_of_nhdsWithin (by simpa [f] using hnhds)
@@ -223,9 +223,9 @@ hx.mono le_trans hstf (le_principal_iff.2 inter_subset_right)
   exact ⟨x, ⟨hsx, this⟩, hx⟩
 
 中文:
-定理 IsCompact.inter_right
-  条件: (hs : IsCompact s) (ht : IsClosed t)
-  结论: IsCompact (s inter t)
+定理 是紧集.inter_right
+  条件: (hs : 是紧集 s) (ht : 是闭集 t)
+  结论: 是紧集 (s inter t)
   证明: by
   intro f hnf hstf
   obtain ⟨x, hsx, hx⟩ : exists x in s, ClusterPt x f :=
@@ -256,9 +256,9 @@ theorem IsCompact.inter_left
   proof: inter_comm t s ▸ ht.inter_right hs
 
 中文:
-定理 IsCompact.inter_left
-  条件: (ht : IsCompact t) (hs : IsClosed s)
-  结论: IsCompact (s inter t)
+定理 是紧集.inter_left
+  条件: (ht : 是紧集 t) (hs : 是闭集 s)
+  结论: 是紧集 (s inter t)
   证明: inter_comm t s ▸ ht.inter_right hs
 
 Depends on / 依赖: ht.inter_right, inter_comm, inter_right
@@ -278,9 +278,9 @@ theorem IsCompact.diff
   proof: hs.inter_right (isClosed_compl_iff.mpr ht)
 
 中文:
-定理 IsCompact.diff
-  条件: (hs : IsCompact s) (ht : IsOpen t)
-  结论: IsCompact (s \ t)
+定理 是紧集.diff
+  条件: (hs : 是紧集 s) (ht : 是开集 t)
+  结论: 是紧集 (s \ t)
   证明: hs.inter_right (isClosed_compl_iff.mpr ht)
 
 Depends on / 依赖: hs.inter_right, inter_right, isClosed_compl_iff, isClosed_compl_iff.mpr
@@ -299,8 +299,8 @@ theorem IsCompact.of_isClosed_subset
 @[compactness .]
 
 中文:
-定理 IsCompact.of_isClosed_subset
-  条件: (hs : IsCompact s) (ht : IsClosed t) (h : t subseteq s)
+定理 是紧集.of_isClosed_subset
+  条件: (hs : 是紧集 s) (ht : 是闭集 t) (h : t subseteq s)
   证明: inter_eq_self_of_subset_right h ▸ hs.inter_right ht
 
 @[compactness .]
@@ -328,8 +328,8 @@ theorem IsCompact.image_of_continuousOn
   have : Tendsto f (𝓝 x 
 
 中文:
-定理 IsCompact.image_of_continuousOn
-  条件: {f : X -> Y} (hs : IsCompact s) (hf : ContinuousOn f s)
+定理 是紧集.image_of_continuousOn
+  条件: {f : X -> Y} (hs : 是紧集 s) (hf : ContinuousOn f s)
   证明: by
   intro l lne ls
   have : NeBot (l.comap f ⊓ 𝓟 s) :=
@@ -365,9 +365,9 @@ theorem IsCompact.image
   proof: hs.image_of_continuousOn hf.continuousOn
 
 中文:
-定理 IsCompact.image
-  条件: {f : X -> Y} (hs : IsCompact s) (hf : Continuous f)
-  结论: IsCompact (f '' s)
+定理 是紧集.像
+  条件: {f : X -> Y} (hs : 是紧集 s) (hf : 连续 f)
+  结论: 是紧集 (f '' s)
   证明: hs.image_of_continuousOn hf.continuousOn
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hs.image_of_continuousOn, image_of_continuousOn
@@ -388,8 +388,8 @@ let ⟨x, hx, (hfx : ClusterPt x <| f ⊓ 𝓟 tᶜ)⟩ := @hs _ ⟨this⟩ inf_
 have A : 𝓝[tᶜ] x = ⊥ :
 
 中文:
-定理 IsCompact.adherence_nhdset
-  结论: {f : Filter X} (hs : IsCompact s) (hf₂ : f <= 𝓟 s)
+定理 是紧集.adherence_nhdset
+  结论: {f : 滤子 X} (hs : 是紧集 s) (hf₂ : f <= 𝓟 s)
   证明: Classical.by_cases mem_of_eq_bot fun (this : f ⊓ 𝓟 tᶜ != ⊥) =>
 let ⟨x, hx, (hfx : ClusterPt x <| f ⊓ 𝓟 tᶜ)⟩ := @hs _ ⟨this⟩ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
@@ -481,8 +481,8 @@ lemma IsCompact.le_nhdsSet_of_clusterPt
   exact h x hxs (.mono (.of_le_nhds hx) hf)
 
 中文:
-引理 IsCompact.le_nhdsSet_of_clusterPt
-  结论: (hs : IsCompact s) {l : Filter X} {s' : Set X}
+引理 是紧集.le_nhdsSet_of_clusterPt
+  结论: (hs : 是紧集 s) {l : 滤子 X} {s' : 集合 X}
   证明: by
   refine le_iff_ultrafilter.2 fun f hf => ?_
   rcases hs.ultrafilter_le_nhds' f (hf hmem) with ⟨x, hxs, hx⟩
@@ -511,8 +511,8 @@ lemma IsCompact.le_nhds_of_unique_clusterPt
   exact hs.le_nhdsSet_of_clusterPt hmem h
 
 中文:
-引理 IsCompact.le_nhds_of_unique_clusterPt
-  结论: (hs : IsCompact s) {l : Filter X} {y : X}
+引理 是紧集.le_nhds_of_unique_clusterPt
+  结论: (hs : 是紧集 s) {l : 滤子 X} {y : X}
   证明: by
   rw [← nhdsSet_singleton]
   exact hs.le_nhdsSet_of_clusterPt hmem h
@@ -533,8 +533,8 @@ lemma IsCompact.tendsto_nhdsSet_of_mapClusterPt
   proof: hs.le_nhdsSet_of_clusterPt (mem_map.2 hmem) h
 
 中文:
-引理 IsCompact.tendsto_nhdsSet_of_mapClusterPt
-  结论: {Y} {l : Filter Y} {s' : Set X} {f : Y -> X}
+引理 是紧集.tendsto_nhdsSet_of_mapClusterPt
+  结论: {Y} {l : 滤子 Y} {s' : 集合 X} {f : Y -> X}
   证明: hs.le_nhdsSet_of_clusterPt (mem_map.2 hmem) h
 
 Depends on / 依赖: hs.le_nhdsSet_of_clusterPt, le_nhdsSet_of_clusterPt, mem_map
@@ -555,8 +555,8 @@ lemma IsCompact.tendsto_nhds_of_unique_mapClusterPt
   exact hs.tendsto_nhdsSet_of_mapClusterPt hmem h
 
 中文:
-引理 IsCompact.tendsto_nhds_of_unique_mapClusterPt
-  结论: {Y} {l : Filter Y} {y : X} {f : Y -> X}
+引理 是紧集.tendsto_nhds_of_unique_mapClusterPt
+  结论: {Y} {l : 滤子 Y} {y : X} {f : Y -> X}
   证明: by
   rw [← nhdsSet_singleton]
   exact hs.tendsto_nhdsSet_of_mapClusterPt hmem h
@@ -584,8 +584,8 @@ theorem IsCompact.elim_directed_cover
       let ⟨i, hi⟩ := mem_iUni
 
 中文:
-定理 IsCompact.elim_directed_cover
-  结论: {ι : 类型v} [hι : Nonempty ι] (hs : IsCompact s)
+定理 是紧集.elim_directed_cover
+  结论: {ι : 类型v} [hι : 非空 ι] (hs : 是紧集 s)
   证明: hι.elim fun i₀ =>
     IsCompact.induction_on hs ⟨i₀, empty_subset _⟩ (fun _ _ hs ⟨i, hi⟩ => ⟨i, hs.trans hi⟩)
       (fun _ _ ⟨i, hi⟩ ⟨j, hj⟩ =>
@@ -619,8 +619,8 @@ theorem IsCompact.elim_finite_subcover
     (directed_of_isDirected_le fun _ _ h => biUnion_subset_biUnion_left h)
 
 中文:
-定理 IsCompact.elim_finite_subcover
-  结论: {ι : 类型v} (hs : IsCompact s) (U : ι -> Set X)
+定理 是紧集.elim_finite_subcover
+  结论: {ι : 类型v} (hs : 是紧集 s) (U : ι -> 集合 X)
   证明: hs.elim_directed_cover _ (fun _ => isOpen_biUnion fun i _ => hUo i)
     (iUnion_eq_iUnion_finset U ▸ hsU)
     (directed_of_isDirected_le fun _ _ h => biUnion_subset_biUnion_left h)
@@ -647,8 +647,8 @@ fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩ w
   refine mem_o
 
 中文:
-引理 IsCompact.elim_nhds_subcover_nhdsSet'
-  结论: (hs : IsCompact s) (U : 对任意 x in s, Set X)
+引理 是紧集.elim_nhds_subcover_nhdsSet'
+  结论: (hs : 是紧集 s) (U : 对任意 x in s, 集合 X)
   证明: by
   rcases hs.elim_finite_subcover (fun x : s => interior (U x x.2)) (fun _ => isOpen_interior)
 fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩ with ⟨t, hst⟩
@@ -682,8 +682,8 @@ lemma IsCompact.elim_nhds_subcover_nhdsSet
     by rwa [Finset.set_biUnion_finset_image]⟩
 
 中文:
-引理 IsCompact.elim_nhds_subcover_nhdsSet
-  结论: (hs : IsCompact s) {U : X -> Set X}
+引理 是紧集.elim_nhds_subcover_nhdsSet
+  结论: (hs : 是紧集 s) {U : X -> 集合 X}
   证明: by
   let ⟨t, ht⟩ := hs.elim_nhds_subcover_nhdsSet' (fun x _ => U x) hU
   classical
@@ -712,8 +712,8 @@ theorem IsCompact.elim_nhds_subcover'
   proof: (hs.elim_nhds_subcover_nhdsSet' U hU).imp fun _ => subset_of_mem_nhdsSet
 
 中文:
-定理 IsCompact.elim_nhds_subcover'
-  结论: (hs : IsCompact s) (U : 对任意 x in s, Set X)
+定理 是紧集.elim_nhds_subcover'
+  结论: (hs : 是紧集 s) (U : 对任意 x in s, 集合 X)
   证明: (hs.elim_nhds_subcover_nhdsSet' U hU).imp fun _ => subset_of_mem_nhdsSet
 
 Depends on / 依赖: elim_nhds_subcover_nhdsSet, hs.elim_nhds_subcover_nhdsSet, subset_of_mem_nhdsSet
@@ -731,8 +731,8 @@ theorem IsCompact.elim_nhds_subcover
   proof: (hs.elim_nhds_subcover_nhdsSet hU).imp fun _ h => h.imp_right subset_of_mem_nhdsSet
 
 中文:
-定理 IsCompact.elim_nhds_subcover
-  条件: (hs : IsCompact s) (U : X -> Set X) (hU : 对任意 x in s, U x in 𝓝 x)
+定理 是紧集.elim_nhds_subcover
+  条件: (hs : 是紧集 s) (U : X -> 集合 X) (hU : 对任意 x in s, U x in 𝓝 x)
   证明: (hs.elim_nhds_subcover_nhdsSet hU).imp fun _ h => h.imp_right subset_of_mem_nhdsSet
 
 Depends on / 依赖: elim_nhds_subcover_nhdsSet, h.imp_right, hs.elim_nhds_subcover_nhdsSet, imp_right, subset_of_mem_nhdsSet
@@ -754,8 +754,8 @@ theorem IsCompact.elim_nhdsWithin_subcover'
   simpa [← iUnion_inter, ← iUnion_coe_set]
 
 中文:
-定理 IsCompact.elim_nhdsWithin_subcover'
-  结论: (hs : IsCompact s) (U : 对任意 x in s, Set X)
+定理 是紧集.elim_nhdsWithin_subcover'
+  结论: (hs : 是紧集 s) (U : 对任意 x in s, 集合 X)
   证明: by
   choose V V_nhds hV using fun x hx => mem_nhdsWithin_iff_exists_mem_nhds_inter.1 (hU x hx)
   refine (hs.elim_nhds_subcover' V V_nhds).imp fun t ht =>
@@ -784,8 +784,8 @@ theorem IsCompact.elim_nhdsWithin_subcover
   simpa [← iUnion_inter]
 
 中文:
-定理 IsCompact.elim_nhdsWithin_subcover
-  结论: (hs : IsCompact s) (U : X -> Set X)
+定理 是紧集.elim_nhdsWithin_subcover
+  结论: (hs : 是紧集 s) (U : X -> 集合 X)
   证明: by
   choose! V V_nhds hV using fun x hx => mem_nhdsWithin_iff_exists_mem_nhds_inter.1 (hU x hx)
   refine (hs.elim_nhds_subcover V V_nhds).imp fun t ⟨t_sub_s, ht⟩ =>
@@ -815,8 +815,8 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   refine (hasBasis_n
 
 中文:
-定理 IsCompact.disjoint_nhdsSet_left
-  条件: {l : Filter X} (hs : IsCompact s)
+定理 是紧集.disjoint_nhdsSet_left
+  条件: {l : 滤子 X} (hs : 是紧集 s)
   证明: by
 refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
@@ -847,8 +847,8 @@ theorem IsCompact.disjoint_nhdsSet_right
   simpa only [disjoint_comm] using hs.disjoint_nhdsSet_left
 
 中文:
-定理 IsCompact.disjoint_nhdsSet_right
-  条件: {l : Filter X} (hs : IsCompact s)
+定理 是紧集.disjoint_nhdsSet_right
+  条件: {l : 滤子 X} (hs : 是紧集 s)
   证明: by
   simpa only [disjoint_comm] using hs.disjoint_nhdsSet_left
 
@@ -873,8 +873,8 @@ theorem IsCompact.elim_directed_family_closed
       (hdt.mono_comp _ fun _ _ => 
 
 中文:
-定理 IsCompact.elim_directed_family_closed
-  结论: {ι : 类型v} [Nonempty ι] (hs : IsCompact s)
+定理 是紧集.elim_directed_family_closed
+  结论: {ι : 类型v} [非空 ι] (hs : 是紧集 s)
   证明: let ⟨t, ht⟩ :=
     hs.elim_directed_cover (compl ∘ t) (fun i => (htc i).isOpen_compl)
       (by
@@ -909,8 +909,8 @@ theorem IsCompact.elim_finite_subfamily_closed
     (directed_of_isDirected_le fun _ _ h => biInter_subset_biInter_left h)
 
 中文:
-定理 IsCompact.elim_finite_subfamily_closed
-  结论: {ι : 类型v} (hs : IsCompact s)
+定理 是紧集.elim_finite_subfamily_closed
+  结论: {ι : 类型v} (hs : 是紧集 s)
   证明: hs.elim_directed_family_closed _ (fun _ => isClosed_biInter fun _ _ => htc _)
     (by rwa [← iInter_eq_iInter_finset])
     (directed_of_isDirected_le fun _ _ h => biInter_subset_biInter_left h)
@@ -935,8 +935,8 @@ theorem IsCompact.inter_iInter_nonempty
   exact hs.elim_finite_subfamily_closed t htc hst
 
 中文:
-定理 IsCompact.inter_iInter_nonempty
-  结论: {ι : 类型v} (hs : IsCompact s) (t : ι -> Set X)
+定理 是紧集.inter_i整数er_nonempty
+  结论: {ι : 类型v} (hs : 是紧集 s) (t : ι -> 集合 X)
   证明: by
   contrapose! hst
   exact hs.elim_finite_subfamily_closed t htc hst
@@ -961,8 +961,8 @@ lemma IsCompact.nonempty_inter_sInter
   simpa using h (Subtype.val '' (a : Set t)) (by simp) (a.finite_toSet.image _)
 
 中文:
-引理 IsCompact.nonempty_inter_sInter
-  结论: (hs : IsCompact s) {t : Set (Set X)}
+引理 是紧集.nonempty_inter_s整数er
+  结论: (hs : 是紧集 s) {t : 集合 (集合 X)}
   证明: by
   rw [Set.sInter_eq_iInter]
   refine hs.inter_iInter_nonempty _ (fun i => ht _ i.2) fun a => ?_
@@ -987,8 +987,8 @@ lemma CompactSpace.nonempty_sInter
   simpa using isCompact_univ.nonempty_inter_sInter hsc (by simpa using hs)
 
 中文:
-引理 CompactSpace.nonempty_sInter
-  结论: [CompactSpace X] {s : Set (Set X)} (hsc : 对任意 t in s, IsClosed t)
+引理 紧空间.nonempty_s整数er
+  结论: [紧空间 X] {s : 集合 (集合 X)} (hsc : 对任意 t in s, 是闭集 t)
   证明: by
   simpa using isCompact_univ.nonempty_inter_sInter hsc (by simpa using hs)
 
@@ -1014,7 +1014,7 @@ theorem IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
   refine ⟨htd,
 
 中文:
-定理 IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
+定理 是紧集.nonempty_i整数er_of_directed_nonempty_isCompact_isClosed
   证明: by
   let i₀ := hι.some
   suffices (t i₀ inter ⋂ i, t i).Nonempty by
@@ -1053,7 +1053,7 @@ theorem IsCompact.nonempty_sInter_of_directed_nonempty_isCompact_isClosed
     (DirectedOn.directed_val hSd) (fun i => hSn i i.2) (fun i => hSc i i.2) (fun i => hScl i i.2)
 
 中文:
-定理 IsCompact.nonempty_sInter_of_directed_nonempty_isCompact_isClosed
+定理 是紧集.nonempty_s整数er_of_directed_nonempty_isCompact_isClosed
   证明: by
   rw [sInter_eq_iInter]
   exact IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed _
@@ -1081,8 +1081,8 @@ have : forall i, t i subseteq t 0 := fun i => tmono Nat.zero_le i
   IsCompact.nonempty_iInter_of_dir
 
 中文:
-定理 IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
-  结论: (t : 自然数 -> Set X)
+定理 是紧集.nonempty_i整数er_of_sequence_nonempty_isCompact_isClosed
+  结论: (t : 自然数 -> 集合 X)
   证明: have tmono : Antitone t := antitone_nat_of_succ_le htd
   have htd : Directed (· ⊇ ·) t := tmono.directed_ge
 have : forall i, t i subseteq t 0 := fun i => tmono Nat.zero_le i
@@ -1114,8 +1114,8 @@ theorem IsCompact.elim_finite_subcover_image
   · rwa [biUnion_image]
 
 中文:
-定理 IsCompact.elim_finite_subcover_image
-  结论: {b : Set ι} {c : ι -> Set X} (hs : IsCompact s)
+定理 是紧集.elim_finite_subcover_image
+  结论: {b : 集合 ι} {c : ι -> 集合 X} (hs : 是紧集 s)
   证明: by
   simp only [Subtype.forall', biUnion_eq_iUnion] at hc₁ hc₂
   rcases hs.elim_finite_subcover (fun i => c i : b -> Set X) hc₁ hc₂ with ⟨d, hd⟩
@@ -1256,8 +1256,8 @@ theorem IsCompact.mem_nhdsSet_prod_of_forall
     refine ⟨u, n
 
 中文:
-定理 IsCompact.mem_nhdsSet_prod_of_forall
-  结论: {K : Set X} {Y} {l : Filter Y} {s : Set (X × Y)}
+定理 是紧集.mem_nhdsSet_prod_of_对任意
+  结论: {K : 集合 X} {Y} {l : 滤子 Y} {s : 集合 (X × Y)}
   证明: by
   refine hK.induction_on (by simp) (fun t t' ht hs => ?_) (fun t t' ht ht' => ?_) fun x hx => ?_
   · exact prod_mono (nhdsSet_mono ht) le_rfl hs
@@ -1288,8 +1288,8 @@ theorem IsCompact.nhdsSet_prod_eq_biSup
     (iSup₂_le fun _ hx => prod_mono (nhds_le_nhdsSet hx) le_rfl)
 
 中文:
-定理 IsCompact.nhdsSet_prod_eq_biSup
-  条件: {K : Set X} (hK : IsCompact K) {Y} (l : Filter Y)
+定理 是紧集.nhdsSet_prod_eq_biSup
+  条件: {K : 集合 X} (hK : 是紧集 K) {Y} (l : 滤子 Y)
   证明: le_antisymm (fun s hs => hK.mem_nhdsSet_prod_of_forall <| by simpa using hs)
     (iSup₂_le fun _ hx => prod_mono (nhds_le_nhdsSet hx) le_rfl)
 
@@ -1310,8 +1310,8 @@ theorem IsCompact.prod_nhdsSet_eq_biSup
   simp only [prod_comm (f := l), hK.nhdsSet_prod_eq_biSup, map_iSup]
 
 中文:
-定理 IsCompact.prod_nhdsSet_eq_biSup
-  条件: {K : Set Y} (hK : IsCompact K) {X} (l : Filter X)
+定理 是紧集.prod_nhdsSet_eq_biSup
+  条件: {K : 集合 Y} (hK : 是紧集 K) {X} (l : 滤子 X)
   证明: by
   simp only [prod_comm (f := l), hK.nhdsSet_prod_eq_biSup, map_iSup]
 
@@ -1330,8 +1330,8 @@ theorem IsCompact.mem_prod_nhdsSet_of_forall
   proof: (hK.prod_nhdsSet_eq_biSup l).symm ▸ by simpa using hs
 
 中文:
-定理 IsCompact.mem_prod_nhdsSet_of_forall
-  结论: {K : Set Y} {X} {l : Filter X} {s : Set (X × Y)}
+定理 是紧集.mem_prod_nhdsSet_of_对任意
+  结论: {K : 集合 Y} {X} {l : 滤子 X} {s : 集合 (X × Y)}
   证明: (hK.prod_nhdsSet_eq_biSup l).symm ▸ by simpa using hs
 
 Depends on / 依赖: hK.prod_nhdsSet_eq_biSup, prod_nhdsSet_eq_biSup
@@ -1354,8 +1354,8 @@ theorem IsCompact.nhdsSet_inf_eq_biSup
   simp_rw [this, ← comap_iSup, hK.nhdsSet_prod_eq_biSup]
 
 中文:
-定理 IsCompact.nhdsSet_inf_eq_biSup
-  条件: {K : Set X} (hK : IsCompact K) (l : Filter X)
+定理 是紧集.nhdsSet_inf_eq_biSup
+  条件: {K : 集合 X} (hK : 是紧集 K) (l : 滤子 X)
   证明: by
   have : forall f : Filter X, f ⊓ l = comap Function.diag (f ×ˢ l) := fun f => by
     simpa only [comap_prod] using! congrArg₂ (· ⊓ ·) comap_id.symm comap_id.symm
@@ -1379,8 +1379,8 @@ theorem IsCompact.inf_nhdsSet_eq_biSup
   simp only [inf_comm l, hK.nhdsSet_inf_eq_biSup]
 
 中文:
-定理 IsCompact.inf_nhdsSet_eq_biSup
-  条件: {K : Set X} (hK : IsCompact K) (l : Filter X)
+定理 是紧集.inf_nhdsSet_eq_biSup
+  条件: {K : 集合 X} (hK : 是紧集 K) (l : 滤子 X)
   证明: by
   simp only [inf_comm l, hK.nhdsSet_inf_eq_biSup]
 
@@ -1399,8 +1399,8 @@ theorem IsCompact.mem_nhdsSet_inf_of_forall
   proof: (hK.nhdsSet_inf_eq_biSup l).symm ▸ by simpa using hs
 
 中文:
-定理 IsCompact.mem_nhdsSet_inf_of_forall
-  结论: {K : Set X} {l : Filter X} {s : Set X}
+定理 是紧集.mem_nhdsSet_inf_of_对任意
+  结论: {K : 集合 X} {l : 滤子 X} {s : 集合 X}
   证明: (hK.nhdsSet_inf_eq_biSup l).symm ▸ by simpa using hs
 
 Depends on / 依赖: hK.nhdsSet_inf_eq_biSup, nhdsSet_inf_eq_biSup
@@ -1418,8 +1418,8 @@ theorem IsCompact.mem_inf_nhdsSet_of_forall
   proof: (hK.inf_nhdsSet_eq_biSup l).symm ▸ by simpa using hs
 
 中文:
-定理 IsCompact.mem_inf_nhdsSet_of_forall
-  结论: {K : Set X} {l : Filter X} {s : Set X}
+定理 是紧集.mem_inf_nhdsSet_of_对任意
+  结论: {K : 集合 X} {l : 滤子 X} {s : 集合 X}
   证明: (hK.inf_nhdsSet_eq_biSup l).symm ▸ by simpa using hs
 
 Depends on / 依赖: hK.inf_nhdsSet_eq_biSup, inf_nhdsSet_eq_biSup
@@ -1441,8 +1441,8 @@ theorem IsCompact.eventually_forall_of_forall_eventually
 @[compactness ., grind .]
 
 中文:
-定理 IsCompact.eventually_forall_of_forall_eventually
-  结论: {x₀ : X} {K : Set Y} (hK : IsCompact K)
+定理 是紧集.eventually_对任意_of_对任意_eventually
+  结论: {x₀ : X} {K : 集合 Y} (hK : 是紧集 K)
   证明: by
   simp only [nhds_prod_eq, ← eventually_iSup, ← hK.prod_nhdsSet_eq_biSup] at hP
   exact hP.curry.mono fun _ h => h.self_of_nhdsSet
@@ -1471,7 +1471,7 @@ Not.elim hnf.ne empty_mem_iff_bot.1 le_principal_iff.1 hsf
 
 中文:
 定理 isCompact_empty
-  结论: IsCompact (∅ : Set X)
+  结论: 是紧集 (∅ : 集合 X)
   证明: fun _f hnf hsf =>
 Not.elim hnf.ne empty_mem_iff_bot.1 le_principal_iff.1 hsf
 
@@ -1495,7 +1495,7 @@ theorem isCompact_singleton
 中文:
 定理 isCompact_singleton
   条件: {x : X}
-  结论: IsCompact ({x} : Set X)
+  结论: 是紧集 ({x} : 集合 X)
   证明: fun _ hf hfa =>
   ⟨x, rfl, ClusterPt.of_le_nhds'
     (hfa.trans <| by simpa only [principal_singleton] using pure_le_nhds x) hf⟩
@@ -1514,9 +1514,9 @@ theorem Set.Subsingleton.isCompact
   proof: Subsingleton.induction_on hs isCompact_empty fun _ => isCompact_singleton
 
 中文:
-定理 Set.Subsingleton.isCompact
-  条件: (hs : s.Subsingleton)
-  结论: IsCompact s
+定理 集合.子单例.isCompact
+  条件: (hs : s.子单例)
+  结论: 是紧集 s
   证明: Subsingleton.induction_on hs isCompact_empty fun _ => isCompact_singleton
 
 Depends on / 依赖: Subsingleton, Subsingleton.induction_on, induction_on, isCompact_empty, isCompact_singleton
@@ -1537,8 +1537,8 @@ theorem Set.Finite.isCompact_biUnion
     exact ⟨x, mem_iUnion₂.2 ⟨i, his, hxi⟩, hlx⟩
 
 中文:
-定理 Set.Finite.isCompact_biUnion
-  结论: {s : Set ι} {f : ι -> Set X} (hs : s.Finite)
+定理 集合.有限.isCompact_biUnion
+  结论: {s : 集合 ι} {f : ι -> 集合 X} (hs : s.有限)
   证明: isCompact_iff_ultrafilter_le_nhds'.2 fun l hl => by
     rw [Ultrafilter.finite_biUnion_mem_iff hs] at hl
     rcases hl with ⟨i, his, hi⟩
@@ -1566,8 +1566,8 @@ theorem Finset.isCompact_biUnion
 @[compactness .]
 
 中文:
-定理 Finset.isCompact_biUnion
-  条件: (s : Finset ι) {f : ι -> Set X} (hf : 对任意 i in s, IsCompact (f i))
+定理 有限集.isCompact_biUnion
+  条件: (s : 有限集 ι) {f : ι -> 集合 X} (hf : 对任意 i in s, 是紧集 (f i))
   证明: s.finite_toSet.isCompact_biUnion hf
 
 @[compactness .]
@@ -1591,7 +1591,7 @@ theorem isCompact_accumulate
 
 中文:
 定理 isCompact_accumulate
-  条件: {K : 自然数 -> Set X} (hK : 对任意 n, IsCompact (K n)) (n : 自然数)
+  条件: {K : 自然数 -> 集合 X} (hK : 对任意 n, 是紧集 (K n)) (n : 自然数)
   证明: (finite_le_nat n).isCompact_biUnion fun k _ => hK k
 
 @[compactness .]
@@ -1615,8 +1615,8 @@ theorem Set.Finite.isCompact_sUnion
 @[compactness .]
 
 中文:
-定理 Set.Finite.isCompact_sUnion
-  条件: {S : Set (Set X)} (hf : S.Finite) (hc : 对任意 s in S, IsCompact s)
+定理 集合.有限.isCompact_sUnion
+  条件: {S : 集合 (集合 X)} (hf : S.有限) (hc : 对任意 s in S, 是紧集 s)
   证明: by
   rw [sUnion_eq_biUnion]; exact hf.isCompact_biUnion hc
 
@@ -1639,7 +1639,7 @@ theorem isCompact_iUnion
 
 中文:
 定理 isCompact_iUnion
-  条件: {ι : Sort*} {f : ι -> Set X} [Finite ι] (h : 对任意 i, IsCompact (f i))
+  条件: {ι : 类型层*} {f : ι -> 集合 X} [有限 ι] (h : 对任意 i, 是紧集 (f i))
   证明: (finite_range f).isCompact_sUnion forall_mem_range.2 h
 
 Depends on / 依赖: finite_range, forall_mem_range, isCompact_sUnion
@@ -1658,9 +1658,9 @@ theorem Set.Finite.isCompact
   proof: biUnion_of_singleton s ▸ hs.isCompact_biUnion fun _ _ => isCompact_singleton
 
 中文:
-定理 Set.Finite.isCompact
-  条件: (hs : s.Finite)
-  结论: IsCompact s
+定理 集合.有限.isCompact
+  条件: (hs : s.有限)
+  结论: 是紧集 s
   证明: biUnion_of_singleton s ▸ hs.isCompact_biUnion fun _ _ => isCompact_singleton
 -/
 @[simp, compactness .] theorem Set.Finite.isCompact (hs : s.Finite) : IsCompact s :=
@@ -1675,8 +1675,8 @@ theorem Set.sUnion_isCompact_eq_univ
   proof: eq_univ_of_forall fun x => ⟨{x}, by simp⟩
 
 中文:
-定理 Set.sUnion_isCompact_eq_univ
-  结论: ⋃₀ {(s : Set X) | IsCompact s} = univ
+定理 集合.sUnion_isCompact_eq_univ
+  结论: ⋃₀ {(s : 集合 X) | 是紧集 s} = univ
   证明: eq_univ_of_forall fun x => ⟨{x}, by simp⟩
 -/
 @[simp] theorem Set.sUnion_isCompact_eq_univ : ⋃₀ {(s : Set X) | IsCompact s} = univ :=
@@ -1696,9 +1696,9 @@ theorem IsCompact.finite_of_discrete
   exact t.finite_toSet.subset hst
 
 中文:
-定理 IsCompact.finite_of_discrete
-  条件: [DiscreteTopology X] (hs : IsCompact s)
-  结论: s.Finite
+定理 是紧集.finite_of_discrete
+  条件: [离散拓扑 X] (hs : 是紧集 s)
+  结论: s.有限
   证明: by
   have : forall x : X, ({x} : Set X) in 𝓝 x := by simp [nhds_discrete]
   rcases hs.elim_nhds_subcover (fun x => {x}) fun x _ => this x with ⟨t, _, hst⟩
@@ -1726,8 +1726,8 @@ theorem isCompact_iff_finite
 
 中文:
 定理 isCompact_iff_finite
-  条件: [DiscreteTopology X]
-  结论: IsCompact s ↔ s.Finite
+  条件: [离散拓扑 X]
+  结论: 是紧集 s ↔ s.有限
   证明: ⟨fun h => h.finite_of_discrete, fun h => h.isCompact⟩
 
 @[compactness .]
@@ -1751,9 +1751,9 @@ theorem IsCompact.union
 @[compactness .]
 
 中文:
-定理 IsCompact.union
-  条件: (hs : IsCompact s) (ht : IsCompact t)
-  结论: IsCompact (s union t)
+定理 是紧集.union
+  条件: (hs : 是紧集 s) (ht : 是紧集 t)
+  结论: 是紧集 (s union t)
   证明: by
   rw [union_eq_iUnion]; exact isCompact_iUnion fun b => by cases b <;> assumption
 
@@ -1775,9 +1775,9 @@ theorem IsCompact.insert
   proof: isCompact_singleton.union hs
 
 中文:
-定理 IsCompact.insert
-  条件: (hs : IsCompact s) (a)
-  结论: IsCompact (insert a s)
+定理 是紧集.insert
+  条件: (hs : 是紧集 s) (a)
+  结论: 是紧集 (insert a s)
   证明: isCompact_singleton.union hs
 -/
 protected theorem IsCompact.insert (hs : IsCompact s) (a) : IsCompact (insert a s) :=
@@ -1799,8 +1799,8 @@ theorem exists_subset_nhds_of_isCompact'
     re
 
 中文:
-定理 exists_subset_nhds_of_isCompact'
-  结论: [Nonempty ι] {V : ι -> Set X}
+定理 存在_subset_nhds_of_isCompact'
+  结论: [非空 ι] {V : ι -> 集合 X}
   证明: by
   obtain ⟨W, hsubW, W_op, hWU⟩ := exists_open_set_nhds hU
   suffices exists i, V i subseteq W from this.imp fun i hi => hi.trans hWU
@@ -1847,7 +1847,7 @@ theorem isCompact_generateFrom
 
 中文:
 定理 isCompact_generateFrom
-  结论: [T : TopologicalSpace X]
+  结论: [T : 拓扑空间 X]
   证明: by
   rw [isCompact_iff_ultrafilter_le_nhds']; rw [hTS]
   intro F hsF
@@ -1889,7 +1889,7 @@ theorem isCompact_generateFrom'
 
 中文:
 定理 isCompact_generateFrom'
-  结论: [T : TopologicalSpace X]
+  结论: [T : 拓扑空间 X]
   证明: isCompact_generateFrom hTS fun P hP hs =>
     have ⟨J, hJ, cover⟩ := h P (fun a => ⟨a.1, hP a.2⟩) (sUnion_eq_iUnion ▸ hs)
     ⟨(·.1) '' J, ⟨by simp, hJ.image _, by aesop⟩⟩
@@ -1920,7 +1920,7 @@ theorem hasBasis_cocompact
 
 中文:
 定理 hasBasis_cocompact
-  结论: (cocompact X).HasBasis IsCompact compl
+  结论: (cocompact X).有基 是紧集 compl
   证明: hasBasis_biInf_principal'
     (fun s hs t ht =>
       ⟨s union t, hs.union ht, compl_subset_compl.2 subset_union_left,
@@ -1946,7 +1946,7 @@ theorem mem_cocompact
 
 中文:
 定理 mem_cocompact
-  结论: s in cocompact X ↔ 存在 t, IsCompact t ∧ tᶜ subseteq s
+  结论: s in cocompact X ↔ 存在 t, 是紧集 t ∧ tᶜ subseteq s
   证明: hasBasis_cocompact.mem_iff
 
 Depends on / 依赖: hasBasis_cocompact, hasBasis_cocompact.mem_iff, mem_iff
@@ -1964,7 +1964,7 @@ theorem mem_cocompact'
 
 中文:
 定理 mem_cocompact'
-  结论: s in cocompact X ↔ 存在 t, IsCompact t ∧ sᶜ subseteq t
+  结论: s in cocompact X ↔ 存在 t, 是紧集 t ∧ sᶜ subseteq t
   证明: mem_cocompact.trans exists_congr fun _ => and_congr_right fun _ => compl_subset_comm
 
 Depends on / 依赖: and_congr_right, compl_subset_comm, exists_congr, mem_cocompact, mem_cocompact.trans
@@ -1982,9 +1982,9 @@ theorem _root_.IsCompact.compl_mem_cocompact
   proof: hasBasis_cocompact.mem_of_mem hs
 
 中文:
-定理 _root_.IsCompact.compl_mem_cocompact
-  条件: (hs : IsCompact s)
-  结论: sᶜ in Filter.cocompact X
+定理 _root_.是紧集.compl_mem_cocompact
+  条件: (hs : 是紧集 s)
+  结论: sᶜ in 滤子.cocompact X
   证明: hasBasis_cocompact.mem_of_mem hs
 
 Depends on / 依赖: hasBasis_cocompact, hasBasis_cocompact.mem_of_mem, mem_of_mem
@@ -2021,7 +2021,7 @@ theorem cocompact_eq_cofinite
 
 中文:
 定理 cocompact_eq_cofinite
-  条件: (X : 类型) [TopologicalSpace X] [DiscreteTopology X]
+  条件: (X : 类型) [拓扑空间 X] [离散拓扑 X]
   证明: by
   simp only [cocompact, hasBasis_cofinite.eq_biInf, isCompact_iff_finite]
 
@@ -2043,7 +2043,7 @@ theorem disjoint_cocompact_left
 
 中文:
 定理 disjoint_cocompact_left
-  条件: (f : Filter X)
+  条件: (f : 滤子 X)
   证明: by
   simp_rw [hasBasis_cocompact.disjoint_iff_left, compl_compl]
   tauto
@@ -2067,7 +2067,7 @@ theorem disjoint_cocompact_right
 
 中文:
 定理 disjoint_cocompact_right
-  条件: (f : Filter X)
+  条件: (f : 滤子 X)
   证明: by
   simp_rw [hasBasis_cocompact.disjoint_iff_right, compl_compl]
   tauto
@@ -2096,7 +2096,7 @@ theorem Tendsto.isCompact_insert_range_of_cocompact
   
 
 中文:
-定理 Tendsto.isCompact_insert_range_of_cocompact
+定理 收敛.isCompact_insert_range_of_cocompact
   结论: {f : X -> Y} {y}
   证明: by
   intro l hne hle
@@ -2138,8 +2138,8 @@ theorem Tendsto.isCompact_insert_range_of_cofinite
   exact hf.isCompact_insert_range_of_cocompact continuous_of_discreteTopology
 
 中文:
-定理 Tendsto.isCompact_insert_range_of_cofinite
-  条件: {f : ι -> X} {x} (hf : Tendsto f cofinite (𝓝 x))
+定理 收敛.isCompact_insert_range_of_cofinite
+  条件: {f : ι -> X} {x} (hf : 收敛 f cofinite (𝓝 x))
   证明: by
   let : TopologicalSpace ι := ⊥; have h : DiscreteTopology ι := ⟨rfl⟩
   rw [← cocompact_eq_cofinite ι] at hf
@@ -2162,8 +2162,8 @@ theorem Tendsto.isCompact_insert_range
   proof: Filter.Tendsto.isCompact_insert_range_of_cofinite Nat.cofinite_eq_atTop.symm ▸ hf
 
 中文:
-定理 Tendsto.isCompact_insert_range
-  条件: {f : 自然数 -> X} {x} (hf : Tendsto f atTop (𝓝 x))
+定理 收敛.isCompact_insert_range
+  条件: {f : 自然数 -> X} {x} (hf : 收敛 f atTop (𝓝 x))
   证明: Filter.Tendsto.isCompact_insert_range_of_cofinite Nat.cofinite_eq_atTop.symm ▸ hf
 
 Depends on / 依赖: Filter, Filter.Tendsto.isCompact_insert_range_of_cofinite, Nat.cofinite_eq_atTop.symm, Tendsto, cofinite_eq_atTop, isCompact_insert_range_of_cofinite
@@ -2245,7 +2245,7 @@ theorem compl_mem_coclosedCompact
 
 中文:
 定理 compl_mem_coclosedCompact
-  结论: sᶜ in coclosedCompact X ↔ IsCompact (closure s)
+  结论: sᶜ in coclosedCompact X ↔ 是紧集 (closure s)
   证明: by
   rw [mem_coclosedCompact_iff]; rw [compl_compl]
 
@@ -2283,8 +2283,8 @@ theorem IsCompact.compl_mem_coclosedCompact_of_isClosed
   proof: hasBasis_coclosedCompact.mem_of_mem ⟨hs', hs⟩
 
 中文:
-定理 IsCompact.compl_mem_coclosedCompact_of_isClosed
-  条件: (hs : IsCompact s) (hs' : IsClosed s)
+定理 是紧集.compl_mem_coclosedCompact_of_isClosed
+  条件: (hs : 是紧集 s) (hs' : 是闭集 s)
   证明: hasBasis_coclosedCompact.mem_of_mem ⟨hs', hs⟩
 
 Depends on / 依赖: hasBasis_coclosedCompact, hasBasis_coclosedCompact.mem_of_mem, mem_of_mem
@@ -2311,7 +2311,7 @@ definition inCompact
 
 中文:
 定义 inCompact
-  签名: : Bornology X where
+  签名: : 有界结构 X where
   定义体: Filter.cocompact X
   le_cofinite := Filter.cocompact_le_cofinite
 
@@ -2334,7 +2334,7 @@ theorem inCompact.isBounded_iff
 
 中文:
 定理 inCompact.isBounded_iff
-  结论: @IsBounded _ (inCompact X) s ↔ 存在 t, IsCompact t ∧ s subseteq t
+  结论: @IsBounded _ (inCompact X) s ↔ 存在 t, 是紧集 t ∧ s subseteq t
   证明: by
   change sᶜ in Filter.cocompact X ↔ _
   rw [Filter.mem_cocompact]
@@ -2392,8 +2392,8 @@ theorem IsCompact.nhdsSet_prod_eq
     nhds_prod_eq]
 
 中文:
-定理 IsCompact.nhdsSet_prod_eq
-  条件: {t : Set Y} (hs : IsCompact s) (ht : IsCompact t)
+定理 是紧集.nhdsSet_prod_eq
+  条件: {t : 集合 Y} (hs : 是紧集 s) (ht : 是紧集 t)
   证明: by
   simp_rw [hs.nhdsSet_prod_eq_biSup, ht.prod_nhdsSet_eq_biSup, nhdsSet, sSup_image, biSup_prod,
     nhds_prod_eq]
@@ -2422,7 +2422,7 @@ theorem nhdsSet_prod_le_of_disjoint_cocompact
 
 中文:
 定理 nhdsSet_prod_le_of_disjoint_cocompact
-  结论: {f : Filter Y} (hs : IsCompact s)
+  结论: {f : 滤子 Y} (hs : 是紧集 s)
   证明: by
   obtain ⟨K, hKf, hK⟩ := (disjoint_cocompact_right f).mp hf
   calc
@@ -2462,7 +2462,7 @@ theorem prod_nhdsSet_le_of_disjoint_cocompact
 
 中文:
 定理 prod_nhdsSet_le_of_disjoint_cocompact
-  结论: {t : Set Y} {f : Filter X} (ht : IsCompact t)
+  结论: {t : 集合 Y} {f : 滤子 X} (ht : 是紧集 t)
   证明: by
   obtain ⟨K, hKf, hK⟩ := (disjoint_cocompact_right f).mp hf
   calc
@@ -2496,7 +2496,7 @@ theorem nhds_prod_le_of_disjoint_cocompact
 
 中文:
 定理 nhds_prod_le_of_disjoint_cocompact
-  结论: {f : Filter Y} (x : X)
+  结论: {f : 滤子 Y} (x : X)
   证明: by
   simpa using nhdsSet_prod_le_of_disjoint_cocompact isCompact_singleton hf
 
@@ -2518,7 +2518,7 @@ theorem prod_nhds_le_of_disjoint_cocompact
 
 中文:
 定理 prod_nhds_le_of_disjoint_cocompact
-  结论: {f : Filter X} (y : Y)
+  结论: {f : 滤子 X} (y : Y)
   证明: by
   simpa using prod_nhdsSet_le_of_disjoint_cocompact isCompact_singleton hf
 
@@ -2542,7 +2542,7 @@ theorem generalized_tube_lemma
 
 中文:
 定理 generalized_tube_lemma
-  结论: (hs : IsCompact s) {t : Set Y} (ht : IsCompact t)
+  结论: (hs : 是紧集 s) {t : 集合 Y} (ht : 是紧集 t)
   证明: by
   rw [← hn.mem_nhdsSet]; rw [hs.nhdsSet_prod_eq ht]; rw [((hasBasis_nhdsSet _).prod (hasBasis_nhdsSet _)).mem_iff] at hp
   rcases hp with ⟨⟨u, v⟩, ⟨⟨huo, hsu⟩, hvo, htv⟩, hn⟩
@@ -2567,8 +2567,8 @@ lemma IsCompact.nhdsSetWithin_prod_eq
   simp [nhdsSetWithin, ← prod_inf_prod, hs.nhdsSet_prod_eq ht]
 
 中文:
-引理 IsCompact.nhdsSetWithin_prod_eq
-  结论: {s s' : Set X} {t t' : Set Y} (hs : IsCompact s)
+引理 是紧集.nhdsSetWithin_prod_eq
+  结论: {s s' : 集合 X} {t t' : 集合 Y} (hs : 是紧集 s)
   证明: by
   simp [nhdsSetWithin, ← prod_inf_prod, hs.nhdsSet_prod_eq ht]
 
@@ -2590,7 +2590,7 @@ lemma generalized_tube_lemma'
 
 中文:
 引理 generalized_tube_lemma'
-  结论: {s s' : Set X} (hs : IsCompact s) {t t' : Set Y} (ht : IsCompact t)
+  结论: {s s' : 集合 X} (hs : 是紧集 s) {t t' : 集合 Y} (ht : 是紧集 t)
   证明: by
   rwa [hs.nhdsSetWithin_prod_eq ht, Filter.mem_prod_iff] at hn
 
@@ -2614,7 +2614,7 @@ lemma generalized_tube_lemma_left
 
 中文:
 引理 generalized_tube_lemma_left
-  结论: {s s' : Set X} (hs : IsCompact s) {t : Set Y} (ht : IsCompact t)
+  结论: {s s' : 集合 X} (hs : 是紧集 s) {t : 集合 Y} (ht : 是紧集 t)
   证明: by
   rw [hs.nhdsSetWithin_prod_eq ht]; rw [nhdsSetWithin_self]; rw [Filter.mem_prod_principal] at hn
   exact ⟨_, hn, fun x hx => hx.1 _ hx.2⟩
@@ -2640,7 +2640,7 @@ lemma generalized_tube_lemma_right
 
 中文:
 引理 generalized_tube_lemma_right
-  结论: {s : Set X} (hs : IsCompact s) {t t' : Set Y} (ht : IsCompact t)
+  结论: {s : 集合 X} (hs : 是紧集 s) {t t' : 集合 Y} (ht : 是紧集 t)
   证明: by
   rw [hs.nhdsSetWithin_prod_eq ht]; rw [nhdsSetWithin_self]; rw [Filter.mem_prod_iff] at hn
   obtain ⟨s', hs', u, hu, h⟩ := hn
@@ -2670,7 +2670,7 @@ theorem isCompact_univ_iff
 
 中文:
 定理 isCompact_univ_iff
-  结论: IsCompact (univ : Set X) ↔ CompactSpace X
+  结论: 是紧集 (univ : 集合 X) ↔ 紧空间 X
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 
 @[compactness ., grind .]
@@ -2690,8 +2690,8 @@ theorem isCompact_univ
 
 中文:
 定理 isCompact_univ
-  条件: [h : CompactSpace X]
-  结论: IsCompact (univ : Set X)
+  条件: [h : 紧空间 X]
+  结论: 是紧集 (univ : 集合 X)
   证明: h.isCompact_univ
 
 Depends on / 依赖: h.isCompact_univ, isCompact_univ
@@ -2713,8 +2713,8 @@ nonrec theorem Ultrafilter.le_nhds_lim [CompactSpace X] (F : Ultrafilter X) : �
   le_nhds_lim ⟨x, h⟩
 
 中文:
-定理 exists_clusterPt_of_compactSpace
-  条件: [CompactSpace X] (f : Filter X) [NeBot f]
+定理 存在_clusterPt_of_compactSpace
+  条件: [紧空间 X] (f : 滤子 X) [NeBot f]
   证明: by
   simpa using isCompact_univ (show f <= 𝓟 univ by simp)
 
@@ -2742,8 +2742,8 @@ theorem CompactSpace.elim_nhds_subcover
   ⟨t, top_unique s⟩
 
 中文:
-定理 CompactSpace.elim_nhds_subcover
-  条件: [CompactSpace X] (U : X -> Set X) (hU : 对任意 x, U x in 𝓝 x)
+定理 紧空间.elim_nhds_subcover
+  条件: [紧空间 X] (U : X -> 集合 X) (hU : 对任意 x, U x in 𝓝 x)
   证明: have ⟨t, _, s⟩ := IsCompact.elim_nhds_subcover isCompact_univ U fun x _ => hU x
   ⟨t, top_unique s⟩
 
@@ -2785,8 +2785,8 @@ lemma CompactSpace.iInter_nonempty
 omit [TopologicalSpace X] in
 
 中文:
-引理 CompactSpace.iInter_nonempty
-  结论: {ι : 类型v} [CompactSpace X] {t : ι -> Set X}
+引理 紧空间.i整数er_nonempty
+  结论: {ι : 类型v} [紧空间 X] {t : ι -> 集合 X}
   证明: by
   simpa using isCompact_univ.inter_iInter_nonempty t htc (by simpa using hst)
 
@@ -2813,7 +2813,7 @@ omit [TopologicalSpace X] in
 
 中文:
 定理 compactSpace_generateFrom
-  结论: [T : TopologicalSpace X] {S : Set (Set X)}
+  结论: [T : 拓扑空间 X] {S : 集合 (集合 X)}
   证明: isCompact_univ_iff.mp isCompact_generateFrom hTS by simpa
 
 omit [TopologicalSpace X] in
@@ -2838,7 +2838,7 @@ omit [TopologicalSpace X] in
 
 中文:
 定理 compactSpace_generateFrom'
-  结论: [T : TopologicalSpace X] {S : Set (Set X)}
+  结论: [T : 拓扑空间 X] {S : 集合 (集合 X)}
   证明: isCompact_univ_iff.mp isCompact_generateFrom' hTS by simpa
 
 omit [TopologicalSpace X] in
@@ -2870,7 +2870,7 @@ lemma compactSpace_generateFrom_of_compl_mem
 
 中文:
 引理 compactSpace_generateFrom_of_compl_mem
-  结论: [T : TopologicalSpace X]
+  结论: [T : 拓扑空间 X]
   证明: by
   refine compactSpace_generateFrom hT fun P hP𝔅 hP => ?_
   contrapose! hP
@@ -2906,9 +2906,9 @@ theorem IsClosed.isCompact
   proof: isCompact_univ.of_isClosed_subset h (subset_univ _)
 
 中文:
-定理 IsClosed.isCompact
-  条件: [CompactSpace X] (h : IsClosed s)
-  结论: IsCompact s
+定理 是闭集.isCompact
+  条件: [紧空间 X] (h : 是闭集 s)
+  结论: 是紧集 s
   证明: isCompact_univ.of_isClosed_subset h (subset_univ _)
 
 Depends on / 依赖: isCompact_univ, isCompact_univ.of_isClosed_subset, of_isClosed_subset, subset_univ
@@ -2926,7 +2926,7 @@ lemma le_nhds_of_unique_clusterPt
 
 中文:
 引理 le_nhds_of_unique_clusterPt
-  结论: [CompactSpace X] {l : Filter X} {y : X}
+  结论: [紧空间 X] {l : 滤子 X} {y : X}
   证明: isCompact_univ.le_nhds_of_unique_clusterPt univ_mem fun x _ => h x
 
 Depends on / 依赖: isCompact_univ, isCompact_univ.le_nhds_of_unique_clusterPt, le_nhds_of_unique_clusterPt, univ_mem
@@ -2945,7 +2945,7 @@ lemma tendsto_nhds_of_unique_mapClusterPt
 
 中文:
 引理 tendsto_nhds_of_unique_mapClusterPt
-  结论: [CompactSpace X] {Y} {l : Filter Y} {y : X} {f : Y -> X}
+  结论: [紧空间 X] {Y} {l : 滤子 Y} {y : X} {f : Y -> X}
   证明: le_nhds_of_unique_clusterPt h
 
 Depends on / 依赖: le_nhds_of_unique_clusterPt
@@ -2965,7 +2965,7 @@ lemma noncompact_univ
 
 中文:
 引理 noncompact_univ
-  条件: (X : 类型) [TopologicalSpace X] [NoncompactSpace X]
+  条件: (X : 类型) [拓扑空间 X] [Noncompact空间 X]
   证明: NoncompactSpace.noncompact_univ
 
 Depends on / 依赖: NoncompactSpace, NoncompactSpace.noncompact_univ, noncompact_univ
@@ -2985,8 +2985,8 @@ theorem IsCompact.ne_univ
   noncompact_univ X (h ▸ hs)
 
 中文:
-定理 IsCompact.ne_univ
-  条件: [NoncompactSpace X] (hs : IsCompact s)
+定理 是紧集.ne_univ
+  条件: [Noncompact空间 X] (hs : 是紧集 s)
   结论: s != univ
   证明: fun h =>
   noncompact_univ X (h ▸ hs)
@@ -3008,8 +3008,8 @@ instance [NoncompactSpace
 @[simp]
 
 中文:
-实例 [NoncompactSpace
-  签名: X] : NeBot (Filter.cocompact X)
+实例 [Noncompact空间
+  签名: X] : NeBot (滤子.cocompact X)
   定义体: by
   refine Filter.hasBasis_cocompact.neBot_iff.2 fun hs => ?_
   contrapose hs; rw [not_nonempty_iff_eq_empty, compl_empty_iff] at hs
@@ -3035,9 +3035,9 @@ theorem Filter.cocompact_eq_bot
   proof: Filter.hasBasis_cocompact.eq_bot_iff.mpr ⟨Set.univ, isCompact_univ, Set.compl_univ⟩
 
 中文:
-定理 Filter.cocompact_eq_bot
-  条件: [CompactSpace X]
-  结论: Filter.cocompact X = ⊥
+定理 滤子.cocompact_eq_bot
+  条件: [紧空间 X]
+  结论: 滤子.cocompact X = ⊥
   证明: Filter.hasBasis_cocompact.eq_bot_iff.mpr ⟨Set.univ, isCompact_univ, Set.compl_univ⟩
 
 Depends on / 依赖: Filter, Filter.hasBasis_cocompact.eq_bot_iff.mpr, Set.compl_univ, Set.univ, compl_univ, eq_bot_iff, hasBasis_cocompact, isCompact_univ
@@ -3054,8 +3054,8 @@ instance [NoncompactSpace
   body: neBot_of_le Filter.cocompact_le_coclosedCompact
 
 中文:
-实例 [NoncompactSpace
-  签名: X] : NeBot (Filter.coclosedCompact X)
+实例 [Noncompact空间
+  签名: X] : NeBot (滤子.coclosedCompact X)
   定义体: neBot_of_le Filter.cocompact_le_coclosedCompact
 
 Depends on / 依赖: Filter, Filter.cocompact_le_coclosedCompact, cocompact_le_coclosedCompact, neBot_of_le
@@ -3074,8 +3074,8 @@ theorem noncompactSpace_of_neBot
 
 中文:
 定理 noncompactSpace_of_neBot
-  条件: (_ : NeBot (Filter.cocompact X))
-  结论: NoncompactSpace X
+  条件: (_ : NeBot (滤子.cocompact X))
+  结论: Noncompact空间 X
   证明: ⟨fun h' => (Filter.nonempty_of_mem h'.compl_mem_cocompact).ne_empty compl_univ⟩
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, compl_mem_cocompact, compl_univ, ne_empty, nonempty_of_mem
@@ -3092,8 +3092,8 @@ theorem Filter.cocompact_neBot_iff
   proof: ⟨noncompactSpace_of_neBot, fun _ => inferInstance⟩
 
 中文:
-定理 Filter.cocompact_neBot_iff
-  结论: NeBot (Filter.cocompact X) ↔ NoncompactSpace X
+定理 滤子.cocompact_neBot_iff
+  结论: NeBot (滤子.cocompact X) ↔ Noncompact空间 X
   证明: ⟨noncompactSpace_of_neBot, fun _ => inferInstance⟩
 
 Depends on / 依赖: noncompactSpace_of_neBot
@@ -3111,7 +3111,7 @@ theorem not_compactSpace_iff
 
 中文:
 定理 not_compactSpace_iff
-  结论: ¬CompactSpace X ↔ NoncompactSpace X
+  结论: ¬紧空间 X ↔ Noncompact空间 X
   证明: ⟨fun h₁ => ⟨fun h₂ => h₁ ⟨h₂⟩⟩, fun ⟨h₁⟩ ⟨h₂⟩ => h₁ h₂⟩
 -/
 theorem not_compactSpace_iff : ¬CompactSpace X ↔ NoncompactSpace X :=
@@ -3127,7 +3127,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace 整数
+  签名: Noncompact空间 整数
   定义体: noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
 
 Depends on / 依赖: Filter, Filter.cocompact_eq_cofinite, Filter.cofinite_neBot, cocompact_eq_cofinite, cofinite_neBot, noncompactSpace_of_neBot
@@ -3147,8 +3147,8 @@ theorem finite_of_compact_of_discrete
 
 中文:
 定理 finite_of_compact_of_discrete
-  条件: [CompactSpace X] [DiscreteTopology X]
-  结论: Finite X
+  条件: [紧空间 X] [离散拓扑 X]
+  结论: 有限 X
   证明: Finite.of_finite_univ isCompact_univ.finite_of_discrete
 
 Depends on / 依赖: Finite, Finite.of_finite_univ, finite_of_discrete, isCompact_univ, isCompact_univ.finite_of_discrete, of_finite_univ
@@ -3166,7 +3166,7 @@ lemma Set.Infinite.exists_accPt_cofinite_inf_principal_of_subset_isCompact
       (finite_singleton _).cofinite_inf_principal_compl]
 
 中文:
-引理 Set.Infinite.exists_accPt_cofinite_inf_principal_of_subset_isCompact
+引理 集合.无限.存在_accPt_cofinite_inf_principal_of_subset_isCompact
   证明: (@hK _ hs.cofinite_inf_principal_neBot (inf_le_right.trans <| principal_mono.2 hsub)).imp
     fun x hx => by rwa [accPt_iff_clusterPt, inf_comm, inf_right_comm,
       (finite_singleton _).cofinite_inf_principal_compl]
@@ -3190,8 +3190,8 @@ lemma Set.Infinite.exists_accPt_of_subset_isCompact
   ⟨x, hxK, hx.mono inf_le_right⟩
 
 中文:
-引理 Set.Infinite.exists_accPt_of_subset_isCompact
-  结论: {K : Set X} (hs : s.Infinite)
+引理 集合.无限.存在_accPt_of_subset_isCompact
+  结论: {K : 集合 X} (hs : s.无限)
   证明: let ⟨x, hxK, hx⟩ := hs.exists_accPt_cofinite_inf_principal_of_subset_isCompact hK hsub
   ⟨x, hxK, hx.mono inf_le_right⟩
 
@@ -3213,8 +3213,8 @@ lemma Set.Infinite.exists_accPt_cofinite_inf_principal
     using hs.exists_accPt_cofinite_inf_principal_of_subset_isCompact isCompact_univ s.subset_univ
 
 中文:
-引理 Set.Infinite.exists_accPt_cofinite_inf_principal
-  条件: [CompactSpace X] (hs : s.Infinite)
+引理 集合.无限.存在_accPt_cofinite_inf_principal
+  条件: [紧空间 X] (hs : s.无限)
   证明: by
   simpa only [mem_univ, true_and]
     using hs.exists_accPt_cofinite_inf_principal_of_subset_isCompact isCompact_univ s.subset_univ
@@ -3236,9 +3236,9 @@ lemma Set.Infinite.exists_accPt_principal
   proof: hs.exists_accPt_cofinite_inf_principal.imp fun _x hx => hx.mono inf_le_right
 
 中文:
-引理 Set.Infinite.exists_accPt_principal
-  条件: [CompactSpace X] (hs : s.Infinite)
-  结论: 存在 x, AccPt x (𝓟 s)
+引理 集合.无限.存在_accPt_principal
+  条件: [紧空间 X] (hs : s.无限)
+  结论: 存在 x, 聚点 x (𝓟 s)
   证明: hs.exists_accPt_cofinite_inf_principal.imp fun _x hx => hx.mono inf_le_right
 
 Depends on / 依赖: exists_accPt_cofinite_inf_principal, hs.exists_accPt_cofinite_inf_principal.imp, hx.mono, inf_le_right
@@ -3256,8 +3256,8 @@ theorem exists_nhds_ne_neBot
   simpa [AccPt] using (@infinite_univ X _).exists_accPt_principal
 
 中文:
-定理 exists_nhds_ne_neBot
-  条件: (X : 类型) [TopologicalSpace X] [CompactSpace X] [Infinite X]
+定理 存在_nhds_ne_neBot
+  条件: (X : 类型) [拓扑空间 X] [紧空间 X] [无限 X]
   证明: by
   simpa [AccPt] using (@infinite_univ X _).exists_accPt_principal
 
@@ -3279,7 +3279,7 @@ theorem finite_cover_nhds_interior
 
 中文:
 定理 finite_cover_nhds_interior
-  条件: [CompactSpace X] {U : X -> Set X} (hU : 对任意 x, U x in 𝓝 x)
+  条件: [紧空间 X] {U : X -> 集合 X} (hU : 对任意 x, U x in 𝓝 x)
   证明: let ⟨t, ht⟩ := isCompact_univ.elim_finite_subcover (fun x => interior (U x))
     (fun _ => isOpen_interior) fun x _ => mem_iUnion.2 ⟨x, mem_interior_iff_mem_nhds.2 (hU x)⟩
   ⟨t, univ_subset_iff.1 ht⟩
@@ -3303,7 +3303,7 @@ theorem finite_cover_nhds
 
 中文:
 定理 finite_cover_nhds
-  条件: [CompactSpace X] {U : X -> Set X} (hU : 对任意 x, U x in 𝓝 x)
+  条件: [紧空间 X] {U : X -> 集合 X} (hU : 对任意 x, U x in 𝓝 x)
   证明: let ⟨t, ht⟩ := finite_cover_nhds_interior hU
 ⟨t, univ_subset_iff.1 ht.symm.subset.trans iUnion₂_mono fun _ _ => interior_subset⟩
 
@@ -3327,8 +3327,8 @@ theorem Filter.comap_cocompact_le
   simpa using t.subset_preimage_image f
 
 中文:
-定理 Filter.comap_cocompact_le
-  条件: {f : X -> Y} (hf : Continuous f)
+定理 滤子.comap_cocompact_le
+  条件: {f : X -> Y} (hf : 连续 f)
   证明: by
   rw [(Filter.hasBasis_cocompact.comap f).le_basis_iff Filter.hasBasis_cocompact]
   intro t ht
@@ -3361,7 +3361,7 @@ theorem disjoint_map_cocompact
 
 中文:
 定理 disjoint_map_cocompact
-  结论: {g : X -> Y} {f : Filter X} (hg : Continuous g)
+  结论: {g : X -> Y} {f : 滤子 X} (hg : 连续 g)
   证明: by
   rw [← Filter.disjoint_comap_iff_map]; rw [disjoint_iff_inf_le]
   calc
@@ -3394,8 +3394,8 @@ theorem isCompact_range
 
 中文:
 定理 isCompact_range
-  条件: [CompactSpace X] {f : X -> Y} (hf : Continuous f)
-  结论: IsCompact (range f)
+  条件: [紧空间 X] {f : X -> Y} (hf : 连续 f)
+  结论: 是紧集 (range f)
   证明: by
   rw [← image_univ]; exact isCompact_univ.image hf
 
@@ -3417,8 +3417,8 @@ lemma Function.Surjective.compactSpace
 @[compactness .]
 
 中文:
-引理 Function.Surjective.compactSpace
-  结论: {f : X -> Y} (hf : Continuous f) [CompactSpace X]
+引理 函数.满射.compactSpace
+  结论: {f : X -> Y} (hf : 连续 f) [紧空间 X]
   证明: by
     rw [← hf'.range_eq]
     exact isCompact_range hf
@@ -3445,8 +3445,8 @@ theorem isCompact_diagonal
 
 中文:
 定理 isCompact_diagonal
-  条件: [CompactSpace X]
-  结论: IsCompact (diagonal X)
+  条件: [紧空间 X]
+  结论: 是紧集 (diagonal X)
   证明: @range_diag X ▸ isCompact_range (continuous_id.prodMk continuous_id)
 
 Depends on / 依赖: continuous_id, continuous_id.prodMk, isCompact_range, prodMk, range_diag
@@ -3463,8 +3463,8 @@ theorem exists_subset_nhds_of_compactSpace
   proof: exists_subset_nhds_of_isCompact' hV (fun i => (hV_closed i).isCompact) hV_closed hU
 
 中文:
-定理 exists_subset_nhds_of_compactSpace
-  结论: [CompactSpace X] [Nonempty ι]
+定理 存在_subset_nhds_of_compactSpace
+  结论: [紧空间 X] [非空 ι]
   证明: exists_subset_nhds_of_isCompact' hV (fun i => (hV_closed i).isCompact) hV_closed hU
 
 Depends on / 依赖: exists_subset_nhds_of_isCompact, hV_closed, isCompact
@@ -3487,8 +3487,8 @@ theorem Topology.IsInducing.isCompact_iff
   exact ⟨x, x_in, hf.mapClusterPt_iff.1 hx⟩
 
 中文:
-定理 Topology.IsInducing.isCompact_iff
-  条件: {f : X -> Y} (hf : IsInducing f)
+定理 拓扑.是Inducing.isCompact_iff
+  条件: {f : X -> Y} (hf : 是Inducing f)
   证明: by
   refine ⟨fun hs => hs.image hf.continuous, fun hs F F_ne_bot F_le => ?_⟩
   obtain ⟨_, ⟨x, x_in : x in s, rfl⟩, hx : ClusterPt (f x) (map f F)⟩ :=
@@ -3513,8 +3513,8 @@ theorem Topology.IsEmbedding.isCompact_iff
   proof: hf.isInducing.isCompact_iff
 
 中文:
-定理 Topology.IsEmbedding.isCompact_iff
-  条件: {f : X -> Y} (hf : IsEmbedding f)
+定理 拓扑.是嵌入.isCompact_iff
+  条件: {f : X -> Y} (hf : 是嵌入 f)
   证明: hf.isInducing.isCompact_iff
 
 Depends on / 依赖: hf.isInducing.isCompact_iff, isCompact_iff, isInducing
@@ -3533,8 +3533,8 @@ theorem Topology.IsInducing.isCompact_preimage
   rwa [hf.isCompact_iff, image_preimage_eq_inter_range]
 
 中文:
-定理 Topology.IsInducing.isCompact_preimage
-  结论: (hf : IsInducing f) (hf' : IsClosed (range f))
+定理 拓扑.是Inducing.isCompact_preimage
+  结论: (hf : 是Inducing f) (hf' : 是闭集 (range f))
   证明: by
   replace hK := hK.inter_right hf'
   rwa [hf.isCompact_iff, image_preimage_eq_inter_range]
@@ -3556,8 +3556,8 @@ lemma Topology.IsInducing.isCompact_preimage_iff
   rw [hf.isCompact_iff]; rw [image_preimage_eq_of_subset Kf]
 
 中文:
-引理 Topology.IsInducing.isCompact_preimage_iff
-  结论: {f : X -> Y} (hf : IsInducing f) {K : Set Y}
+引理 拓扑.是Inducing.isCompact_preimage_iff
+  结论: {f : X -> Y} (hf : 是Inducing f) {K : 集合 Y}
   证明: by
   rw [hf.isCompact_iff]; rw [image_preimage_eq_of_subset Kf]
 
@@ -3576,8 +3576,8 @@ lemma Topology.IsInducing.isCompact_preimage'
   proof: (hf.isCompact_preimage_iff Kf).2 hK
 
 中文:
-引理 Topology.IsInducing.isCompact_preimage'
-  结论: (hf : IsInducing f) {K : Set Y}
+引理 拓扑.是Inducing.isCompact_preimage'
+  结论: (hf : 是Inducing f) {K : 集合 Y}
   证明: (hf.isCompact_preimage_iff Kf).2 hK
 
 Depends on / 依赖: hf.isCompact_preimage_iff, isCompact_preimage_iff
@@ -3595,8 +3595,8 @@ theorem Topology.IsClosedEmbedding.isCompact_preimage
   proof: hf.isInducing.isCompact_preimage (hf.isClosed_range) hK
 
 中文:
-定理 Topology.IsClosedEmbedding.isCompact_preimage
-  结论: (hf : IsClosedEmbedding f)
+定理 拓扑.是闭嵌入.isCompact_preimage
+  结论: (hf : 是闭嵌入 f)
   证明: hf.isInducing.isCompact_preimage (hf.isClosed_range) hK
 
 Depends on / 依赖: hf.isClosed_range, hf.isInducing.isCompact_preimage, isClosed_range, isCompact_preimage, isInducing
@@ -3615,8 +3615,8 @@ theorem Topology.IsClosedEmbedding.tendsto_cocompact
     (hf.isCompact_preimage hK).compl_mem_cocompact
 
 中文:
-定理 Topology.IsClosedEmbedding.tendsto_cocompact
-  条件: (hf : IsClosedEmbedding f)
+定理 拓扑.是闭嵌入.tendsto_cocompact
+  条件: (hf : 是闭嵌入 f)
   证明: Filter.hasBasis_cocompact.tendsto_right_iff.mpr fun _K hK =>
     (hf.isCompact_preimage hK).compl_mem_cocompact
 
@@ -3636,8 +3636,8 @@ theorem Subtype.isCompact_iff
   proof: IsEmbedding.subtypeVal.isCompact_iff
 
 中文:
-定理 Subtype.isCompact_iff
-  条件: {p : X -> 命题} {s : Set { x // p x }}
+定理 子类型.isCompact_iff
+  条件: {p : X -> 命题} {s : 集合 { x // p x }}
   证明: IsEmbedding.subtypeVal.isCompact_iff
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isCompact_iff, isCompact_iff, subtypeVal
@@ -3657,7 +3657,7 @@ theorem isCompact_iff_isCompact_univ
 
 中文:
 定理 isCompact_iff_isCompact_univ
-  结论: IsCompact s ↔ IsCompact (univ : Set s)
+  结论: 是紧集 s ↔ 是紧集 (univ : 集合 s)
   证明: by
   rw [Subtype.isCompact_iff]; rw [image_univ]; rw [Subtype.range_coe]
 
@@ -3680,7 +3680,7 @@ theorem IsCompact.elim_finite_subfamily_isClosed_subtype
   simpa [Set.eq_empty_iff_forall_notMem, Subtype.
 
 中文:
-定理 IsCompact.elim_finite_subfamily_isClosed_subtype
+定理 是紧集.elim_finite_subfamily_isClosed_subtype
   证明: by
   suffices univ inter ⋂ i, (fun i : I => s ↓inter t i) i = ∅ by
     simpa [eq_empty_iff_forall_notMem] using
@@ -3712,7 +3712,7 @@ theorem isCompact_iff_compactSpace
 
 中文:
 定理 isCompact_iff_compactSpace
-  结论: IsCompact s ↔ CompactSpace s
+  结论: 是紧集 s ↔ 紧空间 s
   证明: isCompact_iff_isCompact_univ.trans isCompact_univ_iff
 
 Depends on / 依赖: isCompact_iff_isCompact_univ, isCompact_iff_isCompact_univ.trans, isCompact_univ_iff
@@ -3731,9 +3731,9 @@ theorem IsCompact.finite
     (isCompact_iff_compactSpace.mp hs) hs'.to_subtype)
 
 中文:
-定理 IsCompact.finite
-  条件: (hs : IsCompact s) (hs' : IsDiscrete s)
-  结论: s.Finite
+定理 是紧集.finite
+  条件: (hs : 是紧集 s) (hs' : 是离散 s)
+  结论: s.有限
   证明: finite_coe_iff.mp (@finite_of_compact_of_discrete _ _
     (isCompact_iff_compactSpace.mp hs) hs'.to_subtype)
 
@@ -3752,8 +3752,8 @@ theorem exists_nhds_ne_inf_principal_neBot
   proof: hs'.exists_accPt_of_subset_isCompact hs Subset.rfl
 
 中文:
-定理 exists_nhds_ne_inf_principal_neBot
-  条件: (hs : IsCompact s) (hs' : s.Infinite)
+定理 存在_nhds_ne_inf_principal_neBot
+  条件: (hs : 是紧集 s) (hs' : s.无限)
   证明: hs'.exists_accPt_of_subset_isCompact hs Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, exists_accPt_of_subset_isCompact
@@ -3771,8 +3771,8 @@ theorem Topology.IsClosedEmbedding.noncompactSpace
   proof: noncompactSpace_of_neBot hf.tendsto_cocompact.neBot
 
 中文:
-定理 Topology.IsClosedEmbedding.noncompactSpace
-  结论: [NoncompactSpace X] {f : X -> Y}
+定理 拓扑.是闭嵌入.noncompactSpace
+  结论: [Noncompact空间 X] {f : X -> Y}
   证明: noncompactSpace_of_neBot hf.tendsto_cocompact.neBot
 -/
 protected theorem Topology.IsClosedEmbedding.noncompactSpace [NoncompactSpace X] {f : X -> Y}
@@ -3790,8 +3790,8 @@ theorem Topology.IsClosedEmbedding.compactSpace
 @[compactness .]
 
 中文:
-定理 Topology.IsClosedEmbedding.compactSpace
-  结论: [h : CompactSpace Y] {f : X -> Y}
+定理 拓扑.是闭嵌入.compactSpace
+  结论: [h : 紧空间 Y] {f : X -> Y}
   证明: ⟨by rw [hf.isInducing.isCompact_iff, image_univ]; exact hf.isClosed_range.isCompact⟩
 
 @[compactness .]
@@ -3816,8 +3816,8 @@ theorem IsCompact.prod
     ht (f.map Prod.snd) (me
 
 中文:
-定理 IsCompact.prod
-  条件: {t : Set Y} (hs : IsCompact s) (ht : IsCompact t)
+定理 是紧集.乘积
+  条件: {t : 集合 Y} (hs : 是紧集 s) (ht : 是紧集 t)
   证明: by
   rw [isCompact_iff_ultrafilter_le_nhds'] at hs ht ⊢
   intro f hfs
@@ -3858,8 +3858,8 @@ instance ULift.compactSpace
   body: IsClosedEmbedding.uliftDown.compactSpace
 
 中文:
-实例 ULift.compactSpace
-  签名: [CompactSpace X]
+实例 类型层提升.compactSpace
+  签名: [紧空间 X]
   定义体: IsClosedEmbedding.uliftDown.compactSpace
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.uliftDown.compactSpace, compactSpace, uliftDown
@@ -3876,8 +3876,8 @@ instance [CompactSpace
   body: ⟨by rw [← univ_prod_univ]; exact isCompact_univ.prod isCompact_univ⟩
 
 中文:
-实例 [CompactSpace
-  签名: X] [CompactSpace Y] : CompactSpace (X × Y)
+实例 [紧空间
+  签名: X] [紧空间 Y] : 紧空间 (X × Y)
   定义体: ⟨by rw [← univ_prod_univ]; exact isCompact_univ.prod isCompact_univ⟩
 
 Depends on / 依赖: isCompact_univ, isCompact_univ.prod, univ_prod_univ
@@ -3896,8 +3896,8 @@ instance [CompactSpace
     exact (isCompact_range continuous_inl).union (isCompact_range continuous_inr)⟩
 
 中文:
-实例 [CompactSpace
-  签名: X] [CompactSpace Y] : CompactSpace (X oplus Y)
+实例 [紧空间
+  签名: X] [紧空间 Y] : 紧空间 (X oplus Y)
   定义体: ⟨by
     rw [← range_inl_union_range_inr]
     exact (isCompact_range continuous_inl).union (isCompact_range continuous_inr)⟩
@@ -3927,8 +3927,8 @@ lemma Set.isCompact_sigma
   exact hs.isCompact_biUnion fun i hi => (ht i hi).image continuous_sigmaMk
 
 中文:
-引理 Set.isCompact_sigma
-  结论: {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)] {s : Set ι}
+引理 集合.isCompact_sigma
+  结论: {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)] {s : 集合 ι}
   证明: by
   rw [Set.sigma_eq_biUnion]
   exact hs.isCompact_biUnion fun i hi => (ht i hi).image continuous_sigmaMk
@@ -3955,8 +3955,8 @@ lemma IsCompact.sigma_exists_finite_sigma_eq
   · exact Topology.IsClosedE
 
 中文:
-引理 IsCompact.sigma_exists_finite_sigma_eq
-  结论: {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+引理 是紧集.sigma_存在_finite_sigma_eq
+  结论: {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: by
   obtain ⟨s, hs⟩ := hu.elim_finite_subcover (fun i : ι => Sigma.mk i '' Sigma.mk i ⁻¹' Set.univ)
     (fun i => isOpenMap_sigmaMk _ <| isOpen_univ.preimage continuous_sigmaMk)
@@ -3993,7 +3993,7 @@ theorem Filter.coprod_cocompact
     exact (hK.1.prod hK.2).compl_mem_co
 
 中文:
-定理 Filter.coprod_cocompact
+定理 滤子.coprod_cocompact
   证明: by
   apply le_antisymm
   · exact sup_le (comap_cocompact_le continuous_fst) (comap_cocompact_le continuous_snd)
@@ -4020,7 +4020,7 @@ theorem Prod.noncompactSpace_iff
   simp [← Filter.cocompact_neBot_iff, ← Filter.coprod_cocompact, Filter.coprod_neBot_iff]
 
 中文:
-定理 Prod.noncompactSpace_iff
+定理 积类型.noncompactSpace_iff
   证明: by
   simp [← Filter.cocompact_neBot_iff, ← Filter.coprod_cocompact, Filter.coprod_neBot_iff]
 
@@ -4060,7 +4060,7 @@ theorem isCompact_pi_infinite
 
 中文:
 定理 isCompact_pi_infinite
-  条件: {s : 对任意 i, Set (X i)}
+  条件: {s : 对任意 i, 集合 (X i)}
   证明: by
   simp only [isCompact_iff_ultrafilter_le_nhds, nhds_pi, le_pi, le_principal_iff]
   intro h f hfs
@@ -4093,7 +4093,7 @@ theorem isCompact_univ_pi
 
 中文:
 定理 isCompact_univ_pi
-  条件: {s : 对任意 i, Set (X i)} (h : 对任意 i, IsCompact (s i))
+  条件: {s : 对任意 i, 集合 (X i)} (h : 对任意 i, 是紧集 (s i))
   证明: by
   convert! isCompact_pi_infinite h
   simp only [← mem_univ_pi, ofPred_mem_eq]
@@ -4114,8 +4114,8 @@ instance Pi.compactSpace
   body: ⟨by rw [← pi_univ univ]; exact isCompact_univ_pi fun i => isCompact_univ⟩
 
 中文:
-实例 Pi.compactSpace
-  签名: [对任意 i, CompactSpace (X i)]
+实例 依赖函数类型.compactSpace
+  签名: [对任意 i, 紧空间 (X i)]
   定义体: ⟨by rw [← pi_univ univ]; exact isCompact_univ_pi fun i => isCompact_univ⟩
 
 Depends on / 依赖: isCompact_univ, isCompact_univ_pi, pi_univ
@@ -4132,8 +4132,8 @@ instance Function.compactSpace
   body: Pi.compactSpace
 
 中文:
-实例 Function.compactSpace
-  签名: [CompactSpace Y]
+实例 函数.compactSpace
+  签名: [紧空间 Y]
   定义体: Pi.compactSpace
 
 Depends on / 依赖: Pi.compactSpace, compactSpace
@@ -4153,8 +4153,8 @@ lemma Pi.isCompact_iff_of_isClosed
   · exact IsCompact.of_isClosed_subset (isCompact_univ_pi H) hs (subset_pi_eval_image univ s)
 
 中文:
-引理 Pi.isCompact_iff_of_isClosed
-  条件: {s : Set (Π i, X i)} (hs : IsClosed s)
+引理 依赖函数类型.isCompact_iff_of_isClosed
+  条件: {s : 集合 (Π i, X i)} (hs : 是闭集 s)
   证明: by
   constructor <;> intro H
 · exact fun i => H.image continuous_apply i
@@ -4183,8 +4183,8 @@ exact ⟨eval i '' K, hK.image continuous_apply i, hsK.trans K.subset_preimage_i
     exact ⟨pi univ K, isCompact_univ_pi hK, fun _ hx i _ => hsK i hx⟩
 
 中文:
-引理 Pi.exists_compact_superset_iff
-  条件: {s : Set (Π i, X i)}
+引理 依赖函数类型.存在_compact_superset_iff
+  条件: {s : 集合 (Π i, X i)}
   证明: by
   constructor
   · intro ⟨K, hK, hsK⟩ i
@@ -4216,8 +4216,8 @@ theorem Filter.coprodᵢ_cocompact
   exact ⟨Set.pi univ K, isCompac
 
 中文:
-定理 Filter.coprodᵢ_cocompact
-  条件: {X : ι -> 类型} [对任意 d, TopologicalSpace (X d)]
+定理 滤子.coprodᵢ_cocompact
+  条件: {X : ι -> 类型} [对任意 d, 拓扑空间 (X d)]
   证明: by
   refine le_antisymm (iSup_le fun i => Filter.comap_cocompact_le (continuous_apply i)) ?_
   refine compl_surjective.forall.2 fun s H => ?_
@@ -4248,8 +4248,8 @@ instance Quot.compactSpace
     exact isCompact_range continuous_quot_mk⟩
 
 中文:
-实例 Quot.compactSpace
-  签名: {r : X -> X -> 命题} [CompactSpace X]
+实例 商.compactSpace
+  签名: {r : X -> X -> 命题} [紧空间 X]
   定义体: ⟨by
     rw [← range_quot_mk]
     exact isCompact_range continuous_quot_mk⟩
@@ -4270,8 +4270,8 @@ instance Quotient.compactSpace
   body: Quot.compactSpace
 
 中文:
-实例 Quotient.compactSpace
-  签名: {s : Setoid X} [CompactSpace X]
+实例 商.compactSpace
+  签名: {s : 集合等价关系 X} [紧空间 X]
   定义体: Quot.compactSpace
 
 Depends on / 依赖: Quot.compactSpace, compactSpace
@@ -4296,8 +4296,8 @@ theorem IsClosed.exists_minimal_nonempty_closed_subset
       
 
 中文:
-定理 IsClosed.exists_minimal_nonempty_closed_subset
-  结论: [CompactSpace X] {S : Set X}
+定理 是闭集.存在_minimal_nonempty_closed_subset
+  结论: [紧空间 X] {S : 集合 X}
   证明: by
   let opens := { U : Set X | Sᶜ subseteq U ∧ IsOpen U ∧ Uᶜ.Nonempty }
   obtain ⟨U, h⟩ :=

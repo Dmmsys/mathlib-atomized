@@ -59,8 +59,8 @@ instance Mon.uniqueHomToTrivial
 @[deprecated (since := "2026-03-20")] alias uniqueHomToTrivial := Mon.uniqueHomToTrivial
 
 中文:
-实例 Mon.uniqueHomToTrivial
-  签名: (A : Mon D)
+实例 幺半群.uniqueHomToTrivial
+  签名: (A : 幺半群 D)
   定义体: toUnit A.X
   default.isMonHom_hom.mul_hom := toUnit_unique _ _
   uniq f := Mon.Hom.ext (toUnit_unique _ _)
@@ -93,7 +93,7 @@ lemma isZero_trivial
 
 中文:
 引理 isZero_trivial
-  结论: IsZero (Mon.trivial D) where
+  结论: 是零 (幺半群.trivial D) where
   证明: nonempty_unique (Mon.trivial D ⟶ A)
   unique_from A := nonempty_unique (A ⟶ Mon.trivial D)
 
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject (Mon D)
+  签名: 有ZeroObject (幺半群 D)
   定义体: ⟨Mon.trivial D, Mon.isZero_trivial D⟩
 
 @[to_additive]
@@ -146,7 +146,7 @@ lemma zero_hom
 
 中文:
 引理 zero_hom
-  条件: (M N : Mon D)
+  条件: (M N : 幺半群 D)
   结论: (0 : M ⟶ N).hom = toUnit _ ≫ η
   证明: rfl
 
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (Mon D)
+  签名: 有ZeroMorphisms (幺半群 D)
 -/
 noncomputable instance : HasZeroMorphisms (Mon D) where
 
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (fst M N)
+  签名: 是幺半群态射 (fst M N)
 -/
 instance : IsMonHom (fst M N) where
 
@@ -290,7 +290,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (snd M N)
+  签名: 是幺半群态射 (snd M N)
 -/
 instance : IsMonHom (snd M N) where
 
@@ -307,8 +307,8 @@ instance [IsCommMonObj
   body: by simp [toUnit_unique (ρ_ (𝟙_ C)).hom (fun_ (𝟙_ C)).hom]
 
 中文:
-实例 [IsCommMonObj
-  签名: M] : IsMonHom μ[M] where
+实例 [是交换MonObj
+  签名: M] : 是幺半群态射 μ[M] where
   定义体: by simp [toUnit_unique (ρ_ (𝟙_ C)).hom (fun_ (𝟙_ C)).hom]
 
 Depends on / 依赖: fun_, toUnit_unique
@@ -340,7 +340,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory (Mon C)
+  签名: CartesianMonoidal范畴 (幺半群 C)
   定义体: .ofUniqueHom (fun M => ⟨toUnit _⟩) fun M f => by ext; exact toUnit_unique ..
   fst M N := .mk (fst M.X N.X)
   snd M N := .mk (snd M.X N.X)
@@ -399,7 +399,7 @@ lemma fst_hom
 
 中文:
 引理 fst_hom
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: (fst M N).hom = fst M.X N.X
   证明: rfl
 
@@ -419,7 +419,7 @@ lemma snd_hom
 
 中文:
 引理 snd_hom
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: (snd M N).hom = snd M.X N.X
   证明: rfl
 -/
@@ -443,7 +443,7 @@ instance [IsCommMonObj
 @[to_additive (attr := simp)]
 
 中文:
-实例 [IsCommMonObj
+实例 [是交换MonObj
   签名: M.X] : MonObj M where
   定义体: .mk η[M.X]
   mul := .mk μ[M.X]
@@ -468,7 +468,7 @@ lemma hom_one
 
 中文:
 引理 hom_one
-  条件: (M : Mon C) [IsCommMonObj M.X]
+  条件: (M : 幺半群 C) [是交换MonObj M.X]
   结论: η[M].hom = η[M.X]
   证明: rfl
 
@@ -488,7 +488,7 @@ lemma hom_mul
 
 中文:
 引理 hom_mul
-  条件: (M : Mon C) [IsCommMonObj M.X]
+  条件: (M : 幺半群 C) [是交换MonObj M.X]
   结论: μ[M].hom = μ[M.X]
   证明: rfl
 -/
@@ -506,8 +506,8 @@ instance [IsCommMonObj
   signature: M.X] : IsCommMonObj M where
 
 中文:
-实例 [IsCommMonObj
-  签名: M.X] : IsCommMonObj M where
+实例 [是交换MonObj
+  签名: M.X] : 是交换MonObj M where
 -/
 instance [IsCommMonObj M.X] : IsCommMonObj M where
 
@@ -533,7 +533,7 @@ definition MonObj.ofRepresentableBy
 
 中文:
 定义 MonObj.ofRepresentableBy
-  签名: (F : Cᵒᵖ ⥤ MonCat.{w}) (α : (F ⋙ forget _).RepresentableBy X)
+  签名: (F : Cᵒᵖ ⥤ 幺半群范畴.{w}) (α : (F ⋙ forget _).可表示 X)
   定义体: α.homEquiv'.symm 1
   mul := α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X))
   one_mul := by
@@ -588,8 +588,8 @@ abbreviation Hom.monoid
       simp_rw
 
 中文:
-缩写 Hom.monoid
-  签名: : Monoid (X ⟶ M) where
+缩写 态射.monoid
+  签名: : 幺半群 (X ⟶ M) where
   定义体: lift f₁ f₂ ≫ μ
   mul_assoc f₁ f₂ f₃ := by
     change lift (lift f₁ f₂ ≫ μ) f₃ ≫ μ = lift f₁ (lift f₂ f₃ ≫ μ) ≫ μ
@@ -637,7 +637,7 @@ lemma Hom.one_def
 @[to_additive]
 
 中文:
-引理 Hom.one_def
+引理 态射.one_def
   结论: (1 : X ⟶ M) = toUnit X ≫ η
   证明: rfl
 @[to_additive]
@@ -654,7 +654,7 @@ lemma Hom.mul_def
   proof: rfl
 
 中文:
-引理 Hom.mul_def
+引理 态射.mul_def
   条件: (f₁ f₂ : X ⟶ M)
   结论: f₁ * f₂ = lift f₁ f₂ ≫ μ
   证明: rfl
@@ -746,8 +746,8 @@ definition FullyFaithful.homMulEquiv
   __ := F.homMonoidHom
 
 中文:
-定义 FullyFaithful.homMulEquiv
-  签名: (hF : F.FullyFaithful)
+定义 满忠实.homMulEquiv
+  签名: (hF : F.满忠实)
   定义体: hF.homEquiv
   __ := F.homMonoidHom
 
@@ -775,8 +775,8 @@ abbreviation Hom.commMonoid
   body: by simpa [-IsCommMonObj.mul_comm] using! lift g f ≫= IsCommMonObj.mul_comm M
 
 中文:
-缩写 Hom.commMonoid
-  签名: [IsCommMonObj M]
+缩写 态射.commMonoid
+  签名: [是交换MonObj M]
   定义体: by simpa [-IsCommMonObj.mul_comm] using! lift g f ≫= IsCommMonObj.mul_comm M
 
 Depends on / 依赖: IsCommMonObj, IsCommMonObj.mul_comm, mul_comm
@@ -869,8 +869,8 @@ definition IsMonHom.monoidHom
 @[to_additive (attr := simp)]
 
 中文:
-定义 IsMonHom.monoidHom
-  签名: (f : M ⟶ N) [IsMonHom f] (X : C)
+定义 是幺半群态射.monoidHom
+  签名: (f : M ⟶ N) [是幺半群态射 f] (X : C)
   定义体: (· ≫ f)
   map_one' := by simp [Hom.one_def]
   map_mul' := by simp [Hom.mul_def]
@@ -895,8 +895,8 @@ lemma IsMonHom.monoidHom_id
 @[to_additive (attr := simp)]
 
 中文:
-引理 IsMonHom.monoidHom_id
-  结论: IsMonHom.monoidHom (𝟙 M) X = MonoidHom.id _
+引理 是幺半群态射.monoidHom_id
+  结论: 是幺半群态射.monoidHom (𝟙 M) X = 幺半群态射.id _
   证明: by
   cat_disch
 
@@ -918,8 +918,8 @@ lemma IsMonHom.monoidHom_comp
   cat_disch
 
 中文:
-引理 IsMonHom.monoidHom_comp
-  条件: (f : M ⟶ N) (g : N ⟶ O) [IsMonHom f] [IsMonHom g]
+引理 是幺半群态射.monoidHom_comp
+  条件: (f : M ⟶ N) (g : N ⟶ O) [是幺半群态射 f] [是幺半群态射 g]
   证明: by
   cat_disch
 
@@ -950,7 +950,7 @@ definition yonedaMonObj
 
 中文:
 定义 yonedaMonObj
-  签名: : Cᵒᵖ ⥤ MonCat.{v} where
+  签名: : Cᵒᵖ ⥤ 幺半群范畴.{v} where
   定义体: MonCat.of (unop X ⟶ M)
   map {X Y₂} φ := MonCat.ofHom
     { toFun := (φ.unop ≫ ·)
@@ -1041,7 +1041,7 @@ map_comp _ _ := NatTrans.ext funext fun _ => MonCa
 
 中文:
 定义 yonedaMon
-  签名: : Mon C ⥤ Cᵒᵖ ⥤ MonCat.{v} where
+  签名: : 幺半群 C ⥤ Cᵒᵖ ⥤ 幺半群范畴.{v} where
   定义体: yonedaMonObj M.X
   map ψ :=
   { app _ := MonCat.ofHom <| IsMonHom.monoidHom _ _
@@ -1096,7 +1096,7 @@ definition yonedaMonObjRepresentableBy
 
 中文:
 定义 yonedaMonObjRepresentableBy
-  签名: : (yonedaMonObj M ⋙ forget _).RepresentableBy M
+  签名: : (yonedaMonObj M ⋙ forget _).可表示 M
   定义体: Functor.representableByEquiv.symm (.refl _)
 
 Depends on / 依赖: Functor, Functor.representableByEquiv.symm, representableByEquiv
@@ -1143,7 +1143,7 @@ definition yonedaMonFullyFaithful
 
 中文:
 定义 yonedaMonFullyFaithful
-  签名: : yonedaMon (C := C).FullyFaithful where
+  签名: : yonedaMon (C := C).满忠实 where
   定义体: { hom := α.app (op M.X) (𝟙 M.X)
       isMonHom_hom.one_hom := by
           dsimp only [yonedaMon_obj] at α ⊢
@@ -1185,7 +1185,7 @@ instance :
 
 中文:
 实例 :
-  签名: yonedaMon (C := C).Full
+  签名: yonedaMon (C := C).满
   定义体: yonedaMonFullyFaithful.full
 @[to_additive]
 
@@ -1205,7 +1205,7 @@ instance :
 
 中文:
 实例 :
-  签名: yonedaMon (C := C).Faithful
+  签名: yonedaMon (C := C).忠实
   定义体: yonedaMonFullyFaithful.faithful
 
 @[to_additive]
@@ -1270,7 +1270,7 @@ lemma MonObj.one_comp
 
 中文:
 引理 MonObj.one_comp
-  条件: (f : M ⟶ N) [IsMonHom f]
+  条件: (f : M ⟶ N) [是幺半群态射 f]
   结论: (1 : X ⟶ M) ≫ f = 1
   证明: by simp [Hom.one_def]
 
@@ -1293,7 +1293,7 @@ lemma MonObj.mul_comp
 
 中文:
 引理 MonObj.mul_comp
-  条件: (f₁ f₂ : X ⟶ M) (g : M ⟶ N) [IsMonHom g]
+  条件: (f₁ f₂ : X ⟶ M) (g : M ⟶ N) [是幺半群态射 g]
   证明: by simp [Hom.mul_def]
 
 @[to_additive (attr := reassoc)]
@@ -1317,7 +1317,7 @@ lemma MonObj.pow_comp
 
 中文:
 引理 MonObj.pow_comp
-  条件: (f : X ⟶ M) (n : 自然数) (g : M ⟶ N) [IsMonHom g]
+  条件: (f : X ⟶ M) (n : 自然数) (g : M ⟶ N) [是幺半群态射 g]
   证明: by
   induction n <;> simp [pow_succ, MonObj.mul_comp, *]
 
@@ -1462,7 +1462,7 @@ definition mulEquivCongrRight
 
 中文:
 定义 mulEquivCongrRight
-  签名: (e : M ≅ N) [IsMonHom e.hom] (X : C)
+  签名: (e : M ≅ N) [是幺半群态射 e.hom] (X : C)
   定义体: ((yonedaMon.mapIso <| Mon.mkIso' e).app <| .op X).monCatIsoToMulEquiv
 
 Depends on / 依赖: Mon.mkIso, mapIso, monCatIsoToMulEquiv, yonedaMon, yonedaMon.mapIso
@@ -1488,7 +1488,7 @@ lemma isCommMonObj_iff_isMulCommutative
 
 中文:
 引理 isCommMonObj_iff_isMulCommutative
-  条件: (M : C) [MonObj M] [BraidedCategory C]
+  条件: (M : C) [MonObj M] [辫范畴 C]
   证明: by
   exact ⟨fun h X => ⟨⟨by simp [mul_comm]⟩⟩, fun h => ⟨by simp [mul_eq_mul, comp_mul, mul_comm]⟩⟩
 

@@ -72,7 +72,7 @@ alias ⟨Integrable.eval_piLp, Integrable.of_eval_piLp⟩ := integrable_piLp_iff
 
 中文:
 引理 integrable_piLp_iff
-  结论: 整数egrable f μ ↔ 对任意 i, 整数egrable (f · i) μ
+  结论: 可积 f μ ↔ 对任意 i, 可积 (f · i) μ
   证明: by
   simp_rw [← memLp_one_iff_integrable, memLp_piLp_iff]
 
@@ -100,7 +100,7 @@ lemma eval_integral_piLp
 
 中文:
 引理 eval_integral_piLp
-  条件: (hf : 对任意 i, 整数egrable (f · i) μ) (i : ι)
+  条件: (hf : 对任意 i, 可积 (f · i) μ) (i : ι)
   证明: by
   rw [← PiLp.proj_apply (𝕜 := Real) q E i (∫ x]; rw [f x ∂μ)]; rw [← ContinuousLinearMap.integral_comp_comm]
   · simp
@@ -222,9 +222,9 @@ lemma Integrable.prodLp_fst
   proof: .1 integrable_prodLp_iff.1 h
 
 中文:
-引理 Integrable.prodLp_fst
-  条件: (h : 整数egrable f μ)
-  结论: 整数egrable (fun x => (f x).fst) μ
+引理 可积.prodLp_fst
+  条件: (h : 可积 f μ)
+  结论: 可积 (fun x => (f x).fst) μ
   证明: .1 integrable_prodLp_iff.1 h
 
 Depends on / 依赖: integrable_prodLp_iff
@@ -244,9 +244,9 @@ lemma Integrable.prodLp_snd
 alias ⟨_, Integrable.of_fst_of_snd_prodLp⟩ := integrable_prodLp_iff
 
 中文:
-引理 Integrable.prodLp_snd
-  条件: (h : 整数egrable f μ)
-  结论: 整数egrable (fun x => (f x).snd) μ
+引理 可积.prodLp_snd
+  条件: (h : 可积 f μ)
+  结论: 可积 (fun x => (f x).snd) μ
   证明: .2 integrable_prodLp_iff.1 h
 
 alias ⟨_, Integrable.of_fst_of_snd_prodLp⟩ := integrable_prodLp_iff
@@ -275,7 +275,7 @@ theorem fst_integral_withLp
 
 中文:
 定理 fst_integral_withLp
-  条件: [CompleteSpace F] (hf : 整数egrable f μ)
+  条件: [完备空间 F] (hf : 可积 f μ)
   证明: by
   rw [← WithLp.ofLp_fst]
   conv => enter [1, 1]; change WithLp.prodContinuousLinearEquiv q Real E F _
@@ -308,7 +308,7 @@ theorem snd_integral_withLp
 
 中文:
 定理 snd_integral_withLp
-  条件: [CompleteSpace E] (hf : 整数egrable f μ)
+  条件: [完备空间 E] (hf : 可积 f μ)
   证明: by
   rw [← WithLp.ofLp_snd]
   conv => enter [1, 1]; change WithLp.prodContinuousLinearEquiv q Real E F _

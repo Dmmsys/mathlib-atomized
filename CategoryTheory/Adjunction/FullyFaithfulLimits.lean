@@ -53,7 +53,7 @@ lemma preservesColimitsOfShape_iff
 
 中文:
 引理 preservesColimitsOfShape_iff
-  结论: (J : 类型u) [Category.{v} J]
+  结论: (J : 类型u) [范畴.{v} J]
   证明: by
   have := adj.isLeftAdjoint
   refine ⟨fun _ => inferInstance, fun _ => ⟨fun {K} => ?_⟩⟩

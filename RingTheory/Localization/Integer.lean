@@ -49,7 +49,7 @@ definition IsInteger
   body: a in (algebraMap R S).rangeS
 
 中文:
-定义 IsInteger
+定义 Is整数eger
   签名: (a : S)
   定义体: a in (algebraMap R S).rangeS
 
@@ -69,7 +69,7 @@ theorem isInteger_zero
   proof: Subsemiring.zero_mem _
 
 中文:
-定理 isInteger_zero
+定理 is整数eger_zero
   结论: Is整数eger R (0 : S)
   证明: Subsemiring.zero_mem _
 
@@ -87,7 +87,7 @@ theorem isInteger_one
   proof: Subsemiring.one_mem _
 
 中文:
-定理 isInteger_one
+定理 is整数eger_one
   结论: Is整数eger R (1 : S)
   证明: Subsemiring.one_mem _
 
@@ -106,7 +106,7 @@ theorem isInteger_add
   proof: Subsemiring.add_mem _ ha hb
 
 中文:
-定理 isInteger_add
+定理 is整数eger_add
   条件: {a b : S} (ha : Is整数eger R a) (hb : Is整数eger R b)
   结论: Is整数eger R (a + b)
   证明: Subsemiring.add_mem _ ha hb
@@ -126,7 +126,7 @@ theorem isInteger_mul
   proof: Subsemiring.mul_mem _ ha hb
 
 中文:
-定理 isInteger_mul
+定理 is整数eger_mul
   条件: {a b : S} (ha : Is整数eger R a) (hb : Is整数eger R b)
   结论: Is整数eger R (a * b)
   证明: Subsemiring.mul_mem _ ha hb
@@ -149,7 +149,7 @@ theorem isInteger_smul
   rw [← hb]; rw [(algebraMap R S).map_mul]; rw [Algebra.smul_def]
 
 中文:
-定理 isInteger_smul
+定理 is整数eger_smul
   条件: {a : R} {b : S} (hb : Is整数eger R b)
   结论: Is整数eger R (a • b)
   证明: by
@@ -178,7 +178,7 @@ theorem exists_integer_multiple'
   ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
 
 中文:
-定理 exists_integer_multiple'
+定理 存在_integer_multiple'
   条件: (a : S)
   结论: 存在 b : M, Is整数eger R (a * algebraMap R S b)
   证明: let ⟨⟨Num, denom⟩, h⟩ := IsLocalization.surj _ a
@@ -202,7 +202,7 @@ theorem exists_integer_multiple
   apply exists_integer_multiple'
 
 中文:
-定理 exists_integer_multiple
+定理 存在_integer_multiple
   条件: (a : S)
   结论: 存在 b : M, Is整数eger R ((b : R) • a)
   证明: by
@@ -231,7 +231,7 @@ theorem exist_integer_multiples
 
 中文:
 定理 exist_integer_multiples
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> S)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
   证明: by
   have := Classical.propDecidable
   refine ⟨∏ i in s, (sec M (f i)).2, fun i hi => ⟨?_, ?_⟩⟩
@@ -267,7 +267,7 @@ theorem exist_integer_multiples_of_finite
 
 中文:
 定理 exist_integer_multiples_of_finite
-  条件: {ι : 类型} [Finite ι] (f : ι -> S)
+  条件: {ι : 类型} [有限 ι] (f : ι -> S)
   证明: by
   cases nonempty_fintype ι
   obtain ⟨b, hb⟩ := exist_integer_multiples M Finset.univ f
@@ -291,7 +291,7 @@ theorem exist_integer_multiples_of_finset
 
 中文:
 定理 exist_integer_multiples_of_finset
-  条件: (s : Finset S)
+  条件: (s : 有限集 S)
   证明: exist_integer_multiples M s id
 
 Depends on / 依赖: exist_integer_multiples
@@ -310,7 +310,7 @@ definition commonDenom
 
 中文:
 定义 commonDenom
-  签名: {ι : 类型} (s : Finset ι) (f : ι -> S)
+  签名: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
   定义体: (exist_integer_multiples M s f).choose
 
 Depends on / 依赖: exist_integer_multiples
@@ -330,7 +330,7 @@ definition integerMultiple
 
 中文:
 定义 integerMultiple
-  签名: {ι : 类型} (s : Finset ι) (f : ι -> S) (i : s)
+  签名: {ι : 类型} (s : 有限集 ι) (f : ι -> S) (i : s)
   定义体: ((exist_integer_multiples M s f).choose_spec i i.prop).choose
 
 @[simp]
@@ -351,7 +351,7 @@ theorem map_integerMultiple
 
 中文:
 定理 map_integerMultiple
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> S) (i : s)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> S) (i : s)
   证明: ((exist_integer_multiples M s f).choose_spec _ i.prop).choose_spec
 
 Depends on / 依赖: choose_spec, exist_integer_multiples, i.prop
@@ -374,7 +374,7 @@ theorem integerMultiple_injective
 
 中文:
 定理 integerMultiple_injective
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> S)
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
   证明: by
   intro i j h
   rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
@@ -401,7 +401,7 @@ definition commonDenomOfFinset
 
 中文:
 定义 commonDenomOfFinset
-  签名: (s : Finset S)
+  签名: (s : 有限集 S)
   定义体: commonDenom M s id
 
 Depends on / 依赖: commonDenom
@@ -418,8 +418,8 @@ definition finsetIntegerMultiple
   body: s.attach.image fun t => integerMultiple M s id t
 
 中文:
-定义 finsetIntegerMultiple
-  签名: [DecidableEq R] (s : Finset S)
+定义 finset整数egerMultiple
+  签名: [DecidableEq R] (s : 有限集 S)
   定义体: s.attach.image fun t => integerMultiple M s id t
 
 Depends on / 依赖: attach, integerMultiple, s.attach.image
@@ -449,8 +449,8 @@ theorem finsetIntegerMultiple_image
 @[simp]
 
 中文:
-定理 finsetIntegerMultiple_image
-  条件: [DecidableEq R] (s : Finset S)
+定理 finset整数egerMultiple_image
+  条件: [DecidableEq R] (s : 有限集 S)
   证明: by
   delta finsetIntegerMultiple commonDenom
   rw [Finset.coe_image]
@@ -489,8 +489,8 @@ theorem card_finsetIntegerMultiple
     Finset.card_attach
 
 中文:
-定理 card_finsetIntegerMultiple
-  条件: [DecidableEq R] (s : Finset S)
+定理 card_finset整数egerMultiple
+  条件: [DecidableEq R] (s : 有限集 S)
   证明: (Finset.card_image_of_injective _ (integerMultiple_injective M s id injective_id)).trans
     Finset.card_attach
 

@@ -29,8 +29,8 @@ theorem Finset.exists_between
   convert! _root_.exists_between (a₁ := s.max' hs) (a₂ := t.min' ht) (by simp_all) <;> simp
 
 中文:
-定理 Finset.exists_between
-  结论: {s t : Finset α}
+定理 有限集.存在_between
+  结论: {s t : 有限集 α}
   证明: by
   convert! _root_.exists_between (a₁ := s.max' hs) (a₂ := t.min' ht) (by simp_all) <;> simp
 
@@ -55,8 +55,8 @@ theorem Finset.exists_between'
   · exact Nonempty.elim ‹_› fun p => ⟨p, by simp_all⟩
 
 中文:
-定理 Finset.exists_between'
-  结论: (s t : Finset α) [NoMaxOrder α] [NoMinOrder α] [Nonempty α]
+定理 有限集.存在_between'
+  结论: (s t : 有限集 α) [NoMax序 α] [NoMin序 α] [非空 α]
   证明: by
   by_cases hs : s.Nonempty <;> by_cases ht : t.Nonempty
   · exact s.exists_between hs ht H
@@ -87,8 +87,8 @@ theorem Set.Finite.exists_between
     1; simp
 
 中文:
-定理 Set.Finite.exists_between
-  结论: {s t : Set α}
+定理 集合.有限.存在_between
+  结论: {s t : 集合 α}
   证明: by
   convert!
     Finset.exists_between (s := hsf.toFinset) (t := htf.toFinset) (by simpa) (by simpa)
@@ -115,8 +115,8 @@ theorem Set.Finite.exists_between'
   convert! hs.toFinset.exists_between' ht.toFinset (by simpa) using 1; simp
 
 中文:
-定理 Set.Finite.exists_between'
-  结论: [NoMaxOrder α] [NoMinOrder α] [Nonempty α]
+定理 集合.有限.存在_between'
+  结论: [NoMax序 α] [NoMin序 α] [非空 α]
   证明: by
   convert! hs.toFinset.exists_between' ht.toFinset (by simpa) using 1; simp
 

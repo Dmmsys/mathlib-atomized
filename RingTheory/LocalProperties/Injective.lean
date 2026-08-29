@@ -50,8 +50,8 @@ theorem Module.injective_of_isLocalizedModule
     ⟨Iₛ.comap (algebraMap R Rₛ), by simp [Ideal.localized'_eq_map, IsLocalization.map
 
 中文:
-定理 Module.injective_of_isLocalizedModule
-  结论: [Small.{v} R] [IsNoetherianRing R] {Rₛ : 类型u'}
+定理 模.injective_of_isLocalizedModule
+  结论: [Small.{v} R] [是Noether环 R] {Rₛ : 类型u'}
   证明: by
   have MB : Baer R M := Baer.of_injective ‹_›
   simp only [← Baer.iff_injective, Module.Baer.iff_surjective] at MB ⊢
@@ -100,8 +100,8 @@ theorem Module.injective_of_localization_maximal
   let f := LocalizedModule.m
 
 中文:
-定理 Module.injective_of_localization_maximal
-  结论: [Small.{v} R] [IsNoetherianRing R]
+定理 模.injective_of_localization_maximal
+  结论: [Small.{v} R] [是Noether环 R]
   证明: by
   rw [← Baer.iff_injective]; rw [Baer.iff_surjective]
   intro I
@@ -182,8 +182,8 @@ theorem Module.injective_of_localization_maximal'
         (LocalizedModule.mkLinearMap
 
 中文:
-定理 Module.injective_of_localization_maximal'
-  结论: [Small.{v} R] [IsNoetherianRing R]
+定理 模.injective_of_localization_maximal'
+  结论: [Small.{v} R] [是Noether环 R]
   证明: by
   apply Module.injective_of_localization_maximal
   intro P hP

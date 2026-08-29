@@ -40,13 +40,13 @@ structure CommBialgCat
     - [bialgebra : Bialgebra R carrier]
 
 中文:
-结构 CommBialgCat
+结构 交换Bialg范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [commRing : CommRing carrier]
-    - [bialgebra : Bialgebra R carrier]
+    - [commRing : 交换环 carrier]
+    - [bialgebra : 双代数 R carrier]
 -/
 structure CommBialgCat where
   private mk ::
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CommBialgCat R) (类型v)
+  签名: CoeSort (交换Bialg范畴 R) (类型v)
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -95,7 +95,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [CommRing X] [Bialgebra R X]
+  签名: (X : 类型v) [交换环 X] [双代数 R X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type v) [CommRing X] [Bialgebra R X] : CommBialgCat.{v} R := ⟨X⟩
@@ -112,7 +112,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [CommRing X] [Bialgebra R X]
+  条件: (X : 类型v) [交换环 X] [双代数 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -131,8 +131,8 @@ structure Hom
     - hom' : A ->ₐc[R] B
 
 中文:
-结构 Hom
-  参数: (A B : CommBialgCat.{v} R)
+结构 态射
+  参数: (A B : 交换Bialg范畴.{v} R)
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₐc[R] B
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommBialgCat.{v} R)
+  签名: 范畴 (交换Bialg范畴.{v} R)
   定义体: Hom A B
   id A := ⟨.id R A⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (CommBialgCat.{v} R) (· ->ₐc[R] ·)
+  签名: 余ncrete范畴 (交换Bialg范畴.{v} R) (· ->ₐc[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -198,8 +198,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommBialgCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: (f : Hom A B)
+缩写 态射.hom
+  签名: (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := CommBialgCat R) f
 -/
 abbrev Hom.hom (f : Hom A B) : A ->ₐc[R] B := ConcreteCategory.hom (C := CommBialgCat R) f
@@ -214,7 +214,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} {_ : CommRing X} {_ : CommRing Y} {_ : Bialgebra R X}
+  签名: {X Y : 类型v} {_ : 交换环 X} {_ : 交换环 Y} {_ : 双代数 R X}
   定义体: ConcreteCategory.ofHom (C := CommBialgCat R) f
 
 Depends on / 依赖: CommBialgCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -234,8 +234,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : CommBialgCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : 交换Bialg范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -289,7 +289,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (A : CommBialgCat.{v} R) (a : A)
+  条件: (A : 交换Bialg范畴.{v} R) (a : A)
   结论: (𝟙 A : A ⟶ A) a = a
   证明: by simp
 -/
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommBialgCat R)
+  签名: 可居 (交换Bialg范畴 R)
   定义体: ⟨of R R⟩
 -/
 instance : Inhabited (CommBialgCat R) := ⟨of R R⟩
@@ -476,8 +476,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: (A : CommBialgCat.{v} R)
-  结论: (forget (CommBialgCat.{v} R)).obj A = A
+  条件: (A : 交换Bialg范畴.{v} R)
+  结论: (forget (交换Bialg范畴.{v} R)).obj A = A
   证明: rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-06")]
@@ -498,7 +498,7 @@ lemma forget_map
 中文:
 引理 forget_map
   条件: (f : A ⟶ B)
-  结论: (forget (CommBialgCat.{v} R)).map f = (f : _ -> _)
+  结论: (forget (交换Bialg范畴.{v} R)).map f = (f : _ -> _)
   证明: rfl
 -/
 lemma forget_map (f : A ⟶ B) : (forget (CommBialgCat.{v} R)).map f = (f : _ -> _) := rfl
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing ((forget (CommBialgCat R)).obj A)
+  签名: 交换环 ((forget (交换Bialg范畴 R)).obj A)
   定义体: inferInstanceAs CommRing A
 
 Depends on / 依赖: CommRing
@@ -530,7 +530,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bialgebra R ((forget (CommBialgCat R)).obj A)
+  签名: 双代数 R ((forget (交换Bialg范畴 R)).obj A)
   定义体: inferInstanceAs Bialgebra R A
 
 Depends on / 依赖: Bialgebra
@@ -548,7 +548,7 @@ instance hasForgetToCommAlgCat
 
 中文:
 实例 hasForgetToCommAlgCat
-  签名: : HasForget₂ (CommBialgCat.{v} R) (CommAlgCat.{v} R) where
+  签名: : 有Forget₂ (交换Bialg范畴.{v} R) (交换Alg范畴.{v} R) where
   定义体: .of R M
   forget₂.map f := CommAlgCat.ofHom f.hom.toAlgHom
 -/
@@ -566,7 +566,7 @@ lemma forget₂_commAlgCat_obj
 
 中文:
 引理 forget₂_commAlgCat_obj
-  条件: (A : CommBialgCat.{v} R)
+  条件: (A : 交换Bialg范畴.{v} R)
   证明: rfl
 -/
 @[simp] lemma forget₂_commAlgCat_obj (A : CommBialgCat.{v} R) :
@@ -605,7 +605,7 @@ definition ofIsoSelf
 
 中文:
 定义 ofIsoSelf
-  签名: (M : CommBialgCat.{v} R)
+  签名: (M : 交换Bialg范畴.{v} R)
   定义体: 𝟙 M
   inv := 𝟙 M
 
@@ -631,7 +631,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : 类型v} {_ : CommRing X} {_ : CommRing Y} {_ : Bialgebra R X}
+  签名: {X Y : 类型v} {_ : 交换环 X} {_ : 交换环 Y} {_ : 双代数 R X}
   定义体: ofHom (e : X ->ₐc[R] Y)
   inv := ofHom (e.symm : Y ->ₐc[R] X)
 -/
@@ -714,7 +714,7 @@ instance reflectsIsomorphisms_forget
 
 中文:
 实例 reflectsIsomorphisms_forget
-  签名: : (forget (CommBialgCat.{u} R)).ReflectsIsomorphisms where
+  签名: : (forget (交换Bialg范畴.{u} R)).反映同构 where
   定义体: by
     let i := asIso ((forget (CommBialgCat.{u} R)).map f)
     let e : X ≃ₐc[R] Y := { f.hom, i.toEquiv with }
@@ -747,8 +747,8 @@ instance CommAlgCat.monObjOpOf
 @[simp]
 
 中文:
-实例 CommAlgCat.monObjOpOf
-  签名: {A : 类型u} [CommRing A] [Bialgebra R A]
+实例 交换Alg范畴.monObjOpOf
+  签名: {A : 类型u} [交换环 A] [双代数 R A]
   定义体: (CommAlgCat.ofHom <| counitAlgHom R A).op
   mul := (CommAlgCat.ofHom <| comulAlgHom R A).op
   one_mul := by ext; exact Coalgebra.rTensor_counit_comul _
@@ -779,8 +779,8 @@ lemma CommAlgCat.one_op_of_unop_hom
 @[simp]
 
 中文:
-引理 CommAlgCat.one_op_of_unop_hom
-  条件: {A : 类型u} [CommRing A] [Bialgebra R A]
+引理 交换Alg范畴.one_op_of_unop_hom
+  条件: {A : 类型u} [交换环 A] [双代数 R A]
   证明: rfl
 
 @[simp]
@@ -798,8 +798,8 @@ lemma CommAlgCat.mul_op_of_unop_hom
   proof: rfl
 
 中文:
-引理 CommAlgCat.mul_op_of_unop_hom
-  条件: {A : 类型u} [CommRing A] [Bialgebra R A]
+引理 交换Alg范畴.mul_op_of_unop_hom
+  条件: {A : 类型u} [交换环 A] [双代数 R A]
   证明: rfl
 -/
 lemma CommAlgCat.mul_op_of_unop_hom {A : Type u} [CommRing A] [Bialgebra R A] :
@@ -838,7 +838,7 @@ inverse.map {A B} f := CommBialgCat.ofHom .ofAlgHom f.unop.hom.unop.hom
 
 中文:
 定义 commBialgCatEquivComonCommAlgCat
-  签名: : CommBialgCat R ≌ (Mon (CommAlgCat R)ᵒᵖ)ᵒᵖ where
+  签名: : 交换Bialg范畴 R ≌ (幺半群 (交换Alg范畴 R)ᵒᵖ)ᵒᵖ where
   定义体: .op .mk .op .of R A
 functor.map {A B} f := .op .mk' .op CommAlgCat.ofHom f.hom.toAlgHom
   inverse.obj A := .of R A.unop.X.unop
@@ -871,7 +871,7 @@ lemma commBialgCatEquivComonCommAlgCat_functor_map_unop_hom
 
 中文:
 引理 commBialgCatEquivComonCommAlgCat_functor_map_unop_hom
-  条件: {A B : CommBialgCat R} (f : A ⟶ B)
+  条件: {A B : 交换Bialg范畴 R} (f : A ⟶ B)
   证明: rfl
 
 @[simp]

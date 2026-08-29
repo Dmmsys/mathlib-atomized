@@ -34,7 +34,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: (X : 类型u) [TopologicalSpace X] [Small.{v} X]
+  签名: (X : 类型u) [拓扑空间 X] [Small.{v} X]
   定义体: (equivShrink X).symm.homeomorph.symm
 
 Depends on / 依赖: equivShrink, homeomorph, symm.homeomorph.symm

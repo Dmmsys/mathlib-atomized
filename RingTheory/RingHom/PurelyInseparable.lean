@@ -35,7 +35,7 @@ definition RingHom.IsPurelyInseparable
   IsPurelyInseparable F E
 
 中文:
-定义 RingHom.IsPurelyInseparable
+定义 环态射.是纯不可分
   定义体: letI : Algebra F E := f.toAlgebra
   IsPurelyInseparable F E
 -/
@@ -53,7 +53,7 @@ lemma RingHom.isPurelyInseparable_algebraMap_iff
   rw [RingHom.IsPurelyInseparable]; rw [toAlgebra_algebraMap]
 
 中文:
-引理 RingHom.isPurelyInseparable_algebraMap_iff
+引理 环态射.isPurelyInseparable_algebraMap_iff
   证明: by
   rw [RingHom.IsPurelyInseparable]; rw [toAlgebra_algebraMap]
 
@@ -80,8 +80,8 @@ lemma id
 
 中文:
 引理 id
-  条件: [CommRing F]
-  结论: RingHom.IsPurelyInseparable (RingHom.id F)
+  条件: [交换环 F]
+  结论: 环态射.是纯不可分 (环态射.id F)
   证明: isPurelyInseparable_self F
 
 Depends on / 依赖: isPurelyInseparable_self
@@ -99,7 +99,7 @@ lemma containsIdentities
 
 中文:
 引理 containsIdentities
-  结论: ContainsIdentities RingHom.IsPurelyInseparable
+  结论: 余ntainsIdentities 环态射.是纯不可分
   证明: id
 -/
 lemma containsIdentities : ContainsIdentities RingHom.IsPurelyInseparable := id
@@ -116,7 +116,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: [Field F] [Field E] [Field K] {f : F ->+* E} {g : E ->+* K}
+  结论: [域 F] [域 E] [域 K] {f : F ->+* E} {g : E ->+* K}
   证明: by
   algebraize [f, g, g.comp f]
   exact IsPurelyInseparable.trans F E K

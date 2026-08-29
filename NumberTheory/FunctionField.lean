@@ -61,7 +61,7 @@ abbreviation FunctionField
 
 中文:
 缩写 FunctionField
-  签名: [Algebra F⟮X⟯ K]
+  签名: [代数 F⟮X⟯ K]
   定义体: FiniteDimensional F⟮X⟯ K
 
 Depends on / 依赖: FiniteDimensional
@@ -86,7 +86,7 @@ theorem functionField_iff
 
 中文:
 定理 functionField_iff
-  结论: (Ft : 类型) [Field Ft] [Algebra F[X] Ft]
+  结论: (Ft : 类型) [域 Ft] [代数 F[X] Ft]
   证明: by
   let e := IsLocalization.algEquiv F[X]⁰ F⟮X⟯ Ft
   have : forall (c) (x : K), e c • x = c • x := by
@@ -131,7 +131,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: [Algebra F[X] K] [Algebra F⟮X⟯ K]
+  结论: [代数 F[X] K] [代数 F⟮X⟯ K]
   证明: by
   rw [IsScalarTower.algebraMap_eq F[X] F⟮X⟯ K]
   exact (algebraMap F⟮X⟯ K).injective.comp (IsFractionRing.injective F[X] F⟮X⟯)
@@ -152,8 +152,8 @@ definition ringOfIntegers
   body: integralClosure F[X] K
 
 中文:
-定义 ringOfIntegers
-  签名: [Algebra F[X] K]
+定义 ringOf整数egers
+  签名: [代数 F[X] K]
   定义体: integralClosure F[X] K
 
 Depends on / 依赖: integralClosure
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain (ringOf整数egers F K)
+  签名: 是整环 (ringOf整数egers F K)
   定义体: (ringOfIntegers F K).isDomain
 
 Depends on / 依赖: isDomain, ringOfIntegers
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egralClosure (ringOf整数egers F K) F[X] K
+  签名: 是整闭包 (ringOf整数egers F K) F[X] K
   定义体: integralClosure.isIntegralClosure _ _
 
 Depends on / 依赖: integralClosure, integralClosure.isIntegralClosure, isIntegralClosure
@@ -219,7 +219,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: Function.Injective (algebraMap F[X] (ringOf整数egers F K))
+  结论: 函数.单射 (algebraMap F[X] (ringOf整数egers F K))
   证明: by
   have hinj : Function.Injective (algebraMap F[X] K) := by
     rw [IsScalarTower.algebraMap_eq F[X] F⟮X⟯ K]
@@ -253,7 +253,7 @@ theorem not_isField
 
 中文:
 定理 not_isField
-  结论: ¬IsField (ringOf整数egers F K)
+  结论: ¬是域 (ringOf整数egers F K)
   证明: by
   simpa [← (IsIntegralClosure.isIntegral_algebra F[X] K).isField_iff_isField
       (algebraMap_injective F K)] using
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egrallyClosed (ringOf整数egers F K)
+  签名: 是整闭 (ringOf整数egers F K)
   定义体: integralClosure.isIntegrallyClosedOfFiniteExtension F⟮X⟯
 
 Depends on / 依赖: integralClosure, integralClosure.isIntegrallyClosedOfFiniteExtension, isIntegrallyClosedOfFiniteExtension
@@ -313,8 +313,8 @@ instance [Algebra.IsSeparable
   body: IsIntegralClosure.isNoetherian _ F⟮X⟯ K _
 
 中文:
-实例 [Algebra.IsSeparable
-  签名: F⟮X⟯ K] : IsNoetherian F[X] (ringOf整数egers F K)
+实例 [代数.是可分
+  签名: F⟮X⟯ K] : 是Noether F[X] (ringOf整数egers F K)
   定义体: IsIntegralClosure.isNoetherian _ F⟮X⟯ K _
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian
@@ -331,8 +331,8 @@ instance [Algebra.IsSeparable
   body: IsIntegralClosure.isDedekindDomain F[X] F⟮X⟯ K _
 
 中文:
-实例 [Algebra.IsSeparable
-  签名: F⟮X⟯ K] : IsDedekindDomain (ringOf整数egers F K)
+实例 [代数.是可分
+  签名: F⟮X⟯ K] : 是Dedekind整环 (ringOf整数egers F K)
   定义体: IsIntegralClosure.isDedekindDomain F[X] F⟮X⟯ K _
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isDedekindDomain, isDedekindDomain
@@ -439,8 +439,8 @@ instance FiniteDimensional.adjoin_X
   RatFunc.adjoin_X (K := F) ▸ Module.Finite.trans F⟮X⟯ _
 
 中文:
-实例 FiniteDimensional.adjoin_X
-  签名: : FiniteDimensional F⟮(X : F⟮X⟯)⟯ K
+实例 有限维.adjoin_X
+  签名: : 有限维 F⟮(X : F⟮X⟯)⟯ K
   定义体: have : Module.Finite (⊤ : IntermediateField F F⟮X⟯) F⟮X⟯ :=
     .top_left F⟮X⟯ F⟮X⟯
   RatFunc.adjoin_X (K := F) ▸ Module.Finite.trans F⟮X⟯ _
@@ -462,7 +462,7 @@ theorem FiniteDimensional.adjoin_algebraMap_X
   proof: .of_restrictScalars_finite F⟮(X : F⟮X⟯)⟯ _ _
 
 中文:
-定理 FiniteDimensional.adjoin_algebraMap_X
+定理 有限维.adjoin_algebraMap_X
   证明: .of_restrictScalars_finite F⟮(X : F⟮X⟯)⟯ _ _
 
 Depends on / 依赖: of_restrictScalars_finite
@@ -480,7 +480,7 @@ theorem Algebra.IsAlgebraic.adjoin_algebraMap_X
   exact .tower_top (K := F⟮(X : F⟮X⟯)⟯) _
 
 中文:
-定理 Algebra.IsAlgebraic.adjoin_algebraMap_X
+定理 代数.是代数.adjoin_algebraMap_X
   证明: by
   exact .tower_top (K := F⟮(X : F⟮X⟯)⟯) _
 
@@ -503,7 +503,7 @@ theorem isAlgebraic_X_over_adjoin_transcendental
 
 中文:
 定理 isAlgebraic_X_over_adjoin_transcendental
-  条件: (hy : Transcendental F y)
+  条件: (hy : 超越 F y)
   证明: isAlgebraic_adjoin_iff.mpr (.adjoin_singleton transcendental_X hy
     (isAlgebraic_adjoin_iff.mp (Algebra.IsAlgebraic.isAlgebraic y)))
 
@@ -531,7 +531,7 @@ lemma finiteDimensional_of_adjoin_transcendental
 
 中文:
 引理 finiteDimensional_of_adjoin_transcendental
-  条件: (hy : Transcendental F y)
+  条件: (hy : 超越 F y)
   证明: -- Local definitions for convenience
   let x := algebraMap _ K (X : F⟮X⟯)
   let Fyx := restrictScalars F F⟮y⟯⟮x⟯
@@ -593,7 +593,7 @@ theorem finiteDimensional_ratFunc_of_constantExtension
 
 中文:
 定理 finiteDimensional_ratFunc_of_constantExtension
-  条件: [IsScalarTower F[X] E[X] K]
+  条件: [标量塔 F[X] E[X] K]
   证明: .equiv (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F⟮X⟯ E⟮X⟯ K)).toLinearEquiv.symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, IsScalarTower, IsScalarTower.toAlgHom, ofInjectiveField, toAlgHom, toLinearEquiv, toLinearEquiv.symm
@@ -613,7 +613,7 @@ theorem finiteDimensional_of_constantExtension
 
 中文:
 定理 finiteDimensional_of_constantExtension
-  结论: [IsScalarTower F[X] E[X] K]
+  结论: [标量塔 F[X] E[X] K]
   证明: have := finiteDimensional_ratFunc_of_constantExtension (F := F) (E := E) K
   Module.finite_of_finrank_pos ((finrank_ratFunc_ratFunc F E) ▸ Module.finrank_pos)
 
@@ -641,7 +641,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiniteDimensional F⟮X⟯ E⟮X⟯
+  签名: 有限维 F⟮X⟯ E⟮X⟯
   定义体: finiteDimensional_ratFunc_of_constantExtension K
 
 Depends on / 依赖: finiteDimensional_ratFunc_of_constantExtension
@@ -658,8 +658,8 @@ instance [Algebra.IsAlgebraic
   body: finiteDimensional_of_constantExtension K
 
 中文:
-实例 [Algebra.IsAlgebraic
-  签名: F E] : FiniteDimensional F E
+实例 [代数.是代数
+  签名: F E] : 有限维 F E
   定义体: finiteDimensional_of_constantExtension K
 
 Depends on / 依赖: finiteDimensional_of_constantExtension

@@ -42,8 +42,8 @@ definition SimplexCategory.sd
   body: toPartOrd ⋙ PartOrd.nonemptyFiniteChainsFunctor ⋙ PartOrd.nerveFunctor
 
 中文:
-定义 SimplexCategory.sd
-  签名: : SimplexCategory ⥤ SSet.{u}
+定义 单纯形范畴.sd
+  签名: : 单纯形范畴 ⥤ SSet.{u}
   定义体: toPartOrd ⋙ PartOrd.nonemptyFiniteChainsFunctor ⋙ PartOrd.nerveFunctor
 
 Depends on / 依赖: PartOrd, PartOrd.nerveFunctor, PartOrd.nonemptyFiniteChainsFunctor, nerveFunctor, nonemptyFiniteChainsFunctor, toPartOrd
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: sd.{u}.IsLeftAdjoint
+  签名: sd.{u}.是左伴随
   定义体: sdExAdjunction.isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, sdExAdjunction, sdExAdjunction.isLeftAdjoint
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: ex.{u}.IsRightAdjoint
+  签名: ex.{u}.是右伴随
   定义体: sdExAdjunction.isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, sdExAdjunction, sdExAdjunction.isRightAdjoint
@@ -162,7 +162,7 @@ definition sdIso
 
 中文:
 定义 sdIso
-  签名: : stdSimplex.{u} ⋙ sd ≅ SimplexCategory.sd
+  签名: : stdSimplex.{u} ⋙ sd ≅ 单纯形范畴.sd
   定义体: Presheaf.isExtensionAlongULiftYoneda _
 
 Depends on / 依赖: Presheaf, Presheaf.isExtensionAlongULiftYoneda, isExtensionAlongULiftYoneda
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: sd.{u}.IsLeftKanExtension stdSimplex.sdIso.inv
+  签名: sd.{u}.是LeftKanExtension stdSimplex.sdIso.inv
   定义体: inferInstanceAs (Functor.IsLeftKanExtension _
     (SSet.stdSimplex.leftKanExtensionUnit SimplexCategory.sd.{u}))
 

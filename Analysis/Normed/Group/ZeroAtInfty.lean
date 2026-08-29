@@ -40,7 +40,7 @@ theorem ZeroAtInftyContinuousMapClass.norm_le
   suffices x in (fun x => ‖f x‖) ⁻¹' Metric.bal
 
 中文:
-定理 ZeroAtInftyContinuousMapClass.norm_le
+定理 ZeroAtInftyContinuous映射类.norm_le
   条件: (f : 𝓕) (ε : 实数) (hε : 0 < ε)
   证明: by
   have h := zero_at_infty f

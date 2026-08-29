@@ -32,7 +32,7 @@ theorem injective_object_of_injective_module
 
 中文:
 定理 injective_object_of_injective_module
-  条件: [inj : Injective R M]
+  条件: [inj : 单射 R M]
   证明: have ⟨l, h⟩ := inj.out f.hom ((ModuleCat.mono_iff_injective f).mp m) g.hom
     ⟨ModuleCat.ofHom l, by ext x; simpa using h x⟩
 
@@ -108,7 +108,7 @@ instance ModuleCat.ulift_injective_of_injective.{v'}
       (inj := Module.injective_module_of_injective_object _ _))
 
 中文:
-实例 ModuleCat.ulift_injective_of_injective.{v'}
+实例 模范畴.ulift_injective_of_injective.{v'}
   签名: [Small.{v} R]
   定义体: Module.injective_object_of_injective_module
     (inj := Module.ulift_injective_of_injective

@@ -41,7 +41,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: (N : Subgroup G)
+  签名: (N : 子群 G)
   定义体: instTopologicalSpaceQuotient
 
 @[to_additive]
@@ -63,7 +63,7 @@ instance [CompactSpace
 @[to_additive]
 
 中文:
-实例 [CompactSpace
+实例 [紧空间
   签名: G] (N
   定义体: Quotient.compactSpace
 
@@ -88,8 +88,8 @@ theorem isQuotientMap_mk
 
 中文:
 定理 isQuotientMap_mk
-  条件: (N : Subgroup G)
-  结论: IsQuotientMap (mk : G -> G ⧸ N)
+  条件: (N : 子群 G)
+  结论: 是商映射 (mk : G -> G ⧸ N)
   证明: isQuotientMap_quot_mk
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -111,8 +111,8 @@ theorem continuous_mk
 
 中文:
 定理 continuous_mk
-  条件: {N : Subgroup G}
-  结论: Continuous (mk : G -> G ⧸ N)
+  条件: {N : 子群 G}
+  结论: 连续 (mk : G -> G ⧸ N)
   证明: continuous_quot_mk
 
 Depends on / 依赖: continuous_quot_mk
@@ -137,7 +137,7 @@ theorem isOpenMap_coe
 
 中文:
 定理 isOpenMap_coe
-  结论: IsOpenMap ((↑) : G -> G ⧸ N)
+  结论: 是开映射 ((↑) : G -> G ⧸ N)
   证明: isOpenMap_quotient_mk'_mul
 
 @[to_additive]
@@ -159,7 +159,7 @@ theorem isOpenQuotientMap_mk
 
 中文:
 定理 isOpenQuotientMap_mk
-  结论: IsOpenQuotientMap (mk : G -> G ⧸ N)
+  结论: 是OpenQuotient映射 (mk : G -> G ⧸ N)
   证明: MulAction.isOpenQuotientMap_quotientMk
 
 @[to_additive (attr := simp)]
@@ -183,8 +183,8 @@ theorem dense_preimage_mk
 
 中文:
 定理 dense_preimage_mk
-  条件: {s : Set (G ⧸ N)}
-  结论: Dense ((↑) ⁻¹' s : Set G) ↔ Dense s
+  条件: {s : 集合 (G ⧸ N)}
+  结论: 稠密 ((↑) ⁻¹' s : 集合 G) ↔ 稠密 s
   证明: isOpenQuotientMap_mk.dense_preimage_iff
 
 @[to_additive]
@@ -208,7 +208,7 @@ theorem dense_image_mk
 
 中文:
 定理 dense_image_mk
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   证明: by
   rw [← dense_preimage_mk]; rw [preimage_image_mk_eq_mul]
 
@@ -235,7 +235,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: {G : 类型} [Group G] [TopologicalSpace G] [ContinuousMul G]
+  签名: {G : 类型} [群 G] [拓扑空间 G] [连续乘法 G]
   定义体: by
     rw [← (IsOpenQuotientMap.id.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
     exact continuous_mk.comp continuous_mul
@@ -265,7 +265,7 @@ exact continuous_mk.comp continuous_const_smul γ
 
 中文:
 实例 instContinuousConstSMul
-  签名: : ContinuousConstSMul G (G ⧸ N) where
+  签名: : 连续常数标量乘法 G (G ⧸ N) where
   定义体: by
     rw [← isOpenQuotientMap_mk.continuous_comp_iff]
 exact continuous_mk.comp continuous_const_smul γ
@@ -354,7 +354,7 @@ instance instT1Space
 
 中文:
 实例 instT1Space
-  签名: [hN : IsClosed (N : Set G)]
+  签名: [hN : 是闭集 (N : 集合 G)]
   定义体: t1Space_iff.mpr hN
 
 Depends on / 依赖: t1Space_iff, t1Space_iff.mpr
@@ -375,7 +375,7 @@ theorem discreteTopology
 
 中文:
 定理 discreteTopology
-  条件: (hN : IsOpen (N : Set G))
+  条件: (hN : 是开集 (N : 集合 G))
   证明: discreteTopology_iff.mpr hN
 
 Depends on / 依赖: discreteTopology_iff, discreteTopology_iff.mpr
@@ -396,7 +396,7 @@ instance instLocallyCompactSpace
 
 中文:
 实例 instLocallyCompactSpace
-  签名: [LocallyCompactSpace G] (N : Subgroup G)
+  签名: [局部紧空间 G] (N : 子群 G)
   定义体: QuotientGroup.isOpenQuotientMap_mk.locallyCompactSpace
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.isOpenQuotientMap_mk.locallyCompactSpace, isOpenQuotientMap_mk, locallyCompactSpace
@@ -424,7 +424,7 @@ theorem nhds_eq
 中文:
 定理 nhds_eq
   条件: (x : G)
-  结论: 𝓝 (x : G ⧸ N) = Filter.map (↑) (𝓝 x)
+  结论: 𝓝 (x : G ⧸ N) = 滤子.map (↑) (𝓝 x)
   证明: (isOpenQuotientMap_mk.map_nhds_eq _).symm
 
 @[to_additive]
@@ -445,7 +445,7 @@ instance instFirstCountableTopology
 
 中文:
 实例 instFirstCountableTopology
-  签名: [FirstCountableTopology G]
+  签名: [第一可数拓扑 G]
   定义体: mk_surjective.forall.2 fun x => nhds_eq N x ▸ inferInstance
 
 Depends on / 依赖: mk_surjective, mk_surjective.forall, nhds_eq
@@ -468,7 +468,7 @@ instance instSecondCountableTopology
 
 中文:
 实例 instSecondCountableTopology
-  签名: [SecondCountableTopology G]
+  签名: [第二可数拓扑 G]
   定义体: ContinuousConstSMul.secondCountableTopology
 
 Depends on / 依赖: ContinuousConstSMul, ContinuousConstSMul.secondCountableTopology, secondCountableTopology
@@ -497,7 +497,7 @@ instance instIsTopologicalGroup
 
 中文:
 实例 instIsTopologicalGroup
-  签名: [N.Normal]
+  签名: [N.正规]
   定义体: by
     rw [← (isOpenQuotientMap_mk.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
     exact continuous_mk.comp continuous_mul
@@ -529,7 +529,7 @@ theorem isClosedMap_coe
 
 中文:
 定理 isClosedMap_coe
-  条件: {H : Subgroup G} (hH : IsCompact (H : Set G))
+  条件: {H : 子群 G} (hH : 是紧集 (H : 集合 G))
   证明: by
   intro t ht
   rw [← (isQuotientMap_mk H).isClosed_preimage]; rw [preimage_image_mk_eq_mul]
@@ -557,7 +557,7 @@ instance instT3Space
 
 中文:
 实例 instT3Space
-  签名: [N.Normal] [hN : IsClosed (N : Set G)]
+  签名: [N.正规] [hN : 是闭集 (N : 集合 G)]
   定义体: by
   infer_instance
 

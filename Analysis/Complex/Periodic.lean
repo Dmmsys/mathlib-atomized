@@ -46,7 +46,7 @@ definition qParam
 
 中文:
 定义 qParam
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: exp (2 * π * I * z / h)
 -/
 def qParam (z : Complex) : Complex := exp (2 * π * I * z / h)
@@ -63,7 +63,7 @@ local notation "𝕢" => qParam
 
 中文:
 定义 invQParam
-  签名: (q : Complex)
+  签名: (q : 复形)
   定义体: h / (2 * π * I) * log q
 
 local notation "𝕢" => qParam
@@ -88,7 +88,7 @@ theorem norm_qParam
 
 中文:
 定理 norm_qParam
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖𝕢 h z‖ = 实数.exp (-2 * π * im z / h)
   证明: by
   simp only [qParam, norm_exp, div_ofReal_re, mul_re, re_ofNat, ofReal_re, im_ofNat, ofReal_im,
@@ -116,7 +116,7 @@ theorem im_invQParam
 
 中文:
 定理 im_invQParam
-  条件: (q : Complex)
+  条件: (q : 复形)
   结论: im (invQParam h q) = -h / (2 * π) * 实数.log ‖q‖
   证明: by
   simp only [invQParam, ← div_div, div_I, neg_mul, neg_im, mul_im, mul_re, div_ofReal_re,
@@ -145,7 +145,7 @@ theorem qParam_right_inv
 
 中文:
 定理 qParam_right_inv
-  条件: (hh : h != 0) {q : Complex} (hq : q != 0)
+  条件: (hh : h != 0) {q : 复形} (hq : q != 0)
   结论: 𝕢 h (invQParam h q) = q
   证明: by
   simp only [qParam, invQParam, ← mul_assoc, mul_div_cancel₀ _ two_pi_I_ne_zero,
@@ -171,7 +171,7 @@ theorem qParam_left_inv_mod_period
 
 中文:
 定理 qParam_left_inv_mod_period
-  条件: (hh : h != 0) (z : Complex)
+  条件: (hh : h != 0) (z : 复形)
   证明: by
   dsimp only [qParam, invQParam]
   obtain ⟨m, hm⟩ := log_exp_exists (2 * ↑π * I * z / ↑h)
@@ -199,7 +199,7 @@ theorem norm_qParam_lt_iff
 
 中文:
 定理 norm_qParam_lt_iff
-  条件: (hh : 0 < h) (A : 实数) (z : Complex)
+  条件: (hh : 0 < h) (A : 实数) (z : 复形)
   证明: by
   rw [norm_qParam]; rw [Real.exp_lt_exp]; rw [div_lt_div_iff_of_pos_right hh]; rw [mul_lt_mul_left_of_neg]
   simpa using Real.pi_pos
@@ -223,7 +223,7 @@ theorem norm_qParam_lt_one
 
 中文:
 定理 norm_qParam_lt_one
-  条件: (hh : 0 < h) {z : Complex} (hz : 0 < im z)
+  条件: (hh : 0 < h) {z : 复形} (hz : 0 < im z)
   结论: ‖𝕢 h z‖ < 1
   证明: by
   simpa using (norm_qParam_lt_iff hh 0 z).mpr hz
@@ -247,7 +247,7 @@ lemma qParam_ne_zero
 
 中文:
 引理 qParam_ne_zero
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: 𝕢 h z != 0
   证明: by
   simp [qParam, exp_ne_zero]
@@ -274,7 +274,7 @@ lemma continuous_qParam
 
 中文:
 引理 continuous_qParam
-  结论: Continuous (𝕢 h)
+  结论: 连续 (𝕢 h)
   证明: by
   unfold qParam
   fun_prop
@@ -302,7 +302,7 @@ lemma differentiable_qParam
 
 中文:
 引理 differentiable_qParam
-  结论: Differentiable Complex (𝕢 h)
+  结论: 可微 复形 (𝕢 h)
   证明: by
   unfold qParam
   fun_prop
@@ -330,7 +330,7 @@ lemma contDiff_qParam
 中文:
 引理 contDiff_qParam
   条件: (m : WithTop 自然数∞)
-  结论: ContDiff Complex m (𝕢 h)
+  结论: 连续可微 复形 m (𝕢 h)
   证明: by
   unfold qParam
   fun_prop
@@ -359,7 +359,7 @@ theorem qParam_tendsto
 中文:
 定理 qParam_tendsto
   条件: (hh : 0 < h)
-  结论: Tendsto (qParam h) I∞ (𝓝[!=] 0)
+  结论: 收敛 (qParam h) I∞ (𝓝[!=] 0)
   证明: by
   refine tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ ?_
     (.of_forall fun q => exp_ne_zero _)
@@ -394,7 +394,7 @@ theorem invQParam_tendsto
 中文:
 定理 invQParam_tendsto
   条件: (hh : 0 < h)
-  结论: Tendsto (invQParam h) (𝓝[!=] 0) I∞
+  结论: 收敛 (invQParam h) (𝓝[!=] 0) I∞
   证明: by
   simp only [tendsto_comap_iff, comp_def, im_invQParam]
   apply Tendsto.const_mul_atBot_of_neg (div_neg_of_neg_of_pos (neg_lt_zero.mpr hh) (by positivity))
@@ -423,7 +423,7 @@ definition cuspFunction
 
 中文:
 定义 cuspFunction
-  签名: : Complex -> Complex
+  签名: : 复形 -> 复形
   定义体: update (f ∘ invQParam h) 0 (limUnder (𝓝[!=] 0) (f ∘ invQParam h))
 
 Depends on / 依赖: invQParam, limUnder, update
@@ -441,7 +441,7 @@ theorem cuspFunction_eq_of_nonzero
 
 中文:
 定理 cuspFunction_eq_of_nonzero
-  条件: {q : Complex} (hq : q != 0)
+  条件: {q : 复形} (hq : q != 0)
   证明: update_of_ne hq ..
 
 Depends on / 依赖: update_of_ne
@@ -492,7 +492,7 @@ theorem eq_cuspFunction
 
 中文:
 定理 eq_cuspFunction
-  条件: (hh : h != 0) (hf : Periodic f h) (z : Complex)
+  条件: (hh : h != 0) (hf : 周期 f h) (z : 复形)
   证明: by
   have : (cuspFunction h f) (𝕢 h z) = f (invQParam h (𝕢 h z)) := by
     rw [cuspFunction]; rw [update_of_ne]; rw [comp_apply]
@@ -522,7 +522,7 @@ lemma tendsto_nhds_zero
 
 中文:
 引理 tendsto_nhds_zero
-  条件: {f : Complex -> Complex} (hcts : ContinuousAt (cuspFunction h f) 0)
+  条件: {f : 复形 -> 复形} (hcts : ContinuousAt (cuspFunction h f) 0)
   证明: by
   apply (tendsto_nhdsWithin_of_tendsto_nhds hcts.tendsto).congr'
   filter_upwards [self_mem_nhdsWithin] with a using cuspFunction_eq_of_nonzero h f
@@ -555,7 +555,7 @@ theorem differentiableAt_cuspFunction
 
 中文:
 定理 differentiableAt_cuspFunction
-  结论: (hh : h != 0) (hf : Periodic f h)
+  结论: (hh : h != 0) (hf : 周期 f h)
   证明: by
   let q := 𝕢 h z
   have qdiff : HasStrictDerivAt (𝕢 h) (q * (2 * π * I / h)) z := by
@@ -603,7 +603,7 @@ theorem eventually_differentiableAt_cuspFunction_nhds_ne_zero
 
 中文:
 定理 eventually_differentiableAt_cuspFunction_nhds_ne_zero
-  结论: (hh : 0 < h) (hf : Periodic f h)
+  结论: (hh : 0 < h) (hf : 周期 f h)
   证明: by
   refine ((invQParam_tendsto hh).eventually h_hol).mp ?_
   refine eventually_nhdsWithin_of_forall (fun q hq h_diff => ?_)
@@ -689,7 +689,7 @@ theorem differentiableAt_cuspFunction_zero
 
 中文:
 定理 differentiableAt_cuspFunction_zero
-  结论: (hh : 0 < h) (hf : Periodic f h)
+  结论: (hh : 0 < h) (hf : 周期 f h)
   证明: by
   obtain ⟨c, t⟩ := (boundedAtFilter_cuspFunction hh h_bd).bound
   replace t := (eventually_differentiableAt_cuspFunction_nhds_ne_zero hh hf h_hol).and t
@@ -731,7 +731,7 @@ theorem tendsto_at_I_inf
 
 中文:
 定理 tendsto_at_I_inf
-  结论: (hh : 0 < h) (hf : Periodic f h)
+  结论: (hh : 0 < h) (hf : 周期 f h)
   证明: by
   suffices Tendsto (cuspFunction h f) (𝓝[!=] 0) (𝓝 <| cuspFunction h f 0) by
     simpa only [Function.comp_def, eq_cuspFunction hh.ne' hf] using this.comp (qParam_tendsto hh)
@@ -761,7 +761,7 @@ theorem exp_decay_sub_of_bounded_at_inf
 
 中文:
 定理 exp_decay_sub_of_bounded_at_inf
-  结论: (hh : 0 < h) (hf : Periodic f h)
+  结论: (hh : 0 < h) (hf : 周期 f h)
   证明: by
   simpa [comp_def, eq_cuspFunction hh.ne' hf, norm_qParam] using
 .isBigO_sub.mono differentiableAt_cuspFunction_zero hh hf h_hol h_bd
@@ -788,7 +788,7 @@ theorem exp_decay_of_zero_at_inf
 
 中文:
 定理 exp_decay_of_zero_at_inf
-  结论: (hh : 0 < h) (hf : Periodic f h)
+  结论: (hh : 0 < h) (hf : 周期 f h)
   证明: by
   simpa [cuspFunction_zero_of_zero_at_inf hh h_zer, sub_zero] using
     exp_decay_sub_of_bounded_at_inf hh hf h_hol h_zer.boundedAtFilter
@@ -820,7 +820,7 @@ lemma cuspFunction_smul
 
 中文:
 引理 cuspFunction_smul
-  条件: {h} {f : Complex -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0) (a : Complex)
+  条件: {h} {f : 复形 -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0) (a : 复形)
   证明: by
   simp only [cuspFunction] at *
   ext y
@@ -849,7 +849,7 @@ lemma cuspFunction_neg
 
 中文:
 引理 cuspFunction_neg
-  条件: {h} {f : Complex -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  条件: {h} {f : 复形 -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: by
   simpa using cuspFunction_smul hfcts (-1)
 
@@ -875,7 +875,7 @@ lemma cuspFunction_add
 
 中文:
 引理 cuspFunction_add
-  结论: {h} {f g : Complex -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  结论: {h} {f g : 复形 -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: by
   simp only [cuspFunction]
   ext y
@@ -908,7 +908,7 @@ lemma cuspFunction_sub
 
 中文:
 引理 cuspFunction_sub
-  结论: {h} {f g : Complex -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  结论: {h} {f g : 复形 -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: by
   simpa [sub_eq_add_neg, ← cuspFunction_neg hgcts]
     using cuspFunction_add hfcts (by simp [cuspFunction_neg, hgcts])

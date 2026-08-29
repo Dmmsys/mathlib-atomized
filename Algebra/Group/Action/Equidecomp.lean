@@ -74,7 +74,7 @@ definition IsDecompOn
 
 中文:
 定义 IsDecompOn
-  签名: (f : X -> X) (A : Set X) (S : Finset G)
+  签名: (f : X -> X) (A : 集合 X) (S : 有限集 G)
   定义体: forall a in A, exists g in S, f a = g • a
 -/
 def IsDecompOn (f : X -> X) (A : Set X) (S : Finset G) : Prop := forall a in A, exists g in S, f a = g • a
@@ -93,10 +93,10 @@ structure _root_.Equidecomp
 
 中文:
 结构 _root_.Equidecomp
-  参数: extends PartialEquiv X X
-  继承: PartialEquiv X X
+  参数: extends 部分等价 X X
+  继承: 部分等价 X X
   公理与运算 (1 个):
-    - isDecompOn' : 存在 S : Finset G, IsDecompOn toFun source S
+    - isDecompOn' : 存在 S : 有限集 G, IsDecompOn toFun source S
 -/
 structure _root_.Equidecomp extends PartialEquiv X X where
   isDecompOn' : exists S : Finset G, IsDecompOn toFun source S
@@ -187,7 +187,7 @@ theorem toPartialEquiv_injective
 
 中文:
 定理 toPartialEquiv_injective
-  结论: Injective toPartialEquiv (X := X) (G := G)
+  结论: 单射 toPartialEquiv (X := X) (G := G)
   证明: by
   intro ⟨_, _, _⟩ _ _
   congr
@@ -209,7 +209,7 @@ theorem IsDecompOn.mono
 
 中文:
 定理 IsDecompOn.mono
-  结论: {f f' : X -> X} {A A' : Set X} {S : Finset G} (h : IsDecompOn f A S)
+  结论: {f f' : X -> X} {A A' : 集合 X} {S : 有限集 G} (h : IsDecompOn f A S)
   证明: by
   intro a ha
   rw [← hf' ha]
@@ -237,7 +237,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: (f : Equidecomp X G) (A : Set X)
+  签名: (f : Equidecomp X G) (A : 集合 X)
   定义体: f.toPartialEquiv.restr A
   isDecompOn' := ⟨f.witness,
     f.isDecompOn.mono (source_restr_subset_source _ _) fun _ => congrFun rfl⟩
@@ -262,7 +262,7 @@ theorem toPartialEquiv_restr
 
 中文:
 定理 toPartialEquiv_restr
-  条件: (f : Equidecomp X G) (A : Set X)
+  条件: (f : Equidecomp X G) (A : 集合 X)
   证明: rfl
 -/
 theorem toPartialEquiv_restr (f : Equidecomp X G) (A : Set X) :
@@ -278,7 +278,7 @@ theorem source_restr
 
 中文:
 定理 source_restr
-  条件: (f : Equidecomp X G) {A : Set X} (hA : A subseteq f.source)
+  条件: (f : Equidecomp X G) {A : 集合 X} (hA : A subseteq f.source)
   证明: by rw [restr_source, inter_eq_self_of_subset_right hA]
 
 Depends on / 依赖: inter_eq_self_of_subset_right, restr_source
@@ -300,7 +300,7 @@ theorem restr_of_source_subset
 
 中文:
 定理 restr_of_source_subset
-  条件: {f : Equidecomp X G} {A : Set X} (hA : f.source subseteq A)
+  条件: {f : Equidecomp X G} {A : 集合 X} (hA : f.source subseteq A)
   证明: by
   apply toPartialEquiv_injective
   rw [toPartialEquiv_restr]; rw [PartialEquiv.restr_eq_of_source_subset hA]
@@ -382,7 +382,7 @@ theorem IsDecompOn.comp'
 
 中文:
 定理 IsDecompOn.comp'
-  结论: {g f : X -> X} {B A : Set X} {T S : Finset G}
+  结论: {g f : X -> X} {B A : 集合 X} {T S : 有限集 G}
   证明: by
   intro _ ⟨aA, aB⟩
   rcases hf _ aA with ⟨γ, γ_mem, hγ⟩
@@ -414,7 +414,7 @@ theorem IsDecompOn.comp
 
 中文:
 定理 IsDecompOn.comp
-  结论: {g f : X -> X} {B A : Set X} {T S : Finset G}
+  结论: {g f : X -> X} {B A : 集合 X} {T S : 有限集 G}
   证明: by
   rw [left_eq_inter.mpr h]
   exact hg.comp' hf
@@ -471,7 +471,7 @@ theorem IsDecompOn.of_leftInvOn
 
 中文:
 定理 IsDecompOn.of_leftInvOn
-  结论: {f g : X -> X} {A : Set X} {S : Finset G}
+  结论: {f g : X -> X} {A : 集合 X} {S : 有限集 G}
   证明: by
   rintro _ ⟨a, ha, rfl⟩
   rcases hf a ha with ⟨γ, γ_mem, hγ⟩
@@ -636,7 +636,7 @@ theorem symm_involutive
 
 中文:
 定理 symm_involutive
-  结论: Function.Involutive (symm : Equidecomp X G -> _)
+  结论: 函数.对合 (symm : Equidecomp X G -> _)
   证明: symm_symm
 
 Depends on / 依赖: symm_symm
@@ -655,7 +655,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : Equidecomp X G -> _)
+  结论: 函数.双射 (symm : Equidecomp X G -> _)
   证明: symm_involutive.bijective
 
 @[simp]
@@ -695,7 +695,7 @@ theorem restr_refl_symm
 
 中文:
 定理 restr_refl_symm
-  条件: (A : Set X)
+  条件: (A : 集合 X)
   证明: rfl
 -/
 theorem restr_refl_symm (A : Set X) :

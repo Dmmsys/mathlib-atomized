@@ -296,7 +296,7 @@ theorem strictMonoOn_natAbs
 
 中文:
 定理 strictMonoOn_natAbs
-  结论: StrictMonoOn natAbs (Ici 0)
+  结论: StrictMonoOn natAbs (左闭右无界区间 0)
   证明: fun _ ha _ _ hab =>
   natAbs_lt_natAbs_of_nonneg_of_lt ha hab
 -/
@@ -315,7 +315,7 @@ theorem strictAntiOn_natAbs
 
 中文:
 定理 strictAntiOn_natAbs
-  结论: StrictAntiOn natAbs (Iic 0)
+  结论: StrictAntiOn natAbs (左无界右闭区间 0)
   证明: fun a _ b hb hab => by
   simpa [Int.natAbs_neg] using
     natAbs_lt_natAbs_of_nonneg_of_lt (Right.nonneg_neg_iff.mpr hb) (neg_lt_neg_iff.mpr hab)
@@ -336,7 +336,7 @@ theorem injOn_natAbs_Ici
 
 中文:
 定理 injOn_natAbs_Ici
-  结论: InjOn natAbs (Ici 0)
+  结论: 单射限制 natAbs (左闭右无界区间 0)
   证明: strictMonoOn_natAbs.injOn
 
 Depends on / 依赖: strictMonoOn_natAbs, strictMonoOn_natAbs.injOn
@@ -354,7 +354,7 @@ theorem injOn_natAbs_Iic
 
 中文:
 定理 injOn_natAbs_Iic
-  结论: InjOn natAbs (Iic 0)
+  结论: 单射限制 natAbs (左无界右闭区间 0)
   证明: strictAntiOn_natAbs.injOn
 
 Depends on / 依赖: strictAntiOn_natAbs, strictAntiOn_natAbs.injOn

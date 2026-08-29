@@ -29,7 +29,7 @@ structure Semiquot
   (no additional axioms)
 
 中文:
-结构 Semiquot
+结构 半商
   参数: (α : 类型)
   (无附加公理)
 -/
@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (Semiquot α)
+  签名: Membership α (半商 α)
   定义体: ⟨fun q a => a in q.s⟩
 -/
 instance : Membership α (Semiquot α) :=
@@ -69,7 +69,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {a : α} {s : Set α} (h : a in s)
+  签名: {a : α} {s : 集合 α} (h : a in s)
   定义体: ⟨s, Trunc.mk ⟨a, h⟩⟩
 
 Depends on / 依赖: Trunc.mk
@@ -91,7 +91,7 @@ theorem ext_s
 
 中文:
 定理 ext_s
-  条件: {q₁ q₂ : Semiquot α}
+  条件: {q₁ q₂ : 半商 α}
   结论: q₁ = q₂ ↔ q₁.s = q₂.s
   证明: by
   refine ⟨congr_arg _, fun h => ?_⟩
@@ -116,7 +116,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {q₁ q₂ : Semiquot α}
+  条件: {q₁ q₂ : 半商 α}
   结论: q₁ = q₂ ↔ 对任意 a, a in q₁ ↔ a in q₂
   证明: ext_s.trans Set.ext_iff
 
@@ -136,8 +136,8 @@ theorem exists_mem
   ⟨a, h⟩
 
 中文:
-定理 exists_mem
-  条件: (q : Semiquot α)
+定理 存在_mem
+  条件: (q : 半商 α)
   结论: 存在 a, a in q
   证明: let ⟨⟨a, h⟩, _⟩ := q.2.exists_rep
   ⟨a, h⟩
@@ -159,7 +159,7 @@ theorem eq_mk_of_mem
 
 中文:
 定理 eq_mk_of_mem
-  条件: {q : Semiquot α} {a : α} (h : a in q)
+  条件: {q : 半商 α} {a : α} (h : a in q)
   结论: q = @mk _ a q.1 h
   证明: ext_s.2 rfl
 
@@ -179,8 +179,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (q : Semiquot α)
-  结论: q.s.Nonempty
+  条件: (q : 半商 α)
+  结论: q.s.非空
   证明: q.exists_mem
 
 Depends on / 依赖: exists_mem, q.exists_mem
@@ -221,7 +221,7 @@ theorem mem_pure'
 中文:
 定理 mem_pure'
   条件: {a b : α}
-  结论: a in Semiquot.pure b ↔ a = b
+  结论: a in 半商.pure b ↔ a = b
   证明: Set.mem_singleton_iff
 
 Depends on / 依赖: Set.mem_singleton_iff, mem_singleton_iff
@@ -239,7 +239,7 @@ definition blur'
 
 中文:
 定义 blur'
-  签名: (q : Semiquot α) {s : Set α} (h : q.s subseteq s)
+  签名: (q : 半商 α) {s : 集合 α} (h : q.s subseteq s)
   定义体: ⟨s, Trunc.lift (fun a : q.s => Trunc.mk ⟨a.1, h a.2⟩) (fun _ _ => Trunc.eq _ _) q.2⟩
 
 Depends on / 依赖: Trunc.eq, Trunc.lift, Trunc.mk
@@ -257,7 +257,7 @@ definition blur
 
 中文:
 定义 blur
-  签名: (s : Set α) (q : Semiquot α)
+  签名: (s : 集合 α) (q : 半商 α)
   定义体: blur' q (s.subset_union_right (t := q.s))
 
 Depends on / 依赖: s.subset_union_right, subset_union_right
@@ -279,7 +279,7 @@ theorem blur_eq_blur'
 
 中文:
 定理 blur_eq_blur'
-  条件: (q : Semiquot α) (s : Set α) (h : q.s subseteq s)
+  条件: (q : 半商 α) (s : 集合 α) (h : q.s subseteq s)
   结论: blur s q = blur' q h
   证明: by
   unfold blur; congr; exact Set.union_eq_self_of_subset_right h
@@ -303,7 +303,7 @@ theorem mem_blur'
 
 中文:
 定理 mem_blur'
-  条件: (q : Semiquot α) {s : Set α} (h : q.s subseteq s) {a : α}
+  条件: (q : 半商 α) {s : 集合 α} (h : q.s subseteq s) {a : α}
   结论: a in blur' q h ↔ a in s
   证明: Iff.rfl
 
@@ -340,7 +340,7 @@ definition toTrunc
 
 中文:
 定义 toTrunc
-  签名: (q : Semiquot α)
+  签名: (q : 半商 α)
   定义体: q.2.map Subtype.val
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -358,7 +358,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: (q : Semiquot α) (f : α -> β) (h : 对任意 a in q, 对任意 b in q, f a = f b)
+  签名: (q : 半商 α) (f : α -> β) (h : 对任意 a in q, 对任意 b in q, f a = f b)
   定义体: Trunc.liftOn q.2 (fun x => f x.1) fun x y => h _ x.2 _ y.2
 
 Depends on / 依赖: Trunc.liftOn, liftOn
@@ -377,7 +377,7 @@ theorem liftOn_ofMem
 
 中文:
 定理 liftOn_ofMem
-  结论: (q : Semiquot α) (f : α -> β)
+  结论: (q : 半商 α) (f : α -> β)
   证明: by
   revert h; rw [eq_mk_of_mem aq]; intro; rfl
 
@@ -399,7 +399,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (q : Semiquot α)
+  签名: (f : α -> β) (q : 半商 α)
   定义体: ⟨f '' q.1, q.2.map fun x => ⟨f x.1, Set.mem_image_of_mem _ x.2⟩⟩
 
 @[simp]
@@ -421,7 +421,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: (f : α -> β) (q : Semiquot α) (b : β)
+  条件: (f : α -> β) (q : 半商 α) (b : β)
   结论: b in map f q ↔ 存在 a, a in q ∧ f a = b
   证明: Set.mem_image _ _ _
 
@@ -442,7 +442,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (q : Semiquot α) (f : α -> Semiquot β)
+  签名: (q : 半商 α) (f : α -> 半商 β)
   定义体: ⟨⋃ a in q.1, (f a).1, q.2.bind fun a => (f a.1).2.map fun b => ⟨b.1, Set.mem_biUnion a.2 b.2⟩⟩
 
 @[simp]
@@ -463,7 +463,7 @@ theorem mem_bind
 
 中文:
 定理 mem_bind
-  条件: (q : Semiquot α) (f : α -> Semiquot β) (b : β)
+  条件: (q : 半商 α) (f : α -> 半商 β) (b : β)
   证明: by simp_rw [← exists_prop]; exact Set.mem_iUnion₂
 
 Depends on / 依赖: Set.mem_iUnion, exists_prop, simp_rw
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad Semiquot
+  签名: 单子 半商
   定义体: @Semiquot.pure
   map := @Semiquot.map
   bind := @Semiquot.bind
@@ -514,7 +514,7 @@ theorem map_def
 中文:
 定理 map_def
   条件: {β}
-  结论: ((· <$> ·) : (α -> β) -> Semiquot α -> Semiquot β) = map
+  结论: ((· <$> ·) : (α -> β) -> 半商 α -> 半商 β) = map
   证明: rfl
 
 @[simp]
@@ -537,7 +537,7 @@ theorem bind_def
 中文:
 定理 bind_def
   条件: {β}
-  结论: ((· >>= ·) : Semiquot α -> (α -> Semiquot β) -> Semiquot β) = bind
+  结论: ((· >>= ·) : 半商 α -> (α -> 半商 β) -> 半商 β) = bind
   证明: rfl
 
 @[simp]
@@ -558,7 +558,7 @@ theorem mem_pure
 中文:
 定理 mem_pure
   条件: {a b : α}
-  结论: a in (pure b : Semiquot α) ↔ a = b
+  结论: a in (pure b : 半商 α) ↔ a = b
   证明: Set.mem_singleton_iff
 
 Depends on / 依赖: Set.mem_singleton_iff, mem_singleton_iff
@@ -580,7 +580,7 @@ theorem mem_pure_self
 中文:
 定理 mem_pure_self
   条件: (a : α)
-  结论: a in (pure a : Semiquot α)
+  结论: a in (pure a : 半商 α)
   证明: Set.mem_singleton a
 
 @[simp]
@@ -603,7 +603,7 @@ theorem pure_inj
 中文:
 定理 pure_inj
   条件: {a b : α}
-  结论: (pure a : Semiquot α) = pure b ↔ a = b
+  结论: (pure a : 半商 α) = pure b ↔ a = b
   证明: ext_s.trans Set.singleton_eq_singleton_iff
 
 Depends on / 依赖: Set.singleton_eq_singleton_iff, ext_s, ext_s.trans, singleton_eq_singleton_iff
@@ -628,7 +628,7 @@ ext.2 by
 
 中文:
 实例 :
-  签名: LawfulMonad Semiquot
+  签名: 合法单子 半商
   定义体: LawfulMonad.mk'
   (pure_bind := fun {α β} x f => ext.2 <| by simp)
   (bind_assoc := fun {α β} γ s f g =>
@@ -660,7 +660,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Semiquot α)
+  签名: LE (半商 α)
   定义体: ⟨fun s t => forall ⦃x⦄, x in s -> x in t⟩
 -/
 instance : LE (Semiquot α) :=
@@ -678,7 +678,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder (Semiquot α) where
+  签名: : 偏序 (半商 α) where
   定义体: Set.Subset.refl _
   le_trans _ _ _ := Set.Subset.trans
   le_antisymm _ _ h₁ h₂ := ext_s.2 (Set.Subset.antisymm h₁ h₂)
@@ -706,7 +706,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (Semiquot α)
+  签名: SemilatticeSup (半商 α)
   定义体: { Semiquot.partialOrder with
     sup := fun s => blur s.s
     le_sup_left := fun _ _ => Set.subset_union_left
@@ -736,7 +736,7 @@ theorem pure_le
 
 中文:
 定理 pure_le
-  条件: {a : α} {s : Semiquot α}
+  条件: {a : α} {s : 半商 α}
   结论: pure a <= s ↔ a in s
   证明: Set.singleton_subset_iff
 
@@ -755,7 +755,7 @@ definition IsPure
 
 中文:
 定义 IsPure
-  签名: (q : Semiquot α)
+  签名: (q : 半商 α)
   定义体: forall a in q, forall b in q, a = b
 -/
 def IsPure (q : Semiquot α) : Prop :=
@@ -771,7 +771,7 @@ definition get
 
 中文:
 定义 get
-  签名: (q : Semiquot α) (h : q.IsPure)
+  签名: (q : 半商 α) (h : q.IsPure)
   定义体: liftOn q id h
 
 Depends on / 依赖: liftOn
@@ -793,7 +793,7 @@ theorem get_mem
 
 中文:
 定理 get_mem
-  条件: {q : Semiquot α} (p)
+  条件: {q : 半商 α} (p)
   结论: get q p in q
   证明: by
   let ⟨a, h⟩ := exists_mem q
@@ -818,7 +818,7 @@ theorem eq_pure
 
 中文:
 定理 eq_pure
-  条件: {q : Semiquot α} (p)
+  条件: {q : 半商 α} (p)
   结论: q = pure (get q p)
   证明: ext.2 fun a => by simpa using ⟨fun h => p _ h _ (get_mem _), fun e => e.symm ▸ get_mem _⟩
 
@@ -859,7 +859,7 @@ theorem isPure_iff
 
 中文:
 定理 isPure_iff
-  条件: {s : Semiquot α}
+  条件: {s : 半商 α}
   结论: IsPure s ↔ 存在 a, s = pure a
   证明: ⟨fun h => ⟨_, eq_pure h⟩, fun ⟨_, e⟩ => e.symm ▸ pure_isPure _⟩
 
@@ -878,7 +878,7 @@ theorem IsPure.mono
 
 中文:
 定理 IsPure.mono
-  条件: {s t : Semiquot α} (st : s <= t) (h : IsPure t)
+  条件: {s t : 半商 α} (st : s <= t) (h : IsPure t)
   结论: IsPure s
 -/
 theorem IsPure.mono {s t : Semiquot α} (st : s <= t) (h : IsPure t) : IsPure s
@@ -897,8 +897,8 @@ le_antisymm st by
     le_of_eq⟩
 
 中文:
-定理 IsPure.min
-  条件: {s t : Semiquot α} (h : IsPure t)
+定理 IsPure.最小值
+  条件: {s t : 半商 α} (h : IsPure t)
   结论: s <= t ↔ s = t
   证明: ⟨fun st =>
 le_antisymm st by
@@ -923,7 +923,7 @@ theorem isPure_of_subsingleton
 
 中文:
 定理 isPure_of_subsingleton
-  条件: [Subsingleton α] (q : Semiquot α)
+  条件: [子单例 α] (q : 半商 α)
   结论: IsPure q
 -/
 theorem isPure_of_subsingleton [Subsingleton α] (q : Semiquot α) : IsPure q
@@ -939,7 +939,7 @@ definition univ
 
 中文:
 定义 univ
-  签名: [Inhabited α]
+  签名: [可居 α]
   定义体: mk Set.mem_univ default
 
 Depends on / 依赖: Set.mem_univ, mem_univ
@@ -958,8 +958,8 @@ instance [Inhabited
 @[simp]
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Semiquot α)
+实例 [可居
+  签名: α] : 可居 (半商 α)
   定义体: ⟨univ⟩
 
 @[simp]
@@ -981,7 +981,7 @@ theorem mem_univ
 
 中文:
 定理 mem_univ
-  条件: [Inhabited α]
+  条件: [可居 α]
   结论: 对任意 a, a in @univ α _
   证明: @Set.mem_univ α
 
@@ -1006,7 +1006,7 @@ theorem univ_unique
 
 中文:
 定理 univ_unique
-  条件: (I J : Inhabited α)
+  条件: (I J : 可居 α)
   结论: @univ _ I = @univ _ J
   证明: ext.2 fun a => refl (a in univ)
 
@@ -1027,8 +1027,8 @@ theorem isPure_univ
 
 中文:
 定理 isPure_univ
-  条件: [Inhabited α]
-  结论: @IsPure α univ ↔ Subsingleton α
+  条件: [可居 α]
+  结论: @IsPure α univ ↔ 子单例 α
   证明: ⟨fun h => ⟨fun a b => h a trivial b trivial⟩, fun ⟨h⟩ a _ b _ => h a b⟩
 -/
 theorem isPure_univ [Inhabited α] : @IsPure α univ ↔ Subsingleton α :=
@@ -1044,8 +1044,8 @@ instance [Inhabited
   le_top _ := Set.subset_univ _
 
 中文:
-实例 [Inhabited
-  签名: α] : OrderTop (Semiquot α) where
+实例 [可居
+  签名: α] : 有顶序 (半商 α) where
   定义体: univ
   le_top _ := Set.subset_univ _
 -/

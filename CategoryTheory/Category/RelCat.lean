@@ -59,7 +59,7 @@ structure Hom
     - rel : SetRel X Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : RelCat.{u})
   公理与运算 (2 个):
     - ofRel : :
@@ -86,7 +86,7 @@ comp f g := .ofRel f.rel ○ g.rel
 
 中文:
 实例 instLargeCategory
-  签名: : LargeCategory RelCat where
+  签名: : 大范畴 RelCat where
   定义体: Hom
   id _ := .ofRel .id
 comp f g := .ofRel f.rel ○ g.rel
@@ -224,7 +224,7 @@ instance graphFunctor_faithful
 
 中文:
 实例 graphFunctor_faithful
-  签名: : graphFunctor.Faithful where
+  签名: : graphFunctor.忠实 where
   定义体: by
     ext
     simp [Function.graph_injective congr(($h).rel)]
@@ -247,7 +247,7 @@ instance graphFunctor_essSurj
 
 中文:
 实例 graphFunctor_essSurj
-  签名: : graphFunctor.EssSurj
+  签名: : graphFunctor.本质满射
   定义体: graphFunctor.essSurj_of_surj Function.surjective_id
 
 Depends on / 依赖: Function, Function.surjective_id, essSurj_of_surj, graphFunctor, graphFunctor.essSurj_of_surj, surjective_id
@@ -424,7 +424,7 @@ instance :
 
 中文:
 实例 :
-  签名: opFunctor.IsEquivalence
+  签名: opFunctor.是等价
   定义体: by
   change opEquivalence.functor.IsEquivalence
   infer_instance
@@ -448,7 +448,7 @@ instance :
 
 中文:
 实例 :
-  签名: unopFunctor.IsEquivalence
+  签名: unopFunctor.是等价
   定义体: by
   change opEquivalence.inverse.IsEquivalence
   infer_instance

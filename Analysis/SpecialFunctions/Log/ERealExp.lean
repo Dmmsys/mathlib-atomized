@@ -112,7 +112,7 @@ lemma exp_coe
 中文:
 引理 exp_coe
   条件: (x : 实数)
-  结论: exp x = ENN实数.of实数 (实数.exp x)
+  结论: exp x = 广义非负实数.of实数 (实数.exp x)
   证明: rfl
 -/
 @[simp] lemma exp_coe (x : Real) : exp x = ENNReal.ofReal (Real.exp x) := rfl
@@ -185,7 +185,7 @@ lemma exp_strictMono
 
 中文:
 引理 exp_strictMono
-  结论: StrictMono exp
+  结论: 严格递增 exp
   证明: by
   intro x y h
   induction x
@@ -225,7 +225,7 @@ lemma exp_monotone
 
 中文:
 引理 exp_monotone
-  结论: Monotone exp
+  结论: 递增 exp
   证明: exp_strictMono.monotone
 
 Depends on / 依赖: exp_strictMono, exp_strictMono.monotone, monotone

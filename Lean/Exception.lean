@@ -34,7 +34,7 @@ definition successIfFail
 
 中文:
 定义 successIfFail
-  签名: {α : Type} {M : Type -> Type} [MonadError M] [Monad M] (m : M α)
+  签名: {α : 类型} {M : 类型 -> 类型} [MonadError M] [单子 M] (m : M α)
   定义体: do
   match ← tryCatch (m *> pure none) (pure ∘ some) with
   | none => throwError "Expected an exception."

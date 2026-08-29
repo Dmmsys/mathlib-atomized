@@ -44,7 +44,7 @@ definition toUniformOnFun
 
 中文:
 定义 toUniformOnFun
-  签名: [TopologicalSpace F] (f : ContinuousMultilinearMap 𝕜 E F)
+  签名: [拓扑空间 F] (f : 连续多重线性映射 𝕜 E F)
   定义体: UniformOnFun.ofFun _ f
 
 Depends on / 依赖: UniformOnFun, UniformOnFun.ofFun
@@ -72,7 +72,7 @@ lemma range_toUniformOnFun
 
 中文:
 引理 range_toUniformOnFun
-  条件: [DecidableEq ι] [TopologicalSpace F]
+  条件: [DecidableEq ι] [拓扑空间 F]
   证明: by
   ext f
   constructor
@@ -111,7 +111,7 @@ lemma toUniformOnFun_toFun
 
 中文:
 引理 toUniformOnFun_toFun
-  条件: [TopologicalSpace F] (f : ContinuousMultilinearMap 𝕜 E F)
+  条件: [拓扑空间 F] (f : 连续多重线性映射 𝕜 E F)
   证明: rfl
 -/
 lemma toUniformOnFun_toFun [TopologicalSpace F] (f : ContinuousMultilinearMap 𝕜 E F) :
@@ -129,7 +129,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 F] [是拓扑加群 F]
   定义体: .induced toUniformOnFun
     @UniformOnFun.topologicalSpace _ _ (IsTopologicalAddGroup.rightUniformSpace F) _
 
@@ -151,7 +151,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: [UniformSpace F] [IsUniformAddGroup F]
+  签名: [一致空间 F] [是UniformAdd群 F]
   定义体: .replaceTopology (.comap toUniformOnFun <| UniformOnFun.uniformSpace _ _ _) by
     rw [instTopologicalSpace]; rw [IsUniformAddGroup.rightUniformSpace_eq]; rfl
 
@@ -234,7 +234,7 @@ theorem uniformContinuous_coe_fun
 
 中文:
 定理 uniformContinuous_coe_fun
-  条件: [对任意 i, ContinuousSMul 𝕜 (E i)]
+  条件: [对任意 i, 连续标量乘法 𝕜 (E i)]
   证明: (UniformOnFun.uniformContinuous_toFun sUnion_isVonNBounded_eq_univ).comp
     isUniformEmbedding_toUniformOnFun.uniformContinuous
 
@@ -258,7 +258,7 @@ theorem uniformContinuous_eval_const
 
 中文:
 定理 uniformContinuous_eval_const
-  条件: [对任意 i, ContinuousSMul 𝕜 (E i)] (x : Π i, E i)
+  条件: [对任意 i, 连续标量乘法 𝕜 (E i)] (x : Π i, E i)
   证明: uniformContinuous_pi.1 uniformContinuous_coe_fun x
 
 Depends on / 依赖: uniformContinuous_coe_fun, uniformContinuous_pi
@@ -279,7 +279,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: : IsUniformAddGroup (ContinuousMultilinearMap 𝕜 E F)
+  签名: : 是UniformAdd群 (连续多重线性映射 𝕜 E F)
   定义体: let φ : ContinuousMultilinearMap 𝕜 E F ->+ (Π i, E i) ->ᵤ[{s | IsVonNBounded 𝕜 s}] F :=
     { toFun := toUniformOnFun, map_add' := fun _ _ => rfl, map_zero' := rfl }
   isUniformEmbedding_toUniformOnFun.isUniformAddGroup φ
@@ -366,7 +366,7 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  条件: (h : IsCoherentWith {s : Set (Π i, E i) | IsVonNBounded 𝕜 s})
+  条件: (h : 是余herentWith {s : 集合 (Π i, E i) | IsVonNBounded 𝕜 s})
   证明: by
   classical
   wlog hF : T2Space F generalizing F
@@ -410,7 +410,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [对任意 i, IsTopologicalAddGroup (E i)] [SequentialSpace (Π i, E i)]
+  签名: [对任意 i, 是拓扑加群 (E i)] [Sequential空间 (Π i, E i)]
   定义体: completeSpace .of_seq fun _u x hux => (hux.isVonNBounded_range 𝕜).insert x
 
 Depends on / 依赖: completeSpace, hux.isVonNBounded_range, insert, isVonNBounded_range, of_seq
@@ -498,7 +498,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (ContinuousMultilinearMap 𝕜 E F)
+  签名: : 是拓扑加群 (连续多重线性映射 𝕜 E F)
   定义体: letI := IsTopologicalAddGroup.rightUniformSpace F
   haveI := isUniformAddGroup_of_addCommGroup (G := F)
   inferInstance
@@ -550,7 +550,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: [ContinuousSMul 𝕜 F]
+  签名: [连续标量乘法 𝕜 F]
   定义体: letI := IsTopologicalAddGroup.rightUniformSpace F
   haveI := isUniformAddGroup_of_addCommGroup (G := F)
   let φ : ContinuousMultilinearMap 𝕜 E F ->ₗ[𝕜] (Π i, E i) -> F :=
@@ -584,7 +584,7 @@ theorem hasBasis_nhds_zero_of_basis
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
-  结论: {ι : 类型} {p : ι -> 命题} {b : ι -> Set F}
+  结论: {ι : 类型} {p : ι -> 命题} {b : ι -> 集合 F}
   证明: by
   let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -636,7 +636,7 @@ theorem eventually_nhds_zero_mapsTo
 
 中文:
 定理 eventually_nhds_zero_mapsTo
-  结论: {s : Set (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
+  结论: {s : 集合 (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
   证明: hasBasis_nhds_zero.mem_of_mem (i := (s, U)) ⟨hs, hu⟩
 
 Depends on / 依赖: hasBasis_nhds_zero, hasBasis_nhds_zero.mem_of_mem, mem_of_mem
@@ -662,7 +662,7 @@ theorem isVonNBounded_image2_apply
 
 中文:
 定理 isVonNBounded_image2_apply
-  结论: [ContinuousConstSMul 𝕜 F]
+  结论: [连续常数标量乘法 𝕜 F]
   证明: by
   intro U hU
   filter_upwards [hS (eventually_nhds_zero_mapsTo hs hU)] with c hc
@@ -778,7 +778,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEvalConst (ContinuousMultilinearMap 𝕜 E F) (Π i, E i) F
+  签名: 余ntinuousEvalConst (连续多重线性映射 𝕜 E F) (Π i, E i) F
   定义体: let _ := IsTopologicalAddGroup.rightUniformSpace F
     have _ := isUniformAddGroup_of_addCommGroup (G := F)
     (uniformContinuous_eval_const x).continuous
@@ -801,7 +801,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space F]
+  签名: [T2空间 F]
   定义体: .of_injective_continuous DFunLike.coe_injective continuous_coeFun
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coeFun, of_injective_continuous
@@ -819,7 +819,7 @@ instance instT3Space
 
 中文:
 实例 instT3Space
-  签名: [T2Space F]
+  签名: [T2空间 F]
   定义体: inferInstance
 -/
 instance instT3Space [T2Space F] : T3Space (ContinuousMultilinearMap 𝕜 E F) :=
@@ -892,7 +892,7 @@ definition restrictScalarsLinear
 
 中文:
 定义 restrictScalarsLinear
-  签名: [ContinuousConstSMul 𝕜' F]
+  签名: [连续常数标量乘法 𝕜' F]
   定义体: restrictScalars 𝕜'
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -921,7 +921,7 @@ definition apply
 
 中文:
 定义 apply
-  签名: [ContinuousConstSMul 𝕜 F] (m : Π i, E i)
+  签名: [连续常数标量乘法 𝕜 F] (m : Π i, E i)
   定义体: c m
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -944,7 +944,7 @@ lemma apply_apply
 
 中文:
 引理 apply_apply
-  条件: [ContinuousConstSMul 𝕜 F] {m : Π i, E i} {c : ContinuousMultilinearMap 𝕜 E F}
+  条件: [连续常数标量乘法 𝕜 F] {m : Π i, E i} {c : 连续多重线性映射 𝕜 E F}
   证明: rfl
 -/
 lemma apply_apply [ContinuousConstSMul 𝕜 F] {m : Π i, E i} {c : ContinuousMultilinearMap 𝕜 E F} :
@@ -960,7 +960,7 @@ theorem hasSum_eval
 
 中文:
 定理 hasSum_eval
-  结论: {α : 类型} {p : α -> ContinuousMultilinearMap 𝕜 E F}
+  结论: {α : 类型} {p : α -> 连续多重线性映射 𝕜 E F}
   证明: h.map (applyAddHom m) (continuous_eval_const m)
 
 Depends on / 依赖: applyAddHom, continuous_eval_const, h.map
@@ -980,7 +980,7 @@ theorem tsum_eval
 
 中文:
 定理 tsum_eval
-  结论: [T2Space F] {α : 类型} {p : α -> ContinuousMultilinearMap 𝕜 E F} (hp : Summable p)
+  结论: [T2空间 F] {α : 类型} {p : α -> 连续多重线性映射 𝕜 E F} (hp : Summable p)
   证明: (hasSum_eval hp.hasSum m).tsum_eq.symm
 
 Depends on / 依赖: hasSum, hasSum_eval, hp.hasSum, tsum_eq, tsum_eq.symm
@@ -1071,7 +1071,7 @@ theorem compContinuousMultilinearMapL_apply
 
 中文:
 定理 compContinuousMultilinearMapL_apply
-  条件: (g : F ->L[𝕜] G) (f : ContinuousMultilinearMap 𝕜 E F)
+  条件: (g : F ->L[𝕜] G) (f : 连续多重线性映射 𝕜 E F)
   证明: rfl
 
 @[fun_prop]
@@ -1090,7 +1090,7 @@ theorem _root_.ContinuousLinearMap.continuous_postcomp_continuousMultilinearMap
   proof: map_continuous (compContinuousMultilinearMapL 𝕜 E F G g)
 
 中文:
-定理 _root_.ContinuousLinearMap.continuous_postcomp_continuousMultilinearMap
+定理 _root_.连续线性映射.continuous_postcomp_continuousMultilinearMap
   条件: (g : F ->L[𝕜] G)
   证明: map_continuous (compContinuousMultilinearMapL 𝕜 E F G g)
 -/

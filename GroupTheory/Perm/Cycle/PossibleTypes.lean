@@ -35,8 +35,8 @@ theorem List.exists_pw_disjoint_with_card
   have hc'_lt : forall l in c.ranges, forall n in l, n < Fi
 
 中文:
-定理 List.exists_pw_disjoint_with_card
-  结论: {α : 类型} [Fintype α]
+定理 列表.存在_pw_disjoint_with_card
+  结论: {α : 类型} [有限类型 α]
   证明: by
   let klift (n : Nat) (hn : n < Fintype.card α) : Fin (Fintype.card α) :=
     (⟨n, hn⟩ : Fin (Fintype.card α))
@@ -115,7 +115,7 @@ theorem Equiv.Perm.exists_with_cycleType_iff
     have hc' : m.toList.s
 
 中文:
-定理 Equiv.Perm.exists_with_cycleType_iff
+定理 等价.置换.存在_with_cycleType_iff
   条件: {m : Multiset 自然数}
   证明: by
   constructor

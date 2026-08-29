@@ -179,7 +179,7 @@ definition presheafToTop
 
 中文:
 定义 presheafToTop
-  签名: (T : TopCat)
+  签名: (T : 顶元素范畴)
   定义体: (Opens.toTopCat X).op ⋙ yoneda.obj T
 
 @[simp]
@@ -200,7 +200,7 @@ theorem presheafToTop_obj
 
 中文:
 定理 presheafToTop_obj
-  条件: (T : TopCat) (U : (Opens X)ᵒᵖ)
+  条件: (T : 顶元素范畴) (U : (Opens X)ᵒᵖ)
   证明: rfl
 -/
 theorem presheafToTop_obj (T : TopCat) (U : (Opens X)ᵒᵖ) :

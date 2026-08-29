@@ -40,8 +40,8 @@ theorem Finset.exists_disjoint_union_of_even_card
   ⟨t, s \ t, by simp [card_sdiff_of_subset, disjoint_sdiff, *]⟩
 
 中文:
-定理 Finset.exists_disjoint_union_of_even_card
-  条件: [DecidableEq α] {s : Finset α} (he : Even #s)
+定理 有限集.存在_disjoint_union_of_even_card
+  条件: [DecidableEq α] {s : 有限集 α} (he : Even #s)
   证明: let ⟨n, hn⟩ := he
   let ⟨t, ht, ht'⟩ := exists_subset_card_eq (show n <= #s by lia)
   ⟨t, s \ t, by simp [card_sdiff_of_subset, disjoint_sdiff, *]⟩
@@ -67,8 +67,8 @@ theorem Finset.exists_disjoint_union_of_even_card_iff
 @[simp]
 
 中文:
-定理 Finset.exists_disjoint_union_of_even_card_iff
-  条件: [DecidableEq α] (s : Finset α)
+定理 有限集.存在_disjoint_union_of_even_card_iff
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: ⟨Finset.exists_disjoint_union_of_even_card, by
     rintro ⟨t, u, rfl, hdtu, hctu⟩
     simp_all⟩
@@ -101,7 +101,7 @@ lemma finsum_one
 
 中文:
 引理 finsum_one
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: ∑ᶠ i in s, 1 = s.ncard
   证明: by
   obtain hs | hs := s.infinite_or_finite
@@ -133,7 +133,7 @@ lemma set_ncard_biUnion_le
 
 中文:
 引理 set_ncard_biUnion_le
-  条件: (t : Finset ι) (s : ι -> Set α)
+  条件: (t : 有限集 ι) (s : ι -> 集合 α)
   证明: t.apply_union_le_sum (by simp) (Set.ncard_union_le _ _)
 
 Depends on / 依赖: Set.ncard_union_le, apply_union_le_sum, ncard_union_le, t.apply_union_le_sum
@@ -152,7 +152,7 @@ lemma set_encard_biUnion_le
 
 中文:
 引理 set_encard_biUnion_le
-  条件: (t : Finset ι) (s : ι -> Set α)
+  条件: (t : 有限集 ι) (s : ι -> 集合 α)
   证明: t.apply_union_le_sum (by simp) (Set.encard_union_le _ _)
 
 Depends on / 依赖: Set.encard_union_le, apply_union_le_sum, encard_union_le, t.apply_union_le_sum
@@ -184,8 +184,8 @@ theorem Infinite.exists_union_disjoint_cardinal_eq_of_infinite
   · exact disjoint_image_of_injec
 
 中文:
-定理 Infinite.exists_union_disjoint_cardinal_eq_of_infinite
-  条件: (h : s.Infinite)
+定理 无限.存在_union_disjoint_cardinal_eq_of_infinite
+  条件: (h : s.无限)
   证明: by
   have := h.to_subtype
   obtain ⟨f⟩ : Nonempty (s ≃ s oplus s) := by
@@ -223,7 +223,7 @@ theorem exists_union_disjoint_cardinal_eq_of_even
   simp [← Finset.coe_union, *]
 
 中文:
-定理 exists_union_disjoint_cardinal_eq_of_even
+定理 存在_union_disjoint_cardinal_eq_of_even
   条件: (he : Even s.ncard)
   证明: by
   obtain hs | hs := s.infinite_or_finite
@@ -257,7 +257,7 @@ theorem exists_union_disjoint_ncard_eq_of_even
   exact ⟨t, u, hutu, hdtu, congrArg Cardinal.toNat hctu⟩
 
 中文:
-定理 exists_union_disjoint_ncard_eq_of_even
+定理 存在_union_disjoint_ncard_eq_of_even
   条件: (he : Even s.ncard)
   证明: by
   obtain ⟨t, u, hutu, hdtu, hctu⟩ := exists_union_disjoint_cardinal_eq_of_even he
@@ -286,8 +286,8 @@ theorem exists_union_disjoint_cardinal_eq_iff
     exact Even
 
 中文:
-定理 exists_union_disjoint_cardinal_eq_iff
-  条件: (s : Set α)
+定理 存在_union_disjoint_cardinal_eq_iff
+  条件: (s : 集合 α)
   证明: by
   use exists_union_disjoint_cardinal_eq_of_even
   rintro ⟨t, u, rfl, hdtu, hctu⟩
@@ -322,8 +322,8 @@ lemma Finite.ncard_biUnion
   rw [← finsum_one]; rw [finsum_mem_biUnion h ht hs]; rw [finsum_mem_congr rfl fun i hi => finsum_one]
 
 中文:
-引理 Finite.ncard_biUnion
-  结论: {t : Set ι} (ht : t.Finite) {s : ι -> Set α} (hs : 对任意 i in t, (s i).Finite)
+引理 有限.ncard_biUnion
+  结论: {t : 集合 ι} (ht : t.有限) {s : ι -> 集合 α} (hs : 对任意 i in t, (s i).有限)
   证明: by
   rw [← finsum_one]; rw [finsum_mem_biUnion h ht hs]; rw [finsum_mem_congr rfl fun i hi => finsum_one]
 
@@ -345,7 +345,7 @@ lemma ncard_iUnion_of_finite
 
 中文:
 引理 ncard_iUnion_of_finite
-  结论: [Finite ι] {s : ι -> Set α} (hs : 对任意 i, (s i).Finite)
+  结论: [有限 ι] {s : ι -> 集合 α} (hs : 对任意 i, (s i).有限)
   证明: by
   rw [← finsum_mem_univ]; rw [← finite_univ.ncard_biUnion (by simpa) (fun _ _ _ _ hab => h hab)]
   simp
@@ -370,8 +370,8 @@ lemma Finite.encard_biUnion
   · obtain ⟨i, hi, (hn : (s i).In
 
 中文:
-引理 Finite.encard_biUnion
-  结论: {t : Set ι} (ht : t.Finite) {s : ι -> Set α}
+引理 有限.encard_biUnion
+  结论: {t : 集合 ι} (ht : t.有限) {s : ι -> 集合 α}
   证明: by
   by_cases! h : forall i in t, (s i).Finite
   · have : (⋃ i in t, s i).Finite := ht.biUnion (fun i hi => h i hi)
@@ -401,7 +401,7 @@ lemma encard_iUnion_of_finite
 
 中文:
 引理 encard_iUnion_of_finite
-  条件: [Finite ι] {s : ι -> Set α} (hs : Pairwise (Disjoint on s))
+  条件: [有限 ι] {s : ι -> 集合 α} (hs : 两两 (Disjoint on s))
   证明: by
   rw [← finsum_mem_univ]; rw [← finite_univ.encard_biUnion (fun a _ b _ hab => hs hab)]
   simp
@@ -423,8 +423,8 @@ lemma Finite.ncard_biUnion_le
   simpa [← finsum_mem_eq_finite_toFinset_sum] using ht.toFinset.set_ncard_biUnion_le s
 
 中文:
-引理 Finite.ncard_biUnion_le
-  条件: {t : Set ι} (ht : t.Finite) (s : ι -> Set α)
+引理 有限.ncard_biUnion_le
+  条件: {t : 集合 ι} (ht : t.有限) (s : ι -> 集合 α)
   证明: by
   simpa [← finsum_mem_eq_finite_toFinset_sum] using ht.toFinset.set_ncard_biUnion_le s
 
@@ -444,8 +444,8 @@ lemma Finite.encard_biUnion_le
   simpa [← finsum_mem_eq_finite_toFinset_sum] using ht.toFinset.set_encard_biUnion_le s
 
 中文:
-引理 Finite.encard_biUnion_le
-  条件: {t : Set ι} (ht : t.Finite) (s : ι -> Set α)
+引理 有限.encard_biUnion_le
+  条件: {t : 集合 ι} (ht : t.有限) (s : ι -> 集合 α)
   证明: by
   simpa [← finsum_mem_eq_finite_toFinset_sum] using ht.toFinset.set_encard_biUnion_le s
 
@@ -466,7 +466,7 @@ lemma ncard_iUnion_le_of_fintype
 
 中文:
 引理 ncard_iUnion_le_of_fintype
-  条件: [Fintype ι] (s : ι -> Set α)
+  条件: [有限类型 ι] (s : ι -> 集合 α)
   证明: by
   simpa using Finset.univ.set_ncard_biUnion_le s
 
@@ -487,7 +487,7 @@ lemma encard_iUnion_le_of_fintype
 
 中文:
 引理 encard_iUnion_le_of_fintype
-  条件: [Fintype ι] (s : ι -> Set α)
+  条件: [有限类型 ι] (s : ι -> 集合 α)
   证明: by
   simpa using Finset.univ.set_encard_biUnion_le s
 
@@ -508,7 +508,7 @@ lemma ncard_iUnion_le_of_finite
 
 中文:
 引理 ncard_iUnion_le_of_finite
-  条件: [Finite ι] (s : ι -> Set α)
+  条件: [有限 ι] (s : ι -> 集合 α)
   证明: by
   simpa using finite_univ.ncard_biUnion_le s
 
@@ -529,7 +529,7 @@ lemma encard_iUnion_le_of_finite
 
 中文:
 引理 encard_iUnion_le_of_finite
-  条件: [Finite ι] (s : ι -> Set α)
+  条件: [有限 ι] (s : ι -> 集合 α)
   证明: by
   simpa using finite_univ.encard_biUnion_le s
 

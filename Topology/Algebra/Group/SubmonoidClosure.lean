@@ -39,7 +39,7 @@ theorem mapClusterPt_atTop_zpow_iff_pow
 
 中文:
 定理 mapClusterPt_atTop_zpow_iff_pow
-  条件: [DivInvMonoid G] [TopologicalSpace G] {x y : G}
+  条件: [除逆幺半群 G] [拓扑空间 G] {x y : G}
   证明: by
   simp_rw [MapClusterPt, ← Nat.map_cast_int_atTop, map_map, comp_def, zpow_natCast]
 
@@ -315,7 +315,7 @@ theorem topologicalClosure_subgroupClosure_toSubmonoid
 
 中文:
 定理 topologicalClosure_subgroupClosure_toSubmonoid
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   证明: by
   refine le_antisymm ?_ (closure_mono <| Subgroup.le_closure_toSubmonoid _)
   refine Submonoid.topologicalClosure_minimal _ ?_ isClosed_closure
@@ -349,7 +349,7 @@ theorem closure_submonoidClosure_eq_closure_subgroupClosure
 
 中文:
 定理 closure_submonoidClosure_eq_closure_subgroupClosure
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   证明: congrArg SetLike.coe (topologicalClosure_subgroupClosure_toSubmonoid s).symm
 
 @[to_additive]
@@ -372,7 +372,7 @@ theorem dense_submonoidClosure_iff_subgroupClosure
 
 中文:
 定理 dense_submonoidClosure_iff_subgroupClosure
-  条件: {s : Set G}
+  条件: {s : 集合 G}
   证明: by
   simp only [dense_iff_closure_eq, closure_submonoidClosure_eq_closure_subgroupClosure]
 

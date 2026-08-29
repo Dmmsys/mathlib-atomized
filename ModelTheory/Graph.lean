@@ -50,7 +50,7 @@ inductive graphRel
 
 中文:
 归纳类型 graphRel
-  参数: : 自然数 -> Type
+  参数: : 自然数 -> 类型
   构造子 (1 个):
     - adj: graphRel 2
 
@@ -88,7 +88,7 @@ abbreviation adj
 
 中文:
 缩写 adj
-  签名: : Language.graph.Relations 2
+  签名: : Language.graph.关系 2
   定义体: .adj
 -/
 abbrev adj : Language.graph.Relations 2 := .adj
@@ -103,8 +103,8 @@ definition _root_.SimpleGraph.structure
   signature: (G : SimpleGraph V)
 
 中文:
-定义 _root_.SimpleGraph.structure
-  签名: (G : SimpleGraph V)
+定义 _root_.简单图.structure
+  签名: (G : 简单图 V)
 -/
 def _root_.SimpleGraph.structure (G : SimpleGraph V) : Language.graph.Structure V where
   RelMap | .adj => (fun x => G.Adj (x 0) (x 1))
@@ -121,7 +121,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: : Subsingleton (Language.graph.Relations n)
+  签名: : 子单例 (Language.graph.关系 n)
   定义体: ⟨by rintro ⟨⟩ ⟨⟩; rfl⟩
 -/
 instance instSubsingleton : Subsingleton (Language.graph.Relations n) :=
@@ -161,7 +161,7 @@ theorem Theory.simpleGraph_model_iff
 
 中文:
 定理 Theory.simpleGraph_model_iff
-  条件: [Language.graph.Structure V]
+  条件: [Language.graph.结构 V]
   证明: by
   simp [Theory.simpleGraph]
 
@@ -186,7 +186,7 @@ instance simpleGraph_model
 
 中文:
 实例 simpleGraph_model
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: by
   let := G.structure
   rw [Theory.simpleGraph_model_iff]
@@ -215,7 +215,7 @@ definition simpleGraphOfStructure
 
 中文:
 定义 simpleGraphOfStructure
-  签名: [Language.graph.Structure V] [V ⊨ Theory.simpleGraph]
+  签名: [Language.graph.结构 V] [V ⊨ Theory.simpleGraph]
   定义体: RelMap adj ![x, y]
 
 @[simp]
@@ -240,8 +240,8 @@ theorem _root_.SimpleGraph.simpleGraphOfStructure
 @[simp]
 
 中文:
-定理 _root_.SimpleGraph.simpleGraphOfStructure
-  条件: (G : SimpleGraph V)
+定理 _root_.简单图.simpleGraphOfStructure
+  条件: (G : 简单图 V)
   证明: by
   ext
   rfl
@@ -274,7 +274,7 @@ theorem structure_simpleGraphOfStructure
 
 中文:
 定理 structure_simpleGraphOfStructure
-  条件: [S : Language.graph.Structure V] [V ⊨ Theory.simpleGraph]
+  条件: [S : Language.graph.结构 V] [V ⊨ Theory.simpleGraph]
   证明: by
   ext
   case funMap n f xs =>

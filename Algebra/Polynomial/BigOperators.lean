@@ -61,7 +61,7 @@ theorem natDegree_list_sum_le
 
 中文:
 定理 natDegree_list_sum_le
-  条件: (l : List S[X])
+  条件: (l : 列表 S[X])
   证明: by
   apply List.sum_le_foldr_max natDegree
   · simp
@@ -124,7 +124,7 @@ lemma natDegree_sum_le_of_forall_le
   proof: le_trans (natDegree_sum_le s f) (Finset.fold_max_le n).mpr by simpa
 
 中文:
-引理 natDegree_sum_le_of_forall_le
+引理 natDegree_sum_le_of_对任意_le
   条件: {n : 自然数} (f : ι -> S[X]) (h : 对任意 i in s, natDegree (f i) <= n)
   证明: le_trans (natDegree_sum_le s f) (Finset.fold_max_le n).mpr by simpa
 
@@ -151,7 +151,7 @@ theorem leadingCoeff_sum_of_degree_eq
 
 中文:
 定理 leadingCoeff_sum_of_degree_eq
-  结论: {f : ι -> S[X]} {s : Finset ι} {d}
+  结论: {f : ι -> S[X]} {s : 有限集 ι} {d}
   证明: by
   obtain _ | d := d
   · simp_all [WithBot.none_eq_bot]
@@ -189,8 +189,8 @@ theorem degree_list_sum_le_of_forall_degree_le
     exact le_trans (degree_add_le hd tl.sum) (max_le hhd (ih htl))
 
 中文:
-定理 degree_list_sum_le_of_forall_degree_le
-  结论: (l : List S[X])
+定理 degree_list_sum_le_of_对任意_degree_le
+  结论: (l : 列表 S[X])
   证明: by
   induction l with
   | nil => simp
@@ -234,8 +234,8 @@ theorem degree_list_sum_le
 
 中文:
 定理 degree_list_sum_le
-  条件: (l : List S[X])
-  结论: degree l.sum <= (l.map natDegree).maximum
+  条件: (l : 列表 S[X])
+  结论: degree l.求和 <= (l.map natDegree).maximum
   证明: by
   apply degree_list_sum_le_of_forall_degree_le
   intro p hp
@@ -273,8 +273,8 @@ theorem natDegree_list_prod_le
 
 中文:
 定理 natDegree_list_prod_le
-  条件: (l : List S[X])
-  结论: natDegree l.prod <= (l.map natDegree).sum
+  条件: (l : 列表 S[X])
+  结论: natDegree l.乘积 <= (l.map natDegree).求和
   证明: l.apply_prod_le_sum_map _ natDegree_one.le fun _ _ => natDegree_mul_le
 
 Depends on / 依赖: apply_prod_le_sum_map, l.apply_prod_le_sum_map, natDegree_mul_le, natDegree_one, natDegree_one.le
@@ -293,8 +293,8 @@ theorem degree_list_prod_le
 
 中文:
 定理 degree_list_prod_le
-  条件: (l : List S[X])
-  结论: degree l.prod <= (l.map degree).sum
+  条件: (l : 列表 S[X])
+  结论: degree l.乘积 <= (l.map degree).求和
   证明: l.apply_prod_le_sum_map _ degree_one_le degree_mul_le
 
 Depends on / 依赖: apply_prod_le_sum_map, degree_mul_le, degree_one_le, l.apply_prod_le_sum_map
@@ -319,7 +319,7 @@ theorem coeff_list_prod_of_natDegree_le
 
 中文:
 定理 coeff_list_prod_of_natDegree_le
-  条件: (l : List S[X]) (n : 自然数) (hl : 对任意 p in l, natDegree p <= n)
+  条件: (l : 列表 S[X]) (n : 自然数) (hl : 对任意 p in l, natDegree p <= n)
   证明: by
   induction l with
   | nil => simp
@@ -362,7 +362,7 @@ theorem natDegree_multiset_prod_le
 
 中文:
 定理 natDegree_multiset_prod_le
-  结论: t.prod.natDegree <= (t.map natDegree).sum
+  结论: t.乘积.natDegree <= (t.map natDegree).求和
   证明: Quotient.inductionOn t (by simpa using natDegree_list_prod_le)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, natDegree_list_prod_le
@@ -400,7 +400,7 @@ theorem degree_multiset_prod_le
 
 中文:
 定理 degree_multiset_prod_le
-  结论: t.prod.degree <= (t.map Polynomial.degree).sum
+  结论: t.乘积.degree <= (t.map 多项式.degree).求和
   证明: Quotient.inductionOn t (by simpa using degree_list_prod_le)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, degree_list_prod_le, inductionOn
@@ -448,7 +448,7 @@ theorem leadingCoeff_multiset_prod'
 
 中文:
 定理 leadingCoeff_multiset_prod'
-  条件: (h : (t.map leadingCoeff).prod != 0)
+  条件: (h : (t.map leadingCoeff).乘积 != 0)
   证明: by
   induction t using Multiset.induction_on with | empty => simp | cons a t ih => ?_
   simp only [Multiset.map_cons, Multiset.prod_cons] at h ⊢
@@ -514,7 +514,7 @@ theorem natDegree_multiset_prod'
 
 中文:
 定理 natDegree_multiset_prod'
-  条件: (h : (t.map fun f => leadingCoeff f).prod != 0)
+  条件: (h : (t.map fun f => leadingCoeff f).乘积 != 0)
   证明: by
   revert h
   refine Multiset.induction_on t ?_ fun a t ih ht => ?_; · simp
@@ -596,7 +596,7 @@ have : t.prod != 0 := Monic.ne_zero by simpa using monic_multiset_prod_of_monic 
 
 中文:
 定理 degree_multiset_prod_of_monic
-  条件: [Nontrivial R] (h : 对任意 f in t, Monic f)
+  条件: [非平凡 R] (h : 对任意 f in t, Monic f)
   证明: by
 have : t.prod != 0 := Monic.ne_zero by simpa using monic_multiset_prod_of_monic _ _ h
   rw [degree_eq_natDegree this]; rw [natDegree_multiset_prod_of_monic _ h]; rw [Nat.cast_multiset_sum]; rw [Multiset.map_map]; rw [Function.comp_def]; rw [Multiset.map_congr rfl (fun f hf => (degree_eq_natDegree
@@ -640,7 +640,7 @@ theorem degree_prod_of_monic
 
 中文:
 定理 degree_prod_of_monic
-  条件: [Nontrivial R] (h : 对任意 i in s, (f i).Monic)
+  条件: [非平凡 R] (h : 对任意 i in s, (f i).Monic)
   证明: by
   simpa using degree_multiset_prod_of_monic (s.1.map f) (by simpa using h)
 
@@ -719,7 +719,7 @@ theorem coeff_zero_multiset_prod
 
 中文:
 定理 coeff_zero_multiset_prod
-  结论: t.prod.coeff 0 = (t.map fun f => coeff f 0).prod
+  结论: t.乘积.coeff 0 = (t.map fun f => coeff f 0).乘积
   证明: by
   refine Multiset.induction_on t ?_ fun a t ht => ?_; · simp
   rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [Polynomial.mul_coeff_zero]; rw [ht]
@@ -804,7 +804,7 @@ theorem prod_X_sub_C_nextCoeff
 
 中文:
 定理 prod_X_sub_C_nextCoeff
-  条件: {s : Finset ι} (f : ι -> R)
+  条件: {s : 有限集 ι} (f : ι -> R)
   证明: by
   simpa using multiset_prod_X_sub_C_nextCoeff (s.1.map f)
 
@@ -876,7 +876,7 @@ theorem prod_X_sub_C_coeff_card_pred
 
 中文:
 定理 prod_X_sub_C_coeff_card_pred
-  条件: (s : Finset ι) (f : ι -> R) (hs : 0 < #s)
+  条件: (s : 有限集 ι) (f : ι -> R) (hs : 0 < #s)
   证明: by
   simpa using multiset_prod_X_sub_C_coeff_card_pred (s.1.map f) (by simpa using hs)
 
@@ -905,7 +905,7 @@ degree_map_le.trans Finset.le_sup (f := fun i => (f i).degree) hi
 
 中文:
 引理 degree_sum_eq_of_linearIndepOn
-  结论: {A : 类型} [CommRing A] [Algebra R A] {f : ι -> R[X]}
+  结论: {A : 类型} [交换环 A] [代数 R A] {f : ι -> R[X]}
   证明: by
   apply le_antisymm
 · exact (degree_sum_le s _).trans Finset.sup_le fun i hi => (degree_smul_le _ _).trans
@@ -959,7 +959,7 @@ natDegree_map_le.trans Finset.le_sup (f := fun i => (f i).natDegree) hi
 
 中文:
 引理 natDegree_sum_eq_of_linearIndepOn
-  结论: {A : 类型} [CommRing A] [Algebra R A] {f : ι -> R[X]}
+  结论: {A : 类型} [交换环 A] [代数 R A] {f : ι -> R[X]}
   证明: by
   apply le_antisymm
 · exact natDegree_sum_le_of_forall_le _ _ fun i hi => (natDegree_smul_le _ _).trans
@@ -1035,7 +1035,7 @@ alias natDegree_finset_prod_X_sub_C_eq_card := natDegree_finsetProd_X_sub_C_eq_c
 
 中文:
 引理 natDegree_finsetProd_X_sub_C_eq_card
-  条件: {α} (s : Finset α) (f : α -> R)
+  条件: {α} (s : 有限集 α) (f : α -> R)
   证明: by
   rw [Finset.prod]; rw [← (X - C ·).comp_def f]; rw [← Multiset.map_map]; rw [natDegree_multiset_prod_X_sub_C_eq_card]; rw [Multiset.card_map]; rw [Finset.card]
 
@@ -1068,8 +1068,8 @@ theorem degree_list_prod
 
 中文:
 定理 degree_list_prod
-  条件: [Nontrivial R] (l : List R[X])
-  结论: l.prod.degree = (l.map degree).sum
+  条件: [非平凡 R] (l : 列表 R[X])
+  结论: l.乘积.degree = (l.map degree).求和
   证明: map_list_prod (@degreeMonoidHom R _ _ _) l
 
 Depends on / 依赖: degreeMonoidHom, map_list_prod
@@ -1157,8 +1157,8 @@ theorem degree_multiset_prod
 
 中文:
 定理 degree_multiset_prod
-  条件: [Nontrivial R]
-  结论: t.prod.degree = (t.map fun f => degree f).sum
+  条件: [非平凡 R]
+  结论: t.乘积.degree = (t.map fun f => degree f).求和
   证明: map_multiset_prod (@degreeMonoidHom R _ _ _) _
 
 Depends on / 依赖: degreeMonoidHom, map_multiset_prod
@@ -1177,7 +1177,7 @@ theorem degree_prod
 
 中文:
 定理 degree_prod
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (∏ i in s, f i).degree = ∑ i in s, (f i).degree
   证明: map_prod (@degreeMonoidHom R _ _ _) _ _
 

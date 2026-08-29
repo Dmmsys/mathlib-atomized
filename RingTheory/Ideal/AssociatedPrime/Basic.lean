@@ -68,9 +68,9 @@ structure IsAssociatedPrime
     - eq_radical_colon : exists x, I = (colon N {x}).radical
 
 中文:
-结构 IsAssociatedPrime
-  参数: : 命题 extends I.IsPrime where
-  继承: I.IsPrime
+结构 是AssociatedPrime
+  参数: : 命题 extends I.是素 where
+  继承: I.是素
   公理与运算 (1 个):
     - eq_radical_colon : 存在 x, I = (colon N {x}).radical
 -/
@@ -87,7 +87,7 @@ definition associatedPrimes
 
 中文:
 定义 associatedPrimes
-  签名: : Set (Ideal R)
+  签名: : 集合 (理想 R)
   定义体: { I | N.IsAssociatedPrime I }
 -/
 protected def associatedPrimes : Set (Ideal R) :=
@@ -126,7 +126,7 @@ theorem isAssociatedPrime_iff
 
 中文:
 定理 isAssociatedPrime_iff
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   constructor
   · rintro ⟨hx, x, rfl⟩
@@ -156,7 +156,7 @@ theorem AssociatePrimes.mem_iff
 
 中文:
 定理 AssociatePrimes.mem_iff
-  结论: I in N.associatedPrimes ↔ N.IsAssociatedPrime I
+  结论: I in N.associatedPrimes ↔ N.是AssociatedPrime I
   证明: .rfl
 -/
 protected theorem AssociatePrimes.mem_iff : I in N.associatedPrimes ↔ N.IsAssociatedPrime I :=
@@ -177,7 +177,7 @@ definition IsAssociatedPrime
   body: (⊥ : Submodule R M).IsAssociatedPrime I
 
 中文:
-定义 IsAssociatedPrime
+定义 是AssociatedPrime
   签名: : 命题
   定义体: (⊥ : Submodule R M).IsAssociatedPrime I
 
@@ -197,7 +197,7 @@ definition associatedPrimes
 
 中文:
 定义 associatedPrimes
-  签名: : Set (Ideal R)
+  签名: : 集合 (理想 R)
   定义体: { I | IsAssociatedPrime I M }
 
 Depends on / 依赖: IsAssociatedPrime
@@ -217,7 +217,7 @@ theorem AssociatedPrimes.mem_iff
 
 中文:
 定理 AssociatedPrimes.mem_iff
-  结论: I in associatedPrimes R M ↔ IsAssociatedPrime I M
+  结论: I in associatedPrimes R M ↔ 是AssociatedPrime I M
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -234,9 +234,9 @@ theorem IsAssociatedPrime.isPrime
   proof: h.1
 
 中文:
-定理 IsAssociatedPrime.isPrime
-  条件: (h : IsAssociatedPrime I M)
-  结论: I.IsPrime
+定理 是AssociatedPrime.isPrime
+  条件: (h : 是AssociatedPrime I M)
+  结论: I.是素
   证明: h.1
 
 Depends on / 依赖: Countable, Countable.to_separableSpace, SeparableSpace, to_separableSpace
@@ -255,7 +255,7 @@ theorem isAssociatedPrime_iff
 
 中文:
 定理 isAssociatedPrime_iff
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: (⊥ : Submodule R M).isAssociatedPrime_iff
 
 Depends on / 依赖: Submodule, isAssociatedPrime_iff
@@ -278,8 +278,8 @@ theorem IsAssociatedPrime.map_of_injective
   simp_rw [Ideal.mem_radical_iff, mem_colon_singleton, mem_bot, ← map_smul, map_eq_zero_iff f hf]
 
 中文:
-定理 IsAssociatedPrime.map_of_injective
-  条件: (h : IsAssociatedPrime I M) (hf : Function.Injective f)
+定理 是AssociatedPrime.map_of_injective
+  条件: (h : 是AssociatedPrime I M) (hf : 函数.单射 f)
   证明: by
   obtain ⟨x, rfl⟩ := h.2
   refine ⟨h.1, ⟨f x, ?_⟩⟩
@@ -305,7 +305,7 @@ theorem LinearEquiv.isAssociatedPrime_iff
     fun h => h.map_of_injective l.symm l.symm.injective⟩
 
 中文:
-定理 LinearEquiv.isAssociatedPrime_iff
+定理 线性等价.isAssociatedPrime_iff
   条件: (l : M ≃ₗ[R] M')
   证明: ⟨fun h => h.map_of_injective l l.injective,
     fun h => h.map_of_injective l.symm l.symm.injective⟩
@@ -331,8 +331,8 @@ theorem not_isAssociatedPrime_of_subsingleton
 
 中文:
 定理 not_isAssociatedPrime_of_subsingleton
-  条件: [Subsingleton M]
-  结论: ¬IsAssociatedPrime I M
+  条件: [子单例 M]
+  结论: ¬是AssociatedPrime I M
   证明: by
   rintro ⟨hI, x, hx⟩
   apply hI.ne_top
@@ -362,8 +362,8 @@ theorem exists_le_isAssociatedPrime_of_isNoetherianRing
   i
 
 中文:
-定理 exists_le_isAssociatedPrime_of_isNoetherianRing
-  结论: [H : IsNoetherianRing R] (x : M)
+定理 存在_le_isAssociatedPrime_of_isNoetherianRing
+  结论: [H : 是Noether环 R] (x : M)
   证明: by
   simp only [isAssociatedPrime_iff]
   obtain ⟨P, ⟨l, h₁, y, rfl⟩, h₃⟩ :=
@@ -411,7 +411,7 @@ theorem subset_of_injective
 
 中文:
 定理 subset_of_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: fun _I h => h.map_of_injective f hf
 
 Depends on / 依赖: h.map_of_injective, map_of_injective
@@ -441,7 +441,7 @@ theorem subset_union_of_exact
 
 中文:
 定理 subset_union_of_exact
-  条件: (hf : Function.Injective f) (hfg : Function.Exact f g)
+  条件: (hf : 函数.单射 f) (hfg : 函数.正合 f g)
   证明: by
   rintro p ⟨_, x, hx⟩
   by_cases! h : exists a in p.primeCompl, exists y : M, exists k, f y = a ^ k • x
@@ -500,7 +500,7 @@ theorem prod
     ⟨subset_of_injective LinearMap.inl_injective, subset_of_injective LinearMap.inr_injective⟩)
 
 中文:
-定理 prod
+定理 乘积
   结论: associatedPrimes R (M × M') = associatedPrimes R M union associatedPrimes R M'
   证明: (subset_union_of_exact LinearMap.inl_injective .inl_snd).antisymm (Set.union_subset_iff.2
     ⟨subset_of_injective LinearMap.inl_injective, subset_of_injective LinearMap.inr_injective⟩)
@@ -523,7 +523,7 @@ theorem LinearEquiv.AssociatedPrimes.eq
     (associatedPrimes.subset_of_injective l.symm.injective)
 
 中文:
-定理 LinearEquiv.AssociatedPrimes.eq
+定理 线性等价.AssociatedPrimes.eq
   条件: (l : M ≃ₗ[R] M')
   证明: le_antisymm (associatedPrimes.subset_of_injective l.injective)
     (associatedPrimes.subset_of_injective l.symm.injective)
@@ -548,7 +548,7 @@ theorem associatedPrimes.eq_empty_of_subsingleton
 
 中文:
 定理 associatedPrimes.eq_empty_of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   结论: associatedPrimes R M = ∅
   证明: by
   ext; simp only [Set.mem_empty_iff_false, iff_false]
@@ -575,7 +575,7 @@ theorem associatedPrimes.nonempty
 
 中文:
 定理 associatedPrimes.nonempty
-  条件: [IsNoetherianRing R] [Nontrivial M]
+  条件: [是Noether环 R] [非平凡 M]
   证明: by
   obtain ⟨x, hx⟩ := exists_ne (0 : M)
   obtain ⟨P, hP, _⟩ := exists_le_isAssociatedPrime_of_isNoetherianRing R x hx
@@ -605,7 +605,7 @@ theorem biUnion_associatedPrimes_eq_zero_divisors
 
 中文:
 定理 biUnion_associatedPrimes_eq_zero_divisors
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   simp only [AssociatedPrimes.mem_iff, isAssociatedPrime_iff]
   refine subset_antisymm (Set.iUnion₂_subset ?_) ?_
@@ -638,7 +638,7 @@ theorem biUnion_associatedPrimes_eq_compl_nonZeroDivisors
 
 中文:
 定理 biUnion_associatedPrimes_eq_compl_nonZeroDivisors
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: (biUnion_associatedPrimes_eq_zero_divisors R R).trans by
     ext; simp [← nonZeroDivisorsLeft_eq_nonZeroDivisors, and_comm]
 
@@ -663,8 +663,8 @@ theorem IsAssociatedPrime.annihilator_le
   exact (annihilator_mono le_top).trans Ideal.le_radical
 
 中文:
-定理 IsAssociatedPrime.annihilator_le
-  条件: (h : IsAssociatedPrime I M)
+定理 是AssociatedPrime.annihilator_le
+  条件: (h : 是AssociatedPrime I M)
   证明: by
   obtain ⟨hI, x, rfl⟩ := h
   rw [bot_colon']
@@ -696,8 +696,8 @@ theorem isAssociatedPrime_iff_exists_injective_linearMap
   · conv_lhs => rw [←
 
 中文:
-定理 isAssociatedPrime_iff_exists_injective_linearMap
-  条件: [IsNoetherianRing R]
+定理 isAssociatedPrime_iff_存在_injective_linearMap
+  条件: [是Noether环 R]
   证明: by
   rw [isAssociatedPrime_iff]; rw [and_congr_right_iff]
   refine fun _ => ⟨fun ⟨x, h⟩ => ?_, fun ⟨f, h⟩ => ⟨(f ∘ₗ mkQ I) 1, ?_⟩⟩
@@ -735,8 +735,8 @@ theorem IsAssociatedPrime.eq_radical
     rw [mem_co
 
 中文:
-定理 IsAssociatedPrime.eq_radical
-  条件: (hI : I.IsPrimary) (h : IsAssociatedPrime J (R ⧸ I))
+定理 是AssociatedPrime.eq_radical
+  条件: (hI : I.是准素) (h : 是AssociatedPrime J (R ⧸ I))
   证明: by
   obtain ⟨hJ, x, e⟩ := h
   have : x != 0 := by
@@ -784,7 +784,7 @@ theorem associatedPrimes.eq_singleton_of_isPrimary
 
 中文:
 定理 associatedPrimes.eq_singleton_of_isPrimary
-  条件: [IsNoetherianRing R] (hI : I.IsPrimary)
+  条件: [是Noether环 R] (hI : I.是准素)
   证明: by
   ext J
   rw [Set.mem_singleton_iff]

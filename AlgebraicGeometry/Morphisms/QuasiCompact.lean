@@ -50,10 +50,10 @@ class QuasiCompact
     - isCompact_preimage : forall U : Set Y, IsOpen U -> IsCompact U -> IsCompact (f ⁻¹' U)
 
 中文:
-类 QuasiCompact
+类 拟紧
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - isCompact_preimage : 对任意 U : Set Y, IsOpen U -> IsCompact U -> IsCompact (f ⁻¹' U)
+    - isCompact_preimage : 对任意 U : 集合 Y, 是开集 U -> 是紧集 U -> 是紧集 (f ⁻¹' U)
 -/
 class QuasiCompact (f : X ⟶ Y) : Prop where
   /-- The preimage of a compact open set under a quasi-compact morphism between schemes is
@@ -71,7 +71,7 @@ theorem quasiCompact_iff_isSpectralMap
 
 中文:
 定理 quasiCompact_iff_isSpectralMap
-  结论: QuasiCompact f ↔ IsSpectralMap f
+  结论: 拟紧 f ↔ 是谱映射 f
   证明: ⟨fun ⟨h⟩ => ⟨by fun_prop, h⟩, fun h => ⟨h.2⟩⟩
 
 Depends on / 依赖: fun_prop
@@ -90,9 +90,9 @@ theorem Scheme.Hom.isSpectralMap
   rwa [← quasiCompact_iff_isSpectralMap]
 
 中文:
-定理 Scheme.Hom.isSpectralMap
-  条件: [QuasiCompact f]
-  结论: IsSpectralMap f
+定理 概形.态射.isSpectralMap
+  条件: [拟紧 f]
+  结论: 是谱映射 f
   证明: by
   rwa [← quasiCompact_iff_isSpectralMap]
 
@@ -110,8 +110,8 @@ lemma Scheme.Hom.isCompact_preimage
   proof: f.isSpectralMap.2 U.2 hU
 
 中文:
-引理 Scheme.Hom.isCompact_preimage
-  结论: [QuasiCompact f] {U : Opens Y}
+引理 概形.态射.isCompact_preimage
+  结论: [拟紧 f] {U : Opens Y}
   证明: f.isSpectralMap.2 U.2 hU
 
 Depends on / 依赖: f.isSpectralMap, isSpectralMap
@@ -146,7 +146,7 @@ instance quasiCompact_comp
 
 中文:
 实例 quasiCompact_comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [QuasiCompact f]
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [拟紧 f]
   定义体: by
   constructor
   intro U hU hU'
@@ -180,7 +180,7 @@ theorem isCompact_and_isOpen_iff_finite_and_eq_biUnion_affineOpens
 
 中文:
 定理 isCompact_and_isOpen_iff_finite_and_eq_biUnion_affineOpens
-  条件: {U : Set X}
+  条件: {U : 集合 X}
   证明: by
   apply Opens.IsBasis.isCompact_open_iff_eq_finite_iUnion
     (fun (U : X.affineOpens) => (U : X.Opens))
@@ -234,7 +234,7 @@ theorem isCompact_and_isOpen_iff_finite_and_eq_biUnion_basicOpen
 
 中文:
 定理 isCompact_and_isOpen_iff_finite_and_eq_biUnion_basicOpen
-  条件: [IsAffine X] {U : Set X}
+  条件: [是仿射 X] {U : 集合 X}
   证明: (isBasis_basicOpen X).isCompact_open_iff_eq_finite_iUnion _
     (fun _ => ((isAffineOpen_top _).basicOpen _).isCompact) _
 
@@ -260,7 +260,7 @@ theorem quasiCompact_iff_forall_isAffineOpen
   exact Set.Finite.isCompact_biUnion hS (fun i _ => H i i.prop)
 
 中文:
-定理 quasiCompact_iff_forall_isAffineOpen
+定理 quasiCompact_iff_对任意_isAffineOpen
   证明: by
   rw [quasiCompact_iff]
   refine ⟨fun H U hU => H U U.isOpen hU.isCompact, ?_⟩
@@ -295,7 +295,7 @@ theorem isCompact_basicOpen
 
 中文:
 定理 isCompact_basicOpen
-  结论: (X : Scheme) {U : X.Opens} (hU : IsCompact (U : Set X))
+  结论: (X : 概形) {U : X.Opens} (hU : 是紧集 (U : 集合 X))
   证明: by
   refine isCompact_iff_finite_and_eq_biUnion_affineOpens.mpr ?_
   obtain ⟨s, hs, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hU
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAffine命题erty @QuasiCompact (fun X _ _ _ => CompactSpace X)
+  签名: 有AffineProperty @拟紧 (fun X _ _ _ => 紧空间 X)
   定义体: by
     ext X Y f
     simp only [quasiCompact_iff_forall_isAffineOpen, isCompact_iff_compactSpace,
@@ -377,7 +377,7 @@ theorem compactSpace_iff_quasiCompact
 
 中文:
 定理 compactSpace_iff_quasiCompact
-  条件: (X : Scheme)
+  条件: (X : 概形)
   证明: by
   rw [HasAffineProperty.iff_of_isAffine (P := @QuasiCompact)]
 
@@ -403,8 +403,8 @@ lemma QuasiCompact.compactSpace_of_compactSpace
   exact QuasiCompact.isCompact_preimage _ isOpen_univ CompactSpace.isCompact_univ
 
 中文:
-引理 QuasiCompact.compactSpace_of_compactSpace
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [QuasiCompact f]
+引理 拟紧.compactSpace_of_compactSpace
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [拟紧 f]
   证明: by
   constructor
   rw [← Set.preimage_univ (f := f)]
@@ -445,7 +445,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @QuasiCompact
+  签名: MorphismProperty.是Multiplicative @拟紧
   定义体: inferInstance
 
 Depends on / 依赖: Cat.of, IsIso.of_isIso_fac_left, IsIso.of_isIso_fac_right, hoFunctor, isIso_of_fully_faithful, nerveFunctor, nerveFunctor.map, of_isIso_fac_left, of_isIso_fac_right, prodComparison, prodComparison_comp
@@ -523,7 +523,7 @@ lemma compactSpace_iff_exists
   mpr := fun ⟨_, f, hf⟩ => ⟨hf.range_eq ▸ isCompact_range f.continuous⟩
 
 中文:
-引理 compactSpace_iff_exists
+引理 compactSpace_iff_存在
   证明: let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
     ⟨Γ(∐ 𝒰.X, ⊤), (∐ 𝒰.X).isoSpec.inv ≫ Sigma.desc 𝒰.f, Surjective.surj⟩
   mpr := fun ⟨_, f, hf⟩ => ⟨hf.range_eq ▸ isCompact_range f.continuous⟩
@@ -551,7 +551,7 @@ lemma isCompact_iff_exists
   apply show Function.Injective (
 
 中文:
-引理 isCompact_iff_exists
+引理 isCompact_iff_存在
   条件: {U : X.Opens}
   证明: by
   refine isCompact_iff_compactSpace.trans ((compactSpace_iff_exists (X := U)).trans ?_)
@@ -644,8 +644,8 @@ theorem exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen
   exact ⟨n, by simpa [mul_comm x] using e⟩
 
 中文:
-定理 exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen
-  结论: (X : Scheme)
+定理 存在_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen
+  结论: (X : 概形)
   证明: by
   rw [← map_zero (X.presheaf.map (homOfLE <| X.basicOpen_le f : X.basicOpen f ⟶ U).op).hom] at H
   obtain ⟨n, e⟩ := (hU.isLocalization_basicOpen f).exists_of_eq _ H
@@ -677,8 +677,8 @@ theorem exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
   h
 
 中文:
-定理 exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
-  结论: (X : Scheme.{u})
+定理 存在_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
+  结论: (X : 概形.{u})
   证明: by
   obtain ⟨s, hs, e⟩ := isCompact_and_isOpen_iff_finite_and_eq_biUnion_affineOpens.mp ⟨hU, U.2⟩
   replace e : U = iSup fun i : s => (i : X.Opens) := by
@@ -747,8 +747,8 @@ lemma Scheme.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
     rw 
 
 中文:
-引理 Scheme.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
-  结论: {X : Scheme.{u}}
+引理 概形.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
+  结论: {X : 概形.{u}}
   证明: by
   refine ⟨X.basicOpen_eq_bot_of_isNilpotent U f, fun hf => ?_⟩
   have h : (1 : Γ(X, U)) |_ (X.basicOpen f) = 0 := by
@@ -783,8 +783,8 @@ lemma Scheme.isNilpotent_iff_basicOpen_eq_bot
   proof: isNilpotent_iff_basicOpen_eq_bot_of_isCompact (U := ⊤) (CompactSpace.isCompact_univ) f
 
 中文:
-引理 Scheme.isNilpotent_iff_basicOpen_eq_bot
-  结论: {X : Scheme.{u}}
+引理 概形.isNilpotent_iff_basicOpen_eq_bot
+  结论: {X : 概形.{u}}
   证明: isNilpotent_iff_basicOpen_eq_bot_of_isCompact (U := ⊤) (CompactSpace.isCompact_univ) f
 
 Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ, isCompact_univ, isNilpotent_iff_basicOpen_eq_bot_of_isCompact
@@ -805,8 +805,8 @@ lemma Scheme.zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact
     ← mem_nilradical, Set.subset_def]
 
 中文:
-引理 Scheme.zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact
-  结论: {X : Scheme.{u}} {U : X.Opens}
+引理 概形.zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact
+  结论: {X : 概形.{u}} {U : X.Opens}
   证明: by
   simp [Scheme.zeroLocus_def, ← Scheme.isNilpotent_iff_basicOpen_eq_bot_of_isCompact hU,
     ← mem_nilradical, Set.subset_def]
@@ -828,8 +828,8 @@ lemma Scheme.zeroLocus_eq_univ_iff_subset_nilradical
   proof: zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact (U := ⊤) (CompactSpace.isCompact_univ) s
 
 中文:
-引理 Scheme.zeroLocus_eq_univ_iff_subset_nilradical
-  结论: {X : Scheme.{u}}
+引理 概形.zeroLocus_eq_univ_iff_subset_nilradical
+  结论: {X : 概形.{u}}
   证明: zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact (U := ⊤) (CompactSpace.isCompact_univ) s
 
 Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ, isCompact_univ, zeroLocus_eq_univ_iff_subset_nilradical_of_isCompact

@@ -37,7 +37,7 @@ instance small_sup
 
 中文:
 实例 small_sup
-  签名: {P Q : Submodule R M} [smallP : Small.{u} P] [smallQ : Small.{u} Q]
+  签名: {P Q : 子模 R M} [smallP : Small.{u} P] [smallQ : Small.{u} Q]
   定义体: by
   rw [Submodule.sup_eq_range]
   exact small_range _
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup {P : Submodule R M // Small.{u} P}
+  签名: SemilatticeSup {P : 子模 R M // Small.{u} P}
   定义体: fun P Q => ⟨P.val ⊔ Q.val, small_sup (smallP := P.property) (smallQ := Q.property)⟩
   le_sup_left := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_left
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited {P : Submodule R M // Small.{u} P}
+  签名: 可居 {P : 子模 R M // Small.{u} P}
   定义体: ⟨⊥, inferInstance⟩
 -/
 instance : Inhabited {P : Submodule R M // Small.{u} P} where
@@ -137,7 +137,7 @@ theorem FG.small
 
 中文:
 定理 FG.small
-  条件: [Small.{u} R] (P : Submodule R M) (hP : P.FG)
+  条件: [Small.{u} R] (P : 子模 R M) (hP : P.FG)
   结论: Small.{u} P
   证明: by
   rw [fg_iff_exists_fin_generating_family] at hP
@@ -167,8 +167,8 @@ theorem _root_.Module.Finite.small
   rwa [← small_univ_iff]
 
 中文:
-定理 _root_.Module.Finite.small
-  条件: [Small.{u} R] [Module.Finite R M]
+定理 _root_.模.有限.small
+  条件: [Small.{u} R] [模.有限 R M]
   结论: Small.{u} M
   证明: by
   have : Small.{u} (⊤ : Submodule R M) :=
@@ -214,7 +214,7 @@ theorem small_span
 
 中文:
 定理 small_span
-  条件: [Small.{u} R] (s : Set M) [Small.{u} s]
+  条件: [Small.{u} R] (s : 集合 M) [Small.{u} s]
   证明: by
   suffices span R s = iSup (fun i : s => span R ({(↑i : M)} : Set M)) by
     rw [this]
@@ -250,7 +250,7 @@ instance small_adjoin
 
 中文:
 实例 small_adjoin
-  签名: [Small.{u} R] {s : Set S} [Small.{u} s]
+  签名: [Small.{u} R] {s : 集合 S} [Small.{u} s]
   定义体: by
   rw [Algebra.adjoin_eq_range]
   apply small_range
@@ -273,8 +273,8 @@ theorem _root_.Subalgebra.FG.small
   exact small_adjoin
 
 中文:
-定理 _root_.Subalgebra.FG.small
-  条件: [Small.{u} R] {A : Subalgebra R S} (fgS : A.FG)
+定理 _root_.子代数.FG.small
+  条件: [Small.{u} R] {A : 子代数 R S} (fgS : A.FG)
   证明: by
   obtain ⟨s, hs, rfl⟩ := fgS
   exact small_adjoin
@@ -298,8 +298,8 @@ theorem FiniteType.small
   rwa [← small_univ_iff]
 
 中文:
-定理 FiniteType.small
-  条件: [Small.{u} R] [Algebra.FiniteType R S]
+定理 有限型.small
+  条件: [Small.{u} R] [代数.有限型 R S]
   证明: by
   have : Small.{u} (⊤ : Subalgebra R S) :=
     Subalgebra.FG.small Algebra.FiniteType.out

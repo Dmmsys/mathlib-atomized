@@ -40,7 +40,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass M₀] [MulZeroClass N₀]
+  签名: [乘零类 M₀] [乘零类 N₀]
   定义体: by simp [Prod.mul_def]
   mul_zero := by simp [Prod.mul_def]
 
@@ -61,7 +61,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero M₀] [SemigroupWithZero N₀]
+  签名: [带零半群 M₀] [带零半群 N₀]
   定义体: by simp
   mul_zero := by simp
 
@@ -83,7 +83,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  签名: [乘零幺类 M₀] [乘零幺类 N₀]
   定义体: by simp
   mul_zero := by simp
 
@@ -105,7 +105,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [MonoidWithZero M₀] [MonoidWithZero N₀]
+  签名: [带零幺半群 M₀] [带零幺半群 N₀]
   定义体: by simp
   mul_zero := by simp
 
@@ -126,7 +126,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: [CommMonoidWithZero M₀] [CommMonoidWithZero N₀]
+  签名: [带零交换幺半群 M₀] [带零交换幺半群 N₀]
   定义体: by simp
   mul_zero := by simp
 
@@ -151,7 +151,7 @@ lemma WithZero.ofClass_withZeroUnitsEquiv
 
 中文:
 引理 WithZero.ofClass_withZeroUnitsEquiv
-  结论: [GroupWithZero M₀]
+  结论: [带零群 M₀]
   证明: rfl
 -/
 lemma WithZero.ofClass_withZeroUnitsEquiv [GroupWithZero M₀]
@@ -177,7 +177,7 @@ definition mulMonoidWithZeroHom
 
 中文:
 定义 mulMonoidWithZeroHom
-  签名: [CommMonoidWithZero M₀]
+  签名: [带零交换幺半群 M₀]
   定义体: mulMonoidHom
   map_zero' := mul_zero _
 
@@ -200,7 +200,7 @@ definition divMonoidWithZeroHom
 
 中文:
 定义 divMonoidWithZeroHom
-  签名: [CommGroupWithZero M₀]
+  签名: [带零交换群 M₀]
   定义体: divMonoidHom
   map_zero' := zero_div _
 

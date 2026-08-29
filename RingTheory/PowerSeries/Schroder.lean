@@ -45,7 +45,7 @@ definition largeSchroderSeries
 
 中文:
 定义 largeSchroderSeries
-  签名: : PowerSeries 自然数
+  签名: : 幂级数 自然数
   定义体: PowerSeries.mk largeSchroder
 
 @[simp]

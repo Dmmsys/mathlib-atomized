@@ -52,7 +52,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (Σ i, α i) where
+  签名: : 局部有限序 (Σ i, α i) where
   定义体: sigmaLift fun _ => Icc
   finsetIco := sigmaLift fun _ => Ico
   finsetIoc := sigmaLift fun _ => Ioc
@@ -97,7 +97,7 @@ theorem card_Icc
 
 中文:
 定理 card_Icc
-  结论: #(Icc a b) = if h : a.1 = b.1 then #(Icc (h.rec a.2) b.2) else 0
+  结论: #(闭区间 a b) = if h : a.1 = b.1 then #(闭区间 (h.rec a.2) b.2) else 0
   证明: card_sigmaLift (fun _ => Icc) _ _
 
 Depends on / 依赖: card_sigmaLift
@@ -115,7 +115,7 @@ theorem card_Ico
 
 中文:
 定理 card_Ico
-  结论: #(Ico a b) = if h : a.1 = b.1 then #(Ico (h.rec a.2) b.2) else 0
+  结论: #(左闭右开区间 a b) = if h : a.1 = b.1 then #(左闭右开区间 (h.rec a.2) b.2) else 0
   证明: card_sigmaLift (fun _ => Ico) _ _
 
 Depends on / 依赖: card_sigmaLift
@@ -133,7 +133,7 @@ theorem card_Ioc
 
 中文:
 定理 card_Ioc
-  结论: #(Ioc a b) = if h : a.1 = b.1 then #(Ioc (h.rec a.2) b.2) else 0
+  结论: #(左开右闭区间 a b) = if h : a.1 = b.1 then #(左开右闭区间 (h.rec a.2) b.2) else 0
   证明: card_sigmaLift (fun _ => Ioc) _ _
 
 Depends on / 依赖: card_sigmaLift
@@ -151,7 +151,7 @@ theorem card_Ioo
 
 中文:
 定理 card_Ioo
-  结论: #(Ioo a b) = if h : a.1 = b.1 then #(Ioo (h.rec a.2) b.2) else 0
+  结论: #(开区间 a b) = if h : a.1 = b.1 then #(开区间 (h.rec a.2) b.2) else 0
   证明: card_sigmaLift (fun _ => Ioo) _ _
 
 Depends on / 依赖: card_sigmaLift
@@ -176,7 +176,7 @@ theorem Icc_mk_mk
 
 中文:
 定理 Icc_mk_mk
-  结论: Icc (⟨i, a⟩ : Sigma α) ⟨i, b⟩ = (Icc a b).map (Embedding.sigmaMk i)
+  结论: 闭区间 (⟨i, a⟩ : 依赖和类型 α) ⟨i, b⟩ = (闭区间 a b).map (嵌入.sigmaMk i)
   证明: dif_pos rfl
 
 @[simp]
@@ -199,7 +199,7 @@ theorem Ico_mk_mk
 
 中文:
 定理 Ico_mk_mk
-  结论: Ico (⟨i, a⟩ : Sigma α) ⟨i, b⟩ = (Ico a b).map (Embedding.sigmaMk i)
+  结论: 左闭右开区间 (⟨i, a⟩ : 依赖和类型 α) ⟨i, b⟩ = (左闭右开区间 a b).map (嵌入.sigmaMk i)
   证明: dif_pos rfl
 
 @[simp]
@@ -222,7 +222,7 @@ theorem Ioc_mk_mk
 
 中文:
 定理 Ioc_mk_mk
-  结论: Ioc (⟨i, a⟩ : Sigma α) ⟨i, b⟩ = (Ioc a b).map (Embedding.sigmaMk i)
+  结论: 左开右闭区间 (⟨i, a⟩ : 依赖和类型 α) ⟨i, b⟩ = (左开右闭区间 a b).map (嵌入.sigmaMk i)
   证明: dif_pos rfl
 
 @[simp]
@@ -243,7 +243,7 @@ theorem Ioo_mk_mk
 
 中文:
 定理 Ioo_mk_mk
-  结论: Ioo (⟨i, a⟩ : Sigma α) ⟨i, b⟩ = (Ioo a b).map (Embedding.sigmaMk i)
+  结论: 开区间 (⟨i, a⟩ : 依赖和类型 α) ⟨i, b⟩ = (开区间 a b).map (嵌入.sigmaMk i)
   证明: dif_pos rfl
 
 Depends on / 依赖: dif_pos
@@ -309,7 +309,7 @@ theorem Iic_mk
 
 中文:
 定理 Iic_mk
-  结论: Iic (⟨i, a⟩ : Sigma α) = (Iic a).map (Embedding.sigmaMk i)
+  结论: 左无界右闭区间 (⟨i, a⟩ : 依赖和类型 α) = (左无界右闭区间 a).map (嵌入.sigmaMk i)
   证明: rfl
 -/
 @[simp] theorem Iic_mk : Iic (⟨i, a⟩ : Sigma α) = (Iic a).map (Embedding.sigmaMk i) := rfl
@@ -323,7 +323,7 @@ theorem Iio_mk
 
 中文:
 定理 Iio_mk
-  结论: Iio (⟨i, a⟩ : Sigma α) = (Iio a).map (Embedding.sigmaMk i)
+  结论: 左无界右开区间 (⟨i, a⟩ : 依赖和类型 α) = (左无界右开区间 a).map (嵌入.sigmaMk i)
   证明: rfl
 -/
 @[simp] theorem Iio_mk : Iio (⟨i, a⟩ : Sigma α) = (Iio a).map (Embedding.sigmaMk i) := rfl
@@ -386,7 +386,7 @@ theorem Ici_mk
 
 中文:
 定理 Ici_mk
-  结论: Ici (⟨i, a⟩ : Sigma α) = (Ici a).map (Embedding.sigmaMk i)
+  结论: 左闭右无界区间 (⟨i, a⟩ : 依赖和类型 α) = (左闭右无界区间 a).map (嵌入.sigmaMk i)
   证明: rfl
 -/
 @[simp] theorem Ici_mk : Ici (⟨i, a⟩ : Sigma α) = (Ici a).map (Embedding.sigmaMk i) := rfl
@@ -400,7 +400,7 @@ theorem Ioi_mk
 
 中文:
 定理 Ioi_mk
-  结论: Ioi (⟨i, a⟩ : Sigma α) = (Ioi a).map (Embedding.sigmaMk i)
+  结论: 左开右无界区间 (⟨i, a⟩ : 依赖和类型 α) = (左开右无界区间 a).map (嵌入.sigmaMk i)
   证明: rfl
 -/
 @[simp] theorem Ioi_mk : Ioi (⟨i, a⟩ : Sigma α) = (Ioi a).map (Embedding.sigmaMk i) := rfl

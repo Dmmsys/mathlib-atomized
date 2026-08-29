@@ -80,7 +80,7 @@ definition uniqueAlgEquiv
 
 中文:
 定义 uniqueAlgEquiv
-  签名: (σ : 类型) [Unique σ]
+  签名: (σ : 类型) [唯一 σ]
   定义体: eval₂ Polynomial.C fun _ => Polynomial.X
   invFun := Polynomial.eval₂ MvPolynomial.C (X default)
   left_inv := by
@@ -124,7 +124,7 @@ theorem uniqueAlgEquiv_monomial
 
 中文:
 定理 uniqueAlgEquiv_monomial
-  条件: [Unique σ] {d : σ ->₀ 自然数} {r : R}
+  条件: [唯一 σ] {d : σ ->₀ 自然数} {r : R}
   证明: by
   simp [Polynomial.C_mul_X_pow_eq_monomial]
 
@@ -146,7 +146,7 @@ theorem uniqueAlgEquiv_symm_monomial
 
 中文:
 定理 uniqueAlgEquiv_symm_monomial
-  条件: [Unique σ] {d : σ ->₀ 自然数} {r : R}
+  条件: [唯一 σ] {d : σ ->₀ 自然数} {r : R}
   证明: by
   simp [MvPolynomial.monomial_eq]
 
@@ -173,7 +173,7 @@ theorem coeff_uniqueAlgEquiv
 
 中文:
 定理 coeff_uniqueAlgEquiv
-  条件: [Unique σ] (P : MvPolynomial σ R) (n : 自然数)
+  条件: [唯一 σ] (P : 多元多项式 σ R) (n : 自然数)
   证明: by
   induction P using induction_on' with
   | monomial d r =>
@@ -205,7 +205,7 @@ theorem coeff_uniqueAlgEquiv_symm
 
 中文:
 定理 coeff_uniqueAlgEquiv_symm
-  条件: [Unique σ] (P : Polynomial R) (d : σ ->₀ 自然数)
+  条件: [唯一 σ] (P : 多项式 R) (d : σ ->₀ 自然数)
   证明: by
   rw [Finsupp.unique_single d]; rw [← coeff_uniqueAlgEquiv R]; rw [AlgEquiv.apply_symm_apply]; rw [Finsupp.single_eq_same]
 
@@ -250,7 +250,7 @@ theorem pUnitAlgEquiv_monomial
 
 中文:
 定理 pUnitAlgEquiv_monomial
-  条件: {d : PUnit ->₀ 自然数} {r : R}
+  条件: {d : 命题单元 ->₀ 自然数} {r : R}
   证明: uniqueAlgEquiv_monomial _
 
 @[deprecated uniqueAlgEquiv_symm_monomial (since := "2026-04-15")]
@@ -273,7 +273,7 @@ theorem pUnitAlgEquiv_symm_monomial
 
 中文:
 定理 pUnitAlgEquiv_symm_monomial
-  条件: {d : PUnit ->₀ 自然数} {r : R}
+  条件: {d : 命题单元 ->₀ 自然数} {r : R}
   证明: uniqueAlgEquiv_symm_monomial _
 
 Depends on / 依赖: uniqueAlgEquiv_symm_monomial
@@ -299,7 +299,7 @@ definition mapEquiv
 
 中文:
 定义 mapEquiv
-  签名: [CommSemiring S₁] [CommSemiring S₂] (e : S₁ ≃+* S₂)
+  签名: [交换半环 S₁] [交换半环 S₂] (e : S₁ ≃+* S₂)
   定义体: AddMonoidAlgebra.mapRingEquiv _ e
 
 @[simp]
@@ -323,7 +323,7 @@ lemma mapEquiv_apply
 
 中文:
 引理 mapEquiv_apply
-  结论: [CommSemiring S₁] [CommSemiring S₂] (e : S₁ ≃+* S₂)
+  结论: [交换半环 S₁] [交换半环 S₂] (e : S₁ ≃+* S₂)
   证明: rfl
 
 @[simp]
@@ -345,7 +345,7 @@ theorem mapEquiv_refl
 
 中文:
 定理 mapEquiv_refl
-  结论: mapEquiv σ (RingEquiv.refl R) = RingEquiv.refl _
+  结论: mapEquiv σ (环等价.refl R) = 环等价.refl _
   证明: RingEquiv.ext map_id
 
 @[simp]
@@ -368,7 +368,7 @@ theorem mapEquiv_symm
 
 中文:
 定理 mapEquiv_symm
-  条件: [CommSemiring S₁] [CommSemiring S₂] (e : S₁ ≃+* S₂)
+  条件: [交换半环 S₁] [交换半环 S₂] (e : S₁ ≃+* S₂)
   证明: rfl
 
 @[simp]
@@ -388,7 +388,7 @@ theorem mapEquiv_trans
 
 中文:
 定理 mapEquiv_trans
-  结论: [CommSemiring S₁] [CommSemiring S₂] [CommSemiring S₃] (e : S₁ ≃+* S₂)
+  结论: [交换半环 S₁] [交换半环 S₂] [交换半环 S₃] (e : S₁ ≃+* S₂)
   证明: (AddMonoidAlgebra.mapRingEquiv_trans _ _).symm
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.mapRingEquiv_trans, mapRingEquiv_trans
@@ -435,7 +435,7 @@ lemma mapAlgEquiv_apply
 
 中文:
 引理 mapAlgEquiv_apply
-  条件: (e : A₁ ≃ₐ[R] A₂) (x : MvPolynomial σ A₁)
+  条件: (e : A₁ ≃ₐ[R] A₂) (x : 多元多项式 σ A₁)
   证明: rfl
 
 @[simp]
@@ -457,7 +457,7 @@ theorem mapAlgEquiv_refl
 
 中文:
 定理 mapAlgEquiv_refl
-  结论: mapAlgEquiv σ (AlgEquiv.refl : A₁ ≃ₐ[R] A₁) = AlgEquiv.refl
+  结论: mapAlgEquiv σ (代数等价.refl : A₁ ≃ₐ[R] A₁) = 代数等价.refl
   证明: AlgEquiv.ext map_id
 
 @[simp]
@@ -532,7 +532,7 @@ theorem eval₂_uniqueAlgEquiv
 
 中文:
 定理 eval₂_uniqueAlgEquiv
-  结论: [Unique σ] {f : MvPolynomial σ R} {φ : R ->+* S}
+  结论: [唯一 σ] {f : 多元多项式 σ R} {φ : R ->+* S}
   证明: by
   simp only [MvPolynomial.uniqueAlgEquiv_apply]
   induction f using MvPolynomial.induction_on' with
@@ -570,7 +570,7 @@ theorem eval₂_uniqueAlgEquiv_symm
 
 中文:
 定理 eval₂_uniqueAlgEquiv_symm
-  结论: [Unique σ] {f : Polynomial R} {φ : R ->+* S}
+  结论: [唯一 σ] {f : 多项式 R} {φ : R ->+* S}
   证明: by
   rw [(eval₂_uniqueAlgEquiv (R := R) (σ := σ) (f := (MvPolynomial.uniqueAlgEquiv R σ).symm f)
     (φ := φ) (a := a)).symm]
@@ -597,7 +597,7 @@ theorem eval₂_const_uniqueAlgEquiv_symm
 
 中文:
 定理 eval₂_const_uniqueAlgEquiv_symm
-  结论: [Unique σ] {f : Polynomial R}
+  结论: [唯一 σ] {f : 多项式 R}
   证明: by
   rw [eval₂_uniqueAlgEquiv_symm]
 -/
@@ -620,7 +620,7 @@ theorem eval₂_const_uniqueAlgEquiv
 
 中文:
 定理 eval₂_const_uniqueAlgEquiv
-  结论: [Unique σ] {f : MvPolynomial σ R}
+  结论: [唯一 σ] {f : 多元多项式 σ R}
   证明: by
   rw [← eval₂_uniqueAlgEquiv]
 
@@ -645,7 +645,7 @@ theorem eval₂_pUnitAlgEquiv_symm
 
 中文:
 定理 eval₂_pUnitAlgEquiv_symm
-  条件: {f : Polynomial R} {φ : R ->+* S} {a : Unit -> S}
+  条件: {f : 多项式 R} {φ : R ->+* S} {a : 单元 -> S}
   证明: eval₂_uniqueAlgEquiv_symm
 
 @[deprecated eval₂_const_uniqueAlgEquiv_symm (since := "2026-04-15")]
@@ -668,7 +668,7 @@ theorem eval₂_const_pUnitAlgEquiv_symm
 
 中文:
 定理 eval₂_const_pUnitAlgEquiv_symm
-  条件: {f : Polynomial R} {φ : R ->+* S} {a : S}
+  条件: {f : 多项式 R} {φ : R ->+* S} {a : S}
   证明: eval₂_const_uniqueAlgEquiv_symm
 
 @[deprecated eval₂_uniqueAlgEquiv (since := "2026-04-15")]
@@ -691,7 +691,7 @@ theorem eval₂_pUnitAlgEquiv
 
 中文:
 定理 eval₂_pUnitAlgEquiv
-  条件: {f : MvPolynomial PUnit R} {φ : R ->+* S} {a : PUnit -> S}
+  条件: {f : 多元多项式 命题单元 R} {φ : R ->+* S} {a : 命题单元 -> S}
   证明: eval₂_uniqueAlgEquiv
 
 @[deprecated eval₂_const_uniqueAlgEquiv (since := "2026-04-15")]
@@ -711,7 +711,7 @@ theorem eval₂_const_pUnitAlgEquiv
 
 中文:
 定理 eval₂_const_pUnitAlgEquiv
-  条件: {f : MvPolynomial PUnit R} {φ : R ->+* S} {a : S}
+  条件: {f : 多元多项式 命题单元 R} {φ : R ->+* S} {a : S}
   证明: eval₂_const_uniqueAlgEquiv
 -/
 theorem eval₂_const_pUnitAlgEquiv {f : MvPolynomial PUnit R} {φ : R ->+* S} {a : S} :
@@ -741,7 +741,7 @@ definition isEmptyAlgEquiv
 
 中文:
 定义 isEmptyAlgEquiv
-  签名: : MvPolynomial σ R ≃ₐ[R] R
+  签名: : 多元多项式 σ R ≃ₐ[R] R
   定义体: AddMonoidAlgebra.uniqueAlgEquiv ..
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.uniqueAlgEquiv, uniqueAlgEquiv
@@ -765,7 +765,7 @@ lemma aeval_injective_iff_of_isEmpty
 
 中文:
 引理 aeval_injective_iff_of_isEmpty
-  条件: [CommSemiring S₁] [Algebra R S₁] {f : σ -> S₁}
+  条件: [交换半环 S₁] [代数 R S₁] {f : σ -> S₁}
   证明: by
   have : aeval f = (Algebra.ofId R S₁).comp (@isEmptyAlgEquiv R σ _ _).toAlgHom := by
     ext i
@@ -798,7 +798,7 @@ definition isEmptyRingEquiv
 
 中文:
 定义 isEmptyRingEquiv
-  签名: : MvPolynomial σ R ≃+* R
+  签名: : 多元多项式 σ R ≃+* R
   定义体: AddMonoidAlgebra.uniqueRingEquiv _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.uniqueRingEquiv, uniqueRingEquiv
@@ -850,7 +850,7 @@ lemma isEmptyRingEquiv_eq_coeff_zero
 
 中文:
 引理 isEmptyRingEquiv_eq_coeff_zero
-  条件: {x : MvPolynomial σ R}
+  条件: {x : 多元多项式 σ R}
   结论: isEmptyRingEquiv R σ x = x.coeff 0
   证明: rfl
 -/
@@ -912,7 +912,7 @@ definition mvPolynomialEquivMvPolynomial
 
 中文:
 定义 mvPolynomialEquivMvPolynomial
-  签名: [CommSemiring S₃] (f : MvPolynomial S₁ R ->+* MvPolynomial S₂ S₃)
+  签名: [交换半环 S₃] (f : 多元多项式 S₁ R ->+* 多元多项式 S₂ S₃)
   定义体: f
   invFun := g
   left_inv := is_id (RingHom.comp _ _) hgfC hgfX
@@ -943,7 +943,7 @@ definition sumRingEquiv
 
 中文:
 定义 sumRingEquiv
-  签名: : MvPolynomial (S₁ oplus S₂) R ≃+* MvPolynomial S₁ (MvPolynomial S₂ R)
+  签名: : 多元多项式 (S₁ oplus S₂) R ≃+* 多元多项式 S₁ (多元多项式 S₂ R)
   定义体: (mapDomainRingEquiv _ sumFinsuppAddEquivProdFinsupp).trans curryRingEquiv
 
 @[simp]
@@ -1130,7 +1130,7 @@ definition sumToIter
 
 中文:
 定义 sumToIter
-  签名: : MvPolynomial (S₁ oplus S₂) R ->+* MvPolynomial S₁ (MvPolynomial S₂ R)
+  签名: : 多元多项式 (S₁ oplus S₂) R ->+* 多元多项式 S₁ (多元多项式 S₂ R)
   定义体: eval₂Hom (C.comp C) fun bc => Sum.recOn bc X (C ∘ X)
 
 @[deprecated sumRingEquiv_C (since := "2026-06-18")]
@@ -1178,7 +1178,7 @@ theorem sumToIter_Xl
 中文:
 定理 sumToIter_Xl
   条件: (b : S₁)
-  结论: sumToIter R S₁ S₂ (X (Sum.inl b)) = X b
+  结论: sumToIter R S₁ S₂ (X (和.inl b)) = X b
   证明: eval₂_X _ _ (Sum.inl b)
 
 @[deprecated sumRingEquiv_X_inr (since := "2026-06-18")]
@@ -1201,7 +1201,7 @@ theorem sumToIter_Xr
 中文:
 定理 sumToIter_Xr
   条件: (c : S₂)
-  结论: sumToIter R S₁ S₂ (X (Sum.inr c)) = C (X c)
+  结论: sumToIter R S₁ S₂ (X (和.inr c)) = C (X c)
   证明: eval₂_X _ _ (Sum.inr c)
 
 Depends on / 依赖: Sum.inr
@@ -1228,7 +1228,7 @@ definition iterToSum
 
 中文:
 定义 iterToSum
-  签名: : MvPolynomial S₁ (MvPolynomial S₂ R) ->+* MvPolynomial (S₁ oplus S₂) R
+  签名: : 多元多项式 S₁ (多元多项式 S₂ R) ->+* 多元多项式 (S₁ oplus S₂) R
   定义体: eval₂Hom (eval₂Hom C (X ∘ Sum.inr)) (X ∘ Sum.inl)
 
 @[deprecated sumRingEquiv_symm_C_C (since := "2026-06-18")]
@@ -1278,7 +1278,7 @@ theorem iterToSum_X
 中文:
 定理 iterToSum_X
   条件: (b : S₁)
-  结论: iterToSum R S₁ S₂ (X b) = X (Sum.inl b)
+  结论: iterToSum R S₁ S₂ (X b) = X (和.inl b)
   证明: eval₂_X _ _ _
 
 @[deprecated sumRingEquiv_symm_C_X (since := "2026-06-18")]
@@ -1302,7 +1302,7 @@ theorem iterToSum_C_X
 中文:
 定理 iterToSum_C_X
   条件: (c : S₂)
-  结论: iterToSum R S₁ S₂ (C (X c)) = X (Sum.inr c)
+  结论: iterToSum R S₁ S₂ (C (X c)) = X (和.inr c)
   证明: Eq.trans (eval₂_C _ _ (X c)) (eval₂_X _ _ _)
 
 @[deprecated (since := "2026-06-18")] alias iterToSum_sumToIter := RingEquiv.symm_apply_apply
@@ -1334,7 +1334,7 @@ definition sumAlgEquiv
 
 中文:
 定义 sumAlgEquiv
-  签名: : MvPolynomial (S₁ oplus S₂) R ≃ₐ[R] MvPolynomial S₁ (MvPolynomial S₂ R)
+  签名: : 多元多项式 (S₁ oplus S₂) R ≃ₐ[R] 多元多项式 S₁ (多元多项式 S₂ R)
   定义体: (domCongr _ _ sumFinsuppAddEquivProdFinsupp).trans (curryAlgEquiv _)
 
 @[simp]
@@ -1556,7 +1556,7 @@ definition commAlgEquiv
 
 中文:
 定义 commAlgEquiv
-  签名: : MvPolynomial S₁ (MvPolynomial S₂ R) ≃ₐ[R] MvPolynomial S₂ (MvPolynomial S₁ R)
+  签名: : 多元多项式 S₁ (多元多项式 S₂ R) ≃ₐ[R] 多元多项式 S₂ (多元多项式 S₁ R)
   定义体: AddMonoidAlgebra.commAlgEquiv _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.commAlgEquiv, commAlgEquiv
@@ -1657,7 +1657,7 @@ definition optionEquivLeft
 
 中文:
 定义 optionEquivLeft
-  签名: : MvPolynomial (Option S₁) R ≃ₐ[R] Polynomial (MvPolynomial S₁ R)
+  签名: : 多元多项式 (选项类型 S₁) R ≃ₐ[R] 多项式 (多元多项式 S₁ R)
   定义体: AlgEquiv.ofAlgHom (MvPolynomial.aeval fun o => o.elim Polynomial.X fun s => Polynomial.C (X s))
     (Polynomial.aevalTower (MvPolynomial.rename some) (X none))
     (by ext : 2 <;> simp) (by ext i : 2; cases i <;> simp)
@@ -1687,7 +1687,7 @@ lemma optionEquivLeft_X_some
 中文:
 引理 optionEquivLeft_X_some
   条件: (x : S₁)
-  结论: optionEquivLeft R S₁ (X (some x)) = Polynomial.C (X x)
+  结论: optionEquivLeft R S₁ (X (some x)) = 多项式.C (X x)
   证明: by
   simp [optionEquivLeft_apply, aeval_X]
 
@@ -1712,7 +1712,7 @@ lemma optionEquivLeft_X_none
 
 中文:
 引理 optionEquivLeft_X_none
-  结论: optionEquivLeft R S₁ (X none) = Polynomial.X
+  结论: optionEquivLeft R S₁ (X none) = 多项式.X
   证明: by
   simp [optionEquivLeft_apply, aeval_X]
 
@@ -1737,7 +1737,7 @@ lemma optionEquivLeft_C
 中文:
 引理 optionEquivLeft_C
   条件: (r : R)
-  结论: optionEquivLeft R S₁ (C r) = Polynomial.C (C r)
+  结论: optionEquivLeft R S₁ (C r) = 多项式.C (C r)
   证明: by
   simp only [optionEquivLeft_apply, aeval_C, Polynomial.algebraMap_apply, algebraMap_eq]
 
@@ -1761,7 +1761,7 @@ theorem optionEquivLeft_monomial
 
 中文:
 定理 optionEquivLeft_monomial
-  条件: (m : Option S₁ ->₀ 自然数) (r : R)
+  条件: (m : 选项类型 S₁ ->₀ 自然数) (r : R)
   证明: by
   rw [optionEquivLeft_apply]; rw [aeval_monomial]; rw [prod_option_index]
   · rw [MvPolynomial.monomial_eq, ← Polynomial.C_mul_X_pow_eq_monomial]
@@ -1916,7 +1916,7 @@ theorem optionEquivLeft_elim_eval
 
 中文:
 定理 optionEquivLeft_elim_eval
-  条件: (s : S₁ -> R) (y : R) (f : MvPolynomial (Option S₁) R)
+  条件: (s : S₁ -> R) (y : R) (f : 多元多项式 (选项类型 S₁) R)
   证明: by
   -- turn this into a def `Polynomial.mapAlgHom`
   let φ : (MvPolynomial S₁ R)[X] ->ₐ[R] R[X] :=
@@ -1959,7 +1959,7 @@ theorem mem_support_coeff_optionEquivLeft
 
 中文:
 定理 mem_support_coeff_optionEquivLeft
-  条件: {f : MvPolynomial (Option σ) R} {i : 自然数} {m : σ ->₀ 自然数}
+  条件: {f : 多元多项式 (选项类型 σ) R} {i : 自然数} {m : σ ->₀ 自然数}
   证明: by
   simp [← optionEquivLeft_coeff_some_coeff_none]
 
@@ -1987,7 +1987,7 @@ lemma support_optionEquivLeft
 
 中文:
 引理 support_optionEquivLeft
-  条件: (p : MvPolynomial (Option σ) R)
+  条件: (p : 多元多项式 (选项类型 σ) R)
   证明: by
   ext i
   simp only [Polynomial.mem_support_iff, ne_eq, MvPolynomial.ext_iff, coeff_zero, not_forall,
@@ -2021,7 +2021,7 @@ theorem nonempty_support_optionEquivLeft
 
 中文:
 定理 nonempty_support_optionEquivLeft
-  条件: {f : MvPolynomial (Option σ) R} (h : f != 0)
+  条件: {f : 多元多项式 (选项类型 σ) R} (h : f != 0)
   证明: by
   rwa [Polynomial.support_nonempty, EmbeddingLike.map_ne_zero_iff]
 
@@ -2044,7 +2044,7 @@ theorem degree_optionEquivLeft
 
 中文:
 定理 degree_optionEquivLeft
-  条件: {f : MvPolynomial (Option σ) R} (h : f != 0)
+  条件: {f : 多元多项式 (选项类型 σ) R} (h : f != 0)
   证明: by
   have h' : ((optionEquivLeft R σ f).support.sup fun x => x) = degreeOf none f := by
     rw [degreeOf_eq_sup]; rw [support_optionEquivLeft]; rw [Finset.sup_image]; rw [Function.comp_def]
@@ -2072,7 +2072,7 @@ lemma natDegree_optionEquivLeft
 
 中文:
 引理 natDegree_optionEquivLeft
-  条件: (p : MvPolynomial (Option σ) R)
+  条件: (p : 多元多项式 (选项类型 σ) R)
   证明: by
   by_cases c : p = 0
   · rw [c, map_zero, Polynomial.natDegree_zero, degreeOf_zero]
@@ -2212,7 +2212,7 @@ definition optionEquivRight
 
 中文:
 定义 optionEquivRight
-  签名: : MvPolynomial (Option S₁) R ≃ₐ[R] MvPolynomial S₁ R[X]
+  签名: : 多元多项式 (选项类型 S₁) R ≃ₐ[R] 多元多项式 S₁ R[X]
   定义体: AlgEquiv.ofAlgHom (MvPolynomial.aeval fun o => o.elim (C Polynomial.X) X)
     (MvPolynomial.aevalTower (Polynomial.aeval (X none)) fun i => X (Option.some i))
     (by
@@ -2268,7 +2268,7 @@ lemma optionEquivRight_X_none
 
 中文:
 引理 optionEquivRight_X_none
-  结论: optionEquivRight R S₁ (X none) = C Polynomial.X
+  结论: optionEquivRight R S₁ (X none) = C 多项式.X
   证明: by
   simp [optionEquivRight_apply, aeval_X]
 
@@ -2290,7 +2290,7 @@ lemma optionEquivRight_C
 中文:
 引理 optionEquivRight_C
   条件: (r : R)
-  结论: optionEquivRight R S₁ (C r) = C (Polynomial.C r)
+  结论: optionEquivRight R S₁ (C r) = C (多项式.C r)
   证明: by
   simp only [optionEquivRight_apply, aeval_C, algebraMap_apply, Polynomial.algebraMap_eq]
 
@@ -2311,7 +2311,7 @@ definition finSuccEquiv
 
 中文:
 定义 finSuccEquiv
-  签名: : MvPolynomial (Fin (n + 1)) R ≃ₐ[R] Polynomial (MvPolynomial (Fin n) R)
+  签名: : 多元多项式 (有限集 (n + 1)) R ≃ₐ[R] 多项式 (多元多项式 (有限集 n) R)
   定义体: (renameEquiv R (_root_.finSuccEquiv n)).trans (optionEquivLeft R (Fin n))
 
 Depends on / 依赖: _root_, _root_.finSuccEquiv, finSuccEquiv, optionEquivLeft, renameEquiv
@@ -2363,7 +2363,7 @@ theorem finSuccEquiv_apply
 
 中文:
 定理 finSuccEquiv_apply
-  条件: (p : MvPolynomial (Fin (n + 1)) R)
+  条件: (p : 多元多项式 (有限集 (n + 1)) R)
   证明: by
   rw [← finSuccEquiv_eq]; rw [RingHom.coe_coe]
 
@@ -2391,7 +2391,7 @@ theorem finSuccEquiv_comp_C_eq_C
 
 中文:
 定理 finSuccEquiv_comp_C_eq_C
-  条件: {R : 类型u} [CommSemiring R] (n : 自然数)
+  条件: {R : 类型u} [交换半环 R] (n : 自然数)
   证明: by
   refine RingHom.ext fun x => ?_
   rw [RingHom.comp_apply]
@@ -2425,7 +2425,7 @@ theorem finSuccEquiv_X_zero
 
 中文:
 定理 finSuccEquiv_X_zero
-  结论: finSuccEquiv R n (X 0) = Polynomial.X
+  结论: finSuccEquiv R n (X 0) = 多项式.X
   证明: by simp [finSuccEquiv_apply]
 
 Depends on / 依赖: finSuccEquiv_apply
@@ -2444,8 +2444,8 @@ theorem finSuccEquiv_X_succ
 
 中文:
 定理 finSuccEquiv_X_succ
-  条件: {j : Fin n}
-  结论: finSuccEquiv R n (X j.succ) = Polynomial.C (X j)
+  条件: {j : 有限集 n}
+  结论: finSuccEquiv R n (X j.succ) = 多项式.C (X j)
   证明: by
   simp [finSuccEquiv_apply]
 
@@ -2469,7 +2469,7 @@ theorem finSuccEquiv_coeff_coeff
 
 中文:
 定理 finSuccEquiv_coeff_coeff
-  条件: (m : Fin n ->₀ 自然数) (f : MvPolynomial (Fin (n + 1)) R) (i : 自然数)
+  条件: (m : 有限集 n ->₀ 自然数) (f : 多元多项式 (有限集 (n + 1)) R) (i : 自然数)
   证明: by
   induction f using MvPolynomial.induction_on' generalizing i m with
   | add p q hp hq => simp only [map_add, Polynomial.coeff_add, coeff_add, hp, hq]
@@ -2520,7 +2520,7 @@ theorem eval_eq_eval_mv_eval'
 
 中文:
 定理 eval_eq_eval_mv_eval'
-  条件: (s : Fin n -> R) (y : R) (f : MvPolynomial (Fin (n + 1)) R)
+  条件: (s : 有限集 n -> R) (y : R) (f : 多元多项式 (有限集 (n + 1)) R)
   证明: by
   -- turn this into a def `Polynomial.mapAlgHom`
   let φ : (MvPolynomial (Fin n) R)[X] ->ₐ[R] R[X] :=
@@ -2563,7 +2563,7 @@ theorem coeff_eval_eq_eval_coeff
 
 中文:
 定理 coeff_eval_eq_eval_coeff
-  结论: (s' : S₁ -> R) (f : Polynomial (MvPolynomial S₁ R))
+  结论: (s' : S₁ -> R) (f : 多项式 (多元多项式 S₁ R))
   证明: by
   simp only [Polynomial.coeff_map]
 
@@ -2588,7 +2588,7 @@ theorem mem_support_coeff_finSuccEquiv
 
 中文:
 定理 mem_support_coeff_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} {i : 自然数} {m : Fin n ->₀ 自然数}
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} {i : 自然数} {m : 有限集 n ->₀ 自然数}
   证明: by
   apply Iff.intro
   · intro h
@@ -2621,7 +2621,7 @@ lemma totalDegree_coeff_finSuccEquiv_add_le
 
 中文:
 引理 totalDegree_coeff_finSuccEquiv_add_le
-  结论: (f : MvPolynomial (Fin (n + 1)) R) (i : 自然数)
+  结论: (f : 多元多项式 (有限集 (n + 1)) R) (i : 自然数)
   证明: by
   have hf'_sup : ((finSuccEquiv R n f).coeff i).support.Nonempty := by
     rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty]
@@ -2666,7 +2666,7 @@ theorem support_finSuccEquiv
 
 中文:
 定理 support_finSuccEquiv
-  条件: (f : MvPolynomial (Fin (n + 1)) R)
+  条件: (f : 多元多项式 (有限集 (n + 1)) R)
   证明: by
   ext i
   simp only [Polynomial.mem_support_iff, ne_eq, MvPolynomial.ext_iff, coeff_zero, not_forall,
@@ -2701,7 +2701,7 @@ theorem mem_support_finSuccEquiv
 
 中文:
 定理 mem_support_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} {x}
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} {x}
   证明: by
   simpa using congr(x in $(support_finSuccEquiv f))
 
@@ -2733,7 +2733,7 @@ theorem image_support_finSuccEquiv
 
 中文:
 定理 image_support_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} {i : 自然数}
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} {i : 自然数}
   证明: by
   ext m
   rw [Finset.mem_filter]; rw [Finset.mem_image]; rw [mem_support_iff]
@@ -2776,7 +2776,7 @@ lemma mem_image_support_coeff_finSuccEquiv
 
 中文:
 引理 mem_image_support_coeff_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} {i : 自然数} {x}
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} {i : 自然数} {x}
   证明: by
   simpa using congr(x in $image_support_finSuccEquiv)
 
@@ -2799,7 +2799,7 @@ theorem nonempty_support_finSuccEquiv
 
 中文:
 定理 nonempty_support_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} (h : f != 0)
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} (h : f != 0)
   证明: by
   rwa [Polynomial.support_nonempty, EmbeddingLike.map_ne_zero_iff]
 
@@ -2824,7 +2824,7 @@ theorem degree_finSuccEquiv
 
 中文:
 定理 degree_finSuccEquiv
-  条件: {f : MvPolynomial (Fin (n + 1)) R} (h : f != 0)
+  条件: {f : 多元多项式 (有限集 (n + 1)) R} (h : f != 0)
   证明: by
   -- TODO: these should be lemmas
   have h₀ : forall {α β : Type _} (f : α -> β), (fun x => x) ∘ f = f := fun f => rfl
@@ -2854,7 +2854,7 @@ theorem natDegree_finSuccEquiv
 
 中文:
 定理 natDegree_finSuccEquiv
-  条件: (f : MvPolynomial (Fin (n + 1)) R)
+  条件: (f : 多元多项式 (有限集 (n + 1)) R)
   证明: by
   by_cases c : f = 0
   · rw [c, map_zero, Polynomial.natDegree_zero, degreeOf_zero]
@@ -2881,7 +2881,7 @@ lemma degreeOf_eq_natDegree
 
 中文:
 引理 degreeOf_eq_natDegree
-  条件: [DecidableEq σ] (a : σ) (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (a : σ) (p : 多元多项式 σ R)
   证明: by
   rw [natDegree_optionEquivLeft]; rw [eq_comm]
   convert! degreeOf_rename_of_injective (Equiv.injective (Equiv.optionSubtypeNe a).symm) a
@@ -2912,7 +2912,7 @@ theorem degreeOf_coeff_finSuccEquiv
 
 中文:
 定理 degreeOf_coeff_finSuccEquiv
-  条件: (p : MvPolynomial (Fin (n + 1)) R) (j : Fin n) (i : 自然数)
+  条件: (p : 多元多项式 (有限集 (n + 1)) R) (j : 有限集 n) (i : 自然数)
   证明: by
   rw [degreeOf_eq_sup]; rw [degreeOf_eq_sup]; rw [Finset.sup_le_iff]
   intro m hm
@@ -2948,7 +2948,7 @@ lemma finSuccEquiv_rename_finSuccEquiv
 
 中文:
 引理 finSuccEquiv_rename_finSuccEquiv
-  条件: (e : σ ≃ Fin n) (φ : MvPolynomial (Option σ) R)
+  条件: (e : σ ≃ 有限集 n) (φ : 多元多项式 (选项类型 σ) R)
   证明: by
   suffices (finSuccEquiv R n).toRingEquiv.toRingHom.comp (rename ((Equiv.optionCongr e).trans
         (_root_.finSuccEquiv n).symm)).toRingHom =
@@ -3013,7 +3013,7 @@ definition Polynomial.toMvPolynomial
 @[simp]
 
 中文:
-定义 Polynomial.toMvPolynomial
+定义 多项式.toMvPolynomial
   签名: (i : σ)
   定义体: aeval (MvPolynomial.X i)
 
@@ -3038,9 +3038,9 @@ lemma Polynomial.toMvPolynomial_C
 @[simp]
 
 中文:
-引理 Polynomial.toMvPolynomial_C
+引理 多项式.toMvPolynomial_C
   条件: (i : σ) (r : R)
-  结论: (C r).toMvPolynomial i = MvPolynomial.C r
+  结论: (C r).toMvPolynomial i = 多元多项式.C r
   证明: by
   simp [toMvPolynomial]
 
@@ -3063,9 +3063,9 @@ lemma Polynomial.toMvPolynomial_X
   simp [toMvPolynomial]
 
 中文:
-引理 Polynomial.toMvPolynomial_X
+引理 多项式.toMvPolynomial_X
   条件: (i : σ)
-  结论: X.toMvPolynomial i = MvPolynomial.X (R := R) i
+  结论: X.toMvPolynomial i = 多元多项式.X (R := R) i
   证明: by
   simp [toMvPolynomial]
 
@@ -3085,7 +3085,7 @@ lemma Polynomial.toMvPolynomial_eq_rename_comp
   simp
 
 中文:
-引理 Polynomial.toMvPolynomial_eq_rename_comp
+引理 多项式.toMvPolynomial_eq_rename_comp
   条件: (i : σ)
   证明: by
   ext
@@ -3109,7 +3109,7 @@ lemma Polynomial.toMvPolynomial_injective
   exact MvPolynomial.rename_injective (fun x => i) fun _ _ _ => rfl
 
 中文:
-引理 Polynomial.toMvPolynomial_injective
+引理 多项式.toMvPolynomial_injective
   条件: (i : σ)
   证明: by
   simp only [toMvPolynomial_eq_rename_comp, AlgHom.coe_comp, AlgEquiv.coe_toAlgHom,
@@ -3135,7 +3135,7 @@ lemma Polynomial.toMvPolynomial_inj
 @[simp]
 
 中文:
-引理 Polynomial.toMvPolynomial_inj
+引理 多项式.toMvPolynomial_inj
   条件: {i : σ} {p q : R[X]}
   证明: ⟨fun h => Polynomial.toMvPolynomial_injective i h, fun h => by rw [h]⟩
 
@@ -3160,7 +3160,7 @@ lemma MvPolynomial.eval_comp_toMvPolynomial
 @[simp]
 
 中文:
-引理 MvPolynomial.eval_comp_toMvPolynomial
+引理 多元多项式.eval_comp_toMvPolynomial
   条件: (f : σ -> R) (i : σ)
   证明: by
   ext <;> simp
@@ -3185,7 +3185,7 @@ lemma MvPolynomial.eval_toMvPolynomial
 @[simp]
 
 中文:
-引理 MvPolynomial.eval_toMvPolynomial
+引理 多元多项式.eval_toMvPolynomial
   条件: (f : σ -> R) (i : σ) (p : R[X])
   证明: DFunLike.congr_fun (eval_comp_toMvPolynomial ..) p
 
@@ -3211,7 +3211,7 @@ lemma MvPolynomial.aeval_comp_toMvPolynomial
 @[simp]
 
 中文:
-引理 MvPolynomial.aeval_comp_toMvPolynomial
+引理 多元多项式.aeval_comp_toMvPolynomial
   条件: (f : σ -> S) (i : σ)
   证明: by
   ext
@@ -3238,7 +3238,7 @@ lemma MvPolynomial.aeval_toMvPolynomial
 @[simp]
 
 中文:
-引理 MvPolynomial.aeval_toMvPolynomial
+引理 多元多项式.aeval_toMvPolynomial
   条件: (f : σ -> S) (i : σ) (p : R[X])
   证明: DFunLike.congr_fun (aeval_comp_toMvPolynomial ..) p
 
@@ -3264,7 +3264,7 @@ lemma MvPolynomial.rename_comp_toMvPolynomial
 @[simp]
 
 中文:
-引理 MvPolynomial.rename_comp_toMvPolynomial
+引理 多元多项式.rename_comp_toMvPolynomial
   条件: (f : σ -> τ) (a : σ)
   证明: by
   ext
@@ -3289,7 +3289,7 @@ lemma MvPolynomial.rename_toMvPolynomial
   proof: DFunLike.congr_fun (rename_comp_toMvPolynomial ..) p
 
 中文:
-引理 MvPolynomial.rename_toMvPolynomial
+引理 多元多项式.rename_toMvPolynomial
   条件: (f : σ -> τ) (a : σ) (p : R[X])
   证明: DFunLike.congr_fun (rename_comp_toMvPolynomial ..) p
 

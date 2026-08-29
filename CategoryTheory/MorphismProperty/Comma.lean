@@ -59,7 +59,7 @@ lemma costructuredArrow_iso_iff
 
 中文:
 引理 costructuredArrow_iso_iff
-  结论: (P : Morphism命题erty T) [P.RespectsIso]
+  结论: (P : MorphismProperty T) [P.RespectsIso]
   证明: P.comma_iso_iff e
 
 Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
@@ -79,7 +79,7 @@ lemma structuredArrow_iso_iff
 
 中文:
 引理 structuredArrow_iso_iff
-  结论: (P : Morphism命题erty T) [P.RespectsIso]
+  结论: (P : MorphismProperty T) [P.RespectsIso]
   证明: P.comma_iso_iff e
 
 Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
@@ -99,7 +99,7 @@ lemma over_iso_iff
 
 中文:
 引理 over_iso_iff
-  条件: (P : Morphism命题erty T) [P.RespectsIso] {X : T} {f g : Over X} (e : f ≅ g)
+  条件: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Over X} (e : f ≅ g)
   证明: P.comma_iso_iff e
 
 Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
@@ -118,7 +118,7 @@ lemma under_iso_iff
 
 中文:
 引理 under_iso_iff
-  条件: (P : Morphism命题erty T) [P.RespectsIso] {X : T} {f g : Under X} (e : f ≅ g)
+  条件: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Under X} (e : f ≅ g)
   证明: P.comma_iso_iff e
 
 Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
@@ -141,7 +141,7 @@ definition commaObj
 
 中文:
 定义 commaObj
-  签名: (W : Morphism命题erty T)
+  签名: (W : MorphismProperty T)
   定义体: fun f => W f.hom
 
 Depends on / 依赖: f.hom
@@ -160,7 +160,7 @@ lemma commaObj_iff
 
 中文:
 引理 commaObj_iff
-  条件: (Y : Comma L R)
+  条件: (Y : 交换a L R)
   结论: W.commaObj L R Y ↔ W Y.hom
   证明: .rfl
 -/
@@ -178,7 +178,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : (W.commaObj L R).IsClosedUnderIsomorphisms where
+  签名: : (W.commaObj L R).在同构下封闭 where
   定义体: by
     rwa [commaObj_iff, ← W.cancel_left_of_respectsIso (L.map e.hom.left), e.hom.w,
       W.cancel_right_of_respectsIso]
@@ -200,7 +200,7 @@ definition costructuredArrowObj
 
 中文:
 定义 costructuredArrowObj
-  签名: (W : Morphism命题erty T)
+  签名: (W : MorphismProperty T)
   定义体: fun f => W f.hom
 
 Depends on / 依赖: f.hom
@@ -234,7 +234,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : (W.costructuredArrowObj L (X := X)).IsClosedUnderIsomorphisms
+  签名: : (W.costructuredArrowObj L (X := X)).在同构下封闭
   定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
 
 Depends on / 依赖: IsClosedUnderIsomorphisms
@@ -252,7 +252,7 @@ definition structuredArrowObj
 
 中文:
 定义 structuredArrowObj
-  签名: (W : Morphism命题erty T)
+  签名: (W : MorphismProperty T)
   定义体: fun f => W f.hom
 
 Depends on / 依赖: f.hom
@@ -270,7 +270,7 @@ lemma structuredArrowObj_iff
 
 中文:
 引理 structuredArrowObj_iff
-  条件: (Y : StructuredArrow X R)
+  条件: (Y : 结构化箭头 X R)
   证明: .rfl
 -/
 @[simp] lemma structuredArrowObj_iff (Y : StructuredArrow X R) :
@@ -286,7 +286,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : (W.structuredArrowObj L (X := X)).IsClosedUnderIsomorphisms
+  签名: : (W.structuredArrowObj L (X := X)).在同构下封闭
   定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
 
 Depends on / 依赖: IsClosedUnderIsomorphisms
@@ -304,7 +304,7 @@ definition over
 
 中文:
 定义 over
-  签名: (W : Morphism命题erty T) {X : T}
+  签名: (W : MorphismProperty T) {X : T}
   定义体: fun _ _ f => W f.left
 
 Depends on / 依赖: f.left
@@ -321,7 +321,7 @@ lemma over_eq_inverseImage
 
 中文:
 引理 over_eq_inverseImage
-  条件: (W : Morphism命题erty T) (X : T)
+  条件: (W : MorphismProperty T) (X : T)
   证明: rfl
 -/
 lemma over_eq_inverseImage (W : MorphismProperty T) (X : T) :
@@ -354,7 +354,7 @@ definition under
 
 中文:
 定义 under
-  签名: (W : Morphism命题erty T) {X : T}
+  签名: (W : MorphismProperty T) {X : T}
   定义体: fun _ _ f => W f.right
 
 Depends on / 依赖: f.right
@@ -371,7 +371,7 @@ lemma under_eq_inverseImage
 
 中文:
 引理 under_eq_inverseImage
-  条件: (W : Morphism命题erty T) (X : T)
+  条件: (W : MorphismProperty T) (X : T)
   证明: rfl
 -/
 lemma under_eq_inverseImage (W : MorphismProperty T) (X : T) :
@@ -404,7 +404,7 @@ definition overObj
 
 中文:
 定义 overObj
-  签名: (W : Morphism命题erty T) {X : T}
+  签名: (W : MorphismProperty T) {X : T}
   定义体: fun f => W f.hom
 
 Depends on / 依赖: f.hom
@@ -438,7 +438,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : (W.overObj (X := X)).IsClosedUnderIsomorphisms
+  签名: : (W.overObj (X := X)).在同构下封闭
   定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
 
 Depends on / 依赖: IsClosedUnderIsomorphisms
@@ -456,7 +456,7 @@ definition underObj
 
 中文:
 定义 underObj
-  签名: (W : Morphism命题erty T) {X : T}
+  签名: (W : MorphismProperty T) {X : T}
   定义体: fun f => W f.hom
 
 Depends on / 依赖: f.hom
@@ -492,7 +492,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : (W.underObj (X := X)).IsClosedUnderIsomorphisms
+  签名: : (W.underObj (X := X)).在同构下封闭
   定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
 
 @[simp]
@@ -515,7 +515,7 @@ lemma inverseImage_op_overObj
 
 中文:
 引理 inverseImage_op_overObj
-  条件: (W : Morphism命题erty T) {X : T}
+  条件: (W : MorphismProperty T) {X : T}
   证明: rfl
 
 @[simp]
@@ -534,7 +534,7 @@ lemma inverseImage_op_underObj
 
 中文:
 引理 inverseImage_op_underObj
-  条件: (W : Morphism命题erty T) {X : T}
+  条件: (W : MorphismProperty T) {X : T}
   证明: rfl
 -/
 lemma inverseImage_op_underObj (W : MorphismProperty T) {X : T} :
@@ -559,9 +559,9 @@ structure Comma
     - prop : P toComma.hom
 
 中文:
-结构 Comma
-  参数: (Q : Morphism命题erty A) (W : Morphism命题erty B)
-  继承: Comma L R
+结构 交换a
+  参数: (Q : MorphismProperty A) (W : MorphismProperty B)
+  继承: 交换a L R
   公理与运算 (1 个):
     - prop : P toComma.hom
 -/
@@ -587,9 +587,9 @@ structure Hom
     - prop_hom_right : W toCommaMorphism.right
 
 中文:
-结构 Hom
-  参数: (X Y : P.Comma L R Q W)
-  继承: CommaMorphism X.toComma Y.toComma
+结构 态射
+  参数: (X Y : P.交换a L R Q W)
+  继承: 交换a态射 X.toComma Y.toComma
   公理与运算 (2 个):
     - prop_hom_left : Q toCommaMorphism.left
     - prop_hom_right : W toCommaMorphism.right
@@ -609,8 +609,8 @@ abbreviation Hom.hom
 @[simp]
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
+缩写 态射.hom
+  签名: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
   定义体: f.toCommaMorphism
 
 @[simp]
@@ -628,8 +628,8 @@ lemma Hom.hom_mk
   proof: rfl
 
 中文:
-引理 Hom.hom_mk
-  条件: {X Y : P.Comma L R Q W} (f : CommaMorphism X.toComma Y.toComma) (hf) (hg)
+引理 态射.hom_mk
+  条件: {X Y : P.交换a L R Q W} (f : 交换a态射 X.toComma Y.toComma) (hf) (hg)
   证明: rfl
 -/
 lemma Hom.hom_mk {X Y : P.Comma L R Q W} (f : CommaMorphism X.toComma Y.toComma) (hf) (hg) :
@@ -645,8 +645,8 @@ lemma Hom.hom_left
   proof: rfl
 
 中文:
-引理 Hom.hom_left
-  条件: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
+引理 态射.hom_left
+  条件: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
   结论: f.hom.left = f.left
   证明: rfl
 -/
@@ -662,8 +662,8 @@ lemma Hom.hom_right
   proof: rfl
 
 中文:
-引理 Hom.hom_right
-  条件: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
+引理 态射.hom_right
+  条件: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
   结论: f.hom.right = f.right
   证明: rfl
 -/
@@ -680,8 +680,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Comma.Hom (toCommaMorphism -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: {X Y : P.Comma L R Q W} (f : X.Hom Y)
+定义 态射.Simps.hom
+  签名: {X Y : P.交换a L R Q W} (f : X.态射 Y)
   定义体: f.hom
 
 initialize_simps_projections Comma.Hom (toCommaMorphism -> hom)
@@ -707,7 +707,7 @@ definition id
 
 中文:
 定义 id
-  签名: [Q.ContainsIdentities] [W.ContainsIdentities] (X : P.Comma L R Q W)
+  签名: [Q.余ntainsIdentities] [W.余ntainsIdentities] (X : P.交换a L R Q W)
   定义体: 𝟙 X.left
   right := 𝟙 X.right
   prop_hom_left := Q.id_mem X.toComma.left
@@ -735,8 +735,8 @@ definition Hom.comp
   prop_hom_right := W.comp_mem _ _ f.prop_hom_right g.prop_hom_right
 
 中文:
-定义 Hom.comp
-  签名: [Q.IsStableUnderComposition] [W.IsStableUnderComposition] {X Y Z : P.Comma L R Q W}
+定义 态射.comp
+  签名: [Q.是StableUnderComposition] [W.是StableUnderComposition] {X Y Z : P.交换a L R Q W}
   定义体: f.left ≫ g.left
   right := f.right ≫ g.right
   prop_hom_left := Q.comp_mem _ _ f.prop_hom_left g.prop_hom_left
@@ -765,7 +765,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (P.Comma L R Q W)
+  签名: 范畴 (P.交换a L R Q W)
   定义体: X.Hom Y
   id X := X.id
   comp f g := f.comp g
@@ -788,7 +788,7 @@ lemma toCommaMorphism_eq_hom
 
 中文:
 引理 toCommaMorphism_eq_hom
-  条件: {X Y : P.Comma L R Q W} (f : X ⟶ Y)
+  条件: {X Y : P.交换a L R Q W} (f : X ⟶ Y)
   结论: f.toCommaMorphism = f.hom
   证明: rfl
 
@@ -811,8 +811,8 @@ lemma Hom.ext'
 @[simp]
 
 中文:
-引理 Hom.ext'
-  条件: {X Y : P.Comma L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom)
+引理 态射.ext'
+  条件: {X Y : P.交换a L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom)
   证明: Comma.Hom.ext
   (congrArg CommaMorphism.left h)
   (congrArg CommaMorphism.right h)
@@ -838,7 +838,7 @@ lemma id_hom
 
 中文:
 引理 id_hom
-  条件: (X : P.Comma L R Q W)
+  条件: (X : P.交换a L R Q W)
   结论: (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma
   证明: rfl
 
@@ -859,7 +859,7 @@ lemma comp_hom
 
 中文:
 引理 comp_hom
-  条件: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[reassoc]
@@ -880,7 +880,7 @@ lemma comp_left
 
 中文:
 引理 comp_left
-  条件: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[reassoc]
@@ -899,7 +899,7 @@ lemma comp_right
 
 中文:
 引理 comp_right
-  条件: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma comp_right {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -919,7 +919,7 @@ definition homFromCommaOfIsIso
 
 中文:
 定义 homFromCommaOfIsIso
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
+  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
   定义体: i
   prop_hom_left := Q.of_isIso i.left
   prop_hom_right := W.of_isIso i.right
@@ -944,7 +944,7 @@ instance [Q.RespectsIso]
 
 中文:
 实例 [Q.RespectsIso]
-  签名: [W.RespectsIso] {X Y : P.Comma L R Q W} (i : X.toComma ⟶ Y.toComma)
+  签名: [W.RespectsIso] {X Y : P.交换a L R Q W} (i : X.toComma ⟶ Y.toComma)
   定义体: by
   constructor
   use homFromCommaOfIsIso (inv i)
@@ -972,7 +972,7 @@ definition isoFromComma
 
 中文:
 定义 isoFromComma
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
+  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
   定义体: homFromCommaOfIsIso i.hom
   inv := homFromCommaOfIsIso i.inv
 
@@ -996,7 +996,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (l : X.left ≅ Y.left)
+  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W} (l : X.left ≅ Y.left)
   定义体: isoFromComma (CategoryTheory.Comma.isoMk l r h)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Comma.isoMk, cat_disch, isoFromComma
@@ -1021,7 +1021,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : P.Comma L R Q W ⥤ Comma L R where
+  签名: : P.交换a L R Q W ⥤ 交换a L R where
   定义体: X.toComma
   map f := f.hom
 
@@ -1041,7 +1041,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget L R P Q W).Faithful
+  签名: (forget L R P Q W).忠实
   定义体: Comma.Hom.ext'
 
 Depends on / 依赖: Comma.Hom.ext
@@ -1064,7 +1064,7 @@ lemma hom_homFromCommaOfIsIso
 
 中文:
 引理 hom_homFromCommaOfIsIso
-  结论: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
+  结论: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
   证明: rfl
 -/
 lemma hom_homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
@@ -1085,7 +1085,7 @@ lemma inv_hom
 
 中文:
 引理 inv_hom
-  条件: {X Y : P.Comma L R Q W} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : P.交换a L R Q W} (f : X ⟶ Y) [是同构 f]
   结论: (inv f).hom = inv f.hom
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -1137,7 +1137,7 @@ definition forgetFullyFaithful
 
 中文:
 定义 forgetFullyFaithful
-  签名: : (forget L R P ⊤ ⊤).FullyFaithful where
+  签名: : (forget L R P ⊤ ⊤).满忠实 where
   定义体: ⟨f, trivial, trivial⟩
 -/
 def forgetFullyFaithful : (forget L R P ⊤ ⊤).FullyFaithful where
@@ -1153,7 +1153,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget L R P ⊤ ⊤).Full
+  签名: (forget L R P ⊤ ⊤).满
   定义体: Functor.FullyFaithful.full (forgetFullyFaithful L R P)
 
 Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.full, forgetFullyFaithful
@@ -1180,7 +1180,7 @@ lemma eqToHom_left
 
 中文:
 引理 eqToHom_left
-  条件: {X Y : P.Comma L R Q W} (h : X = Y)
+  条件: {X Y : P.交换a L R Q W} (h : X = Y)
   证明: by
   subst h
   rfl
@@ -1205,7 +1205,7 @@ lemma eqToHom_right
 
 中文:
 引理 eqToHom_right
-  条件: {X Y : P.Comma L R Q W} (h : X = Y)
+  条件: {X Y : P.交换a L R Q W} (h : X = Y)
   证明: by
   subst h
   rfl
@@ -1235,7 +1235,7 @@ definition changeProp
 
 中文:
 定义 changeProp
-  签名: : P.Comma L R Q W ⥤ P'.Comma L R Q' W' where
+  签名: : P.交换a L R Q W ⥤ P'.交换a L R Q' W' where
   定义体: ⟨X.toComma, hP _ X.2⟩
   map f := ⟨f.toCommaMorphism, hQ _ f.2, hW _ f.3⟩
 
@@ -1274,7 +1274,7 @@ instance :
 
 中文:
 实例 :
-  签名: (change命题 L R hP hQ hW).Faithful
+  签名: (changeProp L R hP hQ hW).忠实
   定义体: by ext : 1; exact congr($(h).hom)
 -/
 instance : (changeProp L R hP hQ hW).Faithful where
@@ -1290,7 +1290,7 @@ instance :
 
 中文:
 实例 :
-  签名: (change命题 (Q := Q) (W := W) L R hP le_rfl le_rfl).Full
+  签名: (changeProp (Q := Q) (W := W) L R hP le_rfl le_rfl).满
   定义体: (fullyFaithfulChangeProp ..).full
 
 Depends on / 依赖: le_rfl
@@ -1323,7 +1323,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {C : 类型} [Category* C] (F : C ⥤ Comma L R)
+  签名: {C : 类型} [范畴* C] (F : C ⥤ 交换a L R)
   定义体: { __ := F.obj X
       prop := hP X }
   map {X Y} f :=
@@ -1360,7 +1360,7 @@ definition mapLeft
 
 中文:
 定义 mapLeft
-  签名: (l : L₁ ⟶ L₂) (hl : 对任意 X : P.Comma L₂ R Q W, P (l.app X.left ≫ X.hom))
+  签名: (l : L₁ ⟶ L₂) (hl : 对任意 X : P.交换a L₂ R Q W, P (l.app X.left ≫ X.hom))
   定义体: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapLeft R l) hl
     (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
 
@@ -1509,7 +1509,7 @@ definition mapRight
 
 中文:
 定义 mapRight
-  签名: (r : R₁ ⟶ R₂) (hr : 对任意 X : P.Comma L R₁ Q W, P (X.hom ≫ r.app X.right))
+  签名: (r : R₁ ⟶ R₂) (hr : 对任意 X : P.交换a L R₁ Q W, P (X.hom ≫ r.app X.right))
   定义体: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapRight L r) hr
     (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
 
@@ -1664,8 +1664,8 @@ abbreviation Arrow
   body: P.Comma (𝟭 T) (𝟭 T) Q W
 
 中文:
-缩写 Arrow
-  签名: : Type _
+缩写 箭头
+  签名: : 类型 _
   定义体: P.Comma (𝟭 T) (𝟭 T) Q W
 -/
 protected abbrev Arrow : Type _ := P.Comma (𝟭 T) (𝟭 T) Q W
@@ -1679,8 +1679,8 @@ abbreviation Arrow.forget
   body: Comma.forget (𝟭 T) (𝟭 T) P Q W
 
 中文:
-缩写 Arrow.forget
-  签名: : P.Arrow Q W ⥤ Arrow T
+缩写 箭头.forget
+  签名: : P.箭头 Q W ⥤ 箭头 T
   定义体: Comma.forget (𝟭 T) (𝟭 T) P Q W
 -/
 protected abbrev Arrow.forget : P.Arrow Q W ⥤ Arrow T := Comma.forget (𝟭 T) (𝟭 T) P Q W
@@ -1695,7 +1695,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Arrow.forget P Q W).Faithful
+  签名: (箭头.forget P Q W).忠实
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
 
 Depends on / 依赖: Comma.forget, Faithful, forget
@@ -1711,7 +1711,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Arrow.forget P ⊤ ⊤).Full
+  签名: (箭头.forget P ⊤ ⊤).满
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
 
 Depends on / 依赖: Comma.forget, forget
@@ -1727,8 +1727,8 @@ lemma Arrow.forget_comp_leftFunc_map
   proof: rfl
 
 中文:
-引理 Arrow.forget_comp_leftFunc_map
-  条件: {A B : P.Arrow Q W} (f : A ⟶ B)
+引理 箭头.forget_comp_leftFunc_map
+  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
   证明: rfl
 -/
 lemma Arrow.forget_comp_leftFunc_map {A B : P.Arrow Q W} (f : A ⟶ B) :
@@ -1743,8 +1743,8 @@ lemma Arrow.forget_comp_rightFunc_map
   proof: rfl
 
 中文:
-引理 Arrow.forget_comp_rightFunc_map
-  条件: {A B : P.Arrow Q W} (f : A ⟶ B)
+引理 箭头.forget_comp_rightFunc_map
+  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
   证明: rfl
 -/
 lemma Arrow.forget_comp_rightFunc_map {A B : P.Arrow Q W} (f : A ⟶ B) :
@@ -1765,8 +1765,8 @@ definition Arrow.Hom.mk
   prop_hom_right := hfr
 
 中文:
-定义 Arrow.Hom.mk
-  签名: {A B : P.Arrow Q W} (f : (Arrow.forget _ _ _).obj A ⟶ (Arrow.forget _ _ _).obj B)
+定义 箭头.态射.mk
+  签名: {A B : P.箭头 Q W} (f : (箭头.forget _ _ _).obj A ⟶ (箭头.forget _ _ _).obj B)
   定义体: f
   prop_hom_left := hfl
   prop_hom_right := hfr
@@ -1791,7 +1791,7 @@ definition Arrow.mk
   prop := hf
 
 中文:
-定义 Arrow.mk
+定义 箭头.mk
   签名: {A B : T} (f : A ⟶ B) (hf : P f)
   定义体: A
   right := B
@@ -1817,8 +1817,8 @@ definition Arrow.homMk
   prop_hom_right := hg
 
 中文:
-定义 Arrow.homMk
-  签名: {A B : P.Arrow Q W} (f : A.left ⟶ B.left) (g : A.right ⟶ B.right)
+定义 箭头.homMk
+  签名: {A B : P.箭头 Q W} (f : A.left ⟶ B.left) (g : A.right ⟶ B.right)
   定义体: CategoryTheory.Arrow.homMk f g w
   prop_hom_left := hf
   prop_hom_right := hg
@@ -1843,8 +1843,8 @@ definition Arrow.isoMk
 @[ext]
 
 中文:
-定义 Arrow.isoMk
-  签名: [Q.RespectsIso] [W.RespectsIso] {A B : P.Arrow Q W}
+定义 箭头.isoMk
+  签名: [Q.RespectsIso] [W.RespectsIso] {A B : P.箭头 Q W}
   定义体: Comma.isoMk f g
 
 @[ext]
@@ -1869,8 +1869,8 @@ lemma Arrow.Hom.ext
 @[reassoc]
 
 中文:
-引理 Arrow.Hom.ext
-  结论: {A B : P.Arrow Q W} {f g : A ⟶ B}
+引理 箭头.态射.ext
+  结论: {A B : P.箭头 Q W} {f g : A ⟶ B}
   证明: by
   ext
   · exact hl
@@ -1894,8 +1894,8 @@ lemma Arrow.w
   proof: f.w
 
 中文:
-引理 Arrow.w
-  条件: {A B : P.Arrow Q W} (f : A ⟶ B)
+引理 箭头.w
+  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
   证明: f.w
 -/
 lemma Arrow.w {A B : P.Arrow Q W} (f : A ⟶ B) :
@@ -1915,7 +1915,7 @@ abbreviation Arrow.changeProp
   body: Comma.changeProp _ _ hPP' hQQ' hWW'
 
 中文:
-缩写 Arrow.changeProp
+缩写 箭头.changeProp
   签名: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W')
   定义体: Comma.changeProp _ _ hPP' hQQ' hWW'
 
@@ -1936,8 +1936,8 @@ lemma Arrow.changeProp_obj_left
   proof: rfl
 
 中文:
-引理 Arrow.changeProp_obj_left
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
+引理 箭头.changeProp_obj_left
+  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
   证明: rfl
 -/
 lemma Arrow.changeProp_obj_left (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
@@ -1954,8 +1954,8 @@ lemma Arrow.changeProp_obj_right
   proof: rfl
 
 中文:
-引理 Arrow.changeProp_obj_right
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
+引理 箭头.changeProp_obj_right
+  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
   证明: rfl
 -/
 lemma Arrow.changeProp_obj_right (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
@@ -1972,8 +1972,8 @@ lemma Arrow.changeProp_obj_hom
   proof: rfl
 
 中文:
-引理 Arrow.changeProp_obj_hom
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
+引理 箭头.changeProp_obj_hom
+  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
   证明: rfl
 -/
 lemma Arrow.changeProp_obj_hom (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
@@ -1997,7 +1997,7 @@ abbreviation Over
 
 中文:
 缩写 Over
-  签名: : Type _
+  签名: : 类型 _
   定义体: P.Comma (Functor.id T) (Functor.fromPUnit.{0} X) Q ⊤
 -/
 protected abbrev Over : Type _ :=
@@ -2029,7 +2029,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Over.forget P Q X).Faithful
+  签名: (Over.forget P Q X).忠实
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
 
 Depends on / 依赖: Comma.forget, Faithful, forget
@@ -2045,7 +2045,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Over.forget P ⊤ X).Full
+  签名: (Over.forget P ⊤ X).满
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
 
 Depends on / 依赖: Comma.forget, forget
@@ -2083,7 +2083,7 @@ definition Over.Hom.mk
   prop_hom_right := trivial
 
 中文:
-定义 Over.Hom.mk
+定义 Over.态射.mk
   签名: {A B : P.Over Q X}
   定义体: f
   prop_hom_left := hf
@@ -2182,7 +2182,7 @@ lemma Over.Hom.ext
   · simp
 
 中文:
-引理 Over.Hom.ext
+引理 Over.态射.ext
   条件: {A B : P.Over Q X} {f g : A ⟶ B} (h : f.left = g.left)
   结论: f = g
   证明: by
@@ -2300,7 +2300,7 @@ abbreviation Under
 
 中文:
 缩写 Under
-  签名: : Type _
+  签名: : 类型 _
   定义体: P.Comma (Functor.fromPUnit.{0} X) (Functor.id T) ⊤ Q
 -/
 protected abbrev Under : Type _ :=
@@ -2332,7 +2332,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Under.forget P Q X).Faithful
+  签名: (Under.forget P Q X).忠实
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
 
 Depends on / 依赖: Comma.forget, Faithful, forget
@@ -2348,7 +2348,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Under.forget P ⊤ X).Full
+  签名: (Under.forget P ⊤ X).满
   定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
 
 Depends on / 依赖: Comma.forget, forget
@@ -2386,7 +2386,7 @@ definition Under.Hom.mk
   prop_hom_right := hf
 
 中文:
-定义 Under.Hom.mk
+定义 Under.态射.mk
   签名: {A B : P.Under Q X}
   定义体: f
   prop_hom_left := trivial
@@ -2485,7 +2485,7 @@ lemma Under.Hom.ext
   · exact h
 
 中文:
-引理 Under.Hom.ext
+引理 Under.态射.ext
   条件: {A B : P.Under Q X} {f g : A ⟶ B} (h : f.right = g.right)
   结论: f = g
   证明: by
@@ -2534,7 +2534,7 @@ abbreviation CostructuredArrow
 
 中文:
 缩写 CostructuredArrow
-  签名: (P : Morphism命题erty D) (Q : Morphism命题erty C)
+  签名: (P : MorphismProperty D) (Q : MorphismProperty C)
   定义体: P.Comma F (Functor.fromPUnit.{0} X) Q ⊤
 -/
 protected abbrev CostructuredArrow (P : MorphismProperty D) (Q : MorphismProperty C)
@@ -2618,7 +2618,7 @@ lemma CostructuredArrow.Hom.ext
   ext <;> simp [h]
 
 中文:
-引理 CostructuredArrow.Hom.ext
+引理 CostructuredArrow.态射.ext
   结论: {A B : P.CostructuredArrow Q F X} {f g : A ⟶ B}
   证明: by
   ext <;> simp [h]
@@ -2706,8 +2706,8 @@ instance [F.Faithful]
   exact F.map_injective congr($(hfg).left)
 
 中文:
-实例 [F.Faithful]
-  签名: : (CostructuredArrow.toOver P F X).Faithful
+实例 [F.忠实]
+  签名: : (CostructuredArrow.toOver P F X).忠实
   定义体: by
   constructor
   intro A B f g hfg
@@ -2737,8 +2737,8 @@ instance [F.Full]
   · ext; simp
 
 中文:
-实例 [F.Full]
-  签名: : (CostructuredArrow.toOver P F X).Full
+实例 [F.满]
+  签名: : (CostructuredArrow.toOver P F X).满
   定义体: by
   constructor
   intro A B f
@@ -2774,7 +2774,7 @@ instance HasFactorization.over
     }⟩
 
 中文:
-实例 HasFactorization.over
+实例 有分解.over
   定义体: by
     let hf := W₁.factorizationData W₂ f.left
     exact ⟨{

@@ -73,7 +73,7 @@ theorem floor_div_ofNat
   proof: floor_div_natCast a n
 
 中文:
-定理 floor_div_ofNat
+定理 floor_div_of自然数
   条件: (a : K) (n : 自然数) [n.AtLeastTwo]
   证明: floor_div_natCast a n
 
@@ -308,8 +308,8 @@ theorem IsNat.natFloor
   exact ⟨by simp⟩
 
 中文:
-定理 IsNat.natFloor
-  结论: {R : 类型} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是自然数.natFloor
+  结论: {R : 类型} [半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rintro ⟨⟨⟩⟩
   exact ⟨by simp⟩
@@ -330,8 +330,8 @@ theorem IsInt.natFloor
 exact ⟨Nat.floor_of_nonpos by simp⟩
 
 中文:
-定理 IsInt.natFloor
-  结论: {R : 类型} [Ring R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是整数.natFloor
+  结论: {R : 类型} [环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rintro ⟨⟨⟩⟩
 exact ⟨Nat.floor_of_nonpos by simp⟩
@@ -354,8 +354,8 @@ theorem IsNNRat.natFloor
   rw [← hres]; rw [h.to_eq rfl rfl]; rw [Nat.floor_div_eq_div]; rw [Nat.cast_id]
 
 中文:
-定理 IsNNRat.natFloor
-  结论: {R : 类型} [Semifield R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是NNRat.natFloor
+  结论: {R : 类型} [半域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   constructor
   rw [← hres]; rw [h.to_eq rfl rfl]; rw [Nat.floor_div_eq_div]; rw [Nat.cast_id]
@@ -381,8 +381,8 @@ theorem IsRat.natFloor
   exact lt_of_le_of_lt (by simp [mul_nonneg]) one_pos
 
 中文:
-定理 IsRat.natFloor
-  结论: {R : 类型} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是有理数.natFloor
+  结论: {R : 类型} [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rcases h with ⟨hd, rfl⟩
   constructor

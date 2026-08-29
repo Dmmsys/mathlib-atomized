@@ -58,7 +58,7 @@ definition divisors
 
 中文:
 定义 divisors
-  签名: : Finset 自然数
+  签名: : 有限集 自然数
   定义体: {d in Ico 1 (n + 1) | d ∣ n}
 -/
 def divisors : Finset Nat := {d in Ico 1 (n + 1) | d ∣ n}
@@ -73,7 +73,7 @@ definition properDivisors
 
 中文:
 定义 properDivisors
-  签名: : Finset 自然数
+  签名: : 有限集 自然数
   定义体: {d in Ico 1 n | d ∣ n}
 -/
 def properDivisors : Finset Nat := {d in Ico 1 n | d ∣ n}
@@ -89,7 +89,7 @@ definition divisorsAntidiagonal
 
 中文:
 定义 divisorsAntidiagonal
-  签名: : Finset (自然数 × 自然数)
+  签名: : 有限集 (自然数 × 自然数)
   定义体: (Icc 1 n).filterMap (fun x => let y := n / x; if x * y = n then some (x, y) else none)
     fun x₁ x₂ (x, y) hx₁ hx₂ => by aesop
 
@@ -994,7 +994,7 @@ lemma nonempty_divisors
 
 中文:
 引理 nonempty_divisors
-  结论: (divisors n).Nonempty ↔ n != 0
+  结论: (divisors n).非空 ↔ n != 0
   证明: ⟨fun ⟨m, hm⟩ hn => by simp [hn] at hm, fun hn => ⟨1, one_mem_divisors.2 hn⟩⟩
 
 @[simp]
@@ -1186,7 +1186,7 @@ lemma sup_divisors_id
 中文:
 引理 sup_divisors_id
   条件: (n : 自然数)
-  结论: n.divisors.sup id = n
+  结论: n.divisors.上确界 id = n
   证明: by
   refine le_antisymm (Finset.sup_le fun _ => divisor_le) ?_
   rcases Decidable.eq_or_ne n 0 with rfl | hn
@@ -1261,7 +1261,7 @@ lemma mem_properDivisors_iff_exists
 @[simp]
 
 中文:
-引理 mem_properDivisors_iff_exists
+引理 mem_properDivisors_iff_存在
   条件: {m n : 自然数} (hn : n != 0)
   证明: by
   refine ⟨fun h => ⟨n / m, one_lt_div_of_mem_properDivisors h, ?_⟩, ?_⟩
@@ -1296,7 +1296,7 @@ lemma nonempty_properDivisors
 
 中文:
 引理 nonempty_properDivisors
-  结论: n.properDivisors.Nonempty ↔ 1 < n
+  结论: n.properDivisors.非空 ↔ 1 < n
   证明: ⟨fun ⟨_m, hm⟩ => one_lt_of_mem_properDivisors hm, fun hn =>
     ⟨1, one_mem_properDivisors_iff_one_lt.2 hn⟩⟩
 
@@ -1525,7 +1525,7 @@ theorem image_fst_divisorsAntidiagonal
 
 中文:
 定理 image_fst_divisorsAntidiagonal
-  结论: (divisorsAntidiagonal n).image Prod.fst = divisors n
+  结论: (divisorsAntidiagonal n).像 积类型.fst = divisors n
   证明: by
   ext
   simp [Dvd.dvd, @eq_comm _ n (_ * _)]
@@ -1551,7 +1551,7 @@ theorem image_snd_divisorsAntidiagonal
 
 中文:
 定理 image_snd_divisorsAntidiagonal
-  结论: (divisorsAntidiagonal n).image Prod.snd = divisors n
+  结论: (divisorsAntidiagonal n).像 积类型.snd = divisors n
   证明: by
   rw [← map_swap_divisorsAntidiagonal]; rw [map_eq_image]; rw [image_image]
   exact image_fst_divisorsAntidiagonal
@@ -1669,7 +1669,7 @@ definition Perfect
   body: ∑ i in properDivisors n, i = n ∧ 0 < n
 
 中文:
-定义 Perfect
+定义 完美
   签名: (n : 自然数)
   定义体: ∑ i in properDivisors n, i = n ∧ 0 < n
 
@@ -1690,7 +1690,7 @@ theorem perfect_iff_sum_properDivisors
 中文:
 定理 perfect_iff_sum_properDivisors
   条件: (h : 0 < n)
-  结论: Perfect n ↔ ∑ i in properDivisors n, i = n
+  结论: 完美 n ↔ ∑ i in properDivisors n, i = n
   证明: and_iff_left h
 
 Depends on / 依赖: and_iff_left
@@ -1739,7 +1739,7 @@ theorem mem_divisors_prime_pow
 
 中文:
 定理 mem_divisors_prime_pow
-  条件: {p : 自然数} (pp : p.Prime) (k : 自然数) {x : 自然数}
+  条件: {p : 自然数} (pp : p.素) (k : 自然数) {x : 自然数}
   证明: by
   rw [mem_divisors]; rw [Nat.dvd_prime_pow pp]; rw [and_iff_left (ne_of_gt (pow_pos pp.pos k))]
 
@@ -1761,8 +1761,8 @@ theorem Prime.divisors
   rw [mem_divisors]; rw [dvd_prime pp]; rw [and_iff_left pp.ne_zero]; rw [Finset.mem_insert]; rw [Finset.mem_singleton]
 
 中文:
-定理 Prime.divisors
-  条件: {p : 自然数} (pp : p.Prime)
+定理 素.divisors
+  条件: {p : 自然数} (pp : p.素)
   结论: divisors p = {1, p}
   证明: by
   ext
@@ -1785,8 +1785,8 @@ theorem Prime.properDivisors
   rw [← erase_insert self_notMem_properDivisors]; rw [insert_self_properDivisors pp.ne_zero]; rw [pp.divisors]; rw [pair_comm]; rw [erase_insert fun con => pp.ne_one (mem_singleton.1 con)]
 
 中文:
-定理 Prime.properDivisors
-  条件: {p : 自然数} (pp : p.Prime)
+定理 素.properDivisors
+  条件: {p : 自然数} (pp : p.素)
   结论: properDivisors p = {1}
   证明: by
   rw [← erase_insert self_notMem_properDivisors]; rw [insert_self_properDivisors pp.ne_zero]; rw [pp.divisors]; rw [pair_comm]; rw [erase_insert fun con => pp.ne_one (mem_singleton.1 con)]
@@ -1809,7 +1809,7 @@ theorem divisors_prime_pow
 
 中文:
 定理 divisors_prime_pow
-  条件: {p : 自然数} (pp : p.Prime) (k : 自然数)
+  条件: {p : 自然数} (pp : p.素) (k : 自然数)
   证明: by
   ext a
   rw [mem_divisors_prime_pow pp]
@@ -1835,7 +1835,7 @@ theorem divisors_injective
 
 中文:
 定理 divisors_injective
-  结论: Function.Injective divisors
+  结论: 函数.单射 divisors
   证明: Function.LeftInverse.injective sup_divisors_id
 
 @[simp]
@@ -1887,7 +1887,7 @@ theorem eq_properDivisors_of_subset_of_sum_eq_sum
 
 中文:
 定理 eq_properDivisors_of_subset_of_sum_eq_sum
-  条件: {s : Finset 自然数} (hsub : s subseteq n.properDivisors)
+  条件: {s : 有限集 自然数} (hsub : s subseteq n.properDivisors)
   证明: by
   cases n
   · rw [properDivisors_zero, subset_empty] at hsub
@@ -1984,8 +1984,8 @@ theorem Prime.prod_properDivisors
 @[to_additive (attr := simp)]
 
 中文:
-定理 Prime.prod_properDivisors
-  条件: {α : 类型} [CommMonoid α] {p : 自然数} {f : 自然数 -> α} (h : p.Prime)
+定理 素.prod_properDivisors
+  条件: {α : 类型} [交换幺半群 α] {p : 自然数} {f : 自然数 -> α} (h : p.素)
   证明: by simp [h.properDivisors]
 
 @[to_additive (attr := simp)]
@@ -2006,8 +2006,8 @@ theorem Prime.prod_divisors
   rw [← cons_self_properDivisors h.ne_zero]; rw [prod_cons]; rw [h.prod_properDivisors]
 
 中文:
-定理 Prime.prod_divisors
-  条件: {α : 类型} [CommMonoid α] {p : 自然数} {f : 自然数 -> α} (h : p.Prime)
+定理 素.prod_divisors
+  条件: {α : 类型} [交换幺半群 α] {p : 自然数} {f : 自然数 -> α} (h : p.素)
   证明: by
   rw [← cons_self_properDivisors h.ne_zero]; rw [prod_cons]; rw [h.prod_properDivisors]
 
@@ -2032,7 +2032,7 @@ refine ⟨Nat.succ_le_iff.mpr one_mem_properDivisors_iff_one_lt.mp (by simp [h])
 
 中文:
 定理 properDivisors_eq_singleton_one_iff_prime
-  结论: n.properDivisors = {1} ↔ n.Prime
+  结论: n.properDivisors = {1} ↔ n.素
   证明: by
   refine ⟨fun h => ?_, Prime.properDivisors⟩
   rw [Nat.prime_def_lt]
@@ -2068,7 +2068,7 @@ theorem sum_properDivisors_eq_one_iff_prime
 
 中文:
 定理 sum_properDivisors_eq_one_iff_prime
-  结论: ∑ x in n.properDivisors, x = 1 ↔ n.Prime
+  结论: ∑ x in n.properDivisors, x = 1 ↔ n.素
   证明: by
   rcases n with - | n
   · simp [Nat.not_prime_zero]
@@ -2112,7 +2112,7 @@ theorem mem_properDivisors_prime_pow
 
 中文:
 定理 mem_properDivisors_prime_pow
-  条件: {p : 自然数} (pp : p.Prime) (k : 自然数) {x : 自然数}
+  条件: {p : 自然数} (pp : p.素) (k : 自然数) {x : 自然数}
   证明: by
   rw [mem_properDivisors]; rw [Nat.dvd_prime_pow pp]
   constructor
@@ -2146,7 +2146,7 @@ theorem properDivisors_prime_pow
 
 中文:
 定理 properDivisors_prime_pow
-  条件: {p : 自然数} (pp : p.Prime) (k : 自然数)
+  条件: {p : 自然数} (pp : p.素) (k : 自然数)
   证明: by
   ext a
   simp [mem_properDivisors_prime_pow pp, eq_comm]
@@ -2174,7 +2174,7 @@ theorem prod_properDivisors_prime_pow
 
 中文:
 定理 prod_properDivisors_prime_pow
-  结论: {α : 类型} [CommMonoid α] {k p : 自然数} {f : 自然数 -> α}
+  结论: {α : 类型} [交换幺半群 α] {k p : 自然数} {f : 自然数 -> α}
   证明: by
   simp [h, properDivisors_prime_pow]
 
@@ -2200,7 +2200,7 @@ theorem prod_divisors_prime_pow
 
 中文:
 定理 prod_divisors_prime_pow
-  条件: {α : 类型} [CommMonoid α] {k p : 自然数} {f : 自然数 -> α} (h : p.Prime)
+  条件: {α : 类型} [交换幺半群 α] {k p : 自然数} {f : 自然数 -> α} (h : p.素)
   证明: by
   simp [h, divisors_prime_pow]
 
@@ -2227,7 +2227,7 @@ theorem prod_divisorsAntidiagonal
 
 中文:
 定理 prod_divisorsAntidiagonal
-  条件: {M : 类型} [CommMonoid M] (f : 自然数 -> 自然数 -> M) {n : 自然数}
+  条件: {M : 类型} [交换幺半群 M] (f : 自然数 -> 自然数 -> M) {n : 自然数}
   证明: by
   rw [← map_div_right_divisors]; rw [Finset.prod_map]
   rfl
@@ -2254,7 +2254,7 @@ theorem prod_divisorsAntidiagonal'
 
 中文:
 定理 prod_divisorsAntidiagonal'
-  条件: {M : 类型} [CommMonoid M] (f : 自然数 -> 自然数 -> M) {n : 自然数}
+  条件: {M : 类型} [交换幺半群 M] (f : 自然数 -> 自然数 -> M) {n : 自然数}
   证明: by
   rw [← map_swap_divisorsAntidiagonal]; rw [Finset.prod_map]
   exact prod_divisorsAntidiagonal fun i j => f j i
@@ -2362,7 +2362,7 @@ theorem prod_div_divisors
 
 中文:
 定理 prod_div_divisors
-  条件: {α : 类型} [CommMonoid α] (n : 自然数) (f : 自然数 -> α)
+  条件: {α : 类型} [交换幺半群 α] (n : 自然数) (f : 自然数 -> α)
   证明: by
   by_cases hn : n = 0; · simp [hn]
   rw [← prod_image]
@@ -2534,7 +2534,7 @@ definition divisorsAntidiag
 
 中文:
 定义 divisorsAntidiag
-  签名: : (z : 整数) -> Finset (整数 × 整数)
+  签名: : (z : 整数) -> 有限集 (整数 × 整数)
   定义体: n.divisorsAntidiagonal
 (s.map <| .prodMap natCast natCast).disjUnion (s.map <| .prodMap negNatCast negNatCast) by
       simp +contextual [s, disjoint_left, eq_comm]
@@ -2716,7 +2716,7 @@ lemma nonempty_divisors
 
 中文:
 引理 nonempty_divisors
-  结论: (divisors z).Nonempty ↔ z != 0
+  结论: (divisors z).非空 ↔ z != 0
   证明: ⟨fun ⟨z, hz⟩ hx => by simp [hx] at hz, fun hx => ⟨1, one_mem_divisors.mpr hx⟩⟩
 
 @[simp]
@@ -2867,7 +2867,7 @@ theorem image_fst_divisorsAntidiag
 
 中文:
 定理 image_fst_divisorsAntidiag
-  结论: z.divisorsAntidiag.image Prod.fst = z.divisors
+  结论: z.divisorsAntidiag.像 积类型.fst = z.divisors
   证明: by
   ext
   simp [Eq.comm, dvd_def]
@@ -2890,7 +2890,7 @@ theorem image_snd_divisorsAntidiag
 
 中文:
 定理 image_snd_divisorsAntidiag
-  结论: z.divisorsAntidiag.image Prod.snd = z.divisors
+  结论: z.divisorsAntidiag.像 积类型.snd = z.divisors
   证明: by
   ext
   simp [Eq.comm, mul_comm, dvd_def]
@@ -3169,7 +3169,7 @@ lemma divisorsAntidiag_ofNat
   proof: rfl
 
 中文:
-引理 divisorsAntidiag_ofNat
+引理 divisorsAntidiag_of自然数
   条件: (n : 自然数)
   证明: rfl
 -/

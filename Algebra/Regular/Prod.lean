@@ -31,7 +31,7 @@ theorem Prod.isLeftRegular_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 Prod.isLeftRegular_mk
+定理 积类型.isLeftRegular_mk
   条件: {a : R} {b : S}
   证明: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Prod.map_injective
 
@@ -55,7 +55,7 @@ theorem Prod.isRightRegular_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 Prod.isRightRegular_mk
+定理 积类型.isRightRegular_mk
   条件: {a : R} {b : S}
   证明: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Iff.symm .symm Prod.map_injective
 
@@ -81,9 +81,9 @@ theorem Prod.isRegular_mk
 @[to_additive]
 
 中文:
-定理 Prod.isRegular_mk
+定理 积类型.isRegular_mk
   条件: {a : R} {b : S}
-  结论: IsRegular (a, b) ↔ IsRegular a ∧ IsRegular b
+  结论: 是正则 (a, b) ↔ 是正则 a ∧ 是正则 b
   证明: by
   simp [isRegular_iff, and_and_and_comm]
 
@@ -150,8 +150,8 @@ theorem IsRegular.prodMk
   proof: Prod.isRegular_mk.2 ⟨ha, hb⟩
 
 中文:
-定理 IsRegular.prodMk
-  条件: {a : R} {b : S} (ha : IsRegular a) (hb : IsRegular b)
+定理 是正则.prodMk
+  条件: {a : R} {b : S} (ha : 是正则 a) (hb : 是正则 b)
   证明: Prod.isRegular_mk.2 ⟨ha, hb⟩
 
 Depends on / 依赖: Prod.isRegular_mk, isRegular_mk
@@ -171,8 +171,8 @@ theorem Prod.isSMulRegular_iff
   proof: Prod.map_injective
 
 中文:
-定理 Prod.isSMulRegular_iff
-  条件: [SMul α R] [SMul α S] {r : α} [Nonempty R] [Nonempty S]
+定理 积类型.isSMulRegular_iff
+  条件: [标量乘法 α R] [标量乘法 α S] {r : α} [非空 R] [非空 S]
   证明: Prod.map_injective
 
 Depends on / 依赖: Prod.map_injective, map_injective

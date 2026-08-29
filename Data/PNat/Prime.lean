@@ -29,7 +29,7 @@ definition toPNat
   body: fun p => ⟨(p : Nat), p.property.pos⟩
 
 中文:
-定义 toPNat
+定义 toP自然数
   签名: : 自然数.Primes -> 自然数+
   定义体: fun p => ⟨(p : Nat), p.property.pos⟩
 -/
@@ -47,7 +47,7 @@ instance coePNat
 @[norm_cast]
 
 中文:
-实例 coePNat
+实例 coeP自然数
   签名: : Coe 自然数.Primes 自然数+
   定义体: ⟨toPNat⟩
 
@@ -90,7 +90,7 @@ theorem coe_pnat_injective
 
 中文:
 定理 coe_pnat_injective
-  结论: Function.Injective ((↑) : 自然数.Primes -> 自然数+)
+  结论: 函数.单射 ((↑) : 自然数.Primes -> 自然数+)
   证明: fun p q h =>
   Subtype.ext (by injection h)
 
@@ -135,7 +135,7 @@ definition gcd
   body: ⟨Nat.gcd (n : Nat) (m : Nat), Nat.gcd_pos_of_pos_left (m : Nat) n.pos⟩
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: (n m : 自然数+)
   定义体: ⟨Nat.gcd (n : Nat) (m : Nat), Nat.gcd_pos_of_pos_left (m : Nat) n.pos⟩
 
@@ -158,7 +158,7 @@ definition lcm
 @[simp, norm_cast]
 
 中文:
-定义 lcm
+定义 最小公倍数
   签名: (n m : 自然数+)
   定义体: ⟨Nat.lcm (n : Nat) (m : Nat), by
     let h := mul_pos n.pos m.pos
@@ -190,7 +190,7 @@ theorem gcd_coe
 中文:
 定理 gcd_coe
   条件: (n m : 自然数+)
-  结论: (gcd n m : 自然数) = 自然数.gcd n m
+  结论: (最大公约数 n m : 自然数) = 自然数.最大公约数 n m
   证明: rfl
 
 @[simp, norm_cast]
@@ -211,7 +211,7 @@ theorem lcm_coe
 中文:
 定理 lcm_coe
   条件: (n m : 自然数+)
-  结论: (lcm n m : 自然数) = 自然数.lcm n m
+  结论: (最小公倍数 n m : 自然数) = 自然数.最小公倍数 n m
   证明: rfl
 -/
 theorem lcm_coe (n m : Nat+) : (lcm n m : Nat) = Nat.lcm n m :=
@@ -229,7 +229,7 @@ theorem gcd_dvd_left
 中文:
 定理 gcd_dvd_left
   条件: (n m : 自然数+)
-  结论: gcd n m ∣ n
+  结论: 最大公约数 n m ∣ n
   证明: dvd_iff.2 (Nat.gcd_dvd_left (n : Nat) (m : Nat))
 
 Depends on / 依赖: Nat.gcd_dvd_left, dvd_iff, gcd_dvd_left
@@ -249,7 +249,7 @@ theorem gcd_dvd_right
 中文:
 定理 gcd_dvd_right
   条件: (n m : 自然数+)
-  结论: gcd n m ∣ m
+  结论: 最大公约数 n m ∣ m
   证明: dvd_iff.2 (Nat.gcd_dvd_right (n : Nat) (m : Nat))
 
 Depends on / 依赖: Nat.gcd_dvd_right, dvd_iff, gcd_dvd_right
@@ -269,7 +269,7 @@ theorem dvd_gcd
 中文:
 定理 dvd_gcd
   条件: {m n k : 自然数+} (hm : k ∣ m) (hn : k ∣ n)
-  结论: k ∣ gcd m n
+  结论: k ∣ 最大公约数 m n
   证明: dvd_iff.2 (Nat.dvd_gcd (dvd_iff.1 hm) (dvd_iff.1 hn))
 
 Depends on / 依赖: Nat.dvd_gcd, dvd_gcd, dvd_iff
@@ -289,7 +289,7 @@ theorem dvd_lcm_left
 中文:
 定理 dvd_lcm_left
   条件: (n m : 自然数+)
-  结论: n ∣ lcm n m
+  结论: n ∣ 最小公倍数 n m
   证明: dvd_iff.2 (Nat.dvd_lcm_left (n : Nat) (m : Nat))
 
 Depends on / 依赖: Nat.dvd_lcm_left, dvd_iff, dvd_lcm_left
@@ -309,7 +309,7 @@ theorem dvd_lcm_right
 中文:
 定理 dvd_lcm_right
   条件: (n m : 自然数+)
-  结论: m ∣ lcm n m
+  结论: m ∣ 最小公倍数 n m
   证明: dvd_iff.2 (Nat.dvd_lcm_right (n : Nat) (m : Nat))
 
 Depends on / 依赖: Nat.dvd_lcm_right, dvd_iff, dvd_lcm_right
@@ -329,7 +329,7 @@ theorem lcm_dvd
 中文:
 定理 lcm_dvd
   条件: {m n k : 自然数+} (hm : m ∣ k) (hn : n ∣ k)
-  结论: lcm m n ∣ k
+  结论: 最小公倍数 m n ∣ k
   证明: dvd_iff.2 (@Nat.lcm_dvd (m : Nat) (n : Nat) (k : Nat) (dvd_iff.1 hm) (dvd_iff.1 hn))
 
 Depends on / 依赖: Nat.lcm_dvd, dvd_iff, lcm_dvd
@@ -349,7 +349,7 @@ theorem gcd_mul_lcm
 中文:
 定理 gcd_mul_lcm
   条件: (n m : 自然数+)
-  结论: gcd n m * lcm n m = n * m
+  结论: 最大公约数 n m * 最小公倍数 n m = n * m
   证明: Subtype.ext (Nat.gcd_mul_lcm (n : Nat) (m : Nat))
 
 Depends on / 依赖: Nat.gcd_mul_lcm, Subtype, Subtype.ext, gcd_mul_lcm
@@ -400,7 +400,7 @@ definition Prime
   body: (p : Nat).Prime
 
 中文:
-定义 Prime
+定义 素
   签名: (p : 自然数+)
   定义体: (p : Nat).Prime
 -/
@@ -417,9 +417,9 @@ theorem Prime.one_lt
   proof: Nat.Prime.one_lt
 
 中文:
-定理 Prime.one_lt
+定理 素.one_lt
   条件: {p : 自然数+}
-  结论: p.Prime -> 1 < p
+  结论: p.素 -> 1 < p
   证明: Nat.Prime.one_lt
 -/
 theorem Prime.one_lt {p : Nat+} : p.Prime -> 1 < p :=
@@ -435,7 +435,7 @@ theorem prime_two
 
 中文:
 定理 prime_two
-  结论: (2 : 自然数+).Prime
+  结论: (2 : 自然数+).素
   证明: Nat.prime_two
 
 Depends on / 依赖: Nat.prime_two, prime_two
@@ -455,7 +455,7 @@ instance fact_prime_two
 
 中文:
 实例 fact_prime_two
-  签名: : Fact (2 : 自然数+).Prime
+  签名: : Fact (2 : 自然数+).素
   定义体: ⟨prime_two⟩
 
 Depends on / 依赖: prime_two
@@ -473,7 +473,7 @@ theorem prime_three
 
 中文:
 定理 prime_three
-  结论: (3 : 自然数+).Prime
+  结论: (3 : 自然数+).素
   证明: Nat.prime_three
 
 Depends on / 依赖: Nat.prime_three, prime_three
@@ -491,7 +491,7 @@ instance fact_prime_three
 
 中文:
 实例 fact_prime_three
-  签名: : Fact (3 : 自然数+).Prime
+  签名: : Fact (3 : 自然数+).素
   定义体: ⟨prime_three⟩
 
 Depends on / 依赖: prime_three
@@ -509,7 +509,7 @@ theorem prime_five
 
 中文:
 定理 prime_five
-  结论: (5 : 自然数+).Prime
+  结论: (5 : 自然数+).素
   证明: Nat.prime_five
 
 Depends on / 依赖: Nat.prime_five, prime_five
@@ -527,7 +527,7 @@ instance fact_prime_five
 
 中文:
 实例 fact_prime_five
-  签名: : Fact (5 : 自然数+).Prime
+  签名: : Fact (5 : 自然数+).素
   定义体: ⟨prime_five⟩
 
 Depends on / 依赖: prime_five
@@ -549,7 +549,7 @@ theorem dvd_prime
 
 中文:
 定理 dvd_prime
-  条件: {p m : 自然数+} (pp : p.Prime)
+  条件: {p m : 自然数+} (pp : p.素)
   结论: m ∣ p ↔ m = 1 ∨ m = p
   证明: by
   rw [PNat.dvd_iff]
@@ -579,9 +579,9 @@ theorem Prime.ne_one
 @[simp]
 
 中文:
-定理 Prime.ne_one
+定理 素.ne_one
   条件: {p : 自然数+}
-  结论: p.Prime -> p != 1
+  结论: p.素 -> p != 1
   证明: by
   intro pp contra
   apply Nat.Prime.ne_one pp
@@ -607,7 +607,7 @@ theorem not_prime_one
 
 中文:
 定理 not_prime_one
-  结论: ¬(1 : 自然数+).Prime
+  结论: ¬(1 : 自然数+).素
   证明: Nat.not_prime_one
 
 Depends on / 依赖: Nat.not_prime_one, not_prime_one
@@ -627,9 +627,9 @@ theorem Prime.not_dvd_one
   apply Nat.Prime.not_dvd_one pp
 
 中文:
-定理 Prime.not_dvd_one
+定理 素.not_dvd_one
   条件: {p : 自然数+}
-  结论: p.Prime -> ¬p ∣ 1
+  结论: p.素 -> ¬p ∣ 1
   证明: fun pp : p.Prime => by
   rw [dvd_iff]
   apply Nat.Prime.not_dvd_one pp
@@ -651,9 +651,9 @@ theorem exists_prime_and_dvd
   exists (⟨p, Nat.Prime.pos hp.left⟩ : Nat+); rw [dvd_iff]; apply hp
 
 中文:
-定理 exists_prime_and_dvd
+定理 存在_prime_and_dvd
   条件: {n : 自然数+} (hn : n != 1)
-  结论: 存在 p : 自然数+, p.Prime ∧ p ∣ n
+  结论: 存在 p : 自然数+, p.素 ∧ p ∣ n
   证明: by
   obtain ⟨p, hp⟩ := Nat.exists_prime_and_dvd (mt coe_eq_one_iff.mp hn)
   exists (⟨p, Nat.Prime.pos hp.left⟩ : Nat+); rw [dvd_iff]; apply hp
@@ -793,7 +793,7 @@ theorem gcd_comm
 中文:
 定理 gcd_comm
   条件: {m n : 自然数+}
-  结论: m.gcd n = n.gcd m
+  结论: m.最大公约数 n = n.最大公约数 m
   证明: by
   apply eq
   simp only [gcd_coe]
@@ -820,7 +820,7 @@ theorem gcd_eq_left_iff_dvd
 中文:
 定理 gcd_eq_left_iff_dvd
   条件: {m n : 自然数+}
-  结论: m.gcd n = m ↔ m ∣ n
+  结论: m.最大公约数 n = m ↔ m ∣ n
   证明: by
   rw [dvd_iff]; rw [← Nat.gcd_eq_left_iff_dvd]; rw [← coe_inj]
   simp
@@ -845,7 +845,7 @@ theorem gcd_eq_right_iff_dvd
 中文:
 定理 gcd_eq_right_iff_dvd
   条件: {m n : 自然数+}
-  结论: n.gcd m = m ↔ m ∣ n
+  结论: n.最大公约数 m = m ↔ m ∣ n
   证明: by
   rw [gcd_comm]
   apply gcd_eq_left_iff_dvd
@@ -967,7 +967,7 @@ theorem one_gcd
 中文:
 定理 one_gcd
   条件: {n : 自然数+}
-  结论: gcd 1 n = 1
+  结论: 最大公约数 1 n = 1
   证明: by
   rw [gcd_eq_left_iff_dvd]
   apply one_dvd
@@ -997,7 +997,7 @@ theorem gcd_one
 中文:
 定理 gcd_one
   条件: {n : 自然数+}
-  结论: gcd n 1 = 1
+  结论: 最大公约数 n 1 = 1
   证明: by
   rw [gcd_comm]
   apply one_gcd

@@ -438,7 +438,7 @@ theorem tsum_mul_left
 
 中文:
 定理 tsum_mul_left
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: by
   by_cases ha : a = 0
   · simp [ha]
@@ -469,7 +469,7 @@ theorem tsum_mul_right
 
 中文:
 定理 tsum_mul_right
-  条件: [T2Space α]
+  条件: [T2空间 α]
   结论: ∑'[L] x, f x * a = (∑'[L] x, f x) * a
   证明: by
   by_cases ha : a = 0
@@ -497,7 +497,7 @@ theorem tsum_div_const
 
 中文:
 定理 tsum_div_const
-  条件: [T2Space α]
+  条件: [T2空间 α]
   结论: ∑'[L] x, f x / a = (∑'[L] x, f x) / a
   证明: by
   simpa only [div_eq_mul_inv] using tsum_mul_right
@@ -968,7 +968,7 @@ theorem tprod_one_add
 
 中文:
 定理 tprod_one_add
-  条件: [T2Space α] (h : Summable (∏ i in ·, f i))
+  条件: [T2空间 α] (h : Summable (∏ i in ·, f i))
   证明: HasProd.tprod_eq hasProd_one_add_of_hasSum_prod h.hasSum
 
 Depends on / 依赖: HasProd, HasProd.tprod_eq, h.hasSum, hasProd_one_add_of_hasSum_prod, hasSum, tprod_eq
@@ -999,7 +999,7 @@ theorem tprod_one_add_ordered
 
 中文:
 定理 tprod_one_add_ordered
-  结论: [T2Space α] [ContinuousAdd α]
+  结论: [T2空间 α] [连续加法 α]
   证明: by
   rcases isEmpty_or_nonempty ι with _ | _
   · simp

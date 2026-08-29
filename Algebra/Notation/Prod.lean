@@ -43,7 +43,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (M × N)
+  签名: : 幺 (M × N)
   定义体: ⟨(1, 1)⟩
 
 @[to_additive (attr := simp)]
@@ -194,7 +194,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (M × N)
+  签名: : 乘法 (M × N)
   定义体: ⟨fun p q => ⟨p.1 * q.1, p.2 * q.2⟩⟩
 
 @[to_additive (attr := simp)]
@@ -327,7 +327,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (G × H)
+  签名: : 取逆 (G × H)
   定义体: ⟨fun p => (p.1⁻¹, p.2⁻¹)⟩
 
 @[to_additive (attr := simp)]
@@ -438,7 +438,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: : Div (G × H)
+  签名: : 除法 (G × H)
   定义体: ⟨fun p q => ⟨p.1 / q.1, p.2 / q.2⟩⟩
 
 @[to_additive (attr := simp)]
@@ -566,7 +566,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow (α × β) E where pow p c
+  签名: : 幂 (α × β) E where pow p c
   定义体: (p.1 ^ c, p.2 ^ c)
 
 @[to_additive (attr := to_additive, simp) (reorder := p c) smul_fst]
@@ -632,7 +632,7 @@ lemma pow_mk
 中文:
 引理 pow_mk
   条件: (a : α) (b : β) (c : E)
-  结论: Prod.mk a b ^ c = Prod.mk (a ^ c) (b ^ c)
+  结论: 积类型.mk a b ^ c = 积类型.mk (a ^ c) (b ^ c)
   证明: rfl
 
 @[to_additive (attr := to_additive) (reorder := p c) smul_def]
@@ -697,7 +697,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (R × S)
+  签名: 对合 (R × S)
   定义体: (star x.1, star x.2)
 
 @[simp]

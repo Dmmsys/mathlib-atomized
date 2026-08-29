@@ -31,8 +31,8 @@ instance DivisionRing.continuousConstSMul_rat
   body: ⟨fun r => by simpa only [Algebra.smul_def] using! continuous_id.const_mul _⟩
 
 中文:
-实例 DivisionRing.continuousConstSMul_rat
-  签名: {A} [DivisionRing A] [TopologicalSpace A]
+实例 除环.continuousConstSMul_rat
+  签名: {A} [除环 A] [拓扑空间 A]
   定义体: ⟨fun r => by simpa only [Algebra.smul_def] using! continuous_id.const_mul _⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, const_mul, continuous_id, continuous_id.const_mul, smul_def

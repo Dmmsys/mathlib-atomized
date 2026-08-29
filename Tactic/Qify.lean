@@ -93,7 +93,7 @@ lemma intCast_eq
 中文:
 引理 intCast_eq
   条件: (a b : 整数)
-  结论: a = b ↔ (a : Rat) = (b : Rat)
+  结论: a = b ↔ (a : 有理数) = (b : 有理数)
   证明: by simp only [Int.cast_inj]
 -/
 @[qify_simps] lemma intCast_eq (a b : Int) : a = b ↔ (a : Rat) = (b : Rat) := by simp only [Int.cast_inj]
@@ -109,7 +109,7 @@ lemma intCast_le
 中文:
 引理 intCast_le
   条件: (a b : 整数)
-  结论: a <= b ↔ (a : Rat) <= (b : Rat)
+  结论: a <= b ↔ (a : 有理数) <= (b : 有理数)
   证明: Int.cast_le.symm
 -/
 @[qify_simps] lemma intCast_le (a b : Int) : a <= b ↔ (a : Rat) <= (b : Rat) := Int.cast_le.symm
@@ -125,7 +125,7 @@ lemma intCast_lt
 中文:
 引理 intCast_lt
   条件: (a b : 整数)
-  结论: a < b ↔ (a : Rat) < (b : Rat)
+  结论: a < b ↔ (a : 有理数) < (b : 有理数)
   证明: Int.cast_lt.symm
 -/
 @[qify_simps] lemma intCast_lt (a b : Int) : a < b ↔ (a : Rat) < (b : Rat) := Int.cast_lt.symm
@@ -142,7 +142,7 @@ lemma intCast_ne
 中文:
 引理 intCast_ne
   条件: (a b : 整数)
-  结论: a != b ↔ (a : Rat) != (b : Rat)
+  结论: a != b ↔ (a : 有理数) != (b : 有理数)
   证明: by
   simp only [ne_eq, Int.cast_inj]
 -/

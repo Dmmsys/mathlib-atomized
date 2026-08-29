@@ -54,10 +54,10 @@ class IsFlasque
     - epi : forall {U V : (Opens X)ᵒᵖ} (i : U ⟶ V), Epi (F.map i)
 
 中文:
-类 IsFlasque
+类 是松
   参数: : 命题 where
   公理与运算 (1 个):
-    - epi : 对任意 {U V : (Opens X)ᵒᵖ} (i : U ⟶ V), Epi (F.map i)
+    - epi : 对任意 {U V : (Opens X)ᵒᵖ} (i : U ⟶ V), 满态射 (F.map i)
 -/
 class IsFlasque : Prop where
   epi : forall {U V : (Opens X)ᵒᵖ} (i : U ⟶ V), Epi (F.map i)
@@ -80,7 +80,7 @@ instance pushforward_isFlasque
 
 中文:
 实例 pushforward_isFlasque
-  签名: {Y : TopCat.{u}} [IsFlasque F] (f : X ⟶ Y)
+  签名: {Y : 顶元素范畴.{u}} [是松 F] (f : X ⟶ Y)
   定义体: by
     simp only [pushforward_obj_obj, pushforward_obj_map]
     infer_instance
@@ -108,8 +108,8 @@ abbreviation IsFlasque
   body: Presheaf.IsFlasque F.obj
 
 中文:
-缩写 IsFlasque
-  签名: {C : 类型v} [Category.{w} C] (F : Sheaf C X)
+缩写 是松
+  签名: {C : 类型v} [范畴.{w} C] (F : 层 C X)
   定义体: Presheaf.IsFlasque F.obj
 
 Depends on / 依赖: F.obj, IsFlasque, Presheaf, Presheaf.IsFlasque
@@ -128,7 +128,7 @@ instance pushforward_isFlasque
 
 中文:
 实例 pushforward_isFlasque
-  签名: {C : 类型v} [Category.{w} C] {Y : TopCat.{u}} (F : Sheaf C X)
+  签名: {C : 类型v} [范畴.{w} C] {Y : 顶元素范畴.{u}} (F : 层 C X)
   定义体: Presheaf.IsFlasque.pushforward_isFlasque F.1 f
 
 Depends on / 依赖: IsFlasque, Presheaf, Presheaf.IsFlasque.pushforward_isFlasque, pushforward_isFlasque
@@ -173,7 +173,7 @@ lemma structured_arrows_elements_sheaf_chains_bounded
 
 中文:
 引理 structured_arrows_elements_sheaf_chains_bounded
-  结论: (c : Set (Under g s))
+  结论: (c : 集合 (Under g s))
   证明: by
   let f : c -> (Opens X) := fun x => x.1.right.1.unop
   obtain ⟨t, ht, _⟩ : exists! s_1, IsGluing F.obj f (fun x => x.val.right.2) s_1 := by
@@ -221,7 +221,7 @@ theorem epi_of_shortExact
 
 中文:
 定理 epi_of_shortExact
-  结论: {S : ShortComplex (Sheaf AddCommGrpCat X)} (hS : S.ShortExact)
+  结论: {S : 短复形 (层 加法交换群范畴 X)} (hS : S.短正合)
   证明: by
   refine (AddCommGrpCat.epi_iff_surjective _).mpr (fun s => ?_)
   -- We want to find a preimage of `s` by `S.g`.
@@ -312,7 +312,7 @@ theorem of_shortExact_of_isFlasque₁₂
 
 中文:
 定理 of_shortExact_of_isFlasque₁₂
-  结论: {S : ShortComplex (Sheaf AddCommGrpCat X)}
+  结论: {S : 短复形 (层 加法交换群范畴 X)}
   证明: by
     have : Epi (S.g.1.app U ≫ S.X₃.obj.map i) := by
       rw [← S.g.hom.naturality i]
@@ -350,7 +350,7 @@ theorem isFlasque_skyscraperSheaf_of_epi_from
 
 中文:
 定理 isFlasque_skyscraperSheaf_of_epi_from
-  结论: {X : TopCat} (p₀ : ↑X)
+  结论: {X : 顶元素范畴} (p₀ : ↑X)
   证明: by
     by_cases h1 : p₀ in unop U
     · by_cases h2 : p₀ in unop V
@@ -389,7 +389,7 @@ theorem isFlasque_skyscraperSheaf_of_hasZeroObject
 
 中文:
 定理 isFlasque_skyscraperSheaf_of_hasZeroObject
-  结论: {X : TopCat} (p₀ : ↑X)
+  结论: {X : 顶元素范畴} (p₀ : ↑X)
   证明: isFlasque_skyscraperSheaf_of_epi_from p₀ A
 
 Depends on / 依赖: isFlasque_skyscraperSheaf_of_epi_from

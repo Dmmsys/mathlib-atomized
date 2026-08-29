@@ -94,7 +94,7 @@ definition separableClosure
 
 中文:
 定义 separableClosure
-  签名: : 整数ermediateField F E where
+  签名: : 中间域 F E where
   定义体: {x | IsSeparable F x}
   mul_mem' := isSeparable_mul
   add_mem' := isSeparable_add
@@ -209,7 +209,7 @@ obtain ⟨y, rfl⟩ := mem_bot.1 h ▸ mem_separableClosure_iff.2
 
 中文:
 定理 separableClosure.map_eq_of_separableClosure_eq_bot
-  结论: [Algebra E K] [IsScalarTower F E K]
+  结论: [代数 E K] [标量塔 F E K]
   证明: by
   refine le_antisymm (map_le_of_algHom _) (fun x hx => ?_)
 obtain ⟨y, rfl⟩ := mem_bot.1 h ▸ mem_separableClosure_iff.2
@@ -285,7 +285,7 @@ instance separableClosure.isAlgebraic
 
 中文:
 实例 separableClosure.isAlgebraic
-  签名: : Algebra.IsAlgebraic F (separableClosure F E)
+  签名: : 代数.是代数 F (separableClosure F E)
   定义体: ⟨fun x => isAlgebraic_iff.2 (IsSeparable.isIntegral x.2).isAlgebraic⟩
 
 Depends on / 依赖: IsSeparable, IsSeparable.isIntegral, isAlgebraic, isAlgebraic_iff, isIntegral
@@ -305,7 +305,7 @@ instance separableClosure.isSeparable
 
 中文:
 实例 separableClosure.isSeparable
-  签名: : Algebra.IsSeparable F (separableClosure F E)
+  签名: : 代数.是可分 F (separableClosure F E)
   定义体: ⟨fun x => by simpa only [IsSeparable, minpoly_eq] using! x.2⟩
 
 Depends on / 依赖: IsSeparable, minpoly_eq
@@ -323,7 +323,7 @@ theorem le_separableClosure'
 
 中文:
 定理 le_separableClosure'
-  条件: {L : 整数ermediateField F E} (hs : 对任意 x : L, IsSeparable F x)
+  条件: {L : 中间域 F E} (hs : 对任意 x : L, 是可分 F x)
   证明: fun x h => by simpa only [IsSeparable, minpoly_eq] using! hs ⟨x, h⟩
 
 Depends on / 依赖: IsSeparable, minpoly_eq
@@ -341,7 +341,7 @@ theorem le_separableClosure
 
 中文:
 定理 le_separableClosure
-  条件: (L : 整数ermediateField F E) [Algebra.IsSeparable F L]
+  条件: (L : 中间域 F E) [代数.是可分 F L]
   证明: le_separableClosure' F E (Algebra.IsSeparable.isSeparable F)
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, isSeparable, le_separableClosure
@@ -359,7 +359,7 @@ theorem le_separableClosure_iff
 
 中文:
 定理 le_separableClosure_iff
-  条件: (L : 整数ermediateField F E)
+  条件: (L : 中间域 F E)
   证明: Subalgebra.isSeparable_iff.symm
 
 Depends on / 依赖: Subalgebra, Subalgebra.isSeparable_iff.symm, isSeparable_iff
@@ -423,8 +423,8 @@ theorem IntermediateField.isSeparable_adjoin_iff_isSeparable
   proof: (le_separableClosure_iff F E _).symm.trans adjoin_le_iff
 
 中文:
-定理 IntermediateField.isSeparable_adjoin_iff_isSeparable
-  条件: {S : Set E}
+定理 中间域.isSeparable_adjoin_iff_isSeparable
+  条件: {S : 集合 E}
   证明: (le_separableClosure_iff F E _).symm.trans adjoin_le_iff
 
 Depends on / 依赖: adjoin_le_iff, le_separableClosure_iff, symm.trans
@@ -444,7 +444,7 @@ theorem Algebra.isSeparable_of_separable_splitting_field
   exact fun x hx => hp.of_dvd (minpoly.dvd F x (aeval_eq_zero_of_mem_rootSet hx))
 
 中文:
-定理 Algebra.isSeparable_of_separable_splitting_field
+定理 代数.isSeparable_of_separable_splitting_field
   结论: {p : F[X]}
   证明: by
   rw [← isSeparable_top]; rw [← (isSplittingField_iff_intermediateField.mp sp).2]; rw [isSeparable_adjoin_iff_isSeparable]
@@ -468,7 +468,7 @@ theorem separableClosure.eq_top_iff
 
 中文:
 定理 separableClosure.eq_top_iff
-  结论: separableClosure F E = ⊤ ↔ Algebra.IsSeparable F E
+  结论: separableClosure F E = ⊤ ↔ 代数.是可分 F E
   证明: ⟨fun h => ⟨fun _ => mem_separableClosure_iff.1 (h ▸ mem_top)⟩,
     fun _ => top_unique fun x _ => mem_separableClosure_iff.2 (Algebra.IsSeparable.isSeparable _ x)⟩
 
@@ -488,7 +488,7 @@ theorem separableClosure.le_restrictScalars
 
 中文:
 定理 separableClosure.le_restrictScalars
-  条件: [Algebra E K] [IsScalarTower F E K]
+  条件: [代数 E K] [标量塔 F E K]
   证明: fun _ => IsSeparable.tower_top E
 
 Depends on / 依赖: IsSeparable, IsSeparable.tower_top, tower_top
@@ -508,7 +508,7 @@ theorem separableClosure.eq_restrictScalars_of_isSeparable
 
 中文:
 定理 separableClosure.eq_restrictScalars_of_isSeparable
-  结论: [Algebra E K] [IsScalarTower F E K]
+  结论: [代数 E K] [标量塔 F E K]
   证明: (separableClosure.le_restrictScalars F E K).antisymm fun _ h =>
     IsSeparable.of_algebra_isSeparable_of_isSeparable F h
 
@@ -529,7 +529,7 @@ theorem separableClosure.adjoin_le
 
 中文:
 定理 separableClosure.adjoin_le
-  条件: [Algebra E K] [IsScalarTower F E K]
+  条件: [代数 E K] [标量塔 F E K]
   证明: adjoin_le_iff.2 le_restrictScalars F E K
 
 Depends on / 依赖: adjoin_le_iff, le_restrictScalars
@@ -549,8 +549,8 @@ instance IntermediateField.isSeparable_sup
   exact sup_le h1 h2
 
 中文:
-实例 IntermediateField.isSeparable_sup
-  签名: (L1 L2 : 整数ermediateField F E)
+实例 中间域.isSeparable_sup
+  签名: (L1 L2 : 中间域 F E)
   定义体: by
   rw [← le_separableClosure_iff] at h1 h2 ⊢
   exact sup_le h1 h2
@@ -574,8 +574,8 @@ instance IntermediateField.isSeparable_iSup
   exact iSup_le h
 
 中文:
-实例 IntermediateField.isSeparable_iSup
-  签名: {ι : 类型} {t : ι -> 整数ermediateField F E}
+实例 中间域.isSeparable_iSup
+  签名: {ι : 类型} {t : ι -> 中间域 F E}
   定义体: by
   simp_rw [← le_separableClosure_iff] at h ⊢
   exact iSup_le h
@@ -599,7 +599,7 @@ theorem le_restrictScalars_separableClosure
 
 中文:
 定理 le_restrictScalars_separableClosure
-  条件: (L : 整数ermediateField F E)
+  条件: (L : 中间域 F E)
   证明: fun x hx => isSeparable_algebraMap (F := L) ⟨x, hx⟩
 
 Depends on / 依赖: isSeparable_algebraMap
@@ -624,7 +624,7 @@ abbreviation separableClosureOperator
 
 中文:
 缩写 separableClosureOperator
-  签名: : ClosureOperator (整数ermediateField F E)
+  签名: : 闭包算子 (中间域 F E)
   定义体: by
   refine .mk' (fun K => (separableClosure K E).restrictScalars F) (fun K L le x hx => ?_)
     le_restrictScalars_separableClosure fun K x hx => ?_
@@ -656,7 +656,7 @@ lemma isClosed_restrictScalars_separableClosure
 
 中文:
 引理 isClosed_restrictScalars_separableClosure
-  条件: [Algebra K E] [IsScalarTower F K E]
+  条件: [代数 K E] [标量塔 F K E]
   证明: ClosureOperator.isClosed_iff_closure_le.mpr fun x hx => by
     obtain ⟨x, rfl⟩ := (separableClosure.separableClosure_eq_bot K E).le hx
     exact x.2
@@ -755,7 +755,7 @@ theorem finInsepDegree_def'
 
 中文:
 定理 finInsepDegree_def'
-  结论: finInsepDegree F E = Cardinal.to自然数 (insepDegree F E)
+  结论: finInsepDegree F E = 基数.to自然数 (insepDegree F E)
   证明: rfl
 -/
 theorem finInsepDegree_def' : finInsepDegree F E = Cardinal.toNat (insepDegree F E) := rfl
@@ -804,7 +804,7 @@ instance instNeZeroFinInsepDegree
 
 中文:
 实例 instNeZeroFinInsepDegree
-  签名: [FiniteDimensional F E]
+  签名: [有限维 F E]
   定义体: ⟨finrank_pos.ne'⟩
 
 Depends on / 依赖: finrank_pos, finrank_pos.ne
@@ -841,7 +841,7 @@ theorem sepDegree_eq_of_equiv
 
 中文:
 定理 sepDegree_eq_of_equiv
-  条件: (K : 类型v) [Field K] [Algebra F K] (i : E ≃ₐ[F] K)
+  条件: (K : 类型v) [域 K] [代数 F K] (i : E ≃ₐ[F] K)
   证明: i.separableClosure.toLinearEquiv.rank_eq
 
 Depends on / 依赖: i.separableClosure.toLinearEquiv.rank_eq, rank_eq, separableClosure, toLinearEquiv
@@ -860,7 +860,7 @@ theorem sepDegree_mul_insepDegree
 
 中文:
 定理 sepDegree_mul_insepDegree
-  结论: sepDegree F E * insepDegree F E = Module.rank F E
+  结论: sepDegree F E * insepDegree F E = 模.rank F E
   证明: rank_mul_rank F (separableClosure F E) E
 
 Depends on / 依赖: rank_mul_rank, separableClosure
@@ -878,7 +878,7 @@ theorem sepDegree_le_rank
 
 中文:
 定理 sepDegree_le_rank
-  结论: sepDegree F E <= Module.rank F E
+  结论: sepDegree F E <= 模.rank F E
   证明: Module.rank_bot_le_rank_of_isScalarTower _ _ _
 
 Depends on / 依赖: Module, Module.rank_bot_le_rank_of_isScalarTower, rank_bot_le_rank_of_isScalarTower
@@ -896,7 +896,7 @@ theorem insepDegree_le_rank
 
 中文:
 定理 insepDegree_le_rank
-  结论: insepDegree F E <= Module.rank F E
+  结论: insepDegree F E <= 模.rank F E
   证明: Module.rank_top_le_rank_of_isScalarTower _ _ _
 
 Depends on / 依赖: Module, Module.rank_top_le_rank_of_isScalarTower, rank_top_le_rank_of_isScalarTower
@@ -933,7 +933,7 @@ theorem insepDegree_eq_of_equiv
 
 中文:
 定理 insepDegree_eq_of_equiv
-  条件: (K : 类型v) [Field K] [Algebra F K] (i : E ≃ₐ[F] K)
+  条件: (K : 类型v) [域 K] [代数 F K] (i : E ≃ₐ[F] K)
   证明: Algebra.rank_eq_of_equiv_equiv i.separableClosure i rfl
 
 Depends on / 依赖: Algebra, Algebra.rank_eq_of_equiv_equiv, i.separableClosure, rank_eq_of_equiv_equiv, separableClosure
@@ -1058,7 +1058,7 @@ lemma exists_finset_maximalFor_isTranscendenceBasis_separableClosure
       rw [← isAlgeb
 
 中文:
-引理 exists_finset_maximalFor_isTranscendenceBasis_separableClosure
+引理 存在_finset_maximalFor_isTranscendenceBasis_separableClosure
   证明: by
   let d (s : Finset E) := Field.finInsepDegree (adjoin F (s : Set E)) E
   have Hexists : {s : Finset E | IsTranscendenceBasis F ((↑) : s -> E)}.Nonempty := by
@@ -1110,7 +1110,7 @@ theorem sepDegree_bot
 
 中文:
 定理 sepDegree_bot
-  结论: sepDegree F (⊥ : 整数ermediateField F E) = 1
+  结论: sepDegree F (⊥ : 中间域 F E) = 1
   证明: by
   have := lift_sepDegree_eq_of_equiv _ _ _ (botEquiv F E)
   rwa [sepDegree_self, Cardinal.lift_one, ← Cardinal.lift_one.{v, u}, Cardinal.lift_inj] at this
@@ -1138,7 +1138,7 @@ theorem insepDegree_bot
 
 中文:
 定理 insepDegree_bot
-  结论: insepDegree F (⊥ : 整数ermediateField F E) = 1
+  结论: insepDegree F (⊥ : 中间域 F E) = 1
   证明: by
   have := lift_insepDegree_eq_of_equiv _ _ _ (botEquiv F E)
   rwa [insepDegree_self, Cardinal.lift_one, ← Cardinal.lift_one.{v, u}, Cardinal.lift_inj] at this
@@ -1163,7 +1163,7 @@ theorem finInsepDegree_bot
 
 中文:
 定理 finInsepDegree_bot
-  结论: finInsepDegree F (⊥ : 整数ermediateField F E) = 1
+  结论: finInsepDegree F (⊥ : 中间域 F E) = 1
   证明: by
   rw [finInsepDegree_eq_of_equiv _ _ _ (botEquiv F E)]; rw [finInsepDegree_self]
 
@@ -1186,7 +1186,7 @@ theorem lift_sepDegree_bot'
 
 中文:
 定理 lift_sepDegree_bot'
-  结论: Cardinal.lift.{v} (sepDegree F (⊥ : 整数ermediateField E K)) =
+  结论: 基数.lift.{v} (sepDegree F (⊥ : 中间域 E K)) =
   证明: lift_sepDegree_eq_of_equiv _ _ _ ((botEquiv E K).restrictScalars F)
 
 Depends on / 依赖: botEquiv, lift_sepDegree_eq_of_equiv, restrictScalars
@@ -1205,7 +1205,7 @@ theorem lift_insepDegree_bot'
 
 中文:
 定理 lift_insepDegree_bot'
-  结论: Cardinal.lift.{v} (insepDegree F (⊥ : 整数ermediateField E K)) =
+  结论: 基数.lift.{v} (insepDegree F (⊥ : 中间域 E K)) =
   证明: lift_insepDegree_eq_of_equiv _ _ _ ((botEquiv E K).restrictScalars F)
 
 Depends on / 依赖: botEquiv, lift_insepDegree_eq_of_equiv, restrictScalars
@@ -1253,7 +1253,7 @@ theorem sepDegree_top
 
 中文:
 定理 sepDegree_top
-  结论: sepDegree F (⊤ : 整数ermediateField E K) = sepDegree F K
+  结论: sepDegree F (⊤ : 中间域 E K) = sepDegree F K
   证明: sepDegree_eq_of_equiv _ _ _ ((topEquiv (F := E) (E := K)).restrictScalars F)
 
 @[simp]
@@ -1276,7 +1276,7 @@ theorem insepDegree_top
 
 中文:
 定理 insepDegree_top
-  结论: insepDegree F (⊤ : 整数ermediateField E K) = insepDegree F K
+  结论: insepDegree F (⊤ : 中间域 E K) = insepDegree F K
   证明: insepDegree_eq_of_equiv _ _ _ ((topEquiv (F := E) (E := K)).restrictScalars F)
 
 @[simp]
@@ -1298,7 +1298,7 @@ theorem finInsepDegree_top
 
 中文:
 定理 finInsepDegree_top
-  结论: finInsepDegree F (⊤ : 整数ermediateField E K) = finInsepDegree F K
+  结论: finInsepDegree F (⊤ : 中间域 E K) = finInsepDegree F K
   证明: by
   rw [finInsepDegree_def']; rw [insepDegree_top]; rw [← finInsepDegree_def']
 
@@ -1322,7 +1322,7 @@ theorem sepDegree_bot'
 
 中文:
 定理 sepDegree_bot'
-  结论: sepDegree F (⊥ : 整数ermediateField E K) = sepDegree F E
+  结论: sepDegree F (⊥ : 中间域 E K) = sepDegree F E
   证明: sepDegree_eq_of_equiv _ _ _ ((botEquiv E K).restrictScalars F)
 
 @[simp]
@@ -1343,7 +1343,7 @@ theorem insepDegree_bot'
 
 中文:
 定理 insepDegree_bot'
-  结论: insepDegree F (⊥ : 整数ermediateField E K) = insepDegree F E
+  结论: insepDegree F (⊥ : 中间域 E K) = insepDegree F E
   证明: insepDegree_eq_of_equiv _ _ _ ((botEquiv E K).restrictScalars F)
 
 Depends on / 依赖: botEquiv, insepDegree_eq_of_equiv, restrictScalars
@@ -1365,7 +1365,7 @@ lemma _root_.Field.insepDegree_top_le_insepDegree_of_isScalarTower
     (separableClosure F K) ((separ
 
 中文:
-引理 _root_.Field.insepDegree_top_le_insepDegree_of_isScalarTower
+引理 _root_.域.insepDegree_top_le_insepDegree_of_isScalarTower
   证明: by
   let := (IntermediateField.inclusion (separableClosure.le_restrictScalars F E K)).toAlgebra
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
@@ -1396,8 +1396,8 @@ lemma _root_.Field.insepDegree_le_of_left_le
   exact insepDegree_top_le_insepDegree_of_isScalarTower _ _ _
 
 中文:
-引理 _root_.Field.insepDegree_le_of_left_le
-  条件: {E₁ E₂ : 整数ermediateField F K} (H : E₁ <= E₂)
+引理 _root_.域.insepDegree_le_of_left_le
+  条件: {E₁ E₂ : 中间域 F K} (H : E₁ <= E₂)
   证明: by
   let := (IntermediateField.inclusion H).toAlgebra
   have : IsScalarTower E₁ E₂ K := .of_algebraMap_eq' rfl
@@ -1426,8 +1426,8 @@ lemma _root_.Field.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
     (separableClosure F K) (
 
 中文:
-引理 _root_.Field.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
-  条件: [Module.Finite F K]
+引理 _root_.域.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
+  条件: [模.有限 F K]
   证明: by
   let := (IntermediateField.inclusion (separableClosure.le_restrictScalars F E K)).toAlgebra
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
@@ -1459,7 +1459,7 @@ lemma finInsepDegree_le_of_left_le
 
 中文:
 引理 finInsepDegree_le_of_left_le
-  结论: {E₁ E₂ : 整数ermediateField F K} (H : E₁ <= E₂)
+  结论: {E₁ E₂ : 中间域 F K} (H : E₁ <= E₂)
   证明: by
   let := (IntermediateField.inclusion H).toAlgebra
   have : IsScalarTower E₁ E₂ K := .of_algebraMap_eq' rfl
@@ -1487,8 +1487,8 @@ theorem Algebra.IsSeparable.sepDegree_eq
   rw [sepDegree]; rw [(separableClosure.eq_top_iff F E).2 ‹_›]; rw [IntermediateField.rank_top']
 
 中文:
-定理 Algebra.IsSeparable.sepDegree_eq
-  条件: [Algebra.IsSeparable F E]
+定理 代数.是可分.sepDegree_eq
+  条件: [代数.是可分 F E]
   证明: by
   rw [sepDegree]; rw [(separableClosure.eq_top_iff F E).2 ‹_›]; rw [IntermediateField.rank_top']
 
@@ -1509,8 +1509,8 @@ theorem Algebra.IsSeparable.insepDegree_eq
   rw [insepDegree]; rw [(separableClosure.eq_top_iff F E).2 ‹_›]; rw [IntermediateField.rank_top]
 
 中文:
-定理 Algebra.IsSeparable.insepDegree_eq
-  条件: [Algebra.IsSeparable F E]
+定理 代数.是可分.insepDegree_eq
+  条件: [代数.是可分 F E]
   结论: insepDegree F E = 1
   证明: by
   rw [insepDegree]; rw [(separableClosure.eq_top_iff F E).2 ‹_›]; rw [IntermediateField.rank_top]
@@ -1530,8 +1530,8 @@ theorem Algebra.IsSeparable.finInsepDegree_eq
   proof: Cardinal.one_toNat ▸ congr(Cardinal.toNat $(insepDegree_eq F E))
 
 中文:
-定理 Algebra.IsSeparable.finInsepDegree_eq
-  条件: [Algebra.IsSeparable F E]
+定理 代数.是可分.finInsepDegree_eq
+  条件: [代数.是可分 F E]
   结论: finInsepDegree F E = 1
   证明: Cardinal.one_toNat ▸ congr(Cardinal.toNat $(insepDegree_eq F E))
 

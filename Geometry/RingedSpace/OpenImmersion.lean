@@ -77,11 +77,11 @@ class PresheafedSpace.IsOpenImmersion
     - c_iso : forall U : Opens X, IsIso (f.c.app (op (base_open.functor.obj U)))
 
 中文:
-类 PresheafedSpace.IsOpenImmersion
-  参数: {X Y : PresheafedSpace C} (f : X ⟶ Y)
+类 Presheafed空间.是开浸入
+  参数: {X Y : Presheafed空间 C} (f : X ⟶ Y)
   公理与运算 (2 个):
-    - base_open : IsOpenEmbedding f.base
-    - c_iso : 对任意 U : Opens X, IsIso (f.c.app (op (base_open.functor.obj U)))
+    - base_open : 是开嵌入 f.base
+    - c_iso : 对任意 U : Opens X, 是同构 (f.c.app (op (base_open.functor.obj U)))
 -/
 class PresheafedSpace.IsOpenImmersion {X Y : PresheafedSpace C} (f : X ⟶ Y) : Prop where
   /-- the underlying continuous map of underlying spaces from the source to an open subset of the
@@ -99,8 +99,8 @@ abbreviation SheafedSpace.IsOpenImmersion
   body: PresheafedSpace.IsOpenImmersion f.hom
 
 中文:
-缩写 SheafedSpace.IsOpenImmersion
-  签名: {X Y : SheafedSpace C} (f : X ⟶ Y)
+缩写 Sheafed空间.是开浸入
+  签名: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   定义体: PresheafedSpace.IsOpenImmersion f.hom
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion, f.hom
@@ -117,8 +117,8 @@ lemma SheafedSpace.isOpenImmersion_iff_hom
   proof: Iff.rfl
 
 中文:
-引理 SheafedSpace.isOpenImmersion_iff_hom
-  条件: {X Y : SheafedSpace C} (f : X ⟶ Y)
+引理 Sheafed空间.isOpenImmersion_iff_hom
+  条件: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -135,8 +135,8 @@ abbreviation LocallyRingedSpace.IsOpenImmersion
   body: SheafedSpace.IsOpenImmersion f.toShHom
 
 中文:
-缩写 LocallyRingedSpace.IsOpenImmersion
-  签名: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
+缩写 LocallyRinged空间.是开浸入
+  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
   定义体: SheafedSpace.IsOpenImmersion f.toShHom
 
 Depends on / 依赖: IsOpenImmersion, SheafedSpace, SheafedSpace.IsOpenImmersion, f.toShHom, toShHom
@@ -295,7 +295,7 @@ instance mono
 
 中文:
 实例 mono
-  签名: : Mono f
+  签名: : 单态射 f
   定义体: by
   rw [← H.isoRestrict_hom_ofRestrict]; apply mono_comp
 
@@ -346,7 +346,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {Z : PresheafedSpace C} (g : Y ⟶ Z) [hg : IsOpenImmersion g]
+  签名: {Z : Presheafed空间 C} (g : Y ⟶ Z) [hg : 是开浸入 g]
   定义体: hg.base_open.comp H.base_open
   c_iso U := by
     generalize_proofs h
@@ -538,7 +538,7 @@ theorem app_inv_app'
 
 中文:
 定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base)
+  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.base)
   证明: by
   simp only [app_invApp, Opens.carrier_eq_coe,
     homOfLE_leOfHom, eqToHom_op]
@@ -571,7 +571,7 @@ instance ofIso
 
 中文:
 实例 ofIso
-  签名: {X Y : PresheafedSpace C} (H : X ≅ Y)
+  签名: {X Y : Presheafed空间 C} (H : X ≅ Y)
   定义体: (TopCat.homeoOfIso ((forget C).mapIso H)).isOpenEmbedding
   -- Porting note: `inferInstance` will fail if Lean is not told that `H.hom.c` is iso
   c_iso _ := letI : IsIso H.hom.c := inferInstance;
@@ -610,7 +610,7 @@ instance ofRestrict
 
 中文:
 实例 ofRestrict
-  签名: {X : TopCat} (Y : PresheafedSpace C) {f : X ⟶ Y.carrier}
+  签名: {X : 顶元素范畴} (Y : Presheafed空间 C) {f : X ⟶ Y.carrier}
   定义体: hf
   c_iso U := by
     dsimp
@@ -659,7 +659,7 @@ theorem ofRestrict_invApp
 
 中文:
 定理 ofRestrict_invApp
-  结论: {C : 类型} [Category* C] (X : PresheafedSpace C) {Y : TopCat.{w}}
+  结论: {C : 类型} [范畴* C] (X : Presheafed空间 C) {Y : 顶元素范畴.{w}}
   证明: by
   delta invApp
   rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
@@ -695,8 +695,8 @@ theorem to_iso
 
 中文:
 定理 to_iso
-  条件: [h' : Epi f.base]
-  结论: IsIso f
+  条件: [h' : 满态射 f.base]
+  结论: 是同构 f
   证明: by
   have : forall (U : (Opens Y)ᵒᵖ), IsIso (f.c.app U) := by
     intro U
@@ -740,7 +740,7 @@ instance stalk_iso
 
 中文:
 实例 stalk_iso
-  签名: [HasColimits C] (x : X)
+  签名: [有余极限 C] (x : X)
   定义体: by
   rw [← H.isoRestrict_hom_ofRestrict]; rw [PresheafedSpace.stalkMap.comp]
   infer_instance
@@ -1045,7 +1045,7 @@ instance pullbackConeSndIsOpenImmersion
 
 中文:
 实例 pullbackConeSndIsOpenImmersion
-  签名: : IsOpenImmersion (pullbackConeOfLeft f g).snd
+  签名: : 是开浸入 (pullbackConeOfLeft f g).snd
   定义体: by
   erw [CategoryTheory.Limits.PullbackCone.mk_snd]
   infer_instance
@@ -1074,7 +1074,7 @@ definition pullbackConeOfLeftIsLimit
 
 中文:
 定义 pullbackConeOfLeftIsLimit
-  签名: : IsLimit (pullbackConeOfLeft f g)
+  签名: : 是极限 (pullbackConeOfLeft f g)
   定义体: by
   apply PullbackCone.isLimitAux'
   intro s
@@ -1147,7 +1147,7 @@ instance pullbackSndOfLeft
 
 中文:
 实例 pullbackSndOfLeft
-  签名: : IsOpenImmersion (pullback.snd f g)
+  签名: : 是开浸入 (pullback.snd f g)
   定义体: by
   delta pullback.snd
   rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
@@ -1172,7 +1172,7 @@ instance pullbackFstOfRight
 
 中文:
 实例 pullbackFstOfRight
-  签名: : IsOpenImmersion (pullback.fst g f)
+  签名: : 是开浸入 (pullback.fst g f)
   定义体: by
   rw [← pullbackSymmetry_hom_comp_snd]
   infer_instance
@@ -1196,7 +1196,7 @@ instance pullbackToBaseIsOpenImmersion
 
 中文:
 实例 pullbackToBaseIsOpenImmersion
-  签名: [IsOpenImmersion g]
+  签名: [是开浸入 g]
   定义体: by
   rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
   infer_instance
@@ -1224,7 +1224,7 @@ instance forget_preservesLimitsOfLeft
 
 中文:
 实例 forget_preservesLimitsOfLeft
-  签名: : PreservesLimit (cospan f g) (forget C)
+  签名: : 保持极限 (cospan f g) (forget C)
   定义体: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g)
     (by
       apply (IsLimit.postcomposeHomEquiv (diagramIsoCospan _) _).toFun
@@ -1263,7 +1263,7 @@ instance forget_preservesLimitsOfRight
 
 中文:
 实例 forget_preservesLimitsOfRight
-  签名: : PreservesLimit (cospan g f) (forget C)
+  签名: : 保持极限 (cospan g f) (forget C)
   定义体: preservesPullback_symmetry (forget C) f g
 
 Depends on / 依赖: forget, preservesPullback_symmetry
@@ -1288,7 +1288,7 @@ theorem pullback_snd_isIso_of_range_subset
 
 中文:
 定理 pullback_snd_isIso_of_range_subset
-  条件: (H : Set.range g.base subseteq Set.range f.base)
+  条件: (H : 集合.range g.base subseteq 集合.range f.base)
   证明: by
   have := TopCat.snd_iso_of_left_embedding_range_subset hf.base_open.isEmbedding g.base H
   have : IsIso (pullback.snd f g).base := by
@@ -1322,7 +1322,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (H : Set.range g.base subseteq Set.range f.base)
+  签名: (H : 集合.range g.base subseteq 集合.range f.base)
   定义体: haveI := pullback_snd_isIso_of_range_subset f g H
   inv (pullback.snd f g) ≫ pullback.fst _ _
 
@@ -1348,7 +1348,7 @@ theorem lift_fac
 
 中文:
 定理 lift_fac
-  条件: (H : Set.range g.base subseteq Set.range f.base)
+  条件: (H : 集合.range g.base subseteq 集合.range f.base)
   结论: lift f g H ≫ f = g
   证明: by
   simp [AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift,
@@ -1370,7 +1370,7 @@ theorem lift_uniq
 
 中文:
 定理 lift_uniq
-  条件: (H : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
+  条件: (H : 集合.range g.base subseteq 集合.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
   证明: by rw [← cancel_mono f, hl, lift_fac]
 
 Depends on / 依赖: cancel_mono, lift_fac
@@ -1393,7 +1393,7 @@ definition isoOfRangeEq
 
 中文:
 定义 isoOfRangeEq
-  签名: [IsOpenImmersion g] (e : Set.range f.base = Set.range g.base)
+  签名: [是开浸入 g] (e : 集合.range f.base = 集合.range g.base)
   定义体: lift g f (le_of_eq e)
   inv := lift f g (le_of_eq e.symm)
   hom_inv_id := by rw [← cancel_mono f]; simp
@@ -1429,7 +1429,7 @@ definition toSheafedSpace
 
 中文:
 定义 toSheafedSpace
-  签名: (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f]
+  签名: (f : X ⟶ Y.toPresheafedSpace) [H : 是开浸入 f]
   定义体: by
     apply TopCat.Presheaf.isSheaf_of_iso (sheafIsoOfIso (isoRestrict f).symm).symm
     apply TopCat.Sheaf.pushforward_sheaf_of_sheaf
@@ -1536,7 +1536,7 @@ instance toSheafedSpace_isOpenImmersion
 
 中文:
 实例 toSheafedSpace_isOpenImmersion
-  签名: : SheafedSpace.IsOpenImmersion (toSheafedSpaceHom Y f)
+  签名: : Sheafed空间.是开浸入 (toSheafedSpaceHom Y f)
   定义体: H
 
 @[simp]
@@ -1555,7 +1555,7 @@ theorem sheafedSpace_toSheafedSpace
 
 中文:
 定理 sheafedSpace_toSheafedSpace
-  结论: {X Y : SheafedSpace C} (f : X ⟶ Y)
+  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   证明: by cases X; rfl
 -/
 theorem sheafedSpace_toSheafedSpace {X Y : SheafedSpace C} (f : X ⟶ Y)
@@ -1585,7 +1585,7 @@ definition toLocallyRingedSpace
 
 中文:
 定义 toLocallyRingedSpace
-  签名: : LocallyRingedSpace where
+  签名: : LocallyRinged空间 where
   定义体: toSheafedSpace Y.toSheafedSpace f
   isLocalRing x :=
     haveI : IsLocalRing (Y.presheaf.stalk (f.base x)) := Y.isLocalRing _
@@ -1686,7 +1686,7 @@ theorem locallyRingedSpace_toLocallyRingedSpace
 
 中文:
 定理 locallyRingedSpace_toLocallyRingedSpace
-  结论: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
+  结论: {X Y : LocallyRinged空间} (f : X ⟶ Y)
   证明: rfl
 -/
 theorem locallyRingedSpace_toLocallyRingedSpace {X Y : LocallyRingedSpace} (f : X ⟶ Y)
@@ -1709,7 +1709,7 @@ theorem isIso_of_subset
 
 中文:
 定理 isIso_of_subset
-  结论: {X Y : PresheafedSpace C} (f : X ⟶ Y)
+  结论: {X Y : Presheafed空间 C} (f : X ⟶ Y)
   证明: by
   have : U = H.base_open.functor.obj ((Opens.map f.base).obj U) := by
     ext1
@@ -1747,7 +1747,7 @@ noncomputable section Pullback
 
 中文:
 实例 comp
-  签名: {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) [SheafedSpace.IsOpenImmersion f]
+  签名: {X Y Z : Sheafed空间 C} (f : X ⟶ Y) (g : Y ⟶ Z) [Sheafed空间.是开浸入 f]
   定义体: PresheafedSpace.IsOpenImmersion.comp f.hom g.hom
 
 noncomputable section Pullback
@@ -1778,7 +1778,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono f
+  签名: 单态射 f
   定义体: (forget).mono_of_mono_map (show @Mono (PresheafedSpace C) _ _ _ f.hom by infer_instance)
 
 Depends on / 依赖: PresheafedSpace, f.hom, forget, infer_instance, mono_of_mono_map
@@ -1796,7 +1796,7 @@ instance forgetMapIsOpenImmersion
 
 中文:
 实例 forgetMapIsOpenImmersion
-  签名: : PresheafedSpace.IsOpenImmersion ((forget).map f)
+  签名: : Presheafed空间.是开浸入 ((forget).map f)
   定义体: ⟨H.base_open, H.c_iso⟩
 
 Depends on / 依赖: H.base_open, H.c_iso, base_open, c_iso
@@ -1819,7 +1819,7 @@ instance hasLimit_cospan_forget_of_left
 
 中文:
 实例 hasLimit_cospan_forget_of_left
-  签名: : HasLimit (cospan f g ⋙ forget)
+  签名: : 有极限 (cospan f g ⋙ forget)
   定义体: by
   have : HasLimit (cospan ((cospan f g ⋙ forget).map Hom.inl)
       ((cospan f g ⋙ forget).map Hom.inr)) := by
@@ -1870,7 +1870,7 @@ instance hasLimit_cospan_forget_of_right
 
 中文:
 实例 hasLimit_cospan_forget_of_right
-  签名: : HasLimit (cospan g f ⋙ forget)
+  签名: : 有极限 (cospan g f ⋙ forget)
   定义体: by
   have : HasLimit (cospan ((cospan g f ⋙ forget).map Hom.inl)
       ((cospan g f ⋙ forget).map Hom.inr)) := by
@@ -1920,7 +1920,7 @@ instance forgetCreatesPullbackOfLeft
 
 中文:
 实例 forgetCreatesPullbackOfLeft
-  签名: : CreatesLimit (cospan f g) forget
+  签名: : 创造极限 (cospan f g) forget
   定义体: createsLimitOfFullyFaithfulOfIso
     (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
       (@pullback.snd (PresheafedSpace C) _ _ _ _ f.hom g.hom _))
@@ -1950,7 +1950,7 @@ instance forgetCreatesPullbackOfRight
 
 中文:
 实例 forgetCreatesPullbackOfRight
-  签名: : CreatesLimit (cospan g f) forget
+  签名: : 创造极限 (cospan g f) forget
   定义体: createsLimitOfFullyFaithfulOfIso
     (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
       (@pullback.fst (PresheafedSpace C) _ _ _ _ g.hom f.hom _))
@@ -2162,7 +2162,7 @@ instance sheafedSpace_pullback_to_base_isOpenImmersion
 
 中文:
 实例 sheafedSpace_pullback_to_base_isOpenImmersion
-  签名: [SheafedSpace.IsOpenImmersion g]
+  签名: [Sheafed空间.是开浸入 g]
   定义体: by
   rw [← limit.w (cospan f g) Hom.inl]; rw [cospan_map_inl]
   infer_instance
@@ -2203,7 +2203,7 @@ theorem of_stalk_iso
 
 中文:
 定理 of_stalk_iso
-  结论: {X Y : SheafedSpace C} (f : X ⟶ Y) (hf : IsOpenEmbedding f.hom.base)
+  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y) (hf : 是开嵌入 f.hom.base)
   证明: { base_open := hf
     c_iso := fun U => by
       apply +allowSynthFailures TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso
@@ -2463,7 +2463,7 @@ theorem app_inv_app'
 
 中文:
 定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.hom.base)
+  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.hom.base)
   证明: PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
 
 Depends on / 依赖: f.hom.base
@@ -2489,7 +2489,7 @@ instance ofRestrict
 
 中文:
 实例 ofRestrict
-  签名: {X : TopCat.{w}} (Y : SheafedSpace C) {f : X ⟶ Y.carrier}
+  签名: {X : 顶元素范畴.{w}} (Y : Sheafed空间 C) {f : X ⟶ Y.carrier}
   定义体: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
 
 @[elementwise, simp]
@@ -2511,7 +2511,7 @@ theorem ofRestrict_invApp
 
 中文:
 定理 ofRestrict_invApp
-  结论: {C : 类型} [Category* C] (X : SheafedSpace C) {Y : TopCat.{w}}
+  结论: {C : 类型} [范畴* C] (X : Sheafed空间 C) {Y : 顶元素范畴.{w}}
   证明: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, ofRestrict_invApp
@@ -2534,8 +2534,8 @@ theorem to_iso
 
 中文:
 定理 to_iso
-  条件: [h' : Epi f.hom.base]
-  结论: IsIso f
+  条件: [h' : 满态射 f.hom.base]
+  结论: 是同构 f
   证明: by
   have : IsIso (forgetToPresheafedSpace.map f) := PresheafedSpace.IsOpenImmersion.to_iso f.hom
   apply isIso_of_reflects_iso _ (SheafedSpace.forgetToPresheafedSpace)
@@ -2556,7 +2556,7 @@ instance stalk_iso
 
 中文:
 实例 stalk_iso
-  签名: [HasColimits C] (x : X)
+  签名: [有余极限 C] (x : X)
   定义体: PresheafedSpace.IsOpenImmersion.stalk_iso f.hom x
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.stalk_iso, f.hom, stalk_iso
@@ -2590,7 +2590,7 @@ theorem sigma_ι_isOpenEmbedding
 
 中文:
 定理 sigma_ι_isOpenEmbedding
-  结论: IsOpenEmbedding (colimit.ι F i).hom.base
+  结论: 是开嵌入 (colimit.ι F i).hom.base
   证明: by
   rw [← show _ = (colimit.ι F i).hom.base from
     ι_preservesColimitIso_inv (SheafedSpace.forget C) F i]
@@ -2633,7 +2633,7 @@ theorem image_preimage_is_empty
 
 中文:
 定理 image_preimage_is_empty
-  条件: (j : Discrete ι) (h : i != j) (U : Opens (F.obj i))
+  条件: (j : 离散 ι) (h : i != j) (U : Opens (F.obj i))
   证明: by
   ext x
   apply iff_false_intro
@@ -2686,7 +2686,7 @@ instance sigma_ι_isOpenImmersion_aux
 
 中文:
 实例 sigma_ι_isOpenImmersion_aux
-  签名: [HasStrictTerminalObjects C]
+  签名: [有StrictTerminalObjects C]
   定义体: sigma_ι_isOpenEmbedding F i
   c_iso U := by
     have h₁ := ι_preservesColimitIso_inv SheafedSpace.forgetToPresheafedSpace F i
@@ -2746,7 +2746,7 @@ instance sigma_ι_isOpenImmersion
 
 中文:
 实例 sigma_ι_isOpenImmersion
-  签名: {ι : Type w} [Small.{v} ι]
+  签名: {ι : 类型 w} [Small.{v} ι]
   定义体: by
   obtain ⟨ι', ⟨e⟩⟩ := Small.equiv_small (α := ι)
   let f : Discrete ι' ≌ Discrete ι := Discrete.equivalence e.symm
@@ -2797,7 +2797,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: (g : Z ⟶ Y) [LocallyRingedSpace.IsOpenImmersion g]
+  签名: (g : Z ⟶ Y) [LocallyRinged空间.是开浸入 g]
   定义体: PresheafedSpace.IsOpenImmersion.comp f.1 g.1
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.comp
@@ -2816,7 +2816,7 @@ instance mono
 
 中文:
 实例 mono
-  签名: : Mono f
+  签名: : 单态射 f
   定义体: LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map (show Mono f.toShHom by infer_instance)
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map, f.toShHom, forgetToSheafedSpace, infer_instance, mono_of_mono_map, toShHom
@@ -2834,7 +2834,7 @@ instance :
 
 中文:
 实例 :
-  签名: SheafedSpace.IsOpenImmersion (LocallyRingedSpace.forgetToSheafedSpace.map f)
+  签名: Sheafed空间.是开浸入 (LocallyRinged空间.forgetToSheafedSpace.map f)
   定义体: H
 -/
 instance : SheafedSpace.IsOpenImmersion (LocallyRingedSpace.forgetToSheafedSpace.map f) :=
@@ -2893,7 +2893,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyRingedSpace.IsOpenImmersion (pullbackConeOfLeft f g).snd
+  签名: LocallyRinged空间.是开浸入 (pullbackConeOfLeft f g).snd
   定义体: show PresheafedSpace.IsOpenImmersion (Y.toPresheafedSpace.ofRestrict _) by infer_instance
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion, Y.toPresheafedSpace.ofRestrict, infer_instance, ofRestrict, toPresheafedSpace
@@ -2916,7 +2916,7 @@ definition pullbackConeOfLeftIsLimit
 
 中文:
 定义 pullbackConeOfLeftIsLimit
-  签名: : IsLimit (pullbackConeOfLeft f g)
+  签名: : 是极限 (pullbackConeOfLeft f g)
   定义体: PullbackCone.isLimitAux' _ fun s => by
     refine ⟨LocallyRingedSpace.Hom.mk (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift
         f.1 g.1 (PullbackCone.mk _ _ (congr_arg LocallyRingedSpace.Hom.toHom s.condition))) ?_,
@@ -3052,7 +3052,7 @@ instance pullback_to_base_isOpenImmersion
 
 中文:
 实例 pullback_to_base_isOpenImmersion
-  签名: [LocallyRingedSpace.IsOpenImmersion g]
+  签名: [LocallyRinged空间.是开浸入 g]
   定义体: by
   rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
   infer_instance
@@ -3314,7 +3314,7 @@ theorem pullback_snd_isIso_of_range_subset
 
 中文:
 定理 pullback_snd_isIso_of_range_subset
-  条件: (H' : Set.range g.base subseteq Set.range f.base)
+  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
   证明: by
   apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
     (F := LocallyRingedSpace.forgetToSheafedSpace)
@@ -3350,7 +3350,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (H' : Set.range g.base subseteq Set.range f.base)
+  签名: (H' : 集合.range g.base subseteq 集合.range f.base)
   定义体: have := pullback_snd_isIso_of_range_subset f g H'
   inv (pullback.snd f g) ≫ pullback.fst _ _
 
@@ -3375,7 +3375,7 @@ theorem lift_fac
 
 中文:
 定理 lift_fac
-  条件: (H' : Set.range g.base subseteq Set.range f.base)
+  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
   结论: lift f g H' ≫ f = g
   证明: by
   simp [lift, pullback.condition]
@@ -3395,7 +3395,7 @@ theorem lift_uniq
 
 中文:
 定理 lift_uniq
-  条件: (H' : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
+  条件: (H' : 集合.range g.base subseteq 集合.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
   证明: by rw [← cancel_mono f, hl, lift_fac]
 
 Depends on / 依赖: cancel_mono, lift_fac
@@ -3420,7 +3420,7 @@ theorem lift_range
 
 中文:
 定理 lift_range
-  条件: (H' : Set.range g.base subseteq Set.range f.base)
+  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
   证明: by
   have := pullback_snd_isIso_of_range_subset f g H'
   dsimp only [lift]
@@ -3462,7 +3462,7 @@ definition isoRestrict
 
 中文:
 定义 isoRestrict
-  签名: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
+  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
   定义体: LocallyRingedSpace.isoOfSheafedSpaceIso
     SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso
       (PresheafedSpace.IsOpenImmersion.isoRestrict f.1)
@@ -3486,7 +3486,7 @@ abbreviation opensFunctor
 
 中文:
 缩写 opensFunctor
-  签名: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
+  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
   定义体: H.base_open.functor
 
 Depends on / 依赖: H.base_open.functor, base_open, functor
@@ -3507,7 +3507,7 @@ theorem of_stalk_iso
 
 中文:
 定理 of_stalk_iso
-  结论: {X Y : LocallyRingedSpace} (f : X ⟶ Y) (hf : IsOpenEmbedding f.base)
+  结论: {X Y : LocallyRinged空间} (f : X ⟶ Y) (hf : 是开嵌入 f.base)
   证明: SheafedSpace.IsOpenImmersion.of_stalk_iso _ hf (H := stalk_iso)
 
 Depends on / 依赖: IsOpenImmersion, SheafedSpace, SheafedSpace.IsOpenImmersion.of_stalk_iso, of_stalk_iso, stalk_iso
@@ -3710,7 +3710,7 @@ theorem app_inv_app'
 
 中文:
 定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base)
+  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.base)
   证明: PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
 
 Depends on / 依赖: f.base
@@ -3736,7 +3736,7 @@ instance ofRestrict
 
 中文:
 实例 ofRestrict
-  签名: {X : TopCat.{w}} (Y : LocallyRingedSpace) {f : X ⟶ Y.carrier}
+  签名: {X : 顶元素范畴.{w}} (Y : LocallyRinged空间) {f : X ⟶ Y.carrier}
   定义体: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
 
 @[elementwise, simp]
@@ -3758,7 +3758,7 @@ theorem ofRestrict_invApp
 
 中文:
 定理 ofRestrict_invApp
-  结论: (X : LocallyRingedSpace) {Y : TopCat.{w}}
+  结论: (X : LocallyRinged空间) {Y : 顶元素范畴.{w}}
   证明: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, ofRestrict_invApp
@@ -3800,8 +3800,8 @@ theorem to_iso
 
 中文:
 定理 to_iso
-  条件: [Epi f.base]
-  结论: IsIso f
+  条件: [满态射 f.base]
+  结论: 是同构 f
   证明: by
   rw [← isIso_iff_of_reflects_iso _ LocallyRingedSpace.forgetToSheafedSpace]
   have : Epi (forgetToSheafedSpace.map f).hom.base := by assumption

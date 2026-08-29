@@ -58,7 +58,7 @@ definition coboundaries
 
 中文:
 定义 coboundaries
-  签名: : AddSubgroup (Cocycle K L n) where
+  签名: : 加法子群 (Cocycle K L n) where
   定义体: Set.ofPred (fun α => exists (m : Int) (hm : m + 1 = n) (β : Cochain K L m), δ m n β = α)
   zero_mem' := ⟨n - 1, by simp, 0, by simp⟩
   add_mem' := by
@@ -116,7 +116,7 @@ definition CohomologyClass
   body: Cocycle K L n ⧸ coboundaries K L n
 
 中文:
-定义 CohomologyClass
+定义 上同调类
   签名: : 类型v
   定义体: Cocycle K L n ⧸ coboundaries K L n
 
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (CohomologyClass K L n)
+  签名: 加法交换群 (上同调类 K L n)
   定义体: inferInstanceAs (AddCommGroup (Cocycle K L n ⧸ coboundaries K L n))
 
 Depends on / 依赖: AddCommGroup, Cocycle, coboundaries
@@ -174,7 +174,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk : Cocycle K L n -> _)
+  结论: 函数.满射 (mk : Cocycle K L n -> _)
   证明: Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
@@ -295,7 +295,7 @@ definition mkAddMonoidHom
 
 中文:
 定义 mkAddMonoidHom
-  签名: : Cocycle K L n ->+ CohomologyClass K L n where
+  签名: : Cocycle K L n ->+ 上同调类 K L n where
   定义体: mk
   map_zero' := by simp
   map_add' := by simp
@@ -459,7 +459,7 @@ lemma toHom_bijective
 
 中文:
 引理 toHom_bijective
-  结论: Function.Bijective (toHom : CohomologyClass K L n -> _)
+  结论: 函数.双射 (toHom : 上同调类 K L n -> _)
   证明: by
   refine ⟨fun x y h => ?_, fun f => ?_⟩
   · obtain ⟨x, rfl⟩ := x.mk_surjective

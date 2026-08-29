@@ -49,8 +49,8 @@ class Functor.Additive
     - map_add : forall {X Y : C} {f g : X ⟶ Y}, F.map (f + g) = F.map f + F.map g  [default: by cat_disch]
 
 中文:
-类 Functor.Additive
-  参数: {C D : 类型} [Category* C] [Category* D] [Preadditive C] [Preadditive D]
+类 函子.加性
+  参数: {C D : 类型} [范畴* C] [范畴* D] [预加性 C] [预加性 D]
   公理与运算 (1 个):
     - map_add : 对任意 {X Y : C} {f g : X ⟶ Y}, F.map (f + g) = F.map f + F.map g  [默认: by cat_disch]
 
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Additive (𝟭 C)
+  签名: 加性 (𝟭 C)
 -/
 instance : Additive (𝟭 C) where
 
@@ -272,7 +272,7 @@ omit [F.Additive] in
 中文:
 引理 additive_of_iso
   条件: {G : C ⥤ D} (e : F ≅ G)
-  结论: G.Additive
+  结论: G.加性
   证明: by
   constructor
   intro X Y f g
@@ -302,7 +302,7 @@ lemma additive_iff_of_iso
 中文:
 引理 additive_iff_of_iso
   条件: {G : C ⥤ D} (e : F ≅ G)
-  结论: F.Additive ↔ G.Additive
+  结论: F.加性 ↔ G.加性
   证明: ⟨fun _ => additive_of_iso e, fun _ => additive_of_iso e.symm⟩
 
 Depends on / 依赖: additive_of_iso, e.symm
@@ -328,7 +328,7 @@ lemma additive_of_full_essSurj_comp
 
 中文:
 引理 additive_of_full_essSurj_comp
-  结论: [Full F] [EssSurj F] (G : D ⥤ E)
+  结论: [满 F] [本质满射 F] (G : D ⥤ E)
   证明: by
     obtain ⟨f', hf'⟩ := F.map_surjective ((F.objObjPreimageIso X).hom ≫ f ≫
       (F.objObjPreimageIso Y).inv)
@@ -387,7 +387,7 @@ lemma hasZeroObject_of_additive
 
 中文:
 引理 hasZeroObject_of_additive
-  条件: [HasZeroObject C]
+  条件: [有ZeroObject C]
   证明: ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.map_id, id_zero, F.map_zero]⟩
 
 Depends on / 依赖: F.map_id, F.map_zero, F.obj, IsZero, IsZero.iff_id_eq_zero, id_zero, iff_id_eq_zero, map_id, map_zero
@@ -409,8 +409,8 @@ lemma Additive.of_isZero
       exact NatTrans.congr_app ((IsZero.iff_id_eq_zero _).1 hF) _) _ _
 
 中文:
-引理 Additive.of_isZero
-  条件: {F : C ⥤ D} (hF : IsZero F)
+引理 加性.of_isZero
+  条件: {F : C ⥤ D} (hF : 是零 F)
   证明: IsZero.eq_of_tgt (by
       rw [IsZero.iff_id_eq_zero]
       exact NatTrans.congr_app ((IsZero.iff_id_eq_zero _).1 hF) _) _ _
@@ -435,8 +435,8 @@ instance [HasZeroObject
 omit [Preadditive C] in
 
 中文:
-实例 [HasZeroObject
-  签名: D] : Functor.Additive (0
+实例 [有ZeroObject
+  签名: D] : 函子.加性 (0
   定义体: .of_isZero (isZero_zero _)
 
 omit [Preadditive C] in
@@ -459,7 +459,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Functor.whiskeringRight C D E).Additive
+  签名: (函子.whiskeringRight C D E).加性
 -/
 instance : (Functor.whiskeringRight C D E).Additive where
 
@@ -485,7 +485,7 @@ instance [HasCoproducts.{w}
 
 中文:
 实例 [HasCoproducts.{w}
-  签名: C] : (sigmaConst.{w} (C := C)).Additive where
+  签名: C] : (sigmaConst.{w} (C := C)).加性 where
 
 Depends on / 依赖: Additive
 -/
@@ -506,7 +506,7 @@ instance inducedFunctor_additive
 
 中文:
 实例 inducedFunctor_additive
-  签名: : Functor.Additive (inducedFunctor F) where
+  签名: : 函子.加性 (inducedFunctor F) where
 -/
 instance inducedFunctor_additive : Functor.Additive (inducedFunctor F) where
 
@@ -521,7 +521,7 @@ instance fullSubcategoryInclusion_additive
 
 中文:
 实例 fullSubcategoryInclusion_additive
-  签名: {C : 类型} [Category* C] [Preadditive C]
+  签名: {C : 类型} [范畴* C] [预加性 C]
 -/
 instance fullSubcategoryInclusion_additive {C : Type*} [Category* C] [Preadditive C]
     (Z : ObjectProperty C) : Z.ι.Additive where
@@ -574,7 +574,7 @@ lemma hasFiniteProducts_of_additive_of_essSurj
 
 中文:
 引理 hasFiniteProducts_of_additive_of_essSurj
-  结论: [HasFiniteProducts C] [Additive F]
+  结论: [有FiniteProducts C] [加性 F]
   证明: ⟨fun _ => ⟨fun K => hasLimit_of_iso
     (F := Discrete.functor (fun i => F.objPreimage (K.obj ⟨i⟩)) ⋙ F)
       (Discrete.natIso (fun _ => F.objObjPreimageIso _))⟩⟩
@@ -598,7 +598,7 @@ theorem additive_of_preservesBinaryBiproducts
 
 中文:
 定理 additive_of_preservesBinaryBiproducts
-  结论: [HasBinaryBiproducts C] [PreservesZeroMorphisms F]
+  结论: [有BinaryBiproducts C] [保持ZeroMorphisms F]
   证明: by
     rw [biprod.add_eq_lift_id_desc]; rw [F.map_comp]; rw [← biprod.lift_mapBiprod]; rw [← biprod.mapBiprod_hom_desc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [F.map_id]; rw [biprod.add_eq_lift_id_desc]
 
@@ -656,7 +656,7 @@ instance inverse_additive
 
 中文:
 实例 inverse_additive
-  签名: (e : C ≌ D) [e.functor.Additive]
+  签名: (e : C ≌ D) [e.functor.加性]
   定义体: e.functor.map_injective (by simp)
 
 Depends on / 依赖: e.functor.map_injective, functor, map_injective
@@ -680,7 +680,7 @@ definition additiveFunctor
 
 中文:
 定义 additiveFunctor
-  签名: : Object命题erty (C ⥤ D)
+  签名: : ObjectProperty (C ⥤ D)
   定义体: fun F => F.Additive
 
 Depends on / 依赖: Additive, F.Additive
@@ -760,7 +760,7 @@ definition AdditiveFunctor.of
 
 中文:
 定义 AdditiveFunctor.of
-  签名: (F : C ⥤ D) [F.Additive]
+  签名: (F : C ⥤ D) [F.加性]
   定义体: ⟨F, by simpa⟩
 
 @[simp]
@@ -782,7 +782,7 @@ theorem AdditiveFunctor.of_fst
 
 中文:
 定理 AdditiveFunctor.of_fst
-  条件: (F : C ⥤ D) [F.Additive]
+  条件: (F : C ⥤ D) [F.加性]
   结论: (AdditiveFunctor.of F).1 = F
   证明: rfl
 
@@ -822,7 +822,7 @@ theorem AdditiveFunctor.forget_obj_of
 
 中文:
 定理 AdditiveFunctor.forget_obj_of
-  条件: (F : C ⥤ D) [F.Additive]
+  条件: (F : C ⥤ D) [F.加性]
   证明: rfl
 
 @[simp]
@@ -859,7 +859,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Additive (AdditiveFunctor.forget C D)
+  签名: 函子.加性 (AdditiveFunctor.forget C D)
   定义体: rfl
 -/
 instance : Functor.Additive (AdditiveFunctor.forget C D) where map_add := rfl

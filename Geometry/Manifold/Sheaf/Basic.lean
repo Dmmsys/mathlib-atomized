@@ -53,8 +53,8 @@ instance TopCat.of.chartedSpace
   body: inferInstanceAs ChartedSpace H M
 
 中文:
-实例 TopCat.of.chartedSpace
-  签名: : ChartedSpace H (TopCat.of M)
+实例 顶元素范畴.of.chartedSpace
+  签名: : Charted空间 H (顶元素范畴.of M)
   定义体: inferInstanceAs ChartedSpace H M
 
 Depends on / 依赖: ChartedSpace
@@ -71,8 +71,8 @@ instance TopCat.of.hasGroupoid
   body: inferInstanceAs HasGroupoid M G
 
 中文:
-实例 TopCat.of.hasGroupoid
-  签名: [HasGroupoid M G]
+实例 顶元素范畴.of.hasGroupoid
+  签名: [有群胚 M G]
   定义体: inferInstanceAs HasGroupoid M G
 
 Depends on / 依赖: HasGroupoid
@@ -99,7 +99,7 @@ definition StructureGroupoid.LocalInvariantProp.localPredicate
 
 中文:
 定义 StructureGroupoid.LocalInvariantProp.localPredicate
-  签名: (hG : LocalInvariant命题 G G' P)
+  签名: (hG : LocalInvariantProp G G' P)
   定义体: fun f : U -> M' => ChartedSpace.LiftProp P f
   res := by
     intro U V i f h x
@@ -142,7 +142,7 @@ definition StructureGroupoid.LocalInvariantProp.sheaf
 
 中文:
 定义 StructureGroupoid.LocalInvariantProp.sheaf
-  签名: (hG : LocalInvariant命题 G G' P)
+  签名: (hG : LocalInvariantProp G G' P)
   定义体: TopCat.subsheafToTypes (hG.localPredicate M M')
 
 Depends on / 依赖: TopCat, TopCat.subsheafToTypes, hG.localPredicate, localPredicate, subsheafToTypes
@@ -161,7 +161,7 @@ instance StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun
 
 中文:
 实例 StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun
-  签名: (hG : LocalInvariant命题 G G' P)
+  签名: (hG : LocalInvariantProp G G' P)
   定义体: a.1
 -/
 instance StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun (hG : LocalInvariantProp G G' P)
@@ -178,7 +178,7 @@ theorem StructureGroupoid.LocalInvariantProp.section_spec
 
 中文:
 定理 StructureGroupoid.LocalInvariantProp.section_spec
-  结论: (hG : LocalInvariant命题 G G' P)
+  结论: (hG : LocalInvariantProp G G' P)
   证明: f.2
 -/
 theorem StructureGroupoid.LocalInvariantProp.section_spec (hG : LocalInvariantProp G G' P)

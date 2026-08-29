@@ -62,7 +62,7 @@ lemma isRegularEpiCategory_sheaf
 
 中文:
 引理 isRegularEpiCategory_sheaf
-  结论: (J : GrothendieckTopology C)
+  结论: (J : Grothendieck拓扑 C)
   证明: by
     -- Factor `f` on the level of presheaves as an epimorphism `p` followed by a monomorphism `i`.
     obtain ⟨I, p, i, hp, hi, hpi⟩ := h f

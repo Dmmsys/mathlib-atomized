@@ -60,7 +60,7 @@ definition constantPresheafAdj
 
 中文:
 定义 constantPresheafAdj
-  签名: {T : C} (hT : IsTerminal T)
+  签名: {T : C} (hT : 是终止 T)
   定义体: (Functor.constCompEvaluationObj D (op T)).hom
   counit := {
     app := fun F => {
@@ -96,7 +96,7 @@ definition constantSheaf
 
 中文:
 定义 constantSheaf
-  签名: : D ⥤ Sheaf J D
+  签名: : D ⥤ 层 J D
   定义体: Functor.const Cᵒᵖ ⋙ (presheafToSheaf J D)
 
 Depends on / 依赖: Functor, Functor.const, presheafToSheaf
@@ -115,7 +115,7 @@ definition constantSheafAdj
 
 中文:
 定义 constantSheafAdj
-  签名: {T : C} (hT : IsTerminal T)
+  签名: {T : C} (hT : 是终止 T)
   定义体: (constantPresheafAdj D hT).comp (sheafificationAdjunction J D)
 
 Depends on / 依赖: constantPresheafAdj, sheafificationAdjunction
@@ -138,8 +138,8 @@ class IsConstant
     - mem_essImage : (constantSheaf J D).essImage F
 
 中文:
-类 IsConstant
-  参数: (F : Sheaf J D)
+类 是常数
+  参数: (F : 层 J D)
   公理与运算 (1 个):
     - mem_essImage : (constantSheaf J D).essImage F
 -/
@@ -156,7 +156,7 @@ lemma mem_essImage_of_isConstant
 
 中文:
 引理 mem_essImage_of_isConstant
-  条件: (F : Sheaf J D) [IsConstant J F]
+  条件: (F : 层 J D) [是常数 J F]
   证明: IsConstant.mem_essImage
 
 Depends on / 依赖: IsConstant, IsConstant.mem_essImage, mem_essImage
@@ -176,8 +176,8 @@ lemma isConstant_congr
 
 中文:
 引理 isConstant_congr
-  条件: {F G : Sheaf J D} (i : F ≅ G) [IsConstant J F]
-  结论: IsConstant J G where
+  条件: {F G : 层 J D} (i : F ≅ G) [是常数 J F]
+  结论: 是常数 J G where
   证明: essImage.ofIso i F.mem_essImage_of_isConstant
 
 Depends on / 依赖: F.mem_essImage_of_isConstant, essImage, essImage.ofIso, mem_essImage_of_isConstant
@@ -195,7 +195,7 @@ lemma isConstant_of_iso
 
 中文:
 引理 isConstant_of_iso
-  条件: {F : Sheaf J D} {X : D} (i : F ≅ (constantSheaf J D).obj X)
+  条件: {F : 层 J D} {X : D} (i : F ≅ (constantSheaf J D).obj X)
   证明: ⟨_, ⟨i.symm⟩⟩
 
 Depends on / 依赖: i.symm
@@ -215,7 +215,7 @@ lemma isConstant_iff_mem_essImage
 
 中文:
 引理 isConstant_iff_mem_essImage
-  结论: {L : D ⥤ Sheaf J D} {T : C} (hT : IsTerminal T)
+  结论: {L : D ⥤ 层 J D} {T : C} (hT : 是终止 T)
   证明: by
   rw [essImage_eq_of_natIso (adj.leftAdjointUniq (constantSheafAdj J D hT))]
   exact ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
@@ -238,7 +238,7 @@ lemma isConstant_of_isIso_counit_app
 
 中文:
 引理 isConstant_of_isIso_counit_app
-  结论: (F : Sheaf J D) [HasTerminal C]
+  结论: (F : 层 J D) [有终止 C]
   证明: ⟨_, ⟨asIso (constantSheafAdj J D terminalIsTerminal).counit.app F⟩⟩
 
 Depends on / 依赖: constantSheafAdj, counit, counit.app, eRk_eq_eRk_union, hIX.eRk_eq_eRk_union, terminalIsTerminal, union_singleton
@@ -259,7 +259,7 @@ instance [(constantSheaf
 
 中文:
 实例 [(constantSheaf
-  签名: J D).Faithful] [(constantSheaf J D).Full] (F : Sheaf J D)
+  签名: J D).忠实] [(constantSheaf J D).满] (F : 层 J D)
   定义体: by
   rw [isIso_counit_app_iff_mem_essImage]
   exact F.mem_essImage_of_isConstant
@@ -282,7 +282,7 @@ lemma isConstant_iff_isIso_counit_app
 
 中文:
 引理 isConstant_iff_isIso_counit_app
-  结论: [(constantSheaf J D).Faithful] [(constantSheaf J D).Full]
+  结论: [(constantSheaf J D).忠实] [(constantSheaf J D).满]
   证明: ⟨fun _ => inferInstance, fun _ => ⟨_, ⟨asIso (constantSheafAdj J D hT).counit.app F⟩⟩⟩
 
 Depends on / 依赖: constantSheafAdj, counit, counit.app
@@ -302,7 +302,7 @@ lemma isConstant_iff_isIso_counit_app'
 
 中文:
 引理 isConstant_iff_isIso_counit_app'
-  结论: {L : D ⥤ Sheaf J D} {T : C} (hT : IsTerminal T)
+  结论: {L : D ⥤ 层 J D} {T : C} (hT : 是终止 T)
   证明: (isConstant_iff_mem_essImage J hT adj F).trans (isIso_counit_app_iff_mem_essImage adj).symm
 
 Depends on / 依赖: isConstant_iff_mem_essImage, isIso_counit_app_iff_mem_essImage
@@ -385,8 +385,8 @@ lemma Sheaf.isConstant_iff_of_equivalence
       (sheafEquiv J K G D).inverse.
 
 中文:
-引理 Sheaf.isConstant_iff_of_equivalence
-  条件: (F : Sheaf K D)
+引理 层.isConstant_iff_of_equivalence
+  条件: (F : 层 K D)
   证明: by
   constructor
   · exact fun ⟨Y, ⟨i⟩⟩ => ⟨_, ⟨(equivCommuteConstant J D K G hT hT').symm.app _ ≪≫
@@ -482,7 +482,7 @@ lemma constantSheafAdj_counit_w
 
 中文:
 引理 constantSheafAdj_counit_w
-  条件: {T : C} (hT : IsTerminal T)
+  条件: {T : C} (hT : 是终止 T)
   证明: by
   apply Sheaf.hom_ext
   dsimp
@@ -521,8 +521,8 @@ lemma Sheaf.isConstant_of_forget
   exact isIso_of_reflects_iso _ (sheafCompose J U)
 
 中文:
-引理 Sheaf.isConstant_of_forget
-  结论: [constantSheaf J D |>.Faithful] [constantSheaf J D |>.Full]
+引理 层.isConstant_of_forget
+  结论: [constantSheaf J D |>.忠实] [constantSheaf J D |>.满]
   证明: by
   have : IsIso ((sheafCompose J U).map ((constantSheafAdj J D hT).counit.app F)) := by
     rw [← constantSheafAdj_counit_w]
@@ -557,7 +557,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : F.IsConstant J] : ((sheafCompose J U).obj F).IsConstant J
+  签名: : F.是常数 J] : ((sheafCompose J U).obj F).是常数 J
   定义体: by
   obtain ⟨Y, ⟨i⟩⟩ := h
   exact ⟨U.obj Y, ⟨(fullyFaithfulSheafToPresheaf _ _).preimageIso
@@ -583,8 +583,8 @@ lemma Sheaf.isConstant_iff_forget
   proof: ⟨fun _ => inferInstance, fun _ => Sheaf.isConstant_of_forget _ U F hT⟩
 
 中文:
-引理 Sheaf.isConstant_iff_forget
-  结论: [constantSheaf J D |>.Faithful] [constantSheaf J D |>.Full]
+引理 层.isConstant_iff_forget
+  结论: [constantSheaf J D |>.忠实] [constantSheaf J D |>.满]
   证明: ⟨fun _ => inferInstance, fun _ => Sheaf.isConstant_of_forget _ U F hT⟩
 
 Depends on / 依赖: Sheaf.isConstant_of_forget, isConstant_of_forget

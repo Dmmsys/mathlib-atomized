@@ -43,9 +43,9 @@ theorem Bounded.mono
   proof: hs.imp fun _ ha b hb => ha b (hst hb)
 
 中文:
-定理 Bounded.mono
-  条件: (hst : s subseteq t) (hs : Bounded r t)
-  结论: Bounded r s
+定理 有界.mono
+  条件: (hst : s subseteq t) (hs : 有界 r t)
+  结论: 有界 r s
   证明: hs.imp fun _ ha b hb => ha b (hst hb)
 
 Depends on / 依赖: hs.imp
@@ -89,8 +89,8 @@ theorem unbounded_le_of_forall_exists_lt
   ⟨b, hb, fun hba => hba.not_gt hb'⟩
 
 中文:
-定理 unbounded_le_of_forall_exists_lt
-  条件: [Preorder α] (h : 对任意 a, 存在 b in s, a < b)
+定理 unbounded_le_of_对任意_存在_lt
+  条件: [预序 α] (h : 对任意 a, 存在 b in s, a < b)
   证明: fun a =>
   let ⟨b, hb, hb'⟩ := h a
   ⟨b, hb, fun hba => hba.not_gt hb'⟩
@@ -112,7 +112,7 @@ theorem unbounded_le_iff
 
 中文:
 定理 unbounded_le_iff
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: Unbounded (· <= ·) s ↔ 对任意 a, 存在 b in s, a < b
   证明: by
   simp only [Unbounded, not_le]
@@ -133,8 +133,8 @@ theorem unbounded_lt_of_forall_exists_le
   ⟨b, hb, fun hba => hba.not_ge hb'⟩
 
 中文:
-定理 unbounded_lt_of_forall_exists_le
-  条件: [Preorder α] (h : 对任意 a, 存在 b in s, a <= b)
+定理 unbounded_lt_of_对任意_存在_le
+  条件: [预序 α] (h : 对任意 a, 存在 b in s, a <= b)
   证明: fun a =>
   let ⟨b, hb, hb'⟩ := h a
   ⟨b, hb, fun hba => hba.not_ge hb'⟩
@@ -156,7 +156,7 @@ theorem unbounded_lt_iff
 
 中文:
 定理 unbounded_lt_iff
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: Unbounded (· < ·) s ↔ 对任意 a, 存在 b in s, a <= b
   证明: by
   simp only [Unbounded, not_lt]
@@ -175,8 +175,8 @@ theorem unbounded_ge_of_forall_exists_gt
   proof: @unbounded_le_of_forall_exists_lt αᵒᵈ _ _ h
 
 中文:
-定理 unbounded_ge_of_forall_exists_gt
-  条件: [Preorder α] (h : 对任意 a, 存在 b in s, b < a)
+定理 unbounded_ge_of_对任意_存在_gt
+  条件: [预序 α] (h : 对任意 a, 存在 b in s, b < a)
   证明: @unbounded_le_of_forall_exists_lt αᵒᵈ _ _ h
 
 Depends on / 依赖: unbounded_le_of_forall_exists_lt
@@ -199,7 +199,7 @@ theorem unbounded_ge_iff
 
 中文:
 定理 unbounded_ge_iff
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: Unbounded (· >= ·) s ↔ 对任意 a, 存在 b in s, b < a
   证明: ⟨fun h a =>
     let ⟨b, hb, hba⟩ := h a
@@ -225,8 +225,8 @@ theorem unbounded_gt_of_forall_exists_ge
   ⟨b, hb, fun hba => not_le_of_gt hba hb'⟩
 
 中文:
-定理 unbounded_gt_of_forall_exists_ge
-  条件: [Preorder α] (h : 对任意 a, 存在 b in s, b <= a)
+定理 unbounded_gt_of_对任意_存在_ge
+  条件: [预序 α] (h : 对任意 a, 存在 b in s, b <= a)
   证明: fun a =>
   let ⟨b, hb, hb'⟩ := h a
   ⟨b, hb, fun hba => not_le_of_gt hba hb'⟩
@@ -250,7 +250,7 @@ theorem unbounded_gt_iff
 
 中文:
 定理 unbounded_gt_iff
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: Unbounded (· > ·) s ↔ 对任意 a, 存在 b in s, b <= a
   证明: ⟨fun h a =>
     let ⟨b, hb, hba⟩ := h a
@@ -281,9 +281,9 @@ theorem Bounded.rel_mono
   ⟨a, fun b hb => hrr' b a (ha b hb)⟩
 
 中文:
-定理 Bounded.rel_mono
-  条件: {r' : α -> α -> 命题} (h : Bounded r s) (hrr' : r <= r')
-  结论: Bounded r' s
+定理 有界.rel_mono
+  条件: {r' : α -> α -> 命题} (h : 有界 r s) (hrr' : r <= r')
+  结论: 有界 r' s
   证明: let ⟨a, ha⟩ := h
   ⟨a, fun b hb => hrr' b a (ha b hb)⟩
 -/
@@ -302,8 +302,8 @@ theorem bounded_le_of_bounded_lt
 
 中文:
 定理 bounded_le_of_bounded_lt
-  条件: [Preorder α] (h : Bounded (· < ·) s)
-  结论: Bounded (· <= ·) s
+  条件: [预序 α] (h : 有界 (· < ·) s)
+  结论: 有界 (· <= ·) s
   证明: h.rel_mono fun _ _ => le_of_lt
 
 Depends on / 依赖: h.rel_mono, le_of_lt, rel_mono
@@ -346,7 +346,7 @@ theorem unbounded_lt_of_unbounded_le
 
 中文:
 定理 unbounded_lt_of_unbounded_le
-  条件: [Preorder α] (h : Unbounded (· <= ·) s)
+  条件: [预序 α] (h : Unbounded (· <= ·) s)
   结论: Unbounded (· < ·) s
   证明: h.rel_mono fun _ _ => le_of_lt
 
@@ -369,7 +369,7 @@ theorem bounded_le_iff_bounded_lt
 
 中文:
 定理 bounded_le_iff_bounded_lt
-  条件: [Preorder α] [NoMaxOrder α]
+  条件: [预序 α] [NoMax序 α]
   证明: by
   refine ⟨fun h => ?_, bounded_le_of_bounded_lt⟩
   obtain ⟨a, ha⟩ := h
@@ -396,7 +396,7 @@ theorem unbounded_lt_iff_unbounded_le
 
 中文:
 定理 unbounded_lt_iff_unbounded_le
-  条件: [Preorder α] [NoMaxOrder α]
+  条件: [预序 α] [NoMax序 α]
   证明: by
   simp_rw [← not_bounded_iff, bounded_le_iff_bounded_lt]
 
@@ -420,8 +420,8 @@ theorem bounded_ge_of_bounded_gt
 
 中文:
 定理 bounded_ge_of_bounded_gt
-  条件: [Preorder α] (h : Bounded (· > ·) s)
-  结论: Bounded (· >= ·) s
+  条件: [预序 α] (h : 有界 (· > ·) s)
+  结论: 有界 (· >= ·) s
   证明: let ⟨a, ha⟩ := h
   ⟨a, fun b hb => le_of_lt (ha b hb)⟩
 
@@ -444,7 +444,7 @@ theorem unbounded_gt_of_unbounded_ge
 
 中文:
 定理 unbounded_gt_of_unbounded_ge
-  条件: [Preorder α] (h : Unbounded (· >= ·) s)
+  条件: [预序 α] (h : Unbounded (· >= ·) s)
   结论: Unbounded (· > ·) s
   证明: fun a =>
   let ⟨b, hb, hba⟩ := h a
@@ -467,7 +467,7 @@ theorem bounded_ge_iff_bounded_gt
 
 中文:
 定理 bounded_ge_iff_bounded_gt
-  条件: [Preorder α] [NoMinOrder α]
+  条件: [预序 α] [NoMin序 α]
   证明: @bounded_le_iff_bounded_lt αᵒᵈ _ _ _
 
 Depends on / 依赖: bounded_le_iff_bounded_lt
@@ -486,7 +486,7 @@ theorem unbounded_gt_iff_unbounded_ge
 
 中文:
 定理 unbounded_gt_iff_unbounded_ge
-  条件: [Preorder α] [NoMinOrder α]
+  条件: [预序 α] [NoMin序 α]
   证明: @unbounded_lt_iff_unbounded_le αᵒᵈ _ _ _
 
 Depends on / 依赖: unbounded_lt_iff_unbounded_le
@@ -510,8 +510,8 @@ theorem unbounded_le_univ
 
 中文:
 定理 unbounded_le_univ
-  条件: [LE α] [NoTopOrder α]
-  结论: Unbounded (· <= ·) (@Set.univ α)
+  条件: [LE α] [无顶序 α]
+  结论: Unbounded (· <= ·) (@集合.univ α)
   证明: fun a =>
   let ⟨b, hb⟩ := exists_not_le a
   ⟨b, ⟨⟩, hb⟩
@@ -531,8 +531,8 @@ theorem unbounded_lt_univ
 
 中文:
 定理 unbounded_lt_univ
-  条件: [Preorder α] [NoTopOrder α]
-  结论: Unbounded (· < ·) (@Set.univ α)
+  条件: [预序 α] [无顶序 α]
+  结论: Unbounded (· < ·) (@集合.univ α)
   证明: unbounded_lt_of_unbounded_le unbounded_le_univ
 
 Depends on / 依赖: unbounded_le_univ, unbounded_lt_of_unbounded_le
@@ -553,8 +553,8 @@ theorem unbounded_ge_univ
 
 中文:
 定理 unbounded_ge_univ
-  条件: [LE α] [NoBotOrder α]
-  结论: Unbounded (· >= ·) (@Set.univ α)
+  条件: [LE α] [无底序 α]
+  结论: Unbounded (· >= ·) (@集合.univ α)
   证明: fun a =>
   let ⟨b, hb⟩ := exists_not_ge a
   ⟨b, ⟨⟩, hb⟩
@@ -574,8 +574,8 @@ theorem unbounded_gt_univ
 
 中文:
 定理 unbounded_gt_univ
-  条件: [Preorder α] [NoBotOrder α]
-  结论: Unbounded (· > ·) (@Set.univ α)
+  条件: [预序 α] [无底序 α]
+  结论: Unbounded (· > ·) (@集合.univ α)
   证明: unbounded_gt_of_unbounded_ge unbounded_ge_univ
 
 Depends on / 依赖: unbounded_ge_univ, unbounded_gt_of_unbounded_ge
@@ -597,7 +597,7 @@ theorem bounded_self
 中文:
 定理 bounded_self
   条件: (a : α)
-  结论: Bounded r { b | r b a }
+  结论: 有界 r { b | r b a }
   证明: ⟨a, fun _ => id⟩
 -/
 theorem bounded_self (a : α) : Bounded r { b | r b a } :=
@@ -616,8 +616,8 @@ theorem bounded_lt_Iio
 
 中文:
 定理 bounded_lt_Iio
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· < ·) (Iio a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· < ·) (左无界右开区间 a)
   证明: bounded_self a
 
 Depends on / 依赖: bounded_self
@@ -636,8 +636,8 @@ theorem bounded_le_Iio
 
 中文:
 定理 bounded_le_Iio
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· <= ·) (Iio a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· <= ·) (左无界右开区间 a)
   证明: bounded_le_of_bounded_lt (bounded_lt_Iio a)
 
 Depends on / 依赖: bounded_le_of_bounded_lt, bounded_lt_Iio
@@ -656,8 +656,8 @@ theorem bounded_le_Iic
 
 中文:
 定理 bounded_le_Iic
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· <= ·) (Iic a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· <= ·) (左无界右闭区间 a)
   证明: bounded_self a
 
 Depends on / 依赖: bounded_self
@@ -677,8 +677,8 @@ theorem bounded_lt_Iic
 
 中文:
 定理 bounded_lt_Iic
-  条件: [Preorder α] [NoMaxOrder α] (a : α)
-  结论: Bounded (· < ·) (Iic a)
+  条件: [预序 α] [NoMax序 α] (a : α)
+  结论: 有界 (· < ·) (左无界右闭区间 a)
   证明: by
   simp only [← bounded_le_iff_bounded_lt, bounded_le_Iic]
 
@@ -698,8 +698,8 @@ theorem bounded_gt_Ioi
 
 中文:
 定理 bounded_gt_Ioi
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· > ·) (Ioi a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· > ·) (左开右无界区间 a)
   证明: bounded_self a
 
 Depends on / 依赖: bounded_self
@@ -718,8 +718,8 @@ theorem bounded_ge_Ioi
 
 中文:
 定理 bounded_ge_Ioi
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· >= ·) (Ioi a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· >= ·) (左开右无界区间 a)
   证明: bounded_ge_of_bounded_gt (bounded_gt_Ioi a)
 
 Depends on / 依赖: bounded_ge_of_bounded_gt, bounded_gt_Ioi
@@ -738,8 +738,8 @@ theorem bounded_ge_Ici
 
 中文:
 定理 bounded_ge_Ici
-  条件: [Preorder α] (a : α)
-  结论: Bounded (· >= ·) (Ici a)
+  条件: [预序 α] (a : α)
+  结论: 有界 (· >= ·) (左闭右无界区间 a)
   证明: bounded_self a
 
 Depends on / 依赖: bounded_self
@@ -759,8 +759,8 @@ theorem bounded_gt_Ici
 
 中文:
 定理 bounded_gt_Ici
-  条件: [Preorder α] [NoMinOrder α] (a : α)
-  结论: Bounded (· > ·) (Ici a)
+  条件: [预序 α] [NoMin序 α] (a : α)
+  结论: 有界 (· > ·) (左闭右无界区间 a)
   证明: by
   simp only [← bounded_ge_iff_bounded_gt, bounded_ge_Ici]
 
@@ -782,8 +782,8 @@ theorem bounded_lt_Ioo
 
 中文:
 定理 bounded_lt_Ioo
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· < ·) (Ioo a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· < ·) (开区间 a b)
   证明: (bounded_lt_Iio b).mono Set.Ioo_subset_Iio_self
 
 Depends on / 依赖: Ioo_subset_Iio_self, Set.Ioo_subset_Iio_self, bounded_lt_Iio
@@ -802,8 +802,8 @@ theorem bounded_lt_Ico
 
 中文:
 定理 bounded_lt_Ico
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· < ·) (Ico a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· < ·) (左闭右开区间 a b)
   证明: (bounded_lt_Iio b).mono Set.Ico_subset_Iio_self
 
 Depends on / 依赖: Ico_subset_Iio_self, Set.Ico_subset_Iio_self, bounded_lt_Iio
@@ -822,8 +822,8 @@ theorem bounded_lt_Ioc
 
 中文:
 定理 bounded_lt_Ioc
-  条件: [Preorder α] [NoMaxOrder α] (a b : α)
-  结论: Bounded (· < ·) (Ioc a b)
+  条件: [预序 α] [NoMax序 α] (a b : α)
+  结论: 有界 (· < ·) (左开右闭区间 a b)
   证明: (bounded_lt_Iic b).mono Set.Ioc_subset_Iic_self
 
 Depends on / 依赖: Ioc_subset_Iic_self, Set.Ioc_subset_Iic_self, bounded_lt_Iic
@@ -842,8 +842,8 @@ theorem bounded_lt_Icc
 
 中文:
 定理 bounded_lt_Icc
-  条件: [Preorder α] [NoMaxOrder α] (a b : α)
-  结论: Bounded (· < ·) (Icc a b)
+  条件: [预序 α] [NoMax序 α] (a b : α)
+  结论: 有界 (· < ·) (闭区间 a b)
   证明: (bounded_lt_Iic b).mono Set.Icc_subset_Iic_self
 
 Depends on / 依赖: Icc_subset_Iic_self, Set.Icc_subset_Iic_self, bounded_lt_Iic
@@ -862,8 +862,8 @@ theorem bounded_le_Ioo
 
 中文:
 定理 bounded_le_Ioo
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· <= ·) (Ioo a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· <= ·) (开区间 a b)
   证明: (bounded_le_Iio b).mono Set.Ioo_subset_Iio_self
 
 Depends on / 依赖: Ioo_subset_Iio_self, Set.Ioo_subset_Iio_self, bounded_le_Iio
@@ -882,8 +882,8 @@ theorem bounded_le_Ico
 
 中文:
 定理 bounded_le_Ico
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· <= ·) (Ico a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· <= ·) (左闭右开区间 a b)
   证明: (bounded_le_Iio b).mono Set.Ico_subset_Iio_self
 
 Depends on / 依赖: Ico_subset_Iio_self, Set.Ico_subset_Iio_self, bounded_le_Iio
@@ -902,8 +902,8 @@ theorem bounded_le_Ioc
 
 中文:
 定理 bounded_le_Ioc
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· <= ·) (Ioc a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· <= ·) (左开右闭区间 a b)
   证明: (bounded_le_Iic b).mono Set.Ioc_subset_Iic_self
 
 Depends on / 依赖: Ioc_subset_Iic_self, Set.Ioc_subset_Iic_self, bounded_le_Iic
@@ -922,8 +922,8 @@ theorem bounded_le_Icc
 
 中文:
 定理 bounded_le_Icc
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· <= ·) (Icc a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· <= ·) (闭区间 a b)
   证明: (bounded_le_Iic b).mono Set.Icc_subset_Iic_self
 
 Depends on / 依赖: Icc_subset_Iic_self, Set.Icc_subset_Iic_self, bounded_le_Iic
@@ -942,8 +942,8 @@ theorem bounded_gt_Ioo
 
 中文:
 定理 bounded_gt_Ioo
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· > ·) (Ioo a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· > ·) (开区间 a b)
   证明: (bounded_gt_Ioi a).mono Set.Ioo_subset_Ioi_self
 
 Depends on / 依赖: Ioo_subset_Ioi_self, Set.Ioo_subset_Ioi_self, bounded_gt_Ioi
@@ -962,8 +962,8 @@ theorem bounded_gt_Ioc
 
 中文:
 定理 bounded_gt_Ioc
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· > ·) (Ioc a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· > ·) (左开右闭区间 a b)
   证明: (bounded_gt_Ioi a).mono Set.Ioc_subset_Ioi_self
 
 Depends on / 依赖: Ioc_subset_Ioi_self, Set.Ioc_subset_Ioi_self, bounded_gt_Ioi
@@ -982,8 +982,8 @@ theorem bounded_gt_Ico
 
 中文:
 定理 bounded_gt_Ico
-  条件: [Preorder α] [NoMinOrder α] (a b : α)
-  结论: Bounded (· > ·) (Ico a b)
+  条件: [预序 α] [NoMin序 α] (a b : α)
+  结论: 有界 (· > ·) (左闭右开区间 a b)
   证明: (bounded_gt_Ici a).mono Set.Ico_subset_Ici_self
 
 Depends on / 依赖: Ico_subset_Ici_self, Set.Ico_subset_Ici_self, bounded_gt_Ici
@@ -1002,8 +1002,8 @@ theorem bounded_gt_Icc
 
 中文:
 定理 bounded_gt_Icc
-  条件: [Preorder α] [NoMinOrder α] (a b : α)
-  结论: Bounded (· > ·) (Icc a b)
+  条件: [预序 α] [NoMin序 α] (a b : α)
+  结论: 有界 (· > ·) (闭区间 a b)
   证明: (bounded_gt_Ici a).mono Set.Icc_subset_Ici_self
 
 Depends on / 依赖: Icc_subset_Ici_self, Set.Icc_subset_Ici_self, bounded_gt_Ici
@@ -1022,8 +1022,8 @@ theorem bounded_ge_Ioo
 
 中文:
 定理 bounded_ge_Ioo
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· >= ·) (Ioo a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· >= ·) (开区间 a b)
   证明: (bounded_ge_Ioi a).mono Set.Ioo_subset_Ioi_self
 
 Depends on / 依赖: Ioo_subset_Ioi_self, Set.Ioo_subset_Ioi_self, bounded_ge_Ioi
@@ -1042,8 +1042,8 @@ theorem bounded_ge_Ioc
 
 中文:
 定理 bounded_ge_Ioc
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· >= ·) (Ioc a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· >= ·) (左开右闭区间 a b)
   证明: (bounded_ge_Ioi a).mono Set.Ioc_subset_Ioi_self
 
 Depends on / 依赖: Ioc_subset_Ioi_self, Set.Ioc_subset_Ioi_self, bounded_ge_Ioi
@@ -1062,8 +1062,8 @@ theorem bounded_ge_Ico
 
 中文:
 定理 bounded_ge_Ico
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· >= ·) (Ico a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· >= ·) (左闭右开区间 a b)
   证明: (bounded_ge_Ici a).mono Set.Ico_subset_Ici_self
 
 Depends on / 依赖: Ico_subset_Ici_self, Set.Ico_subset_Ici_self, bounded_ge_Ici
@@ -1082,8 +1082,8 @@ theorem bounded_ge_Icc
 
 中文:
 定理 bounded_ge_Icc
-  条件: [Preorder α] (a b : α)
-  结论: Bounded (· >= ·) (Icc a b)
+  条件: [预序 α] (a b : α)
+  结论: 有界 (· >= ·) (闭区间 a b)
   证明: (bounded_ge_Ici a).mono Set.Icc_subset_Ici_self
 
 Depends on / 依赖: Icc_subset_Ici_self, Set.Icc_subset_Ici_self, bounded_ge_Ici
@@ -1105,7 +1105,7 @@ theorem unbounded_le_Ioi
 
 中文:
 定理 unbounded_le_Ioi
-  条件: [SemilatticeSup α] [NoMaxOrder α] (a : α)
+  条件: [SemilatticeSup α] [NoMax序 α] (a : α)
   证明: fun b =>
   let ⟨c, hc⟩ := exists_gt (a ⊔ b)
   ⟨c, le_sup_left.trans_lt hc, (le_sup_right.trans_lt hc).not_ge⟩
@@ -1125,7 +1125,7 @@ theorem unbounded_le_Ici
 
 中文:
 定理 unbounded_le_Ici
-  条件: [SemilatticeSup α] [NoMaxOrder α] (a : α)
+  条件: [SemilatticeSup α] [NoMax序 α] (a : α)
   证明: (unbounded_le_Ioi a).mono Set.Ioi_subset_Ici_self
 
 Depends on / 依赖: Ioi_subset_Ici_self, Set.Ioi_subset_Ici_self, unbounded_le_Ioi
@@ -1144,7 +1144,7 @@ theorem unbounded_lt_Ioi
 
 中文:
 定理 unbounded_lt_Ioi
-  条件: [SemilatticeSup α] [NoMaxOrder α] (a : α)
+  条件: [SemilatticeSup α] [NoMax序 α] (a : α)
   证明: unbounded_lt_of_unbounded_le (unbounded_le_Ioi a)
 
 Depends on / 依赖: unbounded_le_Ioi, unbounded_lt_of_unbounded_le
@@ -1166,7 +1166,7 @@ theorem unbounded_lt_Ici
 中文:
 定理 unbounded_lt_Ici
   条件: [SemilatticeSup α] (a : α)
-  结论: Unbounded (· < ·) (Ici a)
+  结论: Unbounded (· < ·) (左闭右无界区间 a)
   证明: fun b =>
   ⟨a ⊔ b, le_sup_left, le_sup_right.not_gt⟩
 -/
@@ -1282,7 +1282,7 @@ theorem bounded_le_inter_lt
 
 中文:
 定理 bounded_le_inter_lt
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   simp_rw [← not_le, bounded_le_inter_not_le]
 
@@ -1304,7 +1304,7 @@ theorem unbounded_le_inter_lt
 
 中文:
 定理 unbounded_le_inter_lt
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   convert! @unbounded_le_inter_not_le _ s _ a
   exact lt_iff_not_ge
@@ -1329,7 +1329,7 @@ theorem bounded_le_inter_le
 
 中文:
 定理 bounded_le_inter_le
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   refine ⟨?_, Bounded.mono Set.inter_subset_left⟩
   rw [← @bounded_le_inter_lt _ s _ a]
@@ -1355,7 +1355,7 @@ theorem unbounded_le_inter_le
 
 中文:
 定理 unbounded_le_inter_le
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   rw [← not_bounded_iff]; rw [← not_bounded_iff]; rw [not_iff_not]
   exact bounded_le_inter_le a
@@ -1424,7 +1424,7 @@ theorem bounded_lt_inter_le
 
 中文:
 定理 bounded_lt_inter_le
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   convert! @bounded_lt_inter_not_lt _ s _ a
   exact not_lt.symm
@@ -1448,7 +1448,7 @@ theorem unbounded_lt_inter_le
 
 中文:
 定理 unbounded_lt_inter_le
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: by
   convert! @unbounded_lt_inter_not_lt _ s _ a
   exact not_lt.symm
@@ -1472,7 +1472,7 @@ theorem bounded_lt_inter_lt
 
 中文:
 定理 bounded_lt_inter_lt
-  条件: [LinearOrder α] [NoMaxOrder α] (a : α)
+  条件: [线性序 α] [NoMax序 α] (a : α)
   证明: by
   rw [← bounded_le_iff_bounded_lt]; rw [← bounded_le_iff_bounded_lt]
   exact bounded_le_inter_lt a
@@ -1496,7 +1496,7 @@ theorem unbounded_lt_inter_lt
 
 中文:
 定理 unbounded_lt_inter_lt
-  条件: [LinearOrder α] [NoMaxOrder α] (a : α)
+  条件: [线性序 α] [NoMax序 α] (a : α)
   证明: by
   rw [← not_bounded_iff]; rw [← not_bounded_iff]; rw [not_iff_not]
   exact bounded_lt_inter_lt a
@@ -1558,7 +1558,7 @@ theorem bounded_ge_inter_gt
 
 中文:
 定理 bounded_ge_inter_gt
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @bounded_le_inter_lt αᵒᵈ s _ a
 
 Depends on / 依赖: bounded_le_inter_lt
@@ -1577,7 +1577,7 @@ theorem unbounded_ge_inter_gt
 
 中文:
 定理 unbounded_ge_inter_gt
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @unbounded_le_inter_lt αᵒᵈ s _ a
 
 Depends on / 依赖: unbounded_le_inter_lt
@@ -1596,7 +1596,7 @@ theorem bounded_ge_inter_ge
 
 中文:
 定理 bounded_ge_inter_ge
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @bounded_le_inter_le αᵒᵈ s _ a
 
 Depends on / 依赖: bounded_le_inter_le
@@ -1615,7 +1615,7 @@ theorem unbounded_ge_iff_unbounded_inter_ge
 
 中文:
 定理 unbounded_ge_iff_unbounded_inter_ge
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @unbounded_le_inter_le αᵒᵈ s _ a
 
 Depends on / 依赖: unbounded_le_inter_le
@@ -1674,7 +1674,7 @@ theorem bounded_gt_inter_ge
 
 中文:
 定理 bounded_gt_inter_ge
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @bounded_lt_inter_le αᵒᵈ s _ a
 
 Depends on / 依赖: bounded_lt_inter_le
@@ -1693,7 +1693,7 @@ theorem unbounded_inter_ge
 
 中文:
 定理 unbounded_inter_ge
-  条件: [LinearOrder α] (a : α)
+  条件: [线性序 α] (a : α)
   证明: @unbounded_lt_inter_le αᵒᵈ s _ a
 
 Depends on / 依赖: unbounded_lt_inter_le
@@ -1712,7 +1712,7 @@ theorem bounded_gt_inter_gt
 
 中文:
 定理 bounded_gt_inter_gt
-  条件: [LinearOrder α] [NoMinOrder α] (a : α)
+  条件: [线性序 α] [NoMin序 α] (a : α)
   证明: @bounded_lt_inter_lt αᵒᵈ s _ _ a
 
 Depends on / 依赖: bounded_lt_inter_lt
@@ -1731,7 +1731,7 @@ theorem unbounded_gt_inter_gt
 
 中文:
 定理 unbounded_gt_inter_gt
-  条件: [LinearOrder α] [NoMinOrder α] (a : α)
+  条件: [线性序 α] [NoMin序 α] (a : α)
   证明: @unbounded_lt_inter_lt αᵒᵈ s _ _ a
 
 Depends on / 依赖: unbounded_lt_inter_lt

@@ -51,9 +51,9 @@ class JointlySurjective
 
 中文:
 类 JointlySurjective
-  参数: (K : Precoverage Scheme.{u})
+  参数: (K : Precoverage 概形.{u})
   公理与运算 (1 个):
-    - exists_eq({X : Scheme.{u}} (S : Presieve X) (hS : S in K X) (x : X)) : 存在 (Y : Scheme.{u}) (g : Y ⟶ X), S g ∧ x in Set.range g
+    - exists_eq({X : 概形.{u}} (S : Presieve X) (hS : S in K X) (x : X)) : 存在 (Y : 概形.{u}) (g : Y ⟶ X), S g ∧ x in 集合.range g
 -/
 class JointlySurjective (K : Precoverage Scheme.{u}) : Prop where
   exists_eq {X : Scheme.{u}} (S : Presieve X) (hS : S in K X) (x : X) :
@@ -69,7 +69,7 @@ abbreviation Cover
 
 中文:
 缩写 Cover
-  签名: (K : Precoverage Scheme.{u})
+  签名: (K : Precoverage 概形.{u})
   定义体: Precoverage.ZeroHypercover.{v} K
 
 Depends on / 依赖: Precoverage, Precoverage.ZeroHypercover, ZeroHypercover
@@ -92,7 +92,7 @@ lemma Cover.exists_eq
   use i, y
 
 中文:
-引理 Cover.exists_eq
+引理 Cover.存在_eq
   条件: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
   证明: by
   obtain ⟨Y, g, ⟨i⟩, y, hy⟩ := JointlySurjective.exists_eq 𝒰.presieve₀ 𝒰.mem₀ x
@@ -156,7 +156,7 @@ theorem Cover.iUnion_range
 
 中文:
 定理 Cover.iUnion_range
-  条件: [JointlySurjective K] {X : Scheme.{u}} (𝒰 : X.Cover K)
+  条件: [JointlySurjective K] {X : 概形.{u}} (𝒰 : X.Cover K)
   证明: by
   rw [Set.eq_univ_iff_forall]
   intro x
@@ -184,7 +184,7 @@ instance Cover.nonempty_of_nonempty
 
 中文:
 实例 Cover.nonempty_of_nonempty
-  签名: [JointlySurjective K] [Nonempty X] (𝒰 : X.Cover K)
+  签名: [JointlySurjective K] [非空 X] (𝒰 : X.Cover K)
   定义体: by
   obtain ⟨i, _⟩ := 𝒰.exists_eq ‹Nonempty X›.some
   use i
@@ -260,7 +260,7 @@ definition Cover.mkOfCovers
 
 中文:
 定义 Cover.mkOfCovers
-  签名: (J : 类型) (obj : J -> Scheme.{u}) (map : (j : J) -> obj j ⟶ X)
+  签名: (J : 类型) (obj : J -> 概形.{u}) (map : (j : J) -> obj j ⟶ X)
   定义体: J
   X := obj
   f := map
@@ -295,7 +295,7 @@ definition coverOfIsIso
 
 中文:
 定义 coverOfIsIso
-  签名: [P.ContainsIdentities] [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y)
+  签名: [P.余ntainsIdentities] [P.RespectsIso] {X Y : 概形.{u}} (f : X ⟶ Y)
   定义体: .mkOfCovers PUnit (fun _ => X)
     (fun _ => f)
     (fun x => ⟨⟨⟩, inv f x, by simp [← Hom.comp_apply]⟩)
@@ -396,7 +396,7 @@ definition Cover.copy
 
 中文:
 定义 Cover.copy
-  签名: [P.RespectsIso] {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
+  签名: [P.RespectsIso] {X : 概形.{u}} (𝒰 : X.Cover (precoverage P))
   定义体: J
   X := obj
   f := map
@@ -446,7 +446,7 @@ definition Cover.pushforwardIso
 
 中文:
 定义 Cover.pushforwardIso
-  签名: [P.RespectsIso] [P.ContainsIdentities] [P.IsStableUnderComposition]
+  签名: [P.RespectsIso] [P.余ntainsIdentities] [P.是StableUnderComposition]
   定义体: Cover.copy ((coverOfIsIso.{v, u} f).bind fun _ => 𝒰) 𝒰.I₀ _ _
     ((Equiv.punitProd _).symm.trans (Equiv.sigmaEquivProd PUnit 𝒰.I₀).symm) (fun _ => Iso.refl _)
     fun _ => (Category.id_comp _).symm
@@ -482,7 +482,7 @@ definition Cover.pullbackHom
 
 中文:
 定义 Cover.pullbackHom
-  签名: [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
+  签名: [P.是StableUnderBaseChange] [是JointlySurjectivePreserving P]
   定义体: pullback.snd f (𝒰.f i)
 
 @[reassoc (attr := simp)]
@@ -505,7 +505,7 @@ lemma Cover.pullbackHom_map
 
 中文:
 引理 Cover.pullbackHom_map
-  结论: [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
+  结论: [P.是StableUnderBaseChange] [是JointlySurjectivePreserving P]
   证明: pullback.condition.symm
 
 Depends on / 依赖: condition, pullback, pullback.condition.symm
@@ -530,14 +530,14 @@ structure AffineCover
     - map_prop((j : I₀)) : P (f j)  [default: by infer_instance]
 
 中文:
-结构 AffineCover
-  参数: (P : Morphism命题erty Scheme.{u}) (S : Scheme.{u})
+结构 仿射覆盖
+  参数: (P : MorphismProperty 概形.{u}) (S : 概形.{u})
   公理与运算 (6 个):
     - I₀ : 类型v
-    - X((j : I₀)) : CommRingCat.{u}
+    - X((j : I₀)) : 交换环范畴.{u}
     - f((j : I₀)) : Spec (X j) ⟶ S
     - idx((x : S)) : I₀
-    - covers((x : S)) : x in Set.range (f (idx x))
+    - covers((x : S)) : x in 集合.range (f (idx x))
     - map_prop((j : I₀)) : P (f j)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
@@ -574,8 +574,8 @@ definition AffineCover.cover
     use 𝒰.idx x, y
 
 中文:
-定义 AffineCover.cover
-  签名: {X : Scheme.{u}} (𝒰 : X.AffineCover P)
+定义 仿射覆盖.cover
+  签名: {X : 概形.{u}} (𝒰 : X.仿射覆盖 P)
   定义体: 𝒰.I₀
   X j := Spec (𝒰.X j)
   f := 𝒰.f
@@ -669,8 +669,8 @@ abbreviation Cover.Hom
 @[d
 
 中文:
-缩写 Cover.Hom
-  签名: {X : Scheme.{u}} (𝒰 𝒱 : Cover.{v} K X)
+缩写 Cover.态射
+  签名: {X : 概形.{u}} (𝒰 𝒱 : Cover.{v} K X)
   定义体: Precoverage.ZeroHypercover.Hom K 𝒰 𝒱
 
 @[deprecated (since := "2026-01-13")] alias Cover.Hom.idx := PreZeroHypercover.Hom.s₀

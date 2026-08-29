@@ -47,7 +47,7 @@ class Small
 类 Small
   参数: (α : 类型v)
   公理与运算 (1 个):
-    - equiv_small : 存在 S : Type w, Nonempty (α ≃ S)
+    - equiv_small : 存在 S : 类型 w, 非空 (α ≃ S)
 -/
 class Small (α : Type v) : Prop where
   /-- If a type is `Small.{w}`, then there exists an equivalence with some `S : Type w` -/
@@ -64,7 +64,7 @@ theorem Small.mk'
 
 中文:
 定理 Small.mk'
-  条件: {α : 类型v} {S : Type w} (e : α ≃ S)
+  条件: {α : 类型v} {S : 类型 w} (e : α ≃ S)
   结论: Small.{w} α
   证明: ⟨⟨S, ⟨e⟩⟩⟩
 -/
@@ -153,7 +153,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Shrink.rec {α : 类型} [Small.{w} α] {F : Shrink α -> Sort v}
+  签名: def Shrink.rec {α : 类型} [Small.{w} α] {F : Shrink α -> 类型层 v}
   定义体: fun X => ((equivShrink _).apply_symm_apply X) ▸ (h _)
 
 @[simp]
@@ -175,7 +175,7 @@ lemma Shrink.rec_equivShrink
 
 中文:
 引理 Shrink.rec_equivShrink
-  结论: {α : 类型} [Small.{w} α] {F : Shrink α -> Sort v}
+  结论: {α : 类型} [Small.{w} α] {F : Shrink α -> 类型层 v}
   证明: by
   simp only [Shrink.rec, eqRec_eq_cast, cast_eq_iff_heq]
   rw [Equiv.symm_apply_apply]
@@ -241,7 +241,7 @@ Small.mk' f.trans (Equiv.ulift.{w}).symm
 中文:
 定理 small_lift
   条件: (α : 类型u) [hα : Small.{v} α]
-  结论: Small.{max v w} α
+  结论: Small.{最大值 v w} α
   证明: let ⟨⟨_, ⟨f⟩⟩⟩ := hα
 Small.mk' f.trans (Equiv.ulift.{w}).symm
 
@@ -263,7 +263,7 @@ lemma small_max
 中文:
 引理 small_max
   条件: (α : 类型v)
-  结论: Small.{max w v} α
+  结论: Small.{最大值 w v} α
   证明: small_lift.{v, w} α
 
 Depends on / 依赖: small_lift
@@ -281,7 +281,7 @@ instance small_zero
 
 中文:
 实例 small_zero
-  签名: (α : Type)
+  签名: (α : 类型)
   定义体: small_max α
 
 Depends on / 依赖: small_max
@@ -337,7 +337,7 @@ theorem small_type
 
 中文:
 定理 small_type
-  结论: Small.{max (u + 1) v} (类型u)
+  结论: Small.{最大值 (u + 1) v} (类型u)
   证明: small_max.{max (u + 1) v} _
 
 Depends on / 依赖: small_max
@@ -402,7 +402,7 @@ theorem not_small_type
 
 中文:
 定理 not_small_type
-  结论: ¬Small.{u} (Type max u v)
+  结论: ¬Small.{u} (类型 最大值 u v)
 -/
 theorem not_small_type : ¬Small.{u} (Type max u v)
   | ⟨⟨S, ⟨e⟩⟩⟩ =>

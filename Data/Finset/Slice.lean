@@ -52,7 +52,7 @@ definition Sized
 
 中文:
 定义 Sized
-  签名: (r : 自然数) (A : Set (Finset α))
+  签名: (r : 自然数) (A : 集合 (有限集 α))
   定义体: forall ⦃x⦄, x in A -> #x = r
 -/
 def Sized (r : Nat) (A : Set (Finset α)) : Prop := forall ⦃x⦄, x in A -> #x = r
@@ -84,7 +84,7 @@ lemma sized_empty
 
 中文:
 引理 sized_empty
-  结论: (∅ : Set (Finset α)).Sized r
+  结论: (∅ : 集合 (有限集 α)).Sized r
   证明: by simp [Sized]
 -/
 @[simp] lemma sized_empty : (∅ : Set (Finset α)).Sized r := by simp [Sized]
@@ -98,7 +98,7 @@ lemma sized_singleton
 
 中文:
 引理 sized_singleton
-  结论: ({s} : Set (Finset α)).Sized r ↔ #s = r
+  结论: ({s} : 集合 (有限集 α)).Sized r ↔ #s = r
   证明: by simp [Sized]
 -/
 @[simp] lemma sized_singleton : ({s} : Set (Finset α)).Sized r ↔ #s = r := by simp [Sized]
@@ -145,7 +145,7 @@ theorem sized_iUnion
 
 中文:
 定理 sized_iUnion
-  条件: {f : ι -> Set (Finset α)}
+  条件: {f : ι -> 集合 (有限集 α)}
   结论: (⋃ i, f i).Sized r ↔ 对任意 i, (f i).Sized r
   证明: by
   simp_rw [Set.Sized, Set.mem_iUnion, forall_exists_index]
@@ -169,7 +169,7 @@ theorem sized_iUnion₂
 
 中文:
 定理 sized_iUnion₂
-  条件: {f : 对任意 i, κ i -> Set (Finset α)}
+  条件: {f : 对任意 i, κ i -> 集合 (有限集 α)}
   证明: by
   simp only [Set.sized_iUnion]
 
@@ -209,7 +209,7 @@ theorem Sized.subsingleton
 中文:
 定理 Sized.subsingleton
   条件: (hA : A.Sized 0)
-  结论: A.Subsingleton
+  结论: A.子单例
   证明: subsingleton_of_forall_eq ∅ fun _s hs => card_eq_zero.1 hA hs
 -/
 protected theorem Sized.subsingleton (hA : A.Sized 0) : A.Subsingleton :=
@@ -226,8 +226,8 @@ theorem Sized.subsingleton'
 
 中文:
 定理 Sized.subsingleton'
-  条件: [Fintype α] (hA : A.Sized (Fintype.card α))
-  结论: A.Subsingleton
+  条件: [有限类型 α] (hA : A.Sized (有限类型.card α))
+  结论: A.子单例
   证明: subsingleton_of_forall_eq Finset.univ fun s hs => s.card_eq_iff_eq_univ.1 hA hs
 
 Depends on / 依赖: Finset, Finset.univ, card_eq_iff_eq_univ, s.card_eq_iff_eq_univ, subsingleton_of_forall_eq
@@ -266,8 +266,8 @@ theorem Sized.univ_mem_iff
 
 中文:
 定理 Sized.univ_mem_iff
-  条件: [Fintype α] (hA : A.Sized r)
-  结论: Finset.univ in A ↔ A = {Finset.univ}
+  条件: [有限类型 α] (hA : A.Sized r)
+  结论: 有限集.univ in A ↔ A = {有限集.univ}
   证明: hA.isAntichain.top_mem_iff
 
 Depends on / 依赖: divMod_to_nat, hA.isAntichain.top_mem_iff, isAntichain, top_mem_iff
@@ -286,8 +286,8 @@ theorem sized_powersetCard
 
 中文:
 定理 sized_powersetCard
-  条件: (s : Finset α) (r : 自然数)
-  结论: (powersetCard r s : Set (Finset α)).Sized r
+  条件: (s : 有限集 α) (r : 自然数)
+  结论: (powersetCard r s : 集合 (有限集 α)).Sized r
   证明: fun _t ht => (mem_powersetCard.1 ht).2
 
 Depends on / 依赖: mem_powersetCard
@@ -315,7 +315,7 @@ alias ⟨_, _root_.Set.Sized.subset_powersetCard_univ⟩ := subset_powersetCard_
 
 中文:
 定理 subset_powersetCard_univ_iff
-  结论: 𝒜 subseteq powersetCard r univ ↔ (𝒜 : Set (Finset α)).Sized r
+  结论: 𝒜 subseteq powersetCard r univ ↔ (𝒜 : 集合 (有限集 α)).Sized r
   证明: forall_congr' fun A => by rw [mem_powersetCard_univ, mem_coe]
 
 alias ⟨_, _root_.Set.Sized.subset_powersetCard_univ⟩ := subset_powersetCard_univ_iff
@@ -338,8 +338,8 @@ theorem _root_.Set.Sized.card_le
   exact card_le_card (subset_powersetCard_univ_iff.mpr h𝒜)
 
 中文:
-定理 _root_.Set.Sized.card_le
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+定理 _root_.集合.Sized.card_le
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   rw [Fintype.card]; rw [← card_powersetCard]
   exact card_le_card (subset_powersetCard_univ_iff.mpr h𝒜)
@@ -373,7 +373,7 @@ scoped[Finset] infixl:90 " # " => Finset.slice
 
 中文:
 定义 slice
-  签名: (𝒜 : Finset (Finset α)) (r : 自然数)
+  签名: (𝒜 : 有限集 (有限集 α)) (r : 自然数)
   定义体: {A in 𝒜 | #A = r}
 
 @[inherit_doc]
@@ -430,7 +430,7 @@ theorem sized_slice
 
 中文:
 定理 sized_slice
-  结论: (𝒜 # r : Set (Finset α)).Sized r
+  结论: (𝒜 # r : 集合 (有限集 α)).Sized r
   证明: fun _ => And.right ∘ mem_slice.mp
 
 Depends on / 依赖: And.right, mem_slice, mem_slice.mp
@@ -488,7 +488,7 @@ disjoint_filter.2 fun _s _hs hm hn => hmn hm.symm.trans hn
 
 中文:
 定理 pairwiseDisjoint_slice
-  结论: (Set.univ : Set 自然数).PairwiseDisjoint (slice 𝒜)
+  结论: (集合.univ : 集合 自然数).PairwiseDisjoint (slice 𝒜)
   证明: fun _ _ _ _ hmn =>
 disjoint_filter.2 fun _s _hs hm hn => hmn hm.symm.trans hn
 -/
@@ -513,7 +513,7 @@ mem_biUnion.2 ⟨#s, mem_Iic.2 s.card_le_univ, mem_slice.2 ⟨hs, rfl⟩⟩
 中文:
 定理 biUnion_slice
   条件: [DecidableEq α]
-  结论: (Iic <| Fintype.card α).biUnion 𝒜.slice = 𝒜
+  结论: (左无界右闭区间 <| 有限类型.card α).biUnion 𝒜.slice = 𝒜
   证明: Subset.antisymm (biUnion_subset.2 fun _r _ => slice_subset) fun s hs =>
 mem_biUnion.2 ⟨#s, mem_Iic.2 s.card_le_univ, mem_slice.2 ⟨hs, rfl⟩⟩
 
@@ -539,7 +539,7 @@ theorem sum_card_slice
 
 中文:
 定理 sum_card_slice
-  结论: ∑ r in Iic (Fintype.card α), #(𝒜 # r) = #𝒜
+  结论: ∑ r in 左无界右闭区间 (有限类型.card α), #(𝒜 # r) = #𝒜
   证明: by
   let := Classical.decEq α
   rw [← card_biUnion]; rw [biUnion_slice]

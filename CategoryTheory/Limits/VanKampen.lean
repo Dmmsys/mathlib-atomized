@@ -52,7 +52,7 @@ definition IsUniversalColimit
 
 中文:
 定义 IsUniversalColimit
-  签名: {F : J ⥤ C} (c : Cocone F)
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: forall ⦃F' : J ⥤ C⦄ (c' : Cocone F') (α : F' ⟶ F) (f : c'.pt ⟶ c.pt)
     (_ : α ≫ c.ι = c'.ι ≫ (Functor.const J).map f) (_ : NatTrans.Equifibered α),
     (forall j : J, IsPullback (c'.ι.app j) (α.app j) f (c.ι.app j)) -> Nonempty (IsColimit c')
@@ -76,7 +76,7 @@ definition IsVanKampenColimit
 
 中文:
 定义 IsVanKampenColimit
-  签名: {F : J ⥤ C} (c : Cocone F)
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: forall ⦃F' : J ⥤ C⦄ (c' : Cocone F') (α : F' ⟶ F) (f : c'.pt ⟶ c.pt)
     (_ : α ≫ c.ι = c'.ι ≫ (Functor.const J).map f) (_ : NatTrans.Equifibered α),
     Nonempty (IsColimit c') ↔ forall j : J, IsPullback (c'.ι.app j) (α.app j) f (c.ι.app j)
@@ -98,7 +98,7 @@ theorem IsVanKampenColimit.isUniversal
 
 中文:
 定理 IsVanKampenColimit.isUniversal
-  条件: {F : J ⥤ C} {c : Cocone F} (H : IsVanKampenColimit c)
+  条件: {F : J ⥤ C} {c : 余锥 F} (H : IsVanKampenColimit c)
   证明: fun _ c' α f h hα => (H c' α f h hα).mpr
 -/
 theorem IsVanKampenColimit.isUniversal {F : J ⥤ C} {c : Cocone F} (H : IsVanKampenColimit c) :
@@ -121,7 +121,7 @@ definition IsUniversalColimit.isColimit
 
 中文:
 定义 IsUniversalColimit.isColimit
-  签名: {F : J ⥤ C} {c : Cocone F}
+  签名: {F : J ⥤ C} {c : 余锥 F}
   定义体: by
   refine ((h c (𝟙 F) (𝟙 c.pt :) (by rw [Functor.map_id, Category.comp_id, Category.id_comp])
     (.of_isIso _)) fun j => ?_).some
@@ -147,7 +147,7 @@ definition IsVanKampenColimit.isColimit
 
 中文:
 定义 IsVanKampenColimit.isColimit
-  签名: {F : J ⥤ C} {c : Cocone F}
+  签名: {F : J ⥤ C} {c : 余锥 F}
   定义体: h.isUniversal.isColimit
 
 Depends on / 依赖: h.isUniversal.isColimit, isColimit, isUniversal
@@ -173,7 +173,7 @@ theorem IsInitial.isVanKampenColimit
 
 中文:
 定理 IsInitial.isVanKampenColimit
-  条件: [HasStrictInitialObjects C] {X : C} (h : IsInitial X)
+  条件: [有StrictInitialObjects C] {X : C} (h : IsInitial X)
   证明: by
   intro F' c' α f hf hα
   have : F' = Functor.empty C := by apply Functor.hext <;> rintro ⟨⟨⟩⟩
@@ -213,7 +213,7 @@ theorem IsUniversalColimit.of_iso
 
 中文:
 定理 IsUniversalColimit.of_iso
-  结论: {F : J ⥤ C} {c c' : Cocone F} (hc : IsUniversalColimit c)
+  结论: {F : J ⥤ C} {c c' : 余锥 F} (hc : IsUniversalColimit c)
   证明: by
   intro F' c'' α f h hα H
   have : c'.ι ≫ (Functor.const J).map e.inv.hom = c.ι := by
@@ -256,7 +256,7 @@ theorem IsVanKampenColimit.of_iso
 
 中文:
 定理 IsVanKampenColimit.of_iso
-  结论: {F : J ⥤ C} {c c' : Cocone F} (H : IsVanKampenColimit c)
+  结论: {F : J ⥤ C} {c c' : 余锥 F} (H : IsVanKampenColimit c)
   证明: by
   intro F' c'' α f h hα
   have : c'.ι ≫ (Functor.const J).map e.inv.hom = c.ι := by
@@ -301,7 +301,7 @@ theorem IsVanKampenColimit.precompose_isIso
 
 中文:
 定理 IsVanKampenColimit.precompose_isIso
-  结论: {F G : J ⥤ C} (α : F ⟶ G) [IsIso α]
+  结论: {F G : J ⥤ C} (α : F ⟶ G) [是同构 α]
   证明: by
   intro F' c' α' f e hα
   refine (hc c' (α' ≫ α) f ((Category.assoc _ _ _).trans e) (hα.comp (.of_isIso _))).trans ?_
@@ -343,7 +343,7 @@ theorem IsUniversalColimit.precompose_isIso
 
 中文:
 定理 IsUniversalColimit.precompose_isIso
-  结论: {F G : J ⥤ C} (α : F ⟶ G) [IsIso α]
+  结论: {F G : J ⥤ C} (α : F ⟶ G) [是同构 α]
   证明: by
   intro F' c' α' f e hα H
   apply (hc c' (α' ≫ α) f ((Category.assoc _ _ _).trans e) (hα.comp (.of_isIso _)))
@@ -377,7 +377,7 @@ theorem IsVanKampenColimit.precompose_isIso_iff
 
 中文:
 定理 IsVanKampenColimit.precompose_isIso_iff
-  结论: {F G : J ⥤ C} (α : F ⟶ G) [IsIso α]
+  结论: {F G : J ⥤ C} (α : F ⟶ G) [是同构 α]
   证明: ⟨fun hc => IsVanKampenColimit.of_iso (IsVanKampenColimit.precompose_isIso (inv α) hc)
     (Cocone.ext (Iso.refl _) (by simp)),
     IsVanKampenColimit.precompose_isIso α⟩
@@ -403,7 +403,7 @@ theorem IsUniversalColimit.of_mapCocone
 
 中文:
 定理 IsUniversalColimit.of_mapCocone
-  结论: (G : C ⥤ D) {F : J ⥤ C} {c : Cocone F}
+  结论: (G : C ⥤ D) {F : J ⥤ C} {c : 余锥 F}
   证明: fun F' c' α f h hα H =>
     ⟨isColimitOfReflects _ (hc (G.mapCocone c') (whiskerRight α G) (G.map f)
     (by ext j; simpa using! G.congr_map (NatTrans.congr_app h j))
@@ -434,7 +434,7 @@ theorem IsVanKampenColimit.of_mapCocone
 
 中文:
 定理 IsVanKampenColimit.of_mapCocone
-  结论: (G : C ⥤ D) {F : J ⥤ C} {c : Cocone F}
+  结论: (G : C ⥤ D) {F : J ⥤ C} {c : 余锥 F}
   证明: by
   intro F' c' α f h hα
   refine (Iff.trans ?_ (H (G.mapCocone c') (whiskerRight α G) (G.map f)
@@ -473,7 +473,7 @@ theorem IsVanKampenColimit.mapCocone_iff
 
 中文:
 定理 IsVanKampenColimit.mapCocone_iff
-  结论: (G : C ⥤ D) {F : J ⥤ C} {c : Cocone F}
+  结论: (G : C ⥤ D) {F : J ⥤ C} {c : 余锥 F}
   证明: ⟨IsVanKampenColimit.of_mapCocone G, fun hc => by
     let e : F ⋙ G ⋙ Functor.inv G ≅ F := NatIso.hcomp (Iso.refl F) G.asEquivalence.unitIso.symm
     apply IsVanKampenColimit.of_mapCocone G.inv
@@ -508,7 +508,7 @@ theorem IsUniversalColimit.whiskerEquivalence
 
 中文:
 定理 IsUniversalColimit.whiskerEquivalence
-  结论: {K : 类型} [Category* K] (e : J ≌ K)
+  结论: {K : 类型} [范畴* K] (e : J ≌ K)
   证明: by
   intro F' c' α f e' hα H
   convert!
@@ -547,7 +547,7 @@ theorem IsUniversalColimit.whiskerEquivalence_iff
 
 中文:
 定理 IsUniversalColimit.whiskerEquivalence_iff
-  结论: {K : 类型} [Category* K] (e : J ≌ K)
+  结论: {K : 类型} [范畴* K] (e : J ≌ K)
   证明: ⟨fun hc => ((hc.whiskerEquivalence e.symm).precompose_isIso (e.invFunIdAssoc F).inv).of_iso
       (Cocone.ext (Iso.refl _) (by simp)), IsUniversalColimit.whiskerEquivalence e⟩
 
@@ -577,7 +577,7 @@ theorem IsVanKampenColimit.whiskerEquivalence
 
 中文:
 定理 IsVanKampenColimit.whiskerEquivalence
-  结论: {K : 类型} [Category* K] (e : J ≌ K)
+  结论: {K : 类型} [范畴* K] (e : J ≌ K)
   证明: by
   intro F' c' α f e' hα
   convert!
@@ -626,7 +626,7 @@ theorem IsVanKampenColimit.whiskerEquivalence_iff
 
 中文:
 定理 IsVanKampenColimit.whiskerEquivalence_iff
-  结论: {K : 类型} [Category* K] (e : J ≌ K)
+  结论: {K : 类型} [范畴* K] (e : J ≌ K)
   证明: ⟨fun hc => ((hc.whiskerEquivalence e.symm).precompose_isIso (e.invFunIdAssoc F).inv).of_iso
       (Cocone.ext (Iso.refl _) (by simp)), IsVanKampenColimit.whiskerEquivalence e⟩
 
@@ -658,7 +658,7 @@ theorem isVanKampenColimit_of_evaluation
 
 中文:
 定理 isVanKampenColimit_of_evaluation
-  结论: [HasPullbacks D] [HasColimitsOfShape J D] (F : J ⥤ C ⥤ D)
+  结论: [有Pullbacks D] [有形状余极限 J D] (F : J ⥤ C ⥤ D)
   证明: by
   intro F' c' α f e hα
   have := fun x => hc x (((evaluation C D).obj x).mapCocone c') (whiskerRight α _)
@@ -836,7 +836,7 @@ theorem IsVanKampenColimit.map_reflective
 
 中文:
 定理 IsVanKampenColimit.map_reflective
-  结论: [HasColimitsOfShape J C]
+  结论: [有形状余极限 J C]
   证明: by
   have := adj.rightAdjoint_preservesLimits
   have : PreservesColimitsOfSize.{u', v'} Gl := adj.leftAdjoint_preservesColimits
@@ -966,7 +966,7 @@ theorem isVanKampenColimit_of_isEmpty
 
 中文:
 定理 isVanKampenColimit_of_isEmpty
-  结论: [HasStrictInitialObjects C] [IsEmpty J] {F : J ⥤ C}
+  结论: [有StrictInitialObjects C] [是空 J] {F : J ⥤ C}
   证明: by
   have : IsInitial c.pt := by
     have := (IsColimit.precomposeInvEquiv (Functor.uniqueFromEmpty _) _).symm
@@ -1236,7 +1236,7 @@ theorem isUniversalColimit_extendCofan
 
 中文:
 定理 isUniversalColimit_extendCofan
-  结论: {n : 自然数} (f : Fin (n + 1) -> C)
+  结论: {n : 自然数} (f : 有限集 (n + 1) -> C)
   证明: by
   intro F c α i e hα H
   let F' : Fin (n + 1) -> C := F.obj ∘ Discrete.mk
@@ -1326,7 +1326,7 @@ theorem isVanKampenColimit_extendCofan
 
 中文:
 定理 isVanKampenColimit_extendCofan
-  结论: {n : 自然数} (f : Fin (n + 1) -> C)
+  结论: {n : 自然数} (f : 有限集 (n + 1) -> C)
   证明: by
   intro F c α i e hα
   refine ⟨?_, isUniversalColimit_extendCofan f t₁.isUniversal t₂.isUniversal c α i e hα⟩
@@ -1476,7 +1476,7 @@ theorem isPullback_initial_to_of_cofan_isVanKampen
 
 中文:
 定理 isPullback_initial_to_of_cofan_isVanKampen
-  结论: [HasInitial C] {ι : 类型} {F : Discrete ι ⥤ C}
+  结论: [HasInitial C] {ι : 类型} {F : 离散 ι ⥤ C}
   证明: by
   classical
   let f : ι -> C := F.obj ∘ Discrete.mk
@@ -1521,7 +1521,7 @@ theorem mono_of_cofan_isVanKampen
 
 中文:
 定理 mono_of_cofan_isVanKampen
-  结论: [HasInitial C] {ι : 类型} {F : Discrete ι ⥤ C}
+  结论: [HasInitial C] {ι : 类型} {F : 离散 ι ⥤ C}
   证明: by
   classical
   let f : ι -> C := F.obj ∘ Discrete.mk
@@ -1652,7 +1652,7 @@ lemma IsUniversalColimit.isPullback_of_isColimit_left
 
 中文:
 引理 IsUniversalColimit.isPullback_of_isColimit_left
-  结论: {d : Cofan P} (hd : IsColimit d)
+  结论: {d : Cofan P} (hd : 是余极限 d)
   证明: by
   let c : Cofan P := Cofan.mk (pullback v u)
     fun i => pullback.lift (q₁ i) (q₂ i ≫ a.inj i) (by simp [(hP i).w, hu])
@@ -1776,7 +1776,7 @@ lemma IsUniversalColimit.isPullback_of_isColimit_right
 
 中文:
 引理 IsUniversalColimit.isPullback_of_isColimit_right
-  结论: {d : Cofan P} (hd : IsColimit d)
+  结论: {d : Cofan P} (hd : 是余极限 d)
   证明: by
   let c : Cofan P := Cofan.mk (pullback u v)
     fun i => pullback.lift (q₁ i ≫ a.inj i) (q₂ i) (by simp [(hP i).w, hu])

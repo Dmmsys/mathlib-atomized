@@ -47,7 +47,7 @@ theorem mod_four_eq_three_of_nat_prime_of_prime
 
 中文:
 定理 mod_four_eq_three_of_nat_prime_of_prime
-  结论: (p : 自然数) [hp : Fact p.Prime]
+  结论: (p : 自然数) [hp : Fact p.素]
   证明: hp.1.eq_two_or_odd.elim
     (fun hp2 => by
       have := hpi.irreducible.isUnit_or_isUnit (a := ⟨1, 1⟩) (b := ⟨1, -1⟩)
@@ -111,7 +111,7 @@ theorem prime_of_nat_prime_of_mod_four_eq_three
 
 中文:
 定理 prime_of_nat_prime_of_mod_four_eq_three
-  条件: (p : 自然数) [Fact p.Prime] (hp3 : p % 4 = 3)
+  条件: (p : 自然数) [Fact p.素] (hp3 : p % 4 = 3)
   证明: irreducible_iff_prime.1
     by_contradiction fun hpi =>
       let ⟨a, b, hab⟩ := sq_add_sq_of_nat_prime_of_not_irreducible p hpi
@@ -140,7 +140,7 @@ theorem prime_iff_mod_four_eq_three_of_nat_prime
 
 中文:
 定理 prime_iff_mod_four_eq_three_of_nat_prime
-  条件: (p : 自然数) [Fact p.Prime]
+  条件: (p : 自然数) [Fact p.素]
   证明: ⟨mod_four_eq_three_of_nat_prime_of_prime p, prime_of_nat_prime_of_mod_four_eq_three p⟩
 
 Depends on / 依赖: mod_four_eq_three_of_nat_prime_of_prime, prime_of_nat_prime_of_mod_four_eq_three

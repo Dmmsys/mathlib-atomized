@@ -107,7 +107,7 @@ lemma isCofibrant_of_cofibration
 
 中文:
 引理 isCofibrant_of_cofibration
-  结论: [(cofibrations C).IsStableUnderComposition]
+  结论: [(cofibrations C).是StableUnderComposition]
   证明: by
   rw [isCofibrant_iff] at hX ⊢
   rw [Subsingleton.elim (initial.to Y) (initial.to X ≫ i)]
@@ -174,7 +174,7 @@ instance [hX
 
 中文:
 实例 [hX
-  签名: : IsCofibrant X] : Cofibration (coprod.inr : Y ⟶ X ⨿ Y)
+  签名: : IsCofibrant X] : 余纤维化 (coprod.inr : Y ⟶ X ⨿ Y)
   定义体: by
   rw [isCofibrant_iff] at hX
   rw [cofibration_iff] at hX ⊢
@@ -279,7 +279,7 @@ lemma isFibrant_of_fibration
 
 中文:
 引理 isFibrant_of_fibration
-  结论: [(fibrations C).IsStableUnderComposition]
+  结论: [(fibrations C).是StableUnderComposition]
   证明: by
   rw [isFibrant_iff] at hY ⊢
   rw [Subsingleton.elim (terminal.from X) (p ≫ terminal.from Y)]
@@ -347,7 +347,7 @@ instance [hX
 
 中文:
 实例 [hX
-  签名: : IsFibrant X] : Fibration (prod.snd : X ⨯ Y ⟶ Y)
+  签名: : IsFibrant X] : 纤维化 (乘积.snd : X ⨯ Y ⟶ Y)
   定义体: by
   rw [isFibrant_iff] at hX
   rw [fibration_iff] at hX ⊢

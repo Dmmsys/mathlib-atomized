@@ -57,7 +57,7 @@ definition commaFromOver
 
 中文:
 定义 commaFromOver
-  签名: : (J ⥤ Over X) ⥤ Comma (𝟭 (J ⥤ C)) (Functor.const J) where
+  签名: : (J ⥤ Over X) ⥤ 交换a (𝟭 (J ⥤ C)) (函子.const J) where
   定义体: {
     left := K ⋙ Over.forget X
     right := X
@@ -147,7 +147,7 @@ definition coneLift
 
 中文:
 定义 coneLift
-  签名: : Cone K ⥤ Cone (liftFromOver.obj K) where
+  签名: : 锥 K ⥤ 锥 (liftFromOver.obj K) where
   定义体: {
     pt := t.pt.left
     π.app
@@ -204,7 +204,7 @@ definition coneBack
 
 中文:
 定义 coneBack
-  签名: : Cone (liftFromOver.obj K) ⥤ Cone K where
+  签名: : 锥 (liftFromOver.obj K) ⥤ 锥 K where
   定义体: {
     pt := .mk (t.π.app star)
     π.app a := Over.homMk (t.π.app (of a)) (t.w (homFrom a))
@@ -248,7 +248,7 @@ counitIso := NatIso.ofComponents fun t => Cone.ext .refl _
 
 中文:
 定义 coneEquiv
-  签名: : Cone K ≌ Cone (liftFromOver.obj K) where
+  签名: : 锥 K ≌ 锥 (liftFromOver.obj K) where
   定义体: coneLift
   inverse := coneBack
   unitIso := .refl _
@@ -321,7 +321,7 @@ definition isLimitEquiv
 
 中文:
 定义 isLimitEquiv
-  签名: : IsLimit (coneEquiv.functor.obj t) ≃ IsLimit t
+  签名: : 是极限 (coneEquiv.functor.obj t) ≃ 是极限 t
   定义体: IsLimit.ofConeEquiv coneEquiv
 
 Depends on / 依赖: IsLimit, IsLimit.ofConeEquiv, coneEquiv, ofConeEquiv
@@ -387,7 +387,7 @@ definition commaFromUnder
 
 中文:
 定义 commaFromUnder
-  签名: : (J ⥤ Under X) ⥤ Comma (Functor.const J) (𝟭 (J ⥤ C)) where
+  签名: : (J ⥤ Under X) ⥤ 交换a (函子.const J) (𝟭 (J ⥤ C)) where
   定义体: {
     left := X
     right := K ⋙ Under.forget X
@@ -477,7 +477,7 @@ definition coconeLift
 
 中文:
 定义 coconeLift
-  签名: : Cocone K ⥤ Cocone (liftFromUnder.obj K) where
+  签名: : 余锥 K ⥤ 余锥 (liftFromUnder.obj K) where
   定义体: {
     pt := t.pt.right
     ι.app
@@ -534,7 +534,7 @@ definition coconeBack
 
 中文:
 定义 coconeBack
-  签名: : Cocone (liftFromUnder.obj K) ⥤ Cocone K where
+  签名: : 余锥 (liftFromUnder.obj K) ⥤ 余锥 K where
   定义体: {
     pt := .mk (t.ι.app star)
     ι.app a := Under.homMk (t.ι.app (of a)) (t.w (homTo a))
@@ -578,7 +578,7 @@ counitIso := NatIso.ofComponents fun t => Cocone.ext .refl _
 
 中文:
 定义 coconeEquiv
-  签名: : Cocone K ≌ Cocone (liftFromUnder.obj K) where
+  签名: : 余锥 K ≌ 余锥 (liftFromUnder.obj K) where
   定义体: coconeLift
   inverse := coconeBack
   unitIso := .refl _
@@ -651,7 +651,7 @@ definition isColimitEquiv
 
 中文:
 定义 isColimitEquiv
-  签名: : IsColimit (coconeEquiv.functor.obj t) ≃ IsColimit t
+  签名: : 是余极限 (coconeEquiv.functor.obj t) ≃ 是余极限 t
   定义体: IsColimit.ofCoconeEquiv coconeEquiv
 
 Depends on / 依赖: IsColimit, IsColimit.ofCoconeEquiv, coconeEquiv, ofCoconeEquiv

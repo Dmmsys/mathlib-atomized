@@ -61,7 +61,7 @@ lemma ne_of_ne_of_eq'
 
 中文:
 引理 ne_of_ne_of_eq'
-  条件: {α : Sort*} {a c b : α} (hab : (a : α) != c) (hbc : a = b)
+  条件: {α : 类型层*} {a c b : α} (hab : (a : α) != c) (hbc : a = b)
   结论: b != c
   证明: hbc ▸ hab
 -/
@@ -87,8 +87,8 @@ inductive Strictness
 归纳类型 Strictness
   参数: (e : Q($α))
   构造子 (4 个):
-    - positive: {pα : Q(PartialOrder $α)} (pf : Q(0 < $e)) : Strictness e pα
-    - nonnegative: {pα : Q(PartialOrder $α)} (pf : Q(0 <= $e)) : Strictness e pα
+    - positive: {pα : Q(偏序 $α)} (pf : Q(0 < $e)) : Strictness e pα
+    - nonnegative: {pα : Q(偏序 $α)} (pf : Q(0 <= $e)) : Strictness e pα
     - nonzero: {pα?} (pf : Q($e != 0)) : Strictness e pα?
     - none: {pα?} : Strictness e pα?
 -/
@@ -175,7 +175,7 @@ structure PositivityExt
 结构 PositivityExt
   参数: where
   公理与运算 (1 个):
-    - eval({u : Level} {α : Q(类型u)} (zα : Q(Zero $α)) (pα? : Option Q(PartialOrder $α)) (e : Q($α))) : MetaM (Strictness zα e pα?)
+    - eval({u : Level} {α : Q(类型u)} (zα : Q(零 $α)) (pα? : 选项类型 Q(偏序 $α)) (e : Q($α))) : MetaM (Strictness zα e pα?)
 -/
 structure PositivityExt where
   /-- Attempts to prove an expression `e : α` is `>0`, `≥0`, or `≠0`. -/
@@ -275,8 +275,8 @@ lemma pos_of_isNat
   simpa using! w
 
 中文:
-引理 pos_of_isNat
-  结论: {n : 自然数} [Semiring A] [PartialOrder A] [IsOrderedRing A] [Nontrivial A]
+引理 pos_of_is自然数
+  结论: {n : 自然数} [半环 A] [偏序 A] [是Ordered环 A] [非平凡 A]
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
   apply Nat.cast_pos.2
@@ -302,7 +302,7 @@ lemma pos_of_isNat'
   simpa using! w
 
 中文:
-引理 pos_of_isNat'
+引理 pos_of_is自然数'
   结论: {n : 自然数}
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
@@ -329,8 +329,8 @@ lemma nonneg_of_isNat
   exact Nat.cast_nonneg n
 
 中文:
-引理 nonneg_of_isNat
-  结论: {n : 自然数} [Semiring A] [PartialOrder A] [IsOrderedRing A]
+引理 nonneg_of_is自然数
+  结论: {n : 自然数} [半环 A] [偏序 A] [是Ordered环 A]
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
   exact Nat.cast_nonneg n
@@ -353,7 +353,7 @@ lemma nonneg_of_isNat'
   exact Nat.cast_nonneg' n
 
 中文:
-引理 nonneg_of_isNat'
+引理 nonneg_of_is自然数'
   结论: {n : 自然数}
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
@@ -380,8 +380,8 @@ lemma nz_of_isNegNat
   simpa using! w
 
 中文:
-引理 nz_of_isNegNat
-  结论: {n : 自然数} [Ring A] [PartialOrder A] [IsStrictOrderedRing A]
+引理 nz_of_isNeg自然数
+  结论: {n : 自然数} [环 A] [偏序 A] [是StrictOrdered环 A]
   证明: by
   rw [NormNum.IsInt.neg_to_eq h rfl]
   simp only [ne_eq, neg_eq_zero]
@@ -410,7 +410,7 @@ lemma pos_of_isNNRat
 
 中文:
 引理 pos_of_isNNRat
-  条件: {n d : 自然数} [Semiring A] [LinearOrder A] [IsStrictOrderedRing A]
+  条件: {n d : 自然数} [半环 A] [线性序 A] [是StrictOrdered环 A]
   证明: pos_invOf_of_invertible_cast d
 .2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Nat.cast_pos (n := n)
     rw [eq]
@@ -439,7 +439,7 @@ lemma pos_of_isRat
 
 中文:
 引理 pos_of_isRat
-  条件: {n : 整数} {d : 自然数} [Ring A] [LinearOrder A] [IsStrictOrderedRing A]
+  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A] [是StrictOrdered环 A]
   证明: pos_invOf_of_invertible_cast d
 .2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Int.cast_pos (n := n)
     rw [eq]
@@ -464,7 +464,7 @@ lemma nonneg_of_isNNRat
 
 中文:
 引理 nonneg_of_isNNRat
-  条件: {n d : 自然数} [Semiring A] [LinearOrder A]
+  条件: {n d : 自然数} [半环 A] [线性序 A]
 -/
 lemma nonneg_of_isNNRat {n d : Nat} [Semiring A] [LinearOrder A] :
     (NormNum.IsNNRat e n d) -> (decide (n = 0)) -> (0 <= (e : A))
@@ -479,7 +479,7 @@ lemma nonneg_of_isRat
 
 中文:
 引理 nonneg_of_isRat
-  条件: {n : 整数} {d : 自然数} [Ring A] [LinearOrder A]
+  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A]
 -/
 lemma nonneg_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] :
     (NormNum.IsRat e n d) -> (decide (n = 0)) -> (0 <= (e : A))
@@ -499,7 +499,7 @@ lemma nz_of_isRat
 
 中文:
 引理 nz_of_isRat
-  条件: {n : 整数} {d : 自然数} [Ring A] [LinearOrder A] [IsStrictOrderedRing A]
+  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A] [是StrictOrdered环 A]
   证明: pos_invOf_of_invertible_cast d
 .2 (of_decide_eq_true h) have neg_n : ((n : A) < 0) := Int.cast_lt_zero (n := n)
     have neg := mul_neg_of_neg_of_pos neg_n pos_invOf_d
@@ -584,7 +584,7 @@ definition normNumPositivity
 
 中文:
 定义 normNumPositivity
-  签名: (pα : Q(PartialOrder $α)) (e : Q($α))
+  签名: (pα : Q(偏序 $α)) (e : Q($α))
   定义体: catchNone do
   match ← NormNum.derive e with
   | .isBool .. => failure
@@ -693,7 +693,7 @@ definition positivityCanon
 
 中文:
 定义 positivityCanon
-  签名: (pα : Q(PartialOrder $α)) (e : Q($α))
+  签名: (pα : Q(偏序 $α)) (e : Q($α))
   定义体: do
   let _add ← synthInstanceQ q(AddMonoid $α)
   let _le ← synthInstanceQ q(PartialOrder $α)
@@ -722,7 +722,7 @@ definition compareHypLE
 
 中文:
 定义 compareHypLE
-  签名: (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e))
+  签名: (pα : Q(偏序 $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e))
   定义体: do
   match ← normNumPositivity zα pα lo with
   | .positive p₁ => pure (.positive q(lt_of_lt_of_le $p₁ $p₂))
@@ -750,7 +750,7 @@ definition compareHypLT
 
 中文:
 定义 compareHypLT
-  签名: (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo < $e))
+  签名: (pα : Q(偏序 $α)) (lo e : Q($α)) (p₂ : Q($lo < $e))
   定义体: do
   match ← normNumPositivity zα pα lo with
   | .positive p₁ => pure (.positive q(lt_trans $p₁ $p₂))
@@ -779,7 +779,7 @@ definition compareHypEq
 
 中文:
 定义 compareHypEq
-  签名: (pα : Q(PartialOrder $α)) (e x : Q($α)) (p₂ : Q($x = $e))
+  签名: (pα : Q(偏序 $α)) (e x : Q($α)) (p₂ : Q($x = $e))
   定义体: do
   match ← normNumPositivity zα pα x with
   | .positive p₁ => pure (.positive q(lt_of_lt_of_eq $p₁ $p₂))
@@ -816,7 +816,7 @@ definition compareHyp
 
 中文:
 定义 compareHyp
-  签名: (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl)
+  签名: (pα : Q(偏序 $α)) (e : Q($α)) (ldecl : LocalDecl)
   定义体: do
   unless ← isProp ldecl.type do return .none
   have e' : Q(Prop) := ldecl.type
@@ -989,7 +989,7 @@ result ← orElse result ext.eval zα pα? e
 
 中文:
 定义 core
-  签名: (pα? : Option Q(PartialOrder $α)) (e : Q($α))
+  签名: (pα? : 选项类型 Q(偏序 $α)) (e : Q($α))
   定义体: do
   let mut result := .none
   trace[Tactic.positivity] "trying to prove positivity of {e}"
@@ -1050,7 +1050,7 @@ inductive OrderRel
 
 中文:
 归纳类型 OrderRel
-  参数: : Type
+  参数: : 类型
   构造子 (4 个):
     - le: OrderRel -- `0 ≤ a`
     - lt: OrderRel -- `0 < a`

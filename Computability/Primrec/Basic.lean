@@ -374,9 +374,9 @@ class Primcodable
 中文:
 类 Primcodable
   参数: (α : 类型)
-  继承: Encodable α
+  继承: 可编码 α
   公理与运算 (1 个):
-    - prim((α)) : 自然数.Primrec fun n => Encodable.encode (decode n)
+    - prim((α)) : 自然数.Primrec fun n => 可编码.encode (decode n)
 -/
 class Primcodable (α : Type*) extends Encodable α where
   prim (α) : Nat.Primrec fun n => Encodable.encode (decode n)
@@ -430,7 +430,7 @@ instance empty
 
 中文:
 实例 empty
-  签名: : Primcodable Empty
+  签名: : Primcodable 空
   定义体: ⟨zero⟩
 -/
 instance empty : Primcodable Empty :=
@@ -446,7 +446,7 @@ instance unit
 
 中文:
 实例 unit
-  签名: : Primcodable PUnit
+  签名: : Primcodable 命题单元
   定义体: ⟨(casesOn1 1 zero).of_eq fun n => by cases n <;> simp⟩
 
 Depends on / 依赖: casesOn1, of_eq
@@ -500,7 +500,7 @@ instance bool
 
 中文:
 实例 bool
-  签名: : Primcodable 布尔
+  签名: : Primcodable 布尔值
   定义体: ⟨(casesOn1 1 (casesOn1 2 zero)).of_eq fun n => match n with
     | 0 => rfl
     | 1 => rfl
@@ -584,7 +584,7 @@ theorem dom_denumerable
 
 中文:
 定理 dom_denumerable
-  条件: {α β} [Denumerable α] [Primcodable β] {f : α -> β}
+  条件: {α β} [可枚举 α] [Primcodable β] {f : α -> β}
   证明: ⟨fun h => (pred.comp h).of_eq fun n => by simp, fun h =>
     (Nat.Primrec.succ.comp h).of_eq fun n => by simp⟩
 
@@ -799,8 +799,8 @@ theorem ofNat_iff
   proof: dom_denumerable.trans nat_iff.symm.trans encode_iff
 
 中文:
-定理 ofNat_iff
-  条件: {α β} [Denumerable α] [Primcodable β] {f : α -> β}
+定理 of自然数_iff
+  条件: {α β} [可枚举 α] [Primcodable β] {f : α -> β}
   证明: dom_denumerable.trans nat_iff.symm.trans encode_iff
 
 Depends on / 依赖: dom_denumerable, dom_denumerable.trans, encode_iff, nat_iff, nat_iff.symm.trans
@@ -819,8 +819,8 @@ theorem ofNat
   proof: ofNat_iff.1 Primrec.id
 
 中文:
-定理 ofNat
-  条件: (α) [Denumerable α]
+定理 of自然数
+  条件: (α) [可枚举 α]
   结论: Primrec (of自然数 α)
   证明: ofNat_iff.1 Primrec.id
 -/
@@ -975,7 +975,7 @@ instance prod
       cases @
 
 中文:
-实例 prod
+实例 乘积
   签名: {α β} [Primcodable α] [Primcodable β]
   定义体: ⟨((casesOn' zero ((casesOn' zero .succ).comp (pair right ((Primcodable.prim β).comp left)))).comp
           (pair right ((Primcodable.prim α).comp left))).of_eq
@@ -1020,7 +1020,7 @@ theorem fst
 中文:
 定理 fst
   条件: {α β} [Primcodable α] [Primcodable β]
-  结论: Primrec (@Prod.fst α β)
+  结论: Primrec (@积类型.fst α β)
   证明: ((casesOn' zero
             ((casesOn' zero (Nat.Primrec.succ.comp left)).comp
               (pair right ((Primcodable.prim β).comp left)))).comp
@@ -1059,7 +1059,7 @@ theorem snd
 中文:
 定理 snd
   条件: {α β} [Primcodable α] [Primcodable β]
-  结论: Primrec (@Prod.snd α β)
+  结论: Primrec (@积类型.snd α β)
   证明: ((casesOn' zero
             ((casesOn' zero (Nat.Primrec.succ.comp right)).comp
               (pair right ((Primcodable.prim β).comp left)))).comp
@@ -1138,7 +1138,7 @@ theorem list_getElem?₁
 
 中文:
 定理 list_getElem?₁
-  结论: 对任意 l : List α, Primrec (l[·]? : 自然数 -> Option α)
+  结论: 对任意 l : 列表 α, Primrec (l[·]? : 自然数 -> 选项类型 α)
 -/
 theorem list_getElem?₁ : forall l : List α, Primrec (l[·]? : Nat -> Option α)
   | [] => dom_denumerable.2 zero
@@ -1273,7 +1273,7 @@ theorem pair
 
 中文:
 定理 pair
-  结论: Primrec₂ (@Prod.mk α β)
+  结论: Primrec₂ (@积类型.mk α β)
   证明: Primrec.pair .fst .snd
 -/
 protected theorem pair : Primrec₂ (@Prod.mk α β) :=
@@ -1417,8 +1417,8 @@ theorem ofNat_iff
   proof: (Primrec.ofNat_iff.trans <| by simp).trans unpaired
 
 中文:
-定理 ofNat_iff
-  条件: {α β σ} [Denumerable α] [Denumerable β] [Primcodable σ] {f : α -> β -> σ}
+定理 of自然数_iff
+  条件: {α β σ} [可枚举 α] [可枚举 β] [Primcodable σ] {f : α -> β -> σ}
   证明: (Primrec.ofNat_iff.trans <| by simp).trans unpaired
 
 Depends on / 依赖: Primrec, Primrec.ofNat_iff.trans, ofNat_iff, unpaired
@@ -1440,7 +1440,7 @@ theorem uncurry
 中文:
 定理 uncurry
   条件: {f : α -> β -> σ}
-  结论: Primrec (Function.uncurry f) ↔ Primrec₂ f
+  结论: Primrec (函数.uncurry f) ↔ Primrec₂ f
   证明: by
   rw [show Function.uncurry f = fun p : α × β => f p.1 p.2 from funext fun ⟨a]; rw [b⟩ => rfl]; rfl
 
@@ -1462,7 +1462,7 @@ theorem curry
 中文:
 定理 curry
   条件: {f : α × β -> σ}
-  结论: Primrec₂ (Function.curry f) ↔ Primrec f
+  结论: Primrec₂ (函数.curry f) ↔ Primrec f
   证明: by
   rw [← uncurry]; rw [Function.uncurry_curry]
 
@@ -2072,7 +2072,7 @@ Primrec₂.encode_iff.2
 
 中文:
 定理 option_casesOn
-  结论: {o : α -> Option β} {f : α -> σ} {g : α -> β -> σ} (ho : Primrec o)
+  结论: {o : α -> 选项类型 β} {f : α -> σ} {g : α -> β -> σ} (ho : Primrec o)
   证明: encode_iff.1
     (nat_casesOn (encode_iff.2 ho) (encode_iff.2 hf) <|
 pred.comp₂
@@ -2104,7 +2104,7 @@ theorem option_bind
 
 中文:
 定理 option_bind
-  条件: {f : α -> Option β} {g : α -> β -> Option σ} (hf : Primrec f) (hg : Primrec₂ g)
+  条件: {f : α -> 选项类型 β} {g : α -> β -> 选项类型 σ} (hf : Primrec f) (hg : Primrec₂ g)
   证明: (option_casesOn hf (const none) hg).of_eq fun a => by cases f a <;> rfl
 
 Depends on / 依赖: of_eq, option_casesOn
@@ -2124,8 +2124,8 @@ theorem option_bind₁
 
 中文:
 定理 option_bind₁
-  条件: {f : α -> Option σ} (hf : Primrec f)
-  结论: Primrec fun o => Option.bind o f
+  条件: {f : α -> 选项类型 σ} (hf : Primrec f)
+  结论: Primrec fun o => 选项类型.bind o f
   证明: option_bind .id (hf.comp snd).to₂
 
 Depends on / 依赖: hf.comp, option_bind
@@ -2143,7 +2143,7 @@ theorem option_map
 
 中文:
 定理 option_map
-  条件: {f : α -> Option β} {g : α -> β -> σ} (hf : Primrec f) (hg : Primrec₂ g)
+  条件: {f : α -> 选项类型 β} {g : α -> β -> σ} (hf : Primrec f) (hg : Primrec₂ g)
   证明: (option_bind hf (option_some.comp₂ hg)).of_eq fun x => by cases f x <;> rfl
 
 Depends on / 依赖: of_eq, option_bind, option_some, option_some.comp
@@ -2164,7 +2164,7 @@ theorem option_map₁
 中文:
 定理 option_map₁
   条件: {f : α -> σ} (hf : Primrec f)
-  结论: Primrec (Option.map f)
+  结论: Primrec (选项类型.map f)
   证明: option_map .id (hf.comp snd).to₂
 
 Depends on / 依赖: hf.comp, option_map
@@ -2183,7 +2183,7 @@ theorem option_getD
 
 中文:
 定理 option_getD
-  结论: Primrec₂ (@Option.getD α)
+  结论: Primrec₂ (@选项类型.getD α)
   证明: Primrec.of_eq (option_casesOn Primrec₂.left Primrec₂.right .right) fun ⟨o, a⟩ => by
     cases o <;> rfl
 
@@ -2206,8 +2206,8 @@ theorem option_getD_default
 
 中文:
 定理 option_getD_default
-  条件: [Inhabited α]
-  结论: Primrec (fun o : Option α => o.getD default)
+  条件: [可居 α]
+  结论: Primrec (fun o : 选项类型 α => o.getD default)
   证明: option_getD.comp .id (const default)
 
 @[deprecated option_getD_default (since := "2026-01-05")]
@@ -2229,8 +2229,8 @@ theorem option_iget
 
 中文:
 定理 option_iget
-  条件: [Inhabited α]
-  结论: Primrec (@Option.iget α _)
+  条件: [可居 α]
+  结论: Primrec (@选项类型.iget α _)
   证明: option_getD_default
 
 Depends on / 依赖: option_getD_default
@@ -2248,7 +2248,7 @@ theorem option_isSome
 
 中文:
 定理 option_isSome
-  结论: Primrec (@Option.isSome α)
+  结论: Primrec (@选项类型.isSome α)
   证明: (option_casesOn .id (const false) (const true).to₂).of_eq fun o => by cases o <;> rfl
 
 Depends on / 依赖: of_eq, option_casesOn
@@ -2267,7 +2267,7 @@ option_bind (Primrec.decode.comp snd) h.comp (fst.comp fst) snd⟩
 
 中文:
 定理 bind_decode_iff
-  条件: {f : α -> β -> Option σ}
+  条件: {f : α -> β -> 选项类型 σ}
   证明: ⟨fun h => by simpa [encodek] using! h.comp fst ((@Primrec.encode β _).comp snd), fun h =>
 option_bind (Primrec.decode.comp snd) h.comp (fst.comp fst) snd⟩
 
@@ -2366,7 +2366,7 @@ theorem cond
 
 中文:
 定理 cond
-  结论: {c : α -> 布尔} {f : α -> σ} {g : α -> σ} (hc : Primrec c) (hf : Primrec f)
+  结论: {c : α -> 布尔值} {f : α -> σ} {g : α -> σ} (hc : Primrec c) (hf : Primrec f)
   证明: (nat_casesOn (encode_iff.2 hc) hg (hf.comp fst).to₂).of_eq fun a => by cases c a <;> rfl
 
 Depends on / 依赖: encode_iff, hf.comp, nat_casesOn, of_eq
@@ -2436,7 +2436,7 @@ theorem nat_min
 
 中文:
 定理 nat_min
-  结论: Primrec₂ (@min 自然数 _)
+  结论: Primrec₂ (@最小值 自然数 _)
   证明: ite nat_le fst snd
 
 Depends on / 依赖: nat_le
@@ -2454,7 +2454,7 @@ theorem nat_max
 
 中文:
 定理 nat_max
-  结论: Primrec₂ (@max 自然数 _)
+  结论: Primrec₂ (@最大值 自然数 _)
   证明: ite (nat_le.comp fst snd) snd fst
 
 Depends on / 依赖: nat_le, nat_le.comp
@@ -2473,7 +2473,7 @@ theorem dom_bool
 
 中文:
 定理 dom_bool
-  条件: (f : 布尔 -> α)
+  条件: (f : 布尔值 -> α)
   结论: Primrec f
   证明: (cond .id (const (f true)) (const (f false))).of_eq fun b => by cases b <;> rfl
 
@@ -2494,7 +2494,7 @@ theorem dom_bool₂
 
 中文:
 定理 dom_bool₂
-  条件: (f : 布尔 -> 布尔 -> α)
+  条件: (f : 布尔值 -> 布尔值 -> α)
   结论: Primrec₂ f
   证明: (cond fst ((dom_bool (f true)).comp snd) ((dom_bool (f false)).comp snd)).of_eq fun ⟨a, b⟩ => by
     cases a <;> rfl
@@ -2612,7 +2612,7 @@ theorem eq
 
 中文:
 定理 eq
-  结论: PrimrecRel (@Eq α)
+  结论: PrimrecRel (@相等 α)
   证明: have : PrimrecRel fun a b : Nat => a = b :=
     (PrimrecPred.and nat_le nat_le.swap).of_eq fun a => by simp [le_antisymm_iff]
   (this.decide.comp₂ (Primrec.encode.comp₂ Primrec₂.left)
@@ -2690,7 +2690,7 @@ theorem option_orElse
 
 中文:
 定理 option_orElse
-  结论: Primrec₂ ((· <|> ·) : Option α -> Option α -> Option α)
+  结论: Primrec₂ ((· <|> ·) : 选项类型 α -> 选项类型 α -> 选项类型 α)
   证明: (option_casesOn fst snd (fst.comp fst).to₂).of_eq fun ⟨o₁, o₂⟩ => by cases o₁ <;> cases o₂ <;> rfl
 
 Depends on / 依赖: fst.comp, of_eq, option_casesOn
@@ -2726,7 +2726,7 @@ theorem list_findIdx₁
 
 中文:
 定理 list_findIdx₁
-  条件: {p : α -> β -> 布尔} (hp : Primrec₂ p)
+  条件: {p : α -> β -> 布尔值} (hp : Primrec₂ p)
 -/
 theorem list_findIdx₁ {p : α -> β -> Bool} (hp : Primrec₂ p) :
     forall l : List β, Primrec fun a => l.findIdx (p a)
@@ -2745,7 +2745,7 @@ theorem list_idxOf₁
 
 中文:
 定理 list_idxOf₁
-  条件: [DecidableEq α] (l : List α)
+  条件: [DecidableEq α] (l : 列表 α)
   结论: Primrec fun a => l.idxOf a
   证明: list_findIdx₁ (.swap .beq) l
 -/
@@ -2767,7 +2767,7 @@ option_some_iff.1 by
 
 中文:
 定理 dom_finite
-  条件: [Finite α] (f : α -> σ)
+  条件: [有限 α] (f : α -> σ)
   结论: Primrec f
   证明: let ⟨l, _, m⟩ := Finite.exists_univ_list α
 option_some_iff.1 by
@@ -3023,7 +3023,7 @@ to₂ nat_double_succ.comp (Primrec.encode.comp snd))
 to₂ nat_double.comp (Primrec.encode.comp snd))))
 
 中文:
-实例 sum
+实例 求和
   签名: : Primcodable (α oplus β)
   定义体: ⟨Primrec.nat_iff.1
       (encode_iff.2
@@ -3068,7 +3068,7 @@ theorem sumInl
 
 中文:
 定理 sumInl
-  结论: Primrec (@Sum.inl α β)
+  结论: Primrec (@和.inl α β)
   证明: encode_iff.1 nat_double.comp Primrec.encode
 
 Depends on / 依赖: Primrec, Primrec.encode, encode, encode_iff, nat_double, nat_double.comp
@@ -3086,7 +3086,7 @@ theorem sumInr
 
 中文:
 定理 sumInr
-  结论: Primrec (@Sum.inr α β)
+  结论: Primrec (@和.inr α β)
   证明: encode_iff.1 nat_double_succ.comp Primrec.encode
 
 Depends on / 依赖: Primrec, Primrec.encode, encode, encode_iff, nat_double_succ, nat_double_succ.comp
@@ -3247,7 +3247,7 @@ theorem mem_range_encode
 
 中文:
 定理 mem_range_encode
-  结论: PrimrecPred (fun n => n in Set.range (encode : α -> 自然数))
+  结论: PrimrecPred (fun n => n in 集合.range (encode : α -> 自然数))
   证明: have : PrimrecPred fun n => Encodable.decode₂ α n != none :=
     .not
       (Primrec.eq.comp
@@ -3343,7 +3343,7 @@ theorem subtype_val_iff
 
 中文:
 定理 subtype_val_iff
-  条件: {p : β -> 命题} [DecidablePred p] {hp : PrimrecPred p} {f : α -> Subtype p}
+  条件: {p : β -> 命题} [DecidablePred p] {hp : PrimrecPred p} {f : α -> 子类型 p}
   证明: Primcodable.subtype hp
     (Primrec fun a => (f a).1) ↔ Primrec f := by
   let := Primcodable.subtype hp
@@ -3402,7 +3402,7 @@ theorem option_get
 
 中文:
 定理 option_get
-  条件: {f : α -> Option β} {h : 对任意 a, (f a).isSome}
+  条件: {f : α -> 选项类型 β} {h : 对任意 a, (f a).isSome}
   证明: by
   intro hf
   refine (Nat.Primrec.pred.comp hf).of_eq fun n => ?_
@@ -3473,7 +3473,7 @@ theorem fin_val_iff
 
 中文:
 定理 fin_val_iff
-  条件: {n} {f : α -> Fin n}
+  条件: {n} {f : α -> 有限集 n}
   结论: (Primrec fun a => (f a).1) ↔ Primrec f
   证明: by
   let : Primcodable { a // a < n } := Primcodable.subtype (nat_lt.comp .id (const _))
@@ -3497,7 +3497,7 @@ theorem fin_val
 中文:
 定理 fin_val
   条件: {n}
-  结论: Primrec (fun (i : Fin n) => (i : 自然数))
+  结论: Primrec (fun (i : 有限集 n) => (i : 自然数))
   证明: fin_val_iff.2 .id
 
 Depends on / 依赖: fin_val_iff
@@ -3517,7 +3517,7 @@ theorem fin_succ
 中文:
 定理 fin_succ
   条件: {n}
-  结论: Primrec (@Fin.succ n)
+  结论: Primrec (@有限集.succ n)
   证明: fin_val_iff.1 by simp [succ.comp fin_val]
 
 Depends on / 依赖: fin_val, fin_val_iff, succ.comp

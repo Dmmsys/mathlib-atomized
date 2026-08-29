@@ -74,7 +74,7 @@ theorem contDiffWithinAt_abs
 
 中文:
 定理 contDiffWithinAt_abs
-  条件: {x : 实数} (hx : x != 0) (s : Set 实数)
+  条件: {x : 实数} (hx : x != 0) (s : 集合 实数)
   证明: (contDiffAt_abs hx).contDiffWithinAt
 
 Depends on / 依赖: contDiffAt_abs, contDiffWithinAt
@@ -111,7 +111,7 @@ theorem contDiffOn_abs
 
 中文:
 定理 contDiffOn_abs
-  条件: {s : Set 实数} (hs : 对任意 x in s, x != 0)
+  条件: {s : 集合 实数} (hs : 对任意 x in s, x != 0)
   证明: fun x hx => contDiffWithinAt_abs (hs x hx) s
 
 Depends on / 依赖: contDiffWithinAt_abs
@@ -145,9 +145,9 @@ theorem ContDiff.abs
   proof: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.abs (h₀ x)
 
 中文:
-定理 ContDiff.abs
-  条件: (hf : ContDiff 实数 n f) (h₀ : 对任意 x, f x != 0)
-  结论: ContDiff 实数 n fun y => |f y|
+定理 连续可微.abs
+  条件: (hf : 连续可微 实数 n f) (h₀ : 对任意 x, f x != 0)
+  结论: 连续可微 实数 n fun y => |f y|
   证明: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.abs (h₀ x)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, hf.contDiffAt.abs
@@ -319,8 +319,8 @@ theorem HasFDerivAt.abs_of_neg
   simp
 
 中文:
-定理 HasFDerivAt.abs_of_neg
-  结论: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.abs_of_neg
+  结论: (hf : 在点处Fréchet可导 f f' x)
   证明: by
   convert! (hasDerivAt_abs_neg h₀).hasFDerivAt.comp x hf using 1
   ext y
@@ -373,8 +373,8 @@ theorem HasFDerivAt.abs_of_pos
   simp
 
 中文:
-定理 HasFDerivAt.abs_of_pos
-  结论: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.abs_of_pos
+  结论: (hf : 在点处Fréchet可导 f f' x)
   证明: by
   convert! (hasDerivAt_abs_pos h₀).hasFDerivAt.comp x hf using 1
   ext y
@@ -427,8 +427,8 @@ theorem HasFDerivAt.abs
   simp [mul_comm]
 
 中文:
-定理 HasFDerivAt.abs
-  结论: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.abs
+  结论: (hf : 在点处Fréchet可导 f f' x)
   证明: by
   convert! (hasDerivAt_abs h₀).hasFDerivAt.comp x hf using 1
   ext y
@@ -452,7 +452,7 @@ theorem hasDerivWithinAt_abs_neg
 
 中文:
 定理 hasDerivWithinAt_abs_neg
-  条件: (s : Set 实数) {x : 实数} (hx : x < 0)
+  条件: (s : 集合 实数) {x : 实数} (hx : x < 0)
   证明: (hasDerivAt_abs_neg hx).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt_abs_neg, hasDerivWithinAt
@@ -470,7 +470,7 @@ theorem hasDerivWithinAt_abs_pos
 
 中文:
 定理 hasDerivWithinAt_abs_pos
-  条件: (s : Set 实数) {x : 实数} (hx : 0 < x)
+  条件: (s : 集合 实数) {x : 实数} (hx : 0 < x)
   证明: (hasDerivAt_abs_pos hx).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt_abs_pos, hasDerivWithinAt
@@ -488,7 +488,7 @@ theorem hasDerivWithinAt_abs
 
 中文:
 定理 hasDerivWithinAt_abs
-  条件: (s : Set 实数) {x : 实数} (hx : x != 0)
+  条件: (s : 集合 实数) {x : 实数} (hx : x != 0)
   证明: (hasDerivAt_abs hx).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt_abs, hasDerivWithinAt
@@ -681,7 +681,7 @@ theorem differentiableWithinAt_abs_neg
 
 中文:
 定理 differentiableWithinAt_abs_neg
-  条件: (s : Set 实数) {x : 实数} (hx : x < 0)
+  条件: (s : 集合 实数) {x : 实数} (hx : x < 0)
   证明: (differentiableAt_abs_neg hx).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_abs_neg, differentiableWithinAt
@@ -699,7 +699,7 @@ theorem differentiableWithinAt_abs_pos
 
 中文:
 定理 differentiableWithinAt_abs_pos
-  条件: (s : Set 实数) {x : 实数} (hx : 0 < x)
+  条件: (s : 集合 实数) {x : 实数} (hx : 0 < x)
   证明: (differentiableAt_abs_pos hx).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_abs_pos, differentiableWithinAt
@@ -717,7 +717,7 @@ theorem differentiableWithinAt_abs
 
 中文:
 定理 differentiableWithinAt_abs
-  条件: (s : Set 实数) {x : 实数} (hx : x != 0)
+  条件: (s : 集合 实数) {x : 实数} (hx : x != 0)
   证明: (differentiableAt_abs hx).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_abs, differentiableWithinAt
@@ -793,7 +793,7 @@ theorem differentiableOn_abs
 
 中文:
 定理 differentiableOn_abs
-  条件: {s : Set 实数} (hs : 对任意 x in s, x != 0)
+  条件: {s : 集合 实数} (hs : 对任意 x in s, x != 0)
   结论: DifferentiableOn 实数 (|·|) s
   证明: fun x hx => differentiableWithinAt_abs s (hs x hx)
 
@@ -828,8 +828,8 @@ theorem Differentiable.abs
   proof: fun x => (hf x).abs (h₀ x)
 
 中文:
-定理 Differentiable.abs
-  条件: (hf : Differentiable 实数 f) (h₀ : 对任意 x, f x != 0)
+定理 可微.abs
+  条件: (hf : 可微 实数 f) (h₀ : 对任意 x, f x != 0)
   证明: fun x => (hf x).abs (h₀ x)
 -/
 theorem Differentiable.abs (hf : Differentiable Real f) (h₀ : forall x, f x != 0) :

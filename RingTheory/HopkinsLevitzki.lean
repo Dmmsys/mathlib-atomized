@@ -146,8 +146,8 @@ theorem finite_of_isNoetherian
 
 中文:
 定理 finite_of_isNoetherian
-  条件: [IsNoetherian R M]
-  结论: Module.Finite R₀ M
+  条件: [是Noether R M]
+  结论: 模.有限 R₀ M
   证明: finite_of_isNoetherian_or_isArtinian R₀ R M (.inl ‹_›)
 
 Depends on / 依赖: finite_of_isNoetherian_or_isArtinian
@@ -166,8 +166,8 @@ theorem finite_of_isArtinian
 
 中文:
 定理 finite_of_isArtinian
-  条件: [IsArtinian R M]
-  结论: Module.Finite R₀ M
+  条件: [是Artin R M]
+  结论: 模.有限 R₀ M
   证明: finite_of_isNoetherian_or_isArtinian R₀ R M (.inr ‹_›)
 
 Depends on / 依赖: finite_of_isNoetherian_or_isArtinian
@@ -192,7 +192,7 @@ theorem isNoetherian_iff_isArtinian
 
 中文:
 定理 isNoetherian_iff_isArtinian
-  结论: IsNoetherian R M ↔ IsArtinian R M
+  结论: 是Noether R M ↔ 是Artin R M
   证明: IsSemiprimaryRing.induction R R M (P := fun M => IsNoetherian R M ↔ IsArtinian R M)
     (fun M _ _ _ _ _ _ => IsSemisimpleModule.finite_tfae.out 1 2)
     fun M _ _ _ _ h h' => let N : Submodule R M := Ring.jacobson R • ⊤; by
@@ -220,7 +220,7 @@ theorem isNoetherian_iff_finite_of_jacobson_fg
 
 中文:
 定理 isNoetherian_iff_finite_of_jacobson_fg
-  条件: (fg : (Ring.jacobson R).FG)
+  条件: (fg : (环.jacobson R).FG)
   证明: ⟨fun _ => inferInstance, IsSemiprimaryRing.induction R R M
     (P := fun M => Module.Finite R M -> IsNoetherian R M)
     (fun M _ _ _ _ _ _ => (IsSemisimpleModule.finite_tfae.out 0 1).mp)
@@ -248,7 +248,7 @@ theorem isNoetherianRing_iff_jacobson_fg
 
 中文:
 定理 isNoetherianRing_iff_jacobson_fg
-  结论: IsNoetherianRing R ↔ (Ring.jacobson R).FG
+  结论: 是Noether环 R ↔ (环.jacobson R).FG
   证明: ⟨fun _ => IsNoetherian.noetherian .., fun fg =>
     (IsSemiprimaryRing.isNoetherian_iff_finite_of_jacobson_fg fg).mpr inferInstance⟩
 
@@ -276,8 +276,8 @@ theorem IsArtinianRing.tfae
   tfa
 
 中文:
-定理 IsArtinianRing.tfae
-  条件: [IsArtinianRing R]
+定理 是Artin环.tfae
+  条件: [是Artin环 R]
   证明: by
   tfae_have 2 ↔ 3 := IsSemiprimaryRing.isNoetherian_iff_isArtinian
   tfae_have 2 -> 1 := fun _ => inferInstance
@@ -314,7 +314,7 @@ theorem isArtinianRing_iff_isFiniteLength
 
 中文:
 定理 isArtinianRing_iff_isFiniteLength
-  结论: IsArtinianRing R ↔ IsFiniteLength R R
+  结论: 是Artin环 R ↔ 是FiniteLength R R
   证明: ⟨fun h => ((IsArtinianRing.tfae R R).out 2 3).mp h,
     fun h => (isFiniteLength_iff_isNoetherian_isArtinian.mp h).2⟩
 
@@ -338,8 +338,8 @@ instance [IsArtinianRing
   body: ((IsArtinianRing.tfae R R).out 2 1).mp ‹_›
 
 中文:
-实例 [IsArtinianRing
-  签名: R] : IsNoetherianRing R
+实例 [是Artin环
+  签名: R] : 是Noether环 R
   定义体: ((IsArtinianRing.tfae R R).out 2 1).mp ‹_›
 
 Depends on / 依赖: IsArtinianRing, IsArtinianRing.tfae
@@ -362,7 +362,7 @@ theorem isNoetherian_of_finite_isArtinian
 
 中文:
 定理 isNoetherian_of_finite_isArtinian
-  结论: {R} [CommRing R] [Module R M]
+  结论: {R} [交换环 R] [模 R M]
   证明: by
   obtain ⟨s, fin, span⟩ := Submodule.fg_def.mp (Module.finite_def.mp ‹_›)
   rw [← s.iUnion_of_singleton_coe]; rw [Submodule.span_iUnion] at span
@@ -402,8 +402,8 @@ theorem IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
   have (I : Spec) : IsSemisimpleRing (
 
 中文:
-定理 IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
-  结论: {R} [CommRing R]
+定理 是Noether环.isArtinianRing_of_krullDimLE_zero
+  结论: {R} [交换环 R]
   证明: have eq := Ring.jacobson_eq_nilradical_of_krullDimLE_zero R
   let Spec := {I : Ideal R | I.IsPrime}
   have : Finite Spec :=
@@ -438,7 +438,7 @@ theorem isArtinianRing_iff_isNoetherianRing_krullDimLE_zero
 
 中文:
 定理 isArtinianRing_iff_isNoetherianRing_krullDimLE_zero
-  条件: {R} [CommRing R]
+  条件: {R} [交换环 R]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨h, _⟩ => h.isArtinianRing_of_krullDimLE_zero⟩
 -/
 @[stacks 00KH] theorem isArtinianRing_iff_isNoetherianRing_krullDimLE_zero {R} [CommRing R] :
@@ -456,7 +456,7 @@ theorem isArtinianRing_iff_krullDimLE_zero
 
 中文:
 定理 isArtinianRing_iff_krullDimLE_zero
-  条件: {R : 类型} [CommRing R] [IsNoetherianRing R]
+  条件: {R : 类型} [交换环 R] [是Noether环 R]
   证明: by
   rwa [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero, and_iff_right]
 
@@ -477,7 +477,7 @@ lemma isArtinianRing_iff_isNilpotent_maximalIdeal
 
 中文:
 引理 isArtinianRing_iff_isNilpotent_maximalIdeal
-  结论: (R : 类型) [CommRing R] [IsNoetherianRing R]
+  结论: (R : 类型) [交换环 R] [是Noether环 R]
   证明: by
   rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ideal.FG.isNilpotent_iff_le_nilradical (IsNoetherian.noetherian _)]; rw [← and_iff_left (a := Ring.KrullDimLE 0 R) ‹IsLocalRing R›]; rw [(Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 3 rfl rfl]; rw [IsLocalRing.isMaximal_iff]; rw [le_antisymm_i
 

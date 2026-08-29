@@ -61,10 +61,10 @@ class ContinuousConstSMul
     - continuous_const_smul : forall γ : Γ, Continuous fun x : T => γ • x
 
 中文:
-类 ContinuousConstSMul
-  参数: (Γ : 类型) (T : 类型) [TopologicalSpace T] [SMul Γ T]
+类 连续常数标量乘法
+  参数: (Γ : 类型) (T : 类型) [拓扑空间 T] [标量乘法 Γ T]
   公理与运算 (1 个):
-    - continuous_const_smul : 对任意 γ : Γ, Continuous fun x : T => γ • x
+    - continuous_const_smul : 对任意 γ : Γ, 连续 fun x : T => γ • x
 -/
 class ContinuousConstSMul (Γ : Type*) (T : Type*) [TopologicalSpace T] [SMul Γ T] : Prop where
   /-- The scalar multiplication `(•) : Γ → T → T` is continuous in the second argument. -/
@@ -80,10 +80,10 @@ class ContinuousConstVAdd
     - continuous_const_vadd : forall γ : Γ, Continuous fun x : T => γ +ᵥ x
 
 中文:
-类 ContinuousConstVAdd
-  参数: (Γ : 类型) (T : 类型) [TopologicalSpace T] [VAdd Γ T]
+类 连续常数向量加法
+  参数: (Γ : 类型) (T : 类型) [拓扑空间 T] [向量加法 Γ T]
   公理与运算 (1 个):
-    - continuous_const_vadd : 对任意 γ : Γ, Continuous fun x : T => γ +ᵥ x
+    - continuous_const_vadd : 对任意 γ : Γ, 连续 fun x : T => γ +ᵥ x
 -/
 class ContinuousConstVAdd (Γ : Type*) (T : Type*) [TopologicalSpace T] [VAdd Γ T] : Prop where
   /-- The additive action `(+ᵥ) : Γ → T → T` is continuous in the second argument. -/
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousConstSMul (ULift M) α
+  签名: 连续常数标量乘法 (类型层提升 M) α
   定义体: ⟨fun γ => continuous_const_smul (ULift.down γ)⟩
 
 @[to_additive]
@@ -132,8 +132,8 @@ theorem Filter.Tendsto.const_smul
   proof: ((continuous_const_smul _).tendsto _).comp hf
 
 中文:
-定理 Filter.Tendsto.const_smul
-  结论: {f : β -> α} {l : Filter β} {a : α} (hf : Tendsto f l (𝓝 a))
+定理 滤子.收敛.const_smul
+  结论: {f : β -> α} {l : 滤子 β} {a : α} (hf : 收敛 f l (𝓝 a))
   证明: ((continuous_const_smul _).tendsto _).comp hf
 
 Depends on / 依赖: continuous_const_smul, tendsto
@@ -188,9 +188,9 @@ theorem Continuous.const_smul
   proof: (continuous_const_smul _).comp hg
 
 中文:
-定理 Continuous.const_smul
-  条件: (hg : Continuous g) (c : M)
-  结论: Continuous (c • g)
+定理 连续.const_smul
+  条件: (hg : 连续 g) (c : M)
+  结论: 连续 (c • g)
   证明: (continuous_const_smul _).comp hg
 
 Depends on / 依赖: continuous_const_smul
@@ -212,8 +212,8 @@ instance ContinuousConstSMul.op
 @[to_additive]
 
 中文:
-实例 ContinuousConstSMul.op
-  签名: [SMul Mᵐᵒᵖ α] [IsCentralScalar M α]
+实例 连续常数标量乘法.op
+  签名: [标量乘法 Mᵐᵒᵖ α] [中心标量 M α]
   定义体: ⟨MulOpposite.rec' fun c => by simpa only [op_smul_eq_smul] using continuous_const_smul c⟩
 
 @[to_additive]
@@ -237,7 +237,7 @@ instance MulOpposite.continuousConstSMul
 
 中文:
 实例 MulOpposite.continuousConstSMul
-  签名: : ContinuousConstSMul M αᵐᵒᵖ
+  签名: : 连续常数标量乘法 M αᵐᵒᵖ
   定义体: ⟨fun c => MulOpposite.continuous_op.comp MulOpposite.continuous_unop.const_smul c⟩
 
 @[to_additive]
@@ -260,7 +260,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousConstSMul M αᵒᵈ
+  签名: 连续常数标量乘法 M αᵒᵈ
   定义体: ‹ContinuousConstSMul M α›
 
 @[to_additive]
@@ -282,7 +282,7 @@ instance OrderDual.continuousConstSMul'
 
 中文:
 实例 OrderDual.continuousConstSMul'
-  签名: : ContinuousConstSMul Mᵒᵈ α
+  签名: : 连续常数标量乘法 Mᵒᵈ α
   定义体: ‹ContinuousConstSMul M α›
 
 @[to_additive]
@@ -304,8 +304,8 @@ instance Prod.continuousConstSMul
 @[to_additive]
 
 中文:
-实例 Prod.continuousConstSMul
-  签名: [SMul M β] [ContinuousConstSMul M β]
+实例 积类型.continuousConstSMul
+  签名: [标量乘法 M β] [连续常数标量乘法 M β]
   定义体: ⟨fun _ => (continuous_fst.const_smul _).prodMk (continuous_snd.const_smul _)⟩
 
 @[to_additive]
@@ -333,8 +333,8 @@ theorem IsCompact.smul
 @[to_additive]
 
 中文:
-定理 IsCompact.smul
-  结论: {α β} [SMul α β] [TopologicalSpace β] [ContinuousConstSMul α β] (a : α)
+定理 是紧集.smul
+  结论: {α β} [标量乘法 α β] [拓扑空间 β] [连续常数标量乘法 α β] (a : α)
   证明: hs.image (continuous_id.const_smul a)
 
 @[to_additive]
@@ -382,8 +382,8 @@ theorem Inseparable.const_smul
 @[to_additive]
 
 中文:
-定理 Inseparable.const_smul
-  条件: {x y : α} (h : Inseparable x y) (c : M)
+定理 不可分.const_smul
+  条件: {x y : α} (h : 不可分 x y) (c : M)
   证明: h.map (continuous_const_smul c)
 
 @[to_additive]
@@ -407,8 +407,8 @@ theorem Topology.IsInducing.continuousConstSMul
 @[to_additive]
 
 中文:
-定理 Topology.IsInducing.continuousConstSMul
-  结论: {N β : 类型} [SMul N β] [TopologicalSpace β]
+定理 拓扑.是Inducing.continuousConstSMul
+  结论: {N β : 类型} [标量乘法 N β] [拓扑空间 β]
   证明: by
     simpa only [Function.comp_def, hf, hg.continuous_iff] using hg.continuous.fun_const_smul (f c)
 
@@ -436,7 +436,7 @@ theorem smul_closure_subset
 
 中文:
 定理 smul_closure_subset
-  条件: (c : M) (s : Set α)
+  条件: (c : M) (s : 集合 α)
   结论: c • closure s subseteq closure (c • s)
   证明: ((Set.mapsTo_image _ _).closure <| continuous_const_smul c).image_subset
 
@@ -462,7 +462,7 @@ exact iUnion₂_subset fun c hc => (smul_closure_subset c t).trans closure_mono
 
 中文:
 定理 set_smul_closure_subset
-  条件: (s : Set M) (t : Set α)
+  条件: (s : 集合 M) (t : 集合 α)
   结论: s • closure t subseteq closure (s • t)
   证明: by
   simp only [← iUnion_smul_set]
@@ -491,7 +491,7 @@ theorem isClosed_setOfPred_map_smul
 
 中文:
 定理 isClosed_setOfPred_map_smul
-  结论: {N : 类型} (α β) [SMul M α] [SMul N β]
+  结论: {N : 类型} (α β) [标量乘法 M α] [标量乘法 N β]
   证明: by
   simp only [Set.ofPred_forall]
   exact isClosed_iInter fun c => isClosed_iInter fun x =>
@@ -525,8 +525,8 @@ theorem Filter.Tendsto.const_smul_zero
   proof: smul_zero c (A := α) ▸ hg.const_smul c
 
 中文:
-定理 Filter.Tendsto.const_smul_zero
-  结论: {g : β -> α} {l : Filter β}
+定理 滤子.收敛.const_smul_zero
+  结论: {g : β -> α} {l : 滤子 β}
   证明: smul_zero c (A := α) ▸ hg.const_smul c
 -/
 protected theorem Filter.Tendsto.const_smul_zero {g : β -> α} {l : Filter β}
@@ -553,8 +553,8 @@ instance Units.continuousConstSMul
 @[to_additive]
 
 中文:
-实例 Units.continuousConstSMul
-  签名: : ContinuousConstSMul Mˣ α where
+实例 单位群.continuousConstSMul
+  签名: : 连续常数标量乘法 Mˣ α where
   定义体: continuous_const_smul (m : M)
 
 @[to_additive]
@@ -601,7 +601,7 @@ theorem tendsto_const_smul_iff
 
 中文:
 定理 tendsto_const_smul_iff
-  条件: {f : β -> α} {l : Filter β} {a : α} (c : G)
+  条件: {f : β -> α} {l : 滤子 β} {a : α} (c : G)
   证明: ⟨fun h => by simpa only [inv_smul_smul] using h.const_smul c⁻¹, fun h => h.const_smul _⟩
 
 Depends on / 依赖: const_smul, h.const_smul, inv_smul_smul
@@ -698,7 +698,7 @@ theorem continuous_const_smul_iff
 中文:
 定理 continuous_const_smul_iff
   条件: (c : G)
-  结论: (Continuous fun x => c • f x) ↔ Continuous f
+  结论: (连续 fun x => c • f x) ↔ 连续 f
   证明: by
   simp only [continuous_iff_continuousAt, continuousAt_const_smul_iff]
 
@@ -721,7 +721,7 @@ definition Homeomorph.smul
 @[to_additive]
 
 中文:
-定义 Homeomorph.smul
+定义 同胚.smul
   签名: (γ : G)
   定义体: MulAction.toPerm γ
 
@@ -743,9 +743,9 @@ lemma Homeomorph.smul_symm
   proof: Homeomorph.ext_iff.mpr smul_symm_apply g
 
 中文:
-引理 Homeomorph.smul_symm
+引理 同胚.smul_symm
   条件: {g : G}
-  结论: (Homeomorph.smul (α := α) g).symm = Homeomorph.smul g⁻¹
+  结论: (同胚.smul (α := α) g).symm = 同胚.smul g⁻¹
   证明: Homeomorph.ext_iff.mpr smul_symm_apply g
 
 Depends on / 依赖: Homeomorph, Homeomorph.smul
@@ -772,7 +772,7 @@ theorem isHomeomorph_smul
 中文:
 定理 isHomeomorph_smul
   条件: (c : G)
-  结论: IsHomeomorph fun x : α => c • x
+  结论: 是同胚 fun x : α => c • x
   证明: (Homeomorph.smul c).isHomeomorph
 
 @[to_additive]
@@ -797,7 +797,7 @@ theorem isOpenMap_smul
 中文:
 定理 isOpenMap_smul
   条件: (c : G)
-  结论: IsOpenMap fun x : α => c • x
+  结论: 是开映射 fun x : α => c • x
   证明: (Homeomorph.smul c).isOpenMap
 
 @[to_additive]
@@ -820,9 +820,9 @@ theorem IsOpen.smul
 @[to_additive]
 
 中文:
-定理 IsOpen.smul
-  条件: {s : Set α} (hs : IsOpen s) (c : G)
-  结论: IsOpen (c • s)
+定理 是开集.smul
+  条件: {s : 集合 α} (hs : 是开集 s) (c : G)
+  结论: 是开集 (c • s)
   证明: isOpenMap_smul c s hs
 
 @[to_additive]
@@ -847,7 +847,7 @@ theorem isClosedMap_smul
 中文:
 定理 isClosedMap_smul
   条件: (c : G)
-  结论: IsClosedMap fun x : α => c • x
+  结论: 是闭映射 fun x : α => c • x
   证明: (Homeomorph.smul c).isClosedMap
 
 @[to_additive]
@@ -870,9 +870,9 @@ theorem IsClosed.smul
 @[to_additive]
 
 中文:
-定理 IsClosed.smul
-  条件: {s : Set α} (hs : IsClosed s) (c : G)
-  结论: IsClosed (c • s)
+定理 是闭集.smul
+  条件: {s : 集合 α} (hs : 是闭集 s) (c : G)
+  结论: 是闭集 (c • s)
   证明: isClosedMap_smul c s hs
 
 @[to_additive]
@@ -896,7 +896,7 @@ theorem closure_smul
 
 中文:
 定理 closure_smul
-  条件: (c : G) (s : Set α)
+  条件: (c : G) (s : 集合 α)
   结论: closure (c • s) = c • closure s
   证明: ((Homeomorph.smul c).image_closure s).symm
 
@@ -921,9 +921,9 @@ theorem Dense.smul
 @[to_additive]
 
 中文:
-定理 Dense.smul
-  条件: (c : G) {s : Set α} (hs : Dense s)
-  结论: Dense (c • s)
+定理 稠密.smul
+  条件: (c : G) {s : 集合 α} (hs : 稠密 s)
+  结论: 稠密 (c • s)
   证明: by
   rw [dense_iff_closure_eq] at hs ⊢; rw [closure_smul, hs, smul_set_univ]
 
@@ -946,7 +946,7 @@ theorem interior_smul
 
 中文:
 定理 interior_smul
-  条件: (c : G) (s : Set α)
+  条件: (c : G) (s : 集合 α)
   结论: interior (c • s) = c • interior s
   证明: ((Homeomorph.smul c).image_interior s).symm
 
@@ -1018,9 +1018,9 @@ theorem IsOpen.smul_left
 @[to_additive]
 
 中文:
-定理 IsOpen.smul_left
-  条件: {s : Set G} {t : Set α} (ht : IsOpen t)
-  结论: IsOpen (s • t)
+定理 是开集.smul_left
+  条件: {s : 集合 G} {t : 集合 α} (ht : 是开集 t)
+  结论: 是开集 (s • t)
   证明: by
   rw [← iUnion_smul_set]
   exact isOpen_biUnion fun a _ => ht.smul _
@@ -1047,7 +1047,7 @@ theorem subset_interior_smul_right
 
 中文:
 定理 subset_interior_smul_right
-  条件: {s : Set G} {t : Set α}
+  条件: {s : 集合 G} {t : 集合 α}
   结论: s • interior t subseteq interior (s • t)
   证明: interior_maximal (Set.smul_subset_smul_left interior_subset) isOpen_interior.smul_left
 
@@ -1074,7 +1074,7 @@ theorem smul_mem_nhds_smul_iff
 
 中文:
 定理 smul_mem_nhds_smul_iff
-  条件: {t : Set α} (g : G) {a : α}
+  条件: {t : 集合 α} (g : G) {a : α}
   结论: g • t in 𝓝 (g • a) ↔ t in 𝓝 a
   证明: (Homeomorph.smul g).isOpenEmbedding.image_mem_nhds
 
@@ -1101,7 +1101,7 @@ theorem smul_mem_nhds_self
 
 中文:
 定理 smul_mem_nhds_self
-  条件: [TopologicalSpace G] [ContinuousConstSMul G G] {g : G} {s : Set G}
+  条件: [拓扑空间 G] [连续常数标量乘法 G G] {g : G} {s : 集合 G}
   证明: by
   rw [← smul_mem_nhds_smul_iff g⁻¹]; simp
 
@@ -1132,7 +1132,7 @@ lemma t1Space_iff
 
 中文:
 引理 t1Space_iff
-  条件: (x : α) [IsPretransitive G α]
+  条件: (x : α) [是Pretransitive G α]
   证明: by
   refine ⟨fun H => isClosed_singleton, fun hx => ⟨fun y => ?_⟩⟩
   rcases MulAction.exists_smul_eq G x y with ⟨g, rfl⟩
@@ -1166,7 +1166,7 @@ lemma discreteTopology_iff
 
 中文:
 引理 discreteTopology_iff
-  条件: (x : α) [IsPretransitive G α]
+  条件: (x : α) [是Pretransitive G α]
   证明: by
   rw [discreteTopology_iff_isOpen_singleton]
   refine ⟨fun H => H _, fun hx y => ?_⟩
@@ -1203,7 +1203,7 @@ theorem tendsto_const_smul_iff₀
 
 中文:
 定理 tendsto_const_smul_iff₀
-  条件: {f : β -> α} {l : Filter β} {a : α} {c : G₀} (hc : c != 0)
+  条件: {f : β -> α} {l : 滤子 β} {a : α} {c : G₀} (hc : c != 0)
   证明: tendsto_const_smul_iff (Units.mk0 c hc)
 
 Depends on / 依赖: Units.mk0, tendsto_const_smul_iff
@@ -1283,7 +1283,7 @@ theorem continuous_const_smul_iff₀
 中文:
 定理 continuous_const_smul_iff₀
   条件: (hc : c != 0)
-  结论: (Continuous fun x => c • f x) ↔ Continuous f
+  结论: (连续 fun x => c • f x) ↔ 连续 f
   证明: continuous_const_smul_iff (Units.mk0 c hc)
 
 Depends on / 依赖: Units.mk0, continuous_const_smul_iff
@@ -1305,7 +1305,7 @@ definition Homeomorph.smulOfNeZero
 @[simp]
 
 中文:
-定义 Homeomorph.smulOfNeZero
+定义 同胚.smulOfNeZero
   签名: (c : G₀) (hc : c != 0)
   定义体: Homeomorph.smul (Units.mk0 c hc)
 
@@ -1324,7 +1324,7 @@ theorem Homeomorph.smulOfNeZero_symm_apply
   proof: rfl
 
 中文:
-定理 Homeomorph.smulOfNeZero_symm_apply
+定理 同胚.smulOfNeZero_symm_apply
   条件: {c : G₀} (hc : c != 0)
   证明: rfl
 -/
@@ -1344,7 +1344,7 @@ theorem isHomeomorph_smul₀
 中文:
 定理 isHomeomorph_smul₀
   条件: {c : G₀} (hc : c != 0)
-  结论: IsHomeomorph fun x : α => c • x
+  结论: 是同胚 fun x : α => c • x
   证明: (Homeomorph.smulOfNeZero c hc).isHomeomorph
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, isHomeomorph, smulOfNeZero
@@ -1364,7 +1364,7 @@ theorem isOpenMap_smul₀
 中文:
 定理 isOpenMap_smul₀
   条件: {c : G₀} (hc : c != 0)
-  结论: IsOpenMap fun x : α => c • x
+  结论: 是开映射 fun x : α => c • x
   证明: (Homeomorph.smulOfNeZero c hc).isOpenMap
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, isOpenMap, smulOfNeZero
@@ -1382,9 +1382,9 @@ theorem IsOpen.smul₀
   proof: isOpenMap_smul₀ hc s hs
 
 中文:
-定理 IsOpen.smul₀
-  条件: {c : G₀} {s : Set α} (hs : IsOpen s) (hc : c != 0)
-  结论: IsOpen (c • s)
+定理 是开集.smul₀
+  条件: {c : G₀} {s : 集合 α} (hs : 是开集 s) (hc : c != 0)
+  结论: 是开集 (c • s)
   证明: isOpenMap_smul₀ hc s hs
 -/
 theorem IsOpen.smul₀ {c : G₀} {s : Set α} (hs : IsOpen s) (hc : c != 0) : IsOpen (c • s) :=
@@ -1401,7 +1401,7 @@ theorem interior_smul₀
 
 中文:
 定理 interior_smul₀
-  条件: {c : G₀} (hc : c != 0) (s : Set α)
+  条件: {c : G₀} (hc : c != 0) (s : 集合 α)
   结论: interior (c • s) = c • interior s
   证明: ((Homeomorph.smulOfNeZero c hc).image_interior s).symm
 
@@ -1420,7 +1420,7 @@ theorem closure_smul₀'
 
 中文:
 定理 closure_smul₀'
-  条件: {c : G₀} (hc : c != 0) (s : Set α)
+  条件: {c : G₀} (hc : c != 0) (s : 集合 α)
   证明: ((Homeomorph.smulOfNeZero c hc).image_closure s).symm
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, image_closure, smulOfNeZero
@@ -1445,7 +1445,7 @@ theorem closure_smul₀
 
 中文:
 定理 closure_smul₀
-  结论: {E} [Zero E] [MulActionWithZero G₀ E] [TopologicalSpace E] [T1Space E]
+  结论: {E} [零 E] [带零乘法作用 G₀ E] [拓扑空间 E] [T1空间 E]
   证明: by
   rcases eq_or_ne c 0 with (rfl | hc)
   · rcases eq_empty_or_nonempty s with (rfl | hs)
@@ -1519,7 +1519,7 @@ theorem isClosedMap_smul_of_ne_zero
 中文:
 定理 isClosedMap_smul_of_ne_zero
   条件: {c : G₀} (hc : c != 0)
-  结论: IsClosedMap fun x : α => c • x
+  结论: 是闭映射 fun x : α => c • x
   证明: (Homeomorph.smulOfNeZero c hc).isClosedMap
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, isClosedMap, smulOfNeZero
@@ -1536,8 +1536,8 @@ theorem IsClosed.smul_of_ne_zero
   proof: isClosedMap_smul_of_ne_zero hc s hs
 
 中文:
-定理 IsClosed.smul_of_ne_zero
-  条件: {c : G₀} {s : Set α} (hs : IsClosed s) (hc : c != 0)
+定理 是闭集.smul_of_ne_zero
+  条件: {c : G₀} {s : 集合 α} (hs : 是闭集 s) (hc : c != 0)
   证明: isClosedMap_smul_of_ne_zero hc s hs
 
 Depends on / 依赖: isClosedMap_smul_of_ne_zero
@@ -1560,7 +1560,7 @@ theorem isClosedMap_smul₀
 
 中文:
 定理 isClosedMap_smul₀
-  结论: {E : 类型} [Zero E] [MulActionWithZero G₀ E] [TopologicalSpace E]
+  结论: {E : 类型} [零 E] [带零乘法作用 G₀ E] [拓扑空间 E]
   证明: by
   rcases eq_or_ne c 0 with (rfl | hne)
   · simp only [zero_smul]
@@ -1585,8 +1585,8 @@ theorem IsClosed.smul₀
   proof: isClosedMap_smul₀ c s hs
 
 中文:
-定理 IsClosed.smul₀
-  结论: {E : 类型} [Zero E] [MulActionWithZero G₀ E] [TopologicalSpace E]
+定理 是闭集.smul₀
+  结论: {E : 类型} [零 E] [带零乘法作用 G₀ E] [拓扑空间 E]
   证明: isClosedMap_smul₀ c s hs
 -/
 theorem IsClosed.smul₀ {E : Type*} [Zero E] [MulActionWithZero G₀ E] [TopologicalSpace E]
@@ -1604,7 +1604,7 @@ theorem HasCompactMulSupport.comp_smul
 
 中文:
 定理 HasCompactMulSupport.comp_smul
-  结论: {β : 类型} [One β] {f : α -> β} (h : HasCompactMulSupport f)
+  结论: {β : 类型} [幺 β] {f : α -> β} (h : HasCompactMulSupport f)
   证明: h.comp_homeomorph (Homeomorph.smulOfNeZero c hc)
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, comp_homeomorph, h.comp_homeomorph, smulOfNeZero
@@ -1623,7 +1623,7 @@ theorem HasCompactSupport.comp_smul
 
 中文:
 定理 HasCompactSupport.comp_smul
-  结论: {β : 类型} [Zero β] {f : α -> β} (h : HasCompactSupport f)
+  结论: {β : 类型} [零 β] {f : α -> β} (h : HasCompactSupport f)
   证明: h.comp_homeomorph (Homeomorph.smulOfNeZero c hc)
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, comp_homeomorph, h.comp_homeomorph, smulOfNeZero
@@ -1683,7 +1683,7 @@ theorem isQuotientMap_smul
 
 中文:
 定理 isQuotientMap_smul
-  结论: {S β} [SMul S M] [SMul S α] [IsScalarTower S M α]
+  结论: {S β} [标量乘法 S M] [标量乘法 S α] [标量塔 S M α]
   证明: hf.of_comp_isQuotientMap by convert! hf.comp hc.isHomeomorph_smul.isQuotientMap; ext; simp
 
 Depends on / 依赖: convert, hc.isHomeomorph_smul.isQuotientMap, hf.comp, hf.of_comp_isQuotientMap, isHomeomorph_smul, isQuotientMap, of_comp_isQuotientMap
@@ -1703,7 +1703,7 @@ theorem isQuotientMap_nsmul
 
 中文:
 定理 isQuotientMap_nsmul
-  结论: {M β} [Semiring M] [AddCommMonoid α] [Module M α]
+  结论: {M β} [半环 M] [加法交换幺半群 α] [模 M α]
   证明: isQuotientMap_smul (M := M) ⟨f, map_nsmul f⟩ hf _ by rwa [nsmul_one]
 
 Depends on / 依赖: isQuotientMap_smul, map_nsmul, nsmul_one
@@ -1723,7 +1723,7 @@ theorem isQuotientMap_zsmul
 
 中文:
 定理 isQuotientMap_zsmul
-  结论: {M β} [Ring M] [AddCommGroup α] [Module M α]
+  结论: {M β} [环 M] [加法交换群 α] [模 M α]
   证明: isQuotientMap_smul (M := M) ⟨f, map_zsmul f⟩ hf _ by rwa [zsmul_one n]
 
 Depends on / 依赖: isQuotientMap_smul, map_zsmul, zsmul_one
@@ -1746,9 +1746,9 @@ class ProperlyDiscontinuousSMul
 
 中文:
 类 ProperlyDiscontinuousSMul
-  参数: (Γ : 类型) (T : 类型) [TopologicalSpace T] [SMul Γ T]
+  参数: (Γ : 类型) (T : 类型) [拓扑空间 T] [标量乘法 Γ T]
   公理与运算 (1 个):
-    - finite_disjoint_inter_image : 对任意 {K L : Set T}, IsCompact K -> IsCompact L -> Set.Finite { γ : Γ | ((γ • ·) '' K inter L).Nonempty }
+    - finite_disjoint_inter_image : 对任意 {K L : 集合 T}, 是紧集 K -> 是紧集 L -> 集合.有限 { γ : Γ | ((γ • ·) '' K inter L).非空 }
 -/
 class ProperlyDiscontinuousSMul (Γ : Type*) (T : Type*) [TopologicalSpace T] [SMul Γ T] :
     Prop where
@@ -1767,9 +1767,9 @@ class ProperlyDiscontinuousVAdd
 
 中文:
 类 ProperlyDiscontinuousVAdd
-  参数: (Γ : 类型) (T : 类型) [TopologicalSpace T] [VAdd Γ T]
+  参数: (Γ : 类型) (T : 类型) [拓扑空间 T] [向量加法 Γ T]
   公理与运算 (1 个):
-    - finite_disjoint_inter_image : 对任意 {K L : Set T}, IsCompact K -> IsCompact L -> Set.Finite { γ : Γ | ((γ +ᵥ ·) '' K inter L).Nonempty }
+    - finite_disjoint_inter_image : 对任意 {K L : 集合 T}, 是紧集 K -> 是紧集 L -> 集合.有限 { γ : Γ | ((γ +ᵥ ·) '' K inter L).非空 }
 -/
 class ProperlyDiscontinuousVAdd (Γ : Type*) (T : Type*) [TopologicalSpace T] [VAdd Γ T] :
   Prop where
@@ -1793,7 +1793,7 @@ lemma properlyDiscontinuousSMul_iff
 
 中文:
 引理 properlyDiscontinuousSMul_iff
-  条件: [TopologicalSpace α] [SMul M α]
+  条件: [拓扑空间 α] [标量乘法 M α]
   证明: ⟨fun _ _ _ => ProperlyDiscontinuousSMul.finite_disjoint_inter_image, .mk⟩
 
 Depends on / 依赖: ProperlyDiscontinuousSMul, ProperlyDiscontinuousSMul.finite_disjoint_inter_image, finite_disjoint_inter_image
@@ -1820,7 +1820,7 @@ lemma ProperlyDiscontinuousSMul.finite_stabilizer'
 
 中文:
 引理 ProperlyDiscontinuousSMul.finite_stabilizer'
-  结论: {γ : Γ | γ • x = x}.Finite
+  结论: {γ : Γ | γ • x = x}.有限
   证明: by
   simp_rw [← mem_singleton_iff, ← singleton_inter_nonempty, ← image_singleton]
   exact finite_disjoint_inter_image isCompact_singleton isCompact_singleton
@@ -1844,7 +1844,7 @@ lemma ProperlyDiscontinuousSMul.exists_nhds_image_smul_eq_self
   refine
 
 中文:
-引理 ProperlyDiscontinuousSMul.exists_nhds_image_smul_eq_self
+引理 ProperlyDiscontinuousSMul.存在_nhds_image_smul_eq_self
   证明: by
   obtain ⟨V, V_cpt, V_nhd⟩ := exists_compact_mem_nhds x
   let Γ₀ := {γ : Γ | ((γ • ·) '' V inter V).Nonempty ∧ γ • x != x}
@@ -1877,7 +1877,7 @@ lemma ProperlyDiscontinuousSMul.exists_nhds_disjoint_image
   simp [Set.not_disjoint_iff_nonempty_inter]
 
 中文:
-引理 ProperlyDiscontinuousSMul.exists_nhds_disjoint_image
+引理 ProperlyDiscontinuousSMul.存在_nhds_disjoint_image
   证明: by
   convert! exists_nhds_image_smul_eq_self Γ x using 4
   rw [← not_imp_not]
@@ -1908,7 +1908,7 @@ lemma ProperlyDiscontinuousSMul.finite_stabilizer
 
 中文:
 引理 ProperlyDiscontinuousSMul.finite_stabilizer
-  结论: [命题erlyDiscontinuousSMul Γ T]
+  结论: [ProperlyDiscontinuousSMul Γ T]
   证明: ProperlyDiscontinuousSMul.finite_stabilizer' Γ x
 -/
 @[to_additive] lemma ProperlyDiscontinuousSMul.finite_stabilizer [ProperlyDiscontinuousSMul Γ T]
@@ -1934,7 +1934,7 @@ theorem isOpenMap_quotient_mk'_mul
 
 中文:
 定理 isOpenMap_quotient_mk'_mul
-  条件: [ContinuousConstSMul Γ T]
+  条件: [连续常数标量乘法 Γ T]
   证明: MulAction.orbitRel Γ T
     IsOpenMap (Quotient.mk' : T -> Quotient (MulAction.orbitRel Γ T)) := fun U hU => by
   rw [isOpen_coinduced]; rw [MulAction.quotient_preimage_image_eq_union_mul U]
@@ -1960,8 +1960,8 @@ theorem MulAction.isOpenQuotientMap_quotientMk
   proof: ⟨Quot.mk_surjective, continuous_quot_mk, isOpenMap_quotient_mk'_mul⟩
 
 中文:
-定理 MulAction.isOpenQuotientMap_quotientMk
-  条件: [ContinuousConstSMul Γ T]
+定理 乘法作用.isOpenQuotientMap_quotientMk
+  条件: [连续常数标量乘法 Γ T]
   证明: ⟨Quot.mk_surjective, continuous_quot_mk, isOpenMap_quotient_mk'_mul⟩
 
 Depends on / 依赖: Quot.mk_surjective, _mul, continuous_quot_mk, isOpenMap_quotient_mk, mk_surjective
@@ -2018,8 +2018,8 @@ theorem ContinuousConstSMul.secondCountableTopology
   proof: TopologicalSpace.Quotient.secondCountableTopology isOpenMap_quotient_mk'_mul
 
 中文:
-定理 ContinuousConstSMul.secondCountableTopology
-  结论: [SecondCountableTopology T]
+定理 连续常数标量乘法.secondCountableTopology
+  结论: [第二可数拓扑 T]
   证明: TopologicalSpace.Quotient.secondCountableTopology isOpenMap_quotient_mk'_mul
 
 Depends on / 依赖: Quotient, TopologicalSpace, TopologicalSpace.Quotient.secondCountableTopology, _mul, isOpenMap_quotient_mk, secondCountableTopology
@@ -2047,7 +2047,7 @@ alias ⟨_, smul_mem_nhds_smul₀⟩ := smul_mem_nhds_smul_iff₀
 
 中文:
 定理 smul_mem_nhds_smul_iff₀
-  条件: {c : G₀} {s : Set α} {x : α} (hc : c != 0)
+  条件: {c : G₀} {s : 集合 α} {x : α} (hc : c != 0)
   证明: smul_mem_nhds_smul_iff (Units.mk0 c hc)
 
 alias ⟨_, smul_mem_nhds_smul₀⟩ := smul_mem_nhds_smul_iff₀
@@ -2079,7 +2079,7 @@ theorem set_smul_mem_nhds_zero_iff
 
 中文:
 定理 set_smul_mem_nhds_zero_iff
-  条件: {s : Set α} {c : G₀} (hc : c != 0)
+  条件: {s : 集合 α} {c : G₀} (hc : c != 0)
   证明: by
   refine Iff.trans ?_ (smul_mem_nhds_smul_iff₀ hc)
   rw [smul_zero]

@@ -41,8 +41,8 @@ instance SubmonoidClass.instMulArchimedean
   exact MulArchimedean.arch x.val
 
 中文:
-实例 SubmonoidClass.instMulArchimedean
-  签名: {M S : 类型} [SetLike S M]
+实例 子幺半群类.instMulArchimedean
+  签名: {M S : 类型} [集合状 S M]
   定义体: by
   constructor
   rintro x _

@@ -44,7 +44,7 @@ structure DayFunctor
     - functor : C ⥤ V
 
 中文:
-结构 DayFunctor
+结构 Day函子
   公理与运算 (1 个):
     - functor : C ⥤ V
 -/
@@ -111,7 +111,7 @@ structure Hom
     - natTrans : F.functor ⟶ G.functor
 
 中文:
-结构 Hom
+结构 态射
   参数: (F G : C ⊛⥤ V)
   公理与运算 (1 个):
     - natTrans : F.functor ⟶ G.functor
@@ -135,7 +135,7 @@ comp α β := .mk α.natTrans ≫ β.natTrans
 
 中文:
 实例 :
-  签名: Category (C ⊛⥤ V)
+  签名: 范畴 (C ⊛⥤ V)
   定义体: Hom
 id x := .mk 𝟙 x.functor
 comp α β := .mk α.natTrans ≫ β.natTrans
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (C ⊛⥤ V)
+  签名: 幺半群范畴 (C ⊛⥤ V)
   定义体: monoidalOfHasDayConvolutions
     (equiv C V).functor
     (equiv C V).fullyFaithfulFunctor
@@ -551,7 +551,7 @@ definition νNatTrans
   body: ν C V
 
 中文:
-定义 νNatTrans
+定义 ν自然数Trans
   签名: :
   定义体: ν C V
 -/
@@ -571,7 +571,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟙_ (C ⊛⥤ V)).functor.IsLeftKanExtension (ν自然数Trans C V)
+  签名: (𝟙_ (C ⊛⥤ V)).functor.是LeftKanExtension (ν自然数Trans C V)
   定义体: .isLeftKanExtension isPointwiseLeftKanExtensionUnitUnit C V (C ⊛⥤ V)
 
 Depends on / 依赖: isLeftKanExtension, isPointwiseLeftKanExtensionUnitUnit

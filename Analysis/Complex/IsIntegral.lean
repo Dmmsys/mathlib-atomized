@@ -32,8 +32,8 @@ theorem isIntegral_int_I
   rw [eval₂_add]; rw [eval₂_X_pow]; rw [eval₂_C]; rw [I_sq]; rw [eq_intCast]; rw [Int.cast_one]; rw [neg_add_cancel]
 
 中文:
-定理 isIntegral_int_I
-  结论: Is整数egral 整数 I
+定理 is整数egral_int_I
+  结论: 是整 整数 I
   证明: by
   refine ⟨X ^ 2 + C 1, monic_X_pow_add_C _ two_ne_zero, ?_⟩
   rw [eval₂_add]; rw [eval₂_X_pow]; rw [eval₂_C]; rw [I_sq]; rw [eq_intCast]; rw [Int.cast_one]; rw [neg_add_cancel]
@@ -53,8 +53,8 @@ theorem isIntegral_rat_I
   proof: isIntegral_int_I.tower_top
 
 中文:
-定理 isIntegral_rat_I
-  结论: Is整数egral Rat I
+定理 is整数egral_rat_I
+  结论: 是整 有理数 I
   证明: isIntegral_int_I.tower_top
 
 Depends on / 依赖: isIntegral_int_I, isIntegral_int_I.tower_top, tower_top

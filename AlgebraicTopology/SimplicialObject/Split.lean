@@ -82,7 +82,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {Δ Δ' : SimplexCategory} (f : Δ ⟶ Δ') [Epi f]
+  签名: {Δ Δ' : 单纯形范畴} (f : Δ ⟶ Δ') [满态射 f]
   定义体: ⟨op Δ', f, inferInstance⟩
 -/
 def mk {Δ Δ' : SimplexCategory} (f : Δ ⟶ Δ') [Epi f] : IndexSet (op Δ) :=
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi A.e
+  签名: 满态射 A.e
   定义体: A.2.2
 -/
 instance : Epi A.e :=
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (IndexSet Δ)
+  签名: 有限类型 (IndexSet Δ)
   定义体: Fintype.ofInjective
     (fun A =>
       ⟨⟨A.1.unop.len, Nat.lt_succ_iff.mpr (len_le_of_epi A.e)⟩,
@@ -251,7 +251,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (IndexSet Δ)
+  签名: 可居 (IndexSet Δ)
   定义体: ⟨id Δ⟩
 -/
 instance : Inhabited (IndexSet Δ) :=
@@ -424,7 +424,7 @@ theorem eqId_iff_mono
 
 中文:
 定理 eqId_iff_mono
-  结论: A.EqId ↔ Mono A.e
+  结论: A.EqId ↔ 单态射 A.e
   证明: by
   constructor
   · intro h
@@ -463,7 +463,7 @@ definition epiComp
 
 中文:
 定义 epiComp
-  签名: {Δ₁ Δ₂ : SimplexCategoryᵒᵖ} (A : IndexSet Δ₁) (p : Δ₁ ⟶ Δ₂) [Epi p.unop]
+  签名: {Δ₁ Δ₂ : SimplexCategoryᵒᵖ} (A : IndexSet Δ₁) (p : Δ₁ ⟶ Δ₂) [满态射 p.unop]
   定义体: ⟨A.1, ⟨p.unop ≫ A.e, epi_comp _ _⟩⟩
 
 Depends on / 依赖: epi_comp, p.unop
@@ -511,7 +511,7 @@ theorem fac_pull
 
 中文:
 定理 fac_pull
-  结论: (A.pull θ).e ≫ image.ι (θ.unop ≫ A.e) = θ.unop ≫ A.e
+  结论: (A.pull θ).e ≫ 像.ι (θ.unop ≫ A.e) = θ.unop ≫ A.e
   证明: image.fac _
 
 Depends on / 依赖: image.fac
@@ -583,7 +583,7 @@ structure Splitting
   公理与运算 (3 个):
     - N : 自然数 -> C
     - ι : 对任意 n, N n ⟶ X _⦋n⦌
-    - isColimit' : 对任意 Δ : SimplexCategoryᵒᵖ, IsColimit (Splitting.cofan' N X ι Δ)
+    - isColimit' : 对任意 Δ : SimplexCategoryᵒᵖ, 是余极限 (Splitting.cofan' N X ι Δ)
 -/
 structure Splitting (X : SimplicialObject C) where
   /-- The "nondegenerate simplices" `N n` for all `n : ℕ`. -/
@@ -908,7 +908,7 @@ definition map
 
 中文:
 定义 map
-  签名: (F : C ⥤ D) [PreservesFiniteCoproducts F]
+  签名: (F : C ⥤ D) [保持FiniteCoproducts F]
   定义体: F.obj (s.N n)
   ι n := F.map (s.ι n)
   isColimit' n :=
@@ -944,7 +944,7 @@ structure Split
     - s : Splitting X
 
 中文:
-结构 Split
+结构 分裂
   参数: where
   公理与运算 (2 个):
     - X : SimplicialObject C
@@ -991,8 +991,8 @@ structure Hom
     - comm : forall n : Nat, S₁.s.ι n ≫ F.app (op ⦋n⦌) = f n ≫ S₂.s.ι n  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (S₁ S₂ : Split C)
+结构 态射
+  参数: (S₁ S₂ : 分裂 C)
   公理与运算 (3 个):
     - F : S₁.X ⟶ S₂.X
     - f : 对任意 n : 自然数, S₁.s.N n ⟶ S₂.s.N n
@@ -1029,8 +1029,8 @@ theorem Hom.ext
   rw [c₁]; rw [c₂]
 
 中文:
-定理 Hom.ext
-  条件: {S₁ S₂ : Split C} (Φ₁ Φ₂ : Hom S₁ S₂) (h : 对任意 n : 自然数, Φ₁.f n = Φ₂.f n)
+定理 态射.ext
+  条件: {S₁ S₂ : 分裂 C} (Φ₁ Φ₂ : 态射 S₁ S₂) (h : 对任意 n : 自然数, Φ₁.f n = Φ₂.f n)
   结论: Φ₁ = Φ₂
   证明: by
   rcases Φ₁ with ⟨F₁, f₁, c₁⟩
@@ -1081,7 +1081,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Split C)
+  签名: 范畴 (分裂 C)
   定义体: Split.Hom
   id S :=
     { F := 𝟙 _
@@ -1123,7 +1123,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {S₁ S₂ : Split C} (Φ₁ Φ₂ : S₁ ⟶ S₂) (h : 对任意 n : 自然数, Φ₁.f n = Φ₂.f n)
+  条件: {S₁ S₂ : 分裂 C} (Φ₁ Φ₂ : S₁ ⟶ S₂) (h : 对任意 n : 自然数, Φ₁.f n = Φ₂.f n)
   结论: Φ₁ = Φ₂
   证明: Hom.ext _ _ h
 
@@ -1143,7 +1143,7 @@ theorem congr_F
 
 中文:
 定理 congr_F
-  条件: {S₁ S₂ : Split C} {Φ₁ Φ₂ : S₁ ⟶ S₂} (h : Φ₁ = Φ₂)
+  条件: {S₁ S₂ : 分裂 C} {Φ₁ Φ₂ : S₁ ⟶ S₂} (h : Φ₁ = Φ₂)
   结论: Φ₁.f = Φ₂.f
   证明: by rw [h]
 -/
@@ -1163,7 +1163,7 @@ theorem congr_f
 
 中文:
 定理 congr_f
-  条件: {S₁ S₂ : Split C} {Φ₁ Φ₂ : S₁ ⟶ S₂} (h : Φ₁ = Φ₂) (n : 自然数)
+  条件: {S₁ S₂ : 分裂 C} {Φ₁ Φ₂ : S₁ ⟶ S₂} (h : Φ₁ = Φ₂) (n : 自然数)
   结论: Φ₁.f n = Φ₂.f n
   证明: by
   rw [h]
@@ -1187,7 +1187,7 @@ theorem id_F
 
 中文:
 定理 id_F
-  条件: (S : Split C)
+  条件: (S : 分裂 C)
   结论: (𝟙 S : S ⟶ S).F = 𝟙 S.X
   证明: rfl
 
@@ -1210,7 +1210,7 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (S : Split C) (n : 自然数)
+  条件: (S : 分裂 C) (n : 自然数)
   结论: (𝟙 S : S ⟶ S).f n = 𝟙 (S.s.N n)
   证明: rfl
 
@@ -1232,7 +1232,7 @@ theorem comp_F
 
 中文:
 定理 comp_F
-  条件: {S₁ S₂ S₃ : Split C} (Φ₁₂ : S₁ ⟶ S₂) (Φ₂₃ : S₂ ⟶ S₃)
+  条件: {S₁ S₂ S₃ : 分裂 C} (Φ₁₂ : S₁ ⟶ S₂) (Φ₂₃ : S₂ ⟶ S₃)
   证明: rfl
 
 @[simp]
@@ -1252,7 +1252,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {S₁ S₂ S₃ : Split C} (Φ₁₂ : S₁ ⟶ S₂) (Φ₂₃ : S₂ ⟶ S₃) (n : 自然数)
+  条件: {S₁ S₂ S₃ : 分裂 C} (Φ₁₂ : S₁ ⟶ S₂) (Φ₂₃ : S₂ ⟶ S₃) (n : 自然数)
   证明: rfl
 -/
 theorem comp_f {S₁ S₂ S₃ : Split C} (Φ₁₂ : S₁ ⟶ S₂) (Φ₂₃ : S₂ ⟶ S₃) (n : Nat) :
@@ -1273,7 +1273,7 @@ theorem cofan_inj_naturality_symm
 
 中文:
 定理 cofan_inj_naturality_symm
-  结论: {S₁ S₂ : Split C} (Φ : S₁ ⟶ S₂) {Δ : SimplexCategoryᵒᵖ}
+  结论: {S₁ S₂ : 分裂 C} (Φ : S₁ ⟶ S₂) {Δ : SimplexCategoryᵒᵖ}
   证明: by
   rw [S₁.s.cofan_inj_eq]; rw [S₂.s.cofan_inj_eq]; rw [assoc]; rw [Φ.F.naturality]; rw [← Φ.comm_assoc]
 
@@ -1300,7 +1300,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Split C ⥤ SimplicialObject C where
+  签名: : 分裂 C ⥤ SimplicialObject C where
   定义体: S.X
   map Φ := Φ.F
 -/

@@ -114,8 +114,8 @@ theorem _root_.Equiv.isTrivialRelation_comp
   simp_rw [isTrivialRelation_iff_vanishesTrivially, e.vanishesTrivially_comp]
 
 中文:
-定理 _root_.Equiv.isTrivialRelation_comp
-  条件: {κ} [Fintype κ] (e : κ ≃ ι)
+定理 _root_.等价.isTrivialRelation_comp
+  条件: {κ} [有限类型 κ] (e : κ ≃ ι)
   证明: by
   simp_rw [isTrivialRelation_iff_vanishesTrivially, e.vanishesTrivially_comp]
 
@@ -187,7 +187,7 @@ theorem tfae_equational_criterion
 
 中文:
 定理 tfae_equational_criterion
-  结论: List.TFAE [
+  结论: 列表.TFAE [
   证明: by
   tfae_have 1 ↔ 2 := iff_rTensor_injective'
   tfae_have 3 ↔ 2 := forall_vanishesTrivially_iff_forall_rTensor_injective R
@@ -260,8 +260,8 @@ theorem iff_forall_isTrivialRelation
   proof: (tfae_equational_criterion R M).out 0 3
 
 中文:
-定理 iff_forall_isTrivialRelation
-  结论: Flat R M ↔ 对任意 {l : 自然数} {f : Fin l -> R} {x : Fin l -> M},
+定理 iff_对任意_isTrivialRelation
+  结论: 平坦 R M ↔ 对任意 {l : 自然数} {f : 有限集 l -> R} {x : 有限集 l -> M},
   证明: (tfae_equational_criterion R M).out 0 3
 
 Depends on / 依赖: tfae_equational_criterion
@@ -285,7 +285,7 @@ theorem isTrivialRelation_of_sum_smul_eq_zero
 
 中文:
 定理 isTrivialRelation_of_sum_smul_eq_zero
-  结论: [Flat R M] {ι : 类型} [Fintype ι] {f : ι -> R}
+  结论: [平坦 R M] {ι : 类型} [有限类型 ι] {f : ι -> R}
   证明: (Fintype.equivFin ι).symm.isTrivialRelation_comp.mp iff_forall_isTrivialRelation.mp ‹_› by
     simpa only [← (Fintype.equivFin ι).symm.sum_comp] using! h
 
@@ -309,8 +309,8 @@ theorem of_forall_isTrivialRelation
   proof: iff_forall_isTrivialRelation.mpr hfx
 
 中文:
-定理 of_forall_isTrivialRelation
-  结论: (hfx : 对任意 {l : 自然数} {f : Fin l -> R} {x : Fin l -> M},
+定理 of_对任意_isTrivialRelation
+  结论: (hfx : 对任意 {l : 自然数} {f : 有限集 l -> R} {x : 有限集 l -> M},
   证明: iff_forall_isTrivialRelation.mpr hfx
 
 Depends on / 依赖: iff_forall_isTrivialRelation, iff_forall_isTrivialRelation.mpr
@@ -335,8 +335,8 @@ theorem iff_forall_exists_factorization
   proof: (tfae_equational_criterion R M).out 0 4
 
 中文:
-定理 iff_forall_exists_factorization
-  结论: Flat R M ↔
+定理 iff_对任意_存在_factorization
+  结论: 平坦 R M ↔
   证明: (tfae_equational_criterion R M).out 0 4
 
 Depends on / 依赖: tfae_equational_criterion
@@ -361,7 +361,7 @@ theorem of_forall_exists_factorization
   proof: iff_forall_exists_factorization.mpr h
 
 中文:
-定理 of_forall_exists_factorization
+定理 of_对任意_存在_factorization
   证明: iff_forall_exists_factorization.mpr h
 
 Depends on / 依赖: iff_forall_exists_factorization, iff_forall_exists_factorization.mpr
@@ -390,8 +390,8 @@ theorem exists_factorization_of_apply_eq_zero_of_free
   ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, LinearEquiv.eq_comp_toLinearMap_symm], haf⟩
 
 中文:
-定理 exists_factorization_of_apply_eq_zero_of_free
-  结论: [Flat R M] {N : 类型} [AddCommGroup N]
+定理 存在_factorization_of_apply_eq_zero_of_free
+  结论: [平坦 R M] {N : 类型} [加法交换群 N]
   证明: have e := ((Module.Free.chooseBasis R N).reindex (Fintype.equivFin _)).repr.symm
   have ⟨k, a, y, hya, haf⟩ := iff_forall_exists_factorization.mp ‹Flat R M›
     (f := e.symm f) (x := x ∘ₗ e) (by simpa using h)
@@ -421,8 +421,8 @@ theorem exists_factorization_of_comp_eq_zero_of_free_aux
       have : x (f k
 
 中文:
-定理 exists_factorization_of_comp_eq_zero_of_free_aux
-  结论: [Flat R M] {K : 类型} {n : 自然数}
+定理 存在_factorization_of_comp_eq_zero_of_free_aux
+  结论: [平坦 R M] {K : 类型} {n : 自然数}
   证明: by
   have (K' : Submodule R K) (hK' : K'.FG) : exists (k : Nat) (a : (Fin n ->₀ R) ->ₗ[R] (Fin k ->₀ R))
       (y : (Fin k ->₀ R) ->ₗ[R] M), x = y ∘ₗ a ∧ K' <= LinearMap.ker (a ∘ₗ f) := by
@@ -469,8 +469,8 @@ theorem exists_factorization_of_comp_eq_zero_of_free
   ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, 
 
 中文:
-定理 exists_factorization_of_comp_eq_zero_of_free
-  结论: [Flat R M] {K N : 类型} [AddCommGroup K]
+定理 存在_factorization_of_comp_eq_zero_of_free
+  结论: [平坦 R M] {K N : 类型} [加法交换群 K]
   证明: have e := ((Module.Free.chooseBasis R N).reindex (Fintype.equivFin _)).repr.symm
   have ⟨k, a, y, hya, haf⟩ := exists_factorization_of_comp_eq_zero_of_free_aux
     (f := e.symm ∘ₗ f) (x := x ∘ₗ e.toLinearMap) (by ext; simpa [comp_assoc] using congr($h _))
@@ -506,8 +506,8 @@ theorem exists_factorization_of_finitePresentation
   obtain ⟨k, a, y, hay, ha⟩ := exists_factorization
 
 中文:
-定理 exists_factorization_of_finitePresentation
-  结论: [Flat R M] {P : 类型} [AddCommGroup P]
+定理 存在_factorization_of_finitePresentation
+  结论: [平坦 R M] {P : 类型} [加法交换群 P]
   证明: by
   have ⟨_, K, ϕ, hK⟩ := FinitePresentation.exists_fin R P
   have : Module.Finite R K := .of_fg hK
@@ -546,8 +546,8 @@ theorem projective_of_finitePresentation
 
 中文:
 定理 projective_of_finitePresentation
-  条件: [Flat R M] [FinitePresentation R M]
-  结论: Projective R M
+  条件: [平坦 R M] [有限呈现 R M]
+  结论: 投射 R M
   证明: have ⟨_, f, g, eq⟩ := exists_factorization_of_finitePresentation (.id (R := R) (M := M))
   .of_split f g eq.symm
 

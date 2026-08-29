@@ -81,7 +81,7 @@ theorem support_sum
 
 中文:
 定理 support_sum
-  结论: {k' G' : 类型} [DecidableEq G'] [AddCommMonoid k'] {f : SkewMonoidAlgebra k G}
+  结论: {k' G' : 类型} [DecidableEq G'] [加法交换幺半群 k'] {f : 斜幺半群代数 k G}
   证明: by
   simp_rw [support, coeff_sum']
   apply Finsupp.support_sum
@@ -112,7 +112,7 @@ theorem support_neg
 
 中文:
 定理 support_neg
-  条件: (p : SkewMonoidAlgebra k G)
+  条件: (p : 斜幺半群代数 k G)
   结论: (-p).support = p.support
   证明: by
   rw [support]; rw [coeff_neg]; rw [Finsupp.support_neg]; rw [support_coeff]
@@ -140,7 +140,7 @@ lemma support_one_subset
 
 中文:
 引理 support_one_subset
-  结论: (1 : SkewMonoidAlgebra k G).support subseteq 1
+  结论: (1 : 斜幺半群代数 k G).support subseteq 1
   证明: Finsupp.support_single_subset
 
 @[simp]
@@ -163,7 +163,7 @@ lemma support_one
 中文:
 引理 support_one
   条件: [NeZero (1 : k)]
-  结论: (1 : SkewMonoidAlgebra k G).support = 1
+  结论: (1 : 斜幺半群代数 k G).support = 1
   证明: Finsupp.support_single _ one_ne_zero
 
 Depends on / 依赖: Finsupp, Finsupp.support_single, one_ne_zero, support_single
@@ -333,7 +333,7 @@ theorem support_mul_single
 
 中文:
 定理 support_mul_single
-  结论: [IsRightCancelMul G] (r : k) (x : G)
+  结论: [右乘消去 G] (r : k) (x : G)
   证明: by
   classical
   ext a
@@ -361,7 +361,7 @@ theorem support_single_mul
 
 中文:
 定理 support_single_mul
-  结论: [IsLeftCancelMul G] (r : k) (x : G)
+  结论: [左乘消去 G] (r : k) (x : G)
   证明: by
   classical
   ext a
@@ -391,7 +391,7 @@ theorem mem_span_support
 
 中文:
 定理 mem_span_support
-  条件: (f : SkewMonoidAlgebra k G)
+  条件: (f : 斜幺半群代数 k G)
   证明: by
   rw [Fintype.mem_span_image_iff_exists_fun k]
   use Finset.restrict f.support f.coeff

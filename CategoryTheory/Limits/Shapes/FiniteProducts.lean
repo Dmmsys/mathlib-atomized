@@ -35,10 +35,10 @@ class HasFiniteProducts
     - out((n : Nat)) : HasLimitsOfShape (Discrete (Fin n)) C
 
 中文:
-类 HasFiniteProducts
+类 有FiniteProducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((n : 自然数)) : HasLimitsOfShape (Discrete (Fin n)) C
+    - out((n : 自然数)) : 有形状极限 (离散 (有限集 n)) C
 -/
 class HasFiniteProducts : Prop where
   /-- `C` has finite products -/
@@ -62,7 +62,7 @@ instance hasLimitsOfShape_discrete
 
 中文:
 实例 hasLimitsOfShape_discrete
-  签名: [HasFiniteProducts C] (ι : Type w) [Finite ι]
+  签名: [有FiniteProducts C] (ι : 类型 w) [有限 ι]
   定义体: by
   rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
   have : HasLimitsOfShape (Discrete (Fin n)) C := HasFiniteProducts.out n
@@ -92,7 +92,7 @@ theorem hasFiniteProducts_of_hasProducts
 中文:
 定理 hasFiniteProducts_of_hasProducts
   条件: [HasProducts.{w} C]
-  结论: HasFiniteProducts C
+  结论: 有FiniteProducts C
   证明: ⟨fun _ => hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
 
 Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.ulift, equivalence, hasLimitsOfShape_of_equivalence
@@ -110,10 +110,10 @@ class HasFiniteCoproducts
     - out((n : Nat)) : HasColimitsOfShape (Discrete (Fin n)) C
 
 中文:
-类 HasFiniteCoproducts
+类 有FiniteCoproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((n : 自然数)) : HasColimitsOfShape (Discrete (Fin n)) C
+    - out((n : 自然数)) : 有形状余极限 (离散 (有限集 n)) C
 -/
 class HasFiniteCoproducts : Prop where
   /-- `C` has all finite coproducts -/
@@ -132,7 +132,7 @@ instance hasColimitsOfShape_discrete
 
 中文:
 实例 hasColimitsOfShape_discrete
-  签名: [HasFiniteCoproducts C] (ι : Type w) [Finite ι]
+  签名: [有FiniteCoproducts C] (ι : 类型 w) [有限 ι]
   定义体: by
   rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
   have : HasColimitsOfShape (Discrete (Fin n)) C := HasFiniteCoproducts.out n
@@ -163,7 +163,7 @@ theorem hasFiniteCoproducts_of_hasCoproducts
 中文:
 定理 hasFiniteCoproducts_of_hasCoproducts
   条件: [HasCoproducts.{w} C]
-  结论: HasFiniteCoproducts C
+  结论: 有FiniteCoproducts C
   证明: ⟨fun _ => hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
 
 Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.ulift, equivalence, hasColimitsOfShape_of_equivalence

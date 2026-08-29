@@ -45,7 +45,7 @@ inductive presburgerFunc
 
 中文:
 归纳类型 presburgerFunc
-  参数: : 自然数 -> Type
+  参数: : 自然数 -> 类型
   构造子 (3 个):
     - zero: presburgerFunc 0
     - one: presburgerFunc 0
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (presburger.Term α)
+  签名: 零 (presburger.项 α)
   定义体: Constants.term .zero
 
 Depends on / 依赖: Constants, Constants.term
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (presburger.Term α)
+  签名: 幺 (presburger.项 α)
   定义体: Constants.term .one
 
 Depends on / 依赖: Constants, Constants.term
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (presburger.Term α)
+  签名: 加法 (presburger.项 α)
   定义体: Functions.apply₂ .add
 
 Depends on / 依赖: Functions, Functions.apply
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (presburger.Term α)
+  签名: 自然数嵌入 (presburger.项 α)
   定义体: Nat.unaryCast
 
 Depends on / 依赖: Nat.unaryCast, unaryCast
@@ -167,7 +167,7 @@ theorem natCast_zero
 
 中文:
 定理 natCast_zero
-  结论: (0 : 自然数) = (0 : presburger.Term α)
+  结论: (0 : 自然数) = (0 : presburger.项 α)
   证明: rfl
 -/
 @[simp, norm_cast] theorem natCast_zero : (0 : Nat) = (0 : presburger.Term α) := rfl
@@ -184,7 +184,7 @@ theorem natCast_succ
 中文:
 定理 natCast_succ
   条件: (n : 自然数)
-  结论: (n + 1 : 自然数) = (n : presburger.Term α) + 1
+  结论: (n + 1 : 自然数) = (n : presburger.项 α) + 1
   证明: rfl
 -/
 @[simp, norm_cast] theorem natCast_succ (n : Nat) : (n + 1 : Nat) = (n : presburger.Term α) + 1 := rfl
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (presburger.Term α)
+  签名: 标量乘法 自然数 (presburger.项 α)
   定义体: nsmulRec
 
 Depends on / 依赖: nsmulRec
@@ -248,8 +248,8 @@ definition sum
   body: (s.toList.map f).sum
 
 中文:
-定义 sum
-  签名: {β : 类型} (s : Finset β) (f : β -> presburger.Term α)
+定义 求和
+  签名: {β : 类型} (s : 有限集 β) (f : β -> presburger.项 α)
   定义体: (s.toList.map f).sum
 
 Depends on / 依赖: s.toList.map, toList
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: presburger.Structure M
+  签名: presburger.结构 M
 -/
 instance : presburger.Structure M where
   funMap
@@ -338,7 +338,7 @@ theorem realize_zero
 
 中文:
 定理 realize_zero
-  结论: Term.realize v (0 : presburger.Term α) = 0
+  结论: 项.realize v (0 : presburger.项 α) = 0
   证明: rfl
 -/
 @[simp] theorem realize_zero : Term.realize v (0 : presburger.Term α) = 0 := rfl
@@ -353,7 +353,7 @@ theorem realize_one
 
 中文:
 定理 realize_one
-  结论: Term.realize v (1 : presburger.Term α) = 1
+  结论: 项.realize v (1 : presburger.项 α) = 1
   证明: rfl
 -/
 @[simp] theorem realize_one : Term.realize v (1 : presburger.Term α) = 1 := rfl
@@ -385,7 +385,7 @@ theorem realize_natCast
 
 中文:
 定理 realize_natCast
-  条件: [AddMonoidWithOne M] {n : 自然数}
+  条件: [加法带幺幺半群 M] {n : 自然数}
   证明: by
   induction n with simp [*]
 -/
@@ -404,7 +404,7 @@ theorem realize_nsmul
 
 中文:
 定理 realize_nsmul
-  条件: [AddMonoidWithOne M] {n : 自然数}
+  条件: [加法带幺幺半群 M] {n : 自然数}
   证明: by
   induction n with simp [*, add_nsmul]
 -/
@@ -427,7 +427,7 @@ theorem realize_sum
 
 中文:
 定理 realize_sum
-  结论: [AddCommMonoidWithOne M]
+  结论: [加法交换带幺幺半群 M]
   证明: by
   classical
   simp only [sum]

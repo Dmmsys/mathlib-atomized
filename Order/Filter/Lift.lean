@@ -39,8 +39,8 @@ theorem lift_top
 
 中文:
 定理 lift_top
-  条件: (g : Set α -> Filter β)
-  结论: (⊤ : Filter α).lift g = g univ
+  条件: (g : 集合 α -> 滤子 β)
+  结论: (⊤ : 滤子 α).lift g = g univ
   证明: by simp [Filter.lift]
 
 Depends on / 依赖: Filter, Filter.lift
@@ -61,8 +61,8 @@ theorem HasBasis.mem_lift_iff
     exact hf.exists_iff fun t₁ t₂ ht H => gm ht H
 
 中文:
-定理 HasBasis.mem_lift_iff
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set α} {f : Filter α}
+定理 有基.mem_lift_iff
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 α} {f : 滤子 α}
   证明: by
   refine (mem_biInf_of_directed ?_ ⟨univ, univ_sets _⟩).trans ?_
   · intro t₁ ht₁ t₂ ht₂
@@ -93,8 +93,8 @@ theorem HasBasis.lift
   simp [Sigma.exists, and_assoc, exists_and_left]
 
 中文:
-定理 HasBasis.lift
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set α} {f : Filter α} (hf : f.HasBasis p s)
+定理 有基.lift
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 α} {f : 滤子 α} (hf : f.有基 p s)
   证明: by
   refine ⟨fun t => (hf.mem_lift_iff hg gm).trans ?_⟩
   simp [Sigma.exists, and_assoc, exists_and_left]
@@ -122,7 +122,7 @@ theorem mem_lift_sets
 
 中文:
 定理 mem_lift_sets
-  条件: (hg : Monotone g) {s : Set β}
+  条件: (hg : 递增 g) {s : 集合 β}
   结论: s in f.lift g ↔ 存在 t in f, s in g t
   证明: (f.basis_sets.mem_lift_iff (fun s => (g s).basis_sets) hg).trans by
     simp only [id, exists_mem_subset_iff]
@@ -144,8 +144,8 @@ theorem sInter_lift_sets
     iInter_and, @iInter_comm _ (Set β)]
 
 中文:
-定理 sInter_lift_sets
-  条件: (hg : Monotone g)
+定理 s整数er_lift_sets
+  条件: (hg : 递增 g)
   证明: by
   simp only [sInter_eq_biInter, mem_ofPred_eq, mem_lift_sets hg, iInter_exists,
     iInter_and, @iInter_comm _ (Set β)]
@@ -169,7 +169,7 @@ show f.lift g <= 𝓟 s from iInf_le_of_le t iInf_le_of_le ht le_principal_iff.m
 
 中文:
 定理 mem_lift
-  条件: {s : Set β} {t : Set α} (ht : t in f) (hs : s in g t)
+  条件: {s : 集合 β} {t : 集合 α} (ht : t in f) (hs : s in g t)
   结论: s in f.lift g
   证明: le_principal_iff.mp
 show f.lift g <= 𝓟 s from iInf_le_of_le t iInf_le_of_le ht le_principal_iff.mpr hs
@@ -190,7 +190,7 @@ theorem lift_le
 
 中文:
 定理 lift_le
-  结论: {f : Filter α} {g : Set α -> Filter β} {h : Filter β} {s : Set α} (hs : s in f)
+  结论: {f : 滤子 α} {g : 集合 α -> 滤子 β} {h : 滤子 β} {s : 集合 α} (hs : s in f)
   证明: iInf₂_le_of_le s hs hg
 -/
 theorem lift_le {f : Filter α} {g : Set α -> Filter β} {h : Filter β} {s : Set α} (hs : s in f)
@@ -207,7 +207,7 @@ theorem le_lift
 
 中文:
 定理 le_lift
-  条件: {f : Filter α} {g : Set α -> Filter β} {h : Filter β}
+  条件: {f : 滤子 α} {g : 集合 α -> 滤子 β} {h : 滤子 β}
   证明: le_iInf₂_iff
 -/
 theorem le_lift {f : Filter α} {g : Set α -> Filter β} {h : Filter β} :
@@ -262,7 +262,7 @@ theorem tendsto_lift
 
 中文:
 定理 tendsto_lift
-  条件: {m : γ -> β} {l : Filter γ}
+  条件: {m : γ -> β} {l : 滤子 γ}
   证明: by
   simp only [Filter.lift, tendsto_iInf]
 
@@ -285,7 +285,7 @@ theorem map_lift_eq
 
 中文:
 定理 map_lift_eq
-  条件: {m : β -> γ} (hg : Monotone g)
+  条件: {m : β -> γ} (hg : 递增 g)
   结论: map m (f.lift g) = f.lift (map m ∘ g)
   证明: have : Monotone (map m ∘ g) := map_mono.comp hg
   Filter.ext fun s => by
@@ -331,7 +331,7 @@ theorem comap_lift_eq2
 
 中文:
 定理 comap_lift_eq2
-  条件: {m : β -> α} {g : Set β -> Filter γ} (hg : Monotone g)
+  条件: {m : β -> α} {g : 集合 β -> 滤子 γ} (hg : 递增 g)
   证明: le_antisymm (le_iInf₂ fun s hs => iInf₂_le (m ⁻¹' s) ⟨s, hs, Subset.rfl⟩)
     (le_iInf₂ fun _s ⟨s', hs', h_sub⟩ => iInf₂_le_of_le s' hs' <| hg h_sub)
 
@@ -353,8 +353,8 @@ theorem lift_map_le
 
 中文:
 定理 lift_map_le
-  条件: {g : Set β -> Filter γ} {m : α -> β}
-  结论: (map m f).lift g <= f.lift (g ∘ image m)
+  条件: {g : 集合 β -> 滤子 γ} {m : α -> β}
+  结论: (map m f).lift g <= f.lift (g ∘ 像 m)
   证明: le_lift.2 fun _s hs => lift_le (image_mem_map hs) le_rfl
 
 Depends on / 依赖: image_mem_map, le_lift, le_rfl, lift_le
@@ -372,7 +372,7 @@ theorem map_lift_eq2
 
 中文:
 定理 map_lift_eq2
-  条件: {g : Set β -> Filter γ} {m : α -> β} (hg : Monotone g)
+  条件: {g : 集合 β -> 滤子 γ} {m : α -> β} (hg : 递增 g)
   证明: lift_map_le.antisymm le_lift.2 fun _s hs => lift_le hs hg image_preimage_subset _ _
 
 Depends on / 依赖: antisymm, image_preimage_subset, le_lift, lift_le, lift_map_le, lift_map_le.antisymm
@@ -395,7 +395,7 @@ iInf_le_of_le j iInf_le_of_le hj iInf_le_of_le i iInf_le _ hi)
 
 中文:
 定理 lift_comm
-  条件: {g : Filter β} {h : Set α -> Set β -> Filter γ}
+  条件: {g : 滤子 β} {h : 集合 α -> 集合 β -> 滤子 γ}
   证明: le_antisymm
     (le_iInf fun i => le_iInf fun hi => le_iInf fun j => le_iInf fun hj =>
 iInf_le_of_le j iInf_le_of_le hj iInf_le_of_le i iInf_le _ hi)
@@ -427,7 +427,7 @@ iInf_le_of_le s iInf_le_of_le hs iInf_le_of_le t iInf_le _ h')
 
 中文:
 定理 lift_assoc
-  条件: {h : Set β -> Filter γ} (hg : Monotone g)
+  条件: {h : 集合 β -> 滤子 γ} (hg : 递增 g)
   证明: le_antisymm
     (le_iInf₂ fun _s hs => le_iInf₂ fun t ht =>
 iInf_le_of_le t iInf_le _ (mem_lift_sets hg).mpr ⟨_, hs, ht⟩)
@@ -456,7 +456,7 @@ theorem lift_lift_same_le_lift
 
 中文:
 定理 lift_lift_same_le_lift
-  条件: {g : Set α -> Set α -> Filter β}
+  条件: {g : 集合 α -> 集合 α -> 滤子 β}
   证明: le_lift.2 fun _s hs => lift_le hs lift_le hs le_rfl
 
 Depends on / 依赖: le_lift, le_rfl, lift_le
@@ -479,7 +479,7 @@ le_lift.2 fun s hs => le_lift.2 fun t ht => lift_le (inter_mem hs ht)
 
 中文:
 定理 lift_lift_same_eq_lift
-  结论: {g : Set α -> Set α -> Filter β} (hg₁ : 对任意 s, Monotone fun t => g s t)
+  结论: {g : 集合 α -> 集合 α -> 滤子 β} (hg₁ : 对任意 s, 递增 fun t => g s t)
   证明: lift_lift_same_le_lift.antisymm
 le_lift.2 fun s hs => le_lift.2 fun t ht => lift_le (inter_mem hs ht)
       calc
@@ -507,7 +507,7 @@ theorem lift_principal
 
 中文:
 定理 lift_principal
-  条件: {s : Set α} (hg : Monotone g)
+  条件: {s : 集合 α} (hg : 递增 g)
   结论: (𝓟 s).lift g = g s
   证明: (lift_le (mem_principal_self _) le_rfl).antisymm (le_lift.2 fun _t ht => hg ht)
 
@@ -526,7 +526,7 @@ theorem monotone_lift
 
 中文:
 定理 monotone_lift
-  结论: [Preorder γ] {f : γ -> Filter α} {g : γ -> Set α -> Filter β} (hf : Monotone f)
+  结论: [预序 γ] {f : γ -> 滤子 α} {g : γ -> 集合 α -> 滤子 β} (hf : 递增 f)
   证明: fun _ _ h => lift_mono (hf h) (hg h)
 
 Depends on / 依赖: lift_mono
@@ -548,7 +548,7 @@ theorem lift_neBot_iff
 
 中文:
 定理 lift_neBot_iff
-  条件: (hm : Monotone g)
+  条件: (hm : 递增 g)
   结论: (NeBot (f.lift g)) ↔ 对任意 s in f, NeBot (g s)
   证明: by
   simp only [neBot_iff, Ne, ← empty_mem_iff_bot, mem_lift_sets hm, not_exists, not_and]
@@ -574,7 +574,7 @@ theorem lift_const
 
 中文:
 定理 lift_const
-  条件: {f : Filter α} {g : Filter β}
+  条件: {f : 滤子 α} {g : 滤子 β}
   结论: (f.lift fun _ => g) = g
   证明: iInf_subtype'.trans iInf_const
 
@@ -598,7 +598,7 @@ theorem lift_inf
 
 中文:
 定理 lift_inf
-  条件: {f : Filter α} {g h : Set α -> Filter β}
+  条件: {f : 滤子 α} {g h : 集合 α -> 滤子 β}
   证明: by simp only [Filter.lift, iInf_inf_eq]
 
 @[simp]
@@ -621,7 +621,7 @@ theorem lift_principal2
 
 中文:
 定理 lift_principal2
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: f.lift 𝓟 = f
   证明: le_antisymm (fun s hs => mem_lift hs (mem_principal_self s))
     (le_iInf fun s => le_iInf fun hs => by simp only [hs, le_principal_iff])
@@ -642,7 +642,7 @@ theorem lift_iInf_le
 
 中文:
 定理 lift_iInf_le
-  条件: {f : ι -> Filter α} {g : Set α -> Filter β}
+  条件: {f : ι -> 滤子 α} {g : 集合 α -> 滤子 β}
   证明: le_iInf fun _ => lift_mono (iInf_le _ _) le_rfl
 
 Depends on / 依赖: iInf_le, le_iInf, le_rfl, lift_mono
@@ -669,7 +669,7 @@ theorem lift_iInf
 
 中文:
 定理 lift_iInf
-  结论: [Nonempty ι] {f : ι -> Filter α} {g : Set α -> Filter β}
+  结论: [非空 ι] {f : ι -> 滤子 α} {g : 集合 α -> 滤子 β}
   证明: by
   refine lift_iInf_le.antisymm fun s => ?_
   have H : forall t in iInf f, ⨅ i, (f i).lift g <= g t := by
@@ -707,7 +707,7 @@ exact fun t i ht hs => mem_iInf_of_mem i mem_lift ht hs
 
 中文:
 定理 lift_iInf_of_directed
-  结论: [Nonempty ι] {f : ι -> Filter α} {g : Set α -> Filter β}
+  结论: [非空 ι] {f : ι -> 滤子 α} {g : 集合 α -> 滤子 β}
   证明: lift_iInf_le.antisymm fun s => by
     simp only [mem_lift_sets hg, exists_imp, and_imp, mem_iInf_of_directed hf]
 exact fun t i ht hs => mem_iInf_of_mem i mem_lift ht hs
@@ -733,7 +733,7 @@ theorem lift_iInf_of_map_univ
 
 中文:
 定理 lift_iInf_of_map_univ
-  结论: {f : ι -> Filter α} {g : Set α -> Filter β}
+  结论: {f : ι -> 滤子 α} {g : 集合 α -> 滤子 β}
   证明: by
   cases isEmpty_or_nonempty ι
   · simp [iInf_of_empty, hg']
@@ -766,8 +766,8 @@ theorem lift'_top
 
 中文:
 定理 lift'_top
-  条件: (h : Set α -> Set β)
-  结论: (⊤ : Filter α).lift' h = 𝓟 (h univ)
+  条件: (h : 集合 α -> 集合 β)
+  结论: (⊤ : 滤子 α).lift' h = 𝓟 (h univ)
   证明: lift_top _
 
 Depends on / 依赖: lift_top
@@ -786,7 +786,7 @@ theorem mem_lift'
 
 中文:
 定理 mem_lift'
-  条件: {t : Set α} (ht : t in f)
+  条件: {t : 集合 α} (ht : t in f)
   结论: h t in f.lift' h
   证明: le_principal_iff.mp show f.lift' h <= 𝓟 (h t) from iInf_le_of_le t iInf_le_of_le ht le_rfl
 
@@ -806,7 +806,7 @@ theorem tendsto_lift'
 
 中文:
 定理 tendsto_lift'
-  条件: {m : γ -> β} {l : Filter γ}
+  条件: {m : γ -> β} {l : 滤子 γ}
   证明: by
   simp only [Filter.lift', tendsto_lift, tendsto_principal, comp]
 
@@ -826,8 +826,8 @@ theorem HasBasis.lift'
     (monotone_principal.comp hh)).trans <| by simp only [exists_const, true_and, comp]⟩
 
 中文:
-定理 HasBasis.lift'
-  条件: {ι} {p : ι -> 命题} {s} (hf : f.HasBasis p s) (hh : Monotone h)
+定理 有基.lift'
+  条件: {ι} {p : ι -> 命题} {s} (hf : f.有基 p s) (hh : 递增 h)
   证明: ⟨fun t => (hf.mem_lift_iff (fun i => hasBasis_principal (h (s i)))
     (monotone_principal.comp hh)).trans <| by simp only [exists_const, true_and, comp]⟩
 
@@ -849,7 +849,7 @@ theorem mem_lift'_sets
 
 中文:
 定理 mem_lift'_sets
-  条件: (hh : Monotone h) {s : Set β}
+  条件: (hh : 递增 h) {s : 集合 β}
   结论: s in f.lift' h ↔ 存在 t in f, h t subseteq s
   证明: mem_lift_sets monotone_principal.comp hh
 -/
@@ -866,7 +866,7 @@ theorem eventually_lift'_iff
 
 中文:
 定理 eventually_lift'_iff
-  条件: (hh : Monotone h) {p : β -> 命题}
+  条件: (hh : 递增 h) {p : β -> 命题}
   证明: mem_lift'_sets hh
 
 Depends on / 依赖: _sets, mem_lift
@@ -885,8 +885,8 @@ theorem sInter_lift'_sets
   proof: (sInter_lift_sets (monotone_principal.comp hh)).trans iInter₂_congr fun _ _ => csInf_Ici
 
 中文:
-定理 sInter_lift'_sets
-  条件: (hh : Monotone h)
+定理 s整数er_lift'_sets
+  条件: (hh : 递增 h)
   结论: ⋂₀ { s | s in f.lift' h } = ⋂ s in f, h s
   证明: (sInter_lift_sets (monotone_principal.comp hh)).trans iInter₂_congr fun _ _ => csInf_Ici
 
@@ -905,7 +905,7 @@ theorem lift'_le
 
 中文:
 定理 lift'_le
-  结论: {f : Filter α} {g : Set α -> Set β} {h : Filter β} {s : Set α} (hs : s in f)
+  结论: {f : 滤子 α} {g : 集合 α -> 集合 β} {h : 滤子 β} {s : 集合 α} (hs : s in f)
   证明: lift_le hs hg
 -/
 theorem lift'_le {f : Filter α} {g : Set α -> Set β} {h : Filter β} {s : Set α} (hs : s in f)
@@ -982,8 +982,8 @@ map m (f.lift' h) = f.lift (map m ∘ 𝓟 ∘ h) := map_lift_eq monotone_princi
 
 中文:
 定理 map_lift'_eq
-  条件: {m : β -> γ} (hh : Monotone h)
-  结论: map m (f.lift' h) = f.lift' (image m ∘ h)
+  条件: {m : β -> γ} (hh : 递增 h)
+  结论: map m (f.lift' h) = f.lift' (像 m ∘ h)
   证明: calc
 map m (f.lift' h) = f.lift (map m ∘ 𝓟 ∘ h) := map_lift_eq monotone_principal.comp hh
     _ = f.lift' (image m ∘ h) := by simp only [comp_def, Filter.lift', map_principal]
@@ -1006,8 +1006,8 @@ theorem lift'_map_le
 
 中文:
 定理 lift'_map_le
-  条件: {g : Set β -> Set γ} {m : α -> β}
-  结论: (map m f).lift' g <= f.lift' (g ∘ image m)
+  条件: {g : 集合 β -> 集合 γ} {m : α -> β}
+  结论: (map m f).lift' g <= f.lift' (g ∘ 像 m)
   证明: lift_map_le
 -/
 theorem lift'_map_le {g : Set β -> Set γ} {m : α -> β} : (map m f).lift' g <= f.lift' (g ∘ image m) :=
@@ -1023,7 +1023,7 @@ theorem map_lift'_eq2
 
 中文:
 定理 map_lift'_eq2
-  条件: {g : Set β -> Set γ} {m : α -> β} (hg : Monotone g)
+  条件: {g : 集合 β -> 集合 γ} {m : α -> β} (hg : 递增 g)
   证明: map_lift_eq2 monotone_principal.comp hg
 -/
 theorem map_lift'_eq2 {g : Set β -> Set γ} {m : α -> β} (hg : Monotone g) :
@@ -1043,7 +1043,7 @@ theorem comap_lift'_eq
 中文:
 定理 comap_lift'_eq
   条件: {m : γ -> β}
-  结论: comap m (f.lift' h) = f.lift' (preimage m ∘ h)
+  结论: comap m (f.lift' h) = f.lift' (原像 m ∘ h)
   证明: by
   simp only [Filter.lift', comap_lift_eq, comp_def, comap_principal]
 
@@ -1062,7 +1062,7 @@ theorem comap_lift'_eq2
 
 中文:
 定理 comap_lift'_eq2
-  条件: {m : β -> α} {g : Set β -> Set γ} (hg : Monotone g)
+  条件: {m : β -> α} {g : 集合 β -> 集合 γ} (hg : 递增 g)
   证明: comap_lift_eq2 monotone_principal.comp hg
 -/
 theorem comap_lift'_eq2 {m : β -> α} {g : Set β -> Set γ} (hg : Monotone g) :
@@ -1080,7 +1080,7 @@ theorem lift'_principal
 
 中文:
 定理 lift'_principal
-  条件: {s : Set α} (hh : Monotone h)
+  条件: {s : 集合 α} (hh : 递增 h)
   结论: (𝓟 s).lift' h = 𝓟 (h s)
   证明: lift_principal monotone_principal.comp hh
 -/
@@ -1099,8 +1099,8 @@ theorem lift'_pure
 
 中文:
 定理 lift'_pure
-  条件: {a : α} (hh : Monotone h)
-  结论: (pure a : Filter α).lift' h = 𝓟 (h {a})
+  条件: {a : α} (hh : 递增 h)
+  结论: (pure a : 滤子 α).lift' h = 𝓟 (h {a})
   证明: by
   rw [← principal_singleton]; rw [lift'_principal hh]
 -/
@@ -1119,8 +1119,8 @@ theorem lift'_bot
 
 中文:
 定理 lift'_bot
-  条件: (hh : Monotone h)
-  结论: (⊥ : Filter α).lift' h = 𝓟 (h ∅)
+  条件: (hh : 递增 h)
+  结论: (⊥ : 滤子 α).lift' h = 𝓟 (h ∅)
   证明: by
   rw [← principal_empty]; rw [lift'_principal hh]
 -/
@@ -1137,7 +1137,7 @@ theorem le_lift'
 
 中文:
 定理 le_lift'
-  条件: {f : Filter α} {h : Set α -> Set β} {g : Filter β}
+  条件: {f : 滤子 α} {h : 集合 α -> 集合 β} {g : 滤子 β}
   证明: le_lift.trans forall₂_congr fun _ _ => le_principal_iff
 
 Depends on / 依赖: le_lift, le_lift.trans, le_principal_iff
@@ -1157,7 +1157,7 @@ theorem principal_le_lift'
 
 中文:
 定理 principal_le_lift'
-  条件: {t : Set β}
+  条件: {t : 集合 β}
   结论: 𝓟 t <= f.lift' h ↔ 对任意 s in f, t subseteq h s
   证明: le_lift'
 
@@ -1176,7 +1176,7 @@ theorem monotone_lift'
 
 中文:
 定理 monotone_lift'
-  结论: [Preorder γ] {f : γ -> Filter α} {g : γ -> Set α -> Set β} (hf : Monotone f)
+  结论: [预序 γ] {f : γ -> 滤子 α} {g : γ -> 集合 α -> 集合 β} (hf : 递增 f)
   证明: fun _ _ h => lift'_mono (hf h) (hg h)
 
 Depends on / 依赖: _mono
@@ -1196,7 +1196,7 @@ theorem lift_lift'_assoc
 
 中文:
 定理 lift_lift'_assoc
-  结论: {g : Set α -> Set β} {h : Set β -> Filter γ} (hg : Monotone g)
+  结论: {g : 集合 α -> 集合 β} {h : 集合 β -> 滤子 γ} (hg : 递增 g)
   证明: calc
     (f.lift' g).lift h = f.lift fun s => (𝓟 (g s)).lift h := lift_assoc (monotone_principal.comp hg)
     _ = f.lift fun s => h (g s) := by simp only [lift_principal, hh]
@@ -1219,7 +1219,7 @@ theorem lift'_lift'_assoc
 
 中文:
 定理 lift'_lift'_assoc
-  结论: {g : Set α -> Set β} {h : Set β -> Set γ} (hg : Monotone g)
+  结论: {g : 集合 α -> 集合 β} {h : 集合 β -> 集合 γ} (hg : 递增 g)
   证明: lift_lift'_assoc hg (monotone_principal.comp hh)
 -/
 theorem lift'_lift'_assoc {g : Set α -> Set β} {h : Set β -> Set γ} (hg : Monotone g)
@@ -1236,7 +1236,7 @@ theorem lift'_lift_assoc
 
 中文:
 定理 lift'_lift_assoc
-  条件: {g : Set α -> Filter β} {h : Set β -> Set γ} (hg : Monotone g)
+  条件: {g : 集合 α -> 滤子 β} {h : 集合 β -> 集合 γ} (hg : 递增 g)
   证明: lift_assoc hg
 -/
 theorem lift'_lift_assoc {g : Set α -> Filter β} {h : Set β -> Set γ} (hg : Monotone g) :
@@ -1253,7 +1253,7 @@ theorem lift_lift'_same_le_lift'
 
 中文:
 定理 lift_lift'_same_le_lift'
-  条件: {g : Set α -> Set α -> Set β}
+  条件: {g : 集合 α -> 集合 α -> 集合 β}
   证明: lift_lift_same_le_lift
 -/
 theorem lift_lift'_same_le_lift' {g : Set α -> Set α -> Set β} :
@@ -1271,7 +1271,7 @@ theorem lift_lift'_same_eq_lift'
 
 中文:
 定理 lift_lift'_same_eq_lift'
-  结论: {g : Set α -> Set α -> Set β} (hg₁ : 对任意 s, Monotone fun t => g s t)
+  结论: {g : 集合 α -> 集合 α -> 集合 β} (hg₁ : 对任意 s, 递增 fun t => g s t)
   证明: lift_lift_same_eq_lift (fun s => monotone_principal.comp (hg₁ s)) fun t =>
     monotone_principal.comp (hg₂ t)
 -/
@@ -1292,7 +1292,7 @@ theorem lift'_inf_principal_eq
 
 中文:
 定理 lift'_inf_principal_eq
-  条件: {h : Set α -> Set β} {s : Set β}
+  条件: {h : 集合 α -> 集合 β} {s : 集合 β}
   证明: by
   simp only [Filter.lift', Filter.lift, (· ∘ ·), ← inf_principal, iInf_subtype', ← iInf_inf]
 -/
@@ -1315,8 +1315,8 @@ theorem lift'_neBot_iff
 
 中文:
 定理 lift'_neBot_iff
-  条件: (hh : Monotone h)
-  结论: NeBot (f.lift' h) ↔ 对任意 s in f, (h s).Nonempty
+  条件: (hh : 递增 h)
+  结论: NeBot (f.lift' h) ↔ 对任意 s in f, (h s).非空
   证明: calc
     NeBot (f.lift' h) ↔ forall s in f, NeBot (𝓟 (h s)) := lift_neBot_iff (monotone_principal.comp hh)
     _ ↔ forall s in f, (h s).Nonempty := by simp only [principal_neBot_iff]
@@ -1340,7 +1340,7 @@ theorem lift'_id
 
 中文:
 定理 lift'_id
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: f.lift' id = f
   证明: lift_principal2
 -/
@@ -1357,7 +1357,7 @@ theorem lift'_iInf
 
 中文:
 定理 lift'_iInf
-  结论: [Nonempty ι] {f : ι -> Filter α} {g : Set α -> Set β}
+  结论: [非空 ι] {f : ι -> 滤子 α} {g : 集合 α -> 集合 β}
   证明: lift_iInf fun s t => by simp only [inf_principal, comp, hg]
 -/
 theorem lift'_iInf [Nonempty ι] {f : ι -> Filter α} {g : Set α -> Set β}
@@ -1375,7 +1375,7 @@ theorem lift'_iInf_of_map_univ
 
 中文:
 定理 lift'_iInf_of_map_univ
-  结论: {f : ι -> Filter α} {g : Set α -> Set β}
+  结论: {f : ι -> 滤子 α} {g : 集合 α -> 集合 β}
   证明: lift_iInf_of_map_univ (fun s t => by simp only [inf_principal, comp, hg])
     (by rw [Function.comp_apply, hg', principal_univ])
 -/
@@ -1398,7 +1398,7 @@ theorem lift'_inf
 
 中文:
 定理 lift'_inf
-  条件: (f g : Filter α) {s : Set α -> Set β} (hs : 对任意 t₁ t₂, s (t₁ inter t₂) = s t₁ inter s t₂)
+  条件: (f g : 滤子 α) {s : 集合 α -> 集合 β} (hs : 对任意 t₁ t₂, s (t₁ inter t₂) = s t₁ inter s t₂)
   证明: by
   rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [lift'_iInf hs]
   refine iInf_congr ?_
@@ -1420,7 +1420,7 @@ theorem lift'_inf_le
 
 中文:
 定理 lift'_inf_le
-  条件: (f g : Filter α) (s : Set α -> Set β)
+  条件: (f g : 滤子 α) (s : 集合 α -> 集合 β)
   证明: le_inf (lift'_mono inf_le_left le_rfl) (lift'_mono inf_le_right le_rfl)
 -/
 theorem lift'_inf_le (f g : Filter α) (s : Set α -> Set β) :
@@ -1438,8 +1438,8 @@ theorem comap_eq_lift'
 
 中文:
 定理 comap_eq_lift'
-  条件: {f : Filter β} {m : α -> β}
-  结论: comap m f = f.lift' (preimage m)
+  条件: {f : 滤子 β} {m : α -> β}
+  结论: comap m f = f.lift' (原像 m)
   证明: Filter.ext fun _ => (mem_lift'_sets monotone_preimage).symm
 
 Depends on / 依赖: Filter, Filter.ext, _sets, mem_lift, monotone_preimage
@@ -1467,7 +1467,7 @@ alias mem_prod_same_iff := mem_prod_self_iff
 
 中文:
 定理 prod_def
-  条件: {f : Filter α} {g : Filter β}
+  条件: {f : 滤子 α} {g : 滤子 β}
   证明: by
   simpa only [Filter.lift', Filter.lift, (f.basis_sets.prod g.basis_sets).eq_biInf,
     iInf_prod, iInf_and] using! iInf_congr fun i => iInf_comm
@@ -1493,7 +1493,7 @@ theorem prod_same_eq
 
 中文:
 定理 prod_same_eq
-  结论: f ×ˢ f = f.lift' fun t : Set α => t ×ˢ t
+  结论: f ×ˢ f = f.lift' fun t : 集合 α => t ×ˢ t
   证明: f.basis_sets.prod_self.eq_biInf
 
 Depends on / 依赖: basis_sets, eq_biInf, f.basis_sets.prod_self.eq_biInf, prod_self
@@ -1512,7 +1512,7 @@ theorem tendsto_prod_self_iff
 
 中文:
 定理 tendsto_prod_self_iff
-  条件: {f : α × α -> β} {x : Filter α} {y : Filter β}
+  条件: {f : α × α -> β} {x : 滤子 α} {y : 滤子 β}
   证明: by
   simp only [tendsto_def, mem_prod_same_iff, prod_sub_preimage_iff]
 
@@ -1539,7 +1539,7 @@ theorem prod_lift_lift
 
 中文:
 定理 prod_lift_lift
-  结论: {f₁ : Filter α₁} {f₂ : Filter α₂} {g₁ : Set α₁ -> Filter β₁}
+  结论: {f₁ : 滤子 α₁} {f₂ : 滤子 α₂} {g₁ : 集合 α₁ -> 滤子 β₁}
   证明: by
   simp only [prod_def, lift_assoc hg₁]
   apply congr_arg; funext x
@@ -1572,7 +1572,7 @@ theorem prod_lift'_lift'
 
 中文:
 定理 prod_lift'_lift'
-  结论: {f₁ : Filter α₁} {f₂ : Filter α₂} {g₁ : Set α₁ -> Set β₁}
+  结论: {f₁ : 滤子 α₁} {f₂ : 滤子 α₂} {g₁ : 集合 α₁ -> 集合 β₁}
   证明: calc
     f₁.lift' g₁ ×ˢ f₂.lift' g₂ = f₁.lift fun s => f₂.lift fun t => 𝓟 (g₁ s) ×ˢ 𝓟 (g₂ t) :=
       prod_lift_lift (monotone_principal.comp hg₁) (monotone_principal.comp hg₂)

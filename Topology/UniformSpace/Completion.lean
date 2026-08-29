@@ -61,7 +61,7 @@ definition CauchyFilter
 
 中文:
 定义 CauchyFilter
-  签名: (α : 类型u) [UniformSpace α]
+  签名: (α : 类型u) [一致空间 α]
   定义体: { f : Filter α // Cauchy f }
 
 Depends on / 依赖: Cauchy, Filter
@@ -105,7 +105,7 @@ theorem monotone_gen
 
 中文:
 定理 monotone_gen
-  结论: Monotone (gen : SetRel α α -> _)
+  结论: 递增 (gen : SetRel α α -> _)
   证明: monotone_ofPred fun p => @Filter.monotone_mem _ (p.1.val ×ˢ p.2.val)
 
 Depends on / 依赖: Filter, Filter.monotone_mem, monotone_mem, monotone_ofPred
@@ -130,7 +130,7 @@ theorem symm_gen
 
 中文:
 定理 symm_gen
-  结论: map Prod.swap ((𝓤 α).lift' gen) <= (𝓤 α).lift' gen
+  结论: map 积类型.swap ((𝓤 α).lift' gen) <= (𝓤 α).lift' gen
   证明: by
   let f := fun s : SetRel α α =>
         { p : CauchyFilter α × CauchyFilter α | s in (p.2.val ×ˢ p.1.val : Filter (α × α)) }
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (CauchyFilter α)
+  签名: 一致空间 (CauchyFilter α)
   定义体: UniformSpace.ofCore
     { uniformity := (𝓤 α).lift' gen
       refl := principal_le_lift'.2 fun _s hs ⟨a, b⟩ =>
@@ -273,7 +273,7 @@ theorem mem_uniformity
 
 中文:
 定理 mem_uniformity
-  条件: {s : Set (CauchyFilter α × CauchyFilter α)}
+  条件: {s : 集合 (CauchyFilter α × CauchyFilter α)}
   证明: mem_lift'_sets monotone_gen
 
 Depends on / 依赖: _sets, mem_lift, monotone_gen
@@ -292,7 +292,7 @@ theorem basis_uniformity
 
 中文:
 定理 basis_uniformity
-  条件: {ι : Sort*} {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
+  条件: {ι : 类型层*} {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
   证明: h.lift' monotone_gen
 
 Depends on / 依赖: h.lift, monotone_gen
@@ -313,7 +313,7 @@ theorem mem_uniformity'
 
 中文:
 定理 mem_uniformity'
-  条件: {s : Set (CauchyFilter α × CauchyFilter α)}
+  条件: {s : 集合 (CauchyFilter α × CauchyFilter α)}
   证明: by
   refine mem_uniformity.trans (exists_congr (fun t => and_congr_right_iff.mpr (fun _h => ?_)))
   exact ⟨fun h _f _g ht => h ht, fun h _p hp => h _ _ hp⟩
@@ -358,7 +358,7 @@ theorem isUniformInducing_pureCauchy
 
 中文:
 定理 isUniformInducing_pureCauchy
-  结论: IsUniformInducing (pureCauchy : α -> CauchyFilter α)
+  结论: 是UniformInducing (pureCauchy : α -> CauchyFilter α)
   证明: ⟨have : (preimage fun x : α × α => (pureCauchy x.fst, pureCauchy x.snd)) ∘ gen = id :=
       funext fun s =>
         Set.ext fun ⟨a₁, a₂⟩ => by simp [preimage, gen, pureCauchy]
@@ -390,7 +390,7 @@ injective _a₁ _a₂ h := pure_injective Subtype.ext_iff.1 h
 
 中文:
 定理 isUniformEmbedding_pureCauchy
-  结论: IsUniformEmbedding (pureCauchy : α -> CauchyFilter α) where
+  结论: 是一致嵌入 (pureCauchy : α -> CauchyFilter α) where
   证明: isUniformInducing_pureCauchy
 injective _a₁ _a₂ h := pure_injective Subtype.ext_iff.1 h
 
@@ -455,7 +455,7 @@ theorem isDenseInducing_pureCauchy
 
 中文:
 定理 isDenseInducing_pureCauchy
-  结论: IsDenseInducing (pureCauchy : α -> CauchyFilter α)
+  结论: 是DenseInducing (pureCauchy : α -> CauchyFilter α)
   证明: isUniformInducing_pureCauchy.isDenseInducing denseRange_pureCauchy
 
 Depends on / 依赖: denseRange_pureCauchy, isDenseInducing, isUniformInducing_pureCauchy, isUniformInducing_pureCauchy.isDenseInducing
@@ -473,7 +473,7 @@ theorem isDenseEmbedding_pureCauchy
 
 中文:
 定理 isDenseEmbedding_pureCauchy
-  结论: IsDenseEmbedding (pureCauchy : α -> CauchyFilter α)
+  结论: 是稠密嵌入 (pureCauchy : α -> CauchyFilter α)
   证明: isUniformEmbedding_pureCauchy.isDenseEmbedding denseRange_pureCauchy
 
 Depends on / 依赖: denseRange_pureCauchy, isDenseEmbedding, isUniformEmbedding_pureCauchy, isUniformEmbedding_pureCauchy.isDenseEmbedding
@@ -496,7 +496,7 @@ theorem nonempty_cauchyFilter_iff
 
 中文:
 定理 nonempty_cauchyFilter_iff
-  结论: Nonempty (CauchyFilter α) ↔ Nonempty α
+  结论: 非空 (CauchyFilter α) ↔ 非空 α
   证明: by
   constructor <;> rintro ⟨c⟩
   · have := eq_univ_iff_forall.1 isDenseEmbedding_pureCauchy.isDenseInducing.closure_range c
@@ -529,7 +529,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace (CauchyFilter α)
+  签名: 完备空间 (CauchyFilter α)
   定义体: completeSpace_extension isUniformInducing_pureCauchy denseRange_pureCauchy fun f hf =>
     let f' : CauchyFilter α := ⟨f, hf⟩
     have : map pureCauchy f <= (𝓤 <| CauchyFilter α).lift' (preimage (Prod.mk f')) :=
@@ -561,8 +561,8 @@ instance [Inhabited
   body: ⟨pureCauchy default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (CauchyFilter α)
+实例 [可居
+  签名: α] : 可居 (CauchyFilter α)
   定义体: ⟨pureCauchy default⟩
 
 Depends on / 依赖: pureCauchy
@@ -580,7 +580,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Nonempty α] : Nonempty (CauchyFilter α)
+  签名: : 非空 α] : 非空 (CauchyFilter α)
   定义体: h.recOn fun a => Nonempty.intro CauchyFilter.pureCauchy a
 
 Depends on / 依赖: CauchyFilter, CauchyFilter.pureCauchy, Nonempty, Nonempty.intro, h.recOn, pureCauchy
@@ -628,7 +628,7 @@ theorem extend_pureCauchy
 
 中文:
 定理 extend_pureCauchy
-  条件: {f : α -> β} (hf : UniformContinuous f) (a : α)
+  条件: {f : α -> β} (hf : 一致连续 f) (a : α)
   证明: by
   rw [extend]; rw [if_pos hf]
   exact uniformly_extend_of_ind isUniformInducing_pureCauchy denseRange_pureCauchy hf _
@@ -662,7 +662,7 @@ theorem uniformContinuous_extend
 中文:
 定理 uniformContinuous_extend
   条件: {f : α -> β}
-  结论: UniformContinuous (extend f)
+  结论: 一致连续 (extend f)
   证明: by
   by_cases hf : UniformContinuous f
   · rw [extend, if_pos hf]
@@ -693,7 +693,7 @@ theorem inseparable_iff
 中文:
 定理 inseparable_iff
   条件: {f g : CauchyFilter α}
-  结论: Inseparable f g ↔ f.1 ×ˢ g.1 <= 𝓤 α
+  结论: 不可分 f g ↔ f.1 ×ˢ g.1 <= 𝓤 α
   证明: (basis_uniformity (basis_sets _)).inseparable_iff_uniformity
 
 Depends on / 依赖: basis_sets, basis_uniformity, inseparable_iff_uniformity
@@ -739,7 +739,7 @@ theorem inseparable_lim_iff
 
 中文:
 定理 inseparable_lim_iff
-  条件: [CompleteSpace α] {f g : CauchyFilter α}
+  条件: [完备空间 α] {f g : CauchyFilter α}
   证明: f.2.1.nonempty; Inseparable (lim f.1) (lim g.1) ↔ Inseparable f g :=
   inseparable_iff_of_le_nhds f.2.le_nhds_lim g.2.le_nhds_lim
 
@@ -762,7 +762,7 @@ theorem cauchyFilter_eq
 
 中文:
 定理 cauchyFilter_eq
-  结论: {α : 类型} [UniformSpace α] [CompleteSpace α] [T0Space α]
+  结论: {α : 类型} [一致空间 α] [完备空间 α] [T0空间 α]
   证明: f.2.1.nonempty; lim f.1 = lim g.1 ↔ Inseparable f g := by
   rw [← inseparable_iff_eq]; rw [inseparable_lim_iff]
 
@@ -787,7 +787,7 @@ Inseparable.eq (inseparable_iff_of_le_nhds (pure_le_nhds a) (pure_le_nhds b)).2
 
 中文:
 定理 separated_pureCauchy_injective
-  条件: {α : 类型} [UniformSpace α] [T0Space α]
+  条件: {α : 类型} [一致空间 α] [T0空间 α]
   证明: fun a b h =>
 Inseparable.eq (inseparable_iff_of_le_nhds (pure_le_nhds a) (pure_le_nhds b)).2
     SeparationQuotient.mk_eq_mk.1 h
@@ -817,7 +817,7 @@ definition Completion
   body: SeparationQuotient (CauchyFilter α)
 
 中文:
-定义 Completion
+定义 完备化
   定义体: SeparationQuotient (CauchyFilter α)
 
 Depends on / 依赖: CauchyFilter, SeparationQuotient
@@ -836,7 +836,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Inhabited α]
+  签名: [可居 α]
   定义体: inferInstanceAs Inhabited (Quotient _)
 
 Depends on / 依赖: Inhabited, Quotient
@@ -854,7 +854,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (Completion α)
+  签名: : 一致空间 (完备化 α)
   定义体: fast_instance% SeparationQuotient.instUniformSpace
 
 Depends on / 依赖: SeparationQuotient, SeparationQuotient.instUniformSpace, fast_instance, instUniformSpace
@@ -872,7 +872,7 @@ instance completeSpace
 
 中文:
 实例 completeSpace
-  签名: : CompleteSpace (Completion α)
+  签名: : 完备空间 (完备化 α)
   定义体: SeparationQuotient.instCompleteSpace
 
 Depends on / 依赖: SeparationQuotient, SeparationQuotient.instCompleteSpace, instCompleteSpace
@@ -890,7 +890,7 @@ instance t0Space
 
 中文:
 实例 t0Space
-  签名: : T0Space (Completion α)
+  签名: : T0空间 (完备化 α)
   定义体: SeparationQuotient.instT0Space
 
 Depends on / 依赖: SeparationQuotient, SeparationQuotient.instT0Space, instT0Space
@@ -908,7 +908,7 @@ definition coe'
 
 中文:
 定义 coe'
-  签名: : α -> Completion α
+  签名: : α -> 完备化 α
   定义体: SeparationQuotient.mk ∘ pureCauchy
 -/
 @[coe] def coe' : α -> Completion α := SeparationQuotient.mk ∘ pureCauchy
@@ -923,7 +923,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe α (Completion α)
+  签名: Coe α (完备化 α)
   定义体: ⟨coe'⟩
 -/
 instance : Coe α (Completion α) :=
@@ -940,7 +940,7 @@ theorem coe_eq
 
 中文:
 定理 coe_eq
-  结论: ((↑) : α -> Completion α) = SeparationQuotient.mk ∘ pureCauchy
+  结论: ((↑) : α -> 完备化 α) = SeparationQuotient.mk ∘ pureCauchy
   证明: rfl
 -/
 protected theorem coe_eq : ((↑) : α -> Completion α) = SeparationQuotient.mk ∘ pureCauchy := rfl
@@ -955,7 +955,7 @@ theorem isUniformInducing_coe
 
 中文:
 定理 isUniformInducing_coe
-  结论: IsUniformInducing ((↑) : α -> Completion α)
+  结论: 是UniformInducing ((↑) : α -> 完备化 α)
   证明: SeparationQuotient.isUniformInducing_mk.comp isUniformInducing_pureCauchy
 
 Depends on / 依赖: SeparationQuotient, SeparationQuotient.isUniformInducing_mk.comp, isUniformInducing_mk, isUniformInducing_pureCauchy
@@ -992,7 +992,7 @@ theorem denseRange_coe
 
 中文:
 定理 denseRange_coe
-  结论: DenseRange ((↑) : α -> Completion α)
+  结论: DenseRange ((↑) : α -> 完备化 α)
   证明: SeparationQuotient.surjective_mk.denseRange.comp denseRange_pureCauchy
     SeparationQuotient.continuous_mk
 
@@ -1018,7 +1018,7 @@ definition cPkg
 
 中文:
 定义 cPkg
-  签名: {α : 类型} [UniformSpace α]
+  签名: {α : 类型} [一致空间 α]
   定义体: Completion α
   coe := (↑)
   uniformStruct := by infer_instance
@@ -1048,7 +1048,7 @@ instance AbstractCompletion.inhabited
 
 中文:
 实例 AbstractCompletion.inhabited
-  签名: : Inhabited (AbstractCompletion α)
+  签名: : 可居 (AbstractCompletion α)
   定义体: ⟨cPkg⟩
 -/
 instance AbstractCompletion.inhabited : Inhabited (AbstractCompletion α) :=
@@ -1069,7 +1069,7 @@ theorem nonempty_completion_iff
 
 中文:
 定理 nonempty_completion_iff
-  结论: Nonempty (Completion α) ↔ Nonempty α
+  结论: 非空 (完备化 α) ↔ 非空 α
   证明: cPkg.dense.nonempty_iff.symm
 
 @[fun_prop]
@@ -1090,7 +1090,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: UniformContinuous ((↑) : α -> Completion α)
+  结论: 一致连续 ((↑) : α -> 完备化 α)
   证明: cPkg.uniformContinuous_coe
 
 Depends on / 依赖: cPkg.uniformContinuous_coe, uniformContinuous_coe
@@ -1108,7 +1108,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : α -> Completion α)
+  结论: 连续 ((↑) : α -> 完备化 α)
   证明: cPkg.continuous_coe
 
 Depends on / 依赖: cPkg.continuous_coe, continuous_coe
@@ -1128,8 +1128,8 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  条件: [T0Space α]
-  结论: IsUniformEmbedding ((↑) : α -> Completion α)
+  条件: [T0空间 α]
+  结论: 是一致嵌入 ((↑) : α -> 完备化 α)
   证明: { comap_uniformity := comap_coe_eq_uniformity α
     injective := separated_pureCauchy_injective }
 
@@ -1150,8 +1150,8 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  条件: [T0Space α]
-  结论: Function.Injective ((↑) : α -> Completion α)
+  条件: [T0空间 α]
+  结论: 函数.单射 ((↑) : α -> 完备化 α)
   证明: IsUniformEmbedding.injective (isUniformEmbedding_coe _)
 
 Depends on / 依赖: IsUniformEmbedding, IsUniformEmbedding.injective, injective, isUniformEmbedding_coe
@@ -1173,8 +1173,8 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  条件: [T0Space α] {a b : α}
-  结论: (a : Completion α) = b ↔ a = b
+  条件: [T0空间 α] {a b : α}
+  结论: (a : 完备化 α) = b ↔ a = b
   证明: (coe_injective _).eq_iff
 
 Depends on / 依赖: coe_injective, eq_iff
@@ -1192,7 +1192,7 @@ theorem isDenseInducing_coe
 
 中文:
 定理 isDenseInducing_coe
-  结论: IsDenseInducing ((↑) : α -> Completion α)
+  结论: 是DenseInducing ((↑) : α -> 完备化 α)
   证明: { (isUniformInducing_coe α).isInducing with dense := denseRange_coe }
 
 Depends on / 依赖: denseRange_coe, isInducing, isUniformInducing_coe
@@ -1210,7 +1210,7 @@ definition UniformCompletion.completeEquivSelf
 
 中文:
 定义 UniformCompletion.completeEquivSelf
-  签名: [CompleteSpace α] [T0Space α]
+  签名: [完备空间 α] [T0空间 α]
   定义体: AbstractCompletion.compareEquiv Completion.cPkg AbstractCompletion.ofComplete
 
 Depends on / 依赖: AbstractCompletion, AbstractCompletion.compareEquiv, AbstractCompletion.ofComplete, Completion, Completion.cPkg, compareEquiv, ofComplete
@@ -1230,7 +1230,7 @@ instance separableSpace_completion
 
 中文:
 实例 separableSpace_completion
-  签名: [SeparableSpace α]
+  签名: [可分空间 α]
   定义体: Completion.isDenseInducing_coe.separableSpace
 
 Depends on / 依赖: Completion, Completion.isDenseInducing_coe.separableSpace, isDenseInducing_coe, separableSpace
@@ -1249,8 +1249,8 @@ theorem isDenseEmbedding_coe
 
 中文:
 定理 isDenseEmbedding_coe
-  条件: [T0Space α]
-  结论: IsDenseEmbedding ((↑) : α -> Completion α)
+  条件: [T0空间 α]
+  结论: 是稠密嵌入 ((↑) : α -> 完备化 α)
   证明: { isDenseInducing_coe with injective := separated_pureCauchy_injective }
 
 Depends on / 依赖: injective, isDenseInducing_coe, separated_pureCauchy_injective
@@ -1310,7 +1310,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {p : Completion α -> 命题} (a : Completion α) (hp : IsClosed { a | p a })
+  结论: {p : 完备化 α -> 命题} (a : 完备化 α) (hp : 是闭集 { a | p a })
   证明: isClosed_property denseRange_coe hp ih a
 
 @[elab_as_elim]
@@ -1336,7 +1336,7 @@ theorem induction_on₂
 
 中文:
 定理 induction_on₂
-  结论: {p : Completion α -> Completion β -> 命题} (a : Completion α) (b : Completion β)
+  结论: {p : 完备化 α -> 完备化 β -> 命题} (a : 完备化 α) (b : 完备化 β)
   证明: have : forall x : Completion α × Completion β, p x.1 x.2 :=
     isClosed_property denseRange_coe₂ hp fun ⟨a, b⟩ => ih a b
   this (a, b)
@@ -1365,7 +1365,7 @@ theorem induction_on₃
 
 中文:
 定理 induction_on₃
-  结论: {p : Completion α -> Completion β -> Completion γ -> 命题} (a : Completion α)
+  结论: {p : 完备化 α -> 完备化 β -> 完备化 γ -> 命题} (a : 完备化 α)
   证明: have : forall x : Completion α × Completion β × Completion γ, p x.1 x.2.1 x.2.2 :=
     isClosed_property denseRange_coe₃ hp fun ⟨a, b, c⟩ => ih a b c
   this (a, b, c)
@@ -1390,7 +1390,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {Y : 类型} [TopologicalSpace Y] [T2Space Y] {f g : Completion α -> Y}
+  结论: {Y : 类型} [拓扑空间 Y] [T2空间 Y] {f g : 完备化 α -> Y}
   证明: cPkg.funext hf hg h
 
 Depends on / 依赖: cPkg.funext
@@ -1409,7 +1409,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: {Y : 类型} [TopologicalSpace Y] [T2Space Y] {f g : Completion α -> Y}
+  结论: {Y : 类型} [拓扑空间 Y] [T2空间 Y] {f g : 完备化 α -> Y}
   证明: congr_fun (ext hf hg h) a
 
 Depends on / 依赖: congr_fun
@@ -1456,7 +1456,7 @@ theorem uniformContinuous_extension
 
 中文:
 定理 uniformContinuous_extension
-  结论: UniformContinuous (Completion.extension f)
+  结论: 一致连续 (完备化.extension f)
   证明: cPkg.uniformContinuous_extend
 
 @[continuity, fun_prop]
@@ -1477,7 +1477,7 @@ theorem continuous_extension
 
 中文:
 定理 continuous_extension
-  结论: Continuous (Completion.extension f)
+  结论: 连续 (完备化.extension f)
   证明: cPkg.continuous_extend
 
 Depends on / 依赖: cPkg.continuous_extend, continuous_extend
@@ -1497,7 +1497,7 @@ theorem extension_coe
 
 中文:
 定理 extension_coe
-  条件: [T0Space β] (hf : UniformContinuous f) (a : α)
+  条件: [T0空间 β] (hf : 一致连续 f) (a : α)
   证明: cPkg.extend_coe hf a
 
 Depends on / 依赖: cPkg.extend_coe, extend_coe
@@ -1516,7 +1516,7 @@ theorem inseparable_extension_coe
 
 中文:
 定理 inseparable_extension_coe
-  条件: (hf : UniformContinuous f) (x : α)
+  条件: (hf : 一致连续 f) (x : α)
   证明: cPkg.inseparable_extend_coe hf x
 
 Depends on / 依赖: cPkg.inseparable_extend_coe, inseparable_extend_coe
@@ -1535,7 +1535,7 @@ lemma isUniformInducing_extension
 
 中文:
 引理 isUniformInducing_extension
-  条件: [CompleteSpace β] (h : IsUniformInducing f)
+  条件: [完备空间 β] (h : 是UniformInducing f)
   证明: cPkg.isUniformInducing_extend h
 
 Depends on / 依赖: cPkg.isUniformInducing_extend, isUniformInducing_extend
@@ -1558,7 +1558,7 @@ theorem extension_unique
 
 中文:
 定理 extension_unique
-  结论: (hf : UniformContinuous f) {g : Completion α -> β}
+  结论: (hf : 一致连续 f) {g : 完备化 α -> β}
   证明: cPkg.extend_unique hf hg h
 
 @[simp]
@@ -1581,7 +1581,7 @@ theorem extension_comp_coe
 
 中文:
 定理 extension_comp_coe
-  条件: {f : Completion α -> β} (hf : UniformContinuous f)
+  条件: {f : 完备化 α -> β} (hf : 一致连续 f)
   证明: cPkg.extend_comp_coe hf
 
 Depends on / 依赖: cPkg.extend_comp_coe, extend_comp_coe
@@ -1629,7 +1629,7 @@ theorem uniformContinuous_map
 
 中文:
 定理 uniformContinuous_map
-  结论: UniformContinuous (Completion.map f)
+  结论: 一致连续 (完备化.map f)
   证明: cPkg.uniformContinuous_map cPkg f
 
 @[continuity, fun_prop]
@@ -1650,7 +1650,7 @@ theorem continuous_map
 
 中文:
 定理 continuous_map
-  结论: Continuous (Completion.map f)
+  结论: 连续 (完备化.map f)
   证明: cPkg.continuous_map cPkg f
 
 Depends on / 依赖: cPkg.continuous_map, continuous_map
@@ -1669,8 +1669,8 @@ theorem map_coe
 
 中文:
 定理 map_coe
-  条件: (hf : UniformContinuous f) (a : α)
-  结论: (Completion.map f) a = f a
+  条件: (hf : 一致连续 f) (a : α)
+  结论: (完备化.map f) a = f a
   证明: cPkg.map_coe cPkg hf a
 
 Depends on / 依赖: cPkg.map_coe, map_coe
@@ -1690,7 +1690,7 @@ theorem map_unique
 
 中文:
 定理 map_unique
-  结论: {f : α -> β} {g : Completion α -> Completion β} (hg : UniformContinuous g)
+  结论: {f : α -> β} {g : 完备化 α -> 完备化 β} (hg : 一致连续 g)
   证明: cPkg.map_unique cPkg hg h
 
 @[simp]
@@ -1712,7 +1712,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: Completion.map (@id α) = id
+  结论: 完备化.map (@id α) = id
   证明: cPkg.map_id
 
 Depends on / 依赖: cPkg.map_id, map_id
@@ -1731,7 +1731,7 @@ theorem extension_map
 
 中文:
 定理 extension_map
-  结论: [CompleteSpace γ] [T0Space γ] {f : β -> γ} {g : α -> β}
+  结论: [完备空间 γ] [T0空间 γ] {f : β -> γ} {g : α -> β}
   证明: Completion.ext (continuous_extension.comp continuous_map) continuous_extension by
     simp [hf, hg, hf.comp hg, map_coe, extension_coe]
 
@@ -1754,7 +1754,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {g : β -> γ} {f : α -> β} (hg : UniformContinuous g) (hf : UniformContinuous f)
+  条件: {g : β -> γ} {f : α -> β} (hg : 一致连续 g) (hf : 一致连续 f)
   证明: extension_map ((uniformContinuous_coe _).comp hg) hf
 
 Depends on / 依赖: extension_map, uniformContinuous_coe
@@ -1850,7 +1850,7 @@ definition completionSeparationQuotientEquiv
 
 中文:
 定义 completionSeparationQuotientEquiv
-  签名: (α : 类型u) [UniformSpace α]
+  签名: (α : 类型u) [一致空间 α]
   定义体: by
   refine ⟨Completion.extension (lift' ((↑) : α -> Completion α)),
     Completion.map SeparationQuotient.mk, fun a => ?_, fun a => ?_⟩
@@ -1972,7 +1972,7 @@ theorem uniformContinuous_extension₂
 
 中文:
 定理 uniformContinuous_extension₂
-  结论: UniformContinuous₂ (Completion.extension₂ f)
+  结论: UniformContinuous₂ (完备化.extension₂ f)
   证明: cPkg.uniformContinuous_extension₂ cPkg f
 
 Depends on / 依赖: cPkg.uniformContinuous_extension
@@ -2019,7 +2019,7 @@ theorem uniformContinuous_map₂
 中文:
 定理 uniformContinuous_map₂
   条件: (f : α -> β -> γ)
-  结论: UniformContinuous₂ (Completion.map₂ f)
+  结论: UniformContinuous₂ (完备化.map₂ f)
   证明: cPkg.uniformContinuous_map₂ cPkg cPkg f
 
 Depends on / 依赖: cPkg.uniformContinuous_map
@@ -2037,7 +2037,7 @@ theorem continuous_map₂
 
 中文:
 定理 continuous_map₂
-  结论: {δ} [TopologicalSpace δ] {f : α -> β -> γ} {a : δ -> Completion α}
+  结论: {δ} [拓扑空间 δ] {f : α -> β -> γ} {a : δ -> 完备化 α}
   证明: cPkg.continuous_map₂ cPkg cPkg ha hb
 
 Depends on / 依赖: cPkg.continuous_map

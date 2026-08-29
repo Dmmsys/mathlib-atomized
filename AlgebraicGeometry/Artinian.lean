@@ -59,10 +59,10 @@ class IsLocallyArtinian
     - isArtinianRing_presheaf_obj : forall (U : X.affineOpens), IsArtinianRing Γ(X, U)  [default: by infer_instance]
 
 中文:
-类 IsLocallyArtinian
-  参数: (X : Scheme)
+类 是LocallyArtinian
+  参数: (X : 概形)
   公理与运算 (1 个):
-    - isArtinianRing_presheaf_obj : 对任意 (U : X.affineOpens), IsArtinianRing Γ(X, U)  [默认: by infer_instance]
+    - isArtinianRing_presheaf_obj : 对任意 (U : X.affineOpens), 是Artin环 Γ(X, U)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -80,8 +80,8 @@ instance IsLocallyArtinian.isLocallyNoetherian
   signature: [h : IsLocallyArtinian X]
 
 中文:
-实例 IsLocallyArtinian.isLocallyNoetherian
-  签名: [h : IsLocallyArtinian X]
+实例 是LocallyArtinian.isLocallyNoetherian
+  签名: [h : 是LocallyArtinian X]
 -/
 instance IsLocallyArtinian.isLocallyNoetherian [h : IsLocallyArtinian X] :
     IsLocallyNoetherian X where
@@ -95,8 +95,8 @@ instance IsLocallyArtinian.isArtinianRing_of_isAffine
   body: h.1 ⟨⊤, isAffineOpen_top X⟩
 
 中文:
-实例 IsLocallyArtinian.isArtinianRing_of_isAffine
-  签名: [h : IsLocallyArtinian X] [IsAffine X]
+实例 是LocallyArtinian.isArtinianRing_of_isAffine
+  签名: [h : 是LocallyArtinian X] [是仿射 X]
   定义体: h.1 ⟨⊤, isAffineOpen_top X⟩
 
 Depends on / 依赖: isAffineOpen_top
@@ -116,7 +116,7 @@ lemma IsLocallyArtinian.of_topologicalKrullDim_le_zero
     chan
 
 中文:
-引理 IsLocallyArtinian.of_topologicalKrullDim_le_zero
+引理 是LocallyArtinian.of_topologicalKrullDim_le_zero
   证明: by
     have _ : IsNoetherianRing Γ(X, U) := IsLocallyNoetherian.component_noetherian U
     rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ringKrullDim]; rw [Nat.cast_zero]; rw [← PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim Γ(X]; rw [U)]
@@ -141,7 +141,7 @@ theorem IsLocallyArtinian.of_isLocallyNoetherian_of_discreteTopology
   proof: .of_topologicalKrullDim_le_zero (topologicalKrullDim_zero_of_discreteTopology X)
 
 中文:
-定理 IsLocallyArtinian.of_isLocallyNoetherian_of_discreteTopology
+定理 是LocallyArtinian.of_isLocallyNoetherian_of_discreteTopology
   证明: .of_topologicalKrullDim_le_zero (topologicalKrullDim_zero_of_discreteTopology X)
 
 Depends on / 依赖: of_topologicalKrullDim_le_zero, topologicalKrullDim_zero_of_discreteTopology
@@ -162,8 +162,8 @@ lemma IsLocallyArtinian.of_isOpenImmersion
     (f.appIso U).commRingCatIsoToRingEquiv.surjective.isArtinianRing
 
 中文:
-引理 IsLocallyArtinian.of_isOpenImmersion
-  条件: [IsOpenImmersion f] [IsLocallyArtinian Y]
+引理 是LocallyArtinian.of_isOpenImmersion
+  条件: [是开浸入 f] [是LocallyArtinian Y]
   证明: have : IsArtinianRing ↑Γ(Y, f ''ᵁ ↑U) :=
       IsLocallyArtinian.isArtinianRing_presheaf_obj ⟨_, U.2.image_of_isOpenImmersion f⟩
     (f.appIso U).commRingCatIsoToRingEquiv.surjective.isArtinianRing
@@ -184,7 +184,7 @@ instance [IsLocallyArtinian
   body: .of_isOpenImmersion U.ι
 
 中文:
-实例 [IsLocallyArtinian
+实例 [是LocallyArtinian
   签名: X] {U
   定义体: .of_isOpenImmersion U.ι
 
@@ -201,7 +201,7 @@ instance [IsLocallyArtinian
   body: .of_isOpenImmersion (U.f i)
 
 中文:
-实例 [IsLocallyArtinian
+实例 [是LocallyArtinian
   签名: X] {U
   定义体: .of_isOpenImmersion (U.f i)
 
@@ -232,7 +232,7 @@ theorem IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology
   proof: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => .of_isLocallyNoetherian_of_discreteTopology⟩
 
 中文:
-定理 IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology
+定理 是LocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => .of_isLocallyNoetherian_of_discreteTopology⟩
 
 Depends on / 依赖: comp_mem, of_isLocallyNoetherian_of_discreteTopology
@@ -252,8 +252,8 @@ theorem IsLocallyArtinian.of_isImmersion
     ⟨LocallyOfFiniteType.isLocallyNoetherian f, f.isEmbedding.discreteTopology⟩
 
 中文:
-定理 IsLocallyArtinian.of_isImmersion
-  条件: [IsImmersion f] [IsLocallyArtinian Y]
+定理 是LocallyArtinian.of_isImmersion
+  条件: [是Immersion f] [是LocallyArtinian Y]
   证明: iff_isLocallyNoetherian_and_discreteTopology.mpr
     ⟨LocallyOfFiniteType.isLocallyNoetherian f, f.isEmbedding.discreteTopology⟩
 
@@ -275,8 +275,8 @@ theorem Scheme.isLocallyArtinianScheme_Spec
     (topologicalKrullDim_zero_of_discreteTopology (PrimeSpectrum _))
 
 中文:
-定理 Scheme.isLocallyArtinianScheme_Spec
-  条件: {R : CommRingCat}
+定理 概形.isLocallyArtinianScheme_Spec
+  条件: {R : 交换环范畴}
   证明: (AlgebraicGeometry.Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv.isArtinianRing
   mpr _ := .of_topologicalKrullDim_le_zero
     (topologicalKrullDim_zero_of_discreteTopology (PrimeSpectrum _))
@@ -385,9 +385,9 @@ class IsArtinianScheme
   (no additional axioms)
 
 中文:
-类 IsArtinianScheme
-  参数: (X : Scheme.{u})
-  继承: IsLocallyArtinian X, CompactSpace X
+类 是ArtinianScheme
+  参数: (X : 概形.{u})
+  继承: 是LocallyArtinian X, 紧空间 X
   (无附加公理)
 -/
 class IsArtinianScheme (X : Scheme.{u}) : Prop extends IsLocallyArtinian X, CompactSpace X
@@ -409,7 +409,7 @@ theorem IsArtinianScheme.iff_isNoetherian_and_discreteTopology
     IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology])
 
 中文:
-定理 IsArtinianScheme.iff_isNoetherian_and_discreteTopology
+定理 是ArtinianScheme.iff_isNoetherian_and_discreteTopology
   证明: by
   aesop (add simp [isArtinianScheme_iff, isNoetherian_iff,
     IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology])
@@ -440,8 +440,8 @@ theorem Scheme.isArtinianScheme_Spec
   simp [isArtinianScheme_iff, (inferInstance : CompactSpace (Spec R))]
 
 中文:
-定理 Scheme.isArtinianScheme_Spec
-  条件: {R : CommRingCat}
+定理 概形.isArtinianScheme_Spec
+  条件: {R : 交换环范畴}
   证明: by
   simp [isArtinianScheme_iff, (inferInstance : CompactSpace (Spec R))]
 

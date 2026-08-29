@@ -44,7 +44,7 @@ structure Core
     - of : C
 
 中文:
-结构 Core
+结构 核
   参数: (C : 类型u₁)
   公理与运算 (1 个):
     - of : C
@@ -68,8 +68,8 @@ structure CoreHom
     - iso : X.of ≅ Y.of
 
 中文:
-结构 CoreHom
-  参数: (X Y : Core C)
+结构 核态射
+  参数: (X Y : 核 C)
   公理与运算 (1 个):
     - iso : X.of ≅ Y.of
 -/
@@ -93,7 +93,7 @@ inv {_ _} f := .mk Iso.symm f.iso
 
 中文:
 实例 coreCategory
-  签名: : Groupoid.{v₁} (Core C) where
+  签名: : 群胚.{v₁} (核 C) where
   定义体: CoreHom X Y
 id (X : Core C) := .mk Iso.refl X.of
 comp f g := .mk Iso.trans f.iso g.iso
@@ -120,7 +120,7 @@ lemma coreCategory_comp_iso
 
 中文:
 引理 coreCategory_comp_iso
-  条件: {x y z : Core C} (f : x ⟶ y) (g : y ⟶ z)
+  条件: {x y z : 核 C} (f : x ⟶ y) (g : y ⟶ z)
   证明: rfl
 -/
 lemma coreCategory_comp_iso {x y z : Core C} (f : x ⟶ y) (g : y ⟶ z) :
@@ -144,7 +144,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: : Core C ⥤ C where
+  签名: : 核 C ⥤ C where
   定义体: of
   map f := f.iso.hom
 
@@ -167,7 +167,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {X Y : Core C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom)
+  条件: {X Y : 核 C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom)
   证明: by
   apply CoreHom.ext
   exact Iso.ext h
@@ -191,7 +191,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {x y : Core C} (e : x.of ≅ y.of)
+  签名: {x y : 核 C} (e : x.of ≅ y.of)
   定义体: .symm (.mk e) Groupoid.isoEquivHom _ _
 
 Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inclusion C).Faithful
+  签名: (inclusion C).忠实
 -/
 instance : (inclusion C).Faithful where
 
@@ -255,7 +255,7 @@ definition forgetFunctorToCore
 
 中文:
 定义 forgetFunctorToCore
-  签名: : (G ⥤ Core C) ⥤ G ⥤ C
+  签名: : (G ⥤ 核 C) ⥤ G ⥤ C
   定义体: (whiskeringRight _ _ _).obj (inclusion C)
 
 Depends on / 依赖: inclusion, whiskeringRight
@@ -303,7 +303,7 @@ definition coreId
 
 中文:
 定义 coreId
-  签名: : (𝟭 C).core ≅ 𝟭 (Core C)
+  签名: : (𝟭 C).core ≅ 𝟭 (核 C)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -322,7 +322,7 @@ definition coreComp
 
 中文:
 定义 coreComp
-  签名: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  签名: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -444,7 +444,7 @@ lemma coreId
 中文:
 引理 coreId
   条件: {F : C ⥤ D}
-  结论: (Iso.refl F).core = Iso.refl F.core
+  结论: (同构.refl F).core = 同构.refl F.core
   证明: rfl
 -/
 lemma coreId {F : C ⥤ D} : (Iso.refl F).core = Iso.refl F.core := rfl
@@ -461,7 +461,7 @@ lemma coreWhiskerLeft
 
 中文:
 引理 coreWhiskerLeft
-  条件: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} (η : G ≅ H)
+  条件: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} (η : G ≅ H)
   证明: by
   cat_disch
 
@@ -484,7 +484,7 @@ lemma coreWhiskerRight
 
 中文:
 引理 coreWhiskerRight
-  条件: {E : 类型u₃} [Category.{v₃} E] {F G : C ⥤ D} (η : F ≅ G) (H : D ⥤ E)
+  条件: {E : 类型u₃} [范畴.{v₃} E] {F G : C ⥤ D} (η : F ≅ G) (H : D ⥤ E)
   证明: by
   cat_disch
 
@@ -553,7 +553,7 @@ lemma coreAssociator
 
 中文:
 引理 coreAssociator
-  结论: {E : 类型u₃} [Category.{v₃} E] {E' : 类型u₄} [Category.{v₄} E']
+  结论: {E : 类型u₃} [范畴.{v₃} E] {E' : 类型u₄} [范畴.{v₄} E']
   证明: by
   cat_disch
 
@@ -584,7 +584,7 @@ definition functorToCoreCompLeftIso
 
 中文:
 定义 functorToCoreCompLeftIso
-  签名: {G' : 类型u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
+  签名: {G' : 类型u₃} [群胚.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -604,7 +604,7 @@ lemma functorToCore_comp_left
 
 中文:
 引理 functorToCore_comp_left
-  条件: {G' : 类型u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
+  条件: {G' : 类型u₃} [群胚.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
   证明: Functor.ext_of_iso (functorToCoreCompLeftIso H F) (by cat_disch)
 
 Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreCompLeftIso
@@ -623,7 +623,7 @@ definition functorToCoreCompRightIso
 
 中文:
 定义 functorToCoreCompRightIso
-  签名: {C' : 类型u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
+  签名: {C' : 类型u₄} [范畴.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -642,7 +642,7 @@ lemma functorToCore_comp_right
 
 中文:
 引理 functorToCore_comp_right
-  条件: {C' : 类型u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
+  条件: {C' : 类型u₄} [范畴.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
   证明: Functor.ext_of_iso (functorToCoreCompRightIso H F) (by cat_disch)
 
 Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreCompRightIso
@@ -662,7 +662,7 @@ definition inclusionCompFunctorToCoreIso
 
 中文:
 定义 inclusionCompFunctorToCoreIso
-  签名: : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (Core G)
+  签名: : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (核 G)
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -681,7 +681,7 @@ theorem inclusion_comp_functorToCore
 
 中文:
 定理 inclusion_comp_functorToCore
-  结论: inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (Core G)
+  结论: inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (核 G)
   证明: Functor.ext_of_iso inclusionCompFunctorToCoreIso (by cat_disch)
 
 Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, inclusionCompFunctorToCoreIso
@@ -699,7 +699,7 @@ definition functorToCoreInclusionIso
 
 中文:
 定义 functorToCoreInclusionIso
-  签名: : functorToCore (inclusion C) ≅ 𝟭 (Core C)
+  签名: : functorToCore (inclusion C) ≅ 𝟭 (核 C)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -717,7 +717,7 @@ theorem functorToCore_inclusion
 
 中文:
 定理 functorToCore_inclusion
-  结论: functorToCore (inclusion C) = 𝟭 (Core C)
+  结论: functorToCore (inclusion C) = 𝟭 (核 C)
   证明: Functor.ext_of_iso functorToCoreInclusionIso (by cat_disch)
 
 Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreInclusionIso
@@ -780,7 +780,7 @@ definition coreFunctor
 
 中文:
 定义 coreFunctor
-  签名: : Core (C ⥤ D) ⥤ Core C ⥤ Core D where
+  签名: : 核 (C ⥤ D) ⥤ 核 C ⥤ 核 D where
   定义体: F.of.core
   map η := η.iso.core.hom
 
@@ -807,7 +807,7 @@ map f := .mk (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
 
 中文:
 定义 ofEquivFunctor
-  签名: (m : 类型u₁ -> 类型u₂) [EquivFunctor m]
+  签名: (m : 类型u₁ -> 类型u₂) [等价函子 m]
   定义体: .mk m x.of
 map f := .mk (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
   map_id α := by ext x; exact congr_fun (EquivFunctor.map_refl' _) x

@@ -93,7 +93,7 @@ lemma isTightMeasureSet_of_tendsto_measure_compl_closedBall
 
 中文:
 引理 isTightMeasureSet_of_tendsto_measure_compl_closedBall
-  结论: [命题erSpace E] {x : E}
+  结论: [真空间 E] {x : E}
   证明: by
   refine isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mpr fun ε hε => ?_
   rw [ENNReal.tendsto_atTop_zero] at h
@@ -121,7 +121,7 @@ lemma isTightMeasureSet_iff_tendsto_measure_compl_closedBall
 
 中文:
 引理 isTightMeasureSet_iff_tendsto_measure_compl_closedBall
-  条件: [命题erSpace E] (x : E)
+  条件: [真空间 E] (x : E)
   证明: ⟨fun hS => tendsto_measure_compl_closedBall_of_isTightMeasureSet hS x,
     isTightMeasureSet_of_tendsto_measure_compl_closedBall⟩
 
@@ -182,7 +182,7 @@ lemma isTightMeasureSet_of_tendsto_measure_norm_gt
 
 中文:
 引理 isTightMeasureSet_of_tendsto_measure_norm_gt
-  结论: [命题erSpace E]
+  结论: [真空间 E]
   证明: by
   refine isTightMeasureSet_of_tendsto_measure_compl_closedBall (x := 0) ?_
   convert! h using 6 with r
@@ -209,7 +209,7 @@ lemma isTightMeasureSet_iff_tendsto_measure_norm_gt
 
 中文:
 引理 isTightMeasureSet_iff_tendsto_measure_norm_gt
-  条件: [命题erSpace E]
+  条件: [真空间 E]
   证明: ⟨tendsto_measure_norm_gt_of_isTightMeasureSet, isTightMeasureSet_of_tendsto_measure_norm_gt⟩
 
 Depends on / 依赖: isTightMeasureSet_of_tendsto_measure_norm_gt, tendsto_measure_norm_gt_of_isTightMeasureSet
@@ -311,8 +311,8 @@ lemma isTightMeasureSet_of_forall_basis_tendsto
  
 
 中文:
-引理 isTightMeasureSet_of_forall_basis_tendsto
-  结论: (b : OrthonormalBasis ι 𝕜 E)
+引理 isTightMeasureSet_of_对任意_basis_tendsto
+  结论: (b : 正交标准基 ι 𝕜 E)
   证明: by
   rcases subsingleton_or_nontrivial E with hE | hE
   · simp only [IsTightMeasureSet, cocompact_eq_bot, smallSets_bot]
@@ -572,7 +572,7 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_measureReal_inner_of_norm_eq_one
     rw [ENNRe
 
 中文:
-引理 isTightMeasureSet_range_of_tendsto_limsup_measureReal_inner_of_norm_eq_one
+引理 isTightMeasureSet_range_of_tendsto_limsup_measure实数_inner_of_norm_eq_one
   证明: by
   refine isTightMeasureSet_range_of_tendsto_limsup_inner_of_norm_eq_one 𝕜 fun z hz => ?_
   have h_ofReal (r : Real) : limsup (fun n => μ n {x | r < ‖⟪z, x⟫_𝕜‖}) atTop

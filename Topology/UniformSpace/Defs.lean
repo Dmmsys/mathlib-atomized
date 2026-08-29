@@ -131,7 +131,7 @@ lemma SetRel.mem_filter_prod_comm
 
 中文:
 引理 SetRel.mem_filter_prod_comm
-  条件: (R : SetRel α α) {f g : Filter α} [R.IsSymm]
+  条件: (R : SetRel α α) {f g : 滤子 α} [R.是Symm]
   证明: by
   rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← mem_map]; rw [← prod_comm]; rw [← SetRel.inv]; rw [R.inv_eq_self]
 
@@ -154,12 +154,12 @@ structure UniformSpace.Core
     - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
 
 中文:
-结构 UniformSpace.Core
+结构 一致空间.核
   参数: (α : 类型u)
   公理与运算 (4 个):
-    - uniformity : Filter (α × α)
+    - uniformity : 滤子 (α × α)
     - refl : 𝓟 SetRel.id <= uniformity
-    - symm : Tendsto Prod.swap uniformity uniformity
+    - symm : 收敛 积类型.swap uniformity uniformity
     - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
 
 Depends on / 依赖: _sets, c.comp, mem_lift, monotone_id, monotone_id.relComp, relComp
@@ -184,8 +184,8 @@ theorem UniformSpace.Core.comp_mem_uniformity_sets
   proof: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp c.comp hs
 
 中文:
-定理 UniformSpace.Core.comp_mem_uniformity_sets
-  结论: {c : Core α} {s : SetRel α α}
+定理 一致空间.核.comp_mem_uniformity_sets
+  结论: {c : 核 α} {s : SetRel α α}
   证明: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp c.comp hs
 -/
 protected theorem UniformSpace.Core.comp_mem_uniformity_sets {c : Core α} {s : SetRel α α}
@@ -204,8 +204,8 @@ definition UniformSpace.Core.mk'
   comp _r ru := let ⟨_s, hs, hsr⟩ := comp _ ru; mem_of_superset (mem_lift' hs) hsr
 
 中文:
-定义 UniformSpace.Core.mk'
-  签名: {α : 类型u} (U : Filter (α × α)) (refl : 对任意 r in U, 对任意 (x), (x, x) in r)
+定义 一致空间.核.mk'
+  签名: {α : 类型u} (U : 滤子 (α × α)) (refl : 对任意 r in U, 对任意 (x), (x, x) in r)
   定义体: U
   refl _r ru := SetRel.id_subset_iff.2 ⟨refl _ ru⟩
   symm
@@ -231,8 +231,8 @@ definition UniformSpace.Core.mkOfBasis
   comp := ((B.hasBasis.lift' (monotone_id.relComp monotone_id)).le_basis_iff B.hasBasis).2 comp
 
 中文:
-定义 UniformSpace.Core.mkOfBasis
-  签名: {α : 类型u} (B : FilterBasis (α × α))
+定义 一致空间.核.mkOfBasis
+  签名: {α : 类型u} (B : 滤子基 (α × α))
   定义体: B.filter
   refl := B.hasBasis.ge_iff.mpr fun _r ru => SetRel.id_subset_iff.2 ⟨refl _ ru⟩
   symm := (B.hasBasis.tendsto_iff B.hasBasis).mpr symm
@@ -259,8 +259,8 @@ definition UniformSpace.Core.toTopologicalSpace
   body: .mkOfNhds fun x => .comap (Prod.mk x) u.uniformity
 
 中文:
-定义 UniformSpace.Core.toTopologicalSpace
-  签名: {α : 类型u} (u : UniformSpace.Core α)
+定义 一致空间.核.toTopologicalSpace
+  签名: {α : 类型u} (u : 一致空间.核 α)
   定义体: .mkOfNhds fun x => .comap (Prod.mk x) u.uniformity
 
 Depends on / 依赖: Prod.mk, mkOfNhds, u.uniformity, uniformity
@@ -276,7 +276,7 @@ English:
 theorem UniformSpace.Core.ext
 
 中文:
-定理 UniformSpace.Core.ext
+定理 一致空间.核.ext
 -/
 theorem UniformSpace.Core.ext :
     forall {u₁ u₂ : UniformSpace.Core α}, u₁.uniformity = u₂.uniformity -> u₁ = u₂
@@ -297,8 +297,8 @@ theorem UniformSpace.Core.nhds_toTopologicalSpace
     filter_upwards [preimage_mem_comap hV] wi
 
 中文:
-定理 UniformSpace.Core.nhds_toTopologicalSpace
-  条件: {α : 类型u} (u : Core α) (x : α)
+定理 一致空间.核.nhds_toTopologicalSpace
+  条件: {α : 类型u} (u : 核 α) (x : α)
   证明: by
   apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun _ => (basis_sets _).comap _)
   · exact fun a U hU => u.refl hU rfl
@@ -343,14 +343,14 @@ class UniformSpace
     - nhds_eq_comap_uniformity((x : α)) : 𝓝 x = comap (Prod.mk x) uniformity
 
 中文:
-类 UniformSpace
+类 一致空间
   参数: (α : 类型u)
-  继承: TopologicalSpace α
+  继承: 拓扑空间 α
   公理与运算 (4 个):
-    - uniformity : Filter (α × α)
-    - symm : Tendsto Prod.swap uniformity uniformity
+    - uniformity : 滤子 (α × α)
+    - symm : 收敛 积类型.swap uniformity uniformity
     - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-    - nhds_eq_comap_uniformity((x : α)) : 𝓝 x = comap (Prod.mk x) uniformity
+    - nhds_eq_comap_uniformity((x : α)) : 𝓝 x = comap (积类型.mk x) uniformity
 -/
 class UniformSpace (α : Type u) extends TopologicalSpace α where
   /-- The uniformity filter. -/
@@ -373,7 +373,7 @@ definition uniformity
 
 中文:
 定义 uniformity
-  签名: (α : 类型u) [UniformSpace α]
+  签名: (α : 类型u) [一致空间 α]
   定义体: @UniformSpace.uniformity α _
 
 Depends on / 依赖: UniformSpace, UniformSpace.uniformity, uniformity
@@ -400,8 +400,8 @@ abbreviation UniformSpace.ofCoreEq
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_toTopologicalSpace]
 
 中文:
-缩写 UniformSpace.ofCoreEq
-  签名: {α : 类型u} (u : UniformSpace.Core α) (t : TopologicalSpace α)
+缩写 一致空间.ofCoreEq
+  签名: {α : 类型u} (u : 一致空间.核 α) (t : 拓扑空间 α)
   定义体: u
   toTopologicalSpace := t
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_toTopologicalSpace]
@@ -421,8 +421,8 @@ abbreviation UniformSpace.ofCore
   body: .ofCoreEq u _ rfl
 
 中文:
-缩写 UniformSpace.ofCore
-  签名: {α : 类型u} (u : UniformSpace.Core α)
+缩写 一致空间.ofCore
+  签名: {α : 类型u} (u : 一致空间.核 α)
   定义体: .ofCoreEq u _ rfl
 
 Depends on / 依赖: ofCoreEq
@@ -445,8 +445,8 @@ abbreviation UniformSpace.toCore
     convert! mem_of_mem_nhds this
 
 中文:
-缩写 UniformSpace.toCore
-  签名: (u : UniformSpace α)
+缩写 一致空间.toCore
+  签名: (u : 一致空间 α)
   定义体: u
   refl := by
     rintro U hU ⟨x, y⟩ (rfl : x = y)
@@ -474,8 +474,8 @@ theorem UniformSpace.toCore_toTopologicalSpace
     rw [u.nhds_eq_comap_uniformity]; rw [u.toCore.nhds_toTopologicalSpace]
 
 中文:
-定理 UniformSpace.toCore_toTopologicalSpace
-  条件: (u : UniformSpace α)
+定理 一致空间.toCore_toTopologicalSpace
+  条件: (u : 一致空间 α)
   证明: TopologicalSpace.ext_nhds fun a => by
     rw [u.nhds_eq_comap_uniformity]; rw [u.toCore.nhds_toTopologicalSpace]
 
@@ -497,8 +497,8 @@ lemma UniformSpace.mem_uniformity_ofCore_iff
 @[ext (iff := false)]
 
 中文:
-引理 UniformSpace.mem_uniformity_ofCore_iff
-  条件: {u : UniformSpace.Core α} {s : SetRel α α}
+引理 一致空间.mem_uniformity_ofCore_iff
+  条件: {u : 一致空间.核 α} {s : SetRel α α}
   证明: Iff.rfl
 
 @[ext (iff := false)]
@@ -524,8 +524,8 @@ theorem UniformSpace.ext
   cases u₁; cases u₂; congr
 
 中文:
-定理 UniformSpace.ext
-  条件: {u₁ u₂ : UniformSpace α} (h : 𝓤[u₁] = 𝓤[u₂])
+定理 一致空间.ext
+  条件: {u₁ u₂ : 一致空间 α} (h : 𝓤[u₁] = 𝓤[u₂])
   结论: u₁ = u₂
   证明: by
   have : u₁.toTopologicalSpace = u₂.toTopologicalSpace := TopologicalSpace.ext_nhds fun x => by
@@ -548,8 +548,8 @@ theorem UniformSpace.ext_iff
   proof: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
 
 中文:
-定理 UniformSpace.ext_iff
-  条件: {u₁ u₂ : UniformSpace α}
+定理 一致空间.ext_iff
+  条件: {u₁ u₂ : 一致空间 α}
   证明: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
 -/
 protected theorem UniformSpace.ext_iff {u₁ u₂ : UniformSpace α} :
@@ -565,8 +565,8 @@ theorem UniformSpace.ofCoreEq_toCore
   proof: UniformSpace.ext rfl
 
 中文:
-定理 UniformSpace.ofCoreEq_toCore
-  结论: (u : UniformSpace α) (t : TopologicalSpace α)
+定理 一致空间.ofCoreEq_toCore
+  结论: (u : 一致空间 α) (t : 拓扑空间 α)
   证明: UniformSpace.ext rfl
 
 Depends on / 依赖: UniformSpace, UniformSpace.ext
@@ -586,8 +586,8 @@ abbreviation UniformSpace.replaceTopology
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_eq_comap_uniformity]
 
 中文:
-缩写 UniformSpace.replaceTopology
-  签名: {α : 类型} [i : TopologicalSpace α] (u : UniformSpace α)
+缩写 一致空间.replaceTopology
+  签名: {α : 类型} [i : 拓扑空间 α] (u : 一致空间 α)
   定义体: u
   toTopologicalSpace := i
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_eq_comap_uniformity]
@@ -607,8 +607,8 @@ theorem UniformSpace.replaceTopology_eq
   proof: UniformSpace.ext rfl
 
 中文:
-定理 UniformSpace.replaceTopology_eq
-  结论: {α : 类型} [i : TopologicalSpace α] (u : UniformSpace α)
+定理 一致空间.replaceTopology_eq
+  结论: {α : 类型} [i : 拓扑空间 α] (u : 一致空间 α)
   证明: UniformSpace.ext rfl
 
 Depends on / 依赖: UniformSpace, UniformSpace.ext
@@ -633,7 +633,7 @@ theorem nhds_eq_comap_uniformity
 中文:
 定理 nhds_eq_comap_uniformity
   条件: {x : α}
-  结论: 𝓝 x = (𝓤 α).comap (Prod.mk x)
+  结论: 𝓝 x = (𝓤 α).comap (积类型.mk x)
   证明: UniformSpace.nhds_eq_comap_uniformity x
 
 Depends on / 依赖: UniformSpace, UniformSpace.nhds_eq_comap_uniformity, nhds_eq_comap_uniformity
@@ -652,7 +652,7 @@ theorem isOpen_uniformity
 
 中文:
 定理 isOpen_uniformity
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   simp only [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap_prodMk]
 
@@ -690,7 +690,7 @@ instance uniformity.neBot
 
 中文:
 实例 uniformity.neBot
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: diagonal_nonempty.principal_neBot.mono refl_le_uniformity
 
 Depends on / 依赖: diagonal_nonempty, diagonal_nonempty.principal_neBot.mono, principal_neBot, refl_le_uniformity
@@ -768,7 +768,7 @@ theorem symm_le_uniformity
 
 中文:
 定理 symm_le_uniformity
-  结论: map (@Prod.swap α α) (𝓤 _) <= 𝓤 _
+  结论: map (@积类型.swap α α) (𝓤 _) <= 𝓤 _
   证明: UniformSpace.symm
 
 Depends on / 依赖: UniformSpace, UniformSpace.symm
@@ -823,7 +823,7 @@ theorem tendsto_swap_uniformity
 
 中文:
 定理 tendsto_swap_uniformity
-  结论: Tendsto (@Prod.swap α α) (𝓤 α) (𝓤 α)
+  结论: 收敛 (@积类型.swap α α) (𝓤 α) (𝓤 α)
   证明: symm_le_uniformity
 
 Depends on / 依赖: symm_le_uniformity
@@ -862,8 +862,8 @@ theorem Filter.Tendsto.uniformity_trans
   filter_upwards [mem_map.1 (h₁₂ hs), mem_map.1 (h₂₃ hs)] with x hx₁₂ hx₂₃ using ⟨_, hx₁₂, hx₂₃⟩
 
 中文:
-定理 Filter.Tendsto.uniformity_trans
-  结论: {l : Filter β} {f₁ f₂ f₃ : β -> α}
+定理 滤子.收敛.uniformity_trans
+  结论: {l : 滤子 β} {f₁ f₂ f₃ : β -> α}
   证明: by
   refine le_trans (le_lift'.2 fun s hs => mem_map.2 ?_) comp_le_uniformity
   filter_upwards [mem_map.1 (h₁₂ hs), mem_map.1 (h₂₃ hs)] with x hx₁₂ hx₂₃ using ⟨_, hx₁₂, hx₂₃⟩
@@ -885,8 +885,8 @@ theorem Filter.Tendsto.uniformity_symm
   proof: tendsto_swap_uniformity.comp h
 
 中文:
-定理 Filter.Tendsto.uniformity_symm
-  条件: {l : Filter β} {f : β -> α × α} (h : Tendsto f l (𝓤 α))
+定理 滤子.收敛.uniformity_symm
+  条件: {l : 滤子 β} {f : β -> α × α} (h : 收敛 f l (𝓤 α))
   证明: tendsto_swap_uniformity.comp h
 
 Depends on / 依赖: tendsto_swap_uniformity, tendsto_swap_uniformity.comp
@@ -906,7 +906,7 @@ mem_map.2 univ_mem' fun _ => refl_mem_uniformity hs
 
 中文:
 定理 tendsto_diag_uniformity
-  条件: (f : β -> α) (l : Filter β)
+  条件: (f : β -> α) (l : 滤子 β)
   证明: fun _s hs =>
 mem_map.2 univ_mem' fun _ => refl_mem_uniformity hs
 -/
@@ -925,8 +925,8 @@ theorem tendsto_const_uniformity
 
 中文:
 定理 tendsto_const_uniformity
-  条件: {a : α} {f : Filter β}
-  结论: Tendsto (fun _ => (a, a)) f (𝓤 α)
+  条件: {a : α} {f : 滤子 β}
+  结论: 收敛 (fun _ => (a, a)) f (𝓤 α)
   证明: tendsto_diag_uniformity (fun _ => a) f
 
 Depends on / 依赖: tendsto_diag_uniformity
@@ -992,7 +992,7 @@ theorem uniformity_le_symm
 
 中文:
 定理 uniformity_le_symm
-  结论: 𝓤 α <= map Prod.swap (𝓤 α)
+  结论: 𝓤 α <= map 积类型.swap (𝓤 α)
   证明: by
   rw [map_swap_eq_comap_swap]; exact tendsto_swap_uniformity.le_comap
 
@@ -1013,7 +1013,7 @@ theorem uniformity_eq_symm
 
 中文:
 定理 uniformity_eq_symm
-  结论: 𝓤 α = map Prod.swap (𝓤 α)
+  结论: 𝓤 α = map 积类型.swap (𝓤 α)
   证明: le_antisymm uniformity_le_symm symm_le_uniformity
 
 @[simp]
@@ -1034,7 +1034,7 @@ theorem comap_swap_uniformity
 
 中文:
 定理 comap_swap_uniformity
-  结论: comap (@Prod.swap α α) (𝓤 α) = 𝓤 α
+  结论: comap (@积类型.swap α α) (𝓤 α) = 𝓤 α
   证明: (congr_arg _ uniformity_eq_symm).trans comap_map Prod.swap_injective
 
 Depends on / 依赖: Prod.swap_injective, comap_map, congr_arg, swap_injective, uniformity_eq_symm
@@ -1080,7 +1080,7 @@ theorem UniformSpace.hasBasis_symmetric
       SetRel.symmetrize_subset_self⟩
 
 中文:
-定理 UniformSpace.hasBasis_symmetric
+定理 一致空间.hasBasis_symmetric
   证明: hasBasis_self.2 fun t t_in =>
     ⟨SetRel.symmetrize t, symmetrize_mem_uniformity t_in, inferInstance,
       SetRel.symmetrize_subset_self⟩
@@ -1106,7 +1106,7 @@ theorem uniformity_lift_le_swap
 
 中文:
 定理 uniformity_lift_le_swap
-  结论: {g : SetRel α α -> Filter β} {f : Filter β} (hg : Monotone g)
+  结论: {g : SetRel α α -> 滤子 β} {f : 滤子 β} (hg : 递增 g)
   证明: calc
     (𝓤 α).lift g <= (Filter.map (@Prod.swap α α) <| 𝓤 α).lift g :=
       lift_mono uniformity_le_symm le_rfl
@@ -1136,7 +1136,7 @@ theorem uniformity_lift_le_comp
 
 中文:
 定理 uniformity_lift_le_comp
-  条件: {f : SetRel α α -> Filter β} (h : Monotone f)
+  条件: {f : SetRel α α -> 滤子 β} (h : 递增 f)
   证明: calc
     ((𝓤 α).lift fun s => f (s ○ s)) = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift f := by
       rw [lift_lift'_assoc]
@@ -1315,7 +1315,7 @@ definition ball
 
 中文:
 定义 ball
-  签名: (x : β) (V : Set (β × β))
+  签名: (x : β) (V : 集合 (β × β))
   定义体: Prod.mk x ⁻¹' V
 
 Depends on / 依赖: Prod.mk
@@ -1353,7 +1353,7 @@ theorem mem_ball_comp
 
 中文:
 定理 mem_ball_comp
-  条件: {V W : Set (β × β)} {x y z} (h : y in ball x V) (h' : z in ball y W)
+  条件: {V W : 集合 (β × β)} {x y z} (h : y in ball x V) (h' : z in ball y W)
   证明: SetRel.prodMk_mem_comp h h'
 
 Depends on / 依赖: SetRel, SetRel.prodMk_mem_comp, prodMk_mem_comp
@@ -1372,7 +1372,7 @@ theorem ball_subset_of_comp_subset
 
 中文:
 定理 ball_subset_of_comp_subset
-  条件: {V W : Set (β × β)} {x y} (h : x in ball y W) (h' : W ○ W subseteq V)
+  条件: {V W : 集合 (β × β)} {x y} (h : x in ball y W) (h' : W ○ W subseteq V)
   证明: fun _z z_in => h' (mem_ball_comp h z_in)
 
 Depends on / 依赖: mem_ball_comp, z_in
@@ -1391,7 +1391,7 @@ theorem ball_mono
 
 中文:
 定理 ball_mono
-  条件: {V W : Set (β × β)} (h : V subseteq W) (x : β)
+  条件: {V W : 集合 (β × β)} (h : V subseteq W) (x : β)
   结论: ball x V subseteq ball x W
   证明: preimage_mono h
 
@@ -1411,7 +1411,7 @@ theorem ball_inter
 
 中文:
 定理 ball_inter
-  条件: (x : β) (V W : Set (β × β))
+  条件: (x : β) (V W : 集合 (β × β))
   结论: ball x (V inter W) = ball x V inter ball x W
   证明: preimage_inter
 
@@ -1431,7 +1431,7 @@ theorem ball_inter_left
 
 中文:
 定理 ball_inter_left
-  条件: (x : β) (V W : Set (β × β))
+  条件: (x : β) (V W : 集合 (β × β))
   结论: ball x (V inter W) subseteq ball x V
   证明: ball_mono inter_subset_left x
 
@@ -1451,7 +1451,7 @@ theorem ball_inter_right
 
 中文:
 定理 ball_inter_right
-  条件: (x : β) (V W : Set (β × β))
+  条件: (x : β) (V W : 集合 (β × β))
   结论: ball x (V inter W) subseteq ball x W
   证明: ball_mono inter_subset_right x
 
@@ -1470,8 +1470,8 @@ theorem ball_iInter
   proof: preimage_iInter
 
 中文:
-定理 ball_iInter
-  条件: {x : β} {V : ι -> Set (β × β)}
+定理 ball_i整数er
+  条件: {x : β} {V : ι -> 集合 (β × β)}
   结论: ball x (⋂ i, V i) = ⋂ i, ball x (V i)
   证明: preimage_iInter
 
@@ -1491,7 +1491,7 @@ theorem mem_ball_symmetry
 
 中文:
 定理 mem_ball_symmetry
-  条件: {V : SetRel β β} [V.IsSymm] {x y}
+  条件: {V : SetRel β β} [V.是Symm] {x y}
   结论: x in ball y V ↔ y in ball x V
   证明: V.comm
 
@@ -1513,7 +1513,7 @@ theorem ball_eq_of_symmetry
 
 中文:
 定理 ball_eq_of_symmetry
-  条件: {V : SetRel β β} [V.IsSymm] {x}
+  条件: {V : SetRel β β} [V.是Symm] {x}
   结论: ball x V = { y | (y, x) in V }
   证明: by
   ext y
@@ -1539,7 +1539,7 @@ theorem mem_comp_of_mem_ball
 
 中文:
 定理 mem_comp_of_mem_ball
-  结论: {V W : SetRel β β} {x y z : β} [V.IsSymm] (hx : x in ball z V)
+  结论: {V W : SetRel β β} {x y z : β} [V.是Symm] (hx : x in ball z V)
   证明: by
   rw [mem_ball_symmetry] at hx
   exact ⟨z, hx, hy⟩
@@ -1568,7 +1568,7 @@ theorem mem_comp_comp
 
 中文:
 定理 mem_comp_comp
-  条件: {V W M : SetRel β β} [W.IsSymm] {p : β × β}
+  条件: {V W M : SetRel β β} [W.是Symm] {p : β × β}
   证明: by
   obtain ⟨x, y⟩ := p
   constructor
@@ -1604,7 +1604,7 @@ alias ⟨_root_.SetRel.IsCover.subset_iUnion_ball, _root_.SetRel.IsCover.of_subs
 
 中文:
 引理 isCover_iff_subset_iUnion_ball
-  条件: {U : SetRel β β} [U.IsSymm] {s N : Set β}
+  条件: {U : SetRel β β} [U.是Symm] {s N : 集合 β}
   证明: by
   simp [SetRel.IsCover, subset_def, ball, U.comm]
 
@@ -1639,7 +1639,7 @@ theorem mem_nhds_uniformity_iff_right
 
 中文:
 定理 mem_nhds_uniformity_iff_right
-  条件: {x : α} {s : Set α}
+  条件: {x : α} {s : 集合 α}
   证明: by
   simp only [nhds_eq_comap_uniformity, mem_comap_prodMk]
 
@@ -1661,7 +1661,7 @@ theorem mem_nhds_uniformity_iff_left
 
 中文:
 定理 mem_nhds_uniformity_iff_left
-  条件: {x : α} {s : Set α}
+  条件: {x : α} {s : 集合 α}
   证明: by
   rw [uniformity_eq_symm]; rw [mem_nhds_uniformity_iff_right]
   simp only [mem_map, preimage_ofPred_eq, Prod.snd_swap, Prod.fst_swap]
@@ -1684,7 +1684,7 @@ theorem nhdsWithin_eq_comap_uniformity_of_mem
 
 中文:
 定理 nhdsWithin_eq_comap_uniformity_of_mem
-  条件: {x : α} {T : Set α} (hx : x in T) (S : Set α)
+  条件: {x : α} {T : 集合 α} (hx : x in T) (S : 集合 α)
   证明: by
   simp [nhdsWithin, nhds_eq_comap_uniformity, hx]
 
@@ -1704,7 +1704,7 @@ theorem nhdsWithin_eq_comap_uniformity
 
 中文:
 定理 nhdsWithin_eq_comap_uniformity
-  条件: {x : α} (S : Set α)
+  条件: {x : α} (S : 集合 α)
   证明: nhdsWithin_eq_comap_uniformity_of_mem (mem_univ _) S
 
 Depends on / 依赖: mem_univ, nhdsWithin_eq_comap_uniformity_of_mem
@@ -1725,8 +1725,8 @@ theorem isOpen_iff_ball_subset
 
 中文:
 定理 isOpen_iff_ball_subset
-  条件: {s : Set α}
-  结论: IsOpen s ↔ 对任意 x in s, 存在 V in 𝓤 α, ball x V subseteq s
+  条件: {s : 集合 α}
+  结论: 是开集 s ↔ 对任意 x in s, 存在 V in 𝓤 α, ball x V subseteq s
   证明: by
   simp_rw [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap, ball]
 
@@ -1747,7 +1747,7 @@ theorem nhds_basis_uniformity'
 
 中文:
 定理 nhds_basis_uniformity'
-  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
+  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
   证明: by
   rw [nhds_eq_comap_uniformity]
   exact h.comap (Prod.mk x)
@@ -1772,7 +1772,7 @@ theorem nhds_basis_uniformity
 
 中文:
 定理 nhds_basis_uniformity
-  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
+  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
   证明: by
   replace h := h.comap Prod.swap
   rw [comap_swap_uniformity] at h
@@ -1818,8 +1818,8 @@ theorem UniformSpace.mem_nhds_iff
   simp_rw [ball]
 
 中文:
-定理 UniformSpace.mem_nhds_iff
-  条件: {x : α} {s : Set α}
+定理 一致空间.mem_nhds_iff
+  条件: {x : α} {s : 集合 α}
   结论: s in 𝓝 x ↔ 存在 V in 𝓤 α, ball x V subseteq s
   证明: by
   rw [nhds_eq_comap_uniformity]; rw [mem_comap]
@@ -1843,7 +1843,7 @@ theorem UniformSpace.ball_mem_nhds
   exact ⟨V, V_in, Subset.rfl⟩
 
 中文:
-定理 UniformSpace.ball_mem_nhds
+定理 一致空间.ball_mem_nhds
   条件: (x : α) ⦃V
   结论: SetRel α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x
   证明: by
@@ -1868,8 +1868,8 @@ theorem UniformSpace.ball_mem_nhdsWithin
   exact ⟨V, V_in, Subset.rfl⟩
 
 中文:
-定理 UniformSpace.ball_mem_nhdsWithin
-  条件: {x : α} {S : Set α} ⦃V
+定理 一致空间.ball_mem_nhdsWithin
+  条件: {x : α} {S : 集合 α} ⦃V
   结论: SetRel α α⦄ (x_in : x in S)
   证明: by
   rw [nhdsWithin_eq_comap_uniformity_of_mem x_in]; rw [mem_comap]
@@ -1898,8 +1898,8 @@ theorem UniformSpace.mem_nhds_iff_symm
     exact ⟨V, V_in, V_sub⟩
 
 中文:
-定理 UniformSpace.mem_nhds_iff_symm
-  条件: {x : α} {s : Set α}
+定理 一致空间.mem_nhds_iff_symm
+  条件: {x : α} {s : 集合 α}
   证明: by
   rw [UniformSpace.mem_nhds_iff]
   constructor
@@ -1930,7 +1930,7 @@ theorem UniformSpace.hasBasis_nhds
   proof: ⟨fun t => by simp [UniformSpace.mem_nhds_iff_symm, and_assoc]⟩
 
 中文:
-定理 UniformSpace.hasBasis_nhds
+定理 一致空间.hasBasis_nhds
   条件: (x : α)
   证明: ⟨fun t => by simp [UniformSpace.mem_nhds_iff_symm, and_assoc]⟩
 
@@ -1952,8 +1952,8 @@ theorem UniformSpace.mem_closure_iff_symm_ball
   simp [mem_closure_iff_nhds_basis (hasBasis_nhds x), Set.Nonempty]
 
 中文:
-定理 UniformSpace.mem_closure_iff_symm_ball
-  条件: {s : Set α} {x}
+定理 一致空间.mem_closure_iff_symm_ball
+  条件: {s : 集合 α} {x}
   证明: by
   simp [mem_closure_iff_nhds_basis (hasBasis_nhds x), Set.Nonempty]
 
@@ -1973,8 +1973,8 @@ theorem UniformSpace.mem_closure_iff_ball
   simp [mem_closure_iff_nhds_basis' (nhds_basis_uniformity' (𝓤 α).basis_sets)]
 
 中文:
-定理 UniformSpace.mem_closure_iff_ball
-  条件: {s : Set α} {x}
+定理 一致空间.mem_closure_iff_ball
+  条件: {s : 集合 α} {x}
   证明: by
   simp [mem_closure_iff_nhds_basis' (nhds_basis_uniformity' (𝓤 α).basis_sets)]
 
@@ -1995,7 +1995,7 @@ theorem UniformSpace.closure_subset_preimage
   exact ⟨y, hy, hxy⟩
 
 中文:
-定理 UniformSpace.closure_subset_preimage
+定理 一致空间.closure_subset_preimage
   证明: by
   intro x hx
   obtain ⟨y, hxy, hy⟩ := mem_closure_iff_ball.mp hx hU
@@ -2017,7 +2017,7 @@ theorem UniformSpace.closure_subset_image
   proof: closure_subset_preimage (symm_le_uniformity hU) s
 
 中文:
-定理 UniformSpace.closure_subset_image
+定理 一致空间.closure_subset_image
   证明: closure_subset_preimage (symm_le_uniformity hU) s
 
 Depends on / 依赖: closure_subset_preimage, symm_le_uniformity
@@ -2116,8 +2116,8 @@ theorem exists_mem_nhds_ball_subset_of_mem_nhds
   ⟨_, mem_nhds_left a ht, t, ht, fun a₁ h₁ a₂ h₂ => @htU (a, a₂) ⟨a₁, h₁, h₂⟩ rfl⟩
 
 中文:
-定理 exists_mem_nhds_ball_subset_of_mem_nhds
-  条件: {a : α} {U : Set α} (h : U in 𝓝 a)
+定理 存在_mem_nhds_ball_subset_of_mem_nhds
+  条件: {a : α} {U : 集合 α} (h : U in 𝓝 a)
   证明: let ⟨t, ht, htU⟩ := comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 h)
   ⟨_, mem_nhds_left a ht, t, ht, fun a₁ h₁ a₂ h₂ => @htU (a, a₂) ⟨a₁, h₁, h₂⟩ rfl⟩
 
@@ -2141,7 +2141,7 @@ theorem tendsto_right_nhds_uniformity
 中文:
 定理 tendsto_right_nhds_uniformity
   条件: {a : α}
-  结论: Tendsto (fun a' => (a', a)) (𝓝 a) (𝓤 α)
+  结论: 收敛 (fun a' => (a', a)) (𝓝 a) (𝓤 α)
   证明: fun _ =>
   mem_nhds_right a
 -/
@@ -2161,7 +2161,7 @@ theorem tendsto_left_nhds_uniformity
 中文:
 定理 tendsto_left_nhds_uniformity
   条件: {a : α}
-  结论: Tendsto (fun a' => (a, a')) (𝓝 a) (𝓤 α)
+  结论: 收敛 (fun a' => (a, a')) (𝓝 a) (𝓤 α)
   证明: fun _ =>
   mem_nhds_left a
 -/
@@ -2180,7 +2180,7 @@ theorem lift_nhds_left
 
 中文:
 定理 lift_nhds_left
-  条件: {x : α} {g : Set α -> Filter β} (hg : Monotone g)
+  条件: {x : α} {g : 集合 α -> 滤子 β} (hg : 递增 g)
   证明: by
   rw [nhds_eq_comap_uniformity]; rw [comap_lift_eq2 hg]
   simp_rw [ball, Function.comp_def]
@@ -2204,7 +2204,7 @@ theorem lift_nhds_right
 
 中文:
 定理 lift_nhds_right
-  条件: {x : α} {g : Set α -> Filter β} (hg : Monotone g)
+  条件: {x : α} {g : 集合 α -> 滤子 β} (hg : 递增 g)
   证明: by
   rw [nhds_eq_comap_uniformity']; rw [comap_lift_eq2 hg]
   simp_rw [Function.comp_def, preimage]
@@ -2252,7 +2252,7 @@ theorem Filter.HasBasis.biInter_biUnion_ball
   simp [mem_closure_iff_nhds_basis (nhds_basis_uniformity h), ball]
 
 中文:
-定理 Filter.HasBasis.biInter_biUnion_ball
+定理 滤子.有基.bi整数er_biUnion_ball
   结论: {p : ι -> 命题} {U : ι -> SetRel α α}
   证明: by
   ext x
@@ -2283,7 +2283,7 @@ definition UniformContinuous
   body: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α) (𝓤 β)
 
 中文:
-定义 UniformContinuous
+定义 一致连续
   签名: (f : α -> β)
   定义体: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α) (𝓤 β)
 
@@ -2310,7 +2310,7 @@ definition UniformContinuousOn
 
 中文:
 定义 UniformContinuousOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α ⊓ 𝓟 (s ×ˢ s)) (𝓤 β)
 
 Depends on / 依赖: Tendsto
@@ -2419,7 +2419,7 @@ theorem uniformContinuous_id
 
 中文:
 定理 uniformContinuous_id
-  结论: UniformContinuous (@id α)
+  结论: 一致连续 (@id α)
   证明: tendsto_id
 
 @[fun_prop]
@@ -2446,7 +2446,7 @@ nonrec theorem UniformContinuous.comp [UniformSpace γ] {g : β -> γ} {f : α -
 中文:
 定理 uniformContinuous_const
   条件: {b : β}
-  结论: UniformContinuous fun _ : α => b
+  结论: 一致连续 fun _ : α => b
   证明: uniformContinuous_of_const fun _ _ => rfl
 
 @[fun_prop]
@@ -2479,8 +2479,8 @@ theorem UniformContinuous.iterate
   | succ n hn => exact Function.iterate_succ _ _ ▸ UniformContinuous.comp hn h
 
 中文:
-定理 UniformContinuous.iterate
-  条件: (T : β -> β) (n : 自然数) (h : UniformContinuous T)
+定理 一致连续.iterate
+  条件: (T : β -> β) (n : 自然数) (h : 一致连续 T)
   证明: by
   induction n with
   | zero => exact uniformContinuous_id
@@ -2503,7 +2503,7 @@ theorem Filter.HasBasis.uniformContinuous_iff
   proof: (ha.tendsto_iff hb).trans by simp only [Prod.forall]
 
 中文:
-定理 Filter.HasBasis.uniformContinuous_iff
+定理 滤子.有基.uniformContinuous_iff
   结论: {ι'} {p : ι -> 命题}
   证明: (ha.tendsto_iff hb).trans by simp only [Prod.forall]
 
@@ -2525,7 +2525,7 @@ theorem Filter.HasBasis.uniformContinuousOn_iff
     simp_rw [Prod.forall, Set.inter_comm (s _), forall_mem_comm, mem_inter_iff, mem_prod, and_imp]
 
 中文:
-定理 Filter.HasBasis.uniformContinuousOn_iff
+定理 滤子.有基.uniformContinuousOn_iff
   结论: {ι'} {p : ι -> 命题}
   证明: ((ha.inf_principal (S ×ˢ S)).tendsto_iff hb).trans by
     simp_rw [Prod.forall, Set.inter_comm (s _), forall_mem_comm, mem_inter_iff, mem_prod, and_imp]
@@ -2554,7 +2554,7 @@ structure IsUniformInducing
     - comap_uniformity : comap (fun x : α × α => (f x.1, f x.2)) (𝓤 β) = 𝓤 α
 
 中文:
-结构 IsUniformInducing
+结构 是UniformInducing
   参数: (f : α -> β)
   公理与运算 (1 个):
     - comap_uniformity : comap (fun x : α × α => (f x.1, f x.2)) (𝓤 β) = 𝓤 α
@@ -2578,11 +2578,11 @@ structure IsUniformEmbedding
     - injective : Function.Injective f
 
 中文:
-结构 IsUniformEmbedding
+结构 是一致嵌入
   参数: (f : α -> β)
-  继承: IsUniformInducing f
+  继承: 是UniformInducing f
   公理与运算 (1 个):
-    - injective : Function.Injective f
+    - injective : 函数.单射 f
 -/
 structure IsUniformEmbedding (f : α -> β) : Prop extends IsUniformInducing f where
   /-- A uniform embedding is injective. -/
@@ -2597,8 +2597,8 @@ lemma IsUniformEmbedding.isUniformInducing
   proof: hf.toIsUniformInducing
 
 中文:
-引理 IsUniformEmbedding.isUniformInducing
-  条件: {f : α -> β} (hf : IsUniformEmbedding f)
+引理 是一致嵌入.isUniformInducing
+  条件: {f : α -> β} (hf : 是一致嵌入 f)
   证明: hf.toIsUniformInducing
 
 Depends on / 依赖: hf.toIsUniformInducing, toIsUniformInducing

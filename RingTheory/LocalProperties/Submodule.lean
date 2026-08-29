@@ -56,8 +56,8 @@ theorem Submodule.mem_of_localization_maximal
   rw [← IsLocalizedModule.mk'_one P.primeCompl]; rw [IsLocalizedModule.mk'_eq_m
 
 中文:
-定理 Submodule.mem_of_localization_maximal
-  结论: (m : M) (N : Submodule R M)
+定理 子模.mem_of_localization_maximal
+  结论: (m : M) (N : 子模 R M)
   证明: by
   let I : Ideal R := N.comap (LinearMap.toSpanSingleton R M m)
   suffices I = ⊤ by simpa [I] using I.eq_top_iff_one.mp this
@@ -88,8 +88,8 @@ theorem Submodule.le_of_localization_maximal
   proof: fun m hm => mem_of_localization_maximal _ f _ _ fun P hP => h P ⟨m, hm, 1, by simp⟩
 
 中文:
-定理 Submodule.le_of_localization_maximal
-  结论: {N₁ N₂ : Submodule R M}
+定理 子模.le_of_localization_maximal
+  结论: {N₁ N₂ : 子模 R M}
   证明: fun m hm => mem_of_localization_maximal _ f _ _ fun P hP => h P ⟨m, hm, 1, by simp⟩
 
 Depends on / 依赖: mem_of_localization_maximal
@@ -110,8 +110,8 @@ theorem Submodule.eq_of_localization₀_maximal
     (Submodule.le_of_localization_maximal Mₚ f fun P _ => (h P).ge)
 
 中文:
-定理 Submodule.eq_of_localization₀_maximal
-  结论: {N₁ N₂ : Submodule R M}
+定理 子模.eq_of_localization₀_maximal
+  结论: {N₁ N₂ : 子模 R M}
   证明: le_antisymm (Submodule.le_of_localization_maximal Mₚ f fun P _ => (h P).le)
     (Submodule.le_of_localization_maximal Mₚ f fun P _ => (h P).ge)
 
@@ -133,8 +133,8 @@ theorem Submodule.eq_bot_of_localization₀_maximal
   proof: Submodule.eq_of_localization₀_maximal Mₚ f fun P hP => by simpa using h P
 
 中文:
-定理 Submodule.eq_bot_of_localization₀_maximal
-  结论: (N : Submodule R M)
+定理 子模.eq_bot_of_localization₀_maximal
+  结论: (N : 子模 R M)
   证明: Submodule.eq_of_localization₀_maximal Mₚ f fun P hP => by simpa using h P
 
 Depends on / 依赖: Submodule, Submodule.eq_of_localization
@@ -153,8 +153,8 @@ theorem Submodule.eq_top_of_localization₀_maximal
   proof: Submodule.eq_of_localization₀_maximal Mₚ f fun P hP => by simpa using h P
 
 中文:
-定理 Submodule.eq_top_of_localization₀_maximal
-  结论: (N : Submodule R M)
+定理 子模.eq_top_of_localization₀_maximal
+  结论: (N : 子模 R M)
   证明: Submodule.eq_of_localization₀_maximal Mₚ f fun P hP => by simpa using h P
 
 Depends on / 依赖: Submodule, Submodule.eq_of_localization
@@ -178,7 +178,7 @@ theorem Module.eq_of_localization_maximal
   exact s.2 (le hs)
 
 中文:
-定理 Module.eq_of_localization_maximal
+定理 模.eq_of_localization_maximal
   结论: (m m' : M)
   证明: by
   rw [← one_smul R m]; rw [← one_smul R m']
@@ -207,7 +207,7 @@ theorem Module.eq_zero_of_localization_maximal
   proof: eq_of_localization_maximal _ f _ _ fun P _ => by rw [h, map_zero]
 
 中文:
-定理 Module.eq_zero_of_localization_maximal
+定理 模.eq_zero_of_localization_maximal
   结论: (m : M)
   证明: eq_of_localization_maximal _ f _ _ fun P _ => by rw [h, map_zero]
 
@@ -230,7 +230,7 @@ theorem LinearMap.eq_of_localization_maximal
 include f in
 
 中文:
-定理 LinearMap.eq_of_localization_maximal
+定理 线性映射.eq_of_localization_maximal
   结论: (g g' : M ->ₗ[R] M₁)
   证明: ext fun x => Module.eq_of_localization_maximal _ f₁ _ _ fun P _ => by
     simpa only [IsLocalizedModule.map_apply] using DFunLike.congr_fun (h P) (f P x)
@@ -259,7 +259,7 @@ theorem Module.subsingleton_of_localization_maximal
   exact Module.eq_of_localization_maximal Mₚ f x 0 fun _ _ => Subsingleton.elim _ _
 
 中文:
-定理 Module.subsingleton_of_localization_maximal
+定理 模.subsingleton_of_localization_maximal
   证明: by
   rw [subsingleton_iff_forall_eq 0]
   intro x
@@ -283,8 +283,8 @@ theorem Submodule.eq_of_localization_maximal
   proof: eq_of_localization₀_maximal Mₚ f fun P _ => congr(restrictScalars _ $(h P))
 
 中文:
-定理 Submodule.eq_of_localization_maximal
-  结论: {N₁ N₂ : Submodule R M}
+定理 子模.eq_of_localization_maximal
+  结论: {N₁ N₂ : 子模 R M}
   证明: eq_of_localization₀_maximal Mₚ f fun P _ => congr(restrictScalars _ $(h P))
 
 Depends on / 依赖: restrictScalars
@@ -304,8 +304,8 @@ theorem Submodule.eq_bot_of_localization_maximal
   proof: Submodule.eq_of_localization_maximal Rₚ Mₚ f fun P hP => by simpa using h P
 
 中文:
-定理 Submodule.eq_bot_of_localization_maximal
-  结论: (N : Submodule R M)
+定理 子模.eq_bot_of_localization_maximal
+  结论: (N : 子模 R M)
   证明: Submodule.eq_of_localization_maximal Rₚ Mₚ f fun P hP => by simpa using h P
 
 Depends on / 依赖: Submodule, Submodule.eq_of_localization_maximal, eq_of_localization_maximal
@@ -324,8 +324,8 @@ theorem Submodule.eq_top_of_localization_maximal
   proof: Submodule.eq_of_localization_maximal Rₚ Mₚ f fun P hP => by simpa using h P
 
 中文:
-定理 Submodule.eq_top_of_localization_maximal
-  结论: (N : Submodule R M)
+定理 子模.eq_top_of_localization_maximal
+  结论: (N : 子模 R M)
   证明: Submodule.eq_of_localization_maximal Rₚ Mₚ f fun P hP => by simpa using h P
 
 Depends on / 依赖: Submodule, Submodule.eq_of_localization_maximal, eq_of_localization_maximal
@@ -372,7 +372,7 @@ theorem Module.eq_of_isLocalized_span
   have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalizedModule.eq_iff_exists (.powers r.1) _).mp (h r
 
 中文:
-定理 Module.eq_of_isLocalized_span
+定理 模.eq_of_isLocalized_span
   条件: (x y : M) (h : 对任意 r : s, f r x = f r y)
   结论: x = y
   证明: by
@@ -402,7 +402,7 @@ theorem Module.eq_zero_of_isLocalized_span
   proof: eq_of_isLocalized_span s span_eq _ f x 0 by simpa only [map_zero] using h
 
 中文:
-定理 Module.eq_zero_of_isLocalized_span
+定理 模.eq_zero_of_isLocalized_span
   条件: (x : M) (h : 对任意 r : s, f r x = 0)
   结论: x = 0
   证明: eq_of_isLocalized_span s span_eq _ f x 0 by simpa only [map_zero] using h
@@ -428,8 +428,8 @@ theorem Submodule.mem_of_isLocalized_span
   rw [← IsLocalizedModule
 
 中文:
-定理 Submodule.mem_of_isLocalized_span
-  结论: {m : M} {N : Submodule R M}
+定理 子模.mem_of_isLocalized_span
+  结论: {m : M} {N : 子模 R M}
   证明: by
   let I : Ideal R := N.comap (LinearMap.toSpanSingleton R M m)
   suffices I = ⊤ by simpa [I] using I.eq_top_iff_one.mp this
@@ -463,8 +463,8 @@ theorem Submodule.le_of_isLocalized_span
   proof: fun m hm => mem_of_isLocalized_span s span_eq _ f fun r => h r ⟨m, hm, 1, by simp⟩
 
 中文:
-定理 Submodule.le_of_isLocalized_span
-  结论: {N P : Submodule R M}
+定理 子模.le_of_isLocalized_span
+  结论: {N P : 子模 R M}
   证明: fun m hm => mem_of_isLocalized_span s span_eq _ f fun r => h r ⟨m, hm, 1, by simp⟩
 
 Depends on / 依赖: mem_of_isLocalized_span, span_eq
@@ -483,8 +483,8 @@ theorem Submodule.eq_of_isLocalized₀_span
     (le_of_isLocalized_span s span_eq _ _ fun r => (h r).ge)
 
 中文:
-定理 Submodule.eq_of_isLocalized₀_span
-  结论: {N P : Submodule R M}
+定理 子模.eq_of_isLocalized₀_span
+  结论: {N P : 子模 R M}
   证明: le_antisymm (le_of_isLocalized_span s span_eq _ _ fun r => (h r).le)
     (le_of_isLocalized_span s span_eq _ _ fun r => (h r).ge)
 
@@ -504,8 +504,8 @@ theorem Submodule.eq_bot_of_isLocalized₀_span
   proof: eq_of_isLocalized₀_span s span_eq Mₚ f fun _ => by simp only [h, Submodule.localized₀_bot]
 
 中文:
-定理 Submodule.eq_bot_of_isLocalized₀_span
-  结论: {N : Submodule R M}
+定理 子模.eq_bot_of_isLocalized₀_span
+  结论: {N : 子模 R M}
   证明: eq_of_isLocalized₀_span s span_eq Mₚ f fun _ => by simp only [h, Submodule.localized₀_bot]
 
 Depends on / 依赖: Submodule, Submodule.localized, span_eq
@@ -523,8 +523,8 @@ theorem Submodule.eq_top_of_isLocalized₀_span
   proof: eq_of_isLocalized₀_span s span_eq Mₚ f fun _ => by simp only [h, Submodule.localized₀_top]
 
 中文:
-定理 Submodule.eq_top_of_isLocalized₀_span
-  结论: {N : Submodule R M}
+定理 子模.eq_top_of_isLocalized₀_span
+  结论: {N : 子模 R M}
   证明: eq_of_isLocalized₀_span s span_eq Mₚ f fun _ => by simp only [h, Submodule.localized₀_top]
 
 Depends on / 依赖: Submodule, Submodule.localized, span_eq
@@ -542,8 +542,8 @@ theorem Submodule.eq_of_isLocalized'_span
   proof: eq_of_isLocalized₀_span s span_eq _ f fun r => congr(restrictScalars _ $(h r))
 
 中文:
-定理 Submodule.eq_of_isLocalized'_span
-  结论: {N P : Submodule R M}
+定理 子模.eq_of_isLocalized'_span
+  结论: {N P : 子模 R M}
   证明: eq_of_isLocalized₀_span s span_eq _ f fun r => congr(restrictScalars _ $(h r))
 
 Depends on / 依赖: restrictScalars, span_eq
@@ -562,8 +562,8 @@ theorem Submodule.eq_bot_of_isLocalized'_span
   proof: eq_of_isLocalized'_span s span_eq Rₚ Mₚ f fun _ => by simp only [h, Submodule.localized'_bot]
 
 中文:
-定理 Submodule.eq_bot_of_isLocalized'_span
-  结论: {N : Submodule R M}
+定理 子模.eq_bot_of_isLocalized'_span
+  结论: {N : 子模 R M}
   证明: eq_of_isLocalized'_span s span_eq Rₚ Mₚ f fun _ => by simp only [h, Submodule.localized'_bot]
 
 Depends on / 依赖: Submodule, Submodule.localized, _bot, _span, continuous_apply, continuous_fst, continuous_fst.prodMk, continuous_fst.smul, continuous_pi, continuous_snd, eq_of_isLocalized, localized, prodMk, span_eq
@@ -581,8 +581,8 @@ theorem Submodule.eq_top_of_isLocalized'_span
   proof: eq_of_isLocalized'_span s span_eq Rₚ Mₚ f fun _ => by simp only [h, Submodule.localized'_top]
 
 中文:
-定理 Submodule.eq_top_of_isLocalized'_span
-  结论: {N : Submodule R M}
+定理 子模.eq_top_of_isLocalized'_span
+  结论: {N : 子模 R M}
   证明: eq_of_isLocalized'_span s span_eq Rₚ Mₚ f fun _ => by simp only [h, Submodule.localized'_top]
 
 Depends on / 依赖: Submodule, Submodule.localized, _span, _top, continuous_apply, continuous_id, continuous_pi, eq_of_isLocalized, localized, span_eq

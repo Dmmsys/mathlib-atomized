@@ -46,7 +46,7 @@ definition IsExtremal
 
 中文:
 定义 IsExtremal
-  签名: (G : SimpleGraph V) [DecidableRel G.Adj] (p : SimpleGraph V -> 命题)
+  签名: (G : 简单图 V) [DecidableRel G.伴随] (p : 简单图 V -> 命题)
   定义体: p G ∧ forall ⦃G' : SimpleGraph V⦄ [DecidableRel G'.Adj], p G' -> #G'.edgeFinset <= #G.edgeFinset
 
 Depends on / 依赖: DecidableRel, G.edgeFinset, SimpleGraph, edgeFinset
@@ -65,7 +65,7 @@ lemma IsExtremal.prop
 
 中文:
 引理 IsExtremal.prop
-  条件: {p : SimpleGraph V -> 命题} (h : G.IsExtremal p)
+  条件: {p : 简单图 V -> 命题} (h : G.IsExtremal p)
   结论: p G
   证明: h.1
 -/
@@ -87,8 +87,8 @@ theorem exists_isExtremal_iff_exists
   exact ⟨by simpa using hp', fun _ _ hp => by convert! h _ (by simpa 
 
 中文:
-定理 exists_isExtremal_iff_exists
-  条件: (p : SimpleGraph V -> 命题)
+定理 存在_isExtremal_iff_存在
+  条件: (p : 简单图 V -> 命题)
   证明: by
   classical
   refine ⟨fun ⟨_, _, h⟩ => ⟨_, h.1⟩, fun ⟨G, hp⟩ => ?_⟩
@@ -119,8 +119,8 @@ theorem exists_isExtremal_free
   proof: (exists_isExtremal_iff_exists H.Free).mpr ⟨⊥, free_bot h⟩
 
 中文:
-定理 exists_isExtremal_free
-  条件: {W : 类型} {H : SimpleGraph W} (h : H != ⊥)
+定理 存在_isExtremal_free
+  条件: {W : 类型} {H : 简单图 W} (h : H != ⊥)
   证明: (exists_isExtremal_iff_exists H.Free).mpr ⟨⊥, free_bot h⟩
 
 Depends on / 依赖: H.Free, exists_isExtremal_iff_exists, free_bot
@@ -166,7 +166,7 @@ definition extremalNumber
 
 中文:
 定义 extremalNumber
-  签名: (n : 自然数) {W : 类型} (H : SimpleGraph W)
+  签名: (n : 自然数) {W : 类型} (H : 简单图 W)
   定义体: sup { G : SimpleGraph (Fin n) | H.Free G } (#·.edgeFinset)
 
 Depends on / 依赖: H.Free, SimpleGraph, edgeFinset
@@ -198,7 +198,7 @@ theorem extremalNumber_of_fintypeCard_eq
 
 中文:
 定理 extremalNumber_of_fintypeCard_eq
-  条件: [Fintype V] (hc : card V = n)
+  条件: [有限类型 V] (hc : card V = n)
   证明: by
   let e := Fintype.equivFinOfCardEq hc
   rw [extremalNumber]; rw [le_antisymm_iff]
@@ -244,7 +244,7 @@ theorem card_edgeFinset_le_extremalNumber
 
 中文:
 定理 card_edgeFinset_le_extremalNumber
-  条件: (h : H.Free G)
+  条件: (h : H.自由 G)
   证明: by
   rw [extremalNumber_of_fintypeCard_eq rfl]
   convert! @le_sup _ _ _ _ {G | H.Free G} (#·.edgeFinset) G (by simpa using h)
@@ -290,7 +290,7 @@ theorem extremalNumber_le_iff
 
 中文:
 定理 extremalNumber_le_iff
-  条件: (H : SimpleGraph W) (m : 自然数)
+  条件: (H : 简单图 W) (m : 自然数)
   证明: by
   simp_rw [extremalNumber_of_fintypeCard_eq rfl, Finset.sup_le_iff, mem_filter_univ]
   exact ⟨fun h _ _ h' => by convert! h _ h', fun h _ h' => by convert! h h'⟩
@@ -316,7 +316,7 @@ theorem lt_extremalNumber_iff
 
 中文:
 定理 lt_extremalNumber_iff
-  条件: (H : SimpleGraph W) (m : 自然数)
+  条件: (H : 简单图 W) (m : 自然数)
   证明: by
   simp_rw [extremalNumber_of_fintypeCard_eq rfl, Finset.lt_sup_iff, mem_filter_univ]
   exact ⟨fun ⟨_, h, h'⟩ => ⟨_, _, h, h'⟩, fun ⟨_, _, h, h'⟩ => ⟨_, h, by convert!
@@ -348,7 +348,7 @@ theorem extremalNumber_le_iff_of_nonneg
 
 中文:
 定理 extremalNumber_le_iff_of_nonneg
-  条件: (H : SimpleGraph W) {m : R} (h : 0 <= m)
+  条件: (H : 简单图 W) {m : R} (h : 0 <= m)
   证明: by
   simp_rw [← Nat.le_floor_iff h]
   exact extremalNumber_le_iff H ⌊m⌋₊
@@ -376,7 +376,7 @@ theorem lt_extremalNumber_iff_of_nonneg
 
 中文:
 定理 lt_extremalNumber_iff_of_nonneg
-  条件: (H : SimpleGraph W) {m : R} (h : 0 <= m)
+  条件: (H : 简单图 W) {m : R} (h : 0 <= m)
   证明: by
   simp_rw [← Nat.floor_lt h]
   exact lt_extremalNumber_iff H ⌊m⌋₊
@@ -403,7 +403,7 @@ theorem IsContained.extremalNumber_le
 
 中文:
 定理 IsContained.extremalNumber_le
-  条件: {W' : 类型} {H' : SimpleGraph W'} (h : H' ⊑ H)
+  条件: {W' : 类型} {H' : 简单图 W'} (h : H' ⊑ H)
   证明: by
   rw [← Fintype.card_fin n]; rw [extremalNumber_le_iff]
   intro _ _ h'
@@ -441,7 +441,7 @@ theorem extremalNumber_congr
 
 中文:
 定理 extremalNumber_congr
-  结论: {n₁ n₂ : 自然数} {W₁ W₂ : 类型} {H₁ : SimpleGraph W₁}
+  结论: {n₁ n₂ : 自然数} {W₁ W₂ : 类型} {H₁ : 简单图 W₁}
   证明: by
   rw [h]; rw [le_antisymm_iff]
   and_intros
@@ -480,7 +480,7 @@ theorem extremalNumber_congr_right
 
 中文:
 定理 extremalNumber_congr_right
-  结论: {W₁ W₂ : 类型} {H₁ : SimpleGraph W₁} {H₂ : SimpleGraph W₂}
+  结论: {W₁ W₂ : 类型} {H₁ : 简单图 W₁} {H₂ : 简单图 W₂}
   证明: extremalNumber_congr rfl e
 
 Depends on / 依赖: extremalNumber_congr
@@ -520,7 +520,7 @@ lemma card_edgeFinset_of_isExtremal_free
 
 中文:
 引理 card_edgeFinset_of_isExtremal_free
-  条件: (h : G.IsExtremal H.Free)
+  条件: (h : G.IsExtremal H.自由)
   证明: (isExtremal_free_iff.mp h).2
 
 Depends on / 依赖: isExtremal_free_iff, isExtremal_free_iff.mp

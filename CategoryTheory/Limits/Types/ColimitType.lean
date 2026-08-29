@@ -60,10 +60,10 @@ structure CoconeTypes
     - ι_naturality({j j' : J} (f : j ⟶ j')) : (ι j').comp (F.map f) = ι j  [default: by aesop]
 
 中文:
-结构 CoconeTypes
+结构 余coneTypes
   参数: where
   公理与运算 (3 个):
-    - pt : Type w₁
+    - pt : 类型 w₁
     - ι((j : J)) : F.obj j -> pt
     - ι_naturality({j j' : J} (f : j ⟶ j')) : (ι j').comp (F.map f) = ι j  [默认: by aesop]
 -/
@@ -92,7 +92,7 @@ lemma ι_naturality_apply
 
 中文:
 引理 ι_naturality_apply
-  条件: (c : CoconeTypes.{w₁} F) {j j' : J} (f : j ⟶ j') (x : F.obj j)
+  条件: (c : 余coneTypes.{w₁} F) {j j' : J} (f : j ⟶ j') (x : F.obj j)
   证明: congr_fun (c.ι_naturality f) x
 
 Depends on / 依赖: congr_fun
@@ -115,7 +115,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: (c : CoconeTypes.{w₁} F) {T : Type w₂} (φ : c.pt -> T)
+  签名: (c : 余coneTypes.{w₁} F) {T : 类型 w₂} (φ : c.pt -> T)
   定义体: T
   ι j := φ.comp (c.ι j)
 -/
@@ -140,7 +140,7 @@ definition precompose
 
 中文:
 定义 precompose
-  签名: (c : CoconeTypes.{w₁} F) {G : J ⥤ Type w₀'} (app : 对任意 j, G.obj j -> F.obj j)
+  签名: (c : 余coneTypes.{w₁} F) {G : J ⥤ 类型 w₀'} (app : 对任意 j, G.obj j -> F.obj j)
   定义体: c.pt
   ι j := c.ι j ∘ app j
   ι_naturality f := by
@@ -171,7 +171,7 @@ definition precomp
 
 中文:
 定义 precomp
-  签名: (c : CoconeTypes.{w₁} F) {J' : 类型} [Category* J'] (G : J' ⥤ J)
+  签名: (c : 余coneTypes.{w₁} F) {J' : 类型} [范畴* J'] (G : J' ⥤ J)
   定义体: c.pt
   ι _ := c.ι _
 
@@ -212,7 +212,7 @@ definition ColimitType
 
 中文:
 定义 ColimitType
-  签名: : Type (max u w₀)
+  签名: : 类型 (最大值 u w₀)
   定义体: Quot F.ColimitTypeRel
 
 Depends on / 依赖: ColimitTypeRel, F.ColimitTypeRel
@@ -339,7 +339,7 @@ definition coconeTypes
 
 中文:
 定义 coconeTypes
-  签名: : F.CoconeTypes where
+  签名: : F.余coneTypes where
   定义体: F.ColimitType
   ι j := F.ιColimitType j
 
@@ -361,7 +361,7 @@ definition descColimitType
 
 中文:
 定义 descColimitType
-  签名: (c : F.CoconeTypes)
+  签名: (c : F.余coneTypes)
   定义体: Quot.lift (fun ⟨j, x⟩ => c.ι j x) (by rintro _ _ ⟨_, _⟩; aesop)
 
 @[simp]
@@ -384,7 +384,7 @@ lemma descColimitType_comp_ι
 
 中文:
 引理 descColimitType_comp_ι
-  条件: (c : F.CoconeTypes) (j : J)
+  条件: (c : F.余coneTypes) (j : J)
   证明: rfl
 
 @[simp]
@@ -403,7 +403,7 @@ lemma descColimitType_ιColimitType_apply
 
 中文:
 引理 descColimitType_ιColimitType_apply
-  条件: (c : F.CoconeTypes) (j : J) (x : F.obj j)
+  条件: (c : F.余coneTypes) (j : J) (x : F.obj j)
   证明: rfl
 -/
 lemma descColimitType_ιColimitType_apply (c : F.CoconeTypes) (j : J) (x : F.obj j) :
@@ -459,10 +459,10 @@ structure IsColimit
     - bijective : Function.Bijective (F.descColimitType c)
 
 中文:
-结构 IsColimit
+结构 是余极限
   参数: : 命题 where
   公理与运算 (1 个):
-    - bijective : Function.Bijective (F.descColimitType c)
+    - bijective : 函数.双射 (F.descColimitType c)
 -/
 structure IsColimit : Prop where
   bijective : Function.Bijective (F.descColimitType c)
@@ -558,7 +558,7 @@ lemma funext
 
 中文:
 引理 funext
-  结论: {T : Type w₂} {f g : c.pt -> T}
+  结论: {T : 类型 w₂} {f g : c.pt -> T}
   证明: by
   funext y
   obtain ⟨j, x, rfl⟩ := hc.ι_jointly_surjective y
@@ -581,8 +581,8 @@ lemma exists_desc
   proof: ⟨(F.descColimitType c').comp hc.equiv.symm, by aesop⟩
 
 中文:
-引理 exists_desc
-  条件: (c' : CoconeTypes.{w₂} F)
+引理 存在_desc
+  条件: (c' : 余coneTypes.{w₂} F)
   证明: ⟨(F.descColimitType c').comp hc.equiv.symm, by aesop⟩
 
 Depends on / 依赖: F.descColimitType, descColimitType, hc.equiv.symm
@@ -603,7 +603,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (c' : CoconeTypes.{w₂} F)
+  签名: (c' : 余coneTypes.{w₂} F)
   定义体: (hc.exists_desc c').choose
 
 @[simp]
@@ -626,7 +626,7 @@ lemma fac
 
 中文:
 引理 fac
-  条件: (c' : CoconeTypes.{w₂} F) (j : J)
+  条件: (c' : 余coneTypes.{w₂} F) (j : J)
   证明: (hc.exists_desc c').choose_spec j
 
 @[simp]
@@ -648,7 +648,7 @@ lemma fac_apply
 
 中文:
 引理 fac_apply
-  条件: (c' : CoconeTypes.{w₂} F) (j : J) (x : F.obj j)
+  条件: (c' : 余coneTypes.{w₂} F) (j : J) (x : F.obj j)
   证明: congr_fun (hc.fac c' j) x
 
 Depends on / 依赖: congr_fun, hc.fac
@@ -671,7 +671,7 @@ lemma of_equiv
 
 中文:
 引理 of_equiv
-  结论: {c' : CoconeTypes.{w₂} F} (e : c.pt ≃ c'.pt)
+  结论: {c' : 余coneTypes.{w₂} F} (e : c.pt ≃ c'.pt)
   证明: by
     convert! Function.Bijective.comp e.bijective hc.bijective
     ext y
@@ -705,7 +705,7 @@ lemma iff_bijective
 
 中文:
 引理 iff_bijective
-  结论: {c' : CoconeTypes.{w₂} F}
+  结论: {c' : 余coneTypes.{w₂} F}
   证明: by
   refine ⟨fun hc' => ?_, fun h => hc.of_equiv (Equiv.ofBijective _ h) hf⟩
   have h₁ := hc.bijective
@@ -742,12 +742,12 @@ structure IsColimitCore
     - funext({T : Type w₂} {f g : c.pt -> T} (h : forall j, f.comp (c.ι j) = g.comp (c.ι j))) : f = g
 
 中文:
-结构 IsColimitCore
+结构 是余limitCore
   参数: where
   公理与运算 (3 个):
-    - desc((c' : CoconeTypes.{w₂} F)) : c.pt -> c'.pt
-    - fac((c' : CoconeTypes.{w₂} F) (j : J)) : (desc c').comp (c.ι j) = c'.ι j  [默认: by aesop]
-    - funext({T : Type w₂} {f g : c.pt -> T} (h : 对任意 j, f.comp (c.ι j) = g.comp (c.ι j))) : f = g
+    - desc((c' : 余coneTypes.{w₂} F)) : c.pt -> c'.pt
+    - fac((c' : 余coneTypes.{w₂} F) (j : J)) : (desc c').comp (c.ι j) = c'.ι j  [默认: by aesop]
+    - funext({T : 类型 w₂} {f g : c.pt -> T} (h : 对任意 j, f.comp (c.ι j) = g.comp (c.ι j))) : f = g
 
 Depends on / 依赖: c.pt, f.comp, g.comp
 -/
@@ -776,7 +776,7 @@ lemma fac_apply
 
 中文:
 引理 fac_apply
-  结论: (hc : IsColimitCore.{w₂} c)
+  结论: (hc : 是余limitCore.{w₂} c)
   证明: congr_fun (hc.fac c' j) x
 
 Depends on / 依赖: congr_fun, hc.fac
@@ -807,7 +807,7 @@ definition down
 
 中文:
 定义 down
-  签名: (hc : IsColimitCore.{max w₂ w₃} c)
+  签名: (hc : 是余limitCore.{最大值 w₂ w₃} c)
   定义体: Equiv.ulift.toFun.comp
     (hc.desc (c'.postcomp Equiv.ulift.{w₃}.symm))
   fac c' j := by
@@ -851,7 +851,7 @@ definition precompose
 
 中文:
 定义 precompose
-  签名: (hc : IsColimitCore.{w₂} c)
+  签名: (hc : 是余limitCore.{w₂} c)
   定义体: hc.desc (c'.precompose _ (FunctorToTypes.naturality_symm e naturality))
   fac c' j := by
     rw [precompose_ι]; rw [← Function.comp_assoc]; rw [hc.fac]; rw [precompose_ι]; rw [Function.comp_assoc]; rw [Equiv.symm_comp_self]; rw [Function.comp_id]
@@ -889,8 +889,8 @@ definition IsColimit.isColimitCore
   funext := hc.funext
 
 中文:
-定义 IsColimit.isColimitCore
-  签名: (hc : c.IsColimit)
+定义 是余极限.isColimitCore
+  签名: (hc : c.是余极限)
   定义体: hc.desc
   funext := hc.funext
 
@@ -919,8 +919,8 @@ lemma IsColimitCore.isColimit
           have : (F.descColimitTyp
 
 中文:
-引理 IsColimitCore.isColimit
-  条件: (hc : IsColimitCore.{max u w₀ w₁} c)
+引理 是余limitCore.isColimit
+  条件: (hc : 是余limitCore.{最大值 u w₀ w₁} c)
   证明: by
     let e : F.ColimitType ≃ c.pt :=
       { toFun := F.descColimitType c
@@ -960,8 +960,8 @@ lemma IsColimit.precompose
   proof: (hc.isColimitCore.precompose e naturality).isColimit
 
 中文:
-引理 IsColimit.precompose
-  结论: (hc : c.IsColimit) {G : J ⥤ Type w₀'} (e : 对任意 j, G.obj j ≃ F.obj j)
+引理 是余极限.precompose
+  结论: (hc : c.是余极限) {G : J ⥤ 类型 w₀'} (e : 对任意 j, G.obj j ≃ F.obj j)
   证明: (hc.isColimitCore.precompose e naturality).isColimit
 
 Depends on / 依赖: hc.isColimitCore.precompose, isColimit, isColimitCore, naturality, precompose
@@ -985,7 +985,7 @@ lemma isColimit_precompose_iff
 
 中文:
 引理 isColimit_precompose_iff
-  结论: {G : J ⥤ Type w₀'} (e : 对任意 j, G.obj j ≃ F.obj j)
+  结论: {G : J ⥤ 类型 w₀'} (e : 对任意 j, G.obj j ≃ F.obj j)
   证明: ⟨fun hc => (hc.precompose (fun j => (e j).symm)
       (FunctorToTypes.naturality_symm e naturality)).of_equiv (Equiv.refl _) (by simp),
     fun hc => hc.precompose e naturality⟩
@@ -1016,7 +1016,7 @@ lemma isColimit_coconeTypes
 
 中文:
 引理 isColimit_coconeTypes
-  结论: F.coconeTypes.IsColimit where
+  结论: F.coconeTypes.是余极限 where
   证明: by
     convert! Function.bijective_id
     ext y

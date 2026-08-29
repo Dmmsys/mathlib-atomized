@@ -97,7 +97,7 @@ theorem exists_smul_add_of_span_sup_eq_top
   exact ⟨t, z, hz, rfl⟩
 
 中文:
-定理 exists_smul_add_of_span_sup_eq_top
+定理 存在_smul_add_of_span_sup_eq_top
   条件: (y : L)
   结论: 存在 t : R, 存在 z in I, y = t • x + z
   证明: by
@@ -129,7 +129,7 @@ theorem lie_top_eq_of_span_sup_eq_top
 
 中文:
 定理 lie_top_eq_of_span_sup_eq_top
-  条件: (N : LieSubmodule R L M)
+  条件: (N : Lie子模 R L M)
   证明: by
   simp only [lieIdeal_oper_eq_linear_span', Submodule.sup_span, mem_top, true_and,
     Submodule.map_coe, toEnd_apply_apply]
@@ -228,7 +228,7 @@ theorem isNilpotentOfIsNilpotentSpanSupEqTop
 
 中文:
 定理 isNilpotentOfIsNilpotentSpanSupEqTop
-  结论: (hnp : IsNilpotent <| toEnd R L M x)
+  结论: (hnp : 是幂零 <| toEnd R L M x)
   证明: by
   obtain ⟨n, hn⟩ := hnp
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R I M
@@ -274,7 +274,7 @@ definition LieAlgebra.IsEngelian
     (forall x : L, IsNilpotent (toEnd R L M x)) -> LieModule.IsNilpotent L M
 
 中文:
-定义 LieAlgebra.IsEngelian
+定义 Lie代数.IsEngelian
   签名: : 命题
   定义体: forall (M : Type u₄) [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M],
     (forall x : L, IsNilpotent (toEnd R L M x)) -> LieModule.IsNilpotent L M
@@ -300,9 +300,9 @@ theorem LieAlgebra.isEngelian_of_subsingleton
   simp
 
 中文:
-定理 LieAlgebra.isEngelian_of_subsingleton
-  条件: [Subsingleton L]
-  结论: LieAlgebra.IsEngelian R L
+定理 Lie代数.isEngelian_of_subsingleton
+  条件: [子单例 L]
+  结论: Lie代数.IsEngelian R L
   证明: by
   intro M _i1 _i2 _i3 _i4 _h
   use 1
@@ -328,8 +328,8 @@ theorem Function.Surjective.isEngelian
   hav
 
 中文:
-定理 Function.Surjective.isEngelian
-  结论: {f : L ->ₗ⁅R⁆ L₂} (hf : Function.Surjective f)
+定理 函数.满射.isEngelian
+  结论: {f : L ->ₗ⁅R⁆ L₂} (hf : 函数.满射 f)
   证明: by
   intro M _i1 _i2 _i3 _i4 h'
   let : LieRingModule L M := LieRingModule.compLieHom M f
@@ -360,7 +360,7 @@ theorem LieEquiv.isEngelian_iff
   proof: ⟨e.surjective.isEngelian, e.symm.surjective.isEngelian⟩
 
 中文:
-定理 LieEquiv.isEngelian_iff
+定理 Lie等价.isEngelian_iff
   条件: (e : L ≃ₗ⁅R⁆ L₂)
   证明: ⟨e.surjective.isEngelian, e.symm.surjective.isEngelian⟩
 
@@ -384,8 +384,8 @@ theorem LieAlgebra.exists_engelian_lieSubalgebra_of_lt_normalizer
   have hxK' : x in K' := Submodule.mem_sup_left (Submodule.subset_span (Set.mem_singleton _)
 
 中文:
-定理 LieAlgebra.exists_engelian_lieSubalgebra_of_lt_normalizer
-  结论: {K : LieSubalgebra R L}
+定理 Lie代数.存在_engelian_lieSubalgebra_of_lt_normalizer
+  结论: {K : Lie子代数 R L}
   证明: by
   obtain ⟨x, hx₁, hx₂⟩ := SetLike.exists_of_lt hK₂
   let K' : LieSubalgebra R L :=
@@ -444,9 +444,9 @@ theorem LieAlgebra.isEngelian_of_isNoetherian
   let s := {K : LieSubalgebra R L' | LieAlgebra.IsEngeli
 
 中文:
-定理 LieAlgebra.isEngelian_of_isNoetherian
-  条件: [IsNoetherian R L]
-  结论: LieAlgebra.IsEngelian R L
+定理 Lie代数.isEngelian_of_isNoetherian
+  条件: [是Noether R L]
+  结论: Lie代数.IsEngelian R L
   证明: by
   intro M _i1 _i2 _i3 _i4 h
   rw [← isNilpotent_range_toEnd_iff R]
@@ -508,8 +508,8 @@ theorem LieModule.isNilpotent_iff_forall
    fun h => LieAlgebra.isEngelian_of_isNoetherian M h⟩
 
 中文:
-定理 LieModule.isNilpotent_iff_forall
-  条件: [IsNoetherian R L]
+定理 Lie模.isNilpotent_iff_对任意
+  条件: [是Noether R L]
   证明: ⟨fun _ => isNilpotent_toEnd_of_isNilpotent R L M,
    fun h => LieAlgebra.isEngelian_of_isNoetherian M h⟩
 
@@ -530,8 +530,8 @@ theorem LieModule.isNilpotent_iff_forall'
   rw [← isNilpotent_range_toEnd_iff (R := R)]; rw [LieModule.isNilpotent_iff_forall (R := R)]; simp
 
 中文:
-定理 LieModule.isNilpotent_iff_forall'
-  条件: [IsNoetherian R M]
+定理 Lie模.isNilpotent_iff_对任意'
+  条件: [是Noether R M]
   证明: by
   rw [← isNilpotent_range_toEnd_iff (R := R)]; rw [LieModule.isNilpotent_iff_forall (R := R)]; simp
 
@@ -550,8 +550,8 @@ theorem LieAlgebra.isNilpotent_iff_forall
   proof: LieModule.isNilpotent_iff_forall
 
 中文:
-定理 LieAlgebra.isNilpotent_iff_forall
-  条件: [IsNoetherian R L]
+定理 Lie代数.isNilpotent_iff_对任意
+  条件: [是Noether R L]
   证明: LieModule.isNilpotent_iff_forall
 
 Depends on / 依赖: LieModule, LieModule.isNilpotent_iff_forall, isNilpotent_iff_forall

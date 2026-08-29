@@ -33,8 +33,8 @@ theorem IsNoetherianRing.isNilpotent_nilradical
   exact ⟨n, eq_bot_iff.mpr hn⟩
 
 中文:
-定理 IsNoetherianRing.isNilpotent_nilradical
-  条件: (R : 类型) [CommSemiring R] [IsNoetherianRing R]
+定理 是Noether环.isNilpotent_nilradical
+  条件: (R : 类型) [交换半环 R] [是Noether环 R]
   证明: by
   obtain ⟨n, hn⟩ := Ideal.exists_radical_pow_le_of_fg (⊥ : Ideal R) (IsNoetherian.noetherian _)
   exact ⟨n, eq_bot_iff.mpr hn⟩
@@ -56,8 +56,8 @@ lemma Ideal.FG.isNilpotent_iff_le_nilradical
     fun h => let ⟨n, hn⟩ := exists_pow_le_of_le_radical_of_fg h hI; ⟨n, le_bot_iff.mp hn⟩⟩
 
 中文:
-引理 Ideal.FG.isNilpotent_iff_le_nilradical
-  结论: {R : 类型} [CommSemiring R] {I : Ideal R}
+引理 理想.FG.isNilpotent_iff_le_nilradical
+  结论: {R : 类型} [交换半环 R] {I : 理想 R}
   证明: ⟨fun ⟨n, hn⟩ _ hx => ⟨n, hn ▸ Ideal.pow_mem_pow hx n⟩,
     fun h => let ⟨n, hn⟩ := exists_pow_le_of_le_radical_of_fg h hI; ⟨n, le_bot_iff.mp hn⟩⟩
 

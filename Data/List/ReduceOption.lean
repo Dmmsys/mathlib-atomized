@@ -33,7 +33,7 @@ theorem reduceOption_cons_of_some
 
 中文:
 定理 reduceOption_cons_of_some
-  条件: (x : α) (l : List (Option α))
+  条件: (x : α) (l : 列表 (选项类型 α))
   证明: by
   simp only [reduceOption, filterMap, id]
 
@@ -58,7 +58,7 @@ theorem reduceOption_cons_of_none
 
 中文:
 定理 reduceOption_cons_of_none
-  条件: (l : List (Option α))
+  条件: (l : 列表 (选项类型 α))
   证明: by simp only [reduceOption, filterMap, id]
 
 @[simp]
@@ -104,7 +104,7 @@ theorem reduceOption_map
 
 中文:
 定理 reduceOption_map
-  条件: {l : List (Option α)} {f : α -> β}
+  条件: {l : 列表 (选项类型 α)} {f : α -> β}
   证明: by
   induction l with
   | nil => simp only [reduceOption_nil, map_nil]
@@ -132,7 +132,7 @@ theorem reduceOption_append
 
 中文:
 定理 reduceOption_append
-  条件: (l l' : List (Option α))
+  条件: (l l' : 列表 (选项类型 α))
   证明: filterMap_append
 
 @[simp]
@@ -185,7 +185,7 @@ theorem reduceOption_eq_nil_iff
 
 中文:
 定理 reduceOption_eq_nil_iff
-  条件: (l : List (Option α))
+  条件: (l : 列表 (选项类型 α))
   证明: by
   dsimp [reduceOption]
   rw [filterMap_eq_nil_iff]
@@ -225,7 +225,7 @@ theorem reduceOption_eq_singleton_iff
 
 中文:
 定理 reduceOption_eq_singleton_iff
-  条件: (l : List (Option α)) (a : α)
+  条件: (l : 列表 (选项类型 α)) (a : α)
   证明: by
   dsimp [reduceOption]
   constructor
@@ -268,7 +268,7 @@ theorem reduceOption_eq_append_iff
 
 中文:
 定理 reduceOption_eq_append_iff
-  条件: (l : List (Option α)) (l'₁ l'₂ : List α)
+  条件: (l : 列表 (选项类型 α)) (l'₁ l'₂ : 列表 α)
   证明: by
   dsimp [reduceOption]
   exact filterMap_eq_append_iff
@@ -300,7 +300,7 @@ theorem reduceOption_eq_concat_iff
 
 中文:
 定理 reduceOption_eq_concat_iff
-  条件: (l : List (Option α)) (l' : List α) (a : α)
+  条件: (l : 列表 (选项类型 α)) (l' : 列表 α) (a : α)
   证明: by
   rw [concat_eq_append]
   constructor
@@ -343,7 +343,7 @@ theorem reduceOption_length_eq
 
 中文:
 定理 reduceOption_length_eq
-  条件: {l : List (Option α)}
+  条件: {l : 列表 (选项类型 α)}
   证明: by
   induction l with
   | nil => simp_rw [reduceOption_nil, filter_nil, length]
@@ -368,7 +368,7 @@ theorem length_eq_reduceOption_length_add_filter_none
 
 中文:
 定理 length_eq_reduceOption_length_add_filter_none
-  条件: {l : List (Option α)}
+  条件: {l : 列表 (选项类型 α)}
   证明: by
   simp_rw [reduceOption_length_eq, l.length_eq_length_filter_add Option.isSome, Option.not_isSome]
 
@@ -391,7 +391,7 @@ theorem reduceOption_length_le
 
 中文:
 定理 reduceOption_length_le
-  条件: (l : List (Option α))
+  条件: (l : 列表 (选项类型 α))
   结论: l.reduceOption.length <= l.length
   证明: by
   rw [length_eq_reduceOption_length_add_filter_none]
@@ -414,7 +414,7 @@ theorem reduceOption_length_eq_iff
 
 中文:
 定理 reduceOption_length_eq_iff
-  条件: {l : List (Option α)}
+  条件: {l : 列表 (选项类型 α)}
   证明: by
   rw [reduceOption_length_eq]; rw [List.length_filter_eq_length_iff]
 
@@ -438,7 +438,7 @@ theorem reduceOption_length_lt_iff
 
 中文:
 定理 reduceOption_length_lt_iff
-  条件: {l : List (Option α)}
+  条件: {l : 列表 (选项类型 α)}
   证明: by
   rw [Nat.lt_iff_le_and_ne]; rw [and_iff_right (reduceOption_length_le l)]; rw [Ne]; rw [reduceOption_length_eq_iff]
   induction l
@@ -465,7 +465,7 @@ theorem reduceOption_singleton
 
 中文:
 定理 reduceOption_singleton
-  条件: (x : Option α)
+  条件: (x : 选项类型 α)
   结论: [x].reduceOption = x.toList
   证明: by cases x <;> rfl
 -/
@@ -486,7 +486,7 @@ theorem reduceOption_concat
 
 中文:
 定理 reduceOption_concat
-  条件: (l : List (Option α)) (x : Option α)
+  条件: (l : 列表 (选项类型 α)) (x : 选项类型 α)
   证明: by
   induction l generalizing x with
   | nil => cases x <;> simp [Option.toList]
@@ -515,7 +515,7 @@ theorem reduceOption_concat_of_some
 
 中文:
 定理 reduceOption_concat_of_some
-  条件: (l : List (Option α)) (x : α)
+  条件: (l : 列表 (选项类型 α)) (x : α)
   证明: by
   simp only [reduceOption_nil, concat_eq_append, reduceOption_append, reduceOption_cons_of_some]
 
@@ -537,7 +537,7 @@ theorem reduceOption_mem_iff
 
 中文:
 定理 reduceOption_mem_iff
-  条件: {l : List (Option α)} {x : α}
+  条件: {l : 列表 (选项类型 α)} {x : α}
   结论: x in l.reduceOption ↔ some x in l
   证明: by
   simp only [reduceOption, id, mem_filterMap, exists_eq_right]
@@ -558,7 +558,7 @@ theorem reduceOption_getElem?_iff
 
 中文:
 定理 reduceOption_getElem?_iff
-  条件: {l : List (Option α)} {x : α}
+  条件: {l : 列表 (选项类型 α)} {x : α}
   证明: by
   rw [← mem_iff_getElem?]; rw [← mem_iff_getElem?]; rw [reduceOption_mem_iff]
 

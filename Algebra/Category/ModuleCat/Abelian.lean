@@ -47,7 +47,7 @@ w := hom_ext LinearMap.range_mkQ_comp _
 
 中文:
 定义 normalMono
-  签名: (hf : Mono f)
+  签名: (hf : 单态射 f)
   定义体: of R (N ⧸ LinearMap.range f.hom)
   g := ofHom (LinearMap.range f.hom).mkQ
 w := hom_ext LinearMap.range_mkQ_comp _
@@ -98,7 +98,7 @@ w := hom_ext LinearMap.comp_ker_subtype _
 
 中文:
 定义 normalEpi
-  签名: (hf : Epi f)
+  签名: (hf : 满态射 f)
   定义体: of R (LinearMap.ker f.hom)
   g := ofHom (LinearMap.ker f.hom).subtype
 w := hom_ext LinearMap.comp_ker_subtype _
@@ -141,7 +141,7 @@ instance abelian
 
 中文:
 实例 abelian
-  签名: : Abelian (ModuleCat.{v} R) where
+  签名: : 交换 (模范畴.{v} R) where
   定义体: hasCokernels_moduleCat
   normalMonoOfMono f hf := ⟨normalMono f hf⟩
   normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfSize.{v, v} (ModuleCat.{max v w} R)
+  签名: 有LimitsOfSize.{v, v} (模范畴.{最大值 v w} R)
   定义体: ModuleCat.hasLimitsOfSize.{v, v, max v w}
 
 Depends on / 依赖: ModuleCat, ModuleCat.hasLimitsOfSize, hasLimitsOfSize
@@ -221,7 +221,7 @@ instance forget_reflectsLimits
 
 中文:
 实例 forget_reflectsLimits
-  签名: : ReflectsLimits (forget (ModuleCat.{v} R))
+  签名: : ReflectsLimits (forget (模范畴.{v} R))
   定义体: ModuleCat.forget_reflectsLimitsOfSize.{v, v}
 
 Depends on / 依赖: ModuleCat, ModuleCat.forget_reflectsLimitsOfSize, forget_reflectsLimitsOfSize
@@ -239,7 +239,7 @@ instance forget₂_reflectsLimits
 
 中文:
 实例 forget₂_reflectsLimits
-  签名: : ReflectsLimits (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v})
+  签名: : ReflectsLimits (forget₂ (模范畴.{v} R) 加法交换群范畴.{v})
   定义体: ModuleCat.forget₂_reflectsLimitsOfSize.{v, v}
 
 Depends on / 依赖: ModuleCat, ModuleCat.forget

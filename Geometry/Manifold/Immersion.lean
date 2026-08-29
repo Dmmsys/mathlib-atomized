@@ -719,7 +719,7 @@ lemma _root_.IsOpen.isImmersionAtOfComplement
   proof: IsOpen.liftSourceTargetPropertyAt
 
 中文:
-引理 _root_.IsOpen.isImmersionAtOfComplement
+引理 _root_.是开集.isImmersionAtOfComplement
   证明: IsOpen.liftSourceTargetPropertyAt
 
 Depends on / 依赖: IsOpen, IsOpen.liftSourceTargetPropertyAt, liftSourceTargetPropertyAt
@@ -801,7 +801,7 @@ lemma of_opens
 
 中文:
 引理 of_opens
-  条件: [IsManifold I n M] (s : TopologicalSpace.Opens M) (y : s)
+  条件: [是流形 I n M] (s : 拓扑空间.Opens M) (y : s)
   证明: by
   apply IsImmersionAtOfComplement.mk_of_continuousAt (by fun_prop) (.prodUnique 𝕜 E _)
     (chartAt H y) (chartAt H y.val) (mem_chart_source H y) (mem_chart_source H y.val)
@@ -832,7 +832,7 @@ lemma _root_.ModelWithCorners.isImmersionAtOfComplement
     (by simp [Function.comp_def])
 
 中文:
-引理 _root_.ModelWithCorners.isImmersionAtOfComplement
+引理 _root_.带角模型.isImmersionAtOfComplement
   条件: {n : 自然数} {x : H}
   证明: Manifold.IsImmersionAtOfComplement.mk_of_continuousAt I.continuousAt
     (.prodUnique _ _ _) (.refl _) (.refl _) (by simp) (by simp)
@@ -1449,7 +1449,7 @@ lemma _root_.IsOpen.isImmersionAt
     by simp [hx.isImmersionAtOfComplement_complement]⟩
 
 中文:
-引理 _root_.IsOpen.isImmersionAt
+引理 _root_.是开集.isImmersionAt
   证明: by
   rw [isOpen_iff_forall_mem_open]
   exact fun x hx => ⟨{x | IsImmersionAtOfComplement hx.complement I J n f x },
@@ -1501,7 +1501,7 @@ lemma of_opens
 
 中文:
 引理 of_opens
-  条件: [IsManifold I n M] (s : TopologicalSpace.Opens M) (hx : x in s)
+  条件: [是流形 I n M] (s : 拓扑空间.Opens M) (hx : x in s)
   证明: by
   use PUnit, by infer_instance, by infer_instance
   apply Manifold.IsImmersionAtOfComplement.of_opens
@@ -1524,7 +1524,7 @@ lemma _root_.ModelWithCorners.isImmersionAt
   exact I.isImmersionAtOfComplement
 
 中文:
-引理 _root_.ModelWithCorners.isImmersionAt
+引理 _root_.带角模型.isImmersionAt
   条件: {n : 自然数} {x : H}
   证明: by
   use PUnit, by infer_instance, by infer_instance
@@ -1679,7 +1679,7 @@ definition IsImmersion
   body: exists (F : Type u) (_ : NormedAddCommGroup F) (_ : NormedSpace 𝕜 F), IsImmersionOfComplement F I J n f
 
 中文:
-定义 IsImmersion
+定义 是Immersion
   签名: (f : M -> N)
   定义体: exists (F : Type u) (_ : NormedAddCommGroup F) (_ : NormedSpace 𝕜 F), IsImmersionOfComplement F I J n f
 
@@ -1804,7 +1804,7 @@ lemma isImmersion
 中文:
 引理 isImmersion
   条件: (h : IsImmersionOfComplement F I J n f)
-  结论: IsImmersion I J n f
+  结论: 是Immersion I J n f
   证明: by
   by_cases! hM : IsEmpty M
   · rw [IsImmersion]
@@ -1845,8 +1845,8 @@ lemma id
 
 中文:
 引理 id
-  条件: [IsManifold I n M]
-  结论: IsImmersionOfComplement PUnit I I n (@id M)
+  条件: [是流形 I n M]
+  结论: IsImmersionOfComplement 命题单元 I I n (@id M)
   证明: by
   intro x
   apply IsImmersionAtOfComplement.mk_of_continuousAt (continuousAt_id) (.prodUnique 𝕜 E _)
@@ -1875,7 +1875,7 @@ lemma of_opens
 
 中文:
 引理 of_opens
-  条件: [IsManifold I n M] (s : TopologicalSpace.Opens M)
+  条件: [是流形 I n M] (s : 拓扑空间.Opens M)
   证明: fun y => IsImmersionAtOfComplement.of_opens s y
 
 Depends on / 依赖: IsImmersionAtOfComplement, IsImmersionAtOfComplement.of_opens, of_opens
@@ -1893,7 +1893,7 @@ lemma _root_.ModelWithCorners.isImmersionOfComplement
   proof: fun _ => I.isImmersionAtOfComplement
 
 中文:
-引理 _root_.ModelWithCorners.isImmersionOfComplement
+引理 _root_.带角模型.isImmersionOfComplement
   条件: {n : 自然数}
   证明: fun _ => I.isImmersionAtOfComplement
 -/
@@ -1917,7 +1917,7 @@ lemma sumInl
 
 中文:
 引理 sumInl
-  结论: {M' : 类型} [TopologicalSpace M'] [ChartedSpace H M'] [IsManifold I n M]
+  结论: {M' : 类型} [拓扑空间 M'] [Charted空间 H M'] [是流形 I n M]
   证明: by
   intro x
   apply IsImmersionAtOfComplement.mk_of_continuousAt (equiv := (.prodUnique 𝕜 E _))
@@ -1955,7 +1955,7 @@ lemma sumInr
 
 中文:
 引理 sumInr
-  结论: {M' : 类型} [TopologicalSpace M'] [ChartedSpace H M'] [IsManifold I n M]
+  结论: {M' : 类型} [拓扑空间 M'] [Charted空间 H M'] [是流形 I n M]
   证明: by
   intro x
   apply IsImmersionAtOfComplement.mk_of_continuousAt (equiv := (.prodUnique 𝕜 E _))
@@ -2041,7 +2041,7 @@ definition complement
 
 中文:
 定义 complement
-  签名: (h : IsImmersion I J n f)
+  签名: (h : 是Immersion I J n f)
   定义体: Classical.choose h
 
 Depends on / 依赖: Classical, Classical.choose
@@ -2064,7 +2064,7 @@ lemma isImmersionOfComplement_complement
 
 中文:
 引理 isImmersionOfComplement_complement
-  条件: (h : IsImmersion I J n f)
+  条件: (h : 是Immersion I J n f)
   证明: Classical.choose_spec Classical.choose_spec Classical.choose_spec h
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
@@ -2087,7 +2087,7 @@ lemma isImmersionAt
 
 中文:
 引理 isImmersionAt
-  条件: (h : IsImmersion I J n f) (x : M)
+  条件: (h : 是Immersion I J n f) (x : M)
   结论: IsImmersionAt I J n f x
   证明: by
   rw [IsImmersionAt]
@@ -2112,8 +2112,8 @@ theorem congr
 
 中文:
 定理 congr
-  条件: (h : IsImmersion I J n f) (heq : f = g)
-  结论: IsImmersion I J n g
+  条件: (h : 是Immersion I J n f) (heq : f = g)
+  结论: 是Immersion I J n g
   证明: heq ▸ h
 -/
 theorem congr (h : IsImmersion I J n f) (heq : f = g) : IsImmersion I J n g :=
@@ -2154,8 +2154,8 @@ lemma id
 
 中文:
 引理 id
-  条件: [IsManifold I n M]
-  结论: IsImmersion I I n (@id M)
+  条件: [是流形 I n M]
+  结论: 是Immersion I I n (@id M)
   证明: by
   use PUnit, by infer_instance, by infer_instance
   exact IsImmersionOfComplement.id
@@ -2176,7 +2176,7 @@ lemma of_opens
 
 中文:
 引理 of_opens
-  条件: [IsManifold I n M] (s : TopologicalSpace.Opens M)
+  条件: [是流形 I n M] (s : 拓扑空间.Opens M)
   证明: by
   use PUnit, by infer_instance, by infer_instance
   exact IsImmersionOfComplement.of_opens s
@@ -2199,7 +2199,7 @@ lemma _root_.ModelWithCorners.isImmersion
   exact I.isImmersionOfComplement
 
 中文:
-引理 _root_.ModelWithCorners.isImmersion
+引理 _root_.带角模型.isImmersion
   条件: {n : 自然数}
   证明: by
   use PUnit, by infer_instance, by infer_instance
@@ -2238,7 +2238,7 @@ lemma _root_.ContMDiff.iff_comp_isImmersion
 
 中文:
 引理 _root_.ContMDiff.iff_comp_isImmersion
-  条件: {f : M -> N} {φ : N -> N'} (hφ : IsImmersion J J' n φ)
+  条件: {f : M -> N} {φ : N -> N'} (hφ : 是Immersion J J' n φ)
   证明: by
   rw [ContMDiff.iff_comp_isImmersionOfComplement hφ.isImmersionOfComplement_complement]
 

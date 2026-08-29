@@ -67,7 +67,7 @@ inferInstanceAs NonUnitalNonAssocRing L
 
 中文:
 实例 :
-  签名: NonUnitalNonAssocRing (CommutatorRing L)
+  签名: 非幺非结合环 (CommutatorRing L)
   定义体: have := LieRing.toNonUnitalNonAssocRing L
 inferInstanceAs NonUnitalNonAssocRing L
 
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (CommutatorRing L)
+  签名: Lie环 (CommutatorRing L)
   定义体: inferInstanceAs LieRing L
 
 Depends on / 依赖: LieRing
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra R (CommutatorRing L)
+  签名: Lie代数 R (CommutatorRing L)
   定义体: inferInstanceAs LieAlgebra R L
 
 Depends on / 依赖: LieAlgebra
@@ -127,7 +127,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: : IsScalarTower R (CommutatorRing L) (CommutatorRing L)
+  签名: : 标量塔 R (CommutatorRing L) (CommutatorRing L)
   定义体: ⟨smul_lie (L := L) (M := L)⟩
 
 Depends on / 依赖: smul_lie
@@ -145,7 +145,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: : SMulCommClass R (CommutatorRing L) (CommutatorRing L)
+  签名: : 标量交换类 R (CommutatorRing L) (CommutatorRing L)
   定义体: ⟨fun t x y => (lie_smul t x y).symm⟩
 
 Depends on / 依赖: lie_smul

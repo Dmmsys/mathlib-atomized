@@ -41,7 +41,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: : CommGroup PUnit where
+  签名: : 交换群 命题单元 where
   定义体: unit
   one := unit
   inv _ := unit
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: One PUnit
+  签名: 幺 命题单元
   定义体: unit
 -/
 @[to_additive] instance : One PUnit where one := unit
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul PUnit
+  签名: 乘法 命题单元
   定义体: unit
 -/
 @[to_additive] instance : Mul PUnit where mul _ _ := unit
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div PUnit
+  签名: 除法 命题单元
   定义体: unit
 -/
 @[to_additive] instance : Div PUnit where div _ _ := unit
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv PUnit
+  签名: 取逆 命题单元
   定义体: unit
 -/
 @[to_additive] instance : Inv PUnit where inv _ := unit
@@ -135,7 +135,7 @@ lemma one_eq
 
 中文:
 引理 one_eq
-  结论: (1 : PUnit) = unit
+  结论: (1 : 命题单元) = unit
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma one_eq : (1 : PUnit) = unit := rfl
@@ -152,7 +152,7 @@ lemma mul_eq
 
 中文:
 引理 mul_eq
-  条件: (x y : PUnit)
+  条件: (x y : 命题单元)
   结论: x * y = unit
   证明: rfl
 -/
@@ -169,7 +169,7 @@ lemma div_eq
 
 中文:
 引理 div_eq
-  条件: (x y : PUnit)
+  条件: (x y : 命题单元)
   结论: x / y = unit
   证明: rfl
 -/
@@ -185,7 +185,7 @@ lemma inv_eq
 
 中文:
 引理 inv_eq
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   结论: x⁻¹ = unit
   证明: rfl
 -/

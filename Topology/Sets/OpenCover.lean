@@ -31,7 +31,7 @@ definition IsOpenCover
 
 中文:
 定义 IsOpenCover
-  签名: {ι X : 类型} [TopologicalSpace X] (u : ι -> Opens X)
+  签名: {ι X : 类型} [拓扑空间 X] (u : ι -> Opens X)
   定义体: iSup u = ⊤
 -/
 def IsOpenCover {ι X : Type*} [TopologicalSpace X] (u : ι -> Opens X) : Prop :=
@@ -70,7 +70,7 @@ lemma of_sets
 
 中文:
 引理 of_sets
-  条件: {v : ι -> Set X} (h_open : 对任意 i, IsOpen (v i)) (h_iUnion : ⋃ i, v i = univ)
+  条件: {v : ι -> 集合 X} (h_open : 对任意 i, 是开集 (v i)) (h_iUnion : ⋃ i, v i = univ)
   证明: by
   simp [IsOpenCover, h_iUnion]
 
@@ -110,7 +110,7 @@ lemma iSup_set_eq_univ
 中文:
 引理 iSup_set_eq_univ
   条件: (hu : IsOpenCover u)
-  结论: ⋃ i, (u i : Set X) = univ
+  结论: ⋃ i, (u i : 集合 X) = univ
   证明: by
   simpa [← SetLike.coe_set_eq] using hu.iSup_eq_top
 
@@ -152,7 +152,7 @@ lemma exists_mem
   simpa [← hu.iSup_set_eq_univ] using mem_univ a
 
 中文:
-引理 exists_mem
+引理 存在_mem
   条件: (hu : IsOpenCover u) (a : X)
   结论: 存在 i, a in u i
   证明: by
@@ -173,9 +173,9 @@ lemma exists_mem_nhds
   proof: match hu.exists_mem a with | ⟨i, hi⟩ => ⟨i, (u i).isOpen.mem_nhds hi⟩
 
 中文:
-引理 exists_mem_nhds
+引理 存在_mem_nhds
   条件: (hu : IsOpenCover u) (a : X)
-  结论: 存在 i, (u i : Set X) in 𝓝 a
+  结论: 存在 i, (u i : 集合 X) in 𝓝 a
   证明: match hu.exists_mem a with | ⟨i, hi⟩ => ⟨i, (u i).isOpen.mem_nhds hi⟩
 
 Depends on / 依赖: exists_mem, hu.exists_mem, isOpen, isOpen.mem_nhds, mem_nhds
@@ -194,7 +194,7 @@ lemma iUnion_inter
 
 中文:
 引理 iUnion_inter
-  条件: (hu : IsOpenCover u) (s : Set X)
+  条件: (hu : IsOpenCover u) (s : 集合 X)
   证明: by
   simp [← inter_iUnion, hu.iSup_set_eq_univ]
 
@@ -238,8 +238,8 @@ lemma exists_finite_of_compactSpace
   simpa [IsOpenCover, eq_top_iff, ← SetLike.coe_subset_coe, Set.iUnion_subtype] using hs
 
 中文:
-引理 exists_finite_of_compactSpace
-  条件: (hu : IsOpenCover u) [CompactSpace X]
+引理 存在_finite_of_compactSpace
+  条件: (hu : IsOpenCover u) [紧空间 X]
   证明: by
   rw [IsOpenCover]; rw [eq_top_iff]; rw [← SetLike.coe_subset_coe] at hu
   obtain ⟨s, hs⟩ := IsCompact.elim_finite_subcover isCompact_univ _ (fun i => (u i).2)
@@ -270,8 +270,8 @@ lemma Opens.IsBasis.isOpenCover
   simp [← hS.2]
 
 中文:
-引理 Opens.IsBasis.isOpenCover
-  条件: {S : Set (Opens X)} (hS : Opens.IsBasis S)
+引理 Opens.是基.isOpenCover
+  条件: {S : 集合 (Opens X)} (hS : Opens.是基 S)
   证明: by
   ext1
   simp [← hS.2]
@@ -295,8 +295,8 @@ lemma Opens.IsBasis.isOpenCover_mem_and_le
   exact ⟨⟨(V, i), hV, hVU⟩, hxV⟩
 
 中文:
-引理 Opens.IsBasis.isOpenCover_mem_and_le
-  结论: {S : Set (Opens X)} (hS : Opens.IsBasis S)
+引理 Opens.是基.isOpenCover_mem_and_le
+  结论: {S : 集合 (Opens X)} (hS : Opens.是基 S)
   证明: by
   refine top_le_iff.mp fun x _ => ?_
   obtain ⟨i, hxi⟩ := hU.exists_mem x
@@ -338,7 +338,7 @@ choose i hi using mem_iUnion.mp hsU hx
 
 中文:
 定理 IsPreirreducible.of_subset_iUnion
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   rcases s.eq_empty_or_nonempty with he | hne
   · rw [he]; exact isPreirreducible_empty
@@ -384,8 +384,8 @@ theorem PreirreducibleSpace.of_isOpenCover
   ⟨IsPreirreducible.of_subset_iUnion hn h' isOpen_univ (by simpa using hU.iSup_set_eq_univ)⟩
 
 中文:
-定理 PreirreducibleSpace.of_isOpenCover
-  结论: {X ι : 类型} [TopologicalSpace X]
+定理 Preirreducible空间.of_isOpenCover
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: have h' (i : _) : IsPreirreducible (U i).carrier := IsPreirreducible.of_subtype
   ⟨IsPreirreducible.of_subset_iUnion hn h' isOpen_univ (by simpa using hU.iSup_set_eq_univ)⟩
 

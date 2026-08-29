@@ -69,7 +69,7 @@ definition cofFib
 
 中文:
 定义 cofFib
-  签名: : Object命题erty (Factorisation f)
+  签名: : ObjectProperty (分解 f)
   定义体: fun F => Mono F.ι ∧ degreewiseEpiWithInjectiveKernel F.π
 
 Depends on / 依赖: degreewiseEpiWithInjectiveKernel
@@ -148,7 +148,7 @@ abbreviation S
 
 中文:
 缩写 S
-  签名: : CochainComplex C 整数
+  签名: : 上链复形 C 整数
   定义体: ((single C _ n₁).obj (Injective.under (K.opcycles n₁)))
 
 Depends on / 依赖: Injective, Injective.under, K.opcycles, opcycles, single
@@ -270,8 +270,8 @@ instance [Mono
   body: mono_of_mono_fac (ι_π f n₁)
 
 中文:
-实例 [Mono
-  签名: f] : Mono (ι f n₁)
+实例 [单态射
+  签名: f] : 单态射 (ι f n₁)
   定义体: mono_of_mono_fac (ι_π f n₁)
 
 Depends on / 依赖: mono_of_mono_fac
@@ -439,7 +439,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (homologyMap (ι f n₁) n₁)
+  签名: 单态射 (homologyMap (ι f n₁) n₁)
   定义体: by
   let n₀ := n₁ - 1
   rw [mono_homologyMap_iff_up_to_refinements _ n₀ n₁ (n₁ + 1) (by simp; lia) (by simp)]
@@ -487,7 +487,7 @@ lemma step₁
 
 中文:
 引理 step₁
-  结论: [EnoughInjectives C] [Mono f] (n₀ n₁ : 整数)
+  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
   证明: ⟨.mk { mid := mid K L n₁, ι := ι f n₁, π := π K L n₁ }
     ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π K L n₁⟩,
     fun i hi => quasiIsoAt_ι f n₀ n₁ hn₁ hf i hi,
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono ((p f n).f n)
+  签名: 单态射 ((p f n).f n)
   定义体: by
   simp only [p, mkHomToSingle_f, mono_comp_iff_of_mono]
   infer_instance
@@ -724,8 +724,8 @@ instance [Mono
   body: mono_of_mono_fac (ι_π f n)
 
 中文:
-实例 [Mono
-  签名: f] : Mono (ι f n)
+实例 [单态射
+  签名: f] : 单态射 (ι f n)
   定义体: mono_of_mono_fac (ι_π f n)
 
 Depends on / 依赖: mono_of_mono_fac
@@ -782,7 +782,7 @@ lemma isIso_π_f
 中文:
 引理 isIso_π_f
   条件: (i : 整数) (hi : i <= n)
-  结论: IsIso ((π f n).f i)
+  结论: 是同构 ((π f n).f i)
   证明: by
   refine ⟨(mappingCocone.inl (α f n)).v i i (add_zero i), ?_, by simp⟩
   simp [← mappingCocone.id_X (α f n) i (i - 1) (by lia),
@@ -815,7 +815,7 @@ lemma mono_homologyMap_π
 中文:
 引理 mono_homologyMap_π
   条件: (q : 整数) (hq : q <= n)
-  结论: Mono (homologyMap (π f n) q)
+  结论: 单态射 (homologyMap (π f n) q)
   证明: (CochainComplex.homologyMap_exact₁_of_distTriang _
     (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) (q - 1) q (by lia)).mono_g
       ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_src _ _)
@@ -841,7 +841,7 @@ lemma epi_homologyMap_π
 中文:
 引理 epi_homologyMap_π
   条件: (q : 整数) (hq : q < n)
-  结论: Epi (homologyMap (π f n) q)
+  结论: 满态射 (homologyMap (π f n) q)
   证明: (CochainComplex.homologyMap_exact₂_of_distTriang _
     (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) q).epi_f
       ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_tgt _ _)
@@ -871,7 +871,7 @@ lemma quasiIsoAt_π
 中文:
 引理 quasiIsoAt_π
   条件: (q : 整数) (hq : q < n)
-  结论: QuasiIsoAt (π f n) q
+  结论: 在处拟同构 (π f n) q
   证明: by
   have := mono_homologyMap_π f n q (by lia)
   have := epi_homologyMap_π f n q hq
@@ -899,7 +899,7 @@ definition homologyShortComplex
 
 中文:
 定义 homologyShortComplex
-  签名: : ShortComplex C
+  签名: : 短复形 C
   定义体: ShortComplex.mk (homologyMap f n) (homologyMap (α f n) n) (by
     rw [← homologyMap_comp]; rw [comp_α]; rw [homologyMap_zero])
 
@@ -919,7 +919,7 @@ instance [Mono
   assumption
 
 中文:
-实例 [Mono
+实例 [单态射
   签名: (homologyMap f n)] :
   定义体: by
   assumption
@@ -946,7 +946,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (homologyMap (p f n) n)
+  签名: 单态射 (homologyMap (p f n) n)
   定义体: by
   have := (S f n).isIso_homologyπ (n - 1) n (by simp) (by simp)
   have : Mono ((truncGE (cokernel f) n).homologyπ n ≫ homologyMap (p f n) n) := by
@@ -979,8 +979,8 @@ lemma shortExact
 
 中文:
 引理 shortExact
-  条件: [Mono f]
-  结论: (ShortComplex.mk _ _ (cokernel.condition f)).ShortExact where
+  条件: [单态射 f]
+  结论: (短复形.mk _ _ (cokernel.condition f)).短正合 where
   证明: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f)
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_of_g_is_cokernel, cokernelIsCokernel, exact_of_g_is_cokernel
@@ -1006,7 +1006,7 @@ lemma exact_homologyShortComplex
 
 中文:
 引理 exact_homologyShortComplex
-  条件: [Mono f]
+  条件: [单态射 f]
   证明: by
   let T := ShortComplex.mk (homologyMap f n) (homologyMap (cokernel.π f) n)
     (by rw [← homologyMap_comp, cokernel.condition, homologyMap_zero])
@@ -1060,8 +1060,8 @@ lemma isGE_cokernel
 
 中文:
 引理 isGE_cokernel
-  条件: [Mono f] [Mono (homologyMap f n)]
-  结论: (cokernel f).IsGE n
+  条件: [单态射 f] [单态射 (homologyMap f n)]
+  结论: (cokernel f).是GE n
   证明: by
   rw [isGE_iff]
   intro i hi
@@ -1102,7 +1102,7 @@ lemma quasiIso_truncGEπ
 
 中文:
 引理 quasiIso_truncGEπ
-  条件: [Mono f] [Mono (homologyMap f n)]
+  条件: [单态射 f] [单态射 (homologyMap f n)]
   证明: by
   rw [quasiIso_πTruncGE_iff]
   exact isGE_cokernel f n hf
@@ -1134,7 +1134,7 @@ lemma quasiIsoAt_ι
 
 中文:
 引理 quasiIsoAt_ι
-  条件: [Mono f] [Mono (homologyMap f n)] (q : 整数) (hq : q <= n)
+  条件: [单态射 f] [单态射 (homologyMap f n)] (q : 整数) (hq : q <= n)
   证明: by
   obtain hq | rfl := hq.lt_or_eq'
   · have := quasiIsoAt_π f n q hq
@@ -1181,7 +1181,7 @@ lemma step₂
 
 中文:
 引理 step₂
-  结论: [EnoughInjectives C] [Mono f] (n₀ n₁ : 整数)
+  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
   证明: ⟨.mk { mid := mid f n₁, ι := ι f n₁, π := π f n₁}
     ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π f n₁⟩,
     fun i hi => quasiIsoAt_ι f n₁ (fun j hj => hf j (by lia)) _ hi,
@@ -1213,7 +1213,7 @@ lemma step
 
 中文:
 引理 step
-  结论: [EnoughInjectives C] [Mono f] (n₀ n₁ : 整数)
+  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
   证明: by
   obtain ⟨F₁, h₁, h₂, _⟩ := step₁ f n₀ n₁ hf
   obtain ⟨F₂, h₃, h₄⟩ := step₂ F₁.obj.ι n₀ n₁ h₁
@@ -1276,7 +1276,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: [Mono f] (n : 整数) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)]
+  签名: [单态射 f] (n : 整数) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)]
   定义体: .mk (.mk { mid := L, ι := f, π := 𝟙 L }
     ⟨by assumption, fun i => epiWithInjectiveKernel_of_iso (𝟙 (L.X i))⟩)
     (fun i hi => by
@@ -1316,7 +1316,7 @@ lemma exists_next
       ObjectProperty.homMk { h := F₁₂.obj.π
 
 中文:
-引理 exists_next
+引理 存在_next
   结论: {n₀ : 整数} (F : CofFibFactorizationQuasiIsoLE f n₀)
   证明: by
   obtain ⟨F₁₂, h₁, h₂⟩ := step F.obj.obj.ι n₀ n₁ F.property
@@ -1450,7 +1450,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : 自然数ᵒᵖ ⥤ (cofFib f).FullSubcategory
+  签名: : 自然数ᵒᵖ ⥤ (cofFib f).满子范畴
   定义体: (Functor.ofSequence (fun q => (CofFibFactorizationQuasiIsoLE.toSequenceNext f n₀ q).op)).leftOp
 
 Depends on / 依赖: CofFibFactorizationQuasiIsoLE, CofFibFactorizationQuasiIsoLE.toSequenceNext, Functor, Functor.ofSequence, leftOp, ofSequence, toSequenceNext
@@ -1519,7 +1519,7 @@ abbreviation cochainComplexFunctor
 
 中文:
 缩写 cochainComplexFunctor
-  签名: : 自然数ᵒᵖ ⥤ CochainComplex C 整数
+  签名: : 自然数ᵒᵖ ⥤ 上链复形 C 整数
   定义体: functor f n₀ ⋙ ObjectProperty.ι _ ⋙ Factorisation.forget
 
 Depends on / 依赖: Factorisation, Factorisation.forget, ObjectProperty, forget, functor
@@ -1559,7 +1559,7 @@ abbreviation mid
 
 中文:
 缩写 mid
-  签名: : CochainComplex C 整数
+  签名: : 上链复形 C 整数
   定义体: limit (cochainComplexFunctor f n₀)
 
 Depends on / 依赖: cochainComplexFunctor
@@ -1893,7 +1893,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (ι f n₀)
+  签名: 单态射 (ι f n₀)
   定义体: HomologicalComplex.mono_of_mono_f _ (fun i => by
     obtain ⟨q, _⟩ : exists (q : Nat), IsIso ((midπ f n₀ q).f i) :=
       ⟨(i - n₀).natAbs, isIso_midπ_f f n₀ _ i⟩
@@ -1921,7 +1921,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (ι f n₀)
+  签名: 拟同构 (ι f n₀)
   定义体: by
     obtain ⟨q, hq⟩ : exists (q : Nat), i + 1 <= n₀ + q := ⟨(i + 1 - n₀).natAbs, by lia⟩
     have := quasiIsoAt_midπ f n₀ q i hq

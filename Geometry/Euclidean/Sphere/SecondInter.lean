@@ -45,8 +45,8 @@ definition Sphere.secondInter
   body: (-2 * ⟪v, p -ᵥ s.center⟫ / ⟪v, v⟫) • v +ᵥ p
 
 中文:
-定义 Sphere.secondInter
-  签名: (s : Sphere P) (p : P) (v : V)
+定义 球面.second整数er
+  签名: (s : 球面 P) (p : P) (v : V)
   定义体: (-2 * ⟪v, p -ᵥ s.center⟫ / ⟪v, v⟫) • v +ᵥ p
 
 Depends on / 依赖: center, s.center
@@ -65,8 +65,8 @@ lemma Sphere.secondInter_map
   simp [secondInter, ← AffineIsometry.map_vsub]
 
 中文:
-引理 Sphere.secondInter_map
-  条件: (s : Sphere P) (p : P) (v : V) (f : P ->ᵃⁱ[实数] P₂)
+引理 球面.second整数er_map
+  条件: (s : 球面 P) (p : P) (v : V) (f : P ->ᵃⁱ[实数] P₂)
   证明: by
   simp [secondInter, ← AffineIsometry.map_vsub]
 -/
@@ -84,8 +84,8 @@ lemma Sphere.coe_secondInter
   proof: rfl
 
 中文:
-引理 Sphere.coe_secondInter
-  结论: (as : AffineSubspace 实数 P) [Nonempty as] (s : Sphere as)
+引理 球面.coe_second整数er
+  结论: (as : 仿射子空间 实数 P) [非空 as] (s : 球面 as)
   证明: rfl
 -/
 lemma Sphere.coe_secondInter (as : AffineSubspace Real P) [Nonempty as] (s : Sphere as)
@@ -109,8 +109,8 @@ theorem Sphere.secondInter_dist
   exact Or.inr rfl
 
 中文:
-定理 Sphere.secondInter_dist
-  条件: (s : Sphere P) (p : P) (v : V)
+定理 球面.second整数er_dist
+  条件: (s : 球面 P) (p : P) (v : V)
   证明: by
   rw [Sphere.secondInter]
   by_cases hv : v = 0; · simp [hv]
@@ -139,8 +139,8 @@ theorem Sphere.secondInter_mem
   simp_rw [mem_sphere, Sphere.secondInter_dist]
 
 中文:
-定理 Sphere.secondInter_mem
-  条件: {s : Sphere P} {p : P} (v : V)
+定理 球面.second整数er_mem
+  条件: {s : 球面 P} {p : P} (v : V)
   结论: s.second整数er p v in s ↔ p in s
   证明: by
   simp_rw [mem_sphere, Sphere.secondInter_dist]
@@ -164,8 +164,8 @@ theorem Sphere.secondInter_zero
   simp [Sphere.secondInter]
 
 中文:
-定理 Sphere.secondInter_zero
-  条件: (s : Sphere P) (p : P)
+定理 球面.second整数er_zero
+  条件: (s : 球面 P) (p : P)
   结论: s.second整数er p (0 : V) = p
   证明: by
   simp [Sphere.secondInter]
@@ -190,8 +190,8 @@ theorem Sphere.secondInter_eq_self_iff
       or_iff_right (by simp : (-2 : Re
 
 中文:
-定理 Sphere.secondInter_eq_self_iff
-  条件: {s : Sphere P} {p : P} {v : V}
+定理 球面.second整数er_eq_self_iff
+  条件: {s : 球面 P} {p : P} {v : V}
   证明: by
   refine ⟨fun hp => ?_, fun hp => ?_⟩
   · by_cases hv : v = 0
@@ -230,8 +230,8 @@ theorem Sphere.eq_or_eq_secondInter_of_mem_mk'_span_singleton_iff_mem
     by_cases hv : v = 
 
 中文:
-定理 Sphere.eq_or_eq_secondInter_of_mem_mk'_span_singleton_iff_mem
-  结论: {s : Sphere P} {p : P}
+定理 球面.eq_or_eq_second整数er_of_mem_mk'_span_singleton_iff_mem
+  结论: {s : 球面 P} {p : P}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases h with (h | h)
@@ -277,8 +277,8 @@ lemma Sphere.eq_or_eq_secondInter_iff_mem_of_mem_affineSpan_pair
   simp [direction_affineSpan, vectorSpan_pair_rev]
 
 中文:
-引理 Sphere.eq_or_eq_secondInter_iff_mem_of_mem_affineSpan_pair
-  结论: {s : Sphere P} {p q : P}
+引理 球面.eq_or_eq_second整数er_iff_mem_of_mem_affineSpan_pair
+  结论: {s : 球面 P} {p q : P}
   证明: by
   convert! s.eq_or_eq_secondInter_of_mem_mk'_span_singleton_iff_mem hp ?_
   convert! hp'
@@ -311,8 +311,8 @@ theorem Sphere.secondInter_smul
   rw [mul_comm]; rw [← mul_div_assoc]; rw [← mul_div_assoc]; rw [mul_div_cancel_left₀ _ hr]; rw [mul_comm]; rw [mul_assoc]; rw [mul_div_cancel_left₀ _ hr]; rw [mul_comm]
 
 中文:
-定理 Sphere.secondInter_smul
-  条件: (s : Sphere P) (p : P) (v : V) {r : 实数} (hr : r != 0)
+定理 球面.second整数er_smul
+  条件: (s : 球面 P) (p : P) (v : V) {r : 实数} (hr : r != 0)
   证明: by
   simp_rw [Sphere.secondInter, real_inner_smul_left, inner_smul_right, smul_smul,
     div_mul_eq_div_div]
@@ -338,8 +338,8 @@ theorem Sphere.secondInter_neg
   rw [← neg_one_smul Real v]; rw [s.secondInter_smul p v (by simp : (-1 : Real) != 0)]
 
 中文:
-定理 Sphere.secondInter_neg
-  条件: (s : Sphere P) (p : P) (v : V)
+定理 球面.second整数er_neg
+  条件: (s : 球面 P) (p : P) (v : V)
   证明: by
   rw [← neg_one_smul Real v]; rw [s.secondInter_smul p v (by simp : (-1 : Real) != 0)]
 
@@ -366,8 +366,8 @@ theorem Sphere.secondInter_secondInter
   conv
 
 中文:
-定理 Sphere.secondInter_secondInter
-  条件: (s : Sphere P) (p : P) (v : V)
+定理 球面.second整数er_second整数er
+  条件: (s : 球面 P) (p : P) (v : V)
   证明: by
   by_cases hv : v = 0; · simp [hv]
   have hv' : ⟪v, v⟫ != 0 := inner_self_ne_zero.2 hv
@@ -399,8 +399,8 @@ theorem Sphere.secondInter_eq_lineMap
   proof: rfl
 
 中文:
-定理 Sphere.secondInter_eq_lineMap
-  条件: (s : Sphere P) (p p' : P)
+定理 球面.second整数er_eq_lineMap
+  条件: (s : 球面 P) (p p' : P)
   证明: rfl
 -/
 theorem Sphere.secondInter_eq_lineMap (s : Sphere P) (p p' : P) :
@@ -417,8 +417,8 @@ theorem Sphere.secondInter_vsub_mem_affineSpan
   proof: smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 中文:
-定理 Sphere.secondInter_vsub_mem_affineSpan
-  条件: (s : Sphere P) (p₁ p₂ : P)
+定理 球面.second整数er_vsub_mem_affineSpan
+  条件: (s : 球面 P) (p₁ p₂ : P)
   证明: smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 Depends on / 依赖: smul_vsub_vadd_mem_affineSpan_pair
@@ -440,8 +440,8 @@ theorem Sphere.secondInter_collinear
       (collinear_pair Real _ _)
 
 中文:
-定理 Sphere.secondInter_collinear
-  条件: (s : Sphere P) (p p' : P)
+定理 球面.second整数er_collinear
+  条件: (s : 球面 P) (p p' : P)
   证明: by
   rw [Set.pair_comm]; rw [Set.insert_comm]
   exact
@@ -472,8 +472,8 @@ theorem Sphere.wbtw_secondInter
   rw [eq_comm]; rw [Sphere.secondInter_eq_self_iff]; rw [← neg_neg (p' -ᵥ p)]; rw [inner_neg_left]; rw [neg_vsub_eq
 
 中文:
-定理 Sphere.wbtw_secondInter
-  结论: {s : Sphere P} {p p' : P} (hp : p in s)
+定理 球面.wbtw_second整数er
+  结论: {s : 球面 P} {p p' : P} (hp : p in s)
   证明: by
   by_cases h : p' = p; · simp [h]
   refine
@@ -510,8 +510,8 @@ theorem Sphere.sbtw_secondInter
     exact lt_irrefl _ hp'
 
 中文:
-定理 Sphere.sbtw_secondInter
-  结论: {s : Sphere P} {p p' : P} (hp : p in s)
+定理 球面.sbtw_second整数er
+  结论: {s : 球面 P} {p p' : P} (hp : p in s)
   证明: by
   refine ⟨Sphere.wbtw_secondInter hp hp'.le, ?_, ?_⟩
   · rintro rfl
@@ -547,8 +547,8 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite
       (sx.faceOpposite i).closedInterior_su
 
 中文:
-引理 Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite
-  结论: {s : Sphere P}
+引理 球面.sOppSide_faceOpposite_second整数er_of_mem_interior_faceOpposite
+  结论: {s : 球面 P}
   证明: Sbtw.sOppSide_of_notMem_of_mem
     (s.sbtw_secondInter hi ((sx.faceOpposite i).dist_lt_of_mem_interior_of_strictConvexSpace hp
       (fun j => hsx _)))
@@ -589,8 +589,8 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior
       r • (Finset.univ.affineCo
 
 中文:
-引理 Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior
-  结论: {s : Sphere P}
+引理 球面.sOppSide_faceOpposite_second整数er_of_mem_interior
+  结论: {s : 球面 P}
   证明: by
   obtain ⟨w, hw, hw01, rfl⟩ := hp
   let r : Real := (1 - w i)⁻¹

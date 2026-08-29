@@ -71,7 +71,7 @@ lemma shadow_initSeg
 
 中文:
 引理 shadow_initSeg
-  条件: [Fintype α] (hs : s.Nonempty)
+  条件: [有限类型 α] (hs : s.非空)
   证明: by
   -- This is a pretty painful proof, with lots of cases.
   ext t
@@ -148,7 +148,7 @@ lemma IsInitSeg.shadow
 
 中文:
 引理 IsInitSeg.shadow
-  条件: [Finite α] (h₁ : IsInitSeg 𝒜 r)
+  条件: [有限 α] (h₁ : IsInitSeg 𝒜 r)
   结论: IsInitSeg (∂ 𝒜) (r - 1)
   证明: by
   cases nonempty_fintype α
@@ -196,7 +196,7 @@ refine ⟨_, hA.1.2 max'_mem _ hV, notMem_sdiff_of_mem_right max'_mem _ _, fun a
 
 中文:
 引理 toColex_compress_lt_toColex
-  结论: {hU : U.Nonempty} {hV : V.Nonempty} (h : max' U hU < max' V hV)
+  结论: {hU : U.非空} {hV : V.非空} (h : 最大值' U hU < 最大值' V hV)
   证明: by
   rw [compress]; rw [ite_ne_right_iff] at hA
   rw [compress]; rw [if_pos hA.1]; rw [lt_iff_exists_filter_lt]
@@ -227,7 +227,7 @@ definition UsefulCompression
 
 中文:
 定义 UsefulCompression
-  签名: (U V : Finset α)
+  签名: (U V : 有限集 α)
   定义体: Disjoint U V ∧ #U = #V ∧ exists (HU : U.Nonempty) (HV : V.Nonempty), max' U HU < max' V HV
 -/
 private def UsefulCompression (U V : Finset α) : Prop :=
@@ -265,7 +265,7 @@ lemma compression_improved
 
 中文:
 引理 compression_improved
-  结论: (𝒜 : Finset (Finset α)) (h₁ : UsefulCompression U V)
+  结论: (𝒜 : 有限集 (有限集 α)) (h₁ : UsefulCompression U V)
   证明: by
   obtain ⟨UVd, same_size, hU, hV, max_lt⟩ := h₁
   refine card_shadow_compression_le _ _ fun x Hx => ⟨min' V hV, min'_mem _ _, ?_⟩
@@ -312,7 +312,7 @@ sdiff_non
 
 中文:
 引理 isInitSeg_of_compressed
-  结论: {ℬ : Finset (Finset α)} {r : 自然数} (h₁ : (ℬ : Set (Finset α)).Sized r)
+  结论: {ℬ : 有限集 (有限集 α)} {r : 自然数} (h₁ : (ℬ : 集合 (有限集 α)).Sized r)
   证明: by
   refine ⟨h₁, ?_⟩
   rintro A B hA ⟨hBA, sizeA⟩
@@ -358,7 +358,7 @@ definition familyMeasure
 
 中文:
 定义 familyMeasure
-  签名: (𝒜 : Finset (Finset (Fin n)))
+  签名: (𝒜 : 有限集 (有限集 (有限集 n)))
   定义体: ∑ A in 𝒜, ∑ a in A, 2 ^ (a : Nat)
 -/
 private def familyMeasure (𝒜 : Finset (Finset (Fin n))) : Nat := ∑ A in 𝒜, ∑ a in A, 2 ^ (a : Nat)
@@ -379,7 +379,7 @@ lemma familyMeasure_compression_lt_familyMeasure
 
 中文:
 引理 familyMeasure_compression_lt_familyMeasure
-  结论: {U V : Finset (Fin n)} {hU : U.Nonempty}
+  结论: {U V : 有限集 (有限集 n)} {hU : U.非空}
   证明: by
   rw [compression] at a ⊢
   have q : forall Q in {A in 𝒜 | compress U V A ∉ 𝒜}, compress U V Q != Q := by grind
@@ -424,7 +424,7 @@ lemma kruskal_katona_helper
 
 中文:
 引理 kruskal_katona_helper
-  结论: {r : 自然数} (𝒜 : Finset (Finset (Fin n)))
+  结论: {r : 自然数} (𝒜 : 有限集 (有限集 (有限集 n)))
   证明: by
   classical
   -- Are there any compressions we can make now?
@@ -484,7 +484,7 @@ theorem kruskal_katona
 
 中文:
 定理 kruskal_katona
-  结论: (h𝒜r : (𝒜 : Set (Finset (Fin n))).Sized r) (h𝒞𝒜 : #𝒞 <= #𝒜)
+  结论: (h𝒜r : (𝒜 : 集合 (有限集 (有限集 n))).Sized r) (h𝒞𝒜 : #𝒞 <= #𝒜)
   证明: by
   -- WLOG `|𝒜| = |𝒞|`
   obtain ⟨𝒜', h𝒜, h𝒜𝒞⟩ := exists_subset_card_eq h𝒞𝒜
@@ -523,7 +523,7 @@ theorem iterated_kk
 
 中文:
 定理 iterated_kk
-  条件: (h₁ : (𝒜 : Set (Finset (Fin n))).Sized r) (h₂ : #𝒞 <= #𝒜) (h₃ : IsInitSeg 𝒞 r)
+  条件: (h₁ : (𝒜 : 集合 (有限集 (有限集 n))).Sized r) (h₂ : #𝒞 <= #𝒜) (h₃ : IsInitSeg 𝒞 r)
   证明: by
   induction k generalizing r 𝒜 𝒞 with
   | zero => simpa
@@ -628,7 +628,7 @@ theorem erdos_ko_rado
 
 中文:
 定理 erdos_ko_rado
-  结论: {𝒜 : Finset (Finset (Fin n))} {r : 自然数}
+  结论: {𝒜 : 有限集 (有限集 (有限集 n))} {r : 自然数}
   证明: by
   -- Take care of the r=0 case first: it's not very interesting.
   rcases Nat.eq_zero_or_pos r with b | h1r

@@ -249,7 +249,7 @@ lemma Y_eq_of_X_eq
 
 中文:
 引理 Y_eq_of_X_eq
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: by
   rw [equation_iff] at h₁ h₂
   rw [← sub_eq_zero]; rw [← sub_eq_zero (a := y₁)]; rw [← mul_eq_zero]; rw [negY]
@@ -273,7 +273,7 @@ lemma Y_eq_of_Y_ne
 
 中文:
 引理 Y_eq_of_Y_ne
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂) (hx : x₁ = x₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂) (hx : x₁ = x₂)
   证明: (Y_eq_of_X_eq h₁ h₂ hx).resolve_right hy
 
 Depends on / 依赖: Y_eq_of_X_eq, resolve_right
@@ -297,7 +297,7 @@ lemma equation_neg
 中文:
 引理 equation_neg
   条件: (x y : R)
-  结论: W'.Equation x (W'.negY x y) ↔ W'.Equation x y
+  结论: W'.方程 x (W'.negY x y) ↔ W'.方程 x y
   证明: by
   rw [equation_iff]; rw [equation_iff]; rw [negY]
   congr! 1
@@ -325,7 +325,7 @@ not_congr and_congr_left fun h => by rw [← h]
 中文:
 引理 nonsingular_neg
   条件: (x y : R)
-  结论: W'.Nonsingular x (W'.negY x y) ↔ W'.Nonsingular x y
+  结论: W'.非奇异 x (W'.negY x y) ↔ W'.非奇异 x y
   证明: by
   rw [nonsingular_iff]; rw [equation_neg]; rw [← negY]; rw [negY_negY]; rw [← @ne_comm _ y]; rw [nonsingular_iff]
 exact and_congr_right' (iff_congr not_and_or.symm not_and_or.symm).mpr
@@ -585,7 +585,7 @@ lemma addPolynomial_eq
 中文:
 引理 addPolynomial_eq
   条件: (x y ℓ : R)
-  结论: W'.addPolynomial x y ℓ = -Cubic.toPoly
+  结论: W'.addPolynomial x y ℓ = -三次.toPoly
   证明: by
   rw [addPolynomial]; rw [linePolynomial]; rw [polynomial]; rw [Cubic.toPoly]
   eval_simp
@@ -687,7 +687,7 @@ lemma addPolynomial_slope
 
 中文:
 引理 addPolynomial_slope
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: by
   rw [addPolynomial_eq]; rw [neg_inj]; rw [Cubic.prod_X_sub_C_eq]; rw [Cubic.toPoly_injective]
   by_cases hx : x₁ = x₂
@@ -734,7 +734,7 @@ lemma C_addPolynomial_slope
 
 中文:
 引理 C_addPolynomial_slope
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: by
   rw [addPolynomial_slope h₁ h₂ hxy]
   simp
@@ -760,7 +760,7 @@ lemma derivative_addPolynomial_slope
 
 中文:
 引理 derivative_addPolynomial_slope
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁)
   证明: by
   rw [addPolynomial_slope h₁ h₂ hxy]
   derivative_simp
@@ -838,7 +838,7 @@ lemma equation_add_iff
 中文:
 引理 equation_add_iff
   条件: (x₁ x₂ y₁ ℓ : R)
-  结论: W'.Equation (W'.addX x₁ x₂ ℓ) (W'.negAddY x₁ x₂ y₁ ℓ) ↔
+  结论: W'.方程 (W'.addX x₁ x₂ ℓ) (W'.negAddY x₁ x₂ y₁ ℓ) ↔
   证明: by
   rw [Equation]; rw [negAddY]; rw [addPolynomial]; rw [linePolynomial]; rw [polynomial]
   eval_simp
@@ -863,7 +863,7 @@ lemma equation_negAdd
 
 中文:
 引理 equation_negAdd
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: by
   rw [equation_add_iff]; rw [addPolynomial_slope h₁ h₂ hxy]
   eval_simp
@@ -888,7 +888,7 @@ lemma equation_add
 
 中文:
 引理 equation_add
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: (equation_neg ..).mpr equation_negAdd h₁ h₂ hxy
 
 Depends on / 依赖: equation_neg, equation_negAdd
@@ -915,7 +915,7 @@ lemma nonsingular_negAdd
 
 中文:
 引理 nonsingular_negAdd
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Nonsingular x₁ y₁) (h₂ : W.Nonsingular x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.非奇异 x₁ y₁) (h₂ : W.非奇异 x₂ y₂)
   证明: by
   by_cases hx₁ : W.addX x₁ x₂ (W.slope x₁ x₂ y₁ y₂) = x₁
   · rwa [negAddY, hx₁, sub_self, mul_zero, zero_add]
@@ -954,7 +954,7 @@ lemma nonsingular_add
 
 中文:
 引理 nonsingular_add
-  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.Nonsingular x₁ y₁) (h₂ : W.Nonsingular x₂ y₂)
+  结论: {x₁ x₂ y₁ y₂ : F} (h₁ : W.非奇异 x₁ y₁) (h₂ : W.非奇异 x₂ y₂)
   证明: (nonsingular_neg ..).mpr nonsingular_negAdd h₁ h₂ hxy
 
 Depends on / 依赖: nonsingular_neg, nonsingular_negAdd
@@ -1387,7 +1387,7 @@ lemma baseChange_slope
 
 中文:
 引理 baseChange_slope
-  结论: [DecidableEq F] [DecidableEq K] [Algebra R F] [Algebra S F]
+  结论: [DecidableEq F] [DecidableEq K] [代数 R F] [代数 S F]
   证明: by
   rw [← RingHom.coe_coe]; rw [← map_slope]; rw [map_baseChange]
 

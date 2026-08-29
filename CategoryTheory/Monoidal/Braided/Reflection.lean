@@ -144,7 +144,7 @@ theorem isIso_tfae
 
 中文:
 定理 isIso_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 3 -> 4
   | h => by
@@ -341,7 +341,7 @@ definition monoidalClosed
 
 中文:
 定义 monoidalClosed
-  签名: : MonoidalClosed C where
+  签名: : 幺半群闭 C where
   定义体: closed adj c
 
 Depends on / 依赖: closed

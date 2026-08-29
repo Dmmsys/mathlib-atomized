@@ -103,7 +103,7 @@ theorem DifferentiableAt.comp_mdifferentiableWithinAt
 
 中文:
 定理 DifferentiableAt.comp_mdifferentiableWithinAt
-  结论: {g : F -> F'} {f : M -> F} {s : Set M} {x : M}
+  结论: {g : F -> F'} {f : M -> F} {s : 集合 M} {x : M}
   证明: hg.mdifferentiableAt.comp_mdifferentiableWithinAt x hf
 
 Depends on / 依赖: comp_mdifferentiableWithinAt, hg.mdifferentiableAt.comp_mdifferentiableWithinAt, mdifferentiableAt
@@ -140,8 +140,8 @@ theorem Differentiable.comp_mdifferentiableWithinAt
   proof: hg.differentiableAt.comp_mdifferentiableWithinAt hf
 
 中文:
-定理 Differentiable.comp_mdifferentiableWithinAt
-  结论: {g : F -> F'} {f : M -> F} {s : Set M} {x : M}
+定理 可微.comp_mdifferentiableWithinAt
+  结论: {g : F -> F'} {f : M -> F} {s : 集合 M} {x : M}
   证明: hg.differentiableAt.comp_mdifferentiableWithinAt hf
 
 Depends on / 依赖: comp_mdifferentiableWithinAt, differentiableAt, hg.differentiableAt.comp_mdifferentiableWithinAt
@@ -159,7 +159,7 @@ theorem Differentiable.comp_mdifferentiableAt
   proof: hg.comp_mdifferentiableWithinAt hf
 
 中文:
-定理 Differentiable.comp_mdifferentiableAt
+定理 可微.comp_mdifferentiableAt
   结论: {g : F -> F'} {f : M -> F} {x : M}
   证明: hg.comp_mdifferentiableWithinAt hf
 
@@ -178,7 +178,7 @@ theorem Differentiable.comp_mdifferentiable
   proof: fun x => hg.differentiableAt.comp_mdifferentiableAt (hf x)
 
 中文:
-定理 Differentiable.comp_mdifferentiable
+定理 可微.comp_mdifferentiable
   结论: {g : F -> F'} {f : M -> F}
   证明: fun x => hg.differentiableAt.comp_mdifferentiableAt (hf x)
 
@@ -233,7 +233,7 @@ theorem DifferentiableWithinAt.mdifferentiableWithinAt_of_comp_extChartAt_symm
 
 中文:
 定理 DifferentiableWithinAt.mdifferentiableWithinAt_of_comp_extChartAt_symm
-  结论: [IsManifold I 1 M]
+  结论: [是流形 I 1 M]
   证明: by
   refine (mdifferentiableWithinAt_iff_source_of_mem_source (mem_chart_source H x)).2 ?_
   simpa [extChartAt_self_eq] using hf.mdifferentiableWithinAt
@@ -264,7 +264,7 @@ nonrec theorem MDifferentiableAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x :
 
 中文:
 定理 MDifferentiableWithinAt.clm_precomp
-  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : Set M} {x : M}
+  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : 集合 M} {x : M}
   证明: Differentiable.comp_mdifferentiableWithinAt
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip) hf
 
@@ -294,7 +294,7 @@ theorem MDifferentiableOn.clm_precomp
 
 中文:
 定理 MDifferentiableOn.clm_precomp
-  条件: {f : M -> F₁ ->L[𝕜] F₂} {s : Set M} (hf : MDiff[s] f)
+  条件: {f : M -> F₁ ->L[𝕜] F₂} {s : 集合 M} (hf : MDiff[s] f)
   证明: fun x hx => (hf x hx).clm_precomp
 
 Depends on / 依赖: clm_precomp
@@ -333,7 +333,7 @@ theorem MDifferentiableWithinAt.clm_postcomp
 
 中文:
 定理 MDifferentiableWithinAt.clm_postcomp
-  结论: {f : M -> F₂ ->L[𝕜] F₃} {s : Set M} {x : M}
+  结论: {f : M -> F₂ ->L[𝕜] F₃} {s : 集合 M} {x : M}
   证明: Differentiable.comp_mdifferentiableWithinAt
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃)) hf
 
@@ -454,7 +454,7 @@ theorem MDifferentiableOn.clm_comp
 
 中文:
 定理 MDifferentiableOn.clm_comp
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : 集合 M}
   证明: fun x hx => (hg x hx).clm_comp (hf x hx)
 
 Depends on / 依赖: clm_comp
@@ -496,7 +496,7 @@ theorem MDifferentiableWithinAt.clm_apply
 
 中文:
 定理 MDifferentiableWithinAt.clm_apply
-  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : Set M} {x : M}
+  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : 集合 M} {x : M}
   证明: DifferentiableWithinAt.comp_mdifferentiableWithinAt (t := univ)
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply (Differentiable.differentiableAt _).differentiableWithinAt
@@ -555,7 +555,7 @@ theorem MDifferentiableOn.clm_apply
 
 中文:
 定理 MDifferentiableOn.clm_apply
-  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : 集合 M}
   证明: fun x hx => (hg x hx).clm_apply (hf x hx)
 
 Depends on / 依赖: clm_apply
@@ -647,7 +647,7 @@ theorem MDifferentiableOn.cle_arrowCongr
 
 中文:
 定理 MDifferentiableOn.cle_arrowCongr
-  结论: {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {s : Set M}
+  结论: {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {s : 集合 M}
   证明: fun x hx =>
   (hf x hx).cle_arrowCongr (hg x hx)
 -/
@@ -693,7 +693,7 @@ nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃}
 
 中文:
 定理 MDifferentiableWithinAt.clm_prodMap
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : 集合 M}
   证明: Differentiable.comp_mdifferentiableWithinAt
     (g := fun x : (F₁ ->L[𝕜] F₃) × (F₂ ->L[𝕜] F₄) => x.1.prodMap x.2)
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).differentiable
@@ -728,7 +728,7 @@ theorem MDifferentiableOn.clm_prodMap
 
 中文:
 定理 MDifferentiableOn.clm_prodMap
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : 集合 M}
   证明: fun x hx => (hg x hx).clm_prodMap (hf x hx)
 
 Depends on / 依赖: clm_prodMap
@@ -1027,7 +1027,7 @@ definition mvfderivWithin
 
 中文:
 定义 mvfderivWithin
-  签名: (g : M -> F) (s : Set M)
+  签名: (g : M -> F) (s : 集合 M)
   定义体: fun x => (NormedSpace.fromTangentSpace <| g x).toContinuousLinearMap ∘L (mfderiv[s] g x)
 
 Depends on / 依赖: NormedSpace, NormedSpace.fromTangentSpace, fromTangentSpace, mfderiv, toContinuousLinearMap
@@ -1126,7 +1126,7 @@ lemma mvfderivWithin_univ
 中文:
 引理 mvfderivWithin_univ
   条件: {f : M -> F}
-  结论: d[(univ : Set M)] f = d% f
+  结论: d[(univ : 集合 M)] f = d% f
   证明: by
   ext X
   simp [mvfderiv, mvfderivWithin]
@@ -1336,7 +1336,7 @@ lemma mvfderivWithin_zero
 
 中文:
 引理 mvfderivWithin_zero
-  条件: {s : Set M} (hs : UniqueMDiffAt[s] x)
+  条件: {s : 集合 M} (hs : UniqueMDiffAt[s] x)
   证明: by
   have : d[s] (0 : M -> F) x + d[s] (0 : M -> F) x = d[s] (0 : M -> F) x := by
     rw [← mvfderivWithin_add (by exact mdifferentiableWithinAt_const)

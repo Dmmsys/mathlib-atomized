@@ -145,7 +145,7 @@ theorem _root_.MeasureTheory.Measure.ext_of_integral_eq_on_compactlySupported_nn
   rfl
 
 中文:
-定理 _root_.MeasureTheory.Measure.ext_of_integral_eq_on_compactlySupported_nnreal
+定理 _root_.测度论.测度.ext_of_integral_eq_on_compactlySupported_nnreal
   证明: by
   apply Measure.ext_of_integral_eq_on_compactlySupported
   intro f
@@ -178,7 +178,7 @@ theorem integralLinearMap_inj
 
 中文:
 定理 integralLinearMap_inj
-  条件: {μ ν : Measure X} [μ.Regular] [ν.Regular]
+  条件: {μ ν : 测度 X} [μ.正则] [ν.正则]
   证明: ⟨fun hμν => Measure.ext_of_integral_eq_on_compactlySupported_nnreal fun f =>
       by simpa using congr(($hμν f).toReal), fun _ => by congr⟩
 
@@ -204,7 +204,7 @@ theorem rieszMeasure_integralLinearMap
 
 中文:
 定理 rieszMeasure_integralLinearMap
-  条件: {μ : Measure X} [μ.Regular]
+  条件: {μ : 测度 X} [μ.正则]
   证明: Measure.ext_of_integral_eq_on_compactlySupported_nnreal (by simp)
 
 @[simp]

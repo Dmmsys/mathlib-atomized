@@ -125,7 +125,7 @@ instance [NeZero
 
 中文:
 实例 [NeZero
-  签名: n] : Inhabited (EuclideanHalfSpace n)
+  签名: n] : 可居 (EuclideanHalfSpace n)
   定义体: ⟨0⟩
 -/
 instance [NeZero n] : Inhabited (EuclideanHalfSpace n) :=
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (EuclideanQuadrant n)
+  签名: 可居 (EuclideanQuadrant n)
   定义体: ⟨0⟩
 
 @[ext]
@@ -259,7 +259,7 @@ instance EuclideanQuadrant.pathConnectedSpace
 
 中文:
 实例 EuclideanQuadrant.pathConnectedSpace
-  签名: : PathConnectedSpace (EuclideanQuadrant n)
+  签名: : 道路连通空间 (EuclideanQuadrant n)
   定义体: isPathConnected_iff_pathConnectedSpace.mp convex.isPathConnected ⟨0, by simp⟩
 
 Depends on / 依赖: convex, convex.isPathConnected, isPathConnected, isPathConnected_iff_pathConnectedSpace, isPathConnected_iff_pathConnectedSpace.mp
@@ -277,7 +277,7 @@ instance [NeZero
 
 中文:
 实例 [NeZero
-  签名: n] : LocallyPathConnectedSpace (EuclideanHalfSpace n)
+  签名: n] : LocallyPathConnected空间 (EuclideanHalfSpace n)
   定义体: EuclideanHalfSpace.convex.locallyPathConnectedSpace
 
 Depends on / 依赖: EuclideanHalfSpace, EuclideanHalfSpace.convex.locallyPathConnectedSpace, convex, locallyPathConnectedSpace
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyPathConnectedSpace (EuclideanQuadrant n)
+  签名: LocallyPathConnected空间 (EuclideanQuadrant n)
   定义体: EuclideanQuadrant.convex.locallyPathConnectedSpace
 
 Depends on / 依赖: EuclideanQuadrant, EuclideanQuadrant.convex.locallyPathConnectedSpace, convex, locallyPathConnectedSpace
@@ -343,7 +343,7 @@ theorem interior_halfSpace
 
 中文:
 定理 interior_halfSpace
-  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : Fin n)
+  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : 有限集 n)
   证明: by
   let f : PiLp p (fun _ : Fin n => Real) -> Real := fun x => x i
   change interior (f ⁻¹' Ici a) = f ⁻¹' Ioi a
@@ -378,7 +378,7 @@ theorem closure_halfSpace
 
 中文:
 定理 closure_halfSpace
-  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : Fin n)
+  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : 有限集 n)
   证明: by
   let f : PiLp p (fun _ : Fin n => Real) -> Real := fun x => x i
   change closure (f ⁻¹' Ici a) = f ⁻¹' Ici a
@@ -413,7 +413,7 @@ theorem closure_open_halfSpace
 
 中文:
 定理 closure_open_halfSpace
-  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : Fin n)
+  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : 有限集 n)
   证明: by
   let f : PiLp p (fun _ : Fin n => Real) -> Real := fun x => x i
   change closure (f ⁻¹' Ioi a) = f ⁻¹' Ici a
@@ -445,7 +445,7 @@ theorem frontier_halfSpace
 
 中文:
 定理 frontier_halfSpace
-  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : Fin n)
+  条件: {n : 自然数} (p : 实数>=0∞) (a : 实数) (i : 有限集 n)
   证明: by
   rw [frontier]; rw [closure_halfSpace]; rw [interior_halfSpace]
   ext y
@@ -845,7 +845,7 @@ lemma IccLeftChart_apply
 
 中文:
 引理 IccLeftChart_apply
-  条件: (z : Icc x y)
+  条件: (z : 闭区间 x y)
   证明: rfl
 -/
 lemma IccLeftChart_apply (z : Icc x y) :
@@ -938,7 +938,7 @@ lemma iccLeftChart_extend_zero
 
 中文:
 引理 iccLeftChart_extend_zero
-  条件: {p : Set.Icc x y}
+  条件: {p : 集合.闭区间 x y}
   证明: rfl
 -/
 lemma iccLeftChart_extend_zero {p : Set.Icc x y} :
@@ -956,7 +956,7 @@ lemma IccLeftChart_extend_interior_pos
 
 中文:
 引理 IccLeftChart_extend_interior_pos
-  条件: {p : Set.Icc x y} (hp : x < p.val ∧ p.val < y)
+  条件: {p : 集合.闭区间 x y} (hp : x < p.val ∧ p.val < y)
   证明: by
   simp_rw [iccLeftChart_extend_zero]
   norm_num [hp.1]
@@ -1061,7 +1061,7 @@ lemma IccRightChart_apply
 
 中文:
 引理 IccRightChart_apply
-  条件: (z : Icc x y)
+  条件: (z : 闭区间 x y)
   证明: rfl
 -/
 lemma IccRightChart_apply (z : Icc x y) :
@@ -1210,7 +1210,7 @@ lemma Icc_chartedSpaceChartAt
 
 中文:
 引理 Icc_chartedSpaceChartAt
-  条件: {z : Set.Icc x y}
+  条件: {z : 集合.闭区间 x y}
   证明: rfl
 -/
 lemma Icc_chartedSpaceChartAt {z : Set.Icc x y} :
@@ -1227,7 +1227,7 @@ lemma Icc_chartedSpaceChartAt_of_le_top
 
 中文:
 引理 Icc_chartedSpaceChartAt_of_le_top
-  条件: {z : Set.Icc x y} (h : z.val < y)
+  条件: {z : 集合.闭区间 x y} (h : z.val < y)
   证明: by
   simp [Icc_chartedSpaceChartAt, h]
 
@@ -1248,7 +1248,7 @@ lemma Icc_chartedSpaceChartAt_of_top_le
 
 中文:
 引理 Icc_chartedSpaceChartAt_of_top_le
-  条件: {z : Set.Icc x y} (h : y <= z.val)
+  条件: {z : 集合.闭区间 x y} (h : y <= z.val)
   证明: by
   simp [Icc_chartedSpaceChartAt, reduceIte, not_lt.mpr h]
 
@@ -1270,7 +1270,7 @@ lemma Icc_isBoundaryPoint_bot
 
 中文:
 引理 Icc_isBoundaryPoint_bot
-  结论: (𝓡∂ 1).IsBoundaryPoint (⊥ : Set.Icc x y)
+  结论: (𝓡∂ 1).IsBoundaryPoint (⊥ : 集合.闭区间 x y)
   证明: by
   rw [ModelWithCorners.isBoundaryPoint_iff]; rw [extChartAt]; rw [Icc_chartedSpaceChartAt_of_le_top (by simp [hxy.out])]
   exact IccLeftChart_extend_bot_mem_frontier
@@ -1293,7 +1293,7 @@ lemma Icc_isBoundaryPoint_top
 
 中文:
 引理 Icc_isBoundaryPoint_top
-  结论: (𝓡∂ 1).IsBoundaryPoint (⊤ : Set.Icc x y)
+  结论: (𝓡∂ 1).IsBoundaryPoint (⊤ : 集合.闭区间 x y)
   证明: by
   rw [ModelWithCorners.isBoundaryPoint_iff]; rw [extChartAt]; rw [Icc_chartedSpaceChartAt_of_top_le (by simp)]
   exact IccRightChart_extend_top_mem_frontier
@@ -1315,8 +1315,8 @@ lemma Icc_isInteriorPoint_interior
   exact IccLeftChart_extend_interior_pos hp
 
 中文:
-引理 Icc_isInteriorPoint_interior
-  条件: {p : Set.Icc x y} (hp : x < p.val ∧ p.val < y)
+引理 Icc_is整数eriorPoint_interior
+  条件: {p : 集合.闭区间 x y} (hp : x < p.val ∧ p.val < y)
   证明: by
   rw [ModelWithCorners.IsInteriorPoint]; rw [extChartAt]; rw [Icc_chartedSpaceChartAt_of_le_top hp.2]; rw [interior_range_modelWithCornersEuclideanHalfSpace]
   exact IccLeftChart_extend_interior_pos hp
@@ -1346,7 +1346,7 @@ lemma boundary_Icc
 
 中文:
 引理 boundary_Icc
-  结论: (𝓡∂ 1).boundary (Icc x y) = {⊥, ⊤}
+  结论: (𝓡∂ 1).boundary (闭区间 x y) = {⊥, ⊤}
   证明: by
   ext p
   rcases Set.eq_endpoints_or_mem_Ioo_of_mem_Icc p.2 with (hp | hp | hp)
@@ -1388,7 +1388,7 @@ lemma boundary_product
 
 中文:
 引理 boundary_product
-  条件: [I.Boundaryless]
+  条件: [I.无边界]
   证明: by
   rw [I.boundary_of_boundaryless_left]; rw [boundary_Icc]
 
@@ -1480,7 +1480,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChartedSpace (EuclideanHalfSpace 1) (Icc (0 : 实数) 1)
+  签名: Charted空间 (EuclideanHalfSpace 1) (闭区间 (0 : 实数) 1)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance

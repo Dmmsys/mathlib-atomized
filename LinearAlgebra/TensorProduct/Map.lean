@@ -197,7 +197,7 @@ abbreviation mapIncl
 
 中文:
 缩写 mapIncl
-  签名: (p : Submodule R P) (q : Submodule R Q)
+  签名: (p : 子模 R P) (q : 子模 R Q)
   定义体: map p.subtype q.subtype
 
 Depends on / 依赖: p.subtype, q.subtype, subtype
@@ -216,7 +216,7 @@ lemma range_mapIncl
 
 中文:
 引理 range_mapIncl
-  条件: (p : Submodule R P) (q : Submodule R Q)
+  条件: (p : 子模 R P) (q : 子模 R Q)
   证明: by
   simp_rw [mapIncl, range_map, Submodule.range_subtype]
 
@@ -307,7 +307,7 @@ lemma range_map_mono
 
 中文:
 引理 range_map_mono
-  结论: [Module R M₂] [Module R M₃] [Module R N₂] [Module R N₃]
+  结论: [模 R M₂] [模 R M₃] [模 R N₂] [模 R N₃]
   证明: by
   simp_rw [range_map]
   exact Submodule.map₂_le_map₂ hab hcd
@@ -330,7 +330,7 @@ lemma range_mapIncl_mono
 
 中文:
 引理 range_mapIncl_mono
-  条件: {p p' : Submodule R P} {q q' : Submodule R Q} (hp : p <= p') (hq : q <= q')
+  条件: {p p' : 子模 R P} {q q' : 子模 R Q} (hp : p <= p') (hq : q <= q')
   证明: range_map_mono (by simpa) (by simpa)
 
 Depends on / 依赖: range_map_mono
@@ -1127,7 +1127,7 @@ theorem lTensor_def
 
 中文:
 定理 lTensor_def
-  结论: f.lTensor M = TensorProduct.map LinearMap.id f
+  结论: f.lTensor M = 张量积.map 线性映射.id f
   证明: rfl
 -/
 theorem lTensor_def : f.lTensor M = TensorProduct.map LinearMap.id f := rfl
@@ -1144,7 +1144,7 @@ theorem rTensor_def
 
 中文:
 定理 rTensor_def
-  结论: f.rTensor M = TensorProduct.map f LinearMap.id
+  结论: f.rTensor M = 张量积.map f 线性映射.id
   证明: rfl
 
 @[simp]
@@ -1347,7 +1347,7 @@ theorem smul_lTensor
 
 中文:
 定理 smul_lTensor
-  结论: {S : 类型} [CommSemiring S] [SMul R S] [Module S M] [IsScalarTower R S M]
+  结论: {S : 类型} [交换半环 S] [标量乘法 R S] [模 S M] [标量塔 R S M]
   证明: have h : s • (f.lTensor M) = f.lTensor M ∘ₗ (LinearMap.lsmul S (M otimes[R] N) s).restrictScalars R :=
     TensorProduct.ext rfl
   congrFun (congrArg DFunLike.coe h) m
@@ -1723,7 +1723,7 @@ theorem lTensor_mul
 
 中文:
 定理 lTensor_mul
-  条件: (f g : Module.End R N)
+  条件: (f g : 模.End R N)
   结论: (f * g).lTensor M = f.lTensor M * g.lTensor M
   证明: lTensor_comp M f g
 
@@ -1743,7 +1743,7 @@ theorem rTensor_mul
 
 中文:
 定理 rTensor_mul
-  条件: (f g : Module.End R N)
+  条件: (f g : 模.End R N)
   结论: (f * g).rTensor M = f.rTensor M * g.rTensor M
   证明: rTensor_comp M f g
 
@@ -1789,7 +1789,7 @@ theorem lTensor_id_apply
 中文:
 定理 lTensor_id_apply
   条件: (x : M otimes[R] N)
-  结论: (LinearMap.id : N ->ₗ[R] N).lTensor M x = x
+  结论: (线性映射.id : N ->ₗ[R] N).lTensor M x = x
   证明: by
   rw [lTensor_id]; rw [id_coe]; rw [_root_.id]
 
@@ -1835,7 +1835,7 @@ theorem rTensor_id_apply
 中文:
 定理 rTensor_id_apply
   条件: (x : N otimes[R] M)
-  结论: (LinearMap.id : N ->ₗ[R] N).rTensor M x = x
+  结论: (线性映射.id : N ->ₗ[R] N).rTensor M x = x
   证明: by
   rw [rTensor_id]; rw [id_coe]; rw [_root_.id]
 

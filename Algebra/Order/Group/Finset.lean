@@ -130,7 +130,7 @@ lemma fold_max_add
 
 中文:
 引理 fold_max_add
-  结论: [LinearOrder M] [Add M] [AddRightMono M] (s : Finset ι) (a : WithBot M)
+  结论: [线性序 M] [加法 M] [AddRightMono M] (s : 有限集 ι) (a : WithBot M)
   证明: by
   classical induction s using Finset.induction_on <;> simp [*, max_add_add_right]
 
@@ -154,8 +154,8 @@ lemma inf'_pow
 @[to_additive nsmul_sup']
 
 中文:
-引理 inf'_pow
-  结论: [LinearOrder M] [Monoid M] [MulLeftMono M] [MulRightMono M] (s : Finset ι)
+引理 下确界'_pow
+  结论: [线性序 M] [幺半群 M] [MulLeftMono M] [MulRightMono M] (s : 有限集 ι)
   证明: map_finset_inf' (OrderHom.mk _ <| pow_left_mono n) hs _
 
 @[to_additive nsmul_sup']
@@ -174,8 +174,8 @@ lemma sup'_pow
   proof: map_finset_sup' (OrderHom.mk _ <| pow_left_mono n) hs _
 
 中文:
-引理 sup'_pow
-  结论: [LinearOrder M] [Monoid M] [MulLeftMono M] [MulRightMono M] (s : Finset ι)
+引理 上确界'_pow
+  结论: [线性序 M] [幺半群 M] [MulLeftMono M] [MulRightMono M] (s : 有限集 ι)
   证明: map_finset_sup' (OrderHom.mk _ <| pow_left_mono n) hs _
 -/
 lemma sup'_pow [LinearOrder M] [Monoid M] [MulLeftMono M] [MulRightMono M] (s : Finset ι)
@@ -195,8 +195,8 @@ lemma sup'_mul
   proof: map_finset_sup' (OrderIso.mulRight a) hs f
 
 中文:
-引理 sup'_mul
-  条件: [MulRightMono G] (s : Finset ι) (f : ι -> G) (a : G) (hs)
+引理 上确界'_mul
+  条件: [MulRightMono G] (s : 有限集 ι) (f : ι -> G) (a : G) (hs)
   证明: map_finset_sup' (OrderIso.mulRight a) hs f
 -/
 lemma sup'_mul [MulRightMono G] (s : Finset ι) (f : ι -> G) (a : G) (hs) :
@@ -214,7 +214,7 @@ lemma mul_sup'
 
 中文:
 引理 mul_sup'
-  条件: [MulLeftMono G] (s : Finset ι) (f : ι -> G) (a : G) (hs)
+  条件: [MulLeftMono G] (s : 有限集 ι) (f : ι -> G) (a : G) (hs)
   证明: map_finset_sup' (OrderIso.mulLeft a) hs f
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, map_finset_sup, mulLeft
@@ -242,8 +242,8 @@ lemma sup'_add'
   · exact Finset.sup'_le _ _ fun i hi => by grw [← Finset.le_sup' _ hi]
 
 中文:
-引理 sup'_add'
-  条件: (s : Finset ι) (f : ι -> M) (a : M) (hs : s.Nonempty)
+引理 上确界'_add'
+  条件: (s : 有限集 ι) (f : ι -> M) (a : M) (hs : s.非空)
   证明: by
   apply le_antisymm
   · apply add_le_of_le_tsub_right_of_le
@@ -269,7 +269,7 @@ lemma add_sup''
 
 中文:
 引理 add_sup''
-  条件: (hs : s.Nonempty) (f : ι -> M) (a : M)
+  条件: (hs : s.非空) (f : ι -> M) (a : M)
   证明: by simp_rw [add_comm a, Finset.sup'_add']
 
 Depends on / 依赖: Finset, Finset.sup, _add, add_comm, simp_rw
@@ -290,7 +290,7 @@ lemma sup_add
 
 中文:
 引理 sup_add
-  条件: (hs : s.Nonempty) (f : ι -> M) (a : M)
+  条件: (hs : s.非空) (f : ι -> M) (a : M)
   证明: by
   rw [← Finset.sup'_eq_sup hs]; rw [← Finset.sup'_eq_sup hs]; rw [sup'_add']
 -/
@@ -309,7 +309,7 @@ lemma add_sup
 
 中文:
 引理 add_sup
-  条件: (hs : s.Nonempty) (f : ι -> M) (a : M)
+  条件: (hs : s.非空) (f : ι -> M) (a : M)
   证明: by
   rw [← Finset.sup'_eq_sup hs]; rw [← Finset.sup'_eq_sup hs]; rw [add_sup'']
 -/
@@ -328,7 +328,7 @@ lemma sup_add_sup
 
 中文:
 引理 sup_add_sup
-  条件: (hs : s.Nonempty) (ht : t.Nonempty) (f : ι -> M) (g : κ -> M)
+  条件: (hs : s.非空) (ht : t.非空) (f : ι -> M) (g : κ -> M)
   证明: by
   simp only [Finset.sup_add hs, Finset.add_sup ht, Finset.sup_product_left]
 

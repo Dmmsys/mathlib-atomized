@@ -51,7 +51,7 @@ structure Triplet
 
 中文:
 结构 Triplet
-  参数: {X Y S : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S)
+  参数: {X Y S : 概形.{u}} (f : X ⟶ S) (g : Y ⟶ S)
   公理与运算 (5 个):
     - x : X
     - y : Y
@@ -195,7 +195,7 @@ lemma isPullback_SpecMap_tensor
 中文:
 引理 isPullback_SpecMap_tensor
   条件: (T : Triplet f g)
-  结论: CategoryTheory.IsPullback
+  结论: 范畴论.是拉回
   证明: isPullback_SpecMap_pushout _ _
 
 Depends on / 依赖: isPullback_SpecMap_pushout
@@ -900,7 +900,7 @@ lemma Triplet.exists_preimage
   proof: ⟨carrierEquiv.symm ⟨T, Nonempty.some inferInstance⟩, by simp⟩
 
 中文:
-引理 Triplet.exists_preimage
+引理 Triplet.存在_preimage
   条件: (T : Triplet f g)
   证明: ⟨carrierEquiv.symm ⟨T, Nonempty.some inferInstance⟩, by simp⟩
 
@@ -919,7 +919,7 @@ lemma exists_preimage_pullback
   proof: (Pullback.Triplet.mk' x y h).exists_preimage
 
 中文:
-引理 exists_preimage_pullback
+引理 存在_preimage_pullback
   条件: (x : X) (y : Y) (h : f x = g y)
   证明: (Pullback.Triplet.mk' x y h).exists_preimage
 
@@ -944,7 +944,7 @@ lemma _root_.AlgebraicGeometry.Scheme.isEmpty_pullback_iff
   exact ⟨z⟩
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.isEmpty_pullback_iff
+引理 _root_.AlgebraicGeometry.概形.isEmpty_pullback_iff
   条件: {f : X ⟶ S} {g : Y ⟶ S}
   证明: by
   refine ⟨?_, Scheme.isEmpty_pullback f g⟩
@@ -991,7 +991,7 @@ lemma range_fst
 
 中文:
 引理 range_fst
-  结论: Set.range (pullback.fst f g) = f ⁻¹' Set.range g
+  结论: 集合.range (pullback.fst f g) = f ⁻¹' 集合.range g
   证明: by
   ext x
   refine ⟨?_, fun ⟨y, hy⟩ => ?_⟩
@@ -1029,7 +1029,7 @@ lemma range_snd
 
 中文:
 引理 range_snd
-  结论: Set.range (pullback.snd f g) = g ⁻¹' Set.range f
+  结论: 集合.range (pullback.snd f g) = g ⁻¹' 集合.range f
   证明: by
   ext x
   refine ⟨?_, fun ⟨y, hy⟩ => ?_⟩
@@ -1111,7 +1111,7 @@ lemma range_map
 
 中文:
 引理 range_map
-  结论: {X' Y' S' : Scheme.{u}} (f' : X' ⟶ S') (g' : Y' ⟶ S') (i₁ : X ⟶ X')
+  结论: {X' Y' S' : 概形.{u}} (f' : X' ⟶ S') (g' : Y' ⟶ S') (i₁ : X ⟶ X')
   证明: by
   ext z
   constructor
@@ -1169,7 +1169,7 @@ instance isJointlySurjectivePreserving
 
 中文:
 实例 isJointlySurjectivePreserving
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: by
     obtain ⟨a, b, h⟩ := Pullback.exists_preimage_pullback x y hxy
     use a
@@ -1199,7 +1199,7 @@ refine .of_comp_left (fun x => ?_)
 
 中文:
 引理 pullbackComparison_forget_surjective
-  条件: {X Y S : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S)
+  条件: {X Y S : 概形.{u}} (f : X ⟶ S) (g : Y ⟶ S)
   证明: by
 refine .of_comp_left (fun x => ?_)
     injective_of_mono (Types.pullbackIsoPullback (forget.map f) (forget.map g)).hom
@@ -1243,8 +1243,8 @@ lemma exists_preimage_of_isPullback
   simp [← Scheme.Hom.comp_apply, hzl, hzr]
 
 中文:
-引理 exists_preimage_of_isPullback
-  结论: {P X Y Z : Scheme.{u}} {fst : P ⟶ X} {snd : P ⟶ Y}
+引理 存在_preimage_of_isPullback
+  结论: {P X Y Z : 概形.{u}} {fst : P ⟶ X} {snd : P ⟶ Y}
   证明: by
   let e := h.isoPullback
   obtain ⟨z, hzl, hzr⟩ := AlgebraicGeometry.Scheme.Pullback.exists_preimage_pullback x y hxy
@@ -1277,7 +1277,7 @@ lemma image_preimage_eq_of_isPullback
 
 中文:
 引理 image_preimage_eq_of_isPullback
-  结论: {P X Y Z : Scheme.{u}} {fst : P ⟶ X} {snd : P ⟶ Y}
+  结论: {P X Y Z : 概形.{u}} {fst : P ⟶ X} {snd : P ⟶ Y}
   证明: by
   refine subset_antisymm ?_ (fun x hx => ?_)
   · rw [Set.image_subset_iff, ← Set.preimage_comp, ← TopCat.coe_comp, ← Hom.comp_base, ← h.1.1]
@@ -1317,7 +1317,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderBaseChange @Surjective
+  签名: MorphismProperty.是StableUnderBaseChange @满射
   定义体: by
   refine .mk' ?_
   introv hg

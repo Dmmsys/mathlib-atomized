@@ -116,17 +116,17 @@ inductive Code
     - rfind': Code -> Code
 
 中文:
-归纳类型 Code
-  参数: : Type
+归纳类型 余de
+  参数: : 类型
   构造子 (8 个):
-    - zero: Code
-    - succ: Code
-    - left: Code
-    - right: Code
-    - pair: Code -> Code -> Code
-    - comp: Code -> Code -> Code
-    - prec: Code -> Code -> Code
-    - rfind': Code -> Code
+    - zero: 余de
+    - succ: 余de
+    - left: 余de
+    - right: 余de
+    - pair: 余de -> 余de -> 余de
+    - comp: 余de -> 余de -> 余de
+    - prec: 余de -> 余de -> 余de
+    - rfind': 余de -> 余de
 
 Depends on / 依赖: Lex.le_iff_of_unique, le_iff_of_unique
 -/
@@ -156,7 +156,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited Code
+  签名: : 可居 余de
   定义体: ⟨zero⟩
 -/
 instance instInhabited : Inhabited Code :=
@@ -171,7 +171,7 @@ definition const
 
 中文:
 定义 const
-  签名: : 自然数 -> Code
+  签名: : 自然数 -> 余de
 -/
 protected def const : Nat -> Code
   | 0 => zero
@@ -186,7 +186,7 @@ theorem const_inj
 
 中文:
 定理 const_inj
-  结论: 对任意 {n₁ n₂}, 自然数.Partrec.Code.const n₁ = 自然数.Partrec.Code.const n₂ -> n₁ = n₂
+  结论: 对任意 {n₁ n₂}, 自然数.Partrec.余de.const n₁ = 自然数.Partrec.余de.const n₂ -> n₁ = n₂
 -/
 theorem const_inj : forall {n₁ n₂}, Nat.Partrec.Code.const n₁ = Nat.Partrec.Code.const n₂ -> n₁ = n₂
   | 0, 0, _ => by simp
@@ -205,7 +205,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Code
+  签名: : 余de
   定义体: pair left right
 -/
 protected def id : Code :=
@@ -221,7 +221,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: (c : Code) (n : 自然数)
+  签名: (c : 余de) (n : 自然数)
   定义体: comp c (pair (Code.const n) Code.id)
 
 Depends on / 依赖: Code.const, Code.id
@@ -238,7 +238,7 @@ definition encodeCode
 
 中文:
 定义 encodeCode
-  签名: : Code -> 自然数
+  签名: : 余de -> 自然数
 -/
 def encodeCode : Code -> Nat
   | zero => 0
@@ -266,8 +266,8 @@ definition ofNatCode
     have _m2 :
 
 中文:
-定义 ofNatCode
-  签名: : 自然数 -> Code
+定义 of自然数Code
+  签名: : 自然数 -> 余de
   定义体: n.div2.div2
     have hm : m < n + 4 := by
       simp only [m, div2_val]
@@ -316,7 +316,7 @@ theorem encode_ofNatCode
     have _m2 :
 
 中文:
-定理 encode_ofNatCode
+定理 encode_of自然数Code
   结论: 对任意 n, encodeCode (of自然数Code n) = n
   证明: n.div2.div2
     have hm : m < n + 4 := by
@@ -364,7 +364,7 @@ instance instDenumerable
 
 中文:
 实例 instDenumerable
-  签名: : Denumerable Code
+  签名: : 可枚举 余de
   定义体: mk'
     ⟨encodeCode, ofNatCode, fun c => by
         induction c <;> simp [encodeCode, ofNatCode, Nat.div2_val, *],
@@ -405,8 +405,8 @@ theorem ofNatCode_eq
   proof: rfl
 
 中文:
-定理 ofNatCode_eq
-  结论: of自然数 Code = of自然数Code
+定理 of自然数Code_eq
+  结论: of自然数 余de = of自然数Code
   证明: rfl
 
 Depends on / 依赖: addLeftMono_of_addLeftStrictMono
@@ -854,7 +854,7 @@ theorem computable_recOn
 
 中文:
 定理 computable_recOn
-  结论: {α σ} [Primcodable α] [Primcodable σ] {c : α -> Code} (hc : Computable c)
+  结论: {α σ} [Primcodable α] [Primcodable σ] {c : α -> 余de} (hc : 可计算 c)
   证明: pr a (cf, cg, hf, hg)
     let CO (a) cf cg hf hg := co a (cf, cg, hf, hg)
     let PC (a) cf cg hf hg := pc a (cf, cg, hf, hg)
@@ -958,7 +958,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: : Code -> 自然数 ->. 自然数
+  签名: : 余de -> 自然数 ->. 自然数
 -/
 def eval : Code -> Nat ->. Nat
   | zero => pure 0
@@ -991,7 +991,7 @@ theorem eval_prec_zero
 
 中文:
 定理 eval_prec_zero
-  条件: (cf cg : Code) (a : 自然数)
+  条件: (cf cg : 余de) (a : 自然数)
   结论: eval (prec cf cg) (自然数.pair a 0) = eval cf a
   证明: by
   rw [eval]; rw [Nat.unpaired]; rw [Nat.unpair_pair]
@@ -1015,7 +1015,7 @@ theorem eval_prec_succ
 
 中文:
 定理 eval_prec_succ
-  条件: (cf cg : Code) (a k : 自然数)
+  条件: (cf cg : 余de) (a k : 自然数)
   证明: by
   rw [eval]; rw [Nat.unpaired]; rw [Part.bind_eq_bind]; rw [Nat.unpair_pair]
   simp
@@ -1038,7 +1038,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (自然数 ->. 自然数) Code
+  签名: Membership (自然数 ->. 自然数) 余de
   定义体: ⟨fun c f => eval c = f⟩
 -/
 instance : Membership (Nat ->. Nat) Code :=
@@ -1055,7 +1055,7 @@ theorem eval_const
 
 中文:
 定理 eval_const
-  结论: 对任意 n m, eval (Code.const n) m = Part.some n
+  结论: 对任意 n m, eval (余de.const n) m = Part.some n
 -/
 theorem eval_const : forall n m, eval (Code.const n) m = Part.some n
   | 0, _ => rfl
@@ -1074,7 +1074,7 @@ theorem eval_id
 中文:
 定理 eval_id
   条件: (n)
-  结论: eval Code.id n = Part.some n
+  结论: eval 余de.id n = Part.some n
   证明: by simp! [Seq.seq, Code.id]
 
 Depends on / 依赖: Code.id, Seq.seq
@@ -1115,7 +1115,7 @@ theorem primrec_const
 
 中文:
 定理 primrec_const
-  结论: Primrec Code.const
+  结论: Primrec 余de.const
   证明: (_root_.Primrec.id.nat_iterate (_root_.Primrec.const zero)
     (primrec₂_comp.comp (_root_.Primrec.const succ) Primrec.snd).to₂).of_eq
     fun n => by simp; induction n <;>
@@ -1217,9 +1217,9 @@ theorem exists_code
     | 
 
 中文:
-定理 exists_code
+定理 存在_code
   条件: {f : 自然数 ->. 自然数}
-  结论: 自然数.Partrec f ↔ 存在 c : Code, eval c = f
+  结论: 自然数.Partrec f ↔ 存在 c : 余de, eval c = f
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · induction h with
@@ -1272,7 +1272,7 @@ definition evaln
 
 中文:
 定义 evaln
-  签名: : 自然数 -> Code -> 自然数 -> Option 自然数
+  签名: : 自然数 -> 余de -> 自然数 -> 选项类型 自然数
 -/
 def evaln : Nat -> Code -> Nat -> Option Nat
   | 0, _ => fun _ => Option.none
@@ -1581,7 +1581,7 @@ definition lup
 
 中文:
 定义 lup
-  签名: (L : List (List (Option 自然数))) (p : 自然数 × Code) (n : 自然数)
+  签名: (L : 列表 (列表 (选项类型 自然数))) (p : 自然数 × 余de) (n : 自然数)
   定义体: do
   let l ← L[encode p]?
   let o ← l[n]?
@@ -1637,7 +1637,7 @@ definition G
 
 中文:
 定义 G
-  签名: (L : List (List (Option 自然数)))
+  签名: (L : 列表 (列表 (选项类型 自然数)))
   定义体: Option.some
     let a := ofNat (Nat × Code) L.length
     let k := a.1
@@ -1862,7 +1862,7 @@ theorem primrec_evaln
 
 中文:
 定理 primrec_evaln
-  结论: Primrec fun a : (自然数 × Code) × 自然数 => evaln a.1.1 a.1.2 a.2
+  结论: Primrec fun a : (自然数 × 余de) × 自然数 => evaln a.1.1 a.1.2 a.2
   证明: have :
     Primrec₂ fun (_ : Unit) (n : Nat) =>
       let a := ofNat (Nat × Code) n
@@ -2009,8 +2009,8 @@ theorem fixed_point
 
 中文:
 定理 fixed_point
-  条件: {f : Code -> Code} (hf : Computable f)
-  结论: 存在 c : Code, eval (f c) = eval c
+  条件: {f : 余de -> 余de} (hf : 可计算 f)
+  结论: 存在 c : 余de, eval (f c) = eval c
   证明: let g (x y : Nat) : Part Nat := eval (ofNat Code x) x >>= fun b => eval (ofNat Code b) y
   have : Partrec₂ g :=
     (eval_part.comp ((Computable.ofNat _).comp fst) fst).bind
@@ -2050,8 +2050,8 @@ theorem fixed_point₂
 
 中文:
 定理 fixed_point₂
-  条件: {f : Code -> 自然数 ->. 自然数} (hf : Partrec₂ f)
-  结论: 存在 c : Code, eval c = f c
+  条件: {f : 余de -> 自然数 ->. 自然数} (hf : Partrec₂ f)
+  结论: 存在 c : 余de, eval c = f c
   证明: let ⟨cf, ef⟩ := exists_code.1 hf
   (fixed_point (primrec₂_curry.comp (_root_.Primrec.const cf) Primrec.encode).to_comp).imp
     fun c e => funext fun n => by simp [e.symm, ef, Part.map_id']
@@ -2077,7 +2077,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable {f : 自然数 ->. 自然数 // Partrec f}
+  签名: 可数 {f : 自然数 ->. 自然数 // Partrec f}
   定义体: by
   apply Function.Surjective.countable (f := fun c => ⟨eval c, eval_part.comp (.const c) .id⟩)
   intro ⟨f, hf⟩; simpa using! exists_code.1 hf
@@ -2101,7 +2101,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable {f : 自然数 -> 自然数 // Computable f}
+  签名: 可数 {f : 自然数 -> 自然数 // 可计算 f}
   定义体: @Function.Injective.countable {f : Nat -> Nat // Computable f} {f : Nat ->. Nat // Partrec f} _
     (fun f => ⟨f.val, f.2⟩)
     (fun _ _ h => Subtype.val_inj.1 (PFun.lift_injective (by simpa using h)))

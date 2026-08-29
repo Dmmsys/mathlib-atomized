@@ -56,7 +56,7 @@ alias ⟨LipschitzWith.dist_le_mul, LipschitzWith.of_dist_le_mul⟩ := lipschitz
 
 中文:
 定理 lipschitzWith_iff_dist_le_mul
-  结论: [PseudoMetricSpace α] [PseudoMetricSpace β] {K : 实数>=0}
+  结论: [伪度量空间 α] [伪度量空间 β] {K : 实数>=0}
   证明: by
   simp only [LipschitzWith, edist_nndist, dist_nndist]
   norm_cast
@@ -87,7 +87,7 @@ alias ⟨LipschitzOnWith.dist_le_mul, LipschitzOnWith.of_dist_le_mul⟩ :=
 
 中文:
 定理 lipschitzOnWith_iff_dist_le_mul
-  结论: [PseudoMetricSpace α] [PseudoMetricSpace β] {K : 实数>=0}
+  结论: [伪度量空间 α] [伪度量空间 β] {K : 实数>=0}
   证明: by
   simp only [LipschitzOnWith, edist_nndist, dist_nndist]
   norm_cast
@@ -415,7 +415,7 @@ theorem isBounded_image
 
 中文:
 定理 isBounded_image
-  条件: (hf : LipschitzWith K f) {s : Set α} (hs : IsBounded s)
+  条件: (hf : LipschitzWith K f) {s : 集合 α} (hs : IsBounded s)
   证明: hs.image (toLocallyBoundedMap f hf)
 
 Depends on / 依赖: hs.image, toLocallyBoundedMap
@@ -436,7 +436,7 @@ forall_mem_image.2 fun _y hy => hf.dist_le_mul_of_le Metric.dist_le_diam_of_mem 
 
 中文:
 定理 diam_image_le
-  条件: (hf : LipschitzWith K f) (s : Set α) (hs : IsBounded s)
+  条件: (hf : LipschitzWith K f) (s : 集合 α) (hs : IsBounded s)
   证明: Metric.diam_le_of_forall_dist_le (mul_nonneg K.coe_nonneg Metric.diam_nonneg)
     forall_mem_image.2 fun _x hx =>
 forall_mem_image.2 fun _y hy => hf.dist_le_mul_of_le Metric.dist_le_diam_of_mem hs hx hy
@@ -497,7 +497,7 @@ theorem dist
 
 中文:
 定理 dist
-  结论: LipschitzWith 2 (Function.uncurry <| @dist α _)
+  结论: LipschitzWith 2 (函数.uncurry <| @dist α _)
   证明: by
   rw [← one_add_one_eq_two]
   exact LipschitzWith.uncurry LipschitzWith.dist_left LipschitzWith.dist_right
@@ -541,7 +541,7 @@ theorem _root_.lipschitzWith_max
 
 中文:
 定理 _root_.lipschitzWith_max
-  结论: LipschitzWith 1 fun p : 实数 × 实数 => max p.1 p.2
+  结论: LipschitzWith 1 fun p : 实数 × 实数 => 最大值 p.1 p.2
   证明: LipschitzWith.of_le_add fun _ _ => sub_le_iff_le_add'.1
     (le_abs_self _).trans (abs_max_sub_max_le_max _ _ _ _)
 
@@ -562,7 +562,7 @@ theorem _root_.lipschitzWith_min
 
 中文:
 定理 _root_.lipschitzWith_min
-  结论: LipschitzWith 1 fun p : 实数 × 实数 => min p.1 p.2
+  结论: LipschitzWith 1 fun p : 实数 × 实数 => 最小值 p.1 p.2
   证明: LipschitzWith.of_le_add fun _ _ => sub_le_iff_le_add'.1
     (le_abs_self _).trans (abs_min_sub_min_le_max _ _ _ _)
 
@@ -584,7 +584,7 @@ lemma _root_.Real.lipschitzWith_toNNReal
     lipschitzWith_iff_dist_le_mul.mp lipschitzWith_max (x, 0) (y, 0)
 
 中文:
-引理 _root_.Real.lipschitzWith_toNNReal
+引理 _root_.实数.lipschitzWith_toNN实数
   结论: LipschitzWith 1 实数.toNN实数
   证明: by
   refine lipschitzWith_iff_dist_le_mul.mpr (fun x y => ?_)
@@ -607,8 +607,8 @@ theorem _root_.Set.separatesPoints_lipschitzWith_one
   proof: fun _ y _ => ⟨(dist · y), by simp [LipschitzWith.dist_left], by simpa⟩
 
 中文:
-定理 _root_.Set.separatesPoints_lipschitzWith_one
-  条件: (E : 类型) [MetricSpace E]
+定理 _root_.集合.separatesPoints_lipschitzWith_one
+  条件: (E : 类型) [度量空间 E]
   证明: fun _ y _ => ⟨(dist · y), by simp [LipschitzWith.dist_left], by simpa⟩
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.dist_left, dist_left
@@ -633,7 +633,7 @@ theorem max
   simpa only [(· ∘ ·), one_mul] using! lipschitzWith_max.comp (hf.prodMk hg)
 
 中文:
-定理 max
+定理 最大值
   条件: (hf : LipschitzWith Kf f) (hg : LipschitzWith Kg g)
   证明: by
   simpa only [(· ∘ ·), one_mul] using! lipschitzWith_max.comp (hf.prodMk hg)
@@ -652,7 +652,7 @@ theorem min
   simpa only [(· ∘ ·), one_mul] using! lipschitzWith_min.comp (hf.prodMk hg)
 
 中文:
-定理 min
+定理 最小值
   条件: (hf : LipschitzWith Kf f) (hg : LipschitzWith Kg g)
   证明: by
   simpa only [(· ∘ ·), one_mul] using! lipschitzWith_min.comp (hf.prodMk hg)
@@ -674,7 +674,7 @@ theorem max_const
 中文:
 定理 max_const
   条件: (hf : LipschitzWith Kf f) (a : 实数)
-  结论: LipschitzWith Kf fun x => max (f x) a
+  结论: LipschitzWith Kf fun x => 最大值 (f x) a
   证明: by
   simpa using hf.max (LipschitzWith.const a)
 
@@ -696,7 +696,7 @@ theorem const_max
 中文:
 定理 const_max
   条件: (hf : LipschitzWith Kf f) (a : 实数)
-  结论: LipschitzWith Kf fun x => max a (f x)
+  结论: LipschitzWith Kf fun x => 最大值 a (f x)
   证明: by
   simpa only [max_comm] using hf.max_const a
 
@@ -718,7 +718,7 @@ theorem min_const
 中文:
 定理 min_const
   条件: (hf : LipschitzWith Kf f) (a : 实数)
-  结论: LipschitzWith Kf fun x => min (f x) a
+  结论: LipschitzWith Kf fun x => 最小值 (f x) a
   证明: by
   simpa using hf.min (LipschitzWith.const a)
 
@@ -740,7 +740,7 @@ theorem const_min
 中文:
 定理 const_min
   条件: (hf : LipschitzWith Kf f) (a : 实数)
-  结论: LipschitzWith Kf fun x => min a (f x)
+  结论: LipschitzWith Kf fun x => 最小值 a (f x)
   证明: by
   simpa only [min_comm] using hf.min_const a
 
@@ -782,7 +782,7 @@ lemma LipschitzWith.properSpace
 
 中文:
 引理 LipschitzWith.properSpace
-  结论: {X Y : 类型} [PseudoMetricSpace X]
+  结论: {X Y : 类型} [伪度量空间 X]
   证明: ⟨fun x r => (hf.isCompact_preimage (isCompact_closedBall (f x) (K * r))).of_isClosed_subset
     Metric.isClosed_closedBall (hf'.mapsTo_closedBall x r).subset_preimage⟩
 
@@ -949,7 +949,7 @@ theorem isBounded_image2
 
 中文:
 定理 isBounded_image2
-  结论: (f : α -> β -> γ) {K₁ K₂ : 实数>=0} {s : Set α} {t : Set β}
+  结论: (f : α -> β -> γ) {K₁ K₂ : 实数>=0} {s : 集合 α} {t : 集合 β}
   证明: Metric.isBounded_iff_ediam_ne_top.2
     ne_top_of_le_ne_top
       (ENNReal.add_ne_top.mpr
@@ -989,7 +989,7 @@ lemma min
   proof: lipschitzWith_min.locallyLipschitz.comp (hf.prodMk hg)
 
 中文:
-引理 min
+引理 最小值
   条件: (hf : LocallyLipschitz f) (hg : LocallyLipschitz g)
   证明: lipschitzWith_min.locallyLipschitz.comp (hf.prodMk hg)
 -/
@@ -1006,7 +1006,7 @@ lemma max
   proof: lipschitzWith_max.locallyLipschitz.comp (hf.prodMk hg)
 
 中文:
-引理 max
+引理 最大值
   条件: (hf : LocallyLipschitz f) (hg : LocallyLipschitz g)
   证明: lipschitzWith_max.locallyLipschitz.comp (hf.prodMk hg)
 -/
@@ -1026,7 +1026,7 @@ theorem max_const
 中文:
 定理 max_const
   条件: (hf : LocallyLipschitz f) (a : 实数)
-  结论: LocallyLipschitz fun x => max (f x) a
+  结论: LocallyLipschitz fun x => 最大值 (f x) a
   证明: hf.max (LocallyLipschitz.const a)
 
 Depends on / 依赖: LocallyLipschitz, LocallyLipschitz.const, hf.max
@@ -1047,7 +1047,7 @@ theorem const_max
 中文:
 定理 const_max
   条件: (hf : LocallyLipschitz f) (a : 实数)
-  结论: LocallyLipschitz fun x => max a (f x)
+  结论: LocallyLipschitz fun x => 最大值 a (f x)
   证明: by
   simpa [max_comm] using (hf.max_const a)
 
@@ -1068,7 +1068,7 @@ theorem min_const
 中文:
 定理 min_const
   条件: (hf : LocallyLipschitz f) (a : 实数)
-  结论: LocallyLipschitz fun x => min (f x) a
+  结论: LocallyLipschitz fun x => 最小值 (f x) a
   证明: hf.min (LocallyLipschitz.const a)
 
 Depends on / 依赖: LocallyLipschitz, LocallyLipschitz.const, hf.min
@@ -1089,7 +1089,7 @@ theorem const_min
 中文:
 定理 const_min
   条件: (hf : LocallyLipschitz f) (a : 实数)
-  结论: LocallyLipschitz fun x => min a (f x)
+  结论: LocallyLipschitz fun x => 最小值 a (f x)
   证明: by
   simpa [min_comm] using (hf.min_const a)
 
@@ -1119,7 +1119,7 @@ theorem LipschitzOnWith.extend_real
 
 中文:
 定理 LipschitzOnWith.extend_real
-  条件: {f : α -> 实数} {s : Set α} {K : 实数>=0} (hf : LipschitzOnWith K f s)
+  条件: {f : α -> 实数} {s : 集合 α} {K : 实数>=0} (hf : LipschitzOnWith K f s)
   证明: by
   /- An extension is given by `g y = Inf {f x + K * dist y x | x ∈ s}`. Taking `x = y`, one has
     `g y ≤ f y` for `y ∈ s`, and the other inequality holds because `f` is `K`-Lipschitz, so that it
@@ -1174,7 +1174,7 @@ theorem LipschitzOnWith.extend_pi
 
 中文:
 定理 LipschitzOnWith.extend_pi
-  结论: [Fintype ι] {f : α -> ι -> 实数} {s : Set α}
+  结论: [有限类型 ι] {f : α -> ι -> 实数} {s : 集合 α}
   证明: by
   have : forall i, exists g : α -> Real, LipschitzWith K g ∧ EqOn (fun x => f x i) g s := fun i => by
     have : LipschitzOnWith K (fun x : α => f x i) s :=

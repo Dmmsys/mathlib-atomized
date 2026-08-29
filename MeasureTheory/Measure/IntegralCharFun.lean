@@ -55,7 +55,7 @@ lemma integral_charFun_Icc
 
 中文:
 引理 integral_charFun_Icc
-  条件: [IsFiniteMeasure μ] (hr : 0 < r)
+  条件: [是有限测度 μ] (hr : 0 < r)
   证明: by
   have h_int : Integrable (Function.uncurry fun (x y : Real) => cexp (x * y * I))
       ((volume.restrict (Set.uIoc (-r) r)).prod μ) := by
@@ -129,8 +129,8 @@ lemma measureReal_abs_gt_le_integral_charFun
     simp
 
 中文:
-引理 measureReal_abs_gt_le_integral_charFun
-  条件: [IsProbabilityMeasure μ] (hr : 0 < r)
+引理 measure实数_abs_gt_le_integral_charFun
+  条件: [是概率测度 μ] (hr : 0 < r)
   证明: by
   have integrable_sinc_const_mul (r : Real) : Integrable (fun x => sinc (r * x)) μ :=
     (integrable_map_measure stronglyMeasurable_sinc.aestronglyMeasurable (by fun_prop)).mp
@@ -209,8 +209,8 @@ lemma measureReal_abs_dual_gt_le_integral_charFunDual
   · rw [c
 
 中文:
-引理 measureReal_abs_dual_gt_le_integral_charFunDual
-  结论: {E : 类型} [NormedAddCommGroup E]
+引理 measure实数_abs_dual_gt_le_integral_charFunDual
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   have : IsProbabilityMeasure (μ.map L) := Measure.isProbabilityMeasure_map (by fun_prop)
   convert! measureReal_abs_gt_le_integral_charFun (μ := μ.map L) hr with x
@@ -247,8 +247,8 @@ lemma measureReal_abs_inner_gt_le_integral_charFun
     · exact MeasurableSet.preimage measu
 
 中文:
-引理 measureReal_abs_inner_gt_le_integral_charFun
-  结论: {E : 类型} [SeminormedAddCommGroup E]
+引理 measure实数_abs_inner_gt_le_integral_charFun
+  结论: {E : 类型} [SeminormedAddComm群 E]
   证明: by
   have : IsProbabilityMeasure (μ.map (fun x => ⟪a, x⟫)) :=
     Measure.isProbabilityMeasure_map (by fun_prop)

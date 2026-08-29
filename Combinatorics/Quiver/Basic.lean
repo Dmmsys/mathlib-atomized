@@ -35,7 +35,7 @@ class Quiver
     - Hom : V -> V -> Type v
 
 中文:
-类 Quiver
+类 箭图
   参数: (V : 类型u)
   公理与运算 (1 个):
     - Hom : V -> V -> 类型v
@@ -67,7 +67,7 @@ instance opposite
 
 中文:
 实例 opposite
-  签名: {V} [Quiver V]
+  签名: {V} [箭图 V]
   定义体: ⟨fun a b => (unop b ⟶ unop a)ᵒᵖ⟩
 -/
 instance opposite {V} [Quiver V] : Quiver Vᵒᵖ :=
@@ -84,8 +84,8 @@ definition Hom.op
   body: ⟨f⟩
 
 中文:
-定义 Hom.op
-  签名: {V} [Quiver V] {X Y : V} (f : X ⟶ Y)
+定义 态射.op
+  签名: {V} [箭图 V] {X Y : V} (f : X ⟶ Y)
   定义体: ⟨f⟩
 -/
 def Hom.op {V} [Quiver V] {X Y : V} (f : X ⟶ Y) : op Y ⟶ op X := ⟨f⟩
@@ -101,8 +101,8 @@ definition Hom.unop
   body: Opposite.unop f
 
 中文:
-定义 Hom.unop
-  签名: {V} [Quiver V] {X Y : Vᵒᵖ} (f : X ⟶ Y)
+定义 态射.unop
+  签名: {V} [箭图 V] {X Y : Vᵒᵖ} (f : X ⟶ Y)
   定义体: Opposite.unop f
 
 Depends on / 依赖: Opposite, Opposite.unop
@@ -121,8 +121,8 @@ definition Hom.opEquiv
   invFun := Opposite.unop
 
 中文:
-定义 Hom.opEquiv
-  签名: {V} [Quiver V] {X Y : V}
+定义 态射.opEquiv
+  签名: {V} [箭图 V] {X Y : V}
   定义体: Opposite.op
   invFun := Opposite.unop
 
@@ -141,7 +141,7 @@ definition Empty
   body: V
 
 中文:
-定义 Empty
+定义 空
   签名: (V : 类型u)
   定义体: V
 -/
@@ -180,8 +180,8 @@ theorem empty_arrow
 
 中文:
 定理 empty_arrow
-  条件: {V : 类型u} (a b : Empty V)
-  结论: (a ⟶ b) = PEmpty
+  条件: {V : 类型u} (a b : 空 V)
+  结论: (a ⟶ b) = 命题空
   证明: rfl
 -/
 theorem empty_arrow {V : Type u} (a b : Empty V) : (a ⟶ b) = PEmpty := rfl
@@ -198,7 +198,7 @@ to_dual_insert_cast_fun IsThin := fun inst a b => inst b a, fun inst a b => inst
 
 中文:
 缩写 IsThin
-  签名: (V : 类型u) [Quiver V]
+  签名: (V : 类型u) [箭图 V]
   定义体: forall a b : V, Subsingleton (a ⟶ b)
 
 to_dual_insert_cast_fun IsThin := fun inst a b => inst b a, fun inst a b => inst b a
@@ -312,7 +312,7 @@ lemma homOfEq_rfl
 中文:
 引理 homOfEq_rfl
   条件: (f : X ⟶ Y)
-  结论: Quiver.homOfEq f rfl rfl = f
+  结论: 箭图.homOfEq f rfl rfl = f
   证明: rfl
 
 @[to_dual self]

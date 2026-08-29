@@ -58,7 +58,7 @@ theorem exists_embedding_disjoint_range_of_add_le_ENat_card
     a
 
 中文:
-定理 exists_embedding_disjoint_range_of_add_le_ENat_card
+定理 存在_embedding_disjoint_range_of_add_le_E自然数_card
   证明: by
   rsuffices ⟨y⟩ : Nonempty (Fin n ↪ (sᶜ : Set α))
   · use y.trans (subtype _)
@@ -100,7 +100,7 @@ theorem exists_embedding_disjoint_range_of_add_le_Nat_card
   rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
 
 中文:
-定理 exists_embedding_disjoint_range_of_add_le_Nat_card
+定理 存在_embedding_disjoint_range_of_add_le_自然数_card
   证明: by
   apply exists_embedding_disjoint_range_of_add_le_ENat_card
   rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
@@ -129,7 +129,7 @@ theorem restrictSurjective_of_add_le_ENatCard
   simp [trans_apply, coe_castAddEmb, append]
 
 中文:
-定理 restrictSurjective_of_add_le_ENatCard
+定理 restrictSurjective_of_add_le_E自然数Card
   条件: (hn : m + n <= E自然数.card α)
   证明: by
   intro x
@@ -163,7 +163,7 @@ theorem restrictSurjective_of_le_ENatCard
   exact Fin.Embedding.restrictSurjective_of_add_le_ENatCard hn
 
 中文:
-定理 restrictSurjective_of_le_ENatCard
+定理 restrictSurjective_of_le_E自然数Card
   条件: (hmn : m <= n) (hn : n <= E自然数.card α)
   证明: by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
@@ -188,7 +188,7 @@ theorem restrictSurjective_of_add_le_natCard
 
 中文:
 定理 restrictSurjective_of_add_le_natCard
-  条件: [Finite α] (hn : m + n <= 自然数.card α)
+  条件: [有限 α] (hn : m + n <= 自然数.card α)
   证明: by
   apply restrictSurjective_of_add_le_ENatCard
   rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
@@ -212,7 +212,7 @@ theorem restrictSurjective_of_le_natCard
 
 中文:
 定理 restrictSurjective_of_le_natCard
-  条件: [Finite α] (hmn : m <= n) (hn : n <= 自然数.card α)
+  条件: [有限 α] (hmn : m <= n) (hn : n <= 自然数.card α)
   证明: by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   exact Fin.Embedding.restrictSurjective_of_add_le_natCard hn

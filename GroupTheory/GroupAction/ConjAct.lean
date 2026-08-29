@@ -49,7 +49,7 @@ definition ConjAct
 
 中文:
 定义 ConjAct
-  签名: : Type _
+  签名: : 类型 _
   定义体: G
 -/
 def ConjAct : Type _ :=
@@ -70,8 +70,8 @@ instance [DivInvMonoid
   body: inferInstanceAs DivInvMonoid G
 
 中文:
-实例 [DivInvMonoid
-  签名: G] : DivInvMonoid (ConjAct G)
+实例 [除逆幺半群
+  签名: G] : 除逆幺半群 (ConjAct G)
   定义体: inferInstanceAs DivInvMonoid G
 
 Depends on / 依赖: DivInvMonoid
@@ -87,8 +87,8 @@ instance [Group
   body: inferInstanceAs Group G
 
 中文:
-实例 [Group
-  签名: G] : Group (ConjAct G)
+实例 [群
+  签名: G] : 群 (ConjAct G)
   定义体: inferInstanceAs Group G
 -/
 instance [Group G] : Group (ConjAct G) := inferInstanceAs Group G
@@ -104,8 +104,8 @@ instance [Fintype
 @[simp]
 
 中文:
-实例 [Fintype
-  签名: G] : Fintype (ConjAct G)
+实例 [有限类型
+  签名: G] : 有限类型 (ConjAct G)
   定义体: inferInstanceAs Fintype G
 
 @[simp]
@@ -126,8 +126,8 @@ theorem card
 
 中文:
 定理 card
-  条件: [Fintype G]
-  结论: Fintype.card (ConjAct G) = Fintype.card G
+  条件: [有限类型 G]
+  结论: 有限类型.card (ConjAct G) = 有限类型.card G
   证明: rfl
 -/
 theorem card [Fintype G] : Fintype.card (ConjAct G) = Fintype.card G :=
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ConjAct G)
+  签名: 可居 (ConjAct G)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (ConjAct G) :=
@@ -207,7 +207,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {C : ConjAct G -> Sort*} (h : 对任意 g, C (toConjAct g))
+  签名: {C : ConjAct G -> 类型层*} (h : 对任意 g, C (toConjAct g))
   定义体: h
 
 @[simp]
@@ -228,7 +228,7 @@ theorem «forall»
 @[simp]
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: (p : ConjAct G -> 命题)
   结论: (对任意 x : ConjAct G, p x) ↔ 对任意 x : G, p (toConjAct x)
   证明: id Iff.rfl
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (ConjAct G) G
+  签名: 标量乘法 (ConjAct G) G
   定义体: ofConjAct g * h * (ofConjAct g)⁻¹
 
 Depends on / 依赖: ofConjAct
@@ -527,7 +527,7 @@ instance unitsScalar
 
 中文:
 实例 unitsScalar
-  签名: : SMul (ConjAct Mˣ) M where smul g h
+  签名: : 标量乘法 (ConjAct Mˣ) M where smul g h
   定义体: ofConjAct g * h * ↑(ofConjAct g)⁻¹
 
 Depends on / 依赖: ofConjAct
@@ -565,7 +565,7 @@ instance unitsMulDistribMulAction
 
 中文:
 实例 unitsMulDistribMulAction
-  签名: : MulDistribMulAction (ConjAct Mˣ) M where
+  签名: : MulDistribMul作用 (ConjAct Mˣ) M where
   定义体: by simp [units_smul_def]
   mul_smul := by simp [units_smul_def, mul_assoc]
   smul_mul := by simp [units_smul_def, mul_assoc]
@@ -590,7 +590,7 @@ instance unitsSMulCommClass
 
 中文:
 实例 unitsSMulCommClass
-  签名: [SMul α M] [SMulCommClass α M M] [IsScalarTower α M M]
+  签名: [标量乘法 α M] [标量交换类 α M M] [标量塔 α M M]
   定义体: by rw [units_smul_def, units_smul_def, mul_smul_comm, smul_mul_assoc]
 
 Depends on / 依赖: mul_smul_comm, smul_mul_assoc, units_smul_def
@@ -610,7 +610,7 @@ instance unitsSMulCommClass'
 
 中文:
 实例 unitsSMulCommClass'
-  签名: [SMul α M] [SMulCommClass M α M] [IsScalarTower α M M]
+  签名: [标量乘法 α M] [标量交换类 M α M] [标量塔 α M M]
   定义体: haveI : SMulCommClass α M M := SMulCommClass.symm _ _ _
   SMulCommClass.symm _ _ _
 
@@ -638,7 +638,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: {G : 类型} [Group G] {H : Subgroup G} (g h : H)
+  条件: {G : 类型} [群 G] {H : 子群 G} (g h : H)
   证明: by
   rfl
 -/
@@ -683,7 +683,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (ConjAct G) G
+  签名: MulDistribMul作用 (ConjAct G) G
   定义体: by simp [smul_def]
   smul_one := by simp [smul_def]
   one_smul := by simp [smul_def]
@@ -707,7 +707,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G]
+  签名: [标量乘法 α G] [标量交换类 α G G] [标量塔 α G G]
   定义体: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
 
 Depends on / 依赖: mul_smul_comm, smul_def, smul_mul_assoc
@@ -727,7 +727,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: [SMul α G] [SMulCommClass G α G] [IsScalarTower α G G]
+  签名: [标量乘法 α G] [标量交换类 G α G] [标量塔 α G G]
   定义体: haveI := SMulCommClass.symm G α G
   SMulCommClass.symm _ _ _
 
@@ -898,7 +898,7 @@ theorem _root_.Subgroup.centralizer_eq_comap_stabilizer
   ext k
 
 中文:
-定理 _root_.Subgroup.centralizer_eq_comap_stabilizer
+定理 _root_.子群.centralizer_eq_comap_stabilizer
   条件: (g : G)
   证明: by
   ext k
@@ -922,8 +922,8 @@ instance Subgroup.conjAction
   body: ⟨fun g h => ⟨g • (h : G), hH.conj_mem h.1 h.2 (ofConjAct g)⟩⟩
 
 中文:
-实例 Subgroup.conjAction
-  签名: {H : Subgroup G} [hH : H.Normal]
+实例 子群.conjAction
+  签名: {H : 子群 G} [hH : H.正规]
   定义体: ⟨fun g h => ⟨g • (h : G), hH.conj_mem h.1 h.2 (ofConjAct g)⟩⟩
 
 Depends on / 依赖: conj_mem, hH.conj_mem, ofConjAct
@@ -940,8 +940,8 @@ theorem Subgroup.val_conj_smul
   proof: rfl
 
 中文:
-定理 Subgroup.val_conj_smul
-  条件: {H : Subgroup G} [H.Normal] (g : ConjAct G) (h : H)
+定理 子群.val_conj_smul
+  条件: {H : 子群 G} [H.正规] (g : ConjAct G) (h : H)
   证明: rfl
 -/
 theorem Subgroup.val_conj_smul {H : Subgroup G} [H.Normal] (g : ConjAct G) (h : H) :
@@ -957,8 +957,8 @@ instance Subgroup.conjMulDistribMulAction
   body: Subtype.coe_injective.mulDistribMulAction H.subtype Subgroup.val_conj_smul
 
 中文:
-实例 Subgroup.conjMulDistribMulAction
-  签名: {H : Subgroup G} [H.Normal]
+实例 子群.conjMulDistribMulAction
+  签名: {H : 子群 G} [H.正规]
   定义体: Subtype.coe_injective.mulDistribMulAction H.subtype Subgroup.val_conj_smul
 
 Depends on / 依赖: H.subtype, Subgroup, Subgroup.val_conj_smul, Subtype, Subtype.coe_injective.mulDistribMulAction, coe_injective, mulDistribMulAction, subtype, val_conj_smul
@@ -979,7 +979,7 @@ definition _root_.MulAut.conjNormal
 
 中文:
 定义 _root_.MulAut.conjNormal
-  签名: {H : Subgroup G} [H.Normal]
+  签名: {H : 子群 G} [H.正规]
   定义体: (MulDistribMulAction.toMulAut (ConjAct G) H).comp toConjAct.toMonoidHom
 
 @[simp]
@@ -1000,7 +1000,7 @@ theorem _root_.MulAut.conjNormal_apply
 
 中文:
 定理 _root_.MulAut.conjNormal_apply
-  条件: {H : Subgroup G} [H.Normal] (g : G) (h : H)
+  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
   证明: rfl
 -/
 theorem _root_.MulAut.conjNormal_apply {H : Subgroup G} [H.Normal] (g : G) (h : H) :
@@ -1022,7 +1022,7 @@ theorem _root_.MulAut.conjNormal_symm_apply
 
 中文:
 定理 _root_.MulAut.conjNormal_symm_apply
-  条件: {H : Subgroup G} [H.Normal] (g : G) (h : H)
+  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
   证明: by
   change _ * g⁻¹⁻¹ = _
   rw [inv_inv]
@@ -1046,7 +1046,7 @@ theorem _root_.MulAut.conjNormal_inv_apply
 
 中文:
 定理 _root_.MulAut.conjNormal_inv_apply
-  条件: {H : Subgroup G} [H.Normal] (g : G) (h : H)
+  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
   证明: MulAut.conjNormal_symm_apply g h
 
 Depends on / 依赖: MulAut, MulAut.conjNormal_symm_apply, conjNormal_symm_apply
@@ -1065,7 +1065,7 @@ theorem _root_.MulAut.conjNormal_val
 
 中文:
 定理 _root_.MulAut.conjNormal_val
-  条件: {H : Subgroup G} [H.Normal] {h : H}
+  条件: {H : 子群 G} [H.正规] {h : H}
   证明: MulEquiv.ext fun _ => rfl
 
 Depends on / 依赖: MulEquiv, MulEquiv.ext
@@ -1087,7 +1087,7 @@ instance normal_of_characteristic_of_normal
 
 中文:
 实例 normal_of_characteristic_of_normal
-  签名: {H : Subgroup G} [hH : H.Normal] {K : Subgroup H}
+  签名: {H : 子群 G} [hH : H.正规] {K : 子群 H}
   定义体: ⟨fun a ha b => by
     obtain ⟨a, ha, rfl⟩ := ha
     exact K.apply_coe_mem_map H.subtype

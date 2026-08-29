@@ -118,7 +118,7 @@ lemma cast_pi
 
 中文:
 引理 cast_pi
-  条件: {s t : Set 自然数} (h : s = t) (x : (i : s) -> X i) (i : t)
+  条件: {s t : 集合 自然数} (h : s = t) (x : (i : s) -> X i) (i : t)
   证明: by
   cases h; rfl
 -/
@@ -140,7 +140,7 @@ lemma measure_cast
 
 中文:
 引理 measure_cast
-  条件: {a b : 自然数} (h : a = b) (μ : (n : 自然数) -> Measure (Π i : Iic n, X i))
+  条件: {a b : 自然数} (h : a = b) (μ : (n : 自然数) -> 测度 (Π i : 左无界右闭区间 n, X i))
   证明: by
   cases h
   exact Measure.map_id
@@ -180,7 +180,7 @@ definition iterateInduction
 
 中文:
 定义 iterateInduction
-  签名: {a : 自然数} (x : Π i : Iic a, X i)
+  签名: {a : 自然数} (x : Π i : 左无界右闭区间 a, X i)
 -/
 def iterateInduction {a : Nat} (x : Π i : Iic a, X i)
     (ind : (n : Nat) -> (Π i : Iic n, X i) -> X (n + 1)) : Π n, X n
@@ -204,7 +204,7 @@ lemma frestrictLe_iterateInduction
 
 中文:
 引理 frestrictLe_iterateInduction
-  结论: {a : 自然数} (x : Π i : Iic a, X i)
+  结论: {a : 自然数} (x : Π i : 左无界右闭区间 a, X i)
   证明: by
   ext i
   simp only [frestrictLe_apply]
@@ -247,7 +247,7 @@ theorem isProjectiveLimit_nat_iff'
 
 中文:
 定理 isProjectiveLimit_nat_iff'
-  结论: {μ : (I : Finset 自然数) -> Measure (Π i : I, X i)}
+  结论: {μ : (I : 有限集 自然数) -> 测度 (Π i : I, X i)}
   证明: by
   refine ⟨fun h n _ => h (Iic n), fun h I => ?_⟩
   have := (I.subset_Iic_sup_id.trans (Iic_subset_Iic.2 (le_max_left (I.sup id) a)))
@@ -276,7 +276,7 @@ theorem isProjectiveLimit_nat_iff
 
 中文:
 定理 isProjectiveLimit_nat_iff
-  结论: {μ : (I : Finset 自然数) -> Measure (Π i : I, X i)}
+  结论: {μ : (I : 有限集 自然数) -> 测度 (Π i : I, X i)}
   证明: by
   rw [isProjectiveLimit_nat_iff' hμ _ 0]
   simp
@@ -301,7 +301,7 @@ definition inducedFamily
 
 中文:
 定义 inducedFamily
-  签名: (S : Finset 自然数)
+  签名: (S : 有限集 自然数)
   定义体: (μ (S.sup id)).map (restrict₂ S.subset_Iic_sup_id)
 
 Depends on / 依赖: S.subset_Iic_sup_id, S.sup, subset_Iic_sup_id
@@ -318,7 +318,7 @@ instance [forall
   body: by rw [inducedFamily]; infer_instance
 
 中文:
-实例 [forall
+实例 [对任意
   签名: n, SFinite (μ n)] (I
   定义体: by rw [inducedFamily]; infer_instance
 
@@ -336,8 +336,8 @@ instance [forall
   body: by rw [inducedFamily]; infer_instance
 
 中文:
-实例 [forall
-  签名: n, IsFiniteMeasure (μ n)] (I
+实例 [对任意
+  签名: n, 是有限测度 (μ n)] (I
   定义体: by rw [inducedFamily]; infer_instance
 
 Depends on / 依赖: inducedFamily, infer_instance
@@ -354,8 +354,8 @@ instance [forall
   body: by rw [inducedFamily]; infer_instance
 
 中文:
-实例 [forall
-  签名: n, IsZeroOrProbabilityMeasure (μ n)] (I
+实例 [对任意
+  签名: n, 是ZeroOrProbabilityMeasure (μ n)] (I
   定义体: by rw [inducedFamily]; infer_instance
 
 Depends on / 依赖: inducedFamily, infer_instance
@@ -374,8 +374,8 @@ instance [forall
   exact Measure.isProbabilityMeasure_map (measurable_restrict₂ _).aemeasurable
 
 中文:
-实例 [forall
-  签名: n, IsProbabilityMeasure (μ n)] (I
+实例 [对任意
+  签名: n, 是概率测度 (μ n)] (I
   定义体: by
   rw [inducedFamily]
   exact Measure.isProbabilityMeasure_map (measurable_restrict₂ _).aemeasurable
@@ -402,7 +402,7 @@ theorem inducedFamily_Iic
 中文:
 定理 inducedFamily_Iic
   条件: (n : 自然数)
-  结论: inducedFamily μ (Iic n) = μ n
+  结论: inducedFamily μ (左无界右闭区间 n) = μ n
   证明: by
   rw [inducedFamily]; rw [← measure_cast (sup_Iic n) μ]
   congr with x i
@@ -470,7 +470,7 @@ lemma isProjectiveMeasureFamily_partialTraj
 
 中文:
 引理 isProjectiveMeasureFamily_partialTraj
-  条件: {a : 自然数} (x₀ : Π i : Iic a, X i)
+  条件: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i)
   证明: isProjectiveMeasureFamily_inducedFamily _
     (fun _ _ => partialTraj_map_frestrictLe₂_apply (κ := κ) x₀)
 
@@ -491,7 +491,7 @@ definition trajContent
 
 中文:
 定义 trajContent
-  签名: {a : 自然数} (x₀ : Π i : Iic a, X i)
+  签名: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i)
   定义体: projectiveFamilyContent (isProjectiveMeasureFamily_partialTraj κ x₀)
 
 Depends on / 依赖: isProjectiveMeasureFamily_partialTraj, projectiveFamilyContent
@@ -513,7 +513,7 @@ theorem trajContent_cylinder
 
 中文:
 定理 trajContent_cylinder
-  结论: {a b : 自然数} {S : Set (Π i : Iic b, X i)} (mS : MeasurableSet S)
+  结论: {a b : 自然数} {S : 集合 (Π i : 左无界右闭区间 b, X i)} (mS : 可测集 S)
   证明: by
   rw [trajContent]; rw [projectiveFamilyContent_cylinder _ mS]; rw [inducedFamily_Iic]
 
@@ -540,7 +540,7 @@ theorem trajContent_eq_lmarginalPartialTraj
 
 中文:
 定理 trajContent_eq_lmarginalPartialTraj
-  结论: {b : 自然数} {S : Set (Π i : Iic b, X i)}
+  结论: {b : 自然数} {S : 集合 (Π i : 左无界右闭区间 b, X i)}
   证明: by
   rw [trajContent_cylinder mS]; rw [← lintegral_indicator_one mS]; rw [lmarginalPartialTraj]
   congr with x
@@ -572,7 +572,7 @@ lemma trajContent_ne_top
 
 中文:
 引理 trajContent_ne_top
-  条件: {a : 自然数} {x : Π i : Iic a, X i} {s : Set (Π n, X n)}
+  条件: {a : 自然数} {x : Π i : 左无界右闭区间 a, X i} {s : 集合 (Π n, X n)}
   证明: projectiveFamilyContent_ne_top (isProjectiveMeasureFamily_partialTraj κ x)
 
 Depends on / 依赖: isProjectiveMeasureFamily_partialTraj, projectiveFamilyContent_ne_top
@@ -699,7 +699,7 @@ theorem trajContent_tendsto_zero
 
 中文:
 定理 trajContent_tendsto_zero
-  结论: {A : 自然数 -> Set (Π n, X n)}
+  结论: {A : 自然数 -> 集合 (Π n, X n)}
   证明: by
   have _ n : Nonempty (X n) := by
     induction n using Nat.case_strong_induction_on with
@@ -838,7 +838,7 @@ theorem isSigmaSubadditive_trajContent
 
 中文:
 定理 isSigmaSubadditive_trajContent
-  条件: {a : 自然数} (x₀ : Π i : Iic a, X i)
+  条件: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i)
   证明: by
   refine isSigmaSubadditive_of_addContent_iUnion_eq_tsum
     isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
@@ -867,7 +867,7 @@ definition trajFun
 
 中文:
 定义 trajFun
-  签名: (a : 自然数) (x₀ : Π i : Iic a, X i)
+  签名: (a : 自然数) (x₀ : Π i : 左无界右闭区间 a, X i)
   定义体: (trajContent κ x₀).measure isSetSemiring_measurableCylinders generateFrom_measurableCylinders.ge
     (isSigmaSubadditive_trajContent κ x₀)
 
@@ -890,7 +890,7 @@ theorem isProbabilityMeasure_trajFun
 
 中文:
 定理 isProbabilityMeasure_trajFun
-  条件: (a : 自然数) (x₀ : Π i : Iic a, X i)
+  条件: (a : 自然数) (x₀ : Π i : 左无界右闭区间 a, X i)
   证明: by
     rw [← cylinder_univ (Iic 0)]; rw [trajFun]; rw [AddContent.measure_eq]; rw [trajContent_cylinder .univ]; rw [measure_univ]
     · exact generateFrom_measurableCylinders.symm
@@ -919,7 +919,7 @@ theorem isProjectiveLimit_trajFun
 
 中文:
 定理 isProjectiveLimit_trajFun
-  条件: (a : 自然数) (x₀ : Π i : Iic a, X i)
+  条件: (a : 自然数) (x₀ : Π i : 左无界右闭区间 a, X i)
   证明: by
 .2 fun n => ?_ refine isProjectiveLimit_nat_iff (isProjectiveMeasureFamily_partialTraj κ x₀) _
   ext s ms
@@ -954,7 +954,7 @@ theorem measurable_trajFun
 中文:
 定理 measurable_trajFun
   条件: (a : 自然数)
-  结论: Measurable (trajFun κ a)
+  结论: 可测 (trajFun κ a)
   证明: by
   apply Measure.measurable_of_measurable_coe
   refine MeasurableSpace.induction_on_inter
@@ -1017,7 +1017,7 @@ lemma traj_apply
 
 中文:
 引理 traj_apply
-  条件: (a : 自然数) (x : Π i : Iic a, X i)
+  条件: (a : 自然数) (x : Π i : 左无界右闭区间 a, X i)
   结论: traj κ a x = trajFun κ a x
   证明: rfl
 -/
@@ -1064,7 +1064,7 @@ lemma traj_map_frestrictLe_apply
 
 中文:
 引理 traj_map_frestrictLe_apply
-  条件: (a b : 自然数) (x : Π i : Iic a, X i)
+  条件: (a b : 自然数) (x : Π i : 左无界右闭区间 a, X i)
   证明: by
   rw [← map_apply _ (measurable_frestrictLe b)]; rw [traj_map_frestrictLe]
 
@@ -1142,7 +1142,7 @@ theorem eq_traj'
 
 中文:
 定理 eq_traj'
-  结论: {a : 自然数} (n : 自然数) (η : Kernel (Π i : Iic a, X i) (Π n, X n))
+  结论: {a : 自然数} (n : 自然数) (η : 核 (Π i : 左无界右闭区间 a, X i) (Π n, X n))
   证明: by
   ext x : 1
   refine ((isProjectiveLimit_trajFun _ _ _).unique ?_).symm
@@ -1172,7 +1172,7 @@ theorem eq_traj
 
 中文:
 定理 eq_traj
-  结论: {a : 自然数} (η : Kernel (Π i : Iic a, X i) (Π n, X n))
+  结论: {a : 自然数} (η : 核 (Π i : 左无界右闭区间 a, X i) (Π n, X n))
   证明: eq_traj' κ 0 η fun b _ => hη b
 
 Depends on / 依赖: eq_traj
@@ -1262,7 +1262,7 @@ theorem traj_map_updateFinset
 
 中文:
 定理 traj_map_updateFinset
-  条件: {n : 自然数} (x : Π i : Iic n, X i)
+  条件: {n : 自然数} (x : Π i : 左无界右闭区间 n, X i)
   证明: by
   nth_rw 2 [traj_eq_prod]
   have : (updateFinset · _ x) = IicProdIoi n ∘ (Prod.mk x) ∘ (Set.Ioi n).domRestrict := by
@@ -1298,7 +1298,7 @@ theorem lintegral_traj₀
 
 中文:
 定理 lintegral_traj₀
-  结论: {a : 自然数} (x₀ : Π i : Iic a, X i) {f : (Π n, X n) -> 实数>=0∞}
+  结论: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i) {f : (Π n, X n) -> 实数>=0∞}
   证明: by
   nth_rw 1 [← traj_map_updateFinset, MeasureTheory.lintegral_map']
   · convert! mf
@@ -1325,7 +1325,7 @@ theorem lintegral_traj
 
 中文:
 定理 lintegral_traj
-  结论: {a : 自然数} (x₀ : Π i : Iic a, X i) {f : (Π n, X n) -> 实数>=0∞}
+  结论: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i) {f : (Π n, X n) -> 实数>=0∞}
   证明: lintegral_traj₀ x₀ mf.aemeasurable
 
 Depends on / 依赖: aemeasurable, mf.aemeasurable
@@ -1415,7 +1415,7 @@ theorem integral_traj
 
 中文:
 定理 integral_traj
-  结论: {a : 自然数} (x₀ : Π i : Iic a, X i) {f : (Π n, X n) -> E}
+  结论: {a : 自然数} (x₀ : Π i : 左无界右闭区间 a, X i) {f : (Π n, X n) -> E}
   证明: by
   nth_rw 1 [← traj_map_updateFinset, integral_map]
   · exact measurable_updateFinset_left.aemeasurable
@@ -1449,7 +1449,7 @@ lemma partialTraj_compProd_traj
 
 中文:
 引理 partialTraj_compProd_traj
-  条件: {a b : 自然数} (hab : a <= b) (u : Π i : Iic a, X i)
+  条件: {a b : 自然数} (hab : a <= b) (u : Π i : 左无界右闭区间 a, X i)
   证明: by
   ext s ms
   rw [Measure.map_apply]; rw [Measure.compProd_apply]; rw [← traj_comp_partialTraj hab]; rw [comp_apply']
@@ -1488,7 +1488,7 @@ lemma partialTraj_compProd_eq_map_traj
 
 中文:
 引理 partialTraj_compProd_eq_map_traj
-  条件: {a b : 自然数} (hab : a <= b) {x₀ : Π n : Iic a, X n}
+  条件: {a b : 自然数} (hab : a <= b) {x₀ : Π n : 左无界右闭区间 a, X n}
   证明: by
   have hf : (fun x : Π n, X n => (frestrictLe b x, x (b + 1))) =
       (Prod.map id (fun x => x (b + 1))) ∘ (fun x => (frestrictLe b x, x)) := rfl
@@ -1516,7 +1516,7 @@ theorem integral_traj_partialTraj'
 
 中文:
 定理 integral_traj_partialTraj'
-  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : Iic a, X i}
+  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : 左无界右闭区间 a, X i}
   证明: by
   have hf' := hf
   rw [partialTraj_compProd_traj hab] at hf'
@@ -1548,7 +1548,7 @@ theorem integral_traj_partialTraj
 
 中文:
 定理 integral_traj_partialTraj
-  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : Iic a, X i}
+  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : 左无界右闭区间 a, X i}
   证明: by
   apply integral_traj_partialTraj' hab
   rw [← traj_comp_partialTraj hab]; rw [comp_apply]; rw [← Measure.snd_compProd] at hf
@@ -1578,8 +1578,8 @@ theorem setIntegral_traj_partialTraj'
   by_cases hx : x in A <;> simp [uncurry_def, hx]
 
 中文:
-定理 setIntegral_traj_partialTraj'
-  结论: {a b : 自然数} (hab : a <= b) {u : (Π i : Iic a, X i)}
+定理 set整数egral_traj_partialTraj'
+  结论: {a b : 自然数} (hab : a <= b) {u : (Π i : 左无界右闭区间 a, X i)}
   证明: by
   rw [← integral_integral_indicator _ _ _ hA]; rw [integral_traj_partialTraj' hab]
   · simp_rw [← Set.indicator_comp_right, ← integral_indicator (measurable_frestrictLe b hA)]
@@ -1615,8 +1615,8 @@ theorem setIntegral_traj_partialTraj
   exact hf.comp_measurable measurable_snd
 
 中文:
-定理 setIntegral_traj_partialTraj
-  结论: {a b : 自然数} (hab : a <= b) {x₀ : (Π i : Iic a, X i)}
+定理 set整数egral_traj_partialTraj
+  结论: {a b : 自然数} (hab : a <= b) {x₀ : (Π i : 左无界右闭区间 a, X i)}
   证明: by
   refine setIntegral_traj_partialTraj' hab ?_ hA
   rw [← traj_comp_partialTraj hab]; rw [comp_apply]; rw [← Measure.snd_compProd] at hf
@@ -1653,7 +1653,7 @@ theorem condExp_traj
 
 中文:
 定理 condExp_traj
-  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : Iic a, X i}
+  结论: {a b : 自然数} (hab : a <= b) {x₀ : Π i : 左无界右闭区间 a, X i}
   证明: by
   have i_f' : Integrable (fun x => ∫ y, f y ∂(traj κ b) x)
       (((traj κ a) x₀).map (frestrictLe b)) := by
@@ -1743,7 +1743,7 @@ definition trajMeasure
 
 中文:
 定义 trajMeasure
-  签名: (μ₀ : Measure (X 0)) (κ : (n : 自然数) -> Kernel (Π i : Iic n, X i) (X (n + 1)))
+  签名: (μ₀ : 测度 (X 0)) (κ : (n : 自然数) -> 核 (Π i : 左无界右闭区间 n, X i) (X (n + 1)))
   定义体: (traj κ 0) ∘ₘ (μ₀.map (MeasurableEquiv.piUnique _).symm)
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.piUnique, piUnique
@@ -1770,7 +1770,7 @@ Measure.isProbabilityMeasure_map by fun_prop
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure (trajMeasure μ₀ κ)
+  签名: 是概率测度 (trajMeasure μ₀ κ)
   定义体: by
   rw [trajMeasure]
   have : IsProbabilityMeasure (μ₀.map (MeasurableEquiv.piUnique ((fun i : Iic 0 => X i))).symm) :=
@@ -1825,7 +1825,7 @@ lemma condDistrib_trajMeasure
 
 中文:
 引理 condDistrib_trajMeasure
-  条件: {a : 自然数} [StandardBorelSpace (X (a + 1))] [Nonempty (X (a + 1))]
+  条件: {a : 自然数} [StandardBorel空间 (X (a + 1))] [非空 (X (a + 1))]
   证明: by
   apply condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (by fun_prop) (by fun_prop)
   exact map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure.symm

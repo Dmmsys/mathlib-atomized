@@ -44,7 +44,7 @@ theorem integral_eq_tsum
 
 中文:
 定理 integral_eq_tsum
-  条件: (p : PMF α) (f : α -> E) (hf : 整数egrable f p.toMeasure)
+  条件: (p : PMF α) (f : α -> E) (hf : 可积 f p.toMeasure)
   证明: calc
   _ = ∫ a in p.support, f a ∂(p.toMeasure) := by rw [restrict_toMeasure_support p]
   _ = ∑' (a : support p), (p.toMeasure {a.val}).toReal • f a := by
@@ -82,7 +82,7 @@ theorem integral_eq_sum
 
 中文:
 定理 integral_eq_sum
-  条件: [Fintype α] (p : PMF α) (f : α -> E)
+  条件: [有限类型 α] (p : PMF α) (f : α -> E)
   证明: by
   rw [integral_fintype .of_finite]
   congr with x

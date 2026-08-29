@@ -42,8 +42,8 @@ structure TwoSidedIdeal
     - ringCon : RingCon R
 
 中文:
-结构 TwoSidedIdeal
-  参数: (R : 类型) [NonUnitalNonAssocRing R]
+结构 TwoSided理想
+  参数: (R : 类型) [非幺非结合环 R]
   公理与运算 (2 个):
     - ofRingCon : :
     - ringCon : RingCon R
@@ -73,8 +73,8 @@ instance [Nontrivial
   exact ⟨⟨I⟩, ⟨J⟩, by contrapose h; aesop⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (TwoSidedIdeal R)
+实例 [非平凡
+  签名: R] : 非平凡 (TwoSided理想 R)
   定义体: by
   obtain ⟨I, J, h⟩ : Nontrivial (RingCon R) := inferInstance
   exact ⟨⟨I⟩, ⟨J⟩, by contrapose h; aesop⟩
@@ -102,7 +102,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: : SetLike (TwoSidedIdeal R) R where
+  签名: : 集合状 (TwoSided理想 R) R where
   定义体: {r | t.ringCon r 0}
   coe_injective := by
     rintro ⟨t₁⟩ ⟨t₂⟩ (h : {x | _} = {x | _})
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (TwoSidedIdeal R)
+  签名: 偏序 (TwoSided理想 R)
   定义体: .ofSetLike (TwoSidedIdeal R) R
 
 Depends on / 依赖: TwoSidedIdeal, ofSetLike
@@ -204,7 +204,7 @@ lemma coe_ofRingCon
 中文:
 引理 coe_ofRingCon
   条件: {c : RingCon R}
-  结论: (ofRingCon c : Set R) = {x | c x 0}
+  结论: (ofRingCon c : 集合 R) = {x | c x 0}
   证明: rfl
 -/
 lemma coe_ofRingCon {c : RingCon R} : (ofRingCon c : Set R) = {x | c x 0} := rfl
@@ -269,7 +269,7 @@ lemma coe_mk
 中文:
 引理 coe_mk
   条件: {c : RingCon R}
-  结论: (mk c : Set R) = {x | c x 0}
+  结论: (mk c : 集合 R) = {x | c x 0}
   证明: rfl
 -/
 lemma coe_mk {c : RingCon R} : (mk c : Set R) = {x | c x 0} := rfl
@@ -321,7 +321,7 @@ definition coeOrderEmbedding
 
 中文:
 定义 coeOrderEmbedding
-  签名: : TwoSidedIdeal R ↪o Set R where
+  签名: : TwoSided理想 R ↪o 集合 R where
   定义体: SetLike.coe
   inj' := SetLike.coe_injective
   map_rel_iff' {I J} := ⟨fun (h : (I : Set R) subseteq (J : Set R)) _ h' => h h', fun h _ h' => h h'⟩
@@ -344,8 +344,8 @@ lemma le_iff
 
 中文:
 引理 le_iff
-  条件: {I J : TwoSidedIdeal R}
-  结论: I <= J ↔ (I : Set R) subseteq (J : Set R)
+  条件: {I J : TwoSided理想 R}
+  结论: I <= J ↔ (I : 集合 R) subseteq (J : 集合 R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -367,7 +367,7 @@ map_rel_iff' {I J} := Iff.symm le_iff.trans ⟨fun h x y r => by rw [rel_iff] at
 
 中文:
 定义 orderIsoRingCon
-  签名: : TwoSidedIdeal R ≃o RingCon R where
+  签名: : TwoSided理想 R ≃o RingCon R where
   定义体: TwoSidedIdeal.ringCon
   invFun := ofRingCon
 map_rel_iff' {I J} := Iff.symm le_iff.trans ⟨fun h x y r => by rw [rel_iff] at r ⊢; exact h r,
@@ -392,7 +392,7 @@ lemma ringCon_injective
 
 中文:
 引理 ringCon_injective
-  结论: Function.Injective (TwoSidedIdeal.ringCon (R := R))
+  结论: 函数.单射 (TwoSided理想.ringCon (R := R))
   证明: by
   rintro ⟨x⟩ ⟨y⟩ rfl; rfl
 -/
@@ -412,7 +412,7 @@ lemma ringCon_le_iff
 
 中文:
 引理 ringCon_le_iff
-  条件: {I J : TwoSidedIdeal R}
+  条件: {I J : TwoSided理想 R}
   结论: I <= J ↔ I.ringCon <= J.ringCon
   证明: orderIsoRingCon.map_rel_iff.symm
 
@@ -435,7 +435,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {I J : TwoSidedIdeal R} (h : 对任意 x, x in I ↔ x in J)
+  条件: {I J : TwoSided理想 R} (h : 对任意 x, x in I ↔ x in J)
   结论: I = J
   证明: coeOrderEmbedding.injective (Set.ext h)
 
@@ -457,8 +457,8 @@ lemma lt_iff
 
 中文:
 引理 lt_iff
-  条件: (I J : TwoSidedIdeal R)
-  结论: I < J ↔ (I : Set R) ⊂ (J : Set R)
+  条件: (I J : TwoSided理想 R)
+  结论: I < J ↔ (I : 集合 R) ⊂ (J : 集合 R)
   证明: by
   rw [lt_iff_le_and_ne]; rw [Set.ssubset_iff_subset_ne]; rw [le_iff]
   simp
@@ -536,7 +536,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSubgroupClass (TwoSidedIdeal R) R
+  签名: 加法子群类 (TwoSided理想 R) R
   定义体: zero_mem
   add_mem := @add_mem _ _
   neg_mem := @neg_mem _ _
@@ -665,7 +665,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (carrier : Set R)
+  签名: (carrier : 集合 R)
   定义体: { r := fun x y => x - y in carrier
       iseqv :=
       { refl := fun x => by simpa using zero_mem
@@ -709,7 +709,7 @@ lemma mem_mk'
 
 中文:
 引理 mem_mk'
-  条件: (carrier : Set R) (zero_mem add_mem neg_mem mul_mem_left mul_mem_right) (x : R)
+  条件: (carrier : 集合 R) (zero_mem add_mem neg_mem mul_mem_left mul_mem_right) (x : R)
   证明: by
   rw [mem_iff]
   simp [mk']
@@ -733,7 +733,7 @@ lemma coe_mk'
 
 中文:
 引理 coe_mk'
-  条件: (carrier : Set R) (zero_mem add_mem neg_mem mul_mem_left mul_mem_right)
+  条件: (carrier : 集合 R) (zero_mem add_mem neg_mem mul_mem_left mul_mem_right)
   证明: Set.ext mem_mk' carrier zero_mem add_mem neg_mem mul_mem_left mul_mem_right
 
 Depends on / 依赖: Set.ext, add_mem, carrier, mem_mk, mul_mem_left, mul_mem_right, neg_mem, zero_mem
@@ -752,7 +752,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (TwoSidedIdeal R) R R
+  签名: SMulMem类 (TwoSided理想 R) R R
   定义体: TwoSidedIdeal.mul_mem_left _ _ _ h
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.mul_mem_left, mul_mem_left
@@ -773,7 +773,7 @@ theorem instSMulMemClassMulOpposite
 
 中文:
 定理 instSMulMemClassMulOpposite
-  结论: SMulMemClass (TwoSidedIdeal R) Rᵐᵒᵖ R where
+  结论: SMulMem类 (TwoSided理想 R) Rᵐᵒᵖ R where
   证明: TwoSidedIdeal.mul_mem_right _ _ _ h
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.mul_mem_right, mul_mem_right
@@ -791,7 +791,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add I
+  签名: 加法 I
   定义体: ⟨x.1 + y.1, I.add_mem x.2 y.2⟩
 
 Depends on / 依赖: I.add_mem, add_mem
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero I
+  签名: 零 I
   定义体: ⟨0, I.zero_mem⟩
 
 Depends on / 依赖: I.zero_mem, zero_mem
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 I
+  签名: 标量乘法 自然数 I
   定义体: ⟨n • x.1, I.nsmul_mem n x.2⟩
 
 Depends on / 依赖: I.nsmul_mem, nsmul_mem
@@ -842,7 +842,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg I
+  签名: 取负 I
   定义体: ⟨-x.1, I.neg_mem x.2⟩
 
 Depends on / 依赖: I.neg_mem, neg_mem
@@ -859,7 +859,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub I
+  签名: 减法 I
   定义体: ⟨x.1 - y.1, I.sub_mem x.2 y.2⟩
 
 Depends on / 依赖: I.sub_mem, sub_mem
@@ -876,7 +876,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 I
+  签名: 标量乘法 整数 I
   定义体: ⟨n • x.1, I.zsmul_mem n x.2⟩
 
 Depends on / 依赖: I.zsmul_mem, zsmul_mem
@@ -894,7 +894,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup I
+  签名: : 加法交换群 I
   定义体: Function.Injective.addCommGroup _ Subtype.coe_injective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -942,7 +942,7 @@ definition op
 
 中文:
 定义 op
-  签名: (I : TwoSidedIdeal R)
+  签名: (I : TwoSided理想 R)
   定义体: I.ringCon.op
 
 @[simp]
@@ -966,7 +966,7 @@ lemma mem_op_iff
 
 中文:
 引理 mem_op_iff
-  条件: {I : TwoSidedIdeal R} {x : Rᵐᵒᵖ}
+  条件: {I : TwoSided理想 R} {x : Rᵐᵒᵖ}
   结论: x in I.op ↔ x.unop in I
   证明: I.ringCon.comm'
 
@@ -989,8 +989,8 @@ lemma coe_op
 
 中文:
 引理 coe_op
-  条件: {I : TwoSidedIdeal R}
-  结论: (I.op : Set Rᵐᵒᵖ) = MulOpposite.unop ⁻¹' I
+  条件: {I : TwoSided理想 R}
+  结论: (I.op : 集合 Rᵐᵒᵖ) = MulOpposite.unop ⁻¹' I
   证明: Set.ext fun _ => mem_op_iff
 
 Depends on / 依赖: Set.ext, mem_op_iff
@@ -1013,7 +1013,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (I : TwoSidedIdeal Rᵐᵒᵖ)
+  签名: (I : TwoSided理想 Rᵐᵒᵖ)
   定义体: I.ringCon.unop
 
 @[simp]
@@ -1037,7 +1037,7 @@ lemma mem_unop_iff
 
 中文:
 引理 mem_unop_iff
-  条件: {I : TwoSidedIdeal Rᵐᵒᵖ} {x : R}
+  条件: {I : TwoSided理想 Rᵐᵒᵖ} {x : R}
   结论: x in I.unop ↔ MulOpposite.op x in I
   证明: I.ringCon.comm'
 
@@ -1060,8 +1060,8 @@ lemma coe_unop
 
 中文:
 引理 coe_unop
-  条件: {I : TwoSidedIdeal Rᵐᵒᵖ}
-  结论: (I.unop : Set R) = MulOpposite.op ⁻¹' I
+  条件: {I : TwoSided理想 Rᵐᵒᵖ}
+  结论: (I.unop : 集合 R) = MulOpposite.op ⁻¹' I
   证明: Set.ext fun _ => mem_unop_iff
 
 Depends on / 依赖: Set.ext, mem_unop_iff
@@ -1085,7 +1085,7 @@ definition opOrderIso
 
 中文:
 定义 opOrderIso
-  签名: : TwoSidedIdeal R ≃o TwoSidedIdeal Rᵐᵒᵖ where
+  签名: : TwoSided理想 R ≃o TwoSided理想 Rᵐᵒᵖ where
   定义体: op
   invFun := unop
   map_rel_iff' {I' J'} := by simpa [ringCon_le_iff] using RingCon.opOrderIso.map_rel_iff

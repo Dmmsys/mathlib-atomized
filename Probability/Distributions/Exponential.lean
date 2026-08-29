@@ -47,7 +47,7 @@ definition exponentialPDFReal
   body: gammaPDFReal 1 r x
 
 中文:
-定义 exponentialPDFReal
+定义 exponentialPDF实数
   签名: (r x : 实数)
   定义体: gammaPDFReal 1 r x
 
@@ -170,9 +170,9 @@ lemma measurable_exponentialPDFReal
   proof: measurable_gammaPDFReal 1 r
 
 中文:
-引理 measurable_exponentialPDFReal
+引理 measurable_exponentialPDF实数
   条件: (r : 实数)
-  结论: Measurable (exponentialPDF实数 r)
+  结论: 可测 (exponentialPDF实数 r)
   证明: measurable_gammaPDFReal 1 r
 
 Depends on / 依赖: measurable_gammaPDFReal
@@ -191,7 +191,7 @@ lemma stronglyMeasurable_exponentialPDFReal
   proof: stronglyMeasurable_gammaPDFReal 1 r
 
 中文:
-引理 stronglyMeasurable_exponentialPDFReal
+引理 stronglyMeasurable_exponentialPDF实数
   条件: (r : 实数)
   证明: stronglyMeasurable_gammaPDFReal 1 r
 
@@ -209,7 +209,7 @@ lemma exponentialPDFReal_pos
   proof: gammaPDFReal_pos zero_lt_one hr hx
 
 中文:
-引理 exponentialPDFReal_pos
+引理 exponentialPDF实数_pos
   条件: {x r : 实数} (hr : 0 < r) (hx : 0 < x)
   证明: gammaPDFReal_pos zero_lt_one hr hx
 
@@ -227,7 +227,7 @@ lemma exponentialPDFReal_nonneg
   proof: gammaPDFReal_nonneg zero_lt_one hr x
 
 中文:
-引理 exponentialPDFReal_nonneg
+引理 exponentialPDF实数_nonneg
   条件: {r : 实数} (hr : 0 < r) (x : 实数)
   证明: gammaPDFReal_nonneg zero_lt_one hr x
 

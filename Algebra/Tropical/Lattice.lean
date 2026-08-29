@@ -103,7 +103,7 @@ instance instLatticeTropical
 
 中文:
 实例 instLatticeTropical
-  签名: [Lattice R]
+  签名: [格 R]
   定义体: { instSemilatticeInfTropical, instSemilatticeSupTropical with }
 
 Depends on / 依赖: instSemilatticeInfTropical, instSemilatticeSupTropical
@@ -120,8 +120,8 @@ instance [SupSet
   body: trop (sSup (untrop '' s))
 
 中文:
-实例 [SupSet
-  签名: R] : SupSet (Tropical R) where sSup s
+实例 [上确界集
+  签名: R] : 上确界集 (Tropical R) where sSup s
   定义体: trop (sSup (untrop '' s))
 
 Depends on / 依赖: untrop
@@ -137,8 +137,8 @@ instance [InfSet
   body: trop (sInf (untrop '' s))
 
 中文:
-实例 [InfSet
-  签名: R] : InfSet (Tropical R) where sInf s
+实例 [下确界集
+  签名: R] : 下确界集 (Tropical R) where sInf s
   定义体: trop (sInf (untrop '' s))
 
 Depends on / 依赖: untrop
@@ -157,7 +157,7 @@ instance instConditionallyCompleteLatticeTropical
 
 中文:
 实例 instConditionallyCompleteLatticeTropical
-  签名: [ConditionallyCompleteLattice R]
+  签名: [条件完备格 R]
   定义体: .of_image untrop_le_iff isLUB_csSup (hn.image _) (untrop_monotone.map_bddAbove hb)
   isGLB_csInf _ hn hb :=
 .of_image untrop_le_iff isGLB_csInf (hn.image _) (untrop_monotone.map_bddBelow hb)
@@ -185,8 +185,8 @@ instance [ConditionallyCompleteLinearOrder
       apply csSup_of_not_b
 
 中文:
-实例 [ConditionallyCompleteLinearOrder
-  签名: R] : ConditionallyCompleteLinearOrder (Tropical R)
+实例 [条件完备线性序
+  签名: R] : 条件完备线性序 (Tropical R)
   定义体: { instConditionallyCompleteLatticeTropical, Tropical.instLinearOrderTropical with
     csSup_of_not_bddAbove := by
       intro s hs

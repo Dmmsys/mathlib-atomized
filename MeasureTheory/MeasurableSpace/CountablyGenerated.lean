@@ -60,10 +60,10 @@ class CountablyGenerated
     - isCountablyGenerated : exists b : Set (Set α), b.Countable ∧ m = generateFrom b
 
 中文:
-类 CountablyGenerated
-  参数: (α : 类型) [m : MeasurableSpace α]
+类 余untablyGenerated
+  参数: (α : 类型) [m : 可测空间 α]
   公理与运算 (1 个):
-    - isCountablyGenerated : 存在 b : Set (Set α), b.Countable ∧ m = generateFrom b
+    - isCountablyGenerated : 存在 b : 集合 (集合 α), b.可数 ∧ m = generateFrom b
 -/
 class CountablyGenerated (α : Type*) [m : MeasurableSpace α] : Prop where
   isCountablyGenerated : exists b : Set (Set α), b.Countable ∧ m = generateFrom b
@@ -83,7 +83,7 @@ definition countableGeneratingSet
 
 中文:
 定义 countableGeneratingSet
-  签名: (α : 类型) [MeasurableSpace α] [h : CountablyGenerated α]
+  签名: (α : 类型) [可测空间 α] [h : 余untablyGenerated α]
   定义体: insert ∅ h.isCountablyGenerated.choose
 
 Depends on / 依赖: h.isCountablyGenerated.choose, insert, isCountablyGenerated
@@ -102,7 +102,7 @@ lemma countable_countableGeneratingSet
 
 中文:
 引理 countable_countableGeneratingSet
-  条件: [MeasurableSpace α] [h : CountablyGenerated α]
+  条件: [可测空间 α] [h : 余untablyGenerated α]
   证明: Countable.insert _ h.isCountablyGenerated.choose_spec.1
 
 Depends on / 依赖: Countable, Countable.insert, choose_spec, h.isCountablyGenerated.choose_spec, insert, isCountablyGenerated
@@ -121,7 +121,7 @@ lemma generateFrom_countableGeneratingSet
 
 中文:
 引理 generateFrom_countableGeneratingSet
-  条件: [m : MeasurableSpace α] [h : CountablyGenerated α]
+  条件: [m : 可测空间 α] [h : 余untablyGenerated α]
   证明: (generateFrom_insert_empty _).trans h.isCountablyGenerated.choose_spec.2.symm
 
 Depends on / 依赖: choose_spec, generateFrom_insert_empty, h.isCountablyGenerated.choose_spec, isCountablyGenerated
@@ -140,7 +140,7 @@ lemma empty_mem_countableGeneratingSet
 
 中文:
 引理 empty_mem_countableGeneratingSet
-  条件: [MeasurableSpace α] [CountablyGenerated α]
+  条件: [可测空间 α] [余untablyGenerated α]
   证明: mem_insert _ _
 
 Depends on / 依赖: mem_insert
@@ -158,7 +158,7 @@ lemma nonempty_countableGeneratingSet
 
 中文:
 引理 nonempty_countableGeneratingSet
-  条件: [MeasurableSpace α] [CountablyGenerated α]
+  条件: [可测空间 α] [余untablyGenerated α]
   证明: ⟨∅, mem_insert _ _⟩
 
 Depends on / 依赖: mem_insert
@@ -179,7 +179,7 @@ lemma measurableSet_countableGeneratingSet
 
 中文:
 引理 measurableSet_countableGeneratingSet
-  结论: [MeasurableSpace α] [CountablyGenerated α]
+  结论: [可测空间 α] [余untablyGenerated α]
   证明: by
   rw [← generateFrom_countableGeneratingSet (α := α)]
   exact measurableSet_generateFrom hs
@@ -206,7 +206,7 @@ definition natGeneratingSequence
 
 中文:
 定义 natGeneratingSequence
-  签名: (α : 类型) [MeasurableSpace α] [CountablyGenerated α]
+  签名: (α : 类型) [可测空间 α] [余untablyGenerated α]
   定义体: enumerateCountable (countable_countableGeneratingSet (α := α)) ∅
 
 Depends on / 依赖: countable_countableGeneratingSet, enumerateCountable
@@ -225,7 +225,7 @@ lemma generateFrom_natGeneratingSequence
 
 中文:
 引理 generateFrom_natGeneratingSequence
-  结论: (α : 类型) [m : MeasurableSpace α]
+  结论: (α : 类型) [m : 可测空间 α]
   证明: by
   rw [natGeneratingSequence]; rw [range_enumerateCountable_of_mem _ empty_mem_countableGeneratingSet]; rw [generateFrom_countableGeneratingSet]
 
@@ -246,7 +246,7 @@ lemma measurableSet_natGeneratingSequence
 
 中文:
 引理 measurableSet_natGeneratingSequence
-  条件: [MeasurableSpace α] [CountablyGenerated α] (n : 自然数)
+  条件: [可测空间 α] [余untablyGenerated α] (n : 自然数)
   证明: measurableSet_countableGeneratingSet Set.enumerateCountable_mem _
     empty_mem_countableGeneratingSet n
 
@@ -270,8 +270,8 @@ theorem CountablyGenerated.comap
   exact ⟨_, hbc.image _, rfl⟩
 
 中文:
-定理 CountablyGenerated.comap
-  条件: [m : MeasurableSpace β] [h : CountablyGenerated β] (f : α -> β)
+定理 余untablyGenerated.comap
+  条件: [m : 可测空间 β] [h : 余untablyGenerated β] (f : α -> β)
   证明: by
   rcases h with ⟨⟨b, hbc, rfl⟩⟩
   rw [comap_generateFrom]
@@ -299,8 +299,8 @@ theorem CountablyGenerated.sup
   exact @mk _ (_ ⊔ _) ⟨_, hb₁c.union hb₂c, generateFrom_sup_generateFrom⟩
 
 中文:
-定理 CountablyGenerated.sup
-  结论: {m₁ m₂ : MeasurableSpace β} (h₁ : @CountablyGenerated β m₁)
+定理 余untablyGenerated.上确界
+  结论: {m₁ m₂ : 可测空间 β} (h₁ : @余untablyGenerated β m₁)
   证明: by
   rcases h₁ with ⟨⟨b₁, hb₁c, rfl⟩⟩
   rcases h₂ with ⟨⟨b₂, hb₂c, rfl⟩⟩
@@ -341,8 +341,8 @@ instance [MeasurableSpace
   body: .comap _
 
 中文:
-实例 [MeasurableSpace
-  签名: α] [CountablyGenerated α] {p
+实例 [可测空间
+  签名: α] [余untablyGenerated α] {p
   定义体: .comap _
 -/
 instance [MeasurableSpace α] [CountablyGenerated α] {p : α -> Prop} :
@@ -357,8 +357,8 @@ instance [MeasurableSpace
   body: .sup (.comap Prod.fst) (.comap Prod.snd)
 
 中文:
-实例 [MeasurableSpace
-  签名: α] [CountablyGenerated α] [MeasurableSpace β] [CountablyGenerated β] :
+实例 [可测空间
+  签名: α] [余untablyGenerated α] [可测空间 β] [余untablyGenerated β] :
   定义体: .sup (.comap Prod.fst) (.comap Prod.snd)
 
 Depends on / 依赖: Prod.fst, Prod.snd
@@ -389,7 +389,7 @@ definition countablyGeneratedAtom
 
 中文:
 定义 countablyGeneratedAtom
-  签名: (α : 类型) [MeasurableSpace α] [CountablyGenerated α]
+  签名: (α : 类型) [可测空间 α] [余untablyGenerated α]
   定义体: fun p => ⋂ n, if p n then natGeneratingSequence α n else (natGeneratingSequence α n)ᶜ
 
 Depends on / 依赖: natGeneratingSequence
@@ -532,8 +532,8 @@ lemma exists_eq_iUnion_countablyGeneratedAtom
     simp only [mem_iUnion, mem_ite_em
 
 中文:
-引理 exists_eq_iUnion_countablyGeneratedAtom
-  条件: {s : Set α} (hs : MeasurableSet s)
+引理 存在_eq_iUnion_countablyGeneratedAtom
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [← generateFrom_natGeneratingSequence α] at hs
   refine generateFrom_induction (range (natGeneratingSequence α)) _ ?_ ?_ ?_ ?_ s hs
@@ -652,7 +652,7 @@ lemma measurableSet_measurableAtom
 中文:
 引理 measurableSet_measurableAtom
   条件: (x : α)
-  结论: MeasurableSet (measurableAtom x)
+  结论: 可测集 (measurableAtom x)
   证明: by
   rw [measurableAtom_eq_countablyGeneratedAtom_natGeneratingSequence]
   exact measurableSet_countablyGeneratedAtom _
@@ -678,9 +678,9 @@ class SeparatesPoints
 
 中文:
 类 SeparatesPoints
-  参数: (α : 类型) [m : MeasurableSpace α]
+  参数: (α : 类型) [m : 可测空间 α]
   公理与运算 (1 个):
-    - separates : 对任意 x y : α, (对任意 s, MeasurableSet s -> (x in s -> y in s)) -> x = y
+    - separates : 对任意 x y : α, (对任意 s, 可测集 s -> (x in s -> y in s)) -> x = y
 -/
 class SeparatesPoints (α : Type*) [m : MeasurableSpace α] : Prop where
   separates : forall x y : α, (forall s, MeasurableSet s -> (x in s -> y in s)) -> x = y
@@ -695,7 +695,7 @@ theorem separatesPoints_def
 
 中文:
 定理 separatesPoints_def
-  结论: [MeasurableSpace α] [hs : SeparatesPoints α] {x y : α}
+  结论: [可测空间 α] [hs : SeparatesPoints α] {x y : α}
   证明: hs.separates _ _ h
 
 Depends on / 依赖: hs.separates, separates
@@ -714,8 +714,8 @@ theorem exists_measurableSet_of_ne
   exact separatesPoints_def h
 
 中文:
-定理 exists_measurableSet_of_ne
-  结论: [MeasurableSpace α] [SeparatesPoints α] {x y : α}
+定理 存在_measurableSet_of_ne
+  结论: [可测空间 α] [SeparatesPoints α] {x y : α}
   证明: by
   contrapose! h
   exact separatesPoints_def h
@@ -740,7 +740,7 @@ theorem separatesPoints_iff
 
 中文:
 定理 separatesPoints_iff
-  条件: [MeasurableSpace α]
+  条件: [可测空间 α]
   结论: SeparatesPoints α ↔
   证明: ⟨fun h => fun _ _ hxy => h.separates _ _ fun _ hs xs => (hxy _ hs).mp xs,
     fun h => ⟨fun _ _ hxy => h _ _ fun _ hs =>
@@ -768,7 +768,7 @@ exact separatesPoints_def fun _ hs => (hxy _ hs).mp
 
 中文:
 定理 separating_of_generateFrom
-  结论: (S : Set (Set α))
+  结论: (S : 集合 (集合 α))
   证明: by
   let := generateFrom S
   intro x y hxy
@@ -796,7 +796,7 @@ theorem SeparatesPoints.mono
 
 中文:
 定理 SeparatesPoints.mono
-  条件: {m m' : MeasurableSpace α} [hsep : @SeparatesPoints _ m] (h : m <= m')
+  条件: {m m' : 可测空间 α} [hsep : @SeparatesPoints _ m] (h : m <= m')
   证明: @SeparatesPoints.mk _ m' fun _ _ hxy =>
     @SeparatesPoints.separates _ m hsep _ _ fun _ hs => hxy _ (h _ hs)
 
@@ -825,7 +825,7 @@ theorem _root_.eq_const_of_measurable_bot
 
 中文:
 定理 _root_.eq_const_of_measurable_bot
-  结论: [MeasurableSpace β] [Nonempty β]
+  结论: [可测空间 β] [非空 β]
   证明: by
   have h (a₁ : α) (a₂ : α) : f a₁ = f a₂ := by
     by_contra! h
@@ -864,10 +864,10 @@ class CountablySeparated
     - countably_separated : HasCountableSeparatingOn α MeasurableSet univ
 
 中文:
-类 CountablySeparated
-  参数: (α : 类型) [MeasurableSpace α]
+类 余untablySeparated
+  参数: (α : 类型) [可测空间 α]
   公理与运算 (1 个):
-    - countably_separated : HasCountableSeparatingOn α MeasurableSet univ
+    - countably_separated : 有余untableSeparatingOn α 可测集 univ
 -/
 class CountablySeparated (α : Type*) [MeasurableSpace α] : Prop where
   countably_separated : HasCountableSeparatingOn α MeasurableSet univ
@@ -882,7 +882,7 @@ instance countablySeparated_of_hasCountableSeparatingOn
 
 中文:
 实例 countablySeparated_of_hasCountableSeparatingOn
-  签名: [MeasurableSpace α]
+  签名: [可测空间 α]
   定义体: ⟨h⟩
 -/
 instance countablySeparated_of_hasCountableSeparatingOn [MeasurableSpace α]
@@ -898,7 +898,7 @@ instance hasCountableSeparatingOn_of_countablySeparated
 
 中文:
 实例 hasCountableSeparatingOn_of_countablySeparated
-  签名: [MeasurableSpace α]
+  签名: [可测空间 α]
   定义体: h.countably_separated
 
 Depends on / 依赖: countably_separated, h.countably_separated
@@ -917,7 +917,7 @@ theorem countablySeparated_def
 
 中文:
 定理 countablySeparated_def
-  条件: [MeasurableSpace α]
+  条件: [可测空间 α]
   证明: ⟨fun h => h.countably_separated, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: countably_separated, h.countably_separated
@@ -938,8 +938,8 @@ theorem CountablySeparated.mono
   use S, Sct, (fun s hs => h _ <| Smeas _ hs), hS
 
 中文:
-定理 CountablySeparated.mono
-  结论: {m m' : MeasurableSpace α} [hsep : @CountablySeparated _ m]
+定理 余untablySeparated.mono
+  结论: {m m' : 可测空间 α} [hsep : @余untablySeparated _ m]
   证明: by
   simp_rw [countablySeparated_def] at *
   rcases hsep with ⟨S, Sct, Smeas, hS⟩
@@ -964,8 +964,8 @@ theorem CountablySeparated.subtype_iff
   exact HasCountableSeparatingOn.subtype_iff
 
 中文:
-定理 CountablySeparated.subtype_iff
-  条件: [MeasurableSpace α] {s : Set α}
+定理 余untablySeparated.subtype_iff
+  条件: [可测空间 α] {s : 集合 α}
   证明: by
   rw [countablySeparated_def]
   exact HasCountableSeparatingOn.subtype_iff
@@ -1053,7 +1053,7 @@ instance countablySeparated_of_separatesPoints
 
 中文:
 实例 countablySeparated_of_separatesPoints
-  签名: [MeasurableSpace α]
+  签名: [可测空间 α]
   定义体: by
   rcases h with ⟨b, hbc, hb⟩
   refine ⟨⟨b, hbc, fun t ht => hb.symm ▸ .basic t ht, ?_⟩⟩
@@ -1087,8 +1087,8 @@ theorem exists_countablyGenerated_le_of_countablySeparated
 exact fun x y hxy => hb _ trivial _ trivial fun _ hs => hxy _ measurableSet_generateFrom hs
 
 中文:
-定理 exists_countablyGenerated_le_of_countablySeparated
-  结论: [m : MeasurableSpace α]
+定理 存在_countablyGenerated_le_of_countablySeparated
+  结论: [m : 可测空间 α]
   证明: by
   rcases h with ⟨b, bct, hbm, hb⟩
   refine ⟨generateFrom b, ?_, ?_, generateFrom_le hbm⟩
@@ -1122,8 +1122,8 @@ definition mapNatBool
   body: x in natGeneratingSequence α n
 
 中文:
-定义 mapNatBool
-  签名: [MeasurableSpace α] [CountablyGenerated α] (x : α) (n : 自然数)
+定义 map自然数布尔
+  签名: [可测空间 α] [余untablyGenerated α] (x : α) (n : 自然数)
   定义体: x in natGeneratingSequence α n
 
 Depends on / 依赖: natGeneratingSequence
@@ -1145,8 +1145,8 @@ theorem measurable_mapNatBool
   apply measurableSet_natGeneratingSequence
 
 中文:
-定理 measurable_mapNatBool
-  条件: [MeasurableSpace α] [CountablyGenerated α]
+定理 measurable_map自然数布尔
+  条件: [可测空间 α] [余untablyGenerated α]
   证明: by
   rw [measurable_pi_iff]
   refine fun n => measurable_to_bool ?_
@@ -1179,8 +1179,8 @@ theorem injective_mapNatBool
   exact congr_fun hxy n
 
 中文:
-定理 injective_mapNatBool
-  结论: [MeasurableSpace α] [CountablyGenerated α]
+定理 injective_map自然数布尔
+  结论: [可测空间 α] [余untablyGenerated α]
   证明: by
   intro x y hxy
   rw [← generateFrom_natGeneratingSequence α] at *
@@ -1218,7 +1218,7 @@ Measurable.subtype_mk measurable_mapNatBool _
 
 中文:
 定理 measurableEquiv_nat_bool_of_countablyGenerated
-  结论: [MeasurableSpace α]
+  结论: [可测空间 α]
   证明: by
 use range (mapNatBool α), Equiv.ofInjective _
     injective_mapNatBool _,
@@ -1258,7 +1258,7 @@ theorem measurable_injection_nat_bool_of_countablySeparated
 
 中文:
 定理 measurable_injection_nat_bool_of_countablySeparated
-  结论: [MeasurableSpace α]
+  结论: [可测空间 α]
   证明: by
   rcases exists_countablyGenerated_le_of_countablySeparated α with ⟨m', _, _, m'le⟩
   refine ⟨mapNatBool α, ?_, injective_mapNatBool _⟩
@@ -1323,7 +1323,7 @@ lemma measurableSet_succ_memPartition
 
 中文:
 引理 measurableSet_succ_memPartition
-  结论: (t : 自然数 -> Set α) (n : 自然数) {s : Set α}
+  结论: (t : 自然数 -> 集合 α) (n : 自然数) {s : 集合 α}
   证明: by
   rw [← sdiff_union_inter s (t n)]
   refine MeasurableSet.union ?_ ?_ <;>
@@ -1352,7 +1352,7 @@ lemma generateFrom_memPartition_le_succ
 
 中文:
 引理 generateFrom_memPartition_le_succ
-  条件: (t : 自然数 -> Set α) (n : 自然数)
+  条件: (t : 自然数 -> 集合 α) (n : 自然数)
   证明: generateFrom_le (fun _ hs => measurableSet_succ_memPartition t n hs)
 
 Depends on / 依赖: generateFrom_le, measurableSet_succ_memPartition
@@ -1378,7 +1378,7 @@ lemma measurableSet_generateFrom_memPartition_iff
 
 中文:
 引理 measurableSet_generateFrom_memPartition_iff
-  条件: (t : 自然数 -> Set α) (n : 自然数) (s : Set α)
+  条件: (t : 自然数 -> 集合 α) (n : 自然数) (s : 集合 α)
   证明: by
   refine ⟨fun h => ?_, fun ⟨S, hS_subset, hS_eq⟩ => ?_⟩
   · induction s, h using generateFrom_induction with
@@ -1442,7 +1442,7 @@ lemma measurableSet_generateFrom_memPartition
 
 中文:
 引理 measurableSet_generateFrom_memPartition
-  条件: (t : 自然数 -> Set α) (n : 自然数)
+  条件: (t : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   have : t n = ⋃ u in memPartition t n, u inter t n := by
     simp_rw [← iUnion_inter, ← sUnion_eq_biUnion, sUnion_memPartition, univ_inter]
@@ -1481,7 +1481,7 @@ lemma generateFrom_iUnion_memPartition
 
 中文:
 引理 generateFrom_iUnion_memPartition
-  条件: (t : 自然数 -> Set α)
+  条件: (t : 自然数 -> 集合 α)
   证明: by
   refine le_antisymm (generateFrom_le fun u hu => ?_) (generateFrom_le fun u hu => ?_)
   · simp only [mem_iUnion] at hu
@@ -1526,7 +1526,7 @@ lemma generateFrom_memPartition_le_range
 
 中文:
 引理 generateFrom_memPartition_le_range
-  条件: (t : 自然数 -> Set α) (n : 自然数)
+  条件: (t : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   conv_rhs => rw [← generateFrom_iUnion_memPartition t]
   exact generateFrom_mono (subset_iUnion _ _)
@@ -1551,7 +1551,7 @@ lemma generateFrom_iUnion_memPartition_le
 
 中文:
 引理 generateFrom_iUnion_memPartition_le
-  结论: [m : MeasurableSpace α] {t : 自然数 -> Set α}
+  结论: [m : 可测空间 α] {t : 自然数 -> 集合 α}
   证明: by
   refine (generateFrom_iUnion_memPartition t).trans_le (generateFrom_le ?_)
   rintro s ⟨i, rfl⟩
@@ -1576,7 +1576,7 @@ lemma generateFrom_memPartition_le
 
 中文:
 引理 generateFrom_memPartition_le
-  结论: [m : MeasurableSpace α] {t : 自然数 -> Set α}
+  结论: [m : 可测空间 α] {t : 自然数 -> 集合 α}
   证明: (generateFrom_mono (subset_iUnion _ _)).trans (generateFrom_iUnion_memPartition_le ht)
 
 Depends on / 依赖: generateFrom_iUnion_memPartition_le, generateFrom_mono, subset_iUnion
@@ -1596,7 +1596,7 @@ lemma measurableSet_memPartition
 
 中文:
 引理 measurableSet_memPartition
-  结论: [MeasurableSpace α] {t : 自然数 -> Set α}
+  结论: [可测空间 α] {t : 自然数 -> 集合 α}
   证明: generateFrom_memPartition_le ht n _ (measurableSet_generateFrom hs)
 
 Depends on / 依赖: generateFrom_memPartition_le, measurableSet_generateFrom
@@ -1616,7 +1616,7 @@ lemma measurableSet_memPartitionSet
 
 中文:
 引理 measurableSet_memPartitionSet
-  结论: [MeasurableSpace α] {t : 自然数 -> Set α}
+  结论: [可测空间 α] {t : 自然数 -> 集合 α}
   证明: measurableSet_memPartition ht n (memPartitionSet_mem t n a)
 
 Depends on / 依赖: measurableSet_memPartition, memPartitionSet_mem
@@ -1642,7 +1642,7 @@ definition countablePartition
 
 中文:
 定义 countablePartition
-  签名: (α : 类型) [MeasurableSpace α] [CountablyGenerated α]
+  签名: (α : 类型) [可测空间 α] [余untablyGenerated α]
   定义体: memPartition (enumerateCountable countable_countableGeneratingSet ∅)
 
 Depends on / 依赖: countable_countableGeneratingSet, enumerateCountable, memPartition
@@ -1680,7 +1680,7 @@ lemma finite_countablePartition
 
 中文:
 引理 finite_countablePartition
-  条件: (α : 类型) [MeasurableSpace α] [CountablyGenerated α] (n : 自然数)
+  条件: (α : 类型) [可测空间 α] [余untablyGenerated α] (n : 自然数)
   证明: finite_memPartition _ n
 
 Depends on / 依赖: finite_memPartition
@@ -1717,7 +1717,7 @@ lemma disjoint_countablePartition
 
 中文:
 引理 disjoint_countablePartition
-  结论: {n : 自然数} {s t : Set α}
+  结论: {n : 自然数} {s t : 集合 α}
   证明: disjoint_memPartition _ n hs ht hst
 
 Depends on / 依赖: disjoint_memPartition
@@ -1737,7 +1737,7 @@ lemma sUnion_countablePartition
 
 中文:
 引理 sUnion_countablePartition
-  条件: (α : 类型) [MeasurableSpace α] [CountablyGenerated α] (n : 自然数)
+  条件: (α : 类型) [可测空间 α] [余untablyGenerated α] (n : 自然数)
   证明: sUnion_memPartition _ n
 
 Depends on / 依赖: sUnion_memPartition
@@ -1756,7 +1756,7 @@ lemma measurableSet_generateFrom_countablePartition_iff
 
 中文:
 引理 measurableSet_generateFrom_countablePartition_iff
-  条件: (n : 自然数) (s : Set α)
+  条件: (n : 自然数) (s : 集合 α)
   证明: measurableSet_generateFrom_memPartition_iff _ n s
 
 Depends on / 依赖: measurableSet_generateFrom_memPartition_iff
@@ -1776,7 +1776,7 @@ lemma measurableSet_succ_countablePartition
 
 中文:
 引理 measurableSet_succ_countablePartition
-  条件: (n : 自然数) {s : Set α} (hs : s in countablePartition α n)
+  条件: (n : 自然数) {s : 集合 α} (hs : s in countablePartition α n)
   证明: measurableSet_succ_memPartition _ _ hs
 
 Depends on / 依赖: measurableSet_succ_memPartition
@@ -1795,7 +1795,7 @@ lemma generateFrom_countablePartition_le_succ
 
 中文:
 引理 generateFrom_countablePartition_le_succ
-  结论: (α : 类型) [MeasurableSpace α] [CountablyGenerated α]
+  结论: (α : 类型) [可测空间 α] [余untablyGenerated α]
   证明: generateFrom_memPartition_le_succ _ _
 
 Depends on / 依赖: generateFrom_memPartition_le_succ
@@ -1816,7 +1816,7 @@ lemma generateFrom_iUnion_countablePartition
 
 中文:
 引理 generateFrom_iUnion_countablePartition
-  结论: (α : 类型) [m : MeasurableSpace α]
+  结论: (α : 类型) [m : 可测空间 α]
   证明: by
   rw [countablePartition]; rw [generateFrom_iUnion_memPartition]; rw [range_enumerateCountable_of_mem _ empty_mem_countableGeneratingSet]; rw [generateFrom_countableGeneratingSet]
 
@@ -1837,7 +1837,7 @@ lemma generateFrom_countablePartition_le
 
 中文:
 引理 generateFrom_countablePartition_le
-  结论: (α : 类型) [m : MeasurableSpace α] [CountablyGenerated α]
+  结论: (α : 类型) [m : 可测空间 α] [余untablyGenerated α]
   证明: generateFrom_memPartition_le (measurableSet_enumerateCountable_countableGeneratingSet α) n
 
 Depends on / 依赖: generateFrom_memPartition_le, measurableSet_enumerateCountable_countableGeneratingSet
@@ -1857,7 +1857,7 @@ lemma measurableSet_countablePartition
 
 中文:
 引理 measurableSet_countablePartition
-  条件: (n : 自然数) {s : Set α} (hs : s in countablePartition α n)
+  条件: (n : 自然数) {s : 集合 α} (hs : s in countablePartition α n)
   证明: generateFrom_countablePartition_le α n _ (measurableSet_generateFrom hs)
 
 Depends on / 依赖: generateFrom_countablePartition_le, measurableSet_generateFrom
@@ -1935,7 +1935,7 @@ lemma countablePartitionSet_eq_iff
 
 中文:
 引理 countablePartitionSet_eq_iff
-  条件: {n : 自然数} (a : α) {s : Set α} (hs : s in countablePartition α n)
+  条件: {n : 自然数} (a : α) {s : 集合 α} (hs : s in countablePartition α n)
   证明: memPartitionSet_eq_iff _ hs
 
 Depends on / 依赖: memPartitionSet_eq_iff
@@ -1956,7 +1956,7 @@ lemma countablePartitionSet_of_mem
 
 中文:
 引理 countablePartitionSet_of_mem
-  结论: {n : 自然数} {a : α} {s : Set α} (hs : s in countablePartition α n)
+  结论: {n : 自然数} {a : α} {s : 集合 α} (hs : s in countablePartition α n)
   证明: memPartitionSet_of_mem hs ha
 
 @[measurability]
@@ -2002,10 +2002,10 @@ class CountableOrCountablyGenerated
     - countableOrCountablyGenerated : Countable α ∨ MeasurableSpace.CountablyGenerated β
 
 中文:
-类 CountableOrCountablyGenerated
-  参数: (α β : 类型) [MeasurableSpace β]
+类 余untableOrCountablyGenerated
+  参数: (α β : 类型) [可测空间 β]
   公理与运算 (1 个):
-    - countableOrCountablyGenerated : Countable α ∨ MeasurableSpace.CountablyGenerated β
+    - countableOrCountablyGenerated : 可数 α ∨ 可测空间.余untablyGenerated β
 -/
 class CountableOrCountablyGenerated (α β : Type*) [MeasurableSpace β] :
     Prop where
@@ -2021,7 +2021,7 @@ instance instCountableOrCountablyGeneratedOfCountable
 
 中文:
 实例 instCountableOrCountablyGeneratedOfCountable
-  签名: [h1 : Countable α] [MeasurableSpace β]
+  签名: [h1 : 可数 α] [可测空间 β]
   定义体: ⟨Or.inl h1⟩
 
 Depends on / 依赖: Or.inl
@@ -2039,7 +2039,7 @@ instance instCountableOrCountablyGeneratedOfCountablyGenerated
 
 中文:
 实例 instCountableOrCountablyGeneratedOfCountablyGenerated
-  签名: [MeasurableSpace β]
+  签名: [可测空间 β]
   定义体: ⟨Or.inr h⟩
 
 Depends on / 依赖: Or.inr
@@ -2059,7 +2059,7 @@ instance [hα
 
 中文:
 实例 [hα
-  签名: : CountableOrCountablyGenerated α γ] [hβ : CountableOrCountablyGenerated β γ] :
+  签名: : 余untableOrCountablyGenerated α γ] [hβ : 余untableOrCountablyGenerated β γ] :
   定义体: by
   rcases hα with (hα | hα) <;> rcases hβ with (hβ | hβ) <;> infer_instance
 
@@ -2083,7 +2083,7 @@ lemma countableOrCountablyGenerated_left_of_prod_left_of_nonempty
 
 中文:
 引理 countableOrCountablyGenerated_left_of_prod_left_of_nonempty
-  结论: [Nonempty β]
+  结论: [非空 β]
   证明: by
   rcases h.countableOrCountablyGenerated with (h | h)
   · have := countable_left_of_prod_of_nonempty h
@@ -2114,7 +2114,7 @@ lemma countableOrCountablyGenerated_right_of_prod_left_of_nonempty
 
 中文:
 引理 countableOrCountablyGenerated_right_of_prod_left_of_nonempty
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   rcases h.countableOrCountablyGenerated with (h | h)
   · have := countable_right_of_prod_of_nonempty h
@@ -2144,7 +2144,7 @@ lemma countableOrCountablyGenerated_prod_left_swap
 
 中文:
 引理 countableOrCountablyGenerated_prod_left_swap
-  条件: [h : CountableOrCountablyGenerated (α × β) γ]
+  条件: [h : 余untableOrCountablyGenerated (α × β) γ]
   证明: by
   rcases h with (h | h)
   · refine ⟨Or.inl countable_prod_swap⟩

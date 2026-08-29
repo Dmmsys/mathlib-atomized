@@ -51,8 +51,8 @@ definition DFunLike.fintype
   body: Fintype.ofInjective _ DFunLike.coe_injective
 
 中文:
-定义 DFunLike.fintype
-  签名: [DecidableEq α] [Fintype α] [对任意 i, Fintype (β i)]
+定义 依赖函数状.fintype
+  签名: [DecidableEq α] [有限类型 α] [对任意 i, 有限类型 (β i)]
   定义体: Fintype.ofInjective _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Fintype, Fintype.ofInjective, coe_injective, ofInjective
@@ -75,8 +75,8 @@ definition FunLike.fintype
   body: DFunLike.fintype G
 
 中文:
-定义 FunLike.fintype
-  签名: [DecidableEq α] [Fintype α] [Fintype γ]
+定义 函数状.fintype
+  签名: [DecidableEq α] [有限类型 α] [有限类型 γ]
   定义体: DFunLike.fintype G
 
 Depends on / 依赖: DFunLike, DFunLike.fintype, fintype
@@ -101,9 +101,9 @@ theorem DFunLike.finite
   proof: Finite.of_injective _ DFunLike.coe_injective
 
 中文:
-定理 DFunLike.finite
-  条件: [Finite α] [对任意 i, Finite (β i)]
-  结论: Finite F
+定理 依赖函数状.finite
+  条件: [有限 α] [对任意 i, 有限 (β i)]
+  结论: 有限 F
   证明: Finite.of_injective _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Finite, Finite.of_injective, coe_injective, h.symm, of_injective
@@ -121,9 +121,9 @@ theorem FunLike.finite
   proof: DFunLike.finite G
 
 中文:
-定理 FunLike.finite
-  条件: [Finite α] [Finite γ]
-  结论: Finite G
+定理 函数状.finite
+  条件: [有限 α] [有限 γ]
+  结论: 有限 G
   证明: DFunLike.finite G
 
 Depends on / 依赖: DFunLike, DFunLike.finite, finite

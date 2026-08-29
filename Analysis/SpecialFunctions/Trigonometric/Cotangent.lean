@@ -51,8 +51,8 @@ lemma Complex.cot_eq_exp_ratio
  
 
 中文:
-引理 Complex.cot_eq_exp_ratio
-  条件: (z : Complex)
+引理 复形.cot_eq_exp_ratio
+  条件: (z : 复形)
   证明: by
   rw [Complex.cot]; rw [Complex.sin]; rw [Complex.cos]
   have h1 : exp (z * I) + exp (-z * I) = exp (-(z * I)) * (exp (2 * I * z) + 1) := by
@@ -88,8 +88,8 @@ lemma Complex.cot_pi_eq_exp_ratio
   ring_nf
 
 中文:
-引理 Complex.cot_pi_eq_exp_ratio
-  条件: (z : Complex)
+引理 复形.cot_pi_eq_exp_ratio
+  条件: (z : 复形)
   证明: by
   rw [cot_eq_exp_ratio (π * z)]
   ring_nf
@@ -155,7 +155,7 @@ abbreviation sineTerm
 
 中文:
 缩写 sineTerm
-  签名: (x : Complex) (n : 自然数)
+  签名: (x : 复形) (n : 自然数)
   定义体: -x ^ 2 / (n + 1) ^ 2
 -/
 noncomputable abbrev sineTerm (x : Complex) (n : Nat) : Complex := -x ^ 2 / (n + 1) ^ 2
@@ -176,7 +176,7 @@ lemma sineTerm_ne_zero
 
 中文:
 引理 sineTerm_ne_zero
-  条件: {x : Complex} (hx : x in Complex_整数) (n : 自然数)
+  条件: {x : 复形} (hx : x in Complex_整数) (n : 自然数)
   结论: 1 + sineTerm x n != 0
   证明: by
   simp only [sineTerm, ne_eq]
@@ -236,7 +236,7 @@ lemma multipliable_sineTerm
 
 中文:
 引理 multipliable_sineTerm
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: Multipliable fun i => (1 + sineTerm x i)
   证明: by
   apply multipliable_one_add_of_summable
@@ -290,7 +290,7 @@ lemma sineTerm_bound_aux
 
 中文:
 引理 sineTerm_bound_aux
-  条件: (hZ : IsCompact Z)
+  条件: (hZ : 是紧集 Z)
   证明: by
   have hf : ContinuousOn (fun x : Complex => ‖-x ^ 2‖) Z := by
     fun_prop
@@ -326,7 +326,7 @@ lemma multipliableUniformlyOn_euler_sin_prod_on_compact
 
 中文:
 引理 multipliableUniformlyOn_euler_sin_prod_on_compact
-  条件: (hZC : IsCompact Z)
+  条件: (hZC : 是紧集 Z)
   证明: by
   obtain ⟨u, hu, hu2⟩ := sineTerm_bound_aux hZC
   refine Summable.multipliableUniformlyOn_nat_one_add hZC hu ?_ ?_
@@ -407,7 +407,7 @@ theorem sin_pi_mul_ne_zero
 中文:
 定理 sin_pi_mul_ne_zero
   条件: (hx : x in Complex_整数)
-  结论: Complex.sin (π * x) != 0
+  结论: 复形.sin (π * x) != 0
   证明: by
   apply Complex.sin_ne_zero_iff.2
   intro k
@@ -524,7 +524,7 @@ abbreviation cotTerm
 
 中文:
 缩写 cotTerm
-  签名: (x : Complex) (n : 自然数)
+  签名: (x : 复形) (n : 自然数)
   定义体: 1 / (x - (n + 1)) + 1 / (x + (n + 1))
 -/
 noncomputable abbrev cotTerm (x : Complex) (n : Nat) : Complex := 1 / (x - (n + 1)) + 1 / (x + (n + 1))
@@ -786,7 +786,7 @@ lemma contDiffOn_inv_linear
 中文:
 引理 contDiffOn_inv_linear
   条件: (d : 整数)
-  结论: ContDiffOn Complex k (fun z : Complex => 1 / (z + d)) Complex_整数
+  结论: ContDiffOn 复形 k (fun z : 复形 => 1 / (z + d)) Complex_整数
   证明: by
   simpa using ContDiffOn.fun_inv (by fun_prop) (fun x hx => integerComplement_add_ne_zero hx d)
 -/
@@ -1078,7 +1078,7 @@ lemma aux_summable_add
 
 中文:
 引理 aux_summable_add
-  条件: {k : 自然数} (hk : 1 <= k) (x : Complex)
+  条件: {k : 自然数} (hk : 1 <= k) (x : 复形)
   证明: by
   apply ((summable_nat_add_iff 1).mpr (summable_int_iff_summable_nat_and_neg.mp
         (EisensteinSeries.linear_right_summable x 1 (k := k + 1) (by lia))).1).congr
@@ -1103,7 +1103,7 @@ lemma aux_summable_sub
 
 中文:
 引理 aux_summable_sub
-  条件: {k : 自然数} (hk : 1 <= k) (x : Complex)
+  条件: {k : 自然数} (hk : 1 <= k) (x : 复形)
   证明: by
   apply ((summable_nat_add_iff 1).mpr (summable_int_iff_summable_nat_and_neg.mp
         (EisensteinSeries.linear_right_summable x 1 (k := k + 1) (by lia))).2).congr
@@ -1201,7 +1201,7 @@ lemma iteratedDerivWithin_cot_pi_mul_sub_inv
 
 中文:
 引理 iteratedDerivWithin_cot_pi_mul_sub_inv
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   证明: by
   simp_rw [sub_eq_add_neg]
   rw [iteratedDerivWithin_fun_add hz isOpen_upperHalfPlaneSet.uniqueDiffOn]
@@ -1238,7 +1238,7 @@ lemma iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_zpow
 
 中文:
 引理 iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_zpow
-  条件: {k : 自然数} (hk : 1 <= k) {z : Complex} (hz : z in ℍₒ)
+  条件: {k : 自然数} (hk : 1 <= k) {z : 复形} (hz : z in ℍₒ)
   证明: by
   have h0 := iteratedDerivWithin_cot_pi_mul_sub_inv k hz
   rw [iteratedDerivWithin_cot_sub_inv_eq_add_mul_tsum hk hz]; rw [add_comm] at h0
@@ -1267,7 +1267,7 @@ theorem iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_div_pow
 
 中文:
 定理 iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_div_pow
-  结论: {k : 自然数} (hk : 1 <= k) {z : Complex}
+  结论: {k : 自然数} (hk : 1 <= k) {z : 复形}
   证明: by
   convert! iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_zpow hk hz with n
   rw [show (-1 - k : Int) = -(k + 1 :) by norm_cast; lia]; rw [zpow_neg_coe_of_pos _ (by lia)]; rw [one_div]

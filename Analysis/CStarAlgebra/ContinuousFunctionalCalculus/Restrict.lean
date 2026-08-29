@@ -44,7 +44,7 @@ right_inv x := Subtype.ext h.left_inv x
 
 中文:
 定义 homeomorph
-  签名: {R S A : 类型} [Semifield R] [Semifield S] [Ring A]
+  签名: {R S A : 类型} [半域 R] [半域 S] [环 A]
   定义体: MapsTo.restrict f _ _ h.subset_preimage
   invFun := MapsTo.restrict (algebraMap R S) _ _ (image_subset_iff.mp h.algebraMap_image.subset)
 left_inv x := Subtype.ext h.rightInvOn x.2
@@ -75,7 +75,7 @@ universe u v w
 
 中文:
 引理 compactSpace
-  结论: {R S A : 类型} [Semifield R] [Semifield S] [Ring A]
+  结论: {R S A : 类型} [半域 R] [半域 S] [环 A]
   证明: by
   rw [← isCompact_iff_compactSpace] at h_cpct ⊢
   exact h.image ▸ h_cpct.image (map_continuous f)
@@ -111,7 +111,7 @@ definition starAlgHom
 
 中文:
 定义 starAlgHom
-  签名: {R : 类型u} {S : 类型v} {A : Type w} [Semifield R]
+  签名: {R : 类型u} {S : 类型v} {A : 类型 w} [半域 R]
   定义体: (φ.restrictScalars R).comp
 (ContinuousMap.compStarAlgHom (spectrum S a) (.ofId R S) (algebraMapCLM R S).continuous).comp
       ContinuousMap.compStarAlgHom' R R
@@ -267,7 +267,7 @@ theorem cfc
 
 中文:
 定理 cfc
-  结论: (f : C(S, R)) (halg : IsClosedEmbedding (algebraMap R S)) (h0 : p 0)
+  结论: (f : C(S, R)) (halg : 是闭嵌入 (algebraMap R S)) (h0 : p 0)
   证明: h0
   spectrum_nonempty a ha := ((h a).mp ha).2.image ▸
     (ContinuousFunctionalCalculus.spectrum_nonempty a ((h a).mp ha).1 |>.image f)
@@ -355,7 +355,7 @@ lemma cfc_eq_restrict
 
 中文:
 引理 cfc_eq_restrict
-  结论: (f : C(S, R)) (halg : IsClosedEmbedding (algebraMap R S)) {a : A} (hpa : p a)
+  结论: (f : C(S, R)) (halg : 是闭嵌入 (algebraMap R S)) {a : A} (hpa : p a)
   证明: by
   by_cases hg : ContinuousOn g (spectrum R a)
   · rw [cfc_apply g a, cfcHom_eq_restrict f hpa hqa h, SpectrumRestricts.starAlgHom_apply,
@@ -404,7 +404,7 @@ theorem closedEmbeddingCFC
 
 中文:
 定理 closedEmbeddingCFC
-  结论: (f : C(S, R)) (halg : IsUniformEmbedding (algebraMap R S))
+  结论: (f : C(S, R)) (halg : 是一致嵌入 (algebraMap R S))
   证明: SpectrumRestricts.cfc f halg.isClosedEmbedding h0 h
   isClosedEmbedding a ha := by
     have := SpectrumRestricts.cfc f halg.isClosedEmbedding h0 h
@@ -445,7 +445,7 @@ universe u v w
 
 中文:
 定义 homeomorph
-  签名: {R S A : 类型} [Semifield R] [Field S] [NonUnitalRing A]
+  签名: {R S A : 类型} [半域 R] [域 S] [非幺环 A]
   定义体: MapsTo.restrict f _ _ h.subset_preimage
   invFun := MapsTo.restrict (algebraMap R S) _ _ (image_subset_iff.mp h.algebraMap_image.subset)
 left_inv x := Subtype.ext h.rightInvOn x.2
@@ -486,7 +486,7 @@ definition nonUnitalStarAlgHom
 
 中文:
 定义 nonUnitalStarAlgHom
-  签名: {R : 类型u} {S : 类型v} {A : Type w} [Semifield R]
+  签名: {R : 类型u} {S : 类型v} {A : 类型 w} [半域 R]
   定义体: (φ.restrictScalars R).comp
     (nonUnitalStarAlgHom_postcomp (σₙ S a) (StarAlgHom.ofId R S) (algebraMapCLM R S).continuous)
 .comp nonUnitalStarAlgHom_precomp R
@@ -656,7 +656,7 @@ theorem cfc
 
 中文:
 定理 cfc
-  结论: (f : C(S, R)) (halg : IsClosedEmbedding (algebraMap R S)) (h0 : p 0)
+  结论: (f : C(S, R)) (halg : 是闭嵌入 (algebraMap R S)) (h0 : p 0)
   证明: h0
   compactSpace_quasispectrum a := by
     have := NonUnitalContinuousFunctionalCalculus.compactSpace_quasispectrum (R := S) a
@@ -742,7 +742,7 @@ lemma cfcₙ_eq_restrict
 
 中文:
 引理 cfcₙ_eq_restrict
-  结论: (f : C(S, R)) (halg : IsClosedEmbedding (algebraMap R S)) {a : A}
+  结论: (f : C(S, R)) (halg : 是闭嵌入 (algebraMap R S)) {a : A}
   证明: by
   by_cases hg : ContinuousOn g (σₙ R a) ∧ g 0 = 0
   · obtain ⟨hg, hg0⟩ := hg

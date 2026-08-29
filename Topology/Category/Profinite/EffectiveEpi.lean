@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: profiniteToCompHaus.PreservesEffectiveEpis
+  签名: profiniteToCompHaus.保持EffectiveEpis
   定义体: ((CompHaus.effectiveEpi_tfae _).out 0 2).mpr (((Profinite.effectiveEpi_tfae _).out 0 2).mp h)
 
 Depends on / 依赖: CompHaus, CompHaus.effectiveEpi_tfae, Profinite, Profinite.effectiveEpi_tfae, effectiveEpi_tfae

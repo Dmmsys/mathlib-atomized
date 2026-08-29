@@ -36,10 +36,10 @@ class Functor.PreservesInjectiveObjects
     - injective_obj({X : C}) : Injective X -> Injective (F.obj X)
 
 中文:
-类 Functor.PreservesInjectiveObjects
+类 函子.保持InjectiveObjects
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - injective_obj({X : C}) : Injective X -> Injective (F.obj X)
+    - injective_obj({X : C}) : 单射 X -> 单射 (F.obj X)
 -/
 class Functor.PreservesInjectiveObjects (F : C ⥤ D) : Prop where
   injective_obj {X : C} : Injective X -> Injective (F.obj X)
@@ -53,8 +53,8 @@ instance Functor.injective_obj
   body: Functor.PreservesInjectiveObjects.injective_obj inferInstance
 
 中文:
-实例 Functor.injective_obj
-  签名: (F : C ⥤ D) [F.PreservesInjectiveObjects] (X : C) [Injective X]
+实例 函子.injective_obj
+  签名: (F : C ⥤ D) [F.保持InjectiveObjects] (X : C) [单射 X]
   定义体: Functor.PreservesInjectiveObjects.injective_obj inferInstance
 
 Depends on / 依赖: Functor, Functor.PreservesInjectiveObjects.injective_obj, PreservesInjectiveObjects, injective_obj
@@ -72,8 +72,8 @@ theorem Functor.injective_obj_of_injective
   proof: Functor.PreservesInjectiveObjects.injective_obj h
 
 中文:
-定理 Functor.injective_obj_of_injective
-  结论: (F : C ⥤ D) [F.PreservesInjectiveObjects] {X : C}
+定理 函子.injective_obj_of_injective
+  结论: (F : C ⥤ D) [F.保持InjectiveObjects] {X : C}
   证明: Functor.PreservesInjectiveObjects.injective_obj h
 
 Depends on / 依赖: Functor, Functor.PreservesInjectiveObjects.injective_obj, PreservesInjectiveObjects, injective_obj
@@ -91,7 +91,7 @@ instance Functor.preservesInjectiveObjects_comp
   body: G.injective_obj_of_injective ∘ F.injective_obj_of_injective
 
 中文:
-实例 Functor.preservesInjectiveObjects_comp
+实例 函子.preservesInjectiveObjects_comp
   签名: (F : C ⥤ D) (G : D ⥤ E)
   定义体: G.injective_obj_of_injective ∘ F.injective_obj_of_injective
 
@@ -110,7 +110,7 @@ theorem Functor.preservesInjectiveObjects_of_adjunction_of_preservesMonomorphism
   proof: adj.map_injective _ h
 
 中文:
-定理 Functor.preservesInjectiveObjects_of_adjunction_of_preservesMonomorphisms
+定理 函子.preservesInjectiveObjects_of_adjunction_of_preservesMonomorphisms
   证明: adj.map_injective _ h
 
 Depends on / 依赖: adj.map_injective, map_injective
@@ -136,7 +136,7 @@ theorem Functor.preservesMonomorphisms_of_adjunction_of_preservesInjectiveObject
       adj.counit.app (Injective.under (F.obj X)), by simp [← Functor.map_comp_assoc]⟩
 
 中文:
-定理 Functor.preservesMonomorphisms_of_adjunction_of_preservesInjectiveObjects
+定理 函子.preservesMonomorphisms_of_adjunction_of_preservesInjectiveObjects
   证明: by
     suffices exists h, F.map f ≫ h = Injective.ι (F.obj X) from mono_of_mono_fac this.choose_spec
     exact ⟨F.map (Injective.factorThru (adj.unit.app X ≫ G.map (Injective.ι _)) f) ≫

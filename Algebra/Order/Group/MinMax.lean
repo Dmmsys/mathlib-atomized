@@ -38,7 +38,7 @@ alias max_zero_sub_eq_self := max_zero_sub_max_neg_zero_eq_self
 中文:
 定理 max_one_div_max_inv_one_eq_self
   条件: (a : α)
-  结论: max a 1 / max a⁻¹ 1 = a
+  结论: 最大值 a 1 / 最大值 a⁻¹ 1 = a
   证明: by
   rcases le_total a 1 with (h | h) <;> simp [h]
 
@@ -67,7 +67,7 @@ lemma max_inv_one
 中文:
 引理 max_inv_one
   条件: (a : α)
-  结论: max a⁻¹ 1 = a⁻¹ * max a 1
+  结论: 最大值 a⁻¹ 1 = a⁻¹ * 最大值 a 1
   证明: by
   rw [eq_inv_mul_iff_mul_eq]; rw [← eq_div_iff_mul_eq']; rw [max_one_div_max_inv_one_eq_self]
 
@@ -93,7 +93,7 @@ lemma min_inv_inv_le
 
 中文:
 引理 min_inv_inv_le
-  结论: min x⁻¹ y⁻¹ <= (max x y)⁻¹
+  结论: 最小值 x⁻¹ y⁻¹ <= (最大值 x y)⁻¹
   证明: by
   cases le_total x y <;> simp_all
 
@@ -124,7 +124,7 @@ theorem min_inv_inv'
 中文:
 定理 min_inv_inv'
   条件: (a b : α)
-  结论: min a⁻¹ b⁻¹ = (max a b)⁻¹
+  结论: 最小值 a⁻¹ b⁻¹ = (最大值 a b)⁻¹
   证明: Eq.symm (@Monotone.map_max α αᵒᵈ _ _ Inv.inv a b) fun _ _ =>
     inv_le_inv_iff.mpr
 
@@ -152,7 +152,7 @@ theorem max_inv_inv'
 中文:
 定理 max_inv_inv'
   条件: (a b : α)
-  结论: max a⁻¹ b⁻¹ = (min a b)⁻¹
+  结论: 最大值 a⁻¹ b⁻¹ = (最小值 a b)⁻¹
   证明: Eq.symm (@Monotone.map_min α αᵒᵈ _ _ Inv.inv a b) fun _ _ =>
     inv_le_inv_iff.mpr
 
@@ -180,7 +180,7 @@ theorem min_div_div_right'
 中文:
 定理 min_div_div_right'
   条件: (a b c : α)
-  结论: min (a / c) (b / c) = min a b / c
+  结论: 最小值 (a / c) (b / c) = 最小值 a b / c
   证明: by
   simpa only [div_eq_mul_inv] using min_mul_mul_right a b c⁻¹
 
@@ -207,7 +207,7 @@ theorem max_div_div_right'
 中文:
 定理 max_div_div_right'
   条件: (a b c : α)
-  结论: max (a / c) (b / c) = max a b / c
+  结论: 最大值 (a / c) (b / c) = 最大值 a b / c
   证明: by
   simpa only [div_eq_mul_inv] using max_mul_mul_right a b c⁻¹
 
@@ -234,7 +234,7 @@ theorem min_div_div_left'
 中文:
 定理 min_div_div_left'
   条件: (a b c : α)
-  结论: min (a / b) (a / c) = a / max b c
+  结论: 最小值 (a / b) (a / c) = a / 最大值 b c
   证明: by
   simp only [div_eq_mul_inv, min_mul_mul_left, min_inv_inv']
 
@@ -259,7 +259,7 @@ theorem max_div_div_left'
 中文:
 定理 max_div_div_left'
   条件: (a b c : α)
-  结论: max (a / b) (a / c) = a / min b c
+  结论: 最大值 (a / b) (a / c) = a / 最小值 b c
   证明: by
   simp only [div_eq_mul_inv, max_mul_mul_left, max_inv_inv']
 
@@ -287,7 +287,7 @@ theorem max_sub_max_le_max
 中文:
 定理 max_sub_max_le_max
   条件: (a b c d : α)
-  结论: max a b - max c d <= max (a - c) (b - d)
+  结论: 最大值 a b - 最大值 c d <= 最大值 (a - c) (b - d)
   证明: by
   grind
 -/
@@ -310,7 +310,7 @@ theorem abs_max_sub_max_le_max
 中文:
 定理 abs_max_sub_max_le_max
   条件: (a b c d : α)
-  结论: |max a b - max c d| <= max |a - c| |b - d|
+  结论: |最大值 a b - 最大值 c d| <= 最大值 |a - c| |b - d|
   证明: by
   refine abs_sub_le_iff.2 ⟨?_, ?_⟩
   · exact (max_sub_max_le_max _ _ _ _).trans (max_le_max (le_abs_self _) (le_abs_self _))
@@ -339,7 +339,7 @@ theorem abs_min_sub_min_le_max
 中文:
 定理 abs_min_sub_min_le_max
   条件: (a b c d : α)
-  结论: |min a b - min c d| <= max |a - c| |b - d|
+  结论: |最小值 a b - 最小值 c d| <= 最大值 |a - c| |b - d|
   证明: by
   simpa only [max_neg_neg, neg_sub_neg, abs_sub_comm] using
     abs_max_sub_max_le_max (-a) (-b) (-c) (-d)
@@ -364,7 +364,7 @@ theorem abs_max_sub_max_le_abs
 中文:
 定理 abs_max_sub_max_le_abs
   条件: (a b c : α)
-  结论: |max a c - max b c| <= |a - b|
+  结论: |最大值 a c - 最大值 b c| <= |a - b|
   证明: by
   simpa only [sub_self, abs_zero, max_eq_left (abs_nonneg (a - b))]
     using abs_max_sub_max_le_max a c b c

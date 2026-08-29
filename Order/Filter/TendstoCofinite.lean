@@ -55,7 +55,7 @@ class TendstoCofinite
 类 TendstoCofinite
   参数: (f : α -> β)
   公理与运算 (1 个):
-    - tendsto_cofinite((f)) : Tendsto f cofinite cofinite
+    - tendsto_cofinite((f)) : 收敛 f cofinite cofinite
 -/
 @[mk_iff] class TendstoCofinite (f : α -> β) : Prop where
   tendsto_cofinite (f) : Tendsto f cofinite cofinite
@@ -72,7 +72,7 @@ lemma TendstoCofinite.finite_preimage
 
 中文:
 引理 TendstoCofinite.finite_preimage
-  条件: [TendstoCofinite f] {s : Set β} (hs : s.Finite)
+  条件: [TendstoCofinite f] {s : 集合 β} (hs : s.有限)
   证明: by
   simpa [compl_eq_univ_sdiff] using TendstoCofinite.tendsto_cofinite f
     (show univ \ s in cofinite by simpa [compl_eq_univ_sdiff])
@@ -137,7 +137,7 @@ lemma tendstoCofinite_of_injective
 
 中文:
 引理 tendstoCofinite_of_injective
-  条件: (h : f.Injective)
+  条件: (h : f.单射)
   结论: TendstoCofinite f
   证明: ⟨h.tendsto_cofinite⟩
 
@@ -159,7 +159,7 @@ lemma tendstoCofinite_of_finite
 
 中文:
 引理 tendstoCofinite_of_finite
-  条件: [Finite α]
+  条件: [有限 α]
   结论: TendstoCofinite f
   证明: (tendstoCofinite_iff_finite_preimage_singleton f).mpr fun b => Set.toFinite (f ⁻¹' {b})
 
@@ -326,7 +326,7 @@ lemma mapDomain_smul
 
 中文:
 引理 mapDomain_smul
-  条件: [DistribSMul R M] (r : R) (v : α -> M)
+  条件: [分配标量乘法 R M] (r : R) (v : α -> M)
   证明: by ext; simp [mapDomain, Finset.smul_sum]
 
 Depends on / 依赖: Finset, Finset.smul_sum, mapDomain, smul_sum
@@ -347,7 +347,7 @@ theorem mapDomain_eq_zero
 
 中文:
 定理 mapDomain_eq_zero
-  条件: (v : α -> M) {i : β} (h' : i ∉ Set.range f)
+  条件: (v : α -> M) {i : β} (h' : i ∉ 集合.range f)
   结论: mapDomain f v i = 0
   证明: by
   rw [← Set.preimage_singleton_eq_empty] at h'
@@ -378,7 +378,7 @@ theorem Finsupp.mapDomain_tendstoCofinite
   refine Set.Finite.subset (Set.Finite.image (
 
 中文:
-定理 Finsupp.mapDomain_tendstoCofinite
+定理 有限支撑.mapDomain_tendstoCofinite
   条件: [TendstoCofinite f]
   证明: by
   classical

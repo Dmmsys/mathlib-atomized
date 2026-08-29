@@ -49,7 +49,7 @@ definition maximalIdeal
 
 中文:
 定义 maximalIdeal
-  签名: : HeightOneSpectrum A where
+  签名: : 高一谱 A where
   定义体: IsLocalRing.maximalIdeal A
   isPrime := Ideal.IsMaximal.isPrime (maximalIdeal.isMaximal A)
   ne_bot := by simpa [ne_eq, ← isField_iff_maximalIdeal_eq] using not_isField A
@@ -127,7 +127,7 @@ theorem exists_lift_of_le_one
     obtain ⟨m, w
 
 中文:
-定理 exists_lift_of_le_one
+定理 存在_lift_of_le_one
   条件: {x : K} (H : ((maximalIdeal A).valuation K) x <= (1 : 整数ᵐ⁰))
   证明: by
   obtain ⟨π, hπ⟩ := exists_irreducible A
@@ -282,7 +282,7 @@ theorem map_algebraMap_eq_valuationSubring
 
 中文:
 定理 map_algebraMap_eq_valuationSubring
-  结论: Subring.map (algebraMap A K) ⊤ =
+  结论: 子环.map (algebraMap A K) ⊤ =
   证明: by
   ext
   refine ⟨fun h => ?_, fun h => ?_⟩

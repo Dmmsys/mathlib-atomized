@@ -80,8 +80,8 @@ structure Polynomial
   (no additional axioms)
 
 中文:
-结构 Polynomial
-  参数: (R : 类型) [Semiring R]
+结构 多项式
+  参数: (R : 类型) [半环 R]
   (无附加公理)
 -/
 structure Polynomial (R : Type*) [Semiring R] where ofFinsupp ::
@@ -113,7 +113,7 @@ theorem forall_iff_forall_finsupp
   proof: ⟨fun h q => h ⟨q⟩, fun h ⟨p⟩ => h p⟩
 
 中文:
-定理 forall_iff_forall_finsupp
+定理 对任意_iff_对任意_finsupp
   条件: (P : R[X] -> 命题)
   证明: ⟨fun h q => h ⟨q⟩, fun h ⟨p⟩ => h p⟩
 -/
@@ -132,7 +132,7 @@ theorem exists_iff_exists_finsupp
 @[simp]
 
 中文:
-定理 exists_iff_exists_finsupp
+定理 存在_iff_存在_finsupp
   条件: (P : R[X] -> 命题)
   证明: ⟨fun ⟨⟨p⟩, hp⟩ => ⟨p, hp⟩, fun ⟨q, hq⟩ => ⟨⟨q⟩, hq⟩⟩
 
@@ -155,7 +155,7 @@ theorem eta
 中文:
 定理 eta
   条件: (f : R[X])
-  结论: Polynomial.ofFinsupp f.toFinsupp = f
+  结论: 多项式.ofFinsupp f.toFinsupp = f
   证明: by constructor
 -/
 theorem eta (f : R[X]) : Polynomial.ofFinsupp f.toFinsupp = f := by constructor
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero R[X]
+  签名: 零 R[X]
   定义体: ⟨⟨0⟩⟩
 -/
 instance : Zero R[X] :=
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: One R[X]
+  签名: 幺 R[X]
   定义体: ⟨⟨1⟩⟩
 -/
 instance : One R[X] :=
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add R[X]
+  签名: 加法 R[X]
   定义体: ⟨fun ⟨a⟩ ⟨b⟩ => ⟨a + b⟩⟩
 -/
 @[no_expose] instance : Add R[X] :=
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul R[X]
+  签名: 乘法 R[X]
   定义体: ⟨fun ⟨a⟩ ⟨b⟩ => ⟨a * b⟩⟩
 -/
 @[no_expose] instance : Mul R[X] :=
@@ -250,7 +250,7 @@ instance instNSMul
 
 中文:
 实例 instNSMul
-  签名: : SMul 自然数 R[X] where
+  签名: : 标量乘法 自然数 R[X] where
   定义体: ⟨r • p.toFinsupp⟩
 
 Depends on / 依赖: p.toFinsupp, toFinsupp
@@ -269,7 +269,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: {S : 类型} [SMulZeroClass S R]
+  签名: {S : 类型} [SMulZero类 S R]
   定义体: ⟨r • p.toFinsupp⟩
   smul_zero a := congr_arg ofFinsupp (smul_zero a)
 
@@ -361,7 +361,7 @@ theorem ofFinsupp_neg
 
 中文:
 定理 ofFinsupp_neg
-  条件: {R : 类型u} [Ring R] {a}
+  条件: {R : 类型u} [环 R] {a}
   结论: (⟨-a⟩ : R[X]) = -⟨a⟩
   证明: (rfl)
 
@@ -386,7 +386,7 @@ theorem ofFinsupp_sub
 
 中文:
 定理 ofFinsupp_sub
-  条件: {R : 类型u} [Ring R] {a b}
+  条件: {R : 类型u} [环 R] {a b}
   结论: (⟨a - b⟩ : R[X]) = ⟨a⟩ - ⟨b⟩
   证明: by
   rw [sub_eq_add_neg]
@@ -457,7 +457,7 @@ theorem ofFinsupp_smul
 
 中文:
 定理 ofFinsupp_smul
-  条件: {S : 类型} [SMulZeroClass S R] (a : S) (b)
+  条件: {S : 类型} [SMulZero类 S R] (a : S) (b)
   证明: rfl
 -/
 theorem ofFinsupp_smul {S : Type*} [SMulZeroClass S R] (a : S) (b) :
@@ -580,7 +580,7 @@ theorem toFinsupp_neg
 
 中文:
 定理 toFinsupp_neg
-  条件: {R : 类型u} [Ring R] (a : R[X])
+  条件: {R : 类型u} [环 R] (a : R[X])
   结论: (-a).toFinsupp = -a.toFinsupp
   证明: (rfl)
 
@@ -604,7 +604,7 @@ theorem toFinsupp_sub
 
 中文:
 定理 toFinsupp_sub
-  条件: {R : 类型u} [Ring R] (a b : R[X])
+  条件: {R : 类型u} [环 R] (a b : R[X])
   证明: by
   rw [sub_eq_add_neg]
   rfl
@@ -677,7 +677,7 @@ theorem toFinsupp_smul
 
 中文:
 定理 toFinsupp_smul
-  条件: {S : 类型} [SMulZeroClass S R] (a : S) (b : R[X])
+  条件: {S : 类型} [SMulZero类 S R] (a : S) (b : R[X])
   证明: rfl
 
 @[simp]
@@ -718,7 +718,7 @@ theorem _root_.IsSMulRegular.polynomial
 
 中文:
 定理 _root_.IsSMulRegular.polynomial
-  结论: {S : 类型} [SMulZeroClass S R] {a : S}
+  结论: {S : 类型} [SMulZero类 S R] {a : S}
 -/
 theorem _root_.IsSMulRegular.polynomial {S : Type*} [SMulZeroClass S R] {a : S}
     (ha : IsSMulRegular R a) : IsSMulRegular R[X] a
@@ -736,7 +736,7 @@ theorem toFinsupp_injective
 
 中文:
 定理 toFinsupp_injective
-  结论: Function.Injective (toFinsupp : R[X] -> AddMonoidAlgebra _ _)
+  结论: 函数.单射 (toFinsupp : R[X] -> 加法幺半群代数 _ _)
   证明: fun ⟨_x⟩ ⟨_y⟩ => congr_arg _
 
 @[simp]
@@ -902,7 +902,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited R[X]
+  签名: : 可居 R[X]
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited R[X] :=
@@ -919,8 +919,8 @@ instance instNatCast
 @[simp]
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast R[X] where natCast n
+实例 inst自然数Cast
+  签名: : 自然数嵌入 R[X] where natCast n
   定义体: ofFinsupp n
 
 @[simp]
@@ -986,7 +986,7 @@ theorem ofFinsupp_ofNat
 @[simp]
 
 中文:
-定理 ofFinsupp_ofNat
+定理 ofFinsupp_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (⟨of自然数(n)⟩ : R[X]) = of自然数(n)
   证明: rfl
@@ -1006,7 +1006,7 @@ theorem toFinsupp_ofNat
   proof: rfl
 
 中文:
-定理 toFinsupp_ofNat
+定理 toFinsupp_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R[X]).toFinsupp = of自然数(n)
   证明: rfl
@@ -1025,7 +1025,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring R[X]
+  签名: : 半环 R[X]
   定义体: fast_instance% Function.Injective.semiring toFinsupp toFinsupp_injective toFinsupp_zero
     toFinsupp_one toFinsupp_add toFinsupp_mul (fun _ _ => toFinsupp_nsmul _ _) toFinsupp_pow
     fun _ => rfl
@@ -1048,7 +1048,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: {S} [DistribSMul S R]
+  签名: {S} [分配标量乘法 S R]
   定义体: fast_instance% Function.Injective.distribSMul ⟨⟨toFinsupp, toFinsupp_zero⟩, toFinsupp_add⟩
     toFinsupp_injective toFinsupp_smul
 
@@ -1069,7 +1069,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: {S} [Monoid S] [DistribMulAction S R]
+  签名: {S} [幺半群 S] [分配乘法作用 S R]
   定义体: fast_instance% Function.Injective.distribMulAction
     ⟨⟨toFinsupp, toFinsupp_zero (R := R)⟩, toFinsupp_add⟩ toFinsupp_injective toFinsupp_smul
 
@@ -1089,7 +1089,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: {S} [SMulZeroClass S R] [FaithfulSMul S R]
+  签名: {S} [SMulZero类 S R] [忠实标量乘法 S R]
   定义体: eq_of_smul_eq_smul fun a : R[Nat] => congr(($(h ⟨a⟩)).toFinsupp)
 
 Depends on / 依赖: eq_of_smul_eq_smul, toFinsupp
@@ -1108,7 +1108,7 @@ instance module
 
 中文:
 实例 module
-  签名: {S} [Semiring S] [Module S R]
+  签名: {S} [半环 S] [模 S R]
   定义体: fast_instance% Function.Injective.module _ ⟨⟨toFinsupp, toFinsupp_zero⟩, toFinsupp_add⟩
     toFinsupp_injective toFinsupp_smul
 
@@ -1130,7 +1130,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: {S₁ S₂} [SMulZeroClass S₁ R] [SMulZeroClass S₂ R] [SMulCommClass S₁ S₂ R]
+  签名: {S₁ S₂} [SMulZero类 S₁ R] [SMulZero类 S₂ R] [标量交换类 S₁ S₂ R]
   定义体: ⟨by
     rintro m n ⟨f⟩
     simp_rw [← ofFinsupp_smul, smul_comm m n f]⟩
@@ -1155,7 +1155,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: {S₁ S₂} [SMul S₁ S₂] [SMulZeroClass S₁ R] [SMulZeroClass S₂ R]
+  签名: {S₁ S₂} [标量乘法 S₁ S₂] [SMulZero类 S₁ R] [SMulZero类 S₂ R]
   定义体: ⟨by
     rintro _ _ ⟨⟩
     simp_rw [← ofFinsupp_smul, smul_assoc]⟩
@@ -1180,7 +1180,7 @@ instance isScalarTower_right
 
 中文:
 实例 isScalarTower_right
-  签名: {α K : 类型} [Semiring K] [DistribSMul α K] [IsScalarTower α K K]
+  签名: {α K : 类型} [半环 K] [分配标量乘法 α K] [标量塔 α K K]
   定义体: ⟨by
     rintro _ ⟨⟩ ⟨⟩
     simp_rw [smul_eq_mul, ← ofFinsupp_smul, ← ofFinsupp_mul, ← ofFinsupp_smul, smul_mul_assoc]⟩
@@ -1205,7 +1205,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: {S} [SMulZeroClass S R] [SMulZeroClass Sᵐᵒᵖ R] [IsCentralScalar S R]
+  签名: {S} [SMulZero类 S R] [SMulZero类 Sᵐᵒᵖ R] [中心标量 S R]
   定义体: ⟨by
     rintro _ ⟨⟩
     simp_rw [← ofFinsupp_smul, op_smul_eq_smul]⟩
@@ -1236,7 +1236,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [Subsingleton R]
+  签名: [子单例 R]
   定义体: { Polynomial.inhabited with
     uniq := by
       rintro ⟨x⟩
@@ -1337,7 +1337,7 @@ theorem ofFinsupp_sum
 
 中文:
 定理 ofFinsupp_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R[自然数])
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R[自然数])
   证明: map_sum (toFinsuppIso R).symm f s
 
 Depends on / 依赖: map_sum, toFinsuppIso
@@ -1356,7 +1356,7 @@ theorem toFinsupp_sum
 
 中文:
 定理 toFinsupp_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R[X])
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R[X])
   证明: map_sum (toFinsuppIso R) f s
 
 Depends on / 依赖: map_sum, toFinsuppIso
@@ -1374,7 +1374,7 @@ definition support
 
 中文:
 定义 support
-  签名: : R[X] -> Finset 自然数
+  签名: : R[X] -> 有限集 自然数
 -/
 def support : R[X] -> Finset Nat
   | ⟨p⟩ => p.coeff.support
@@ -1477,7 +1477,7 @@ lemma support_nonempty
 
 中文:
 引理 support_nonempty
-  结论: p.support.Nonempty ↔ p != 0
+  结论: p.support.非空 ↔ p != 0
   证明: Finset.nonempty_iff_ne_empty.trans support_eq_empty.not
 -/
 @[simp] lemma support_nonempty : p.support.Nonempty ↔ p != 0 :=
@@ -1683,7 +1683,7 @@ theorem smul_monomial
 
 中文:
 定理 smul_monomial
-  条件: {S} [SMulZeroClass S R] (a : S) (n : 自然数) (b : R)
+  条件: {S} [SMulZero类 S R] (a : S) (n : 自然数) (b : R)
   证明: toFinsupp_injective AddMonoidAlgebra.smul_single _ _ _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.smul_single, smul_single, toFinsupp_injective
@@ -1706,7 +1706,7 @@ theorem monomial_injective
 中文:
 定理 monomial_injective
   条件: (n : 自然数)
-  结论: Function.Injective (monomial n : R -> R[X])
+  结论: 函数.单射 (monomial n : R -> R[X])
   证明: (toFinsuppIso R).symm.injective.comp single_right_injective
 
 @[simp]
@@ -1892,7 +1892,7 @@ theorem C_ofNat
   proof: rfl
 
 中文:
-定理 C_ofNat
+定理 C_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: C of自然数(n) = (of自然数(n) : R[X])
   证明: rfl
@@ -1952,7 +1952,7 @@ theorem smul_C
 
 中文:
 定理 smul_C
-  条件: {S} [SMulZeroClass S R] (s : S) (r : R)
+  条件: {S} [SMulZero类 S R] (s : S) (r : R)
   结论: s • C r = C (s • r)
   证明: smul_monomial _ _ r
 
@@ -2145,7 +2145,7 @@ theorem X_ne_C
 
 中文:
 定理 X_ne_C
-  条件: [Nontrivial R] (a : R)
+  条件: [非平凡 R] (a : R)
   结论: X != C a
   证明: by
   intro he
@@ -2512,7 +2512,7 @@ theorem coeff_injective
 
 中文:
 定理 coeff_injective
-  结论: Injective (coeff : R[X] -> 自然数 -> R)
+  结论: 单射 (coeff : R[X] -> 自然数 -> R)
   证明: by rintro ⟨p⟩ ⟨q⟩; simp [coeff]
 
 @[simp]
@@ -2567,7 +2567,7 @@ theorem finite_range_coeff
 中文:
 定理 finite_range_coeff
   条件: (f : R[X])
-  结论: (Set.range f.coeff).Finite
+  结论: (集合.range f.coeff).有限
   证明: Finsupp.finite_range _
 
 Depends on / 依赖: Finsupp, Finsupp.finite_range, finite_range
@@ -3010,7 +3010,7 @@ theorem coeff_ofNat_zero
 @[simp]
 
 中文:
-定理 coeff_ofNat_zero
+定理 coeff_of自然数_zero
   条件: (a : 自然数) [a.AtLeastTwo]
   证明: coeff_monomial
 
@@ -3034,7 +3034,7 @@ theorem coeff_ofNat_succ
   simp [-Nat.cast_ofNat]
 
 中文:
-定理 coeff_ofNat_succ
+定理 coeff_of自然数_succ
   条件: (a n : 自然数) [h : a.AtLeastTwo]
   证明: by
   rw [← Nat.cast_ofNat]
@@ -3147,7 +3147,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Injective (C : R -> R[X])
+  结论: 单射 (C : R -> R[X])
   证明: monomial_injective 0
 
 @[simp]
@@ -3229,7 +3229,7 @@ theorem subsingleton_iff_subsingleton
 
 中文:
 定理 subsingleton_iff_subsingleton
-  结论: Subsingleton R[X] ↔ Subsingleton R
+  结论: 子单例 R[X] ↔ 子单例 R
   证明: ⟨@Injective.subsingleton _ _ _ C_injective, by
     intro
     infer_instance⟩
@@ -3251,9 +3251,9 @@ theorem Nontrivial.of_polynomial_ne
   proof: (subsingleton_or_nontrivial R).resolve_left fun _hI => h Subsingleton.elim _ _
 
 中文:
-定理 Nontrivial.of_polynomial_ne
+定理 非平凡.of_polynomial_ne
   条件: (h : p != q)
-  结论: Nontrivial R
+  结论: 非平凡 R
   证明: (subsingleton_or_nontrivial R).resolve_left fun _hI => h Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, resolve_left, subsingleton_or_nontrivial
@@ -3271,7 +3271,7 @@ theorem forall_eq_iff_forall_eq
   simpa only [← subsingleton_iff] using subsingleton_iff_subsingleton
 
 中文:
-定理 forall_eq_iff_forall_eq
+定理 对任意_eq_iff_对任意_eq
   结论: (对任意 f g : R[X], f = g) ↔ 对任意 a b : R, a = b
   证明: by
   simpa only [← subsingleton_iff] using subsingleton_iff_subsingleton
@@ -3389,7 +3389,7 @@ theorem addHom_ext
 
 中文:
 定理 addHom_ext
-  结论: {M : 类型} [AddZeroClass M] {f g : R[X] ->+ M}
+  结论: {M : 类型} [加法零类 M] {f g : R[X] ->+ M}
   证明: AddMonoidHom.eq_of_eqOn_denseM addSubmonoid_closure_setOfPred_eq_monomial by
     rintro p ⟨n, a, rfl⟩
     exact h n a
@@ -3417,7 +3417,7 @@ theorem addHom_ext'
 
 中文:
 定理 addHom_ext'
-  结论: {M : 类型} [AddZeroClass M] {f g : R[X] ->+ M}
+  结论: {M : 类型} [加法零类 M] {f g : R[X] ->+ M}
   证明: addHom_ext fun n => DFunLike.congr_fun (h n)
 
 @[ext high]
@@ -3439,7 +3439,7 @@ theorem lhom_ext'
 
 中文:
 定理 lhom_ext'
-  结论: {M : 类型} [AddCommMonoid M] [Module R M] {f g : R[X] ->ₗ[R] M}
+  结论: {M : 类型} [加法交换幺半群 M] [模 R M] {f g : R[X] ->ₗ[R] M}
   证明: LinearMap.toAddMonoidHom_injective addHom_ext fun n => LinearMap.congr_fun (h n)
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, LinearMap.toAddMonoidHom_injective, addHom_ext, congr_fun, toAddMonoidHom_injective
@@ -3590,7 +3590,7 @@ theorem support_C_mul_X
 中文:
 定理 support_C_mul_X
   条件: {c : R} (h : c != 0)
-  结论: Polynomial.support (C c * X) = singleton 1
+  结论: 多项式.support (C c * X) = singleton 1
   证明: by
   rw [C_mul_X_eq_monomial]; rw [support_monomial 1 h]
 
@@ -3616,7 +3616,7 @@ theorem support_C_mul_X_subset
 中文:
 定理 support_C_mul_X_subset
   条件: (c : R)
-  结论: Polynomial.support (C c * X) subseteq singleton 1
+  结论: 多项式.support (C c * X) subseteq singleton 1
   证明: by
   simpa only [C_mul_X_eq_monomial] using support_monomial_subset 1 c
 
@@ -3852,7 +3852,7 @@ theorem support_X_pow
 
 中文:
 定理 support_X_pow
-  条件: [Nontrivial R] (n : 自然数)
+  条件: [非平凡 R] (n : 自然数)
   结论: (X ^ n : R[X]).support = singleton n
   证明: by
   convert! support_monomial n (NeZero.out (n := (1 : R)))
@@ -3903,7 +3903,7 @@ theorem support_X
 
 中文:
 定理 support_X
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (X : R[X]).support = singleton 1
   证明: by
   rw [← pow_one X]; rw [support_X_pow 1]
@@ -3985,8 +3985,8 @@ definition sum
   body: ∑ n in p.support, f n (p.coeff n)
 
 中文:
-定义 sum
-  签名: {S : 类型} [AddCommMonoid S] (p : R[X]) (f : 自然数 -> R -> S)
+定义 求和
+  签名: {S : 类型} [加法交换幺半群 S] (p : R[X]) (f : 自然数 -> R -> S)
   定义体: ∑ n in p.support, f n (p.coeff n)
 
 Depends on / 依赖: p.coeff, p.support, support
@@ -4004,7 +4004,7 @@ theorem sum_def
 
 中文:
 定理 sum_def
-  条件: {S : 类型} [AddCommMonoid S] (p : R[X]) (f : 自然数 -> R -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : R[X]) (f : 自然数 -> R -> S)
   证明: rfl
 
 Depends on / 依赖: RingHomInvPair, invPair
@@ -4023,7 +4023,7 @@ theorem sum_eq_of_subset
 
 中文:
 定理 sum_eq_of_subset
-  结论: {S : 类型} [AddCommMonoid S] {p : R[X]} (f : 自然数 -> R -> S)
+  结论: {S : 类型} [加法交换幺半群 S] {p : R[X]} (f : 自然数 -> R -> S)
   证明: Finsupp.sum_of_support_subset _ hs f (fun i _ => hf i)
 
 Depends on / 依赖: Finsupp, Finsupp.sum_of_support_subset, sum_of_support_subset
@@ -4077,8 +4077,8 @@ theorem sum_zero_index
 
 中文:
 定理 sum_zero_index
-  条件: {S : 类型} [AddCommMonoid S] (f : 自然数 -> R -> S)
-  结论: (0 : R[X]).sum f = 0
+  条件: {S : 类型} [加法交换幺半群 S] (f : 自然数 -> R -> S)
+  结论: (0 : R[X]).求和 f = 0
   证明: by
   simp [sum]
 
@@ -4102,7 +4102,7 @@ theorem sum_monomial_index
 
 中文:
 定理 sum_monomial_index
-  结论: {S : 类型} [AddCommMonoid S] {n : 自然数} (a : R) (f : 自然数 -> R -> S)
+  结论: {S : 类型} [加法交换幺半群 S] {n : 自然数} (a : R) (f : 自然数 -> R -> S)
   证明: Finsupp.sum_single_index hf
 
 @[simp]
@@ -4124,7 +4124,7 @@ theorem sum_C_index
 
 中文:
 定理 sum_C_index
-  条件: {a} {β} [AddCommMonoid β] {f : 自然数 -> R -> β} (h : f 0 0 = 0)
+  条件: {a} {β} [加法交换幺半群 β] {f : 自然数 -> R -> β} (h : f 0 0 = 0)
   证明: sum_monomial_index a f h
 
 Depends on / 依赖: Distrib, Distrib.rightDistribClass, rightDistribClass, sum_monomial_index
@@ -4145,7 +4145,7 @@ theorem sum_X_index
 
 中文:
 定理 sum_X_index
-  条件: {S : 类型} [AddCommMonoid S] {f : 自然数 -> R -> S} (hf : f 1 0 = 0)
+  条件: {S : 类型} [加法交换幺半群 S] {f : 自然数 -> R -> S} (hf : f 1 0 = 0)
   证明: sum_monomial_index 1 f hf
 
 Depends on / 依赖: sum_monomial_index
@@ -4166,7 +4166,7 @@ theorem sum_add_index
 
 中文:
 定理 sum_add_index
-  结论: {S : 类型} [AddCommMonoid S] (p q : R[X]) (f : 自然数 -> R -> S)
+  结论: {S : 类型} [加法交换幺半群 S] (p q : R[X]) (f : 自然数 -> R -> S)
   证明: by
   rw [show p + q = ⟨p.toFinsupp + q.toFinsupp⟩ from rfl]
   exact Finsupp.sum_add_index (fun i _ => hf i) (fun a _ b₁ b₂ => h_add a b₁ b₂)
@@ -4191,7 +4191,7 @@ theorem sum_add'
 
 中文:
 定理 sum_add'
-  条件: {S : 类型} [AddCommMonoid S] (p : R[X]) (f g : 自然数 -> R -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : R[X]) (f g : 自然数 -> R -> S)
   证明: by simp [sum_def, Finset.sum_add_distrib]
 
 Depends on / 依赖: Finset, Finset.sum_add_distrib, sum_add_distrib, sum_def
@@ -4211,7 +4211,7 @@ theorem sum_add
 
 中文:
 定理 sum_add
-  条件: {S : 类型} [AddCommMonoid S] (p : R[X]) (f g : 自然数 -> R -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : R[X]) (f g : 自然数 -> R -> S)
   证明: sum_add' _ _ _
 
 Depends on / 依赖: sum_add
@@ -4230,7 +4230,7 @@ theorem sum_smul_index
 
 中文:
 定理 sum_smul_index
-  结论: {S : 类型} [AddCommMonoid S] (p : R[X]) (b : R) (f : 自然数 -> R -> S)
+  结论: {S : 类型} [加法交换幺半群 S] (p : R[X]) (b : R) (f : 自然数 -> R -> S)
   证明: Finsupp.sum_smul_index hf
 
 Depends on / 依赖: Finsupp, Finsupp.sum_smul_index, sum_smul_index
@@ -4249,7 +4249,7 @@ theorem sum_smul_index'
 
 中文:
 定理 sum_smul_index'
-  结论: {S T : 类型} [DistribSMul T R] [AddCommMonoid S] (p : R[X]) (b : T)
+  结论: {S T : 类型} [分配标量乘法 T R] [加法交换幺半群 S] (p : R[X]) (b : T)
   证明: Finsupp.sum_smul_index' hf
 
 Depends on / 依赖: Finsupp, Finsupp.sum_smul_index, sum_smul_index
@@ -4270,7 +4270,7 @@ theorem smul_sum
 
 中文:
 定理 smul_sum
-  结论: {S T : 类型} [AddCommMonoid S] [DistribSMul T S] (p : R[X]) (b : T)
+  结论: {S T : 类型} [加法交换幺半群 S] [分配标量乘法 T S] (p : R[X]) (b : T)
   证明: Finsupp.smul_sum
 
 @[simp]
@@ -4289,7 +4289,7 @@ theorem sum_monomial_eq
 
 中文:
 定理 sum_monomial_eq
-  结论: 对任意 p : R[X], (p.sum fun n a => monomial n a) = p
+  结论: 对任意 p : R[X], (p.求和 fun n a => monomial n a) = p
 -/
 theorem sum_monomial_eq : forall p : R[X], (p.sum fun n a => monomial n a) = p
   | ⟨_p⟩ => (ofFinsupp_sum _ _).symm.trans (congr_arg _ <| sum_coeff_single _)
@@ -4309,7 +4309,7 @@ theorem sum_C_mul_X_pow_eq
 中文:
 定理 sum_C_mul_X_pow_eq
   条件: (p : R[X])
-  结论: (p.sum fun n a => C a * X ^ n) = p
+  结论: (p.求和 fun n a => C a * X ^ n) = p
   证明: by
   simp_rw [C_mul_X_pow_eq_monomial, sum_monomial_eq]
 
@@ -4771,7 +4771,7 @@ theorem support_update
 
 中文:
 定理 support_update
-  条件: (p : R[X]) (n : 自然数) (a : R) [Decidable (a = 0)]
+  条件: (p : R[X]) (n : 自然数) (a : R) [可判定 (a = 0)]
   证明: by
   classical simp [support, update, Finsupp.support_update]
 
@@ -4998,7 +4998,7 @@ theorem coeffs_nonempty_iff
 中文:
 定理 coeffs_nonempty_iff
   条件: {p : R[X]}
-  结论: p.coeffs.Nonempty ↔ p != 0
+  结论: p.coeffs.非空 ↔ p != 0
   证明: by
   simp [Finset.nonempty_iff_ne_empty]
 
@@ -5049,7 +5049,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring R[X]
+  签名: : 交换半环 R[X]
   定义体: fast_instance% { Function.Injective.commSemigroup toFinsupp toFinsupp_injective toFinsupp_mul with
     toSemiring := Polynomial.semiring }
 
@@ -5077,7 +5077,7 @@ instance instZSMul
 
 中文:
 实例 instZSMul
-  签名: : SMul 整数 R[X] where
+  签名: : 标量乘法 整数 R[X] where
   定义体: ⟨r • p.toFinsupp⟩
 
 @[simp]
@@ -5138,8 +5138,8 @@ instance instIntCast
 @[simp]
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast R[X] where intCast n
+实例 inst整数Cast
+  签名: : 整数嵌入 R[X] where intCast n
   定义体: ofFinsupp n
 
 @[simp]
@@ -5207,7 +5207,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: : Ring R[X]
+  签名: : 环 R[X]
   定义体: fast_instance% Function.Injective.ring toFinsupp toFinsupp_injective (toFinsupp_zero (R := R))
       toFinsupp_one toFinsupp_add
       toFinsupp_mul toFinsupp_neg toFinsupp_sub (fun _ _ => toFinsupp_nsmul _ _)
@@ -5412,7 +5412,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: --TODO: add reference to library note in PR https://github.com/leanprover-community/mathlib4/pull/7432
   { toRing := Polynomial.ring
     mul_comm := mul_comm }
@@ -5442,7 +5442,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: by
   have h : Nontrivial R[Nat] := by infer_instance
   rcases h.exists_pair_ne with ⟨x, y, hxy⟩
@@ -5471,7 +5471,7 @@ theorem X_ne_zero
 
 中文:
 定理 X_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (X : R[X]) != 0
   证明: mt (congr_arg fun p => coeff p 1) (by simp)
 
@@ -5489,8 +5489,8 @@ instance [NoZeroDivisors
   body: (toFinsuppIso R).injective.noZeroDivisors _ (map_zero _) (map_mul _)
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] : NoZeroDivisors R[X]
+实例 [无零因子
+  签名: R] : 无零因子 R[X]
   定义体: (toFinsuppIso R).injective.noZeroDivisors _ (map_zero _) (map_mul _)
 
 Depends on / 依赖: injective, injective.noZeroDivisors, map_mul, map_zero, noZeroDivisors, toFinsuppIso
@@ -5507,8 +5507,8 @@ instance [IsCancelAdd
   body: (toFinsuppIso R).injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsLeftCancelMulZero R] : IsLeftCancelMulZero R[X]
+实例 [是消去加法
+  签名: R] [是左消去MulZero R] : 是左消去MulZero R[X]
   定义体: (toFinsuppIso R).injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
 
 Depends on / 依赖: injective, injective.isLeftCancelMulZero, isLeftCancelMulZero, map_mul, map_zero, toFinsuppIso
@@ -5525,8 +5525,8 @@ instance [IsCancelAdd
   body: (toFinsuppIso R).injective.isRightCancelMulZero _ (map_zero _) (map_mul _)
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsRightCancelMulZero R] : IsRightCancelMulZero R[X]
+实例 [是消去加法
+  签名: R] [是右消去MulZero R] : 是右消去MulZero R[X]
   定义体: (toFinsuppIso R).injective.isRightCancelMulZero _ (map_zero _) (map_mul _)
 
 Depends on / 依赖: injective, injective.isRightCancelMulZero, isRightCancelMulZero, map_mul, map_zero, toFinsuppIso
@@ -5542,8 +5542,8 @@ instance [IsCancelAdd
   signature: R] [IsCancelMulZero R] : IsCancelMulZero R[X] where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsCancelMulZero R] : IsCancelMulZero R[X] where
+实例 [是消去加法
+  签名: R] [是乘零消去 R] : 是乘零消去 R[X] where
 -/
 instance [IsCancelAdd R] [IsCancelMulZero R] : IsCancelMulZero R[X] where
 
@@ -5555,8 +5555,8 @@ instance [IsCancelAdd
   signature: R] [IsDomain R] : IsDomain R[X] where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsDomain R] : IsDomain R[X] where
+实例 [是消去加法
+  签名: R] [是整环 R] : 是整环 R[X] where
 -/
 instance [IsCancelAdd R] [IsDomain R] : IsDomain R[X] where
 
@@ -5571,7 +5571,7 @@ theorem noZeroDivisors_iff
 
 中文:
 定理 noZeroDivisors_iff
-  结论: NoZeroDivisors R[X] ↔ NoZeroDivisors R where
+  结论: 无零因子 R[X] ↔ 无零因子 R where
   证明: C_injective.noZeroDivisors _ C_0 fun _ _ => C_mul
   mpr _ := inferInstance
 
@@ -5598,8 +5598,8 @@ lemma nnqsmul_eq_C_mul
 
 中文:
 引理 nnqsmul_eq_C_mul
-  条件: (q : Rat>=0) (f : R[X])
-  结论: q • f = Polynomial.C (q : R) * f
+  条件: (q : 有理数>=0) (f : R[X])
+  结论: q • f = 多项式.C (q : R) * f
   证明: by
   rw [← NNRat.smul_one_eq_cast]; rw [← Polynomial.smul_C]; rw [C_1]; rw [smul_one_mul]
 
@@ -5626,8 +5626,8 @@ theorem qsmul_eq_C_mul
 
 中文:
 定理 qsmul_eq_C_mul
-  条件: (a : Rat) (f : R[X])
-  结论: a • f = Polynomial.C (a : R) * f
+  条件: (a : 有理数) (f : R[X])
+  结论: a • f = 多项式.C (a : R) * f
   证明: by
   rw [← Rat.smul_one_eq_cast]; rw [← Polynomial.smul_C]; rw [C_1]; rw [smul_one_mul]
 
@@ -5653,8 +5653,8 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  条件: [Semiring R]
-  结论: Nontrivial R[X] ↔ Nontrivial R
+  条件: [半环 R]
+  结论: 非平凡 R[X] ↔ 非平凡 R
   证明: ⟨fun h =>
     let ⟨_r, _s, hrs⟩ := @exists_pair_ne _ h
     Nontrivial.of_polynomial_ne hrs,
@@ -5680,7 +5680,7 @@ definition ofMultiset
 
 中文:
 定义 ofMultiset
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: (s.map (fun a => X - C a)).prod
   map_zero_eq_one' := by simp
   map_add_eq_mul' := by simp

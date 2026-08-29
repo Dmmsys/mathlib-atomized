@@ -62,8 +62,8 @@ instance QuotientGroup.measurableSMul
   signature: {G : Type*} [Group G] {Γ : Subgroup G} [MeasurableSpace G]
 
 中文:
-实例 QuotientGroup.measurableSMul
-  签名: {G : 类型} [Group G] {Γ : Subgroup G} [MeasurableSpace G]
+实例 商群.measurableSMul
+  签名: {G : 类型} [群 G] {Γ : 子群 G} [可测空间 G]
 -/
 instance QuotientGroup.measurableSMul {G : Type*} [Group G] {Γ : Subgroup G} [MeasurableSpace G]
     [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G] [BorelSpace (G ⧸ Γ)] :
@@ -128,7 +128,7 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotie
       (meas_π (measurableSet_pre
 
 中文:
-引理 MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient
+引理 测度论.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient
   证明: by
     have meas_π : Measurable π := continuous_quotient_mk'.measurable
     obtain ⟨𝓕, h𝓕⟩ := hasFun.ExistsIsFundamentalDomain
@@ -191,7 +191,7 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotien
     exact smulInvariantMeasur
 
 中文:
-引理 MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient
+引理 测度论.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient
   证明: by
     ext A hA
     obtain ⟨x₁, h⟩ := @Quotient.exists_rep _ (QuotientGroup.leftRel Γ) x
@@ -244,8 +244,8 @@ theorem MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimag
   have i : Quotien
 
 中文:
-定理 MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set
-  结论: {s : Set G}
+定理 测度论.测度.是MulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set
+  结论: {s : 集合 G}
   证明: by
   apply fund_dom_s.quotientMeasureEqMeasurePreimage
   ext U _
@@ -302,8 +302,8 @@ theorem MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage
     rw [← @measure_un
 
 中文:
-定理 MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage
-  结论: [IsFiniteMeasure μ]
+定理 测度论.leftInvariantIsQuotientMeasureEqMeasurePreimage
+  结论: [是有限测度 μ]
   证明: by
   obtain ⟨s, fund_dom_s⟩ := hasFun.ExistsIsFundamentalDomain
   have finiteCovol : μ univ < ⊤ := measure_lt_top μ univ
@@ -363,8 +363,8 @@ theorem MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
   rw [haarMeasure_uniqu
 
 中文:
-定理 MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
-  结论: [LocallyCompactSpace G]
+定理 测度论.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
+  结论: [局部紧空间 G]
   证明: by
   obtain ⟨K⟩ := PositiveCompacts.nonempty' (α := G)
   let K' : PositiveCompacts (G ⧸ Γ) :=
@@ -431,8 +431,8 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
     · apply Set.Nonempty.mono (preimage_interior_subset_interior_preimage cont
 
 中文:
-定理 IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
-  结论: {𝓕 : Set G}
+定理 是FundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
+  结论: {𝓕 : 集合 G}
   证明: by
   apply IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set (fund_dom_s := h𝓕)
     (meas_V := meas_V)
@@ -490,8 +490,8 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
     exa
 
 中文:
-定理 IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
-  结论: {𝓕 : Set G}
+定理 是FundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
+  结论: {𝓕 : 集合 G}
   证明: by
   set c := ν ((π ⁻¹' (K : Set (G ⧸ Γ))) inter 𝓕)
   have c_ne_top : c != ∞ := measure_inter_ne_top_of_right_ne_top h𝓕_finite
@@ -563,7 +563,7 @@ lemma essSup_comp_quotientGroup_mk
 
 中文:
 引理 essSup_comp_quotientGroup_mk
-  结论: [μ.IsMulRightInvariant] {g : G ⧸ Γ -> 实数>=0∞}
+  结论: [μ.是MulRightInvariant] {g : G ⧸ Γ -> 实数>=0∞}
   证明: by
   have hπ : Measurable (QuotientGroup.mk : G -> G ⧸ Γ) := continuous_quotient_mk'.measurable
   rw [essSup_map_measure g_ae_measurable hπ.aemeasurable]
@@ -612,7 +612,7 @@ lemma _root_.MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map
     
 
 中文:
-引理 _root_.MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map
+引理 _root_.测度论.是FundamentalDomain.absolutelyContinuous_map
   证明: by
   set π : G -> G ⧸ Γ := QuotientGroup.mk
   have meas_π : Measurable π := continuous_quotient_mk'.measurable
@@ -667,8 +667,8 @@ lemma QuotientGroup.integral_eq_integral_automorphize
   · exact fun i =
 
 中文:
-引理 QuotientGroup.integral_eq_integral_automorphize
-  结论: {E : 类型} [NormedAddCommGroup E]
+引理 商群.integral_eq_integral_automorphize
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   calc ∫ x : G, f x ∂μ = ∑' γ : Γ.op, ∫ x in 𝓕, f (γ • x) ∂μ :=
     h𝓕.integral_eq_tsum'' f hf₁
@@ -711,8 +711,8 @@ lemma QuotientGroup.integral_mul_eq_integral_automorphize_mul
    
 
 中文:
-引理 QuotientGroup.integral_mul_eq_integral_automorphize_mul
-  结论: {K : 类型} [NormedField K]
+引理 商群.integral_mul_eq_integral_automorphize_mul
+  结论: {K : 类型} [赋范域 K]
   证明: by
   let π : G -> G ⧸ Γ := QuotientGroup.mk
   have meas_π : Measurable π := continuous_quotient_mk'.measurable
@@ -776,7 +776,7 @@ lemma QuotientAddGroup.integral_mul_eq_integral_automorphize_mul
 
 中文:
 引理 QuotientAddGroup.integral_mul_eq_integral_automorphize_mul
-  结论: {K : 类型} [NormedField K]
+  结论: {K : 类型} [赋范域 K]
   证明: by
   let π : G' -> G' ⧸ Γ' := QuotientAddGroup.mk
   have meas_π : Measurable π := continuous_quotient_mk'.measurable

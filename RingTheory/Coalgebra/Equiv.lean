@@ -40,8 +40,8 @@ structure CoalgEquiv
   (no additional axioms)
 
 中文:
-结构 CoalgEquiv
-  参数: (R : 类型) [CommSemiring R] (A B : 类型)
+结构 余alg等价
+  参数: (R : 类型) [交换半环 R] (A B : 类型)
   继承: A ->ₗc[R] B, A ≃ₗ[R] B
   (无附加公理)
 -/
@@ -65,9 +65,9 @@ class CoalgEquivClass
   (no additional axioms)
 
 中文:
-类 CoalgEquivClass
-  参数: (F : 类型) (R A B : outParam 类型) [CommSemiring R]
-  继承: CoalgHomClass F R A B, SemilinearEquivClass F (RingHom.id R) A B
+类 余alg等价类
+  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R]
+  继承: 余alg态射类 F R A B, 半线性等价类 F (环态射.id R) A B
   (无附加公理)
 -/
 class CoalgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R]
@@ -92,7 +92,7 @@ definition toCoalgEquiv
 
 中文:
 定义 toCoalgEquiv
-  签名: [EquivLike F A B] [CoalgEquivClass F R A B] (f : F)
+  签名: [等价状 F A B] [余alg等价类 F R A B] (f : F)
   定义体: { (f : A ->ₗc[R] B), (SemilinearEquivClass.semilinearEquiv f : A ≃ₗ[R] B) with }
 
 Depends on / 依赖: SemilinearEquivClass, SemilinearEquivClass.semilinearEquiv, semilinearEquiv
@@ -159,7 +159,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Function.Injective (toEquiv : (A ≃ₗc[R] B) -> A ≃ B)
+  结论: 函数.单射 (toEquiv : (A ≃ₗc[R] B) -> A ≃ B)
   证明: fun ⟨_, _, _, _⟩ ⟨_, _, _, _⟩ h =>
     (CoalgEquiv.mk.injEq _ _ _ _ _ _ _ _).mpr
       ⟨CoalgHom.ext (congr_fun (Equiv.mk.inj h).1), (Equiv.mk.inj h).2⟩
@@ -204,7 +204,7 @@ theorem toCoalgHom_injective
 
 中文:
 定理 toCoalgHom_injective
-  结论: Function.Injective (toCoalgHom : (A ≃ₗc[R] B) -> A ->ₗc[R] B)
+  结论: 函数.单射 (toCoalgHom : (A ≃ₗc[R] B) -> A ->ₗc[R] B)
   证明: fun _ _ H => toEquiv_injective Equiv.ext CoalgHom.congr_fun H
 
 Depends on / 依赖: CoalgHom, CoalgHom.congr_fun, Equiv.ext, congr_fun, toEquiv_injective
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A ≃ₗc[R] B) A B
+  签名: 等价状 (A ≃ₗc[R] B) A B
   定义体: e.toFun
   inv := CoalgEquiv.invFun
   coe_injective' _ _ h _ := toCoalgHom_injective (DFunLike.coe_injective h)
@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ≃ₗc[R] B) A B
+  签名: 函数状 (A ≃ₗc[R] B) A B
   定义体: DFunLike.coe
   coe_injective := DFunLike.coe_injective
 
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoalgEquivClass (A ≃ₗc[R] B) R A B
+  签名: 余alg等价类 (A ≃ₗc[R] B) R A B
   定义体: (·.map_add')
   map_smulₛₗ := (·.map_smul')
   counit_comp := (·.counit_comp)
@@ -598,7 +598,7 @@ definition Simps.apply
 
 中文:
 定义 Simps.apply
-  签名: {R : 类型} [CommSemiring R] {α β : 类型}
+  签名: {R : 类型} [交换半环 R] {α β : 类型}
   定义体: f
 -/
 def Simps.apply {R : Type*} [CommSemiring R] {α β : Type*}
@@ -618,7 +618,7 @@ initialize_simps_projections CoalgEquiv (toFun -> apply, invFun -> symm_apply)
 
 中文:
 定义 Simps.symm_apply
-  签名: {R : 类型} [CommSemiring R]
+  签名: {R : 类型} [交换半环 R]
   定义体: e.symm
 
 initialize_simps_projections CoalgEquiv (toFun -> apply, invFun -> symm_apply)
@@ -669,7 +669,7 @@ theorem refl_toLinearEquiv
 
 中文:
 定理 refl_toLinearEquiv
-  结论: refl R A = LinearEquiv.refl R A
+  结论: refl R A = 线性等价.refl R A
   证明: rfl
 
 @[simp]
@@ -689,7 +689,7 @@ theorem refl_toCoalgHom
 
 中文:
 定理 refl_toCoalgHom
-  结论: refl R A = CoalgHom.id R A
+  结论: refl R A = 余alg态射.id R A
   证明: rfl
 
 @[simp]
@@ -993,7 +993,7 @@ definition ofCoalgHom
 
 中文:
 定义 ofCoalgHom
-  签名: (f : A ->ₗc[R] B) (g : B ->ₗc[R] A) (h₁ : f.comp g = CoalgHom.id R B)
+  签名: (f : A ->ₗc[R] B) (g : B ->ₗc[R] A) (h₁ : f.comp g = 余alg态射.id R B)
   定义体: f
   toFun := f
   invFun := g
@@ -1086,7 +1086,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  结论: (CoalgEquiv.ofBijective hf : A -> B) = f
+  结论: (余alg等价.ofBijective hf : A -> B) = f
   证明: rfl
 -/
 theorem coe_ofBijective : (CoalgEquiv.ofBijective hf : A -> B) = f :=

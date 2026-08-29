@@ -74,7 +74,7 @@ definition finestTopologySingle
 
 中文:
 定义 finestTopologySingle
-  签名: (P : Cᵒᵖ ⥤ Type w)
+  签名: (P : Cᵒᵖ ⥤ 类型 w)
   定义体: {S | forall (Y) (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f : Presieve Y)}
   top_mem' X Y f := by
     rw [Sieve.pullback_top]
@@ -120,7 +120,7 @@ definition finestTopology
 
 中文:
 定义 finestTopology
-  签名: (Ps : Set (Cᵒᵖ ⥤ Type w))
+  签名: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w))
   定义体: sInf (finestTopologySingle '' Ps)
 
 Depends on / 依赖: finestTopologySingle
@@ -139,7 +139,7 @@ theorem sheaf_for_finestTopology
 
 中文:
 定理 sheaf_for_finestTopology
-  条件: (Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P in Ps)
+  条件: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w)) (h : P in Ps)
   证明: fun X S hS => by
   simpa using hS _ ⟨⟨_, _, ⟨_, h, rfl⟩, rfl⟩, rfl⟩ _ (𝟙 _)
 -/
@@ -158,8 +158,8 @@ lemma mem_finestTopology_of_forall_isSheafFor
   exact H P hP _
 
 中文:
-引理 mem_finestTopology_of_forall_isSheafFor
-  结论: {Ps : Set (Cᵒᵖ ⥤ Type w)} {X : C} {S : Sieve X}
+引理 mem_finestTopology_of_对任意_isSheafFor
+  结论: {Ps : 集合 (Cᵒᵖ ⥤ 类型 w)} {X : C} {S : 筛 X}
   证明: by
   rintro _ ⟨⟨_, _, ⟨P, hP, rfl⟩, rfl⟩, rfl⟩ Y f
   exact H P hP _
@@ -183,7 +183,7 @@ theorem le_finestTopology
 
 中文:
 定理 le_finestTopology
-  结论: (Ps : Set (Cᵒᵖ ⥤ Type w)) (J : GrothendieckTopology C)
+  结论: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w)) (J : Grothendieck拓扑 C)
   证明: by
   intro X S hS
   exact mem_finestTopology_of_forall_isSheafFor
@@ -210,7 +210,7 @@ definition canonicalTopology
 
 中文:
 定义 canonicalTopology
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: finestTopology (Set.range yoneda.obj)
 
 Depends on / 依赖: Set.range, finestTopology, yoneda, yoneda.obj
@@ -230,7 +230,7 @@ theorem isSheaf_yoneda_obj
 中文:
 定理 isSheaf_yoneda_obj
   条件: (X : C)
-  结论: Presieve.IsSheaf (canonicalTopology C) (yoneda.obj X)
+  结论: Presieve.是层 (canonicalTopology C) (yoneda.obj X)
   证明: fun _ _ hS => sheaf_for_finestTopology _ (Set.mem_range_self _) _ hS
 
 Depends on / 依赖: Set.mem_range_self, mem_range_self, sheaf_for_finestTopology
@@ -254,7 +254,7 @@ theorem isSheaf_of_isRepresentable
 
 中文:
 定理 isSheaf_of_isRepresentable
-  条件: (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable]
+  条件: (P : Cᵒᵖ ⥤ 类型 w) [P.是Representable]
   证明: by
   rw [← Presieve.isSheaf_comp_uliftFunctor_iff]
   refine Presieve.isSheaf_iso (canonicalTopology C) (P ⋙ uliftFunctor.{v}).uliftYonedaReprXIso ?_
@@ -290,8 +290,8 @@ class Subcanonical
     - le_canonical : J <= canonicalTopology C
 
 中文:
-类 Subcanonical
-  参数: (J : GrothendieckTopology C)
+类 子典范
+  参数: (J : Grothendieck拓扑 C)
   公理与运算 (1 个):
     - le_canonical : J <= canonicalTopology C
 -/
@@ -309,7 +309,7 @@ lemma le_canonical
 
 中文:
 引理 le_canonical
-  条件: (J : GrothendieckTopology C) [Subcanonical J]
+  条件: (J : Grothendieck拓扑 C) [子典范 J]
   结论: J <= canonicalTopology C
   证明: Subcanonical.le_canonical
 
@@ -328,7 +328,7 @@ instance :
 
 中文:
 实例 :
-  签名: (canonicalTopology C).Subcanonical
+  签名: (canonicalTopology C).子典范
   定义体: le_rfl
 
 Depends on / 依赖: le_rfl
@@ -348,7 +348,7 @@ theorem of_isSheaf_yoneda_obj
 
 中文:
 定理 of_isSheaf_yoneda_obj
-  结论: (J : GrothendieckTopology C)
+  结论: (J : Grothendieck拓扑 C)
   证明: le_finestTopology _ _ (by rintro P ⟨X, rfl⟩; apply h)
 
 Depends on / 依赖: le_finestTopology
@@ -367,7 +367,7 @@ theorem isSheaf_of_isRepresentable
 
 中文:
 定理 isSheaf_of_isRepresentable
-  结论: {J : GrothendieckTopology C} [Subcanonical J]
+  结论: {J : Grothendieck拓扑 C} [子典范 J]
   证明: Presieve.isSheaf_of_le _ J.le_canonical (Sheaf.isSheaf_of_isRepresentable P)
 
 Depends on / 依赖: J.le_canonical, Presieve, Presieve.isSheaf_of_le, Sheaf.isSheaf_of_isRepresentable, isSheaf_of_isRepresentable, isSheaf_of_le, le_canonical
@@ -388,8 +388,8 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: {J K : GrothendieckTopology C} (h : J <= K) [K.Subcanonical]
-  结论: J.Subcanonical
+  条件: {J K : Grothendieck拓扑 C} (h : J <= K) [K.子典范]
+  结论: J.子典范
   证明: of_isSheaf_yoneda_obj _ fun _ _ _ _ => (isSheaf_of_isRepresentable (J := K) _).isSheafFor _
     (h _ (by simpa))
 
@@ -420,7 +420,7 @@ definition yoneda
 
 中文:
 定义 yoneda
-  签名: [J.Subcanonical]
+  签名: [J.子典范]
   定义体: ObjectProperty.lift _ CategoryTheory.yoneda fun X => by
     rw [isSheaf_iff_isSheaf_of_type]
     apply Subcanonical.isSheaf_of_isRepresentable
@@ -447,7 +447,7 @@ definition uliftYoneda
 
 中文:
 定义 uliftYoneda
-  签名: [J.Subcanonical]
+  签名: [J.子典范]
   定义体: J.yoneda ⋙ sheafCompose J uliftFunctor.{w}
 
 #adaptation_note
@@ -474,7 +474,7 @@ definition uliftYonedaIsoYoneda
 
 中文:
 定义 uliftYonedaIsoYoneda
-  签名: {C : 类型u} [Category.{max w v} C] (J : GrothendieckTopology C)
+  签名: {C : 类型u} [范畴.{最大值 w v} C] (J : Grothendieck拓扑 C)
   定义体: dsimp% NatIso.ofComponents (fun _ => (fullyFaithfulSheafToPresheaf J _).preimageIso
     (NatIso.ofComponents (fun _ => Equiv.ulift.toIso)))
 
@@ -546,7 +546,7 @@ definition yonedaFullyFaithful
 
 中文:
 定义 yonedaFullyFaithful
-  签名: : (J.yoneda).FullyFaithful
+  签名: : (J.yoneda).满忠实
   定义体: Functor.FullyFaithful.ofCompFaithful (G := sheafToPresheaf J (Type v)) Yoneda.fullyFaithful
 
 Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofCompFaithful, Yoneda, Yoneda.fullyFaithful, fullyFaithful, ofCompFaithful, sheafToPresheaf
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: (J.yoneda).Full
+  签名: (J.yoneda).满
   定义体: (J.yonedaFullyFaithful).full
 
 Depends on / 依赖: J.yonedaFullyFaithful, yonedaFullyFaithful
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: (J.yoneda).Faithful
+  签名: (J.yoneda).忠实
   定义体: (J.yonedaFullyFaithful).faithful
 
 Depends on / 依赖: J.yonedaFullyFaithful, faithful, yonedaFullyFaithful
@@ -598,7 +598,7 @@ definition fullyFaithfulUliftYoneda
 
 中文:
 定义 fullyFaithfulUliftYoneda
-  签名: : (GrothendieckTopology.uliftYoneda.{w} J).FullyFaithful
+  签名: : (Grothendieck拓扑.uliftYoneda.{w} J).满忠实
   定义体: J.yonedaFullyFaithful.comp (fullyFaithfulSheafCompose J fullyFaithfulULiftFunctor)
 
 Depends on / 依赖: J.yonedaFullyFaithful.comp, fullyFaithfulSheafCompose, fullyFaithfulULiftFunctor, yonedaFullyFaithful
@@ -616,7 +616,7 @@ instance :
 
 中文:
 实例 :
-  签名: (GrothendieckTopology.uliftYoneda.{w} J).Full
+  签名: (Grothendieck拓扑.uliftYoneda.{w} J).满
   定义体: (J.fullyFaithfulUliftYoneda).full
 
 Depends on / 依赖: J.fullyFaithfulUliftYoneda, fullyFaithfulUliftYoneda
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: (GrothendieckTopology.uliftYoneda.{w} J).Faithful
+  签名: (Grothendieck拓扑.uliftYoneda.{w} J).忠实
   定义体: (J.fullyFaithfulUliftYoneda).faithful
 
 Depends on / 依赖: J.fullyFaithfulUliftYoneda, faithful, fullyFaithfulUliftYoneda

@@ -44,7 +44,7 @@ definition permsOfList
 
 中文:
 定义 permsOfList
-  签名: : List α -> List (Perm α)
+  签名: : 列表 α -> 列表 (置换 α)
 -/
 def permsOfList : List α -> List (Perm α)
   | [] => [1]
@@ -59,7 +59,7 @@ theorem length_permsOfList
 
 中文:
 定理 length_permsOfList
-  结论: 对任意 l : List α, length (permsOfList l) = l.length !
+  结论: 对任意 l : 列表 α, length (permsOfList l) = l.length !
 -/
 theorem length_permsOfList : forall l : List α, length (permsOfList l) = l.length !
   | [] => rfl
@@ -85,7 +85,7 @@ theorem mem_permsOfList_of_mem
 
 中文:
 定理 mem_permsOfList_of_mem
-  条件: {l : List α} {f : Perm α} (h : 对任意 x, f x != x -> x in l)
+  条件: {l : 列表 α} {f : 置换 α} (h : 对任意 x, f x != x -> x in l)
   证明: by
   induction l generalizing f with
   | nil =>
@@ -175,7 +175,7 @@ theorem mem_permsOfList_iff
 
 中文:
 定理 mem_permsOfList_iff
-  条件: {l : List α} {f : Perm α}
+  条件: {l : 列表 α} {f : 置换 α}
   证明: ⟨mem_of_mem_permsOfList, mem_permsOfList_of_mem⟩
 
 Depends on / 依赖: mem_of_mem_permsOfList, mem_permsOfList_of_mem
@@ -198,7 +198,7 @@ theorem nodup_permsOfList
 
 中文:
 定理 nodup_permsOfList
-  结论: 对任意 {l : List α}, l.Nodup -> (permsOfList l).Nodup
+  结论: 对任意 {l : 列表 α}, l.Nodup -> (permsOfList l).Nodup
   证明: hl.of_cons
     have hln' : (permsOfList l).Nodup := nodup_permsOfList hl'
     have hmeml : forall {f : Perm α}, f in permsOfList l -> f a = a := fun {f} hf =>
@@ -249,7 +249,7 @@ heq_of_eq Finset.ext by simp [mem_permsOfList_iff, hab.mem_iff])
 
 中文:
 定义 permsOfFinset
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: Quotient.hrecOn s.1 (fun l hl => ⟨permsOfList l, nodup_permsOfList hl⟩)
     (fun a b hab =>
       hfunext (congr_arg _ (Quotient.sound hab)) fun ha hb _ =>
@@ -295,7 +295,7 @@ theorem card_perms_of_finset
 
 中文:
 定理 card_perms_of_finset
-  结论: 对任意 s : Finset α, #(permsOfFinset s) = (#s)!
+  结论: 对任意 s : 有限集 α, #(permsOfFinset s) = (#s)!
   证明: by
   rintro ⟨⟨l⟩, hs⟩; exact length_permsOfList l
 
@@ -316,7 +316,7 @@ definition fintypePerm
 
 中文:
 定义 fintypePerm
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: ⟨permsOfFinset (@Finset.univ α _), by simp [mem_perms_of_finset_iff]⟩
 
 Depends on / 依赖: Finset, Finset.univ, _zip, mem_perms_of_finset_iff, permsOfFinset
@@ -337,8 +337,8 @@ instance Equiv.instFintype
           (equivCongr (Equiv.refl α) (eα.trans (Eq.recOn h eβ.symm)) : α ≃ α ≃
 
 中文:
-实例 Equiv.instFintype
-  签名: [Fintype α] [Fintype β]
+实例 等价.instFintype
+  签名: [有限类型 α] [有限类型 β]
   定义体: if h : Fintype.card β = Fintype.card α then
     Trunc.recOnSubsingleton (Fintype.truncEquivFin α) fun eα =>
       Trunc.recOnSubsingleton (Fintype.truncEquivFin β) fun eβ =>
@@ -366,7 +366,7 @@ instance MulEquiv.instFintype
   complete me := (Finset.mem_filterMap ..).mpr ⟨me.toEquiv, Finset.mem_univ _, by {simp; rfl}⟩
 
 中文:
-实例 MulEquiv.instFintype
+实例 乘法等价.instFintype
   定义体: Equiv.instFintype.elems.filterMap
     (fun e => if h : forall a b : α, e (a * b) = e a * e b then (⟨e, h⟩ : α ≃* β) else none) (by aesop)
   complete me := (Finset.mem_filterMap ..).mpr ⟨me.toEquiv, Finset.mem_univ _, by {simp; rfl}⟩
@@ -390,9 +390,9 @@ theorem Fintype.card_perm
   proof: Subsingleton.elim (@fintypePerm α _ _) (@Equiv.instFintype α α _ _ _ _) ▸ card_perms_of_finset _
 
 中文:
-定理 Fintype.card_perm
-  条件: [Fintype α]
-  结论: Fintype.card (Perm α) = (Fintype.card α)!
+定理 有限类型.card_perm
+  条件: [有限类型 α]
+  结论: 有限类型.card (置换 α) = (有限类型.card α)!
   证明: Subsingleton.elim (@fintypePerm α _ _) (@Equiv.instFintype α α _ _ _ _) ▸ card_perms_of_finset _
 
 Depends on / 依赖: Equiv.instFintype, Subsingleton, Subsingleton.elim, card_perms_of_finset, fintypePerm, instFintype
@@ -409,8 +409,8 @@ theorem Fintype.card_equiv
   proof: Fintype.card_congr (equivCongr (Equiv.refl α) e) ▸ Fintype.card_perm
 
 中文:
-定理 Fintype.card_equiv
-  条件: [Fintype α] [Fintype β] (e : α ≃ β)
+定理 有限类型.card_equiv
+  条件: [有限类型 α] [有限类型 β] (e : α ≃ β)
   证明: Fintype.card_congr (equivCongr (Equiv.refl α) e) ▸ Fintype.card_perm
 
 Depends on / 依赖: Equiv.refl, Fintype, Fintype.card_congr, Fintype.card_perm, card_congr, card_perm, equivCongr

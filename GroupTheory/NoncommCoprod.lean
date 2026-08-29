@@ -109,7 +109,7 @@ theorem comp_noncommCoprod
 
 中文:
 定理 comp_noncommCoprod
-  结论: {Q : 类型} [Semigroup Q] (h : P ->ₙ* Q)
+  结论: {Q : 类型} [半群 Q] (h : P ->ₙ* Q)
   证明: ext fun _ => map_mul h _ _
 
 Depends on / 依赖: map_mul
@@ -263,7 +263,7 @@ theorem noncommCoprod_inl_inr
 
 中文:
 定理 noncommCoprod_inl_inr
-  条件: {M N : 类型} [Monoid M] [Monoid N]
+  条件: {M N : 类型} [幺半群 M] [幺半群 N]
   证明: noncommCoprod_unique .id (M × N)
 
 Depends on / 依赖: noncommCoprod_unique
@@ -284,7 +284,7 @@ theorem comp_noncommCoprod
 
 中文:
 定理 comp_noncommCoprod
-  条件: {Q : 类型} [Monoid Q] (h : P ->* Q)
+  条件: {Q : 类型} [幺半群 Q] (h : P ->* Q)
   证明: ext fun x => by simp
 -/
 theorem comp_noncommCoprod {Q : Type*} [Monoid Q] (h : P ->* Q) :
@@ -313,7 +313,7 @@ lemma noncommCoprod_injective
 
 中文:
 引理 noncommCoprod_injective
-  结论: {M N P : 类型} [Group M] [Group N] [Group P]
+  结论: {M N P : 类型} [群 M] [群 N] [群 P]
   证明: by
   simp only [injective_iff_map_eq_one, disjoint_iff_inf_le,
     noncommCoprod_apply, Prod.forall, Prod.mk_eq_one]
@@ -359,7 +359,7 @@ lemma noncommCoprod_range
 
 中文:
 引理 noncommCoprod_range
-  结论: {M N P : 类型} [Group M] [Group N] [Group P]
+  结论: {M N P : 类型} [群 M] [群 N] [群 P]
   证明: by
   apply le_antisymm
   · rintro - ⟨a, rfl⟩

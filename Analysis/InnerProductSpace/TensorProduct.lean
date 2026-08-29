@@ -68,7 +68,7 @@ instance instInner
 
 中文:
 实例 instInner
-  签名: : Inner 𝕜 (E otimes[𝕜] F) where inner x y
+  签名: : 内积 𝕜 (E otimes[𝕜] F) where inner x y
   定义体: ((lift <| mapBilinear (.id 𝕜) E F 𝕜 𝕜).compr₂ (.mul' 𝕜 𝕜) ∘ₛₗ map (innerₛₗ 𝕜) (innerₛₗ 𝕜)) x y
 
 Depends on / 依赖: mapBilinear
@@ -144,7 +144,7 @@ lemma inner_mapIncl_mapIncl
 
 中文:
 引理 inner_mapIncl_mapIncl
-  条件: (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F) (x y : E' otimes[𝕜] F')
+  条件: (E' : 子模 𝕜 E) (F' : 子模 𝕜 F) (x y : E' otimes[𝕜] F')
   证明: inner_map_map E'.subtypeₗᵢ F'.subtypeₗᵢ x y
 
 Depends on / 依赖: inner_map_map
@@ -172,7 +172,7 @@ theorem inner_self
 
 中文:
 定理 inner_self
-  结论: {ι ι' : 类型} [Fintype ι] [Fintype ι'] (x : E otimes[𝕜] F)
+  结论: {ι ι' : 类型} [有限类型 ι] [有限类型 ι'] (x : E otimes[𝕜] F)
   证明: by
   classical
   have : x = ∑ i : ι, ∑ j : ι', (e.toBasis.tensorProduct f.toBasis).repr x (i, j) • e i otimesₜ f j := by
@@ -292,7 +292,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: : NormedAddCommGroup (E otimes[𝕜] F)
+  签名: : 赋范交换加群 (E otimes[𝕜] F)
   定义体: letI : InnerProductSpace.Core 𝕜 (E otimes[𝕜] F) :=
   { conj_inner_symm x y :=
       x.induction_on (by simp [inner]) (y.induction_on (by simp [inner]) (by simp)
@@ -323,7 +323,7 @@ instance instInnerProductSpace
 
 中文:
 实例 instInnerProductSpace
-  签名: : InnerProductSpace 𝕜 (E otimes[𝕜] F)
+  签名: : 内积空间 𝕜 (E otimes[𝕜] F)
   定义体: .ofCore _
 
 Depends on / 依赖: ofCore
@@ -634,7 +634,7 @@ lemma continuous_tmul
 
 中文:
 引理 continuous_tmul
-  结论: Continuous fun x : E × F => x.1 otimesₜ[𝕜] x.2
+  结论: 连续 fun x : E × F => x.1 otimesₜ[𝕜] x.2
   证明: (mkL 𝕜 E F).continuous₂
 -/
 @[fun_prop] lemma continuous_tmul : Continuous fun x : E × F => x.1 otimesₜ[𝕜] x.2 :=
@@ -763,7 +763,7 @@ definition _root_.LinearIsometry.lTensor
   body: mapIsometry .id f
 
 中文:
-定义 _root_.LinearIsometry.lTensor
+定义 _root_.线性等距.lTensor
   签名: (f : F ->ₗᵢ[𝕜] G)
   定义体: mapIsometry .id f
 
@@ -782,7 +782,7 @@ definition _root_.LinearIsometry.rTensor
   body: mapIsometry f .id
 
 中文:
-定义 _root_.LinearIsometry.rTensor
+定义 _root_.线性等距.rTensor
   签名: (f : E ->ₗᵢ[𝕜] F)
   定义体: mapIsometry f .id
 
@@ -800,7 +800,7 @@ lemma _root_.LinearIsometry.lTensor_def
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.lTensor_def
+引理 _root_.线性等距.lTensor_def
   条件: (f : F ->ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -816,7 +816,7 @@ lemma _root_.LinearIsometry.rTensor_def
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.rTensor_def
+引理 _root_.线性等距.rTensor_def
   条件: (f : E ->ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -832,7 +832,7 @@ lemma _root_.LinearIsometry.toLinearMap_lTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.toLinearMap_lTensor
+引理 _root_.线性等距.toLinearMap_lTensor
   条件: (f : F ->ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -848,7 +848,7 @@ lemma _root_.LinearIsometry.toLinearMap_rTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.toLinearMap_rTensor
+引理 _root_.线性等距.toLinearMap_rTensor
   条件: (f : E ->ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -864,7 +864,7 @@ lemma _root_.LinearIsometry.lTensor_apply
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.lTensor_apply
+引理 _root_.线性等距.lTensor_apply
   条件: (f : F ->ₗᵢ[𝕜] G) (x : E otimes[𝕜] F)
   证明: rfl
 -/
@@ -880,7 +880,7 @@ lemma _root_.LinearIsometry.rTensor_apply
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.rTensor_apply
+引理 _root_.线性等距.rTensor_apply
   条件: (f : E ->ₗᵢ[𝕜] F) (x : E otimes[𝕜] G)
   证明: rfl
 -/
@@ -982,7 +982,7 @@ definition _root_.LinearIsometryEquiv.lTensor
   body: congrIsometry (.refl 𝕜 E) f
 
 中文:
-定义 _root_.LinearIsometryEquiv.lTensor
+定义 _root_.线性等距等价.lTensor
   签名: (f : F ≃ₗᵢ[𝕜] G)
   定义体: congrIsometry (.refl 𝕜 E) f
 
@@ -1001,7 +1001,7 @@ definition _root_.LinearIsometryEquiv.rTensor
   body: congrIsometry f (.refl 𝕜 G)
 
 中文:
-定义 _root_.LinearIsometryEquiv.rTensor
+定义 _root_.线性等距等价.rTensor
   签名: (f : E ≃ₗᵢ[𝕜] F)
   定义体: congrIsometry f (.refl 𝕜 G)
 
@@ -1019,7 +1019,7 @@ lemma _root_.LinearIsometryEquiv.lTensor_def
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.lTensor_def
+引理 _root_.线性等距等价.lTensor_def
   条件: (f : F ≃ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -1035,7 +1035,7 @@ lemma _root_.LinearIsometryEquiv.rTensor_def
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.rTensor_def
+引理 _root_.线性等距等价.rTensor_def
   条件: (f : E ≃ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -1051,7 +1051,7 @@ lemma _root_.LinearIsometryEquiv.symm_lTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.symm_lTensor
+引理 _root_.线性等距等价.symm_lTensor
   条件: (f : F ≃ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -1067,7 +1067,7 @@ lemma _root_.LinearIsometryEquiv.symm_rTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.symm_rTensor
+引理 _root_.线性等距等价.symm_rTensor
   条件: (f : E ≃ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -1083,7 +1083,7 @@ lemma _root_.LinearIsometryEquiv.toLinearEquiv_lTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.toLinearEquiv_lTensor
+引理 _root_.线性等距等价.toLinearEquiv_lTensor
   条件: (f : F ≃ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -1099,7 +1099,7 @@ lemma _root_.LinearIsometryEquiv.toLinearIsometry_lTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.toLinearIsometry_lTensor
+引理 _root_.线性等距等价.toLinearIsometry_lTensor
   条件: (f : F ≃ₗᵢ[𝕜] G)
   证明: rfl
 -/
@@ -1115,7 +1115,7 @@ lemma _root_.LinearIsometryEquiv.toLinearEquiv_rTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.toLinearEquiv_rTensor
+引理 _root_.线性等距等价.toLinearEquiv_rTensor
   条件: (f : E ≃ₗᵢ[𝕜] F)
   证明: rfl
 
@@ -1133,7 +1133,7 @@ lemma _root_.LinearIsometryEquiv.toLinearIsometry_rTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.toLinearIsometry_rTensor
+引理 _root_.线性等距等价.toLinearIsometry_rTensor
   条件: (f : E ≃ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -1149,7 +1149,7 @@ lemma _root_.LinearIsometryEquiv.lTensor_apply
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.lTensor_apply
+引理 _root_.线性等距等价.lTensor_apply
   条件: (f : F ≃ₗᵢ[𝕜] G) (x : E otimes[𝕜] F)
   证明: rfl
 -/
@@ -1165,7 +1165,7 @@ lemma _root_.LinearIsometryEquiv.rTensor_apply
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometryEquiv.rTensor_apply
+引理 _root_.线性等距等价.rTensor_apply
   条件: (f : E ≃ₗᵢ[𝕜] F) (x : E otimes[𝕜] G)
   证明: rfl
 -/
@@ -1182,7 +1182,7 @@ definition mapInclIsometry
 
 中文:
 定义 mapInclIsometry
-  签名: (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F)
+  签名: (E' : 子模 𝕜 E) (F' : 子模 𝕜 F)
   定义体: mapIsometry E'.subtypeₗᵢ F'.subtypeₗᵢ
 
 Depends on / 依赖: mapIsometry
@@ -1201,7 +1201,7 @@ lemma mapInclIsometry_apply
 
 中文:
 引理 mapInclIsometry_apply
-  结论: (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F)
+  结论: (E' : 子模 𝕜 E) (F' : 子模 𝕜 F)
   证明: rfl
 -/
 @[simp] lemma mapInclIsometry_apply (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F)
@@ -1217,7 +1217,7 @@ lemma toLinearMap_mapInclIsometry
 
 中文:
 引理 toLinearMap_mapInclIsometry
-  条件: (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F)
+  条件: (E' : 子模 𝕜 E) (F' : 子模 𝕜 F)
   证明: rfl
 -/
 @[simp] lemma toLinearMap_mapInclIsometry (E' : Submodule 𝕜 E) (F' : Submodule 𝕜 F) :
@@ -1442,7 +1442,7 @@ lemma lidIsometry_apply
 中文:
 引理 lidIsometry_apply
   条件: (x : 𝕜 otimes[𝕜] E)
-  结论: lidIsometry 𝕜 E x = TensorProduct.lid 𝕜 E x
+  结论: lidIsometry 𝕜 E x = 张量积.lid 𝕜 E x
   证明: rfl
 -/
 @[simp] lemma lidIsometry_apply (x : 𝕜 otimes[𝕜] E) : lidIsometry 𝕜 E x = TensorProduct.lid 𝕜 E x := rfl
@@ -1476,7 +1476,7 @@ lemma norm_lid
 中文:
 引理 norm_lid
   条件: (x)
-  结论: ‖TensorProduct.lid 𝕜 E x‖ = ‖x‖
+  结论: ‖张量积.lid 𝕜 E x‖ = ‖x‖
   证明: (lidIsometry 𝕜 E).norm_map x
 .nnnorm_map x @[simp] lemma nnnorm_lid (x) : ‖TensorProduct.lid 𝕜 E x‖₊ = ‖x‖₊ := lidIsometry 𝕜 E
 -/
@@ -1577,7 +1577,7 @@ lemma ridIsometry_apply
 中文:
 引理 ridIsometry_apply
   条件: (x)
-  结论: ridIsometry 𝕜 E x = TensorProduct.rid 𝕜 E x
+  结论: ridIsometry 𝕜 E x = 张量积.rid 𝕜 E x
   证明: rfl
 -/
 @[simp] lemma ridIsometry_apply (x) : ridIsometry 𝕜 E x = TensorProduct.rid 𝕜 E x := rfl
@@ -1627,7 +1627,7 @@ lemma norm_rid
 中文:
 引理 norm_rid
   条件: (x)
-  结论: ‖TensorProduct.rid 𝕜 E x‖ = ‖x‖
+  结论: ‖张量积.rid 𝕜 E x‖ = ‖x‖
   证明: (ridIsometry 𝕜 E).norm_map x
 -/
 @[simp] lemma norm_rid (x) : ‖TensorProduct.rid 𝕜 E x‖ = ‖x‖ := (ridIsometry 𝕜 E).norm_map x
@@ -1643,7 +1643,7 @@ lemma nnnorm_rid
 中文:
 引理 nnnorm_rid
   条件: (x)
-  结论: ‖TensorProduct.rid 𝕜 E x‖₊ = ‖x‖₊
+  结论: ‖张量积.rid 𝕜 E x‖₊ = ‖x‖₊
   证明: by simp [← NNReal.coe_inj]
 -/
 @[simp] lemma nnnorm_rid (x) : ‖TensorProduct.rid 𝕜 E x‖₊ = ‖x‖₊ := by simp [← NNReal.coe_inj]
@@ -1660,7 +1660,7 @@ lemma enorm_rid
 中文:
 引理 enorm_rid
   条件: (x)
-  结论: ‖TensorProduct.rid 𝕜 E x‖ₑ = ‖x‖ₑ
+  结论: ‖张量积.rid 𝕜 E x‖ₑ = ‖x‖ₑ
   证明: .toLinearIsometry.enorm_map x ridIsometry 𝕜 E
 -/
 @[simp] lemma enorm_rid (x) : ‖TensorProduct.rid 𝕜 E x‖ₑ = ‖x‖ₑ :=
@@ -1959,7 +1959,7 @@ lemma _root_.LinearIsometry.toContinuousLinearMap_rTensor
   proof: rfl
 
 中文:
-引理 _root_.LinearIsometry.toContinuousLinearMap_rTensor
+引理 _root_.线性等距.toContinuousLinearMap_rTensor
   条件: (f : E ->ₗᵢ[𝕜] F)
   证明: rfl
 -/
@@ -2311,7 +2311,7 @@ lemma _root_.LinearIsometry.toContinuousLinearMap_lTensor
   proof: by ext; simp
 
 中文:
-引理 _root_.LinearIsometry.toContinuousLinearMap_lTensor
+引理 _root_.线性等距.toContinuousLinearMap_lTensor
   条件: (g : E ->ₗᵢ[𝕜] F)
   证明: by ext; simp
 -/
@@ -2836,7 +2836,7 @@ lemma _root_.ContinuousLinearMap.mapL_comp_rTensor
   proof: by ext; simp
 
 中文:
-引理 _root_.ContinuousLinearMap.mapL_comp_rTensor
+引理 _root_.连续线性映射.mapL_comp_rTensor
   结论: (f₁ : E ->L[𝕜] F) (f₂ : A ->L[𝕜] E)
   证明: by ext; simp
 -/
@@ -2852,7 +2852,7 @@ lemma _root_.ContinuousLinearMap.mapL_comp_lTensor
   proof: by ext; simp
 
 中文:
-引理 _root_.ContinuousLinearMap.mapL_comp_lTensor
+引理 _root_.连续线性映射.mapL_comp_lTensor
   结论: (f : E ->L[𝕜] F) (g₁ : G ->L[𝕜] H)
   证明: by ext; simp
 -/
@@ -2868,7 +2868,7 @@ lemma _root_.ContinuousLinearMap.rTensor_comp_mapL
   proof: by ext; simp
 
 中文:
-引理 _root_.ContinuousLinearMap.rTensor_comp_mapL
+引理 _root_.连续线性映射.rTensor_comp_mapL
   结论: (f₁ : E ->L[𝕜] F) (f₂ : A ->L[𝕜] E)
   证明: by ext; simp
 -/
@@ -2884,7 +2884,7 @@ lemma _root_.ContinuousLinearMap.lTensor_comp_mapL
   proof: by ext; simp
 
 中文:
-引理 _root_.ContinuousLinearMap.lTensor_comp_mapL
+引理 _root_.连续线性映射.lTensor_comp_mapL
   结论: (f : E ->L[𝕜] F) (g₁ : G ->L[𝕜] H)
   证明: by ext; simp
 -/
@@ -2903,7 +2903,7 @@ theorem _root_.ContinuousLinearMap.rTensor_eq_mapL
   proof: by simp [mapL]
 
 中文:
-定理 _root_.ContinuousLinearMap.rTensor_eq_mapL
+定理 _root_.连续线性映射.rTensor_eq_mapL
   条件: (f : E ->L[𝕜] F)
   证明: by simp [mapL]
 -/
@@ -2920,7 +2920,7 @@ theorem _root_.ContinuousLinearMap.lTensor_eq_mapL
   proof: by simp [mapL]
 
 中文:
-定理 _root_.ContinuousLinearMap.lTensor_eq_mapL
+定理 _root_.连续线性映射.lTensor_eq_mapL
   条件: (g : G ->L[𝕜] H)
   证明: by simp [mapL]
 -/
@@ -2936,7 +2936,7 @@ lemma _root_.ContinuousLinearMap.lTensor_comp_rTensor
   proof: by ext; simp [← LinearMap.lTensor_comp_rTensor]
 
 中文:
-引理 _root_.ContinuousLinearMap.lTensor_comp_rTensor
+引理 _root_.连续线性映射.lTensor_comp_rTensor
   条件: (f : E ->L[𝕜] F) (g : G ->L[𝕜] H)
   证明: by ext; simp [← LinearMap.lTensor_comp_rTensor]
 -/
@@ -2952,7 +2952,7 @@ lemma _root_.ContinuousLinearMap.rTensor_comp_lTensor
   proof: rfl
 
 中文:
-引理 _root_.ContinuousLinearMap.rTensor_comp_lTensor
+引理 _root_.连续线性映射.rTensor_comp_lTensor
   条件: (f : E ->L[𝕜] F) (g : G ->L[𝕜] H)
   证明: rfl
 -/
@@ -2971,7 +2971,7 @@ apply ContinuousLinearMap.coe_inj.mp ext' ?_
 
 中文:
 定理 adjoint_mapL
-  结论: [CompleteSpace E] [CompleteSpace G] [CompleteSpace (E otimes[𝕜] G)]
+  结论: [完备空间 E] [完备空间 G] [完备空间 (E otimes[𝕜] G)]
   证明: by
 apply ContinuousLinearMap.coe_inj.mp ext' ?_
   simp [TensorProduct.ext_iff_inner_right, ContinuousLinearMap.adjoint_inner_left]
@@ -2993,8 +2993,8 @@ theorem _root_.ContinuousLinearMap.adjoint_rTensor
   proof: by simp [ContinuousLinearMap.rTensor_eq_mapL]
 
 中文:
-定理 _root_.ContinuousLinearMap.adjoint_rTensor
-  结论: [CompleteSpace E] [CompleteSpace G]
+定理 _root_.连续线性映射.adjoint_rTensor
+  结论: [完备空间 E] [完备空间 G]
   证明: by simp [ContinuousLinearMap.rTensor_eq_mapL]
 -/
 @[simp] theorem _root_.ContinuousLinearMap.adjoint_rTensor [CompleteSpace E] [CompleteSpace G]
@@ -3012,8 +3012,8 @@ theorem _root_.ContinuousLinearMap.adjoint_lTensor
   proof: by simp [ContinuousLinearMap.lTensor_eq_mapL]
 
 中文:
-定理 _root_.ContinuousLinearMap.adjoint_lTensor
-  结论: [CompleteSpace E] [CompleteSpace G]
+定理 _root_.连续线性映射.adjoint_lTensor
+  结论: [完备空间 E] [完备空间 G]
   证明: by simp [ContinuousLinearMap.lTensor_eq_mapL]
 -/
 @[simp] theorem _root_.ContinuousLinearMap.adjoint_lTensor [CompleteSpace E] [CompleteSpace G]
@@ -3032,7 +3032,7 @@ theorem adjoint_map
 
 中文:
 定理 adjoint_map
-  结论: [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 G]
+  结论: [有限维 𝕜 E] [有限维 𝕜 F] [有限维 𝕜 G]
   证明: ext' fun _ _ => by simp [TensorProduct.ext_iff_inner_right, adjoint_inner_left]
 -/
 @[simp] theorem adjoint_map [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 G]
@@ -3049,8 +3049,8 @@ theorem _root_.LinearMap.adjoint_rTensor
   proof: by simp [rTensor]
 
 中文:
-定理 _root_.LinearMap.adjoint_rTensor
-  结论: [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
+定理 _root_.线性映射.adjoint_rTensor
+  结论: [有限维 𝕜 E] [有限维 𝕜 F]
   证明: by simp [rTensor]
 -/
 @[simp] theorem _root_.LinearMap.adjoint_rTensor [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
@@ -3066,8 +3066,8 @@ theorem _root_.LinearMap.adjoint_lTensor
   proof: by simp [lTensor]
 
 中文:
-定理 _root_.LinearMap.adjoint_lTensor
-  结论: [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
+定理 _root_.线性映射.adjoint_lTensor
+  结论: [有限维 𝕜 E] [有限维 𝕜 F]
   证明: by simp [lTensor]
 -/
 @[simp] theorem _root_.LinearMap.adjoint_lTensor [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
@@ -3263,7 +3263,7 @@ lemma tensorProduct_repr_tmul_apply
 
 中文:
 引理 tensorProduct_repr_tmul_apply
-  结论: (b₁ : OrthonormalBasis ι₁ 𝕜 E) (b₂ : OrthonormalBasis ι₂ 𝕜 F)
+  结论: (b₁ : 正交标准基 ι₁ 𝕜 E) (b₂ : 正交标准基 ι₂ 𝕜 F)
   证明: by
   simp [OrthonormalBasis.tensorProduct]
 
@@ -3308,7 +3308,7 @@ lemma toBasis_tensorProduct
 
 中文:
 引理 toBasis_tensorProduct
-  条件: (b₁ : OrthonormalBasis ι₁ 𝕜 E) (b₂ : OrthonormalBasis ι₂ 𝕜 F)
+  条件: (b₁ : 正交标准基 ι₁ 𝕜 E) (b₂ : 正交标准基 ι₂ 𝕜 F)
   证明: by
   simp [OrthonormalBasis.tensorProduct]
 

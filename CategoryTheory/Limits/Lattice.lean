@@ -40,7 +40,7 @@ definition finiteLimitCone
 
 中文:
 定义 finiteLimitCone
-  签名: [SemilatticeInf α] [OrderTop α] (F : J ⥤ α)
+  签名: [SemilatticeInf α] [有顶序 α] (F : J ⥤ α)
   定义体: { pt := Finset.univ.inf F.obj
       π := { app := fun _ => homOfLE (Finset.inf_le (Fintype.complete _)) } }
   isLimit := { lift := fun s => homOfLE (Finset.le_inf fun j _ => (s.π.app j).down.down) }
@@ -69,7 +69,7 @@ definition finiteColimitCocone
 
 中文:
 定义 finiteColimitCocone
-  签名: [SemilatticeSup α] [OrderBot α] (F : J ⥤ α)
+  签名: [SemilatticeSup α] [有底序 α] (F : J ⥤ α)
   定义体: { pt := Finset.univ.sup F.obj
       ι := { app := fun _ => homOfLE (Finset.le_sup (Fintype.complete _)) } }
   isColimit := { desc := fun s => homOfLE (Finset.sup_le fun j _ => (s.ι.app j).down.down) }
@@ -104,7 +104,7 @@ theorem finite_limit_eq_finset_univ_inf
 
 中文:
 定理 finite_limit_eq_finset_univ_inf
-  条件: [SemilatticeInf α] [OrderTop α] (F : J ⥤ α)
+  条件: [SemilatticeInf α] [有顶序 α] (F : J ⥤ α)
   证明: (IsLimit.conePointUniqueUpToIso (limit.isLimit F) (finiteLimitCone F).isLimit).to_eq
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, finiteLimitCone, isLimit, limit.isLimit, to_eq
@@ -123,7 +123,7 @@ theorem finite_colimit_eq_finset_univ_sup
 
 中文:
 定理 finite_colimit_eq_finset_univ_sup
-  条件: [SemilatticeSup α] [OrderBot α] (F : J ⥤ α)
+  条件: [SemilatticeSup α] [有底序 α] (F : J ⥤ α)
   证明: (IsColimit.coconePointUniqueUpToIso (colimit.isColimit F) (finiteColimitCocone F).isColimit).to_eq
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, finiteColimitCocone, isColimit, to_eq
@@ -149,7 +149,7 @@ theorem finite_product_eq_finset_inf
 
 中文:
 定理 finite_product_eq_finset_inf
-  结论: [SemilatticeInf α] [OrderTop α] {ι : 类型u} [Fintype ι]
+  结论: [SemilatticeInf α] [有顶序 α] {ι : 类型u} [有限类型 ι]
   证明: by
   trans
   · exact
@@ -187,7 +187,7 @@ theorem finite_coproduct_eq_finset_sup
 
 中文:
 定理 finite_coproduct_eq_finset_sup
-  结论: [SemilatticeSup α] [OrderBot α] {ι : 类型u} [Fintype ι]
+  结论: [SemilatticeSup α] [有底序 α] {ι : 类型u} [有限类型 ι]
   证明: by
   trans
   · exact
@@ -235,8 +235,8 @@ theorem prod_eq_inf
 
 中文:
 定理 prod_eq_inf
-  条件: [SemilatticeInf α] [OrderTop α] (x y : α)
-  结论: Limits.prod x y = x ⊓ y
+  条件: [SemilatticeInf α] [有顶序 α] (x y : α)
+  结论: Limits.乘积 x y = x ⊓ y
   证明: calc
     Limits.prod x y = limit (pair x y) := rfl
     _ = Finset.univ.inf (pair x y).obj := by rw [finite_limit_eq_finset_univ_inf (pair.{u} x y)]
@@ -281,7 +281,7 @@ theorem coprod_eq_sup
 
 中文:
 定理 coprod_eq_sup
-  条件: [SemilatticeSup α] [OrderBot α] (x y : α)
+  条件: [SemilatticeSup α] [有底序 α] (x y : α)
   结论: Limits.coprod x y = x ⊔ y
   证明: calc
     Limits.coprod x y = colimit (pair x y) := rfl
@@ -319,7 +319,7 @@ theorem pullback_eq_inf
 
 中文:
 定理 pullback_eq_inf
-  条件: [SemilatticeInf α] [OrderTop α] {x y z : α} (f : x ⟶ z) (g : y ⟶ z)
+  条件: [SemilatticeInf α] [有顶序 α] {x y z : α} (f : x ⟶ z) (g : y ⟶ z)
   证明: calc
     pullback f g = limit (cospan f g) := rfl
     _ = Finset.univ.inf (cospan f g).obj := by rw [finite_limit_eq_finset_univ_inf]
@@ -357,7 +357,7 @@ theorem pushout_eq_sup
 
 中文:
 定理 pushout_eq_sup
-  条件: [SemilatticeSup α] [OrderBot α] (x y z : α) (f : z ⟶ x) (g : z ⟶ y)
+  条件: [SemilatticeSup α] [有底序 α] (x y z : α) (f : z ⟶ x) (g : z ⟶ y)
   证明: calc
     pushout f g = colimit (span f g) := rfl
     _ = Finset.univ.sup (span f g).obj := by rw [finite_colimit_eq_finset_univ_sup]

@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (FractionalIdeal R₁⁰ K)
+  签名: 取逆 (FractionalIdeal R₁⁰ K)
   定义体: ⟨fun I => 1 / I⟩
 -/
 noncomputable instance : Inv (FractionalIdeal R₁⁰ K) := ⟨fun I => 1 / I⟩
@@ -210,7 +210,7 @@ theorem coe_ideal_le_self_mul_inv
 
 中文:
 定理 coe_ideal_le_self_mul_inv
-  条件: (I : Ideal R₁)
+  条件: (I : 理想 R₁)
   证明: le_self_mul_inv coeIdeal_le_one
 
 Depends on / 依赖: coeIdeal_le_one, le_self_mul_inv
@@ -271,7 +271,7 @@ theorem mul_inv_cancel_iff_isUnit
 中文:
 定理 mul_inv_cancel_iff_isUnit
   条件: {I : FractionalIdeal R₁⁰ K}
-  结论: I * I⁻¹ = 1 ↔ IsUnit I
+  结论: I * I⁻¹ = 1 ↔ 是单位 I
   证明: (mul_inv_cancel_iff K).trans isUnit_iff_exists_inv.symm
 
 Depends on / 依赖: isUnit_iff_exists_inv, isUnit_iff_exists_inv.symm, mul_inv_cancel_iff
@@ -494,7 +494,7 @@ theorem mul_generator_self_inv
 
 中文:
 定理 mul_generator_self_inv
-  结论: {R₁ : 类型} [CommRing R₁] [Algebra R₁ K] [IsLocalization R₁⁰ K]
+  结论: {R₁ : 类型} [交换环 R₁] [代数 R₁ K] [是Localization R₁⁰ K]
   证明: by
   -- Rewrite only the `I` that appears alone.
   conv_lhs => congr; rw [eq_spanSingleton_of_principal I]
@@ -598,7 +598,7 @@ theorem isPrincipal_inv
 
 中文:
 定理 isPrincipal_inv
-  结论: (I : FractionalIdeal R₁⁰ K) [Submodule.IsPrincipal (I : Submodule R₁ K)]
+  结论: (I : FractionalIdeal R₁⁰ K) [子模.是Principal (I : 子模 R₁ K)]
   证明: by
   rw [val_eq_coe]; rw [isPrincipal_iff]
   use (generator (I : Submodule R₁ K))⁻¹
@@ -722,7 +722,7 @@ instance :
 
 中文:
 实例 :
-  签名: InvOneClass (FractionalIdeal R₁⁰ K)
+  签名: InvOne类 (FractionalIdeal R₁⁰ K)
   定义体: { inv_one := div_one }
 
 Depends on / 依赖: div_one, inv_one

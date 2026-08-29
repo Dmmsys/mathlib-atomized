@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Box ι)
+  签名: 可居 (Box ι)
   定义体: ⟨⟨0, 1, fun _ => zero_lt_one⟩⟩
 
 Depends on / 依赖: zero_lt_one
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC (Box ι) (Set <| ι -> 实数)
+  签名: CoeTC (Box ι) (集合 <| ι -> 实数)
   定义体: ⟨toSet⟩
 
 @[simp]
@@ -227,7 +227,7 @@ theorem mem_mk
 中文:
 定理 mem_mk
   条件: {l u x : ι -> 实数} {H}
-  结论: x in mk l u H ↔ 对任意 i, x i in Ioc (l i) (u i)
+  结论: x in mk l u H ↔ 对任意 i, x i in 左开右闭区间 (l i) (u i)
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -247,7 +247,7 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  结论: x in (I : Set (ι -> 实数)) ↔ x in I
+  结论: x in (I : 集合 (ι -> 实数)) ↔ x in I
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -264,7 +264,7 @@ theorem mem_def
 
 中文:
 定理 mem_def
-  结论: x in I ↔ 对任意 i, x i in Ioc (I.lower i) (I.upper i)
+  结论: x in I ↔ 对任意 i, x i in 左开右闭区间 (I.lower i) (I.upper i)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -283,7 +283,7 @@ theorem mem_univ_Ioc
 中文:
 定理 mem_univ_Ioc
   条件: {I : Box ι}
-  结论: (x in pi univ fun i => Ioc (I.lower i) (I.upper i)) ↔ x in I
+  结论: (x in pi univ fun i => 左开右闭区间 (I.lower i) (I.upper i)) ↔ x in I
   证明: mem_univ_pi
 
 Depends on / 依赖: mem_univ_pi
@@ -303,7 +303,7 @@ theorem coe_eq_pi
 
 中文:
 定理 coe_eq_pi
-  结论: (I : Set (ι -> 实数)) = pi univ fun i => Ioc (I.lower i) (I.upper i)
+  结论: (I : 集合 (ι -> 实数)) = pi univ fun i => 左开右闭区间 (I.lower i) (I.upper i)
   证明: Set.ext fun _ => mem_univ_Ioc.symm
 
 @[simp]
@@ -341,7 +341,7 @@ theorem exists_mem
   proof: ⟨_, I.upper_mem⟩
 
 中文:
-定理 exists_mem
+定理 存在_mem
   结论: 存在 x, x in I
   证明: ⟨_, I.upper_mem⟩
 
@@ -362,7 +362,7 @@ theorem nonempty_coe
 
 中文:
 定理 nonempty_coe
-  结论: Set.Nonempty (I : Set (ι -> 实数))
+  结论: 集合.非空 (I : 集合 (ι -> 实数))
   证明: I.exists_mem
 
 @[simp]
@@ -385,7 +385,7 @@ theorem coe_ne_empty
 
 中文:
 定理 coe_ne_empty
-  结论: (I : Set (ι -> 实数)) != ∅
+  结论: (I : 集合 (ι -> 实数)) != ∅
   证明: I.nonempty_coe.ne_empty
 
 @[simp]
@@ -406,7 +406,7 @@ theorem empty_ne_coe
 
 中文:
 定理 empty_ne_coe
-  结论: ∅ != (I : Set (ι -> 实数))
+  结论: ∅ != (I : 集合 (ι -> 实数))
   证明: I.coe_ne_empty.symm
 
 Depends on / 依赖: I.coe_ne_empty.symm, coe_ne_empty
@@ -464,7 +464,7 @@ theorem le_TFAE
 
 中文:
 定理 le_TFAE
-  结论: List.TFAE [I <= J, (I : Set (ι -> 实数)) subseteq J,
+  结论: 列表.TFAE [I <= J, (I : 集合 (ι -> 实数)) subseteq J,
   证明: by
   tfae_have 1 ↔ 2 := Iff.rfl
   tfae_have 2 -> 3
@@ -499,7 +499,7 @@ theorem coe_subset_coe
 
 中文:
 定理 coe_subset_coe
-  结论: (I : Set (ι -> 实数)) subseteq J ↔ I <= J
+  结论: (I : 集合 (ι -> 实数)) subseteq J ↔ I <= J
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -540,7 +540,7 @@ theorem injective_coe
 
 中文:
 定理 injective_coe
-  结论: Injective ((↑) : Box ι -> Set (ι -> 实数))
+  结论: 单射 ((↑) : Box ι -> 集合 (ι -> 实数))
   证明: by
   rintro ⟨l₁, u₁, h₁⟩ ⟨l₂, u₂, h₂⟩ h
   simp only [Subset.antisymm_iff, coe_subset_coe, le_iff_bounds] at h
@@ -570,7 +570,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  结论: (I : Set (ι -> 实数)) = J ↔ I = J
+  结论: (I : 集合 (ι -> 实数)) = J ↔ I = J
   证明: injective_coe.eq_iff
 
 @[ext]
@@ -612,7 +612,7 @@ theorem ne_of_disjoint_coe
 
 中文:
 定理 ne_of_disjoint_coe
-  条件: (h : Disjoint (I : Set (ι -> 实数)) J)
+  条件: (h : Disjoint (I : 集合 (ι -> 实数)) J)
   结论: I != J
   证明: mt coe_inj.2 h.ne I.coe_ne_empty
 
@@ -631,7 +631,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Box ι)
+  签名: 偏序 (Box ι)
   定义体: { PartialOrder.lift ((↑) : Box ι -> Set (ι -> Real)) injective_coe with le := (· <= ·) }
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, injective_coe
@@ -648,8 +648,8 @@ definition Icc
   body: OrderEmbedding.ofMapLEIff (fun I : Box ι => Icc I.lower I.upper) fun I J => (le_TFAE I J).out 2 0
 
 中文:
-定义 Icc
-  签名: : Box ι ↪o Set (ι -> 实数)
+定义 闭区间
+  签名: : Box ι ↪o 集合 (ι -> 实数)
   定义体: OrderEmbedding.ofMapLEIff (fun I : Box ι => Icc I.lower I.upper) fun I J => (le_TFAE I J).out 2 0
 -/
 protected def Icc : Box ι ↪o Set (ι -> Real) :=
@@ -667,7 +667,7 @@ theorem Icc_def
 
 中文:
 定理 Icc_def
-  结论: Box.Icc I = Icc I.lower I.upper
+  结论: Box.闭区间 I = 闭区间 I.lower I.upper
   证明: rfl
 
 @[simp]
@@ -689,7 +689,7 @@ theorem upper_mem_Icc
 中文:
 定理 upper_mem_Icc
   条件: (I : Box ι)
-  结论: I.upper in Box.Icc I
+  结论: I.upper in Box.闭区间 I
   证明: right_mem_Icc.2 I.lower_le_upper
 
 @[simp]
@@ -712,7 +712,7 @@ theorem lower_mem_Icc
 中文:
 定理 lower_mem_Icc
   条件: (I : Box ι)
-  结论: I.lower in Box.Icc I
+  结论: I.lower in Box.闭区间 I
   证明: left_mem_Icc.2 I.lower_le_upper
 
 Depends on / 依赖: I.lower_le_upper, left_mem_Icc, lower_le_upper
@@ -732,7 +732,7 @@ theorem isCompact_Icc
 中文:
 定理 isCompact_Icc
   条件: (I : Box ι)
-  结论: IsCompact (Box.Icc I)
+  结论: 是紧集 (Box.闭区间 I)
   证明: isCompact_Icc
 -/
 protected theorem isCompact_Icc (I : Box ι) : IsCompact (Box.Icc I) :=
@@ -748,7 +748,7 @@ theorem Icc_eq_pi
 
 中文:
 定理 Icc_eq_pi
-  结论: Box.Icc I = pi univ fun i => Icc (I.lower i) (I.upper i)
+  结论: Box.闭区间 I = pi univ fun i => 闭区间 (I.lower i) (I.upper i)
   证明: (pi_univ_Icc _ _).symm
 
 Depends on / 依赖: pi_univ_Icc
@@ -766,7 +766,7 @@ theorem le_iff_Icc
 
 中文:
 定理 le_iff_Icc
-  结论: I <= J ↔ Box.Icc I subseteq Box.Icc J
+  结论: I <= J ↔ Box.闭区间 I subseteq Box.闭区间 J
   证明: (le_TFAE I J).out 0 2
 
 Depends on / 依赖: le_TFAE
@@ -784,7 +784,7 @@ theorem antitone_lower
 
 中文:
 定理 antitone_lower
-  结论: Antitone fun I : Box ι => I.lower
+  结论: 递减 fun I : Box ι => I.lower
   证明: fun _ _ H => (le_iff_bounds.1 H).1
 
 Depends on / 依赖: le_iff_bounds
@@ -802,7 +802,7 @@ theorem monotone_upper
 
 中文:
 定理 monotone_upper
-  结论: Monotone fun I : Box ι => I.upper
+  结论: 递增 fun I : Box ι => I.upper
   证明: fun _ _ H => (le_iff_bounds.1 H).2
 
 Depends on / 依赖: le_iff_bounds
@@ -820,7 +820,7 @@ theorem coe_subset_Icc
 
 中文:
 定理 coe_subset_Icc
-  结论: ↑I subseteq Box.Icc I
+  结论: ↑I subseteq Box.闭区间 I
   证明: fun _ hx => ⟨fun i => (hx i).1.le, fun i => (hx i).2⟩
 -/
 theorem coe_subset_Icc : ↑I subseteq Box.Icc I :=
@@ -839,8 +839,8 @@ theorem isBounded_Icc
 
 中文:
 定理 isBounded_Icc
-  条件: [Finite ι] (I : Box ι)
-  结论: Bornology.IsBounded (Box.Icc I)
+  条件: [有限 ι] (I : Box ι)
+  结论: 有界结构.IsBounded (Box.闭区间 I)
   证明: by
   cases nonempty_fintype ι
   exact Metric.isBounded_Icc _ _
@@ -862,8 +862,8 @@ theorem isBounded
 
 中文:
 定理 isBounded
-  条件: [Finite ι] (I : Box ι)
-  结论: Bornology.IsBounded I.toSet
+  条件: [有限 ι] (I : Box ι)
+  结论: 有界结构.IsBounded I.toSet
   证明: Bornology.IsBounded.subset I.isBounded_Icc coe_subset_Icc
 
 Depends on / 依赖: Bornology, Bornology.IsBounded.subset, I.isBounded_Icc, IsBounded, coe_subset_Icc, isBounded_Icc, subset
@@ -945,7 +945,7 @@ instance withBotCoe
 
 中文:
 实例 withBotCoe
-  签名: : CoeTC (WithBot (Box ι)) (Set (ι -> 实数))
+  签名: : CoeTC (WithBot (Box ι)) (集合 (ι -> 实数))
   定义体: ⟨withBotToSet⟩
 
 @[simp, norm_cast]
@@ -968,7 +968,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : WithBot (Box ι)) : Set (ι -> 实数)) = ∅
+  结论: ((⊥ : WithBot (Box ι)) : 集合 (ι -> 实数)) = ∅
   证明: rfl
 
 @[simp, norm_cast]
@@ -986,7 +986,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  结论: ((I : WithBot (Box ι)) : Set (ι -> 实数)) = I
+  结论: ((I : WithBot (Box ι)) : 集合 (ι -> 实数)) = I
   证明: rfl
 -/
 theorem coe_coe : ((I : WithBot (Box ι)) : Set (ι -> Real)) = I := rfl
@@ -1000,7 +1000,7 @@ theorem isSome_iff
 
 中文:
 定理 isSome_iff
-  结论: 对任意 {I : WithBot (Box ι)}, I.isSome ↔ (I : Set (ι -> 实数)).Nonempty
+  结论: 对任意 {I : WithBot (Box ι)}, I.isSome ↔ (I : 集合 (ι -> 实数)).非空
 -/
 theorem isSome_iff : forall {I : WithBot (Box ι)}, I.isSome ↔ (I : Set (ι -> Real)).Nonempty
   | ⊥ => by
@@ -1051,7 +1051,7 @@ theorem withBotCoe_subset_iff
 中文:
 定理 withBotCoe_subset_iff
   条件: {I J : WithBot (Box ι)}
-  结论: (I : Set (ι -> 实数)) subseteq J ↔ I <= J
+  结论: (I : 集合 (ι -> 实数)) subseteq J ↔ I <= J
   证明: by
   induction I; · simp
   induction J; · simp [subset_empty_iff]
@@ -1080,7 +1080,7 @@ theorem withBotCoe_inj
 中文:
 定理 withBotCoe_inj
   条件: {I J : WithBot (Box ι)}
-  结论: (I : Set (ι -> 实数)) = J ↔ I = J
+  结论: (I : 集合 (ι -> 实数)) = J ↔ I = J
   证明: by
   simp only [Subset.antisymm_iff, ← le_antisymm_iff, withBotCoe_subset_iff]
 
@@ -1193,7 +1193,7 @@ theorem coe_mk'
 中文:
 定理 coe_mk'
   条件: (l u : ι -> 实数)
-  结论: (mk' l u : Set (ι -> 实数)) = pi univ fun i => Ioc (l i) (u i)
+  结论: (mk' l u : 集合 (ι -> 实数)) = pi univ fun i => 左开右闭区间 (l i) (u i)
   证明: by
   rw [mk']; split_ifs with h
   · exact coe_eq_pi _
@@ -1223,8 +1223,8 @@ instance WithBot.inf
 @[simp]
 
 中文:
-实例 WithBot.inf
-  签名: : Min (WithBot (Box ι))
+实例 WithBot.下确界
+  签名: : 最小值 (WithBot (Box ι))
   定义体: ⟨fun I =>
     WithBot.recBotCoe (fun _ => ⊥)
       (fun I J => WithBot.recBotCoe ⊥ (fun J => mk' (I.lower ⊔ J.lower) (I.upper ⊓ J.upper)) J) I⟩
@@ -1260,7 +1260,7 @@ theorem coe_inf
 中文:
 定理 coe_inf
   条件: (I J : WithBot (Box ι))
-  结论: (↑(I ⊓ J) : Set (ι -> 实数)) = (I : Set _) inter J
+  结论: (↑(I ⊓ J) : 集合 (ι -> 实数)) = (I : 集合 _) inter J
   证明: by
   induction I
   · change ∅ = _
@@ -1303,7 +1303,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (WithBot (Box ι))
+  签名: 格 (WithBot (Box ι))
   定义体: { inf := min
     inf_le_left := fun I J => by
       rw [← withBotCoe_subset_iff]; rw [coe_inf]
@@ -1363,7 +1363,7 @@ theorem disjoint_coe
 
 中文:
 定理 disjoint_coe
-  结论: Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : Set (ι -> 实数)) J
+  结论: Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : 集合 (ι -> 实数)) J
   证明: disjoint_withBotCoe.symm
 
 Depends on / 依赖: disjoint_withBotCoe, disjoint_withBotCoe.symm
@@ -1410,7 +1410,7 @@ definition face
 
 中文:
 定义 face
-  签名: {n} (I : Box (Fin (n + 1))) (i : Fin (n + 1))
+  签名: {n} (I : Box (有限集 (n + 1))) (i : 有限集 (n + 1))
   定义体: ⟨I.lower ∘ Fin.succAbove i, I.upper ∘ Fin.succAbove i, fun _ => I.lower_lt_upper _⟩
 
 @[simp]
@@ -1433,7 +1433,7 @@ theorem face_mk
 
 中文:
 定理 face_mk
-  条件: {n} (l u : Fin (n + 1) -> 实数) (h : 对任意 i, l i < u i) (i : Fin (n + 1))
+  条件: {n} (l u : 有限集 (n + 1) -> 实数) (h : 对任意 i, l i < u i) (i : 有限集 (n + 1))
   证明: rfl
 
 @[gcongr, mono]
@@ -1452,7 +1452,7 @@ theorem face_mono
 
 中文:
 定理 face_mono
-  条件: {n} {I J : Box (Fin (n + 1))} (h : I <= J) (i : Fin (n + 1))
+  条件: {n} {I J : Box (有限集 (n + 1))} (h : I <= J) (i : 有限集 (n + 1))
   证明: fun _ hx _ => Ioc_subset_Ioc ((le_iff_bounds.1 h).1 _) ((le_iff_bounds.1 h).2 _) (hx _)
 
 Depends on / 依赖: Ioc_subset_Ioc, le_iff_bounds
@@ -1472,8 +1472,8 @@ theorem monotone_face
 
 中文:
 定理 monotone_face
-  条件: {n} (i : Fin (n + 1))
-  结论: Monotone fun I => face I i
+  条件: {n} (i : 有限集 (n + 1))
+  结论: 递增 fun I => face I i
   证明: fun _ _ h => face_mono h i
 
 Depends on / 依赖: face_mono
@@ -1491,7 +1491,7 @@ theorem mapsTo_insertNth_face_Icc
 
 中文:
 定理 mapsTo_insertNth_face_Icc
-  结论: {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : 实数}
+  结论: {n} (I : Box (有限集 (n + 1))) {i : 有限集 (n + 1)} {x : 实数}
   证明: fun _ hy => Fin.insertNth_mem_Icc.2 ⟨hx, hy⟩
 
 Depends on / 依赖: Fin.insertNth_mem_Icc, insertNth_mem_Icc
@@ -1515,7 +1515,7 @@ theorem mapsTo_insertNth_face
 
 中文:
 定理 mapsTo_insertNth_face
-  结论: {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : 实数}
+  结论: {n} (I : Box (有限集 (n + 1))) {i : 有限集 (n + 1)} {x : 实数}
   证明: by
   intro y hy
   simp_rw [mem_coe, mem_def, i.forall_iff_succAbove, Fin.insertNth_apply_same,
@@ -1542,7 +1542,7 @@ theorem continuousOn_face_Icc
 
 中文:
 定理 continuousOn_face_Icc
-  结论: {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) -> 实数) -> X}
+  结论: {X} [拓扑空间 X] {n} {f : (有限集 (n + 1) -> 实数) -> X}
   证明: h.comp (continuousOn_const.finInsertNth i continuousOn_id) (I.mapsTo_insertNth_face_Icc hx)
 
 Depends on / 依赖: I.mapsTo_insertNth_face_Icc, continuousOn_const, continuousOn_const.finInsertNth, continuousOn_id, finInsertNth, h.comp, mapsTo_insertNth_face_Icc
@@ -1569,8 +1569,8 @@ definition Ioo
     pi_mono fun i _ => Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
 
 中文:
-定义 Ioo
-  签名: : Box ι ->o Set (ι -> 实数) where
+定义 开区间
+  签名: : Box ι ->o 集合 (ι -> 实数) where
   定义体: pi univ fun i => Ioo (I.lower i) (I.upper i)
   monotone' _ _ h :=
     pi_mono fun i _ => Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
@@ -1592,7 +1592,7 @@ theorem Ioo_subset_coe
 中文:
 定理 Ioo_subset_coe
   条件: (I : Box ι)
-  结论: Box.Ioo I subseteq I
+  结论: Box.开区间 I subseteq I
   证明: fun _ hx i => Ioo_subset_Ioc_self (hx i trivial)
 
 Depends on / 依赖: Ioo_subset_Ioc_self
@@ -1612,7 +1612,7 @@ theorem Ioo_subset_Icc
 中文:
 定理 Ioo_subset_Icc
   条件: (I : Box ι)
-  结论: Box.Ioo I subseteq Box.Icc I
+  结论: Box.开区间 I subseteq Box.闭区间 I
   证明: I.Ioo_subset_coe.trans coe_subset_Icc
 -/
 protected theorem Ioo_subset_Icc (I : Box ι) : Box.Ioo I subseteq Box.Icc I :=
@@ -1633,7 +1633,7 @@ theorem iUnion_Ioo_of_tendsto
 
 中文:
 定理 iUnion_Ioo_of_tendsto
-  结论: [Finite ι] {I : Box ι} {J : 自然数 -> Box ι} (hJ : Monotone J)
+  结论: [有限 ι] {I : Box ι} {J : 自然数 -> Box ι} (hJ : 递增 J)
   证明: have hl' : forall i, Antitone fun n => (J n).lower i :=
     fun i => (monotone_eval i).comp_antitone (antitone_lower.comp_monotone hJ)
   have hu' : forall i, Monotone fun n => (J n).upper i :=
@@ -1673,7 +1673,7 @@ theorem exists_seq_mono_tendsto
         le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i =
 
 中文:
-定理 exists_seq_mono_tendsto
+定理 存在_seq_mono_tendsto
   条件: (I : Box ι)
   证明: by
   choose a b ha_anti hb_mono ha_mem hb_mem hab ha_tendsto hb_tendsto using

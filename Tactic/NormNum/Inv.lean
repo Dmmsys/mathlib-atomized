@@ -31,7 +31,7 @@ definition inferCharZeroOfRing
 
 中文:
 定义 inferCharZeroOfRing
-  签名: {α : Q(类型u)} (_i : Q(Ring $α) := by with_reducible assumption)
+  签名: {α : Q(类型u)} (_i : Q(环 $α) := by with_reducible assumption)
   定义体: return ← synthInstanceQ q(CharZero $α) >
     throwError "not a characteristic zero ring"
 
@@ -52,7 +52,7 @@ definition inferCharZeroOfRing?
 
 中文:
 定义 inferCharZeroOfRing?
-  签名: {α : Q(类型u)} (_i : Q(Ring $α) := by with_reducible assumption)
+  签名: {α : Q(类型u)} (_i : Q(环 $α) := by with_reducible assumption)
   定义体: return (← trySynthInstanceQ q(CharZero $α)).toOption
 -/
 def inferCharZeroOfRing? {α : Q(Type u)} (_i : Q(Ring $α) := by with_reducible assumption) :
@@ -166,7 +166,7 @@ theorem isRat_mkRat
 
 中文:
 定理 isRat_mkRat
-  结论: {a na n : 整数} -> {b nb d : 自然数} -> Is整数 a na -> Is自然数 b nb ->
+  结论: {a na n : 整数} -> {b nb d : 自然数} -> 是整数 a na -> 是自然数 b nb ->
 -/
 theorem isRat_mkRat : {a na n : Int} -> {b nb d : Nat} -> IsInt a na -> IsNat b nb ->
     IsRat (na / nb : Rat) n d -> IsRat (mkRat a b) n d
@@ -180,8 +180,8 @@ theorem isNNRat_divNat
   statement: {a na n : Nat} -> {b nb d : Nat} -> IsNat a na -> IsNat b nb ->
 
 中文:
-定理 isNNRat_divNat
-  结论: {a na n : 自然数} -> {b nb d : 自然数} -> Is自然数 a na -> Is自然数 b nb ->
+定理 isNNRat_div自然数
+  结论: {a na n : 自然数} -> {b nb d : 自然数} -> 是自然数 a na -> 是自然数 b nb ->
 -/
 theorem isNNRat_divNat : {a na n : Nat} -> {b nb d : Nat} -> IsNat a na -> IsNat b nb ->
     IsNNRat (na / nb : Rat>=0) n d -> IsNNRat (NNRat.divNat a b) n d
@@ -207,7 +207,7 @@ haveI' : e =Q mkRat a b := ⟨⟩
 
 中文:
 定义 evalMkRat
-  签名: : NormNumExt where eval {u α} (e : Q(Rat)) : MetaM (Result e)
+  签名: : NormNumExt where eval {u α} (e : Q(有理数)) : MetaM (Result e)
   定义体: do
   let .app (.app (.const ``mkRat _) (a : Q(Int))) (b : Q(Nat)) ← whnfR e | failure
 haveI' : e =Q mkRat a b := ⟨⟩
@@ -243,8 +243,8 @@ haveI' : e =Q NNRat.divNat a b := ⟨⟩
   let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWit
 
 中文:
-定义 evalNNRatDivNat
-  签名: : NormNumExt where eval {u α} (e : Q(Rat>=0)) : MetaM (Result e)
+定义 evalNNRatDiv自然数
+  签名: : NormNumExt where eval {u α} (e : Q(有理数>=0)) : MetaM (Result e)
   定义体: do
   let .app (.app (.const ``NNRat.divNat _) (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
 haveI' : e =Q NNRat.divNat a b := ⟨⟩
@@ -271,9 +271,9 @@ theorem isNat_ratCast
   statement: {q : Rat} -> {n : Nat} ->
 
 中文:
-定理 isNat_ratCast
-  条件: {R : 类型} [DivisionRing R]
-  结论: {q : Rat} -> {n : 自然数} ->
+定理 is自然数_ratCast
+  条件: {R : 类型} [除环 R]
+  结论: {q : 有理数} -> {n : 自然数} ->
 -/
 theorem isNat_ratCast {R : Type*} [DivisionRing R] : {q : Rat} -> {n : Nat} ->
     IsNat q n -> IsNat (q : R) n
@@ -288,9 +288,9 @@ theorem isNat_nnratCast
   statement: {q : Rat>=0} -> {n : Nat} ->
 
 中文:
-定理 isNat_nnratCast
-  条件: {R : 类型} [DivisionSemiring R]
-  结论: {q : Rat>=0} -> {n : 自然数} ->
+定理 is自然数_nnratCast
+  条件: {R : 类型} [除半环 R]
+  结论: {q : 有理数>=0} -> {n : 自然数} ->
 -/
 theorem isNat_nnratCast {R : Type*} [DivisionSemiring R] : {q : Rat>=0} -> {n : Nat} ->
     IsNat q n -> IsNat (q : R) n
@@ -305,9 +305,9 @@ theorem isInt_ratCast
   statement: {q : Rat} -> {n : Int} ->
 
 中文:
-定理 isInt_ratCast
-  条件: {R : 类型} [DivisionRing R]
-  结论: {q : Rat} -> {n : 整数} ->
+定理 is整数_ratCast
+  条件: {R : 类型} [除环 R]
+  结论: {q : 有理数} -> {n : 整数} ->
 -/
 theorem isInt_ratCast {R : Type*} [DivisionRing R] : {q : Rat} -> {n : Int} ->
     IsInt q n -> IsInt (q : R) n
@@ -323,8 +323,8 @@ theorem isNNRat_ratCast
 
 中文:
 定理 isNNRat_ratCast
-  条件: {R : 类型} [DivisionRing R] [CharZero R]
-  结论: {q : Rat} -> {n : 自然数} -> {d : 自然数} ->
+  条件: {R : 类型} [除环 R] [特征零 R]
+  结论: {q : 有理数} -> {n : 自然数} -> {d : 自然数} ->
 -/
 theorem isNNRat_ratCast {R : Type*} [DivisionRing R] [CharZero R] : {q : Rat} -> {n : Nat} -> {d : Nat} ->
     IsNNRat q n d -> IsNNRat (q : R) n d
@@ -340,8 +340,8 @@ theorem isNNRat_nnratCast
 
 中文:
 定理 isNNRat_nnratCast
-  条件: {R : 类型} [DivisionSemiring R] [CharZero R]
-  结论: {q : Rat>=0} -> {n : 自然数} ->
+  条件: {R : 类型} [除半环 R] [特征零 R]
+  结论: {q : 有理数>=0} -> {n : 自然数} ->
 -/
 theorem isNNRat_nnratCast {R : Type*} [DivisionSemiring R] [CharZero R] : {q : Rat>=0} -> {n : Nat} ->
     {d : Nat} -> IsNNRat q n d -> IsNNRat (q : R) n d
@@ -357,8 +357,8 @@ theorem isRat_ratCast
 
 中文:
 定理 isRat_ratCast
-  条件: {R : 类型} [DivisionRing R] [CharZero R]
-  结论: {q : Rat} -> {n : 整数} -> {d : 自然数} ->
+  条件: {R : 类型} [除环 R] [特征零 R]
+  结论: {q : 有理数} -> {n : 整数} -> {d : 自然数} ->
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.toT2Space, toT2Space
 -/
@@ -481,7 +481,7 @@ theorem isNNRat_inv_pos
 
 中文:
 定理 isNNRat_inv_pos
-  条件: {α} [DivisionSemiring α] [CharZero α] {a : α} {n d : 自然数}
+  条件: {α} [除半环 α] [特征零 α] {a : α} {n d : 自然数}
   证明: by
   rintro ⟨_, rfl⟩
   have := invertibleOfNonzero (α := α) (Nat.cast_ne_zero.2 (Nat.succ_ne_zero n))
@@ -508,7 +508,7 @@ theorem isRat_inv_pos
 
 中文:
 定理 isRat_inv_pos
-  条件: {α} [DivisionRing α] [CharZero α] {a : α} {n d : 自然数}
+  条件: {α} [除环 α] [特征零 α] {a : α} {n d : 自然数}
   证明: by
   rintro ⟨_, rfl⟩
   have := invertibleOfNonzero (α := α) (Nat.cast_ne_zero.2 (Nat.succ_ne_zero n))
@@ -531,8 +531,8 @@ theorem isNat_inv_one
   statement: {a : α} ->
 
 中文:
-定理 isNat_inv_one
-  条件: {α} [DivisionSemiring α]
+定理 is自然数_inv_one
+  条件: {α} [除半环 α]
   结论: {a : α} ->
 -/
 theorem isNat_inv_one {α} [DivisionSemiring α] : {a : α} ->
@@ -548,8 +548,8 @@ theorem isNat_inv_zero
   statement: {a : α} ->
 
 中文:
-定理 isNat_inv_zero
-  条件: {α} [DivisionSemiring α]
+定理 is自然数_inv_zero
+  条件: {α} [除半环 α]
   结论: {a : α} ->
 -/
 theorem isNat_inv_zero {α} [DivisionSemiring α] : {a : α} ->
@@ -565,8 +565,8 @@ theorem isInt_inv_neg_one
   statement: {a : α} ->
 
 中文:
-定理 isInt_inv_neg_one
-  条件: {α} [DivisionRing α]
+定理 is整数_inv_neg_one
+  条件: {α} [除环 α]
   结论: {a : α} ->
 -/
 theorem isInt_inv_neg_one {α} [DivisionRing α] : {a : α} ->
@@ -589,7 +589,7 @@ theorem isRat_inv_neg
 
 中文:
 定理 isRat_inv_neg
-  条件: {α} [DivisionRing α] [CharZero α] {a : α} {n d : 自然数}
+  条件: {α} [除环 α] [特征零 α] {a : α} {n d : 自然数}
   证明: by
   rintro ⟨_, rfl⟩
   simp only [Int.negOfNat_eq]

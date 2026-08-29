@@ -88,7 +88,7 @@ theorem noncommFoldr_coe
 
 中文:
 定理 noncommFoldr_coe
-  条件: (l : List α) (comm) (b : β)
+  条件: (l : 列表 α) (comm) (b : β)
   证明: by
   simp only [noncommFoldr, coe_foldr, coe_attach, List.attach, List.attachWith, Function.comp_def]
   rw [← List.foldr_map]
@@ -159,7 +159,7 @@ theorem noncommFoldr_eq_foldr
 
 中文:
 定理 noncommFoldr_eq_foldr
-  条件: (s : Multiset α) [h : LeftCommutative f] (b : β)
+  条件: (s : Multiset α) [h : 左交换 f] (b : β)
   证明: by
   induction s using Quotient.inductionOn
   simp
@@ -185,7 +185,7 @@ definition noncommFold
 
 中文:
 定义 noncommFold
-  签名: (s : Multiset α) (comm : { x | x in s }.Pairwise fun x y => op x y = op y x)
+  签名: (s : Multiset α) (comm : { x | x in s }.两两 fun x y => op x y = op y x)
   定义体: noncommFoldr op s fun x hx y hy h b => by rw [← assoc.assoc, comm hx hy h, assoc.assoc]
 
 Depends on / 依赖: assoc.assoc, noncommFoldr
@@ -208,7 +208,7 @@ theorem noncommFold_coe
 
 中文:
 定理 noncommFold_coe
-  条件: (l : List α) (comm) (a : α)
+  条件: (l : 列表 α) (comm) (a : α)
   证明: by simp [noncommFold]
 
 @[simp]
@@ -273,7 +273,7 @@ theorem noncommFold_eq_fold
 
 中文:
 定理 noncommFold_eq_fold
-  条件: (s : Multiset α) [Std.Commutative op] (a : α)
+  条件: (s : Multiset α) [Std.交换 op] (a : α)
   证明: by
   induction s using Quotient.inductionOn
   simp
@@ -304,7 +304,7 @@ definition noncommProd
 
 中文:
 定义 noncommProd
-  签名: (s : Multiset α) (comm : { x | x in s }.Pairwise Commute)
+  签名: (s : Multiset α) (comm : { x | x in s }.两两 Commute)
   定义体: s.noncommFold (· * ·) comm 1
 
 Depends on / 依赖: noncommFold, s.noncommFold
@@ -335,8 +335,8 @@ theorem noncommProd_coe
 
 中文:
 定理 noncommProd_coe
-  条件: (l : List α) (comm)
-  结论: noncommProd (l : Multiset α) comm = l.prod
+  条件: (l : 列表 α) (comm)
+  结论: noncommProd (l : Multiset α) comm = l.乘积
   证明: by
   rw [noncommProd]
   simp only [noncommFold_coe]
@@ -540,7 +540,7 @@ theorem map_noncommProd_aux
 
 中文:
 定理 map_noncommProd_aux
-  结论: [MulHomClass F α β] (s : Multiset α)
+  结论: [乘法态射类 F α β] (s : Multiset α)
   证明: by
   simp only [Multiset.mem_map]
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ _
@@ -569,7 +569,7 @@ theorem map_noncommProd
 
 中文:
 定理 map_noncommProd
-  条件: [MonoidHomClass F α β] (s : Multiset α) (comm) (f : F)
+  条件: [幺半群态射类 F α β] (s : Multiset α) (comm) (f : F)
   证明: by
   induction s using Quotient.inductionOn
   simpa using map_list_prod f _
@@ -630,7 +630,7 @@ theorem noncommProd_eq_prod
 
 中文:
 定理 noncommProd_eq_prod
-  条件: {α : 类型} [CommMonoid α] (s : Multiset α)
+  条件: {α : 类型} [交换幺半群 α] (s : Multiset α)
   证明: by
   induction s using Quotient.inductionOn
   simp
@@ -769,7 +769,7 @@ theorem noncommProd_lemma
 
 中文:
 定理 noncommProd_lemma
-  结论: (s : Finset α) (f : α -> β)
+  结论: (s : 有限集 α) (f : α -> β)
   证明: Multiset.map_set_pairwise comm
 
 Depends on / 依赖: Multiset, Multiset.map_set_pairwise, map_set_pairwise
@@ -795,7 +795,7 @@ definition noncommProd
 
 中文:
 定义 noncommProd
-  签名: (s : Finset α) (f : α -> β)
+  签名: (s : 有限集 α) (f : α -> β)
   定义体: (s.1.map f).noncommProd noncommProd_lemma s f comm
 
 @[to_additive]
@@ -822,7 +822,7 @@ lemma noncommProd_induction
 
 中文:
 引理 noncommProd_induction
-  结论: (s : Finset α) (f : α -> β) (comm)
+  结论: (s : 有限集 α) (f : α -> β) (comm)
   证明: by
   refine Multiset.noncommProd_induction _ _ _ hom unit fun b hb => ?_
   obtain (⟨a, ha : a in s, rfl : f a = b⟩) := by simpa using hb
@@ -853,7 +853,7 @@ theorem noncommProd_congr
 
 中文:
 定理 noncommProd_congr
-  结论: {s₁ s₂ : Finset α} {f g : α -> β} (h₁ : s₁ = s₂)
+  结论: {s₁ s₂ : 有限集 α} {f g : α -> β} (h₁ : s₁ = s₂)
   证明: by
   simp_rw [noncommProd, Multiset.map_congr (congr_arg _ h₁) h₂]
 
@@ -886,7 +886,7 @@ theorem noncommProd_toFinset
 
 中文:
 定理 noncommProd_toFinset
-  条件: [DecidableEq α] (l : List α) (f : α -> β) (comm) (hl : l.Nodup)
+  条件: [DecidableEq α] (l : 列表 α) (f : α -> β) (comm) (hl : l.Nodup)
   证明: by
   rw [← List.dedup_eq_self] at hl
   simp [noncommProd, hl]
@@ -915,7 +915,7 @@ theorem noncommProd_empty
 中文:
 定理 noncommProd_empty
   条件: (f : α -> β) (h)
-  结论: noncommProd (∅ : Finset α) f h = 1
+  结论: noncommProd (∅ : 有限集 α) f h = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -937,7 +937,7 @@ theorem noncommProd_cons
 
 中文:
 定理 noncommProd_cons
-  结论: (s : Finset α) (a : α) (f : α -> β)
+  结论: (s : 有限集 α) (a : α) (f : α -> β)
   证明: by
   simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons]
 
@@ -963,7 +963,7 @@ theorem noncommProd_cons'
 
 中文:
 定理 noncommProd_cons'
-  结论: (s : Finset α) (a : α) (f : α -> β)
+  结论: (s : 有限集 α) (a : α) (f : α -> β)
   证明: by
   simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons']
 
@@ -988,7 +988,7 @@ theorem noncommProd_insert_of_notMem
 
 中文:
 定理 noncommProd_insert_of_notMem
-  结论: [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
+  结论: [DecidableEq α] (s : 有限集 α) (a : α) (f : α -> β) (comm)
   证明: by
   simp only [← cons_eq_insert _ _ ha, noncommProd_cons]
 
@@ -1015,7 +1015,7 @@ theorem noncommProd_insert_of_notMem'
 
 中文:
 定理 noncommProd_insert_of_notMem'
-  结论: [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
+  结论: [DecidableEq α] (s : 有限集 α) (a : α) (f : α -> β) (comm)
   证明: by
   simp only [← cons_eq_insert _ _ ha, noncommProd_cons']
 
@@ -1068,7 +1068,7 @@ theorem map_noncommProd
 
 中文:
 定理 map_noncommProd
-  条件: [MonoidHomClass F β γ] (s : Finset α) (f : α -> β) (comm) (g : F)
+  条件: [幺半群态射类 F β γ] (s : 有限集 α) (f : α -> β) (comm) (g : F)
   证明: by
   simp [noncommProd, Multiset.map_noncommProd]
 
@@ -1097,7 +1097,7 @@ theorem noncommProd_eq_pow_card
 
 中文:
 定理 noncommProd_eq_pow_card
-  条件: (s : Finset α) (f : α -> β) (comm) (m : β) (h : 对任意 x in s, f x = m)
+  条件: (s : 有限集 α) (f : α -> β) (comm) (m : β) (h : 对任意 x in s, f x = m)
   证明: by
   rw [noncommProd]; rw [Multiset.noncommProd_eq_pow_card _ _ m]
   · simp only [Finset.card_def, Multiset.card_map]
@@ -1129,7 +1129,7 @@ theorem noncommProd_commute
 
 中文:
 定理 noncommProd_commute
-  结论: (s : Finset α) (f : α -> β) (comm) (y : β)
+  结论: (s : 有限集 α) (f : α -> β) (comm) (y : β)
   证明: by
   apply Multiset.noncommProd_commute
   intro y
@@ -1160,7 +1160,7 @@ theorem mul_noncommProd_erase
 
 中文:
 定理 mul_noncommProd_erase
-  结论: [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
+  结论: [DecidableEq α] (s : 有限集 α) {a : α} (h : a in s) (f : α -> β) (comm)
   证明: by
   classical
   simpa only [← Multiset.map_erase_of_mem _ _ h] using!
@@ -1188,7 +1188,7 @@ theorem noncommProd_erase_mul
 
 中文:
 定理 noncommProd_erase_mul
-  结论: [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
+  结论: [DecidableEq α] (s : 有限集 α) {a : α} (h : a in s) (f : α -> β) (comm)
   证明: by
   classical
   simpa only [← Multiset.map_erase_of_mem _ _ h] using!
@@ -1218,7 +1218,7 @@ theorem noncommProd_eq_prod
 
 中文:
 定理 noncommProd_eq_prod
-  条件: {β : 类型} [CommMonoid β] (s : Finset α) (f : α -> β)
+  条件: {β : 类型} [交换幺半群 β] (s : 有限集 α) (f : α -> β)
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -1250,7 +1250,7 @@ theorem noncommProd_union_of_disjoint
 
 中文:
 定理 noncommProd_union_of_disjoint
-  结论: [DecidableEq α] {s t : Finset α} (h : Disjoint s t)
+  结论: [DecidableEq α] {s t : 有限集 α} (h : Disjoint s t)
   证明: by
   rcases s with ⟨⟨sl⟩, hsl⟩
   rcases t with ⟨⟨tl⟩, htl⟩
@@ -1288,7 +1288,7 @@ theorem noncommProd_mul_distrib_aux
 
 中文:
 定理 noncommProd_mul_distrib_aux
-  结论: {s : Finset α} {f : α -> β} {g : α -> β}
+  结论: {s : 有限集 α} {f : α -> β} {g : α -> β}
   证明: by
   intro x hx y hy h
   apply Commute.mul_left <;> apply Commute.mul_right
@@ -1329,7 +1329,7 @@ theorem noncommProd_mul_distrib
 
 中文:
 定理 noncommProd_mul_distrib
-  条件: {s : Finset α} (f : α -> β) (g : α -> β) (comm_ff comm_gg comm_gf)
+  条件: {s : 有限集 α} (f : α -> β) (g : α -> β) (comm_ff comm_gg comm_gf)
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -1374,7 +1374,7 @@ theorem noncommProd_mulSingle
 
 中文:
 定理 noncommProd_mulSingle
-  条件: [Fintype ι] [DecidableEq ι] (x : 对任意 i, M i)
+  条件: [有限类型 ι] [DecidableEq ι] (x : 对任意 i, M i)
   证明: by
   ext i
   apply (univ.map_noncommProd (fun i => MonoidHom.mulSingle M i (x i)) ?a
@@ -1421,8 +1421,8 @@ theorem _root_.MonoidHom.pi_ext
   congr 1 with i; exact h i (x i)
 
 中文:
-定理 _root_.MonoidHom.pi_ext
-  结论: [Finite ι] [DecidableEq ι] {f g : (对任意 i, M i) ->* γ}
+定理 _root_.幺半群态射.pi_ext
+  结论: [有限 ι] [DecidableEq ι] {f g : (对任意 i, M i) ->* γ}
   证明: by
   cases nonempty_fintype ι
   ext x

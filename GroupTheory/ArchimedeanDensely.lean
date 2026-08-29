@@ -45,8 +45,8 @@ theorem exists_pow_lt₀
     simpa using! exists_pow_lt ha b
 
 中文:
-定理 exists_pow_lt₀
-  结论: {G : 类型} [LinearOrderedCommGroupWithZero G] [MulArchimedean G]
+定理 存在_pow_lt₀
+  结论: {G : 类型} [带零LinearOrderedComm群 G] [MulArchimedean G]
   证明: by
   rcases eq_or_ne a 0 with rfl | ha'
   · use 1
@@ -88,7 +88,7 @@ lemma Subgroup.mem_closure_singleton_iff_existsUnique_zpow
   
 
 中文:
-引理 Subgroup.mem_closure_singleton_iff_existsUnique_zpow
+引理 子群.mem_closure_singleton_iff_存在Unique_zpow
   结论: {G : 类型}
   证明: by
   rw [mem_closure_singleton]
@@ -131,7 +131,7 @@ lemma Int.addEquiv_eq_refl_or_neg
   simpa [e.surjective, eq_comm
 
 中文:
-引理 Int.addEquiv_eq_refl_or_neg
+引理 整数.addEquiv_eq_refl_or_neg
   条件: (e : 整数 ≃+ 整数)
   结论: e = .refl _ ∨ e = .neg _
   证明: by
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (整数 ≃+ 整数)
+  签名: 有限类型 (整数 ≃+ 整数)
   定义体: .cons (.neg _) ({.refl _}) (by simp [AddEquiv.ext_int_iff])
   complete x := by
     obtain rfl | rfl := Int.addEquiv_eq_refl_or_neg x <;>
@@ -190,7 +190,7 @@ lemma Int.univ_addEquiv
   proof: rfl
 
 中文:
-引理 Int.univ_addEquiv
+引理 整数.univ_addEquiv
   证明: rfl
 -/
 lemma Int.univ_addEquiv :
@@ -206,8 +206,8 @@ lemma Int.card_fintype_addEquiv
   proof: rfl
 
 中文:
-引理 Int.card_fintype_addEquiv
-  结论: Fintype.card (整数 ≃+ 整数) = 2
+引理 整数.card_fintype_addEquiv
+  结论: 有限类型.card (整数 ≃+ 整数) = 2
   证明: rfl
 -/
 @[simp] lemma Int.card_fintype_addEquiv : Fintype.card (Int ≃+ Int) = 2 := rfl
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (整数 ≃+o 整数)
+  签名: 唯一 (整数 ≃+o 整数)
   定义体: OrderAddMonoidIso.toAddEquiv_injective
 .resolve_right fun H => by Int.addEquiv_eq_refl_or_neg e
       replace H : e 1 = -1 := congr($H 1)
@@ -265,7 +265,7 @@ uniq e := OrderAddMonoidIso.toAddEquiv_injective by
 
 中文:
 实例 :
-  签名: Unique (整数 ≃+o 整数ᵒᵈ)
+  签名: 唯一 (整数 ≃+o 整数ᵒᵈ)
   定义体: ⟨AddEquiv.neg Int
 uniq e := OrderAddMonoidIso.toAddEquiv_injective by
     simp only [OrderAddMonoidIso.toAddEquiv_eq_coe]
@@ -383,7 +383,7 @@ lemma Subgroup.isLeast_of_closure_iff_eq_mabs
     obtain ⟨m, hm⟩ := th
 
 中文:
-引理 Subgroup.isLeast_of_closure_iff_eq_mabs
+引理 子群.isLeast_of_closure_iff_eq_mabs
   条件: {a b : G}
   证明: by
   constructor <;> intro h
@@ -509,8 +509,8 @@ lemma Archimedean.of_locallyFiniteOrder
   proof: .comap (LocallyFiniteOrder.addMonoidHom G) LocallyFiniteOrder.orderAddMonoidHom_strictMono
 
 中文:
-引理 Archimedean.of_locallyFiniteOrder
-  结论: {G : 类型} [AddCommGroup G] [LinearOrder G]
+引理 阿基米德.of_locallyFiniteOrder
+  结论: {G : 类型} [加法交换群 G] [线性序 G]
   证明: .comap (LocallyFiniteOrder.addMonoidHom G) LocallyFiniteOrder.orderAddMonoidHom_strictMono
 
 Depends on / 依赖: LocallyFiniteOrder, LocallyFiniteOrder.addMonoidHom, LocallyFiniteOrder.orderAddMonoidHom_strictMono, addMonoidHom, orderAddMonoidHom_strictMono
@@ -533,7 +533,7 @@ lemma MulArchimedean.of_locallyFiniteOrder
 
 中文:
 引理 MulArchimedean.of_locallyFiniteOrder
-  结论: {G : 类型} [CommGroup G] [LinearOrder G]
+  结论: {G : 类型} [交换群 G] [线性序 G]
   证明: .comap (LocallyFiniteOrder.orderMonoidHom G).toMonoidHom
     LocallyFiniteOrder.orderMonoidHom_strictMono
 
@@ -722,7 +722,7 @@ lemma LinearOrderedCommGroup.isCyclic_iff_not_denselyOrdered
 
 中文:
 引理 LinearOrderedCommGroup.isCyclic_iff_not_denselyOrdered
-  条件: [Nontrivial G]
+  条件: [非平凡 G]
   证明: by
   rw [← isAddCyclic_additive_iff]; rw [LinearOrderedAddCommGroup.isAddCyclic_iff_not_denselyOrdered]
   rfl
@@ -747,7 +747,7 @@ lemma LinearOrderedCommGroupWithZero.discrete_or_denselyOrdered
   exact ⟨OrderMonoidIso.withZeroUnits.symm.trans f.withZero⟩
 
 中文:
-引理 LinearOrderedCommGroupWithZero.discrete_or_denselyOrdered
+引理 带零LinearOrderedComm群.discrete_or_denselyOrdered
   结论: (G : 类型)
   证明: by
   rw [← denselyOrdered_units_iff]
@@ -782,7 +782,7 @@ lemma LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered
   
 
 中文:
-引理 LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered
+引理 带零LinearOrderedComm群.discrete_iff_not_denselyOrdered
   结论: (G : 类型)
   证明: by
   rw [← denselyOrdered_units_iff]; rw [← LinearOrderedCommGroup.discrete_iff_not_denselyOrdered]
@@ -1010,7 +1010,7 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_
     · exact Wi
 
 中文:
-引理 LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero
+引理 带零LinearOrderedComm群.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero
   证明: by
   suffices Set.WellFoundedOn {x : G₀ | g <= x} (· < ·) ↔
     Set.WellFoundedOn {x : G₀ˣ | Units.mk0 g hg <= x} (· < ·) by
@@ -1067,7 +1067,7 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_
     rcases eq_or_ne x 0 with rfl
 
 中文:
-引理 LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
+引理 带零LinearOrderedComm群.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
   证明: by
   have hg' : g⁻¹ != 0 := by simp [hg]
   rw [← wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero hg']; rw [← Set.wellFoundedOn_sdiff_singleton (a := 0)]
@@ -1121,7 +1121,7 @@ instance instWellFoundedGTWithZeroMultiplicativeIntLeOne
     one_ne_zero).mpr instNonemptyOfInhabited }
 
 中文:
-实例 instWellFoundedGTWithZeroMultiplicativeIntLeOne
+实例 instWellFoundedGTWithZeroMultiplicative整数LeOne
   签名: :
   定义体: { wf :=
     (LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
@@ -1185,7 +1185,7 @@ lemma WithZero.mulArchimedean_iff
 
 中文:
 引理 WithZero.mulArchimedean_iff
-  条件: {α} [CommGroup α] [PartialOrder α]
+  条件: {α} [交换群 α] [偏序 α]
   证明: by
   constructor <;> intro _
   · exact OrderMonoidIso.unitsWithZero.mulArchimedean
@@ -1211,8 +1211,8 @@ lemma Units.mulArchimedean_iff
   · infer_instance
 
 中文:
-引理 Units.mulArchimedean_iff
-  条件: {G₀} [LinearOrderedCommGroupWithZero G₀]
+引理 单位群.mulArchimedean_iff
+  条件: {G₀} [带零LinearOrderedComm群 G₀]
   证明: by
   constructor <;> intro _
   · exact OrderMonoidIso.withZeroUnits.mulArchimedean
@@ -1240,7 +1240,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyFiniteOrder (Multiplicative X)
+  签名: 局部有限序 (Multiplicative X)
   定义体: OrderIso.locallyFiniteOrder (⟨Multiplicative.toAdd, by simp⟩ : Multiplicative X ≃o X)
 
 Depends on / 依赖: Multiplicative, Multiplicative.toAdd, OrderIso, OrderIso.locallyFiniteOrder, locallyFiniteOrder
@@ -1259,7 +1259,7 @@ noncomputable
 
 中文:
 实例 :
-  签名: LocallyFiniteOrder (Additive X)
+  签名: 局部有限序 (加性 X)
   定义体: OrderIso.locallyFiniteOrder (⟨Additive.toMul, by simp⟩ : Additive X ≃o X)
 
 noncomputable
@@ -1279,8 +1279,8 @@ instance [Monoid
   body: OrderEmbedding.locallyFiniteOrder (⟨⟨Units.val, Units.val_injective⟩, by simp⟩ : Units X ↪o X)
 
 中文:
-实例 [Monoid
-  签名: X] : LocallyFiniteOrder (Units X)
+实例 [幺半群
+  签名: X] : 局部有限序 (单位群 X)
   定义体: OrderEmbedding.locallyFiniteOrder (⟨⟨Units.val, Units.val_injective⟩, by simp⟩ : Units X ↪o X)
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.locallyFiniteOrder, Units.val, Units.val_injective, locallyFiniteOrder, val_injective
@@ -1297,8 +1297,8 @@ instance [Group
   body: OrderIso.locallyFiniteOrder (OrderMonoidIso.unitsWithZero (α := X) : (WithZero X)ˣ ≃o X)
 
 中文:
-实例 [Group
-  签名: X] : LocallyFiniteOrder (WithZero X)ˣ
+实例 [群
+  签名: X] : 局部有限序 (WithZero X)ˣ
   定义体: OrderIso.locallyFiniteOrder (OrderMonoidIso.unitsWithZero (α := X) : (WithZero X)ˣ ≃o X)
 
 Depends on / 依赖: OrderIso, OrderIso.locallyFiniteOrder, OrderMonoidIso, OrderMonoidIso.unitsWithZero, WithZero, locallyFiniteOrder, unitsWithZero
@@ -1322,7 +1322,7 @@ lemma denselyOrdered_additive_iff
 
 中文:
 引理 denselyOrdered_additive_iff
-  结论: DenselyOrdered (Additive X) ↔ DenselyOrdered X
+  结论: 稠密序 (加性 X) ↔ 稠密序 X
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1338,7 +1338,7 @@ lemma denselyOrdered_multiplicative_iff
 
 中文:
 引理 denselyOrdered_multiplicative_iff
-  结论: DenselyOrdered (Multiplicative X) ↔ DenselyOrdered X
+  结论: 稠密序 (Multiplicative X) ↔ 稠密序 X
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1355,8 +1355,8 @@ instance [DenselyOrdered
   body: denselyOrdered_multiplicative_iff.2 ‹_›
 
 中文:
-实例 [DenselyOrdered
-  签名: X] : DenselyOrdered (Multiplicative X)
+实例 [稠密序
+  签名: X] : 稠密序 (Multiplicative X)
   定义体: denselyOrdered_multiplicative_iff.2 ‹_›
 
 Depends on / 依赖: denselyOrdered_multiplicative_iff
@@ -1372,8 +1372,8 @@ instance [DenselyOrdered
   body: denselyOrdered_additive_iff.2 ‹_›
 
 中文:
-实例 [DenselyOrdered
-  签名: X] : DenselyOrdered (Additive X)
+实例 [稠密序
+  签名: X] : 稠密序 (加性 X)
   定义体: denselyOrdered_additive_iff.2 ‹_›
 
 Depends on / 依赖: denselyOrdered_additive_iff
@@ -1391,7 +1391,7 @@ lemma WithZero.denselyOrdered_iff
 
 中文:
 引理 WithZero.denselyOrdered_iff
-  条件: {M : 类型} [Preorder M] [NoMinOrder M]
+  条件: {M : 类型} [预序 M] [NoMin序 M]
   证明: WithBot.denselyOrdered_iff
 
 Depends on / 依赖: WithBot, WithBot.denselyOrdered_iff, denselyOrdered_iff
@@ -1413,8 +1413,8 @@ lemma Int.not_denselyOrdered
   proof: (LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered Int).mp ⟨.refl _⟩
 
 中文:
-引理 Int.not_denselyOrdered
-  结论: ¬ DenselyOrdered 整数
+引理 整数.not_denselyOrdered
+  结论: ¬ 稠密序 整数
   证明: (LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered Int).mp ⟨.refl _⟩
 
 Depends on / 依赖: LinearOrderedAddCommGroup, LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered, discrete_iff_not_denselyOrdered
@@ -1432,7 +1432,7 @@ lemma not_denselyOrdered_withZero_int
 
 中文:
 引理 not_denselyOrdered_withZero_int
-  结论: ¬ DenselyOrdered 整数ᵐ⁰
+  结论: ¬ 稠密序 整数ᵐ⁰
   证明: (LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered _).mp ⟨.refl _⟩
 
 Depends on / 依赖: LinearOrderedCommGroupWithZero, LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered, discrete_iff_not_denselyOrdered
@@ -1450,7 +1450,7 @@ lemma WithZero.denselyOrdered_set_iff_subsingleton
 
 中文:
 引理 WithZero.denselyOrdered_set_iff_subsingleton
-  结论: {X : 类型} [LinearOrder X]
+  结论: {X : 类型} [线性序 X]
   证明: WithBot.denselyOrdered_set_iff_subsingleton
 
 Depends on / 依赖: WithBot, WithBot.denselyOrdered_set_iff_subsingleton, denselyOrdered_set_iff_subsingleton

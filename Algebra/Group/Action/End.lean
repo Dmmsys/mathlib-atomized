@@ -48,7 +48,7 @@ instance applyMulAction
 
 中文:
 实例 applyMulAction
-  签名: : MulAction (Function.End α) α where
+  签名: : 乘法作用 (函数.End α) α where
   定义体: (· <| ·)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -68,7 +68,7 @@ instance applyAddAction
 
 中文:
 实例 applyAddAction
-  签名: : AddAction (Additive (Function.End α)) α
+  签名: : 加法作用 (加性 (函数.End α)) α
   定义体: inferInstance
 -/
 instance applyAddAction : AddAction (Additive (Function.End α)) α := inferInstance
@@ -84,7 +84,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (f : Function.End α) (a : α)
+  条件: (f : 函数.End α) (a : α)
   结论: f • a = f a
   证明: rfl
 -/
@@ -102,7 +102,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  条件: (f g : Function.End α)
+  条件: (f g : 函数.End α)
   结论: (f * g) = f ∘ g
   证明: rfl
 -/
@@ -119,7 +119,7 @@ lemma one_def
 
 中文:
 引理 one_def
-  结论: (1 : Function.End α) = id
+  结论: (1 : 函数.End α) = id
   证明: rfl
 -/
 lemma one_def : (1 : Function.End α) = id := rfl
@@ -134,7 +134,7 @@ instance apply_FaithfulSMul
 
 中文:
 实例 apply_FaithfulSMul
-  签名: : FaithfulSMul (Function.End α) α where eq_of_smul_eq_smul
+  签名: : 忠实标量乘法 (函数.End α) α where eq_of_smul_eq_smul
   定义体: funext
 -/
 instance apply_FaithfulSMul : FaithfulSMul (Function.End α) α where eq_of_smul_eq_smul := funext
@@ -183,7 +183,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: {α : 类型} (f : Perm α) (a : α)
+  条件: {α : 类型} (f : 置换 α) (a : α)
   结论: f • a = f a
   证明: rfl
 -/
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction.IsPretransitive (Perm α) α
+  签名: 乘法作用.是Pretransitive (置换 α) α
   定义体: by
   rw [MulAction.isPretransitive_iff]
   classical
@@ -259,7 +259,7 @@ instance applyMulAction
 
 中文:
 实例 applyMulAction
-  签名: : MulAction (MulAut M) M where
+  签名: : 乘法作用 (MulAut M) M where
   定义体: (· <| ·)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -284,7 +284,7 @@ instance applyMulDistribMulAction
 
 中文:
 实例 applyMulDistribMulAction
-  签名: : MulDistribMulAction (MulAut M) M where
+  签名: : MulDistribMul作用 (MulAut M) M where
   定义体: map_one
   smul_mul := map_mul
 
@@ -323,7 +323,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (MulAut M) M where eq_of_smul_eq_smul
+  签名: : 忠实标量乘法 (MulAut M) M where eq_of_smul_eq_smul
   定义体: MulEquiv.ext
 
 Depends on / 依赖: MulEquiv, MulEquiv.ext
@@ -358,8 +358,8 @@ definition MulAction.toEndHom
   map_mul' x y := funext (mul_smul x y)
 
 中文:
-定义 MulAction.toEndHom
-  签名: [MulAction M α]
+定义 乘法作用.toEndHom
+  签名: [乘法作用 M α]
   定义体: (· • ·)
   map_one' := funext (one_smul M)
   map_mul' x y := funext (mul_smul x y)
@@ -378,8 +378,8 @@ abbreviation MulAction.ofEndHom
   body: .compHom α f
 
 中文:
-缩写 MulAction.ofEndHom
-  签名: (f : M ->* Function.End α)
+缩写 乘法作用.ofEndHom
+  签名: (f : M ->* 函数.End α)
   定义体: .compHom α f
 
 Depends on / 依赖: compHom
@@ -400,8 +400,8 @@ definition AddAction.toEndHom
   body: MulAction.toEndHom.toAdditiveRight
 
 中文:
-定义 AddAction.toEndHom
-  签名: [AddAction M α]
+定义 加法作用.toEndHom
+  签名: [加法作用 M α]
   定义体: MulAction.toEndHom.toAdditiveRight
 
 Depends on / 依赖: MulAction, MulAction.toEndHom.toAdditiveRight, toAdditiveRight, toEndHom
@@ -418,8 +418,8 @@ abbreviation AddAction.ofEndHom
   body: .compHom α f
 
 中文:
-缩写 AddAction.ofEndHom
-  签名: (f : M ->+ Additive (Function.End α))
+缩写 加法作用.ofEndHom
+  签名: (f : M ->+ 加性 (函数.End α))
   定义体: .compHom α f
 
 Depends on / 依赖: compHom
@@ -444,8 +444,8 @@ map_one' := Equiv.ext one_smul G
 map_mul' u₁ u₂ := Equiv.ext mul_smul (u₁ : G) u₂
 
 中文:
-定义 MulAction.toPermHom
-  签名: : G ->* Equiv.Perm α where
+定义 乘法作用.toPermHom
+  签名: : G ->* 等价.置换 α where
   定义体: MulAction.toPerm
 map_one' := Equiv.ext one_smul G
 map_mul' u₁ u₂ := Equiv.ext mul_smul (u₁ : G) u₂
@@ -465,7 +465,7 @@ lemma MulAction.coe_toPermHom
   proof: rfl
 
 中文:
-引理 MulAction.coe_toPermHom
+引理 乘法作用.coe_toPermHom
   证明: rfl
 -/
 lemma MulAction.coe_toPermHom :
@@ -481,7 +481,7 @@ lemma MulAction.toPerm_one
   aesop
 
 中文:
-引理 MulAction.toPerm_one
+引理 乘法作用.toPerm_one
   证明: by
   aesop
 -/
@@ -506,8 +506,8 @@ definition AddAction.toPermHom
   body: (MulAction.toPermHom ..).toAdditiveRight
 
 中文:
-定义 AddAction.toPermHom
-  签名: : G ->+ Additive (Equiv.Perm α)
+定义 加法作用.toPermHom
+  签名: : G ->+ 加性 (等价.置换 α)
   定义体: (MulAction.toPermHom ..).toAdditiveRight
 
 Depends on / 依赖: MulAction, MulAction.toPermHom, toAdditiveRight, toPermHom
@@ -522,7 +522,7 @@ lemma AddAction.coe_toPermHom
   proof: rfl
 
 中文:
-引理 AddAction.coe_toPermHom
+引理 加法作用.coe_toPermHom
   证明: rfl
 -/
 lemma AddAction.coe_toPermHom :
@@ -538,7 +538,7 @@ theorem AddAction.toPerm_zero
   aesop
 
 中文:
-定理 AddAction.toPerm_zero
+定理 加法作用.toPerm_zero
   证明: by
   aesop
 -/
@@ -564,7 +564,7 @@ definition MulDistribMulAction.toMulEquiv
   body: { MulDistribMulAction.toMonoidHom M x, MulAction.toPermHom G M x with }
 
 中文:
-定义 MulDistribMulAction.toMulEquiv
+定义 MulDistribMul作用.toMulEquiv
   签名: (x : G)
   定义体: { MulDistribMulAction.toMonoidHom M x, MulAction.toPermHom G M x with }
 
@@ -589,7 +589,7 @@ definition MulDistribMulAction.toMulAut
   map_mul' _ _ := MulEquiv.ext (mul_smul _ _)
 
 中文:
-定义 MulDistribMulAction.toMulAut
+定义 MulDistribMul作用.toMulAut
   签名: : G ->* MulAut M where
   定义体: MulDistribMulAction.toMulEquiv M
   map_one' := MulEquiv.ext (one_smul _)

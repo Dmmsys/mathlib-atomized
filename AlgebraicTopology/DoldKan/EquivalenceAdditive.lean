@@ -45,7 +45,7 @@ definition N
 
 中文:
 定义 N
-  签名: : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C 自然数)
+  签名: : Karoubi (SimplicialObject C) ⥤ Karoubi (链复形 C 自然数)
   定义体: N₂
 -/
 def N : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C Nat) :=
@@ -66,7 +66,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : Karoubi (ChainComplex C 自然数) ⥤ Karoubi (SimplicialObject C)
+  签名: : Karoubi (链复形 C 自然数) ⥤ Karoubi (SimplicialObject C)
   定义体: Γ₂
 -/
 def Γ : Karoubi (ChainComplex C Nat) ⥤ Karoubi (SimplicialObject C) :=
@@ -96,7 +96,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: : Karoubi (SimplicialObject C) ≌ Karoubi (ChainComplex C 自然数) where
+  签名: : Karoubi (SimplicialObject C) ≌ Karoubi (链复形 C 自然数) where
   定义体: N
   inverse := Γ
   unitIso := Γ₂N₂

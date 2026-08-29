@@ -69,10 +69,10 @@ class MeasurableAdd
 
 中文:
 类 MeasurableAdd
-  参数: (M : 类型) [MeasurableSpace M] [Add M]
+  参数: (M : 类型) [可测空间 M] [加法 M]
   公理与运算 (2 个):
-    - measurable_const_add : 对任意 c : M, Measurable (c + ·)  [默认: by intro; fun_prop]
-    - measurable_add_const : 对任意 c : M, Measurable (· + c)  [默认: by intro; fun_prop]
+    - measurable_const_add : 对任意 c : M, 可测 (c + ·)  [默认: by intro; fun_prop]
+    - measurable_add_const : 对任意 c : M, 可测 (· + c)  [默认: by intro; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_add_const
 -/
@@ -93,9 +93,9 @@ class MeasurableAdd₂
 
 中文:
 类 MeasurableAdd₂
-  参数: (M : 类型) [MeasurableSpace M] [Add M]
+  参数: (M : 类型) [可测空间 M] [加法 M]
   公理与运算 (1 个):
-    - measurable_add : Measurable fun p : M × M => p.1 + p.2
+    - measurable_add : 可测 fun p : M × M => p.1 + p.2
 -/
 class MeasurableAdd₂ (M : Type*) [MeasurableSpace M] [Add M] : Prop where
   measurable_add : Measurable fun p : M × M => p.1 + p.2
@@ -117,10 +117,10 @@ class MeasurableMul
 
 中文:
 类 MeasurableMul
-  参数: (M : 类型) [MeasurableSpace M] [Mul M]
+  参数: (M : 类型) [可测空间 M] [乘法 M]
   公理与运算 (2 个):
-    - measurable_const_mul : 对任意 c : M, Measurable (c * ·)  [默认: by intro; fun_prop]
-    - measurable_mul_const : 对任意 c : M, Measurable (· * c)  [默认: by intro; fun_prop]
+    - measurable_const_mul : 对任意 c : M, 可测 (c * ·)  [默认: by intro; fun_prop]
+    - measurable_mul_const : 对任意 c : M, 可测 (· * c)  [默认: by intro; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_mul_const
 -/
@@ -144,9 +144,9 @@ class MeasurableMul₂
 
 中文:
 类 MeasurableMul₂
-  参数: (M : 类型) [MeasurableSpace M] [Mul M]
+  参数: (M : 类型) [可测空间 M] [乘法 M]
   公理与运算 (1 个):
-    - measurable_mul : Measurable fun p : M × M => p.1 * p.2
+    - measurable_mul : 可测 fun p : M × M => p.1 * p.2
 -/
 class MeasurableMul₂ (M : Type*) [MeasurableSpace M] [Mul M] : Prop where
   measurable_mul : Measurable fun p : M × M => p.1 * p.2
@@ -170,8 +170,8 @@ theorem Measurable.const_mul
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.const_mul
-  条件: [MeasurableMul M] (hf : Measurable f) (c : M)
+定理 可测.const_mul
+  条件: [MeasurableMul M] (hf : 可测 f) (c : M)
   证明: (measurable_const_mul c).comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -194,8 +194,8 @@ theorem AEMeasurable.const_mul
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 AEMeasurable.const_mul
-  条件: [MeasurableMul M] (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.const_mul
+  条件: [MeasurableMul M] (hf : 几乎处处可测 f μ) (c : M)
   证明: (MeasurableMul.measurable_const_mul c).comp_aemeasurable hf
 
 @[to_additive (attr := fun_prop)]
@@ -218,8 +218,8 @@ theorem Measurable.mul_const
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.mul_const
-  条件: [MeasurableMul M] (hf : Measurable f) (c : M)
+定理 可测.mul_const
+  条件: [MeasurableMul M] (hf : 可测 f) (c : M)
   证明: (measurable_mul_const c).comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -242,8 +242,8 @@ theorem AEMeasurable.mul_const
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 AEMeasurable.mul_const
-  条件: [MeasurableMul M] (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.mul_const
+  条件: [MeasurableMul M] (hf : 几乎处处可测 f μ) (c : M)
   证明: (measurable_mul_const c).comp_aemeasurable hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -264,8 +264,8 @@ theorem Measurable.mul
   proof: measurable_mul.comp (hf.prodMk hg)
 
 中文:
-定理 Measurable.mul
-  条件: [MeasurableMul₂ M] (hf : Measurable f) (hg : Measurable g)
+定理 可测.mul
+  条件: [MeasurableMul₂ M] (hf : 可测 f) (hg : 可测 g)
   证明: measurable_mul.comp (hf.prodMk hg)
 
 Depends on / 依赖: hf.prodMk, measurable_mul, measurable_mul.comp, prodMk
@@ -289,8 +289,8 @@ lemma Measurable.mul'
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-引理 Measurable.mul'
-  结论: [MeasurableMul₂ M] {f g : α -> β -> M} {h : α -> β} (hf : Measurable ↿f)
+引理 可测.mul'
+  结论: [MeasurableMul₂ M] {f g : α -> β -> M} {h : α -> β} (hf : 可测 ↿f)
   证明: by
   dsimp; fun_prop
 
@@ -317,8 +317,8 @@ theorem AEMeasurable.mul
 @[to_additive]
 
 中文:
-定理 AEMeasurable.mul
-  条件: [MeasurableMul₂ M] (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+定理 几乎处处可测.mul
+  条件: [MeasurableMul₂ M] (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: measurable_mul.comp_aemeasurable (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.mul' := AEMeasurable.mul
@@ -352,8 +352,8 @@ instance Pi.measurableMul
 @[to_additive Pi.measurableAdd₂]
 
 中文:
-实例 Pi.measurableMul
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Mul (α i)]
+实例 依赖函数类型.measurableMul
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 乘法 (α i)]
   定义体: ⟨fun _ => measurable_pi_iff.mpr fun i => (measurable_pi_apply i).const_mul _, fun _ =>
     measurable_pi_iff.mpr fun i => (measurable_pi_apply i).mul_const _⟩
 
@@ -376,8 +376,8 @@ instance Pi.measurableMul₂
   body: ⟨measurable_pi_iff.mpr fun _ => measurable_fst.eval.mul measurable_snd.eval⟩
 
 中文:
-实例 Pi.measurableMul₂
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Mul (α i)]
+实例 依赖函数类型.measurableMul₂
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 乘法 (α i)]
   定义体: ⟨measurable_pi_iff.mpr fun _ => measurable_fst.eval.mul measurable_snd.eval⟩
 
 Depends on / 依赖: measurable_fst, measurable_fst.eval.mul, measurable_pi_iff, measurable_pi_iff.mpr, measurable_snd, measurable_snd.eval
@@ -402,7 +402,7 @@ theorem measurable_div_const'
 
 中文:
 定理 measurable_div_const'
-  结论: {G : 类型} [DivInvMonoid G] [MeasurableSpace G] [MeasurableMul G]
+  结论: {G : 类型} [除逆幺半群 G] [可测空间 G] [MeasurableMul G]
   证明: by simp_rw [div_eq_mul_inv, measurable_mul_const]
 
 Depends on / 依赖: div_eq_mul_inv, measurable_mul_const, simp_rw
@@ -421,9 +421,9 @@ class MeasurablePow
 
 中文:
 类 MeasurablePow
-  参数: (β γ : 类型) [MeasurableSpace β] [MeasurableSpace γ] [Pow β γ]
+  参数: (β γ : 类型) [可测空间 β] [可测空间 γ] [幂 β γ]
   公理与运算 (1 个):
-    - measurable_pow : Measurable fun p : β × γ => p.1 ^ p.2
+    - measurable_pow : 可测 fun p : β × γ => p.1 ^ p.2
 -/
 class MeasurablePow (β γ : Type*) [MeasurableSpace β] [MeasurableSpace γ] [Pow β γ] : Prop where
   measurable_pow : Measurable fun p : β × γ => p.1 ^ p.2
@@ -444,8 +444,8 @@ instance Monoid.measurablePow
         exact ih.mul measurable_id⟩
 
 中文:
-实例 Monoid.measurablePow
-  签名: (M : 类型) [Monoid M] [MeasurableSpace M] [MeasurableMul₂ M]
+实例 幺半群.measurablePow
+  签名: (M : 类型) [幺半群 M] [可测空间 M] [MeasurableMul₂ M]
   定义体: ⟨measurable_from_prod_countable_left fun n => by
       induction n with
       | zero => simp only [pow_zero, ← Pi.one_def, measurable_one]
@@ -482,9 +482,9 @@ theorem Measurable.pow
 @[fun_prop]
 
 中文:
-定理 Measurable.pow
-  条件: (hf : Measurable f) (hg : Measurable g)
-  结论: Measurable fun x => f x ^ g x
+定理 可测.pow
+  条件: (hf : 可测 f) (hg : 可测 g)
+  结论: 可测 fun x => f x ^ g x
   证明: measurable_pow.comp (hf.prodMk hg)
 
 @[fun_prop]
@@ -506,8 +506,8 @@ theorem AEMeasurable.pow
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.pow
-  条件: (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+定理 几乎处处可测.pow
+  条件: (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: measurable_pow.comp_aemeasurable (hf.prodMk hg)
 
 @[fun_prop]
@@ -531,9 +531,9 @@ theorem Measurable.pow_const
 @[fun_prop]
 
 中文:
-定理 Measurable.pow_const
-  条件: (hf : Measurable f) (c : γ)
-  结论: Measurable fun x => f x ^ c
+定理 可测.pow_const
+  条件: (hf : 可测 f) (c : γ)
+  结论: 可测 fun x => f x ^ c
   证明: hf.pow measurable_const
 
 @[fun_prop]
@@ -555,8 +555,8 @@ theorem AEMeasurable.pow_const
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.pow_const
-  条件: (hf : AEMeasurable f μ) (c : γ)
+定理 几乎处处可测.pow_const
+  条件: (hf : 几乎处处可测 f μ) (c : γ)
   证明: hf.pow aemeasurable_const
 
 @[fun_prop]
@@ -580,9 +580,9 @@ theorem Measurable.const_pow
 @[fun_prop]
 
 中文:
-定理 Measurable.const_pow
-  条件: (hg : Measurable g) (c : β)
-  结论: Measurable fun x => c ^ g x
+定理 可测.const_pow
+  条件: (hg : 可测 g) (c : β)
+  结论: 可测 fun x => c ^ g x
   证明: measurable_const.pow hg
 
 @[fun_prop]
@@ -602,8 +602,8 @@ theorem AEMeasurable.const_pow
   proof: aemeasurable_const.pow hg
 
 中文:
-定理 AEMeasurable.const_pow
-  条件: (hg : AEMeasurable g μ) (c : β)
+定理 几乎处处可测.const_pow
+  条件: (hg : 几乎处处可测 g μ) (c : β)
   证明: aemeasurable_const.pow hg
 
 Depends on / 依赖: aemeasurable_const, aemeasurable_const.pow
@@ -626,10 +626,10 @@ class MeasurableSub
 
 中文:
 类 MeasurableSub
-  参数: (G : 类型) [MeasurableSpace G] [Sub G]
+  参数: (G : 类型) [可测空间 G] [减法 G]
   公理与运算 (2 个):
-    - measurable_const_sub : 对任意 c : G, Measurable (c - ·)  [默认: by intro; fun_prop]
-    - measurable_sub_const : 对任意 c : G, Measurable (· - c)  [默认: by intro; fun_prop]
+    - measurable_const_sub : 对任意 c : G, 可测 (c - ·)  [默认: by intro; fun_prop]
+    - measurable_sub_const : 对任意 c : G, 可测 (· - c)  [默认: by intro; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_sub_const
 -/
@@ -650,9 +650,9 @@ class MeasurableSub₂
 
 中文:
 类 MeasurableSub₂
-  参数: (G : 类型) [MeasurableSpace G] [Sub G]
+  参数: (G : 类型) [可测空间 G] [减法 G]
   公理与运算 (1 个):
-    - measurable_sub : Measurable fun p : G × G => p.1 - p.2
+    - measurable_sub : 可测 fun p : G × G => p.1 - p.2
 -/
 class MeasurableSub₂ (G : Type*) [MeasurableSpace G] [Sub G] : Prop where
   measurable_sub : Measurable fun p : G × G => p.1 - p.2
@@ -674,10 +674,10 @@ class MeasurableDiv
 
 中文:
 类 MeasurableDiv
-  参数: (G₀ : 类型) [MeasurableSpace G₀] [Div G₀]
+  参数: (G₀ : 类型) [可测空间 G₀] [除法 G₀]
   公理与运算 (2 个):
-    - measurable_const_div : 对任意 c : G₀, Measurable (c / ·)  [默认: by intro; fun_prop]
-    - measurable_div_const : 对任意 c : G₀, Measurable (· / c)  [默认: by intro; fun_prop]
+    - measurable_const_div : 对任意 c : G₀, 可测 (c / ·)  [默认: by intro; fun_prop]
+    - measurable_div_const : 对任意 c : G₀, 可测 (· / c)  [默认: by intro; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_div_const
 -/
@@ -701,9 +701,9 @@ class MeasurableDiv₂
 
 中文:
 类 MeasurableDiv₂
-  参数: (G₀ : 类型) [MeasurableSpace G₀] [Div G₀]
+  参数: (G₀ : 类型) [可测空间 G₀] [除法 G₀]
   公理与运算 (1 个):
-    - measurable_div : Measurable fun p : G₀ × G₀ => p.1 / p.2
+    - measurable_div : 可测 fun p : G₀ × G₀ => p.1 / p.2
 -/
 class MeasurableDiv₂ (G₀ : Type*) [MeasurableSpace G₀] [Div G₀] : Prop where
   measurable_div : Measurable fun p : G₀ × G₀ => p.1 / p.2
@@ -727,8 +727,8 @@ theorem Measurable.const_div
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.const_div
-  条件: [MeasurableDiv G] (hf : Measurable f) (c : G)
+定理 可测.const_div
+  条件: [MeasurableDiv G] (hf : 可测 f) (c : G)
   证明: (MeasurableDiv.measurable_const_div c).comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -751,8 +751,8 @@ theorem AEMeasurable.const_div
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 AEMeasurable.const_div
-  条件: [MeasurableDiv G] (hf : AEMeasurable f μ) (c : G)
+定理 几乎处处可测.const_div
+  条件: [MeasurableDiv G] (hf : 几乎处处可测 f μ) (c : G)
   证明: (MeasurableDiv.measurable_const_div c).comp_aemeasurable hf
 
 @[to_additive (attr := fun_prop)]
@@ -775,8 +775,8 @@ theorem Measurable.div_const
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.div_const
-  条件: [MeasurableDiv G] (hf : Measurable f) (c : G)
+定理 可测.div_const
+  条件: [MeasurableDiv G] (hf : 可测 f) (c : G)
   证明: (MeasurableDiv.measurable_div_const c).comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -799,8 +799,8 @@ theorem AEMeasurable.div_const
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 AEMeasurable.div_const
-  条件: [MeasurableDiv G] (hf : AEMeasurable f μ) (c : G)
+定理 几乎处处可测.div_const
+  条件: [MeasurableDiv G] (hf : 几乎处处可测 f μ) (c : G)
   证明: (MeasurableDiv.measurable_div_const c).comp_aemeasurable hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -823,8 +823,8 @@ theorem Measurable.div
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.div
-  条件: [MeasurableDiv₂ G] (hf : Measurable f) (hg : Measurable g)
+定理 可测.div
+  条件: [MeasurableDiv₂ G] (hf : 可测 f) (hg : 可测 g)
   证明: measurable_div.comp (hf.prodMk hg)
 
 @[to_additive (attr := fun_prop)]
@@ -848,8 +848,8 @@ lemma Measurable.div'
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-引理 Measurable.div'
-  结论: [MeasurableDiv₂ G] {f g : α -> β -> G} {h : α -> β} (hf : Measurable ↿f)
+引理 可测.div'
+  结论: [MeasurableDiv₂ G] {f g : α -> β -> G} {h : α -> β} (hf : 可测 ↿f)
   证明: by
   dsimp; fun_prop
 
@@ -876,8 +876,8 @@ theorem AEMeasurable.div
 @[to_additive]
 
 中文:
-定理 AEMeasurable.div
-  条件: [MeasurableDiv₂ G] (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+定理 几乎处处可测.div
+  条件: [MeasurableDiv₂ G] (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: measurable_div.comp_aemeasurable (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.div' := AEMeasurable.div
@@ -912,8 +912,8 @@ instance Pi.measurableDiv
 @[to_additive Pi.measurableSub₂]
 
 中文:
-实例 Pi.measurableDiv
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Div (α i)]
+实例 依赖函数类型.measurableDiv
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 除法 (α i)]
   定义体: ⟨fun _ => measurable_pi_iff.mpr fun i => (measurable_pi_apply i).const_div _, fun _ =>
     measurable_pi_iff.mpr fun i => (measurable_pi_apply i).div_const _⟩
 
@@ -936,8 +936,8 @@ instance Pi.measurableDiv₂
   body: ⟨measurable_pi_iff.mpr fun _ => measurable_fst.eval.div measurable_snd.eval⟩
 
 中文:
-实例 Pi.measurableDiv₂
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Div (α i)]
+实例 依赖函数类型.measurableDiv₂
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 除法 (α i)]
   定义体: ⟨measurable_pi_iff.mpr fun _ => measurable_fst.eval.div measurable_snd.eval⟩
 
 Depends on / 依赖: measurable_fst, measurable_fst.eval.div, measurable_pi_iff, measurable_pi_iff.mpr, measurable_snd, measurable_snd.eval
@@ -973,9 +973,9 @@ class MeasurableNeg
 
 中文:
 类 MeasurableNeg
-  参数: (G : 类型) [Neg G] [MeasurableSpace G]
+  参数: (G : 类型) [取负 G] [可测空间 G]
   公理与运算 (1 个):
-    - measurable_neg : Measurable (Neg.neg : G -> G)
+    - measurable_neg : 可测 (取负.neg : G -> G)
 -/
 class MeasurableNeg (G : Type*) [Neg G] [MeasurableSpace G] : Prop where
   measurable_neg : Measurable (Neg.neg : G -> G)
@@ -993,9 +993,9 @@ class MeasurableInv
 
 中文:
 类 MeasurableInv
-  参数: (G : 类型) [Inv G] [MeasurableSpace G]
+  参数: (G : 类型) [取逆 G] [可测空间 G]
   公理与运算 (1 个):
-    - measurable_inv : Measurable (Inv.inv : G -> G)
+    - measurable_inv : 可测 (取逆.inv : G -> G)
 -/
 class MeasurableInv (G : Type*) [Inv G] [MeasurableSpace G] : Prop where
   measurable_inv : Measurable (Inv.inv : G -> G)
@@ -1034,9 +1034,9 @@ theorem Measurable.inv
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 Measurable.inv
-  条件: (hf : Measurable f)
-  结论: Measurable f⁻¹
+定理 可测.inv
+  条件: (hf : 可测 f)
+  结论: 可测 f⁻¹
   证明: measurable_inv.comp hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1059,9 +1059,9 @@ theorem AEMeasurable.inv
 @[to_additive (attr := simp)]
 
 中文:
-定理 AEMeasurable.inv
-  条件: (hf : AEMeasurable f μ)
-  结论: AEMeasurable f⁻¹ μ
+定理 几乎处处可测.inv
+  条件: (hf : 几乎处处可测 f μ)
+  结论: 几乎处处可测 f⁻¹ μ
   证明: measurable_inv.comp_aemeasurable hf
 
 @[to_additive (attr := simp)]
@@ -1084,7 +1084,7 @@ theorem measurable_inv_iff
 
 中文:
 定理 measurable_inv_iff
-  结论: {G : 类型} [InvolutiveInv G] [MeasurableSpace G] [MeasurableInv G]
+  结论: {G : 类型} [InvolutiveInv G] [可测空间 G] [MeasurableInv G]
   证明: ⟨fun h => by simpa only [inv_inv] using h.fun_inv, fun h => h.inv⟩
 
 @[to_additive (attr := simp)]
@@ -1108,7 +1108,7 @@ theorem aemeasurable_inv_iff
 
 中文:
 定理 aemeasurable_inv_iff
-  结论: {G : 类型} [InvolutiveInv G] [MeasurableSpace G] [MeasurableInv G]
+  结论: {G : 类型} [InvolutiveInv G] [可测空间 G] [MeasurableInv G]
   证明: ⟨fun h => by simpa only [inv_inv] using h.fun_inv, fun h => h.inv⟩
 
 @[to_additive]
@@ -1131,8 +1131,8 @@ instance Pi.measurableInv
 @[to_additive]
 
 中文:
-实例 Pi.measurableInv
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Inv (α i)]
+实例 依赖函数类型.measurableInv
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 取逆 (α i)]
   定义体: ⟨measurable_pi_iff.mpr fun i => (measurable_pi_apply i).inv⟩
 
 @[to_additive]
@@ -1156,9 +1156,9 @@ theorem MeasurableSet.inv
 @[to_additive]
 
 中文:
-定理 MeasurableSet.inv
-  条件: {s : Set G} (hs : MeasurableSet s)
-  结论: MeasurableSet s⁻¹
+定理 可测集.inv
+  条件: {s : 集合 G} (hs : 可测集 s)
+  结论: 可测集 s⁻¹
   证明: measurable_inv hs
 
 @[to_additive]
@@ -1201,8 +1201,8 @@ theorem Measurable.mul_iff_right
 @[to_additive]
 
 中文:
-定理 Measurable.mul_iff_right
-  结论: {G : 类型} [MeasurableSpace G] [MeasurableSpace α] [CommGroup G]
+定理 可测.mul_iff_right
+  结论: {G : 类型} [可测空间 G] [可测空间 α] [交换群 G]
   证明: ⟨fun h => show g = f * g * f⁻¹ by simp only [mul_inv_cancel_comm] ▸ h.mul hf.inv,
     fun h => hf.mul h⟩
 
@@ -1229,8 +1229,8 @@ theorem AEMeasurable.mul_iff_right
 @[to_additive]
 
 中文:
-定理 AEMeasurable.mul_iff_right
-  结论: {G : 类型} [MeasurableSpace G] [MeasurableSpace α] [CommGroup G]
+定理 几乎处处可测.mul_iff_right
+  结论: {G : 类型} [可测空间 G] [可测空间 α] [交换群 G]
   证明: ⟨fun h => show g = f * g * f⁻¹ by simp only [mul_inv_cancel_comm] ▸ h.mul hf.inv,
     fun h => hf.mul h⟩
 
@@ -1256,8 +1256,8 @@ theorem Measurable.mul_iff_left
 @[to_additive]
 
 中文:
-定理 Measurable.mul_iff_left
-  结论: {G : 类型} [MeasurableSpace G] [MeasurableSpace α] [CommGroup G]
+定理 可测.mul_iff_left
+  结论: {G : 类型} [可测空间 G] [可测空间 α] [交换群 G]
   证明: mul_comm g f ▸ Measurable.mul_iff_right hf
 
 @[to_additive]
@@ -1279,8 +1279,8 @@ theorem AEMeasurable.mul_iff_left
   proof: mul_comm g f ▸ AEMeasurable.mul_iff_right hf
 
 中文:
-定理 AEMeasurable.mul_iff_left
-  结论: {G : 类型} [MeasurableSpace G] [MeasurableSpace α] [CommGroup G]
+定理 几乎处处可测.mul_iff_left
+  结论: {G : 类型} [可测空间 G] [可测空间 α] [交换群 G]
   证明: mul_comm g f ▸ AEMeasurable.mul_iff_right hf
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mul_iff_right, mul_comm, mul_iff_right
@@ -1306,8 +1306,8 @@ instance DivInvMonoid.measurableZPow
 @[to_additive]
 
 中文:
-实例 DivInvMonoid.measurableZPow
-  签名: (G : 类型u) [DivInvMonoid G] [MeasurableSpace G]
+实例 除逆幺半群.measurableZPow
+  签名: (G : 类型u) [除逆幺半群 G] [可测空间 G]
   定义体: ⟨measurable_from_prod_countable_left fun n => by
       rcases n with n | n
       · simp_rw [Int.ofNat_eq_natCast, zpow_natCast]
@@ -1350,10 +1350,10 @@ class MeasurableConstVAdd
     - measurable_const_vadd : forall c : M, Measurable (c +ᵥ · : α -> α)
 
 中文:
-类 MeasurableConstVAdd
-  参数: (M α : 类型) [VAdd M α] [MeasurableSpace α]
+类 可测常数向量加法
+  参数: (M α : 类型) [向量加法 M α] [可测空间 α]
   公理与运算 (1 个):
-    - measurable_const_vadd : 对任意 c : M, Measurable (c +ᵥ · : α -> α)
+    - measurable_const_vadd : 对任意 c : M, 可测 (c +ᵥ · : α -> α)
 -/
 class MeasurableConstVAdd (M α : Type*) [VAdd M α] [MeasurableSpace α] : Prop where
   measurable_const_vadd : forall c : M, Measurable (c +ᵥ · : α -> α)
@@ -1371,10 +1371,10 @@ class MeasurableConstSMul
     - measurable_const_smul : forall c : M, Measurable (c • · : α -> α)  [default: by measurability]
 
 中文:
-类 MeasurableConstSMul
-  参数: (M α : 类型) [SMul M α] [MeasurableSpace α]
+类 可测常数标量乘法
+  参数: (M α : 类型) [标量乘法 M α] [可测空间 α]
   公理与运算 (1 个):
-    - measurable_const_smul : 对任意 c : M, Measurable (c • · : α -> α)  [默认: by measurability]
+    - measurable_const_smul : 对任意 c : M, 可测 (c • · : α -> α)  [默认: by measurability]
 
 Depends on / 依赖: measurability
 -/
@@ -1392,11 +1392,11 @@ class MeasurableVAdd
     - measurable_vadd_const : forall x : α, Measurable (· +ᵥ x : M -> α)
 
 中文:
-类 MeasurableVAdd
-  参数: (M α : 类型) [VAdd M α] [MeasurableSpace M] [MeasurableSpace α]
-  继承: MeasurableConstVAdd M α
+类 可测向量加法
+  参数: (M α : 类型) [向量加法 M α] [可测空间 M] [可测空间 α]
+  继承: 可测常数向量加法 M α
   公理与运算 (1 个):
-    - measurable_vadd_const : 对任意 x : α, Measurable (· +ᵥ x : M -> α)
+    - measurable_vadd_const : 对任意 x : α, 可测 (· +ᵥ x : M -> α)
 -/
 class MeasurableVAdd (M α : Type*) [VAdd M α] [MeasurableSpace M] [MeasurableSpace α]
     extends MeasurableConstVAdd M α where
@@ -1416,11 +1416,11 @@ class MeasurableSMul
     - measurable_smul_const : forall x : α, Measurable (· • x : M -> α)  [default: by measurability]
 
 中文:
-类 MeasurableSMul
-  参数: (M α : 类型) [SMul M α] [MeasurableSpace M] [MeasurableSpace α]
-  继承: MeasurableConstSMul M α
+类 可测标量乘法
+  参数: (M α : 类型) [标量乘法 M α] [可测空间 M] [可测空间 α]
+  继承: 可测常数标量乘法 M α
   公理与运算 (1 个):
-    - measurable_smul_const : 对任意 x : α, Measurable (· • x : M -> α)  [默认: by measurability]
+    - measurable_smul_const : 对任意 x : α, 可测 (· • x : M -> α)  [默认: by measurability]
 
 Depends on / 依赖: measurability
 -/
@@ -1439,9 +1439,9 @@ class MeasurableVAdd₂
 
 中文:
 类 MeasurableVAdd₂
-  参数: (M α : 类型) [VAdd M α] [MeasurableSpace M] [MeasurableSpace α]
+  参数: (M α : 类型) [向量加法 M α] [可测空间 M] [可测空间 α]
   公理与运算 (1 个):
-    - measurable_vadd : Measurable (Function.uncurry (· +ᵥ ·) : M × α -> α)
+    - measurable_vadd : 可测 (函数.uncurry (· +ᵥ ·) : M × α -> α)
 -/
 class MeasurableVAdd₂ (M α : Type*) [VAdd M α] [MeasurableSpace M] [MeasurableSpace α] :
     Prop where
@@ -1461,9 +1461,9 @@ class MeasurableSMul₂
 
 中文:
 类 MeasurableSMul₂
-  参数: (M α : 类型) [SMul M α] [MeasurableSpace M] [MeasurableSpace α]
+  参数: (M α : 类型) [标量乘法 M α] [可测空间 M] [可测空间 α]
   公理与运算 (1 个):
-    - measurable_smul : Measurable (Function.uncurry (· • ·) : M × α -> α)
+    - measurable_smul : 可测 (函数.uncurry (· • ·) : M × α -> α)
 -/
 class MeasurableSMul₂ (M α : Type*) [SMul M α] [MeasurableSpace M] [MeasurableSpace α] :
     Prop where
@@ -1486,7 +1486,7 @@ instance measurableSMul_of_mul
 
 中文:
 实例 measurableSMul_of_mul
-  签名: (M : 类型) [Mul M] [MeasurableSpace M] [MeasurableMul M]
+  签名: (M : 类型) [乘法 M] [可测空间 M] [MeasurableMul M]
 -/
 instance measurableSMul_of_mul (M : Type*) [Mul M] [MeasurableSpace M] [MeasurableMul M] :
     MeasurableSMul M M where
@@ -1504,7 +1504,7 @@ instance measurableSMul₂_of_mul
 
 中文:
 实例 measurableSMul₂_of_mul
-  签名: (M : 类型) [Mul M] [MeasurableSpace M] [MeasurableMul₂ M]
+  签名: (M : 类型) [乘法 M] [可测空间 M] [MeasurableMul₂ M]
   定义体: ⟨measurable_mul⟩
 
 @[to_additive]
@@ -1527,8 +1527,8 @@ instance Submonoid.instMeasurableConstSMul
 @[to_additive]
 
 中文:
-实例 Submonoid.instMeasurableConstSMul
-  签名: {M α} [MeasurableSpace α] [Monoid M] [MulAction M α]
+实例 子幺半群.instMeasurableConstSMul
+  签名: {M α} [可测空间 α] [幺半群 M] [乘法作用 M α]
   定义体: by simpa only using! measurable_const_smul (c : M)
 
 @[to_additive]
@@ -1551,8 +1551,8 @@ instance Submonoid.instMeasurableSMul
 @[to_additive]
 
 中文:
-实例 Submonoid.instMeasurableSMul
-  签名: {M α} [MeasurableSpace M] [MeasurableSpace α] [Monoid M]
+实例 子幺半群.instMeasurableSMul
+  签名: {M α} [可测空间 M] [可测空间 α] [幺半群 M]
   定义体: (measurable_smul_const (M := M) x).comp measurable_subtype_coe
 
 @[to_additive]
@@ -1575,8 +1575,8 @@ instance Subgroup.instMeasurableConstSMul
 @[to_additive]
 
 中文:
-实例 Subgroup.instMeasurableConstSMul
-  签名: {G α} [MeasurableSpace α] [Group G] [MulAction G α]
+实例 子群.instMeasurableConstSMul
+  签名: {G α} [可测空间 α] [群 G] [乘法作用 G α]
   定义体: s.toSubmonoid.instMeasurableConstSMul
 
 @[to_additive]
@@ -1597,8 +1597,8 @@ instance Subgroup.instMeasurableSMul
   body: s.toSubmonoid.instMeasurableSMul
 
 中文:
-实例 Subgroup.instMeasurableSMul
-  签名: {G α} [MeasurableSpace G] [MeasurableSpace α] [Group G]
+实例 子群.instMeasurableSMul
+  签名: {G α} [可测空间 G] [可测空间 α] [群 G]
   定义体: s.toSubmonoid.instMeasurableSMul
 
 Depends on / 依赖: instMeasurableSMul, s.toSubmonoid.instMeasurableSMul, toSubmonoid
@@ -1627,9 +1627,9 @@ lemma Measurable.const_smul
 @[to_additive (attr := to_fun (attr := fun_prop))]
 
 中文:
-引理 Measurable.const_smul
-  条件: (hg : Measurable g) (c : M)
-  结论: Measurable (c • g)
+引理 可测.const_smul
+  条件: (hg : 可测 g) (c : M)
+  结论: 可测 (c • g)
   证明: (measurable_const_smul c).comp hg
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -1652,9 +1652,9 @@ lemma AEMeasurable.const_smul
 @[to_additive]
 
 中文:
-引理 AEMeasurable.const_smul
-  条件: (hg : AEMeasurable g μ) (c : M)
-  结论: AEMeasurable (c • g) μ
+引理 几乎处处可测.const_smul
+  条件: (hg : 几乎处处可测 g μ) (c : M)
+  结论: 几乎处处可测 (c • g) μ
   证明: (measurable_const_smul c).comp_aemeasurable hg
 
 @[to_additive]
@@ -1674,8 +1674,8 @@ instance Pi.instMeasurableConstSMul
   body: measurable_pi_iff.2 fun i => (measurable_pi_apply i).const_smul _
 
 中文:
-实例 Pi.instMeasurableConstSMul
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, SMul M (α i)]
+实例 依赖函数类型.instMeasurableConstSMul
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 标量乘法 M (α i)]
   定义体: measurable_pi_iff.2 fun i => (measurable_pi_apply i).const_smul _
 
 Depends on / 依赖: const_smul, measurable_pi_apply, measurable_pi_iff
@@ -1706,8 +1706,8 @@ theorem Measurable.smul
   proof: measurable_smul.comp (hf.prodMk hg)
 
 中文:
-定理 Measurable.smul
-  条件: [MeasurableSMul₂ M X] (hf : Measurable f) (hg : Measurable g)
+定理 可测.smul
+  条件: [MeasurableSMul₂ M X] (hf : 可测 f) (hg : 可测 g)
   证明: measurable_smul.comp (hf.prodMk hg)
 
 Depends on / 依赖: hf.prodMk, measurable_smul, measurable_smul.comp, prodMk
@@ -1730,7 +1730,7 @@ lemma Measurable.smul'
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-引理 Measurable.smul'
+引理 可测.smul'
   结论: [MeasurableSMul₂ M X] {f : α -> β -> M} {g : α -> β -> X} {h : α -> β}
   证明: by dsimp; fun_prop
 
@@ -1754,8 +1754,8 @@ theorem AEMeasurable.smul
 @[to_additive]
 
 中文:
-定理 AEMeasurable.smul
-  结论: [MeasurableSMul₂ M X] {μ : Measure α} (hf : AEMeasurable f μ)
+定理 几乎处处可测.smul
+  结论: [MeasurableSMul₂ M X] {μ : 测度 α} (hf : 几乎处处可测 f μ)
   证明: MeasurableSMul₂.measurable_smul.comp_aemeasurable (hf.prodMk hg)
 
 @[to_additive]
@@ -1785,9 +1785,9 @@ theorem Measurable.smul_const
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.smul_const
-  条件: (hf : Measurable f) (y : X)
-  结论: Measurable fun x => f x • y
+定理 可测.smul_const
+  条件: (hf : 可测 f) (y : X)
+  结论: 可测 fun x => f x • y
   证明: (MeasurableSMul.measurable_smul_const y).comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -1809,8 +1809,8 @@ theorem AEMeasurable.smul_const
 @[to_additive]
 
 中文:
-定理 AEMeasurable.smul_const
-  条件: (hf : AEMeasurable f μ) (y : X)
+定理 几乎处处可测.smul_const
+  条件: (hf : 几乎处处可测 f μ) (y : X)
   证明: by fun_prop
 
 @[to_additive]
@@ -1830,8 +1830,8 @@ instance Pi.measurableSMul
   body: measurable_pi_iff.2 fun _ => measurable_smul_const _
 
 中文:
-实例 Pi.measurableSMul
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, SMul M (α i)]
+实例 依赖函数类型.measurableSMul
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 标量乘法 M (α i)]
   定义体: measurable_pi_iff.2 fun _ => measurable_smul_const _
 
 Depends on / 依赖: measurable_pi_iff, measurable_smul_const
@@ -1857,8 +1857,8 @@ instance AddMonoid.measurableSMul_nat₂
       exact 
 
 中文:
-实例 AddMonoid.measurableSMul_nat₂
-  签名: (M : 类型) [AddMonoid M] [MeasurableSpace M]
+实例 加法幺半群.measurableSMul_nat₂
+  签名: (M : 类型) [加法幺半群 M] [可测空间 M]
   定义体: ⟨by
     suffices Measurable fun p : M × Nat => p.2 • p.1 by apply this.comp measurable_swap
     refine measurable_from_prod_countable_left fun n => ?_
@@ -1898,8 +1898,8 @@ instance SubNegMonoid.measurableSMul_int₂
       
 
 中文:
-实例 SubNegMonoid.measurableSMul_int₂
-  签名: (M : 类型) [SubNegMonoid M] [MeasurableSpace M]
+实例 SubNeg幺半群.measurableSMul_int₂
+  签名: (M : 类型) [SubNeg幺半群 M] [可测空间 M]
   定义体: ⟨by
     suffices Measurable fun p : M × Int => p.2 • p.1 by apply this.comp measurable_swap
     refine measurable_from_prod_countable_left fun n => ?_
@@ -1944,8 +1944,8 @@ theorem Measurable.measurableSMul₂_iterateMulAct
 @[to_additive (attr := simp)]
 
 中文:
-定理 Measurable.measurableSMul₂_iterateMulAct
-  条件: (h : Measurable f)
+定理 可测.measurableSMul₂_iterateMulAct
+  条件: (h : 可测 f)
   证明: suffices Measurable fun p : α × IterateMulAct f => f^[p.2.val] p.1 from this.comp measurable_swap
     measurable_from_prod_countable_left fun n => h.iterate n.val
 
@@ -1973,7 +1973,7 @@ theorem measurableSMul_iterateMulAct
 
 中文:
 定理 measurableSMul_iterateMulAct
-  结论: MeasurableSMul (IterateMulAct f) α ↔ Measurable f
+  结论: 可测标量乘法 (IterateMulAct f) α ↔ 可测 f
   证明: ⟨fun _ => measurable_const_smul (IterateMulAct.mk (f := f) 1), fun h =>
     have := h.measurableSMul₂_iterateMulAct; inferInstance⟩
 
@@ -1997,7 +1997,7 @@ theorem measurableSMul₂_iterateMulAct
 
 中文:
 定理 measurableSMul₂_iterateMulAct
-  结论: MeasurableSMul₂ (IterateMulAct f) α ↔ Measurable f
+  结论: MeasurableSMul₂ (IterateMulAct f) α ↔ 可测 f
   证明: ⟨fun _ => measurableSMul_iterateMulAct.mp inferInstance,
     Measurable.measurableSMul₂_iterateMulAct⟩
 
@@ -2030,7 +2030,7 @@ theorem measurable_const_smul_iff
 中文:
 定理 measurable_const_smul_iff
   条件: (c : G)
-  结论: (Measurable fun x => c • f x) ↔ Measurable f
+  结论: (可测 fun x => c • f x) ↔ 可测 f
   证明: ⟨fun h => by simpa [inv_smul_smul, Pi.smul_def] using h.const_smul c⁻¹, fun h => h.const_smul c⟩
 
 @[to_additive]
@@ -2087,8 +2087,8 @@ nonrec theorem IsUnit.measurable_const_smul_iff {c : M} (hc : IsUnit c) :
 nonrec theorem IsUnit.aemeasurable_const_smul_iff {c : M}
 
 中文:
-实例 Units.instMeasurableConstSMul
-  签名: : MeasurableConstSMul Mˣ β where
+实例 单位群.instMeasurableConstSMul
+  签名: : 可测常数标量乘法 Mˣ β where
   定义体: measurable_const_smul (c : M)
 
 @[to_additive]
@@ -2134,8 +2134,8 @@ instance Units.instMeasurableSpace
 @[to_additive]
 
 中文:
-实例 Units.instMeasurableSpace
-  签名: : MeasurableSpace Mˣ
+实例 单位群.instMeasurableSpace
+  签名: : 可测空间 Mˣ
   定义体: .comap Units.val ‹_›
 
 @[to_additive]
@@ -2154,8 +2154,8 @@ instance Units.measurableSMul
   body: (measurable_smul_const x : Measurable fun c : M => c • x).comp MeasurableSpace.le_map_comap
 
 中文:
-实例 Units.measurableSMul
-  签名: : MeasurableSMul Mˣ β where
+实例 单位群.measurableSMul
+  签名: : 可测标量乘法 Mˣ β where
   定义体: (measurable_smul_const x : Measurable fun c : M => c • x).comp MeasurableSpace.le_map_comap
 
 Depends on / 依赖: Measurable, MeasurableSpace, MeasurableSpace.le_map_comap, le_map_comap, measurable_smul_const
@@ -2233,7 +2233,7 @@ instance MulOpposite.instMeasurableSpace
 
 中文:
 实例 MulOpposite.instMeasurableSpace
-  签名: {α : 类型} [h : MeasurableSpace α]
+  签名: {α : 类型} [h : 可测空间 α]
   定义体: MeasurableSpace.map op h
 
 @[to_additive]
@@ -2259,8 +2259,8 @@ theorem measurable_mul_op
 
 中文:
 定理 measurable_mul_op
-  条件: {α : 类型} [MeasurableSpace α]
-  结论: Measurable (op : α -> αᵐᵒᵖ)
+  条件: {α : 类型} [可测空间 α]
+  结论: 可测 (op : α -> αᵐᵒᵖ)
   证明: fun _ =>
   id
 
@@ -2283,8 +2283,8 @@ theorem measurable_mul_unop
 
 中文:
 定理 measurable_mul_unop
-  条件: {α : 类型} [MeasurableSpace α]
-  结论: Measurable (unop : αᵐᵒᵖ -> α)
+  条件: {α : 类型} [可测空间 α]
+  结论: 可测 (unop : αᵐᵒᵖ -> α)
   证明: fun _ => id
 
 @[to_additive]
@@ -2306,7 +2306,7 @@ instance MulOpposite.instMeasurableMul
 
 中文:
 实例 MulOpposite.instMeasurableMul
-  签名: {M : 类型} [Mul M] [MeasurableSpace M]
+  签名: {M : 类型} [乘法 M] [可测空间 M]
   定义体: ⟨fun _ => measurable_mul_op.comp (measurable_mul_unop.mul_const _), fun _ =>
     measurable_mul_op.comp (measurable_mul_unop.const_mul _)⟩
 
@@ -2331,7 +2331,7 @@ instance MulOpposite.instMeasurableMul₂
 
 中文:
 实例 MulOpposite.instMeasurableMul₂
-  签名: {M : 类型} [Mul M] [MeasurableSpace M]
+  签名: {M : 类型} [乘法 M] [可测空间 M]
   定义体: ⟨measurable_mul_op.comp
       ((measurable_mul_unop.comp measurable_snd).mul (measurable_mul_unop.comp measurable_fst))⟩
 
@@ -2371,7 +2371,7 @@ instance measurableSMul_opposite_of_mul
 
 中文:
 实例 measurableSMul_opposite_of_mul
-  签名: {M : 类型} [Mul M] [MeasurableSpace M]
+  签名: {M : 类型} [乘法 M] [可测空间 M]
   定义体: measurable_mul_unop.const_mul x
 
 @[to_additive]
@@ -2393,7 +2393,7 @@ instance measurableSMul₂_opposite_of_mul
 
 中文:
 实例 measurableSMul₂_opposite_of_mul
-  签名: {M : 类型} [Mul M] [MeasurableSpace M]
+  签名: {M : 类型} [乘法 M] [可测空间 M]
   定义体: ⟨measurable_snd.mul (measurable_mul_unop.comp measurable_fst)⟩
 
 Depends on / 依赖: measurable_fst, measurable_mul_unop, measurable_mul_unop.comp, measurable_snd, measurable_snd.mul
@@ -2433,8 +2433,8 @@ theorem List.measurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 List.measurable_prod
-  条件: (l : List (α -> M)) (hl : 对任意 f in l, Measurable f)
+定理 列表.measurable_prod
+  条件: (l : 列表 (α -> M)) (hl : 对任意 f in l, 可测 f)
   证明: by
   induction l with
   | nil => exact measurable_one
@@ -2474,8 +2474,8 @@ theorem List.aemeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 List.aemeasurable_prod
-  条件: (l : List (α -> M)) (hl : 对任意 f in l, AEMeasurable f μ)
+定理 列表.aemeasurable_prod
+  条件: (l : 列表 (α -> M)) (hl : 对任意 f in l, 几乎处处可测 f μ)
   证明: by
   induction l with
   | nil => exact aemeasurable_one
@@ -2510,8 +2510,8 @@ theorem List.measurable_fun_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 List.measurable_fun_prod
-  条件: (l : List (α -> M)) (hl : 对任意 f in l, Measurable f)
+定理 列表.measurable_fun_prod
+  条件: (l : 列表 (α -> M)) (hl : 对任意 f in l, 可测 f)
   证明: by
   simpa only [← Pi.list_prod_apply] using l.measurable_prod hl
 
@@ -2534,8 +2534,8 @@ theorem List.aemeasurable_fun_prod
   simpa only [← Pi.list_prod_apply] using l.aemeasurable_prod hl
 
 中文:
-定理 List.aemeasurable_fun_prod
-  条件: (l : List (α -> M)) (hl : 对任意 f in l, AEMeasurable f μ)
+定理 列表.aemeasurable_fun_prod
+  条件: (l : 列表 (α -> M)) (hl : 对任意 f in l, 几乎处处可测 f μ)
   证明: by
   simpa only [← Pi.list_prod_apply] using l.aemeasurable_prod hl
 
@@ -2567,7 +2567,7 @@ theorem Multiset.measurable_prod
 
 中文:
 定理 Multiset.measurable_prod
-  条件: (l : Multiset (α -> M)) (hl : 对任意 f in l, Measurable f)
+  条件: (l : Multiset (α -> M)) (hl : 对任意 f in l, 可测 f)
   证明: by
   rcases l with ⟨l⟩
   simpa using l.measurable_prod (by simpa using hl)
@@ -2596,7 +2596,7 @@ theorem Multiset.aemeasurable_prod
 
 中文:
 定理 Multiset.aemeasurable_prod
-  条件: (l : Multiset (α -> M)) (hl : 对任意 f in l, AEMeasurable f μ)
+  条件: (l : Multiset (α -> M)) (hl : 对任意 f in l, 几乎处处可测 f μ)
   证明: by
   rcases l with ⟨l⟩
   simpa using l.aemeasurable_prod (by simpa using hl)
@@ -2624,7 +2624,7 @@ theorem Multiset.measurable_fun_prod
 
 中文:
 定理 Multiset.measurable_fun_prod
-  条件: (s : Multiset (α -> M)) (hs : 对任意 f in s, Measurable f)
+  条件: (s : Multiset (α -> M)) (hs : 对任意 f in s, 可测 f)
   证明: by
   simpa only [← Pi.multiset_prod_apply] using s.measurable_prod hs
 
@@ -2650,7 +2650,7 @@ theorem Multiset.aemeasurable_fun_prod
 
 中文:
 定理 Multiset.aemeasurable_fun_prod
-  条件: (s : Multiset (α -> M)) (hs : 对任意 f in s, AEMeasurable f μ)
+  条件: (s : Multiset (α -> M)) (hs : 对任意 f in s, 几乎处处可测 f μ)
   证明: by
   simpa only [← Pi.multiset_prod_apply] using s.aemeasurable_prod hs
 
@@ -2676,8 +2676,8 @@ theorem Finset.measurable_fun_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Finset.measurable_fun_prod
-  条件: (s : Finset ι) (hf : 对任意 i in s, Measurable (f i))
+定理 有限集.measurable_fun_prod
+  条件: (s : 有限集 ι) (hf : 对任意 i in s, 可测 (f i))
   证明: by
   simp_rw [← Finset.prod_apply]
   exact Finset.prod_induction _ _ (fun _ _ => Measurable.mul) (@measurable_one M _ _ _ _) hf
@@ -2703,8 +2703,8 @@ theorem Finset.measurable_prod
   exact Finset.prod_induction _ _ (fun _ _ => Measurable.mul) (@measurable_one M _ _ _ _) hf
 
 中文:
-定理 Finset.measurable_prod
-  条件: (s : Finset ι) (hf : 对任意 i in s, Measurable (f i))
+定理 有限集.measurable_prod
+  条件: (s : 有限集 ι) (hf : 对任意 i in s, 可测 (f i))
   证明: by
   simp_rw [← Finset.prod_apply]
   exact Finset.prod_induction _ _ (fun _ _ => Measurable.mul) (@measurable_one M _ _ _ _) hf
@@ -2731,8 +2731,8 @@ lemma Finset.measurable_prod_apply
 @[to_additive (attr := fun_prop)]
 
 中文:
-引理 Finset.measurable_prod_apply
-  结论: {f : ι -> α -> β -> M} {g : α -> β} {s : Finset ι}
+引理 有限集.measurable_prod_apply
+  结论: {f : ι -> α -> β -> M} {g : α -> β} {s : 有限集 ι}
   证明: by
   simp only [prod_apply]; fun_prop
 
@@ -2759,8 +2759,8 @@ theorem Finset.aemeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Finset.aemeasurable_prod
-  条件: (s : Finset ι) (hf : 对任意 i in s, AEMeasurable (f i) μ)
+定理 有限集.aemeasurable_prod
+  条件: (s : 有限集 ι) (hf : 对任意 i in s, 几乎处处可测 (f i) μ)
   证明: Multiset.aemeasurable_prod _ fun _g hg =>
     let ⟨_i, hi, hg⟩ := Multiset.mem_map.1 hg
     hg ▸ hf _ hi
@@ -2786,8 +2786,8 @@ theorem Finset.aemeasurable_fun_prod
   simpa only [← Finset.prod_apply] using s.aemeasurable_prod hf
 
 中文:
-定理 Finset.aemeasurable_fun_prod
-  条件: (s : Finset ι) (hf : 对任意 i in s, AEMeasurable (f i) μ)
+定理 有限集.aemeasurable_fun_prod
+  条件: (s : 有限集 ι) (hf : 对任意 i in s, 几乎处处可测 (f i) μ)
   证明: by
   simpa only [← Finset.prod_apply] using s.aemeasurable_prod hf
 

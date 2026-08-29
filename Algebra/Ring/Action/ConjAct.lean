@@ -31,7 +31,7 @@ instance unitsMulSemiringAction
 
 中文:
 实例 unitsMulSemiringAction
-  签名: : MulSemiringAction (ConjAct Rˣ) R
+  签名: : MulSemiring作用 (ConjAct Rˣ) R
   定义体: { ConjAct.unitsMulDistribMulAction with
     smul_zero := by simp [units_smul_def]
     smul_add := by simp [units_smul_def, mul_add, add_mul] }

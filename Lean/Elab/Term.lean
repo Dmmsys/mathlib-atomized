@@ -31,7 +31,7 @@ withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := fa
 
 中文:
 定义 elabPattern
-  签名: (patt : Term) (expectedType? : Option Expr)
+  签名: (patt : 项) (expectedType? : 选项类型 Expr)
   定义体: do
 withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := false })
     withSynthesizeLight do

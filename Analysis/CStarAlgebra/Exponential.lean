@@ -100,7 +100,7 @@ lemma selfAdjoint.continuous_expUnitary
 
 中文:
 引理 selfAdjoint.continuous_expUnitary
-  结论: Continuous (expUnitary : selfAdjoint A -> unitary A)
+  结论: 连续 (expUnitary : selfAdjoint A -> unitary A)
   证明: by
   simp only [continuous_induced_rng, Function.comp_def, selfAdjoint.expUnitary_coe]
   let +nondep : NormedAlgebra Rat A := NormedAlgebra.restrictScalars Rat Complex A

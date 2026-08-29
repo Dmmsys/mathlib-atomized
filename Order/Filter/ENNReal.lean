@@ -36,7 +36,7 @@ lemma limsSup_of_not_isCobounded
 
 中文:
 引理 limsSup_of_not_isCobounded
-  条件: {f : Filter 实数} (hf : ¬ f.IsCobounded (· <= ·))
+  条件: {f : 滤子 实数} (hf : ¬ f.IsCobounded (· <= ·))
   证明: by rwa [limsSup, sInf_of_not_bddBelow]
 
 @[simp]
@@ -63,7 +63,7 @@ lemma limsSup_of_not_isBounded
 
 中文:
 引理 limsSup_of_not_isBounded
-  条件: {f : Filter 实数} (hf : ¬ f.IsBounded (· <= ·))
+  条件: {f : 滤子 实数} (hf : ¬ f.IsBounded (· <= ·))
   结论: limsSup f = 0
   证明: by
   rw [limsSup]
@@ -92,7 +92,7 @@ lemma limsInf_of_not_isCobounded
 
 中文:
 引理 limsInf_of_not_isCobounded
-  条件: {f : Filter 实数} (hf : ¬ f.IsCobounded (· >= ·))
+  条件: {f : 滤子 实数} (hf : ¬ f.IsCobounded (· >= ·))
   证明: by rwa [limsInf, sSup_of_not_bddAbove]
 
 @[simp]
@@ -119,7 +119,7 @@ lemma limsInf_of_not_isBounded
 
 中文:
 引理 limsInf_of_not_isBounded
-  条件: {f : Filter 实数} (hf : ¬ f.IsBounded (· >= ·))
+  条件: {f : 滤子 实数} (hf : ¬ f.IsBounded (· >= ·))
   结论: limsInf f = 0
   证明: by
   rw [limsInf]
@@ -250,7 +250,7 @@ lemma isBoundedUnder_le_toReal
     exact ⟨b, hb⟩
 
 中文:
-引理 isBoundedUnder_le_toReal
+引理 isBoundedUnder_le_to实数
   证明: by
   simp only [IsBoundedUnder, IsBounded, eventually_map, ← coe_le_coe, NNReal.exists, coe_mk]
   constructor
@@ -282,7 +282,7 @@ lemma isBoundedUnder_ge_toReal
     exact ⟨b, hb⟩
 
 中文:
-引理 isBoundedUnder_ge_toReal
+引理 isBoundedUnder_ge_to实数
   证明: by
   simp only [IsBoundedUnder, IsBounded, eventually_map, ← coe_le_coe, NNReal.exists, coe_mk]
   constructor
@@ -316,7 +316,7 @@ lemma isCoboundedUnder_le_toReal
     exact ⟨b, fun x hx => hb _ (hx.exists.choose_spec.trans' (by
 
 中文:
-引理 isCoboundedUnder_le_toReal
+引理 isCoboundedUnder_le_to实数
   条件: [f.NeBot]
   证明: by
   simp only [IsCoboundedUnder, IsCobounded, eventually_map, ← coe_le_coe, NNReal.forall,
@@ -354,7 +354,7 @@ lemma isCoboundedUnder_ge_toReal
     · exact hx₀.t
 
 中文:
-引理 isCoboundedUnder_ge_toReal
+引理 isCoboundedUnder_ge_to实数
   证明: by
   simp only [IsCoboundedUnder, IsCobounded, eventually_map, ← coe_le_coe, NNReal.forall,
     NNReal.exists]
@@ -396,7 +396,7 @@ lemma limsSup_of_not_isBounded
 
 中文:
 引理 limsSup_of_not_isBounded
-  条件: {f : Filter 实数>=0} (hf : ¬ f.IsBounded (· <= ·))
+  条件: {f : 滤子 实数>=0} (hf : ¬ f.IsBounded (· <= ·))
   结论: limsSup f = 0
   证明: by
   rw [limsSup]; rw [← bot_eq_zero]
@@ -425,7 +425,7 @@ lemma limsInf_of_not_isCobounded
 
 中文:
 引理 limsInf_of_not_isCobounded
-  条件: {f : Filter 实数>=0} (hf : ¬ f.IsCobounded (· >= ·))
+  条件: {f : 滤子 实数>=0} (hf : ¬ f.IsCobounded (· >= ·))
   证明: by rwa [limsInf, sSup_of_not_bddAbove]
 
 @[simp]
@@ -500,7 +500,7 @@ lemma toReal_liminf
   simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_
 
 中文:
-引理 toReal_liminf
+引理 to实数_liminf
   结论: liminf (fun i => (u i : 实数)) f = liminf u f
   证明: by
   by_cases hf : f.IsCoboundedUnder (· >= ·) u; swap
@@ -538,7 +538,7 @@ lemma toReal_limsup
   rw [← Real.toNNReal_le_iff_le_coe]; rw [le_limsup_iff (by simpa) (b
 
 中文:
-引理 toReal_limsup
+引理 to实数_limsup
   结论: limsup (fun i => (u i : 实数)) f = limsup u f
   证明: by
   obtain rfl | hf := f.eq_or_neBot
@@ -580,7 +580,7 @@ theorem eventually_le_limsup
 
 中文:
 定理 eventually_le_limsup
-  条件: [Countable整数erFilter f] (u : α -> 实数>=0∞)
+  条件: [余untable整数erFilter f] (u : α -> 实数>=0∞)
   证明: _root_.eventually_le_limsup
 
 Depends on / 依赖: _root_, _root_.eventually_le_limsup, eventually_le_limsup
@@ -599,7 +599,7 @@ theorem limsup_eq_zero_iff
 
 中文:
 定理 limsup_eq_zero_iff
-  条件: [Countable整数erFilter f] {u : α -> 实数>=0∞}
+  条件: [余untable整数erFilter f] {u : α -> 实数>=0∞}
   证明: limsup_eq_bot
 
 Depends on / 依赖: limsup_eq_bot
@@ -784,7 +784,7 @@ theorem limsup_const_mul
 
 中文:
 定理 limsup_const_mul
-  条件: [Countable整数erFilter f] {u : α -> 实数>=0∞} {a : 实数>=0∞}
+  条件: [余untable整数erFilter f] {u : α -> 实数>=0∞} {a : 实数>=0∞}
   证明: by
   by_cases! ha_top : a != ⊤
   · exact limsup_const_mul_of_ne_top ha_top
@@ -825,7 +825,7 @@ theorem limsup_mul_const
 
 中文:
 定理 limsup_mul_const
-  条件: [Countable整数erFilter f] {u : α -> 实数>=0∞} {a : 实数>=0∞}
+  条件: [余untable整数erFilter f] {u : α -> 实数>=0∞} {a : 实数>=0∞}
   证明: by
   simpa [mul_comm] using limsup_const_mul
 
@@ -849,7 +849,7 @@ theorem limsup_mul_le
 
 中文:
 定理 limsup_mul_le
-  条件: [Countable整数erFilter f] (u v : α -> 实数>=0∞)
+  条件: [余untable整数erFilter f] (u v : α -> 实数>=0∞)
   证明: calc
     f.limsup (u * v) <= f.limsup fun x => f.limsup u * v x := by
       refine limsup_le_limsup ?_
@@ -877,7 +877,7 @@ theorem limsup_add_le
 
 中文:
 定理 limsup_add_le
-  条件: [Countable整数erFilter f] (u v : α -> 实数>=0∞)
+  条件: [余untable整数erFilter f] (u v : α -> 实数>=0∞)
   证明: sInf_le ((eventually_le_limsup u).mp
     ((eventually_le_limsup v).mono fun _ hxg hxf => add_le_add hxf hxg))
 
@@ -901,7 +901,7 @@ sInf_le h1.mono fun x hx => Filter.liminf_le_liminf (Filter.Eventually.of_forall
 
 中文:
 定理 limsup_liminf_le_liminf_limsup
-  结论: {β} [Countable β] {f : Filter α} [Countable整数erFilter f]
+  结论: {β} [可数 β] {f : 滤子 α} [余untable整数erFilter f]
   证明: have h1 : forallᶠ a in f, forall b, u a b <= f.limsup fun a' => u a' b := by
     rw [eventually_countable_forall]
     exact fun b => ENNReal.eventually_le_limsup fun a => u a b
@@ -936,7 +936,7 @@ lemma ofReal_limsup
     · simpa [ofReal_of_nonp
 
 中文:
-引理 ofReal_limsup
+引理 of实数_limsup
   结论: {u : α -> 实数}
   证明: by
   refine ENNReal.eq_of_forall_le_nnreal_iff fun r => ?_
@@ -985,7 +985,7 @@ IsCoboundedUnder.of_frequently_ge .of_forall fun _ => by positivity
     e
 
 中文:
-引理 ofReal_limsup_toReal
+引理 of实数_limsup_to实数
   条件: [f.NeBot] {u : α -> 实数>=0∞} {C : 实数>=0} (hf : 对任意ᶠ a in f, u a <= C)
   证明: by
   have h₁ : IsCoboundedUnder (· <= ·) f (fun a => (u a).toReal) :=
@@ -1025,7 +1025,7 @@ lemma toReal_limsup
    
 
 中文:
-引理 toReal_limsup
+引理 to实数_limsup
   结论: {u : α -> 实数>=0∞} (h₁ : 对任意ᶠ a in f, u a != ∞)
   证明: by
   obtain rfl | hf := f.eq_or_neBot

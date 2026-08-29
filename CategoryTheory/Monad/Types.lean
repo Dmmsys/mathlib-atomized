@@ -49,7 +49,7 @@ definition ofTypeMonad
 
 中文:
 定义 ofTypeMonad
-  签名: : Monad (类型u) where
+  签名: : 单子 (类型u) where
   定义体: ofTypeFunctor m
   η := ⟨fun X => ↾(@pure m _ X), fun _ _ f => by
     ext x; exact (LawfulApplicative.map_pure f x).symm⟩

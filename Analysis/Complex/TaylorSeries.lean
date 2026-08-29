@@ -115,7 +115,7 @@ lemma taylorSeries_eq_on_ball'
 
 中文:
 引理 taylorSeries_eq_on_ball'
-  条件: {f : Complex -> Complex} (hf : DifferentiableOn Complex f (Metric.ball c r))
+  条件: {f : 复形 -> 复形} (hf : DifferentiableOn 复形 f (Metric.ball c r))
   证明: by
   convert! taylorSeries_eq_on_ball hf hz using 3 with n
   rw [mul_right_comm]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
@@ -223,7 +223,7 @@ alias taylorSeries_eq_on_emetric_ball' := taylorSeries_eq_on_eball'
 
 中文:
 引理 taylorSeries_eq_on_eball'
-  条件: {f : Complex -> Complex} (hf : DifferentiableOn Complex f (Metric.eball c r))
+  条件: {f : 复形 -> 复形} (hf : DifferentiableOn 复形 f (Metric.eball c r))
   证明: by
   convert! taylorSeries_eq_on_eball hf hz using 3 with n
   rw [mul_right_comm]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
@@ -302,7 +302,7 @@ lemma taylorSeries_eq_of_entire'
 
 中文:
 引理 taylorSeries_eq_of_entire'
-  条件: {f : Complex -> Complex} (hf : Differentiable Complex f)
+  条件: {f : 复形 -> 复形} (hf : 可微 复形 f)
   证明: by
   convert! taylorSeries_eq_of_entire hf c z using 3 with n
   rw [mul_right_comm]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]

@@ -42,9 +42,9 @@ structure CompactlySupportedContinuousMap
     - hasCompactSupport' : HasCompactSupport toFun
 
 中文:
-结构 CompactlySupportedContinuousMap
-  参数: (α β : 类型) [TopologicalSpace α] [Zero β]
-  继承: ContinuousMap α β
+结构 余mpactlySupportedContinuous映射
+  参数: (α β : 类型) [拓扑空间 α] [零 β]
+  继承: 连续映射 α β
   公理与运算 (1 个):
     - hasCompactSupport' : HasCompactSupport toFun
 -/
@@ -75,9 +75,9 @@ class CompactlySupportedContinuousMapClass
     - hasCompactSupport((f : F)) : HasCompactSupport f
 
 中文:
-类 CompactlySupportedContinuousMapClass
+类 余mpactlySupportedContinuous映射类
   参数: (F : 类型) (α β : outParam <| 类型)
-  继承: ContinuousMapClass F α β
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
     - hasCompactSupport((f : F)) : HasCompactSupport f
 -/
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike C_c(α, β) α β
+  签名: 函数状 C_c(α, β) α β
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactlySupportedContinuousMapClass C_c(α, β) α β
+  签名: 余mpactlySupportedContinuous映射类 C_c(α, β) α β
   定义体: f.continuous_toFun
   hasCompactSupport f := f.hasCompactSupport'
 
@@ -322,7 +322,7 @@ theorem eq_of_empty
 
 中文:
 定理 eq_of_empty
-  条件: [IsEmpty α] (f g : C_c(α, β))
+  条件: [是空 α] (f g : C_c(α, β))
   结论: f = g
   证明: ext IsEmpty.elim ‹_›
 
@@ -345,7 +345,7 @@ definition continuousMapEquiv
 
 中文:
 定义 continuousMapEquiv
-  签名: [CompactSpace α]
+  签名: [紧空间 α]
   定义体: { toFun := f
       hasCompactSupport' := HasCompactSupport.of_compactSpace f }
   invFun f := f
@@ -462,7 +462,7 @@ definition toBoundedContinuousFunction
 
 中文:
 定义 toBoundedContinuousFunction
-  签名: {β : 类型} [PseudoMetricSpace β] [Zero β]
+  签名: {β : 类型} [伪度量空间 β] [零 β]
   定义体: f
   map_bounded' := by
     have : IsCompact (Set.range f) := f.hasCompactSupport.isCompact_range f.continuous
@@ -501,8 +501,8 @@ instance [Zero
             hasCompactSupport' := by simp [HasCompactSupport, tsupport] }
 
 中文:
-实例 [Zero
-  签名: β] : Zero C_c(α, β) where
+实例 [零
+  签名: β] : 零 C_c(α, β) where
   定义体: { toFun := (0 : C(α, β))
             continuous_toFun := (0 : C(α, β)).2
             hasCompactSupport' := by simp [HasCompactSupport, tsupport] }
@@ -523,8 +523,8 @@ instance [Zero
 @[simp]
 
 中文:
-实例 [Zero
-  签名: β] : Inhabited C_c(α, β)
+实例 [零
+  签名: β] : 可居 C_c(α, β)
   定义体: ⟨0⟩
 
 @[simp]
@@ -544,7 +544,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  条件: [Zero β]
+  条件: [零 β]
   结论: ⇑(0 : C_c(α, β)) = 0
   证明: rfl
 -/
@@ -562,7 +562,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [Zero β]
+  条件: [零 β]
   结论: (0 : C_c(α, β)) x = 0
   证明: rfl
 -/
@@ -580,8 +580,8 @@ instance [MulZeroClass
 @[simp]
 
 中文:
-实例 [MulZeroClass
-  签名: β] [ContinuousMul β] : Mul C_c(α, β)
+实例 [乘零类
+  签名: β] [连续乘法 β] : 乘法 C_c(α, β)
   定义体: ⟨fun f g => ⟨f * g, HasCompactSupport.mul_left g.2⟩⟩
 
 @[simp]
@@ -603,7 +603,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β))
+  条件: [乘零类 β] [连续乘法 β] (f g : C_c(α, β))
   结论: ⇑(f * g) = f * g
   证明: rfl
 -/
@@ -621,7 +621,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β))
+  条件: [乘零类 β] [连续乘法 β] (f g : C_c(α, β))
   结论: (f * g) x = f x * g x
   证明: rfl
 -/
@@ -639,8 +639,8 @@ instance [Zero
 @[simp]
 
 中文:
-实例 [Zero
-  签名: β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
+实例 [零
+  签名: β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
   定义体: ⟨⟨fun x => f x • g x, (map_continuous f).smul (map_continuous g)⟩, g.hasCompactSupport.smul_left⟩
 
 @[simp]
@@ -663,7 +663,7 @@ theorem coe_smulc
 
 中文:
 定理 coe_smulc
-  结论: [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
+  结论: [零 β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
   证明: rfl
 -/
 theorem coe_smulc [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
@@ -681,7 +681,7 @@ theorem smulc_apply
 
 中文:
 定理 smulc_apply
-  结论: [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
+  结论: [零 β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
   证明: rfl
 -/
 theorem smulc_apply [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
@@ -699,8 +699,8 @@ instance [MulZeroClass
   DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
 
 中文:
-实例 [MulZeroClass
-  签名: β] [ContinuousMul β] : MulZeroClass C_c(α, β)
+实例 [乘零类
+  签名: β] [连续乘法 β] : 乘零类 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
 
@@ -719,8 +719,8 @@ instance [SemigroupWithZero
   DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
 
 中文:
-实例 [SemigroupWithZero
-  签名: β] [ContinuousMul β] :
+实例 [带零半群
+  签名: β] [连续乘法 β] :
   定义体: fast_instance%
   DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
 
@@ -741,8 +741,8 @@ instance [AddZeroClass
 @[simp]
 
 中文:
-实例 [AddZeroClass
-  签名: β] [ContinuousAdd β] : Add C_c(α, β)
+实例 [加法零类
+  签名: β] [连续加法 β] : 加法 C_c(α, β)
   定义体: ⟨fun f g => ⟨f + g, HasCompactSupport.add f.2 g.2⟩⟩
 
 @[simp]
@@ -764,7 +764,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β))
+  条件: [加法零类 β] [连续加法 β] (f g : C_c(α, β))
   结论: ⇑(f + g) = f + g
   证明: rfl
 -/
@@ -782,7 +782,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β))
+  条件: [加法零类 β] [连续加法 β] (f g : C_c(α, β))
   结论: (f + g) x = f x + g x
   证明: rfl
 -/
@@ -799,8 +799,8 @@ instance [AddZeroClass
   DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
 中文:
-实例 [AddZeroClass
-  签名: β] [ContinuousAdd β] : AddZeroClass C_c(α, β)
+实例 [加法零类
+  签名: β] [连续加法 β] : 加法零类 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
@@ -821,7 +821,7 @@ definition coeFnMonoidHom
 
 中文:
 定义 coeFnMonoidHom
-  签名: [AddMonoid β] [ContinuousAdd β]
+  签名: [加法幺半群 β] [连续加法 β]
   定义体: f
   map_zero' := coe_zero
   map_add' := coe_add
@@ -843,7 +843,7 @@ instance [Zero
 @[simp, norm_cast]
 
 中文:
-实例 [Zero
+实例 [零
   签名: β] {R
   定义体: fast_instance%
   ⟨fun r f => ⟨⟨r • ⇑f, (map_continuous f).const_smul r⟩, HasCompactSupport.smul_left f.2⟩⟩
@@ -867,7 +867,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  结论: [Zero β] {R : 类型} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
+  结论: [零 β] {R : 类型} [SMulZero类 R β] [连续常数标量乘法 R β] (r : R)
   证明: rfl
 -/
 theorem coe_smul [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
@@ -884,7 +884,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  结论: [Zero β] {R : 类型} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
+  结论: [零 β] {R : 类型} [SMulZero类 R β] [连续常数标量乘法 R β] (r : R)
   证明: rfl
 -/
 theorem smul_apply [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
@@ -903,8 +903,8 @@ instance [AddMonoid
   DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
 中文:
-实例 [AddMonoid
-  签名: β] [ContinuousAdd β] : AddMonoid C_c(α, β)
+实例 [加法幺半群
+  签名: β] [连续加法 β] : 加法幺半群 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
@@ -927,8 +927,8 @@ instance [AddCommMonoid
 @[simp]
 
 中文:
-实例 [AddCommMonoid
-  签名: β] [ContinuousAdd β] : AddCommMonoid C_c(α, β)
+实例 [加法交换幺半群
+  签名: β] [连续加法 β] : 加法交换幺半群 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
@@ -950,7 +950,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: [AddCommMonoid β] [ContinuousAdd β] {ι : 类型} (s : Finset ι) (f : ι -> C_c(α, β))
+  条件: [加法交换幺半群 β] [连续加法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C_c(α, β))
   证明: map_sum coeFnMonoidHom f s
 
 Depends on / 依赖: coeFnMonoidHom, map_sum
@@ -969,7 +969,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  结论: [AddCommMonoid β] [ContinuousAdd β] {ι : 类型} (s : Finset ι) (f : ι -> C_c(α, β))
+  结论: [加法交换幺半群 β] [连续加法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C_c(α, β))
   证明: by simp
 -/
 theorem sum_apply [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β))
@@ -993,7 +993,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg C_c(α, β)
+  签名: 取负 C_c(α, β)
   定义体: { toFun := -f.1
              continuous_toFun := map_continuous (-f.1)
              hasCompactSupport' := by simpa [HasCompactSupport, tsupport] using f.2 }
@@ -1053,7 +1053,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub C_c(α, β)
+  签名: 减法 C_c(α, β)
   定义体: { toFun := f.1 - g.1
                continuous_toFun := map_continuous (f.1 - g.1)
                hasCompactSupport' := by
@@ -1111,7 +1111,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup C_c(α, β)
+  签名: 加法群 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
@@ -1133,8 +1133,8 @@ instance [AddCommGroup
     rfl
 
 中文:
-实例 [AddCommGroup
-  签名: β] [IsTopologicalAddGroup β] : AddCommGroup C_c(α, β)
+实例 [加法交换群
+  签名: β] [是拓扑加群 β] : 加法交换群 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
     rfl
@@ -1154,7 +1154,7 @@ instance [Zero
   body: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
 
 中文:
-实例 [Zero
+实例 [零
   签名: β] {R
   定义体: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
 
@@ -1174,7 +1174,7 @@ instance [Zero
   Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
 
 中文:
-实例 [Zero
+实例 [零
   签名: β] {R
   定义体: fast_instance%
   Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
@@ -1195,7 +1195,7 @@ instance [Zero
   Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
 
 中文:
-实例 [Zero
+实例 [零
   签名: β] {R
   定义体: fast_instance%
   Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
@@ -1216,8 +1216,8 @@ instance [AddCommMonoid
   Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
 
 中文:
-实例 [AddCommMonoid
-  签名: β] [ContinuousAdd β] {R
+实例 [加法交换幺半群
+  签名: β] [连续加法 β] {R
   定义体: fast_instance%
   Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
 
@@ -1237,8 +1237,8 @@ instance [NonUnitalNonAssocSemiring
   DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: β] [IsTopologicalSemiring β] :
+实例 [非幺非结合半环
+  签名: β] [是TopologicalSemiring β] :
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1258,8 +1258,8 @@ instance [NonUnitalSemiring
   DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalSemiring
-  签名: β] [IsTopologicalSemiring β] :
+实例 [非幺半环
+  签名: β] [是TopologicalSemiring β] :
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1279,8 +1279,8 @@ instance [NonUnitalCommSemiring
   DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: β] [IsTopologicalSemiring β] :
+实例 [非幺交换半环
+  签名: β] [是TopologicalSemiring β] :
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
 
@@ -1301,8 +1301,8 @@ instance [NonUnitalNonAssocRing
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: β] [IsTopologicalRing β] :
+实例 [非幺非结合环
+  签名: β] [是拓扑环 β] :
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1325,8 +1325,8 @@ instance [NonUnitalRing
     fun _ _ => rfl
 
 中文:
-实例 [NonUnitalRing
-  签名: β] [IsTopologicalRing β] : NonUnitalRing C_c(α, β)
+实例 [非幺环
+  签名: β] [是拓扑环 β] : 非幺环 C_c(α, β)
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
@@ -1348,8 +1348,8 @@ instance [NonUnitalCommRing
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommRing
-  签名: β] [IsTopologicalRing β] :
+实例 [非幺交换环
+  签名: β] [是拓扑环 β] :
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1409,7 +1409,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star C_c(α, β)
+  签名: 对合 C_c(α, β)
   定义体: { toFun := fun x => star (f x)
       continuous_toFun := (map_continuous f).star
       hasCompactSupport' := by
@@ -1497,8 +1497,8 @@ instance [ContinuousAdd
   star_add f g := ext fun x => star_add (f x) (g x)
 
 中文:
-实例 [ContinuousAdd
-  签名: β] : StarAddMonoid C_c(α, β) where
+实例 [连续加法
+  签名: β] : StarAdd幺半群 C_c(α, β) where
   定义体: ext fun x => star_star (f x)
   star_add f g := ext fun x => star_add (f x) (g x)
 
@@ -1525,7 +1525,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 𝕜 C_c(α, β)
+  签名: 对合模 𝕜 C_c(α, β)
   定义体: ext fun x => star_smul k (f x)
 
 Depends on / 依赖: star_smul
@@ -1551,7 +1551,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing C_c(α, β)
+  签名: 对合环 C_c(α, β)
   定义体: { CompactlySupportedContinuousMap.instStarAddMonoid with
     star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
 
@@ -1581,7 +1581,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder C_c(α, β)
+  签名: : 偏序 C_c(α, β)
   定义体: fast_instance% PartialOrder.lift (⇑) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective, fast_instance
@@ -1645,7 +1645,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max C_c(α, β) where max f g
+  签名: : 最大值 C_c(α, β) where 最大值 f g
   定义体: { toFun := f ⊔ g
     continuous_toFun := Continuous.sup f.continuous g.continuous
     hasCompactSupport' := f.hasCompactSupport.sup g.hasCompactSupport }
@@ -1723,7 +1723,7 @@ lemma finsetSup'_apply
 
 中文:
 引理 finsetSup'_apply
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α)
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β)) (a : α)
   证明: Finset.apply_sup'_eq_sup'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -1745,7 +1745,7 @@ lemma coe_finsetSup'
 
 中文:
 引理 coe_finsetSup'
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β))
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β))
   证明: by ext; simp [finsetSup'_apply]
 
 Depends on / 依赖: _apply, finsetSup
@@ -1771,7 +1771,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min C_c(α, β) where min f g
+  签名: : 最小值 C_c(α, β) where 最小值 f g
   定义体: { toFun := f ⊓ g
     continuous_toFun := Continuous.inf f.continuous g.continuous
     hasCompactSupport' := f.hasCompactSupport.inf g.hasCompactSupport }
@@ -1849,7 +1849,7 @@ lemma finsetInf'_apply
 
 中文:
 引理 finsetInf'_apply
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α)
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β)) (a : α)
   证明: Finset.apply_inf'_eq_inf'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -1871,7 +1871,7 @@ lemma coe_finsetInf'
 
 中文:
 引理 coe_finsetInf'
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β))
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β))
   证明: by ext; simp [finsetInf'_apply]
 
 Depends on / 依赖: _apply, finsetInf
@@ -1893,8 +1893,8 @@ instance [Lattice
   signature: β] [TopologicalLattice β] [Zero β] : Lattice C_c(α, β) where
 
 中文:
-实例 [Lattice
-  签名: β] [TopologicalLattice β] [Zero β] : Lattice C_c(α, β) where
+实例 [格
+  签名: β] [拓扑格 β] [零 β] : 格 C_c(α, β) where
 -/
 instance [Lattice β] [TopologicalLattice β] [Zero β] : Lattice C_c(α, β) where
 
@@ -1908,7 +1908,7 @@ instance instMulLeftMono
 
 中文:
 实例 instMulLeftMono
-  签名: [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulLeftMono β]
+  签名: [偏序 β] [乘零类 β] [连续乘法 β] [MulLeftMono β]
   定义体: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_right (hg₁₂ x) _⟩
 
 Depends on / 依赖: mul_le_mul_right
@@ -1927,7 +1927,7 @@ instance instMulRightMono
 
 中文:
 实例 instMulRightMono
-  签名: [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulRightMono β]
+  签名: [偏序 β] [乘零类 β] [连续乘法 β] [MulRightMono β]
   定义体: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_left (hg₁₂ x) _⟩
 
 Depends on / 依赖: mul_le_mul_left
@@ -1946,7 +1946,7 @@ instance instAddLeftMono
 
 中文:
 实例 instAddLeftMono
-  签名: [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddLeftMono β]
+  签名: [偏序 β] [加法零类 β] [连续加法 β] [AddLeftMono β]
   定义体: ⟨fun _ _ _ hg₁₂ x => add_le_add_right (hg₁₂ x) _⟩
 
 Depends on / 依赖: add_le_add_right
@@ -1965,7 +1965,7 @@ instance instAddRightMono
 
 中文:
 实例 instAddRightMono
-  签名: [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddRightMono β]
+  签名: [偏序 β] [加法零类 β] [连续加法 β] [AddRightMono β]
   定义体: ⟨fun _ _ _ hg₁₂ x => add_le_add_left (hg₁₂ x) _⟩
 
 Depends on / 依赖: add_le_add_left
@@ -1993,7 +1993,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid C_c(α, β)
+  签名: 是OrderedAdd幺半群 C_c(α, β)
   定义体: add_le_add_left hfg c
 
 Depends on / 依赖: add_le_add_left
@@ -2095,7 +2095,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : C_c(γ, δ))
-  结论: f.comp (CocompactMap.id γ) = f
+  结论: f.comp (余compact映射.id γ) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -2158,7 +2158,7 @@ definition compAddMonoidHom
 
 中文:
 定义 compAddMonoidHom
-  签名: [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ)
+  签名: [加法幺半群 δ] [连续加法 δ] (g : β ->co γ)
   定义体: f.comp g
   map_zero' := zero_comp g
   map_add' _ _ := rfl
@@ -2181,7 +2181,7 @@ definition compMulHom
 
 中文:
 定义 compMulHom
-  签名: [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ)
+  签名: [乘零类 δ] [连续乘法 δ] (g : β ->co γ)
   定义体: f.comp g
   map_mul' _ _ := rfl
 
@@ -2203,7 +2203,7 @@ definition compLinearMap
 
 中文:
 定义 compLinearMap
-  签名: [AddCommMonoid δ] [ContinuousAdd δ] {R : 类型} [Semiring R] [Module R δ]
+  签名: [加法交换幺半群 δ] [连续加法 δ] {R : 类型} [半环 R] [模 R δ]
   定义体: f.comp g
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2230,7 +2230,7 @@ definition compNonUnitalAlgHom
 
 中文:
 定义 compNonUnitalAlgHom
-  签名: {R : 类型} [Semiring R] [NonUnitalNonAssocSemiring δ]
+  签名: {R : 类型} [半环 R] [非幺非结合半环 δ]
   定义体: f.comp g
   map_smul' _ _ := rfl
   map_zero' := rfl
@@ -2269,7 +2269,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC F (CompactlySupportedContinuousMap α β)
+  签名: CoeTC F (余mpactlySupportedContinuous映射 α β)
   定义体: ⟨fun f =>
     { toFun := f
       continuous_toFun := map_continuous f
@@ -2296,7 +2296,7 @@ lemma of_compactSpace
 
 中文:
 引理 of_compactSpace
-  结论: (G : 类型) [FunLike G α β]
+  结论: (G : 类型) [函数状 G α β]
   证明: map_continuous
   hasCompactSupport := by
     intro f
@@ -2331,7 +2331,7 @@ theorem uniformContinuous
 中文:
 定理 uniformContinuous
   条件: (f : F)
-  结论: UniformContinuous (f : β -> γ)
+  结论: 一致连续 (f : β -> γ)
   证明: (map_continuous f).uniformContinuous_of_tendsto_cocompact
   (HasCompactSupport.is_zero_at_infty (hasCompactSupport f))
 
@@ -2358,7 +2358,7 @@ instance :
 
 中文:
 实例 :
-  签名: ZeroAtInftyContinuousMapClass F β γ
+  签名: ZeroAtInftyContinuous映射类 F β γ
   定义体: HasCompactSupport.is_zero_at_infty (hasCompactSupport f)
 
 Depends on / 依赖: HasCompactSupport, HasCompactSupport.is_zero_at_infty, hasCompactSupport, is_zero_at_infty
@@ -2394,7 +2394,7 @@ lemma exists_add_of_le
     simp only [ContinuousMap.toFun_eq_coe, coe_toContin
 
 中文:
-引理 exists_add_of_le
+引理 存在_add_of_le
   条件: {f₁ f₂ : C_c(α, 实数>=0)} (h : f₁ <= f₂)
   结论: 存在 (g : C_c(α, 实数>=0)),
   证明: by
@@ -2602,7 +2602,7 @@ lemma exists_add_nnrealPart_add_eq
     Real.coe_toNNReal'
 
 中文:
-引理 exists_add_nnrealPart_add_eq
+引理 存在_add_nnrealPart_add_eq
   条件: (f g : C_c(α, 实数))
   结论: 存在 (h : C_c(α, 实数>=0)),
   证明: by
@@ -2639,7 +2639,7 @@ definition toReal
   body: f.compLeft ContinuousMap.coeNNRealReal
 
 中文:
-定义 toReal
+定义 to实数
   签名: (f : C_c(α, 实数>=0))
   定义体: f.compLeft ContinuousMap.coeNNRealReal
 
@@ -2658,7 +2658,7 @@ lemma toReal_apply
   proof: compLeft_apply rfl _ _
 
 中文:
-引理 toReal_apply
+引理 to实数_apply
   条件: (f : C_c(α, 实数>=0)) (x : α)
   结论: f.to实数 x = f x
   证明: compLeft_apply rfl _ _
@@ -2674,7 +2674,7 @@ lemma toReal_nonneg
   proof: fun _ => by simp
 
 中文:
-引理 toReal_nonneg
+引理 to实数_nonneg
   条件: {f : C_c(α, 实数>=0)}
   结论: 0 <= f.to实数
   证明: fun _ => by simp
@@ -2690,7 +2690,7 @@ lemma toReal_add
   proof: by ext; simp
 
 中文:
-引理 toReal_add
+引理 to实数_add
   条件: (f g : C_c(α, 实数>=0))
   结论: (f + g).to实数 = f.to实数 + g.to实数
   证明: by ext; simp
@@ -2709,7 +2709,7 @@ lemma toReal_smul
 @[simp]
 
 中文:
-引理 toReal_smul
+引理 to实数_smul
   条件: (r : 实数>=0) (f : C_c(α, 实数>=0))
   结论: (r • f).to实数 = r • f.to实数
   证明: by
@@ -2750,7 +2750,7 @@ definition toRealLinearMap
 @[simp, norm_cast]
 
 中文:
-定义 toRealLinearMap
+定义 to实数LinearMap
   签名: : C_c(α, 实数>=0) ->ₗ[实数>=0] C_c(α, 实数) where
   定义体: toReal
   map_add' f g := by ext x; simp
@@ -2775,7 +2775,7 @@ lemma coe_toRealLinearMap
   proof: rfl
 
 中文:
-引理 coe_toRealLinearMap
+引理 coe_to实数LinearMap
   结论: (to实数LinearMap : C_c(α, 实数>=0) -> C_c(α, 实数)) = to实数
   证明: rfl
 -/
@@ -2791,7 +2791,7 @@ lemma toRealLinearMap_apply
   proof: rfl
 
 中文:
-引理 toRealLinearMap_apply
+引理 to实数LinearMap_apply
   条件: (f : C_c(α, 实数>=0))
   结论: to实数LinearMap f = f.to实数
   证明: rfl
@@ -2809,7 +2809,7 @@ lemma toRealLinearMap_apply_apply
 @[simp]
 
 中文:
-引理 toRealLinearMap_apply_apply
+引理 to实数LinearMap_apply_apply
   条件: (f : C_c(α, 实数>=0)) (x : α)
   证明: by simp
 
@@ -2831,7 +2831,7 @@ lemma nnrealPart_toReal_eq
 @[simp]
 
 中文:
-引理 nnrealPart_toReal_eq
+引理 nnrealPart_to实数_eq
   条件: (f : C_c(α, 实数>=0))
   结论: nnrealPart (to实数 f) = f
   证明: by ext x; simp
@@ -2851,7 +2851,7 @@ lemma nnrealPart_neg_toReal_eq
   proof: by ext x; simp
 
 中文:
-引理 nnrealPart_neg_toReal_eq
+引理 nnrealPart_neg_to实数_eq
   条件: (f : C_c(α, 实数>=0))
   结论: nnrealPart (-to实数 f) = 0
   证明: by ext x; simp
@@ -2873,7 +2873,7 @@ definition toNNRealLinear
 @[simp]
 
 中文:
-定义 toNNRealLinear
+定义 toNN实数Linear
   签名: (Λ : C_c(α, 实数) ->ₚ[实数] 实数)
   定义体: .mk (Λ (toRealLinearMap f)) (Λ.map_nonneg (by simp))
   map_add' f g := by simp; rfl
@@ -2901,7 +2901,7 @@ lemma toNNRealLinear_apply
 @[simp]
 
 中文:
-引理 toNNRealLinear_apply
+引理 toNN实数Linear_apply
   条件: (Λ : C_c(α, 实数) ->ₚ[实数] 实数) (f : C_c(α, 实数>=0))
   证明: rfl
 
@@ -2925,7 +2925,7 @@ lemma toNNRealLinear_inj
   simp_rw [map_sub, h]
 
 中文:
-引理 toNNRealLinear_inj
+引理 toNN实数Linear_inj
   条件: (Λ₁ Λ₂ : C_c(α, 实数) ->ₚ[实数] 实数)
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [h]⟩
@@ -2963,7 +2963,7 @@ definition toRealPositiveLinear
         rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← s
 
 中文:
-定义 toRealPositiveLinear
+定义 to实数PositiveLinear
   签名: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0)
   定义体: PositiveLinearMap.mk₀
     { toFun := fun f => Λ (nnrealPart f) - Λ (nnrealPart (- f))
@@ -3005,7 +3005,7 @@ lemma toRealPositiveLinear_apply
 @[simp]
 
 中文:
-引理 toRealPositiveLinear_apply
+引理 to实数PositiveLinear_apply
   条件: {Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0} (f : C_c(α, 实数))
   证明: rfl
 
@@ -3027,7 +3027,7 @@ lemma eq_toRealPositiveLinear_toReal
 @[simp]
 
 中文:
-引理 eq_toRealPositiveLinear_toReal
+引理 eq_to实数PositiveLinear_to实数
   条件: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0) (f : C_c(α, 实数>=0))
   证明: by
   simp [toRealPositiveLinear_apply]
@@ -3052,7 +3052,7 @@ lemma eq_toNNRealLinear_toRealPositiveLinear
   simp
 
 中文:
-引理 eq_toNNRealLinear_toRealPositiveLinear
+引理 eq_toNN实数Linear_to实数PositiveLinear
   条件: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0)
   证明: by
   ext f
@@ -3090,7 +3090,7 @@ definition pullback_monoidHom
 
 中文:
 定义 pullback_monoidHom
-  签名: (f : CompactlySupportedContinuousMap β γ) (b : β)
+  签名: (f : 余mpactlySupportedContinuous映射 β γ) (b : β)
   定义体: f (b * φ a)
   hasCompactSupport' := by
     obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
@@ -3119,7 +3119,7 @@ theorem pullback_monoidHom_def
 
 中文:
 定理 pullback_monoidHom_def
-  条件: (f : CompactlySupportedContinuousMap β γ) (b : β) (a : α)
+  条件: (f : 余mpactlySupportedContinuous映射 β γ) (b : β) (a : α)
   证明: rfl
 -/
 theorem pullback_monoidHom_def (f : CompactlySupportedContinuousMap β γ) (b : β) (a : α) :

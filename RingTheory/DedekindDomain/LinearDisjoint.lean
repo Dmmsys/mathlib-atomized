@@ -57,8 +57,8 @@ theorem Submodule.traceDual_le_span_map_traceDual
   have h_main : x 
 
 中文:
-定理 Submodule.traceDual_le_span_map_traceDual
-  结论: [Module.Free A R₂]
+定理 子模.traceDual_le_span_map_traceDual
+  结论: [模.自由 A R₂]
   证明: by
   intro x hx
   have h₂' : F₁.toSubalgebra ⊔ F₂.toSubalgebra = ⊤ := by
@@ -119,7 +119,7 @@ theorem differentIdeal_dvd_map_differentIdeal
 
 中文:
 定理 differentIdeal_dvd_map_differentIdeal
-  结论: [Algebra.Is整数egral R₂ B]
+  结论: [代数.是整 R₂ B]
   证明: by
   have : Algebra.IsSeparable (FractionRing A) (FractionRing R₂) := by
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
@@ -187,7 +187,7 @@ theorem differentIdeal_eq_map_differentIdeal
 
 中文:
 定理 differentIdeal_eq_map_differentIdeal
-  结论: [Module.Free A R₂] (h₁ : F₁.LinearDisjoint F₂)
+  结论: [模.自由 A R₂] (h₁ : F₁.LinearDisjoint F₂)
   证明: by
   apply dvd_antisymm
   · exact differentIdeal_dvd_map_differentIdeal A B R₁ R₂ h₁ h₂
@@ -253,8 +253,8 @@ theorem Submodule.traceDual_eq_span_map_traceDual_of_linearDisjoint
     exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv 
 
 中文:
-定理 Submodule.traceDual_eq_span_map_traceDual_of_linearDisjoint
-  结论: [Module.Free A R₂]
+定理 子模.traceDual_eq_span_map_traceDual_of_linearDisjoint
+  结论: [模.自由 A R₂]
   证明: by
   have : Algebra.IsSeparable (FractionRing A) (FractionRing R₂) := by
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
@@ -312,7 +312,7 @@ congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).du
 
 中文:
 定理 ofIsCoprimeDifferentIdeal_aux
-  结论: [Module.Free A R₂]
+  结论: [模.自由 A R₂]
   证明: by
   classical
   have h₂' : F₁ ⊔ F₂ = ⊤ := by
@@ -475,7 +475,7 @@ theorem adjoin_union_eq_top_of_isCoprime_differentialIdeal
 
 中文:
 定理 adjoin_union_eq_top_of_isCoprime_differentialIdeal
-  结论: [Module.Free A R₂]
+  结论: [模.自由 A R₂]
   证明: by
   rw [Algebra.adjoin_union]; rw [← IsScalarTower.coe_toAlgHom' A R₁]; rw [← IsScalarTower.coe_toAlgHom' A R₂]; rw [← AlgHom.map_adjoin]; rw [hs]; rw [← AlgHom.map_adjoin]; rw [ht]; rw [Algebra.map_top]; rw [Algebra.map_top]
   exact range_sup_range_eq_top_of_isCoprime_differentIdeal A B R₁ R₂ h₁ h

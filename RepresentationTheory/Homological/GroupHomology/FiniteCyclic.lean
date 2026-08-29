@@ -69,7 +69,7 @@ definition coinvariantsTensorResolutionIso
 
 中文:
 定义 coinvariantsTensorResolutionIso
-  签名: (hg : 对任意 x, x in Subgroup.zpowers g)
+  签名: (hg : 对任意 x, x in 子群.zpowers g)
   定义体: HomologicalComplex.Hom.isoOfComponents
     (fun _ => (coinvariantsTprodLeftRegularLEquiv A.ρ).toModuleIso) fun i j h =>
     coinvariantsTensor_hom_ext (LinearMap.ext fun a =>
@@ -107,7 +107,7 @@ abbreviation groupHomologyIso₀
 
 中文:
 缩写 groupHomologyIso₀
-  签名: (hg : 对任意 x, x in Subgroup.zpowers g)
+  签名: (hg : 对任意 x, x in 子群.zpowers g)
   定义体: groupHomology.H0Iso A ≪≫ (Submodule.quotEquivOfEq _ _ (by
     simp [Representation.FiniteCyclicGroup.coinvariantsKer_eq_range A.ρ g hg, sub_hom,
       Rep.applyAsHom])).toModuleIso
@@ -188,7 +188,7 @@ lemma groupHomologyπEven_eq_zero_iff
 
 中文:
 引理 groupHomologyπEven_eq_zero_iff
-  结论: (hg : 对任意 x, x in Subgroup.zpowers g)
+  结论: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   simp [sub_hom, groupHomologyπEven, map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1
     inferInstance), ShortComplex.moduleCatToCycles, -LinearMap.mem_range, Rep.applyAsHom, Rep.norm,
@@ -215,7 +215,7 @@ lemma groupHomologyπEven_eq_iff
 
 中文:
 引理 groupHomologyπEven_eq_iff
-  结论: (hg : 对任意 x, x in Subgroup.zpowers g)
+  结论: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   rw [← sub_eq_zero]; rw [← map_sub]; rw [groupHomologyπEven_eq_zero_iff]; rw [AddSubgroupClass.coe_sub]
 
@@ -240,7 +240,7 @@ definition groupHomologyIsoOdd
 
 中文:
 定义 groupHomologyIsoOdd
-  签名: (hg : 对任意 x, x in Subgroup.zpowers g) (i : 自然数) (hi : Odd i)
+  签名: (hg : 对任意 x, x in 子群.zpowers g) (i : 自然数) (hi : Odd i)
   定义体: groupHomologyIso A i (resolution k g⁻¹ <| (@Subgroup.zpowers_inv G ..).symm ▸ hg) ≪≫
   (HomologicalComplex.homologyMapIso (coinvariantsTensorResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoOdd (ModuleCat.of k A.V) (by ext; simp [sub_hom,
@@ -267,7 +267,7 @@ abbreviation groupHomologyπOdd
 
 中文:
 缩写 groupHomologyπOdd
-  签名: (hg : 对任意 x, x in Subgroup.zpowers g) (i : 自然数) (hi : Odd i)
+  签名: (hg : 对任意 x, x in 子群.zpowers g) (i : 自然数) (hi : Odd i)
   定义体: (ShortComplex.moduleCatCyclesIso <| normHomCompSub A g).inv ≫
     ShortComplex.homologyπ _ ≫ (groupHomologyIsoOdd A g hg i hi).inv
 
@@ -292,7 +292,7 @@ lemma groupHomologyπOdd_eq_zero_iff
 
 中文:
 引理 groupHomologyπOdd_eq_zero_iff
-  结论: (hg : 对任意 x, x in Subgroup.zpowers g)
+  结论: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   simp [groupHomologyπOdd, map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance),
     ShortComplex.moduleCatToCycles, -LinearMap.mem_range, Rep.norm, LinearMap.range_codRestrict]
@@ -316,7 +316,7 @@ lemma groupHomologyπOdd_eq_iff
 
 中文:
 引理 groupHomologyπOdd_eq_iff
-  结论: (g : G) (hg : 对任意 x, x in Subgroup.zpowers g)
+  结论: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   rw [← sub_eq_zero]; rw [← map_sub]; rw [groupHomologyπOdd_eq_zero_iff]; rw [AddSubgroupClass.coe_sub]
 

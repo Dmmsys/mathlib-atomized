@@ -74,7 +74,7 @@ theorem ofScalars_eq_zero
 
 中文:
 定理 ofScalars_eq_zero
-  条件: [Nontrivial E] (n : 自然数)
+  条件: [非平凡 E] (n : 自然数)
   结论: ofScalars E c n = 0 ↔ c n = 0
   证明: by
   rw [ofScalars]; rw [smul_eq_zero]
@@ -132,7 +132,7 @@ theorem ofScalars_series_eq_zero
 
 中文:
 定理 ofScalars_series_eq_zero
-  条件: [Nontrivial E]
+  条件: [非平凡 E]
   结论: ofScalars E c = 0 ↔ c = 0
   证明: by
   simp [FormalMultilinearSeries.ext_iff, funext_iff]
@@ -182,7 +182,7 @@ theorem ofScalars_series_of_subsingleton
 
 中文:
 定理 ofScalars_series_of_subsingleton
-  条件: [Subsingleton E]
+  条件: [子单例 E]
   结论: ofScalars E c = 0
   证明: by
   simp_rw [FormalMultilinearSeries.ext_iff, ofScalars, ContinuousMultilinearMap.ext_iff]
@@ -209,8 +209,8 @@ theorem ofScalars_series_injective
 
 中文:
 定理 ofScalars_series_injective
-  条件: [Nontrivial E]
-  结论: Function.Injective (ofScalars E (𝕜 := 𝕜))
+  条件: [非平凡 E]
+  结论: 函数.单射 (ofScalars E (𝕜 := 𝕜))
   证明: by
   intro _ _ h
   ext n
@@ -236,7 +236,7 @@ theorem ofScalars_series_eq_iff
 
 中文:
 定理 ofScalars_series_eq_iff
-  条件: [Nontrivial E] (c' : 自然数 -> 𝕜)
+  条件: [非平凡 E] (c' : 自然数 -> 𝕜)
   证明: ⟨fun e => ofScalars_series_injective 𝕜 E e, _root_.congrArg _⟩
 
 Depends on / 依赖: _root_, _root_.congrArg, ofScalars_series_injective
@@ -429,7 +429,7 @@ definition ofScalarsSubmodule
 
 中文:
 定义 ofScalarsSubmodule
-  签名: : Submodule 𝕜 (FormalMultilinearSeries 𝕜 E E) where
+  签名: : 子模 𝕜 (FormalMultilinearSeries 𝕜 E E) where
   定义体: {ofScalars E f | f}
   add_mem' := fun ⟨c, hc⟩ ⟨c', hc'⟩ => ⟨c + c', hc' ▸ hc ▸ ofScalars_add E c c'⟩
   zero_mem' := ⟨0, ofScalars_series_eq_zero_of_scalar_zero 𝕜 E⟩
@@ -584,7 +584,7 @@ theorem ofScalarsSum_of_subsingleton
 
 中文:
 定理 ofScalarsSum_of_subsingleton
-  条件: [Subsingleton E] {x : E}
+  条件: [子单例 E] {x : E}
   结论: ofScalarsSum c x = 0
   证明: by
   simp [Subsingleton.eq_zero (α := E)]
@@ -610,7 +610,7 @@ theorem ofScalarsSum_op
 
 中文:
 定理 ofScalarsSum_op
-  条件: [T2Space E] (x : E)
+  条件: [T2空间 E] (x : E)
   证明: by
   simp [ofScalars_sum_eq, ← MulOpposite.op_pow, ← MulOpposite.op_smul, tsum_op]
 
@@ -634,7 +634,7 @@ theorem ofScalarsSum_unop
 
 中文:
 定理 ofScalarsSum_unop
-  条件: [T2Space E] (x : Eᵐᵒᵖ)
+  条件: [T2空间 E] (x : Eᵐᵒᵖ)
   证明: by
   simp [ofScalars_sum_eq, ← MulOpposite.unop_pow, ← MulOpposite.unop_smul, tsum_unop]
 
@@ -714,7 +714,7 @@ theorem ofScalars_norm
 
 中文:
 定理 ofScalars_norm
-  条件: [NormOneClass E]
+  条件: [NormOne类 E]
   结论: ‖ofScalars E c n‖ = ‖c n‖
   证明: by
   simp
@@ -823,7 +823,7 @@ theorem ofScalars_radius_eq_inv_of_tendsto
 
 中文:
 定理 ofScalars_radius_eq_inv_of_tendsto
-  结论: [NormOneClass E] {r : 实数>=0} (hr : r != 0)
+  结论: [NormOne类 E] {r : 实数>=0} (hr : r != 0)
   证明: by
   refine le_antisymm ?_ (inv_le_ofScalars_radius_of_tendsto E c hr hc)
   refine le_of_forall_nnreal_lt (fun r' hr' => ?_)
@@ -861,7 +861,7 @@ theorem ofScalars_radius_eq_of_tendsto
 
 中文:
 定理 ofScalars_radius_eq_of_tendsto
-  结论: [NormOneClass E] {r : NN实数} (hr : r != 0)
+  结论: [NormOne类 E] {r : 非负实数} (hr : r != 0)
   证明: by
   suffices Tendsto (fun n => ‖c n.succ‖ / ‖c n‖) atTop (𝓝 r⁻¹) by
     convert! ofScalars_radius_eq_inv_of_tendsto E c (inv_ne_zero hr) this
@@ -940,7 +940,7 @@ theorem ofScalars_radius_eq_zero_of_tendsto
 
 中文:
 定理 ofScalars_radius_eq_zero_of_tendsto
-  结论: [NormOneClass E]
+  结论: [NormOne类 E]
   证明: by
   suffices (ofScalars E c).radius <= 0 by simp_all
   refine le_of_forall_nnreal_lt (fun r hr => ?_)
@@ -994,8 +994,8 @@ refine Tendsto.congr' ?_ (tendsto_toReal zero_ne_top).comp hc'
 
 
 中文:
-定理 ofScalars_radius_eq_inv_of_tendsto_ENNReal
-  结论: [NormOneClass E] {r : 实数>=0∞}
+定理 ofScalars_radius_eq_inv_of_tendsto_ENN实数
+  结论: [NormOne类 E] {r : 实数>=0∞}
   证明: by
   rcases ENNReal.trichotomy r with (hr | hr | hr)
   · simp_rw [hr, inv_zero] at hc' ⊢

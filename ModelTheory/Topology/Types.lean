@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (T.CompleteType α)
+  签名: 紧空间 (T.余mpleteType α)
   定义体: by
   constructor
   rw [isCompact_iff_ultrafilter_le_nhds]
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: BaireSpace (T.CompleteType α)
+  签名: Baire空间 (T.余mpleteType α)
   定义体: BaireSpace.of_t2Space_locallyCompactSpace
 
 Depends on / 依赖: BaireSpace, BaireSpace.of_t2Space_locallyCompactSpace, of_t2Space_locallyCompactSpace

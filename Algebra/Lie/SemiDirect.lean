@@ -43,7 +43,7 @@ structure SemiDirectSum
 
 中文:
 结构 SemiDirectSum
-  参数: {R : 类型} [CommRing R] (K : 类型) [LieRing K] [LieAlgebra R K]
+  参数: {R : 类型} [交换环 R] (K : 类型) [Lie环 K] [Lie代数 R K]
   公理与运算 (2 个):
     - left : K
     - right : L
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (K ⋊⁅ψ⁆ L)
+  签名: 加法交换群 (K ⋊⁅ψ⁆ L)
   定义体: toProd.addCommGroup
 
 Depends on / 依赖: addCommGroup, toProd, toProd.addCommGroup
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (K ⋊⁅ψ⁆ L)
+  签名: 模 R (K ⋊⁅ψ⁆ L)
   定义体: toProd.module R
 
 Depends on / 依赖: module, toProd, toProd.module
@@ -314,7 +314,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (K ⋊⁅ψ⁆ L)
+  签名: Lie环 (K ⋊⁅ψ⁆ L)
   定义体: by simp; abel
   lie_add _ _ _ := by simp; abel
   lie_self _ := by simp
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra R (K ⋊⁅ψ⁆ L)
+  签名: Lie代数 R (K ⋊⁅ψ⁆ L)
   定义体: by simp [smul_sub, smul_add]
 
 Depends on / 依赖: smul_add, smul_sub
@@ -445,7 +445,7 @@ lemma inl_injective
 
 中文:
 引理 inl_injective
-  结论: Function.Injective (inl ψ)
+  结论: 函数.单射 (inl ψ)
   证明: by intro; simp [inl]
 -/
 lemma inl_injective : Function.Injective (inl ψ) := by intro; simp [inl]
@@ -614,7 +614,7 @@ lemma projr_surjective
 
 中文:
 引理 projr_surjective
-  结论: Function.Surjective (projr ψ)
+  结论: 函数.满射 (projr ψ)
   证明: fun x => ⟨inr ψ x, by simp⟩
 -/
 lemma projr_surjective : Function.Surjective (projr ψ) :=
@@ -632,7 +632,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra.IsExtension (inl ψ) (projr ψ)
+  签名: Lie代数.是扩张 (inl ψ) (projr ψ)
   定义体: by simp [LieHom.ker_eq_bot]
   range_eq_top := by simp [LieHom.range_eq_top]
   exact := by ext ⟨x, y⟩; aesop

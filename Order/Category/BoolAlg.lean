@@ -35,12 +35,12 @@ structure BoolAlg
     - [str : BooleanAlgebra carrier]
 
 中文:
-结构 BoolAlg
+结构 布尔Alg
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型
-    - [str : 布尔eanAlgebra carrier]
+    - [str : 布尔代数 carrier]
 -/
 structure BoolAlg where
   /-- Construct a bundled `BoolAlg` from the underlying type and typeclass. -/
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort 布尔Alg (Type _)
+  签名: CoeSort 布尔Alg (类型 _)
   定义体: ⟨BoolAlg.carrier⟩
 
 Depends on / 依赖: BoolAlg, BoolAlg.carrier, carrier
@@ -88,11 +88,11 @@ structure Hom
     - hom' : BoundedLatticeHom X Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : 布尔Alg.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : BoundedLatticeHom X Y
+    - hom' : 有界格态射 X Y
 -/
 structure Hom (X Y : BoolAlg.{u}) where
   private mk ::
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category 布尔Alg.{u}
+  签名: 范畴 布尔Alg.{u}
   定义体: Hom X Y
   id X := ⟨BoundedLatticeHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory 布尔Alg (BoundedLatticeHom · ·)
+  签名: 余ncrete范畴 布尔Alg (有界格态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -155,8 +155,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := BoolAlg) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : 布尔Alg.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 布尔Alg.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BoolAlg) f
 -/
 abbrev Hom.hom {X Y : BoolAlg.{u}} (f : Hom X Y) :=
@@ -172,7 +172,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [布尔eanAlgebra X] [布尔eanAlgebra Y] (f : BoundedLatticeHom X Y)
+  签名: {X Y : 类型u} [布尔代数 X] [布尔代数 Y] (f : 有界格态射 X Y)
   定义体: ConcreteCategory.ofHom (C := BoolAlg) f
 
 Depends on / 依赖: BoolAlg, ConcreteCategory, ConcreteCategory.ofHom
@@ -193,8 +193,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : 布尔Alg.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 布尔Alg.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -308,7 +308,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [布尔eanAlgebra X]
+  条件: (X : 类型u) [布尔代数 X]
   结论: (布尔Alg.of X : 类型u) = X
   证明: rfl
 
@@ -329,7 +329,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {X : 布尔Alg}
-  结论: (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _
+  结论: (𝟙 X : X ⟶ X).hom = 有界格态射.id _
   证明: rfl
 -/
 lemma hom_id {X : BoolAlg} : (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _ := rfl
@@ -429,7 +429,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [布尔eanAlgebra X] [布尔eanAlgebra Y] (f : BoundedLatticeHom X Y)
+  条件: {X Y : 类型u} [布尔代数 X] [布尔代数 Y] (f : 有界格态射 X Y)
   证明: rfl
 
 @[simp]
@@ -473,8 +473,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [布尔eanAlgebra X]
-  结论: ofHom (BoundedLatticeHom.id _) = 𝟙 (of X)
+  条件: {X : 类型u} [布尔代数 X]
+  结论: ofHom (有界格态射.id _) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -492,7 +492,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [布尔eanAlgebra X] [布尔eanAlgebra Y] [布尔eanAlgebra Z]
+  结论: {X Y Z : 类型u} [布尔代数 X] [布尔代数 Y] [布尔代数 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [BooleanAlgebra X] [BooleanAlgebra Y] [BooleanAlgebra Z]
@@ -510,7 +510,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {X Y : 类型u} [布尔eanAlgebra X] [布尔eanAlgebra Y]
+  结论: {X Y : 类型u} [布尔代数 X] [布尔代数 Y]
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [BooleanAlgebra X] [BooleanAlgebra Y]
@@ -567,7 +567,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 布尔Alg
+  签名: 可居 布尔Alg
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited BoolAlg :=
@@ -623,7 +623,7 @@ instance hasForgetToBddDistLat
 
 中文:
 实例 hasForgetToBddDistLat
-  签名: : HasForget₂ 布尔Alg BddDistLat where
+  签名: : 有Forget₂ 布尔Alg 有界分配格 where
   定义体: .of X
   forget₂.map f := BddDistLat.ofHom f.hom
 -/
@@ -647,7 +647,7 @@ instance hasForgetToHeytAlg
 
 中文:
 实例 hasForgetToHeytAlg
-  签名: : HasForget₂ 布尔Alg HeytAlg where
+  签名: : 有Forget₂ 布尔Alg HeytAlg where
   定义体: .of X
   forget₂.map {X Y} f := HeytAlg.ofHom f.hom
 -/
@@ -669,7 +669,7 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : 布尔Alg.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
@@ -756,7 +756,7 @@ definition typeToBoolAlgOp
   map {X Y} f := Quiver.Hom.op (BoolAlg.ofHom (CompleteLatticeHom.setPreimage f))
 
 中文:
-定义 typeToBoolAlgOp
+定义 typeTo布尔AlgOp
   签名: : 类型u ⥤ 布尔Algᵒᵖ where
   定义体: op .of (Set X)
   map {X Y} f := Quiver.Hom.op (BoolAlg.ofHom (CompleteLatticeHom.setPreimage f))

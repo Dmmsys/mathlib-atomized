@@ -173,7 +173,7 @@ abbreviation HasHomology
   body: (K.sc i).HasHomology
 
 中文:
-缩写 HasHomology
+缩写 有同调
   定义体: (K.sc i).HasHomology
 
 Depends on / 依赖: HasHomology, K.sc
@@ -194,8 +194,8 @@ lemma hasHomology_of_iso
 
 中文:
 引理 hasHomology_of_iso
-  条件: [K.HasHomology i]
-  结论: L.HasHomology i
+  条件: [K.有同调 i]
+  结论: L.有同调 i
   证明: ShortComplex.hasHomology_of_iso
     ((shortComplexFunctor _ _ i).mapIso iso : K.sc i ≅ L.sc i)
 
@@ -304,7 +304,7 @@ abbreviation liftCycles'
 
 中文:
 缩写 liftCycles'
-  签名: {A : C} (k : A ⟶ K.X i) (j : ι) (hj : c.Rel i j)
+  签名: {A : C} (k : A ⟶ K.X i) (j : ι) (hj : c.关系 i j)
   定义体: K.liftCycles k j (c.next_eq' hj) hk
 
 Depends on / 依赖: K.liftCycles, c.next_eq, liftCycles, next_eq
@@ -353,7 +353,7 @@ definition toCycles
 
 中文:
 定义 toCycles
-  签名: [K.HasHomology j]
+  签名: [K.有同调 j]
   定义体: K.liftCycles (K.d i j) (c.next j) rfl (K.d_comp_d _ _ _)
 
 @[reassoc (attr := simp)]
@@ -431,7 +431,7 @@ lemma toCycles_i
 
 中文:
 引理 toCycles_i
-  条件: [K.HasHomology j]
+  条件: [K.有同调 j]
   证明: liftCycles_i _ _ _ _ _
 
 Depends on / 依赖: liftCycles_i
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (K.iCycles i)
+  签名: 单态射 (K.iCycles i)
   定义体: by
   dsimp only [iCycles]
   infer_instance
@@ -480,7 +480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (K.homologyπ i)
+  签名: 满态射 (K.homologyπ i)
   定义体: by
   dsimp only [homologyπ]
   infer_instance
@@ -505,7 +505,7 @@ lemma d_toCycles
 
 中文:
 引理 d_toCycles
-  条件: [K.HasHomology k]
+  条件: [K.有同调 k]
   证明: by
   simp only [← cancel_mono (K.iCycles k), assoc, toCycles_i, d_comp_d, zero_comp]
 
@@ -527,7 +527,7 @@ lemma toCycles_eq_zero
 
 中文:
 引理 toCycles_eq_zero
-  条件: [K.HasHomology j] (hij : ¬ c.Rel i j)
+  条件: [K.有同调 j] (hij : ¬ c.关系 i j)
   证明: by
   rw [← cancel_mono (K.iCycles j)]; rw [toCycles_i]; rw [zero_comp]; rw [K.shape _ _ hij]
 
@@ -623,7 +623,7 @@ lemma toCycles_comp_homologyπ
 
 中文:
 引理 toCycles_comp_homologyπ
-  条件: [K.HasHomology j]
+  条件: [K.有同调 j]
   证明: K.liftCycles_homologyπ_eq_zero_of_boundary (K.d i j) (c.next j) rfl (𝟙 _) (by simp)
 
 Depends on / 依赖: K.liftCycles_homology, c.next
@@ -644,7 +644,7 @@ definition homologyIsCokernel
 
 中文:
 定义 homologyIsCokernel
-  签名: (hi : c.prev j = i) [K.HasHomology j]
+  签名: (hi : c.prev j = i) [K.有同调 j]
   定义体: by
   subst hi
   exact (K.sc j).homologyIsCokernel
@@ -739,7 +739,7 @@ abbreviation descOpcycles'
 
 中文:
 缩写 descOpcycles'
-  签名: {A : C} (k : K.X i ⟶ A) (j : ι) (hj : c.Rel j i)
+  签名: {A : C} (k : K.X i ⟶ A) (j : ι) (hj : c.关系 j i)
   定义体: K.descOpcycles k j (c.prev_eq' hj) hk
 
 Depends on / 依赖: K.descOpcycles, c.prev_eq, descOpcycles, prev_eq
@@ -817,7 +817,7 @@ lemma d_pOpcycles
 
 中文:
 引理 d_pOpcycles
-  条件: [K.HasHomology j]
+  条件: [K.有同调 j]
   结论: K.d i j ≫ K.pOpcycles j = 0
   证明: by
   by_cases hij : c.Rel i j
@@ -847,7 +847,7 @@ definition opcyclesIsCokernel
 
 中文:
 定义 opcyclesIsCokernel
-  签名: (hi : c.prev j = i) [K.HasHomology j]
+  签名: (hi : c.prev j = i) [K.有同调 j]
   定义体: by
   obtain rfl := hi
   exact (K.sc j).opcyclesIsCokernel
@@ -892,7 +892,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (K.pOpcycles i)
+  签名: 满态射 (K.pOpcycles i)
   定义体: by
   dsimp only [pOpcycles]
   infer_instance
@@ -918,7 +918,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (K.homologyι i)
+  签名: 单态射 (K.homologyι i)
   定义体: by
   dsimp only [homologyι]
   infer_instance
@@ -963,7 +963,7 @@ lemma fromOpcycles_eq_zero
 
 中文:
 引理 fromOpcycles_eq_zero
-  条件: (hij : ¬ c.Rel i j)
+  条件: (hij : ¬ c.关系 i j)
   证明: by
   rw [← cancel_epi (K.pOpcycles i)]; rw [p_fromOpcycles]; rw [comp_zero]; rw [K.shape _ _ hij]
 
@@ -1198,8 +1198,8 @@ instance [Mono
   body: mono_of_mono_fac (cyclesMap_i φ i)
 
 中文:
-实例 [Mono
-  签名: (φ.f i)] : Mono (cyclesMap φ i)
+实例 [单态射
+  签名: (φ.f i)] : 单态射 (cyclesMap φ i)
   定义体: mono_of_mono_fac (cyclesMap_i φ i)
 
 Depends on / 依赖: cyclesMap_i, mono_of_mono_fac
@@ -1215,8 +1215,8 @@ instance [Epi
   body: epi_of_epi_fac (p_opcyclesMap φ i)
 
 中文:
-实例 [Epi
-  签名: (φ.f i)] : Epi (opcyclesMap φ i)
+实例 [满态射
+  签名: (φ.f i)] : 满态射 (opcyclesMap φ i)
   定义体: epi_of_epi_fac (p_opcyclesMap φ i)
 
 Depends on / 依赖: epi_of_epi_fac, p_opcyclesMap
@@ -1661,7 +1661,7 @@ definition homologyFunctor
 
 中文:
 定义 homologyFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.homology i
   map f := homologyMap f i
 
@@ -1684,7 +1684,7 @@ definition gradedHomologyFunctor
 
 中文:
 定义 gradedHomologyFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.homology i
   map f i := homologyMap f i
 
@@ -1708,7 +1708,7 @@ definition cyclesFunctor
 
 中文:
 定义 cyclesFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.cycles i
   map f := cyclesMap f i
 
@@ -1731,7 +1731,7 @@ definition opcyclesFunctor
 
 中文:
 定义 opcyclesFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.opcycles i
   map f := opcyclesMap f i
 
@@ -1755,7 +1755,7 @@ definition natTransHomologyπ
 
 中文:
 定义 natTransHomologyπ
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.homologyπ i
 
 Depends on / 依赖: K.homology
@@ -1778,7 +1778,7 @@ definition natTransHomologyι
 
 中文:
 定义 natTransHomologyι
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.homologyι i
 
 Depends on / 依赖: K.homology
@@ -1800,7 +1800,7 @@ definition homologyFunctorIso
 
 中文:
 定义 homologyFunctorIso
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -1820,7 +1820,7 @@ definition homologyFunctorIso'
 
 中文:
 定义 homologyFunctorIso'
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: homologyFunctorIso C c j ≪≫ Functor.isoWhiskerRight (natIsoSc' C c i j k hi hk) _
 
 Depends on / 依赖: Functor, Functor.isoWhiskerRight, homologyFunctorIso, isoWhiskerRight, natIsoSc
@@ -1839,8 +1839,8 @@ instance [CategoryWithHomology
   signature: C] : (homologyFunctor C c i).PreservesZeroMorphisms where
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (homologyFunctor C c i).PreservesZeroMorphisms where
+实例 [带同调范畴
+  签名: C] : (homologyFunctor C c i).保持ZeroMorphisms where
 -/
 instance [CategoryWithHomology C] : (homologyFunctor C c i).PreservesZeroMorphisms where
 /--
@@ -1851,8 +1851,8 @@ instance [CategoryWithHomology
   signature: C] : (opcyclesFunctor C c i).PreservesZeroMorphisms where
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (opcyclesFunctor C c i).PreservesZeroMorphisms where
+实例 [带同调范畴
+  签名: C] : (opcyclesFunctor C c i).保持ZeroMorphisms where
 -/
 instance [CategoryWithHomology C] : (opcyclesFunctor C c i).PreservesZeroMorphisms where
 /--
@@ -1863,8 +1863,8 @@ instance [CategoryWithHomology
   signature: C] : (cyclesFunctor C c i).PreservesZeroMorphisms where
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (cyclesFunctor C c i).PreservesZeroMorphisms where
+实例 [带同调范畴
+  签名: C] : (cyclesFunctor C c i).保持ZeroMorphisms where
 -/
 instance [CategoryWithHomology C] : (cyclesFunctor C c i).PreservesZeroMorphisms where
 
@@ -1889,7 +1889,7 @@ lemma isIso_iCycles
 
 中文:
 引理 isIso_iCycles
-  结论: IsIso (K.iCycles i)
+  结论: 是同构 (K.iCycles i)
   证明: by
   subst hj
   exact ShortComplex.isIso_iCycles _ h
@@ -1977,7 +1977,7 @@ lemma isIso_homologyι
 
 中文:
 引理 isIso_homologyι
-  结论: IsIso (K.homologyι i)
+  结论: 是同构 (K.homologyι i)
   证明: ShortComplex.isIso_homologyι _ (by cat_disch)
 
 Depends on / 依赖: ShortComplex, ShortComplex.isIso_homology, cat_disch
@@ -2072,7 +2072,7 @@ lemma isIso_pOpcycles
 
 中文:
 引理 isIso_pOpcycles
-  结论: IsIso (K.pOpcycles j)
+  结论: 是同构 (K.pOpcycles j)
   证明: by
   obtain rfl := hi
   exact ShortComplex.isIso_pOpcycles _ h
@@ -2160,7 +2160,7 @@ lemma isIso_homologyπ
 
 中文:
 引理 isIso_homologyπ
-  结论: IsIso (K.homologyπ j)
+  结论: 是同构 (K.homologyπ j)
   证明: ShortComplex.isIso_homologyπ _ (by cat_disch)
 
 Depends on / 依赖: ShortComplex, ShortComplex.isIso_homology, cat_disch
@@ -2348,7 +2348,7 @@ lemma ExactAt.of_iso
 
 中文:
 引理 ExactAt.of_iso
-  条件: (hK : K.ExactAt i) {L : HomologicalComplex C c} (e : K ≅ L)
+  条件: (hK : K.ExactAt i) {L : 同调复形 C c} (e : K ≅ L)
   证明: by
   rw [exactAt_iff] at hK ⊢
   exact ShortComplex.exact_of_iso ((shortComplexFunctor C c i).mapIso e) hK
@@ -2372,7 +2372,7 @@ lemma ExactAt.of_isZero
 
 中文:
 引理 ExactAt.of_isZero
-  条件: (h : IsZero (K.X i))
+  条件: (h : 是零 (K.X i))
   结论: K.ExactAt i
   证明: ShortComplex.exact_of_isZero_X₂ _ h
 
@@ -2412,7 +2412,7 @@ lemma exactAt_iff_isZero_homology
 
 中文:
 引理 exactAt_iff_isZero_homology
-  条件: [K.HasHomology i]
+  条件: [K.有同调 i]
   证明: by
   dsimp [homology]
   rw [exactAt_iff]; rw [ShortComplex.exact_iff_isZero_homology]
@@ -2436,7 +2436,7 @@ lemma ExactAt.isZero_homology
 
 中文:
 引理 ExactAt.isZero_homology
-  条件: [K.HasHomology i] (h : K.ExactAt i)
+  条件: [K.有同调 i] (h : K.ExactAt i)
   证明: by
   rwa [← exactAt_iff_isZero_homology]
 
@@ -2454,7 +2454,7 @@ definition Acyclic
   body: forall i, K.ExactAt i
 
 中文:
-定义 Acyclic
+定义 非循环
   定义体: forall i, K.ExactAt i
 
 Depends on / 依赖: ExactAt, K.ExactAt
@@ -2491,7 +2491,7 @@ lemma acyclic_of_isZero
 
 中文:
 引理 acyclic_of_isZero
-  条件: (hK : IsZero K)
+  条件: (hK : 是零 K)
   证明: by
   rw [acyclic_iff]
   intro i
@@ -2524,7 +2524,7 @@ instance isIso_iCycles₀
 
 中文:
 实例 isIso_iCycles₀
-  签名: : IsIso (K.iCycles 0)
+  签名: : 是同构 (K.iCycles 0)
   定义体: K.isIso_iCycles 0 0 (by simp) (by simp)
 
 Depends on / 依赖: K.isIso_iCycles, infer_instance, isIso_iCycles
@@ -2603,7 +2603,7 @@ lemma isoHomologyι₀_inv_naturality
 
 中文:
 引理 isoHomologyι₀_inv_naturality
-  条件: [L.HasHomology 0]
+  条件: [L.有同调 0]
   证明: by
   simp only [assoc, ← cancel_mono (L.homologyι 0),
     HomologicalComplex.homologyι_naturality, HomologicalComplex.isoHomologyι_inv_hom_id_assoc,
@@ -2635,7 +2635,7 @@ instance isIso_pOpcycles₀
 
 中文:
 实例 isIso_pOpcycles₀
-  签名: : IsIso (K.pOpcycles 0)
+  签名: : 是同构 (K.pOpcycles 0)
   定义体: K.isIso_pOpcycles 0 0 (by simp) (by simp)
 
 Depends on / 依赖: K.isIso_pOpcycles, isIso_pOpcycles
@@ -2714,7 +2714,7 @@ lemma isoHomologyπ₀_inv_naturality
 
 中文:
 引理 isoHomologyπ₀_inv_naturality
-  条件: [L.HasHomology 0]
+  条件: [L.有同调 0]
   证明: by
   simp only [← cancel_epi (K.homologyπ 0), HomologicalComplex.homologyπ_naturality_assoc,
     HomologicalComplex.isoHomologyπ_hom_inv_id, comp_id,
@@ -2830,8 +2830,8 @@ instance [CategoryWithHomology
   signature: C] : (homologyFunctor C c i).Additive where
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (homologyFunctor C c i).Additive where
+实例 [带同调范畴
+  签名: C] : (homologyFunctor C c i).加性 where
 -/
 instance [CategoryWithHomology C] : (homologyFunctor C c i).Additive where
 
@@ -2858,7 +2858,7 @@ lemma isIso_liftCycles_iff
 
 中文:
 引理 isIso_liftCycles_iff
-  结论: (K : CochainComplex C 自然数) {X : C} (φ : X ⟶ K.X 0)
+  结论: (K : 上链复形 C 自然数) {X : C} (φ : X ⟶ K.X 0)
   证明: by
   suffices forall (i : Nat) (hx : (ComplexShape.up Nat).next 0 = i)
     (hφ : φ ≫ K.d 0 i = 0), IsIso (K.liftCycles φ i hx hφ) ↔
@@ -2907,7 +2907,7 @@ lemma isIso_descOpcycles_iff
 
 中文:
 引理 isIso_descOpcycles_iff
-  结论: (K : ChainComplex C 自然数) {X : C} (φ : K.X 0 ⟶ X)
+  结论: (K : 链复形 C 自然数) {X : C} (φ : K.X 0 ⟶ X)
   证明: by
   suffices forall (i : Nat) (hx : (ComplexShape.down Nat).prev 0 = i)
     (hφ : K.d i 0 ≫ φ = 0), IsIso (K.descOpcycles φ i hx hφ) ↔
@@ -3162,7 +3162,7 @@ lemma homology_sc'_eq_homology
 
 中文:
 引理 homology_sc'_eq_homology
-  条件: [(K.sc' (c.prev j) j (c.next j)).HasHomology]
+  条件: [(K.sc' (c.prev j) j (c.next j)).有同调]
   证明: rfl
 -/
 lemma homology_sc'_eq_homology [(K.sc' (c.prev j) j (c.next j)).HasHomology] :

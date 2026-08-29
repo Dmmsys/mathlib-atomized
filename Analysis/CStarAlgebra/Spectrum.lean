@@ -89,7 +89,7 @@ theorem Unitary.spectrum_subset_circle
     rw [← inv_inv (Unitary.toUnits u)]; rw [← s
 
 中文:
-定理 Unitary.spectrum_subset_circle
+定理 酉.spectrum_subset_circle
   条件: (u : unitary E)
   证明: by
   nontriviality E
@@ -169,8 +169,8 @@ lemma CStarAlgebra.le_nnnorm_of_mem_quasispectrum
   simpa [Unitization.nnnorm_inr] using spectrum.le_nnnorm_of_mem hx
 
 中文:
-引理 CStarAlgebra.le_nnnorm_of_mem_quasispectrum
-  结论: {A : 类型} [NonUnitalCStarAlgebra A]
+引理 CStar代数.le_nnnorm_of_mem_quasispectrum
+  结论: {A : 类型} [非幺CStar代数 A]
   证明: by
   rw [Unitization.quasispectrum_eq_spectrum_inr' Real>=0 Complex] at hx
   simpa [Unitization.nnnorm_inr] using spectrum.le_nnnorm_of_mem hx
@@ -240,7 +240,7 @@ lemma IsSelfAdjoint.toReal_spectralRadius_complex_eq_norm
   simp [ha.spectralRadius_eq_nnnorm]
 
 中文:
-引理 IsSelfAdjoint.toReal_spectralRadius_complex_eq_norm
+引理 IsSelfAdjoint.to实数_spectralRadius_complex_eq_norm
   条件: {a : A} (ha : IsSelfAdjoint a)
   证明: by
   simp [ha.spectralRadius_eq_nnnorm]
@@ -266,8 +266,8 @@ theorem IsStarNormal.spectralRadius_eq_nnnorm
     rw [Function.comp_apply]; rw [← rpow_natCast]; r
 
 中文:
-定理 IsStarNormal.spectralRadius_eq_nnnorm
-  条件: (a : A) [IsStarNormal a]
+定理 是StarNormal.spectralRadius_eq_nnnorm
+  条件: (a : A) [是StarNormal a]
   证明: by
   refine (ENNReal.pow_right_strictMono two_ne_zero).injective ?_
   have heq :
@@ -306,7 +306,7 @@ theorem toReal_spectralRadius_star_mul_self_eq_norm_sq
   rw [(IsSelfAdjoint.star_mul_self a).toReal_spectralRadius_complex_eq_norm]; rw [CStarRing.norm_star_mul_self]; rw [← pow_two]
 
 中文:
-定理 toReal_spectralRadius_star_mul_self_eq_norm_sq
+定理 to实数_spectralRadius_star_mul_self_eq_norm_sq
   条件: (a : A)
   证明: by
   rw [(IsSelfAdjoint.star_mul_self a).toReal_spectralRadius_complex_eq_norm]; rw [CStarRing.norm_star_mul_self]; rw [← pow_two]
@@ -327,7 +327,7 @@ theorem toReal_spectralRadius_self_mul_star_eq_norm_sq
   rw [← norm_star a]; rw [← toReal_spectralRadius_star_mul_self_eq_norm_sq]; rw [star_star]
 
 中文:
-定理 toReal_spectralRadius_self_mul_star_eq_norm_sq
+定理 to实数_spectralRadius_self_mul_star_eq_norm_sq
   条件: (a : A)
   证明: by
   rw [← norm_star a]; rw [← toReal_spectralRadius_star_mul_self_eq_norm_sq]; rw [star_star]
@@ -348,7 +348,7 @@ theorem sqrt_toReal_spectralRadius_star_mul_self_eq_norm
   simp [toReal_spectralRadius_star_mul_self_eq_norm_sq]
 
 中文:
-定理 sqrt_toReal_spectralRadius_star_mul_self_eq_norm
+定理 sqrt_to实数_spectralRadius_star_mul_self_eq_norm
   条件: (a : A)
   证明: by
   simp [toReal_spectralRadius_star_mul_self_eq_norm_sq]
@@ -369,7 +369,7 @@ theorem sqrt_toReal_spectralRadius_self_mul_star_eq_norm
   simp [toReal_spectralRadius_self_mul_star_eq_norm_sq]
 
 中文:
-定理 sqrt_toReal_spectralRadius_self_mul_star_eq_norm
+定理 sqrt_to实数_spectralRadius_self_mul_star_eq_norm
   条件: (a : A)
   证明: by
   simp [toReal_spectralRadius_self_mul_star_eq_norm_sq]
@@ -397,7 +397,7 @@ theorem IsSelfAdjoint.mem_spectrum_eq_re
 
 中文:
 定理 IsSelfAdjoint.mem_spectrum_eq_re
-  结论: {a : A} (ha : IsSelfAdjoint a) {z : Complex}
+  结论: {a : A} (ha : IsSelfAdjoint a) {z : 复形}
   证明: by
   let +nondep : NormedAlgebra Rat A := .restrictScalars Rat Complex A
   have hu := exp_mem_unitary_of_mem_skewAdjoint (ha.smul_mem_skewAdjoint conj_I)
@@ -430,7 +430,7 @@ theorem selfAdjoint.mem_spectrum_eq_re
 
 中文:
 定理 selfAdjoint.mem_spectrum_eq_re
-  结论: (a : selfAdjoint A) {z : Complex}
+  结论: (a : selfAdjoint A) {z : 复形}
   证明: a.prop.mem_spectrum_eq_re hz
 
 Depends on / 依赖: a.prop.mem_spectrum_eq_re, mem_spectrum_eq_re
@@ -570,7 +570,7 @@ Subalgebra.spectrum_eq_of_isPreconnected_compl S _
 中文:
 引理 coe_isUnit
   条件: {a : S}
-  结论: IsUnit (a : A) ↔ IsUnit a
+  结论: 是单位 (a : A) ↔ 是单位 a
   证明: by
   refine ⟨fun ha => ?_, IsUnit.map S.subtype⟩
   have ha₁ := ha.star.mul ha
@@ -606,8 +606,8 @@ lemma mem_spectrum_iff
 
 中文:
 引理 mem_spectrum_iff
-  条件: {a : S} {z : Complex}
-  结论: z in spectrum Complex a ↔ z in spectrum Complex (a : A)
+  条件: {a : S} {z : 复形}
+  结论: z in spectrum 复形 a ↔ z in spectrum 复形 (a : A)
   证明: not_iff_not.mpr S.coe_isUnit.symm
 
 Depends on / 依赖: S.coe_isUnit.symm, coe_isUnit, not_iff_not, not_iff_not.mpr
@@ -627,7 +627,7 @@ lemma spectrum_eq
 中文:
 引理 spectrum_eq
   条件: {a : S}
-  结论: spectrum Complex a = spectrum Complex (a : A)
+  结论: spectrum 复形 a = spectrum 复形 (a : A)
   证明: Set.ext fun _ => S.mem_spectrum_iff
 
 Depends on / 依赖: S.mem_spectrum_iff, Set.ext, mem_spectrum_iff
@@ -724,7 +724,7 @@ scoped[CStarAlgebra] attribute [instance] NonUnitalStarAlgHom.instContinuousLine
 
 中文:
 引理 instContinuousLinearMapClassComplex
-  结论: ContinuousLinearMapClass F Complex A B
+  结论: ContinuousLinearMapClass F 复形 A B
   证明: { NonUnitalAlgHomClass.instLinearMapClass with
     map_continuous := fun φ =>
       AddMonoidHomClass.continuous_of_bound φ 1 (by simpa only [one_mul] using! nnnorm_apply_le φ) }
@@ -802,7 +802,7 @@ lemma isometry
 中文:
 引理 isometry
   条件: (φ : F)
-  结论: Isometry φ
+  结论: 等距 φ
   证明: AddMonoidHomClass.isometry_of_norm φ (norm_map φ)
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, isometry_of_norm, norm_map
@@ -842,8 +842,8 @@ lemma _root_.AlgHomClass.instStarHomClass
   proof: { WeakDual.Complex.instStarHomClass, hF with }
 
 中文:
-引理 _root_.AlgHomClass.instStarHomClass
-  结论: StarHomClass F A Complex
+引理 _root_.代数态射类.instStarHomClass
+  结论: 对合态射类 F A 复形
   证明: { WeakDual.Complex.instStarHomClass, hF with }
 
 Depends on / 依赖: WeakDual, WeakDual.Complex.instStarHomClass, instStarHomClass
@@ -863,7 +863,7 @@ instance instStarHomClass
 
 中文:
 实例 instStarHomClass
-  签名: : StarHomClass (characterSpace Complex A) A Complex
+  签名: : 对合态射类 (characterSpace 复形 A) A 复形
   定义体: { AlgHomClass.instStarHomClass with }
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.instStarHomClass, instStarHomClass

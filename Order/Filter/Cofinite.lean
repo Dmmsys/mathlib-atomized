@@ -51,7 +51,7 @@ definition cofinite
 
 中文:
 定义 cofinite
-  签名: : Filter α
+  签名: : 滤子 α
   定义体: comk Set.Finite finite_empty (fun _t ht _s hsub => ht.subset hsub) fun _ h _ => h.union
 
 @[simp]
@@ -75,8 +75,8 @@ theorem mem_cofinite
 
 中文:
 定理 mem_cofinite
-  条件: {s : Set α}
-  结论: s in @cofinite α ↔ sᶜ.Finite
+  条件: {s : 集合 α}
+  结论: s in @cofinite α ↔ sᶜ.有限
   证明: Iff.rfl
 
 @[simp]
@@ -99,7 +99,7 @@ theorem eventually_cofinite
 中文:
 定理 eventually_cofinite
   条件: {p : α -> 命题}
-  结论: (对任意ᶠ x in cofinite, p x) ↔ { x | ¬p x }.Finite
+  结论: (对任意ᶠ x in cofinite, p x) ↔ { x | ¬p x }.有限
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -119,7 +119,7 @@ htf.subset compl_subset_comm.2 hts⟩⟩
 
 中文:
 定理 hasBasis_cofinite
-  结论: HasBasis cofinite (fun s : Set α => s.Finite) compl
+  结论: 有基 cofinite (fun s : 集合 α => s.有限) compl
   证明: ⟨fun s =>
     ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ =>
 htf.subset compl_subset_comm.2 hts⟩⟩
@@ -143,7 +143,7 @@ instance cofinite_neBot
 
 中文:
 实例 cofinite_neBot
-  签名: [Infinite α]
+  签名: [无限 α]
   定义体: hasBasis_cofinite.neBot_iff.2 fun hs => hs.infinite_compl.nonempty
 
 @[simp]
@@ -167,7 +167,7 @@ theorem cofinite_eq_bot_iff
 
 中文:
 定理 cofinite_eq_bot_iff
-  结论: @cofinite α = ⊥ ↔ Finite α
+  结论: @cofinite α = ⊥ ↔ 有限 α
   证明: by
   simp [← empty_mem_iff_bot, finite_univ_iff]
 
@@ -190,7 +190,7 @@ theorem cofinite_eq_bot
 
 中文:
 定理 cofinite_eq_bot
-  条件: [Finite α]
+  条件: [有限 α]
   结论: @cofinite α = ⊥
   证明: cofinite_eq_bot_iff.2 ‹_›
 
@@ -234,8 +234,8 @@ alias ⟨_, _root_.Set.Infinite.frequently_cofinite⟩ := frequently_cofinite_me
 
 中文:
 引理 frequently_cofinite_mem_iff_infinite
-  条件: {s : Set α}
-  结论: (存在ᶠ x in cofinite, x in s) ↔ s.Infinite
+  条件: {s : 集合 α}
+  结论: (存在ᶠ x in cofinite, x in s) ↔ s.无限
   证明: frequently_cofinite_iff_infinite
 
 alias ⟨_, _root_.Set.Infinite.frequently_cofinite⟩ := frequently_cofinite_mem_iff_infinite
@@ -263,8 +263,8 @@ alias ⟨_, _root_.Set.Infinite.cofinite_inf_principal_neBot⟩ := cofinite_inf_
 
 中文:
 引理 cofinite_inf_principal_neBot_iff
-  条件: {s : Set α}
-  结论: (cofinite ⊓ 𝓟 s).NeBot ↔ s.Infinite
+  条件: {s : 集合 α}
+  结论: (cofinite ⊓ 𝓟 s).NeBot ↔ s.无限
   证明: frequently_mem_iff_neBot.symm.trans frequently_cofinite_mem_iff_infinite
 
 alias ⟨_, _root_.Set.Infinite.cofinite_inf_principal_neBot⟩ := cofinite_inf_principal_neBot_iff
@@ -286,8 +286,8 @@ theorem _root_.Set.Finite.compl_mem_cofinite
   proof: mem_cofinite.2 (compl_compl s).symm ▸ hs
 
 中文:
-定理 _root_.Set.Finite.compl_mem_cofinite
-  条件: {s : Set α} (hs : s.Finite)
+定理 _root_.集合.有限.compl_mem_cofinite
+  条件: {s : 集合 α} (hs : s.有限)
   结论: sᶜ in @cofinite α
   证明: mem_cofinite.2 (compl_compl s).symm ▸ hs
 
@@ -305,8 +305,8 @@ theorem _root_.Set.Finite.eventually_cofinite_notMem
   proof: hs.compl_mem_cofinite
 
 中文:
-定理 _root_.Set.Finite.eventually_cofinite_notMem
-  条件: {s : Set α} (hs : s.Finite)
+定理 _root_.集合.有限.eventually_cofinite_notMem
+  条件: {s : 集合 α} (hs : s.有限)
   证明: hs.compl_mem_cofinite
 
 Depends on / 依赖: compl_mem_cofinite, hs.compl_mem_cofinite
@@ -325,8 +325,8 @@ theorem _root_.Finset.eventually_cofinite_notMem
   proof: s.finite_toSet.eventually_cofinite_notMem
 
 中文:
-定理 _root_.Finset.eventually_cofinite_notMem
-  条件: (s : Finset α)
+定理 _root_.有限集.eventually_cofinite_notMem
+  条件: (s : 有限集 α)
   结论: 对任意ᶠ x in cofinite, x ∉ s
   证明: s.finite_toSet.eventually_cofinite_notMem
 
@@ -344,8 +344,8 @@ theorem _root_.Set.infinite_iff_frequently_cofinite
   proof: frequently_cofinite_iff_infinite.symm
 
 中文:
-定理 _root_.Set.infinite_iff_frequently_cofinite
-  条件: {s : Set α}
+定理 _root_.集合.infinite_iff_frequently_cofinite
+  条件: {s : 集合 α}
   证明: frequently_cofinite_iff_infinite.symm
 
 Depends on / 依赖: frequently_cofinite_iff_infinite, frequently_cofinite_iff_infinite.symm
@@ -429,8 +429,8 @@ theorem atTop_le_cofinite
 
 中文:
 定理 atTop_le_cofinite
-  条件: [Preorder α] [NoTopOrder α]
-  结论: (atTop : Filter α) <= cofinite
+  条件: [预序 α] [无顶序 α]
+  结论: (atTop : 滤子 α) <= cofinite
   证明: le_cofinite_iff_eventually_ne.mpr eventually_ne_atTop
 
 Depends on / 依赖: eventually_ne_atTop, le_cofinite_iff_eventually_ne, le_cofinite_iff_eventually_ne.mpr
@@ -449,8 +449,8 @@ theorem atBot_le_cofinite
 
 中文:
 定理 atBot_le_cofinite
-  条件: [Preorder α] [NoBotOrder α]
-  结论: (atBot : Filter α) <= cofinite
+  条件: [预序 α] [无底序 α]
+  结论: (atBot : 滤子 α) <= cofinite
   证明: le_cofinite_iff_eventually_ne.mpr eventually_ne_atBot
 
 Depends on / 依赖: eventually_ne_atBot, le_cofinite_iff_eventually_ne, le_cofinite_iff_eventually_ne.mpr
@@ -492,7 +492,7 @@ theorem coprod_cofinite
 
 中文:
 定理 coprod_cofinite
-  结论: (cofinite : Filter α).coprod (cofinite : Filter β) = cofinite
+  结论: (cofinite : 滤子 α).coprod (cofinite : 滤子 β) = cofinite
   证明: Filter.coext fun s => by
     simp only [compl_mem_coprod, mem_cofinite, compl_compl, finite_image_fst_and_snd_iff]
 
@@ -513,7 +513,7 @@ theorem coprodᵢ_cofinite
 
 中文:
 定理 coprodᵢ_cofinite
-  条件: {α : ι -> 类型} [Finite ι]
+  条件: {α : ι -> 类型} [有限 ι]
   证明: Filter.coext fun s => by
     simp only [compl_mem_coprodᵢ, mem_cofinite, compl_compl, forall_finite_image_eval_iff]
 
@@ -535,7 +535,7 @@ theorem disjoint_cofinite_left
 
 中文:
 定理 disjoint_cofinite_left
-  结论: Disjoint cofinite l ↔ 存在 s in l, Set.Finite s
+  结论: Disjoint cofinite l ↔ 存在 s in l, 集合.有限 s
   证明: by
   simp [l.basis_sets.disjoint_iff_right]
 
@@ -554,7 +554,7 @@ theorem disjoint_cofinite_right
 
 中文:
 定理 disjoint_cofinite_right
-  结论: Disjoint l cofinite ↔ 存在 s in l, Set.Finite s
+  结论: Disjoint l cofinite ↔ 存在 s in l, 集合.有限 s
   证明: disjoint_comm.trans disjoint_cofinite_left
 
 Depends on / 依赖: disjoint_cofinite_left, disjoint_comm, disjoint_comm.trans
@@ -576,8 +576,8 @@ exact countable_iUnion fun n => Set.Finite.countable h hs.mem _
 
 中文:
 定理 countable_compl_ker
-  条件: [l.IsCountablyGenerated] (h : cofinite <= l)
-  结论: Set.Countable l.kerᶜ
+  条件: [l.是余untablyGenerated] (h : cofinite <= l)
+  结论: 集合.可数 l.kerᶜ
   证明: by
   rcases exists_antitone_basis l with ⟨s, hs⟩
   simp only [hs.ker, iInter_true, compl_iInter]
@@ -599,7 +599,7 @@ theorem Tendsto.countable_compl_preimage_ker
   proof: by rw [← ker_comap]; exact countable_compl_ker h.le_comap
 
 中文:
-定理 Tendsto.countable_compl_preimage_ker
+定理 收敛.countable_compl_preimage_ker
   结论: {f : α -> β}
   证明: by rw [← ker_comap]; exact countable_compl_ker h.le_comap
 
@@ -624,7 +624,7 @@ theorem univ_pi_mem_pi
 
 中文:
 定理 univ_pi_mem_pi
-  结论: {α : ι -> 类型} {s : 对任意 i, Set (α i)} {l : 对任意 i, Filter (α i)}
+  结论: {α : ι -> 类型} {s : 对任意 i, 集合 (α i)} {l : 对任意 i, 滤子 (α i)}
   证明: by
   filter_upwards [pi_mem_pi hfin fun i _ => h i] with a ha i _
   if hi : s i = univ then
@@ -694,7 +694,7 @@ theorem map_piMap_pi_finite
 
 中文:
 定理 map_piMap_pi_finite
-  结论: {α β : ι -> 类型} [Finite ι]
+  结论: {α β : ι -> 类型} [有限 ι]
   证明: map_piMap_pi (by simp) l
 
 Depends on / 依赖: map_piMap_pi
@@ -718,8 +718,8 @@ lemma Set.Finite.cofinite_inf_principal_compl
   simpa using hs.compl_mem_cofinite
 
 中文:
-引理 Set.Finite.cofinite_inf_principal_compl
-  条件: {s : Set α} (hs : s.Finite)
+引理 集合.有限.cofinite_inf_principal_compl
+  条件: {s : 集合 α} (hs : s.有限)
   证明: by
   simpa using hs.compl_mem_cofinite
 
@@ -742,8 +742,8 @@ lemma Set.Finite.cofinite_inf_principal_sdiff
 alias Set.Finite.cofinite_inf_principal_diff := Set.Finite.cofinite_inf_principal_sdiff
 
 中文:
-引理 Set.Finite.cofinite_inf_principal_sdiff
-  条件: {s t : Set α} (ht : t.Finite)
+引理 集合.有限.cofinite_inf_principal_sdiff
+  条件: {s t : 集合 α} (ht : t.有限)
   证明: by
   rw [sdiff_eq]; rw [← inf_principal]; rw [← inf_assoc]; rw [inf_right_comm]; rw [ht.cofinite_inf_principal_compl]
 
@@ -771,7 +771,7 @@ theorem Nat.cofinite_eq_atTop
   simpa only [mem_cofinite, compl_Ici] using! finite_lt_nat N
 
 中文:
-定理 Nat.cofinite_eq_atTop
+定理 自然数.cofinite_eq_atTop
   结论: @cofinite 自然数 = atTop
   证明: by
   refine le_antisymm ?_ atTop_le_cofinite
@@ -795,7 +795,7 @@ theorem Nat.frequently_atTop_iff_infinite
   rw [← Nat.cofinite_eq_atTop]; rw [frequently_cofinite_iff_infinite]
 
 中文:
-定理 Nat.frequently_atTop_iff_infinite
+定理 自然数.frequently_atTop_iff_infinite
   条件: {p : 自然数 -> 命题}
   证明: by
   rw [← Nat.cofinite_eq_atTop]; rw [frequently_cofinite_iff_infinite]
@@ -815,8 +815,8 @@ lemma Nat.eventually_pos
   proof: Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx => hx⟩) (fun _ hx => hx)
 
 中文:
-引理 Nat.eventually_pos
-  结论: 对任意ᶠ (k : 自然数) in Filter.atTop, 0 < k
+引理 自然数.eventually_pos
+  结论: 对任意ᶠ (k : 自然数) in 滤子.atTop, 0 < k
   证明: Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx => hx⟩) (fun _ hx => hx)
 
 Depends on / 依赖: Filter, Filter.eventually_of_mem, Filter.mem_atTop_sets.mpr, eventually_of_mem, mem_atTop_sets
@@ -838,8 +838,8 @@ theorem Filter.Tendsto.exists_within_forall_le
     simp only 
 
 中文:
-定理 Filter.Tendsto.exists_within_forall_le
-  结论: {α β : 类型} [LinearOrder β] {s : Set α}
+定理 滤子.收敛.存在_within_对任意_le
+  结论: {α β : 类型} [线性序 β] {s : 集合 α}
   证明: by
   by_cases! all_top : exists y in s, exists x, f y < x
   · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
@@ -875,8 +875,8 @@ theorem Filter.Tendsto.exists_forall_le
   ⟨a₀, fun a => ha₀ a (mem_univ _)⟩
 
 中文:
-定理 Filter.Tendsto.exists_forall_le
-  结论: [Nonempty α] [LinearOrder β] {f : α -> β}
+定理 滤子.收敛.存在_对任意_le
+  结论: [非空 α] [线性序 β] {f : α -> β}
   证明: let ⟨a₀, _, ha₀⟩ := hf.exists_within_forall_le univ_nonempty
   ⟨a₀, fun a => ha₀ a (mem_univ _)⟩
 
@@ -896,8 +896,8 @@ theorem Filter.Tendsto.exists_within_forall_ge
   proof: @Filter.Tendsto.exists_within_forall_le _ βᵒᵈ _ _ hs _ hf
 
 中文:
-定理 Filter.Tendsto.exists_within_forall_ge
-  结论: [LinearOrder β] {s : Set α} (hs : s.Nonempty)
+定理 滤子.收敛.存在_within_对任意_ge
+  结论: [线性序 β] {s : 集合 α} (hs : s.非空)
   证明: @Filter.Tendsto.exists_within_forall_le _ βᵒᵈ _ _ hs _ hf
 
 Depends on / 依赖: Filter, Filter.Tendsto.exists_within_forall_le, Tendsto, exists_within_forall_le
@@ -916,8 +916,8 @@ theorem Filter.Tendsto.exists_forall_ge
   proof: @Filter.Tendsto.exists_forall_le _ βᵒᵈ _ _ _ hf
 
 中文:
-定理 Filter.Tendsto.exists_forall_ge
-  结论: [Nonempty α] [LinearOrder β] {f : α -> β}
+定理 滤子.收敛.存在_对任意_ge
+  结论: [非空 α] [线性序 β] {f : α -> β}
   证明: @Filter.Tendsto.exists_forall_le _ βᵒᵈ _ _ _ hf
 
 Depends on / 依赖: Filter, Filter.Tendsto.exists_forall_le, Tendsto, exists_forall_le
@@ -935,8 +935,8 @@ theorem Function.Surjective.le_map_cofinite
   proof: fun _ h => .of_preimage h hf
 
 中文:
-定理 Function.Surjective.le_map_cofinite
-  条件: {f : α -> β} (hf : Surjective f)
+定理 函数.满射.le_map_cofinite
+  条件: {f : α -> β} (hf : 满射 f)
   证明: fun _ h => .of_preimage h hf
 
 Depends on / 依赖: of_preimage
@@ -953,8 +953,8 @@ theorem Function.Injective.tendsto_cofinite
   proof: fun _ h => h.preimage hf.injOn
 
 中文:
-定理 Function.Injective.tendsto_cofinite
-  条件: {f : α -> β} (hf : Injective f)
+定理 函数.单射.tendsto_cofinite
+  条件: {f : α -> β} (hf : 单射 f)
   证明: fun _ h => h.preimage hf.injOn
 
 Depends on / 依赖: h.preimage, hf.injOn, preimage
@@ -971,7 +971,7 @@ theorem Filter.Tendsto.cofinite_of_finite_preimage_singleton
   proof: fun _ h => h.preimage' fun b _ => hf b
 
 中文:
-定理 Filter.Tendsto.cofinite_of_finite_preimage_singleton
+定理 滤子.收敛.cofinite_of_finite_preimage_singleton
   结论: {f : α -> β}
   证明: fun _ h => h.preimage' fun b _ => hf b
 
@@ -990,8 +990,8 @@ theorem Function.Injective.comap_cofinite_eq
   proof: (comap_cofinite_le f).antisymm hf.tendsto_cofinite.le_comap
 
 中文:
-定理 Function.Injective.comap_cofinite_eq
-  条件: {f : α -> β} (hf : Injective f)
+定理 函数.单射.comap_cofinite_eq
+  条件: {f : α -> β} (hf : 单射 f)
   证明: (comap_cofinite_le f).antisymm hf.tendsto_cofinite.le_comap
 
 Depends on / 依赖: antisymm, comap_cofinite_le, hf.tendsto_cofinite.le_comap, le_comap, tendsto_cofinite
@@ -1009,8 +1009,8 @@ theorem Function.Injective.nat_tendsto_atTop
   proof: Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite
 
 中文:
-定理 Function.Injective.nat_tendsto_atTop
-  条件: {f : 自然数 -> 自然数} (hf : Injective f)
+定理 函数.单射.nat_tendsto_atTop
+  条件: {f : 自然数 -> 自然数} (hf : 单射 f)
   证明: Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, hf.tendsto_cofinite, tendsto_cofinite
@@ -1029,7 +1029,7 @@ lemma Function.update_eventuallyEq
   filter_upwards [mem_principal_self _] with u hu using Function.update_of_ne hu _ _
 
 中文:
-引理 Function.update_eventuallyEq
+引理 函数.update_eventuallyEq
   条件: [DecidableEq α] (f : α -> β) (a : α) (b : β)
   证明: by
   filter_upwards [mem_principal_self _] with u hu using Function.update_of_ne hu _ _
@@ -1049,7 +1049,7 @@ lemma Function.update_eventuallyEq_cofinite
   proof: (Function.update_eventuallyEq f a b).filter_mono (by simp)
 
 中文:
-引理 Function.update_eventuallyEq_cofinite
+引理 函数.update_eventuallyEq_cofinite
   条件: [DecidableEq α] (f : α -> β) (a : α) (b : β)
   证明: (Function.update_eventuallyEq f a b).filter_mono (by simp)
 
@@ -1070,7 +1070,7 @@ lemma tendsto_cofinite_pure_iff
 
 中文:
 引理 tendsto_cofinite_pure_iff
-  条件: {f : α -> β} [Zero β]
+  条件: {f : α -> β} [零 β]
   证明: by
   simp [Function.HasFiniteSupport, Function.support]
 
@@ -1186,7 +1186,7 @@ theorem boundary_principal
 
 中文:
 定理 boundary_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: Coheyting.boundary (𝓟 s) = ⊥
   证明: by
   simp [← Coheyting.inf_hnot_self]
@@ -1210,7 +1210,7 @@ theorem existsUnique_eq_principal_sup_free
       Coheyting.hnot_hnot_sup_boundary]
 
 中文:
-定理 existsUnique_eq_principal_sup_free
+定理 存在Unique_eq_principal_sup_free
   证明: by
   refine ⟨(f.ker, Coheyting.boundary f), ⟨?_, ?_, ?_⟩, fun q hq => ?_⟩
   · exact boundary_le_cofinite f
@@ -1247,7 +1247,7 @@ theorem exists_eq_principal_sup_free
   proof: Prod.exists.mp (existsUnique_eq_principal_sup_free f).exists
 
 中文:
-定理 exists_eq_principal_sup_free
+定理 存在_eq_principal_sup_free
   证明: Prod.exists.mp (existsUnique_eq_principal_sup_free f).exists
 
 Depends on / 依赖: Prod.exists.mp, existsUnique_eq_principal_sup_free

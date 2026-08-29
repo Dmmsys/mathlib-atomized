@@ -26,8 +26,8 @@ definition Submonoid.topOrderMonoidIso
   map_le_map_iff' := Iff.rfl
 
 中文:
-定义 Submonoid.topOrderMonoidIso
-  签名: {α : 类型} [Preorder α] [Monoid α]
+定义 子幺半群.topOrderMonoidIso
+  签名: {α : 类型} [预序 α] [幺半群 α]
   定义体: Submonoid.topEquiv
   map_le_map_iff' := Iff.rfl
 

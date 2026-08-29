@@ -89,11 +89,11 @@ structure OrderHom
     - monotone' : Monotone toFun
 
 中文:
-结构 OrderHom
-  参数: (α β : 类型) [Preorder α] [Preorder β]
+结构 序态射
+  参数: (α β : 类型) [预序 α] [预序 β]
   公理与运算 (2 个):
     - toFun : α -> β
-    - monotone' : Monotone toFun
+    - monotone' : 递增 toFun
 -/
 structure OrderHom (α β : Type*) [Preorder α] [Preorder β] where
   /-- The underlying function of an `OrderHom`. -/
@@ -187,8 +187,8 @@ abbreviation OrderHomClass
 to_dual_insert_cast OrderHomClass := by grind only [RelHomClass]
 
 中文:
-缩写 OrderHomClass
-  签名: (F : 类型) (α β : outParam 类型) [LE α] [LE β] [FunLike F α β]
+缩写 序态射类
+  签名: (F : 类型) (α β : outParam 类型) [LE α] [LE β] [函数状 F α β]
   定义体: RelHomClass F ((· <= ·) : α -> α -> Prop) ((· <= ·) : β -> β -> Prop)
 
 to_dual_insert_cast OrderHomClass := by grind only [RelHomClass]
@@ -210,8 +210,8 @@ class OrderIsoClass
     - map_le_map_iff((f : F) {a b : α}) : f a <= f b ↔ a <= b
 
 中文:
-类 OrderIsoClass
-  参数: (F : 类型) (α β : outParam 类型) [LE α] [LE β] [EquivLike F α β]
+类 OrderIso类
+  参数: (F : 类型) (α β : outParam 类型) [LE α] [LE β] [等价状 F α β]
   公理与运算 (1 个):
     - map_le_map_iff((f : F) {a b : α}) : f a <= f b ↔ a <= b
 -/
@@ -240,8 +240,8 @@ definition OrderIsoClass.toOrderIso
   body: { EquivLike.toEquiv f with map_rel_iff' := map_le_map_iff f }
 
 中文:
-定义 OrderIsoClass.toOrderIso
-  签名: [LE α] [LE β] [EquivLike F α β] [OrderIsoClass F α β] (f : F)
+定义 OrderIso类.toOrderIso
+  签名: [LE α] [LE β] [等价状 F α β] [OrderIso类 F α β] (f : F)
   定义体: { EquivLike.toEquiv f with map_rel_iff' := map_le_map_iff f }
 
 Depends on / 依赖: EquivLike, EquivLike.toEquiv, map_le_map_iff, map_rel_iff, toEquiv
@@ -260,7 +260,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [LE β] [EquivLike F α β] [OrderIsoClass F α β] : CoeTC F (α ≃o β)
+  签名: α] [LE β] [等价状 F α β] [OrderIso类 F α β] : CoeTC F (α ≃o β)
   定义体: ⟨OrderIsoClass.toOrderIso⟩
 -/
 instance [LE α] [LE β] [EquivLike F α β] [OrderIsoClass F α β] : CoeTC F (α ≃o β) :=
@@ -290,7 +290,7 @@ theorem monotone
 中文:
 定理 monotone
   条件: (f : F)
-  结论: Monotone f
+  结论: 递增 f
   证明: fun _ _ => map_rel f
 
 @[gcongr]
@@ -310,7 +310,7 @@ theorem mono
 中文:
 定理 mono
   条件: (f : F)
-  结论: Monotone f
+  结论: 递增 f
   证明: fun _ _ => map_rel f
 -/
 protected theorem mono (f : F) : Monotone f := fun _ _ => map_rel f
@@ -380,7 +380,7 @@ theorem map_inv_le_iff
 中文:
 定理 map_inv_le_iff
   条件: (f : F) {a : α} {b : β}
-  结论: EquivLike.inv f b <= a ↔ b <= f a
+  结论: 等价状.inv f b <= a ↔ b <= f a
   证明: by
   convert! (map_le_map_iff f).symm
   exact (EquivLike.right_inv f _).symm
@@ -459,7 +459,7 @@ theorem map_inv_lt_iff
 中文:
 定理 map_inv_lt_iff
   条件: (f : F) {a : α} {b : β}
-  结论: EquivLike.inv f b < a ↔ b < f a
+  结论: 等价状.inv f b < a ↔ b < f a
   证明: by
   rw [← map_lt_map_iff f]
   simp only [EquivLike.apply_inv_apply]
@@ -509,7 +509,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (α ->o β) α β
+  签名: 函数状 (α ->o β) α β
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (α ->o β) α β
+  签名: 序态射类 (α ->o β) α β
   定义体: f.monotone' h
 
 Depends on / 依赖: f.monotone, monotone
@@ -546,7 +546,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f : α -> β) (hf : Monotone f)
+  条件: (f : α -> β) (hf : 递增 f)
   结论: ⇑(mk f hf) = f
   证明: rfl
 -/
@@ -564,7 +564,7 @@ theorem monotone
 中文:
 定理 monotone
   条件: (f : α ->o β)
-  结论: Monotone f
+  结论: 递增 f
   证明: f.monotone'
 -/
 protected theorem monotone (f : α ->o β) : Monotone f :=
@@ -582,7 +582,7 @@ theorem mono
 中文:
 定理 mono
   条件: (f : α ->o β)
-  结论: Monotone f
+  结论: 递增 f
   证明: f.monotone
 -/
 protected theorem mono (f : α ->o β) : Monotone f :=
@@ -658,7 +658,7 @@ theorem coe_eq
 中文:
 定理 coe_eq
   条件: (f : α ->o β)
-  结论: OrderHomClass.toOrderHom f = f
+  结论: 序态射类.toOrderHom f = f
   证明: rfl
 -/
 @[simp] theorem coe_eq (f : α ->o β) : OrderHomClass.toOrderHom f = f := rfl
@@ -672,8 +672,8 @@ theorem _root_.OrderHomClass.coe_coe
   proof: rfl
 
 中文:
-定理 _root_.OrderHomClass.coe_coe
-  条件: {F} [FunLike F α β] [OrderHomClass F α β] (f : F)
+定理 _root_.序态射类.coe_coe
+  条件: {F} [函数状 F α β] [序态射类 F α β] (f : F)
   证明: rfl
 -/
 @[simp] theorem _root_.OrderHomClass.coe_coe {F} [FunLike F α β] [OrderHomClass F α β] (f : F) :
@@ -690,7 +690,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift (α -> β) (α ->o β) (↑) Monotone where
+  签名: : CanLift (α -> β) (α ->o β) (↑) 递增 where
   定义体: ⟨⟨f, h⟩, rfl⟩
 -/
 protected instance canLift : CanLift (α -> β) (α ->o β) (↑) Monotone where
@@ -789,7 +789,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->o α)
+  签名: 可居 (α ->o α)
   定义体: ⟨id⟩
 -/
 instance : Inhabited (α ->o α) :=
@@ -809,7 +809,7 @@ definition equivRelHom
 
 中文:
 定义 equivRelHom
-  签名: : (α ->o β) ≃ @RelHom α β (· <= ·) (· <= ·) where
+  签名: : (α ->o β) ≃ @关系态射 α β (· <= ·) (· <= ·) where
   定义体: ⟨f, @f.monotone⟩
   invFun f := ⟨f, @f.map_rel⟩
   left_inv _ := rfl
@@ -833,7 +833,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (α ->o β)
+  签名: 预序 (α ->o β)
   定义体: @Preorder.lift (α ->o β) (α -> β) _ DFunLike.coe
 
 Depends on / 依赖: DFunLike, DFunLike.coe, Preorder, Preorder.lift
@@ -1182,7 +1182,7 @@ definition const
 
 中文:
 定义 const
-  签名: (α : 类型) [Preorder α] {β : 类型} [Preorder β]
+  签名: (α : 类型) [预序 α] {β : 类型} [预序 β]
   定义体: ⟨Function.const α b, fun _ _ _ => le_rfl⟩
   monotone' _ _ h _ := h
 
@@ -1228,7 +1228,7 @@ theorem comp_const
 
 中文:
 定理 comp_const
-  条件: (γ : 类型) [Preorder γ] (f : α ->o β) (c : α)
+  条件: (γ : 类型) [预序 γ] (f : α ->o β) (c : α)
   证明: rfl
 -/
 theorem comp_const (γ : Type*) [Preorder γ] (f : α ->o β) (c : α) :
@@ -1249,7 +1249,7 @@ definition prod
 @[mono, to_dual self]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : α ->o β) (g : α ->o γ)
   定义体: ⟨fun x => (f x, g x), fun _ _ h => ⟨f.mono h, g.mono h⟩⟩
 
@@ -1414,7 +1414,7 @@ theorem fst_prod_snd
 
 中文:
 定理 fst_prod_snd
-  结论: (fst : α × β ->o α).prod snd = id
+  结论: (fst : α × β ->o α).乘积 snd = id
   证明: by
   ext ⟨x, y⟩ : 2
   rfl
@@ -1440,7 +1440,7 @@ theorem fst_comp_prod
 中文:
 定理 fst_comp_prod
   条件: (f : α ->o β) (g : α ->o γ)
-  结论: fst.comp (f.prod g) = f
+  结论: fst.comp (f.乘积 g) = f
   证明: ext _ _ rfl
 
 @[simp]
@@ -1461,7 +1461,7 @@ theorem snd_comp_prod
 中文:
 定理 snd_comp_prod
   条件: (f : α ->o β) (g : α ->o γ)
-  结论: snd.comp (f.prod g) = g
+  结论: snd.comp (f.乘积 g) = g
   证明: ext _ _ rfl
 -/
 theorem snd_comp_prod (f : α ->o β) (g : α ->o γ) : snd.comp (f.prod g) = g :=
@@ -1527,7 +1527,7 @@ definition _root_.Pi.evalOrderHom
   body: ⟨Function.eval i, Function.monotone_eval i⟩
 
 中文:
-定义 _root_.Pi.evalOrderHom
+定义 _root_.依赖函数类型.evalOrderHom
   签名: (i : ι)
   定义体: ⟨Function.eval i, Function.monotone_eval i⟩
 
@@ -1636,7 +1636,7 @@ definition Subtype.val
   body: ⟨_root_.Subtype.val, fun _ _ h => h⟩
 
 中文:
-定义 Subtype.val
+定义 子类型.val
   签名: (p : α -> 命题)
   定义体: ⟨_root_.Subtype.val, fun _ _ h => h⟩
 
@@ -1657,7 +1657,7 @@ definition _root_.Subtype.orderEmbedding
     map_rel_iff' := by aesop }
 
 中文:
-定义 _root_.Subtype.orderEmbedding
+定义 _root_.子类型.orderEmbedding
   签名: {p q : α -> 命题} (h : 对任意 a, p a -> q a)
   定义体: { Subtype.impEmbedding _ _ h with
     map_rel_iff' := by aesop }
@@ -1680,7 +1680,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: OrderHom.id
   uniq _ := ext _ _ (Subsingleton.elim _ _)
 
@@ -1701,8 +1701,8 @@ theorem orderHom_eq_id
 
 中文:
 定理 orderHom_eq_id
-  条件: [Subsingleton α] (g : α ->o α)
-  结论: g = OrderHom.id
+  条件: [子单例 α] (g : α ->o α)
+  结论: g = 序态射.id
   证明: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1751,7 +1751,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: (OrderHom.id : α ->o α).dual = OrderHom.id
+  结论: (序态射.id : α ->o α).dual = 序态射.id
   证明: rfl
 
 @[simp]
@@ -1794,7 +1794,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: OrderHom.dual.symm OrderHom.id = (OrderHom.id : α ->o α)
+  结论: 序态射.dual.symm 序态射.id = (序态射.id : α ->o α)
   证明: rfl
 
 @[simp]
@@ -1831,7 +1831,7 @@ definition dualIso
 
 中文:
 定义 dualIso
-  签名: (α β : 类型) [Preorder α] [Preorder β]
+  签名: (α β : 类型) [预序 α] [预序 β]
   定义体: OrderHom.dual.trans OrderDual.toDual
   map_rel_iff' := Iff.rfl
 
@@ -1965,8 +1965,8 @@ definition RelEmbedding.orderEmbeddingOfLTEmbedding
 @[simp]
 
 中文:
-定义 RelEmbedding.orderEmbeddingOfLTEmbedding
-  签名: [PartialOrder α] [PartialOrder β]
+定义 关系嵌入.orderEmbeddingOfLTEmbedding
+  签名: [偏序 α] [偏序 β]
   定义体: { f with
     map_rel_iff' := by
       simp [le_iff_lt_or_eq, f.map_rel_iff, f.injective.eq_iff] }
@@ -1991,8 +1991,8 @@ theorem RelEmbedding.orderEmbeddingOfLTEmbedding_apply
   proof: rfl
 
 中文:
-定理 RelEmbedding.orderEmbeddingOfLTEmbedding_apply
-  结论: [PartialOrder α] [PartialOrder β]
+定理 关系嵌入.orderEmbeddingOfLTEmbedding_apply
+  结论: [偏序 α] [偏序 β]
   证明: rfl
 -/
 theorem RelEmbedding.orderEmbeddingOfLTEmbedding_apply [PartialOrder α] [PartialOrder β]
@@ -2061,7 +2061,7 @@ theorem id_toEmbedding
 
 中文:
 定理 id_toEmbedding
-  结论: (id α).toEmbedding = Function.Embedding.refl α
+  结论: (id α).toEmbedding = 函数.嵌入.refl α
   证明: rfl
 -/
 theorem id_toEmbedding : (id α).toEmbedding = Function.Embedding.refl α :=
@@ -2310,7 +2310,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone f
+  结论: 递增 f
   证明: OrderHomClass.monotone f
 -/
 protected theorem monotone : Monotone f :=
@@ -2326,7 +2326,7 @@ theorem strictMono
 
 中文:
 定理 strictMono
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: fun _ _ => f.lt_iff_lt.2
 -/
 protected theorem strictMono : StrictMono f := fun _ _ => f.lt_iff_lt.2
@@ -2382,8 +2382,8 @@ theorem isWellOrder
 
 中文:
 定理 isWellOrder
-  条件: [IsWellOrder β (· < ·)] (f : α ↪o β)
-  结论: IsWellOrder α (· < ·)
+  条件: [是良序 β (· < ·)] (f : α ↪o β)
+  结论: 是良序 α (· < ·)
   证明: f.ltEmbedding.isWellOrder
 -/
 protected theorem isWellOrder [IsWellOrder β (· < ·)] (f : α ↪o β) : IsWellOrder α (· < ·) :=
@@ -2442,7 +2442,7 @@ definition ofMapLEIff
 
 中文:
 定义 ofMapLEIff
-  签名: {α β} [PartialOrder α] [Preorder β] (f : α -> β) (hf : 对任意 a b, f a <= f b ↔ a <= b)
+  签名: {α β} [偏序 α] [预序 β] (f : α -> β) (hf : 对任意 a b, f a <= f b ↔ a <= b)
   定义体: RelEmbedding.ofMapRelIff f hf
 
 @[simp, to_dual self]
@@ -2464,7 +2464,7 @@ theorem coe_ofMapLEIff
 
 中文:
 定理 coe_ofMapLEIff
-  条件: {α β} [PartialOrder α] [Preorder β] {f : α -> β} (h)
+  条件: {α β} [偏序 α] [预序 β] {f : α -> β} (h)
   证明: rfl
 -/
 theorem coe_ofMapLEIff {α β} [PartialOrder α] [Preorder β] {f : α -> β} (h) :
@@ -2483,7 +2483,7 @@ definition ofStrictMono
 
 中文:
 定义 ofStrictMono
-  签名: {α β} [LinearOrder α] [Preorder β] (f : α -> β) (h : StrictMono f)
+  签名: {α β} [线性序 α] [预序 β] (f : α -> β) (h : 严格递增 f)
   定义体: ofMapLEIff f fun _ _ => h.le_iff_le
 
 @[simp, grind =]
@@ -2504,7 +2504,7 @@ theorem coe_ofStrictMono
 
 中文:
 定理 coe_ofStrictMono
-  条件: {α β} [LinearOrder α] [Preorder β] {f : α -> β} (h : StrictMono f)
+  条件: {α β} [线性序 α] [预序 β] {f : α -> β} (h : 严格递增 f)
   证明: rfl
 -/
 theorem coe_ofStrictMono {α β} [LinearOrder α] [Preorder β] {f : α -> β} (h : StrictMono f) :
@@ -2545,7 +2545,7 @@ theorem subtype_apply
 
 中文:
 定理 subtype_apply
-  条件: {p : α -> 命题} (x : Subtype p)
+  条件: {p : α -> 命题} (x : 子类型 p)
   结论: subtype p x = x
   证明: rfl
 -/
@@ -2566,7 +2566,7 @@ theorem subtype_injective
 中文:
 定理 subtype_injective
   条件: (p : α -> 命题)
-  结论: Function.Injective (subtype p)
+  结论: 函数.单射 (subtype p)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -2589,7 +2589,7 @@ theorem coe_subtype
 中文:
 定理 coe_subtype
   条件: (p : α -> 命题)
-  结论: ⇑(subtype p) = Subtype.val
+  结论: ⇑(subtype p) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype (p : α -> Prop) : ⇑(subtype p) = Subtype.val :=
@@ -2608,7 +2608,7 @@ definition toOrderHom
 
 中文:
 定义 toOrderHom
-  签名: {X Y : 类型} [Preorder X] [Preorder Y] (f : X ↪o Y)
+  签名: {X Y : 类型} [预序 X] [预序 Y] (f : X ↪o Y)
   定义体: f
   monotone' := f.monotone
 -/
@@ -2630,7 +2630,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: isEmptyElim
   inj' := isEmptyElim
   map_rel_iff' {a} := isEmptyElim a
@@ -2654,7 +2654,7 @@ lemma coe_ofIsEmpty
 
 中文:
 引理 coe_ofIsEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: (ofIsEmpty : α ↪o β) = (isEmptyElim : α -> β)
   证明: rfl
 -/
@@ -2683,7 +2683,7 @@ lemma Disjoint.of_orderEmbedding
 
 中文:
 引理 Disjoint.of_orderEmbedding
-  条件: [OrderBot α] [OrderBot β] {a₁ a₂ : α}
+  条件: [有底序 α] [有底序 β] {a₁ a₂ : α}
   证明: by
   intro h x h₁ h₂
   rw [← f.le_iff_le] at h₁ h₂ ⊢
@@ -2711,7 +2711,7 @@ lemma Codisjoint.of_orderEmbedding
 
 中文:
 引理 Codisjoint.of_orderEmbedding
-  条件: [OrderTop α] [OrderTop β] {a₁ a₂ : α}
+  条件: [有顶序 α] [有顶序 β] {a₁ a₂ : α}
   证明: Disjoint.of_orderEmbedding (α := αᵒᵈ) (β := βᵒᵈ) f.dual
 
 Depends on / 依赖: Disjoint, Disjoint.of_orderEmbedding, f.dual, of_orderEmbedding
@@ -2730,8 +2730,8 @@ lemma IsCompl.of_orderEmbedding
   ⟨Disjoint.of_orderEmbedding f hd, Codisjoint.of_orderEmbedding f hcd⟩
 
 中文:
-引理 IsCompl.of_orderEmbedding
-  条件: [BoundedOrder α] [BoundedOrder β] {a₁ a₂ : α}
+引理 是补集.of_orderEmbedding
+  条件: [有界序 α] [有界序 β] {a₁ a₂ : α}
   证明: fun ⟨hd, hcd⟩ =>
   ⟨Disjoint.of_orderEmbedding f hd, Codisjoint.of_orderEmbedding f hcd⟩
 -/
@@ -2781,7 +2781,7 @@ theorem RelEmbedding.toOrderHom_injective
   proof: fun _ _ h => f.injective h
 
 中文:
-定理 RelEmbedding.toOrderHom_injective
+定理 关系嵌入.toOrderHom_injective
   证明: fun _ _ h => f.injective h
 
 Depends on / 依赖: f.injective, injective
@@ -2809,7 +2809,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (α ≃o β) α β
+  签名: 等价状 (α ≃o β) α β
   定义体: inferInstance
 -/
 instance : EquivLike (α ≃o β) α β :=
@@ -2827,7 +2827,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderIsoClass (α ≃o β) α β
+  签名: OrderIso类 (α ≃o β) α β
   定义体: f.map_rel_iff'
 
 @[simp]
@@ -2931,7 +2931,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : α ≃o β)
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective (e : α ≃o β) : Function.Bijective e :=
@@ -2949,7 +2949,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : α ≃o β)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: e.toEquiv.injective
 -/
 protected theorem injective (e : α ≃o β) : Function.Injective e :=
@@ -2967,7 +2967,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : α ≃o β)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: e.toEquiv.surjective
 -/
 protected theorem surjective (e : α ≃o β) : Function.Surjective e :=
@@ -3070,7 +3070,7 @@ theorem refl_toEquiv
 
 中文:
 定理 refl_toEquiv
-  结论: (refl α).toEquiv = Equiv.refl α
+  结论: (refl α).toEquiv = 等价.refl α
   证明: rfl
 -/
 theorem refl_toEquiv : (refl α).toEquiv = Equiv.refl α :=
@@ -3279,7 +3279,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (OrderIso.symm : (α ≃o β) -> β ≃o α)
+  结论: 函数.双射 (OrderIso.symm : (α ≃o β) -> β ≃o α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -3299,7 +3299,7 @@ theorem symm_injective
 
 中文:
 定理 symm_injective
-  结论: Function.Injective (symm : α ≃o β -> β ≃o α)
+  结论: 函数.单射 (symm : α ≃o β -> β ≃o α)
   证明: symm_bijective.injective
 
 @[simp]
@@ -3621,7 +3621,7 @@ right_inv p := DFunLik
 
 中文:
 定义 arrowCongr
-  签名: {α β γ δ} [Preorder α] [Preorder β] [Preorder γ] [Preorder δ]
+  签名: {α β γ δ} [预序 α] [预序 β] [预序 γ] [预序 δ]
   定义体: .comp g .comp p f.symm
 invFun p := .comp g.symm .comp p f
 left_inv p := DFunLike.coe_injective by
@@ -3662,7 +3662,7 @@ definition conj
 
 中文:
 定义 conj
-  签名: {α β} [Preorder α] [Preorder β] (f : α ≃o β)
+  签名: {α β} [预序 α] [预序 β] (f : α ≃o β)
   定义体: arrowCongr f f
 
 Depends on / 依赖: arrowCongr
@@ -3806,7 +3806,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: (f : α ↪o β) (hf : Function.Surjective f)
+  签名: (f : α ↪o β) (hf : 函数.满射 f)
   定义体: RelIso.ofSurjective f hf
 
 Depends on / 依赖: RelIso, RelIso.ofSurjective, ofSurjective
@@ -3907,7 +3907,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm : α × β ≃o β × α) = Prod.swap
+  结论: ⇑(prodComm : α × β ≃o β × α) = 积类型.swap
   证明: rfl
 
 @[simp]
@@ -4106,7 +4106,7 @@ theorem monotone
 中文:
 定理 monotone
   条件: (e : α ≃o β)
-  结论: Monotone e
+  结论: 递增 e
   证明: e.toOrderEmbedding.monotone
 -/
 protected theorem monotone (e : α ≃o β) : Monotone e :=
@@ -4126,7 +4126,7 @@ theorem strictMono
 中文:
 定理 strictMono
   条件: (e : α ≃o β)
-  结论: StrictMono e
+  结论: 严格递增 e
   证明: e.toOrderEmbedding.strictMono
 
 @[simp, gcongr, to_dual self]
@@ -4304,7 +4304,7 @@ definition ofRelIsoLT
 
 中文:
 定义 ofRelIsoLT
-  签名: {α β} [PartialOrder α] [PartialOrder β]
+  签名: {α β} [偏序 α] [偏序 β]
   定义体: ⟨e.toEquiv, by simp [le_iff_eq_or_lt, e.map_rel_iff, e.injective.eq_iff]⟩
 
 @[simp]
@@ -4328,7 +4328,7 @@ theorem ofRelIsoLT_apply
 
 中文:
 定理 ofRelIsoLT_apply
-  结论: {α β} [PartialOrder α] [PartialOrder β]
+  结论: {α β} [偏序 α] [偏序 β]
   证明: rfl
 
 @[simp]
@@ -4350,7 +4350,7 @@ theorem ofRelIsoLT_symm
 
 中文:
 定理 ofRelIsoLT_symm
-  结论: {α β} [PartialOrder α] [PartialOrder β]
+  结论: {α β} [偏序 α] [偏序 β]
   证明: rfl
 
 @[simp]
@@ -4375,7 +4375,7 @@ theorem ofRelIsoLT_toRelIsoLT
 
 中文:
 定理 ofRelIsoLT_toRelIsoLT
-  条件: {α β} [PartialOrder α] [PartialOrder β] (e : α ≃o β)
+  条件: {α β} [偏序 α] [偏序 β] (e : α ≃o β)
   证明: by
   ext
   simp
@@ -4400,7 +4400,7 @@ theorem toRelIsoLT_ofRelIsoLT
 
 中文:
 定理 toRelIsoLT_ofRelIsoLT
-  结论: {α β} [PartialOrder α] [PartialOrder β]
+  结论: {α β} [偏序 α] [偏序 β]
   证明: by
   ext
   simp
@@ -4429,7 +4429,7 @@ definition ofCmpEqCmp
 
 中文:
 定义 ofCmpEqCmp
-  签名: {α β} [LinearOrder α] [LinearOrder β] (f : α -> β) (g : β -> α)
+  签名: {α β} [线性序 α] [线性序 β] (f : α -> β) (g : β -> α)
   定义体: have gf : forall a : α, a = g (f a) := by
     intro
     rw [← cmp_eq_eq_iff]; rw [h]; rw [cmp_self_eq_eq]
@@ -4532,7 +4532,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (α β : 类型) [Unique α] [Preorder β]
+  签名: (α β : 类型) [唯一 α] [预序 β]
   定义体: Equiv.funUnique α β
   map_rel_iff' := by simp [Pi.le_def, Unique.forall_iff]
 
@@ -4555,7 +4555,7 @@ theorem funUnique_symm_apply
 
 中文:
 定理 funUnique_symm_apply
-  条件: {α β : 类型} [Unique α] [Preorder β]
+  条件: {α β : 类型} [唯一 α] [预序 β]
   证明: rfl
 -/
 theorem funUnique_symm_apply {α β : Type*} [Unique α] [Preorder β] :
@@ -4596,7 +4596,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: (α β : 类型) [Preorder α] [Preorder β] [IsEmpty α] [IsEmpty β]
+  签名: (α β : 类型) [预序 α] [预序 β] [是空 α] [是空 β]
   定义体: ⟨Equiv.equivOfIsEmpty α β, @isEmptyElim _ _ _⟩
 
 Depends on / 依赖: Equiv.equivOfIsEmpty, equivOfIsEmpty, isEmptyElim
@@ -4622,7 +4622,7 @@ definition toOrderIso
 
 中文:
 定义 toOrderIso
-  签名: (e : α ≃ β) (h₁ : Monotone e) (h₂ : Monotone e.symm)
+  签名: (e : α ≃ β) (h₁ : 递增 e) (h₂ : 递增 e.symm)
   定义体: ⟨e, ⟨fun h => by simpa only [e.symm_apply_apply] using h₂ h, fun h => h₁ h⟩⟩
 
 @[simp]
@@ -4645,7 +4645,7 @@ theorem coe_toOrderIso
 
 中文:
 定理 coe_toOrderIso
-  条件: (e : α ≃ β) (h₁ : Monotone e) (h₂ : Monotone e.symm)
+  条件: (e : α ≃ β) (h₁ : 递增 e) (h₂ : 递增 e.symm)
   证明: rfl
 
 @[simp]
@@ -4665,7 +4665,7 @@ theorem toOrderIso_toEquiv
 
 中文:
 定理 toOrderIso_toEquiv
-  条件: (e : α ≃ β) (h₁ : Monotone e) (h₂ : Monotone e.symm)
+  条件: (e : α ≃ β) (h₁ : 递增 e) (h₂ : 递增 e.symm)
   证明: rfl
 -/
 theorem toOrderIso_toEquiv (e : α ≃ β) (h₁ : Monotone e) (h₂ : Monotone e.symm) :
@@ -4695,7 +4695,7 @@ left_inv := fun _ => h_mono.injective hg _,
 
 中文:
 定义 orderIsoOfRightInverse
-  签名: (g : β -> α) (hg : Function.RightInverse g f)
+  签名: (g : β -> α) (hg : 函数.右逆 g f)
   定义体: { OrderEmbedding.ofStrictMono f h_mono with
     toFun := f,
     invFun := g,
@@ -4801,7 +4801,7 @@ theorem OrderIso.map_bot'
 
 中文:
 定理 OrderIso.map_bot'
-  结论: [LE α] [PartialOrder β] (f : α ≃o β) {x : α} {y : β} (hx : 对任意 x', x <= x')
+  结论: [LE α] [偏序 β] (f : α ≃o β) {x : α} {y : β} (hx : 对任意 x', x <= x')
   证明: by
   refine le_antisymm ?_ (hy _)
   rw [← f.apply_symm_apply y]; rw [f.le_iff_le]
@@ -4831,7 +4831,7 @@ theorem OrderIso.map_bot
 
 中文:
 定理 OrderIso.map_bot
-  条件: [LE α] [PartialOrder β] [OrderBot α] [OrderBot β] (f : α ≃o β)
+  条件: [LE α] [偏序 β] [有底序 α] [有底序 β] (f : α ≃o β)
   结论: f ⊥ = ⊥
   证明: f.map_bot' (fun _ => bot_le) fun _ => bot_le
 
@@ -4912,7 +4912,7 @@ theorem OrderIso.isMax_apply
 
 中文:
 定理 OrderIso.isMax_apply
-  条件: {α β : 类型} [Preorder α] [Preorder β] (f : α ≃o β) {x : α}
+  条件: {α β : 类型} [预序 α] [预序 β] (f : α ≃o β) {x : α}
   证明: by
   refine ⟨f.strictMono.isMax_of_apply, ?_⟩
   conv_lhs => rw [← f.symm_apply_apply x]
@@ -4938,7 +4938,7 @@ theorem Disjoint.map_orderIso
 
 中文:
 定理 Disjoint.map_orderIso
-  结论: [SemilatticeInf α] [OrderBot α] [SemilatticeInf β] [OrderBot β]
+  结论: [SemilatticeInf α] [有底序 α] [SemilatticeInf β] [有底序 β]
   证明: by
   rw [disjoint_iff_inf_le]; rw [← f.map_inf]; rw [← f.map_bot]
   exact f.monotone ha.le_bot
@@ -4966,7 +4966,7 @@ theorem Codisjoint.map_orderIso
 
 中文:
 定理 Codisjoint.map_orderIso
-  结论: [SemilatticeSup α] [OrderTop α] [SemilatticeSup β] [OrderTop β]
+  结论: [SemilatticeSup α] [有顶序 α] [SemilatticeSup β] [有顶序 β]
   证明: by
   rw [codisjoint_iff_le_sup]; rw [← f.map_sup]; rw [← f.map_top]
   exact f.monotone ha.top_le
@@ -4992,7 +4992,7 @@ theorem disjoint_map_orderIso_iff
 
 中文:
 定理 disjoint_map_orderIso_iff
-  结论: [SemilatticeInf α] [OrderBot α] [SemilatticeInf β] [OrderBot β]
+  结论: [SemilatticeInf α] [有底序 α] [SemilatticeInf β] [有底序 β]
   证明: ⟨fun h => f.symm_apply_apply a ▸ f.symm_apply_apply b ▸ h.map_orderIso f.symm,
    fun h => h.map_orderIso f⟩
 
@@ -5018,8 +5018,8 @@ theorem OrderIso.isCompl
 
 中文:
 定理 OrderIso.isCompl
-  条件: {x y : α} (h : IsCompl x y)
-  结论: IsCompl (f x) (f y)
+  条件: {x y : α} (h : 是补集 x y)
+  结论: 是补集 (f x) (f y)
   证明: ⟨h.1.map_orderIso _, h.2.map_orderIso _⟩
 
 Depends on / 依赖: map_orderIso
@@ -5039,7 +5039,7 @@ theorem OrderIso.isCompl_iff
 中文:
 定理 OrderIso.isCompl_iff
   条件: {x y : α}
-  结论: IsCompl x y ↔ IsCompl (f x) (f y)
+  结论: 是补集 x y ↔ 是补集 (f x) (f y)
   证明: ⟨f.isCompl, fun h => f.symm_apply_apply x ▸ f.symm_apply_apply y ▸ f.symm.isCompl h⟩
 
 Depends on / 依赖: f.isCompl, f.symm.isCompl, f.symm_apply_apply, isCompl, symm_apply_apply
@@ -5061,8 +5061,8 @@ theorem OrderIso.complementedLattice
 
 中文:
 定理 OrderIso.complementedLattice
-  条件: [ComplementedLattice α] (f : α ≃o β)
-  结论: ComplementedLattice β
+  条件: [有补格 α] (f : α ≃o β)
+  结论: 有补格 β
   证明: ⟨fun x => by
     obtain ⟨y, hy⟩ := exists_isCompl (f.symm x)
     rw [← f.symm_apply_apply y] at hy
@@ -5117,8 +5117,8 @@ lemma StrictMono.denselyOrdered_range
     using fun _ _ => exists_between
 
 中文:
-引理 StrictMono.denselyOrdered_range
-  结论: {X Y : 类型} [LinearOrder X] [DenselyOrdered X] [Preorder Y]
+引理 严格递增.denselyOrdered_range
+  结论: {X Y : 类型} [线性序 X] [稠密序 X] [预序 Y]
   证明: by
   constructor
   simpa [← exists_and_left, ← exists_and_right, exists_comm, hf.lt_iff_lt]
@@ -5152,7 +5152,7 @@ lemma denselyOrdered_iff_of_orderIsoClass
 
 中文:
 引理 denselyOrdered_iff_of_orderIsoClass
-  结论: {X Y F : 类型} [Preorder X] [Preorder Y]
+  结论: {X Y F : 类型} [预序 X] [预序 Y]
   证明: by
   constructor
   · intro H
@@ -5196,7 +5196,7 @@ lemma denselyOrdered_iff_of_strictAnti
 
 中文:
 引理 denselyOrdered_iff_of_strictAnti
-  结论: {X Y F : 类型} [LinearOrder X] [Preorder Y]
+  结论: {X Y F : 类型} [线性序 X] [预序 Y]
   证明: by
   rw [← denselyOrdered_orderDual]
   let e : Xᵒᵈ ≃o Y := ⟨OrderDual.ofDual.trans (f : X ≃ Y), ?_⟩
@@ -5233,8 +5233,8 @@ definition ULift.orderIso
   body: Equiv.ulift.toOrderIso (fun _ _ => id) (fun _ _ => id)
 
 中文:
-定义 ULift.orderIso
-  签名: {α : 类型u} [Preorder α]
+定义 类型层提升.orderIso
+  签名: {α : 类型u} [预序 α]
   定义体: Equiv.ulift.toOrderIso (fun _ _ => id) (fun _ _ => id)
 
 Depends on / 依赖: Equiv.ulift.toOrderIso, toOrderIso

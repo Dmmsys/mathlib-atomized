@@ -27,7 +27,7 @@ theorem IsSimpleRing.exists_algEquiv_matrix_of_isAlgClosed
     IsAlgClosed.algebraMap_bijective_of_isIntegral⟩⟩
 
 中文:
-定理 IsSimpleRing.exists_algEquiv_matrix_of_isAlgClosed
+定理 是单环.存在_algEquiv_matrix_of_isAlgClosed
   证明: have := IsArtinianRing.of_finite F R
   have ⟨n, hn, D, _, _, _, ⟨e⟩⟩ := exists_algEquiv_matrix_divisionRing_finite F R
 ⟨n, hn, ⟨e.trans .mapMatrix .symm .ofBijective (Algebra.ofId F D)
@@ -53,7 +53,7 @@ theorem IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed
     (Algebra.ofId F (D i)) IsAlgClosed.algebraMap_bijective_of_isIntegral⟩⟩
 
 中文:
-定理 IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed
+定理 IsSemisimpleRing.存在_algEquiv_pi_matrix_of_isAlgClosed
   证明: have ⟨n, D, d, _, _, _, hd, ⟨e⟩⟩ := exists_algEquiv_pi_matrix_divisionRing_finite F R
 ⟨n, d, hd, ⟨e.trans .piCongrRight fun i => .mapMatrix .symm .ofBijective
     (Algebra.ofId F (D i)) IsAlgClosed.algebraMap_bijective_of_isIntegral⟩⟩

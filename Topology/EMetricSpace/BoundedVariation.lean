@@ -65,7 +65,7 @@ definition eVariationOn
 
 中文:
 定义 eVariationOn
-  签名: (f : α -> E) (s : Set α)
+  签名: (f : α -> E) (s : 集合 α)
   定义体: ⨆ p : Nat × { u : Nat -> α // Monotone u ∧ forall i, u i in s },
     ∑ i in Finset.range p.1, edist (f (p.2.1 (i + 1))) (f (p.2.1 i))
 
@@ -85,7 +85,7 @@ definition BoundedVariationOn
 
 中文:
 定义 BoundedVariationOn
-  签名: (f : α -> E) (s : Set α)
+  签名: (f : α -> E) (s : 集合 α)
   定义体: eVariationOn f s != ∞
 
 Depends on / 依赖: eVariationOn
@@ -103,7 +103,7 @@ definition LocallyBoundedVariationOn
 
 中文:
 定义 LocallyBoundedVariationOn
-  签名: (f : α -> E) (s : Set α)
+  签名: (f : α -> E) (s : 集合 α)
   定义体: forall a b, a in s -> b in s -> BoundedVariationOn f (s inter Icc a b)
 
 Depends on / 依赖: BoundedVariationOn
@@ -127,7 +127,7 @@ theorem nonempty_monotone_mem
 
 中文:
 定理 nonempty_monotone_mem
-  条件: {s : Set α} (hs : s.Nonempty)
+  条件: {s : 集合 α} (hs : s.非空)
   证明: by
   obtain ⟨x, hx⟩ := hs
   exact ⟨⟨fun _ => x, fun i j _ => le_rfl, fun _ => hx⟩⟩
@@ -153,7 +153,7 @@ theorem eq_of_edist_zero_on
 
 中文:
 定理 eq_of_edist_zero_on
-  条件: {f f' : α -> E} {s : Set α} (h : 对任意 ⦃x⦄, x in s -> edist (f x) (f' x) = 0)
+  条件: {f f' : α -> E} {s : 集合 α} (h : 对任意 ⦃x⦄, x in s -> edist (f x) (f' x) = 0)
   证明: by
   dsimp only [eVariationOn]
   congr 1 with p : 1
@@ -179,7 +179,7 @@ theorem eq_of_eqOn
 
 中文:
 定理 eq_of_eqOn
-  条件: {f f' : α -> E} {s : Set α} (h : EqOn f f' s)
+  条件: {f f' : α -> E} {s : 集合 α} (h : EqOn f f' s)
   证明: eq_of_edist_zero_on fun x xs => by rw [h xs, edist_self]
 
 Depends on / 依赖: edist_self, eq_of_edist_zero_on
@@ -198,7 +198,7 @@ theorem sum_le
 
 中文:
 定理 sum_le
-  条件: {f : α -> E} {s : Set α} {n : 自然数} {u : 自然数 -> α} (hu : Monotone u) (us : 对任意 i, u i in s)
+  条件: {f : α -> E} {s : 集合 α} {n : 自然数} {u : 自然数 -> α} (hu : 递增 u) (us : 对任意 i, u i in s)
   证明: le_iSup_of_le ⟨n, u, hu, us⟩ le_rfl
 
 Depends on / 依赖: le_iSup_of_le, le_rfl
@@ -225,7 +225,7 @@ theorem sum_le_of_monotoneOn_Icc
 
 中文:
 定理 sum_le_of_monotoneOn_Icc
-  结论: {f : α -> E} {s : Set α} {m n : 自然数} {u : 自然数 -> α}
+  结论: {f : α -> E} {s : 集合 α} {m n : 自然数} {u : 自然数 -> α}
   证明: by
   rcases le_total n m with hnm | hmn
   · simp [Finset.Ico_eq_empty_of_le hnm]
@@ -268,7 +268,7 @@ theorem sum_le_of_monotoneOn_Iic
 
 中文:
 定理 sum_le_of_monotoneOn_Iic
-  结论: {f : α -> E} {s : Set α} {n : 自然数} {u : 自然数 -> α}
+  结论: {f : α -> E} {s : 集合 α} {n : 自然数} {u : 自然数 -> α}
   证明: by
   simpa using sum_le_of_monotoneOn_Icc (m := 0) (hu.mono Icc_subset_Iic_self) fun i hi => us i hi.2
 
@@ -296,7 +296,7 @@ theorem eVariationOn_eq_strictMonoOn
 
 中文:
 定理 eVariationOn_eq_strictMonoOn
-  条件: (f : α -> E) (s : Set α)
+  条件: (f : α -> E) (s : 集合 α)
   证明: by
   apply le_antisymm
   · apply iSup_le
@@ -355,7 +355,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: (f : α -> E) {s t : Set α} (hst : t subseteq s)
+  条件: (f : α -> E) {s t : 集合 α} (hst : t subseteq s)
   结论: eVariationOn f t <= eVariationOn f s
   证明: by
   apply iSup_le _
@@ -387,7 +387,7 @@ theorem eq_biSup_inter_Icc
 
 中文:
 定理 eq_biSup_inter_Icc
-  条件: {f : α -> E} {s : Set α}
+  条件: {f : α -> E} {s : 集合 α}
   结论: eVariationOn f s =
   证明: by
   apply le_antisymm ?_ (by simp [iSup_le_iff, mono f inter_subset_left])
@@ -423,7 +423,7 @@ theorem _root_.BoundedVariationOn.mono
 
 中文:
 定理 _root_.BoundedVariationOn.mono
-  结论: {f : α -> E} {s : Set α} (h : BoundedVariationOn f s)
+  结论: {f : α -> E} {s : 集合 α} (h : BoundedVariationOn f s)
   证明: ne_top_of_le_ne_top h (eVariationOn.mono f ht)
 
 Depends on / 依赖: eVariationOn, eVariationOn.mono, ne_top_of_le_ne_top
@@ -443,7 +443,7 @@ theorem _root_.BoundedVariationOn.locallyBoundedVariationOn
 
 中文:
 定理 _root_.BoundedVariationOn.locallyBoundedVariationOn
-  结论: {f : α -> E} {s : Set α}
+  结论: {f : α -> E} {s : 集合 α}
   证明: fun _ _ _ _ =>
   h.mono inter_subset_left
 -/
@@ -463,7 +463,7 @@ theorem congr
 
 中文:
 定理 congr
-  条件: {f g : α -> E} {s : Set α} (h : EqOn f g s)
+  条件: {f g : α -> E} {s : 集合 α} (h : EqOn f g s)
   结论: eVariationOn f s = eVariationOn g s
   证明: by
   grind [eVariationOn]
@@ -493,7 +493,7 @@ theorem edist_le
 
 中文:
 定理 edist_le
-  条件: (f : α -> E) {s : Set α} {x y : α} (hx : x in s) (hy : y in s)
+  条件: (f : α -> E) {s : 集合 α} {x y : α} (hx : x in s) (hy : y in s)
   证明: by
   wlog hxy : y <= x generalizing x y
   · rw [edist_comm]
@@ -541,7 +541,7 @@ theorem eq_zero_iff
 
 中文:
 定理 eq_zero_iff
-  条件: (f : α -> E) {s : Set α}
+  条件: (f : α -> E) {s : 集合 α}
   证明: by
   constructor
   · rintro h x xs y ys
@@ -582,7 +582,7 @@ theorem constant_on
 
 中文:
 定理 constant_on
-  条件: {f : α -> E} {s : Set α} (hf : (f '' s).Subsingleton)
+  条件: {f : α -> E} {s : 集合 α} (hf : (f '' s).子单例)
   证明: by
   rw [eq_zero_iff]
   rintro x xs y ys
@@ -611,7 +611,7 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: (f : α -> E) {s : Set α} (hs : s.Subsingleton)
+  条件: (f : α -> E) {s : 集合 α} (hs : s.子单例)
   证明: constant_on (hs.image f)
 
 @[simp]
@@ -632,7 +632,7 @@ theorem _root_.BoundedVariationOn.of_subsingleton
 
 中文:
 定理 _root_.BoundedVariationOn.of_subsingleton
-  条件: {f : α -> E} {s : Set α} (hs : s.Subsingleton)
+  条件: {f : α -> E} {s : 集合 α} (hs : s.子单例)
   证明: by
   simp [BoundedVariationOn, hs]
 
@@ -657,7 +657,7 @@ theorem lowerSemicontinuous_aux
 
 中文:
 定理 lowerSemicontinuous_aux
-  结论: {ι : 类型} {F : ι -> α -> E} {p : Filter ι} {f : α -> E} {s : Set α}
+  结论: {ι : 类型} {F : ι -> α -> E} {p : 滤子 ι} {f : α -> E} {s : 集合 α}
   证明: by
   obtain ⟨⟨n, ⟨u, um, us⟩⟩, hlt⟩ :
     exists p : Nat × { u : Nat -> α // Monotone u ∧ forall i, u i in s },
@@ -693,7 +693,7 @@ theorem lowerSemicontinuous
 
 中文:
 定理 lowerSemicontinuous
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: fun f => by
   apply @lowerSemicontinuous_aux _ _ _ _ (UniformOnFun α E (s.image singleton)) id (𝓝 f) f s _
   simpa only [UniformOnFun.tendsto_iff_tendstoUniformlyOn, mem_image, forall_exists_index, and_imp,
@@ -721,7 +721,7 @@ theorem lowerSemicontinuous_uniformOn
 
 中文:
 定理 lowerSemicontinuous_uniformOn
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: fun f => by
   apply @lowerSemicontinuous_aux _ _ _ _ (UniformOnFun α E {s}) id (𝓝 f) f s _
   have := @tendsto_id _ (𝓝 f)
@@ -751,7 +751,7 @@ theorem _root_.BoundedVariationOn.dist_le
 
 中文:
 定理 _root_.BoundedVariationOn.dist_le
-  结论: {E : 类型} [PseudoMetricSpace E] {f : α -> E}
+  结论: {E : 类型} [伪度量空间 E] {f : α -> E}
   证明: by
   rw [← ENNReal.ofReal_le_ofReal_iff ENNReal.toReal_nonneg]; rw [ENNReal.ofReal_toReal h]; rw [← edist_dist]
   exact edist_le f hx hy
@@ -777,7 +777,7 @@ theorem _root_.BoundedVariationOn.sub_le
 
 中文:
 定理 _root_.BoundedVariationOn.sub_le
-  结论: {f : α -> 实数} {s : Set α} (h : BoundedVariationOn f s)
+  结论: {f : α -> 实数} {s : 集合 α} (h : BoundedVariationOn f s)
   证明: by
   apply (le_abs_self _).trans
   rw [← Real.dist_eq]
@@ -807,7 +807,7 @@ theorem add_point
 
 中文:
 定理 add_point
-  结论: (f : α -> E) {s : Set α} {x : α} (hx : x in s) (u : 自然数 -> α) (hu : Monotone u)
+  结论: (f : α -> E) {s : 集合 α} {x : α} (hx : x in s) (u : 自然数 -> α) (hu : 递增 u)
   证明: by
   rcases le_or_gt (u n) x with (h | h)
   · let v i := if i <= n then u i else x
@@ -908,7 +908,7 @@ theorem add_le_union
 
 中文:
 定理 add_le_union
-  条件: (f : α -> E) {s t : Set α} (h : 对任意 x in s, 对任意 y in t, x <= y)
+  条件: (f : α -> E) {s t : 集合 α} (h : 对任意 x in s, 对任意 y in t, x <= y)
   证明: by
   by_cases hs : s = ∅
   · simp [hs]
@@ -975,7 +975,7 @@ theorem union
 
 中文:
 定理 union
-  条件: (f : α -> E) {s t : Set α} {x : α} (hs : IsGreatest s x) (ht : IsLeast t x)
+  条件: (f : α -> E) {s t : 集合 α} {x : α} (hs : IsGreatest s x) (ht : IsLeast t x)
   证明: by
   apply (eVariationOn.add_le_union f fun a ha b hb => (hs.2 ha).trans (ht.2 hb)).antisymm'
   refine iSup_le fun ⟨n, ⟨u, hu, ust⟩⟩ => ?_
@@ -1013,7 +1013,7 @@ theorem Icc_add_Icc
 
 中文:
 定理 Icc_add_Icc
-  条件: (f : α -> E) {s : Set α} {a b c : α} (hab : a <= b) (hbc : b <= c) (hb : b in s)
+  条件: (f : α -> E) {s : 集合 α} {a b c : α} (hab : a <= b) (hbc : b <= c) (hb : b in s)
   证明: by
   have A : IsGreatest (s inter Icc a b) b :=
     ⟨⟨hb, hab, le_rfl⟩, inter_subset_right.trans Icc_subset_Iic_self⟩
@@ -1050,8 +1050,8 @@ theorem sum
     · apply hn <;> omega
 
 中文:
-定理 sum
-  结论: (f : α -> E) {s : Set α} {E : 自然数 -> α} (hE : Monotone E) {n : 自然数}
+定理 求和
+  结论: (f : α -> E) {s : 集合 α} {E : 自然数 -> α} (hE : 递增 E) {n : 自然数}
   证明: by
   induction n with
   | zero => simp [Subsingleton.inter_singleton]
@@ -1097,8 +1097,8 @@ theorem sum'
   · simp
 
 中文:
-定理 sum'
-  条件: (f : α -> E) {I : 自然数 -> α} (hI : Monotone I) {n : 自然数}
+定理 求和'
+  条件: (f : α -> E) {I : 自然数 -> α} (hI : 递增 I) {n : 自然数}
   证明: by
   convert!
       sum f hI (s := Icc (I 0) (I n)) (n := n)
@@ -1178,7 +1178,7 @@ theorem union'
 
 中文:
 定理 union'
-  结论: (f : α -> E) {s t : Set α} {x y : α} (hs : IsGreatest s x) (ht : IsLeast t y)
+  结论: (f : α -> E) {s t : 集合 α} {x y : α} (hs : IsGreatest s x) (ht : IsLeast t y)
   证明: by
   rw [(by grind [hs.1]; rw [ht.1] : s union t = (s union {x, y}) union t), union f _ ht, union f hs]
   <;> simp [IsLeast, IsGreatest, hxy, upperBounds_mono_mem hxy hs.2]
@@ -1208,7 +1208,7 @@ theorem image_range_of_monotone
 
 中文:
 定理 image_range_of_monotone
-  条件: (f : α -> E) {u : 自然数 -> α} (hu : Monotone u) (n : 自然数)
+  条件: (f : α -> E) {u : 自然数 -> α} (hu : 递增 u) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [Iic]
@@ -1247,7 +1247,7 @@ theorem _root_.BoundedVariationOn.of_finset
 
 中文:
 定理 _root_.BoundedVariationOn.of_finset
-  结论: {E} [PseudoMetricSpace E] (f : α -> E)
+  结论: {E} [伪度量空间 E] (f : α -> E)
   证明: by
   obtain rfl | hne := s.eq_empty_or_nonempty
   · simp [BoundedVariationOn]
@@ -1286,7 +1286,7 @@ theorem _root_.BoundedVariationOn.of_finite
 
 中文:
 定理 _root_.BoundedVariationOn.of_finite
-  结论: {E} [PseudoMetricSpace E] (f : α -> E) (s : Set α)
+  结论: {E} [伪度量空间 E] (f : α -> E) (s : 集合 α)
   证明: by
   simpa using BoundedVariationOn.of_finset f s.toFinite.toFinset
 
@@ -1313,7 +1313,7 @@ theorem comp_le_of_monotoneOn
 
 中文:
 定理 comp_le_of_monotoneOn
-  结论: (f : α -> E) {s : Set α} {t : Set β} (φ : β -> α) (hφ : MonotoneOn φ t)
+  结论: (f : α -> E) {s : 集合 α} {t : 集合 β} (φ : β -> α) (hφ : MonotoneOn φ t)
   证明: iSup_le fun ⟨n, u, hu, ut⟩ =>
     le_iSup_of_le ⟨n, φ ∘ u, fun x y xy => hφ (ut x) (ut y) (hu xy), fun i => φst (ut i)⟩ le_rfl
 
@@ -1342,7 +1342,7 @@ refine (Finset.sum_congr rfl fun x hx => ?_).trans_le le_iSup_of_le
 
 中文:
 定理 comp_le_of_antitoneOn
-  结论: (f : α -> E) {s : Set α} {t : Set β} (φ : β -> α) (hφ : AntitoneOn φ t)
+  结论: (f : α -> E) {s : 集合 α} {t : 集合 β} (φ : β -> α) (hφ : AntitoneOn φ t)
   证明: by
   refine iSup_le ?_
   rintro ⟨n, u, hu, ut⟩
@@ -1385,7 +1385,7 @@ theorem comp_eq_of_monotoneOn
 
 中文:
 定理 comp_eq_of_monotoneOn
-  条件: (f : α -> E) {t : Set β} (φ : β -> α) (hφ : MonotoneOn φ t)
+  条件: (f : α -> E) {t : 集合 β} (φ : β -> α) (hφ : MonotoneOn φ t)
   证明: by
   apply le_antisymm (comp_le_of_monotoneOn f φ hφ (mapsTo_image φ t))
   cases isEmpty_or_nonempty β
@@ -1427,7 +1427,7 @@ theorem comp_inter_Icc_eq_of_monotoneOn
 
 中文:
 定理 comp_inter_Icc_eq_of_monotoneOn
-  结论: (f : α -> E) {t : Set β} (φ : β -> α) (hφ : MonotoneOn φ t)
+  结论: (f : α -> E) {t : 集合 β} (φ : β -> α) (hφ : MonotoneOn φ t)
   证明: by
   rcases le_total x y with (h | h)
   · convert! comp_eq_of_monotoneOn f φ (hφ.mono Set.inter_subset_left)
@@ -1477,7 +1477,7 @@ theorem comp_eq_of_antitoneOn
 
 中文:
 定理 comp_eq_of_antitoneOn
-  条件: (f : α -> E) {t : Set β} (φ : β -> α) (hφ : AntitoneOn φ t)
+  条件: (f : α -> E) {t : 集合 β} (φ : β -> α) (hφ : AntitoneOn φ t)
   证明: by
   apply le_antisymm (comp_le_of_antitoneOn f φ hφ (mapsTo_image φ t))
   cases isEmpty_or_nonempty β
@@ -1516,7 +1516,7 @@ theorem comp_ofDual
 
 中文:
 定理 comp_ofDual
-  条件: (f : α -> E) (s : Set α)
+  条件: (f : α -> E) (s : 集合 α)
   证明: by
   convert! comp_eq_of_antitoneOn f ofDual fun _ _ _ _ => id
   simp only [Equiv.image_preimage]
@@ -1554,7 +1554,7 @@ lemma boundedVariation_ofDual
 
 中文:
 引理 boundedVariation_ofDual
-  条件: {f : α -> E} {s : Set α}
+  条件: {f : α -> E} {s : 集合 α}
   证明: ⟨fun h => h.ofDual, fun h => h.ofDual⟩
 -/
 @[simp] lemma boundedVariation_ofDual {f : α -> E} {s : Set α} :
@@ -1574,7 +1574,7 @@ lemma _root_.LocallyBoundedVariationOn.ofDual
 
 中文:
 引理 _root_.LocallyBoundedVariationOn.ofDual
-  结论: {f : α -> E} {s : Set α}
+  结论: {f : α -> E} {s : 集合 α}
   证明: by
   intro x y hx hy
   rw [← toDual_ofDual x]; rw [← toDual_ofDual y]; rw [Icc_toDual]; rw [← preimage_inter]
@@ -1597,7 +1597,7 @@ lemma locallyBoundedVariation_ofDual
 
 中文:
 引理 locallyBoundedVariation_ofDual
-  条件: {f : α -> E} {s : Set α}
+  条件: {f : α -> E} {s : 集合 α}
   证明: ⟨fun h => h.ofDual, fun h => h.ofDual⟩
 -/
 @[simp] lemma locallyBoundedVariation_ofDual {f : α -> E} {s : Set α} :
@@ -1912,8 +1912,8 @@ lemma exists_lt_eVariationOn_inter_Icc
  
 
 中文:
-引理 exists_lt_eVariationOn_inter_Icc
-  结论: {f : α -> E} {ε : 实数>=0∞} {s : Set α}
+引理 存在_lt_eVariationOn_inter_Icc
+  结论: {f : α -> E} {ε : 实数>=0∞} {s : 集合 α}
   证明: by
   obtain ⟨n, u, ⟨u_mono, u_mem⟩, hu⟩ : exists n u, (Monotone u ∧ forall (i : Nat), u i in s) ∧
       ε < ∑ x in Finset.range n, edist (f (u (x + 1))) (f (u x)) := by
@@ -2036,8 +2036,8 @@ theorem _root_.BoundedVariationOn.exists_tendsto_left_of_filter
   obtain ⟨y, y_mem, hy⟩ : exists y in s, eVariat
 
 中文:
-定理 _root_.BoundedVariationOn.exists_tendsto_left_of_filter
-  结论: [CompleteSpace E]
+定理 _root_.BoundedVariationOn.存在_tendsto_left_of_filter
+  结论: [完备空间 E]
   证明: by
   rcases hs with ⟨x₀, hx₀⟩
   rcases Filter.eq_or_neBot L with h | h
@@ -2121,7 +2121,7 @@ theorem _root_.BoundedVariationOn.tendsto_eVariationOn_Ioc_zero
 
 中文:
 定理 _root_.BoundedVariationOn.tendsto_eVariationOn_Ioc_zero
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   have : (fun y => eVariationOn f (s inter Ioc x y)) =
       (fun y => eVariationOn (f ∘ ofDual) (ofDual ⁻¹' s inter Ico (toDual y) (toDual x))) := by
@@ -2156,8 +2156,8 @@ theorem _root_.BoundedVariationOn.exists_tendsto_left
     (hf.mono inter_subset_left) _ (fun y hy => inter_mem_nhdsWithi
 
 中文:
-定理 _root_.BoundedVariationOn.exists_tendsto_left
-  结论: [CompleteSpace E] [TopologicalSpace α]
+定理 _root_.BoundedVariationOn.存在_tendsto_left
+  结论: [完备空间 E] [拓扑空间 α]
   证明: by
   rcases eq_empty_or_nonempty (s inter Iio x) with hs | hs
   · simp only [hs, nhdsWithin_empty, tendsto_bot, exists_const_iff, and_true]
@@ -2185,8 +2185,8 @@ theorem _root_.BoundedVariationOn.exists_tendsto_right
   proof: hf.ofDual.exists_tendsto_left (toDual x)
 
 中文:
-定理 _root_.BoundedVariationOn.exists_tendsto_right
-  结论: [CompleteSpace E] [TopologicalSpace α]
+定理 _root_.BoundedVariationOn.存在_tendsto_right
+  结论: [完备空间 E] [拓扑空间 α]
   证明: hf.ofDual.exists_tendsto_left (toDual x)
 
 Depends on / 依赖: exists_tendsto_left, hf.ofDual.exists_tendsto_left, ofDual, toDual
@@ -2209,7 +2209,7 @@ theorem _root_.BoundedVariationOn.tendsto_leftLim
 
 中文:
 定理 _root_.BoundedVariationOn.tendsto_leftLim
-  结论: [CompleteSpace E] [TopologicalSpace α]
+  结论: [完备空间 E] [拓扑空间 α]
   证明: by
   apply tendsto_leftLim_of_tendsto
   convert! hf.exists_tendsto_left x
@@ -2234,7 +2234,7 @@ theorem _root_.BoundedVariationOn.tendsto_rightLim
 
 中文:
 定理 _root_.BoundedVariationOn.tendsto_rightLim
-  结论: [CompleteSpace E] [TopologicalSpace α]
+  结论: [完备空间 E] [拓扑空间 α]
   证明: hf.ofDual.tendsto_leftLim x
 
 Depends on / 依赖: hf.ofDual.tendsto_leftLim, ofDual, tendsto_leftLim
@@ -2261,7 +2261,7 @@ theorem _root_.BoundedVariationOn.eVariationOn_Iic_eq_Iio_add_edist
 
 中文:
 定理 _root_.BoundedVariationOn.eVariationOn_Iic_eq_Iio_add_edist
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   let : TopologicalSpace α := Preorder.topology α
   have : OrderTopology α := ⟨rfl⟩
@@ -2301,7 +2301,7 @@ theorem _root_.BoundedVariationOn.eVariationOn_Ici_eq_Ioi_add_edist
 
 中文:
 定理 _root_.BoundedVariationOn.eVariationOn_Ici_eq_Ioi_add_edist
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   rw [← eVariationOn.comp_ofDual f]; rw [← eVariationOn.comp_ofDual f]
   exact hf.ofDual.eVariationOn_Iic_eq_Iio_add_edist (a := toDual a)
@@ -2655,7 +2655,7 @@ lemma eVariationOn_leftLim_le
 
 中文:
 引理 eVariationOn_leftLim_le
-  结论: [TopologicalSpace α] [OrderTopology α] {f : α -> E}
+  结论: [拓扑空间 α] [Order拓扑 α] {f : α -> E}
   证明: by
   apply eVariationOn_le_of_mapClusterPt (fun x hx => ?_)
   rw [IsOpen.nhdsWithin_eq hs hx]
@@ -2683,7 +2683,7 @@ lemma eVariationOn_rightLim_le
 
 中文:
 引理 eVariationOn_rightLim_le
-  结论: [TopologicalSpace α] [OrderTopology α] {f : α -> E}
+  结论: [拓扑空间 α] [Order拓扑 α] {f : α -> E}
   证明: by
   apply eVariationOn_le_of_mapClusterPt (fun x hx => ?_)
   rw [IsOpen.nhdsWithin_eq hs hx]
@@ -2708,7 +2708,7 @@ lemma _root_.BoundedVariationOn.leftLim
 
 中文:
 引理 _root_.BoundedVariationOn.leftLim
-  结论: [TopologicalSpace α] [OrderTopology α] {f : α -> E}
+  结论: [拓扑空间 α] [Order拓扑 α] {f : α -> E}
   证明: ((eVariationOn_leftLim_le isOpen_univ).trans_lt hf.lt_top).ne
 
 Depends on / 依赖: eVariationOn_leftLim_le, hf.lt_top, isOpen_univ, lt_top, trans_lt
@@ -2727,7 +2727,7 @@ lemma _root_.BoundedVariationOn.rightLim
 
 中文:
 引理 _root_.BoundedVariationOn.rightLim
-  结论: [TopologicalSpace α] [OrderTopology α] {f : α -> E}
+  结论: [拓扑空间 α] [Order拓扑 α] {f : α -> E}
   证明: ((eVariationOn_rightLim_le isOpen_univ).trans_lt hf.lt_top).ne
 
 Depends on / 依赖: eVariationOn_rightLim_le, hf.lt_top, isOpen_univ, lt_top, trans_lt
@@ -2749,7 +2749,7 @@ lemma _root_.BoundedVariationOn.continuousWithinAt_leftLim
 
 中文:
 引理 _root_.BoundedVariationOn.continuousWithinAt_leftLim
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: by
   have : Tendsto f.leftLim (𝓝[<] x) (𝓝 (f.leftLim.leftLim x)) := hf.leftLim.tendsto_leftLim x
   rw [leftLim_leftLim (hf.tendsto_leftLim x)] at this
@@ -2774,7 +2774,7 @@ lemma _root_.BoundedVariationOn.continuousWithinAt_rightLim
 
 中文:
 引理 _root_.BoundedVariationOn.continuousWithinAt_rightLim
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: BoundedVariationOn.continuousWithinAt_leftLim hf.ofDual
 
 Depends on / 依赖: BoundedVariationOn, BoundedVariationOn.continuousWithinAt_leftLim, continuousWithinAt_leftLim, hf.ofDual, ofDual
@@ -2855,8 +2855,8 @@ theorem _root_.BoundedVariationOn.exists_tendsto_atTop
       (fun y hy => inter_mem_inf (mem_principal_self s) (Ici_mem_atTop _)) hs
 
 中文:
-定理 _root_.BoundedVariationOn.exists_tendsto_atTop
-  结论: [CompleteSpace E] [hE : Nonempty E]
+定理 _root_.BoundedVariationOn.存在_tendsto_atTop
+  结论: [完备空间 E] [hE : 非空 E]
   证明: by
   rcases eq_empty_or_nonempty s with rfl | hs
   · simp
@@ -2882,8 +2882,8 @@ theorem _root_.BoundedVariationOn.exists_tendsto_atBot
   proof: hf.ofDual.exists_tendsto_atTop
 
 中文:
-定理 _root_.BoundedVariationOn.exists_tendsto_atBot
-  结论: [CompleteSpace E] [hE : Nonempty E]
+定理 _root_.BoundedVariationOn.存在_tendsto_atBot
+  结论: [完备空间 E] [hE : 非空 E]
   证明: hf.ofDual.exists_tendsto_atTop
 
 Depends on / 依赖: exists_tendsto_atTop, hf.ofDual.exists_tendsto_atTop, ofDual
@@ -2903,7 +2903,7 @@ theorem _root_.BoundedVariationOn.tendsto_atTop_limUnder
 
 中文:
 定理 _root_.BoundedVariationOn.tendsto_atTop_limUnder
-  结论: [CompleteSpace E] [hE : Nonempty E]
+  结论: [完备空间 E] [hE : 非空 E]
   证明: tendsto_nhds_limUnder (by simpa using hf.exists_tendsto_atTop)
 
 Depends on / 依赖: exists_tendsto_atTop, hf.exists_tendsto_atTop, tendsto_nhds_limUnder
@@ -2923,7 +2923,7 @@ theorem _root_.BoundedVariationOn.tendsto_atBot_limUnder
 
 中文:
 定理 _root_.BoundedVariationOn.tendsto_atBot_limUnder
-  结论: [CompleteSpace E] [hE : Nonempty E]
+  结论: [完备空间 E] [hE : 非空 E]
   证明: tendsto_nhds_limUnder (by simpa using hf.exists_tendsto_atBot)
 
 Depends on / 依赖: exists_tendsto_atBot, hf.exists_tendsto_atBot, tendsto_nhds_limUnder
@@ -3084,7 +3084,7 @@ lemma eVariationOn_id
 
 中文:
 引理 eVariationOn_id
-  条件: {a b : 实数} {s : Set 实数} (as : a in s) (bs : b in s)
+  条件: {a b : 实数} {s : 集合 实数} (as : a in s) (bs : b in s)
   证明: (monotone_id.monotoneOn _).eVariationOn_eq as bs
 
 Depends on / 依赖: eVariationOn_eq, monotoneOn, monotone_id, monotone_id.monotoneOn
@@ -3108,7 +3108,7 @@ lemma eVariationOn_id_Icc
 中文:
 引理 eVariationOn_id_Icc
   条件: (a b : 实数)
-  结论: eVariationOn id (Icc a b) = .of实数 (b - a)
+  结论: eVariationOn id (闭区间 a b) = .of实数 (b - a)
   证明: by
   simpa using eVariationOn_id (s := univ) (by simp) (by simp)
 
@@ -3132,7 +3132,7 @@ lemma BoundedVariationOn.id_Icc
 中文:
 引理 BoundedVariationOn.id_Icc
   条件: (a b : 实数)
-  结论: BoundedVariationOn id (Icc a b)
+  结论: BoundedVariationOn id (闭区间 a b)
   证明: by
   simp [BoundedVariationOn]
 
@@ -3166,7 +3166,7 @@ theorem LipschitzOnWith.comp_eVariationOn_le
 
 中文:
 定理 LipschitzOnWith.comp_eVariationOn_le
-  结论: {f : E -> F} {C : 实数>=0} {t : Set E}
+  结论: {f : E -> F} {C : 实数>=0} {t : 集合 E}
   证明: by
   apply iSup_le _
   rintro ⟨n, ⟨u, hu, us⟩⟩
@@ -3200,7 +3200,7 @@ theorem LipschitzOnWith.comp_boundedVariationOn
 
 中文:
 定理 LipschitzOnWith.comp_boundedVariationOn
-  结论: {f : E -> F} {C : 实数>=0} {t : Set E}
+  结论: {f : E -> F} {C : 实数>=0} {t : 集合 E}
   证明: ne_top_of_le_ne_top (by finiteness) (hf.comp_eVariationOn_le hg)
 
 Depends on / 依赖: comp_eVariationOn_le, finiteness, hf.comp_eVariationOn_le, ne_top_of_le_ne_top
@@ -3221,7 +3221,7 @@ theorem LipschitzOnWith.comp_locallyBoundedVariationOn
 
 中文:
 定理 LipschitzOnWith.comp_locallyBoundedVariationOn
-  结论: {f : E -> F} {C : 实数>=0} {t : Set E}
+  结论: {f : E -> F} {C : 实数>=0} {t : 集合 E}
   证明: fun x y xs ys =>
   hf.comp_boundedVariationOn (hg.mono_left inter_subset_left) (h x y xs ys)
 
@@ -3283,7 +3283,7 @@ theorem LipschitzOnWith.locallyBoundedVariationOn
 
 中文:
 定理 LipschitzOnWith.locallyBoundedVariationOn
-  结论: {f : 实数 -> E} {C : 实数>=0} {s : Set 实数}
+  结论: {f : 实数 -> E} {C : 实数>=0} {s : 集合 实数}
   证明: hf.comp_locallyBoundedVariationOn (mapsTo_id _)
     (@monotoneOn_id Real _ s).locallyBoundedVariationOn
 

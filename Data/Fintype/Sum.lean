@@ -127,7 +127,7 @@ lemma univ_disjSum_univ
 
 中文:
 引理 univ_disjSum_univ
-  结论: univ.disjSum univ = (univ : Finset (α oplus β))
+  结论: univ.disjSum univ = (univ : 有限集 (α oplus β))
   证明: rfl
 -/
 @[simp] lemma univ_disjSum_univ : univ.disjSum univ = (univ : Finset (α oplus β)) := rfl
@@ -141,7 +141,7 @@ lemma toLeft_univ
 
 中文:
 引理 toLeft_univ
-  结论: (univ : Finset (α oplus β)).toLeft = univ
+  结论: (univ : 有限集 (α oplus β)).toLeft = univ
   证明: by ext; simp
 -/
 @[simp] lemma toLeft_univ : (univ : Finset (α oplus β)).toLeft = univ := by ext; simp
@@ -155,7 +155,7 @@ lemma toRight_univ
 
 中文:
 引理 toRight_univ
-  结论: (univ : Finset (α oplus β)).toRight = univ
+  结论: (univ : 有限集 (α oplus β)).toRight = univ
   证明: by ext; simp
 -/
 @[simp] lemma toRight_univ : (univ : Finset (α oplus β)).toRight = univ := by ext; simp
@@ -172,8 +172,8 @@ theorem Fintype.card_sum
   proof: card_disjSum _ _
 
 中文:
-定理 Fintype.card_sum
-  条件: [Fintype α] [Fintype β]
+定理 有限类型.card_sum
+  条件: [有限类型 α] [有限类型 β]
   证明: card_disjSum _ _
 
 Depends on / 依赖: card_disjSum
@@ -195,7 +195,7 @@ definition fintypeOfFintypeNe
 
 中文:
 定义 fintypeOfFintypeNe
-  签名: (a : α) (_ : Fintype { b // b != a })
+  签名: (a : α) (_ : 有限类型 { b // b != a })
   定义体: Fintype.ofBijective (Sum.elim ((↑) : { b // b = a } -> α) ((↑) : { b // b != a } -> α)) by
     classical exact (Equiv.sumCompl (· = a)).bijective
 
@@ -224,7 +224,7 @@ theorem image_subtype_ne_univ_eq_image_erase
 
 中文:
 定理 image_subtype_ne_univ_eq_image_erase
-  条件: [Fintype α] [DecidableEq β] (k : β) (b : α -> β)
+  条件: [有限类型 α] [DecidableEq β] (k : β) (b : α -> β)
   证明: by
   apply subset_antisymm
   · rw [image_subset_iff]
@@ -261,7 +261,7 @@ theorem image_subtype_univ_ssubset_image_univ
 
 中文:
 定理 image_subtype_univ_ssubset_image_univ
-  结论: [Fintype α] [DecidableEq β] (k : β) (b : α -> β)
+  结论: [有限类型 α] [DecidableEq β] (k : β) (b : α -> β)
   证明: by
   grind
 -/
@@ -287,8 +287,8 @@ theorem Finset.exists_equiv_extend_of_card_eq
     have hfst' : Finset.image f s subseteq t := (Finset.image_mono _ (s.su
 
 中文:
-定理 Finset.exists_equiv_extend_of_card_eq
-  结论: [Fintype α] [DecidableEq β] {t : Finset β}
+定理 有限集.存在_equiv_extend_of_card_eq
+  结论: [有限类型 α] [DecidableEq β] {t : 有限集 β}
   证明: by
   classical
     induction s using Finset.induction generalizing f with
@@ -341,8 +341,8 @@ theorem Set.MapsTo.exists_equiv_extend_of_card_eq
     refine ⟨g, fun i hi =>
 
 中文:
-定理 Set.MapsTo.exists_equiv_extend_of_card_eq
-  结论: [Fintype α] {t : Finset β}
+定理 集合.映射到.存在_equiv_extend_of_card_eq
+  结论: [有限类型 α] {t : 有限集 β}
   证明: by
   classical
     let s' : Finset α := s.toFinset
@@ -377,8 +377,8 @@ theorem Fintype.card_subtype_or
     rw [Fintype.card_sum]
 
 中文:
-定理 Fintype.card_subtype_or
-  结论: (p q : α -> 命题) [Fintype { x // p x }] [Fintype { x // q x }]
+定理 有限类型.card_subtype_or
+  结论: (p q : α -> 命题) [有限类型 { x // p x }] [有限类型 { x // q x }]
   证明: by
   classical
     convert! Fintype.card_le_of_embedding (subtypeOrLeftEmbedding p q)
@@ -405,8 +405,8 @@ theorem Fintype.card_subtype_or_disjoint
     simp
 
 中文:
-定理 Fintype.card_subtype_or_disjoint
-  结论: (p q : α -> 命题) (h : Disjoint p q) [Fintype { x // p x }]
+定理 有限类型.card_subtype_or_disjoint
+  结论: (p q : α -> 命题) (h : Disjoint p q) [有限类型 { x // p x }]
   证明: by
   classical
     convert! Fintype.card_congr (subtypeOrEquiv p q h)
@@ -430,8 +430,8 @@ theorem Fintype.card_subtype_eq_or_eq_of_ne
   proof: Fintype.card_subtype_or_disjoint _ _ fun _ ha hb _ hc => ha _ hc ▸ hb _ hc ▸ h rfl
 
 中文:
-定理 Fintype.card_subtype_eq_or_eq_of_ne
-  结论: {α : 类型} [Fintype α] [DecidableEq α] {a b : α}
+定理 有限类型.card_subtype_eq_or_eq_of_ne
+  结论: {α : 类型} [有限类型 α] [DecidableEq α] {a b : α}
   证明: Fintype.card_subtype_or_disjoint _ _ fun _ ha hb _ hc => ha _ hc ▸ hb _ hc ▸ h rfl
 
 Depends on / 依赖: Fintype, Fintype.card_subtype_or_disjoint, card_subtype_or_disjoint
@@ -455,7 +455,7 @@ theorem infinite_sum
 
 中文:
 定理 infinite_sum
-  结论: Infinite (α oplus β) ↔ Infinite α ∨ Infinite β
+  结论: 无限 (α oplus β) ↔ 无限 α ∨ 无限 β
   证明: by
   refine ⟨fun H => ?_, fun H => H.elim (@Sum.infinite_of_left α β) (@Sum.infinite_of_right α β)⟩
   contrapose! H; cases H

@@ -46,7 +46,7 @@ theorem dvd_sub_pow_of_dvd_sub
 
 中文:
 定理 dvd_sub_pow_of_dvd_sub
-  结论: {R : 类型} [CommRing R] {p : 自然数} {a b : R} (h : (p : R) ∣ a - b)
+  结论: {R : 类型} [交换环 R] {p : 自然数} {a b : R} (h : (p : R) ∣ a - b)
   证明: by
   induction k with
   | zero => rwa [pow_one, pow_zero, pow_one, pow_one]

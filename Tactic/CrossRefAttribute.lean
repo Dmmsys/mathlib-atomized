@@ -167,7 +167,7 @@ definition addTagEntry
 
 中文:
 定义 addTagEntry
-  签名: {m : Type -> Type} [MonadEnv m]
+  签名: {m : 类型 -> 类型} [MonadEnv m]
   定义体: modifyEnv (tagExt.addEntry ·
     { declName := declName, database := db, tag := tag, comment := comment })
 
@@ -855,7 +855,7 @@ definition traceCrossRefs
 
 中文:
 定义 traceCrossRefs
-  签名: (db : Database) (verbose : 布尔 := false)
+  签名: (db : Database) (verbose : 布尔值 := false)
   定义体: do
   let env ← getEnv
 .filter (·.database == db) let entries := env.getSortedCrossRefs

@@ -45,7 +45,7 @@ definition toModifiers
 
 中文:
 定义 toModifiers
-  签名: (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none)
+  签名: (nm : Name) (newDoc : 选项类型 (TSyntax `Lean.Parser.Command.docComment) := none)
   定义体: do
   let env ← getEnv
   let d ← getConstInfo nm
@@ -137,7 +137,7 @@ definition setProtected
 
 中文:
 定义 setProtected
-  签名: {m : Type -> Type} [MonadEnv m] (nm : Name)
+  签名: {m : 类型 -> 类型} [MonadEnv m] (nm : Name)
   定义体: modifyEnv (addProtected · nm)
 
 Depends on / 依赖: BoundedLENhdsClass, OrderTop, OrderTop.to_BoundedLENhdsClass, addProtected, modifyEnv, to_BoundedLENhdsClass
@@ -162,7 +162,7 @@ definition MVarId.rintroWithPats
 
 中文:
 定义 MVarId.rintroWithPats
-  签名: (g : MVarId) (patterns : List (TSyntax `rintroPat))
+  签名: (g : MVarId) (patterns : 列表 (TSyntax `rintroPat))
   定义体: do
   let n ← numIntros?.getDM (return getIntrosSize (← instantiateMVars (← g.getType)))
   if n == 0 then
@@ -262,7 +262,7 @@ definition getSimpArgs
 
 中文:
 定义 getSimpArgs
-  签名: : Syntax -> TacticM (Array Syntax)
+  签名: : Syntax -> TacticM (数组 Syntax)
 
 Depends on / 依赖: BoundedGENhdsClass, BoundedGENhdsClass.of_closedIicTopology, LinearOrder, of_closedIicTopology
 -/
@@ -279,7 +279,7 @@ definition getDSimpArgs
 
 中文:
 定义 getDSimpArgs
-  签名: : Syntax -> TacticM (Array Syntax)
+  签名: : Syntax -> TacticM (数组 Syntax)
 -/
 def getDSimpArgs : Syntax -> TacticM (Array Syntax)
   | `(dsimpArgs| [$args,*]) => pure args.getElems
@@ -294,7 +294,7 @@ definition getWithArgs
 
 中文:
 定义 getWithArgs
-  签名: : Syntax -> TacticM (Array Syntax)
+  签名: : Syntax -> TacticM (数组 Syntax)
 -/
 def getWithArgs : Syntax -> TacticM (Array Syntax)
   | `(withArgs| with $args*) => pure args
@@ -335,7 +335,7 @@ definition filterOutImplementationDetails
 
 中文:
 定义 filterOutImplementationDetails
-  签名: (lctx : LocalContext) (fvarIds : Array FVarId)
+  签名: (lctx : LocalContext) (fvarIds : 数组 FVarId)
   定义体: fvarIds.filter (fun fvar => ! (lctx.fvarIdToDecl.find! fvar).isImplementationDetail)
 
 Depends on / 依赖: filter, fvarIdToDecl, fvarIds, fvarIds.filter, isImplementationDetail, lctx.fvarIdToDecl.find
@@ -396,7 +396,7 @@ definition getFVarIdsAt
 
 中文:
 定义 getFVarIdsAt
-  签名: (goal : MVarId) (ids : Option (Array Syntax) := none)
+  签名: (goal : MVarId) (ids : 选项类型 (数组 Syntax) := none)
   定义体: goal.withContext do
     let lctx := (← goal.getDecl).lctx
     let fvarIds ← match ids with
@@ -441,7 +441,7 @@ definition allGoals
 
 中文:
 定义 allGoals
-  签名: (tac : TacticM Unit)
+  签名: (tac : TacticM 单元)
   定义体: do
   let mvarIds ← getGoals
   let mut mvarIdsNew := #[]
@@ -485,7 +485,7 @@ universe u
 
 中文:
 定义 andThenOnSubgoals
-  签名: (tac1 : TacticM Unit) (tac2 : TacticM Unit)
+  签名: (tac1 : TacticM 单元) (tac2 : TacticM 单元)
   定义体: focus do tac1; allGoals tac2
 
 universe u
@@ -507,7 +507,7 @@ definition iterateAtMost
 
 中文:
 定义 iterateAtMost
-  签名: : 自然数 -> m Unit -> m Unit
+  签名: : 自然数 -> m 单元 -> m 单元
 -/
 def iterateAtMost : Nat -> m Unit -> m Unit
   | 0, _ => pure ()
@@ -522,7 +522,7 @@ definition iterateExactly'
 
 中文:
 定义 iterateExactly'
-  签名: : 自然数 -> m Unit -> m Unit
+  签名: : 自然数 -> m 单元 -> m 单元
 -/
 def iterateExactly' : Nat -> m Unit -> m Unit
   | 0, _ => pure ()
@@ -537,7 +537,7 @@ definition iterateRange
 
 中文:
 定义 iterateRange
-  签名: : 自然数 -> 自然数 -> m Unit -> m Unit
+  签名: : 自然数 -> 自然数 -> m 单元 -> m 单元
 
 Depends on / 依赖: iterateUntilFailure
 -/
@@ -556,7 +556,7 @@ definition iterateUntilFailure
 
 中文:
 定义 iterateUntilFailure
-  签名: (tac : m Unit)
+  签名: (tac : m 单元)
   定义体: try tac; iterateUntilFailure tac catch _ => pure ()
 -/
 partial def iterateUntilFailure (tac : m Unit) : m Unit :=
@@ -577,7 +577,7 @@ definition iterateUntilFailureWithResults
 
 中文:
 定义 iterateUntilFailureWithResults
-  签名: {α : Type} (tac : m α)
+  签名: {α : 类型} (tac : m α)
   定义体: do
   try
     let a ← tac
@@ -604,7 +604,7 @@ definition iterateUntilFailureCount
 
 中文:
 定义 iterateUntilFailureCount
-  签名: {α : Type} (tac : m α)
+  签名: {α : 类型} (tac : m α)
   定义体: do
   let r ← iterateUntilFailureWithResults tac
   return r.length

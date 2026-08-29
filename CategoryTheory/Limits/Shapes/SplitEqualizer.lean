@@ -56,7 +56,7 @@ structure IsSplitEqualizer
     - top_rightRetraction : f ≫ rightRetraction = leftRetraction ≫ ι  [default: by cat_disch]
 
 中文:
-结构 IsSplitEqualizer
+结构 是SplitEqualizer
   参数: {W : C} (ι : W ⟶ X)
   公理与运算 (6 个):
     - leftRetraction : X ⟶ W
@@ -109,8 +109,8 @@ definition IsSplitEqualizer.map
   top_rightRe
 
 中文:
-定义 IsSplitEqualizer.map
-  签名: {W : C} {ι : W ⟶ X} (q : IsSplitEqualizer f g ι) (F : C ⥤ D)
+定义 是SplitEqualizer.map
+  签名: {W : C} {ι : W ⟶ X} (q : 是SplitEqualizer f g ι) (F : C ⥤ D)
   定义体: F.map q.leftRetraction
   rightRetraction := F.map q.rightRetraction
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
@@ -146,8 +146,8 @@ definition IsSplitEqualizer.asFork
 @[simp]
 
 中文:
-定义 IsSplitEqualizer.asFork
-  签名: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
+定义 是SplitEqualizer.asFork
+  签名: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
   定义体: Fork.ofι h t.condition
 
 @[simp]
@@ -167,8 +167,8 @@ theorem IsSplitEqualizer.asFork_ι
   proof: rfl
 
 中文:
-定理 IsSplitEqualizer.asFork_ι
-  条件: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
+定理 是SplitEqualizer.asFork_ι
+  条件: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
   证明: rfl
 -/
 theorem IsSplitEqualizer.asFork_ι {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h) :
@@ -188,8 +188,8 @@ definition IsSplitEqualizer.isEqualizer
       fun hm => by simp [← hm] ⟩
 
 中文:
-定义 IsSplitEqualizer.isEqualizer
-  签名: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
+定义 是SplitEqualizer.isEqualizer
+  签名: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
   定义体: Fork.IsLimit.mk' _ fun s =>
     ⟨ s.ι ≫ t.leftRetraction,
       by simp [-top_rightRetraction, ← t.top_rightRetraction, s.condition_assoc],
@@ -217,10 +217,10 @@ class HasSplitEqualizer
     - splittable : exists (W : C) (h : W ⟶ X), Nonempty (IsSplitEqualizer f g h)
 
 中文:
-类 HasSplitEqualizer
+类 有SplitEqualizer
   参数: : 命题 where
   公理与运算 (1 个):
-    - splittable : 存在 (W : C) (h : W ⟶ X), Nonempty (IsSplitEqualizer f g h)
+    - splittable : 存在 (W : C) (h : W ⟶ X), 非空 (是SplitEqualizer f g h)
 
 Depends on / 依赖: Cocone, Cocone.mk, fac_assoc, hom_ext, isColimit, naturality, p.isColimit.desc, p.isColimit.fac_assoc, p.isColimit.hom_ext, p.prop_diag_obj, prop_diag_obj
 -/
@@ -237,7 +237,7 @@ abbreviation Functor.IsCosplitPair
   body: HasSplitEqualizer (G.map f) (G.map g)
 
 中文:
-缩写 Functor.IsCosplitPair
+缩写 函子.IsCosplitPair
   签名: : 命题
   定义体: HasSplitEqualizer (G.map f) (G.map g)
 
@@ -255,8 +255,8 @@ definition HasSplitEqualizer.equalizerOfSplit
   body: (splittable (f := f) (g := g)).choose
 
 中文:
-定义 HasSplitEqualizer.equalizerOfSplit
-  签名: [HasSplitEqualizer f g]
+定义 有SplitEqualizer.equalizerOfSplit
+  签名: [有SplitEqualizer f g]
   定义体: (splittable (f := f) (g := g)).choose
 
 Depends on / 依赖: splittable
@@ -273,8 +273,8 @@ definition HasSplitEqualizer.equalizerι
   body: (splittable (f := f) (g := g)).choose_spec.choose
 
 中文:
-定义 HasSplitEqualizer.equalizerι
-  签名: [HasSplitEqualizer f g]
+定义 有SplitEqualizer.equalizerι
+  签名: [有SplitEqualizer f g]
   定义体: (splittable (f := f) (g := g)).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, splittable
@@ -292,8 +292,8 @@ definition HasSplitEqualizer.isSplitEqualizer
   body: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
 
 中文:
-定义 HasSplitEqualizer.isSplitEqualizer
-  签名: [HasSplitEqualizer f g]
+定义 有SplitEqualizer.isSplitEqualizer
+  签名: [有SplitEqualizer f g]
   定义体: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
 
 Depends on / 依赖: Classical, Classical.choice, choice, choose_spec, choose_spec.choose_spec, splittable
@@ -312,7 +312,7 @@ instance map_is_cosplit_pair
 
 中文:
 实例 map_is_cosplit_pair
-  签名: [HasSplitEqualizer f g]
+  签名: [有SplitEqualizer f g]
   定义体: ⟨_, _, ⟨IsSplitEqualizer.map (HasSplitEqualizer.isSplitEqualizer f g) _⟩⟩
 
 Depends on / 依赖: HasSplitEqualizer, HasSplitEqualizer.isSplitEqualizer, IsSplitEqualizer, IsSplitEqualizer.map, isSplitEqualizer

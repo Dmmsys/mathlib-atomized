@@ -38,7 +38,7 @@ definition count
 
 中文:
 定义 count
-  签名: : Measure α
+  签名: : 测度 α
   定义体: sum dirac
 -/
 def count : Measure α :=
@@ -55,8 +55,8 @@ lemma count_ne_zero''
 
 中文:
 引理 count_ne_zero''
-  条件: [Nonempty α]
-  结论: (count : Measure α) != 0
+  条件: [非空 α]
+  结论: (count : 测度 α) != 0
   证明: by simp [count]
 -/
 @[simp] lemma count_ne_zero'' [Nonempty α] : (count : Measure α) != 0 := by simp [count]
@@ -102,7 +102,7 @@ theorem count_apply
 
 中文:
 定理 count_apply
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: count s = s.encard
   证明: by
   simp [count, hs, ← tsum_subtype]
@@ -127,7 +127,7 @@ theorem count_apply_finset'
 
 中文:
 定理 count_apply_finset'
-  条件: {s : Finset α} (hs : MeasurableSet (s : Set α))
+  条件: {s : 有限集 α} (hs : 可测集 (s : 集合 α))
   证明: by simp [count_apply hs]
 
 @[simp]
@@ -148,7 +148,7 @@ theorem count_apply_finset
 
 中文:
 定理 count_apply_finset
-  条件: [MeasurableSingletonClass α] (s : Finset α)
+  条件: [MeasurableSingleton类 α] (s : 有限集 α)
   证明: count_apply_finset' s.measurableSet
 
 Depends on / 依赖: count_apply_finset, measurableSet, s.measurableSet
@@ -169,7 +169,7 @@ theorem count_apply_finite'
 
 中文:
 定理 count_apply_finite'
-  条件: {s : Set α} (s_fin : s.Finite) (s_mble : MeasurableSet s)
+  条件: {s : 集合 α} (s_fin : s.有限) (s_mble : 可测集 s)
   证明: by
   simp [←
     @count_apply_finset' _ _ s_fin.toFinset (by simpa only [Finite.coe_toFinset] using s_mble)]
@@ -191,7 +191,7 @@ theorem count_apply_finite
 
 中文:
 定理 count_apply_finite
-  条件: [MeasurableSingletonClass α] (s : Set α) (hs : s.Finite)
+  条件: [MeasurableSingleton类 α] (s : 集合 α) (hs : s.有限)
   证明: by rw [← count_apply_finset, Finite.coe_toFinset]
 
 Depends on / 依赖: Finite, Finite.coe_toFinset, coe_toFinset, count_apply_finset
@@ -217,7 +217,7 @@ theorem count_apply_infinite
 
 中文:
 定理 count_apply_infinite
-  条件: (hs : s.Infinite)
+  条件: (hs : s.无限)
   结论: count s = ∞
   证明: by
   refine top_unique (le_of_tendsto' ENNReal.tendsto_nat_nhds_top fun n => ?_)
@@ -257,8 +257,8 @@ theorem count_apply_eq_top'
 
 中文:
 定理 count_apply_eq_top'
-  条件: (s_mble : MeasurableSet s)
-  结论: count s = ∞ ↔ s.Infinite
+  条件: (s_mble : 可测集 s)
+  结论: count s = ∞ ↔ s.无限
   证明: by
   by_cases hs : s.Finite
   · simp [Set.Infinite, hs, count_apply_finite' hs s_mble]
@@ -293,8 +293,8 @@ theorem count_apply_eq_top
 
 中文:
 定理 count_apply_eq_top
-  条件: [MeasurableSingletonClass α]
-  结论: count s = ∞ ↔ s.Infinite
+  条件: [MeasurableSingleton类 α]
+  结论: count s = ∞ ↔ s.无限
   证明: by
   by_cases hs : s.Finite
   · exact count_apply_eq_top' hs.measurableSet
@@ -328,8 +328,8 @@ theorem count_apply_lt_top'
 
 中文:
 定理 count_apply_lt_top'
-  条件: (s_mble : MeasurableSet s)
-  结论: count s < ∞ ↔ s.Finite
+  条件: (s_mble : 可测集 s)
+  结论: count s < ∞ ↔ s.有限
   证明: calc
     count s < ∞ ↔ count s != ∞ := lt_top_iff_ne_top
     _ ↔ ¬s.Infinite := not_congr (count_apply_eq_top' s_mble)
@@ -362,8 +362,8 @@ theorem count_apply_lt_top
 
 中文:
 定理 count_apply_lt_top
-  条件: [MeasurableSingletonClass α]
-  结论: count s < ∞ ↔ s.Finite
+  条件: [MeasurableSingleton类 α]
+  结论: count s < ∞ ↔ s.有限
   证明: calc
     count s < ∞ ↔ count s != ∞ := lt_top_iff_ne_top
     _ ↔ ¬s.Infinite := not_congr count_apply_eq_top
@@ -418,7 +418,7 @@ alias ⟨_, count_ne_zero⟩ := count_ne_zero_iff
 
 中文:
 引理 count_ne_zero_iff
-  结论: count s != 0 ↔ s.Nonempty
+  结论: count s != 0 ↔ s.非空
   证明: count_eq_zero_iff.not.trans nonempty_iff_ne_empty.symm
 
 alias ⟨_, count_ne_zero⟩ := count_ne_zero_iff
@@ -482,8 +482,8 @@ theorem count_singleton'
 
 中文:
 定理 count_singleton'
-  条件: {a : α} (ha : MeasurableSet ({a} : Set α))
-  结论: count ({a} : Set α) = 1
+  条件: {a : α} (ha : 可测集 ({a} : 集合 α))
+  结论: count ({a} : 集合 α) = 1
   证明: by
   rw [count_apply_finite' (Set.finite_singleton a) ha]; rw [Set.Finite.toFinset]
   simp
@@ -507,8 +507,8 @@ theorem count_singleton
 
 中文:
 定理 count_singleton
-  条件: [MeasurableSingletonClass α] (a : α)
-  结论: count ({a} : Set α) = 1
+  条件: [MeasurableSingleton类 α] (a : α)
+  结论: count ({a} : 集合 α) = 1
   证明: count_singleton' (measurableSet_singleton a)
 
 @[simp]
@@ -528,7 +528,7 @@ theorem _root_.MeasureTheory.count_real_singleton'
   rw [measureReal_def]; rw [count_singleton' ha]; rw [ENNReal.toReal_one]
 
 中文:
-定理 _root_.MeasureTheory.count_real_singleton'
+定理 _root_.测度论.count_real_singleton'
   证明: by
   rw [measureReal_def]; rw [count_singleton' ha]; rw [ENNReal.toReal_one]
 
@@ -548,8 +548,8 @@ theorem _root_.MeasureTheory.count_real_singleton
   proof: count_real_singleton' (measurableSet_singleton a)
 
 中文:
-定理 _root_.MeasureTheory.count_real_singleton
-  条件: [MeasurableSingletonClass α] (a : α)
+定理 _root_.测度论.count_real_singleton
+  条件: [MeasurableSingleton类 α] (a : α)
   证明: count_real_singleton' (measurableSet_singleton a)
 
 Depends on / 依赖: count_real_singleton, measurableSet_singleton
@@ -575,7 +575,7 @@ theorem count_injective_image'
 
 中文:
 定理 count_injective_image'
-  结论: {f : β -> α} (hf : Function.Injective f) {s : Set β}
+  结论: {f : β -> α} (hf : 函数.单射 f) {s : 集合 β}
   证明: by
   classical
   by_cases hs : s.Finite
@@ -613,7 +613,7 @@ theorem count_injective_image
 
 中文:
 定理 count_injective_image
-  结论: [MeasurableSingletonClass α] [MeasurableSingletonClass β] {f : β -> α}
+  结论: [MeasurableSingleton类 α] [MeasurableSingleton类 β] {f : β -> α}
   证明: by
   by_cases hs : s.Finite
   · exact count_injective_image' hf hs.measurableSet (Finite.image f hs).measurableSet
@@ -641,7 +641,7 @@ instance count.instSigmaFinite
 
 中文:
 实例 count.instSigmaFinite
-  签名: [MeasurableSingletonClass α] [Countable α]
+  签名: [MeasurableSingleton类 α] [可数 α]
   定义体: by simp [sigmaFinite_iff_measure_singleton_lt_top]
 
 Depends on / 依赖: sigmaFinite_iff_measure_singleton_lt_top
@@ -661,7 +661,7 @@ instance count.isFiniteMeasure
 
 中文:
 实例 count.isFiniteMeasure
-  签名: [Finite α]
+  签名: [有限 α]
   定义体: ⟨by simp [Measure.count_apply]⟩
 
 @[simp]
@@ -683,7 +683,7 @@ lemma count_univ
 
 中文:
 引理 count_univ
-  结论: count (univ : Set α) = E自然数.card α
+  结论: count (univ : 集合 α) = E自然数.card α
   证明: by simp [count_apply .univ, encard_univ]
 
 Depends on / 依赖: IsModularLattice, IsModularLattice.to_isUpperModularLattice, IsUpperModularLattice, count_apply, encard_univ, to_isUpperModularLattice
@@ -700,7 +700,7 @@ lemma count_real_univ
 
 中文:
 引理 count_real_univ
-  结论: count.real (.univ : Set α) = 自然数.card α
+  结论: count.real (.univ : 集合 α) = 自然数.card α
   证明: by simp [Measure.real]
 -/
 @[simp] lemma count_real_univ : count.real (.univ : Set α) = Nat.card α := by simp [Measure.real]
@@ -715,7 +715,7 @@ instance neZero_count
 
 中文:
 实例 neZero_count
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: by rintro h; simpa using congr($h .univ)
 -/
 instance neZero_count [Nonempty α] : NeZero (count : Measure α) where
@@ -734,8 +734,8 @@ lemma _root_.Subsingleton.count_eq_dirac
     _ = dirac i := by simp
 
 中文:
-引理 _root_.Subsingleton.count_eq_dirac
-  条件: [Subsingleton α] (i : α)
+引理 _root_.子单例.count_eq_dirac
+  条件: [子单例 α] (i : α)
   证明: by
   calc count
       = count.restrict univ := by simp
@@ -761,8 +761,8 @@ lemma _root_.Unique.count_eq_dirac
   proof: Subsingleton.count_eq_dirac _
 
 中文:
-引理 _root_.Unique.count_eq_dirac
-  条件: [Unique α]
+引理 _root_.唯一.count_eq_dirac
+  条件: [唯一 α]
   结论: count = dirac (default : α)
   证明: Subsingleton.count_eq_dirac _
 
@@ -784,7 +784,7 @@ lemma _root_.Function.Injective.map_count_le
   gcongr
 
 中文:
-引理 _root_.Function.Injective.map_count_le
+引理 _root_.函数.单射.map_count_le
   结论: {f : α -> β}
   证明: by
   refine le_intro fun s hs _ => ?_

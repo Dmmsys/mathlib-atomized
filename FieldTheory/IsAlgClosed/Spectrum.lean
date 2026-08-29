@@ -68,8 +68,8 @@ theorem exists_mem_of_not_isUnit_aeval_prod
   exact ⟨r, by rwa 
 
 中文:
-定理 exists_mem_of_not_isUnit_aeval_prod
-  结论: [IsDomain R] {p : R[X]} {a : A}
+定理 存在_mem_of_not_isUnit_aeval_prod
+  结论: [是整环 R] {p : R[X]} {a : A}
   证明: by
   rw [← Multiset.prod_toList]; rw [map_list_prod] at h
   replace h := mt List.prod_isUnit h
@@ -158,7 +158,7 @@ theorem map_polynomial_aeval_of_degree_pos
 
 中文:
 定理 map_polynomial_aeval_of_degree_pos
-  结论: [IsAlgClosed 𝕜] (a : A) (p : 𝕜[X])
+  结论: [是代数闭 𝕜] (a : A) (p : 𝕜[X])
   证明: by
   -- handle the easy direction via `spectrum.subset_polynomial_aeval`
   refine Set.eq_of_subset_of_subset (fun k hk => ?_) (subset_polynomial_aeval a p)
@@ -199,7 +199,7 @@ theorem map_polynomial_aeval_of_nonempty
 
 中文:
 定理 map_polynomial_aeval_of_nonempty
-  结论: [IsAlgClosed 𝕜] (a : A) (p : 𝕜[X])
+  结论: [是代数闭 𝕜] (a : A) (p : 𝕜[X])
   证明: by
   nontriviality A
   refine Or.elim (le_or_gt (degree p) 0) (fun h => ?_) (map_polynomial_aeval_of_degree_pos a p)
@@ -269,7 +269,7 @@ theorem map_pow_of_pos
 
 中文:
 定理 map_pow_of_pos
-  条件: [IsAlgClosed 𝕜] (a : A) {n : 自然数} (hn : 0 < n)
+  条件: [是代数闭 𝕜] (a : A) {n : 自然数} (hn : 0 < n)
   证明: by
   simpa only [aeval_X_pow, eval_X_pow]
     using map_polynomial_aeval_of_degree_pos a (X ^ n : 𝕜[X]) (by rwa [degree_X_pow, Nat.cast_pos])
@@ -292,7 +292,7 @@ theorem map_pow_of_nonempty
 
 中文:
 定理 map_pow_of_nonempty
-  条件: [IsAlgClosed 𝕜] {a : A} (ha : (σ a).Nonempty) (n : 自然数)
+  条件: [是代数闭 𝕜] {a : A} (ha : (σ a).非空) (n : 自然数)
   证明: by
   simpa only [aeval_X_pow, eval_X_pow] using map_polynomial_aeval_of_nonempty a (X ^ n) ha
 
@@ -319,7 +319,7 @@ theorem nonempty_of_isAlgClosed_of_finiteDimensional
 
 中文:
 定理 nonempty_of_isAlgClosed_of_finiteDimensional
-  结论: [IsAlgClosed 𝕜] [Nontrivial A]
+  结论: [是代数闭 𝕜] [非平凡 A]
   证明: by
   obtain ⟨p, ⟨h_mon, h_eval_p⟩⟩ := isIntegral_of_noetherian (IsNoetherian.iff_fg.2 I) a
   have nu : ¬IsUnit (aeval a p) := by rw [← aeval_def] at h_eval_p; rw [h_eval_p]; simp
@@ -355,7 +355,7 @@ theorem IsIdempotentElem.spectrum_subset
 
 中文:
 定理 IsIdempotentElem.spectrum_subset
-  结论: (𝕜 : 类型) {A : 类型} [Field 𝕜] [Ring A] [Algebra 𝕜 A]
+  结论: (𝕜 : 类型) {A : 类型} [域 𝕜] [环 A] [代数 𝕜 A]
   证明: by
   nontriviality A
 .trans apply Set.image_subset_iff.mp (spectrum.subset_polynomial_aeval p (X ^ 2 - X))
@@ -382,7 +382,7 @@ lemma IsIdempotentElem.finite_spectrum
 
 中文:
 引理 IsIdempotentElem.finite_spectrum
-  结论: (𝕜 : 类型) {A : 类型} [Field 𝕜] [Ring A] [Algebra 𝕜 A]
+  结论: (𝕜 : 类型) {A : 类型} [域 𝕜] [环 A] [代数 𝕜 A]
   证明: have : ({0, 1} : Set 𝕜).encard = (2 : Nat) := Set.encard_pair (by simp)
   Set.finite_of_encard_le_coe (this ▸ Set.encard_le_encard (hp.spectrum_subset 𝕜))
 
@@ -404,7 +404,7 @@ theorem IsIdempotentElem.quasispectrum_subset
 
 中文:
 定理 IsIdempotentElem.quasispectrum_subset
-  结论: (𝕜 : 类型) {A : 类型} [Field 𝕜] [NonUnitalRing A]
+  结论: (𝕜 : 类型) {A : 类型} [域 𝕜] [非幺环 A]
   证明: quasispectrum_eq_spectrum_inr' 𝕜 𝕜 p ▸ (hp.inr _ |>.spectrum_subset _)
 
 Depends on / 依赖: hp.inr, quasispectrum_eq_spectrum_inr, spectrum_subset
@@ -425,7 +425,7 @@ theorem IsIdempotentElem.finite_quasispectrum
 
 中文:
 定理 IsIdempotentElem.finite_quasispectrum
-  结论: (𝕜 : 类型) {A : 类型} [Field 𝕜] [NonUnitalRing A]
+  结论: (𝕜 : 类型) {A : 类型} [域 𝕜] [非幺环 A]
   证明: have : ({0, 1} : Set 𝕜).encard = (2 : Nat) := Set.encard_pair (by simp)
   Set.finite_of_encard_le_coe (this ▸ Set.encard_le_encard (hp.quasispectrum_subset 𝕜))
 

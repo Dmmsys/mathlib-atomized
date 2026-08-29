@@ -303,7 +303,7 @@ lemma hasSum_integral_geometricMeasure
 
 中文:
 引理 hasSum_integral_geometricMeasure
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   have : (fun n => ((1 - p : Real) ^ n * p) • f n) =
       fun n => (ENNReal.ofReal ((1 - p) ^ n * p)).toReal • f n := by
@@ -335,7 +335,7 @@ lemma integral_geometricMeasure'
 
 中文:
 引理 integral_geometricMeasure'
-  结论: [CompleteSpace E] (hp : p != 0)
+  结论: [完备空间 E] (hp : p != 0)
   证明: (hasSum_integral_geometricMeasure hp hf).tsum_eq.symm
 
 Depends on / 依赖: hasSum_integral_geometricMeasure, tsum_eq, tsum_eq.symm
@@ -358,7 +358,7 @@ lemma integral_geometricMeasure
 
 中文:
 引理 integral_geometricMeasure
-  条件: [FiniteDimensional 实数 E] (hp : p != 0) (f : 自然数 -> E)
+  条件: [有限维 实数 E] (hp : p != 0) (f : 自然数 -> E)
   证明: by
   rw [geometricMeasure_eq hp]; rw [integral_sum_dirac (by simp)]
   congr with n
@@ -392,7 +392,7 @@ definition geometricPMFReal
 @[deprecated hasSum_one_geometricMeasure (since := "2026-03-08")]
 
 中文:
-定义 geometricPMFReal
+定义 geometricPMF实数
   签名: (p : 实数) (n : 自然数)
   定义体: (1 - p) ^ n * p
 
@@ -418,7 +418,7 @@ lemma geometricPMFRealSum
 @[deprecated geometri
 
 中文:
-引理 geometricPMFRealSum
+引理 geometricPMF实数Sum
   条件: (hp_pos : 0 < p) (hp_le_one : p <= 1)
   证明: by
   unfold geometricPMFReal
@@ -455,7 +455,7 @@ lemma geometricPMFReal_pos
 @[deprecated measureReal_nonneg (since := "2026-03-08")]
 
 中文:
-引理 geometricPMFReal_pos
+引理 geometricPMF实数_pos
   条件: {n : 自然数} (hp_pos : 0 < p) (hp_lt_one : p < 1)
   证明: by
   rw [geometricPMFReal]
@@ -482,7 +482,7 @@ lemma geometricPMFReal_nonneg
   positivity [sub_nonneg.mpr hp_le_one]
 
 中文:
-引理 geometricPMFReal_nonneg
+引理 geometricPMF实数_nonneg
   条件: {n : 自然数} (hp_pos : 0 < p) (hp_le_one : p <= 1)
   证明: by
   rw [geometricPMFReal]
@@ -545,8 +545,8 @@ lemma measurable_geometricPMFReal
 @[deprecated StronglyMeasurable.of_discrete (since := "2026-03-08")]
 
 中文:
-引理 measurable_geometricPMFReal
-  结论: Measurable (geometricPMF实数 p)
+引理 measurable_geometricPMF实数
+  结论: 可测 (geometricPMF实数 p)
   证明: by
   fun_prop
 
@@ -567,7 +567,7 @@ lemma stronglyMeasurable_geometricPMFReal
   proof: stronglyMeasurable_iff_measurable.mpr measurable_geometricPMFReal
 
 中文:
-引理 stronglyMeasurable_geometricPMFReal
+引理 stronglyMeasurable_geometricPMF实数
   结论: StronglyMeasurable (geometricPMF实数 p)
   证明: stronglyMeasurable_iff_measurable.mpr measurable_geometricPMFReal
 

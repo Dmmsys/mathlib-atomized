@@ -51,7 +51,7 @@ definition withDensity
 
 中文:
 定义 withDensity
-  签名: (μ : VectorMeasure X F) (f : X -> E) (B : E ->L[实数] F ->L[实数] G)
+  签名: (μ : 向量测度 X F) (f : X -> E) (B : E ->L[实数] F ->L[实数] G)
   定义体: if h : μ.Integrable f then
     { measureOf' s := ∫ᵛ x in s, f x ∂[B; μ]
       empty' := by simp
@@ -81,7 +81,7 @@ lemma withDensity_apply
 
 中文:
 引理 withDensity_apply
-  条件: (hf : μ.整数egrable f)
+  条件: (hf : μ.可积 f)
   证明: by
   simp [withDensity, hf]
 
@@ -136,7 +136,7 @@ lemma withDensity_zero_vectorMeasure
 
 中文:
 引理 withDensity_zero_vectorMeasure
-  结论: (0 : VectorMeasure X F).withDensity f B = 0
+  结论: (0 : 向量测度 X F).withDensity f B = 0
   证明: by
   ext s hs
   simp [withDensity_apply]
@@ -227,7 +227,7 @@ lemma restrict_withDensity
 
 中文:
 引理 restrict_withDensity
-  条件: (hf : μ.整数egrable f)
+  条件: (hf : μ.可积 f)
   证明: by
   by_cases hs : MeasurableSet s; swap
   · simp [restrict_not_measurable _ hs]
@@ -292,7 +292,7 @@ lemma variation_withDensity'
 
 中文:
 引理 variation_withDensity'
-  结论: [CompleteSpace G]
+  结论: [完备空间 G]
   证明: by
   apply le_antisymm variation_WithDensity_le
   apply Measure.le_iff.2 (fun s hs => ?_)
@@ -551,7 +551,7 @@ lemma variation_withDensity
 
 中文:
 引理 variation_withDensity
-  结论: [CompleteSpace G]
+  结论: [完备空间 G]
   证明: by
   apply variation_withDensity' hf (fun x y => ?_)
   refine le_antisymm (ContinuousLinearMap.le_opNorm (B.flip y) x) ?_
@@ -585,8 +585,8 @@ lemma _root_.MeasureTheory.Measure.variation_withDensityᵥ
   rcases subsinglet
 
 中文:
-引理 _root_.MeasureTheory.Measure.variation_withDensityᵥ
-  结论: [CompleteSpace E]
+引理 _root_.测度论.测度.variation_withDensityᵥ
+  结论: [完备空间 E]
   证明: by
   /- We deduce this statement from the statement `variation_withDensity` for vector measures
   with density. For this, we write `μ.withDensityᵥ f` as the vector measure with density `f / ‖f‖`

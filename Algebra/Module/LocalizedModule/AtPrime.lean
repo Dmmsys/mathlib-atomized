@@ -23,8 +23,8 @@ abbreviation IsLocalizedModule.AtPrime
   body: IsLocalizedModule P.primeCompl f
 
 中文:
-缩写 IsLocalizedModule.AtPrime
-  签名: {R M M' : 类型} [CommSemiring R] (P : Ideal R)
+缩写 是Localized模.AtPrime
+  签名: {R M M' : 类型} [交换半环 R] (P : 理想 R)
   定义体: IsLocalizedModule P.primeCompl f
 -/
 protected abbrev IsLocalizedModule.AtPrime {R M M' : Type*} [CommSemiring R] (P : Ideal R)
@@ -41,7 +41,7 @@ abbreviation LocalizedModule.AtPrime
 
 中文:
 缩写 LocalizedModule.AtPrime
-  签名: {R : 类型} [CommSemiring R] (P : Ideal R) [P.IsPrime]
+  签名: {R : 类型} [交换半环 R] (P : 理想 R) [P.是素]
   定义体: LocalizedModule P.primeCompl M
 -/
 protected abbrev LocalizedModule.AtPrime {R : Type*} [CommSemiring R] (P : Ideal R) [P.IsPrime]

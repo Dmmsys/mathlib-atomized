@@ -122,7 +122,7 @@ theorem vecMulVec_one
 
 中文:
 定理 vecMulVec_one
-  条件: [MulOneClass R] (x : n -> R)
+  条件: [MulOne类 R] (x : n -> R)
   证明: by
   ext; simp [vecMulVec_apply]
 
@@ -146,7 +146,7 @@ theorem one_vecMulVec
 
 中文:
 定理 one_vecMulVec
-  条件: [MulOneClass R] (x : n -> R)
+  条件: [MulOne类 R] (x : n -> R)
   证明: by
   ext; simp [vecMulVec_apply]
 
@@ -168,7 +168,7 @@ theorem replicateCol_injective
 
 中文:
 定理 replicateCol_injective
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   证明: by
   inhabit ι
   exact fun _x _y h => funext fun i => congr_fun₂ h i default
@@ -190,7 +190,7 @@ theorem replicateCol_inj
 
 中文:
 定理 replicateCol_inj
-  条件: [Nonempty ι] {v w : m -> α}
+  条件: [非空 ι] {v w : m -> α}
   证明: replicateCol_injective.eq_iff
 -/
 @[simp] theorem replicateCol_inj [Nonempty ι] {v w : m -> α} :
@@ -208,7 +208,7 @@ theorem replicateCol_zero
 
 中文:
 定理 replicateCol_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: replicateCol ι (0 : m -> α) = 0
   证明: rfl
 -/
@@ -226,7 +226,7 @@ theorem replicateCol_eq_zero
 
 中文:
 定理 replicateCol_eq_zero
-  条件: [Zero α] [Nonempty ι] (v : m -> α)
+  条件: [零 α] [非空 ι] (v : m -> α)
   证明: replicateCol_inj
 
 @[simp]
@@ -250,7 +250,7 @@ theorem replicateCol_add
 
 中文:
 定理 replicateCol_add
-  条件: [Add α] (v w : m -> α)
+  条件: [加法 α] (v w : m -> α)
   证明: by
   ext
   rfl
@@ -275,7 +275,7 @@ theorem replicateCol_smul
 
 中文:
 定理 replicateCol_smul
-  条件: [SMul R α] (x : R) (v : m -> α)
+  条件: [标量乘法 R α] (x : R) (v : m -> α)
   证明: by
   ext
   rfl
@@ -297,7 +297,7 @@ theorem replicateRow_injective
 
 中文:
 定理 replicateRow_injective
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   证明: by
   inhabit ι
   exact fun _x _y h => funext fun j => congr_fun₂ h default j
@@ -319,7 +319,7 @@ theorem replicateRow_inj
 
 中文:
 定理 replicateRow_inj
-  条件: [Nonempty ι] {v w : n -> α}
+  条件: [非空 ι] {v w : n -> α}
   证明: replicateRow_injective.eq_iff
 -/
 @[simp] theorem replicateRow_inj [Nonempty ι] {v w : n -> α} :
@@ -337,7 +337,7 @@ theorem replicateRow_zero
 
 中文:
 定理 replicateRow_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: replicateRow ι (0 : n -> α) = 0
   证明: rfl
 -/
@@ -355,7 +355,7 @@ theorem replicateRow_eq_zero
 
 中文:
 定理 replicateRow_eq_zero
-  条件: [Zero α] [Nonempty ι] (v : n -> α)
+  条件: [零 α] [非空 ι] (v : n -> α)
   证明: replicateRow_inj
 
 @[simp]
@@ -379,7 +379,7 @@ theorem replicateRow_add
 
 中文:
 定理 replicateRow_add
-  条件: [Add α] (v w : m -> α)
+  条件: [加法 α] (v w : m -> α)
   证明: by
   ext
   rfl
@@ -406,7 +406,7 @@ theorem replicateRow_smul
 
 中文:
 定理 replicateRow_smul
-  条件: [SMul R α] (x : R) (v : m -> α)
+  条件: [标量乘法 R α] (x : R) (v : m -> α)
   证明: by
   ext
   rfl
@@ -489,7 +489,7 @@ theorem conjTranspose_replicateCol
 
 中文:
 定理 conjTranspose_replicateCol
-  条件: [Star α] (v : m -> α)
+  条件: [对合 α] (v : m -> α)
   证明: by
   ext
   rfl
@@ -514,7 +514,7 @@ theorem conjTranspose_replicateRow
 
 中文:
 定理 conjTranspose_replicateRow
-  条件: [Star α] (v : m -> α)
+  条件: [对合 α] (v : m -> α)
   证明: by
   ext
   rfl
@@ -536,7 +536,7 @@ theorem replicateRow_vecMul
 
 中文:
 定理 replicateRow_vecMul
-  结论: [Fintype m] [NonUnitalNonAssocSemiring α] (M : Matrix m n α)
+  结论: [有限类型 m] [非幺非结合半环 α] (M : 矩阵 m n α)
   证明: by
   ext
   rfl
@@ -558,7 +558,7 @@ theorem replicateCol_vecMul
 
 中文:
 定理 replicateCol_vecMul
-  结论: [Fintype m] [NonUnitalNonAssocSemiring α] (M : Matrix m n α)
+  结论: [有限类型 m] [非幺非结合半环 α] (M : 矩阵 m n α)
   证明: by
   ext
   rfl
@@ -580,7 +580,7 @@ theorem replicateCol_mulVec
 
 中文:
 定理 replicateCol_mulVec
-  结论: [Fintype n] [NonUnitalNonAssocSemiring α] (M : Matrix m n α)
+  结论: [有限类型 n] [非幺非结合半环 α] (M : 矩阵 m n α)
   证明: by
   ext
   rfl
@@ -602,7 +602,7 @@ theorem replicateRow_mulVec
 
 中文:
 定理 replicateRow_mulVec
-  结论: [Fintype n] [NonUnitalNonAssocSemiring α] (M : Matrix m n α)
+  结论: [有限类型 n] [非幺非结合半环 α] (M : 矩阵 m n α)
   证明: by
   ext
   rfl
@@ -622,7 +622,7 @@ theorem replicateRow_mulVec_eq_const
 
 中文:
 定理 replicateRow_mulVec_eq_const
-  条件: [Fintype m] [NonUnitalNonAssocSemiring α] (v w : m -> α)
+  条件: [有限类型 m] [非幺非结合半环 α] (v w : m -> α)
   证明: rfl
 -/
 theorem replicateRow_mulVec_eq_const [Fintype m] [NonUnitalNonAssocSemiring α] (v w : m -> α) :
@@ -638,7 +638,7 @@ theorem mulVec_replicateCol_eq_const
 
 中文:
 定理 mulVec_replicateCol_eq_const
-  条件: [Fintype m] [NonUnitalNonAssocSemiring α] (v w : m -> α)
+  条件: [有限类型 m] [非幺非结合半环 α] (v w : m -> α)
   证明: rfl
 -/
 theorem mulVec_replicateCol_eq_const [Fintype m] [NonUnitalNonAssocSemiring α] (v w : m -> α) :
@@ -656,7 +656,7 @@ theorem replicateRow_mul_replicateCol
 
 中文:
 定理 replicateRow_mul_replicateCol
-  条件: [Fintype m] [Mul α] [AddCommMonoid α] (v w : m -> α)
+  条件: [有限类型 m] [乘法 α] [加法交换幺半群 α] (v w : m -> α)
   证明: rfl
 
 @[simp]
@@ -678,7 +678,7 @@ theorem replicateRow_mul_replicateCol_apply
 
 中文:
 定理 replicateRow_mul_replicateCol_apply
-  结论: [Fintype m] [Mul α] [AddCommMonoid α] (v w : m -> α)
+  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α] (v w : m -> α)
   证明: rfl
 
 @[simp]
@@ -700,7 +700,7 @@ theorem diag_replicateCol_mul_replicateRow
 
 中文:
 定理 diag_replicateCol_mul_replicateRow
-  条件: [Mul α] [AddCommMonoid α] [Unique ι] (a b : n -> α)
+  条件: [乘法 α] [加法交换幺半群 α] [唯一 ι] (a b : n -> α)
   证明: by
   ext
   simp [Matrix.mul_apply, replicateCol, replicateRow]
@@ -726,7 +726,7 @@ theorem vecMulVec_eq
 
 中文:
 定理 vecMulVec_eq
-  条件: [Mul α] [AddCommMonoid α] [Unique ι] (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [加法交换幺半群 α] [唯一 ι] (w : m -> α) (v : n -> α)
   证明: by
   ext
   simp [vecMulVec, mul_apply]
@@ -750,7 +750,7 @@ definition updateRow
 
 中文:
 定义 updateRow
-  签名: [DecidableEq m] (M : Matrix m n α) (i : m) (b : n -> α)
+  签名: [DecidableEq m] (M : 矩阵 m n α) (i : m) (b : n -> α)
   定义体: of Function.update M i b
 
 Depends on / 依赖: Function, Function.update, update
@@ -768,7 +768,7 @@ definition updateCol
 
 中文:
 定义 updateCol
-  签名: [DecidableEq n] (M : Matrix m n α) (j : n) (b : m -> α)
+  签名: [DecidableEq n] (M : 矩阵 m n α) (j : n) (b : m -> α)
   定义体: of fun i => Function.update (M i) j (b i)
 
 Depends on / 依赖: Function, Function.update, update
@@ -946,7 +946,7 @@ theorem updateCol_subsingleton
 
 中文:
 定理 updateCol_subsingleton
-  条件: [Subsingleton n] (A : Matrix m n R) (i : n) (b : m -> R)
+  条件: [子单例 n] (A : 矩阵 m n R) (i : n) (b : m -> R)
   证明: by
   ext x y
   simp [Subsingleton.elim i y]
@@ -973,7 +973,7 @@ theorem updateRow_subsingleton
 
 中文:
 定理 updateRow_subsingleton
-  条件: [Subsingleton m] (A : Matrix m n R) (i : m) (b : n -> R)
+  条件: [子单例 m] (A : 矩阵 m n R) (i : m) (b : n -> R)
   证明: by
   ext x y
   simp [Subsingleton.elim i x]
@@ -1107,7 +1107,7 @@ theorem updateRow_conjTranspose
 
 中文:
 定理 updateRow_conjTranspose
-  条件: [DecidableEq n] [Star α]
+  条件: [DecidableEq n] [对合 α]
   证明: by
   rw [conjTranspose]; rw [conjTranspose]; rw [transpose_map]; rw [transpose_map]; rw [updateRow_transpose]; rw [map_updateCol]
   rfl
@@ -1133,7 +1133,7 @@ theorem updateCol_conjTranspose
 
 中文:
 定理 updateCol_conjTranspose
-  条件: [DecidableEq m] [Star α]
+  条件: [DecidableEq m] [对合 α]
   证明: by
   rw [conjTranspose]; rw [conjTranspose]; rw [transpose_map]; rw [transpose_map]; rw [updateCol_transpose]; rw [map_updateRow]
   rfl
@@ -1161,7 +1161,7 @@ theorem updateRow_eq_self
 
 中文:
 定理 updateRow_eq_self
-  条件: [DecidableEq m] (A : Matrix m n α) (i : m)
+  条件: [DecidableEq m] (A : 矩阵 m n α) (i : m)
   结论: A.updateRow i (A i) = A
   证明: Function.update_eq_self i A
 
@@ -1185,7 +1185,7 @@ theorem updateCol_eq_self
 
 中文:
 定理 updateCol_eq_self
-  条件: [DecidableEq n] (A : Matrix m n α) (i : n)
+  条件: [DecidableEq n] (A : 矩阵 m n α) (i : n)
   证明: funext fun j => Function.update_eq_self i (A j)
 
 @[simp]
@@ -1209,7 +1209,7 @@ theorem updateRow_zero_zero
 
 中文:
 定理 updateRow_zero_zero
-  条件: [DecidableEq m] [Zero α] (i : m)
+  条件: [DecidableEq m] [零 α] (i : m)
   证明: updateRow_eq_self _ i
 
 @[simp]
@@ -1231,7 +1231,7 @@ theorem updateCol_zero_zero
 
 中文:
 定理 updateCol_zero_zero
-  条件: [DecidableEq n] [Zero α] (i : n)
+  条件: [DecidableEq n] [零 α] (i : n)
   证明: updateCol_eq_self _ i
 
 Depends on / 依赖: updateCol_eq_self
@@ -1258,7 +1258,7 @@ theorem diagonal_updateCol_single
 
 中文:
 定理 diagonal_updateCol_single
-  条件: [DecidableEq n] [Zero α] (v : n -> α) (i : n) (x : α)
+  条件: [DecidableEq n] [零 α] (v : n -> α) (i : n) (x : α)
   证明: by
   ext j k
   obtain rfl | hjk := eq_or_ne j k
@@ -1297,7 +1297,7 @@ theorem diagonal_updateRow_single
 
 中文:
 定理 diagonal_updateRow_single
-  条件: [DecidableEq n] [Zero α] (v : n -> α) (i : n) (x : α)
+  条件: [DecidableEq n] [零 α] (v : n -> α) (i : n) (x : α)
   证明: by
   rw [← diagonal_transpose]; rw [updateRow_transpose]; rw [diagonal_updateCol_single]; rw [diagonal_transpose]
 
@@ -1320,7 +1320,7 @@ theorem updateRow_idem
 
 中文:
 定理 updateRow_idem
-  条件: [DecidableEq m] (A : Matrix m n α) (i : m) (x y : n -> α)
+  条件: [DecidableEq m] (A : 矩阵 m n α) (i : m) (x y : n -> α)
   证明: Function.update_idem _ _ _
 
 Depends on / 依赖: Function, Function.update_idem, update_idem
@@ -1340,7 +1340,7 @@ theorem updateRow_comm
 
 中文:
 定理 updateRow_comm
-  条件: [DecidableEq m] (A : Matrix m n α) {i i' : m} (h : i != i') (x y : n -> α)
+  条件: [DecidableEq m] (A : 矩阵 m n α) {i i' : m} (h : i != i') (x y : n -> α)
   证明: Function.update_comm h _ _ _
 
 @[simp]
@@ -1363,7 +1363,7 @@ simpa only [updateRow_transpose] using! congr_arg transpose updateRow_idem Aᵀ 
 
 中文:
 定理 updateCol_idem
-  条件: [DecidableEq n] (A : Matrix m n α) (j : n) (x y : m -> α)
+  条件: [DecidableEq n] (A : 矩阵 m n α) (j : n) (x y : m -> α)
   证明: by
 simpa only [updateRow_transpose] using! congr_arg transpose updateRow_idem Aᵀ j x y
 
@@ -1384,7 +1384,7 @@ simpa only [updateRow_transpose] using! congr_arg transpose updateRow_comm Aᵀ 
 
 中文:
 定理 updateCol_comm
-  条件: [DecidableEq n] (A : Matrix m n α) {j j' : n} (h : j != j') (x y : m -> α)
+  条件: [DecidableEq n] (A : 矩阵 m n α) {j j' : n} (h : j != j') (x y : m -> α)
   证明: by
 simpa only [updateRow_transpose] using! congr_arg transpose updateRow_comm Aᵀ h x y
 
@@ -1408,7 +1408,7 @@ theorem updateRow_submatrix_equiv
 
 中文:
 定理 updateRow_submatrix_equiv
-  结论: [DecidableEq l] [DecidableEq m] (A : Matrix m n α) (i : l)
+  结论: [DecidableEq l] [DecidableEq m] (A : 矩阵 m n α) (i : l)
   证明: by
   ext i' j
   simp only [submatrix_apply, updateRow_apply, Equiv.apply_eq_iff_eq, Equiv.symm_apply_apply]
@@ -1431,7 +1431,7 @@ theorem submatrix_updateRow_equiv
 
 中文:
 定理 submatrix_updateRow_equiv
-  结论: [DecidableEq l] [DecidableEq m] (A : Matrix m n α) (i : m)
+  结论: [DecidableEq l] [DecidableEq m] (A : 矩阵 m n α) (i : m)
   证明: Eq.trans (by simp_rw [Equiv.apply_symm_apply]) (updateRow_submatrix_equiv A _ _ e f).symm
 
 Depends on / 依赖: Eq.trans, Equiv.apply_symm_apply, apply_symm_apply, simp_rw, updateRow_submatrix_equiv
@@ -1453,7 +1453,7 @@ theorem updateCol_submatrix_equiv
 
 中文:
 定理 updateCol_submatrix_equiv
-  结论: [DecidableEq o] [DecidableEq n] (A : Matrix m n α) (j : o)
+  结论: [DecidableEq o] [DecidableEq n] (A : 矩阵 m n α) (j : o)
   证明: by
   simpa only [← transpose_submatrix, updateRow_transpose] using!
     congr_arg transpose (updateRow_submatrix_equiv Aᵀ j c f e)
@@ -1476,7 +1476,7 @@ theorem submatrix_updateCol_equiv
 
 中文:
 定理 submatrix_updateCol_equiv
-  结论: [DecidableEq o] [DecidableEq n] (A : Matrix m n α) (j : n)
+  结论: [DecidableEq o] [DecidableEq n] (A : 矩阵 m n α) (j : n)
   证明: Eq.trans (by simp_rw [Equiv.apply_symm_apply]) (updateCol_submatrix_equiv A _ _ e f).symm
 
 Depends on / 依赖: Eq.trans, Equiv.apply_symm_apply, apply_symm_apply, simp_rw, updateCol_submatrix_equiv
@@ -1498,7 +1498,7 @@ theorem updateRow_reindex
 
 中文:
 定理 updateRow_reindex
-  结论: [DecidableEq l] [DecidableEq m] (A : Matrix m n α) (i : l) (r : o -> α)
+  结论: [DecidableEq l] [DecidableEq m] (A : 矩阵 m n α) (i : l) (r : o -> α)
   证明: updateRow_submatrix_equiv _ _ _ _ _
 
 Depends on / 依赖: updateRow_submatrix_equiv
@@ -1518,7 +1518,7 @@ theorem reindex_updateRow
 
 中文:
 定理 reindex_updateRow
-  结论: [DecidableEq l] [DecidableEq m] (A : Matrix m n α) (i : m) (r : n -> α)
+  结论: [DecidableEq l] [DecidableEq m] (A : 矩阵 m n α) (i : m) (r : n -> α)
   证明: submatrix_updateRow_equiv _ _ _ _ _
 
 Depends on / 依赖: submatrix_updateRow_equiv
@@ -1538,7 +1538,7 @@ theorem updateCol_reindex
 
 中文:
 定理 updateCol_reindex
-  结论: [DecidableEq o] [DecidableEq n] (A : Matrix m n α) (j : o) (c : l -> α)
+  结论: [DecidableEq o] [DecidableEq n] (A : 矩阵 m n α) (j : o) (c : l -> α)
   证明: updateCol_submatrix_equiv _ _ _ _ _
 
 Depends on / 依赖: updateCol_submatrix_equiv
@@ -1558,7 +1558,7 @@ theorem reindex_updateCol
 
 中文:
 定理 reindex_updateCol
-  结论: [DecidableEq o] [DecidableEq n] (A : Matrix m n α) (j : n) (c : m -> α)
+  结论: [DecidableEq o] [DecidableEq n] (A : 矩阵 m n α) (j : n) (c : m -> α)
   证明: submatrix_updateCol_equiv _ _ _ _ _
 
 Depends on / 依赖: submatrix_updateCol_equiv
@@ -1578,7 +1578,7 @@ theorem single_eq_updateRow_zero
 
 中文:
 定理 single_eq_updateRow_zero
-  条件: [DecidableEq m] [DecidableEq n] [Zero α] (i : m) (j : n) (r : α)
+  条件: [DecidableEq m] [DecidableEq n] [零 α] (i : m) (j : n) (r : α)
   证明: single_eq_of_single_single _ _ _
 
 Depends on / 依赖: single_eq_of_single_single
@@ -1598,7 +1598,7 @@ theorem single_eq_updateCol_zero
 
 中文:
 定理 single_eq_updateCol_zero
-  条件: [DecidableEq m] [DecidableEq n] [Zero α] (i : m) (j : n) (r : α)
+  条件: [DecidableEq m] [DecidableEq n] [零 α] (i : m) (j : n) (r : α)
   证明: by
   simpa [← updateCol_transpose] using congr($(single_eq_updateRow_zero j i r)ᵀ)
 
@@ -1624,7 +1624,7 @@ theorem updateRow_mulVec
 
 中文:
 定理 updateRow_mulVec
-  结论: [DecidableEq l] [Fintype m] [NonUnitalNonAssocSemiring α]
+  结论: [DecidableEq l] [有限类型 m] [非幺非结合半环 α]
   证明: by
   ext i'
   obtain rfl | hi := eq_or_ne i' i
@@ -1655,7 +1655,7 @@ theorem vecMul_updateCol
 
 中文:
 定理 vecMul_updateCol
-  结论: [DecidableEq n] [Fintype m] [NonUnitalNonAssocSemiring α]
+  结论: [DecidableEq n] [有限类型 m] [非幺非结合半环 α]
   证明: by
   ext j'
   obtain rfl | hj := eq_or_ne j' j
@@ -1686,7 +1686,7 @@ theorem update_vecMulVec
 
 中文:
 定理 update_vecMulVec
-  条件: [DecidableEq m] [Mul α] (u : m -> α) (v : n -> α) (i : m) (a : α)
+  条件: [DecidableEq m] [乘法 α] (u : m -> α) (v : n -> α) (i : m) (a : α)
   证明: by
   ext i' j
   obtain rfl | hi := eq_or_ne i' i
@@ -1716,7 +1716,7 @@ theorem vecMulVec_update
 
 中文:
 定理 vecMulVec_update
-  条件: [DecidableEq n] [Mul α] (u : m -> α) (v : n -> α) (j : n) (a : α)
+  条件: [DecidableEq n] [乘法 α] (u : m -> α) (v : n -> α) (j : n) (a : α)
   证明: by
   ext i j'
   obtain rfl | hi := eq_or_ne j' j
@@ -1746,7 +1746,7 @@ theorem updateRow_mul
 
 中文:
 定理 updateRow_mul
-  结论: [DecidableEq l] [Fintype m] [NonUnitalNonAssocSemiring α]
+  结论: [DecidableEq l] [有限类型 m] [非幺非结合半环 α]
   证明: by
   ext i' j'
   obtain rfl | hi := eq_or_ne i' i
@@ -1777,7 +1777,7 @@ theorem mul_updateCol
 
 中文:
 定理 mul_updateCol
-  结论: [DecidableEq n] [Fintype m] [NonUnitalNonAssocSemiring α]
+  结论: [DecidableEq n] [有限类型 m] [非幺非结合半环 α]
   证明: by
   ext i' j'
   obtain rfl | hj := eq_or_ne j' j

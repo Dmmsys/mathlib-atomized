@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul α c.Quotient
+  签名: 标量乘法 α c.商
   定义体: ⟨c.smulAux (Con.smul c.toCon)⟩
 
 @[simp, norm_cast]
@@ -85,7 +85,7 @@ theorem coe_smul
 中文:
 定理 coe_smul
   条件: (a : α) (x : R)
-  结论: (↑(a • x) : c.Quotient) = a • (x : c.Quotient)
+  结论: (↑(a • x) : c.商) = a • (x : c.商)
   证明: rfl
 -/
 theorem coe_smul (a : α) (x : R) : (↑(a • x) : c.Quotient) = a • (x : c.Quotient) :=
@@ -100,8 +100,8 @@ instance [SMulCommClass
   body: inferInstanceAs (SMulCommClass α β c.toCon.Quotient)
 
 中文:
-实例 [SMulCommClass
-  签名: α β R] : SMulCommClass α β c.Quotient
+实例 [标量交换类
+  签名: α β R] : 标量交换类 α β c.商
   定义体: inferInstanceAs (SMulCommClass α β c.toCon.Quotient)
 
 Depends on / 依赖: Quotient, SMulCommClass, c.toCon.Quotient
@@ -118,8 +118,8 @@ instance [SMul
   body: inferInstanceAs (IsScalarTower α β c.toCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: α β] [IsScalarTower α β R] : IsScalarTower α β c.Quotient
+实例 [标量乘法
+  签名: α β] [标量塔 α β R] : 标量塔 α β c.商
   定义体: inferInstanceAs (IsScalarTower α β c.toCon.Quotient)
 
 Depends on / 依赖: IsScalarTower, Quotient, c.toCon.Quotient
@@ -136,8 +136,8 @@ instance [SMul
   body: inferInstanceAs (IsCentralScalar α c.toCon.Quotient)
 
 中文:
-实例 [SMul
-  签名: αᵐᵒᵖ R] [IsCentralScalar α R] : IsCentralScalar α c.Quotient
+实例 [标量乘法
+  签名: αᵐᵒᵖ R] [中心标量 α R] : 中心标量 α c.商
   定义体: inferInstanceAs (IsCentralScalar α c.toCon.Quotient)
 
 Depends on / 依赖: IsCentralScalar, Quotient, c.toCon.Quotient
@@ -157,7 +157,7 @@ instance isScalarTower_right
 
 中文:
 实例 isScalarTower_right
-  签名: [Add R] [MulOneClass R] [SMul α R] [IsScalarTower α R R]
+  签名: [加法 R] [MulOne类 R] [标量乘法 α R] [标量塔 α R R]
   定义体: Quotient.ind₂' fun _ _ => congr_arg Quotient.mk'' smul_mul_assoc _ _ _
 
 Depends on / 依赖: Quotient, Quotient.ind, Quotient.mk, congr_arg, smul_mul_assoc
@@ -176,7 +176,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [Add R] [MulOneClass R] [SMul α R] [IsScalarTower α R R]
+  签名: [加法 R] [MulOne类 R] [标量乘法 α R] [标量塔 α R R]
   定义体: Quotient.ind₂' fun _ _ => congr_arg Quotient.mk'' (mul_smul_comm _ _ _).symm
 
 Depends on / 依赖: Quotient, Quotient.ind, Quotient.mk, congr_arg, mul_smul_comm
@@ -196,7 +196,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: [Add R] [MulOneClass R] [SMul α R] [IsScalarTower α R R]
+  签名: [加法 R] [MulOne类 R] [标量乘法 α R] [标量塔 α R R]
   定义体: haveI := SMulCommClass.symm R α R
   SMulCommClass.symm _ _ _
 
@@ -216,8 +216,8 @@ instance [Monoid
   body: inferInstanceAs MulAction α c.toCon.Quotient
 
 中文:
-实例 [Monoid
-  签名: α] [NonAssocSemiring R] [MulAction α R] [IsScalarTower α R R]
+实例 [幺半群
+  签名: α] [非结合半环 R] [乘法作用 α R] [标量塔 α R R]
   定义体: inferInstanceAs MulAction α c.toCon.Quotient
 
 Depends on / 依赖: MulAction, Quotient, c.toCon.Quotient
@@ -236,8 +236,8 @@ instance [Monoid
 smul_add := fun _ => Quotient.ind₂' fun _ _ => congr_arg toQuotient smul_add _ _ _
 
 中文:
-实例 [Monoid
-  签名: α] [NonAssocSemiring R] [DistribMulAction α R] [IsScalarTower α R R]
+实例 [幺半群
+  签名: α] [非结合半环 R] [分配乘法作用 α R] [标量塔 α R R]
   定义体: fun _ => congr_arg toQuotient smul_zero _
 smul_add := fun _ => Quotient.ind₂' fun _ _ => congr_arg toQuotient smul_add _ _ _
 
@@ -259,8 +259,8 @@ smul_mul := fun _ => Quotient.ind₂' fun _ _ => congr_arg toQuotient
     MulSemiringAction.smul_mul _ _ _
 
 中文:
-实例 [Monoid
-  签名: α] [Semiring R] [MulSemiringAction α R] [IsScalarTower α R R] (c
+实例 [幺半群
+  签名: α] [半环 R] [MulSemiring作用 α R] [标量塔 α R R] (c
   定义体: fun _ => congr_arg toQuotient smul_one _
 smul_mul := fun _ => Quotient.ind₂' fun _ _ => congr_arg toQuotient
     MulSemiringAction.smul_mul _ _ _
@@ -416,7 +416,7 @@ mul' := fun h1 h2 c hc => c.mul (h1 c hc) h2 c hc }
 
 中文:
 实例 :
-  签名: InfSet (RingCon R)
+  签名: 下确界集 (RingCon R)
   定义体: { r := fun x y => forall c : RingCon R, c in S -> c x y
       iseqv :=
 ⟨fun x c _hc => c.refl x, fun h c hc => c.symm h c hc, fun h1 h2 c hc =>
@@ -447,7 +447,7 @@ theorem sInf_toSetoid
 
 中文:
 定理 sInf_toSetoid
-  条件: (S : Set (RingCon R))
+  条件: (S : 集合 (RingCon R))
   结论: (sInf S).toSetoid = sInf ((·.toSetoid) '' S)
   证明: Setoid.ext fun x y =>
     ⟨fun h r ⟨c, hS, hr⟩ => by rw [← hr]; exact h c hS, fun h c hS => h c.toSetoid ⟨c, hS, rfl⟩⟩
@@ -475,7 +475,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (RingCon R))
+  条件: (S : 集合 (RingCon R))
   结论: ⇑(sInf S) = sInf ((⇑) '' S)
   证明: by
   ext; simp only [sInf_image, iInf_apply, iInf_Prop_eq]; rfl
@@ -500,7 +500,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} (f : ι -> RingCon R)
+  条件: {ι : 类型层*} (f : ι -> RingCon R)
   结论: ⇑(iInf f) = ⨅ i, ⇑(f i)
   证明: by
   rw [iInf]; rw [coe_sInf]; rw [← Set.range_comp]; rw [sInf_range]; rw [Function.comp_def]
@@ -522,7 +522,7 @@ le_trans _c1 _c2 _c3 h1 h2 _x _y h := h2 h1 h
 
 中文:
 实例 :
-  签名: PartialOrder (RingCon R)
+  签名: 偏序 (RingCon R)
   定义体: id
 le_trans _c1 _c2 _c3 h1 h2 _x _y h := h2 h1 h
   le_antisymm _c _d hc hd := ext fun _x _y => ⟨fun h => hc h, fun h => hd h⟩
@@ -548,7 +548,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (RingCon R)
+  签名: 完备格 (RingCon R)
   定义体: completeLatticeOfInf (RingCon R) fun s =>
     ⟨fun r hr x y h => (h : forall r in s, (r : RingCon R) x y) r hr,
       fun _r hr _x _y h _r' hr' => hr hr' h⟩
@@ -605,7 +605,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ⇑(⊥ : RingCon R) = Eq
+  结论: ⇑(⊥ : RingCon R) = 相等
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : ⇑(⊥ : RingCon R) = Eq := rfl
@@ -678,7 +678,7 @@ lemma subsingleton_quotient
 
 中文:
 引理 subsingleton_quotient
-  结论: Subsingleton c.Quotient ↔ c = ⊤
+  结论: 子单例 c.商 ↔ c = ⊤
   证明: by simp [RingCon.Quotient]
 -/
 @[simp] lemma subsingleton_quotient : Subsingleton c.Quotient ↔ c = ⊤ := by simp [RingCon.Quotient]
@@ -694,7 +694,7 @@ lemma nontrivial_quotient
 
 中文:
 引理 nontrivial_quotient
-  结论: Nontrivial c.Quotient ↔ c != ⊤
+  结论: 非平凡 c.商 ↔ c != ⊤
   证明: by
   simp [← not_subsingleton_iff_nontrivial]
 -/
@@ -751,8 +751,8 @@ instance [Nontrivial
 ⟨⊥, ⊤, ne_of_apply_ne (· x y) by simp [ne]⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (RingCon R) where
+实例 [非平凡
+  签名: R] : 非平凡 (RingCon R) where
   定义体: let ⟨x, y, ne⟩ := exists_pair_ne R
 ⟨⊥, ⊤, ne_of_apply_ne (· x y) by simp [ne]⟩
 
@@ -772,8 +772,8 @@ instance [Subsingleton
   body: ext fun r r' => by simp_rw [Subsingleton.elim r' r, c.refl, c'.refl]
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton (RingCon R) where
+实例 [子单例
+  签名: R] : 子单例 (RingCon R) where
   定义体: ext fun r r' => by simp_rw [Subsingleton.elim r' r, c.refl, c'.refl]
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, c.refl, simp_rw
@@ -794,7 +794,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (RingCon R) ↔ Nontrivial R
+  结论: 非平凡 (RingCon R) ↔ 非平凡 R
   证明: by
   cases subsingleton_or_nontrivial R
   on_goal 1 => simp_rw [← not_subsingleton_iff_nontrivial, not_iff_not]
@@ -818,7 +818,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (RingCon R) ↔ Subsingleton R
+  结论: 子单例 (RingCon R) ↔ 子单例 R
   证明: by
   simp_rw [← not_nontrivial_iff_subsingleton, nontrivial_iff]
 
@@ -918,7 +918,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (ringConGen (R := R)) (⇑) where
+  签名: : Galois嵌入 (ringConGen (R := R)) (⇑) where
   定义体: ringConGen r
   gc _r _ := ringConGen_le
   le_l_u _ := le_ringConGen
@@ -940,7 +940,7 @@ theorem ringConGen_monotone
 
 中文:
 定理 ringConGen_monotone
-  结论: Monotone (ringConGen (R := R))
+  结论: 递增 (ringConGen (R := R))
   证明: .gc.monotone_l RingCon.gi R
 -/
 theorem ringConGen_monotone : Monotone (ringConGen (R := R)) :=
@@ -1039,7 +1039,7 @@ theorem ringConGen_sSup
 
 中文:
 定理 ringConGen_sSup
-  条件: (rs : Set (R -> R -> 命题))
+  条件: (rs : 集合 (R -> R -> 命题))
   结论: ringConGen (sSup rs) = ⨆ r in rs, ringConGen r
   证明: .gc.l_sSup RingCon.gi R
 
@@ -1058,7 +1058,7 @@ theorem ringConGen_iSup
 
 中文:
 定理 ringConGen_iSup
-  条件: {ι : Sort*} (r : ι -> R -> R -> 命题)
+  条件: {ι : 类型层*} (r : ι -> R -> R -> 命题)
   证明: .gc.l_iSup RingCon.gi R
 
 Depends on / 依赖: RingCon, RingCon.gi, gc.l_iSup, l_iSup
@@ -1118,7 +1118,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (S : Set (RingCon R))
+  条件: (S : 集合 (RingCon R))
   结论: sSup S = ringConGen (sSup ((⇑) '' S))
   证明: .symm .l_sSup_u_image _ RingCon.gi R
 
@@ -1140,7 +1140,7 @@ theorem sSup_eq_ringConGen
 
 中文:
 定理 sSup_eq_ringConGen
-  条件: (S : Set (RingCon R))
+  条件: (S : 集合 (RingCon R))
   证明: by
   rw [sSup_def]
   congr! with x y
@@ -1166,7 +1166,7 @@ theorem le_comap_ringConGen
 
 中文:
 定理 le_comap_ringConGen
-  结论: {F} [FunLike F R' R] [MulHomClass F R' R] [AddHomClass F R' R]
+  结论: {F} [函数状 F R' R] [乘法态射类 F R' R] [加法态射类 F R' R]
   证明: ringConGen_le.2 fun _ _ h => RingConGen.Rel.of _ _ h
 
 Depends on / 依赖: RingConGen, RingConGen.Rel.of, ringConGen_le
@@ -1186,7 +1186,7 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  结论: {F} [FunLike F R' R] [MulHomClass F R' R] [AddHomClass F R' R]
+  结论: {F} [函数状 F R' R] [乘法态射类 F R' R] [加法态射类 F R' R]
   证明: .of_comp (f := toCon) (Con.comap_injective f hf <| map_mul f).comp toCon_injective
 
 Depends on / 依赖: Con.comap_injective, comap_injective, map_mul, of_comp, toCon_injective
@@ -1213,7 +1213,7 @@ theorem comap_ringConGen_ringEquiv
 
 中文:
 定理 comap_ringConGen_ringEquiv
-  结论: {R R'} [NonAssocSemiring R] [NonAssocSemiring R']
+  结论: {R R'} [非结合半环 R] [非结合半环 R']
   证明: by
   refine le_antisymm ?_ (le_comap_ringConGen _ _)
   trans (ringConGen (r on ⇑f) |>.comap f.symm.toNonUnitalRingHom).comap f.toNonUnitalRingHom

@@ -39,7 +39,7 @@ theorem Presheaf.sections_exact_of_exact
     ⟨inferInstance, inferInstance⟩ S hS) _ h
 
 中文:
-定理 Presheaf.sections_exact_of_exact
+定理 预层.sections_exact_of_exact
   证明: by
   dsimp [Presheaf] at S
   let F := (evaluation (Opens X)ᵒᵖ AddCommGrpCat.{u}).obj (Opposite.op U)
@@ -68,8 +68,8 @@ lemma Sheaf.sections_exact_of_left_exact
     inferInstance S ⟨hS, hf⟩).left h
 
 中文:
-引理 Sheaf.sections_exact_of_left_exact
-  结论: {S : ShortComplex (TopCat.Sheaf AddCommGrpCat X)}
+引理 层.sections_exact_of_left_exact
+  结论: {S : 短复形 (顶元素范畴.层 加法交换群范畴 X)}
   证明: Presheaf.sections_exact_of_exact
     (((Functor.preservesFiniteLimits_tfae (Sheaf.forget ..)).out 1 3 rfl rfl).mpr
     inferInstance S ⟨hS, hf⟩).left h
@@ -95,8 +95,8 @@ lemma Presheaf.restrict_sum
   cat_disch
 
 中文:
-引理 Presheaf.restrict_sum
-  结论: {V : Opens X} {F : Presheaf AddCommGrpCat X} (h : V <= U)
+引理 预层.restrict_sum
+  结论: {V : Opens X} {F : 预层 加法交换群范畴 X} (h : V <= U)
   证明: by
   delta Presheaf.restrictOpen Presheaf.restrict
   cat_disch

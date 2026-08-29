@@ -227,8 +227,8 @@ instance [CharP
     exact mu
 
 中文:
-实例 [CharP
-  签名: R p] [NoZeroDivisors R] : NoZeroDivisors (𝕎 R)
+实例 [特征p
+  签名: R p] [无零因子 R] : 无零因子 (𝕎 R)
   定义体: ⟨fun {x y} => by
     contrapose!
     rintro ⟨ha, hb⟩
@@ -260,7 +260,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: [CharP R p] [IsDomain R]
+  签名: [特征p R p] [是整环 R]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain

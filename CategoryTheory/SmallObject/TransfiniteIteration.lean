@@ -100,7 +100,7 @@ definition iterationCocone
 
 中文:
 定义 iterationCocone
-  签名: : Cocone (Φ.iterationFunctor J)
+  签名: : 余锥 (Φ.iterationFunctor J)
   定义体: colimit.cocone _
 
 @[simp]
@@ -136,7 +136,7 @@ definition isColimitIterationCocone
 
 中文:
 定义 isColimitIterationCocone
-  签名: : IsColimit (Φ.iterationCocone J)
+  签名: : 是余极限 (Φ.iterationCocone J)
   定义体: colimit.isColimit _
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.iterationFunctor J).IsWellOrderContinuous
+  签名: (Φ.iterationFunctor J).是WellOrderContinuous
   定义体: ⟨by
     let e : (Set.principalSegIio i).monotone.functor ⋙
       (Φ.iterationFunctor J) ≅ restrictionLT (Φ.iter i).F (by simp) :=

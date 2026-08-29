@@ -51,7 +51,7 @@ abbreviation AlgebraicCycle
 
 中文:
 缩写 AlgebraicCycle
-  签名: (X : Scheme.{u}) (R : 类型) [Zero R]
+  签名: (X : 概形.{u}) (R : 类型) [零 R]
   定义体: Function.locallyFinsupp X R
 
 Depends on / 依赖: Function, Function.locallyFinsupp, locallyFinsupp
@@ -77,7 +77,7 @@ definition mapCoeff
 
 中文:
 定义 mapCoeff
-  签名: {N : 类型} [DecidableEq N] {Y : Scheme} (f : X ⟶ Y) (wx : X -> N)
+  签名: {N : 类型} [DecidableEq N] {Y : 概形} (f : X ⟶ Y) (wx : X -> N)
   定义体: if wx x = wy (f.base x) then f.residueDegree x else 0
 
 Depends on / 依赖: f.base, f.residueDegree, residueDegree
@@ -108,7 +108,7 @@ definition map
 
 中文:
 定义 map
-  签名: [QuasiCompact f] {N : 类型} [DecidableEq N] (wx : X -> N) (wy : Y -> N)
+  签名: [拟紧 f] {N : 类型} [DecidableEq N] (wx : X -> N) (wy : Y -> N)
   定义体: Function.locallyFinsupp.map f (Nat.cast (R := R) <| mapCoeff f wx wy ·) f.isSpectralMap c
 
 @[simp]

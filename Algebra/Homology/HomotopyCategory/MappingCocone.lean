@@ -38,7 +38,7 @@ definition mappingCocone
 
 中文:
 定义 mappingCocone
-  签名: [HasHomotopyCofiber φ]
+  签名: [有HomotopyCofiber φ]
   定义体: (mappingCone φ)⟦(-1 : Int)⟧
 
 Depends on / 依赖: mappingCone
@@ -482,7 +482,7 @@ definition descCocycle
 
 中文:
 定义 descCocycle
-  签名: {M : CochainComplex C 整数} {n m : 整数}
+  签名: {M : 上链复形 C 整数} {n m : 整数}
   定义体: ⟨descCochain φ α β h, by
     simp [Cocycle.mem_iff _ n h, δ_descCochain _ _ _ h (n + 1) (by lia), hαβ]⟩
 
@@ -801,7 +801,7 @@ definition liftCocycle
 
 中文:
 定义 liftCocycle
-  签名: {M : CochainComplex C 整数} {n m : 整数}
+  签名: {M : 上链复形 C 整数} {n m : 整数}
   定义体: ⟨liftCochain φ α β h,
     by simp [Cocycle.mem_iff _ _ rfl, δ_liftCochain _ _ _ _ _ rfl, hαβ]⟩
 
@@ -953,7 +953,7 @@ definition triangle
 
 中文:
 定义 triangle
-  签名: : Triangle (CochainComplex C 整数)
+  签名: : Triangle (上链复形 C 整数)
   定义体: Triangle.mk (fst φ) φ
     ((mappingCone.triangle φ).mor₂ ≫ (shiftFunctorCompIsoId _ (-1 : Int) 1 (by lia)).inv.app _)
 

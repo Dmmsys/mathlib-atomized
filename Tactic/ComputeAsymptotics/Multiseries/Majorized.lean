@@ -90,7 +90,7 @@ theorem self
 
 中文:
 定理 self
-  条件: (h : Tendsto f atTop atTop)
+  条件: (h : 收敛 f atTop atTop)
   证明: by
   simp only [Majorized]
   intro exp' h_exp
@@ -180,7 +180,7 @@ theorem const
 
 中文:
 定理 const
-  条件: (h_tendsto : Tendsto b atTop atTop) {c : 实数}
+  条件: (h_tendsto : 收敛 b atTop atTop) {c : 实数}
   证明: by
   intro exp h_exp
   apply Asymptotics.isLittleO_const_left.mpr

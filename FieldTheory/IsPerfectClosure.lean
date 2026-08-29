@@ -78,7 +78,7 @@ definition pNilradical
 
 中文:
 定义 pNilradical
-  签名: (R : 类型) [CommSemiring R] (p : 自然数)
+  签名: (R : 类型) [交换半环 R] (p : 自然数)
   定义体: if 1 < p then nilradical R else ⊥
 
 Depends on / 依赖: nilradical
@@ -98,7 +98,7 @@ theorem pNilradical_le_nilradical
 
 中文:
 定理 pNilradical_le_nilradical
-  条件: {R : 类型} [CommSemiring R] {p : 自然数}
+  条件: {R : 类型} [交换半环 R] {p : 自然数}
   证明: by
   by_cases hp : 1 < p
   · rw [pNilradical, if_pos hp]
@@ -122,7 +122,7 @@ theorem pNilradical_eq_nilradical
 
 中文:
 定理 pNilradical_eq_nilradical
-  条件: {R : 类型} [CommSemiring R] {p : 自然数} (hp : 1 < p)
+  条件: {R : 类型} [交换半环 R] {p : 自然数} (hp : 1 < p)
   证明: by rw [pNilradical, if_pos hp]
 
 Depends on / 依赖: if_pos, pNilradical
@@ -140,7 +140,7 @@ theorem pNilradical_eq_bot
 
 中文:
 定理 pNilradical_eq_bot
-  条件: {R : 类型} [CommSemiring R] {p : 自然数} (hp : ¬ 1 < p)
+  条件: {R : 类型} [交换半环 R] {p : 自然数} (hp : ¬ 1 < p)
   证明: by rw [pNilradical, if_neg hp]
 
 Depends on / 依赖: if_neg, pNilradical
@@ -158,7 +158,7 @@ theorem pNilradical_eq_bot'
 
 中文:
 定理 pNilradical_eq_bot'
-  条件: {R : 类型} [CommSemiring R] {p : 自然数} (hp : p <= 1)
+  条件: {R : 类型} [交换半环 R] {p : 自然数} (hp : p <= 1)
   证明: pNilradical_eq_bot (not_lt.2 hp)
 
 Depends on / 依赖: not_lt, pNilradical_eq_bot
@@ -176,7 +176,7 @@ theorem pNilradical_prime
 
 中文:
 定理 pNilradical_prime
-  条件: {R : 类型} [CommSemiring R] {p : 自然数} (hp : p.Prime)
+  条件: {R : 类型} [交换半环 R] {p : 自然数} (hp : p.素)
   证明: pNilradical_eq_nilradical hp.one_lt
 
 Depends on / 依赖: hp.one_lt, one_lt, pNilradical_eq_nilradical
@@ -194,7 +194,7 @@ theorem pNilradical_one
 
 中文:
 定理 pNilradical_one
-  条件: {R : 类型} [CommSemiring R]
+  条件: {R : 类型} [交换半环 R]
   证明: pNilradical_eq_bot' rfl.le
 
 Depends on / 依赖: pNilradical_eq_bot, rfl.le
@@ -218,7 +218,7 @@ theorem mem_pNilradical
 
 中文:
 定理 mem_pNilradical
-  条件: {R : 类型} [CommSemiring R] {p : 自然数} {x : R}
+  条件: {R : 类型} [交换半环 R] {p : 自然数} {x : R}
   证明: by
   by_cases hp : 1 < p
   · rw [pNilradical_eq_nilradical hp]
@@ -255,7 +255,7 @@ theorem sub_mem_pNilradical_iff_pow_expChar_pow_eq
 
 中文:
 定理 sub_mem_pNilradical_iff_pow_expChar_pow_eq
-  结论: {R : 类型} [CommRing R] {p : 自然数} [ExpChar R p]
+  结论: {R : 类型} [交换环 R] {p : 自然数} [ExpChar R p]
   证明: by
   simp_rw [mem_pNilradical, sub_pow_expChar_pow, sub_eq_zero]
 
@@ -276,7 +276,7 @@ sub_eq_zero.1 Ideal.mem_bot.1 h ▸ sub_mem_pNilradical_iff_pow_expChar_pow_eq.2
 
 中文:
 定理 pow_expChar_pow_inj_of_pNilradical_eq_bot
-  结论: (R : 类型) [CommRing R] (p : 自然数) [ExpChar R p]
+  结论: (R : 类型) [交换环 R] (p : 自然数) [ExpChar R p]
   证明: fun _ _ H =>
 sub_eq_zero.1 Ideal.mem_bot.1 h ▸ sub_mem_pNilradical_iff_pow_expChar_pow_eq.2 ⟨n, H⟩
 -/
@@ -296,7 +296,7 @@ theorem pNilradical_eq_bot_of_frobenius_inj
 
 中文:
 定理 pNilradical_eq_bot_of_frobenius_inj
-  结论: (R : 类型) [CommSemiring R] (p : 自然数) [ExpChar R p]
+  结论: (R : 类型) [交换半环 R] (p : 自然数) [ExpChar R p]
   证明: bot_unique fun x => by
   rw [mem_pNilradical]; rw [Ideal.mem_bot]
   exact fun ⟨n, _⟩ => h.iterate n (by rwa [← coe_iterateFrobenius, map_zero])
@@ -317,8 +317,8 @@ theorem PerfectRing.pNilradical_eq_bot
   proof: pNilradical_eq_bot_of_frobenius_inj R p (injective_frobenius R p)
 
 中文:
-定理 PerfectRing.pNilradical_eq_bot
-  结论: (R : 类型) [CommSemiring R] (p : 自然数) [ExpChar R p]
+定理 完美环.pNilradical_eq_bot
+  结论: (R : 类型) [交换半环 R] (p : 自然数) [ExpChar R p]
   证明: pNilradical_eq_bot_of_frobenius_inj R p (injective_frobenius R p)
 
 Depends on / 依赖: injective_frobenius, pNilradical_eq_bot_of_frobenius_inj
@@ -355,11 +355,11 @@ class IsPRadical
     - ker_le' : RingHom.ker i <= pNilradical K p
 
 中文:
-类 IsPRadical
+类 是PRadical
   参数: : 命题 where
   公理与运算 (2 个):
     - pow_mem' : 对任意 x : L, 存在 (n : 自然数) (y : K), i y = x ^ p ^ n
-    - ker_le' : RingHom.ker i <= pNilradical K p
+    - ker_le' : 环态射.ker i <= pNilradical K p
 -/
 class IsPRadical : Prop where
   pow_mem' : forall x : L, exists (n : Nat) (y : K), i y = x ^ p ^ n
@@ -374,8 +374,8 @@ theorem IsPRadical.pow_mem
   proof: pow_mem' x
 
 中文:
-定理 IsPRadical.pow_mem
-  条件: [IsPRadical i p] (x : L)
+定理 是PRadical.pow_mem
+  条件: [是PRadical i p] (x : L)
   证明: pow_mem' x
 
 Depends on / 依赖: pow_mem
@@ -392,8 +392,8 @@ theorem IsPRadical.ker_le
   proof: ker_le'
 
 中文:
-定理 IsPRadical.ker_le
-  条件: [IsPRadical i p]
+定理 是PRadical.ker_le
+  条件: [是PRadical i p]
   证明: ker_le'
 
 Depends on / 依赖: ker_le
@@ -415,8 +415,8 @@ obtain ⟨m, h⟩ := mem_pNilradical.1 ker_le i p ((map_pow i x _).symm ▸ h)
   simp only [Ideal.mem_comap, mem_pNilradical] at h
 
 中文:
-定理 IsPRadical.comap_pNilradical
-  条件: [IsPRadical i p]
+定理 是PRadical.comap_pNilradical
+  条件: [是PRadical i p]
   证明: by
   refine le_antisymm (fun x h => mem_pNilradical.2 ?_) (fun x h => ?_)
 · obtain ⟨n, h⟩ := mem_pNilradical.1 Ideal.mem_comap.1 h
@@ -447,8 +447,8 @@ instance IsPRadical.of_id
   ker_le' x h := by convert! Ideal.zero_mem _
 
 中文:
-实例 IsPRadical.of_id
-  签名: : IsPRadical (RingHom.id K) p where
+实例 是PRadical.of_id
+  签名: : 是PRadical (环态射.id K) p where
   定义体: ⟨0, x, by simp⟩
   ker_le' x h := by convert! Ideal.zero_mem _
 
@@ -473,8 +473,8 @@ theorem IsPRadical.trans
     simpa only [← Ideal.mem_comap, c
 
 中文:
-定理 IsPRadical.trans
-  条件: [IsPRadical i p] [IsPRadical f p]
+定理 是PRadical.trans
+  条件: [是PRadical i p] [是PRadical f p]
   证明: by
     obtain ⟨n, y, hy⟩ := pow_mem f p x
     obtain ⟨m, z, hz⟩ := pow_mem i p y
@@ -513,8 +513,8 @@ abbreviation IsPerfectClosure
   body: IsPRadical i p
 
 中文:
-缩写 IsPerfectClosure
-  签名: [ExpChar L p] [PerfectRing L p]
+缩写 是完美闭包
+  签名: [ExpChar L p] [完美环 L p]
   定义体: IsPRadical i p
 
 Depends on / 依赖: IsPRadical
@@ -534,8 +534,8 @@ theorem RingHom.pNilradical_le_ker_of_perfectRing
     map_zero, map_zero] at h
 
 中文:
-定理 RingHom.pNilradical_le_ker_of_perfectRing
-  条件: [ExpChar L p] [PerfectRing L p]
+定理 环态射.pNilradical_le_ker_of_perfectRing
+  条件: [ExpChar L p] [完美环 L p]
   证明: fun x h => by
   obtain ⟨n, h⟩ := mem_pNilradical.1 h
   replace h := congr((iterateFrobeniusEquiv L p n).symm (i $h))
@@ -561,8 +561,8 @@ theorem IsPerfectClosure.ker_eq
   proof: IsPRadical.ker_le'.antisymm (i.pNilradical_le_ker_of_perfectRing p)
 
 中文:
-定理 IsPerfectClosure.ker_eq
-  条件: [PerfectRing L p] [IsPerfectClosure i p]
+定理 是完美闭包.ker_eq
+  条件: [完美环 L p] [是完美闭包 i p]
   证明: IsPRadical.ker_le'.antisymm (i.pNilradical_le_ker_of_perfectRing p)
 
 Depends on / 依赖: IsPRadical, IsPRadical.ker_le, antisymm, i.pNilradical_le_ker_of_perfectRing, ker_le, pNilradical_le_ker_of_perfectRing
@@ -642,7 +642,7 @@ theorem liftAux_self_apply
 
 中文:
 定理 liftAux_self_apply
-  条件: [ExpChar L p] [PerfectRing L p] (x : L)
+  条件: [ExpChar L p] [完美环 L p] (x : L)
   结论: liftAux i i p x = x
   证明: by
   rw [liftAux]; rw [Classical.choose_spec (lift_aux i p x)]; rw [← iterateFrobenius_def]; rw [← iterateFrobeniusEquiv_apply]; rw [RingEquiv.symm_apply_apply]
@@ -668,7 +668,7 @@ theorem liftAux_self
 
 中文:
 定理 liftAux_self
-  条件: [ExpChar L p] [PerfectRing L p]
+  条件: [ExpChar L p] [完美环 L p]
   结论: liftAux i i p = id
   证明: funext (liftAux_self_apply i p)
 
@@ -696,7 +696,7 @@ theorem liftAux_id_apply
 中文:
 定理 liftAux_id_apply
   条件: (x : K)
-  结论: liftAux (RingHom.id K) j p x = j x
+  结论: liftAux (环态射.id K) j p x = j x
   证明: by
   have := RingHom.id_apply _ ▸ Classical.choose_spec (lift_aux (RingHom.id K) p x)
   rw [liftAux]; rw [this]; rw [map_pow]; rw [← iterateFrobenius_def]; rw [← iterateFrobeniusEquiv_apply]; rw [RingEquiv.symm_apply_apply]
@@ -720,7 +720,7 @@ theorem liftAux_id
 
 中文:
 定理 liftAux_id
-  结论: liftAux (RingHom.id K) j p = j
+  结论: liftAux (环态射.id K) j p = j
   证明: funext (liftAux_id_apply j p)
 
 Depends on / 依赖: liftAux_id_apply
@@ -754,7 +754,7 @@ theorem injective_comp_of_pNilradical_eq_bot
 
 中文:
 定理 injective_comp_of_pNilradical_eq_bot
-  条件: [IsPRadical i p] (h : pNilradical M p = ⊥)
+  条件: [是PRadical i p] (h : pNilradical M p = ⊥)
   证明: fun f g heq => by
   ext x
   obtain ⟨n, y, hx⟩ := IsPRadical.pow_mem i p x
@@ -783,7 +783,7 @@ theorem injective_comp
 
 中文:
 定理 injective_comp
-  条件: [IsPRadical i p] [IsReduced M]
+  条件: [是PRadical i p] [是既约 M]
   证明: injective_comp_of_pNilradical_eq_bot i p bot_unique
     pNilradical_le_nilradical.trans (nilradical_eq_zero M).le
 
@@ -804,7 +804,7 @@ theorem injective_comp_of_perfect
 
 中文:
 定理 injective_comp_of_perfect
-  条件: [IsPRadical i p] [PerfectRing M p]
+  条件: [是PRadical i p] [完美环 M p]
   证明: injective_comp_of_pNilradical_eq_bot i p (PerfectRing.pNilradical_eq_bot M p)
 
 Depends on / 依赖: PerfectRing, PerfectRing.pNilradical_eq_bot, injective_comp_of_pNilradical_eq_bot, pNilradical_eq_bot
@@ -983,7 +983,7 @@ theorem lift_self_apply
 
 中文:
 定理 lift_self_apply
-  条件: [PerfectRing L p] (x : L)
+  条件: [完美环 L p] (x : L)
   结论: lift i i p x = x
   证明: liftAux_self_apply i p x
 
@@ -1005,8 +1005,8 @@ theorem lift_self
 
 中文:
 定理 lift_self
-  条件: [PerfectRing L p]
-  结论: lift i i p = RingHom.id L
+  条件: [完美环 L p]
+  结论: lift i i p = 环态射.id L
   证明: RingHom.ext (liftAux_self_apply i p)
 
 Depends on / 依赖: RingHom, RingHom.ext, liftAux_self_apply
@@ -1028,7 +1028,7 @@ theorem lift_id_apply
 中文:
 定理 lift_id_apply
   条件: (x : K)
-  结论: lift (RingHom.id K) j p x = j x
+  结论: lift (环态射.id K) j p x = j x
   证明: liftAux_id_apply j p x
 
 @[simp]
@@ -1050,7 +1050,7 @@ theorem lift_id
 
 中文:
 定理 lift_id
-  结论: lift (RingHom.id K) j p = j
+  结论: lift (环态射.id K) j p = j
   证明: RingHom.ext (liftAux_id_apply j p)
 
 @[simp]
@@ -1167,7 +1167,7 @@ theorem liftEquiv_id_apply
 
 中文:
 定理 liftEquiv_id_apply
-  结论: liftEquiv M (RingHom.id K) p j = j
+  结论: liftEquiv M (环态射.id K) p j = j
   证明: lift_id j p
 
 @[simp]
@@ -1188,7 +1188,7 @@ theorem liftEquiv_id
 
 中文:
 定理 liftEquiv_id
-  结论: liftEquiv M (RingHom.id K) p = Equiv.refl _
+  结论: liftEquiv M (环态射.id K) p = 等价.refl _
   证明: Equiv.ext (liftEquiv_id_apply · p)
 
 Depends on / 依赖: Equiv.ext, liftEquiv_id_apply
@@ -1255,7 +1255,7 @@ theorem lift_comp_lift_apply_eq_self
 
 中文:
 定理 lift_comp_lift_apply_eq_self
-  条件: [PerfectRing L p] (x : L)
+  条件: [完美环 L p] (x : L)
   证明: by
   rw [lift_comp_lift_apply]; rw [lift_self_apply]
 
@@ -1275,7 +1275,7 @@ theorem lift_comp_lift_eq_id
 
 中文:
 定理 lift_comp_lift_eq_id
-  条件: [PerfectRing L p]
+  条件: [完美环 L p]
   证明: RingHom.ext (lift_comp_lift_apply_eq_self i j p)
 
 Depends on / 依赖: RingHom, RingHom.ext, lift_comp_lift_apply_eq_self
@@ -1425,7 +1425,7 @@ theorem equiv_toRingHom
 
 中文:
 定理 equiv_toRingHom
-  结论: (equiv i j p).toRingHom = PerfectRing.lift i j p
+  结论: (equiv i j p).toRingHom = 完美环.lift i j p
   证明: rfl
 
 @[simp]
@@ -1539,7 +1539,7 @@ theorem equiv_self
 
 中文:
 定理 equiv_self
-  结论: equiv i i p = RingEquiv.refl L
+  结论: equiv i i p = 环等价.refl L
   证明: RingEquiv.ext (equiv_self_apply i p)
 
 @[simp]
@@ -1585,7 +1585,7 @@ theorem equiv_comp
 
 中文:
 定理 equiv_comp
-  结论: RingHom.comp (equiv i j p) i = j
+  结论: 环态射.comp (equiv i j p) i = j
   证明: RingHom.ext (equiv_comp_apply i j p)
 
 Depends on / 依赖: RingHom, RingHom.ext, equiv_comp_apply
@@ -1704,7 +1704,7 @@ instance isPRadical
 
 中文:
 实例 isPRadical
-  签名: : IsPRadical (PerfectClosure.of K p) p where
+  签名: : 是PRadical (完美闭包.of K p) p where
   定义体: PerfectClosure.induction_on x fun x => ⟨x.1, x.2, by
     rw [← iterate_frobenius]; rw [iterate_frobenius_mk K p x.1 x.2]⟩
   ker_le' x h := by
@@ -1739,8 +1739,8 @@ theorem IsPRadical.isPurelyInseparable
   proof: (isPurelyInseparable_iff_pow_mem K p).2 (IsPRadical.pow_mem (algebraMap K L) p)
 
 中文:
-定理 IsPRadical.isPurelyInseparable
-  条件: [IsPRadical (algebraMap K L) p]
+定理 是PRadical.isPurelyInseparable
+  条件: [是PRadical (algebraMap K L) p]
   证明: (isPurelyInseparable_iff_pow_mem K p).2 (IsPRadical.pow_mem (algebraMap K L) p)
 
 Depends on / 依赖: IsPRadical, IsPRadical.pow_mem, algebraMap, isPurelyInseparable_iff_pow_mem, pow_mem
@@ -1759,8 +1759,8 @@ instance IsPurelyInseparable.isPRadical
   ker_le' := (RingHom.injective_iff_ker_eq_bot _).1 (algebraMap K L).injective ▸ bot_le
 
 中文:
-实例 IsPurelyInseparable.isPRadical
-  签名: [IsPurelyInseparable K L]
+实例 是纯不可分.isPRadical
+  签名: [是纯不可分 K L]
   定义体: (isPurelyInseparable_iff_pow_mem K p).1 ‹_›
   ker_le' := (RingHom.injective_iff_ker_eq_bot _).1 (algebraMap K L).injective ▸ bot_le
 

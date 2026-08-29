@@ -51,7 +51,7 @@ lemma eLpNorm_indicator_eq_eLpNorm_restrict
 
 中文:
 引理 eLpNorm_indicator_eq_eLpNorm_restrict
-  条件: {f : α -> ε} {s : Set α} (hs : MeasurableSet s)
+  条件: {f : α -> ε} {s : 集合 α} (hs : 可测集 s)
   证明: by
   by_cases hp_zero : p = 0
   · simp only [hp_zero, eLpNorm_exponent_zero]
@@ -87,7 +87,7 @@ lemma eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict
 
 中文:
 引理 eLpNormEssSup_indicator_eq_eLpNormEssSup_restrict
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   simp_rw [← eLpNorm_exponent_top, eLpNorm_indicator_eq_eLpNorm_restrict hs]
 
@@ -107,7 +107,7 @@ lemma eLpNorm_restrict_le
 
 中文:
 引理 eLpNorm_restrict_le
-  条件: (f : α -> ε') (p : 实数>=0∞) (μ : Measure α) (s : Set α)
+  条件: (f : α -> ε') (p : 实数>=0∞) (μ : 测度 α) (s : 集合 α)
   证明: eLpNorm_mono_measure f Measure.restrict_le_self
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, eLpNorm_mono_measure, restrict_le_self
@@ -156,7 +156,7 @@ lemma eLpNormEssSup_indicator_le
 
 中文:
 引理 eLpNormEssSup_indicator_le
-  条件: (s : Set α) (f : α -> ε)
+  条件: (s : 集合 α) (f : α -> ε)
   证明: by
   refine essSup_mono_ae (.of_forall fun x => ?_)
   simp_rw [enorm_indicator_eq_indicator_enorm]
@@ -183,7 +183,7 @@ lemma eLpNormEssSup_indicator_const_le
 
 中文:
 引理 eLpNormEssSup_indicator_const_le
-  条件: (s : Set α) (c : ε)
+  条件: (s : 集合 α) (c : ε)
   证明: by
   obtain rfl | hμ0 := eq_or_ne μ 0
   · simp
@@ -213,7 +213,7 @@ lemma eLpNormEssSup_indicator_const_eq
 
 中文:
 引理 eLpNormEssSup_indicator_const_eq
-  条件: (s : Set α) (c : ε) (hμs : μ s != 0)
+  条件: (s : 集合 α) (c : ε) (hμs : μ s != 0)
   证明: by
   refine le_antisymm (eLpNormEssSup_indicator_const_le s c) ?_
   by_contra! h
@@ -283,7 +283,7 @@ lemma eLpNorm_indicator_const
 
 中文:
 引理 eLpNorm_indicator_const
-  条件: (hs : MeasurableSet s) (hp : p != 0) (hp_top : p != ∞)
+  条件: (hs : 可测集 s) (hp : p != 0) (hp_top : p != ∞)
   证明: eLpNorm_indicator_const₀ hs.nullMeasurableSet hp hp_top
 
 Depends on / 依赖: hp_top, hs.nullMeasurableSet, mul_ne_zero, nullMeasurableSet, pi_ne_zero, pow_ne_zero, two_ne_zero
@@ -305,7 +305,7 @@ lemma eLpNorm_indicator_const'
 
 中文:
 引理 eLpNorm_indicator_const'
-  条件: (hs : MeasurableSet s) (hμs : μ s != 0) (hp : p != 0)
+  条件: (hs : 可测集 s) (hμs : μ s != 0) (hp : p != 0)
   证明: by
   by_cases hp_top : p = ∞
   · simp [hp_top, eLpNormEssSup_indicator_const_eq s c hμs]
@@ -379,7 +379,7 @@ lemma MemLp.indicator
 
 中文:
 引理 MemLp.indicator
-  条件: {f : α -> ε} (hs : MeasurableSet s) (hf : MemLp f p μ)
+  条件: {f : α -> ε} (hs : 可测集 s) (hf : MemLp f p μ)
   证明: ⟨hf.aestronglyMeasurable.indicator hs, lt_of_le_of_lt (eLpNorm_indicator_le f) (by finiteness)⟩
 
 Depends on / 依赖: aestronglyMeasurable, eLpNorm_indicator_le, finiteness, hf.aestronglyMeasurable.indicator, indicator, lt_of_le_of_lt
@@ -399,7 +399,7 @@ lemma memLp_indicator_iff_restrict
 
 中文:
 引理 memLp_indicator_iff_restrict
-  条件: {f : α -> ε} (hs : MeasurableSet s)
+  条件: {f : α -> ε} (hs : 可测集 s)
   证明: by
   simp [MemLp, aestronglyMeasurable_indicator_iff hs, eLpNorm_indicator_eq_eLpNorm_restrict hs]
 
@@ -424,7 +424,7 @@ lemma memLp_indicator_const
 
 中文:
 引理 memLp_indicator_const
-  条件: (p : 实数>=0∞) (hs : MeasurableSet s) (c : E) (hμsc : c = 0 ∨ μ s != ∞)
+  条件: (p : 实数>=0∞) (hs : 可测集 s) (c : E) (hμsc : c = 0 ∨ μ s != ∞)
   证明: by
   rw [memLp_indicator_iff_restrict hs]
   obtain rfl | hμ := hμsc
@@ -455,7 +455,7 @@ lemma eLpNormEssSup_piecewise
 
 中文:
 引理 eLpNormEssSup_piecewise
-  条件: (f g : α -> ε) [DecidablePred (· in s)] (hs : MeasurableSet s)
+  条件: (f g : α -> ε) [DecidablePred (· in s)] (hs : 可测集 s)
   证明: by
   simp only [eLpNormEssSup, ← ENNReal.essSup_piecewise hs]
   congr with x
@@ -480,7 +480,7 @@ lemma eLpNorm_top_piecewise
 
 中文:
 引理 eLpNorm_top_piecewise
-  条件: (f g : α -> ε) [DecidablePred (· in s)] (hs : MeasurableSet s)
+  条件: (f g : α -> ε) [DecidablePred (· in s)] (hs : 可测集 s)
   证明: eLpNormEssSup_piecewise f g hs
 
 Depends on / 依赖: eLpNormEssSup_piecewise
@@ -507,7 +507,7 @@ lemma MemLp.piecewise
 
 中文:
 引理 MemLp.piecewise
-  结论: {f : α -> ε} [DecidablePred (· in s)] {g} (hs : MeasurableSet s)
+  结论: {f : α -> ε} [DecidablePred (· in s)] {g} (hs : 可测集 s)
   证明: by
   by_cases hp_zero : p = 0
   · simp only [hp_zero, memLp_zero_iff_aestronglyMeasurable]
@@ -557,7 +557,7 @@ theorem eLpNorm_indicator_sub_le_of_dist_bdd
 
 中文:
 定理 eLpNorm_indicator_sub_le_of_dist_bdd
-  结论: {β : 类型} [NormedAddCommGroup β]
+  结论: {β : 类型} [赋范交换加群 β]
   证明: by
   by_cases hp : p = 0
   · simp [hp]
@@ -601,7 +601,7 @@ theorem eLpNorm_sub_le_of_dist_bdd
 
 中文:
 定理 eLpNorm_sub_le_of_dist_bdd
-  结论: {β : 类型} [NormedAddCommGroup β]
+  结论: {β : 类型} [赋范交换加群 β]
   证明: by
   have hs₃ : s.indicator (f - g) = f - g := by
     rw [Set.indicator_eq_self]
@@ -640,8 +640,8 @@ theorem MemLp.exists_eLpNorm_indicator_compl_lt
       · exact ((eL
 
 中文:
-定理 MemLp.exists_eLpNorm_indicator_compl_lt
-  结论: {β : 类型} [NormedAddCommGroup β] (hp_top : p != ∞)
+定理 MemLp.存在_eLpNorm_indicator_compl_lt
+  结论: {β : 类型} [赋范交换加群 β] (hp_top : p != ∞)
   证明: by
   rcases eq_or_ne p 0 with rfl | hp₀
   · use ∅; simp [pos_iff_ne_zero.2 hε] -- first take care of `p = 0`

@@ -42,7 +42,7 @@ theorem analyticAt_clog
 中文:
 定理 analyticAt_clog
   条件: (m : z in slitPlane)
-  结论: AnalyticAt Complex log z
+  结论: AnalyticAt 复形 log z
   证明: by
   rw [analyticAt_iff_eventually_differentiableAt]
   filter_upwards [isOpen_slitPlane.eventually_mem m]
@@ -69,7 +69,7 @@ theorem AnalyticAt.clog
 
 中文:
 定理 AnalyticAt.clog
-  条件: (fa : AnalyticAt Complex f x) (m : f x in slitPlane)
+  条件: (fa : AnalyticAt 复形 f x) (m : f x in slitPlane)
   证明: (analyticAt_clog m).comp fa
 
 Depends on / 依赖: analyticAt_clog
@@ -88,7 +88,7 @@ theorem AnalyticWithinAt.clog
 
 中文:
 定理 AnalyticWithinAt.clog
-  条件: (fa : AnalyticWithinAt Complex f s x) (m : f x in slitPlane)
+  条件: (fa : AnalyticWithinAt 复形 f s x) (m : f x in slitPlane)
   证明: (analyticAt_clog m).comp_analyticWithinAt fa
 
 Depends on / 依赖: analyticAt_clog, comp_analyticWithinAt
@@ -107,7 +107,7 @@ theorem AnalyticOnNhd.clog
 
 中文:
 定理 AnalyticOnNhd.clog
-  条件: (fs : AnalyticOnNhd Complex f s) (m : 对任意 z in s, f z in slitPlane)
+  条件: (fs : AnalyticOnNhd 复形 f s) (m : 对任意 z in s, f z in slitPlane)
   证明: fun z n => (analyticAt_clog (m z n)).comp (fs z n)
 
 Depends on / 依赖: analyticAt_clog
@@ -126,7 +126,7 @@ theorem AnalyticOn.clog
 
 中文:
 定理 AnalyticOn.clog
-  条件: (fs : AnalyticOn Complex f s) (m : 对任意 z in s, f z in slitPlane)
+  条件: (fs : AnalyticOn 复形 f s) (m : 对任意 z in s, f z in slitPlane)
   证明: fun z n => (analyticAt_clog (m z n)).analyticWithinAt.comp (fs z n) m
 
 Depends on / 依赖: analyticAt_clog, analyticWithinAt, analyticWithinAt.comp
@@ -151,7 +151,7 @@ theorem AnalyticWithinAt.cpow
 
 中文:
 定理 AnalyticWithinAt.cpow
-  结论: (fa : AnalyticWithinAt Complex f s x) (ga : AnalyticWithinAt Complex g s x)
+  结论: (fa : AnalyticWithinAt 复形 f s x) (ga : AnalyticWithinAt 复形 g s x)
   证明: by
   have e : (fun z => f z ^ g z) =ᶠ[𝓝[insert x s] x] fun z => exp (log (f z) * g z) := by
     filter_upwards [(fa.continuousWithinAt_insert.eventually_ne (slitPlane_ne_zero m))]
@@ -185,7 +185,7 @@ theorem AnalyticAt.cpow
 
 中文:
 定理 AnalyticAt.cpow
-  结论: (fa : AnalyticAt Complex f x) (ga : AnalyticAt Complex g x)
+  结论: (fa : AnalyticAt 复形 f x) (ga : AnalyticAt 复形 g x)
   证明: by
   rw [← analyticWithinAt_univ] at fa ga ⊢
   exact fa.cpow ga m
@@ -207,7 +207,7 @@ theorem AnalyticOn.cpow
 
 中文:
 定理 AnalyticOn.cpow
-  结论: (fs : AnalyticOn Complex f s) (gs : AnalyticOn Complex g s)
+  结论: (fs : AnalyticOn 复形 f s) (gs : AnalyticOn 复形 g s)
   证明: fun z n => (fs z n).cpow (gs z n) (m z n)
 -/
 theorem AnalyticOn.cpow (fs : AnalyticOn Complex f s) (gs : AnalyticOn Complex g s)
@@ -224,7 +224,7 @@ theorem AnalyticOnNhd.cpow
 
 中文:
 定理 AnalyticOnNhd.cpow
-  结论: (fs : AnalyticOnNhd Complex f s) (gs : AnalyticOnNhd Complex g s)
+  结论: (fs : AnalyticOnNhd 复形 f s) (gs : AnalyticOnNhd 复形 g s)
   证明: fun z n => (fs z n).cpow (gs z n) (m z n)
 -/
 theorem AnalyticOnNhd.cpow (fs : AnalyticOnNhd Complex f s) (gs : AnalyticOnNhd Complex g s)
@@ -247,8 +247,8 @@ lemma AnalyticAt.re_ofReal
 @[fun_prop]
 
 中文:
-引理 AnalyticAt.re_ofReal
-  条件: (hf : AnalyticAt Complex f x)
+引理 AnalyticAt.re_of实数
+  条件: (hf : AnalyticAt 复形 f x)
   证明: (Complex.reCLM.analyticAt _).comp (hf.restrictScalars.comp (Complex.ofRealCLM.analyticAt _))
 
 @[fun_prop]
@@ -269,8 +269,8 @@ lemma AnalyticAt.im_ofReal
   proof: (Complex.imCLM.analyticAt _).comp (hf.restrictScalars.comp (Complex.ofRealCLM.analyticAt _))
 
 中文:
-引理 AnalyticAt.im_ofReal
-  条件: (hf : AnalyticAt Complex f x)
+引理 AnalyticAt.im_of实数
+  条件: (hf : AnalyticAt 复形 f x)
   证明: (Complex.imCLM.analyticAt _).comp (hf.restrictScalars.comp (Complex.ofRealCLM.analyticAt _))
 
 Depends on / 依赖: Complex.imCLM.analyticAt, Complex.ofRealCLM.analyticAt, analyticAt, hf.restrictScalars.comp, ofRealCLM, restrictScalars
@@ -289,8 +289,8 @@ lemma AnalyticWithinAt.re_ofReal
     (Complex.ofRealCLM.analyticWithinAt _ _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticWithinAt.re_ofReal
-  条件: (hf : AnalyticWithinAt Complex f (of实数 '' s) x)
+引理 AnalyticWithinAt.re_of实数
+  条件: (hf : AnalyticWithinAt 复形 f (of实数 '' s) x)
   证明: ((Complex.reCLM.analyticWithinAt _ _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticWithinAt _ _) (mapsTo_image ofReal s)
 
@@ -311,8 +311,8 @@ lemma AnalyticWithinAt.im_ofReal
     (Complex.ofRealCLM.analyticWithinAt _ _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticWithinAt.im_ofReal
-  条件: (hf : AnalyticWithinAt Complex f (of实数 '' s) x)
+引理 AnalyticWithinAt.im_of实数
+  条件: (hf : AnalyticWithinAt 复形 f (of实数 '' s) x)
   证明: ((Complex.imCLM.analyticWithinAt _ _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticWithinAt _ _) (mapsTo_image ofReal s)
 
@@ -333,8 +333,8 @@ lemma AnalyticOn.re_ofReal
     (Complex.ofRealCLM.analyticOn _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticOn.re_ofReal
-  条件: (hf : AnalyticOn Complex f (of实数 '' s))
+引理 AnalyticOn.re_of实数
+  条件: (hf : AnalyticOn 复形 f (of实数 '' s))
   证明: ((Complex.reCLM.analyticOn _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticOn _) (mapsTo_image ofReal s)
 
@@ -355,8 +355,8 @@ lemma AnalyticOn.im_ofReal
     (Complex.ofRealCLM.analyticOn _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticOn.im_ofReal
-  条件: (hf : AnalyticOn Complex f (of实数 '' s))
+引理 AnalyticOn.im_of实数
+  条件: (hf : AnalyticOn 复形 f (of实数 '' s))
   证明: ((Complex.imCLM.analyticOn _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticOn _) (mapsTo_image ofReal s)
 
@@ -377,8 +377,8 @@ lemma AnalyticOnNhd.re_ofReal
     (Complex.ofRealCLM.analyticOnNhd _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticOnNhd.re_ofReal
-  条件: (hf : AnalyticOnNhd Complex f (of实数 '' s))
+引理 AnalyticOnNhd.re_of实数
+  条件: (hf : AnalyticOnNhd 复形 f (of实数 '' s))
   证明: ((Complex.reCLM.analyticOnNhd _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticOnNhd _) (mapsTo_image ofReal s)
 
@@ -399,8 +399,8 @@ lemma AnalyticOnNhd.im_ofReal
     (Complex.ofRealCLM.analyticOnNhd _) (mapsTo_image ofReal s)
 
 中文:
-引理 AnalyticOnNhd.im_ofReal
-  条件: (hf : AnalyticOnNhd Complex f (of实数 '' s))
+引理 AnalyticOnNhd.im_of实数
+  条件: (hf : AnalyticOnNhd 复形 f (of实数 '' s))
   证明: ((Complex.imCLM.analyticOnNhd _).comp hf.restrictScalars (mapsTo_image f _)).comp
     (Complex.ofRealCLM.analyticOnNhd _) (mapsTo_image ofReal s)
 
@@ -459,7 +459,7 @@ lemma analyticOnNhd_log
 
 中文:
 引理 analyticOnNhd_log
-  结论: AnalyticOnNhd 实数 实数.log (Set.Ioi 0)
+  结论: AnalyticOnNhd 实数 实数.log (集合.左开右无界区间 0)
   证明: fun _ hx => analyticAt_log hx
 
 Depends on / 依赖: analyticAt_log
@@ -478,7 +478,7 @@ lemma analyticOn_log
 
 中文:
 引理 analyticOn_log
-  结论: AnalyticOn 实数 实数.log (Set.Ioi 0)
+  结论: AnalyticOn 实数 实数.log (集合.左开右无界区间 0)
   证明: analyticOnNhd_log.analyticOn
 
 @[fun_prop]
@@ -579,7 +579,7 @@ theorem iteratedDeriv_succ_log
 
 中文:
 定理 iteratedDeriv_succ_log
-  条件: {n : 自然数} {x : Complex} (hx : x in slitPlane)
+  条件: {n : 自然数} {x : 复形} (hx : x in slitPlane)
   证明: by
   have h_eq : deriv log =ᶠ[𝓝 x] Inv.inv := by
     filter_upwards [isOpen_slitPlane.mem_nhds hx] with y hy

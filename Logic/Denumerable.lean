@@ -40,9 +40,9 @@ class Denumerable
     - decode_inv : forall n, exists a in decode n, encode a = n
 
 中文:
-类 Denumerable
+类 可枚举
   参数: (α : 类型)
-  继承: Encodable α
+  继承: 可编码 α
   公理与运算 (1 个):
     - decode_inv : 对任意 n, 存在 a in decode n, encode a = n
 -/
@@ -71,7 +71,7 @@ theorem decode_isSome
 
 中文:
 定理 decode_isSome
-  条件: (α) [Denumerable α] (n : 自然数)
+  条件: (α) [可枚举 α] (n : 自然数)
   结论: (decode (α := α) n).isSome
   证明: Option.isSome_iff_exists.2 (decode_inv n).imp fun _ => And.left
 
@@ -91,8 +91,8 @@ definition ofNat
 @[simp]
 
 中文:
-定义 ofNat
-  签名: (α) [Denumerable α] (n : 自然数)
+定义 of自然数
+  签名: (α) [可枚举 α] (n : 自然数)
   定义体: Option.get _ (decode_isSome α n)
 
 @[simp]
@@ -113,8 +113,8 @@ theorem decode_eq_ofNat
   proof: Option.eq_some_of_isSome _
 
 中文:
-定理 decode_eq_ofNat
-  条件: (α) [Denumerable α] (n : 自然数)
+定理 decode_eq_of自然数
+  条件: (α) [可枚举 α] (n : 自然数)
   结论: decode (α := α) n = some (of自然数 α n)
   证明: Option.eq_some_of_isSome _
 -/
@@ -134,7 +134,7 @@ theorem ofNat_of_decode
 @[simp]
 
 中文:
-定理 ofNat_of_decode
+定理 of自然数_of_decode
   条件: {n b} (h : decode (α := α) n = some b)
   结论: of自然数 (α := α) n = b
   证明: by
@@ -160,7 +160,7 @@ theorem encode_ofNat
 @[simp]
 
 中文:
-定理 encode_ofNat
+定理 encode_of自然数
   条件: (n)
   结论: encode (of自然数 α n) = n
   证明: by
@@ -186,7 +186,7 @@ theorem ofNat_encode
   proof: ofNat_of_decode (encodek _)
 
 中文:
-定理 ofNat_encode
+定理 of自然数_encode
   条件: (a)
   结论: of自然数 α (encode a) = a
   证明: ofNat_of_decode (encodek _)
@@ -206,7 +206,7 @@ definition eqv
 
 中文:
 定义 eqv
-  签名: (α) [Denumerable α]
+  签名: (α) [可枚举 α]
   定义体: ⟨encode, ofNat α, ofNat_encode, encode_ofNat⟩
 
 Depends on / 依赖: encode, encode_ofNat, ofNat_encode
@@ -262,7 +262,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: (α) {β} [Denumerable α] (e : β ≃ α)
+  签名: (α) {β} [可枚举 α] (e : β ≃ α)
   定义体: { Encodable.ofEquiv _ e with
     decode_inv := fun n => by
       simp [decode_ofEquiv, encode_ofEquiv] }
@@ -290,8 +290,8 @@ theorem ofEquiv_ofNat
   simp
 
 中文:
-定理 ofEquiv_ofNat
-  条件: (α) {β} [Denumerable α] (e : β ≃ α) (n)
+定理 ofEquiv_of自然数
+  条件: (α) {β} [可枚举 α] (e : β ≃ α) (n)
   证明: by
   let := ofEquiv _ e
   refine ofNat_of_decode ?_
@@ -317,7 +317,7 @@ definition equiv₂
 
 中文:
 定义 equiv₂
-  签名: (α β) [Denumerable α] [Denumerable β]
+  签名: (α β) [可枚举 α] [可枚举 β]
   定义体: (eqv α).trans (eqv β).symm
 -/
 def equiv₂ (α β) [Denumerable α] [Denumerable β] : α ≃ β :=
@@ -335,7 +335,7 @@ instance nat
 
 中文:
 实例 nat
-  签名: : Denumerable 自然数
+  签名: : 可枚举 自然数
   定义体: ⟨fun _ => ⟨_, rfl, rfl⟩⟩
 
 @[simp]
@@ -354,7 +354,7 @@ theorem ofNat_nat
   proof: rfl
 
 中文:
-定理 ofNat_nat
+定理 of自然数_nat
   条件: (n)
   结论: of自然数 自然数 n = n
   证明: rfl
@@ -380,7 +380,7 @@ instance option
 
 中文:
 实例 option
-  签名: : Denumerable (Option α)
+  签名: : 可枚举 (选项类型 α)
   定义体: ⟨fun n => by
     cases n with
     | zero =>
@@ -417,8 +417,8 @@ instance sum
     cases bodd n <;> simp [bit_val, encodeSum]⟩
 
 中文:
-实例 sum
-  签名: : Denumerable (α oplus β)
+实例 求和
+  签名: : 可枚举 (α oplus β)
   定义体: ⟨fun n => by
     suffices exists a in @decodeSum α β _ _ n, encodeSum a = bit (bodd n) (div2 n) by
       simpa [bit_bodd_div2]
@@ -450,7 +450,7 @@ instance sigma
 
 中文:
 实例 sigma
-  签名: : Denumerable (Sigma γ)
+  签名: : 可枚举 (依赖和类型 γ)
   定义体: ⟨fun n => by simp⟩
 
 @[simp]
@@ -468,7 +468,7 @@ theorem sigma_ofNat_val
   proof: Option.some.inj by rw [← decode_eq_ofNat, decode_sigma_val]; simp
 
 中文:
-定理 sigma_ofNat_val
+定理 sigma_of自然数_val
   条件: (n : 自然数)
   证明: Option.some.inj by rw [← decode_eq_ofNat, decode_sigma_val]; simp
 
@@ -489,8 +489,8 @@ instance prod
   body: ofEquiv _ (Equiv.sigmaEquivProd α β).symm
 
 中文:
-实例 prod
-  签名: : Denumerable (α × β)
+实例 乘积
+  签名: : 可枚举 (α × β)
   定义体: ofEquiv _ (Equiv.sigmaEquivProd α β).symm
 
 Depends on / 依赖: Equiv.sigmaEquivProd, ofEquiv, sigmaEquivProd
@@ -509,7 +509,7 @@ theorem prod_ofNat_val
 @[simp]
 
 中文:
-定理 prod_ofNat_val
+定理 prod_of自然数_val
   条件: (n : 自然数)
   证明: by simp
 
@@ -528,7 +528,7 @@ theorem prod_nat_ofNat
   proof: by funext; simp
 
 中文:
-定理 prod_nat_ofNat
+定理 prod_nat_of自然数
   结论: of自然数 (自然数 × 自然数) = unpair
   证明: by funext; simp
 -/
@@ -544,7 +544,7 @@ instance int
 
 中文:
 实例 int
-  签名: : Denumerable 整数
+  签名: : 可枚举 整数
   定义体: fast_instance% Denumerable.mk' Equiv.intEquivNat
 
 Depends on / 依赖: Denumerable, Denumerable.mk, Equiv.intEquivNat, fast_instance, intEquivNat
@@ -562,7 +562,7 @@ instance pnat
 
 中文:
 实例 pnat
-  签名: : Denumerable 自然数+
+  签名: : 可枚举 自然数+
   定义体: fast_instance% Denumerable.mk' Equiv.pnatEquivNat
 
 Depends on / 依赖: Denumerable, Denumerable.mk, Equiv.pnatEquivNat, fast_instance, pnatEquivNat
@@ -580,7 +580,7 @@ instance ulift
 
 中文:
 实例 ulift
-  签名: : Denumerable (ULift α)
+  签名: : 可枚举 (类型层提升 α)
   定义体: ofEquiv _ Equiv.ulift
 
 Depends on / 依赖: Equiv.ulift, ofEquiv
@@ -598,7 +598,7 @@ instance plift
 
 中文:
 实例 plift
-  签名: : Denumerable (PLift α)
+  签名: : 可枚举 (命题层提升 α)
   定义体: ofEquiv _ Equiv.plift
 
 Depends on / 依赖: Equiv.plift, ofEquiv
@@ -653,7 +653,7 @@ theorem exists_succ
       (fun (y : Nat) (hy : y in s) => Subtype.mk y
 
 中文:
-定理 exists_succ
+定理 存在_succ
   条件: (x : s)
   结论: 存在 n, (x : 自然数) + n + 1 in s
   证明: by
@@ -745,7 +745,7 @@ theorem le_succ_of_forall_lt_le
         (by lia : (y : Nat) < (y : Nat) + Nat.find hx + 1)
 
 中文:
-定理 le_succ_of_forall_lt_le
+定理 le_succ_of_对任意_lt_le
   条件: {x y : s} (h : 对任意 z < x, z <= y)
   结论: x <= succ y
   证明: have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
@@ -820,8 +820,8 @@ definition ofNat
   signature: (s : Set Nat) [DecidablePred (· in s)] [Infinite s]
 
 中文:
-定义 ofNat
-  签名: (s : Set 自然数) [DecidablePred (· in s)] [Infinite s]
+定义 of自然数
+  签名: (s : 集合 自然数) [DecidablePred (· in s)] [无限 s]
 -/
 def ofNat (s : Set Nat) [DecidablePred (· in s)] [Infinite s] : Nat -> s
   | 0 => ⊥
@@ -841,8 +841,8 @@ theorem ofNat_surjective
     cases hmax : List.maxi
 
 中文:
-定理 ofNat_surjective
-  结论: Surjective (of自然数 s)
+定理 of自然数_surjective
+  结论: 满射 (of自然数 s)
   证明: ((List.range x).filter fun y => y in s).pmap
         (fun (y : Nat) (hy : y in s) => ⟨y, hy⟩)
         (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
@@ -883,8 +883,8 @@ theorem ofNat_range
 @[simp]
 
 中文:
-定理 ofNat_range
-  结论: Set.range (of自然数 s) = Set.univ
+定理 of自然数_range
+  结论: 集合.range (of自然数 s) = 集合.univ
   证明: ofNat_surjective.range_eq
 
 @[simp]
@@ -905,8 +905,8 @@ theorem coe_comp_ofNat_range
   rw [Set.range_comp Subtype.val]; rw [ofNat_range]; rw [Set.image_univ]; rw [Subtype.range_coe]
 
 中文:
-定理 coe_comp_ofNat_range
-  结论: Set.range ((↑) ∘ of自然数 s : 自然数 -> 自然数) = s
+定理 coe_comp_of自然数_range
+  结论: 集合.range ((↑) ∘ of自然数 s : 自然数 -> 自然数) = s
   证明: by
   rw [Set.range_comp Subtype.val]; rw [ofNat_range]; rw [Set.image_univ]; rw [Subtype.range_coe]
 
@@ -944,7 +944,7 @@ theorem toFunAux_eq
 
 中文:
 定理 toFunAux_eq
-  条件: {s : Set 自然数} [DecidablePred (· in s)] (x : s)
+  条件: {s : 集合 自然数} [DecidablePred (· in s)] (x : s)
   证明: by
   rw [toFunAux]; rw [List.countP_eq_length_filter]
   rfl
@@ -1020,7 +1020,7 @@ definition denumerable
 
 中文:
 定义 denumerable
-  签名: (s : Set 自然数) [DecidablePred (· in s)] [Infinite s]
+  签名: (s : 集合 自然数) [DecidablePred (· in s)] [无限 s]
   定义体: Denumerable.ofEquiv Nat
     { toFun := toFunAux
       invFun := ofNat s
@@ -1059,7 +1059,7 @@ definition ofEncodableOfInfinite
 
 中文:
 定义 ofEncodableOfInfinite
-  签名: (α : 类型) [Encodable α] [Infinite α]
+  签名: (α : 类型) [可编码 α] [无限 α]
   定义体: by
   letI := @decidableRangeEncode α _
   letI : Infinite (Set.range (@encode α _)) :=
@@ -1089,8 +1089,8 @@ theorem nonempty_denumerable
 
 中文:
 定理 nonempty_denumerable
-  条件: (α : 类型) [Countable α] [Infinite α]
-  结论: Nonempty (Denumerable α)
+  条件: (α : 类型) [可数 α] [无限 α]
+  结论: 非空 (可枚举 α)
   证明: (nonempty_encodable α).map fun h => @Denumerable.ofEncodableOfInfinite _ h _
 
 Depends on / 依赖: Denumerable, Denumerable.ofEncodableOfInfinite, nonempty_encodable, ofEncodableOfInfinite
@@ -1130,7 +1130,7 @@ instance nonempty_equiv_of_countable
 
 中文:
 实例 nonempty_equiv_of_countable
-  签名: [Countable α] [Infinite α] [Countable β] [Infinite β]
+  签名: [可数 α] [无限 α] [可数 β] [无限 β]
   定义体: by
   cases nonempty_denumerable α
   cases nonempty_denumerable β

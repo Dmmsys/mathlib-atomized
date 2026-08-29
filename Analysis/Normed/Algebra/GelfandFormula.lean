@@ -164,7 +164,7 @@ theorem differentiableOn_inverse_one_sub_smul
 
 中文:
 定理 differentiableOn_inverse_one_sub_smul
-  结论: [NontriviallyNormedField 𝕜] [NormedRing A]
+  结论: [NontriviallyNormedField 𝕜] [赋范环 A]
   证明: by
   intro z z_mem
   apply DifferentiableAt.differentiableWithinAt
@@ -319,7 +319,7 @@ theorem nonempty
 中文:
 定理 nonempty
   条件: (a : A)
-  结论: (spectrum Complex a).Nonempty
+  结论: (spectrum 复形 a).非空
   证明: by
   /- Suppose `σ a = ∅`, then resolvent set is `ℂ`, any `(z • 1 - a)` is a unit, and `resolvent a`
     is differentiable on `ℂ`. -/
@@ -350,7 +350,7 @@ theorem exists_nnnorm_eq_spectralRadius
   proof: exists_nnnorm_eq_spectralRadius_of_nonempty (spectrum.nonempty a)
 
 中文:
-定理 exists_nnnorm_eq_spectralRadius
+定理 存在_nnnorm_eq_spectralRadius
   条件: (a : A)
   证明: exists_nnnorm_eq_spectralRadius_of_nonempty (spectrum.nonempty a)
 
@@ -369,7 +369,7 @@ theorem spectralRadius_lt_of_forall_lt
   proof: spectralRadius_lt_of_forall_lt_of_nonempty (spectrum.nonempty a) hr
 
 中文:
-定理 spectralRadius_lt_of_forall_lt
+定理 spectralRadius_lt_of_对任意_lt
   结论: (a : A) {r : 实数>=0}
   证明: spectralRadius_lt_of_forall_lt_of_nonempty (spectrum.nonempty a) hr
 
@@ -391,7 +391,7 @@ theorem map_polynomial_aeval
 
 中文:
 定理 map_polynomial_aeval
-  条件: (a : A) (p : Complex[X])
+  条件: (a : A) (p : 复形[X])
   证明: map_polynomial_aeval_of_nonempty a p (spectrum.nonempty a)
 
 Depends on / 依赖: map_polynomial_aeval_of_nonempty, nonempty, spectrum, spectrum.nonempty
@@ -434,7 +434,7 @@ theorem algebraMap_eq_of_mem
 
 中文:
 定理 algebraMap_eq_of_mem
-  结论: (hA : 对任意 {a : A}, IsUnit a ↔ a != 0) {a : A} {z : Complex}
+  结论: (hA : 对任意 {a : A}, 是单位 a ↔ a != 0) {a : A} {z : 复形}
   证明: by
   rwa [mem_iff, hA, Classical.not_not, sub_eq_zero] at h
 
@@ -469,8 +469,8 @@ definition _root_.NormedRing.algEquivComplexOfComplete
         (@spect
 
 中文:
-定义 _root_.NormedRing.algEquivComplexOfComplete
-  签名: (hA : 对任意 {a : A}, IsUnit a ↔ a != 0)
+定义 _root_.赋范环.algEquivComplexOfComplete
+  签名: (hA : 对任意 {a : A}, 是单位 a ↔ a != 0)
   定义体: let nt : Nontrivial A := ⟨⟨1, 0, hA.mp ⟨⟨1, 1, mul_one _, mul_one _⟩, rfl⟩⟩⟩
   { Algebra.ofId Complex A with
     toFun := algebraMap Complex A

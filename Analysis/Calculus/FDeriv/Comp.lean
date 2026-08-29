@@ -58,8 +58,8 @@ refine .of_isLittleOTVS calc
           g' (f p.1 - f p.2 - f' (p.1 - p.2)) :=
 
 中文:
-定理 HasFDerivAtFilter.comp
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} {L' : Filter (F × F)}
+定理 有FDerivAtFilter.comp
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} {L' : 滤子 (F × F)}
   证明: by
   -- This proof can be golfed a lot. However, it should be left this way for readability.
 refine .of_isLittleOTVS calc
@@ -124,7 +124,7 @@ theorem HasFDerivWithinAt.comp
 
 中文:
 定理 HasFDerivWithinAt.comp
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : Set F}
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : 集合 F}
   证明: HasFDerivAtFilter.comp hg hf .prodMap (hf.continuousWithinAt.tendsto_nhdsWithin hst)
     tendsto_pure_pure ..
 
@@ -150,7 +150,7 @@ theorem HasFDerivAt.comp_hasFDerivWithinAt
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.comp_hasFDerivWithinAt
+定理 在点处Fréchet可导.comp_hasFDerivWithinAt
   结论: {g : F -> G} {g' : F ->L[𝕜] G}
   证明: hg.hasFDerivWithinAt.comp x hf (mapsTo_univ _ _)
 
@@ -174,7 +174,7 @@ theorem HasFDerivWithinAt.comp_of_tendsto
 
 中文:
 定理 HasFDerivWithinAt.comp_of_tendsto
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : Set F}
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : 集合 F}
   证明: HasFDerivAtFilter.comp hg hf hst.prodMap tendsto_pure_pure ..
 
 Depends on / 依赖: HasFDerivAtFilter, HasFDerivAtFilter.comp, hst.prodMap, prodMap, tendsto_pure_pure
@@ -195,7 +195,7 @@ theorem HasFDerivWithinAt.comp_hasFDerivAt
 
 中文:
 定理 HasFDerivWithinAt.comp_hasFDerivAt
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : Set F}
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : 集合 F}
   证明: HasFDerivAtFilter.comp hg hf .prodMap (tendsto_nhdsWithin_iff.mpr ⟨hf.continuousAt, ht⟩)
     tendsto_pure_pure ..
 
@@ -218,7 +218,7 @@ theorem HasFDerivWithinAt.comp_hasFDerivAt_of_eq
 
 中文:
 定理 HasFDerivWithinAt.comp_hasFDerivAt_of_eq
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : Set F} {y : F}
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} {t : 集合 F} {y : F}
   证明: by
   subst y; exact hg.comp_hasFDerivAt x hf ht
 
@@ -242,8 +242,8 @@ theorem HasFDerivAt.comp
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.comp
-  结论: {g : F -> G} {g' : F ->L[𝕜] G} (hg : HasFDerivAt g g' (f x))
+定理 在点处Fréchet可导.comp
+  结论: {g : F -> G} {g' : F ->L[𝕜] G} (hg : 在点处Fréchet可导 g g' (f x))
   证明: HasFDerivAtFilter.comp hg hf hf.continuousAt.tendsto.prodMap tendsto_pure_pure ..
 
 @[fun_prop]
@@ -267,7 +267,7 @@ theorem DifferentiableWithinAt.comp
 
 中文:
 定理 DifferentiableWithinAt.comp
-  结论: {g : F -> G} {t : Set F}
+  结论: {g : F -> G} {t : 集合 F}
   证明: (hg.hasFDerivWithinAt.comp x hf.hasFDerivWithinAt h).differentiableWithinAt
 
 @[fun_prop]
@@ -292,7 +292,7 @@ theorem DifferentiableWithinAt.comp'
 
 中文:
 定理 DifferentiableWithinAt.comp'
-  结论: {g : F -> G} {t : Set F}
+  结论: {g : F -> G} {t : 集合 F}
   证明: hg.comp x (hf.mono inter_subset_left) inter_subset_right
 
 @[fun_prop]
@@ -388,7 +388,7 @@ theorem fderivWithin_comp
 
 中文:
 定理 fderivWithin_comp
-  结论: {g : F -> G} {t : Set F} (hg : DifferentiableWithinAt 𝕜 g t (f x))
+  结论: {g : F -> G} {t : 集合 F} (hg : DifferentiableWithinAt 𝕜 g t (f x))
   证明: (hg.hasFDerivWithinAt.comp x hf.hasFDerivWithinAt h).fderivWithin hxs
 
 @[to_fun fderivWithin_fun_comp_of_eq]
@@ -415,7 +415,7 @@ theorem fderivWithin_comp_of_eq
 
 中文:
 定理 fderivWithin_comp_of_eq
-  结论: {g : F -> G} {t : Set F} {y : F}
+  结论: {g : F -> G} {t : 集合 F} {y : F}
   证明: by
   subst hy; exact fderivWithin_comp _ hg hf h hxs
 
@@ -445,7 +445,7 @@ theorem fderivWithin_fderivWithin
 
 中文:
 定理 fderivWithin_fderivWithin
-  结论: {g : F -> G} {f : E -> F} {x : E} {y : F} {s : Set E} {t : Set F}
+  结论: {g : F -> G} {f : E -> F} {x : E} {y : F} {s : 集合 E} {t : 集合 F}
   证明: by
   subst y
   rw [fderivWithin_comp x hg hf h hxs]; rw [comp_apply]
@@ -474,7 +474,7 @@ theorem fderivWithin_comp₃
 
 中文:
 定理 fderivWithin_comp₃
-  结论: {g' : G -> G'} {g : F -> G} {t : Set F} {u : Set G} {y : F} {y' : G}
+  结论: {g' : G -> G'} {g : F -> G} {t : 集合 F} {u : 集合 G} {y : F} {y' : G}
   证明: by
   subst h3g h3f
   exact (hg'.hasFDerivWithinAt.comp x (hg.hasFDerivWithinAt.comp x hf.hasFDerivWithinAt h2f) <|
@@ -554,7 +554,7 @@ theorem DifferentiableOn.fun_comp
 
 中文:
 定理 DifferentiableOn.fun_comp
-  结论: {g : F -> G} {t : Set F} (hg : DifferentiableOn 𝕜 g t)
+  结论: {g : F -> G} {t : 集合 F} (hg : DifferentiableOn 𝕜 g t)
   证明: fun x hx => DifferentiableWithinAt.comp x (hg (f x) (st hx)) (hf x hx) st
 
 @[fun_prop]
@@ -579,7 +579,7 @@ theorem DifferentiableOn.comp
 
 中文:
 定理 DifferentiableOn.comp
-  结论: {g : F -> G} {t : Set F} (hg : DifferentiableOn 𝕜 g t)
+  结论: {g : F -> G} {t : 集合 F} (hg : DifferentiableOn 𝕜 g t)
   证明: fun x hx => DifferentiableWithinAt.comp x (hg (f x) (st hx)) (hf x hx) st
 
 @[fun_prop]
@@ -602,8 +602,8 @@ theorem Differentiable.fun_comp
 @[fun_prop]
 
 中文:
-定理 Differentiable.fun_comp
-  条件: {g : F -> G} (hg : Differentiable 𝕜 g) (hf : Differentiable 𝕜 f)
+定理 可微.fun_comp
+  条件: {g : F -> G} (hg : 可微 𝕜 g) (hf : 可微 𝕜 f)
   证明: fun x => DifferentiableAt.comp x (hg (f x)) (hf x)
 
 @[fun_prop]
@@ -626,8 +626,8 @@ theorem Differentiable.comp
 @[fun_prop]
 
 中文:
-定理 Differentiable.comp
-  条件: {g : F -> G} (hg : Differentiable 𝕜 g) (hf : Differentiable 𝕜 f)
+定理 可微.comp
+  条件: {g : F -> G} (hg : 可微 𝕜 g) (hf : 可微 𝕜 f)
   证明: fun x => DifferentiableAt.comp x (hg (f x)) (hf x)
 
 @[fun_prop]
@@ -651,8 +651,8 @@ theorem Differentiable.comp_differentiableOn
 @[fun_prop]
 
 中文:
-定理 Differentiable.comp_differentiableOn
-  结论: {g : F -> G} (hg : Differentiable 𝕜 g)
+定理 可微.comp_differentiableOn
+  结论: {g : F -> G} (hg : 可微 𝕜 g)
   证明: hg.differentiableOn.comp hf (mapsTo_univ _ _)
 
 
@@ -677,8 +677,8 @@ theorem Differentiable.iterate
 @[fun_prop]
 
 中文:
-定理 Differentiable.iterate
-  条件: {f : E -> E} (hf : Differentiable 𝕜 f) (n : 自然数)
+定理 可微.iterate
+  条件: {f : E -> E} (hf : 可微 𝕜 f) (n : 自然数)
   证明: Nat.recOn n differentiable_id fun _ ihn => ihn.comp hf
 
 @[fun_prop]
@@ -723,7 +723,7 @@ theorem HasFDerivAtFilter.iterate
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.iterate
+定理 有FDerivAtFilter.iterate
   结论: {f : E -> E} {f' : E ->L[𝕜] E}
   证明: by
   induction n with
@@ -757,8 +757,8 @@ theorem HasFDerivAt.iterate
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.iterate
-  结论: {f : E -> E} {f' : E ->L[𝕜] E} (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.iterate
+  结论: {f : E -> E} {f' : E ->L[𝕜] E} (hf : 在点处Fréchet可导 f f' x)
   证明: by
   refine HasFDerivAtFilter.iterate hf ?_ n
   simpa [hx] using hf.continuousAt.tendsto.prodMap (tendsto_pure_pure f x)

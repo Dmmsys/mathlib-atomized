@@ -45,8 +45,8 @@ theorem exists_eq_polynomial
   set f : Fin m.succ -> Fin d -> Fq 
 
 中文:
-定理 exists_eq_polynomial
-  结论: [Semiring Fq] {d : 自然数} {m : 自然数} (hm : Fintype.card Fq ^ d <= m)
+定理 存在_eq_polynomial
+  结论: [半环 Fq] {d : 自然数} {m : 自然数} (hm : 有限类型.card Fq ^ d <= m)
   证明: by
   -- Since there are > q^d elements of A, and only q^d choices for the highest `d` coefficients,
   -- there must be two elements of A with the same coefficients at
@@ -93,8 +93,8 @@ theorem exists_approx_polynomial_aux
   -- `degree 
 
 中文:
-定理 exists_approx_polynomial_aux
-  结论: [Ring Fq] {d : 自然数} {m : 自然数} (hm : Fintype.card Fq ^ d <= m)
+定理 存在_approx_polynomial_aux
+  结论: [环 Fq] {d : 自然数} {m : 自然数} (hm : 有限类型.card Fq ^ d <= m)
   证明: by
   have hb : b != 0 := by
     rintro rfl
@@ -160,7 +160,7 @@ theorem exists_approx_polynomial
   have q_po
 
 中文:
-定理 exists_approx_polynomial
+定理 存在_approx_polynomial
   结论: {b : Fq[X]} (hb : b != 0) {ε : 实数} (hε : 0 < ε)
   证明: by
   have hbε : 0 < cardPowDegree b • ε := by
@@ -282,7 +282,7 @@ theorem exists_partition_polynomial_aux
   -- Show `anti_archimedean
 
 中文:
-定理 exists_partition_polynomial_aux
+定理 存在_partition_polynomial_aux
   结论: (n : 自然数) {ε : 实数} (hε : 0 < ε) {b : Fq[X]} (hb : b != 0)
   证明: by
   have hbε : 0 < cardPowDegree b • ε := by
@@ -371,7 +371,7 @@ theorem exists_partition_polynomial
   exact ⟨t, fun i₀ i₁ hi => (ht i₀ i₁).mp hi⟩
 
 中文:
-定理 exists_partition_polynomial
+定理 存在_partition_polynomial
   结论: (n : 自然数) {ε : 实数} (hε : 0 < ε) {b : Fq[X]} (hb : b != 0)
   证明: by
   obtain ⟨t, ht⟩ := exists_partition_polynomial_aux n hε hb A

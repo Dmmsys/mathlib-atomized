@@ -36,7 +36,7 @@ equiv := equiv.optionCongr.trans .symm finSuccEquiv' i
 
 中文:
 定义 insertNone
-  签名: (α : 类型u) [FinEnum α] (i : Fin (card α + 1))
+  签名: (α : 类型u) [FinEnum α] (i : 有限集 (card α + 1))
   定义体: card α + 1
 equiv := equiv.optionCongr.trans .symm finSuccEquiv' i
 -/
@@ -80,7 +80,7 @@ definition recEmptyOption
 
 中文:
 定义 recEmptyOption
-  签名: {P : 类型u -> Sort v}
+  签名: {P : 类型u -> 类型层 v}
   定义体: match cardeq : card α with
   | 0 => congr _ _ cardeq empty
   | n + 1 =>
@@ -123,7 +123,7 @@ theorem recEmptyOption_of_card_eq_zero
 
 中文:
 定理 recEmptyOption_of_card_eq_zero
-  结论: {P : 类型u -> Sort v}
+  结论: {P : 类型u -> 类型层 v}
   证明: by
   unfold recEmptyOption
   split
@@ -160,7 +160,7 @@ theorem recEmptyOption_of_card_pos
 
 中文:
 定理 recEmptyOption_of_card_pos
-  结论: {P : 类型u -> Sort v}
+  结论: {P : 类型u -> 类型层 v}
   证明: by
   conv => lhs; unfold recEmptyOption
   split
@@ -195,7 +195,7 @@ abbreviation recOnEmptyOption
 
 中文:
 缩写 recOnEmptyOption
-  签名: {P : 类型u -> Sort v}
+  签名: {P : 类型u -> 类型层 v}
   定义体: @recEmptyOption P finChoice congr empty option α aenum
 
 Depends on / 依赖: finChoice, option, recEmptyOption

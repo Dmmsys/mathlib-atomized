@@ -169,7 +169,7 @@ lemma adj_counit_app
 
 中文:
 引理 adj_counit_app
-  条件: (F : Discrete J ⥤ C)
+  条件: (F : 离散 J ⥤ C)
   证明: by
   apply constLimAdj.localization_counit_app
 
@@ -195,7 +195,7 @@ definition isLimitMapCone
 
 中文:
 定义 isLimitMapCone
-  签名: (F : Discrete J ⥤ C)
+  签名: (F : 离散 J ⥤ C)
   定义体: IsLimit.ofIsoLimit (isLimitConeOfAdj (adj L W J) (F ⋙ L))
     (Cone.ext ((compLimitFunctorIso L W J).app F) (by simp [adj_counit_app, constLimAdj]))
 
@@ -222,7 +222,7 @@ lemma hasProductsOfShape
 
 中文:
 引理 hasProductsOfShape
-  结论: (J : Type) [Finite J] [HasProductsOfShape J C]
+  结论: (J : 类型) [有限 J] [HasProductsOfShape J C]
   证明: hasLimitsOfShape_iff_isLeftAdjoint_const.2
     (HasProductsOfShapeAux.adj L W J).isLeftAdjoint
 
@@ -245,7 +245,7 @@ lemma preservesProductsOfShape
 
 中文:
 引理 preservesProductsOfShape
-  结论: (J : Type) [Finite J]
+  结论: (J : 类型) [有限 J]
   证明: preservesLimit_of_preserves_limit_cone (limit.isLimit F)
     (HasProductsOfShapeAux.isLimitMapCone L W J F)
 
@@ -272,7 +272,7 @@ include W in
 
 中文:
 引理 hasFiniteProducts
-  结论: HasFiniteProducts D
+  结论: 有FiniteProducts D
   证明: ⟨fun _ => hasProductsOfShape L W _⟩
 
 include W in
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteProducts (W.Localization)
+  签名: 有FiniteProducts (W.Localization)
   定义体: hasFiniteProducts W.Q W
 
 Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.addMonoidal_rightUnitor, addMonoidal_rightUnitor, eqToHom_app, eqToHom_map, eqToIso, eqToIso.inv, hasFiniteProducts, id_comp, shiftFunctor, shiftFunctorAdd, shiftFunctorZero
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteProducts W.Q
+  签名: 保持FiniteProducts W.Q
   定义体: preservesFiniteProducts W.Q W
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Discrete, Discrete.addMonoidal_associator, _eq_shiftFunctorAdd, addMonoidal_associator, comp_id, eqToHom_app, eqToHom_map, eqToIso, eqToIso.hom, preservesFiniteProducts, shiftFunctor, shiftFunctorAdd
@@ -343,7 +343,7 @@ instance [W.HasLocalization]
   body: hasFiniteProducts W.Q' W
 
 中文:
-实例 [W.HasLocalization]
+实例 [W.有Localization]
   签名: :
   定义体: hasFiniteProducts W.Q' W
 
@@ -362,7 +362,7 @@ instance [W.HasLocalization]
   body: preservesFiniteProducts W.Q' W
 
 中文:
-实例 [W.HasLocalization]
+实例 [W.有Localization]
   签名: :
   定义体: preservesFiniteProducts W.Q' W
 

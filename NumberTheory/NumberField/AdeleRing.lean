@@ -46,8 +46,8 @@ definition AdeleRing
 deriving CommRing, TopologicalSpace, IsTopologicalRing, Algebra K
 
 中文:
-定义 AdeleRing
-  签名: (R K : 类型) [CommRing R] [IsDedekindDomain R] [Field K]
+定义 Adele环
+  签名: (R K : 类型) [交换环 R] [是Dedekind整环 R] [域 K]
   定义体: InfiniteAdeleRing K × FiniteAdeleRing R K
 deriving CommRing, TopologicalSpace, IsTopologicalRing, Algebra K
 
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 𝔸[R, K]
+  签名: 可居 𝔸[R, K]
   定义体: ⟨0⟩
 
 @[simp]
@@ -120,7 +120,7 @@ theorem algebraMap_snd_apply
 
 中文:
 定理 algebraMap_snd_apply
-  条件: (x : K) (v : HeightOneSpectrum R)
+  条件: (x : K) (v : 高一谱 R)
   证明: rfl
 -/
 theorem algebraMap_snd_apply (x : K) (v : HeightOneSpectrum R) :
@@ -137,8 +137,8 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  条件: [NumberField K]
-  结论: Function.Injective (algebraMap K 𝔸[R, K])
+  条件: [数域 K]
+  结论: 函数.单射 (algebraMap K 𝔸[R, K])
   证明: fun _ _ hxy => (algebraMap K K∞).injective (Prod.ext_iff.1 hxy).1
 
 Depends on / 依赖: Prod.ext_iff, algebraMap, ext_iff, injective
@@ -156,7 +156,7 @@ abbreviation principalSubgroup
 
 中文:
 缩写 principalSubgroup
-  签名: : AddSubgroup 𝔸[R, K]
+  签名: : 加法子群 𝔸[R, K]
   定义体: (algebraMap K 𝔸[R, K]).range.toAddSubgroup
 
 Depends on / 依赖: algebraMap, range.toAddSubgroup, toAddSubgroup

@@ -77,7 +77,7 @@ definition oreEqv
 
 中文:
 定义 oreEqv
-  签名: : Setoid (X × S) where
+  签名: : 集合等价关系 (X × S) where
   定义体: exists (u : S) (v : R), u • rs'.1 = v • rs.1 ∧ u * rs'.2 = v * rs.2
   iseqv := by
     refine ⟨fun _ => ⟨1, 1, by simp⟩, ?_, ?_⟩
@@ -123,7 +123,7 @@ definition OreLocalization
 
 中文:
 定义 OreLocalization
-  签名: {R : 类型} [Monoid R] (S : Submonoid R) [OreSet S]
+  签名: {R : 类型} [幺半群 R] (S : 子幺半群 R) [OreSet S]
   定义体: Quotient (OreLocalization.oreEqv S X)
 
 Depends on / 依赖: OreLocalization, OreLocalization.oreEqv, Quotient, oreEqv
@@ -349,7 +349,7 @@ definition liftExpand
 
 中文:
 定义 liftExpand
-  签名: {C : Sort*} (P : X -> S -> C)
+  签名: {C : 类型层*} (P : X -> S -> C)
   定义体: Quotient.lift (fun p : X × S => P p.1 p.2) fun (r₁, s₁) (r₂, s₂) ⟨u, v, hr₂, hs₂⟩ => by
     dsimp at *
     have s₁vS : v * s₁ in S := by
@@ -383,7 +383,7 @@ theorem liftExpand_of
 
 中文:
 定理 liftExpand_of
-  结论: {C : Sort*} {P : X -> S -> C}
+  结论: {C : 类型层*} {P : X -> S -> C}
   证明: rfl
 -/
 theorem liftExpand_of {C : Sort*} {P : X -> S -> C}
@@ -413,7 +413,7 @@ definition lift₂Expand
 
 中文:
 定义 lift₂Expand
-  签名: {C : Sort*} (P : X -> S -> X -> S -> C)
+  签名: {C : 类型层*} (P : X -> S -> X -> S -> C)
   定义体: liftExpand
     (fun r₁ s₁ => liftExpand (P r₁ s₁) fun r₂ t₂ s₂ ht₂ => by
       have := hP r₁ 1 s₁ (by simp) r₂ t₂ s₂ ht₂
@@ -451,7 +451,7 @@ theorem lift₂Expand_of
 
 中文:
 定理 lift₂Expand_of
-  结论: {C : Sort*} {P : X -> S -> X -> S -> C}
+  结论: {C : 类型层*} {P : X -> S -> X -> S -> C}
   证明: rfl
 -/
 theorem lift₂Expand_of {C : Sort*} {P : X -> S -> X -> S -> C}
@@ -646,7 +646,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R[S⁻¹] X[S⁻¹]
+  签名: 标量乘法 R[S⁻¹] X[S⁻¹]
   定义体: ⟨OreLocalization.smul⟩
 
 @[to_additive]
@@ -669,7 +669,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul R[S⁻¹]
+  签名: 乘法 R[S⁻¹]
   定义体: ⟨OreLocalization.smul⟩
 
 @[to_additive]
@@ -837,7 +837,7 @@ definition one
 
 中文:
 定义 one
-  签名: [One X]
+  签名: [幺 X]
   定义体: 1 /ₒ 1
 
 @[to_additive]
@@ -856,8 +856,8 @@ instance [One
 @[to_additive]
 
 中文:
-实例 [One
-  签名: X] : One X[S⁻¹]
+实例 [幺
+  签名: X] : 幺 X[S⁻¹]
   定义体: ⟨OreLocalization.one⟩
 
 @[to_additive]
@@ -882,7 +882,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  条件: [One X]
+  条件: [幺 X]
   结论: (1 : X[S⁻¹]) = 1 /ₒ 1
   证明: by
   with_unfolding_all rfl
@@ -905,7 +905,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited R[S⁻¹]
+  签名: 可居 R[S⁻¹]
   定义体: ⟨1⟩
 
 @[to_additive (attr := simp)]
@@ -1143,7 +1143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid R[S⁻¹]
+  签名: 幺半群 R[S⁻¹]
   定义体: OreLocalization.one_mul
   mul_one := OreLocalization.mul_one
   mul_assoc := OreLocalization.mul_assoc
@@ -1214,7 +1214,7 @@ instance instMulActionOreLocalization
 
 中文:
 实例 instMulActionOreLocalization
-  签名: : MulAction R[S⁻¹] X[S⁻¹] where
+  签名: : 乘法作用 R[S⁻¹] X[S⁻¹] where
   定义体: OreLocalization.one_smul
   mul_smul := OreLocalization.mul_smul
 
@@ -1543,7 +1543,7 @@ theorem numerator_isUnit
 中文:
 定理 numerator_isUnit
   条件: (s : S)
-  结论: IsUnit (numeratorHom (s : R) : R[S⁻¹])
+  结论: 是单位 (numeratorHom (s : R) : R[S⁻¹])
   证明: ⟨numeratorUnit s, rfl⟩
 
 Depends on / 依赖: numeratorUnit
@@ -1728,8 +1728,8 @@ instance [IsScalarTower
 @[to_additive]
 
 中文:
-实例 [IsScalarTower
-  签名: R M X] [IsScalarTower R M M] : SMul R (X[S⁻¹]) where
+实例 [标量塔
+  签名: R M X] [标量塔 R M M] : 标量乘法 R (X[S⁻¹]) where
   定义体: OreLocalization.hsmul
 
 @[to_additive]
@@ -1863,7 +1863,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R R' X[S⁻¹]
+  签名: 标量塔 R R' X[S⁻¹]
   定义体: by
     rw [← smul_one_oreDiv_one_smul]; rw [← smul_one_oreDiv_one_smul]; rw [← smul_one_oreDiv_one_smul]; rw [← mul_smul]; rw [mul_div_one]
     simp only [smul_mul_assoc, smul_assoc, one_mul]
@@ -1890,8 +1890,8 @@ instance [SMulCommClass
 @[to_additive]
 
 中文:
-实例 [SMulCommClass
-  签名: R R' M] : SMulCommClass R R' X[S⁻¹] where
+实例 [标量交换类
+  签名: R R' M] : 标量交换类 R R' X[S⁻¹] where
   定义体: by
     rw [← smul_one_smul m]; rw [← smul_assoc]; rw [smul_comm]; rw [smul_assoc]; rw [smul_one_smul]
 
@@ -1917,7 +1917,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R M[S⁻¹] X[S⁻¹]
+  签名: 标量塔 R M[S⁻¹] X[S⁻¹]
   定义体: by
     rw [← smul_one_oreDiv_one_smul]; rw [← smul_one_oreDiv_one_smul]; rw [← mul_smul]; rw [smul_eq_mul]
 
@@ -1945,8 +1945,8 @@ instance [SMulCommClass
 @[to_additive]
 
 中文:
-实例 [SMulCommClass
-  签名: R M M] : SMulCommClass R M[S⁻¹] X[S⁻¹] where
+实例 [标量交换类
+  签名: R M M] : 标量交换类 R M[S⁻¹] X[S⁻¹] where
   定义体: by
     cases x with | _ r₁ s₁
     cases y with | _ r₂ s₂
@@ -1977,8 +1977,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: Rᵐᵒᵖ M] [SMul Rᵐᵒᵖ X] [IsScalarTower Rᵐᵒᵖ M M] [IsScalarTower Rᵐᵒᵖ M X]
+实例 [标量乘法
+  签名: Rᵐᵒᵖ M] [标量乘法 Rᵐᵒᵖ X] [标量塔 Rᵐᵒᵖ M M] [标量塔 Rᵐᵒᵖ M X]
   定义体: by
     rw [← smul_one_oreDiv_one_smul]; rw [← smul_one_oreDiv_one_smul]; rw [op_smul_eq_smul]
 
@@ -2067,7 +2067,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid R[S⁻¹]
+  签名: 交换幺半群 R[S⁻¹]
   定义体: fun x y => by
     cases x with | _ r₁ s₁
     cases y with | _ r₂ s₂
@@ -2116,7 +2116,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero X[S⁻¹]
+  签名: 零 X[S⁻¹]
   定义体: ⟨OreLocalization.zero⟩
 
 Depends on / 依赖: OreLocalization, OreLocalization.zero

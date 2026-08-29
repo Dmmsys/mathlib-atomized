@@ -58,7 +58,7 @@ definition sigmaCurry
 
 中文:
 定义 sigmaCurry
-  签名: [对任意 i j, Zero (δ i j)] (f : Π₀ (i : Σ _, _), δ i.1 i.2)
+  签名: [对任意 i j, 零 (δ i j)] (f : Π₀ (i : Σ _, _), δ i.1 i.2)
   定义体: fun i =>
   { toFun := fun j => f ⟨i, j⟩,
     support' := f.support'.map (fun ⟨m, hm⟩ =>
@@ -90,7 +90,7 @@ theorem sigmaCurry_apply
 
 中文:
 定理 sigmaCurry_apply
-  条件: [对任意 i j, Zero (δ i j)] (f : Π₀ (i : Σ _, _), δ i.1 i.2) (i : ι) (j : α i)
+  条件: [对任意 i j, 零 (δ i j)] (f : Π₀ (i : Σ _, _), δ i.1 i.2) (i : ι) (j : α i)
   证明: rfl
 
 @[simp]
@@ -112,7 +112,7 @@ theorem sigmaCurry_zero
 
 中文:
 定理 sigmaCurry_zero
-  条件: [对任意 i j, Zero (δ i j)]
+  条件: [对任意 i j, 零 (δ i j)]
   证明: rfl
 
 @[simp]
@@ -136,7 +136,7 @@ theorem sigmaCurry_add
 
 中文:
 定理 sigmaCurry_add
-  条件: [对任意 i j, AddZeroClass (δ i j)] (f g : Π₀ (i : Σ _, _), δ i.1 i.2)
+  条件: [对任意 i j, 加法零类 (δ i j)] (f g : Π₀ (i : Σ _, _), δ i.1 i.2)
   证明: by
   ext (i j)
   rfl
@@ -163,7 +163,7 @@ theorem sigmaCurry_smul
 
 中文:
 定理 sigmaCurry_smul
-  结论: [Monoid γ] [对任意 i j, AddMonoid (δ i j)] [对任意 i j, DistribMulAction γ (δ i j)]
+  结论: [幺半群 γ] [对任意 i j, 加法幺半群 (δ i j)] [对任意 i j, 分配乘法作用 γ (δ i j)]
   证明: by
   ext (i j)
   rfl
@@ -198,7 +198,7 @@ theorem sigmaCurry_single
 
 中文:
 定理 sigmaCurry_single
-  结论: [对任意 i, DecidableEq (α i)] [对任意 i j, Zero (δ i j)]
+  结论: [对任意 i, DecidableEq (α i)] [对任意 i j, 零 (δ i j)]
   证明: by
   obtain ⟨i, j⟩ := ij
   ext i' j'
@@ -247,7 +247,7 @@ definition sigmaUncurry
 
 中文:
 定义 sigmaUncurry
-  签名: [对任意 i j, Zero (δ i j)] (f : Π₀ (i) (j), δ i j)
+  签名: [对任意 i j, 零 (δ i j)] (f : Π₀ (i) (j), δ i j)
   定义体: f i.1 i.2
   support' :=
     f.support'.bind fun s =>
@@ -290,7 +290,7 @@ theorem sigmaUncurry_apply
 
 中文:
 定理 sigmaUncurry_apply
-  结论: [对任意 i j, Zero (δ i j)]
+  结论: [对任意 i j, 零 (δ i j)]
   证明: rfl
 
 @[simp]
@@ -313,7 +313,7 @@ theorem sigmaUncurry_zero
 
 中文:
 定理 sigmaUncurry_zero
-  条件: [对任意 i j, Zero (δ i j)]
+  条件: [对任意 i j, 零 (δ i j)]
   证明: rfl
 
 @[simp]
@@ -335,7 +335,7 @@ theorem sigmaUncurry_add
 
 中文:
 定理 sigmaUncurry_add
-  条件: [对任意 i j, AddZeroClass (δ i j)] (f g : Π₀ (i) (j), δ i j)
+  条件: [对任意 i j, 加法零类 (δ i j)] (f g : Π₀ (i) (j), δ i j)
   证明: DFunLike.coe_injective rfl
 
 @[simp]
@@ -359,7 +359,7 @@ theorem sigmaUncurry_smul
 
 中文:
 定理 sigmaUncurry_smul
-  结论: [Monoid γ] [对任意 i j, AddMonoid (δ i j)]
+  结论: [幺半群 γ] [对任意 i j, 加法幺半群 (δ i j)]
   证明: DFunLike.coe_injective rfl
 
 @[simp]
@@ -392,7 +392,7 @@ theorem sigmaUncurry_single
 
 中文:
 定理 sigmaUncurry_single
-  结论: [对任意 i j, Zero (δ i j)] [对任意 i, DecidableEq (α i)]
+  结论: [对任意 i j, 零 (δ i j)] [对任意 i, DecidableEq (α i)]
   证明: by
   ext ⟨i', j'⟩
   dsimp only
@@ -438,7 +438,7 @@ definition sigmaCurryEquiv
 
 中文:
 定义 sigmaCurryEquiv
-  签名: [对任意 i j, Zero (δ i j)]
+  签名: [对任意 i j, 零 (δ i j)]
   定义体: sigmaCurry
   invFun := sigmaUncurry
   left_inv f := by

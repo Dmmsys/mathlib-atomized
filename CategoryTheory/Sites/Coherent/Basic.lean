@@ -62,7 +62,7 @@ class Precoherent
 类 Precoherent
   参数: : 命题 where
   公理与运算 (1 个):
-    - pullback({B₁ B₂ : C} (f : B₂ ⟶ B₁)) : 对任意 (α : Type) [Finite α] (X₁ : α -> C) (π₁ : (a : α) -> (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ -> 存在 (β : Type) (_ : Finite β) (X₂ : β -> C) (π₂ : (b : β) -> (X₂ b ⟶ B₂)), EffectiveEpiFamily X₂ π₂ ∧ 存在 (i : β -> α) (ι : (b : β) -> (X₂ b ⟶ X₁ (i b))), 对任意 (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
+    - pullback({B₁ B₂ : C} (f : B₂ ⟶ B₁)) : 对任意 (α : 类型) [有限 α] (X₁ : α -> C) (π₁ : (a : α) -> (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ -> 存在 (β : 类型) (_ : 有限 β) (X₂ : β -> C) (π₂ : (b : β) -> (X₂ b ⟶ B₂)), EffectiveEpiFamily X₂ π₂ ∧ 存在 (i : β -> α) (ι : (b : β) -> (X₂ b ⟶ X₁ (i b))), 对任意 (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
 -/
 class Precoherent : Prop where
   /--
@@ -141,7 +141,7 @@ class Preregular
 类 Preregular
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_fac : 对任意 {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [EffectiveEpi g], (存在 (W : C) (h : W ⟶ X) (_ : EffectiveEpi h) (i : W ⟶ Z), i ≫ g = h ≫ f)
+    - exists_fac : 对任意 {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [有效满态射 g], (存在 (W : C) (h : W ⟶ X) (_ : 有效满态射 h) (i : W ⟶ Z), i ≫ g = h ≫ f)
 -/
 class Preregular : Prop where
   /--
@@ -237,7 +237,7 @@ definition extensiveCoverage
 
 中文:
 定义 extensiveCoverage
-  签名: [FinitaryPreExtensive C]
+  签名: [有限预广延 C]
   定义体: { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
     S = Presieve.ofArrows X π ∧ IsIso (Sigma.desc π) }
   pullback := by
@@ -274,7 +274,7 @@ definition extensiveTopology
 
 中文:
 定义 extensiveTopology
-  签名: [FinitaryPreExtensive C]
+  签名: [有限预广延 C]
   定义体: (extensiveCoverage C).toGrothendieck
 
 Depends on / 依赖: extensiveCoverage, toGrothendieck

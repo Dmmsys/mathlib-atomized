@@ -471,8 +471,8 @@ lemma StrictMono.mem_upperBounds_image
   proof: by simp [upperBounds, hf.le_iff_le]
 
 中文:
-引理 StrictMono.mem_upperBounds_image
-  条件: (hf : StrictMono f)
+引理 严格递增.mem_upperBounds_image
+  条件: (hf : 严格递增 f)
   证明: by simp [upperBounds, hf.le_iff_le]
 
 Depends on / 依赖: hf.le_iff_le, le_iff_le, upperBounds
@@ -489,8 +489,8 @@ lemma StrictMono.mem_lowerBounds_image
   proof: by simp [lowerBounds, hf.le_iff_le]
 
 中文:
-引理 StrictMono.mem_lowerBounds_image
-  条件: (hf : StrictMono f)
+引理 严格递增.mem_lowerBounds_image
+  条件: (hf : 严格递增 f)
   证明: by simp [lowerBounds, hf.le_iff_le]
 
 Depends on / 依赖: hf.le_iff_le, le_iff_le, lowerBounds
@@ -509,8 +509,8 @@ lemma StrictMono.map_isLeast
   simp [IsLeast, hf.injective.eq_iff, hf.mem_lowerBounds_image]
 
 中文:
-引理 StrictMono.map_isLeast
-  条件: (hf : StrictMono f)
+引理 严格递增.map_isLeast
+  条件: (hf : 严格递增 f)
   结论: IsLeast (f '' s) (f a) ↔ IsLeast s a
   证明: by
   simp [IsLeast, hf.injective.eq_iff, hf.mem_lowerBounds_image]
@@ -530,8 +530,8 @@ lemma StrictMono.map_isGreatest
   simp [IsGreatest, hf.injective.eq_iff, hf.mem_upperBounds_image]
 
 中文:
-引理 StrictMono.map_isGreatest
-  条件: (hf : StrictMono f)
+引理 严格递增.map_isGreatest
+  条件: (hf : 严格递增 f)
   证明: by
   simp [IsGreatest, hf.injective.eq_iff, hf.mem_upperBounds_image]
 
@@ -557,8 +557,8 @@ lemma StrictAnti.mem_upperBounds_image
   simp [upperBounds, lowerBounds, hf.le_iff_ge]
 
 中文:
-引理 StrictAnti.mem_upperBounds_image
-  条件: (hf : StrictAnti f)
+引理 严格递减.mem_upperBounds_image
+  条件: (hf : 严格递减 f)
   证明: by
   simp [upperBounds, lowerBounds, hf.le_iff_ge]
 
@@ -578,8 +578,8 @@ lemma StrictAnti.mem_lowerBounds_image
   simp [upperBounds, lowerBounds, hf.le_iff_ge]
 
 中文:
-引理 StrictAnti.mem_lowerBounds_image
-  条件: (hf : StrictAnti f)
+引理 严格递减.mem_lowerBounds_image
+  条件: (hf : 严格递减 f)
   证明: by
   simp [upperBounds, lowerBounds, hf.le_iff_ge]
 
@@ -600,8 +600,8 @@ lemma StrictAnti.map_isLeast
   simp [IsLeast, IsGreatest, hf.injective.eq_iff, hf.mem_lowerBounds_image]
 
 中文:
-引理 StrictAnti.map_isLeast
-  条件: (hf : StrictAnti f)
+引理 严格递减.map_isLeast
+  条件: (hf : 严格递减 f)
   结论: IsLeast (f '' s) (f a) ↔ IsGreatest s a
   证明: by
   simp [IsLeast, IsGreatest, hf.injective.eq_iff, hf.mem_lowerBounds_image]
@@ -622,8 +622,8 @@ lemma StrictAnti.map_isGreatest
   simp [IsLeast, IsGreatest, hf.injective.eq_iff, hf.mem_upperBounds_image]
 
 中文:
-引理 StrictAnti.map_isGreatest
-  条件: (hf : StrictAnti f)
+引理 严格递减.map_isGreatest
+  条件: (hf : 严格递减 f)
   结论: IsGreatest (f '' s) (f a) ↔ IsLeast s a
   证明: by
   simp [IsLeast, IsGreatest, hf.injective.eq_iff, hf.mem_upperBounds_image]
@@ -911,7 +911,7 @@ theorem BddBelow.image2_bddAbove
 
 中文:
 定理 BddBelow.image2_bddAbove
-  结论: BddBelow s -> BddBelow t -> BddAbove (Set.image2 f s t)
+  结论: BddBelow s -> BddBelow t -> BddAbove (集合.image2 f s t)
   证明: by
   rintro ⟨a, ha⟩ ⟨b, hb⟩
   exact ⟨f a b, mem_upperBounds_image2_of_mem_lowerBounds h₀ h₁ ha hb⟩
@@ -1075,7 +1075,7 @@ lemma IsCofinalFor.image_of_monotone
 
 中文:
 引理 IsCofinalFor.image_of_monotone
-  条件: (hst : IsCofinalFor s t) (hf : Monotone f)
+  条件: (hst : IsCofinalFor s t) (hf : 递增 f)
   证明: by
   simp only [IsCofinalFor, forall_mem_image, exists_mem_image]
   rintro a ha
@@ -1108,7 +1108,7 @@ lemma IsCofinalFor.image_of_antitone
 
 中文:
 引理 IsCofinalFor.image_of_antitone
-  条件: (hst : IsCofinalFor s t) (hf : Antitone f)
+  条件: (hst : IsCofinalFor s t) (hf : 递减 f)
   证明: by
   simp only [IsCoinitialFor, forall_mem_image, exists_mem_image]
   rintro a ha
@@ -1146,7 +1146,7 @@ lemma bddAbove_prod
 
 中文:
 引理 bddAbove_prod
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: ⟨fun ⟨p, hp⟩ => ⟨⟨p.1, forall_mem_image.2 fun _q hq => (hp hq).1⟩,
     ⟨p.2, forall_mem_image.2 fun _q hq => (hp hq).2⟩⟩,
     fun ⟨⟨x, hx⟩, ⟨y, hy⟩⟩ => ⟨⟨x, y⟩, fun _p hp =>
@@ -1208,7 +1208,7 @@ exact fun q hq => ⟨ha mem_image_of_mem _ hq, (H.1 hq).2⟩
 
 中文:
 定理 isLUB_prod
-  条件: {s : Set (α × β)} {p : α × β}
+  条件: {s : 集合 (α × β)} {p : α × β}
   证明: by
   refine
     ⟨fun H =>
@@ -1248,8 +1248,8 @@ lemma Monotone.upperBounds_image_of_directedOn_prod
   (upperBounds_mono_set (image_mono subset_fst_image_prod_snd_image))
 
 中文:
-引理 Monotone.upperBounds_image_of_directedOn_prod
-  结论: {γ : 类型} [Preorder γ] {g : α × β -> γ}
+引理 递增.upperBounds_image_of_directedOn_prod
+  结论: {γ : 类型} [预序 γ] {g : α × β -> γ}
   证明: le_antisymm
   (upperBounds_mono_of_isCofinalFor (hd.isCofinalFor_fst_image_prod_snd_image.image_of_monotone hg))
   (upperBounds_mono_set (image_mono subset_fst_image_prod_snd_image))
@@ -1283,7 +1283,7 @@ fun h => ⟨fun a => (h a).some, fun _ hg a => (h a).some_mem mem_image_of_mem _
 
 中文:
 引理 bddAbove_pi
-  条件: {s : Set (对任意 a, π a)}
+  条件: {s : 集合 (对任意 a, π a)}
   证明: ⟨fun ⟨f, hf⟩ a => ⟨f a, forall_mem_image.2 fun _ hg => hf hg a⟩,
 fun h => ⟨fun a => (h a).some, fun _ hg a => (h a).some_mem mem_image_of_mem _ hg⟩⟩
 
@@ -1342,7 +1342,7 @@ exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _
 
 中文:
 定理 isLUB_pi
-  条件: {s : Set (对任意 a, π a)} {f : 对任意 a, π a}
+  条件: {s : 集合 (对任意 a, π a)} {f : 对任意 a, π a}
   证明: by
   classical
     refine
@@ -1380,7 +1380,7 @@ hf.1 hx.2 Monotone.mem_lowerBounds_image (fun _ _ => hf.2) hy⟩
 
 中文:
 定理 IsGLB.of_image
-  结论: [Preorder α] [Preorder β] {f : α -> β} (hf : 对任意 {x y}, f x <= f y ↔ x <= y)
+  结论: [预序 α] [预序 β] {f : α -> β} (hf : 对任意 {x y}, f x <= f y ↔ x <= y)
   证明: ⟨fun _ hy => hf.1 hx.1 mem_image_of_mem _ hy, fun _ hy =>
 hf.1 hx.2 Monotone.mem_lowerBounds_image (fun _ _ => hf.2) hy⟩
 
@@ -1410,7 +1410,7 @@ lemma BddAbove.range_mono
 
 中文:
 引理 BddAbove.range_mono
-  结论: [Preorder β] {f : α -> β} (g : α -> β) (h : 对任意 a, f a <= g a)
+  结论: [预序 β] {f : α -> β} (g : α -> β) (h : 对任意 a, f a <= g a)
   证明: by
   obtain ⟨C, hC⟩ := hbdd
   use C
@@ -1447,7 +1447,7 @@ alias BddBelow.range_comp
 
 中文:
 引理 BddAbove.range_comp_left
-  结论: {γ : 类型} [Preorder β] [Preorder γ] {f : α -> β} {g : β -> γ}
+  结论: {γ : 类型} [预序 β] [预序 γ] {f : α -> β} {g : β -> γ}
   证明: by
   change BddAbove (range (g ∘ f))
   simpa only [Set.range_comp] using hg.map_bddAbove hf

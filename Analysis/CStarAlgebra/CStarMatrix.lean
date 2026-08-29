@@ -98,7 +98,7 @@ lemma ofMatrix_apply
 
 中文:
 引理 ofMatrix_apply
-  条件: {M : Matrix m n A} {i : m}
+  条件: {M : 矩阵 m n A} {i : m}
   结论: (ofMatrix M) i = M i
   证明: rfl
 
@@ -269,7 +269,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {C : 类型} {M : Matrix m n A} {f : A -> B} {g : B -> C}
+  条件: {C : 类型} {M : 矩阵 m n A} {f : A -> B} {g : B -> C}
   证明: by ext; rfl
 -/
 theorem map_map {C : Type*} {M : Matrix m n A} {f : A -> B} {g : B -> C} :
@@ -286,7 +286,7 @@ ext fun i j => hf ext_iff.mpr h i j
 
 中文:
 定理 map_injective
-  条件: {f : A -> B} (hf : Function.Injective f)
+  条件: {f : A -> B} (hf : 函数.单射 f)
   证明: fun _ _ h =>
 ext fun i j => hf ext_iff.mpr h i j
 -/
@@ -347,7 +347,7 @@ definition conjTranspose
 
 中文:
 定义 conjTranspose
-  签名: [Star A] (M : CStarMatrix m n A)
+  签名: [对合 A] (M : CStarMatrix m n A)
   定义体: M.transpose.map star
 
 @[simp]
@@ -368,7 +368,7 @@ theorem conjTranspose_apply
 
 中文:
 定理 conjTranspose_apply
-  条件: [Star A] (M : CStarMatrix m n A) (i j)
+  条件: [对合 A] (M : CStarMatrix m n A) (i j)
   证明: rfl
 -/
 theorem conjTranspose_apply [Star A] (M : CStarMatrix m n A) (i j) :
@@ -384,7 +384,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: [Star A]
+  签名: [对合 A]
   定义体: M.conjTranspose
 
 Depends on / 依赖: M.conjTranspose, conjTranspose
@@ -403,7 +403,7 @@ lemma star_eq_conjTranspose
 
 中文:
 引理 star_eq_conjTranspose
-  条件: [Star A] {M : CStarMatrix n n A}
+  条件: [对合 A] {M : CStarMatrix n n A}
   结论: star M = M.conjTranspose
   证明: rfl
 -/
@@ -437,7 +437,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited A]
+  签名: [可居 A]
   定义体: inferInstanceAs Inhabited (Matrix m n A)
 
 Depends on / 依赖: Inhabited, Matrix
@@ -455,7 +455,7 @@ instance instDecidableEq
 
 中文:
 实例 instDecidableEq
-  签名: [DecidableEq A] [Fintype m] [Fintype n]
+  签名: [DecidableEq A] [有限类型 m] [有限类型 n]
   定义体: inferInstanceAs DecidableEq (Matrix m n A)
 
 Depends on / 依赖: DecidableEq, Matrix
@@ -481,7 +481,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [Add A]
+  签名: [加法 A]
   定义体: inferInstanceAs Add (Matrix m n A)
 
 Depends on / 依赖: Matrix
@@ -499,7 +499,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: [AddSemigroup A]
+  签名: [加法半群 A]
   定义体: inferInstanceAs AddSemigroup (Matrix m n A)
 
 Depends on / 依赖: AddSemigroup, Matrix
@@ -517,7 +517,7 @@ instance instAddCommSemigroup
 
 中文:
 实例 instAddCommSemigroup
-  签名: [AddCommSemigroup A]
+  签名: [加法交换半群 A]
   定义体: inferInstanceAs AddCommSemigroup (Matrix m n A)
 
 Depends on / 依赖: AddCommSemigroup, Matrix
@@ -535,7 +535,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero A]
+  签名: [零 A]
   定义体: inferInstanceAs Zero (Matrix m n A)
 
 Depends on / 依赖: Matrix
@@ -553,7 +553,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: [AddZeroClass A]
+  签名: [加法零类 A]
   定义体: inferInstanceAs AddZeroClass (Matrix m n A)
 
 Depends on / 依赖: AddZeroClass, Matrix
@@ -571,7 +571,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul R A]
+  签名: [标量乘法 R A]
   定义体: inferInstanceAs SMul R (Matrix m n A)
 
 Depends on / 依赖: Matrix
@@ -590,7 +590,7 @@ __ : AddMonoid (CStarMatrix m n A) := inferInstanceAs AddMonoid (Matrix m n A)
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid A]
+  签名: [加法幺半群 A]
   定义体: letI := instSMul (R := Nat) (A := A) (m := m) (n := n); (· • · )
 __ : AddMonoid (CStarMatrix m n A) := inferInstanceAs AddMonoid (Matrix m n A)
 
@@ -610,7 +610,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid A]
+  签名: [加法交换幺半群 A]
   定义体: inferInstanceAs AddCommMonoid (Matrix m n A)
 
 Depends on / 依赖: AddCommMonoid, Matrix
@@ -628,7 +628,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [Neg A]
+  签名: [取负 A]
   定义体: inferInstanceAs Neg (Matrix m n A)
 
 Depends on / 依赖: Matrix
@@ -646,7 +646,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [Sub A]
+  签名: [减法 A]
   定义体: inferInstanceAs Sub (Matrix m n A)
 
 Depends on / 依赖: Matrix
@@ -665,7 +665,7 @@ __ : AddGroup (CStarMatrix m n A) := inferInstanceAs AddGroup (Matrix m n A)
 
 中文:
 实例 instAddGroup
-  签名: [AddGroup A]
+  签名: [加法群 A]
   定义体: letI := instSMul (R := Int) (A := A) (m := m) (n := n); (· • · )
 __ : AddGroup (CStarMatrix m n A) := inferInstanceAs AddGroup (Matrix m n A)
 
@@ -685,7 +685,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup A]
+  签名: [加法交换群 A]
   定义体: inferInstanceAs AddCommGroup (Matrix m n A)
 
 Depends on / 依赖: AddCommGroup, Matrix
@@ -703,7 +703,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Unique A]
+  签名: [唯一 A]
   定义体: inferInstanceAs Unique (Matrix m n A)
 
 Depends on / 依赖: Matrix, Unique
@@ -721,7 +721,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: inferInstanceAs Subsingleton (Matrix m n A)
 
 Depends on / 依赖: Matrix, Subsingleton
@@ -739,7 +739,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nonempty m] [Nonempty n] [Nontrivial A]
+  签名: [非空 m] [非空 n] [非平凡 A]
   定义体: inferInstanceAs Nontrivial (Matrix m n A)
 
 Depends on / 依赖: Matrix, Nontrivial
@@ -757,7 +757,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul R A] [SMul S A] [SMulCommClass R S A]
+  签名: [标量乘法 R A] [标量乘法 S A] [标量交换类 R S A]
   定义体: inferInstanceAs SMulCommClass R S (Matrix m n A)
 
 Depends on / 依赖: Matrix, SMulCommClass
@@ -776,7 +776,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul R S] [SMul R A] [SMul S A] [IsScalarTower R S A]
+  签名: [标量乘法 R S] [标量乘法 R A] [标量乘法 S A] [标量塔 R S A]
   定义体: inferInstanceAs IsScalarTower R S (Matrix m n A)
 
 Depends on / 依赖: IsScalarTower, Matrix
@@ -795,7 +795,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul R A] [SMul Rᵐᵒᵖ A] [IsCentralScalar R A]
+  签名: [标量乘法 R A] [标量乘法 Rᵐᵒᵖ A] [中心标量 R A]
   定义体: inferInstanceAs IsCentralScalar R (Matrix m n A)
 
 Depends on / 依赖: IsCentralScalar, Matrix
@@ -814,7 +814,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid R] [MulAction R A]
+  签名: [幺半群 R] [乘法作用 R A]
   定义体: inferInstanceAs MulAction R (Matrix m n A)
 
 Depends on / 依赖: Matrix, MulAction
@@ -832,7 +832,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid R] [AddMonoid A] [DistribMulAction R A]
+  签名: [幺半群 R] [加法幺半群 A] [分配乘法作用 R A]
   定义体: inferInstanceAs DistribMulAction R (Matrix m n A)
 
 Depends on / 依赖: DistribMulAction, Matrix
@@ -853,7 +853,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddCommMonoid A] [Module R A]
+  签名: [半环 R] [加法交换幺半群 A] [模 R A]
   定义体: inferInstanceAs Module R (Matrix m n A)
 
 @[simp]
@@ -875,7 +875,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [Zero A] (i : m) (j : n)
+  条件: [零 A] (i : m) (j : n)
   结论: (0 : CStarMatrix m n A) i j = 0
   证明: rfl
 -/
@@ -891,7 +891,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [Add A] (M N : CStarMatrix m n A) (i : m) (j : n)
+  条件: [加法 A] (M N : CStarMatrix m n A) (i : m) (j : n)
   证明: rfl
 -/
 @[simp] theorem add_apply [Add A] (M N : CStarMatrix m n A) (i : m) (j : n) :
@@ -907,7 +907,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul B A] (r : B) (M : CStarMatrix m n A) (i : m) (j : n)
+  条件: [标量乘法 B A] (r : B) (M : CStarMatrix m n A) (i : m) (j : n)
   证明: rfl
 -/
 @[simp] theorem smul_apply [SMul B A] (r : B) (M : CStarMatrix m n A) (i : m) (j : n) :
@@ -923,7 +923,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: [Sub A] (M N : CStarMatrix m n A) (i : m) (j : n)
+  条件: [减法 A] (M N : CStarMatrix m n A) (i : m) (j : n)
   证明: rfl
 -/
 @[simp] theorem sub_apply [Sub A] (M N : CStarMatrix m n A) (i : m) (j : n) :
@@ -941,7 +941,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [Neg A] (M : CStarMatrix m n A) (i : m) (j : n)
+  条件: [取负 A] (M : CStarMatrix m n A) (i : m) (j : n)
   证明: rfl
 
 @[simp]
@@ -960,7 +960,7 @@ theorem conjTranspose_zero
 
 中文:
 定理 conjTranspose_zero
-  条件: [AddMonoid A] [StarAddMonoid A]
+  条件: [加法幺半群 A] [StarAdd幺半群 A]
   证明: by ext; simp
 -/
 theorem conjTranspose_zero [AddMonoid A] [StarAddMonoid A] :
@@ -978,8 +978,8 @@ theorem of_zero
 
 中文:
 定理 of_zero
-  条件: [Zero A]
-  结论: ofMatrix (0 : Matrix m n A) = 0
+  条件: [零 A]
+  结论: ofMatrix (0 : 矩阵 m n A) = 0
   证明: rfl
 -/
 @[simp] theorem of_zero [Zero A] : ofMatrix (0 : Matrix m n A) = 0 := rfl
@@ -996,7 +996,7 @@ theorem of_add_of
 
 中文:
 定理 of_add_of
-  条件: [Add A] (f g : Matrix m n A)
+  条件: [加法 A] (f g : 矩阵 m n A)
   证明: rfl
 
 @[simp]
@@ -1016,7 +1016,7 @@ theorem of_sub_of
 
 中文:
 定理 of_sub_of
-  条件: [Sub A] (f g : Matrix m n A)
+  条件: [减法 A] (f g : 矩阵 m n A)
   结论: ofMatrix f - ofMatrix g = ofMatrix (f - g)
   证明: rfl
 -/
@@ -1034,7 +1034,7 @@ theorem neg_of
 
 中文:
 定理 neg_of
-  条件: [Neg A] (f : Matrix m n A)
+  条件: [取负 A] (f : 矩阵 m n A)
   结论: -ofMatrix f = ofMatrix (-f)
   证明: rfl
 -/
@@ -1050,7 +1050,7 @@ theorem smul_of
 
 中文:
 定理 smul_of
-  条件: [SMul R A] (r : R) (f : Matrix m n A)
+  条件: [标量乘法 R A] (r : R) (f : 矩阵 m n A)
   证明: rfl
 -/
 @[simp] theorem smul_of [SMul R A] (r : R) (f : Matrix m n A) :
@@ -1067,7 +1067,7 @@ theorem star_apply
 
 中文:
 定理 star_apply
-  条件: [Star A] {f : CStarMatrix n n A} {i j : n}
+  条件: [对合 A] {f : CStarMatrix n n A} {i j : n}
   证明: by
   rw [star_eq_conjTranspose]; rw [conjTranspose_apply]
 
@@ -1088,7 +1088,7 @@ theorem star_apply_of_isSelfAdjoint
 
 中文:
 定理 star_apply_of_isSelfAdjoint
-  结论: [Star A] {f : CStarMatrix n n A} (hf : IsSelfAdjoint f)
+  结论: [对合 A] {f : CStarMatrix n n A} (hf : IsSelfAdjoint f)
   证明: by
   rw [← star_apply]; rw [IsSelfAdjoint.star_eq hf]
 
@@ -1108,7 +1108,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: [AddMonoid A] [StarAddMonoid A]
+  签名: [加法幺半群 A] [StarAdd幺半群 A]
   定义体: star_add (R := Matrix n n A)
 
 Depends on / 依赖: Matrix, star_add
@@ -1126,7 +1126,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: [Star R] [Star A] [SMul R A] [StarModule R A]
+  签名: [对合 R] [对合 A] [标量乘法 R A] [对合模 R A]
   定义体: star_smul r (ofMatrix.symm a)
 
 Depends on / 依赖: ofMatrix, ofMatrix.symm, star_smul
@@ -1145,7 +1145,7 @@ definition ofMatrixₗ
 
 中文:
 定义 ofMatrixₗ
-  签名: [AddCommMonoid A] [Semiring R] [Module R A]
+  签名: [加法交换幺半群 A] [半环 R] [模 R A]
   定义体: LinearEquiv.refl _ _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl
@@ -1167,7 +1167,7 @@ definition mapₗ
 
 中文:
 定义 mapₗ
-  签名: [Semiring R] [Semiring S] {σ : R ->+* S} [AddCommMonoid A] [AddCommMonoid B]
+  签名: [半环 R] [半环 S] {σ : R ->+* S} [加法交换幺半群 A] [加法交换幺半群 B]
   定义体: fun M => M.map f
   map_add' M N := by ext; simp
   map_smul' r M := by ext; simp
@@ -1198,7 +1198,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (CStarMatrix n n A)
+  签名: : 幺 (CStarMatrix n n A)
   定义体: inferInstanceAs One (Matrix n n A)
 
 Depends on / 依赖: Matrix
@@ -1294,7 +1294,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne A]
+  签名: [加法带幺幺半群 A]
   定义体: inferInstanceAs AddMonoidWithOne (Matrix n n A)
 
 Depends on / 依赖: AddMonoidWithOne, Matrix
@@ -1312,7 +1312,7 @@ instance instAddGroupWithOne
 
 中文:
 实例 instAddGroupWithOne
-  签名: [AddGroupWithOne A]
+  签名: [加法带幺群 A]
   定义体: inferInstanceAs AddGroupWithOne (Matrix n n A)
 
 Depends on / 依赖: AddGroupWithOne, Matrix
@@ -1330,7 +1330,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: [AddCommMonoidWithOne A]
+  签名: [加法交换带幺幺半群 A]
   定义体: inferInstanceAs AddCommMonoidWithOne (Matrix n n A)
 
 Depends on / 依赖: AddCommMonoidWithOne, Matrix
@@ -1349,7 +1349,7 @@ instance instAddCommGroupWithOne
 
 中文:
 实例 instAddCommGroupWithOne
-  签名: [AddCommGroupWithOne A]
+  签名: [加法交换带幺群 A]
   定义体: inferInstanceAs AddCommGroupWithOne (Matrix n n A)
 
 Depends on / 依赖: AddCommGroupWithOne, Matrix
@@ -1374,8 +1374,8 @@ instance [Fintype
   body: M * N
 
 中文:
-实例 [Fintype
-  签名: n] [Mul A] [AddCommMonoid A] : Mul (CStarMatrix n n A) where mul M N
+实例 [有限类型
+  签名: n] [乘法 A] [加法交换幺半群 A] : 乘法 (CStarMatrix n n A) where mul M N
   定义体: M * N
 -/
 instance [Fintype n] [Mul A] [AddCommMonoid A] : Mul (CStarMatrix n n A) where mul M N := M * N
@@ -1392,7 +1392,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  结论: {l : 类型} [Fintype m] [Mul A] [AddCommMonoid A] {M : CStarMatrix l m A}
+  结论: {l : 类型} [有限类型 m] [乘法 A] [加法交换幺半群 A] {M : CStarMatrix l m A}
   证明: rfl
 -/
 theorem mul_apply {l : Type*} [Fintype m] [Mul A] [AddCommMonoid A] {M : CStarMatrix l m A}
@@ -1410,7 +1410,7 @@ theorem mul_apply'
 
 中文:
 定理 mul_apply'
-  结论: {l : 类型} [Fintype m] [Mul A] [AddCommMonoid A] {M : CStarMatrix l m A}
+  结论: {l : 类型} [有限类型 m] [乘法 A] [加法交换幺半群 A] {M : CStarMatrix l m A}
   证明: rfl
 
 @[simp]
@@ -1429,7 +1429,7 @@ theorem smul_mul
 
 中文:
 定理 smul_mul
-  结论: {l : 类型} [Fintype n] [Monoid R] [AddCommMonoid A] [Mul A] [DistribMulAction R A]
+  结论: {l : 类型} [有限类型 n] [幺半群 R] [加法交换幺半群 A] [乘法 A] [分配乘法作用 R A]
   证明: Matrix.smul_mul a M N
 
 Depends on / 依赖: Matrix, Matrix.smul_mul, smul_mul
@@ -1450,7 +1450,7 @@ theorem mul_smul
 
 中文:
 定理 mul_smul
-  结论: {l : 类型} [Fintype n] [Monoid R] [AddCommMonoid A] [Mul A] [DistribMulAction R A]
+  结论: {l : 类型} [有限类型 n] [幺半群 R] [加法交换幺半群 A] [乘法 A] [分配乘法作用 R A]
   证明: Matrix.mul_smul M a N
 
 @[simp]
@@ -1474,7 +1474,7 @@ theorem mul_zero
 
 中文:
 定理 mul_zero
-  结论: {o : 类型} [Fintype n] [NonUnitalNonAssocSemiring A]
+  结论: {o : 类型} [有限类型 n] [非幺非结合半环 A]
   证明: Matrix.mul_zero _
 
 @[simp]
@@ -1493,7 +1493,7 @@ theorem zero_mul
 
 中文:
 定理 zero_mul
-  结论: {l : 类型} [Fintype m] [NonUnitalNonAssocSemiring A]
+  结论: {l : 类型} [有限类型 m] [非幺非结合半环 A]
   证明: Matrix.zero_mul _
 -/
 protected theorem zero_mul {l : Type*} [Fintype m] [NonUnitalNonAssocSemiring A]
@@ -1509,7 +1509,7 @@ theorem mul_add
 
 中文:
 定理 mul_add
-  结论: {o : 类型} [Fintype n] [NonUnitalNonAssocSemiring A]
+  结论: {o : 类型} [有限类型 n] [非幺非结合半环 A]
   证明: Matrix.mul_add _ _ _
 -/
 protected theorem mul_add {o : Type*} [Fintype n] [NonUnitalNonAssocSemiring A]
@@ -1526,7 +1526,7 @@ theorem add_mul
 
 中文:
 定理 add_mul
-  结论: {l : 类型} [Fintype m] [NonUnitalNonAssocSemiring A]
+  结论: {l : 类型} [有限类型 m] [非幺非结合半环 A]
   证明: Matrix.add_mul _ _ _
 -/
 protected theorem add_mul {l : Type*} [Fintype m] [NonUnitalNonAssocSemiring A]
@@ -1543,7 +1543,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [Fintype n] [NonUnitalNonAssocSemiring A]
+  签名: [有限类型 n] [非幺非结合半环 A]
   定义体: inferInstanceAs NonUnitalNonAssocSemiring (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonUnitalNonAssocSemiring
@@ -1562,7 +1562,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [Fintype n] [NonUnitalNonAssocRing A]
+  签名: [有限类型 n] [非幺非结合环 A]
   定义体: inferInstanceAs NonUnitalNonAssocRing (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonUnitalNonAssocRing
@@ -1581,7 +1581,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [Fintype n] [NonUnitalSemiring A]
+  签名: [有限类型 n] [非幺半环 A]
   定义体: inferInstanceAs NonUnitalSemiring (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonUnitalSemiring
@@ -1600,7 +1600,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [Fintype n] [DecidableEq n] [NonAssocSemiring A]
+  签名: [有限类型 n] [DecidableEq n] [非结合半环 A]
   定义体: inferInstanceAs NonAssocSemiring (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonAssocSemiring
@@ -1619,7 +1619,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [Fintype n] [NonUnitalRing A]
+  签名: [有限类型 n] [非幺环 A]
   定义体: inferInstanceAs NonUnitalRing (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonUnitalRing
@@ -1638,7 +1638,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [Fintype n] [DecidableEq n] [NonAssocRing A]
+  签名: [有限类型 n] [DecidableEq n] [非结合环 A]
   定义体: inferInstanceAs NonAssocRing (Matrix n n A)
 
 Depends on / 依赖: Matrix, NonAssocRing
@@ -1657,7 +1657,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Fintype n] [DecidableEq n] [Semiring A]
+  签名: [有限类型 n] [DecidableEq n] [半环 A]
   定义体: inferInstanceAs Semiring (Matrix n n A)
 
 Depends on / 依赖: Matrix, Semiring
@@ -1676,7 +1676,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Fintype n] [DecidableEq n] [Ring A]
+  签名: [有限类型 n] [DecidableEq n] [环 A]
   定义体: inferInstanceAs Ring (Matrix n n A)
 
 Depends on / 依赖: Matrix
@@ -1696,7 +1696,7 @@ definition ofMatrixRingEquiv
 
 中文:
 定义 ofMatrixRingEquiv
-  签名: [Fintype n] [Semiring A]
+  签名: [有限类型 n] [半环 A]
   定义体: { ofMatrix with
     map_mul' := fun _ _ => rfl
     map_add' := fun _ _ => rfl }
@@ -1719,7 +1719,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: [Fintype n] [NonUnitalSemiring A] [StarRing A]
+  签名: [有限类型 n] [非幺半环 A] [对合环 A]
   定义体: inferInstanceAs StarRing (Matrix n n A)
 
 Depends on / 依赖: Matrix, StarRing
@@ -1737,7 +1737,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: [Fintype n] [DecidableEq n] [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: [有限类型 n] [DecidableEq n] [交换半环 R] [半环 A] [代数 R A]
   定义体: inferInstanceAs Algebra R (Matrix n n A)
 
 Depends on / 依赖: Algebra, Matrix
@@ -1757,7 +1757,7 @@ definition ofMatrixStarAlgEquiv
 
 中文:
 定义 ofMatrixStarAlgEquiv
-  签名: [Fintype n] [SMul Complex A] [Semiring A] [StarRing A]
+  签名: [有限类型 n] [标量乘法 复形 A] [半环 A] [对合环 A]
   定义体: { ofMatrixRingEquiv with
     map_star' := fun _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -1780,7 +1780,7 @@ lemma ofMatrix_eq_ofMatrixStarAlgEquiv
 
 中文:
 引理 ofMatrix_eq_ofMatrixStarAlgEquiv
-  条件: [Fintype n] [SMul Complex A] [Semiring A] [StarRing A]
+  条件: [有限类型 n] [标量乘法 复形 A] [半环 A] [对合环 A]
   证明: rfl
 -/
 lemma ofMatrix_eq_ofMatrixStarAlgEquiv [Fintype n] [SMul Complex A] [Semiring A] [StarRing A] :
@@ -1803,7 +1803,7 @@ definition reindexₗ
 
 中文:
 定义 reindexₗ
-  签名: {l o : 类型} [Semiring R] [AddCommMonoid A] [Module R A]
+  签名: {l o : 类型} [半环 R] [加法交换幺半群 A] [模 R A]
   定义体: { Matrix.reindex eₘ eₙ with
     map_add' M N := by ext; simp
     map_smul' r M := by ext; simp }
@@ -1829,7 +1829,7 @@ lemma reindexₗ_apply
 
 中文:
 引理 reindexₗ_apply
-  结论: {l o : 类型} [Semiring R] [AddCommMonoid A] [Module R A]
+  结论: {l o : 类型} [半环 R] [加法交换幺半群 A] [模 R A]
   证明: rfl
 -/
 lemma reindexₗ_apply {l o : Type*} [Semiring R] [AddCommMonoid A] [Module R A]
@@ -1857,7 +1857,7 @@ definition reindexₐ
 
 中文:
 定义 reindexₐ
-  签名: (R) (A) [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Module R A]
+  签名: (R) (A) [有限类型 m] [有限类型 n] [半环 R] [加法交换幺半群 A] [乘法 A] [模 R A]
   定义体: { reindexₗ R A e e with
     map_mul' M N := by
       ext i j
@@ -1901,7 +1901,7 @@ lemma reindexₐ_apply
 
 中文:
 引理 reindexₐ_apply
-  结论: [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Star A]
+  结论: [有限类型 m] [有限类型 n] [半环 R] [加法交换幺半群 A] [乘法 A] [对合 A]
   证明: rfl
 -/
 lemma reindexₐ_apply [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Star A]
@@ -1919,7 +1919,7 @@ lemma mapₗ_reindexₐ
 
 中文:
 引理 mapₗ_reindexₐ
-  结论: [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Module R A]
+  结论: [有限类型 m] [有限类型 n] [半环 R] [加法交换幺半群 A] [乘法 A] [模 R A]
   证明: rfl
 -/
 lemma mapₗ_reindexₐ [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Module R A]
@@ -1939,7 +1939,7 @@ lemma reindexₐ_symm
 
 中文:
 引理 reindexₐ_symm
-  结论: [Fintype m] [Fintype n] [Semiring R] [AddCommMonoid A] [Mul A] [Module R A]
+  结论: [有限类型 m] [有限类型 n] [半环 R] [加法交换幺半群 A] [乘法 A] [模 R A]
   证明: by
   simp [reindexₐ, reindexₗ]
 -/
@@ -1968,7 +1968,7 @@ definition mapₙₐ
 
 中文:
 定义 mapₙₐ
-  签名: [Fintype n] [Semiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: [有限类型 n] [半环 R] [非幺非结合半环 A] [模 R A]
   定义体: fun M => M.mapₗ (f : A ->ₗ[R] B)
   map_smul' := by simp
   map_zero' := by simp [map_zero]
@@ -2004,7 +2004,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  结论: [Fintype n] [DecidableEq n] [CommSemiring R] [Semiring A]
+  结论: [有限类型 n] [DecidableEq n] [交换半环 R] [半环 A]
   证明: rfl
 -/
 theorem algebraMap_apply [Fintype n] [DecidableEq n] [CommSemiring R] [Semiring A]
@@ -2032,7 +2032,7 @@ definition toOneByOne
 
 中文:
 定义 toOneByOne
-  签名: [Unique n] [Semiring R] [AddCommMonoid A] [Mul A] [Star A] [Module R A]
+  签名: [唯一 n] [半环 R] [加法交换幺半群 A] [乘法 A] [对合 A] [模 R A]
   定义体: fun x y => a
   invFun M := M default default
   left_inv := by intro; simp
@@ -2078,7 +2078,7 @@ definition toCLM
 
 中文:
 定义 toCLM
-  签名: : CStarMatrix m n A ->ₗ[Complex] C⋆ᵐᵒᵈ(A, m -> A) ->L[Complex] C⋆ᵐᵒᵈ(A, n -> A) where
+  签名: : CStarMatrix m n A ->ₗ[复形] C⋆ᵐᵒᵈ(A, m -> A) ->L[复形] C⋆ᵐᵒᵈ(A, n -> A) where
   定义体: { toFun := (WithCStarModule.equivL Complex).symm ∘ M.vecMul ∘ WithCStarModule.equivL Complex
                map_add' := M.add_vecMul
                map_smul' := M.smul_vecMul }
@@ -2164,7 +2164,7 @@ definition toCLMNonUnitalAlgHom
 
 中文:
 定义 toCLMNonUnitalAlgHom
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: { (MulOpposite.opLinearEquiv Complex).toLinearMap ∘ₗ (toCLM (n := n) (m := n)) with
     map_zero' := by simp
     map_mul' := by
@@ -2196,7 +2196,7 @@ lemma toCLMNonUnitalAlgHom_eq_toCLM
 
 中文:
 引理 toCLMNonUnitalAlgHom_eq_toCLM
-  条件: [Fintype n] {M : CStarMatrix n n A}
+  条件: [有限类型 n] {M : CStarMatrix n n A}
   证明: rfl
 
 Depends on / 依赖: MulOpposite, MulOpposite.op
@@ -2264,7 +2264,7 @@ lemma toCLM_injective
 
 中文:
 引理 toCLM_injective
-  结论: Function.Injective (toCLM (A := A) (m := m) (n := n))
+  结论: 函数.单射 (toCLM (A := A) (m := m) (n := n))
   证明: by
   classical
   rw [injective_iff_map_eq_zero]
@@ -2297,7 +2297,7 @@ lemma mul_entry_mul_eq_inner_toCLM
 
 中文:
 引理 mul_entry_mul_eq_inner_toCLM
-  结论: [Fintype n] [DecidableEq m] [DecidableEq n]
+  结论: [有限类型 n] [DecidableEq m] [DecidableEq n]
   证明: by = ⟪equiv _ _
   simp [mul_assoc, inner_def]
 
@@ -2378,7 +2378,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm (CStarMatrix m n A) where
+  签名: : 范数 (CStarMatrix m n A) where
   定义体: ‖toCLM M‖
 -/
 noncomputable instance instNorm : Norm (CStarMatrix m n A) where
@@ -2434,7 +2434,7 @@ lemma normedSpaceCore
 
 中文:
 引理 normedSpaceCore
-  结论: NormedSpace.Core Complex (CStarMatrix m n A) where
+  结论: 赋范空间.核 复形 (CStarMatrix m n A) where
   证明: (toCLM M).opNorm_nonneg
   norm_smul c M := by rw [norm_def, norm_def, map_smul, norm_smul _ (toCLM M)]
   norm_triangle M₁ M₂ := by simpa [← map_add] using! norm_add_le (toCLM M₁) (toCLM M₂)
@@ -2510,7 +2510,7 @@ lemma norm_le_of_forall_inner_le
     simpa [← sq, norm_sq_eq A] using h ..
 
 中文:
-引理 norm_le_of_forall_inner_le
+引理 norm_le_of_对任意_inner_le
   结论: {M : CStarMatrix m n A} {C : 实数>=0}
   证明: by
   refine (toCLM M).opNorm_le_bound (by simp) fun v => ?_
@@ -2590,7 +2590,7 @@ lemma nnnorm_le_of_forall_inner_le
   proof: CStarMatrix.norm_le_of_forall_inner_le fun v w => h v w
 
 中文:
-引理 nnnorm_le_of_forall_inner_le
+引理 nnnorm_le_of_对任意_inner_le
   结论: {M : CStarMatrix m n A} {C : 实数>=0}
   证明: CStarMatrix.norm_le_of_forall_inner_le fun v w => h v w
 -/
@@ -2776,7 +2776,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (CStarMatrix m n A)
+  签名: : 拓扑空间 (CStarMatrix m n A)
   定义体: inferInstanceAs TopologicalSpace (Matrix m n A)
 
 Depends on / 依赖: Matrix, TopologicalSpace
@@ -2794,7 +2794,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (CStarMatrix m n A)
+  签名: : 一致空间 (CStarMatrix m n A)
   定义体: inferInstanceAs UniformSpace (Matrix m n A)
 
 Depends on / 依赖: Matrix, UniformSpace
@@ -2813,7 +2813,7 @@ instance instBornology
 
 中文:
 实例 instBornology
-  签名: : Bornology (CStarMatrix m n A)
+  签名: : 有界结构 (CStarMatrix m n A)
   定义体: inferInstanceAs Bornology (m -> n -> A)
 
 Depends on / 依赖: Bornology
@@ -2831,7 +2831,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: : CompleteSpace (CStarMatrix m n A)
+  签名: : 完备空间 (CStarMatrix m n A)
   定义体: inferInstanceAs CompleteSpace (Matrix m n A)
 
 Depends on / 依赖: CompleteSpace, Matrix
@@ -2849,7 +2849,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: : T2Space (CStarMatrix m n A)
+  签名: : T2空间 (CStarMatrix m n A)
   定义体: inferInstanceAs T2Space (Matrix m n A)
 
 Depends on / 依赖: Matrix, T2Space
@@ -2865,7 +2865,7 @@ instance instT3Space
 
 中文:
 实例 instT3Space
-  签名: : T3Space (CStarMatrix m n A)
+  签名: : T3空间 (CStarMatrix m n A)
   定义体: inferInstanceAs T3Space (Matrix m n A)
 
 Depends on / 依赖: Matrix, T3Space
@@ -2883,7 +2883,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (CStarMatrix m n A)
+  签名: : 是拓扑加群 (CStarMatrix m n A)
   定义体: inferInstanceAs IsTopologicalAddGroup (Matrix m n A)
 
 Depends on / 依赖: IsTopologicalAddGroup, Matrix
@@ -2901,7 +2901,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: : IsUniformAddGroup (CStarMatrix m n A)
+  签名: : 是UniformAdd群 (CStarMatrix m n A)
   定义体: inferInstanceAs IsUniformAddGroup (Matrix m n A)
 
 Depends on / 依赖: IsUniformAddGroup, Matrix
@@ -2919,7 +2919,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: {R : 类型} [SMul R A] [TopologicalSpace R] [ContinuousSMul R A]
+  签名: {R : 类型} [标量乘法 R A] [拓扑空间 R] [连续标量乘法 R A]
   定义体: inferInstanceAs ContinuousSMul R (Matrix m n A)
 
 Depends on / 依赖: ContinuousSMul, Matrix
@@ -2959,7 +2959,7 @@ instance instNormedSpace
 
 中文:
 实例 instNormedSpace
-  签名: : NormedSpace Complex (CStarMatrix m n A)
+  签名: : 赋范空间 复形 (CStarMatrix m n A)
   定义体: .ofCore CStarMatrix.normedSpaceCore
 
 Depends on / 依赖: CStarMatrix, CStarMatrix.normedSpaceCore, normedSpaceCore, ofCore
@@ -3007,7 +3007,7 @@ instance instCStarRing
 
 中文:
 实例 instCStarRing
-  签名: : CStarRing (CStarMatrix n n A)
+  签名: : CStar环 (CStarMatrix n n A)
   定义体: .of_le_norm_mul_star_self fun M => by
     have hmain : ‖M‖ <= √‖M * star M‖ := by
       change ‖toCLM M‖ <= √‖M * star M‖
@@ -3121,7 +3121,7 @@ instance instNormedRing
 
 中文:
 实例 instNormedRing
-  签名: : NormedRing (CStarMatrix n n A) where
+  签名: : 赋范环 (CStarMatrix n n A) where
   定义体: rfl
   norm_mul_le := norm_mul_le
 -/
@@ -3139,7 +3139,7 @@ instance instNormedAlgebra
 
 中文:
 实例 instNormedAlgebra
-  签名: : NormedAlgebra Complex (CStarMatrix n n A) where
+  签名: : 赋范代数 复形 (CStarMatrix n n A) where
   定义体: by simpa only [norm_def, map_smul] using (toCLM M).opNorm_smul_le r
 
 Depends on / 依赖: map_smul, norm_def, opNorm_smul_le
@@ -3156,7 +3156,7 @@ instance instCStarAlgebra
 
 中文:
 实例 instCStarAlgebra
-  签名: : CStarAlgebra (CStarMatrix n n A) where
+  签名: : CStar代数 (CStarMatrix n n A) where
 -/
 noncomputable instance instCStarAlgebra : CStarAlgebra (CStarMatrix n n A) where
 
@@ -3198,7 +3198,7 @@ definition ofMatrixL
 
 中文:
 定义 ofMatrixL
-  签名: : Matrix m n A ≃L[Complex] CStarMatrix m n A
+  签名: : 矩阵 m n A ≃L[复形] CStarMatrix m n A
   定义体: { ofMatrixₗ with
     continuous_toFun := continuous_id
     continuous_invFun := continuous_id }

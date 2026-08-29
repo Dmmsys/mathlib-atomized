@@ -133,7 +133,7 @@ theorem exists_eq_X_add_C_of_natDegree_le_one
   proof: ⟨p.coeff 1, p.coeff 0, eq_X_add_C_of_natDegree_le_one h⟩
 
 中文:
-定理 exists_eq_X_add_C_of_natDegree_le_one
+定理 存在_eq_X_add_C_of_natDegree_le_one
   条件: (h : natDegree p <= 1)
   结论: 存在 a b, p = C a * X + C b
   证明: ⟨p.coeff 1, p.coeff 0, eq_X_add_C_of_natDegree_le_one h⟩

@@ -723,7 +723,7 @@ definition coneFunctorEnrichedHom
 
 中文:
 定义 coneFunctorEnrichedHom
-  签名: : Cone (functorEnrichedHom V F₁ F₂) where
+  签名: : 锥 (functorEnrichedHom V F₁ F₂) where
   定义体: enrichedHom V F₁ F₂
   π := { app := fun j => precompEnrichedHom V F₁ F₂ (Under.forget j) }
 

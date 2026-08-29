@@ -56,13 +56,13 @@ class NormalMono
     - isLimit : IsLimit (KernelFork.ofι f w)
 
 中文:
-类 NormalMono
+类 正规单态射
   参数: (f : X ⟶ Y)
   公理与运算 (4 个):
     - Z : C
     - g : Y ⟶ Z
     - w : f ≫ g = 0
-    - isLimit : IsLimit (KernelFork.ofι f w)
+    - isLimit : 是极限 (核叉.ofι f w)
 -/
 class NormalMono (f : X ⟶ Y) where
   Z : C
@@ -95,7 +95,7 @@ IsLimit.ofConeEquiv (C
 
 中文:
 定义 equivalenceReflectsNormalMono
-  签名: {D : 类型u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
+  签名: {D : 类型u₂} [范畴.{v₁} D] [有ZeroMorphisms D] (F : C ⥤ D)
   定义体: F.objPreimage hf.Z
   g := F.preimage (hf.g ≫ (F.objObjPreimageIso hf.Z).inv)
 w := F.map_injective by
@@ -135,8 +135,8 @@ definition NormalMono.regularMono
     w := by simpa using I.w }
 
 中文:
-定义 NormalMono.regularMono
-  签名: (f : X ⟶ Y) [I : NormalMono f]
+定义 正规单态射.regularMono
+  签名: (f : X ⟶ Y) [I : 正规单态射 f]
   定义体: { I with
     left := I.g
     right := 0
@@ -159,8 +159,8 @@ definition NormalMono.lift'
   body: KernelFork.IsLimit.lift' NormalMono.isLimit _ h
 
 中文:
-定义 NormalMono.lift'
-  签名: {W : C} (f : X ⟶ Y) [hf : NormalMono f] (k : W ⟶ Y) (h : k ≫ hf.g = 0)
+定义 正规单态射.lift'
+  签名: {W : C} (f : X ⟶ Y) [hf : 正规单态射 f] (k : W ⟶ Y) (h : k ≫ hf.g = 0)
   定义体: KernelFork.IsLimit.lift' NormalMono.isLimit _ h
 
 Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.lift, NormalMono, NormalMono.isLimit, isLimit
@@ -266,7 +266,7 @@ definition NormalMono.ofArrowIso
     · exact 
 
 中文:
-定义 NormalMono.ofArrowIso
+定义 正规单态射.ofArrowIso
   签名: {X Y : C} {f : X ⟶ Y}
   定义体: hf.Z
   g := e.inv.right ≫ hf.g
@@ -309,10 +309,10 @@ class IsNormalMonoCategory
     - normalMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
 
 中文:
-类 IsNormalMonoCategory
+类 是正规单态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - normalMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
+    - normalMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 非空 (正规单态射 f)
 -/
 class IsNormalMonoCategory : Prop where
   normalMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
@@ -334,7 +334,7 @@ definition normalMonoOfMono
 
 中文:
 定义 normalMonoOfMono
-  签名: [IsNormalMonoCategory C] (f : X ⟶ Y) [Mono f]
+  签名: [是正规单态射范畴 C] (f : X ⟶ Y) [单态射 f]
   定义体: (IsNormalMonoCategory.normalMonoOfMono _).some
 
 Depends on / 依赖: IsNormalMonoCategory, IsNormalMonoCategory.normalMonoOfMono, normalMonoOfMono
@@ -367,13 +367,13 @@ class NormalEpi
     - isColimit : IsColimit (CokernelCofork.ofπ f w)
 
 中文:
-类 NormalEpi
+类 正规满态射
   参数: (f : X ⟶ Y)
   公理与运算 (4 个):
     - W : C
     - g : W ⟶ X
     - w : g ≫ f = 0
-    - isColimit : IsColimit (CokernelCofork.ofπ f w)
+    - isColimit : 是余极限 (余核余叉.ofπ f w)
 -/
 class NormalEpi (f : X ⟶ Y) where
   W : C
@@ -405,7 +405,7 @@ IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
 
 中文:
 定义 equivalenceReflectsNormalEpi
-  签名: {D : 类型u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
+  签名: {D : 类型u₂} [范畴.{v₁} D] [有ZeroMorphisms D] (F : C ⥤ D)
   定义体: F.objPreimage hf.W
   g := F.preimage ((F.objObjPreimageIso hf.W).hom ≫ hf.g)
 w := F.map_injective by simp [hf.w]
@@ -441,8 +441,8 @@ definition NormalEpi.regularEpi
     w := by simpa using I.w }
 
 中文:
-定义 NormalEpi.regularEpi
-  签名: (f : X ⟶ Y) [I : NormalEpi f]
+定义 正规满态射.regularEpi
+  签名: (f : X ⟶ Y) [I : 正规满态射 f]
   定义体: { I with
     left := I.g
     right := 0
@@ -465,8 +465,8 @@ definition NormalEpi.desc'
   body: CokernelCofork.IsColimit.desc' NormalEpi.isColimit _ h
 
 中文:
-定义 NormalEpi.desc'
-  签名: {W : C} (f : X ⟶ Y) [nef : NormalEpi f] (k : X ⟶ W) (h : nef.g ≫ k = 0)
+定义 正规满态射.desc'
+  签名: {W : C} (f : X ⟶ Y) [nef : 正规满态射 f] (k : X ⟶ W) (h : nef.g ≫ k = 0)
   定义体: CokernelCofork.IsColimit.desc' NormalEpi.isColimit _ h
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, NormalEpi, NormalEpi.isColimit, isColimit
@@ -577,7 +577,7 @@ definition NormalEpi.ofArrowIso
     · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc
 
 中文:
-定义 NormalEpi.ofArrowIso
+定义 正规满态射.ofArrowIso
   签名: {X Y : C} {f : X ⟶ Y}
   定义体: hf.W
   g := hf.g ≫ e.hom.left
@@ -628,7 +628,7 @@ definition normalEpiOfNormalMonoUnop
 
 中文:
 定义 normalEpiOfNormalMonoUnop
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.unop)
+  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : 正规单态射 f.unop)
   定义体: op m.Z
   g := m.g.op
   w := congrArg Quiver.Hom.op m.w
@@ -679,7 +679,7 @@ definition normalMonoOfNormalEpiUnop
 
 中文:
 定义 normalMonoOfNormalEpiUnop
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalEpi f.unop)
+  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : 正规满态射 f.unop)
   定义体: op m.W
   g := m.g.op
   w := congrArg Quiver.Hom.op m.w
@@ -722,10 +722,10 @@ class IsNormalEpiCategory
     - normalEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
 
 中文:
-类 IsNormalEpiCategory
+类 是正规满态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - normalEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
+    - normalEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 非空 (正规满态射 f)
 -/
 class IsNormalEpiCategory : Prop where
   normalEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
@@ -747,7 +747,7 @@ definition normalEpiOfEpi
 
 中文:
 定义 normalEpiOfEpi
-  签名: [IsNormalEpiCategory C] (f : X ⟶ Y) [Epi f]
+  签名: [是正规满态射范畴 C] (f : X ⟶ Y) [满态射 f]
   定义体: (IsNormalEpiCategory.normalEpiOfEpi _).some
 
 Depends on / 依赖: IsNormalEpiCategory, IsNormalEpiCategory.normalEpiOfEpi, normalEpiOfEpi

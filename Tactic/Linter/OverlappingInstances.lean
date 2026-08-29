@@ -188,7 +188,7 @@ definition findOverlappingInstances
 
 中文:
 定义 findOverlappingInstances
-  签名: : MetaM (ExprMap (Array FVarId))
+  签名: : MetaM (ExprMap (数组 FVarId))
   定义体: do
   -- Maps a class to the collection of local instances that overlap on it.
   -- This only includes overlaps of at least 2 local instances.
@@ -243,7 +243,7 @@ definition runLinter
 
 中文:
 定义 runLinter
-  签名: (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Option Expr)
+  签名: (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : 选项类型 Expr)
   定义体: do
   ctx.runMetaM lctx do
   -- Add the hypotheses of the expected type to the local context, as it may have more instances.

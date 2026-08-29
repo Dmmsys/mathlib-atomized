@@ -61,8 +61,8 @@ structure AffineMap
     - map_vadd' : forall (p : P1) (v : V1), toFun (v +ᵥ p) = linear v +ᵥ toFun p
 
 中文:
-结构 AffineMap
-  参数: (k : 类型) {V1 : 类型} (P1 : 类型) {V2 : 类型} (P2 : 类型) [Ring k]
+结构 仿射映射
+  参数: (k : 类型) {V1 : 类型} (P1 : 类型) {V2 : 类型} (P2 : 类型) [环 k]
   公理与运算 (3 个):
     - toFun : P1 -> P2
     - linear : V1 ->ₗ[k] V2
@@ -96,7 +96,7 @@ instance AffineMap.instFunLike
     rw [← f_add]; rw [h]; rw [← g_add]
 
 中文:
-实例 AffineMap.instFunLike
+实例 仿射映射.instFunLike
   签名: (k : 类型) {V1 : 类型} (P1 : 类型) {V2 : 类型} (P2 : 类型)
   定义体: AffineMap.toFun
   coe_injective := fun ⟨f, f_linear, f_add⟩ ⟨g, g_linear, g_add⟩ => fun (h : f = g) => by
@@ -318,7 +318,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Function.Injective (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑)
+  结论: @函数.单射 (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -469,7 +469,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (p : P2)
-  结论: ⇑(const k P1 p) = Function.const P1 p
+  结论: ⇑(const k P1 p) = 函数.const P1 p
   证明: rfl
 
 @[simp]
@@ -535,7 +535,7 @@ theorem linear_eq_zero_iff_exists_const
     exact const_linear k P1 q
 
 中文:
-定理 linear_eq_zero_iff_exists_const
+定理 linear_eq_zero_iff_存在_const
   条件: (f : P1 ->ᵃ[k] P2)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -566,7 +566,7 @@ instance nonempty
 
 中文:
 实例 nonempty
-  签名: : Nonempty (P1 ->ᵃ[k] P2)
+  签名: : 非空 (P1 ->ᵃ[k] P2)
   定义体: (AddTorsor.nonempty : Nonempty P2).map const k P1
 
 Depends on / 依赖: AddTorsor, AddTorsor.nonempty, Nonempty, nonempty
@@ -660,7 +660,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: : MulAction R (P1 ->ᵃ[k] V2) where
+  签名: : 乘法作用 R (P1 ->ᵃ[k] V2) where
   定义体: ⟨c • ⇑f, c • f.linear, fun p v => by simp [smul_add]⟩
   one_smul _ := ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
@@ -726,7 +726,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [DistribMulAction Rᵐᵒᵖ V2] [IsCentralScalar R V2]
+  签名: [分配乘法作用 Rᵐᵒᵖ V2] [中心标量 R V2]
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -747,7 +747,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (P1 ->ᵃ[k] V2)
+  签名: 零 (P1 ->ᵃ[k] V2)
   定义体: ⟨0, 0, fun _ _ => (zero_vadd _ _).symm⟩
 
 Depends on / 依赖: zero_vadd
@@ -764,7 +764,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (P1 ->ᵃ[k] V2)
+  签名: 加法 (P1 ->ᵃ[k] V2)
   定义体: ⟨f + g, f.linear + g.linear, fun p v => by simp [add_add_add_comm]⟩
 
 Depends on / 依赖: add_add_add_comm, f.linear, g.linear, linear
@@ -782,7 +782,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (P1 ->ᵃ[k] V2)
+  签名: 减法 (P1 ->ᵃ[k] V2)
   定义体: ⟨f - g, f.linear - g.linear, fun p v => by simp [sub_add_sub_comm]⟩
 
 Depends on / 依赖: f.linear, g.linear, linear, sub_add_sub_comm
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (P1 ->ᵃ[k] V2)
+  签名: 取负 (P1 ->ᵃ[k] V2)
   定义体: ⟨-f, -f.linear, fun p v => by simp [add_comm, map_vadd f]⟩
 
 @[simp, norm_cast]
@@ -999,7 +999,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (P1 ->ᵃ[k] V2)
+  签名: 加法交换群 (P1 ->ᵃ[k] V2)
   定义体: coeFn_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _)
     fun _ _ => coe_smul _ _
 
@@ -1025,7 +1025,7 @@ instance :
 
 中文:
 实例 :
-  签名: AffineSpace (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2)
+  签名: 仿射空间 (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2)
   定义体: ⟨fun p => f p +ᵥ g p, f.linear + g.linear,
       fun p v => by simp [vadd_vadd, add_right_comm]⟩
   zero_vadd f := ext fun p => zero_vadd _ (f p)
@@ -1177,7 +1177,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ⇑(fst : P1 × P2 ->ᵃ[k] P1) = Prod.fst
+  结论: ⇑(fst : P1 × P2 ->ᵃ[k] P1) = 积类型.fst
   证明: rfl
 
 @[simp]
@@ -1196,7 +1196,7 @@ theorem fst_linear
 
 中文:
 定理 fst_linear
-  结论: (fst : P1 × P2 ->ᵃ[k] P1).linear = LinearMap.fst k V1 V2
+  结论: (fst : P1 × P2 ->ᵃ[k] P1).linear = 线性映射.fst k V1 V2
   证明: rfl
 -/
 theorem fst_linear : (fst : P1 × P2 ->ᵃ[k] P1).linear = LinearMap.fst k V1 V2 :=
@@ -1243,7 +1243,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ⇑(snd : P1 × P2 ->ᵃ[k] P2) = Prod.snd
+  结论: ⇑(snd : P1 × P2 ->ᵃ[k] P2) = 积类型.snd
   证明: rfl
 
 @[simp]
@@ -1262,7 +1262,7 @@ theorem snd_linear
 
 中文:
 定理 snd_linear
-  结论: (snd : P1 × P2 ->ᵃ[k] P2).linear = LinearMap.snd k V1 V2
+  结论: (snd : P1 × P2 ->ᵃ[k] P2).linear = 线性映射.snd k V1 V2
   证明: rfl
 -/
 theorem snd_linear : (snd : P1 × P2 ->ᵃ[k] P2).linear = LinearMap.snd k V1 V2 :=
@@ -1308,7 +1308,7 @@ theorem id_linear
 
 中文:
 定理 id_linear
-  结论: (id k P1).linear = LinearMap.id
+  结论: (id k P1).linear = 线性映射.id
   证明: rfl
 -/
 theorem id_linear : (id k P1).linear = LinearMap.id :=
@@ -1346,7 +1346,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (P1 ->ᵃ[k] P1)
+  签名: 可居 (P1 ->ᵃ[k] P1)
   定义体: ⟨id k P1⟩
 -/
 instance : Inhabited (P1 ->ᵃ[k] P1) :=
@@ -1502,7 +1502,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (P1 ->ᵃ[k] P1)
+  签名: 幺半群 (P1 ->ᵃ[k] P1)
   定义体: id k P1
   mul := comp
   one_mul := id_comp
@@ -1698,7 +1698,7 @@ theorem image_vsub_image
 
 中文:
 定理 image_vsub_image
-  条件: {s t : Set P1} (f : P1 ->ᵃ[k] P2)
+  条件: {s t : 集合 P1} (f : P1 ->ᵃ[k] P2)
   证明: by
   ext v
   simp only [Set.mem_vsub, Set.mem_image,
@@ -1727,7 +1727,7 @@ definition prod
   map_vadd' := by simp
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
   定义体: Function.prod f g
   linear := f.linear.prod g.linear
@@ -1754,7 +1754,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
-  结论: prod f g = Function.prod f g
+  结论: 乘积 f g = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -1775,7 +1775,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1)
-  结论: prod f g p = (f p, g p)
+  结论: 乘积 f g p = (f p, g p)
   证明: rfl
 -/
 theorem prod_apply (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1) : prod f g p = (f p, g p) :=
@@ -1821,7 +1821,7 @@ theorem coe_prodMap
 中文:
 定理 coe_prodMap
   条件: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4)
-  结论: ⇑(f.prodMap g) = Prod.map f g
+  结论: ⇑(f.prodMap g) = 积类型.map f g
   证明: rfl
 
 @[simp]
@@ -2145,7 +2145,7 @@ theorem lineMap_eq_lineMap_iff
 
 中文:
 定理 lineMap_eq_lineMap_iff
-  条件: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k}
+  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c₁ c₂ : k}
   证明: by
   rw [lineMap_apply]; rw [lineMap_apply]; rw [← @vsub_eq_zero_iff_eq V1]; rw [vadd_vsub_vadd_cancel_right]; rw [←
     sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [vsub_eq_zero_iff_eq]; rw [or_comm]; rw [eq_comm]
@@ -2170,7 +2170,7 @@ theorem lineMap_eq_left_iff
 
 中文:
 定理 lineMap_eq_left_iff
-  条件: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k}
+  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c : k}
   证明: by
   rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_zero]
 
@@ -2193,7 +2193,7 @@ theorem lineMap_eq_right_iff
 
 中文:
 定理 lineMap_eq_right_iff
-  条件: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k}
+  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c : k}
   证明: by
   rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_one]
 
@@ -2216,7 +2216,7 @@ theorem lineMap_injective
 
 中文:
 定理 lineMap_injective
-  条件: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} (h : p₀ != p₁)
+  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} (h : p₀ != p₁)
   证明: fun _c₁ _c₂ hc =>
   (lineMap_eq_lineMap_iff.mp hc).resolve_left h
 -/
@@ -2549,7 +2549,7 @@ lemma lineMap_mono
 
 中文:
 引理 lineMap_mono
-  结论: [LinearOrder k] [Preorder V1] [AddRightMono V1] [SMulPosMono k V1]
+  结论: [线性序 k] [预序 V1] [AddRightMono V1] [标量乘正递增 k V1]
   证明: by
   intro x y hxy
   suffices x • (p₁ - p₀) <= y • (p₁ - p₀) by simpa [lineMap]
@@ -2581,7 +2581,7 @@ lemma lineMap_anti
 
 中文:
 引理 lineMap_anti
-  结论: [LinearOrder k] [Preorder V1] [AddLeftMono V1] [SMulPosMono k V1]
+  结论: [线性序 k] [预序 V1] [AddLeftMono V1] [标量乘正递增 k V1]
   证明: by
   intro x y hxy
   suffices y • (p₁ - p₀) <= x • (p₁ - p₀) by simpa [lineMap]
@@ -2672,7 +2672,7 @@ theorem image_uIcc
 
 中文:
 定理 image_uIcc
-  结论: {k : 类型} [Field k] [LinearOrder k] [IsStrictOrderedRing k]
+  结论: {k : 类型} [域 k] [线性序 k] [是StrictOrdered环 k]
   证明: by
   have : ⇑f = (fun x => x + f 0) ∘ fun x => x * (f 1 - f 0) := by
     ext x
@@ -2761,7 +2761,7 @@ theorem proj_linear
 中文:
 定理 proj_linear
   条件: (i : ι)
-  结论: (@proj k _ ι V P _ _ _ i).linear = @LinearMap.proj k ι _ V _ _ i
+  结论: (@proj k _ ι V P _ _ _ i).linear = @线性映射.proj k ι _ V _ _ i
   证明: rfl
 -/
 theorem proj_linear (i : ι) : (@proj k _ ι V P _ _ _ i).linear = @LinearMap.proj k ι _ V _ _ i :=
@@ -2815,7 +2815,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: : DistribMulAction R (P1 ->ᵃ[k] V2) where
+  签名: : 分配乘法作用 R (P1 ->ᵃ[k] V2) where
   定义体: ext fun _ => smul_add _ _ _
   smul_zero _ := ext fun _ => smul_zero _
 
@@ -2843,7 +2843,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (P1 ->ᵃ[k] V2)
+  签名: 模 R (P1 ->ᵃ[k] V2)
   定义体: { AffineMap.distribMulAction with
     add_smul := fun _ _ _ => ext fun _ => add_smul _ _ _
     zero_smul := fun _ => ext fun _ => zero_smul _ _ }
@@ -2927,7 +2927,7 @@ lemma lineMap_apply'
 
 中文:
 引理 lineMap_apply'
-  结论: [SMulCommClass k k V2] (f g : P1 ->ᵃ[k] P2) (c : k)
+  结论: [标量交换类 k k V2] (f g : P1 ->ᵃ[k] P2) (c : k)
   证明: by
   simp [AffineMap.lineMap_apply]
 
@@ -3093,7 +3093,7 @@ theorem pi_ext_zero
 
 中文:
 定理 pi_ext_zero
-  条件: (h : 对任意 i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0)
+  条件: (h : 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x)) (h₂ : f 0 = g 0)
   证明: by
   apply ext_linear
   · apply LinearMap.pi_ext
@@ -3136,7 +3136,7 @@ theorem pi_ext_nonempty
 
 中文:
 定理 pi_ext_nonempty
-  条件: [Nonempty ι] (h : 对任意 i x, f (Pi.single i x) = g (Pi.single i x))
+  条件: [非空 ι] (h : 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x))
   证明: by
   apply pi_ext_zero h
   inhabit ι
@@ -3167,7 +3167,7 @@ theorem pi_ext_nonempty'
 
 中文:
 定理 pi_ext_nonempty'
-  结论: [Nonempty ι] (h : 对任意 i, f.comp (LinearMap.single _ _ i).toAffineMap =
+  结论: [非空 ι] (h : 对任意 i, f.comp (线性映射.single _ _ i).toAffineMap =
   证明: by
   refine pi_ext_nonempty fun i x => ?_
   convert! AffineMap.congr_fun (h i) x
@@ -3277,7 +3277,7 @@ theorem homothety_linear
 中文:
 定理 homothety_linear
   条件: (c : P1) (r : k)
-  结论: (homothety c r).linear = r • LinearMap.id
+  结论: (homothety c r).linear = r • 线性映射.id
   证明: by
   simp [homothety]
 
@@ -3501,7 +3501,7 @@ theorem homothety_injective
 
 中文:
 定理 homothety_injective
-  结论: [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
+  结论: [模.是无挠 k V1] [是乘零消去 k] (c : P1) {r : k}
   证明: fun _ _ h => by simpa [homothety_def, hr] using h
 
 @[simp]
@@ -3524,7 +3524,7 @@ theorem homothety_inj
 
 中文:
 定理 homothety_inj
-  结论: [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k} (hr : r != 0)
+  结论: [模.是无挠 k V1] [是乘零消去 k] (c : P1) {r : k} (hr : r != 0)
   证明: (homothety_injective c hr).eq_iff
 
 Depends on / 依赖: eq_iff, homothety_injective
@@ -3644,7 +3644,7 @@ theorem Convex.combo_affine_apply
   exact f.apply_lineMap _ _ _
 
 中文:
-定理 Convex.combo_affine_apply
+定理 凸.combo_affine_apply
   条件: {x y : E} {a b : 𝕜} {f : E ->ᵃ[𝕜] F} (h : a + b = 1)
   证明: by
   simp only [Convex.combo_eq_smul_sub_add h, ← vsub_eq_sub]

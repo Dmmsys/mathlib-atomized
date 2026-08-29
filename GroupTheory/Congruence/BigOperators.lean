@@ -41,7 +41,7 @@ exact c.mul (h _ <| .head _) ih fun k hk => h _ (.tail _ hk)
 
 中文:
 定理 list_prod
-  结论: {ι M : 类型} [MulOneClass M] (c : Con M) {l : List ι} {f g : ι -> M}
+  结论: {ι M : 类型} [MulOne类 M] (c : Con M) {l : 列表 ι} {f g : ι -> M}
   证明: by
   induction l with
   | nil =>
@@ -74,7 +74,7 @@ theorem coe_listProd
 
 中文:
 定理 coe_listProd
-  结论: {ι M : 类型} [MulOneClass M] (c : Con M)
+  结论: {ι M : 类型} [MulOne类 M] (c : Con M)
   证明: by
   induction l with simp [*]
 -/
@@ -98,7 +98,7 @@ theorem multiset_prod
 
 中文:
 定理 multiset_prod
-  结论: {ι M : 类型} [CommMonoid M] (c : Con M) {s : Multiset ι}
+  结论: {ι M : 类型} [交换幺半群 M] (c : Con M) {s : Multiset ι}
   证明: by
   rcases s; simpa using c.list_prod h
 
@@ -121,7 +121,7 @@ theorem coe_multisetProd
 
 中文:
 定理 coe_multisetProd
-  结论: {ι M : 类型} [CommMonoid M] (c : Con M)
+  结论: {ι M : 类型} [交换幺半群 M] (c : Con M)
   证明: by
   simpa using map_multiset_prod c.mk' (s.map f)
 -/
@@ -144,7 +144,7 @@ theorem finsetProd
 
 中文:
 定理 finsetProd
-  结论: {ι M : 类型} [CommMonoid M] (c : Con M) (s : Finset ι)
+  结论: {ι M : 类型} [交换幺半群 M] (c : Con M) (s : 有限集 ι)
   证明: c.multiset_prod h
 
 @[to_additive (attr := simp, norm_cast)]
@@ -167,7 +167,7 @@ theorem coe_finsetProd
 
 中文:
 定理 coe_finsetProd
-  结论: {ι M : 类型} [CommMonoid M] (c : Con M) (s : Finset ι)
+  结论: {ι M : 类型} [交换幺半群 M] (c : Con M) (s : 有限集 ι)
   证明: map_prod c.mk' f s
 
 @[to_additive]
@@ -318,7 +318,7 @@ theorem _root_.AddCon.dfinsuppSumAddHom
 @[simp, norm_cast]
 
 中文:
-定理 _root_.AddCon.dfinsuppSumAddHom
+定理 _root_.加法Con.dfinsuppSumAddHom
   结论: {ι : 类型} {β : ι -> 类型} {M : 类型}
   证明: by
   classical
@@ -357,7 +357,7 @@ protected alias _root_.AddCon.finset_sum := AddCon.finsetSum
 protected alias finset_prod := Con.finsetProd
 
 中文:
-定理 _root_.AddCon.coe_dfinsuppSumAddHom
+定理 _root_.加法Con.coe_dfinsuppSumAddHom
   结论: {ι : 类型} {β : ι -> 类型} {M : 类型}
   证明: by
   classical

@@ -40,7 +40,7 @@ lemma ringKrullDim_quotient
 
 中文:
 引理 ringKrullDim_quotient
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   rw [ringKrullDim]; rw [Order.krullDim_eq_of_orderIso I.primeSpectrumQuotientOrderIsoZeroLocus]
 
@@ -113,7 +113,7 @@ lemma ringKrullDim_succ_le_of_surjective
 
 中文:
 引理 ringKrullDim_succ_le_of_surjective
-  结论: (f : R ->+* S) (hf : Function.Surjective f)
+  结论: (f : R ->+* S) (hf : 函数.满射 f)
   证明: by
   refine le_trans ?_ (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hr)
   gcongr
@@ -162,7 +162,7 @@ lemma ringKrullDim_mvPolynomial_of_isEmpty
 
 中文:
 引理 ringKrullDim_mvPolynomial_of_isEmpty
-  条件: (σ : 类型) [IsEmpty σ]
+  条件: (σ : 类型) [是空 σ]
   证明: ringKrullDim_eq_of_ringEquiv (isEmptyRingEquiv _ _)
 
 Depends on / 依赖: isEmptyRingEquiv, ringKrullDim_eq_of_ringEquiv
@@ -190,7 +190,7 @@ lemma ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial
 
 中文:
 引理 ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial
-  条件: (σ : 类型) [Finite σ]
+  条件: (σ : 类型) [有限 σ]
   证明: by
   induction σ using Finite.induction_empty_option with
   | of_equiv e H =>

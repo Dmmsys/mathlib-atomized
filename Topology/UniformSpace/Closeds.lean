@@ -60,7 +60,7 @@ theorem mem_hausdorffEntourage
 
 中文:
 定理 mem_hausdorffEntourage
-  条件: (U : SetRel α α) (s t : Set α)
+  条件: (U : SetRel α α) (s t : 集合 α)
   证明: Iff.rfl
 
 @[gcongr]
@@ -108,7 +108,7 @@ theorem monotone_hausdorffEntourage
 
 中文:
 定理 monotone_hausdorffEntourage
-  结论: Monotone (hausdorffEntourage (α := α))
+  结论: 递增 (hausdorffEntourage (α := α))
   证明: fun _ _ => hausdorffEntourage_mono
 
 @[simp]
@@ -191,7 +191,7 @@ instance isSymm_hausdorffEntourage
 
 中文:
 实例 isSymm_hausdorffEntourage
-  签名: (U : SetRel α α) [U.IsSymm]
+  签名: (U : SetRel α α) [U.是Symm]
   定义体: by
   rw [← inv_eq_self_iff]; rw [inv_hausdorffEntourage]; rw [inv_eq_self]
 
@@ -260,7 +260,7 @@ instance isTrans_hausdorffEntourage
 
 中文:
 实例 isTrans_hausdorffEntourage
-  签名: (U : SetRel α α) [U.IsTrans]
+  签名: (U : SetRel α α) [U.是Trans]
   定义体: by
   grw [isTrans_iff_comp_subset_self, ← hausdorffEntourage_comp, comp_subset_self]
 
@@ -305,7 +305,7 @@ theorem union_mem_hausdorffEntourage
 
 中文:
 定理 union_mem_hausdorffEntourage
-  结论: (U : SetRel α α) {s₁ s₂ t₁ t₂ : Set α}
+  结论: (U : SetRel α α) {s₁ s₂ t₁ t₂ : 集合 α}
   证明: by
   grind [mem_hausdorffEntourage, preimage_union, image_union]
 
@@ -333,8 +333,8 @@ theorem TotallyBounded.exists_prodMk_finset_mem_hausdorffEntourage
   exact ⟨y, ⟨hy, x, hx, hx
 
 中文:
-定理 TotallyBounded.exists_prodMk_finset_mem_hausdorffEntourage
-  结论: [UniformSpace α]
+定理 全有界.存在_prodMk_finset_mem_hausdorffEntourage
+  结论: [一致空间 α]
   证明: by
   obtain ⟨t, ht₁, ht₂⟩ := hs _ (symm_le_uniformity hU)
   lift t to Finset α using ht₁
@@ -405,8 +405,8 @@ abbreviation UniformSpace.hausdorff
       Filter.tendsto_lift'.mpr fun U h
 
 中文:
-缩写 UniformSpace.hausdorff
-  签名: : UniformSpace (Set α)
+缩写 一致空间.hausdorff
+  签名: : 一致空间 (集合 α)
   定义体: .ofCore
   { uniformity := (𝓤 α).lift' hausdorffEntourage
     refl := by
@@ -444,7 +444,7 @@ theorem Filter.HasBasis.uniformity_hausdorff
   proof: h.lift' monotone_hausdorffEntourage
 
 中文:
-定理 Filter.HasBasis.uniformity_hausdorff
+定理 滤子.有基.uniformity_hausdorff
   证明: h.lift' monotone_hausdorffEntourage
 
 Depends on / 依赖: h.lift, monotone_hausdorffEntourage
@@ -475,7 +475,7 @@ theorem isOpen_inter_nonempty_of_isOpen
 
 中文:
 定理 isOpen_inter_nonempty_of_isOpen
-  条件: {U : Set α} (hU : IsOpen U)
+  条件: {U : 集合 α} (hU : 是开集 U)
   证明: by
   rw [isOpen_iff_mem_nhds]
   intro s ⟨x, hx₁, hx₂⟩
@@ -512,8 +512,8 @@ theorem _root_.IsClosed.powerset_hausdorff
   exact isOpen_inter_nonempty_of_isOpen hF.isOpen_compl
 
 中文:
-定理 _root_.IsClosed.powerset_hausdorff
-  条件: {F : Set α} (hF : IsClosed F)
+定理 _root_.是闭集.powerset_hausdorff
+  条件: {F : 集合 α} (hF : 是闭集 F)
   证明: by
   simp_rw [Set.powerset, ← isOpen_compl_iff, Set.compl_ofPred, ← Set.inter_compl_nonempty_iff]
   exact isOpen_inter_nonempty_of_isOpen hF.isOpen_compl
@@ -541,7 +541,7 @@ theorem isClopen_singleton_empty
 
 中文:
 定理 isClopen_singleton_empty
-  结论: IsClopen {(∅ : Set α)}
+  结论: IsClopen {(∅ : 集合 α)}
   证明: by
   constructor
   · rw [← Set.powerset_empty]
@@ -575,7 +575,7 @@ theorem isUniformEmbedding_singleton
 
 中文:
 定理 isUniformEmbedding_singleton
-  结论: IsUniformEmbedding ({·} : α -> Set α) where
+  结论: 是一致嵌入 ({·} : α -> 集合 α) where
   证明: Set.singleton_injective
   comap_uniformity := by
     change Filter.comap _ (Filter.lift' _ _) = _
@@ -607,7 +607,7 @@ theorem isClosedEmbedding_singleton
 
 中文:
 定理 isClosedEmbedding_singleton
-  条件: [T0Space α]
+  条件: [T0空间 α]
   证明: isUniformEmbedding_singleton.isEmbedding
   isClosed_range :=
     TopologicalSpace.isClosed_range_singleton
@@ -637,7 +637,7 @@ theorem uniformContinuous_union
 
 中文:
 定理 uniformContinuous_union
-  结论: UniformContinuous (fun x : Set α × Set α => x.1 union x.2)
+  结论: 一致连续 (fun x : 集合 α × 集合 α => x.1 union x.2)
   证明: by
   refine Filter.tendsto_lift'.mpr fun U hU => ?_
   filter_upwards [entourageProd_mem_uniformity (Filter.mem_lift' hU) (Filter.mem_lift' hU)]
@@ -664,7 +664,7 @@ theorem uniformContinuous_prod
 
 中文:
 定理 uniformContinuous_prod
-  结论: UniformContinuous (fun x : Set α × Set β => x.1 ×ˢ x.2)
+  结论: 一致连续 (fun x : 集合 α × 集合 β => x.1 ×ˢ x.2)
   证明: by
 .lift' monotone_hausdorffEntourage refine (𝓤 α).basis_sets.uniformity_prod (𝓤 β).basis_sets
 .tendsto_right_iff.mpr fun ⟨U, V⟩ ⟨hU, hV⟩ => ?_
@@ -695,7 +695,7 @@ theorem uniformContinuous_closure
 
 中文:
 定理 uniformContinuous_closure
-  结论: UniformContinuous (closure (X := α))
+  结论: 一致连续 (closure (X := α))
   证明: by
   simp_rw [UniformContinuous, (𝓤 α).basis_sets.uniformity_hausdorff.tendsto_iff
     (𝓤 α).basis_sets.uniformity_hausdorff, Function.comp_id, mem_hausdorffEntourage]
@@ -728,7 +728,7 @@ theorem continuous_closure
 
 中文:
 定理 continuous_closure
-  结论: Continuous (closure (X := α))
+  结论: 连续 (closure (X := α))
   证明: uniformContinuous_closure.continuous
 -/
 theorem continuous_closure : Continuous (closure (X := α)) :=
@@ -750,7 +750,7 @@ refine ⟨le_antisymm ?_ Filter.map_le_iff_le_comap.mp uniformContinuous_closure
 
 中文:
 定理 isUniformInducing_closure
-  结论: IsUniformInducing (closure (X := α))
+  结论: 是UniformInducing (closure (X := α))
   证明: by
 refine ⟨le_antisymm ?_ Filter.map_le_iff_le_comap.mp uniformContinuous_closure⟩
   rw [(𝓤 α).basis_sets.uniformity_hausdorff.comap _ |>.le_basis_iff
@@ -785,7 +785,7 @@ theorem nhds_closure
 
 中文:
 定理 nhds_closure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 𝓝 (closure s) = 𝓝 s
   证明: by
   simp_rw +singlePass [isUniformInducing_closure.isInducing.nhds_eq_comap, closure_closure]
@@ -811,7 +811,7 @@ theorem isClosed_setOfPred_totallyBounded
 
 中文:
 定理 isClosed_setOfPred_totallyBounded
-  结论: IsClosed {s : Set α | TotallyBounded s}
+  结论: 是闭集 {s : 集合 α | 全有界 s}
   证明: by
   simp_rw [isClosed_iff_frequently, nhds_eq_comap_uniformity]
   intro s hs U hU
@@ -850,7 +850,7 @@ instance [DiscreteUniformity
 
 中文:
 实例 [DiscreteUniformity
-  签名: α] : DiscreteUniformity (Set α)
+  签名: α] : DiscreteUniformity (集合 α)
   定义体: by
   rw [discreteUniformity_iff_setRelId_mem_uniformity]
   convert! Filter.mem_lift' (DiscreteUniformity.relId_mem_uniformity α)
@@ -879,8 +879,8 @@ theorem UniformContinuous.image_hausdorff
     h₂.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.me
 
 中文:
-定理 UniformContinuous.image_hausdorff
-  条件: {f : α -> β} (hf : UniformContinuous f)
+定理 一致连续.image_hausdorff
+  条件: {f : α -> β} (hf : 一致连续 f)
   证明: by
   refine Filter.tendsto_lift'.mpr fun U hU => ?_
   filter_upwards [Filter.mem_lift' (hf hU)] with ⟨s, t⟩ ⟨h₁, h₂⟩
@@ -912,8 +912,8 @@ theorem IsUniformInducing.image_hausdorff
   simp only [Function.comp, hausdorffEntourage, SetRel.preimage, SetRel.image, Set.pr
 
 中文:
-定理 IsUniformInducing.image_hausdorff
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+定理 是UniformInducing.image_hausdorff
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: by
   constructor
   change Filter.comap _ (Filter.lift' _ _) = Filter.lift' _ _
@@ -942,8 +942,8 @@ theorem IsUniformEmbedding.image_hausdorff
   injective := hf.injective.image_injective
 
 中文:
-定理 IsUniformEmbedding.image_hausdorff
-  条件: {f : α -> β} (hf : IsUniformEmbedding f)
+定理 是一致嵌入.image_hausdorff
+  条件: {f : α -> β} (hf : 是一致嵌入 f)
   证明: hf.isUniformInducing.image_hausdorff
   injective := hf.injective.image_injective
 
@@ -969,8 +969,8 @@ theorem TotallyBounded.powerset_hausdorff
     
 
 中文:
-定理 TotallyBounded.powerset_hausdorff
-  条件: {t : Set α} (ht : TotallyBounded t)
+定理 全有界.powerset_hausdorff
+  条件: {t : 集合 α} (ht : 全有界 t)
   证明: by
   simp_rw [(𝓤 α).basis_sets.uniformity_hausdorff.totallyBounded_iff, Function.comp_id,
     Set.powerset, Set.ofPred_subset, Set.mem_iUnion]
@@ -1007,8 +1007,8 @@ theorem TotallyBounded.nhds_vietoris_le_nhds_hausdorff
   have : U.IsRefl := ⟨fun _ => refl_mem_unif
 
 中文:
-定理 TotallyBounded.nhds_vietoris_le_nhds_hausdorff
-  条件: {s : Set α} (hs : TotallyBounded s)
+定理 全有界.nhds_vietoris_le_nhds_hausdorff
+  条件: {s : 集合 α} (hs : 全有界 s)
   证明: by
   open UniformSpace TopologicalSpace.vietoris in
   simp_rw [nhds_eq_comap_uniformity,
@@ -1052,8 +1052,8 @@ theorem IsCompact.nhds_hausdorff_eq_nhds_vietoris
 .mem_iff.mp (hU.mem_nhdsSet.mpr hs') hs.nhdsSet_
 
 中文:
-定理 IsCompact.nhds_hausdorff_eq_nhds_vietoris
-  条件: {s : Set α} (hs : IsCompact s)
+定理 是紧集.nhds_hausdorff_eq_nhds_vietoris
+  条件: {s : 集合 α} (hs : 是紧集 s)
   证明: by
   refine le_antisymm ?_ hs.totallyBounded.nhds_vietoris_le_nhds_hausdorff
   simp_rw [TopologicalSpace.nhds_generateFrom, le_iInf₂_iff, Filter.le_principal_iff]
@@ -1093,8 +1093,8 @@ instance [CompactSpace
       ← TopologicalSpace
 
 中文:
-实例 [CompactSpace
-  签名: α] : CompactSpace (Set α) where
+实例 [紧空间
+  签名: α] : 紧空间 (集合 α) where
   定义体: by
     rw [isCompact_iff_ultrafilter_le_nhds]
     rintro f -
@@ -1130,7 +1130,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (Closeds α)
+  签名: : 一致空间 (Closeds α)
   定义体: .comap (↑) (.hausdorff α)
 
 Depends on / 依赖: hausdorff
@@ -1161,7 +1161,7 @@ theorem _root_.Filter.HasBasis.uniformity_closeds
   proof: h.uniformity_hausdorff.comap _
 
 中文:
-定理 _root_.Filter.HasBasis.uniformity_closeds
+定理 _root_.滤子.有基.uniformity_closeds
   证明: h.uniformity_hausdorff.comap _
 
 Depends on / 依赖: h.uniformity_hausdorff.comap, uniformity_hausdorff
@@ -1182,7 +1182,7 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  结论: IsUniformEmbedding ((↑) : Closeds α -> Set α) where
+  结论: 是一致嵌入 ((↑) : Closeds α -> 集合 α) where
   证明: SetLike.coe_injective
   comap_uniformity := rfl
 
@@ -1202,7 +1202,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: UniformContinuous ((↑) : Closeds α -> Set α)
+  结论: 一致连续 ((↑) : Closeds α -> 集合 α)
   证明: isUniformEmbedding_coe.uniformContinuous
 
 Depends on / 依赖: isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous, uniformContinuous
@@ -1220,7 +1220,7 @@ theorem isOpen_inter_nonempty_of_isOpen
 
 中文:
 定理 isOpen_inter_nonempty_of_isOpen
-  条件: {s : Set α} (hs : IsOpen s)
+  条件: {s : 集合 α} (hs : 是开集 s)
   证明: isOpen_induced (UniformSpace.hausdorff.isOpen_inter_nonempty_of_isOpen hs)
 
 Depends on / 依赖: UniformSpace, UniformSpace.hausdorff.isOpen_inter_nonempty_of_isOpen, hausdorff, isOpen_induced, isOpen_inter_nonempty_of_isOpen
@@ -1239,7 +1239,7 @@ theorem isClosed_subsets_of_isClosed
 
 中文:
 定理 isClosed_subsets_of_isClosed
-  条件: {s : Set α} (hs : IsClosed s)
+  条件: {s : 集合 α} (hs : 是闭集 s)
   证明: isClosed_induced hs.powerset_hausdorff
 
 Depends on / 依赖: hs.powerset_hausdorff, isClosed_induced, powerset_hausdorff
@@ -1281,7 +1281,7 @@ theorem totallyBounded_subsets_of_totallyBounded
 
 中文:
 定理 totallyBounded_subsets_of_totallyBounded
-  条件: {t : Set α} (ht : TotallyBounded t)
+  条件: {t : 集合 α} (ht : 全有界 t)
   证明: totallyBounded_preimage isUniformEmbedding_coe.isUniformInducing ht.powerset_hausdorff
 
 Depends on / 依赖: ht.powerset_hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.isUniformInducing, isUniformInducing, powerset_hausdorff, totallyBounded_preimage
@@ -1303,7 +1303,7 @@ alias isClosed_setOf_totallyBounded := isClosed_setOfPred_totallyBounded
 
 中文:
 定理 isClosed_setOfPred_totallyBounded
-  结论: IsClosed {s : Closeds α | TotallyBounded (s : Set α)}
+  结论: 是闭集 {s : Closeds α | 全有界 (s : 集合 α)}
   证明: UniformSpace.hausdorff.isClosed_setOfPred_totallyBounded.preimage uniformContinuous_coe.continuous
 
 @[deprecated (since := "2026-07-09")]
@@ -1349,7 +1349,7 @@ theorem isUniformEmbedding_singleton
 
 中文:
 定理 isUniformEmbedding_singleton
-  结论: IsUniformEmbedding ({·} : α -> Closeds α)
+  结论: 是一致嵌入 ({·} : α -> Closeds α)
   证明: isUniformEmbedding_coe.of_comp_iff.mp UniformSpace.hausdorff.isUniformEmbedding_singleton
 
 Depends on / 依赖: UniformSpace, UniformSpace.hausdorff.isUniformEmbedding_singleton, hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.of_comp_iff.mp, isUniformEmbedding_singleton, of_comp_iff
@@ -1369,7 +1369,7 @@ theorem uniformContinuous_singleton
 
 中文:
 定理 uniformContinuous_singleton
-  结论: UniformContinuous ({·} : α -> Closeds α)
+  结论: 一致连续 ({·} : α -> Closeds α)
   证明: isUniformEmbedding_singleton.uniformContinuous
 
 @[fun_prop]
@@ -1392,7 +1392,7 @@ theorem isEmbedding_singleton
 
 中文:
 定理 isEmbedding_singleton
-  结论: IsEmbedding ({·} : α -> Closeds α)
+  结论: 是嵌入 ({·} : α -> Closeds α)
   证明: isUniformEmbedding_singleton.isEmbedding
 
 @[fun_prop]
@@ -1415,7 +1415,7 @@ theorem continuous_singleton
 
 中文:
 定理 continuous_singleton
-  结论: Continuous ({·} : α -> Closeds α)
+  结论: 连续 ({·} : α -> Closeds α)
   证明: isEmbedding_singleton.continuous
 
 @[fun_prop]
@@ -1442,7 +1442,7 @@ theorem isClosedEmbedding_singleton
 
 中文:
 定理 isClosedEmbedding_singleton
-  结论: Topology.IsClosedEmbedding ({·} : α -> Closeds α) where
+  结论: 拓扑.是闭嵌入 ({·} : α -> Closeds α) where
   证明: isUniformEmbedding_singleton.isEmbedding
   isClosed_range := by
     rw [← SetLike.coe_injective.preimage_image (s := Set.range ({·}))]; rw [← Set.range_comp]
@@ -1493,7 +1493,7 @@ UniformSpace.hausdorff.uniformContinuous_union.comp
 
 中文:
 定理 uniformContinuous_sup
-  结论: UniformContinuous (fun x : Closeds α × Closeds α => x.1 ⊔ x.2)
+  结论: 一致连续 (fun x : Closeds α × Closeds α => x.1 ⊔ x.2)
   证明: isUniformEmbedding_coe.uniformContinuous_iff.mpr
 UniformSpace.hausdorff.uniformContinuous_union.comp
       uniformContinuous_coe.prodMap uniformContinuous_coe
@@ -1513,7 +1513,7 @@ theorem _root_.UniformContinuous.sup_closeds
   proof: uniformContinuous_sup.comp hf.prodMk hg
 
 中文:
-定理 _root_.UniformContinuous.sup_closeds
+定理 _root_.一致连续.sup_closeds
   证明: uniformContinuous_sup.comp hf.prodMk hg
 
 Depends on / 依赖: hf.prodMk, prodMk, uniformContinuous_sup, uniformContinuous_sup.comp
@@ -1533,7 +1533,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSup (Closeds α)
+  签名: 余ntinuousSup (Closeds α)
   定义体: ⟨uniformContinuous_sup.continuous⟩
 
 Depends on / 依赖: continuous, uniformContinuous_sup, uniformContinuous_sup.continuous
@@ -1553,7 +1553,7 @@ UniformSpace.hausdorff.uniformContinuous_prod.comp
 
 中文:
 定理 uniformContinuous_prod
-  结论: UniformContinuous (fun x : Closeds α × Closeds β => x.1 ×ˢ x.2)
+  结论: 一致连续 (fun x : Closeds α × Closeds β => x.1 ×ˢ x.2)
   证明: isUniformEmbedding_coe.uniformContinuous_iff.mpr
 UniformSpace.hausdorff.uniformContinuous_prod.comp
       uniformContinuous_coe.prodMap uniformContinuous_coe
@@ -1576,7 +1576,7 @@ theorem _root_.UniformContinuous.prod_closeds
 @[fun_prop]
 
 中文:
-定理 _root_.UniformContinuous.prod_closeds
+定理 _root_.一致连续.prod_closeds
   结论: {f : α -> Closeds β} {g : α -> Closeds γ}
   证明: uniformContinuous_prod.comp (hf.prodMk hg)
 
@@ -1600,7 +1600,7 @@ theorem continuous_prod
 
 中文:
 定理 continuous_prod
-  结论: Continuous (fun x : Closeds α × Closeds β => x.1 ×ˢ x.2)
+  结论: 连续 (fun x : Closeds α × Closeds β => x.1 ×ˢ x.2)
   证明: uniformContinuous_prod.continuous
 
 Depends on / 依赖: continuous, uniformContinuous_prod, uniformContinuous_prod.continuous
@@ -1622,7 +1622,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space (Closeds α)
+  签名: T0空间 (Closeds α)
   定义体: by
   suffices forall F₁ F₂ : Closeds α, Inseparable F₁ F₂ -> F₁ <= F₂ from
     ⟨fun F₁ F₂ h => le_antisymm (this F₁ F₂ h) (this F₂ F₁ h.symm)⟩
@@ -1653,7 +1653,7 @@ theorem isUniformInducing_closure
 
 中文:
 定理 isUniformInducing_closure
-  结论: IsUniformInducing (Closeds.closure (α := α))
+  结论: 是UniformInducing (Closeds.closure (α := α))
   证明: isUniformEmbedding_coe.isUniformInducing.of_comp_iff.mp
     UniformSpace.hausdorff.isUniformInducing_closure
 -/
@@ -1673,7 +1673,7 @@ theorem uniformContinuous_closure
 
 中文:
 定理 uniformContinuous_closure
-  结论: UniformContinuous (Closeds.closure (α := α))
+  结论: 一致连续 (Closeds.closure (α := α))
   证明: isUniformInducing_closure.uniformContinuous
 
 @[fun_prop]
@@ -1692,7 +1692,7 @@ theorem continuous_closure
 
 中文:
 定理 continuous_closure
-  结论: Continuous (Closeds.closure (α := α))
+  结论: 连续 (Closeds.closure (α := α))
   证明: uniformContinuous_closure.continuous
 -/
 theorem continuous_closure : Continuous (Closeds.closure (α := α)) :=
@@ -1710,8 +1710,8 @@ instance [CompactSpace
 @[simp]
 
 中文:
-实例 [CompactSpace
-  签名: α] : CompactSpace (Closeds α) where
+实例 [紧空间
+  签名: α] : 紧空间 (Closeds α) where
   定义体: by simpa [gi.l_surjective.range_eq]
     using isCompact_univ.image continuous_closure
 
@@ -1739,7 +1739,7 @@ theorem compactSpace_iff
 
 中文:
 定理 compactSpace_iff
-  结论: CompactSpace (Closeds α) ↔ CompactSpace α
+  结论: 紧空间 (Closeds α) ↔ 紧空间 α
   证明: by
   refine ⟨fun _ => compactSpace_of_finite_subfamily_closed fun {ι} F hF₁ hF₂ => ?_,
     fun _ => inferInstance⟩
@@ -1774,7 +1774,7 @@ theorem noncompactSpace_iff
 
 中文:
 定理 noncompactSpace_iff
-  结论: NoncompactSpace (Closeds α) ↔ NoncompactSpace α
+  结论: Noncompact空间 (Closeds α) ↔ Noncompact空间 α
   证明: by
   simp_rw [← not_compactSpace_iff, compactSpace_iff]
 
@@ -1792,8 +1792,8 @@ instance [NoncompactSpace
   body: noncompactSpace_iff.mpr ‹_›
 
 中文:
-实例 [NoncompactSpace
-  签名: α] : NoncompactSpace (Closeds α)
+实例 [Noncompact空间
+  签名: α] : Noncompact空间 (Closeds α)
   定义体: noncompactSpace_iff.mpr ‹_›
 
 Depends on / 依赖: noncompactSpace_iff, noncompactSpace_iff.mpr
@@ -1816,7 +1816,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (Compacts α)
+  签名: : 一致空间 (余mpacts α)
   定义体: .replaceTopology (.comap (↑) (.hausdorff α)) ext_nhds fun K => by
     simp_rw [nhds_induced, K.isCompact.nhds_hausdorff_eq_nhds_vietoris]
 
@@ -1849,7 +1849,7 @@ theorem _root_.Filter.HasBasis.uniformity_compacts
   proof: h.uniformity_hausdorff.comap _
 
 中文:
-定理 _root_.Filter.HasBasis.uniformity_compacts
+定理 _root_.滤子.有基.uniformity_compacts
   证明: h.uniformity_hausdorff.comap _
 
 Depends on / 依赖: h.uniformity_hausdorff.comap, uniformity_hausdorff
@@ -1870,7 +1870,7 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  结论: IsUniformEmbedding ((↑) : Compacts α -> Set α) where
+  结论: 是一致嵌入 ((↑) : 余mpacts α -> 集合 α) where
   证明: SetLike.coe_injective
   comap_uniformity := rfl
 
@@ -1890,7 +1890,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: UniformContinuous ((↑) : Compacts α -> Set α)
+  结论: 一致连续 ((↑) : 余mpacts α -> 集合 α)
   证明: isUniformEmbedding_coe.uniformContinuous
 
 Depends on / 依赖: isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous, uniformContinuous
@@ -1910,8 +1910,8 @@ theorem isUniformEmbedding_toCloseds
 
 中文:
 定理 isUniformEmbedding_toCloseds
-  条件: [T2Space α]
-  结论: IsUniformEmbedding (toCloseds (α := α)) where
+  条件: [T2空间 α]
+  结论: 是一致嵌入 (toCloseds (α := α)) where
   证明: toCloseds_injective
   comap_uniformity := Filter.comap_comap
 -/
@@ -1932,8 +1932,8 @@ theorem uniformContinuous_toCloseds
 
 中文:
 定理 uniformContinuous_toCloseds
-  条件: [T2Space α]
-  结论: UniformContinuous (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 一致连续 (toCloseds (α := α))
   证明: isUniformEmbedding_toCloseds.uniformContinuous
 
 @[fun_prop]
@@ -1955,8 +1955,8 @@ theorem isEmbedding_toCloseds
 
 中文:
 定理 isEmbedding_toCloseds
-  条件: [T2Space α]
-  结论: IsEmbedding (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 是嵌入 (toCloseds (α := α))
   证明: isUniformEmbedding_toCloseds.isEmbedding
 
 @[fun_prop]
@@ -1978,8 +1978,8 @@ theorem continuous_toCloseds
 
 中文:
 定理 continuous_toCloseds
-  条件: [T2Space α]
-  结论: Continuous (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 连续 (toCloseds (α := α))
   证明: uniformContinuous_toCloseds.continuous
 
 @[fun_prop]
@@ -2003,7 +2003,7 @@ theorem isClosedEmbedding_toCloseds
 
 中文:
 定理 isClosedEmbedding_toCloseds
-  条件: [T2Space α] [CompleteSpace α]
+  条件: [T2空间 α] [完备空间 α]
   证明: isEmbedding_toCloseds
   isClosed_range := by
     convert! Closeds.isClosed_setOfPred_totallyBounded
@@ -2030,7 +2030,7 @@ theorem totallyBounded_subsets_of_totallyBounded
 
 中文:
 定理 totallyBounded_subsets_of_totallyBounded
-  条件: {t : Set α} (ht : TotallyBounded t)
+  条件: {t : 集合 α} (ht : 全有界 t)
   证明: totallyBounded_preimage isUniformEmbedding_coe.isUniformInducing ht.powerset_hausdorff
 
 Depends on / 依赖: ht.powerset_hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.isUniformInducing, isUniformInducing, powerset_hausdorff, totallyBounded_preimage
@@ -2049,7 +2049,7 @@ theorem isUniformEmbedding_singleton
 
 中文:
 定理 isUniformEmbedding_singleton
-  结论: IsUniformEmbedding ({·} : α -> Compacts α)
+  结论: 是一致嵌入 ({·} : α -> 余mpacts α)
   证明: isUniformEmbedding_coe.of_comp_iff.mp UniformSpace.hausdorff.isUniformEmbedding_singleton
 
 Depends on / 依赖: UniformSpace, UniformSpace.hausdorff.isUniformEmbedding_singleton, hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.of_comp_iff.mp, isUniformEmbedding_singleton, of_comp_iff
@@ -2067,7 +2067,7 @@ theorem uniformContinuous_singleton
 
 中文:
 定理 uniformContinuous_singleton
-  结论: UniformContinuous ({·} : α -> Compacts α)
+  结论: 一致连续 ({·} : α -> 余mpacts α)
   证明: isUniformEmbedding_singleton.uniformContinuous
 
 Depends on / 依赖: isUniformEmbedding_singleton, isUniformEmbedding_singleton.uniformContinuous, uniformContinuous
@@ -2106,7 +2106,7 @@ theorem _root_.UniformContinuous.sup_compacts
   proof: uniformContinuous_sup.comp hf.prodMk hg
 
 中文:
-定理 _root_.UniformContinuous.sup_compacts
+定理 _root_.一致连续.sup_compacts
   证明: uniformContinuous_sup.comp hf.prodMk hg
 
 Depends on / 依赖: hf.prodMk, prodMk, uniformContinuous_sup, uniformContinuous_sup.comp
@@ -2148,8 +2148,8 @@ theorem _root_.UniformContinuous.prod_compacts
   proof: uniformContinuous_prod.comp (hf.prodMk hg)
 
 中文:
-定理 _root_.UniformContinuous.prod_compacts
-  结论: {f : α -> Compacts β} {g : α -> Compacts γ}
+定理 _root_.一致连续.prod_compacts
+  结论: {f : α -> 余mpacts β} {g : α -> 余mpacts γ}
   证明: uniformContinuous_prod.comp (hf.prodMk hg)
 
 Depends on / 依赖: hf.prodMk, prodMk, uniformContinuous_prod, uniformContinuous_prod.comp
@@ -2168,8 +2168,8 @@ theorem _root_.UniformContinuous.compacts_map
   proof: isUniformEmbedding_coe.uniformContinuous_iff.mpr hf.image_hausdorff.comp uniformContinuous_coe
 
 中文:
-定理 _root_.UniformContinuous.compacts_map
-  条件: {f : α -> β} (hf : UniformContinuous f)
+定理 _root_.一致连续.compacts_map
+  条件: {f : α -> β} (hf : 一致连续 f)
   证明: isUniformEmbedding_coe.uniformContinuous_iff.mpr hf.image_hausdorff.comp uniformContinuous_coe
 
 Depends on / 依赖: hf.image_hausdorff.comp, image_hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous_iff.mpr, uniformContinuous_coe, uniformContinuous_iff
@@ -2188,8 +2188,8 @@ theorem _root_.IsUniformInducing.compacts_map
     hf.image_hausdorff.comp isUniformEmbedding_coe.isUniformInducing
 
 中文:
-定理 _root_.IsUniformInducing.compacts_map
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+定理 _root_.是UniformInducing.compacts_map
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: .of_comp hf.uniformContinuous.compacts_map uniformContinuous_coe
     hf.image_hausdorff.comp isUniformEmbedding_coe.isUniformInducing
 
@@ -2210,8 +2210,8 @@ theorem _root_.IsUniformEmbedding.compacts_map
   injective := map_injective hf.uniformContinuous.continuous hf.injective
 
 中文:
-定理 _root_.IsUniformEmbedding.compacts_map
-  条件: {f : α -> β} (hf : IsUniformEmbedding f)
+定理 _root_.是一致嵌入.compacts_map
+  条件: {f : α -> β} (hf : 是一致嵌入 f)
   证明: hf.isUniformInducing.compacts_map
   injective := map_injective hf.uniformContinuous.continuous hf.injective
 
@@ -2234,7 +2234,7 @@ instance [DiscreteUniformity
 
 中文:
 实例 [DiscreteUniformity
-  签名: α] : DiscreteUniformity (Compacts α)
+  签名: α] : DiscreteUniformity (余mpacts α)
   定义体: isUniformEmbedding_coe.discreteUniformity
 
 @[simp]
@@ -2255,7 +2255,7 @@ theorem discreteUniformity_iff
 
 中文:
 定理 discreteUniformity_iff
-  结论: DiscreteUniformity (Compacts α) ↔ DiscreteUniformity α
+  结论: DiscreteUniformity (余mpacts α) ↔ DiscreteUniformity α
   证明: ⟨fun _ => isUniformEmbedding_singleton.discreteUniformity, fun _ => inferInstance⟩
 
 Depends on / 依赖: discreteUniformity, isUniformEmbedding_singleton, isUniformEmbedding_singleton.discreteUniformity
@@ -2277,8 +2277,8 @@ instance [CompleteSpace
   have hl : l.Totally
 
 中文:
-实例 [CompleteSpace
-  签名: α] : CompleteSpace (Compacts α)
+实例 [完备空间
+  签名: α] : 完备空间 (余mpacts α)
   定义体: by
   refine ⟨fun {f} ⟨_, hf⟩ => ?_⟩
   grw [← Filter.curry_le_prod, (𝓤 α).basis_sets.uniformity_compacts.ge_iff] at hf
@@ -2349,7 +2349,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (NonemptyCompacts α)
+  签名: : 一致空间 (NonemptyCompacts α)
   定义体: .replaceTopology (.comap (↑) (.hausdorff α)) ext_nhds fun K => by
     simp_rw [nhds_induced, K.isCompact.nhds_hausdorff_eq_nhds_vietoris]
 
@@ -2382,7 +2382,7 @@ theorem _root_.Filter.HasBasis.uniformity_nonemptyCompacts
   proof: h.uniformity_hausdorff.comap _
 
 中文:
-定理 _root_.Filter.HasBasis.uniformity_nonemptyCompacts
+定理 _root_.滤子.有基.uniformity_nonemptyCompacts
   证明: h.uniformity_hausdorff.comap _
 
 Depends on / 依赖: h.uniformity_hausdorff.comap, uniformity_hausdorff
@@ -2404,7 +2404,7 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  结论: IsUniformEmbedding ((↑) : NonemptyCompacts α -> Set α) where
+  结论: 是一致嵌入 ((↑) : NonemptyCompacts α -> 集合 α) where
   证明: SetLike.coe_injective
   comap_uniformity := rfl
 
@@ -2424,7 +2424,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: UniformContinuous ((↑) : NonemptyCompacts α -> Set α)
+  结论: 一致连续 ((↑) : NonemptyCompacts α -> 集合 α)
   证明: isUniformEmbedding_coe.uniformContinuous
 
 Depends on / 依赖: isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous, uniformContinuous
@@ -2444,8 +2444,8 @@ theorem isUniformEmbedding_toCloseds
 
 中文:
 定理 isUniformEmbedding_toCloseds
-  条件: [T2Space α]
-  结论: IsUniformEmbedding (toCloseds (α := α)) where
+  条件: [T2空间 α]
+  结论: 是一致嵌入 (toCloseds (α := α)) where
   证明: toCloseds_injective
   comap_uniformity := Filter.comap_comap
 -/
@@ -2466,8 +2466,8 @@ theorem uniformContinuous_toCloseds
 
 中文:
 定理 uniformContinuous_toCloseds
-  条件: [T2Space α]
-  结论: UniformContinuous (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 一致连续 (toCloseds (α := α))
   证明: isUniformEmbedding_toCloseds.uniformContinuous
 
 @[fun_prop]
@@ -2489,8 +2489,8 @@ theorem isEmbedding_toCloseds
 
 中文:
 定理 isEmbedding_toCloseds
-  条件: [T2Space α]
-  结论: IsEmbedding (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 是嵌入 (toCloseds (α := α))
   证明: isUniformEmbedding_toCloseds.isEmbedding
 
 @[fun_prop]
@@ -2512,8 +2512,8 @@ theorem continuous_toCloseds
 
 中文:
 定理 continuous_toCloseds
-  条件: [T2Space α]
-  结论: Continuous (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 连续 (toCloseds (α := α))
   证明: uniformContinuous_toCloseds.continuous
 
 @[fun_prop]
@@ -2532,7 +2532,7 @@ theorem isClosedEmbedding_toCloseds
 
 中文:
 定理 isClosedEmbedding_toCloseds
-  条件: [T2Space α] [CompleteSpace α]
+  条件: [T2空间 α] [完备空间 α]
   证明: Compacts.isClosedEmbedding_toCloseds.comp isClosedEmbedding_toCompacts
 -/
 theorem isClosedEmbedding_toCloseds [T2Space α] [CompleteSpace α] :
@@ -2550,7 +2550,7 @@ theorem isUniformEmbedding_toCompacts
 
 中文:
 定理 isUniformEmbedding_toCompacts
-  结论: IsUniformEmbedding (toCompacts (α := α)) where
+  结论: 是一致嵌入 (toCompacts (α := α)) where
   证明: toCompacts_injective
   comap_uniformity := Filter.comap_comap
 -/
@@ -2568,7 +2568,7 @@ theorem uniformContinuous_toCompacts
 
 中文:
 定理 uniformContinuous_toCompacts
-  结论: UniformContinuous (toCompacts (α := α))
+  结论: 一致连续 (toCompacts (α := α))
   证明: isUniformEmbedding_toCompacts.uniformContinuous
 -/
 theorem uniformContinuous_toCompacts : UniformContinuous (toCompacts (α := α)) :=
@@ -2584,7 +2584,7 @@ theorem totallyBounded_subsets_of_totallyBounded
 
 中文:
 定理 totallyBounded_subsets_of_totallyBounded
-  条件: {t : Set α} (ht : TotallyBounded t)
+  条件: {t : 集合 α} (ht : 全有界 t)
   证明: totallyBounded_preimage isUniformEmbedding_coe.isUniformInducing ht.powerset_hausdorff
 
 Depends on / 依赖: ht.powerset_hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.isUniformInducing, isUniformInducing, powerset_hausdorff, totallyBounded_preimage
@@ -2603,7 +2603,7 @@ theorem isUniformEmbedding_singleton
 
 中文:
 定理 isUniformEmbedding_singleton
-  结论: IsUniformEmbedding ({·} : α -> NonemptyCompacts α)
+  结论: 是一致嵌入 ({·} : α -> NonemptyCompacts α)
   证明: isUniformEmbedding_coe.of_comp_iff.mp UniformSpace.hausdorff.isUniformEmbedding_singleton
 
 Depends on / 依赖: UniformSpace, UniformSpace.hausdorff.isUniformEmbedding_singleton, hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.of_comp_iff.mp, isUniformEmbedding_singleton, of_comp_iff
@@ -2621,7 +2621,7 @@ theorem uniformContinuous_singleton
 
 中文:
 定理 uniformContinuous_singleton
-  结论: UniformContinuous ({·} : α -> NonemptyCompacts α)
+  结论: 一致连续 ({·} : α -> NonemptyCompacts α)
   证明: isUniformEmbedding_singleton.uniformContinuous
 
 Depends on / 依赖: isUniformEmbedding_singleton, isUniformEmbedding_singleton.uniformContinuous, uniformContinuous
@@ -2660,7 +2660,7 @@ theorem _root_.UniformContinuous.sup_nonemptyCompacts
   proof: uniformContinuous_sup.comp hf.prodMk hg
 
 中文:
-定理 _root_.UniformContinuous.sup_nonemptyCompacts
+定理 _root_.一致连续.sup_nonemptyCompacts
   证明: uniformContinuous_sup.comp hf.prodMk hg
 
 Depends on / 依赖: hf.prodMk, prodMk, uniformContinuous_sup, uniformContinuous_sup.comp
@@ -2701,7 +2701,7 @@ theorem _root_.UniformContinuous.prod_nonemptyCompacts
   proof: uniformContinuous_prod.comp (hf.prodMk hg)
 
 中文:
-定理 _root_.UniformContinuous.prod_nonemptyCompacts
+定理 _root_.一致连续.prod_nonemptyCompacts
   证明: uniformContinuous_prod.comp (hf.prodMk hg)
 
 Depends on / 依赖: hf.prodMk, prodMk, uniformContinuous_prod, uniformContinuous_prod.comp
@@ -2720,8 +2720,8 @@ theorem _root_.UniformContinuous.nonemptyCompacts_map
   proof: isUniformEmbedding_coe.uniformContinuous_iff.mpr hf.image_hausdorff.comp uniformContinuous_coe
 
 中文:
-定理 _root_.UniformContinuous.nonemptyCompacts_map
-  条件: {f : α -> β} (hf : UniformContinuous f)
+定理 _root_.一致连续.nonemptyCompacts_map
+  条件: {f : α -> β} (hf : 一致连续 f)
   证明: isUniformEmbedding_coe.uniformContinuous_iff.mpr hf.image_hausdorff.comp uniformContinuous_coe
 
 Depends on / 依赖: hf.image_hausdorff.comp, image_hausdorff, isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous_iff.mpr, uniformContinuous_coe, uniformContinuous_iff
@@ -2740,8 +2740,8 @@ theorem _root_.IsUniformInducing.nonemptyCompacts_map
     hf.image_hausdorff.comp isUniformEmbedding_coe.isUniformInducing
 
 中文:
-定理 _root_.IsUniformInducing.nonemptyCompacts_map
-  条件: {f : α -> β} (hf : IsUniformInducing f)
+定理 _root_.是UniformInducing.nonemptyCompacts_map
+  条件: {f : α -> β} (hf : 是UniformInducing f)
   证明: .of_comp hf.uniformContinuous.nonemptyCompacts_map uniformContinuous_coe
     hf.image_hausdorff.comp isUniformEmbedding_coe.isUniformInducing
 
@@ -2762,8 +2762,8 @@ theorem _root_.IsUniformEmbedding.nonemptyCompacts_map
   injective := map_injective hf.uniformContinuous.continuous hf.injective
 
 中文:
-定理 _root_.IsUniformEmbedding.nonemptyCompacts_map
-  条件: {f : α -> β} (hf : IsUniformEmbedding f)
+定理 _root_.是一致嵌入.nonemptyCompacts_map
+  条件: {f : α -> β} (hf : 是一致嵌入 f)
   证明: hf.isUniformInducing.nonemptyCompacts_map
   injective := map_injective hf.uniformContinuous.continuous hf.injective
 
@@ -2826,8 +2826,8 @@ instance [CompleteSpace
 @[simp]
 
 中文:
-实例 [CompleteSpace
-  签名: α] : CompleteSpace (NonemptyCompacts α)
+实例 [完备空间
+  签名: α] : 完备空间 (NonemptyCompacts α)
   定义体: isUniformEmbedding_toCompacts.completeSpace isClosedEmbedding_toCompacts.isClosed_range.isComplete
 
 @[simp]
@@ -2855,7 +2855,7 @@ obtain ⟨K, hK⟩ := CompleteSpace.complete hf.map uniformContinuous_singleton
 
 中文:
 定理 completeSpace_iff
-  结论: CompleteSpace (NonemptyCompacts α) ↔ CompleteSpace α
+  结论: 完备空间 (NonemptyCompacts α) ↔ 完备空间 α
   证明: by
   refine ⟨fun _ => ⟨fun {f} hf => ?_⟩, fun _ => inferInstance⟩
 obtain ⟨K, hK⟩ := CompleteSpace.complete hf.map uniformContinuous_singleton
@@ -2889,7 +2889,7 @@ theorem _root_.TopologicalSpace.Compacts.completeSpace_iff
   mpr _ := inferInstance
 
 中文:
-定理 _root_.TopologicalSpace.Compacts.completeSpace_iff
+定理 _root_.拓扑空间.余mpacts.completeSpace_iff
   证明: NonemptyCompacts.completeSpace_iff.mp
       NonemptyCompacts.isUniformEmbedding_toCompacts.completeSpace
         isClosedEmbedding_toCompacts.isClosed_range.isComplete

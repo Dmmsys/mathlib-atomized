@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB5 (ModuleCat.{u} R)
+  签名: AB5 (模范畴.{u} R)
   定义体: HasExactColimitsOfShape.domain_of_functor J (forget₂ (ModuleCat R) AddCommGrpCat)
 -/
 instance : AB5 (ModuleCat.{u} R) where
@@ -55,7 +55,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB4 (ModuleCat.{u} R)
+  签名: AB4 (模范畴.{u} R)
   定义体: AB4.of_AB5 _
 
 Depends on / 依赖: AB4.of_AB5, of_AB5
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB4Star (ModuleCat.{u} R)
+  签名: AB4Star (模范畴.{u} R)
   定义体: HasExactLimitsOfShape.domain_of_functor (Discrete J) (forget₂ (ModuleCat R) AddCommGrpCat.{u})
 
 Depends on / 依赖: AddCommGrpCat, Discrete, HasExactLimitsOfShape, HasExactLimitsOfShape.domain_of_functor, ModuleCat, domain_of_functor
@@ -96,9 +96,9 @@ lemma ModuleCat.isSeparator
     (Shrink.linearEquiv R R : Shrink R ->ₗ
 
 中文:
-引理 ModuleCat.isSeparator
+引理 模范畴.isSeparator
   条件: [Small.{v} R]
-  结论: IsSeparator (ModuleCat.of.{v} R (Shrink.{v} R))
+  结论: IsSeparator (模范畴.of.{v} R (Shrink.{v} R))
   证明: fun X Y f g h => by
   simp only [ObjectProperty.singleton_iff, ModuleCat.hom_ext_iff, hom_comp,
     LinearMap.ext_iff, LinearMap.coe_comp, Function.comp_apply, forall_eq'] at h
@@ -126,7 +126,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] : HasSeparator (ModuleCat.{v} R) where
+  签名: R] : 有Separator (模范畴.{v} R) where
   定义体: ⟨ModuleCat.of R (Shrink.{v} R), ModuleCat.isSeparator R⟩
 
 Depends on / 依赖: ModuleCat, ModuleCat.isSeparator, ModuleCat.of, Shrink, isSeparator
@@ -143,6 +143,6 @@ instance :
 
 中文:
 实例 :
-  签名: IsGrothendieckAbelian.{u} (ModuleCat.{u} R)
+  签名: 是GrothendieckAbelian.{u} (模范畴.{u} R)
 -/
 instance : IsGrothendieckAbelian.{u} (ModuleCat.{u} R) where

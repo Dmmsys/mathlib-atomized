@@ -36,7 +36,7 @@ definition GradedAlgebra.ι
     (ι R).codRestrict _ fun m => by simpa only [pow_one] using LinearMap.mem_range_self _ m
 
 中文:
-定义 GradedAlgebra.ι
+定义 分次代数.ι
   签名: :
   定义体: DirectSum.lof R Nat (fun i => ⋀[R]^i M) 1 ∘ₗ
     (ι R).codRestrict _ fun m => by simpa only [pow_one] using LinearMap.mem_range_self _ m
@@ -55,7 +55,7 @@ theorem GradedAlgebra.ι_apply
   proof: rfl
 
 中文:
-定理 GradedAlgebra.ι_apply
+定理 分次代数.ι_apply
   条件: (m : M)
   证明: rfl
 -/
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike.GradedMonoid fun i
+  签名: 集合状.分次幺半群 fun i
   定义体: Submodule.nat_power_gradedMonoid (LinearMap.range (ι R : M ->ₗ[R] ExteriorAlgebra R M))
 
 Depends on / 依赖: ExteriorAlgebra, LinearMap, LinearMap.range, Submodule, Submodule.nat_power_gradedMonoid, nat_power_gradedMonoid
@@ -98,9 +98,9 @@ theorem GradedAlgebra.ι_sq_zero
   exact DFinsupp.single_eq_zero.mpr (Subtype.ext <| ExteriorAlgebra.ι_sq_zero _)
 
 中文:
-定理 GradedAlgebra.ι_sq_zero
+定理 分次代数.ι_sq_zero
   条件: (m : M)
-  结论: GradedAlgebra.ι R M m * GradedAlgebra.ι R M m = 0
+  结论: 分次代数.ι R M m * 分次代数.ι R M m = 0
   证明: by
   rw [GradedAlgebra.ι_apply]; rw [DirectSum.of_mul_of]
   exact DFinsupp.single_eq_zero.mpr (Subtype.ext <| ExteriorAlgebra.ι_sq_zero _)
@@ -120,7 +120,7 @@ definition GradedAlgebra.liftι
   body: lift R ⟨by apply GradedAlgebra.ι R M, GradedAlgebra.ι_sq_zero R M⟩
 
 中文:
-定义 GradedAlgebra.liftι
+定义 分次代数.liftι
   签名: :
   定义体: lift R ⟨by apply GradedAlgebra.ι R M, GradedAlgebra.ι_sq_zero R M⟩
 
@@ -145,7 +145,7 @@ theorem GradedAlgebra.liftι_eq
   | mem_mul _ h
 
 中文:
-定理 GradedAlgebra.liftι_eq
+定理 分次代数.liftι_eq
   条件: (i : 自然数) (x : ⋀[R]^i M)
   证明: by
   obtain ⟨x, hx⟩ := x
@@ -186,7 +186,7 @@ instance gradedAlgebra
 
 中文:
 实例 gradedAlgebra
-  签名: : GradedAlgebra (fun i : 自然数 => ⋀[R]^i M)
+  签名: : 分次代数 (fun i : 自然数 => ⋀[R]^i M)
   定义体: GradedAlgebra.ofAlgHom _
     (-- while not necessary, the `by apply` makes this elaborate faster
     by apply GradedAlgebra.liftι R M)

@@ -64,11 +64,11 @@ class SemiCartesianMonoidalCategory
     - snd_def((X Y : C)) : snd X Y = isTerminalTensorUnit.from X ▷ Y ≫ (fun_ Y).hom  [default: by cat_disch]
 
 中文:
-类 SemiCartesianMonoidalCategory
-  参数: (C : 类型u) [Category.{v} C]
-  继承: MonoidalCategory C
+类 SemiCartesianMonoidal范畴
+  参数: (C : 类型u) [范畴.{v} C]
+  继承: 幺半群范畴 C
   公理与运算 (5 个):
-    - isTerminalTensorUnit : IsTerminal (𝟙_ C)
+    - isTerminalTensorUnit : 是终止 (𝟙_ C)
     - fst((X Y : C)) : X otimes Y ⟶ X
     - snd((X Y : C)) : X otimes Y ⟶ Y
     - fst_def((X Y : C)) : fst X Y = X ◁ isTerminalTensorUnit.from Y ≫ (ρ_ X).hom  [默认: by cat_disch]
@@ -207,10 +207,10 @@ class CartesianMonoidalCategory
     - tensorProductIsBinaryProduct((X Y : C)) : IsLimit BinaryFan.mk (fst X Y) (snd X Y)
 
 中文:
-类 CartesianMonoidalCategory
-  参数: (C : 类型u) [Category.{v} C]
+类 CartesianMonoidal范畴
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - tensorProductIsBinaryProduct((X Y : C)) : IsLimit BinaryFan.mk (fst X Y) (snd X Y)
+    - tensorProductIsBinaryProduct((X Y : C)) : 是极限 BinaryFan.mk (fst X Y) (snd X Y)
 
 Depends on / 依赖: Functor, Functor.isContinuous_of_coverPreserving, isContinuous_of_coverPreserving, over_map_compatiblePreserving, over_map_coverPreserving
 -/
@@ -489,7 +489,7 @@ abbreviation ofChosenFiniteProducts
 
 中文:
 缩写 ofChosenFiniteProducts
-  签名: : CartesianMonoidalCategory C
+  签名: : CartesianMonoidal范畴 C
   定义体: letI : MonoidalCategoryStruct C := {
     tensorUnit := 𝒯.cone.pt
     tensorObj := tensorObj ℬ
@@ -548,7 +548,7 @@ abbreviation ofHasFiniteProducts
 
 中文:
 缩写 ofHasFiniteProducts
-  签名: [HasFiniteProducts C]
+  签名: [有FiniteProducts C]
   定义体: .ofChosenFiniteProducts (getLimitCone (.empty C)) (getLimitCone <| pair · ·)
 
 Depends on / 依赖: getLimitCone, ofChosenFiniteProducts
@@ -1832,8 +1832,8 @@ definition _root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory
   body: { hom := lift (snd _ _) (fst _ _), inv := lift (snd _ _) (fst _ _) }
 
 中文:
-定义 _root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory
-  签名: : BraidedCategory C where
+定义 _root_.范畴论.辫范畴.ofCartesianMonoidalCategory
+  签名: : 辫范畴 C where
   定义体: { hom := lift (snd _ _) (fst _ _), inv := lift (snd _ _) (fst _ _) }
 -/
 def _root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory : BraidedCategory C where
@@ -1849,7 +1849,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (BraidedCategory C)
+  签名: 非空 (辫范畴 C)
   定义体: ⟨.ofCartesianMonoidalCategory⟩
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -1865,7 +1865,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (BraidedCategory C)
+  签名: 子单例 (辫范畴 C)
 -/
 instance : Subsingleton (BraidedCategory C) where
   allEq
@@ -1887,7 +1887,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (SymmetricCategory C)
+  签名: 子单例 (对称范畴 C)
   定义体: by rintro ⟨_⟩ ⟨_⟩; congr; exact Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1966,7 +1966,7 @@ lemma preservesLimit_empty_of_isIso_terminalComparison
 
 中文:
 引理 preservesLimit_empty_of_isIso_terminalComparison
-  条件: [IsIso (terminalComparison F)]
+  条件: [是同构 (terminalComparison F)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone isTerminalTensorUnit
   apply isLimitChangeEmptyCone D isTerminalTensorUnit
@@ -1993,7 +1993,7 @@ definition preservesTerminalIso
 
 中文:
 定义 preservesTerminalIso
-  签名: [h : PreservesLimit (Functor.empty.{0} C) F]
+  签名: [h : 保持极限 (函子.empty.{0} C) F]
   定义体: (isLimitChangeEmptyCone D (isLimitOfPreserves _ isTerminalTensorUnit) (asEmptyCone (F.obj (𝟙_ C)))
     (Iso.refl _)).conePointUniqueUpToIso isTerminalTensorUnit
 
@@ -2017,7 +2017,7 @@ lemma preservesTerminalIso_hom
 
 中文:
 引理 preservesTerminalIso_hom
-  条件: [PreservesLimit (Functor.empty.{0} C) F]
+  条件: [保持极限 (函子.empty.{0} C) F]
   证明: toUnit_unique _ _
 
 Depends on / 依赖: comp_mem_coverings, toUnit_unique
@@ -2039,7 +2039,7 @@ instance terminalComparison_isIso_of_preservesLimits
 
 中文:
 实例 terminalComparison_isIso_of_preservesLimits
-  签名: [PreservesLimit (Functor.empty.{0} C) F]
+  签名: [保持极限 (函子.empty.{0} C) F]
   定义体: by
   rw [← preservesTerminalIso_hom]
   infer_instance
@@ -2090,7 +2090,7 @@ lemma preservesTerminalIso_comp
 
 中文:
 引理 preservesTerminalIso_comp
-  结论: [PreservesLimit (Functor.empty.{0} C) F]
+  结论: [保持极限 (函子.empty.{0} C) F]
   证明: by
   cat_disch
 
@@ -2189,7 +2189,7 @@ theorem inv_prodComparison_map_fst
 
 中文:
 定理 inv_prodComparison_map_fst
-  条件: [IsIso (prodComparison F A B)]
+  条件: [是同构 (prodComparison F A B)]
   证明: by simp [IsIso.inv_comp_eq]
 
 @[reassoc (attr := simp)]
@@ -2210,7 +2210,7 @@ theorem inv_prodComparison_map_snd
 
 中文:
 定理 inv_prodComparison_map_snd
-  条件: [IsIso (prodComparison F A B)]
+  条件: [是同构 (prodComparison F A B)]
   证明: by simp [IsIso.inv_comp_eq]
 
 Depends on / 依赖: IsIso.inv_comp_eq, inv_comp_eq
@@ -2314,7 +2314,7 @@ theorem prodComparison_inv_natural
 
 中文:
 定理 prodComparison_inv_natural
-  条件: (f : A ⟶ A') (g : B ⟶ B') [IsIso (prodComparison F A' B')]
+  条件: (f : A ⟶ A') (g : B ⟶ B') [是同构 (prodComparison F A' B')]
   证明: by
   rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural]
 
@@ -2338,7 +2338,7 @@ theorem prodComparison_inv_natural_whiskerLeft
 
 中文:
 定理 prodComparison_inv_natural_whiskerLeft
-  条件: (g : B ⟶ B') [IsIso (prodComparison F A B')]
+  条件: (g : B ⟶ B') [是同构 (prodComparison F A B')]
   证明: by
   rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerLeft]
 
@@ -2362,7 +2362,7 @@ theorem prodComparison_inv_natural_whiskerRight
 
 中文:
 定理 prodComparison_inv_natural_whiskerRight
-  条件: (f : A ⟶ A') [IsIso (prodComparison F A' B)]
+  条件: (f : A ⟶ A') [是同构 (prodComparison F A' B)]
   证明: by
   rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerRight]
 
@@ -2438,7 +2438,7 @@ definition prodComparisonNatTrans
       prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map
 
 中文:
-定义 prodComparisonNatTrans
+定义 prodComparison自然数Trans
   签名: (A : C)
   定义体: prodComparison F A B
   naturality x y f := by
@@ -2468,7 +2468,7 @@ theorem prodComparisonNatTrans_comp
   ext; simp [prodComparison_comp]
 
 中文:
-定理 prodComparisonNatTrans_comp
+定理 prodComparison自然数Trans_comp
   证明: by
   ext; simp [prodComparison_comp]
 
@@ -2489,7 +2489,7 @@ lemma prodComparisonNatTrans_id
   proof: by ext; simp
 
 中文:
-引理 prodComparisonNatTrans_id
+引理 prodComparison自然数Trans_id
   证明: by ext; simp
 -/
 lemma prodComparisonNatTrans_id :
@@ -2511,7 +2511,7 @@ definition prodComparisonBifunctorNatTrans
     apply hom_ext <;> simp [← Functor.map_comp]
 
 中文:
-定义 prodComparisonBifunctorNatTrans
+定义 prodComparisonBifunctor自然数Trans
   签名: :
   定义体: prodComparisonNatTrans F A
   naturality x y f := by
@@ -2542,7 +2542,7 @@ theorem prodComparisonBifunctorNatTrans_comp
   ext; simp [prodComparison_comp]
 
 中文:
-定理 prodComparisonBifunctorNatTrans_comp
+定理 prodComparisonBifunctor自然数Trans_comp
   结论: prodComparisonBifunctor自然数Trans (F ⋙ G) =
   证明: by
   ext; simp [prodComparison_comp]
@@ -2573,8 +2573,8 @@ instance [forall
   apply NatIso.isIso_of_isIso_app
 
 中文:
-实例 [forall
-  签名: A B, IsIso (prodComparison F A B)] : IsIso (prodComparisonBifunctor自然数Trans F)
+实例 [对任意
+  签名: A B, 是同构 (prodComparison F A B)] : 是同构 (prodComparisonBifunctor自然数Trans F)
   定义体: by
   let : forall X, IsIso ((prodComparisonBifunctorNatTrans F).app X) :=
     fun _ => by dsimp; apply NatIso.isIso_of_isIso_app
@@ -2673,7 +2673,7 @@ instance isIso_prodComparison_of_preservesLimit_pair
 
 中文:
 实例 isIso_prodComparison_of_preservesLimit_pair
-  签名: : IsIso (prodComparison F A B)
+  签名: : 是同构 (prodComparison F A B)
   定义体: by
   rw [← prodComparisonIso_hom]
   infer_instance
@@ -2712,7 +2712,7 @@ lemma prodComparisonIso_comp
 
 中文:
 引理 prodComparisonIso_comp
-  结论: [PreservesLimit (pair A B) (F ⋙ G)]
+  结论: [保持极限 (pair A B) (F ⋙ G)]
   证明: by
   ext <;> simp [CartesianMonoidalCategory.prodComparison, ← G.map_comp]
 
@@ -2738,8 +2738,8 @@ definition prodComparisonNatIso
   body: asIso (prodComparisonNatTrans F A)
 
 中文:
-定义 prodComparisonNatIso
-  签名: (A : C) [对任意 B, PreservesLimit (pair A B) F]
+定义 prodComparison自然数Iso
+  签名: (A : C) [对任意 B, 保持极限 (pair A B) F]
   定义体: asIso (prodComparisonNatTrans F A)
 
 Depends on / 依赖: prodComparisonNatTrans
@@ -2760,8 +2760,8 @@ definition prodComparisonBifunctorNatIso
   body: asIso (prodComparisonBifunctorNatTrans F)
 
 中文:
-定义 prodComparisonBifunctorNatIso
-  签名: [对任意 A B, PreservesLimit (pair A B) F]
+定义 prodComparisonBifunctor自然数Iso
+  签名: [对任意 A B, 保持极限 (pair A B) F]
   定义体: asIso (prodComparisonBifunctorNatTrans F)
 
 Depends on / 依赖: prodComparisonBifunctorNatTrans
@@ -3085,7 +3085,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (η F)
+  签名: 是同构 (η F)
   定义体: η_of_cartesianMonoidalCategory F ▸ terminalComparison_isIso_of_preservesLimits F
 
 Depends on / 依赖: terminalComparison_isIso_of_preservesLimits
@@ -3150,7 +3150,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton F.OplaxMonoidal
+  签名: 子单例 F.反松弛幺半群
   定义体: by
     ext1
     · exact toUnit_unique _ _
@@ -3282,7 +3282,7 @@ lemma μ_comp
 
 中文:
 引理 μ_comp
-  条件: [(F ⋙ G).Monoidal] (X Y : C)
+  条件: [(F ⋙ G).幺半群] (X Y : C)
   结论: μ (F ⋙ G) X Y = μ G _ _ ≫ G.map (μ F X Y)
   证明: by
   rw [← cancel_mono (μIso _ _ _).inv]; ext <;> simp [← Functor.comp_obj, ← Functor.map_comp]
@@ -3353,7 +3353,7 @@ definition ofChosenFiniteProducts
 
 中文:
 定义 ofChosenFiniteProducts
-  签名: (F : C ⥤ D) [PreservesFiniteProducts F]
+  签名: (F : C ⥤ D) [保持FiniteProducts F]
   定义体: .ofOplaxMonoidal F
 
 Depends on / 依赖: IsLimit, IsLimit.mapConeEquiv, J.yoneda.mapCocone, J.yonedaOpCompCoyoneda, X.obj, c.op, coyoneda, coyoneda.mapCone, evaluation, evaluationJointlyReflectsLimits, hc.op, isColimitOfOp, isLimitOfPreserves, isLimitOfReflects, isoWhiskerRight, mapCocone, mapCone, mapConeEquiv, ofOplaxMonoidal, uliftFunctor
@@ -3371,7 +3371,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton F.Monoidal
+  签名: 子单例 F.幺半群
   定义体: (toOplaxMonoidal_injective F).subsingleton
 
 Depends on / 依赖: subsingleton, toOplaxMonoidal_injective
@@ -3395,8 +3395,8 @@ instance [F.Monoidal]
   have := preservesLimitsOfShape_discrete_walkin
 
 中文:
-实例 [F.Monoidal]
-  签名: : PreservesFiniteProducts F
+实例 [F.幺半群]
+  签名: : 保持FiniteProducts F
   定义体: have (A B : _) : IsIso (CartesianMonoidalCategory.prodComparison F A B) :=
     δ_of_cartesianMonoidalCategory F A B ▸ inferInstance
   have : IsIso (CartesianMonoidalCategory.terminalComparison F) :=
@@ -3454,7 +3454,7 @@ definition ofChosenFiniteProducts
 
 中文:
 定义 ofChosenFiniteProducts
-  签名: (F : C ⥤ D) [PreservesFiniteProducts F]
+  签名: (F : C ⥤ D) [保持FiniteProducts F]
   定义体: by rw [← cancel_mono (Monoidal.μIso _ _ _).inv]; ext <;> simp [← F.map_comp]
 
 Depends on / 依赖: F.map_comp, Monoidal, cancel_mono, map_comp
@@ -3472,7 +3472,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton F.Braided
+  签名: 子单例 F.辫
   定义体: (Braided.toMonoidal_injective F).subsingleton
 
 Depends on / 依赖: Braided, Braided.toMonoidal_injective, J.uliftYonedaIsoYoneda, preservesColimit_of_natIso, subsingleton, toMonoidal_injective, uliftYonedaIsoYoneda
@@ -3515,7 +3515,7 @@ lemma lift_def
 中文:
 引理 lift_def
   条件: (f : T ⟶ X) (g : T ⟶ Y)
-  结论: lift f g = Object命题erty.homMk (lift f.hom g.hom)
+  结论: lift f g = ObjectProperty.homMk (lift f.hom g.hom)
   证明: rfl
 -/
 lemma lift_def (f : T ⟶ X) (g : T ⟶ Y) : lift f g = ObjectProperty.homMk (lift f.hom g.hom) := rfl
@@ -3589,7 +3589,7 @@ instance IsMonoidal.of_cartesianMonoidalCategory
     apply CartesianMonoidalCategory.hom_ext <;> simp
 
 中文:
-实例 IsMonoidal.of_cartesianMonoidalCategory
+实例 是幺半群.of_cartesianMonoidalCategory
   签名: (α : F ⟶ G)
   定义体: (cancel_mono (Functor.Monoidal.εIso _).inv).1 (toUnit_unique _ _)
   tensor {X Y} := by

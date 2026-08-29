@@ -65,7 +65,7 @@ definition balancedCore
 
 中文:
 定义 balancedCore
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: ⋃₀ { t : Set E | Balanced 𝕜 t ∧ t subseteq s }
 
 Depends on / 依赖: Balanced, subseteq
@@ -83,7 +83,7 @@ definition balancedCoreAux
 
 中文:
 定义 balancedCoreAux
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: ⋂ (r : 𝕜) (_ : 1 <= ‖r‖), r • s
 -/
 def balancedCoreAux (s : Set E) :=
@@ -99,7 +99,7 @@ definition balancedHull
 
 中文:
 定义 balancedHull
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: ⋃ (r : 𝕜) (_ : ‖r‖ <= 1), r • s
 -/
 def balancedHull (s : Set E) :=
@@ -118,7 +118,7 @@ theorem balancedCore_subset
 
 中文:
 定理 balancedCore_subset
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: balancedCore 𝕜 s subseteq s
   证明: sUnion_subset fun _ ht => ht.2
 
@@ -137,7 +137,7 @@ theorem balancedCore_empty
 
 中文:
 定理 balancedCore_empty
-  结论: balancedCore 𝕜 (∅ : Set E) = ∅
+  结论: balancedCore 𝕜 (∅ : 集合 E) = ∅
   证明: eq_empty_of_subset_empty (balancedCore_subset _)
 
 Depends on / 依赖: balancedCore_subset, eq_empty_of_subset_empty
@@ -179,7 +179,7 @@ theorem smul_balancedCore_subset
 
 中文:
 定理 smul_balancedCore_subset
-  条件: (s : Set E) {a : 𝕜} (ha : ‖a‖ <= 1)
+  条件: (s : 集合 E) {a : 𝕜} (ha : ‖a‖ <= 1)
   证明: by
   rintro x ⟨y, hy, rfl⟩
   rw [mem_balancedCore_iff] at hy
@@ -207,7 +207,7 @@ theorem balancedCore_balanced
 
 中文:
 定理 balancedCore_balanced
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Balanced 𝕜 (balancedCore 𝕜 s)
   证明: fun _ =>
   smul_balancedCore_subset s
@@ -395,7 +395,7 @@ theorem balancedCore_nonempty_iff
 
 中文:
 定理 balancedCore_nonempty_iff
-  结论: (balancedCore 𝕜 s).Nonempty ↔ (0 : E) in s
+  结论: (balancedCore 𝕜 s).非空 ↔ (0 : E) in s
   证明: ⟨fun h => zero_subset.1 (zero_smul_set h).superset.trans
 (balancedCore_balanced s (0 : 𝕜) <| norm_zero.trans_le zero_le_one).trans
       balancedCore_subset _,
@@ -422,7 +422,7 @@ lemma Balanced.zero_mem
 
 中文:
 引理 Balanced.zero_mem
-  条件: (hs : Balanced 𝕜 s) (hs_nonempty : s.Nonempty)
+  条件: (hs : Balanced 𝕜 s) (hs_nonempty : s.非空)
   结论: (0 : E) in s
   证明: by
   rw [← hs.balancedCore_eq] at hs_nonempty
@@ -447,7 +447,7 @@ theorem subset_balancedHull
 
 中文:
 定理 subset_balancedHull
-  条件: [NormOneClass 𝕜] {s : Set E}
+  条件: [NormOne类 𝕜] {s : 集合 E}
   结论: s subseteq balancedHull 𝕜 s
   证明: fun _ hx =>
   mem_balancedHull_iff.2 ⟨1, norm_one.le, _, hx, one_smul _ _⟩
@@ -471,7 +471,7 @@ theorem balancedHull.balanced
 
 中文:
 定理 balancedHull.balanced
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Balanced 𝕜 (balancedHull 𝕜 s)
   证明: by
   intro a ha
@@ -501,7 +501,7 @@ theorem balancedHull_add_subset
 
 中文:
 定理 balancedHull_add_subset
-  条件: [NormOneClass 𝕜] {t : Set E}
+  条件: [NormOne类 𝕜] {t : 集合 E}
   证明: balancedHull_subset_of_subset (add (balancedHull.balanced _) (balancedHull.balanced _))
     (add_subset_add (subset_balancedHull _) (subset_balancedHull _))
 
@@ -533,7 +533,7 @@ theorem balancedCoreAux_empty
 
 中文:
 定理 balancedCoreAux_empty
-  结论: balancedCoreAux 𝕜 (∅ : Set E) = ∅
+  结论: balancedCoreAux 𝕜 (∅ : 集合 E) = ∅
   证明: by
   simp_rw [balancedCoreAux, iInter₂_eq_empty_iff, smul_set_empty]
   exact fun _ => ⟨1, norm_one.ge, notMem_empty _⟩
@@ -556,7 +556,7 @@ theorem balancedCoreAux_subset
 
 中文:
 定理 balancedCoreAux_subset
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: balancedCoreAux 𝕜 s subseteq s
   证明: fun x hx => by
   simpa only [one_smul] using mem_balancedCoreAux_iff.1 hx 1 norm_one.ge
@@ -676,7 +676,7 @@ theorem balancedCore_eq_iInter
   exact balancedCore_subset_balancedCoreAux (balancedCore_zero_mem hs)
 
 中文:
-定理 balancedCore_eq_iInter
+定理 balancedCore_eq_i整数er
   条件: (hs : (0 : E) in s)
   证明: by
   refine balancedCore_subset_balancedCoreAux.antisymm ?_
@@ -757,9 +757,9 @@ theorem IsClosed.balancedCore
   · have : balancedCore 𝕜 U = ∅ :=
 
 中文:
-定理 IsClosed.balancedCore
-  条件: (hU : IsClosed U)
-  结论: IsClosed (balancedCore 𝕜 U)
+定理 是闭集.balancedCore
+  条件: (hU : 是闭集 U)
+  结论: 是闭集 (balancedCore 𝕜 U)
   证明: by
   by_cases h : (0 : E) in U
   · rw [balancedCore_eq_iInter h]
@@ -799,8 +799,8 @@ theorem IsOpen.balancedHull
    
 
 中文:
-定理 IsOpen.balancedHull
-  结论: [ContinuousConstSMul 𝕜 E] {s : Set E} (hs : IsOpen s)
+定理 是开集.balancedHull
+  结论: [连续常数标量乘法 𝕜 E] {s : 集合 E} (hs : 是开集 s)
   证明: by
   have : (⋃ r : 𝕜, ⋃ (_ : ‖r‖ <= 1), r • s) = (⋃ r : 𝕜, ⋃ (_ : ‖r‖ <= 1 ∧ r != 0), r • s) := by
     refine subset_antisymm (Set.iUnion₂_mono' fun r hr => ?_) (Set.iUnion₂_mono' (by grind))
@@ -903,7 +903,7 @@ theorem nhds_basis_closed_balanced
 
 中文:
 定理 nhds_basis_closed_balanced
-  条件: [RegularSpace E]
+  条件: [正则空间 E]
   证明: by
   refine
     (closed_nhds_basis 0).to_hasBasis (fun s hs => ?_) fun s hs => ⟨s, ⟨hs.1, hs.2.1⟩, rfl.subset⟩

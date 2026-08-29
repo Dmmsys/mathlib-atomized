@@ -485,7 +485,7 @@ definition recOnHorner
 
 中文:
 定义 recOnHorner
-  签名: {M : R[X] -> Sort*} (p : R[X]) (M0 : M 0)
+  签名: {M : R[X] -> 类型层*} (p : R[X]) (M0 : M 0)
   定义体: letI := Classical.decEq R
   if hp : p = 0 then hp ▸ M0
   else by

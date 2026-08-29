@@ -42,7 +42,7 @@ lemma smul_set_pi₀
 
 中文:
 引理 smul_set_pi₀
-  结论: {M ι : 类型} {α : ι -> 类型} [GroupWithZero M] [对任意 i, MulAction M (α i)]
+  结论: {M ι : 类型} {α : ι -> 类型} [带零群 M] [对任意 i, 乘法作用 M (α i)]
   证明: smul_set_pi_of_isUnit (.mk0 _ hc) I s
 
 Depends on / 依赖: smul_set_pi_of_isUnit
@@ -61,7 +61,7 @@ lemma smul_set_pi₀'
 
 中文:
 引理 smul_set_pi₀'
-  结论: {M ι : 类型} {α : ι -> 类型} [GroupWithZero M] [对任意 i, MulAction M (α i)]
+  结论: {M ι : 类型} {α : ι -> 类型} [带零群 M] [对任意 i, 乘法作用 M (α i)]
   证明: h.elim (fun hc => smul_set_pi_of_isUnit (.mk0 _ hc) I s) (fun hI => hI ▸ smul_set_univ_pi ..)
 
 Depends on / 依赖: h.elim, smul_set_pi_of_isUnit, smul_set_univ_pi
@@ -88,7 +88,7 @@ scoped[Pointwise] attribute [instance] Set.smulZeroClassSet
 
 中文:
 定义 smulZeroClassSet
-  签名: : SMulZeroClass α (Set β) where
+  签名: : SMulZero类 α (集合 β) where
   定义体: image_singleton.trans by rw [smul_zero, singleton_zero]
 
 scoped[Pointwise] attribute [instance] Set.smulZeroClassSet
@@ -109,8 +109,8 @@ lemma smul_zero_subset
 
 中文:
 引理 smul_zero_subset
-  条件: (s : Set α)
-  结论: s • (0 : Set β) subseteq 0
+  条件: (s : 集合 α)
+  结论: s • (0 : 集合 β) subseteq 0
   证明: by simp [subset_def, mem_smul]
 
 Depends on / 依赖: mem_smul, subset_def
@@ -127,9 +127,9 @@ lemma Nonempty.smul_zero
   proof: s.smul_zero_subset.antisymm by simpa [mem_smul] using! hs
 
 中文:
-引理 Nonempty.smul_zero
-  条件: (hs : s.Nonempty)
-  结论: s • (0 : Set β) = 0
+引理 非空.smul_zero
+  条件: (hs : s.非空)
+  结论: s • (0 : 集合 β) = 0
   证明: s.smul_zero_subset.antisymm by simpa [mem_smul] using! hs
 -/
 lemma Nonempty.smul_zero (hs : s.Nonempty) : s • (0 : Set β) = 0 :=
@@ -171,8 +171,8 @@ lemma zero_smul_subset
 
 中文:
 引理 zero_smul_subset
-  条件: (t : Set β)
-  结论: (0 : Set α) • t subseteq 0
+  条件: (t : 集合 β)
+  结论: (0 : 集合 α) • t subseteq 0
   证明: by simp [subset_def, mem_smul]
 
 Depends on / 依赖: mem_smul, subset_def
@@ -189,9 +189,9 @@ lemma Nonempty.zero_smul
   proof: t.zero_smul_subset.antisymm by simpa [mem_smul] using! ht
 
 中文:
-引理 Nonempty.zero_smul
-  条件: (ht : t.Nonempty)
-  结论: (0 : Set α) • t = 0
+引理 非空.zero_smul
+  条件: (ht : t.非空)
+  结论: (0 : 集合 α) • t = 0
   证明: t.zero_smul_subset.antisymm by simpa [mem_smul] using! ht
 -/
 lemma Nonempty.zero_smul (ht : t.Nonempty) : (0 : Set α) • t = 0 :=
@@ -209,8 +209,8 @@ lemma zero_smul_set
 
 中文:
 引理 zero_smul_set
-  条件: {s : Set β} (h : s.Nonempty)
-  结论: (0 : α) • s = (0 : Set β)
+  条件: {s : 集合 β} (h : s.非空)
+  结论: (0 : α) • s = (0 : 集合 β)
   证明: by
   simp only [← image_smul, zero_smul, h.image_const, singleton_zero]
 -/
@@ -228,7 +228,7 @@ lemma zero_smul_set_subset
 
 中文:
 引理 zero_smul_set_subset
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: (0 : α) • s subseteq 0
   证明: image_subset_iff.2 fun x _ => zero_smul α x
 
@@ -248,8 +248,8 @@ lemma subsingleton_zero_smul_set
 
 中文:
 引理 subsingleton_zero_smul_set
-  条件: (s : Set β)
-  结论: ((0 : α) • s).Subsingleton
+  条件: (s : 集合 β)
+  结论: ((0 : α) • s).子单例
   证明: subsingleton_singleton.anti zero_smul_set_subset s
 
 Depends on / 依赖: subsingleton_singleton, subsingleton_singleton.anti, zero_smul_set_subset
@@ -274,7 +274,7 @@ scoped[Pointwise] attribute [instance] Set.distribSMulSet
 
 中文:
 定义 noncomputable
-  签名: def distribSMulSet [AddZeroClass β] [DistribSMul α β]
+  签名: def distribSMulSet [加法零类 β] [分配标量乘法 α β]
   定义体: image_image2_distrib smul_add _
 
 scoped[Pointwise] attribute [instance] Set.distribSMulSet
@@ -299,7 +299,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def distribMulActionSet [Monoid α] [AddMonoid β] [DistribMulAction α β]
+  签名: def distribMulActionSet [幺半群 α] [加法幺半群 β] [分配乘法作用 α β]
   定义体: smul_add
   smul_zero := smul_zero
 -/
@@ -323,7 +323,7 @@ scoped[Pointwise] attribute [instance] Set.distribMulActionSet Set.mulDistribMul
 
 中文:
 定义 noncomputable
-  签名: def mulDistribMulActionSet [Monoid α] [Monoid β] [MulDistribMulAction α β]
+  签名: def mulDistribMulActionSet [幺半群 α] [幺半群 β] [MulDistribMul作用 α β]
   定义体: image_image2_distrib smul_mul' _
 smul_one _ := image_singleton.trans by rw [smul_one, singleton_one]
 
@@ -351,8 +351,8 @@ instance [Zero
     exact (eq_zero_or_eq_z
 
 中文:
-实例 [Zero
-  签名: α] [Mul α] [NoZeroDivisors α] : NoZeroDivisors (Set α) where
+实例 [零
+  签名: α] [乘法 α] [无零因子 α] : 无零因子 (集合 α) where
   定义体: by
     by_contra! H
     have hst : (s * t).Nonempty := h.symm.subst zero_nonempty
@@ -387,7 +387,7 @@ lemma smul_mem_smul_set_iff₀
 
 中文:
 引理 smul_mem_smul_set_iff₀
-  条件: (ha : a != 0) (A : Set β) (x : β)
+  条件: (ha : a != 0) (A : 集合 β) (x : β)
   结论: a • x in a • A ↔ x in A
   证明: show Units.mk0 a ha • _ in _ ↔ _ from smul_mem_smul_set_iff
 
@@ -407,7 +407,7 @@ lemma mem_smul_set_iff_inv_smul_mem₀
 
 中文:
 引理 mem_smul_set_iff_inv_smul_mem₀
-  条件: (ha : a != 0) (A : Set β) (x : β)
+  条件: (ha : a != 0) (A : 集合 β) (x : β)
   结论: x in a • A ↔ a⁻¹ • x in A
   证明: show _ in Units.mk0 a ha • _ ↔ _ from mem_smul_set_iff_inv_smul_mem
 
@@ -427,7 +427,7 @@ lemma mem_inv_smul_set_iff₀
 
 中文:
 引理 mem_inv_smul_set_iff₀
-  条件: (ha : a != 0) (A : Set β) (x : β)
+  条件: (ha : a != 0) (A : 集合 β) (x : β)
   结论: x in a⁻¹ • A ↔ a • x in A
   证明: show _ in (Units.mk0 a ha)⁻¹ • _ ↔ _ from mem_inv_smul_set_iff
 
@@ -447,7 +447,7 @@ lemma preimage_smul₀
 
 中文:
 引理 preimage_smul₀
-  条件: (ha : a != 0) (t : Set β)
+  条件: (ha : a != 0) (t : 集合 β)
   结论: (fun x => a • x) ⁻¹' t = a⁻¹ • t
   证明: preimage_smul (Units.mk0 a ha) t
 
@@ -469,7 +469,7 @@ lemma preimage_smul_inv₀
 
 中文:
 引理 preimage_smul_inv₀
-  条件: (ha : a != 0) (t : Set β)
+  条件: (ha : a != 0) (t : 集合 β)
   结论: (fun x => a⁻¹ • x) ⁻¹' t = a • t
   证明: preimage_smul (Units.mk0 a ha)⁻¹ t
 
@@ -492,7 +492,7 @@ lemma smul_set_subset_smul_set_iff₀
 
 中文:
 引理 smul_set_subset_smul_set_iff₀
-  条件: (ha : a != 0) {A B : Set β}
+  条件: (ha : a != 0) {A B : 集合 β}
   结论: a • A subseteq a • B ↔ A subseteq B
   证明: show Units.mk0 a ha • A subseteq _ ↔ _ from smul_set_subset_smul_set_iff
 
@@ -512,7 +512,7 @@ lemma smul_set_subset_iff₀
 
 中文:
 引理 smul_set_subset_iff₀
-  条件: (ha : a != 0) {A B : Set β}
+  条件: (ha : a != 0) {A B : 集合 β}
   结论: a • A subseteq B ↔ A subseteq a⁻¹ • B
   证明: show Units.mk0 a ha • A subseteq _ ↔ _ from smul_set_subset_iff_subset_inv_smul_set
 
@@ -532,7 +532,7 @@ lemma subset_smul_set_iff₀
 
 中文:
 引理 subset_smul_set_iff₀
-  条件: (ha : a != 0) {A B : Set β}
+  条件: (ha : a != 0) {A B : 集合 β}
   结论: A subseteq a • B ↔ a⁻¹ • A subseteq B
   证明: show _ subseteq Units.mk0 a ha • B ↔ _ from subset_smul_set_iff
 
@@ -614,7 +614,7 @@ lemma smul_set_univ₀
 中文:
 引理 smul_set_univ₀
   条件: (ha : a != 0)
-  结论: a • (univ : Set β) = univ
+  结论: a • (univ : 集合 β) = univ
   证明: image_univ_of_surjective MulAction.surjective₀ ha
 
 Depends on / 依赖: MulAction, MulAction.surjective, image_univ_of_surjective
@@ -634,8 +634,8 @@ lemma smul_univ₀
 
 中文:
 引理 smul_univ₀
-  条件: {s : Set α} (hs : ¬s subseteq 0)
-  结论: s • (univ : Set β) = univ
+  条件: {s : 集合 α} (hs : ¬s subseteq 0)
+  结论: s • (univ : 集合 β) = univ
   证明: let ⟨a, ha, ha₀⟩ := not_subset.1 hs
   eq_univ_of_forall fun b => ⟨a, ha, a⁻¹ • b, trivial, smul_inv_smul₀ ha₀ _⟩
 
@@ -656,8 +656,8 @@ lemma smul_univ₀'
 
 中文:
 引理 smul_univ₀'
-  条件: {s : Set α} (hs : s.Nontrivial)
-  结论: s • (univ : Set β) = univ
+  条件: {s : 集合 α} (hs : s.非平凡)
+  结论: s • (univ : 集合 β) = univ
   证明: smul_univ₀ hs.not_subset_singleton
 
 Depends on / 依赖: hs.not_subset_singleton, not_subset_singleton
@@ -680,7 +680,7 @@ lemma inv_smul_set_distrib₀
 
 中文:
 引理 inv_smul_set_distrib₀
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (a • s)⁻¹ = s⁻¹ <• a⁻¹
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -707,7 +707,7 @@ lemma inv_op_smul_set_distrib₀
 
 中文:
 引理 inv_op_smul_set_distrib₀
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (s <• a)⁻¹ = a⁻¹ • s⁻¹
   证明: by
   obtain rfl | ha := eq_or_ne a 0

@@ -84,13 +84,13 @@ structure IsPicardLindelof
     - mul_max_le : L * max (tmax - t₀) (t₀ - tmin) <= a - r
 
 中文:
-结构 IsPicardLindelof
-  参数: {E : 类型} [NormedAddCommGroup E]
+结构 是PicardLindelof
+  参数: {E : 类型} [赋范交换加群 E]
   公理与运算 (4 个):
-    - lipschitzOnWith : 对任意 t in Icc tmin tmax, LipschitzOnWith K (f t) (closedBall x₀ a)
-    - continuousOn : 对任意 x in closedBall x₀ a, ContinuousOn (f · x) (Icc tmin tmax)
-    - norm_le : 对任意 t in Icc tmin tmax, 对任意 x in closedBall x₀ a, ‖f t x‖ <= L
-    - mul_max_le : L * max (tmax - t₀) (t₀ - tmin) <= a - r
+    - lipschitzOnWith : 对任意 t in 闭区间 tmin tmax, LipschitzOnWith K (f t) (closedBall x₀ a)
+    - continuousOn : 对任意 x in closedBall x₀ a, ContinuousOn (f · x) (闭区间 tmin tmax)
+    - norm_le : 对任意 t in 闭区间 tmin tmax, 对任意 x in closedBall x₀ a, ‖f t x‖ <= L
+    - mul_max_le : L * 最大值 (tmax - t₀) (t₀ - tmin) <= a - r
 -/
 structure IsPicardLindelof {E : Type*} [NormedAddCommGroup E]
     (f : Real -> E -> E) {tmin tmax : Real} (t₀ : Icc tmin tmax) (x₀ : E) (a r L K : Real>=0) : Prop where
@@ -238,10 +238,10 @@ structure FunSpace
     - mem_closedBall₀ : toFun t₀ in closedBall x₀ r
 
 中文:
-结构 FunSpace
-  参数: {E : 类型} [NormedAddCommGroup E]
+结构 Fun空间
+  参数: {E : 类型} [赋范交换加群 E]
   公理与运算 (3 个):
-    - toFun : Icc tmin tmax -> E
+    - toFun : 闭区间 tmin tmax -> E
     - lipschitzWith : LipschitzWith L toFun
     - mem_closedBall₀ : toFun t₀ in closedBall x₀ r
 -/
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (FunSpace t₀ x₀ r L) fun _ => Icc tmin tmax -> E
+  签名: CoeFun (Fun空间 t₀ x₀ r L) fun _ => 闭区间 tmin tmax -> E
   定义体: ⟨fun α => α.toFun⟩
 
 @[ext]
@@ -292,7 +292,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {α β : FunSpace t₀ x₀ r L} (h : 对任意 t, α t = β t)
+  条件: {α β : Fun空间 t₀ x₀ r L} (h : 对任意 t, α t = β t)
   结论: α = β
   证明: by
   cases α; cases β; simp only [mk.injEq]; ext t; exact h t
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FunSpace t₀ x₀ r L)
+  签名: 可居 (Fun空间 t₀ x₀ r L)
   定义体: ⟨fun _ => x₀, (LipschitzWith.const _).weaken zero_le, mem_closedBall_self r.2⟩
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.const, mem_closedBall_self, weaken, zero_le
@@ -331,8 +331,8 @@ lemma continuous
 
 中文:
 引理 continuous
-  条件: (α : FunSpace t₀ x₀ L r)
-  结论: Continuous α
+  条件: (α : Fun空间 t₀ x₀ L r)
+  结论: 连续 α
   证明: α.lipschitzWith.continuous
 -/
 protected lemma continuous (α : FunSpace t₀ x₀ L r) : Continuous α := α.lipschitzWith.continuous
@@ -349,7 +349,7 @@ definition toContinuousMap
 
 中文:
 定义 toContinuousMap
-  签名: : FunSpace t₀ x₀ r L ↪ C(Icc tmin tmax, E)
+  签名: : Fun空间 t₀ x₀ r L ↪ C(闭区间 tmin tmax, E)
   定义体: ⟨fun α => ⟨α, α.continuous⟩, fun α β h => by cases α; cases β; simpa using h⟩
 
 @[simp]
@@ -370,7 +370,7 @@ lemma toContinuousMap_apply_eq_apply
 
 中文:
 引理 toContinuousMap_apply_eq_apply
-  条件: (α : FunSpace t₀ x₀ r L) (t : Icc tmin tmax)
+  条件: (α : Fun空间 t₀ x₀ r L) (t : 闭区间 tmin tmax)
   证明: rfl
 -/
 lemma toContinuousMap_apply_eq_apply (α : FunSpace t₀ x₀ r L) (t : Icc tmin tmax) :
@@ -388,7 +388,7 @@ lemma apply_of_zero
 
 中文:
 引理 apply_of_zero
-  条件: (α : FunSpace t₀ x₀ 0 L)
+  条件: (α : Fun空间 t₀ x₀ 0 L)
   结论: α t₀ = x₀
   证明: by
   simpa using α.mem_closedBall₀
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace (FunSpace t₀ x₀ r L)
+  签名: 度量空间 (Fun空间 t₀ x₀ r L)
   定义体: MetricSpace.induced toContinuousMap toContinuousMap.injective inferInstance
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, induced, injective, toContinuousMap, toContinuousMap.injective
@@ -476,8 +476,8 @@ instance [CompleteSpace
   exact isClosed_le (by fun_prop) (
 
 中文:
-实例 [CompleteSpace
-  签名: E] : CompleteSpace (FunSpace t₀ x₀ r L)
+实例 [完备空间
+  签名: E] : 完备空间 (Fun空间 t₀ x₀ r L)
   定义体: by
   rw [completeSpace_iff_isComplete_range isUniformInducing_toContinuousMap]
   apply IsClosed.isComplete
@@ -508,7 +508,7 @@ definition compProj
 
 中文:
 定义 compProj
-  签名: (α : FunSpace t₀ x₀ r L) (t : 实数)
+  签名: (α : Fun空间 t₀ x₀ r L) (t : 实数)
   定义体: α projIcc tmin tmax (le_trans t₀.2.1 t₀.2.2) t
 
 @[simp]
@@ -529,7 +529,7 @@ lemma compProj_apply
 
 中文:
 引理 compProj_apply
-  条件: {α : FunSpace t₀ x₀ r L} {t : 实数}
+  条件: {α : Fun空间 t₀ x₀ r L} {t : 实数}
   证明: rfl
 -/
 lemma compProj_apply {α : FunSpace t₀ x₀ r L} {t : Real} :
@@ -545,7 +545,7 @@ lemma compProj_val
 
 中文:
 引理 compProj_val
-  条件: {α : FunSpace t₀ x₀ r L} {t : Icc tmin tmax}
+  条件: {α : Fun空间 t₀ x₀ r L} {t : 闭区间 tmin tmax}
   证明: by simp only [compProj_apply, projIcc_val]
 
 Depends on / 依赖: compProj_apply, projIcc_val
@@ -565,7 +565,7 @@ lemma compProj_of_mem
 
 中文:
 引理 compProj_of_mem
-  条件: {α : FunSpace t₀ x₀ r L} {t : 实数} (ht : t in Icc tmin tmax)
+  条件: {α : Fun空间 t₀ x₀ r L} {t : 实数} (ht : t in 闭区间 tmin tmax)
   证明: by rw [compProj_apply, projIcc_of_mem]
 
 @[continuity, fun_prop]
@@ -587,8 +587,8 @@ lemma continuous_compProj
 
 中文:
 引理 continuous_compProj
-  条件: (α : FunSpace t₀ x₀ r L)
-  结论: Continuous α.compProj
+  条件: (α : Fun空间 t₀ x₀ r L)
+  结论: 连续 α.compProj
   证明: α.continuous.comp continuous_projIcc
 
 Depends on / 依赖: continuous, continuous.comp, continuous_projIcc
@@ -678,7 +678,7 @@ lemma continuousOn_comp_compProj
 
 中文:
 引理 continuousOn_comp_compProj
-  条件: (hf : IsPicardLindelof f t₀ x₀ a r L K) (α : FunSpace t₀ x₀ r L)
+  条件: (hf : 是PicardLindelof f t₀ x₀ a r L K) (α : Fun空间 t₀ x₀ r L)
   证明: continuousOn_comp
     (continuousOn_prod_of_continuousOn_lipschitzOnWith' (uncurry f) K hf.lipschitzOnWith
       hf.continuousOn)
@@ -707,8 +707,8 @@ lemma intervalIntegrable_comp_compProj
   exact uIcc_subset_Icc t₀.2 t.2
 
 中文:
-引理 intervalIntegrable_comp_compProj
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+引理 interval整数egrable_comp_compProj
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: by
   apply ContinuousOn.intervalIntegrable
 .mono apply α.continuousOn_comp_compProj hf
@@ -736,7 +736,7 @@ definition next
 
 中文:
 定义 next
-  签名: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  签名: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   定义体: picard f t₀ x α.compProj t
   lipschitzWith := LipschitzWith.of_dist_le_mul fun t₁ t₂ => by
     rw [dist_eq_norm]; rw [picard_apply]; rw [picard_apply]; rw [add_sub_add_left_eq_sub]; rw [integral_interval_sub_left (intervalIntegrable_comp_compProj hf _ t₁)
@@ -768,7 +768,7 @@ lemma next_apply
 
 中文:
 引理 next_apply
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   证明: rfl
 -/
 lemma next_apply (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
@@ -785,7 +785,7 @@ lemma next_apply₀
 
 中文:
 引理 next_apply₀
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   证明: by simp
 -/
 lemma next_apply₀ (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
@@ -806,7 +806,7 @@ lemma isFixedPt_next_iff
 
 中文:
 引理 isFixedPt_next_iff
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   证明: by
   constructor
 .symm · exact fun hα t => congrArg (· t) hα
@@ -840,7 +840,7 @@ lemma dist_comp_iterate_next_le
 
 中文:
 引理 dist_comp_iterate_next_le
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: calc
     _ <= K * dist ((next hf hx)^[n] α t) ((next hf hx)^[n] β t) :=
 .dist_le_mul hf.lipschitzOnWith t.1 t.2
@@ -881,7 +881,7 @@ lemma dist_iterate_next_apply_le
 
 中文:
 引理 dist_iterate_next_apply_le
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: by
   induction n generalizing t with
   | zero => simpa using!
@@ -934,7 +934,7 @@ apply le_trans dist_iterate_next_apply_le hf hx α β n t
 
 中文:
 引理 dist_iterate_next_iterate_next_le
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: by
   rw [← MetricSpace.isometry_induced FunSpace.toContinuousMap FunSpace.toContinuousMap.injective
 .dist_eq]; rw [ContinuousMap.dist_le]
@@ -972,8 +972,8 @@ lemma exists_contractingWith_iterate_next
 have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le 
 
 中文:
-引理 exists_contractingWith_iterate_next
-  条件: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+引理 存在_contractingWith_iterate_next
+  条件: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: by
   obtain ⟨n, hn⟩ := FloorSemiring.tendsto_pow_div_factorial_atTop (K * max (tmax - t₀) (t₀ - tmin))
 .exists .eventually (gt_mem_nhds zero_lt_one)
@@ -1003,8 +1003,8 @@ lemma exists_isFixedPt_next
 .isFixedPt_fixedPoint_iterate⟩ ⟨_, h x hx
 
 中文:
-引理 exists_isFixedPt_next
-  结论: [CompleteSpace E] (hf : IsPicardLindelof f t₀ x₀ a r L K)
+引理 存在_isFixedPt_next
+  结论: [完备空间 E] (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: let ⟨_, _, h⟩ := exists_contractingWith_iterate_next hf
 .isFixedPt_fixedPoint_iterate⟩ ⟨_, h x hx
 
@@ -1038,7 +1038,7 @@ lemma dist_next_next
 
 中文:
 引理 dist_next_next
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   证明: by
   have : Nonempty (Icc tmin tmax) := ⟨t₀⟩ -- needed for `ciSup_const`
   rw [← MetricSpace.isometry_induced FunSpace.toContinuousMap FunSpace.toContinuousMap.injective
@@ -1071,7 +1071,7 @@ lemma dist_iterate_next_le
 
 中文:
 引理 dist_iterate_next_le
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K) (hx : x in closedBall x₀ r)
   证明: by
   nth_rw 1 [← iterate_zero_apply (next hf hx) α]
   rw [Finset.sum_mul]
@@ -1111,7 +1111,7 @@ apply le_trans hm.dist_iterate_succ_le_geometric α i
 
 中文:
 引理 dist_iterate_iterate_next_le_of_lipschitzWith
-  结论: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+  结论: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: by
   nth_rw 1 [← iterate_zero_apply (next hf hx) α]
   rw [Finset.mul_sum]; rw [Finset.sum_mul]
@@ -1154,8 +1154,8 @@ have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_l
   refine ⟨.mk L'
 
 中文:
-引理 exists_forall_closedBall_funSpace_dist_le_mul
-  结论: [CompleteSpace E]
+引理 存在_对任意_closedBall_funSpace_dist_le_mul
+  结论: [完备空间 E]
   证明: by
   obtain ⟨m, C, h⟩ := exists_contractingWith_iterate_next hf
   let L' := (∑ i in Finset.range m, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / i !) * (1 - C)⁻¹
@@ -1447,7 +1447,7 @@ lemma continuousOn_uncurry
 
 中文:
 引理 continuousOn_uncurry
-  条件: (hf : IsPicardLindelof f t₀ x₀ a r L K)
+  条件: (hf : 是PicardLindelof f t₀ x₀ a r L K)
   证明: continuousOn_prod_of_continuousOn_lipschitzOnWith' _ K hf.lipschitzOnWith hf.continuousOn
 
 Depends on / 依赖: continuousOn, continuousOn_prod_of_continuousOn_lipschitzOnWith, hf.continuousOn, hf.lipschitzOnWith, lipschitzOnWith
@@ -1470,7 +1470,7 @@ lemma shrink
 
 中文:
 引理 shrink
-  结论: {f : 实数 -> E -> E} {tmin tmax tmin' tmax' : 实数} {t₀ : Icc tmin tmax}
+  结论: {f : 实数 -> E -> E} {tmin tmax tmin' tmax' : 实数} {t₀ : 闭区间 tmin tmax}
   证明: (hf.lipschitzOnWith t ⟨htmin.trans ht.1, ht.2.trans htmax⟩).mono
     (closedBall_subset_closedBall ha)
   continuousOn x hx := (hf.continuousOn x (closedBall_subset_closedBall ha hx)).mono
@@ -1507,7 +1507,7 @@ lemma shrink_time
 
 中文:
 引理 shrink_time
-  结论: {f : 实数 -> E -> E} {tmin tmax tmin' tmax' : 实数} {t₀ : Icc tmin tmax}
+  结论: {f : 实数 -> E -> E} {tmin tmax tmin' tmax' : 实数} {t₀ : 闭区间 tmin tmax}
   证明: by
   apply hf.shrink t₀' htmin htmax le_rfl
   calc L * max (tmax' - t₀') (t₀' - tmin')
@@ -1538,7 +1538,7 @@ lemma weaken_lipschitz
 
 中文:
 引理 weaken_lipschitz
-  条件: (hf : IsPicardLindelof f t₀ x₀ a r L K) {K' : 实数>=0} (hK : K <= K')
+  条件: (hf : 是PicardLindelof f t₀ x₀ a r L K) {K' : 实数>=0} (hK : K <= K')
   证明: (hf.lipschitzOnWith t ht).weaken hK
   continuousOn := hf.continuousOn
   norm_le := hf.norm_le
@@ -1567,7 +1567,7 @@ lemma exists_shrink_radius
   refine ⟨ε', hε'pos, hf.shrink ⟨t₀, by simp [le_of_lt hε'pos]⟩ (by linarith)
 
 中文:
-引理 exists_shrink_radius
+引理 存在_shrink_radius
   结论: {f : 实数 -> E -> E} {t₀ ε : 实数} (hε : 0 < ε) {x₀ : E} {a r L K : 实数>=0}
   证明: by
   have ha'r' : (0 : Real) < a' - r' := by simp only [sub_pos, NNReal.coe_lt_coe, hr]
@@ -1638,7 +1638,7 @@ lemma of_contDiffAt_one
 
 中文:
 引理 of_contDiffAt_one
-  结论: [NormedSpace 实数 E]
+  结论: [赋范空间 实数 E]
   证明: by
   -- Obtain ball of radius `a` within the domain in which f is `K`-lipschitz
   obtain ⟨K, s, hs, hl⟩ := hf.exists_lipschitzOnWith
@@ -1702,7 +1702,7 @@ theorem exists_eq_forall_mem_Icc_eq_picard
   rw [FunSpace.compProj_apply]; rw [FunSpace.next_apply]; rw [hα]; rw [projIcc_of_mem _ ht]
 
 中文:
-定理 exists_eq_forall_mem_Icc_eq_picard
+定理 存在_eq_对任意_mem_Icc_eq_picard
   证明: by
   obtain ⟨α, hα⟩ := FunSpace.exists_isFixedPt_next hf hx
   refine ⟨(FunSpace.next hf hx α).compProj, by simp, fun t ht => ?_⟩

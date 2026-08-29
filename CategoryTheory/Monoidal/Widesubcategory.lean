@@ -44,8 +44,8 @@ class IsStableUnderAssociator
     - associator_inv_mem((P) (c c' c'' : C)) : P (α_ c c' c'').inv
 
 中文:
-类 IsStableUnderAssociator
-  参数: (P : Morphism命题erty C)
+类 是StableUnderAssociator
+  参数: (P : MorphismProperty C)
   公理与运算 (2 个):
     - associator_hom_mem((P) (c c' c'' : C)) : P (α_ c c' c'').hom
     - associator_inv_mem((P) (c c' c'' : C)) : P (α_ c c' c'').inv
@@ -69,8 +69,8 @@ class IsStableUnderUnitor
     - rightUnitor_inv_mem((P) (c : C)) : P ((ρ_ c).inv)
 
 中文:
-类 IsStableUnderUnitor
-  参数: (P : Morphism命题erty C)
+类 是StableUnderUnitor
+  参数: (P : MorphismProperty C)
   公理与运算 (4 个):
     - leftUnitor_hom_mem((P) (c : C)) : P ((fun_ c).hom)
     - leftUnitor_inv_mem((P) (c : C)) : P ((fun_ c).inv)
@@ -96,9 +96,9 @@ class IsMonoidalStable
   (no additional axioms)
 
 中文:
-类 IsMonoidalStable
-  参数: : 命题 extends IsMonoidal P, IsStableUnderAssociator P,
-  继承: IsMonoidal P, IsStableUnderAssociator P, 
+类 是MonoidalStable
+  参数: : 命题 extends 是幺半群 P, 是StableUnderAssociator P,
+  继承: 是幺半群 P, 是StableUnderAssociator P, 
   (无附加公理)
 -/
 class IsMonoidalStable : Prop extends IsMonoidal P, IsStableUnderAssociator P,
@@ -116,9 +116,9 @@ class IsStableUnderBraiding
     - braiding_inv_mem((P) (c c' : C)) : P (β_ c c').inv
 
 中文:
-类 IsStableUnderBraiding
-  参数: [BraidedCategory C] (P : Morphism命题erty C)
-  继承: IsMonoidalStable P
+类 是StableUnderBraiding
+  参数: [辫范畴 C] (P : MorphismProperty C)
+  继承: 是MonoidalStable P
   公理与运算 (2 个):
     - braiding_hom_mem((P) (c c' : C)) : P (β_ c c').hom
     - braiding_inv_mem((P) (c c' : C)) : P (β_ c c').inv
@@ -151,8 +151,8 @@ instance [P.IsMonoidalStable]
     
 
 中文:
-实例 [P.IsMonoidalStable]
-  签名: : MonoidalCategoryStruct (WideSubcategory P) where
+实例 [P.是MonoidalStable]
+  签名: : 幺半群范畴结构 (宽子范畴 P) where
   定义体: ⟨c.obj otimes c'.obj⟩
   whiskerLeft c _ _ f := ⟨c.obj ◁ f.1, P.whiskerLeft_mem _ _ f.2⟩
   whiskerRight f c' := ⟨f.1 ▷ c'.obj, P.whiskerRight_mem _ f.2 _⟩
@@ -188,8 +188,8 @@ instance [P.IsMonoidalStable]
       μIso _ _ := Iso.refl _ }
 
 中文:
-实例 [P.IsMonoidalStable]
-  签名: : MonoidalCategory (WideSubcategory P)
+实例 [P.是MonoidalStable]
+  签名: : 幺半群范畴 (宽子范畴 P)
   定义体: Monoidal.induced (wideSubcategoryInclusion P)
     { εIso := Iso.refl _
       μIso _ _ := Iso.refl _ }
@@ -210,8 +210,8 @@ instance [BraidedCategory
   body: isoMk (β_ _ _) (P.braiding_hom_mem _ _) (P.braiding_inv_mem _ _)
 
 中文:
-实例 [BraidedCategory
-  签名: C] [P.IsStableUnderBraiding] :
+实例 [辫范畴
+  签名: C] [P.是StableUnderBraiding] :
   定义体: isoMk (β_ _ _) (P.braiding_hom_mem _ _) (P.braiding_inv_mem _ _)
 
 Depends on / 依赖: P.braiding_hom_mem, P.braiding_inv_mem, braiding_hom_mem, braiding_inv_mem
@@ -234,7 +234,7 @@ lemma tensorμ_hom
 
 中文:
 引理 tensorμ_hom
-  条件: [BraidedCategory C] [P.IsStableUnderBraiding] (X Y Z T : WideSubcategory P)
+  条件: [辫范畴 C] [P.是StableUnderBraiding] (X Y Z T : 宽子范畴 P)
   证明: rfl
 -/
 lemma tensorμ_hom [BraidedCategory C] [P.IsStableUnderBraiding] (X Y Z T : WideSubcategory P) :
@@ -251,8 +251,8 @@ instance [SymmetricCategory
     exact SymmetricCategory.symmetry _ _
 
 中文:
-实例 [SymmetricCategory
-  签名: C] [P.IsStableUnderBraiding] :
+实例 [对称范畴
+  签名: C] [P.是StableUnderBraiding] :
   定义体: by
     ext
     exact SymmetricCategory.symmetry _ _

@@ -44,7 +44,7 @@ definition closedCompactCylinders
 
 中文:
 定义 closedCompactCylinders
-  签名: : Set (Set (Π i, X i))
+  签名: : 集合 (集合 (Π i, X i))
   定义体: ⋃ (s) (S) (_ : IsClosed S) (_ : IsCompact S), {cylinder s S}
 
 Depends on / 依赖: IsClosed, IsCompact, cylinder
@@ -87,7 +87,7 @@ theorem mem_closedCompactCylinders
 
 中文:
 定理 mem_closedCompactCylinders
-  条件: (t : Set (Π i, X i))
+  条件: (t : 集合 (Π i, X i))
   证明: by
   simp_rw [closedCompactCylinders, mem_iUnion, mem_singleton_iff, exists_prop]
 
@@ -207,7 +207,7 @@ theorem cylinder_mem_closedCompactCylinders
 
 中文:
 定理 cylinder_mem_closedCompactCylinders
-  结论: (s : Finset ι) (S : Set (Π i : s, X i))
+  结论: (s : 有限集 ι) (S : 集合 (Π i : s, X i))
   证明: by
   rw [mem_closedCompactCylinders]
   exact ⟨s, S, hS_closed, hS_compact, rfl⟩
@@ -234,7 +234,7 @@ theorem mem_measurableCylinders_of_mem_closedCompactCylinders
 
 中文:
 定理 mem_measurableCylinders_of_mem_closedCompactCylinders
-  结论: [对任意 i, MeasurableSpace (X i)]
+  结论: [对任意 i, 可测空间 (X i)]
   证明: by
   rw [mem_measurableCylinders]
   refine ⟨closedCompactCylinders.finset ht, closedCompactCylinders.set ht, ?_, ?_⟩

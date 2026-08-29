@@ -41,7 +41,7 @@ theorem banach_steinhaus
 
 中文:
 定理 banach_steinhaus
-  结论: {ι : 类型} [CompleteSpace E] {g : ι -> E ->SL[σ₁₂] F}
+  结论: {ι : 类型} [完备空间 E] {g : ι -> E ->SL[σ₁₂] F}
   证明: by
   rw [show (exists C]; rw [forall i]; rw [‖g i‖ <= C) ↔ _ from (NormedSpace.equicontinuous_TFAE g).out 5 2]
   refine (norm_withSeminorms 𝕜₂ F).banach_steinhaus (fun _ x => ?_)
@@ -70,7 +70,7 @@ theorem banach_steinhaus_iSup_nnnorm
 
 中文:
 定理 banach_steinhaus_iSup_nnnorm
-  结论: {ι : 类型} [CompleteSpace E] {g : ι -> E ->SL[σ₁₂] F}
+  结论: {ι : 类型} [完备空间 E] {g : ι -> E ->SL[σ₁₂] F}
   证明: by
   rw [show ((⨆ i]; rw [↑‖g i‖₊) < ∞) ↔ _ from (NormedSpace.equicontinuous_TFAE g).out 8 2]
   refine (norm_withSeminorms 𝕜₂ F).banach_steinhaus (fun _ x => ?_)

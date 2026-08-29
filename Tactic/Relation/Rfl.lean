@@ -32,7 +32,7 @@ definition rflTac
 
 中文:
 定义 rflTac
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: withMainContext do liftMetaFinishingTactic (·.applyRfl)
 
 Depends on / 依赖: applyRfl, liftMetaFinishingTactic, withMainContext

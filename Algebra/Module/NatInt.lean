@@ -47,8 +47,8 @@ instance [AddMonoid
   mul_smul _ _ _ := mul_nsmul' ..
 
 中文:
-实例 [AddMonoid
-  签名: M] : MulAction 自然数 M where
+实例 [加法幺半群
+  签名: M] : 乘法作用 自然数 M where
   定义体: one_nsmul
   mul_smul _ _ _ := mul_nsmul' ..
 
@@ -68,8 +68,8 @@ instance [AddMonoid
   zero_smul := zero_nsmul
 
 中文:
-实例 [AddMonoid
-  签名: M] : SMulWithZero 自然数 M where
+实例 [加法幺半群
+  签名: M] : 带零标量乘法 自然数 M where
   定义体: nsmul_zero
   zero_smul := zero_nsmul
 
@@ -89,8 +89,8 @@ instance [SubtractionMonoid
   mul_smul _ _ _ := mul_zsmul ..
 
 中文:
-实例 [SubtractionMonoid
-  签名: M] : MulAction 整数 M where
+实例 [Subtraction幺半群
+  签名: M] : 乘法作用 整数 M where
   定义体: one_zsmul
   mul_smul _ _ _ := mul_zsmul ..
 
@@ -110,8 +110,8 @@ instance [SubtractionMonoid
   zero_smul := zero_zsmul
 
 中文:
-实例 [SubtractionMonoid
-  签名: M] : SMulWithZero 整数 M where
+实例 [Subtraction幺半群
+  签名: M] : 带零标量乘法 整数 M where
   定义体: zsmul_zero
   zero_smul := zero_zsmul
 
@@ -137,8 +137,8 @@ instance AddCommMonoid.toNatModule
   add_smul r s x := add_nsmul x r s
 
 中文:
-实例 AddCommMonoid.toNatModule
-  签名: : Module 自然数 M where
+实例 加法交换幺半群.to自然数Module
+  签名: : 模 自然数 M where
   定义体: nsmul_add a b n
   smul_zero := nsmul_zero
   zero_smul := zero_nsmul
@@ -160,7 +160,7 @@ theorem DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom
   proof: rfl
 
 中文:
-定理 DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom
+定理 分配标量乘法.toAddMonoidHom_eq_nsmulAddMonoidHom
   证明: rfl
 -/
 theorem DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom :
@@ -186,8 +186,8 @@ instance AddCommGroup.toIntModule
   add_smul r s x := add_zsmul x r s
 
 中文:
-实例 AddCommGroup.toIntModule
-  签名: : Module 整数 M where
+实例 加法交换群.to整数Module
+  签名: : 模 整数 M where
   定义体: one_zsmul
   mul_smul m n a := mul_zsmul a m n
   smul_add n a b := zsmul_add a b n
@@ -213,7 +213,7 @@ theorem DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom
   proof: rfl
 
 中文:
-定理 DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom
+定理 分配标量乘法.toAddMonoidHom_eq_zsmulAddGroupHom
   证明: rfl
 -/
 theorem DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom :
@@ -237,7 +237,7 @@ abbreviation Module.addCommMonoidToAddCommGroup
   zsmul
 
 中文:
-缩写 Module.addCommMonoidToAddCommGroup
+缩写 模.addCommMonoidToAddCommGroup
   定义体: fun a => (-1 : R) • a
   neg_add_cancel := fun a =>
     show (-1 : R) • a + a = 0 by
@@ -284,7 +284,7 @@ lemma Nat.cast_smul_eq_nsmul
   | succ n ih => rw [Nat.cast_succ, add_smul, add_smul, one_smul, ih, one_smul]
 
 中文:
-引理 Nat.cast_smul_eq_nsmul
+引理 自然数.cast_smul_eq_nsmul
   条件: (n : 自然数) (b : M)
   结论: (n : R) • b = n • b
   证明: by
@@ -308,7 +308,7 @@ lemma ofNat_smul_eq_nsmul
   proof: Nat.cast_smul_eq_nsmul ..
 
 中文:
-引理 ofNat_smul_eq_nsmul
+引理 of自然数_smul_eq_nsmul
   条件: (n : 自然数) [n.AtLeastTwo] (b : M)
   证明: Nat.cast_smul_eq_nsmul ..
 
@@ -330,7 +330,7 @@ theorem nat_smul_eq_nsmul
 
 中文:
 定理 nat_smul_eq_nsmul
-  条件: (h : Module 自然数 M) (n : 自然数) (x : M)
+  条件: (h : 模 自然数 M) (n : 自然数) (x : M)
   结论: h.smul n x = n • x
   证明: Nat.cast_smul_eq_nsmul ..
 
@@ -352,8 +352,8 @@ definition AddCommMonoid.uniqueNatModule
   uniq P := (Module.ext' P _) fun n => by convert! nat_smul_eq_nsmul P n
 
 中文:
-定义 AddCommMonoid.uniqueNatModule
-  签名: : Unique (Module 自然数 M) where
+定义 加法交换幺半群.unique自然数Module
+  签名: : 唯一 (模 自然数 M) where
   定义体: inferInstance
   uniq P := (Module.ext' P _) fun n => by convert! nat_smul_eq_nsmul P n
 -/
@@ -370,8 +370,8 @@ instance AddCommMonoid.subsingletonNatModule
   body: AddCommMonoid.uniqueNatModule.instSubsingleton
 
 中文:
-实例 AddCommMonoid.subsingletonNatModule
-  签名: : Subsingleton (Module 自然数 M)
+实例 加法交换幺半群.subsingleton自然数Module
+  签名: : 子单例 (模 自然数 M)
   定义体: AddCommMonoid.uniqueNatModule.instSubsingleton
 
 Depends on / 依赖: AddCommMonoid, AddCommMonoid.uniqueNatModule.instSubsingleton, instSubsingleton, uniqueNatModule
@@ -391,8 +391,8 @@ instance AddCommMonoid.nat_isScalarTower
     | succ n ih => simp only [add_smul, one_smul, ih]
 
 中文:
-实例 AddCommMonoid.nat_isScalarTower
-  签名: : IsScalarTower 自然数 R M where
+实例 加法交换幺半群.nat_isScalarTower
+  签名: : 标量塔 自然数 R M where
   定义体: by
     induction n with
     | zero => simp only [zero_smul]
@@ -419,7 +419,7 @@ theorem map_natCast_smul
 
 中文:
 定理 map_natCast_smul
-  结论: [AddCommMonoid M] [AddCommMonoid M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by
   simp only [Nat.cast_smul_eq_nsmul, map_nsmul]
 
@@ -441,8 +441,8 @@ theorem Nat.smul_one_eq_cast
   rw [nsmul_eq_mul]; rw [mul_one]
 
 中文:
-定理 Nat.smul_one_eq_cast
-  条件: {R : 类型} [NonAssocSemiring R] (m : 自然数)
+定理 自然数.smul_one_eq_cast
+  条件: {R : 类型} [非结合半环 R] (m : 自然数)
   结论: m • (1 : R) = ↑m
   证明: by
   rw [nsmul_eq_mul]; rw [mul_one]
@@ -463,8 +463,8 @@ theorem Int.smul_one_eq_cast
   rw [zsmul_eq_mul]; rw [mul_one]
 
 中文:
-定理 Int.smul_one_eq_cast
-  条件: {R : 类型} [NonAssocRing R] (m : 整数)
+定理 整数.smul_one_eq_cast
+  条件: {R : 类型} [非结合环 R] (m : 整数)
   结论: m • (1 : R) = ↑m
   证明: by
   rw [zsmul_eq_mul]; rw [mul_one]
@@ -497,7 +497,7 @@ lemma Int.cast_smul_eq_zsmul
   | negSucc => simp [add_smul, Nat.cast_smul_eq_nsmul]
 
 中文:
-引理 Int.cast_smul_eq_zsmul
+引理 整数.cast_smul_eq_zsmul
   条件: (n : 整数) (b : M)
   结论: (n : R) • b = n • b
   证明: by
@@ -525,7 +525,7 @@ theorem int_smul_eq_zsmul
 
 中文:
 定理 int_smul_eq_zsmul
-  条件: (h : Module 整数 M) (n : 整数) (x : M)
+  条件: (h : 模 整数 M) (n : 整数) (x : M)
   结论: h.smul n x = n • x
   证明: Int.cast_smul_eq_zsmul ..
 
@@ -547,8 +547,8 @@ definition AddCommGroup.uniqueIntModule
   uniq P := (Module.ext' P _) fun n => by convert! int_smul_eq_zsmul P n
 
 中文:
-定义 AddCommGroup.uniqueIntModule
-  签名: : Unique (Module 整数 M) where
+定义 加法交换群.unique整数Module
+  签名: : 唯一 (模 整数 M) where
   定义体: inferInstance
   uniq P := (Module.ext' P _) fun n => by convert! int_smul_eq_zsmul P n
 -/
@@ -568,8 +568,8 @@ instance AddCommMonoid.subsingletonIntModule
     AddCommGroup.uniqueIntModule.instSubsingleton.allEq a b
 
 中文:
-实例 AddCommMonoid.subsingletonIntModule
-  签名: [AddCommMonoid M]
+实例 加法交换幺半群.subsingleton整数Module
+  签名: [加法交换幺半群 M]
   定义体: let : AddCommGroup M := Module.addCommMonoidToAddCommGroup Int
     AddCommGroup.uniqueIntModule.instSubsingleton.allEq a b
 
@@ -590,7 +590,7 @@ theorem map_intCast_smul
 
 中文:
 定理 map_intCast_smul
-  结论: [AddCommGroup M] [AddCommGroup M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换群 M] [加法交换群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by simp only [Int.cast_smul_eq_zsmul, map_zsmul]
 
 Depends on / 依赖: Int.cast_smul_eq_zsmul, cast_smul_eq_zsmul, map_zsmul
@@ -612,8 +612,8 @@ instance AddCommGroup.intIsScalarTower
     | negSucc => simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
 
 中文:
-实例 AddCommGroup.intIsScalarTower
-  签名: {R : 类型u} {M : 类型v} [Ring R] [AddCommGroup M]
+实例 加法交换群.intIsScalarTower
+  签名: {R : 类型u} {M : 类型v} [环 R] [加法交换群 M]
   定义体: by
     cases n with
     | ofNat => simp [mul_smul, Nat.cast_smul_eq_nsmul]
@@ -640,8 +640,8 @@ lemma CharZero.of_module
   rw [← nsmul_one]; rw [← nsmul_one]; rw [← Nat.cast_smul_eq_nsmul R]; rw [← Nat.cast_smul_eq_nsmul R]; rw [h]
 
 中文:
-引理 CharZero.of_module
-  条件: [Semiring R] [AddCommMonoidWithOne M] [CharZero M] [Module R M]
+引理 特征零.of_module
+  条件: [半环 R] [加法交换带幺幺半群 M] [特征零 M] [模 R M]
   证明: by
   refine ⟨fun m n h => @Nat.cast_injective M _ _ _ _ ?_⟩
   rw [← nsmul_one]; rw [← nsmul_one]; rw [← Nat.cast_smul_eq_nsmul R]; rw [← Nat.cast_smul_eq_nsmul R]; rw [h]

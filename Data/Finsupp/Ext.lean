@@ -76,7 +76,7 @@ theorem addHom_ext
 
 中文:
 定理 addHom_ext
-  条件: [AddZeroClass N] ⦃f g
+  条件: [加法零类 N] ⦃f g
   结论: (α ->₀ M) ->+ N⦄
   证明: by
   refine AddMonoidHom.eq_of_eqOn_denseM add_closure_setOfPred_eq_single ?_
@@ -109,7 +109,7 @@ theorem addHom_ext'
 
 中文:
 定理 addHom_ext'
-  条件: [AddZeroClass N] ⦃f g
+  条件: [加法零类 N] ⦃f g
   结论: (α ->₀ M) ->+ N⦄
   证明: addHom_ext fun x => DFunLike.congr_fun (H x)
 
@@ -137,7 +137,7 @@ DFunLike.congr_fun by
 
 中文:
 定理 mulHom_ext
-  条件: [MulOneClass N] ⦃f g
+  条件: [MulOne类 N] ⦃f g
   结论: Multiplicative (α ->₀ M) ->* N⦄
   证明: MonoidHom.ext
 DFunLike.congr_fun by
@@ -171,7 +171,7 @@ theorem mulHom_ext'
 
 中文:
 定理 mulHom_ext'
-  结论: [MulOneClass N] {f g : Multiplicative (α ->₀ M) ->* N}
+  结论: [MulOne类 N] {f g : Multiplicative (α ->₀ M) ->* N}
   证明: mulHom_ext fun x => DFunLike.congr_fun (H x)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, mulHom_ext

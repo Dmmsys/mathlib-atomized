@@ -38,10 +38,10 @@ class IsStableUnderRetracts
     - of_retract({X Y : C} (_ : Retract X Y) (_ : P Y)) : P X
 
 中文:
-类 IsStableUnderRetracts
+类 是StableUnderRetracts
   参数: where
   公理与运算 (1 个):
-    - of_retract({X Y : C} (_ : Retract X Y) (_ : P Y)) : P X
+    - of_retract({X Y : C} (_ : 收缩 X Y) (_ : P Y)) : P X
 -/
 class IsStableUnderRetracts where
   of_retract {X Y : C} (_ : Retract X Y) (_ : P Y) : P X
@@ -57,7 +57,7 @@ lemma prop_of_retract
 
 中文:
 引理 prop_of_retract
-  条件: [IsStableUnderRetracts P] {X Y : C} (h : Retract X Y) (hY : P Y)
+  条件: [是StableUnderRetracts P] {X Y : C} (h : 收缩 X Y) (hY : P Y)
   结论: P X
   证明: IsStableUnderRetracts.of_retract h hY
 
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderRetracts (⊥ : Object命题erty C)
+  签名: 是StableUnderRetracts (⊥ : ObjectProperty C)
   定义体: h
 -/
 instance : IsStableUnderRetracts (⊥ : ObjectProperty C) where
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderRetracts (⊤ : Object命题erty C)
+  签名: 是StableUnderRetracts (⊤ : ObjectProperty C)
   定义体: by trivial
 -/
 instance : IsStableUnderRetracts (⊤ : ObjectProperty C) where
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.IsClosedUnderIsomorphisms
+  签名: P.在同构下封闭
   定义体: IsStableUnderRetracts.of_retract i.symm.retract h
 
 Depends on / 依赖: IsStableUnderRetracts, IsStableUnderRetracts.of_retract, i.symm.retract, of_retract, retract
@@ -138,8 +138,8 @@ lemma containsZero
 
 中文:
 引理 containsZero
-  条件: [HasZeroObject C] {X : C} (h : P X)
-  结论: P.ContainsZero where
+  条件: [有ZeroObject C] {X : C} (h : P X)
+  结论: P.余ntainsZero where
   证明: ⟨0, isZero_zero _, of_retract ((isZero_zero _).retract X) h⟩
 
 Depends on / 依赖: isZero_zero, of_retract, retract
@@ -157,7 +157,7 @@ lemma of_binaryBicone_left
 
 中文:
 引理 of_binaryBicone_left
-  条件: [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
+  条件: [有ZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
   证明: of_retract c.retract_left h
 
 Depends on / 依赖: c.retract_left, of_retract, retract_left
@@ -176,7 +176,7 @@ lemma of_binaryBicone_right
 
 中文:
 引理 of_binaryBicone_right
-  条件: [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
+  条件: [有ZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
   证明: of_retract c.retract_right h
 
 Depends on / 依赖: c.retract_right, of_retract, retract_right
@@ -195,7 +195,7 @@ lemma of_biprod_left
 
 中文:
 引理 of_biprod_left
-  条件: [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y))
+  条件: [有ZeroMorphisms C] {X Y : C} [有BinaryBiproduct X Y] (h : P (X ⊞ Y))
   证明: of_binaryBicone_left P (BinaryBiproduct.bicone X Y) h
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone, of_binaryBicone_left
@@ -214,7 +214,7 @@ lemma of_biprod_right
 
 中文:
 引理 of_biprod_right
-  条件: [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y))
+  条件: [有ZeroMorphisms C] {X Y : C} [有BinaryBiproduct X Y] (h : P (X ⊞ Y))
   证明: of_binaryBicone_right P (BinaryBiproduct.bicone X Y) h
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone, of_binaryBicone_right
@@ -233,7 +233,7 @@ lemma of_bicone
 
 中文:
 引理 of_bicone
-  条件: [HasZeroMorphisms C] {J : 类型} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : J)
+  条件: [有ZeroMorphisms C] {J : 类型} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : J)
   证明: of_retract (c.retract j) h
 
 Depends on / 依赖: c.retract, of_retract, retract
@@ -252,7 +252,7 @@ lemma of_biproduct
 
 中文:
 引理 of_biproduct
-  结论: [HasZeroMorphisms C] {J : 类型} (F : J -> C) [HasBiproduct F] (h : P (⨁ F))
+  结论: [有ZeroMorphisms C] {J : 类型} (F : J -> C) [有Biproduct F] (h : P (⨁ F))
   证明: of_bicone P F (biproduct.bicone F) h j
 
 Depends on / 依赖: bicone, biproduct, biproduct.bicone, of_bicone
@@ -273,7 +273,7 @@ definition retractClosure
 
 中文:
 定义 retractClosure
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (Y : C) (_ : P Y), Nonempty (Retract X Y)
 
 Depends on / 依赖: Nonempty, Retract
@@ -308,7 +308,7 @@ lemma prop_retractClosure
 
 中文:
 引理 prop_retractClosure
-  条件: {X Y : C} (h : P Y) (r : Retract X Y)
+  条件: {X Y : C} (h : P Y) (r : 收缩 X Y)
   结论: retractClosure P X
   证明: ⟨Y, h, ⟨r⟩⟩
 -/
@@ -342,8 +342,8 @@ instance [P.Nonempty]
   body: .mono P.le_retractClosure
 
 中文:
-实例 [P.Nonempty]
-  签名: : P.retractClosure.Nonempty
+实例 [P.非空]
+  签名: : P.retractClosure.非空
   定义体: .mono P.le_retractClosure
 
 Depends on / 依赖: P.le_retractClosure, le_retractClosure
@@ -392,7 +392,7 @@ lemma retractClosure_eq_self
 
 中文:
 引理 retractClosure_eq_self
-  条件: [IsStableUnderRetracts P]
+  条件: [是StableUnderRetracts P]
   结论: retractClosure P = P
   证明: by
   apply le_antisymm
@@ -423,7 +423,7 @@ lemma retractClosure_bot
 
 中文:
 引理 retractClosure_bot
-  结论: retractClosure (⊥ : Object命题erty C) = ⊥
+  结论: retractClosure (⊥ : ObjectProperty C) = ⊥
   证明: retractClosure_eq_self _
 
 @[simp]
@@ -444,7 +444,7 @@ lemma retractClosure_top
 
 中文:
 引理 retractClosure_top
-  结论: retractClosure (⊤ : Object命题erty C) = ⊤
+  结论: retractClosure (⊤ : ObjectProperty C) = ⊤
   证明: retractClosure_eq_self _
 
 Depends on / 依赖: retractClosure_eq_self
@@ -463,7 +463,7 @@ lemma retractClosure_le_iff
 
 中文:
 引理 retractClosure_le_iff
-  条件: (Q : Object命题erty C) [IsStableUnderRetracts Q]
+  条件: (Q : ObjectProperty C) [是StableUnderRetracts Q]
   证明: ⟨(le_retractClosure P).trans,
     fun h => (monotone_retractClosure h).trans (by rw [retractClosure_eq_self])⟩
 
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderRetracts (retractClosure P)
+  签名: 是StableUnderRetracts (retractClosure P)
   定义体: by
     rintro X Y r₁ ⟨Z, hZ, ⟨r₂⟩⟩
     refine ⟨Z, hZ, ⟨r₁.trans r₂⟩⟩

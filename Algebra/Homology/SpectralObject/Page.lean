@@ -112,7 +112,7 @@ lemma isZero_E_of_isZero_H
 
 中文:
 引理 isZero_E_of_isZero_H
-  结论: (h : IsZero ((X.H n₁).obj (mk₁ f₂)))
+  结论: (h : 是零 ((X.H n₁).obj (mk₁ f₂)))
   证明: (X.shortComplex f₁ f₂ f₃ n₀ n₁ n₂).exact_iff_isZero_homology.1
     (ShortComplex.exact_of_isZero_X₂ _ h)
 
@@ -354,7 +354,7 @@ lemma δ_eq_zero_of_isIso₁
 
 中文:
 引理 δ_eq_zero_of_isIso₁
-  条件: (hf : IsIso f) (n₀ n₁ : 整数) (hn₁ : n₀ + 1 = n₁ := by lia)
+  条件: (hf : 是同构 f) (n₀ n₁ : 整数) (hn₁ : n₀ + 1 = n₁ := by lia)
   证明: by
   simpa only [Preadditive.IsIso.comp_left_eq_zero] using X.zero₃ f g _ rfl n₀ n₁
 
@@ -375,7 +375,7 @@ lemma δ_eq_zero_of_isIso₂
 
 中文:
 引理 δ_eq_zero_of_isIso₂
-  条件: (hg : IsIso g) (n₀ n₁ : 整数) (hn₁ : n₀ + 1 = n₁ := by lia)
+  条件: (hg : 是同构 g) (n₀ n₁ : 整数) (hn₁ : n₀ + 1 = n₁ := by lia)
   证明: by
   simpa only [Preadditive.IsIso.comp_right_eq_zero] using X.zero₁ f g _ rfl n₀ n₁
 
@@ -406,7 +406,7 @@ lemma isZero_H_obj_of_isIso
 
 中文:
 引理 isZero_H_obj_of_isIso
-  条件: {i j : ι} (f : i ⟶ j) (hf : IsIso f) (n : 整数)
+  条件: {i j : ι} (f : i ⟶ j) (hf : 是同构 f) (n : 整数)
   证明: by
   let e : mk₁ (𝟙 i) ≅ mk₁ f := isoMk₁ (Iso.refl _) (asIso f) (by simp)
   refine IsZero.of_iso ?_ ((X.H n).mapIso e.symm)

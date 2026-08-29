@@ -44,8 +44,8 @@ lemma trace_restrict_eq_of_forall_mem
   set B : Matrix ι ι R := toMat
 
 中文:
-引理 trace_restrict_eq_of_forall_mem
-  结论: [IsDomain R] [IsPrincipalIdealRing R]
+引理 trace_restrict_eq_of_对任意_mem
+  结论: [是整环 R] [是主理想环 R]
   证明: by
   let ι := Module.Free.ChooseBasisIndex R M
   obtain ⟨n, snf⟩ := p.smithNormalForm (Module.Free.chooseBasis R M)

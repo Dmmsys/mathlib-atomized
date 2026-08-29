@@ -135,8 +135,8 @@ structure CircleDeg1Lift
 
 中文:
 结构 CircleDeg1Lift
-  参数: : Type extends 实数 ->o 实数 where
-  继承: Real ->o Real
+  参数: : 类型 extends 实数 ->o 实数 where
+  继承: 实数 ->o 实数
   公理与运算 (1 个):
     - map_add_one' : 对任意 x, toFun (x + 1) = toFun x + 1
 -/
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike CircleDeg1Lift 实数 实数
+  签名: 函数状 CircleDeg1Lift 实数 实数
   定义体: f.toFun
   coe_injective | ⟨⟨_, _⟩, _⟩, ⟨⟨_, _⟩, _⟩, rfl => rfl
 
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass CircleDeg1Lift 实数 实数
+  签名: 序态射类 CircleDeg1Lift 实数 实数
   定义体: f.monotone' h
 
 Depends on / 依赖: f.monotone, monotone
@@ -228,7 +228,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone f
+  结论: 递增 f
   证明: f.monotone'
 -/
 protected theorem monotone : Monotone f := f.monotone'
@@ -262,7 +262,7 @@ theorem strictMono_iff_injective
 
 中文:
 定理 strictMono_iff_injective
-  结论: StrictMono f ↔ Injective f
+  结论: 严格递增 f ↔ 单射 f
   证明: f.monotone.strictMono_iff_injective
 
 @[simp]
@@ -355,7 +355,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid CircleDeg1Lift
+  签名: 幺半群 CircleDeg1Lift
   定义体: { toOrderHom := f.1.comp g.1
       map_add_one' := fun x => by simp [map_add_one] }
   one := ⟨.id, fun _ => rfl⟩
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CircleDeg1Lift
+  签名: 可居 CircleDeg1Lift
   定义体: ⟨1⟩
 
 @[simp]
@@ -638,7 +638,7 @@ theorem isUnit_iff_bijective
 中文:
 定理 isUnit_iff_bijective
   条件: {f : CircleDeg1Lift}
-  结论: IsUnit f ↔ Bijective f
+  结论: 是单位 f ↔ 双射 f
   证明: ⟨fun ⟨u, h⟩ => h ▸ (toOrderIso u).bijective, fun h =>
     Units.isUnit
       { val := f
@@ -711,7 +711,7 @@ theorem commute_iff_commute
 中文:
 定理 commute_iff_commute
   条件: {f g : CircleDeg1Lift}
-  结论: Commute f g ↔ Function.Commute f g
+  结论: Commute f g ↔ 函数.Commute f g
   证明: CircleDeg1Lift.ext_iff
 
 Depends on / 依赖: CircleDeg1Lift, CircleDeg1Lift.ext_iff, ext_iff
@@ -886,7 +886,7 @@ theorem commute_nat_add
 中文:
 定理 commute_nat_add
   条件: (n : 自然数)
-  结论: Function.Commute f (n + ·)
+  结论: 函数.Commute f (n + ·)
   证明: by
   simpa only [nsmul_one, add_left_iterate] using Function.Commute.iterate_right f.map_one_add n
 
@@ -908,7 +908,7 @@ theorem commute_add_nat
 中文:
 定理 commute_add_nat
   条件: (n : 自然数)
-  结论: Function.Commute f (· + n)
+  结论: 函数.Commute f (· + n)
   证明: by
   simp only [add_comm _ (n : Real), f.commute_nat_add n]
 
@@ -931,7 +931,7 @@ theorem commute_sub_nat
 中文:
 定理 commute_sub_nat
   条件: (n : 自然数)
-  结论: Function.Commute f (· - n)
+  结论: 函数.Commute f (· - n)
   证明: by
   simpa only [sub_eq_add_neg] using!
     (f.commute_add_nat n).inverses_right (Equiv.addRight _).right_inv (Equiv.addRight _).left_inv
@@ -951,7 +951,7 @@ theorem commute_add_int
 
 中文:
 定理 commute_add_int
-  结论: 对任意 n : 整数, Function.Commute f (· + n)
+  结论: 对任意 n : 整数, 函数.Commute f (· + n)
 -/
 theorem commute_add_int : forall n : Int, Function.Commute f (· + n)
   | (n : Nat) => f.commute_add_nat n
@@ -970,7 +970,7 @@ theorem commute_int_add
 中文:
 定理 commute_int_add
   条件: (n : 整数)
-  结论: Function.Commute f (n + ·)
+  结论: 函数.Commute f (n + ·)
   证明: by
   simpa only [add_comm _ (n : Real)] using f.commute_add_int n
 
@@ -995,7 +995,7 @@ theorem commute_sub_int
 中文:
 定理 commute_sub_int
   条件: (n : 整数)
-  结论: Function.Commute f (· - n)
+  结论: 函数.Commute f (· - n)
   证明: by
   simpa only [sub_eq_add_neg] using!
     (f.commute_add_int n).inverses_right (Equiv.addRight _).right_inv (Equiv.addRight _).left_inv
@@ -1221,7 +1221,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice CircleDeg1Lift
+  签名: 格 CircleDeg1Lift
   定义体: { toFun := fun x => max (f x) (g x)
       monotone' := fun _ _ h => max_le_max (f.mono h) (g.mono h)
       -- TODO: generalize to `Monotone.max`
@@ -1268,7 +1268,7 @@ theorem sup_apply
 中文:
 定理 sup_apply
   条件: (x : 实数)
-  结论: (f ⊔ g) x = max (f x) (g x)
+  结论: (f ⊔ g) x = 最大值 (f x) (g x)
   证明: rfl
 
 @[simp]
@@ -1289,7 +1289,7 @@ theorem inf_apply
 中文:
 定理 inf_apply
   条件: (x : 实数)
-  结论: (f ⊓ g) x = min (f x) (g x)
+  结论: (f ⊓ g) x = 最小值 (f x) (g x)
   证明: rfl
 -/
 theorem inf_apply (x : Real) : (f ⊓ g) x = min (f x) (g x) :=
@@ -1308,7 +1308,7 @@ theorem iterate_monotone
 中文:
 定理 iterate_monotone
   条件: (n : 自然数)
-  结论: Monotone fun f : CircleDeg1Lift => f^[n]
+  结论: 递增 fun f : CircleDeg1Lift => f^[n]
   证明: fun f _ h =>
   f.monotone.iterate_le_of_le h _
 -/
@@ -1369,7 +1369,7 @@ theorem pow_monotone
 中文:
 定理 pow_monotone
   条件: (n : 自然数)
-  结论: Monotone fun f : CircleDeg1Lift => f ^ n
+  结论: 递增 fun f : CircleDeg1Lift => f ^ n
   证明: fun _ _ h => pow_mono h n
 
 Depends on / 依赖: pow_mono
@@ -1653,7 +1653,7 @@ theorem dist_map_zero_lt_of_semiconj
 
 中文:
 定理 dist_map_zero_lt_of_semiconj
-  条件: {f g₁ g₂ : CircleDeg1Lift} (h : Function.Semiconj f g₁ g₂)
+  条件: {f g₁ g₂ : CircleDeg1Lift} (h : 函数.Semiconj f g₁ g₂)
   证明: calc
     dist (g₁ 0) (g₂ 0) <= dist (g₁ 0) (f (g₁ 0) - f 0) + dist _ (g₂ 0) := dist_triangle _ _ _
     _ = dist (f 0 + g₁ 0) (f (g₁ 0)) + dist (g₂ 0 + f 0) (g₂ (f 0)) := by
@@ -1705,7 +1705,7 @@ theorem tendsto_atBot
 
 中文:
 定理 tendsto_atBot
-  结论: Tendsto f atBot atBot
+  结论: 收敛 f atBot atBot
   证明: tendsto_atBot_mono f.map_le_of_map_zero tendsto_atBot_add_const_left _ _
 (tendsto_atBot_mono fun x => (ceil_lt_add_one x).le)
       tendsto_atBot_add_const_right _ _ tendsto_id
@@ -1727,7 +1727,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  结论: Tendsto f atTop atTop
+  结论: 收敛 f atTop atTop
   证明: tendsto_atTop_mono f.le_map_of_map_zero tendsto_atTop_add_const_left _ _
 (tendsto_atTop_mono fun x => (sub_one_lt_floor x).le) by
       simpa [sub_eq_add_neg] using tendsto_atTop_add_const_right _ _ tendsto_id
@@ -1747,7 +1747,7 @@ theorem continuous_iff_surjective
 
 中文:
 定理 continuous_iff_surjective
-  结论: Continuous f ↔ Function.Surjective f
+  结论: 连续 f ↔ 函数.满射 f
   证明: ⟨fun h => h.surjective f.tendsto_atTop f.tendsto_atBot, f.monotone.continuous_of_surjective⟩
 
 Depends on / 依赖: continuous_of_surjective, f.monotone.continuous_of_surjective, f.tendsto_atBot, f.tendsto_atTop, h.surjective, monotone, surjective, tendsto_atBot, tendsto_atTop
@@ -2040,7 +2040,7 @@ theorem translationNumber_eq_of_tendsto_aux
 
 中文:
 定理 translationNumber_eq_of_tendsto_aux
-  条件: {τ' : 实数} (h : Tendsto f.transnumAuxSeq atTop (𝓝 τ'))
+  条件: {τ' : 实数} (h : 收敛 f.transnumAuxSeq atTop (𝓝 τ'))
   证明: h.limUnder_eq
 
 Depends on / 依赖: IsMultiplyPreprimitive, IsMultiplyPreprimitive.isMultiplyPretransitive, h.limUnder_eq, isMultiplyPretransitive, limUnder_eq
@@ -2157,7 +2157,7 @@ theorem tendsto_translationNumber_aux
 
 中文:
 定理 tendsto_translationNumber_aux
-  结论: Tendsto f.transnumAuxSeq atTop (𝓝 <| τ f)
+  结论: 收敛 f.transnumAuxSeq atTop (𝓝 <| τ f)
   证明: (cauchySeq_of_le_geometric_two fun n => le_of_lt <| f.transnumAuxSeq_dist_lt n).tendsto_limUnder
 
 Depends on / 依赖: cauchySeq_of_le_geometric_two, f.transnumAuxSeq_dist_lt, le_of_lt, tendsto_limUnder, transnumAuxSeq_dist_lt
@@ -2408,7 +2408,7 @@ theorem translationNumber_zpow
 中文:
 定理 translationNumber_zpow
   条件: (f : CircleDeg1Liftˣ)
-  结论: 对任意 n : 整数, τ (f ^ n : Units _) = n * τ f
+  结论: 对任意 n : 整数, τ (f ^ n : 单位群 _) = n * τ f
 -/
 theorem translationNumber_zpow (f : CircleDeg1Liftˣ) : forall n : Int, τ (f ^ n : Units _) = n * τ f
   | (n : Nat) => by simp [translationNumber_pow f n]
@@ -2525,7 +2525,7 @@ theorem tendsto_translation_number₀
 
 中文:
 定理 tendsto_translation_number₀
-  结论: Tendsto (fun n : 自然数 => (f ^ n) 0 / n) atTop (𝓝 <| τ f)
+  结论: 收敛 (fun n : 自然数 => (f ^ n) 0 / n) atTop (𝓝 <| τ f)
   证明: (tendsto_add_atTop_iff_nat 1).1 (mod_cast f.tendsto_translation_number₀')
 
 Depends on / 依赖: f.tendsto_translation_number, mod_cast, tendsto_add_atTop_iff_nat
@@ -2591,7 +2591,7 @@ theorem translationNumber_mono
 
 中文:
 定理 translationNumber_mono
-  结论: Monotone τ
+  结论: 递增 τ
   证明: fun f g h =>
   le_of_tendsto_of_tendsto' f.tendsto_translation_number₀ g.tendsto_translation_number₀ fun n => by
     gcongr; exact pow_mono h _ _
@@ -2997,8 +2997,8 @@ theorem forall_map_sub_of_Icc
   proof: f.map_fract_sub_fract_eq x ▸ h _ ⟨fract_nonneg _, le_of_lt (fract_lt_one _)⟩
 
 中文:
-定理 forall_map_sub_of_Icc
-  条件: (P : 实数 -> 命题) (h : 对任意 x in Icc (0 : 实数) 1, P (f x - x)) (x : 实数)
+定理 对任意_map_sub_of_Icc
+  条件: (P : 实数 -> 命题) (h : 对任意 x in 闭区间 (0 : 实数) 1, P (f x - x)) (x : 实数)
   证明: f.map_fract_sub_fract_eq x ▸ h _ ⟨fract_nonneg _, le_of_lt (fract_lt_one _)⟩
 
 Depends on / 依赖: f.map_fract_sub_fract_eq, fract_lt_one, fract_nonneg, le_of_lt, map_fract_sub_fract_eq
@@ -3021,8 +3021,8 @@ theorem translationNumber_lt_of_forall_lt_add
   apply translationNumber_le_of
 
 中文:
-定理 translationNumber_lt_of_forall_lt_add
-  条件: (hf : Continuous f) {z : 实数} (hz : 对任意 x, f x < x + z)
+定理 translationNumber_lt_of_对任意_lt_add
+  条件: (hf : 连续 f) {z : 实数} (hz : 对任意 x, f x < x + z)
   证明: by
   obtain ⟨x, -, hx⟩ : exists x in Icc (0 : Real) 1, forall y in Icc (0 : Real) 1, f y - y <= f x - x :=
     isCompact_Icc.exists_isMaxOn (nonempty_Icc.2 zero_le_one)
@@ -3055,8 +3055,8 @@ theorem lt_translationNumber_of_forall_add_lt
   apply le_translationNumber_of_add_l
 
 中文:
-定理 lt_translationNumber_of_forall_add_lt
-  条件: (hf : Continuous f) {z : 实数} (hz : 对任意 x, x + z < f x)
+定理 lt_translationNumber_of_对任意_add_lt
+  条件: (hf : 连续 f) {z : 实数} (hz : 对任意 x, x + z < f x)
   证明: by
   obtain ⟨x, -, hx⟩ : exists x in Icc (0 : Real) 1, forall y in Icc (0 : Real) 1, f x - x <= f y - y :=
     isCompact_Icc.exists_isMinOn (nonempty_Icc.2 zero_le_one) (hf.sub continuous_id).continuousOn
@@ -3091,8 +3091,8 @@ theorem exists_eq_add_translationNumber
   exact intermediate_valu
 
 中文:
-定理 exists_eq_add_translationNumber
-  条件: (hf : Continuous f)
+定理 存在_eq_add_translationNumber
+  条件: (hf : 连续 f)
   结论: 存在 x, f x = x + τ f
   证明: by
   obtain ⟨a, ha⟩ : exists x, f x <= x + τ f := by
@@ -3130,7 +3130,7 @@ theorem translationNumber_eq_int_iff
 
 中文:
 定理 translationNumber_eq_int_iff
-  条件: (hf : Continuous f) {m : 整数}
+  条件: (hf : 连续 f) {m : 整数}
   证明: by
   constructor
   · intro h
@@ -3163,8 +3163,8 @@ theorem continuous_pow
 
 中文:
 定理 continuous_pow
-  条件: (hf : Continuous f) (n : 自然数)
-  结论: Continuous (f ^ n : CircleDeg1Lift)
+  条件: (hf : 连续 f) (n : 自然数)
+  结论: 连续 (f ^ n : CircleDeg1Lift)
   证明: by
   rw [coe_pow]
   exact hf.iterate n
@@ -3187,7 +3187,7 @@ theorem translationNumber_eq_rat_iff
 
 中文:
 定理 translationNumber_eq_rat_iff
-  条件: (hf : Continuous f) {m : 整数} {n : 自然数} (hn : 0 < n)
+  条件: (hf : 连续 f) {m : 整数} {n : 自然数} (hn : 0 < n)
   证明: by
   rw [eq_div_iff]; rw [mul_comm]; rw [← translationNumber_pow] <;> [skip; exact ne_of_gt (Nat.cast_pos.2 hn)]
   exact (f ^ n).translationNumber_eq_int_iff (f.continuous_pow hf n)
@@ -3215,8 +3215,8 @@ theorem semiconj_of_group_action_of_forall_translationNumber_eq
       rw [← 
 
 中文:
-定理 semiconj_of_group_action_of_forall_translationNumber_eq
-  结论: {G : 类型} [Group G]
+定理 semiconj_of_group_action_of_对任意_translationNumber_eq
+  结论: {G : 类型} [群 G]
   证明: by
   -- Equality of translation number guarantees that for each `x`
   -- the set `{f₂ g⁻¹ (f₁ g x) | g : G}` is bounded above.
@@ -3303,7 +3303,7 @@ theorem semiconj_of_isUnit_of_translationNumber_eq
 
 中文:
 定理 semiconj_of_isUnit_of_translationNumber_eq
-  结论: {f₁ f₂ : CircleDeg1Lift} (h₁ : IsUnit f₁)
+  结论: {f₁ f₂ : CircleDeg1Lift} (h₁ : 是单位 f₁)
   证明: by
   rcases h₁, h₂ with ⟨⟨f₁, rfl⟩, ⟨f₂, rfl⟩⟩
   exact units_semiconj_of_translationNumber_eq h
@@ -3326,7 +3326,7 @@ theorem semiconj_of_bijective_of_translationNumber_eq
 
 中文:
 定理 semiconj_of_bijective_of_translationNumber_eq
-  结论: {f₁ f₂ : CircleDeg1Lift} (h₁ : Bijective f₁)
+  结论: {f₁ f₂ : CircleDeg1Lift} (h₁ : 双射 f₁)
   证明: semiconj_of_isUnit_of_translationNumber_eq (isUnit_iff_bijective.2 h₁) (isUnit_iff_bijective.2 h₂)
     h
 

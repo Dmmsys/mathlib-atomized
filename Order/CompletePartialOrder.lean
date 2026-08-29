@@ -51,9 +51,9 @@ class CompletePartialOrder
     - lubOfDirected : forall d, DirectedOn (· <= ·) d -> IsLUB d (sSup d)
 
 中文:
-类 CompletePartialOrder
+类 余mpletePartial序
   参数: (α : 类型)
-  继承: PartialOrder α, SupSet α, OrderBot α
+  继承: 偏序 α, 上确界集 α, 有底序 α
   公理与运算 (1 个):
     - lubOfDirected : 对任意 d, DirectedOn (· <= ·) d -> IsLUB d (sSup d)
 -/
@@ -79,8 +79,8 @@ bot_le := isLUB_empty_iff.mp lub_of_directed ∅ IsChain.empty.directedOn
   lubOfDirected := lub_of_directed
 
 中文:
-定义 CompletePartialOrder.ofLubOfDirected
-  签名: (α : 类型) [H1 : PartialOrder α] [H2 : SupSet α]
+定义 余mpletePartial序.ofLubOfDirected
+  签名: (α : 类型) [H1 : 偏序 α] [H2 : 上确界集 α]
   定义体: H1; __ := H2
   bot := sSup ∅
 bot_le := isLUB_empty_iff.mp lub_of_directed ∅ IsChain.empty.directedOn
@@ -198,7 +198,7 @@ lemma CompletePartialOrder.scottContinuous
   exact h hne hd
 
 中文:
-引理 CompletePartialOrder.scottContinuous
+引理 余mpletePartial序.scottContinuous
   条件: {f : α -> β}
   证明: by
   refine ⟨fun h d hd₁ hd₂ => h hd₁ hd₂ hd₂.isLUB_sSup, fun h d hne hd a hda => ?_⟩

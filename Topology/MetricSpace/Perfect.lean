@@ -54,8 +54,8 @@ theorem Perfect.small_diam_aux
   have := hC.closure_nhds_inter x xC this Metric.
 
 中文:
-定理 Perfect.small_diam_aux
-  条件: (hC : Perfect C) (ε_pos : 0 < ε) {x : α} (xC : x in C)
+定理 完美.small_diam_aux
+  条件: (hC : 完美 C) (ε_pos : 0 < ε) {x : α} (xC : x in C)
   证明: closure (Metric.eball x (ε / 2) inter C)
     Perfect D ∧ D.Nonempty ∧ D subseteq C ∧ Metric.ediam D <= ε := by
   have : x in Metric.eball x (ε / 2) := by
@@ -94,8 +94,8 @@ theorem Perfect.small_diam_splitting
   rcases perf1.small_diam_aux ε_pos hx₁ with ⟨perf1', non1', sub1', diam1
 
 中文:
-定理 Perfect.small_diam_splitting
-  条件: (hC : Perfect C) (hnonempty : C.Nonempty) (ε_pos : 0 < ε)
+定理 完美.small_diam_splitting
+  条件: (hC : 完美 C) (hnonempty : C.非空) (ε_pos : 0 < ε)
   证明: by
   rcases hC.splitting hnonempty with ⟨D₀, D₁, ⟨perf0, non0, sub0⟩, ⟨perf1, non1, sub1⟩, hdisj⟩
   obtain ⟨x₀, hx₀⟩ := non0
@@ -133,7 +133,7 @@ theorem Perfect.exists_nat_bool_injection
     fun {C : Set α} (hC : Perfect C) (hnonempty : C.Nonempty) {ε : Real>=0∞} (hε : 0
 
 中文:
-定理 Perfect.exists_nat_bool_injection
+定理 完美.存在_nat_bool_injection
   证明: by
   obtain ⟨u, -, upos', hu⟩ := exists_seq_strictAnti_tendsto' (zero_lt_one' Real>=0∞)
   have upos := fun n => (upos' n).1
@@ -212,8 +212,8 @@ theorem IsClosed.exists_nat_bool_injection_of_not_countable
   exact ⟨f, hfD.trans hDC, hf⟩
 
 中文:
-定理 IsClosed.exists_nat_bool_injection_of_not_countable
-  结论: {α : 类型} [TopologicalSpace α]
+定理 是闭集.存在_nat_bool_injection_of_not_countable
+  结论: {α : 类型} [拓扑空间 α]
   证明: by
   let := TopologicalSpace.upgradeIsCompletelyMetrizable α
   obtain ⟨D, hD, Dnonempty, hDC⟩ := exists_perfect_nonempty_of_isClosed_of_not_countable hC hunc

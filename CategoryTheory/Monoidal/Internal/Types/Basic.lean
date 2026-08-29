@@ -72,7 +72,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Mon (类型u) ⥤ MonCat.{u} where
+  签名: : 幺半群 (类型u) ⥤ 幺半群范畴.{u} where
   定义体: MonCat.of A.X
   map f := MonCat.ofHom
     { toFun := f.hom
@@ -108,7 +108,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : MonCat.{u} ⥤ Mon (类型u) where
+  签名: : 幺半群范畴.{u} ⥤ 幺半群 (类型u) where
   定义体: { X := A
       mon :=
         { one := ↾fun _ => 1
@@ -162,7 +162,7 @@ definition monTypeEquivalenceMon
 
 中文:
 定义 monTypeEquivalenceMon
-  签名: : Mon (类型u) ≌ MonCat.{u} where
+  签名: : 幺半群 (类型u) ≌ 幺半群范畴.{u} where
   定义体: functor
   inverse := inverse
   unitIso := Iso.refl _
@@ -209,7 +209,7 @@ instance monTypeInhabited
 
 中文:
 实例 monTypeInhabited
-  签名: : Inhabited (Mon (类型u))
+  签名: : 可居 (幺半群 (类型u))
   定义体: ⟨MonTypeEquivalenceMon.inverse.obj (MonCat.of PUnit)⟩
 
 Depends on / 依赖: MonCat, MonCat.of, MonTypeEquivalenceMon, MonTypeEquivalenceMon.inverse.obj, inverse
@@ -231,7 +231,7 @@ instance commMonCommMonoid
 
 中文:
 实例 commMonCommMonoid
-  签名: (A : 类型u) [MonObj A] [IsCommMonObj A]
+  签名: (A : 类型u) [MonObj A] [是交换MonObj A]
   定义体: { MonTypeEquivalenceMon.monMonoid A with
     mul_comm := fun x y => by
       convert! congr_hom (CC := fun X => X) (IsCommMonObj.mul_comm A) (y, x) }
@@ -254,7 +254,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : CommMon (类型u) ⥤ CommMonCat.{u} where
+  签名: : 交换幺半群 (类型u) ⥤ 交换幺半群范畴.{u} where
   定义体: CommMonCat.of A.X
   map f := CommMonCat.ofHom (MonTypeEquivalenceMon.functor.map f.hom).hom
 
@@ -279,7 +279,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : CommMonCat.{u} ⥤ CommMon (类型u) where
+  签名: : 交换幺半群范畴.{u} ⥤ 交换幺半群 (类型u) where
   定义体: { MonTypeEquivalenceMon.inverse.obj ((forget₂ CommMonCat MonCat).obj A) with
       comm :=
         { mul_comm := by
@@ -317,7 +317,7 @@ definition commMonTypeEquivalenceCommMon
 
 中文:
 定义 commMonTypeEquivalenceCommMon
-  签名: : CommMon (类型u) ≌ CommMonCat.{u} where
+  签名: : 交换幺半群 (类型u) ≌ 交换幺半群范畴.{u} where
   定义体: functor
   inverse := inverse
   unitIso := Iso.refl _

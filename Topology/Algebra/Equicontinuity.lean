@@ -37,7 +37,7 @@ theorem equicontinuous_of_equicontinuousAt_one
 
 中文:
 定理 equicontinuous_of_equicontinuousAt_one
-  结论: {ι G M hom : 类型} [TopologicalSpace G]
+  结论: {ι G M hom : 类型} [拓扑空间 G]
   证明: by
   rw [equicontinuous_iff_continuous]
   rw [equicontinuousAt_iff_continuousAt] at hf
@@ -79,7 +79,7 @@ theorem uniformEquicontinuous_of_equicontinuousAt_one
 
 中文:
 定理 uniformEquicontinuous_of_equicontinuousAt_one
-  结论: {ι G M hom : 类型} [UniformSpace G]
+  结论: {ι G M hom : 类型} [一致空间 G]
   证明: by
   rw [uniformEquicontinuous_iff_uniformContinuous]
   rw [equicontinuousAt_iff_continuousAt] at hf

@@ -44,10 +44,10 @@ structure Context
     - bvars : List FVarId
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (1 个):
-    - bvars : List FVarId
+    - bvars : 列表 FVarId
 -/
 private structure Context where
   /-- Variables that come from a lambda or forall binder.
@@ -127,7 +127,7 @@ definition withLams
 
 中文:
 定义 withLams
-  签名: (lambdas : List FVarId) (key : Key)
+  签名: (lambdas : 列表 FVarId) (key : Key)
   定义体: do
   match lambdas with
   | [] => return key
@@ -158,7 +158,7 @@ definition encodingStepAux
 
 中文:
 定义 encodingStepAux
-  签名: (e : Expr) (lambdas : List FVarId) (root : 布尔)
+  签名: (e : Expr) (lambdas : 列表 FVarId) (root : 布尔值)
   定义体: do
   withLams lambdas (← go)
 -/
@@ -235,7 +235,7 @@ definition etaPossibilities
 
 中文:
 定义 etaPossibilities
-  签名: (e : Expr) (lambdas : List FVarId) (root : 布尔)
+  签名: (e : Expr) (lambdas : 列表 FVarId) (root : 布尔值)
   定义体: do
   return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
       (← match e, lambdas with
@@ -282,7 +282,7 @@ definition lambdaTelescopeReduce
 
 中文:
 定义 lambdaTelescopeReduce
-  签名: {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
+  签名: {m} {α} [非空 (m α)] [单子 m] [MonadLiftT MetaM m]
   定义体: do
   /- expressions marked with `no_index` should be indexed with a star -/
   if DiscrTree.hasNoindexAnnotation e then
@@ -318,7 +318,7 @@ definition encodingStepWithEta
 
 中文:
 定义 encodingStepWithEta
-  签名: (e : Expr) (root : 布尔)
+  签名: (e : Expr) (root : 布尔值)
   定义体: lambdaTelescopeReduce e []
     (fun lambdas => return [← (withLams lambdas .star).run entry])
     (fun e lambdas => etaPossibilities e lambdas root entry)
@@ -342,7 +342,7 @@ definition encodingStep
 
 中文:
 定义 encodingStep
-  签名: (e : Expr) (root : 布尔)
+  签名: (e : Expr) (root : 布尔值)
   定义体: do
   lambdaTelescopeReduce e []
     (fun lambdas => withLams lambdas .star)
@@ -364,7 +364,7 @@ definition initializeLazyEntryWithEtaAux
 
 中文:
 定义 initializeLazyEntryWithEtaAux
-  签名: (e : Expr) (labelledStars : 布尔)
+  签名: (e : Expr) (labelledStars : 布尔值)
   定义体: do
   (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
 -/
@@ -384,7 +384,7 @@ definition initializeLazyEntryWithEta
 
 中文:
 定义 initializeLazyEntryWithEta
-  签名: (e : Expr) (labelledStars : 布尔 := true)
+  签名: (e : Expr) (labelledStars : 布尔值 := true)
   定义体: do
   withReducible do initializeLazyEntryWithEtaAux e labelledStars
 -/
@@ -403,7 +403,7 @@ definition initializeLazyEntry
 
 中文:
 定义 initializeLazyEntry
-  签名: (e : Expr) (labelledStars : 布尔)
+  签名: (e : Expr) (labelledStars : 布尔值)
   定义体: do
   ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
 -/
@@ -431,7 +431,7 @@ definition evalLazyEntryAux
 
 中文:
 定义 evalLazyEntryAux
-  签名: (entry : LazyEntry) (eta : 布尔)
+  签名: (entry : LazyEntry) (eta : 布尔值)
   定义体: do
   match entry.stack with
   | [] => return none
@@ -473,7 +473,7 @@ definition getStackEntries
 
 中文:
 定义 getStackEntries
-  签名: (fn : Expr) (args : Array Expr) (bvars : List FVarId)
+  签名: (fn : Expr) (args : 数组 Expr) (bvars : 列表 FVarId)
   定义体: do
   let mut fnType ← inferType fn
   loop fnType 0 0 []
@@ -578,7 +578,7 @@ definition evalLazyEntry
 
 中文:
 定义 evalLazyEntry
-  签名: (entry : LazyEntry) (eta : 布尔)
+  签名: (entry : LazyEntry) (eta : 布尔值)
   定义体: do
   if let key :: computedKeys := entry.computedKeys then
     -- If there is already a result available, use it.
@@ -609,7 +609,7 @@ definition encodeExprWithEta
 
 中文:
 定义 encodeExprWithEta
-  签名: (e : Expr) (labelledStars : 布尔)
+  签名: (e : Expr) (labelledStars : 布尔值)
   定义体: withReducible do
     let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
     let entries := entries.map fun (key, entry) => (#[key], entry)
@@ -657,7 +657,7 @@ definition LazyEntry.toList
 
 中文:
 定义 LazyEntry.toList
-  签名: (entry : LazyEntry) (result : List Key := [])
+  签名: (entry : LazyEntry) (result : 列表 Key := [])
   定义体: do
   match ← evalLazyEntry entry false with
   | some [(key, entry')] => entry'.toList (key :: result)
@@ -682,7 +682,7 @@ definition encodeExpr
 
 中文:
 定义 encodeExpr
-  签名: (e : Expr) (labelledStars : 布尔)
+  签名: (e : Expr) (labelledStars : 布尔值)
   定义体: withReducible do
   let (key, entry) ← initializeLazyEntry e labelledStars
   return (key, ← entry.toList)

@@ -236,7 +236,7 @@ definition covariantSequence
 
 中文:
 定义 covariantSequence
-  签名: : ComposableArrows AddCommGrpCat.{w} 5
+  签名: : ComposableArrows 加法交换群范畴.{w} 5
   定义体: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₀)))
     (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
     (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
@@ -383,7 +383,7 @@ lemma postcomp_mk₀_injective_of_mono
 
 中文:
 引理 postcomp_mk₀_injective_of_mono
-  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f]
+  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : 单态射 f]
   证明: by
   rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
   intro x hx
@@ -409,7 +409,7 @@ lemma mono_postcomp_mk₀_of_mono
 
 中文:
 引理 mono_postcomp_mk₀_of_mono
-  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f]
+  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : 单态射 f]
   证明: (AddCommGrpCat.mono_iff_injective _).mpr (postcomp_mk₀_injective_of_mono L f)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, mono_iff_injective
@@ -613,7 +613,7 @@ definition contravariantSequence
 
 中文:
 定义 contravariantSequence
-  签名: : ComposableArrows AddCommGrpCat.{w} 5
+  签名: : ComposableArrows 加法交换群范畴.{w} 5
   定义体: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₀)))
     (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₀)))
     (AddCommGrpCat.ofHom (hS.extClass.precomp Y h))
@@ -760,7 +760,7 @@ lemma precomp_mk₀_injective_of_epi
 
 中文:
 引理 precomp_mk₀_injective_of_epi
-  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g]
+  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : 满态射 g]
   证明: by
   rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
   intro x hx
@@ -786,7 +786,7 @@ lemma mono_precomp_mk₀_of_epi
 
 中文:
 引理 mono_precomp_mk₀_of_epi
-  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g]
+  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : 满态射 g]
   证明: (AddCommGrpCat.mono_iff_injective _).mpr (precomp_mk₀_injective_of_epi L g)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, add_right_comm, mono_iff_injective

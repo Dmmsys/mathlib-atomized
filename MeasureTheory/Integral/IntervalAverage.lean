@@ -153,7 +153,7 @@ theorem exists_eq_interval_average_of_measure
     isCompact_uIcc measurableSet_uIoc uIoc_subset_uIcc hμfin) hμfin hμ0
 
 中文:
-定理 exists_eq_interval_average_of_measure
+定理 存在_eq_interval_average_of_measure
   证明: exists_eq_setAverage ⟨nonempty_of_measure_ne_zero hμ0, isPreconnected_Ioc⟩
     (hf.mono uIoc_subset_uIcc) (hf.integrableOn_of_subset_isCompact
     isCompact_uIcc measurableSet_uIoc uIoc_subset_uIcc hμfin) hμfin hμ0
@@ -181,7 +181,7 @@ theorem exists_eq_interval_average_of_nullSingletonClass
   have
 
 中文:
-定理 exists_eq_interval_average_of_nullSingletonClass
+定理 存在_eq_interval_average_of_nullSingletonClass
   证明: by
   have hint : IntegrableOn f (Ι a b) μ := hf.integrableOn_of_subset_isCompact
     isCompact_uIcc measurableSet_uIoc uIoc_subset_uIcc hμfin
@@ -220,7 +220,7 @@ theorem exists_eq_interval_average
     (by simpa using sub_ne_zero.mpr hab.symm)
 
 中文:
-定理 exists_eq_interval_average
+定理 存在_eq_interval_average
   证明: exists_eq_interval_average_of_nullSingletonClass hf (by simp)
     (by simpa using sub_ne_zero.mpr hab.symm)
 

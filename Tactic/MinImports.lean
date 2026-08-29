@@ -73,7 +73,7 @@ definition isInitImport
 
 中文:
 定义 isInitImport
-  签名: : Name -> 布尔
+  签名: : Name -> 布尔值
 -/
 partial def isInitImport : Name -> Bool
   | `Init => true
@@ -402,7 +402,7 @@ definition getAllImports
 
 中文:
 定义 getAllImports
-  签名: (cmd id : Syntax) (dbg? : 布尔 := false)
+  签名: (cmd id : Syntax) (dbg? : 布尔值 := false)
   定义体: do
   let env ← getEnv
   -- We collect the implied declaration names, the `SyntaxNodeKinds` and the attributes.

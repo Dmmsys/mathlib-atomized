@@ -44,7 +44,7 @@ theorem degree_le_of_ne_zero
 
 中文:
 定理 degree_le_of_ne_zero
-  条件: {p : A[X]} (pnz : p != 0) (hp : Polynomial.aeval x p = 0)
+  条件: {p : A[X]} (pnz : p != 0) (hp : 多项式.aeval x p = 0)
   证明: calc
     degree (minpoly A x) <= degree (p * C (leadingCoeff p)⁻¹) :=
       min A x (monic_mul_leadingCoeff_inv pnz) (by simp [hp])
@@ -70,7 +70,7 @@ theorem ne_zero_of_finite
 
 中文:
 定理 ne_zero_of_finite
-  条件: (e : B) [FiniteDimensional A B]
+  条件: (e : B) [有限维 A B]
   结论: minpoly A e != 0
   证明: minpoly.ne_zero .of_finite A _
 
@@ -96,7 +96,7 @@ theorem unique
 
 中文:
 定理 unique
-  结论: {p : A[X]} (pmonic : p.Monic) (hp : Polynomial.aeval x p = 0)
+  结论: {p : A[X]} (pmonic : p.Monic) (hp : 多项式.aeval x p = 0)
   证明: by
   have hx : IsIntegral A x := ⟨p, pmonic, hp⟩
   symm; apply eq_of_sub_eq_zero
@@ -157,7 +157,7 @@ theorem dvd
 
 中文:
 定理 dvd
-  条件: {p : A[X]} (hp : Polynomial.aeval x p = 0)
+  条件: {p : A[X]} (hp : 多项式.aeval x p = 0)
   结论: minpoly A x ∣ p
   证明: by
   by_cases hp0 : p = 0
@@ -194,7 +194,7 @@ lemma dvd_iff
 中文:
 引理 dvd_iff
   条件: {p : A[X]}
-  结论: minpoly A x ∣ p ↔ Polynomial.aeval x p = 0
+  结论: minpoly A x ∣ p ↔ 多项式.aeval x p = 0
   证明: ⟨fun ⟨q, hq⟩ => by rw [hq, map_mul, aeval, zero_mul], minpoly.dvd A x⟩
 
 Depends on / 依赖: map_mul, minpoly, minpoly.dvd, zero_mul
@@ -214,7 +214,7 @@ theorem isRadical
 
 中文:
 定理 isRadical
-  条件: [IsReduced B]
+  条件: [是既约 B]
   结论: IsRadical (minpoly A x)
   证明: fun n p dvd => by
   rw [dvd_iff] at dvd ⊢; rw [map_pow] at dvd; exact IsReduced.eq_zero _ ⟨n, dvd⟩
@@ -236,7 +236,7 @@ theorem dvd_map_of_isScalarTower
 
 中文:
 定理 dvd_map_of_isScalarTower
-  结论: (A K : 类型) {R : 类型} [CommRing A] [Field K] [Ring R]
+  结论: (A K : 类型) {R : 类型} [交换环 A] [域 K] [环 R]
   证明: by
   refine minpoly.dvd K x ?_
   rw [aeval_map_algebraMap]; rw [minpoly.aeval]
@@ -262,7 +262,7 @@ theorem dvd_map_of_isScalarTower'
 
 中文:
 定理 dvd_map_of_isScalarTower'
-  结论: (R : 类型) {S : 类型} (K L : 类型) [CommRing R]
+  结论: (R : 类型) {S : 类型} (K L : 类型) [交换环 R]
   证明: by
   apply minpoly.dvd K (algebraMap S L s)
   rw [← map_aeval_eq_aeval_map]; rw [minpoly.aeval]; rw [map_zero]
@@ -290,7 +290,7 @@ theorem aeval_of_isScalarTower
 
 中文:
 定理 aeval_of_isScalarTower
-  结论: (R : 类型) {K T U : 类型} [CommRing R] [Field K] [CommRing T]
+  结论: (R : 类型) {K T U : 类型} [交换环 R] [域 K] [交换环 T]
   证明: aeval_map_algebraMap K y (minpoly R x) ▸
     eval₂_eq_zero_of_dvd_of_eval₂_eq_zero (algebraMap K U) y
       (minpoly.dvd_map_of_isScalarTower R K x) hy
@@ -320,7 +320,7 @@ theorem map_algebraMap
 
 中文:
 定理 map_algebraMap
-  结论: {F E A : 类型} [Field F] [Field E] [CommRing A]
+  结论: {F E A : 类型} [域 F] [域 E] [交换环 A]
   证明: by
   refine eq_of_monic_of_dvd_of_natDegree_le (minpoly.monic ha.tower_top)
     ((algebraMap F E).injective.monic_map_iff.mp <| minpoly.monic ha)
@@ -385,7 +385,7 @@ eq_of_monic_of_associated hp3 (monic ⟨p, ⟨hp3, hp2⟩⟩)
 
 中文:
 定理 eq_of_irreducible_of_monic
-  结论: [Nontrivial B] {p : A[X]} (hp1 : Irreducible p)
+  结论: [非平凡 B] {p : A[X]} (hp1 : 不可约 p)
   证明: let ⟨_, hq⟩ := dvd A x hp2
 eq_of_monic_of_associated hp3 (monic ⟨p, ⟨hp3, hp2⟩⟩)
     mul_one (minpoly A x) ▸ hq.symm ▸ Associated.mul_left _
@@ -410,7 +410,7 @@ theorem eq_iff_aeval_eq_zero
 
 中文:
 定理 eq_iff_aeval_eq_zero
-  条件: [Nontrivial B] {p : A[X]} (irr : Irreducible p) (monic : p.Monic)
+  条件: [非平凡 B] {p : A[X]} (irr : 不可约 p) (monic : p.Monic)
   证明: ⟨(· ▸ aeval A x), (eq_of_irreducible_of_monic irr · monic)⟩
 
 Depends on / 依赖: eq_of_irreducible_of_monic
@@ -429,7 +429,7 @@ theorem eq_iff_aeval_minpoly_eq_zero
 
 中文:
 定理 eq_iff_aeval_minpoly_eq_zero
-  结论: [IsDomain B] {C} [Ring C] [Algebra A C] [Nontrivial C]
+  结论: [是整环 B] {C} [环 C] [代数 A C] [非平凡 C]
   证明: eq_iff_aeval_eq_zero (irreducible h) (monic h)
 
 Depends on / 依赖: eq_iff_aeval_eq_zero, irreducible
@@ -454,7 +454,7 @@ theorem eq_of_irreducible
 
 中文:
 定理 eq_of_irreducible
-  结论: [Nontrivial B] {p : A[X]} (hp1 : Irreducible p)
+  结论: [非平凡 B] {p : A[X]} (hp1 : 不可约 p)
   证明: by
   have : p.leadingCoeff != 0 := leadingCoeff_ne_zero.mpr hp1.ne_zero
   apply eq_of_irreducible_of_monic
@@ -483,8 +483,8 @@ theorem Irreducible.eq_minpoly
   rw [← minpoly.eq_of_irreducible hi hx]; rw [mul_comm]; rw [mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀ (leadingCoeff_ne_zero.mpr hi.ne_zero)]; rw [C_1]; rw [mul_one]
 
 中文:
-定理 Irreducible.eq_minpoly
-  结论: [Nontrivial B] {p : A[X]} (hi : Irreducible p)
+定理 不可约.eq_minpoly
+  结论: [非平凡 B] {p : A[X]} (hi : 不可约 p)
   证明: by
   rw [← minpoly.eq_of_irreducible hi hx]; rw [mul_comm]; rw [mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀ (leadingCoeff_ne_zero.mpr hi.ne_zero)]; rw [C_1]; rw [mul_one]
 
@@ -508,8 +508,8 @@ theorem _root_.Irreducible.dvd_iff_aeval_eq_zero
     simp [hfa]
 
 中文:
-定理 _root_.Irreducible.dvd_iff_aeval_eq_zero
-  结论: [Nontrivial B] {p q : A[X]} (hi : Irreducible p)
+定理 _root_.不可约.dvd_iff_aeval_eq_zero
+  结论: [非平凡 B] {p q : A[X]} (hi : 不可约 p)
   证明: by
   refine ⟨fun hga => dvd_trans ?_ (minpoly.dvd A b hga), ?_⟩
   · rw [← minpoly.eq_of_irreducible hi hfa]
@@ -542,7 +542,7 @@ theorem add_algebraMap
 
 中文:
 定理 add_algebraMap
-  结论: {B : 类型} [CommRing B] [Algebra A B] (x : B)
+  结论: {B : 类型} [交换环 B] [代数 A B] (x : B)
   证明: by
   by_cases hx : IsIntegral A x
   · refine (minpoly.unique _ _ ((minpoly.monic hx).comp_X_sub_C _) ?_ fun q qmo hq => ?_).symm
@@ -578,7 +578,7 @@ theorem sub_algebraMap
 
 中文:
 定理 sub_algebraMap
-  结论: {B : 类型} [CommRing B] [Algebra A B] (x : B)
+  结论: {B : 类型} [交换环 B] [代数 A B] (x : B)
   证明: by
   simpa [sub_eq_add_neg] using add_algebraMap x (-a)
 
@@ -605,7 +605,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: {B : 类型} [Ring B] [Algebra A B] (x : B)
+  条件: {B : 类型} [环 B] [代数 A B] (x : B)
   证明: by
   by_cases hx : IsIntegral A x
   · refine (minpoly.unique _ _ ((minpoly.monic hx).neg_one_pow_natDegree_mul_comp_neg_X)
@@ -646,7 +646,7 @@ theorem map_eq_of_equiv_equiv
 
 中文:
 定理 map_eq_of_equiv_equiv
-  结论: {R S T : 类型} [CommRing R] [IsDomain R] [Ring S] [Ring T]
+  结论: {R S T : 类型} [交换环 R] [是整环 R] [环 S] [环 T]
   证明: by
   refine minpoly.eq_of_irreducible_of_monic ?_ ?_ ?_
   · rw [← mapEquiv_apply, MulEquiv.irreducible_iff]
@@ -681,8 +681,8 @@ definition Fintype.subtypeProd
   body: @Pi.instFintype _ _ _ (Finite.fintype hX) _
 
 中文:
-定义 Fintype.subtypeProd
-  签名: {E : 类型} {X : Set E} (hX : X.Finite) {L : 类型}
+定义 有限类型.subtypeProd
+  签名: {E : 类型} {X : 集合 E} (hX : X.有限) {L : 类型}
   定义体: @Pi.instFintype _ _ _ (Finite.fintype hX) _
 
 Depends on / 依赖: Finite, Finite.fintype, Pi.instFintype, fintype, instFintype
@@ -733,7 +733,7 @@ theorem aux_inj_roots_of_min_poly
 
 中文:
 定理 aux_inj_roots_of_min_poly
-  结论: Injective (rootsOfMinPolyPiType F E K)
+  结论: 单射 (rootsOfMinPolyPiType F E K)
   证明: by
   intro f g h
   -- needs explicit coercion on the RHS
@@ -762,8 +762,8 @@ instance AlgHom.fintype
     _ (aux_inj_roots_of_min_poly F E K)
 
 中文:
-实例 AlgHom.fintype
-  签名: : Fintype (E ->ₐ[F] K)
+实例 代数态射.fintype
+  签名: : 有限类型 (E ->ₐ[F] K)
   定义体: @Fintype.ofInjective _ _
     (Fintype.subtypeProd (finite_range (Module.finBasis F E)) fun e =>
       (minpoly F e).aroots K)
@@ -890,8 +890,8 @@ theorem prime
 
 中文:
 定理 prime
-  条件: (hx : Is整数egral A x)
-  结论: Prime (minpoly A x)
+  条件: (hx : 是整 A x)
+  结论: 素 (minpoly A x)
   证明: by
   refine ⟨minpoly.ne_zero hx, not_isUnit A x, ?_⟩
   rintro p q ⟨d, h⟩
@@ -923,7 +923,7 @@ theorem root
 
 中文:
 定理 root
-  条件: {x : B} (hx : Is整数egral A x) {y : A} (h : IsRoot (minpoly A x) y)
+  条件: {x : B} (hx : 是整 A x) {y : A} (h : IsRoot (minpoly A x) y)
   证明: by
   have key : minpoly A x = X - C y := eq_of_monic_of_associated (monic hx) (monic_X_sub_C y)
     (associated_of_dvd_dvd ((irreducible_X_sub_C y).dvd_symm (irreducible hx) (dvd_iff_isRoot.2 h))
@@ -961,7 +961,7 @@ theorem coeff_zero_eq_zero
 
 中文:
 定理 coeff_zero_eq_zero
-  条件: (hx : Is整数egral A x)
+  条件: (hx : 是整 A x)
   结论: coeff (minpoly A x) 0 = 0 ↔ x = 0
   证明: by
   constructor
@@ -996,7 +996,7 @@ theorem coeff_zero_ne_zero
 
 中文:
 定理 coeff_zero_ne_zero
-  条件: (hx : Is整数egral A x) (h : x != 0)
+  条件: (hx : 是整 A x) (h : x != 0)
   结论: coeff (minpoly A x) 0 != 0
   证明: by
   contrapose h

@@ -45,7 +45,7 @@ definition graph
 
 中文:
 定义 graph
-  签名: (f : Fin n -> α)
+  签名: (f : 有限集 n -> α)
   定义体: Finset.univ.image fun i => (f i, i)
 
 Depends on / 依赖: Finset, Finset.univ.image
@@ -63,7 +63,7 @@ definition graph.proj
 
 中文:
 定义 graph.proj
-  签名: {f : Fin n -> α}
+  签名: {f : 有限集 n -> α}
   定义体: fun p => p.1.1
 -/
 def graph.proj {f : Fin n -> α} : graph f -> α := fun p => p.1.1
@@ -87,7 +87,7 @@ theorem graph.card
 
 中文:
 定理 graph.card
-  条件: (f : Fin n -> α)
+  条件: (f : 有限集 n -> α)
   结论: (graph f).card = n
   证明: by
   rw [graph]; rw [Finset.card_image_of_injective]
@@ -124,7 +124,7 @@ definition graphEquiv₁
 
 中文:
 定义 graphEquiv₁
-  签名: (f : Fin n -> α)
+  签名: (f : 有限集 n -> α)
   定义体: ⟨(f i, i), by simp [graph]⟩
   invFun p := p.1.2
   left_inv i := by simp
@@ -152,7 +152,7 @@ theorem proj_equiv₁'
 
 中文:
 定理 proj_equiv₁'
-  条件: (f : Fin n -> α)
+  条件: (f : 有限集 n -> α)
   结论: graph.proj ∘ graphEquiv₁ f = f
   证明: rfl
 -/
@@ -169,7 +169,7 @@ definition graphEquiv₂
 
 中文:
 定义 graphEquiv₂
-  签名: (f : Fin n -> α)
+  签名: (f : 有限集 n -> α)
   定义体: Finset.orderIsoOfFin _ (by simp)
 
 Depends on / 依赖: Finset, Finset.orderIsoOfFin, orderIsoOfFin
@@ -187,7 +187,7 @@ definition sort
 
 中文:
 定义 sort
-  签名: (f : Fin n -> α)
+  签名: (f : 有限集 n -> α)
   定义体: (graphEquiv₂ f).toEquiv.trans (graphEquiv₁ f).symm
 
 Depends on / 依赖: toEquiv, toEquiv.trans
@@ -205,7 +205,7 @@ theorem graphEquiv₂_apply
 
 中文:
 定理 graphEquiv₂_apply
-  条件: (f : Fin n -> α) (i : Fin n)
+  条件: (f : 有限集 n -> α) (i : 有限集 n)
   证明: ((graphEquiv₁ f).apply_symm_apply _).symm
 
 Depends on / 依赖: apply_symm_apply
@@ -225,7 +225,7 @@ theorem self_comp_sort
 
 中文:
 定理 self_comp_sort
-  条件: (f : Fin n -> α)
+  条件: (f : 有限集 n -> α)
   结论: f ∘ sort f = graph.proj ∘ graphEquiv₂ f
   证明: show graph.proj ∘ (graphEquiv₁ f ∘ (graphEquiv₁ f).symm) ∘ (graphEquiv₂ f).toEquiv = _ by simp
 
@@ -248,8 +248,8 @@ theorem monotone_proj
 
 中文:
 定理 monotone_proj
-  条件: (f : Fin n -> α)
-  结论: Monotone (graph.proj : graph f -> α)
+  条件: (f : 有限集 n -> α)
+  结论: 递增 (graph.proj : graph f -> α)
   证明: by
   rintro ⟨⟨x, i⟩, hx⟩ ⟨⟨y, j⟩, hy⟩ (_ | h)
   · exact le_of_lt ‹_›
@@ -275,8 +275,8 @@ theorem monotone_sort
 
 中文:
 定理 monotone_sort
-  条件: (f : Fin n -> α)
-  结论: Monotone (f ∘ sort f)
+  条件: (f : 有限集 n -> α)
+  结论: 递增 (f ∘ sort f)
   证明: by
   rw [self_comp_sort]
   exact (monotone_proj f).comp (graphEquiv₂ f).monotone
@@ -311,7 +311,7 @@ theorem lt_card_le_iff_apply_le_of_monotone
 
 中文:
 定理 lt_card_le_iff_apply_le_of_monotone
-  条件: [DecidableLE α] (h_sorted : Monotone f)
+  条件: [DecidableLE α] (h_sorted : 递增 f)
   证明: Fin.lt_card_filter_univ_iff_apply_of_imp (f · <= a) (by grind [Monotone])
 
 Depends on / 依赖: Fin.lt_card_filter_univ_iff_apply_of_imp, Monotone, lt_card_filter_univ_iff_apply_of_imp
@@ -330,7 +330,7 @@ theorem lt_card_ge_iff_apply_ge_of_antitone
 
 中文:
 定理 lt_card_ge_iff_apply_ge_of_antitone
-  条件: [DecidableLE α] (h_sorted : Antitone f)
+  条件: [DecidableLE α] (h_sorted : 递减 f)
   证明: Fin.lt_card_filter_univ_iff_apply_of_imp (a <= f ·) (by grind [Antitone])
 
 Depends on / 依赖: Antitone, Fin.lt_card_filter_univ_iff_apply_of_imp, lt_card_filter_univ_iff_apply_of_imp
@@ -349,7 +349,7 @@ theorem lt_card_lt_iff_apply_lt_of_monotone
 
 中文:
 定理 lt_card_lt_iff_apply_lt_of_monotone
-  条件: [DecidableLT α] (h_sorted : Monotone f)
+  条件: [DecidableLT α] (h_sorted : 递增 f)
   证明: Fin.lt_card_filter_univ_iff_apply_of_imp (f · < a) (by grind [Monotone])
 
 Depends on / 依赖: Fin.lt_card_filter_univ_iff_apply_of_imp, Monotone, lt_card_filter_univ_iff_apply_of_imp
@@ -368,7 +368,7 @@ theorem lt_card_gt_iff_apply_gt_of_antitone
 
 中文:
 定理 lt_card_gt_iff_apply_gt_of_antitone
-  条件: [DecidableLT α] (h_sorted : Antitone f)
+  条件: [DecidableLT α] (h_sorted : 递减 f)
   证明: Fin.lt_card_filter_univ_iff_apply_of_imp (a < f ·) (by grind [Antitone])
 
 Depends on / 依赖: Antitone, Fin.lt_card_filter_univ_iff_apply_of_imp, lt_card_filter_univ_iff_apply_of_imp
@@ -391,7 +391,7 @@ theorem unique_monotone
 
 中文:
 定理 unique_monotone
-  结论: [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
+  结论: [偏序 α] {f : 有限集 n -> α} {σ τ : 等价.置换 (有限集 n)}
   证明: ofFn_injective
     ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
       hfσ.sortedLE_ofFn.pairwise hfτ.sortedLE_ofFn.pairwise
@@ -416,7 +416,7 @@ theorem unique_antitone
 
 中文:
 定理 unique_antitone
-  结论: [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
+  结论: [偏序 α] {f : 有限集 n -> α} {σ τ : 等价.置换 (有限集 n)}
   证明: ofFn_injective
     ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
       hfσ.sortedGE_ofFn.pairwise hfτ.sortedGE_ofFn.pairwise
@@ -447,7 +447,7 @@ theorem eq_sort_iff'
 
 中文:
 定理 eq_sort_iff'
-  结论: σ = sort f ↔ StrictMono (σ.trans <| graphEquiv₁ f)
+  结论: σ = sort f ↔ 严格递增 (σ.trans <| graphEquiv₁ f)
   证明: by
   constructor <;> intro h
   · rw [h, sort, Equiv.trans_assoc, Equiv.symm_trans_self]
@@ -510,7 +510,7 @@ theorem sort_eq_refl_iff_monotone
 
 中文:
 定理 sort_eq_refl_iff_monotone
-  结论: sort f = Equiv.refl _ ↔ Monotone f
+  结论: sort f = 等价.refl _ ↔ 递增 f
   证明: by
   rw [eq_comm]; rw [eq_sort_iff]; rw [Equiv.coe_refl]; rw [Function.comp_id]
   simp only [id, and_iff_left_iff_imp]
@@ -533,7 +533,7 @@ theorem comp_sort_eq_comp_iff_monotone
 
 中文:
 定理 comp_sort_eq_comp_iff_monotone
-  结论: f ∘ σ = f ∘ sort f ↔ Monotone (f ∘ σ)
+  结论: f ∘ σ = f ∘ sort f ↔ 递增 (f ∘ σ)
   证明: ⟨fun h => h.symm ▸ monotone_sort f, fun h => unique_monotone h (monotone_sort f)⟩
 
 Depends on / 依赖: h.symm, monotone_sort, unique_monotone
@@ -624,7 +624,7 @@ theorem sort_perm
 
 中文:
 定理 sort_perm
-  条件: (σ : Equiv.Perm (Fin n))
+  条件: (σ : 等价.置换 (有限集 n))
   证明: by
   apply (eq_sort_iff.2 ⟨?_ , ?_⟩).symm
   · simpa using monotone_id
@@ -652,8 +652,8 @@ theorem Equiv.Perm.monotone_iff
   rw [← Tuple.sort_eq_refl_iff_monotone]; rw [Tuple.sort_perm]; rw [← inv_eq_one]; rw [one_def]
 
 中文:
-定理 Equiv.Perm.monotone_iff
-  条件: {n : 自然数} (σ : Perm (Fin n))
+定理 等价.置换.monotone_iff
+  条件: {n : 自然数} (σ : 置换 (有限集 n))
   证明: by
   rw [← Tuple.sort_eq_refl_iff_monotone]; rw [Tuple.sort_perm]; rw [← inv_eq_one]; rw [one_def]
 

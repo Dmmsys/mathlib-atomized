@@ -57,11 +57,11 @@ class IsStack
     - essSurj_of_sieve((F) {S : C} (R : Sieve S) (hR : R in J S)) : (F.toDescentData (fun (f : R.arrows.category) => f.obj.hom)).EssSurj
 
 中文:
-类 IsStack
-  参数: (F : LocallyDiscrete Cᵒᵖ ⥤ᵖ Cat.{v', u'}) (J : GrothendieckTopology C)
-  继承: F.IsPrestack J
+类 是Stack
+  参数: (F : LocallyDiscrete Cᵒᵖ ⥤ᵖ Cat.{v', u'}) (J : Grothendieck拓扑 C)
+  继承: F.是Prestack J
   公理与运算 (1 个):
-    - essSurj_of_sieve((F) {S : C} (R : Sieve S) (hR : R in J S)) : (F.toDescentData (fun (f : R.arrows.category) => f.obj.hom)).EssSurj
+    - essSurj_of_sieve((F) {S : C} (R : 筛 S) (hR : R in J S)) : (F.toDescentData (fun (f : R.arrows.category) => f.obj.hom)).本质满射
 -/
 class IsStack (F : LocallyDiscrete Cᵒᵖ ⥤ᵖ Cat.{v', u'}) (J : GrothendieckTopology C) : Prop
     extends F.IsPrestack J where
@@ -86,7 +86,7 @@ lemma isStackFor'
 
 中文:
 引理 isStackFor'
-  条件: [F.IsStack J] {S : C} (R : Sieve S) (hR : R in J S)
+  条件: [F.是Stack J] {S : C} (R : 筛 S) (hR : R in J S)
   证明: by
   rw [isStackFor_iff]
   have hF := (F.isPrestackFor' _ hR).fullyFaithful
@@ -117,7 +117,7 @@ lemma isStackFor
 
 中文:
 引理 isStackFor
-  条件: [F.IsStack J] {S : C} (R : Presieve S) (hR : Sieve.generate R in J S)
+  条件: [F.是Stack J] {S : C} (R : Presieve S) (hR : 筛.generate R in J S)
   证明: by
   simpa using F.isStackFor' _ hR
 
@@ -139,7 +139,7 @@ lemma isEquivalence_toDescentData
 
 中文:
 引理 isEquivalence_toDescentData
-  结论: [F.IsStack J]
+  结论: [F.是Stack J]
   证明: by
   rw [← isStackFor_ofArrows_iff]; rw [← IsStackFor_generate_iff]
   exact F.isStackFor _ (by simpa)
@@ -164,7 +164,7 @@ lemma IsStack.of_isStackFor
     infer_instance
 
 中文:
-引理 IsStack.of_isStackFor
+引理 是Stack.of_isStackFor
   证明: .of_isPrestackFor (fun _ _ hR => (hF _ _ hR).isPrestackFor)
   essSurj_of_sieve R hR := by
     have := (isStackFor_iff _ _).1 (hF _ _ hR)

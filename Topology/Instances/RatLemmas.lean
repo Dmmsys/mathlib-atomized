@@ -53,7 +53,7 @@ theorem interior_compact_eq_empty
 
 中文:
 定理 interior_compact_eq_empty
-  条件: (hs : IsCompact s)
+  条件: (hs : 是紧集 s)
   结论: interior s = ∅
   证明: isDenseEmbedding_coe_real.isDenseInducing.interior_compact_eq_empty dense_irrational hs
 
@@ -73,8 +73,8 @@ theorem dense_compl_compact
 
 中文:
 定理 dense_compl_compact
-  条件: (hs : IsCompact s)
-  结论: Dense sᶜ
+  条件: (hs : 是紧集 s)
+  结论: 稠密 sᶜ
   证明: interior_eq_empty_iff_dense_compl.1 (interior_compact_eq_empty hs)
 
 Depends on / 依赖: interior_compact_eq_empty, interior_eq_empty_iff_dense_compl
@@ -95,7 +95,7 @@ instance cocompact_inf_nhds_neBot
 
 中文:
 实例 cocompact_inf_nhds_neBot
-  签名: : NeBot (cocompact Rat ⊓ 𝓝 p)
+  签名: : NeBot (cocompact 有理数 ⊓ 𝓝 p)
   定义体: by
   refine (hasBasis_cocompact.inf (nhds_basis_opens _)).neBot_iff.2 ?_
   rintro ⟨s, o⟩ ⟨hs, hpo, ho⟩; rw [inter_comm]
@@ -124,7 +124,7 @@ theorem not_countably_generated_cocompact
 
 中文:
 定理 not_countably_generated_cocompact
-  结论: ¬IsCountablyGenerated (cocompact Rat)
+  结论: ¬是余untablyGenerated (cocompact 有理数)
   证明: by
   intro H
   rcases exists_seq_tendsto (cocompact Rat ⊓ 𝓝 0) with ⟨x, hx⟩
@@ -157,7 +157,7 @@ theorem not_countably_generated_nhds_infty_opc
 
 中文:
 定理 not_countably_generated_nhds_infty_opc
-  结论: ¬IsCountablyGenerated (𝓝 (∞ : Rat∞))
+  结论: ¬是余untablyGenerated (𝓝 (∞ : 有理数∞))
   证明: by
   intro
   have : IsCountablyGenerated (comap (OnePoint.some : Rat -> Rat∞) (𝓝 ∞)) := by infer_instance
@@ -184,7 +184,7 @@ theorem not_firstCountableTopology_opc
 
 中文:
 定理 not_firstCountableTopology_opc
-  结论: ¬FirstCountableTopology Rat∞
+  结论: ¬第一可数拓扑 有理数∞
   证明: by
   intro
   exact not_countably_generated_nhds_infty_opc inferInstance
@@ -207,7 +207,7 @@ theorem not_secondCountableTopology_opc
 
 中文:
 定理 not_secondCountableTopology_opc
-  结论: ¬SecondCountableTopology Rat∞
+  结论: ¬第二可数拓扑 有理数∞
   证明: by
   intro
   exact not_firstCountableTopology_opc inferInstance
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: TotallyDisconnectedSpace Rat
+  签名: 全不连通空间 有理数
   定义体: by
   clear p s
   refine ⟨fun s hsu hs x hx y hy => ?_⟩; clear hsu

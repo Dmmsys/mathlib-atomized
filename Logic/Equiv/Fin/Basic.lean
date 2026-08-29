@@ -41,8 +41,8 @@ theorem Fin.preimage_apply_01_prod
   simp [Fin.forall_fin_two]
 
 中文:
-定理 Fin.preimage_apply_01_prod
-  条件: {α : Fin 2 -> 类型u} (s : Set (α 0)) (t : Set (α 1))
+定理 有限集.preimage_apply_01_prod
+  条件: {α : 有限集 2 -> 类型u} (s : 集合 (α 0)) (t : 集合 (α 1))
   证明: by
   ext f
   simp [Fin.forall_fin_two]
@@ -64,8 +64,8 @@ theorem Fin.preimage_apply_01_prod'
   proof: @Fin.preimage_apply_01_prod (fun _ => α) s t
 
 中文:
-定理 Fin.preimage_apply_01_prod'
-  条件: {α : 类型u} (s t : Set α)
+定理 有限集.preimage_apply_01_prod'
+  条件: {α : 类型u} (s t : 集合 α)
   证明: @Fin.preimage_apply_01_prod (fun _ => α) s t
 
 Depends on / 依赖: Fin.preimage_apply_01_prod, preimage_apply_01_prod
@@ -130,7 +130,7 @@ definition finSuccEquiv'
 
 中文:
 定义 finSuccEquiv'
-  签名: (i : Fin (n + 1))
+  签名: (i : 有限集 (n + 1))
   定义体: i.insertNth none some
   invFun x := x.casesOn' i (Fin.succAbove i)
   left_inv x := Fin.succAboveCases i (by simp) (fun j => by simp) x
@@ -160,7 +160,7 @@ theorem finSuccEquiv'_at
 
 中文:
 定理 finSuccEquiv'_at
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: (finSuccEquiv' i) i = none
   证明: by
   simp [finSuccEquiv']
@@ -181,7 +181,7 @@ theorem finSuccEquiv'_succAbove
 
 中文:
 定理 finSuccEquiv'_succAbove
-  条件: (i : Fin (n + 1)) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: @Fin.insertNth_apply_succAbove n (fun _ => Option (Fin n)) i _ _ _
 -/
 theorem finSuccEquiv'_succAbove (i : Fin (n + 1)) (j : Fin n) :
@@ -199,7 +199,7 @@ theorem finSuccEquiv'_below
 
 中文:
 定理 finSuccEquiv'_below
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
   证明: by
   rw [← Fin.succAbove_of_castSucc_lt _ _ h]; rw [finSuccEquiv'_succAbove]
 -/
@@ -220,7 +220,7 @@ theorem finSuccEquiv'_above
 
 中文:
 定理 finSuccEquiv'_above
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
   证明: by
   rw [← Fin.succAbove_of_le_castSucc _ _ h]; rw [finSuccEquiv'_succAbove]
 
@@ -244,7 +244,7 @@ theorem finSuccEquiv'_symm_none
 
 中文:
 定理 finSuccEquiv'_symm_none
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   结论: (finSuccEquiv' i).symm none = i
   证明: rfl
 
@@ -266,7 +266,7 @@ theorem finSuccEquiv'_symm_some
 
 中文:
 定理 finSuccEquiv'_symm_some
-  条件: (i : Fin (n + 1)) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -288,7 +288,7 @@ theorem finSuccEquiv'_eq_some
 
 中文:
 定理 finSuccEquiv'_eq_some
-  条件: {i j : Fin (n + 1)} {k : Fin n}
+  条件: {i j : 有限集 (n + 1)} {k : 有限集 n}
   证明: (finSuccEquiv' i).eq_symm_apply.symm
 
 @[simp]
@@ -309,7 +309,7 @@ theorem finSuccEquiv'_eq_none
 
 中文:
 定理 finSuccEquiv'_eq_none
-  条件: {i j : Fin (n + 1)}
+  条件: {i j : 有限集 (n + 1)}
   结论: finSuccEquiv' i j = none ↔ i = j
   证明: (finSuccEquiv' i).eq_symm_apply.symm.trans eq_comm
 -/
@@ -326,7 +326,7 @@ theorem finSuccEquiv'_symm_some_below
 
 中文:
 定理 finSuccEquiv'_symm_some_below
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
   证明: Fin.succAbove_of_castSucc_lt i m h
 -/
 theorem finSuccEquiv'_symm_some_below {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i) :
@@ -343,7 +343,7 @@ theorem finSuccEquiv'_symm_some_above
 
 中文:
 定理 finSuccEquiv'_symm_some_above
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
   证明: Fin.succAbove_of_le_castSucc i m h
 -/
 theorem finSuccEquiv'_symm_some_above {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m) :
@@ -360,7 +360,7 @@ theorem finSuccEquiv'_symm_coe_below
 
 中文:
 定理 finSuccEquiv'_symm_coe_below
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
   证明: finSuccEquiv'_symm_some_below h
 -/
 theorem finSuccEquiv'_symm_coe_below {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i) :
@@ -377,7 +377,7 @@ theorem finSuccEquiv'_symm_coe_above
 
 中文:
 定理 finSuccEquiv'_symm_coe_above
-  条件: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
+  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
   证明: finSuccEquiv'_symm_some_above h
 -/
 theorem finSuccEquiv'_symm_coe_above {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m) :
@@ -441,7 +441,7 @@ theorem finSuccEquiv_succ
 
 中文:
 定理 finSuccEquiv_succ
-  条件: (m : Fin n)
+  条件: (m : 有限集 n)
   结论: (finSuccEquiv n) m.succ = some m
   证明: finSuccEquiv'_above (Fin.zero_le _)
 
@@ -467,7 +467,7 @@ theorem finSuccEquiv_last
 中文:
 定理 finSuccEquiv_last
   条件: (n : 自然数)
-  结论: finSuccEquiv (n + 1) (Fin.last (n + 1)) = Fin.last n
+  结论: finSuccEquiv (n + 1) (有限集.last (n + 1)) = 有限集.last n
   证明: rfl
 
 @[simp]
@@ -511,7 +511,7 @@ theorem finSuccEquiv_symm_some
 
 中文:
 定理 finSuccEquiv_symm_some
-  条件: (m : Fin n)
+  条件: (m : 有限集 n)
   结论: (finSuccEquiv n).symm (some m) = m.succ
   证明: congr_fun Fin.succAbove_zero m
 
@@ -535,7 +535,7 @@ theorem finSuccEquiv_eq_some
 
 中文:
 定理 finSuccEquiv_eq_some
-  条件: {i : Fin (n + 1)} {j : Fin n}
+  条件: {i : 有限集 (n + 1)} {j : 有限集 n}
   证明: (finSuccEquiv n).eq_symm_apply.symm
 
 @[simp]
@@ -558,7 +558,7 @@ theorem finSuccEquiv_eq_none
 
 中文:
 定理 finSuccEquiv_eq_none
-  条件: {i : Fin (n + 1)}
+  条件: {i : 有限集 (n + 1)}
   结论: finSuccEquiv n i = none ↔ i = 0
   证明: (finSuccEquiv n).eq_symm_apply.symm
 
@@ -577,7 +577,7 @@ theorem finSuccEquiv'_zero
 
 中文:
 定理 finSuccEquiv'_zero
-  结论: finSuccEquiv' (0 : Fin (n + 1)) = finSuccEquiv n
+  结论: finSuccEquiv' (0 : 有限集 (n + 1)) = finSuccEquiv n
   证明: rfl
 -/
 theorem finSuccEquiv'_zero : finSuccEquiv' (0 : Fin (n + 1)) = finSuccEquiv n :=
@@ -594,7 +594,7 @@ theorem finSuccEquiv'_last_apply_castSucc
 
 中文:
 定理 finSuccEquiv'_last_apply_castSucc
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   证明: by
   rw [← Fin.succAbove_last]; rw [finSuccEquiv'_succAbove]
 -/
@@ -613,7 +613,7 @@ theorem finSuccEquiv'_last_apply
 
 中文:
 定理 finSuccEquiv'_last_apply
-  条件: {i : Fin (n + 1)} (h : i != Fin.last n)
+  条件: {i : 有限集 (n + 1)} (h : i != 有限集.last n)
   证明: by
   simp
 -/
@@ -634,7 +634,7 @@ theorem finSuccEquiv'_ne_last_apply
 
 中文:
 定理 finSuccEquiv'_ne_last_apply
-  条件: {i j : Fin (n + 1)} (hi : i != Fin.last n) (hj : j != i)
+  条件: {i j : 有限集 (n + 1)} (hi : i != 有限集.last n) (hj : j != i)
   证明: by
   rcases Fin.exists_succAbove_eq hj with ⟨j, rfl⟩
   rcases Fin.exists_castSucc_eq.2 hi with ⟨i, rfl⟩
@@ -656,7 +656,7 @@ definition finSuccAboveEquiv
 
 中文:
 定义 finSuccAboveEquiv
-  签名: (p : Fin (n + 1))
+  签名: (p : 有限集 (n + 1))
   定义体: .optionSubtype p ⟨(finSuccEquiv' p).symm, rfl⟩
 
 Depends on / 依赖: finSuccEquiv, optionSubtype
@@ -674,7 +674,7 @@ theorem finSuccAboveEquiv_apply
 
 中文:
 定理 finSuccAboveEquiv_apply
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: rfl
 
 Depends on / 依赖: preNormEDS
@@ -695,7 +695,7 @@ theorem finSuccAboveEquiv_symm_apply_last
 
 中文:
 定理 finSuccAboveEquiv_symm_apply_last
-  条件: (x : { x : Fin (n + 1) // x != Fin.last n })
+  条件: (x : { x : 有限集 (n + 1) // x != 有限集.last n })
   证明: by
   rw [← Option.some_inj]
   simp [finSuccAboveEquiv]
@@ -719,7 +719,7 @@ theorem finSuccAboveEquiv_symm_apply_ne_last
 
 中文:
 定理 finSuccAboveEquiv_symm_apply_ne_last
-  结论: {p : Fin (n + 1)} (h : p != Fin.last n)
+  结论: {p : 有限集 (n + 1)} (h : p != 有限集.last n)
   证明: by
   rw [← Option.some_inj]
   simpa [finSuccAboveEquiv] using finSuccEquiv'_ne_last_apply h x.property
@@ -744,7 +744,7 @@ definition finSuccEquivLast
 
 中文:
 定义 finSuccEquivLast
-  签名: : Fin (n + 1) ≃ Option (Fin n)
+  签名: : 有限集 (n + 1) ≃ 选项类型 (有限集 n)
   定义体: finSuccEquiv' (Fin.last n)
 
 @[simp]
@@ -768,8 +768,8 @@ theorem finSuccEquivLast_castSucc
 
 中文:
 定理 finSuccEquivLast_castSucc
-  条件: (i : Fin n)
-  结论: finSuccEquivLast (Fin.castSucc i) = some i
+  条件: (i : 有限集 n)
+  结论: finSuccEquivLast (有限集.castSucc i) = some i
   证明: finSuccEquiv'_below i.2
 
 @[simp]
@@ -793,7 +793,7 @@ theorem finSuccEquivLast_last
 
 中文:
 定理 finSuccEquivLast_last
-  结论: finSuccEquivLast (Fin.last n) = none
+  结论: finSuccEquivLast (有限集.last n) = none
   证明: by
   simp [finSuccEquivLast]
 
@@ -815,7 +815,7 @@ theorem finSuccEquivLast_symm_some
 
 中文:
 定理 finSuccEquivLast_symm_some
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   证明: finSuccEquiv'_symm_some_below i.2
 
 Depends on / 依赖: _symm_some_below, dif_pos, even_two_mul, finSuccEquiv, m.mul_div_cancel_left, mul_div_cancel_left, preNormEDS, two_pos
@@ -834,7 +834,7 @@ theorem finSuccEquivLast_symm_none
 
 中文:
 定理 finSuccEquivLast_symm_none
-  结论: finSuccEquivLast.symm none = Fin.last n
+  结论: finSuccEquivLast.symm none = 有限集.last n
   证明: finSuccEquiv'_symm_none _
 -/
 @[simp] theorem finSuccEquivLast_symm_none : finSuccEquivLast.symm none = Fin.last n :=
@@ -850,7 +850,7 @@ definition Equiv.embeddingFinSucc
     (Function.Embedding.optionEmbeddingEquiv (Fin n) ι)
 
 中文:
-定义 Equiv.embeddingFinSucc
+定义 等价.embeddingFinSucc
   签名: (n : 自然数) (ι : 类型)
   定义体: ((finSuccEquiv n).embeddingCongr (Equiv.refl ι)).trans
     (Function.Embedding.optionEmbeddingEquiv (Fin n) ι)
@@ -871,8 +871,8 @@ lemma Equiv.embeddingFinSucc_fst
   proof: rfl
 
 中文:
-引理 Equiv.embeddingFinSucc_fst
-  条件: {n : 自然数} {ι : 类型} (e : Fin (n + 1) ↪ ι)
+引理 等价.embeddingFinSucc_fst
+  条件: {n : 自然数} {ι : 类型} (e : 有限集 (n + 1) ↪ ι)
   证明: rfl
 -/
 @[simp] lemma Equiv.embeddingFinSucc_fst {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
@@ -887,8 +887,8 @@ lemma Equiv.embeddingFinSucc_snd
   proof: rfl
 
 中文:
-引理 Equiv.embeddingFinSucc_snd
-  条件: {n : 自然数} {ι : 类型} (e : Fin (n + 1) ↪ ι)
+引理 等价.embeddingFinSucc_snd
+  条件: {n : 自然数} {ι : 类型} (e : 有限集 (n + 1) ↪ ι)
   证明: rfl
 -/
 @[simp] lemma Equiv.embeddingFinSucc_snd {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
@@ -905,7 +905,7 @@ lemma Equiv.coe_embeddingFinSucc_symm
   exact Fin.cases rfl (fun j => rfl) i
 
 中文:
-引理 Equiv.coe_embeddingFinSucc_symm
+引理 等价.coe_embeddingFinSucc_symm
   结论: {n : 自然数} {ι : 类型}
   证明: by
   ext i
@@ -932,7 +932,7 @@ definition finSumFinEquiv
 
 中文:
 定义 finSumFinEquiv
-  签名: : Fin m oplus Fin n ≃ Fin (m + n) where
+  签名: : 有限集 m oplus 有限集 n ≃ 有限集 (m + n) where
   定义体: Sum.elim (Fin.castAdd n) (Fin.natAdd m)
   invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
   left_inv x := by rcases x with y | y <;> simp
@@ -961,7 +961,7 @@ theorem finSumFinEquiv_apply_left
 
 中文:
 定理 finSumFinEquiv_apply_left
-  条件: (i : Fin m)
+  条件: (i : 有限集 m)
   证明: rfl
 
 @[simp]
@@ -983,7 +983,7 @@ theorem finSumFinEquiv_apply_right
 
 中文:
 定理 finSumFinEquiv_apply_right
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -1005,7 +1005,7 @@ theorem finSumFinEquiv_symm_apply_castAdd
 
 中文:
 定理 finSumFinEquiv_symm_apply_castAdd
-  条件: (x : Fin m)
+  条件: (x : 有限集 m)
   证明: finSumFinEquiv.symm_apply_apply (Sum.inl x)
 
 @[simp]
@@ -1029,7 +1029,7 @@ theorem finSumFinEquiv_symm_apply_castSucc
 
 中文:
 定理 finSumFinEquiv_symm_apply_castSucc
-  条件: (x : Fin m)
+  条件: (x : 有限集 m)
   证明: finSumFinEquiv_symm_apply_castAdd x
 
 @[simp]
@@ -1053,7 +1053,7 @@ theorem finSumFinEquiv_symm_apply_natAdd
 
 中文:
 定理 finSumFinEquiv_symm_apply_natAdd
-  条件: (x : Fin n)
+  条件: (x : 有限集 n)
   证明: finSumFinEquiv.symm_apply_apply (Sum.inr x)
 
 @[simp]
@@ -1075,7 +1075,7 @@ theorem finSumFinEquiv_symm_last
 
 中文:
 定理 finSumFinEquiv_symm_last
-  结论: finSumFinEquiv.symm (Fin.last n) = Sum.inr 0
+  结论: finSumFinEquiv.symm (有限集.last n) = 和.inr 0
   证明: finSumFinEquiv_symm_apply_natAdd 0
 
 Depends on / 依赖: finSumFinEquiv_symm_apply_natAdd
@@ -1098,7 +1098,7 @@ definition finSumNatEquiv
 right_inv i := (apply_dite _ _ _ _)
 
 中文:
-定义 finSumNatEquiv
+定义 finSum自然数Equiv
   签名: (n : 自然数)
   定义体: Sum.elim Fin.val (n + ·)
   invFun i := if hi : i < n then .inl ⟨i, hi⟩ else .inr (i - n)
@@ -1130,8 +1130,8 @@ theorem finSumNatEquiv_apply_left
   proof: rfl
 
 中文:
-定理 finSumNatEquiv_apply_left
-  条件: (i : Fin n)
+定理 finSum自然数Equiv_apply_left
+  条件: (i : 有限集 n)
   证明: rfl
 -/
 @[simp] theorem finSumNatEquiv_apply_left (i : Fin n) :
@@ -1146,7 +1146,7 @@ theorem finSumNatEquiv_apply_right
   proof: rfl
 
 中文:
-定理 finSumNatEquiv_apply_right
+定理 finSum自然数Equiv_apply_right
   条件: (i : 自然数)
   证明: rfl
 -/
@@ -1162,7 +1162,7 @@ theorem finSumNatEquiv_symm_apply_of_lt
   proof: dif_pos hi
 
 中文:
-定理 finSumNatEquiv_symm_apply_of_lt
+定理 finSum自然数Equiv_symm_apply_of_lt
   条件: {i : 自然数} (hi : i < n)
   证明: dif_pos hi
 -/
@@ -1178,7 +1178,7 @@ theorem finSumNatEquiv_symm_apply_of_ge
   proof: dif_neg (Nat.not_lt_of_ge hi)
 
 中文:
-定理 finSumNatEquiv_symm_apply_of_ge
+定理 finSum自然数Equiv_symm_apply_of_ge
   条件: {i : 自然数} (hi : n <= i)
   证明: dif_neg (Nat.not_lt_of_ge hi)
 -/
@@ -1194,8 +1194,8 @@ theorem finSumNatEquiv_symm_apply_fin
   proof: by simp
 
 中文:
-定理 finSumNatEquiv_symm_apply_fin
-  条件: (i : Fin n)
+定理 finSum自然数Equiv_symm_apply_fin
+  条件: (i : 有限集 n)
   证明: by simp
 -/
 theorem finSumNatEquiv_symm_apply_fin (i : Fin n) :
@@ -1210,7 +1210,7 @@ theorem finSumNatEquiv_symm_apply_add_left
   proof: by simp
 
 中文:
-定理 finSumNatEquiv_symm_apply_add_left
+定理 finSum自然数Equiv_symm_apply_add_left
   条件: (i : 自然数)
   证明: by simp
 -/
@@ -1226,7 +1226,7 @@ theorem finSumNatEquiv_symm_apply_add_right
   proof: by simp
 
 中文:
-定理 finSumNatEquiv_symm_apply_add_right
+定理 finSum自然数Equiv_symm_apply_add_right
   条件: (i : 自然数)
   证明: by simp
 -/
@@ -1245,7 +1245,7 @@ theorem isLeft_finSumNatEquiv_symm_apply
   · simp_rw [finSumNatEquiv_symm_apply_of_ge hi, hi.not_gt, Sum.isLeft_inr, decide_false]
 
 中文:
-定理 isLeft_finSumNatEquiv_symm_apply
+定理 isLeft_finSum自然数Equiv_symm_apply
   条件: (i : 自然数)
   证明: by
   rcases i.lt_or_ge n with hi | hi
@@ -1269,7 +1269,7 @@ theorem isRight_finSumNatEquiv_symm_apply
   cases (finSumNatEquiv n).symm i <;> rfl
 
 中文:
-定理 isRight_finSumNatEquiv_symm_apply
+定理 isRight_finSum自然数Equiv_symm_apply
   条件: (i : 自然数)
   证明: by
   simp_rw [← not_lt, decide_not, ← isLeft_finSumNatEquiv_symm_apply]
@@ -1292,7 +1292,7 @@ definition finAddFlip
 
 中文:
 定义 finAddFlip
-  签名: : Fin (m + n) ≃ Fin (n + m)
+  签名: : 有限集 (m + n) ≃ 有限集 (n + m)
   定义体: (finSumFinEquiv.symm.trans (Equiv.sumComm _ _)).trans finSumFinEquiv
 
 @[simp]
@@ -1315,7 +1315,7 @@ theorem finAddFlip_apply_castAdd
 
 中文:
 定理 finAddFlip_apply_castAdd
-  条件: (k : Fin m) (n : 自然数)
+  条件: (k : 有限集 m) (n : 自然数)
   证明: by simp [finAddFlip]
 
 @[simp]
@@ -1338,7 +1338,7 @@ theorem finAddFlip_apply_natAdd
 
 中文:
 定理 finAddFlip_apply_natAdd
-  条件: (k : Fin n) (m : 自然数)
+  条件: (k : 有限集 n) (m : 自然数)
   证明: by simp [finAddFlip]
 
 @[simp]
@@ -1420,7 +1420,7 @@ _ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
 
 中文:
 定义 finProdFinEquiv
-  签名: : Fin m × Fin n ≃ Fin (m * n) where
+  签名: : 有限集 m × 有限集 n ≃ 有限集 (m * n) where
   定义体: ⟨x.2 + n * x.1,
       calc
         x.2.1 + n * x.1.1 + 1 = x.1.1 * n + x.2.1 + 1 := by ac_rfl
@@ -1477,7 +1477,7 @@ definition Nat.divModEquiv
     rw [Nat.add_comm]; rw [Nat.add_mul_div_right 
 
 中文:
-定义 Nat.divModEquiv
+定义 自然数.divModEquiv
   签名: (n : 自然数) [NeZero n]
   定义体: (a / n, Fin.ofNat n a)
   invFun p := p.1 * n + ↑p.2
@@ -1519,7 +1519,7 @@ definition Int.divModEquiv
     simp only [Pro
 
 中文:
-定义 Int.divModEquiv
+定义 整数.divModEquiv
   签名: (n : 自然数) [NeZero n]
   定义体: (a / n, Fin.ofNat n (a.natMod n))
   invFun p := p.1 * n + ↑p.2
@@ -1564,7 +1564,7 @@ definition Fin.castLEquiv
   right_inv _ := by simp
 
 中文:
-定义 Fin.castLEquiv
+定义 有限集.castLEquiv
   签名: {n m : 自然数} (h : n <= m)
   定义体: ⟨Fin.castLE h i, by simp⟩
   invFun i := ⟨i, i.prop⟩
@@ -1593,7 +1593,7 @@ definition Fin.appendEquiv
   right_inv f := by simp [Fin.append_castAdd_natAdd]
 
 中文:
-定义 Fin.appendEquiv
+定义 有限集.appendEquiv
   签名: {α : 类型} (m n : 自然数)
   定义体: Fin.append fg.1 fg.2
   invFun f := ⟨fun i => f (Fin.castAdd n i), fun i => f (Fin.natAdd m i)⟩
@@ -1620,7 +1620,7 @@ definition Fin.succFunEquiv
   body: (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ => Equiv.funUnique (Fin 1) α)
 
 中文:
-定义 Fin.succFunEquiv
+定义 有限集.succFunEquiv
   签名: (α : 类型) (n : 自然数)
   定义体: (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ => Equiv.funUnique (Fin 1) α)
 

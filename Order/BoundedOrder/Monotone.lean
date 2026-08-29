@@ -39,8 +39,8 @@ theorem StrictMono.apply_eq_top_iff
   proof: ⟨fun h => not_lt_top_iff.1 fun ha => (hf ha).ne h, congr_arg _⟩
 
 中文:
-定理 StrictMono.apply_eq_top_iff
-  条件: (hf : StrictMono f)
+定理 严格递增.apply_eq_top_iff
+  条件: (hf : 严格递增 f)
   结论: f a = f ⊤ ↔ a = ⊤
   证明: ⟨fun h => not_lt_top_iff.1 fun ha => (hf ha).ne h, congr_arg _⟩
 
@@ -59,8 +59,8 @@ theorem StrictAnti.apply_eq_top_iff
   proof: ⟨fun h => not_lt_top_iff.1 fun ha => (hf ha).ne' h, congr_arg _⟩
 
 中文:
-定理 StrictAnti.apply_eq_top_iff
-  条件: (hf : StrictAnti f)
+定理 严格递减.apply_eq_top_iff
+  条件: (hf : 严格递减 f)
   结论: f a = f ⊤ ↔ a = ⊤
   证明: ⟨fun h => not_lt_top_iff.1 fun ha => (hf ha).ne' h, congr_arg _⟩
 
@@ -84,8 +84,8 @@ theorem StrictMono.maximal_preimage_top
     x
 
 中文:
-定理 StrictMono.maximal_preimage_top
-  结论: [LinearOrder α] [Preorder β] [OrderTop β] {f : α -> β}
+定理 严格递增.maximal_preimage_top
+  结论: [线性序 α] [预序 β] [有顶序 β] {f : α -> β}
   证明: H.maximal_of_maximal_image
     (fun p => by
       rw [h_top]
@@ -116,8 +116,8 @@ theorem StrictMono.apply_eq_bot_iff
   proof: hf.dual.apply_eq_top_iff
 
 中文:
-定理 StrictMono.apply_eq_bot_iff
-  条件: (hf : StrictMono f)
+定理 严格递增.apply_eq_bot_iff
+  条件: (hf : 严格递增 f)
   结论: f a = f ⊥ ↔ a = ⊥
   证明: hf.dual.apply_eq_top_iff
 
@@ -136,8 +136,8 @@ theorem StrictAnti.apply_eq_bot_iff
   proof: hf.dual.apply_eq_top_iff
 
 中文:
-定理 StrictAnti.apply_eq_bot_iff
-  条件: (hf : StrictAnti f)
+定理 严格递减.apply_eq_bot_iff
+  条件: (hf : 严格递减 f)
   结论: f a = f ⊥ ↔ a = ⊥
   证明: hf.dual.apply_eq_top_iff
 
@@ -161,8 +161,8 @@ theorem StrictMono.minimal_preimage_bot
     x
 
 中文:
-定理 StrictMono.minimal_preimage_bot
-  结论: [LinearOrder α] [Preorder β] [OrderBot β] {f : α -> β}
+定理 严格递增.minimal_preimage_bot
+  结论: [线性序 α] [预序 β] [有底序 β] {f : α -> β}
   证明: H.minimal_of_minimal_image
     (fun p => by
       rw [h_bot]
@@ -200,7 +200,7 @@ theorem monotone_and
 
 中文:
 定理 monotone_and
-  条件: {p q : α -> 命题} (m_p : Monotone p) (m_q : Monotone q)
+  条件: {p q : α -> 命题} (m_p : 递增 p) (m_q : 递增 q)
   证明: fun _ _ h => And.imp (m_p h) (m_q h)
 
 Depends on / 依赖: And.imp
@@ -220,7 +220,7 @@ theorem monotone_or
 
 中文:
 定理 monotone_or
-  条件: {p q : α -> 命题} (m_p : Monotone p) (m_q : Monotone q)
+  条件: {p q : α -> 命题} (m_p : 递增 p) (m_q : 递增 q)
   证明: fun _ _ h => Or.imp (m_p h) (m_q h)
 
 Depends on / 依赖: Or.imp
@@ -241,7 +241,7 @@ theorem monotone_le
 中文:
 定理 monotone_le
   条件: {x : α}
-  结论: Monotone (x <= ·)
+  结论: 递增 (x <= ·)
   证明: fun _ _ h' h => h.trans h'
 
 Depends on / 依赖: h.trans
@@ -260,7 +260,7 @@ theorem monotone_lt
 中文:
 定理 monotone_lt
   条件: {x : α}
-  结论: Monotone (x < ·)
+  结论: 递增 (x < ·)
   证明: fun _ _ h' h => h.trans_le h'
 
 Depends on / 依赖: h.trans_le, trans_le
@@ -279,7 +279,7 @@ theorem antitone_le
 中文:
 定理 antitone_le
   条件: {x : α}
-  结论: Antitone (· <= x)
+  结论: 递减 (· <= x)
   证明: fun _ _ h' h => h'.trans h
 -/
 theorem antitone_le {x : α} : Antitone (· <= x) := fun _ _ h' h => h'.trans h
@@ -296,7 +296,7 @@ theorem antitone_lt
 中文:
 定理 antitone_lt
   条件: {x : α}
-  结论: Antitone (· < x)
+  结论: 递减 (· < x)
   证明: fun _ _ h' h => h'.trans_lt h
 
 Depends on / 依赖: trans_lt
@@ -312,8 +312,8 @@ theorem Monotone.forall
   proof: fun _ _ hy h x => hP x hy h x
 
 中文:
-定理 Monotone.forall
-  条件: {P : β -> α -> 命题} (hP : 对任意 x, Monotone (P x))
+定理 递增.对任意
+  条件: {P : β -> α -> 命题} (hP : 对任意 x, 递增 (P x))
   证明: fun _ _ hy h x => hP x hy h x
 -/
 theorem Monotone.forall {P : β -> α -> Prop} (hP : forall x, Monotone (P x)) :
@@ -329,8 +329,8 @@ theorem Antitone.forall
   proof: fun _ _ hy h x => hP x hy (h x)
 
 中文:
-定理 Antitone.forall
-  条件: {P : β -> α -> 命题} (hP : 对任意 x, Antitone (P x))
+定理 递减.对任意
+  条件: {P : β -> α -> 命题} (hP : 对任意 x, 递减 (P x))
   证明: fun _ _ hy h x => hP x hy (h x)
 -/
 theorem Antitone.forall {P : β -> α -> Prop} (hP : forall x, Antitone (P x)) :
@@ -346,8 +346,8 @@ theorem Monotone.ball
   proof: fun _ _ hy h x hx => hP x hx hy (h x hx)
 
 中文:
-定理 Monotone.ball
-  条件: {P : β -> α -> 命题} {s : Set β} (hP : 对任意 x in s, Monotone (P x))
+定理 递增.ball
+  条件: {P : β -> α -> 命题} {s : 集合 β} (hP : 对任意 x in s, 递增 (P x))
   证明: fun _ _ hy h x hx => hP x hx hy (h x hx)
 -/
 theorem Monotone.ball {P : β -> α -> Prop} {s : Set β} (hP : forall x in s, Monotone (P x)) :
@@ -362,8 +362,8 @@ theorem Antitone.ball
   proof: fun _ _ hy h x hx => hP x hx hy (h x hx)
 
 中文:
-定理 Antitone.ball
-  条件: {P : β -> α -> 命题} {s : Set β} (hP : 对任意 x in s, Antitone (P x))
+定理 递减.ball
+  条件: {P : β -> α -> 命题} {s : 集合 β} (hP : 对任意 x in s, 递减 (P x))
   证明: fun _ _ hy h x hx => hP x hx hy (h x hx)
 -/
 theorem Antitone.ball {P : β -> α -> Prop} {s : Set β} (hP : forall x in s, Antitone (P x)) :
@@ -378,8 +378,8 @@ theorem Monotone.exists
   proof: fun _ _ hy ⟨x, hx⟩ => ⟨x, hP x hy hx⟩
 
 中文:
-定理 Monotone.exists
-  条件: {P : β -> α -> 命题} (hP : 对任意 x, Monotone (P x))
+定理 递增.存在
+  条件: {P : β -> α -> 命题} (hP : 对任意 x, 递增 (P x))
   证明: fun _ _ hy ⟨x, hx⟩ => ⟨x, hP x hy hx⟩
 -/
 theorem Monotone.exists {P : β -> α -> Prop} (hP : forall x, Monotone (P x)) :
@@ -395,8 +395,8 @@ theorem Antitone.exists
   proof: fun _ _ hy ⟨x, hx⟩ => ⟨x, hP x hy hx⟩
 
 中文:
-定理 Antitone.exists
-  条件: {P : β -> α -> 命题} (hP : 对任意 x, Antitone (P x))
+定理 递减.存在
+  条件: {P : β -> α -> 命题} (hP : 对任意 x, 递减 (P x))
   证明: fun _ _ hy ⟨x, hx⟩ => ⟨x, hP x hy hx⟩
 -/
 theorem Antitone.exists {P : β -> α -> Prop} (hP : forall x, Antitone (P x)) :
@@ -412,8 +412,8 @@ theorem forall_ge_iff
   proof: ⟨fun H => H x₀ le_rfl, fun H _ hx => hP hx H⟩
 
 中文:
-定理 forall_ge_iff
-  条件: {P : α -> 命题} {x₀ : α} (hP : Monotone P)
+定理 对任意_ge_iff
+  条件: {P : α -> 命题} {x₀ : α} (hP : 递增 P)
   证明: ⟨fun H => H x₀ le_rfl, fun H _ hx => hP hx H⟩
 
 Depends on / 依赖: le_rfl
@@ -431,8 +431,8 @@ theorem forall_le_iff
   proof: ⟨fun H => H x₀ le_rfl, fun H _ hx => hP hx H⟩
 
 中文:
-定理 forall_le_iff
-  条件: {P : α -> 命题} {x₀ : α} (hP : Antitone P)
+定理 对任意_le_iff
+  条件: {P : α -> 命题} {x₀ : α} (hP : 递减 P)
   证明: ⟨fun H => H x₀ le_rfl, fun H _ hx => hP hx H⟩
 
 Depends on / 依赖: le_rfl

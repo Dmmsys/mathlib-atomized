@@ -44,7 +44,7 @@ instance decidableEqMulEquivFintype
 
 中文:
 实例 decidableEqMulEquivFintype
-  签名: {α β : 类型} [DecidableEq β] [Fintype α] [Mul α] [Mul β]
+  签名: {α β : 类型} [DecidableEq β] [有限类型 α] [乘法 α] [乘法 β]
   定义体: fun a b => decidable_of_iff ((a : α -> β) = b) (Injective.eq_iff DFunLike.coe_injective)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Injective, Injective.eq_iff, coe_injective, decidable_of_iff, eq_iff

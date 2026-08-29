@@ -37,7 +37,7 @@ definition log
 
 中文:
 定义 log
-  签名: (x : Complex)
+  签名: (x : 复形)
   定义体: Real.log ‖x‖ + arg x * I
 
 Depends on / 依赖: Real.log
@@ -56,7 +56,7 @@ theorem log_re
 
 中文:
 定理 log_re
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: x.log.re = 实数.log ‖x‖
   证明: by simp [log]
 -/
@@ -73,7 +73,7 @@ theorem log_im
 
 中文:
 定理 log_im
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: x.log.im = x.arg
   证明: by simp [log]
 -/
@@ -90,7 +90,7 @@ theorem neg_pi_lt_log_im
 
 中文:
 定理 neg_pi_lt_log_im
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: -π < (log x).im
   证明: by simp only [log_im, neg_pi_lt_arg]
 
@@ -109,7 +109,7 @@ theorem log_im_le_pi
 
 中文:
 定理 log_im_le_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: (log x).im <= π
   证明: by simp only [log_im, arg_le_pi]
 
@@ -129,7 +129,7 @@ theorem exp_log
 
 中文:
 定理 exp_log
-  条件: {x : Complex} (hx : x != 0)
+  条件: {x : 复形} (hx : x != 0)
   结论: exp (log x) = x
   证明: by
   rw [log]; rw [exp_add_mul_I]; rw [← ofReal_sin]; rw [sin_arg]; rw [← ofReal_cos]; rw [cos_arg hx]; rw [← ofReal_exp]; rw [Real.exp_log (norm_pos_iff.mpr hx)]; rw [mul_add]; rw [ofReal_div]; rw [ofReal_div]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [← mul_assoc]; 
@@ -153,7 +153,7 @@ theorem range_exp
 
 中文:
 定理 range_exp
-  结论: Set.range exp = {0}ᶜ
+  结论: 集合.range exp = {0}ᶜ
   证明: Set.ext fun x =>
     ⟨by
       rintro ⟨x, rfl⟩
@@ -179,7 +179,7 @@ theorem log_exp
 
 中文:
 定理 log_exp
-  条件: {x : Complex} (hx₁ : -π < x.im) (hx₂ : x.im <= π)
+  条件: {x : 复形} (hx₁ : -π < x.im) (hx₂ : x.im <= π)
   结论: log (exp x) = x
   证明: by
   rw [log]; rw [norm_exp]; rw [Real.log_exp]; rw [exp_eq_exp_re_mul_sin_add_cos]; rw [← ofReal_exp]; rw [arg_mul_cos_add_sin_mul_I (Real.exp_pos _) ⟨hx₁]; rw [hx₂⟩]; rw [re_add_im]
@@ -200,7 +200,7 @@ theorem log_exp_eq_re_add_toIocMod
 
 中文:
 定理 log_exp_eq_re_add_toIocMod
-  条件: (x : Complex)
+  条件: (x : 复形)
   证明: by
   rw [log]; rw [norm_exp]; rw [Real.log_exp]; rw [arg_exp]
 
@@ -222,7 +222,7 @@ theorem log_exp_eq_sub_toIocDiv
 
 中文:
 定理 log_exp_eq_sub_toIocDiv
-  条件: (x : Complex)
+  条件: (x : 复形)
   证明: by
   rw [log_exp_eq_re_add_toIocMod]; rw [toIocMod]; rw [ofReal_sub]; rw [sub_mul]; rw [← add_sub_assoc]
   simp [mul_assoc]
@@ -245,7 +245,7 @@ theorem exp_inj_of_neg_pi_lt_of_le_pi
 
 中文:
 定理 exp_inj_of_neg_pi_lt_of_le_pi
-  结论: {x y : Complex} (hx₁ : -π < x.im) (hx₂ : x.im <= π) (hy₁ : -π < y.im)
+  结论: {x y : 复形} (hx₁ : -π < x.im) (hx₂ : x.im <= π) (hy₁ : -π < y.im)
   证明: by
   rw [← log_exp hx₁ hx₂]; rw [← log_exp hy₁ hy₂]; rw [hxy]
 
@@ -268,9 +268,9 @@ theorem ofReal_log
 @[simp, norm_cast]
 
 中文:
-定理 ofReal_log
+定理 of实数_log
   条件: {x : 实数} (hx : 0 <= x)
-  结论: (x.log : Complex) = log x
+  结论: (x.log : 复形) = log x
   证明: Complex.ext (by rw [log_re, ofReal_re, Complex.norm_of_nonneg hx])
     (by rw [ofReal_im, log_im, arg_ofReal_of_nonneg hx])
 
@@ -316,7 +316,7 @@ lemma ofNat_log
   proof: natCast_log
 
 中文:
-引理 ofNat_log
+引理 of自然数_log
   条件: {n : 自然数} [n.AtLeastTwo]
   证明: natCast_log
 
@@ -336,9 +336,9 @@ theorem log_ofReal_re
   proof: by simp [log_re]
 
 中文:
-定理 log_ofReal_re
+定理 log_of实数_re
   条件: (x : 实数)
-  结论: (log (x : Complex)).re = 实数.log x
+  结论: (log (x : 复形)).re = 实数.log x
   证明: by simp [log_re]
 
 Depends on / 依赖: log_re
@@ -357,8 +357,8 @@ theorem log_ofReal_mul
     Real.log_mul hr.ne' hx, ofReal_add, add_assoc]
 
 中文:
-定理 log_ofReal_mul
-  条件: {r : 实数} (hr : 0 < r) {x : Complex} (hx : x != 0)
+定理 log_of实数_mul
+  条件: {r : 实数} (hr : 0 < r) {x : 复形} (hx : x != 0)
   证明: by
   replace hx := norm_ne_zero_iff.mpr hx
   simp_rw [log, norm_mul, norm_real, arg_real_mul _ hr, Real.norm_of_nonneg hr.le,
@@ -381,8 +381,8 @@ theorem log_mul_ofReal
   proof: by rw [mul_comm, log_ofReal_mul hr hx]
 
 中文:
-定理 log_mul_ofReal
-  条件: (r : 实数) (hr : 0 < r) (x : Complex) (hx : x != 0)
+定理 log_mul_of实数
+  条件: (r : 实数) (hr : 0 < r) (x : 复形) (hx : x != 0)
   证明: by rw [mul_comm, log_ofReal_mul hr hx]
 
 Depends on / 依赖: log_ofReal_mul, mul_comm
@@ -407,7 +407,7 @@ alias ⟨_, log_mul⟩ := log_mul_eq_add_log_iff
 
 中文:
 引理 log_mul_eq_add_log_iff
-  条件: {x y : Complex} (hx₀ : x != 0) (hy₀ : y != 0)
+  条件: {x y : 复形} (hx₀ : x != 0) (hy₀ : y != 0)
   证明: by
 refine Complex.ext_iff.trans Iff.trans ?_ arg_mul_eq_add_arg_iff hx₀ hy₀
   simp_rw [add_re, add_im, log_re, log_im, norm_mul,
@@ -474,7 +474,7 @@ lemma log_div_self
 
 中文:
 引理 log_div_self
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: log (x / x) = 0
   证明: by simp [log]
 -/
@@ -540,7 +540,7 @@ theorem log_conj_eq_ite
 
 中文:
 定理 log_conj_eq_ite
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: log (conj x) = if x.arg = π then log x else conj (log x)
   证明: by
   simp_rw [log, norm_conj, arg_conj, map_add, map_mul, conj_ofReal]
@@ -568,7 +568,7 @@ theorem log_conj
 
 中文:
 定理 log_conj
-  条件: (x : Complex) (h : x.arg != π)
+  条件: (x : 复形) (h : x.arg != π)
   结论: log (conj x) = conj (log x)
   证明: by
   rw [log_conj_eq_ite]; rw [if_neg h]
@@ -594,7 +594,7 @@ theorem log_inv_eq_ite
 
 中文:
 定理 log_inv_eq_ite
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: log x⁻¹ = if x.arg = π then -conj (log x) else -log x
   证明: by
   by_cases hx : x = 0
@@ -627,7 +627,7 @@ theorem log_inv
 
 中文:
 定理 log_inv
-  条件: (x : Complex) (hx : x.arg != π)
+  条件: (x : 复形) (hx : x.arg != π)
   结论: log x⁻¹ = -log x
   证明: by rw [log_inv_eq_ite, if_neg hx]
 
@@ -645,7 +645,7 @@ theorem two_pi_I_ne_zero
 
 中文:
 定理 two_pi_I_ne_zero
-  结论: (2 * π * I : Complex) != 0
+  结论: (2 * π * I : 复形) != 0
   证明: by simp [Real.pi_ne_zero, I_ne_zero]
 
 Depends on / 依赖: I_ne_zero, Real.pi_ne_zero, pi_ne_zero
@@ -670,7 +670,7 @@ theorem exp_eq_one_iff
 
 中文:
 定理 exp_eq_one_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: exp x = 1 ↔ 存在 n : 整数, x = n * (2 * π * I)
   证明: by
   constructor
@@ -709,7 +709,7 @@ theorem exp_eq_one_iff_of_im_nonneg
 
 中文:
 定理 exp_eq_one_iff_of_im_nonneg
-  条件: {x : Complex} (hx : 0 <= x.im)
+  条件: {x : 复形} (hx : 0 <= x.im)
   证明: by
   rw [exp_eq_one_iff]
   refine ⟨fun ⟨n, hn⟩ => ?_, fun ⟨n, hn⟩ => ⟨n, by rw [hn]; norm_cast⟩⟩
@@ -772,7 +772,7 @@ theorem exp_eq_exp_iff_exp_sub_eq_one
 
 中文:
 定理 exp_eq_exp_iff_exp_sub_eq_one
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   结论: exp x = exp y ↔ exp (x - y) = 1
   证明: by
   rw [exp_sub]; rw [div_eq_one_iff_eq (exp_ne_zero _)]
@@ -793,8 +793,8 @@ theorem exp_eq_exp_iff_exists_int
   simp only [exp_eq_exp_iff_exp_sub_eq_one, exp_eq_one_iff, sub_eq_iff_eq_add']
 
 中文:
-定理 exp_eq_exp_iff_exists_int
-  条件: {x y : Complex}
+定理 exp_eq_exp_iff_存在_int
+  条件: {x y : 复形}
   结论: exp x = exp y ↔ 存在 n : 整数, x = y + n * (2 * π * I)
   证明: by
   simp only [exp_eq_exp_iff_exp_sub_eq_one, exp_eq_one_iff, sub_eq_iff_eq_add']
@@ -816,7 +816,7 @@ lemma re_eq_re_of_cexp_eq_cexp
 
 中文:
 引理 re_eq_re_of_cexp_eq_cexp
-  条件: {x y : Complex} (h : cexp x = cexp y)
+  条件: {x y : 复形} (h : cexp x = cexp y)
   证明: by
   obtain ⟨n, hn⟩ := exp_eq_exp_iff_exists_int.1 h
   simp [hn]
@@ -839,8 +839,8 @@ theorem log_exp_exists
 @[simp]
 
 中文:
-定理 log_exp_exists
-  条件: (z : Complex)
+定理 log_exp_存在
+  条件: (z : 复形)
   证明: by
   rw [← exp_eq_exp_iff_exists_int]; rw [exp_log]
   exact exp_ne_zero z
@@ -872,8 +872,8 @@ theorem countable_preimage_exp
 
 中文:
 定理 countable_preimage_exp
-  条件: {s : Set Complex}
-  结论: (exp ⁻¹' s).Countable ↔ s.Countable
+  条件: {s : 集合 复形}
+  结论: (exp ⁻¹' s).可数 ↔ s.可数
   证明: by
   refine ⟨fun hs => ?_, fun hs => ?_⟩
   · refine ((hs.image exp).insert 0).mono ?_
@@ -916,7 +916,7 @@ theorem tendsto_log_nhdsWithin_im_neg_of_re_neg_of_im_zero
 
 中文:
 定理 tendsto_log_nhdsWithin_im_neg_of_re_neg_of_im_zero
-  结论: {z : Complex} (hre : z.re < 0)
+  结论: {z : 复形} (hre : z.re < 0)
   证明: by
   convert!
     (continuous_ofReal.continuousAt.comp_continuousWithinAt
@@ -956,7 +956,7 @@ theorem continuousWithinAt_log_of_re_neg_of_im_zero
 
 中文:
 定理 continuousWithinAt_log_of_re_neg_of_im_zero
-  条件: {z : Complex} (hre : z.re < 0) (him : z.im = 0)
+  条件: {z : 复形} (hre : z.re < 0) (him : z.im = 0)
   证明: by
   convert!
     (continuous_ofReal.continuousAt.comp_continuousWithinAt
@@ -992,7 +992,7 @@ theorem tendsto_log_nhdsWithin_im_nonneg_of_re_neg_of_im_zero
 
 中文:
 定理 tendsto_log_nhdsWithin_im_nonneg_of_re_neg_of_im_zero
-  结论: {z : Complex} (hre : z.re < 0)
+  结论: {z : 复形} (hre : z.re < 0)
   证明: by
   simpa only [log, arg_eq_pi_iff.2 ⟨hre, him⟩] using
     (continuousWithinAt_log_of_re_neg_of_im_zero hre him).tendsto
@@ -1044,7 +1044,7 @@ theorem map_exp_comap_re_atTop
 
 中文:
 定理 map_exp_comap_re_atTop
-  结论: map exp (comap re atTop) = cobounded Complex
+  结论: map exp (comap re atTop) = cobounded 复形
   证明: by
   rw [← comap_exp_cobounded]; rw [map_comap]; rw [range_exp]; rw [inf_eq_left]; rw [le_principal_iff]
   exact eventually_ne_cobounded _
@@ -1082,7 +1082,7 @@ exact norm_ne_zero_iff.mpr slitPlane_ne_zero h
 
 中文:
 定理 continuousAt_clog
-  条件: {x : Complex} (h : x in slitPlane)
+  条件: {x : 复形} (h : x in slitPlane)
   结论: ContinuousAt log x
   证明: by
   refine ContinuousAt.add ?_ ?_
@@ -1112,8 +1112,8 @@ theorem _root_.Filter.Tendsto.clog
   proof: (continuousAt_clog hx).tendsto.comp h
 
 中文:
-定理 _root_.Filter.Tendsto.clog
-  结论: {l : Filter α} {f : α -> Complex} {x : Complex} (h : Tendsto f l (𝓝 x))
+定理 _root_.滤子.收敛.clog
+  结论: {l : 滤子 α} {f : α -> 复形} {x : 复形} (h : 收敛 f l (𝓝 x))
   证明: (continuousAt_clog hx).tendsto.comp h
 
 Depends on / 依赖: AB4OfSize, HasCoproducts, continuousAt_clog, tendsto, tendsto.comp
@@ -1137,7 +1137,7 @@ nonrec
 
 中文:
 定理 _root_.ContinuousAt.clog
-  结论: {f : α -> Complex} {x : α} (h₁ : ContinuousAt f x)
+  结论: {f : α -> 复形} {x : α} (h₁ : ContinuousAt f x)
   证明: h₁.clog h₂
 
 nonrec
@@ -1159,7 +1159,7 @@ nonrec
 
 中文:
 定理 _root_.ContinuousWithinAt.clog
-  结论: {f : α -> Complex} {s : Set α} {x : α}
+  结论: {f : α -> 复形} {s : 集合 α} {x : α}
   证明: h₁.clog h₂
 
 nonrec
@@ -1183,7 +1183,7 @@ nonrec
 
 中文:
 定理 _root_.ContinuousOn.clog
-  结论: {f : α -> Complex} {s : Set α} (h₁ : ContinuousOn f s)
+  结论: {f : α -> 复形} {s : 集合 α} (h₁ : ContinuousOn f s)
   证明: fun x hx =>
   (h₁ x hx).clog (h₂ x hx)
 
@@ -1205,8 +1205,8 @@ theorem _root_.Continuous.clog
   proof: continuous_iff_continuousAt.2 fun x => h₁.continuousAt.clog (h₂ x)
 
 中文:
-定理 _root_.Continuous.clog
-  结论: {f : α -> Complex} (h₁ : Continuous f)
+定理 _root_.连续.clog
+  结论: {f : α -> 复形} (h₁ : 连续 f)
   证明: continuous_iff_continuousAt.2 fun x => h₁.continuousAt.clog (h₂ x)
 
 Depends on / 依赖: AB4OfSize, CountableAB4, HasCoproducts, continuousAt, continuousAt.clog, continuous_iff_continuousAt
@@ -1241,7 +1241,7 @@ definition expOpenPartialHomeomorph
 
 中文:
 定义 expOpenPartialHomeomorph
-  签名: : OpenPartialHomeomorph Complex Complex where
+  签名: : OpenPartialHomeomorph 复形 复形 where
   定义体: exp
   invFun := log
   source := {z : Complex | z.im in Ioo (-π) π}

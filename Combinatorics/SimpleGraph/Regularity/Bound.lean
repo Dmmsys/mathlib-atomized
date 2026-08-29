@@ -81,7 +81,7 @@ theorem stepBound_mono
 
 中文:
 定理 stepBound_mono
-  结论: Monotone stepBound
+  结论: 递增 stepBound
   证明: fun _ _ h => by unfold stepBound; gcongr; decide
 
 Depends on / 依赖: stepBound
@@ -124,7 +124,7 @@ lemma coe_stepBound
 
 中文:
 引理 coe_stepBound
-  条件: {α : 类型} [Semiring α] (n : 自然数)
+  条件: {α : 类型} [半环 α] (n : 自然数)
   证明: by unfold stepBound; norm_cast
 -/
 @[norm_cast] lemma coe_stepBound {α : Type*} [Semiring α] (n : Nat) :
@@ -178,7 +178,7 @@ theorem m_pos
 
 中文:
 定理 m_pos
-  条件: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  条件: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   结论: 0 < m
   证明: Nat.div_pos (hPα.trans' <| by unfold stepBound; gcongr; simp)
     stepBound_pos (P.parts_nonempty <| univ_nonempty.ne_empty).card_pos
@@ -226,7 +226,7 @@ theorem m_pos
 
 中文:
 定理 m_pos
-  条件: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  条件: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   结论: 0 < m
   证明: by
   sz_positivity
@@ -262,7 +262,7 @@ theorem one_le_m_coe
 
 中文:
 定理 one_le_m_coe
-  条件: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  条件: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   结论: (1 : 实数) <= m
   证明: Nat.one_le_cast.2 m_pos hPα
 
@@ -324,7 +324,7 @@ theorem hundred_div_ε_pow_five_le_m
 
 中文:
 定理 hundred_div_ε_pow_five_le_m
-  结论: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   证明: (div_le_of_le_mul₀ (eps_pow_five_pos hPε).le (by positivity) hPε).trans by
     norm_cast
     rwa [Nat.le_div_iff_mul_le (stepBound_pos (P.parts_nonempty <|
@@ -351,7 +351,7 @@ theorem hundred_le_m
 
 中文:
 定理 hundred_le_m
-  结论: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   证明: mod_cast
     (hundred_div_ε_pow_five_le_m hPα hPε).trans'
       (le_div_self (by simp) (by sz_positivity) <| pow_le_one₀ (by sz_positivity) hε)

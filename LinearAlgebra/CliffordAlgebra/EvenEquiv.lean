@@ -504,7 +504,7 @@ Subtype.ext
 
 中文:
 定理 toEven_comp_ofEven
-  结论: (toEven Q).comp (ofEven Q) = AlgHom.id R _
+  结论: (toEven Q).comp (ofEven Q) = 代数态射.id R _
   证明: even.algHom_ext (Q' Q)
 EvenHom.ext
       LinearMap.ext fun m₁ =>
@@ -565,7 +565,7 @@ theorem ofEven_comp_toEven
 
 中文:
 定理 ofEven_comp_toEven
-  结论: (ofEven Q).comp (toEven Q) = AlgHom.id R _
+  结论: (ofEven Q).comp (toEven Q) = 代数态射.id R _
   证明: CliffordAlgebra.hom_ext
     LinearMap.ext fun m =>
       calc

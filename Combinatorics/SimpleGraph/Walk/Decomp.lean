@@ -65,7 +65,7 @@ theorem takeUntil_nil
 中文:
 定理 takeUntil_nil
   条件: {u : V} {h}
-  结论: takeUntil (nil : G.Walk u u) u h = nil
+  结论: takeUntil (nil : G.途径 u u) u h = nil
   证明: rfl
 -/
 @[simp] theorem takeUntil_nil {u : V} {h} : takeUntil (nil : G.Walk u u) u h = nil := rfl
@@ -83,7 +83,7 @@ lemma takeUntil_cons
 
 中文:
 引理 takeUntil_cons
-  结论: {v' : V} {p : G.Walk v' v} (hwp : w in p.support) (h : u != w)
+  结论: {v' : V} {p : G.途径 v' v} (hwp : w in p.support) (h : u != w)
   证明: by
   simp [Walk.takeUntil, h]
 
@@ -109,7 +109,7 @@ lemma takeUntil_first
 
 中文:
 引理 takeUntil_first
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: by cases p <;> simp [Walk.takeUntil]
 
 @[simp]
@@ -130,7 +130,7 @@ lemma nil_takeUntil
 
 中文:
 引理 nil_takeUntil
-  条件: (p : G.Walk u v) (hwp : w in p.support)
+  条件: (p : G.途径 u v) (hwp : w in p.support)
   证明: ⟨Nil.eq, (by cases ·; simp)⟩
 
 Depends on / 依赖: Nil.eq
@@ -156,7 +156,7 @@ lemma takeUntil_eq_take
 
 中文:
 引理 takeUntil_eq_take
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   证明: by
   apply ext_support
   induction p with
@@ -189,7 +189,7 @@ lemma length_takeUntil
 
 中文:
 引理 length_takeUntil
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   证明: by
   simp [takeUntil_eq_take, Nat.le_iff_lt_add_one, ← length_support, List.idxOf_lt_length_of_mem h]
 
@@ -244,7 +244,7 @@ theorem take_spec
 
 中文:
 定理 take_spec
-  条件: {u v w : V} (p : G.Walk v w) (h : u in p.support)
+  条件: {u v w : V} (p : G.途径 v w) (h : u in p.support)
   证明: by
   induction p
   · rw [mem_support_nil_iff] at h
@@ -284,7 +284,7 @@ lemma dropUntil_first
 
 中文:
 引理 dropUntil_first
-  条件: (p : G.Walk u v) (h : u in p.support)
+  条件: (p : G.途径 u v) (h : u in p.support)
   结论: p.dropUntil u h = p
   证明: by
   unfold dropUntil
@@ -317,7 +317,7 @@ lemma dropUntil_eq_drop
 
 中文:
 引理 dropUntil_eq_drop
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   证明: by
   apply ext_support
   induction p with
@@ -357,7 +357,7 @@ lemma length_dropUntil
 
 中文:
 引理 length_dropUntil
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   证明: by
   simp [dropUntil_eq_drop]
 
@@ -378,7 +378,7 @@ theorem isSubwalk_takeUntil
 
 中文:
 定理 isSubwalk_takeUntil
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   结论: (p.takeUntil w h).IsSubwalk p
   证明: ⟨nil, p.dropUntil w h, by simp⟩
 
@@ -398,7 +398,7 @@ theorem isSubwalk_dropUntil
 
 中文:
 定理 isSubwalk_dropUntil
-  条件: (p : G.Walk u v) (h : w in p.support)
+  条件: (p : G.途径 u v) (h : w in p.support)
   结论: (p.dropUntil w h).IsSubwalk p
   证明: ⟨p.takeUntil w h, nil, by simp⟩
 
@@ -423,8 +423,8 @@ theorem mem_support_iff_exists_append
 @[simp]
 
 中文:
-定理 mem_support_iff_exists_append
-  结论: {V : 类型u} {G : SimpleGraph V} {u v w : V}
+定理 mem_support_iff_存在_append
+  结论: {V : 类型u} {G : 简单图 V} {u v w : V}
   证明: by
   classical
   constructor
@@ -463,7 +463,7 @@ theorem count_support_takeUntil_eq_one
 
 中文:
 定理 count_support_takeUntil_eq_one
-  条件: {u v w : V} (p : G.Walk v w) (h : u in p.support)
+  条件: {u v w : V} (p : G.途径 v w) (h : u in p.support)
   证明: by
   induction p
   · rw [mem_support_nil_iff] at h
@@ -512,7 +512,7 @@ theorem count_edges_takeUntil_le_one
 
 中文:
 定理 count_edges_takeUntil_le_one
-  条件: {u v w : V} (p : G.Walk v w) (h : u in p.support) (x : V)
+  条件: {u v w : V} (p : G.途径 v w) (h : u in p.support) (x : V)
   证明: by
   induction p with
   | nil =>
@@ -569,7 +569,7 @@ theorem takeUntil_copy
 
 中文:
 定理 takeUntil_copy
-  结论: {u v w v' w'} (p : G.Walk v w) (hv : v = v') (hw : w = w')
+  结论: {u v w v' w'} (p : G.途径 v w) (hv : v = v') (hw : w = w')
   证明: by
   subst_vars
   rfl
@@ -595,7 +595,7 @@ theorem dropUntil_copy
 
 中文:
 定理 dropUntil_copy
-  结论: {u v w v' w'} (p : G.Walk v w) (hv : v = v') (hw : w = w')
+  结论: {u v w v' w'} (p : G.途径 v w) (hv : v = v') (hw : w = w')
   证明: by
   subst_vars
   rfl
@@ -617,7 +617,7 @@ theorem support_takeUntil_prefix_support
 
 中文:
 定理 support_takeUntil_prefix_support
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: by
   grw [takeUntil_eq_take, support_copy, support_take, List.take_prefix]
 
@@ -640,7 +640,7 @@ alias support_takeUntil_subset := support_takeUntil_subset_support
 
 中文:
 定理 support_takeUntil_subset_support
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.support_takeUntil_prefix_support h
 
 @[deprecated (since := "2026-05-25")]
@@ -666,7 +666,7 @@ theorem support_dropUntil_suffix_support
 
 中文:
 定理 support_dropUntil_suffix_support
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: by
   grw [dropUntil_eq_drop, support_copy, drop_support_eq_support_drop_min, List.drop_suffix]
 
@@ -689,7 +689,7 @@ alias support_dropUntil_subset := support_dropUntil_subset_support
 
 中文:
 定理 support_dropUntil_subset_support
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.support_dropUntil_suffix_support h
 
 @[deprecated (since := "2026-05-25")]
@@ -715,7 +715,7 @@ theorem darts_takeUntil_prefix_darts
 
 中文:
 定理 darts_takeUntil_prefix_darts
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: by
   grw [takeUntil_eq_take, darts_copy, darts_take, List.take_prefix]
 
@@ -737,7 +737,7 @@ theorem darts_takeUntil_subset_darts
 
 中文:
 定理 darts_takeUntil_subset_darts
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.darts_takeUntil_prefix_darts h
 
 @[deprecated (since := "2026-05-25")] alias darts_takeUntil_subset := darts_takeUntil_subset_darts
@@ -761,7 +761,7 @@ theorem darts_dropUntil_suffix_darts
 
 中文:
 定理 darts_dropUntil_suffix_darts
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: by
   grw [dropUntil_eq_drop, darts_copy, darts_drop, List.drop_suffix]
 
@@ -783,7 +783,7 @@ theorem darts_dropUntil_subset_darts
 
 中文:
 定理 darts_dropUntil_subset_darts
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.darts_dropUntil_suffix_darts h
 
 @[deprecated (since := "2026-05-25")] alias darts_dropUntil_subset := darts_dropUntil_subset_darts
@@ -806,7 +806,7 @@ theorem edges_takeUntil_prefix_edges
 
 中文:
 定理 edges_takeUntil_prefix_edges
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .map _ p.darts_takeUntil_prefix_darts h
 
 Depends on / 依赖: darts_takeUntil_prefix_darts, p.darts_takeUntil_prefix_darts
@@ -827,7 +827,7 @@ theorem edges_takeUntil_subset_edges
 
 中文:
 定理 edges_takeUntil_subset_edges
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.edges_takeUntil_prefix_edges h
 
 @[deprecated (since := "2026-05-25")] alias edges_takeUntil_subset := edges_takeUntil_subset_edges
@@ -850,7 +850,7 @@ theorem edges_dropUntil_suffix_edges
 
 中文:
 定理 edges_dropUntil_suffix_edges
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .map _ p.darts_dropUntil_suffix_darts h
 
 Depends on / 依赖: darts_dropUntil_suffix_darts, p.darts_dropUntil_suffix_darts
@@ -871,7 +871,7 @@ theorem edges_dropUntil_subset_edges
 
 中文:
 定理 edges_dropUntil_subset_edges
-  条件: (p : G.Walk v w) (h : u in p.support)
+  条件: (p : G.途径 v w) (h : u in p.support)
   证明: .subset p.edges_dropUntil_suffix_edges h
 
 @[deprecated (since := "2026-05-25")] alias edges_dropUntil_subset := edges_dropUntil_subset_edges
@@ -897,7 +897,7 @@ theorem length_takeUntil_le_length
 
 中文:
 定理 length_takeUntil_le_length
-  条件: {u v w : V} (p : G.Walk v w) (h : u in p.support)
+  条件: {u v w : V} (p : G.途径 v w) (h : u in p.support)
   证明: by
 .length_le simpa using p.darts_takeUntil_prefix_darts h
 
@@ -924,7 +924,7 @@ theorem length_dropUntil_le_length
 
 中文:
 定理 length_dropUntil_le_length
-  条件: {u v w : V} (p : G.Walk v w) (h : u in p.support)
+  条件: {u v w : V} (p : G.途径 v w) (h : u in p.support)
   证明: by
 .length_le simpa using p.darts_dropUntil_suffix_darts h
 
@@ -951,7 +951,7 @@ lemma takeUntil_append_of_mem_left
 
 中文:
 引理 takeUntil_append_of_mem_left
-  条件: {x : V} (p : G.Walk u v) (q : G.Walk v w) (hx : x in p.support)
+  条件: {x : V} (p : G.途径 u v) (q : G.途径 v w) (hx : x in p.support)
   证明: by
   induction p with
   | nil => rw [mem_support_nil_iff] at hx; subst_vars; simp
@@ -977,7 +977,7 @@ lemma getVert_takeUntil
 
 中文:
 引理 getVert_takeUntil
-  结论: {u v : V} {n : 自然数} {p : G.Walk u v} (hw : w in p.support)
+  结论: {u v : V} {n : 自然数} {p : G.途径 u v} (hw : w in p.support)
   证明: by
   conv_rhs => rw [← take_spec p hw, getVert_append]
   cases hn.lt_or_eq <;> simp_all
@@ -1003,7 +1003,7 @@ lemma snd_takeUntil
 
 中文:
 引理 snd_takeUntil
-  条件: (hsu : w != u) (p : G.Walk u v) (h : w in p.support)
+  条件: (hsu : w != u) (p : G.途径 u v) (h : w in p.support)
   证明: by
   apply p.getVert_takeUntil h
   contrapose hsu
@@ -1031,7 +1031,7 @@ lemma getVert_length_takeUntil
 
 中文:
 引理 getVert_length_takeUntil
-  条件: {p : G.Walk v w} (h : u in p.support)
+  条件: {p : G.途径 v w} (h : u in p.support)
   证明: by
   have := congr_arg₂ (y := (p.takeUntil _ h).length) getVert (p.take_spec h) rfl
   grind [getVert_append, getVert_zero]
@@ -1059,7 +1059,7 @@ lemma getVert_lt_length_takeUntil_ne
 
 中文:
 引理 getVert_lt_length_takeUntil_ne
-  结论: {n : 自然数} {p : G.Walk v w} (h : u in p.support)
+  结论: {n : 自然数} {p : G.途径 v w} (h : u in p.support)
   证明: by
   rintro rfl
   have h₁ : n < (p.takeUntil _ h).support.dropLast.length := by simpa
@@ -1091,7 +1091,7 @@ theorem getVert_le_length_takeUntil_eq_iff
 
 中文:
 定理 getVert_le_length_takeUntil_eq_iff
-  结论: {n : 自然数} {p : G.Walk v w} (h : u in p.support)
+  结论: {n : 自然数} {p : G.途径 v w} (h : u in p.support)
   证明: by
   grind [getVert_length_takeUntil, getVert_lt_length_takeUntil_ne]
 
@@ -1116,7 +1116,7 @@ lemma length_takeUntil_lt_length
 
 中文:
 引理 length_takeUntil_lt_length
-  条件: {u v w : V} {p : G.Walk v w} (h : u in p.support) (huw : u != w)
+  条件: {u v w : V} {p : G.途径 v w} (h : u in p.support) (huw : u != w)
   证明: by
   rw [(p.length_takeUntil_le_length h).lt_iff_ne]
   exact fun hl => huw (by simpa using (hl ▸ getVert_takeUntil h (by rfl) :
@@ -1145,7 +1145,7 @@ lemma length_dropUntil_lt_length
 
 中文:
 引理 length_dropUntil_lt_length
-  条件: {u v w : V} {p : G.Walk v w} (h : u in p.support) (huv : u != v)
+  条件: {u v w : V} {p : G.途径 v w} (h : u in p.support) (huv : u != v)
   证明: by
   grind [length_dropUntil, cons_tail_support]
 
@@ -1166,7 +1166,7 @@ lemma takeUntil_takeUntil
 
 中文:
 引理 takeUntil_takeUntil
-  结论: {w x : V} (p : G.Walk u v) (hw : w in p.support)
+  结论: {w x : V} (p : G.途径 u v) (hw : w in p.support)
   证明: by
   simp_rw [← takeUntil_append_of_mem_left _ (p.dropUntil w hw) hx, take_spec]
 
@@ -1194,7 +1194,7 @@ lemma notMem_support_takeUntil_support_takeUntil_subset
 
 中文:
 引理 notMem_support_takeUntil_support_takeUntil_subset
-  结论: {p : G.Walk u v} {x : V} (h : x != w)
+  结论: {p : G.途径 u v} {x : V} (h : x != w)
   证明: by
   rw [← takeUntil_takeUntil p hw hx]
   intro hw'
@@ -1230,7 +1230,7 @@ definition rotate
 
 中文:
 定义 rotate
-  签名: (c : G.Walk v v) (u : V) (h : u in c.support)
+  签名: (c : G.途径 v v) (u : V) (h : u in c.support)
   定义体: (c.dropUntil u h).append (c.takeUntil u h)
 
 @[simp]
@@ -1256,7 +1256,7 @@ theorem support_rotate
 
 中文:
 定理 support_rotate
-  条件: (c : G.Walk v v) (u : V) (h)
+  条件: (c : G.途径 v v) (u : V) (h)
   证明: by
   simp only [rotate, tail_support_append]
   apply List.IsRotated.trans List.isRotated_append
@@ -1284,7 +1284,7 @@ theorem mem_support_rotate_iff
 
 中文:
 定理 mem_support_rotate_iff
-  条件: (c : G.Walk v v) (u : V) (h)
+  条件: (c : G.途径 v v) (u : V) (h)
   证明: by
   grind [rotate, take_spec, mem_support_append_iff]
 
@@ -1308,7 +1308,7 @@ theorem rotate_darts
 
 中文:
 定理 rotate_darts
-  条件: (c : G.Walk v v) (u : V) (h)
+  条件: (c : G.途径 v v) (u : V) (h)
   结论: (c.rotate u h).darts ~r c.darts
   证明: by
   simp only [rotate, darts_append]
@@ -1333,7 +1333,7 @@ theorem rotate_edges
 
 中文:
 定理 rotate_edges
-  条件: (c : G.Walk v v) (u : V) (h)
+  条件: (c : G.途径 v v) (u : V) (h)
   结论: (c.rotate u h).edges ~r c.edges
   证明: (rotate_darts c u h).map _
 
@@ -1356,7 +1356,7 @@ lemma length_rotate
 
 中文:
 引理 length_rotate
-  条件: (c : G.Walk v v) (u : V) (h)
+  条件: (c : G.途径 v v) (u : V) (h)
   结论: (c.rotate u h).length = c.length
   证明: by
   simpa using (rotate_edges c u h).perm.length_eq
@@ -1381,7 +1381,7 @@ theorem nil_rotate
 
 中文:
 定理 nil_rotate
-  条件: {c : G.Walk v v} (h)
+  条件: {c : G.途径 v v} (h)
   结论: (c.rotate u h).Nil ↔ c.Nil
   证明: by
   simp [← length_eq_zero_iff]
@@ -1405,7 +1405,7 @@ lemma rotate_eq_nil
 
 中文:
 引理 rotate_eq_nil
-  条件: {c : G.Walk v v} (h)
+  条件: {c : G.途径 v v} (h)
   结论: c.rotate u h = nil ↔ c = nil
   证明: by simp
 -/
@@ -1426,8 +1426,8 @@ theorem mem_support_iff_exists_getVert
     (fun ⟨_, h, _⟩ => h ▸ getVert_mem_support _ _)
 
 中文:
-定理 mem_support_iff_exists_getVert
-  条件: {u v w : V} {p : G.Walk v w}
+定理 mem_support_iff_存在_getVert
+  条件: {u v w : V} {p : G.途径 v w}
   证明: by
   classical
   exact Iff.intro

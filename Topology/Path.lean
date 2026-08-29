@@ -66,7 +66,7 @@ structure Path
     - target' : toFun 1 = y
 
 中文:
-结构 Path
+结构 道路
   参数: (x y : X)
   继承: C(I, X)
   公理与运算 (2 个):
@@ -91,8 +91,8 @@ instance Path.instFunLike
     cases γ₁; cases γ₂; congr
 
 中文:
-实例 Path.instFunLike
-  签名: : FunLike (Path x y) I X where
+实例 道路.instFunLike
+  签名: : 函数状 (道路 x y) I X where
   定义体: ⇑γ.toContinuousMap
   coe_injective γ₁ γ₂ h := by
     simp only [DFunLike.coe_fn_eq] at h
@@ -117,8 +117,8 @@ instance Path.continuousMapClass
 @[ext, grind ext]
 
 中文:
-实例 Path.continuousMapClass
-  签名: : ContinuousMapClass (Path x y) I X where
+实例 道路.continuousMapClass
+  签名: : 连续映射类 (道路 x y) I X where
   定义体: show Continuous γ.toContinuousMap by fun_prop
 
 @[ext, grind ext]
@@ -140,8 +140,8 @@ theorem Path.ext
   rfl
 
 中文:
-定理 Path.ext
-  结论: 对任意 {γ₁ γ₂ : Path x y}, (γ₁ : I -> X) = γ₂ -> γ₁ = γ₂
+定理 道路.ext
+  结论: 对任意 {γ₁ γ₂ : 道路 x y}, (γ₁ : I -> X) = γ₂ -> γ₁ = γ₂
   证明: by
   rintro ⟨⟨x, h11⟩, h12, h13⟩ ⟨⟨x, h21⟩, h22, h23⟩ rfl
   rfl
@@ -166,7 +166,7 @@ theorem coe_mk'
 中文:
 定理 coe_mk'
   条件: (f : C(I, X)) (h₁ h₂)
-  结论: ⇑(mk f h₁ h₂ : Path x y) = f
+  结论: ⇑(mk f h₁ h₂ : 道路 x y) = f
   证明: rfl
 -/
 theorem coe_mk' (f : C(I, X)) (h₁ h₂) : ⇑(mk f h₁ h₂ : Path x y) = f := rfl
@@ -203,7 +203,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous γ
+  结论: 连续 γ
   证明: γ.continuous_toFun
 
 @[simp, grind =]
@@ -308,7 +308,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  结论: range ((↑) : Path x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y}
+  结论: range ((↑) : 道路 x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y}
   证明: Subset.antisymm (range_subset_iff.mpr fun γ => ⟨γ.source, γ.target⟩) fun f ⟨hf₀, hf₁⟩ =>
     ⟨⟨f, hf₀, hf₁⟩, rfl⟩
 
@@ -353,7 +353,7 @@ lemma source_mem_range
 
 中文:
 引理 source_mem_range
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: x in range ⇑γ
   证明: ⟨0, Path.source γ⟩
 
@@ -376,7 +376,7 @@ lemma target_mem_range
 
 中文:
 引理 target_mem_range
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: y in range ⇑γ
   证明: ⟨1, Path.target γ⟩
 
@@ -399,7 +399,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Path (0 : I) 1 where
+  签名: : 道路 (0 : I) 1 where
   定义体: .id _
   source' := rfl
   target' := rfl
@@ -450,7 +450,7 @@ theorem refl_range
 中文:
 定理 refl_range
   条件: {a : X}
-  结论: range (Path.refl a) = {a}
+  结论: range (道路.refl a) = {a}
   证明: range_const
 
 Depends on / 依赖: range_const
@@ -474,7 +474,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (γ : Path x y)
+  签名: (γ : 道路 x y)
   定义体: γ ∘ σ
   continuous_toFun := by fun_prop
   source' := by simp
@@ -500,7 +500,7 @@ theorem symm_symm
 
 中文:
 定理 symm_symm
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: γ.symm.symm = γ
   证明: by grind
 -/
@@ -518,7 +518,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (Path.symm : Path x y -> Path y x)
+  结论: 函数.双射 (道路.symm : 道路 x y -> 道路 y x)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -543,7 +543,7 @@ theorem refl_symm
 中文:
 定理 refl_symm
   条件: {a : X}
-  结论: (Path.refl a).symm = Path.refl a
+  结论: (道路.refl a).symm = 道路.refl a
   证明: rfl
 
 @[simp]
@@ -562,7 +562,7 @@ theorem symm_range
 
 中文:
 定理 symm_range
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   结论: range γ.symm = range γ
   证明: symm_involutive.surjective.range_comp γ
 
@@ -586,7 +586,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (Path x y)
+  签名: : 拓扑空间 (道路 x y)
   定义体: TopologicalSpace.induced ((↑) : _ -> C(I, X)) ContinuousMap.compactOpen
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compactOpen, TopologicalSpace, TopologicalSpace.induced, compactOpen, induced
@@ -604,7 +604,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEval (Path x y) I X
+  签名: 余ntinuousEval (道路 x y) I X
   定义体: .of_continuous_forget continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom, of_continuous_forget
@@ -623,7 +623,7 @@ theorem continuous_uncurry_iff
 
 中文:
 定理 continuous_uncurry_iff
-  条件: {Y} [TopologicalSpace Y] {g : Y -> Path x y}
+  条件: {Y} [拓扑空间 Y] {g : Y -> 道路 x y}
   证明: Iff.symm continuous_induced_rng.trans
     ⟨fun h => continuous_uncurry_of_continuous ⟨_, h⟩,
     continuous_of_continuous_uncurry (fun (y : Y) => ContinuousMap.mk (g y))⟩
@@ -665,8 +665,8 @@ theorem _root_.Continuous.pathExtend
   proof: Continuous.IccExtend hγ hf
 
 中文:
-定理 _root_.Continuous.pathExtend
-  结论: {γ : Y -> Path x y} {f : Y -> 实数} (hγ : Continuous ↿γ)
+定理 _root_.连续.pathExtend
+  结论: {γ : Y -> 道路 x y} {f : Y -> 实数} (hγ : 连续 ↿γ)
   证明: Continuous.IccExtend hγ hf
 
 Depends on / 依赖: Continuous, Continuous.IccExtend, IccExtend
@@ -685,7 +685,7 @@ theorem continuous_extend
 
 中文:
 定理 continuous_extend
-  结论: Continuous γ.extend
+  结论: 连续 γ.extend
   证明: γ.continuous.Icc_extend'
 
 Depends on / 依赖: Icc_extend, continuous, continuous.Icc_extend
@@ -701,7 +701,7 @@ theorem _root_.Filter.Tendsto.pathExtend
   proof: Filter.Tendsto.IccExtend _ hγ
 
 中文:
-定理 _root_.Filter.Tendsto.pathExtend
+定理 _root_.滤子.收敛.pathExtend
   证明: Filter.Tendsto.IccExtend _ hγ
 
 Depends on / 依赖: Filter, Filter.Tendsto.IccExtend, IccExtend, Tendsto
@@ -724,7 +724,7 @@ theorem _root_.ContinuousAt.pathExtend
 
 中文:
 定理 _root_.ContinuousAt.pathExtend
-  结论: {g : Y -> 实数} {l r : Y -> X} (γ : 对任意 y, Path (l y) (r y))
+  结论: {g : Y -> 实数} {l r : Y -> X} (γ : 对任意 y, 道路 (l y) (r y))
   证明: hγ.IccExtend (fun x => γ x) hg
 
 @[simp, grind =]
@@ -747,7 +747,7 @@ theorem extend_apply
 
 中文:
 定理 extend_apply
-  结论: {a b : X} (γ : Path a b) {t : 实数}
+  结论: {a b : X} (γ : 道路 a b) {t : 实数}
   证明: IccExtend_of_mem _ γ ht
 
 Depends on / 依赖: IccExtend_of_mem
@@ -799,7 +799,7 @@ theorem extend_extends'
 
 中文:
 定理 extend_extends'
-  条件: {a b : X} (γ : Path a b) (t : (Icc 0 1 : Set 实数))
+  条件: {a b : X} (γ : 道路 a b) (t : (闭区间 0 1 : 集合 实数))
   结论: γ.extend t = γ t
   证明: IccExtend_val _ γ t
 
@@ -821,7 +821,7 @@ theorem extend_range
 
 中文:
 定理 extend_range
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   证明: IccExtend_range _ γ
 
 Depends on / 依赖: IccExtend_range
@@ -841,7 +841,7 @@ theorem image_extend_of_subset
 
 中文:
 定理 image_extend_of_subset
-  条件: (γ : Path x y) {s : Set 实数} (h : I subseteq s)
+  条件: (γ : 道路 x y) {s : 集合 实数} (h : I subseteq s)
   证明: (γ.extend_range ▸ image_subset_range _ _).antisymm range_subset_iff.mpr fun t =>
     ⟨t, h t.2, extend_extends' _ _⟩
 
@@ -862,7 +862,7 @@ theorem extend_of_le_zero
 
 中文:
 定理 extend_of_le_zero
-  结论: {a b : X} (γ : Path a b) {t : 实数}
+  结论: {a b : X} (γ : 道路 a b) {t : 实数}
   证明: (IccExtend_of_le_left _ _ ht).trans γ.source
 
 Depends on / 依赖: IccExtend_of_le_left, source
@@ -883,7 +883,7 @@ theorem extend_of_one_le
 
 中文:
 定理 extend_of_one_le
-  结论: {a b : X} (γ : Path a b) {t : 实数}
+  结论: {a b : X} (γ : 道路 a b) {t : 实数}
   证明: (IccExtend_of_right_le _ _ ht).trans γ.target
 
 @[simp]
@@ -907,7 +907,7 @@ theorem refl_extend
 中文:
 定理 refl_extend
   条件: {a : X}
-  结论: (Path.refl a).extend = .const 实数 a
+  结论: (道路.refl a).extend = .const 实数 a
   证明: rfl
 -/
 theorem refl_extend {a : X} : (Path.refl a).extend = .const Real a :=
@@ -926,7 +926,7 @@ theorem extend_symm_apply
 
 中文:
 定理 extend_symm_apply
-  条件: (γ : Path x y) (t : 实数)
+  条件: (γ : 道路 x y) (t : 实数)
   结论: γ.symm.extend t = γ.extend (1 - t)
   证明: congrArg γ symm_projIcc _
 
@@ -949,7 +949,7 @@ theorem extend_symm
 
 中文:
 定理 extend_symm
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: γ.symm.extend = (γ.extend <| 1 - ·)
   证明: funext γ.extend_symm_apply
 
@@ -1021,7 +1021,7 @@ theorem ofLine_extend
 
 中文:
 定理 ofLine_extend
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: ofLine (by fun_prop) (extend_zero γ) (extend_one γ) = γ
   证明: by
   ext t
@@ -1057,7 +1057,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (γ : Path x y) (γ' : Path y z)
+  签名: (γ : 道路 x y) (γ' : 道路 y z)
   定义体: (fun t : Real => if t <= 1 / 2 then γ.extend (2 * t) else γ'.extend (2 * t - 1)) ∘ (↑)
   continuous_toFun := by
     refine
@@ -1094,7 +1094,7 @@ theorem trans_apply
 
 中文:
 定理 trans_apply
-  条件: (γ : Path x y) (γ' : Path y z) (t : I)
+  条件: (γ : 道路 x y) (γ' : 道路 y z) (t : I)
   证明: show ite _ _ _ = _ by split_ifs <;> rw [extend_apply]
 
 @[simp]
@@ -1127,7 +1127,7 @@ theorem trans_symm
 
 中文:
 定理 trans_symm
-  条件: (γ : Path x y) (γ' : Path y z)
+  条件: (γ : 道路 x y) (γ' : 道路 y z)
   结论: (γ.trans γ').symm = γ'.symm.trans γ.symm
   证明: by
   ext t
@@ -1168,7 +1168,7 @@ theorem extend_trans_of_le_half
 
 中文:
 定理 extend_trans_of_le_half
-  条件: (γ₁ : Path x y) (γ₂ : Path y z) {t : 实数} (ht : t <= 1 / 2)
+  条件: (γ₁ : 道路 x y) (γ₂ : 道路 y z) {t : 实数} (ht : t <= 1 / 2)
   证明: by
   obtain _ | ht₀ := le_total t 0
   · repeat rw [extend_of_le_zero _ (by linarith)]
@@ -1198,7 +1198,7 @@ theorem extend_trans_of_half_le
 
 中文:
 定理 extend_trans_of_half_le
-  条件: (γ₁ : Path x y) (γ₂ : Path y z) {t : 实数} (ht : 1 / 2 <= t)
+  条件: (γ₁ : 道路 x y) (γ₂ : 道路 y z) {t : 实数} (ht : 1 / 2 <= t)
   证明: by
   conv_lhs => rw [← sub_sub_cancel 1 t]
   rw [← extend_symm_apply]; rw [trans_symm]; rw [extend_trans_of_le_half _ _ (by linarith)]; rw [extend_symm_apply]
@@ -1252,7 +1252,7 @@ theorem trans_range
 
 中文:
 定理 trans_range
-  条件: {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c)
+  条件: {a b c : X} (γ₁ : 道路 a b) (γ₂ : 道路 b c)
   证明: by
   rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.
 
@@ -1277,7 +1277,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: (γ : Path x y) {f : X -> Y} (h : ContinuousOn f (range γ))
+  签名: (γ : 道路 x y) {f : X -> Y} (h : ContinuousOn f (range γ))
   定义体: f ∘ γ
   continuous_toFun := h.comp_continuous γ.continuous (fun x => mem_range_self x)
   source' := by simp
@@ -1301,7 +1301,7 @@ definition map
 
 中文:
 定义 map
-  签名: (γ : Path x y) {f : X -> Y} (h : Continuous f)
+  签名: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
   定义体: γ.map' h.continuousOn
 
 @[simp, grind =]
@@ -1326,7 +1326,7 @@ theorem map_coe
 
 中文:
 定理 map_coe
-  条件: (γ : Path x y) {f : X -> Y} (h : Continuous f)
+  条件: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
   证明: by
   ext t
   rfl
@@ -1351,7 +1351,7 @@ theorem map_symm
 
 中文:
 定理 map_symm
-  条件: (γ : Path x y) {f : X -> Y} (h : Continuous f)
+  条件: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
   证明: rfl
 
 @[simp]
@@ -1376,7 +1376,7 @@ theorem map_trans
 
 中文:
 定理 map_trans
-  结论: (γ : Path x y) (γ' : Path y z) {f : X -> Y}
+  结论: (γ : 道路 x y) (γ' : 道路 y z) {f : X -> Y}
   证明: by
   ext t
   rw [trans_apply]; rw [map_coe]; rw [Function.comp_apply]; rw [trans_apply]; rw [map_coe]; rw [map_coe]
@@ -1408,7 +1408,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: γ.map continuous_id = γ
   证明: by
   ext
@@ -1433,7 +1433,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: (γ : Path x y) {Z : 类型} [TopologicalSpace Z]
+  结论: (γ : 道路 x y) {Z : 类型} [拓扑空间 Z]
   证明: by
   ext
   rfl
@@ -1457,7 +1457,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
+  签名: (γ : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
   定义体: γ
   continuous_toFun := γ.continuous
   source' := by simp [hx]
@@ -1482,7 +1482,7 @@ theorem cast_rfl_rfl
 
 中文:
 定理 cast_rfl_rfl
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: γ.cast rfl rfl = γ
   证明: rfl
 
@@ -1503,7 +1503,7 @@ theorem cast_symm
 
 中文:
 定理 cast_symm
-  条件: {a₁ a₂ b₁ b₂ : X} (γ : Path a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂)
+  条件: {a₁ a₂ b₁ b₂ : X} (γ : 道路 a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂)
   证明: rfl
 
 @[simp]
@@ -1525,7 +1525,7 @@ theorem cast_trans
 
 中文:
 定理 cast_trans
-  结论: {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : Path a₂ b₂)
+  结论: {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : 道路 a₂ b₂)
   证明: rfl
 
 @[simp]
@@ -1548,7 +1548,7 @@ theorem extend_cast
 
 中文:
 定理 extend_cast
-  条件: {x' y'} (γ : Path x y) (hx : x' = x) (hy : y' = y)
+  条件: {x' y'} (γ : 道路 x y) (hx : x' = x) (hy : y' = y)
   证明: rfl
 
 @[simp]
@@ -1568,7 +1568,7 @@ theorem cast_coe
 
 中文:
 定理 cast_coe
-  条件: (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
+  条件: (γ : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
   结论: (γ.cast hx hy : I -> X) = γ
   证明: rfl
 -/
@@ -1590,7 +1590,7 @@ lemma bijective_cast
 中文:
 引理 bijective_cast
   条件: {x' y' : X} (hx : x' = x) (hy : y' = y)
-  结论: Bijective (Path.cast · hx hy)
+  结论: 双射 (道路.cast · hx hy)
   证明: by
   subst_vars; exact bijective_id
 
@@ -1613,8 +1613,8 @@ lemma exists_congr
 @[continuity, fun_prop]
 
 中文:
-引理 exists_congr
-  结论: {x₁ x₂ y₁ y₂ : X} {p : Path x₁ y₁ -> 命题}
+引理 存在_congr
+  结论: {x₁ x₂ y₁ y₂ : X} {p : 道路 x₁ y₁ -> 命题}
   证明: .surjective.exists bijective_cast hx hy
 
 @[continuity, fun_prop]
@@ -1639,7 +1639,7 @@ theorem symm_continuous_family
 
 中文:
 定理 symm_continuous_family
-  结论: {ι : 类型} [TopologicalSpace ι]
+  结论: {ι : 类型} [拓扑空间 ι]
   证明: h.comp (continuous_id.prodMap continuous_symm)
 
 @[continuity]
@@ -1664,7 +1664,7 @@ theorem continuous_symm
 
 中文:
 定理 continuous_symm
-  结论: Continuous (symm : Path x y -> Path y x)
+  结论: 连续 (symm : 道路 x y -> 道路 y x)
   证明: continuous_uncurry_iff.mp symm_continuous_family _ (by fun_prop)
 
 @[continuity]
@@ -1689,7 +1689,7 @@ theorem continuous_uncurry_extend_of_continuous_family
 
 中文:
 定理 continuous_uncurry_extend_of_continuous_family
-  结论: {ι : 类型} [TopologicalSpace ι]
+  结论: {ι : 类型} [拓扑空间 ι]
   证明: by
   apply h.comp (continuous_id.prodMap continuous_projIcc)
   exact zero_le_one
@@ -1721,7 +1721,7 @@ theorem trans_continuous_family
 
 中文:
 定理 trans_continuous_family
-  结论: {ι : 类型} [TopologicalSpace ι]
+  结论: {ι : 类型} [拓扑空间 ι]
   证明: by
   have h₁' := Path.continuous_uncurry_extend_of_continuous_family γ₁ h₁
   have h₂' := Path.continuous_uncurry_extend_of_continuous_family γ₂ h₂
@@ -1764,8 +1764,8 @@ theorem _root_.Continuous.path_trans
 @[continuity, fun_prop]
 
 中文:
-定理 _root_.Continuous.path_trans
-  条件: {f : Y -> Path x y} {g : Y -> Path y z}
+定理 _root_.连续.path_trans
+  条件: {f : Y -> 道路 x y} {g : Y -> 道路 y z}
   证明: by
   intro hf hg
   apply continuous_uncurry_iff.mp
@@ -1795,7 +1795,7 @@ theorem continuous_trans
 中文:
 定理 continuous_trans
   条件: {x y z : X}
-  结论: Continuous fun ρ : Path x y × Path y z => ρ.1.trans ρ.2
+  结论: 连续 fun ρ : 道路 x y × 道路 y z => ρ.1.trans ρ.2
   证明: by
   fun_prop
 
@@ -1823,8 +1823,8 @@ definition prod
 @[simp, grind =]
 
 中文:
-定义 prod
-  签名: (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂)
+定义 乘积
+  签名: (γ₁ : 道路 a₁ a₂) (γ₂ : 道路 b₁ b₂)
   定义体: ContinuousMap.prodMk γ₁.toContinuousMap γ₂.toContinuousMap
   source' := by simp
   target' := by simp
@@ -1847,7 +1847,7 @@ theorem prod_coe
 
 中文:
 定理 prod_coe
-  条件: (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂)
+  条件: (γ₁ : 道路 a₁ a₂) (γ₂ : 道路 b₁ b₂)
   证明: rfl
 -/
 theorem prod_coe (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) :
@@ -1865,7 +1865,7 @@ theorem trans_prod_eq_prod_trans
 
 中文:
 定理 trans_prod_eq_prod_trans
-  结论: (γ₁ : Path a₁ a₂) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁ b₂)
+  结论: (γ₁ : 道路 a₁ a₂) (δ₁ : 道路 a₂ a₃) (γ₂ : 道路 b₁ b₂)
   证明: by
   grind
 -/
@@ -1893,7 +1893,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (γ : 对任意 i, Path (as i) (bs i))
+  签名: (γ : 对任意 i, 道路 (as i) (bs i))
   定义体: ContinuousMap.pi fun i => (γ i).toContinuousMap
   source' := by simp
   target' := by simp
@@ -1917,8 +1917,8 @@ theorem pi_coe
 
 中文:
 定理 pi_coe
-  条件: (γ : 对任意 i, Path (as i) (bs i))
-  结论: ⇑(Path.pi γ) = fun t i => γ i t
+  条件: (γ : 对任意 i, 道路 (as i) (bs i))
+  结论: ⇑(道路.pi γ) = fun t i => γ i t
   证明: rfl
 -/
 theorem pi_coe (γ : forall i, Path (as i) (bs i)) : ⇑(Path.pi γ) = fun t i => γ i t :=
@@ -1940,7 +1940,7 @@ theorem trans_pi_eq_pi_trans
 
 中文:
 定理 trans_pi_eq_pi_trans
-  条件: (γ₀ : 对任意 i, Path (as i) (bs i)) (γ₁ : 对任意 i, Path (bs i) (cs i))
+  条件: (γ₀ : 对任意 i, 道路 (as i) (bs i)) (γ₁ : 对任意 i, 道路 (bs i) (cs i))
   证明: by
   ext t i
   unfold Path.trans
@@ -1977,7 +1977,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: [Mul X] [ContinuousMul X] {a₁ b₁ a₂ b₂ : X} (γ₁ : Path a₁ b₁) (γ₂ : Path a₂ b₂)
+  签名: [乘法 X] [连续乘法 X] {a₁ b₁ a₂ b₂ : X} (γ₁ : 道路 a₁ b₁) (γ₂ : 道路 a₂ b₂)
   定义体: (γ₁.prod γ₂).map continuous_mul
 -/
 protected def mul [Mul X] [ContinuousMul X] {a₁ b₁ a₂ b₂ : X} (γ₁ : Path a₁ b₁) (γ₂ : Path a₂ b₂) :
@@ -1996,7 +1996,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: {a b : X} [Inv X] [ContinuousInv X] (γ : Path a b)
+  签名: {a b : X} [取逆 X] [连续取逆 X] (γ : 道路 a b)
   定义体: γ.map continuous_inv
 
 Depends on / 依赖: continuous_inv
@@ -2027,7 +2027,7 @@ definition truncate
 
 中文:
 定义 truncate
-  签名: {X : 类型} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t₁ : 实数)
+  签名: {X : 类型} [拓扑空间 X] {a b : X} (γ : 道路 a b) (t₀ t₁ : 实数)
   定义体: γ.extend (min (max s t₀) t₁)
   continuous_toFun := γ.continuous_extend.comp (by fun_prop)
   source' := by
@@ -2073,7 +2073,7 @@ definition truncateOfLE
 
 中文:
 定义 truncateOfLE
-  签名: {X : 类型} [TopologicalSpace X] {a b : X} (γ : Path a b) {t₀ t₁ : 实数}
+  签名: {X : 类型} [拓扑空间 X] {a b : X} (γ : 道路 a b) {t₀ t₁ : 实数}
   定义体: (γ.truncate t₀ t₁).cast (by rw [min_eq_left h]) rfl
 
 Depends on / 依赖: min_eq_left, truncate
@@ -2096,7 +2096,7 @@ theorem truncate_range
 
 中文:
 定理 truncate_range
-  条件: {a b : X} (γ : Path a b) {t₀ t₁ : 实数}
+  条件: {a b : X} (γ : 道路 a b) {t₀ t₁ : 实数}
   证明: by
   rw [← γ.extend_range]
   simp only [range_subset_iff, SetCoe.forall]
@@ -2129,7 +2129,7 @@ theorem truncate_continuous_family
 
 中文:
 定理 truncate_continuous_family
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   证明: γ.continuous_extend.comp
     (((continuous_subtype_val.comp (continuous_snd.comp continuous_snd)).max continuous_fst).min
       (continuous_fst.comp continuous_snd))
@@ -2159,7 +2159,7 @@ theorem truncate_const_continuous_family
 
 中文:
 定理 truncate_const_continuous_family
-  结论: {a b : X} (γ : Path a b)
+  结论: {a b : X} (γ : 道路 a b)
   证明: by
   have key : Continuous (fun x => (t, x) : Real × I -> Real × Real × I) := by fun_prop
   exact γ.truncate_continuous_family.comp key
@@ -2186,7 +2186,7 @@ theorem truncate_self
 
 中文:
 定理 truncate_self
-  条件: {a b : X} (γ : Path a b) (t : 实数)
+  条件: {a b : X} (γ : 道路 a b) (t : 实数)
   证明: by
   ext x
   by_cases hx : x <= t <;> simp [truncate]
@@ -2209,7 +2209,7 @@ theorem truncate_zero_zero
 
 中文:
 定理 truncate_zero_zero
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   证明: by
   convert! γ.truncate_self 0
 
@@ -2232,7 +2232,7 @@ theorem truncate_one_one
 
 中文:
 定理 truncate_one_one
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   证明: by
   convert! γ.truncate_self 1
 
@@ -2259,7 +2259,7 @@ theorem truncate_zero_one
 
 中文:
 定理 truncate_zero_one
-  条件: {a b : X} (γ : Path a b)
+  条件: {a b : X} (γ : 道路 a b)
   证明: by
   ext x
   rw [cast_coe]
@@ -2293,7 +2293,7 @@ definition reparam
 
 中文:
 定义 reparam
-  签名: (γ : Path x y) (f : I -> I) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
+  签名: (γ : 道路 x y) (f : I -> I) (hfcont : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
   定义体: γ ∘ f
   continuous_toFun := by fun_prop
   source' := by simp [hf₀]
@@ -2321,7 +2321,7 @@ theorem coe_reparam
 
 中文:
 定理 coe_reparam
-  结论: (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
+  结论: (γ : 道路 x y) {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0)
   证明: rfl
 
 @[simp]
@@ -2344,7 +2344,7 @@ theorem reparam_id
 
 中文:
 定理 reparam_id
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: γ.reparam id continuous_id rfl rfl = γ
   证明: by
   ext
@@ -2371,7 +2371,7 @@ theorem range_reparam
 
 中文:
 定理 range_reparam
-  结论: (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
+  结论: (γ : 道路 x y) {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0)
   证明: by
   change range (γ ∘ f) = range γ
   have : range f = univ := by
@@ -2409,7 +2409,7 @@ theorem refl_reparam
 
 中文:
 定理 refl_reparam
-  条件: {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
+  条件: {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
   证明: by
   ext
   simp

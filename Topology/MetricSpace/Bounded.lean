@@ -60,7 +60,7 @@ lemma totallyBounded_Icc
 中文:
 引理 totallyBounded_Icc
   条件: (a b : α)
-  结论: TotallyBounded (Icc a b)
+  结论: 全有界 (闭区间 a b)
   证明: isCompact_Icc.totallyBounded
 
 Depends on / 依赖: isCompact_Icc, isCompact_Icc.totallyBounded, totallyBounded
@@ -80,7 +80,7 @@ lemma totallyBounded_Ico
 中文:
 引理 totallyBounded_Ico
   条件: (a b : α)
-  结论: TotallyBounded (Ico a b)
+  结论: 全有界 (左闭右开区间 a b)
   证明: (totallyBounded_Icc a b).subset Ico_subset_Icc_self
 
 Depends on / 依赖: Ico_subset_Icc_self, subset, totallyBounded_Icc
@@ -100,7 +100,7 @@ lemma totallyBounded_Ioc
 中文:
 引理 totallyBounded_Ioc
   条件: (a b : α)
-  结论: TotallyBounded (Ioc a b)
+  结论: 全有界 (左开右闭区间 a b)
   证明: (totallyBounded_Icc a b).subset Ioc_subset_Icc_self
 
 Depends on / 依赖: Ioc_subset_Icc_self, subset, totallyBounded_Icc
@@ -120,7 +120,7 @@ lemma totallyBounded_Ioo
 中文:
 引理 totallyBounded_Ioo
   条件: (a b : α)
-  结论: TotallyBounded (Ioo a b)
+  结论: 全有界 (开区间 a b)
   证明: (totallyBounded_Icc a b).subset Ioo_subset_Icc_self
 
 Depends on / 依赖: Ioo_subset_Icc_self, subset, totallyBounded_Icc
@@ -194,7 +194,7 @@ theorem eq_countable_union_of_isBounded_of_isOpen
 
 中文:
 定理 eq_countable_union_of_isBounded_of_isOpen
-  条件: {U : Set α} (hU : IsOpen U)
+  条件: {U : 集合 α} (hU : 是开集 U)
   证明: by
   obtain rfl | ⟨x, -⟩ := U.eq_empty_or_nonempty
   · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
@@ -263,7 +263,7 @@ theorem _root_.Bornology.IsBounded.subset_closedBall
   proof: (isBounded_iff_subset_closedBall c).1 h
 
 中文:
-定理 _root_.Bornology.IsBounded.subset_closedBall
+定理 _root_.有界结构.IsBounded.subset_closedBall
   条件: (h : IsBounded s) (c : α)
   证明: (isBounded_iff_subset_closedBall c).1 h
 
@@ -284,7 +284,7 @@ theorem _root_.Bornology.IsBounded.subset_ball_lt
     (le_max_left _ _).trans_lt (lt_add_one _)⟩
 
 中文:
-定理 _root_.Bornology.IsBounded.subset_ball_lt
+定理 _root_.有界结构.IsBounded.subset_ball_lt
   条件: (h : IsBounded s) (a : 实数) (c : α)
   证明: let ⟨r, hr⟩ := h.subset_closedBall c
 ⟨max r a + 1, (le_max_right _ _).trans_lt (lt_add_one _), hr.trans closedBall_subset_ball
@@ -308,7 +308,7 @@ theorem _root_.Bornology.IsBounded.subset_ball
   proof: (h.subset_ball_lt 0 c).imp fun _ => And.right
 
 中文:
-定理 _root_.Bornology.IsBounded.subset_ball
+定理 _root_.有界结构.IsBounded.subset_ball
   条件: (h : IsBounded s) (c : α)
   结论: 存在 r, s subseteq ball c r
   证明: (h.subset_ball_lt 0 c).imp fun _ => And.right
@@ -348,7 +348,7 @@ theorem _root_.Bornology.IsBounded.subset_closedBall_lt
   ⟨r, har, hr.trans ball_subset_closedBall⟩
 
 中文:
-定理 _root_.Bornology.IsBounded.subset_closedBall_lt
+定理 _root_.有界结构.IsBounded.subset_closedBall_lt
   条件: (h : IsBounded s) (a : 实数) (c : α)
   证明: let ⟨r, har, hr⟩ := h.subset_ball_lt a c
   ⟨r, har, hr.trans ball_subset_closedBall⟩
@@ -398,7 +398,7 @@ theorem _root_.Bornology.IsBounded.closure
 @[simp]
 
 中文:
-定理 _root_.Bornology.IsBounded.closure
+定理 _root_.有界结构.IsBounded.closure
   条件: (h : IsBounded s)
   结论: IsBounded (closure s)
   证明: isBounded_closure_of_isBounded h
@@ -609,7 +609,7 @@ theorem tendsto_dist_right_atTop_iff
 
 中文:
 定理 tendsto_dist_right_atTop_iff
-  条件: (c : α) {f : β -> α} {l : Filter β}
+  条件: (c : α) {f : β -> α} {l : 滤子 β}
   证明: by
   rw [← comap_dist_right_atTop c]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -633,7 +633,7 @@ theorem tendsto_dist_left_atTop_iff
 
 中文:
 定理 tendsto_dist_left_atTop_iff
-  条件: (c : α) {f : β -> α} {l : Filter β}
+  条件: (c : α) {f : β -> α} {l : 滤子 β}
   证明: by
   simp only [dist_comm c, tendsto_dist_right_atTop_iff]
 
@@ -655,7 +655,7 @@ theorem tendsto_dist_right_cobounded_atTop
 中文:
 定理 tendsto_dist_right_cobounded_atTop
   条件: (c : α)
-  结论: Tendsto (dist · c) (cobounded α) atTop
+  结论: 收敛 (dist · c) (cobounded α) atTop
   证明: tendsto_iff_comap.2 (comap_dist_right_atTop c).ge
 
 Depends on / 依赖: comap_dist_right_atTop, tendsto_iff_comap
@@ -675,7 +675,7 @@ theorem tendsto_dist_left_cobounded_atTop
 中文:
 定理 tendsto_dist_left_cobounded_atTop
   条件: (c : α)
-  结论: Tendsto (dist c) (cobounded α) atTop
+  结论: 收敛 (dist c) (cobounded α) atTop
   证明: tendsto_iff_comap.2 (comap_dist_left_atTop c).ge
 
 Depends on / 依赖: comap_dist_left_atTop, tendsto_iff_comap
@@ -696,8 +696,8 @@ theorem _root_.TotallyBounded.isBounded
   ((isBounded_biUnion fint).2 fun _ _ => isBounded_ball).subset subs
 
 中文:
-定理 _root_.TotallyBounded.isBounded
-  条件: {s : Set α} (h : TotallyBounded s)
+定理 _root_.全有界.isBounded
+  条件: {s : 集合 α} (h : 全有界 s)
   结论: IsBounded s
   证明: -- We cover the totally bounded set by finitely many balls of radius 1,
   -- and then argue that a finite union of bounded sets is bounded
@@ -723,8 +723,8 @@ theorem _root_.IsCompact.isBounded
   h.totallyBounded.isBounded
 
 中文:
-定理 _root_.IsCompact.isBounded
-  条件: {s : Set α} (h : IsCompact s)
+定理 _root_.是紧集.isBounded
+  条件: {s : 集合 α} (h : 是紧集 s)
   结论: IsBounded s
   证明: -- A compact set is totally bounded, thus bounded
   h.totallyBounded.isBounded
@@ -767,7 +767,7 @@ theorem isCobounded_iff_closedBall_compl_subset
 
 中文:
 定理 isCobounded_iff_closedBall_compl_subset
-  条件: {s : Set α} (c : α)
+  条件: {s : 集合 α} (c : α)
   证明: by
   rw [← isBounded_compl_iff]; rw [isBounded_iff_subset_closedBall c]
   apply exists_congr
@@ -792,8 +792,8 @@ theorem _root_.Bornology.IsCobounded.closedBall_compl_subset
   proof: (isCobounded_iff_closedBall_compl_subset c).mp hs
 
 中文:
-定理 _root_.Bornology.IsCobounded.closedBall_compl_subset
-  结论: {s : Set α} (hs : IsCobounded s)
+定理 _root_.有界结构.IsCobounded.closedBall_compl_subset
+  结论: {s : 集合 α} (hs : IsCobounded s)
   证明: (isCobounded_iff_closedBall_compl_subset c).mp hs
 
 Depends on / 依赖: isCobounded_iff_closedBall_compl_subset
@@ -812,7 +812,7 @@ theorem closedBall_compl_subset_of_mem_cocompact
 
 中文:
 定理 closedBall_compl_subset_of_mem_cocompact
-  条件: {s : Set α} (hs : s in cocompact α) (c : α)
+  条件: {s : 集合 α} (hs : s in cocompact α) (c : α)
   证明: IsCobounded.closedBall_compl_subset (cobounded_le_cocompact hs) c
 
 Depends on / 依赖: IsCobounded, IsCobounded.closedBall_compl_subset, closedBall_compl_subset, cobounded_le_cocompact
@@ -834,7 +834,7 @@ theorem mem_cocompact_of_closedBall_compl_subset
 
 中文:
 定理 mem_cocompact_of_closedBall_compl_subset
-  结论: [命题erSpace α] (c : α)
+  结论: [真空间 α] (c : α)
   证明: by
   rcases h with ⟨r, h⟩
   rw [Filter.mem_cocompact]
@@ -858,7 +858,7 @@ theorem mem_cocompact_iff_closedBall_compl_subset
 
 中文:
 定理 mem_cocompact_iff_closedBall_compl_subset
-  条件: [命题erSpace α] (c : α)
+  条件: [真空间 α] (c : α)
   证明: ⟨(closedBall_compl_subset_of_mem_cocompact · _), mem_cocompact_of_closedBall_compl_subset _⟩
 
 Depends on / 依赖: closedBall_compl_subset_of_mem_cocompact, mem_cocompact_of_closedBall_compl_subset
@@ -897,7 +897,7 @@ theorem isBounded_image_iff
 
 中文:
 定理 isBounded_image_iff
-  条件: {f : β -> α} {s : Set β}
+  条件: {f : β -> α} {s : 集合 β}
   证明: isBounded_iff.trans by simp only [forall_mem_image]
 
 Depends on / 依赖: forall_mem_image, isBounded_iff, isBounded_iff.trans
@@ -989,7 +989,7 @@ theorem isBounded_range_of_tendsto_cofinite
 
 中文:
 定理 isBounded_range_of_tendsto_cofinite
-  条件: {f : β -> α} {a : α} (hf : Tendsto f cofinite (𝓝 a))
+  条件: {f : β -> α} {a : α} (hf : 收敛 f cofinite (𝓝 a))
   证明: isBounded_range_of_tendsto_cofinite_uniformity
 (hf.prodMap hf).mono_right nhds_prod_eq.symm.trans_le (nhds_le_uniformity a)
 
@@ -1011,7 +1011,7 @@ theorem isBounded_of_compactSpace
 
 中文:
 定理 isBounded_of_compactSpace
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   结论: IsBounded s
   证明: isCompact_univ.isBounded.subset (subset_univ _)
 
@@ -1030,7 +1030,7 @@ theorem isBounded_range_of_tendsto
 
 中文:
 定理 isBounded_range_of_tendsto
-  条件: (u : 自然数 -> α) {x : α} (hu : Tendsto u atTop (𝓝 x))
+  条件: (u : 自然数 -> α) {x : α} (hu : 收敛 u atTop (𝓝 x))
   证明: hu.cauchySeq.isBounded_range
 
 Depends on / 依赖: cauchySeq, hu.cauchySeq.isBounded_range, isBounded_range
@@ -1090,7 +1090,7 @@ theorem disjoint_nhdsSet_cobounded
 
 中文:
 定理 disjoint_nhdsSet_cobounded
-  条件: {s : Set α} (hs : IsCompact s)
+  条件: {s : 集合 α} (hs : 是紧集 s)
   结论: Disjoint (𝓝ˢ s) (cobounded α)
   证明: hs.disjoint_nhdsSet_left.2 fun _ _ => disjoint_nhds_cobounded _
 
@@ -1110,7 +1110,7 @@ theorem disjoint_cobounded_nhdsSet
 
 中文:
 定理 disjoint_cobounded_nhdsSet
-  条件: {s : Set α} (hs : IsCompact s)
+  条件: {s : 集合 α} (hs : 是紧集 s)
   结论: Disjoint (cobounded α) (𝓝ˢ s)
   证明: (disjoint_nhdsSet_cobounded hs).symm
 
@@ -1128,8 +1128,8 @@ theorem exists_isBounded_image_of_tendsto
   proof: (l.basis_sets.map f).disjoint_iff_left.mp (disjoint_nhds_cobounded x).mono_left hf
 
 中文:
-定理 exists_isBounded_image_of_tendsto
-  结论: {α β : 类型} [PseudoMetricSpace β]
+定理 存在_isBounded_image_of_tendsto
+  结论: {α β : 类型} [伪度量空间 β]
   证明: (l.basis_sets.map f).disjoint_iff_left.mp (disjoint_nhds_cobounded x).mono_left hf
 
 Depends on / 依赖: basis_sets, disjoint_iff_left, disjoint_iff_left.mp, disjoint_nhds_cobounded, l.basis_sets.map, mono_left
@@ -1152,7 +1152,7 @@ exact fun x hx => disjoint_left_comm.2
   rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_
 
 中文:
-定理 exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt
+定理 存在_isOpen_isBounded_image_inter_of_isCompact_of_对任意_continuousWithinAt
   证明: by
   have : Disjoint (𝓝ˢ k ⊓ 𝓟 s) (comap f (cobounded α)) := by
     rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
@@ -1187,8 +1187,8 @@ theorem exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt
     exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk hf
 
 中文:
-定理 exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt
-  结论: [TopologicalSpace β]
+定理 存在_isOpen_isBounded_image_of_isCompact_of_对任意_continuousAt
+  结论: [拓扑空间 β]
   证明: by
   simp_rw [← continuousWithinAt_univ] at hf
   simpa only [inter_univ] using
@@ -1213,8 +1213,8 @@ theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn
     hf x (hks hx)
 
 中文:
-定理 exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn
-  结论: [TopologicalSpace β]
+定理 存在_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn
+  结论: [拓扑空间 β]
   证明: exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk fun x hx =>
     hf x (hks hx)
 
@@ -1236,8 +1236,8 @@ theorem exists_isOpen_isBounded_image_of_isCompact_of_continuousOn
     hf.continuousAt (hs.mem_nhds (hks hx))
 
 中文:
-定理 exists_isOpen_isBounded_image_of_isCompact_of_continuousOn
-  结论: [TopologicalSpace β]
+定理 存在_isOpen_isBounded_image_of_isCompact_of_continuousOn
+  结论: [拓扑空间 β]
   证明: exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt hk fun _x hx =>
     hf.continuousAt (hs.mem_nhds (hks hx))
 
@@ -1263,7 +1263,7 @@ theorem isCompact_of_isClosed_isBounded
 
 中文:
 定理 isCompact_of_isClosed_isBounded
-  条件: [命题erSpace α] (hc : IsClosed s) (hb : IsBounded s)
+  条件: [真空间 α] (hc : 是闭集 s) (hb : IsBounded s)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | ⟨x, -⟩)
   · exact isCompact_empty
@@ -1288,8 +1288,8 @@ theorem _root_.Bornology.IsBounded.isCompact_closure
   proof: isCompact_of_isClosed_isBounded isClosed_closure h.closure
 
 中文:
-定理 _root_.Bornology.IsBounded.isCompact_closure
-  条件: [命题erSpace α] (h : IsBounded s)
+定理 _root_.有界结构.IsBounded.isCompact_closure
+  条件: [真空间 α] (h : IsBounded s)
   证明: isCompact_of_isClosed_isBounded isClosed_closure h.closure
 
 Depends on / 依赖: closure, h.closure, isClosed_closure, isCompact_of_isClosed_isBounded
@@ -1311,7 +1311,7 @@ theorem isCompact_iff_isClosed_bounded
 
 中文:
 定理 isCompact_iff_isClosed_bounded
-  条件: {α : 类型} {s : Set α} [MetricSpace α] [命题erSpace α]
+  条件: {α : 类型} {s : 集合 α} [度量空间 α] [真空间 α]
   证明: ⟨fun h => ⟨h.isClosed, h.isBounded⟩, fun h => isCompact_of_isClosed_isBounded h.1 h.2⟩
 
 Depends on / 依赖: h.isBounded, h.isClosed, isBounded, isClosed, isCompact_of_isClosed_isBounded
@@ -1330,7 +1330,7 @@ theorem compactSpace_iff_isBounded_univ
 
 中文:
 定理 compactSpace_iff_isBounded_univ
-  条件: [命题erSpace α]
+  条件: [真空间 α]
   证明: ⟨@isBounded_of_compactSpace α _ _, fun hb => ⟨isCompact_of_isClosed_isBounded isClosed_univ hb⟩⟩
 
 Depends on / 依赖: isBounded_of_compactSpace, isClosed_univ, isCompact_of_isClosed_isBounded
@@ -1355,7 +1355,7 @@ theorem isBounded_Icc
 中文:
 定理 isBounded_Icc
   条件: (a b : α)
-  结论: IsBounded (Icc a b)
+  结论: IsBounded (闭区间 a b)
   证明: (totallyBounded_Icc a b).isBounded
 
 Depends on / 依赖: isBounded, totallyBounded_Icc
@@ -1375,7 +1375,7 @@ theorem isBounded_Ico
 中文:
 定理 isBounded_Ico
   条件: (a b : α)
-  结论: IsBounded (Ico a b)
+  结论: IsBounded (左闭右开区间 a b)
   证明: (totallyBounded_Ico a b).isBounded
 
 Depends on / 依赖: isBounded, totallyBounded_Ico
@@ -1395,7 +1395,7 @@ theorem isBounded_Ioc
 中文:
 定理 isBounded_Ioc
   条件: (a b : α)
-  结论: IsBounded (Ioc a b)
+  结论: IsBounded (左开右闭区间 a b)
   证明: (totallyBounded_Ioc a b).isBounded
 
 Depends on / 依赖: isBounded, totallyBounded_Ioc
@@ -1415,7 +1415,7 @@ theorem isBounded_Ioo
 中文:
 定理 isBounded_Ioo
   条件: (a b : α)
-  结论: IsBounded (Ioo a b)
+  结论: IsBounded (开区间 a b)
   证明: (totallyBounded_Ioo a b).isBounded
 
 Depends on / 依赖: isBounded, totallyBounded_Ioo
@@ -1435,7 +1435,7 @@ theorem isBounded_of_bddAbove_of_bddBelow
 
 中文:
 定理 isBounded_of_bddAbove_of_bddBelow
-  条件: {s : Set α} (h₁ : BddAbove s) (h₂ : BddBelow s)
+  条件: {s : 集合 α} (h₁ : BddAbove s) (h₂ : BddBelow s)
   证明: let ⟨u, hu⟩ := h₁
   let ⟨l, hl⟩ := h₂
   (isBounded_Icc l u).subset (fun _x hx => mem_Icc.mpr ⟨hl hx, hu hx⟩)
@@ -1462,7 +1462,7 @@ lemma _root_.IsOrderBornology.of_isCompactIcc
     exact ⟨(bddBelow_ball _).mono hr, (bddAbove_ball _).mono hr⟩
 
 中文:
-引理 _root_.IsOrderBornology.of_isCompactIcc
+引理 _root_.是OrderBornology.of_isCompactIcc
   结论: (x : α)
   证明: by
     refine ⟨?_, fun hs => Metric.isBounded_of_bddAbove_of_bddBelow hs.2 hs.1⟩
@@ -1503,7 +1503,7 @@ lemma isBounded_of_abs_le
 中文:
 引理 isBounded_of_abs_le
   条件: (C : α)
-  结论: Bornology.IsBounded {x : α | |x| <= C}
+  结论: 有界结构.IsBounded {x : α | |x| <= C}
   证明: by
   convert! Metric.isBounded_Icc (-C) C
   ext1 x
@@ -1531,7 +1531,7 @@ lemma isBounded_of_abs_lt
 中文:
 引理 isBounded_of_abs_lt
   条件: (C : α)
-  结论: Bornology.IsBounded {x : α | |x| < C}
+  结论: 有界结构.IsBounded {x : α | |x| < C}
   证明: by
   convert! Metric.isBounded_Ioo (-C) C
   ext1 x
@@ -1565,7 +1565,7 @@ definition diam
 
 中文:
 定义 diam
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ENNReal.toReal (ediam s)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, toReal
@@ -1603,7 +1603,7 @@ theorem diam_subsingleton
 
 中文:
 定理 diam_subsingleton
-  条件: (hs : s.Subsingleton)
+  条件: (hs : s.子单例)
   结论: diam s = 0
   证明: by
   simp [diam, ediam_subsingleton hs]
@@ -1625,7 +1625,7 @@ theorem diam_empty
 
 中文:
 定理 diam_empty
-  结论: diam (∅ : Set α) = 0
+  结论: diam (∅ : 集合 α) = 0
   证明: diam_subsingleton subsingleton_empty
 
 Depends on / 依赖: diam_subsingleton, subsingleton_empty
@@ -1647,7 +1647,7 @@ theorem diam_singleton
 
 中文:
 定理 diam_singleton
-  结论: diam ({x} : Set α) = 0
+  结论: diam ({x} : 集合 α) = 0
   证明: diam_subsingleton subsingleton_singleton
 
 @[to_additive (attr := simp)]
@@ -1669,8 +1669,8 @@ theorem diam_one
 
 中文:
 定理 diam_one
-  条件: [One α]
-  结论: diam (1 : Set α) = 0
+  条件: [幺 α]
+  结论: diam (1 : 集合 α) = 0
   证明: diam_singleton
 
 Depends on / 依赖: diam_singleton
@@ -1690,7 +1690,7 @@ theorem diam_pair
 
 中文:
 定理 diam_pair
-  结论: diam ({x, y} : Set α) = dist x y
+  结论: diam ({x, y} : 集合 α) = dist x y
   证明: by
   simp only [diam, ediam_pair, dist_edist]
 
@@ -1731,7 +1731,7 @@ theorem ediam_le_of_forall_dist_le
   proof: ediam_le fun x hx y hy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy)
 
 中文:
-定理 ediam_le_of_forall_dist_le
+定理 ediam_le_of_对任意_dist_le
   条件: {C : 实数} (h : 对任意 x in s, 对任意 y in s, dist x y <= C)
   证明: ediam_le fun x hx y hy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy)
 
@@ -1750,7 +1750,7 @@ theorem diam_le_of_forall_dist_le
   proof: ENNReal.toReal_le_of_le_ofReal h₀ (ediam_le_of_forall_dist_le h)
 
 中文:
-定理 diam_le_of_forall_dist_le
+定理 diam_le_of_对任意_dist_le
   条件: {C : 实数} (h₀ : 0 <= C) (h : 对任意 x in s, 对任意 y in s, dist x y <= C)
   证明: ENNReal.toReal_le_of_le_ofReal h₀ (ediam_le_of_forall_dist_le h)
 
@@ -1772,8 +1772,8 @@ theorem diam_le_of_forall_dist_le_of_nonempty
   diam_le_of_forall_dist_le h₀ h
 
 中文:
-定理 diam_le_of_forall_dist_le_of_nonempty
-  结论: (hs : s.Nonempty) {C : 实数}
+定理 diam_le_of_对任意_dist_le_of_nonempty
+  结论: (hs : s.非空) {C : 实数}
   证明: have h₀ : 0 <= C :=
     let ⟨x, hx⟩ := hs
     le_trans dist_nonneg (h x hx x hx)
@@ -1873,7 +1873,7 @@ theorem ediam_univ_eq_top_iff_noncompact
 
 中文:
 定理 ediam_univ_eq_top_iff_noncompact
-  条件: [命题erSpace α]
+  条件: [真空间 α]
   证明: by
   rw [← not_compactSpace_iff]; rw [compactSpace_iff_isBounded_univ]; rw [isBounded_iff_ediam_ne_top]; rw [Classical.not_not]
 
@@ -1898,7 +1898,7 @@ theorem ediam_univ_of_noncompact
 
 中文:
 定理 ediam_univ_of_noncompact
-  条件: [命题erSpace α] [NoncompactSpace α]
+  条件: [真空间 α] [Noncompact空间 α]
   证明: ediam_univ_eq_top_iff_noncompact.mpr ‹_›
 
 @[simp]
@@ -1922,8 +1922,8 @@ theorem diam_univ_of_noncompact
 
 中文:
 定理 diam_univ_of_noncompact
-  条件: [命题erSpace α] [NoncompactSpace α]
-  结论: diam (univ : Set α) = 0
+  条件: [真空间 α] [Noncompact空间 α]
+  结论: diam (univ : 集合 α) = 0
   证明: by
   simp [diam]
 -/
@@ -2002,7 +2002,7 @@ theorem diam_mono
 
 中文:
 定理 diam_mono
-  条件: {s t : Set α} (h : s subseteq t) (ht : IsBounded t)
+  条件: {s t : 集合 α} (h : s subseteq t) (ht : IsBounded t)
   结论: diam s <= diam t
   证明: ENNReal.toReal_mono ht.ediam_ne_top ediam_mono h
 
@@ -2026,7 +2026,7 @@ exact fun h => top_unique h ▸ ediam_mono subset_union_left
 
 中文:
 定理 diam_union
-  条件: {t : Set α} (xs : x in s) (yt : y in t)
+  条件: {t : 集合 α} (xs : x in s) (yt : y in t)
   证明: by
   simp only [diam, dist_edist]
   grw [ENNReal.toReal_le_add' (ediam_union_le_add_edist xs yt), ENNReal.toReal_add_le]
@@ -2057,7 +2057,7 @@ theorem diam_union'
 
 中文:
 定理 diam_union'
-  条件: {t : Set α} (h : (s inter t).Nonempty)
+  条件: {t : 集合 α} (h : (s inter t).非空)
   结论: diam (s union t) <= diam s + diam t
   证明: by
   rcases h with ⟨x, ⟨xs, xt⟩⟩
@@ -2159,8 +2159,8 @@ theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter
     intro m n N hm 
 
 中文:
-定理 _root_.IsComplete.nonempty_iInter_of_nonempty_biInter
-  结论: {s : 自然数 -> Set α}
+定理 _root_.是完备.nonempty_i整数er_of_nonempty_bi整数er
+  结论: {s : 自然数 -> 集合 α}
   证明: by
   let u N := (h N).some
   have I : forall n N, n <= N -> u N in s n := by
@@ -2206,8 +2206,8 @@ theorem nonempty_iInter_of_nonempty_biInter
   proof: (hs 0).isComplete.nonempty_iInter_of_nonempty_biInter hs h's h h'
 
 中文:
-定理 nonempty_iInter_of_nonempty_biInter
-  结论: [CompleteSpace α] {s : 自然数 -> Set α}
+定理 nonempty_i整数er_of_nonempty_bi整数er
+  结论: [完备空间 α] {s : 自然数 -> 集合 α}
   证明: (hs 0).isComplete.nonempty_iInter_of_nonempty_biInter hs h's h h'
 
 Depends on / 依赖: isComplete, isComplete.nonempty_iInter_of_nonempty_biInter, nonempty_iInter_of_nonempty_biInter
@@ -2234,7 +2234,7 @@ exact (dist_pos.mpr hxy).trans_le Metric.dist_le_diam_of_mem hs2 hx hy
 
 中文:
 定理 diam_pos
-  条件: [MetricSpace α] (hs1 : s.Nontrivial) (hs2 : IsBounded s)
+  条件: [度量空间 α] (hs1 : s.非平凡) (hs2 : IsBounded s)
   结论: 0 < diam s
   证明: by
   rcases hs1 with ⟨x, hx, y, hy, hxy⟩
@@ -2288,7 +2288,7 @@ exact cobounded_le_cocompact.antisymm (hasBasis_cobounded_compl_closedBall defau
 
 中文:
 定理 Metric.cobounded_eq_cocompact
-  条件: [命题erSpace α]
+  条件: [真空间 α]
   结论: cobounded α = cocompact α
   证明: by
   nontriviality α; inhabit α
@@ -2312,7 +2312,7 @@ theorem tendsto_dist_right_cocompact_atTop
 
 中文:
 定理 tendsto_dist_right_cocompact_atTop
-  条件: [命题erSpace α] (x : α)
+  条件: [真空间 α] (x : α)
   证明: (tendsto_dist_right_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
 
 Depends on / 依赖: cobounded_eq_cocompact, cobounded_eq_cocompact.ge, mono_left, tendsto_dist_right_cobounded_atTop
@@ -2331,7 +2331,7 @@ theorem tendsto_dist_left_cocompact_atTop
 
 中文:
 定理 tendsto_dist_left_cocompact_atTop
-  条件: [命题erSpace α] (x : α)
+  条件: [真空间 α] (x : α)
   证明: (tendsto_dist_left_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
 
 Depends on / 依赖: cobounded_eq_cocompact, cobounded_eq_cocompact.ge, mono_left, tendsto_dist_left_cobounded_atTop
@@ -2350,7 +2350,7 @@ theorem comap_dist_left_atTop_eq_cocompact
 
 中文:
 定理 comap_dist_left_atTop_eq_cocompact
-  条件: [命题erSpace α] (x : α)
+  条件: [真空间 α] (x : α)
   证明: by simp [cobounded_eq_cocompact]
 
 Depends on / 依赖: cobounded_eq_cocompact
@@ -2368,7 +2368,7 @@ theorem tendsto_cocompact_of_tendsto_dist_comp_atTop
 
 中文:
 定理 tendsto_cocompact_of_tendsto_dist_comp_atTop
-  结论: {f : β -> α} {l : Filter β} (x : α)
+  结论: {f : β -> α} {l : 滤子 β} (x : α)
   证明: ((tendsto_dist_right_atTop_iff _).1 h).mono_right cobounded_le_cocompact
 
 Depends on / 依赖: cobounded_le_cocompact, mono_right, tendsto_dist_right_atTop_iff
@@ -2390,7 +2390,7 @@ theorem Metric.finite_isBounded_inter_isClosed
 
 中文:
 定理 Metric.finite_isBounded_inter_isClosed
-  结论: [命题erSpace α] {K s : Set α} (hsd : IsDiscrete s)
+  结论: [真空间 α] {K s : 集合 α} (hsd : 是离散 s)
   证明: by
   refine (IsCompact.finite ?_ ?_).subset (Set.inter_subset_inter_left s subset_closure)
   · exact hK.isCompact_closure.inter_right hs
@@ -2425,8 +2425,8 @@ theorem exists_forall_le_of_isBounded
     exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop))
 
 中文:
-定理 exists_forall_le_of_isBounded
-  结论: {f : β -> α} (hf : Continuous f) (x₀ : β)
+定理 存在_对任意_le_of_isBounded
+  结论: {f : β -> α} (hf : 连续 f) (x₀ : β)
   证明: by
   refine hf.exists_forall_le' (x₀ := x₀) ?_
   have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
@@ -2455,8 +2455,8 @@ theorem exists_forall_ge_of_isBounded
   proof: hf.exists_forall_le_of_isBounded (α := αᵒᵈ) x₀ h
 
 中文:
-定理 exists_forall_ge_of_isBounded
-  结论: {f : β -> α} (hf : Continuous f) (x₀ : β)
+定理 存在_对任意_ge_of_isBounded
+  结论: {f : β -> α} (hf : 连续 f) (x₀ : β)
   证明: hf.exists_forall_le_of_isBounded (α := αᵒᵈ) x₀ h
 
 Depends on / 依赖: exists_forall_le_of_isBounded, hf.exists_forall_le_of_isBounded

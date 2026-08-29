@@ -56,8 +56,8 @@ theorem IsAlgClosed.of_denseRange
   let : 
 
 中文:
-定理 IsAlgClosed.of_denseRange
-  结论: {K L : 类型} [Field K] [NontriviallyNormedField L]
+定理 是代数闭.of_denseRange
+  结论: {K L : 类型} [域 K] [NontriviallyNormedField L]
   证明: by
   -- Fix any monic irreducible polynomial `f` in `L`.
   -- Let `F` be the splitting field of `f`. Let `a` be a root of `f` in `F`.

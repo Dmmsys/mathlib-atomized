@@ -41,7 +41,7 @@ inductive TerminalReplacementOutcome
   参数: where
   构造子 (3 个):
     - success: (stx : TSyntax `tactic)
-    - remainingGoals: (stx : TSyntax `tactic) (goals : List MessageData)
+    - remainingGoals: (stx : TSyntax `tactic) (goals : 列表 MessageData)
     - error: (stx : TSyntax `tactic) (msg : MessageData)
 -/
 private inductive TerminalReplacementOutcome where
@@ -381,7 +381,7 @@ definition Mathlib.TacticAnalysis.rwMerge
 
 中文:
 定义 Mathlib.TacticAnalysis.rwMerge
-  签名: : TacticAnalysis.Config
+  签名: : TacticAnalysis.余nfig
   定义体: .ofComplex {
   out := (List MVarId × Array Syntax)
   ctx := (Array (Array Syntax))
@@ -461,7 +461,7 @@ definition Mathlib.TacticAnalysis.mergeWithGrind
 
 中文:
 定义 Mathlib.TacticAnalysis.mergeWithGrind
-  签名: : TacticAnalysis.Config where
+  签名: : TacticAnalysis.余nfig where
   定义体: do
     if let #[preI, postI] := seq[seq.size - 2:].toArray then
       if postI.tacI.stx.getKind == ``Lean.Parser.Tactic.grind &&
@@ -513,7 +513,7 @@ definition Mathlib.TacticAnalysis.terminalToGrind
 
 中文:
 定义 Mathlib.TacticAnalysis.terminalToGrind
-  签名: : TacticAnalysis.Config where
+  签名: : TacticAnalysis.余nfig where
   定义体: do
     let threshold := 3
     -- `replaced` will hold the terminal tactic sequence that can be replaced with `grind`.
@@ -742,7 +742,7 @@ definition Mathlib.TacticAnalysis.tryAtEachStepFromEnvImpl
 
 中文:
 定义 Mathlib.TacticAnalysis.tryAtEachStepFromEnvImpl
-  签名: : TacticAnalysis.Config where
+  签名: : TacticAnalysis.余nfig where
   定义体: do
     let some tacticStr := (← IO.getEnv "TRY_AT_EACH_STEP_TACTIC") | return
     let label := (← IO.getEnv "TRY_AT_EACH_STEP_LABEL").getD tacticStr
@@ -938,7 +938,7 @@ definition introMergeArgOfRIntroPat?
   | _ => none
 
 中文:
-定义 introMergeArgOfRIntroPat?
+定义 introMergeArgOfR整数roPat?
   签名: (pat : TSyntax `rintroPat)
   定义体: match pat with
   | `(rintroPat| $pat:rcasesPat) => introMergeArgOfRCasesPat? pat
@@ -1009,7 +1009,7 @@ definition Mathlib.TacticAnalysis.introMerge
 
 中文:
 定义 Mathlib.TacticAnalysis.introMerge
-  签名: : TacticAnalysis.Config
+  签名: : TacticAnalysis.余nfig
   定义体: .ofComplex {
   out := Option (TSyntax `tactic)
   ctx := Array (Array Term)

@@ -40,8 +40,8 @@ instance Submonoid.mulSemiringAction
   body: inferInstance
 
 中文:
-实例 Submonoid.mulSemiringAction
-  签名: [MulSemiringAction M R] (H : Submonoid M)
+实例 子幺半群.mulSemiringAction
+  签名: [MulSemiring作用 M R] (H : 子幺半群 M)
   定义体: inferInstance
 -/
 instance Submonoid.mulSemiringAction [MulSemiringAction M R] (H : Submonoid M) :
@@ -57,8 +57,8 @@ instance Subgroup.mulSemiringAction
   body: inferInstance
 
 中文:
-实例 Subgroup.mulSemiringAction
-  签名: [MulSemiringAction G R] (H : Subgroup G)
+实例 子群.mulSemiringAction
+  签名: [MulSemiring作用 G R] (H : 子群 G)
   定义体: inferInstance
 -/
 instance Subgroup.mulSemiringAction [MulSemiringAction G R] (H : Subgroup G) :

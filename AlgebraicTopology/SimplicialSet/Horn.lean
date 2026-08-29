@@ -44,7 +44,7 @@ definition horn
 
 中文:
 定义 horn
-  签名: (n : 自然数) (i : Fin (n + 1))
+  签名: (n : 自然数) (i : 有限集 (n + 1))
   定义体: Set.ofPred (fun s => Set.range (stdSimplex.asOrderHom s) union {i} != Set.univ)
   map φ s hs h := hs (by
     rw [Set.eq_univ_iff_forall] at h ⊢; intro j
@@ -75,7 +75,7 @@ lemma mem_horn_iff
 
 中文:
 引理 mem_horn_iff
-  条件: {n : 自然数} (i : Fin (n + 1)) {m : SimplexCategoryᵒᵖ} (x : Δ[n].obj m)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) {m : SimplexCategoryᵒᵖ} (x : Δ[n].obj m)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -96,7 +96,7 @@ lemma horn_eq_iSup
 
 中文:
 引理 horn_eq_iSup
-  条件: (n : 自然数) (i : Fin (n + 1))
+  条件: (n : 自然数) (i : 有限集 (n + 1))
   证明: by
   ext m j
   simp [stdSimplex.face_obj, horn, Set.eq_univ_iff_forall]
@@ -127,7 +127,7 @@ lemma mem_horn_iff_notMem_range
 
 中文:
 引理 mem_horn_iff_notMem_range
-  条件: {n d : 自然数} (s : Δ[n] _⦋d⦌) (i : Fin (n + 1))
+  条件: {n d : 自然数} (s : Δ[n] _⦋d⦌) (i : 有限集 (n + 1))
   证明: by
   simp [horn_eq_iSup]
 
@@ -151,7 +151,7 @@ lemma face_le_horn
 
 中文:
 引理 face_le_horn
-  条件: {n : 自然数} (i j : Fin (n + 1)) (h : i != j)
+  条件: {n : 自然数} (i j : 有限集 (n + 1)) (h : i != j)
   证明: by
   rw [horn_eq_iSup]
   exact le_iSup (fun (k : ({j}ᶜ : Set (Fin (n + 1)))) => stdSimplex.face.{u} {k.1}ᶜ) ⟨i, h⟩
@@ -181,7 +181,7 @@ lemma horn_obj_zero
 
 中文:
 引理 horn_obj_zero
-  条件: (n : 自然数) (i : Fin (n + 3))
+  条件: (n : 自然数) (i : 有限集 (n + 3))
   证明: by
   ext j
   -- this was produced using `simp? [horn_eq_iSup]`
@@ -226,7 +226,7 @@ lemma horn_obj_eq_univ
 
 中文:
 引理 horn_obj_eq_univ
-  条件: {n : 自然数} (i : Fin (n + 1)) (m : 自然数) (h : m + 1 < n := by lia)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (m : 自然数) (h : m + 1 < n := by lia)
   证明: by
   ext x
   obtain ⟨f, rfl⟩ := stdSimplex.objEquiv.symm.surjective x
@@ -323,7 +323,7 @@ lemma face_le_horn_iff
 
 中文:
 引理 face_le_horn_iff
-  条件: {n : 自然数} (S : Finset (Fin (n + 2))) (j : Fin (n + 2))
+  条件: {n : 自然数} (S : 有限集 (有限集 (n + 2))) (j : 有限集 (n + 2))
   证明: by
   rw [subcomplex_le_horn_iff]; rw [stdSimplex.face_le_face_iff]; rw [← not_iff_not]
   simp only [Decidable.not_not, ne_eq, not_and_or]
@@ -354,7 +354,7 @@ lemma objEquiv_symm_notMem_horn_of_isIso
 
 中文:
 引理 objEquiv_symm_notMem_horn_of_isIso
-  结论: {n : 自然数} (i : Fin (n + 1))
+  结论: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   rw [mem_horn_iff]; rw [ne_eq]; rw [not_not]
   ext i
@@ -382,7 +382,7 @@ lemma objEquiv_symm_δ_mem_horn_iff
 
 中文:
 引理 objEquiv_symm_δ_mem_horn_iff
-  条件: {n : 自然数} (i j : Fin (n + 2))
+  条件: {n : 自然数} (i j : 有限集 (n + 2))
   证明: by
   dsimp
   rw [← Subcomplex.ofSimplex_le_iff]; rw [← stdSimplex.face_singleton_compl]; rw [face_le_horn_iff]
@@ -406,7 +406,7 @@ lemma objEquiv_symm_δ_notMem_horn_iff
 
 中文:
 引理 objEquiv_symm_δ_notMem_horn_iff
-  条件: {n : 自然数} (i j : Fin (n + 2))
+  条件: {n : 自然数} (i j : 有限集 (n + 2))
   证明: by
   simp [objEquiv_symm_δ_mem_horn_iff.{u}]
 -/
@@ -432,7 +432,7 @@ lemma op_horn
 
 中文:
 引理 op_horn
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   ext ⟨⟨d⟩⟩ j
   simp only [Subcomplex.preimage_obj, Set.mem_preimage, stdSimplex.opIso_inv_app_hom_apply,
@@ -500,7 +500,7 @@ lemma const_val_apply
 
 中文:
 引理 const_val_apply
-  条件: {m : 自然数} (a : Fin (m + 1))
+  条件: {m : 自然数} (a : 有限集 (m + 1))
   证明: rfl
 -/
 lemma const_val_apply {m : Nat} (a : Fin (m + 1)) :
@@ -530,7 +530,7 @@ definition edge
 
 中文:
 定义 edge
-  签名: (n : 自然数) (i a b : Fin (n + 1)) (hab : a <= b) (H : #{i, a, b} <= n)
+  签名: (n : 自然数) (i a b : 有限集 (n + 1)) (hab : a <= b) (H : #{i, a, b} <= n)
   定义体: ⟨stdSimplex.edge n a b hab, by
     have hS : ¬ ({i, a, b} = Finset.univ) := fun hS => by
       have := Finset.card_le_card hS.symm.le
@@ -574,7 +574,7 @@ definition edge₃
 
 中文:
 定义 edge₃
-  签名: (n : 自然数) (i a b : Fin (n + 1)) (hab : a <= b) (H : 3 <= n)
+  签名: (n : 自然数) (i a b : 有限集 (n + 1)) (hab : a <= b) (H : 3 <= n)
   定义体: edge n i a b hab Finset.card_le_three.trans H
 
 Depends on / 依赖: Finset, Finset.card_le_three.trans, card_le_three
@@ -603,7 +603,7 @@ definition primitiveEdge
 
 中文:
 定义 primitiveEdge
-  签名: {n : 自然数} {i : Fin (n + 1)}
+  签名: {n : 自然数} {i : 有限集 (n + 1)}
   定义体: by
   refine edge n i j.castSucc j.succ ?_ ?_
   · simp only [← Fin.val_fin_le, Fin.val_castSucc, Fin.val_succ, le_add_iff_nonneg_right, zero_le]
@@ -645,7 +645,7 @@ definition primitiveTriangle
 
 中文:
 定义 primitiveTriangle
-  签名: {n : 自然数} (i : Fin (n + 4))
+  签名: {n : 自然数} (i : 有限集 (n + 4))
   定义体: by
   refine ⟨stdSimplex.triangle
     (n := n+3) ⟨k, by lia⟩ ⟨k+1, by lia⟩ ⟨k+2, by lia⟩ ?_ ?_, ?_⟩
@@ -707,7 +707,7 @@ definition face
 
 中文:
 定义 face
-  签名: {n : 自然数} (i j : Fin (n + 2)) (h : j != i)
+  签名: {n : 自然数} (i j : 有限集 (n + 2)) (h : j != i)
   定义体: yonedaEquiv (Subfunctor.lift (stdSimplex.δ j) (by
     simpa using face_le_horn _ _ h))
 
@@ -736,7 +736,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {n : 自然数} {i : Fin (n + 2)} {S : SSet} (σ₁ σ₂ : (Λ[n + 1, i] : SSet.{u}) ⟶ S)
+  结论: {n : 自然数} {i : 有限集 (n + 2)} {S : SSet} (σ₁ σ₂ : (Λ[n + 1, i] : SSet.{u}) ⟶ S)
   证明: by
   rw [← Subfunctor.equalizer_eq_iff]
   apply le_antisymm (Subfunctor.equalizer_le σ₁ σ₂)
@@ -772,7 +772,7 @@ definition faceι
 
 中文:
 定义 faceι
-  签名: {n : 自然数} (i : Fin (n + 1)) (j : Fin (n + 1)) (hij : j != i)
+  签名: {n : 自然数} (i : 有限集 (n + 1)) (j : 有限集 (n + 1)) (hij : j != i)
   定义体: Subcomplex.homOfLE (face_le_horn j i hij)
 
 @[reassoc (attr := simp)]
@@ -795,7 +795,7 @@ lemma faceι_ι
 
 中文:
 引理 faceι_ι
-  条件: {n : 自然数} (i : Fin (n + 1)) (j : Fin (n + 1)) (hij : j != i)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (j : 有限集 (n + 1)) (hij : j != i)
   证明: by
   simp [faceι]
 -/
@@ -813,7 +813,7 @@ definition ι
 
 中文:
 定义 ι
-  签名: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 2)) (hij : j != i)
+  签名: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 2)) (hij : j != i)
   定义体: yonedaEquiv.symm (face i j hij)
 
 Depends on / 依赖: yonedaEquiv, yonedaEquiv.symm
@@ -835,7 +835,7 @@ lemma yonedaEquiv_ι
 
 中文:
 引理 yonedaEquiv_ι
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 2)) (hij : j != i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 2)) (hij : j != i)
   证明: by
   rw [ι]; rw [Equiv.apply_symm_apply]
 
@@ -861,7 +861,7 @@ lemma ι_ι
 
 中文:
 引理 ι_ι
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 2)) (hij : j != i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 2)) (hij : j != i)
   证明: by
   rw [ι]; rw [face]; rw [Equiv.symm_apply_apply]; rw [Subfunctor.lift_ι]
 
@@ -887,7 +887,7 @@ lemma faceSingletonComplIso_inv_ι
 
 中文:
 引理 faceSingletonComplIso_inv_ι
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 2)) (hij : j != i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 2)) (hij : j != i)
   证明: by
   rw [← cancel_epi (stdSimplex.faceSingletonComplIso.{u} j).hom]; rw [Iso.hom_inv_id_assoc]
   rfl

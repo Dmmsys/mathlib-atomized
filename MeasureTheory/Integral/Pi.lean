@@ -44,7 +44,7 @@ theorem fin_nat_prod
 
 中文:
 定理 fin_nat_prod
-  结论: {n : 自然数} {E : Fin n -> 类型}
+  结论: {n : 自然数} {E : 有限集 n -> 类型}
   证明: by
   induction n with
   | zero => simp only [Finset.univ_eq_empty, Finset.prod_empty, isFiniteMeasure_iff,
@@ -156,7 +156,7 @@ theorem integral_fin_nat_prod_eq_prod
 
 中文:
 定理 integral_fin_nat_prod_eq_prod
-  结论: {n : 自然数} {E : Fin n -> 类型}
+  结论: {n : 自然数} {E : 有限集 n -> 类型}
   证明: by
   induction n with
   | zero => simp [measureReal_def]
@@ -199,7 +199,7 @@ theorem integral_fin_nat_prod_volume_eq_prod
 
 中文:
 定理 integral_fin_nat_prod_volume_eq_prod
-  结论: {n : 自然数} {E : Fin n -> 类型}
+  结论: {n : 自然数} {E : 有限集 n -> 类型}
   证明: integral_fin_nat_prod_eq_prod _
 
 Depends on / 依赖: integral_fin_nat_prod_eq_prod
@@ -270,7 +270,7 @@ theorem integral_fintype_prod_eq_pow
 
 中文:
 定理 integral_fintype_prod_eq_pow
-  结论: {E : 类型} (f : E -> 𝕜) {mE : MeasurableSpace E}
+  结论: {E : 类型} (f : E -> 𝕜) {mE : 可测空间 E}
   证明: by
   rw [integral_fintype_prod_eq_prod]; rw [Finset.prod_const]; rw [card]
 
@@ -317,7 +317,7 @@ exact hf.smul_measure ENNReal.prod_ne_top (by finiteness)
 
 中文:
 引理 integrable_comp_eval
-  结论: [对任意 i, IsFiniteMeasure (μ i)] {i : ι} {f : X i -> E}
+  结论: [对任意 i, 是有限测度 (μ i)] {i : ι} {f : X i -> E}
   证明: by
   refine Integrable.comp_measurable ?_ (by fun_prop)
   classical
@@ -344,7 +344,7 @@ lemma integrable_eval
 
 中文:
 引理 integrable_eval
-  结论: [对任意 i, NormedAddCommGroup (X i)] [对任意 i, IsFiniteMeasure (μ i)] {i : ι}
+  结论: [对任意 i, 赋范交换加群 (X i)] [对任意 i, 是有限测度 (μ i)] {i : ι}
   证明: integrable_comp_eval h
 
 Depends on / 依赖: integrable_comp_eval
@@ -367,7 +367,7 @@ lemma integral_comp_eval
 
 中文:
 引理 integral_comp_eval
-  结论: [NormedSpace 实数 E] [对任意 i, IsProbabilityMeasure (μ i)] {i : ι} {f : X i -> E}
+  结论: [赋范空间 实数 E] [对任意 i, 是概率测度 (μ i)] {i : ι} {f : X i -> E}
   证明: by
   rw [← (measurePreserving_eval μ i).map_eq]; rw [integral_map]
   · exact Measurable.aemeasurable (by fun_prop)
@@ -392,7 +392,7 @@ lemma integral_eval
 
 中文:
 引理 integral_eval
-  结论: [对任意 i, NormedAddCommGroup (X i)] [对任意 i, NormedSpace 实数 (X i)]
+  结论: [对任意 i, 赋范交换加群 (X i)] [对任意 i, 赋范空间 实数 (X i)]
   证明: integral_comp_eval aestronglyMeasurable_id
 
 Depends on / 依赖: aestronglyMeasurable_id, integral_comp_eval

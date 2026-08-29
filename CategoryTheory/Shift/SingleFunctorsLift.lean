@@ -219,8 +219,8 @@ instance [Preadditive
   exact Functor.additive_of_comp_faithful _ G
 
 中文:
-实例 [Preadditive
-  签名: C] [Preadditive D] [Preadditive E] [G.Additive] (a
+实例 [预加性
+  签名: C] [预加性 D] [预加性 E] [G.加性] (a
   定义体: by
   have : ((lift F G Φ hΦ).functor a ⋙ G).Additive := by
     dsimp

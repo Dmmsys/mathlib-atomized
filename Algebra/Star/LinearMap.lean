@@ -53,7 +53,7 @@ instance intrinsicStar
 
 中文:
 实例 intrinsicStar
-  签名: : Star (WithConv (E ->ₗ[R] F)) where
+  签名: : 对合 (WithConv (E ->ₗ[R] F)) where
   定义体: toConv
   { toFun x := star (f (star x))
     map_add' := by simp
@@ -109,7 +109,7 @@ instance intrinsicStarAddMonoid
 
 中文:
 实例 intrinsicStarAddMonoid
-  签名: : StarAddMonoid (WithConv (E ->ₗ[R] F)) where
+  签名: : StarAdd幺半群 (WithConv (E ->ₗ[R] F)) where
   定义体: by ext; simp
 -/
 instance intrinsicStarAddMonoid : StarAddMonoid (WithConv (E ->ₗ[R] F)) where
@@ -126,7 +126,7 @@ theorem IntrinsicStar.isSelfAdjoint_iff_map_star
     star_eq_iff_star_eq, eq_comm]
 
 中文:
-定理 IntrinsicStar.isSelfAdjoint_iff_map_star
+定理 整数rinsicStar.isSelfAdjoint_iff_map_star
   条件: (f : WithConv (E ->ₗ[R] F))
   证明: by
   simp_rw [IsSelfAdjoint, WithConv.ext_iff, LinearMap.ext_iff, intrinsicStar_apply,
@@ -150,8 +150,8 @@ theorem _root_.IntrinsicStar.StarHomClass.isSelfAdjoint
   proof: .mpr (map_star f) IntrinsicStar.isSelfAdjoint_iff_map_star _
 
 中文:
-定理 _root_.IntrinsicStar.StarHomClass.isSelfAdjoint
-  结论: {S : 类型} [FunLike S E F]
+定理 _root_.整数rinsicStar.对合态射类.isSelfAdjoint
+  结论: {S : 类型} [函数状 S E F]
   证明: .mpr (map_star f) IntrinsicStar.isSelfAdjoint_iff_map_star _
 -/
 protected theorem _root_.IntrinsicStar.StarHomClass.isSelfAdjoint {S : Type*} [FunLike S E F]
@@ -281,7 +281,7 @@ theorem intrinsicStar_mul'
 
 中文:
 定理 intrinsicStar_mul'
-  条件: [SMulCommClass R' E E] [IsScalarTower R' E E]
+  条件: [标量交换类 R' E E] [标量塔 R' E E]
   证明: WithConv.ext TensorProduct.ext' fun _ _ => by simp
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext, WithConv, WithConv.ext
@@ -303,7 +303,7 @@ instance intrinsicStarModule
 
 中文:
 实例 intrinsicStarModule
-  签名: : StarModule R (WithConv (E ->ₗ[R] F)) where
+  签名: : 对合模 R (WithConv (E ->ₗ[R] F)) where
   定义体: by ext; simp
 -/
 instance intrinsicStarModule : StarModule R (WithConv (E ->ₗ[R] F)) where
@@ -324,7 +324,7 @@ theorem _root_.TensorProduct.intrinsicStar_map
   proof: WithConv.ext TensorProduct.ext' fun _ _ => by simp
 
 中文:
-定理 _root_.TensorProduct.intrinsicStar_map
+定理 _root_.张量积.intrinsicStar_map
   证明: WithConv.ext TensorProduct.ext' fun _ _ => by simp
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext, WithConv, WithConv.ext
@@ -344,7 +344,7 @@ theorem _root_.TensorProduct.star_map_apply_eq_map_intrinsicStar
   simpa using congr($(TensorProduct.intrinsicStar_map f g) (star x))
 
 中文:
-定理 _root_.TensorProduct.star_map_apply_eq_map_intrinsicStar
+定理 _root_.张量积.star_map_apply_eq_map_intrinsicStar
   证明: by
   simpa using congr($(TensorProduct.intrinsicStar_map f g) (star x))
 
@@ -414,7 +414,7 @@ theorem IntrinsicStar.starLinearEquiv_eq_arrowCongr
   proof: rfl
 
 中文:
-定理 IntrinsicStar.starLinearEquiv_eq_arrowCongr
+定理 整数rinsicStar.starLinearEquiv_eq_arrowCongr
   证明: rfl
 
 Depends on / 依赖: WithConv
@@ -457,7 +457,7 @@ theorem intrinsicStar_smulRight
 
 中文:
 定理 intrinsicStar_smulRight
-  条件: [Module S F] [StarModule S F] (f : WithConv (E ->ₗ[S] S)) (x : F)
+  条件: [模 S F] [对合模 S F] (f : WithConv (E ->ₗ[S] S)) (x : F)
   证明: by
   ext; simp
 -/
@@ -488,7 +488,7 @@ theorem intrinsicStar_convMul
 
 中文:
 定理 intrinsicStar_convMul
-  结论: [CoalgebraStruct R C]
+  结论: [余algebraStruct R C]
   证明: by
   simp_rw [convMul_def, intrinsicStar_comp', intrinsicStar_mul', intrinsicStar_map,
     h, comp_assoc, ← comp_assoc _ _ (map _ _), map_comp_comm_eq,
@@ -515,8 +515,8 @@ abbreviation convIntrinsicStarRing
   star_mul := intrinsicStar_convMul h
 
 中文:
-缩写 convIntrinsicStarRing
-  签名: [Coalgebra R C]
+缩写 conv整数rinsicStarRing
+  签名: [余algebra R C]
   定义体: intrinsicStarAddMonoid
   star_mul := intrinsicStar_convMul h
 
@@ -567,8 +567,8 @@ theorem _root_.Pi.intrinsicStar_comul
   simp
 
 中文:
-定理 _root_.Pi.intrinsicStar_comul
-  结论: [Π i, CoalgebraStruct R (B i)]
+定理 _root_.依赖函数类型.intrinsicStar_comul
+  结论: [Π i, 余algebraStruct R (B i)]
   证明: by
   ext i x
   have := by simpa using congr($(h i) x)
@@ -597,7 +597,7 @@ theorem _root_.Pi.intrinsicStar_comul_commSemiring
   proof: Pi.intrinsicStar_comul fun _ => by ext; simp
 
 中文:
-定理 _root_.Pi.intrinsicStar_comul_commSemiring
+定理 _root_.依赖函数类型.intrinsicStar_comul_commSemiring
   证明: Pi.intrinsicStar_comul fun _ => by ext; simp
 -/
 @[simp] theorem _root_.Pi.intrinsicStar_comul_commSemiring :
@@ -614,7 +614,7 @@ instance _root_.Pi.convIntrinsicStarRingCommSemiring
   body: convIntrinsicStarRing (by simp)
 
 中文:
-实例 _root_.Pi.convIntrinsicStarRingCommSemiring
+实例 _root_.依赖函数类型.conv整数rinsicStarRingCommSemiring
   签名: {m : 类型}
   定义体: convIntrinsicStarRing (by simp)
 
@@ -662,7 +662,7 @@ theorem IntrinsicStar.isSelfAdjoint_iff_toMatrix'
     WithConv.ext_iff]
 
 中文:
-定理 IntrinsicStar.isSelfAdjoint_iff_toMatrix'
+定理 整数rinsicStar.isSelfAdjoint_iff_toMatrix'
   条件: (f : WithConv ((m -> R) ->ₗ[R] (n -> R)))
   证明: by
   simp [IsSelfAdjoint, ← toMatrix'.injective.eq_iff, toMatrix'_intrinsicStar, ← Matrix.ext_iff,
@@ -690,7 +690,7 @@ theorem intrinsicStar_toLin'
 
 中文:
 定理 intrinsicStar_toLin'
-  条件: (A : Matrix n m R)
+  条件: (A : 矩阵 n m R)
   证明: by
   simp [← LinearMap.toMatrix'.injective.eq_iff, LinearMap.toMatrix'_intrinsicStar, WithConv.ext_iff]
 
@@ -710,8 +710,8 @@ theorem IntrinsicStar.isSelfAdjoint_toLin'_iff
   simp [IsSelfAdjoint, intrinsicStar_toLin', ← ext_iff]
 
 中文:
-定理 IntrinsicStar.isSelfAdjoint_toLin'_iff
-  条件: (A : Matrix n m R)
+定理 整数rinsicStar.isSelfAdjoint_toLin'_iff
+  条件: (A : 矩阵 n m R)
   证明: by
   simp [IsSelfAdjoint, intrinsicStar_toLin', ← ext_iff]
 
@@ -740,8 +740,8 @@ instance Units.intrinsicStar
       simp [← mul_eq_comp, one_eq_id]
 
 中文:
-实例 Units.intrinsicStar
-  签名: : Star (WithConv (End R E)ˣ) where
+实例 单位群.intrinsicStar
+  签名: : 对合 (WithConv (End R E)ˣ) where
   定义体: toConv by
     refine ⟨(star (toConv ↑f.ofConv : WithConv (End R E))).ofConv,
       (star (toConv ↑(f.ofConv⁻¹ : (End R E)ˣ))).ofConv, ?_, ?_⟩
@@ -771,8 +771,8 @@ theorem IsUnit.intrinsicStar
   simpa [hu] using this
 
 中文:
-定理 IsUnit.intrinsicStar
-  条件: {f : WithConv (End R E)} (hf : IsUnit f.ofConv)
+定理 是单位.intrinsicStar
+  条件: {f : WithConv (End R E)} (hf : 是单位 f.ofConv)
   证明: by
   have ⟨u, hu⟩ := hf
   have : IsUnit (star (toConv (u : End R E))).ofConv := (star (toConv u)).ofConv.isUnit

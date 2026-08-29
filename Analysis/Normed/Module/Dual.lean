@@ -65,8 +65,8 @@ theorem isClosed_polar
 
 中文:
 定理 isClosed_polar
-  条件: (s : Set E)
-  结论: IsClosed (StrongDual.polar 𝕜 s)
+  条件: (s : 集合 E)
+  结论: 是闭集 (StrongDual.polar 𝕜 s)
   证明: by
   dsimp only [StrongDual.polar]
   simp only [LinearMap.polar_eq_iInter, LinearMap.flip_apply]
@@ -99,7 +99,7 @@ closure_minimal ((topDualPairing 𝕜 E).flip.polar_gc.le_u_l s) by
 
 中文:
 定理 polar_closure
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: StrongDual.polar 𝕜 (closure s) = StrongDual.polar 𝕜 s
   证明: ((topDualPairing 𝕜 E).flip.polar_antitone subset_closure).antisymm
 (topDualPairing 𝕜 E).flip.polar_gc.l_le
@@ -135,7 +135,7 @@ theorem smul_mem_polar
 
 中文:
 定理 smul_mem_polar
-  条件: {s : Set E} {x' : StrongDual 𝕜 E} {c : 𝕜} (hc : 对任意 z, z in s -> ‖x' z‖ <= ‖c‖)
+  条件: {s : 集合 E} {x' : StrongDual 𝕜 E} {c : 𝕜} (hc : 对任意 z, z in s -> ‖x' z‖ <= ‖c‖)
   证明: by
   by_cases c_zero : c = 0
   · simp only [c_zero, inv_zero, zero_smul]
@@ -260,7 +260,7 @@ theorem polar_closedBall
 
 中文:
 定理 polar_closedBall
-  结论: {𝕜 E : 类型} [RCLike 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] {r : 实数}
+  结论: {𝕜 E : 类型} [RCLike 𝕜] [赋范交换加群 E] [赋范空间 𝕜 E] {r : 实数}
   证明: by
   refine Subset.antisymm ?_ (closedBall_inv_subset_polar_closedBall 𝕜)
   intro x' h
@@ -291,7 +291,7 @@ theorem polar_ball
 
 中文:
 定理 polar_ball
-  结论: {𝕜 E : 类型} [RCLike 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] {r : 实数}
+  结论: {𝕜 E : 类型} [RCLike 𝕜] [赋范交换加群 E] [赋范空间 𝕜 E] {r : 实数}
   证明: by
   let : NormedSpace Real E := .restrictScalars Real 𝕜 E
   rw [← polar_closedBall hr]; rw [← closure_ball _ hr.ne']; rw [polar_closure]
@@ -318,7 +318,7 @@ theorem isBounded_polar_of_mem_nhds_zero
 
 中文:
 定理 isBounded_polar_of_mem_nhds_zero
-  条件: {s : Set E} (s_nhds : s in 𝓝 (0 : E))
+  条件: {s : 集合 E} (s_nhds : s in 𝓝 (0 : E))
   证明: by
   obtain ⟨a, ha⟩ : exists a : 𝕜, 1 < ‖a‖ := NormedField.exists_one_lt_norm 𝕜
   obtain ⟨r, r_pos, r_ball⟩ : exists r : Real, 0 < r ∧ ball 0 r subseteq s := Metric.mem_nhds_iff.1 s_nhds
@@ -347,8 +347,8 @@ theorem sInter_polar_eq_closedBall
   rw [← polar_closedBall (inv_pos_of_pos hr)]; rw [StrongDual.polar]; rw [(topDualPairing 𝕜 E).flip.sInter_polar_finite_subset_eq_polar (closedBall (0 : E) r⁻¹)]
 
 中文:
-定理 sInter_polar_eq_closedBall
-  结论: {𝕜 E : 类型} [RCLike 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+定理 s整数er_polar_eq_closedBall
+  结论: {𝕜 E : 类型} [RCLike 𝕜] [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: by
   conv_rhs => rw [← inv_inv r]
   rw [← polar_closedBall (inv_pos_of_pos hr)]; rw [StrongDual.polar]; rw [(topDualPairing 𝕜 E).flip.sInter_polar_finite_subset_eq_polar (closedBall (0 : E) r⁻¹)]
@@ -425,7 +425,7 @@ theorem NormedSpace.eq_zero_of_forall_dual_eq_zero
 @[deprecated SeparatingDual.eq_zero_iff_forall_dual_eq_zero (since := "2026-03-18")]
 
 中文:
-定理 NormedSpace.eq_zero_of_forall_dual_eq_zero
+定理 赋范空间.eq_zero_of_对任意_dual_eq_zero
   结论: {x : E}
   证明: SeparatingDual.eq_zero_of_forall_dual_eq_zero h
 
@@ -449,7 +449,7 @@ theorem NormedSpace.eq_zero_iff_forall_dual_eq_zero
 @[deprecated SeparatingDual.eq_iff_forall_dual_eq (since := "2026-03-18")]
 
 中文:
-定理 NormedSpace.eq_zero_iff_forall_dual_eq_zero
+定理 赋范空间.eq_zero_iff_对任意_dual_eq_zero
   条件: (x : E)
   证明: SeparatingDual.eq_zero_iff_forall_dual_eq_zero x
 
@@ -471,7 +471,7 @@ theorem NormedSpace.eq_iff_forall_dual_eq
   proof: SeparatingDual.eq_iff_forall_dual_eq
 
 中文:
-定理 NormedSpace.eq_iff_forall_dual_eq
+定理 赋范空间.eq_iff_对任意_dual_eq
   条件: {x y : E}
   证明: SeparatingDual.eq_iff_forall_dual_eq
 

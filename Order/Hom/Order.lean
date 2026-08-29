@@ -45,7 +45,7 @@ instance [SemilatticeSup
 
 中文:
 实例 [SemilatticeSup
-  签名: β] : Max (α ->o β) where
+  签名: β] : 最大值 (α ->o β) where
   定义体: ⟨fun a => f a ⊔ g a, f.mono.sup g.mono⟩
 
 Depends on / 依赖: f.mono.sup, g.mono
@@ -109,7 +109,7 @@ instance [SemilatticeInf
 
 中文:
 实例 [SemilatticeInf
-  签名: β] : Min (α ->o β) where
+  签名: β] : 最小值 (α ->o β) where
   定义体: ⟨fun a => f a ⊓ g a, f.mono.inf g.mono⟩
 
 Depends on / 依赖: f.mono.inf, g.mono
@@ -166,7 +166,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: [Lattice β]
+  签名: [格 β]
   定义体: { (_ : SemilatticeSup (α ->o β)), (_ : SemilatticeInf (α ->o β)) with }
 
 @[simps]
@@ -186,8 +186,8 @@ instance [Preorder
   body: const α ⊥
 
 中文:
-实例 [Preorder
-  签名: β] [OrderBot β] : Bot (α ->o β) where
+实例 [预序
+  签名: β] [有底序 β] : 底元素 (α ->o β) where
   定义体: const α ⊥
 -/
 instance [Preorder β] [OrderBot β] : Bot (α ->o β) where
@@ -205,7 +205,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [Preorder β] [OrderBot β]
+  签名: [预序 β] [有底序 β]
   定义体: bot_le
 
 @[simps]
@@ -226,7 +226,7 @@ instance instTopOrderHom
 
 中文:
 实例 instTopOrderHom
-  签名: [Preorder β] [OrderTop β]
+  签名: [预序 β] [有顶序 β]
   定义体: const α ⊤
 -/
 instance instTopOrderHom [Preorder β] [OrderTop β] : Top (α ->o β) where
@@ -242,7 +242,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [Preorder β] [OrderTop β]
+  签名: [预序 β] [有顶序 β]
   定义体: le_top
 
 Depends on / 依赖: le_top
@@ -261,8 +261,8 @@ instance [CompleteLattice
 @[simp]
 
 中文:
-实例 [CompleteLattice
-  签名: β] : InfSet (α ->o β) where
+实例 [完备格
+  签名: β] : 下确界集 (α ->o β) where
   定义体: ⟨fun x => ⨅ f in s, (f :) x, fun _ _ h => iInf₂_mono fun f _ => f.mono h⟩
 
 @[simp]
@@ -283,7 +283,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: [CompleteLattice β] (s : Set (α ->o β)) (x : α)
+  条件: [完备格 β] (s : 集合 (α ->o β)) (x : α)
   证明: rfl
 -/
 theorem sInf_apply [CompleteLattice β] (s : Set (α ->o β)) (x : α) :
@@ -302,7 +302,7 @@ theorem iInf_apply
 
 中文:
 定理 iInf_apply
-  条件: {ι : Sort*} [CompleteLattice β] (f : ι -> α ->o β) (x : α)
+  条件: {ι : 类型层*} [完备格 β] (f : ι -> α ->o β) (x : α)
   证明: (sInf_apply _ _).trans iInf_range
 
 @[simp, norm_cast]
@@ -325,7 +325,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} [CompleteLattice β] (f : ι -> α ->o β)
+  条件: {ι : 类型层*} [完备格 β] (f : ι -> α ->o β)
   证明: by
   funext x; simp [iInf_apply]
 
@@ -346,8 +346,8 @@ instance [CompleteLattice
 @[simp]
 
 中文:
-实例 [CompleteLattice
-  签名: β] : SupSet (α ->o β) where
+实例 [完备格
+  签名: β] : 上确界集 (α ->o β) where
   定义体: ⟨fun x => ⨆ f in s, (f :) x, fun _ _ h => iSup₂_mono fun f _ => f.mono h⟩
 
 @[simp]
@@ -368,7 +368,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: [CompleteLattice β] (s : Set (α ->o β)) (x : α)
+  条件: [完备格 β] (s : 集合 (α ->o β)) (x : α)
   证明: rfl
 -/
 theorem sSup_apply [CompleteLattice β] (s : Set (α ->o β)) (x : α) :
@@ -387,7 +387,7 @@ theorem iSup_apply
 
 中文:
 定理 iSup_apply
-  条件: {ι : Sort*} [CompleteLattice β] (f : ι -> α ->o β) (x : α)
+  条件: {ι : 类型层*} [完备格 β] (f : ι -> α ->o β) (x : α)
   证明: (sSup_apply _ _).trans iSup_range
 
 @[simp, norm_cast]
@@ -410,7 +410,7 @@ theorem coe_iSup
 
 中文:
 定理 coe_iSup
-  条件: {ι : Sort*} [CompleteLattice β] (f : ι -> α ->o β)
+  条件: {ι : 类型层*} [完备格 β] (f : ι -> α ->o β)
   证明: by
   funext x; simp [iSup_apply]
 
@@ -433,8 +433,8 @@ instance [CompleteLattice
       .of_image (f := (⇑)) coe_le_coe (by simp [isGLB_pi, Set.image_image, isGLB_biInf]) }
 
 中文:
-实例 [CompleteLattice
-  签名: β] : CompleteLattice (α ->o β)
+实例 [完备格
+  签名: β] : 完备格 (α ->o β)
   定义体: { (_ : Lattice (α ->o β)), OrderHom.orderTop, OrderHom.orderBot with
     isLUB_sSup _ :=
       .of_image (f := (⇑)) coe_le_coe (by simp [isLUB_pi, Set.image_image, isLUB_biSup])

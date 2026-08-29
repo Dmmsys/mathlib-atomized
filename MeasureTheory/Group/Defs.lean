@@ -55,10 +55,10 @@ class VAddInvariantMeasure
     - measure_preimage_vadd : forall (c : M) ⦃s : Set α⦄, MeasurableSet s -> μ ((fun x => c +ᵥ x) ⁻¹' s) = μ s
 
 中文:
-类 VAddInvariantMeasure
-  参数: (M α : 类型) [VAdd M α] {_ : MeasurableSpace α} (μ : Measure α)
+类 向量加不变测度
+  参数: (M α : 类型) [向量加法 M α] {_ : 可测空间 α} (μ : 测度 α)
   公理与运算 (1 个):
-    - measure_preimage_vadd : 对任意 (c : M) ⦃s : Set α⦄, MeasurableSet s -> μ ((fun x => c +ᵥ x) ⁻¹' s) = μ s
+    - measure_preimage_vadd : 对任意 (c : M) ⦃s : 集合 α⦄, 可测集 s -> μ ((fun x => c +ᵥ x) ⁻¹' s) = μ s
 -/
 class VAddInvariantMeasure (M α : Type*) [VAdd M α] {_ : MeasurableSpace α} (μ : Measure α) :
   Prop where
@@ -78,10 +78,10 @@ class SMulInvariantMeasure
     - measure_preimage_smul : forall (c : M) ⦃s : Set α⦄, MeasurableSet s -> μ ((fun x => c • x) ⁻¹' s) = μ s
 
 中文:
-类 SMulInvariantMeasure
-  参数: (M α : 类型) [SMul M α] {_ : MeasurableSpace α} (μ : Measure α)
+类 标量乘不变测度
+  参数: (M α : 类型) [标量乘法 M α] {_ : 可测空间 α} (μ : 测度 α)
   公理与运算 (1 个):
-    - measure_preimage_smul : 对任意 (c : M) ⦃s : Set α⦄, MeasurableSet s -> μ ((fun x => c • x) ⁻¹' s) = μ s
+    - measure_preimage_smul : 对任意 (c : M) ⦃s : 集合 α⦄, 可测集 s -> μ ((fun x => c • x) ⁻¹' s) = μ s
 -/
 class SMulInvariantMeasure (M α : Type*) [SMul M α] {_ : MeasurableSpace α} (μ : Measure α) :
   Prop where
@@ -103,8 +103,8 @@ class IsAddLeftInvariant
     - map_add_left_eq_self : forall g : G, map (g + ·) μ = μ
 
 中文:
-类 IsAddLeftInvariant
-  参数: [Add G] (μ : Measure G)
+类 是加法左不变
+  参数: [加法 G] (μ : 测度 G)
   公理与运算 (1 个):
     - map_add_left_eq_self : 对任意 g : G, map (g + ·) μ = μ
 -/
@@ -124,8 +124,8 @@ class IsMulLeftInvariant
     - map_mul_left_eq_self : forall g : G, map (g * ·) μ = μ
 
 中文:
-类 IsMulLeftInvariant
-  参数: [Mul G] (μ : Measure G)
+类 是MulLeftInvariant
+  参数: [乘法 G] (μ : 测度 G)
   公理与运算 (1 个):
     - map_mul_left_eq_self : 对任意 g : G, map (g * ·) μ = μ
 -/
@@ -142,8 +142,8 @@ class IsAddRightInvariant
     - map_add_right_eq_self : forall g : G, map (· + g) μ = μ
 
 中文:
-类 IsAddRightInvariant
-  参数: [Add G] (μ : Measure G)
+类 是加法右不变
+  参数: [加法 G] (μ : 测度 G)
   公理与运算 (1 个):
     - map_add_right_eq_self : 对任意 g : G, map (· + g) μ = μ
 -/
@@ -163,8 +163,8 @@ class IsMulRightInvariant
     - map_mul_right_eq_self : forall g : G, map (· * g) μ = μ
 
 中文:
-类 IsMulRightInvariant
-  参数: [Mul G] (μ : Measure G)
+类 是MulRightInvariant
+  参数: [乘法 G] (μ : 测度 G)
   公理与运算 (1 个):
     - map_mul_right_eq_self : 对任意 g : G, map (· * g) μ = μ
 -/
@@ -185,8 +185,8 @@ instance IsMulLeftInvariant.smulInvariantMeasure
 @[to_additive]
 
 中文:
-实例 IsMulLeftInvariant.smulInvariantMeasure
-  签名: [Mul G] [IsMulLeftInvariant μ]
+实例 是MulLeftInvariant.smulInvariantMeasure
+  签名: [乘法 G] [是MulLeftInvariant μ]
   定义体: ⟨fun _x _s hs => measure_preimage_of_map_eq_self (map_mul_left_eq_self _) hs.nullMeasurableSet⟩
 
 @[to_additive]
@@ -209,7 +209,7 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
+实例 [幺半群
   签名: G] (s
   定义体: ⟨fun ⟨x, _⟩ _ h => IsMulLeftInvariant.smulInvariantMeasure.1 x h⟩
 
@@ -231,8 +231,8 @@ instance IsMulRightInvariant.toSMulInvariantMeasure_op
   body: ⟨fun _x _s hs => measure_preimage_of_map_eq_self (map_mul_right_eq_self _) hs.nullMeasurableSet⟩
 
 中文:
-实例 IsMulRightInvariant.toSMulInvariantMeasure_op
-  签名: [Mul G] [μ.IsMulRightInvariant]
+实例 是MulRightInvariant.toSMulInvariantMeasure_op
+  签名: [乘法 G] [μ.是MulRightInvariant]
   定义体: ⟨fun _x _s hs => measure_preimage_of_map_eq_self (map_mul_right_eq_self _) hs.nullMeasurableSet⟩
 
 Depends on / 依赖: hs.nullMeasurableSet, map_mul_right_eq_self, measure_preimage_of_map_eq_self, nullMeasurableSet

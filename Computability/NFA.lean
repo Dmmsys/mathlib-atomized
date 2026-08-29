@@ -63,9 +63,9 @@ structure NFA
 结构 NFA
   参数: (α : 类型u) (σ : 类型v)
   公理与运算 (3 个):
-    - step : σ -> α -> Set σ
-    - start : Set σ
-    - accept : Set σ
+    - step : σ -> α -> 集合 σ
+    - start : 集合 σ
+    - accept : 集合 σ
 -/
 structure NFA (α : Type u) (σ : Type v) where
   /-- The NFA's transition function -/
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NFA α σ)
+  签名: 可居 (NFA α σ)
   定义体: ⟨NFA.mk (fun _ _ => ∅) ∅ ∅⟩
 
 Depends on / 依赖: NFA.mk
@@ -108,7 +108,7 @@ definition stepSet
 
 中文:
 定义 stepSet
-  签名: (S : Set σ) (a : α)
+  签名: (S : 集合 σ) (a : α)
   定义体: ⋃ s in S, M.step s a
 
 Depends on / 依赖: M.step
@@ -128,7 +128,7 @@ theorem mem_stepSet
 
 中文:
 定理 mem_stepSet
-  条件: {s : σ} {S : Set σ} {a : α}
+  条件: {s : σ} {S : 集合 σ} {a : α}
   结论: s in M.stepSet S a ↔ 存在 t in S, s in M.step t a
   证明: by
   simp [stepSet]
@@ -197,7 +197,7 @@ theorem stepSet_union
 
 中文:
 定理 stepSet_union
-  条件: {S T : Set σ} {a : α}
+  条件: {S T : 集合 σ} {a : α}
   证明: by
   ext s
   simp [mem_stepSet, or_and_right, exists_or]
@@ -220,7 +220,7 @@ definition evalFrom
 
 中文:
 定义 evalFrom
-  签名: (S : Set σ)
+  签名: (S : 集合 σ)
   定义体: List.foldl M.stepSet S
 
 Depends on / 依赖: List.foldl, M.stepSet, stepSet
@@ -241,7 +241,7 @@ theorem evalFrom_nil
 
 中文:
 定理 evalFrom_nil
-  条件: (S : Set σ)
+  条件: (S : 集合 σ)
   结论: M.evalFrom S [] = S
   证明: rfl
 -/
@@ -261,7 +261,7 @@ theorem evalFrom_singleton
 
 中文:
 定理 evalFrom_singleton
-  条件: (S : Set σ) (a : α)
+  条件: (S : 集合 σ) (a : α)
   结论: M.evalFrom S [a] = M.stepSet S a
   证明: rfl
 -/
@@ -280,7 +280,7 @@ theorem evalFrom_cons
 
 中文:
 定理 evalFrom_cons
-  条件: (S : Set σ) (a : α) (x : List α)
+  条件: (S : 集合 σ) (a : α) (x : 列表 α)
   证明: rfl
 -/
 theorem evalFrom_cons (S : Set σ) (a : α) (x : List α) :
@@ -300,7 +300,7 @@ theorem evalFrom_append
 
 中文:
 定理 evalFrom_append
-  条件: (S : Set σ) (x y : List α)
+  条件: (S : 集合 σ) (x y : 列表 α)
   证明: by
   simp only [evalFrom, List.foldl_append]
 
@@ -325,7 +325,7 @@ theorem evalFrom_union
 
 中文:
 定理 evalFrom_union
-  条件: (S T : Set σ) (x : List α)
+  条件: (S T : 集合 σ) (x : 列表 α)
   证明: by
   induction x generalizing S T with
   | nil => simp
@@ -354,7 +354,7 @@ theorem evalFrom_iUnion
 
 中文:
 定理 evalFrom_iUnion
-  条件: {ι : Sort*} (s : ι -> Set σ) (x : List α)
+  条件: {ι : 类型层*} (s : ι -> 集合 σ) (x : 列表 α)
   证明: by
   induction x generalizing s with
   | nil => simp
@@ -380,7 +380,7 @@ theorem evalFrom_iUnion₂
 
 中文:
 定理 evalFrom_iUnion₂
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : 对任意 i, κ i -> Set σ) (x : List α)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : 对任意 i, κ i -> 集合 σ) (x : 列表 α)
   证明: by
   simp
 -/
@@ -400,7 +400,7 @@ theorem evalFrom_eq_biUnion_singleton
 
 中文:
 定理 evalFrom_eq_biUnion_singleton
-  条件: (S : Set σ) (x : List α)
+  条件: (S : 集合 σ) (x : 列表 α)
   证明: by
   simp [← evalFrom_iUnion₂]
 -/
@@ -419,8 +419,8 @@ theorem mem_evalFrom_iff_exists
   simp
 
 中文:
-定理 mem_evalFrom_iff_exists
-  条件: {s : σ} {S : Set σ} {x : List α}
+定理 mem_evalFrom_iff_存在
+  条件: {s : σ} {S : 集合 σ} {x : 列表 α}
   证明: by
   rw [evalFrom_eq_biUnion_singleton]
   simp
@@ -443,7 +443,7 @@ definition acceptsFrom
 
 中文:
 定义 acceptsFrom
-  签名: (S : Set σ)
+  签名: (S : 集合 σ)
   定义体: {x | exists s in M.accept, s in M.evalFrom S x}
 
 Depends on / 依赖: M.accept, M.evalFrom, accept, evalFrom
@@ -461,7 +461,7 @@ theorem mem_acceptsFrom
 
 中文:
 定理 mem_acceptsFrom
-  条件: {S : Set σ} {x : List α}
+  条件: {S : 集合 σ} {x : 列表 α}
   证明: by
   rfl
 -/
@@ -483,7 +483,7 @@ theorem nil_mem_acceptsFrom
 
 中文:
 定理 nil_mem_acceptsFrom
-  条件: {S : Set σ}
+  条件: {S : 集合 σ}
   结论: [] in M.acceptsFrom S ↔ 存在 s in S, s in M.accept
   证明: by
   simp only [mem_acceptsFrom, evalFrom_nil]; tauto
@@ -506,7 +506,7 @@ theorem cons_mem_acceptsFrom
 
 中文:
 定理 cons_mem_acceptsFrom
-  条件: {S : Set σ} {a : α} {x : List α}
+  条件: {S : 集合 σ} {a : α} {x : 列表 α}
   证明: by
   simp [mem_acceptsFrom]
 
@@ -529,7 +529,7 @@ theorem cons_preimage_acceptsFrom
 
 中文:
 定理 cons_preimage_acceptsFrom
-  条件: {S : Set σ} {a : α}
+  条件: {S : 集合 σ} {a : α}
   证明: by
   ext x; simp [cons_mem_acceptsFrom M]
 
@@ -552,7 +552,7 @@ theorem append_mem_acceptsFrom
 
 中文:
 定理 append_mem_acceptsFrom
-  条件: {S : Set σ} {x y : List α}
+  条件: {S : 集合 σ} {x y : 列表 α}
   证明: by
   simp [mem_acceptsFrom]
 
@@ -575,7 +575,7 @@ theorem append_preimage_acceptsFrom
 
 中文:
 定理 append_preimage_acceptsFrom
-  条件: {S : Set σ} {x : List α}
+  条件: {S : 集合 σ} {x : 列表 α}
   证明: by
   ext y; simp [append_mem_acceptsFrom M]
 
@@ -604,7 +604,7 @@ theorem acceptsFrom_union
 
 中文:
 定理 acceptsFrom_union
-  条件: {S T : Set σ}
+  条件: {S T : 集合 σ}
   证明: by
   rw [Language.add_def]; ext x
   simp only [mem_acceptsFrom, evalFrom_union, mem_union]
@@ -642,7 +642,7 @@ theorem acceptsFrom_iUnion
 
 中文:
 定理 acceptsFrom_iUnion
-  条件: {ι : Sort*} (s : ι -> Set σ)
+  条件: {ι : 类型层*} (s : ι -> 集合 σ)
   证明: by
   ext x
   simp only [acceptsFrom, evalFrom_iUnion, mem_iUnion]
@@ -669,7 +669,7 @@ theorem acceptsFrom_iUnion₂
 
 中文:
 定理 acceptsFrom_iUnion₂
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : 对任意 i, κ i -> Set σ)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : 对任意 i, κ i -> 集合 σ)
   证明: by
   simp
 -/
@@ -695,7 +695,7 @@ theorem mem_acceptsFrom_sep_fact
 
 中文:
 定理 mem_acceptsFrom_sep_fact
-  条件: {S : Set σ} {p : 命题} {x : List α}
+  条件: {S : 集合 σ} {p : 命题} {x : 列表 α}
   证明: by
   induction x generalizing S with
   | nil => simp only [nil_mem_acceptsFrom, mem_ofPred_eq]; tauto
@@ -724,7 +724,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: : List α -> Set σ
+  签名: : 列表 α -> 集合 σ
   定义体: M.evalFrom M.start
 
 Depends on / 依赖: M.evalFrom, M.start, evalFrom
@@ -783,7 +783,7 @@ theorem eval_append_singleton
 
 中文:
 定理 eval_append_singleton
-  条件: (x : List α) (a : α)
+  条件: (x : 列表 α) (a : α)
   证明: by
   simp [eval]
 -/
@@ -821,7 +821,7 @@ theorem mem_accepts
 
 中文:
 定理 mem_accepts
-  条件: {x : List α}
+  条件: {x : 列表 α}
   结论: x in M.accepts ↔ 存在 S in M.accept, S in M.evalFrom M.start x
   证明: by
   rfl
@@ -856,11 +856,11 @@ inductive Path
     - cons: (t s u : σ) (a : α) (x : List α) : t in M.step s a -> Path t u x -> Path s u (a :: x)
 
 中文:
-归纳类型 Path
-  参数: : σ -> σ -> List α -> Type (max u v)
+归纳类型 道路
+  参数: : σ -> σ -> 列表 α -> 类型 (最大值 u v)
   构造子 (2 个):
-    - nil: (s : σ) : Path s s []
-    - cons: (t s u : σ) (a : α) (x : List α) : t in M.step s a -> Path t u x -> Path s u (a :: x)
+    - nil: (s : σ) : 道路 s s []
+    - cons: (t s u : σ) (a : α) (x : 列表 α) : t in M.step s a -> 道路 t u x -> 道路 s u (a :: x)
 -/
 inductive Path : σ -> σ -> List α -> Type (max u v)
   | nil (s : σ) : Path s s []
@@ -877,8 +877,8 @@ definition Path.supp
   signature: [DecidableEq σ] {s t : σ} {x : List α}
 
 中文:
-定义 Path.supp
-  签名: [DecidableEq σ] {s t : σ} {x : List α}
+定义 道路.supp
+  签名: [DecidableEq σ] {s t : σ} {x : 列表 α}
 -/
 def Path.supp [DecidableEq σ] {s t : σ} {x : List α} : M.Path s t x -> Finset σ
   | nil s => {s}
@@ -902,7 +902,7 @@ theorem mem_evalFrom_iff_nonempty_path
 
 中文:
 定理 mem_evalFrom_iff_nonempty_path
-  条件: {s t : σ} {x : List α}
+  条件: {s t : σ} {x : 列表 α}
   证明: match x with
     | [] =>
       have h : s = t := by simp at h; tauto
@@ -942,8 +942,8 @@ theorem accepts_iff_exists_path
   tauto
 
 中文:
-定理 accepts_iff_exists_path
-  条件: {x : List α}
+定理 accepts_iff_存在_path
+  条件: {x : 列表 α}
   证明: by
   simp only [← mem_evalFrom_iff_nonempty_path, mem_accepts, mem_evalFrom_iff_exists (S := M.start)]
   tauto
@@ -970,7 +970,7 @@ definition toDFA
 
 中文:
 定义 toDFA
-  签名: : DFA α (Set σ) where
+  签名: : DFA α (集合 σ) where
   定义体: M.stepSet
   start := M.start
   accept := { S | exists s in S, s in M.accept }
@@ -1023,7 +1023,7 @@ theorem pumping_lemma
 
 中文:
 定理 pumping_lemma
-  结论: [Fintype σ] {x : List α} (hx : x in M.accepts)
+  结论: [有限类型 σ] {x : 列表 α} (hx : x in M.accepts)
   证明: by
   rw [← toDFA_correct] at hx ⊢
   exact M.toDFA.pumping_lemma hx hlen
@@ -1087,7 +1087,7 @@ theorem toNFA_evalFrom_match
 
 中文:
 定理 toNFA_evalFrom_match
-  条件: (M : DFA α σ) (start : σ) (s : List α)
+  条件: (M : DFA α σ) (start : σ) (s : 列表 α)
   证明: by
   change List.foldl M.toNFA.stepSet {start} s = {List.foldl M.step start s}
   induction s generalizing start with
@@ -1214,7 +1214,7 @@ theorem disjoint_stepSet_reverse
 
 中文:
 定理 disjoint_stepSet_reverse
-  条件: {a : α} {S S' : Set σ}
+  条件: {a : α} {S S' : 集合 σ}
   证明: by
   rw [← not_iff_not]
   simp only [Set.not_disjoint_iff, mem_stepSet, reverse_step, Set.mem_ofPred_eq]
@@ -1247,7 +1247,7 @@ theorem disjoint_evalFrom_reverse
 
 中文:
 定理 disjoint_evalFrom_reverse
-  结论: {x : List α} {S S' : Set σ}
+  结论: {x : 列表 α} {S S' : 集合 σ}
   证明: by
   simp only [evalFrom, List.foldl_reverse] at h ⊢
   induction x generalizing S S' with
@@ -1285,7 +1285,7 @@ theorem disjoint_evalFrom_reverse_iff
 
 中文:
 定理 disjoint_evalFrom_reverse_iff
-  条件: {x : List α} {S S' : Set σ}
+  条件: {x : 列表 α} {S S' : 集合 σ}
   证明: ⟨disjoint_evalFrom_reverse, fun h => List.reverse_reverse x ▸ disjoint_evalFrom_reverse h⟩
 
 @[simp]
@@ -1309,7 +1309,7 @@ theorem mem_accepts_reverse
 
 中文:
 定理 mem_accepts_reverse
-  条件: {x : List α}
+  条件: {x : 列表 α}
   结论: x in M.reverse.accepts ↔ x.reverse in M.accepts
   证明: by
   simp [mem_accepts, ← Set.not_disjoint_iff, disjoint_evalFrom_reverse_iff]
@@ -1334,9 +1334,9 @@ theorem IsRegular.reverse
   ⟨_, inferInstance, M.toNFA.reverse.toDFA, by ext; simp [hM]⟩
 
 中文:
-定理 IsRegular.reverse
-  条件: {L : Language α} (h : L.IsRegular)
-  结论: L.reverse.IsRegular
+定理 是正则.reverse
+  条件: {L : Language α} (h : L.是正则)
+  结论: L.reverse.是正则
   证明: have ⟨σ, _, M, hM⟩ := h
   ⟨_, inferInstance, M.toNFA.reverse.toDFA, by ext; simp [hM]⟩
 -/
@@ -1354,9 +1354,9 @@ theorem IsRegular.of_reverse
   proof: L.reverse_reverse ▸ h.reverse
 
 中文:
-定理 IsRegular.of_reverse
-  条件: {L : Language α} (h : L.reverse.IsRegular)
-  结论: L.IsRegular
+定理 是正则.of_reverse
+  条件: {L : Language α} (h : L.reverse.是正则)
+  结论: L.是正则
   证明: L.reverse_reverse ▸ h.reverse
 -/
 protected theorem IsRegular.of_reverse {L : Language α} (h : L.reverse.IsRegular) : L.IsRegular :=
@@ -1376,7 +1376,7 @@ theorem isRegular_reverse_iff
 中文:
 定理 isRegular_reverse_iff
   条件: {L : Language α}
-  结论: L.reverse.IsRegular ↔ L.IsRegular
+  结论: L.reverse.是正则 ↔ L.是正则
   证明: ⟨.of_reverse, .reverse⟩
 
 Depends on / 依赖: of_reverse, reverse

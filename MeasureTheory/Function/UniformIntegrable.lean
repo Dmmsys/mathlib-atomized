@@ -66,8 +66,8 @@ definition UnifIntegrable
     MeasurableSet s -> μ s <= ENNReal.ofReal δ -> eLpNorm (s.indicator (f i)) p μ <= ENNReal.ofReal ε
 
 中文:
-定义 UnifIntegrable
-  签名: {_ : MeasurableSpace α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : Measure α)
+定义 Unif整数egrable
+  签名: {_ : 可测空间 α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : 测度 α)
   定义体: forall ⦃ε : Real⦄ (_ : 0 < ε), exists (δ : Real) (_ : 0 < δ), forall i s,
     MeasurableSet s -> μ s <= ENNReal.ofReal δ -> eLpNorm (s.indicator (f i)) p μ <= ENNReal.ofReal ε
 
@@ -86,8 +86,8 @@ definition UniformIntegrable
   body: (forall i, AEStronglyMeasurable (f i) μ) ∧ UnifIntegrable f p μ ∧ exists C : Real>=0, forall i, eLpNorm (f i) p μ <= C
 
 中文:
-定义 UniformIntegrable
-  签名: {_ : MeasurableSpace α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : Measure α)
+定义 Uniform整数egrable
+  签名: {_ : 可测空间 α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : 测度 α)
   定义体: (forall i, AEStronglyMeasurable (f i) μ) ∧ UnifIntegrable f p μ ∧ exists C : Real>=0, forall i, eLpNorm (f i) p μ <= C
 
 Depends on / 依赖: AEStronglyMeasurable, UnifIntegrable, eLpNorm
@@ -123,7 +123,7 @@ theorem unifIntegrable
   proof: hf.2.1
 
 中文:
-定理 unifIntegrable
+定理 unif整数egrable
   条件: {f : ι -> α -> β} {p : 实数>=0∞} (hf : Uniform整数egrable f p μ)
   证明: hf.2.1
 -/
@@ -307,7 +307,7 @@ theorem indicator
 
 中文:
 定理 indicator
-  条件: (hf : Unif整数egrable f p μ) (E : Set α)
+  条件: (hf : Unif整数egrable f p μ) (E : 集合 α)
   证明: fun ε hε => by
   obtain ⟨δ, hδ_pos, hε⟩ := hf hε
   refine ⟨δ, hδ_pos, fun i s hs hμs => ?_⟩
@@ -344,7 +344,7 @@ theorem restrict
 
 中文:
 定理 restrict
-  条件: (hf : Unif整数egrable f p μ) (E : Set α)
+  条件: (hf : Unif整数egrable f p μ) (E : 集合 α)
   证明: fun ε hε => by
   obtain ⟨δ, hδ_pos, hδε⟩ := hf hε
   refine ⟨δ, hδ_pos, fun i s hs hμs => ?_⟩
@@ -378,8 +378,8 @@ theorem unifIntegrable_zero_meas
   proof: fun ε _ => ⟨1, one_pos, fun i s _ _ => by simp⟩
 
 中文:
-定理 unifIntegrable_zero_meas
-  条件: [MeasurableSpace α] {p : 实数>=0∞} {f : ι -> α -> β}
+定理 unif整数egrable_zero_meas
+  条件: [可测空间 α] {p : 实数>=0∞} {f : ι -> α -> β}
   证明: fun ε _ => ⟨1, one_pos, fun i s _ _ => by simp⟩
 
 Depends on / 依赖: one_pos
@@ -397,7 +397,7 @@ theorem unifIntegrable_congr_ae
   proof: ⟨fun hf => hf.ae_eq hfg, fun hg => hg.ae_eq fun n => (hfg n).symm⟩
 
 中文:
-定理 unifIntegrable_congr_ae
+定理 unif整数egrable_congr_ae
   条件: {p : 实数>=0∞} {f g : ι -> α -> β} (hfg : 对任意 n, f n =ᵐ[μ] g n)
   证明: ⟨fun hf => hf.ae_eq hfg, fun hg => hg.ae_eq fun n => (hfg n).symm⟩
 
@@ -922,7 +922,7 @@ theorem unifIntegrable_const
   exact ⟨δ, hδ_pos, fun _ => hgδ⟩
 
 中文:
-定理 unifIntegrable_const
+定理 unif整数egrable_const
   条件: {g : α -> β} (hp : 1 <= p) (hp_ne_top : p != ∞) (hg : MemLp g p μ)
   证明: by
   intro ε hε
@@ -953,8 +953,8 @@ theorem unifIntegrable_subsingleton
 · exact ⟨1, zero_lt_one, fun i => False.elim hι Nonempty.intro i⟩
 
 中文:
-定理 unifIntegrable_subsingleton
-  结论: [Subsingleton ι] (hp_one : 1 <= p) (hp_top : p != ∞)
+定理 unif整数egrable_subsingleton
+  结论: [子单例 ι] (hp_one : 1 <= p) (hp_top : p != ∞)
   证明: by
   intro ε hε
   by_cases hι : Nonempty ι
@@ -993,8 +993,8 @@ theorem unifIntegrable_fin
     obtain ⟨δ₁, hδ₁pos, hδ₁⟩ 
 
 中文:
-定理 unifIntegrable_fin
-  结论: (hp_one : 1 <= p) (hp_top : p != ∞) {n : 自然数} {f : Fin n -> α -> β}
+定理 unif整数egrable_fin
+  结论: (hp_one : 1 <= p) (hp_top : p != ∞) {n : 自然数} {f : 有限集 n -> α -> β}
   证明: by
   revert f
   induction n with
@@ -1042,8 +1042,8 @@ theorem unifIntegrable_finite
   simpa [g] using hδ (hn.some
 
 中文:
-定理 unifIntegrable_finite
-  结论: [Finite ι] (hp_one : 1 <= p) (hp_top : p != ∞) {f : ι -> α -> β}
+定理 unif整数egrable_finite
+  结论: [有限 ι] (hp_one : 1 <= p) (hp_top : p != ∞) {f : ι -> α -> β}
   证明: by
   obtain ⟨n, hn⟩ := Finite.exists_equiv_fin ι
   intro ε hε
@@ -1086,7 +1086,7 @@ theorem tendsto_Lp_finite_of_tendsto_ae_of_meas
 
 中文:
 定理 tendsto_Lp_finite_of_tendsto_ae_of_meas
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: by
   rw [ENNReal.tendsto_atTop_zero]
   intro ε hε
@@ -1175,7 +1175,7 @@ theorem tendsto_Lp_finite_of_tendsto_ae
 
 中文:
 定理 tendsto_Lp_finite_of_tendsto_ae
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: by
   have : forall n, eLpNorm (f n - g) p μ = eLpNorm ((hf n).mk (f n) - hg.1.mk g) p μ :=
     fun n => eLpNorm_congr_ae ((hf n).ae_eq_mk.sub hg.1.ae_eq_mk)
@@ -1221,7 +1221,7 @@ theorem unifIntegrable_of_tendsto_Lp_zero
   refine ⟨δ₁, hδ
 
 中文:
-定理 unifIntegrable_of_tendsto_Lp_zero
+定理 unif整数egrable_of_tendsto_Lp_zero
   结论: (hp : 1 <= p) (hp' : p != ∞) (hf : 对任意 n, MemLp (f n) p μ)
   证明: by
   intro ε hε
@@ -1262,7 +1262,7 @@ theorem unifIntegrable_of_tendsto_Lp
   · exact unifIntegrable_of_tendsto_Lp_zero hp hp' (fun 
 
 中文:
-定理 unifIntegrable_of_tendsto_Lp
+定理 unif整数egrable_of_tendsto_Lp
   结论: (hp : 1 <= p) (hp' : p != ∞) (hf : 对任意 n, MemLp (f n) p μ)
   证明: by
   have : f = (fun _ => g) + fun n => f n - g := by ext1 n; simp
@@ -1300,7 +1300,7 @@ theorem tendsto_Lp_finite_of_tendstoInMeasure
 
 中文:
 定理 tendsto_Lp_finite_of_tendstoInMeasure
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: by
   refine tendsto_of_subseq_tendsto fun ns hns => ?_
   obtain ⟨ms, _, hms'⟩ := TendstoInMeasure.exists_seq_tendsto_ae fun ε hε => (hfg ε hε).comp hns
@@ -1335,7 +1335,7 @@ theorem tendstoInMeasure_iff_tendsto_Lp_finite
 
 中文:
 定理 tendstoInMeasure_iff_tendsto_Lp_finite
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: ⟨fun h => tendsto_Lp_finite_of_tendstoInMeasure hp hp' (fun n => (hf n).1) hg h.2 h.1, fun h =>
     ⟨tendstoInMeasure_of_tendsto_eLpNorm (lt_of_lt_of_le zero_lt_one hp).ne.symm
         (fun n => (hf n).aestronglyMeasurable) hg.aestronglyMeasurable h,
@@ -1369,7 +1369,7 @@ theorem unifIntegrable_of'
     Real.rpo
 
 中文:
-定理 unifIntegrable_of'
+定理 unif整数egrable_of'
   结论: (hp : 1 <= p) (hp' : p != ∞) {f : ι -> α -> β}
   证明: by
   have hpzero := (lt_of_lt_of_le zero_lt_one hp).ne.symm
@@ -1461,7 +1461,7 @@ theorem unifIntegrable_of
   have hCg : forall i, eLpNorm ({ x | C <= ‖g i x‖₊ }.indicator (g 
 
 中文:
-定理 unifIntegrable_of
+定理 unif整数egrable_of
   结论: (hp : 1 <= p) (hp' : p != ∞) {f : ι -> α -> β}
   证明: by
   set g : ι -> α -> β := fun i => (hf i).choose
@@ -1511,8 +1511,8 @@ lemma UnifIntegrable.unifIntegrable_of_tendstoInMeasure
   exact fun n => (hfn (s n)).indicator ht
 
 中文:
-引理 UnifIntegrable.unifIntegrable_of_tendstoInMeasure
-  结论: {κ : 类型} (u : Filter κ) [NeBot u]
+引理 Unif整数egrable.unif整数egrable_of_tendstoInMeasure
+  结论: {κ : 类型} (u : 滤子 κ) [NeBot u]
   证明: by
   intro ε hε
   obtain ⟨δ, hδ, hδ'⟩ := hUI hε
@@ -1552,8 +1552,8 @@ lemma UnifIntegrable.unifIntegrable_of_ae_tendsto
     by_cases memt :
 
 中文:
-引理 UnifIntegrable.unifIntegrable_of_ae_tendsto
-  结论: {κ : 类型} (u : Filter κ) [NeBot u]
+引理 Unif整数egrable.unif整数egrable_of_ae_tendsto
+  结论: {κ : 类型} (u : 滤子 κ) [NeBot u]
   证明: by
   intro ε hε
   obtain ⟨δ, hδ, hδ'⟩ := hUI hε
@@ -1610,9 +1610,9 @@ theorem uniformIntegrable_zero_meas
     fun _ => eLpNorm_measure_zero.le⟩
 
 中文:
-定理 uniformIntegrable_zero_meas
-  条件: [MeasurableSpace α]
-  结论: Uniform整数egrable f p (0 : Measure α)
+定理 uniform整数egrable_zero_meas
+  条件: [可测空间 α]
+  结论: Uniform整数egrable f p (0 : 测度 α)
   证明: ⟨fun _ => aestronglyMeasurable_zero_measure _, unifIntegrable_zero_meas, 0,
     fun _ => eLpNorm_measure_zero.le⟩
 
@@ -1635,7 +1635,7 @@ theorem UniformIntegrable.ae_eq
   exact hC i
 
 中文:
-定理 UniformIntegrable.ae_eq
+定理 Uniform整数egrable.ae_eq
   结论: {g : ι -> α -> β} (hf : Uniform整数egrable f p μ)
   证明: by
   obtain ⟨hfm, hunif, C, hC⟩ := hf
@@ -1661,7 +1661,7 @@ theorem uniformIntegrable_congr_ae
   proof: ⟨fun h => h.ae_eq hfg, fun h => h.ae_eq fun i => (hfg i).symm⟩
 
 中文:
-定理 uniformIntegrable_congr_ae
+定理 uniform整数egrable_congr_ae
   条件: {g : ι -> α -> β} (hfg : 对任意 n, f n =ᵐ[μ] g n)
   证明: ⟨fun h => h.ae_eq hfg, fun h => h.ae_eq fun i => (hfg i).symm⟩
 
@@ -1686,8 +1686,8 @@ theorem uniformIntegrable_finite
       ⟨eLpNorm (f hι.some) p μ, Finset.mem_image.2 ⟨hι.some, Finset.mem_univ
 
 中文:
-定理 uniformIntegrable_finite
-  结论: [Finite ι] (hp_one : 1 <= p) (hp_top : p != ∞)
+定理 uniform整数egrable_finite
+  结论: [有限 ι] (hp_one : 1 <= p) (hp_top : p != ∞)
   证明: by
   cases nonempty_fintype ι
   refine ⟨fun n => (hf n).1, unifIntegrable_finite hp_one hp_top hf, ?_⟩
@@ -1724,8 +1724,8 @@ theorem uniformIntegrable_subsingleton
   proof: uniformIntegrable_finite hp_one hp_top hf
 
 中文:
-定理 uniformIntegrable_subsingleton
-  结论: [Subsingleton ι] (hp_one : 1 <= p) (hp_top : p != ∞)
+定理 uniform整数egrable_subsingleton
+  结论: [子单例 ι] (hp_one : 1 <= p) (hp_top : p != ∞)
   证明: uniformIntegrable_finite hp_one hp_top hf
 
 Depends on / 依赖: hp_one, hp_top, uniformIntegrable_finite
@@ -1744,7 +1744,7 @@ theorem uniformIntegrable_const
     ⟨(eLpNorm g p μ).toNNReal, fun _ => le_of_eq (ENNReal.coe_toNNReal hg.2.ne).symm⟩⟩
 
 中文:
-定理 uniformIntegrable_const
+定理 uniform整数egrable_const
   条件: {g : α -> β} (hp : 1 <= p) (hp_ne_top : p != ∞) (hg : MemLp g p μ)
   证明: ⟨fun _ => hg.1, unifIntegrable_const hp hp_ne_top hg,
     ⟨(eLpNorm g p μ).toNNReal, fun _ => le_of_eq (ENNReal.coe_toNNReal hg.2.ne).symm⟩⟩
@@ -1772,8 +1772,8 @@ theorem uniformIntegrable_of'
         eLpNorm ({ x : α | ‖f 
 
 中文:
-定理 uniformIntegrable_of'
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+定理 uniform整数egrable_of'
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: by
   refine ⟨fun i => (hf i).aestronglyMeasurable,
     unifIntegrable_of hp hp' (fun i => (hf i).aestronglyMeasurable) h, ?_⟩
@@ -1833,8 +1833,8 @@ theorem uniformIntegrable_of
   refine (uniformIntegrable_of' hp hp' hgmeas fun ε hε => ?_).ae_eq h
 
 中文:
-定理 uniformIntegrable_of
-  结论: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+定理 uniform整数egrable_of
+  结论: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: by
   set g : ι -> α -> β := fun i => (hf i).choose
   have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hf i).1
@@ -1877,7 +1877,7 @@ theorem UniformIntegrable.spec'
     have : forall C : Real>=0, C • (δ : Real>=0∞
 
 中文:
-定理 UniformIntegrable.spec'
+定理 Uniform整数egrable.spec'
   结论: (hp : p != 0) (hp' : p != ∞) (hf : 对任意 i, StronglyMeasurable (f i))
   证明: by
   obtain ⟨-, hfu, M, hM⟩ := hfu
@@ -1936,7 +1936,7 @@ theorem UniformIntegrable.spec
   r
 
 中文:
-定理 UniformIntegrable.spec
+定理 Uniform整数egrable.spec
   结论: (hp : p != 0) (hp' : p != ∞) (hfu : Uniform整数egrable f p μ) {ε : 实数}
   证明: by
   set g : ι -> α -> β := fun i => (hfu.1 i).choose
@@ -1972,8 +1972,8 @@ theorem uniformIntegrable_iff
     fun h => uniformIntegrable_of hp hp' h.1 h.2⟩
 
 中文:
-定理 uniformIntegrable_iff
-  条件: [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞)
+定理 uniform整数egrable_iff
+  条件: [是有限测度 μ] (hp : 1 <= p) (hp' : p != ∞)
   证明: ⟨fun h => ⟨h.1, fun _ => h.spec (lt_of_lt_of_le zero_lt_one hp).ne.symm hp'⟩,
     fun h => uniformIntegrable_of hp hp' h.1 h.2⟩
 
@@ -2002,7 +2002,7 @@ theorem uniformIntegrable_average
     refine le_tran
 
 中文:
-定理 uniformIntegrable_average
+定理 uniform整数egrable_average
   证明: by
   obtain ⟨hf₁, hf₂, hf₃⟩ := hf
   refine ⟨fun n => ?_, fun ε hε => ?_, ?_⟩
@@ -2055,7 +2055,7 @@ theorem uniformIntegrable_average_real
   simp [div_eq_inv_mul]
 
 中文:
-定理 uniformIntegrable_average_real
+定理 uniform整数egrable_average_real
   条件: (hp : 1 <= p) {f : 自然数 -> α -> 实数} (hf : Uniform整数egrable f p μ)
   证明: by
   convert! uniformIntegrable_average hp hf using 2 with n
@@ -2084,8 +2084,8 @@ lemma UniformIntegrable.uniformIntegrable_of_tendstoInMeasure
       (Eventually.of_forall fun n => hC (s n))
 
 中文:
-引理 UniformIntegrable.uniformIntegrable_of_tendstoInMeasure
-  结论: {κ : 类型} (u : Filter κ) [NeBot u]
+引理 Uniform整数egrable.uniform整数egrable_of_tendstoInMeasure
+  结论: {κ : 类型} (u : 滤子 κ) [NeBot u]
   证明: by
   refine ⟨fun ⟨f, s, hs⟩ => ?_, hUI.2.1.unifIntegrable_of_tendstoInMeasure u (fun i => hUI.1 i), ?_⟩
   · exact hs.aestronglyMeasurable (fun n => hUI.1 (s n))
@@ -2115,8 +2115,8 @@ lemma UniformIntegrable.memLp_of_tendstoInMeasure
   simpa using (hUI.uniformIntegrable_of_tendstoInMeasure u).memLp ⟨g, ⟨fun n => n, htends⟩⟩
 
 中文:
-引理 UniformIntegrable.memLp_of_tendstoInMeasure
-  结论: {κ : 类型} {u : Filter κ} [NeBot u]
+引理 Uniform整数egrable.memLp_of_tendstoInMeasure
+  结论: {κ : 类型} {u : 滤子 κ} [NeBot u]
   证明: by
   simpa using (hUI.uniformIntegrable_of_tendstoInMeasure u).memLp ⟨g, ⟨fun n => n, htends⟩⟩
 
@@ -2137,8 +2137,8 @@ lemma UniformIntegrable.integrable_of_tendstoInMeasure
   proof: memLp_one_iff_integrable.mp (hUI.memLp_of_tendstoInMeasure htends)
 
 中文:
-引理 UniformIntegrable.integrable_of_tendstoInMeasure
-  结论: {κ : 类型} {u : Filter κ} [NeBot u]
+引理 Uniform整数egrable.integrable_of_tendstoInMeasure
+  结论: {κ : 类型} {u : 滤子 κ} [NeBot u]
   证明: memLp_one_iff_integrable.mp (hUI.memLp_of_tendstoInMeasure htends)
 
 Depends on / 依赖: hUI.memLp_of_tendstoInMeasure, htends, memLp_of_tendstoInMeasure, memLp_one_iff_integrable, memLp_one_iff_integrable.mp
@@ -2163,8 +2163,8 @@ lemma UniformIntegrable.uniformIntegrable_of_ae_tendsto
       (Eventually.of_forall fun n => hC
 
 中文:
-引理 UniformIntegrable.uniformIntegrable_of_ae_tendsto
-  结论: {κ : 类型} (u : Filter κ) [NeBot u]
+引理 Uniform整数egrable.uniform整数egrable_of_ae_tendsto
+  结论: {κ : 类型} (u : 滤子 κ) [NeBot u]
   证明: by
   refine ⟨fun ⟨f, s, hs⟩ => ?_, hUI.2.1.unifIntegrable_of_ae_tendsto u (fun i => hUI.1 i), ?_⟩
   · exact aestronglyMeasurable_of_tendsto_ae u (fun n => hUI.1 (s n)) hs
@@ -2195,8 +2195,8 @@ lemma UniformIntegrable.memLp_of_ae_tendsto
   simpa using (hUI.uniformIntegrable_of_ae_tendsto u).memLp ⟨g, ⟨fun n => n, htends⟩⟩
 
 中文:
-引理 UniformIntegrable.memLp_of_ae_tendsto
-  结论: {κ : 类型} {u : Filter κ} [NeBot u]
+引理 Uniform整数egrable.memLp_of_ae_tendsto
+  结论: {κ : 类型} {u : 滤子 κ} [NeBot u]
   证明: by
   simpa using (hUI.uniformIntegrable_of_ae_tendsto u).memLp ⟨g, ⟨fun n => n, htends⟩⟩
 
@@ -2217,8 +2217,8 @@ lemma UniformIntegrable.integrable_of_ae_tendsto
   proof: memLp_one_iff_integrable.mp (hUI.memLp_of_ae_tendsto htends)
 
 中文:
-引理 UniformIntegrable.integrable_of_ae_tendsto
-  结论: {κ : 类型} {u : Filter κ} [NeBot u]
+引理 Uniform整数egrable.integrable_of_ae_tendsto
+  结论: {κ : 类型} {u : 滤子 κ} [NeBot u]
   证明: memLp_one_iff_integrable.mp (hUI.memLp_of_ae_tendsto htends)
 
 Depends on / 依赖: hUI.memLp_of_ae_tendsto, htends, memLp_of_ae_tendsto, memLp_one_iff_integrable, memLp_one_iff_integrable.mp

@@ -184,7 +184,7 @@ theorem spectralValueTerms_finite_range
 中文:
 定理 spectralValueTerms_finite_range
   条件: (p : R[X])
-  结论: (Set.range (spectralValueTerms p)).Finite
+  结论: (集合.range (spectralValueTerms p)).有限
   证明: Set.Finite.subset (Set.Finite.union (Set.finite_singleton 0) <|
     (Set.finite_Iio p.natDegree).image (fun n => ‖p.coeff n‖ ^ (1 / (p.natDegree - n : Real)))) <| by
       aesop (add simp [Set.range_subset_iff, spectralValueTerms])
@@ -209,7 +209,7 @@ theorem spectralValueTerms_bddAbove
 中文:
 定理 spectralValueTerms_bddAbove
   条件: (p : R[X])
-  结论: BddAbove (Set.range (spectralValueTerms p))
+  结论: BddAbove (集合.range (spectralValueTerms p))
   证明: (spectralValueTerms_finite_range p).bddAbove
 
 Depends on / 依赖: bddAbove, spectralValueTerms_finite_range
@@ -391,7 +391,7 @@ refine hp.eq_X_pow_iff_natDegree_le_natTrailingDegree.mpr
 
 中文:
 定理 spectralValue_eq_zero_iff
-  条件: [Nontrivial R] {p : R[X]} (hp : p.Monic)
+  条件: [非平凡 R] {p : R[X]} (hp : p.Monic)
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ spectralValue_X_pow p.natDegree⟩
 refine hp.eq_X_pow_iff_natDegree_le_natTrailingDegree.mpr
@@ -494,7 +494,7 @@ theorem norm_root_le_spectralValue
 
 中文:
 定理 norm_root_le_spectralValue
-  结论: {f : AlgebraNorm K L} (hf_pm : IsPowMul f)
+  结论: {f : 代数范数 K L} (hf_pm : IsPowMul f)
   证明: by
   by_cases hx0 : f x = 0
   · rw [hx0]; exact spectralValue_nonneg p
@@ -573,7 +573,7 @@ theorem max_norm_root_eq_spectralValue
 
 中文:
 定理 max_norm_root_eq_spectralValue
-  结论: [DecidableEq L] {f : AlgebraNorm K L} (hf_pm : IsPowMul f)
+  结论: [DecidableEq L] {f : 代数范数 K L} (hf_pm : IsPowMul f)
   证明: by
   have h_le : 0 <= ⨆ x : L, ite (x in s) (f x) 0 := by
     apply iSup_nonneg (fun _ => ?_)
@@ -700,7 +700,7 @@ theorem spectralNorm.eq_of_tower
 
 中文:
 定理 spectralNorm.eq_of_tower
-  结论: {E : 类型} [Field E] [Algebra K E] [Algebra E L]
+  结论: {E : 类型} [域 E] [代数 K E] [代数 E L]
   证明: by
   have hx : minpoly K (algebraMap E L x) = minpoly K x :=
     minpoly.algebraMap_eq (algebraMap E L).injective x
@@ -750,7 +750,7 @@ theorem spectralNorm.eq_of_normalClosure
 
 中文:
 定理 spectralNorm.eq_of_normalClosure
-  结论: {E : 整数ermediateField K L} {x : L} (g : E)
+  结论: {E : 中间域 K L} {x : L} (g : E)
   证明: h_map ▸ spectralNorm.eq_of_normalClosure' E g
 
 Depends on / 依赖: eq_of_normalClosure, h_map, spectralNorm, spectralNorm.eq_of_normalClosure
@@ -824,7 +824,7 @@ theorem spectralNorm_zero_lt
 
 中文:
 定理 spectralNorm_zero_lt
-  条件: {y : L} (hy : y != 0) (hy_alg : IsAlgebraic K y)
+  条件: {y : L} (hy : y != 0) (hy_alg : 是代数 K y)
   证明: by
   apply lt_of_le_of_ne (spectralNorm_nonneg _)
   rw [spectralNorm]; rw [ne_eq]; rw [eq_comm]; rw [spectralValue_eq_zero_iff (minpoly.monic hy_alg.isIntegral)]
@@ -877,7 +877,7 @@ theorem norm_le_spectralNorm
 
 中文:
 定理 norm_le_spectralNorm
-  结论: {f : AlgebraNorm K L} (hf_pm : IsPowMul f)
+  结论: {f : 代数范数 K L} (hf_pm : IsPowMul f)
   证明: norm_root_le_spectralValue hf_pm hf_na (minpoly.monic hx_alg.isIntegral)
     (by rw [minpoly.aeval])
 
@@ -994,7 +994,7 @@ theorem spectralNorm_eq_invariantExtension
 
 中文:
 定理 spectralNorm_eq_invariantExtension
-  条件: [hu : IsUltrametricDist K]
+  条件: [hu : 是UltrametricDist K]
   证明: by
   ext x
   have hna := hu.isNonarchimedean_norm
@@ -1036,7 +1036,7 @@ theorem isPowMul_spectralNorm_of_finiteDimensional_normal
 
 中文:
 定理 isPowMul_spectralNorm_of_finiteDimensional_normal
-  条件: [IsUltrametricDist K]
+  条件: [是UltrametricDist K]
   证明: by
   rw [spectralNorm_eq_invariantExtension K L]
   exact isPowMul_invariantExtension K L
@@ -1064,7 +1064,7 @@ definition spectralAlgNorm_of_finiteDimensional_normal
 
 中文:
 定义 spectralAlgNorm_of_finiteDimensional_normal
-  签名: [IsUltrametricDist K]
+  签名: [是UltrametricDist K]
   定义体: spectralNorm K L
   map_zero' := by rw [spectralNorm_eq_invariantExtension K L, map_zero]
   add_le' := by rw [spectralNorm_eq_invariantExtension]; exact map_add_le_add _
@@ -1098,7 +1098,7 @@ theorem spectralAlgNorm_of_finiteDimensional_normal_def
 
 中文:
 定理 spectralAlgNorm_of_finiteDimensional_normal_def
-  条件: [IsUltrametricDist K] (x : L)
+  条件: [是UltrametricDist K] (x : L)
   证明: rfl
 -/
 theorem spectralAlgNorm_of_finiteDimensional_normal_def [IsUltrametricDist K] (x : L) :
@@ -1137,7 +1137,7 @@ theorem spectralNorm_extends_of_finiteDimensional
 
 中文:
 定理 spectralNorm_extends_of_finiteDimensional
-  条件: [IsUltrametricDist K] (x : K)
+  条件: [是UltrametricDist K] (x : K)
   证明: by
   rw [spectralNorm_eq_invariantExtension]; rw [invariantExtension_extends K L x]
 
@@ -1161,7 +1161,7 @@ theorem spectralNorm_unique_of_finiteDimensional_normal
 
 中文:
 定理 spectralNorm_unique_of_finiteDimensional_normal
-  结论: {f : AlgebraNorm K L}
+  结论: {f : 代数范数 K L}
   证明: by
   have h_sup : (⨆ σ : Gal(L/K), f (σ x)) = f x := by
     rw [← @ciSup_const _ Gal(L/K) _ _ (f x)]
@@ -1195,7 +1195,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeminormClass (AlgebraNorm K ↥(normalClosure K (↥E) (AlgebraicClosure ↥E))) K
+  签名: 半范数类 (代数范数 K ↥(normalClosure K (↥E) (代数闭包 ↥E))) K
   定义体: AlgebraNormClass.toSeminormClass
 
 Depends on / 依赖: AlgebraNormClass, AlgebraNormClass.toSeminormClass, toSeminormClass
@@ -1269,7 +1269,7 @@ theorem spectralNorm_neg
 
 中文:
 定理 spectralNorm_neg
-  条件: {y : L} (hy : IsAlgebraic K y)
+  条件: {y : L} (hy : 是代数 K y)
   证明: by
   set E := K⟮y⟯
   have h_finiteDimensional_E : FiniteDimensional K E :=
@@ -1306,7 +1306,7 @@ theorem spectralNorm_smul
 
 中文:
 定理 spectralNorm_smul
-  条件: (k : K) {y : L} (hy : IsAlgebraic K y)
+  条件: (k : K) {y : L} (hy : 是代数 K y)
   证明: by
   set E := K⟮y⟯
   have h_finiteDimensional_E : FiniteDimensional K E :=
@@ -1347,7 +1347,7 @@ theorem spectralNorm_mul
 
 中文:
 定理 spectralNorm_mul
-  条件: {x y : L} (hx : IsAlgebraic K x) (hy : IsAlgebraic K y)
+  条件: {x y : L} (hx : 是代数 K x) (hy : 是代数 K y)
   证明: by
   set E := K⟮x, y⟯
   have h_finiteDimensional_E : FiniteDimensional K E :=
@@ -1471,7 +1471,7 @@ definition spectralAlgNorm
 
 中文:
 定义 spectralAlgNorm
-  签名: : AlgebraNorm K L where
+  签名: : 代数范数 K L where
   定义体: spectralNorm K L
   map_zero' := spectralNorm_zero
   add_le' _ _ := IsNonarchimedean.add_le spectralNorm_nonneg isNonarchimedean_spectralNorm
@@ -1593,7 +1593,7 @@ let : Module K E := id show Module K K⟮x⟯ by infer_instance
 
 中文:
 定理 spectralNorm_unique
-  条件: [CompleteSpace K] {f : AlgebraNorm K L} (hf_pm : IsPowMul f)
+  条件: [完备空间 K] {f : 代数范数 K L} (hf_pm : IsPowMul f)
   证明: by
   apply eq_of_powMul_faithful f hf_pm _ spectralAlgNorm_isPowMul
   intro x
@@ -1692,7 +1692,7 @@ theorem spectralNorm_unique_field_norm_ext
 
 中文:
 定理 spectralNorm_unique_field_norm_ext
-  结论: [CompleteSpace K]
+  结论: [完备空间 K]
   证明: by
   set g : AlgebraNorm K L :=
     { MulRingNorm.mulRingNormEquivAbsoluteValue.invFun f with
@@ -1734,8 +1734,8 @@ theorem NormedAlgebra.norm_eq_spectralNorm
       (MulRingNorm.isPowMul (toMulAlgebraNorm K L).toMulRingNorm)]
 
 中文:
-定理 NormedAlgebra.norm_eq_spectralNorm
-  结论: {L : 类型} [NormedField L] [NormedAlgebra K L]
+定理 赋范代数.norm_eq_spectralNorm
+  结论: {L : 类型} [赋范域 L] [赋范代数 K L]
   证明: by
   rw [← toMulAlgebraNorm_apply K L x]; rw [← spectralAlgNorm_def]; rw [← MulAlgebraNorm.coe_AlgebraNorm]; rw [spectralNorm_unique (f := (toMulAlgebraNorm K L).toAlgebraNorm)
       (MulRingNorm.isPowMul (toMulAlgebraNorm K L).toMulRingNorm)]
@@ -1862,7 +1862,7 @@ definition spectralMulAlgNorm
 
 中文:
 定义 spectralMulAlgNorm
-  签名: : MulAlgebraNorm K L
+  签名: : 乘法代数范数 K L
   定义体: { spectralAlgNorm K L with
     map_one' := spectralAlgNorm_one
     map_mul' := spectralAlgNorm_mul }
@@ -1912,7 +1912,7 @@ definition normedField
 
 中文:
 定义 normedField
-  签名: : NormedField L
+  签名: : 赋范域 L
   定义体: { (inferInstance : Field L) with
     norm x := (spectralNorm K L x : Real)
     dist x y := (spectralNorm K L (x - y) : Real)
@@ -1982,7 +1982,7 @@ definition seminormedRing
 
 中文:
 定义 seminormedRing
-  签名: : SeminormedRing L
+  签名: : Seminormed环 L
   定义体: by
   letI : NormedField L := normedField K L
   infer_instance
@@ -2007,7 +2007,7 @@ definition normedAddCommGroup
 
 中文:
 定义 normedAddCommGroup
-  签名: : NormedAddCommGroup L
+  签名: : 赋范交换加群 L
   定义体: by
   haveI : NormedField L := normedField K L
   infer_instance
@@ -2032,7 +2032,7 @@ definition seminormedAddCommGroup
 
 中文:
 定义 seminormedAddCommGroup
-  签名: : SeminormedAddCommGroup L
+  签名: : SeminormedAddComm群 L
   定义体: by
   have : NormedField L := normedField K L
   infer_instance
@@ -2059,7 +2059,7 @@ definition normedSpace
 
 中文:
 定义 normedSpace
-  签名: : @NormedSpace K L _ (seminormedAddCommGroup K L)
+  签名: : @赋范空间 K L _ (seminormedAddCommGroup K L)
   定义体: letI _ := seminormedAddCommGroup K L
   { (inferInstance : Module K L) with
     norm_smul_le r x := by
@@ -2119,7 +2119,7 @@ definition normedAlgebra'
 
 中文:
 定义 normedAlgebra'
-  签名: (E L : 类型) [Field L] [Algebra K L] [Algebra.IsAlgebraic K L] [NormedField E]
+  签名: (E L : 类型) [域 L] [代数 K L] [代数.是代数 K L] [赋范域 E]
   定义体: letI _ := normedField K L
   letI _ := normedAlgebra K L
   letI _ := Algebra.IsAlgebraic.tower_bot K E L
@@ -2156,7 +2156,7 @@ definition metricSpace
 
 中文:
 定义 metricSpace
-  签名: : MetricSpace L
+  签名: : 度量空间 L
   定义体: (normedField K L).toMetricSpace
 
 Depends on / 依赖: normedField, toMetricSpace
@@ -2175,7 +2175,7 @@ definition uniformSpace
 
 中文:
 定义 uniformSpace
-  签名: : UniformSpace L
+  签名: : 一致空间 L
   定义体: (metricSpace K L).toUniformSpace
 
 Depends on / 依赖: metricSpace, toUniformSpace
@@ -2206,7 +2206,7 @@ lemma spectralMulAlgNorm_eq_of_mem_roots
 
 中文:
 引理 spectralMulAlgNorm_eq_of_mem_roots
-  结论: (x : L) {E : 类型} [Field E] [Algebra K E] [Algebra L E]
+  结论: (x : L) {E : 类型} [域 E] [代数 K E] [代数 L E]
   证明: by
   simp only [spectralMulAlgNorm_def, spectralNorm]
   have : (aeval a) (minpoly K ((algebraMap L E) x)) = 0 := by
@@ -2242,7 +2242,7 @@ theorem spectralNorm_pow_natDegree_eq_prod_roots
 
 中文:
 定理 spectralNorm_pow_natDegree_eq_prod_roots
-  结论: (x : L) {E : 类型} [Field E] [Algebra K E]
+  结论: (x : L) {E : 类型} [域 E] [代数 K E]
   证明: by
   have h_deg : (minpoly K x).natDegree = Multiset.card ((mapAlg K E) (minpoly K x)).roots := by
     trans (mapAlg K E (minpoly K x)).natDegree

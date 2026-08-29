@@ -43,7 +43,7 @@ definition IsSubwalk
 
 中文:
 定义 IsSubwalk
-  签名: {u₁ v₁ u₂ v₂} (p : G.Walk u₁ v₁) (q : G.Walk u₂ v₂)
+  签名: {u₁ v₁ u₂ v₂} (p : G.途径 u₁ v₁) (q : G.途径 u₂ v₂)
   定义体: exists (ru : G.Walk u₂ u₁) (rv : G.Walk v₁ v₂), q = (ru.append p).append rv
 
 @[refl, simp]
@@ -67,7 +67,7 @@ lemma isSubwalk_rfl
 
 中文:
 引理 isSubwalk_rfl
-  条件: {u v} (p : G.Walk u v)
+  条件: {u v} (p : G.途径 u v)
   结论: p.IsSubwalk p
   证明: ⟨nil, nil, by simp⟩
 
@@ -92,8 +92,8 @@ lemma isSubwalk_nil_start
 
 中文:
 引理 isSubwalk_nil_start
-  条件: {u v} (q : G.Walk u v)
-  结论: (Walk.nil : G.Walk u u).IsSubwalk q
+  条件: {u v} (q : G.途径 u v)
+  结论: (途径.nil : G.途径 u u).IsSubwalk q
   证明: ⟨nil, q, by simp⟩
 
 @[deprecated (since := "2026-07-11")] alias nil_isSubwalk := isSubwalk_nil_start
@@ -117,8 +117,8 @@ theorem isSubwalk_nil_end
 
 中文:
 定理 isSubwalk_nil_end
-  条件: {u v} (q : G.Walk u v)
-  结论: (nil : G.Walk v v).IsSubwalk q
+  条件: {u v} (q : G.途径 u v)
+  结论: (nil : G.途径 v v).IsSubwalk q
   证明: ⟨q, nil, by simp⟩
 -/
 theorem isSubwalk_nil_end {u v} (q : G.Walk u v) : (nil : G.Walk v v).IsSubwalk q :=
@@ -139,7 +139,7 @@ lemma IsSubwalk.cons
 
 中文:
 引理 IsSubwalk.cons
-  结论: {u v u' v' w} {p : G.Walk u v} {q : G.Walk u' v'}
+  结论: {u v u' v' w} {p : G.途径 u v} {q : G.途径 u' v'}
   证明: by
   obtain ⟨r1, r2, rfl⟩ := hpq
   use r1.cons h, r2
@@ -165,7 +165,7 @@ lemma isSubwalk_cons
 
 中文:
 引理 isSubwalk_cons
-  条件: {u v w} (p : G.Walk u v) (h : G.Adj w u)
+  条件: {u v w} (p : G.途径 u v) (h : G.伴随 w u)
   结论: p.IsSubwalk (p.cons h)
   证明: (isSubwalk_rfl p).cons h
 
@@ -188,7 +188,7 @@ lemma IsSubwalk.concat
 
 中文:
 引理 IsSubwalk.concat
-  结论: {u v u' v' w} {p : G.Walk u v} {q : G.Walk u' v'}
+  结论: {u v u' v' w} {p : G.途径 u v} {q : G.途径 u' v'}
   证明: by
   obtain ⟨r₁, r₂, rfl⟩ := hpq
   exact ⟨r₁, r₂.concat h, by rw [append_concat]⟩
@@ -212,7 +212,7 @@ lemma isSubwalk_concat
 
 中文:
 引理 isSubwalk_concat
-  条件: {u v w} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w} (p : G.途径 u v) (h : G.伴随 v w)
   结论: p.IsSubwalk (p.concat h)
   证明: (isSubwalk_rfl p).concat h
 
@@ -235,7 +235,7 @@ lemma IsSubwalk.trans
 
 中文:
 引理 IsSubwalk.trans
-  结论: {u₁ v₁ u₂ v₂ u₃ v₃} {p₁ : G.Walk u₁ v₁} {p₂ : G.Walk u₂ v₂}
+  结论: {u₁ v₁ u₂ v₂ u₃ v₃} {p₁ : G.途径 u₁ v₁} {p₂ : G.途径 u₂ v₂}
   证明: by
   obtain ⟨q₁, r₁, rfl⟩ := h₁
   obtain ⟨q₂, r₂, rfl⟩ := h₂
@@ -273,7 +273,7 @@ lemma isSubwalk_nil_iff
 
 中文:
 引理 isSubwalk_nil_iff
-  条件: {u v u'} (p : G.Walk u v)
+  条件: {u v u'} (p : G.途径 u v)
   证明: by
   cases p with
   | nil =>
@@ -311,8 +311,8 @@ lemma nil_isSubwalk_iff_exists
   simp [IsSubwalk]
 
 中文:
-引理 nil_isSubwalk_iff_exists
-  条件: {u' u v} (q : G.Walk u v)
+引理 nil_isSubwalk_iff_存在
+  条件: {u' u v} (q : G.途径 u v)
   证明: by
   simp [IsSubwalk]
 
@@ -334,7 +334,7 @@ lemma length_le_of_isSubwalk
 
 中文:
 引理 length_le_of_isSubwalk
-  结论: {u₁ v₁ u₂ v₂} {q : G.Walk u₁ v₁} {p : G.Walk u₂ v₂}
+  结论: {u₁ v₁ u₂ v₂} {q : G.途径 u₁ v₁} {p : G.途径 u₂ v₂}
   证明: by
   grind [IsSubwalk, length_append]
 
@@ -354,7 +354,7 @@ lemma isSubwalk_of_append_left
 
 中文:
 引理 isSubwalk_of_append_left
-  结论: {v w u : V} {p₁ : G.Walk v w} {p₂ : G.Walk w u} {p₃ : G.Walk v u}
+  结论: {v w u : V} {p₁ : G.途径 v w} {p₂ : G.途径 w u} {p₃ : G.途径 v u}
   证明: ⟨nil, p₂, h⟩
 -/
 lemma isSubwalk_of_append_left {v w u : V} {p₁ : G.Walk v w} {p₂ : G.Walk w u} {p₃ : G.Walk v u}
@@ -371,7 +371,7 @@ lemma isSubwalk_of_append_right
 
 中文:
 引理 isSubwalk_of_append_right
-  结论: {v w u : V} {p₁ : G.Walk v w} {p₂ : G.Walk w u} {p₃ : G.Walk v u}
+  结论: {v w u : V} {p₁ : G.途径 v w} {p₂ : G.途径 w u} {p₃ : G.途径 v u}
   证明: ⟨p₁, nil, append_nil _ ▸ h⟩
 
 Depends on / 依赖: append_nil
@@ -391,7 +391,7 @@ theorem isSubwalk_take
 
 中文:
 定理 isSubwalk_take
-  条件: {u v : V} (p : G.Walk u v) (n : 自然数)
+  条件: {u v : V} (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).IsSubwalk p
   证明: ⟨nil, p.drop n, by simp⟩
 
@@ -411,7 +411,7 @@ theorem isSubwalk_drop
 
 中文:
 定理 isSubwalk_drop
-  条件: {u v : V} (p : G.Walk u v) (n : 自然数)
+  条件: {u v : V} (p : G.途径 u v) (n : 自然数)
   结论: (p.drop n).IsSubwalk p
   证明: ⟨p.take n, nil, by simp⟩
 
@@ -435,7 +435,7 @@ theorem isSubwalk_iff_support_isInfix
 
 中文:
 定理 isSubwalk_iff_support_isInfix
-  条件: {v w v' w' : V} {p₁ : G.Walk v w} {p₂ : G.Walk v' w'}
+  条件: {v w v' w' : V} {p₁ : G.途径 v w} {p₂ : G.途径 v' w'}
   证明: by
   refine ⟨fun ⟨ru, rv, h⟩ => ?_, fun ⟨s, t, h⟩ => ?_⟩
   · grind [support_append, support_append_eq_support_dropLast_append]
@@ -475,7 +475,7 @@ theorem isSubwalk_iff_darts_isInfix
 
 中文:
 定理 isSubwalk_iff_darts_isInfix
-  条件: {p₁ : G.Walk u v} {p₂ : G.Walk u' v'} (hnil : ¬p₁.Nil)
+  条件: {p₁ : G.途径 u v} {p₂ : G.途径 u' v'} (hnil : ¬p₁.Nil)
   证明: by
   rw [isSubwalk_iff_support_isInfix]; rw [List.infix_iff_getElem?]; rw [List.infix_iff_getElem?]
   refine ⟨fun ⟨k, hk, h⟩ => ⟨k, by grind, fun i hi => ?_⟩,
@@ -510,7 +510,7 @@ theorem isSubwalk_nil_iff_mem_support
 
 中文:
 定理 isSubwalk_nil_iff_mem_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: isSubwalk_iff_support_isInfix.trans p.support.singleton_infix_iff _
 
 Depends on / 依赖: isSubwalk_iff_support_isInfix, isSubwalk_iff_support_isInfix.trans, p.support.singleton_infix_iff, singleton_infix_iff, support
@@ -530,7 +530,7 @@ theorem isSubwalk_toWalk_iff_mem_darts
 
 中文:
 定理 isSubwalk_toWalk_iff_mem_darts
-  条件: (p : G.Walk u v) (h : G.Adj u' v')
+  条件: (p : G.途径 u v) (h : G.伴随 u' v')
   证明: by
   simp [isSubwalk_iff_darts_isInfix, List.singleton_infix_iff]
 
@@ -550,7 +550,7 @@ theorem isSubwalk_toWalk_adj_iff_mem_darts
 
 中文:
 定理 isSubwalk_toWalk_adj_iff_mem_darts
-  条件: {d : G.Dart} (p : G.Walk u v)
+  条件: {d : G.Dart} (p : G.途径 u v)
   证明: isSubwalk_toWalk_iff_mem_darts ..
 
 Depends on / 依赖: isSubwalk_toWalk_iff_mem_darts
@@ -575,7 +575,7 @@ theorem isSubwalk_toWalk_iff_mem_edges
 
 中文:
 定理 isSubwalk_toWalk_iff_mem_edges
-  条件: {p : G.Walk u v} (h : G.Adj u' v')
+  条件: {p : G.途径 u v} (h : G.伴随 u' v')
   证明: by
   rw [isSubwalk_toWalk_iff_mem_darts]; rw [isSubwalk_toWalk_iff_mem_darts]; rw [edges]; rw [List.mem_map]
   refine ⟨fun h => by grind [Dart.edge], fun h => ?_⟩
@@ -611,7 +611,7 @@ theorem infix_support_iff_mem_edges
 
 中文:
 定理 infix_support_iff_mem_edges
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have := h.elim adj_of_infix_support (adj_of_infix_support · |>.symm)
@@ -643,7 +643,7 @@ exact ext_support List.infix_antisymm h₁ h₂
 
 中文:
 引理 isSubwalk_antisymm
-  条件: {u v} {p₁ p₂ : G.Walk u v} (h₁ : p₁.IsSubwalk p₂) (h₂ : p₂.IsSubwalk p₁)
+  条件: {u v} {p₁ p₂ : G.途径 u v} (h₁ : p₁.IsSubwalk p₂) (h₂ : p₂.IsSubwalk p₁)
   证明: by
   rw [isSubwalk_iff_support_isInfix] at h₁ h₂
 exact ext_support List.infix_antisymm h₁ h₂
@@ -668,7 +668,7 @@ theorem IsSubwalk.support_subset
 
 中文:
 定理 IsSubwalk.support_subset
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: (isSubwalk_iff_support_isInfix.mp h).subset
 
 Depends on / 依赖: isSubwalk_iff_support_isInfix, isSubwalk_iff_support_isInfix.mp, subset
@@ -690,7 +690,7 @@ theorem IsSubwalk.edges_isInfix
 
 中文:
 定理 IsSubwalk.edges_isInfix
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: by
   grind [edges_append, IsSubwalk]
 
@@ -713,7 +713,7 @@ theorem IsSubwalk.edges_subset
 
 中文:
 定理 IsSubwalk.edges_subset
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: h.edges_isInfix.subset
 
 Depends on / 依赖: edges_isInfix, h.edges_isInfix.subset, subset
@@ -735,7 +735,7 @@ theorem IsSubwalk.darts_isInfix
 
 中文:
 定理 IsSubwalk.darts_isInfix
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: by
   grind [darts_append, IsSubwalk]
 
@@ -758,7 +758,7 @@ theorem IsSubwalk.darts_subset
 
 中文:
 定理 IsSubwalk.darts_subset
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: h.darts_isInfix.subset
 
 Depends on / 依赖: darts_isInfix, h.darts_isInfix.subset, subset
@@ -778,7 +778,7 @@ lemma IsSubwalk.map
 
 中文:
 引理 IsSubwalk.map
-  结论: {u v u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u v u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: by
   simp [isSubwalk_iff_support_isInfix, isSubwalk_iff_support_isInfix.mp h, List.IsInfix.map]
 -/
@@ -797,7 +797,7 @@ lemma IsSubwalk.copy
 
 中文:
 引理 IsSubwalk.copy
-  结论: {u v u' v' x y x' y'} {p : G.Walk x y} {q : G.Walk u v}
+  结论: {u v u' v' x y x' y'} {p : G.途径 x y} {q : G.途径 u v}
   证明: by
   simp [isSubwalk_iff_support_isInfix, isSubwalk_iff_support_isInfix.mp h]
 -/
@@ -816,7 +816,7 @@ lemma IsSubwalk.dropLast
 
 中文:
 引理 IsSubwalk.dropLast
-  结论: {u v u' v'} {p : G.Walk u v} {q : G.Walk u' v'}
+  结论: {u v u' v'} {p : G.途径 u v} {q : G.途径 u' v'}
   证明: (isSubwalk_take _ _).trans hpq
 -/
 protected lemma IsSubwalk.dropLast {u v u' v'} {p : G.Walk u v} {q : G.Walk u' v'}
@@ -833,7 +833,7 @@ lemma IsSubwalk.tail
 
 中文:
 引理 IsSubwalk.tail
-  结论: {u v u' v'} {p : G.Walk u v} {q : G.Walk u' v'}
+  结论: {u v u' v'} {p : G.途径 u v} {q : G.途径 u' v'}
   证明: (isSubwalk_drop _ _).trans hpq
 -/
 protected lemma IsSubwalk.tail {u v u' v'} {p : G.Walk u v} {q : G.Walk u' v'}
@@ -860,7 +860,7 @@ theorem take_isSubwalk_take
 
 中文:
 定理 take_isSubwalk_take
-  条件: {u v n k} (p : G.Walk u v) (h : n <= k)
+  条件: {u v n k} (p : G.途径 u v) (h : n <= k)
   证明: by
   induction k, h using Nat.le_induction with
   | base => rfl
@@ -904,7 +904,7 @@ theorem drop_isSubwalk_drop
 
 中文:
 定理 drop_isSubwalk_drop
-  条件: {u v n k} (p : G.Walk u v) (h : n <= k)
+  条件: {u v n k} (p : G.途径 u v) (h : n <= k)
   证明: by
   induction k, h using Nat.le_induction with
   | base => rfl

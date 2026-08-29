@@ -44,7 +44,7 @@ theorem dotProduct_block
 
 中文:
 定理 dotProduct_block
-  条件: [Fintype m] [Fintype n] [Mul α] [AddCommMonoid α] (v w : m oplus n -> α)
+  条件: [有限类型 m] [有限类型 n] [乘法 α] [加法交换幺半群 α] (v w : m oplus n -> α)
   证明: Fintype.sum_sum_type _
 
 Depends on / 依赖: Fintype, Fintype.sum_sum_type, sum_sum_type
@@ -70,7 +70,7 @@ definition fromBlocks
 
 中文:
 定义 fromBlocks
-  签名: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α) (D : Matrix o m α)
+  签名: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α) (D : 矩阵 o m α)
   定义体: of Sum.elim (fun i => Sum.elim (A i) (B i)) (fun j => Sum.elim (C j) (D j))
 
 @[simp]
@@ -94,7 +94,7 @@ theorem fromBlocks_apply₁₁
 
 中文:
 定理 fromBlocks_apply₁₁
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -116,7 +116,7 @@ theorem fromBlocks_apply₁₂
 
 中文:
 定理 fromBlocks_apply₁₂
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -138,7 +138,7 @@ theorem fromBlocks_apply₂₁
 
 中文:
 定理 fromBlocks_apply₂₁
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -158,7 +158,7 @@ theorem fromBlocks_apply₂₂
 
 中文:
 定理 fromBlocks_apply₂₂
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 -/
 theorem fromBlocks_apply₂₂ (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
@@ -175,7 +175,7 @@ definition toBlocks₁₁
 
 中文:
 定义 toBlocks₁₁
-  签名: (M : Matrix (n oplus o) (l oplus m) α)
+  签名: (M : 矩阵 (n oplus o) (l oplus m) α)
   定义体: of fun i j => M (Sum.inl i) (Sum.inl j)
 
 Depends on / 依赖: Sum.inl
@@ -193,7 +193,7 @@ definition toBlocks₁₂
 
 中文:
 定义 toBlocks₁₂
-  签名: (M : Matrix (n oplus o) (l oplus m) α)
+  签名: (M : 矩阵 (n oplus o) (l oplus m) α)
   定义体: of fun i j => M (Sum.inl i) (Sum.inr j)
 
 Depends on / 依赖: Sum.inl, Sum.inr
@@ -211,7 +211,7 @@ definition toBlocks₂₁
 
 中文:
 定义 toBlocks₂₁
-  签名: (M : Matrix (n oplus o) (l oplus m) α)
+  签名: (M : 矩阵 (n oplus o) (l oplus m) α)
   定义体: of fun i j => M (Sum.inr i) (Sum.inl j)
 
 Depends on / 依赖: Sum.inl, Sum.inr
@@ -229,7 +229,7 @@ definition toBlocks₂₂
 
 中文:
 定义 toBlocks₂₂
-  签名: (M : Matrix (n oplus o) (l oplus m) α)
+  签名: (M : 矩阵 (n oplus o) (l oplus m) α)
   定义体: of fun i j => M (Sum.inr i) (Sum.inr j)
 
 Depends on / 依赖: Sum.inr
@@ -251,7 +251,7 @@ theorem fromBlocks_toBlocks
 
 中文:
 定理 fromBlocks_toBlocks
-  条件: (M : Matrix (n oplus o) (l oplus m) α)
+  条件: (M : 矩阵 (n oplus o) (l oplus m) α)
   证明: by
   ext i j
   rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> rfl
@@ -276,7 +276,7 @@ theorem toBlocks_fromBlocks₁₁
 
 中文:
 定理 toBlocks_fromBlocks₁₁
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -300,7 +300,7 @@ theorem toBlocks_fromBlocks₁₂
 
 中文:
 定理 toBlocks_fromBlocks₁₂
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -324,7 +324,7 @@ theorem toBlocks_fromBlocks₂₁
 
 中文:
 定理 toBlocks_fromBlocks₂₁
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 
 @[simp]
@@ -344,7 +344,7 @@ theorem toBlocks_fromBlocks₂₂
 
 中文:
 定理 toBlocks_fromBlocks₂₂
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: rfl
 -/
 theorem toBlocks_fromBlocks₂₂ (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
@@ -364,7 +364,7 @@ theorem ext_iff_blocks
 
 中文:
 定理 ext_iff_blocks
-  条件: {A B : Matrix (n oplus o) (l oplus m) α}
+  条件: {A B : 矩阵 (n oplus o) (l oplus m) α}
   证明: ⟨fun h => h ▸ ⟨rfl, rfl, rfl, rfl⟩, fun ⟨h₁₁, h₁₂, h₂₁, h₂₂⟩ => by
     rw [← fromBlocks_toBlocks A]; rw [← fromBlocks_toBlocks B]; rw [h₁₁]; rw [h₁₂]; rw [h₂₁]; rw [h₂₂]⟩
 
@@ -390,7 +390,7 @@ theorem fromBlocks_inj
 
 中文:
 定理 fromBlocks_inj
-  结论: {A : Matrix n l α} {B : Matrix n m α} {C : Matrix o l α} {D : Matrix o m α}
+  结论: {A : 矩阵 n l α} {B : 矩阵 n m α} {C : 矩阵 o l α} {D : 矩阵 o m α}
   证明: ext_iff_blocks
 
 Depends on / 依赖: ext_iff_blocks
@@ -411,7 +411,7 @@ theorem fromBlocks_map
 
 中文:
 定理 fromBlocks_map
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α) (D : Matrix o m α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α) (D : 矩阵 o m α)
   证明: by
   ext i j; rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> simp [fromBlocks]
 
@@ -434,7 +434,7 @@ theorem fromBlocks_transpose
 
 中文:
 定理 fromBlocks_transpose
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   ext i j
   rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> simp [fromBlocks]
@@ -459,7 +459,7 @@ theorem fromBlocks_conjTranspose
 
 中文:
 定理 fromBlocks_conjTranspose
-  结论: [Star α] (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: [对合 α] (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   simp only [conjTranspose, fromBlocks_transpose, fromBlocks_map]
 
@@ -486,7 +486,7 @@ theorem fromBlocks_submatrix_sum_swap_left
 
 中文:
 定理 fromBlocks_submatrix_sum_swap_left
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   ext i j
   cases i <;> dsimp <;> cases f j <;> rfl
@@ -512,7 +512,7 @@ theorem fromBlocks_submatrix_sum_swap_right
 
 中文:
 定理 fromBlocks_submatrix_sum_swap_right
-  结论: (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   ext i j
   cases j <;> dsimp <;> cases f i <;> rfl
@@ -533,7 +533,7 @@ theorem fromBlocks_submatrix_sum_swap_sum_swap
 
 中文:
 定理 fromBlocks_submatrix_sum_swap_sum_swap
-  结论: {l m n o α : 类型} (A : Matrix n l α)
+  结论: {l m n o α : 类型} (A : 矩阵 n l α)
   证明: by simp
 -/
 theorem fromBlocks_submatrix_sum_swap_sum_swap {l m n o α : Type*} (A : Matrix n l α)
@@ -550,7 +550,7 @@ definition IsTwoBlockDiagonal
 
 中文:
 定义 IsTwoBlockDiagonal
-  签名: [Zero α] (A : Matrix (n oplus o) (l oplus m) α)
+  签名: [零 α] (A : 矩阵 (n oplus o) (l oplus m) α)
   定义体: toBlocks₁₂ A = 0 ∧ toBlocks₂₁ A = 0
 -/
 def IsTwoBlockDiagonal [Zero α] (A : Matrix (n oplus o) (l oplus m) α) : Prop :=
@@ -568,7 +568,7 @@ definition toBlock
 
 中文:
 定义 toBlock
-  签名: (M : Matrix m n α) (p : m -> 命题) (q : n -> 命题)
+  签名: (M : 矩阵 m n α) (p : m -> 命题) (q : n -> 命题)
   定义体: M.submatrix (↑) (↑)
 
 @[simp]
@@ -589,7 +589,7 @@ theorem toBlock_apply
 
 中文:
 定理 toBlock_apply
-  结论: (M : Matrix m n α) (p : m -> 命题) (q : n -> 命题) (i : { a // p a })
+  结论: (M : 矩阵 m n α) (p : m -> 命题) (q : n -> 命题) (i : { a // p a })
   证明: rfl
 -/
 theorem toBlock_apply (M : Matrix m n α) (p : m -> Prop) (q : n -> Prop) (i : { a // p a })
@@ -606,7 +606,7 @@ definition toSquareBlockProp
 
 中文:
 定义 toSquareBlockProp
-  签名: (M : Matrix m m α) (p : m -> 命题)
+  签名: (M : 矩阵 m m α) (p : m -> 命题)
   定义体: toBlock M _ _
 
 Depends on / 依赖: toBlock
@@ -624,7 +624,7 @@ theorem toSquareBlockProp_def
 
 中文:
 定理 toSquareBlockProp_def
-  条件: (M : Matrix m m α) (p : m -> 命题)
+  条件: (M : 矩阵 m m α) (p : m -> 命题)
   证明: rfl
 -/
 theorem toSquareBlockProp_def (M : Matrix m m α) (p : m -> Prop) :
@@ -641,7 +641,7 @@ definition toSquareBlock
 
 中文:
 定义 toSquareBlock
-  签名: (M : Matrix m m α) (b : m -> β) (k : β)
+  签名: (M : 矩阵 m m α) (b : m -> β) (k : β)
   定义体: toSquareBlockProp M _
 
 Depends on / 依赖: toSquareBlockProp
@@ -660,7 +660,7 @@ theorem toSquareBlock_def
 
 中文:
 定理 toSquareBlock_def
-  条件: (M : Matrix m m α) (b : m -> β) (k : β)
+  条件: (M : 矩阵 m m α) (b : m -> β) (k : β)
   证明: rfl
 -/
 theorem toSquareBlock_def (M : Matrix m m α) (b : m -> β) (k : β) :
@@ -678,7 +678,7 @@ theorem fromBlocks_smul
 
 中文:
 定理 fromBlocks_smul
-  结论: [SMul R α] (x : R) (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: [标量乘法 R α] (x : R) (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   ext i j; rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> simp [fromBlocks]
 
@@ -702,7 +702,7 @@ theorem fromBlocks_neg
 
 中文:
 定理 fromBlocks_neg
-  结论: [Neg R] (A : Matrix n l R) (B : Matrix n m R) (C : Matrix o l R)
+  结论: [取负 R] (A : 矩阵 n l R) (B : 矩阵 n m R) (C : 矩阵 o l R)
   证明: by
   ext i j
   cases i <;> cases j <;> simp [fromBlocks]
@@ -730,8 +730,8 @@ theorem fromBlocks_zero
 
 中文:
 定理 fromBlocks_zero
-  条件: [Zero α]
-  结论: fromBlocks (0 : Matrix n l α) 0 0 (0 : Matrix o m α) = 0
+  条件: [零 α]
+  结论: fromBlocks (0 : 矩阵 n l α) 0 0 (0 : 矩阵 o m α) = 0
   证明: by
   ext i j
   rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> rfl
@@ -751,7 +751,7 @@ theorem fromBlocks_add
 
 中文:
 定理 fromBlocks_add
-  结论: [Add α] (A : Matrix n l α) (B : Matrix n m α) (C : Matrix o l α)
+  结论: [加法 α] (A : 矩阵 n l α) (B : 矩阵 n m α) (C : 矩阵 o l α)
   证明: by
   ext i j; rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> rfl
 -/
@@ -774,7 +774,7 @@ theorem fromBlocks_multiply
 
 中文:
 定理 fromBlocks_multiply
-  结论: [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring α] (A : Matrix n l α)
+  结论: [有限类型 l] [有限类型 m] [非幺非结合半环 α] (A : 矩阵 n l α)
   证明: by
   ext i j
   rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> simp only [fromBlocks, mul_apply, of_apply,
@@ -805,7 +805,7 @@ theorem fromBlocks_diagonal_pow
 
 中文:
 定理 fromBlocks_diagonal_pow
-  结论: [Semiring α] [Fintype n] [Fintype m] [DecidableEq n] [DecidableEq m]
+  结论: [半环 α] [有限类型 n] [有限类型 m] [DecidableEq n] [DecidableEq m]
   证明: by
   induction k with
   | zero => ext (i | i) (j | j) <;> simp [one_apply]
@@ -834,7 +834,7 @@ theorem fromBlocks_mulVec
 
 中文:
 定理 fromBlocks_mulVec
-  结论: [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring α] (A : Matrix n l α)
+  结论: [有限类型 l] [有限类型 m] [非幺非结合半环 α] (A : 矩阵 n l α)
   证明: by
   ext i
   cases i <;> simp [mulVec, dotProduct]
@@ -861,7 +861,7 @@ theorem vecMul_fromBlocks
 
 中文:
 定理 vecMul_fromBlocks
-  结论: [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring α] (A : Matrix n l α)
+  结论: [有限类型 n] [有限类型 o] [非幺非结合半环 α] (A : 矩阵 n l α)
   证明: by
   ext i
   cases i <;> simp [vecMul, dotProduct]
@@ -1097,7 +1097,7 @@ theorem fromBlocks_one
 
 中文:
 定理 fromBlocks_one
-  结论: fromBlocks (1 : Matrix l l α) 0 0 (1 : Matrix m m α) = 1
+  结论: fromBlocks (1 : 矩阵 l l α) 0 0 (1 : 矩阵 m m α) = 1
   证明: by
   ext i j
   rcases i with ⟨⟩ <;> rcases j with ⟨⟩ <;> simp [one_apply]
@@ -1123,7 +1123,7 @@ theorem toBlock_one_self
 中文:
 定理 toBlock_one_self
   条件: (p : m -> 命题)
-  结论: Matrix.toBlock (1 : Matrix m m α) p p = 1
+  结论: 矩阵.toBlock (1 : 矩阵 m m α) p p = 1
   证明: toBlock_diagonal_self _ p
 
 Depends on / 依赖: toBlock_diagonal_self
@@ -1172,7 +1172,7 @@ definition blockDiagonal
 
 中文:
 定义 blockDiagonal
-  签名: (M : o -> Matrix m n α)
+  签名: (M : o -> 矩阵 m n α)
   定义体: of (fun ⟨i, k⟩ ⟨j, k'⟩ => if k = k' then M k i j else 0 : m × o -> n × o -> α)
 -/
 def blockDiagonal (M : o -> Matrix m n α) : Matrix (m × o) (n × o) α :=
@@ -1189,7 +1189,7 @@ theorem blockDiagonal_apply'
 
 中文:
 定理 blockDiagonal_apply'
-  条件: (M : o -> Matrix m n α) (i k j k')
+  条件: (M : o -> 矩阵 m n α) (i k j k')
   证明: rfl
 -/
 theorem blockDiagonal_apply' (M : o -> Matrix m n α) (i k j k') :
@@ -1208,7 +1208,7 @@ theorem blockDiagonal_apply
 
 中文:
 定理 blockDiagonal_apply
-  条件: (M : o -> Matrix m n α) (ik jk)
+  条件: (M : o -> 矩阵 m n α) (ik jk)
   证明: rfl
 
 @[simp]
@@ -1227,7 +1227,7 @@ theorem blockDiagonal_apply_eq
 
 中文:
 定理 blockDiagonal_apply_eq
-  条件: (M : o -> Matrix m n α) (i j k)
+  条件: (M : o -> 矩阵 m n α) (i j k)
   证明: if_pos rfl
 
 Depends on / 依赖: if_pos
@@ -1246,7 +1246,7 @@ theorem blockDiagonal_apply_ne
 
 中文:
 定理 blockDiagonal_apply_ne
-  条件: (M : o -> Matrix m n α) (i j) {k k'} (h : k != k')
+  条件: (M : o -> 矩阵 m n α) (i j) {k k'} (h : k != k')
   证明: if_neg h
 
 Depends on / 依赖: if_neg
@@ -1270,7 +1270,7 @@ theorem blockDiagonal_map
 
 中文:
 定理 blockDiagonal_map
-  条件: (M : o -> Matrix m n α) (f : α -> β) (hf : f 0 = 0)
+  条件: (M : o -> 矩阵 m n α) (f : α -> β) (hf : f 0 = 0)
   证明: by
   ext
   simp only [map_apply, blockDiagonal_apply]
@@ -1304,7 +1304,7 @@ theorem blockDiagonal_transpose
 
 中文:
 定理 blockDiagonal_transpose
-  条件: (M : o -> Matrix m n α)
+  条件: (M : o -> 矩阵 m n α)
   证明: by
   ext
   simp only [transpose_apply, blockDiagonal_apply, eq_comm]
@@ -1339,7 +1339,7 @@ theorem blockDiagonal_conjTranspose
 
 中文:
 定理 blockDiagonal_conjTranspose
-  结论: {α : 类型} [AddMonoid α] [StarAddMonoid α]
+  结论: {α : 类型} [加法幺半群 α] [StarAdd幺半群 α]
   证明: by
   simp only [conjTranspose, blockDiagonal_transpose]
   rw [blockDiagonal_map _ star (star_zero α)]
@@ -1368,7 +1368,7 @@ theorem blockDiagonal_zero
 
 中文:
 定理 blockDiagonal_zero
-  结论: blockDiagonal (0 : o -> Matrix m n α) = 0
+  结论: blockDiagonal (0 : o -> 矩阵 m n α) = 0
   证明: by
   ext
   simp [blockDiagonal_apply]
@@ -1429,8 +1429,8 @@ theorem blockDiagonal_one
 
 中文:
 定理 blockDiagonal_one
-  条件: [DecidableEq m] [One α]
-  结论: blockDiagonal (1 : o -> Matrix m m α) = 1
+  条件: [DecidableEq m] [幺 α]
+  结论: blockDiagonal (1 : o -> 矩阵 m m α) = 1
   证明: show (blockDiagonal fun _ : o => diagonal fun _ : m => (1 : α)) = diagonal fun _ => 1 by
     rw [blockDiagonal_diagonal]
 
@@ -1456,7 +1456,7 @@ theorem blockDiagonal_add
 
 中文:
 定理 blockDiagonal_add
-  条件: [AddZeroClass α] (M N : o -> Matrix m n α)
+  条件: [加法零类 α] (M N : o -> 矩阵 m n α)
   证明: by
   ext
   simp only [blockDiagonal_apply, Pi.add_apply, add_apply]
@@ -1488,7 +1488,7 @@ definition blockDiagonalAddMonoidHom
 
 中文:
 定义 blockDiagonalAddMonoidHom
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: blockDiagonal
   map_zero' := blockDiagonal_zero
   map_add' := blockDiagonal_add
@@ -1516,7 +1516,7 @@ theorem blockDiagonal_neg
 
 中文:
 定理 blockDiagonal_neg
-  条件: [AddGroup α] (M : o -> Matrix m n α)
+  条件: [加法群 α] (M : o -> 矩阵 m n α)
   证明: map_neg (blockDiagonalAddMonoidHom m n o α) M
 
 @[simp]
@@ -1540,7 +1540,7 @@ theorem blockDiagonal_sub
 
 中文:
 定理 blockDiagonal_sub
-  条件: [AddGroup α] (M N : o -> Matrix m n α)
+  条件: [加法群 α] (M N : o -> 矩阵 m n α)
   证明: map_sub (blockDiagonalAddMonoidHom m n o α) M N
 
 @[simp]
@@ -1565,7 +1565,7 @@ theorem blockDiagonal_mul
 
 中文:
 定理 blockDiagonal_mul
-  结论: [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring α]
+  结论: [有限类型 n] [有限类型 o] [非幺非结合半环 α]
   证明: by
   ext ⟨i, k⟩ ⟨j, k'⟩
   simp only [blockDiagonal_apply, mul_apply, ← Finset.univ_product_univ, Finset.sum_product]
@@ -1599,7 +1599,7 @@ definition blockDiagonalRingHom
 
 中文:
 定义 blockDiagonalRingHom
-  签名: [DecidableEq m] [Fintype o] [Fintype m] [NonAssocSemiring α]
+  签名: [DecidableEq m] [有限类型 o] [有限类型 m] [非结合半环 α]
   定义体: { blockDiagonalAddMonoidHom m m o α with
     toFun := blockDiagonal
     map_one' := blockDiagonal_one
@@ -1629,7 +1629,7 @@ theorem blockDiagonal_pow
 
 中文:
 定理 blockDiagonal_pow
-  结论: [DecidableEq m] [Fintype o] [Fintype m] [Semiring α]
+  结论: [DecidableEq m] [有限类型 o] [有限类型 m] [半环 α]
   证明: map_pow (blockDiagonalRingHom m o α) M n
 
 @[simp]
@@ -1654,7 +1654,7 @@ theorem blockDiagonal_smul
 
 中文:
 定理 blockDiagonal_smul
-  结论: {R : 类型} [Zero α] [SMulZeroClass R α] (x : R)
+  结论: {R : 类型} [零 α] [SMulZero类 R α] (x : R)
   证明: by
   ext
   simp only [blockDiagonal_apply, Pi.smul_apply, smul_apply]
@@ -1682,7 +1682,7 @@ definition blockDiag
 
 中文:
 定义 blockDiag
-  签名: (M : Matrix (m × o) (n × o) α) (k : o)
+  签名: (M : 矩阵 (m × o) (n × o) α) (k : o)
   定义体: of fun i j => M (i, k) (j, k)
 -/
 def blockDiag (M : Matrix (m × o) (n × o) α) (k : o) : Matrix m n α :=
@@ -1699,7 +1699,7 @@ theorem blockDiag_apply
 
 中文:
 定理 blockDiag_apply
-  条件: (M : Matrix (m × o) (n × o) α) (k : o) (i j)
+  条件: (M : 矩阵 (m × o) (n × o) α) (k : o) (i j)
   证明: rfl
 -/
 theorem blockDiag_apply (M : Matrix (m × o) (n × o) α) (k : o) (i j) :
@@ -1718,7 +1718,7 @@ theorem blockDiag_map
 
 中文:
 定理 blockDiag_map
-  条件: (M : Matrix (m × o) (n × o) α) (f : α -> β)
+  条件: (M : 矩阵 (m × o) (n × o) α) (f : α -> β)
   证明: rfl
 
 @[simp]
@@ -1740,7 +1740,7 @@ theorem blockDiag_transpose
 
 中文:
 定理 blockDiag_transpose
-  条件: (M : Matrix (m × o) (n × o) α) (k : o)
+  条件: (M : 矩阵 (m × o) (n × o) α) (k : o)
   证明: ext fun _ _ => rfl
 
 @[simp]
@@ -1760,7 +1760,7 @@ theorem blockDiag_conjTranspose
 
 中文:
 定理 blockDiag_conjTranspose
-  结论: {α : 类型} [Star α]
+  结论: {α : 类型} [对合 α]
   证明: ext fun _ _ => rfl
 -/
 theorem blockDiag_conjTranspose {α : Type*} [Star α]
@@ -1784,7 +1784,7 @@ theorem blockDiag_zero
 
 中文:
 定理 blockDiag_zero
-  结论: blockDiag (0 : Matrix (m × o) (n × o) α) = 0
+  结论: blockDiag (0 : 矩阵 (m × o) (n × o) α) = 0
   证明: rfl
 
 @[simp]
@@ -1839,7 +1839,7 @@ theorem blockDiag_blockDiagonal
 
 中文:
 定理 blockDiag_blockDiagonal
-  条件: [DecidableEq o] (M : o -> Matrix m n α)
+  条件: [DecidableEq o] (M : o -> 矩阵 m n α)
   证明: funext fun _ => ext fun i j => blockDiagonal_apply_eq M i j _
 
 Depends on / 依赖: blockDiagonal_apply_eq
@@ -1884,7 +1884,7 @@ theorem blockDiagonal_inj
 
 中文:
 定理 blockDiagonal_inj
-  条件: [DecidableEq o] {M N : o -> Matrix m n α}
+  条件: [DecidableEq o] {M N : o -> 矩阵 m n α}
   证明: blockDiagonal_injective.eq_iff
 
 @[simp]
@@ -1906,7 +1906,7 @@ theorem blockDiag_one
 
 中文:
 定理 blockDiag_one
-  条件: [DecidableEq o] [DecidableEq m] [One α]
+  条件: [DecidableEq o] [DecidableEq m] [幺 α]
   证明: funext blockDiag_diagonal _
 
 Depends on / 依赖: blockDiag_diagonal
@@ -1928,7 +1928,7 @@ theorem blockDiag_add
 
 中文:
 定理 blockDiag_add
-  条件: [Add α] (M N : Matrix (m × o) (n × o) α)
+  条件: [加法 α] (M N : 矩阵 (m × o) (n × o) α)
   证明: rfl
 -/
 theorem blockDiag_add [Add α] (M N : Matrix (m × o) (n × o) α) :
@@ -1953,7 +1953,7 @@ definition blockDiagAddMonoidHom
 
 中文:
 定义 blockDiagAddMonoidHom
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: blockDiag
   map_zero' := blockDiag_zero
   map_add' := blockDiag_add
@@ -1981,7 +1981,7 @@ theorem blockDiag_neg
 
 中文:
 定理 blockDiag_neg
-  条件: [AddGroup α] (M : Matrix (m × o) (n × o) α)
+  条件: [加法群 α] (M : 矩阵 (m × o) (n × o) α)
   结论: blockDiag (-M) = -blockDiag M
   证明: map_neg (blockDiagAddMonoidHom m n o α) M
 
@@ -2005,7 +2005,7 @@ theorem blockDiag_sub
 
 中文:
 定理 blockDiag_sub
-  条件: [AddGroup α] (M N : Matrix (m × o) (n × o) α)
+  条件: [加法群 α] (M N : 矩阵 (m × o) (n × o) α)
   证明: map_sub (blockDiagAddMonoidHom m n o α) M N
 
 @[simp]
@@ -2027,7 +2027,7 @@ theorem blockDiag_smul
 
 中文:
 定理 blockDiag_smul
-  结论: {R : 类型} [SMul R α] (x : R)
+  结论: {R : 类型} [标量乘法 R α] (x : R)
   证明: rfl
 -/
 theorem blockDiag_smul {R : Type*} [SMul R α] (x : R)
@@ -2056,7 +2056,7 @@ definition blockDiagonal'
 
 中文:
 定义 blockDiagonal'
-  签名: (M : 对任意 i, Matrix (m' i) (n' i) α)
+  签名: (M : 对任意 i, 矩阵 (m' i) (n' i) α)
   定义体: of
     (fun ⟨k, i⟩ ⟨k', j⟩ => if h : k = k' then M k i (cast (congr_arg n' h.symm) j) else 0 :
       (Σ i, m' i) -> (Σ i, n' i) -> α)
@@ -2079,7 +2079,7 @@ theorem blockDiagonal'_apply'
 
 中文:
 定理 blockDiagonal'_apply'
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α) (k i k' j)
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α) (k i k' j)
   证明: rfl
 -/
 theorem blockDiagonal'_apply' (M : forall i, Matrix (m' i) (n' i) α) (k i k' j) :
@@ -2097,7 +2097,7 @@ theorem blockDiagonal'_eq_blockDiagonal
 
 中文:
 定理 blockDiagonal'_eq_blockDiagonal
-  条件: (M : o -> Matrix m n α) {k k'} (i j)
+  条件: (M : o -> 矩阵 m n α) {k k'} (i j)
   证明: rfl
 -/
 theorem blockDiagonal'_eq_blockDiagonal (M : o -> Matrix m n α) {k k'} (i j) :
@@ -2114,7 +2114,7 @@ theorem blockDiagonal'_submatrix_eq_blockDiagonal
 
 中文:
 定理 blockDiagonal'_submatrix_eq_blockDiagonal
-  条件: (M : o -> Matrix m n α)
+  条件: (M : o -> 矩阵 m n α)
   证明: Matrix.ext fun ⟨_, _⟩ ⟨_, _⟩ => rfl
 -/
 theorem blockDiagonal'_submatrix_eq_blockDiagonal (M : o -> Matrix m n α) :
@@ -2134,7 +2134,7 @@ theorem blockDiagonal'_apply
 
 中文:
 定理 blockDiagonal'_apply
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α) (ik jk)
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α) (ik jk)
   证明: rfl
 
 @[simp]
@@ -2154,7 +2154,7 @@ theorem blockDiagonal'_apply_eq
 
 中文:
 定理 blockDiagonal'_apply_eq
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α) (k i j)
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α) (k i j)
   证明: dif_pos rfl
 -/
 theorem blockDiagonal'_apply_eq (M : forall i, Matrix (m' i) (n' i) α) (k i j) :
@@ -2171,7 +2171,7 @@ theorem blockDiagonal'_apply_ne
 
 中文:
 定理 blockDiagonal'_apply_ne
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α) {k k'} (i j) (h : k != k')
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α) {k k'} (i j) (h : k != k')
   证明: dif_neg h
 -/
 theorem blockDiagonal'_apply_ne (M : forall i, Matrix (m' i) (n' i) α) {k k'} (i j) (h : k != k') :
@@ -2193,7 +2193,7 @@ theorem blockDiagonal'_map
 
 中文:
 定理 blockDiagonal'_map
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α) (f : α -> β) (hf : f 0 = 0)
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α) (f : α -> β) (hf : f 0 = 0)
   证明: by
   ext
   simp only [map_apply, blockDiagonal'_apply]
@@ -2223,7 +2223,7 @@ theorem blockDiagonal'_transpose
 
 中文:
 定理 blockDiagonal'_transpose
-  条件: (M : 对任意 i, Matrix (m' i) (n' i) α)
+  条件: (M : 对任意 i, 矩阵 (m' i) (n' i) α)
   证明: by
   ext ⟨ii, ix⟩ ⟨ji, jx⟩
   simp only [transpose_apply, blockDiagonal'_apply]
@@ -2252,7 +2252,7 @@ theorem blockDiagonal'_conjTranspose
 
 中文:
 定理 blockDiagonal'_conjTranspose
-  结论: {α} [AddMonoid α] [StarAddMonoid α]
+  结论: {α} [加法幺半群 α] [StarAdd幺半群 α]
   证明: by
   simp only [conjTranspose, blockDiagonal'_transpose]
   exact blockDiagonal'_map _ star (star_zero α)
@@ -2279,7 +2279,7 @@ theorem blockDiagonal'_zero
 
 中文:
 定理 blockDiagonal'_zero
-  结论: blockDiagonal' (0 : 对任意 i, Matrix (m' i) (n' i) α) = 0
+  结论: blockDiagonal' (0 : 对任意 i, 矩阵 (m' i) (n' i) α) = 0
   证明: by
   ext
   simp [blockDiagonal'_apply]
@@ -2338,7 +2338,7 @@ theorem blockDiagonal'_one
 
 中文:
 定理 blockDiagonal'_one
-  条件: [对任意 i, DecidableEq (m' i)] [One α]
+  条件: [对任意 i, DecidableEq (m' i)] [幺 α]
   证明: show (blockDiagonal' fun i : o => diagonal fun _ : m' i => (1 : α)) = diagonal fun _ => 1 by
     rw [blockDiagonal'_diagonal]
 -/
@@ -2363,7 +2363,7 @@ theorem blockDiagonal'_add
 
 中文:
 定理 blockDiagonal'_add
-  条件: [AddZeroClass α] (M N : 对任意 i, Matrix (m' i) (n' i) α)
+  条件: [加法零类 α] (M N : 对任意 i, 矩阵 (m' i) (n' i) α)
   证明: by
   ext
   simp only [blockDiagonal'_apply, Pi.add_apply, add_apply]
@@ -2392,8 +2392,8 @@ definition blockDiagonal'AddMonoidHom
   map_add' := blockDiagonal'_add
 
 中文:
-定义 blockDiagonal'AddMonoidHom
-  签名: [AddZeroClass α]
+定义 blockDiagonal'加法幺半群态射
+  签名: [加法零类 α]
   定义体: blockDiagonal'
   map_zero' := blockDiagonal'_zero
   map_add' := blockDiagonal'_add
@@ -2419,7 +2419,7 @@ theorem blockDiagonal'_neg
 
 中文:
 定理 blockDiagonal'_neg
-  条件: [AddGroup α] (M : 对任意 i, Matrix (m' i) (n' i) α)
+  条件: [加法群 α] (M : 对任意 i, 矩阵 (m' i) (n' i) α)
   证明: map_neg (blockDiagonal'AddMonoidHom m' n' α) M
 
 @[simp]
@@ -2441,7 +2441,7 @@ theorem blockDiagonal'_sub
 
 中文:
 定理 blockDiagonal'_sub
-  条件: [AddGroup α] (M N : 对任意 i, Matrix (m' i) (n' i) α)
+  条件: [加法群 α] (M N : 对任意 i, 矩阵 (m' i) (n' i) α)
   证明: map_sub (blockDiagonal'AddMonoidHom m' n' α) M N
 
 @[simp]
@@ -2468,7 +2468,7 @@ theorem blockDiagonal'_mul
 
 中文:
 定理 blockDiagonal'_mul
-  结论: [NonUnitalNonAssocSemiring α] [对任意 i, Fintype (n' i)] [Fintype o]
+  结论: [非幺非结合半环 α] [对任意 i, 有限类型 (n' i)] [有限类型 o]
   证明: by
   ext ⟨k, i⟩ ⟨k', j⟩
   simp only [blockDiagonal'_apply, mul_apply, ← Finset.univ_sigma_univ, Finset.sum_sigma]
@@ -2507,8 +2507,8 @@ definition blockDiagonal'RingHom
     map_mul' := blockDiagonal'_mul }
 
 中文:
-定义 blockDiagonal'RingHom
-  签名: [对任意 i, DecidableEq (m' i)] [Fintype o] [对任意 i, Fintype (m' i)]
+定义 blockDiagonal'环态射
+  签名: [对任意 i, DecidableEq (m' i)] [有限类型 o] [对任意 i, 有限类型 (m' i)]
   定义体: { blockDiagonal'AddMonoidHom m' m' α with
     toFun := blockDiagonal'
     map_one' := blockDiagonal'_one
@@ -2536,7 +2536,7 @@ theorem blockDiagonal'_pow
 
 中文:
 定理 blockDiagonal'_pow
-  结论: [对任意 i, DecidableEq (m' i)] [Fintype o] [对任意 i, Fintype (m' i)] [Semiring α]
+  结论: [对任意 i, DecidableEq (m' i)] [有限类型 o] [对任意 i, 有限类型 (m' i)] [半环 α]
   证明: map_pow (blockDiagonal'RingHom m' α) M n
 
 @[simp]
@@ -2559,7 +2559,7 @@ theorem blockDiagonal'_smul
 
 中文:
 定理 blockDiagonal'_smul
-  结论: {R : 类型} [Zero α] [SMulZeroClass R α] (x : R)
+  结论: {R : 类型} [零 α] [SMulZero类 R α] (x : R)
   证明: by
   ext
   simp only [blockDiagonal'_apply, Pi.smul_apply, smul_apply]
@@ -2585,7 +2585,7 @@ definition blockDiag'
 
 中文:
 定义 blockDiag'
-  签名: (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (k : o)
+  签名: (M : 矩阵 (Σ i, m' i) (Σ i, n' i) α) (k : o)
   定义体: of fun i j => M ⟨k, i⟩ ⟨k, j⟩
 -/
 def blockDiag' (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (k : o) : Matrix (m' k) (n' k) α :=
@@ -2602,7 +2602,7 @@ theorem blockDiag'_apply
 
 中文:
 定理 blockDiag'_apply
-  条件: (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (k : o) (i j)
+  条件: (M : 矩阵 (Σ i, m' i) (Σ i, n' i) α) (k : o) (i j)
   证明: rfl
 -/
 theorem blockDiag'_apply (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (k : o) (i j) :
@@ -2621,7 +2621,7 @@ theorem blockDiag'_map
 
 中文:
 定理 blockDiag'_map
-  条件: (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (f : α -> β)
+  条件: (M : 矩阵 (Σ i, m' i) (Σ i, n' i) α) (f : α -> β)
   证明: rfl
 
 @[simp]
@@ -2643,7 +2643,7 @@ theorem blockDiag'_transpose
 
 中文:
 定理 blockDiag'_transpose
-  条件: (M : Matrix (Σ i, m' i) (Σ i, n' i) α) (k : o)
+  条件: (M : 矩阵 (Σ i, m' i) (Σ i, n' i) α) (k : o)
   证明: ext fun _ _ => rfl
 
 @[simp]
@@ -2663,7 +2663,7 @@ theorem blockDiag'_conjTranspose
 
 中文:
 定理 blockDiag'_conjTranspose
-  结论: {α : 类型} [Star α]
+  结论: {α : 类型} [对合 α]
   证明: ext fun _ _ => rfl
 -/
 theorem blockDiag'_conjTranspose {α : Type*} [Star α]
@@ -2687,7 +2687,7 @@ theorem blockDiag'_zero
 
 中文:
 定理 blockDiag'_zero
-  结论: blockDiag' (0 : Matrix (Σ i, m' i) (Σ i, n' i) α) = 0
+  结论: blockDiag' (0 : 矩阵 (Σ i, m' i) (Σ i, n' i) α) = 0
   证明: rfl
 
 @[simp]
@@ -2742,7 +2742,7 @@ theorem blockDiag'_blockDiagonal'
 
 中文:
 定理 blockDiag'_blockDiagonal'
-  条件: [DecidableEq o] (M : 对任意 i, Matrix (m' i) (n' i) α)
+  条件: [DecidableEq o] (M : 对任意 i, 矩阵 (m' i) (n' i) α)
   证明: funext fun _ => ext fun _ _ => blockDiagonal'_apply_eq M _ _ _
 -/
 theorem blockDiag'_blockDiagonal' [DecidableEq o] (M : forall i, Matrix (m' i) (n' i) α) :
@@ -2783,7 +2783,7 @@ theorem blockDiagonal'_inj
 
 中文:
 定理 blockDiagonal'_inj
-  条件: [DecidableEq o] {M N : 对任意 i, Matrix (m' i) (n' i) α}
+  条件: [DecidableEq o] {M N : 对任意 i, 矩阵 (m' i) (n' i) α}
   证明: blockDiagonal'_injective.eq_iff
 
 @[simp]
@@ -2803,7 +2803,7 @@ theorem blockDiag'_one
 
 中文:
 定理 blockDiag'_one
-  条件: [DecidableEq o] [对任意 i, DecidableEq (m' i)] [One α]
+  条件: [DecidableEq o] [对任意 i, DecidableEq (m' i)] [幺 α]
   证明: funext blockDiag'_diagonal _
 -/
 theorem blockDiag'_one [DecidableEq o] [forall i, DecidableEq (m' i)] [One α] :
@@ -2823,7 +2823,7 @@ theorem blockDiag'_add
 
 中文:
 定理 blockDiag'_add
-  条件: [Add α] (M N : Matrix (Σ i, m' i) (Σ i, n' i) α)
+  条件: [加法 α] (M N : 矩阵 (Σ i, m' i) (Σ i, n' i) α)
   证明: rfl
 -/
 theorem blockDiag'_add [Add α] (M N : Matrix (Σ i, m' i) (Σ i, n' i) α) :
@@ -2847,8 +2847,8 @@ definition blockDiag'AddMonoidHom
   map_add' := blockDiag'_add
 
 中文:
-定义 blockDiag'AddMonoidHom
-  签名: [AddZeroClass α]
+定义 blockDiag'加法幺半群态射
+  签名: [加法零类 α]
   定义体: blockDiag'
   map_zero' := blockDiag'_zero
   map_add' := blockDiag'_add
@@ -2874,7 +2874,7 @@ theorem blockDiag'_neg
 
 中文:
 定理 blockDiag'_neg
-  条件: [AddGroup α] (M : Matrix (Σ i, m' i) (Σ i, n' i) α)
+  条件: [加法群 α] (M : 矩阵 (Σ i, m' i) (Σ i, n' i) α)
   证明: map_neg (blockDiag'AddMonoidHom m' n' α) M
 
 @[simp]
@@ -2896,7 +2896,7 @@ theorem blockDiag'_sub
 
 中文:
 定理 blockDiag'_sub
-  条件: [AddGroup α] (M N : Matrix (Σ i, m' i) (Σ i, n' i) α)
+  条件: [加法群 α] (M N : 矩阵 (Σ i, m' i) (Σ i, n' i) α)
   证明: map_sub (blockDiag'AddMonoidHom m' n' α) M N
 
 @[simp]
@@ -2916,7 +2916,7 @@ theorem blockDiag'_smul
 
 中文:
 定理 blockDiag'_smul
-  结论: {R : 类型} [SMul R α] (x : R)
+  结论: {R : 类型} [标量乘法 R α] (x : R)
   证明: rfl
 -/
 theorem blockDiag'_smul {R : Type*} [SMul R α] (x : R)
@@ -2943,7 +2943,7 @@ theorem toBlock_mul_eq_mul
 
 中文:
 定理 toBlock_mul_eq_mul
-  结论: {m n k : 类型} [Fintype n] (p : m -> 命题) (q : k -> 命题)
+  结论: {m n k : 类型} [有限类型 n] (p : m -> 命题) (q : k -> 命题)
   证明: by
   ext i k
   simp only [toBlock_apply, mul_apply]
@@ -2973,7 +2973,7 @@ theorem toBlock_mul_eq_add
 
 中文:
 定理 toBlock_mul_eq_add
-  结论: {m n k : 类型} [Fintype n] (p : m -> 命题) (q : n -> 命题)
+  结论: {m n k : 类型} [有限类型 n] (p : m -> 命题) (q : n -> 命题)
   证明: by
   ext i k
   simp only [toBlock_apply, mul_apply]
@@ -3004,7 +3004,7 @@ lemma Matrix.map_toSquareBlock
   proof: submatrix_map _ _ _ _
 
 中文:
-引理 Matrix.map_toSquareBlock
+引理 矩阵.map_toSquareBlock
   证明: submatrix_map _ _ _ _
 
 Depends on / 依赖: submatrix_map
@@ -3026,7 +3026,7 @@ lemma Matrix.comp_toSquareBlock
   rfl
 
 中文:
-引理 Matrix.comp_toSquareBlock
+引理 矩阵.comp_toSquareBlock
   结论: {b : m -> α}
   证明: Equiv.prodSubtypeFstEquivSubtypeProd.symm
     (M.comp m m n n R).toSquareBlock (fun i => b i.1) a =
@@ -3056,7 +3056,7 @@ lemma Matrix.comp_diagonal
   simp [diagonal, blockDiagonal, Matrix.ite_apply]
 
 中文:
-引理 Matrix.comp_diagonal
+引理 矩阵.comp_diagonal
   条件: (d)
   证明: by
   ext

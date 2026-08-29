@@ -37,8 +37,8 @@ lemma Ideal.finite_minimalPrimes_of_isNoetherianRing
   have h1 : ¬ I.IsPrime := by contrapose hI; simp [minimalPrimes_eq_subsing
 
 中文:
-引理 Ideal.finite_minimalPrimes_of_isNoetherianRing
-  条件: (I : Ideal R)
+引理 理想.finite_minimalPrimes_of_isNoetherianRing
+  条件: (I : 理想 R)
   证明: by
   by_contra hI
   obtain ⟨I : Ideal R, hI : ¬ I.minimalPrimes.Finite, hmax⟩ :=
@@ -75,7 +75,7 @@ lemma minimalPrimes.finite_of_isNoetherianRing
 
 中文:
 引理 minimalPrimes.finite_of_isNoetherianRing
-  结论: (minimalPrimes R).Finite
+  结论: (minimalPrimes R).有限
   证明: Ideal.finite_minimalPrimes_of_isNoetherianRing R ⊥
 
 Depends on / 依赖: Ideal.finite_minimalPrimes_of_isNoetherianRing, finite_minimalPrimes_of_isNoetherianRing

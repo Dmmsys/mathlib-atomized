@@ -79,7 +79,7 @@ instance [HasFilteredColimitsOfSize.{w,
   body: by infer_instance
 
 中文:
-实例 [HasFilteredColimitsOfSize.{w,
+实例 [有FilteredColimitsOfSize.{w,
   签名: w'} C] :
   定义体: by infer_instance
 
@@ -103,7 +103,7 @@ instance hasExactColimitsOfShape
 
 中文:
 实例 hasExactColimitsOfShape
-  签名: (J : Type w) [Category.{w'} J] [HasFiniteLimits C]
+  签名: (J : 类型 w) [范畴.{w'} J] [有有限极限 C]
   定义体: ⟨fun K _ _ => ⟨fun {F} => ⟨fun hc => ⟨isLimitOfEval _ _ (fun i => by
       let e := preservesColimitNatIso (J := J) (eval C c i)
       exact (IsLimit.postcomposeHomEquiv (Functor.isoWhiskerLeft F e) _).1
@@ -133,7 +133,7 @@ instance ab5OfSize
 
 中文:
 实例 ab5OfSize
-  签名: [HasFilteredColimitsOfSize.{w', w} C] [HasFiniteLimits C]
+  签名: [有FilteredColimitsOfSize.{w', w} C] [有有限极限 C]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -158,7 +158,7 @@ instance isGrothendieckAbelian
 
 中文:
 实例 isGrothendieckAbelian
-  签名: [Abelian C] [IsGrothendieckAbelian.{w} C]
+  签名: [交换 C] [是GrothendieckAbelian.{w} C]
   定义体: by
     have : HasCoproductsOfShape ι C :=
       hasColimitsOfShape_of_equivalence (Discrete.equivalence (equivShrink.{w} ι)).symm

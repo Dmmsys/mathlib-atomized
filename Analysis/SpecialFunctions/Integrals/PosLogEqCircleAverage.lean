@@ -42,7 +42,7 @@ lemma circleIntegrable_log_norm_sub_const
   proof: MeromorphicOn.circleIntegrable_log_norm (fun z hz => by fun_prop)
 
 中文:
-引理 circleIntegrable_log_norm_sub_const
+引理 circle整数egrable_log_norm_sub_const
   条件: (r : 实数)
   结论: Circle整数egrable (log ‖· - a‖) c r
   证明: MeromorphicOn.circleIntegrable_log_norm (fun z hz => by fun_prop)

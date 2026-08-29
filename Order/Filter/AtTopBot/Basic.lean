@@ -41,8 +41,8 @@ theorem hasAntitoneBasis_atTop
 
 中文:
 定理 hasAntitoneBasis_atTop
-  条件: [Nonempty α]
-  结论: (@atTop α _).HasAntitoneBasis Ici
+  条件: [非空 α]
+  结论: (@atTop α _).有AntitoneBasis 左闭右无界区间
   证明: .iInf_principal fun _ _ => Ici_subset_Ici.2
 
 Depends on / 依赖: Ici_subset_Ici, iInf_principal
@@ -63,8 +63,8 @@ theorem atTop_basis
 
 中文:
 定理 atTop_basis
-  条件: [Nonempty α]
-  结论: (@atTop α _).HasBasis (fun _ => True) Ici
+  条件: [非空 α]
+  结论: (@atTop α _).有基 (fun _ => 真) 左闭右无界区间
   证明: hasAntitoneBasis_atTop.1
 
 @[to_dual existing]
@@ -87,7 +87,7 @@ lemma atBot_basis
 
 中文:
 引理 atBot_basis
-  条件: {α : 类型} [Preorder α] [IsCodirectedOrder α] [Nonempty α]
+  条件: {α : 类型} [预序 α] [IsCodirectedOrder α] [非空 α]
   证明: atTop_basis (α := αᵒᵈ)
 
 @[to_dual]
@@ -112,8 +112,8 @@ lemma atTop_basis_Ioi
 
 中文:
 引理 atTop_basis_Ioi
-  条件: [Nonempty α] [NoMaxOrder α]
-  结论: (@atTop α _).HasBasis (fun _ => True) Ioi
+  条件: [非空 α] [NoMax序 α]
+  结论: (@atTop α _).有基 (fun _ => 真) 左开右无界区间
   证明: atTop_basis.to_hasBasis (fun a ha => ⟨a, ha, Ioi_subset_Ici_self⟩) fun a ha =>
     (exists_gt a).imp fun _b hb => ⟨ha, Ici_subset_Ioi.2 hb⟩
 
@@ -144,8 +144,8 @@ lemma atTop_basis_Ioi'
 
 中文:
 引理 atTop_basis_Ioi'
-  条件: [NoMaxOrder α] (a : α)
-  结论: atTop.HasBasis (a < ·) Ioi
+  条件: [NoMax序 α] (a : α)
+  结论: atTop.有基 (a < ·) 左开右无界区间
   证明: by
   have : Nonempty α := ⟨a⟩
   refine atTop_basis_Ioi.to_hasBasis (fun b _ => ?_) fun b _ => ⟨b, trivial, Subset.rfl⟩
@@ -181,7 +181,7 @@ theorem atTop_basis'
 中文:
 定理 atTop_basis'
   条件: (a : α)
-  结论: atTop.HasBasis (a <= ·) Ici
+  结论: atTop.有基 (a <= ·) 左闭右无界区间
   证明: by
   have : Nonempty α := ⟨a⟩
   refine atTop_basis.to_hasBasis (fun b _ => ?_) fun b _ => ⟨b, trivial, Subset.rfl⟩
@@ -211,7 +211,7 @@ instance atTop_neBot
 
 中文:
 实例 atTop_neBot
-  签名: : NeBot (atTop : Filter α)
+  签名: : NeBot (atTop : 滤子 α)
   定义体: atTop_basis.neBot_iff.2 fun _ => nonempty_Ici
 
 @[to_dual]
@@ -235,7 +235,7 @@ theorem atTop_neBot_iff
 
 中文:
 定理 atTop_neBot_iff
-  条件: {α : 类型} [Preorder α]
+  条件: {α : 类型} [预序 α]
   证明: by
   refine ⟨fun h => ⟨nonempty_of_neBot atTop, ⟨fun x y => ?_⟩⟩, fun ⟨h₁, h₂⟩ => atTop_neBot⟩
   exact ((eventually_ge_atTop x).and (eventually_ge_atTop y)).exists
@@ -263,8 +263,8 @@ lemma mem_atTop_sets
 
 中文:
 引理 mem_atTop_sets
-  条件: {s : Set α}
-  结论: s in (atTop : Filter α) ↔ 存在 a : α, 对任意 b, a <= b -> b in s
+  条件: {s : 集合 α}
+  结论: s in (atTop : 滤子 α) ↔ 存在 a : α, 对任意 b, a <= b -> b in s
   证明: atTop_basis.mem_iff.trans exists_congr fun _ => iff_of_eq (true_and _)
 
 @[to_dual (attr := simp)]
@@ -339,7 +339,7 @@ exact exists_congr fun a => .symm forall_ge_iff Monotone.exists fun _ _ _ hb H n
 @[to_dual existing]
 
 中文:
-引理 exists_eventually_atTop
+引理 存在_eventually_atTop
   条件: {r : α -> β -> 命题}
   证明: by
   simp_rw [eventually_atTop, ← exists_comm (α := α)]
@@ -368,8 +368,8 @@ lemma exists_eventually_atBot
 @[to_dual]
 
 中文:
-引理 exists_eventually_atBot
-  结论: {α : 类型} [Preorder α] [IsCodirectedOrder α] [Nonempty α]
+引理 存在_eventually_atBot
+  结论: {α : 类型} [预序 α] [IsCodirectedOrder α] [非空 α]
   证明: exists_eventually_atTop (α := αᵒᵈ)
 
 @[to_dual]
@@ -417,7 +417,7 @@ theorem frequently_atTop'
 
 中文:
 定理 frequently_atTop'
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: (存在ᶠ x in atTop, p x) ↔ 对任意 a, 存在 b > a, p b
   证明: atTop_basis_Ioi.frequently_iff.trans by simp
 
@@ -490,7 +490,7 @@ theorem extraction_forall_of_frequently
     cases n <;> simp [hu']
 
 中文:
-定理 extraction_forall_of_frequently
+定理 extraction_对任意_of_frequently
   条件: {P : 自然数 -> 自然数 -> 命题} (h : 对任意 n, 存在ᶠ k in atTop, P n k)
   证明: by
   simp only [frequently_atTop'] at h
@@ -526,7 +526,7 @@ theorem extraction_forall_of_eventually
   proof: extraction_forall_of_frequently fun n => (h n).frequently
 
 中文:
-定理 extraction_forall_of_eventually
+定理 extraction_对任意_of_eventually
   条件: {P : 自然数 -> 自然数 -> 命题} (h : 对任意 n, 对任意ᶠ k in atTop, P n k)
   证明: extraction_forall_of_frequently fun n => (h n).frequently
 
@@ -545,7 +545,7 @@ theorem extraction_forall_of_eventually'
   proof: extraction_forall_of_eventually (by simp [eventually_atTop, h])
 
 中文:
-定理 extraction_forall_of_eventually'
+定理 extraction_对任意_of_eventually'
   条件: {P : 自然数 -> 自然数 -> 命题} (h : 对任意 n, 存在 N, 对任意 k >= N, P n k)
   证明: extraction_forall_of_eventually (by simp [eventually_atTop, h])
 
@@ -570,7 +570,7 @@ theorem inf_map_atTop_neBot_iff
 
 中文:
 定理 inf_map_atTop_neBot_iff
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   simp_rw [inf_neBot_iff_frequently_left, frequently_map, frequently_atTop]; rfl
 
@@ -598,8 +598,8 @@ lemma exists_le_of_tendsto_atTop
 @[to_dual (dont_translate := α)]
 
 中文:
-引理 exists_le_of_tendsto_atTop
-  条件: (h : Tendsto u atTop atTop) (a : α) (b : β)
+引理 存在_le_of_tendsto_atTop
+  条件: (h : 收敛 u atTop atTop) (a : α) (b : β)
   证明: by
   have : Nonempty α := ⟨a⟩
   have : forallᶠ x in atTop, a <= x ∧ b <= u x :=
@@ -630,8 +630,8 @@ theorem exists_lt_of_tendsto_atTop
   exact ⟨a', ha', lt_of_lt_of_le hb' ha''⟩
 
 中文:
-定理 exists_lt_of_tendsto_atTop
-  条件: [NoMaxOrder β] (h : Tendsto u atTop atTop) (a : α) (b : β)
+定理 存在_lt_of_tendsto_atTop
+  条件: [NoMax序 β] (h : 收敛 u atTop atTop) (a : α) (b : β)
   证明: by
   obtain ⟨b', hb'⟩ := exists_gt b
   rcases exists_le_of_tendsto_atTop h a b' with ⟨a', ha', ha''⟩
@@ -664,7 +664,7 @@ theorem tendsto_atTop'
 
 中文:
 定理 tendsto_atTop'
-  结论: Tendsto f atTop l ↔ 对任意 s in l, 存在 a, 对任意 b, a <= b -> f b in s
+  结论: 收敛 f atTop l ↔ 对任意 s in l, 存在 a, 对任意 b, a <= b -> f b in s
   证明: by
   simp only [tendsto_def, mem_atTop_sets, mem_preimage]
 
@@ -687,7 +687,7 @@ theorem tendsto_atTop_principal
 
 中文:
 定理 tendsto_atTop_principal
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   证明: by
   simp_rw [tendsto_iff_comap, comap_principal, le_principal_iff, mem_atTop_sets, mem_preimage]
 
@@ -712,7 +712,7 @@ theorem tendsto_atTop_atTop
 
 中文:
 定理 tendsto_atTop_atTop
-  结论: Tendsto f atTop atTop ↔ 对任意 b : β, 存在 i : α, 对任意 a : α, i <= a -> b <= f a
+  结论: 收敛 f atTop atTop ↔ 对任意 b : β, 存在 i : α, 对任意 a : α, i <= a -> b <= f a
   证明: tendsto_iInf.trans forall_congr' fun _ => tendsto_atTop_principal
 
 @[to_dual]
@@ -735,7 +735,7 @@ theorem tendsto_atTop_atBot
 
 中文:
 定理 tendsto_atTop_atBot
-  结论: Tendsto f atTop atBot ↔ 对任意 b : β, 存在 i : α, 对任意 a : α, i <= a -> f a <= b
+  结论: 收敛 f atTop atBot ↔ 对任意 b : β, 存在 i : α, 对任意 a : α, i <= a -> f a <= b
   证明: tendsto_atTop_atTop (β := βᵒᵈ)
 
 @[to_dual]
@@ -762,7 +762,7 @@ alias _root_.Monotone.tendsto_atTop_atTop_iff := tendsto_atTop_atTop_iff_of_mono
 
 中文:
 定理 tendsto_atTop_atTop_iff_of_monotone
-  条件: (hf : Monotone f)
+  条件: (hf : 递增 f)
   证明: tendsto_atTop_atTop.trans forall_congr' fun _ => exists_congr fun a =>
 ⟨fun h => h a (le_refl a), fun h _a' ha' => le_trans h hf ha'⟩
 
@@ -792,7 +792,7 @@ theorem tendsto_atTop_atBot_iff_of_antitone
 
 中文:
 定理 tendsto_atTop_atBot_iff_of_antitone
-  条件: (hf : Antitone f)
+  条件: (hf : 递减 f)
   证明: tendsto_atTop_atTop_iff_of_monotone (β := βᵒᵈ) hf
 
 Depends on / 依赖: tendsto_atTop_atTop_iff_of_monotone
@@ -813,8 +813,8 @@ theorem Tendsto.subseq_mem
     (fun n => tendsto_atTop'.mp hu _ (h n) : forall n, exists N, forall k >= N, u k in V n)
 
 中文:
-定理 Tendsto.subseq_mem
-  结论: {F : Filter α} {V : 自然数 -> Set α} (h : 对任意 n, V n in F) {u : 自然数 -> α}
+定理 收敛.subseq_mem
+  结论: {F : 滤子 α} {V : 自然数 -> 集合 α} (h : 对任意 n, V n in F) {u : 自然数 -> α}
   证明: extraction_forall_of_eventually'
     (fun n => tendsto_atTop'.mp hu _ (h n) : forall n, exists N, forall k >= N, u k in V n)
 
@@ -928,7 +928,7 @@ theorem map_val_atTop_of_Ici_subset
 
 中文:
 定理 map_val_atTop_of_Ici_subset
-  结论: [Preorder α] [IsDirectedOrder α] {a : α} {s : Set α}
+  结论: [预序 α] [IsDirectedOrder α] {a : α} {s : 集合 α}
   证明: by
   choose f hl hr using exists_ge_ge (α := α)
   have : DirectedOn (· <= ·) s := fun x _ y _ =>
@@ -964,7 +964,7 @@ theorem _root_.Nat.map_cast_int_atTop
   exact ⟨n, rfl, fun _ => Int.ofNat_le⟩
 
 中文:
-定理 _root_.Nat.map_cast_int_atTop
+定理 _root_.自然数.map_cast_int_atTop
   结论: map ((↑) : 自然数 -> 整数) atTop = atTop
   证明: by
   refine map_atTop_eq_of_gc_preorder (fun _ _ => Int.ofNat_le.2) 0 fun n hn => ?_
@@ -991,7 +991,7 @@ theorem map_val_Ici_atTop
 
 中文:
 定理 map_val_Ici_atTop
-  条件: [Preorder α] [IsDirectedOrder α] (a : α)
+  条件: [预序 α] [IsDirectedOrder α] (a : α)
   证明: map_val_atTop_of_Ici_subset Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, map_val_atTop_of_Ici_subset
@@ -1014,7 +1014,7 @@ map_val_atTop_of_Ici_subset Ici_subset_Ioi.2 hb
 
 中文:
 定理 map_val_Ioi_atTop
-  条件: [Preorder α] [IsDirectedOrder α] [NoMaxOrder α] (a : α)
+  条件: [预序 α] [IsDirectedOrder α] [NoMax序 α] (a : α)
   证明: let ⟨_b, hb⟩ := exists_gt a
 map_val_atTop_of_Ici_subset Ici_subset_Ioi.2 hb
 
@@ -1041,7 +1041,7 @@ theorem atTop_Ioi_eq
 
 中文:
 定理 atTop_Ioi_eq
-  条件: [Preorder α] [IsDirectedOrder α] (a : α)
+  条件: [预序 α] [IsDirectedOrder α] (a : α)
   证明: by
   rcases isEmpty_or_nonempty (Ioi a) with h | ⟨⟨b, hb⟩⟩
   · subsingleton
@@ -1071,7 +1071,7 @@ theorem atTop_Ici_eq
 
 中文:
 定理 atTop_Ici_eq
-  条件: [Preorder α] [IsDirectedOrder α] (a : α)
+  条件: [预序 α] [IsDirectedOrder α] (a : α)
   证明: by
   rw [← map_val_Ici_atTop a]; rw [comap_map Subtype.coe_injective]
 
@@ -1097,7 +1097,7 @@ theorem tendsto_Ioi_atTop
 
 中文:
 定理 tendsto_Ioi_atTop
-  结论: [Preorder α] [IsDirectedOrder α]
+  结论: [预序 α] [IsDirectedOrder α]
   证明: by
   rw [atTop_Ioi_eq]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -1124,7 +1124,7 @@ theorem tendsto_Ici_atTop
 
 中文:
 定理 tendsto_Ici_atTop
-  结论: [Preorder α] [IsDirectedOrder α]
+  结论: [预序 α] [IsDirectedOrder α]
   证明: by
   rw [atTop_Ici_eq]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -1151,7 +1151,7 @@ theorem tendsto_comp_val_Ioi_atTop
 
 中文:
 定理 tendsto_comp_val_Ioi_atTop
-  结论: [Preorder α] [IsDirectedOrder α] [NoMaxOrder α]
+  结论: [预序 α] [IsDirectedOrder α] [NoMax序 α]
   证明: by
   rw [← map_val_Ioi_atTop a]; rw [tendsto_map'_iff]; rw [Function.comp_def]
 
@@ -1176,7 +1176,7 @@ theorem tendsto_comp_val_Ici_atTop
 
 中文:
 定理 tendsto_comp_val_Ici_atTop
-  结论: [Preorder α] [IsDirectedOrder α]
+  结论: [预序 α] [IsDirectedOrder α]
   证明: by
   rw [← map_val_Ici_atTop a]; rw [tendsto_map'_iff]; rw [Function.comp_def]
 
@@ -1245,7 +1245,7 @@ theorem tendsto_add_atTop_nat
 中文:
 定理 tendsto_add_atTop_nat
   条件: (k : 自然数)
-  结论: Tendsto (fun a => a + k) atTop atTop
+  结论: 收敛 (fun a => a + k) atTop atTop
   证明: le_of_eq (map_add_atTop_eq_nat k)
 
 Depends on / 依赖: le_of_eq, map_add_atTop_eq_nat
@@ -1265,7 +1265,7 @@ theorem tendsto_sub_atTop_nat
 中文:
 定理 tendsto_sub_atTop_nat
   条件: (k : 自然数)
-  结论: Tendsto (fun a => a - k) atTop atTop
+  结论: 收敛 (fun a => a - k) atTop atTop
   证明: le_of_eq (map_sub_atTop_eq_nat k)
 
 Depends on / 依赖: le_of_eq, map_sub_atTop_eq_nat
@@ -1284,7 +1284,7 @@ theorem tendsto_add_atTop_iff_nat
 
 中文:
 定理 tendsto_add_atTop_iff_nat
-  条件: {f : 自然数 -> α} {l : Filter α} (k : 自然数)
+  条件: {f : 自然数 -> α} {l : 滤子 α} (k : 自然数)
   证明: show Tendsto (f ∘ fun n => n + k) atTop l ↔ Tendsto f atTop l by
     rw [← tendsto_map'_iff]; rw [map_add_atTop_eq_nat]
 
@@ -1390,7 +1390,7 @@ theorem not_bddAbove_of_tendsto_atTop
 
 中文:
 定理 not_bddAbove_of_tendsto_atTop
-  条件: [NoMaxOrder β] (h : Tendsto f l atTop)
+  条件: [NoMax序 β] (h : 收敛 f l atTop)
   证明: by
   rintro ⟨M, hM⟩
   have : forall x, f x <= M := by aesop
@@ -1420,8 +1420,8 @@ theorem HasAntitoneBasis.eventually_subset
   (eventually_ge_atTop i).mono fun _j hj => (hl.antitone hj).trans hi
 
 中文:
-定理 HasAntitoneBasis.eventually_subset
-  结论: [Preorder ι] {l : Filter α} {s : ι -> Set α}
+定理 有AntitoneBasis.eventually_subset
+  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
   证明: let ⟨i, _, hi⟩ := hl.1.mem_iff.1 ht
   (eventually_ge_atTop i).mono fun _j hj => (hl.antitone hj).trans hi
 
@@ -1441,8 +1441,8 @@ theorem HasAntitoneBasis.tendsto
   proof: fun _t ht => mem_map.2 (hl.eventually_subset ht).mono fun i hi => hi (h i)
 
 中文:
-定理 HasAntitoneBasis.tendsto
-  结论: [Preorder ι] {l : Filter α} {s : ι -> Set α}
+定理 有AntitoneBasis.tendsto
+  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
   证明: fun _t ht => mem_map.2 (hl.eventually_subset ht).mono fun i hi => hi (h i)
 
 Depends on / 依赖: LinearDisjoint, Submodule, Submodule.LinearDisjoint.symm_of_commute, symm_of_commute
@@ -1463,8 +1463,8 @@ theorem HasAntitoneBasis.comp_mono
     hs.antitone.comp_monotone φ_mono⟩
 
 中文:
-定理 HasAntitoneBasis.comp_mono
-  结论: [Nonempty ι] [Preorder ι] [IsDirectedOrder ι] [Preorder ι']
+定理 有AntitoneBasis.comp_mono
+  结论: [非空 ι] [预序 ι] [IsDirectedOrder ι] [预序 ι']
   证明: ⟨hs.1.to_hasBasis
       (fun n _ => (hφ.eventually_ge_atTop n).exists.imp fun _m hm => ⟨trivial, hs.antitone hm⟩)
       fun n _ => ⟨φ n, trivial, Subset.rfl⟩,
@@ -1490,8 +1490,8 @@ theorem HasAntitoneBasis.comp_strictMono
   proof: hs.comp_mono hφ.monotone hφ.tendsto_atTop
 
 中文:
-定理 HasAntitoneBasis.comp_strictMono
-  结论: {l : Filter α} {s : 自然数 -> Set α} (hs : l.HasAntitoneBasis s)
+定理 有AntitoneBasis.comp_strictMono
+  结论: {l : 滤子 α} {s : 自然数 -> 集合 α} (hs : l.有AntitoneBasis s)
   证明: hs.comp_mono hφ.monotone hφ.tendsto_atTop
 
 Depends on / 依赖: comp_mono, hs.comp_mono, monotone, tendsto_atTop
@@ -1511,8 +1511,8 @@ theorem subseq_forall_of_frequently
   exact ⟨ns, h_tendsto.comp (tendsto_atTop_mono hge tendsto_id), hns⟩
 
 中文:
-定理 subseq_forall_of_frequently
-  结论: {ι : 类型} {x : 自然数 -> ι} {p : ι -> 命题} {l : Filter ι}
+定理 subseq_对任意_of_frequently
+  结论: {ι : 类型} {x : 自然数 -> ι} {p : ι -> 命题} {l : 滤子 ι}
   证明: by
   choose ns hge hns using frequently_atTop.1 h
   exact ⟨ns, h_tendsto.comp (tendsto_atTop_mono hge tendsto_id), hns⟩

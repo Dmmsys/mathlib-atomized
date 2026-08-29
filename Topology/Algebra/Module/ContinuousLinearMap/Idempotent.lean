@@ -47,7 +47,7 @@ alias ⟨_, IsIdempotentElem.toLinearMap⟩ := isIdempotentElem_toLinearMap_iff
 
 中文:
 定理 isIdempotentElem_toLinearMap_iff
-  结论: {R M : 类型} [Semiring R] [TopologicalSpace M]
+  结论: {R M : 类型} [半环 R] [拓扑空间 M]
   证明: by
   simp only [IsIdempotentElem, Module.End.mul_eq_comp, ← toLinearMap_comp, mul_def, coe_inj]
 
@@ -205,7 +205,7 @@ theorem commute_iff_of_isUnit
 
 中文:
 定理 commute_iff_of_isUnit
-  结论: {f T : M ->L[R] M} (hT : IsUnit T)
+  结论: {f T : M ->L[R] M} (hT : 是单位 T)
   证明: by
   have := hT.map ContinuousLinearMap.toLinearMapRingHom
   lift T to (M ->L[R] M)ˣ using hT
@@ -232,7 +232,7 @@ theorem isClosed_range
 
 中文:
 定理 isClosed_range
-  结论: [T1Space M] {p : M ->L[R] M}
+  结论: [T1空间 M] {p : M ->L[R] M}
   证明: LinearMap.IsIdempotentElem.range_eq_ker hp.toLinearMap ▸ isClosed_ker (.id R M - p)
 
 Depends on / 依赖: IsIdempotentElem, LinearMap, LinearMap.IsIdempotentElem.range_eq_ker, hp.toLinearMap, isClosed_ker, range_eq_ker, toLinearMap

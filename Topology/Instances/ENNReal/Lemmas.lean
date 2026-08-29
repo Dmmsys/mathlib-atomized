@@ -45,7 +45,7 @@ theorem isOpen_ne_top
 
 中文:
 定理 isOpen_ne_top
-  结论: IsOpen { a : 实数>=0∞ | a != ∞ }
+  结论: 是开集 { a : 实数>=0∞ | a != ∞ }
   证明: isOpen_ne
 
 Depends on / 依赖: isOpen_ne
@@ -64,7 +64,7 @@ theorem isOpen_Ico_zero
 
 中文:
 定理 isOpen_Ico_zero
-  结论: IsOpen (Ico 0 b)
+  结论: 是开集 (左闭右开区间 0 b)
   证明: by
   rw [ENNReal.Ico_eq_Iio]
   exact isOpen_Iio
@@ -108,7 +108,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : 实数>=0 -> 实数>=0∞)
+  结论: 连续 ((↑) : 实数>=0 -> 实数>=0∞)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -128,9 +128,9 @@ lemma tendsto_coe_toNNReal
   exact continuous_coe.tendsto _
 
 中文:
-引理 tendsto_coe_toNNReal
+引理 tendsto_coe_toNN实数
   条件: {a : 实数>=0∞} (ha : a != ⊤)
-  结论: Tendsto (↑) (𝓝 a.toNN实数) (𝓝 a)
+  结论: 收敛 (↑) (𝓝 a.toNN实数) (𝓝 a)
   证明: by
   nth_rewrite 2 [← coe_toNNReal ha]
   exact continuous_coe.tendsto _
@@ -151,7 +151,7 @@ theorem continuous_coe_iff
 
 中文:
 定理 continuous_coe_iff
-  条件: {α} [TopologicalSpace α] {f : α -> 实数>=0}
+  条件: {α} [拓扑空间 α] {f : α -> 实数>=0}
   证明: isEmbedding_coe.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe, isEmbedding_coe.continuous_iff.symm
@@ -191,7 +191,7 @@ theorem tendsto_nhds_coe_iff
 
 中文:
 定理 tendsto_nhds_coe_iff
-  条件: {α : 类型} {l : Filter α} {x : 实数>=0} {f : 实数>=0∞ -> α}
+  条件: {α : 类型} {l : 滤子 α} {x : 实数>=0} {f : 实数>=0∞ -> α}
   证明: by
   rw [nhds_coe]; rw [tendsto_map'_iff]
 
@@ -211,7 +211,7 @@ theorem continuousAt_coe_iff
 
 中文:
 定理 continuousAt_coe_iff
-  条件: {α : 类型} [TopologicalSpace α] {x : 实数>=0} {f : 实数>=0∞ -> α}
+  条件: {α : 类型} [拓扑空间 α] {x : 实数>=0} {f : 实数>=0∞ -> α}
   证明: tendsto_nhds_coe_iff
 
 Depends on / 依赖: tendsto_nhds_coe_iff
@@ -229,8 +229,8 @@ theorem continuous_ofReal
   proof: (continuous_coe_iff.2 continuous_id).comp continuous_real_toNNReal
 
 中文:
-定理 continuous_ofReal
-  结论: Continuous ENN实数.of实数
+定理 continuous_of实数
+  结论: 连续 广义非负实数.of实数
   证明: (continuous_coe_iff.2 continuous_id).comp continuous_real_toNNReal
 
 Depends on / 依赖: continuous_coe_iff, continuous_id, continuous_real_toNNReal
@@ -247,8 +247,8 @@ theorem tendsto_ofReal
   proof: (continuous_ofReal.tendsto a).comp h
 
 中文:
-定理 tendsto_ofReal
-  条件: {f : Filter α} {m : α -> 实数} {a : 实数} (h : Tendsto m f (𝓝 a))
+定理 tendsto_of实数
+  条件: {f : 滤子 α} {m : α -> 实数} {a : 实数} (h : 收敛 m f (𝓝 a))
   证明: (continuous_ofReal.tendsto a).comp h
 
 Depends on / 依赖: continuous_ofReal, continuous_ofReal.tendsto, tendsto
@@ -269,7 +269,7 @@ theorem tendsto_toNNReal
   exact tendsto_id
 
 中文:
-定理 tendsto_toNNReal
+定理 tendsto_toNN实数
   条件: {a : 实数>=0∞} (ha : a != ∞)
   证明: by
   lift a to Real>=0 using ha
@@ -296,8 +296,8 @@ theorem tendsto_toNNReal_iff
   exact (tendsto_coe_toNNReal ha).comp h
 
 中文:
-定理 tendsto_toNNReal_iff
-  条件: {f : α -> 实数>=0∞} {u : Filter α} (ha : a != ∞) (hf : 对任意 x, f x != ∞)
+定理 tendsto_toNN实数_iff
+  条件: {f : α -> 实数>=0∞} {u : 滤子 α} (ha : a != ∞) (hf : 对任意 x, f x != ∞)
   证明: by
   refine ⟨fun h => ?_, fun h => (ENNReal.tendsto_toNNReal ha).comp h⟩
   rw [← coe_comp_toNNReal_comp hf]
@@ -322,8 +322,8 @@ theorem tendsto_toNNReal_iff'
   exact tendsto_toNNReal_iff coe_ne_top hf
 
 中文:
-定理 tendsto_toNNReal_iff'
-  条件: {f : α -> 实数>=0∞} {u : Filter α} {a : 实数>=0} (hf : 对任意 x, f x != ∞)
+定理 tendsto_toNN实数_iff'
+  条件: {f : α -> 实数>=0∞} {u : 滤子 α} {a : 实数>=0} (hf : 对任意 x, f x != ∞)
   证明: by
   rw [← toNNReal_coe a]
   exact tendsto_toNNReal_iff coe_ne_top hf
@@ -346,8 +346,8 @@ theorem eventuallyEq_of_toReal_eventuallyEq
   rwa [← ENNReal.toReal_eq_toReal_iff' hfx hgx]
 
 中文:
-定理 eventuallyEq_of_toReal_eventuallyEq
-  结论: {l : Filter α} {f g : α -> 实数>=0∞}
+定理 eventuallyEq_of_to实数_eventuallyEq
+  结论: {l : 滤子 α} {f g : α -> 实数>=0∞}
   证明: by
   filter_upwards [hfi, hgi, hfg] with _ hfx hgx _
   rwa [← ENNReal.toReal_eq_toReal_iff' hfx hgx]
@@ -370,8 +370,8 @@ theorem continuousOn_toNNReal
   ContinuousAt.continuousWithinAt (tendsto_toNNReal ha)
 
 中文:
-定理 continuousOn_toNNReal
-  结论: ContinuousOn ENN实数.toNN实数 { a | a != ∞ }
+定理 continuousOn_toNN实数
+  结论: ContinuousOn 广义非负实数.toNN实数 { a | a != ∞ }
   证明: fun _a ha =>
   ContinuousAt.continuousWithinAt (tendsto_toNNReal ha)
 -/
@@ -388,9 +388,9 @@ theorem tendsto_toReal
   proof: NNReal.tendsto_coe.2 tendsto_toNNReal ha
 
 中文:
-定理 tendsto_toReal
+定理 tendsto_to实数
   条件: {a : 实数>=0∞} (ha : a != ∞)
-  结论: Tendsto ENN实数.to实数 (𝓝 a) (𝓝 a.to实数)
+  结论: 收敛 广义非负实数.to实数 (𝓝 a) (𝓝 a.to实数)
   证明: NNReal.tendsto_coe.2 tendsto_toNNReal ha
 
 Depends on / 依赖: NNReal, NNReal.tendsto_coe, tendsto_coe, tendsto_toNNReal
@@ -407,8 +407,8 @@ lemma continuousOn_toReal
   proof: NNReal.continuous_coe.comp_continuousOn continuousOn_toNNReal
 
 中文:
-引理 continuousOn_toReal
-  结论: ContinuousOn ENN实数.to实数 { a | a != ∞ }
+引理 continuousOn_to实数
+  结论: ContinuousOn 广义非负实数.to实数 { a | a != ∞ }
   证明: NNReal.continuous_coe.comp_continuousOn continuousOn_toNNReal
 
 Depends on / 依赖: NNReal, NNReal.continuous_coe.comp_continuousOn, comp_continuousOn, continuousOn_toNNReal, continuous_coe
@@ -426,9 +426,9 @@ lemma continuousAt_toReal
   proof: continuousOn_toReal.continuousAt (isOpen_ne_top.mem_nhds_iff.mpr hx)
 
 中文:
-引理 continuousAt_toReal
+引理 continuousAt_to实数
   条件: (hx : x != ∞)
-  结论: ContinuousAt ENN实数.to实数 x
+  结论: ContinuousAt 广义非负实数.to实数 x
   证明: continuousOn_toReal.continuousAt (isOpen_ne_top.mem_nhds_iff.mpr hx)
 
 Depends on / 依赖: continuousAt, continuousOn_toReal, continuousOn_toReal.continuousAt, isOpen_ne_top, isOpen_ne_top.mem_nhds_iff.mpr, mem_nhds_iff
@@ -447,7 +447,7 @@ definition neTopHomeomorphNNReal
   continuous_invFun := continuous_coe.subtype_mk _
 
 中文:
-定义 neTopHomeomorphNNReal
+定义 neTopHomeomorphNN实数
   签名: : { a | a != ∞ } ≃ₜ 实数>=0 where
   定义体: neTopEquivNNReal
   continuous_toFun := continuousOn_iff_continuous_domRestrict.1 continuousOn_toNNReal
@@ -471,7 +471,7 @@ definition ltTopHomeomorphNNReal
   simp only [lt_top_iff_ne_top]
 
 中文:
-定义 ltTopHomeomorphNNReal
+定义 ltTopHomeomorphNN实数
   签名: : { a | a < ∞ } ≃ₜ 实数>=0
   定义体: by
   refine (Homeomorph.setCongr ?_).trans neTopHomeomorphNNReal
@@ -493,7 +493,7 @@ theorem nhds_top
 
 中文:
 定理 nhds_top
-  结论: 𝓝 ∞ = ⨅ (a) (_ : a != ∞), 𝓟 (Ioi a)
+  结论: 𝓝 ∞ = ⨅ (a) (_ : a != ∞), 𝓟 (左开右无界区间 a)
   证明: nhds_top_order.trans by simp [lt_top_iff_ne_top, Ioi]
 
 Depends on / 依赖: lt_top_iff_ne_top, nhds_top_order, nhds_top_order.trans
@@ -511,7 +511,7 @@ theorem nhds_top'
 
 中文:
 定理 nhds_top'
-  结论: 𝓝 ∞ = ⨅ r : 实数>=0, 𝓟 (Ioi ↑r)
+  结论: 𝓝 ∞ = ⨅ r : 实数>=0, 𝓟 (左开右无界区间 ↑r)
   证明: nhds_top.trans iInf_ne_top _
 
 Depends on / 依赖: iInf_ne_top, nhds_top, nhds_top.trans
@@ -529,7 +529,7 @@ theorem nhds_top_basis
 
 中文:
 定理 nhds_top_basis
-  结论: (𝓝 ∞).HasBasis (fun a => a < ∞) fun a => Ioi a
+  结论: (𝓝 ∞).有基 (fun a => a < ∞) fun a => 左开右无界区间 a
   证明: _root_.nhds_top_basis
 
 Depends on / 依赖: _root_, _root_.nhds_top_basis, nhds_top_basis
@@ -548,7 +548,7 @@ theorem tendsto_nhds_top_iff_nnreal
 
 中文:
 定理 tendsto_nhds_top_iff_nnreal
-  条件: {m : α -> 实数>=0∞} {f : Filter α}
+  条件: {m : α -> 实数>=0∞} {f : 滤子 α}
   证明: by
   simp only [nhds_top', tendsto_iInf, tendsto_principal, mem_Ioi]
 
@@ -571,7 +571,7 @@ theorem tendsto_nhds_top_iff_nat
 
 中文:
 定理 tendsto_nhds_top_iff_nat
-  条件: {m : α -> 实数>=0∞} {f : Filter α}
+  条件: {m : α -> 实数>=0∞} {f : 滤子 α}
   证明: tendsto_nhds_top_iff_nnreal.trans
     ⟨fun h n => by simpa only [ENNReal.coe_natCast] using h n, fun h x =>
       let ⟨n, hn⟩ := exists_nat_gt x
@@ -596,7 +596,7 @@ theorem tendsto_nhds_top
 
 中文:
 定理 tendsto_nhds_top
-  条件: {m : α -> 实数>=0∞} {f : Filter α} (h : 对任意 n : 自然数, 对任意ᶠ a in f, ↑n < m a)
+  条件: {m : α -> 实数>=0∞} {f : 滤子 α} (h : 对任意 n : 自然数, 对任意ᶠ a in f, ↑n < m a)
   证明: tendsto_nhds_top_iff_nat.2 h
 
 Depends on / 依赖: tendsto_nhds_top_iff_nat
@@ -618,7 +618,7 @@ mem_atTop_sets.2 ⟨n + 1, fun _m hm => mem_ofPred.2 Nat.cast_lt.2 Nat.lt_of_suc
 
 中文:
 定理 tendsto_nat_nhds_top
-  结论: Tendsto (fun n : 自然数 => ↑n) atTop (𝓝 ∞)
+  结论: 收敛 (fun n : 自然数 => ↑n) atTop (𝓝 ∞)
   证明: tendsto_nhds_top fun n =>
 mem_atTop_sets.2 ⟨n + 1, fun _m hm => mem_ofPred.2 Nat.cast_lt.2 Nat.lt_of_succ_le hm⟩
 
@@ -644,7 +644,7 @@ theorem tendsto_coe_nhds_top
 
 中文:
 定理 tendsto_coe_nhds_top
-  条件: {f : α -> 实数>=0} {l : Filter α}
+  条件: {f : α -> 实数>=0} {l : 滤子 α}
   证明: by
   rw [tendsto_nhds_top_iff_nnreal]; rw [atTop_basis_Ioi.tendsto_right_iff]; simp
 
@@ -666,8 +666,8 @@ theorem tendsto_ofReal_nhds_top
   proof: tendsto_coe_nhds_top.trans Real.tendsto_toNNReal_atTop_iff
 
 中文:
-定理 tendsto_ofReal_nhds_top
-  条件: {f : α -> 实数} {l : Filter α}
+定理 tendsto_of实数_nhds_top
+  条件: {f : α -> 实数} {l : 滤子 α}
   证明: tendsto_coe_nhds_top.trans Real.tendsto_toNNReal_atTop_iff
 
 Depends on / 依赖: Real.tendsto_toNNReal_atTop_iff, tendsto_coe_nhds_top, tendsto_coe_nhds_top.trans, tendsto_toNNReal_atTop_iff
@@ -685,8 +685,8 @@ theorem tendsto_ofReal_atTop
   proof: tendsto_ofReal_nhds_top.2 tendsto_id
 
 中文:
-定理 tendsto_ofReal_atTop
-  结论: Tendsto ENN实数.of实数 atTop (𝓝 ∞)
+定理 tendsto_of实数_atTop
+  结论: 收敛 广义非负实数.of实数 atTop (𝓝 ∞)
   证明: tendsto_ofReal_nhds_top.2 tendsto_id
 
 Depends on / 依赖: tendsto_id, tendsto_ofReal_nhds_top
@@ -704,7 +704,7 @@ theorem nhds_zero
 
 中文:
 定理 nhds_zero
-  结论: 𝓝 (0 : 实数>=0∞) = ⨅ (a) (_ : a != 0), 𝓟 (Iio a)
+  结论: 𝓝 (0 : 实数>=0∞) = ⨅ (a) (_ : a != 0), 𝓟 (左无界右开区间 a)
   证明: nhds_bot_order.trans by simp [pos_iff_ne_zero, Iio]
 
 Depends on / 依赖: nhds_bot_order, nhds_bot_order.trans, pos_iff_ne_zero
@@ -722,7 +722,7 @@ theorem nhds_zero_basis
 
 中文:
 定理 nhds_zero_basis
-  结论: (𝓝 (0 : 实数>=0∞)).HasBasis (fun a : 实数>=0∞ => 0 < a) fun a => Iio a
+  结论: (𝓝 (0 : 实数>=0∞)).有基 (fun a : 实数>=0∞ => 0 < a) fun a => 左无界右开区间 a
   证明: nhds_bot_basis
 
 Depends on / 依赖: nhds_bot_basis
@@ -740,7 +740,7 @@ theorem nhds_zero_basis_Iic
 
 中文:
 定理 nhds_zero_basis_Iic
-  结论: (𝓝 (0 : 实数>=0∞)).HasBasis (fun a : 实数>=0∞ => 0 < a) Iic
+  结论: (𝓝 (0 : 实数>=0∞)).有基 (fun a : 实数>=0∞ => 0 < a) 左无界右闭区间
   证明: nhds_bot_basis_Iic
 
 Depends on / 依赖: nhds_bot_basis_Iic
@@ -834,7 +834,7 @@ theorem nhdsGT_ofNat_neBot
 @[instance]
 
 中文:
-定理 nhdsGT_ofNat_neBot
+定理 nhdsGT_of自然数_neBot
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (𝓝[>] (Of自然数.of自然数 n : 实数>=0∞)).NeBot
   证明: nhdsGT_coe_neBot
@@ -943,7 +943,7 @@ theorem Icc_mem_nhds
 中文:
 定理 Icc_mem_nhds
   条件: (xt : x != ∞) (ε0 : ε != 0)
-  结论: Icc (x - ε) (x + ε) in 𝓝 x
+  结论: 闭区间 (x - ε) (x + ε) in 𝓝 x
   证明: (hasBasis_nhds_of_ne_top' xt).mem_of_mem ε0
 
 Depends on / 依赖: hasBasis_nhds_of_ne_top, mem_of_mem
@@ -963,7 +963,7 @@ theorem nhds_of_ne_top
 中文:
 定理 nhds_of_ne_top
   条件: (xt : x != ∞)
-  结论: 𝓝 x = ⨅ ε > 0, 𝓟 (Icc (x - ε) (x + ε))
+  结论: 𝓝 x = ⨅ ε > 0, 𝓟 (闭区间 (x - ε) (x + ε))
   证明: (hasBasis_nhds_of_ne_top xt).eq_biInf
 
 Depends on / 依赖: eq_biInf, hasBasis_nhds_of_ne_top
@@ -980,7 +980,7 @@ theorem biInf_le_nhds
 
 中文:
 定理 biInf_le_nhds
-  结论: 对任意 x : 实数>=0∞, ⨅ ε > 0, 𝓟 (Icc (x - ε) (x + ε)) <= 𝓝 x
+  结论: 对任意 x : 实数>=0∞, ⨅ ε > 0, 𝓟 (闭区间 (x - ε) (x + ε)) <= 𝓝 x
 
 Depends on / 依赖: Tendsto, Tendsto.mono_right, biInf_le_nhds, mono_right, tendsto_iInf, tendsto_principal
 -/
@@ -1001,7 +1001,7 @@ theorem tendsto_nhds_of_Icc
 
 中文:
 定理 tendsto_nhds_of_Icc
-  结论: {f : Filter α} {u : α -> 实数>=0∞} {a : 实数>=0∞}
+  结论: {f : 滤子 α} {u : α -> 实数>=0∞} {a : 实数>=0∞}
   证明: by
   refine Tendsto.mono_right ?_ (biInf_le_nhds _)
   simpa only [tendsto_iInf, tendsto_principal]
@@ -1022,7 +1022,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {f : Filter α} {u : α -> 实数>=0∞} {a : 实数>=0∞} (ha : a != ∞)
+  条件: {f : 滤子 α} {u : α -> 实数>=0∞} {a : 实数>=0∞} (ha : a != ∞)
   证明: by
   simp only [nhds_of_ne_top ha, tendsto_iInf, tendsto_principal]
 -/
@@ -1040,7 +1040,7 @@ theorem tendsto_nhds_zero
 
 中文:
 定理 tendsto_nhds_zero
-  条件: {f : Filter α} {u : α -> 实数>=0∞}
+  条件: {f : 滤子 α} {u : α -> 实数>=0∞}
   证明: nhds_zero_basis_Iic.tendsto_right_iff
 -/
 protected theorem tendsto_nhds_zero {f : Filter α} {u : α -> Real>=0∞} :
@@ -1065,7 +1065,7 @@ theorem tendsto_const_sub_nhds_zero_iff
 
 中文:
 定理 tendsto_const_sub_nhds_zero_iff
-  结论: {l : Filter α} {f : α -> 实数>=0∞} {a : 实数>=0∞} (ha : a != ∞)
+  结论: {l : 滤子 α} {f : α -> 实数>=0∞} {a : 实数>=0∞} (ha : a != ∞)
   证明: by
   rw [ENNReal.tendsto_nhds_zero]; rw [ENNReal.tendsto_nhds ha]
   refine ⟨fun h ε hε => ?_, fun h ε hε => ?_⟩
@@ -1102,7 +1102,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  结论: [Nonempty β] [SemilatticeSup β] {f : β -> 实数>=0∞} {a : 实数>=0∞}
+  结论: [非空 β] [SemilatticeSup β] {f : β -> 实数>=0∞} {a : 实数>=0∞}
   证明: .trans (atTop_basis.tendsto_iff (hasBasis_nhds_of_ne_top ha)) (by simp only [true_and]; rfl)
 -/
 protected theorem tendsto_atTop [Nonempty β] [SemilatticeSup β] {f : β -> Real>=0∞} {a : Real>=0∞}
@@ -1119,7 +1119,7 @@ theorem tendsto_atTop_zero
 
 中文:
 定理 tendsto_atTop_zero
-  条件: [Nonempty β] [SemilatticeSup β] {f : β -> 实数>=0∞}
+  条件: [非空 β] [SemilatticeSup β] {f : β -> 实数>=0∞}
   证明: .trans (atTop_basis.tendsto_iff nhds_zero_basis_Iic) (by simp only [true_and]; rfl)
 -/
 protected theorem tendsto_atTop_zero [Nonempty β] [SemilatticeSup β] {f : β -> Real>=0∞} :
@@ -1142,7 +1142,7 @@ theorem tendsto_atTop_zero_iff_le_of_antitone
 
 中文:
 定理 tendsto_atTop_zero_iff_le_of_antitone
-  结论: {β : 类型} [Nonempty β] [SemilatticeSup β]
+  结论: {β : 类型} [非空 β] [SemilatticeSup β]
   证明: by
   rw [ENNReal.tendsto_atTop_zero]
   refine ⟨fun h => fun ε hε => ?_, fun h => fun ε hε => ?_⟩
@@ -1180,7 +1180,7 @@ theorem tendsto_atTop_zero_iff_lt_of_antitone
 
 中文:
 定理 tendsto_atTop_zero_iff_lt_of_antitone
-  结论: {β : 类型} [Nonempty β] [SemilatticeSup β]
+  结论: {β : 类型} [非空 β] [SemilatticeSup β]
   证明: by
   rw [ENNReal.tendsto_atTop_zero_iff_le_of_antitone hf]
   constructor <;> intro h ε hε
@@ -1251,8 +1251,8 @@ theorem Tendsto.sub
     Tendsto.comp (ENNReal.tendsto_sub h) (hma.prodMk_nhds hmb)
 
 中文:
-定理 Tendsto.sub
-  结论: {f : Filter α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.sub
+  结论: {f : 滤子 α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: show Tendsto ((fun p : Real>=0∞ × Real>=0∞ => p.1 - p.2) ∘ fun a => (ma a, mb a)) f (𝓝 (a - b)) from
     Tendsto.comp (ENNReal.tendsto_sub h) (hma.prodMk_nhds hmb)
 -/
@@ -1317,8 +1317,8 @@ theorem Tendsto.mul
     Tendsto.comp (ENNReal.tendsto_mul ha hb) (hma.prodMk_nhds hmb)
 
 中文:
-定理 Tendsto.mul
-  结论: {f : Filter α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.mul
+  结论: {f : 滤子 α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: show Tendsto ((fun p : Real>=0∞ × Real>=0∞ => p.1 * p.2) ∘ fun a => (ma a, mb a)) f (𝓝 (a * b)) from
     Tendsto.comp (ENNReal.tendsto_mul ha hb) (hma.prodMk_nhds hmb)
 -/
@@ -1339,7 +1339,7 @@ theorem _root_.ContinuousOn.ennreal_mul
 
 中文:
 定理 _root_.ContinuousOn.ennreal_mul
-  结论: [TopologicalSpace α] {f g : α -> 实数>=0∞} {s : Set α}
+  结论: [拓扑空间 α] {f g : α -> 实数>=0∞} {s : 集合 α}
   证明: fun x hx =>
   ENNReal.Tendsto.mul (hf x hx) (h₁ x hx) (hg x hx) (h₂ x hx)
 -/
@@ -1358,8 +1358,8 @@ theorem _root_.Continuous.ennreal_mul
     ENNReal.Tendsto.mul hf.continuousAt (h₁ x) hg.continuousAt (h₂ x)
 
 中文:
-定理 _root_.Continuous.ennreal_mul
-  结论: [TopologicalSpace α] {f g : α -> 实数>=0∞} (hf : Continuous f)
+定理 _root_.连续.ennreal_mul
+  结论: [拓扑空间 α] {f g : α -> 实数>=0∞} (hf : 连续 f)
   证明: continuous_iff_continuousAt.2 fun x =>
     ENNReal.Tendsto.mul hf.continuousAt (h₁ x) hg.continuousAt (h₂ x)
 
@@ -1381,8 +1381,8 @@ theorem Tendsto.const_mul
     ENNReal.Tendsto.mul tendsto_const_nhds (Or.inl ha) hm hb
 
 中文:
-定理 Tendsto.const_mul
-  结论: {f : Filter α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.const_mul
+  结论: {f : 滤子 α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: by_cases (fun (this : a = 0) => by simp [this, tendsto_const_nhds]) fun ha : a != 0 =>
     ENNReal.Tendsto.mul tendsto_const_nhds (Or.inl ha) hm hb
 -/
@@ -1401,8 +1401,8 @@ theorem Tendsto.mul_const
   simpa only [mul_comm] using ENNReal.Tendsto.const_mul hm ha
 
 中文:
-定理 Tendsto.mul_const
-  结论: {f : Filter α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.mul_const
+  结论: {f : 滤子 α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: by
   simpa only [mul_comm] using ENNReal.Tendsto.const_mul hm ha
 -/
@@ -1429,7 +1429,7 @@ theorem tendsto_finsetProd_of_ne_top
 
 中文:
 定理 tendsto_finsetProd_of_ne_top
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {x : Filter α} {a : ι -> 实数>=0∞}
+  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {x : 滤子 α} {a : ι -> 实数>=0∞}
   证明: by
   classical
   induction s using Finset.induction with
@@ -1514,7 +1514,7 @@ theorem continuous_const_mul
 中文:
 定理 continuous_const_mul
   条件: {a : 实数>=0∞} (ha : a != ∞)
-  结论: Continuous (a * ·)
+  结论: 连续 (a * ·)
   证明: continuous_iff_continuousAt.2 fun _ => ENNReal.continuousAt_const_mul (Or.inl ha)
 
 @[fun_prop]
@@ -1537,7 +1537,7 @@ theorem continuous_mul_const
 中文:
 定理 continuous_mul_const
   条件: {a : 实数>=0∞} (ha : a != ∞)
-  结论: Continuous fun x => x * a
+  结论: 连续 fun x => x * a
   证明: continuous_iff_continuousAt.2 fun _ => ENNReal.continuousAt_mul_const (Or.inl ha)
 
 @[fun_prop]
@@ -1588,7 +1588,7 @@ theorem continuous_pow
 中文:
 定理 continuous_pow
   条件: (n : 自然数)
-  结论: Continuous fun a : 实数>=0∞ => a ^ n
+  结论: 连续 fun a : 实数>=0∞ => a ^ n
   证明: by
   induction n with
   | zero => simp [continuous_const]
@@ -1655,7 +1655,7 @@ theorem continuous_sub_left
 中文:
 定理 continuous_sub_left
   条件: {a : 实数>=0∞} (a_ne_top : a != ∞)
-  结论: Continuous (a - ·)
+  结论: 连续 (a - ·)
   证明: by
   change Continuous (Function.uncurry Sub.sub ∘ (a, ·))
   refine continuousOn_sub.comp_continuous (.prodMk_right a) fun x => ?_
@@ -1680,7 +1680,7 @@ theorem continuous_nnreal_sub
 中文:
 定理 continuous_nnreal_sub
   条件: {a : 实数>=0}
-  结论: Continuous fun x : 实数>=0∞ => (a : 实数>=0∞) - x
+  结论: 连续 fun x : 实数>=0∞ => (a : 实数>=0∞) - x
   证明: continuous_sub_left coe_ne_top
 
 Depends on / 依赖: coe_ne_top, continuous_sub_left
@@ -1737,7 +1737,7 @@ theorem continuous_sub_right
 中文:
 定理 continuous_sub_right
   条件: (a : 实数>=0∞)
-  结论: Continuous fun x : 实数>=0∞ => x - a
+  结论: 连续 fun x : 实数>=0∞ => x - a
   证明: by
   by_cases a_infty : a = ∞
   · simp [a_infty, continuous_const, tsub_eq_zero_of_le]
@@ -1765,8 +1765,8 @@ theorem Tendsto.pow
   proof: ((ENNReal.continuous_pow n).tendsto a).comp hm
 
 中文:
-定理 Tendsto.pow
-  结论: {f : Filter α} {m : α -> 实数>=0∞} {a : 实数>=0∞} {n : 自然数}
+定理 收敛.pow
+  结论: {f : 滤子 α} {m : α -> 实数>=0∞} {a : 实数>=0∞} {n : 自然数}
   证明: ((ENNReal.continuous_pow n).tendsto a).comp hm
 -/
 protected theorem Tendsto.pow {f : Filter α} {m : α -> Real>=0∞} {a : Real>=0∞} {n : Nat}
@@ -1787,7 +1787,7 @@ theorem le_of_forall_lt_one_mul_le
   exact le_of_tendsto this (eventually_nhdsWithin_iff.2 <| Eventually.of_forall h)
 
 中文:
-定理 le_of_forall_lt_one_mul_le
+定理 le_of_对任意_lt_one_mul_le
   条件: {x y : 实数>=0∞} (h : 对任意 a < 1, a * x <= y)
   结论: x <= y
   证明: by
@@ -1814,7 +1814,7 @@ theorem inv_limsup
 
 中文:
 定理 inv_limsup
-  条件: {ι : Sort _} {x : ι -> 实数>=0∞} {l : Filter ι}
+  条件: {ι : 类型层 _} {x : ι -> 实数>=0∞} {l : 滤子 ι}
   证明: OrderIso.invENNReal.limsup_apply
 
 Depends on / 依赖: OrderIso, OrderIso.invENNReal.limsup_apply, invENNReal, limsup_apply
@@ -1835,7 +1835,7 @@ theorem inv_liminf
 
 中文:
 定理 inv_liminf
-  条件: {ι : Sort _} {x : ι -> 实数>=0∞} {l : Filter ι}
+  条件: {ι : 类型层 _} {x : ι -> 实数>=0∞} {l : 滤子 ι}
   证明: OrderIso.invENNReal.liminf_apply
 
 @[fun_prop]
@@ -1857,7 +1857,7 @@ theorem continuous_zpow
 
 中文:
 定理 continuous_zpow
-  结论: 对任意 n : 整数, Continuous (· ^ n : 实数>=0∞ -> 实数>=0∞)
+  结论: 对任意 n : 整数, 连续 (· ^ n : 实数>=0∞ -> 实数>=0∞)
   证明: tendsto_inv_iff
 -/
 protected theorem continuous_zpow : forall n : Int, Continuous (· ^ n : Real>=0∞ -> Real>=0∞)
@@ -1876,8 +1876,8 @@ theorem Tendsto.div
   apply Tendsto.mul hma _ (tendsto_inv_iff.2 hmb) _ <;> simp [ha, hb]
 
 中文:
-定理 Tendsto.div
-  结论: {f : Filter α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.div
+  结论: {f : 滤子 α} {ma : α -> 实数>=0∞} {mb : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: by
   apply Tendsto.mul hma _ (tendsto_inv_iff.2 hmb) _ <;> simp [ha, hb]
 -/
@@ -1897,8 +1897,8 @@ theorem Tendsto.const_div
   simp [hb]
 
 中文:
-定理 Tendsto.const_div
-  结论: {f : Filter α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.const_div
+  结论: {f : 滤子 α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: by
   apply Tendsto.const_mul (tendsto_inv_iff.2 hm)
   simp [hb]
@@ -1919,8 +1919,8 @@ theorem Tendsto.div_const
   simp [ha]
 
 中文:
-定理 Tendsto.div_const
-  结论: {f : Filter α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
+定理 收敛.div_const
+  结论: {f : 滤子 α} {m : α -> 实数>=0∞} {a b : 实数>=0∞}
   证明: by
   apply Tendsto.mul_const hm
   simp [ha]
@@ -1940,7 +1940,7 @@ theorem tendsto_inv_nat_nhds_zero
 
 中文:
 定理 tendsto_inv_nat_nhds_zero
-  结论: Tendsto (fun n : 自然数 => (n : 实数>=0∞)⁻¹) atTop (𝓝 0)
+  结论: 收敛 (fun n : 自然数 => (n : 实数>=0∞)⁻¹) atTop (𝓝 0)
   证明: ENNReal.inv_top ▸ tendsto_inv_iff.2 tendsto_nat_nhds_top
 -/
 protected theorem tendsto_inv_nat_nhds_zero : Tendsto (fun n : Nat => (n : Real>=0∞)⁻¹) atTop (𝓝 0) :=
@@ -1975,7 +1975,7 @@ theorem exists_countable_dense_no_zero_top
   exact ⟨s, s_count, s_dense, fun h => hs.1 0 (by simp) h, fun h => hs.2 ∞ (by simp) h⟩
 
 中文:
-定理 exists_countable_dense_no_zero_top
+定理 存在_countable_dense_no_zero_top
   证明: by
   obtain ⟨s, s_count, s_dense, hs⟩ :
     exists s : Set Real>=0∞, s.Countable ∧ Dense s ∧ (forall x, IsBot x -> x ∉ s) ∧ forall x, IsTop x -> x ∉ s :=
@@ -2008,8 +2008,8 @@ theorem exists_frequently_lt_of_liminf_ne_top
   filter_upwards [h r] with i hi using hi.trans (le_abs_self (x i))
 
 中文:
-定理 exists_frequently_lt_of_liminf_ne_top
-  结论: {ι : 类型} {l : Filter ι} {x : ι -> 实数}
+定理 存在_frequently_lt_of_liminf_ne_top
+  结论: {ι : 类型} {l : 滤子 ι} {x : ι -> 实数}
   证明: by
   by_contra! h
   refine hx (ENNReal.eq_top_of_forall_nnreal_le fun r => le_limsInf_of_le (by isBoundedDefault) ?_)
@@ -2038,8 +2038,8 @@ theorem exists_frequently_lt_of_liminf_ne_top'
   filter_upwards [h (-r)] with i hi using (le_neg.1 hi).trans (neg_le_abs _)
 
 中文:
-定理 exists_frequently_lt_of_liminf_ne_top'
-  结论: {ι : 类型} {l : Filter ι} {x : ι -> 实数}
+定理 存在_frequently_lt_of_liminf_ne_top'
+  结论: {ι : 类型} {l : 滤子 ι} {x : ι -> 实数}
   证明: by
   by_contra! h
   refine hx (ENNReal.eq_top_of_forall_nnreal_le fun r => le_limsInf_of_le (by isBoundedDefault) ?_)
@@ -2071,8 +2071,8 @@ theorem exists_upcrossings_of_not_bounded_under
       filter
 
 中文:
-定理 exists_upcrossings_of_not_bounded_under
-  结论: {ι : 类型} {l : Filter ι} {x : ι -> 实数}
+定理 存在_upcrossings_of_not_bounded_under
+  结论: {ι : 类型} {l : 滤子 ι} {x : ι -> 实数}
   证明: by
   rw [isBoundedUnder_le_abs]; rw [not_and_or] at hbdd
   obtain hbdd | hbdd := hbdd
@@ -2121,8 +2121,8 @@ theorem tendsto_toReal_iff
   simp [tendsto_coe]
 
 中文:
-定理 tendsto_toReal_iff
-  结论: {ι} {fi : Filter ι} {f : ι -> 实数>=0∞} (hf : 对任意 i, f i != ∞) {x : 实数>=0∞}
+定理 tendsto_to实数_iff
+  结论: {ι} {fi : 滤子 ι} {f : ι -> 实数>=0∞} (hf : 对任意 i, f i != ∞) {x : 实数>=0∞}
   证明: by
   lift f to ι -> Real>=0 using hf
   lift x to Real>=0 using hx
@@ -2146,8 +2146,8 @@ theorem tendsto_toReal_zero_iff
   rw [← ENNReal.toReal_zero]; rw [tendsto_toReal_iff hf ENNReal.zero_ne_top]
 
 中文:
-定理 tendsto_toReal_zero_iff
-  结论: {ι} {fi : Filter ι} {f : ι -> 实数>=0∞}
+定理 tendsto_to实数_zero_iff
+  结论: {ι} {fi : 滤子 ι} {f : ι -> 实数>=0∞}
   证明: by
   rw [← ENNReal.toReal_zero]; rw [tendsto_toReal_iff hf ENNReal.zero_ne_top]
 
@@ -2258,7 +2258,7 @@ theorem tendsto_iff_edist_tendsto_0
 
 中文:
 定理 tendsto_iff_edist_tendsto_0
-  条件: {l : Filter β} {f : β -> α} {y : α}
+  条件: {l : 滤子 β} {f : β -> α} {y : α}
   证明: by
   simp only [Metric.nhds_basis_eball.tendsto_right_iff, Metric.mem_eball,
     @tendsto_order Real>=0∞ β _ _, forall_prop_of_false ENNReal.not_lt_zero, forall_const, true_and]
@@ -2286,7 +2286,7 @@ theorem EMetric.cauchySeq_iff_le_tendsto_0
 
 中文:
 定理 EMetric.cauchySeq_iff_le_tendsto_0
-  条件: [Nonempty β] [SemilatticeSup β] {s : β -> α}
+  条件: [非空 β] [SemilatticeSup β] {s : β -> α}
   证明: EMetric.cauchySeq_iff.trans by
   constructor
   · intro hs
@@ -2369,7 +2369,7 @@ theorem continuous_edist
 
 中文:
 定理 continuous_edist
-  结论: Continuous fun p : α × α => edist p.1 p.2
+  结论: 连续 fun p : α × α => edist p.1 p.2
   证明: by
   apply continuous_of_le_add_edist 2 (by decide)
   rintro ⟨x, y⟩ ⟨x', y'⟩
@@ -2400,8 +2400,8 @@ theorem Continuous.edist
   proof: continuous_edist.comp (hf.prodMk hg :)
 
 中文:
-定理 Continuous.edist
-  结论: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
+定理 连续.edist
+  结论: [拓扑空间 β] {f g : β -> α} (hf : 连续 f)
   证明: continuous_edist.comp (hf.prodMk hg :)
 
 Depends on / 依赖: continuous_edist, continuous_edist.comp, hf.prodMk, prodMk
@@ -2419,8 +2419,8 @@ theorem Filter.Tendsto.edist
   proof: (continuous_edist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.edist
-  结论: {f g : β -> α} {x : Filter β} {a b : α} (hf : Tendsto f x (𝓝 a))
+定理 滤子.收敛.edist
+  结论: {f g : β -> α} {x : 滤子 β} {a b : α} (hf : 收敛 f x (𝓝 a))
   证明: (continuous_edist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuous_edist, continuous_edist.tendsto, hf.prodMk_nhds, prodMk_nhds, tendsto
@@ -2446,7 +2446,7 @@ alias EMetric.isClosed_closedBall := Metric.isClosed_closedEBall
 中文:
 定理 Metric.isClosed_closedEBall
   条件: {a : α} {r : 实数>=0∞}
-  结论: IsClosed (closedEBall a r)
+  结论: 是闭集 (closedEBall a r)
   证明: isClosed_le (by fun_prop) continuous_const
 
 @[deprecated (since := "2026-01-24")]
@@ -2480,7 +2480,7 @@ theorem Metric.ediam_closure
 
 中文:
 定理 Metric.ediam_closure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ediam (closure s) = ediam s
   证明: by
   refine le_antisymm (ediam_le fun x hx y hy => ?_) (ediam_mono subset_closure)
@@ -2511,7 +2511,7 @@ theorem Metric.diam_closure
 
 中文:
 定理 Metric.diam_closure
-  条件: {α : 类型} [PseudoMetricSpace α] (s : Set α)
+  条件: {α : 类型} [伪度量空间 α] (s : 集合 α)
   证明: by simp only [Metric.diam, Metric.ediam_closure]
 
 Depends on / 依赖: Metric, Metric.diam, Metric.ediam_closure, ediam_closure
@@ -2535,7 +2535,7 @@ alias isClosed_setOf_lipschitzOnWith := isClosed_set
 
 中文:
 定理 isClosed_setOfPred_lipschitzOnWith
-  结论: {α β} [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  结论: {α β} [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   simp only [LipschitzOnWith, ofPred_forall]
   refine isClosed_biInter fun x _ => isClosed_biInter fun y _ => isClosed_le ?_ ?_
@@ -2570,7 +2570,7 @@ alias isClosed_setOf_lipschitzWith := isClosed_setOfPred_lipschitzWith
 
 中文:
 定理 isClosed_setOfPred_lipschitzWith
-  结论: {α β} [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  结论: {α β} [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   simp only [← lipschitzOnWith_univ, isClosed_setOfPred_lipschitzOnWith]
 
@@ -2600,7 +2600,7 @@ lemma LipschitzOnWith.closure
 
 中文:
 引理 LipschitzOnWith.closure
-  结论: [PseudoEMetricSpace β] {f : α -> β} {s : Set α} {K : 实数>=0}
+  结论: [PseudoEMetric空间 β] {f : α -> β} {s : 集合 α} {K : 实数>=0}
   证明: by
   have := ENNReal.continuous_const_mul (ENNReal.coe_ne_top (r := K))
   refine fun x hx => le_on_closure (fun y hy => le_on_closure (fun x hx => hf hx hy) ?_ ?_ hx) ?_ ?_
@@ -2623,7 +2623,7 @@ lemma lipschitzOnWith_closure_iff
 
 中文:
 引理 lipschitzOnWith_closure_iff
-  结论: [PseudoEMetricSpace β] {f : α -> β} {s : Set α} {K : 实数>=0}
+  结论: [PseudoEMetric空间 β] {f : α -> β} {s : 集合 α} {K : 实数>=0}
   证明: ⟨fun hf => hf.mono subset_closure, LipschitzOnWith.closure hcont⟩
 
 Depends on / 依赖: LipschitzOnWith, LipschitzOnWith.closure, closure, hf.mono, subset_closure
@@ -2651,7 +2651,7 @@ theorem ediam_eq
 
 中文:
 定理 ediam_eq
-  条件: {s : Set 实数} (h : Bornology.IsBounded s)
+  条件: {s : 集合 实数} (h : 有界结构.IsBounded s)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hne)
   · simp
@@ -2689,7 +2689,7 @@ theorem diam_eq
 
 中文:
 定理 diam_eq
-  条件: {s : Set 实数} (h : Bornology.IsBounded s)
+  条件: {s : 集合 实数} (h : 有界结构.IsBounded s)
   结论: Metric.diam s = sSup s - sInf s
   证明: by
   rw [Metric.diam]; rw [Real.ediam_eq h]; rw [ENNReal.toReal_ofReal]
@@ -2721,7 +2721,7 @@ theorem ediam_Ioo
 中文:
 定理 ediam_Ioo
   条件: (a b : 实数)
-  结论: Metric.ediam (Ioo a b) = ENN实数.of实数 (b - a)
+  结论: Metric.ediam (开区间 a b) = 广义非负实数.of实数 (b - a)
   证明: by
   rcases le_or_gt b a with (h | h)
   · simp [h]
@@ -2754,7 +2754,7 @@ theorem ediam_Icc
 中文:
 定理 ediam_Icc
   条件: (a b : 实数)
-  结论: Metric.ediam (Icc a b) = ENN实数.of实数 (b - a)
+  结论: Metric.ediam (闭区间 a b) = 广义非负实数.of实数 (b - a)
   证明: by
   rcases le_or_gt a b with (h | h)
   · rw [Real.ediam_eq (isBounded_Icc _ _), csSup_Icc h, csInf_Icc h]
@@ -2785,7 +2785,7 @@ theorem ediam_Ico
 中文:
 定理 ediam_Ico
   条件: (a b : 实数)
-  结论: Metric.ediam (Ico a b) = ENN实数.of实数 (b - a)
+  结论: Metric.ediam (左闭右开区间 a b) = 广义非负实数.of实数 (b - a)
   证明: le_antisymm (ediam_Icc a b ▸ ediam_mono Ico_subset_Icc_self)
     (ediam_Ioo a b ▸ ediam_mono Ioo_subset_Ico_self)
 
@@ -2811,7 +2811,7 @@ theorem ediam_Ioc
 中文:
 定理 ediam_Ioc
   条件: (a b : 实数)
-  结论: Metric.ediam (Ioc a b) = ENN实数.of实数 (b - a)
+  结论: Metric.ediam (左开右闭区间 a b) = 广义非负实数.of实数 (b - a)
   证明: le_antisymm (ediam_Icc a b ▸ ediam_mono Ioc_subset_Icc_self)
     (ediam_Ioo a b ▸ ediam_mono Ioo_subset_Ioc_self)
 
@@ -2834,7 +2834,7 @@ theorem diam_Icc
 中文:
 定理 diam_Icc
   条件: {a b : 实数} (h : a <= b)
-  结论: Metric.diam (Icc a b) = b - a
+  结论: Metric.diam (闭区间 a b) = b - a
   证明: by
   simp [Metric.diam, ENNReal.toReal_ofReal (sub_nonneg.2 h)]
 
@@ -2856,7 +2856,7 @@ theorem diam_Ico
 中文:
 定理 diam_Ico
   条件: {a b : 实数} (h : a <= b)
-  结论: Metric.diam (Ico a b) = b - a
+  结论: Metric.diam (左闭右开区间 a b) = b - a
   证明: by
   simp [Metric.diam, ENNReal.toReal_ofReal (sub_nonneg.2 h)]
 
@@ -2878,7 +2878,7 @@ theorem diam_Ioc
 中文:
 定理 diam_Ioc
   条件: {a b : 实数} (h : a <= b)
-  结论: Metric.diam (Ioc a b) = b - a
+  结论: Metric.diam (左开右闭区间 a b) = b - a
   证明: by
   simp [Metric.diam, ENNReal.toReal_ofReal (sub_nonneg.2 h)]
 
@@ -2900,7 +2900,7 @@ theorem diam_Ioo
 中文:
 定理 diam_Ioo
   条件: {a b : 实数} (h : a <= b)
-  结论: Metric.diam (Ioo a b) = b - a
+  结论: Metric.diam (开区间 a b) = b - a
   证明: by
   simp [Metric.diam, ENNReal.toReal_ofReal (sub_nonneg.2 h)]
 
@@ -2926,7 +2926,7 @@ definition truncateToReal
   body: (min t x).toReal
 
 中文:
-定义 truncateToReal
+定义 truncateTo实数
   签名: (t x : 实数>=0∞)
   定义体: (min t x).toReal
 
@@ -2947,7 +2947,7 @@ lemma truncateToReal_eq_toReal
   exact (ENNReal.toReal_eq_toReal_iff' obs x_lt_top.ne).mpr (min_eq_right x_le)
 
 中文:
-引理 truncateToReal_eq_toReal
+引理 truncateTo实数_eq_to实数
   条件: {t x : 实数>=0∞} (t_ne_top : t != ∞) (x_le : x <= t)
   证明: by
   have x_lt_top : x < ∞ := lt_of_le_of_lt x_le t_ne_top.lt_top
@@ -2976,7 +2976,7 @@ lemma truncateToReal_le
   exact min_le_left t x
 
 中文:
-引理 truncateToReal_le
+引理 truncateTo实数_le
   条件: {t : 实数>=0∞} (t_ne_top : t != ∞) {x : 实数>=0∞}
   证明: by
   rw [truncateToReal]
@@ -3001,7 +3001,7 @@ lemma truncateToReal_nonneg
   proof: toReal_nonneg
 
 中文:
-引理 truncateToReal_nonneg
+引理 truncateTo实数_nonneg
   条件: {t x : 实数>=0∞}
   结论: 0 <= truncateTo实数 t x
   证明: toReal_nonneg
@@ -3024,9 +3024,9 @@ lemma monotone_truncateToReal
   exact ne_top_of_le_ne_top t_ne_top (min_le_left _ _)
 
 中文:
-引理 monotone_truncateToReal
+引理 monotone_truncateTo实数
   条件: {t : 实数>=0∞} (t_ne_top : t != ∞)
-  结论: Monotone (truncateTo实数 t)
+  结论: 递增 (truncateTo实数 t)
   证明: by
   intro x y x_le_y
   simp only [truncateToReal]
@@ -3055,9 +3055,9 @@ lemma continuous_truncateToReal
   simp [t_ne_top]
 
 中文:
-引理 continuous_truncateToReal
+引理 continuous_truncateTo实数
   条件: {t : 实数>=0∞} (t_ne_top : t != ∞)
-  结论: Continuous (truncateTo实数 t)
+  结论: 连续 (truncateTo实数 t)
   证明: by
   apply continuousOn_toReal.comp_continuous (by fun_prop)
   simp [t_ne_top]
@@ -3088,7 +3088,7 @@ lemma limsup_sub_const
 
 中文:
 引理 limsup_sub_const
-  条件: (F : Filter ι) (f : ι -> 实数>=0∞) (c : 实数>=0∞)
+  条件: (F : 滤子 ι) (f : ι -> 实数>=0∞) (c : 实数>=0∞)
   证明: by
   rcases F.eq_or_neBot with rfl | _
   · simp
@@ -3115,7 +3115,7 @@ lemma liminf_sub_const
 
 中文:
 引理 liminf_sub_const
-  条件: (F : Filter ι) [NeBot F] (f : ι -> 实数>=0∞) (c : 实数>=0∞)
+  条件: (F : 滤子 ι) [NeBot F] (f : ι -> 实数>=0∞) (c : 实数>=0∞)
   证明: (Monotone.map_limsInf_of_continuousAt (F := F.map f) (f := fun (x : Real>=0∞) => x - c)
     (fun _ _ h => tsub_le_tsub_right h c) (continuous_sub_right c).continuousAt).symm
 
@@ -3140,7 +3140,7 @@ lemma limsup_const_sub
 
 中文:
 引理 limsup_const_sub
-  条件: (F : Filter ι) (f : ι -> 实数>=0∞) {c : 实数>=0∞} (c_ne_top : c != ∞)
+  条件: (F : 滤子 ι) (f : ι -> 实数>=0∞) {c : 实数>=0∞} (c_ne_top : c != ∞)
   证明: by
   rcases F.eq_or_neBot with rfl | _
   · simp
@@ -3167,7 +3167,7 @@ lemma liminf_const_sub
 
 中文:
 引理 liminf_const_sub
-  条件: (F : Filter ι) [NeBot F] (f : ι -> 实数>=0∞) {c : 实数>=0∞} (c_ne_top : c != ∞)
+  条件: (F : 滤子 ι) [NeBot F] (f : ι -> 实数>=0∞) {c : 实数>=0∞} (c_ne_top : c != ∞)
   证明: (Antitone.map_limsSup_of_continuousAt (F := F.map f) (f := fun (x : Real>=0∞) => c - x)
     (fun _ _ h => tsub_le_tsub_left h c) (continuous_sub_left c_ne_top).continuousAt).symm
 
@@ -3297,7 +3297,7 @@ lemma liminf_toReal_eq
    
 
 中文:
-引理 liminf_toReal_eq
+引理 liminf_to实数_eq
   条件: [NeBot f] {b : 实数>=0∞} (b_ne_top : b != ∞) (le_b : 对任意ᶠ i in f, u i <= b)
   证明: by
   have liminf_le : f.liminf u <= b := by
@@ -3345,7 +3345,7 @@ lemma limsup_toReal_eq
     rw [truncateToReal_eq_toReal b_ne_t
 
 中文:
-引理 limsup_toReal_eq
+引理 limsup_to实数_eq
   条件: [NeBot f] {b : 实数>=0∞} (b_ne_top : b != ∞) (le_b : 对任意ᶠ i in f, u i <= b)
   证明: by
   have aux : forallᶠ i in f, (u i).toReal = ENNReal.truncateToReal b (u i) := by
@@ -3386,7 +3386,7 @@ lemma ofNNReal_limsup
 @[simp, norm_cast]
 
 中文:
-引理 ofNNReal_limsup
+引理 ofNN实数_limsup
   条件: {u : ι -> 实数>=0} (hf : f.IsBoundedUnder (· <= ·) u)
   证明: by
   refine eq_of_forall_nnreal_le_iff fun r => ?_
@@ -3416,7 +3416,7 @@ lemma ofNNReal_liminf
   simp [forall_ennreal]
 
 中文:
-引理 ofNNReal_liminf
+引理 ofNN实数_liminf
   条件: {u : ι -> 实数>=0} (hf : f.IsCoboundedUnder (· >= ·) u)
   证明: by
   refine eq_of_forall_nnreal_le_iff fun r => ?_
@@ -3448,7 +3448,7 @@ exact ENNReal.le_of_
 
 中文:
 定理 liminf_add_of_right_tendsto_zero
-  结论: {u : Filter ι} {g : ι -> 实数>=0∞} (hg : u.Tendsto g (𝓝 0))
+  结论: {u : 滤子 ι} {g : ι -> 实数>=0∞} (hg : u.收敛 g (𝓝 0))
   证明: by
 refine le_antisymm ?_ liminf_le_liminf .of_forall by simp
   refine liminf_le_of_le (by isBoundedDefault) fun b hb => ?_
@@ -3482,7 +3482,7 @@ theorem liminf_add_of_left_tendsto_zero
 
 中文:
 定理 liminf_add_of_left_tendsto_zero
-  结论: {u : Filter ι} {f : ι -> 实数>=0∞} (hf : u.Tendsto f (𝓝 0))
+  结论: {u : 滤子 ι} {f : ι -> 实数>=0∞} (hf : u.收敛 f (𝓝 0))
   证明: by
   rw [add_comm]; rw [liminf_add_of_right_tendsto_zero hf]
 
@@ -3509,7 +3509,7 @@ refine le_antisymm ?_ limsup_le_limsup .of_forall by simp
 
 中文:
 定理 limsup_add_of_right_tendsto_zero
-  结论: {u : Filter ι} {g : ι -> 实数>=0∞} (hg : u.Tendsto g (𝓝 0))
+  结论: {u : 滤子 ι} {g : ι -> 实数>=0∞} (hg : u.收敛 g (𝓝 0))
   证明: by
 refine le_antisymm ?_ limsup_le_limsup .of_forall by simp
   refine le_limsup_of_le (by isBoundedDefault) fun b hb => ?_
@@ -3543,7 +3543,7 @@ theorem limsup_add_of_left_tendsto_zero
 
 中文:
 定理 limsup_add_of_left_tendsto_zero
-  结论: {u : Filter ι} {f : ι -> 实数>=0∞} (hf : u.Tendsto f (𝓝 0))
+  结论: {u : 滤子 ι} {f : ι -> 实数>=0∞} (hf : u.收敛 f (𝓝 0))
   证明: by
   rw [add_comm]; rw [limsup_add_of_right_tendsto_zero hf]
 
@@ -3570,7 +3570,7 @@ lemma Dense.lipschitzWith_extend
     exact (ENNReal.continuous_const_mul (by simp)).comp (by
 
 中文:
-引理 Dense.lipschitzWith_extend
+引理 稠密.lipschitzWith_extend
   结论: {α β : 类型}
   证明: by
   have : IsClosed {p : α × α | edist (hs.extend f p.1) (hs.extend f p.2) <= K * edist p.1 p.2} := by

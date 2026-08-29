@@ -37,8 +37,8 @@ theorem Preadditive.isSeparating_iff
 sub_eq_zero.1 h𝒢 _ (by simpa only [Preadditive.comp_sub, sub_eq_zero] using hfg)⟩
 
 中文:
-定理 Preadditive.isSeparating_iff
-  条件: (P : Object命题erty C)
+定理 预加性.isSeparating_iff
+  条件: (P : ObjectProperty C)
   证明: ⟨fun h𝒢 X Y f hf => h𝒢 _ _ (by simpa only [Limits.comp_zero] using hf), fun h𝒢 X Y f g hfg =>
 sub_eq_zero.1 h𝒢 _ (by simpa only [Preadditive.comp_sub, sub_eq_zero] using hfg)⟩
 
@@ -60,8 +60,8 @@ theorem Preadditive.isCoseparating_iff
 sub_eq_zero.1 h𝒢 _ (by simpa only [Preadditive.sub_comp, sub_eq_zero] using hfg)⟩
 
 中文:
-定理 Preadditive.isCoseparating_iff
-  条件: (P : Object命题erty C)
+定理 预加性.isCoseparating_iff
+  条件: (P : ObjectProperty C)
   证明: ⟨fun h𝒢 X Y f hf => h𝒢 _ _ (by simpa only [Limits.zero_comp] using hf), fun h𝒢 X Y f g hfg =>
 sub_eq_zero.1 h𝒢 _ (by simpa only [Preadditive.sub_comp, sub_eq_zero] using hfg)⟩
 
@@ -84,7 +84,7 @@ theorem Preadditive.isSeparator_iff
 sub_eq_zero.1 hG _ (by simpa only [Preadditive.comp_sub, sub_eq_zero] using hfg)⟩
 
 中文:
-定理 Preadditive.isSeparator_iff
+定理 预加性.isSeparator_iff
   条件: (G : C)
   证明: ⟨fun hG X Y f hf => hG.def _ _ (by simpa only [Limits.comp_zero] using hf), fun hG =>
     (isSeparator_def _).2 fun X Y f g hfg =>
@@ -109,7 +109,7 @@ theorem Preadditive.isCoseparator_iff
 sub_eq_zero.1 hG _ (by simpa only [Preadditive.sub_comp, sub_eq_zero] using hfg)⟩
 
 中文:
-定理 Preadditive.isCoseparator_iff
+定理 预加性.isCoseparator_iff
   条件: (G : C)
   证明: ⟨fun hG X Y f hf => hG.def _ _ (by simpa only [Limits.zero_comp] using hf), fun hG =>
     (isCoseparator_def _).2 fun X Y f g hfg =>

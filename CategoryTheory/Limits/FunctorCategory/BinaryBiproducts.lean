@@ -80,7 +80,7 @@ definition pointwiseBinaryBicone.isBilimit
 
 中文:
 定义 pointwiseBinaryBicone.isBilimit
-  签名: : (pointwiseBinaryBicone F G).IsBilimit where
+  签名: : (pointwiseBinaryBicone F G).是Bilimit where
   定义体: evaluationJointlyReflectsLimits _ fun d => by
     refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (BinaryBiproduct.isLimit (F.obj d) (G.obj d))
     · exact (pairComp F G ((evaluation D C).obj d)).symm
@@ -132,7 +132,7 @@ instance functorCategoryHasBinaryBiproducts
 
 中文:
 实例 functorCategoryHasBinaryBiproducts
-  签名: : HasBinaryBiproducts (D ⥤ C) where
+  签名: : 有BinaryBiproducts (D ⥤ C) where
   定义体: ⟨⟨pointwiseBinaryBiproductData F G⟩⟩
 
 Depends on / 依赖: pointwiseBinaryBiproductData

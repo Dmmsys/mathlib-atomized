@@ -105,8 +105,8 @@ instance [PathConnectedSpace
   body: inferInstanceAs (IsIso ((toSSet.obj X).homology₀ε R))
 
 中文:
-实例 [PathConnectedSpace
-  签名: X] : IsIso (X.singularHomology₀ε R)
+实例 [道路连通空间
+  签名: X] : 是同构 (X.singularHomology₀ε R)
   定义体: inferInstanceAs (IsIso ((toSSet.obj X).homology₀ε R))
 
 Depends on / 依赖: toSSet, toSSet.obj

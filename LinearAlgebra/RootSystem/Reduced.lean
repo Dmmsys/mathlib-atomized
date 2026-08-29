@@ -51,7 +51,7 @@ class IsReduced
     - eq_or_eq_neg((i j : ι) (h : ¬ LinearIndependent R ![P.root i, P.root j])) : P.root i = P.root j ∨ P.root i = - P.root j
 
 中文:
-类 IsReduced
+类 是既约
   参数: : 命题 where
   公理与运算 (1 个):
     - eq_or_eq_neg((i j : ι) (h : ¬ LinearIndependent R ![P.root i, P.root j])) : P.root i = P.root j ∨ P.root i = - P.root j
@@ -77,7 +77,7 @@ lemma isReduced_iff'
 
 中文:
 引理 isReduced_iff'
-  结论: P.IsReduced ↔ 对任意 i j : ι, i != j ->
+  结论: P.是既约 ↔ 对任意 i j : ι, i != j ->
   证明: by
   rw [isReduced_iff]
   refine ⟨fun h i j hij hLin => ?_, fun h i j hLin => ?_⟩
@@ -110,8 +110,8 @@ lemma IsReduced.linearIndependent
   simp_all
 
 中文:
-引理 IsReduced.linearIndependent
-  条件: [P.IsReduced] (h : i != j) (h' : P.root i != -P.root j)
+引理 是既约.linearIndependent
+  条件: [P.是既约] (h : i != j) (h' : P.root i != -P.root j)
   证明: by
   have := IsReduced.eq_or_eq_neg (P := P) i j
   simp_all
@@ -139,8 +139,8 @@ lemma IsReduced.linearIndependent_iff
     exact ⟨1, 1, by simp⟩
 
 中文:
-引理 IsReduced.linearIndependent_iff
-  条件: [Nontrivial R] [P.IsReduced]
+引理 是既约.linearIndependent_iff
+  条件: [非平凡 R] [P.是既约]
   证明: by
   refine ⟨fun h => ?_, fun ⟨h, h'⟩ => linearIndependent P h h'⟩
   rw [LinearIndependent.pair_iff] at h
@@ -178,7 +178,7 @@ lemma nsmul_notMem_range_root
 
 中文:
 引理 nsmul_notMem_range_root
-  结论: [CharZero R] [IsAddTorsionFree M] [P.IsReduced]
+  结论: [特征零 R] [是加法无挠 M] [P.是既约]
   证明: by
   have : ¬ LinearIndependent R ![n • P.root i, P.root i] := by
     simpa only [LinearIndependent.pair_iff, not_forall] using
@@ -277,7 +277,7 @@ lemma linearIndependent_of_add_mem_range_root'
 
 中文:
 引理 linearIndependent_of_add_mem_range_root'
-  结论: [CharZero R] [IsDomain R] [P.IsReduced] {i j : ι}
+  结论: [特征零 R] [是整环 R] [P.是既约] {i j : ι}
   证明: have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : IsAddTorsionFree M := .of_isTorsionFree R M
   P.linearIndependent_of_add_mem_range_root h
@@ -303,7 +303,7 @@ lemma linearIndependent_of_sub_mem_range_root'
 
 中文:
 引理 linearIndependent_of_sub_mem_range_root'
-  结论: [CharZero R] [IsDomain R] [P.IsReduced] {i j : ι}
+  结论: [特征零 R] [是整环 R] [P.是既约] {i j : ι}
   证明: have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : IsAddTorsionFree M := .of_isTorsionFree R M
   P.linearIndependent_of_sub_mem_range_root h
@@ -333,7 +333,7 @@ lemma infinite_of_linearIndependent_coxeterWeight_four
 
 中文:
 引理 infinite_of_linearIndependent_coxeterWeight_four
-  结论: [NeZero (2 : R)] [IsAddTorsionFree M]
+  结论: [NeZero (2 : R)] [是加法无挠 M]
   证明: by
   refine (infinite_range_iff (Embedding.injective P.root)).mp (Infinite.mono ?_
     ((infinite_range_reflection_reflection_iterate_iff (P.coroot_root_two i)
@@ -382,7 +382,7 @@ lemma pairing_smul_root_eq_of_not_linearIndependent
 
 中文:
 引理 pairing_smul_root_eq_of_not_linearIndependent
-  结论: [NeZero (2 : R)] [IsDomain R]
+  结论: [NeZero (2 : R)] [是整环 R]
   证明: by
   rw [LinearIndependent.pair_iff] at h
   push Not at h
@@ -433,7 +433,7 @@ lemma coxeterWeight_ne_four_of_linearIndependent
 
 中文:
 引理 coxeterWeight_ne_four_of_linearIndependent
-  结论: [NeZero (2 : R)] [IsAddTorsionFree M]
+  结论: [NeZero (2 : R)] [是加法无挠 M]
   证明: by
   intro contra
   have := P.infinite_of_linearIndependent_coxeterWeight_four hl contra
@@ -525,7 +525,7 @@ instance instFlipIsReduced
 
 中文:
 实例 instFlipIsReduced
-  签名: [P.IsReduced] [IsTorsionFree R N]
+  签名: [P.是既约] [是无挠 R N]
   定义体: by
   refine ⟨fun i j h => ?_⟩
   rcases eq_or_ne i j with rfl | hij; · tauto
@@ -767,7 +767,7 @@ lemma coxeterWeightIn_ne_four
 
 中文:
 引理 coxeterWeightIn_ne_four
-  条件: [P.IsReduced] (h : i != j) (h' : P.root i != -P.root j)
+  条件: [P.是既约] (h : i != j) (h' : P.root i != -P.root j)
   证明: by
   rw [ne_eq]; rw [coxeterWeightIn_eq_four_iff_not_linearIndependent]; rw [not_not]
   exact IsReduced.linearIndependent P h h'

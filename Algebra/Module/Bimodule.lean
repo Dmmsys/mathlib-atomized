@@ -94,7 +94,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (p : AddSubmonoid M) (hA : 对任意 (a : A) {m : M}, m in p -> a • m in p)
+  签名: (p : 加法子幺半群 M) (hA : 对任意 (a : A) {m : M}, m in p -> a • m in p)
   定义体: { p with
     carrier := p
     smul_mem' := fun ab m =>
@@ -126,7 +126,7 @@ theorem smul_mem
 
 中文:
 定理 smul_mem
-  条件: (p : Submodule (A otimes[R] B) M) (a : A) {m : M} (hm : m in p)
+  条件: (p : 子模 (A otimes[R] B) M) (a : A) {m : M} (hm : m in p)
   结论: a • m in p
   证明: by
   suffices a • m = a otimesₜ[R] (1 : B) • m by exact this.symm ▸ p.smul_mem _ hm
@@ -151,7 +151,7 @@ theorem smul_mem'
 
 中文:
 定理 smul_mem'
-  条件: (p : Submodule (A otimes[R] B) M) (b : B) {m : M} (hm : m in p)
+  条件: (p : 子模 (A otimes[R] B) M) (b : B) {m : M} (hm : m in p)
   结论: b • m in p
   证明: by
   suffices b • m = (1 : A) otimesₜ[R] b • m by exact this.symm ▸ p.smul_mem _ hm
@@ -176,7 +176,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: (S : 类型) [CommSemiring S] [Module S M] [Algebra S A] [Algebra S B]
+  签名: (S : 类型) [交换半环 S] [模 S M] [代数 S A] [代数 S B]
   定义体: mk p.toAddSubmonoid (smul_mem p) (smul_mem' p)
 
 Depends on / 依赖: p.toAddSubmonoid, smul_mem, toAddSubmonoid
@@ -200,7 +200,7 @@ definition toSubmodule
 
 中文:
 定义 toSubmodule
-  签名: (p : Submodule (A otimes[R] B) M)
+  签名: (p : 子模 (A otimes[R] B) M)
   定义体: { p with
     carrier := p
     smul_mem' := smul_mem p }
@@ -226,7 +226,7 @@ definition toSubmodule'
 
 中文:
 定义 toSubmodule'
-  签名: (p : Submodule (A otimes[R] B) M)
+  签名: (p : 子模 (A otimes[R] B) M)
   定义体: { p with
     carrier := p
     smul_mem' := smul_mem' p }
@@ -257,8 +257,8 @@ definition toSubbimoduleInt
   body: baseChange Int p
 
 中文:
-定义 toSubbimoduleInt
-  签名: (p : Submodule (R otimes[自然数] S) M)
+定义 toSubbimodule整数
+  签名: (p : 子模 (R otimes[自然数] S) M)
   定义体: baseChange Int p
 
 Depends on / 依赖: baseChange
@@ -278,8 +278,8 @@ definition toSubbimoduleNat
   body: baseChange Nat p
 
 中文:
-定义 toSubbimoduleNat
-  签名: (p : Submodule (R otimes[整数] S) M)
+定义 toSubbimodule自然数
+  签名: (p : 子模 (R otimes[整数] S) M)
   定义体: baseChange Nat p
 
 Depends on / 依赖: baseChange

@@ -40,7 +40,7 @@ definition Class
   body: Set ZFSet deriving LE, EmptyCollection, Nonempty, Union, Inter, Compl, SDiff
 
 中文:
-定义 Class
+定义 类
   定义体: Set ZFSet deriving LE, EmptyCollection, Nonempty, Union, Inter, Compl, SDiff
 
 Depends on / 依赖: EmptyCollection, Nonempty, deriving
@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: Insert ZFSet Class
+  签名: Insert ZFSet 类
   定义体: ⟨Set.insert⟩
 
 Depends on / 依赖: Set.insert, insert
@@ -82,7 +82,7 @@ definition sep
 
 中文:
 定义 sep
-  签名: (p : ZFSet -> 命题) (A : Class)
+  签名: (p : ZFSet -> 命题) (A : 类)
   定义体: {y | A y ∧ p y}
 
 @[ext]
@@ -102,7 +102,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {x y : Class.{u}}
+  条件: {x y : 类.{u}}
   结论: (对任意 z : ZFSet.{u}, x z ↔ y z) -> x = y
   证明: Set.ext
 
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe ZFSet Class
+  签名: Coe ZFSet 类
   定义体: ⟨ofSet⟩
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.toEDist, toEDist
@@ -157,7 +157,7 @@ definition univ
 
 中文:
 定义 univ
-  签名: : Class
+  签名: : 类
   定义体: Set.univ
 
 Depends on / 依赖: Set.univ
@@ -177,7 +177,7 @@ deriving instance CompleteLattice for Class
 
 中文:
 实例 :
-  签名: Top Class
+  签名: 顶元素 类
   定义体: ⟨univ⟩
 
 deriving instance CompleteLattice for Class
@@ -196,7 +196,7 @@ definition ToSet
 
 中文:
 定义 ToSet
-  签名: (B : Class.{u}) (A : Class.{u})
+  签名: (B : 类.{u}) (A : 类.{u})
   定义体: exists x : ZFSet, ↑x = A ∧ B x
 -/
 def ToSet (B : Class.{u}) (A : Class.{u}) : Prop :=
@@ -212,7 +212,7 @@ definition Mem
 
 中文:
 定义 Mem
-  签名: (B A : Class.{u})
+  签名: (B A : 类.{u})
   定义体: ToSet.{u} B A
 -/
 protected def Mem (B A : Class.{u}) : Prop :=
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership Class Class
+  签名: Membership 类 类
   定义体: ⟨Class.Mem⟩
 
 Depends on / 依赖: Class.Mem
@@ -249,7 +249,7 @@ theorem mem_def
 
 中文:
 定理 mem_def
-  条件: (A B : Class.{u})
+  条件: (A B : 类.{u})
   结论: A in B ↔ 存在 x : ZFSet, ↑x = A ∧ B x
   证明: Iff.rfl
 
@@ -274,8 +274,8 @@ theorem notMem_empty
 
 中文:
 定理 notMem_empty
-  条件: (x : Class.{u})
-  结论: x ∉ (∅ : Class.{u})
+  条件: (x : 类.{u})
+  结论: x ∉ (∅ : 类.{u})
   证明: fun ⟨_, _, h⟩ => h
 
 @[simp]
@@ -297,7 +297,7 @@ theorem not_empty_hom
 中文:
 定理 not_empty_hom
   条件: (x : ZFSet.{u})
-  结论: ¬(∅ : Class.{u}) x
+  结论: ¬(∅ : 类.{u}) x
   证明: id
 
 @[simp]
@@ -319,7 +319,7 @@ theorem mem_univ
 
 中文:
 定理 mem_univ
-  条件: {A : Class.{u}}
+  条件: {A : 类.{u}}
   结论: A in univ.{u} ↔ 存在 x : ZFSet.{u}, ↑x = A
   证明: exists_congr fun _ => iff_of_eq (and_true _)
 
@@ -359,8 +359,8 @@ theorem eq_univ_iff_forall
   proof: Set.eq_univ_iff_forall
 
 中文:
-定理 eq_univ_iff_forall
-  条件: {A : Class.{u}}
+定理 eq_univ_iff_对任意
+  条件: {A : 类.{u}}
   结论: A = univ ↔ 对任意 x : ZFSet, A x
   证明: Set.eq_univ_iff_forall
 
@@ -379,8 +379,8 @@ theorem eq_univ_of_forall
   proof: Set.eq_univ_of_forall
 
 中文:
-定理 eq_univ_of_forall
-  条件: {A : Class.{u}}
+定理 eq_univ_of_对任意
+  条件: {A : 类.{u}}
   结论: (对任意 x : ZFSet, A x) -> A = univ
   证明: Set.eq_univ_of_forall
 
@@ -406,7 +406,7 @@ theorem mem_wf
 
 中文:
 定理 mem_wf
-  结论: @WellFounded Class.{u} (· in ·)
+  结论: @良基 类.{u} (· in ·)
   证明: ⟨by
     have H : forall x : ZFSet.{u}, @Acc Class.{u} (· in ·) ↑x := by
       refine fun a => ZFSet.inductionOn a fun x IH => ⟨_, ?_⟩
@@ -438,7 +438,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsWellFounded Class (· in ·)
+  签名: 是良基 类 (· in ·)
   定义体: ⟨mem_wf⟩
 
 Depends on / 依赖: mem_wf
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation Class
+  签名: 良基关系 类
   定义体: ⟨_, mem_wf⟩
 
 Depends on / 依赖: NNDist, PseudoMetricSpace, PseudoMetricSpace.toNNDist, mem_wf, toNNDist
@@ -475,7 +475,7 @@ theorem mem_asymm
 
 中文:
 定理 mem_asymm
-  条件: {x y : Class}
+  条件: {x y : 类}
   结论: x in y -> y ∉ x
   证明: asymm_of (· in ·)
 
@@ -495,7 +495,7 @@ theorem mem_irrefl
 
 中文:
 定理 mem_irrefl
-  条件: (x : Class)
+  条件: (x : 类)
   结论: x ∉ x
   证明: irrefl_of (· in ·) x
 
@@ -534,7 +534,7 @@ definition congToClass
 
 中文:
 定义 congToClass
-  签名: (x : Set Class.{u})
+  签名: (x : 集合 类.{u})
   定义体: { y | ↑y in x }
 
 @[simp]
@@ -573,7 +573,7 @@ definition classToCong
 
 中文:
 定义 classToCong
-  签名: (x : Class.{u})
+  签名: (x : 类.{u})
   定义体: { y | y in x }
 
 @[simp]
@@ -612,7 +612,7 @@ definition powerset
 
 中文:
 定义 powerset
-  签名: (x : Class)
+  签名: (x : 类)
   定义体: congToClass (Set.powerset x)
 
 Depends on / 依赖: Set.powerset, congToClass, powerset
@@ -632,8 +632,8 @@ definition sUnion
 scoped prefix:110 "⋃₀ " => Class.sUnion
 
 中文:
-定义 sUnion
-  签名: (x : Class)
+定义 集合并集
+  签名: (x : 类)
   定义体: sSup (classToCong x)
 
 @[inherit_doc]
@@ -659,8 +659,8 @@ definition sInter
 scoped prefix:110 "⋂₀ " => Class.sInter
 
 中文:
-定义 sInter
-  签名: (x : Class)
+定义 集合交集
+  签名: (x : 类)
   定义体: sInf (classToCong x)
 
 @[inherit_doc]
@@ -689,7 +689,7 @@ theorem ofSet.inj
 
 中文:
 定理 ofSet.inj
-  条件: {x y : ZFSet.{u}} (h : (x : Class.{u}) = y)
+  条件: {x y : ZFSet.{u}} (h : (x : 类.{u}) = y)
   结论: x = y
   证明: ZFSet.ext fun z => by
     change (x : Class.{u}) z ↔ (y : Class.{u}) z
@@ -718,7 +718,7 @@ theorem toSet_of_ZFSet
 
 中文:
 定理 toSet_of_ZFSet
-  条件: (A : Class.{u}) (x : ZFSet.{u})
+  条件: (A : 类.{u}) (x : ZFSet.{u})
   结论: ToSet A x ↔ A x
   证明: ⟨fun ⟨y, yx, py⟩ => by rwa [ofSet.inj yx] at py, fun px => ⟨x, rfl, px⟩⟩
 
@@ -743,7 +743,7 @@ theorem coe_mem
 
 中文:
 定理 coe_mem
-  条件: {x : ZFSet.{u}} {A : Class.{u}}
+  条件: {x : ZFSet.{u}} {A : 类.{u}}
   结论: ↑x in A ↔ A x
   证明: toSet_of_ZFSet _ _
 
@@ -769,7 +769,7 @@ theorem coe_apply
 中文:
 定理 coe_apply
   条件: {x y : ZFSet.{u}}
-  结论: (y : Class.{u}) x ↔ x in y
+  结论: (y : 类.{u}) x ↔ x in y
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -794,7 +794,7 @@ theorem coe_subset
 中文:
 定理 coe_subset
   条件: (x y : ZFSet.{u})
-  结论: (x : Class.{u}) subseteq y ↔ x subseteq y
+  结论: (x : 类.{u}) subseteq y ↔ x subseteq y
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -817,7 +817,7 @@ theorem coe_sep
 
 中文:
 定理 coe_sep
-  条件: (p : Class.{u}) (x : ZFSet.{u})
+  条件: (p : 类.{u}) (x : ZFSet.{u})
   证明: ext fun _ => ZFSet.mem_sep
 
 @[simp, norm_cast]
@@ -841,7 +841,7 @@ theorem coe_empty
 
 中文:
 定理 coe_empty
-  结论: ↑(∅ : ZFSet.{u}) = (∅ : Class.{u})
+  结论: ↑(∅ : ZFSet.{u}) = (∅ : 类.{u})
   证明: ext fun y => iff_false _ ▸ ZFSet.notMem_empty y
 
 @[simp, norm_cast]
@@ -866,7 +866,7 @@ theorem coe_insert
 中文:
 定理 coe_insert
   条件: (x y : ZFSet.{u})
-  结论: ↑(insert x y) = @insert ZFSet.{u} Class.{u} _ x y
+  结论: ↑(insert x y) = @insert ZFSet.{u} 类.{u} _ x y
   证明: ext fun _ => ZFSet.mem_insert_iff
 
 @[simp, norm_cast]
@@ -891,7 +891,7 @@ theorem coe_union
 中文:
 定理 coe_union
   条件: (x y : ZFSet.{u})
-  结论: ↑(x union y) = (x : Class.{u}) union y
+  结论: ↑(x union y) = (x : 类.{u}) union y
   证明: ext fun _ => ZFSet.mem_union
 
 @[simp, norm_cast]
@@ -916,7 +916,7 @@ theorem coe_inter
 中文:
 定理 coe_inter
   条件: (x y : ZFSet.{u})
-  结论: ↑(x inter y) = (x : Class.{u}) inter y
+  结论: ↑(x inter y) = (x : 类.{u}) inter y
   证明: ext fun _ => ZFSet.mem_inter
 
 @[simp, norm_cast]
@@ -943,7 +943,7 @@ theorem coe_sdiff
 中文:
 定理 coe_sdiff
   条件: (x y : ZFSet.{u})
-  结论: ↑(x \ y) = (x : Class.{u}) \ y
+  结论: ↑(x \ y) = (x : 类.{u}) \ y
   证明: ext fun _ => ZFSet.mem_sdiff
 
 @[deprecated (since := "2026-06-03")] alias coe_diff := coe_sdiff
@@ -996,7 +996,7 @@ theorem powerset_apply
 
 中文:
 定理 powerset_apply
-  条件: {A : Class.{u}} {x : ZFSet.{u}}
+  条件: {A : 类.{u}} {x : ZFSet.{u}}
   结论: powerset A x ↔ ↑x subseteq A
   证明: Iff.rfl
 
@@ -1023,7 +1023,7 @@ theorem sUnion_apply
 
 中文:
 定理 sUnion_apply
-  条件: {x : Class} {y : ZFSet}
+  条件: {x : 类} {y : ZFSet}
   结论: (⋃₀ x) y ↔ 存在 z : ZFSet, x z ∧ y in z
   证明: by
   constructor
@@ -1056,7 +1056,7 @@ theorem coe_sUnion
 中文:
 定理 coe_sUnion
   条件: (x : ZFSet.{u})
-  结论: ↑(⋃₀ x : ZFSet) = ⋃₀ (x : Class.{u})
+  结论: ↑(⋃₀ x : ZFSet) = ⋃₀ (x : 类.{u})
   证明: ext fun y =>
     ZFSet.mem_sUnion.trans (sUnion_apply.trans <| by rfl).symm
 
@@ -1085,7 +1085,7 @@ theorem mem_sUnion
 
 中文:
 定理 mem_sUnion
-  条件: {x y : Class.{u}}
+  条件: {x y : 类.{u}}
   结论: y in ⋃₀ x ↔ 存在 z, z in x ∧ y in z
   证明: by
   constructor
@@ -1116,8 +1116,8 @@ theorem sInter_apply
   exact H _ hxz
 
 中文:
-定理 sInter_apply
-  条件: {x : Class.{u}} {y : ZFSet.{u}}
+定理 s整数er_apply
+  条件: {x : 类.{u}} {y : ZFSet.{u}}
   结论: (⋂₀ x) y ↔ 对任意 z : ZFSet.{u}, x z -> y in z
   证明: by
   refine ⟨fun hxy z hxz => hxy _ ⟨z, rfl, hxz⟩, ?_⟩
@@ -1141,9 +1141,9 @@ theorem coe_sInter
   proof: Set.ext fun _ => (ZFSet.mem_sInter h).trans sInter_apply.symm
 
 中文:
-定理 coe_sInter
-  条件: {x : ZFSet.{u}} (h : x.Nonempty)
-  结论: ↑(⋂₀ x : ZFSet) = ⋂₀ (x : Class.{u})
+定理 coe_s整数er
+  条件: {x : ZFSet.{u}} (h : x.非空)
+  结论: ↑(⋂₀ x : ZFSet) = ⋂₀ (x : 类.{u})
   证明: Set.ext fun _ => (ZFSet.mem_sInter h).trans sInter_apply.symm
 
 Depends on / 依赖: Set.ext, ZFSet.mem_sInter, mem_sInter, sInter_apply, sInter_apply.symm
@@ -1163,8 +1163,8 @@ theorem mem_of_mem_sInter
   exact coe_mem.2 (hw z hz)
 
 中文:
-定理 mem_of_mem_sInter
-  条件: {x y z : Class} (hy : y in ⋂₀ x) (hz : z in x)
+定理 mem_of_mem_s整数er
+  条件: {x y z : 类} (hy : y in ⋂₀ x) (hz : z in x)
   结论: y in z
   证明: by
   obtain ⟨w, rfl, hw⟩ := hy
@@ -1194,8 +1194,8 @@ theorem mem_sInter
 @[simp]
 
 中文:
-定理 mem_sInter
-  条件: {x y : Class.{u}} (h : x.Nonempty)
+定理 mem_s整数er
+  条件: {x y : 类.{u}} (h : x.非空)
   结论: y in ⋂₀ x ↔ 对任意 z, z in x -> y in z
   证明: by
   refine ⟨fun hy z => mem_of_mem_sInter hy, fun H => ?_⟩
@@ -1232,7 +1232,7 @@ theorem sUnion_empty
 
 中文:
 定理 sUnion_empty
-  结论: ⋃₀ (∅ : Class.{u}) = (∅ : Class.{u})
+  结论: ⋃₀ (∅ : 类.{u}) = (∅ : 类.{u})
   证明: by
   ext
   simp
@@ -1254,8 +1254,8 @@ theorem sInter_empty
   simp [sInter, Top.top]
 
 中文:
-定理 sInter_empty
-  结论: ⋂₀ (∅ : Class.{u}) = univ
+定理 s整数er_empty
+  结论: ⋂₀ (∅ : 类.{u}) = univ
   证明: by
   simp [sInter, Top.top]
 
@@ -1282,7 +1282,7 @@ WellFounded.not_lt_min ZFSet.mem_wf _ hB coe_apply.1 hx))
 
 中文:
 定理 eq_univ_of_powerset_subset
-  条件: {A : Class} (hA : powerset A subseteq A)
+  条件: {A : 类} (hA : powerset A subseteq A)
   结论: A = univ
   证明: eq_univ_of_forall
     (by
@@ -1315,7 +1315,7 @@ definition iota
 
 中文:
 定义 iota
-  签名: (A : Class)
+  签名: (A : 类)
   定义体: ⋃₀ ({ x | forall y, A y ↔ y = x } : Class)
 -/
 def iota (A : Class) : Class :=
@@ -1334,7 +1334,7 @@ theorem iota_val
 
 中文:
 定理 iota_val
-  条件: (A : Class) (x : ZFSet) (H : 对任意 y, A y ↔ y = x)
+  条件: (A : 类) (x : ZFSet) (H : 对任意 y, A y ↔ y = x)
   结论: iota A = ↑x
   证明: ext fun y =>
     ⟨fun ⟨_, ⟨x', rfl, h⟩, yx'⟩ => by rwa [← (H x').1 <| (h x').2 rfl], fun yx =>
@@ -1387,7 +1387,7 @@ infixl:100 " ′ " => fval
 
 中文:
 定义 fval
-  签名: (F A : Class.{u})
+  签名: (F A : 类.{u})
   定义体: iota fun y => ToSet (fun x => F (ZFSet.pair x y)) A
 
 @[inherit_doc]
@@ -1412,7 +1412,7 @@ theorem fval_ex
 
 中文:
 定理 fval_ex
-  条件: (F A : Class.{u})
+  条件: (F A : 类.{u})
   结论: F ′ A in univ.{u}
   证明: iota_ex _
 
@@ -1576,7 +1576,7 @@ lemma coe_equiv_aux
 
 中文:
 引理 coe_equiv_aux
-  条件: {s : Set ZFSet.{u}} (hs : Small.{u} s)
+  条件: {s : 集合 ZFSet.{u}} (hs : Small.{u} s)
   证明: by
   ext x
   rw [SetLike.mem_coe]; rw [← mk_out x]; rw [mk_mem_iff]; rw [mk_out]
@@ -1612,7 +1612,7 @@ right_inv s := private Subtype.coe_injective
 
 中文:
 定义 coeEquiv
-  签名: : ZFSet.{u} ≃ {s : Set ZFSet.{u} // Small.{u, u+1} s} where
+  签名: : ZFSet.{u} ≃ {s : 集合 ZFSet.{u} // Small.{u, u+1} s} where
   定义体: ⟨x, x.small_coe⟩
 invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
   left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
@@ -1644,7 +1644,7 @@ theorem isOrdinal_notMem_univ
 
 中文:
 定理 isOrdinal_notMem_univ
-  结论: IsOrdinal ∉ Class.univ.{u}
+  结论: 是序数 ∉ 类.univ.{u}
   证明: by
   rintro ⟨x, hx, -⟩
   suffices IsOrdinal x by

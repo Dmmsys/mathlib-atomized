@@ -52,7 +52,7 @@ structure LeftFraction
 
 中文:
 结构 LeftFraction
-  参数: (W : Morphism命题erty C) (X Y : C)
+  参数: (W : MorphismProperty C) (X Y : C)
   公理与运算 (4 个):
     - {Y' : C}
     - f : X ⟶ Y'
@@ -85,7 +85,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: (f : X ⟶ Y) [W.ContainsIdentities]
+  签名: (f : X ⟶ Y) [W.余ntainsIdentities]
   定义体: mk f (𝟙 Y) (W.id_mem Y)
 
 Depends on / 依赖: Cardinal, Cardinal.IsRegular.aleph0_le, CategoryTheory, CategoryTheory.isCardinalPresentable_iff, Fact.out, IsCardinalLocallyPresentable, IsCardinalLocallyPresentable.iff_exists_isStrongGenerator, IsRegular, ObjectProperty, ObjectProperty.singleton_le_iff, W.id_mem, aleph0_le, hasCardinalLT_of_finite, id_mem, iff_exists_isStrongGenerator, isCardinalPresentable_iff, isStrongGenerator_punit, singleton, singleton_le_iff
@@ -180,7 +180,7 @@ lemma map_ofHom
 
 中文:
 引理 map_ofHom
-  条件: (f : X ⟶ Y) (L : C ⥤ D) (hL : W.IsInvertedBy L) [W.ContainsIdentities]
+  条件: (f : X ⟶ Y) (L : C ⥤ D) (hL : W.IsInvertedBy L) [W.余ntainsIdentities]
   证明: by
   simp [map]
 -/
@@ -271,7 +271,7 @@ structure RightFraction
 
 中文:
 结构 RightFraction
-  参数: (W : Morphism命题erty C) (X Y : C)
+  参数: (W : MorphismProperty C) (X Y : C)
   公理与运算 (4 个):
     - {X' : C}
     - s : X' ⟶ X
@@ -305,7 +305,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: (f : X ⟶ Y) [W.ContainsIdentities]
+  签名: (f : X ⟶ Y) [W.余ntainsIdentities]
   定义体: mk (𝟙 X) (W.id_mem X) f
 
 Depends on / 依赖: W.id_mem, id_mem
@@ -401,7 +401,7 @@ lemma map_ofHom
 
 中文:
 引理 map_ofHom
-  条件: (f : X ⟶ Y) (L : C ⥤ D) (hL : W.IsInvertedBy L) [W.ContainsIdentities]
+  条件: (f : X ⟶ Y) (L : C ⥤ D) (hL : W.IsInvertedBy L) [W.余ntainsIdentities]
   证明: by
   simp [map]
 -/
@@ -492,9 +492,9 @@ class HasLeftCalculusOfFractions
     - ext : forall ⦃X' X Y : C⦄ (f₁ f₂ : X ⟶ Y) (s : X' ⟶ X) (_ : W s) (_ : s ≫ f₁ = s ≫ f₂), exists (Y' : C) (t : Y ⟶ Y') (_ : W t), f₁ ≫ t = f₂ ≫ t
 
 中文:
-类 HasLeftCalculusOfFractions
-  参数: : 命题 extends W.IsMultiplicative where
-  继承: W.IsMultiplicative
+类 有LeftCalculusOfFractions
+  参数: : 命题 extends W.是Multiplicative where
+  继承: W.是Multiplicative
   公理与运算 (2 个):
     - exists_leftFraction(⦃X Y) : C⦄ (φ : W.RightFraction X Y) : 存在 (ψ : W.LeftFraction X Y), φ.f ≫ ψ.s = φ.s ≫ ψ.f
     - ext : 对任意 ⦃X' X Y : C⦄ (f₁ f₂ : X ⟶ Y) (s : X' ⟶ X) (_ : W s) (_ : s ≫ f₁ = s ≫ f₂), 存在 (Y' : C) (t : Y ⟶ Y') (_ : W t), f₁ ≫ t = f₂ ≫ t
@@ -517,9 +517,9 @@ class HasRightCalculusOfFractions
     - ext : forall ⦃X Y Y' : C⦄ (f₁ f₂ : X ⟶ Y) (s : Y ⟶ Y') (_ : W s) (_ : f₁ ≫ s = f₂ ≫ s), exists (X' : C) (t : X' ⟶ X) (_ : W t), t ≫ f₁ = t ≫ f₂
 
 中文:
-类 HasRightCalculusOfFractions
-  参数: : 命题 extends W.IsMultiplicative where
-  继承: W.IsMultiplicative
+类 有RightCalculusOfFractions
+  参数: : 命题 extends W.是Multiplicative where
+  继承: W.是Multiplicative
   公理与运算 (2 个):
     - exists_rightFraction(⦃X Y) : C⦄ (φ : W.LeftFraction X Y) : 存在 (ψ : W.RightFraction X Y), ψ.s ≫ φ.f = ψ.f ≫ φ.s
     - ext : 对任意 ⦃X Y Y' : C⦄ (f₁ f₂ : X ⟶ Y) (s : Y ⟶ Y') (_ : W s) (_ : f₁ ≫ s = f₂ ≫ s), 存在 (X' : C) (t : X' ⟶ X) (_ : W t), t ≫ f₁ = t ≫ f₂
@@ -541,8 +541,8 @@ lemma RightFraction.exists_leftFraction
   proof: HasLeftCalculusOfFractions.exists_leftFraction φ
 
 中文:
-引理 RightFraction.exists_leftFraction
-  结论: [W.HasLeftCalculusOfFractions] {X Y : C}
+引理 RightFraction.存在_leftFraction
+  结论: [W.有LeftCalculusOfFractions] {X Y : C}
   证明: HasLeftCalculusOfFractions.exists_leftFraction φ
 
 Depends on / 依赖: HasLeftCalculusOfFractions, HasLeftCalculusOfFractions.exists_leftFraction, exists_leftFraction
@@ -563,7 +563,7 @@ definition RightFraction.leftFraction
 
 中文:
 定义 RightFraction.leftFraction
-  签名: [W.HasLeftCalculusOfFractions] {X Y : C}
+  签名: [W.有LeftCalculusOfFractions] {X Y : C}
   定义体: φ.exists_leftFraction.choose
 
 @[reassoc]
@@ -585,7 +585,7 @@ lemma RightFraction.leftFraction_fac
 
 中文:
 引理 RightFraction.leftFraction_fac
-  结论: [W.HasLeftCalculusOfFractions] {X Y : C}
+  结论: [W.有LeftCalculusOfFractions] {X Y : C}
   证明: φ.exists_leftFraction.choose_spec
 
 Depends on / 依赖: choose_spec, exists_leftFraction, exists_leftFraction.choose_spec
@@ -603,8 +603,8 @@ lemma LeftFraction.exists_rightFraction
   proof: HasRightCalculusOfFractions.exists_rightFraction φ
 
 中文:
-引理 LeftFraction.exists_rightFraction
-  结论: [W.HasRightCalculusOfFractions] {X Y : C}
+引理 LeftFraction.存在_rightFraction
+  结论: [W.有RightCalculusOfFractions] {X Y : C}
   证明: HasRightCalculusOfFractions.exists_rightFraction φ
 
 Depends on / 依赖: HasRightCalculusOfFractions, HasRightCalculusOfFractions.exists_rightFraction, exists_rightFraction
@@ -625,7 +625,7 @@ definition LeftFraction.rightFraction
 
 中文:
 定义 LeftFraction.rightFraction
-  签名: [W.HasRightCalculusOfFractions] {X Y : C}
+  签名: [W.有RightCalculusOfFractions] {X Y : C}
   定义体: φ.exists_rightFraction.choose
 
 @[reassoc]
@@ -647,7 +647,7 @@ lemma LeftFraction.rightFraction_fac
 
 中文:
 引理 LeftFraction.rightFraction_fac
-  结论: [W.HasRightCalculusOfFractions] {X Y : C}
+  结论: [W.有RightCalculusOfFractions] {X Y : C}
   证明: φ.exists_rightFraction.choose_spec
 
 Depends on / 依赖: choose_spec, exists_rightFraction, exists_rightFraction.choose_spec
@@ -785,7 +785,7 @@ lemma equivalenceLeftFractionRel
 
 中文:
 引理 equivalenceLeftFractionRel
-  条件: [W.HasLeftCalculusOfFractions] (X Y : C)
+  条件: [W.有LeftCalculusOfFractions] (X Y : C)
   证明: LeftFractionRel.refl
   symm := LeftFractionRel.symm
   trans := LeftFractionRel.trans
@@ -816,7 +816,7 @@ definition comp₀
 
 中文:
 定义 comp₀
-  签名: [W.HasLeftCalculusOfFractions] {X Y Z : C}
+  签名: [W.有LeftCalculusOfFractions] {X Y Z : C}
   定义体: mk (z₁.f ≫ z₃.f) (z₂.s ≫ z₃.s) (W.comp_mem _ _ z₂.hs z₃.hs)
 
 Depends on / 依赖: W.comp_mem, comp_mem
@@ -842,7 +842,7 @@ lemma comp₀_rel
 
 中文:
 引理 comp₀_rel
-  结论: [W.HasLeftCalculusOfFractions]
+  结论: [W.有LeftCalculusOfFractions]
   证明: by
   obtain ⟨z₄, fac⟩ := exists_leftFraction (RightFraction.mk z₃.s z₃.hs z₃'.s)
   dsimp at fac
@@ -880,7 +880,7 @@ definition Localization.Hom
   body: Quot (LeftFractionRel : W.LeftFraction X Y -> W.LeftFraction X Y -> Prop)
 
 中文:
-定义 Localization.Hom
+定义 Localization.态射
   签名: (X Y : C)
   定义体: Quot (LeftFractionRel : W.LeftFraction X Y -> W.LeftFraction X Y -> Prop)
 
@@ -898,7 +898,7 @@ definition Localization.Hom.mk
   body: Quot.mk _ z
 
 中文:
-定义 Localization.Hom.mk
+定义 Localization.态射.mk
   签名: {X Y : C} (z : W.LeftFraction X Y)
   定义体: Quot.mk _ z
 
@@ -918,8 +918,8 @@ lemma Localization.Hom.mk_surjective
   exact ⟨z, rfl⟩
 
 中文:
-引理 Localization.Hom.mk_surjective
-  条件: {X Y : C} (f : Localization.Hom W X Y)
+引理 Localization.态射.mk_surjective
+  条件: {X Y : C} (f : Localization.态射 W X Y)
   证明: by
   obtain ⟨z⟩ := f
   exact ⟨z, rfl⟩
@@ -988,8 +988,8 @@ definition Hom.comp
     obtain ⟨w₁, fac₁'⟩ := exists_leftFract
 
 中文:
-定义 Hom.comp
-  签名: {X Y Z : C} (z₁ : Hom W X Y) (z₂ : Hom W Y Z)
+定义 态射.comp
+  签名: {X Y Z : C} (z₁ : 态射 W X Y) (z₂ : 态射 W Y Z)
   定义体: by
   refine Quot.lift₂ (fun a b => a.comp b) ?_ ?_ z₁ z₂
   · rintro a b₁ b₂ ⟨U, t₁, t₂, hst, hft, ht⟩
@@ -1084,7 +1084,7 @@ lemma Hom.comp_eq
   proof: rfl
 
 中文:
-引理 Hom.comp_eq
+引理 态射.comp_eq
   条件: {X Y Z : C} (z₁ : W.LeftFraction X Y) (z₂ : W.LeftFraction Y Z)
   证明: rfl
 -/
@@ -1106,7 +1106,7 @@ definition Localization
 
 中文:
 定义 Localization
-  签名: (_ : Morphism命题erty C)
+  签名: (_ : MorphismProperty C)
   定义体: C
 -/
 def Localization (_ : MorphismProperty C) := C
@@ -1132,7 +1132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Localization W)
+  签名: 范畴 (Localization W)
   定义体: Localization.Hom W X Y
   id _ := Localization.Hom.mk (ofHom W (𝟙 _))
   comp f g := f.comp g
@@ -1246,7 +1246,7 @@ lemma homMk_eq_hom_mk
 中文:
 引理 homMk_eq_hom_mk
   条件: {X Y : C} (f : W.LeftFraction X Y)
-  结论: homMk f = Hom.mk f
+  结论: homMk f = 态射.mk f
   证明: rfl
 -/
 lemma homMk_eq_hom_mk {X Y : C} (f : W.LeftFraction X Y) : homMk f = Hom.mk f := rfl
@@ -1492,8 +1492,8 @@ definition Hom.map
     rw [← cancel_mono (F.map (a₁.s ≫ t₁))]; rw [F.map_comp]; rw [map_comp_map_s_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [hst]; rw [hft]; rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc
 
 中文:
-定义 Hom.map
-  签名: {X Y : C} (f : Hom W X Y) (F : C ⥤ E) (hF : W.IsInvertedBy F)
+定义 态射.map
+  签名: {X Y : C} (f : 态射 W X Y) (F : C ⥤ E) (hF : W.IsInvertedBy F)
   定义体: Quot.lift (fun f => f.map F hF) (by
     intro a₁ a₂ ⟨Z, t₁, t₂, hst, hft, h⟩
     have := hF _ h
@@ -1518,7 +1518,7 @@ lemma Hom.map_mk
   proof: rfl
 
 中文:
-引理 Hom.map_mk
+引理 态射.map_mk
   条件: {W} {X Y : C} (f : LeftFraction W X Y) (F : C ⥤ E) (hF : W.IsInvertedBy F)
   证明: rfl
 -/
@@ -1696,7 +1696,7 @@ definition strictUniversalPropertyFixedTarget
 
 中文:
 定义 strictUniversalPropertyFixedTarget
-  签名: (E : 类型) [Category* E]
+  签名: (E : 类型) [范畴* E]
   定义体: inverts W
   lift := lift
   fac := fac
@@ -1723,7 +1723,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Q W).IsLocalization W
+  签名: (Q W).是Localization W
   定义体: Functor.IsLocalization.mk' _ _
     (strictUniversalPropertyFixedTarget W _)
     (strictUniversalPropertyFixedTarget W _)
@@ -1816,7 +1816,7 @@ lemma map_eq
 
 中文:
 引理 map_eq
-  条件: {W} {X Y : C} (φ : W.LeftFraction X Y) (L : C ⥤ D) [L.IsLocalization W]
+  条件: {W} {X Y : C} (φ : W.LeftFraction X Y) (L : C ⥤ D) [L.是Localization W]
   证明: rfl
 -/
 lemma map_eq {W} {X Y : C} (φ : W.LeftFraction X Y) (L : C ⥤ D) [L.IsLocalization W] :
@@ -1946,7 +1946,7 @@ lemma Localization.exists_leftFraction
       f = e.inv.app _ ≫ f' ≫ e.hom.app _ := ⟨e.hom.app _ ≫ f ≫ e.inv.app _, by 
 
 中文:
-引理 Localization.exists_leftFraction
+引理 Localization.存在_leftFraction
   条件: {X Y : C} (f : L.obj X ⟶ L.obj Y)
   证明: by
   let E := Localization.uniq (MorphismProperty.LeftFraction.Localization.Q W) L W
@@ -2175,7 +2175,7 @@ definition LeftFraction.unop
 
 中文:
 定义 LeftFraction.unop
-  签名: {W : Morphism命题erty Cᵒᵖ}
+  签名: {W : MorphismProperty Cᵒᵖ}
   定义体: Opposite.unop φ.Y'
   s := φ.s.unop
   hs := φ.hs
@@ -2206,7 +2206,7 @@ definition RightFraction.unop
 
 中文:
 定义 RightFraction.unop
-  签名: {W : Morphism命题erty Cᵒᵖ}
+  签名: {W : MorphismProperty Cᵒᵖ}
   定义体: Opposite.unop φ.X'
   s := φ.s.unop
   hs := φ.hs
@@ -2285,7 +2285,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : W.HasLeftCalculusOfFractions] : W.op.HasRightCalculusOfFractions where
+  签名: : W.有LeftCalculusOfFractions] : W.op.有RightCalculusOfFractions where
   定义体: by
     obtain ⟨ψ, eq⟩ := h.exists_leftFraction φ.unop
     exact ⟨ψ.op, Quiver.Hom.unop_inj eq⟩
@@ -2318,7 +2318,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : W.HasRightCalculusOfFractions] : W.op.HasLeftCalculusOfFractions where
+  签名: : W.有RightCalculusOfFractions] : W.op.有LeftCalculusOfFractions where
   定义体: by
     obtain ⟨ψ, eq⟩ := h.exists_rightFraction φ.unop
     exact ⟨ψ.op, Quiver.Hom.unop_inj eq⟩
@@ -2413,7 +2413,7 @@ lemma RightFractionRel.unop
 
 中文:
 引理 RightFractionRel.unop
-  结论: {W : Morphism命题erty Cᵒᵖ} {X Y : Cᵒᵖ}
+  结论: {W : MorphismProperty Cᵒᵖ} {X Y : Cᵒᵖ}
   证明: by
   obtain ⟨Z, t₁, t₂, hs, hf, ht⟩ := h
   exact ⟨Opposite.unop Z, t₁.unop, t₂.unop, Quiver.Hom.op_inj hs,
@@ -2468,7 +2468,7 @@ lemma LeftFractionRel.unop
 
 中文:
 引理 LeftFractionRel.unop
-  结论: {W : Morphism命题erty Cᵒᵖ} {X Y : Cᵒᵖ}
+  结论: {W : MorphismProperty Cᵒᵖ} {X Y : Cᵒᵖ}
   证明: by
   obtain ⟨Z, t₁, t₂, hs, hf, ht⟩ := h
   exact ⟨Opposite.unop Z, t₁.unop, t₂.unop, Quiver.Hom.op_inj hs,
@@ -2595,7 +2595,7 @@ lemma equivalenceRightFractionRel
 
 中文:
 引理 equivalenceRightFractionRel
-  条件: (X Y : C) [HasRightCalculusOfFractions W]
+  条件: (X Y : C) [有RightCalculusOfFractions W]
   证明: RightFractionRel.refl
   symm := RightFractionRel.symm
   trans := RightFractionRel.trans
@@ -2628,7 +2628,7 @@ lemma Localization.exists_rightFraction
   rfl
 
 中文:
-引理 Localization.exists_rightFraction
+引理 Localization.存在_rightFraction
   条件: {X Y : C} (f : L.obj X ⟶ L.obj Y)
   证明: by
   obtain ⟨φ, eq⟩ := Localization.exists_leftFraction L.op W.op f.op

@@ -44,7 +44,7 @@ theorem transcendental_supported_polynomial_aeval_X
 
 中文:
 定理 transcendental_supported_polynomial_aeval_X
-  结论: {i : σ} {s : Set σ} (h : i ∉ s)
+  结论: {i : σ} {s : 集合 σ} (h : i ∉ s)
   证明: by
   classical
   rw [transcendental_iff_injective] at hf ⊢
@@ -106,7 +106,7 @@ theorem transcendental_polynomial_aeval_X
 
 中文:
 定理 transcendental_polynomial_aeval_X
-  条件: (i : σ) {f : R[X]} (hf : Transcendental R f)
+  条件: (i : σ) {f : R[X]} (hf : 超越 R f)
   证明: by
   have := transcendental_supported_polynomial_aeval_X R (Set.notMem_empty i) hf
   let g := (Algebra.botEquivOfInjective (MvPolynomial.C_injective σ R)).symm.trans
@@ -199,7 +199,7 @@ theorem transcendental_supported_X
 
 中文:
 定理 transcendental_supported_X
-  条件: {i : σ} {s : Set σ} (h : i ∉ s)
+  条件: {i : σ} {s : 集合 σ} (h : i ∉ s)
   证明: by
   simpa using transcendental_supported_polynomial_aeval_X R h (Polynomial.transcendental_X R)
 
@@ -222,7 +222,7 @@ theorem transcendental_X
 中文:
 定理 transcendental_X
   条件: (i : σ)
-  结论: Transcendental R (X i : MvPolynomial σ R)
+  结论: 超越 R (X i : 多元多项式 σ R)
   证明: by
   simpa using transcendental_polynomial_aeval_X R i (Polynomial.transcendental_X R)
 
@@ -243,7 +243,7 @@ theorem transcendental_supported_X_iff
 
 中文:
 定理 transcendental_supported_X_iff
-  条件: [Nontrivial R] {i : σ} {s : Set σ}
+  条件: [非平凡 R] {i : σ} {s : 集合 σ}
   证明: by
   simpa [Polynomial.transcendental_X] using
     transcendental_supported_polynomial_aeval_X_iff R (i := i) (s := s) (f := Polynomial.X)

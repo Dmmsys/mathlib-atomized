@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Lex R⟦Γ⟧)
+  签名: 偏序 (Lex R⟦Γ⟧)
   定义体: PartialOrder.lift (toLex <| ofLex · |>.coeff) fun x y => by simp
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (Lex R⟦Γ⟧)
+  签名: 线性序 (Lex R⟦Γ⟧)
   定义体: by
     rcases eq_or_ne a b with hab | hab
     · exact Or.inl hab.le
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (Lex R⟦Γ⟧)
+  签名: 是OrderedAdd幺半群 (Lex R⟦Γ⟧)
   定义体: by
     obtain rfl | hlt := hab.eq_or_lt
     · simp
@@ -409,7 +409,7 @@ theorem order_abs
 
 中文:
 定理 order_abs
-  条件: [Zero Γ] (x : Lex R⟦Γ⟧)
+  条件: [零 Γ] (x : Lex R⟦Γ⟧)
   结论: (ofLex |x|).order = (ofLex x).order
   证明: by
   obtain rfl | hne := eq_or_ne x 0
@@ -974,8 +974,8 @@ instance [IsOrderedRing
   mul_le_mul_of_nonneg_righ
 
 中文:
-实例 [IsOrderedRing
-  签名: R] [NoZeroDivisors R] : IsOrderedRing (Lex R⟦Γ⟧) where
+实例 [是Ordered环
+  签名: R] [无零因子 R] : 是Ordered环 (Lex R⟦Γ⟧) where
   定义体: by simp [← leadingCoeff_nonneg_iff]
   mul_le_mul_of_nonneg_left a ha b c hbc := by
     rw [← sub_nonneg] at hbc ⊢
@@ -1010,8 +1010,8 @@ instance [IsStrictOrderedRing
   signature: R] : IsStrictOrderedRing (Lex R⟦Γ⟧) where
 
 中文:
-实例 [IsStrictOrderedRing
-  签名: R] : IsStrictOrderedRing (Lex R⟦Γ⟧) where
+实例 [是StrictOrdered环
+  签名: R] : 是StrictOrdered环 (Lex R⟦Γ⟧) where
 -/
 instance [IsStrictOrderedRing R] : IsStrictOrderedRing (Lex R⟦Γ⟧) where
 
@@ -1039,7 +1039,7 @@ definition embDomainOrderEmbedding
 
 中文:
 定义 embDomainOrderEmbedding
-  签名: [Zero R]
+  签名: [零 R]
   定义体: toLex (embDomain f (ofLex a))
   inj' := toLex.injective.comp (embDomain_injective.comp (ofLex.injective))
   map_rel_iff' {a b} := by
@@ -1088,7 +1088,7 @@ definition embDomainOrderAddMonoidHom
 
 中文:
 定义 embDomainOrderAddMonoidHom
-  签名: [AddMonoid R]
+  签名: [加法幺半群 R]
   定义体: (embDomainOrderEmbedding f).toOrderHom
   map_zero' := by simp
   map_add' := by simp [embDomainOrderEmbedding, embDomain_add]
@@ -1110,7 +1110,7 @@ theorem embDomainOrderAddMonoidHom_injective
 
 中文:
 定理 embDomainOrderAddMonoidHom_injective
-  条件: [AddMonoid R]
+  条件: [加法幺半群 R]
   证明: (embDomainOrderEmbedding f).injective
 -/
 theorem embDomainOrderAddMonoidHom_injective [AddMonoid R] :

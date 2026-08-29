@@ -114,7 +114,7 @@ theorem IsSuccPrelimit.of_dense
 
 中文:
 定理 IsSuccPrelimit.of_dense
-  条件: [DenselyOrdered α] (a : α)
+  条件: [稠密序 α] (a : α)
   结论: IsSuccPrelimit a
   证明: fun _ => not_covBy
 
@@ -178,7 +178,7 @@ structure IsSuccLimit
     - isSuccPrelimit : IsSuccPrelimit a
 
 中文:
-结构 IsSuccLimit
+结构 是SuccLimit
   参数: (a : α)
   公理与运算 (2 个):
     - not_isMin : ¬ IsMin a
@@ -208,7 +208,7 @@ structure IsPredLimit
     - isPredPrelimit : IsPredPrelimit a
 
 中文:
-结构 IsPredLimit
+结构 是PredLimit
   参数: (a : α)
   公理与运算 (2 个):
     - not_isMax : ¬ IsMax a
@@ -239,7 +239,7 @@ theorem isSuccLimit_toDual_iff
 
 中文:
 定理 isSuccLimit_toDual_iff
-  结论: IsSuccLimit (toDual a) ↔ IsPredLimit a
+  结论: 是SuccLimit (toDual a) ↔ 是PredLimit a
   证明: by
   simp [isSuccLimit_iff, isPredLimit_iff]
 
@@ -268,7 +268,7 @@ theorem not_isSuccLimit_iff
 
 中文:
 定理 not_isSuccLimit_iff
-  结论: ¬ IsSuccLimit a ↔ IsMin a ∨ ¬ IsSuccPrelimit a
+  结论: ¬ 是SuccLimit a ↔ IsMin a ∨ ¬ IsSuccPrelimit a
   证明: by
   rw [isSuccLimit_iff]; rw [not_and_or]; rw [not_not]
 
@@ -290,7 +290,7 @@ theorem not_isPredLimit_of_not_isPredPrelimit
 
 中文:
 定理 not_isPredLimit_of_not_isPredPrelimit
-  结论: ¬ IsPredPrelimit a -> ¬ IsPredLimit a
+  结论: ¬ IsPredPrelimit a -> ¬ 是PredLimit a
   证明: mt IsPredLimit.isPredPrelimit
 
 Depends on / 依赖: IsPredLimit, IsPredLimit.isPredPrelimit, isPredPrelimit
@@ -362,8 +362,8 @@ theorem isSuccPrelimit_iff_isSuccLimit
 
 中文:
 定理 isSuccPrelimit_iff_isSuccLimit
-  条件: [NoMinOrder α]
-  结论: IsSuccPrelimit a ↔ IsSuccLimit a
+  条件: [NoMin序 α]
+  结论: IsSuccPrelimit a ↔ 是SuccLimit a
   证明: isSuccPrelimit_iff_isSuccLimit_of_not_isMin (not_isMin a)
 
 @[to_dual] alias ⟨IsSuccPrelimit.isSuccLimit, _⟩ := isSuccPrelimit_iff_isSuccLimit
@@ -392,7 +392,7 @@ theorem _root_.IsMin.not_isSuccLimit
 中文:
 定理 _root_.IsMin.not_isSuccLimit
   条件: (h : IsMin a)
-  结论: ¬ IsSuccLimit a
+  结论: ¬ 是SuccLimit a
   证明: fun ha => ha.not_isMin h
 
 @[to_dual]
@@ -436,9 +436,9 @@ theorem IsSuccLimit.nonempty_Iio
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.nonempty_Iio
-  条件: (h : IsSuccLimit a)
-  结论: (Set.Iio a).Nonempty
+定理 是SuccLimit.nonempty_Iio
+  条件: (h : 是SuccLimit a)
+  结论: (集合.左无界右开区间 a).非空
   证明: not_isMin_iff.1 h.1
 
 @[to_dual]
@@ -466,7 +466,7 @@ theorem IsSuccPrelimit.noMaxOrder_Iio
 中文:
 定理 IsSuccPrelimit.noMaxOrder_Iio
   条件: (h : IsSuccPrelimit a)
-  结论: NoMaxOrder (Set.Iio a)
+  结论: NoMax序 (集合.左无界右开区间 a)
   证明: by
   refine ⟨fun ⟨b, hb⟩ => ?_⟩
   obtain ⟨c, hbc, hca⟩ := (not_covBy_iff hb).1 (h b)
@@ -495,7 +495,7 @@ theorem isSuccPrelimit_bot
 
 中文:
 定理 isSuccPrelimit_bot
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: IsSuccPrelimit (⊥ : α)
   证明: isMin_bot.isSuccPrelimit
 
@@ -520,8 +520,8 @@ theorem not_isSuccLimit_bot
 
 中文:
 定理 not_isSuccLimit_bot
-  条件: [OrderBot α]
-  结论: ¬ IsSuccLimit (⊥ : α)
+  条件: [有底序 α]
+  结论: ¬ 是SuccLimit (⊥ : α)
   证明: isMin_bot.not_isSuccLimit
 
 @[to_dual]
@@ -544,8 +544,8 @@ theorem IsSuccLimit.bot_lt
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.bot_lt
-  条件: [OrderBot α] (h : IsSuccLimit a)
+定理 是SuccLimit.bot_lt
+  条件: [有底序 α] (h : 是SuccLimit a)
   结论: ⊥ < a
   证明: not_isMin_iff_bot_lt.1 h.not_isMin
 
@@ -567,8 +567,8 @@ theorem IsSuccLimit.ne_bot
   proof: h.bot_lt.ne'
 
 中文:
-定理 IsSuccLimit.ne_bot
-  条件: [OrderBot α] (h : IsSuccLimit a)
+定理 是SuccLimit.ne_bot
+  条件: [有底序 α] (h : 是SuccLimit a)
   结论: a != ⊥
   证明: h.bot_lt.ne'
 
@@ -588,8 +588,8 @@ theorem IsSuccLimit.pos
   h.bot_lt
 
 中文:
-定理 IsSuccLimit.pos
-  条件: [Zero α] [IsBotZeroClass α] (h : IsSuccLimit a)
+定理 是SuccLimit.pos
+  条件: [零 α] [是BotZero类 α] (h : 是SuccLimit a)
   结论: 0 < a
   证明: let := IsBotZeroClass.toOrderBot α
   h.bot_lt
@@ -612,8 +612,8 @@ theorem IsSuccLimit.ne_zero
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.ne_zero
-  条件: [Zero α] [IsBotZeroClass α] (h : IsSuccLimit a)
+定理 是SuccLimit.ne_zero
+  条件: [零 α] [是BotZero类 α] (h : 是SuccLimit a)
   结论: a != 0
   证明: h.pos.ne'
 
@@ -643,7 +643,7 @@ theorem IsSuccPrelimit.subtypeVal
 
 中文:
 定理 IsSuccPrelimit.subtypeVal
-  结论: {s : Set α} (hs : IsLowerSet s) {a : s}
+  结论: {s : 集合 α} (hs : 是下集 s) {a : s}
   证明: by
   intro b hb
   have := ha ⟨b, hs hb.le a.2⟩
@@ -680,8 +680,8 @@ theorem IsSuccLimit.subtypeVal
   exact ⟨b, hb⟩
 
 中文:
-定理 IsSuccLimit.subtypeVal
-  结论: {s : Set α} (hs : IsLowerSet s) {a : s}
+定理 是SuccLimit.subtypeVal
+  结论: {s : 集合 α} (hs : 是下集 s) {a : s}
   证明: by
   refine ⟨?_, ha.isSuccPrelimit.subtypeVal hs⟩
   have := ha.1
@@ -742,7 +742,7 @@ theorem _root_.WithTop.isSuccPrelimit_iff
 
 中文:
 定理 _root_.WithTop.isSuccPrelimit_iff
-  条件: [NoMaxOrder α] {x : WithTop α}
+  条件: [NoMax序 α] {x : WithTop α}
   证明: by
   cases x with
   | coe x => simp [IsSuccPrelimit, WithTop.forall]
@@ -799,7 +799,7 @@ theorem _root_.WithTop.isSuccPrelimit_top
 
 中文:
 定理 _root_.WithTop.isSuccPrelimit_top
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   结论: IsSuccPrelimit (⊤ : WithTop α)
   证明: by
   simp [WithTop.isSuccPrelimit_iff]
@@ -827,7 +827,7 @@ theorem _root_.WithTop.isSuccLimit_iff
 
 中文:
 定理 _root_.WithTop.isSuccLimit_iff
-  条件: [Nonempty α] [NoMaxOrder α] {x : WithTop α}
+  条件: [非空 α] [NoMax序 α] {x : WithTop α}
   证明: by
   cases x with
   | coe x => simp [Order.isSuccLimit_iff, WithTop.isSuccPrelimit_iff, WithTop.exists]
@@ -856,8 +856,8 @@ theorem IsSuccLimit.withTopCoe
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.withTopCoe
-  条件: {x : α} (h : IsSuccLimit x)
+定理 是SuccLimit.withTopCoe
+  条件: {x : α} (h : 是SuccLimit x)
   证明: by
   simpa [isSuccLimit_iff, WithTop.exists, h.isSuccPrelimit.withTopCoe] using h.not_isMin
 
@@ -883,7 +883,7 @@ theorem _root_.WithTop.isSuccLimit_top
 
 中文:
 定理 _root_.WithTop.isSuccLimit_top
-  条件: [Nonempty α] [NoMaxOrder α]
+  条件: [非空 α] [NoMax序 α]
   证明: by
   simp [WithTop.isSuccLimit_iff]
 
@@ -939,9 +939,9 @@ theorem IsPredLimit.withTopCoe
   simpa [WithTop.isPredPrelimit_iff, isPredLimit_iff, WithTop.exists] using h
 
 中文:
-定理 IsPredLimit.withTopCoe
-  条件: {x : α} (h : IsPredLimit x)
-  结论: IsPredLimit (x : WithTop α)
+定理 是PredLimit.withTopCoe
+  条件: {x : α} (h : 是PredLimit x)
+  结论: 是PredLimit (x : WithTop α)
   证明: by
   simpa [WithTop.isPredPrelimit_iff, isPredLimit_iff, WithTop.exists] using h
 
@@ -991,8 +991,8 @@ theorem IsSuccLimit.isMax
   proof: h.isSuccPrelimit.isMax
 
 中文:
-定理 IsSuccLimit.isMax
-  条件: (h : IsSuccLimit (succ a))
+定理 是SuccLimit.isMax
+  条件: (h : 是SuccLimit (succ a))
   结论: IsMax a
   证明: h.isSuccPrelimit.isMax
 -/
@@ -1038,7 +1038,7 @@ theorem not_isSuccLimit_succ_of_not_isMax
 中文:
 定理 not_isSuccLimit_succ_of_not_isMax
   条件: (ha : ¬ IsMax a)
-  结论: ¬ IsSuccLimit (succ a)
+  结论: ¬ 是SuccLimit (succ a)
   证明: mt IsSuccLimit.isMax ha
 
 Depends on / 依赖: IsSuccLimit, IsSuccLimit.isMax
@@ -1096,8 +1096,8 @@ theorem IsSuccLimit.succ_ne
 @[to_dual (attr := simp)]
 
 中文:
-定理 IsSuccLimit.succ_ne
-  条件: (h : IsSuccLimit a) (b : α)
+定理 是SuccLimit.succ_ne
+  条件: (h : 是SuccLimit a) (b : α)
   结论: succ b != a
   证明: h.isSuccPrelimit.succ_ne b
 
@@ -1145,7 +1145,7 @@ theorem not_isSuccLimit_succ
 中文:
 定理 not_isSuccLimit_succ
   条件: (a : α)
-  结论: ¬IsSuccLimit (succ a)
+  结论: ¬是SuccLimit (succ a)
   证明: fun h => h.succ_ne _ rfl
 
 Depends on / 依赖: h.succ_ne, succ_ne
@@ -1233,7 +1233,7 @@ theorem not_isSuccLimit_of_noMax
 
 中文:
 定理 not_isSuccLimit_of_noMax
-  结论: ¬ IsSuccLimit a
+  结论: ¬ 是SuccLimit a
   证明: fun h => h.not_isMin h.isSuccPrelimit.isMin_of_noMax
 
 @[to_dual]
@@ -1255,7 +1255,7 @@ theorem not_isSuccPrelimit_of_noMax
 
 中文:
 定理 not_isSuccPrelimit_of_noMax
-  条件: [NoMinOrder α]
+  条件: [NoMin序 α]
   结论: ¬ IsSuccPrelimit a
   证明: by simp
 -/
@@ -1282,8 +1282,8 @@ theorem isSuccLimit_iff_of_orderBot
 
 中文:
 定理 isSuccLimit_iff_of_orderBot
-  条件: [OrderBot α]
-  结论: IsSuccLimit a ↔ a != ⊥ ∧ IsSuccPrelimit a
+  条件: [有底序 α]
+  结论: 是SuccLimit a ↔ a != ⊥ ∧ IsSuccPrelimit a
   证明: by
   rw [isSuccLimit_iff]; rw [isMin_iff_eq_bot]
 
@@ -1519,8 +1519,8 @@ theorem IsSuccLimit.succ_lt
 @[to_dual lt_pred_iff]
 
 中文:
-定理 IsSuccLimit.succ_lt
-  条件: (hb : IsSuccLimit b) (ha : a < b)
+定理 是SuccLimit.succ_lt
+  条件: (hb : 是SuccLimit b) (ha : a < b)
   结论: succ a < b
   证明: hb.isSuccPrelimit.succ_lt ha
 
@@ -1569,8 +1569,8 @@ theorem IsSuccLimit.succ_lt_iff
 @[to_dual isPredPrelimit_iff_lt_pred]
 
 中文:
-定理 IsSuccLimit.succ_lt_iff
-  条件: (hb : IsSuccLimit b)
+定理 是SuccLimit.succ_lt_iff
+  条件: (hb : 是SuccLimit b)
   结论: succ a < b ↔ a < b
   证明: hb.isSuccPrelimit.succ_lt_iff
 
@@ -1758,7 +1758,7 @@ alias not_isPredLimit := not_isPredLimit_of_isPredArchimedean
 
 中文:
 定理 not_isSuccLimit_of_isSuccArchimedean
-  结论: ¬ IsSuccLimit a
+  结论: ¬ 是SuccLimit a
   证明: fun h => h.not_isMin h.isSuccPrelimit.isMin
 
 @[deprecated (since := "2026-04-19")]
@@ -1795,7 +1795,7 @@ alias not_isPredPrelimit := not_isPredPrelimit_of_isPredArchimedean
 
 中文:
 定理 not_isSuccPrelimit_of_isSuccArchimedean
-  条件: [NoMinOrder α]
+  条件: [NoMin序 α]
   结论: ¬ IsSuccPrelimit a
   证明: by simp
 
@@ -1836,7 +1836,7 @@ theorem IsSuccPrelimit.le_iff_forall_le
 @[to_dual]
 
 中文:
-定理 IsSuccPrelimit.le_iff_forall_le
+定理 IsSuccPrelimit.le_iff_对任意_le
   条件: (h : IsSuccPrelimit a)
   结论: a <= b ↔ 对任意 c < a, c <= b
   证明: by
@@ -1868,8 +1868,8 @@ theorem IsSuccLimit.le_iff_forall_le
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.le_iff_forall_le
-  条件: (h : IsSuccLimit a)
+定理 是SuccLimit.le_iff_对任意_le
+  条件: (h : 是SuccLimit a)
   结论: a <= b ↔ 对任意 c < a, c <= b
   证明: h.isSuccPrelimit.le_iff_forall_le
 
@@ -1895,7 +1895,7 @@ theorem IsSuccPrelimit.lt_iff_exists_lt
 @[to_dual]
 
 中文:
-定理 IsSuccPrelimit.lt_iff_exists_lt
+定理 IsSuccPrelimit.lt_iff_存在_lt
   条件: (h : IsSuccPrelimit b)
   结论: a < b ↔ 存在 c < b, a < c
   证明: by
@@ -1923,8 +1923,8 @@ theorem IsSuccLimit.lt_iff_exists_lt
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.lt_iff_exists_lt
-  条件: (h : IsSuccLimit b)
+定理 是SuccLimit.lt_iff_存在_lt
+  条件: (h : 是SuccLimit b)
   结论: a < b ↔ 存在 c < b, a < c
   证明: h.isSuccPrelimit.lt_iff_exists_lt
 
@@ -1952,7 +1952,7 @@ lemma _root_.IsLUB.isSuccPrelimit_of_notMem
 
 中文:
 引理 _root_.IsLUB.isSuccPrelimit_of_notMem
-  条件: {s : Set α} (hs : IsLUB s a) (ha : a ∉ s)
+  条件: {s : 集合 α} (hs : IsLUB s a) (ha : a ∉ s)
   证明: by
   intro b hb
   obtain ⟨c, hc, hbc, hca⟩ := hs.exists_between hb.lt
@@ -1983,7 +1983,7 @@ lemma _root_.IsLUB.mem_of_not_isSuccPrelimit
 
 中文:
 引理 _root_.IsLUB.mem_of_not_isSuccPrelimit
-  条件: {s : Set α} (hs : IsLUB s a) (ha : ¬IsSuccPrelimit a)
+  条件: {s : 集合 α} (hs : IsLUB s a) (ha : ¬IsSuccPrelimit a)
   证明: ha.imp_symm hs.isSuccPrelimit_of_notMem
 
 @[to_dual]
@@ -2012,7 +2012,7 @@ lemma _root_.IsLUB.isSuccLimit_of_notMem
 
 中文:
 引理 _root_.IsLUB.isSuccLimit_of_notMem
-  结论: {s : Set α} (hs : IsLUB s a) (hs' : s.Nonempty)
+  结论: {s : 集合 α} (hs : IsLUB s a) (hs' : s.非空)
   证明: by
   refine ⟨?_, hs.isSuccPrelimit_of_notMem ha⟩
   obtain ⟨b, hb⟩ := hs'
@@ -2045,7 +2045,7 @@ lemma _root_.IsLUB.mem_of_not_isSuccLimit
 
 中文:
 引理 _root_.IsLUB.mem_of_not_isSuccLimit
-  结论: {s : Set α} (hs : IsLUB s a) (hs' : s.Nonempty)
+  结论: {s : 集合 α} (hs : IsLUB s a) (hs' : s.非空)
   证明: ha.imp_symm hs.isSuccLimit_of_notMem hs'
 
 @[to_dual]
@@ -2074,7 +2074,7 @@ theorem IsSuccPrelimit.isLUB_Iio
 中文:
 定理 IsSuccPrelimit.isLUB_Iio
   条件: (ha : IsSuccPrelimit a)
-  结论: IsLUB (Iio a) a
+  结论: IsLUB (左无界右开区间 a) a
   证明: by
   refine ⟨fun _ => le_of_lt, fun b hb => le_of_forall_lt fun c hc => ?_⟩
   obtain ⟨d, hd, hd'⟩ := ha.lt_iff_exists_lt.1 hc
@@ -2102,9 +2102,9 @@ theorem IsSuccLimit.isLUB_Iio
 @[to_dual]
 
 中文:
-定理 IsSuccLimit.isLUB_Iio
-  条件: (ha : IsSuccLimit a)
-  结论: IsLUB (Iio a) a
+定理 是SuccLimit.isLUB_Iio
+  条件: (ha : 是SuccLimit a)
+  结论: IsLUB (左无界右开区间 a) a
   证明: ha.isSuccPrelimit.isLUB_Iio
 
 @[to_dual]
@@ -2129,7 +2129,7 @@ theorem isLUB_Iio_iff_isSuccPrelimit
 
 中文:
 定理 isLUB_Iio_iff_isSuccPrelimit
-  结论: IsLUB (Iio a) a ↔ IsSuccPrelimit a
+  结论: IsLUB (左无界右开区间 a) a ↔ IsSuccPrelimit a
   证明: by
   refine ⟨fun ha b hb => ?_, IsSuccPrelimit.isLUB_Iio⟩
   rw [hb.Iio_eq] at ha
@@ -2182,8 +2182,8 @@ theorem IsSuccLimit.le_succ_iff
   proof: hb.isSuccPrelimit.le_succ_iff
 
 中文:
-定理 IsSuccLimit.le_succ_iff
-  条件: (hb : IsSuccLimit b)
+定理 是SuccLimit.le_succ_iff
+  条件: (hb : 是SuccLimit b)
   结论: b <= succ a ↔ b <= a
   证明: hb.isSuccPrelimit.le_succ_iff
 
@@ -2318,7 +2318,7 @@ theorem isSuccPrelimitRecOn_succ
 
 中文:
 定理 isSuccPrelimitRecOn_succ
-  条件: [NoMaxOrder α] (b : α)
+  条件: [NoMax序 α] (b : α)
   证明: isSuccPrelimitRecOn_succ_of_not_isMax ..
 
 Depends on / 依赖: isSuccPrelimitRecOn_succ_of_not_isMax
@@ -2383,7 +2383,7 @@ theorem isSuccLimitRecOn_of_isSuccLimit
 
 中文:
 定理 isSuccLimitRecOn_of_isSuccLimit
-  条件: (hb : IsSuccLimit b)
+  条件: (hb : 是SuccLimit b)
   证明: by
   rw [isSuccLimitRecOn]; rw [isSuccPrelimitRecOn_of_isSuccPrelimit _ _ hb.isSuccPrelimit]; rw [dif_neg hb.not_isMin]
 
@@ -2440,7 +2440,7 @@ theorem isSuccLimitRecOn_succ
 
 中文:
 定理 isSuccLimitRecOn_succ
-  条件: [NoMaxOrder α] (b : α)
+  条件: [NoMax序 α] (b : α)
   证明: isSuccLimitRecOn_succ_of_not_isMax isMin succ isSuccLimit _
 
 @[to_dual]
@@ -2608,7 +2608,7 @@ theorem prelimitRecOn_succ
 
 中文:
 定理 prelimitRecOn_succ
-  条件: [NoMaxOrder α] (b : α)
+  条件: [NoMax序 α] (b : α)
   证明: prelimitRecOn_succ_of_not_isMax _ _ _
 
 Depends on / 依赖: prelimitRecOn_succ_of_not_isMax
@@ -2701,7 +2701,7 @@ theorem limitRecOn_of_isSuccLimit
 
 中文:
 定理 limitRecOn_of_isSuccLimit
-  条件: (hb : IsSuccLimit b)
+  条件: (hb : 是SuccLimit b)
   证明: by
   rw [limitRecOn]; rw [prelimitRecOn_of_isSuccPrelimit _ _ hb.isSuccPrelimit]; rw [dif_neg hb.not_isMin]; rfl
 
@@ -2758,7 +2758,7 @@ theorem limitRecOn_succ
 
 中文:
 定理 limitRecOn_succ
-  条件: [NoMaxOrder α] (b : α)
+  条件: [NoMax序 α] (b : α)
   证明: limitRecOn_succ_of_not_isMax isMin succ isSuccLimit _
 
 Depends on / 依赖: isSuccLimit, limitRecOn_succ_of_not_isMax

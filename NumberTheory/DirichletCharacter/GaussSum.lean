@@ -70,7 +70,7 @@ lemma factorsThrough_of_gaussSum_ne_zero
 
 中文:
 引理 factorsThrough_of_gaussSum_ne_zero
-  结论: [IsDomain R] {χ : DirichletCharacter R N} {d : 自然数}
+  结论: [是整环 R] {χ : DirichletCharacter R N} {d : 自然数}
   证明: by
   rw [DirichletCharacter.factorsThrough_iff_ker_unitsMap hd]
   intro _ hu
@@ -99,7 +99,7 @@ have : χ.conductor <= d := Nat.sInf_le factorsThrough_of_gaussSum_ne_zero e hd�
 
 中文:
 引理 gaussSum_eq_zero_of_isPrimitive_of_not_isPrimitive
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   contrapose! hχ
   rcases e.exists_divisor_of_not_isPrimitive he with ⟨d, hd₁, hd₂, hed⟩
@@ -130,7 +130,7 @@ lemma gaussSum_mulShift_of_isPrimitive
 
 中文:
 引理 gaussSum_mulShift_of_isPrimitive
-  结论: [IsDomain R] {χ : DirichletCharacter R N}
+  结论: [是整环 R] {χ : DirichletCharacter R N}
   证明: by
   by_cases ha : IsUnit a
   · simpa [ha.unit_spec] using gaussSum_mulShift_eq χ e ha.unit

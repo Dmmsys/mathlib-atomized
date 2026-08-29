@@ -136,7 +136,7 @@ definition inductiveSystem
 
 中文:
 定义 inductiveSystem
-  签名: : Set.Iio j ⥤ C where
+  签名: : 集合.左无界右开区间 j ⥤ C where
   定义体: (iter i.1 i.2).F.obj ⟨i.1, by simp⟩
   map {i₁ i₂} f := mapObj (iter i₁.1 i₁.2) (iter i₂.1 i₂.2) (leOfHom f)
     (by simp) (by simp) (leOfHom f)
@@ -159,7 +159,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Set.Iic j ⥤ C
+  签名: : 集合.左无界右闭区间 j ⥤ C
   定义体: letI := hasColimitsOfShape_of_isSuccLimit C j hj
   ofCocone (colimit.cocone (inductiveSystem iter))
 
@@ -263,7 +263,7 @@ definition mkOfLimit
 
 中文:
 定义 mkOfLimit
-  签名: {j : J} (hj : Order.IsSuccLimit j)
+  签名: {j : J} (hj : Order.是SuccLimit j)
   定义体: functor hj iter
   obj_bot := functor_obj hj iter ⊥ (Order.IsSuccLimit.bot_lt hj) (mkOfBot Φ J) (by rfl)
   arrowSucc_eq i hi := by

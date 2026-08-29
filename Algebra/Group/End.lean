@@ -50,7 +50,7 @@ definition Function.End
   body: α -> α
 
 中文:
-定义 Function.End
+定义 函数.End
   定义体: α -> α
 -/
 protected def Function.End := α -> α
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (Function.End α)
+  签名: 幺半群 (函数.End α)
   定义体: id
   mul := (· ∘ ·)
   mul_assoc _ _ _ := rfl
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Function.End α)
+  签名: 可居 (函数.End α)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (Function.End α) := ⟨1⟩
@@ -120,7 +120,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (Perm α) where one
+  签名: : 幺 (置换 α) where one
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -136,7 +136,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Perm α) where mul f g
+  签名: : 乘法 (置换 α) where mul f g
   定义体: Equiv.trans g f
 
 Depends on / 依赖: Equiv.trans
@@ -152,7 +152,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (Perm α) where inv
+  签名: : 取逆 (置换 α) where inv
   定义体: Equiv.symm
 
 Depends on / 依赖: Equiv.symm
@@ -167,8 +167,8 @@ instance instPowNat
   body: ⟨f^[n], f.symm^[n], f.left_inv.iterate _, f.right_inv.iterate _⟩
 
 中文:
-实例 instPowNat
-  签名: : Pow (Perm α) 自然数 where
+实例 instPow自然数
+  签名: : 幂 (置换 α) 自然数 where
   定义体: ⟨f^[n], f.symm^[n], f.left_inv.iterate _, f.right_inv.iterate _⟩
 
 Depends on / 依赖: f.left_inv.iterate, f.right_inv.iterate, f.symm, iterate, left_inv, right_inv
@@ -195,7 +195,7 @@ zpow_succ' _ _ := coe_fn_injective Function.iterate_succ _ _
 
 中文:
 实例 permGroup
-  签名: : Group (Perm α) where
+  签名: : 群 (置换 α) where
   定义体: (trans_assoc _ _ _).symm
   one_mul := trans_refl
   mul_one := refl_trans
@@ -230,7 +230,7 @@ theorem default_eq
 
 中文:
 定理 default_eq
-  结论: (default : Perm α) = 1
+  结论: (default : 置换 α) = 1
   证明: rfl
 -/
 theorem default_eq : (default : Perm α) = 1 :=
@@ -252,7 +252,7 @@ definition equivUnitsEnd
 
 中文:
 定义 equivUnitsEnd
-  签名: : Perm α ≃* Units (Function.End α) where
+  签名: : 置换 α ≃* 单位群 (函数.End α) where
   定义体: ⟨⇑e, ⇑e.symm, e.self_comp_symm, e.symm_comp_self⟩
   invFun u :=
     ⟨(u : Function.End α), (↑u⁻¹ : Function.End α), congr_fun u.inv_val, congr_fun u.val_inv⟩
@@ -278,8 +278,8 @@ definition _root_.MonoidHom.toHomPerm
   body: equivUnitsEnd.symm.toMonoidHom.comp f.toHomUnits
 
 中文:
-定义 _root_.MonoidHom.toHomPerm
-  签名: {G : 类型} [Group G] (f : G ->* Function.End α)
+定义 _root_.幺半群态射.toHomPerm
+  签名: {G : 类型} [群 G] (f : G ->* 函数.End α)
   定义体: equivUnitsEnd.symm.toMonoidHom.comp f.toHomUnits
 
 Depends on / 依赖: equivUnitsEnd, equivUnitsEnd.symm.toMonoidHom.comp, f.toHomUnits, toHomUnits, toMonoidHom
@@ -298,7 +298,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: (f g : Perm α) (x)
+  条件: (f g : 置换 α) (x)
   结论: (f * g) x = f (g x)
   证明: rfl
 -/
@@ -319,7 +319,7 @@ theorem one_apply
 中文:
 定理 one_apply
   条件: (x)
-  结论: (1 : Perm α) x = x
+  结论: (1 : 置换 α) x = x
   证明: rfl
 
 @[pull_end, push_end← ]
@@ -340,7 +340,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : Perm α) = Equiv.refl α
+  结论: (1 : 置换 α) = 等价.refl α
   证明: rfl
 
 @[pull_end, push_end← ]
@@ -362,7 +362,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: (f g : Perm α)
+  条件: (f g : 置换 α)
   结论: f * g = g.trans f
   证明: rfl
 
@@ -383,7 +383,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: f⁻¹ = f.symm
   证明: rfl
 -/
@@ -401,7 +401,7 @@ lemma coe_inv
 
 中文:
 引理 coe_inv
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: ⇑f⁻¹ = ⇑f.symm
   证明: rfl
 -/
@@ -417,7 +417,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ⇑(1 : Perm α) = id
+  结论: ⇑(1 : 置换 α) = id
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_one : ⇑(1 : Perm α) = id := rfl
@@ -433,7 +433,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: (f g : Perm α)
+  条件: (f g : 置换 α)
   结论: ⇑(f * g) = f ∘ g
   证明: rfl
 -/
@@ -452,7 +452,7 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  条件: (f : Perm α) (n : 自然数)
+  条件: (f : 置换 α) (n : 自然数)
   结论: ⇑(f ^ n) = f^[n]
   证明: rfl
 
@@ -472,7 +472,7 @@ lemma iterate_eq_pow
 
 中文:
 引理 iterate_eq_pow
-  条件: (f : Perm α) (n : 自然数)
+  条件: (f : 置换 α) (n : 自然数)
   结论: f^[n] = ⇑(f ^ n)
   证明: rfl
 -/
@@ -489,7 +489,7 @@ theorem eq_inv_iff_eq
 
 中文:
 定理 eq_inv_iff_eq
-  条件: {f : Perm α} {x y : α}
+  条件: {f : 置换 α} {x y : α}
   结论: x = f⁻¹ y ↔ f x = y
   证明: f.eq_symm_apply
 
@@ -509,7 +509,7 @@ theorem inv_eq_iff_eq
 
 中文:
 定理 inv_eq_iff_eq
-  条件: {f : Perm α} {x y : α}
+  条件: {f : 置换 α} {x y : α}
   结论: f⁻¹ x = y ↔ x = f y
   证明: f.symm_apply_eq
 
@@ -529,7 +529,7 @@ theorem zpow_apply_comm
 
 中文:
 定理 zpow_apply_comm
-  条件: {α : 类型} (σ : Perm α) (m n : 整数) {x : α}
+  条件: {α : 类型} (σ : 置换 α) (m n : 整数) {x : α}
   证明: by
   rw [← Equiv.Perm.mul_apply]; rw [← Equiv.Perm.mul_apply]; rw [zpow_mul_comm]
 
@@ -558,8 +558,8 @@ theorem trans_one
 
 中文:
 定理 trans_one
-  条件: {α : Sort*} {β : 类型} (e : α ≃ β)
-  结论: e.trans (1 : Perm β) = e
+  条件: {α : 类型层*} {β : 类型} (e : α ≃ β)
+  结论: e.trans (1 : 置换 β) = e
   证明: Equiv.trans_refl e
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -583,8 +583,8 @@ theorem mul_refl
 
 中文:
 定理 mul_refl
-  条件: (e : Perm α)
-  结论: e * Equiv.refl α = e
+  条件: (e : 置换 α)
+  结论: e * 等价.refl α = e
   证明: Equiv.trans_refl e
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -607,7 +607,7 @@ theorem one_symm
 
 中文:
 定理 one_symm
-  结论: (1 : Perm α).symm = 1
+  结论: (1 : 置换 α).symm = 1
   证明: rfl
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -628,7 +628,7 @@ theorem refl_inv
 
 中文:
 定理 refl_inv
-  结论: (Equiv.refl α : Perm α)⁻¹ = 1
+  结论: (等价.refl α : 置换 α)⁻¹ = 1
   证明: rfl
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -650,8 +650,8 @@ theorem one_trans
 
 中文:
 定理 one_trans
-  条件: {α : 类型} {β : Sort*} (e : α ≃ β)
-  结论: (1 : Perm α).trans e = e
+  条件: {α : 类型} {β : 类型层*} (e : α ≃ β)
+  结论: (1 : 置换 α).trans e = e
   证明: rfl
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -673,8 +673,8 @@ theorem refl_mul
 
 中文:
 定理 refl_mul
-  条件: (e : Perm α)
-  结论: Equiv.refl α * e = e
+  条件: (e : 置换 α)
+  结论: 等价.refl α * e = e
   证明: rfl
 
 @[deprecated "use `pull_end` simpset instead" (since := "2026-05-13")]
@@ -696,7 +696,7 @@ theorem inv_trans_self
 
 中文:
 定理 inv_trans_self
-  条件: (e : Perm α)
+  条件: (e : 置换 α)
   结论: e⁻¹.trans e = 1
   证明: Equiv.symm_trans_self e
 
@@ -721,7 +721,7 @@ theorem mul_symm
 
 中文:
 定理 mul_symm
-  条件: (e : Perm α)
+  条件: (e : 置换 α)
   结论: e * e.symm = 1
   证明: Equiv.symm_trans_self e
 
@@ -746,7 +746,7 @@ theorem self_trans_inv
 
 中文:
 定理 self_trans_inv
-  条件: (e : Perm α)
+  条件: (e : 置换 α)
   结论: e.trans e⁻¹ = 1
   证明: Equiv.self_trans_symm e
 
@@ -769,7 +769,7 @@ theorem symm_mul
 
 中文:
 定理 symm_mul
-  条件: (e : Perm α)
+  条件: (e : 置换 α)
   结论: e.symm * e = 1
   证明: Equiv.self_trans_symm e
 
@@ -794,7 +794,7 @@ theorem sumCongr_mul
 
 中文:
 定理 sumCongr_mul
-  条件: {α β : 类型} (e : Perm α) (f : Perm β) (g : Perm α) (h : Perm β)
+  条件: {α β : 类型} (e : 置换 α) (f : 置换 β) (g : 置换 α) (h : 置换 β)
   证明: sumCongr_trans g h e f
 
 @[simp]
@@ -818,7 +818,7 @@ theorem sumCongr_inv
 
 中文:
 定理 sumCongr_inv
-  条件: {α β : 类型} (e : Perm α) (f : Perm β)
+  条件: {α β : 类型} (e : 置换 α) (f : 置换 β)
   证明: rfl
 
 @[simp]
@@ -840,7 +840,7 @@ theorem sumCongr_one
 中文:
 定理 sumCongr_one
   条件: {α β : 类型}
-  结论: sumCongr (1 : Perm α) (1 : Perm β) = 1
+  结论: sumCongr (1 : 置换 α) (1 : 置换 β) = 1
   证明: sumCongr_refl
 
 Depends on / 依赖: sumCongr_refl
@@ -896,7 +896,7 @@ theorem sumCongrHom_injective
 中文:
 定理 sumCongrHom_injective
   条件: {α β : 类型}
-  结论: Function.Injective (sumCongrHom α β)
+  结论: 函数.单射 (sumCongrHom α β)
   证明: by
   rintro ⟨⟩ ⟨⟩ h
   rw [Prod.mk_inj]
@@ -975,7 +975,7 @@ theorem sigmaCongrRight_mul
 
 中文:
 定理 sigmaCongrRight_mul
-  结论: {α : 类型} {β : α -> 类型} (F : 对任意 a, Perm (β a))
+  结论: {α : 类型} {β : α -> 类型} (F : 对任意 a, 置换 (β a))
   证明: rfl
 
 @[simp]
@@ -997,7 +997,7 @@ theorem sigmaCongrRight_inv
 
 中文:
 定理 sigmaCongrRight_inv
-  条件: {α : 类型} {β : α -> 类型} (F : 对任意 a, Perm (β a))
+  条件: {α : 类型} {β : α -> 类型} (F : 对任意 a, 置换 (β a))
   证明: rfl
 
 @[simp]
@@ -1149,8 +1149,8 @@ theorem _root_.Equiv.permCongr_eq_mul
 @[simp]
 
 中文:
-定理 _root_.Equiv.permCongr_eq_mul
-  条件: (e p : Perm α)
+定理 _root_.等价.permCongr_eq_mul
+  条件: (e p : 置换 α)
   结论: e.permCongr p = e * p * e⁻¹
   证明: rfl
 
@@ -1169,8 +1169,8 @@ lemma _root_.Equiv.permCongr_mul
   proof: .symm permCongr_trans e q p
 
 中文:
-引理 _root_.Equiv.permCongr_mul
-  条件: (e : α ≃ β) (p q : Perm α)
+引理 _root_.等价.permCongr_mul
+  条件: (e : α ≃ β) (p q : 置换 α)
   证明: .symm permCongr_trans e q p
 
 Depends on / 依赖: permCongr_trans
@@ -1189,7 +1189,7 @@ definition _root_.Equiv.permCongrHom
   map_mul' p q := e.permCongr_mul p q
 
 中文:
-定义 _root_.Equiv.permCongrHom
+定义 _root_.等价.permCongrHom
   签名: (e : α ≃ β)
   定义体: e.permCongr
   map_mul' p q := e.permCongr_mul p q
@@ -1215,7 +1215,7 @@ theorem _root_.Equiv.permCongrHom_symm
 @[simp]
 
 中文:
-定理 _root_.Equiv.permCongrHom_symm
+定理 _root_.等价.permCongrHom_symm
   条件: (e : α ≃ β)
   证明: rfl
 
@@ -1237,7 +1237,7 @@ theorem _root_.Equiv.permCongrHom_trans
 @[simp]
 
 中文:
-定理 _root_.Equiv.permCongrHom_trans
+定理 _root_.等价.permCongrHom_trans
   条件: (e : α ≃ β) (e' : β ≃ γ)
   证明: rfl
 
@@ -1259,7 +1259,7 @@ lemma _root_.Equiv.permCongrHom_coe_equiv
 @[simp]
 
 中文:
-引理 _root_.Equiv.permCongrHom_coe_equiv
+引理 _root_.等价.permCongrHom_coe_equiv
   条件: (e : α ≃ β)
   证明: rfl
 
@@ -1280,7 +1280,7 @@ lemma _root_.Equiv.permCongrHom_coe
   proof: rfl
 
 中文:
-引理 _root_.Equiv.permCongrHom_coe
+引理 _root_.等价.permCongrHom_coe
   条件: (e : α ≃ β)
   结论: ⇑e.permCongrHom = ⇑e.permCongr
   证明: rfl
@@ -1350,7 +1350,7 @@ theorem extendDomain_mul
 
 中文:
 定理 extendDomain_mul
-  条件: (e e' : Perm α)
+  条件: (e e' : 置换 α)
   证明: extendDomain_trans _ _ _
 
 Depends on / 依赖: extendDomain_trans
@@ -1373,7 +1373,7 @@ definition extendDomainHom
 
 中文:
 定义 extendDomainHom
-  签名: : Perm α ->* Perm β where
+  签名: : 置换 α ->* 置换 β where
   定义体: extendDomain e f
   map_one' := extendDomain_one f
   map_mul' e e' := (extendDomain_mul f e e').symm
@@ -1399,7 +1399,7 @@ ext fun x => f.injective
 
 中文:
 定理 extendDomainHom_injective
-  结论: Function.Injective (extendDomainHom f)
+  结论: 函数.单射 (extendDomainHom f)
   证明: (injective_iff_map_eq_one (extendDomainHom f)).mpr fun e he =>
 ext fun x => f.injective
       Subtype.ext ((extendDomain_apply_image e f x).symm.trans (Perm.ext_iff.mp he (f x)))
@@ -1427,7 +1427,7 @@ theorem extendDomain_eq_one_iff
 
 中文:
 定理 extendDomain_eq_one_iff
-  条件: {e : Perm α} {f : α ≃ Subtype p}
+  条件: {e : 置换 α} {f : α ≃ 子类型 p}
   结论: e.extendDomain f = 1 ↔ e = 1
   证明: (injective_iff_map_eq_one' (extendDomainHom f)).mp (extendDomainHom_injective f) e
 
@@ -1505,7 +1505,7 @@ invFun := fun x => ⟨f⁻¹ x, (h (f⁻¹ x)).1 by simpa using x.2⟩
 
 中文:
 定义 subtypePerm
-  签名: (f : Perm α) (h : 对任意 x, p (f x) ↔ p x)
+  签名: (f : 置换 α) (h : 对任意 x, p (f x) ↔ p x)
   定义体: fun x => ⟨f x, (h _).2 x.2⟩
 invFun := fun x => ⟨f⁻¹ x, (h (f⁻¹ x)).1 by simpa using x.2⟩
   left_inv _ := by simp
@@ -1532,7 +1532,7 @@ theorem subtypePerm_apply
 
 中文:
 定理 subtypePerm_apply
-  条件: (f : Perm α) (h : 对任意 x, p (f x) ↔ p x) (x : { x // p x })
+  条件: (f : 置换 α) (h : 对任意 x, p (f x) ↔ p x) (x : { x // p x })
   证明: rfl
 
 @[simp]
@@ -1555,7 +1555,7 @@ theorem subtypePerm_one
 
 中文:
 定理 subtypePerm_one
-  条件: (p : α -> 命题) (h := fun _ => Iff.rfl)
+  条件: (p : α -> 命题) (h := fun _ => 当且仅当.rfl)
   结论: @subtypePerm α p 1 h = 1
   证明: rfl
 
@@ -1577,7 +1577,7 @@ theorem subtypePerm_mul
 
 中文:
 定理 subtypePerm_mul
-  条件: (f g : Perm α) (hf hg)
+  条件: (f g : 置换 α) (hf hg)
   证明: rfl
 -/
 theorem subtypePerm_mul (f g : Perm α) (hf hg) :
@@ -1614,7 +1614,7 @@ theorem subtypePerm_inv
 
 中文:
 定理 subtypePerm_inv
-  条件: (f : Perm α) (hf)
+  条件: (f : 置换 α) (hf)
   证明: rfl
 -/
 theorem subtypePerm_inv (f : Perm α) (hf) :
@@ -1635,7 +1635,7 @@ theorem inv_subtypePerm
 
 中文:
 定理 inv_subtypePerm
-  条件: (f : Perm α) (hf)
+  条件: (f : 置换 α) (hf)
   证明: rfl
 -/
 theorem inv_subtypePerm (f : Perm α) (hf) :
@@ -1677,7 +1677,7 @@ theorem subtypePerm_pow
 
 中文:
 定理 subtypePerm_pow
-  条件: (f : Perm α) (n : 自然数) (hf)
+  条件: (f : 置换 α) (n : 自然数) (hf)
   证明: by
   induction n with
   | zero => simp
@@ -1727,7 +1727,7 @@ theorem subtypePerm_zpow
 
 中文:
 定理 subtypePerm_zpow
-  条件: (f : Perm α) (n : 整数) (hf)
+  条件: (f : 置换 α) (n : 整数) (hf)
   证明: by
   cases n with
   | ofNat n => exact subtypePerm_pow _ _ _
@@ -1755,7 +1755,7 @@ definition ofSubtype
 
 中文:
 定义 ofSubtype
-  签名: : Perm (Subtype p) ->* Perm α where
+  签名: : 置换 (子类型 p) ->* 置换 α where
   定义体: extendDomain f (Equiv.refl (Subtype p))
   map_one' := Equiv.Perm.extendDomain_one _
   map_mul' f g := (Equiv.Perm.extendDomain_mul _ f g).symm
@@ -1782,7 +1782,7 @@ theorem ofSubtype_subtypePerm
 
 中文:
 定理 ofSubtype_subtypePerm
-  条件: {f : Perm α} (h₁ : 对任意 x, p (f x) ↔ p x) (h₂ : 对任意 x, f x != x -> p x)
+  条件: {f : 置换 α} (h₁ : 对任意 x, p (f x) ↔ p x) (h₂ : 对任意 x, f x != x -> p x)
   证明: Equiv.ext fun x => by
     by_cases hx : p x
     · exact (subtypePerm f h₁).extendDomain_apply_subtype _ hx
@@ -1814,7 +1814,7 @@ theorem ofSubtype_apply_of_mem
 
 中文:
 定理 ofSubtype_apply_of_mem
-  条件: (f : Perm (Subtype p)) (ha : p a)
+  条件: (f : 置换 (子类型 p)) (ha : p a)
   结论: ofSubtype f a = f ⟨a, ha⟩
   证明: extendDomain_apply_subtype _ _ ha
 
@@ -1837,7 +1837,7 @@ theorem ofSubtype_apply_coe
 
 中文:
 定理 ofSubtype_apply_coe
-  条件: (f : Perm (Subtype p)) (x : Subtype p)
+  条件: (f : 置换 (子类型 p)) (x : 子类型 p)
   结论: ofSubtype f x = f x
   证明: Subtype.casesOn x fun _ => ofSubtype_apply_of_mem f
 
@@ -1857,7 +1857,7 @@ theorem ofSubtype_apply_of_not_mem
 
 中文:
 定理 ofSubtype_apply_of_not_mem
-  条件: (f : Perm (Subtype p)) (ha : ¬p a)
+  条件: (f : 置换 (子类型 p)) (ha : ¬p a)
   结论: ofSubtype f a = a
   证明: extendDomain_apply_not_subtype _ _ ha
 
@@ -1878,7 +1878,7 @@ theorem ofSubtype_apply_mem_iff_mem
 
 中文:
 定理 ofSubtype_apply_mem_iff_mem
-  条件: (f : Perm (Subtype p)) (x : α)
+  条件: (f : 置换 (子类型 p)) (x : α)
   证明: if h : p x then by
     simpa only [h, iff_true, MonoidHom.coe_mk, ofSubtype_apply_of_mem f h] using (f ⟨x, h⟩).2
   else by simp [h, ofSubtype_apply_of_not_mem f h]
@@ -1909,7 +1909,7 @@ theorem ofSubtype_injective
 
 中文:
 定理 ofSubtype_injective
-  结论: Function.Injective (ofSubtype : Perm (Subtype p) -> Perm α)
+  结论: 函数.单射 (ofSubtype : 置换 (子类型 p) -> 置换 α)
   证明: by
   intro x y h
   rw [Perm.ext_iff] at h ⊢
@@ -1939,7 +1939,7 @@ theorem subtypePerm_ofSubtype
 
 中文:
 定理 subtypePerm_ofSubtype
-  条件: (f : Perm (Subtype p))
+  条件: (f : 置换 (子类型 p))
   证明: Equiv.ext fun x => Subtype.coe_injective (ofSubtype_apply_coe f x)
 
 Depends on / 依赖: Equiv.ext, Subtype, Subtype.coe_injective, coe_injective, ofSubtype_apply_coe
@@ -2035,7 +2035,7 @@ theorem subtypeEquivSubtypePerm_apply_of_mem
 
 中文:
 定理 subtypeEquivSubtypePerm_apply_of_mem
-  条件: (f : Perm (Subtype p)) (h : p a)
+  条件: (f : 置换 (子类型 p)) (h : p a)
   证明: f.ofSubtype_apply_of_mem h
 
 Depends on / 依赖: f.ofSubtype_apply_of_mem, ofSubtype_apply_of_mem
@@ -2054,7 +2054,7 @@ theorem subtypeEquivSubtypePerm_apply_of_not_mem
 
 中文:
 定理 subtypeEquivSubtypePerm_apply_of_not_mem
-  条件: (f : Perm (Subtype p)) (h : ¬p a)
+  条件: (f : 置换 (子类型 p)) (h : ¬p a)
   证明: f.ofSubtype_apply_of_not_mem h
 
 Depends on / 依赖: f.ofSubtype_apply_of_not_mem, ofSubtype_apply_of_not_mem
@@ -2127,7 +2127,7 @@ theorem swap_mul_eq_mul_swap
 
 中文:
 定理 swap_mul_eq_mul_swap
-  条件: (f : Perm α) (x y : α)
+  条件: (f : 置换 α) (x y : α)
   结论: swap x y * f = f * swap (f⁻¹ x) (f⁻¹ y)
   证明: Equiv.ext fun z => by
     simp only [Perm.mul_apply, swap_apply_def]; split_ifs <;> simp_all [eq_symm_apply]
@@ -2150,7 +2150,7 @@ theorem mul_swap_eq_swap_mul
 
 中文:
 定理 mul_swap_eq_swap_mul
-  条件: (f : Perm α) (x y : α)
+  条件: (f : 置换 α) (x y : α)
   结论: f * swap x y = swap (f x) (f y) * f
   证明: by
   simp [swap_mul_eq_mul_swap]
@@ -2172,7 +2172,7 @@ theorem swap_apply_apply
 
 中文:
 定理 swap_apply_apply
-  条件: (f : Perm α) (x y : α)
+  条件: (f : 置换 α) (x y : α)
   结论: swap (f x) (f y) = f * swap x y * f⁻¹
   证明: by
   rw [mul_swap_eq_swap_mul]; rw [mul_inv_cancel_right]
@@ -2199,8 +2199,8 @@ theorem swap_mul_self_mul
 
 中文:
 定理 swap_mul_self_mul
-  条件: (i j : α) (σ : Perm α)
-  结论: Equiv.swap i j * (Equiv.swap i j * σ) = σ
+  条件: (i j : α) (σ : 置换 α)
+  结论: 等价.swap i j * (等价.swap i j * σ) = σ
   证明: by
   simp [← mul_assoc]
 
@@ -2226,8 +2226,8 @@ theorem mul_swap_mul_self
 
 中文:
 定理 mul_swap_mul_self
-  条件: (i j : α) (σ : Perm α)
-  结论: σ * Equiv.swap i j * Equiv.swap i j = σ
+  条件: (i j : α) (σ : 置换 α)
+  结论: σ * 等价.swap i j * 等价.swap i j = σ
   证明: by
   rw [mul_assoc]; rw [swap_mul_self]; rw [mul_one]
 
@@ -2250,7 +2250,7 @@ theorem swap_mul_involutive
 中文:
 定理 swap_mul_involutive
   条件: (i j : α)
-  结论: Function.Involutive (Equiv.swap i j * ·)
+  结论: 函数.对合 (等价.swap i j * ·)
   证明: swap_mul_self_mul i j
 
 Depends on / 依赖: swap_mul_self_mul
@@ -2274,7 +2274,7 @@ theorem mul_swap_involutive
 中文:
 定理 mul_swap_involutive
   条件: (i j : α)
-  结论: Function.Involutive (· * Equiv.swap i j)
+  结论: 函数.对合 (· * 等价.swap i j)
   证明: mul_swap_mul_self i j
 
 @[simp]
@@ -2297,7 +2297,7 @@ theorem swap_eq_one_iff
 中文:
 定理 swap_eq_one_iff
   条件: {i j : α}
-  结论: swap i j = (1 : Perm α) ↔ i = j
+  结论: swap i j = (1 : 置换 α) ↔ i = j
   证明: swap_eq_refl_iff
 
 Depends on / 依赖: swap_eq_refl_iff
@@ -2317,7 +2317,7 @@ theorem swap_mul_eq_iff
 
 中文:
 定理 swap_mul_eq_iff
-  条件: {i j : α} {σ : Perm α}
+  条件: {i j : α} {σ : 置换 α}
   结论: swap i j * σ = σ ↔ i = j
   证明: by
   rw [mul_eq_right]; rw [swap_eq_one_iff]
@@ -2339,7 +2339,7 @@ theorem mul_swap_eq_iff
 
 中文:
 定理 mul_swap_eq_iff
-  条件: {i j : α} {σ : Perm α}
+  条件: {i j : α} {σ : 置换 α}
   结论: σ * swap i j = σ ↔ i = j
   证明: by
   rw [mul_eq_left]; rw [swap_eq_one_iff]
@@ -2391,7 +2391,7 @@ lemma mulLeft_one
 
 中文:
 引理 mulLeft_one
-  结论: Equiv.mulLeft (1 : α) = 1
+  结论: 等价.mulLeft (1 : α) = 1
   证明: ext one_mul
 
 @[to_additive (attr := simp)]
@@ -2413,7 +2413,7 @@ lemma mulRight_one
 
 中文:
 引理 mulRight_one
-  结论: Equiv.mulRight (1 : α) = 1
+  结论: 等价.mulRight (1 : α) = 1
   证明: ext mul_one
 
 @[to_additive (attr := simp)]
@@ -2435,7 +2435,7 @@ lemma mulLeft_mul
 
 中文:
 引理 mulLeft_mul
-  结论: Equiv.mulLeft (a * b) = Equiv.mulLeft a * Equiv.mulLeft b
+  结论: 等价.mulLeft (a * b) = 等价.mulLeft a * 等价.mulLeft b
   证明: ext mul_assoc _ _
 
 @[to_additive (attr := simp)]
@@ -2458,7 +2458,7 @@ lemma mulRight_mul
 
 中文:
 引理 mulRight_mul
-  结论: Equiv.mulRight (a * b) = Equiv.mulRight b * Equiv.mulRight a
+  结论: 等价.mulRight (a * b) = 等价.mulRight b * 等价.mulRight a
   证明: ext fun _ => (mul_assoc _ _ _).symm
 
 @[to_additive (attr := simp)]
@@ -2481,7 +2481,7 @@ lemma inv_mulLeft
 
 中文:
 引理 inv_mulLeft
-  结论: (Equiv.mulLeft a)⁻¹ = Equiv.mulLeft a⁻¹
+  结论: (等价.mulLeft a)⁻¹ = 等价.mulLeft a⁻¹
   证明: Equiv.coe_inj.1 rfl
 
 @[to_additive (attr := simp)]
@@ -2503,7 +2503,7 @@ lemma inv_mulRight
 
 中文:
 引理 inv_mulRight
-  结论: (Equiv.mulRight a)⁻¹ = Equiv.mulRight a⁻¹
+  结论: (等价.mulRight a)⁻¹ = 等价.mulRight a⁻¹
   证明: Equiv.coe_inj.1 rfl
 
 @[to_additive (attr := simp)]
@@ -2528,7 +2528,7 @@ lemma pow_mulLeft
 中文:
 引理 pow_mulLeft
   条件: (n : 自然数)
-  结论: Equiv.mulLeft a ^ n = Equiv.mulLeft (a ^ n)
+  结论: 等价.mulLeft a ^ n = 等价.mulLeft (a ^ n)
   证明: by
   ext; simp [Perm.coe_pow]
 
@@ -2555,7 +2555,7 @@ lemma pow_mulRight
 中文:
 引理 pow_mulRight
   条件: (n : 自然数)
-  结论: Equiv.mulRight a ^ n = Equiv.mulRight (a ^ n)
+  结论: 等价.mulRight a ^ n = 等价.mulRight (a ^ n)
   证明: by
   ext; simp [Perm.coe_pow]
 
@@ -2576,7 +2576,7 @@ lemma zpow_mulLeft
 
 中文:
 引理 zpow_mulLeft
-  结论: 对任意 n : 整数, Equiv.mulLeft a ^ n = Equiv.mulLeft (a ^ n)
+  结论: 对任意 n : 整数, 等价.mulLeft a ^ n = 等价.mulLeft (a ^ n)
 -/
 lemma zpow_mulLeft : forall n : Int, Equiv.mulLeft a ^ n = Equiv.mulLeft (a ^ n)
   | Int.ofNat n => by simp
@@ -2592,7 +2592,7 @@ lemma zpow_mulRight
 
 中文:
 引理 zpow_mulRight
-  结论: 对任意 n : 整数, Equiv.mulRight a ^ n = Equiv.mulRight (a ^ n)
+  结论: 对任意 n : 整数, 等价.mulRight a ^ n = 等价.mulRight (a ^ n)
 -/
 lemma zpow_mulRight : forall n : Int, Equiv.mulRight a ^ n = Equiv.mulRight (a ^ n)
   | Int.ofNat n => by simp
@@ -2613,7 +2613,7 @@ abbreviation MulAut
 
 中文:
 缩写 MulAut
-  签名: (M : 类型) [Mul M]
+  签名: (M : 类型) [乘法 M]
   定义体: M ≃* M
 -/
 abbrev MulAut (M : Type*) [Mul M] :=
@@ -2664,7 +2664,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (MulAut M)
+  签名: 群 (MulAut M)
   定义体: MulEquiv.trans h g
   one := MulEquiv.refl _
   inv := MulEquiv.symm
@@ -2699,7 +2699,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MulAut M)
+  签名: 可居 (MulAut M)
   定义体: ⟨1⟩
 
 @[to_additive (attr := simp)]
@@ -2809,7 +2809,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : MulAut M) = MulEquiv.refl _
+  结论: (1 : MulAut M) = 乘法等价.refl _
   证明: rfl
 
 @[to_additive]
@@ -3015,7 +3015,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : MulAut M ->* Equiv.Perm M where
+  签名: : MulAut M ->* 等价.置换 M where
   定义体: MulEquiv.toEquiv
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -3051,7 +3051,7 @@ definition conj
 
 中文:
 定义 conj
-  签名: [Group G]
+  签名: [群 G]
   定义体: { toFun h := g * h * g⁻¹
       invFun h := g⁻¹ * h * g
       left_inv _ := by simp [mul_assoc]
@@ -3088,7 +3088,7 @@ theorem conj_apply
 
 中文:
 定理 conj_apply
-  条件: [Group G] (g h : G)
+  条件: [群 G] (g h : G)
   结论: conj g h = g * h * g⁻¹
   证明: rfl
 
@@ -3111,7 +3111,7 @@ theorem conj_symm_apply
 
 中文:
 定理 conj_symm_apply
-  条件: [Group G] (g h : G)
+  条件: [群 G] (g h : G)
   结论: (conj g).symm h = g⁻¹ * h * g
   证明: rfl
 
@@ -3132,7 +3132,7 @@ theorem conj_inv_apply
 
 中文:
 定理 conj_inv_apply
-  条件: [Group G] (g h : G)
+  条件: [群 G] (g h : G)
   结论: (conj g)⁻¹ h = g⁻¹ * h * g
   证明: rfl
 -/
@@ -3155,7 +3155,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: [Group G] {H : 类型} [Group H] (ϕ : G ≃* H)
+  签名: [群 G] {H : 类型} [群 H] (ϕ : G ≃* H)
   定义体: ϕ.symm.trans (f.trans ϕ)
   invFun f := ϕ.trans (f.trans ϕ.symm)
   left_inv _ := by simp [DFunLike.ext_iff]
@@ -3209,7 +3209,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : AddAut A ->+ Additive (Equiv.Perm A) where
+  签名: : AddAut A ->+ 加性 (等价.置换 A) where
   定义体: AddEquiv.toEquiv
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -3244,7 +3244,7 @@ theorem neg_conj_apply
 
 中文:
 定理 neg_conj_apply
-  条件: [AddGroup G] (g h : G)
+  条件: [加法群 G] (g h : G)
   结论: (-addConj g) h = -g + h + g
   证明: by
   simp
@@ -3268,7 +3268,7 @@ definition MulAutMultiplicative
 
 中文:
 定义 MulAutMultiplicative
-  签名: [AddGroup G]
+  签名: [加法群 G]
   定义体: { AddEquiv.toMultiplicative.symm with map_mul' := fun _ _ => rfl }
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicative.symm, map_mul, toMultiplicative
@@ -3288,7 +3288,7 @@ definition AddAutAdditive
 
 中文:
 定义 AddAutAdditive
-  签名: [Group G]
+  签名: [群 G]
   定义体: { MulEquiv.toAdditive.symm with map_add' := fun _ _ => rfl }
 
 Depends on / 依赖: MulEquiv, MulEquiv.toAdditive.symm, map_add, toAdditive

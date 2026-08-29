@@ -69,7 +69,7 @@ class IsAlgClosed
     - splits : forall p : k[X], p.Splits
 
 中文:
-类 IsAlgClosed
+类 是代数闭
   参数: : 命题 where
   公理与运算 (1 个):
     - splits : 对任意 p : k[X], p.Splits
@@ -86,8 +86,8 @@ theorem IsAlgClosed.splits_domain
   proof: (IsAlgClosed.splits p).map f
 
 中文:
-定理 IsAlgClosed.splits_domain
-  结论: {k K : 类型} [Field k] [IsAlgClosed k] [Field K] {f : k ->+* K}
+定理 是代数闭.splits_domain
+  结论: {k K : 类型} [域 k] [是代数闭 k] [域 K] {f : k ->+* K}
   证明: (IsAlgClosed.splits p).map f
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, splits
@@ -114,8 +114,8 @@ theorem exists_root
   proof: (IsAlgClosed.splits p).exists_eval_eq_zero hp
 
 中文:
-定理 exists_root
-  条件: [IsAlgClosed k] (p : k[X]) (hp : p.degree != 0)
+定理 存在_root
+  条件: [是代数闭 k] (p : k[X]) (hp : p.degree != 0)
   结论: 存在 x, IsRoot p x
   证明: (IsAlgClosed.splits p).exists_eval_eq_zero hp
 
@@ -141,8 +141,8 @@ theorem exists_pow_nat_eq
   exact sub_eq_zero.1 hz
 
 中文:
-定理 exists_pow_nat_eq
-  条件: [IsAlgClosed k] (x : k) {n : 自然数} (hn : 0 < n)
+定理 存在_pow_nat_eq
+  条件: [是代数闭 k] (x : k) {n : 自然数} (hn : 0 < n)
   结论: 存在 z, z ^ n = x
   证明: by
   have : degree (X ^ n - C x) != 0 := by
@@ -176,8 +176,8 @@ theorem exists_eq_mul_self
   exact ⟨z, sq z⟩
 
 中文:
-定理 exists_eq_mul_self
-  条件: [IsAlgClosed k] (x : k)
+定理 存在_eq_mul_self
+  条件: [是代数闭 k] (x : k)
   结论: 存在 z, x = z * z
   证明: by
   rcases exists_pow_nat_eq x zero_lt_two with ⟨z, rfl⟩
@@ -205,7 +205,7 @@ theorem roots_eq_zero_iff
 
 中文:
 定理 roots_eq_zero_iff
-  条件: [IsAlgClosed k] {p : k[X]}
+  条件: [是代数闭 k] {p : k[X]}
   证明: by
   refine ⟨fun h => ?_, fun hp => by rw [hp, roots_C]⟩
   rcases le_or_gt (degree p) 0 with hd | hd
@@ -235,7 +235,7 @@ theorem roots_eq_zero_iff_natDegree_eq_zero
 
 中文:
 定理 roots_eq_zero_iff_natDegree_eq_zero
-  条件: [IsAlgClosed k] {p : k[X]}
+  条件: [是代数闭 k] {p : k[X]}
   证明: roots_eq_zero_iff.trans eq_C_coeff_zero_iff_natDegree_eq_zero
 
 Depends on / 依赖: IsAddKleinFour, IsAddKleinFour.card_four, card_four, eq_C_coeff_zero_iff_natDegree_eq_zero, exponent_two, roots_eq_zero_iff, roots_eq_zero_iff.trans
@@ -255,7 +255,7 @@ theorem roots_eq_zero_iff_degree_nonpos
 
 中文:
 定理 roots_eq_zero_iff_degree_nonpos
-  条件: [IsAlgClosed k] {p : k[X]}
+  条件: [是代数闭 k] {p : k[X]}
   结论: p.roots = 0 ↔ p.degree <= 0
   证明: roots_eq_zero_iff_natDegree_eq_zero.trans natDegree_eq_zero_iff_degree_le_zero
 
@@ -277,7 +277,7 @@ theorem card_roots_eq_natDegree
 
 中文:
 定理 card_roots_eq_natDegree
-  条件: [IsAlgClosed k] {p : k[X]}
+  条件: [是代数闭 k] {p : k[X]}
   结论: p.roots.card = p.natDegree
   证明: by
   have ⟨_, _, hdeg, hroots⟩ := exists_prod_multiset_X_sub_C_mul p
@@ -299,7 +299,7 @@ theorem card_roots_map_eq_natDegree_of_leadingCoeff_ne_zero
 
 中文:
 定理 card_roots_map_eq_natDegree_of_leadingCoeff_ne_zero
-  结论: {A B : 类型} [Semiring A] [Field B]
+  结论: {A B : 类型} [半环 A] [域 B]
   证明: natDegree_map_of_leadingCoeff_ne_zero _ hf ▸ card_roots_eq_natDegree
 
 Depends on / 依赖: card_roots_eq_natDegree, natDegree_map_of_leadingCoeff_ne_zero
@@ -319,7 +319,7 @@ theorem card_roots_map_eq_natDegree_of_isUnit_leadingCoeff
 
 中文:
 定理 card_roots_map_eq_natDegree_of_isUnit_leadingCoeff
-  结论: {A B : 类型} [Semiring A] [Field B]
+  结论: {A B : 类型} [半环 A] [域 B]
   证明: natDegree_map_eq_of_isUnit_leadingCoeff f h ▸ card_roots_eq_natDegree
 
 Depends on / 依赖: card_roots_eq_natDegree, natDegree_map_eq_of_isUnit_leadingCoeff
@@ -339,7 +339,7 @@ theorem card_roots_map_eq_natDegree_of_injective
 
 中文:
 定理 card_roots_map_eq_natDegree_of_injective
-  结论: {A B : 类型} [Semiring A] [Field B]
+  结论: {A B : 类型} [半环 A] [域 B]
   证明: natDegree_map_eq_of_injective hf _ ▸ card_roots_eq_natDegree
 
 Depends on / 依赖: card_roots_eq_natDegree, natDegree_map_eq_of_injective
@@ -359,7 +359,7 @@ theorem card_roots_map_eq_natDegree_from_simpleRing
 
 中文:
 定理 card_roots_map_eq_natDegree_from_simpleRing
-  结论: {A B : 类型} [Ring A] [IsSimpleRing A]
+  结论: {A B : 类型} [环 A] [是单环 A]
   证明: natDegree_map f ▸ card_roots_eq_natDegree
 
 Depends on / 依赖: card_roots_eq_natDegree, natDegree_map
@@ -378,7 +378,7 @@ theorem card_aroots_eq_natDegree_of_leadingCoeff_ne_zero
 
 中文:
 定理 card_aroots_eq_natDegree_of_leadingCoeff_ne_zero
-  结论: {A B : 类型} [CommRing A] [Field B]
+  结论: {A B : 类型} [交换环 A] [域 B]
   证明: card_roots_map_eq_natDegree_of_leadingCoeff_ne_zero hf
 
 Depends on / 依赖: card_roots_map_eq_natDegree_of_leadingCoeff_ne_zero
@@ -398,7 +398,7 @@ theorem card_aroots_eq_natDegree_of_isUnit_leadingCoeff
 
 中文:
 定理 card_aroots_eq_natDegree_of_isUnit_leadingCoeff
-  结论: {A B : 类型} [CommRing A] [Field B]
+  结论: {A B : 类型} [交换环 A] [域 B]
   证明: card_roots_map_eq_natDegree_of_isUnit_leadingCoeff _ h
 
 Depends on / 依赖: card_roots_map_eq_natDegree_of_isUnit_leadingCoeff
@@ -418,7 +418,7 @@ theorem card_aroots_eq_natDegree
 
 中文:
 定理 card_aroots_eq_natDegree
-  结论: {A B : 类型} [CommRing A] [Field B] [IsAlgClosed B] [Algebra A B]
+  结论: {A B : 类型} [交换环 A] [域 B] [是代数闭 B] [代数 A B]
   证明: card_roots_map_eq_natDegree_of_injective _ FaithfulSMul.algebraMap_injective _ _
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, card_roots_map_eq_natDegree_of_injective
@@ -437,7 +437,7 @@ theorem dvd_iff_roots_le_roots
 
 中文:
 定理 dvd_iff_roots_le_roots
-  条件: [IsAlgClosed k] {p q : k[X]} (hp : p != 0) (hq : q != 0)
+  条件: [是代数闭 k] {p q : k[X]} (hp : p != 0) (hq : q != 0)
   证明: Splits.dvd_iff_roots_le_roots (splits _) hp hq
 
 Depends on / 依赖: Splits, Splits.dvd_iff_roots_le_roots, dvd_iff_roots_le_roots, splits
@@ -458,7 +458,7 @@ theorem associated_iff_roots_eq_roots
 
 中文:
 定理 associated_iff_roots_eq_roots
-  条件: [IsAlgClosed k] {p q : k[X]} (hp : p != 0) (hq : q != 0)
+  条件: [是代数闭 k] {p q : k[X]} (hp : p != 0) (hq : q != 0)
   证明: ⟨Associated.roots_eq, fun h => associated_of_dvd_dvd
     (dvd_iff_roots_le_roots hp hq |>.mpr <| le_of_eq h)
     (dvd_iff_roots_le_roots hq hp |>.mpr <| le_of_eq h.symm)⟩
@@ -481,8 +481,8 @@ theorem exists_eval₂_eq_zero_of_injective
   ⟨x, by rwa [eval₂_eq_eval_map, ← IsRoot]⟩
 
 中文:
-定理 exists_eval₂_eq_zero_of_injective
-  结论: {R : 类型} [Semiring R] [IsAlgClosed k] (f : R ->+* k)
+定理 存在_eval₂_eq_zero_of_injective
+  结论: {R : 类型} [半环 R] [是代数闭 k] (f : R ->+* k)
   证明: let ⟨x, hx⟩ := exists_root (p.map f) (by rwa [degree_map_eq_of_injective hf])
   ⟨x, by rwa [eval₂_eq_eval_map, ← IsRoot]⟩
 
@@ -502,8 +502,8 @@ theorem exists_eval₂_eq_zero
   proof: exists_eval₂_eq_zero_of_injective _ f.injective _ hp
 
 中文:
-定理 exists_eval₂_eq_zero
-  结论: {R : 类型} [Ring R] [IsSimpleRing R] [IsAlgClosed k] (f : R ->+* k)
+定理 存在_eval₂_eq_zero
+  结论: {R : 类型} [环 R] [是单环 R] [是代数闭 k] (f : R ->+* k)
   证明: exists_eval₂_eq_zero_of_injective _ f.injective _ hp
 
 Depends on / 依赖: f.injective, injective
@@ -523,8 +523,8 @@ theorem exists_aeval_eq_zero_of_injective
   proof: exists_eval₂_eq_zero_of_injective (algebraMap R k) hinj p hp
 
 中文:
-定理 exists_aeval_eq_zero_of_injective
-  结论: {R : 类型} [CommSemiring R] [IsAlgClosed k] [Algebra R k]
+定理 存在_aeval_eq_zero_of_injective
+  结论: {R : 类型} [交换半环 R] [是代数闭 k] [代数 R k]
   证明: exists_eval₂_eq_zero_of_injective (algebraMap R k) hinj p hp
 
 Depends on / 依赖: algebraMap
@@ -543,8 +543,8 @@ theorem exists_aeval_eq_zero
   proof: exists_aeval_eq_zero_of_injective _ (FaithfulSMul.algebraMap_injective ..) _ hp
 
 中文:
-定理 exists_aeval_eq_zero
-  结论: {R : 类型} [CommSemiring R] [IsAlgClosed k] [Algebra R k]
+定理 存在_aeval_eq_zero
+  结论: {R : 类型} [交换半环 R] [是代数闭 k] [代数 R k]
   证明: exists_aeval_eq_zero_of_injective _ (FaithfulSMul.algebraMap_injective ..) _ hp
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, exists_aeval_eq_zero_of_injective
@@ -572,8 +572,8 @@ theorem of_exists_root
   by_cases hp0
 
 中文:
-定理 of_exists_root
-  条件: (H : 对任意 p : k[X], p.Monic -> Irreducible p -> 存在 x, p.eval x = 0)
+定理 of_存在_root
+  条件: (H : 对任意 p : k[X], p.Monic -> 不可约 p -> 存在 x, p.eval x = 0)
   证明: by
   replace H (p : k[X]) (hp : Irreducible p) : exists x, p.eval x = 0 := by
     obtain ⟨x, hx⟩ := H (p * C (leadingCoeff p)⁻¹) (monic_mul_leadingCoeff_inv hp.ne_zero)
@@ -619,7 +619,7 @@ theorem of_ringEquiv
 
 中文:
 定理 of_ringEquiv
-  结论: (k' : 类型u) [Field k'] (e : k ≃+* k')
+  结论: (k' : 类型u) [域 k'] (e : k ≃+* k')
   证明: by
   apply IsAlgClosed.of_exists_root
   intro p hmp hp
@@ -662,7 +662,7 @@ theorem degree_eq_one_of_irreducible
 
 中文:
 定理 degree_eq_one_of_irreducible
-  条件: [IsAlgClosed k] {p : k[X]} (hp : Irreducible p)
+  条件: [是代数闭 k] {p : k[X]} (hp : 不可约 p)
   证明: (IsAlgClosed.splits p).degree_eq_one_of_irreducible hp
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, degree_eq_one_of_irreducible, splits
@@ -685,8 +685,8 @@ theorem algebraMap_bijective_of_isIntegral
   h
 
 中文:
-定理 algebraMap_bijective_of_isIntegral
-  结论: {k K : 类型} [Field k] [Ring K] [IsDomain K]
+定理 algebraMap_bijective_of_is整数egral
+  结论: {k K : 类型} [域 k] [环 K] [是整环 K]
   证明: by
   refine ⟨RingHom.injective _, fun x => ⟨-(minpoly k x).coeff 0, ?_⟩⟩
   have hq : (minpoly k x).leadingCoeff = 1 := minpoly.monic (Algebra.IsIntegral.isIntegral x)
@@ -718,8 +718,8 @@ theorem ringHom_bijective_of_isIntegral
   algebraMap_bijective_of_isIntegral
 
 中文:
-定理 ringHom_bijective_of_isIntegral
-  结论: {k K : 类型} [Field k] [CommRing K] [IsDomain K]
+定理 ringHom_bijective_of_is整数egral
+  结论: {k K : 类型} [域 k] [交换环 K] [是整环 K]
   证明: let _ : Algebra k K := f.toAlgebra
   have : Algebra.IsIntegral k K := ⟨hf⟩
   algebraMap_bijective_of_isIntegral
@@ -750,8 +750,8 @@ theorem IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic
   exact ⟨y, congr_arg (algebraMap L K) hy⟩
 
 中文:
-定理 IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic
-  结论: {k K : 类型} [Field k] [Field K]
+定理 中间域.eq_bot_of_isAlgClosed_of_isAlgebraic
+  结论: {k K : 类型} [域 k] [域 K]
   证明: bot_unique fun x hx => by
   obtain ⟨y, hy⟩ := (IsAlgClosed.algebraMap_bijective_of_isIntegral (k := k)).2 (⟨x, hx⟩ : L)
   exact ⟨y, congr_arg (algebraMap L K) hy⟩
@@ -779,8 +779,8 @@ lemma Polynomial.isCoprime_iff_aeval_ne_zero_of_isAlgClosed
 obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraM
 
 中文:
-引理 Polynomial.isCoprime_iff_aeval_ne_zero_of_isAlgClosed
-  结论: (K : 类型v) [Field K] [IsAlgClosed K]
+引理 多项式.isCoprime_iff_aeval_ne_zero_of_isAlgClosed
+  结论: (K : 类型v) [域 K] [是代数闭 K]
   证明: by
   refine ⟨fun h => aeval_ne_zero_of_isCoprime h, fun h => isCoprime_of_dvd _ _ ?_ fun x hu h0 => ?_⟩
   · replace h := h 0
@@ -815,11 +815,11 @@ class IsAlgClosure
     - isAlgebraic : Algebra.IsAlgebraic R K
 
 中文:
-类 IsAlgClosure
-  参数: (R : 类型u) (K : 类型v) [CommRing R] [Field K] [Algebra R K]
+类 是AlgClosure
+  参数: (R : 类型u) (K : 类型v) [交换环 R] [域 K] [代数 R K]
   公理与运算 (2 个):
-    - isAlgClosed : IsAlgClosed K
-    - isAlgebraic : Algebra.IsAlgebraic R K
+    - isAlgClosed : 是代数闭 K
+    - isAlgebraic : 代数.是代数 R K
 -/
 class IsAlgClosure (R : Type u) (K : Type v) [CommRing R] [Field K] [Algebra R K]
     [IsTorsionFree R K] : Prop where
@@ -838,7 +838,7 @@ theorem isAlgClosure_iff
 
 中文:
 定理 isAlgClosure_iff
-  条件: (K : 类型v) [Field K] [Algebra k K]
+  条件: (K : 类型v) [域 K] [代数 k K]
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isAlgClosure_iff (K : Type v) [Field K] [Algebra k K] :
@@ -864,8 +864,8 @@ instance IsAlgClosed.instIsAlgClosure
   isAlgebraic := .of_finite F F
 
 中文:
-实例 IsAlgClosed.instIsAlgClosure
-  签名: (F : 类型) [Field F] [IsAlgClosed F]
+实例 是代数闭.instIsAlgClosure
+  签名: (F : 类型) [域 F] [是代数闭 F]
   定义体: ‹_›
   isAlgebraic := .of_finite F F
 -/
@@ -886,8 +886,8 @@ theorem IsAlgClosure.of_splits
       degree_ne_of_natDegree_ne p_irred.natDegree_pos.ne'
 
 中文:
-定理 IsAlgClosure.of_splits
-  结论: {R K} [CommRing R] [IsDomain R] [Field K] [Algebra R K]
+定理 是AlgClosure.of_splits
+  结论: {R K} [交换环 R] [是整环 R] [域 K] [代数 R K]
   证明: inferInstance
   isAlgClosed := .of_exists_root _ fun _p _ p_irred =>
     have ⟨g, monic, irred, dvd⟩ := p_irred.exists_dvd_monic_irreducible_of_isIntegral (K := R)
@@ -925,7 +925,7 @@ have ⟨y, hy⟩ := (IsAlgClosed.splits (p - C x)).exists_eval_eq_zero by
 中文:
 定理 eval_surjective
   条件: {p : M[X]} (hp : p.natDegree != 0)
-  结论: Function.Surjective p.eval
+  结论: 函数.满射 p.eval
   证明: fun x => by
     rw [← Nat.pos_iff_ne_zero]; rw [natDegree_pos_iff_degree_pos] at hp
 have ⟨y, hy⟩ := (IsAlgClosed.splits (p - C x)).exists_eval_eq_zero by
@@ -1192,8 +1192,8 @@ theorem ofAlgebraic
 
 中文:
 定理 ofAlgebraic
-  条件: [Algebra.IsAlgebraic K J]
-  结论: IsAlgClosure K L
+  条件: [代数.是代数 K J]
+  结论: 是AlgClosure K L
   证明: ⟨IsAlgClosure.isAlgClosed J, .trans K J L⟩
 
 Depends on / 依赖: IsAlgClosure, IsAlgClosure.isAlgClosed, isAlgClosed
@@ -1216,7 +1216,7 @@ definition equivOfAlgebraic'
 
 中文:
 定义 equivOfAlgebraic'
-  签名: [IsDomain R] [IsDomain S] [IsTorsionFree R S]
+  签名: [是整环 R] [是整环 S] [是无挠 R S]
   定义体: by
   have : IsTorsionFree R L := .trans_faithfulSMul R S L
   have : IsAlgClosure R L :=
@@ -1245,7 +1245,7 @@ definition equivOfAlgebraic
 
 中文:
 定义 equivOfAlgebraic
-  签名: [Algebra.IsAlgebraic K J]
+  签名: [代数.是代数 K J]
   定义体: have := Algebra.IsAlgebraic.trans K J L
   equivOfAlgebraic' K J _ _
 
@@ -1437,8 +1437,8 @@ theorem Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly
   proof: range_eval_eq_rootSet_minpoly_of_splits A (fun _ => IsAlgClosed.splits _) x
 
 中文:
-定理 Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly
-  条件: [IsAlgClosed A] (x : K)
+定理 代数.是代数.range_eval_eq_rootSet_minpoly
+  条件: [是代数闭 A] (x : K)
   证明: range_eval_eq_rootSet_minpoly_of_splits A (fun _ => IsAlgClosed.splits _) x
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, range_eval_eq_rootSet_minpoly_of_splits, splits
@@ -1462,8 +1462,8 @@ definition IntermediateField.algHomEquivAlgHomOfSplits
       rw [minpoly.algHom_eq f f.injective]; exact hL x
 
 中文:
-定义 IntermediateField.algHomEquivAlgHomOfSplits
-  签名: (L : 整数ermediateField F A)
+定义 中间域.algHomEquivAlgHomOfSplits
+  签名: (L : 中间域 F A)
   定义体: L.val.comp
   invFun f := f.codRestrict _ fun x =>
 ((Algebra.IsIntegral.isIntegral x).map f).mem_intermediateField_of_minpoly_splits by
@@ -1488,8 +1488,8 @@ theorem IntermediateField.algHomEquivAlgHomOfSplits_apply_apply
   proof: rfl
 
 中文:
-定理 IntermediateField.algHomEquivAlgHomOfSplits_apply_apply
-  结论: (L : 整数ermediateField F A)
+定理 中间域.algHomEquivAlgHomOfSplits_apply_apply
+  结论: (L : 中间域 F A)
   证明: rfl
 -/
 theorem IntermediateField.algHomEquivAlgHomOfSplits_apply_apply (L : IntermediateField F A)
@@ -1507,8 +1507,8 @@ definition Algebra.IsAlgebraic.algHomEquivAlgHomOfSplits
     fun x => Splits.of_algHom (hL x) (AlgHom.rangeRestrict _)
 
 中文:
-定义 Algebra.IsAlgebraic.algHomEquivAlgHomOfSplits
-  签名: (L : 类型) [Field L]
+定义 代数.是代数.algHomEquivAlgHomOfSplits
+  签名: (L : 类型) [域 L]
   定义体: (AlgEquiv.refl.arrowCongr (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L A))).trans
     IntermediateField.algHomEquivAlgHomOfSplits A (IsScalarTower.toAlgHom F L A).fieldRange
     fun x => Splits.of_algHom (hL x) (AlgHom.rangeRestrict _)
@@ -1532,8 +1532,8 @@ theorem Algebra.IsAlgebraic.algHomEquivAlgHomOfSplits_apply_apply
   proof: rfl
 
 中文:
-定理 Algebra.IsAlgebraic.algHomEquivAlgHomOfSplits_apply_apply
-  结论: (L : 类型) [Field L]
+定理 代数.是代数.algHomEquivAlgHomOfSplits_apply_apply
+  结论: (L : 类型) [域 L]
   证明: rfl
 -/
 theorem Algebra.IsAlgebraic.algHomEquivAlgHomOfSplits_apply_apply (L : Type*) [Field L]
@@ -1560,8 +1560,8 @@ theorem Polynomial.isRoot_of_isRoot_iff_dvd_derivative_mul
   c
 
 中文:
-定理 Polynomial.isRoot_of_isRoot_iff_dvd_derivative_mul
-  结论: {K : 类型} [Field K]
+定理 多项式.isRoot_of_isRoot_iff_dvd_derivative_mul
+  结论: {K : 类型} [域 K]
   证明: by
   refine ⟨?_, isRoot_of_isRoot_of_dvd_derivative_mul hf0⟩
   by_cases hg0 : g = 0

@@ -28,8 +28,8 @@ instance [Fintype
 @[to_dual]
 
 中文:
-实例 [Fintype
-  签名: α] : Fintype (WithTop α)
+实例 [有限类型
+  签名: α] : 有限类型 (WithTop α)
   定义体: inferInstanceAs Fintype (Option α)
 
 @[to_dual]
@@ -50,8 +50,8 @@ instance [Finite
   Finite.of_fintype _
 
 中文:
-实例 [Finite
-  签名: α] : Finite (WithTop α)
+实例 [有限
+  签名: α] : 有限 (WithTop α)
   定义体: have := Fintype.ofFinite α
   Finite.of_fintype _
 

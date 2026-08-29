@@ -43,7 +43,7 @@ lemma tendsto_zero_pow_of_v_lt_one
 
 中文:
 引理 tendsto_zero_pow_of_v_lt_one
-  条件: [MulArchimedean Γ₀] [Valued R Γ₀] {x : R} (hx : v x < 1)
+  条件: [MulArchimedean Γ₀] [赋值 R Γ₀] {x : R} (hx : v x < 1)
   证明: by
   simp only [(hasBasis_nhds_zero _ _).tendsto_right_iff, mem_ofPred_eq, map_pow, eventually_atTop,
     forall_const]
@@ -82,7 +82,7 @@ lemma tendsto_zero_pow_of_le_exp_neg_one
 
 中文:
 引理 tendsto_zero_pow_of_le_exp_neg_one
-  条件: [Valued R 整数ᵐ⁰] {x : R} (hx : v x <= exp (-1))
+  条件: [赋值 R 整数ᵐ⁰] {x : R} (hx : v x <= exp (-1))
   证明: by
   refine tendsto_zero_pow_of_v_lt_one (hx.trans_lt ?_)
   rw [← exp_zero]; rw [exp_lt_exp]
@@ -108,8 +108,8 @@ lemma exists_pow_lt_of_le_exp_neg_one
   simp
 
 中文:
-引理 exists_pow_lt_of_le_exp_neg_one
-  条件: [Valued R 整数ᵐ⁰] {x : R} (hx : v x <= exp (-1)) (γ : 整数ᵐ⁰ˣ)
+引理 存在_pow_lt_of_le_exp_neg_one
+  条件: [赋值 R 整数ᵐ⁰] {x : R} (hx : v x <= exp (-1)) (γ : 整数ᵐ⁰ˣ)
   证明: by
   refine exists_pow_lt₀ (hx.trans_lt ?_) _
   rw [← exp_zero]; rw [exp_lt_exp]

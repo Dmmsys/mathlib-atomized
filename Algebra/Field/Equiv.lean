@@ -33,8 +33,8 @@ mul_comm x y := inj by rw [map_mul, map_mul, hB.mul_comm]
     (IsUnit.of_mul_eq_one _ he).of_ma
 
 中文:
-定理 IsLocalHom.isField
-  结论: [FunLike F A B] [MonoidWithZeroHomClass F A B] {f : F}
+定理 是Local态射.isField
+  结论: [函数状 F A B] [带零幺半群态射类 F A B] {f : F}
   证明: have : Nontrivial B := ⟨hB.1⟩; (domain_nontrivial f (map_zero f) (map_one f)).1
 mul_comm x y := inj by rw [map_mul, map_mul, hB.mul_comm]
   mul_inv_cancel h :=
@@ -61,9 +61,9 @@ theorem MulEquiv.isField
   proof: IsLocalHom.isField e.injective hB
 
 中文:
-定理 MulEquiv.isField
-  条件: (hB : IsField B) (e : A ≃* B)
-  结论: IsField A
+定理 乘法等价.isField
+  条件: (hB : 是域 B) (e : A ≃* B)
+  结论: 是域 A
   证明: IsLocalHom.isField e.injective hB
 -/
 protected theorem MulEquiv.isField (hB : IsField B) (e : A ≃* B) : IsField A :=
@@ -79,9 +79,9 @@ theorem MulEquiv.isField_congr
   proof: ⟨e.symm.isField, e.isField⟩
 
 中文:
-定理 MulEquiv.isField_congr
+定理 乘法等价.isField_congr
   条件: (e : A ≃* B)
-  结论: IsField A ↔ IsField B
+  结论: 是域 A ↔ 是域 B
   证明: ⟨e.symm.isField, e.isField⟩
 -/
 protected theorem MulEquiv.isField_congr (e : A ≃* B) : IsField A ↔ IsField B :=

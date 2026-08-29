@@ -45,8 +45,8 @@ lemma ofNNReal_finsetSum
 @[simp, norm_cast]
 
 中文:
-引理 ofNNReal_finsetSum
-  条件: (s : Finset ι) (f : ι -> 实数>=0)
+引理 ofNN实数_finsetSum
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
   结论: ↑(∑ i in s, f i) = ∑ i in s, ofNN实数 (f i)
   证明: map_sum ofNNRealHom ..
 
@@ -78,8 +78,8 @@ lemma ofNNReal_finsetProd
 @[simp, norm_cast]
 
 中文:
-引理 ofNNReal_finsetProd
-  条件: (s : Finset ι) (f : ι -> 实数>=0)
+引理 ofNN实数_finsetProd
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
   证明: map_prod ofNNRealHom f s
 
 @[deprecated (since := "2026-06-04")] alias coe_finsetProd := ofNNReal_finsetProd
@@ -107,7 +107,7 @@ lemma ofNNReal_finsuppSum
 @[simp, norm_cast]
 
 中文:
-引理 ofNNReal_finsuppSum
+引理 ofNN实数_finsuppSum
   条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
   证明: map_finsuppSum ofNNRealHom ..
 
@@ -130,7 +130,7 @@ lemma ofNNReal_finsuppProd
 @[simp]
 
 中文:
-引理 ofNNReal_finsuppProd
+引理 ofNN实数_finsuppProd
   条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
   证明: map_finsuppProd ofNNRealHom ..
 
@@ -153,8 +153,8 @@ theorem toNNReal_prod
 @[simp]
 
 中文:
-定理 toNNReal_prod
-  条件: (s : Finset ι) (f : ι -> 实数>=0∞)
+定理 toNN实数_prod
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0∞)
   证明: map_prod toNNRealHom _ _
 
 @[simp]
@@ -175,8 +175,8 @@ theorem toReal_prod
   proof: map_prod toRealHom _ _
 
 中文:
-定理 toReal_prod
-  条件: (s : Finset ι) (f : ι -> 实数>=0∞)
+定理 to实数_prod
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0∞)
   证明: map_prod toRealHom _ _
 
 Depends on / 依赖: map_prod, toRealHom
@@ -196,8 +196,8 @@ theorem ofReal_prod_of_nonneg
   exact Real.toNNReal_prod_of_nonneg hf
 
 中文:
-定理 ofReal_prod_of_nonneg
-  条件: {α : 类型} {s : Finset α} {f : α -> 实数} (hf : 对任意 i, i in s -> 0 <= f i)
+定理 of实数_prod_of_nonneg
+  条件: {α : 类型} {s : 有限集 α} {f : α -> 实数} (hf : 对任意 i, i in s -> 0 <= f i)
   证明: by
   simp_rw [ENNReal.ofReal, ← ofNNReal_finsetProd, coe_inj]
   exact Real.toNNReal_prod_of_nonneg hf
@@ -226,7 +226,7 @@ theorem iInf_sum
 
 中文:
 定理 iInf_sum
-  结论: {ι α : 类型} {f : ι -> α -> 实数>=0∞} {s : Finset α} [Nonempty ι]
+  结论: {ι α : 类型} {f : ι -> α -> 实数>=0∞} {s : 有限集 α} [非空 ι]
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp only [Finset.sum_empty, ciInf_const]
@@ -353,7 +353,7 @@ theorem lt_top_of_sum_ne_top
 
 中文:
 定理 lt_top_of_sum_ne_top
-  结论: {s : Finset α} {f : α -> 实数>=0∞} (h : ∑ x in s, f x != ∞) {a : α}
+  结论: {s : 有限集 α} {f : α -> 实数>=0∞} (h : ∑ x in s, f x != ∞) {a : α}
   证明: sum_lt_top.1 h.lt_top a ha
 
 Depends on / 依赖: h.lt_top, lt_top, sum_lt_top
@@ -375,8 +375,8 @@ theorem toNNReal_sum
   · exact sum_ne_top.2 hf
 
 中文:
-定理 toNNReal_sum
-  条件: {s : Finset α} {f : α -> 实数>=0∞} (hf : 对任意 a in s, f a != ∞)
+定理 toNN实数_sum
+  条件: {s : 有限集 α} {f : α -> 实数>=0∞} (hf : 对任意 a in s, f a != ∞)
   证明: by
   rw [← coe_inj]; rw [coe_toNNReal]; rw [ofNNReal_finsetSum]; rw [sum_congr rfl]
   · intro x hx
@@ -403,8 +403,8 @@ theorem toReal_sum
   rfl
 
 中文:
-定理 toReal_sum
-  条件: {s : Finset α} {f : α -> 实数>=0∞} (hf : 对任意 a in s, f a != ∞)
+定理 to实数_sum
+  条件: {s : 有限集 α} {f : α -> 实数>=0∞} (hf : 对任意 a in s, f a != ∞)
   证明: by
   rw [ENNReal.toReal]; rw [toNNReal_sum hf]; rw [NNReal.coe_sum]
   rfl
@@ -427,8 +427,8 @@ theorem ofReal_sum_of_nonneg
   exact Real.toNNReal_sum_of_nonneg hf
 
 中文:
-定理 ofReal_sum_of_nonneg
-  条件: {s : Finset α} {f : α -> 实数} (hf : 对任意 i, i in s -> 0 <= f i)
+定理 of实数_sum_of_nonneg
+  条件: {s : 有限集 α} {f : α -> 实数} (hf : 对任意 i, i in s -> 0 <= f i)
   证明: by
   simp_rw [ENNReal.ofReal, ← ofNNReal_finsetSum, coe_inj]
   exact Real.toNNReal_sum_of_nonneg hf
@@ -455,7 +455,7 @@ theorem sum_lt_sum_of_nonempty
 
 中文:
 定理 sum_lt_sum_of_nonempty
-  结论: {s : Finset α} (hs : s.Nonempty) {f g : α -> 实数>=0∞}
+  结论: {s : 有限集 α} (hs : s.非空) {f g : α -> 实数>=0∞}
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton => simp [Hlt _ (Finset.mem_singleton_self _)]
@@ -484,8 +484,8 @@ theorem exists_le_of_sum_le
   apply ENNReal.sum_lt_sum_of_nonempty hs Hle
 
 中文:
-定理 exists_le_of_sum_le
-  结论: {s : Finset α} (hs : s.Nonempty) {f g : α -> 实数>=0∞}
+定理 存在_le_of_sum_le
+  结论: {s : 有限集 α} (hs : s.非空) {f g : α -> 实数>=0∞}
   证明: by
   contrapose! Hle
   apply ENNReal.sum_lt_sum_of_nonempty hs Hle
@@ -519,7 +519,7 @@ lemma prod_inv_distrib
 
 中文:
 引理 prod_inv_distrib
-  条件: (hf : (s : Set ι).Pairwise fun i j => f i != 0 ∨ f j != ∞)
+  条件: (hf : (s : 集合 ι).两两 fun i j => f i != 0 ∨ f j != ∞)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -552,7 +552,7 @@ lemma prod_div_distrib
 
 中文:
 引理 prod_div_distrib
-  条件: (hg : (s : Set ι).Pairwise fun i j => g i != 0 ∨ g j != ∞)
+  条件: (hg : (s : 集合 ι).两两 fun i j => g i != 0 ∨ g j != ∞)
   证明: by
   simp only [div_eq_mul_inv, prod_inv_distrib hg, ← Finset.prod_mul_distrib]
 
@@ -617,7 +617,7 @@ lemma finsetSum_iSup
 
 中文:
 引理 finsetSum_iSup
-  结论: {α : 类型} {s : Finset α} {f : α -> ι -> 实数>=0∞}
+  结论: {α : 类型} {s : 有限集 α} {f : α -> ι -> 实数>=0∞}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -650,7 +650,7 @@ lemma finsetSum_iSup_of_monotone
 
 中文:
 引理 finsetSum_iSup_of_monotone
-  结论: {α : 类型} [Preorder ι] [IsDirectedOrder ι] {s : Finset α}
+  结论: {α : 类型} [预序 ι] [IsDirectedOrder ι] {s : 有限集 α}
   证明: finsetSum_iSup fun i j => (exists_ge_ge i j).imp fun _k ⟨hi, hj⟩ a => ⟨hf a hi, hf a hj⟩
 
 Depends on / 依赖: exists_ge_ge, finsetSum_iSup

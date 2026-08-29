@@ -82,7 +82,7 @@ scoped[Pointwise] attribute [instance] Finset.one Finset.zero
 
 中文:
 定义 one
-  签名: : One (Finset α)
+  签名: : 幺 (有限集 α)
   定义体: ⟨{1}⟩
 
 scoped[Pointwise] attribute [instance] Finset.one Finset.zero
@@ -107,7 +107,7 @@ theorem mem_one
 
 中文:
 定理 mem_one
-  结论: a in (1 : Finset α) ↔ a = 1
+  结论: a in (1 : 有限集 α) ↔ a = 1
   证明: mem_singleton
 
 @[to_additive (attr := simp, norm_cast)]
@@ -130,7 +130,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : Finset α) = (1 : Set α)
+  结论: ↑(1 : 有限集 α) = (1 : 集合 α)
   证明: coe_singleton 1
 
 @[to_additive (attr := simp, norm_cast)]
@@ -153,7 +153,7 @@ lemma coe_eq_one
 
 中文:
 引理 coe_eq_one
-  结论: (s : Set α) = 1 ↔ s = 1
+  结论: (s : 集合 α) = 1 ↔ s = 1
   证明: coe_eq_singleton
 
 @[to_additive (attr := simp)]
@@ -173,7 +173,7 @@ theorem one_subset
 
 中文:
 定理 one_subset
-  结论: (1 : Finset α) subseteq s ↔ (1 : α) in s
+  结论: (1 : 有限集 α) subseteq s ↔ (1 : α) in s
   证明: singleton_subset_iff
 
 Depends on / 依赖: singleton_subset_iff
@@ -196,7 +196,7 @@ theorem singleton_one
 
 中文:
 定理 singleton_one
-  结论: ({1} : Finset α) = 1
+  结论: ({1} : 有限集 α) = 1
   证明: rfl
 
 @[to_additive]
@@ -217,7 +217,7 @@ theorem one_mem_one
 
 中文:
 定理 one_mem_one
-  结论: (1 : α) in (1 : Finset α)
+  结论: (1 : α) in (1 : 有限集 α)
   证明: mem_singleton_self _
 
 @[to_additive (attr := simp, aesop safe apply (rule_sets := [finsetNonempty]))]
@@ -240,7 +240,7 @@ theorem one_nonempty
 
 中文:
 定理 one_nonempty
-  结论: (1 : Finset α).Nonempty
+  结论: (1 : 有限集 α).非空
   证明: ⟨1, one_mem_one⟩
 
 @[to_additive (attr := simp)]
@@ -288,7 +288,7 @@ theorem image_one
 中文:
 定理 image_one
   条件: [DecidableEq β] {f : α -> β}
-  结论: image f 1 = {f 1}
+  结论: 像 f 1 = {f 1}
   证明: image_singleton _ _
 
 @[to_additive]
@@ -334,8 +334,8 @@ theorem Nonempty.subset_one_iff
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.subset_one_iff
-  条件: (h : s.Nonempty)
+定理 非空.subset_one_iff
+  条件: (h : s.非空)
   结论: s subseteq 1 ↔ s = 1
   证明: h.subset_singleton_iff
 
@@ -357,7 +357,7 @@ theorem card_one
 
 中文:
 定理 card_one
-  结论: #(1 : Finset α) = 1
+  结论: #(1 : 有限集 α) = 1
   证明: card_singleton _
 
 Depends on / 依赖: card_singleton
@@ -379,7 +379,7 @@ definition singletonOneHom
 
 中文:
 定义 singletonOneHom
-  签名: : OneHom α (Finset α) where
+  签名: : 幺态射 α (有限集 α) where
   定义体: singleton; map_one' := singleton_one
 
 @[to_additive (attr := simp)]
@@ -402,7 +402,7 @@ theorem coe_singletonOneHom
 
 中文:
 定理 coe_singletonOneHom
-  结论: (singletonOneHom : α -> Finset α) = singleton
+  结论: (singletonOneHom : α -> 有限集 α) = singleton
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -444,7 +444,7 @@ definition imageOneHom
 
 中文:
 定义 imageOneHom
-  签名: [DecidableEq β] [One β] [FunLike F α β] [OneHomClass F α β] (f : F)
+  签名: [DecidableEq β] [幺 β] [函数状 F α β] [幺态射类 F α β] (f : F)
   定义体: Finset.image f
   map_one' := by rw [image_one, map_one, singleton_one]
 
@@ -471,8 +471,8 @@ lemma sup_one
 
 中文:
 引理 sup_one
-  条件: [SemilatticeSup β] [OrderBot β] (f : α -> β)
-  结论: sup 1 f = f 1
+  条件: [SemilatticeSup β] [有底序 β] (f : α -> β)
+  结论: 上确界 1 f = f 1
   证明: sup_singleton
 
 @[to_additive (attr := simp)]
@@ -494,9 +494,9 @@ lemma sup'_one
 @[to_additive (attr := simp)]
 
 中文:
-引理 sup'_one
+引理 上确界'_one
   条件: [SemilatticeSup β] (f : α -> β)
-  结论: sup' 1 one_nonempty f = f 1
+  结论: 上确界' 1 one_nonempty f = f 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -517,8 +517,8 @@ lemma inf_one
 
 中文:
 引理 inf_one
-  条件: [SemilatticeInf β] [OrderTop β] (f : α -> β)
-  结论: inf 1 f = f 1
+  条件: [SemilatticeInf β] [有顶序 β] (f : α -> β)
+  结论: 下确界 1 f = f 1
   证明: inf_singleton
 
 @[to_additive (attr := simp)]
@@ -540,9 +540,9 @@ lemma inf'_one
 @[to_additive (attr := simp)]
 
 中文:
-引理 inf'_one
+引理 下确界'_one
   条件: [SemilatticeInf β] (f : α -> β)
-  结论: inf' 1 one_nonempty f = f 1
+  结论: 下确界' 1 one_nonempty f = f 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -563,8 +563,8 @@ lemma max_one
 
 中文:
 引理 max_one
-  条件: [LinearOrder α]
-  结论: (1 : Finset α).max = 1
+  条件: [线性序 α]
+  结论: (1 : 有限集 α).最大值 = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -585,8 +585,8 @@ lemma min_one
 
 中文:
 引理 min_one
-  条件: [LinearOrder α]
-  结论: (1 : Finset α).min = 1
+  条件: [线性序 α]
+  结论: (1 : 有限集 α).最小值 = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -606,9 +606,9 @@ lemma max'_one
 @[to_additive (attr := simp)]
 
 中文:
-引理 max'_one
-  条件: [LinearOrder α]
-  结论: (1 : Finset α).max' one_nonempty = 1
+引理 最大值'_one
+  条件: [线性序 α]
+  结论: (1 : 有限集 α).最大值' one_nonempty = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -628,9 +628,9 @@ lemma min'_one
 @[to_additive (attr := simp)]
 
 中文:
-引理 min'_one
-  条件: [LinearOrder α]
-  结论: (1 : Finset α).min' one_nonempty = 1
+引理 最小值'_one
+  条件: [线性序 α]
+  结论: (1 : 有限集 α).最小值' one_nonempty = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -652,7 +652,7 @@ lemma image_op_one
 中文:
 引理 image_op_one
   条件: [DecidableEq α]
-  结论: (1 : Finset α).image op = 1
+  结论: (1 : 有限集 α).像 op = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -672,7 +672,7 @@ lemma map_op_one
 
 中文:
 引理 map_op_one
-  结论: (1 : Finset α).map opEquiv.toEmbedding = 1
+  结论: (1 : 有限集 α).map opEquiv.toEmbedding = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -691,8 +691,8 @@ lemma one_product_one
 
 中文:
 引理 one_product_one
-  条件: [One β]
-  结论: (1 ×ˢ 1 : Finset (α × β)) = 1
+  条件: [幺 β]
+  结论: (1 ×ˢ 1 : 有限集 (α × β)) = 1
   证明: by ext; simp [Prod.ext_iff]
 
 Depends on / 依赖: Prod.ext_iff, ext_iff
@@ -724,7 +724,7 @@ scoped[Pointwise] attribute [instance] Finset.inv Finset.neg
 
 中文:
 定义 inv
-  签名: : Inv (Finset α)
+  签名: : 取逆 (有限集 α)
   定义体: ⟨image Inv.inv⟩
 
 scoped[Pointwise] attribute [instance] Finset.inv Finset.neg
@@ -747,7 +747,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  结论: s⁻¹ = s.image fun x => x⁻¹
+  结论: s⁻¹ = s.像 fun x => x⁻¹
   证明: rfl
 -/
 theorem inv_def : s⁻¹ = s.image fun x => x⁻¹ :=
@@ -766,8 +766,8 @@ lemma image_inv_eq_inv
 
 中文:
 引理 image_inv_eq_inv
-  条件: (s : Finset α)
-  结论: s.image (·⁻¹) = s⁻¹
+  条件: (s : 有限集 α)
+  结论: s.像 (·⁻¹) = s⁻¹
   证明: rfl
 
 @[to_additive]
@@ -860,7 +860,7 @@ theorem inv_empty
 
 中文:
 定理 inv_empty
-  结论: (∅ : Finset α)⁻¹ = ∅
+  结论: (∅ : 有限集 α)⁻¹ = ∅
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -881,7 +881,7 @@ alias ⟨Nonempty.of_inv, Nonempty.inv⟩ := inv_nonempty_iff
 
 中文:
 定理 inv_nonempty_iff
-  结论: s⁻¹.Nonempty ↔ s.Nonempty
+  结论: s⁻¹.非空 ↔ s.非空
   证明: image_nonempty
 
 alias ⟨Nonempty.of_inv, Nonempty.inv⟩ := inv_nonempty_iff
@@ -957,7 +957,7 @@ theorem inv_singleton
 中文:
 定理 inv_singleton
   条件: (a : α)
-  结论: ({a} : Finset α)⁻¹ = {a⁻¹}
+  结论: ({a} : 有限集 α)⁻¹ = {a⁻¹}
   证明: image_singleton _ _
 
 @[to_additive (attr := simp)]
@@ -981,7 +981,7 @@ theorem inv_insert
 
 中文:
 定理 inv_insert
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (insert a s)⁻¹ = insert a⁻¹ s⁻¹
   证明: image_insert _ _ _
 
@@ -1005,7 +1005,7 @@ lemma sup_inv
 
 中文:
 引理 sup_inv
-  条件: [SemilatticeSup β] [OrderBot β] (s : Finset α) (f : α -> β)
+  条件: [SemilatticeSup β] [有底序 β] (s : 有限集 α) (f : α -> β)
   证明: sup_image ..
 
 @[to_additive (attr := simp)]
@@ -1028,8 +1028,8 @@ lemma sup'_inv
 @[to_additive (attr := simp)]
 
 中文:
-引理 sup'_inv
-  条件: [SemilatticeSup β] {s : Finset α} (hs : s⁻¹.Nonempty) (f : α -> β)
+引理 上确界'_inv
+  条件: [SemilatticeSup β] {s : 有限集 α} (hs : s⁻¹.非空) (f : α -> β)
   证明: sup'_image ..
 
 @[to_additive (attr := simp)]
@@ -1051,7 +1051,7 @@ lemma inf_inv
 
 中文:
 引理 inf_inv
-  条件: [SemilatticeInf β] [OrderTop β] (s : Finset α) (f : α -> β)
+  条件: [SemilatticeInf β] [有顶序 β] (s : 有限集 α) (f : α -> β)
   证明: inf_image ..
 
 @[to_additive (attr := simp)]
@@ -1072,8 +1072,8 @@ lemma inf'_inv
   proof: inf'_image ..
 
 中文:
-引理 inf'_inv
-  条件: [SemilatticeInf β] {s : Finset α} (hs : s⁻¹.Nonempty) (f : α -> β)
+引理 下确界'_inv
+  条件: [SemilatticeInf β] {s : 有限集 α} (hs : s⁻¹.非空) (f : α -> β)
   证明: inf'_image ..
 -/
 lemma inf'_inv [SemilatticeInf β] {s : Finset α} (hs : s⁻¹.Nonempty) (f : α -> β) :
@@ -1093,8 +1093,8 @@ lemma image_op_inv
 
 中文:
 引理 image_op_inv
-  条件: (s : Finset α)
-  结论: s⁻¹.image op = (s.image op)⁻¹
+  条件: (s : 有限集 α)
+  结论: s⁻¹.像 op = (s.像 op)⁻¹
   证明: image_comm op_inv
 
 @[to_additive]
@@ -1115,7 +1115,7 @@ lemma map_op_inv
 
 中文:
 引理 map_op_inv
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s⁻¹.map opEquiv.toEmbedding = (s.map opEquiv.toEmbedding)⁻¹
   证明: by
   simp [map_eq_image, image_op_inv]
@@ -1168,7 +1168,7 @@ theorem inv_filter
 
 中文:
 定理 inv_filter
-  条件: (s : Finset α) (p : α -> 命题) [DecidablePred p]
+  条件: (s : 有限集 α) (p : α -> 命题) [DecidablePred p]
   证明: by
   ext; simp
 
@@ -1192,7 +1192,7 @@ theorem inv_filter_univ
 
 中文:
 定理 inv_filter_univ
-  条件: (p : α -> 命题) [Fintype α] [DecidablePred p]
+  条件: (p : α -> 命题) [有限类型 α] [DecidablePred p]
   证明: by
   simp
 
@@ -1216,8 +1216,8 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: (s : Finset α)
-  结论: ↑s⁻¹ = (s : Set α)⁻¹
+  条件: (s : 有限集 α)
+  结论: ↑s⁻¹ = (s : 集合 α)⁻¹
   证明: coe_image.trans Set.image_inv_eq_inv
 
 @[to_additive (attr := simp)]
@@ -1240,7 +1240,7 @@ theorem card_inv
 
 中文:
 定理 card_inv
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: #s⁻¹ = #s
   证明: card_image_of_injective _ inv_injective
 
@@ -1264,8 +1264,8 @@ theorem preimage_inv
 
 中文:
 定理 preimage_inv
-  条件: (s : Finset α)
-  结论: s.preimage (·⁻¹) inv_injective.injOn = s⁻¹
+  条件: (s : 有限集 α)
+  结论: s.原像 (·⁻¹) inv_injective.injOn = s⁻¹
   证明: coe_injective by rw [coe_preimage, Set.inv_preimage, coe_inv]
 
 @[to_additive (attr := simp)]
@@ -1289,8 +1289,8 @@ lemma inv_univ
 
 中文:
 引理 inv_univ
-  条件: [Fintype α]
-  结论: (univ : Finset α)⁻¹ = univ
+  条件: [有限类型 α]
+  结论: (univ : 有限集 α)⁻¹ = univ
   证明: by ext; simp
 
 @[to_additive (attr := simp)]
@@ -1311,7 +1311,7 @@ lemma inv_inter
 
 中文:
 引理 inv_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s inter t)⁻¹ = s⁻¹ inter t⁻¹
   证明: coe_injective by simp
 
@@ -1332,7 +1332,7 @@ lemma inv_product
 
 中文:
 引理 inv_product
-  条件: [DecidableEq β] [InvolutiveInv β] (s : Finset α) (t : Finset β)
+  条件: [DecidableEq β] [InvolutiveInv β] (s : 有限集 α) (t : 有限集 β)
   证明: mod_cast (s : Set α).inv_prod (t : Set β)
 
 Depends on / 依赖: inv_prod, mod_cast
@@ -1371,7 +1371,7 @@ scoped[Pointwise] attribute [instance] Finset.mul Finset.add
 
 中文:
 定义 mul
-  签名: : Mul (Finset α)
+  签名: : 乘法 (有限集 α)
   定义体: ⟨image₂ (· * ·)⟩
 
 scoped[Pointwise] attribute [instance] Finset.mul Finset.add
@@ -1396,7 +1396,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  结论: s * t = (s ×ˢ t).image fun p : α × α => p.1 * p.2
+  结论: s * t = (s ×ˢ t).像 fun p : α × α => p.1 * p.2
   证明: rfl
 
 @[to_additive]
@@ -1417,7 +1417,7 @@ theorem image_mul_product
 
 中文:
 定理 image_mul_product
-  结论: ((s ×ˢ t).image fun x : α × α => x.fst * x.snd) = s * t
+  结论: ((s ×ˢ t).像 fun x : α × α => x.fst * x.snd) = s * t
   证明: rfl
 
 @[to_additive]
@@ -1461,8 +1461,8 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (s t : Finset α)
-  结论: (↑(s * t) : Set α) = ↑s * ↑t
+  条件: (s t : 有限集 α)
+  结论: (↑(s * t) : 集合 α) = ↑s * ↑t
   证明: coe_image₂ _ _ _
 
 @[to_additive]
@@ -1546,7 +1546,7 @@ theorem empty_mul
 
 中文:
 定理 empty_mul
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ * s = ∅
   证明: image₂_empty_left
 
@@ -1569,7 +1569,7 @@ theorem mul_empty
 
 中文:
 定理 mul_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s * ∅ = ∅
   证明: image₂_empty_right
 
@@ -1612,7 +1612,7 @@ theorem mul_nonempty
 
 中文:
 定理 mul_nonempty
-  结论: (s * t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s * t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[to_additive (attr := aesop safe apply (rule_sets := [finsetNonempty]))]
@@ -1632,8 +1632,8 @@ theorem Nonempty.mul
 @[to_additive]
 
 中文:
-定理 Nonempty.mul
-  结论: s.Nonempty -> t.Nonempty -> (s * t).Nonempty
+定理 非空.mul
+  结论: s.非空 -> t.非空 -> (s * t).非空
   证明: Nonempty.image₂
 
 @[to_additive]
@@ -1655,8 +1655,8 @@ theorem Nonempty.of_mul_left
 @[to_additive]
 
 中文:
-定理 Nonempty.of_mul_left
-  结论: (s * t).Nonempty -> s.Nonempty
+定理 非空.of_mul_left
+  结论: (s * t).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 @[to_additive]
@@ -1678,8 +1678,8 @@ theorem Nonempty.of_mul_right
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.of_mul_right
-  结论: (s * t).Nonempty -> t.Nonempty
+定理 非空.of_mul_right
+  结论: (s * t).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 @[to_additive (attr := simp)]
@@ -1704,7 +1704,7 @@ theorem singleton_mul_singleton
 中文:
 定理 singleton_mul_singleton
   条件: (a b : α)
-  结论: ({a} : Finset α) * {b} = {a * b}
+  结论: ({a} : 有限集 α) * {b} = {a * b}
   证明: image₂_singleton
 
 @[to_additive]
@@ -1781,7 +1781,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulLeftMono (Finset α)
+  签名: MulLeftMono (有限集 α)
   定义体: mul_subset_mul_left
 -/
 @[to_additive] instance : MulLeftMono (Finset α) where elim _s _t₁ _t₂ := mul_subset_mul_left
@@ -1797,7 +1797,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulRightMono (Finset α)
+  签名: MulRightMono (有限集 α)
   定义体: mul_subset_mul_right
 
 @[to_additive]
@@ -1964,7 +1964,7 @@ theorem subset_mul
 
 中文:
 定理 subset_mul
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: subset_set_image₂
 
 @[to_additive]
@@ -1988,7 +1988,7 @@ theorem image_mul
 中文:
 定理 image_mul
   条件: [DecidableEq β]
-  结论: (s * t).image (f : α -> β) = s.image f * t.image f
+  结论: (s * t).像 (f : α -> β) = s.像 f * t.像 f
   证明: image_image₂_distrib map_mul f
 
 @[to_additive]
@@ -2012,8 +2012,8 @@ lemma image_op_mul
 
 中文:
 引理 image_op_mul
-  条件: (s t : Finset α)
-  结论: (s * t).image op = t.image op * s.image op
+  条件: (s t : 有限集 α)
+  结论: (s * t).像 op = t.像 op * s.像 op
   证明: image_image₂_antidistrib op_mul
 
 @[to_additive (attr := simp)]
@@ -2036,7 +2036,7 @@ lemma product_mul_product_comm
 
 中文:
 引理 product_mul_product_comm
-  条件: [DecidableEq β] (s₁ s₂ : Finset α) (t₁ t₂ : Finset β)
+  条件: [DecidableEq β] (s₁ s₂ : 有限集 α) (t₁ t₂ : 有限集 β)
   证明: mod_cast (s₁ : Set α).prod_mul_prod_comm s₂ (t₁ : Set β) t₂
 
 @[to_additive]
@@ -2059,7 +2059,7 @@ lemma map_op_mul
 
 中文:
 引理 map_op_mul
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by
   simp [map_eq_image, image_op_mul]
 
@@ -2083,7 +2083,7 @@ definition singletonMulHom
 
 中文:
 定义 singletonMulHom
-  签名: : α ->ₙ* Finset α where
+  签名: : α ->ₙ* 有限集 α where
   定义体: singleton; map_mul' _ _ := (singleton_mul_singleton _ _).symm
 
 @[to_additive (attr := simp)]
@@ -2106,7 +2106,7 @@ theorem coe_singletonMulHom
 
 中文:
 定理 coe_singletonMulHom
-  结论: (singletonMulHom : α -> Finset α) = singleton
+  结论: (singletonMulHom : α -> 有限集 α) = singleton
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2173,7 +2173,7 @@ lemma sup_mul_le
 
 中文:
 引理 sup_mul_le
-  条件: {β} [SemilatticeSup β] [OrderBot β] {s t : Finset α} {f : α -> β} {a : β}
+  条件: {β} [SemilatticeSup β] [有底序 β] {s t : 有限集 α} {f : α -> β} {a : β}
   证明: sup_image₂_le
 
 @[to_additive]
@@ -2195,7 +2195,7 @@ lemma sup_mul_left
 
 中文:
 引理 sup_mul_left
-  条件: {β} [SemilatticeSup β] [OrderBot β] (s t : Finset α) (f : α -> β)
+  条件: {β} [SemilatticeSup β] [有底序 β] (s t : 有限集 α) (f : α -> β)
   证明: sup_image₂_left ..
 
 @[to_additive]
@@ -2217,7 +2217,7 @@ lemma sup_mul_right
 
 中文:
 引理 sup_mul_right
-  条件: {β} [SemilatticeSup β] [OrderBot β] (s t : Finset α) (f : α -> β)
+  条件: {β} [SemilatticeSup β] [有底序 β] (s t : 有限集 α) (f : α -> β)
   证明: sup_image₂_right ..
 
 @[to_additive (attr := simp (default + 1))]
@@ -2239,7 +2239,7 @@ lemma le_inf_mul
 
 中文:
 引理 le_inf_mul
-  条件: {β} [SemilatticeInf β] [OrderTop β] {s t : Finset α} {f : α -> β} {a : β}
+  条件: {β} [SemilatticeInf β] [有顶序 β] {s t : 有限集 α} {f : α -> β} {a : β}
   证明: le_inf_image₂
 
 @[to_additive]
@@ -2261,7 +2261,7 @@ lemma inf_mul_left
 
 中文:
 引理 inf_mul_left
-  条件: {β} [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β)
+  条件: {β} [SemilatticeInf β] [有顶序 β] (s t : 有限集 α) (f : α -> β)
   证明: inf_image₂_left ..
 
 @[to_additive]
@@ -2281,7 +2281,7 @@ lemma inf_mul_right
 
 中文:
 引理 inf_mul_right
-  条件: {β} [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β)
+  条件: {β} [SemilatticeInf β] [有顶序 β] (s t : 有限集 α) (f : α -> β)
   证明: inf_image₂_right ..
 -/
 lemma inf_mul_right {β} [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β) :
@@ -2363,7 +2363,7 @@ scoped[Pointwise] attribute [instance] Finset.div Finset.sub
 
 中文:
 定义 div
-  签名: : Div (Finset α)
+  签名: : 除法 (有限集 α)
   定义体: ⟨image₂ (· / ·)⟩
 
 scoped[Pointwise] attribute [instance] Finset.div Finset.sub
@@ -2388,7 +2388,7 @@ theorem div_def
 
 中文:
 定理 div_def
-  结论: s / t = (s ×ˢ t).image fun p : α × α => p.1 / p.2
+  结论: s / t = (s ×ˢ t).像 fun p : α × α => p.1 / p.2
   证明: rfl
 
 @[to_additive]
@@ -2409,7 +2409,7 @@ theorem image_div_product
 
 中文:
 定理 image_div_product
-  结论: ((s ×ˢ t).image fun x : α × α => x.fst / x.snd) = s / t
+  结论: ((s ×ˢ t).像 fun x : α × α => x.fst / x.snd) = s / t
   证明: rfl
 
 @[to_additive]
@@ -2452,8 +2452,8 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: (s t : Finset α)
-  结论: (↑(s / t) : Set α) = ↑s / ↑t
+  条件: (s t : 有限集 α)
+  结论: (↑(s / t) : 集合 α) = ↑s / ↑t
   证明: coe_image₂ _ _ _
 
 @[to_additive]
@@ -2517,7 +2517,7 @@ theorem empty_div
 
 中文:
 定理 empty_div
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ / s = ∅
   证明: image₂_empty_left
 
@@ -2540,7 +2540,7 @@ theorem div_empty
 
 中文:
 定理 div_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s / ∅ = ∅
   证明: image₂_empty_right
 
@@ -2583,7 +2583,7 @@ theorem div_nonempty
 
 中文:
 定理 div_nonempty
-  结论: (s / t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s / t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[to_additive (attr := aesop safe apply (rule_sets := [finsetNonempty]))]
@@ -2603,8 +2603,8 @@ theorem Nonempty.div
 @[to_additive]
 
 中文:
-定理 Nonempty.div
-  结论: s.Nonempty -> t.Nonempty -> (s / t).Nonempty
+定理 非空.div
+  结论: s.非空 -> t.非空 -> (s / t).非空
   证明: Nonempty.image₂
 
 @[to_additive]
@@ -2626,8 +2626,8 @@ theorem Nonempty.of_div_left
 @[to_additive]
 
 中文:
-定理 Nonempty.of_div_left
-  结论: (s / t).Nonempty -> s.Nonempty
+定理 非空.of_div_left
+  结论: (s / t).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 @[to_additive]
@@ -2649,8 +2649,8 @@ theorem Nonempty.of_div_right
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.of_div_right
-  结论: (s / t).Nonempty -> t.Nonempty
+定理 非空.of_div_right
+  结论: (s / t).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 @[to_additive (attr := simp)]
@@ -2675,7 +2675,7 @@ theorem div_singleton
 中文:
 定理 div_singleton
   条件: (a : α)
-  结论: s / {a} = s.image (· / a)
+  结论: s / {a} = s.像 (· / a)
   证明: image₂_singleton_right
 
 @[to_additive (attr := simp)]
@@ -2698,7 +2698,7 @@ theorem singleton_div
 中文:
 定理 singleton_div
   条件: (a : α)
-  结论: {a} / s = s.image (a / ·)
+  结论: {a} / s = s.像 (a / ·)
   证明: image₂_singleton_left
 
 @[to_additive]
@@ -2721,7 +2721,7 @@ theorem singleton_div_singleton
 中文:
 定理 singleton_div_singleton
   条件: (a b : α)
-  结论: ({a} : Finset α) / {b} = {a / b}
+  结论: ({a} : 有限集 α) / {b} = {a / b}
   证明: image₂_singleton
 
 @[to_additive (attr := mono, gcongr)]
@@ -2952,7 +2952,7 @@ theorem subset_div
 
 中文:
 定理 subset_div
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: subset_set_image₂
 
 @[to_additive (attr := simp (default + 1))]
@@ -2974,7 +2974,7 @@ lemma sup_div_le
 
 中文:
 引理 sup_div_le
-  条件: [SemilatticeSup β] [OrderBot β] {s t : Finset α} {f : α -> β} {a : β}
+  条件: [SemilatticeSup β] [有底序 β] {s t : 有限集 α} {f : α -> β} {a : β}
   证明: sup_image₂_le
 
 @[to_additive]
@@ -2996,7 +2996,7 @@ lemma sup_div_left
 
 中文:
 引理 sup_div_left
-  条件: [SemilatticeSup β] [OrderBot β] (s t : Finset α) (f : α -> β)
+  条件: [SemilatticeSup β] [有底序 β] (s t : 有限集 α) (f : α -> β)
   证明: sup_image₂_left ..
 
 @[to_additive]
@@ -3018,7 +3018,7 @@ lemma sup_div_right
 
 中文:
 引理 sup_div_right
-  条件: [SemilatticeSup β] [OrderBot β] (s t : Finset α) (f : α -> β)
+  条件: [SemilatticeSup β] [有底序 β] (s t : 有限集 α) (f : α -> β)
   证明: sup_image₂_right ..
 
 @[to_additive (attr := simp (default + 1))]
@@ -3040,7 +3040,7 @@ lemma le_inf_div
 
 中文:
 引理 le_inf_div
-  条件: [SemilatticeInf β] [OrderTop β] {s t : Finset α} {f : α -> β} {a : β}
+  条件: [SemilatticeInf β] [有顶序 β] {s t : 有限集 α} {f : α -> β} {a : β}
   证明: le_inf_image₂
 
 @[to_additive]
@@ -3062,7 +3062,7 @@ lemma inf_div_left
 
 中文:
 引理 inf_div_left
-  条件: [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β)
+  条件: [SemilatticeInf β] [有顶序 β] (s t : 有限集 α) (f : α -> β)
   证明: inf_image₂_left ..
 
 @[to_additive]
@@ -3082,7 +3082,7 @@ lemma inf_div_right
 
 中文:
 引理 inf_div_right
-  条件: [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β)
+  条件: [SemilatticeInf β] [有顶序 β] (s t : 有限集 α) (f : α -> β)
   证明: inf_image₂_right ..
 -/
 lemma inf_div_right [SemilatticeInf β] [OrderTop β] (s t : Finset α) (f : α -> β) :
@@ -3112,7 +3112,7 @@ definition npow
 
 中文:
 定义 npow
-  签名: [One α] [Mul α]
+  签名: [幺 α] [乘法 α]
   定义体: ⟨fun s n => npowRec n s⟩
 -/
 protected def npow [One α] [Mul α] : Pow (Finset α) Nat :=
@@ -3135,7 +3135,7 @@ scoped[Pointwise] attribute [instance] Finset.nsmul Finset.npow Finset.zsmul Fin
 
 中文:
 定义 zpow
-  签名: [One α] [Mul α] [Inv α]
+  签名: [幺 α] [乘法 α] [取逆 α]
   定义体: ⟨fun s n => zpowRec npowRec n s⟩
 
 scoped[Pointwise] attribute [instance] Finset.nsmul Finset.npow Finset.zsmul Finset.zpow
@@ -3158,7 +3158,7 @@ definition semigroup
 
 中文:
 定义 semigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: coe_injective.semigroup _ coe_mul
 -/
 protected def semigroup [Semigroup α] : Semigroup (Finset α) :=
@@ -3183,7 +3183,7 @@ definition commSemigroup
 
 中文:
 定义 commSemigroup
-  签名: : CommSemigroup (Finset α)
+  签名: : 交换半群 (有限集 α)
   定义体: coe_injective.commSemigroup _ coe_mul
 
 @[to_additive]
@@ -3257,7 +3257,7 @@ scoped[Pointwise] attribute [instance] Finset.semigroup Finset.addSemigroup Fins
 
 中文:
 定义 mulOneClass
-  签名: : MulOneClass (Finset α)
+  签名: : MulOne类 (有限集 α)
   定义体: coe_injective.mulOneClass _ (coe_singleton 1) coe_mul
 
 scoped[Pointwise] attribute [instance] Finset.semigroup Finset.addSemigroup Finset.commSemigroup
@@ -3286,7 +3286,7 @@ theorem subset_mul_left
 
 中文:
 定理 subset_mul_left
-  条件: (s : Finset α) {t : Finset α} (ht : (1 : α) in t)
+  条件: (s : 有限集 α) {t : 有限集 α} (ht : (1 : α) in t)
   结论: s subseteq s * t
   证明: fun a ha =>
   mem_mul.2 ⟨a, ha, 1, ht, mul_one _⟩
@@ -3309,7 +3309,7 @@ theorem subset_mul_right
 
 中文:
 定理 subset_mul_right
-  条件: {s : Finset α} (t : Finset α) (hs : (1 : α) in s)
+  条件: {s : 有限集 α} (t : 有限集 α) (hs : (1 : α) in s)
   结论: t subseteq s * t
   证明: fun a ha =>
   mem_mul.2 ⟨1, hs, a, ha, one_mul _⟩
@@ -3331,7 +3331,7 @@ definition singletonMonoidHom
 
 中文:
 定义 singletonMonoidHom
-  签名: : α ->* Finset α
+  签名: : α ->* 有限集 α
   定义体: { singletonMulHom, singletonOneHom with }
 
 @[to_additive (attr := simp)]
@@ -3354,7 +3354,7 @@ theorem coe_singletonMonoidHom
 
 中文:
 定理 coe_singletonMonoidHom
-  结论: (singletonMonoidHom : α -> Finset α) = singleton
+  结论: (singletonMonoidHom : α -> 有限集 α) = singleton
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3397,7 +3397,7 @@ definition coeMonoidHom
 
 中文:
 定义 coeMonoidHom
-  签名: : Finset α ->* Set α where
+  签名: : 有限集 α ->* 集合 α where
   定义体: (↑)
   map_one' := coe_one
   map_mul' := coe_mul
@@ -3422,7 +3422,7 @@ theorem coe_coeMonoidHom
 
 中文:
 定理 coe_coeMonoidHom
-  结论: (coeMonoidHom : Finset α -> Set α) = (↑)
+  结论: (coeMonoidHom : 有限集 α -> 集合 α) = (↑)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3442,7 +3442,7 @@ theorem coeMonoidHom_apply
 
 中文:
 定理 coeMonoidHom_apply
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: coeMonoidHom s = s
   证明: rfl
 -/
@@ -3461,7 +3461,7 @@ definition imageMonoidHom
 
 中文:
 定义 imageMonoidHom
-  签名: [MulOneClass β] [FunLike F α β] [MonoidHomClass F α β] (f : F)
+  签名: [MulOne类 β] [函数状 F α β] [幺半群态射类 F α β] (f : F)
   定义体: { imageMulHom f, imageOneHom f with }
 
 Depends on / 依赖: imageMulHom, imageOneHom
@@ -3492,8 +3492,8 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: (s : Finset α) (n : 自然数)
-  结论: ↑(s ^ n) = (s : Set α) ^ n
+  条件: (s : 有限集 α) (n : 自然数)
+  结论: ↑(s ^ n) = (s : 集合 α) ^ n
   证明: by
   change ↑(npowRec n s) = (s : Set α) ^ n
   induction n with
@@ -3523,7 +3523,7 @@ scoped[Pointwise] attribute [instance] Finset.monoid Finset.addMonoid
 
 中文:
 定义 monoid
-  签名: : Monoid (Finset α)
+  签名: : 幺半群 (有限集 α)
   定义体: coe_injective.monoid _ coe_one coe_mul coe_pow
 
 scoped[Pointwise] attribute [instance] Finset.monoid Finset.addMonoid
@@ -3551,7 +3551,7 @@ lemma pow_right_monotone
 中文:
 引理 pow_right_monotone
   条件: (hs : 1 in s)
-  结论: Monotone (s ^ ·)
+  结论: 递增 (s ^ ·)
   证明: pow_right_monotone one_subset.2 hs
 
 @[to_additive]
@@ -3698,7 +3698,7 @@ lemma empty_pow
 中文:
 引理 empty_pow
   条件: (hn : n != 0)
-  结论: (∅ : Finset α) ^ n = ∅
+  结论: (∅ : 有限集 α) ^ n = ∅
   证明: match n with | n + 1 => by simp [pow_succ]
 
 @[to_additive]
@@ -3717,9 +3717,9 @@ lemma Nonempty.pow
   statement: forall {n}, (s ^ n).Nonempty
 
 中文:
-引理 Nonempty.pow
-  条件: (hs : s.Nonempty)
-  结论: 对任意 {n}, (s ^ n).Nonempty
+引理 非空.pow
+  条件: (hs : s.非空)
+  结论: 对任意 {n}, (s ^ n).非空
 -/
 lemma Nonempty.pow (hs : s.Nonempty) : forall {n}, (s ^ n).Nonempty
   | 0 => by simp
@@ -3777,7 +3777,7 @@ lemma singleton_pow
 中文:
 引理 singleton_pow
   条件: (a : α)
-  结论: 对任意 n, ({a} : Finset α) ^ n = {a ^ n}
+  结论: 对任意 n, ({a} : 有限集 α) ^ n = {a ^ n}
 -/
 lemma singleton_pow (a : α) : forall n, ({a} : Finset α) ^ n = {a ^ n}
   | 0 => by simp [singleton_one]
@@ -3860,8 +3860,8 @@ theorem coe_list_prod
 
 中文:
 定理 coe_list_prod
-  条件: (s : List (Finset α))
-  结论: (↑s.prod : Set α) = (s.map (↑)).prod
+  条件: (s : 列表 (有限集 α))
+  结论: (↑s.乘积 : 集合 α) = (s.map (↑)).乘积
   证明: map_list_prod (coeMonoidHom : Finset α ->* Set α) _
 
 @[to_additive]
@@ -3886,7 +3886,7 @@ theorem mem_prod_list_ofFn
 
 中文:
 定理 mem_prod_list_ofFn
-  条件: {a : α} {s : Fin n -> Finset α}
+  条件: {a : α} {s : 有限集 n -> 有限集 α}
   证明: by
   rw [← mem_coe]; rw [coe_list_prod]; rw [List.map_ofFn]; rw [Set.mem_prod_list_ofFn]
   rfl
@@ -3956,7 +3956,7 @@ theorem mul_univ_of_one_mem
 
 中文:
 定理 mul_univ_of_one_mem
-  条件: [Fintype α] (hs : (1 : α) in s)
+  条件: [有限类型 α] (hs : (1 : α) in s)
   结论: s * univ = univ
   证明: eq_univ_iff_forall.2 fun _ => mem_mul.2 ⟨_, hs, _, mem_univ _, one_mul _⟩
 
@@ -3981,7 +3981,7 @@ theorem univ_mul_of_one_mem
 
 中文:
 定理 univ_mul_of_one_mem
-  条件: [Fintype α] (ht : (1 : α) in t)
+  条件: [有限类型 α] (ht : (1 : α) in t)
   结论: univ * t = univ
   证明: eq_univ_iff_forall.2 fun _ => mem_mul.2 ⟨_, mem_univ _, _, ht, mul_one _⟩
 
@@ -4006,8 +4006,8 @@ theorem univ_mul_univ
 
 中文:
 定理 univ_mul_univ
-  条件: [Fintype α]
-  结论: (univ : Finset α) * univ = univ
+  条件: [有限类型 α]
+  结论: (univ : 有限集 α) * univ = univ
   证明: mul_univ_of_one_mem mem_univ _
 
 @[to_additive (attr := simp) nsmul_univ]
@@ -4031,8 +4031,8 @@ theorem univ_pow
 
 中文:
 定理 univ_pow
-  条件: [Fintype α] (hn : n != 0)
-  结论: (univ : Finset α) ^ n = univ
+  条件: [有限类型 α] (hn : n != 0)
+  结论: (univ : 有限集 α) ^ n = univ
   证明: coe_injective by rw [coe_pow, coe_univ, Set.univ_pow hn]
 
 @[to_additive]
@@ -4054,8 +4054,8 @@ theorem _root_.IsUnit.finset
 @[to_additive]
 
 中文:
-定理 _root_.IsUnit.finset
-  结论: IsUnit a -> IsUnit ({a} : Finset α)
+定理 _root_.是单位.finset
+  结论: 是单位 a -> 是单位 ({a} : 有限集 α)
   证明: IsUnit.map (singletonMonoidHom : α ->* Finset α)
 
 @[to_additive]
@@ -4074,8 +4074,8 @@ lemma image_op_pow
 
 中文:
 引理 image_op_pow
-  条件: (s : Finset α)
-  结论: 对任意 n : 自然数, (s ^ n).image op = s.image op ^ n
+  条件: (s : 有限集 α)
+  结论: 对任意 n : 自然数, (s ^ n).像 op = s.像 op ^ n
 -/
 lemma image_op_pow (s : Finset α) : forall n : Nat, (s ^ n).image op = s.image op ^ n
   | 0 => by simp [singleton_one]
@@ -4091,7 +4091,7 @@ lemma map_op_pow
 
 中文:
 引理 map_op_pow
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
 -/
 lemma map_op_pow (s : Finset α) :
     forall n : Nat, (s ^ n).map opEquiv.toEmbedding = s.map opEquiv.toEmbedding ^ n
@@ -4109,7 +4109,7 @@ lemma product_pow
 
 中文:
 引理 product_pow
-  条件: [Monoid β] (s : Finset α) (t : Finset β)
+  条件: [幺半群 β] (s : 有限集 α) (t : 有限集 β)
   结论: 对任意 n, (s ×ˢ t) ^ n = (s ^ n) ×ˢ (t ^ n)
 -/
 lemma product_pow [Monoid β] (s : Finset α) (t : Finset β) : forall n, (s ×ˢ t) ^ n = (s ^ n) ×ˢ (t ^ n)
@@ -4137,7 +4137,7 @@ scoped[Pointwise] attribute [instance] Finset.commMonoid Finset.addCommMonoid
 
 中文:
 定义 commMonoid
-  签名: : CommMonoid (Finset α)
+  签名: : 交换幺半群 (有限集 α)
   定义体: coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
 scoped[Pointwise] attribute [instance] Finset.commMonoid Finset.addCommMonoid
@@ -4164,8 +4164,8 @@ theorem coe_zpow
 
 中文:
 定理 coe_zpow
-  条件: (s : Finset α)
-  结论: 对任意 n : 整数, ↑(s ^ n) = (s : Set α) ^ n
+  条件: (s : 有限集 α)
+  结论: 对任意 n : 整数, ↑(s ^ n) = (s : 集合 α) ^ n
 -/
 theorem coe_zpow (s : Finset α) : forall n : Int, ↑(s ^ n) = (s : Set α) ^ n
   | Int.ofNat _ => coe_pow _ _
@@ -4209,7 +4209,7 @@ scoped[Pointwise] attribute [instance] Finset.divisionMonoid Finset.subtractionM
 
 中文:
 定义 divisionMonoid
-  签名: : DivisionMonoid (Finset α)
+  签名: : Division幺半群 (有限集 α)
   定义体: coe_injective.divisionMonoid _ coe_one coe_mul coe_inv coe_div coe_pow coe_zpow
 
 scoped[Pointwise] attribute [instance] Finset.divisionMonoid Finset.subtractionMonoid
@@ -4242,7 +4242,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit s ↔ 存在 a, s = {a} ∧ IsUnit a
+  结论: 是单位 s ↔ 存在 a, s = {a} ∧ 是单位 a
   证明: by
   constructor
   · rintro ⟨u, rfl⟩
@@ -4281,7 +4281,7 @@ theorem isUnit_coe
 
 中文:
 定理 isUnit_coe
-  结论: IsUnit (s : Set α) ↔ IsUnit s
+  结论: 是单位 (s : 集合 α) ↔ 是单位 s
   证明: by
   simp_rw [isUnit_iff, Set.isUnit_iff, coe_eq_singleton]
 
@@ -4304,8 +4304,8 @@ lemma univ_div_univ
 
 中文:
 引理 univ_div_univ
-  条件: [Fintype α]
-  结论: (univ / univ : Finset α) = univ
+  条件: [有限类型 α]
+  结论: (univ / univ : 有限集 α) = univ
   证明: by simp [div_eq_mul_inv]
 
 Depends on / 依赖: div_eq_mul_inv
@@ -4371,7 +4371,7 @@ lemma empty_zpow
 中文:
 引理 empty_zpow
   条件: (hn : n != 0)
-  结论: (∅ : Finset α) ^ n = ∅
+  结论: (∅ : 有限集 α) ^ n = ∅
   证明: by cases n <;> simp_all
 
 @[to_additive]
@@ -4388,9 +4388,9 @@ lemma Nonempty.zpow
   statement: forall {n : Int}, (s ^ n).Nonempty
 
 中文:
-引理 Nonempty.zpow
-  条件: (hs : s.Nonempty)
-  结论: 对任意 {n : 整数}, (s ^ n).Nonempty
+引理 非空.zpow
+  条件: (hs : s.非空)
+  结论: 对任意 {n : 整数}, (s ^ n).非空
 -/
 lemma Nonempty.zpow (hs : s.Nonempty) : forall {n : Int}, (s ^ n).Nonempty
   | (n : Nat) => hs.pow
@@ -4449,7 +4449,7 @@ lemma singleton_zpow
 中文:
 引理 singleton_zpow
   条件: (a : α) (n : 整数)
-  结论: ({a} : Finset α) ^ n = {a ^ n}
+  结论: ({a} : 有限集 α) ^ n = {a ^ n}
   证明: by cases n <;> simp
 
 Depends on / 依赖: Characteristic, H.Characteristic, H.Normal, Normal, normal_of_characteristic
@@ -4473,7 +4473,7 @@ scoped[Pointwise] attribute [instance] Finset.divisionCommMonoid Finset.subtract
 
 中文:
 定义 divisionCommMonoid
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
   定义体: coe_injective.divisionCommMonoid _ coe_one coe_mul coe_inv coe_div coe_pow coe_zpow
 
 scoped[Pointwise] attribute [instance] Finset.divisionCommMonoid Finset.subtractionCommMonoid
@@ -4605,8 +4605,8 @@ theorem Nonempty.one_mem_div
 @[to_additive]
 
 中文:
-定理 Nonempty.one_mem_div
-  条件: (h : s.Nonempty)
+定理 非空.one_mem_div
+  条件: (h : s.非空)
   结论: (1 : α) in s / s
   证明: let ⟨a, ha⟩ := h
   mem_div.2 ⟨a, ha, a, ha, div_self' _⟩
@@ -4632,7 +4632,7 @@ theorem isUnit_singleton
 中文:
 定理 isUnit_singleton
   条件: (a : α)
-  结论: IsUnit ({a} : Finset α)
+  结论: 是单位 ({a} : 有限集 α)
   证明: (Group.isUnit a).finset
 
 Depends on / 依赖: Group.isUnit, finset, isUnit
@@ -4653,7 +4653,7 @@ theorem isUnit_iff_singleton
 
 中文:
 定理 isUnit_iff_singleton
-  结论: IsUnit s ↔ 存在 a, s = {a}
+  结论: 是单位 s ↔ 存在 a, s = {a}
   证明: by
   simp only [isUnit_iff, Group.isUnit, and_true]
 
@@ -4678,7 +4678,7 @@ theorem isUnit_iff_singleton_aux
 
 中文:
 定理 isUnit_iff_singleton_aux
-  条件: {α} [Group α] {s : Finset α}
+  条件: {α} [群 α] {s : 有限集 α}
   证明: by
   simp only [Group.isUnit, and_true]
 
@@ -4725,7 +4725,7 @@ theorem image_mul_right
 
 中文:
 定理 image_mul_right
-  结论: image (· * b) t = preimage t (· * b⁻¹) (mul_left_injective _).injOn
+  结论: 像 (· * b) t = 原像 t (· * b⁻¹) (mul_left_injective _).injOn
   证明: coe_injective by simp
 
 @[to_additive]
@@ -4788,8 +4788,8 @@ lemma image_inv
 
 中文:
 引理 image_inv
-  条件: (f : F) (s : Finset α)
-  结论: s⁻¹.image f = (s.image f)⁻¹
+  条件: (f : F) (s : 有限集 α)
+  结论: s⁻¹.像 f = (s.像 f)⁻¹
   证明: image_comm (map_inv _)
 
 Depends on / 依赖: image_comm, map_inv
@@ -4806,7 +4806,7 @@ theorem image_div
 
 中文:
 定理 image_div
-  结论: (s / t).image (f : α -> β) = s.image f / t.image f
+  结论: (s / t).像 (f : α -> β) = s.像 f / t.像 f
   证明: image_image₂_distrib map_div f
 
 Depends on / 依赖: map_div
@@ -4884,7 +4884,7 @@ theorem preimage_mul_left_one
 
 中文:
 定理 preimage_mul_left_one
-  结论: preimage 1 (a * ·) (mul_right_injective _).injOn = {a⁻¹}
+  结论: 原像 1 (a * ·) (mul_right_injective _).injOn = {a⁻¹}
   证明: by
   classical rw [← image_mul_left', image_one, mul_one]
 
@@ -4909,7 +4909,7 @@ theorem preimage_mul_right_one
 
 中文:
 定理 preimage_mul_right_one
-  结论: preimage 1 (· * b) (mul_left_injective _).injOn = {b⁻¹}
+  结论: 原像 1 (· * b) (mul_left_injective _).injOn = {b⁻¹}
   证明: by
   classical rw [← image_mul_right', image_one, one_mul]
 
@@ -4934,7 +4934,7 @@ theorem preimage_mul_left_one'
 
 中文:
 定理 preimage_mul_left_one'
-  结论: preimage 1 (a⁻¹ * ·) (mul_right_injective _).injOn = {a}
+  结论: 原像 1 (a⁻¹ * ·) (mul_right_injective _).injOn = {a}
   证明: by
   rw [preimage_mul_left_one]; rw [inv_inv]
 
@@ -4957,7 +4957,7 @@ theorem preimage_mul_right_one'
 
 中文:
 定理 preimage_mul_right_one'
-  结论: preimage 1 (· * b⁻¹) (mul_left_injective _).injOn = {b}
+  结论: 原像 1 (· * b⁻¹) (mul_left_injective _).injOn = {b}
   证明: by
   rw [preimage_mul_right_one]; rw [inv_inv]
 
@@ -4981,7 +4981,7 @@ lemma image_pow_of_ne_zero
 
 中文:
 引理 image_pow_of_ne_zero
-  条件: [MulHomClass F α β]
+  条件: [乘法态射类 F α β]
 -/
 lemma image_pow_of_ne_zero [MulHomClass F α β] :
     forall {n}, n != 0 -> forall (f : F) (s : Finset α), (s ^ n).image f = s.image f ^ n
@@ -4999,8 +4999,8 @@ lemma image_pow
 
 中文:
 引理 image_pow
-  条件: [MonoidHomClass F α β] (f : F) (s : Finset α)
-  结论: 对任意 n, (s ^ n).image f = s.image f ^ n
+  条件: [幺半群态射类 F α β] (f : F) (s : 有限集 α)
+  结论: 对任意 n, (s ^ n).像 f = s.像 f ^ n
 -/
 lemma image_pow [MonoidHomClass F α β] (f : F) (s : Finset α) : forall n, (s ^ n).image f = s.image f ^ n
   | 0 => by simp [singleton_one]
@@ -5026,8 +5026,8 @@ lemma Nontrivial.mul_left
 @[to_additive]
 
 中文:
-引理 Nontrivial.mul_left
-  结论: t.Nontrivial -> s.Nonempty -> (s * t).Nontrivial
+引理 非平凡.mul_left
+  结论: t.非平凡 -> s.非空 -> (s * t).非平凡
   证明: by
   rintro ⟨a, ha, b, hb, hab⟩ ⟨c, hc⟩
   exact ⟨c * a, mul_mem_mul hc ha, c * b, mul_mem_mul hc hb, by simpa⟩
@@ -5053,9 +5053,9 @@ lemma Nontrivial.mul
 @[to_additive (attr := simp)]
 
 中文:
-引理 Nontrivial.mul
-  条件: (hs : s.Nontrivial) (ht : t.Nontrivial)
-  结论: (s * t).Nontrivial
+引理 非平凡.mul
+  条件: (hs : s.非平凡) (ht : t.非平凡)
+  结论: (s * t).非平凡
   证明: ht.mul_left hs.nonempty
 
 @[to_additive (attr := simp)]
@@ -5079,7 +5079,7 @@ theorem card_singleton_mul
 
 中文:
 定理 card_singleton_mul
-  条件: (a : α) (t : Finset α)
+  条件: (a : α) (t : 有限集 α)
   结论: #({a} * t) = #t
   证明: card_image₂_singleton_left _ mul_right_injective _
 
@@ -5104,7 +5104,7 @@ theorem singleton_mul_inter
 
 中文:
 定理 singleton_mul_inter
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   结论: {a} * (s inter t) = {a} * s inter ({a} * t)
   证明: image₂_singleton_inter _ _ mul_right_injective _
 
@@ -5127,7 +5127,7 @@ theorem card_le_card_mul_left
 
 中文:
 定理 card_le_card_mul_left
-  条件: {s : Finset α} (hs : s.Nonempty)
+  条件: {s : 有限集 α} (hs : s.非空)
   结论: #t <= #(s * t)
   证明: have ⟨_, ha⟩ := hs; card_le_card_mul_left_of_injective ha (mul_right_injective _)
 
@@ -5155,7 +5155,7 @@ theorem card_le_card_mul_self
 
 中文:
 定理 card_le_card_mul_self
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: #s <= #(s * s)
   证明: by
   cases s.eq_empty_or_nonempty <;> simp [card_le_card_mul_left, *]
@@ -5185,8 +5185,8 @@ lemma Nontrivial.mul_right
 @[to_additive (attr := simp)]
 
 中文:
-引理 Nontrivial.mul_right
-  结论: s.Nontrivial -> t.Nonempty -> (s * t).Nontrivial
+引理 非平凡.mul_right
+  结论: s.非平凡 -> t.非空 -> (s * t).非平凡
   证明: by
   rintro ⟨a, ha, b, hb, hab⟩ ⟨c, hc⟩
   exact ⟨a * c, mul_mem_mul ha hc, b * c, mul_mem_mul hb hc, by simpa⟩
@@ -5213,7 +5213,7 @@ theorem card_mul_singleton
 
 中文:
 定理 card_mul_singleton
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: #(s * {a}) = #s
   证明: card_image₂_singleton_right _ mul_left_injective _
 
@@ -5238,7 +5238,7 @@ theorem inter_mul_singleton
 
 中文:
 定理 inter_mul_singleton
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: s inter t * {a} = s * {a} inter (t * {a})
   证明: image₂_inter_singleton _ _ mul_left_injective _
 
@@ -5261,7 +5261,7 @@ theorem card_le_card_mul_right
 
 中文:
 定理 card_le_card_mul_right
-  条件: (ht : t.Nonempty)
+  条件: (ht : t.非空)
   结论: #s <= #(s * t)
   证明: have ⟨_, ha⟩ := ht; card_le_card_mul_right_of_injective ha (mul_left_injective _)
 
@@ -5312,9 +5312,9 @@ lemma Nontrivial.pow
   statement: forall {n}, n != 0 -> (s ^ n).Nontrivial
 
 中文:
-引理 Nontrivial.pow
-  条件: (hs : s.Nontrivial)
-  结论: 对任意 {n}, n != 0 -> (s ^ n).Nontrivial
+引理 非平凡.pow
+  条件: (hs : s.非平凡)
+  结论: 对任意 {n}, n != 0 -> (s ^ n).非平凡
 -/
 lemma Nontrivial.pow (hs : s.Nontrivial) : forall {n}, n != 0 -> (s ^ n).Nontrivial
   | 1, _ => by simpa
@@ -5332,9 +5332,9 @@ lemma Nonempty.card_pow_mono
   proof: monotone_nat_of_le_succ fun n => by rw [pow_succ]; exact card_le_card_mul_right hs
 
 中文:
-引理 Nonempty.card_pow_mono
-  条件: (hs : s.Nonempty)
-  结论: Monotone fun n : 自然数 => #(s ^ n)
+引理 非空.card_pow_mono
+  条件: (hs : s.非空)
+  结论: 递增 fun n : 自然数 => #(s ^ n)
   证明: monotone_nat_of_le_succ fun n => by rw [pow_succ]; exact card_le_card_mul_right hs
 -/
 protected lemma Nonempty.card_pow_mono (hs : s.Nonempty) : Monotone fun n : Nat => #(s ^ n) :=
@@ -5414,7 +5414,7 @@ lemma card_le_card_div_left
 
 中文:
 引理 card_le_card_div_left
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: #t <= #(s / t)
   证明: have ⟨_, ha⟩ := hs; card_le_card_image₂_left _ ha div_right_injective
 -/
@@ -5432,7 +5432,7 @@ lemma card_le_card_div_right
 
 中文:
 引理 card_le_card_div_right
-  条件: (ht : t.Nonempty)
+  条件: (ht : t.非空)
   结论: #s <= #(s / t)
   证明: have ⟨_, ha⟩ := ht; card_le_card_image₂_right _ ha div_left_injective
 
@@ -5480,7 +5480,7 @@ lemma piFinset_mul
 
 中文:
 引理 piFinset_mul
-  条件: [对任意 i, Mul (α i)] (s t : 对任意 i, Finset (α i))
+  条件: [对任意 i, 乘法 (α i)] (s t : 对任意 i, 有限集 (α i))
   证明: piFinset_image₂ _ _ _
 
 @[to_additive]
@@ -5501,7 +5501,7 @@ lemma piFinset_div
 
 中文:
 引理 piFinset_div
-  条件: [对任意 i, Div (α i)] (s t : 对任意 i, Finset (α i))
+  条件: [对任意 i, 除法 (α i)] (s t : 对任意 i, 有限集 (α i))
   证明: piFinset_image₂ _ _ _
 
 @[to_additive (attr := simp)]
@@ -5520,7 +5520,7 @@ lemma piFinset_inv
 
 中文:
 引理 piFinset_inv
-  条件: [对任意 i, Inv (α i)] (s : 对任意 i, Finset (α i))
+  条件: [对任意 i, 取逆 (α i)] (s : 对任意 i, 有限集 (α i))
   证明: piFinset_image _ _
 
 Depends on / 依赖: piFinset_image
@@ -5548,7 +5548,7 @@ instance instFintypeOne
 
 中文:
 实例 instFintypeOne
-  签名: [One α]
+  签名: [幺 α]
   定义体: Set.fintypeSingleton _
 
 Depends on / 依赖: Set.fintypeSingleton, fintypeSingleton
@@ -5568,7 +5568,7 @@ theorem toFinset_one
 
 中文:
 定理 toFinset_one
-  结论: (1 : Set α).toFinset = 1
+  结论: (1 : 集合 α).toFinset = 1
   证明: rfl
 -/
 theorem toFinset_one : (1 : Set α).toFinset = 1 :=
@@ -5586,8 +5586,8 @@ theorem Finite.toFinset_one
   proof: Finite.toFinset_singleton _
 
 中文:
-定理 Finite.toFinset_one
-  条件: (h : (1 : Set α).Finite := finite_one)
+定理 有限.toFinset_one
+  条件: (h : (1 : 集合 α).有限 := finite_one)
   结论: h.toFinset = 1
   证明: Finite.toFinset_singleton _
 
@@ -5615,7 +5615,7 @@ theorem toFinset_mul
 
 中文:
 定理 toFinset_mul
-  条件: (s t : Set α) [Fintype s] [Fintype t] [Fintype ↑(s * t)]
+  条件: (s t : 集合 α) [有限类型 s] [有限类型 t] [有限类型 ↑(s * t)]
   证明: toFinset_image2 _ _ _
 
 @[to_additive]
@@ -5636,8 +5636,8 @@ theorem Finite.toFinset_mul
   proof: Finite.toFinset_image2 _ _ _
 
 中文:
-定理 Finite.toFinset_mul
-  条件: (hs : s.Finite) (ht : t.Finite) (hf := hs.mul ht)
+定理 有限.toFinset_mul
+  条件: (hs : s.有限) (ht : t.有限) (hf := hs.mul ht)
   证明: Finite.toFinset_image2 _ _ _
 
 Depends on / 依赖: hs.mul

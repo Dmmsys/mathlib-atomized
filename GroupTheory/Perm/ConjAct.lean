@@ -44,7 +44,7 @@ theorem mem_conj_support
 
 中文:
 定理 mem_conj_support
-  条件: (k : ConjAct (Perm α)) (g : Perm α) (a : α)
+  条件: (k : ConjAct (置换 α)) (g : 置换 α) (a : α)
   证明: by
   simp only [mem_support, ConjAct.smul_def, not_iff_not, coe_mul,
     Function.comp_apply, ConjAct.ofConjAct_inv]
@@ -70,7 +70,7 @@ theorem support_conj_eq_smul_support
 
 中文:
 定理 support_conj_eq_smul_support
-  条件: (k : ConjAct (Perm α)) (g : Equiv.Perm α)
+  条件: (k : ConjAct (置换 α)) (g : 等价.置换 α)
   证明: by
   ext
   rw [mem_conj_support]; rw [← Perm.smul_def]; rw [ConjAct.ofConjAct_inv]; rw [Finset.inv_smul_mem_iff]
@@ -93,7 +93,7 @@ theorem support_toConjAct_eq_smul_support
 
 中文:
 定理 support_toConjAct_eq_smul_support
-  条件: (k g : Perm α)
+  条件: (k g : 置换 α)
   证明: by
   rw [Equiv.Perm.support_conj_eq_smul_support]; rw [ConjAct.ofConjAct_toConjAct]
 
@@ -118,7 +118,7 @@ theorem cycleFactorsFinset_conj
 
 中文:
 定理 cycleFactorsFinset_conj
-  条件: (g k : Perm α)
+  条件: (g k : 置换 α)
   证明: by
   ext c
   rw [ConjAct.smul_def]; rw [ConjAct.ofConjAct_toConjAct]; rw [Finset.mem_map_equiv]; rw [← mem_cycleFactorsFinset_conj g k]
@@ -210,7 +210,7 @@ theorem conj_smul_range_ofSubtype
 
 中文:
 定理 conj_smul_range_ofSubtype
-  条件: [Finite α] (g : Perm α) (s : Finset α)
+  条件: [有限 α] (g : 置换 α) (s : 有限集 α)
   证明: by
   have : Fintype α := Fintype.ofFinite α
   ext k

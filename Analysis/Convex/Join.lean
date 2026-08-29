@@ -38,7 +38,7 @@ definition convexJoin
 
 中文:
 定义 convexJoin
-  签名: (s t : Set E)
+  签名: (s t : 集合 E)
   定义体: ⋃ (x in s) (y in t), segment 𝕜 x y
 
 Depends on / 依赖: segment
@@ -79,7 +79,7 @@ theorem convexJoin_comm
 
 中文:
 定理 convexJoin_comm
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: convexJoin 𝕜 s t = convexJoin 𝕜 t s
   证明: (iUnion₂_comm _).trans by simp_rw [convexJoin, segment_symm]
 
@@ -166,7 +166,7 @@ theorem convexJoin_empty_left
 
 中文:
 定理 convexJoin_empty_left
-  条件: (t : Set E)
+  条件: (t : 集合 E)
   结论: convexJoin 𝕜 ∅ t = ∅
   证明: by simp [convexJoin]
 
@@ -190,7 +190,7 @@ theorem convexJoin_empty_right
 
 中文:
 定理 convexJoin_empty_right
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: convexJoin 𝕜 s ∅ = ∅
   证明: by simp [convexJoin]
 
@@ -213,7 +213,7 @@ theorem convexJoin_singleton_left
 
 中文:
 定理 convexJoin_singleton_left
-  条件: (t : Set E) (x : E)
+  条件: (t : 集合 E) (x : E)
   证明: by simp [convexJoin]
 
 @[simp]
@@ -234,7 +234,7 @@ theorem convexJoin_singleton_right
 
 中文:
 定理 convexJoin_singleton_right
-  条件: (s : Set E) (y : E)
+  条件: (s : 集合 E) (y : E)
   证明: by simp [convexJoin]
 
 Depends on / 依赖: convexJoin
@@ -277,7 +277,7 @@ theorem convexJoin_union_left
 
 中文:
 定理 convexJoin_union_left
-  条件: (s₁ s₂ t : Set E)
+  条件: (s₁ s₂ t : 集合 E)
   证明: by
   simp_rw [convexJoin, mem_union, iUnion_or, iUnion_union_distrib]
 
@@ -303,7 +303,7 @@ theorem convexJoin_union_right
 
 中文:
 定理 convexJoin_union_right
-  条件: (s t₁ t₂ : Set E)
+  条件: (s t₁ t₂ : 集合 E)
   证明: by
   simp_rw [convexJoin_comm s, convexJoin_union_left]
 
@@ -330,7 +330,7 @@ theorem convexJoin_iUnion_left
 
 中文:
 定理 convexJoin_iUnion_left
-  条件: (s : ι -> Set E) (t : Set E)
+  条件: (s : ι -> 集合 E) (t : 集合 E)
   证明: by
   simp_rw [convexJoin, mem_iUnion, iUnion_exists]
   exact iUnion_comm _
@@ -356,7 +356,7 @@ theorem convexJoin_iUnion_right
 
 中文:
 定理 convexJoin_iUnion_right
-  条件: (s : Set E) (t : ι -> Set E)
+  条件: (s : 集合 E) (t : ι -> 集合 E)
   证明: by
   simp_rw [convexJoin_comm s, convexJoin_iUnion_left]
 
@@ -402,7 +402,7 @@ segment_subset_convexJoin hx hy left_mem_segment _ _ _
 
 中文:
 定理 subset_convexJoin_left
-  条件: (h : t.Nonempty)
+  条件: (h : t.非空)
   结论: s subseteq convexJoin 𝕜 s t
   证明: fun _x hx =>
   let ⟨_y, hy⟩ := h
@@ -423,7 +423,7 @@ theorem subset_convexJoin_right
 
 中文:
 定理 subset_convexJoin_right
-  条件: (h : s.Nonempty)
+  条件: (h : s.非空)
   结论: t subseteq convexJoin 𝕜 s t
   证明: convexJoin_comm (𝕜 := 𝕜) t s ▸ subset_convexJoin_left h
 
@@ -445,7 +445,7 @@ theorem convexJoin_subset
 
 中文:
 定理 convexJoin_subset
-  条件: (hs : s subseteq u) (ht : t subseteq u) (hu : Convex 𝕜 u)
+  条件: (hs : s subseteq u) (ht : t subseteq u) (hu : 凸 𝕜 u)
   结论: convexJoin 𝕜 s t subseteq u
   证明: iUnion₂_subset fun _x hx => iUnion₂_subset fun _y hy => hu.segment_subset (hs hx) (ht hy)
 
@@ -467,7 +467,7 @@ theorem convexJoin_subset_convexHull
 
 中文:
 定理 convexJoin_subset_convexHull
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: convexJoin 𝕜 s t subseteq convexHull 𝕜 (s union t)
   证明: convexJoin_subset (subset_union_left.trans <| subset_convexHull _ _)
 (subset_union_right.trans <| subset_convexHull _ _)
@@ -502,7 +502,7 @@ theorem convexJoin_assoc_aux
 
 中文:
 定理 convexJoin_assoc_aux
-  条件: (s t u : Set E)
+  条件: (s t u : 集合 E)
   证明: by
   simp_rw [subset_def, mem_convexJoin]
   rintro _ ⟨z, ⟨x, hx, y, hy, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩, z, hz, a₂, b₂, ha₂, hb₂, hab₂, rfl⟩
@@ -539,7 +539,7 @@ theorem convexJoin_assoc
 
 中文:
 定理 convexJoin_assoc
-  条件: (s t u : Set E)
+  条件: (s t u : 集合 E)
   证明: by
   refine (convexJoin_assoc_aux _ _ _).antisymm ?_
   simp_rw [convexJoin_comm s, convexJoin_comm _ u]
@@ -564,7 +564,7 @@ theorem convexJoin_left_comm
 
 中文:
 定理 convexJoin_left_comm
-  条件: (s t u : Set E)
+  条件: (s t u : 集合 E)
   证明: by
   simp_rw [← convexJoin_assoc, convexJoin_comm]
 
@@ -585,7 +585,7 @@ theorem convexJoin_right_comm
 
 中文:
 定理 convexJoin_right_comm
-  条件: (s t u : Set E)
+  条件: (s t u : 集合 E)
   证明: by
   simp_rw [convexJoin_assoc, convexJoin_comm]
 
@@ -606,7 +606,7 @@ theorem convexJoin_convexJoin_convexJoin_comm
 
 中文:
 定理 convexJoin_convexJoin_convexJoin_comm
-  条件: (s t u v : Set E)
+  条件: (s t u v : 集合 E)
   证明: by
   simp_rw [← convexJoin_assoc, convexJoin_right_comm]
 
@@ -631,8 +631,8 @@ theorem Convex.convexJoin
   rcases ht.
 
 中文:
-定理 Convex.convexJoin
-  条件: (hs : Convex 𝕜 s) (ht : Convex 𝕜 t)
+定理 凸.convexJoin
+  条件: (hs : 凸 𝕜 s) (ht : 凸 𝕜 t)
   证明: by
   simp only [Convex, StarConvex, convexJoin, mem_iUnion]
   rintro _ ⟨x₁, hx₁, y₁, hy₁, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩
@@ -663,8 +663,8 @@ theorem Convex.convexHull_union
     convexJoin_subset_convexHull _ _
 
 中文:
-定理 Convex.convexHull_union
-  结论: (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) (hs₀ : s.Nonempty)
+定理 凸.convexHull_union
+  结论: (hs : 凸 𝕜 s) (ht : 凸 𝕜 t) (hs₀ : s.非空)
   证明: (convexHull_min (union_subset (subset_convexJoin_left ht₀) <| subset_convexJoin_right hs₀) <|
         hs.convexJoin ht).antisymm <|
     convexJoin_subset_convexHull _ _
@@ -687,7 +687,7 @@ theorem convexHull_union
 
 中文:
 定理 convexHull_union
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   rw [← convexHull_convexHull_union_left]; rw [← convexHull_convexHull_union_right]
   exact (convex_convexHull 𝕜 s).convexHull_union (convex_convexHull 𝕜 t) hs.convexHull ht.convexHull
@@ -710,7 +710,7 @@ theorem convexHull_insert
 
 中文:
 定理 convexHull_insert
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   证明: by
   rw [insert_eq]; rw [convexHull_union (singleton_nonempty _) hs]; rw [convexHull_singleton]
 

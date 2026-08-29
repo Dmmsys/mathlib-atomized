@@ -36,7 +36,7 @@ theorem continuous_restrictLe
 中文:
 定理 continuous_restrictLe
   条件: (a : α)
-  结论: Continuous (restrictLe (π := X) a)
+  结论: 连续 (restrictLe (π := X) a)
   证明: Pi.continuous_domRestrict _
 
 @[continuity, fun_prop]
@@ -57,7 +57,7 @@ theorem continuous_restrictLe₂
 中文:
 定理 continuous_restrictLe₂
   条件: {a b : α} (hab : a <= b)
-  结论: Continuous (restrictLe₂ (π := X) hab)
+  结论: 连续 (restrictLe₂ (π := X) hab)
   证明: Pi.continuous_domRestrict₂ _
 -/
 theorem continuous_restrictLe₂ {a b : α} (hab : a <= b) : Continuous (restrictLe₂ (π := X) hab) :=
@@ -80,7 +80,7 @@ theorem continuous_frestrictLe
 中文:
 定理 continuous_frestrictLe
   条件: (a : α)
-  结论: Continuous (frestrictLe (π := X) a)
+  结论: 连续 (frestrictLe (π := X) a)
   证明: Finset.continuous_restrict _
 
 @[continuity, fun_prop]

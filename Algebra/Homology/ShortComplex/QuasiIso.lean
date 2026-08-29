@@ -38,10 +38,10 @@ class QuasiIso
     - isIso' : IsIso (homologyMap φ)
 
 中文:
-类 QuasiIso
+类 拟同构
   参数: (φ : S₁ ⟶ S₂)
   公理与运算 (1 个):
-    - isIso' : IsIso (homologyMap φ)
+    - isIso' : 是同构 (homologyMap φ)
 -/
 class QuasiIso (φ : S₁ ⟶ S₂) : Prop where
   /-- the homology map is an isomorphism -/
@@ -56,8 +56,8 @@ instance QuasiIso.isIso
   body: QuasiIso.isIso'
 
 中文:
-实例 QuasiIso.isIso
-  签名: (φ : S₁ ⟶ S₂) [QuasiIso φ]
+实例 拟同构.isIso
+  签名: (φ : S₁ ⟶ S₂) [拟同构 φ]
   定义体: QuasiIso.isIso'
 
 Depends on / 依赖: QuasiIso, QuasiIso.isIso
@@ -107,7 +107,7 @@ instance quasiIso_of_isIso
 
 中文:
 实例 quasiIso_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ]
   定义体: ⟨(homologyMapIso (asIso φ)).isIso_hom⟩
 
 Depends on / 依赖: homologyMapIso, isIso_hom
@@ -128,7 +128,7 @@ instance quasiIso_comp
 
 中文:
 实例 quasiIso_comp
-  签名: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ : QuasiIso φ] [hφ' : QuasiIso φ']
+  签名: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ : 拟同构 φ] [hφ' : 拟同构 φ']
   定义体: by
   rw [quasiIso_iff] at hφ hφ' ⊢
   rw [homologyMap_comp]
@@ -185,7 +185,7 @@ lemma quasiIso_iff_comp_left
 
 中文:
 引理 quasiIso_iff_comp_left
-  条件: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ : QuasiIso φ]
+  条件: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ : 拟同构 φ]
   证明: by
   constructor
   · intro
@@ -246,7 +246,7 @@ lemma quasiIso_iff_comp_right
 
 中文:
 引理 quasiIso_iff_comp_right
-  条件: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ' : QuasiIso φ']
+  条件: (φ : S₁ ⟶ S₂) (φ' : S₂ ⟶ S₃) [hφ' : 拟同构 φ']
   证明: by
   constructor
   · intro
@@ -282,7 +282,7 @@ lemma quasiIso_of_arrow_mk_iso
 
 中文:
 引理 quasiIso_of_arrow_mk_iso
-  结论: (φ : S₁ ⟶ S₂) (φ' : S₃ ⟶ S₄) (e : Arrow.mk φ ≅ Arrow.mk φ')
+  结论: (φ : S₁ ⟶ S₂) (φ' : S₃ ⟶ S₄) (e : 箭头.mk φ ≅ 箭头.mk φ')
   证明: by
   let α : S₃ ⟶ S₁ := e.inv.left
   let β : S₂ ⟶ S₄ := e.hom.right
@@ -314,7 +314,7 @@ lemma quasiIso_iff_of_arrow_mk_iso
 
 中文:
 引理 quasiIso_iff_of_arrow_mk_iso
-  条件: (φ : S₁ ⟶ S₂) (φ' : S₃ ⟶ S₄) (e : Arrow.mk φ ≅ Arrow.mk φ')
+  条件: (φ : S₁ ⟶ S₂) (φ' : S₃ ⟶ S₄) (e : 箭头.mk φ ≅ 箭头.mk φ')
   证明: ⟨fun _ => quasiIso_of_arrow_mk_iso φ φ' e, fun _ => quasiIso_of_arrow_mk_iso φ' φ e.symm⟩
 
 Depends on / 依赖: e.symm, quasiIso_of_arrow_mk_iso
@@ -487,7 +487,7 @@ lemma quasiIso_of_epi_of_isIso_of_mono
 
 中文:
 引理 quasiIso_of_epi_of_isIso_of_mono
-  条件: (φ : S₁ ⟶ S₂) [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃]
+  条件: (φ : S₁ ⟶ S₂) [满态射 φ.τ₁] [是同构 φ.τ₂] [单态射 φ.τ₃]
   证明: by
   rw [((LeftHomologyMapData.ofEpiOfIsIsoOfMono φ) S₁.leftHomologyData).quasiIso_iff]
   dsimp
@@ -556,7 +556,7 @@ lemma quasiIso_opMap
 
 中文:
 引理 quasiIso_opMap
-  条件: (φ : S₁ ⟶ S₂) [QuasiIso φ]
+  条件: (φ : S₁ ⟶ S₂) [拟同构 φ]
   证明: by
   rw [quasiIso_opMap_iff]
   infer_instance
@@ -581,7 +581,7 @@ lemma quasiIso_unopMap
 
 中文:
 引理 quasiIso_unopMap
-  结论: {S₁ S₂ : ShortComplex Cᵒᵖ} [S₁.HasHomology] [S₂.HasHomology]
+  结论: {S₁ S₂ : 短复形 Cᵒᵖ} [S₁.有同调] [S₂.有同调]
   证明: by
   rw [← quasiIso_opMap_iff]
   change QuasiIso φ

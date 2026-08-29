@@ -85,7 +85,7 @@ lemma cexp_neg_quadratic_isLittleO_rpow_atTop
 
 中文:
 引理 cexp_neg_quadratic_isLittleO_rpow_atTop
-  条件: {a : Complex} (ha : a.re < 0) (b : Complex) (s : 实数)
+  条件: {a : 复形} (ha : a.re < 0) (b : 复形) (s : 实数)
   证明: by
   apply Asymptotics.IsLittleO.of_norm_left
   convert! rexp_neg_quadratic_isLittleO_rpow_atTop ha b.re s with x
@@ -116,7 +116,7 @@ lemma cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
 
 中文:
 引理 cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
-  条件: {a : Complex} (ha : a.re < 0) (b : Complex) (s : 实数)
+  条件: {a : 复形} (ha : a.re < 0) (b : 复形) (s : 实数)
   证明: by
   rw [cocompact_eq_atBot_atTop]; rw [isLittleO_sup]
   constructor
@@ -188,7 +188,7 @@ theorem isLittleO_exp_neg_mul_sq_cocompact
 
 中文:
 定理 isLittleO_exp_neg_mul_sq_cocompact
-  条件: {a : Complex} (ha : 0 < a.re) (s : 实数)
+  条件: {a : 复形} (ha : 0 < a.re) (s : 实数)
   证明: by
   convert! cexp_neg_quadratic_isLittleO_abs_rpow_cocompact (?_ : (-a).re < 0) 0 s using 1
   · simp_rw [zero_mul, add_zero]
@@ -218,8 +218,8 @@ theorem Complex.tsum_exp_neg_quadratic
   have h2
 
 中文:
-定理 Complex.tsum_exp_neg_quadratic
-  条件: {a : Complex} (ha : 0 < a.re) (b : Complex)
+定理 复形.tsum_exp_neg_quadratic
+  条件: {a : 复形} (ha : 0 < a.re) (b : 复形)
   证明: by
   let f : Real -> Complex := fun x => cexp (-π * a * x ^ 2 + 2 * π * b * x)
   have hFf : 𝓕 f = fun x : Real => 1 / a ^ (1 / 2 : Complex) * cexp (-π / a * (x + I * b) ^ 2) :=
@@ -272,8 +272,8 @@ theorem Complex.tsum_exp_neg_mul_int_sq
   simpa only [mul_zero, zero_mul, add_zero] using Complex.tsum_exp_neg_quadratic ha 0
 
 中文:
-定理 Complex.tsum_exp_neg_mul_int_sq
-  条件: {a : Complex} (ha : 0 < a.re)
+定理 复形.tsum_exp_neg_mul_int_sq
+  条件: {a : 复形} (ha : 0 < a.re)
   证明: by
   simpa only [mul_zero, zero_mul, add_zero] using Complex.tsum_exp_neg_quadratic ha 0
 
@@ -296,7 +296,7 @@ theorem Real.tsum_exp_neg_mul_int_sq
     add_zero] using Complex.tsum_exp_neg_quadratic (by rwa [ofReal_re] : 0 < (a : Complex).re) 0
 
 中文:
-定理 Real.tsum_exp_neg_mul_int_sq
+定理 实数.tsum_exp_neg_mul_int_sq
   条件: {a : 实数} (ha : 0 < a)
   证明: by
   simpa only [← ofReal_inj, ofReal_tsum, ofReal_exp, ofReal_mul, ofReal_neg, ofReal_pow,

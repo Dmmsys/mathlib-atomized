@@ -39,7 +39,7 @@ lemma strictConvex_preimage
 
 中文:
 引理 strictConvex_preimage
-  条件: {s : Set F} (e : E ≃L[𝕜] F)
+  条件: {s : 集合 F} (e : E ≃L[𝕜] F)
   证明: ⟨fun h => Function.LeftInverse.preimage_preimage e.right_inv s ▸
     h.linear_preimage e.symm.toLinearMap e.symm.continuous e.symm.injective,
     fun h => h.linear_preimage e.toLinearMap e.continuous e.injective⟩
@@ -66,7 +66,7 @@ lemma strictConvex_image
 
 中文:
 引理 strictConvex_image
-  条件: {s : Set E} (e : E ≃L[𝕜] F)
+  条件: {s : 集合 E} (e : E ≃L[𝕜] F)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.strictConvex_preimage]
 

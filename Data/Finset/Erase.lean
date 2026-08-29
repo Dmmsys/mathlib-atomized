@@ -56,7 +56,7 @@ definition erase
 
 中文:
 定义 erase
-  签名: (s : Finset α) (a : α)
+  签名: (s : 有限集 α) (a : α)
   定义体: ⟨_, s.2.erase a⟩
 
 @[simp]
@@ -78,7 +78,7 @@ theorem erase_val
 
 中文:
 定理 erase_val
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: (erase s a).1 = s.1.erase a
   证明: rfl
 
@@ -99,7 +99,7 @@ theorem mem_erase
 
 中文:
 定理 mem_erase
-  条件: {a b : α} {s : Finset α}
+  条件: {a b : α} {s : 有限集 α}
   结论: a in erase s b ↔ a != b ∧ a in s
   证明: s.2.mem_erase_iff
 
@@ -119,7 +119,7 @@ theorem notMem_erase
 
 中文:
 定理 notMem_erase
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: a ∉ erase s a
   证明: s.2.notMem_erase
 
@@ -218,7 +218,7 @@ theorem erase_eq_of_notMem
 
 中文:
 定理 erase_eq_of_notMem
-  条件: {a : α} {s : Finset α} (h : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
   结论: erase s a = s
   证明: eq_of_veq erase_of_notMem h
 
@@ -282,7 +282,7 @@ theorem erase_subset_erase
 
 中文:
 定理 erase_subset_erase
-  条件: (a : α) {s t : Finset α} (h : s subseteq t)
+  条件: (a : α) {s t : 有限集 α} (h : s subseteq t)
   结论: erase s a subseteq erase t a
   证明: val_le_iff.1 erase_le_erase _ val_le_iff.2 h
 
@@ -302,7 +302,7 @@ theorem erase_subset
 
 中文:
 定理 erase_subset
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: erase s a subseteq s
   证明: Multiset.erase_subset _ _
 
@@ -324,7 +324,7 @@ theorem subset_erase
 
 中文:
 定理 subset_erase
-  条件: {a : α} {s t : Finset α}
+  条件: {a : α} {s t : 有限集 α}
   结论: s subseteq t.erase a ↔ s subseteq t ∧ a ∉ s
   证明: by grind
 
@@ -344,8 +344,8 @@ theorem coe_erase
 
 中文:
 定理 coe_erase
-  条件: (a : α) (s : Finset α)
-  结论: ↑(erase s a) = (s \ {a} : Set α)
+  条件: (a : α) (s : 有限集 α)
+  结论: ↑(erase s a) = (s \ {a} : 集合 α)
   证明: by grind
 -/
 theorem coe_erase (a : α) (s : Finset α) : ↑(erase s a) = (s \ {a} : Set α) := by grind
@@ -361,7 +361,7 @@ theorem erase_idem
 
 中文:
 定理 erase_idem
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: erase (erase s a) a = erase s a
   证明: by simp
 -/
@@ -379,7 +379,7 @@ theorem erase_right_comm
 
 中文:
 定理 erase_right_comm
-  条件: {a b : α} {s : Finset α}
+  条件: {a b : α} {s : 有限集 α}
   结论: erase (erase s a) b = erase (erase s b) a
   证明: by
   grind
@@ -399,7 +399,7 @@ theorem erase_inj
 
 中文:
 定理 erase_inj
-  条件: {x y : α} (s : Finset α) (hx : x in s)
+  条件: {x y : α} (s : 有限集 α) (hx : x in s)
   结论: s.erase x = s.erase y ↔ x = y
   证明: by
   grind [eq_of_mem_of_notMem_erase]
@@ -420,8 +420,8 @@ theorem erase_injOn
 
 中文:
 定理 erase_injOn
-  条件: (s : Finset α)
-  结论: Set.InjOn s.erase s
+  条件: (s : 有限集 α)
+  结论: 集合.单射限制 s.erase s
   证明: fun _ _ _ _ => (erase_inj s ‹_›).mp
 
 Depends on / 依赖: erase_inj

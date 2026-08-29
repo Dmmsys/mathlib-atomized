@@ -55,7 +55,7 @@ definition levelParamsToMessageData
 
 中文:
 定义 levelParamsToMessageData
-  签名: (levelParams : List Name)
+  签名: (levelParams : 列表 Name)
   定义体: match levelParams with
   | [] => ""
   | u::us => Id.run do
@@ -91,7 +91,7 @@ definition mkHeader
 
 中文:
 定义 mkHeader
-  签名: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
+  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
   定义体: do
   let m : MessageData :=
     match safety with
@@ -127,7 +127,7 @@ definition mkHeader'
 
 中文:
 定义 mkHeader'
-  签名: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
+  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
   定义体: mkHeader kind id levelParams type
     (if isUnsafe then DefinitionSafety.unsafe else DefinitionSafety.safe)
 -/
@@ -146,7 +146,7 @@ definition printDefLike
 
 中文:
 定义 printDefLike
-  签名: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
+  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
   定义体: return (← mkHeader kind id levelParams type safety) ++ " :=" ++ Format.line ++ value
 -/
 private def printDefLike (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
@@ -169,7 +169,7 @@ definition printInduct
 
 中文:
 定义 printInduct
-  签名: (id : Name) (levelParams : List Name) (_numParams : 自然数) (_numIndices : 自然数)
+  签名: (id : Name) (levelParams : 列表 Name) (_numParams : 自然数) (_numIndices : 自然数)
   定义体: do
   let mut m ← mkHeader' "inductive" id levelParams type isUnsafe
   m := m ++ Format.line ++ "constructors:"

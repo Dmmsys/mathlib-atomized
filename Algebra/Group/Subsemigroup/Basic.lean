@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Subsemigroup M)
+  签名: 下确界集 (子半群 M)
   定义体: ⟨fun s =>
     { carrier := ⋂ t in s, ↑t
       mul_mem' := fun hx hy =>
@@ -106,8 +106,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Subsemigroup M))
-  结论: ((sInf S : Subsemigroup M) : Set M) = ⋂ s in S, ↑s
+  条件: (S : 集合 (子半群 M))
+  结论: ((sInf S : 子半群 M) : 集合 M) = ⋂ s in S, ↑s
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -129,7 +129,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Subsemigroup M)} {x : M}
+  条件: {S : 集合 (子半群 M)} {x : M}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -155,7 +155,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Subsemigroup M} {x : M}
+  条件: {ι : 类型层*} {S : ι -> 子半群 M} {x : M}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -180,8 +180,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Subsemigroup M}
-  结论: (↑(⨅ i, S i) : Set M) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子半群 M}
+  结论: (↑(⨅ i, S i) : 集合 M) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subsemigroup M)
+  签名: 完备格 (子半群 M)
   定义体: { completeLatticeOfInf (Subsemigroup M) fun _ =>
       IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf with
     le := (· <= ·)
@@ -254,7 +254,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: sInf { S | s subseteq S }
 
 @[to_additive]
@@ -277,7 +277,7 @@ theorem mem_closure
 中文:
 定理 mem_closure
   条件: {x : M}
-  结论: x in closure s ↔ 对任意 S : Subsemigroup M, s subseteq S -> x in S
+  结论: x in closure s ↔ 对任意 S : 子半群 M, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -323,7 +323,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set M} {x : M} (hx : x in s)
+  条件: {s : 集合 M} {x : M} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -397,7 +397,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set M⦄ (h : s subseteq t) : closure s <= closure t
+  结论: 集合 M⦄ (h : s subseteq t) : closure s <= closure t
   证明: closure_le.2 Subset.trans h subset_closure
 
 @[to_additive]
@@ -524,7 +524,7 @@ theorem dense_induction
 
 中文:
 定理 dense_induction
-  结论: {p : M -> 命题} (s : Set M) (closure : closure s = ⊤)
+  结论: {p : M -> 命题} (s : 集合 M) (closure : closure s = ⊤)
   证明: by
   induction closure.symm ▸ mem_top x using closure_induction with
   | mem _ h => exact mem _ h
@@ -566,7 +566,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure M _) SetLike.coe
+  签名: : Galois嵌入 (@closure M _) 集合状.coe
   定义体: GaloisConnection.toGaloisInsertion (fun _ _ => closure_le) fun _ => subset_closure
 -/
 protected def gi : GaloisInsertion (@closure M _) SetLike.coe :=
@@ -588,7 +588,7 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  结论: closure (S : Set M) = S
+  结论: closure (S : 集合 M) = S
   证明: (Subsemigroup.gi M).l_u_eq S
 
 @[to_additive (attr := simp)]
@@ -611,7 +611,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set M) = ⊥
+  结论: closure (∅ : 集合 M) = ⊥
   证明: (Subsemigroup.gi M).gc.l_bot
 
 @[to_additive (attr := simp)]
@@ -634,7 +634,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (univ : Set M) = ⊤
+  结论: closure (univ : 集合 M) = ⊤
   证明: @coe_top M _ ▸ closure_eq ⊤
 
 @[to_additive]
@@ -658,7 +658,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (Subsemigroup.gi M).gc.l_sup
 
@@ -683,7 +683,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set M)
+  条件: {ι} (s : ι -> 集合 M)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (Subsemigroup.gi M).gc.l_iSup
 
@@ -709,7 +709,7 @@ theorem closure_singleton_le_iff_mem
 
 中文:
 定理 closure_singleton_le_iff_mem
-  条件: (m : M) (p : Subsemigroup M)
+  条件: (m : M) (p : 子半群 M)
   结论: closure {m} <= p ↔ m in p
   证明: by
   rw [closure_le]; rw [singleton_subset_iff]; rw [SetLike.mem_coe]
@@ -736,7 +736,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {ι : Sort*} (p : ι -> Subsemigroup M) {m : M}
+  条件: {ι : 类型层*} (p : ι -> 子半群 M) {m : M}
   证明: by
   rw [← closure_singleton_le_iff_mem]; rw [le_iSup_iff]
   simp only [closure_singleton_le_iff_mem]
@@ -762,7 +762,7 @@ theorem iSup_eq_closure
 
 中文:
 定理 iSup_eq_closure
-  条件: {ι : Sort*} (p : ι -> Subsemigroup M)
+  条件: {ι : 类型层*} (p : ι -> 子半群 M)
   证明: by
   simp_rw [Subsemigroup.closure_iUnion, Subsemigroup.closure_eq]
 
@@ -795,7 +795,7 @@ theorem eqOn_closure
 
 中文:
 定理 eqOn_closure
-  条件: {f g : M ->ₙ* N} {s : Set M} (h : Set.EqOn f g s)
+  条件: {f g : M ->ₙ* N} {s : 集合 M} (h : 集合.EqOn f g s)
   证明: show closure s <= f.eqLocus g from closure_le.2 h
 
 @[to_additive]
@@ -817,7 +817,7 @@ theorem eq_of_eqOn_dense
 
 中文:
 定理 eq_of_eqOn_dense
-  条件: {s : Set M} (hs : closure s = ⊤) {f g : M ->ₙ* N} (h : s.EqOn f g)
+  条件: {s : 集合 M} (hs : closure s = ⊤) {f g : M ->ₙ* N} (h : s.EqOn f g)
   证明: eq_of_eqOn_top hs ▸ eqOn_closure h
 
 Depends on / 依赖: eqOn_closure, eq_of_eqOn_top
@@ -853,7 +853,7 @@ definition ofDense
 
 中文:
 定义 ofDense
-  签名: {M N} [Semigroup M] [Semigroup N] {s : Set M} (f : M -> N) (hs : closure s = ⊤)
+  签名: {M N} [半群 M] [半群 N] {s : 集合 M} (f : M -> N) (hs : closure s = ⊤)
   定义体: f
   map_mul' x y :=
     dense_induction _ hs (fun y hy x => hmul x y hy)
@@ -883,7 +883,7 @@ theorem coe_ofDense
 
 中文:
 定理 coe_ofDense
-  结论: [Semigroup M] [Semigroup N] {s : Set M} (f : M -> N) (hs : closure s = ⊤)
+  结论: [半群 M] [半群 N] {s : 集合 M} (f : M -> N) (hs : closure s = ⊤)
   证明: rfl
 -/
 theorem coe_ofDense [Semigroup M] [Semigroup N] {s : Set M} (f : M -> N) (hs : closure s = ⊤)

@@ -166,7 +166,7 @@ definition pullbackConeOfLeftIsoIsLimit
 
 中文:
 定义 pullbackConeOfLeftIsoIsLimit
-  签名: : IsLimit (pullbackConeOfLeftIso f g)
+  签名: : 是极限 (pullbackConeOfLeftIso f g)
   定义体: PullbackCone.isLimitAux' _ fun s => ⟨s.snd, by simp [← s.condition_assoc]⟩
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, condition_assoc, isLimitAux, s.condition_assoc, s.snd
@@ -211,7 +211,7 @@ instance pullback_snd_iso_of_left_iso
 
 中文:
 实例 pullback_snd_iso_of_left_iso
-  签名: : IsIso (pullback.snd f g)
+  签名: : 是同构 (pullback.snd f g)
   定义体: by
   refine ⟨⟨pullback.lift (g ≫ inv f) (𝟙 _) (by simp), ?_, by simp⟩⟩
   ext
@@ -391,7 +391,7 @@ definition pullbackConeOfRightIsoIsLimit
 
 中文:
 定义 pullbackConeOfRightIsoIsLimit
-  签名: : IsLimit (pullbackConeOfRightIso f g)
+  签名: : 是极限 (pullbackConeOfRightIso f g)
   定义体: PullbackCone.isLimitAux' _ fun s => ⟨s.fst, by simp [s.condition_assoc]⟩
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, condition_assoc, isLimitAux, s.condition_assoc, s.fst
@@ -436,7 +436,7 @@ instance pullback_fst_iso_of_right_iso
 
 中文:
 实例 pullback_fst_iso_of_right_iso
-  签名: : IsIso (pullback.fst f g)
+  签名: : 是同构 (pullback.fst f g)
   定义体: by
   refine ⟨⟨pullback.lift (𝟙 _) (f ≫ inv g) (by simp), ?_, by simp⟩⟩
   ext
@@ -630,7 +630,7 @@ definition pushoutCoconeOfLeftIsoIsLimit
 
 中文:
 定义 pushoutCoconeOfLeftIsoIsLimit
-  签名: : IsColimit (pushoutCoconeOfLeftIso f g)
+  签名: : 是余极限 (pushoutCoconeOfLeftIso f g)
   定义体: PushoutCocone.isColimitAux' _ fun s => ⟨s.inr, by simp [← s.condition]⟩
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, condition, isColimitAux, s.condition, s.inr
@@ -675,7 +675,7 @@ instance pushout_inr_iso_of_left_iso
 
 中文:
 实例 pushout_inr_iso_of_left_iso
-  签名: : IsIso (pushout.inr f g)
+  签名: : 是同构 (pushout.inr f g)
   定义体: by
   refine ⟨⟨pushout.desc (inv f ≫ g) (𝟙 _) (by simp), by simp, ?_⟩⟩
   ext
@@ -865,7 +865,7 @@ definition pushoutCoconeOfRightIsoIsLimit
 
 中文:
 定义 pushoutCoconeOfRightIsoIsLimit
-  签名: : IsColimit (pushoutCoconeOfRightIso f g)
+  签名: : 是余极限 (pushoutCoconeOfRightIso f g)
   定义体: PushoutCocone.isColimitAux' _ fun s => ⟨s.inl, by simp [← s.condition]⟩
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, condition, isColimitAux, s.condition, s.inl
@@ -910,7 +910,7 @@ instance pushout_inl_iso_of_right_iso
 
 中文:
 实例 pushout_inl_iso_of_right_iso
-  签名: : IsIso (pushout.inl _ _ : _ ⟶ pushout f g)
+  签名: : 是同构 (pushout.inl _ _ : _ ⟶ pushout f g)
   定义体: by
   refine ⟨⟨pushout.desc (𝟙 _) (inv g ≫ f) (by simp), by simp, ?_⟩⟩
   ext

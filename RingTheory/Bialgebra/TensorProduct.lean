@@ -85,8 +85,8 @@ instance _root_.TensorProduct.instBialgebra
   simp on
 
 中文:
-实例 _root_.TensorProduct.instBialgebra
-  签名: : Bialgebra S (A otimes[R] B)
+实例 _root_.张量积.instBialgebra
+  签名: : 双代数 S (A otimes[R] B)
   定义体: by
   have hcounit := congr(DFunLike.coe $(counit_eq_algHom_toLinearMap R S A B))
   have hcomul := congr(DFunLike.coe $(comul_eq_algHom_toLinearMap R S A B))
@@ -405,7 +405,7 @@ theorem lid_tmul
 中文:
 定理 lid_tmul
   条件: (r : R) (a : B)
-  结论: Bialgebra.TensorProduct.lid R B (r otimesₜ a) = r • a
+  结论: 双代数.张量积.lid R B (r otimesₜ a) = r • a
   证明: rfl
 
 @[simp]
@@ -425,7 +425,7 @@ theorem lid_symm_apply
 中文:
 定理 lid_symm_apply
   条件: (a : B)
-  结论: (Bialgebra.TensorProduct.lid R B).symm a = 1 otimesₜ a
+  结论: (双代数.张量积.lid R B).symm a = 1 otimesₜ a
   证明: rfl
 -/
 theorem lid_symm_apply (a : B) : (Bialgebra.TensorProduct.lid R B).symm a = 1 otimesₜ a := rfl
@@ -540,7 +540,7 @@ theorem rid_tmul
 中文:
 定理 rid_tmul
   条件: (r : R) (a : A)
-  结论: Bialgebra.TensorProduct.rid R S A (a otimesₜ r) = r • a
+  结论: 双代数.张量积.rid R S A (a otimesₜ r) = r • a
   证明: rfl
 
 @[simp]
@@ -560,7 +560,7 @@ theorem rid_symm_apply
 中文:
 定理 rid_symm_apply
   条件: (a : A)
-  结论: (Bialgebra.TensorProduct.rid R S A).symm a = a otimesₜ 1
+  结论: (双代数.张量积.rid R S A).symm a = a otimesₜ 1
   证明: rfl
 -/
 theorem rid_symm_apply (a : A) : (Bialgebra.TensorProduct.rid R S A).symm a = a otimesₜ 1 := rfl
@@ -665,7 +665,7 @@ definition comulBialgHom
 
 中文:
 定义 comulBialgHom
-  签名: [IsCocomm R A]
+  签名: [是余comm R A]
   定义体: comulAlgHom R A
   __ := comulCoalgHom R A
 -/
@@ -684,7 +684,7 @@ lemma comm_comp_comulBialgHom
 
 中文:
 引理 comm_comp_comulBialgHom
-  条件: [IsCocomm R A]
+  条件: [是余comm R A]
   证明: by
   ext; exact comm_comul _ _
 
@@ -740,7 +740,7 @@ lemma toLinearMap_mulCoalgHom
 
 中文:
 引理 toLinearMap_mulCoalgHom
-  结论: mulCoalgHom R A = LinearMap.mul' R A
+  结论: mulCoalgHom R A = 线性映射.mul' R A
   证明: rfl
 -/
 lemma toLinearMap_mulCoalgHom : mulCoalgHom R A = LinearMap.mul' R A := rfl
@@ -755,7 +755,7 @@ lemma coe_mulCoalgHom
 
 中文:
 引理 coe_mulCoalgHom
-  结论: ⇑(mulCoalgHom R A) = LinearMap.mul' R A
+  结论: ⇑(mulCoalgHom R A) = 线性映射.mul' R A
   证明: rfl
 -/
 @[simp] lemma coe_mulCoalgHom : ⇑(mulCoalgHom R A) = LinearMap.mul' R A := rfl
@@ -776,8 +776,8 @@ definition _root_.Coalgebra.Repr.tmul
       ← Finset.sum_product']
 
 中文:
-定义 _root_.Coalgebra.Repr.tmul
-  签名: (ℛa : Coalgebra.Repr R a ι) (ℛb : Coalgebra.Repr R b κ)
+定义 _root_.余algebra.Repr.tmul
+  签名: (ℛa : 余algebra.Repr R a ι) (ℛb : 余algebra.Repr R b κ)
   定义体: ℛa.index ×ˢ ℛb.index
   left i := ℛa.left i.1 otimesₜ ℛb.left i.2
   right i := ℛa.right i.1 otimesₜ ℛb.right i.2
@@ -805,8 +805,8 @@ definition _root_.Coalgebra.Repr.mul
   body: (ℛ₁.tmul ℛ₂).induced (R := R) (mulCoalgHom R A)
 
 中文:
-定义 _root_.Coalgebra.Repr.mul
-  签名: {b : A} (ℛ₁ : Coalgebra.Repr R a ι) (ℛ₂ : Coalgebra.Repr R b κ)
+定义 _root_.余algebra.Repr.mul
+  签名: {b : A} (ℛ₁ : 余algebra.Repr R a ι) (ℛ₂ : 余algebra.Repr R b κ)
   定义体: (ℛ₁.tmul ℛ₂).induced (R := R) (mulCoalgHom R A)
 
 Depends on / 依赖: induced, mulCoalgHom
@@ -828,7 +828,7 @@ lemma counitAlgHom_comp_includeRight
 
 中文:
 引理 counitAlgHom_comp_includeRight
-  条件: [CommSemiring A] [Semiring B] [Algebra R A] [Bialgebra R B]
+  条件: [交换半环 A] [半环 B] [代数 R A] [双代数 R B]
   证明: by
   ext; simp [Algebra.algebraMap_eq_smul_one]
 
@@ -850,7 +850,7 @@ lemma comul_includeRight
 
 中文:
 引理 comul_includeRight
-  条件: [CommSemiring A] [CommSemiring B] [Bialgebra R B] [Algebra R A]
+  条件: [交换半环 A] [交换半环 B] [双代数 R B] [代数 R A]
   证明: by
   ext x; simp [← (ℛ R x).eq, TensorProduct.tmul_sum]
 -/
@@ -907,7 +907,7 @@ lemma mulBialgHom_toAlgHom
 
 中文:
 引理 mulBialgHom_toAlgHom
-  结论: (mulBialgHom R A).toAlgHom = Algebra.TensorProduct.lmul' R
+  结论: (mulBialgHom R A).toAlgHom = 代数.张量积.lmul' R
   证明: rfl
 -/
 lemma mulBialgHom_toAlgHom : (mulBialgHom R A).toAlgHom = Algebra.TensorProduct.lmul' R := rfl
@@ -922,7 +922,7 @@ lemma coe_mulBialgHom
 
 中文:
 引理 coe_mulBialgHom
-  结论: ⇑(mulBialgHom R A) = LinearMap.mul' R A
+  结论: ⇑(mulBialgHom R A) = 线性映射.mul' R A
   证明: rfl
 -/
 @[simp] lemma coe_mulBialgHom : ⇑(mulBialgHom R A) = LinearMap.mul' R A := rfl

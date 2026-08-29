@@ -37,7 +37,7 @@ structure IsIntertwiningMap
     - isIntertwining((g : G) (v : V)) : f (ρ g v) = σ g (f v)
 
 中文:
-结构 IsIntertwiningMap
+结构 是整数ertwining映射
   参数: : 命题 where
   公理与运算 (1 个):
     - isIntertwining((g : G) (v : V)) : f (ρ g v) = σ g (f v)
@@ -56,7 +56,7 @@ structure IntertwiningMap
     - isIntertwining'((g : G)) : toLinearMap ∘ₗ ρ g = σ g ∘ₗ toLinearMap
 
 中文:
-结构 IntertwiningMap
+结构 整数ertwining映射
   参数: extends V ->ₗ[A] W
   继承: V ->ₗ[A] W
   公理与运算 (1 个):
@@ -74,7 +74,7 @@ definition _root_.LinearMap.intertwiningMap_of_isIntertwiningMap
   body: { f with isIntertwining' g := by ext v; exact hf g v }
 
 中文:
-定义 _root_.LinearMap.intertwiningMap_of_isIntertwiningMap
+定义 _root_.线性映射.intertwiningMap_of_is整数ertwiningMap
   定义体: { f with isIntertwining' g := by ext v; exact hf g v }
 
 Depends on / 依赖: isIntertwining
@@ -93,8 +93,8 @@ lemma IntertwiningMap.isIntertwining_assoc
   rw [← LinearMap.comp_assoc]; rw [f.2]; rw [LinearMap.comp_assoc]
 
 中文:
-引理 IntertwiningMap.isIntertwining_assoc
-  条件: {f : 整数ertwiningMap ρ σ} (g : G) (l : U ->ₗ[A] V)
+引理 整数ertwining映射.is整数ertwining_assoc
+  条件: {f : 整数ertwining映射 ρ σ} (g : G) (l : U ->ₗ[A] V)
   证明: by
   rw [← LinearMap.comp_assoc]; rw [f.2]; rw [LinearMap.comp_assoc]
 
@@ -121,7 +121,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {f g : 整数ertwiningMap ρ σ} (h : f.toLinearMap = g.toLinearMap)
+  条件: {f g : 整数ertwining映射 ρ σ} (h : f.toLinearMap = g.toLinearMap)
   结论: f = g
   证明: by
   cases f; cases g
@@ -141,7 +141,7 @@ lemma toLinearMap_injective
 
 中文:
 引理 toLinearMap_injective
-  结论: Function.Injective fun f : 整数ertwiningMap ρ σ => f.toLinearMap
+  结论: 函数.单射 fun f : 整数ertwining映射 ρ σ => f.toLinearMap
   证明: fun _ _ => ext
 -/
 lemma toLinearMap_injective : Function.Injective fun f : IntertwiningMap ρ σ => f.toLinearMap :=
@@ -160,7 +160,7 @@ lemma toFun_injective
 
 中文:
 引理 toFun_injective
-  结论: Function.Injective fun f : 整数ertwiningMap ρ σ => f.toLinearMap.toFun
+  结论: 函数.单射 fun f : 整数ertwining映射 ρ σ => f.toLinearMap.toFun
   证明: by
   intro f g h
   ext x
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (整数ertwiningMap ρ σ) V W
+  签名: 函数状 (整数ertwining映射 ρ σ) V W
   定义体: f.toFun
   coe_injective := toFun_injective ρ σ
 
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (整数ertwiningMap ρ σ) A V W
+  签名: 线性映射类 (整数ertwining映射 ρ σ) A V W
   定义体: f.map_add
   map_smulₛₗ f := f.map_smul
 
@@ -227,7 +227,7 @@ lemma coe_eq_toLinearMap
 
 中文:
 引理 coe_eq_toLinearMap
-  条件: {f : 整数ertwiningMap ρ σ}
+  条件: {f : 整数ertwining映射 ρ σ}
   证明: rfl
 -/
 lemma coe_eq_toLinearMap {f : IntertwiningMap ρ σ} :
@@ -245,7 +245,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : V ->ₗ[A] W) (h)
-  结论: ⇑(⟨f, h⟩ : 整数ertwiningMap ρ σ) = f
+  结论: ⇑(⟨f, h⟩ : 整数ertwining映射 ρ σ) = f
   证明: rfl
 -/
 @[simp] theorem coe_mk (f : V ->ₗ[A] W) (h) : ⇑(⟨f, h⟩ : IntertwiningMap ρ σ) = f := rfl
@@ -275,8 +275,8 @@ lemma isIntertwining
   proof: congr($(f.isIntertwining' g) v)
 
 中文:
-引理 isIntertwining
-  条件: (f : 整数ertwiningMap ρ σ) (g : G) (v : V)
+引理 is整数ertwining
+  条件: (f : 整数ertwining映射 ρ σ) (g : G) (v : V)
   证明: congr($(f.isIntertwining' g) v)
 
 Depends on / 依赖: f.isIntertwining, isIntertwining
@@ -295,7 +295,7 @@ lemma toLinearMap_apply
 
 中文:
 引理 toLinearMap_apply
-  条件: (f : 整数ertwiningMap ρ σ) (v : V)
+  条件: (f : 整数ertwining映射 ρ σ) (v : V)
   结论: f.toLinearMap v = f v
   证明: rfl
 -/
@@ -312,7 +312,7 @@ lemma coe_toLinearMap
 
 中文:
 引理 coe_toLinearMap
-  条件: (f : 整数ertwiningMap ρ σ)
+  条件: (f : 整数ertwining映射 ρ σ)
   结论: (f.toLinearMap : _ -> _) = f
   证明: rfl
 -/
@@ -326,7 +326,7 @@ lemma _root_.LinearMap.toIntertwiningMap
   proof: rfl
 
 中文:
-引理 _root_.LinearMap.toIntertwiningMap
+引理 _root_.线性映射.to整数ertwiningMap
   证明: rfl
 -/
 @[simp] lemma _root_.LinearMap.toIntertwiningMap
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (整数ertwiningMap ρ σ)
+  签名: 零 (整数ertwining映射 ρ σ)
   定义体: ⟨⟨0, by simp⟩⟩
 -/
 instance : Zero (IntertwiningMap ρ σ) := ⟨⟨0, by simp⟩⟩
@@ -358,7 +358,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ((0 : 整数ertwiningMap ρ σ) : V -> W) = 0
+  结论: ((0 : 整数ertwining映射 ρ σ) : V -> W) = 0
   证明: rfl
 -/
 @[simp] lemma coe_zero : ((0 : IntertwiningMap ρ σ) : V -> W) = 0 := rfl
@@ -373,7 +373,7 @@ lemma zero_toLinearMap
 
 中文:
 引理 zero_toLinearMap
-  结论: (0 : 整数ertwiningMap ρ σ).toLinearMap = 0
+  结论: (0 : 整数ertwining映射 ρ σ).toLinearMap = 0
   证明: rfl
 -/
 @[simp] lemma zero_toLinearMap : (0 : IntertwiningMap ρ σ).toLinearMap = 0 := rfl
@@ -389,7 +389,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (整数ertwiningMap ρ σ)
+  签名: 加法 (整数ertwining映射 ρ σ)
   定义体: ⟨fun f g => ⟨f.toLinearMap + g.toLinearMap, by
     simp [LinearMap.add_comp, LinearMap.comp_add, f.2, g.2,]⟩⟩
 
@@ -411,7 +411,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: (f g : 整数ertwiningMap ρ σ)
+  条件: (f g : 整数ertwining映射 ρ σ)
   证明: rfl
 
 @[simp]
@@ -430,7 +430,7 @@ lemma add_toLinearMap
 
 中文:
 引理 add_toLinearMap
-  条件: (f g : 整数ertwiningMap ρ σ)
+  条件: (f g : 整数ertwining映射 ρ σ)
   证明: rfl
 -/
 lemma add_toLinearMap (f g : IntertwiningMap ρ σ) :
@@ -446,7 +446,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (整数ertwiningMap ρ σ)
+  签名: 标量乘法 自然数 (整数ertwining映射 ρ σ)
   定义体: ⟨fun n f => ⟨n • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
@@ -464,7 +464,7 @@ lemma coe_nsmul
 
 中文:
 引理 coe_nsmul
-  条件: (f : 整数ertwiningMap ρ σ) (n : 自然数)
+  条件: (f : 整数ertwining映射 ρ σ) (n : 自然数)
   证明: rfl
 -/
 @[simp] lemma coe_nsmul (f : IntertwiningMap ρ σ) (n : Nat) :
@@ -481,7 +481,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (整数ertwiningMap ρ σ)
+  签名: : 加法交换幺半群 (整数ertwining映射 ρ σ)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommMonoid _ (coe_zero ρ σ) (coe_add ρ σ) (by intro f n; rw [coe_nsmul])
 
@@ -507,7 +507,7 @@ definition range
 
 中文:
 定义 range
-  签名: (f : 整数ertwiningMap ρ σ)
+  签名: (f : 整数ertwining映射 ρ σ)
   定义体: LinearMap.range f.toLinearMap
   apply_mem_toSubmodule g {w} := fun ⟨v, hv⟩ => ⟨(ρ g) v, by
     simp [f.isIntertwining, (f.toLinearMap_apply _ _ _).symm.trans hv]⟩
@@ -532,7 +532,7 @@ lemma mem_range
 
 中文:
 引理 mem_range
-  条件: (f : 整数ertwiningMap ρ σ) (w : W)
+  条件: (f : 整数ertwining映射 ρ σ) (w : W)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -555,7 +555,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: (f : 整数ertwiningMap ρ σ)
+  签名: (f : 整数ertwining映射 ρ σ)
   定义体: LinearMap.ker f.toLinearMap
   apply_mem_toSubmodule g := by simp +contextual [f.isIntertwining]
 
@@ -578,7 +578,7 @@ lemma mem_ker
 
 中文:
 引理 mem_ker
-  条件: (f : 整数ertwiningMap ρ σ) (v : V)
+  条件: (f : 整数ertwining映射 ρ σ) (v : V)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -599,7 +599,7 @@ lemma toLinearMap_sum
 
 中文:
 引理 toLinearMap_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> 整数ertwiningMap ρ σ)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 整数ertwining映射 ρ σ)
   证明: by
   classical induction s using Finset.induction with
   | empty => simp
@@ -624,7 +624,7 @@ lemma sum_apply
 
 中文:
 引理 sum_apply
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> 整数ertwiningMap ρ σ) (v : V)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 整数ertwining映射 ρ σ) (v : V)
   证明: by
   simp [← toLinearMap_apply _ _ (∑ _ in s, _), toLinearMap_sum, LinearMap.sum_apply]
 
@@ -652,7 +652,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (整数ertwiningMap ρ σ)
+  签名: 取负 (整数ertwining映射 ρ σ)
   定义体: ⟨fun f => ⟨-f.toLinearMap, by simp [LinearMap.neg_comp, f.2]⟩⟩
 
 @[simp]
@@ -674,8 +674,8 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: (f : 整数ertwiningMap ρ σ)
-  结论: ((-f : 整数ertwiningMap ρ σ) : V -> W) = -f
+  条件: (f : 整数ertwining映射 ρ σ)
+  结论: ((-f : 整数ertwining映射 ρ σ) : V -> W) = -f
   证明: rfl
 -/
 lemma coe_neg (f : IntertwiningMap ρ σ) : ((-f : IntertwiningMap ρ σ) : V -> W) = -f := rfl
@@ -691,7 +691,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (整数ertwiningMap ρ σ)
+  签名: 减法 (整数ertwining映射 ρ σ)
   定义体: ⟨fun f g => ⟨f.toLinearMap - g.toLinearMap, by
     simp [LinearMap.sub_comp, LinearMap.comp_sub, f.2, g.2]⟩⟩
 
@@ -713,7 +713,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: (f g : 整数ertwiningMap ρ σ)
+  条件: (f g : 整数ertwining映射 ρ σ)
   证明: rfl
 
 @[simp]
@@ -732,7 +732,7 @@ lemma sub_toLinearMap
 
 中文:
 引理 sub_toLinearMap
-  条件: (f g : 整数ertwiningMap ρ σ)
+  条件: (f g : 整数ertwining映射 ρ σ)
   证明: rfl
 -/
 lemma sub_toLinearMap (f g : IntertwiningMap ρ σ) :
@@ -748,7 +748,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (整数ertwiningMap ρ σ)
+  签名: 标量乘法 整数 (整数ertwining映射 ρ σ)
   定义体: ⟨fun z f => ⟨z • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
@@ -766,7 +766,7 @@ lemma coe_zsmul
 
 中文:
 引理 coe_zsmul
-  条件: (f : 整数ertwiningMap ρ σ) (z : 整数)
+  条件: (f : 整数ertwining映射 ρ σ) (z : 整数)
   证明: rfl
 -/
 @[simp] lemma coe_zsmul (f : IntertwiningMap ρ σ) (z : Int) :
@@ -784,7 +784,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (整数ertwiningMap ρ σ)
+  签名: 加法交换群 (整数ertwining映射 ρ σ)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ (coe_zero ρ σ) (coe_add ρ σ) (coe_neg ρ σ) (coe_sub ρ σ)
     (coe_nsmul ρ σ) (coe_zsmul ρ σ)
@@ -810,7 +810,7 @@ definition coeFnAddMonoidHom
 
 中文:
 定义 coeFnAddMonoidHom
-  签名: : 整数ertwiningMap ρ σ ->+ V -> W where
+  签名: : 整数ertwining映射 ρ σ ->+ V -> W where
   定义体: (⇑)
   map_zero' := coe_zero ρ σ
   map_add' := coe_add ρ σ
@@ -833,7 +833,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 整数ertwiningMap ρ ρ where
+  签名: : 整数ertwining映射 ρ ρ where
   定义体: LinearMap.id
   isIntertwining' := by simp
 
@@ -858,7 +858,7 @@ lemma toLinearMap_id
 
 中文:
 引理 toLinearMap_id
-  结论: (id ρ).toLinearMap = LinearMap.id
+  结论: (id ρ).toLinearMap = 线性映射.id
   证明: rfl
 
 @[simp]
@@ -897,7 +897,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  签名: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   定义体: f.toLinearMap ∘ₗ g.toLinearMap
   isIntertwining' := by simp [LinearMap.comp_assoc, g.2, f.isIntertwining_assoc]
 
@@ -922,7 +922,7 @@ lemma comp_toLinearMap
 
 中文:
 引理 comp_toLinearMap
-  条件: (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   证明: rfl
 
 @[simp]
@@ -941,7 +941,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ) (v : V)
+  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ) (v : V)
   证明: rfl
 -/
 lemma comp_apply (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) (v : V) :
@@ -957,7 +957,7 @@ lemma comp_add
 
 中文:
 引理 comp_add
-  条件: (f₁ f₂ : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  条件: (f₁ f₂ : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   证明: by ext1; simp [LinearMap.add_comp]
 
 Depends on / 依赖: LinearMap, LinearMap.add_comp, add_comp
@@ -975,7 +975,7 @@ lemma add_comp
 
 中文:
 引理 add_comp
-  条件: (f : 整数ertwiningMap σ τ) (g₁ g₂ : 整数ertwiningMap ρ σ)
+  条件: (f : 整数ertwining映射 σ τ) (g₁ g₂ : 整数ertwining映射 ρ σ)
   证明: by ext1; simp [LinearMap.comp_add]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_add, comp_add
@@ -995,7 +995,7 @@ isIntertwining' _ := LinearMap.ext by simp
 
 中文:
 定义 fst
-  签名: : 整数ertwiningMap (ρ.prod σ) ρ where
+  签名: : 整数ertwining映射 (ρ.乘积 σ) ρ where
   定义体: LinearMap.fst A V W
 isIntertwining' _ := LinearMap.ext by simp
 
@@ -1019,7 +1019,7 @@ isIntertwining' _ := LinearMap.ext by simp
 
 中文:
 定义 snd
-  签名: : 整数ertwiningMap (ρ.prod σ) σ where
+  签名: : 整数ertwining映射 (ρ.乘积 σ) σ where
   定义体: LinearMap.snd A V W
 isIntertwining' _ := LinearMap.ext by simp
 
@@ -1081,7 +1081,7 @@ lemma coe_fst
 
 中文:
 引理 coe_fst
-  结论: ⇑(fst A ρ σ) = Prod.fst
+  结论: ⇑(fst A ρ σ) = 积类型.fst
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_fst : ⇑(fst A ρ σ) = Prod.fst := rfl
@@ -1096,7 +1096,7 @@ lemma coe_snd
 
 中文:
 引理 coe_snd
-  结论: ⇑(snd A ρ σ) = Prod.snd
+  结论: ⇑(snd A ρ σ) = 积类型.snd
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_snd : ⇑(snd A ρ σ) = Prod.snd := rfl
@@ -1111,7 +1111,7 @@ lemma fst_surjective
 
 中文:
 引理 fst_surjective
-  结论: Function.Surjective (fst A ρ σ)
+  结论: 函数.满射 (fst A ρ σ)
   证明: LinearMap.fst_surjective
 
 Depends on / 依赖: LinearMap, LinearMap.fst_surjective, fst_surjective
@@ -1128,7 +1128,7 @@ lemma snd_surjective
 
 中文:
 引理 snd_surjective
-  结论: Function.Surjective (snd A ρ σ)
+  结论: 函数.满射 (snd A ρ σ)
   证明: LinearMap.snd_surjective
 
 Depends on / 依赖: LinearMap, LinearMap.snd_surjective, snd_surjective
@@ -1150,8 +1150,8 @@ isIntertwining' _ := LinearMap.ext by simp [f.isIntertwining, g.isIntertwining]
 @[simp]
 
 中文:
-定义 prod
-  签名: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap ρ τ)
+定义 乘积
+  签名: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
   定义体: f.toLinearMap.prod g.toLinearMap
 isIntertwining' _ := LinearMap.ext by simp [f.isIntertwining, g.isIntertwining]
 
@@ -1176,7 +1176,7 @@ lemma fst_prod
 
 中文:
 引理 fst_prod
-  条件: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap ρ τ)
+  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
   证明: IntertwiningMap.ext LinearMap.fst_prod _ _
 
 @[simp]
@@ -1197,7 +1197,7 @@ lemma snd_prod
 
 中文:
 引理 snd_prod
-  条件: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap ρ τ)
+  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
   证明: IntertwiningMap.ext LinearMap.snd_prod _ _
 
 Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext, LinearMap, LinearMap.snd_prod, snd_prod
@@ -1215,7 +1215,7 @@ lemma prod_comp
 
 中文:
 引理 prod_comp
-  结论: (X : 类型) [AddCommMonoid X] [Module A X] {π : Representation A G X}
+  结论: (X : 类型) [加法交换幺半群 X] [模 A X] {π : Representation A G X}
   证明: IntertwiningMap.ext LinearMap.prod_comp ..
 
 Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext, LinearMap, LinearMap.prod_comp, prod_comp
@@ -1236,7 +1236,7 @@ definition inl
 
 中文:
 定义 inl
-  签名: : 整数ertwiningMap ρ (ρ.prod σ)
+  签名: : 整数ertwining映射 ρ (ρ.乘积 σ)
   定义体: prod (id ρ) 0
 -/
 def inl : IntertwiningMap ρ (ρ.prod σ) := prod (id ρ) 0
@@ -1252,7 +1252,7 @@ definition inr
 
 中文:
 定义 inr
-  签名: : 整数ertwiningMap σ (ρ.prod σ)
+  签名: : 整数ertwining映射 σ (ρ.乘积 σ)
   定义体: prod (0 : IntertwiningMap σ ρ) (id σ)
 
 Depends on / 依赖: IntertwiningMap
@@ -1390,9 +1390,9 @@ structure Equiv
     - mk' : :
 
 中文:
-结构 Equiv
-  参数: extends 整数ertwiningMap ρ σ, V ≃ₗ[A] W
-  继承: IntertwiningMap ρ σ, V ≃ₗ[A] W
+结构 等价
+  参数: extends 整数ertwining映射 ρ σ, V ≃ₗ[A] W
+  继承: 整数ertwining映射 ρ σ, V ≃ₗ[A] W
   公理与运算 (1 个):
     - mk' : :
 -/
@@ -1457,7 +1457,7 @@ lemma toIntertwiningMap_mk'
 @[simp]
 
 中文:
-引理 toIntertwiningMap_mk'
+引理 to整数ertwiningMap_mk'
   条件: (e : V ≃ₗ[A] W) (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
   证明: rfl
 
@@ -1493,7 +1493,7 @@ lemma toLinearEquiv_injective
 
 中文:
 引理 toLinearEquiv_injective
-  结论: Function.Injective (toLinearEquiv : (σ.Equiv ρ) -> _)
+  结论: 函数.单射 (toLinearEquiv : (σ.等价 ρ) -> _)
   证明: fun φ ψ h => by cases φ; cases ψ; simpa [IntertwiningMap.ext_iff] using h
 
 Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext_iff, ext_iff
@@ -1512,7 +1512,7 @@ lemma toLinearEquiv_inj
 
 中文:
 引理 toLinearEquiv_inj
-  条件: (φ ψ : σ.Equiv ρ)
+  条件: (φ ψ : σ.等价 ρ)
   结论: φ.toLinearEquiv = ψ.toLinearEquiv ↔ φ = ψ
   证明: toLinearEquiv_injective.eq_iff
 
@@ -1537,7 +1537,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (Equiv ρ σ) V W
+  签名: 等价状 (等价 ρ σ) V W
   定义体: φ.toLinearEquiv
   inv φ := φ.invFun
   left_inv e := e.left_inv
@@ -1570,7 +1570,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearEquivClass (σ.Equiv ρ) A W V
+  签名: LinearEquivClass (σ.等价 ρ) A W V
   定义体: f.map_add
   map_smulₛₗ f := f.map_smul
 
@@ -1619,7 +1619,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ)
+  条件: {φ ψ : 等价 ρ σ} (h : (φ : V -> W) = ψ)
   结论: φ = ψ
   证明: by
   cases φ; cases ψ
@@ -1641,7 +1641,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : Equiv ρ ρ where
+  签名: : 等价 ρ ρ where
   定义体: LinearEquiv.refl _ _
   isIntertwining' g := by simp
 
@@ -1660,7 +1660,7 @@ lemma toIntertwiningMap_refl
   proof: rfl
 
 中文:
-引理 toIntertwiningMap_refl
+引理 to整数ertwiningMap_refl
   结论: (refl ρ).to整数ertwiningMap = .id ρ
   证明: rfl
 -/
@@ -1676,7 +1676,7 @@ lemma toLinearMap_refl
 
 中文:
 引理 toLinearMap_refl
-  结论: (refl ρ).toLinearMap = LinearMap.id
+  结论: (refl ρ).toLinearMap = 线性映射.id
   证明: rfl
 -/
 @[simp] lemma toLinearMap_refl : (refl ρ).toLinearMap = LinearMap.id := rfl
@@ -1707,7 +1707,7 @@ lemma coe_toIntertwiningMap
   proof: rfl
 
 中文:
-引理 coe_toIntertwiningMap
+引理 coe_to整数ertwiningMap
   结论: ⇑φ.to整数ertwiningMap = φ
   证明: rfl
 -/
@@ -1789,7 +1789,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (φ : Equiv ρ σ)
+  签名: (φ : 等价 ρ σ)
   定义体: φ.toLinearEquiv.symm
   isIntertwining' g := by
     rw [← cancel_left φ.toLinearEquiv.injective]; rw [← comp_assoc]; rw [← comp_assoc]; rw [φ.1.2 g]; rw [φ.comp_symm]; rw [comp_assoc]; rw [φ.comp_symm]; rw [id_comp]; rw [comp_id]
@@ -1815,7 +1815,7 @@ lemma _root_.LinearEquiv.isIntertwining_symm_isIntertwining
 @[simp]
 
 中文:
-引理 _root_.LinearEquiv.isIntertwining_symm_isIntertwining
+引理 _root_.线性等价.is整数ertwining_symm_is整数ertwining
   结论: {e : V ≃ₗ[A] W}
   证明: by
 .1 apply e.comp_toLinearMap_eq_iff _ _
@@ -1859,7 +1859,7 @@ lemma toLinearMap_symm
 
 中文:
 引理 toLinearMap_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: (symm φ).toLinearMap = φ.toLinearEquiv.symm
   证明: rfl
 -/
@@ -1876,7 +1876,7 @@ lemma coe_symm
 
 中文:
 引理 coe_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: ⇑φ.toLinearEquiv.symm = φ.symm
   证明: rfl
 -/
@@ -1901,7 +1901,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+  签名: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   定义体: φ.toLinearEquiv.trans ψ.toLinearEquiv
   isIntertwining' g := by
     rw [LinearEquiv.coe_trans]; rw [comp_assoc]; rw [φ.1.2]; rw [← comp_assoc]; rw [ψ.1.2]; rw [comp_assoc]
@@ -1927,8 +1927,8 @@ lemma toIntertwiningMap_trans
 @[simp]
 
 中文:
-引理 toIntertwiningMap_trans
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+引理 to整数ertwiningMap_trans
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   证明: rfl
 
 @[simp]
@@ -1949,7 +1949,7 @@ lemma toLinearMap_trans
 
 中文:
 引理 toLinearMap_trans
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   证明: rfl
 
 @[simp]
@@ -1970,7 +1970,7 @@ lemma trans_apply
 
 中文:
 引理 trans_apply
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ) (v : V)
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ) (v : V)
   证明: rfl
 
 @[simp]
@@ -1992,7 +1992,7 @@ lemma apply_symm_apply
 
 中文:
 引理 apply_symm_apply
-  条件: (φ : Equiv ρ σ) (v : W)
+  条件: (φ : 等价 ρ σ) (v : W)
   结论: φ (φ.symm v) = v
   证明: φ.right_inv v
 
@@ -2016,7 +2016,7 @@ lemma symm_apply_apply
 
 中文:
 引理 symm_apply_apply
-  条件: (φ : Equiv ρ σ) (v : V)
+  条件: (φ : 等价 ρ σ) (v : V)
   结论: φ.symm (φ v) = v
   证明: φ.left_inv v
 
@@ -2040,7 +2040,7 @@ lemma trans_symm
 
 中文:
 引理 trans_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: φ.trans φ.symm = .refl ρ
   证明: by ext; simp
 
@@ -2060,7 +2060,7 @@ lemma symm_trans
 
 中文:
 引理 symm_trans
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: φ.symm.trans φ = .refl σ
   证明: by ext; simp
 -/
@@ -2092,8 +2092,8 @@ theorem Equiv.conj_apply_self
   simp [this]
 
 中文:
-定理 Equiv.conj_apply_self
-  条件: (g : G) (φ : Equiv ρ σ)
+定理 等价.conj_apply_self
+  条件: (g : G) (φ : 等价 ρ σ)
   结论: φ.conj (ρ g) = σ g
   证明: by
   ext w
@@ -2125,7 +2125,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul A (整数ertwiningMap ρ σ)
+  签名: 标量乘法 A (整数ertwining映射 ρ σ)
   定义体: ⟨fun a f => ⟨a • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
@@ -2145,7 +2145,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (a : A) (f : 整数ertwiningMap ρ σ)
+  条件: (a : A) (f : 整数ertwining映射 ρ σ)
   证明: rfl
 
 @[simp]
@@ -2164,7 +2164,7 @@ lemma toLinearMap_smul
 
 中文:
 引理 toLinearMap_smul
-  条件: (a : A) (f : 整数ertwiningMap ρ σ)
+  条件: (a : A) (f : 整数ertwining映射 ρ σ)
   证明: rfl
 -/
 lemma toLinearMap_smul (a : A) (f : IntertwiningMap ρ σ) :
@@ -2180,7 +2180,7 @@ lemma smul_apply
 
 中文:
 引理 smul_apply
-  条件: (a : A) (f : 整数ertwiningMap ρ σ) (v : V)
+  条件: (a : A) (f : 整数ertwining映射 ρ σ) (v : V)
   证明: rfl
 -/
 lemma smul_apply (a : A) (f : IntertwiningMap ρ σ) (v : V) :
@@ -2197,7 +2197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module A (整数ertwiningMap ρ σ)
+  签名: 模 A (整数ertwining映射 ρ σ)
   定义体: fast_instance%
   Function.Injective.module A (coeFnAddMonoidHom ρ σ) DFunLike.coe_injective (coe_smul ρ σ)
 
@@ -2269,7 +2269,7 @@ definition llcomp
 
 中文:
 定义 llcomp
-  签名: : 整数ertwiningMap σ τ ->ₗ[A] 整数ertwiningMap ρ σ ->ₗ[A] 整数ertwiningMap ρ τ where
+  签名: : 整数ertwining映射 σ τ ->ₗ[A] 整数ertwining映射 ρ σ ->ₗ[A] 整数ertwining映射 ρ τ where
   定义体: { toFun g := ((f.toLinearMap.comp g.toLinearMap).intertwiningMap_of_isIntertwiningMap ρ τ
       (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
       map_add' _ _ := by ext; simp [map_add, toLinearMap_apply]
@@ -2297,7 +2297,7 @@ lemma comp_def
 
 中文:
 引理 comp_def
-  条件: (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   证明: rfl
 -/
 lemma comp_def (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
@@ -2313,7 +2313,7 @@ lemma smul_comp
 
 中文:
 引理 smul_comp
-  条件: (a : A) (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  条件: (a : A) (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   证明: by simp [comp_def]
 
 Depends on / 依赖: comp_def
@@ -2331,7 +2331,7 @@ lemma comp_smul
 
 中文:
 引理 comp_smul
-  条件: (a : A) (f : 整数ertwiningMap σ τ) (g : 整数ertwiningMap ρ σ)
+  条件: (a : A) (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
   证明: by simp [comp_def]
 
 Depends on / 依赖: comp_def
@@ -2349,7 +2349,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (整数ertwiningMap ρ ρ)
+  签名: 乘法 (整数ertwining映射 ρ ρ)
   定义体: comp
 -/
 instance : Mul (IntertwiningMap ρ ρ) where
@@ -2365,7 +2365,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: (f g : 整数ertwiningMap ρ ρ)
+  条件: (f g : 整数ertwining映射 ρ ρ)
   证明: rfl
 -/
 @[simp] lemma coe_mul (f g : IntertwiningMap ρ ρ) :
@@ -2382,7 +2382,7 @@ lemma mul_apply
 
 中文:
 引理 mul_apply
-  条件: (f g : 整数ertwiningMap ρ ρ) (v : V)
+  条件: (f g : 整数ertwining映射 ρ ρ) (v : V)
   结论: (f * g) v = f (g v)
   证明: rfl
 -/
@@ -2398,7 +2398,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (整数ertwiningMap ρ ρ)
+  签名: 幺 (整数ertwining映射 ρ ρ)
   定义体: ⟨id ρ⟩
 -/
 instance : One (IntertwiningMap ρ ρ) := ⟨id ρ⟩
@@ -2413,7 +2413,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ((1 : 整数ertwiningMap ρ ρ) : V -> V) = (_root_.id : V -> V)
+  结论: ((1 : 整数ertwining映射 ρ ρ) : V -> V) = (_root_.id : V -> V)
   证明: rfl
 -/
 @[simp] lemma coe_one : ((1 : IntertwiningMap ρ ρ) : V -> V) = (_root_.id : V -> V) := rfl
@@ -2429,7 +2429,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup (整数ertwiningMap ρ ρ)
+  签名: 半群 (整数ertwining映射 ρ ρ)
   定义体: Function.Injective.semigroup (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
     (toLinearMap_injective ρ ρ) (coe_mul ρ)
 
@@ -2449,7 +2449,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (整数ertwiningMap ρ ρ) 自然数
+  签名: 幂 (整数ertwining映射 ρ ρ) 自然数
   定义体: ⟨fun f n => npowRecAuto n f⟩
 
 Depends on / 依赖: npowRecAuto
@@ -2471,7 +2471,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (整数ertwiningMap ρ ρ)
+  签名: 幺半群 (整数ertwining映射 ρ ρ)
   定义体: Function.Injective.monoid (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
     (toLinearMap_injective ρ ρ) rfl (fun _ _ => rfl)
     (fun f n => by
@@ -2499,7 +2499,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (整数ertwiningMap ρ ρ)
+  签名: 自然数嵌入 (整数ertwining映射 ρ ρ)
   定义体: n • (1 : IntertwiningMap ρ ρ)
 
 Depends on / 依赖: IntertwiningMap
@@ -2525,7 +2525,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (整数ertwiningMap ρ ρ)
+  签名: : 半环 (整数ertwining映射 ρ ρ)
   定义体: fast_instance%
   Function.Injective.semiring (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
     (toLinearMap_injective ρ ρ) rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -2559,7 +2559,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A (整数ertwiningMap ρ ρ)
+  签名: 代数 A (整数ertwining映射 ρ ρ)
   定义体: Algebra.ofModule (fun a f g => rfl) (fun a f g => by ext; simp)
 
 Depends on / 依赖: Algebra, Algebra.ofModule, ofModule
@@ -2579,7 +2579,7 @@ lemma algebraMap_apply
 中文:
 引理 algebraMap_apply
   条件: (a : A)
-  结论: algebraMap A (整数ertwiningMap ρ ρ) a = a • 1
+  结论: algebraMap A (整数ertwining映射 ρ ρ) a = a • 1
   证明: rfl
 -/
 @[simp] lemma algebraMap_apply (a : A) : algebraMap A (IntertwiningMap ρ ρ) a = a • 1 := rfl
@@ -2625,8 +2625,8 @@ theorem isIntertwiningMap_of_mem_center
   rw [← Module.End.mul_apply]; rw [← Module.End.mul_apply]; rw [← ρ.map_mul]; rw [← hg g']; rw [ρ.map_mul]
 
 中文:
-定理 isIntertwiningMap_of_mem_center
-  条件: (g : G) (hg : g in Submonoid.center G)
+定理 is整数ertwiningMap_of_mem_center
+  条件: (g : G) (hg : g in 子幺半群.center G)
   证明: by
   rw [isIntertwiningMap_iff]
   intro g' v
@@ -2653,7 +2653,7 @@ isIntertwining' x := LinearMap.ext (isIntertwiningMap_of_mem_center ρ g hg).isI
 
 中文:
 定义 centralMul
-  签名: (g : G) (hg : g in Submonoid.center G)
+  签名: (g : G) (hg : g in 子幺半群.center G)
   定义体: ρ g
 isIntertwining' x := LinearMap.ext (isIntertwiningMap_of_mem_center ρ g hg).isIntertwining x
 -/
@@ -2673,7 +2673,7 @@ definition centralAlgebraMul
 
 中文:
 定义 centralAlgebraMul
-  签名: {z : A[G]} (hz : z in Submonoid.center A[G])
+  签名: {z : A[G]} (hz : z in 子幺半群.center A[G])
   定义体: ρ.asAlgebraHom z
   isIntertwining' _ := by simp_rw [← ρ.asAlgebraHom_of, ← Module.End.mul_eq_comp,
     ← map_mul, Submonoid.mem_center_iff.1 hz]
@@ -2696,7 +2696,7 @@ lemma centralAlgebraMul_apply
 
 中文:
 引理 centralAlgebraMul_apply
-  条件: {z : A[G]} (hz : z in Submonoid.center A[G]) (v : V)
+  条件: {z : A[G]} (hz : z in 子幺半群.center A[G]) (v : V)
   证明: rfl
 -/
 @[simp] lemma centralAlgebraMul_apply {z : A[G]} (hz : z in Submonoid.center A[G]) (v : V) :
@@ -2714,7 +2714,7 @@ definition centralAlgebraMulHom
 
 中文:
 定义 centralAlgebraMulHom
-  签名: : Submonoid.center A[G] ->* ρ.整数ertwiningMap ρ where
+  签名: : 子幺半群.center A[G] ->* ρ.整数ertwining映射 ρ where
   定义体: centralAlgebraMul _ z.2
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -2736,7 +2736,7 @@ definition toLinearMapl
 
 中文:
 定义 toLinearMapl
-  签名: : 整数ertwiningMap ρ σ ->ₗ[A] V ->ₗ[A] W where
+  签名: : 整数ertwining映射 ρ σ ->ₗ[A] V ->ₗ[A] W where
   定义体: toLinearMap
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2757,8 +2757,8 @@ instance [Module.Finite
   body: .of_injective (toLinearMapl (ρ := ρ) (σ := σ)) (toLinearMap_injective ρ σ)
 
 中文:
-实例 [Module.Finite
-  签名: A V] [IsNoetherian A W] :
+实例 [模.有限
+  签名: A V] [是Noether A W] :
   定义体: .of_injective (toLinearMapl (ρ := ρ) (σ := σ)) (toLinearMap_injective ρ σ)
 
 Depends on / 依赖: of_injective, toLinearMap_injective, toLinearMapl
@@ -2783,7 +2783,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : 整数ertwiningMap ρ σ) (hf : Function.Bijective f)
+  签名: (f : 整数ertwining映射 ρ σ) (hf : 函数.双射 f)
   定义体: f.isIntertwining'
   toLinearEquiv := LinearEquiv.ofBijective f.toLinearMap hf
 
@@ -2807,7 +2807,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  条件: (f : 整数ertwiningMap ρ σ) (hf : Function.Bijective f)
+  条件: (f : 整数ertwining映射 ρ σ) (hf : 函数.双射 f)
   证明: rfl
 -/
 theorem coe_ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) :
@@ -2831,7 +2831,7 @@ definition tensor
 
 中文:
 定义 tensor
-  签名: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap τ π)
+  签名: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
   定义体: TensorProduct.map f.toLinearMap g.toLinearMap
   isIntertwining' x := by
     rw [tprod_apply]; rw [← TensorProduct.map_comp]; rw [f.2]; rw [g.2]; rw [TensorProduct.map_comp]; rw [tprod_apply]
@@ -2859,7 +2859,7 @@ lemma toLinearMap_tensor
 
 中文:
 引理 toLinearMap_tensor
-  条件: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap τ π)
+  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
   证明: rfl
 
 @[simp]
@@ -2880,7 +2880,7 @@ lemma tensor_add_left
 
 中文:
 引理 tensor_add_left
-  条件: (f₁ f₂ : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap τ π)
+  条件: (f₁ f₂ : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
   证明: by ext; simp [TensorProduct.add_tmul]
 
 @[simp]
@@ -2903,7 +2903,7 @@ lemma tensor_add_right
 
 中文:
 引理 tensor_add_right
-  条件: (f : 整数ertwiningMap ρ σ) (g₁ g₂ : 整数ertwiningMap τ π)
+  条件: (f : 整数ertwining映射 ρ σ) (g₁ g₂ : 整数ertwining映射 τ π)
   证明: by ext; simp [TensorProduct.tmul_add]
 
 @[simp]
@@ -2926,7 +2926,7 @@ lemma tensor_smul_left
 
 中文:
 引理 tensor_smul_left
-  条件: (a : A) (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap τ π)
+  条件: (a : A) (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
   证明: by ext; simp [TensorProduct.smul_tmul]
 
 @[simp]
@@ -2949,7 +2949,7 @@ lemma tensor_smul_right
 
 中文:
 引理 tensor_smul_right
-  条件: (f : 整数ertwiningMap ρ σ) (a : A) (g : 整数ertwiningMap τ π)
+  条件: (f : 整数ertwining映射 ρ σ) (a : A) (g : 整数ertwining映射 τ π)
   证明: by ext; simp [TensorProduct.tmul_smul]
 
 @[simp]
@@ -2970,7 +2970,7 @@ lemma tensor_apply
 
 中文:
 引理 tensor_apply
-  条件: (f : 整数ertwiningMap ρ σ) (g : 整数ertwiningMap τ π) (v : V) (w : U)
+  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π) (v : V) (w : U)
   证明: rfl
 -/
 lemma tensor_apply (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) (v : V) (w : U) :
@@ -2989,7 +2989,7 @@ definition lTensor
 
 中文:
 定义 lTensor
-  签名: (f : 整数ertwiningMap σ τ)
+  签名: (f : 整数ertwining映射 σ τ)
   定义体: tensor (id ρ) f
 
 @[simp]
@@ -3012,7 +3012,7 @@ lemma toLinearMap_lTensor
 
 中文:
 引理 toLinearMap_lTensor
-  条件: (f : 整数ertwiningMap ρ σ)
+  条件: (f : 整数ertwining映射 ρ σ)
   证明: rfl
 
 @[simp]
@@ -3033,7 +3033,7 @@ lemma lTensor_apply
 
 中文:
 引理 lTensor_apply
-  条件: (f : 整数ertwiningMap σ τ) (v : V) (w : W)
+  条件: (f : 整数ertwining映射 σ τ) (v : V) (w : W)
   证明: rfl
 
 @[simp]
@@ -3074,7 +3074,7 @@ lemma lTensor_zero
 
 中文:
 引理 lTensor_zero
-  结论: lTensor ρ (0 : 整数ertwiningMap σ τ) = 0
+  结论: lTensor ρ (0 : 整数ertwining映射 σ τ) = 0
   证明: by ext; simp
 
 @[simp]
@@ -3094,7 +3094,7 @@ lemma lTensor_add
 
 中文:
 引理 lTensor_add
-  条件: (f₁ f₂ : 整数ertwiningMap σ τ)
+  条件: (f₁ f₂ : 整数ertwining映射 σ τ)
   证明: tensor_add_right _ _ _
 
 @[simp]
@@ -3115,7 +3115,7 @@ lemma lTensor_smul
 
 中文:
 引理 lTensor_smul
-  条件: (a : A) (f : 整数ertwiningMap σ τ)
+  条件: (a : A) (f : 整数ertwining映射 σ τ)
   证明: tensor_smul_right _ _ _
 
 Depends on / 依赖: tensor_smul_right
@@ -3136,7 +3136,7 @@ definition rTensor
 
 中文:
 定义 rTensor
-  签名: (f : 整数ertwiningMap σ τ)
+  签名: (f : 整数ertwining映射 σ τ)
   定义体: tensor f (id ρ)
 
 @[simp]
@@ -3159,7 +3159,7 @@ lemma toLinearMap_rTensor
 
 中文:
 引理 toLinearMap_rTensor
-  条件: (f : 整数ertwiningMap σ τ)
+  条件: (f : 整数ertwining映射 σ τ)
   证明: rfl
 
 @[simp]
@@ -3180,7 +3180,7 @@ lemma rTensor_apply
 
 中文:
 引理 rTensor_apply
-  条件: (f : 整数ertwiningMap σ τ) (v : V) (w : W)
+  条件: (f : 整数ertwining映射 σ τ) (v : V) (w : W)
   证明: rfl
 
 @[simp]
@@ -3221,7 +3221,7 @@ lemma rTensor_zero
 
 中文:
 引理 rTensor_zero
-  结论: rTensor ρ (0 : 整数ertwiningMap σ τ) = 0
+  结论: rTensor ρ (0 : 整数ertwining映射 σ τ) = 0
   证明: by ext; simp
 
 @[simp]
@@ -3241,7 +3241,7 @@ lemma rTensor_add
 
 中文:
 引理 rTensor_add
-  条件: (f₁ f₂ : 整数ertwiningMap σ τ)
+  条件: (f₁ f₂ : 整数ertwining映射 σ τ)
   证明: tensor_add_left _ _ _
 
 @[simp]
@@ -3262,7 +3262,7 @@ lemma rTensor_smul
 
 中文:
 引理 rTensor_smul
-  条件: (a : A) (f : 整数ertwiningMap σ τ)
+  条件: (a : A) (f : 整数ertwining映射 σ τ)
   证明: tensor_smul_left _ _ _
 
 Depends on / 依赖: tensor_smul_left
@@ -3282,7 +3282,7 @@ lemma rTensor_comp_lTensor
 
 中文:
 引理 rTensor_comp_lTensor
-  条件: (f : ρ.整数ertwiningMap τ) (g : σ.整数ertwiningMap υ)
+  条件: (f : ρ.整数ertwining映射 τ) (g : σ.整数ertwining映射 υ)
   证明: by ext; simp
 -/
 lemma rTensor_comp_lTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
@@ -3298,7 +3298,7 @@ lemma lTensor_comp_rTensor
 
 中文:
 引理 lTensor_comp_rTensor
-  条件: (f : ρ.整数ertwiningMap τ) (g : σ.整数ertwiningMap υ)
+  条件: (f : ρ.整数ertwining映射 τ) (g : σ.整数ertwining映射 υ)
   证明: by ext; simp
 -/
 lemma lTensor_comp_rTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
@@ -3322,7 +3322,7 @@ definition comm
 
 中文:
 定义 comm
-  签名: : (tprod ρ σ).Equiv (tprod σ ρ)
+  签名: : (tprod ρ σ).等价 (tprod σ ρ)
   定义体: .mk (_root_.TensorProduct.comm A V W) fun g => by ext; simp
 
 @[simp]
@@ -3345,7 +3345,7 @@ lemma toLinearMap_comm
 
 中文:
 引理 toLinearMap_comm
-  结论: (comm ρ σ).toLinearMap = _root_.TensorProduct.comm A V W
+  结论: (comm ρ σ).toLinearMap = _root_.张量积.comm A V W
   证明: rfl
 
 @[simp]
@@ -3380,7 +3380,7 @@ lemma comm_comp_lTensor
 
 中文:
 引理 comm_comp_lTensor
-  条件: (f : 整数ertwiningMap σ τ)
+  条件: (f : 整数ertwining映射 σ τ)
   证明: by ext; simp
 -/
 lemma comm_comp_lTensor (f : IntertwiningMap σ τ) :
@@ -3396,7 +3396,7 @@ lemma comm_comp_rTensor
 
 中文:
 引理 comm_comp_rTensor
-  条件: (f : 整数ertwiningMap σ τ)
+  条件: (f : 整数ertwining映射 σ τ)
   证明: by ext; simp
 -/
 lemma comm_comp_rTensor (f : IntertwiningMap σ τ) :
@@ -3429,7 +3429,7 @@ definition assoc
 
 中文:
 定义 assoc
-  签名: : (tprod (tprod ρ σ) τ).Equiv (tprod ρ (tprod σ τ))
+  签名: : (tprod (tprod ρ σ) τ).等价 (tprod ρ (tprod σ τ))
   定义体: .mk (_root_.TensorProduct.assoc A V W U) fun g => by ext; simp
 
 @[simp]
@@ -3452,7 +3452,7 @@ lemma toLinearMap_assoc
 
 中文:
 引理 toLinearMap_assoc
-  结论: (assoc ρ σ τ).toLinearMap = _root_.TensorProduct.assoc A V W U
+  结论: (assoc ρ σ τ).toLinearMap = _root_.张量积.assoc A V W U
   证明: rfl
 
 @[simp]
@@ -3511,7 +3511,7 @@ definition rid
 
 中文:
 定义 rid
-  签名: : (σ.tprod (trivial A G A)).Equiv σ
+  签名: : (σ.tprod (trivial A G A)).等价 σ
   定义体: .mk (_root_.TensorProduct.rid A W) fun g => by ext; simp
 
 @[simp]
@@ -3534,7 +3534,7 @@ lemma toLinearMap_rid
 
 中文:
 引理 toLinearMap_rid
-  结论: (rid A σ).toLinearMap = _root_.TensorProduct.rid A W
+  结论: (rid A σ).toLinearMap = _root_.张量积.rid A W
   证明: rfl
 
 @[simp]
@@ -3594,7 +3594,7 @@ definition lid
 
 中文:
 定义 lid
-  签名: : ((trivial A G A).tprod σ).Equiv σ
+  签名: : ((trivial A G A).tprod σ).等价 σ
   定义体: .mk (_root_.TensorProduct.lid A W) fun g => by ext; simp
 
 @[simp]
@@ -3617,7 +3617,7 @@ lemma toLinearMap_lid
 
 中文:
 引理 toLinearMap_lid
-  结论: (lid A σ).toLinearMap = _root_.TensorProduct.lid A W
+  结论: (lid A σ).toLinearMap = _root_.张量积.lid A W
   证明: rfl
 
 @[simp]
@@ -3690,7 +3690,7 @@ definition dualTensorHom
 
 中文:
 定义 dualTensorHom
-  签名: : Equiv (tprod ρ.dual σ) (linHom ρ σ) where
+  签名: : 等价 (tprod ρ.dual σ) (linHom ρ σ) where
   定义体: dualTensorHomEquiv (R := k) (M := V) (N := W)
   isIntertwining' g := by
     ext v' w v; simp [Module.Dual.transpose_apply]

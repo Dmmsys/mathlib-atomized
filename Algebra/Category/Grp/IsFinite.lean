@@ -40,7 +40,7 @@ definition isFinite
 
 中文:
 定义 isFinite
-  签名: : Object命题erty AddCommGrpCat.{u}
+  签名: : ObjectProperty 加法交换群范畴.{u}
   定义体: fun M => Finite M
 
 @[simp]
@@ -62,8 +62,8 @@ lemma prop_isFinite_iff
 
 中文:
 引理 prop_isFinite_iff
-  条件: (M : AddCommGrpCat.{u})
-  结论: isFinite M ↔ Finite M
+  条件: (M : 加法交换群范畴.{u})
+  结论: isFinite M ↔ 有限 M
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: isFinite.{u}.IsSerreClass
+  签名: isFinite.{u}.是Serre类
   定义体: ⟨.of PUnit, isZero_of_subsingleton _,
     by rw [prop_isFinite_iff]; infer_instance⟩
   prop_of_mono {M N} f hf hN := by

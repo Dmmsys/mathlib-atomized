@@ -165,7 +165,7 @@ theorem to_nontrivial
 
 中文:
 定理 to_nontrivial
-  结论: Nontrivial α
+  结论: 非平凡 α
   证明: ⟨⟨p.fst, p.snd, p.fst_ne_snd⟩⟩
 
 Depends on / 依赖: fst_ne_snd, p.fst, p.fst_ne_snd, p.snd
@@ -185,8 +185,8 @@ instance [Nontrivial
 @[simp]
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nonempty (TwoPointing α)
+实例 [非平凡
+  签名: α] : 非空 (TwoPointing α)
   定义体: let ⟨a, b, h⟩ := exists_pair_ne α
   ⟨⟨(a, b), h⟩⟩
 
@@ -209,7 +209,7 @@ theorem nonempty_two_pointing_iff
 
 中文:
 定理 nonempty_two_pointing_iff
-  结论: Nonempty (TwoPointing α) ↔ Nontrivial α
+  结论: 非空 (TwoPointing α) ↔ 非平凡 α
   证明: ⟨fun ⟨p⟩ => p.to_nontrivial, fun _ => inferInstance⟩
 
 Depends on / 依赖: p.to_nontrivial, to_nontrivial
@@ -302,7 +302,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: : TwoPointing (α × β) where
   定义体: (p.fst, q.fst)
   snd := (p.snd, q.snd)
@@ -330,7 +330,7 @@ theorem prod_fst
 
 中文:
 定理 prod_fst
-  结论: (p.prod q).fst = (p.fst, q.fst)
+  结论: (p.乘积 q).fst = (p.fst, q.fst)
   证明: rfl
 
 @[simp]
@@ -349,7 +349,7 @@ theorem prod_snd
 
 中文:
 定理 prod_snd
-  结论: (p.prod q).snd = (p.snd, q.snd)
+  结论: (p.乘积 q).snd = (p.snd, q.snd)
   证明: rfl
 -/
 theorem prod_snd : (p.prod q).snd = (p.snd, q.snd) :=
@@ -366,7 +366,7 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
+定义 求和
   签名: : TwoPointing (α oplus β)
   定义体: ⟨(Sum.inl p.fst, Sum.inr q.snd), Sum.inl_ne_inr⟩
 
@@ -388,7 +388,7 @@ theorem sum_fst
 
 中文:
 定理 sum_fst
-  结论: (p.sum q).fst = Sum.inl p.fst
+  结论: (p.求和 q).fst = 和.inl p.fst
   证明: rfl
 
 @[simp]
@@ -407,7 +407,7 @@ theorem sum_snd
 
 中文:
 定理 sum_snd
-  结论: (p.sum q).snd = Sum.inr q.snd
+  结论: (p.求和 q).snd = 和.inr q.snd
   证明: rfl
 -/
 theorem sum_snd : (p.sum q).snd = Sum.inr q.snd :=
@@ -425,7 +425,7 @@ definition bool
 
 中文:
 定义 bool
-  签名: : TwoPointing 布尔
+  签名: : TwoPointing 布尔值
   定义体: ⟨(false, true), Bool.false_ne_true⟩
 
 @[simp]
@@ -479,7 +479,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (TwoPointing 布尔)
+  签名: 可居 (TwoPointing 布尔值)
   定义体: ⟨TwoPointing.bool⟩
 
 Depends on / 依赖: TwoPointing, TwoPointing.bool
@@ -520,7 +520,7 @@ theorem prop_fst
 
 中文:
 定理 prop_fst
-  结论: TwoPointing.prop.fst = False
+  结论: TwoPointing.prop.fst = 假
   证明: rfl
 
 @[simp]
@@ -539,7 +539,7 @@ theorem prop_snd
 
 中文:
 定理 prop_snd
-  结论: TwoPointing.prop.snd = True
+  结论: TwoPointing.prop.snd = 真
   证明: rfl
 -/
 theorem prop_snd : TwoPointing.prop.snd = True :=

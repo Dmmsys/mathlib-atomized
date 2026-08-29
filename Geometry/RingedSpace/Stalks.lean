@@ -44,8 +44,8 @@ definition Hom.stalkMap
   body: (stalkFunctor C (α.base x)).map α.c ≫ X.presheaf.stalkPushforward C α.base x
 
 中文:
-定义 Hom.stalkMap
-  签名: {X Y : PresheafedSpace.{_, _, v} C} (α : Hom X Y) (x : X)
+定义 态射.stalkMap
+  签名: {X Y : Presheafed空间.{_, _, v} C} (α : 态射 X Y) (x : X)
   定义体: (stalkFunctor C (α.base x)).map α.c ≫ X.presheaf.stalkPushforward C α.base x
 -/
 def Hom.stalkMap {X Y : PresheafedSpace.{_, _, v} C} (α : Hom X Y) (x : X) :
@@ -65,7 +65,7 @@ theorem stalkMap_germ
 
 中文:
 定理 stalkMap_germ
-  结论: {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y)
+  结论: {X Y : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y)
   证明: by
   rw [Hom.stalkMap]; rw [stalkFunctor_map_germ_assoc]; rw [stalkPushforward_germ]
 
@@ -93,7 +93,7 @@ definition restrictStalkIso
 
 中文:
 定义 restrictStalkIso
-  签名: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶ (X : TopCat.{v})}
+  签名: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C) {f : U ⟶ (X : 顶元素范畴.{v})}
   定义体: haveI := initial_of_adjunction (h.adjunctionNhds x)
   Final.colimitIso (h.functorNhds x).op ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
   -- As a left adjoint, the functor `h.functorNhds x` is initial.
@@ -124,7 +124,7 @@ theorem restrictStalkIso_hom_eq_germ
 
 中文:
 定理 restrictStalkIso_hom_eq_germ
-  结论: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
+  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
   证明: colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) (h.functorNhds x).op
     (op ⟨V, hx⟩)
 
@@ -152,7 +152,7 @@ theorem restrictStalkIso_inv_eq_germ
 
 中文:
 定理 restrictStalkIso_inv_eq_germ
-  结论: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
+  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
   证明: by
   rw [← restrictStalkIso_hom_eq_germ]; rw [Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
 
@@ -182,7 +182,7 @@ theorem restrictStalkIso_inv_eq_ofRestrict
 
 中文:
 定理 restrictStalkIso_inv_eq_ofRestrict
-  结论: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
+  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
   证明: by
   -- We can't use `ext` here because it would call `stalk_hom_ext` instead.
   refine colimit.hom_ext fun V => ?_
@@ -218,7 +218,7 @@ instance ofRestrict_stalkMap_isIso
 
 中文:
 实例 ofRestrict_stalkMap_isIso
-  签名: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
+  签名: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
   定义体: by
   rw [← restrictStalkIso_inv_eq_ofRestrict]; infer_instance
 
@@ -248,7 +248,7 @@ theorem id
 
 中文:
 定理 id
-  条件: (X : PresheafedSpace.{_, _, v} C) (x : X)
+  条件: (X : Presheafed空间.{_, _, v} C) (x : X)
   证明: by
   dsimp [Hom.stalkMap]
   ext
@@ -280,7 +280,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {X Y Z : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X)
+  条件: {X Y Z : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X)
   证明: by
   dsimp [Hom.stalkMap, stalkFunctor, stalkPushforward]
   -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
@@ -313,7 +313,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y)
+  结论: {X Y : Presheafed空间.{_, _, v} C} (α β : X ⟶ Y)
   证明: by
   ext
   subst h₁ h₂
@@ -339,7 +339,7 @@ theorem congr_hom
 
 中文:
 定理 congr_hom
-  条件: {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X)
+  条件: {X Y : Presheafed空间.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X)
   证明: by
   rw [← stalkMap.congr α β h x x rfl]; rw [eqToHom_refl]; rw [Category.comp_id]
 
@@ -362,7 +362,7 @@ theorem congr_point
 
 中文:
 定理 congr_point
-  结论: {X Y : PresheafedSpace.{_, _, v} C}
+  结论: {X Y : Presheafed空间.{_, _, v} C}
   证明: by
   rw [stalkMap.congr α α rfl x x' h]
 
@@ -390,7 +390,7 @@ instance isIso
 
 中文:
 实例 isIso
-  签名: {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) [IsIso α] (x : X)
+  签名: {X Y : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) [是同构 α] (x : X)
   定义体: by
     let β : Y ⟶ X := CategoryTheory.inv α
     have h_eq : (α ≫ β).base x = x := by rw [IsIso.hom_inv_id α, id_base, TopCat.id_app]
@@ -430,7 +430,7 @@ definition stalkIso
 
 中文:
 定义 stalkIso
-  签名: {X Y : PresheafedSpace.{_, _, v} C} (α : X ≅ Y) (x : X)
+  签名: {X Y : Presheafed空间.{_, _, v} C} (α : X ≅ Y) (x : X)
   定义体: asIso (α.hom.stalkMap x)
 
 Depends on / 依赖: hom.stalkMap, stalkMap
@@ -457,7 +457,7 @@ theorem stalkSpecializes_stalkMap
 
 中文:
 定理 stalkSpecializes_stalkMap
-  结论: {X Y : PresheafedSpace.{_, _, v} C}
+  结论: {X Y : Presheafed空间.{_, _, v} C}
   证明: by
   -- Porting note: the original one liner `dsimp [stalkMap]; simp [stalkMap]` doesn't work,
   -- I had to uglify this

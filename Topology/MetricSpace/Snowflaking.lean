@@ -164,7 +164,7 @@ definition casesOn_toSnowflaking
 
 中文:
 定义 casesOn_toSnowflaking
-  签名: {motive : Snowflaking X α hα₀ hα₁ -> Sort*}
+  签名: {motive : Snowflaking X α hα₀ hα₁ -> 类型层*}
   定义体: toSnowflaking x.val
 
 @[simp]
@@ -346,7 +346,7 @@ theorem image_toSnowflaking_eq_preimage
 
 中文:
 定理 image_toSnowflaking_eq_preimage
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: toSnowflaking.image_eq_preimage_symm _
 
 Depends on / 依赖: image_eq_preimage_symm, toSnowflaking, toSnowflaking.image_eq_preimage_symm
@@ -367,7 +367,7 @@ theorem image_ofSnowflaking_eq_preimage
 
 中文:
 定理 image_ofSnowflaking_eq_preimage
-  条件: (s : Set (Snowflaking X α hα₀ hα₁))
+  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
   证明: ofSnowflaking.image_eq_preimage_symm _
 
 @[simp]
@@ -391,7 +391,7 @@ theorem image_toSnowflaking_image_ofSnowflaking
 
 中文:
 定理 image_toSnowflaking_image_ofSnowflaking
-  条件: (s : Set (Snowflaking X α hα₀ hα₁))
+  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
   证明: ofSnowflaking.symm_image_image _
 
 @[simp]
@@ -413,7 +413,7 @@ theorem image_ofSnowflaking_image_toSnowflaking
 
 中文:
 定理 image_ofSnowflaking_image_toSnowflaking
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: ofSnowflaking.image_symm_image _
 
 Depends on / 依赖: image_symm_image, ofSnowflaking, ofSnowflaking.image_symm_image
@@ -444,7 +444,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Snowflaking X α hα₀ hα₁)
+  签名: 拓扑空间 (Snowflaking X α hα₀ hα₁)
   定义体: .induced Snowflaking.ofSnowflaking ‹_›
 
 @[fun_prop]
@@ -466,7 +466,7 @@ theorem continuous_ofSnowflaking
 
 中文:
 定理 continuous_ofSnowflaking
-  结论: Continuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X)
+  结论: 连续 (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X)
   证明: continuous_induced_dom
 
 @[fun_prop]
@@ -487,7 +487,7 @@ theorem continuous_toSnowflaking
 
 中文:
 定理 continuous_toSnowflaking
-  结论: Continuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
+  结论: 连续 (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
   证明: continuous_induced_rng.2 continuous_id
 
 Depends on / 依赖: continuous_id, continuous_induced_rng
@@ -528,8 +528,8 @@ instance [T0Space
   body: homeomorph.symm.t0Space
 
 中文:
-实例 [T0Space
-  签名: X] : T0Space (Snowflaking X α hα₀ hα₁)
+实例 [T0空间
+  签名: X] : T0空间 (Snowflaking X α hα₀ hα₁)
   定义体: homeomorph.symm.t0Space
 
 Depends on / 依赖: homeomorph, homeomorph.symm.t0Space, t0Space
@@ -546,8 +546,8 @@ instance [T2Space
   body: homeomorph.symm.t2Space
 
 中文:
-实例 [T2Space
-  签名: X] : T2Space (Snowflaking X α hα₀ hα₁)
+实例 [T2空间
+  签名: X] : T2空间 (Snowflaking X α hα₀ hα₁)
   定义体: homeomorph.symm.t2Space
 
 Depends on / 依赖: homeomorph, homeomorph.symm.t2Space, t2Space
@@ -564,8 +564,8 @@ instance [SecondCountableTopology
   body: homeomorph.secondCountableTopology
 
 中文:
-实例 [SecondCountableTopology
-  签名: X] : SecondCountableTopology (Snowflaking X α hα₀ hα₁)
+实例 [第二可数拓扑
+  签名: X] : 第二可数拓扑 (Snowflaking X α hα₀ hα₁)
   定义体: homeomorph.secondCountableTopology
 
 Depends on / 依赖: homeomorph, homeomorph.secondCountableTopology, secondCountableTopology
@@ -595,7 +595,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bornology (Snowflaking X α hα₀ hα₁)
+  签名: 有界结构 (Snowflaking X α hα₀ hα₁)
   定义体: .induced ofSnowflaking
 
 Depends on / 依赖: induced, ofSnowflaking
@@ -617,7 +617,7 @@ theorem isBounded_image_ofSnowflaking_iff
 
 中文:
 定理 isBounded_image_ofSnowflaking_iff
-  条件: {s : Set (Snowflaking X α hα₀ hα₁)}
+  条件: {s : 集合 (Snowflaking X α hα₀ hα₁)}
   证明: isBounded_induced.symm
 
 @[simp]
@@ -642,7 +642,7 @@ theorem isBounded_preimage_toSnowflaking_iff
 
 中文:
 定理 isBounded_preimage_toSnowflaking_iff
-  条件: {s : Set (Snowflaking X α hα₀ hα₁)}
+  条件: {s : 集合 (Snowflaking X α hα₀ hα₁)}
   证明: by
   rw [← image_ofSnowflaking_eq_preimage]; rw [isBounded_image_ofSnowflaking_iff]
 
@@ -668,7 +668,7 @@ theorem isBounded_image_toSnowflaking_iff
 
 中文:
 定理 isBounded_image_toSnowflaking_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [← isBounded_image_ofSnowflaking_iff]; rw [image_ofSnowflaking_image_toSnowflaking]
 
@@ -692,7 +692,7 @@ theorem isBounded_preimage_ofSnowflaking_iff
 
 中文:
 定理 isBounded_preimage_ofSnowflaking_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [← image_toSnowflaking_eq_preimage]; rw [isBounded_image_toSnowflaking_iff]
 
@@ -724,7 +724,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (Snowflaking X α hα₀ hα₁)
+  签名: 一致空间 (Snowflaking X α hα₀ hα₁)
   定义体: UniformSpace.comap Snowflaking.ofSnowflaking ‹_›
 
 Depends on / 依赖: Snowflaking, Snowflaking.ofSnowflaking, UniformSpace, UniformSpace.comap, ofSnowflaking
@@ -914,7 +914,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (Snowflaking X α hα₀ hα₁)
+  签名: PseudoEMetric空间 (Snowflaking X α hα₀ hα₁)
   定义体: by simp [edist_def, hα₀]
   edist_comm x y := by rw [edist_def, edist_def, edist_comm]
   edist_triangle x y z := by
@@ -1248,7 +1248,7 @@ theorem ediam_image_ofSnowflaking
 
 中文:
 定理 ediam_image_ofSnowflaking
-  条件: (s : Set (Snowflaking X α hα₀ hα₁))
+  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
   证明: by
   refine eq_of_forall_ge_iff fun c => ?_
   simp only [ENNReal.rpow_inv_le_iff hα₀, ediam_le_iff, Set.forall_mem_image,
@@ -1278,7 +1278,7 @@ theorem ediam_preimage_toSnowflaking
 
 中文:
 定理 ediam_preimage_toSnowflaking
-  条件: (s : Set (Snowflaking X α hα₀ hα₁))
+  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
   证明: by
   rw [← image_ofSnowflaking_eq_preimage]; rw [ediam_image_ofSnowflaking]
 
@@ -1304,7 +1304,7 @@ theorem ediam_preimage_ofSnowflaking
 
 中文:
 定理 ediam_preimage_ofSnowflaking
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   rw [← ENNReal.rpow_inv_rpow hα₀.ne' (ediam _)]; rw [← ediam_preimage_toSnowflaking]; rw [← Set.preimage_comp]; rw [ofSnowflaking_comp_toSnowflaking]; rw [Set.preimage_id]
 
@@ -1328,7 +1328,7 @@ theorem ediam_image_toSnowflaking
 
 中文:
 定理 ediam_image_toSnowflaking
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   simp [image_toSnowflaking_eq_preimage]
 
@@ -1349,8 +1349,8 @@ instance [EMetricSpace
   body: .ofT0PseudoEMetricSpace _
 
 中文:
-实例 [EMetricSpace
-  签名: X] : EMetricSpace (Snowflaking X α hα₀ hα₁)
+实例 [广义度量空间
+  签名: X] : 广义度量空间 (Snowflaking X α hα₀ hα₁)
   定义体: .ofT0PseudoEMetricSpace _
 
 Depends on / 依赖: ofT0PseudoEMetricSpace
@@ -1418,7 +1418,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (Snowflaking X α hα₀ hα₁)
+  签名: 伪度量空间 (Snowflaking X α hα₀ hα₁)
   定义体: letI aux : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
     PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist
       (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
@@ -1701,8 +1701,8 @@ instance [MetricSpace
   body: .ofT0PseudoMetricSpace _
 
 中文:
-实例 [MetricSpace
-  签名: X] : MetricSpace (Snowflaking X α hα₀ hα₁)
+实例 [度量空间
+  签名: X] : 度量空间 (Snowflaking X α hα₀ hα₁)
   定义体: .ofT0PseudoMetricSpace _
 
 Depends on / 依赖: ofT0PseudoMetricSpace

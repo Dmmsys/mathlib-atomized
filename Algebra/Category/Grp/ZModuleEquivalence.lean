@@ -40,7 +40,7 @@ instance forget₂_addCommGroup_full
 
 中文:
 实例 forget₂_addCommGroup_full
-  签名: : (forget₂ (ModuleCat 整数) AddCommGrpCat.{u}).Full where
+  签名: : (forget₂ (模范畴 整数) 加法交换群范畴.{u}).满 where
   定义体: ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule
             @LinearMap.mk _ _ _ _ _ _ _ _ _ A.isModule B.isModule
             { toFun := f,
@@ -76,7 +76,7 @@ instance forget₂_addCommGrp_essSurj
 
 中文:
 实例 forget₂_addCommGrp_essSurj
-  签名: : (forget₂ (ModuleCat 整数) AddCommGrpCat.{u}).EssSurj where
+  签名: : (forget₂ (模范畴 整数) 加法交换群范畴.{u}).本质满射 where
   定义体: ⟨ModuleCat.of Int A,
       ⟨{ hom := 𝟙 A
           inv := 𝟙 A }⟩⟩

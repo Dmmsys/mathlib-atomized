@@ -34,7 +34,7 @@ theorem rtendsto_nhds
 
 中文:
 定理 rtendsto_nhds
-  条件: {r : SetRel Y X} {l : Filter Y} {x : X}
+  条件: {r : SetRel Y X} {l : 滤子 Y} {x : X}
   证明: all_mem_nhds_filter _ _ (fun _s _t => id) _
 
 Depends on / 依赖: all_mem_nhds_filter
@@ -56,7 +56,7 @@ theorem rtendsto'_nhds
 
 中文:
 定理 rtendsto'_nhds
-  条件: {r : SetRel Y X} {l : Filter Y} {x : X}
+  条件: {r : SetRel Y X} {l : 滤子 Y} {x : X}
   证明: by
   rw [rtendsto'_def]
   apply all_mem_nhds_filter
@@ -80,7 +80,7 @@ theorem ptendsto_nhds
 
 中文:
 定理 ptendsto_nhds
-  条件: {f : Y ->. X} {l : Filter Y} {x : X}
+  条件: {f : Y ->. X} {l : 滤子 Y} {x : X}
   证明: rtendsto_nhds
 
 Depends on / 依赖: rtendsto_nhds
@@ -99,7 +99,7 @@ theorem ptendsto'_nhds
 
 中文:
 定理 ptendsto'_nhds
-  条件: {f : Y ->. X} {l : Filter Y} {x : X}
+  条件: {f : Y ->. X} {l : 滤子 Y} {x : X}
   证明: rtendsto'_nhds
 
 Depends on / 依赖: _nhds, rtendsto
@@ -144,7 +144,7 @@ theorem open_dom_of_pcontinuous
 中文:
 定理 open_dom_of_pcontinuous
   条件: {f : X ->. Y} (h : PContinuous f)
-  结论: IsOpen f.Dom
+  结论: 是开集 f.Dom
   证明: by
   rw [← PFun.preimage_univ]; exact h _ isOpen_univ
 
@@ -221,7 +221,7 @@ theorem continuousWithinAt_iff_ptendsto_res
 
 中文:
 定理 continuousWithinAt_iff_ptendsto_res
-  条件: (f : X -> Y) {x : X} {s : Set X}
+  条件: (f : X -> Y) {x : X} {s : 集合 X}
   证明: tendsto_iff_ptendsto _ _ _ _
 
 Depends on / 依赖: tendsto_iff_ptendsto

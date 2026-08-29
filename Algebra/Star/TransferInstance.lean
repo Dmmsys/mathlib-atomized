@@ -32,7 +32,7 @@ abbreviation star
 
 中文:
 缩写 star
-  签名: [Star S]
+  签名: [对合 S]
   定义体: e.invFun (star (e.toFun r))
 -/
 protected abbrev star [Star S] : Star R where
@@ -71,7 +71,7 @@ abbreviation starMul
 
 中文:
 缩写 starMul
-  签名: [Mul S] [StarMul S]
+  签名: [乘法 S] [StarMul S]
   定义体: e.mul
     StarMul R := by
   let := e.star
@@ -99,7 +99,7 @@ abbreviation starAddMonoid
 
 中文:
 缩写 starAddMonoid
-  签名: [AddMonoid S] [StarAddMonoid S]
+  签名: [加法幺半群 S] [StarAdd幺半群 S]
   定义体: e.addMonoid
     StarAddMonoid R := by
   let := e.star
@@ -127,7 +127,7 @@ abbreviation starRing
 
 中文:
 缩写 starRing
-  签名: [NonUnitalNonAssocSemiring S] [StarRing S]
+  签名: [非幺非结合半环 S] [对合环 S]
   定义体: e.nonUnitalNonAssocSemiring
     StarRing R := by
   let := e.star

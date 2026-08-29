@@ -60,7 +60,7 @@ theorem exists_mem_stabilizer_isThreeCycle_of_two_lt_ncard
   aesop
 
 中文:
-定理 exists_mem_stabilizer_isThreeCycle_of_two_lt_ncard
+定理 存在_mem_stabilizer_isThreeCycle_of_two_lt_ncard
   证明: by
   rw [two_lt_ncard_iff] at hs
   obtain ⟨a, b, c, ha, hb, hc, hab, hac, hbc⟩ := hs
@@ -94,7 +94,7 @@ theorem exists_mem_stabilizer_isThreeCycle
     exact exists_mem_stabilizer_isThreeCycle_of_two_lt_ncard (by grind)
 
 中文:
-定理 exists_mem_stabilizer_isThreeCycle
+定理 存在_mem_stabilizer_isThreeCycle
   证明: by
   rcases Nat.lt_or_ge 2 (ncard s) with hs | hs
   · exact exists_mem_stabilizer_isThreeCycle_of_two_lt_ncard hs
@@ -168,7 +168,7 @@ theorem stabilizer.surjective_toPerm
 
 中文:
 定理 stabilizer.surjective_toPerm
-  条件: {s : Set α} (hs : sᶜ.Nontrivial)
+  条件: {s : 集合 α} (hs : sᶜ.非平凡)
   证明: by
   classical
   have : exists k : Perm α, IsSwap k ∧ _root_.Disjoint s k.support := by
@@ -221,7 +221,7 @@ theorem stabilizer_isPreprimitive
 
 中文:
 定理 stabilizer_isPreprimitive
-  条件: {s : Set α} (hs : (sᶜ : Set α).Nontrivial)
+  条件: {s : 集合 α} (hs : (sᶜ : 集合 α).非平凡)
   证明: isPreprimitive_stabilizer_of_surjective s (stabilizer.surjective_toPerm hs)
 
 Depends on / 依赖: isPreprimitive_stabilizer_of_surjective, stabilizer, stabilizer.surjective_toPerm, surjective_toPerm
@@ -246,7 +246,7 @@ theorem stabilizer_subgroup_isPreprimitive
 
 中文:
 定理 stabilizer_subgroup_isPreprimitive
-  结论: {s : Set α} (hsc : sᶜ.Nontrivial)
+  结论: {s : 集合 α} (hsc : sᶜ.非平凡)
   证明: have := stabilizer_isPreprimitive hsc
   let φ (g : stabilizer (alternatingGroup α) s) : stabilizer G s :=
       ⟨⟨g, hG g.prop⟩, g.prop⟩
@@ -284,7 +284,7 @@ theorem stabilizer_ne_top
 
 中文:
 定理 stabilizer_ne_top
-  条件: {s : Set α} (hs : s.Nonempty) (hsc : sᶜ.Nontrivial)
+  条件: {s : 集合 α} (hs : s.非空) (hsc : sᶜ.非平凡)
   证明: by
   obtain ⟨a, ha⟩ := hs
   obtain ⟨b, hb, c, hc, hbc⟩ := hsc
@@ -323,8 +323,8 @@ theorem exists_mem_stabilizer_smul_eq
     refine ⟨⟨swap c a * swap a b, by si
 
 中文:
-定理 exists_mem_stabilizer_smul_eq
-  条件: (hα : 4 <= 自然数.card α) {t : Set α}
+定理 存在_mem_stabilizer_smul_eq
+  条件: (hα : 4 <= 自然数.card α) {t : 集合 α}
   证明: by
   intro a ha b hb
   by_cases hab : a = b
@@ -465,7 +465,7 @@ theorem isCoatom_stabilizer_of_ncard_lt_ncard_compl
 
 中文:
 定理 isCoatom_stabilizer_of_ncard_lt_ncard_compl
-  结论: {s : Set α}
+  结论: {s : 集合 α}
   证明: by
   have := ncard_add_ncard_compl s
   have h1 : sᶜ.Nontrivial := by
@@ -598,7 +598,7 @@ theorem isCoatom_stabilizer
 
 中文:
 定理 isCoatom_stabilizer
-  结论: {s : Set α}
+  结论: {s : 集合 α}
   证明: by
   rw [← ncard_add_ncard_compl s]; rw [two_mul]; rw [ne_eq]; rw [Nat.add_left_cancel_iff] at hs
   wlog hs' : ncard s < ncard sᶜ

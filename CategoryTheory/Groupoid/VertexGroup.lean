@@ -87,7 +87,7 @@ theorem vertexGroup.inv_eq_inv
 中文:
 定理 vertexGroup.inv_eq_inv
   条件: (c : C) (γ : c ⟶ c)
-  结论: γ⁻¹ = CategoryTheory.inv γ
+  结论: γ⁻¹ = 范畴论.inv γ
   证明: Groupoid.inv_eq_inv γ
 
 Depends on / 依赖: Groupoid, Groupoid.inv_eq_inv, inv_eq_inv
@@ -150,7 +150,7 @@ definition vertexGroupIsomOfPath
 
 中文:
 定义 vertexGroupIsomOfPath
-  签名: {c d : C} (p : Quiver.Path c d)
+  签名: {c d : C} (p : 箭图.道路 c d)
   定义体: vertexGroupIsomOfMap (composePath p)
 
 Depends on / 依赖: composePath, vertexGroupIsomOfMap
@@ -171,8 +171,8 @@ definition _root_.CategoryTheory.Functor.mapVertexGroup
   map_mul' := φ.map_comp
 
 中文:
-定义 _root_.CategoryTheory.Functor.mapVertexGroup
-  签名: {D : 类型v} [Groupoid D] (φ : C ⥤ D) (c : C)
+定义 _root_.范畴论.函子.mapVertexGroup
+  签名: {D : 类型v} [群胚 D] (φ : C ⥤ D) (c : C)
   定义体: φ.map
   map_one' := φ.map_id c
   map_mul' := φ.map_comp

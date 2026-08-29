@@ -56,7 +56,7 @@ theorem image_smul_setₛₗ
 
 中文:
 定理 image_smul_setₛₗ
-  条件: (f : F) (c : M) (s : Set α)
+  条件: (f : F) (c : M) (s : 集合 α)
   证明: Semiconj.set_image (map_smulₛₗ f c) s
 
 @[to_additive]
@@ -78,9 +78,9 @@ theorem Set.MapsTo.smul_setₛₗ
   proof: Function.Semiconj.mapsTo_image_right (map_smulₛₗ _ _) hst
 
 中文:
-定理 Set.MapsTo.smul_setₛₗ
-  条件: (hst : MapsTo f s t) (c : M)
-  结论: MapsTo f (c • s) (σ c • t)
+定理 集合.映射到.smul_setₛₗ
+  条件: (hst : 映射到 f s t) (c : M)
+  结论: 映射到 f (c • s) (σ c • t)
   证明: Function.Semiconj.mapsTo_image_right (map_smulₛₗ _ _) hst
 
 Depends on / 依赖: Function, Function.Semiconj.mapsTo_image_right, Semiconj, mapsTo_image_right
@@ -101,7 +101,7 @@ theorem smul_preimage_set_subsetₛₗ
 
 中文:
 定理 smul_preimage_set_subsetₛₗ
-  条件: (f : F) (c : M) (t : Set β)
+  条件: (f : F) (c : M) (t : 集合 β)
   结论: c • f ⁻¹' t subseteq f ⁻¹' (σ c • t)
   证明: ((mapsTo_preimage f t).smul_setₛₗ c).subset_preimage
 
@@ -194,8 +194,8 @@ theorem IsUnit.preimage_smul_setₛₗ
   proof: preimage_smul_setₛₗ_of_isUnit_isUnit _ hc (hc.map _) _
 
 中文:
-定理 IsUnit.preimage_smul_setₛₗ
-  结论: {F G : 类型} [FunLike G M N] [MonoidHomClass G M N]
+定理 是单位.preimage_smul_setₛₗ
+  结论: {F G : 类型} [函数状 G M N] [幺半群态射类 G M N]
   证明: preimage_smul_setₛₗ_of_isUnit_isUnit _ hc (hc.map _) _
 
 Depends on / 依赖: hc.map
@@ -218,8 +218,8 @@ theorem MonoidHom.preimage_smul_setₛₗ
   proof: hc.preimage_smul_setₛₗ σ f t
 
 中文:
-定理 MonoidHom.preimage_smul_setₛₗ
-  结论: {F : 类型} (σ : M ->* N) [FunLike F α β]
+定理 幺半群态射.preimage_smul_setₛₗ
+  结论: {F : 类型} (σ : M ->* N) [函数状 F α β]
   证明: hc.preimage_smul_setₛₗ σ f t
 -/
 protected theorem MonoidHom.preimage_smul_setₛₗ {F : Type*} (σ : M ->* N) [FunLike F α β]
@@ -240,8 +240,8 @@ theorem Group.preimage_smul_setₛₗ
   proof: preimage_smul_setₛₗ_of_isUnit_isUnit _ (Group.isUnit _) (Group.isUnit _) _
 
 中文:
-定理 Group.preimage_smul_setₛₗ
-  结论: {G H α β : 类型} [Group G] [Group H] (σ : G -> H)
+定理 群.preimage_smul_setₛₗ
+  结论: {G H α β : 类型} [群 G] [群 H] (σ : G -> H)
   证明: preimage_smul_setₛₗ_of_isUnit_isUnit _ (Group.isUnit _) (Group.isUnit _) _
 
 Depends on / 依赖: Group.isUnit, isUnit
@@ -274,7 +274,7 @@ theorem image_smul_set
 
 中文:
 定理 image_smul_set
-  条件: (f : F) (c : M) (s : Set α)
+  条件: (f : F) (c : M) (s : 集合 α)
   结论: f '' (c • s) = c • f '' s
   证明: image_smul_setₛₗ f c s
 
@@ -297,7 +297,7 @@ theorem smul_preimage_set_subset
 
 中文:
 定理 smul_preimage_set_subset
-  条件: (f : F) (c : M) (t : Set β)
+  条件: (f : F) (c : M) (t : 集合 β)
   结论: c • f ⁻¹' t subseteq f ⁻¹' (c • t)
   证明: smul_preimage_set_subsetₛₗ f c t
 
@@ -316,8 +316,8 @@ theorem Set.MapsTo.smul_set
   proof: hst.smul_setₛₗ c
 
 中文:
-定理 Set.MapsTo.smul_set
-  条件: {f : F} {s : Set α} {t : Set β} (hst : MapsTo f s t) (c : M)
+定理 集合.映射到.smul_set
+  条件: {f : F} {s : 集合 α} {t : 集合 β} (hst : 映射到 f s t) (c : M)
   证明: hst.smul_setₛₗ c
 
 Depends on / 依赖: hst.smul_set
@@ -338,8 +338,8 @@ theorem IsUnit.preimage_smul_set
   proof: preimage_smul_setₛₗ_of_isUnit_isUnit f hc hc t
 
 中文:
-定理 IsUnit.preimage_smul_set
-  结论: {M α β F : 类型} [Monoid M] [MulAction M α] [MulAction M β]
+定理 是单位.preimage_smul_set
+  结论: {M α β F : 类型} [幺半群 M] [乘法作用 M α] [乘法作用 M β]
   证明: preimage_smul_setₛₗ_of_isUnit_isUnit f hc hc t
 -/
 theorem IsUnit.preimage_smul_set {M α β F : Type*} [Monoid M] [MulAction M α] [MulAction M β]
@@ -359,8 +359,8 @@ theorem Group.preimage_smul_set
   proof: (Group.isUnit c).preimage_smul_set f t
 
 中文:
-定理 Group.preimage_smul_set
-  结论: {G : 类型} [Group G] {α β : 类型} [MulAction G α] [MulAction G β]
+定理 群.preimage_smul_set
+  结论: {G : 类型} [群 G] {α β : 类型} [乘法作用 G α] [乘法作用 G β]
   证明: (Group.isUnit c).preimage_smul_set f t
 
 Depends on / 依赖: Group.isUnit, isUnit, preimage_smul_set

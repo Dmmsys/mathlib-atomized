@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace Rat
+  签名: 度量空间 有理数
   定义体: fast_instance% MetricSpace.induced (↑) Rat.cast_injective Real.metricSpace
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, Rat.cast_injective, Real.metricSpace, cast_injective, fast_instance, induced, metricSpace
@@ -55,7 +55,7 @@ theorem dist_eq
 
 中文:
 定理 dist_eq
-  条件: (x y : Rat)
+  条件: (x y : 有理数)
   结论: dist x y = |(x : 实数) - y|
   证明: rfl
 
@@ -75,7 +75,7 @@ theorem dist_cast
 
 中文:
 定理 dist_cast
-  条件: (x y : Rat)
+  条件: (x y : 有理数)
   结论: dist (x : 实数) y = dist x y
   证明: rfl
 -/
@@ -92,7 +92,7 @@ theorem uniformContinuous_coe_real
 
 中文:
 定理 uniformContinuous_coe_real
-  结论: UniformContinuous ((↑) : Rat -> 实数)
+  结论: 一致连续 ((↑) : 有理数 -> 实数)
   证明: uniformContinuous_comap
 
 Depends on / 依赖: uniformContinuous_comap
@@ -110,7 +110,7 @@ theorem isUniformEmbedding_coe_real
 
 中文:
 定理 isUniformEmbedding_coe_real
-  结论: IsUniformEmbedding ((↑) : Rat -> 实数)
+  结论: 是一致嵌入 ((↑) : 有理数 -> 实数)
   证明: isUniformEmbedding_comap Rat.cast_injective
 
 Depends on / 依赖: Rat.cast_injective, cast_injective, isUniformEmbedding_comap
@@ -128,7 +128,7 @@ theorem isDenseEmbedding_coe_real
 
 中文:
 定理 isDenseEmbedding_coe_real
-  结论: IsDenseEmbedding ((↑) : Rat -> 实数)
+  结论: 是稠密嵌入 ((↑) : 有理数 -> 实数)
   证明: isUniformEmbedding_coe_real.isDenseEmbedding Rat.denseRange_cast
 
 Depends on / 依赖: Rat.denseRange_cast, denseRange_cast, isDenseEmbedding, isUniformEmbedding_coe_real, isUniformEmbedding_coe_real.isDenseEmbedding
@@ -146,7 +146,7 @@ theorem isEmbedding_coe_real
 
 中文:
 定理 isEmbedding_coe_real
-  结论: IsEmbedding ((↑) : Rat -> 实数)
+  结论: 是嵌入 ((↑) : 有理数 -> 实数)
   证明: isDenseEmbedding_coe_real.isEmbedding
 
 Depends on / 依赖: isDenseEmbedding_coe_real, isDenseEmbedding_coe_real.isEmbedding, isEmbedding
@@ -164,7 +164,7 @@ theorem continuous_coe_real
 
 中文:
 定理 continuous_coe_real
-  结论: Continuous ((↑) : Rat -> 实数)
+  结论: 连续 ((↑) : 有理数 -> 实数)
   证明: uniformContinuous_coe_real.continuous
 
 Depends on / 依赖: continuous, uniformContinuous_coe_real, uniformContinuous_coe_real.continuous
@@ -186,9 +186,9 @@ theorem Nat.dist_cast_rat
   rw [← Nat.dist_cast_real]; rw [← Rat.dist_cast]; congr
 
 中文:
-定理 Nat.dist_cast_rat
+定理 自然数.dist_cast_rat
   条件: (x y : 自然数)
-  结论: dist (x : Rat) y = dist x y
+  结论: dist (x : 有理数) y = dist x y
   证明: by
   rw [← Nat.dist_cast_real]; rw [← Rat.dist_cast]; congr
 
@@ -206,8 +206,8 @@ theorem Nat.isUniformEmbedding_coe_rat
   proof: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
 
 中文:
-定理 Nat.isUniformEmbedding_coe_rat
-  结论: IsUniformEmbedding ((↑) : 自然数 -> Rat)
+定理 自然数.isUniformEmbedding_coe_rat
+  结论: 是一致嵌入 ((↑) : 自然数 -> 有理数)
   证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
 
 Depends on / 依赖: Nat.pairwise_one_le_dist, isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -226,8 +226,8 @@ theorem Nat.isClosedEmbedding_coe_rat
 @[norm_cast, simp]
 
 中文:
-定理 Nat.isClosedEmbedding_coe_rat
-  结论: IsClosedEmbedding ((↑) : 自然数 -> Rat)
+定理 自然数.isClosedEmbedding_coe_rat
+  结论: 是闭嵌入 ((↑) : 自然数 -> 有理数)
   证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
 
 @[norm_cast, simp]
@@ -249,9 +249,9 @@ theorem Int.dist_cast_rat
   rw [← Int.dist_cast_real]; rw [← Rat.dist_cast]; congr
 
 中文:
-定理 Int.dist_cast_rat
+定理 整数.dist_cast_rat
   条件: (x y : 整数)
-  结论: dist (x : Rat) y = dist x y
+  结论: dist (x : 有理数) y = dist x y
   证明: by
   rw [← Int.dist_cast_real]; rw [← Rat.dist_cast]; congr
 
@@ -269,8 +269,8 @@ theorem Int.isUniformEmbedding_coe_rat
   proof: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
 
 中文:
-定理 Int.isUniformEmbedding_coe_rat
-  结论: IsUniformEmbedding ((↑) : 整数 -> Rat)
+定理 整数.isUniformEmbedding_coe_rat
+  结论: 是一致嵌入 ((↑) : 整数 -> 有理数)
   证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
 
 Depends on / 依赖: Int.pairwise_one_le_dist, isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -287,8 +287,8 @@ theorem Int.isClosedEmbedding_coe_rat
   proof: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
 
 中文:
-定理 Int.isClosedEmbedding_coe_rat
-  结论: IsClosedEmbedding ((↑) : 整数 -> Rat)
+定理 整数.isClosedEmbedding_coe_rat
+  结论: 是闭嵌入 ((↑) : 整数 -> 有理数)
   证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
 
 Depends on / 依赖: Int.pairwise_one_le_dist, isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -308,7 +308,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace Rat
+  签名: Noncompact空间 有理数
   定义体: Int.isClosedEmbedding_coe_rat.noncompactSpace
 
 Depends on / 依赖: Int.isClosedEmbedding_coe_rat.noncompactSpace, isClosedEmbedding_coe_rat, noncompactSpace
@@ -328,7 +328,7 @@ theorem uniformContinuous_add
 
 中文:
 定理 uniformContinuous_add
-  结论: UniformContinuous fun p : Rat × Rat => p.1 + p.2
+  结论: 一致连续 fun p : 有理数 × 有理数 => p.1 + p.2
   证明: Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff.2 by
     simp only [Function.comp_def, Rat.cast_add]
     exact Real.uniformContinuous_add.comp
@@ -354,7 +354,7 @@ theorem uniformContinuous_neg
 
 中文:
 定理 uniformContinuous_neg
-  结论: UniformContinuous (@Neg.neg Rat _)
+  结论: 一致连续 (@取负.neg 有理数 _)
   证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨_, ε0, fun _ _ h => by
       simpa only [abs_sub_comm, dist_eq, cast_neg, neg_sub_neg] using h⟩
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformAddGroup Rat
+  签名: 是UniformAdd群 有理数
   定义体: IsUniformAddGroup.mk' Rat.uniformContinuous_add Rat.uniformContinuous_neg
 
 Depends on / 依赖: IsUniformAddGroup, IsUniformAddGroup.mk, Rat.uniformContinuous_add, Rat.uniformContinuous_neg, uniformContinuous_add, uniformContinuous_neg
@@ -394,7 +394,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalAddGroup Rat
+  签名: 是拓扑加群 有理数
   定义体: inferInstance
 -/
 instance : IsTopologicalAddGroup Rat := inferInstance
@@ -409,7 +409,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology Rat
+  签名: Order拓扑 有理数
   定义体: induced_orderTopology _ Rat.cast_lt exists_rat_btwn
 
 Depends on / 依赖: Rat.cast_lt, cast_lt, exists_rat_btwn, induced_orderTopology
@@ -428,7 +428,7 @@ theorem uniformContinuous_abs
 
 中文:
 定理 uniformContinuous_abs
-  结论: UniformContinuous (abs : Rat -> Rat)
+  结论: 一致连续 (abs : 有理数 -> 有理数)
   证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨ε, ε0, fun _ _ h =>
       lt_of_le_of_lt (by simpa [Rat.dist_eq] using abs_abs_sub_abs_le_abs_sub _ _) h⟩
@@ -455,7 +455,7 @@ nonrec theorem totallyBounded_Icc (a b : Rat) : TotallyBounded (Icc a b) := by
 
 中文:
 实例 :
-  签名: IsTopologicalRing Rat
+  签名: 是拓扑环 有理数
   定义体: inferInstance
 
 nonrec theorem totallyBounded_Icc (a b : Rat) : TotallyBounded (Icc a b) := by
@@ -484,7 +484,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace Rat>=0
+  签名: 度量空间 有理数>=0
   定义体: inferInstanceAs MetricSpace (Subtype _)
 
 Depends on / 依赖: MetricSpace, Subtype
@@ -505,8 +505,8 @@ lemma dist_eq
 
 中文:
 引理 dist_eq
-  条件: (p q : Rat>=0)
-  结论: dist p q = dist (p : Rat) (q : Rat)
+  条件: (p q : 有理数>=0)
+  结论: dist p q = dist (p : 有理数) (q : 有理数)
   证明: rfl
 -/
 lemma dist_eq (p q : Rat>=0) : dist p q = dist (p : Rat) (q : Rat) := rfl
@@ -524,8 +524,8 @@ lemma nndist_eq
 
 中文:
 引理 nndist_eq
-  条件: (p q : Rat>=0)
-  结论: nndist p q = nndist (p : Rat) (q : Rat)
+  条件: (p q : 有理数>=0)
+  结论: nndist p q = nndist (p : 有理数) (q : 有理数)
   证明: rfl
 -/
 lemma nndist_eq (p q : Rat>=0) : nndist p q = nndist (p : Rat) (q : Rat) := rfl
@@ -541,7 +541,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalSemiring Rat>=0
+  签名: 是TopologicalSemiring 有理数>=0
   定义体: continuousAdd_induced Nonneg.coeRingHom
   toContinuousMul := continuousMul_induced Nonneg.coeRingHom
 
@@ -561,7 +561,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSub Rat>=0
+  签名: 余ntinuousSub 有理数>=0
   定义体: ⟨Continuous.subtype_mk (by fun_prop) _⟩
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -578,7 +578,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology Rat>=0
+  签名: Order拓扑 有理数>=0
   定义体: orderTopology_of_ordConnected (t := Set.Ici 0)
 
 Depends on / 依赖: Set.Ici, orderTopology_of_ordConnected
@@ -594,7 +594,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousInv₀ Rat>=0
+  签名: 余ntinuousInv₀ 有理数>=0
   定义体: inferInstance
 -/
 instance : ContinuousInv₀ Rat>=0 := inferInstance
@@ -610,7 +610,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul Rat 实数
+  签名: 连续标量乘法 有理数 实数
   定义体: continuous_induced_dom.fst'.smul (M := Real) (X := Real) continuous_snd
 
 Depends on / 依赖: continuous_induced_dom, continuous_induced_dom.fst, continuous_snd
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul Rat>=0 NN实数
+  签名: 连续标量乘法 有理数>=0 非负实数
   定义体: Continuous.subtype_mk (by fun_prop) _
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk

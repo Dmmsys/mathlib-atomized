@@ -45,8 +45,8 @@ definition quotientZMultiplesNatEquivZMod
     quotientKerEquivOfRightInverse (Int.castAddHom (ZMod n)) cast intCast_zmod_cast
 
 中文:
-定义 quotientZMultiplesNatEquivZMod
-  签名: : 整数 ⧸ AddSubgroup.zmultiples (n : 整数) ≃+ ZMod n
+定义 quotientZMultiples自然数EquivZMod
+  签名: : 整数 ⧸ 加法子群.zmultiples (n : 整数) ≃+ ZMod n
   定义体: (quotientAddEquivOfEq (ZMod.ker_intCastAddHom _)).symm.trans
     quotientKerEquivOfRightInverse (Int.castAddHom (ZMod n)) cast intCast_zmod_cast
 
@@ -92,7 +92,7 @@ lemma index_zmultiples
 中文:
 引理 index_zmultiples
   条件: (a : 整数)
-  结论: (AddSubgroup.zmultiples a).index = a.natAbs
+  结论: (加法子群.zmultiples a).index = a.natAbs
   证明: by
   rw [AddSubgroup.index]; rw [Nat.card_congr (quotientZMultiplesEquivZMod a).toEquiv]; rw [Nat.card_zmod]
 
@@ -245,8 +245,8 @@ definition _root_.AddAction.orbitZMultiplesEquiv
     (zmultiplesQuotientStabilizerEquiv a b).toEquiv
 
 中文:
-定义 _root_.AddAction.orbitZMultiplesEquiv
-  签名: {α β : 类型} [AddGroup α] (a : α)
+定义 _root_.加法作用.orbitZMultiplesEquiv
+  签名: {α β : 类型} [加法群 α] (a : α)
   定义体: (AddAction.orbitEquivQuotientStabilizer (zmultiples a) b).trans
     (zmultiplesQuotientStabilizerEquiv a b).toEquiv
 
@@ -316,8 +316,8 @@ theorem _root_.AddAction.orbitZMultiplesEquiv_symm_apply'
   exact Subtype.ext (zsmul_vadd_mod_minimalPeriod a _ k)
 
 中文:
-定理 _root_.AddAction.orbitZMultiplesEquiv_symm_apply'
-  结论: {α β : 类型} [AddGroup α] (a : α)
+定理 _root_.加法作用.orbitZMultiplesEquiv_symm_apply'
+  结论: {α β : 类型} [加法群 α] (a : α)
   证明: by
   rw [AddAction.orbitZMultiplesEquiv_symm_apply]; rw [ZMod.coe_intCast]
   -- Making `a` explicit turns this from ~190000 heartbeats to ~700.
@@ -350,7 +350,7 @@ theorem minimalPeriod_eq_card
 
 中文:
 定理 minimalPeriod_eq_card
-  条件: [Fintype (orbit (zpowers a) b)]
+  条件: [有限类型 (orbit (zpowers a) b)]
   证明: by
   rw [← Fintype.ofEquiv_card (orbitZPowersEquiv a b)]; rw [ZMod.card]
 
@@ -377,7 +377,7 @@ instance minimalPeriod_pos
 
 中文:
 实例 minimalPeriod_pos
-  签名: [Finite <| orbit (zpowers a) b]
+  签名: [有限 <| orbit (zpowers a) b]
   定义体: ⟨by
     cases nonempty_fintype (orbit (zpowers a) b)
     have : Nonempty (orbit (zpowers a) b) := (nonempty_orbit b).to_subtype
@@ -415,7 +415,7 @@ theorem Nat.card_zpowers
   rwa [Nat.card_zmod, orbit_subgroup_one_eq_self] at this
 
 中文:
-定理 Nat.card_zpowers
+定理 自然数.card_zpowers
   结论: 自然数.card (zpowers a) = orderOf a
   证明: by
   have := Nat.card_congr (MulAction.orbitZPowersEquiv a (1 : α))
@@ -444,7 +444,7 @@ lemma finite_zpowers
 
 中文:
 引理 finite_zpowers
-  结论: (zpowers a : Set α).Finite ↔ IsOfFinOrder a
+  结论: (zpowers a : 集合 α).有限 ↔ IsOfFinOrder a
   证明: by
   simp only [← orderOf_pos_iff, ← Nat.card_zpowers, Nat.card_pos_iff, ← SetLike.coe_sort_coe,
     nonempty_coe_sort, Nat.card_pos_iff, Set.finite_coe_iff, OneMemClass.coe_nonempty, true_and]
@@ -471,7 +471,7 @@ protected alias ⟨_, IsOfFinOrder.finite_zpowers⟩ := finite_zpowers
 
 中文:
 引理 infinite_zpowers
-  结论: (zpowers a : Set α).Infinite ↔ ¬IsOfFinOrder a
+  结论: (zpowers a : 集合 α).无限 ↔ ¬IsOfFinOrder a
   证明: finite_zpowers.not
 
 @[to_additive]
@@ -523,7 +523,7 @@ lemma quotientEquivSigmaZMod_symm_apply
 
 中文:
 引理 quotientEquivSigmaZMod_symm_apply
-  结论: (q : orbitRel.Quotient (zpowers g) (G ⧸ H))
+  结论: (q : orbitRel.商 (zpowers g) (G ⧸ H))
   证明: rfl
 -/
 lemma quotientEquivSigmaZMod_symm_apply (q : orbitRel.Quotient (zpowers g) (G ⧸ H))
@@ -541,7 +541,7 @@ lemma quotientEquivSigmaZMod_apply
 
 中文:
 引理 quotientEquivSigmaZMod_apply
-  条件: (q : orbitRel.Quotient (zpowers g) (G ⧸ H)) (k : 整数)
+  条件: (q : orbitRel.商 (zpowers g) (G ⧸ H)) (k : 整数)
   证明: by
   rw [← eq_symm_apply]; rw [quotientEquivSigmaZMod_symm_apply]; rw [ZMod.coe_intCast]; rw [zpow_smul_mod_minimalPeriod]
 
@@ -567,7 +567,7 @@ lemma index_eq_sum_minimalPeriod
 
 中文:
 引理 index_eq_sum_minimalPeriod
-  结论: (g : G) [Finite (G ⧸ H)]
+  结论: (g : G) [有限 (G ⧸ H)]
   证明: by
   have : Fintype (G ⧸ H) := Fintype.ofFinite _
   have (q : Quotient (MulAction.orbitRel (zpowers g) (G ⧸ H))) :

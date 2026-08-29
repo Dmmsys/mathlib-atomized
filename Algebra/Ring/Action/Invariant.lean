@@ -39,7 +39,7 @@ class IsInvariantSubring
     - smul_mem : forall (m : M) {x : R}, x in S -> m • x in S
 
 中文:
-类 IsInvariantSubring
+类 是不变子环
   参数: : 命题 where
   公理与运算 (1 个):
     - smul_mem : 对任意 (m : M) {x : R}, x in S -> m • x in S
@@ -62,8 +62,8 @@ smul_one m := Subtype.ext smul_one m
 smul_mul m s₁ s₂ :=
 
 中文:
-实例 IsInvariantSubring.toMulSemiringAction
-  签名: [IsInvariantSubring M S]
+实例 是不变子环.toMulSemiringAction
+  签名: [是不变子环 M S]
   定义体: ⟨m • ↑x, IsInvariantSubring.smul_mem m x.2⟩
 one_smul s := Subtype.ext one_smul M (s : R)
 mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
@@ -103,7 +103,7 @@ definition IsInvariantSubring.subtypeHom
 @[simp]
 
 中文:
-定义 IsInvariantSubring.subtypeHom
+定义 是不变子环.subtypeHom
   签名: : U ->+*[M] R'
   定义体: { U.subtype with map_smul' := fun _ _ => rfl }
 
@@ -125,7 +125,7 @@ theorem IsInvariantSubring.coe_subtypeHom
 @[simp]
 
 中文:
-定理 IsInvariantSubring.coe_subtypeHom
+定理 是不变子环.coe_subtypeHom
   证明: rfl
 
 @[simp]
@@ -142,7 +142,7 @@ theorem IsInvariantSubring.coe_subtypeHom'
   proof: rfl
 
 中文:
-定理 IsInvariantSubring.coe_subtypeHom'
+定理 是不变子环.coe_subtypeHom'
   证明: rfl
 -/
 theorem IsInvariantSubring.coe_subtypeHom' :

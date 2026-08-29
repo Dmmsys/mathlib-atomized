@@ -63,7 +63,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Grp (类型u) ⥤ GrpCat.{u} where
+  签名: : 群 (类型u) ⥤ 群范畴.{u} where
   定义体: GrpCat.of A.X
   map f := GrpCat.ofHom (MonTypeEquivalenceMon.functor.map f.hom).hom
 
@@ -92,7 +92,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : GrpCat.{u} ⥤ Grp (类型u) where
+  签名: : 群范畴.{u} ⥤ 群 (类型u) where
   定义体: { MonTypeEquivalenceMon.inverse.obj ((forget₂ GrpCat MonCat).obj A) with
       grp :=
         { inv := ↾((·⁻¹) : A -> A)
@@ -136,7 +136,7 @@ definition grpTypeEquivalenceGrp
 
 中文:
 定义 grpTypeEquivalenceGrp
-  签名: : Grp (类型u) ≌ GrpCat.{u} where
+  签名: : 群 (类型u) ≌ 群范畴.{u} where
   定义体: GrpTypeEquivalenceGrp.functor
   inverse := GrpTypeEquivalenceGrp.inverse
   unitIso := Iso.refl _

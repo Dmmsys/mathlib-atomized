@@ -253,7 +253,7 @@ theorem fixedBy_one_eq_univ
 
 中文:
 定理 fixedBy_one_eq_univ
-  结论: fixedBy α (1 : M) = Set.univ
+  结论: fixedBy α (1 : M) = 集合.univ
   证明: Set.eq_univ_iff_forall.mpr one_smul M
 
 Depends on / 依赖: Set.eq_univ_iff_forall.mpr, eq_univ_iff_forall, one_smul
@@ -325,7 +325,7 @@ lemma fixedBy_mul_eq_empty_iff
 
 中文:
 引理 fixedBy_mul_eq_empty_iff
-  条件: [IsRightCancelMul M] {m : M}
+  条件: [右乘消去 M] {m : M}
   证明: by
   simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
 
@@ -346,7 +346,7 @@ lemma fixedBy_mul_op_eq_empty_iff
 
 中文:
 引理 fixedBy_mul_op_eq_empty_iff
-  条件: [IsLeftCancelMul M] {m : M}
+  条件: [左乘消去 M] {m : M}
   证明: by
   simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
 
@@ -386,7 +386,7 @@ theorem set_mem_fixedBy_iff
 
 中文:
 定理 set_mem_fixedBy_iff
-  条件: (s : Set α) (g : G)
+  条件: (s : 集合 α) (g : G)
   证明: by
   simp_rw [mem_fixedBy, ← eq_inv_smul_iff, Set.ext_iff, Set.mem_inv_smul_set_iff, Iff.comm]
 
@@ -409,7 +409,7 @@ theorem smul_mem_of_set_mem_fixedBy
 
 中文:
 定理 smul_mem_of_set_mem_fixedBy
-  结论: {s : Set α} {g : G} (s_in_fixedBy : s in fixedBy (Set α) g)
+  结论: {s : 集合 α} {g : G} (s_in_fixedBy : s in fixedBy (集合 α) g)
   证明: (set_mem_fixedBy_iff s g).mp s_in_fixedBy x
 
 Depends on / 依赖: s_in_fixedBy, set_mem_fixedBy_iff
@@ -443,7 +443,7 @@ theorem set_mem_fixedBy_of_subset_fixedBy
 
 中文:
 定理 set_mem_fixedBy_of_subset_fixedBy
-  条件: {s : Set α} {g : G} (s_ss_fixedBy : s subseteq fixedBy α g)
+  条件: {s : 集合 α} {g : G} (s_ss_fixedBy : s subseteq fixedBy α g)
   证明: by
   rw [← fixedBy_inv]
   ext x
@@ -473,7 +473,7 @@ theorem smul_subset_of_set_mem_fixedBy
 
 中文:
 定理 smul_subset_of_set_mem_fixedBy
-  结论: {s t : Set α} {g : G} (t_ss_s : t subseteq s)
+  结论: {s t : 集合 α} {g : G} (t_ss_s : t subseteq s)
   证明: (Set.smul_set_subset_smul_set_iff.mpr t_ss_s).trans s_in_fixedBy.subset
 
 Depends on / 依赖: Set.smul_set_subset_smul_set_iff.mpr, s_in_fixedBy, s_in_fixedBy.subset, smul_set_subset_smul_set_iff, subset, t_ss_s
@@ -509,7 +509,7 @@ theorem set_mem_fixedBy_of_movedBy_subset
 
 中文:
 定理 set_mem_fixedBy_of_movedBy_subset
-  条件: {s : Set α} {g : G} (s_subset : (fixedBy α g)ᶜ subseteq s)
+  条件: {s : 集合 α} {g : G} (s_subset : (fixedBy α g)ᶜ subseteq s)
   证明: by
   rw [← fixedBy_inv]
   ext a
@@ -679,7 +679,7 @@ theorem fixedBy_eq_univ_iff_eq_one
 中文:
 定理 fixedBy_eq_univ_iff_eq_one
   条件: {m : M}
-  结论: fixedBy α m = Set.univ ↔ m = 1
+  结论: fixedBy α m = 集合.univ ↔ m = 1
   证明: by
   rw [← (smul_left_injective' (M := M) (α := α)).eq_iff]; rw [Set.eq_univ_iff_forall]
   simp_rw [funext_iff, one_smul, mem_fixedBy]
@@ -743,7 +743,7 @@ lemma map_mem_fixedPoints
 
 中文:
 引理 map_mem_fixedPoints
-  结论: {G A B : 类型} [Monoid G] [MulAction G A] [MulAction G B]
+  结论: {G A B : 类型} [幺半群 G] [乘法作用 G A] [乘法作用 G B]
   证明: by
   intro ⟨h, _⟩
   simp_all [← f.map_smul h a]
@@ -769,7 +769,7 @@ lemma map_mem_fixedBy
 
 中文:
 引理 map_mem_fixedBy
-  结论: {G A B : 类型} [Monoid G] [MulAction G A] [MulAction G B]
+  结论: {G A B : 类型} [幺半群 G] [乘法作用 G A] [乘法作用 G B]
   证明: by
   simpa using congr_arg f ha
 

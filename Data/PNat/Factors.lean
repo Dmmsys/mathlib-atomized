@@ -102,7 +102,7 @@ definition toNatMultiset
   body: fun v => v.map (↑)
 
 中文:
-定义 toNatMultiset
+定义 to自然数Multiset
   签名: : PrimeMultiset -> Multiset 自然数
   定义体: fun v => v.map (↑)
 
@@ -119,7 +119,7 @@ instance coeNat
   body: ⟨toNatMultiset⟩
 
 中文:
-实例 coeNat
+实例 coe自然数
   签名: : Coe PrimeMultiset (Multiset 自然数)
   定义体: ⟨toNatMultiset⟩
 
@@ -139,7 +139,7 @@ definition coeNatMonoidHom
 @[simp]
 
 中文:
-定义 coeNatMonoidHom
+定义 coe自然数MonoidHom
   签名: : PrimeMultiset ->+ Multiset 自然数
   定义体: Multiset.mapAddMonoidHom (↑)
 
@@ -160,7 +160,7 @@ theorem coe_coeNatMonoidHom
   proof: rfl
 
 中文:
-定理 coe_coeNatMonoidHom
+定理 coe_coe自然数MonoidHom
   结论: (coe自然数MonoidHom : PrimeMultiset -> Multiset 自然数) = (↑)
   证明: rfl
 -/
@@ -176,8 +176,8 @@ theorem coeNat_injective
   proof: Multiset.map_injective Nat.Primes.coe_nat_injective
 
 中文:
-定理 coeNat_injective
-  结论: Function.Injective ((↑) : PrimeMultiset -> Multiset 自然数)
+定理 coe自然数_injective
+  结论: 函数.单射 ((↑) : PrimeMultiset -> Multiset 自然数)
   证明: Multiset.map_injective Nat.Primes.coe_nat_injective
 
 Depends on / 依赖: Multiset, Multiset.map_injective, Nat.Primes.coe_nat_injective, Primes, coe_nat_injective, map_injective
@@ -195,7 +195,7 @@ theorem coeNat_ofPrime
   proof: rfl
 
 中文:
-定理 coeNat_ofPrime
+定理 coe自然数_ofPrime
   条件: (p : 自然数.Primes)
   结论: (ofPrime p : Multiset 自然数) = {(p : 自然数)}
   证明: rfl
@@ -215,9 +215,9 @@ theorem coeNat_prime
   exact h_eq ▸ hp'
 
 中文:
-定理 coeNat_prime
+定理 coe自然数_prime
   条件: (v : PrimeMultiset) (p : 自然数) (h : p in (v : Multiset 自然数))
-  结论: p.Prime
+  结论: p.素
   证明: by
   rcases Multiset.mem_map.mp h with ⟨⟨_, hp'⟩, ⟨_, h_eq⟩⟩
   exact h_eq ▸ hp'
@@ -237,7 +237,7 @@ definition toPNatMultiset
   body: fun v => v.map (↑)
 
 中文:
-定义 toPNatMultiset
+定义 toP自然数Multiset
   签名: : PrimeMultiset -> Multiset 自然数+
   定义体: fun v => v.map (↑)
 
@@ -254,7 +254,7 @@ instance coePNat
   body: ⟨toPNatMultiset⟩
 
 中文:
-实例 coePNat
+实例 coeP自然数
   签名: : Coe PrimeMultiset (Multiset 自然数+)
   定义体: ⟨toPNatMultiset⟩
 
@@ -274,7 +274,7 @@ definition coePNatMonoidHom
 @[simp]
 
 中文:
-定义 coePNatMonoidHom
+定义 coeP自然数MonoidHom
   签名: : PrimeMultiset ->+ Multiset 自然数+
   定义体: Multiset.mapAddMonoidHom (↑)
 
@@ -295,7 +295,7 @@ theorem coe_coePNatMonoidHom
   proof: rfl
 
 中文:
-定理 coe_coePNatMonoidHom
+定理 coe_coeP自然数MonoidHom
   结论: (coeP自然数MonoidHom : PrimeMultiset -> Multiset 自然数+) = (↑)
   证明: rfl
 -/
@@ -311,8 +311,8 @@ theorem coePNat_injective
   proof: Multiset.map_injective Nat.Primes.coe_pnat_injective
 
 中文:
-定理 coePNat_injective
-  结论: Function.Injective ((↑) : PrimeMultiset -> Multiset 自然数+)
+定理 coeP自然数_injective
+  结论: 函数.单射 ((↑) : PrimeMultiset -> Multiset 自然数+)
   证明: Multiset.map_injective Nat.Primes.coe_pnat_injective
 
 Depends on / 依赖: Multiset, Multiset.map_injective, Nat.Primes.coe_pnat_injective, Primes, coe_pnat_injective, map_injective
@@ -330,7 +330,7 @@ theorem coePNat_ofPrime
   proof: rfl
 
 中文:
-定理 coePNat_ofPrime
+定理 coeP自然数_ofPrime
   条件: (p : 自然数.Primes)
   结论: (ofPrime p : Multiset 自然数+) = {(p : 自然数+)}
   证明: rfl
@@ -350,9 +350,9 @@ theorem coePNat_prime
   exact h_eq ▸ hp'
 
 中文:
-定理 coePNat_prime
+定理 coeP自然数_prime
   条件: (v : PrimeMultiset) (p : 自然数+) (h : p in (v : Multiset 自然数+))
-  结论: p.Prime
+  结论: p.素
   证明: by
   rcases Multiset.mem_map.mp h with ⟨⟨_, hp'⟩, ⟨_, h_eq⟩⟩
   exact h_eq ▸ hp'
@@ -372,7 +372,7 @@ instance coeMultisetPNatNat
   body: ⟨fun v => v.map (↑)⟩
 
 中文:
-实例 coeMultisetPNatNat
+实例 coeMultisetP自然数自然数
   签名: : Coe (Multiset 自然数+) (Multiset 自然数)
   定义体: ⟨fun v => v.map (↑)⟩
 
@@ -395,7 +395,7 @@ theorem coePNat_nat
   rfl
 
 中文:
-定理 coePNat_nat
+定理 coeP自然数_nat
   条件: (v : PrimeMultiset)
   结论: ((v : Multiset 自然数+) : Multiset 自然数) = (v : Multiset 自然数)
   证明: by
@@ -419,7 +419,7 @@ definition prod
   body: (v : Multiset PNat).prod
 
 中文:
-定义 prod
+定义 乘积
   签名: (v : PrimeMultiset)
   定义体: (v : Multiset PNat).prod
 
@@ -444,7 +444,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (v : PrimeMultiset)
-  结论: (v.prod : 自然数) = (v : Multiset 自然数).prod
+  结论: (v.乘积 : 自然数) = (v : Multiset 自然数).乘积
   证明: by
   have h : (v.prod : Nat) = ((v.map (↑) : Multiset Nat+).map (↑)).prod :=
     PNat.coeMonoidHom.map_multiset_prod v.toPNatMultiset
@@ -469,7 +469,7 @@ theorem prod_ofPrime
 中文:
 定理 prod_ofPrime
   条件: (p : 自然数.Primes)
-  结论: (ofPrime p).prod = (p : 自然数+)
+  结论: (ofPrime p).乘积 = (p : 自然数+)
   证明: Multiset.prod_singleton _
 
 Depends on / 依赖: Multiset, Multiset.prod_singleton, prod_singleton
@@ -486,8 +486,8 @@ definition ofNatMultiset
   body: @Multiset.pmap Nat Nat.Primes Nat.Prime (fun p hp => ⟨p, hp⟩) v h
 
 中文:
-定义 ofNatMultiset
-  签名: (v : Multiset 自然数) (h : 对任意 p : 自然数, p in v -> p.Prime)
+定义 of自然数Multiset
+  签名: (v : Multiset 自然数) (h : 对任意 p : 自然数, p in v -> p.素)
   定义体: @Multiset.pmap Nat Nat.Primes Nat.Prime (fun p hp => ⟨p, hp⟩) v h
 
 Depends on / 依赖: Multiset, Multiset.pmap, Nat.Prime, Nat.Primes, Primes
@@ -509,7 +509,7 @@ theorem mem_ofNatMultiset
   simp
 
 中文:
-定理 mem_ofNatMultiset
+定理 mem_of自然数Multiset
   条件: {p : 自然数+} {s : Multiset 自然数} (hs)
   证明: by
   simp only [ofNatMultiset, toPNatMultiset, Multiset.map_pmap, Multiset.mem_pmap, Nat.Primes.toPNat,
@@ -540,7 +540,7 @@ theorem to_ofNatMultiset
 @[simp]
 
 中文:
-定理 to_ofNatMultiset
+定理 to_of自然数Multiset
   条件: (v : Multiset 自然数) (h)
   结论: (of自然数Multiset v h : Multiset 自然数) = v
   证明: by
@@ -565,7 +565,7 @@ theorem prod_ofNatMultiset
   proof: by rw [coe_prod, to_ofNatMultiset]
 
 中文:
-定理 prod_ofNatMultiset
+定理 prod_of自然数Multiset
   条件: (v : Multiset 自然数) (h)
   证明: by rw [coe_prod, to_ofNatMultiset]
 
@@ -583,8 +583,8 @@ definition ofPNatMultiset
   body: @Multiset.pmap Nat+ Nat.Primes PNat.Prime (fun p hp => ⟨(p : Nat), hp⟩) v h
 
 中文:
-定义 ofPNatMultiset
-  签名: (v : Multiset 自然数+) (h : 对任意 p : 自然数+, p in v -> p.Prime)
+定义 ofP自然数Multiset
+  签名: (v : Multiset 自然数+) (h : 对任意 p : 自然数+, p in v -> p.素)
   定义体: @Multiset.pmap Nat+ Nat.Primes PNat.Prime (fun p hp => ⟨(p : Nat), hp⟩) v h
 
 Depends on / 依赖: Multiset, Multiset.pmap, Nat.Primes, PNat.Prime, Primes
@@ -612,7 +612,7 @@ theorem to_ofPNatMultiset
 @[simp]
 
 中文:
-定理 to_ofPNatMultiset
+定理 to_ofP自然数Multiset
   条件: (v : Multiset 自然数+) (h)
   结论: (ofP自然数Multiset v h : Multiset 自然数+) = v
   证明: by
@@ -648,9 +648,9 @@ theorem prod_ofPNatMultiset
   rw [to_ofPNatMultiset]
 
 中文:
-定理 prod_ofPNatMultiset
+定理 prod_ofP自然数Multiset
   条件: (v : Multiset 自然数+) (h)
-  结论: ((ofP自然数Multiset v h).prod : 自然数+) = v.prod
+  结论: ((ofP自然数Multiset v h).乘积 : 自然数+) = v.乘积
   证明: by
   dsimp [prod]
   rw [to_ofPNatMultiset]
@@ -670,8 +670,8 @@ definition ofNatList
   body: ofNatMultiset (l : Multiset Nat) h
 
 中文:
-定义 ofNatList
-  签名: (l : List 自然数) (h : 对任意 p : 自然数, p in l -> p.Prime)
+定义 of自然数List
+  签名: (l : 列表 自然数) (h : 对任意 p : 自然数, p in l -> p.素)
   定义体: ofNatMultiset (l : Multiset Nat) h
 
 Depends on / 依赖: Multiset, ofNatMultiset
@@ -693,8 +693,8 @@ theorem mem_ofNatList
 @[simp]
 
 中文:
-定理 mem_ofNatList
-  条件: {p : 自然数+} {l : List 自然数} (hl)
+定理 mem_of自然数List
+  条件: {p : 自然数+} {l : 列表 自然数} (hl)
   证明: by
   simp [ofNatList]
 
@@ -720,9 +720,9 @@ theorem prod_ofNatList
   exact this
 
 中文:
-定理 prod_ofNatList
-  条件: (l : List 自然数) (h)
-  结论: ((of自然数List l h).prod : 自然数) = l.prod
+定理 prod_of自然数List
+  条件: (l : 列表 自然数) (h)
+  结论: ((of自然数List l h).乘积 : 自然数) = l.乘积
   证明: by
   have := prod_ofNatMultiset (l : Multiset Nat) h
   rw [Multiset.prod_coe] at this
@@ -744,8 +744,8 @@ definition ofPNatList
   body: ofPNatMultiset (l : Multiset Nat+) h
 
 中文:
-定义 ofPNatList
-  签名: (l : List 自然数+) (h : 对任意 p : 自然数+, p in l -> p.Prime)
+定义 ofP自然数List
+  签名: (l : 列表 自然数+) (h : 对任意 p : 自然数+, p in l -> p.素)
   定义体: ofPNatMultiset (l : Multiset Nat+) h
 
 Depends on / 依赖: Multiset, ofPNatMultiset
@@ -768,8 +768,8 @@ theorem toPNatMultiset_ofPNatList
 @[simp]
 
 中文:
-定理 toPNatMultiset_ofPNatList
-  条件: {l : List 自然数+} (hl)
+定理 toP自然数Multiset_ofP自然数List
+  条件: {l : 列表 自然数+} (hl)
   结论: (ofP自然数List l hl : Multiset 自然数+) = l
   证明: by
   simp [ofPNatList]
@@ -795,9 +795,9 @@ theorem prod_ofPNatList
   exact this
 
 中文:
-定理 prod_ofPNatList
-  条件: (l : List 自然数+) (h)
-  结论: (ofP自然数List l h).prod = l.prod
+定理 prod_ofP自然数List
+  条件: (l : 列表 自然数+) (h)
+  结论: (ofP自然数List l h).乘积 = l.乘积
   证明: by
   have := prod_ofPNatMultiset (l : Multiset Nat+) h
   rw [Multiset.prod_coe] at this
@@ -826,7 +826,7 @@ theorem prod_zero
 
 中文:
 定理 prod_zero
-  结论: (0 : PrimeMultiset).prod = 1
+  结论: (0 : PrimeMultiset).乘积 = 1
   证明: by
   exact Multiset.prod_zero
 
@@ -855,7 +855,7 @@ theorem prod_add
 中文:
 定理 prod_add
   条件: (u v : PrimeMultiset)
-  结论: (u + v).prod = u.prod * v.prod
+  结论: (u + v).乘积 = u.乘积 * v.乘积
   证明: by
   change (coePNatMonoidHom (u + v)).prod = _
   rw [coePNatMonoidHom.map_add]
@@ -886,7 +886,7 @@ theorem prod_smul
 中文:
 定理 prod_smul
   条件: (d : 自然数) (u : PrimeMultiset)
-  结论: (d • u).prod = u.prod ^ d
+  结论: (d • u).乘积 = u.乘积 ^ d
   证明: by
   induction d with
   | zero => simp only [zero_nsmul, pow_zero, prod_zero]
@@ -938,7 +938,7 @@ theorem prod_factorMultiset
 中文:
 定理 prod_factorMultiset
   条件: (n : 自然数+)
-  结论: (factorMultiset n).prod = n
+  结论: (factorMultiset n).乘积 = n
   证明: eq by
     dsimp [factorMultiset]
     rw [PrimeMultiset.prod_ofNatList]
@@ -963,7 +963,7 @@ theorem coeNat_factorMultiset
 @[simp]
 
 中文:
-定理 coeNat_factorMultiset
+定理 coe自然数_factorMultiset
   条件: (n : 自然数+)
   证明: PrimeMultiset.to_ofNatMultiset (Nat.primeFactorsList n) (@Nat.prime_of_mem_primeFactorsList n)
 
@@ -989,7 +989,7 @@ theorem mem_factorMultiset
 中文:
 定理 mem_factorMultiset
   条件: {p n : 自然数+}
-  结论: p in (n.factorMultiset : Multiset 自然数+) ↔ p.Prime ∧ p ∣ n
+  结论: p in (n.factorMultiset : Multiset 自然数+) ↔ p.素 ∧ p ∣ n
   证明: by
   simp [factorMultiset, dvd_iff, PNat.Prime]
 
@@ -1025,7 +1025,7 @@ theorem factorMultiset_prod
 中文:
 定理 factorMultiset_prod
   条件: (v : PrimeMultiset)
-  结论: v.prod.factorMultiset = v
+  结论: v.乘积.factorMultiset = v
   证明: by
   apply PrimeMultiset.coeNat_injective
   rw [v.prod.coeNat_factorMultiset]; rw [PrimeMultiset.coe_prod]
@@ -1304,7 +1304,7 @@ theorem prod_dvd_iff
 中文:
 定理 prod_dvd_iff
   条件: {u v : PrimeMultiset}
-  结论: u.prod ∣ v.prod ↔ u <= v
+  结论: u.乘积 ∣ v.乘积 ↔ u <= v
   证明: by
   let h := @PNat.factorMultiset_le_iff' u.prod v
   rw [u.factorMultiset_prod] at h
@@ -1336,7 +1336,7 @@ theorem prod_dvd_iff'
 中文:
 定理 prod_dvd_iff'
   条件: {u : PrimeMultiset} {n : 自然数+}
-  结论: u.prod ∣ n ↔ u <= n.factorMultiset
+  结论: u.乘积 ∣ n ↔ u <= n.factorMultiset
   证明: by
   let h := @prod_dvd_iff u n.factorMultiset
   rw [n.prod_factorMultiset] at h
@@ -1500,7 +1500,7 @@ theorem prod_inf
 中文:
 定理 prod_inf
   条件: (u v : PrimeMultiset)
-  结论: (u ⊓ v).prod = P自然数.gcd u.prod v.prod
+  结论: (u ⊓ v).乘积 = 正自然数.最大公约数 u.乘积 v.乘积
   证明: by
   let n := u.prod
   let m := v.prod
@@ -1537,7 +1537,7 @@ theorem prod_sup
 中文:
 定理 prod_sup
   条件: (u v : PrimeMultiset)
-  结论: (u ⊔ v).prod = P自然数.lcm u.prod v.prod
+  结论: (u ⊔ v).乘积 = 正自然数.最小公倍数 u.乘积 v.乘积
   证明: by
   let n := u.prod
   let m := v.prod

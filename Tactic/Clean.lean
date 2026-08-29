@@ -31,7 +31,7 @@ definition cleanConsts
 
 中文:
 定义 cleanConsts
-  签名: : List Name
+  签名: : 列表 Name
   定义体: [``id]
 -/
 def cleanConsts : List Name :=
@@ -107,7 +107,7 @@ let e ← Term.withSynthesize Term.elabTerm t expectedType?
 
 中文:
 定义 elabClean
-  签名: : Term.TermElab
+  签名: : 项.TermElab
   定义体: fun stx expectedType? =>
   match stx with
   | `(clean% $t) => do

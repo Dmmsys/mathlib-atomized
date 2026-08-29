@@ -57,7 +57,7 @@ instance compactOpen
 
 中文:
 实例 compactOpen
-  签名: : TopologicalSpace C(X, Y)
+  签名: : 拓扑空间 C(X, Y)
   定义体: .generateFrom image2 (fun K U => {f | MapsTo f K U}) {K | IsCompact K} {U | IsOpen U}
 
 Depends on / 依赖: IsCompact, IsOpen, MapsTo, generateFrom, image2
@@ -94,7 +94,7 @@ theorem isOpen_setOfPred_mapsTo
 
 中文:
 定理 isOpen_setOfPred_mapsTo
-  条件: (hK : IsCompact K) (hU : IsOpen U)
+  条件: (hK : 是紧集 K) (hU : 是开集 U)
   证明: isOpen_generateFrom_of_mem mem_image2_of_mem hK hU
 
 @[deprecated (since := "2026-07-09")] alias isOpen_setOf_mapsTo := isOpen_setOfPred_mapsTo
@@ -117,7 +117,7 @@ lemma eventually_mapsTo
 
 中文:
 引理 eventually_mapsTo
-  条件: {f : C(X, Y)} (hK : IsCompact K) (hU : IsOpen U) (h : MapsTo f K U)
+  条件: {f : C(X, Y)} (hK : 是紧集 K) (hU : 是开集 U) (h : 映射到 f K U)
   证明: (isOpen_setOfPred_mapsTo hK hU).mem_nhds h
 
 Depends on / 依赖: isOpen_setOfPred_mapsTo, mem_nhds
@@ -141,7 +141,7 @@ alias isOpen_setOf_range_subset := isOpen_setOfPred_range_subset
 
 中文:
 引理 isOpen_setOfPred_range_subset
-  条件: [CompactSpace X] (hU : IsOpen U)
+  条件: [紧空间 X] (hU : 是开集 U)
   证明: by
   simp_rw [← mapsTo_univ_iff_range_subset]
   exact isOpen_setOfPred_mapsTo isCompact_univ hU
@@ -169,7 +169,7 @@ lemma eventually_range_subset
 
 中文:
 引理 eventually_range_subset
-  条件: [CompactSpace X] {f : C(X, Y)} (hU : IsOpen U) (h : range f subseteq U)
+  条件: [紧空间 X] {f : C(X, Y)} (hU : 是开集 U) (h : range f subseteq U)
   证明: (isOpen_setOfPred_range_subset hU).mem_nhds h
 
 Depends on / 依赖: isOpen_setOfPred_range_subset, mem_nhds
@@ -214,7 +214,7 @@ lemma tendsto_nhds_compactOpen
 
 中文:
 引理 tendsto_nhds_compactOpen
-  条件: {l : Filter α} {f : α -> C(Y, Z)} {g : C(Y, Z)}
+  条件: {l : 滤子 α} {f : α -> C(Y, Z)} {g : C(Y, Z)}
   证明: by
   simp [nhds_compactOpen]
 
@@ -283,7 +283,7 @@ lemma mem_nhds_iff
 
 中文:
 引理 mem_nhds_iff
-  条件: {f : C(X, Y)} {s : Set C(X, Y)}
+  条件: {f : C(X, Y)} {s : 集合 C(X, Y)}
   证明: by
   simp [f.hasBasis_nhds.mem_iff, ← ofPred_forall, and_assoc]
 -/
@@ -308,7 +308,7 @@ lemma _root_.Filter.HasBasis.nhds_continuousMapConst
       rintro 
 
 中文:
-引理 _root_.Filter.HasBasis.nhds_continuousMapConst
+引理 _root_.滤子.有基.nhds_continuousMapConst
   结论: {ι : 类型} {c : Y} {p : ι -> 命题}
   证明: by
   refine ⟨fun s => ⟨fun hs => ?_, fun hs => ?_⟩⟩
@@ -360,7 +360,7 @@ theorem continuous_postcomp
 中文:
 定理 continuous_postcomp
   条件: (g : C(Y, Z))
-  结论: Continuous (ContinuousMap.comp g : C(X, Y) -> C(X, Z))
+  结论: 连续 (连续映射.comp g : C(X, Y) -> C(X, Z))
   证明: continuous_compactOpen.2 fun _K hK _U hU => isOpen_setOfPred_mapsTo hK (hU.preimage g.2)
 
 Depends on / 依赖: continuous_compactOpen, hU.preimage, isOpen_setOfPred_mapsTo, preimage
@@ -378,7 +378,7 @@ theorem postcomp_injective
 
 中文:
 定理 postcomp_injective
-  条件: (g : C(Y, Z)) (hg : Function.Injective g)
+  条件: (g : C(Y, Z)) (hg : 函数.单射 g)
   证明: fun _ _ => (cancel_left hg).1
 
 Depends on / 依赖: cancel_left
@@ -399,7 +399,7 @@ theorem isInducing_postcomp
 
 中文:
 定理 isInducing_postcomp
-  条件: (g : C(Y, Z)) (hg : IsInducing g)
+  条件: (g : C(Y, Z)) (hg : 是Inducing g)
   证明: by
     simp only [compactOpen_eq, induced_generateFrom_eq, image_image2, hg.setOfPred_isOpen,
       image2_image_right, MapsTo, mem_preimage, preimage_ofPred_eq, comp_apply]
@@ -422,7 +422,7 @@ theorem isEmbedding_postcomp
 
 中文:
 定理 isEmbedding_postcomp
-  条件: (g : C(Y, Z)) (hg : IsEmbedding g)
+  条件: (g : C(Y, Z)) (hg : 是嵌入 g)
   证明: ⟨isInducing_postcomp g hg.1, postcomp_injective g hg.2⟩
 
 Depends on / 依赖: isInducing_postcomp, postcomp_injective
@@ -446,7 +446,7 @@ theorem continuous_precomp
 中文:
 定理 continuous_precomp
   条件: (f : C(X, Y))
-  结论: Continuous (fun g => g.comp f : C(Y, Z) -> C(X, Z))
+  结论: 连续 (fun g => g.comp f : C(Y, Z) -> C(X, Z))
   证明: continuous_compactOpen.2 fun K hK U hU => by
     simpa only [mapsTo_image_iff] using! isOpen_setOfPred_mapsTo (hK.image f.2) hU
 
@@ -493,7 +493,7 @@ invFun f := .comp ψ.symm f.comp φ
 .comp continuous_preco
 
 中文:
-定义 _root_.Homeomorph.arrowCongr
+定义 _root_.同胚.arrowCongr
   签名: (φ : X ≃ₜ Z) (ψ : Y ≃ₜ T)
   定义体: .comp ψ f.comp φ.symm
 invFun f := .comp ψ.symm f.comp φ
@@ -525,7 +525,7 @@ lemma continuous_prodMk_const
 
 中文:
 引理 continuous_prodMk_const
-  结论: Continuous fun p : X × C(Y, Z) => prodMk (const Y p.1) p.2
+  结论: 连续 fun p : X × C(Y, Z) => prodMk (const Y p.1) p.2
   证明: by
   simp_rw [continuous_iff_continuousAt, ContinuousAt, ContinuousMap.tendsto_nhds_compactOpen]
   rintro ⟨r, f⟩ K hK U hU H
@@ -561,7 +561,7 @@ theorem continuous_comp'
 
 中文:
 定理 continuous_comp'
-  结论: Continuous fun x : C(X, Y) × C(Y, Z) => x.2.comp x.1
+  结论: 连续 fun x : C(X, Y) × C(Y, Z) => x.2.comp x.1
   证明: by
   simp_rw [continuous_iff_continuousAt, ContinuousAt, tendsto_nhds_compactOpen]
   intro ⟨f, g⟩ K hK U hU (hKU : MapsTo (g ∘ f) K U)
@@ -591,8 +591,8 @@ lemma _root_.Filter.Tendsto.compCM
   proof: (continuous_comp'.tendsto (f₀, g₀)).comp (hf.prodMk_nhds hg)
 
 中文:
-引理 _root_.Filter.Tendsto.compCM
-  结论: {α : 类型} {l : Filter α} {g : α -> C(Y, Z)} {g₀ : C(Y, Z)}
+引理 _root_.滤子.收敛.compCM
+  结论: {α : 类型} {l : 滤子 α} {g : α -> C(Y, Z)} {g₀ : C(Y, Z)}
   证明: (continuous_comp'.tendsto (f₀, g₀)).comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuous_comp, hf.prodMk_nhds, prodMk_nhds, tendsto
@@ -641,8 +641,8 @@ lemma _root_.Continuous.compCM
   proof: continuous_comp'.comp (hf.prodMk hg)
 
 中文:
-引理 _root_.Continuous.compCM
-  条件: (hg : Continuous g) (hf : Continuous f)
+引理 _root_.连续.compCM
+  条件: (hg : 连续 g) (hf : 连续 f)
   证明: continuous_comp'.comp (hf.prodMk hg)
 
 Depends on / 依赖: continuous_comp, hf.prodMk, prodMk
@@ -669,7 +669,7 @@ instance [LocallyCompactPair
 
 中文:
 实例 [LocallyCompactPair
-  签名: X Y] : ContinuousEval C(X, Y) X Y where
+  签名: X Y] : 余ntinuousEval C(X, Y) X Y where
   定义体: by
     simp_rw [continuous_iff_continuousAt, ContinuousAt, (nhds_basis_opens _).tendsto_right_iff]
     rintro ⟨f, x⟩ U ⟨hx : f x in U, hU : IsOpen U⟩
@@ -695,7 +695,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEvalConst C(X, Y) X Y
+  签名: 余ntinuousEvalConst C(X, Y) X Y
   定义体: continuous_def.2 fun U hU => by simpa using! isOpen_setOfPred_mapsTo isCompact_singleton hU
 
 Depends on / 依赖: continuous_def, isCompact_singleton, isOpen_setOfPred_mapsTo
@@ -717,7 +717,7 @@ alias isClosed_setOf_mapsTo := isClosed_setOfPred_mapsTo
 
 中文:
 引理 isClosed_setOfPred_mapsTo
-  条件: {t : Set Y} (ht : IsClosed t) (s : Set X)
+  条件: {t : 集合 Y} (ht : 是闭集 t) (s : 集合 X)
   证明: ht.setOfPred_mapsTo fun _ _ => continuous_eval_const _
 
 @[deprecated (since := "2026-07-09")]
@@ -746,7 +746,7 @@ lemma isClopen_setOfPred_mapsTo
 
 中文:
 引理 isClopen_setOfPred_mapsTo
-  条件: (hK : IsCompact K) (hU : IsClopen U)
+  条件: (hK : 是紧集 K) (hU : IsClopen U)
   证明: ⟨isClosed_setOfPred_mapsTo hU.isClosed K, isOpen_setOfPred_mapsTo hK hU.isOpen⟩
 
 @[deprecated (since := "2026-07-09")] alias isClopen_setOf_mapsTo := isClopen_setOfPred_mapsTo
@@ -811,7 +811,7 @@ lemma inseparable_coe
 中文:
 引理 inseparable_coe
   条件: {f g : C(X, Y)}
-  结论: Inseparable (f : X -> Y) g ↔ Inseparable f g
+  结论: 不可分 (f : X -> Y) g ↔ 不可分 f g
   证明: by
   simp only [inseparable_iff_specializes_and, specializes_coe]
 
@@ -829,8 +829,8 @@ instance [T0Space
   body: t0Space_of_injective_of_continuous DFunLike.coe_injective continuous_coeFun
 
 中文:
-实例 [T0Space
-  签名: Y] : T0Space C(X, Y)
+实例 [T0空间
+  签名: Y] : T0空间 C(X, Y)
   定义体: t0Space_of_injective_of_continuous DFunLike.coe_injective continuous_coeFun
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coeFun, t0Space_of_injective_of_continuous
@@ -849,8 +849,8 @@ instance [R0Space
     exact h.symm
 
 中文:
-实例 [R0Space
-  签名: Y] : R0Space C(X, Y) where
+实例 [R0空间
+  签名: Y] : R0空间 C(X, Y) where
   定义体: by
     rw [← specializes_coe] at h ⊢
     exact h.symm
@@ -871,8 +871,8 @@ instance [T1Space
   body: t1Space_of_injective_of_continuous DFunLike.coe_injective continuous_coeFun
 
 中文:
-实例 [T1Space
-  签名: Y] : T1Space C(X, Y)
+实例 [T1空间
+  签名: Y] : T1空间 C(X, Y)
   定义体: t1Space_of_injective_of_continuous DFunLike.coe_injective continuous_coeFun
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coeFun, t1Space_of_injective_of_continuous
@@ -889,8 +889,8 @@ instance [R1Space
   body: .of_continuous_specializes_imp continuous_coeFun fun _ _ => specializes_coe.1
 
 中文:
-实例 [R1Space
-  签名: Y] : R1Space C(X, Y)
+实例 [R1空间
+  签名: Y] : R1空间 C(X, Y)
   定义体: .of_continuous_specializes_imp continuous_coeFun fun _ _ => specializes_coe.1
 
 Depends on / 依赖: continuous_coeFun, of_continuous_specializes_imp, specializes_coe
@@ -907,8 +907,8 @@ instance [T2Space
   body: inferInstance
 
 中文:
-实例 [T2Space
-  签名: Y] : T2Space C(X, Y)
+实例 [T2空间
+  签名: Y] : T2空间 C(X, Y)
   定义体: inferInstance
 -/
 instance [T2Space Y] : T2Space C(X, Y) := inferInstance
@@ -927,8 +927,8 @@ instance [RegularSpace
     filter_upwards [mem_lift' (eventually_mapsTo hK hVo (maps
 
 中文:
-实例 [RegularSpace
-  签名: Y] : RegularSpace C(X, Y)
+实例 [正则空间
+  签名: Y] : 正则空间 C(X, Y)
   定义体: .of_lift'_closure_le fun f => by
     rw [← tendsto_id']; rw [tendsto_nhds_compactOpen]
     intro K hK U hU hf
@@ -957,8 +957,8 @@ instance [T3Space
   body: inferInstance
 
 中文:
-实例 [T3Space
-  签名: Y] : T3Space C(X, Y)
+实例 [T3空间
+  签名: Y] : T3空间 C(X, Y)
   定义体: inferInstance
 -/
 instance [T3Space Y] : T3Space C(X, Y) := inferInstance
@@ -1007,7 +1007,7 @@ lemma coe_homeoFnOfDiscrete
 
 中文:
 引理 coe_homeoFnOfDiscrete
-  结论: ⇑homeoFnOfDiscrete = (DFunLike.coe : C(X, Y) -> X -> Y)
+  结论: ⇑homeoFnOfDiscrete = (依赖函数状.coe : C(X, Y) -> X -> Y)
   证明: rfl
 -/
 @[simp] lemma coe_homeoFnOfDiscrete : ⇑homeoFnOfDiscrete = (DFunLike.coe : C(X, Y) -> X -> Y) := rfl
@@ -1039,7 +1039,7 @@ lemma isHomeomorph_coe
 
 中文:
 引理 isHomeomorph_coe
-  结论: IsHomeomorph ((⇑) : C(X, Y) -> X -> Y)
+  结论: 是同胚 ((⇑) : C(X, Y) -> X -> Y)
   证明: homeoFnOfDiscrete.isHomeomorph
 
 Depends on / 依赖: homeoFnOfDiscrete, homeoFnOfDiscrete.isHomeomorph, isHomeomorph
@@ -1061,8 +1061,8 @@ theorem continuous_restrict
 
 中文:
 定理 continuous_restrict
-  条件: (s : Set X)
-  结论: Continuous fun F : C(X, Y) => F.restrict s
+  条件: (s : 集合 X)
+  结论: 连续 fun F : C(X, Y) => F.restrict s
   证明: continuous_precomp restrict s .id X
 
 Depends on / 依赖: continuous_precomp, restrict
@@ -1080,7 +1080,7 @@ theorem compactOpen_le_induced
 
 中文:
 定理 compactOpen_le_induced
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: (continuous_restrict s).le_induced
 
 Depends on / 依赖: continuous_restrict, le_induced
@@ -1156,7 +1156,7 @@ theorem tendsto_compactOpen_restrict
 
 中文:
 定理 tendsto_compactOpen_restrict
-  结论: {ι : 类型} {l : Filter ι} {F : ι -> C(X, Y)} {f : C(X, Y)}
+  结论: {ι : 类型} {l : 滤子 ι} {F : ι -> C(X, Y)} {f : C(X, Y)}
   证明: (continuous_restrict s).continuousAt.tendsto.comp hFf
 
 Depends on / 依赖: continuousAt, continuousAt.tendsto.comp, continuous_restrict, tendsto
@@ -1177,8 +1177,8 @@ theorem tendsto_compactOpen_iff_forall
   simp [nhds_iInf, nhds_induced, Filter.tendsto_comap_iff, Function.comp_def]
 
 中文:
-定理 tendsto_compactOpen_iff_forall
-  条件: {ι : 类型} {l : Filter ι} (F : ι -> C(X, Y)) (f : C(X, Y))
+定理 tendsto_compactOpen_iff_对任意
+  条件: {ι : 类型} {l : 滤子 ι} (F : ι -> C(X, Y)) (f : C(X, Y))
   证明: by
   rw [compactOpen_eq_iInf_induced]
   simp [nhds_iInf, nhds_induced, Filter.tendsto_comap_iff, Function.comp_def]
@@ -1209,8 +1209,8 @@ theorem exists_tendsto_compactOpen_iff_forall
     have 
 
 中文:
-定理 exists_tendsto_compactOpen_iff_forall
-  结论: [WeaklyLocallyCompactSpace X] [T2Space Y]
+定理 存在_tendsto_compactOpen_iff_对任意
+  结论: [WeaklyLocallyCompact空间 X] [T2空间 Y]
   证明: by
   constructor
   · rintro ⟨f, hf⟩ s _
@@ -1291,7 +1291,7 @@ theorem image_coev
 
 中文:
 定理 image_coev
-  条件: {y : Y} (s : Set X)
+  条件: {y : Y} (s : 集合 X)
   结论: coev X Y y '' s = {y} ×ˢ s
   证明: by simp [singleton_prod]
 
@@ -1310,7 +1310,7 @@ theorem continuous_coev
 
 中文:
 定理 continuous_coev
-  结论: Continuous (coev X Y)
+  结论: 连续 (coev X Y)
   证明: ((continuous_prodMk_const (X := Y) (Y := X) (Z := X)).comp
     (.prodMk continuous_id (continuous_const (y := ContinuousMap.id _))) :)
 
@@ -1396,7 +1396,7 @@ theorem continuousOn_of_continuousOn_uncurry
 
 中文:
 定理 continuousOn_of_continuousOn_uncurry
-  结论: {s : Set X} (f : X -> C(Y, Z))
+  结论: {s : 集合 X} (f : X -> C(Y, Z))
   证明: continuousOn_iff_continuous_domRestrict.mpr continuous_of_continuous_uncurry _
     h.comp_continuous (continuous_subtype_val.prodMap continuous_id) (fun x => ⟨x.1.2, trivial⟩)
 
@@ -1421,7 +1421,7 @@ theorem continuous_curry
 
 中文:
 定理 continuous_curry
-  条件: [LocallyCompactSpace (X × Y)]
+  条件: [局部紧空间 (X × Y)]
   证明: by
   apply continuous_of_continuous_uncurry
   apply continuous_of_continuous_uncurry
@@ -1447,7 +1447,7 @@ theorem continuous_uncurry_of_continuous
 
 中文:
 定理 continuous_uncurry_of_continuous
-  条件: [LocallyCompactSpace Y] (f : C(X, C(Y, Z)))
+  条件: [局部紧空间 Y] (f : C(X, C(Y, Z)))
   证明: continuous_eval.comp f.continuous.prodMap continuous_id
 
 Depends on / 依赖: continuous, continuous_eval, continuous_eval.comp, continuous_id, f.continuous.prodMap, prodMap
@@ -1470,7 +1470,7 @@ definition uncurry
 
 中文:
 定义 uncurry
-  签名: [LocallyCompactSpace Y] (f : C(X, C(Y, Z)))
+  签名: [局部紧空间 Y] (f : C(X, C(Y, Z)))
   定义体: ⟨_, continuous_uncurry_of_continuous f⟩
 
 Depends on / 依赖: continuous_uncurry_of_continuous
@@ -1493,7 +1493,7 @@ theorem continuous_uncurry
 
 中文:
 定理 continuous_uncurry
-  条件: [LocallyCompactSpace X] [LocallyCompactSpace Y]
+  条件: [局部紧空间 X] [局部紧空间 Y]
   证明: by
   apply continuous_of_continuous_uncurry
   rw [← (Homeomorph.prodAssoc _ _ _).comp_continuous_iff']
@@ -1563,7 +1563,7 @@ theorem continuous_const'
 
 中文:
 定理 continuous_const'
-  结论: Continuous (const X : Y -> C(X, Y))
+  结论: 连续 (const X : Y -> C(X, Y))
   证明: const'.continuous
 
 Depends on / 依赖: continuous
@@ -1618,7 +1618,7 @@ lemma continuousOn_mkD_of_uncurry
 
 中文:
 引理 continuousOn_mkD_of_uncurry
-  结论: {s : Set T}
+  结论: {s : 集合 T}
   证明: by
   have (x) (hx : x in s) : Continuous (f x) := f_cont.comp_continuous
     (Continuous.prodMk_right x) fun _ => ⟨hx, trivial⟩
@@ -1655,7 +1655,7 @@ lemma continuous_mkD_restrict_of_uncurry
 
 中文:
 引理 continuous_mkD_restrict_of_uncurry
-  结论: {t : Set X}
+  结论: {t : 集合 X}
   证明: by
   have (x : _) : ContinuousOn (f x) t :=
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨trivial, hz⟩
@@ -1691,7 +1691,7 @@ lemma continuousOn_mkD_restrict_of_uncurry
 
 中文:
 引理 continuousOn_mkD_restrict_of_uncurry
-  结论: {s : Set T} {t : Set X}
+  结论: {s : 集合 T} {t : 集合 X}
   证明: by
   have (x) (hx : x in s) : ContinuousOn (f x) t :=
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
@@ -1739,7 +1739,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: [LocallyCompactSpace X] [LocallyCompactSpace Y]
+  签名: [局部紧空间 X] [局部紧空间 Y]
   定义体: ⟨⟨ContinuousMap.curry, uncurry, by intro; ext; rfl, by intro; ext; rfl⟩,
     continuous_curry, continuous_uncurry⟩
 
@@ -1768,7 +1768,7 @@ definition continuousMapOfUnique
 
 中文:
 定义 continuousMapOfUnique
-  签名: [Unique X]
+  签名: [唯一 X]
   定义体: const X
   invFun f := f default
   right_inv f := by
@@ -1804,7 +1804,7 @@ theorem continuousMapOfUnique_apply
 
 中文:
 定理 continuousMapOfUnique_apply
-  条件: [Unique X] (y : Y) (x : X)
+  条件: [唯一 X] (y : Y) (x : X)
   结论: continuousMapOfUnique y x = y
   证明: rfl
 
@@ -1824,7 +1824,7 @@ theorem continuousMapOfUnique_symm_apply
 
 中文:
 定理 continuousMapOfUnique_symm_apply
-  条件: [Unique X] (f : C(X, Y))
+  条件: [唯一 X] (f : C(X, Y))
   证明: rfl
 -/
 theorem continuousMapOfUnique_symm_apply [Unique X] (f : C(X, Y)) :
@@ -1856,8 +1856,8 @@ theorem Topology.IsQuotientMap.continuous_lift_prod_left
 
 
 中文:
-定理 Topology.IsQuotientMap.continuous_lift_prod_left
-  结论: (hf : IsQuotientMap f) {g : X × Y -> Z}
+定理 拓扑.是商映射.continuous_lift_prod_left
+  结论: (hf : 是商映射 f) {g : X × Y -> Z}
   证明: by
   let Gf : C(X₀, C(Y, Z)) := ContinuousMap.curry ⟨_, hg⟩
   have h : forall x : X, Continuous fun y => g (x, y) := by
@@ -1897,8 +1897,8 @@ theorem Topology.IsQuotientMap.continuous_lift_prod_right
   exact (hf.continuous_lift_prod_left this).comp continuous_swap
 
 中文:
-定理 Topology.IsQuotientMap.continuous_lift_prod_right
-  结论: (hf : IsQuotientMap f) {g : Y × X -> Z}
+定理 拓扑.是商映射.continuous_lift_prod_right
+  结论: (hf : 是商映射 f) {g : Y × X -> Z}
   证明: by
   have : Continuous fun p : X₀ × Y => g ((Prod.swap p).1, f (Prod.swap p).2) :=
     hg.comp continuous_swap

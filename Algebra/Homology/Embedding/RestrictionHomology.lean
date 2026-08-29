@@ -54,7 +54,7 @@ definition sc'Iso
 include hi hk hi' hj' hk' hi'' hk'' in
 
 中文:
-定义 sc'Iso
+定义 sc'同构
   签名: : (K.restriction e).sc' i j k ≅ K.sc' i' j' k'
   定义体: ShortComplex.isoMk (K.restrictionXIso e hi') (K.restrictionXIso e hj') (K.restrictionXIso e hk')
     (by subst hi' hj'; simp [restrictionXIso])
@@ -83,8 +83,8 @@ lemma hasHomology
 
 中文:
 引理 hasHomology
-  条件: [K.HasHomology j']
-  结论: (K.restriction e).HasHomology j
+  条件: [K.有同调 j']
+  结论: (K.restriction e).有同调 j
   证明: ShortComplex.hasHomology_of_iso (K.isoSc' i' j' k' hi'' hk'' ≪≫
     (sc'Iso K e i j k hi' hj' hk' hi'' hk'').symm ≪≫
     ((K.restriction e).isoSc' i j k hi hk).symm)

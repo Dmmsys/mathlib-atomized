@@ -69,7 +69,7 @@ structure ContDiffBump
     - rIn_lt_rOut : rIn < rOut
 
 中文:
-结构 ContDiffBump
+结构 余ntDiffBump
   参数: (c : E)
   公理与运算 (3 个):
     - (rIn(rOut) : 实数)
@@ -97,15 +97,15 @@ structure ContDiffBumpBase
     - support : forall R : Real, 1 < R -> Function.support (toFun R) = Metric.ball (0 : E) R
 
 中文:
-结构 ContDiffBumpBase
-  参数: (E : 类型) [NormedAddCommGroup E] [NormedSpace 实数 E]
+结构 余ntDiffBumpBase
+  参数: (E : 类型) [赋范交换加群 E] [赋范空间 实数 E]
   公理与运算 (6 个):
     - toFun : 实数 -> E -> 实数
-    - mem_Icc : 对任意 (R : 实数) (x : E), toFun R x in Icc (0 : 实数) 1
+    - mem_Icc : 对任意 (R : 实数) (x : E), toFun R x in 闭区间 (0 : 实数) 1
     - symmetric : 对任意 (R : 实数) (x : E), toFun R (-x) = toFun R x
-    - smooth : ContDiffOn 实数 ∞ (uncurry toFun) (Ioi (1 : 实数) ×ˢ (univ : Set E))
+    - smooth : ContDiffOn 实数 ∞ (uncurry toFun) (左开右无界区间 (1 : 实数) ×ˢ (univ : 集合 E))
     - eq_one : 对任意 R : 实数, 1 < R -> 对任意 x : E, ‖x‖ <= 1 -> toFun R x = 1
-    - support : 对任意 R : 实数, 1 < R -> Function.support (toFun R) = Metric.ball (0 : E) R
+    - support : 对任意 R : 实数, 1 < R -> 函数.support (toFun R) = Metric.ball (0 : E) R
 -/
 structure ContDiffBumpBase (E : Type*) [NormedAddCommGroup E] [NormedSpace Real E] where
   /-- The function underlying this family of bump functions -/
@@ -126,10 +126,10 @@ class HasContDiffBump
     - out : Nonempty (ContDiffBumpBase E)
 
 中文:
-类 HasContDiffBump
-  参数: (E : 类型) [NormedAddCommGroup E] [NormedSpace 实数 E]
+类 有余ntDiffBump
+  参数: (E : 类型) [赋范交换加群 E] [赋范空间 实数 E]
   公理与运算 (1 个):
-    - out : Nonempty (ContDiffBumpBase E)
+    - out : 非空 (余ntDiffBumpBase E)
 -/
 class HasContDiffBump (E : Type*) [NormedAddCommGroup E] [NormedSpace Real E] : Prop where
   out : Nonempty (ContDiffBumpBase E)
@@ -144,7 +144,7 @@ definition someContDiffBumpBase
 
 中文:
 定义 someContDiffBumpBase
-  签名: (E : 类型) [NormedAddCommGroup E] [NormedSpace 实数 E]
+  签名: (E : 类型) [赋范交换加群 E] [赋范空间 实数 E]
   定义体: Nonempty.some hb.out
 
 Depends on / 依赖: Nonempty, Nonempty.some, hb.out
@@ -166,7 +166,7 @@ theorem rOut_pos
 
 中文:
 定理 rOut_pos
-  条件: {c : E} (f : ContDiffBump c)
+  条件: {c : E} (f : 余ntDiffBump c)
   结论: 0 < f.rOut
   证明: f.rIn_pos.trans f.rIn_lt_rOut
 
@@ -188,7 +188,7 @@ theorem one_lt_rOut_div_rIn
 
 中文:
 定理 one_lt_rOut_div_rIn
-  条件: {c : E} (f : ContDiffBump c)
+  条件: {c : E} (f : 余ntDiffBump c)
   结论: 1 < f.rOut / f.rIn
   证明: by
   rw [one_lt_div f.rIn_pos]
@@ -216,7 +216,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: {c : E} (f : ContDiffBump c)
+  签名: {c : E} (f : 余ntDiffBump c)
   定义体: (someContDiffBumpBase E).toFun (f.rOut / f.rIn) ∘ fun x => (f.rIn⁻¹ • (x - c))
 -/
 @[coe] def toFun {c : E} (f : ContDiffBump c) : E -> Real :=
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (ContDiffBump c) fun _ => E -> 实数
+  签名: CoeFun (余ntDiffBump c) fun _ => E -> 实数
   定义体: ⟨toFun⟩
 -/
 instance : CoeFun (ContDiffBump c) fun _ => E -> Real :=
@@ -287,7 +287,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: (f : ContDiffBump (0 : E)) (x : E)
+  条件: (f : 余ntDiffBump (0 : E)) (x : E)
   结论: f (-x) = f x
   证明: by
   simp_rw [← zero_sub, f.sub, zero_add]
@@ -394,7 +394,7 @@ theorem support_eq
 
 中文:
 定理 support_eq
-  结论: Function.support f = Metric.ball c f.rOut
+  结论: 函数.support f = Metric.ball c f.rOut
   证明: by
   simp only [toFun, support_comp_eq_preimage, ContDiffBumpBase.support _ _ f.one_lt_rOut_div_rIn]
   ext x
@@ -483,7 +483,7 @@ theorem hasCompactSupport
 
 中文:
 定理 hasCompactSupport
-  条件: [FiniteDimensional 实数 E]
+  条件: [有限维 实数 E]
   结论: HasCompactSupport f
   证明: by
   simp_rw [HasCompactSupport, f.tsupport_eq, isCompact_closedBall]
@@ -544,7 +544,7 @@ theorem _root_.ContDiffWithinAt.contDiffBump
 
 中文:
 定理 _root_.ContDiffWithinAt.contDiffBump
-  结论: {c g : X -> E} {s : Set X}
+  结论: {c g : X -> E} {s : 集合 X}
   证明: by
   change ContDiffWithinAt Real n (uncurry (someContDiffBumpBase E).toFun ∘ fun x : X =>
     ((f x).rOut / (f x).rIn, (f x).rIn⁻¹ • (g x - c x))) s x
@@ -583,8 +583,8 @@ theorem _root_.ContDiff.contDiffBump
   exact fun x => (hc x).contDiffBump (hr x) (hR x) (hg x)
 
 中文:
-定理 _root_.ContDiff.contDiffBump
-  结论: {c g : X -> E} {f : 对任意 x, ContDiffBump (c x)}
+定理 _root_.连续可微.contDiffBump
+  结论: {c g : X -> E} {f : 对任意 x, 余ntDiffBump (c x)}
   证明: by
   rw [contDiff_iff_contDiffAt] at *
   exact fun x => (hc x).contDiffBump (hr x) (hR x) (hg x)
@@ -608,7 +608,7 @@ theorem contDiff
 
 中文:
 定理 contDiff
-  结论: ContDiff 实数 n f
+  结论: 连续可微 实数 n f
   证明: contDiff_const.contDiffBump contDiff_const contDiff_const contDiff_id
 -/
 protected theorem contDiff : ContDiff Real n f :=
@@ -641,7 +641,7 @@ theorem contDiffWithinAt
 
 中文:
 定理 contDiffWithinAt
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: ContDiffWithinAt 实数 n f s x
   证明: f.contDiffAt.contDiffWithinAt
 -/
@@ -658,7 +658,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: contDiff_zero.mp f.contDiff
 -/
 protected theorem continuous : Continuous f :=

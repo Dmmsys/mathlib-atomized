@@ -61,8 +61,8 @@ class ConcreteCategory
     - (comp_apply : forall {X Y Z} (f : X ⟶ Y) (g : Y ⟶ Z) (x : CC X), hom (f ≫ g) x = hom g (hom f x)  [default: by cat_disch)]
 
 中文:
-类 ConcreteCategory
-  参数: (C : 类型u) [Category.{v} C]
+类 余ncrete范畴
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (6 个):
     - (hom : 对任意 {X Y}, (X ⟶ Y) -> FC X Y)
     - (ofHom : 对任意 {X Y}, FC X Y -> (X ⟶ Y))
@@ -106,7 +106,7 @@ abbreviation ToType
 
 中文:
 缩写 ToType
-  签名: [ConcreteCategory C FC]
+  签名: [余ncrete范畴 C FC]
   定义体: CC
 
 Depends on / 依赖: PreservesLimits, PreservesLimits.preservesFiniteLimits, preservesFiniteLimits
@@ -128,7 +128,7 @@ abbreviation ToHom
 
 中文:
 缩写 ToHom
-  签名: [ConcreteCategory C FC]
+  签名: [余ncrete范畴 C FC]
   定义体: FC
 -/
 abbrev ToHom [ConcreteCategory C FC] := FC
@@ -217,7 +217,7 @@ lemma hom_bijective
 中文:
 引理 hom_bijective
   条件: {X Y : C}
-  结论: Function.Bijective (hom : (X ⟶ Y) -> ToHom X Y)
+  结论: 函数.双射 (hom : (X ⟶ Y) -> ToHom X Y)
   证明: homEquiv.bijective
 
 Depends on / 依赖: Finite, bijective, homEquiv, homEquiv.bijective
@@ -237,7 +237,7 @@ lemma hom_injective
 中文:
 引理 hom_injective
   条件: {X Y : C}
-  结论: Function.Injective (hom : (X ⟶ Y) -> ToHom X Y)
+  结论: 函数.单射 (hom : (X ⟶ Y) -> ToHom X Y)
   证明: hom_bijective.injective
 
 Depends on / 依赖: hom_bijective, hom_bijective.injective, injective
@@ -257,7 +257,7 @@ lemma hom_surjective
 中文:
 引理 hom_surjective
   条件: {X Y : C}
-  结论: Function.Surjective (hom : (X ⟶ Y) -> ToHom X Y)
+  结论: 函数.满射 (hom : (X ⟶ Y) -> ToHom X Y)
   证明: hom_bijective.surjective
 
 Depends on / 依赖: hom_bijective, hom_bijective.surjective, surjective
@@ -425,7 +425,7 @@ theorem _root_.CategoryTheory.id_apply
   simp [ConcreteCategory.id_apply _]
 
 中文:
-定理 _root_.CategoryTheory.id_apply
+定理 _root_.范畴论.id_apply
   条件: {X : C} (x : ToType X)
   证明: by
   simp [ConcreteCategory.id_apply _]
@@ -447,7 +447,7 @@ theorem _root_.CategoryTheory.comp_apply
   _root_.CategoryTheory.comp_apply
 
 中文:
-定理 _root_.CategoryTheory.comp_apply
+定理 _root_.范畴论.comp_apply
   结论: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: by
   simp [ConcreteCategory.comp_apply]
@@ -548,7 +548,7 @@ instance InducedCategory.concreteCategory
 
 中文:
 实例 InducedCategory.concreteCategory
-  签名: {C : 类型u} {D : 类型u'} [Category.{v'} D]
+  签名: {C : 类型u} {D : 类型u'} [范畴.{v'} D]
   定义体: hom f.hom
   ofHom g := homMk (ofHom g)
   hom_ofHom _ := hom_ofHom _
@@ -586,8 +586,8 @@ instance ObjectProperty.FullSubcategory.concreteCategory
   ObjectP
 
 中文:
-实例 ObjectProperty.FullSubcategory.concreteCategory
-  签名: {C : 类型u} [Category.{v} C]
+实例 ObjectProperty.满子范畴.concreteCategory
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: hom f.hom
   ofHom g := homMk (ofHom g)
   hom_ofHom _ := hom_ofHom _
@@ -633,7 +633,7 @@ lemma NatTrans.naturality_apply
   simp [← CategoryTheory.comp_apply]
 
 中文:
-引理 NatTrans.naturality_apply
+引理 自然变换.naturality_apply
   结论: {F G : C ⥤ D} (φ : F ⟶ G) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp [← CategoryTheory.comp_apply]

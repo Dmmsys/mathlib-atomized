@@ -34,8 +34,8 @@ lemma Set.biUnion_finsetSigma_univ
   proof: by aesop
 
 中文:
-引理 Set.biUnion_finsetSigma_univ
-  条件: (s : Finset ι) (f : Sigma κ -> Set α)
+引理 集合.biUnion_finsetSigma_univ
+  条件: (s : 有限集 ι) (f : 依赖和类型 κ -> 集合 α)
   证明: by aesop
 -/
 lemma Set.biUnion_finsetSigma_univ (s : Finset ι) (f : Sigma κ -> Set α) :
@@ -50,8 +50,8 @@ lemma Set.biUnion_finsetSigma_univ'
   proof: by aesop
 
 中文:
-引理 Set.biUnion_finsetSigma_univ'
-  条件: (s : Finset ι) (f : Π i, κ i -> Set α)
+引理 集合.biUnion_finsetSigma_univ'
+  条件: (s : 有限集 ι) (f : Π i, κ i -> 集合 α)
   证明: by aesop
 -/
 lemma Set.biUnion_finsetSigma_univ' (s : Finset ι) (f : Π i, κ i -> Set α) :
@@ -66,8 +66,8 @@ lemma Set.biInter_finsetSigma_univ
   proof: by aesop
 
 中文:
-引理 Set.biInter_finsetSigma_univ
-  条件: (s : Finset ι) (f : Sigma κ -> Set α)
+引理 集合.bi整数er_finsetSigma_univ
+  条件: (s : 有限集 ι) (f : 依赖和类型 κ -> 集合 α)
   证明: by aesop
 -/
 lemma Set.biInter_finsetSigma_univ (s : Finset ι) (f : Sigma κ -> Set α) :
@@ -83,8 +83,8 @@ lemma Set.biInter_finsetSigma_univ'
   proof: by aesop
 
 中文:
-引理 Set.biInter_finsetSigma_univ'
-  条件: (s : Finset ι) (f : Π i, κ i -> Set α)
+引理 集合.bi整数er_finsetSigma_univ'
+  条件: (s : 有限集 ι) (f : Π i, κ i -> 集合 α)
   证明: by aesop
 -/
 lemma Set.biInter_finsetSigma_univ' (s : Finset ι) (f : Π i, κ i -> Set α) :
@@ -101,8 +101,8 @@ instance Sigma.instFintype
   body: ⟨univ.sigma fun _ => univ, by simp⟩
 
 中文:
-实例 Sigma.instFintype
-  签名: : Fintype (Σ i, κ i)
+实例 依赖和类型.instFintype
+  签名: : 有限类型 (Σ i, κ i)
   定义体: ⟨univ.sigma fun _ => univ, by simp⟩
 
 Depends on / 依赖: univ.sigma
@@ -117,8 +117,8 @@ instance PSigma.instFintype
   body: .ofEquiv _ (Equiv.psigmaEquivSigma _).symm
 
 中文:
-实例 PSigma.instFintype
-  签名: : Fintype (Σ' i, κ i)
+实例 命题和类型.instFintype
+  签名: : 有限类型 (Σ' i, κ i)
   定义体: .ofEquiv _ (Equiv.psigmaEquivSigma _).symm
 
 Depends on / 依赖: Equiv.psigmaEquivSigma, ofEquiv, psigmaEquivSigma
@@ -134,8 +134,8 @@ lemma Finset.univ_sigma_univ
   proof: rfl
 
 中文:
-引理 Finset.univ_sigma_univ
-  结论: univ.sigma (fun _ => univ) = (univ : Finset (Σ i, κ i))
+引理 有限集.univ_sigma_univ
+  结论: univ.sigma (fun _ => univ) = (univ : 有限集 (Σ i, κ i))
   证明: rfl
 -/
 @[simp] lemma Finset.univ_sigma_univ : univ.sigma (fun _ => univ) = (univ : Finset (Σ i, κ i)) := rfl

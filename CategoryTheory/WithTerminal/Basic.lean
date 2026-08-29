@@ -115,7 +115,7 @@ definition Hom
   signature: : WithTerminal C -> WithTerminal C -> Type v
 
 中文:
-定义 Hom
+定义 态射
   签名: : WithTerminal C -> WithTerminal C -> 类型v
 -/
 def Hom : WithTerminal C -> WithTerminal C -> Type v
@@ -135,7 +135,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 对任意 X : WithTerminal C, Hom X X
+  签名: : 对任意 X : WithTerminal C, 态射 X X
 -/
 def id : forall X : WithTerminal C, Hom X X
   | of _ => 𝟙 _
@@ -152,7 +152,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : 对任意 {X Y Z : WithTerminal C}, Hom X Y -> Hom Y Z -> Hom X Z
+  签名: : 对任意 {X Y Z : WithTerminal C}, 态射 X Y -> 态射 Y Z -> 态射 X Z
 -/
 def comp : forall {X Y Z : WithTerminal C}, Hom X Y -> Hom Y Z -> Hom X Z
   | of _X, of _Y, of _Z => fun f g => f ≫ g
@@ -176,8 +176,8 @@ lemma false_of_from_star'
 
 中文:
 引理 false_of_from_star'
-  条件: {X : C} (f : Hom star (of X))
-  结论: False
+  条件: {X : C} (f : 态射 star (of X))
+  结论: 假
   证明: (f : PEmpty).elim
 
 Depends on / 依赖: PEmpty
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{v} (WithTerminal C)
+  签名: 范畴.{v} (WithTerminal C)
   定义体: Hom X Y
   id _ := id _
   comp := comp
@@ -272,7 +272,7 @@ lemma false_of_from_star
 中文:
 引理 false_of_from_star
   条件: {X : C} (f : star ⟶ of X)
-  结论: False
+  结论: 假
   证明: (f : PEmpty).elim
 
 Depends on / 依赖: PEmpty
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl : C ⥤ _).Full
+  签名: (incl : C ⥤ _).满
   定义体: ⟨f, rfl⟩
 -/
 instance : (incl : C ⥤ _).Full where
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl : C ⥤ _).Faithful
+  签名: (incl : C ⥤ _).忠实
 -/
 instance : (incl : C ⥤ _).Faithful where
 
@@ -350,7 +350,7 @@ definition map
 
 中文:
 定义 map
-  签名: {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: match X with
 | of x => of F.obj x
     | star => star
@@ -389,7 +389,7 @@ definition mapId
 
 中文:
 定义 mapId
-  签名: (C : 类型) [Category* C]
+  签名: (C : 类型) [范畴* C]
   定义体: NatIso.ofComponents (fun X => match X with
     | of _ => Iso.refl _
     | star => Iso.refl _) (by cat_disch)
@@ -417,7 +417,7 @@ definition mapComp
 
 中文:
 定义 mapComp
-  签名: {D E : 类型} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E)
+  签名: {D E : 类型} [范畴* D] [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
   定义体: NatIso.ofComponents (fun X => match X with
     | of _ => Iso.refl _
     | star => Iso.refl _) (by cat_disch)
@@ -452,7 +452,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: {D : 类型} [Category* D] {F G : C ⥤ D} (η : F ⟶ G)
+  签名: {D : 类型} [范畴* D] {F G : C ⥤ D} (η : F ⟶ G)
   定义体: fun X => match X with
     | of x => η.app x
     | star => 𝟙 star
@@ -498,7 +498,7 @@ definition prelaxfunctor
 
 中文:
 定义 prelaxfunctor
-  签名: : PrelaxFunctor Cat Cat where
+  签名: : 预松弛函子 Cat Cat where
   定义体: Cat.of (WithTerminal C)
   map F := (map F.toFunctor).toCatHom
   map₂ f := (map₂ f.toNatTrans).toCatHom₂
@@ -637,7 +637,7 @@ definition starTerminal
 
 中文:
 定义 starTerminal
-  签名: : Limits.IsTerminal (star : WithTerminal C)
+  签名: : Limits.是终止 (star : WithTerminal C)
   定义体: Limits.IsTerminal.ofUnique _
 
 Depends on / 依赖: IsTerminal, Limits, Limits.IsTerminal.ofUnique, ofUnique
@@ -656,7 +656,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasTerminal (WithTerminal C)
+  签名: Limits.有终止 (WithTerminal C)
   定义体: Limits.hasTerminal_of_unique star
 
 Depends on / 依赖: Limits, Limits.hasTerminal_of_unique, hasTerminal_of_unique
@@ -703,7 +703,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
   定义体: match X with
     | of x => F.obj x
     | star => Z
@@ -741,7 +741,7 @@ definition inclLift
 
 中文:
 定义 inclLift
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
   定义体: { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 -/
@@ -763,7 +763,7 @@ definition liftStar
 
 中文:
 定义 liftStar
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
   定义体: eqToIso rfl
 
 Depends on / 依赖: eqToIso
@@ -786,7 +786,7 @@ theorem lift_map_liftStar
 
 中文:
 定理 lift_map_liftStar
-  结论: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
+  结论: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
   证明: by
   simp
   rfl
@@ -824,7 +824,7 @@ definition liftUnique
 
 中文:
 定义 liftUnique
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
   定义体: NatIso.ofComponents
     (fun X =>
       match X with
@@ -876,7 +876,7 @@ definition liftToTerminal
 
 中文:
 定义 liftToTerminal
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
   定义体: lift F (fun _x => hZ.from _) fun _x _y _f => hZ.hom_ext _ _
 
 Depends on / 依赖: hZ.from, hZ.hom_ext, hom_ext
@@ -898,7 +898,7 @@ definition inclLiftToTerminal
 
 中文:
 定义 inclLiftToTerminal
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
   定义体: inclLift _ _ _
 
 Depends on / 依赖: inclLift
@@ -921,7 +921,7 @@ definition liftToTerminalUnique
 
 中文:
 定义 liftToTerminalUnique
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
   定义体: liftUnique F (fun _z => hZ.from _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x =>
     hZ.hom_ext _ _
 
@@ -1065,7 +1065,7 @@ definition ofCommaObject
 
 中文:
 定义 ofCommaObject
-  签名: (c : Comma (𝟭 (C ⥤ D)) (Functor.const C))
+  签名: (c : 交换a (𝟭 (C ⥤ D)) (函子.const C))
   定义体: lift (Z := c.right) c.left (fun x => c.hom.app x) (fun x y f => by simp)
 
 Depends on / 依赖: c.hom.app, c.left, c.right
@@ -1095,7 +1095,7 @@ definition ofCommaMorphism
 
 中文:
 定义 ofCommaMorphism
-  签名: {c c' : Comma (𝟭 (C ⥤ D)) (Functor.const C)} (φ : c ⟶ c')
+  签名: {c c' : 交换a (𝟭 (C ⥤ D)) (函子.const C)} (φ : c ⟶ c')
   定义体: match x with
     | of x => φ.left.app x
     | star => φ.right
@@ -1145,7 +1145,7 @@ definition equivComma
 
 中文:
 定义 equivComma
-  签名: : (WithTerminal C ⥤ D) ≌ Comma (𝟭 (C ⥤ D)) (Functor.const C) where
+  签名: : (WithTerminal C ⥤ D) ≌ 交换a (𝟭 (C ⥤ D)) (函子.const C) where
   定义体: { obj := mkCommaObject
       map := mkCommaMorphism }
   inverse :=
@@ -1367,7 +1367,7 @@ definition Hom
   signature: : WithInitial C -> WithInitial C -> Type v
 
 中文:
-定义 Hom
+定义 态射
   签名: : WithInitial C -> WithInitial C -> 类型v
 -/
 def Hom : WithInitial C -> WithInitial C -> Type v
@@ -1387,7 +1387,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 对任意 X : WithInitial C, Hom X X
+  签名: : 对任意 X : WithInitial C, 态射 X X
 -/
 def id : forall X : WithInitial C, Hom X X
   | of _ => 𝟙 _
@@ -1404,7 +1404,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : 对任意 {X Y Z : WithInitial C}, Hom X Y -> Hom Y Z -> Hom X Z
+  签名: : 对任意 {X Y Z : WithInitial C}, 态射 X Y -> 态射 Y Z -> 态射 X Z
 -/
 def comp : forall {X Y Z : WithInitial C}, Hom X Y -> Hom Y Z -> Hom X Z
   | of _X, of _Y, of _Z => fun f g => f ≫ g
@@ -1426,8 +1426,8 @@ lemma false_of_to_star'
 
 中文:
 引理 false_of_to_star'
-  条件: {X : C} (f : Hom (of X) star)
-  结论: False
+  条件: {X : C} (f : 态射 (of X) star)
+  结论: 假
   证明: (f : PEmpty).elim
 
 Depends on / 依赖: PEmpty
@@ -1447,7 +1447,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{v} (WithInitial C)
+  签名: 范畴.{v} (WithInitial C)
   定义体: Hom X Y
   id X := id X
   comp f g := comp f g
@@ -1522,7 +1522,7 @@ lemma false_of_to_star
 中文:
 引理 false_of_to_star
   条件: {X : C} (f : of X ⟶ star)
-  结论: False
+  结论: 假
   证明: (f : PEmpty).elim
 
 Depends on / 依赖: PEmpty
@@ -1560,7 +1560,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl : C ⥤ _).Full
+  签名: (incl : C ⥤ _).满
   定义体: ⟨f, rfl⟩
 -/
 instance : (incl : C ⥤ _).Full where
@@ -1576,7 +1576,7 @@ instance :
 
 中文:
 实例 :
-  签名: (incl : C ⥤ _).Faithful
+  签名: (incl : C ⥤ _).忠实
 -/
 instance : (incl : C ⥤ _).Faithful where
 
@@ -1600,7 +1600,7 @@ definition map
 
 中文:
 定义 map
-  签名: {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: match X with
 | of x => of F.obj x
     | star => star
@@ -1639,7 +1639,7 @@ definition mapId
 
 中文:
 定义 mapId
-  签名: (C : 类型) [Category* C]
+  签名: (C : 类型) [范畴* C]
   定义体: NatIso.ofComponents (fun X => match X with
     | of _ => Iso.refl _
     | star => Iso.refl _) (by cat_disch)
@@ -1667,7 +1667,7 @@ definition mapComp
 
 中文:
 定义 mapComp
-  签名: {D E : 类型} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E)
+  签名: {D E : 类型} [范畴* D] [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
   定义体: NatIso.ofComponents (fun X => match X with
     | of _ => Iso.refl _
     | star => Iso.refl _) (by cat_disch)
@@ -1702,7 +1702,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: {D : 类型} [Category* D] {F G : C ⥤ D} (η : F ⟶ G)
+  签名: {D : 类型} [范畴* D] {F G : C ⥤ D} (η : F ⟶ G)
   定义体: fun X => match X with
     | of x => η.app x
     | star => 𝟙 star
@@ -1747,7 +1747,7 @@ definition prelaxfunctor
 
 中文:
 定义 prelaxfunctor
-  签名: : PrelaxFunctor Cat Cat where
+  签名: : 预松弛函子 Cat Cat where
   定义体: Cat.of (WithInitial C)
   map F := (map F.toFunctor).toCatHom
   map₂ f := (map₂ f.toNatTrans).toCatHom₂
@@ -1951,7 +1951,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
   定义体: match X with
     | of x => F.obj x
     | star => Z
@@ -1989,7 +1989,7 @@ definition inclLift
 
 中文:
 定义 inclLift
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
   定义体: { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 -/
@@ -2011,7 +2011,7 @@ definition liftStar
 
 中文:
 定义 liftStar
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
   定义体: eqToIso rfl
 
 Depends on / 依赖: eqToIso
@@ -2033,7 +2033,7 @@ theorem liftStar_lift_map
 
 中文:
 定理 liftStar_lift_map
-  结论: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
+  结论: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
   证明: by
   simp [incl]
 -/
@@ -2068,7 +2068,7 @@ definition liftUnique
 
 中文:
 定义 liftUnique
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
   定义体: NatIso.ofComponents
     (fun X =>
       match X with
@@ -2122,7 +2122,7 @@ definition liftToInitial
 
 中文:
 定义 liftToInitial
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
   定义体: lift F (fun _x => hZ.to _) fun _x _y _f => hZ.hom_ext _ _
 
 Depends on / 依赖: hZ.hom_ext, hZ.to, hom_ext
@@ -2144,7 +2144,7 @@ definition inclLiftToInitial
 
 中文:
 定义 inclLiftToInitial
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
   定义体: inclLift _ _ _
 
 Depends on / 依赖: inclLift
@@ -2166,7 +2166,7 @@ definition liftToInitialUnique
 
 中文:
 定义 liftToInitialUnique
-  签名: {D : 类型} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
+  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
   定义体: liftUnique F (fun _z => hZ.to _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x => hZ.hom_ext _ _
 
 Depends on / 依赖: hZ.hom_ext, hZ.to, hom_ext, liftUnique
@@ -2308,7 +2308,7 @@ definition ofCommaObject
 
 中文:
 定义 ofCommaObject
-  签名: (c : Comma (Functor.const C) (𝟭 (C ⥤ D)))
+  签名: (c : 交换a (函子.const C) (𝟭 (C ⥤ D)))
   定义体: lift (Z := c.left) c.right (fun x => c.hom.app x)
     (fun x y f => by simpa using (c.hom.naturality f).symm)
 
@@ -2339,7 +2339,7 @@ definition ofCommaMorphism
 
 中文:
 定义 ofCommaMorphism
-  签名: {c c' : Comma (Functor.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c')
+  签名: {c c' : 交换a (函子.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c')
   定义体: match x with
     | of x => φ.right.app x
     | star => φ.left
@@ -2389,7 +2389,7 @@ definition equivComma
 
 中文:
 定义 equivComma
-  签名: : (WithInitial C ⥤ D) ≌ Comma (Functor.const C) (𝟭 (C ⥤ D)) where
+  签名: : (WithInitial C ⥤ D) ≌ 交换a (函子.const C) (𝟭 (C ⥤ D)) where
   定义体: { obj := mkCommaObject
       map := mkCommaMorphism }
   inverse :=

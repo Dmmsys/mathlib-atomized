@@ -53,11 +53,11 @@ class IsClosedImmersion
     - isClosedEmbedding((f)) : IsClosedEmbedding f
 
 中文:
-类 IsClosedImmersion
-  参数: {X Y : Scheme} (f : X ⟶ Y)
+类 是闭浸入
+  参数: {X Y : 概形} (f : X ⟶ Y)
   继承: SurjectiveOnStalks f
   公理与运算 (1 个):
-    - isClosedEmbedding((f)) : IsClosedEmbedding f
+    - isClosedEmbedding((f)) : 是闭嵌入 f
 
 Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.isClosedEmbedding, isClosedEmbedding
 -/
@@ -84,7 +84,7 @@ lemma eq_inf
 
 中文:
 引理 eq_inf
-  结论: @IsClosedImmersion = (topologically IsClosedEmbedding) ⊓
+  结论: @是闭浸入 = (topologically 是闭嵌入) ⊓
   证明: by
   ext X Y f
   rw [isClosedImmersion_iff]; rw [and_comm]
@@ -109,7 +109,7 @@ lemma iff_isPreimmersion
 
 中文:
 引理 iff_isPreimmersion
-  条件: {X Y : Scheme} {f : X ⟶ Y}
+  条件: {X Y : 概形} {f : X ⟶ Y}
   证明: by
   rw [isClosedImmersion_iff]; rw [isPreimmersion_iff]; rw [and_assoc]; rw [isClosedEmbedding_iff]
 
@@ -129,7 +129,7 @@ lemma of_isPreimmersion
 
 中文:
 引理 of_isPreimmersion
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsPreimmersion f]
+  结论: {X Y : 概形} (f : X ⟶ Y) [是Preimmersion f]
   证明: iff_isPreimmersion.mpr ⟨‹_›, hf⟩
 
 Depends on / 依赖: iff_isPreimmersion, iff_isPreimmersion.mpr
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsClosedImmersion
+  签名: MorphismProperty.是Multiplicative @是闭浸入
   定义体: inferInstance
   comp_mem f g _ _ := ⟨g.isClosedEmbedding.comp f.isClosedEmbedding⟩
 -/
@@ -179,7 +179,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion f]
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是闭浸入 f]
   定义体: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
 
 Depends on / 依赖: IsStableUnderComposition, MorphismProperty, MorphismProperty.IsStableUnderComposition.comp_mem, comp_mem
@@ -199,7 +199,7 @@ instance respectsIso
 
 中文:
 实例 respectsIso
-  签名: : Morphism命题erty.RespectsIso @IsClosedImmersion
+  签名: : MorphismProperty.RespectsIso @是闭浸入
   定义体: by
   apply MorphismProperty.RespectsIso.mk <;> intro X Y Z e f hf <;> infer_instance
 
@@ -227,7 +227,7 @@ theorem spec_of_surjective
 
 中文:
 定理 spec_of_surjective
-  条件: {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f)
+  条件: {R S : 交换环范畴} (f : R ⟶ S) (h : 函数.满射 f)
   证明: PrimeSpectrum.isClosedEmbedding_comap_of_surjective _ _ h
   stalkMap_surjective x := by
     have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
@@ -259,7 +259,7 @@ instance spec_of_quotient_mk
 
 中文:
 实例 spec_of_quotient_mk
-  签名: {R : CommRingCat.{u}} (I : Ideal R)
+  签名: {R : 交换环范畴.{u}} (I : 理想 R)
   定义体: spec_of_surjective _ Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Ideal.Quotient.mk_surjective, Quotient, comp_id, id_comp, mk_surjective, spec_of_surjective
@@ -281,7 +281,7 @@ lemma of_surjective_of_isAffine
 
 中文:
 引理 of_surjective_of_isAffine
-  结论: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
+  结论: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
   证明: by
   rw [MorphismProperty.arrow_mk_iso_iff @IsClosedImmersion (arrowIsoSpecΓOfIsAffine f)]
   apply spec_of_surjective
@@ -310,7 +310,7 @@ theorem of_comp_isClosedImmersion
 
 中文:
 定理 of_comp_isClosedImmersion
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion g]
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是闭浸入 g]
   证明: by
     have h := (f ≫ g).isClosedEmbedding
     simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
@@ -345,7 +345,7 @@ instance SpecMap_residue
 
 中文:
 实例 SpecMap_residue
-  签名: {X : Scheme.{u}} (x)
+  签名: {X : 概形.{u}} (x)
   定义体: IsClosedImmersion.spec_of_surjective (X.residue x)
     Ideal.Quotient.mk_surjective
 
@@ -399,7 +399,7 @@ definition overEquivIdealSheafData
 
 中文:
 定义 overEquivIdealSheafData
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: (MorphismProperty.Over.forget _ _ _).op ⋙ X.kerFunctor
   inverse :=
   { obj I := .op <| .mk _ I.subschemeι inferInstance
@@ -439,7 +439,7 @@ lemma isIso_iff_ker_eq_bot
 
 中文:
 引理 isIso_iff_ker_eq_bot
-  条件: {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f]
+  条件: {X Y : 概形.{u}} {f : X ⟶ Y} [是闭浸入 f]
   证明: by
   refine ⟨fun _ => f.ker_eq_bot_of_isIso, fun H => ?_⟩
   have : IsIso f.imageι := by simpa [Scheme.Hom.imageι, Scheme.Hom.image] using H ▸ inferInstance
@@ -471,7 +471,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {X Y Z : Scheme.{u}}
+  签名: {X Y Z : 概形.{u}}
   定义体: g.toImage ≫ Scheme.IdealSheafData.inclusion H ≫ inv f.toImage
 
 @[reassoc (attr := simp)]
@@ -495,7 +495,7 @@ lemma lift_fac
 
 中文:
 引理 lift_fac
-  结论: {X Y Z : Scheme.{u}}
+  结论: {X Y Z : 概形.{u}}
   证明: by
   nth_rw 2 [← f.toImage_imageι]
   simp [lift, -Scheme.Hom.toImage_imageι, g.toImage_imageι]
@@ -524,7 +524,7 @@ lemma isIso_of_ker_eq
 
 中文:
 引理 isIso_of_ker_eq
-  结论: {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
+  结论: {Z₁ Z₂ X : 概形.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
   证明: by
   let f' : MorphismProperty.Over.mk ⊤ i₁ ‹_› ⟶ .mk ⊤ i₂ ‹_› := MorphismProperty.Over.homMk f h
   suffices h : IsIso f'.op by
@@ -554,7 +554,7 @@ lemma isIso_lift
 
 中文:
 引理 isIso_lift
-  结论: {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
+  结论: {Z₁ Z₂ X : 概形.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
   证明: isIso_of_ker_eq i₂ i₁ _ (by simp) h.symm
 
 Depends on / 依赖: h.symm, isIso_of_ker_eq
@@ -587,7 +587,7 @@ lemma isDominant_of_of_appTop_injective
 
 中文:
 引理 isDominant_of_of_appTop_injective
-  结论: [CompactSpace X]
+  结论: [紧空间 X]
   证明: by
   have : f.ker = ⊥ := Scheme.IdealSheafData.ext_of_isAffine
     (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
@@ -615,8 +615,8 @@ instance [CompactSpace
       (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso Γ(X, ⊤)).hom).1)
 
 中文:
-实例 [CompactSpace
-  签名: X] : IsDominant X.toSpecΓ
+实例 [紧空间
+  签名: X] : 是Dominant X.toSpecΓ
   定义体: isDominant_of_of_appTop_injective (by
     simpa only [Scheme.toSpecΓ_appTop] using
       (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso Γ(X, ⊤)).hom).1)
@@ -644,7 +644,7 @@ lemma stalkMap_injective_of_isOpenMap_of_injective
 
 中文:
 引理 stalkMap_injective_of_isOpenMap_of_injective
-  结论: [CompactSpace X]
+  结论: [紧空间 X]
   证明: by
   let φ : Γ(Y, ⊤) ⟶ Γ(X, ⊤) := f.appTop
   let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
@@ -707,7 +707,7 @@ theorem isIso_of_injective_of_isAffine
 
 中文:
 定理 isIso_of_injective_of_isAffine
-  结论: [IsClosedImmersion f]
+  结论: [是闭浸入 f]
   证明: isIso_iff_ker_eq_bot.mpr (Scheme.IdealSheafData.ext_of_isAffine
     (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot]))
 
@@ -735,7 +735,7 @@ theorem isAffine_surjective_of_isAffine
 
 中文:
 定理 isAffine_surjective_of_isAffine
-  条件: [IsClosedImmersion f]
+  条件: [是闭浸入 f]
   证明: by
   refine ⟨isAffine_of_isAffineHom f, ?_⟩
   simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
@@ -771,7 +771,7 @@ lemma Spec_iff
 
 中文:
 引理 Spec_iff
-  条件: {R : CommRingCat} {f : X ⟶ Spec R}
+  条件: {R : 交换环范畴} {f : X ⟶ Spec R}
   证明: by
   constructor
   · intro H
@@ -819,8 +819,8 @@ instance IsClosedImmersion.isZariskiLocalAtTarget
   body: eq_inf ▸ inferInstance
 
 中文:
-实例 IsClosedImmersion.isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @IsClosedImmersion
+实例 是闭浸入.isZariskiLocalAtTarget
+  签名: : IsZariskiLocalAtTarget @是闭浸入
   定义体: eq_inf ▸ inferInstance
 
 Depends on / 依赖: eq_inf
@@ -840,8 +840,8 @@ instance IsClosedImmersion.hasAffineProperty
   refine ⟨fun ⟨h₁, h₂⟩ => of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
 
 中文:
-实例 IsClosedImmersion.hasAffineProperty
-  签名: : HasAffine命题erty @IsClosedImmersion
+实例 是闭浸入.hasAffineProperty
+  签名: : 有AffineProperty @是闭浸入
   定义体: by
   convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsClosedImmersion
   refine ⟨fun ⟨h₁, h₂⟩ => of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
@@ -888,8 +888,8 @@ lemma Scheme.Hom.app_surjective
   proof: (isClosedImmersion_iff_isAffineHom.mp ‹_›).2 U hU
 
 中文:
-引理 Scheme.Hom.app_surjective
-  结论: (f : X ⟶ Y) (U : Y.Opens) (hU : IsAffineOpen U)
+引理 概形.态射.app_surjective
+  结论: (f : X ⟶ Y) (U : Y.Opens) (hU : 是仿射开集 U)
   证明: (isClosedImmersion_iff_isAffineHom.mp ‹_›).2 U hU
 
 Depends on / 依赖: isClosedImmersion_iff_isAffineHom, isClosedImmersion_iff_isAffineHom.mp
@@ -913,7 +913,7 @@ instance IsClosedImmersion.isStableUnderBaseChange
   exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst
 
 中文:
-实例 IsClosedImmersion.isStableUnderBaseChange
+实例 是闭浸入.isStableUnderBaseChange
   签名: :
   定义体: by
   apply HasAffineProperty.isStableUnderBaseChange
@@ -967,7 +967,7 @@ lemma isIso_of_isClosedImmersion_of_surjective
 
 中文:
 引理 isIso_of_isClosedImmersion_of_surjective
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   rw [IsClosedImmersion.isIso_iff_ker_eq_bot]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [Scheme.Hom.support_ker]
   simp
@@ -993,7 +993,7 @@ lemma isClosed_singleton_iff_isClosedImmersion
 
 中文:
 引理 isClosed_singleton_iff_isClosedImmersion
-  条件: {X : Scheme} {x : X}
+  条件: {X : 概形} {x : X}
   证明: by
   rw [← Scheme.range_fromSpecResidueField]
   exact ⟨fun H => .of_isPreimmersion _ H,

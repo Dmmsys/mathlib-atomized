@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (Path PUnit.unit PUnit.unit)
+  签名: 子单例 (道路 命题单元.unit 命题单元.unit)
   定义体: ⟨fun x y => by ext⟩
 -/
 instance : Subsingleton (Path PUnit.unit PUnit.unit) :=
@@ -64,7 +64,7 @@ definition punitEquivDiscretePUnit
 
 中文:
 定义 punitEquivDiscretePUnit
-  签名: : FundamentalGroupoid PUnit.{u + 1} ≌ Discrete PUnit.{v + 1} where
+  签名: : FundamentalGroupoid 命题单元.{u + 1} ≌ 离散 命题单元.{v + 1} where
   定义体: Functor.star _
   inverse := (CategoryTheory.Functor.const _).obj ⟨PUnit.unit⟩
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _)

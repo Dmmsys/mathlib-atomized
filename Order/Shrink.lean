@@ -38,7 +38,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Shrink.{u} α)
+  签名: 底元素 (Shrink.{u} α)
   定义体: equivShrink _ ⊥
 
 @[to_dual (attr := simp)]
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (Shrink.{u} α)
+  签名: 预序 (Shrink.{u} α)
   定义体: Preorder.lift (equivShrink α).symm
 
 Depends on / 依赖: Preorder, Preorder.lift, equivShrink
@@ -252,8 +252,8 @@ instance [OrderBot
 @[to_dual]
 
 中文:
-实例 [OrderBot
-  签名: α] : OrderBot (Shrink.{u} α) where
+实例 [有底序
+  签名: α] : 有底序 (Shrink.{u} α) where
   定义体: by simp [← (orderIsoShrink.{u} α).symm.le_iff_le]
 
 @[to_dual]
@@ -275,8 +275,8 @@ instance [SuccOrder
 @[to_dual]
 
 中文:
-实例 [SuccOrder
-  签名: α] : SuccOrder (Shrink.{u} α)
+实例 [Succ序
+  签名: α] : Succ序 (Shrink.{u} α)
   定义体: SuccOrder.ofOrderIso (orderIsoShrink.{u} α)
 
 @[to_dual]
@@ -316,8 +316,8 @@ instance [PartialOrder
   body: (equivShrink _).symm.injective.partialOrder _ .rfl .rfl
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (Shrink.{u} α)
+实例 [偏序
+  签名: α] : 偏序 (Shrink.{u} α)
   定义体: (equivShrink _).symm.injective.partialOrder _ .rfl .rfl
 
 Depends on / 依赖: equivShrink, injective, partialOrder, symm.injective.partialOrder
@@ -334,8 +334,8 @@ instance [LinearOrder
   body: .lift' _ (equivShrink _).symm.injective
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (Shrink.{u} α)
+实例 [线性序
+  签名: α] : 线性序 (Shrink.{u} α)
   定义体: .lift' _ (equivShrink _).symm.injective
 
 Depends on / 依赖: equivShrink, injective, symm.injective

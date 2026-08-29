@@ -151,7 +151,7 @@ lemma functorPushforward_overForget_arrows
 
 中文:
 引理 functorPushforward_overForget_arrows
-  条件: {X : C} {Y : Over X} (S : Sieve Y)
+  条件: {X : C} {Y : Over X} (S : 筛 Y)
   证明: by
   refine le_antisymm ?_ (S.arrows.map_le_functorPushforward (Over.forget X))
   rintro Z - ⟨W, fW, fZ, h, rfl⟩
@@ -180,7 +180,7 @@ lemma functorPullback_functorPushforward_overForget
 
 中文:
 引理 functorPullback_functorPushforward_overForget
-  条件: {X : C} {Y : Over X} (S : Sieve Y)
+  条件: {X : C} {Y : Over X} (S : 筛 Y)
   证明: by
   apply arrows_ext
   simp
@@ -206,7 +206,7 @@ lemma functorPushforward_functorPullback_overForget
 
 中文:
 引理 functorPushforward_functorPullback_overForget
-  条件: {X : C} {Y : Over X} (S : Sieve Y.left)
+  条件: {X : C} {Y : Over X} (S : 筛 Y.left)
   证明: by
   apply arrows_ext
   simp [← arrows_generate_map_eq_functorPushforward]
@@ -286,7 +286,7 @@ lemma overEquiv_pullback
 
 中文:
 引理 overEquiv_pullback
-  条件: {X : C} {Y₁ Y₂ : Over X} (f : Y₁ ⟶ Y₂) (S : Sieve Y₂)
+  条件: {X : C} {Y₁ Y₂ : Over X} (f : Y₁ ⟶ Y₂) (S : 筛 Y₂)
   证明: by
   ext Z g
   dsimp [overEquiv, Presieve.functorPushforward]
@@ -327,7 +327,7 @@ lemma overEquiv_symm_pullback
 
 中文:
 引理 overEquiv_symm_pullback
-  条件: {X : C} {Y₁ Y₂ : Over X} (f : Y₁ ⟶ Y₂) (S : Sieve Y₂.left)
+  条件: {X : C} {Y₁ Y₂ : Over X} (f : Y₁ ⟶ Y₂) (S : 筛 Y₂.left)
   证明: functorPullback_pullback _ _ _
 
 @[simp]
@@ -350,7 +350,7 @@ lemma overEquiv_symm_iff
 
 中文:
 引理 overEquiv_symm_iff
-  条件: {X : C} {Y : Over X} (S : Sieve Y.left) {Z : Over X} (f : Z ⟶ Y)
+  条件: {X : C} {Y : Over X} (S : 筛 Y.left) {Z : Over X} (f : Z ⟶ Y)
   证明: by
   rfl
 
@@ -374,7 +374,7 @@ lemma overEquiv_iff
 
 中文:
 引理 overEquiv_iff
-  条件: {X : C} {Y : Over X} (S : Sieve Y) {Z : C} (f : Z ⟶ Y.left)
+  条件: {X : C} {Y : Over X} (S : 筛 Y) {Z : C} (f : Z ⟶ Y.left)
   证明: by
   obtain ⟨S, rfl⟩ := (overEquiv Y).symm.surjective S
   simp
@@ -549,7 +549,7 @@ lemma functorPushforward_over_map
 
 中文:
 引理 functorPushforward_over_map
-  条件: {X Y : C} (f : X ⟶ Y) (Z : Over X) (S : Sieve Z.left)
+  条件: {X Y : C} (f : X ⟶ Y) (Z : Over X) (S : 筛 Z.left)
   证明: by
   ext W g
   constructor
@@ -639,7 +639,7 @@ lemma overEquiv_functorPullback_post
 
 中文:
 引理 overEquiv_functorPullback_post
-  结论: {D : 类型} [Category* D] (F : C ⥤ D) {X : C}
+  结论: {D : 类型} [范畴* D] (F : C ⥤ D) {X : C}
   证明: by
   refine le_antisymm ?_ ?_
   · dsimp [Sieve.overEquiv]
@@ -676,7 +676,7 @@ lemma overEquiv_functorPushforward_post
 
 中文:
 引理 overEquiv_functorPushforward_post
-  结论: {D : 类型} [Category* D] (F : C ⥤ D) {X : C}
+  结论: {D : 类型} [范畴* D] (F : C ⥤ D) {X : C}
   证明: by
   simp [Sieve.overEquiv, ← Sieve.functorPushforward_comp, ← Over.post_forget_eq_forget_comp]
 
@@ -744,7 +744,7 @@ lemma mem_over_iff
 
 中文:
 引理 mem_over_iff
-  条件: {X : C} {Y : Over X} (S : Sieve Y)
+  条件: {X : C} {Y : Over X} (S : 筛 Y)
   证明: by
   rfl
 -/
@@ -763,7 +763,7 @@ lemma overEquiv_symm_mem_over
 
 中文:
 引理 overEquiv_symm_mem_over
-  条件: {X : C} (Y : Over X) (S : Sieve Y.left) (hS : S in J Y.left)
+  条件: {X : C} (Y : Over X) (S : 筛 Y.left) (hS : S in J Y.left)
   证明: by
   simpa only [mem_over_iff, OrderIso.apply_symm_apply] using hS
 
@@ -840,7 +840,7 @@ abbreviation overPullback
 
 中文:
 缩写 overPullback
-  签名: (A : 类型u') [Category.{v'} A] (X : C)
+  签名: (A : 类型u') [范畴.{v'} A] (X : C)
   定义体: (Over.forget X).sheafPushforwardContinuous _ _ _
 
 Depends on / 依赖: Over.forget, forget, sheafPushforwardContinuous
@@ -961,8 +961,8 @@ lemma _root_.CategoryTheory.CoverPreserving.overPost
     exact h.cover_preserve hS
 
 中文:
-引理 _root_.CategoryTheory.CoverPreserving.overPost
-  结论: {D : 类型} [Category* D]
+引理 _root_.范畴论.余verPreserving.overPost
+  结论: {D : 类型} [范畴* D]
   证明: by
     rw [GrothendieckTopology.mem_over_iff] at hS ⊢
     rw [Sieve.overEquiv_functorPushforward_post]
@@ -1028,7 +1028,7 @@ lemma coverPreserving_overPullback
 
 中文:
 引理 coverPreserving_overPullback
-  条件: [HasPullbacks C] {X Y : C} (f : X ⟶ Y)
+  条件: [有Pullbacks C] {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← (Over.mapPullbackAdj f).isCocontinuous_iff_coverPreserving]
   infer_instance
@@ -1049,7 +1049,7 @@ instance [HasPullbacks
   body: (Over.mapPullbackAdj f).isContinuous_of_isCocontinuous _ _
 
 中文:
-实例 [HasPullbacks
+实例 [有Pullbacks
   签名: C] {X Y
   定义体: (Over.mapPullbackAdj f).isContinuous_of_isCocontinuous _ _
 
@@ -1360,8 +1360,8 @@ abbreviation Sheaf.over
   body: (J.overPullback A X).obj F
 
 中文:
-缩写 Sheaf.over
-  签名: {A : 类型u'} [Category.{v'} A] (F : Sheaf J A) (X : C)
+缩写 层.over
+  签名: {A : 类型u'} [范畴.{v'} A] (F : 层 J A) (X : C)
   定义体: (J.overPullback A X).obj F
 
 Depends on / 依赖: J.overPullback, overPullback
@@ -1383,8 +1383,8 @@ definition Sheaf.pushforwardOverMapIso
   body: ObjectProperty.isoMk _ (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
 
 中文:
-定义 Sheaf.pushforwardOverMapIso
-  签名: (F : Sheaf J A) {X Y : C} (f : X ⟶ Y)
+定义 层.pushforwardOverMapIso
+  签名: (F : 层 J A) {X Y : C} (f : X ⟶ Y)
   定义体: ObjectProperty.isoMk _ (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, ofComponents
@@ -1410,8 +1410,8 @@ definition Sheaf.toPushforwardOverPullback
   hom.naturality := by simp [← Functor.map_comp, ← op_comp]
 
 中文:
-定义 Sheaf.toPushforwardOverPullback
-  签名: [Limits.HasPullbacks C] (F : Sheaf J A)
+定义 层.toPushforwardOverPullback
+  签名: [Limits.有Pullbacks C] (F : 层 J A)
   定义体: F.obj.map (.op <| Limits.pullback.fst _ _)
   hom.naturality := by simp [← Functor.map_comp, ← op_comp]
 

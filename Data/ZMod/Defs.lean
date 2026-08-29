@@ -153,7 +153,7 @@ Fin.eq_of_val_eq
 中文:
 定理 left_distrib_aux
   条件: (n : 自然数)
-  结论: 对任意 a b c : Fin n, a * (b + c) = a * b + a * c
+  结论: 对任意 a b c : 有限集 n, a * (b + c) = a * b + a * c
   证明: fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ =>
 Fin.eq_of_val_eq
     calc
@@ -311,7 +311,7 @@ definition ZMod
 
 中文:
 定义 ZMod
-  签名: : 自然数 -> Type
+  签名: : 自然数 -> 类型
 -/
 def ZMod : Nat -> Type
   | 0 => Int
@@ -359,7 +359,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: : Unique (ZMod 1)
+  签名: : 唯一 (ZMod 1)
   定义体: Fin.instUnique
 
 Depends on / 依赖: Fin.instUnique, instUnique
@@ -375,7 +375,7 @@ instance fintype
 
 中文:
 实例 fintype
-  签名: : 对任意 (n : 自然数) [NeZero n], Fintype (ZMod n)
+  签名: : 对任意 (n : 自然数) [NeZero n], 有限类型 (ZMod n)
 -/
 instance fintype : forall (n : Nat) [NeZero n], Fintype (ZMod n)
   | 0, h => (h.ne _ rfl).elim
@@ -393,7 +393,7 @@ instance infinite
 
 中文:
 实例 infinite
-  签名: : Infinite (ZMod 0)
+  签名: : 无限 (ZMod 0)
   定义体: Int.infinite
 
 @[simp]
@@ -418,8 +418,8 @@ theorem card
 
 中文:
 定理 card
-  条件: (n : 自然数) [Fintype (ZMod n)]
-  结论: Fintype.card (ZMod n) = n
+  条件: (n : 自然数) [有限类型 (ZMod n)]
+  结论: 有限类型.card (ZMod n) = n
   证明: by
   cases n with
   | zero => exact (not_finite (ZMod 0)).elim

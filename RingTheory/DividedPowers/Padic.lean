@@ -49,7 +49,7 @@ definition DividedPowers.ofInjective
 
 中文:
 定义 DividedPowers.ofInjective
-  签名: (f : A ->+* B) (hf : Injective f)
+  签名: (f : A ->+* B) (hf : 单射 f)
   定义体: open scoped Classical in if hx : x in I then Exists.choose (hmem n hx) else 0
   dpow_null hx := by simp [dif_neg hx]
   dpow_zero {x} hx := by
@@ -189,7 +189,7 @@ lemma dpow'_int
 
 中文:
 引理 dpow'_int
-  条件: (n : 自然数) {x : 整数_[p]} (hx : x in Ideal.span {(p : 整数_[p])})
+  条件: (n : 自然数) {x : 整数_[p]} (hx : x in 理想.span {(p : 整数_[p])})
   证明: by
   unfold dpow'
   by_cases hn : n = 0
@@ -227,7 +227,7 @@ theorem dpow'_mem
 
 中文:
 定理 dpow'_mem
-  条件: {n : 自然数} {x : 整数_[p]} (hm : n != 0) (hx : x in Ideal.span {↑p})
+  条件: {n : 自然数} {x : 整数_[p]} (hm : n != 0) (hx : x in 理想.span {↑p})
   证明: by
   have hiff := PadicInt.norm_le_pow_iff_mem_span_pow ⟨dpow' p n x, dpow'_int p n hx⟩ 1
   rw [pow_one] at hiff
@@ -262,7 +262,7 @@ definition dividedPowers
 
 中文:
 定义 dividedPowers
-  签名: : DividedPowers (Ideal.span {(p : 整数_[p])})
+  签名: : DividedPowers (理想.span {(p : 整数_[p])})
   定义体: by
   classical
   refine ofInjective (Ideal.span {(p : Int_[p])}) (⊤)

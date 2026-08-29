@@ -68,7 +68,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: [DecidableEq α] (l : List α) (H : 对任意 x : α, x in l)
+  签名: [DecidableEq α] (l : 列表 α) (H : 对任意 x : α, x in l)
   定义体: ⟨l.toFinset, by simpa using H⟩
 
 Depends on / 依赖: l.toFinset, toFinset
@@ -90,7 +90,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: [Fintype α] (f : α -> β) (H : Function.Bijective f)
+  签名: [有限类型 α] (f : α -> β) (H : 函数.双射 f)
   定义体: ⟨univ.map ⟨f, H.1⟩, fun b =>
     let ⟨_, e⟩ := H.2 b
     e ▸ mem_map_of_mem _ (mem_univ _)⟩
@@ -116,7 +116,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: [DecidableEq β] [Fintype α] (f : α -> β) (H : Function.Surjective f)
+  签名: [DecidableEq β] [有限类型 α] (f : α -> β) (H : 函数.满射 f)
   定义体: ⟨univ.image f, fun b =>
     let ⟨_, e⟩ := H b
     e ▸ mem_image_of_mem _ (mem_univ _)⟩
@@ -146,7 +146,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: [Fintype β] (f : α -> β) (H : Function.Injective f)
+  签名: [有限类型 β] (f : α -> β) (H : 函数.单射 f)
   定义体: letI := Classical.dec
   if hα : Nonempty α then
     letI := Classical.inhabited_of_nonempty hα
@@ -174,7 +174,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: (α : 类型) [Fintype α] (f : α ≃ β)
+  签名: (α : 类型) [有限类型 α] (f : α ≃ β)
   定义体: ofBijective _ f.bijective
 
 Depends on / 依赖: bijective, f.bijective, ofBijective
@@ -194,7 +194,7 @@ definition ofSubsingleton
 
 中文:
 定义 ofSubsingleton
-  签名: (a : α) [Subsingleton α]
+  签名: (a : α) [子单例 α]
   定义体: ⟨{a}, fun _ => Finset.mem_singleton.2 (Subsingleton.elim _ _)⟩
 
 Depends on / 依赖: Finset, Finset.mem_singleton, Subsingleton, Subsingleton.elim, mem_singleton
@@ -215,7 +215,7 @@ theorem univ_ofSubsingleton
 
 中文:
 定理 univ_ofSubsingleton
-  条件: (a : α) [Subsingleton α]
+  条件: (a : α) [子单例 α]
   结论: @univ _ (ofSubsingleton a) = {a}
   证明: rfl
 -/
@@ -235,7 +235,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: ⟨∅, isEmptyElim⟩
 
 Depends on / 依赖: isEmptyElim
@@ -254,8 +254,8 @@ theorem univ_ofIsEmpty
 
 中文:
 定理 univ_ofIsEmpty
-  条件: [IsEmpty α]
-  结论: @univ α Fintype.ofIsEmpty = ∅
+  条件: [是空 α]
+  结论: @univ α 有限类型.ofIsEmpty = ∅
   证明: rfl
 -/
 theorem univ_ofIsEmpty [IsEmpty α] : @univ α Fintype.ofIsEmpty = ∅ :=
@@ -271,7 +271,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype Empty
+  签名: 有限类型 空
   定义体: Fintype.ofIsEmpty
 
 Depends on / 依赖: Fintype, Fintype.ofIsEmpty, ofIsEmpty
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype PEmpty
+  签名: 有限类型 命题空
   定义体: Fintype.ofIsEmpty
 
 Depends on / 依赖: Fintype, Fintype.ofIsEmpty, ofIsEmpty

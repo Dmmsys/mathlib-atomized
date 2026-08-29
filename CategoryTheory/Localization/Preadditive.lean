@@ -35,7 +35,7 @@ lemma liftNatTrans_zero
   proof: natTrans_ext L W (by simp)
 
 中文:
-引理 liftNatTrans_zero
+引理 lift自然数Trans_zero
   结论: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E)
   证明: natTrans_ext L W (by simp)
 
@@ -59,7 +59,7 @@ lemma liftNatTrans_add
   proof: natTrans_ext L W (by simp)
 
 中文:
-引理 liftNatTrans_add
+引理 lift自然数Trans_add
   结论: (F₁ F₂ : C ⥤ E) (F₁' F₂' : D ⥤ E)
   证明: natTrans_ext L W (by simp)
 

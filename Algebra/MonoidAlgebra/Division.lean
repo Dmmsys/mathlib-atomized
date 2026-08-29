@@ -60,7 +60,7 @@ local infixl:70 " /ᵒᶠ " => divOf
 
 中文:
 定义 divOf
-  签名: [IsCancelAdd G] (x : k[G]) (g : G)
+  签名: [是消去加法 G] (x : k[G]) (g : G)
   定义体: x.coeff.comapDomain (g + ·) (add_right_injective g).injOn
 
 local infixl:70 " /ᵒᶠ " => divOf
@@ -229,7 +229,7 @@ definition divOfHom
 
 中文:
 定义 divOfHom
-  签名: : Multiplicative G ->* AddMonoid.End k[G] where
+  签名: : Multiplicative G ->* 加法幺半群.End k[G] where
   定义体: { toFun := fun x => divOf x g.toAdd
       map_zero' := zero_divOf _
       map_add' := fun x y => add_divOf x y g.toAdd }
@@ -363,7 +363,7 @@ alias modOf_apply_of_not_exists_add := coeff_modOf_of_not_exists_add
 @[simp]
 
 中文:
-定理 coeff_modOf_of_not_exists_add
+定理 coeff_modOf_of_not_存在_add
   条件: (x : k[G]) (g : G) (g' : G) (h : ¬存在 d, g' = g + d)
   证明: by
   classical exact Finsupp.filter_apply_pos _ _ h
@@ -397,7 +397,7 @@ classical exact Finsupp.filter_apply_neg _ _ by rwa [Classical.not_not]
 @[simp]
 
 中文:
-定理 coeff_modOf_of_exists_add
+定理 coeff_modOf_of_存在_add
   条件: (x : k[G]) (g : G) (g' : G) (h : 存在 d, g' = g + d)
   证明: by
 classical exact Finsupp.filter_apply_neg _ _ by rwa [Classical.not_not]
@@ -573,7 +573,7 @@ theorem divOf_add_modOf
 
 中文:
 定理 divOf_add_modOf
-  条件: [IsCancelAdd G] (x : k[G]) (g : G)
+  条件: [是消去加法 G] (x : k[G]) (g : G)
   证明: by
   ext g'
   dsimp only [coeff_add, of'_apply, Finsupp.add_apply]
@@ -604,7 +604,7 @@ theorem modOf_add_divOf
 
 中文:
 定理 modOf_add_divOf
-  条件: [IsCancelAdd G] (x : k[G]) (g : G)
+  条件: [是消去加法 G] (x : k[G]) (g : G)
   证明: by
   rw [add_comm]; rw [divOf_add_modOf]
 
@@ -630,7 +630,7 @@ theorem of'_dvd_iff_modOf_eq_zero
 
 中文:
 定理 of'_dvd_iff_modOf_eq_zero
-  条件: [IsCancelAdd G] {x : k[G]} {g : G}
+  条件: [是消去加法 G] {x : k[G]} {g : G}
   证明: by
   constructor
   · rintro ⟨x, rfl⟩

@@ -40,7 +40,7 @@ definition toLpLin
 
 中文:
 定义 toLpLin
-  签名: : Matrix m n R ≃ₗ[R] WithLp p (n -> R) ->ₗ[R] WithLp q (m -> R)
+  签名: : 矩阵 m n R ≃ₗ[R] WithLp p (n -> R) ->ₗ[R] WithLp q (m -> R)
   定义体: toLin' ≪≫ₗ
     (WithLp.linearEquiv _ R (n -> R)).symm.arrowCongr
       (WithLp.linearEquiv _ R (m -> R)).symm
@@ -67,7 +67,7 @@ lemma toLpLin_toLp
 
 中文:
 引理 toLpLin_toLp
-  条件: (A : Matrix m n R) (x : n -> R)
+  条件: (A : 矩阵 m n R) (x : n -> R)
   证明: rfl
 
 @[simp]
@@ -86,7 +86,7 @@ theorem ofLp_toLpLin
 
 中文:
 定理 ofLp_toLpLin
-  条件: (A : Matrix m n R) (x : WithLp p (n -> R))
+  条件: (A : 矩阵 m n R) (x : WithLp p (n -> R))
   证明: rfl
 -/
 theorem ofLp_toLpLin (A : Matrix m n R) (x : WithLp p (n -> R)) :
@@ -103,7 +103,7 @@ theorem toLpLin_apply
 
 中文:
 定理 toLpLin_apply
-  条件: (M : Matrix m n R) (v : WithLp p (n -> R))
+  条件: (M : 矩阵 m n R) (v : WithLp p (n -> R))
   证明: rfl
 -/
 theorem toLpLin_apply (M : Matrix m n R) (v : WithLp p (n -> R)) :
@@ -121,7 +121,7 @@ theorem toLpLin_eq_toLin
 
 中文:
 定理 toLpLin_eq_toLin
-  条件: [Finite m]
+  条件: [有限 m]
   证明: rfl
 
 @[simp]
@@ -141,7 +141,7 @@ theorem toLpLin_one
 
 中文:
 定理 toLpLin_one
-  结论: toLpLin p p (1 : Matrix n n R) = LinearMap.id
+  结论: toLpLin p p (1 : 矩阵 n n R) = 线性映射.id
   证明: by ext; simp
 -/
 theorem toLpLin_one : toLpLin p p (1 : Matrix n n R) = LinearMap.id := by ext; simp
@@ -157,7 +157,7 @@ theorem toLpLin_mul
 
 中文:
 定理 toLpLin_mul
-  条件: [Fintype o] [DecidableEq o] (A : Matrix m n R) (B : Matrix n o R)
+  条件: [有限类型 o] [DecidableEq o] (A : 矩阵 m n R) (B : 矩阵 n o R)
   证明: by
   ext; simp
 -/
@@ -180,7 +180,7 @@ theorem toLpLin_mul_same
 
 中文:
 定理 toLpLin_mul_same
-  条件: [Fintype o] [DecidableEq o] (A : Matrix m n R) (B : Matrix n o R)
+  条件: [有限类型 o] [DecidableEq o] (A : 矩阵 m n R) (B : 矩阵 n o R)
   证明: toLpLin_mul _ _ _ _ _
 
 @[simp]
@@ -202,7 +202,7 @@ theorem toLpLin_symm_id
 
 中文:
 定理 toLpLin_symm_id
-  结论: (toLpLin p p).symm .id = (1 : Matrix n n R)
+  结论: (toLpLin p p).symm .id = (1 : 矩阵 n n R)
   证明: .injective by simp toLpLin p p
 
 Depends on / 依赖: injective, toLpLin
@@ -220,7 +220,7 @@ theorem toLpLin_symm_comp
 
 中文:
 定理 toLpLin_symm_comp
-  结论: [Fintype o] [DecidableEq o]
+  结论: [有限类型 o] [DecidableEq o]
   证明: .injective by simp [toLpLin_mul (q := q)] toLpLin p r
 
 Depends on / 依赖: injective, toLpLin, toLpLin_mul
@@ -244,7 +244,7 @@ definition toLpLinAlgEquiv
 
 中文:
 定义 toLpLinAlgEquiv
-  签名: : Matrix n n R ≃ₐ[R] Module.End R (WithLp p (n -> R))
+  签名: : 矩阵 n n R ≃ₐ[R] 模.End R (WithLp p (n -> R))
   定义体: .ofLinearEquiv (toLpLin p p) (toLpLin_one p) (toLpLin_mul p p p)
 
 @[simp]
@@ -268,7 +268,7 @@ theorem toLpLin_pow
 
 中文:
 定理 toLpLin_pow
-  条件: (A : Matrix n n R) (k : 自然数)
+  条件: (A : 矩阵 n n R) (k : 自然数)
   结论: toLpLin p p (A ^ k) = toLpLin p p A ^ k
   证明: map_pow (toLpLinAlgEquiv p) A k
 
@@ -290,7 +290,7 @@ theorem toLpLin_symm_pow
 
 中文:
 定理 toLpLin_symm_pow
-  条件: (A : Module.End R (WithLp p (n -> R))) (k : 自然数)
+  条件: (A : 模.End R (WithLp p (n -> R))) (k : 自然数)
   证明: map_pow (toLpLinAlgEquiv p).symm A k
 
 Depends on / 依赖: map_pow, toLpLinAlgEquiv
@@ -312,8 +312,8 @@ theorem LinearMap.det_toLpLin
   simp [Matrix.toLpLin_eq_toLin]
 
 中文:
-定理 LinearMap.det_toLpLin
-  结论: {ι R : 类型} [Fintype ι] [DecidableEq ι] [CommRing R] (p : 实数>=0∞)
+定理 线性映射.det_toLpLin
+  结论: {ι R : 类型} [有限类型 ι] [DecidableEq ι] [交换环 R] (p : 实数>=0∞)
   证明: by
   simp [Matrix.toLpLin_eq_toLin]
 

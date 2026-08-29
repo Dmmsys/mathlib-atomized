@@ -38,7 +38,7 @@ definition take
 
 中文:
 定义 take
-  签名: (m : 自然数) (h : m <= n) (v : (i : Fin n) -> α i)
+  签名: (m : 自然数) (h : m <= n) (v : (i : 有限集 n) -> α i)
   定义体: fun i => v (castLE h i)
 
 @[simp]
@@ -61,7 +61,7 @@ theorem take_apply
 
 中文:
 定理 take_apply
-  条件: (m : 自然数) (h : m <= n) (v : (i : Fin n) -> α i) (i : Fin m)
+  条件: (m : 自然数) (h : m <= n) (v : (i : 有限集 n) -> α i) (i : 有限集 m)
   证明: rfl
 
 @[simp]
@@ -84,7 +84,7 @@ theorem take_zero
 
 中文:
 定理 take_zero
-  条件: (v : (i : Fin n) -> α i)
+  条件: (v : (i : 有限集 n) -> α i)
   结论: take 0 n.zero_le v = fun i => elim0 i
   证明: by
   ext i; exact elim0 i
@@ -109,7 +109,7 @@ theorem take_one
 
 中文:
 定理 take_one
-  条件: {α : Fin (n + 1) -> Sort*} (v : (i : Fin (n + 1)) -> α i)
+  条件: {α : 有限集 (n + 1) -> 类型层*} (v : (i : 有限集 (n + 1)) -> α i)
   证明: by
   ext i
   simp only [take]
@@ -134,7 +134,7 @@ theorem take_eq_init
 
 中文:
 定理 take_eq_init
-  条件: {α : Fin (n + 1) -> Sort*} (v : (i : Fin (n + 1)) -> α i)
+  条件: {α : 有限集 (n + 1) -> 类型层*} (v : (i : 有限集 (n + 1)) -> α i)
   证明: rfl
 
 @[simp]
@@ -158,7 +158,7 @@ theorem take_eq_self
 
 中文:
 定理 take_eq_self
-  条件: (v : (i : Fin n) -> α i)
+  条件: (v : (i : 有限集 n) -> α i)
   结论: take n (le_refl n) v = v
   证明: by
   ext i
@@ -183,7 +183,7 @@ theorem take_take
 
 中文:
 定理 take_take
-  条件: {m n' : 自然数} (h : m <= n') (h' : n' <= n) (v : (i : Fin n) -> α i)
+  条件: {m n' : 自然数} (h : m <= n') (h' : n' <= n) (v : (i : 有限集 n) -> α i)
   证明: rfl
 
 @[simp]
@@ -202,7 +202,7 @@ theorem take_init
 
 中文:
 定理 take_init
-  条件: {α : Fin (n + 1) -> Sort*} (m : 自然数) (h : m <= n) (v : (i : Fin (n + 1)) -> α i)
+  条件: {α : 有限集 (n + 1) -> 类型层*} (m : 自然数) (h : m <= n) (v : (i : 有限集 (n + 1)) -> α i)
   证明: rfl
 -/
 theorem take_init {α : Fin (n + 1) -> Sort*} (m : Nat) (h : m <= n) (v : (i : Fin (n + 1)) -> α i) :
@@ -220,7 +220,7 @@ theorem take_repeat
 
 中文:
 定理 take_repeat
-  条件: {α : 类型} {n' : 自然数} (m : 自然数) (h : m <= n) (a : Fin n' -> α)
+  条件: {α : 类型} {n' : 自然数} (m : 自然数) (h : m <= n) (a : 有限集 n' -> α)
   证明: by
   ext i
   simp only [take, repeat_apply, modNat, val_castLE]
@@ -253,7 +253,7 @@ theorem take_succ_eq_snoc
 
 中文:
 定理 take_succ_eq_snoc
-  条件: (m : 自然数) (h : m < n) (v : (i : Fin n) -> α i)
+  条件: (m : 自然数) (h : m < n) (v : (i : 有限集 n) -> α i)
   证明: by
   ext i
   induction m with
@@ -299,7 +299,7 @@ theorem take_update_of_lt
 
 中文:
 定理 take_update_of_lt
-  结论: (m : 自然数) (h : m <= n) (v : (i : Fin n) -> α i) (i : Fin m)
+  结论: (m : 自然数) (h : m <= n) (v : (i : 有限集 n) -> α i) (i : 有限集 m)
   证明: by
   ext j
   by_cases h' : j = i
@@ -337,7 +337,7 @@ theorem take_update_of_ge
 
 中文:
 定理 take_update_of_ge
-  结论: (m : 自然数) (h : m <= n) (v : (i : Fin n) -> α i) (i : Fin n) (hi : i >= m)
+  结论: (m : 自然数) (h : m <= n) (v : (i : 有限集 n) -> α i) (i : 有限集 n) (hi : i >= m)
   证明: by
   ext j
   have : castLE h j != i := by
@@ -371,7 +371,7 @@ theorem take_addCases_left
 
 中文:
 定理 take_addCases_left
-  结论: {n' : 自然数} {motive : Fin (n + n') -> Sort*} (m : 自然数) (h : m <= n)
+  结论: {n' : 自然数} {motive : 有限集 (n + n') -> 类型层*} (m : 自然数) (h : m <= n)
   证明: by
   ext i
   have : i < n := Nat.lt_of_lt_of_le i.isLt h
@@ -398,7 +398,7 @@ theorem take_append_left
 
 中文:
 定理 take_append_left
-  结论: {n' : 自然数} {α : Sort*} (m : 自然数) (h : m <= n) (u : (i : Fin n) -> α)
+  结论: {n' : 自然数} {α : 类型层*} (m : 自然数) (h : m <= n) (u : (i : 有限集 n) -> α)
   证明: take_addCases_left m h _ _
 
 Depends on / 依赖: take_addCases_left
@@ -424,7 +424,7 @@ theorem take_addCases_right
 
 中文:
 定理 take_addCases_right
-  结论: {n' : 自然数} {motive : Fin (n + n') -> Sort*} (m : 自然数) (h : m <= n')
+  结论: {n' : 自然数} {motive : 有限集 (n + n') -> 类型层*} (m : 自然数) (h : m <= n')
   证明: by
   ext i
   simp only [take, addCases, val_castLE]
@@ -455,7 +455,7 @@ theorem take_append_right
 
 中文:
 定理 take_append_right
-  结论: {n' : 自然数} {α : Sort*} (m : 自然数) (h : m <= n') (u : (i : Fin n) -> α)
+  结论: {n' : 自然数} {α : 类型层*} (m : 自然数) (h : m <= n') (u : (i : 有限集 n) -> α)
   证明: take_addCases_right m h _ _
 
 Depends on / 依赖: take_addCases_right
@@ -475,7 +475,7 @@ theorem ofFn_take_eq_take_ofFn
 
 中文:
 定理 ofFn_take_eq_take_ofFn
-  条件: {α : 类型} {m : 自然数} (h : m <= n) (v : Fin n -> α)
+  条件: {α : 类型} {m : 自然数} (h : m <= n) (v : 有限集 n -> α)
   证明: List.ext_get (by simp [h]) (fun n h1 h2 => by simp)
 
 Depends on / 依赖: List.ext_get, ext_get
@@ -494,7 +494,7 @@ theorem ofFn_take_get
 
 中文:
 定理 ofFn_take_get
-  条件: {α : 类型} {m : 自然数} (l : List α) (h : m <= l.length)
+  条件: {α : 类型} {m : 自然数} (l : 列表 α) (h : m <= l.length)
   证明: List.ext_get (by simp [h]) (fun n h1 h2 => by simp)
 
 Depends on / 依赖: List.ext_get, ext_get
@@ -515,7 +515,7 @@ theorem get_take_eq_take_get_comp_cast
 
 中文:
 定理 get_take_eq_take_get_comp_cast
-  条件: {α : 类型} {m : 自然数} (l : List α) (h : m <= l.length)
+  条件: {α : 类型} {m : 自然数} (l : 列表 α) (h : m <= l.length)
   证明: by
   ext i
   simp only [List.get_eq_getElem, List.getElem_take, comp_apply, take_apply, val_castLE, val_cast]
@@ -539,7 +539,7 @@ theorem get_take_ofFn_eq_take_comp_cast
 
 中文:
 定理 get_take_ofFn_eq_take_comp_cast
-  条件: {α : 类型} {m : 自然数} (v : Fin n -> α) (h : m <= n)
+  条件: {α : 类型} {m : 自然数} (v : 有限集 n -> α) (h : m <= n)
   证明: by
   ext i
   simp [castLE]

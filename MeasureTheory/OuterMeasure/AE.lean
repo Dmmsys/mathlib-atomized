@@ -104,7 +104,7 @@ theorem mem_ae_iff
 
 中文:
 定理 mem_ae_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s in ae μ ↔ μ sᶜ = 0
   证明: Iff.rfl
 
@@ -144,7 +144,7 @@ theorem compl_mem_ae_iff
 
 中文:
 定理 compl_mem_ae_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sᶜ in ae μ ↔ μ s = 0
   证明: by simp only [mem_ae_iff, compl_compl]
 
@@ -183,7 +183,7 @@ theorem frequently_ae_mem_iff
 
 中文:
 定理 frequently_ae_mem_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: (存在ᵐ a ∂μ, a in s) ↔ μ s != 0
   证明: not_congr compl_mem_ae_iff
 
@@ -203,7 +203,7 @@ theorem measure_eq_zero_iff_ae_notMem
 
 中文:
 定理 measure_eq_zero_iff_ae_notMem
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: μ s = 0 ↔ 对任意ᵐ a ∂μ, a ∉ s
   证明: compl_mem_ae_iff.symm
 
@@ -242,7 +242,7 @@ theorem ae_all_iff
 
 中文:
 定理 ae_all_iff
-  条件: {ι : Sort*} [Countable ι] {p : α -> ι -> 命题}
+  条件: {ι : 类型层*} [可数 ι] {p : α -> ι -> 命题}
   证明: eventually_countable_forall
 
 Depends on / 依赖: eventually_countable_forall
@@ -262,7 +262,7 @@ theorem all_ae_of
 
 中文:
 定理 all_ae_of
-  条件: {ι : Sort*} {p : α -> ι -> 命题} (hp : 对任意ᵐ a ∂μ, 对任意 i, p a i) (i : ι)
+  条件: {ι : 类型层*} {p : α -> ι -> 命题} (hp : 对任意ᵐ a ∂μ, 对任意 i, p a i) (i : ι)
   证明: by
   filter_upwards [hp] with a ha using ha i
 
@@ -285,7 +285,7 @@ lemma ae_iff_of_countable
 
 中文:
 引理 ae_iff_of_countable
-  条件: [Countable α] {p : α -> 命题}
+  条件: [可数 α] {p : α -> 命题}
   结论: (对任意ᵐ x ∂μ, p x) ↔ 对任意 x, μ {x} != 0 -> p x
   证明: by
   rw [ae_iff]; rw [measure_null_iff_singleton]
@@ -307,7 +307,7 @@ theorem ae_ball_iff
 
 中文:
 定理 ae_ball_iff
-  条件: {ι : 类型} {S : Set ι} (hS : S.Countable) {p : α -> 对任意 i in S, 命题}
+  条件: {ι : 类型} {S : 集合 ι} (hS : S.可数) {p : α -> 对任意 i in S, 命题}
   证明: eventually_countable_ball hS
 
 Depends on / 依赖: eventually_countable_ball
@@ -436,7 +436,7 @@ lemma _root_.Set.EqOn.aeEq
   proof: eventuallyEq_of_mem h2 h
 
 中文:
-引理 _root_.Set.EqOn.aeEq
+引理 _root_.集合.EqOn.aeEq
   条件: {f g : α -> β} (h : s.EqOn f g) (h2 : μ sᶜ = 0)
   结论: f =ᵐ[μ] g
   证明: eventuallyEq_of_mem h2 h
@@ -494,7 +494,7 @@ theorem ae_le_of_ae_lt
 
 中文:
 定理 ae_le_of_ae_lt
-  条件: {β : 类型} [Preorder β] {f g : α -> β} (h : 对任意ᵐ x ∂μ, f x < g x)
+  条件: {β : 类型} [预序 β] {f g : α -> β} (h : 对任意ᵐ x ∂μ, f x < g x)
   证明: h.mono fun _ => le_of_lt
 
 @[simp]
@@ -516,7 +516,7 @@ theorem ae_eq_empty
 
 中文:
 定理 ae_eq_empty
-  结论: s =ᵐ[μ] (∅ : Set α) ↔ μ s = 0
+  结论: s =ᵐ[μ] (∅ : 集合 α) ↔ μ s = 0
   证明: eventuallyEq_empty.trans by simp only [ae_iff, Classical.not_not, ofPred_mem_eq]
 
 Depends on / 依赖: Classical, Classical.not_not, ae_iff, eventuallyEq_empty, eventuallyEq_empty.trans, not_not, ofPred_mem_eq
@@ -536,7 +536,7 @@ theorem ae_eq_univ
 
 中文:
 定理 ae_eq_univ
-  结论: s =ᵐ[μ] (univ : Set α) ↔ μ sᶜ = 0
+  结论: s =ᵐ[μ] (univ : 集合 α) ↔ μ sᶜ = 0
   证明: eventuallyEq_univ
 
 Depends on / 依赖: eventuallyEq_univ
@@ -578,7 +578,7 @@ theorem ae_le_set_inter
 
 中文:
 定理 ae_le_set_inter
-  条件: {s' t' : Set α} (h : s <=ᵐ[μ] t) (h' : s' <=ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s <=ᵐ[μ] t) (h' : s' <=ᵐ[μ] t')
   证明: h.inter h'
 
 Depends on / 依赖: h.inter
@@ -597,7 +597,7 @@ theorem ae_le_set_union
 
 中文:
 定理 ae_le_set_union
-  条件: {s' t' : Set α} (h : s <=ᵐ[μ] t) (h' : s' <=ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s <=ᵐ[μ] t) (h' : s' <=ᵐ[μ] t')
   证明: h.union h'
 
 Depends on / 依赖: h.union
@@ -619,7 +619,7 @@ theorem union_ae_eq_right
 
 中文:
 定理 union_ae_eq_right
-  结论: (s union t : Set α) =ᵐ[μ] t ↔ μ (s \ t) = 0
+  结论: (s union t : 集合 α) =ᵐ[μ] t ↔ μ (s \ t) = 0
   证明: by
   simp [eventuallyLE_antisymm_iff, ae_le_set, union_sdiff_right,
     sdiff_eq_empty.2 Set.subset_union_right]
@@ -644,7 +644,7 @@ theorem sdiff_ae_eq_self
 
 中文:
 定理 sdiff_ae_eq_self
-  结论: (s \ t : Set α) =ᵐ[μ] s ↔ μ (s inter t) = 0
+  结论: (s \ t : 集合 α) =ᵐ[μ] s ↔ μ (s inter t) = 0
   证明: by
   simp [eventuallyLE_antisymm_iff, ae_le_set]
 
@@ -671,7 +671,7 @@ theorem sdiff_null_ae_eq_self
 中文:
 定理 sdiff_null_ae_eq_self
   条件: (ht : μ t = 0)
-  结论: (s \ t : Set α) =ᵐ[μ] s
+  结论: (s \ t : 集合 α) =ᵐ[μ] s
   证明: sdiff_ae_eq_self.mpr (measure_mono_null inter_subset_right ht)
 
 @[deprecated (since := "2026-06-03")] alias diff_null_ae_eq_self := sdiff_null_ae_eq_self
@@ -696,7 +696,7 @@ theorem ae_eq_set
 
 中文:
 定理 ae_eq_set
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s =ᵐ[μ] t ↔ μ (s \ t) = 0 ∧ μ (t \ s) = 0
   证明: by
   simp [eventuallyLE_antisymm_iff, ae_le_set]
@@ -720,7 +720,7 @@ theorem measure_symmDiff_eq_zero_iff
 
 中文:
 定理 measure_symmDiff_eq_zero_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: μ (s ∆ t) = 0 ↔ s =ᵐ[μ] t
   证明: by
   simp [ae_eq_set, symmDiff_def]
@@ -744,7 +744,7 @@ theorem ae_eq_set_compl_compl
 
 中文:
 定理 ae_eq_set_compl_compl
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: sᶜ =ᵐ[μ] tᶜ ↔ s =ᵐ[μ] t
   证明: by
   simp only [← measure_symmDiff_eq_zero_iff, compl_symmDiff_compl]
@@ -767,7 +767,7 @@ theorem ae_eq_set_compl
 
 中文:
 定理 ae_eq_set_compl
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: sᶜ =ᵐ[μ] t ↔ s =ᵐ[μ] tᶜ
   证明: by
   rw [← ae_eq_set_compl_compl]; rw [compl_compl]
@@ -787,7 +787,7 @@ theorem ae_eq_set_inter
 
 中文:
 定理 ae_eq_set_inter
-  条件: {s' t' : Set α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
   证明: h.inter h'
 
 Depends on / 依赖: h.inter
@@ -806,7 +806,7 @@ theorem ae_eq_set_union
 
 中文:
 定理 ae_eq_set_union
-  条件: {s' t' : Set α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
   证明: h.union h'
 
 Depends on / 依赖: h.union
@@ -827,7 +827,7 @@ theorem ae_eq_set_sdiff
 
 中文:
 定理 ae_eq_set_sdiff
-  条件: {s' t' : Set α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
   证明: h.diff h'
 
 @[deprecated (since := "2026-06-03")] alias ae_eq_set_diff := ae_eq_set_sdiff
@@ -851,7 +851,7 @@ theorem ae_eq_set_symmDiff
 
 中文:
 定理 ae_eq_set_symmDiff
-  条件: {s' t' : Set α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
+  条件: {s' t' : 集合 α} (h : s =ᵐ[μ] t) (h' : s' =ᵐ[μ] t')
   证明: h.symmDiff h'
 
 Depends on / 依赖: h.symmDiff, symmDiff
@@ -873,7 +873,7 @@ theorem union_ae_eq_univ_of_ae_eq_univ_left
 中文:
 定理 union_ae_eq_univ_of_ae_eq_univ_left
   条件: (h : s =ᵐ[μ] univ)
-  结论: (s union t : Set α) =ᵐ[μ] univ
+  结论: (s union t : 集合 α) =ᵐ[μ] univ
   证明: (ae_eq_set_union h (ae_eq_refl t)).trans by rw [univ_union]
 
 Depends on / 依赖: ae_eq_refl, ae_eq_set_union, univ_union
@@ -895,7 +895,7 @@ theorem union_ae_eq_univ_of_ae_eq_univ_right
 中文:
 定理 union_ae_eq_univ_of_ae_eq_univ_right
   条件: (h : t =ᵐ[μ] univ)
-  结论: (s union t : Set α) =ᵐ[μ] univ
+  结论: (s union t : 集合 α) =ᵐ[μ] univ
   证明: by
   convert! ae_eq_set_union (ae_eq_refl s) h
   rw [union_univ]
@@ -919,8 +919,8 @@ theorem union_ae_eq_right_of_ae_eq_empty
 
 中文:
 定理 union_ae_eq_right_of_ae_eq_empty
-  条件: (h : s =ᵐ[μ] (∅ : Set α))
-  结论: (s union t : Set α) =ᵐ[μ] t
+  条件: (h : s =ᵐ[μ] (∅ : 集合 α))
+  结论: (s union t : 集合 α) =ᵐ[μ] t
   证明: by
   convert! ae_eq_set_union h (ae_eq_refl t)
   rw [empty_union]
@@ -944,8 +944,8 @@ theorem union_ae_eq_left_of_ae_eq_empty
 
 中文:
 定理 union_ae_eq_left_of_ae_eq_empty
-  条件: (h : t =ᵐ[μ] (∅ : Set α))
-  结论: (s union t : Set α) =ᵐ[μ] s
+  条件: (h : t =ᵐ[μ] (∅ : 集合 α))
+  结论: (s union t : 集合 α) =ᵐ[μ] s
   证明: by
   convert! ae_eq_set_union (ae_eq_refl s) h
   rw [union_empty]
@@ -970,7 +970,7 @@ theorem inter_ae_eq_right_of_ae_eq_univ
 中文:
 定理 inter_ae_eq_right_of_ae_eq_univ
   条件: (h : s =ᵐ[μ] univ)
-  结论: (s inter t : Set α) =ᵐ[μ] t
+  结论: (s inter t : 集合 α) =ᵐ[μ] t
   证明: by
   convert! ae_eq_set_inter h (ae_eq_refl t)
   rw [univ_inter]
@@ -995,7 +995,7 @@ theorem inter_ae_eq_left_of_ae_eq_univ
 中文:
 定理 inter_ae_eq_left_of_ae_eq_univ
   条件: (h : t =ᵐ[μ] univ)
-  结论: (s inter t : Set α) =ᵐ[μ] s
+  结论: (s inter t : 集合 α) =ᵐ[μ] s
   证明: by
   convert! ae_eq_set_inter (ae_eq_refl s) h
   rw [inter_univ]
@@ -1018,7 +1018,7 @@ theorem inter_ae_eq_empty_of_ae_eq_empty_left
 
 中文:
 定理 inter_ae_eq_empty_of_ae_eq_empty_left
-  条件: (h : s =ᵐ[μ] (∅ : Set α))
+  条件: (h : s =ᵐ[μ] (∅ : 集合 α))
   证明: by
   convert! ae_eq_set_inter h (ae_eq_refl t)
   rw [empty_inter]
@@ -1042,7 +1042,7 @@ theorem inter_ae_eq_empty_of_ae_eq_empty_right
 
 中文:
 定理 inter_ae_eq_empty_of_ae_eq_empty_right
-  条件: (h : t =ᵐ[μ] (∅ : Set α))
+  条件: (h : t =ᵐ[μ] (∅ : 集合 α))
   证明: by
   convert! ae_eq_set_inter (ae_eq_refl s) h
   rw [inter_empty]
@@ -1063,8 +1063,8 @@ theorem ae_eq_set_biInter
   proof: .countable_bInter hs h
 
 中文:
-定理 ae_eq_set_biInter
-  结论: {s : Set β} (hs : s.Countable) {t t' : β -> Set α}
+定理 ae_eq_set_bi整数er
+  结论: {s : 集合 β} (hs : s.可数) {t t' : β -> 集合 α}
   证明: .countable_bInter hs h
 
 Depends on / 依赖: countable_bInter
@@ -1084,7 +1084,7 @@ theorem ae_eq_set_biUnion
 
 中文:
 定理 ae_eq_set_biUnion
-  结论: {s : Set β} (hs : s.Countable) {t t' : β -> Set α}
+  结论: {s : 集合 β} (hs : s.可数) {t t' : β -> 集合 α}
   证明: .countable_bUnion hs h
 
 Depends on / 依赖: countable_bUnion
@@ -1106,8 +1106,8 @@ theorem _root_.Set.mulIndicator_ae_eq_one
   simp [EventuallyEq, eventually_iff, ae, compl_ofPred]; rfl
 
 中文:
-定理 _root_.Set.mulIndicator_ae_eq_one
-  条件: {M : 类型} [One M] {f : α -> M} {s : Set α}
+定理 _root_.集合.mulIndicator_ae_eq_one
+  条件: {M : 类型} [幺 M] {f : α -> M} {s : 集合 α}
   证明: by
   simp [EventuallyEq, eventually_iff, ae, compl_ofPred]; rfl
 

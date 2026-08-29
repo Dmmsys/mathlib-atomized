@@ -44,7 +44,7 @@ definition PartialFun
 
 中文:
 定义 PartialFun
-  签名: : Type (u + 1)
+  签名: : 类型 (u + 1)
   定义体: Type u
 -/
 def PartialFun : Type (u + 1) := Type u
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited PartialFun.{u}
+  签名: 可居 PartialFun.{u}
   定义体: ⟨PartialFun.of PUnit⟩
 
 Depends on / 依赖: PartialFun, PartialFun.of
@@ -115,7 +115,7 @@ instance largeCategory
 
 中文:
 实例 largeCategory
-  签名: : LargeCategory.{u} PartialFun where
+  签名: : 大范畴.{u} PartialFun where
   定义体: PFun X Y
   id X := PFun.id X
   comp f g := g.comp f
@@ -144,7 +144,7 @@ definition Iso.mk
     rfl)
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : PartialFun.{u}} (e : α ≃ β)
   定义体: e x
   inv x := e.symm x
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: typeToPartialFun.Faithful
+  签名: typeToPartialFun.忠实
   定义体: by
     ext x
     exact congrFun (PFun.lift_injective h) x

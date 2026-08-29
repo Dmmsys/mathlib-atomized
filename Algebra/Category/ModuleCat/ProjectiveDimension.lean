@@ -71,7 +71,7 @@ lemma hasProjectiveDimensionLE_of_semiLinearEquiv
 
 中文:
 引理 hasProjectiveDimensionLE_of_semiLinearEquiv
-  结论: (e' : M ≃ₛₗ[RingHomClass.toRingHom e] N)
+  结论: (e' : M ≃ₛₗ[环态射类.toRingHom e] N)
   证明: by
   induction n generalizing M N e' with
   | zero =>
@@ -136,7 +136,7 @@ lemma projectiveDimension_eq_of_semiLinearEquiv
 
 中文:
 引理 projectiveDimension_eq_of_semiLinearEquiv
-  条件: (e' : M ≃ₛₗ[RingHomClass.toRingHom e] N)
+  条件: (e' : M ≃ₛₗ[环态射类.toRingHom e] N)
   证明: by
   refine eq_of_forall_ge_iff (fun N => ?_)
   induction N with
@@ -254,7 +254,7 @@ lemma projectiveDimension_eq_zero_of_projective
 
 中文:
 引理 projectiveDimension_eq_zero_of_projective
-  结论: (M : ModuleCat.{v} R) [Nontrivial M]
+  结论: (M : 模范畴.{v} R) [非平凡 M]
   证明: by
   simpa [projectiveDimension_eq_zero_iff, ModuleCat.isZero_iff_subsingleton,
     not_subsingleton_iff_nontrivial] using ⟨‹_›, ‹_›⟩

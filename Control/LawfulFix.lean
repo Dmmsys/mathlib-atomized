@@ -41,7 +41,7 @@ class LawfulFix
 
 中文:
 类 LawfulFix
-  参数: (α : 类型) [OmegaCompletePartialOrder α]
+  参数: (α : 类型) [OmegaCompletePartial序 α]
   继承: Fix α
   公理与运算 (1 个):
     - fix_eq : 对任意 {f : α -> α}, ωScottContinuous f -> Fix.fix f = f (Fix.fix f)
@@ -228,7 +228,7 @@ theorem exists_fix_le_approx
     cases 
 
 中文:
-定理 exists_fix_le_approx
+定理 存在_fix_le_approx
   条件: (x : α)
   结论: 存在 i, Part.fix f x <= approx f i x
   证明: by
@@ -271,7 +271,7 @@ definition approxChain
 
 中文:
 定义 approxChain
-  签名: : Chain ((a : _) -> Part <| β a)
+  签名: : 链 ((a : _) -> Part <| β a)
   定义体: ⟨approx f, approx_mono f⟩
 
 Depends on / 依赖: approx, approx_mono
@@ -636,7 +636,7 @@ definition monotoneCurry
 
 中文:
 定义 monotoneCurry
-  签名: [(x y : _) -> Preorder <| γ x y]
+  签名: [(x y : _) -> 预序 <| γ x y]
   定义体: curry
   monotone' _x _y h a b := h ⟨a, b⟩
 -/
@@ -658,7 +658,7 @@ definition monotoneUncurry
 
 中文:
 定义 monotoneUncurry
-  签名: [(x y : _) -> Preorder <| γ x y]
+  签名: [(x y : _) -> 预序 <| γ x y]
   定义体: uncurry
   monotone' _x _y h a := h a.1 a.2
 
@@ -746,7 +746,7 @@ instance hasFix
 
 中文:
 实例 hasFix
-  签名: [Fix <| (x : Sigma β) -> γ x.1 x.2]
+  签名: [Fix <| (x : 依赖和类型 β) -> γ x.1 x.2]
   定义体: ⟨fun f => curry (fix <| uncurry ∘ f ∘ curry)⟩
 
 Depends on / 依赖: uncurry
@@ -796,7 +796,7 @@ instance lawfulFix'
 
 中文:
 实例 lawfulFix'
-  签名: [LawfulFix <| (x : Sigma β) -> γ x.1 x.2]
+  签名: [LawfulFix <| (x : 依赖和类型 β) -> γ x.1 x.2]
   定义体: by
     dsimp [fix]
     conv_lhs => erw [LawfulFix.fix_eq (uncurry_curry_ωScottContinuous hc)]

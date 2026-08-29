@@ -56,7 +56,7 @@ structure IsSplitCoequalizer
     - leftSection_top : leftSection ≫ f = π ≫ rightSection  [default: by cat_disch]
 
 中文:
-结构 IsSplitCoequalizer
+结构 是SplitCoequalizer
   参数: {Z : C} (π : Y ⟶ Z)
   公理与运算 (6 个):
     - rightSection : Z ⟶ Y
@@ -109,8 +109,8 @@ definition IsSplitCoequalizer.map
   leftSection_top := by rw [← F.map
 
 中文:
-定义 IsSplitCoequalizer.map
-  签名: {Z : C} {π : Y ⟶ Z} (q : IsSplitCoequalizer f g π) (F : C ⥤ D)
+定义 是SplitCoequalizer.map
+  签名: {Z : C} {π : Y ⟶ Z} (q : 是SplitCoequalizer f g π) (F : C ⥤ D)
   定义体: F.map q.rightSection
   leftSection := F.map q.leftSection
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
@@ -146,8 +146,8 @@ definition IsSplitCoequalizer.asCofork
 @[simp]
 
 中文:
-定义 IsSplitCoequalizer.asCofork
-  签名: {Z : C} {h : Y ⟶ Z} (t : IsSplitCoequalizer f g h)
+定义 是SplitCoequalizer.asCofork
+  签名: {Z : C} {h : Y ⟶ Z} (t : 是SplitCoequalizer f g h)
   定义体: Cofork.ofπ h t.condition
 
 @[simp]
@@ -167,8 +167,8 @@ theorem IsSplitCoequalizer.asCofork_π
   proof: rfl
 
 中文:
-定理 IsSplitCoequalizer.asCofork_π
-  条件: {Z : C} {h : Y ⟶ Z} (t : IsSplitCoequalizer f g h)
+定理 是SplitCoequalizer.asCofork_π
+  条件: {Z : C} {h : Y ⟶ Z} (t : 是SplitCoequalizer f g h)
   证明: rfl
 -/
 theorem IsSplitCoequalizer.asCofork_π {Z : C} {h : Y ⟶ Z} (t : IsSplitCoequalizer f g h) :
@@ -189,8 +189,8 @@ definition IsSplitCoequalizer.isCoequalizer
       simp [← hm]⟩
 
 中文:
-定义 IsSplitCoequalizer.isCoequalizer
-  签名: {Z : C} {h : Y ⟶ Z} (t : IsSplitCoequalizer f g h)
+定义 是SplitCoequalizer.isCoequalizer
+  签名: {Z : C} {h : Y ⟶ Z} (t : 是SplitCoequalizer f g h)
   定义体: Cofork.IsColimit.mk' _ fun s =>
     ⟨t.rightSection ≫ s.π, by
       dsimp
@@ -221,10 +221,10 @@ class HasSplitCoequalizer
     - splittable : exists (Z : C) (h : Y ⟶ Z), Nonempty (IsSplitCoequalizer f g h)
 
 中文:
-类 HasSplitCoequalizer
+类 有SplitCoequalizer
   参数: : 命题 where
   公理与运算 (1 个):
-    - splittable : 存在 (Z : C) (h : Y ⟶ Z), Nonempty (IsSplitCoequalizer f g h)
+    - splittable : 存在 (Z : C) (h : Y ⟶ Z), 非空 (是SplitCoequalizer f g h)
 -/
 class HasSplitCoequalizer : Prop where
   /-- There is some split coequalizer -/
@@ -239,7 +239,7 @@ abbreviation Functor.IsSplitPair
   body: HasSplitCoequalizer (G.map f) (G.map g)
 
 中文:
-缩写 Functor.IsSplitPair
+缩写 函子.IsSplitPair
   签名: : 命题
   定义体: HasSplitCoequalizer (G.map f) (G.map g)
 
@@ -257,8 +257,8 @@ definition HasSplitCoequalizer.coequalizerOfSplit
   body: (splittable (f := f) (g := g)).choose
 
 中文:
-定义 HasSplitCoequalizer.coequalizerOfSplit
-  签名: [HasSplitCoequalizer f g]
+定义 有SplitCoequalizer.coequalizerOfSplit
+  签名: [有SplitCoequalizer f g]
   定义体: (splittable (f := f) (g := g)).choose
 
 Depends on / 依赖: splittable
@@ -275,8 +275,8 @@ definition HasSplitCoequalizer.coequalizerπ
   body: (splittable (f := f) (g := g)).choose_spec.choose
 
 中文:
-定义 HasSplitCoequalizer.coequalizerπ
-  签名: [HasSplitCoequalizer f g]
+定义 有SplitCoequalizer.coequalizerπ
+  签名: [有SplitCoequalizer f g]
   定义体: (splittable (f := f) (g := g)).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, splittable
@@ -294,8 +294,8 @@ definition HasSplitCoequalizer.isSplitCoequalizer
   body: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
 
 中文:
-定义 HasSplitCoequalizer.isSplitCoequalizer
-  签名: [HasSplitCoequalizer f g]
+定义 有SplitCoequalizer.isSplitCoequalizer
+  签名: [有SplitCoequalizer f g]
   定义体: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
 
 Depends on / 依赖: Classical, Classical.choice, choice, choose_spec, choose_spec.choose_spec, splittable
@@ -314,7 +314,7 @@ instance map_is_split_pair
 
 中文:
 实例 map_is_split_pair
-  签名: [HasSplitCoequalizer f g]
+  签名: [有SplitCoequalizer f g]
   定义体: ⟨_, _, ⟨IsSplitCoequalizer.map (HasSplitCoequalizer.isSplitCoequalizer f g) _⟩⟩
 
 Depends on / 依赖: HasSplitCoequalizer, HasSplitCoequalizer.isSplitCoequalizer, IsSplitCoequalizer, IsSplitCoequalizer.map, isSplitCoequalizer

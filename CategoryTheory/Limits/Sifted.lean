@@ -56,7 +56,7 @@ abbreviation IsSiftedOrEmpty
   body: Final (diag C)
 
 中文:
-缩写 IsSiftedOrEmpty
+缩写 是SiftedOrEmpty
   签名: : 命题
   定义体: Final (diag C)
 -/
@@ -73,11 +73,11 @@ class IsSifted
     - [nonempty : Nonempty C]
 
 中文:
-类 IsSifted
-  参数: : 命题 extends IsSiftedOrEmpty C where
-  继承: IsSiftedOrEmpty C
+类 是Sifted
+  参数: : 命题 extends 是SiftedOrEmpty C where
+  继承: 是SiftedOrEmpty C
   公理与运算 (1 个):
-    - [nonempty : Nonempty C]
+    - [nonempty : 非空 C]
 -/
 class IsSifted : Prop extends IsSiftedOrEmpty C where
   [nonempty : Nonempty C]
@@ -109,8 +109,8 @@ lemma isSifted_of_equiv
 
 中文:
 引理 isSifted_of_equiv
-  条件: [IsSifted C] {D : 类型u₁} [Category.{v₁} D] (e : D ≌ C)
-  结论: IsSifted D
+  条件: [是Sifted C] {D : 类型u₁} [范畴.{v₁} D] (e : D ≌ C)
+  结论: 是Sifted D
   证明: letI : Final (diag D) := by
     let : D × D ≌ C × C := Equivalence.prod e e
     have sq : (e.inverse ⋙ diag D ⋙ this.functor ≅ diag C) :=
@@ -142,7 +142,7 @@ lemma isSifted_iff_asSmallIsSifted
 
 中文:
 引理 isSifted_iff_asSmallIsSifted
-  结论: IsSifted C ↔ IsSifted (AsSmall.{w} C) where
+  结论: 是Sifted C ↔ 是Sifted (AsSmall.{w} C) where
   证明: isSifted_of_equiv AsSmall.equiv.symm
   mpr _ := isSifted_of_equiv AsSmall.equiv
 
@@ -169,8 +169,8 @@ instance [IsSifted
           · exact Zag.of_hom
 
 中文:
-实例 [IsSifted
-  签名: C] : IsConnected C
+实例 [是Sifted
+  签名: C] : 是连通 C
   定义体: isConnected_of_zigzag
     (by intro c₁ c₂
         have X : StructuredArrow (c₁, c₂) (diag C) :=
@@ -216,7 +216,7 @@ have : _root_.Nonempty StructuredArrow (c₁, c₂) (diag C) :=
 
 中文:
 实例 [HasBinaryCoproducts
-  签名: C] : IsSiftedOrEmpty C
+  签名: C] : 是SiftedOrEmpty C
   定义体: by
     constructor
     rintro ⟨c₁, c₂⟩
@@ -253,7 +253,7 @@ instance isSifted_of_hasBinaryCoproducts_and_nonempty
 
 中文:
 实例 isSifted_of_hasBinaryCoproducts_and_nonempty
-  签名: [_root_.Nonempty C] [HasBinaryCoproducts C]
+  签名: [_root_.非空 C] [HasBinaryCoproducts C]
 -/
 instance isSifted_of_hasBinaryCoproducts_and_nonempty [_root_.Nonempty C] [HasBinaryCoproducts C] :
     IsSifted C where
@@ -272,8 +272,8 @@ instance [IsSiftedOrEmpty
   final_of_natIso (Iso.refl ((Functor.diag C).prod (Functor.diag D) ⋙ e.functor))
 
 中文:
-实例 [IsSiftedOrEmpty
-  签名: C] [IsSiftedOrEmpty D] :
+实例 [是SiftedOrEmpty
+  签名: C] [是SiftedOrEmpty D] :
   定义体: let e : (C × C) × (D × D) ≌ (C × D) × (C × D) := prod.prodμ ..
   final_of_natIso (Iso.refl ((Functor.diag C).prod (Functor.diag D) ⋙ e.functor))
 
@@ -293,7 +293,7 @@ instance prod_isSifted
 
 中文:
 实例 prod_isSifted
-  签名: [IsSifted C] [IsSifted D]
+  签名: [是Sifted C] [是Sifted D]
 -/
 instance prod_isSifted [IsSifted C] [IsSifted D] : IsSifted (C × D) where
 
@@ -317,8 +317,8 @@ instance [F.Final]
   body: show (diag C ⋙ F.prod G).Final from final_comp _ _
 
 中文:
-实例 [F.Final]
-  签名: [G.Final]
+实例 [F.终]
+  签名: [G.终]
   定义体: show (diag C ⋙ F.prod G).Final from final_comp _ _
 
 Depends on / 依赖: F.prod, final_comp
@@ -394,7 +394,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (CartesianMonoidalCategory.prodComparison colim X Y)
+  签名: 是同构 (CartesianMonoidal范畴.prodComparison colim X Y)
   定义体: by
   rw [← factorization_prodComparison_colim]
   infer_instance
@@ -706,8 +706,8 @@ exact of_final_functor_from_sifted'
     AsSmall.equiv.{_, _, max u₁ v₁}.inverse ⋙ F ⋙ AsSmall.equiv.{_, _, max u v}.functor
 
 中文:
-定理 IsSifted.of_final_functor_from_sifted
-  结论: {D : 类型u₁} [Category.{v₁} D] [h₁ : IsSifted C]
+定理 是Sifted.of_final_functor_from_sifted
+  结论: {D : 类型u₁} [范畴.{v₁} D] [h₁ : 是Sifted C]
   证明: by
   rw [isSifted_iff_asSmallIsSifted] at h₁ ⊢
 exact of_final_functor_from_sifted'

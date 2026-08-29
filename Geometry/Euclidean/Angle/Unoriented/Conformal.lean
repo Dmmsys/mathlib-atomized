@@ -59,7 +59,7 @@ theorem ConformalAt.preserves_angle
 
 中文:
 定理 ConformalAt.preserves_angle
-  结论: {f : E -> F} {x : E} {f' : E ->L[实数] F} (h : HasFDerivAt f f' x)
+  结论: {f : E -> F} {x : E} {f' : E ->L[实数] F} (h : 在点处Fréchet可导 f f' x)
   证明: let ⟨_, h₁, c⟩ := H
   h₁.unique h ▸ IsConformalMap.preserves_angle c u v
 

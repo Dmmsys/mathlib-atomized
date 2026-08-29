@@ -30,7 +30,7 @@ instance ContinuousMap.instLocallyConvexSpace
     exact hUc (hf hx) (hg hx) ha hb hab
 
 中文:
-实例 ContinuousMap.instLocallyConvexSpace
+实例 连续映射.instLocallyConvexSpace
   签名: {X 𝕜 E : 类型}
   定义体: .ofBasisZero _ _ _ _ (LocallyConvexSpace.convex_basis_zero 𝕜 E).nhds_continuousMapConst by
     rintro ⟨K, U⟩ ⟨hK, hU₀, hUc⟩ f hf g hg a b ha hb hab x hx

@@ -30,8 +30,8 @@ instance [Finite
   body: Finite.of_equiv α (by rfl)
 
 中文:
-实例 [Finite
-  签名: α] : Finite (Additive α)
+实例 [有限
+  签名: α] : 有限 (加性 α)
   定义体: Finite.of_equiv α (by rfl)
 
 Depends on / 依赖: Finite, Finite.of_equiv, of_equiv
@@ -48,8 +48,8 @@ instance [Finite
   body: Finite.of_equiv α (by rfl)
 
 中文:
-实例 [Finite
-  签名: α] : Finite (Multiplicative α)
+实例 [有限
+  签名: α] : 有限 (Multiplicative α)
   定义体: Finite.of_equiv α (by rfl)
 
 Depends on / 依赖: Finite, Finite.of_equiv, of_equiv
@@ -67,7 +67,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Infinite α] : Infinite (Additive α)
+  签名: : 无限 α] : 无限 (加性 α)
   定义体: h
 -/
 instance [h : Infinite α] : Infinite (Additive α) := h
@@ -82,7 +82,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Infinite α] : Infinite (Multiplicative α)
+  签名: : 无限 α] : 无限 (Multiplicative α)
   定义体: h
 -/
 instance [h : Infinite α] : Infinite (Multiplicative α) := h
@@ -96,8 +96,8 @@ instance Additive.fintype
   body: Fintype.ofEquiv α Additive.ofMul
 
 中文:
-实例 Additive.fintype
-  签名: : 对任意 [Fintype α], Fintype (Additive α)
+实例 加性.fintype
+  签名: : 对任意 [有限类型 α], 有限类型 (加性 α)
   定义体: Fintype.ofEquiv α Additive.ofMul
 
 Depends on / 依赖: Additive, Additive.ofMul, Fintype, Fintype.ofEquiv, ofEquiv
@@ -115,7 +115,7 @@ instance Multiplicative.fintype
 
 中文:
 实例 Multiplicative.fintype
-  签名: : 对任意 [Fintype α], Fintype (Multiplicative α)
+  签名: : 对任意 [有限类型 α], 有限类型 (Multiplicative α)
   定义体: Fintype.ofEquiv α Multiplicative.ofAdd
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, Multiplicative, Multiplicative.ofAdd, ofEquiv
@@ -132,8 +132,8 @@ lemma Fintype.card_multiplicative
   proof: Finset.card_map _
 
 中文:
-引理 Fintype.card_multiplicative
-  条件: (α : 类型) [Fintype α]
+引理 有限类型.card_multiplicative
+  条件: (α : 类型) [有限类型 α]
   证明: Finset.card_map _
 -/
 @[simp] lemma Fintype.card_multiplicative (α : Type*) [Fintype α] :
@@ -149,9 +149,9 @@ lemma Fintype.card_additive
   proof: Finset.card_map _
 
 中文:
-引理 Fintype.card_additive
-  条件: (α : 类型) [Fintype α]
-  结论: card (Additive α) = card α
+引理 有限类型.card_additive
+  条件: (α : 类型) [有限类型 α]
+  结论: card (加性 α) = card α
   证明: Finset.card_map _
 -/
 @[simp] lemma Fintype.card_additive (α : Type*) [Fintype α] : card (Additive α) = card α :=

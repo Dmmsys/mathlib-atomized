@@ -48,8 +48,8 @@ lemma Measure.integrable_toReal_rnDeriv
     (Measure.lintegral_rnDeriv_lt_top _ _).ne
 
 中文:
-引理 Measure.integrable_toReal_rnDeriv
-  条件: [IsFiniteMeasure μ]
+引理 测度.integrable_to实数_rnDeriv
+  条件: [是有限测度 μ]
   证明: integrable_toReal_of_lintegral_ne_top (Measure.measurable_rnDeriv _ _).aemeasurable
     (Measure.lintegral_rnDeriv_lt_top _ _).ne
 
@@ -76,7 +76,7 @@ lemma le_integral_rnDeriv_of_ac
 
 中文:
 引理 le_integral_rnDeriv_of_ac
-  结论: [IsFiniteMeasure μ] [IsProbabilityMeasure ν]
+  结论: [是有限测度 μ] [是概率测度 ν]
   证明: by
   have hf_cont' : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont
   calc f (μ.real univ)
@@ -118,7 +118,7 @@ lemma mul_le_integral_rnDeriv_of_ac
 
 中文:
 引理 mul_le_integral_rnDeriv_of_ac
-  结论: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: [是有限测度 μ] [是有限测度 ν]
   证明: by
   by_cases hν : ν = 0
   · simp [hν]
@@ -198,7 +198,7 @@ lemma lintegral_rnDeriv_compProd
 
 中文:
 引理 lintegral_rnDeriv_compProd
-  结论: [IsSFiniteKernel κ] [IsFiniteKernel η]
+  结论: [是SFiniteKernel κ] [是FiniteKernel η]
   证明: by
   refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite (by fun_prop) (κ.measurable_coe .univ) ?_
   intro s hs hsμ

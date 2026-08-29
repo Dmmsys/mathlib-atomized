@@ -139,7 +139,7 @@ have en : Q(Nat) := mkRawNatLit n' / 2
     le
 
 中文:
-定义 proveNatFibAux
+定义 prove自然数FibAux
   签名: (en' : Q(自然数))
   定义体: match en'.natLit! with
   | 0 =>
@@ -234,7 +234,7 @@ have en : Q(Nat) := mkRawNatLit n' / 2
     let ⟨ea, eb, H⟩ 
 
 中文:
-定义 proveNatFib
+定义 prove自然数Fib
   签名: (en' : Q(自然数))
   定义体: match en'.natLit! with
 | 0 => have : en' =Q nat_lit 0 := ⟨⟩; ⟨q(nat_lit 0), q(Nat.fib_zero)⟩
@@ -275,8 +275,8 @@ theorem isNat_fib
   statement: {x nx z : Nat} -> IsNat x nx -> Nat.fib nx = z -> IsNat (Nat.fib x) z
 
 中文:
-定理 isNat_fib
-  结论: {x nx z : 自然数} -> Is自然数 x nx -> 自然数.fib nx = z -> Is自然数 (自然数.fib x) z
+定理 is自然数_fib
+  结论: {x nx z : 自然数} -> 是自然数 x nx -> 自然数.fib nx = z -> 是自然数 (自然数.fib x) z
 -/
 theorem isNat_fib : {x nx z : Nat} -> IsNat x nx -> Nat.fib nx = z -> IsNat (Nat.fib x) z
   | _, _, _, ⟨rfl⟩, rfl => ⟨rfl⟩
@@ -298,7 +298,7 @@ definition evalNatFib
   return .isNat sNat ey pf'
 
 中文:
-定义 evalNatFib
+定义 eval自然数Fib
   签名: : NormNumExt where eval {_ _} e
   定义体: do
   let .app _ (x : Q(Nat)) ← Meta.whnfR e | failure

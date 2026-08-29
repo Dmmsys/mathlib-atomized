@@ -45,7 +45,7 @@ lemma div_linear_zpow_differentiableOn
 
 中文:
 引理 div_linear_zpow_differentiableOn
-  条件: (k : 整数) (a : Fin 2 -> 整数)
+  条件: (k : 整数) (a : 有限集 2 -> 整数)
   证明: by
   rcases ne_or_eq a 0 with ha | rfl
   · apply DifferentiableOn.zpow
@@ -83,7 +83,7 @@ lemma eisSummand_extension_differentiableOn
 
 中文:
 引理 eisSummand_extension_differentiableOn
-  条件: (k : 整数) (a : Fin 2 -> 整数)
+  条件: (k : 整数) (a : 有限集 2 -> 整数)
   证明: by
   apply DifferentiableOn.congr (div_linear_zpow_differentiableOn k a)
   intro z hz
@@ -115,7 +115,7 @@ theorem eisensteinSeriesSIF_mdifferentiable
 
 中文:
 定理 eisensteinSeriesSIF_mdifferentiable
-  条件: {k : 整数} {N : 自然数} (hk : 3 <= k) (a : Fin 2 -> ZMod N)
+  条件: {k : 整数} {N : 自然数} (hk : 3 <= k) (a : 有限集 2 -> ZMod N)
   证明: by
   intro τ
   suffices DifferentiableAt Complex (↑ₕeisensteinSeriesSIF a k) τ.1 by

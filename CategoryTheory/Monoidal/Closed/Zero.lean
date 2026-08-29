@@ -88,7 +88,7 @@ definition uniqueHomsetOfZero
 
 中文:
 定义 uniqueHomsetOfZero
-  签名: [HasZeroObject C] (X Y : C)
+  签名: [有ZeroObject C] (X Y : C)
   定义体: by
   haveI : HasInitial C := HasZeroObject.hasInitial
   apply uniqueHomsetOfInitialIsoUnit _ X Y
@@ -120,7 +120,7 @@ definition equivPUnit
 
 中文:
 定义 equivPUnit
-  签名: [HasZeroObject C]
+  签名: [有ZeroObject C]
   定义体: Functor.star C
   inverse := Functor.fromPUnit 0
   unitIso := NatIso.ofComponents

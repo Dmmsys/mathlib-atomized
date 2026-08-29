@@ -72,8 +72,8 @@ theorem ContinuousLinearMap.norm_map_removeNth_le
   exact (f (m i)).le_of_opNorm_le (f.le_opNorm _) _
 
 中文:
-定理 ContinuousLinearMap.norm_map_removeNth_le
-  结论: {i : Fin (n + 1)}
+定理 连续线性映射.norm_map_removeNth_le
+  结论: {i : 有限集 (n + 1)}
   证明: by
   rw [i.prod_univ_succAbove]; rw [← mul_assoc]
   exact (f (m i)).le_of_opNorm_le (f.le_opNorm _) _
@@ -94,7 +94,7 @@ theorem ContinuousLinearMap.norm_map_tail_le
   proof: ContinuousLinearMap.norm_map_removeNth_le (i := 0) f m
 
 中文:
-定理 ContinuousLinearMap.norm_map_tail_le
+定理 连续线性映射.norm_map_tail_le
   证明: ContinuousLinearMap.norm_map_removeNth_le (i := 0) f m
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.norm_map_removeNth_le, norm_map_removeNth_le
@@ -114,7 +114,7 @@ theorem ContinuousMultilinearMap.norm_map_init_le
   exact (f (init m)).le_of_opNorm_le (f.le_opNorm _) _
 
 中文:
-定理 ContinuousMultilinearMap.norm_map_init_le
+定理 连续多重线性映射.norm_map_init_le
   证明: by
   rw [prod_univ_castSucc]; rw [← mul_assoc]
   exact (f (init m)).le_of_opNorm_le (f.le_opNorm _) _
@@ -137,8 +137,8 @@ theorem ContinuousMultilinearMap.norm_map_insertNth_le
   simpa [i.prod_univ_succAbove, mul_assoc] using f.le_opNorm (i.insertNth x m)
 
 中文:
-定理 ContinuousMultilinearMap.norm_map_insertNth_le
-  结论: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.norm_map_insertNth_le
+  结论: (f : 连续多重线性映射 𝕜 Ei G)
   证明: by
   simpa [i.prod_univ_succAbove, mul_assoc] using f.le_opNorm (i.insertNth x m)
 
@@ -159,8 +159,8 @@ theorem ContinuousMultilinearMap.norm_map_cons_le
   simpa [prod_univ_succ, mul_assoc] using f.le_opNorm (cons x m)
 
 中文:
-定理 ContinuousMultilinearMap.norm_map_cons_le
-  结论: (f : ContinuousMultilinearMap 𝕜 Ei G) (x : Ei 0)
+定理 连续多重线性映射.norm_map_cons_le
+  结论: (f : 连续多重线性映射 𝕜 Ei G) (x : Ei 0)
   证明: by
   simpa [prod_univ_succ, mul_assoc] using f.le_opNorm (cons x m)
 
@@ -180,8 +180,8 @@ theorem ContinuousMultilinearMap.norm_map_snoc_le
   simpa [prod_univ_castSucc, mul_assoc] using f.le_opNorm (snoc m x)
 
 中文:
-定理 ContinuousMultilinearMap.norm_map_snoc_le
-  结论: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.norm_map_snoc_le
+  结论: (f : 连续多重线性映射 𝕜 Ei G)
   证明: by
   simpa [prod_univ_castSucc, mul_assoc] using f.le_opNorm (snoc m x)
 
@@ -206,7 +206,7 @@ definition ContinuousLinearMap.uncurryLeft
 @[simp]
 
 中文:
-定义 ContinuousLinearMap.uncurryLeft
+定义 连续线性映射.uncurryLeft
   定义体: (ContinuousMultilinearMap.toMultilinearMapLinear ∘ₗ f.toLinearMap).uncurryLeft.mkContinuous
     ‖f‖ fun m => by exact ContinuousLinearMap.norm_map_tail_le f m
 
@@ -229,7 +229,7 @@ theorem ContinuousLinearMap.uncurryLeft_apply
   proof: rfl
 
 中文:
-定理 ContinuousLinearMap.uncurryLeft_apply
+定理 连续线性映射.uncurryLeft_apply
   证明: rfl
 -/
 theorem ContinuousLinearMap.uncurryLeft_apply
@@ -248,8 +248,8 @@ definition ContinuousMultilinearMap.curryLeft
 @[simp]
 
 中文:
-定义 ContinuousMultilinearMap.curryLeft
-  签名: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定义 连续多重线性映射.curryLeft
+  签名: (f : 连续多重线性映射 𝕜 Ei G)
   定义体: MultilinearMap.mkContinuousLinear f.toMultilinearMap.curryLeft ‖f‖ f.norm_map_cons_le
 
 @[simp]
@@ -272,8 +272,8 @@ theorem ContinuousMultilinearMap.curryLeft_apply
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curryLeft_apply
-  结论: (f : ContinuousMultilinearMap 𝕜 Ei G) (x : Ei 0)
+定理 连续多重线性映射.curryLeft_apply
+  结论: (f : 连续多重线性映射 𝕜 Ei G) (x : Ei 0)
   证明: rfl
 
 @[simp]
@@ -295,7 +295,7 @@ theorem ContinuousLinearMap.curry_uncurryLeft
 @[simp]
 
 中文:
-定理 ContinuousLinearMap.curry_uncurryLeft
+定理 连续线性映射.curry_uncurryLeft
   证明: by
   ext m x
   rw [ContinuousMultilinearMap.curryLeft_apply]; rw [ContinuousLinearMap.uncurryLeft_apply]; rw [tail_cons]; rw [cons_zero]
@@ -320,8 +320,8 @@ theorem ContinuousMultilinearMap.uncurry_curryLeft
   proof: ContinuousMultilinearMap.toMultilinearMap_injective f.toMultilinearMap.uncurry_curryLeft
 
 中文:
-定理 ContinuousMultilinearMap.uncurry_curryLeft
-  条件: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.uncurry_curryLeft
+  条件: (f : 连续多重线性映射 𝕜 Ei G)
   证明: ContinuousMultilinearMap.toMultilinearMap_injective f.toMultilinearMap.uncurry_curryLeft
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.toMultilinearMap_injective, f.toMultilinearMap.uncurry_curryLeft, toMultilinearMap, toMultilinearMap_injective, uncurry_curryLeft
@@ -431,8 +431,8 @@ theorem ContinuousMultilinearMap.curryLeft_norm
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curryLeft_norm
-  条件: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.curryLeft_norm
+  条件: (f : 连续多重线性映射 𝕜 Ei G)
   证明: (continuousMultilinearCurryLeftEquiv 𝕜 Ei G).norm_map f
 
 @[simp]
@@ -452,7 +452,7 @@ theorem ContinuousLinearMap.uncurryLeft_norm
   proof: (continuousMultilinearCurryLeftEquiv 𝕜 Ei G).symm.norm_map f
 
 中文:
-定理 ContinuousLinearMap.uncurryLeft_norm
+定理 连续线性映射.uncurryLeft_norm
   证明: (continuousMultilinearCurryLeftEquiv 𝕜 Ei G).symm.norm_map f
 
 Depends on / 依赖: continuousMultilinearCurryLeftEquiv, norm_map, symm.norm_map
@@ -477,7 +477,7 @@ definition ContinuousMultilinearMap.uncurryRight
 @[simp]
 
 中文:
-定义 ContinuousMultilinearMap.uncurryRight
+定义 连续多重线性映射.uncurryRight
   定义体: let f' : MultilinearMap 𝕜 (fun i : Fin n => Ei <| castSucc i) (Ei (last n) ->ₗ[𝕜] G) :=
     (ContinuousLinearMap.coeLM 𝕜).compMultilinearMap f.toMultilinearMap
   f'.uncurryRight.mkContinuous ‖f‖ fun m => f.norm_map_init_le m
@@ -502,7 +502,7 @@ theorem ContinuousMultilinearMap.uncurryRight_apply
   proof: rfl
 
 中文:
-定理 ContinuousMultilinearMap.uncurryRight_apply
+定理 连续多重线性映射.uncurryRight_apply
   证明: rfl
 -/
 theorem ContinuousMultilinearMap.uncurryRight_apply
@@ -527,8 +527,8 @@ definition ContinuousMultilinearMap.curryRight
     
 
 中文:
-定义 ContinuousMultilinearMap.curryRight
-  签名: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定义 连续多重线性映射.curryRight
+  签名: (f : 连续多重线性映射 𝕜 Ei G)
   定义体: let f' : MultilinearMap 𝕜 (fun i : Fin n => Ei <| castSucc i) (Ei (last n) ->L[𝕜] G) :=
     { toFun := fun m =>
         (f.toMultilinearMap.curryRight m).mkContinuous (‖f‖ * ∏ i, ‖m i‖) fun x =>
@@ -568,8 +568,8 @@ theorem ContinuousMultilinearMap.curryRight_apply
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curryRight_apply
-  结论: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.curryRight_apply
+  结论: (f : 连续多重线性映射 𝕜 Ei G)
   证明: rfl
 
 @[simp]
@@ -591,7 +591,7 @@ theorem ContinuousMultilinearMap.curry_uncurryRight
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curry_uncurryRight
+定理 连续多重线性映射.curry_uncurryRight
   证明: by
   ext m x
   rw [ContinuousMultilinearMap.curryRight_apply]; rw [ContinuousMultilinearMap.uncurryRight_apply]; rw [snoc_last]; rw [init_snoc]
@@ -618,8 +618,8 @@ theorem ContinuousMultilinearMap.uncurry_curryRight
   rw [uncurryRight_apply]; rw [curryRight_apply]; rw [snoc_init_self]
 
 中文:
-定理 ContinuousMultilinearMap.uncurry_curryRight
-  条件: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.uncurry_curryRight
+  条件: (f : 连续多重线性映射 𝕜 Ei G)
   证明: by
   ext m
   rw [uncurryRight_apply]; rw [curryRight_apply]; rw [snoc_init_self]
@@ -797,8 +797,8 @@ theorem ContinuousMultilinearMap.curryRight_norm
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curryRight_norm
-  条件: (f : ContinuousMultilinearMap 𝕜 Ei G)
+定理 连续多重线性映射.curryRight_norm
+  条件: (f : 连续多重线性映射 𝕜 Ei G)
   证明: (continuousMultilinearCurryRightEquiv 𝕜 Ei G).norm_map f
 
 @[simp]
@@ -818,7 +818,7 @@ theorem ContinuousMultilinearMap.uncurryRight_norm
   proof: (continuousMultilinearCurryRightEquiv 𝕜 Ei G).symm.norm_map f
 
 中文:
-定理 ContinuousMultilinearMap.uncurryRight_norm
+定理 连续多重线性映射.uncurryRight_norm
   证明: (continuousMultilinearCurryRightEquiv 𝕜 Ei G).symm.norm_map f
 
 Depends on / 依赖: continuousMultilinearCurryRightEquiv, norm_map, symm.norm_map
@@ -846,8 +846,8 @@ definition ContinuousLinearMap.uncurryMid
 .mkContinuous ‖f‖ fun m => by exact ContinuousLinearMap.norm_map_removeNth_le f m
 
 中文:
-定义 ContinuousLinearMap.uncurryMid
-  签名: (p : Fin (n + 1))
+定义 连续线性映射.uncurryMid
+  签名: (p : 有限集 (n + 1))
   定义体: (ContinuousMultilinearMap.toMultilinearMapLinear ∘ₗ f.toLinearMap).uncurryMid p
 .mkContinuous ‖f‖ fun m => by exact ContinuousLinearMap.norm_map_removeNth_le f m
 
@@ -870,8 +870,8 @@ definition ContinuousMultilinearMap.curryMid
 @[simp]
 
 中文:
-定义 ContinuousMultilinearMap.curryMid
-  签名: (p : Fin (n + 1)) (f : ContinuousMultilinearMap 𝕜 Ei G)
+定义 连续多重线性映射.curryMid
+  签名: (p : 有限集 (n + 1)) (f : 连续多重线性映射 𝕜 Ei G)
   定义体: MultilinearMap.mkContinuousLinear (f.toMultilinearMap.curryMid p) ‖f‖ f.norm_map_insertNth_le
 
 @[simp]
@@ -894,8 +894,8 @@ theorem ContinuousMultilinearMap.curryMid_apply
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curryMid_apply
-  结论: (p : Fin (n + 1))
+定理 连续多重线性映射.curryMid_apply
+  结论: (p : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -917,8 +917,8 @@ theorem ContinuousLinearMap.curryMid_uncurryMid
 @[simp]
 
 中文:
-定理 ContinuousLinearMap.curryMid_uncurryMid
-  结论: (p : Fin (n + 1))
+定理 连续线性映射.curryMid_uncurryMid
+  结论: (p : 有限集 (n + 1))
   证明: by ext; simp
 
 @[simp]
@@ -937,8 +937,8 @@ theorem ContinuousMultilinearMap.uncurryMid_curryMid
   proof: ContinuousMultilinearMap.toMultilinearMap_injective f.toMultilinearMap.uncurryMid_curryMid p
 
 中文:
-定理 ContinuousMultilinearMap.uncurryMid_curryMid
-  结论: (p : Fin (n + 1))
+定理 连续多重线性映射.uncurryMid_curryMid
+  结论: (p : 有限集 (n + 1))
   证明: ContinuousMultilinearMap.toMultilinearMap_injective f.toMultilinearMap.uncurryMid_curryMid p
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.toMultilinearMap_injective, f.toMultilinearMap.uncurryMid_curryMid, toMultilinearMap, toMultilinearMap_injective, uncurryMid_curryMid
@@ -967,8 +967,8 @@ definition ContinuousMultilinearMap.curryMidEquiv
       right_inv := ContinuousLinearMap.
 
 中文:
-定义 ContinuousMultilinearMap.curryMidEquiv
-  签名: (p : Fin (n + 1))
+定义 连续多重线性映射.curryMidEquiv
+  签名: (p : 有限集 (n + 1))
   定义体: LinearIsometryEquiv.ofBounds
     { toFun := ContinuousMultilinearMap.curryMid p
       map_add' := fun _ _ => rfl
@@ -1008,8 +1008,8 @@ theorem ContinuousMultilinearMap.norm_curryMid
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.norm_curryMid
-  结论: (p : Fin (n + 1))
+定理 连续多重线性映射.norm_curryMid
+  结论: (p : 有限集 (n + 1))
   证明: (ContinuousMultilinearMap.curryMidEquiv 𝕜 Ei G p).norm_map f
 
 @[simp]
@@ -1030,8 +1030,8 @@ theorem ContinuousLinearMap.norm_uncurryMid
   proof: (ContinuousMultilinearMap.curryMidEquiv 𝕜 Ei G p).symm.norm_map f
 
 中文:
-定理 ContinuousLinearMap.norm_uncurryMid
-  结论: (p : Fin (n + 1))
+定理 连续线性映射.norm_uncurryMid
+  结论: (p : 有限集 (n + 1))
   证明: (ContinuousMultilinearMap.curryMidEquiv 𝕜 Ei G p).symm.norm_map f
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryMidEquiv, curryMidEquiv, norm_map, symm.norm_map
@@ -1062,8 +1062,8 @@ definition ContinuousMultilinearMap.curry0
   body: f 0
 
 中文:
-定义 ContinuousMultilinearMap.curry0
-  签名: (f : ContinuousMultilinearMap 𝕜 (fun _ : Fin 0 => G) G')
+定义 连续多重线性映射.curry0
+  签名: (f : 连续多重线性映射 𝕜 (fun _ : 有限集 0 => G) G')
   定义体: f 0
 -/
 def ContinuousMultilinearMap.curry0 (f : ContinuousMultilinearMap 𝕜 (fun _ : Fin 0 => G) G') :
@@ -1080,7 +1080,7 @@ definition ContinuousMultilinearMap.uncurry0
   body: ContinuousMultilinearMap.constOfIsEmpty 𝕜 _ x
 
 中文:
-定义 ContinuousMultilinearMap.uncurry0
+定义 连续多重线性映射.uncurry0
   签名: (x : G')
   定义体: ContinuousMultilinearMap.constOfIsEmpty 𝕜 _ x
 
@@ -1102,8 +1102,8 @@ theorem ContinuousMultilinearMap.uncurry0_apply
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.uncurry0_apply
-  条件: (x : G') (m : Fin 0 -> G)
+定理 连续多重线性映射.uncurry0_apply
+  条件: (x : G') (m : 有限集 0 -> G)
   证明: rfl
 
 @[simp]
@@ -1125,7 +1125,7 @@ theorem ContinuousMultilinearMap.curry0_apply
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.curry0_apply
+定理 连续多重线性映射.curry0_apply
   条件: (f : G [×0]->L[𝕜] G')
   结论: f.curry0 = f 0
   证明: rfl
@@ -1147,8 +1147,8 @@ theorem ContinuousMultilinearMap.apply_zero_uncurry0
   simp [Subsingleton.elim x m]
 
 中文:
-定理 ContinuousMultilinearMap.apply_zero_uncurry0
-  条件: (f : G [×0]->L[𝕜] G') {x : Fin 0 -> G}
+定理 连续多重线性映射.apply_zero_uncurry0
+  条件: (f : G [×0]->L[𝕜] G') {x : 有限集 0 -> G}
   证明: by
   ext m
   simp [Subsingleton.elim x m]
@@ -1169,7 +1169,7 @@ theorem ContinuousMultilinearMap.uncurry0_curry0
   proof: by simp
 
 中文:
-定理 ContinuousMultilinearMap.uncurry0_curry0
+定理 连续多重线性映射.uncurry0_curry0
   条件: (f : G [×0]->L[𝕜] G')
   证明: by simp
 -/
@@ -1186,7 +1186,7 @@ theorem ContinuousMultilinearMap.curry0_uncurry0
   proof: rfl
 
 中文:
-定理 ContinuousMultilinearMap.curry0_uncurry0
+定理 连续多重线性映射.curry0_uncurry0
   条件: (x : G')
   证明: rfl
 -/
@@ -1207,7 +1207,7 @@ theorem ContinuousMultilinearMap.uncurry0_norm
 @[simp]
 
 中文:
-定理 ContinuousMultilinearMap.uncurry0_norm
+定理 连续多重线性映射.uncurry0_norm
   条件: (x : G')
   证明: norm_constOfIsEmpty _ _ _
 
@@ -1234,8 +1234,8 @@ theorem ContinuousMultilinearMap.fin0_apply_norm
       simp [-ContinuousMultilinearMap.apply_zero
 
 中文:
-定理 ContinuousMultilinearMap.fin0_apply_norm
-  条件: (f : G [×0]->L[𝕜] G') {x : Fin 0 -> G}
+定理 连续多重线性映射.fin0_apply_norm
+  条件: (f : G [×0]->L[𝕜] G') {x : 有限集 0 -> G}
   证明: by
   obtain rfl : x = 0 := Subsingleton.elim _ _
   refine le_antisymm (by simpa using f.le_opNorm 0) ?_
@@ -1265,8 +1265,8 @@ theorem ContinuousMultilinearMap.fin0_apply_enorm
   simp_rw [← ofReal_norm, fin0_apply_norm]
 
 中文:
-定理 ContinuousMultilinearMap.fin0_apply_enorm
-  条件: (f : G [×0]->L[𝕜] G') {x : Fin 0 -> G}
+定理 连续多重线性映射.fin0_apply_enorm
+  条件: (f : G [×0]->L[𝕜] G') {x : 有限集 0 -> G}
   证明: by
   simp_rw [← ofReal_norm, fin0_apply_norm]
 
@@ -1286,7 +1286,7 @@ theorem ContinuousMultilinearMap.curry0_norm
   proof: by simp
 
 中文:
-定理 ContinuousMultilinearMap.curry0_norm
+定理 连续多重线性映射.curry0_norm
   条件: (f : G [×0]->L[𝕜] G')
   结论: ‖f.curry0‖ = ‖f‖
   证明: by simp
@@ -1383,7 +1383,7 @@ theorem continuousMultilinearCurryFin0_symm_apply_apply
 
 中文:
 定理 continuousMultilinearCurryFin0_symm_apply_apply
-  条件: (x : G') (v : Fin 0 -> G)
+  条件: (x : G') (v : 有限集 0 -> G)
   证明: rfl
 -/
 theorem continuousMultilinearCurryFin0_symm_apply_apply (x : G') (v : Fin 0 -> G) :
@@ -1453,7 +1453,7 @@ theorem continuousMultilinearCurryFin1_symm_apply
 
 中文:
 定理 continuousMultilinearCurryFin1_symm_apply
-  条件: (f : G ->L[𝕜] G') (v : Fin 1 -> G)
+  条件: (f : G ->L[𝕜] G') (v : 有限集 1 -> G)
   证明: rfl
 -/
 theorem continuousMultilinearCurryFin1_symm_apply (f : G ->L[𝕜] G') (v : Fin 1 -> G) :
@@ -1478,7 +1478,7 @@ theorem norm_domDomCongr
 
 中文:
 定理 norm_domDomCongr
-  条件: (σ : ι ≃ ι') (f : ContinuousMultilinearMap 𝕜 (fun _ : ι => G) G')
+  条件: (σ : ι ≃ ι') (f : 连续多重线性映射 𝕜 (fun _ : ι => G) G')
   证明: by
   simp only [norm_def, ← σ.prod_comp,
     (σ.arrowCongr (Equiv.refl G)).surjective.forall, domDomCongr_apply, Equiv.arrowCongr_apply,
@@ -1538,7 +1538,7 @@ definition currySum
 
 中文:
 定义 currySum
-  签名: (f : ContinuousMultilinearMap 𝕜 (fun _ : ι oplus ι' => G) G')
+  签名: (f : 连续多重线性映射 𝕜 (fun _ : ι oplus ι' => G) G')
   定义体: MultilinearMap.mkContinuousMultilinear (MultilinearMap.currySum f.toMultilinearMap) ‖f‖
     fun m m' => by simpa [Fintype.prod_sum_type, mul_assoc] using f.le_opNorm (Sum.elim m m')
 
@@ -1562,7 +1562,7 @@ theorem currySum_apply
 
 中文:
 定理 currySum_apply
-  结论: (f : ContinuousMultilinearMap 𝕜 (fun _ : ι oplus ι' => G) G') (m : ι -> G)
+  结论: (f : 连续多重线性映射 𝕜 (fun _ : ι oplus ι' => G) G') (m : ι -> G)
   证明: rfl
 -/
 theorem currySum_apply (f : ContinuousMultilinearMap 𝕜 (fun _ : ι oplus ι' => G) G') (m : ι -> G)
@@ -1584,7 +1584,7 @@ definition uncurrySum
 
 中文:
 定义 uncurrySum
-  签名: (f : ContinuousMultilinearMap 𝕜 (fun _ : ι => G)
+  签名: (f : 连续多重线性映射 𝕜 (fun _ : ι => G)
   定义体: MultilinearMap.mkContinuous
     (toMultilinearMapLinear.compMultilinearMap f.toMultilinearMap).uncurrySum ‖f‖ fun m => by
     simpa [Fintype.prod_sum_type, mul_assoc] using!
@@ -1613,7 +1613,7 @@ theorem uncurrySum_apply
 
 中文:
 定理 uncurrySum_apply
-  结论: (f : ContinuousMultilinearMap 𝕜 (fun _ : ι => G)
+  结论: (f : 连续多重线性映射 𝕜 (fun _ : ι => G)
   证明: rfl
 -/
 theorem uncurrySum_apply (f : ContinuousMultilinearMap 𝕜 (fun _ : ι => G)
@@ -1646,7 +1646,7 @@ definition currySumEquiv
 
 中文:
 定义 currySumEquiv
-  签名: : ContinuousMultilinearMap 𝕜 (fun _ : ι oplus ι' => G) G' ≃ₗᵢ[𝕜]
+  签名: : 连续多重线性映射 𝕜 (fun _ : ι oplus ι' => G) G' ≃ₗᵢ[𝕜]
   定义体: LinearIsometryEquiv.ofBounds
     { toFun := currySum
       invFun := uncurrySum
@@ -1698,7 +1698,7 @@ definition curryFinFinset
 
 中文:
 定义 curryFinFinset
-  签名: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k) (hl : #sᶜ = l)
+  签名: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k) (hl : #sᶜ = l)
   定义体: (domDomCongrₗᵢ 𝕜 G G' (finSumEquivOfFinset hk hl).symm).trans
     (currySumEquiv 𝕜 (Fin k) (Fin l) G G')
 
@@ -1851,7 +1851,7 @@ definition continuousMultilinearMapOption
 
 中文:
 定义 continuousMultilinearMapOption
-  签名: (B : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F)
+  签名: (B : G ->L[𝕜] 连续多重线性映射 𝕜 E F)
   定义体: MultilinearMap.mkContinuous
   { toFun := fun p => B (p none).1 (fun i => (p i).2 i)
     map_update_add' := by
@@ -1915,7 +1915,7 @@ lemma continuousMultilinearMapOption_apply_eq_self
 
 中文:
 引理 continuousMultilinearMapOption_apply_eq_self
-  结论: (B : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F)
+  结论: (B : G ->L[𝕜] 连续多重线性映射 𝕜 E F)
   证明: rfl
 -/
 lemma continuousMultilinearMapOption_apply_eq_self (B : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F)

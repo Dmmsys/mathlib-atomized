@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGrothendieckAbelian.{u + 1} (Sheaf (ProEt.topology X) Ab.{u + 1})
+  签名: 是GrothendieckAbelian.{u + 1} (层 (ProEt.topology X) Ab.{u + 1})
   定义体: by
   -- Without this, lean starts searching for `EssentiallySmall.{max (u + 1) ?v}` and fails.
   have : EssentiallySmall.{u + 1} X.ProEt := inferInstance
@@ -86,7 +86,7 @@ definition ellAdicSheaf
 
 中文:
 定义 ellAdicSheaf
-  签名: (ℓ : 自然数) [Fact ℓ.Prime]
+  签名: (ℓ : 自然数) [Fact ℓ.素]
   定义体: ((ProEt.forget X ⋙ Over.forget _).sheafPushforwardContinuous _ _ proetaleTopology).obj
 ⟨continuousMapPresheafAb (Int_[ℓ]), .of_le proetaleTopology_le_fpqcTopology
       isSheaf_fpqcTopology_continuousMapPresheafAb _⟩
@@ -112,8 +112,8 @@ lemma isZero_ellAdicSheaf_of_isEmpty
 
 中文:
 引理 isZero_ellAdicSheaf_of_isEmpty
-  条件: [IsEmpty X]
-  结论: IsZero (X.ellAdicSheaf ℓ)
+  条件: [是空 X]
+  结论: 是零 (X.ellAdicSheaf ℓ)
   证明: (Sheaf.isTerminalOfEqTop (ProEt.topology_eq_top_of_isEmpty _) _).isZero
 
 Depends on / 依赖: ProEt.topology_eq_top_of_isEmpty, Sheaf.isTerminalOfEqTop, isTerminalOfEqTop, isZero, topology_eq_top_of_isEmpty
@@ -131,7 +131,7 @@ definition EllAdicCohomology
 
 中文:
 定义 EllAdicCohomology
-  签名: (ℓ : 自然数) [Fact ℓ.Prime] (n : 自然数)
+  签名: (ℓ : 自然数) [Fact ℓ.素] (n : 自然数)
   定义体: ((sheafCompose _ AddCommGrpCat.uliftFunctor.{u + 1}).obj <| X.ellAdicSheaf ℓ).H n
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.uliftFunctor, X.ellAdicSheaf, ellAdicSheaf, sheafCompose, uliftFunctor
@@ -154,7 +154,7 @@ instance [IsEmpty
   exact Functor.map_isZero _ (isZero_ellAdicSheaf_of_isEmpty _ _)
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: X] (n
   定义体: by
   apply Sheaf.subsingleton_H_of_isZero

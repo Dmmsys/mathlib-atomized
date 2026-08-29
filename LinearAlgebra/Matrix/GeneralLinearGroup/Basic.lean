@@ -33,7 +33,7 @@ definition planeConformalMatrix
 
 中文:
 定义 planeConformalMatrix
-  签名: {R} [Field R] (a b : R) (hab : a ^ 2 + b ^ 2 != 0)
+  签名: {R} [域 R] (a b : R) (hab : a ^ 2 + b ^ 2 != 0)
   定义体: GeneralLinearGroup.mkOfDetNeZero !![a, -b; b, a] (by simpa [det_fin_two, sq] using hab)
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.mkOfDetNeZero, det_fin_two, mkOfDetNeZero
@@ -159,7 +159,7 @@ lemma map_center_le
 
 中文:
 引理 map_center_le
-  条件: {S : 类型} [CommRing S] (f : R ->+* S)
+  条件: {S : 类型} [交换环 S] (f : R ->+* S)
   证明: fun u hu => by
   simp only [GeneralLinearGroup.center_eq_range_scalar, MonoidHom.mem_range,
     Subgroup.mem_comap] at hu ⊢
@@ -195,7 +195,7 @@ lemma SpecialLinearGroup.toGL_mem_center_iff
 
 中文:
 引理 SpecialLinearGroup.toGL_mem_center_iff
-  结论: {n R : 类型} [Fintype n] [DecidableEq n] [CommRing R]
+  结论: {n R : 类型} [有限类型 n] [DecidableEq n] [交换环 R]
   证明: by
   if hn : IsEmpty n then simp [Subgroup.center_eq_top] else
   replace hn : Nonempty n := by simpa using hn

@@ -49,7 +49,7 @@ definition tensorToSpan
 
 中文:
 定义 tensorToSpan
-  签名: : A otimes[R] p ->ₗ[A] span A (p : Set M)
+  签名: : A otimes[R] p ->ₗ[A] span A (p : 集合 M)
   定义体: AlgebraTensorModule.lift
     { toFun a := a • p.inclusionSpan A
       map_add' a b := add_smul a b _
@@ -95,7 +95,7 @@ lemma surjective_tensorToSpan
 
 中文:
 引理 surjective_tensorToSpan
-  结论: Surjective (p.tensorToSpan A)
+  结论: 满射 (p.tensorToSpan A)
   证明: by
   intro v
   obtain ⟨f, hf⟩ := (Finsupp.mem_span_iff_linearCombination _ _ _).mp v.property
@@ -129,7 +129,7 @@ AlgebraTensorModule.lift (restrictScalarsₗ R A _ _ A) ∘ₗ lsmul A (span A (
 
 中文:
 引理 injective_tensorToSpan
-  结论: Injective (p.tensorToSpan A)
+  结论: 单射 (p.tensorToSpan A)
   证明: by
   let f : A otimes[R] (span A (p : Set M)) ->ₗ[A] span A (p : Set M) :=
 AlgebraTensorModule.lift (restrictScalarsₗ R A _ _ A) ∘ₗ lsmul A (span A (p : Set M))
@@ -158,7 +158,7 @@ definition tensorEquivSpan
 
 中文:
 定义 tensorEquivSpan
-  签名: : A otimes[R] p ≃ₗ[A] span A (p : Set M)
+  签名: : A otimes[R] p ≃ₗ[A] span A (p : 集合 M)
   定义体: .ofBijective (p.tensorToSpan A) ⟨p.injective_tensorToSpan A, p.surjective_tensorToSpan A⟩
 
 Depends on / 依赖: injective_tensorToSpan, ofBijective, p.injective_tensorToSpan, p.surjective_tensorToSpan, p.tensorToSpan, surjective_tensorToSpan, tensorToSpan
@@ -194,7 +194,7 @@ definition tensorSpanEquivSpan
 
 中文:
 定义 tensorSpanEquivSpan
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: ((span R s).tensorEquivSpan A).trans .ofEq _ _ span_span_of_tower R A s
 
 Depends on / 依赖: span_span_of_tower, tensorEquivSpan
@@ -212,7 +212,7 @@ lemma coe_tensorSpanEquivSpan_apply_tmul
 
 中文:
 引理 coe_tensorSpanEquivSpan_apply_tmul
-  条件: {s : Set M} (a : A) (x : span R s)
+  条件: {s : 集合 M} (a : A) (x : span R s)
   证明: rfl
 -/
 @[simp] lemma coe_tensorSpanEquivSpan_apply_tmul {s : Set M} (a : A) (x : span R s) :
@@ -271,7 +271,7 @@ lemma finrank_span_eq_finrank_span
 
 中文:
 引理 finrank_span_eq_finrank_span
-  结论: [IsPrincipalIdealRing R] [IsDomain R] [IsTorsionFree R M]
+  结论: [是主理想环 R] [是整环 R] [是无挠 R M]
   证明: by
   rw [← span_span_of_tower R]; rw [finrank_span_eq_finrank]
 

@@ -75,11 +75,11 @@ structure HasEval
     - tendsto_zero : Tendsto a cofinite (𝓝 0)
 
 中文:
-结构 HasEval
+结构 有Eval
   参数: (a : σ -> S)
   公理与运算 (2 个):
     - hpow : 对任意 s, IsTopologicallyNilpotent (a s)
-    - tendsto_zero : Tendsto a cofinite (𝓝 0)
+    - tendsto_zero : 收敛 a cofinite (𝓝 0)
 -/
 structure HasEval (a : σ -> S) : Prop where
   hpow : forall s, IsTopologicallyNilpotent (a s)
@@ -95,8 +95,8 @@ theorem HasEval.mono
    Filter.Tendsto.mono_right (@HasEval.tendsto_zero σ _ _ t a ha) (nhds_mono h)⟩
 
 中文:
-定理 HasEval.mono
-  结论: {S : 类型} [CommRing S] {a : σ -> S}
+定理 有Eval.mono
+  结论: {S : 类型} [交换环 S] {a : σ -> S}
   证明: ⟨fun s => Filter.Tendsto.mono_right (@HasEval.hpow _ _ _ t a ha s) (nhds_mono h),
    Filter.Tendsto.mono_right (@HasEval.tendsto_zero σ _ _ t a ha) (nhds_mono h)⟩
 
@@ -118,8 +118,8 @@ theorem HasEval.zero
   tendsto_zero := tendsto_const_nhds
 
 中文:
-定理 HasEval.zero
-  结论: HasEval (0 : σ -> S) where
+定理 有Eval.zero
+  结论: 有Eval (0 : σ -> S) where
   证明: .zero
   tendsto_zero := tendsto_const_nhds
 -/
@@ -137,8 +137,8 @@ theorem HasEval.add
   tendsto_zero := by rw [← add_zero 0]; exact ha.tendsto_zero.add hb.tendsto_zero
 
 中文:
-定理 HasEval.add
-  结论: [ContinuousAdd S] [IsLinearTopology S S]
+定理 有Eval.add
+  结论: [连续加法 S] [是线性拓扑 S S]
   证明: (ha.hpow s).add (hb.hpow s)
   tendsto_zero := by rw [← add_zero 0]; exact ha.tendsto_zero.add hb.tendsto_zero
 
@@ -159,8 +159,8 @@ theorem HasEval.mul_left
   tendsto_zero := IsLinearTopology.tendsto_mul_zero_of_right _ _ hx.tendsto_zero
 
 中文:
-定理 HasEval.mul_left
-  结论: [IsLinearTopology S S]
+定理 有Eval.mul_left
+  结论: [是线性拓扑 S S]
   证明: (hx.hpow s).mul_left (c s)
   tendsto_zero := IsLinearTopology.tendsto_mul_zero_of_right _ _ hx.tendsto_zero
 
@@ -180,8 +180,8 @@ theorem HasEval.mul_right
   proof: mul_comm x c ▸ HasEval.mul_left c hx
 
 中文:
-定理 HasEval.mul_right
-  结论: [IsLinearTopology S S]
+定理 有Eval.mul_right
+  结论: [是线性拓扑 S S]
   证明: mul_comm x c ▸ HasEval.mul_left c hx
 
 Depends on / 依赖: HasEval, HasEval.mul_left, mul_comm, mul_left
@@ -200,8 +200,8 @@ theorem HasEval.map
   tendsto_zero := (map_zero φ ▸ hφ.tendsto 0).comp ha.tendsto_zero
 
 中文:
-定理 HasEval.map
-  条件: (hφ : Continuous φ) {a : σ -> R} (ha : HasEval a)
+定理 有Eval.map
+  条件: (hφ : 连续 φ) {a : σ -> R} (ha : 有Eval a)
   证明: (ha.hpow s).map hφ
   tendsto_zero := (map_zero φ ▸ hφ.tendsto 0).comp ha.tendsto_zero
 
@@ -221,7 +221,7 @@ theorem HasEval.X
   tendsto_zero := variables_tendsto_zero
 
 中文:
-定理 HasEval.X
+定理 有Eval.X
   证明: isTopologicallyNilpotent_of_constantCoeff_zero (constantCoeff_X s)
   tendsto_zero := variables_tendsto_zero
 -/
@@ -247,7 +247,7 @@ definition hasEvalIdeal
 
 中文:
 定义 hasEvalIdeal
-  签名: : Ideal (σ -> S) where
+  签名: : 理想 (σ -> S) where
   定义体: {a | HasEval a}
   add_mem' := HasEval.add
   zero_mem' := HasEval.zero
@@ -292,8 +292,8 @@ theorem HasEval.pow
   proof: mem_hasEvalIdeal_iff.mp Ideal.pow_mem_of_mem hasEvalIdeal ha p hp
 
 中文:
-定理 HasEval.pow
-  条件: (x : σ -> S) (ha : HasEval x) {p : 自然数} (hp : 0 < p)
+定理 有Eval.pow
+  条件: (x : σ -> S) (ha : 有Eval x) {p : 自然数} (hp : 0 < p)
   证明: mem_hasEvalIdeal_iff.mp Ideal.pow_mem_of_mem hasEvalIdeal ha p hp
 
 Depends on / 依赖: Ideal.pow_mem_of_mem, hasEvalIdeal, mem_hasEvalIdeal_iff, mem_hasEvalIdeal_iff.mp, pow_mem_of_mem
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (MvPolynomial σ R)
+  签名: 一致空间 (多元多项式 σ R)
   定义体: comap toMvPowerSeries inferInstance
 -/
 private instance : UniformSpace (MvPolynomial σ R) :=
@@ -342,8 +342,8 @@ instance [IsUniformAddGroup
   body: IsUniformAddGroup.comap coeToMvPowerSeries.ringHom
 
 中文:
-实例 [IsUniformAddGroup
-  签名: R] : IsUniformAddGroup (MvPolynomial σ R)
+实例 [是UniformAdd群
+  签名: R] : 是UniformAdd群 (多元多项式 σ R)
   定义体: IsUniformAddGroup.comap coeToMvPowerSeries.ringHom
 -/
 private instance [IsUniformAddGroup R] : IsUniformAddGroup (MvPolynomial σ R) :=
@@ -357,7 +357,7 @@ theorem _root_.MvPolynomial.toMvPowerSeries_isUniformInducing
   proof: (isUniformInducing_iff toMvPowerSeries).mpr rfl
 
 中文:
-定理 _root_.MvPolynomial.toMvPowerSeries_isUniformInducing
+定理 _root_.多元多项式.toMvPowerSeries_isUniformInducing
   证明: (isUniformInducing_iff toMvPowerSeries).mpr rfl
 -/
 theorem _root_.MvPolynomial.toMvPowerSeries_isUniformInducing :
@@ -372,7 +372,7 @@ theorem _root_.MvPolynomial.toMvPowerSeries_isDenseInducing
   proof: toMvPowerSeries_isUniformInducing.isDenseInducing denseRange_toMvPowerSeries
 
 中文:
-定理 _root_.MvPolynomial.toMvPowerSeries_isDenseInducing
+定理 _root_.多元多项式.toMvPowerSeries_isDenseInducing
   证明: toMvPowerSeries_isUniformInducing.isDenseInducing denseRange_toMvPowerSeries
 -/
 theorem _root_.MvPolynomial.toMvPowerSeries_isDenseInducing :
@@ -395,7 +395,7 @@ theorem _root_.MvPolynomial.toMvPowerSeries_uniformContinuous
   have hn_ne : forall s, Set.Nonempty {n : Nat | (a s) ^ n.succ in
 
 中文:
-定理 _root_.MvPolynomial.toMvPowerSeries_uniformContinuous
+定理 _root_.多元多项式.toMvPowerSeries_uniformContinuous
   证明: by
   classical
   apply uniformContinuous_of_continuousAt_zero
@@ -488,7 +488,7 @@ theorem eval₂_coe
 
 中文:
 定理 eval₂_coe
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   have : exists p : MvPolynomial σ R, (p : MvPowerSeries σ R) = f := ⟨f, rfl⟩
   rw [eval₂]; rw [dif_pos this]
@@ -575,7 +575,7 @@ definition eval₂Hom
 
 中文:
 定义 eval₂Hom
-  签名: (hφ : Continuous φ) (ha : HasEval a)
+  签名: (hφ : 连续 φ) (ha : 有Eval a)
   定义体: IsDenseInducing.extendRingHom (i := coeToMvPowerSeries.ringHom)
     toMvPowerSeries_isUniformInducing
     denseRange_toMvPowerSeries
@@ -600,7 +600,7 @@ theorem eval₂Hom_eq_extend
 
 中文:
 定理 eval₂Hom_eq_extend
-  条件: (hφ : Continuous φ) (ha : HasEval a) (f : MvPowerSeries σ R)
+  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : MvPowerSeries σ R)
   证明: rfl
 -/
 theorem eval₂Hom_eq_extend (hφ : Continuous φ) (ha : HasEval a) (f : MvPowerSeries σ R) :
@@ -626,7 +626,7 @@ theorem coe_eval₂Hom
 
 中文:
 定理 coe_eval₂Hom
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   ext f
   simp only [eval₂Hom_eq_extend, eval₂]
@@ -668,7 +668,7 @@ theorem uniformContinuous_eval₂
 
 中文:
 定理 uniformContinuous_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   rw [← coe_eval₂Hom hφ ha]
   exact uniformContinuous_uniformly_extend
@@ -696,7 +696,7 @@ theorem continuous_eval₂
 
 中文:
 定理 continuous_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: (uniformContinuous_eval₂ hφ ha).continuous
 
 Depends on / 依赖: continuous
@@ -720,7 +720,7 @@ theorem hasSum_eval₂
 
 中文:
 定理 hasSum_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a) (f : MvPowerSeries σ R)
+  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : MvPowerSeries σ R)
   证明: by
   rw [← coe_eval₂Hom hφ ha]; rw [eval₂Hom_eq_extend hφ ha]
   convert! (hasSum_of_monomials_self f).map (eval₂Hom hφ ha) (?_) with d
@@ -750,7 +750,7 @@ theorem eval₂_eq_tsum
 
 中文:
 定理 eval₂_eq_tsum
-  条件: (hφ : Continuous φ) (ha : HasEval a) (f : MvPowerSeries σ R)
+  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : MvPowerSeries σ R)
   证明: (hasSum_eval₂ hφ ha f).tsum_eq.symm
 
 Depends on / 依赖: tsum_eq, tsum_eq.symm
@@ -772,7 +772,7 @@ theorem eval₂_unique
 
 中文:
 定理 eval₂_unique
-  结论: (hφ : Continuous φ) (ha : HasEval a)
+  结论: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   rw [← coe_eval₂Hom hφ ha]
   exact (toMvPowerSeries_isDenseInducing.extend_unique h hε).symm
@@ -802,7 +802,7 @@ theorem comp_eval₂
 
 中文:
 定理 comp_eval₂
-  结论: (hφ : Continuous φ) (ha : HasEval a)
+  结论: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   apply eval₂_unique _ (ha.map hε)
   · exact Continuous.comp hε (continuous_eval₂ hφ ha)
@@ -840,7 +840,7 @@ definition aeval
 
 中文:
 定义 aeval
-  签名: (ha : HasEval a)
+  签名: (ha : 有Eval a)
   定义体: MvPowerSeries.eval₂Hom (continuous_algebraMap R S) ha
   commutes' r := by
     simp only [toMonoidHom_eq_coe, OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, MonoidHom.coe_coe]
@@ -865,7 +865,7 @@ theorem coe_aeval
 
 中文:
 定理 coe_aeval
-  条件: (ha : HasEval a)
+  条件: (ha : 有Eval a)
   证明: by
   simp only [aeval, AlgHom.coe_mk, coe_eval₂Hom]
 
@@ -889,7 +889,7 @@ theorem continuous_aeval
 
 中文:
 定理 continuous_aeval
-  条件: (ha : HasEval a)
+  条件: (ha : 有Eval a)
   证明: by
   rw [coe_aeval]
   exact continuous_eval₂ (continuous_algebraMap R S) ha
@@ -915,7 +915,7 @@ theorem aeval_coe
 
 中文:
 定理 aeval_coe
-  条件: (ha : HasEval a) (p : MvPolynomial σ R)
+  条件: (ha : 有Eval a) (p : 多元多项式 σ R)
   证明: by
   rw [coe_aeval]; rw [aeval_def]; rw [eval₂_coe]
 
@@ -943,7 +943,7 @@ theorem aeval_unique
 
 中文:
 定理 aeval_unique
-  条件: {ε : MvPowerSeries σ R ->ₐ[R] S} (hε : Continuous ε)
+  条件: {ε : MvPowerSeries σ R ->ₐ[R] S} (hε : 连续 ε)
   证明: by
   apply DFunLike.ext'
   rw [coe_aeval]
@@ -979,7 +979,7 @@ theorem hasSum_aeval
 
 中文:
 定理 hasSum_aeval
-  条件: (ha : HasEval a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Eval a) (f : MvPowerSeries σ R)
   证明: by
   simp_rw [coe_aeval, ← algebraMap_smul (R := R) S, smul_eq_mul]
   exact hasSum_eval₂ (continuous_algebraMap R S) ha f
@@ -1002,7 +1002,7 @@ theorem aeval_eq_sum
 
 中文:
 定理 aeval_eq_sum
-  条件: (ha : HasEval a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Eval a) (f : MvPowerSeries σ R)
   证明: (hasSum_aeval ha f).tsum_eq.symm
 
 Depends on / 依赖: hasSum_aeval, tsum_eq, tsum_eq.symm
@@ -1027,7 +1027,7 @@ theorem comp_aeval
 
 中文:
 定理 comp_aeval
-  结论: (ha : HasEval a)
+  结论: (ha : 有Eval a)
   证明: by
   apply DFunLike.ext'
   simp only [AlgHom.coe_comp, coe_aeval ha]

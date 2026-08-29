@@ -41,7 +41,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] : LE (Additive α)
+  签名: α] : LE (加性 α)
   定义体: inferInstanceAs LE α
 -/
 instance [LE α] : LE (Additive α) :=
@@ -73,7 +73,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: α] : LT (Additive α)
+  签名: α] : LT (加性 α)
   定义体: inferInstanceAs LT α
 -/
 instance [LT α] : LT (Additive α) :=
@@ -89,7 +89,7 @@ instance Multiplicative.preorder
 
 中文:
 实例 Multiplicative.preorder
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: inferInstanceAs Preorder α
 
 Depends on / 依赖: Preorder
@@ -106,8 +106,8 @@ instance Additive.preorder
   body: inferInstanceAs Preorder α
 
 中文:
-实例 Additive.preorder
-  签名: [Preorder α]
+实例 加性.preorder
+  签名: [预序 α]
   定义体: inferInstanceAs Preorder α
 
 Depends on / 依赖: Preorder
@@ -125,7 +125,7 @@ instance Multiplicative.partialOrder
 
 中文:
 实例 Multiplicative.partialOrder
-  签名: [PartialOrder α]
+  签名: [偏序 α]
   定义体: inferInstanceAs PartialOrder α
 
 Depends on / 依赖: PartialOrder
@@ -142,8 +142,8 @@ instance Additive.partialOrder
   body: inferInstanceAs PartialOrder α
 
 中文:
-实例 Additive.partialOrder
-  签名: [PartialOrder α]
+实例 加性.partialOrder
+  签名: [偏序 α]
   定义体: inferInstanceAs PartialOrder α
 
 Depends on / 依赖: PartialOrder
@@ -161,7 +161,7 @@ instance Multiplicative.linearOrder
 
 中文:
 实例 Multiplicative.linearOrder
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: inferInstanceAs LinearOrder α
 
 Depends on / 依赖: LinearOrder
@@ -178,8 +178,8 @@ instance Additive.linearOrder
   body: inferInstanceAs LinearOrder α
 
 中文:
-实例 Additive.linearOrder
-  签名: [LinearOrder α]
+实例 加性.linearOrder
+  签名: [线性序 α]
   定义体: inferInstanceAs LinearOrder α
 
 Depends on / 依赖: LinearOrder
@@ -197,7 +197,7 @@ instance Multiplicative.orderBot
 
 中文:
 实例 Multiplicative.orderBot
-  签名: [LE α] [OrderBot α]
+  签名: [LE α] [有底序 α]
   定义体: inferInstanceAs OrderBot α
 
 Depends on / 依赖: OrderBot
@@ -214,8 +214,8 @@ instance Additive.orderBot
   body: inferInstanceAs OrderBot α
 
 中文:
-实例 Additive.orderBot
-  签名: [LE α] [OrderBot α]
+实例 加性.orderBot
+  签名: [LE α] [有底序 α]
   定义体: inferInstanceAs OrderBot α
 
 Depends on / 依赖: OrderBot
@@ -233,7 +233,7 @@ instance Multiplicative.orderTop
 
 中文:
 实例 Multiplicative.orderTop
-  签名: [LE α] [OrderTop α]
+  签名: [LE α] [有顶序 α]
   定义体: inferInstanceAs OrderTop α
 
 Depends on / 依赖: OrderTop
@@ -250,8 +250,8 @@ instance Additive.orderTop
   body: inferInstanceAs OrderTop α
 
 中文:
-实例 Additive.orderTop
-  签名: [LE α] [OrderTop α]
+实例 加性.orderTop
+  签名: [LE α] [有顶序 α]
   定义体: inferInstanceAs OrderTop α
 
 Depends on / 依赖: OrderTop
@@ -269,7 +269,7 @@ instance Multiplicative.boundedOrder
 
 中文:
 实例 Multiplicative.boundedOrder
-  签名: [LE α] [BoundedOrder α]
+  签名: [LE α] [有界序 α]
   定义体: inferInstanceAs BoundedOrder α
 
 Depends on / 依赖: BoundedOrder
@@ -286,8 +286,8 @@ instance Additive.boundedOrder
   body: inferInstanceAs BoundedOrder α
 
 中文:
-实例 Additive.boundedOrder
-  签名: [LE α] [BoundedOrder α]
+实例 加性.boundedOrder
+  签名: [LE α] [有界序 α]
   定义体: inferInstanceAs BoundedOrder α
 
 Depends on / 依赖: BoundedOrder
@@ -304,8 +304,8 @@ instance Multiplicative.existsMulOfLe
   body: ⟨@exists_add_of_le α _ _ _⟩
 
 中文:
-实例 Multiplicative.existsMulOfLe
-  签名: [Add α] [LE α] [ExistsAddOfLE α]
+实例 Multiplicative.存在MulOfLe
+  签名: [加法 α] [LE α] [ExistsAddOfLE α]
   定义体: ⟨@exists_add_of_le α _ _ _⟩
 
 Depends on / 依赖: exists_add_of_le
@@ -323,8 +323,8 @@ instance Additive.existsAddOfLe
   body: ⟨@exists_mul_of_le α _ _ _⟩
 
 中文:
-实例 Additive.existsAddOfLe
-  签名: [Mul α] [LE α] [ExistsMulOfLE α]
+实例 加性.存在AddOfLe
+  签名: [乘法 α] [LE α] [ExistsMulOfLE α]
   定义体: ⟨@exists_mul_of_le α _ _ _⟩
 
 Depends on / 依赖: exists_mul_of_le
@@ -400,7 +400,7 @@ theorem toMul_le
 
 中文:
 定理 toMul_le
-  条件: {a b : Additive α}
+  条件: {a b : 加性 α}
   结论: a.toMul <= b.toMul ↔ a <= b
   证明: Iff.rfl
 
@@ -428,7 +428,7 @@ theorem toMul_lt
 
 中文:
 定理 toMul_lt
-  条件: {a b : Additive α}
+  条件: {a b : 加性 α}
   结论: a.toMul < b.toMul ↔ a < b
   证明: Iff.rfl
 
@@ -508,7 +508,7 @@ lemma toMul_eq_top
 
 中文:
 引理 toMul_eq_top
-  条件: {a : Additive α}
+  条件: {a : 加性 α}
   结论: toMul a = ⊤ ↔ a = ⊤
   证明: .rfl
 -/
@@ -575,7 +575,7 @@ lemma toMul_eq_bot
 
 中文:
 引理 toMul_eq_bot
-  条件: {a : Additive α}
+  条件: {a : 加性 α}
   结论: toMul a = ⊥ ↔ a = ⊥
   证明: .rfl
 -/

@@ -136,10 +136,10 @@ inductive Stmt
 归纳类型 Stmt
   构造子 (7 个):
     - push: 对任意 k, (σ -> Γ k) -> Stmt -> Stmt
-    - peek: 对任意 k, (σ -> Option (Γ k) -> σ) -> Stmt -> Stmt
-    - pop: 对任意 k, (σ -> Option (Γ k) -> σ) -> Stmt -> Stmt
+    - peek: 对任意 k, (σ -> 选项类型 (Γ k) -> σ) -> Stmt -> Stmt
+    - pop: 对任意 k, (σ -> 选项类型 (Γ k) -> σ) -> Stmt -> Stmt
     - load: (σ -> σ) -> Stmt -> Stmt
-    - branch: (σ -> 布尔) -> Stmt -> Stmt -> Stmt
+    - branch: (σ -> 布尔值) -> Stmt -> Stmt -> Stmt
     - goto: (σ -> Λ) -> Stmt
     - halt: Stmt
 -/
@@ -164,7 +164,7 @@ instance Stmt.inhabited
 
 中文:
 实例 Stmt.inhabited
-  签名: : Inhabited (Stmt Γ Λ σ)
+  签名: : 可居 (Stmt Γ Λ σ)
   定义体: ⟨halt⟩
 -/
 instance Stmt.inhabited : Inhabited (Stmt Γ Λ σ) :=
@@ -185,9 +185,9 @@ structure Cfg
 结构 Cfg
   参数: where
   公理与运算 (3 个):
-    - l : Option Λ
+    - l : 选项类型 Λ
     - var : σ
-    - stk : 对任意 k, List (Γ k)
+    - stk : 对任意 k, 列表 (Γ k)
 -/
 structure Cfg where
   /-- The current label to run (or `none` for the halting state) -/
@@ -207,7 +207,7 @@ instance Cfg.inhabited
 
 中文:
 实例 Cfg.inhabited
-  签名: [Inhabited σ]
+  签名: [可居 σ]
   定义体: ⟨⟨default, default, default⟩⟩
 -/
 instance Cfg.inhabited [Inhabited σ] : Inhabited (Cfg Γ Λ σ) :=
@@ -227,7 +227,7 @@ definition stepAux
 
 中文:
 定义 stepAux
-  签名: : Stmt Γ Λ σ -> σ -> (对任意 k, List (Γ k)) -> Cfg Γ Λ σ
+  签名: : Stmt Γ Λ σ -> σ -> (对任意 k, 列表 (Γ k)) -> Cfg Γ Λ σ
 -/
 def stepAux : Stmt Γ Λ σ -> σ -> (forall k, List (Γ k)) -> Cfg Γ Λ σ
   | push k f q, v, S => stepAux q v (update S k (f v :: S k))
@@ -285,7 +285,7 @@ definition SupportsStmt
 
 中文:
 定义 SupportsStmt
-  签名: (S : Finset Λ)
+  签名: (S : 有限集 Λ)
 -/
 def SupportsStmt (S : Finset Λ) : Stmt Γ Λ σ -> Prop
   | push _ _ q => SupportsStmt S q
@@ -308,7 +308,7 @@ definition stmts₁
 
 中文:
 定义 stmts₁
-  签名: : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
+  签名: : Stmt Γ Λ σ -> 有限集 (Stmt Γ Λ σ)
 -/
 noncomputable def stmts₁ : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
   | Q@(push _ _ q) => insert Q (stmts₁ q)
@@ -415,7 +415,7 @@ theorem stmts₁_supportsStmt_mono
 
 中文:
 定理 stmts₁_supportsStmt_mono
-  结论: {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
+  结论: {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
   证明: by
   induction q₂ with
     simp only [stmts₁, SupportsStmt, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton]
@@ -448,7 +448,7 @@ definition stmts
 
 中文:
 定义 stmts
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
+  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
   定义体: Finset.insertNone (S.biUnion fun q => stmts₁ (M q))
 
 Depends on / 依赖: Finset, Finset.insertNone, S.biUnion, biUnion, insertNone
@@ -469,7 +469,7 @@ theorem stmts_trans
 
 中文:
 定理 stmts_trans
-  条件: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
+  条件: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
   证明: by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
@@ -497,7 +497,7 @@ definition Supports
 
 中文:
 定义 Supports
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
+  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
   定义体: default in S ∧ forall q in S, SupportsStmt S (M q)
 
 Depends on / 依赖: SupportsStmt
@@ -518,7 +518,7 @@ theorem stmts_supportsStmt
 
 中文:
 定理 stmts_supportsStmt
-  结论: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ}
+  结论: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q : Stmt Γ Λ σ}
   证明: by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
@@ -551,7 +551,7 @@ theorem step_supports
 
 中文:
 定理 step_supports
-  条件: (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S)
+  条件: (M : Λ -> Stmt Γ Λ σ) {S : 有限集 Λ} (ss : Supports M S)
   证明: ss.2 _ (Finset.some_mem_insertNone.1 h₂)
     simp only [step, Option.mem_def, Option.some.injEq] at h₁; subst c'
     revert h₂; induction M l₁ generalizing v T with intro hs
@@ -589,7 +589,7 @@ definition init
 
 中文:
 定义 init
-  签名: (k : K) (L : List (Γ k))
+  签名: (k : K) (L : 列表 (Γ k))
   定义体: ⟨some default, default, update (fun _ => []) k L⟩
 
 Depends on / 依赖: update
@@ -607,7 +607,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: (M : Λ -> Stmt Γ Λ σ) (k : K) (L : List (Γ k))
+  签名: (M : Λ -> Stmt Γ Λ σ) (k : K) (L : 列表 (Γ k))
   定义体: (StateTransition.eval (step M) (init k L)).map fun c => c.stk k
 
 Depends on / 依赖: StateTransition, StateTransition.eval, c.stk
@@ -671,7 +671,7 @@ theorem stk_nth_val
 
 中文:
 定理 stk_nth_val
-  结论: {K : 类型} {Γ : K -> 类型} {L : ListBlank (对任意 k, Option (Γ k))} {k S} (n)
+  结论: {K : 类型} {Γ : K -> 类型} {L : ListBlank (对任意 k, 选项类型 (Γ k))} {k S} (n)
   证明: by
   rw [← proj_map_nth]; rw [hL]; rw [← List.map_reverse]; rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [List.getElem?_map]
   cases S.reverse[n]? <;> rfl
@@ -714,7 +714,7 @@ instance Γ'.inhabited
 
 中文:
 实例 Γ'.inhabited
-  签名: : Inhabited (Γ' K Γ)
+  签名: : 可居 (Γ' K Γ)
   定义体: ⟨⟨false, fun _ => none⟩⟩
 -/
 instance Γ'.inhabited : Inhabited (Γ' K Γ) :=
@@ -730,7 +730,7 @@ instance Γ'.fintype
 
 中文:
 实例 Γ'.fintype
-  签名: [DecidableEq K] [Fintype K] [对任意 k, Fintype (Γ k)]
+  签名: [DecidableEq K] [有限类型 K] [对任意 k, 有限类型 (Γ k)]
   定义体: instFintypeProd _ _
 
 Depends on / 依赖: Infinite, Infinite.of_surjective, Sigma.fst, Sigma.fst_surjective, fst_surjective, of_surjective
@@ -748,7 +748,7 @@ definition addBottom
 
 中文:
 定义 addBottom
-  签名: (L : ListBlank (对任意 k, Option (Γ k)))
+  签名: (L : ListBlank (对任意 k, 选项类型 (Γ k)))
   定义体: ListBlank.cons (true, L.head) (L.tail.map ⟨Prod.mk false, rfl⟩)
 
 Depends on / 依赖: L.head, L.tail.map, ListBlank, ListBlank.cons, Prod.mk
@@ -771,7 +771,7 @@ theorem addBottom_map
 
 中文:
 定理 addBottom_map
-  条件: (L : ListBlank (对任意 k, Option (Γ k)))
+  条件: (L : ListBlank (对任意 k, 选项类型 (Γ k)))
   证明: by
   simp only [addBottom, ListBlank.map_cons]
   convert! ListBlank.cons_head_tail L
@@ -801,7 +801,7 @@ theorem addBottom_modifyNth
 
 中文:
 定理 addBottom_modifyNth
-  结论: (f : (对任意 k, Option (Γ k)) -> 对任意 k, Option (Γ k))
+  结论: (f : (对任意 k, 选项类型 (Γ k)) -> 对任意 k, 选项类型 (Γ k))
   证明: by
   cases n <;>
     simp only [addBottom, ListBlank.head_cons, ListBlank.modifyNth, ListBlank.tail_cons]
@@ -828,7 +828,7 @@ theorem addBottom_nth_snd
 
 中文:
 定理 addBottom_nth_snd
-  条件: (L : ListBlank (对任意 k, Option (Γ k))) (n : 自然数)
+  条件: (L : ListBlank (对任意 k, 选项类型 (Γ k))) (n : 自然数)
   证明: by
   conv => rhs; rw [← addBottom_map L, ListBlank.nth_map]
 
@@ -850,7 +850,7 @@ theorem addBottom_nth_succ_fst
 
 中文:
 定理 addBottom_nth_succ_fst
-  条件: (L : ListBlank (对任意 k, Option (Γ k))) (n : 自然数)
+  条件: (L : ListBlank (对任意 k, 选项类型 (Γ k))) (n : 自然数)
   证明: by
   rw [ListBlank.nth_succ]; rw [addBottom]; rw [ListBlank.tail_cons]; rw [ListBlank.nth_map]
 
@@ -873,7 +873,7 @@ theorem addBottom_head_fst
 
 中文:
 定理 addBottom_head_fst
-  条件: (L : ListBlank (对任意 k, Option (Γ k)))
+  条件: (L : ListBlank (对任意 k, 选项类型 (Γ k)))
   结论: (addBottom L).head.1 = true
   证明: by
   rw [addBottom]; rw [ListBlank.head_cons]
@@ -900,8 +900,8 @@ inductive StAct
   参数: (k : K)
   构造子 (3 个):
     - push: (σ -> Γ k) -> StAct k
-    - peek: (σ -> Option (Γ k) -> σ) -> StAct k
-    - pop: (σ -> Option (Γ k) -> σ) -> StAct k
+    - peek: (σ -> 选项类型 (Γ k) -> σ) -> StAct k
+    - pop: (σ -> 选项类型 (Γ k) -> σ) -> StAct k
 -/
 inductive StAct (k : K)
   | push : (σ -> Γ k) -> StAct k
@@ -955,7 +955,7 @@ definition stVar
 
 中文:
 定义 stVar
-  签名: {k : K} (v : σ) (l : List (Γ k))
+  签名: {k : K} (v : σ) (l : 列表 (Γ k))
 -/
 def stVar {k : K} (v : σ) (l : List (Γ k)) : StAct K Γ σ k -> σ
   | push _ => v
@@ -971,7 +971,7 @@ definition stWrite
 
 中文:
 定义 stWrite
-  签名: {k : K} (v : σ) (l : List (Γ k))
+  签名: {k : K} (v : σ) (l : 列表 (Γ k))
 -/
 def stWrite {k : K} (v : σ) (l : List (Γ k)) : StAct K Γ σ k -> List (Γ k)
   | push f => f v :: l
@@ -991,7 +991,7 @@ definition stmtStRec.{l}
 
 中文:
 定义 stmtStRec.{l}
-  签名: {motive : TM2.Stmt Γ Λ σ -> Sort l}
+  签名: {motive : TM2.Stmt Γ Λ σ -> 类型层 l}
 -/
 def stmtStRec.{l} {motive : TM2.Stmt Γ Λ σ -> Sort l}
     (run : forall (k) (s : StAct K Γ σ k) (q) (_ : motive q), motive (stRun s q))
@@ -1018,7 +1018,7 @@ theorem supports_run
 
 中文:
 定理 supports_run
-  条件: (S : Finset Λ) {k : K} (s : StAct K Γ σ k) (q : TM2.Stmt Γ Λ σ)
+  条件: (S : 有限集 Λ) {k : K} (s : StAct K Γ σ k) (q : TM2.Stmt Γ Λ σ)
   证明: by
   cases s <;> rfl
 -/
@@ -1066,7 +1066,7 @@ instance Λ'.inhabited
 
 中文:
 实例 Λ'.inhabited
-  签名: [Inhabited Λ]
+  签名: [可居 Λ]
   定义体: ⟨normal default⟩
 
 Depends on / 依赖: normal
@@ -1110,7 +1110,7 @@ definition trInit
 
 中文:
 定义 trInit
-  签名: (k : K) (L : List (Γ k))
+  签名: (k : K) (L : 列表 (Γ k))
   定义体: let L' : List (Γ' K Γ) := L.reverse.map fun a => (false, update (fun _ => none) k (some a))
   (true, L'.headI.2) :: L'.tail
 
@@ -1130,7 +1130,7 @@ theorem step_run
 
 中文:
 定理 step_run
-  条件: {k : K} (q : TM2.Stmt Γ Λ σ) (v : σ) (S : 对任意 k, List (Γ k))
+  条件: {k : K} (q : TM2.Stmt Γ Λ σ) (v : σ) (S : 对任意 k, 列表 (Γ k))
   结论: 对任意 s : StAct K Γ σ k,
 -/
 theorem step_run {k : K} (q : TM2.Stmt Γ Λ σ) (v : σ) (S : forall k, List (Γ k)) : forall s : StAct K Γ σ k,
@@ -1192,7 +1192,7 @@ definition trStmts₁
 
 中文:
 定义 trStmts₁
-  签名: : TM2.Stmt Γ Λ σ -> Finset (Λ' K Γ Λ σ)
+  签名: : TM2.Stmt Γ Λ σ -> 有限集 (Λ' K Γ Λ σ)
 -/
 noncomputable def trStmts₁ : TM2.Stmt Γ Λ σ -> Finset (Λ' K Γ Λ σ)
   | TM2.Stmt.push k f q => {go k (StAct.push f) q, ret q} union trStmts₁ q
@@ -1366,7 +1366,7 @@ inductive TrCfg
 归纳类型 TrCfg
   参数: : TM2.Cfg Γ Λ σ -> TM1.Cfg (Γ' K Γ) (Λ' K Γ Λ σ) σ -> 命题
   构造子 (1 个):
-    - mk: {q : Option Λ} {v : σ} {S : 对任意 k, List (Γ k)} (L : ListBlank (对任意 k, Option (Γ k))) : (对任意 k, L.map (proj k) = ListBlank.mk ((S k).map some).reverse) -> TrCfg ⟨q, v, S⟩ ⟨q.map normal, v, Tape.mk' ∅ (addBottom L)⟩
+    - mk: {q : 选项类型 Λ} {v : σ} {S : 对任意 k, 列表 (Γ k)} (L : ListBlank (对任意 k, 选项类型 (Γ k))) : (对任意 k, L.map (proj k) = ListBlank.mk ((S k).map some).reverse) -> TrCfg ⟨q, v, S⟩ ⟨q.map normal, v, Tape.mk' ∅ (addBottom L)⟩
 -/
 inductive TrCfg : TM2.Cfg Γ Λ σ -> TM1.Cfg (Γ' K Γ) (Λ' K Γ Λ σ) σ -> Prop
   | mk {q : Option Λ} {v : σ} {S : forall k, List (Γ k)} (L : ListBlank (forall k, Option (Γ k))) :
@@ -1392,7 +1392,7 @@ theorem tr_respects_aux₁
 
 中文:
 定理 tr_respects_aux₁
-  结论: {k} (o q v) {S : List (Γ k)} {L : ListBlank (对任意 k, Option (Γ k))}
+  结论: {k} (o q v) {S : 列表 (Γ k)} {L : ListBlank (对任意 k, 选项类型 (Γ k))}
   证明: by
   induction n with
   | zero => rfl
@@ -1438,7 +1438,7 @@ theorem tr_respects_aux₃
 
 中文:
 定理 tr_respects_aux₃
-  条件: {q v} {L : ListBlank (对任意 k, Option (Γ k))} (n)
+  条件: {q v} {L : ListBlank (对任意 k, 选项类型 (Γ k))} (n)
   结论: Reaches₀ (TM1.step (tr M))
   证明: by
   induction n with
@@ -1476,7 +1476,7 @@ theorem tr_respects_aux
 
 中文:
 定理 tr_respects_aux
-  结论: {q v T k} {S : 对任意 k, List (Γ k)}
+  结论: {q v T k} {S : 对任意 k, 列表 (Γ k)}
   证明: by
   simp only [trNormal_run, step_run]
   have hgo := tr_respects_aux₁ M o q v (hT k) _ le_rfl
@@ -1576,7 +1576,7 @@ theorem trCfg_init
 
 中文:
 定理 trCfg_init
-  条件: (k) (L : List (Γ k))
+  条件: (k) (L : 列表 (Γ k))
   结论: TrCfg (TM2.init k L)
   证明: by
   rw [(_ : TM1.init _ = _)]
@@ -1618,7 +1618,7 @@ theorem tr_eval_dom
 
 中文:
 定理 tr_eval_dom
-  条件: (k) (L : List (Γ k))
+  条件: (k) (L : 列表 (Γ k))
   证明: StateTransition.tr_eval_dom (tr_respects M) (trCfg_init k L)
 
 Depends on / 依赖: StateTransition, StateTransition.tr_eval_dom, trCfg_init, tr_eval_dom, tr_respects
@@ -1642,7 +1642,7 @@ theorem tr_eval
 
 中文:
 定理 tr_eval
-  结论: (k) (L : List (Γ k)) {L₁ L₂} (H₁ : L₁ in TM1.eval (tr M) (trInit k L))
+  结论: (k) (L : 列表 (Γ k)) {L₁ L₂} (H₁ : L₁ in TM1.eval (tr M) (trInit k L))
   证明: by
   obtain ⟨c₁, h₁, rfl⟩ := (Part.mem_map_iff _).1 H₁
   obtain ⟨c₂, h₂, rfl⟩ := (Part.mem_map_iff _).1 H₂
@@ -1680,7 +1680,7 @@ definition trSupp
 
 中文:
 定义 trSupp
-  签名: (S : Finset Λ)
+  签名: (S : 有限集 Λ)
   定义体: S.biUnion fun l => insert (normal l) (trStmts₁ (M l))
 
 Depends on / 依赖: S.biUnion, biUnion, insert, normal

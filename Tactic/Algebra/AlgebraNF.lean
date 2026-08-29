@@ -35,7 +35,7 @@ definition cleanupSMul
 
 中文:
 定义 cleanupSMul
-  签名: (cfg : RingNF.Config) (r : Simp.Result)
+  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
   定义体: do
   let thms : SimpTheorems := {}
   let thms ← [``add_zero, ``add_assoc_rev, ``_root_.mul_one, ``mul_assoc_rev, ``_root_.pow_one,
@@ -72,7 +72,7 @@ definition cleanupConsts
 
 中文:
 定义 cleanupConsts
-  签名: (cfg : RingNF.Config) (r : Simp.Result)
+  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
   定义体: do
   let thms : SimpTheorems := {}
   let thms ← [``add_zero, ``_root_.one_mul, ``_root_.mul_one,

@@ -37,8 +37,8 @@ theorem exists_bounded_zero_one_of_closed
   ⟨⟨f, 1, fun _ _ => Real.dist_le_of_mem_Icc_01 (hf _) (hf _)⟩, hfs, hft, hf⟩
 
 中文:
-定理 exists_bounded_zero_one_of_closed
-  结论: {X : 类型} [TopologicalSpace X] [NormalSpace X]
+定理 存在_bounded_zero_one_of_closed
+  结论: {X : 类型} [拓扑空间 X] [正规空间 X]
   证明: let ⟨f, hfs, hft, hf⟩ := exists_continuous_zero_one_of_isClosed hs ht hd
   ⟨⟨f, 1, fun _ _ => Real.dist_le_of_mem_Icc_01 (hf _) (hf _)⟩, hfs, hft, hf⟩
 
@@ -63,8 +63,8 @@ theorem exists_bounded_mem_Icc_of_closed_of_le
     ⟨by dsimp; nlinarith [(hf01 x).1], by dsimp; nlinarith [(hf01 x).2]⟩⟩
 
 中文:
-定理 exists_bounded_mem_Icc_of_closed_of_le
-  结论: {X : 类型} [TopologicalSpace X] [NormalSpace X]
+定理 存在_bounded_mem_Icc_of_closed_of_le
+  结论: {X : 类型} [拓扑空间 X] [正规空间 X]
   证明: let ⟨f, hfs, hft, hf01⟩ := exists_bounded_zero_one_of_closed hs ht hd
   ⟨BoundedContinuousFunction.const X a + (b - a) • f, fun x hx => by simp [hfs hx], fun x hx => by
     simp [hft hx], fun x =>

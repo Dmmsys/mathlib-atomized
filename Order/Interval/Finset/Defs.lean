@@ -118,13 +118,13 @@ class LocallyFiniteOrder
     - finset_mem_Ioo : forall a b x : α, x in finsetIoo a b ↔ a < x ∧ x < b
 
 中文:
-类 LocallyFiniteOrder
-  参数: (α : 类型) [Preorder α]
+类 局部有限序
+  参数: (α : 类型) [预序 α]
   公理与运算 (8 个):
-    - finsetIcc : α -> α -> Finset α
-    - finsetIco : α -> α -> Finset α
-    - finsetIoc : α -> α -> Finset α
-    - finsetIoo : α -> α -> Finset α
+    - finsetIcc : α -> α -> 有限集 α
+    - finsetIco : α -> α -> 有限集 α
+    - finsetIoc : α -> α -> 有限集 α
+    - finsetIoo : α -> α -> 有限集 α
     - finset_mem_Icc : 对任意 a b x : α, x in finsetIcc a b ↔ a <= x ∧ x <= b
     - finset_mem_Ico : 对任意 a b x : α, x in finsetIco a b ↔ a <= x ∧ x < b
     - finset_mem_Ioc : 对任意 a b x : α, x in finsetIoc a b ↔ a < x ∧ x <= b
@@ -167,8 +167,8 @@ abbreviation LocallyFiniteOrder.mk'
   finset_mem_Ioo := by grind
 
 中文:
-缩写 LocallyFiniteOrder.mk'
-  签名: {α : 类型} [Preorder α]
+缩写 局部有限序.mk'
+  签名: {α : 类型} [预序 α]
   定义体: swap finsetIcc
   finsetIco := swap finsetIoc
   finsetIoc := swap finsetIco
@@ -209,10 +209,10 @@ class LocallyFiniteOrderTop
 
 中文:
 类 LocallyFiniteOrderTop
-  参数: (α : 类型) [Preorder α]
+  参数: (α : 类型) [预序 α]
   公理与运算 (4 个):
-    - finsetIoi : α -> Finset α
-    - finsetIci : α -> Finset α
+    - finsetIoi : α -> 有限集 α
+    - finsetIci : α -> 有限集 α
     - finset_mem_Ici : 对任意 a x : α, x in finsetIci a ↔ a <= x
     - finset_mem_Ioi : 对任意 a x : α, x in finsetIoi a ↔ a < x
 -/
@@ -243,10 +243,10 @@ class LocallyFiniteOrderBot
 
 中文:
 类 LocallyFiniteOrderBot
-  参数: (α : 类型) [Preorder α]
+  参数: (α : 类型) [预序 α]
   公理与运算 (4 个):
-    - finsetIio : α -> Finset α
-    - finsetIic : α -> Finset α
+    - finsetIio : α -> 有限集 α
+    - finsetIic : α -> 有限集 α
     - finset_mem_Iic : 对任意 a x : α, x in finsetIic a ↔ x <= a
     - finset_mem_Iio : 对任意 a x : α, x in finsetIio a ↔ x < a
 -/
@@ -279,8 +279,8 @@ definition LocallyFiniteOrder.ofIcc'
   finset_mem
 
 中文:
-定义 LocallyFiniteOrder.ofIcc'
-  签名: (α : 类型) [Preorder α] [DecidableLE α]
+定义 局部有限序.ofIcc'
+  签名: (α : 类型) [预序 α] [DecidableLE α]
   定义体: finsetIcc
   finsetIco a b := {x in finsetIcc a b | ¬b <= x}
   finsetIoc a b := {x in finsetIcc a b | ¬x <= a}
@@ -323,8 +323,8 @@ definition LocallyFiniteOrder.ofIcc
   finset_mem_Ioc
 
 中文:
-定义 LocallyFiniteOrder.ofIcc
-  签名: (α : 类型) [PartialOrder α] [DecidableEq α]
+定义 局部有限序.ofIcc
+  签名: (α : 类型) [偏序 α] [DecidableEq α]
   定义体: finsetIcc
   finsetIco a b := {x in finsetIcc a b | x != b}
   finsetIoc a b := {x in finsetIcc a b | a != x}
@@ -368,7 +368,7 @@ definition LocallyFiniteOrderTop.ofIci'
 
 中文:
 定义 LocallyFiniteOrderTop.ofIci'
-  签名: (α : 类型) [Preorder α] [DecidableLE α]
+  签名: (α : 类型) [预序 α] [DecidableLE α]
   定义体: finsetIci
   finsetIoi a := {x in finsetIci a | ¬x <= a}
   finset_mem_Ici := mem_Ici
@@ -404,7 +404,7 @@ definition LocallyFiniteOrderTop.ofIci
 
 中文:
 定义 LocallyFiniteOrderTop.ofIci
-  签名: (α : 类型) [PartialOrder α] [DecidableEq α]
+  签名: (α : 类型) [偏序 α] [DecidableEq α]
   定义体: finsetIci
   finsetIoi a := {x in finsetIci a | a != x}
   finset_mem_Ici := mem_Ici
@@ -439,8 +439,8 @@ abbreviation IsEmpty.toLocallyFiniteOrder
   finset_mem_Ioo := isEmptyElim
 
 中文:
-缩写 IsEmpty.toLocallyFiniteOrder
-  签名: [Preorder α] [IsEmpty α]
+缩写 是空.toLocallyFiniteOrder
+  签名: [预序 α] [是空 α]
   定义体: isEmptyElim
   finsetIco := isEmptyElim
   finsetIoc := isEmptyElim
@@ -480,8 +480,8 @@ abbreviation IsEmpty.toLocallyFiniteOrderTop
   finset_mem_Ioi := isEmptyElim
 
 中文:
-缩写 IsEmpty.toLocallyFiniteOrderTop
-  签名: [Preorder α] [IsEmpty α]
+缩写 是空.toLocallyFiniteOrderTop
+  签名: [预序 α] [是空 α]
   定义体: isEmptyElim
   finsetIoi := isEmptyElim
   finset_mem_Ici := isEmptyElim
@@ -519,7 +519,7 @@ definition Icc
   body: LocallyFiniteOrder.finsetIcc a b
 
 中文:
-定义 Icc
+定义 闭区间
   签名: (a b : α)
   定义体: LocallyFiniteOrder.finsetIcc a b
 
@@ -537,7 +537,7 @@ definition Ico
   body: LocallyFiniteOrder.finsetIco a b
 
 中文:
-定义 Ico
+定义 左闭右开区间
   签名: (a b : α)
   定义体: LocallyFiniteOrder.finsetIco a b
 
@@ -558,7 +558,7 @@ definition Ioc
   body: LocallyFiniteOrder.finsetIoc a b
 
 中文:
-定义 Ioc
+定义 左开右闭区间
   签名: (a b : α)
   定义体: LocallyFiniteOrder.finsetIoc a b
 
@@ -581,7 +581,7 @@ definition Ioo
 @[simp, grind =]
 
 中文:
-定义 Ioo
+定义 开区间
   签名: (a b : α)
   定义体: LocallyFiniteOrder.finsetIoo a b
 
@@ -605,7 +605,7 @@ theorem mem_Icc
 
 中文:
 定理 mem_Icc
-  结论: x in Icc a b ↔ a <= x ∧ x <= b
+  结论: x in 闭区间 a b ↔ a <= x ∧ x <= b
   证明: LocallyFiniteOrder.finset_mem_Icc a b x
 
 @[simp, grind =]
@@ -628,7 +628,7 @@ theorem mem_Ico
 
 中文:
 定理 mem_Ico
-  结论: x in Ico a b ↔ a <= x ∧ x < b
+  结论: x in 左闭右开区间 a b ↔ a <= x ∧ x < b
   证明: LocallyFiniteOrder.finset_mem_Ico a b x
 
 @[simp, grind =]
@@ -651,7 +651,7 @@ theorem mem_Ioc
 
 中文:
 定理 mem_Ioc
-  结论: x in Ioc a b ↔ a < x ∧ x <= b
+  结论: x in 左开右闭区间 a b ↔ a < x ∧ x <= b
   证明: LocallyFiniteOrder.finset_mem_Ioc a b x
 
 @[simp, grind =]
@@ -672,7 +672,7 @@ theorem mem_Ioo
 
 中文:
 定理 mem_Ioo
-  结论: x in Ioo a b ↔ a < x ∧ x < b
+  结论: x in 开区间 a b ↔ a < x ∧ x < b
   证明: LocallyFiniteOrder.finset_mem_Ioo a b x
 
 Depends on / 依赖: LocallyFiniteOrder, LocallyFiniteOrder.finset_mem_Ioo, finset_mem_Ioo
@@ -690,7 +690,7 @@ theorem mem_Icc'
 
 中文:
 定理 mem_Icc'
-  结论: x in Icc a b ↔ x <= b ∧ a <= x
+  结论: x in 闭区间 a b ↔ x <= b ∧ a <= x
   证明: by grind
 -/
 @[to_dual existing mem_Icc] theorem mem_Icc' : x in Icc a b ↔ x <= b ∧ a <= x := by grind
@@ -704,7 +704,7 @@ theorem mem_Ico'
 
 中文:
 定理 mem_Ico'
-  结论: x in Ico a b ↔ x < b ∧ a <= x
+  结论: x in 左闭右开区间 a b ↔ x < b ∧ a <= x
   证明: by grind
 -/
 @[to_dual existing mem_Ioc] theorem mem_Ico' : x in Ico a b ↔ x < b ∧ a <= x := by grind
@@ -718,7 +718,7 @@ theorem mem_Ioc'
 
 中文:
 定理 mem_Ioc'
-  结论: x in Ioc a b ↔ x <= b ∧ a < x
+  结论: x in 左开右闭区间 a b ↔ x <= b ∧ a < x
   证明: by grind
 -/
 @[to_dual existing mem_Ico] theorem mem_Ioc' : x in Ioc a b ↔ x <= b ∧ a < x := by grind
@@ -734,7 +734,7 @@ theorem mem_Ioo'
 
 中文:
 定理 mem_Ioo'
-  结论: x in Ioo a b ↔ x < b ∧ a < x
+  结论: x in 开区间 a b ↔ x < b ∧ a < x
   证明: by grind
 
 @[simp, norm_cast, to_dual self]
@@ -758,7 +758,7 @@ theorem coe_Icc
 中文:
 定理 coe_Icc
   条件: (a b : α)
-  结论: (Icc a b : Set α) = Set.Icc a b
+  结论: (闭区间 a b : 集合 α) = 集合.闭区间 a b
   证明: Set.ext fun _ => mem_Icc
 
 @[to_dual (reorder := a b) (attr := simp, norm_cast)]
@@ -783,7 +783,7 @@ theorem coe_Ico
 中文:
 定理 coe_Ico
   条件: (a b : α)
-  结论: (Ico a b : Set α) = Set.Ico a b
+  结论: (左闭右开区间 a b : 集合 α) = 集合.左闭右开区间 a b
   证明: Set.ext fun _ => mem_Ico
 
 @[simp, norm_cast, to_dual self]
@@ -808,7 +808,7 @@ theorem coe_Ioo
 中文:
 定理 coe_Ioo
   条件: (a b : α)
-  结论: (Ioo a b : Set α) = Set.Ioo a b
+  结论: (开区间 a b : 集合 α) = 集合.开区间 a b
   证明: Set.ext fun _ => mem_Ioo
 
 @[to_dual self]
@@ -830,8 +830,8 @@ theorem _root_.Fintype.card_Icc
 @[to_dual (reorder := a b)]
 
 中文:
-定理 _root_.Fintype.card_Icc
-  条件: (a b : α) [Fintype (Set.Icc a b)]
+定理 _root_.有限类型.card_Icc
+  条件: (a b : α) [有限类型 (集合.闭区间 a b)]
   证明: Fintype.card_of_finset' _ fun _ => by simp
 
 @[to_dual (reorder := a b)]
@@ -854,8 +854,8 @@ theorem _root_.Fintype.card_Ico
 @[to_dual self]
 
 中文:
-定理 _root_.Fintype.card_Ico
-  条件: (a b : α) [Fintype (Set.Ico a b)]
+定理 _root_.有限类型.card_Ico
+  条件: (a b : α) [有限类型 (集合.左闭右开区间 a b)]
   证明: Fintype.card_of_finset' _ fun _ => by simp
 
 @[to_dual self]
@@ -876,8 +876,8 @@ theorem _root_.Fintype.card_Ioo
   proof: Fintype.card_of_finset' _ fun _ => by simp
 
 中文:
-定理 _root_.Fintype.card_Ioo
-  条件: (a b : α) [Fintype (Set.Ioo a b)]
+定理 _root_.有限类型.card_Ioo
+  条件: (a b : α) [有限类型 (集合.开区间 a b)]
   证明: Fintype.card_of_finset' _ fun _ => by simp
 
 Depends on / 依赖: Fintype, Fintype.card_of_finset, card_of_finset
@@ -904,7 +904,7 @@ definition Ici
   body: LocallyFiniteOrderTop.finsetIci a
 
 中文:
-定义 Ici
+定义 左闭右无界区间
   签名: (a : α)
   定义体: LocallyFiniteOrderTop.finsetIci a
 
@@ -927,7 +927,7 @@ definition Ioi
 @[to_dual (attr := simp, grind =)]
 
 中文:
-定义 Ioi
+定义 左开右无界区间
   签名: (a : α)
   定义体: LocallyFiniteOrderTop.finsetIoi a
 
@@ -951,7 +951,7 @@ theorem mem_Ici
 
 中文:
 定理 mem_Ici
-  结论: x in Ici a ↔ a <= x
+  结论: x in 左闭右无界区间 a ↔ a <= x
   证明: LocallyFiniteOrderTop.finset_mem_Ici _ _
 
 @[to_dual (attr := simp, grind =)]
@@ -974,7 +974,7 @@ theorem mem_Ioi
 
 中文:
 定理 mem_Ioi
-  结论: x in Ioi a ↔ a < x
+  结论: x in 左开右无界区间 a ↔ a < x
   证明: LocallyFiniteOrderTop.finset_mem_Ioi _ _
 
 @[to_dual (attr := simp, norm_cast)]
@@ -999,7 +999,7 @@ theorem coe_Ici
 中文:
 定理 coe_Ici
   条件: (a : α)
-  结论: (Ici a : Set α) = Set.Ici a
+  结论: (左闭右无界区间 a : 集合 α) = 集合.左闭右无界区间 a
   证明: Set.ext fun _ => mem_Ici
 
 @[to_dual (attr := simp, norm_cast)]
@@ -1024,7 +1024,7 @@ theorem coe_Ioi
 中文:
 定理 coe_Ioi
   条件: (a : α)
-  结论: (Ioi a : Set α) = Set.Ioi a
+  结论: (左开右无界区间 a : 集合 α) = 集合.左开右无界区间 a
   证明: Set.ext fun _ => mem_Ioi
 
 @[to_dual]
@@ -1046,8 +1046,8 @@ theorem _root_.Fintype.card_Ici
 @[to_dual]
 
 中文:
-定理 _root_.Fintype.card_Ici
-  条件: (a : α) [Fintype (Set.Ici a)]
+定理 _root_.有限类型.card_Ici
+  条件: (a : α) [有限类型 (集合.左闭右无界区间 a)]
   证明: Fintype.card_of_finset' _ fun _ => by simp
 
 @[to_dual]
@@ -1070,8 +1070,8 @@ theorem _root_.Fintype.card_Ioi
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.Fintype.card_Ioi
-  条件: (a : α) [Fintype (Set.Ioi a)]
+定理 _root_.有限类型.card_Ioi
+  条件: (a : α) [有限类型 (集合.左开右无界区间 a)]
   证明: Fintype.card_of_finset' _ fun _ => by simp
 
 @[to_additive (attr := simp)]
@@ -1094,8 +1094,8 @@ lemma Ici_one_eq_univ
 
 中文:
 引理 Ici_one_eq_univ
-  条件: [One α] [IsBotOneClass α] [Fintype α]
-  结论: Ici (1 : α) = univ
+  条件: [幺 α] [是BotOne类 α] [有限类型 α]
+  结论: 左闭右无界区间 (1 : α) = univ
   证明: by ext; simp
 -/
 lemma Ici_one_eq_univ [One α] [IsBotOneClass α] [Fintype α] : Ici (1 : α) = univ := by ext; simp
@@ -1130,7 +1130,7 @@ theorem Ici_eq_Icc
 中文:
 定理 Ici_eq_Icc
   条件: (a : α)
-  结论: Ici a = Icc a ⊤
+  结论: 左闭右无界区间 a = 闭区间 a ⊤
   证明: rfl
 
 @[to_dual]
@@ -1151,7 +1151,7 @@ theorem Ioi_eq_Ioc
 中文:
 定理 Ioi_eq_Ioc
   条件: (a : α)
-  结论: Ioi a = Ioc a ⊤
+  结论: 左开右无界区间 a = 左开右闭区间 a ⊤
   证明: rfl
 -/
 theorem Ioi_eq_Ioc (a : α) : Ioi a = Ioc a ⊤ :=
@@ -1230,7 +1230,7 @@ theorem coe_uIcc
 中文:
 定理 coe_uIcc
   条件: (a b : α)
-  结论: (Finset.uIcc a b : Set α) = Set.uIcc a b
+  结论: (有限集.uIcc a b : 集合 α) = 集合.uIcc a b
   证明: coe_Icc _ _
 
 Depends on / 依赖: coe_Icc
@@ -1247,8 +1247,8 @@ theorem _root_.Fintype.card_uIcc
   proof: Fintype.card_of_finset' _ fun _ => by simp [Set.uIcc]
 
 中文:
-定理 _root_.Fintype.card_uIcc
-  条件: (a b : α) [Fintype (Set.uIcc a b)]
+定理 _root_.有限类型.card_uIcc
+  条件: (a b : α) [有限类型 (集合.uIcc a b)]
   证明: Fintype.card_of_finset' _ fun _ => by simp [Set.uIcc]
 
 Depends on / 依赖: Fintype, Fintype.card_of_finset, Set.uIcc, card_of_finset
@@ -1328,7 +1328,7 @@ instance instFintypeIcc
 
 中文:
 实例 instFintypeIcc
-  签名: : Fintype (Icc a b)
+  签名: : 有限类型 (闭区间 a b)
   定义体: .ofFinset (Finset.Icc a b) fun _ => by simp
 
 @[to_dual (reorder := a b)]
@@ -1350,7 +1350,7 @@ instance instFintypeIco
 
 中文:
 实例 instFintypeIco
-  签名: : Fintype (Ico a b)
+  签名: : 有限类型 (左闭右开区间 a b)
   定义体: .ofFinset (Finset.Ico a b) fun _ => by simp
 
 @[to_dual self]
@@ -1372,7 +1372,7 @@ instance instFintypeIoo
 
 中文:
 实例 instFintypeIoo
-  签名: : Fintype (Ioo a b)
+  签名: : 有限类型 (开区间 a b)
   定义体: .ofFinset (Finset.Ioo a b) fun _ => by simp
 
 @[simp, to_dual self]
@@ -1394,7 +1394,7 @@ lemma finite_Icc
 
 中文:
 引理 finite_Icc
-  结论: (Icc a b).Finite
+  结论: (闭区间 a b).有限
   证明: (Icc a b).toFinite
 
 @[to_dual (reorder := a b) (attr := simp)]
@@ -1416,7 +1416,7 @@ lemma finite_Ico
 
 中文:
 引理 finite_Ico
-  结论: (Ico a b).Finite
+  结论: (左闭右开区间 a b).有限
   证明: (Ico a b).toFinite
 
 @[simp, to_dual self]
@@ -1436,7 +1436,7 @@ lemma finite_Ioo
 
 中文:
 引理 finite_Ioo
-  结论: (Ioo a b).Finite
+  结论: (开区间 a b).有限
   证明: (Ioo a b).toFinite
 
 Depends on / 依赖: toFinite
@@ -1462,7 +1462,7 @@ instance instFintypeIci
 
 中文:
 实例 instFintypeIci
-  签名: : Fintype (Ici a)
+  签名: : 有限类型 (左闭右无界区间 a)
   定义体: .ofFinset (Finset.Ici a) fun _ => Finset.mem_Ici
 
 @[to_dual]
@@ -1482,7 +1482,7 @@ instance instFintypeIoi
 
 中文:
 实例 instFintypeIoi
-  签名: : Fintype (Ioi a)
+  签名: : 有限类型 (左开右无界区间 a)
   定义体: .ofFinset (Finset.Ioi a) fun _ => Finset.mem_Ioi
 
 Depends on / 依赖: Finset, Finset.Ioi, Finset.mem_Ioi, mem_Ioi, ofFinset
@@ -1499,7 +1499,7 @@ lemma finite_Ici
 
 中文:
 引理 finite_Ici
-  结论: (Ici a).Finite
+  结论: (左闭右无界区间 a).有限
   证明: (Ici a).toFinite
 -/
 @[to_dual (attr := simp)] lemma finite_Ici : (Ici a).Finite := (Ici a).toFinite
@@ -1513,7 +1513,7 @@ lemma finite_Ioi
 
 中文:
 引理 finite_Ioi
-  结论: (Ioi a).Finite
+  结论: (左开右无界区间 a).有限
   证明: (Ioi a).toFinite
 -/
 @[to_dual (attr := simp)] lemma finite_Ioi : (Ioi a).Finite := (Ioi a).toFinite
@@ -1533,7 +1533,7 @@ instance fintypeUIcc
 
 中文:
 实例 fintypeUIcc
-  签名: : Fintype (uIcc a b)
+  签名: : 有限类型 (uIcc a b)
   定义体: Fintype.ofFinset (Finset.uIcc a b) fun _ => Finset.mem_uIcc
 
 Depends on / 依赖: Finset, Finset.mem_uIcc, Finset.uIcc, Fintype, Fintype.ofFinset, mem_uIcc, ofFinset
@@ -1553,7 +1553,7 @@ lemma finite_uIcc
 
 中文:
 引理 finite_uIcc
-  结论: (uIcc a b).Finite
+  结论: (uIcc a b).有限
   证明: (uIcc _ _).toFinite
 
 @[deprecated (since := "2026-02-03")] alias finite_interval := finite_uIcc
@@ -1584,8 +1584,8 @@ definition LocallyFiniteOrder.ofFiniteIcc
     rw [Set.Finite.mem_toFinset]; rw [Set.mem_Icc]
 
 中文:
-定义 LocallyFiniteOrder.ofFiniteIcc
-  签名: (h : 对任意 a b : α, (Set.Icc a b).Finite)
+定义 局部有限序.ofFiniteIcc
+  签名: (h : 对任意 a b : α, (集合.闭区间 a b).有限)
   定义体: @LocallyFiniteOrder.ofIcc' α _ (Classical.decRel _) (fun a b => (h a b).toFinset) fun a b x => by
     rw [Set.Finite.mem_toFinset]; rw [Set.mem_Icc]
 
@@ -1611,8 +1611,8 @@ abbreviation Fintype.toLocallyFiniteOrder
   finset_
 
 中文:
-缩写 Fintype.toLocallyFiniteOrder
-  签名: [Fintype α] [DecidableLT α] [DecidableLE α]
+缩写 有限类型.toLocallyFiniteOrder
+  签名: [有限类型 α] [DecidableLT α] [DecidableLE α]
   定义体: (Set.Icc a b).toFinset
   finsetIco a b := (Set.Ico a b).toFinset
   finsetIoc a b := (Set.Ioc a b).toFinset
@@ -1648,7 +1648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (LocallyFiniteOrder α)
+  签名: 子单例 (局部有限序 α)
   定义体: Subsingleton.intro fun h₀ h₁ => by
     obtain ⟨h₀_finset_Icc, h₀_finset_Ico, h₀_finset_Ioc, h₀_finset_Ioo,
       h₀_finset_mem_Icc, h₀_finset_mem_Ico, h₀_finset_mem_Ioc, h₀_finset_mem_Ioo⟩ := h₀
@@ -1693,7 +1693,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (LocallyFiniteOrderTop α)
+  签名: 子单例 (LocallyFiniteOrderTop α)
   定义体: Subsingleton.intro fun h₀ h₁ => by
     obtain ⟨h₀_finset_Ioi, h₀_finset_Ici, h₀_finset_mem_Ici, h₀_finset_mem_Ioi⟩ := h₀
     obtain ⟨h₁_finset_Ioi, h₁_finset_Ici, h₁_finset_mem_Ici, h₁_finset_mem_Ioi⟩ := h₁
@@ -1732,7 +1732,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def OrderEmbedding.locallyFiniteOrder [LocallyFiniteOrder β] (f : α ↪o β)
+  签名: def OrderEmbedding.locallyFiniteOrder [局部有限序 β] (f : α ↪o β)
   定义体: (Icc (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIco a b := (Ico (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIoc a b := (Ioc (f a) (f b)).preimage f f.toEmbedding.injective.injOn
@@ -1773,7 +1773,7 @@ instance OrderDual.instLocallyFiniteOrder
 
 中文:
 实例 OrderDual.instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder αᵒᵈ where
+  签名: : 局部有限序 αᵒᵈ where
   定义体: @Icc α _ _ (ofDual b) (ofDual a)
   finsetIco a b := @Ioc α _ _ (ofDual b) (ofDual a)
   finsetIoc a b := @Ico α _ _ (ofDual b) (ofDual a)
@@ -1805,7 +1805,7 @@ lemma Finset.Icc_orderDual_def
 @[to_dual (reorder := a b)]
 
 中文:
-引理 Finset.Icc_orderDual_def
+引理 有限集.Icc_orderDual_def
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -1828,7 +1828,7 @@ lemma Finset.Ico_orderDual_def
 @[to_dual self]
 
 中文:
-引理 Finset.Ico_orderDual_def
+引理 有限集.Ico_orderDual_def
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -1851,7 +1851,7 @@ lemma Finset.Ioo_orderDual_def
 @[to_dual self]
 
 中文:
-引理 Finset.Ioo_orderDual_def
+引理 有限集.Ioo_orderDual_def
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -1874,8 +1874,8 @@ lemma Finset.Icc_toDual
 @[to_dual (reorder := a b)]
 
 中文:
-引理 Finset.Icc_toDual
-  结论: Icc (toDual a) (toDual b) = (Icc b a).map toDual.toEmbedding
+引理 有限集.Icc_toDual
+  结论: 闭区间 (toDual a) (toDual b) = (闭区间 b a).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual (reorder := a b)]
@@ -1897,8 +1897,8 @@ lemma Finset.Ico_toDual
 @[to_dual self]
 
 中文:
-引理 Finset.Ico_toDual
-  结论: Ico (toDual a) (toDual b) = (Ioc b a).map toDual.toEmbedding
+引理 有限集.Ico_toDual
+  结论: 左闭右开区间 (toDual a) (toDual b) = (左开右闭区间 b a).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual self]
@@ -1920,8 +1920,8 @@ lemma Finset.Ioo_toDual
 @[to_dual self]
 
 中文:
-引理 Finset.Ioo_toDual
-  结论: Ioo (toDual a) (toDual b) = (Ioo b a).map toDual.toEmbedding
+引理 有限集.Ioo_toDual
+  结论: 开区间 (toDual a) (toDual b) = (开区间 b a).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual self]
@@ -1943,7 +1943,7 @@ lemma Finset.Icc_ofDual
 @[to_dual (reorder := a b)]
 
 中文:
-引理 Finset.Icc_ofDual
+引理 有限集.Icc_ofDual
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -1966,7 +1966,7 @@ lemma Finset.Ico_ofDual
 @[to_dual self]
 
 中文:
-引理 Finset.Ico_ofDual
+引理 有限集.Ico_ofDual
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -1987,7 +1987,7 @@ lemma Finset.Ioo_ofDual
   proof: map_refl.symm
 
 中文:
-引理 Finset.Ioo_ofDual
+引理 有限集.Ioo_ofDual
   条件: (a b : αᵒᵈ)
   证明: map_refl.symm
 
@@ -2061,7 +2061,7 @@ lemma Iic_orderDual_def
 中文:
 引理 Iic_orderDual_def
   条件: (a : αᵒᵈ)
-  结论: Iic a = (Ici (ofDual a)).map toDual.toEmbedding
+  结论: 左无界右闭区间 a = (左闭右无界区间 (ofDual a)).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual]
@@ -2085,7 +2085,7 @@ lemma Iio_orderDual_def
 中文:
 引理 Iio_orderDual_def
   条件: (a : αᵒᵈ)
-  结论: Iio a = (Ioi (ofDual a)).map toDual.toEmbedding
+  结论: 左无界右开区间 a = (左开右无界区间 (ofDual a)).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual]
@@ -2107,9 +2107,9 @@ lemma Finset.Iic_toDual
 @[to_dual]
 
 中文:
-引理 Finset.Iic_toDual
+引理 有限集.Iic_toDual
   条件: (a : α)
-  结论: Iic (toDual a) = (Ici a).map toDual.toEmbedding
+  结论: 左无界右闭区间 (toDual a) = (左闭右无界区间 a).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual]
@@ -2132,9 +2132,9 @@ lemma Finset.Iio_toDual
 @[to_dual]
 
 中文:
-引理 Finset.Iio_toDual
+引理 有限集.Iio_toDual
   条件: (a : α)
-  结论: Iio (toDual a) = (Ioi a).map toDual.toEmbedding
+  结论: 左无界右开区间 (toDual a) = (左开右无界区间 a).map toDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual]
@@ -2157,9 +2157,9 @@ lemma Finset.Ici_ofDual
 @[to_dual]
 
 中文:
-引理 Finset.Ici_ofDual
+引理 有限集.Ici_ofDual
   条件: (a : αᵒᵈ)
-  结论: Ici (ofDual a) = (Iic a).map ofDual.toEmbedding
+  结论: 左闭右无界区间 (ofDual a) = (左无界右闭区间 a).map ofDual.toEmbedding
   证明: map_refl.symm
 
 @[to_dual]
@@ -2180,9 +2180,9 @@ lemma Finset.Ioi_ofDual
   proof: map_refl.symm
 
 中文:
-引理 Finset.Ioi_ofDual
+引理 有限集.Ioi_ofDual
   条件: (a : αᵒᵈ)
-  结论: Ioi (ofDual a) = (Iio a).map ofDual.toEmbedding
+  结论: 左开右无界区间 (ofDual a) = (左无界右开区间 a).map ofDual.toEmbedding
   证明: map_refl.symm
 
 Depends on / 依赖: map_refl, map_refl.symm
@@ -2209,8 +2209,8 @@ instance Prod.instLocallyFiniteOrder
 @[to_dual self]
 
 中文:
-实例 Prod.instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (α × β)
+实例 积类型.instLocallyFiniteOrder
+  签名: : 局部有限序 (α × β)
   定义体: LocallyFiniteOrder.ofIcc' (α × β) (fun x y => Icc x.1 y.1 ×ˢ Icc x.2 y.2) fun a b x => by
     rw [mem_product]; rw [mem_Icc]; rw [mem_Icc]; rw [and_and_and_comm]; rw [le_def]; rw [le_def]
 
@@ -2235,9 +2235,9 @@ lemma Finset.Icc_prod_def
 @[to_dual self]
 
 中文:
-引理 Finset.Icc_prod_def
+引理 有限集.Icc_prod_def
   条件: (x y : α × β)
-  结论: Icc x y = Icc x.1 y.1 ×ˢ Icc x.2 y.2
+  结论: 闭区间 x y = 闭区间 x.1 y.1 ×ˢ 闭区间 x.2 y.2
   证明: rfl
 
 @[to_dual self]
@@ -2256,7 +2256,7 @@ lemma Finset.Icc_product_Icc
 @[to_dual self]
 
 中文:
-引理 Finset.Icc_product_Icc
+引理 有限集.Icc_product_Icc
   条件: (a₁ a₂ : α) (b₁ b₂ : β)
   证明: rfl
 
@@ -2276,9 +2276,9 @@ lemma Finset.card_Icc_prod
   proof: card_product ..
 
 中文:
-引理 Finset.card_Icc_prod
+引理 有限集.card_Icc_prod
   条件: (x y : α × β)
-  结论: #(Icc x y) = #(Icc x.1 y.1) * #(Icc x.2 y.2)
+  结论: #(闭区间 x y) = #(闭区间 x.1 y.1) * #(闭区间 x.2 y.2)
   证明: card_product ..
 
 Depends on / 依赖: card_product
@@ -2304,7 +2304,7 @@ instance Prod.instLocallyFiniteOrderTop
 @[to_dual]
 
 中文:
-实例 Prod.instLocallyFiniteOrderTop
+实例 积类型.instLocallyFiniteOrderTop
   签名: : LocallyFiniteOrderTop (α × β)
   定义体: LocallyFiniteOrderTop.ofIci' (α × β) (fun x => Ici x.1 ×ˢ Ici x.2) fun a x => by
     rw [mem_product]; rw [mem_Ici]; rw [mem_Ici]; rw [le_def]
@@ -2330,9 +2330,9 @@ lemma Finset.Ici_prod_def
 @[to_dual Iic_product_Iic]
 
 中文:
-引理 Finset.Ici_prod_def
+引理 有限集.Ici_prod_def
   条件: (x : α × β)
-  结论: Ici x = Ici x.1 ×ˢ Ici x.2
+  结论: 左闭右无界区间 x = 左闭右无界区间 x.1 ×ˢ 左闭右无界区间 x.2
   证明: rfl
 
 @[to_dual Iic_product_Iic]
@@ -2352,9 +2352,9 @@ lemma Finset.Ici_product_Ici
 @[to_dual]
 
 中文:
-引理 Finset.Ici_product_Ici
+引理 有限集.Ici_product_Ici
   条件: (a : α) (b : β)
-  结论: Ici a ×ˢ Ici b = Ici (a, b)
+  结论: 左闭右无界区间 a ×ˢ 左闭右无界区间 b = 左闭右无界区间 (a, b)
   证明: rfl
 
 @[to_dual]
@@ -2372,9 +2372,9 @@ lemma Finset.card_Ici_prod
   proof: card_product _ _
 
 中文:
-引理 Finset.card_Ici_prod
+引理 有限集.card_Ici_prod
   条件: (x : α × β)
-  结论: #(Ici x) = #(Ici x.1) * #(Ici x.2)
+  结论: #(左闭右无界区间 x) = #(左闭右无界区间 x.1) * #(左闭右无界区间 x.2)
   证明: card_product _ _
 
 Depends on / 依赖: card_product
@@ -2398,7 +2398,7 @@ lemma Finset.uIcc_prod_def
   proof: rfl
 
 中文:
-引理 Finset.uIcc_prod_def
+引理 有限集.uIcc_prod_def
   条件: (x y : α × β)
   结论: uIcc x y = uIcc x.1 y.1 ×ˢ uIcc x.2 y.2
   证明: rfl
@@ -2416,7 +2416,7 @@ lemma Finset.uIcc_product_uIcc
   proof: rfl
 
 中文:
-引理 Finset.uIcc_product_uIcc
+引理 有限集.uIcc_product_uIcc
   条件: (a₁ a₂ : α) (b₁ b₂ : β)
   证明: rfl
 -/
@@ -2433,7 +2433,7 @@ lemma Finset.card_uIcc_prod
   proof: card_product ..
 
 中文:
-引理 Finset.card_uIcc_prod
+引理 有限集.card_uIcc_prod
   条件: (x y : α × β)
   结论: #(uIcc x y) = #(uIcc x.1 y.1) * #(uIcc x.2 y.2)
   证明: card_product ..
@@ -2473,7 +2473,7 @@ definition insertTop
 
 中文:
 定义 insertTop
-  签名: : Finset α ↪o Finset (WithTop α)
+  签名: : 有限集 α ↪o 有限集 (WithTop α)
   定义体: OrderEmbedding.ofMapLEIff
     (fun s => cons ⊤ (s.map Embedding.coeWithTop) <| by simp)
     (fun s t => by rw [cons_subset_cons, map_subset_map])
@@ -2502,7 +2502,7 @@ theorem some_mem_insertTop
 
 中文:
 定理 some_mem_insertTop
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: ↑a in insertTop s ↔ a in s
   证明: by
   simp [insertTop]
@@ -2527,7 +2527,7 @@ theorem top_mem_insertTop
 
 中文:
 定理 top_mem_insertTop
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: ⊤ in insertTop s
   证明: by
   simp [insertTop]
@@ -2559,7 +2559,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyFiniteOrder (WithTop α)
+  签名: 局部有限序 (WithTop α)
   定义体: match a, b with
     | ⊤, ⊤ => {⊤}
     | ⊤, (b : α) => ∅
@@ -2619,7 +2619,7 @@ theorem Icc_coe_top
 
 中文:
 定理 Icc_coe_top
-  结论: Icc (a : WithTop α) ⊤ = insertNone (Ici a)
+  结论: 闭区间 (a : WithTop α) ⊤ = insertNone (左闭右无界区间 a)
   证明: rfl
 
 @[to_dual]
@@ -2640,7 +2640,7 @@ theorem Icc_coe_coe
 
 中文:
 定理 Icc_coe_coe
-  结论: Icc (a : WithTop α) b = (Icc a b).map Embedding.some
+  结论: 闭区间 (a : WithTop α) b = (闭区间 a b).map 嵌入.some
   证明: rfl
 
 @[to_dual Ioc_bot_coe]
@@ -2661,7 +2661,7 @@ theorem Ico_coe_top
 
 中文:
 定理 Ico_coe_top
-  结论: Ico (a : WithTop α) ⊤ = (Ici a).map Embedding.some
+  结论: 左闭右开区间 (a : WithTop α) ⊤ = (左闭右无界区间 a).map 嵌入.some
   证明: rfl
 
 @[to_dual]
@@ -2682,7 +2682,7 @@ theorem Ico_coe_coe
 
 中文:
 定理 Ico_coe_coe
-  结论: Ico (a : WithTop α) b = (Ico a b).map Embedding.some
+  结论: 左闭右开区间 (a : WithTop α) b = (左闭右开区间 a b).map 嵌入.some
   证明: rfl
 
 @[to_dual Ico_bot_coe]
@@ -2703,7 +2703,7 @@ theorem Ioc_coe_top
 
 中文:
 定理 Ioc_coe_top
-  结论: Ioc (a : WithTop α) ⊤ = insertNone (Ioi a)
+  结论: 左开右闭区间 (a : WithTop α) ⊤ = insertNone (左开右无界区间 a)
   证明: rfl
 
 @[to_dual]
@@ -2724,7 +2724,7 @@ theorem Ioc_coe_coe
 
 中文:
 定理 Ioc_coe_coe
-  结论: Ioc (a : WithTop α) b = (Ioc a b).map Embedding.some
+  结论: 左开右闭区间 (a : WithTop α) b = (左开右闭区间 a b).map 嵌入.some
   证明: rfl
 
 @[to_dual Ioo_bot_coe]
@@ -2745,7 +2745,7 @@ theorem Ioo_coe_top
 
 中文:
 定理 Ioo_coe_top
-  结论: Ioo (a : WithTop α) ⊤ = (Ioi a).map Embedding.some
+  结论: 开区间 (a : WithTop α) ⊤ = (左开右无界区间 a).map 嵌入.some
   证明: rfl
 
 @[to_dual]
@@ -2764,7 +2764,7 @@ theorem Ioo_coe_coe
 
 中文:
 定理 Ioo_coe_coe
-  结论: Ioo (a : WithTop α) b = (Ioo a b).map Embedding.some
+  结论: 开区间 (a : WithTop α) b = (开区间 a b).map 嵌入.some
   证明: rfl
 -/
 theorem Ioo_coe_coe : Ioo (a : WithTop α) b = (Ioo a b).map Embedding.some :=
@@ -2795,7 +2795,7 @@ abbreviation locallyFiniteOrder
 
 中文:
 缩写 locallyFiniteOrder
-  签名: [LocallyFiniteOrder β] (f : α ≃o β)
+  签名: [局部有限序 β] (f : α ≃o β)
   定义体: (Icc (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finsetIco a b := (Ico (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finsetIoc a b := (Ioc (f a) (f b)).map f.symm.toEquiv.toEmbedding
@@ -2867,8 +2867,8 @@ instance Subtype.instLocallyFiniteOrder
     simp_rw [Finset.mem
 
 中文:
-实例 Subtype.instLocallyFiniteOrder
-  签名: [LocallyFiniteOrder α]
+实例 子类型.instLocallyFiniteOrder
+  签名: [局部有限序 α]
   定义体: (Icc (a : α) b).subtype p
   finsetIco a b := (Ico (a : α) b).subtype p
   finsetIoc a b := (Ioc (a : α) b).subtype p
@@ -2905,7 +2905,7 @@ instance Subtype.instLocallyFiniteOrderTop
   finset_mem_Ioi a x := by simp_rw [Finset.mem_subtype, mem_Ioi, Subtype.coe_lt_coe]
 
 中文:
-实例 Subtype.instLocallyFiniteOrderTop
+实例 子类型.instLocallyFiniteOrderTop
   签名: [LocallyFiniteOrderTop α]
   定义体: (Ici (a : α)).subtype p
   finsetIoi a := (Ioi (a : α)).subtype p
@@ -2940,7 +2940,7 @@ theorem subtype_Icc_eq
 
 中文:
 定理 subtype_Icc_eq
-  结论: Icc a b = (Icc (a : α) b).subtype p
+  结论: 闭区间 a b = (闭区间 (a : α) b).subtype p
   证明: rfl
 
 @[to_dual (reorder := a b)]
@@ -2961,7 +2961,7 @@ theorem subtype_Ico_eq
 
 中文:
 定理 subtype_Ico_eq
-  结论: Ico a b = (Ico (a : α) b).subtype p
+  结论: 左闭右开区间 a b = (左闭右开区间 (a : α) b).subtype p
   证明: rfl
 
 @[to_dual self]
@@ -2980,7 +2980,7 @@ theorem subtype_Ioo_eq
 
 中文:
 定理 subtype_Ioo_eq
-  结论: Ioo a b = (Ioo (a : α) b).subtype p
+  结论: 开区间 a b = (开区间 (a : α) b).subtype p
   证明: rfl
 -/
 theorem subtype_Ioo_eq : Ioo a b = (Ioo (a : α) b).subtype p :=
@@ -3125,7 +3125,7 @@ theorem subtype_Ici_eq
 
 中文:
 定理 subtype_Ici_eq
-  结论: Ici a = (Ici (a : α)).subtype p
+  结论: 左闭右无界区间 a = (左闭右无界区间 (a : α)).subtype p
   证明: rfl
 
 @[to_dual]
@@ -3146,7 +3146,7 @@ theorem subtype_Ioi_eq
 
 中文:
 定理 subtype_Ioi_eq
-  结论: Ioi a = (Ioi (a : α)).subtype p
+  结论: 左开右无界区间 a = (左开右无界区间 (a : α)).subtype p
   证明: rfl
 
 @[to_dual]
@@ -3232,7 +3232,7 @@ theorem BddBelow.finite_of_bddAbove
 
 中文:
 定理 BddBelow.finite_of_bddAbove
-  结论: [Preorder α] [LocallyFiniteOrder α]
+  结论: [预序 α] [局部有限序 α]
   证明: let ⟨a, ha⟩ := h₀
   let ⟨b, hb⟩ := h₁
   (Set.finite_Icc a b).subset fun _x hx => ⟨ha hx, hb hx⟩
@@ -3261,8 +3261,8 @@ theorem Set.finite_iff_bddAbove
 @[to_dual]
 
 中文:
-定理 Set.finite_iff_bddAbove
-  条件: [SemilatticeSup α] [LocallyFiniteOrder α] [OrderBot α]
+定理 集合.finite_iff_bddAbove
+  条件: [SemilatticeSup α] [局部有限序 α] [有底序 α]
   证明: ⟨fun h => ⟨h.toFinset.sup id, fun _ hx => Finset.le_sup (f := id) ((Finite.mem_toFinset h).mpr hx)⟩,
     fun ⟨m, hm⟩ => (Set.finite_Icc ⊥ m).subset (fun _ hx => ⟨bot_le, hm hx⟩)⟩
 
@@ -3290,8 +3290,8 @@ theorem Set.finite_iff_bddBelow_bddAbove
     ⟨h.toFinset.sup' ((Finite
 
 中文:
-定理 Set.finite_iff_bddBelow_bddAbove
-  条件: [Nonempty α] [Lattice α] [LocallyFiniteOrder α]
+定理 集合.finite_iff_bddBelow_bddAbove
+  条件: [非空 α] [格 α] [局部有限序 α]
   证明: by
   obtain (rfl | hs) := s.eq_empty_or_nonempty
   · simp only [Set.finite_empty, bddBelow_empty, bddAbove_empty, and_self]
@@ -3356,7 +3356,7 @@ instance [LocallyFiniteOrderBot
 
 中文:
 实例 [LocallyFiniteOrderBot
-  签名: α] : Finite { x
+  签名: α] : 有限 { x
   定义体: by
   simpa only [coe_Iic] using! (Finset.Iic y).finite_toSet
 
@@ -3379,7 +3379,7 @@ instance [LocallyFiniteOrderBot
 
 中文:
 实例 [LocallyFiniteOrderBot
-  签名: α] : Finite { x
+  签名: α] : 有限 { x
   定义体: by
   simpa only [coe_Iio] using! (Finset.Iio y).finite_toSet
 
@@ -3409,8 +3409,8 @@ lemma toFinset_Icc
 
 中文:
 引理 toFinset_Icc
-  条件: (a b : α) [Fintype (Icc a b)]
-  结论: (Icc a b).toFinset = Finset.Icc a b
+  条件: (a b : α) [有限类型 (闭区间 a b)]
+  结论: (闭区间 a b).toFinset = 有限集.闭区间 a b
   证明: by
   ext; simp
 
@@ -3434,8 +3434,8 @@ lemma toFinset_Ico
 
 中文:
 引理 toFinset_Ico
-  条件: (a b : α) [Fintype (Ico a b)]
-  结论: (Ico a b).toFinset = Finset.Ico a b
+  条件: (a b : α) [有限类型 (左闭右开区间 a b)]
+  结论: (左闭右开区间 a b).toFinset = 有限集.左闭右开区间 a b
   证明: by
   ext; simp
 
@@ -3457,8 +3457,8 @@ lemma toFinset_Ioo
 
 中文:
 引理 toFinset_Ioo
-  条件: (a b : α) [Fintype (Ioo a b)]
-  结论: (Ioo a b).toFinset = Finset.Ioo a b
+  条件: (a b : α) [有限类型 (开区间 a b)]
+  结论: (开区间 a b).toFinset = 有限集.开区间 a b
   证明: by
   ext; simp
 -/
@@ -3484,8 +3484,8 @@ lemma toFinset_Ici
 
 中文:
 引理 toFinset_Ici
-  条件: (a : α) [Fintype (Ici a)]
-  结论: (Ici a).toFinset = Finset.Ici a
+  条件: (a : α) [有限类型 (左闭右无界区间 a)]
+  结论: (左闭右无界区间 a).toFinset = 有限集.左闭右无界区间 a
   证明: by ext; simp
 
 @[to_dual (attr := simp)]
@@ -3504,8 +3504,8 @@ lemma toFinset_Ioi
 
 中文:
 引理 toFinset_Ioi
-  条件: (a : α) [Fintype (Ioi a)]
-  结论: (Ioi a).toFinset = Finset.Ioi a
+  条件: (a : α) [有限类型 (左开右无界区间 a)]
+  结论: (左开右无界区间 a).toFinset = 有限集.左开右无界区间 a
   证明: by ext; simp
 -/
 lemma toFinset_Ioi (a : α) [Fintype (Ioi a)] : (Ioi a).toFinset = Finset.Ioi a := by ext; simp
@@ -3526,8 +3526,8 @@ abbreviation LocallyFiniteOrder.ofOrderIsoClass
   finsetIoo x y := 
 
 中文:
-缩写 LocallyFiniteOrder.ofOrderIsoClass
-  签名: {F M N : 类型} [Preorder M] [Preorder N]
+缩写 局部有限序.ofOrderIsoClass
+  签名: {F M N : 类型} [预序 M] [预序 N]
   定义体: (finsetIcc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIco x y := (finsetIco (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIoc x y := (finsetIoc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩

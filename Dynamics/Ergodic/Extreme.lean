@@ -129,7 +129,7 @@ _ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter
 
 中文:
 定理 eq_smul_of_absolutelyContinuous
-  结论: [IsFiniteMeasure μ] [IsFiniteMeasure ν] (hμ : Ergodic f μ)
+  结论: [是有限测度 μ] [是有限测度 ν] (hμ : 遍历 f μ)
   证明: by
   have := hfν.rnDeriv_comp_aeEq hμ.toMeasurePreserving
   obtain ⟨c, hc⟩ := hμ.ae_eq_const_of_ae_eq_comp₀ (measurable_rnDeriv _ _).nullMeasurable this
@@ -166,7 +166,7 @@ theorem eq_of_absolutelyContinuous_measure_univ_eq
 
 中文:
 定理 eq_of_absolutelyContinuous_measure_univ_eq
-  结论: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: [是有限测度 μ] [是有限测度 ν]
   证明: by
   rcases hμ.eq_smul_of_absolutelyContinuous hfν hνμ with ⟨c, rfl⟩
   rcases eq_or_ne μ 0 with rfl | hμ₀
@@ -193,7 +193,7 @@ theorem eq_of_absolutelyContinuous
 
 中文:
 定理 eq_of_absolutelyContinuous
-  结论: [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
+  结论: [是概率测度 μ] [是概率测度 ν]
   证明: eq_of_absolutelyContinuous_measure_univ_eq hμ hfν hνμ by simp
 
 Depends on / 依赖: eq_of_absolutelyContinuous_measure_univ_eq
@@ -218,7 +218,7 @@ theorem mem_extremePoints_measure_univ_eq
 
 中文:
 定理 mem_extremePoints_measure_univ_eq
-  条件: [IsFiniteMeasure μ] (hμ : Ergodic f μ)
+  条件: [是有限测度 μ] (hμ : 遍历 f μ)
   证明: by
   rw [mem_extremePoints_iff_left]
   refine ⟨⟨hμ.toMeasurePreserving, rfl⟩, ?_⟩
@@ -249,7 +249,7 @@ theorem mem_extremePoints
 
 中文:
 定理 mem_extremePoints
-  条件: [IsProbabilityMeasure μ] (hμ : Ergodic f μ)
+  条件: [是概率测度 μ] (hμ : 遍历 f μ)
   证明: by
   simpa only [isProbabilityMeasure_iff, measure_univ] using hμ.mem_extremePoints_measure_univ_eq
 
@@ -269,7 +269,7 @@ theorem iff_mem_extremePoints_measure_univ_eq
 
 中文:
 定理 iff_mem_extremePoints_measure_univ_eq
-  条件: [IsFiniteMeasure μ]
+  条件: [是有限测度 μ]
   证明: ⟨mem_extremePoints_measure_univ_eq, of_mem_extremePoints_measure_univ_eq (measure_ne_top _ _)⟩
 
 Depends on / 依赖: measure_ne_top, mem_extremePoints_measure_univ_eq, of_mem_extremePoints_measure_univ_eq
@@ -288,7 +288,7 @@ theorem iff_mem_extremePoints
 
 中文:
 定理 iff_mem_extremePoints
-  条件: [IsProbabilityMeasure μ]
+  条件: [是概率测度 μ]
   证明: ⟨mem_extremePoints, of_mem_extremePoints⟩
 
 Depends on / 依赖: mem_extremePoints, of_mem_extremePoints

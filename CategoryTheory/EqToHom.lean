@@ -219,7 +219,7 @@ theorem conj_eqToHom_iff_heq'
 
 中文:
 定理 conj_eqToHom_iff_heq'
-  结论: {C} [Category* C] {W X Y Z : C}
+  结论: {C} [范畴* C] {W X Y Z : C}
   证明: conj_eqToHom_iff_heq _ _ _ h'.symm
 
 @[to_dual none]
@@ -296,7 +296,7 @@ theorem eqToHom_comp_heq
 
 中文:
 定理 eqToHom_comp_heq
-  结论: {C} [Category* C] {W X Y : C}
+  结论: {C} [范畴* C] {W X Y : C}
   证明: by
   rw [← conj_eqToHom_iff_heq _ _ h rfl]; rw [eqToHom_refl]; rw [Category.comp_id]
 
@@ -321,7 +321,7 @@ theorem eqToHom_comp_heq_iff
 
 中文:
 定理 eqToHom_comp_heq_iff
-  结论: {C} [Category* C] {W X Y Z Z' : C}
+  结论: {C} [范畴* C] {W X Y Z Z' : C}
   证明: ⟨(eqToHom_comp_heq ..).symm.trans, (eqToHom_comp_heq ..).trans⟩
 
 @[simp, to_dual none]
@@ -346,7 +346,7 @@ theorem heq_eqToHom_comp_iff
 
 中文:
 定理 heq_eqToHom_comp_iff
-  结论: {C} [Category* C] {W X Y Z Z' : C}
+  结论: {C} [范畴* C] {W X Y Z Z' : C}
   证明: ⟨(·.trans (eqToHom_comp_heq ..)), (·.trans (eqToHom_comp_heq ..).symm)⟩
 
 @[to_dual none]
@@ -372,7 +372,7 @@ theorem comp_eqToHom_heq
 
 中文:
 定理 comp_eqToHom_heq
-  结论: {C} [Category* C] {X Y Z : C}
+  结论: {C} [范畴* C] {X Y Z : C}
   证明: by
   rw [← conj_eqToHom_iff_heq' _ _ rfl h]; rw [eqToHom_refl]; rw [Category.id_comp]
 
@@ -397,7 +397,7 @@ theorem comp_eqToHom_heq_iff
 
 中文:
 定理 comp_eqToHom_heq_iff
-  结论: {C} [Category* C] {W X Y Z Z' : C}
+  结论: {C} [范畴* C] {W X Y Z Z' : C}
   证明: ⟨(comp_eqToHom_heq ..).symm.trans, (comp_eqToHom_heq ..).trans⟩
 
 @[simp, to_dual none]
@@ -422,7 +422,7 @@ theorem heq_comp_eqToHom_iff
 
 中文:
 定理 heq_comp_eqToHom_iff
-  结论: {C} [Category* C] {W X Y Z Z' : C}
+  结论: {C} [范畴* C] {W X Y Z Z' : C}
   证明: ⟨(·.trans (comp_eqToHom_heq ..)), (·.trans (comp_eqToHom_heq ..).symm)⟩
 
 @[to_dual self (reorder := X Z, X' Z', f g, f' g', eq1 eq3, H1 H2)]
@@ -446,7 +446,7 @@ theorem heq_comp
 
 中文:
 定理 heq_comp
-  结论: {C} [Category* C] {X Y Z X' Y' Z' : C}
+  结论: {C} [范畴* C] {X Y Z X' Y' Z' : C}
   证明: by
   congr!
 -/
@@ -722,7 +722,7 @@ theorem eqToIso_refl
 中文:
 定理 eqToIso_refl
   条件: {X : C} (p : X = X)
-  结论: eqToIso p = Iso.refl X
+  结论: eqToIso p = 同构.refl X
   证明: rfl
 
 @[simp]
@@ -1260,7 +1260,7 @@ theorem NatTrans.congr
 @[to_dual none]
 
 中文:
-定理 NatTrans.congr
+定理 自然变换.congr
   条件: {F G : C ⥤ D} (α : F ⟶ G) {X Y : C} (h : X = Y)
   证明: by
   rw [α.naturality_assoc]
@@ -1344,7 +1344,7 @@ lemma InducedCategory.eqToHom_hom
 
 中文:
 引理 InducedCategory.eqToHom_hom
-  结论: {C D : 类型} [Category D] {F : C -> D}
+  结论: {C D : 类型} [范畴 D] {F : C -> D}
   证明: by
   subst h
   rfl
@@ -1370,7 +1370,7 @@ lemma ObjectProperty.eqToHom_hom
 
 中文:
 引理 ObjectProperty.eqToHom_hom
-  结论: {C : 类型} [Category C] {P : Object命题erty C}
+  结论: {C : 类型} [范畴 C] {P : ObjectProperty C}
   证明: by
   subst h
   rfl
@@ -1398,7 +1398,7 @@ definition Equivalence.induced
   counitIso := NatIso.ofComponents (fun _ => eqToIso (by simp))
 
 中文:
-定义 Equivalence.induced
+定义 等价.induced
   签名: {T : 类型} (e : T ≃ D)
   定义体: inducedFunctor e
   inverse :=

@@ -29,7 +29,7 @@ definition Expr.instOne
 
 中文:
 定义 Expr.instOne
-  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(One $α))
+  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(幺 $α))
   定义体: q(1 : $α)
 -/
 def Expr.instOne {u : Lean.Level} (α : Q(Type u)) (_ : Q(One $α)) : One Q($α) where
@@ -47,7 +47,7 @@ definition Expr.instZero
 
 中文:
 定义 Expr.instZero
-  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(Zero $α))
+  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(零 $α))
   定义体: q(0 : $α)
 -/
 def Expr.instZero {u : Lean.Level} (α : Q(Type u)) (_ : Q(Zero $α)) : Zero Q($α) where
@@ -65,7 +65,7 @@ definition Expr.instMul
 
 中文:
 定义 Expr.instMul
-  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(Mul $α))
+  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(乘法 $α))
   定义体: q($x * $y)
 -/
 def Expr.instMul {u : Lean.Level} (α : Q(Type u)) (_ : Q(Mul $α)) : Mul Q($α) where
@@ -83,7 +83,7 @@ definition Expr.instAdd
 
 中文:
 定义 Expr.instAdd
-  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(Add $α))
+  签名: {u : Lean.Level} (α : Q(类型u)) (_ : Q(加法 $α))
   定义体: q($x + $y)
 -/
 def Expr.instAdd {u : Lean.Level} (α : Q(Type u)) (_ : Q(Add $α)) : Add Q($α) where

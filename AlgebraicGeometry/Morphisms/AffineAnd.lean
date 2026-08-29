@@ -48,7 +48,7 @@ definition affineAnd
 
 中文:
 定义 affineAnd
-  签名: : AffineTargetMorphism命题erty
+  签名: : AffineTargetMorphismProperty
   定义体: fun X _ f => IsAffine X ∧ Q (f.appTop).hom
 
 @[simp]
@@ -69,7 +69,7 @@ lemma affineAnd_apply
 
 中文:
 引理 affineAnd_apply
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsAffine Y]
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是仿射 Y]
   证明: Iff.rfl
 
 Depends on / 依赖: A.mem_degenerate_iff, Iff.rfl, X.degenerate_eq_univ_of_hasDimensionLT, degenerate_eq_univ_of_hasDimensionLT, mem_degenerate_iff
@@ -98,7 +98,7 @@ lemma affineAnd_respectsIso
 
 中文:
 引理 affineAnd_respectsIso
-  条件: (hP : RingHom.RespectsIso Q)
+  条件: (hP : 环态射.RespectsIso Q)
   证明: by
   refine RespectsIso.mk _ ?_ ?_
   · intro X Y Z e f ⟨hZ, ⟨hY, hf⟩⟩
@@ -134,7 +134,7 @@ lemma affineAnd_isLocal
 
 中文:
 引理 affineAnd_isLocal
-  结论: (hPi : RingHom.RespectsIso Q) (hQl : RingHom.LocalizationAwayPreserves Q)
+  结论: (hPi : 环态射.RespectsIso Q) (hQl : 环态射.LocalizationAwayPreserves Q)
   证明: affineAnd_respectsIso hPi
   to_basicOpen {X Y _} f r := fun ⟨hX, hf⟩ => by
     simp only at hf
@@ -215,7 +215,7 @@ lemma affineAnd_isStableUnderBaseChange
 
 中文:
 引理 affineAnd_isStableUnderBaseChange
-  结论: (hQi : RingHom.RespectsIso Q)
+  结论: (hQi : 环态射.RespectsIso Q)
   证明: by
   have : (affineAnd Q).toProperty.RespectsIso := affineAnd_respectsIso hQi
   apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
@@ -249,7 +249,7 @@ lemma targetAffineLocally_affineAnd_iff
 
 中文:
 引理 targetAffineLocally_affineAnd_iff
-  结论: (hQi : RingHom.RespectsIso Q)
+  结论: (hQi : 环态射.RespectsIso Q)
   证明: by
   simp only [targetAffineLocally, affineAnd_apply, morphismRestrict_app, CommRingCat.hom_comp,
     hQi.cancel_right_isIso]
@@ -288,7 +288,7 @@ lemma targetAffineLocally_affineAnd_iff'
 
 中文:
 引理 targetAffineLocally_affineAnd_iff'
-  结论: (hQi : RingHom.RespectsIso Q)
+  结论: (hQi : 环态射.RespectsIso Q)
   证明: by
   rw [targetAffineLocally_affineAnd_iff hQi]; rw [isAffineHom_iff]
   aesop
@@ -322,7 +322,7 @@ lemma targetAffineLocally_affineAnd_iff_affineLocally
 
 中文:
 引理 targetAffineLocally_affineAnd_iff_affineLocally
-  结论: (hQ : RingHom.命题ertyIsLocal Q)
+  结论: (hQ : 环态射.PropertyIsLocal Q)
   证明: by
   have : HasRingHomProperty (affineLocally Q) Q := ⟨hQ, rfl⟩
   rw [targetAffineLocally_affineAnd_iff' hQ.respectsIso]
@@ -375,7 +375,7 @@ lemma targetAffineLocally_affineAnd_eq_affineLocally
 
 中文:
 引理 targetAffineLocally_affineAnd_eq_affineLocally
-  条件: (hQ : RingHom.命题ertyIsLocal Q)
+  条件: (hQ : 环态射.PropertyIsLocal Q)
   证明: by
   ext X Y f
   exact targetAffineLocally_affineAnd_iff_affineLocally hQ f
@@ -433,8 +433,8 @@ lemma HasAffineProperty.affineAnd_isStableUnderComposition
     rw [HasAffin
 
 中文:
-引理 HasAffineProperty.affineAnd_isStableUnderComposition
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.affineAnd_isStableUnderComposition
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
     wlog hZ : IsAffine Z
     · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := P) _ (iSup_affineOpens_eq_top _)]
@@ -473,8 +473,8 @@ lemma HasAffineProperty.affineAnd_isStableUnderBaseChange
     (AlgebraicGeometry.affineAnd_isStableUnderBaseChange hQi hQb)
 
 中文:
-引理 HasAffineProperty.affineAnd_isStableUnderBaseChange
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.affineAnd_isStableUnderBaseChange
+  结论: {P : MorphismProperty 概形.{u}}
   证明: HasAffineProperty.isStableUnderBaseChange
     (AlgebraicGeometry.affineAnd_isStableUnderBaseChange hQi hQb)
 
@@ -499,8 +499,8 @@ lemma HasAffineProperty.affineAnd_containsIdentities
     exact ⟨hU, hQ _⟩
 
 中文:
-引理 HasAffineProperty.affineAnd_containsIdentities
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.affineAnd_containsIdentities
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
     rw [eq_targetAffineLocally P]; rw [targetAffineLocally_affineAnd_iff hQi]
     intro U hU
@@ -533,8 +533,8 @@ lemma HasAffineProperty.affineAnd_iff
     aesop
 
 中文:
-引理 HasAffineProperty.affineAnd_iff
-  结论: (P : Morphism命题erty Scheme.{u})
+引理 有AffineProperty.affineAnd_iff
+  结论: (P : MorphismProperty 概形.{u})
   证明: by
   simp_rw [isAffineHom_iff]
   refine ⟨fun h X Y f => ?_, fun h => ⟨affineAnd_isLocal hQi hQl hQs, ?_⟩⟩
@@ -577,8 +577,8 @@ lemma HasAffineProperty.affineAnd_le_isAffineHom
   
 
 中文:
-引理 HasAffineProperty.affineAnd_le_isAffineHom
-  结论: (P : Morphism命题erty Scheme.{u})
+引理 有AffineProperty.affineAnd_le_isAffineHom
+  结论: (P : MorphismProperty 概形.{u})
   证明: by
   intro X Y f hf
   wlog hY : IsAffine Y
@@ -612,8 +612,8 @@ lemma HasAffineProperty.affineAnd_eq_of_propertyIsLocal
   exact HasRingHomProperty.isLocal_ringHomProperty P'
 
 中文:
-引理 HasAffineProperty.affineAnd_eq_of_propertyIsLocal
-  结论: {P P' : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.affineAnd_eq_of_propertyIsLocal
+  结论: {P P' : MorphismProperty 概形.{u}}
   证明: by
   rw [HasAffineProperty.eq_targetAffineLocally (P := P)]; rw [targetAffineLocally_affineAnd_eq_affineLocally]; rw [HasRingHomProperty.eq_affineLocally (P := P')]
   exact HasRingHomProperty.isLocal_ringHomProperty P'
@@ -639,8 +639,8 @@ lemma HasAffineProperty.SpecMap_iff_of_affineAnd
     (arrowIsoΓSpecOfIsAffine f).symm, inferInstance]
 
 中文:
-引理 HasAffineProperty.SpecMap_iff_of_affineAnd
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.SpecMap_iff_of_affineAnd
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
   have := RingHom.toMorphismProperty_respectsIso_iff.mp hQi
   rw [HasAffineProperty.iff_of_isAffine (P := P)]; rw [affineAnd]; rw [and_iff_right]
@@ -669,8 +669,8 @@ lemma HasAffineProperty.affineAnd_le_affineAnd
   exact targetAffineLocally_affineAnd_le hQQ'
 
 中文:
-引理 HasAffineProperty.affineAnd_le_affineAnd
-  结论: {P P' : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.affineAnd_le_affineAnd
+  结论: {P P' : MorphismProperty 概形.{u}}
   证明: by
   rw [HasAffineProperty.eq_targetAffineLocally (P := P)]; rw [HasAffineProperty.eq_targetAffineLocally (P := P')]
   exact targetAffineLocally_affineAnd_le hQQ'
@@ -699,8 +699,8 @@ lemma HasAffineProperty.coprodDesc_affineAnd
   let e : Γ(U ⨿ V, Limits
 
 中文:
-引理 HasAffineProperty.coprodDesc_affineAnd
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 有AffineProperty.coprodDesc_affineAnd
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
   have := HasAffineProperty.affineAnd_le_isAffineHom P hP f hf
   have := HasAffineProperty.affineAnd_le_isAffineHom P hP g hg

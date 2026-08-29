@@ -36,7 +36,7 @@ lemma preservesMonomorphisms_ι_of_isNormalEpiCategory
 
 中文:
 引理 preservesMonomorphisms_ι_of_isNormalEpiCategory
-  结论: [HasZeroMorphisms C] [HasFiniteCoproducts C]
+  结论: [有ZeroMorphisms C] [有FiniteCoproducts C]
   证明: have := P.preservesKernels_ι
   NormalEpiCategory.preservesMonomorphisms_of_preservesKernels P.ι
 
@@ -62,8 +62,8 @@ instance [Abelian
         (Abelian.monoIsKernelOfCoke
 
 中文:
-实例 [Abelian
-  签名: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
+实例 [交换
+  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels] :
   定义体: have := P.preservesMonomorphisms_ι_of_isNormalEpiCategory
     ⟨{Z := .mk _ (P.prop_cokernel f.hom X.property Y.property)
       g := P.homMk (cokernel.π f.hom)
@@ -94,7 +94,7 @@ lemma preservesEpimorphisms_ι_of_isNormalMonoCategory
 
 中文:
 引理 preservesEpimorphisms_ι_of_isNormalMonoCategory
-  结论: [HasZeroMorphisms C] [HasFiniteProducts C]
+  结论: [有ZeroMorphisms C] [有FiniteProducts C]
   证明: have := P.preservesCokernels_ι
   NormalMonoCategory.preservesEpimorphisms_of_preservesCokernels P.ι
 
@@ -120,8 +120,8 @@ instance [Abelian
         (Abelian.epiIsCoker
 
 中文:
-实例 [Abelian
-  签名: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
+实例 [交换
+  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels] :
   定义体: have := P.preservesEpimorphisms_ι_of_isNormalMonoCategory
     ⟨{W := .mk _ (P.prop_kernel f.hom X.property Y.property)
       g := P.homMk (kernel.ι f.hom)
@@ -149,8 +149,8 @@ instance [Abelian
   signature: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels]
 
 中文:
-实例 [Abelian
-  签名: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels]
+实例 [交换
+  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels]
 -/
 instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels]
     [P.IsClosedUnderFiniteProducts] : Abelian P.FullSubcategory where

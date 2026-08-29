@@ -94,7 +94,7 @@ definition restrictIndepMatroid
 
 中文:
 定义 restrictIndepMatroid
-  签名: (M : Matroid α) (R : Set α)
+  签名: (M : 拟阵 α) (R : 集合 α)
   定义体: R
   Indep I := M.Indep I ∧ I subseteq R
   indep_empty := ⟨M.empty_indep, empty_subset _⟩
@@ -150,7 +150,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (M : Matroid α) (R : Set α)
+  签名: (M : 拟阵 α) (R : 集合 α)
   定义体: (M.restrictIndepMatroid R).matroid
 
 Depends on / 依赖: M.restrictIndepMatroid, matroid, restrictIndepMatroid
@@ -241,8 +241,8 @@ theorem restrict_finite
 
 中文:
 定理 restrict_finite
-  条件: {R : Set α} (hR : R.Finite)
-  结论: (M ↾ R).Finite
+  条件: {R : 集合 α} (hR : R.有限)
+  结论: (M ↾ R).有限
   证明: ⟨hR⟩
 -/
 theorem restrict_finite {R : Set α} (hR : R.Finite) : (M ↾ R).Finite :=
@@ -278,7 +278,7 @@ theorem restrict_ground_eq_self
 
 中文:
 定理 restrict_ground_eq_self
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: (M ↾ M.E) = M
   证明: by
   refine ext_indep rfl ?_; simp_all
@@ -299,7 +299,7 @@ theorem restrict_restrict_eq
 
 中文:
 定理 restrict_restrict_eq
-  条件: {R₁ R₂ : Set α} (M : Matroid α) (hR : R₂ subseteq R₁)
+  条件: {R₁ R₂ : 集合 α} (M : 拟阵 α) (hR : R₂ subseteq R₁)
   证明: by
   refine ext_indep rfl ?_
   simp only [restrict_ground_eq, restrict_indep_iff, and_congr_left_iff, and_iff_left_iff_imp]
@@ -325,7 +325,7 @@ theorem restrict_idem
 
 中文:
 定理 restrict_idem
-  条件: (M : Matroid α) (R : Set α)
+  条件: (M : 拟阵 α) (R : 集合 α)
   结论: M ↾ R ↾ R = M ↾ R
   证明: by
   rw [M.restrict_restrict_eq Subset.rfl]
@@ -363,7 +363,7 @@ theorem isBase_restrict_iff'
 
 中文:
 定理 isBase_restrict_iff'
-  结论: (M ↾ X).IsBase I ↔ M.IsBasis' I X
+  结论: (M ↾ X).IsBase I ↔ M.是基' I X
   证明: by
   simp_rw [isBase_iff_maximal_indep, IsBasis', maximal_iff, restrict_indep_iff]
 
@@ -382,8 +382,8 @@ theorem IsBasis'.isBase_restrict
   proof: isBase_restrict_iff'.1 hI
 
 中文:
-定理 IsBasis'.isBase_restrict
-  条件: (hI : M.IsBasis' I X)
+定理 是基'.isBase_restrict
+  条件: (hI : M.是基' I X)
   结论: (M ↾ X).IsBase I
   证明: isBase_restrict_iff'.1 hI
 
@@ -402,8 +402,8 @@ theorem IsBasis.restrict_isBase
   proof: (isBase_restrict_iff h.subset_ground).2 h
 
 中文:
-定理 IsBasis.restrict_isBase
-  条件: (h : M.IsBasis I X)
+定理 是基.restrict_isBase
+  条件: (h : M.是基 I X)
   结论: (M ↾ X).IsBase I
   证明: (isBase_restrict_iff h.subset_ground).2 h
 
@@ -423,7 +423,7 @@ instance restrict_rankFinite
 
 中文:
 实例 restrict_rankFinite
-  签名: [M.RankFinite] (R : Set α)
+  签名: [M.RankFinite] (R : 集合 α)
   定义体: let ⟨_, hB⟩ := (M ↾ R).exists_isBase
   hB.rankFinite_of_finite (hB.indep.of_restrict.finite)
 
@@ -448,7 +448,7 @@ instance restrict_finitary
 
 中文:
 实例 restrict_finitary
-  签名: [Finitary M] (R : Set α)
+  签名: [Finitary M] (R : 集合 α)
   定义体: by
   refine ⟨fun I hI => ?_⟩
   simp only [restrict_indep_iff] at *
@@ -475,8 +475,8 @@ theorem IsBasis.isBase_restrict
   proof: (isBase_restrict_iff h.subset_ground).mpr h
 
 中文:
-定理 IsBasis.isBase_restrict
-  条件: (h : M.IsBasis I X)
+定理 是基.isBase_restrict
+  条件: (h : M.是基 I X)
   结论: (M ↾ X).IsBase I
   证明: (isBase_restrict_iff h.subset_ground).mpr h
 -/
@@ -493,8 +493,8 @@ theorem IsBasis.isBasis_restrict_of_subset
   rwa [← isBase_restrict_iff, M.restrict_restrict_eq hXY, isBase_restrict_iff]
 
 中文:
-定理 IsBasis.isBasis_restrict_of_subset
-  条件: (hI : M.IsBasis I X) (hXY : X subseteq Y)
+定理 是基.isBasis_restrict_of_subset
+  条件: (hI : M.是基 I X) (hXY : X subseteq Y)
   证明: by
   rwa [← isBase_restrict_iff, M.restrict_restrict_eq hXY, isBase_restrict_iff]
 
@@ -516,7 +516,7 @@ theorem isBasis'_restrict_iff
 
 中文:
 定理 isBasis'_restrict_iff
-  结论: (M ↾ R).IsBasis' I X ↔ M.IsBasis' I (X inter R) ∧ I subseteq R
+  结论: (M ↾ R).是基' I X ↔ M.是基' I (X inter R) ∧ I subseteq R
   证明: by
   simp_rw [IsBasis', maximal_iff, restrict_indep_iff, subset_inter_iff, and_imp]
   tauto
@@ -539,7 +539,7 @@ theorem isBasis_restrict_iff'
 
 中文:
 定理 isBasis_restrict_iff'
-  结论: (M ↾ R).IsBasis I X ↔ M.IsBasis I (X inter M.E) ∧ X subseteq R
+  结论: (M ↾ R).是基 I X ↔ M.是基 I (X inter M.E) ∧ X subseteq R
   证明: by
   rw [isBasis_iff_isBasis'_subset_ground]; rw [isBasis'_restrict_iff]; rw [restrict_ground_eq]; rw [and_congr_left_iff]; rw [← isBasis'_iff_isBasis_inter_ground]
   intro hXR
@@ -592,7 +592,7 @@ lemma isBasis'_iff_isBasis_restrict_univ
 
 中文:
 引理 isBasis'_iff_isBasis_restrict_univ
-  结论: M.IsBasis' I X ↔ (M ↾ univ).IsBasis I X
+  结论: M.是基' I X ↔ (M ↾ univ).是基 I X
   证明: by
   rw [isBasis_restrict_iff']; rw [isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left (subset_univ _)]
 -/
@@ -613,7 +613,7 @@ theorem restrict_eq_restrict_iff
 
 中文:
 定理 restrict_eq_restrict_iff
-  条件: (M M' : Matroid α) (X : Set α)
+  条件: (M M' : 拟阵 α) (X : 集合 α)
   证明: by
   refine ⟨fun h I hIX => ?_, fun h => ext_indep rfl fun I (hI : I subseteq X) => ?_⟩
   · rw [← and_iff_left (a := (M.Indep I)) hIX, ← and_iff_left (a := (M'.Indep I)) hIX,
@@ -661,7 +661,7 @@ definition IsRestriction
 
 中文:
 定义 IsRestriction
-  签名: (N M : Matroid α)
+  签名: (N M : 拟阵 α)
   定义体: exists R subseteq M.E, N = M ↾ R
 
 Depends on / 依赖: subseteq
@@ -678,7 +678,7 @@ definition IsStrictRestriction
 
 中文:
 定义 IsStrictRestriction
-  签名: (N M : Matroid α)
+  签名: (N M : 拟阵 α)
   定义体: IsRestriction N M ∧ ¬ IsRestriction M N
 
 Depends on / 依赖: IsRestriction
@@ -784,7 +784,7 @@ theorem ofMatroid_le_iff
 
 中文:
 定理 ofMatroid_le_iff
-  条件: {M M' : Matroid α}
+  条件: {M M' : 拟阵 α}
   证明: by
   simp
 -/
@@ -803,7 +803,7 @@ theorem ofMatroid_lt_iff
 
 中文:
 定理 ofMatroid_lt_iff
-  条件: {M M' : Matroid α}
+  条件: {M M' : 拟阵 α}
   证明: by
   simp
 -/
@@ -841,7 +841,7 @@ theorem IsRestriction.antisymm
 
 中文:
 定理 IsRestriction.antisymm
-  条件: {M' : Matroid α} (h : M <=r M') (h' : M' <=r M)
+  条件: {M' : 拟阵 α} (h : M <=r M') (h' : M' <=r M)
   结论: M = M'
   证明: by
   simpa using (ofMatroid_le_iff.2 h).antisymm (ofMatroid_le_iff.2 h')
@@ -862,7 +862,7 @@ theorem IsRestriction.trans
 
 中文:
 定理 IsRestriction.trans
-  条件: {M₁ M₂ M₃ : Matroid α} (h : M₁ <=r M₂) (h' : M₂ <=r M₃)
+  条件: {M₁ M₂ M₃ : 拟阵 α} (h : M₁ <=r M₂) (h' : M₂ <=r M₃)
   结论: M₁ <=r M₃
   证明: le_trans (α := Matroidᵣ α) h h'
 
@@ -881,7 +881,7 @@ theorem restrict_isRestriction
 
 中文:
 定理 restrict_isRestriction
-  条件: (M : Matroid α) (R : Set α) (hR : R subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (R : 集合 α) (hR : R subseteq M.E := by aesop_mat)
   证明: ⟨R, hR, rfl⟩
 
 Depends on / 依赖: aesop_mat
@@ -942,7 +942,7 @@ theorem IsRestriction.exists_eq_restrict
   proof: h
 
 中文:
-定理 IsRestriction.exists_eq_restrict
+定理 IsRestriction.存在_eq_restrict
   条件: (h : N <=r M)
   结论: 存在 R subseteq M.E, N = M ↾ R
   证明: h
@@ -961,7 +961,7 @@ theorem IsRestriction.of_subset
 
 中文:
 定理 IsRestriction.of_subset
-  条件: {R' : Set α} (M : Matroid α) (h : R subseteq R')
+  条件: {R' : 集合 α} (M : 拟阵 α) (h : R subseteq R')
   证明: by
   rw [← restrict_restrict_eq M h]; exact restrict_isRestriction _ _ h
 
@@ -981,7 +981,7 @@ theorem isRestriction_iff_exists
   use IsRestriction.exists_eq_restrict; rintro ⟨R, hR, rfl⟩; exact restrict_isRestriction M R hR
 
 中文:
-定理 isRestriction_iff_exists
+定理 isRestriction_iff_存在
   结论: (N <=r M) ↔ 存在 R, R subseteq M.E ∧ N = M ↾ R
   证明: by
   use IsRestriction.exists_eq_restrict; rintro ⟨R, hR, rfl⟩; exact restrict_isRestriction M R hR
@@ -1042,7 +1042,7 @@ theorem IsStrictRestriction.irrefl
 
 中文:
 定理 IsStrictRestriction.irrefl
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: ¬ (M <r M)
   证明: fun h => h.ne rfl
 
@@ -1109,7 +1109,7 @@ theorem IsStrictRestriction.exists_eq_restrict
   proof: ⟨N.E, h.ssubset, by rw [h.eq_restrict]⟩
 
 中文:
-定理 IsStrictRestriction.exists_eq_restrict
+定理 IsStrictRestriction.存在_eq_restrict
   条件: (h : N <r M)
   结论: 存在 R, R ⊂ M.E ∧ N = M ↾ R
   证明: ⟨N.E, h.ssubset, by rw [h.eq_restrict]⟩
@@ -1175,7 +1175,7 @@ theorem restrict_isStrictRestriction
 
 中文:
 定理 restrict_isStrictRestriction
-  条件: {M : Matroid α} (hR : R ⊂ M.E)
+  条件: {M : 拟阵 α} (hR : R ⊂ M.E)
   结论: M ↾ R <r M
   证明: by
   refine (M.restrict_isRestriction R hR.subset).isStrictRestriction_of_ne (fun h => ?_)
@@ -1224,7 +1224,7 @@ theorem IsStrictRestriction.of_ssubset
 
 中文:
 定理 IsStrictRestriction.of_ssubset
-  条件: {R' : Set α} (M : Matroid α) (h : R ⊂ R')
+  条件: {R' : 集合 α} (M : 拟阵 α) (h : R ⊂ R')
   证明: (IsRestriction.of_subset M h.subset).isStrictRestriction_of_ground_ne h.ne
 
 Depends on / 依赖: IsRestriction, IsRestriction.of_subset, h.ne, h.subset, isStrictRestriction_of_ground_ne, of_subset, subset
@@ -1246,8 +1246,8 @@ exact restrict_finite M.ground_finite.subset hR
 
 中文:
 定理 IsRestriction.finite
-  条件: {M : Matroid α} [M.Finite] (h : N <=r M)
-  结论: N.Finite
+  条件: {M : 拟阵 α} [M.有限] (h : N <=r M)
+  结论: N.有限
   证明: by
   obtain ⟨R, hR, rfl⟩ := h
 exact restrict_finite M.ground_finite.subset hR
@@ -1271,7 +1271,7 @@ theorem IsRestriction.rankFinite
 
 中文:
 定理 IsRestriction.rankFinite
-  条件: {M : Matroid α} [RankFinite M] (h : N <=r M)
+  条件: {M : 拟阵 α} [RankFinite M] (h : N <=r M)
   结论: N.RankFinite
   证明: by
   obtain ⟨R, -, rfl⟩ := h
@@ -1296,7 +1296,7 @@ theorem IsRestriction.finitary
 
 中文:
 定理 IsRestriction.finitary
-  条件: {M : Matroid α} [Finitary M] (h : N <=r M)
+  条件: {M : 拟阵 α} [Finitary M] (h : N <=r M)
   结论: N.Finitary
   证明: by
   obtain ⟨R, -, rfl⟩ := h
@@ -1323,8 +1323,8 @@ alias finite_setOf_isRestriction := finite_setOfPred_isRestriction
 
 中文:
 定理 finite_setOfPred_isRestriction
-  条件: (M : Matroid α) [M.Finite]
-  结论: {N | N <=r M}.Finite
+  条件: (M : 拟阵 α) [M.有限]
+  结论: {N | N <=r M}.有限
   证明: (M.ground_finite.finite_subsets.image (fun R => M ↾ R)).subset
     by rintro _ ⟨R, hR, rfl⟩; exact ⟨_, hR, rfl⟩
 
@@ -1412,8 +1412,8 @@ theorem IsBasis.isBasis_isRestriction
   obtain ⟨R, hR, rfl⟩ := hNM; rwa [isBasis_restrict_iff, and_iff_left (show X subseteq R from hX)]
 
 中文:
-定理 IsBasis.isBasis_isRestriction
-  条件: (hI : M.IsBasis I X) (hNM : N <=r M) (hX : X subseteq N.E)
+定理 是基.isBasis_isRestriction
+  条件: (hI : M.是基 I X) (hNM : N <=r M) (hX : X subseteq N.E)
   证明: by
   obtain ⟨R, hR, rfl⟩ := hNM; rwa [isBasis_restrict_iff, and_iff_left (show X subseteq R from hX)]
 
@@ -1434,9 +1434,9 @@ theorem IsBasis.of_isRestriction
   obtain ⟨R, hR, rfl⟩ := hNM; exact ((isBasis_restrict_iff hR).1 hI).1
 
 中文:
-定理 IsBasis.of_isRestriction
-  条件: (hI : N.IsBasis I X) (hNM : N <=r M)
-  结论: M.IsBasis I X
+定理 是基.of_isRestriction
+  条件: (hI : N.是基 I X) (hNM : N <=r M)
+  结论: M.是基 I X
   证明: by
   obtain ⟨R, hR, rfl⟩ := hNM; exact ((isBasis_restrict_iff hR).1 hI).1
 
@@ -1458,7 +1458,7 @@ theorem IsBase.isBasis_of_isRestriction
 中文:
 定理 IsBase.isBasis_of_isRestriction
   条件: (hI : N.IsBase I) (hNM : N <=r M)
-  结论: M.IsBasis I N.E
+  结论: M.是基 I N.E
   证明: by
   obtain ⟨R, hR, rfl⟩ := hNM; rwa [isBase_restrict_iff] at hI
 
@@ -1479,8 +1479,8 @@ theorem IsRestriction.base_iff
 
 中文:
 定理 IsRestriction.base_iff
-  条件: (hMN : N <=r M) {B : Set α}
-  结论: N.IsBase B ↔ M.IsBasis B N.E
+  条件: (hMN : N <=r M) {B : 集合 α}
+  结论: N.IsBase B ↔ M.是基 B N.E
   证明: ⟨fun h => IsBase.isBasis_of_isRestriction h hMN,
     fun h => by simpa [hMN.eq_restrict] using h.restrict_isBase⟩
 
@@ -1502,7 +1502,7 @@ theorem IsRestriction.isBasis_iff
 中文:
 定理 IsRestriction.isBasis_iff
   条件: (hMN : N <=r M)
-  结论: N.IsBasis I X ↔ M.IsBasis I X ∧ X subseteq N.E
+  结论: N.是基 I X ↔ M.是基 I X ∧ X subseteq N.E
   证明: ⟨fun h => ⟨h.of_isRestriction hMN, h.subset_ground⟩, fun h => h.1.isBasis_isRestriction hMN h.2⟩
 
 Depends on / 依赖: h.of_isRestriction, h.subset_ground, isBasis_isRestriction, of_isRestriction, subset_ground
@@ -1604,8 +1604,8 @@ theorem IsBasis.transfer
   exact hJY.isBase_of_isBasis_superset hJX.subset (hIX.isBasis_restrict_of_subset hXY)
 
 中文:
-定理 IsBasis.transfer
-  结论: (hIX : M.IsBasis I X) (hJX : M.IsBasis J X) (hXY : X subseteq Y)
+定理 是基.transfer
+  结论: (hIX : M.是基 I X) (hJX : M.是基 J X) (hXY : X subseteq Y)
   证明: by
   rw [← isBase_restrict_iff]; rw [← isBase_restrict_iff] at hJY
   exact hJY.isBase_of_isBasis_superset hJX.subset (hIX.isBasis_restrict_of_subset hXY)
@@ -1629,8 +1629,8 @@ theorem IsBasis.isBasis_of_isBasis_of_subset_of_subset
   exact hI'.transfer hJ' inter_subset_right hJ
 
 中文:
-定理 IsBasis.isBasis_of_isBasis_of_subset_of_subset
-  结论: (hI : M.IsBasis I X) (hJ : M.IsBasis J Y)
+定理 是基.isBasis_of_isBasis_of_subset_of_subset
+  结论: (hI : M.是基 I X) (hJ : M.是基 J Y)
   证明: by
   have hI' := hI.isBasis_subset (subset_inter hI.subset hIY) inter_subset_left
   have hJ' := hJ.isBasis_subset (subset_inter hJX hJ.subset) inter_subset_right
@@ -1657,7 +1657,7 @@ theorem Indep.exists_isBasis_subset_union_isBasis
   exact ⟨I', hI', hII', hI'IJ⟩
 
 中文:
-定理 Indep.exists_isBasis_subset_union_isBasis
+定理 Indep.存在_isBasis_subset_union_isBasis
   结论: (hI : M.Indep I) (hIX : I subseteq X)
   证明: by
   obtain ⟨I', hI', hII', hI'IJ⟩ :=
@@ -1686,8 +1686,8 @@ theorem Indep.exists_insert_of_not_isBasis
   exact ⟨e, he, (restrict_indep_iff.mp hi).1⟩
 
 中文:
-定理 Indep.exists_insert_of_not_isBasis
-  结论: (hI : M.Indep I) (hIX : I subseteq X) (hI' : ¬M.IsBasis I X)
+定理 Indep.存在_insert_of_not_isBasis
+  结论: (hI : M.Indep I) (hIX : I subseteq X) (hI' : ¬M.是基 I X)
   证明: by
   rw [← isBase_restrict_iff] at hI'; rw [← isBase_restrict_iff] at hJ
   obtain ⟨e, he, hi⟩ := (hI.indep_restrict_of_subset hIX).exists_insert_of_not_isBase hI' hJ
@@ -1710,8 +1710,8 @@ theorem IsBasis.isBase_of_isBase_subset
   proof: hB.isBase_of_isBasis_superset hBX hIX
 
 中文:
-定理 IsBasis.isBase_of_isBase_subset
-  条件: (hIX : M.IsBasis I X) (hB : M.IsBase B) (hBX : B subseteq X)
+定理 是基.isBase_of_isBase_subset
+  条件: (hIX : M.是基 I X) (hB : M.IsBase B) (hBX : B subseteq X)
   证明: hB.isBase_of_isBasis_superset hBX hIX
 
 Depends on / 依赖: hB.isBase_of_isBasis_superset, isBase_of_isBasis_superset
@@ -1731,8 +1731,8 @@ theorem IsBasis.exchange
   exact ⟨y, hy, by rwa [isBase_restrict_iff] at h⟩
 
 中文:
-定理 IsBasis.exchange
-  条件: (hIX : M.IsBasis I X) (hJX : M.IsBasis J X) (he : e in I \ J)
+定理 是基.exchange
+  条件: (hIX : M.是基 I X) (hJX : M.是基 J X) (he : e in I \ J)
   证明: by
   obtain ⟨y, hy, h⟩ := hIX.restrict_isBase.exchange hJX.restrict_isBase he
   exact ⟨y, hy, by rwa [isBase_restrict_iff] at h⟩
@@ -1757,8 +1757,8 @@ theorem IsBasis.eq_exchange_of_sdiff_eq_singleton
 alias IsBasis.eq_exchange_of_diff_eq_singleton := IsBasis.eq_exchange_of_sdiff_eq_singleton
 
 中文:
-定理 IsBasis.eq_exchange_of_sdiff_eq_singleton
-  结论: (hI : M.IsBasis I X) (hJ : M.IsBasis J X)
+定理 是基.eq_exchange_of_sdiff_eq_singleton
+  结论: (hI : M.是基 I X) (hJ : M.是基 J X)
   证明: by
   rw [← isBase_restrict_iff] at hI hJ; exact hI.eq_exchange_of_sdiff_eq_singleton hJ hIJ
 
@@ -1784,8 +1784,8 @@ theorem IsBasis'.encard_eq_encard
   rw [← isBase_restrict_iff'] at hI hJ; exact hI.encard_eq_encard_of_isBase hJ
 
 中文:
-定理 IsBasis'.encard_eq_encard
-  条件: (hI : M.IsBasis' I X) (hJ : M.IsBasis' J X)
+定理 是基'.encard_eq_encard
+  条件: (hI : M.是基' I X) (hJ : M.是基' J X)
   证明: by
   rw [← isBase_restrict_iff'] at hI hJ; exact hI.encard_eq_encard_of_isBase hJ
 -/
@@ -1803,8 +1803,8 @@ theorem IsBasis.encard_eq_encard
   proof: hI.isBasis'.encard_eq_encard hJ.isBasis'
 
 中文:
-定理 IsBasis.encard_eq_encard
-  条件: (hI : M.IsBasis I X) (hJ : M.IsBasis J X)
+定理 是基.encard_eq_encard
+  条件: (hI : M.是基 I X) (hJ : M.是基 J X)
   结论: I.encard = J.encard
   证明: hI.isBasis'.encard_eq_encard hJ.isBasis'
 
@@ -1864,7 +1864,7 @@ lemma Indep.augment_finset
 
 中文:
 引理 Indep.augment_finset
-  结论: {I J : Finset α} (hI : M.Indep I) (hJ : M.Indep J)
+  结论: {I J : 有限集 α} (hI : M.Indep I) (hJ : M.Indep J)
   证明: by
   obtain ⟨x, hx, hxI⟩ := hI.augment hJ (by simpa [encard_eq_coe_toFinset_card])
   simp only [mem_sdiff, Finset.mem_coe] at hx

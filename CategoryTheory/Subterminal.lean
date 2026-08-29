@@ -85,7 +85,7 @@ theorem IsSubterminal.mono_isTerminal_from
 
 中文:
 定理 IsSubterminal.mono_isTerminal_from
-  条件: (hA : IsSubterminal A) {T : C} (hT : IsTerminal T)
+  条件: (hA : IsSubterminal A) {T : C} (hT : 是终止 T)
   证明: { right_cancellation := fun _ _ _ => hA _ _ }
 
 Depends on / 依赖: right_cancellation
@@ -104,7 +104,7 @@ theorem IsSubterminal.mono_terminal_from
 
 中文:
 定理 IsSubterminal.mono_terminal_from
-  条件: [HasTerminal C] (hA : IsSubterminal A)
+  条件: [有终止 C] (hA : IsSubterminal A)
   证明: hA.mono_isTerminal_from terminalIsTerminal
 
 Depends on / 依赖: hA.mono_isTerminal_from, mono_isTerminal_from, terminalIsTerminal
@@ -125,7 +125,7 @@ theorem isSubterminal_of_mono_isTerminal_from
 
 中文:
 定理 isSubterminal_of_mono_isTerminal_from
-  条件: {T : C} (hT : IsTerminal T) [Mono (hT.from A)]
+  条件: {T : C} (hT : 是终止 T) [单态射 (hT.from A)]
   证明: fun Z f g => by
   rw [← cancel_mono (hT.from A)]
   apply hT.hom_ext
@@ -149,7 +149,7 @@ theorem isSubterminal_of_mono_terminal_from
 
 中文:
 定理 isSubterminal_of_mono_terminal_from
-  条件: [HasTerminal C] [Mono (terminal.from A)]
+  条件: [有终止 C] [单态射 (terminal.from A)]
   证明: fun Z f g => by
   rw [← cancel_mono (terminal.from A)]
   subsingleton
@@ -173,7 +173,7 @@ theorem isSubterminal_of_isTerminal
 
 中文:
 定理 isSubterminal_of_isTerminal
-  条件: {T : C} (hT : IsTerminal T)
+  条件: {T : C} (hT : 是终止 T)
   结论: IsSubterminal T
   证明: fun _ _ _ =>
   hT.hom_ext _ _
@@ -193,7 +193,7 @@ theorem isSubterminal_of_terminal
 
 中文:
 定理 isSubterminal_of_terminal
-  条件: [HasTerminal C]
+  条件: [有终止 C]
   结论: IsSubterminal (⊤_ C)
   证明: fun _ _ _ => by
   subsingleton
@@ -219,7 +219,7 @@ theorem IsSubterminal.isIso_diag
 中文:
 定理 IsSubterminal.isIso_diag
   条件: (hA : IsSubterminal A) [HasBinaryProduct A A]
-  结论: IsIso (diag A)
+  结论: 是同构 (diag A)
   证明: ⟨⟨Limits.prod.fst,
       ⟨by simp, by
         rw [IsSubterminal.def] at hA
@@ -247,7 +247,7 @@ theorem isSubterminal_of_isIso_diag
 
 中文:
 定理 isSubterminal_of_isIso_diag
-  条件: [HasBinaryProduct A A] [IsIso (diag A)]
+  条件: [HasBinaryProduct A A] [是同构 (diag A)]
   结论: IsSubterminal A
   证明: fun Z f g => by
   have : (Limits.prod.fst : A ⨯ A ⟶ _) = Limits.prod.snd := by simp [← cancel_epi (diag A)]
@@ -297,7 +297,7 @@ definition Subterminals
 
 中文:
 定义 Subterminals
-  签名: (C : 类型u₁) [Category.{v₁} C]
+  签名: (C : 类型u₁) [范畴.{v₁} C]
   定义体: ObjectProperty.FullSubcategory fun A : C => IsSubterminal A
 
 Depends on / 依赖: FullSubcategory, IsSubterminal, ObjectProperty, ObjectProperty.FullSubcategory
@@ -317,8 +317,8 @@ instance [HasTerminal
   body: ⟨⟨⊤_ C, isSubterminal_of_terminal⟩⟩
 
 中文:
-实例 [HasTerminal
-  签名: C] : Inhabited (Subterminals C)
+实例 [有终止
+  签名: C] : 可居 (Subterminals C)
   定义体: ⟨⟨⊤_ C, isSubterminal_of_terminal⟩⟩
 
 Depends on / 依赖: isSubterminal_of_terminal
@@ -392,7 +392,7 @@ definition subterminalsEquivMonoOverTerminal
 
 中文:
 定义 subterminalsEquivMonoOverTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: { obj := fun X => ⟨Over.mk (terminal.from X.1), X.2.mono_terminal_from⟩
       map := fun f => MonoOver.homMk f.hom (by ext1 ⟨⟨⟩⟩) }
   inverse :=
@@ -431,7 +431,7 @@ theorem subterminals_to_monoOver_terminal_comp_forget
 
 中文:
 定理 subterminals_to_monoOver_terminal_comp_forget
-  条件: [HasTerminal C]
+  条件: [有终止 C]
   证明: rfl
 
 @[simp]
@@ -452,7 +452,7 @@ theorem monoOver_terminal_to_subterminals_comp
 
 中文:
 定理 monoOver_terminal_to_subterminals_comp
-  条件: [HasTerminal C]
+  条件: [有终止 C]
   证明: rfl
 -/
 theorem monoOver_terminal_to_subterminals_comp [HasTerminal C] :

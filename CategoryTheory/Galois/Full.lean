@@ -54,8 +54,8 @@ lemma exists_lift_of_mono_of_isConnected
     (forget₂ (Actio
 
 中文:
-引理 exists_lift_of_mono_of_isConnected
-  结论: (X : C) (Y : Action FintypeCat.{u} (Aut F))
+引理 存在_lift_of_mono_of_isConnected
+  结论: (X : C) (Y : 作用 FintypeCat.{u} (Aut F))
   证明: by
   obtain ⟨y⟩ := nonempty_fiber_of_isConnected (forget₂ _ FintypeCat) Y
   obtain ⟨Z, f, z, hz, hc, hm⟩ := fiber_in_connected_component F X (i.hom y)
@@ -95,8 +95,8 @@ lemma exists_lift_of_mono
   let is2 : (functorToAction F).obj (∐ gZ) ≅ ∐ fun i => (functo
 
 中文:
-引理 exists_lift_of_mono
-  结论: (X : C) (Y : Action FintypeCat.{u} (Aut F))
+引理 存在_lift_of_mono
+  结论: (X : C) (Y : 作用 FintypeCat.{u} (Aut F))
   证明: by
   obtain ⟨ι, hf, f, t, hc⟩ := has_decomp_connected_components' Y
   let i' (j : ι) : f j ⟶ (functorToAction F).obj X := Sigma.ι f j ≫ t.hom ≫ i
@@ -141,7 +141,7 @@ instance functorToAction_full
 
 中文:
 实例 functorToAction_full
-  签名: : Functor.Full (functorToAction F) where
+  签名: : 函子.满 (functorToAction F) where
   定义体: by
     let u : (functorToAction F).obj X ⟶ (functorToAction F).obj X ⨯ (functorToAction F).obj Y :=
       prod.lift (𝟙 _) f

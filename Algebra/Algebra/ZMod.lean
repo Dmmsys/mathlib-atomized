@@ -78,7 +78,7 @@ abbreviation algebra
 
 中文:
 缩写 algebra
-  签名: (p : 自然数) [CharP R p]
+  签名: (p : 自然数) [特征p R p]
   定义体: algebra' R p dvd_rfl
 
 Depends on / 依赖: algebra, dvd_rfl
@@ -105,7 +105,7 @@ definition algebraOfModule
 
 中文:
 定义 algebraOfModule
-  签名: (n : 自然数) (R : 类型) [Ring R] [Module (ZMod n) R]
+  签名: (n : 自然数) (R : 类型) [环 R] [模 (ZMod n) R]
   定义体: Algebra.ofModule' (proof · · |>.1) (proof · · |>.2) where
   proof (r : ZMod n) (x : R) : r • 1 * x = r • x ∧ x * r • 1 = r • x := by
     obtain _ | n := n
@@ -138,7 +138,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: (n : 自然数) (R M : 类型) [Ring R] [AddCommGroup M]
+  签名: (n : 自然数) (R M : 类型) [环 R] [加法交换群 M]
   定义体: by
   let := ZMod.algebraOfModule n R
   let m₂ := Module.compHom M (algebraMap (ZMod n) R)

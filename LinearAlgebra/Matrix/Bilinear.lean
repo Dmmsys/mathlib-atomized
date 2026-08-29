@@ -44,7 +44,7 @@ definition mulLeftLinearMap
 
 中文:
 定义 mulLeftLinearMap
-  签名: (X : Matrix l m A)
+  签名: (X : 矩阵 l m A)
   定义体: (X * ·)
   map_smul' := Matrix.mul_smul _
   map_add' := Matrix.mul_add _
@@ -83,7 +83,7 @@ theorem mulLeftLinearMap_zero_eq_zero
 
 中文:
 定理 mulLeftLinearMap_zero_eq_zero
-  结论: mulLeftLinearMap n R (0 : Matrix l m A) = 0
+  结论: mulLeftLinearMap n R (0 : 矩阵 l m A) = 0
   证明: LinearMap.ext fun _ => Matrix.zero_mul _
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Matrix, Matrix.zero_mul, zero_mul
@@ -110,7 +110,7 @@ definition mulRightLinearMap
 
 中文:
 定义 mulRightLinearMap
-  签名: (Y : Matrix m n A)
+  签名: (Y : 矩阵 m n A)
   定义体: (· * Y)
   map_smul' _ _ := Matrix.smul_mul _ _ _
   map_add' _ _ := Matrix.add_mul _ _ _
@@ -149,7 +149,7 @@ theorem mulRightLinearMap_zero_eq_zero
 
 中文:
 定理 mulRightLinearMap_zero_eq_zero
-  结论: mulRightLinearMap l R (0 : Matrix m n A) = 0
+  结论: mulRightLinearMap l R (0 : 矩阵 m n A) = 0
   证明: LinearMap.ext fun _ => Matrix.mul_zero _
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Matrix, Matrix.mul_zero, mul_zero
@@ -178,7 +178,7 @@ definition mulLinearMap
 
 中文:
 定义 mulLinearMap
-  签名: : Matrix l m A ->ₗ[R] Matrix m n A ->ₗ[R] Matrix l n A where
+  签名: : 矩阵 l m A ->ₗ[R] 矩阵 m n A ->ₗ[R] 矩阵 l n A where
   定义体: mulLeftLinearMap n R
   map_add' _ _ := LinearMap.ext fun _ => Matrix.add_mul _ _ _
   map_smul' _ _ := LinearMap.ext fun _ => Matrix.smul_mul _ _ _
@@ -227,7 +227,7 @@ theorem mulLeftLinearMap_mul
 
 中文:
 定理 mulLeftLinearMap_mul
-  条件: [SMulCommClass R A A] (a : Matrix l m A) (b : Matrix m n A)
+  条件: [标量交换类 R A A] (a : 矩阵 l m A) (b : 矩阵 m n A)
   证明: by
   ext
   simp only [mulLeftLinearMap_apply, LinearMap.comp_apply, Matrix.mul_assoc]
@@ -253,7 +253,7 @@ theorem mulRightLinearMap_mul
 
 中文:
 定理 mulRightLinearMap_mul
-  条件: [IsScalarTower R A A] (a : Matrix m n A) (b : Matrix n o A)
+  条件: [标量塔 R A A] (a : 矩阵 m n A) (b : 矩阵 n o A)
   证明: by
   ext
   simp only [mulRightLinearMap_apply, LinearMap.comp_apply, Matrix.mul_assoc]
@@ -282,7 +282,7 @@ theorem commute_mulLeftLinearMap_mulRightLinearMap
 
 中文:
 定理 commute_mulLeftLinearMap_mulRightLinearMap
-  条件: (a : Matrix l m A) (b : Matrix n o A)
+  条件: (a : 矩阵 l m A) (b : 矩阵 n o A)
   证明: by
   ext c : 1
   exact (Matrix.mul_assoc a c b).symm
@@ -319,7 +319,7 @@ omit [DecidableEq m] in
 
 中文:
 定理 mulLeftLinearMap_one
-  结论: mulLeftLinearMap n R (1 : Matrix m m A) = LinearMap.id
+  结论: mulLeftLinearMap n R (1 : 矩阵 m m A) = 线性映射.id
   证明: LinearMap.ext fun _ => Matrix.one_mul _
 
 omit [DecidableEq m] in
@@ -350,7 +350,7 @@ theorem mulLeftLinearMap_eq_zero_iff
 
 中文:
 定理 mulLeftLinearMap_eq_zero_iff
-  条件: [Nonempty n] (a : Matrix l m A)
+  条件: [非空 n] (a : 矩阵 l m A)
   证明: by
   constructor <;> intro h
   · inhabit n
@@ -389,7 +389,7 @@ theorem pow_mulLeftLinearMap
 
 中文:
 定理 pow_mulLeftLinearMap
-  条件: (a : Matrix m m A) (k : 自然数)
+  条件: (a : 矩阵 m m A) (k : 自然数)
   证明: match k with
   | 0 => by rw [pow_zero, pow_zero, mulLeftLinearMap_one, Module.End.one_eq_id]
   | (n + 1) => by
@@ -423,7 +423,7 @@ omit [DecidableEq m] in
 
 中文:
 定理 mulRightLinearMap_one
-  结论: mulRightLinearMap l R (1 : Matrix m m A) = LinearMap.id
+  结论: mulRightLinearMap l R (1 : 矩阵 m m A) = 线性映射.id
   证明: LinearMap.ext fun _ => Matrix.mul_one _
 
 omit [DecidableEq m] in
@@ -454,7 +454,7 @@ theorem mulRightLinearMap_eq_zero_iff
 
 中文:
 定理 mulRightLinearMap_eq_zero_iff
-  条件: (a : Matrix m n A) [Nonempty l]
+  条件: (a : 矩阵 m n A) [非空 l]
   证明: by
   constructor <;> intro h
   · inhabit l
@@ -493,7 +493,7 @@ theorem pow_mulRightLinearMap
 
 中文:
 定理 pow_mulRightLinearMap
-  条件: (a : Matrix m m A) (k : 自然数)
+  条件: (a : 矩阵 m m A) (k : 自然数)
   证明: match k with
   | 0 => by rw [pow_zero, pow_zero, mulRightLinearMap_one, Module.End.one_eq_id]
   | (n + 1) => by

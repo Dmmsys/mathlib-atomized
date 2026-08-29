@@ -53,7 +53,7 @@ theorem Finset.prod_eq_prod_range_intervalGapsWithin
   · intro
 
 中文:
-定理 Finset.prod_eq_prod_range_intervalGapsWithin
+定理 有限集.prod_eq_prod_range_intervalGapsWithin
   条件: (f : α -> α -> β)
   证明: by
   set p := F.intervalGapsWithin h a b
@@ -95,7 +95,7 @@ theorem Finset.prod_intervalGapsWithin_mul_prod_eq_div
 @[to_additi
 
 中文:
-定理 Finset.prod_intervalGapsWithin_mul_prod_eq_div
+定理 有限集.prod_intervalGapsWithin_mul_prod_eq_div
   证明: by
   rw [F.prod_eq_prod_range_intervalGapsWithin h (fun x y => g y / g x)]; rw [mul_comm]; rw [prod_range_succ]; rw [← mul_assoc]; rw [← prod_mul_distrib]; rw [prod_congr rfl (fun _ _ => div_mul_div_cancel _ _ _)]; rw [prod_range_div (fun i => g (F.intervalGapsWithin h a b i).1)]
   simp
@@ -120,7 +120,7 @@ theorem Finset.prod_intervalGapsWithin_eq_div_div_prod
   proof: eq_div_iff_mul_eq'.mpr (F.prod_intervalGapsWithin_mul_prod_eq_div h g)
 
 中文:
-定理 Finset.prod_intervalGapsWithin_eq_div_div_prod
+定理 有限集.prod_intervalGapsWithin_eq_div_div_prod
   证明: eq_div_iff_mul_eq'.mpr (F.prod_intervalGapsWithin_mul_prod_eq_div h g)
 
 Depends on / 依赖: F.prod_intervalGapsWithin_mul_prod_eq_div, eq_div_iff_mul_eq, prod_intervalGapsWithin_mul_prod_eq_div

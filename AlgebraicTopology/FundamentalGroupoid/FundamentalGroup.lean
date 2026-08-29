@@ -39,7 +39,7 @@ abbreviation FundamentalGroup
   body: End (FundamentalGroupoid.mk x)
 
 中文:
-缩写 FundamentalGroup
+缩写 基本群
   签名: (x : X)
   定义体: End (FundamentalGroupoid.mk x)
 
@@ -64,7 +64,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : FundamentalGroup X x) = .refl x
+  结论: (1 : 基本群 X x) = .refl x
   证明: rfl
 -/
 theorem one_def : (1 : FundamentalGroup X x) = .refl x := rfl
@@ -107,7 +107,7 @@ definition fundamentalGroupMulEquivOfPath
 
 中文:
 定义 fundamentalGroupMulEquivOfPath
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: ((Groupoid.isoEquivHom ..).symm ⟦p⟧).conj
 
 Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom
@@ -128,7 +128,7 @@ definition fundamentalGroupMulEquivOfPathConnected
 
 中文:
 定义 fundamentalGroupMulEquivOfPathConnected
-  签名: [PathConnectedSpace X]
+  签名: [道路连通空间 X]
   定义体: fundamentalGroupMulEquivOfPath (PathConnectedSpace.somePath x₀ x₁)
 
 Depends on / 依赖: PathConnectedSpace, PathConnectedSpace.somePath, fundamentalGroupMulEquivOfPath, somePath
@@ -147,7 +147,7 @@ abbreviation toArrow
 
 中文:
 缩写 toArrow
-  签名: {x : X} (p : FundamentalGroup X x)
+  签名: {x : X} (p : 基本群 X x)
   定义体: p
 -/
 abbrev toArrow {x : X} (p : FundamentalGroup X x) :
@@ -164,7 +164,7 @@ abbreviation toPath
 
 中文:
 缩写 toPath
-  签名: {x : X} (p : FundamentalGroup X x)
+  签名: {x : X} (p : 基本群 X x)
   定义体: toArrow p
 
 Depends on / 依赖: toArrow
@@ -200,7 +200,7 @@ abbreviation fromPath
 
 中文:
 缩写 fromPath
-  签名: {x : X} (p : Path.Homotopic.Quotient x x)
+  签名: {x : X} (p : 道路.同伦.商 x x)
   定义体: fromArrow p
 
 Depends on / 依赖: fromArrow
@@ -236,7 +236,7 @@ definition mapOfEq
 
 中文:
 定义 mapOfEq
-  签名: : FundamentalGroup X x ->* FundamentalGroup Y y
+  签名: : 基本群 X x ->* 基本群 Y y
   定义体: (eqToIso <| congr_arg FundamentalGroupoid.mk h).conj.toMonoidHom.comp (map f x)
 
 Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.mk, congr_arg, conj.toMonoidHom.comp, eqToIso, toMonoidHom
@@ -254,7 +254,7 @@ theorem mapOfEq_apply
 
 中文:
 定理 mapOfEq_apply
-  条件: (p : FundamentalGroup X x)
+  条件: (p : 基本群 X x)
   证明: FundamentalGroupoid.conj_eqToHom ..
 
 Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.conj_eqToHom, conj_eqToHom

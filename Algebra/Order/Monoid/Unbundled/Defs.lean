@@ -118,7 +118,7 @@ class CovariantClass
     - elim : Covariant M N μ r
 
 中文:
-类 CovariantClass
+类 协变类
   参数: : 命题 where
   公理与运算 (1 个):
     - elim : Covariant M N μ r
@@ -138,7 +138,7 @@ class ContravariantClass
     - elim : Contravariant M N μ r
 
 中文:
-类 ContravariantClass
+类 反变类
   参数: : 命题 where
   公理与运算 (1 个):
     - elim : Contravariant M N μ r
@@ -159,7 +159,7 @@ abbreviation MulLeftMono
 
 中文:
 缩写 MulLeftMono
-  签名: [Mul M] [LE M]
+  签名: [乘法 M] [LE M]
   定义体: CovariantClass M M (· * ·) (· <= ·)
 
 Depends on / 依赖: CovariantClass
@@ -177,7 +177,7 @@ abbreviation MulRightMono
 
 中文:
 缩写 MulRightMono
-  签名: [Mul M] [LE M]
+  签名: [乘法 M] [LE M]
   定义体: CovariantClass M M (swap (· * ·)) (· <= ·)
 
 Depends on / 依赖: CovariantClass
@@ -195,7 +195,7 @@ abbreviation AddLeftMono
 
 中文:
 缩写 AddLeftMono
-  签名: [Add M] [LE M]
+  签名: [加法 M] [LE M]
   定义体: CovariantClass M M (· + ·) (· <= ·)
 
 Depends on / 依赖: CovariantClass
@@ -213,7 +213,7 @@ abbreviation AddRightMono
 
 中文:
 缩写 AddRightMono
-  签名: [Add M] [LE M]
+  签名: [加法 M] [LE M]
   定义体: CovariantClass M M (swap (· + ·)) (· <= ·)
 
 Depends on / 依赖: CovariantClass
@@ -233,7 +233,7 @@ abbreviation MulLeftStrictMono
 
 中文:
 缩写 MulLeftStrictMono
-  签名: [Mul M] [LT M]
+  签名: [乘法 M] [LT M]
   定义体: CovariantClass M M (· * ·) (· < ·)
 
 Depends on / 依赖: CovariantClass
@@ -251,7 +251,7 @@ abbreviation MulRightStrictMono
 
 中文:
 缩写 MulRightStrictMono
-  签名: [Mul M] [LT M]
+  签名: [乘法 M] [LT M]
   定义体: CovariantClass M M (swap (· * ·)) (· < ·)
 
 Depends on / 依赖: CovariantClass
@@ -269,7 +269,7 @@ abbreviation AddLeftStrictMono
 
 中文:
 缩写 AddLeftStrictMono
-  签名: [Add M] [LT M]
+  签名: [加法 M] [LT M]
   定义体: CovariantClass M M (· + ·) (· < ·)
 
 Depends on / 依赖: CovariantClass
@@ -287,7 +287,7 @@ abbreviation AddRightStrictMono
 
 中文:
 缩写 AddRightStrictMono
-  签名: [Add M] [LT M]
+  签名: [加法 M] [LT M]
   定义体: CovariantClass M M (swap (· + ·)) (· < ·)
 
 Depends on / 依赖: CovariantClass
@@ -307,7 +307,7 @@ abbreviation MulLeftReflectLT
 
 中文:
 缩写 MulLeftReflectLT
-  签名: [Mul M] [LT M]
+  签名: [乘法 M] [LT M]
   定义体: ContravariantClass M M (· * ·) (· < ·)
 
 Depends on / 依赖: ContravariantClass
@@ -325,7 +325,7 @@ abbreviation MulRightReflectLT
 
 中文:
 缩写 MulRightReflectLT
-  签名: [Mul M] [LT M]
+  签名: [乘法 M] [LT M]
   定义体: ContravariantClass M M (swap (· * ·)) (· < ·)
 
 Depends on / 依赖: ContravariantClass
@@ -343,7 +343,7 @@ abbreviation AddLeftReflectLT
 
 中文:
 缩写 AddLeftReflectLT
-  签名: [Add M] [LT M]
+  签名: [加法 M] [LT M]
   定义体: ContravariantClass M M (· + ·) (· < ·)
 
 Depends on / 依赖: ContravariantClass
@@ -361,7 +361,7 @@ abbreviation AddRightReflectLT
 
 中文:
 缩写 AddRightReflectLT
-  签名: [Add M] [LT M]
+  签名: [加法 M] [LT M]
   定义体: ContravariantClass M M (swap (· + ·)) (· < ·)
 
 Depends on / 依赖: ContravariantClass
@@ -382,7 +382,7 @@ class MulLeftReflectLE
 
 中文:
 类 MulLeftReflectLE
-  参数: [Mul M] [LE M]
+  参数: [乘法 M] [LE M]
   公理与运算 (1 个):
     - le_of_mul_le_mul_left'({a b₁ b₂ : M}) : a * b₁ <= a * b₂ -> b₁ <= b₂
 -/
@@ -401,7 +401,7 @@ class MulRightReflectLE
 
 中文:
 类 MulRightReflectLE
-  参数: [Mul M] [LE M]
+  参数: [乘法 M] [LE M]
   公理与运算 (1 个):
     - le_of_mul_le_mul_right'({b a₁ a₂ : M}) : a₁ * b <= a₂ * b -> a₁ <= a₂
 -/
@@ -419,8 +419,8 @@ class AddLeftReflectLE
     - le_of_add_le_add_left({a b₁ b₂ : M}) : a + b₁ <= a + b₂ -> b₁ <= b₂
 
 中文:
-类 AddLeftReflectLE
-  参数: [Add M] [LE M]
+类 加法LeftReflectLE
+  参数: [加法 M] [LE M]
   公理与运算 (1 个):
     - le_of_add_le_add_left({a b₁ b₂ : M}) : a + b₁ <= a + b₂ -> b₁ <= b₂
 -/
@@ -438,8 +438,8 @@ class AddRightReflectLE
     - le_of_add_le_add_right({b a₁ a₂ : M}) : a₁ + b <= a₂ + b -> a₁ <= a₂
 
 中文:
-类 AddRightReflectLE
-  参数: [Add M] [LE M]
+类 加法RightReflectLE
+  参数: [加法 M] [LE M]
   公理与运算 (1 个):
     - le_of_add_le_add_right({b a₁ a₂ : M}) : a₁ + b <= a₂ + b -> a₁ <= a₂
 -/
@@ -479,7 +479,7 @@ theorem rel_iff_cov
 
 中文:
 定理 rel_iff_cov
-  条件: [CovariantClass M N μ r] [ContravariantClass M N μ r] (m : M) {a b : N}
+  条件: [协变类 M N μ r] [反变类 M N μ r] (m : M) {a b : N}
   证明: rel_iff_cov' CovariantClass.elim ContravariantClass.elim
 
 Depends on / 依赖: ContravariantClass, ContravariantClass.elim, CovariantClass, CovariantClass.elim, rel_iff_cov
@@ -575,8 +575,8 @@ theorem Group.covariant_iff_contravariant
 @[to_additive]
 
 中文:
-定理 Group.covariant_iff_contravariant
-  条件: [Group N]
+定理 群.covariant_iff_contravariant
+  条件: [群 N]
   证明: by
   refine ⟨fun h a b c bc => ?_, fun h a b c bc => ?_⟩
   · rw [← inv_mul_cancel_left a b, ← inv_mul_cancel_left a c]
@@ -613,8 +613,8 @@ instance Group.mulLeftReflectLE_of_mulLeftMono
 @[to_additive]
 
 中文:
-实例 Group.mulLeftReflectLE_of_mulLeftMono
-  签名: [Group N] [LE N] [MulLeftMono N]
+实例 群.mulLeftReflectLE_of_mulLeftMono
+  签名: [群 N] [LE N] [MulLeftMono N]
   定义体: Group.covariant_iff_contravariant.mp CovariantClass.elim _
 
 @[to_additive]
@@ -637,8 +637,8 @@ theorem Group.mulLeftReflectLT_of_mulLeftStrictMono
 @[to_additive]
 
 中文:
-定理 Group.mulLeftReflectLT_of_mulLeftStrictMono
-  结论: [Group N] [LT N]
+定理 群.mulLeftReflectLT_of_mulLeftStrictMono
+  结论: [群 N] [LT N]
   证明: inferInstance
 
 @[to_additive]
@@ -665,8 +665,8 @@ theorem Group.covariant_swap_iff_contravariant_swap
 @[to_additive]
 
 中文:
-定理 Group.covariant_swap_iff_contravariant_swap
-  条件: [Group N]
+定理 群.covariant_swap_iff_contravariant_swap
+  条件: [群 N]
   证明: by
   refine ⟨fun h a b c bc => ?_, fun h a b c bc => ?_⟩
   · rw [← mul_inv_cancel_right b a, ← mul_inv_cancel_right c a]
@@ -705,8 +705,8 @@ instance Group.mulRightReflectLE_of_mulRightMono
 @[to_additive]
 
 中文:
-实例 Group.mulRightReflectLE_of_mulRightMono
-  签名: [Group N] [LE N] [MulRightMono N]
+实例 群.mulRightReflectLE_of_mulRightMono
+  签名: [群 N] [LE N] [MulRightMono N]
   定义体: Group.covariant_swap_iff_contravariant_swap.mp CovariantClass.elim _
 
 @[to_additive]
@@ -727,8 +727,8 @@ theorem Group.mulRightReflectLT_of_mulRightStrictMono
   proof: inferInstance
 
 中文:
-定理 Group.mulRightReflectLT_of_mulRightStrictMono
-  条件: [Group N] [LT N] [MulRightStrictMono N]
+定理 群.mulRightReflectLT_of_mulRightStrictMono
+  条件: [群 N] [LT N] [MulRightStrictMono N]
   证明: inferInstance
 -/
 theorem Group.mulRightReflectLT_of_mulRightStrictMono [Group N] [LT N] [MulRightStrictMono N] :
@@ -900,8 +900,8 @@ theorem Covariant.monotone_of_const
 
 中文:
 定理 Covariant.monotone_of_const
-  条件: [CovariantClass M N μ (· <= ·)] (m : M)
-  结论: Monotone (μ m)
+  条件: [协变类 M N μ (· <= ·)] (m : M)
+  结论: 递增 (μ m)
   证明: fun _ _ => CovariantClass.elim m
 
 Depends on / 依赖: CovariantClass, CovariantClass.elim
@@ -918,8 +918,8 @@ theorem Monotone.covariant_of_const
   proof: hf.comp (Covariant.monotone_of_const m)
 
 中文:
-定理 Monotone.covariant_of_const
-  条件: [CovariantClass M N μ (· <= ·)] (hf : Monotone f) (m : M)
+定理 递增.covariant_of_const
+  条件: [协变类 M N μ (· <= ·)] (hf : 递增 f) (m : M)
   证明: hf.comp (Covariant.monotone_of_const m)
 
 Depends on / 依赖: Covariant, Covariant.monotone_of_const, hf.comp, monotone_of_const
@@ -937,8 +937,8 @@ theorem Monotone.covariant_of_const'
   proof: Monotone.covariant_of_const (μ := swap μ) hf m
 
 中文:
-定理 Monotone.covariant_of_const'
-  结论: {μ : N -> N -> N} [CovariantClass N N (swap μ) (· <= ·)]
+定理 递增.covariant_of_const'
+  结论: {μ : N -> N -> N} [协变类 N N (swap μ) (· <= ·)]
   证明: Monotone.covariant_of_const (μ := swap μ) hf m
 
 Depends on / 依赖: Monotone, Monotone.covariant_of_const, covariant_of_const
@@ -956,8 +956,8 @@ theorem Antitone.covariant_of_const
   proof: hf.comp_monotone Covariant.monotone_of_const m
 
 中文:
-定理 Antitone.covariant_of_const
-  条件: [CovariantClass M N μ (· <= ·)] (hf : Antitone f) (m : M)
+定理 递减.covariant_of_const
+  条件: [协变类 M N μ (· <= ·)] (hf : 递减 f) (m : M)
   证明: hf.comp_monotone Covariant.monotone_of_const m
 
 Depends on / 依赖: Covariant, Covariant.monotone_of_const, comp_monotone, hf.comp_monotone, monotone_of_const
@@ -975,8 +975,8 @@ theorem Antitone.covariant_of_const'
   proof: Antitone.covariant_of_const (μ := swap μ) hf m
 
 中文:
-定理 Antitone.covariant_of_const'
-  结论: {μ : N -> N -> N} [CovariantClass N N (swap μ) (· <= ·)]
+定理 递减.covariant_of_const'
+  结论: {μ : N -> N -> N} [协变类 N N (swap μ) (· <= ·)]
   证明: Antitone.covariant_of_const (μ := swap μ) hf m
 
 Depends on / 依赖: Antitone, Antitone.covariant_of_const, covariant_of_const
@@ -1001,7 +1001,7 @@ theorem covariant_le_of_covariant_lt
 
 中文:
 定理 covariant_le_of_covariant_lt
-  条件: [PartialOrder N]
+  条件: [偏序 N]
   证明: by
   intro h a b c bc
   rcases bc.eq_or_lt with (rfl | bc)
@@ -1029,7 +1029,7 @@ theorem covariantClass_le_of_lt
 
 中文:
 定理 covariantClass_le_of_lt
-  条件: [PartialOrder N] [CovariantClass M N μ (· < ·)]
+  条件: [偏序 N] [协变类 M N μ (· < ·)]
   证明: ⟨covariant_le_of_covariant_lt _ _ _ CovariantClass.elim⟩
 
 @[to_additive]
@@ -1052,7 +1052,7 @@ theorem mulLeftMono_of_mulLeftStrictMono
 
 中文:
 定理 mulLeftMono_of_mulLeftStrictMono
-  条件: (M) [Mul M] [PartialOrder M] [MulLeftStrictMono M]
+  条件: (M) [乘法 M] [偏序 M] [MulLeftStrictMono M]
   证明: covariantClass_le_of_lt _ _ _
 
 @[to_additive]
@@ -1073,7 +1073,7 @@ theorem mulRightMono_of_mulRightStrictMono
 
 中文:
 定理 mulRightMono_of_mulRightStrictMono
-  条件: (M) [Mul M] [PartialOrder M] [MulRightStrictMono M]
+  条件: (M) [乘法 M] [偏序 M] [MulRightStrictMono M]
   证明: covariantClass_le_of_lt _ _ _
 
 Depends on / 依赖: covariantClass_le_of_lt
@@ -1095,7 +1095,7 @@ theorem contravariant_le_iff_contravariant_lt_and_eq
 
 中文:
 定理 contravariant_le_iff_contravariant_lt_and_eq
-  条件: [PartialOrder N]
+  条件: [偏序 N]
   证明: by
   refine ⟨fun h => ⟨fun a b c bc => ?_, fun a b c bc => ?_⟩, fun h => fun a b c bc => ?_⟩
   · exact (h a bc.le).lt_of_ne (by rintro rfl; exact lt_irrefl _ bc)
@@ -1121,7 +1121,7 @@ theorem contravariant_lt_of_contravariant_le
 
 中文:
 定理 contravariant_lt_of_contravariant_le
-  条件: [PartialOrder N]
+  条件: [偏序 N]
   证明: And.left ∘ (contravariant_le_iff_contravariant_lt_and_eq M N μ).mp
 
 Depends on / 依赖: And.left, contravariant_le_iff_contravariant_lt_and_eq
@@ -1141,7 +1141,7 @@ theorem covariant_le_iff_contravariant_lt
 
 中文:
 定理 covariant_le_iff_contravariant_lt
-  条件: [LinearOrder N]
+  条件: [线性序 N]
   证明: ⟨fun h _ _ _ bc => not_le.mp fun k => bc.not_ge (h _ k),
    fun h _ _ _ bc => not_lt.mp fun k => bc.not_gt (h _ k)⟩
 
@@ -1163,7 +1163,7 @@ theorem covariant_lt_iff_contravariant_le
 
 中文:
 定理 covariant_lt_iff_contravariant_le
-  条件: [LinearOrder N]
+  条件: [线性序 N]
   证明: ⟨fun h _ _ _ bc => not_lt.mp fun k => bc.not_gt (h _ k),
    fun h _ _ _ bc => not_le.mp fun k => bc.not_ge (h _ k)⟩
 
@@ -1186,7 +1186,7 @@ theorem covariant_flip_iff
 
 中文:
 定理 covariant_flip_iff
-  条件: [h : Std.Commutative mu]
+  条件: [h : Std.交换 mu]
   证明: by unfold flip; simp_rw [h.comm]
 
 Depends on / 依赖: h.comm, simp_rw
@@ -1204,7 +1204,7 @@ theorem contravariant_flip_iff
 
 中文:
 定理 contravariant_flip_iff
-  条件: [h : Std.Commutative mu]
+  条件: [h : Std.交换 mu]
   证明: by unfold flip; simp_rw [h.comm]
 
 Depends on / 依赖: h.comm, simp_rw
@@ -1224,7 +1224,7 @@ instance contravariant_lt_of_covariant_le
 
 中文:
 实例 contravariant_lt_of_covariant_le
-  签名: [LinearOrder N]
+  签名: [线性序 N]
   定义体: (covariant_le_iff_contravariant_lt N N mu).mp CovariantClass.elim
 
 @[to_additive]
@@ -1248,7 +1248,7 @@ theorem mulLeftReflectLT_of_mulLeftMono
 
 中文:
 定理 mulLeftReflectLT_of_mulLeftMono
-  条件: [Mul N] [LinearOrder N] [MulLeftMono N]
+  条件: [乘法 N] [线性序 N] [MulLeftMono N]
   证明: inferInstance
 
 @[to_additive]
@@ -1268,7 +1268,7 @@ theorem mulRightReflectLT_of_mulRightMono
 
 中文:
 定理 mulRightReflectLT_of_mulRightMono
-  条件: [Mul N] [LinearOrder N] [MulRightMono N]
+  条件: [乘法 N] [线性序 N] [MulRightMono N]
   证明: inferInstance
 -/
 theorem mulRightReflectLT_of_mulRightMono [Mul N] [LinearOrder N] [MulRightMono N] :
@@ -1287,7 +1287,7 @@ instance covariant_lt_of_contravariant_le
 
 中文:
 实例 covariant_lt_of_contravariant_le
-  签名: [LinearOrder N]
+  签名: [线性序 N]
   定义体: (covariant_lt_iff_contravariant_le N N mu).mpr ContravariantClass.elim
 
 @[to_additive]
@@ -1311,7 +1311,7 @@ instance mulLeftStrictMono_of_mulLeftReflectLE
 
 中文:
 实例 mulLeftStrictMono_of_mulLeftReflectLE
-  签名: [Mul N] [LinearOrder N] [MulLeftReflectLE N]
+  签名: [乘法 N] [线性序 N] [MulLeftReflectLE N]
   定义体: .mpr fun _ => MulLeftReflectLE.le_of_mul_le_mul_left' covariant_lt_iff_contravariant_le ..
 
 @[to_additive]
@@ -1336,7 +1336,7 @@ instance mulRightStrictMono_of_mulRightReflectLE
 
 中文:
 实例 mulRightStrictMono_of_mulRightReflectLE
-  签名: [Mul N] [LinearOrder N] [MulRightReflectLE N]
+  签名: [乘法 N] [线性序 N] [MulRightReflectLE N]
   定义体: .mpr fun _ => MulRightReflectLE.le_of_mul_le_mul_right' covariant_lt_iff_contravariant_le ..
 
 @[to_additive]
@@ -1361,7 +1361,7 @@ instance covariant_swap_mul_of_covariant_mul
 
 中文:
 实例 covariant_swap_mul_of_covariant_mul
-  签名: [CommSemigroup N]
+  签名: [交换半群 N]
   定义体: (covariant_flip_iff N r (· * ·)).mpr CovariantClass.elim
 
 @[to_additive]
@@ -1385,7 +1385,7 @@ theorem mulRightMono_of_mulLeftMono
 
 中文:
 定理 mulRightMono_of_mulLeftMono
-  条件: [CommSemigroup N] [LE N] [MulLeftMono N]
+  条件: [交换半群 N] [LE N] [MulLeftMono N]
   证明: inferInstance
 
 @[to_additive]
@@ -1407,7 +1407,7 @@ theorem mulRightStrictMono_of_mulLeftStrictMono
 
 中文:
 定理 mulRightStrictMono_of_mulLeftStrictMono
-  条件: [CommSemigroup N] [LT N] [MulLeftStrictMono N]
+  条件: [交换半群 N] [LT N] [MulLeftStrictMono N]
   证明: inferInstance
 
 @[to_additive]
@@ -1429,7 +1429,7 @@ instance contravariant_swap_mul_of_contravariant_mul
 
 中文:
 实例 contravariant_swap_mul_of_contravariant_mul
-  签名: [CommSemigroup N]
+  签名: [交换半群 N]
   定义体: (contravariant_flip_iff N r (· * ·)).mpr ContravariantClass.elim
 
 @[to_additive]
@@ -1454,7 +1454,7 @@ instance mulRightReflectLE_of_mulLeftReflectLE
 
 中文:
 实例 mulRightReflectLE_of_mulLeftReflectLE
-  签名: [CommSemigroup N] [LE N] [MulLeftReflectLE N]
+  签名: [交换半群 N] [LE N] [MulLeftReflectLE N]
   定义体: contravariant_flip_iff ..
     (fun _ => MulLeftReflectLE.le_of_mul_le_mul_left' : Contravariant N N (· * ·) _) _
 
@@ -1478,7 +1478,7 @@ theorem mulRightReflectLT_of_mulLeftReflectLT
 
 中文:
 定理 mulRightReflectLT_of_mulLeftReflectLT
-  条件: [CommSemigroup N] [LT N] [MulLeftReflectLT N]
+  条件: [交换半群 N] [LT N] [MulLeftReflectLT N]
   证明: inferInstance
 -/
 theorem mulRightReflectLT_of_mulLeftReflectLT [CommSemigroup N] [LT N] [MulLeftReflectLT N] :
@@ -1495,7 +1495,7 @@ theorem covariant_lt_of_covariant_le_of_contravariant_eq
 
 中文:
 定理 covariant_lt_of_covariant_le_of_contravariant_eq
-  结论: [ContravariantClass M N μ (· = ·)]
+  结论: [反变类 M N μ (· = ·)]
   证明: (CovariantClass.elim a bc.le).lt_of_ne (bc.ne ∘ ContravariantClass.elim _)
 
 Depends on / 依赖: ContravariantClass, ContravariantClass.elim, CovariantClass, CovariantClass.elim, bc.le, bc.ne, lt_of_ne
@@ -1515,7 +1515,7 @@ theorem contravariant_le_of_contravariant_eq_and_lt
 
 中文:
 定理 contravariant_le_of_contravariant_eq_and_lt
-  结论: [PartialOrder N]
+  结论: [偏序 N]
   证明: (contravariant_le_iff_contravariant_lt_and_eq M N μ).mpr
     ⟨ContravariantClass.elim, ContravariantClass.elim⟩
 
@@ -1545,8 +1545,8 @@ instance IsLeftCancelMul.mulLeftStrictMono_of_mulLeftMono
 @[to_additive]
 
 中文:
-实例 IsLeftCancelMul.mulLeftStrictMono_of_mulLeftMono
-  签名: [Mul N] [IsLeftCancelMul N]
+实例 左乘消去.mulLeftStrictMono_of_mulLeftMono
+  签名: [乘法 N] [左乘消去 N]
   定义体: (CovariantClass.elim a bc.le).lt_of_ne ((mul_ne_mul_right a).mpr bc.ne)
 
 @[to_additive]
@@ -1569,7 +1569,7 @@ instance IsRightCancelMul.mulRightStrictMono_of_mulRightMono
 @[to_additive]
 
 中文:
-实例 IsRightCancelMul.mulRightStrictMono_of_mulRightMono
+实例 右乘消去.mulRightStrictMono_of_mulRightMono
   定义体: (CovariantClass.elim a bc.le).lt_of_ne ((mul_ne_mul_left a).mpr bc.ne)
 
 @[to_additive]
@@ -1594,8 +1594,8 @@ instance IsLeftCancelMul.mulLeftReflectLE_of_mulLeftReflectLT
 @[to_additive]
 
 中文:
-实例 IsLeftCancelMul.mulLeftReflectLE_of_mulLeftReflectLT
-  签名: [Mul N] [IsLeftCancelMul N]
+实例 左乘消去.mulLeftReflectLE_of_mulLeftReflectLT
+  签名: [乘法 N] [左乘消去 N]
   定义体: contravariant_le_iff_contravariant_lt_and_eq N N _
     ⟨‹MulLeftReflectLT N›.elim, fun _ => mul_left_cancel⟩ _
 
@@ -1619,7 +1619,7 @@ instance IsRightCancelMul.mulRightReflectLE_of_mulRightReflectLT
     ⟨‹MulRightReflectLT N›.elim, fun _ => mul_right_cancel⟩ _
 
 中文:
-实例 IsRightCancelMul.mulRightReflectLE_of_mulRightReflectLT
+实例 右乘消去.mulRightReflectLE_of_mulRightReflectLT
   定义体: contravariant_le_iff_contravariant_lt_and_eq N N _
     ⟨‹MulRightReflectLT N›.elim, fun _ => mul_right_cancel⟩ _
 

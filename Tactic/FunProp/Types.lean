@@ -109,7 +109,7 @@ definition ppOrigin
 
 中文:
 定义 ppOrigin
-  签名: {m} [Monad m] [MonadEnv m] [MonadError m]
+  签名: {m} [单子 m] [MonadEnv m] [MonadError m]
 -/
 def ppOrigin {m} [Monad m] [MonadEnv m] [MonadError m] : Origin -> m MessageData
   | .decl n => return m!"{← mkConstWithLevelParams n}"
@@ -176,7 +176,7 @@ definition defaultNamesToUnfold
 
 中文:
 定义 defaultNamesToUnfold
-  签名: : Array Name
+  签名: : 数组 Name
   定义体: #[`id, `Function.comp, `Function.const, `Function.HasUncurry.uncurry, `Function.uncurry]
 
 Depends on / 依赖: Function, Function.HasUncurry.uncurry, Function.comp, Function.const, Function.uncurry, HasUncurry, uncurry
@@ -195,7 +195,7 @@ structure Config
     - maxSteps : = 100000
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (2 个):
     - maxTransitionDepth : = 1
@@ -230,12 +230,12 @@ structure Context
     - transitionDepth : = 0
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (4 个):
-    - config : Config  [默认: {}]
+    - config : 余nfig  [默认: {}]
     - constToUnfold : TreeSet Name Name.quickCmp  [默认: .ofArray defaultNamesToUnfold _]
-    - disch : Expr -> MetaM (Option Expr)  [默认: fun _ => pure none]
+    - disch : Expr -> MetaM (选项类型 Expr)  [默认: fun _ => pure none]
     - transitionDepth : = 0
 -/
 structure Context where
@@ -267,7 +267,7 @@ structure GeneralTheorem
   公理与运算 (4 个):
     - funPropName : Name
     - thmName : Name
-    - keys : List (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry)
+    - keys : 列表 (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry)
     - priority : 自然数  [默认: eval_prio default]
 
 Depends on / 依赖: eval_prio
@@ -324,7 +324,7 @@ structure State
     - cache : Simp.Cache  [默认: {}]
     - failureCache : ExprSet  [默认: {}]
     - numSteps : = 0
-    - msgLog : List String  [默认: []]
+    - msgLog : 列表 String  [默认: []]
     - morTheorems : GeneralTheorems
     - transitionTheorems : GeneralTheorems
 -/
@@ -352,8 +352,8 @@ definition Context.increaseTransitionDepth
   body: {ctx with transitionDepth := ctx.transitionDepth + 1}
 
 中文:
-定义 Context.increaseTransitionDepth
-  签名: (ctx : Context)
+定义 余ntext.increaseTransitionDepth
+  签名: (ctx : 余ntext)
   定义体: {ctx with transitionDepth := ctx.transitionDepth + 1}
 
 Depends on / 依赖: ctx.transitionDepth, transitionDepth
@@ -406,7 +406,7 @@ definition defaultUnfoldPred
 
 中文:
 定义 defaultUnfoldPred
-  签名: : Name -> 布尔
+  签名: : Name -> 布尔值
   定义体: defaultNamesToUnfold.contains
 
 Depends on / 依赖: contains, defaultNamesToUnfold, defaultNamesToUnfold.contains
@@ -426,7 +426,7 @@ definition unfoldNamePred
 
 中文:
 定义 unfoldNamePred
-  签名: : Fun命题M (Name -> 布尔)
+  签名: : FunPropM (Name -> 布尔值)
   定义体: do
   let toUnfold := (← read).constToUnfold
   return fun n => toUnfold.contains n
@@ -450,7 +450,7 @@ definition increaseSteps
 
 中文:
 定义 increaseSteps
-  签名: : Fun命题M Unit
+  签名: : FunPropM 单元
   定义体: do
   let numSteps := (← get).numSteps
   let maxSteps := (← read).config.maxSteps
@@ -482,7 +482,7 @@ definition withIncreasedTransitionDepth
 
 中文:
 定义 withIncreasedTransitionDepth
-  签名: {α} (go : Fun命题M (Option α))
+  签名: {α} (go : FunPropM (选项类型 α))
   定义体: do
   let maxDepth := (← read).config.maxTransitionDepth
   let newDepth := (← read).transitionDepth + 1

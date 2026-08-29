@@ -38,7 +38,7 @@ abbreviation LieModule.IsIrreducible
   body: IsSimpleOrder (LieSubmodule R L M)
 
 中文:
-缩写 LieModule.IsIrreducible
+缩写 Lie模.是不可约
   签名: : 命题
   定义体: IsSimpleOrder (LieSubmodule R L M)
 
@@ -57,8 +57,8 @@ lemma LieModule.IsIrreducible.mk
   proof: IsSimpleOrder.of_forall_eq_top h
 
 中文:
-引理 LieModule.IsIrreducible.mk
-  条件: [Nontrivial M] (h : 对任意 N : LieSubmodule R L M, N != ⊥ -> N = ⊤)
+引理 Lie模.是不可约.mk
+  条件: [非平凡 M] (h : 对任意 N : Lie子模 R L M, N != ⊥ -> N = ⊤)
   证明: IsSimpleOrder.of_forall_eq_top h
 
 Depends on / 依赖: IsSimpleOrder, IsSimpleOrder.of_forall_eq_top, of_forall_eq_top
@@ -76,8 +76,8 @@ lemma LieSubmodule.eq_top_of_isIrreducible
   proof: (IsSimpleOrder.eq_bot_or_eq_top N).resolve_left (nontrivial_iff_ne_bot R L M).mp inferInstance
 
 中文:
-引理 LieSubmodule.eq_top_of_isIrreducible
-  结论: [LieModule.IsIrreducible R L M]
+引理 Lie子模.eq_top_of_isIrreducible
+  结论: [Lie模.是不可约 R L M]
   证明: (IsSimpleOrder.eq_bot_or_eq_top N).resolve_left (nontrivial_iff_ne_bot R L M).mp inferInstance
 
 Depends on / 依赖: IsSimpleOrder, IsSimpleOrder.eq_bot_or_eq_top, eq_bot_or_eq_top, nontrivial_iff_ne_bot, resolve_left
@@ -101,7 +101,7 @@ class HasTrivialRadical
     - radical_eq_bot : radical R L = ⊥
 
 中文:
-类 HasTrivialRadical
+类 有TrivialRadical
   参数: : 命题 where
   公理与运算 (1 个):
     - radical_eq_bot : radical R L = ⊥
@@ -122,7 +122,7 @@ class HasCentralRadical
     - radical_eq_center : radical R L = center R L
 
 中文:
-类 HasCentralRadical
+类 有CentralRadical
   参数: : 命题 where
   公理与运算 (1 个):
     - radical_eq_center : radical R L = center R L
@@ -158,8 +158,8 @@ instance [Subsingleton
   body: ⟨by simpa only [radical_eq_top_of_isSolvable] using Subsingleton.elim ⊤ ⊥⟩
 
 中文:
-实例 [Subsingleton
-  签名: L] : HasTrivialRadical R L
+实例 [子单例
+  签名: L] : 有TrivialRadical R L
   定义体: ⟨by simpa only [radical_eq_top_of_isSolvable] using Subsingleton.elim ⊤ ⊥⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, radical_eq_top_of_isSolvable
@@ -181,7 +181,7 @@ class IsSimple
     - non_abelian : ¬IsLieAbelian L
 
 中文:
-类 IsSimple
+类 是单
   参数: : 命题 where
   公理与运算 (2 个):
     - eq_bot_or_eq_top : 对任意 I : LieIdeal R L, I = ⊥ ∨ I = ⊤
@@ -203,7 +203,7 @@ class IsSemisimple
     - non_abelian_of_isAtom : forall I : LieIdeal R L, IsAtom I -> ¬ IsLieAbelian I
 
 中文:
-类 IsSemisimple
+类 是半单
   参数: : 命题 where
   公理与运算 (3 个):
     - sSup_atoms_eq_top : sSup {I : LieIdeal R L | IsAtom I} = ⊤

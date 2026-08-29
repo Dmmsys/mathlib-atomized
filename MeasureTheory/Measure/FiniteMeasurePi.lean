@@ -50,7 +50,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (μ : Π i, FiniteMeasure (α i))
+  签名: (μ : Π i, 有限测度 (α i))
   定义体: ⟨Measure.pi (fun i => μ i), inferInstance⟩
 
 Depends on / 依赖: Measure, Measure.pi
@@ -70,7 +70,7 @@ lemma toMeasure_pi
 
 中文:
 引理 toMeasure_pi
-  结论: (FiniteMeasure.pi μ).toMeasure = Measure.pi (fun i => μ i)
+  结论: (有限测度.pi μ).toMeasure = 测度.pi (fun i => μ i)
   证明: rfl
 -/
 @[simp] lemma toMeasure_pi : (FiniteMeasure.pi μ).toMeasure = Measure.pi (fun i => μ i) := rfl
@@ -86,7 +86,7 @@ lemma pi_pi
 
 中文:
 引理 pi_pi
-  条件: (s : Π i, Set (α i))
+  条件: (s : Π i, 集合 (α i))
   证明: by
   simp [coeFn_def]
 -/
@@ -106,7 +106,7 @@ lemma mass_pi
 
 中文:
 引理 mass_pi
-  结论: (FiniteMeasure.pi μ).mass = ∏ i, (μ i).mass
+  结论: (有限测度.pi μ).mass = ∏ i, (μ i).mass
   证明: by
   simp only [mass]
   rw [← pi_univ (univ : Set ι)]; rw [pi_pi]
@@ -128,7 +128,7 @@ lemma pi_map_pi
 
 中文:
 引理 pi_map_pi
-  结论: {β : ι -> 类型} [对任意 i, MeasurableSpace (β i)] {f : Π i, α i -> β i}
+  结论: {β : ι -> 类型} [对任意 i, 可测空间 (β i)] {f : Π i, α i -> β i}
   证明: by
   apply Subtype.ext
   simp only [val_eq_toMeasure, toMeasure_map, toMeasure_pi]
@@ -158,7 +158,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (μ : Π i, ProbabilityMeasure (α i))
+  签名: (μ : Π i, 概率测度 (α i))
   定义体: ⟨Measure.pi (fun i => μ i), inferInstance⟩
 
 Depends on / 依赖: Measure, Measure.pi
@@ -193,7 +193,7 @@ lemma pi_pi
 
 中文:
 引理 pi_pi
-  条件: (s : Π i, Set (α i))
+  条件: (s : Π i, 集合 (α i))
   证明: by
   simp [coeFn_def]
 -/
@@ -219,7 +219,7 @@ theorem continuous_pi
 
 中文:
 定理 continuous_pi
-  结论: [对任意 i, TopologicalSpace (α i)] [对任意 i, SecondCountableTopology (α i)]
+  结论: [对任意 i, 拓扑空间 (α i)] [对任意 i, 第二可数拓扑 (α i)]
   证明: by
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily

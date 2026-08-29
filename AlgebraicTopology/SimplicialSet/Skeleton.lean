@@ -56,7 +56,7 @@ definition skeleton
 
 中文:
 定义 skeleton
-  签名: : 自然数 ->o X.Subcomplex where
+  签名: : 自然数 ->o X.子复形 where
   定义体: ⨆ (i : Fin n) (x : X.nonDegenerate i), Subcomplex.ofSimplex x.1
   monotone' i j h := by
     simp only [iSup_le_iff]
@@ -316,7 +316,7 @@ definition skeletonOfMono
 
 中文:
 定义 skeletonOfMono
-  签名: : 自然数 ->o Y.Subcomplex where
+  签名: : 自然数 ->o Y.子复形 where
   定义体: Subcomplex.range i ⊔ Y.skeleton n
   monotone' n m h := by
     dsimp
@@ -536,7 +536,7 @@ structure Cell
   公理与运算 (3 个):
     - simplex : Y _⦋d⦌
     - nonDegenerate : simplex in Y.nonDegenerate d
-    - notMem : simplex ∉ Set.range (i.app _)
+    - notMem : simplex ∉ 集合.range (i.app _)
 -/
 structure Cell (d : Nat) where
   /-- a `d`-simplex in the target of the monomorphism -/
@@ -665,7 +665,7 @@ lemma range_map_le
 
 中文:
 引理 range_map_le
-  结论: Subcomplex.range c.map <= skeletonOfMono i (d + 1)
+  结论: 子复形.range c.map <= skeletonOfMono i (d + 1)
   证明: by
   simp [map, Subcomplex.range_eq_ofSimplex, mem_skeletonOfMono_obj_iff]
 
@@ -693,7 +693,7 @@ lemma preimage_map
 
 中文:
 引理 preimage_map
-  结论: (skeletonOfMono i d).preimage c.map = ∂Δ[d]
+  结论: (skeletonOfMono i d).原像 c.map = ∂Δ[d]
   证明: by
   rw [stdSimplex.eq_boundary_iff]
   refine ⟨?_, fun h => c.notMem ?_⟩
@@ -922,7 +922,7 @@ lemma ι_b_ι
 中文:
 引理 ι_b_ι
   条件: (c : Cell i d)
-  结论: c.ιSigmaStdSimplex ≫ b i d ≫ Subcomplex.ι _ = c.map
+  结论: c.ιSigmaStdSimplex ≫ b i d ≫ 子复形.ι _ = c.map
   证明: by
   simp
 -/
@@ -943,7 +943,7 @@ lemma b_app_ι_app_objEquiv_symm_val
 
 中文:
 引理 b_app_ι_app_objEquiv_symm_val
-  条件: (c : Cell i d) {n : SimplexCategory} (f : n ⟶ ⦋d⦌)
+  条件: (c : Cell i d) {n : 单纯形范畴} (f : n ⟶ ⦋d⦌)
   证明: by
   simp only [← yonedaEquiv_symm_app_objEquiv_symm, ← ι_b_ι]
   dsimp +instances
@@ -977,7 +977,7 @@ lemma isPullback
 
 中文:
 引理 isPullback
-  结论: IsPullback (t i d) (l i d) (r i d) (b i d) where
+  结论: 是拉回 (t i d) (l i d) (r i d) (b i d) where
   证明: w i d
   isLimit' := ⟨evaluationJointlyReflectsLimits _ (fun ⟨⟨n⟩⟩ => by
     refine (isLimitMapConePullbackConeEquiv _ _).2
@@ -1123,7 +1123,7 @@ lemma isPushout
 
 中文:
 引理 isPushout
-  结论: IsPushout (t i d) (l i d) (r i d) (b i d) where
+  结论: 是推出 (t i d) (l i d) (r i d) (b i d) where
   证明: w i d
   isColimit' := ⟨evaluationJointlyReflectsColimits _ (fun ⟨⟨n⟩⟩ => by
     refine (isColimitMapCoconePushoutCoconeEquiv _ _).2
@@ -1180,7 +1180,7 @@ definition relativeCellComplexOfMono
 
 中文:
 定义 relativeCellComplexOfMono
-  签名: [Mono i]
+  签名: [单态射 i]
   定义体: (skeletonOfMono i).monotone.functor ⋙ Subcomplex.toSSetFunctor
   isoBot := Subcomplex.eqToIso (by simp) ≪≫ (asIso (Subcomplex.toRange i)).symm
   incl.app _ := Subcomplex.ι _

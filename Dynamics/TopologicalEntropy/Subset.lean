@@ -228,7 +228,7 @@ lemma coverEntropyInf_monotone
 
 中文:
 引理 coverEntropyInf_monotone
-  条件: [UniformSpace X] (T : X -> X)
+  条件: [一致空间 X] (T : X -> X)
   证明: fun _ _ F_G => iSup₂_mono fun U _ => coverEntropyInfEntourage_monotone T U F_G
 
 Depends on / 依赖: coverEntropyInfEntourage_monotone
@@ -247,7 +247,7 @@ lemma coverEntropy_monotone
 
 中文:
 引理 coverEntropy_monotone
-  条件: [UniformSpace X] (T : X -> X)
+  条件: [一致空间 X] (T : X -> X)
   证明: fun _ _ F_G => iSup₂_mono fun U _ => coverEntropyEntourage_monotone T U F_G
 
 Depends on / 依赖: coverEntropyEntourage_monotone
@@ -278,7 +278,7 @@ lemma IsDynCoverOf.closure
 
 中文:
 引理 IsDynCoverOf.closure
-  结论: (h : Continuous T)
+  结论: (h : 连续 T)
   证明: by
   rcases (hasBasis_symmetric.mem_iff' V).1 V_uni with ⟨W, ⟨W_uni, W_symm⟩, W_V⟩
   refine IsDynCoverOf.of_entourage_subset (SetRel.comp_subset_comp_left W_V) fun x hx => ?_
@@ -310,7 +310,7 @@ lemma coverMincard_closure_le
 
 中文:
 引理 coverMincard_closure_le
-  结论: (h : Continuous T) (F : Set X) (U : SetRel X X)
+  结论: (h : 连续 T) (F : 集合 X) (U : SetRel X X)
   证明: by
   rcases eq_top_or_lt_top (coverMincard T F U n) with h' | h'
   · exact h' ▸ le_top
@@ -337,7 +337,7 @@ lemma coverEntropyInfEntourage_closure
 
 中文:
 引理 coverEntropyInfEntourage_closure
-  结论: (h : Continuous T) (F : Set X) (U : SetRel X X)
+  结论: (h : 连续 T) (F : 集合 X) (U : SetRel X X)
   证明: expGrowthInf_monotone fun n => ENat.toENNReal_mono (coverMincard_closure_le h F U V_uni n)
 
 Depends on / 依赖: ENat.toENNReal_mono, V_uni, coverMincard_closure_le, expGrowthInf_monotone, toENNReal_mono
@@ -357,7 +357,7 @@ lemma coverEntropyEntourage_closure
 
 中文:
 引理 coverEntropyEntourage_closure
-  结论: (h : Continuous T) (F : Set X) (U : SetRel X X)
+  结论: (h : 连续 T) (F : 集合 X) (U : SetRel X X)
   证明: expGrowthSup_monotone fun n => ENat.toENNReal_mono (coverMincard_closure_le h F U V_uni n)
 
 Depends on / 依赖: ENat.toENNReal_mono, V_uni, coverMincard_closure_le, expGrowthSup_monotone, toENNReal_mono
@@ -381,7 +381,7 @@ lemma coverEntropyInf_closure
 
 中文:
 引理 coverEntropyInf_closure
-  条件: (h : Continuous T)
+  条件: (h : 连续 T)
   证明: by
   refine (iSup₂_le fun U U_uni => ?_).antisymm (coverEntropyInf_monotone T subset_closure)
   obtain ⟨V, V_uni, V_U⟩ := comp_mem_uniformity_sets U_uni
@@ -411,7 +411,7 @@ theorem coverEntropy_closure
 
 中文:
 定理 coverEntropy_closure
-  条件: (h : Continuous T)
+  条件: (h : 连续 T)
   证明: by
   refine (iSup₂_le fun U U_uni => ?_).antisymm (coverEntropy_monotone T subset_closure)
   obtain ⟨V, V_uni, V_U⟩ := comp_mem_uniformity_sets U_uni
@@ -468,7 +468,7 @@ lemma coverMincard_union_le
 
 中文:
 引理 coverMincard_union_le
-  条件: (T : X -> X) (F G : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F G : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   classical
   rcases eq_top_or_lt_top (coverMincard T F U n) with hF | hF
@@ -563,7 +563,7 @@ lemma coverEntropyInf_iUnion_le
 
 中文:
 引理 coverEntropyInf_iUnion_le
-  条件: (T : X -> X) (F : ι -> Set X)
+  条件: (T : X -> X) (F : ι -> 集合 X)
   证明: iSup_le fun i => coverEntropyInf_monotone T (subset_iUnion F i)
 
 Depends on / 依赖: coverEntropyInf_monotone, iSup_le, subset_iUnion
@@ -582,7 +582,7 @@ lemma coverEntropy_iUnion_le
 
 中文:
 引理 coverEntropy_iUnion_le
-  条件: (T : X -> X) (F : ι -> Set X)
+  条件: (T : X -> X) (F : ι -> 集合 X)
   证明: iSup_le fun i => coverEntropy_monotone T (subset_iUnion F i)
 
 Depends on / 依赖: coverEntropy_monotone, iSup_le, subset_iUnion
@@ -601,7 +601,7 @@ lemma coverEntropyInf_biUnion_le
 
 中文:
 引理 coverEntropyInf_biUnion_le
-  条件: (s : Set ι) (T : X -> X) (F : ι -> Set X)
+  条件: (s : 集合 ι) (T : X -> X) (F : ι -> 集合 X)
   证明: iSup₂_le fun _ i_s => coverEntropyInf_monotone T (subset_biUnion_of_mem i_s)
 
 Depends on / 依赖: coverEntropyInf_monotone, subset_biUnion_of_mem
@@ -620,7 +620,7 @@ lemma coverEntropy_biUnion_le
 
 中文:
 引理 coverEntropy_biUnion_le
-  条件: (s : Set ι) (T : X -> X) (F : ι -> Set X)
+  条件: (s : 集合 ι) (T : X -> X) (F : ι -> 集合 X)
   证明: iSup₂_le fun _ i_s => coverEntropy_monotone T (subset_biUnion_of_mem i_s)
 
 Depends on / 依赖: coverEntropy_monotone, subset_biUnion_of_mem
@@ -673,7 +673,7 @@ lemma coverEntropy_iUnion_of_finite
 
 中文:
 引理 coverEntropy_iUnion_of_finite
-  条件: [Finite ι] {T : X -> X} {F : ι -> Set X}
+  条件: [有限 ι] {T : X -> X} {F : ι -> 集合 X}
   证明: map_finite_iSup (coverEntropySupBotHom T) F
 
 Depends on / 依赖: coverEntropySupBotHom, map_finite_iSup
@@ -696,7 +696,7 @@ lemma coverEntropy_biUnion_finset
 
 中文:
 引理 coverEntropy_biUnion_finset
-  条件: {T : X -> X} {F : ι -> Set X} {s : Finset ι}
+  条件: {T : X -> X} {F : ι -> 集合 X} {s : 有限集 ι}
   证明: by
   have := map_finset_sup (coverEntropySupBotHom T) s F
   rw [s.sup_set_eq_biUnion]; rw [s.sup_eq_iSup]; rw [coverEntropySupBotHom]; rw [SupBotHom.coe_mk]; rw [SupHom.coe_mk] at this

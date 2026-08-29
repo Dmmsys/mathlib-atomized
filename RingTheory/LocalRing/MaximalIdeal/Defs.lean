@@ -37,7 +37,7 @@ definition maximalIdeal
 
 中文:
 定义 maximalIdeal
-  签名: : Ideal R where
+  签名: : 理想 R where
   定义体: nonunitsAddSubmonoid R
   smul_mem' _ _ := mul_mem_nonunits_right
 

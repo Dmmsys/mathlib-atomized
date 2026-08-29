@@ -45,7 +45,7 @@ definition digamma
 
 中文:
 定义 digamma
-  签名: : Complex -> Complex
+  签名: : 复形 -> 复形
   定义体: logDeriv Gamma
 
 Depends on / 依赖: logDeriv
@@ -145,7 +145,7 @@ theorem digamma_apply_add_one
 
 中文:
 定理 digamma_apply_add_one
-  条件: (s : Complex) (hs : 对任意 m : 自然数, s != - m)
+  条件: (s : 复形) (hs : 对任意 m : 自然数, s != - m)
   证明: by
   have hs0 : s != 0 := by simpa using hs 0
   rw [digamma_def]; rw [logDeriv_apply]; rw [logDeriv_apply]; rw [deriv_Gamma_add_one s hs0]; rw [Gamma_add_one s hs0]; rw [add_div]; rw [div_mul_cancel_right₀ (Gamma_ne_zero hs)]; rw [mul_div_mul_left _ _ hs0]; rw [add_comm]
@@ -167,7 +167,7 @@ theorem meromorphic_digamma
 
 中文:
 定理 meromorphic_digamma
-  结论: Meromorphic digamma
+  结论: 亚纯 digamma
   证明: Meromorphic.Gamma.logDeriv
 
 Depends on / 依赖: Meromorphic, Meromorphic.Gamma.logDeriv, logDeriv

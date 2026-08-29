@@ -142,7 +142,7 @@ lemma range_castAddHom
 
 中文:
 引理 range_castAddHom
-  条件: {A : 类型} [AddGroupWithOne A]
+  条件: {A : 类型} [加法带幺群 A]
   证明: by
   ext a
   simp_rw [AddMonoidHom.mem_range, Int.coe_castAddHom, AddSubgroup.mem_zmultiples_iff, zsmul_one]
@@ -195,7 +195,7 @@ theorem closure_eq_zmultiples
 中文:
 定理 closure_eq_zmultiples
   条件: (a b : 整数)
-  结论: closure {a, b} = zmultiples (a.gcd b : 整数)
+  结论: closure {a, b} = zmultiples (a.最大公约数 b : 整数)
   证明: by
   apply le_antisymm
   · grind [closure_le, mem_zmultiples_iff, SetLike.mem_coe, gcd_dvd_left, gcd_dvd_right]
@@ -221,7 +221,7 @@ theorem zmultiples_sup
 中文:
 定理 zmultiples_sup
   条件: (a b : 整数)
-  结论: zmultiples a ⊔ zmultiples b = zmultiples (a.gcd b : 整数)
+  结论: zmultiples a ⊔ zmultiples b = zmultiples (a.最大公约数 b : 整数)
   证明: by
   simp_rw [← closure_eq_zmultiples, zmultiples_eq_closure, ← closure_union, Set.singleton_union]
 
@@ -244,7 +244,7 @@ theorem zmultiples_inf
 中文:
 定理 zmultiples_inf
   条件: (a b : 整数)
-  结论: zmultiples a ⊓ zmultiples b = zmultiples (a.lcm b : 整数)
+  结论: zmultiples a ⊓ zmultiples b = zmultiples (a.最小公倍数 b : 整数)
   证明: by
   ext
   simp [mem_zmultiples_iff, coe_lcm_dvd_iff]

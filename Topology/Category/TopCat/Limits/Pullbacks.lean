@@ -370,7 +370,7 @@ theorem pullback_topology
 
 中文:
 定理 pullback_topology
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: by
   let homeo := homeoOfIso (pullbackIsoProdSubtype f g)
   refine homeo.isInducing.eq_induced.trans ?_
@@ -411,7 +411,7 @@ theorem range_pullback_to_prod
 
 中文:
 定理 range_pullback_to_prod
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: by
   ext x
   constructor
@@ -502,7 +502,7 @@ theorem isInducing_pullback_to_prod
 
 中文:
 定理 isInducing_pullback_to_prod
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: ⟨by simp [prod_topology, pullback_topology, induced_compose, ← coe_comp]⟩
 
 Depends on / 依赖: coe_comp, induced_compose, prod_topology, pullback_topology
@@ -521,7 +521,7 @@ theorem isEmbedding_pullback_to_prod
 
 中文:
 定理 isEmbedding_pullback_to_prod
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: ⟨isInducing_pullback_to_prod f g, (TopCat.mono_iff_injective _).mp inferInstance⟩
 
 Depends on / 依赖: TopCat, TopCat.mono_iff_injective, isInducing_pullback_to_prod, mono_iff_injective
@@ -548,7 +548,7 @@ theorem range_pullback_map
 
 中文:
 定理 range_pullback_map
-  结论: {W X Y Z S T : TopCat.{u}} (f₁ : W ⟶ S) (f₂ : X ⟶ S) (g₁ : Y ⟶ T)
+  结论: {W X Y Z S T : 顶元素范畴.{u}} (f₁ : W ⟶ S) (f₂ : X ⟶ S) (g₁ : Y ⟶ T)
   证明: by
   ext
   constructor
@@ -602,7 +602,7 @@ theorem pullback_fst_range
 
 中文:
 定理 pullback_fst_range
-  条件: {X Y S : TopCat.{u}} (f : X ⟶ S) (g : Y ⟶ S)
+  条件: {X Y S : 顶元素范畴.{u}} (f : X ⟶ S) (g : Y ⟶ S)
   证明: by
   ext x
   constructor
@@ -644,7 +644,7 @@ theorem pullback_snd_range
 
 中文:
 定理 pullback_snd_range
-  条件: {X Y S : TopCat.{u}} (f : X ⟶ S) (g : Y ⟶ S)
+  条件: {X Y S : 顶元素范畴.{u}} (f : X ⟶ S) (g : Y ⟶ S)
   证明: by
   ext y
   constructor
@@ -686,7 +686,7 @@ theorem pullback_map_isEmbedding
 
 中文:
 定理 pullback_map_isEmbedding
-  结论: {W X Y Z S T : TopCat.{u}} (f₁ : W ⟶ S) (f₂ : X ⟶ S)
+  结论: {W X Y Z S T : 顶元素范畴.{u}} (f₁ : W ⟶ S) (f₂ : X ⟶ S)
   证明: by
   refine .of_comp (ContinuousMap.continuous_toFun _)
     (show Continuous (prod.lift (pullback.fst g₁ g₂) (pullback.snd g₁ g₂)) from
@@ -730,7 +730,7 @@ theorem pullback_map_isOpenEmbedding
 
 中文:
 定理 pullback_map_isOpenEmbedding
-  结论: {W X Y Z S T : TopCat.{u}} (f₁ : W ⟶ S)
+  结论: {W X Y Z S T : 顶元素范畴.{u}} (f₁ : W ⟶ S)
   证明: by
   constructor
   · apply
@@ -774,7 +774,7 @@ lemma snd_isEmbedding_of_left
 
 中文:
 引理 snd_isEmbedding_of_left
-  条件: {X Y S : TopCat.{u}} {f : X ⟶ S} (H : IsEmbedding f) (g : Y ⟶ S)
+  条件: {X Y S : 顶元素范畴.{u}} {f : X ⟶ S} (H : 是嵌入 f) (g : Y ⟶ S)
   证明: by
   convert!
     (homeoOfIso (asIso (pullback.snd (𝟙 S) g))).isEmbedding.comp
@@ -808,7 +808,7 @@ theorem fst_isEmbedding_of_right
 
 中文:
 定理 fst_isEmbedding_of_right
-  结论: {X Y S : TopCat.{u}} (f : X ⟶ S) {g : Y ⟶ S}
+  结论: {X Y S : 顶元素范畴.{u}} (f : X ⟶ S) {g : Y ⟶ S}
   证明: by
   convert!
     (homeoOfIso (asIso (pullback.fst f (𝟙 S)))).isEmbedding.comp
@@ -839,7 +839,7 @@ theorem isEmbedding_of_pullback
 
 中文:
 定理 isEmbedding_of_pullback
-  结论: {X Y S : TopCat.{u}} {f : X ⟶ S} {g : Y ⟶ S} (H₁ : IsEmbedding f)
+  结论: {X Y S : 顶元素范畴.{u}} {f : X ⟶ S} {g : Y ⟶ S} (H₁ : 是嵌入 f)
   证明: by
   convert! H₂.comp (snd_isEmbedding_of_left H₁ g)
   rw [← coe_comp]; rw [← limit.w _ WalkingCospan.Hom.inr]
@@ -869,7 +869,7 @@ theorem snd_isOpenEmbedding_of_left
 
 中文:
 定理 snd_isOpenEmbedding_of_left
-  结论: {X Y S : TopCat.{u}} {f : X ⟶ S} (H : IsOpenEmbedding f)
+  结论: {X Y S : 顶元素范畴.{u}} {f : X ⟶ S} (H : 是开嵌入 f)
   证明: by
   convert!
     (homeoOfIso (asIso (pullback.snd (𝟙 S) g))).isOpenEmbedding.comp
@@ -903,7 +903,7 @@ theorem fst_isOpenEmbedding_of_right
 
 中文:
 定理 fst_isOpenEmbedding_of_right
-  结论: {X Y S : TopCat.{u}} (f : X ⟶ S) {g : Y ⟶ S}
+  结论: {X Y S : 顶元素范畴.{u}} (f : X ⟶ S) {g : Y ⟶ S}
   证明: by
   convert!
     (homeoOfIso (asIso (pullback.fst f (𝟙 S)))).isOpenEmbedding.comp
@@ -934,7 +934,7 @@ theorem isOpenEmbedding_of_pullback
 
 中文:
 定理 isOpenEmbedding_of_pullback
-  结论: {X Y S : TopCat.{u}} {f : X ⟶ S} {g : Y ⟶ S}
+  结论: {X Y S : 顶元素范畴.{u}} {f : X ⟶ S} {g : Y ⟶ S}
   证明: by
   convert! H₂.comp (snd_isOpenEmbedding_of_left H₁ g)
   rw [← coe_comp]; rw [← limit.w _ WalkingCospan.Hom.inr]
@@ -967,7 +967,7 @@ theorem fst_iso_of_right_embedding_range_subset
 
 中文:
 定理 fst_iso_of_right_embedding_range_subset
-  结论: {X Y S : TopCat.{u}} (f : X ⟶ S) {g : Y ⟶ S}
+  结论: {X Y S : 顶元素范畴.{u}} (f : X ⟶ S) {g : Y ⟶ S}
   证明: by
   let esto : (pullback f g : TopCat) ≃ₜ X :=
     (fst_isEmbedding_of_right f hg).toHomeomorph.trans
@@ -1010,7 +1010,7 @@ theorem snd_iso_of_left_embedding_range_subset
 
 中文:
 定理 snd_iso_of_left_embedding_range_subset
-  结论: {X Y S : TopCat.{u}} {f : X ⟶ S} (hf : IsEmbedding f)
+  结论: {X Y S : 顶元素范畴.{u}} {f : X ⟶ S} (hf : 是嵌入 f)
   证明: by
   let esto : (pullback f g : TopCat) ≃ₜ Y :=
     (snd_isEmbedding_of_left hf g).toHomeomorph.trans
@@ -1052,7 +1052,7 @@ theorem pullback_snd_image_fst_preimage
 
 中文:
 定理 pullback_snd_image_fst_preimage
-  条件: (f : X ⟶ Z) (g : Y ⟶ Z) (U : Set X)
+  条件: (f : X ⟶ Z) (g : Y ⟶ Z) (U : 集合 X)
   证明: by
   ext x
   constructor
@@ -1102,7 +1102,7 @@ theorem pullback_fst_image_snd_preimage
 
 中文:
 定理 pullback_fst_image_snd_preimage
-  条件: (f : X ⟶ Z) (g : Y ⟶ Z) (U : Set Y)
+  条件: (f : X ⟶ Z) (g : Y ⟶ Z) (U : 集合 Y)
   证明: by
   ext x
   constructor
@@ -1160,7 +1160,7 @@ lemma isOpen_iff_of_isColimit_cofork
 
 中文:
 引理 isOpen_iff_of_isColimit_cofork
-  条件: (c : Cofork f g) (hc : IsColimit c) (U : Set c.pt)
+  条件: (c : 余叉 f g) (hc : 是余极限 c) (U : 集合 c.pt)
   证明: by
   rw [isOpen_iff_of_isColimit _ hc]
   constructor
@@ -1198,7 +1198,7 @@ lemma isQuotientMap_of_isColimit_cofork
 
 中文:
 引理 isQuotientMap_of_isColimit_cofork
-  条件: (c : Cofork f g) (hc : IsColimit c)
+  条件: (c : 余叉 f g) (hc : 是余极限 c)
   证明: by
   rw [isQuotientMap_iff]
   refine ⟨.of_isOpen_preimage_iff_isOpen fun s => ?_, ?_⟩
@@ -1224,7 +1224,7 @@ theorem coequalizer_isOpen_iff
 
 中文:
 定理 coequalizer_isOpen_iff
-  条件: (U : Set ((coequalizer f g :) : 类型u))
+  条件: (U : 集合 ((coequalizer f g :) : 类型u))
   证明: isOpen_iff_of_isColimit_cofork _ (coequalizerIsCoequalizer f g) _
 
 Depends on / 依赖: coequalizerIsCoequalizer, isOpen_iff_of_isColimit_cofork

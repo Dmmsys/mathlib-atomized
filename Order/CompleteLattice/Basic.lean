@@ -52,7 +52,7 @@ lemma iSup_ulift
 
 中文:
 引理 iSup_ulift
-  条件: {ι : 类型} [SupSet α] (f : ULift ι -> α)
+  条件: {ι : 类型} [上确界集 α] (f : 类型层提升 ι -> α)
   证明: by simp only [iSup]; congr with x; simp
 -/
 @[to_dual (attr := simp)] lemma iSup_ulift {ι : Type*} [SupSet α] (f : ULift ι -> α) :
@@ -124,7 +124,7 @@ theorem sInf_le_sSup
 
 中文:
 定理 sInf_le_sSup
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: sInf s <= sSup s
   证明: isGLB_le_isLUB (isGLB_sInf s) (isLUB_sSup s) hs
 
@@ -146,7 +146,7 @@ theorem sInf_le_sSup_of_nonempty_inter
 
 中文:
 定理 sInf_le_sSup_of_nonempty_inter
-  条件: (h : (s inter t).Nonempty)
+  条件: (h : (s inter t).非空)
   结论: sInf s <= sSup t
   证明: isGLB_le_isLUB_of_nonempty_inter h (isGLB_sInf s) (isLUB_sSup t)
 
@@ -171,7 +171,7 @@ theorem sSup_union
 
 中文:
 定理 sSup_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: sSup (s union t) = sSup s ⊔ sSup t
   证明: ((isLUB_sSup s).union (isLUB_sSup t)).sSup_eq
 
@@ -196,7 +196,7 @@ theorem sSup_inter_le
 
 中文:
 定理 sSup_inter_le
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: sSup (s inter t) <= sSup s ⊓ sSup t
   证明: sSup_le fun _ hb => le_inf (le_sSup hb.1) (le_sSup hb.2)
 
@@ -264,7 +264,7 @@ theorem sSup_insert
 
 中文:
 定理 sSup_insert
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: sSup (insert a s) = a ⊔ sSup s
   证明: ((isLUB_sSup s).insert a).sSup_eq
 
@@ -317,7 +317,7 @@ sSup_le_sSup_of_subset_insert_bot subset_insert_sdiff_singleton _ _
 
 中文:
 定理 sSup_sdiff_singleton_bot
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sSup (s \ {⊥}) = sSup s
   证明: (sSup_le_sSup sdiff_subset).antisymm
 sSup_le_sSup_of_subset_insert_bot subset_insert_sdiff_singleton _ _
@@ -400,7 +400,7 @@ lemma sSup_eq_bot'
 
 中文:
 引理 sSup_eq_bot'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sSup s = ⊥ ↔ s = ∅ ∨ s = {⊥}
   证明: by
   rw [sSup_eq_bot]; rw [← subset_singleton_iff_eq]; rw [subset_singleton_iff]
@@ -426,7 +426,7 @@ theorem eq_singleton_bot_of_sSup_eq_bot_of_nonempty
 
 中文:
 定理 eq_singleton_bot_of_sSup_eq_bot_of_nonempty
-  结论: {s : Set α} (h_sup : sSup s = ⊥)
+  结论: {s : 集合 α} (h_sup : sSup s = ⊥)
   证明: by
   rw [Set.eq_singleton_iff_nonempty_unique_mem]
   rw [sSup_eq_bot] at h_sup
@@ -460,7 +460,7 @@ theorem sSup_eq_of_forall_le_of_forall_lt_exists_gt
     ((le_sSup ha).trans_lt ha').false
 
 中文:
-定理 sSup_eq_of_forall_le_of_forall_lt_exists_gt
+定理 sSup_eq_of_对任意_le_of_对任意_lt_存在_gt
   结论: (h₁ : 对任意 a in s, a <= b)
   证明: (sSup_le h₁).eq_of_not_lt fun h =>
     let ⟨_, ha, ha'⟩ := h₂ _ h
@@ -518,7 +518,7 @@ theorem sSup_eq_iSup'
 
 中文:
 定理 sSup_eq_iSup'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sSup s = ⨆ a : s, (a : α)
   证明: by rw [iSup, Subtype.range_coe]
 
@@ -625,8 +625,8 @@ theorem Function.Surjective.iSup_comp
 @[to_dual]
 
 中文:
-定理 Function.Surjective.iSup_comp
-  条件: {f : ι -> ι'} (hf : Surjective f) (g : ι' -> α)
+定理 函数.满射.iSup_comp
+  条件: {f : ι -> ι'} (hf : 满射 f) (g : ι' -> α)
   证明: by
   simp only [iSup.eq_1]
   congr
@@ -655,7 +655,7 @@ theorem Equiv.iSup_comp
 @[to_dual]
 
 中文:
-定理 Equiv.iSup_comp
+定理 等价.iSup_comp
   条件: {g : ι' -> α} (e : ι ≃ ι')
   结论: ⨆ x, g (e x) = ⨆ y, g y
   证明: e.surjective.iSup_comp _
@@ -681,8 +681,8 @@ theorem Function.Surjective.iSup_congr
 @[to_dual]
 
 中文:
-定理 Function.Surjective.iSup_congr
-  结论: {g : ι' -> α} (h : ι -> ι') (h1 : Surjective h)
+定理 函数.满射.iSup_congr
+  结论: {g : ι' -> α} (h : ι -> ι') (h1 : 满射 h)
   证明: by
   convert! h1.iSup_comp g
   exact (h2 _).symm
@@ -706,7 +706,7 @@ theorem Equiv.iSup_congr
 @[to_dual (attr := congr)]
 
 中文:
-定理 Equiv.iSup_congr
+定理 等价.iSup_congr
   条件: {g : ι' -> α} (e : ι ≃ ι') (h : 对任意 x, g (e x) = f x)
   证明: e.surjective.iSup_congr _ h
 
@@ -762,8 +762,8 @@ theorem iSup_plift_up
 
 中文:
 定理 iSup_plift_up
-  条件: (f : PLift ι -> α)
-  结论: ⨆ i, f (PLift.up i) = ⨆ i, f i
+  条件: (f : 命题层提升 ι -> α)
+  结论: ⨆ i, f (命题层提升.up i) = ⨆ i, f i
   证明: (PLift.up_surjective.iSup_congr _) fun _ => rfl
 
 @[to_dual]
@@ -788,7 +788,7 @@ theorem iSup_plift_down
 中文:
 定理 iSup_plift_down
   条件: (f : ι -> α)
-  结论: ⨆ i, f (PLift.down i) = ⨆ i, f i
+  结论: ⨆ i, f (命题层提升.down i) = ⨆ i, f i
   证明: (PLift.down_surjective.iSup_congr _) fun _ => rfl
 
 @[to_dual]
@@ -838,7 +838,7 @@ theorem sSup_image'
 
 中文:
 定理 sSup_image'
-  条件: {s : Set β} {f : β -> α}
+  条件: {s : 集合 β} {f : β -> α}
   结论: sSup (f '' s) = ⨆ a : s, f a
   证明: by
   rw [iSup]; rw [image_eq_range]
@@ -888,7 +888,7 @@ lemma iInf_le_iSup
 
 中文:
 引理 iInf_le_iSup
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: ⨅ i, f i <= ⨆ i, f i
   证明: (iInf_le _ (Classical.arbitrary _)).trans le_iSup _ (Classical.arbitrary _)
 
@@ -1085,7 +1085,7 @@ theorem iSup₂_le_iSup
 
 中文:
 定理 iSup₂_le_iSup
-  条件: (κ : ι -> Sort*) (f : ι -> α)
+  条件: (κ : ι -> 类型层*) (f : ι -> α)
   结论: ⨆ (i) (_ : κ i), f i <= ⨆ i, f i
   证明: iSup₂_le fun i _ => le_iSup f i
 
@@ -1336,7 +1336,7 @@ theorem sSup_eq_iSup
 
 中文:
 定理 sSup_eq_iSup
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sSup s = ⨆ a in s, a
   证明: le_antisymm (sSup_le le_iSup₂) (iSup₂_le fun _ => le_sSup)
 
@@ -1363,7 +1363,7 @@ lemma sSup_lowerBounds_eq_sInf
 
 中文:
 引理 sSup_lowerBounds_eq_sInf
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sSup (lowerBounds s) = sInf s
   证明: (isLUB_sSup _).unique (isGLB_sInf _).isLUB
 
@@ -1390,8 +1390,8 @@ theorem Monotone.le_map_iSup
 @[to_dual map_iSup_le]
 
 中文:
-定理 Monotone.le_map_iSup
-  条件: [CompleteLattice β] {f : α -> β} (hf : Monotone f)
+定理 递增.le_map_iSup
+  条件: [完备格 β] {f : α -> β} (hf : 递增 f)
   证明: iSup_le fun _ => hf le_iSup _ _
 
 @[to_dual map_iSup_le]
@@ -1414,8 +1414,8 @@ theorem Antitone.le_map_iInf
 @[to_dual map_iInf₂_le]
 
 中文:
-定理 Antitone.le_map_iInf
-  条件: [CompleteLattice β] {f : α -> β} (hf : Antitone f)
+定理 递减.le_map_iInf
+  条件: [完备格 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.le_map_iSup
 
 @[to_dual map_iInf₂_le]
@@ -1438,8 +1438,8 @@ theorem Monotone.le_map_iSup₂
 @[to_dual map_iSup₂_le]
 
 中文:
-定理 Monotone.le_map_iSup₂
-  条件: [CompleteLattice β] {f : α -> β} (hf : Monotone f) (s : 对任意 i, κ i -> α)
+定理 递增.le_map_iSup₂
+  条件: [完备格 β] {f : α -> β} (hf : 递增 f) (s : 对任意 i, κ i -> α)
   证明: iSup₂_le fun _ _ => hf le_iSup₂ _ _
 
 @[to_dual map_iSup₂_le]
@@ -1460,8 +1460,8 @@ theorem Antitone.le_map_iInf₂
 @[to_dual map_sInf_le]
 
 中文:
-定理 Antitone.le_map_iInf₂
-  条件: [CompleteLattice β] {f : α -> β} (hf : Antitone f) (s : 对任意 i, κ i -> α)
+定理 递减.le_map_iInf₂
+  条件: [完备格 β] {f : α -> β} (hf : 递减 f) (s : 对任意 i, κ i -> α)
   证明: hf.dual_left.le_map_iSup₂ _
 
 @[to_dual map_sInf_le]
@@ -1484,8 +1484,8 @@ theorem Monotone.le_map_sSup
 @[to_dual map_sSup_le]
 
 中文:
-定理 Monotone.le_map_sSup
-  条件: [CompleteLattice β] {s : Set α} {f : α -> β} (hf : Monotone f)
+定理 递增.le_map_sSup
+  条件: [完备格 β] {s : 集合 α} {f : α -> β} (hf : 递增 f)
   证明: by rw [sSup_eq_iSup]; exact hf.le_map_iSup₂ _
 
 @[to_dual map_sSup_le]
@@ -1507,8 +1507,8 @@ theorem Antitone.le_map_sInf
 @[to_dual]
 
 中文:
-定理 Antitone.le_map_sInf
-  条件: [CompleteLattice β] {s : Set α} {f : α -> β} (hf : Antitone f)
+定理 递减.le_map_sInf
+  条件: [完备格 β] {s : 集合 α} {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.le_map_sSup
 
 @[to_dual]
@@ -1533,7 +1533,7 @@ theorem OrderIso.map_iSup
 
 中文:
 定理 OrderIso.map_iSup
-  条件: [CompleteLattice β] (f : α ≃o β) (x : ι -> α)
+  条件: [完备格 β] (f : α ≃o β) (x : ι -> α)
   证明: eq_of_forall_ge_iff f.surjective.forall.2
   fun x => by simp only [f.le_iff_le, iSup_le_iff]
 
@@ -1560,7 +1560,7 @@ lemma OrderIso.map_iSup₂
 
 中文:
 引理 OrderIso.map_iSup₂
-  条件: [CompleteLattice β] (f : α ≃o β) (x : 对任意 i, κ i -> α)
+  条件: [完备格 β] (f : α ≃o β) (x : 对任意 i, κ i -> α)
   证明: eq_of_forall_ge_iff f.surjective.forall.2
   fun x => by simp only [f.le_iff_le, iSup_le_iff]
 
@@ -1587,7 +1587,7 @@ theorem OrderIso.map_sSup
 
 中文:
 定理 OrderIso.map_sSup
-  条件: [CompleteLattice β] (f : α ≃o β) (s : Set α)
+  条件: [完备格 β] (f : α ≃o β) (s : 集合 α)
   证明: by
   simp only [sSup_eq_iSup, OrderIso.map_iSup]
 
@@ -1613,7 +1613,7 @@ theorem iSup_comp_le
 
 中文:
 定理 iSup_comp_le
-  条件: {ι' : Sort*} (f : ι' -> α) (g : ι -> ι')
+  条件: {ι' : 类型层*} (f : ι' -> α) (g : ι -> ι')
   结论: ⨆ x, f (g x) <= ⨆ y, f y
   证明: iSup_mono' fun _ => ⟨_, le_rfl⟩
 
@@ -1636,8 +1636,8 @@ theorem Monotone.iSup_comp_eq
 @[to_dual le_iInf_const]
 
 中文:
-定理 Monotone.iSup_comp_eq
-  结论: [Preorder β] {f : β -> α} (hf : Monotone f) {s : ι -> β}
+定理 递增.iSup_comp_eq
+  结论: [预序 β] {f : β -> α} (hf : 递增 f) {s : ι -> β}
   证明: le_antisymm (iSup_comp_le _ _) (iSup_mono' fun x => (hs x).imp fun _ hi => hf hi)
 
 @[to_dual le_iInf_const]
@@ -1682,7 +1682,7 @@ theorem iSup_const
 
 中文:
 定理 iSup_const
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: ⨆ _ : ι, a = a
   证明: by rw [iSup, range_const, sSup_singleton]
 
@@ -1707,7 +1707,7 @@ lemma iSup_unique
 
 中文:
 引理 iSup_unique
-  条件: [Unique ι] (f : ι -> α)
+  条件: [唯一 ι] (f : ι -> α)
   结论: ⨆ i, f i = f default
   证明: by
   simp only [congr_arg f (Unique.eq_default _), iSup_const]
@@ -1879,7 +1879,7 @@ exists_range_iff.mpr h₂ w hw
 @[to_dual]
 
 中文:
-定理 iSup_eq_of_forall_le_of_forall_lt_exists_gt
+定理 iSup_eq_of_对任意_le_of_对任意_lt_存在_gt
   结论: {f : ι -> α} (h₁ : 对任意 i, f i <= b)
   证明: sSup_eq_of_forall_le_of_forall_lt_exists_gt (forall_mem_range.mpr h₁) fun w hw =>
 exists_range_iff.mpr h₂ w hw
@@ -1906,7 +1906,7 @@ theorem iSup_eq_dif
 
 中文:
 定理 iSup_eq_dif
-  条件: {p : 命题} [Decidable p] (a : p -> α)
+  条件: {p : 命题} [可判定 p] (a : p -> α)
   证明: by by_cases h : p <;> simp [h]
 
 @[to_dual]
@@ -1928,7 +1928,7 @@ theorem iSup_eq_if
 
 中文:
 定理 iSup_eq_if
-  条件: {p : 命题} [Decidable p] (a : α)
+  条件: {p : 命题} [可判定 p] (a : α)
   结论: ⨆ _ : p, a = if p then a else ⊥
   证明: iSup_eq_dif fun _ => a
 
@@ -1981,7 +1981,7 @@ theorem iSup₂_comm
 
 中文:
 定理 iSup₂_comm
-  结论: {ι₁ ι₂ : Sort*} {κ₁ : ι₁ -> Sort*} {κ₂ : ι₂ -> Sort*}
+  结论: {ι₁ ι₂ : 类型层*} {κ₁ : ι₁ -> 类型层*} {κ₂ : ι₂ -> 类型层*}
   证明: by
   simp only [@iSup_comm _ (κ₁ _), @iSup_comm _ ι₁]
 
@@ -2059,7 +2059,7 @@ theorem iSup_subtype
 
 中文:
 定理 iSup_subtype
-  条件: {p : ι -> 命题} {f : Subtype p -> α}
+  条件: {p : ι -> 命题} {f : 子类型 p -> α}
   结论: iSup f = ⨆ (i) (h : p i), f ⟨i, h⟩
   证明: le_antisymm (iSup_le fun ⟨i, h⟩ => @le_iSup₂ _ _ p _ (fun i h => f ⟨i, h⟩) i h)
     (iSup₂_le fun _ _ => le_iSup _ _)
@@ -2110,7 +2110,7 @@ theorem iSup_subtype''
 
 中文:
 定理 iSup_subtype''
-  条件: {ι} (s : Set ι) (f : ι -> α)
+  条件: {ι} (s : 集合 ι) (f : ι -> α)
   结论: ⨆ i : s, f i = ⨆ (t : ι) (_ : t in s), f t
   证明: iSup_subtype
 
@@ -2137,7 +2137,7 @@ theorem biSup_const
 
 中文:
 定理 biSup_const
-  条件: {a : α} {s : Set β} (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 β} (hs : s.非空)
   结论: ⨆ i in s, a = a
   证明: by
   have : Nonempty s := Set.nonempty_coe_sort.mpr hs
@@ -2190,8 +2190,8 @@ lemma Equiv.biSup_comp
 @[to_dual biInf_le]
 
 中文:
-引理 Equiv.biSup_comp
-  条件: {ι ι' : 类型} {g : ι' -> α} (e : ι ≃ ι') (s : Set ι')
+引理 等价.biSup_comp
+  条件: {ι ι' : 类型} {g : ι' -> α} (e : ι ≃ ι') (s : 集合 ι')
   证明: by
   simpa only [iSup_subtype'] using! (image e.symm s).symm.iSup_comp (g := g ∘ (↑))
 
@@ -2215,7 +2215,7 @@ lemma le_biSup
 
 中文:
 引理 le_biSup
-  条件: {ι : 类型} {s : Set ι} (f : ι -> α) {i : ι} (hi : i in s)
+  条件: {ι : 类型} {s : 集合 ι} (f : ι -> α) {i : ι} (hi : i in s)
   结论: f i <= ⨆ i in s, f i
   证明: le_iSup₂_of_le i hi le_rfl
 
@@ -2236,7 +2236,7 @@ lemma biInf_le_biSup
 
 中文:
 引理 biInf_le_biSup
-  条件: {ι : 类型} {s : Set ι} (hs : s.Nonempty) {f : ι -> α}
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.非空) {f : ι -> α}
   证明: (biInf_le _ hs.choose_spec).trans le_biSup _ hs.choose_spec
 
 @[to_dual]
@@ -2262,7 +2262,7 @@ theorem iSup_sup
 
 中文:
 定理 iSup_sup
-  条件: [Nonempty ι] {f : ι -> α} {a : α}
+  条件: [非空 ι] {f : ι -> α} {a : α}
   结论: (⨆ x, f x) ⊔ a = ⨆ x, f x ⊔ a
   证明: by
   rw [iSup_sup_eq]; rw [iSup_const]
@@ -2289,7 +2289,7 @@ theorem sup_iSup
 
 中文:
 定理 sup_iSup
-  条件: [Nonempty ι] {f : ι -> α} {a : α}
+  条件: [非空 ι] {f : ι -> α} {a : α}
   结论: (a ⊔ ⨆ x, f x) = ⨆ x, a ⊔ f x
   证明: by
   rw [iSup_sup_eq]; rw [iSup_const]
@@ -2380,7 +2380,7 @@ lemma biSup_lt_eq_iSup
 
 中文:
 引理 biSup_lt_eq_iSup
-  条件: {ι : 类型} [LT ι] [NoMaxOrder ι] {f : ι -> α}
+  条件: {ι : 类型} [LT ι] [NoMax序 ι] {f : ι -> α}
   证明: by
   apply le_antisymm
   · exact iSup_le fun _ => iSup₂_le fun _ _ => le_iSup _ _
@@ -2416,7 +2416,7 @@ lemma biSup_le_eq_iSup
 
 中文:
 引理 biSup_le_eq_iSup
-  条件: {ι : 类型} [Preorder ι] {f : ι -> α}
+  条件: {ι : 类型} [预序 ι] {f : ι -> α}
   证明: by
   apply le_antisymm
   · exact iSup_le fun _ => iSup₂_le fun _ _ => le_iSup _ _
@@ -2450,7 +2450,7 @@ lemma biSup_gt_eq_iSup
 
 中文:
 引理 biSup_gt_eq_iSup
-  条件: {ι : 类型} [LT ι] [NoMinOrder ι] {f : ι -> α}
+  条件: {ι : 类型} [LT ι] [NoMin序 ι] {f : ι -> α}
   证明: by
   apply le_antisymm
   · exact iSup_le fun _ => iSup₂_le fun _ _ => le_iSup _ _
@@ -2487,7 +2487,7 @@ lemma biSup_ge_eq_iSup
 
 中文:
 引理 biSup_ge_eq_iSup
-  条件: {ι : 类型} [Preorder ι] {f : ι -> α}
+  条件: {ι : 类型} [预序 ι] {f : ι -> α}
   结论: ⨆ (i) (j >= i), f j = ⨆ i, f i
   证明: by
   apply le_antisymm
@@ -2517,7 +2517,7 @@ lemma biSup_le_eq_of_monotone
 
 中文:
 引理 biSup_le_eq_of_monotone
-  条件: [Preorder β] {f : β -> α} (hf : Monotone f) (b : β)
+  条件: [预序 β] {f : β -> α} (hf : 递增 f) (b : β)
   证明: le_antisymm (iSup₂_le_iff.2 (fun _ hji => hf hji))
     (le_iSup_of_le b (ge_of_eq (iSup_pos le_rfl)))
 
@@ -2542,7 +2542,7 @@ lemma biInf_le_eq_of_antitone
 
 中文:
 引理 biInf_le_eq_of_antitone
-  条件: [Preorder β] {f : β -> α} (hf : Antitone f) (b : β)
+  条件: [预序 β] {f : β -> α} (hf : 递减 f) (b : β)
   证明: le_antisymm (iInf₂_le_of_le b le_rfl le_rfl)
     (le_iInf₂ fun _ hji => hf hji)
 
@@ -2569,7 +2569,7 @@ theorem iSup_false
 
 中文:
 定理 iSup_false
-  条件: {s : False -> α}
+  条件: {s : 假 -> α}
   结论: iSup s = ⊥
   证明: by simp
 
@@ -2591,7 +2591,7 @@ theorem iSup_true
 
 中文:
 定理 iSup_true
-  条件: {s : True -> α}
+  条件: {s : 真 -> α}
   结论: iSup s = s trivial
   证明: iSup_pos trivial
 
@@ -2616,8 +2616,8 @@ theorem iSup_exists
 @[to_dual]
 
 中文:
-定理 iSup_exists
-  条件: {p : ι -> 命题} {f : Exists p -> α}
+定理 iSup_存在
+  条件: {p : ι -> 命题} {f : 存在 p -> α}
   结论: ⨆ x, f x = ⨆ (i) (h), f ⟨i, h⟩
   证明: le_antisymm (iSup_le fun ⟨i, h⟩ => @le_iSup₂ _ _ _ _ (fun _ _ => _) i h)
     (iSup₂_le fun _ _ => le_iSup _ _)
@@ -2816,7 +2816,7 @@ theorem sSup_image
 
 中文:
 定理 sSup_image
-  条件: {s : Set β} {f : β -> α}
+  条件: {s : 集合 β} {f : β -> α}
   结论: sSup (f '' s) = ⨆ a in s, f a
   证明: by
   rw [← iSup_subtype'']; rw [sSup_image']
@@ -2840,7 +2840,7 @@ theorem OrderIso.map_sSup_eq_sSup_symm_preimage
 
 中文:
 定理 OrderIso.map_sSup_eq_sSup_symm_preimage
-  条件: [CompleteLattice β] (f : α ≃o β) (s : Set α)
+  条件: [完备格 β] (f : α ≃o β) (s : 集合 α)
   证明: by
   rw [map_sSup]; rw [← sSup_image]; rw [f.image_eq_preimage_symm]
 
@@ -2869,7 +2869,7 @@ theorem iSup_emptyset
 中文:
 定理 iSup_emptyset
   条件: {f : β -> α}
-  结论: ⨆ x in (∅ : Set β), f x = ⊥
+  结论: ⨆ x in (∅ : 集合 β), f x = ⊥
   证明: by simp
 
 @[to_dual]
@@ -2891,7 +2891,7 @@ theorem iSup_univ
 中文:
 定理 iSup_univ
   条件: {f : β -> α}
-  结论: ⨆ x in (univ : Set β), f x = ⨆ x, f x
+  结论: ⨆ x in (univ : 集合 β), f x = ⨆ x, f x
   证明: by simp
 
 @[to_dual]
@@ -2912,7 +2912,7 @@ theorem iSup_union
 
 中文:
 定理 iSup_union
-  条件: {f : β -> α} {s t : Set β}
+  条件: {f : β -> α} {s t : 集合 β}
   证明: by
   simp_rw [mem_union, iSup_or, iSup_sup_eq]
 
@@ -2994,7 +2994,7 @@ theorem iSup_le_iSup_of_subset
 
 中文:
 定理 iSup_le_iSup_of_subset
-  条件: {f : β -> α} {s t : Set β}
+  条件: {f : β -> α} {s t : 集合 β}
   结论: s subseteq t -> ⨆ x in s, f x <= ⨆ x in t, f x
   证明: biSup_mono
 
@@ -3019,7 +3019,7 @@ theorem iSup_insert
 
 中文:
 定理 iSup_insert
-  条件: {f : β -> α} {s : Set β} {b : β}
+  条件: {f : β -> α} {s : 集合 β} {b : β}
   证明: by
   simp [iSup_or, iSup_sup_eq]
 
@@ -3046,7 +3046,7 @@ theorem iSup_singleton
 中文:
 定理 iSup_singleton
   条件: {f : β -> α} {b : β}
-  结论: ⨆ x in (singleton b : Set β), f x = f b
+  结论: ⨆ x in (singleton b : 集合 β), f x = f b
   证明: by simp
 
 @[to_dual]
@@ -3069,7 +3069,7 @@ theorem iSup_pair
 中文:
 定理 iSup_pair
   条件: {f : β -> α} {a b : β}
-  结论: ⨆ x in ({a, b} : Set β), f x = f a ⊔ f b
+  结论: ⨆ x in ({a, b} : 集合 β), f x = f a ⊔ f b
   证明: by
   rw [iSup_insert]; rw [iSup_singleton]
 
@@ -3094,7 +3094,7 @@ theorem iSup_image
 
 中文:
 定理 iSup_image
-  条件: {γ} {f : β -> γ} {g : γ -> α} {t : Set β}
+  条件: {γ} {f : β -> γ} {g : γ -> α} {t : 集合 β}
   证明: by
   rw [← sSup_image]; rw [← sSup_image]; rw [← image_comp]; rw [comp_def]
 
@@ -3121,7 +3121,7 @@ theorem iSup_extend_bot
 
 中文:
 定理 iSup_extend_bot
-  条件: {e : ι -> β} (he : Injective e) (f : ι -> α)
+  条件: {e : ι -> β} (he : 单射 e) (f : ι -> α)
   证明: by
   rw [iSup_split _ fun j => exists i]; rw [e i = j]
   simp +contextual [he.extend_apply, extend_apply', @iSup_comm _ β ι]
@@ -3148,8 +3148,8 @@ theorem Set.BijOn.iSup_comp
 @[to_dual]
 
 中文:
-定理 Set.BijOn.iSup_comp
-  结论: {s : Set β} {t : Set γ} {f : β -> γ} (g : γ -> α)
+定理 集合.双射限制.iSup_comp
+  结论: {s : 集合 β} {t : 集合 γ} {f : β -> γ} (g : γ -> α)
   证明: by
   rw [← hf.image_eq]; rw [iSup_image]
 
@@ -3172,8 +3172,8 @@ theorem Set.BijOn.iSup_congr
   simpa only [h2] using h1.iSup_comp g
 
 中文:
-定理 Set.BijOn.iSup_congr
-  结论: {s : Set β} {t : Set γ} (f : β -> α) (g : γ -> α) {h : β -> γ}
+定理 集合.双射限制.iSup_congr
+  结论: {s : 集合 β} {t : 集合 γ} (f : β -> α) (g : γ -> α) {h : β -> γ}
   证明: by
   simpa only [h2] using h1.iSup_comp g
 
@@ -3268,8 +3268,8 @@ theorem iSup_of_empty'
 
 中文:
 定理 iSup_of_empty'
-  条件: {α ι} [SupSet α] [IsEmpty ι] (f : ι -> α)
-  结论: iSup f = sSup (∅ : Set α)
+  条件: {α ι} [上确界集 α] [是空 ι] (f : ι -> α)
+  结论: iSup f = sSup (∅ : 集合 α)
   证明: congr_arg sSup (range_eq_empty f)
 
 @[to_dual]
@@ -3293,7 +3293,7 @@ theorem iSup_of_empty
 
 中文:
 定理 iSup_of_empty
-  条件: [IsEmpty ι] (f : ι -> α)
+  条件: [是空 ι] (f : ι -> α)
   结论: iSup f = ⊥
   证明: (iSup_of_empty' f).trans sSup_empty
 
@@ -3320,7 +3320,7 @@ theorem isLUB_biSup
 
 中文:
 定理 isLUB_biSup
-  条件: {s : Set β} {f : β -> α}
+  条件: {s : 集合 β} {f : β -> α}
   结论: IsLUB (f '' s) (⨆ x in s, f x)
   证明: by
   simpa only [range_comp, Subtype.range_coe, iSup_subtype'] using!
@@ -3348,7 +3348,7 @@ theorem iSup_sigma
 
 中文:
 定理 iSup_sigma
-  条件: {p : β -> 类型} {f : Sigma p -> α}
+  条件: {p : β -> 类型} {f : 依赖和类型 p -> α}
   结论: ⨆ x, f x = ⨆ (i) (j), f ⟨i, j⟩
   证明: eq_of_forall_ge_iff fun c => by simp only [iSup_le_iff, Sigma.forall]
 
@@ -3395,7 +3395,7 @@ lemma iSup_psigma
 
 中文:
 引理 iSup_psigma
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : (Σ' i, κ i) -> α)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : (Σ' i, κ i) -> α)
   证明: eq_of_forall_ge_iff fun c => by simp only [iSup_le_iff, PSigma.forall]
 
 @[to_dual]
@@ -3419,7 +3419,7 @@ lemma iSup_psigma'
 
 中文:
 引理 iSup_psigma'
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : 对任意 i, κ i -> α)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : 对任意 i, κ i -> α)
   证明: (iSup_psigma fun x => f x.1 x.2).symm
 
 @[to_dual]
@@ -3494,7 +3494,7 @@ theorem biSup_prod
 
 中文:
 定理 biSup_prod
-  条件: {f : β × γ -> α} {s : Set β} {t : Set γ}
+  条件: {f : β × γ -> α} {s : 集合 β} {t : 集合 γ}
   证明: by
   simp_rw [iSup_prod, mem_prod, iSup_and]
   exact iSup_congr fun _ => iSup_comm
@@ -3521,7 +3521,7 @@ theorem biSup_prod'
 
 中文:
 定理 biSup_prod'
-  条件: {f : β -> γ -> α} {s : Set β} {t : Set γ}
+  条件: {f : β -> γ -> α} {s : 集合 β} {t : 集合 γ}
   证明: biSup_prod
 
 @[to_dual]
@@ -3546,7 +3546,7 @@ theorem iSup_image2
 
 中文:
 定理 iSup_image2
-  条件: {γ δ} (f : β -> γ -> δ) (s : Set β) (t : Set γ) (g : δ -> α)
+  条件: {γ δ} (f : β -> γ -> δ) (s : 集合 β) (t : 集合 γ) (g : δ -> α)
   证明: by
   rw [← image_prod]; rw [iSup_image]; rw [biSup_prod]
 
@@ -3573,7 +3573,7 @@ theorem iSup_sum
 中文:
 定理 iSup_sum
   条件: {f : β oplus γ -> α}
-  结论: ⨆ x, f x = (⨆ i, f (Sum.inl i)) ⊔ ⨆ j, f (Sum.inr j)
+  结论: ⨆ x, f x = (⨆ i, f (和.inl i)) ⊔ ⨆ j, f (和.inr j)
   证明: eq_of_forall_ge_iff fun c => by simp only [sup_le_iff, iSup_le_iff, Sum.forall]
 
 @[to_dual]
@@ -3595,8 +3595,8 @@ theorem iSup_option
 
 中文:
 定理 iSup_option
-  条件: (f : Option β -> α)
-  结论: ⨆ o, f o = f none ⊔ ⨆ b, f (Option.some b)
+  条件: (f : 选项类型 β -> α)
+  结论: ⨆ o, f o = f none ⊔ ⨆ b, f (选项类型.some b)
   证明: eq_of_forall_ge_iff fun c => by simp only [iSup_le_iff, sup_le_iff, Option.forall]
 
 Depends on / 依赖: Option.forall, eq_of_forall_ge_iff, iSup_le_iff, sup_le_iff
@@ -3619,7 +3619,7 @@ theorem iSup_option_elim
 中文:
 定理 iSup_option_elim
   条件: (a : α) (f : β -> α)
-  结论: ⨆ o : Option β, o.elim a f = a ⊔ ⨆ b, f b
+  结论: ⨆ o : 选项类型 β, o.elim a f = a ⊔ ⨆ b, f b
   证明: by
   simp [iSup_option]
 
@@ -3690,7 +3690,7 @@ theorem sSup_image2
 
 中文:
 定理 sSup_image2
-  条件: {f : β -> γ -> α} {s : Set β} {t : Set γ}
+  条件: {f : β -> γ -> α} {s : 集合 β} {t : 集合 γ}
   证明: by rw [← image_prod, sSup_image, biSup_prod]
 
 Depends on / 依赖: biSup_prod, image_prod, sSup_image
@@ -3745,8 +3745,8 @@ instance Prop.instCompleteLattice
   isGLB_sInf _ := ⟨fun a h p => p a h, fun _ h p _ hb => h hb p⟩
 
 中文:
-实例 Prop.instCompleteLattice
-  签名: : CompleteLattice 命题 where
+实例 命题.instCompleteLattice
+  签名: : 完备格 命题 where
   定义体: Prop.instBoundedOrder
   __ := Prop.instDistribLattice
   sSup s := exists a in s, a
@@ -3777,8 +3777,8 @@ instance Prop.instCompleteLinearOrder
 @[simp]
 
 中文:
-实例 Prop.instCompleteLinearOrder
-  签名: : CompleteLinearOrder 命题 where
+实例 命题.instCompleteLinearOrder
+  签名: : 完备线性序 命题 where
   定义体: Prop.instCompleteLattice
   __ := Prop.linearOrder
   __ := BooleanAlgebra.toBiheytingAlgebra
@@ -3806,7 +3806,7 @@ theorem sSup_Prop_eq
 
 中文:
 定理 sSup_Prop_eq
-  条件: {s : Set 命题}
+  条件: {s : 集合 命题}
   结论: sSup s = 存在 p in s, p
   证明: rfl
 
@@ -3829,7 +3829,7 @@ theorem sInf_Prop_eq
 
 中文:
 定理 sInf_Prop_eq
-  条件: {s : Set 命题}
+  条件: {s : 集合 命题}
   结论: sInf s = 对任意 p in s, p
   证明: rfl
 
@@ -3903,8 +3903,8 @@ instance Pi.supSet
 @[to_dual (attr := simp)]
 
 中文:
-实例 Pi.supSet
-  签名: {α : 类型} {β : α -> 类型} [对任意 i, SupSet (β i)]
+实例 依赖函数类型.supSet
+  签名: {α : 类型} {β : α -> 类型} [对任意 i, 上确界集 (β i)]
   定义体: ⟨fun s i => ⨆ f : s, (f : forall i, β i) i⟩
 
 @[to_dual (attr := simp)]
@@ -3925,7 +3925,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: {α : 类型} {β : α -> 类型} [对任意 i, SupSet (β i)] {s : Set (对任意 a, β a)} {a : α}
+  条件: {α : 类型} {β : α -> 类型} [对任意 i, 上确界集 (β i)] {s : 集合 (对任意 a, β a)} {a : α}
   证明: rfl
 
 @[to_dual]
@@ -3946,7 +3946,7 @@ theorem sSup_apply_eq_sSup_image
 
 中文:
 定理 sSup_apply_eq_sSup_image
-  结论: {α : 类型} {β : α -> 类型} [对任意 i, SupSet (β i)]
+  结论: {α : 类型} {β : α -> 类型} [对任意 i, 上确界集 (β i)]
   证明: by
   simp [sSup_apply, iSup, image_eq_range]
 
@@ -3970,8 +3970,8 @@ instance Pi.instCompleteLattice
 @[to_dual (attr := simp)]
 
 中文:
-实例 Pi.instCompleteLattice
-  签名: {α : 类型} {β : α -> 类型} [对任意 i, CompleteLattice (β i)]
+实例 依赖函数类型.instCompleteLattice
+  签名: {α : 类型} {β : α -> 类型} [对任意 i, 完备格 (β i)]
   定义体: instBoundedOrder
   isLUB_sSup _ := isLUB_pi.mpr fun _ => by rw [sSup_apply_eq_sSup_image]; exact isLUB_sSup _
   isGLB_sInf _ := isGLB_pi.mpr fun _ => by rw [sInf_apply_eq_sInf_image]; exact isGLB_sInf _
@@ -3999,7 +3999,7 @@ theorem iSup_apply
 
 中文:
 定理 iSup_apply
-  结论: {α : 类型} {β : α -> 类型} {ι : Sort*} [对任意 i, SupSet (β i)] {f : ι -> 对任意 a, β a}
+  结论: {α : 类型} {β : α -> 类型} {ι : 类型层*} [对任意 i, 上确界集 (β i)] {f : ι -> 对任意 a, β a}
   证明: by
   rw [iSup]; rw [sSup_apply]; rw [iSup]; rw [iSup]; rw [← image_eq_range (fun f : forall i]; rw [β i => f a) (range f)]; rw [←
     range_comp]; rfl
@@ -4022,7 +4022,7 @@ theorem unary_relation_sSup_iff
 
 中文:
 定理 unary_relation_sSup_iff
-  条件: {α : 类型} (s : Set (α -> 命题)) {a : α}
+  条件: {α : 类型} (s : 集合 (α -> 命题)) {a : α}
   证明: by
   simp
 -/
@@ -4041,7 +4041,7 @@ theorem unary_relation_sInf_iff
 
 中文:
 定理 unary_relation_sInf_iff
-  条件: {α : 类型} (s : Set (α -> 命题)) {a : α}
+  条件: {α : 类型} (s : 集合 (α -> 命题)) {a : α}
   证明: by
   simp
 -/
@@ -4060,7 +4060,7 @@ theorem binary_relation_sSup_iff
 
 中文:
 定理 binary_relation_sSup_iff
-  条件: {α β : 类型} (s : Set (α -> β -> 命题)) {a : α} {b : β}
+  条件: {α β : 类型} (s : 集合 (α -> β -> 命题)) {a : α} {b : β}
   证明: by
   simp
 -/
@@ -4079,7 +4079,7 @@ theorem binary_relation_sInf_iff
 
 中文:
 定理 binary_relation_sInf_iff
-  条件: {α β : 类型} (s : Set (α -> β -> 命题)) {a : α} {b : β}
+  条件: {α β : 类型} (s : 集合 (α -> β -> 命题)) {a : α} {b : β}
   证明: by
   simp
 -/
@@ -4104,9 +4104,9 @@ lemma Monotone.sSup
 @[to_dual]
 
 中文:
-引理 Monotone.sSup
-  条件: (hs : 对任意 f in s, Monotone f)
-  结论: Monotone (sSup s)
+引理 递增.sSup
+  条件: (hs : 对任意 f in s, 递增 f)
+  结论: 递增 (sSup s)
   证明: fun _ _ h => iSup_mono fun f => hs f f.2 h
 
 @[to_dual]
@@ -4127,9 +4127,9 @@ lemma Antitone.sSup
 @[to_dual]
 
 中文:
-引理 Antitone.sSup
-  条件: (hs : 对任意 f in s, Antitone f)
-  结论: Antitone (sSup s)
+引理 递减.sSup
+  条件: (hs : 对任意 f in s, 递减 f)
+  结论: 递减 (sSup s)
   证明: fun _ _ h => iSup_mono fun f => hs f f.2 h
 
 @[to_dual]
@@ -4150,9 +4150,9 @@ lemma Monotone.iSup
 @[to_dual]
 
 中文:
-引理 Monotone.iSup
-  条件: (hf : 对任意 i, Monotone (f i))
-  结论: Monotone (⨆ i, f i)
+引理 递增.iSup
+  条件: (hf : 对任意 i, 递增 (f i))
+  结论: 递增 (⨆ i, f i)
   证明: Monotone.sSup (by simpa)
 
 @[to_dual]
@@ -4171,9 +4171,9 @@ lemma Antitone.iSup
   proof: Antitone.sSup (by simpa)
 
 中文:
-引理 Antitone.iSup
-  条件: (hf : 对任意 i, Antitone (f i))
-  结论: Antitone (⨆ i, f i)
+引理 递减.iSup
+  条件: (hf : 对任意 i, 递减 (f i))
+  结论: 递减 (⨆ i, f i)
   证明: Antitone.sSup (by simpa)
 -/
 protected lemma Antitone.iSup (hf : forall i, Antitone (f i)) : Antitone (⨆ i, f i) :=
@@ -4196,7 +4196,7 @@ instance supSet
 
 中文:
 实例 supSet
-  签名: [SupSet α] [SupSet β]
+  签名: [上确界集 α] [上确界集 β]
   定义体: ⟨fun s => (sSup (Prod.fst '' s), sSup (Prod.snd '' s))⟩
 
 Depends on / 依赖: Prod.fst, Prod.snd
@@ -4220,8 +4220,8 @@ theorem fst_sSup
 
 中文:
 定理 fst_sSup
-  条件: [SupSet α] [SupSet β] (s : Set (α × β))
-  结论: (sSup s).fst = sSup (Prod.fst '' s)
+  条件: [上确界集 α] [上确界集 β] (s : 集合 (α × β))
+  结论: (sSup s).fst = sSup (积类型.fst '' s)
   证明: rfl
 
 @[to_dual]
@@ -4243,8 +4243,8 @@ theorem snd_sSup
 
 中文:
 定理 snd_sSup
-  条件: [SupSet α] [SupSet β] (s : Set (α × β))
-  结论: (sSup s).snd = sSup (Prod.snd '' s)
+  条件: [上确界集 α] [上确界集 β] (s : 集合 (α × β))
+  结论: (sSup s).snd = sSup (积类型.snd '' s)
   证明: rfl
 
 @[to_dual]
@@ -4267,8 +4267,8 @@ theorem swap_sSup
 
 中文:
 定理 swap_sSup
-  条件: [SupSet α] [SupSet β] (s : Set (α × β))
-  结论: (sSup s).swap = sSup (Prod.swap '' s)
+  条件: [上确界集 α] [上确界集 β] (s : 集合 (α × β))
+  结论: (sSup s).swap = sSup (积类型.swap '' s)
   证明: Prod.ext (congr_arg sSup <| image_comp Prod.fst swap s)
     (congr_arg sSup <| image_comp Prod.snd swap s)
 
@@ -4294,7 +4294,7 @@ theorem fst_iSup
 
 中文:
 定理 fst_iSup
-  条件: [SupSet α] [SupSet β] (f : ι -> α × β)
+  条件: [上确界集 α] [上确界集 β] (f : ι -> α × β)
   结论: (iSup f).fst = ⨆ i, (f i).fst
   证明: congr_arg sSup (range_comp _ _).symm
 
@@ -4319,7 +4319,7 @@ theorem snd_iSup
 
 中文:
 定理 snd_iSup
-  条件: [SupSet α] [SupSet β] (f : ι -> α × β)
+  条件: [上确界集 α] [上确界集 β] (f : ι -> α × β)
   结论: (iSup f).snd = ⨆ i, (f i).snd
   证明: congr_arg sSup (range_comp _ _).symm
 
@@ -4345,7 +4345,7 @@ theorem swap_iSup
 
 中文:
 定理 swap_iSup
-  条件: [SupSet α] [SupSet β] (f : ι -> α × β)
+  条件: [上确界集 α] [上确界集 β] (f : ι -> α × β)
   结论: (iSup f).swap = ⨆ i, (f i).swap
   证明: by
   simp_rw [iSup, swap_sSup, ← range_comp, comp_def]
@@ -4368,7 +4368,7 @@ theorem iSup_mk
 
 中文:
 定理 iSup_mk
-  条件: [SupSet α] [SupSet β] (f : ι -> α) (g : ι -> β)
+  条件: [上确界集 α] [上确界集 β] (f : ι -> α) (g : ι -> β)
   证明: congr_arg₂ Prod.mk (fst_iSup _) (snd_iSup _)
 
 Depends on / 依赖: Prod.mk, fst_iSup, snd_iSup
@@ -4389,7 +4389,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: [CompleteLattice α] [CompleteLattice β]
+  签名: [完备格 α] [完备格 β]
   定义体: instBoundedOrder α β
   isLUB_sSup _ := isLUB_prod.mpr ⟨isLUB_sSup _, isLUB_sSup _⟩
   isGLB_sInf _ := isGLB_prod.mpr ⟨isGLB_sInf _, isGLB_sInf _⟩
@@ -4414,7 +4414,7 @@ lemma sSup_prod
 
 中文:
 引理 sSup_prod
-  条件: [SupSet α] [SupSet β] {s : Set α} {t : Set β} (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: [上确界集 α] [上确界集 β] {s : 集合 α} {t : 集合 β} (hs : s.非空) (ht : t.非空)
   证明: congr_arg₂ Prod.mk (congr_arg sSup <| fst_image_prod _ ht) (congr_arg sSup <| snd_image_prod hs _)
 
 Depends on / 依赖: Prod.mk, congr_arg, fst_image_prod, snd_image_prod
@@ -4436,8 +4436,8 @@ abbreviation Function.Injective.completeLattice
   isGLB_sInf _ := .of_image le (by rw [map_sInf]; exact isGLB_biInf)
 
 中文:
-缩写 Function.Injective.completeLattice
-  签名: [Max α] [Min α] [LE α] [LT α]
+缩写 函数.单射.completeLattice
+  签名: [最大值 α] [最小值 α] [LE α] [LT α]
   定义体: hf.lattice f le lt map_sup map_inf
   __ := BoundedOrder.lift f (fun _ _ => le.1) map_top map_bot
   isLUB_sSup _ := .of_image le (by rw [map_sSup]; exact isLUB_biSup)
@@ -4475,7 +4475,7 @@ abbreviation completeLattice
 
 中文:
 缩写 completeLattice
-  签名: [CompleteLattice β]
+  签名: [完备格 β]
   定义体: by
   let top := e.top
   let bot := e.bot

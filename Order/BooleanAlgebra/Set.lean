@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: HImp (Set α)
+  签名: HImp (集合 α)
   定义体: {x | x in s -> x in t}
 -/
 instance : HImp (Set α) where
@@ -74,8 +74,8 @@ instance instBooleanAlgebra
   body: fast_instance% { (inferInstance : BooleanAlgebra (α -> Prop)) with }
 
 中文:
-实例 instBooleanAlgebra
-  签名: : 布尔eanAlgebra (Set α)
+实例 inst布尔eanAlgebra
+  签名: : 布尔代数 (集合 α)
   定义体: fast_instance% { (inferInstance : BooleanAlgebra (α -> Prop)) with }
 
 Depends on / 依赖: BooleanAlgebra, fast_instance
@@ -113,7 +113,7 @@ lemma inter_sdiff_assoc
 
 中文:
 引理 inter_sdiff_assoc
-  条件: (a b c : Set α)
+  条件: (a b c : 集合 α)
   结论: (a inter b) \ c = a inter (b \ c)
   证明: inf_sdiff_assoc ..
 
@@ -136,7 +136,7 @@ lemma sdiff_inter_right_comm
 
 中文:
 引理 sdiff_inter_right_comm
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s \ t inter u = (s inter u) \ t
   证明: sdiff_inf_right_comm ..
 
@@ -155,7 +155,7 @@ lemma inter_sdiff_left_comm
 
 中文:
 引理 inter_sdiff_left_comm
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter (t \ u) = t inter (s \ u)
   证明: inf_sdiff_left_comm ..
 
@@ -254,7 +254,7 @@ theorem inter_sdiff_distrib_left
 
 中文:
 定理 inter_sdiff_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter (t \ u) = (s inter t) \ (s inter u)
   证明: inf_sdiff_distrib_left _ _ _
 
@@ -280,7 +280,7 @@ theorem inter_sdiff_distrib_right
 
 中文:
 定理 inter_sdiff_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: (s \ t) inter u = (s inter u) \ (t inter u)
   证明: inf_sdiff_distrib_right _ _ _
 
@@ -306,7 +306,7 @@ theorem sdiff_inter_distrib_right
 
 中文:
 定理 sdiff_inter_distrib_right
-  条件: (s t r : Set α)
+  条件: (s t r : 集合 α)
   结论: (t inter r) \ s = (t \ s) inter (r \ s)
   证明: inf_sdiff
 
@@ -331,7 +331,7 @@ theorem compl_def
 
 中文:
 定理 compl_def
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sᶜ = { x | x ∉ s }
   证明: rfl
 -/
@@ -349,7 +349,7 @@ theorem mem_compl
 
 中文:
 定理 mem_compl
-  条件: {s : Set α} {x : α} (h : x ∉ s)
+  条件: {s : 集合 α} {x : α} (h : x ∉ s)
   结论: x in sᶜ
   证明: h
 -/
@@ -391,7 +391,7 @@ theorem notMem_of_mem_compl
 
 中文:
 定理 notMem_of_mem_compl
-  条件: {s : Set α} {x : α} (h : x in sᶜ)
+  条件: {s : 集合 α} {x : α} (h : x in sᶜ)
   结论: x ∉ s
   证明: h
 -/
@@ -436,7 +436,7 @@ theorem inter_compl_self
 
 中文:
 定理 inter_compl_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s inter sᶜ = ∅
   证明: inf_compl_eq_bot
 
@@ -461,7 +461,7 @@ theorem compl_inter_self
 
 中文:
 定理 compl_inter_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sᶜ inter s = ∅
   证明: compl_inf_eq_bot
 
@@ -485,7 +485,7 @@ theorem compl_empty
 
 中文:
 定理 compl_empty
-  结论: (∅ : Set α)ᶜ = univ
+  结论: (∅ : 集合 α)ᶜ = univ
   证明: compl_bot
 
 @[simp]
@@ -507,7 +507,7 @@ theorem compl_union
 
 中文:
 定理 compl_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s union t)ᶜ = sᶜ inter tᶜ
   证明: compl_sup
 
@@ -529,7 +529,7 @@ theorem compl_inter
 
 中文:
 定理 compl_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s inter t)ᶜ = sᶜ union tᶜ
   证明: compl_inf
 
@@ -553,7 +553,7 @@ theorem compl_univ
 
 中文:
 定理 compl_univ
-  结论: (univ : Set α)ᶜ = ∅
+  结论: (univ : 集合 α)ᶜ = ∅
   证明: compl_top
 
 @[simp]
@@ -577,7 +577,7 @@ theorem compl_empty_iff
 
 中文:
 定理 compl_empty_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sᶜ = ∅ ↔ s = univ
   证明: compl_eq_bot
 
@@ -600,7 +600,7 @@ theorem compl_univ_iff
 
 中文:
 定理 compl_univ_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sᶜ = univ ↔ s = ∅
   证明: compl_eq_top
 
@@ -619,7 +619,7 @@ theorem compl_ne_univ
 
 中文:
 定理 compl_ne_univ
-  结论: sᶜ != univ ↔ s.Nonempty
+  结论: sᶜ != univ ↔ s.非空
   证明: compl_univ_iff.not.trans nonempty_iff_ne_empty.symm
 
 Depends on / 依赖: compl_univ_iff, compl_univ_iff.not.trans, nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
@@ -638,7 +638,7 @@ lemma inl_compl_union_inr_compl
 
 中文:
 引理 inl_compl_union_inr_compl
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   证明: by
   grind
 -/
@@ -656,7 +656,7 @@ theorem nonempty_compl
 
 中文:
 定理 nonempty_compl
-  结论: sᶜ.Nonempty ↔ s != univ
+  结论: sᶜ.非空 ↔ s != univ
   证明: (ne_univ_iff_exists_notMem s).symm
 
 Depends on / 依赖: ne_univ_iff_exists_notMem
@@ -675,7 +675,7 @@ theorem union_eq_compl_compl_inter_compl
 
 中文:
 定理 union_eq_compl_compl_inter_compl
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s union t = (sᶜ inter tᶜ)ᶜ
   证明: ext fun _ => or_iff_not_and_not
 
@@ -697,7 +697,7 @@ theorem inter_eq_compl_compl_union_compl
 
 中文:
 定理 inter_eq_compl_compl_union_compl
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s inter t = (sᶜ union tᶜ)ᶜ
   证明: ext fun _ => and_iff_not_or_not
 
@@ -722,7 +722,7 @@ theorem union_compl_self
 
 中文:
 定理 union_compl_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s union sᶜ = univ
   证明: eq_univ_iff_forall.2 fun _ => em _
 
@@ -745,7 +745,7 @@ theorem compl_union_self
 
 中文:
 定理 compl_union_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sᶜ union s = univ
   证明: by rw [union_comm, union_compl_self]
 
@@ -835,7 +835,7 @@ theorem subset_union_compl_iff_inter_subset
 
 中文:
 定理 subset_union_compl_iff_inter_subset
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s subseteq t union uᶜ ↔ s inter u subseteq t
   证明: (@isCompl_compl _ u _).le_sup_right_iff_inf_left_le
 
@@ -855,7 +855,7 @@ theorem compl_subset_iff_union
 
 中文:
 定理 compl_subset_iff_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: sᶜ subseteq t ↔ s union t = univ
   证明: Iff.symm eq_univ_iff_forall.trans forall_congr' fun _ => or_iff_not_imp_left
 
@@ -875,7 +875,7 @@ theorem inter_subset
 
 中文:
 定理 inter_subset
-  条件: (a b c : Set α)
+  条件: (a b c : 集合 α)
   结论: a inter b subseteq c ↔ a subseteq bᶜ union c
   证明: forall_congr' fun _ => and_imp.trans imp_congr_right fun _ => imp_iff_not_or
 
@@ -895,8 +895,8 @@ theorem inter_compl_nonempty_iff
 
 中文:
 定理 inter_compl_nonempty_iff
-  条件: {s t : Set α}
-  结论: (s inter tᶜ).Nonempty ↔ ¬s subseteq t
+  条件: {s t : 集合 α}
+  结论: (s inter tᶜ).非空 ↔ ¬s subseteq t
   证明: (not_subset.trans <| exists_congr fun x => by simp).symm
 
 Depends on / 依赖: exists_congr, not_subset, not_subset.trans
@@ -997,8 +997,8 @@ lemma nonempty_compl_of_nontrivial
 
 中文:
 引理 nonempty_compl_of_nontrivial
-  条件: [Nontrivial α] (x : α)
-  结论: Set.Nonempty {x}ᶜ
+  条件: [非平凡 α] (x : α)
+  结论: 集合.非空 {x}ᶜ
   证明: exists_ne x
 -/
 @[simp] lemma nonempty_compl_of_nontrivial [Nontrivial α] (x : α) : Set.Nonempty {x}ᶜ := exists_ne x
@@ -1013,7 +1013,7 @@ lemma mem_compl_singleton_iff
 
 中文:
 引理 mem_compl_singleton_iff
-  结论: a in ({b} : Set α)ᶜ ↔ a != b
+  结论: a in ({b} : 集合 α)ᶜ ↔ a != b
   证明: .rfl
 -/
 lemma mem_compl_singleton_iff : a in ({b} : Set α)ᶜ ↔ a != b := .rfl
@@ -1095,7 +1095,7 @@ theorem notMem_sdiff_of_mem
 
 中文:
 定理 notMem_sdiff_of_mem
-  条件: {s t : Set α} {x : α} (hx : x in t)
+  条件: {s t : 集合 α} {x : α} (hx : x in t)
   结论: x ∉ s \ t
   证明: fun h => h.2 hx
 
@@ -1118,7 +1118,7 @@ theorem mem_of_mem_sdiff
 
 中文:
 定理 mem_of_mem_sdiff
-  条件: {s t : Set α} {x : α} (h : x in s \ t)
+  条件: {s t : 集合 α} {x : α} (h : x in s \ t)
   结论: x in s
   证明: h.left
 
@@ -1144,7 +1144,7 @@ theorem notMem_of_mem_sdiff
 
 中文:
 定理 notMem_of_mem_sdiff
-  条件: {s t : Set α} {x : α} (h : x in s \ t)
+  条件: {s t : 集合 α} {x : α} (h : x in s \ t)
   结论: x ∉ t
   证明: h.right
 
@@ -1170,7 +1170,7 @@ theorem sdiff_eq_compl_inter
 
 中文:
 定理 sdiff_eq_compl_inter
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ t = tᶜ inter s
   证明: by rw [sdiff_eq, inter_comm]
 
@@ -1195,8 +1195,8 @@ theorem sdiff_nonempty
 
 中文:
 定理 sdiff_nonempty
-  条件: {s t : Set α}
-  结论: (s \ t).Nonempty ↔ ¬s subseteq t
+  条件: {s t : 集合 α}
+  结论: (s \ t).非空 ↔ ¬s subseteq t
   证明: inter_compl_nonempty_iff
 
 @[deprecated (since := "2026-06-03")] alias diff_nonempty := sdiff_nonempty
@@ -1221,7 +1221,7 @@ theorem sdiff_subset
 
 中文:
 定理 sdiff_subset
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ t subseteq s
   证明: sdiff_le
 
@@ -1246,7 +1246,7 @@ theorem sdiff_subset_compl
 
 中文:
 定理 sdiff_subset_compl
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s \ t subseteq tᶜ
   证明: sdiff_eq_compl_inter ▸ inter_subset_left
 
@@ -1272,7 +1272,7 @@ theorem union_sdiff_cancel'
 
 中文:
 定理 union_sdiff_cancel'
-  条件: {s t u : Set α} (h₁ : s subseteq t) (h₂ : t subseteq u)
+  条件: {s t u : 集合 α} (h₁ : s subseteq t) (h₂ : t subseteq u)
   结论: t union u \ s = u
   证明: sup_sdiff_cancel' h₁ h₂
 
@@ -1298,7 +1298,7 @@ theorem union_sdiff_cancel
 
 中文:
 定理 union_sdiff_cancel
-  条件: {s t : Set α} (h : s subseteq t)
+  条件: {s t : 集合 α} (h : s subseteq t)
   结论: s union t \ s = t
   证明: sup_sdiff_cancel_right h
 
@@ -1324,7 +1324,7 @@ theorem union_sdiff_cancel_left
 
 中文:
 定理 union_sdiff_cancel_left
-  条件: {s t : Set α} (h : s inter t subseteq ∅)
+  条件: {s t : 集合 α} (h : s inter t subseteq ∅)
   结论: (s union t) \ s = t
   证明: Disjoint.sup_sdiff_cancel_left disjoint_iff_inf_le.2 h
 
@@ -1352,7 +1352,7 @@ theorem union_sdiff_cancel_right
 
 中文:
 定理 union_sdiff_cancel_right
-  条件: {s t : Set α} (h : s inter t subseteq ∅)
+  条件: {s t : 集合 α} (h : s inter t subseteq ∅)
   结论: (s union t) \ t = s
   证明: Disjoint.sup_sdiff_cancel_right disjoint_iff_inf_le.2 h
 
@@ -1383,7 +1383,7 @@ theorem union_sdiff_left
 
 中文:
 定理 union_sdiff_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: (s union t) \ s = t \ s
   证明: sup_sdiff_left_self
 
@@ -1412,7 +1412,7 @@ theorem union_sdiff_right
 
 中文:
 定理 union_sdiff_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: (s union t) \ t = s \ t
   证明: sup_sdiff_right_self
 
@@ -1440,7 +1440,7 @@ theorem union_sdiff_distrib
 
 中文:
 定理 union_sdiff_distrib
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: (s union t) \ u = s \ u union t \ u
   证明: sup_sdiff
 
@@ -1471,7 +1471,7 @@ theorem inter_sdiff_self
 
 中文:
 定理 inter_sdiff_self
-  条件: (a b : Set α)
+  条件: (a b : 集合 α)
   结论: a inter (b \ a) = ∅
   证明: inf_sdiff_self_right
 
@@ -1502,7 +1502,7 @@ theorem inter_union_sdiff
 
 中文:
 定理 inter_union_sdiff
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s inter t union s \ t = s
   证明: sup_inf_sdiff s t
 
@@ -1535,7 +1535,7 @@ theorem sdiff_union_inter
 
 中文:
 定理 sdiff_union_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s \ t union s inter t = s
   证明: by
   rw [union_comm]
@@ -1565,7 +1565,7 @@ theorem inter_union_compl
 
 中文:
 定理 inter_union_compl
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s inter t union s inter tᶜ = s
   证明: inter_union_sdiff _ _
 
@@ -1586,7 +1586,7 @@ theorem subset_inter_union_compl_left
 
 中文:
 定理 subset_inter_union_compl_left
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: t subseteq s inter t union sᶜ
   证明: by
   simp [inter_union_distrib_right]
@@ -1608,7 +1608,7 @@ theorem subset_inter_union_compl_right
 
 中文:
 定理 subset_inter_union_compl_right
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s subseteq s inter t union tᶜ
   证明: by
   simp [inter_union_distrib_right]
@@ -1630,7 +1630,7 @@ theorem union_inter_compl_left_subset
 
 中文:
 定理 union_inter_compl_left_subset
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s union t) inter sᶜ subseteq t
   证明: by
   simp [union_inter_distrib_right]
@@ -1652,7 +1652,7 @@ theorem union_inter_compl_right_subset
 
 中文:
 定理 union_inter_compl_right_subset
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s union t) inter tᶜ subseteq s
   证明: by
   simp [union_inter_distrib_right]
@@ -1675,7 +1675,7 @@ theorem sdiff_subset_sdiff
 
 中文:
 定理 sdiff_subset_sdiff
-  条件: {s₁ s₂ t₁ t₂ : Set α}
+  条件: {s₁ s₂ t₁ t₂ : 集合 α}
   结论: s₁ subseteq s₂ -> t₂ subseteq t₁ -> s₁ \ t₁ subseteq s₂ \ t₂
   证明: sdiff_le_sdiff
 
@@ -1702,7 +1702,7 @@ theorem sdiff_subset_sdiff_left
 
 中文:
 定理 sdiff_subset_sdiff_left
-  条件: {s₁ s₂ t : Set α} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ t : 集合 α} (h : s₁ subseteq s₂)
   结论: s₁ \ t subseteq s₂ \ t
   证明: by
   gcongr
@@ -1728,7 +1728,7 @@ theorem sdiff_subset_sdiff_right
 
 中文:
 定理 sdiff_subset_sdiff_right
-  条件: {s t u : Set α} (h : t subseteq u)
+  条件: {s t u : 集合 α} (h : t subseteq u)
   结论: s \ u subseteq s \ t
   证明: by
   gcongr
@@ -1753,7 +1753,7 @@ alias diff_subset_diff_iff_subset := sdiff_subset_sdiff_iff_subset
 
 中文:
 定理 sdiff_subset_sdiff_iff_subset
-  条件: {r : Set α} (hs : s subseteq r) (ht : t subseteq r)
+  条件: {r : 集合 α} (hs : s subseteq r) (ht : t subseteq r)
   证明: sdiff_le_sdiff_iff_le hs ht
 
 @[deprecated (since := "2026-06-03")]
@@ -1783,7 +1783,7 @@ theorem compl_eq_univ_sdiff
 
 中文:
 定理 compl_eq_univ_sdiff
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: sᶜ = univ \ s
   证明: top_sdiff.symm
 
@@ -1812,8 +1812,8 @@ theorem empty_sdiff
 
 中文:
 定理 empty_sdiff
-  条件: (s : Set α)
-  结论: (∅ \ s : Set α) = ∅
+  条件: (s : 集合 α)
+  结论: (∅ \ s : 集合 α) = ∅
   证明: bot_sdiff
 
 @[deprecated (since := "2026-06-03")] alias empty_diff := empty_sdiff
@@ -1840,7 +1840,7 @@ theorem sdiff_eq_empty
 
 中文:
 定理 sdiff_eq_empty
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ t = ∅ ↔ s subseteq t
   证明: sdiff_eq_bot_iff
 
@@ -1871,7 +1871,7 @@ theorem sdiff_empty
 
 中文:
 定理 sdiff_empty
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s \ ∅ = s
   证明: sdiff_bot
 
@@ -1900,7 +1900,7 @@ theorem sdiff_univ
 
 中文:
 定理 sdiff_univ
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s \ univ = ∅
   证明: sdiff_eq_empty.2 (subset_univ s)
 
@@ -1926,7 +1926,7 @@ theorem sdiff_sdiff
 
 中文:
 定理 sdiff_sdiff
-  条件: {u : Set α}
+  条件: {u : 集合 α}
   结论: (s \ t) \ u = s \ (t union u)
   证明: sdiff_sdiff_left
 
@@ -1955,7 +1955,7 @@ theorem sdiff_sdiff_comm
 
 中文:
 定理 sdiff_sdiff_comm
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: (s \ t) \ u = (s \ u) \ t
   证明: _root_.sdiff_sdiff_comm
 
@@ -1984,7 +1984,7 @@ theorem sdiff_subset_iff
 
 中文:
 定理 sdiff_subset_iff
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s \ t subseteq u ↔ s subseteq t union u
   证明: sdiff_le_iff
 
@@ -2010,7 +2010,7 @@ theorem subset_sdiff_union
 
 中文:
 定理 subset_sdiff_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s subseteq s \ t union t
   证明: le_sdiff_sup
 
@@ -2036,7 +2036,7 @@ theorem sdiff_union_of_subset
 
 中文:
 定理 sdiff_union_of_subset
-  条件: {s t : Set α} (h : t subseteq s)
+  条件: {s t : 集合 α} (h : t subseteq s)
   结论: s \ t union t = s
   证明: Subset.antisymm (union_subset sdiff_subset h) (subset_sdiff_union _ _)
 
@@ -2062,7 +2062,7 @@ theorem sdiff_subset_comm
 
 中文:
 定理 sdiff_subset_comm
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s \ t subseteq u ↔ s \ u subseteq t
   证明: sdiff_le_comm
 
@@ -2088,7 +2088,7 @@ theorem sdiff_inter
 
 中文:
 定理 sdiff_inter
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s \ (t inter u) = s \ t union s \ u
   证明: sdiff_inf
 
@@ -2186,7 +2186,7 @@ theorem sdiff_sdiff_right
 
 中文:
 定理 sdiff_sdiff_right
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s \ (t \ u) = s \ t union s inter u
   证明: sdiff_sdiff_right'
 
@@ -2245,7 +2245,7 @@ theorem union_sdiff_self
 
 中文:
 定理 union_sdiff_self
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s union t \ s = s union t
   证明: sup_sdiff_self _ _
 
@@ -2276,7 +2276,7 @@ theorem sdiff_union_self
 
 中文:
 定理 sdiff_union_self
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ t union t = s union t
   证明: sdiff_sup_self _ _
 
@@ -2307,7 +2307,7 @@ theorem sdiff_inter_self
 
 中文:
 定理 sdiff_inter_self
-  条件: {a b : Set α}
+  条件: {a b : 集合 α}
   结论: b \ a inter a = ∅
   证明: inf_sdiff_self_left
 
@@ -2338,7 +2338,7 @@ theorem sdiff_inter_self_eq_sdiff
 
 中文:
 定理 sdiff_inter_self_eq_sdiff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ (t inter s) = s \ t
   证明: sdiff_inf_self_right _ _
 
@@ -2367,7 +2367,7 @@ theorem sdiff_self_inter
 
 中文:
 定理 sdiff_self_inter
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s \ (s inter t) = s \ t
   证明: sdiff_inf_self_left _ _
 
@@ -2393,7 +2393,7 @@ theorem sdiff_self
 
 中文:
 定理 sdiff_self
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s \ s = ∅
   证明: _root_.sdiff_self
 
@@ -2419,7 +2419,7 @@ theorem sdiff_sdiff_right_self
 
 中文:
 定理 sdiff_sdiff_right_self
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s \ (s \ t) = s inter t
   证明: _root_.sdiff_sdiff_right_self
 
@@ -2445,7 +2445,7 @@ theorem sdiff_sdiff_cancel_left
 
 中文:
 定理 sdiff_sdiff_cancel_left
-  条件: {s t : Set α} (h : s subseteq t)
+  条件: {s t : 集合 α} (h : s subseteq t)
   结论: t \ (t \ s) = s
   证明: sdiff_sdiff_eq_self h
 
@@ -2472,7 +2472,7 @@ alias union_eq_diff_union_diff_union_inter := union_eq_sdiff_union_sdiff_union_i
 
 中文:
 定理 union_eq_sdiff_union_sdiff_union_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s union t = s \ t union t \ s union s inter t
   证明: sup_eq_sdiff_sup_sdiff_sup_inf
 
@@ -2498,7 +2498,7 @@ lemma sdiff_sep_self
 
 中文:
 引理 sdiff_sep_self
-  条件: (s : Set α) (p : α -> 命题)
+  条件: (s : 集合 α) (p : α -> 命题)
   结论: s \ {a in s | p a} = {a in s | ¬ p a}
   证明: sdiff_self_inter
 -/
@@ -2618,7 +2618,7 @@ lemma sdiff_ssubset_left_iff
 
 中文:
 引理 sdiff_ssubset_left_iff
-  结论: s \ t ⊂ s ↔ (s inter t).Nonempty
+  结论: s \ t ⊂ s ↔ (s inter t).非空
   证明: sdiff_lt_left.trans by rw [not_disjoint_iff_nonempty_inter, inter_comm]
 
 @[deprecated (since := "2026-06-03")] alias diff_ssubset_left_iff := sdiff_ssubset_left_iff
@@ -2648,7 +2648,7 @@ alias _root_.HasSubset.Subset.diff_ssubset_of_nonempty :=
 
 中文:
 引理 _root_.LE.le.sdiff_ssubset_of_nonempty
-  条件: (hst : s subseteq t) (hs : s.Nonempty)
+  条件: (hst : s subseteq t) (hs : s.非空)
   证明: by
   simpa [inter_eq_self_of_subset_right hst]
 
@@ -2755,7 +2755,7 @@ alias subset_insert_diff_singleton := subset_insert_sdiff_singleton
 
 中文:
 引理 subset_insert_sdiff_singleton
-  条件: (x : α) (s : Set α)
+  条件: (x : α) (s : 集合 α)
   结论: s subseteq insert x (s \ {x})
   证明: by
   rw [← sdiff_singleton_subset_iff]
@@ -3052,7 +3052,7 @@ alias insert_diff_singleton_comm := insert_sdiff_singleton_comm
 
 中文:
 引理 insert_sdiff_singleton_comm
-  条件: (hab : a != b) (s : Set α)
+  条件: (hab : a != b) (s : 集合 α)
   证明: by
   simp_rw [← union_singleton, union_sdiff_distrib,
     sdiff_singleton_eq_self (mem_singleton_iff.not.2 hab.symm)]
@@ -3133,8 +3133,8 @@ lemma mem_sdiff_singleton_empty
 
 中文:
 引理 mem_sdiff_singleton_empty
-  条件: {t : Set (Set α)}
-  结论: s in t \ {∅} ↔ s in t ∧ s.Nonempty
+  条件: {t : 集合 (集合 α)}
+  结论: s in t \ {∅} ↔ s in t ∧ s.非空
   证明: mem_sdiff_singleton.trans and_congr_right' nonempty_iff_ne_empty.symm
 
 @[deprecated (since := "2026-06-03")] alias mem_diff_singleton_empty := mem_sdiff_singleton_empty
@@ -3179,7 +3179,7 @@ lemma pair_sdiff_left
 中文:
 引理 pair_sdiff_left
   条件: (hab : a != b)
-  结论: ({a, b} : Set α) \ {a} = {b}
+  结论: ({a, b} : 集合 α) \ {a} = {b}
   证明: by
   rw [insert_sdiff_of_mem _ (mem_singleton a)]; rw [sdiff_singleton_eq_self (by simpa)]
 
@@ -3207,7 +3207,7 @@ lemma pair_sdiff_right
 中文:
 引理 pair_sdiff_right
   条件: (hab : a != b)
-  结论: ({a, b} : Set α) \ {b} = {a}
+  结论: ({a, b} : 集合 α) \ {b} = {a}
   证明: by
   rw [pair_comm]; rw [pair_sdiff_left hab.symm]
 
@@ -3234,7 +3234,7 @@ definition ite
 
 中文:
 定义 ite
-  签名: (t s s' : Set α)
+  签名: (t s s' : 集合 α)
   定义体: s inter t union s' \ t
 
 @[simp]
@@ -3257,7 +3257,7 @@ theorem ite_inter_self
 
 中文:
 定理 ite_inter_self
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: t.ite s s' inter t = s inter t
   证明: by
   rw [Set.ite]; rw [union_inter_distrib_right]; rw [sdiff_inter_self]; rw [inter_assoc]; rw [inter_self]; rw [union_empty]
@@ -3284,7 +3284,7 @@ theorem ite_compl
 
 中文:
 定理 ite_compl
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: tᶜ.ite s s' = t.ite s' s
   证明: by
   rw [Set.ite]; rw [Set.ite]; rw [sdiff_compl]; rw [union_comm]; rw [sdiff_eq]
@@ -3311,7 +3311,7 @@ theorem ite_inter_compl_self
 
 中文:
 定理 ite_inter_compl_self
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: t.ite s s' inter tᶜ = s' inter tᶜ
   证明: by
   rw [← ite_compl]; rw [ite_inter_self]
@@ -3339,7 +3339,7 @@ theorem ite_sdiff_self
 
 中文:
 定理 ite_sdiff_self
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: t.ite s s' \ t = s' \ t
   证明: ite_inter_compl_self t s s'
 
@@ -3368,7 +3368,7 @@ theorem ite_same
 
 中文:
 定理 ite_same
-  条件: (t s : Set α)
+  条件: (t s : 集合 α)
   结论: t.ite s s = s
   证明: inter_union_sdiff _ _
 
@@ -3393,7 +3393,7 @@ theorem ite_left
 
 中文:
 定理 ite_left
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s.ite s t = s union t
   证明: by simp [Set.ite]
 
@@ -3417,7 +3417,7 @@ theorem ite_right
 
 中文:
 定理 ite_right
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s.ite t s = t inter s
   证明: by simp [Set.ite]
 
@@ -3441,8 +3441,8 @@ theorem ite_empty
 
 中文:
 定理 ite_empty
-  条件: (s s' : Set α)
-  结论: Set.ite ∅ s s' = s'
+  条件: (s s' : 集合 α)
+  结论: 集合.ite ∅ s s' = s'
   证明: by simp [Set.ite]
 
 @[simp]
@@ -3465,8 +3465,8 @@ theorem ite_univ
 
 中文:
 定理 ite_univ
-  条件: (s s' : Set α)
-  结论: Set.ite univ s s' = s
+  条件: (s s' : 集合 α)
+  结论: 集合.ite univ s s' = s
   证明: by simp [Set.ite]
 
 @[simp]
@@ -3489,7 +3489,7 @@ theorem ite_empty_left
 
 中文:
 定理 ite_empty_left
-  条件: (t s : Set α)
+  条件: (t s : 集合 α)
   结论: t.ite ∅ s = s \ t
   证明: by simp [Set.ite]
 
@@ -3511,7 +3511,7 @@ theorem ite_empty_right
 
 中文:
 定理 ite_empty_right
-  条件: (t s : Set α)
+  条件: (t s : 集合 α)
   结论: t.ite s ∅ = s inter t
   证明: by simp [Set.ite]
 
@@ -3529,7 +3529,7 @@ theorem ite_mono
 
 中文:
 定理 ite_mono
-  条件: (t : Set α) {s₁ s₁' s₂ s₂' : Set α} (h : s₁ subseteq s₂) (h' : s₁' subseteq s₂')
+  条件: (t : 集合 α) {s₁ s₁' s₂ s₂' : 集合 α} (h : s₁ subseteq s₂) (h' : s₁' subseteq s₂')
   证明: union_subset_union (inter_subset_inter_left _ h) (sdiff_subset_sdiff_left h')
 
 Depends on / 依赖: inter_subset_inter_left, sdiff_subset_sdiff_left, union_subset_union
@@ -3549,7 +3549,7 @@ theorem ite_subset_union
 
 中文:
 定理 ite_subset_union
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: t.ite s s' subseteq s union s'
   证明: union_subset_union inter_subset_left sdiff_subset
 
@@ -3569,7 +3569,7 @@ theorem inter_subset_ite
 
 中文:
 定理 inter_subset_ite
-  条件: (t s s' : Set α)
+  条件: (t s s' : 集合 α)
   结论: s inter s' subseteq t.ite s s'
   证明: ite_same t (s inter s') ▸ ite_mono _ inter_subset_left inter_subset_right
 
@@ -3592,7 +3592,7 @@ theorem ite_inter_inter
 
 中文:
 定理 ite_inter_inter
-  条件: (t s₁ s₂ s₁' s₂' : Set α)
+  条件: (t s₁ s₂ s₁' s₂' : 集合 α)
   证明: by
   ext x
   unfold Set.ite
@@ -3620,7 +3620,7 @@ theorem ite_inter
 
 中文:
 定理 ite_inter
-  条件: (t s₁ s₂ s : Set α)
+  条件: (t s₁ s₂ s : 集合 α)
   结论: t.ite (s₁ inter s) (s₂ inter s) = t.ite s₁ s₂ inter s
   证明: by
   rw [ite_inter_inter]; rw [ite_same]
@@ -3640,7 +3640,7 @@ theorem ite_inter_of_inter_eq
 
 中文:
 定理 ite_inter_of_inter_eq
-  条件: (t : Set α) {s₁ s₂ s : Set α} (h : s₁ inter s = s₂ inter s)
+  条件: (t : 集合 α) {s₁ s₂ s : 集合 α} (h : s₁ inter s = s₂ inter s)
   证明: by rw [← ite_inter, ← h, ite_same]
 
 Depends on / 依赖: ite_inter, ite_same
@@ -3662,7 +3662,7 @@ theorem subset_ite
 
 中文:
 定理 subset_ite
-  条件: {t s s' u : Set α}
+  条件: {t s s' u : 集合 α}
   结论: u subseteq t.ite s s' ↔ u inter t subseteq s ∧ u \ t subseteq s'
   证明: by
   simp only [subset_def, ← forall_and]
@@ -3688,7 +3688,7 @@ theorem ite_eq_of_subset_left
 
 中文:
 定理 ite_eq_of_subset_left
-  条件: (t : Set α) {s₁ s₂ : Set α} (h : s₁ subseteq s₂)
+  条件: (t : 集合 α) {s₁ s₂ : 集合 α} (h : s₁ subseteq s₂)
   证明: by
   ext x
   by_cases hx : x in t <;> simp [*, Set.ite, or_iff_right_of_imp (@h x)]
@@ -3712,7 +3712,7 @@ theorem ite_eq_of_subset_right
 
 中文:
 定理 ite_eq_of_subset_right
-  条件: (t : Set α) {s₁ s₂ : Set α} (h : s₂ subseteq s₁)
+  条件: (t : 集合 α) {s₁ s₂ : 集合 α} (h : s₂ subseteq s₁)
   证明: by
   ext x
   by_cases hx : x in t <;> simp [*, Set.ite, or_iff_left_of_imp (@h x)]

@@ -72,7 +72,7 @@ theorem _root_.mulLeft_bijective₀
 中文:
 定理 _root_.mulLeft_bijective₀
   条件: (a : G₀) (ha : a != 0)
-  结论: Function.Bijective (a * · : G₀ -> G₀)
+  结论: 函数.双射 (a * · : G₀ -> G₀)
   证明: (Equiv.mulLeft₀ a ha).bijective
 
 Depends on / 依赖: Equiv.mulLeft, bijective
@@ -111,7 +111,7 @@ theorem _root_.mulRight_bijective₀
 中文:
 定理 _root_.mulRight_bijective₀
   条件: (a : G₀) (ha : a != 0)
-  结论: Function.Bijective ((· * a) : G₀ -> G₀)
+  结论: 函数.双射 ((· * a) : G₀ -> G₀)
   证明: (Equiv.mulRight₀ a ha).bijective
 
 Depends on / 依赖: Equiv.mulRight, bijective

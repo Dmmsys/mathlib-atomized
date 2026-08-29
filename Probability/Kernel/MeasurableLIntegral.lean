@@ -50,7 +50,7 @@ theorem measurable_kernel_prodMk_left_of_finite
 
 中文:
 定理 measurable_kernel_prodMk_left_of_finite
-  结论: {t : Set (α × β)} (ht : MeasurableSet t)
+  结论: {t : 集合 (α × β)} (ht : 可测集 t)
   证明: by
   -- `t` is a measurable set in the product `α × β`: we use that the product σ-algebra is generated
   -- by boxes to prove the result by induction.
@@ -114,7 +114,7 @@ theorem measurable_kernel_prodMk_left
 
 中文:
 定理 measurable_kernel_prodMk_left
-  结论: [IsSFiniteKernel κ] {t : Set (α × β)}
+  结论: [是SFiniteKernel κ] {t : 集合 (α × β)}
   证明: by
   rw [← Kernel.kernel_sum_seq κ]
   have (a : _) : Kernel.sum (Kernel.seq κ) a (Prod.mk a ⁻¹' t) =
@@ -150,7 +150,7 @@ theorem measurable_kernel_prodMk_left'
 
 中文:
 定理 measurable_kernel_prodMk_left'
-  结论: [IsSFiniteKernel η] {s : Set (β × γ)} (hs : MeasurableSet s)
+  结论: [是SFiniteKernel η] {s : 集合 (β × γ)} (hs : 可测集 s)
   证明: by
   have (b : _) : Prod.mk b ⁻¹' s = {c | ((a, b), c) in {p : (α × β) × γ | (p.1.2, p.2) in s}} := rfl
   simp_rw [this]
@@ -176,7 +176,7 @@ theorem measurable_kernel_prodMk_right
 
 中文:
 定理 measurable_kernel_prodMk_right
-  结论: [IsSFiniteKernel κ] {s : Set (β × α)}
+  结论: [是SFiniteKernel κ] {s : 集合 (β × α)}
   证明: measurable_kernel_prodMk_left (measurableSet_swap_iff.mpr hs)
 
 Depends on / 依赖: measurableSet_swap_iff, measurableSet_swap_iff.mpr, measurable_kernel_prodMk_left
@@ -205,8 +205,8 @@ theorem Kernel.measurable_lintegral_indicator_const
   exact Measurable.const_mul (measurable_kernel_prodMk_left ht) c
 
 中文:
-定理 Kernel.measurable_lintegral_indicator_const
-  结论: {t : Set (α × β)} (ht : MeasurableSet t)
+定理 核.measurable_lintegral_indicator_const
+  结论: {t : 集合 (α × β)} (ht : 可测集 t)
   证明: by
   unfold Function.const
   simp_rw [lintegral_indicator_const_comp measurable_prodMk_left ht _]
@@ -238,7 +238,7 @@ theorem _root_.Measurable.lintegral_kernel_prod_right
   have : forall a, (∫⁻ b, ⨆ n, F n (a, b) ∂κ a) = ⨆ n, ∫⁻ b, F n (a, 
 
 中文:
-定理 _root_.Measurable.lintegral_kernel_prod_right
+定理 _root_.可测.lintegral_kernel_prod_right
   结论: {f : α -> β -> 实数>=0∞}
   证明: by
   let F : Nat -> SimpleFunc (α × β) Real>=0∞ := SimpleFunc.eapprox (uncurry f)
@@ -290,8 +290,8 @@ theorem _root_.Measurable.lintegral_kernel_prod_right'
 @[fun_prop]
 
 中文:
-定理 _root_.Measurable.lintegral_kernel_prod_right'
-  条件: {f : α × β -> 实数>=0∞} (hf : Measurable f)
+定理 _root_.可测.lintegral_kernel_prod_right'
+  条件: {f : α × β -> 实数>=0∞} (hf : 可测 f)
   证明: by fun_prop
 
 @[fun_prop]
@@ -318,8 +318,8 @@ theorem _root_.Measurable.lintegral_kernel_prod_right''
   fun
 
 中文:
-定理 _root_.Measurable.lintegral_kernel_prod_right''
-  条件: {f : β × γ -> 实数>=0∞} (hf : Measurable f)
+定理 _root_.可测.lintegral_kernel_prod_right''
+  条件: {f : β × γ -> 实数>=0∞} (hf : 可测 f)
   证明: by
   change
     Measurable
@@ -353,7 +353,7 @@ theorem _root_.Measurable.setLIntegral_kernel_prod_right
 @[fun_prop]
 
 中文:
-定理 _root_.Measurable.setLIntegral_kernel_prod_right
+定理 _root_.可测.setL整数egral_kernel_prod_right
   结论: {f : α -> β -> 实数>=0∞}
   证明: by
   simp_rw [← lintegral_restrict κ hs]; fun_prop
@@ -379,8 +379,8 @@ theorem _root_.Measurable.lintegral_kernel_prod_left'
 @[fun_prop]
 
 中文:
-定理 _root_.Measurable.lintegral_kernel_prod_left'
-  条件: {f : β × α -> 实数>=0∞} (hf : Measurable f)
+定理 _root_.可测.lintegral_kernel_prod_left'
+  条件: {f : β × α -> 实数>=0∞} (hf : 可测 f)
   证明: by fun_prop
 
 @[fun_prop]
@@ -400,7 +400,7 @@ theorem _root_.Measurable.lintegral_kernel_prod_left
   proof: by fun_prop
 
 中文:
-定理 _root_.Measurable.lintegral_kernel_prod_left
+定理 _root_.可测.lintegral_kernel_prod_left
   结论: {f : β -> α -> 实数>=0∞}
   证明: by fun_prop
 
@@ -421,7 +421,7 @@ theorem _root_.Measurable.setLIntegral_kernel_prod_left
 @[fun_prop]
 
 中文:
-定理 _root_.Measurable.setLIntegral_kernel_prod_left
+定理 _root_.可测.setL整数egral_kernel_prod_left
   结论: {f : β -> α -> 实数>=0∞}
   证明: by
   simp_rw [← lintegral_restrict κ hs]; fun_prop
@@ -445,8 +445,8 @@ theorem _root_.Measurable.lintegral_kernel
   proof: by fun_prop
 
 中文:
-定理 _root_.Measurable.lintegral_kernel
-  条件: {κ : Kernel α β} {f : β -> 实数>=0∞} (hf : Measurable f)
+定理 _root_.可测.lintegral_kernel
+  条件: {κ : 核 α β} {f : β -> 实数>=0∞} (hf : 可测 f)
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -463,8 +463,8 @@ theorem _root_.Measurable.setLIntegral_kernel
   proof: Measurable.setLIntegral_kernel_prod_right (by fun_prop) hs
 
 中文:
-定理 _root_.Measurable.setLIntegral_kernel
-  结论: {f : β -> 实数>=0∞} (hf : Measurable f) {s : Set β}
+定理 _root_.可测.setL整数egral_kernel
+  结论: {f : β -> 实数>=0∞} (hf : 可测 f) {s : 集合 β}
   证明: Measurable.setLIntegral_kernel_prod_right (by fun_prop) hs
 
 Depends on / 依赖: Measurable, Measurable.setLIntegral_kernel_prod_right, fun_prop, setLIntegral_kernel_prod_right

@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology E实数
+  签名: 第二可数拓扑 E实数
   定义体: have : SeparableSpace EReal := ⟨⟨_, countable_range _, denseRange_ratCast⟩⟩
   .of_separableSpace_orderTopology _
 
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology 实数>=0
+  签名: 第二可数拓扑 实数>=0
   定义体: inferInstanceAs (SecondCountableTopology { x : Real | 0 <= x })
 
 Depends on / 依赖: SecondCountableTopology
@@ -86,7 +86,7 @@ instance instProperSpace
 
 中文:
 实例 instProperSpace
-  签名: : 命题erSpace 实数>=0 where
+  签名: : 真空间 实数>=0 where
   定义体: by
     have emb : IsClosedEmbedding ((↑) : Real>=0 -> Real) := Isometry.isClosedEmbedding fun _ => congrFun rfl
     exact emb.isCompact_preimage (K := Metric.closedBall x r) (isCompact_closedBall _ _)
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology 实数>=0∞
+  签名: 第二可数拓扑 实数>=0∞
   定义体: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology
 
 Depends on / 依赖: isEmbedding, orderIsoUnitIntervalBirational, orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology, secondCountableTopology, toHomeomorph

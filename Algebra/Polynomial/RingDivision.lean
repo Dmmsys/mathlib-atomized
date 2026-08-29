@@ -51,7 +51,7 @@ theorem natDegree_pos_of_aeval_root
 
 中文:
 定理 natDegree_pos_of_aeval_root
-  结论: [Algebra R S] {p : R[X]} (hp : p != 0) {z : S}
+  结论: [代数 R S] {p : R[X]} (hp : p != 0) {z : S}
   证明: natDegree_pos_of_eval₂_root hp (algebraMap R S) hz inj
 
 Depends on / 依赖: algebraMap
@@ -70,7 +70,7 @@ theorem degree_pos_of_aeval_root
 
 中文:
 定理 degree_pos_of_aeval_root
-  结论: [Algebra R S] {p : R[X]} (hp : p != 0) {z : S} (hz : aeval z p = 0)
+  结论: [代数 R S] {p : R[X]} (hp : p != 0) {z : S} (hz : aeval z p = 0)
   证明: natDegree_pos_iff_degree_pos.mp (natDegree_pos_of_aeval_root hp hz inj)
 
 Depends on / 依赖: natDegree_pos_iff_degree_pos, natDegree_pos_iff_degree_pos.mp, natDegree_pos_of_aeval_root
@@ -181,7 +181,7 @@ theorem aeval_modByMonic_eq_self_of_root
 
 中文:
 定理 aeval_modByMonic_eq_self_of_root
-  结论: [Algebra R S] {p q : R[X]} {x : S}
+  结论: [代数 R S] {p q : R[X]} {x : S}
   证明: by
   --`eval₂_modByMonic_eq_self_of_root` doesn't work here as it needs commutativity
   simp [modByMonic_eq_sub_mul_div, hx]
@@ -376,8 +376,8 @@ exact fun heq => hp.not_isRoot_of_natDegree_ne_one hdeg
 FaithfulSMul.algebraMap_injective _ _ map_zero (algebraMap R S) ▸ heq
 
 中文:
-引理 _root_.Irreducible.aeval_ne_zero_of_natDegree_ne_one
-  结论: [IsDomain R] [Ring S] [Algebra R S]
+引理 _root_.不可约.aeval_ne_zero_of_natDegree_ne_one
+  结论: [是整环 R] [环 S] [代数 R S]
   证明: by
   obtain ⟨_, rfl⟩ := hx
   rw [aeval_algebraMap_apply_eq_algebraMap_eval]
@@ -405,7 +405,7 @@ theorem natDegree_pos_of_monic_of_aeval_eq_zero
 
 中文:
 定理 natDegree_pos_of_monic_of_aeval_eq_zero
-  结论: [Nontrivial R] [Semiring S] [Algebra R S]
+  结论: [非平凡 R] [半环 S] [代数 R S]
   证明: natDegree_pos_of_aeval_root (Monic.ne_zero hp) hx
     ((injective_iff_map_eq_zero (algebraMap R S)).mp (FaithfulSMul.algebraMap_injective R S))
 
@@ -464,7 +464,7 @@ theorem rootMultiplicity_X_sub_C_pow
 
 中文:
 定理 rootMultiplicity_X_sub_C_pow
-  条件: [Nontrivial R] (a : R) (n : 自然数)
+  条件: [非平凡 R] (a : R) (n : 自然数)
   证明: by
   have := rootMultiplicity_mul_X_sub_C_pow (a := a) (n := n) C.map_one_ne_zero
   rwa [rootMultiplicity_C, map_one, one_mul, zero_add] at this
@@ -486,7 +486,7 @@ theorem rootMultiplicity_X_sub_C_self
 
 中文:
 定理 rootMultiplicity_X_sub_C_self
-  条件: [Nontrivial R] {x : R}
+  条件: [非平凡 R] {x : R}
   证明: pow_one (X - C x) ▸ rootMultiplicity_X_sub_C_pow x 1
 
 Depends on / 依赖: pow_one, rootMultiplicity_X_sub_C_pow
@@ -509,7 +509,7 @@ theorem rootMultiplicity_X_sub_C
 
 中文:
 定理 rootMultiplicity_X_sub_C
-  条件: [Nontrivial R] [DecidableEq R] {x y : R}
+  条件: [非平凡 R] [DecidableEq R] {x y : R}
   证明: by
   split_ifs with hxy
   · rw [hxy]
@@ -541,7 +541,7 @@ theorem rootMultiplicity_comp_C_mul_X_add_C_le
 
 中文:
 定理 rootMultiplicity_comp_C_mul_X_add_C_le
-  条件: (p : R[X]) (a b c : R) (ha : IsUnit a)
+  条件: (p : R[X]) (a b c : R) (ha : 是单位 a)
   证明: by
   let : Invertible a := ha.invertible
   rcases eq_or_ne p 0 with rfl | hp; · simp
@@ -575,7 +575,7 @@ theorem rootMultiplicity_comp_C_mul_X_add_C
 
 中文:
 定理 rootMultiplicity_comp_C_mul_X_add_C
-  条件: (p : R[X]) (a b c : R) (ha : IsUnit a)
+  条件: (p : R[X]) (a b c : R) (ha : 是单位 a)
   证明: by
   let : Invertible a := ha.invertible
   apply le_antisymm (rootMultiplicity_comp_C_mul_X_add_C_le p a b c ha)
@@ -702,7 +702,7 @@ theorem prime_X_sub_C
 中文:
 定理 prime_X_sub_C
   条件: (r : R)
-  结论: Prime (X - C r)
+  结论: 素 (X - C r)
   证明: ⟨X_sub_C_ne_zero r, not_isUnit_X_sub_C r, fun _ _ => by
     simp_rw [dvd_iff_isRoot, IsRoot.def, eval_mul, mul_eq_zero]
     exact id⟩
@@ -726,7 +726,7 @@ theorem prime_X
 
 中文:
 定理 prime_X
-  结论: Prime (X : R[X])
+  结论: 素 (X : R[X])
   证明: by
   convert! prime_X_sub_C (0 : R)
   simp
@@ -750,7 +750,7 @@ theorem Monic.prime_of_degree_eq_one
 中文:
 定理 Monic.prime_of_degree_eq_one
   条件: (hp1 : degree p = 1) (hm : Monic p)
-  结论: Prime p
+  结论: 素 p
   证明: have : p = X - C (-p.coeff 0) := by simpa [hm.leadingCoeff] using eq_X_add_C_of_degree_eq_one hp1
   this.symm ▸ prime_X_sub_C _
 
@@ -772,7 +772,7 @@ theorem irreducible_X_sub_C
 中文:
 定理 irreducible_X_sub_C
   条件: (r : R)
-  结论: Irreducible (X - C r)
+  结论: 不可约 (X - C r)
   证明: (prime_X_sub_C r).irreducible
 
 Depends on / 依赖: irreducible, prime_X_sub_C
@@ -790,7 +790,7 @@ theorem irreducible_X
 
 中文:
 定理 irreducible_X
-  结论: Irreducible (X : R[X])
+  结论: 不可约 (X : R[X])
   证明: Prime.irreducible prime_X
 
 Depends on / 依赖: Prime.irreducible, irreducible, prime_X
@@ -810,7 +810,7 @@ theorem Monic.irreducible_of_degree_eq_one
 中文:
 定理 Monic.irreducible_of_degree_eq_one
   条件: (hp1 : degree p = 1) (hm : Monic p)
-  结论: Irreducible p
+  结论: 不可约 p
   证明: (hm.prime_of_degree_eq_one hp1).irreducible
 
 Depends on / 依赖: hm.prime_of_degree_eq_one, irreducible, prime_of_degree_eq_one
@@ -911,7 +911,7 @@ lemma aeval_ne_zero_of_isCoprime
 
 中文:
 引理 aeval_ne_zero_of_isCoprime
-  结论: {R} [CommSemiring R] [Nontrivial S] [Semiring S] [Algebra R S]
+  结论: {R} [交换半环 R] [非平凡 S] [半环 S] [代数 R S]
   证明: by
   by_contra! ⟨hp, hq⟩
   rcases h with ⟨_, _, h⟩
@@ -941,7 +941,7 @@ theorem isCoprime_X_sub_C_of_isUnit_sub
 
 中文:
 定理 isCoprime_X_sub_C_of_isUnit_sub
-  条件: {R} [CommRing R] {a b : R} (h : IsUnit (a - b))
+  条件: {R} [交换环 R] {a b : R} (h : 是单位 (a - b))
   证明: ⟨-C h.unit⁻¹.val, C h.unit⁻¹.val, by
     rw [neg_mul_comm]; rw [← left_distrib]; rw [neg_add_eq_sub]; rw [sub_sub_sub_cancel_left]; rw [← C_sub]; rw [← C_mul]
     rw [← C_1]
@@ -970,7 +970,7 @@ theorem pairwise_coprime_X_sub_C
 
 中文:
 定理 pairwise_coprime_X_sub_C
-  条件: {K} [Field K] {I : 类型v} {s : I -> K} (H : Function.Injective s)
+  条件: {K} [域 K] {I : 类型v} {s : I -> K} (H : 函数.单射 s)
   证明: fun _ _ hij =>
   isCoprime_X_sub_C_of_isUnit_sub (sub_ne_zero_of_ne <| H.ne hij).isUnit
 -/
@@ -1023,7 +1023,7 @@ theorem exists_multiset_roots
         rw [← mul_divByMonic_eq_iff_isRoot.2 hx]; rw [h]; rw [mul_zero] at hp; exac
 
 中文:
-定理 exists_multiset_roots
+定理 存在_multiset_roots
   条件: [DecidableEq R]
   证明: Classical.propDecidable (exists x, IsRoot p x)
     if h : exists x, IsRoot p x then

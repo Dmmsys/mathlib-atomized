@@ -55,11 +55,11 @@ class IsSplittingField
     - adjoin_rootSet' : Algebra.adjoin K (f.rootSet L : Set L) = ⊤
 
 中文:
-类 IsSplittingField
+类 是分裂域
   参数: (f : K[X])
   公理与运算 (2 个):
     - splits' : Splits (f.map (algebraMap K L))
-    - adjoin_rootSet' : Algebra.adjoin K (f.rootSet L : Set L) = ⊤
+    - adjoin_rootSet' : 代数.adjoin K (f.rootSet L : 集合 L) = ⊤
 -/
 class IsSplittingField (f : K[X]) : Prop where
   splits' : Splits (f.map (algebraMap K L))
@@ -80,7 +80,7 @@ theorem splits
 
 中文:
 定理 splits
-  条件: (f : K[X]) [IsSplittingField K L f]
+  条件: (f : K[X]) [是分裂域 K L f]
   结论: Splits (f.map (algebraMap K L))
   证明: splits'
 
@@ -99,7 +99,7 @@ theorem adjoin_rootSet
 
 中文:
 定理 adjoin_rootSet
-  条件: (f : K[X]) [IsSplittingField K L f]
+  条件: (f : K[X]) [是分裂域 K L f]
   证明: adjoin_rootSet'
 
 Depends on / 依赖: adjoin_rootSet
@@ -125,7 +125,7 @@ Subalgebra.restrictScalars_injective F by
 
 中文:
 实例 map
-  签名: (f : F[X]) [IsSplittingField F L f]
+  签名: (f : F[X]) [是分裂域 F L f]
   定义体: ⟨by rw [map_map, ← IsScalarTower.algebraMap_eq]; exact splits L f,
 Subalgebra.restrictScalars_injective F by
       rw [rootSet]; rw [aroots]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Subalgebra.restrictScalars_top]; rw [eq_top_iff]; rw [← adjoin_rootSet L f]; rw [Algebra.adjoin_le_iff]
@@ -155,7 +155,7 @@ theorem splits_iff
 
 中文:
 定理 splits_iff
-  条件: (f : K[X]) [IsSplittingField K L f]
+  条件: (f : K[X]) [是分裂域 K L f]
   证明: by
     rw [eq_bot_iff]; rw [← adjoin_rootSet L f]; rw [rootSet]; rw [aroots]; rw [h.roots_map]; rw [Algebra.adjoin_le_iff]
     intro y hy
@@ -192,8 +192,8 @@ theorem IsScalarTower.splits
   apply IsSplittingField.splits
 
 中文:
-定理 IsScalarTower.splits
-  条件: (f : F[X]) [IsSplittingField K L (mapAlg F K f)]
+定理 标量塔.splits
+  条件: (f : F[X]) [是分裂域 K L (mapAlg F K f)]
   证明: by
   rw [mapAlg_comp K L f]; rw [mapAlg_eq_map]
   apply IsSplittingField.splits
@@ -220,7 +220,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: (f g : F[X]) (hf : f != 0) (hg : g != 0) [IsSplittingField F K f]
+  结论: (f g : F[X]) (hf : f != 0) (hg : g != 0) [是分裂域 F K f]
   证明: by
   constructor
   · rw [Polynomial.map_mul, IsScalarTower.algebraMap_eq F K L, ← map_map, ← map_map]
@@ -258,7 +258,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [Algebra K F] (f : K[X]) [IsSplittingField K L f]
+  签名: [代数 K F] (f : K[X]) [是分裂域 K L f]
   定义体: if hf0 : f = 0 then
 (Algebra.ofId K F).comp
 (Algebra.botEquiv K L : (⊥ : Subalgebra K L) ->ₐ[K] K).comp by
@@ -301,8 +301,8 @@ theorem finiteDimensional
 
 中文:
 定理 finiteDimensional
-  条件: (f : K[X]) [IsSplittingField K L f]
-  结论: FiniteDimensional K L
+  条件: (f : K[X]) [是分裂域 K L f]
+  结论: 有限维 K L
   证明: by
   classical
   exact ⟨@Algebra.top_toSubmodule K L _ _ _ ▸
@@ -330,8 +330,8 @@ theorem IsScalarTower.isAlgebraic
   exact Algebra.IsAlgebraic.trans F K L
 
 中文:
-定理 IsScalarTower.isAlgebraic
-  结论: [Algebra F K] [Algebra F L] [Algebra.IsAlgebraic F K]
+定理 标量塔.isAlgebraic
+  结论: [代数 F K] [代数 F L] [代数.是代数 F K]
   证明: by
   have : FiniteDimensional K L := IsSplittingField.finiteDimensional L f
   exact Algebra.IsAlgebraic.trans F K L
@@ -359,7 +359,7 @@ theorem of_algEquiv
 
 中文:
 定理 of_algEquiv
-  条件: [Algebra K F] (p : K[X]) (f : F ≃ₐ[K] L) [IsSplittingField K F p]
+  条件: [代数 K F] (p : K[X]) (f : F ≃ₐ[K] L) [是分裂域 K F p]
   证明: by
   constructor
   · rw [← f.toAlgHom.comp_algebraMap, ← map_map]
@@ -387,7 +387,7 @@ theorem adjoin_rootSet_eq_range
 
 中文:
 定理 adjoin_rootSet_eq_range
-  条件: [Algebra K F] (f : K[X]) [IsSplittingField K L f] (i : L ->ₐ[K] F)
+  条件: [代数 K F] (f : K[X]) [是分裂域 K L f] (i : L ->ₐ[K] F)
   证明: ((splits L f).adjoin_rootSet_eq_range i).mpr (adjoin_rootSet L f)
 
 Depends on / 依赖: adjoin_rootSet, adjoin_rootSet_eq_range, splits
@@ -417,7 +417,7 @@ theorem IntermediateField.splits_of_splits
   exact this h (by simpa [rootSet_def] using hF)
 
 中文:
-定理 IntermediateField.splits_of_splits
+定理 中间域.splits_of_splits
   结论: (h : (p.map (algebraMap K L)).Splits)
   证明: by
   classical
@@ -447,7 +447,7 @@ theorem IntermediateField.splits_iff_mem
   exact fun x _ => x.2
 
 中文:
-定理 IntermediateField.splits_iff_mem
+定理 中间域.splits_iff_mem
   条件: (h : (p.map (algebraMap K L)).Splits)
   证明: by
   refine ⟨?_, IntermediateField.splits_of_splits h⟩
@@ -474,8 +474,8 @@ theorem IsIntegral.mem_intermediateField_of_minpoly_splits
   rw [← F.fieldRange_val]; exact int.mem_range_algebraMap_of_minpoly_splits h
 
 中文:
-定理 IsIntegral.mem_intermediateField_of_minpoly_splits
-  结论: {x : L} (int : Is整数egral K x)
+定理 是整.mem_intermediateField_of_minpoly_splits
+  结论: {x : L} (int : 是整 K x)
   证明: by
   rw [← F.fieldRange_val]; exact int.mem_range_algebraMap_of_minpoly_splits h
 
@@ -497,7 +497,7 @@ theorem isSplittingField_iff_intermediateField
 
 中文:
 定理 isSplittingField_iff_intermediateField
-  结论: p.IsSplittingField K L ↔
+  结论: p.是分裂域 K L ↔
   证明: by
   rw [← IntermediateField.toSubalgebra_injective.eq_iff]; rw [IntermediateField.adjoin_toSubalgebra_of_isAlgebraic fun _ => isAlgebraic_of_mem_rootSet]
   exact ⟨fun ⟨spl, adj⟩ => ⟨spl, adj⟩, fun ⟨spl, adj⟩ => ⟨spl, adj⟩⟩
@@ -522,7 +522,7 @@ theorem IntermediateField.isSplittingField_iff
   refine fun h
 
 中文:
-定理 IntermediateField.isSplittingField_iff
+定理 中间域.isSplittingField_iff
   证明: by
   suffices _ -> (Algebra.adjoin K (p.rootSet F) = ⊤ ↔ F = adjoin K (p.rootSet L)) by
     exact ⟨fun h => ⟨h.1, (this h.1).mp h.2⟩, fun h => ⟨h.1, (this h.1).mpr h.2⟩⟩
@@ -548,7 +548,7 @@ theorem IntermediateField.adjoin_rootSet_isSplittingField
   proof: isSplittingField_iff.mpr ⟨splits_of_splits hp fun _ hx => subset_adjoin K (p.rootSet L) hx, rfl⟩
 
 中文:
-定理 IntermediateField.adjoin_rootSet_isSplittingField
+定理 中间域.adjoin_rootSet_isSplittingField
   条件: (hp : (p.map (algebraMap K L)).Splits)
   证明: isSplittingField_iff.mpr ⟨splits_of_splits hp fun _ hx => subset_adjoin K (p.rootSet L) hx, rfl⟩
 
@@ -569,9 +569,9 @@ theorem Polynomial.isSplittingField_C
   adjoin_rootSet' := by simp
 
 中文:
-定理 Polynomial.isSplittingField_C
+定理 多项式.isSplittingField_C
   条件: (a : K)
-  结论: Polynomial.IsSplittingField K K (C a) where
+  结论: 多项式.是分裂域 K K (C a) where
   证明: by simp
   adjoin_rootSet' := by simp
 

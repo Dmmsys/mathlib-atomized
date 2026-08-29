@@ -62,7 +62,7 @@ mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensor
 
 中文:
 定义 limit
-  签名: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
+  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
   定义体: c.pt
   mon.one := hc.lift
     { pt := _
@@ -108,7 +108,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
+  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
   定义体: limit F c hc
   π.app j := .mk' (c.π.app j)
   π.naturality j j' f := Hom.ext' (c.π.naturality f)
@@ -134,7 +134,7 @@ definition forgetMapConeLimitConeIso
 
 中文:
 定义 forgetMapConeLimitConeIso
-  签名: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
+  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
   定义体: Cone.ext (Iso.refl _) (by simp)
 
 Depends on / 依赖: Cone.ext, Iso.refl
@@ -163,7 +163,7 @@ uniq s m w := Hom.ext' hc.hom_ext fun j => by simpa using congr($(w j).hom)
 
 中文:
 定义 limitConeIsLimit
-  签名: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
+  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
   定义体: { hom := hc.lift ((Mon.forget C).mapCone s)
 isMonHom_hom.mul_hom := hc.hom_ext by simp
 isMonHom_hom.one_hom := hc.hom_ext by simp }
@@ -193,7 +193,7 @@ definition limitConeLiftsToLimit
 
 中文:
 定义 limitConeLiftsToLimit
-  签名: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
+  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
   定义体: limitCone F c hc
   validLift := forgetMapConeLimitConeIso _ _ _
   makesLimit := limitConeIsLimit _ _ _
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimitsOfShape J (forget C)
+  签名: 创造形状极限 J (forget C)
   定义体: ⟨inferInstance⟩
 -/
 instance : CreatesLimitsOfShape J (forget C) := ⟨inferInstance⟩
@@ -263,8 +263,8 @@ instance [HasLimitsOfShape
   body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (forget C)
 
 中文:
-实例 [HasLimitsOfShape
-  签名: J C] : HasLimitsOfShape J (Mon C)
+实例 [有形状极限
+  签名: J C] : 有形状极限 J (幺半群 C)
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (forget C)
 
 Depends on / 依赖: forget, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -281,7 +281,7 @@ instance [HasLimitsOfShape
   body: CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape _
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: J C] :
   定义体: CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape _
 

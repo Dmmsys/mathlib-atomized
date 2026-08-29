@@ -685,7 +685,7 @@ lemma expCoeff_cast
 中文:
 引理 expCoeff_cast
   条件: (n : 自然数)
-  结论: (expCoeff n : Rat) = if Even n then (n / 2 : Rat) else n
+  结论: (expCoeff n : 有理数) = if Even n then (n / 2 : 有理数) else n
   证明: by
   rcases n.even_or_odd' with ⟨n, rfl | rfl⟩ <;> simp [expCoeff, n.not_even_two_mul_add_one]
 -/
@@ -940,7 +940,7 @@ lemma preΨ'_ne_zero
 
 中文:
 引理 preΨ'_ne_zero
-  条件: [Nontrivial R] {n : 自然数} (h : (n : R) != 0)
+  条件: [非平凡 R] {n : 自然数} (h : (n : R) != 0)
   结论: W.preΨ' n != 0
   证明: by
   by_cases hn : 2 < n
@@ -1157,7 +1157,7 @@ using ih n neg_ne_zero.mp by exact_mod_cast h
 
 中文:
 引理 preΨ_ne_zero
-  条件: [Nontrivial R] {n : 整数} (h : (n : R) != 0)
+  条件: [非平凡 R] {n : 整数} (h : (n : R) != 0)
   结论: W.preΨ n != 0
   证明: by
   induction n using Int.negInduction with
@@ -1192,7 +1192,7 @@ lemma natDegree_coeff_ΨSq_ofNat
     push_cast [← @Nat.cast_inj Int, add_sq, expDe
 
 中文:
-引理 natDegree_coeff_ΨSq_ofNat
+引理 natDegree_coeff_ΨSq_of自然数
   条件: (n : 自然数)
   证明: by
   let dp {m n p} : _ -> (p ^ n : R[X]).natDegree <= n * m := natDegree_pow_le_of_le n
@@ -1297,7 +1297,7 @@ lemma coeff_ΨSq_ne_zero
 
 中文:
 引理 coeff_ΨSq_ne_zero
-  条件: [NoZeroDivisors R] {n : 整数} (h : (n : R) != 0)
+  条件: [无零因子 R] {n : 整数} (h : (n : R) != 0)
   证明: by
   simpa
 
@@ -1318,7 +1318,7 @@ lemma natDegree_ΨSq
 
 中文:
 引理 natDegree_ΨSq
-  条件: [NoZeroDivisors R] {n : 整数} (h : (n : R) != 0)
+  条件: [无零因子 R] {n : 整数} (h : (n : R) != 0)
   证明: natDegree_eq_of_le_of_coeff_ne_zero (W.natDegree_ΨSq_le n) W.coeff_ΨSq_ne_zero h
 
 Depends on / 依赖: W.coeff_, W.natDegree_, natDegree_eq_of_le_of_coeff_ne_zero
@@ -1340,7 +1340,7 @@ lemma natDegree_ΨSq_pos
 
 中文:
 引理 natDegree_ΨSq_pos
-  条件: [NoZeroDivisors R] {n : 整数} (hn : 1 < n.natAbs) (h : (n : R) != 0)
+  条件: [无零因子 R] {n : 整数} (hn : 1 < n.natAbs) (h : (n : R) != 0)
   证明: by
   simpa [W.natDegree_ΨSq h]
 
@@ -1364,7 +1364,7 @@ lemma leadingCoeff_ΨSq
 
 中文:
 引理 leadingCoeff_ΨSq
-  条件: [NoZeroDivisors R] {n : 整数} (h : (n : R) != 0)
+  条件: [无零因子 R] {n : 整数} (h : (n : R) != 0)
   证明: by
   rw [leadingCoeff]; rw [W.natDegree_ΨSq h]; rw [coeff_ΨSq]
 
@@ -1391,7 +1391,7 @@ lemma ΨSq_ne_zero
 
 中文:
 引理 ΨSq_ne_zero
-  条件: [NoZeroDivisors R] {n : 整数} (h : (n : R) != 0)
+  条件: [无零因子 R] {n : 整数} (h : (n : R) != 0)
   结论: W.ΨSq n != 0
   证明: by
   by_cases hn : 1 < n.natAbs
@@ -1430,7 +1430,7 @@ lemma natDegree_coeff_Φ_ofNat
   let h {n} := W.nat
 
 中文:
-引理 natDegree_coeff_Φ_ofNat
+引理 natDegree_coeff_Φ_of自然数
   条件: (n : 自然数)
   证明: by
   let dm {m n p q} : _ -> _ -> (p * q : R[X]).natDegree <= m + n := natDegree_mul_le_of_le
@@ -1544,7 +1544,7 @@ lemma coeff_Φ_ne_zero
 
 中文:
 引理 coeff_Φ_ne_zero
-  条件: [Nontrivial R] (n : 整数)
+  条件: [非平凡 R] (n : 整数)
   结论: (W.Φ n).coeff (n.natAbs ^ 2) != 0
   证明: W.coeff_Φ n ▸ one_ne_zero
 
@@ -1567,7 +1567,7 @@ lemma natDegree_Φ
 
 中文:
 引理 natDegree_Φ
-  条件: [Nontrivial R] (n : 整数)
+  条件: [非平凡 R] (n : 整数)
   结论: (W.Φ n).natDegree = n.natAbs ^ 2
   证明: natDegree_eq_of_le_of_coeff_ne_zero (W.natDegree_Φ_le n) W.coeff_Φ_ne_zero n
 
@@ -1590,7 +1590,7 @@ lemma natDegree_Φ_pos
 
 中文:
 引理 natDegree_Φ_pos
-  条件: [Nontrivial R] {n : 整数} (hn : n != 0)
+  条件: [非平凡 R] {n : 整数} (hn : n != 0)
   结论: 0 < (W.Φ n).natDegree
   证明: by
   simpa [sq_pos_iff]
@@ -1615,7 +1615,7 @@ lemma leadingCoeff_Φ
 
 中文:
 引理 leadingCoeff_Φ
-  条件: [Nontrivial R] (n : 整数)
+  条件: [非平凡 R] (n : 整数)
   结论: (W.Φ n).leadingCoeff = 1
   证明: by
   rw [leadingCoeff]; rw [natDegree_Φ]; rw [coeff_Φ]
@@ -1639,7 +1639,7 @@ lemma Φ_ne_zero
 
 中文:
 引理 Φ_ne_zero
-  条件: [Nontrivial R] (n : 整数)
+  条件: [非平凡 R] (n : 整数)
   结论: W.Φ n != 0
   证明: by
   by_cases hn : n = 0

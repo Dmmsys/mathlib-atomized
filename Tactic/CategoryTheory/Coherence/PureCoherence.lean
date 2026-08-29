@@ -51,7 +51,7 @@ structure Normalize.Result
 结构 Normalize.Result
   参数: where
   公理与运算 (2 个):
-    - normalizedHom : NormalizedHom
+    - normalizedHom : Normalized态射
     - toNormalize : Mor₂Iso
 -/
 structure Normalize.Result where
@@ -86,7 +86,7 @@ definition normalize
 
 中文:
 定义 normalize
-  签名: (p : NormalizedHom) (f : Mor₁)
+  签名: (p : Normalized态射) (f : Mor₁)
   定义体: do
   match f with
   | .id _ _ =>
@@ -136,18 +136,18 @@ class MonadNormalizeNaturality
     - mkNaturalityInv((p pf : NormalizedHom) (f g : Mor₁) (η η_f η_g : Mor₂Iso) (ih_η : Expr)) : m Expr
 
 中文:
-类 MonadNormalizeNaturality
-  参数: (m : Type -> Type)
+类 MonadNormalize自然数urality
+  参数: (m : 类型 -> 类型)
   公理与运算 (9 个):
-    - mkNaturalityAssociator((p pf pfg pfgh : NormalizedHom) (f g h : Mor₁) (η_f η_g η_h : Mor₂Iso)) : m Expr
-    - mkNaturalityLeftUnitor((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityRightUnitor((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityId((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityComp((p pf : NormalizedHom) (f g h : Mor₁) (η θ η_f η_g η_h : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityWhiskerLeft((p pf pfg : NormalizedHom) (f g h : Mor₁) (η η_f η_fg η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityWhiskerRight((p pf pfh : NormalizedHom) (f g h : Mor₁) (η η_f η_g η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityHorizontalComp((p pf₁ pf₁f₂ : NormalizedHom) (f₁ g₁ f₂ g₂ : Mor₁) (η θ η_f₁ η_g₁ η_f₂ η_g₂ : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityInv((p pf : NormalizedHom) (f g : Mor₁) (η η_f η_g : Mor₂Iso) (ih_η : Expr)) : m Expr
+    - mkNaturalityAssociator((p pf pfg pfgh : Normalized态射) (f g h : Mor₁) (η_f η_g η_h : Mor₂Iso)) : m Expr
+    - mkNaturalityLeftUnitor((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
+    - mkNaturalityRightUnitor((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
+    - mkNaturalityId((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
+    - mkNaturalityComp((p pf : Normalized态射) (f g h : Mor₁) (η θ η_f η_g η_h : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
+    - mkNaturalityWhiskerLeft((p pf pfg : Normalized态射) (f g h : Mor₁) (η η_f η_fg η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
+    - mkNaturalityWhiskerRight((p pf pfh : Normalized态射) (f g h : Mor₁) (η η_f η_g η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
+    - mkNaturalityHorizontalComp((p pf₁ pf₁f₂ : Normalized态射) (f₁ g₁ f₂ g₂ : Mor₁) (η θ η_f₁ η_g₁ η_f₂ η_g₂ : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
+    - mkNaturalityInv((p pf : Normalized态射) (f g : Mor₁) (η η_f η_g : Mor₂Iso) (ih_η : Expr)) : m Expr
 -/
 class MonadNormalizeNaturality (m : Type -> Type) where
   /-- The naturality for the associator. -/
@@ -195,7 +195,7 @@ definition naturality
 
 中文:
 定义 naturality
-  签名: (nm : Name) (p : NormalizedHom) (η : Mor₂Iso)
+  签名: (nm : Name) (p : Normalized态射) (η : Mor₂Iso)
   定义体: do
   let result ← match η with
   | .of _ => throwError m!"could not find a structural isomorphism, but {η.e}"
@@ -277,10 +277,10 @@ class MkEqOfNaturality
     - mkEqOfNaturality((η θ : Expr) (η' θ' : IsoLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr)) : m Expr
 
 中文:
-类 MkEqOfNaturality
-  参数: (m : Type -> Type)
+类 MkEqOf自然数urality
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
-    - mkEqOfNaturality((η θ : Expr) (η' θ' : IsoLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr)) : m Expr
+    - mkEqOfNaturality((η θ : Expr) (η' θ' : 是oLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr)) : m Expr
 -/
 class MkEqOfNaturality (m : Type -> Type) where
   /-- Auxiliary function for `pureCoherence`. -/
@@ -304,7 +304,7 @@ let e ← instantiateMVars ← mvarId.getType
 
 中文:
 定义 pureCoherence
-  签名: (ρ : Type) [Context ρ] [MkMor₂ (CoherenceM ρ)]
+  签名: (ρ : 类型) [余ntext ρ] [MkMor₂ (CoherenceM ρ)]
   定义体: mvarId.withContext do
     withTraceNode nm (fun ex => match ex with
       | .ok _ => return m!"coherence equality: {← mvarId.getType}"

@@ -154,7 +154,7 @@ definition mapTrifunctorMapNatTrans
     simp 
 
 中文:
-定义 mapTrifunctorMapNatTrans
+定义 mapTrifunctorMap自然数Trans
   签名: (α : F ⟶ F') (I₁ I₂ I₃ : 类型)
   定义体: { app := fun X₂ =>
         { app := fun _ _ => ((α.app _).app _).app _ }

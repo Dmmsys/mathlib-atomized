@@ -56,7 +56,7 @@ lemma Ico_succ_left_eq_Ioo
 中文:
 引理 Ico_succ_left_eq_Ioo
   条件: (a b : α)
-  结论: Ico (succ a) b = Ioo a b
+  结论: 左闭右开区间 (succ a) b = 开区间 a b
   证明: by
   by_cases ha : IsMax a
   · rw [Ico_eq_empty (ha.mono <| le_succ _).not_lt, Ioo_eq_empty ha.not_lt]
@@ -84,7 +84,7 @@ lemma Icc_succ_left_eq_Ioc_of_not_isMax
 中文:
 引理 Icc_succ_left_eq_Ioc_of_not_isMax
   条件: (ha : ¬ IsMax a) (b : α)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: by
   ext x; rw [mem_Icc, mem_Ioc, succ_le_iff_of_not_isMax ha]
 
@@ -106,7 +106,7 @@ lemma Ico_succ_right_eq_Icc_of_not_isMax
 中文:
 引理 Ico_succ_right_eq_Icc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: by
   ext x; rw [mem_Ico, mem_Icc, lt_succ_iff_of_not_isMax hb]
 
@@ -128,7 +128,7 @@ lemma Ioo_succ_right_eq_Ioc_of_not_isMax
 中文:
 引理 Ioo_succ_right_eq_Ioc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: by
   ext x; rw [mem_Ioo, mem_Ioc, lt_succ_iff_of_not_isMax hb]
 
@@ -172,7 +172,7 @@ lemma insert_Icc_succ_left_eq_Icc
 中文:
 引理 insert_Icc_succ_left_eq_Icc
   条件: (h : a <= b)
-  结论: insert a (Icc (succ a) b) = Icc a b
+  结论: insert a (闭区间 (succ a) b) = 闭区间 a b
   证明: by
   ext x; simp [or_and_left, eq_comm, ← le_iff_eq_or_succ_le]; aesop
 
@@ -236,7 +236,7 @@ lemma insert_Ico_succ_left_eq_Ico
 中文:
 引理 insert_Ico_succ_left_eq_Ico
   条件: (h : a < b)
-  结论: insert a (Ico (succ a) b) = Ico a b
+  结论: insert a (左闭右开区间 (succ a) b) = 左闭右开区间 a b
   证明: by
   rw [Ico_succ_left_of_not_isMax h.not_isMax]; rw [← Ioo_insert_left h]
 
@@ -279,7 +279,7 @@ lemma insert_Ioc_succ_left_eq_Ioc
 中文:
 引理 insert_Ioc_succ_left_eq_Ioc
   条件: (h : a < b)
-  结论: insert (succ a) (Ioc (succ a) b) = Ioc a b
+  结论: insert (succ a) (左开右闭区间 (succ a) b) = 左开右闭区间 a b
   证明: by
   rw [Ioc_insert_left (succ_le_of_lt h)]; rw [Icc_succ_left_of_not_isMax h.not_isMax]
 
@@ -308,7 +308,7 @@ lemma Icc_succ_left_eq_Ioc
 中文:
 引理 Icc_succ_left_eq_Ioc
   条件: (a b : α)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: Icc_succ_left_eq_Ioc_of_not_isMax (not_isMax _) _
 
 Depends on / 依赖: Icc_succ_left_eq_Ioc_of_not_isMax, not_isMax
@@ -328,7 +328,7 @@ lemma Ico_succ_right_eq_Icc
 中文:
 引理 Ico_succ_right_eq_Icc
   条件: (a b : α)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: Ico_succ_right_eq_Icc_of_not_isMax (not_isMax _) _
 
 Depends on / 依赖: Ico_succ_right_eq_Icc_of_not_isMax, not_isMax
@@ -348,7 +348,7 @@ lemma Ioo_succ_right_eq_Ioc
 中文:
 引理 Ioo_succ_right_eq_Ioc
   条件: (a b : α)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: Ioo_succ_right_eq_Ioc_of_not_isMax (not_isMax _) _
 
 Depends on / 依赖: Ioo_succ_right_eq_Ioc_of_not_isMax, not_isMax
@@ -368,7 +368,7 @@ lemma Ico_succ_succ_eq_Ioc
 中文:
 引理 Ico_succ_succ_eq_Ioc
   条件: (a b : α)
-  结论: Ico (succ a) (succ b) = Ioc a b
+  结论: 左闭右开区间 (succ a) (succ b) = 左开右闭区间 a b
   证明: Ico_succ_succ_eq_Ioc_of_not_isMax (not_isMax _) _
 
 Depends on / 依赖: Ico_succ_succ_eq_Ioc_of_not_isMax, not_isMax
@@ -389,7 +389,7 @@ lemma insert_Ico_right_eq_Ico_succ
 中文:
 引理 insert_Ico_right_eq_Ico_succ
   条件: (h : a <= b)
-  结论: insert b (Ico a b) = Ico a (succ b)
+  结论: insert b (左闭右开区间 a b) = 左闭右开区间 a (succ b)
   证明: insert_Ico_right_eq_Ico_succ_of_not_isMax h (not_isMax _)
 
 Depends on / 依赖: insert_Ico_right_eq_Ico_succ_of_not_isMax, not_isMax
@@ -409,7 +409,7 @@ lemma insert_Ioc_right_eq_Ioc_succ
 中文:
 引理 insert_Ioc_right_eq_Ioc_succ
   条件: (h : a <= b)
-  结论: insert (succ b) (Ioc a b) = Ioc a (succ b)
+  结论: insert (succ b) (左开右闭区间 a b) = 左开右闭区间 a (succ b)
   证明: insert_Ioc_right_eq_Ioc_succ_of_not_isMax h (not_isMax _)
 
 Depends on / 依赖: insert_Ioc_right_eq_Ioc_succ_of_not_isMax, not_isMax
@@ -439,7 +439,7 @@ lemma Ioc_pred_right_eq_Ioo
 中文:
 引理 Ioc_pred_right_eq_Ioo
   条件: (a b : α)
-  结论: Ioc a (pred b) = Ioo a b
+  结论: 左开右闭区间 a (pred b) = 开区间 a b
   证明: by
   by_cases hb : IsMin b
   · rw [Ioc_eq_empty (hb.mono <| pred_le _).not_lt, Ioo_eq_empty hb.not_lt]
@@ -467,7 +467,7 @@ lemma Icc_pred_right_eq_Ico_of_not_isMin
 中文:
 引理 Icc_pred_right_eq_Ico_of_not_isMin
   条件: (hb : ¬ IsMin b) (a : α)
-  结论: Icc a (pred b) = Ico a b
+  结论: 闭区间 a (pred b) = 左闭右开区间 a b
   证明: by
   ext x; rw [mem_Icc, mem_Ico, le_pred_iff_of_not_isMin hb]
 
@@ -489,7 +489,7 @@ lemma Ioc_pred_left_eq_Icc_of_not_isMin
 中文:
 引理 Ioc_pred_left_eq_Icc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioc (pred a) b = Icc a b
+  结论: 左开右闭区间 (pred a) b = 闭区间 a b
   证明: by
   ext x; rw [mem_Ioc, mem_Icc, pred_lt_iff_of_not_isMin ha]
 
@@ -511,7 +511,7 @@ lemma Ioo_pred_left_eq_Ioc_of_not_isMin
 中文:
 引理 Ioo_pred_left_eq_Ioc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioo (pred a) b = Ico a b
+  结论: 开区间 (pred a) b = 左闭右开区间 a b
   证明: by
   ext x; rw [mem_Ioo, mem_Ico, pred_lt_iff_of_not_isMin ha]
 
@@ -555,7 +555,7 @@ lemma insert_Icc_pred_right_eq_Icc
 中文:
 引理 insert_Icc_pred_right_eq_Icc
   条件: (h : a <= b)
-  结论: insert b (Icc a (pred b)) = Icc a b
+  结论: insert b (闭区间 a (pred b)) = 闭区间 a b
   证明: by
   ext x; simp [or_and_left, ← le_iff_eq_or_le_pred]; simp_all
 
@@ -619,7 +619,7 @@ lemma insert_Ioc_pred_right_eq_Ioc
 中文:
 引理 insert_Ioc_pred_right_eq_Ioc
   条件: (h : a < b)
-  结论: insert b (Ioc a (pred b)) = Ioc a b
+  结论: insert b (左开右闭区间 a (pred b)) = 左开右闭区间 a b
   证明: by
   rw [Ioc_pred_right_of_not_isMin h.not_isMin]; rw [Ioo_insert_right h]
 
@@ -662,7 +662,7 @@ lemma insert_Ico_pred_right_eq_Ico
 中文:
 引理 insert_Ico_pred_right_eq_Ico
   条件: (h : a < b)
-  结论: insert (pred b) (Ico a (pred b)) = Ico a b
+  结论: insert (pred b) (左闭右开区间 a (pred b)) = 左闭右开区间 a b
   证明: by
   rw [Ico_insert_right (le_pred_of_lt h)]; rw [Icc_pred_right_of_not_isMin h.not_isMin]
 
@@ -691,7 +691,7 @@ lemma Icc_pred_right_eq_Ico
 中文:
 引理 Icc_pred_right_eq_Ico
   条件: (a b : α)
-  结论: Icc a (pred b) = Ico a b
+  结论: 闭区间 a (pred b) = 左闭右开区间 a b
   证明: Icc_pred_right_eq_Ico_of_not_isMin (not_isMin _) _
 
 Depends on / 依赖: Icc_pred_right_eq_Ico_of_not_isMin, not_isMin
@@ -711,7 +711,7 @@ lemma Ioc_pred_left_eq_Icc
 中文:
 引理 Ioc_pred_left_eq_Icc
   条件: (a b : α)
-  结论: Ioc (pred a) b = Icc a b
+  结论: 左开右闭区间 (pred a) b = 闭区间 a b
   证明: Ioc_pred_left_eq_Icc_of_not_isMin (not_isMin _) _
 
 Depends on / 依赖: Ioc_pred_left_eq_Icc_of_not_isMin, not_isMin
@@ -731,7 +731,7 @@ lemma Ioo_pred_left_eq_Ioc
 中文:
 引理 Ioo_pred_left_eq_Ioc
   条件: (a b : α)
-  结论: Ioo (pred a) b = Ico a b
+  结论: 开区间 (pred a) b = 左闭右开区间 a b
   证明: Ioo_pred_left_eq_Ioc_of_not_isMin (not_isMin _) _
 
 Depends on / 依赖: Ioo_pred_left_eq_Ioc_of_not_isMin, not_isMin
@@ -751,7 +751,7 @@ lemma Ioc_pred_pred_eq_Ico
 中文:
 引理 Ioc_pred_pred_eq_Ico
   条件: (a b : α)
-  结论: Ioc (pred a) (pred b) = Ico a b
+  结论: 左开右闭区间 (pred a) (pred b) = 左闭右开区间 a b
   证明: Ioc_pred_pred_eq_Ico_of_not_isMin (not_isMin _) _
 
 Depends on / 依赖: Ioc_pred_pred_eq_Ico_of_not_isMin, not_isMin
@@ -772,7 +772,7 @@ lemma insert_Ioc_left_eq_Ioc_pred
 中文:
 引理 insert_Ioc_left_eq_Ioc_pred
   条件: (h : a <= b)
-  结论: insert a (Ioc a b) = Ioc (pred a) b
+  结论: insert a (左开右闭区间 a b) = 左开右闭区间 (pred a) b
   证明: insert_Ioc_left_eq_Ioc_pred_of_not_isMin h (not_isMin _)
 
 Depends on / 依赖: insert_Ioc_left_eq_Ioc_pred_of_not_isMin, not_isMin
@@ -792,7 +792,7 @@ lemma insert_Ico_left_eq_Ico_pred
 中文:
 引理 insert_Ico_left_eq_Ico_pred
   条件: (h : a <= b)
-  结论: insert (pred a) (Ico a b) = Ico (pred a) b
+  结论: insert (pred a) (左闭右开区间 a b) = 左闭右开区间 (pred a) b
   证明: insert_Ico_left_eq_Ico_pred_of_not_isMin h (not_isMin _)
 
 Depends on / 依赖: insert_Ico_left_eq_Ico_pred_of_not_isMin, not_isMin
@@ -821,7 +821,7 @@ exact fun h => not_isMin_succ _ hb.mono h.trans pred_le _
 中文:
 引理 Icc_succ_pred_eq_Ioo
   条件: (a b : α)
-  结论: Icc (succ a) (pred b) = Ioo a b
+  结论: 闭区间 (succ a) (pred b) = 开区间 a b
   证明: by
   by_cases hb : IsMin b
   · rw [Icc_eq_empty, Ioo_eq_empty hb.not_lt]
@@ -856,7 +856,7 @@ lemma Iio_succ_eq_Iic_of_not_isMax
 中文:
 引理 Iio_succ_eq_Iic_of_not_isMax
   条件: (hb : ¬ IsMax b)
-  结论: Iio (succ b) = Iic b
+  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
   证明: by
   ext x; rw [mem_Iio, mem_Iic, lt_succ_iff_of_not_isMax hb]
 
@@ -879,7 +879,7 @@ lemma Iio_succ_eq_Iic
 中文:
 引理 Iio_succ_eq_Iic
   条件: (b : α)
-  结论: Iio (succ b) = Iic b
+  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
   证明: Iio_succ_eq_Iic_of_not_isMax (not_isMax _)
 
 Depends on / 依赖: Iio_succ_eq_Iic_of_not_isMax, not_isMax
@@ -904,7 +904,7 @@ lemma Iic_pred_eq_Iio_of_not_isMin
 中文:
 引理 Iic_pred_eq_Iio_of_not_isMin
   条件: (hb : ¬ IsMin b)
-  结论: Iic (pred b) = Iio b
+  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
   证明: by
   ext x; rw [mem_Iic, mem_Iio, le_pred_iff_of_not_isMin hb]
 
@@ -927,7 +927,7 @@ lemma Iic_pred_eq_Iio
 中文:
 引理 Iic_pred_eq_Iio
   条件: (b : α)
-  结论: Iic (pred b) = Iio b
+  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
   证明: Iic_pred_eq_Iio_of_not_isMin (not_isMin _)
 
 Depends on / 依赖: Iic_pred_eq_Iio_of_not_isMin, not_isMin
@@ -954,7 +954,7 @@ lemma Ici_succ_eq_Ioi_of_not_isMax
 中文:
 引理 Ici_succ_eq_Ioi_of_not_isMax
   条件: (ha : ¬ IsMax a)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: by
   ext x; rw [mem_Ici, mem_Ioi, succ_le_iff_of_not_isMax ha]
 
@@ -977,7 +977,7 @@ lemma Ici_succ_eq_Ioi
 中文:
 引理 Ici_succ_eq_Ioi
   条件: (a : α)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: Ici_succ_eq_Ioi_of_not_isMax (not_isMax _)
 
 Depends on / 依赖: Ici_succ_eq_Ioi_of_not_isMax, not_isMax
@@ -1002,7 +1002,7 @@ lemma Ioi_pred_eq_Ici_of_not_isMin
 中文:
 引理 Ioi_pred_eq_Ici_of_not_isMin
   条件: (ha : ¬ IsMin a)
-  结论: Ioi (pred a) = Ici a
+  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
   证明: by
   ext x; rw [mem_Ioi, mem_Ici, pred_lt_iff_of_not_isMin ha]
 
@@ -1025,7 +1025,7 @@ lemma Ioi_pred_eq_Ici
 中文:
 引理 Ioi_pred_eq_Ici
   条件: (a : α)
-  结论: Ioi (pred a) = Ici a
+  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
   证明: Ioi_pred_eq_Ici_of_not_isMin (not_isMin _)
 
 Depends on / 依赖: Ioi_pred_eq_Ici_of_not_isMin, not_isMin

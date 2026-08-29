@@ -99,7 +99,7 @@ theorem QuotedDefEq.rfl
 
 中文:
 定理 QuotedDefEq.rfl
-  条件: {u : Level} {α : Q(Sort u)} {a : Q($α)}
+  条件: {u : Level} {α : Q(类型层 u)} {a : Q($α)}
   结论: @QuotedDefEq u α a a
   证明: ⟨⟩
 -/
@@ -117,7 +117,7 @@ return some .fvar fvarId
 
 中文:
 定义 findLocalDeclWithTypeQ?
-  签名: {u : Level} (sort : Q(Sort u))
+  签名: {u : Level} (sort : Q(类型层 u))
   定义体: do
   let some fvarId ← findLocalDeclWithType? q($sort) | return none
 return some .fvar fvarId
@@ -184,7 +184,7 @@ definition mkNatLitQ
   body: mkNatLit n
 
 中文:
-定义 mkNatLitQ
+定义 mk自然数LitQ
   签名: (n : 自然数)
   定义体: mkNatLit n
 
@@ -201,7 +201,7 @@ definition mkIntLitQ
   body: mkIntLit n
 
 中文:
-定义 mkIntLitQ
+定义 mk整数LitQ
   签名: (n : 整数)
   定义体: mkIntLit n
 

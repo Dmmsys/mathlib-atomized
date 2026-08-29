@@ -50,8 +50,8 @@ definition Measure.tilted
 @[simp]
 
 中文:
-定义 Measure.tilted
-  签名: (μ : Measure α) (f : α -> 实数)
+定义 测度.tilted
+  签名: (μ : 测度 α) (f : α -> 实数)
   定义体: μ.withDensity (fun x => ENNReal.ofReal (exp (f x) / ∫ x, exp (f x) ∂μ))
 
 @[simp]
@@ -77,7 +77,7 @@ lemma tilted_of_not_integrable
 
 中文:
 引理 tilted_of_not_integrable
-  条件: (hf : ¬ 整数egrable (fun x => exp (f x)) μ)
+  条件: (hf : ¬ 可积 (fun x => exp (f x)) μ)
   结论: μ.tilted f = 0
   证明: by
   rw [Measure.tilted]; rw [integral_undef hf]
@@ -108,7 +108,7 @@ lemma tilted_of_not_aemeasurable
 
 中文:
 引理 tilted_of_not_aemeasurable
-  条件: (hf : ¬ AEMeasurable f μ)
+  条件: (hf : ¬ 几乎处处可测 f μ)
   结论: μ.tilted f = 0
   证明: by
   refine tilted_of_not_integrable ?_
@@ -139,7 +139,7 @@ lemma tilted_zero_measure
 中文:
 引理 tilted_zero_measure
   条件: (f : α -> 实数)
-  结论: (0 : Measure α).tilted f = 0
+  结论: (0 : 测度 α).tilted f = 0
   证明: by simp [Measure.tilted]
 
 @[simp]
@@ -166,7 +166,7 @@ lemma tilted_const'
 
 中文:
 引理 tilted_const'
-  条件: (μ : Measure α) (c : 实数)
+  条件: (μ : 测度 α) (c : 实数)
   证明: by
   cases eq_zero_or_neZero μ with
   | inl h => rw [h]; simp
@@ -203,7 +203,7 @@ lemma tilted_const
 
 中文:
 引理 tilted_const
-  条件: (μ : Measure α) [IsProbabilityMeasure μ] (c : 实数)
+  条件: (μ : 测度 α) [是概率测度 μ] (c : 实数)
   证明: by simp
 
 @[simp]
@@ -225,8 +225,8 @@ lemma tilted_zero'
 
 中文:
 引理 tilted_zero'
-  条件: (μ : Measure α)
-  结论: μ.tilted 0 = (μ Set.univ)⁻¹ • μ
+  条件: (μ : 测度 α)
+  结论: μ.tilted 0 = (μ 集合.univ)⁻¹ • μ
   证明: by
   change μ.tilted (fun _ => 0) = (μ Set.univ)⁻¹ • μ
   simp
@@ -248,7 +248,7 @@ lemma tilted_zero
 
 中文:
 引理 tilted_zero
-  条件: (μ : Measure α) [IsProbabilityMeasure μ]
+  条件: (μ : 测度 α) [是概率测度 μ]
   结论: μ.tilted 0 = μ
   证明: by simp
 -/
@@ -306,7 +306,7 @@ lemma tilted_eq_withDensity_nnreal
 
 中文:
 引理 tilted_eq_withDensity_nnreal
-  条件: (μ : Measure α) (f : α -> 实数)
+  条件: (μ : 测度 α) (f : α -> 实数)
   证明: by
   rw [Measure.tilted]
   congr with x
@@ -332,7 +332,7 @@ lemma tilted_apply'
 
 中文:
 引理 tilted_apply'
-  条件: (μ : Measure α) (f : α -> 实数) {s : Set α} (hs : MeasurableSet s)
+  条件: (μ : 测度 α) (f : α -> 实数) {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [Measure.tilted]; rw [withDensity_apply _ hs]
 
@@ -353,7 +353,7 @@ lemma tilted_apply
 
 中文:
 引理 tilted_apply
-  条件: (μ : Measure α) [SFinite μ] (f : α -> 实数) (s : Set α)
+  条件: (μ : 测度 α) [SFinite μ] (f : α -> 实数) (s : 集合 α)
   证明: by
   rw [Measure.tilted]; rw [withDensity_apply' _ s]
 
@@ -378,8 +378,8 @@ lemma tilted_apply_eq_ofReal_integral'
       P
 
 中文:
-引理 tilted_apply_eq_ofReal_integral'
-  条件: {s : Set α} (f : α -> 实数) (hs : MeasurableSet s)
+引理 tilted_apply_eq_of实数_integral'
+  条件: {s : 集合 α} (f : α -> 实数) (hs : 可测集 s)
   证明: by
   by_cases hf : Integrable (fun x => exp (f x)) μ
   · rw [tilted_apply' _ _ hs, ← ofReal_integral_eq_lintegral_ofReal]
@@ -413,8 +413,8 @@ lemma tilted_apply_eq_ofReal_integral
   · simp [tilted_of_not_integrable hf, integral_undef hf]
 
 中文:
-引理 tilted_apply_eq_ofReal_integral
-  条件: [SFinite μ] (f : α -> 实数) (s : Set α)
+引理 tilted_apply_eq_of实数_integral
+  条件: [SFinite μ] (f : α -> 实数) (s : 集合 α)
   证明: by
   by_cases hf : Integrable (fun x => exp (f x)) μ
   · rw [tilted_apply _ _, ← ofReal_integral_eq_lintegral_ofReal]
@@ -446,7 +446,7 @@ lemma isProbabilityMeasure_tilted
 
 中文:
 引理 isProbabilityMeasure_tilted
-  条件: [NeZero μ] (hf : 整数egrable (fun x => exp (f x)) μ)
+  条件: [NeZero μ] (hf : 可积 (fun x => exp (f x)) μ)
   证明: by
   constructor
   simp_rw [tilted_apply' _ _ MeasurableSet.univ, setLIntegral_univ,
@@ -483,7 +483,7 @@ instance isZeroOrProbabilityMeasure_tilted
 
 中文:
 实例 isZeroOrProbabilityMeasure_tilted
-  签名: : IsZeroOrProbabilityMeasure (μ.tilted f)
+  签名: : 是ZeroOrProbabilityMeasure (μ.tilted f)
   定义体: by
   rcases eq_zero_or_neZero μ with hμ | hμ
   · simp only [hμ, tilted_zero_measure]
@@ -524,8 +524,8 @@ lemma setLIntegral_tilted'
     · filter_up
 
 中文:
-引理 setLIntegral_tilted'
-  条件: (f : α -> 实数) (g : α -> 实数>=0∞) {s : Set α} (hs : MeasurableSet s)
+引理 setL整数egral_tilted'
+  条件: (f : α -> 实数) (g : α -> 实数>=0∞) {s : 集合 α} (hs : 可测集 s)
   证明: by
   by_cases hf : AEMeasurable f μ
   · rw [Measure.tilted, setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀]
@@ -571,8 +571,8 @@ lemma setLIntegral_tilted
       si
 
 中文:
-引理 setLIntegral_tilted
-  条件: [SFinite μ] (f : α -> 实数) (g : α -> 实数>=0∞) (s : Set α)
+引理 setL整数egral_tilted
+  条件: [SFinite μ] (f : α -> 实数) (g : α -> 实数>=0∞) (s : 集合 α)
   证明: by
   by_cases hf : AEMeasurable f μ
   · rw [Measure.tilted, setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀']
@@ -644,8 +644,8 @@ lemma setIntegral_tilted'
         refine AEMeasurable.restrict ?_
 
 中文:
-引理 setIntegral_tilted'
-  条件: (f : α -> 实数) (g : α -> E) {s : Set α} (hs : MeasurableSet s)
+引理 set整数egral_tilted'
+  条件: (f : α -> 实数) (g : α -> E) {s : 集合 α} (hs : 可测集 s)
   证明: by
   by_cases hf : AEMeasurable f μ
   · rw [tilted_eq_withDensity_nnreal, setIntegral_withDensity_eq_setIntegral_smul₀ _ _ hs]
@@ -689,8 +689,8 @@ lemma setIntegral_tilted
      
 
 中文:
-引理 setIntegral_tilted
-  条件: [SFinite μ] (f : α -> 实数) (g : α -> E) (s : Set α)
+引理 set整数egral_tilted
+  条件: [SFinite μ] (f : α -> 实数) (g : α -> E) (s : 集合 α)
   证明: by
   by_cases hf : AEMeasurable f μ
   · rw [tilted_eq_withDensity_nnreal, setIntegral_withDensity_eq_setIntegral_smul₀']
@@ -809,7 +809,7 @@ lemma tilted_tilted
 
 中文:
 引理 tilted_tilted
-  条件: (hf : 整数egrable (fun x => exp (f x)) μ) (g : α -> 实数)
+  条件: (hf : 可积 (fun x => exp (f x)) μ) (g : α -> 实数)
   证明: by
   cases eq_zero_or_neZero μ with
   | inl h => simp [h]
@@ -848,7 +848,7 @@ lemma tilted_comm
 
 中文:
 引理 tilted_comm
-  结论: (hf : 整数egrable (fun x => exp (f x)) μ) {g : α -> 实数}
+  结论: (hf : 可积 (fun x => exp (f x)) μ) {g : α -> 实数}
   证明: by
   rw [tilted_tilted hf]; rw [add_comm]; rw [tilted_tilted hg]
 
@@ -873,7 +873,7 @@ lemma tilted_neg_same'
 
 中文:
 引理 tilted_neg_same'
-  条件: (hf : 整数egrable (fun x => exp (f x)) μ)
+  条件: (hf : 可积 (fun x => exp (f x)) μ)
   证明: by
   rw [tilted_tilted hf]; simp
 
@@ -894,7 +894,7 @@ lemma tilted_neg_same
 
 中文:
 引理 tilted_neg_same
-  条件: [IsProbabilityMeasure μ] (hf : 整数egrable (fun x => exp (f x)) μ)
+  条件: [是概率测度 μ] (hf : 可积 (fun x => exp (f x)) μ)
   证明: by
   simp [hf]
 
@@ -915,7 +915,7 @@ lemma tilted_absolutelyContinuous
 
 中文:
 引理 tilted_absolutelyContinuous
-  条件: (μ : Measure α) (f : α -> 实数)
+  条件: (μ : 测度 α) (f : α -> 实数)
   结论: μ.tilted f ≪ μ
   证明: withDensity_absolutelyContinuous _ _
 
@@ -942,7 +942,7 @@ lemma absolutelyContinuous_tilted
 
 中文:
 引理 absolutelyContinuous_tilted
-  条件: (hf : 整数egrable (fun x => exp (f x)) μ)
+  条件: (hf : 可积 (fun x => exp (f x)) μ)
   结论: μ ≪ μ.tilted f
   证明: by
   cases eq_zero_or_neZero μ with
@@ -980,7 +980,7 @@ lemma integrable_tilted_iff
 
 中文:
 引理 integrable_tilted_iff
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   by_cases hμ : μ = 0
   · simp [hμ]
@@ -1028,7 +1028,7 @@ lemma rnDeriv_tilted_right
 
 中文:
 引理 rnDeriv_tilted_right
-  结论: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  结论: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   cases eq_zero_or_neZero ν with
   | inl h => simp_rw [h, ae_zero, Filter.EventuallyEq]; exact Filter.eventually_bot
@@ -1071,8 +1071,8 @@ lemma toReal_rnDeriv_tilted_right
   exact Or.inl (by positivity)
 
 中文:
-引理 toReal_rnDeriv_tilted_right
-  结论: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+引理 to实数_rnDeriv_tilted_right
+  结论: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   filter_upwards [rnDeriv_tilted_right μ ν hf] with x hx
   rw [hx]
@@ -1105,7 +1105,7 @@ lemma rnDeriv_tilted_left
 
 中文:
 引理 rnDeriv_tilted_left
-  条件: {ν : Measure α} [SigmaFinite μ] [SigmaFinite ν] (hfν : AEMeasurable f ν)
+  条件: {ν : 测度 α} [σ有限 μ] [σ有限 ν] (hfν : 几乎处处可测 f ν)
   证明: by
   let g := fun x => ENNReal.ofReal (exp (f x) / (∫ x, exp (f x) ∂μ))
   refine Measure.rnDeriv_withDensity_left (μ := μ) (ν := ν) (f := g) ?_ ?_
@@ -1136,8 +1136,8 @@ lemma toReal_rnDeriv_tilted_left
   exact Or.inl (by positivity)
 
 中文:
-引理 toReal_rnDeriv_tilted_left
-  结论: {ν : Measure α} [SigmaFinite μ] [SigmaFinite ν]
+引理 to实数_rnDeriv_tilted_left
+  结论: {ν : 测度 α} [σ有限 μ] [σ有限 ν]
   证明: by
   filter_upwards [rnDeriv_tilted_left μ hfν] with x hx
   rw [hx]
@@ -1168,7 +1168,7 @@ lemma rnDeriv_tilted_left_self
 
 中文:
 引理 rnDeriv_tilted_left_self
-  条件: [SigmaFinite μ] (hf : AEMeasurable f μ)
+  条件: [σ有限 μ] (hf : 几乎处处可测 f μ)
   证明: by
   refine (rnDeriv_tilted_left μ hf).trans ?_
   filter_upwards [Measure.rnDeriv_self μ] with x hx
@@ -1198,7 +1198,7 @@ lemma log_rnDeriv_tilted_left_self
 
 中文:
 引理 log_rnDeriv_tilted_left_self
-  条件: [SigmaFinite μ] (hf : 整数egrable (fun x => exp (f x)) μ)
+  条件: [σ有限 μ] (hf : 可积 (fun x => exp (f x)) μ)
   证明: by
   cases eq_zero_or_neZero μ with
   | inl h => simp_rw [h, ae_zero, Filter.EventuallyEq]; exact Filter.eventually_bot

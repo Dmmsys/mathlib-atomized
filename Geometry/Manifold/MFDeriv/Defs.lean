@@ -136,7 +136,7 @@ definition DifferentiableWithinAtProp
 
 中文:
 定义 DifferentiableWithinAtProp
-  签名: (f : H -> H') (s : Set H) (x : H)
+  签名: (f : H -> H') (s : 集合 H) (x : H)
   定义体: DifferentiableWithinAt 𝕜 (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s inter Set.range I) (I x)
 
 Depends on / 依赖: DifferentiableWithinAt, I.symm, LinearEquiv, LinearEquiv.ext, Set.range, mapRange_id
@@ -158,7 +158,7 @@ theorem differentiableWithinAtProp_self_source
 
 中文:
 定理 differentiableWithinAtProp_self_source
-  条件: {f : E -> H'} {s : Set E} {x : E}
+  条件: {f : E -> H'} {s : 集合 E} {x : E}
   证明: by
   simp_rw [DifferentiableWithinAtProp, modelWithCornersSelf_coe, range_id, inter_univ,
     modelWithCornersSelf_coe_symm, CompTriple.comp_eq, preimage_id_eq, id_eq]
@@ -180,7 +180,7 @@ theorem DifferentiableWithinAtProp_self
 
 中文:
 定理 DifferentiableWithinAtProp_self
-  条件: {f : E -> E'} {s : Set E} {x : E}
+  条件: {f : E -> E'} {s : 集合 E} {x : E}
   证明: differentiableWithinAtProp_self_source
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ext, differentiableWithinAtProp_self_source
@@ -199,7 +199,7 @@ theorem differentiableWithinAtProp_self_target
 
 中文:
 定理 differentiableWithinAtProp_self_target
-  条件: {f : H -> E'} {s : Set H} {x : H}
+  条件: {f : H -> E'} {s : 集合 H} {x : H}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -287,7 +287,7 @@ definition UniqueMDiffWithinAt
 
 中文:
 定义 UniqueMDiffWithinAt
-  签名: (s : Set M) (x : M)
+  签名: (s : 集合 M) (x : M)
   定义体: UniqueDiffWithinAt 𝕜 ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
 
 Depends on / 依赖: UniqueDiffWithinAt, extChartAt
@@ -306,7 +306,7 @@ definition UniqueMDiffOn
 
 中文:
 定义 UniqueMDiffOn
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: forall x in s, UniqueMDiffWithinAt I s x
 
 Depends on / 依赖: UniqueMDiffWithinAt
@@ -325,7 +325,7 @@ definition MDifferentiableWithinAt
 
 中文:
 定义 MDifferentiableWithinAt
-  签名: (f : M -> M') (s : Set M) (x : M)
+  签名: (f : M -> M') (s : 集合 M) (x : M)
   定义体: LiftPropWithinAt (DifferentiableWithinAtProp I I') f s x
 
 Depends on / 依赖: DifferentiableWithinAtProp, LiftPropWithinAt
@@ -344,7 +344,7 @@ theorem mdifferentiableWithinAt_iff'
 
 中文:
 定理 mdifferentiableWithinAt_iff'
-  条件: (f : M -> M') (s : Set M) (x : M)
+  条件: (f : M -> M') (s : 集合 M) (x : M)
   证明: by
   rw [MDifferentiableWithinAt]; rw [liftPropWithinAt_iff']; rfl
 
@@ -366,7 +366,7 @@ theorem MDifferentiableWithinAt.continuousWithinAt
 
 中文:
 定理 MDifferentiableWithinAt.continuousWithinAt
-  结论: {f : M -> M'} {s : Set M} {x : M}
+  结论: {f : M -> M'} {s : 集合 M} {x : M}
   证明: .1 .1 hf mdifferentiableWithinAt_iff' ..
 
 Depends on / 依赖: mdifferentiableWithinAt_iff
@@ -492,7 +492,7 @@ definition MDifferentiableOn
 
 中文:
 定义 MDifferentiableOn
-  签名: (f : M -> M') (s : Set M)
+  签名: (f : M -> M') (s : 集合 M)
   定义体: forall x in s, MDifferentiableWithinAt I I' f s x
 
 Depends on / 依赖: MDifferentiableWithinAt
@@ -551,7 +551,7 @@ definition HasMFDerivWithinAt
 
 中文:
 定义 HasMFDerivWithinAt
-  签名: (f : M -> M') (s : Set M) (x : M)
+  签名: (f : M -> M') (s : 集合 M) (x : M)
   定义体: ContinuousWithinAt f s x ∧
     HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f'
       ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
@@ -602,7 +602,7 @@ definition mfderivWithin
 
 中文:
 定义 mfderivWithin
-  签名: (f : M -> M') (s : Set M) (x : M)
+  签名: (f : M -> M') (s : 集合 M) (x : M)
   定义体: if MDifferentiableWithinAt I I' f s x then
     (fderivWithin 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inter range I)
         ((extChartAt I x) x) :
@@ -656,7 +656,7 @@ definition tangentMapWithin
 
 中文:
 定义 tangentMapWithin
-  签名: (f : M -> M') (s : Set M)
+  签名: (f : M -> M') (s : 集合 M)
   定义体: fun p =>
   ⟨f p.1, (mfderivWithin I I' f s p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
 -/

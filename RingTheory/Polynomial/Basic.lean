@@ -50,7 +50,7 @@ instance instCharP
 
 中文:
 实例 instCharP
-  签名: (p : 自然数) [h : CharP R p]
+  签名: (p : 自然数) [h : 特征p R p]
   定义体: let ⟨h⟩ := h
   ⟨fun n => by rw [← map_natCast C, ← C_0, C_inj, h]⟩
 
@@ -253,7 +253,7 @@ theorem monomial_coe_mem_degreeLT
 
 中文:
 定理 monomial_coe_mem_degreeLT
-  条件: {n : 自然数} (i : Fin n) (a : R)
+  条件: {n : 自然数} (i : 有限集 n) (a : R)
   结论: monomial i a in degreeLT R n
   证明: mem_degreeLT.mpr .trans_lt by simp degree_monomial_le i a
 
@@ -458,7 +458,7 @@ definition monicEquivDegreeLT
 
 中文:
 定义 monicEquivDegreeLT
-  签名: [Nontrivial R] (n : 自然数)
+  签名: [非平凡 R] (n : 自然数)
   定义体: ⟨p.1.eraseLead, by
     rcases p with ⟨p, hp, rfl⟩
     simp only [mem_degreeLT]
@@ -513,8 +513,8 @@ theorem exists_degree_le_of_mem_span
       rw [SetLike.mem_coe]; rw [mem_degreeLT]; rw [Nat.c
 
 中文:
-定理 exists_degree_le_of_mem_span
-  结论: {s : Set R[X]} {p : R[X]}
+定理 存在_degree_le_of_mem_span
+  结论: {s : 集合 R[X]} {p : R[X]}
   证明: by
   by_contra! h
   by_cases hp_zero : p = 0
@@ -555,8 +555,8 @@ theorem exists_degree_le_of_mem_span_of_finite
 exact hpp'.trans not_lt.1 not_lt_iff_le_imp_ge.2 hmax hp'
 
 中文:
-定理 exists_degree_le_of_mem_span_of_finite
-  条件: {s : Set R[X]} (s_fin : s.Finite) (hs : s.Nonempty)
+定理 存在_degree_le_of_mem_span_of_finite
+  条件: {s : 集合 R[X]} (s_fin : s.有限) (hs : s.非空)
   证明: by
   obtain ⟨a, has, hmax⟩ := s_fin.exists_maximalFor degree s hs
   refine ⟨a, has, fun p hp => ?_⟩
@@ -587,7 +587,7 @@ theorem span_le_degreeLE_of_finite
 
 中文:
 定理 span_le_degreeLE_of_finite
-  条件: {s : Set R[X]} (s_fin : s.Finite)
+  条件: {s : 集合 R[X]} (s_fin : s.有限)
   证明: by
   by_cases s_emp : s.Nonempty
   · rcases exists_degree_le_of_mem_span_of_finite s_fin s_emp with ⟨p', _, hp'max⟩
@@ -618,7 +618,7 @@ theorem span_of_finite_le_degreeLT
 
 中文:
 定理 span_of_finite_le_degreeLT
-  条件: {s : Set R[X]} (s_fin : s.Finite)
+  条件: {s : 集合 R[X]} (s_fin : s.有限)
   证明: by
   rcases span_le_degreeLE_of_finite s_fin with ⟨n, _⟩
   exact ⟨n + 1, by rwa [degreeLT_succ_eq_degreeLE]⟩
@@ -649,8 +649,8 @@ theorem not_finite
 
 中文:
 定理 not_finite
-  条件: [Nontrivial R]
-  结论: ¬ Module.Finite R R[X]
+  条件: [非平凡 R]
+  结论: ¬ 模.有限 R R[X]
   证明: by
   rw [Module.finite_def]; rw [Submodule.fg_def]
   push Not
@@ -974,7 +974,7 @@ theorem map_restriction
 
 中文:
 定理 map_restriction
-  条件: {R : 类型u} [CommRing R] (p : R[X])
+  条件: {R : 类型u} [交换环 R] (p : R[X])
   证明: ext fun n => by rw [coeff_map, Algebra.algebraMap_ofSubsemiring_apply, coeff_restriction]
 
 @[simp]
@@ -1167,7 +1167,7 @@ definition ofPolynomial
 
 中文:
 定义 ofPolynomial
-  签名: (I : Ideal R[X])
+  签名: (I : 理想 R[X])
   定义体: I.carrier
   zero_mem' := I.zero_mem
   add_mem' := I.add_mem
@@ -1255,7 +1255,7 @@ definition leadingCoeff
 
 中文:
 定义 leadingCoeff
-  签名: : Ideal R
+  签名: : 理想 R
   定义体: ⨆ n : Nat, I.leadingCoeffNth n
 
 Depends on / 依赖: I.leadingCoeffNth, leadingCoeffNth
@@ -1279,7 +1279,7 @@ theorem polynomial_mem_ideal_of_coeff_mem_ideal
 
 中文:
 定理 polynomial_mem_ideal_of_coeff_mem_ideal
-  结论: (I : Ideal R[X]) (p : R[X])
+  结论: (I : 理想 R[X]) (p : R[X])
   证明: sum_C_mul_X_pow_eq p ▸ Submodule.sum_mem I fun n _ => I.mul_mem_right _ (hp n)
 
 Depends on / 依赖: I.mul_mem_right, Submodule, Submodule.sum_mem, mul_mem_right, sum_C_mul_X_pow_eq, sum_mem
@@ -1309,7 +1309,7 @@ theorem mem_map_C_iff
 
 中文:
 定理 mem_map_C_iff
-  条件: {I : Ideal R} {f : R[X]}
+  条件: {I : 理想 R} {f : R[X]}
   证明: by
   constructor
   · intro hf
@@ -1361,7 +1361,7 @@ theorem _root_.Polynomial.ker_mapRingHom
   simp [RingHom.mem_ker]
 
 中文:
-定理 _root_.Polynomial.ker_mapRingHom
+定理 _root_.多项式.ker_mapRingHom
   条件: (f : R ->+* S)
   证明: by
   ext
@@ -1528,7 +1528,7 @@ theorem mem_leadingCoeff
 中文:
 定理 mem_leadingCoeff
   条件: (x)
-  结论: x in I.leadingCoeff ↔ 存在 p in I, Polynomial.leadingCoeff p = x
+  结论: x in I.leadingCoeff ↔ 存在 p in I, 多项式.leadingCoeff p = x
   证明: by
   rw [leadingCoeff]; rw [Submodule.mem_iSup_of_directed]
   · simp only [mem_leadingCoeffNth]
@@ -1573,7 +1573,7 @@ lemma leadingCoeff_mono
 
 中文:
 引理 leadingCoeff_mono
-  条件: {I J : Ideal R[X]} (hIJ : I <= J)
+  条件: {I J : 理想 R[X]} (hIJ : I <= J)
   结论: I.leadingCoeff <= J.leadingCoeff
   证明: by
   intro x hx
@@ -1610,7 +1610,7 @@ lemma map_C_leadingCoeff
 
 中文:
 引理 map_C_leadingCoeff
-  条件: (p : Ideal R)
+  条件: (p : 理想 R)
   结论: (map C p).leadingCoeff = p
   证明: by
   ext x
@@ -1645,7 +1645,7 @@ lemma leadingCoeff_top
 
 中文:
 引理 leadingCoeff_top
-  结论: (⊤ : Ideal R[X]).leadingCoeff = ⊤
+  结论: (⊤ : 理想 R[X]).leadingCoeff = ⊤
   证明: by simp [← map_top C]
 
 Depends on / 依赖: map_top
@@ -1667,7 +1667,7 @@ lemma leadingCoeff_mul_le
 
 中文:
 引理 leadingCoeff_mul_le
-  条件: [NoZeroDivisors R] (I J : Ideal R[X])
+  条件: [无零因子 R] (I J : 理想 R[X])
   证明: by
   refine (mul_le).2 ?_
   intro a ha b hb
@@ -1699,7 +1699,7 @@ lemma leadingCoeff_finset_prod_le
 
 中文:
 引理 leadingCoeff_finset_prod_le
-  结论: [NoZeroDivisors R] {ι : 类型} (s : Finset ι)
+  结论: [无零因子 R] {ι : 类型} (s : 有限集 ι)
   证明: by
   classical
   refine Finset.induction_on s (by simp) ?_
@@ -1726,7 +1726,7 @@ lemma leadingCoeff_pow_le
 
 中文:
 引理 leadingCoeff_pow_le
-  条件: [NoZeroDivisors R] (n : 自然数)
+  条件: [无零因子 R] (n : 自然数)
   证明: by
   simpa using leadingCoeff_finset_prod_le (Finset.range n) fun _ => I
 
@@ -1754,8 +1754,8 @@ theorem _root_.Polynomial.coeff_prod_mem_ideal_pow_tsub
       rw [sum_insert ha]; rw [prod_insert ha]; 
 
 中文:
-定理 _root_.Polynomial.coeff_prod_mem_ideal_pow_tsub
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> R[X])
+定理 _root_.多项式.coeff_prod_mem_ideal_pow_tsub
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> R[X])
   证明: by
   classical
     induction s using Finset.induction generalizing k with
@@ -1807,8 +1807,8 @@ theorem _root_.Polynomial.not_isField
   exact hp0 t
 
 中文:
-定理 _root_.Polynomial.not_isField
-  结论: ¬IsField R[X]
+定理 _root_.多项式.not_isField
+  结论: ¬是域 R[X]
   证明: by
   nontriviality R
   intro hR
@@ -1846,7 +1846,7 @@ theorem eq_zero_of_constant_mem_of_maximal
 
 中文:
 定理 eq_zero_of_constant_mem_of_maximal
-  结论: (hR : IsField R) (I : Ideal R[X]) [hI : I.IsMaximal]
+  结论: (hR : 是域 R) (I : 理想 R[X]) [hI : I.是极大]
   证明: by
   refine Classical.by_contradiction fun hx0 => hI.ne_top ((eq_top_iff_one I).2 ?_)
   obtain ⟨y, hy⟩ := hR.mul_inv_cancel hx0
@@ -1887,7 +1887,7 @@ theorem isPrime_map_C_iff_isPrime
 
 中文:
 定理 isPrime_map_C_iff_isPrime
-  条件: (P : Ideal R)
+  条件: (P : 理想 R)
   证明: by
   -- Note: the following proof avoids quotient rings
   -- It can be golfed substantially by using something like
@@ -1956,7 +1956,7 @@ instance isPrime_map_C_of_isPrime
 
 中文:
 实例 isPrime_map_C_of_isPrime
-  签名: {P : Ideal R} [IsPrime P]
+  签名: {P : 理想 R} [是素 P]
   定义体: (isPrime_map_C_iff_isPrime P).mpr ‹_›
 
 Depends on / 依赖: isPrime_map_C_iff_isPrime
@@ -1977,7 +1977,7 @@ theorem is_fg_degreeLE
 
 中文:
 定理 is_fg_degreeLE
-  条件: [IsNoetherianRing R] (I : Ideal R[X]) (n : 自然数)
+  条件: [是Noether环 R] (I : 理想 R[X]) (n : 自然数)
   证明: letI := Classical.decEq R
   isNoetherian_submodule_left.1
     (isNoetherian_of_fg_of_noetherian _ ⟨_, degreeLE_eq_span_X_pow.symm⟩) _
@@ -2005,7 +2005,7 @@ lemma map_C_comap_of_comap_eq_leadingCoeff
 
 中文:
 引理 map_C_comap_of_comap_eq_leadingCoeff
-  条件: (I : Ideal R[X]) (hI : comap C I = I.leadingCoeff)
+  条件: (I : 理想 R[X]) (hI : comap C I = I.leadingCoeff)
   证明: by
   refine le_antisymm map_comap_le (fun f hfI => ?_)
   induction hn : f.natDegree using Nat.strong_induction_on generalizing f with | _ _ ih
@@ -2080,7 +2080,7 @@ theorem mem_span_C_coeff
 
 中文:
 定理 mem_span_C_coeff
-  结论: f in Ideal.span { g : R[X] | 存在 i : 自然数, g = C (coeff f i) }
+  结论: f in 理想.span { g : R[X] | 存在 i : 自然数, g = C (coeff f i) }
   证明: by
   let p := Ideal.span { g : R[X] | exists i : Nat, g = C (coeff f i) }
   nth_rw 2 [(sum_C_mul_X_pow_eq f).symm]
@@ -2117,7 +2117,7 @@ theorem exists_C_coeff_notMem
   proof: Not.imp_symm fun cf => span_le_of_C_coeff_mem (not_exists_not.mp cf) mem_span_C_coeff
 
 中文:
-定理 exists_C_coeff_notMem
+定理 存在_C_coeff_notMem
   结论: f ∉ I -> 存在 i : 自然数, C (coeff f i) ∉ I
   证明: Not.imp_symm fun cf => span_le_of_C_coeff_mem (not_exists_not.mp cf) mem_span_C_coeff
 
@@ -2153,7 +2153,7 @@ theorem prime_C_iff
 
 中文:
 定理 prime_C_iff
-  结论: Prime (C r) ↔ Prime r
+  结论: 素 (C r) ↔ 素 r
   证明: ⟨comap_prime C (evalRingHom (0 : R)) fun _ => eval_C, fun hr => by
     have := hr.1
     rw [← Ideal.span_singleton_prime] at hr ⊢
@@ -2197,7 +2197,7 @@ theorem prime_C_iff_of_fintype
 
 中文:
 定理 prime_C_iff_of_fintype
-  条件: {R : 类型u} (σ : 类型v) {r : R} [CommRing R] [Finite σ]
+  条件: {R : 类型u} (σ : 类型v) {r : R} [交换环 R] [有限 σ]
   证明: by
   have := Fintype.ofFinite σ
   rw [← MulEquiv.prime_iff (renameEquiv R (Fintype.equivFin σ))]
@@ -2241,7 +2241,7 @@ hr.2.1 by
 
 中文:
 定理 prime_C_iff
-  结论: Prime (C r : MvPolynomial σ R) ↔ Prime r
+  结论: 素 (C r : 多元多项式 σ R) ↔ 素 r
   证明: ⟨comap_prime C constantCoeff (constantCoeff_C _), fun hr =>
 ⟨fun h => hr.1 by
         rw [← C_inj]; rw [h]
@@ -2296,7 +2296,7 @@ theorem prime_rename_iff
 
 中文:
 定理 prime_rename_iff
-  条件: (s : Set σ) {p : MvPolynomial s R}
+  条件: (s : 集合 σ) {p : 多元多项式 s R}
   证明: by
   classical
     symm
@@ -2343,9 +2343,9 @@ theorem Polynomial.isNoetherianRing
       have hm2 : forall k, I.leadingC
 
 中文:
-定理 Polynomial.isNoetherianRing
-  条件: [inst : IsNoetherianRing R]
-  结论: IsNoetherianRing R[X]
+定理 多项式.isNoetherianRing
+  条件: [inst : 是Noether环 R]
+  结论: 是Noether环 R[X]
   证明: isNoetherianRing_iff.2
     ⟨fun I : Ideal R[X] =>
       let M := inst.wf.min (Set.range I.leadingCoeffNth) ⟨_, ⟨0, rfl⟩⟩
@@ -2646,7 +2646,7 @@ lemma aeval_natDegree_le
 
 中文:
 引理 aeval_natDegree_le
-  结论: {R : 类型} [CommSemiring R] {m n : 自然数}
+  结论: {R : 类型} [交换半环 R] {m n : 自然数}
   证明: by
   rw [MvPolynomial.aeval_def]; rw [MvPolynomial.eval₂]
   apply (Polynomial.natDegree_sum_le _ _).trans
@@ -2691,7 +2691,7 @@ theorem isNoetherianRing_fin_0
 
 中文:
 定理 isNoetherianRing_fin_0
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   apply isNoetherianRing_of_ringEquiv R
   symm; apply MvPolynomial.isEmptyRingEquiv R (Fin 0)
@@ -2712,7 +2712,7 @@ theorem isNoetherianRing_fin
 
 中文:
 定理 isNoetherianRing_fin
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
 -/
 theorem isNoetherianRing_fin [IsNoetherianRing R] :
     forall {n : Nat}, IsNoetherianRing (MvPolynomial (Fin n) R)
@@ -2736,7 +2736,7 @@ instance isNoetherianRing
 
 中文:
 实例 isNoetherianRing
-  签名: [Finite σ] [IsNoetherianRing R]
+  签名: [有限 σ] [是Noether环 R]
   定义体: by
   cases nonempty_fintype σ
   exact
@@ -2768,7 +2768,7 @@ theorem map_mvPolynomial_eq_eval₂
 
 中文:
 定理 map_mvPolynomial_eq_eval₂
-  结论: {S : 类型} [CommSemiring S] [Finite σ]
+  结论: {S : 类型} [交换半环 S] [有限 σ]
   证明: by
   cases nonempty_fintype σ
   refine Trans.trans (congr_arg ϕ (MvPolynomial.as_sum p)) ?_
@@ -2806,7 +2806,7 @@ theorem mem_ideal_of_coeff_mem_ideal
 
 中文:
 定理 mem_ideal_of_coeff_mem_ideal
-  结论: (I : Ideal (MvPolynomial σ R)) (p : MvPolynomial σ R)
+  结论: (I : 理想 (多元多项式 σ R)) (p : 多元多项式 σ R)
   证明: by
   rw [as_sum p]
   suffices forall m in p.support, monomial m (MvPolynomial.coeff m p) in I by
@@ -2850,7 +2850,7 @@ theorem mem_map_C_iff
 
 中文:
 定理 mem_map_C_iff
-  条件: {I : Ideal R} {f : MvPolynomial σ R}
+  条件: {I : 理想 R} {f : 多元多项式 σ R}
   证明: by
   classical
   constructor
@@ -2934,7 +2934,7 @@ lemma ker_mapAlgHom
 
 中文:
 引理 ker_mapAlgHom
-  结论: {S₁ S₂ σ : 类型} [CommRing S₁] [CommRing S₂] [Algebra R S₁]
+  结论: {S₁ S₂ σ : 类型} [交换环 S₁] [交换环 S₂] [代数 R S₁]
   证明: MvPolynomial.ker_map (f.toRingHom : S₁ ->+* S₂)
 
 Depends on / 依赖: Ideal.map, MvPolynomial, MvPolynomial.C, RingHom, RingHom.ker

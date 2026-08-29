@@ -38,7 +38,7 @@ lemma Topology.IsScott.ωScottContinuous_iff_continuous
     use Chain.pair a b hab; exact OmegaCompletePartialOrder.Chain.range_pair a b hab)]
 
 中文:
-引理 Topology.IsScott.ωScottContinuous_iff_continuous
+引理 拓扑.是Scott.ωScottContinuous_iff_continuous
   结论: {α : 类型}
   证明: by
   rw [ωScottContinuous]; rw [scottContinuousOn_iff_continuous (fun a b hab => by
@@ -63,7 +63,7 @@ definition IsωSup
 
 中文:
 定义 IsωSup
-  签名: {α : 类型u} [Preorder α] (c : Chain α) (x : α)
+  签名: {α : 类型u} [预序 α] (c : 链 α) (x : α)
   定义体: (forall i, c i <= x) ∧ forall y, (forall i, c i <= y) -> x <= y
 -/
 def IsωSup {α : Type u} [Preorder α] (c : Chain α) (x : α) : Prop :=
@@ -80,7 +80,7 @@ theorem isωSup_iff_isLUB
 
 中文:
 定理 isωSup_iff_isLUB
-  条件: {α : 类型u} [Preorder α] {c : Chain α} {x : α}
+  条件: {α : 类型u} [预序 α] {c : 链 α} {x : α}
   证明: by
   simp [IsωSup, IsLUB, IsLeast, upperBounds, lowerBounds]
 
@@ -101,8 +101,8 @@ definition IsOpen
   body: ωScottContinuous fun x => x in s
 
 中文:
-定义 IsOpen
-  签名: (s : Set α)
+定义 是开集
+  签名: (s : 集合 α)
   定义体: ωScottContinuous fun x => x in s
 -/
 def IsOpen (s : Set α) : Prop :=
@@ -118,7 +118,7 @@ theorem isOpen_univ
 
 中文:
 定理 isOpen_univ
-  结论: IsOpen α univ
+  结论: 是开集 α univ
   证明: @CompleteLattice.ωScottContinuous.top α Prop _ _
 
 Depends on / 依赖: CompleteLattice, ScottContinuous.top
@@ -135,9 +135,9 @@ theorem IsOpen.inter
   proof: CompleteLattice.ωScottContinuous.inf
 
 中文:
-定理 IsOpen.inter
-  条件: (s t : Set α)
-  结论: IsOpen α s -> IsOpen α t -> IsOpen α (s inter t)
+定理 是开集.inter
+  条件: (s t : 集合 α)
+  结论: 是开集 α s -> 是开集 α t -> 是开集 α (s inter t)
   证明: CompleteLattice.ωScottContinuous.inf
 
 Depends on / 依赖: CompleteLattice, ScottContinuous.inf
@@ -160,8 +160,8 @@ theorem isOpen_sUnion
 
 中文:
 定理 isOpen_sUnion
-  条件: (s : Set (Set α)) (hs : 对任意 t in s, IsOpen α t)
-  结论: IsOpen α (⋃₀ s)
+  条件: (s : 集合 (集合 α)) (hs : 对任意 t in s, 是开集 α t)
+  结论: 是开集 α (⋃₀ s)
   证明: by
   simp only [IsOpen] at hs ⊢
   convert! CompleteLattice.ωScottContinuous.sSup hs
@@ -184,9 +184,9 @@ theorem IsOpen.isUpperSet
   proof: hs.monotone
 
 中文:
-定理 IsOpen.isUpperSet
-  条件: {s : Set α} (hs : IsOpen α s)
-  结论: IsUpperSet s
+定理 是开集.isUpperSet
+  条件: {s : 集合 α} (hs : 是开集 α s)
+  结论: 是上集 s
   证明: hs.monotone
 
 Depends on / 依赖: hs.monotone, monotone
@@ -211,7 +211,7 @@ theorem isωSup_ωSup
 
 中文:
 定理 isωSup_ωSup
-  条件: {α} [OmegaCompletePartialOrder α] (c : Chain α)
+  条件: {α} [OmegaCompletePartial序 α] (c : 链 α)
   结论: IsωSup c (ωSup c)
   证明: by
   constructor

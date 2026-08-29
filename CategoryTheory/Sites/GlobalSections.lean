@@ -80,7 +80,7 @@ definition Sheaf.Γ
 deriving Functor.IsRightAdjoint
 
 中文:
-定义 Sheaf.Γ
+定义 层.Γ
   签名: [HasGlobalSectionsFunctor J A]
   定义体: (constantSheaf J A).rightAdjoint
 deriving Functor.IsRightAdjoint
@@ -120,7 +120,7 @@ instance hasGlobalSectionsFunctor_of_hasTerminal
 
 中文:
 实例 hasGlobalSectionsFunctor_of_hasTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: ⟨_, ⟨constantSheafAdj J A terminalIsTerminal⟩⟩
 
 Depends on / 依赖: constantSheafAdj, terminalIsTerminal
@@ -138,8 +138,8 @@ definition Sheaf.ΓNatIsoSheafSections
   body: (constantSheafΓAdj J A).rightAdjointUniq (constantSheafAdj J A hT)
 
 中文:
-定义 Sheaf.ΓNatIsoSheafSections
-  签名: [HasTerminal C] {T : C} (hT : IsTerminal T)
+定义 层.Γ自然数IsoSheafSections
+  签名: [有终止 C] {T : C} (hT : 是终止 T)
   定义体: (constantSheafΓAdj J A).rightAdjointUniq (constantSheafAdj J A hT)
 
 Depends on / 依赖: constantSheafAdj, rightAdjointUniq
@@ -158,7 +158,7 @@ instance hasGlobalSectionsFunctor_of_hasLimitsOfShape
 
 中文:
 实例 hasGlobalSectionsFunctor_of_hasLimitsOfShape
-  签名: [HasLimitsOfShape Cᵒᵖ A]
+  签名: [有形状极限 Cᵒᵖ A]
   定义体: ⟨sheafToPresheaf J A ⋙ lim, ⟨constLimAdj.comp (sheafificationAdjunction J A)⟩⟩
 
 Depends on / 依赖: constLimAdj, constLimAdj.comp, sheafToPresheaf, sheafificationAdjunction
@@ -176,8 +176,8 @@ definition Sheaf.ΓNatIsoLim
   body: (constantSheafΓAdj J A).rightAdjointUniq (constLimAdj.comp (sheafificationAdjunction J A))
 
 中文:
-定义 Sheaf.ΓNatIsoLim
-  签名: [HasLimitsOfShape Cᵒᵖ A]
+定义 层.Γ自然数IsoLim
+  签名: [有形状极限 Cᵒᵖ A]
   定义体: (constantSheafΓAdj J A).rightAdjointUniq (constLimAdj.comp (sheafificationAdjunction J A))
 
 Depends on / 依赖: constLimAdj, constLimAdj.comp, rightAdjointUniq, sheafificationAdjunction
@@ -198,8 +198,8 @@ definition Sheaf.ΓHomEquiv
     ((constantSheafΓAdj J A).homEquiv _ _)
 
 中文:
-定义 Sheaf.ΓHomEquiv
-  签名: [HasGlobalSectionsFunctor J A] {X : A} {F : Sheaf J A}
+定义 层.ΓHomEquiv
+  签名: [HasGlobalSectionsFunctor J A] {X : A} {F : 层 J A}
   定义体: ((sheafificationAdjunction J A).homEquiv _ _).symm.trans
     ((constantSheafΓAdj J A).homEquiv _ _)
 
@@ -220,8 +220,8 @@ lemma Sheaf.ΓHomEquiv_naturality_left
     ((constantSheafΓAdj J A).homEquiv_naturality_left _ _)
 
 中文:
-引理 Sheaf.ΓHomEquiv_naturality_left
-  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
+引理 层.ΓHomEquiv_naturality_left
+  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : 层 J A}
   证明: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_left_symm _ _)).trans
     ((constantSheafΓAdj J A).homEquiv_naturality_left _ _)
 
@@ -243,8 +243,8 @@ lemma Sheaf.ΓHomEquiv_naturality_left_symm
     ((sheafificationAdjunction J A).homEquiv_naturality_left _ _)
 
 中文:
-引理 Sheaf.ΓHomEquiv_naturality_left_symm
-  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
+引理 层.ΓHomEquiv_naturality_left_symm
+  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : 层 J A}
   证明: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_left_symm _ _)).trans
     ((sheafificationAdjunction J A).homEquiv_naturality_left _ _)
 
@@ -266,8 +266,8 @@ lemma Sheaf.ΓHomEquiv_naturality_right
     ((constantSheafΓAdj J A).homEquiv_naturality_right _ _)
 
 中文:
-引理 Sheaf.ΓHomEquiv_naturality_right
-  结论: [HasGlobalSectionsFunctor J A] {X : A} {F F' : Sheaf J A}
+引理 层.ΓHomEquiv_naturality_right
+  结论: [HasGlobalSectionsFunctor J A] {X : A} {F F' : 层 J A}
   证明: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_right_symm _ _)).trans
     ((constantSheafΓAdj J A).homEquiv_naturality_right _ _)
 
@@ -289,7 +289,7 @@ lemma Sheaf.ΓHomEquiv_naturality_right_symm
     ((sheafificationAdjunction J A).homEquiv_naturality_right _ _)
 
 中文:
-引理 Sheaf.ΓHomEquiv_naturality_right_symm
+引理 层.ΓHomEquiv_naturality_right_symm
   结论: [HasGlobalSectionsFunctor J A] {X : A}
   证明: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_right_symm _ _)).trans
     ((sheafificationAdjunction J A).homEquiv_naturality_right _ _)
@@ -315,8 +315,8 @@ definition Sheaf.coneΓ
   π := ΓHomEquiv.symm (𝟙 _)
 
 中文:
-定义 Sheaf.coneΓ
-  签名: [HasGlobalSectionsFunctor J A] (F : Sheaf J A)
+定义 层.coneΓ
+  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A)
   定义体: (Γ J A).obj F
   π := ΓHomEquiv.symm (𝟙 _)
 -/
@@ -340,8 +340,8 @@ definition Sheaf.isLimitConeΓ
     simpa [con
 
 中文:
-定义 Sheaf.isLimitConeΓ
-  签名: [HasGlobalSectionsFunctor J A] (F : Sheaf J A)
+定义 层.isLimitConeΓ
+  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A)
   定义体: F.ΓHomEquiv c.π
   fac c j := by
     suffices h : ((Functor.const Cᵒᵖ).map (ΓHomEquiv c.π)) ≫ F.coneΓ.π = c.π from congr_app h j
@@ -371,8 +371,8 @@ definition Sheaf.ΓRes
 @[reassoc (attr := simp)]
 
 中文:
-定义 Sheaf.ΓRes
-  签名: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ)
+定义 层.ΓRes
+  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A) (U : Cᵒᵖ)
   定义体: F.coneΓ.π.app U
 
 @[reassoc (attr := simp)]
@@ -395,8 +395,8 @@ lemma Sheaf.ΓRes_map
 @[simp]
 
 中文:
-引理 Sheaf.ΓRes_map
-  条件: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) {V U : Cᵒᵖ} (f : U ⟶ V)
+引理 层.ΓRes_map
+  条件: [HasGlobalSectionsFunctor J A] (F : 层 J A) {V U : Cᵒᵖ} (f : U ⟶ V)
   证明: F.coneΓ.w f
 
 @[simp]
@@ -417,8 +417,8 @@ lemma Sheaf.coneΓ_π_app
   proof: rfl
 
 中文:
-引理 Sheaf.coneΓ_π_app
-  条件: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ)
+引理 层.coneΓ_π_app
+  条件: [HasGlobalSectionsFunctor J A] (F : 层 J A) (U : Cᵒᵖ)
   证明: rfl
 -/
 lemma Sheaf.coneΓ_π_app [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ) :
@@ -435,8 +435,8 @@ refine .trans ?_ congr_app (ΓHomEquiv_naturality_right_symm _ _) U
   exact (congr_app (ΓHomEquiv_naturality_left_symm ((Γ J A).map f) (𝟙 _)) U).symm.trans (by simp)
 
 中文:
-引理 Sheaf.ΓRes_naturality
-  条件: [HasGlobalSectionsFunctor J A] {F G : Sheaf J A} (f : F ⟶ G) (U : Cᵒᵖ)
+引理 层.ΓRes_naturality
+  条件: [HasGlobalSectionsFunctor J A] {F G : 层 J A} (f : F ⟶ G) (U : Cᵒᵖ)
   证明: by
 refine .trans ?_ congr_app (ΓHomEquiv_naturality_right_symm _ _) U
   exact (congr_app (ΓHomEquiv_naturality_left_symm ((Γ J A).map f) (𝟙 _)) U).symm.trans (by simp)
@@ -463,7 +463,7 @@ definition Sheaf.natTransΓRes
   naturality _ _ f := ΓRes_naturality f U
 
 中文:
-定义 Sheaf.natTransΓRes
+定义 层.natTransΓRes
   签名: [HasGlobalSectionsFunctor J A] (U : Cᵒᵖ)
   定义体: ΓRes F U
   naturality _ _ f := ΓRes_naturality f U
@@ -483,8 +483,8 @@ definition Sheaf.ΓObjEquivSections
     ΓHomEquiv.symm).trans (F.obj.sectionsEquivHom PUnit).symm
 
 中文:
-定义 Sheaf.ΓObjEquivSections
-  签名: [HasWeakSheafify J (Type w)]
+定义 层.ΓObjEquivSections
+  签名: [HasWeakSheafify J (类型 w)]
   定义体: (Equiv.trans (by exact (Equiv.funUnique (PUnit) _).symm.trans TypeCat.homEquiv.symm)
     ΓHomEquiv.symm).trans (F.obj.sectionsEquivHom PUnit).symm
 
@@ -508,8 +508,8 @@ lemma Sheaf.ΓObjEquivSections_naturality
     (Functor.sectionsEquivHom_naturality_symm _ _ _)
 
 中文:
-引理 Sheaf.ΓObjEquivSections_naturality
-  结论: [HasWeakSheafify J (Type w)]
+引理 层.ΓObjEquivSections_naturality
+  结论: [HasWeakSheafify J (类型 w)]
   证明: by
   dsimp [ΓObjEquivSections]
   exact (congr_arg _ (ΓHomEquiv_naturality_right_symm (↾(uniqueElim x)) f)).trans
@@ -535,8 +535,8 @@ lemma Sheaf.ΓObjEquivSections_naturality_symm
   proof: ConcreteCategory.congr_hom (ΓHomEquiv_naturality_right (F.obj.sectionsEquivHom _ x) f) _
 
 中文:
-引理 Sheaf.ΓObjEquivSections_naturality_symm
-  结论: [HasWeakSheafify J (Type w)]
+引理 层.ΓObjEquivSections_naturality_symm
+  结论: [HasWeakSheafify J (类型 w)]
   证明: ConcreteCategory.congr_hom (ΓHomEquiv_naturality_right (F.obj.sectionsEquivHom _ x) f) _
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.obj.sectionsEquivHom, congr_hom, sectionsEquivHom
@@ -558,7 +558,7 @@ definition Sheaf.ΓNatIsoSectionsFunctor
     exact ΓObjEquivSections_naturality J f x
 
 中文:
-定义 Sheaf.ΓNatIsoSectionsFunctor
+定义 层.Γ自然数IsoSectionsFunctor
   签名: :
   定义体: NatIso.ofComponents (fun F => (ΓObjEquivSections J F).toIso) fun f => by
     ext x
@@ -582,8 +582,8 @@ definition Sheaf.ΓObjEquivHom
     ((constantSheafΓAdj J (Type w)).homEquiv _ _).symm
 
 中文:
-定义 Sheaf.ΓObjEquivHom
-  签名: [HasWeakSheafify J (Type w)]
+定义 层.ΓObjEquivHom
+  签名: [HasWeakSheafify J (类型 w)]
   定义体: ((Equiv.funUnique X _).symm.trans TypeCat.homEquiv.symm).trans
     ((constantSheafΓAdj J (Type w)).homEquiv _ _).symm
 
@@ -605,8 +605,8 @@ lemma Sheaf.ΓObjEquivHom_naturality
     (↾(uniqueElim x)) f
 
 中文:
-引理 Sheaf.ΓObjEquivHom_naturality
-  结论: [HasWeakSheafify J (Type w)]
+引理 层.ΓObjEquivHom_naturality
+  结论: [HasWeakSheafify J (类型 w)]
   证明: (constantSheafΓAdj J (Type w)).homEquiv_naturality_right_symm
     (↾(uniqueElim x)) f
 
@@ -628,8 +628,8 @@ lemma Sheaf.ΓObjEquivHom_naturality_symm
   proof: ConcreteCategory.congr_hom ((constantSheafΓAdj J _).homEquiv_naturality_right x f) default
 
 中文:
-引理 Sheaf.ΓObjEquivHom_naturality_symm
-  结论: [HasWeakSheafify J (Type w)]
+引理 层.ΓObjEquivHom_naturality_symm
+  结论: [HasWeakSheafify J (类型 w)]
   证明: ConcreteCategory.congr_hom ((constantSheafΓAdj J _).homEquiv_naturality_right x f) default
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, homEquiv_naturality_right
@@ -651,8 +651,8 @@ definition Sheaf.ΓNatIsoCoyoneda
     exact ΓObjEquivHom_naturality J X f x
 
 中文:
-定义 Sheaf.ΓNatIsoCoyoneda
-  签名: (X : Type (max u v)) [Unique X]
+定义 层.Γ自然数IsoCoyoneda
+  签名: (X : 类型 (最大值 u v)) [唯一 X]
   定义体: NatIso.ofComponents (fun F => (F.ΓObjEquivHom J X).toIso) fun f => by
     ext x
     exact ΓObjEquivHom_naturality J X f x

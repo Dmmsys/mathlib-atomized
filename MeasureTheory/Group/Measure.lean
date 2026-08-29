@@ -57,7 +57,7 @@ theorem map_mul_left_eq_self
 
 中文:
 定理 map_mul_left_eq_self
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] (g : G)
   证明: IsMulLeftInvariant.map_mul_left_eq_self g
 
 @[to_additive]
@@ -82,7 +82,7 @@ theorem map_mul_right_eq_self
 
 中文:
 定理 map_mul_right_eq_self
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (g : G)
   结论: map (· * g) μ = μ
   证明: IsMulRightInvariant.map_mul_right_eq_self g
 
@@ -106,7 +106,7 @@ instance isMulLeftInvariant_smul
 
 中文:
 实例 isMulLeftInvariant_smul
-  签名: [IsMulLeftInvariant μ] (c : 实数>=0∞)
+  签名: [是MulLeftInvariant μ] (c : 实数>=0∞)
   定义体: ⟨fun g => by rw [Measure.map_smul, map_mul_left_eq_self]⟩
 
 @[to_additive MeasureTheory.isAddRightInvariant_smul]
@@ -129,7 +129,7 @@ instance isMulRightInvariant_smul
 
 中文:
 实例 isMulRightInvariant_smul
-  签名: [IsMulRightInvariant μ] (c : 实数>=0∞)
+  签名: [是MulRightInvariant μ] (c : 实数>=0∞)
   定义体: ⟨fun g => by rw [Measure.map_smul, map_mul_right_eq_self]⟩
 
 @[to_additive MeasureTheory.isAddLeftInvariant_smul_nnreal]
@@ -153,7 +153,7 @@ instance isMulLeftInvariant_smul_nnreal
 
 中文:
 实例 isMulLeftInvariant_smul_nnreal
-  签名: [IsMulLeftInvariant μ] (c : 实数>=0)
+  签名: [是MulLeftInvariant μ] (c : 实数>=0)
   定义体: MeasureTheory.isMulLeftInvariant_smul (c : Real>=0∞)
 
 @[to_additive MeasureTheory.isAddRightInvariant_smul_nnreal]
@@ -175,7 +175,7 @@ instance isMulRightInvariant_smul_nnreal
 
 中文:
 实例 isMulRightInvariant_smul_nnreal
-  签名: [IsMulRightInvariant μ] (c : 实数>=0)
+  签名: [是MulRightInvariant μ] (c : 实数>=0)
   定义体: MeasureTheory.isMulRightInvariant_smul (c : Real>=0∞)
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.isMulRightInvariant_smul, Nat.prime_iff_prime_int.mp, absNorm_eq_pow_inertiaDeg, isMulRightInvariant_smul, prime_iff_prime_int
@@ -201,7 +201,7 @@ theorem measurePreserving_mul_left
 
 中文:
 定理 measurePreserving_mul_left
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] (g : G)
   证明: ⟨measurable_const_mul g, map_mul_left_eq_self μ g⟩
 
 @[to_additive]
@@ -224,8 +224,8 @@ theorem MeasurePreserving.mul_left
 @[to_additive]
 
 中文:
-定理 MeasurePreserving.mul_left
-  结论: (μ : Measure G) [IsMulLeftInvariant μ] (g : G) {X : 类型}
+定理 保测.mul_left
+  结论: (μ : 测度 G) [是MulLeftInvariant μ] (g : G) {X : 类型}
   证明: (measurePreserving_mul_left μ g).comp hf
 
 @[to_additive]
@@ -250,7 +250,7 @@ theorem measurePreserving_mul_right
 
 中文:
 定理 measurePreserving_mul_right
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (g : G)
   证明: ⟨measurable_mul_const g, map_mul_right_eq_self μ g⟩
 
 @[to_additive]
@@ -273,8 +273,8 @@ theorem MeasurePreserving.mul_right
 @[to_additive]
 
 中文:
-定理 MeasurePreserving.mul_right
-  结论: (μ : Measure G) [IsMulRightInvariant μ] (g : G) {X : 类型}
+定理 保测.mul_right
+  结论: (μ : 测度 G) [是MulRightInvariant μ] (g : G) {X : 类型}
   证明: (measurePreserving_mul_right μ g).comp hf
 
 @[to_additive]
@@ -296,8 +296,8 @@ instance Subgroup.smulInvariantMeasure
   body: ⟨fun y s hs => by convert! SMulInvariantMeasure.measure_preimage_smul (μ := μ) (y : G) hs⟩
 
 中文:
-实例 Subgroup.smulInvariantMeasure
-  签名: {G α : 类型} [Group G] [MulAction G α] [MeasurableSpace α]
+实例 子群.smulInvariantMeasure
+  签名: {G α : 类型} [群 G] [乘法作用 G α] [可测空间 α]
   定义体: ⟨fun y s hs => by convert! SMulInvariantMeasure.measure_preimage_smul (μ := μ) (y : G) hs⟩
 
 Depends on / 依赖: Ideal.pow_le_pow_right, Nat.find, Nat.find_min, Nat.find_spec, SMulInvariantMeasure, SMulInvariantMeasure.measure_preimage_smul, _eq_find, classical, convert, find_min, find_spec, h.not_ge, hk.trans, le_antisymm, le_of_not_gt, measure_preimage_smul, not_ge, pow_le_pow_right, ramificationIdx
@@ -322,8 +322,8 @@ theorem forall_measure_preimage_mul_iff
   exact ⟨fun h => ⟨h⟩, fun h => h.1⟩
 
 中文:
-定理 forall_measure_preimage_mul_iff
-  条件: (μ : Measure G)
+定理 对任意_measure_preimage_mul_iff
+  条件: (μ : 测度 G)
   证明: by
   trans forall g, map (g * ·) μ = μ
   · simp_rw [Measure.ext_iff]
@@ -360,8 +360,8 @@ theorem forall_measure_preimage_mul_right_iff
 @[to_additive]
 
 中文:
-定理 forall_measure_preimage_mul_right_iff
-  条件: (μ : Measure G)
+定理 对任意_measure_preimage_mul_right_iff
+  条件: (μ : 测度 G)
   证明: by
   trans forall g, map (· * g) μ = μ
   · simp_rw [Measure.ext_iff]
@@ -398,8 +398,8 @@ instance Measure.prod.instIsMulLeftInvariant
 @[to_additive]
 
 中文:
-实例 Measure.prod.instIsMulLeftInvariant
-  签名: [IsMulLeftInvariant μ] [SFinite μ] {H : 类型}
+实例 测度.乘积.instIsMulLeftInvariant
+  签名: [是MulLeftInvariant μ] [SFinite μ] {H : 类型}
   定义体: by
   constructor
   rintro ⟨g, h⟩
@@ -434,8 +434,8 @@ instance Measure.prod.instIsMulRightInvariant
 @[to_additive]
 
 中文:
-实例 Measure.prod.instIsMulRightInvariant
-  签名: [IsMulRightInvariant μ] [SFinite μ] {H : 类型}
+实例 测度.乘积.instIsMulRightInvariant
+  签名: [是MulRightInvariant μ] [SFinite μ] {H : 类型}
   定义体: by
   constructor
   rintro ⟨g, h⟩
@@ -473,7 +473,7 @@ theorem isMulLeftInvariant_map
 
 中文:
 定理 isMulLeftInvariant_map
-  结论: {H : 类型} [MeasurableSpace H] [Mul H] [MeasurableMul H]
+  结论: {H : 类型} [可测空间 H] [乘法 H] [MeasurableMul H]
   证明: by
   refine ⟨fun h => ?_⟩
   rw [map_map (measurable_const_mul _) hf]
@@ -571,7 +571,7 @@ instance isMulLeftInvariant_map_mul_right
 
 中文:
 实例 isMulLeftInvariant_map_mul_right
-  签名: [IsMulLeftInvariant μ] (g : G)
+  签名: [是MulLeftInvariant μ] (g : G)
   定义体: isMulLeftInvariant_map_smul (MulOpposite.op g)
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, isMulLeftInvariant_map_smul
@@ -593,7 +593,7 @@ instance isMulRightInvariant_map_mul_left
 
 中文:
 实例 isMulRightInvariant_map_mul_left
-  签名: [IsMulRightInvariant μ] (g : G)
+  签名: [是MulRightInvariant μ] (g : G)
   定义体: isMulRightInvariant_map_smul g
 
 Depends on / 依赖: isMulRightInvariant_map_smul
@@ -619,7 +619,7 @@ theorem map_div_right_eq_self
 
 中文:
 定理 map_div_right_eq_self
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (g : G)
   证明: by simp_rw [div_eq_mul_inv, map_mul_right_eq_self μ g⁻¹]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_algebraMap, Ideal.map_le_iff_le_comap, Ideal.map_pow, RingEquiv, RingEquiv.symm, RingEquiv.symm_symm, Set.mem_ofPred_eq, comap_coe, comap_comap, comp_algebraMap, div_eq_mul_inv, e.toAlgHom_toRingHom, e.toRingEquiv_toRingHom, map_comap_of_equiv, map_le_iff_le_comap, map_mul_right_eq_self, map_pow, mem_ofPred_eq, ramificationIdx
@@ -644,7 +644,7 @@ theorem measurePreserving_div_right
 
 中文:
 定理 measurePreserving_div_right
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (g : G)
   证明: by simp_rw [div_eq_mul_inv, measurePreserving_mul_right μ g⁻¹]
 
 Depends on / 依赖: AlgEquivClass, AlgEquivClass.toAlgEquiv, P.map, P.map_comap_of_equiv, RingEquivClass, RingEquivClass.toRingEquiv, _comap_eq, div_eq_mul_inv, map_comap_of_equiv, measurePreserving_mul_right, p.ramificationIdx, ramificationIdx, simp_rw, toAlgEquiv, toRingEquiv
@@ -672,7 +672,7 @@ theorem measure_preimage_mul
 
 中文:
 定理 measure_preimage_mul
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] (g : G) (A : Set G)
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] (g : G) (A : 集合 G)
   证明: calc
     μ ((fun h => g * h) ⁻¹' A) = map (fun h => g * h) μ A :=
       ((MeasurableEquiv.mulLeft g).map_apply A).symm
@@ -705,7 +705,7 @@ theorem measure_preimage_mul_right
 
 中文:
 定理 measure_preimage_mul_right
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (g : G) (A : Set G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (g : G) (A : 集合 G)
   证明: calc
     μ ((fun h => h * g) ⁻¹' A) = map (fun h => h * g) μ A :=
       ((MeasurableEquiv.mulRight g).map_apply A).symm
@@ -735,7 +735,7 @@ theorem map_mul_left_ae
 
 中文:
 定理 map_mul_left_ae
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] (x : G)
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] (x : G)
   证明: ((MeasurableEquiv.mulLeft x).map_ae μ).trans congr_arg ae map_mul_left_eq_self μ x
 
 @[to_additive]
@@ -759,7 +759,7 @@ theorem map_mul_right_ae
 
 中文:
 定理 map_mul_right_ae
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (x : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (x : G)
   证明: ((MeasurableEquiv.mulRight x).map_ae μ).trans congr_arg ae map_mul_right_eq_self μ x
 
 @[to_additive]
@@ -783,7 +783,7 @@ theorem map_div_right_ae
 
 中文:
 定理 map_div_right_ae
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (x : G)
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (x : G)
   证明: ((MeasurableEquiv.divRight x).map_ae μ).trans congr_arg ae map_div_right_eq_self μ x
 
 @[to_additive]
@@ -809,7 +809,7 @@ theorem eventually_mul_left_iff
 
 中文:
 定理 eventually_mul_left_iff
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] (t : G) {p : G -> 命题}
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] (t : G) {p : G -> 命题}
   证明: by
   conv_rhs => rw [Filter.Eventually, ← map_mul_left_ae μ t]
   rfl
@@ -838,7 +838,7 @@ theorem eventually_mul_right_iff
 
 中文:
 定理 eventually_mul_right_iff
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (t : G) {p : G -> 命题}
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (t : G) {p : G -> 命题}
   证明: by
   conv_rhs => rw [Filter.Eventually, ← map_mul_right_ae μ t]
   rfl
@@ -867,7 +867,7 @@ theorem eventually_div_right_iff
 
 中文:
 定理 eventually_div_right_iff
-  条件: (μ : Measure G) [IsMulRightInvariant μ] (t : G) {p : G -> 命题}
+  条件: (μ : 测度 G) [是MulRightInvariant μ] (t : G) {p : G -> 命题}
   证明: by
   conv_rhs => rw [Filter.Eventually, ← map_div_right_ae μ t]
   rfl
@@ -898,8 +898,8 @@ lemma Subgroup.index_mul_measure
       · simp [
 
 中文:
-引理 Subgroup.index_mul_measure
-  结论: (H : Subgroup G) [H.FiniteIndex] (hH : MeasurableSet (H : Set G))
+引理 子群.index_mul_measure
+  结论: (H : 子群 G) [H.FiniteIndex] (hH : 可测集 (H : 集合 G))
   证明: by
   obtain ⟨s, hs, -⟩ := H.exists_isComplement_left 1
   have hs' : Finite s := hs.finite_left_iff.mpr inferInstance
@@ -940,7 +940,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def inv [Inv G] (μ : Measure G)
+  签名: def inv [取逆 G] (μ : 测度 G)
   定义体: Measure.map inv μ
 
 Depends on / 依赖: AtPrime, Ideal.dvd_iff_le.mpr, Ideal.map_map, Ideal.map_mul, Ideal.mul_mono_right, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, Localization.AtPrime.map_eq_maximalIdea, _eq_one_of_map_localization, _ne_one_iff, algebraMap, algebraMap_eq, dvd_iff_le, ha.trans_le, map_eq_maximalIdea, map_map, map_mul, mul_mono_right
@@ -958,8 +958,8 @@ class IsNegInvariant
     - neg_eq_self : μ.neg = μ
 
 中文:
-类 IsNegInvariant
-  参数: [Neg G] (μ : Measure G)
+类 是NegInvariant
+  参数: [取负 G] (μ : 测度 G)
   公理与运算 (1 个):
     - neg_eq_self : μ.neg = μ
 
@@ -981,8 +981,8 @@ class IsInvInvariant
     - inv_eq_self : μ.inv = μ
 
 中文:
-类 IsInvInvariant
-  参数: [Inv G] (μ : Measure G)
+类 是InvInvariant
+  参数: [取逆 G] (μ : 测度 G)
   公理与运算 (1 个):
     - inv_eq_self : μ.inv = μ
 -/
@@ -1007,8 +1007,8 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (μ : Measure G)
-  结论: μ.inv = Measure.map inv μ
+  条件: (μ : 测度 G)
+  结论: μ.inv = 测度.map inv μ
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1029,7 +1029,7 @@ theorem inv_eq_self
 
 中文:
 定理 inv_eq_self
-  条件: (μ : Measure G) [IsInvInvariant μ]
+  条件: (μ : 测度 G) [是InvInvariant μ]
   结论: μ.inv = μ
   证明: IsInvInvariant.inv_eq_self
 
@@ -1052,8 +1052,8 @@ theorem map_inv_eq_self
 
 中文:
 定理 map_inv_eq_self
-  条件: (μ : Measure G) [IsInvInvariant μ]
-  结论: map Inv.inv μ = μ
+  条件: (μ : 测度 G) [是InvInvariant μ]
+  结论: map 取逆.inv μ = μ
   证明: IsInvInvariant.inv_eq_self
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, IsInvInvariant, IsInvInvariant.inv_eq_self, IsPrime, IsTorsionFree, Module, Module.IsTorsionFree, Module.IsTorsionFree.of_smul_eq_zero, P.IsPrime, _algebra_tower, algebraMap_eq_zero_iff, algebra_compatible_smul, eq_or_ne, inv_eq_self, isPrime_of_liesOver, le_of_eq, map_le_iff_le_comap, map_le_iff_le_comap.mpr, map_ne_bot_of_ne_bot
@@ -1077,8 +1077,8 @@ theorem measurePreserving_inv
 
 中文:
 定理 measurePreserving_inv
-  条件: (μ : Measure G) [IsInvInvariant μ]
-  结论: MeasurePreserving Inv.inv μ μ
+  条件: (μ : 测度 G) [是InvInvariant μ]
+  结论: 保测 取逆.inv μ μ
   证明: ⟨measurable_inv, map_inv_eq_self μ⟩
 
 @[to_additive]
@@ -1100,7 +1100,7 @@ instance inv.instSFinite
 
 中文:
 实例 inv.instSFinite
-  签名: (μ : Measure G) [SFinite μ]
+  签名: (μ : 测度 G) [SFinite μ]
   定义体: by
   rw [Measure.inv]; infer_instance
 
@@ -1129,7 +1129,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: (μ : Measure G) (s : Set G)
+  条件: (μ : 测度 G) (s : 集合 G)
   结论: μ.inv s = μ s⁻¹
   证明: (MeasurableEquiv.inv G).map_apply s
 
@@ -1154,7 +1154,7 @@ theorem inv_inv
 
 中文:
 定理 inv_inv
-  条件: (μ : Measure G)
+  条件: (μ : 测度 G)
   结论: μ.inv.inv = μ
   证明: (MeasurableEquiv.inv G).map_symm_map
 
@@ -1178,7 +1178,7 @@ theorem measure_inv
 
 中文:
 定理 measure_inv
-  条件: (μ : Measure G) [IsInvInvariant μ] (A : Set G)
+  条件: (μ : 测度 G) [是InvInvariant μ] (A : 集合 G)
   结论: μ A⁻¹ = μ A
   证明: by
   rw [← inv_apply]; rw [inv_eq_self]
@@ -1203,7 +1203,7 @@ theorem measure_preimage_inv
 
 中文:
 定理 measure_preimage_inv
-  条件: (μ : Measure G) [IsInvInvariant μ] (A : Set G)
+  条件: (μ : 测度 G) [是InvInvariant μ] (A : 集合 G)
   证明: μ.measure_inv A
 
 @[to_additive]
@@ -1225,7 +1225,7 @@ instance inv.instSigmaFinite
 
 中文:
 实例 inv.instSigmaFinite
-  签名: (μ : Measure G) [SigmaFinite μ]
+  签名: (μ : 测度 G) [σ有限 μ]
   定义体: (MeasurableEquiv.inv G).sigmaFinite_map
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.inv, sigmaFinite_map
@@ -1257,7 +1257,7 @@ instance inv.instIsMulRightInvariant
 
 中文:
 实例 inv.instIsMulRightInvariant
-  签名: [IsMulLeftInvariant μ]
+  签名: [是MulLeftInvariant μ]
   定义体: by
   constructor
   intro g
@@ -1294,7 +1294,7 @@ instance inv.instIsMulLeftInvariant
 
 中文:
 实例 inv.instIsMulLeftInvariant
-  签名: [IsMulRightInvariant μ]
+  签名: [是MulRightInvariant μ]
   定义体: by
   constructor
   intro g
@@ -1328,7 +1328,7 @@ theorem measurePreserving_div_left
 
 中文:
 定理 measurePreserving_div_left
-  结论: (μ : Measure G) [IsInvInvariant μ] [IsMulLeftInvariant μ]
+  结论: (μ : 测度 G) [是InvInvariant μ] [是MulLeftInvariant μ]
   证明: by
   simp_rw [div_eq_mul_inv]
   exact (measurePreserving_mul_left μ g).comp (measurePreserving_inv μ)
@@ -1355,7 +1355,7 @@ theorem map_div_left_eq_self
 
 中文:
 定理 map_div_left_eq_self
-  条件: (μ : Measure G) [IsInvInvariant μ] [IsMulLeftInvariant μ] (g : G)
+  条件: (μ : 测度 G) [是InvInvariant μ] [是MulLeftInvariant μ] (g : G)
   证明: (measurePreserving_div_left μ g).map_eq
 
 @[to_additive]
@@ -1379,7 +1379,7 @@ theorem measurePreserving_mul_right_inv
 
 中文:
 定理 measurePreserving_mul_right_inv
-  结论: (μ : Measure G) [IsInvInvariant μ] [IsMulLeftInvariant μ]
+  结论: (μ : 测度 G) [是InvInvariant μ] [是MulLeftInvariant μ]
   证明: (measurePreserving_inv μ).comp measurePreserving_mul_left μ g
 
 @[to_additive]
@@ -1401,7 +1401,7 @@ theorem map_mul_right_inv_eq_self
 
 中文:
 定理 map_mul_right_inv_eq_self
-  结论: (μ : Measure G) [IsInvInvariant μ] [IsMulLeftInvariant μ]
+  结论: (μ : 测度 G) [是InvInvariant μ] [是MulLeftInvariant μ]
   证明: (measurePreserving_mul_right_inv μ g).map_eq
 
 Depends on / 依赖: map_eq, measurePreserving_mul_right_inv
@@ -1435,7 +1435,7 @@ instance :
 
 中文:
 实例 :
-  签名: (count : Measure G).IsMulLeftInvariant
+  签名: (count : 测度 G).是MulLeftInvariant
   定义体: by
     ext s hs
     rw [count_apply hs]; rw [map_apply (measurable_const_mul _) hs]; rw [count_apply (measurable_const_mul _ hs)]; rw [encard_preimage_of_bijective (Group.mulLeft_bijective _)]
@@ -1462,7 +1462,7 @@ instance :
 
 中文:
 实例 :
-  签名: (count : Measure G).IsMulRightInvariant
+  签名: (count : 测度 G).是MulRightInvariant
   定义体: by
     ext s hs
     rw [count_apply hs]; rw [map_apply (measurable_mul_const _) hs]; rw [count_apply (measurable_mul_const _ hs)]; rw [encard_preimage_of_bijective (Group.mulRight_bijective _)]
@@ -1497,8 +1497,8 @@ theorem IsMulLeftInvariant.comap
         exact ⟨g⁻¹ * y, by simp [yins],
 
 中文:
-定理 IsMulLeftInvariant.comap
-  结论: {H} [Group H] {mH : MeasurableSpace H} [MeasurableMul H]
+定理 是MulLeftInvariant.comap
+  结论: {H} [群 H] {mH : 可测空间 H} [MeasurableMul H]
   证明: by
     ext s hs
     rw [map_apply (by fun_prop) hs]
@@ -1548,8 +1548,8 @@ theorem IsMulRightInvariant.comap
         exact ⟨y * g⁻¹, by simp [yins],
 
 中文:
-定理 IsMulRightInvariant.comap
-  结论: {H} [Group H] {mH : MeasurableSpace H} [MeasurableMul H]
+定理 是MulRightInvariant.comap
+  结论: {H} [群 H] {mH : 可测空间 H} [MeasurableMul H]
   证明: by
     ext s hs
     rw [map_apply (by fun_prop) hs]
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: (count : Measure G).IsInvInvariant
+  签名: (count : 测度 G).是InvInvariant
   定义体: by ext s hs; rw [count_apply hs, inv_apply, count_apply hs.inv, encard_inv]
 
 Depends on / 依赖: count_apply, encard_inv, hs.inv, inv_apply
@@ -1615,7 +1615,7 @@ theorem map_div_left_ae
 
 中文:
 定理 map_div_left_ae
-  条件: (μ : Measure G) [IsMulLeftInvariant μ] [IsInvInvariant μ] (x : G)
+  条件: (μ : 测度 G) [是MulLeftInvariant μ] [是InvInvariant μ] (x : G)
   证明: ((MeasurableEquiv.divLeft x).map_ae μ).trans congr_arg ae map_div_left_eq_self μ x
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.divLeft, congr_arg, divLeft, map_ae, map_div_left_eq_self
@@ -1644,8 +1644,8 @@ instance Measure.IsFiniteMeasureOnCompacts.inv
 @[to_additive]
 
 中文:
-实例 Measure.IsFiniteMeasureOnCompacts.inv
-  签名: [ContinuousInv G] [IsFiniteMeasureOnCompacts μ]
+实例 测度.紧集上有限测度.inv
+  签名: [连续取逆 G] [紧集上有限测度 μ]
   定义体: IsFiniteMeasureOnCompacts.map μ (Homeomorph.inv G)
 
 @[to_additive]
@@ -1668,8 +1668,8 @@ instance Measure.IsOpenPosMeasure.inv
 @[to_additive]
 
 中文:
-实例 Measure.IsOpenPosMeasure.inv
-  签名: [ContinuousInv G] [IsOpenPosMeasure μ]
+实例 测度.是OpenPosMeasure.inv
+  签名: [连续取逆 G] [是OpenPosMeasure μ]
   定义体: (Homeomorph.inv G).continuous.isOpenPosMeasure_map (Homeomorph.inv G).surjective
 
 @[to_additive]
@@ -1692,8 +1692,8 @@ instance Measure.Regular.inv
 @[to_additive]
 
 中文:
-实例 Measure.Regular.inv
-  签名: [ContinuousInv G] [Regular μ]
+实例 测度.正则.inv
+  签名: [连续取逆 G] [正则 μ]
   定义体: Regular.map (Homeomorph.inv G)
 
 @[to_additive]
@@ -1713,8 +1713,8 @@ instance Measure.InnerRegular.inv
   body: InnerRegular.map (Homeomorph.inv G)
 
 中文:
-实例 Measure.InnerRegular.inv
-  签名: [ContinuousInv G] [InnerRegular μ]
+实例 测度.内正则.inv
+  签名: [连续取逆 G] [内正则 μ]
   定义体: InnerRegular.map (Homeomorph.inv G)
 
 Depends on / 依赖: Homeomorph, Homeomorph.inv, InnerRegular, InnerRegular.map
@@ -1736,7 +1736,7 @@ instance innerRegular_map_smul
 
 中文:
 实例 innerRegular_map_smul
-  签名: {α} [Monoid α] [MulAction α G] [ContinuousConstSMul α G]
+  签名: {α} [幺半群 α] [乘法作用 α G] [连续常数标量乘法 α G]
   定义体: InnerRegular.map_of_continuous (continuous_const_smul a)
 
 Depends on / 依赖: InnerRegular, InnerRegular.map_of_continuous, continuous_const_smul, map_of_continuous
@@ -1758,7 +1758,7 @@ instance innerRegular_map_mul_left
 
 中文:
 实例 innerRegular_map_mul_left
-  签名: [IsTopologicalGroup G] [InnerRegular μ] (g : G)
+  签名: [是拓扑群 G] [内正则 μ] (g : G)
   定义体: InnerRegular.map_of_continuous (continuous_const_mul g)
 
 Depends on / 依赖: InnerRegular, InnerRegular.map_of_continuous, continuous_const_mul, map_of_continuous
@@ -1779,7 +1779,7 @@ instance innerRegular_map_mul_right
 
 中文:
 实例 innerRegular_map_mul_right
-  签名: [IsTopologicalGroup G] [InnerRegular μ] (g : G)
+  签名: [是拓扑群 G] [内正则 μ] (g : G)
   定义体: InnerRegular.map_of_continuous (continuous_mul_const g)
 
 Depends on / 依赖: InnerRegular, InnerRegular.map_of_continuous, continuous_mul_const, map_of_continuous
@@ -1802,7 +1802,7 @@ theorem regular_inv_iff
 
 中文:
 定理 regular_inv_iff
-  结论: μ.inv.Regular ↔ μ.Regular
+  结论: μ.inv.正则 ↔ μ.正则
   证明: Regular.map_iff (Homeomorph.inv G)
 
 @[to_additive]
@@ -1823,7 +1823,7 @@ theorem innerRegular_inv_iff
 
 中文:
 定理 innerRegular_inv_iff
-  结论: μ.inv.InnerRegular ↔ μ.InnerRegular
+  结论: μ.inv.内正则 ↔ μ.内正则
   证明: InnerRegular.map_iff (Homeomorph.inv G)
 
 Depends on / 依赖: Homeomorph, Homeomorph.inv, InnerRegular, InnerRegular.map_iff, map_iff
@@ -1852,7 +1852,7 @@ lemma eventually_nhds_one_measure_smul_sdiff_lt
 
 中文:
 引理 eventually_nhds_one_measure_smul_sdiff_lt
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   obtain ⟨U, hUk, hU, hμUk⟩ : exists (U : Set G), k subseteq U ∧ IsOpen U ∧ μ U < μ k + ε :=
     hk.exists_isOpen_lt_add hε
@@ -1900,7 +1900,7 @@ alias tendsto_measure_smul_diff_isCompact_isClosed := tendsto_measure_smul_sdiff
 
 中文:
 引理 tendsto_measure_smul_sdiff_isCompact_isClosed
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: ENNReal.nhds_zero_basis.tendsto_right_iff.mpr fun _ h =>
     eventually_nhds_one_measure_smul_sdiff_lt hk h'k h.ne'
 
@@ -1945,7 +1945,7 @@ theorem isOpenPosMeasure_of_mulLeftInvariant_of_compact
 
 中文:
 定理 isOpenPosMeasure_of_mulLeftInvariant_of_compact
-  结论: (K : Set G) (hK : IsCompact K)
+  结论: (K : 集合 G) (hK : 是紧集 K)
   证明: by
   refine ⟨fun U hU hne => ?_⟩
   contrapose h
@@ -2003,7 +2003,7 @@ theorem null_iff_of_isMulLeftInvariant
 
 中文:
 定理 null_iff_of_isMulLeftInvariant
-  条件: [Regular μ] {s : Set G} (hs : IsOpen s)
+  条件: [正则 μ] {s : 集合 G} (hs : 是开集 s)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -2033,7 +2033,7 @@ theorem measure_ne_zero_iff_nonempty_of_isMulLeftInvariant
 
 中文:
 定理 measure_ne_zero_iff_nonempty_of_isMulLeftInvariant
-  结论: [Regular μ] (hμ : μ != 0) {s : Set G}
+  结论: [正则 μ] (hμ : μ != 0) {s : 集合 G}
   证明: by
   simpa [null_iff_of_isMulLeftInvariant (μ := μ) hs, hμ] using nonempty_iff_ne_empty.symm
 
@@ -2056,7 +2056,7 @@ theorem measure_pos_iff_nonempty_of_isMulLeftInvariant
 
 中文:
 定理 measure_pos_iff_nonempty_of_isMulLeftInvariant
-  结论: [Regular μ] (h3μ : μ != 0) {s : Set G}
+  结论: [正则 μ] (h3μ : μ != 0) {s : 集合 G}
   证明: pos_iff_ne_zero.trans measure_ne_zero_iff_nonempty_of_isMulLeftInvariant h3μ hs
 
 Depends on / 依赖: measure_ne_zero_iff_nonempty_of_isMulLeftInvariant, pos_iff_ne_zero, pos_iff_ne_zero.trans
@@ -2084,7 +2084,7 @@ exact (measure_mono hKt).trans_lt measure_biUnion_lt_top t.finite_toSet by simp 
 
 中文:
 定理 measure_lt_top_of_isCompact_of_isMulLeftInvariant
-  结论: (U : Set G) (hU : IsOpen U)
+  结论: (U : 集合 G) (hU : 是开集 U)
   证明: by
   rw [← hU.interior_eq] at h'U
   obtain ⟨t, hKt⟩ : exists t : Finset G, K subseteq ⋃ g in t, (fun h : G => g * h) ⁻¹' U :=
@@ -2116,7 +2116,7 @@ theorem measure_lt_top_of_isCompact_of_isMulLeftInvariant'
 
 中文:
 定理 measure_lt_top_of_isCompact_of_isMulLeftInvariant'
-  结论: {U : Set G}
+  结论: {U : 集合 G}
   证明: measure_lt_top_of_isCompact_of_isMulLeftInvariant (interior U) isOpen_interior hU
     ((measure_mono interior_subset).trans_lt (lt_top_iff_ne_top.2 h)).ne hK
 
@@ -2146,7 +2146,7 @@ theorem measure_univ_of_isMulLeftInvariant
 
 中文:
 定理 measure_univ_of_isMulLeftInvariant
-  结论: [WeaklyLocallyCompactSpace G] [NoncompactSpace G]
+  结论: [WeaklyLocallyCompact空间 G] [Noncompact空间 G]
   证明: by
   /- Consider a closed compact set `K` with nonempty interior. For any compact set `L`, one may
     find `g = g (L)` such that `L` is disjoint from `g • K`. Iterating this, one finds
@@ -2212,8 +2212,8 @@ lemma _root_.MeasurableSet.mul_closure_one_eq
 @[to_additive (attr := simp)]
 
 中文:
-引理 _root_.MeasurableSet.mul_closure_one_eq
-  条件: {s : Set G} (hs : MeasurableSet s)
+引理 _root_.可测集.mul_closure_one_eq
+  条件: {s : 集合 G} (hs : 可测集 s)
   证明: by
   induction s, hs using MeasurableSet.induction_on_open with
   | isOpen U hU => exact hU.mul_closure_one_eq
@@ -2249,7 +2249,7 @@ lemma measure_mul_closure_one
 
 中文:
 引理 measure_mul_closure_one
-  条件: (s : Set G) (μ : Measure G)
+  条件: (s : 集合 G) (μ : 测度 G)
   证明: by
   apply le_antisymm ?_ (measure_mono (subset_mul_closure_one s))
   conv_rhs => rw [measure_eq_iInf]
@@ -2340,9 +2340,9 @@ class IsAddHaarMeasure
   (no additional axioms)
 
 中文:
-类 IsAddHaarMeasure
-  参数: {G : 类型} [AddGroup G] [TopologicalSpace G] [MeasurableSpace G]
-  继承: IsFiniteMeasureOnCompacts μ, IsAddLeftInvariant μ, IsOpenPosMeasure μ
+类 是加法Haar测度
+  参数: {G : 类型} [加法群 G] [拓扑空间 G] [可测空间 G]
+  继承: 紧集上有限测度 μ, 是加法左不变 μ, 是OpenPosMeasure μ
   (无附加公理)
 -/
 class IsAddHaarMeasure {G : Type*} [AddGroup G] [TopologicalSpace G] [MeasurableSpace G]
@@ -2368,9 +2368,9 @@ class IsHaarMeasure
   (no additional axioms)
 
 中文:
-类 IsHaarMeasure
-  参数: {G : 类型} [Group G] [TopologicalSpace G] [MeasurableSpace G]
-  继承: IsFiniteMeasureOnCompacts μ, IsMulLeftInvariant μ, IsOpenPosMeasure μ
+类 是Haar测度
+  参数: {G : 类型} [群 G] [拓扑空间 G] [可测空间 G]
+  继承: 紧集上有限测度 μ, 是MulLeftInvariant μ, 是OpenPosMeasure μ
   (无附加公理)
 -/
 class IsHaarMeasure {G : Type*} [Group G] [TopologicalSpace G] [MeasurableSpace G]
@@ -2395,7 +2395,7 @@ theorem haar_singleton
 
 中文:
 定理 haar_singleton
-  条件: [ContinuousMul G] [BorelSpace G] (g : G)
+  条件: [连续乘法 G] [Borel空间 G] (g : G)
   结论: μ {g} = μ {(1 : G)}
   证明: by
   convert! measure_preimage_mul μ g⁻¹ _
@@ -2423,9 +2423,9 @@ theorem IsHaarMeasure.smul
 @[to_additive IsAddHaarMeasure.nnreal_smul]
 
 中文:
-定理 IsHaarMeasure.smul
+定理 是Haar测度.smul
   条件: {c : 实数>=0∞} (cpos : c != 0) (ctop : c != ∞)
-  结论: IsHaarMeasure (c • μ)
+  结论: 是Haar测度 (c • μ)
   证明: { lt_top_of_isCompact := fun _K hK => ENNReal.mul_lt_top ctop.lt_top hK.measure_lt_top
     toIsOpenPosMeasure := isOpenPosMeasure_smul μ cpos }
 
@@ -2448,9 +2448,9 @@ lemma IsHaarMeasure.nnreal_smul
   proof: .smul _ (by simp [hc]) (Option.some_ne_none _)
 
 中文:
-引理 IsHaarMeasure.nnreal_smul
+引理 是Haar测度.nnreal_smul
   条件: {c : 实数>=0} (hc : c != 0)
-  结论: IsHaarMeasure (c • μ)
+  结论: 是Haar测度 (c • μ)
   证明: .smul _ (by simp [hc]) (Option.some_ne_none _)
 
 Depends on / 依赖: Option.some_ne_none, some_ne_none
@@ -2475,7 +2475,7 @@ theorem isHaarMeasure_of_isCompact_nonempty_interior
 
 中文:
 定理 isHaarMeasure_of_isCompact_nonempty_interior
-  结论: [IsTopologicalGroup G] [BorelSpace G]
+  结论: [是拓扑群 G] [Borel空间 G]
   证明: { lt_top_of_isCompact := fun _L hL =>
       measure_lt_top_of_isCompact_of_isMulLeftInvariant' h'K h' hL
     toIsOpenPosMeasure := isOpenPosMeasure_of_mulLeftInvariant_of_compact K hK h }
@@ -2510,7 +2510,7 @@ theorem isHaarMeasure_map
 
 中文:
 定理 isHaarMeasure_map
-  结论: [BorelSpace G] [ContinuousMul G] {H : 类型} [Group H]
+  结论: [Borel空间 G] [连续乘法 G] {H : 类型} [群 H]
   证明: { toIsMulLeftInvariant := isMulLeftInvariant_map f.toMulHom hf.measurable h_surj
     lt_top_of_isCompact := by
       intro K hK
@@ -2545,8 +2545,8 @@ theorem IsHaarMeasure.comap
   open_pos := (IsOpenPosMeasure.comap μ hf).open_pos
 
 中文:
-定理 IsHaarMeasure.comap
-  结论: [BorelSpace G] [MeasurableMul G]
+定理 是Haar测度.comap
+  结论: [Borel空间 G] [MeasurableMul G]
   证明: (IsMulLeftInvariant.comap μ hf.measurableEmbedding).map_mul_left_eq_self
   lt_top_of_isCompact := (IsFiniteMeasureOnCompacts.comap' μ hf.continuous
     hf.measurableEmbedding).lt_top_of_isCompact
@@ -2609,7 +2609,7 @@ exact IsCompact.measure_lt_top (Homeomorph.isCompact_preimage (Homeomorph.smul a
 
 中文:
 实例 isHaarMeasure_map_smul
-  签名: {α} [BorelSpace G] [IsTopologicalGroup G]
+  签名: {α} [Borel空间 G] [是拓扑群 G]
   定义体: isMulLeftInvariant_map_smul _
   lt_top_of_isCompact K hK := by
     let F := (Homeomorph.smul a (α := G)).toMeasurableEquiv
@@ -2646,7 +2646,7 @@ instance isHaarMeasure_map_mul_right
 
 中文:
 实例 isHaarMeasure_map_mul_right
-  签名: [BorelSpace G] [IsTopologicalGroup G] (g : G)
+  签名: [Borel空间 G] [是拓扑群 G] (g : G)
   定义体: isHaarMeasure_map_smul μ (MulOpposite.op g)
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, isHaarMeasure_map_smul
@@ -2678,8 +2678,8 @@ instance _root_.ContinuousMulEquiv.isHaarMeasure_map
   body: e.toMulEquiv.isHaarMeasure_map μ e.continuous e.symm.continuous
 
 中文:
-实例 _root_.ContinuousMulEquiv.isHaarMeasure_map
-  签名: [BorelSpace G] [IsTopologicalGroup G]
+实例 _root_.连续乘法等价.isHaarMeasure_map
+  签名: [Borel空间 G] [是拓扑群 G]
   定义体: e.toMulEquiv.isHaarMeasure_map μ e.continuous e.symm.continuous
 
 Depends on / 依赖: continuous, e.continuous, e.symm.continuous, e.toMulEquiv.isHaarMeasure_map, isHaarMeasure_map, toMulEquiv
@@ -2697,7 +2697,7 @@ instance _root_.ContinuousLinearEquiv.isAddHaarMeasure_map
   body: AddEquiv.isAddHaarMeasure_map _ (L : E ≃+ F) L.continuous L.symm.continuous
 
 中文:
-实例 _root_.ContinuousLinearEquiv.isAddHaarMeasure_map
+实例 _root_.连续线性等价.isAddHaarMeasure_map
   定义体: AddEquiv.isAddHaarMeasure_map _ (L : E ≃+ F) L.continuous L.symm.continuous
 
 Depends on / 依赖: AddEquiv, AddEquiv.isAddHaarMeasure_map, L.continuous, L.symm.continuous, continuous, isAddHaarMeasure_map
@@ -2735,8 +2735,8 @@ instance prod.instIsHaarMeasure
   signature: {G : Type*} [Group G] [TopologicalSpace G] {_ : MeasurableSpace G}
 
 中文:
-实例 prod.instIsHaarMeasure
-  签名: {G : 类型} [Group G] [TopologicalSpace G] {_ : MeasurableSpace G}
+实例 乘积.instIsHaarMeasure
+  签名: {G : 类型} [群 G] [拓扑空间 G] {_ : 可测空间 G}
 -/
 instance prod.instIsHaarMeasure {G : Type*} [Group G] [TopologicalSpace G] {_ : MeasurableSpace G}
     {H : Type*} [Group H] [TopologicalSpace H] {_ : MeasurableSpace H} (μ : Measure G)
@@ -2778,8 +2778,8 @@ instance IsAddHaarMeasure.domSMul
     (continuous_const_smul _) (continuous_const_smul _)
 
 中文:
-实例 IsAddHaarMeasure.domSMul
-  签名: {G A : 类型} [Group G] [AddCommGroup A] [DistribMulAction G A]
+实例 是加法Haar测度.domSMul
+  签名: {G A : 类型} [群 G] [加法交换群 A] [分配乘法作用 G A]
   定义体: (DistribMulAction.toAddEquiv _ (DomMulAct.mk.symm g⁻¹)).isAddHaarMeasure_map _
     (continuous_const_smul _) (continuous_const_smul _)
 

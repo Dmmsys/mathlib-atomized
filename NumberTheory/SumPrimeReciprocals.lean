@@ -64,7 +64,7 @@ theorem Nat.Primes.tprod_eq_tprod_ite
   rw [ite_prime_eq_mulIndicator]; exact tprod_subtype {n | n.Prime} f
 
 中文:
-定理 Nat.Primes.tprod_eq_tprod_ite
+定理 自然数.Primes.tprod_eq_tprod_ite
   证明: by
   rw [ite_prime_eq_mulIndicator]; exact tprod_subtype {n | n.Prime} f
 
@@ -85,7 +85,7 @@ theorem Nat.Primes.multipliable_iff_multipliable_ite
   rw [ite_prime_eq_mulIndicator]; exact multipliable_subtype_iff_mulIndicator
 
 中文:
-定理 Nat.Primes.multipliable_iff_multipliable_ite
+定理 自然数.Primes.multipliable_iff_multipliable_ite
   证明: by
   rw [ite_prime_eq_mulIndicator]; exact multipliable_subtype_iff_mulIndicator
 
@@ -107,7 +107,7 @@ theorem Nat.Primes.hasProd_iff_hasProd_ite
   rw [ite_prime_eq_mulIndicator]; exact hasProd_subtype_iff_mulIndicator
 
 中文:
-定理 Nat.Primes.hasProd_iff_hasProd_ite
+定理 自然数.Primes.hasProd_iff_hasProd_ite
   条件: {a : M}
   证明: by
   rw [ite_prime_eq_mulIndicator]; exact hasProd_subtype_iff_mulIndicator
@@ -134,7 +134,7 @@ exact (Nat.cast_le.mpr <| roughNumbersUpTo_card_le N k).trans
     cast_sum (R := Real) .. ▸ Finset.sum_le_sum fun n _ => cast_div_le
 
 中文:
-引理 Nat.roughNumbersUpTo_card_le'
+引理 自然数.roughNumbersUpTo_card_le'
   条件: (N k : 自然数)
   证明: by
   simp_rw [Finset.mul_sum, mul_one_div]
@@ -256,7 +256,7 @@ theorem Nat.Primes.not_summable_one_div
   convert! summable_subtype_iff_indicator.mp.mt not_summable_one_div_on_primes
 
 中文:
-定理 Nat.Primes.not_summable_one_div
+定理 自然数.Primes.not_summable_one_div
   结论: ¬ Summable (fun p : 自然数.Primes => (1 / p : 实数))
   证明: by
   convert! summable_subtype_iff_indicator.mp.mt not_summable_one_div_on_primes
@@ -284,7 +284,7 @@ refine fun H => Nat.Primes.not_summable_one_div H.of_nonneg_of_le (fun _ => by p
     rw [one_div]; r
 
 中文:
-定理 Nat.Primes.summable_rpow
+定理 自然数.Primes.summable_rpow
   条件: {r : 实数}
   证明: by
   by_cases h : r < -1

@@ -53,7 +53,7 @@ definition image
   body: a.2.choose.1
 
 中文:
-定义 image
+定义 像
   签名: (f : Y -> Z) (a : Fiber f)
   定义体: a.2.choose.1
 -/
@@ -71,7 +71,7 @@ lemma eq_fiber_image
 中文:
 引理 eq_fiber_image
   条件: (f : Y -> Z) (a : Fiber f)
-  结论: a.1 = f ⁻¹' {a.image}
+  结论: a.1 = f ⁻¹' {a.像}
   证明: a.2.choose_spec.symm
 
 Depends on / 依赖: choose_spec, choose_spec.symm
@@ -123,7 +123,7 @@ lemma map_eq_image
 中文:
 引理 map_eq_image
   条件: (f : Y -> Z) (a : Fiber f) (x : a.1)
-  结论: f x = a.image
+  结论: f x = a.像
   证明: by
   have := a.2.choose_spec
   rw [← Set.mem_singleton_iff]; rw [← Set.mem_preimage]
@@ -148,7 +148,7 @@ lemma mk_image
 中文:
 引理 mk_image
   条件: (f : Y -> Z) (y : Y)
-  结论: (Fiber.mk f y).image = f y
+  结论: (Fiber.mk f y).像 = f y
   证明: (map_eq_image (x := mkSelf f y)).symm
 
 Depends on / 依赖: map_eq_image, mkSelf
@@ -168,7 +168,7 @@ lemma mem_iff_eq_image
 中文:
 引理 mem_iff_eq_image
   条件: (f : Y -> Z) (y : Y) (a : Fiber f)
-  结论: y in a.val ↔ f y = a.image
+  结论: y in a.val ↔ f y = a.像
   证明: ⟨fun h => a.map_eq_image _ ⟨y, h⟩, fun h => by rw [a.eq_fiber_image]; exact h⟩
 
 Depends on / 依赖: a.eq_fiber_image, a.map_eq_image, eq_fiber_image, map_eq_image
@@ -185,7 +185,7 @@ definition preimage
   body: a.2.choose.2.choose
 
 中文:
-定义 preimage
+定义 原像
   签名: (f : Y -> Z) (a : Fiber f)
   定义体: a.2.choose.2.choose
 -/
@@ -203,7 +203,7 @@ lemma map_preimage_eq_image
 中文:
 引理 map_preimage_eq_image
   条件: (f : Y -> Z) (a : Fiber f)
-  结论: f a.preimage = a.image
+  结论: f a.原像 = a.像
   证明: a.2.choose.2.choose_spec
 
 Depends on / 依赖: choose_spec
@@ -225,7 +225,7 @@ lemma fiber_nonempty
 中文:
 引理 fiber_nonempty
   条件: (f : Y -> Z) (a : Fiber f)
-  结论: Set.Nonempty a.val
+  结论: 集合.非空 a.val
   证明: by
   refine ⟨preimage f a, ?_⟩
   rw [mem_iff_eq_image]; rw [← map_preimage_eq_image]

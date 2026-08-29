@@ -81,7 +81,7 @@ definition SemicontinuousWithinAt
 
 中文:
 定义 SemicontinuousWithinAt
-  签名: (r : α -> β -> 命题) (s : Set α) (x : α)
+  签名: (r : α -> β -> 命题) (s : 集合 α) (x : α)
   定义体: forall y, r x y -> forallᶠ x' in 𝓝[s] x, r x' y
 -/
 def SemicontinuousWithinAt (r : α -> β -> Prop) (s : Set α) (x : α) :=
@@ -97,7 +97,7 @@ definition SemicontinuousOn
 
 中文:
 定义 SemicontinuousOn
-  签名: (r : α -> β -> 命题) (s : Set α)
+  签名: (r : α -> β -> 命题) (s : 集合 α)
   定义体: forall x in s, SemicontinuousWithinAt r s x
 
 Depends on / 依赖: SemicontinuousWithinAt
@@ -301,7 +301,7 @@ theorem SemicontinuousAt.semicontinuousWithinAt
 
 中文:
 定理 SemicontinuousAt.semicontinuousWithinAt
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: fun y hy =>
   Filter.Eventually.filter_mono nhdsWithin_le_nhds (h y hy)
 -/
@@ -412,7 +412,7 @@ theorem Semicontinuous.semicontinuousWithinAt
 
 中文:
 定理 Semicontinuous.semicontinuousWithinAt
-  结论: (h : Semicontinuous r) (s : Set α)
+  结论: (h : Semicontinuous r) (s : 集合 α)
   证明: (h x).semicontinuousWithinAt s
 
 Depends on / 依赖: semicontinuousWithinAt
@@ -431,7 +431,7 @@ theorem Semicontinuous.semicontinuousOn
 
 中文:
 定理 Semicontinuous.semicontinuousOn
-  条件: (h : Semicontinuous r) (s : Set α)
+  条件: (h : Semicontinuous r) (s : 集合 α)
   证明: fun x _hx => h.semicontinuousWithinAt s x
 
 Depends on / 依赖: h.semicontinuousWithinAt, semicontinuousWithinAt
@@ -451,7 +451,7 @@ theorem semicontinuous_iff_isOpen
 
 中文:
 定理 semicontinuous_iff_isOpen
-  结论: Semicontinuous r ↔ 对任意 b, IsOpen {x | r x b}
+  结论: Semicontinuous r ↔ 对任意 b, 是开集 {x | r x b}
   证明: by
   exact ⟨fun h b => by simpa [isOpen_iff_mem_nhds, Filter.Eventually] using fun x hx => h x b hx,
     fun h x b hbx => (h b).mem_nhds hbx⟩
@@ -474,7 +474,7 @@ theorem Semicontinuous.isOpen
 中文:
 定理 Semicontinuous.isOpen
   条件: (h : Semicontinuous r) (b : β)
-  结论: IsOpen {x | r x b}
+  结论: 是开集 {x | r x b}
   证明: semicontinuous_iff_isOpen.mp h b
 
 Depends on / 依赖: semicontinuous_iff_isOpen, semicontinuous_iff_isOpen.mp
@@ -492,7 +492,7 @@ theorem SemicontinuousWithinAt.inf
   (h b hb).and (h' b hb')
 
 中文:
-定理 SemicontinuousWithinAt.inf
+定理 SemicontinuousWithinAt.下确界
   结论: {r' : α -> β -> 命题}
   证明: fun b ⟨hb, hb'⟩ =>
   (h b hb).and (h' b hb')
@@ -515,7 +515,7 @@ theorem SemicontinuousWithinAt.sup
   · exact (h' b hb').mono fun _ hx => Or.inr hx
 
 中文:
-定理 SemicontinuousWithinAt.sup
+定理 SemicontinuousWithinAt.上确界
   结论: {r' : α -> β -> 命题}
   证明: by
   intro b hab
@@ -543,7 +543,7 @@ theorem SemicontinuousAt.inf
   (h b hb).and (h' b hb')
 
 中文:
-定理 SemicontinuousAt.inf
+定理 SemicontinuousAt.下确界
   结论: {r' : α -> β -> 命题}
   证明: fun b ⟨hb, hb'⟩ =>
   (h b hb).and (h' b hb')
@@ -566,7 +566,7 @@ theorem SemicontinuousAt.sup
   · exact (h' b hb').mono fun _ hx => Or.inr hx
 
 中文:
-定理 SemicontinuousAt.sup
+定理 SemicontinuousAt.上确界
   结论: {r' : α -> β -> 命题}
   证明: by
   intro b hab
@@ -593,7 +593,7 @@ theorem SemicontinuousOn.inf
   proof: fun x hx => (h x hx).inf (h' x hx)
 
 中文:
-定理 SemicontinuousOn.inf
+定理 SemicontinuousOn.下确界
   结论: {r' : α -> β -> 命题}
   证明: fun x hx => (h x hx).inf (h' x hx)
 -/
@@ -610,7 +610,7 @@ theorem SemicontinuousOn.sup
   proof: fun x hx => (h x hx).sup (h' x hx)
 
 中文:
-定理 SemicontinuousOn.sup
+定理 SemicontinuousOn.上确界
   结论: {r' : α -> β -> 命题}
   证明: fun x hx => (h x hx).sup (h' x hx)
 -/
@@ -627,7 +627,7 @@ theorem Semicontinuous.inf
   proof: fun a => (h a).inf (h' a)
 
 中文:
-定理 Semicontinuous.inf
+定理 Semicontinuous.下确界
   条件: {r' : α -> β -> 命题} (h : Semicontinuous r) (h' : Semicontinuous r')
   证明: fun a => (h a).inf (h' a)
 -/
@@ -643,7 +643,7 @@ theorem Semicontinuous.sup
   proof: fun a => (h a).sup (h' a)
 
 中文:
-定理 Semicontinuous.sup
+定理 Semicontinuous.上确界
   条件: {r' : α -> β -> 命题} (h : Semicontinuous r) (h' : Semicontinuous r')
   证明: fun a => (h a).sup (h' a)
 -/
@@ -785,7 +785,7 @@ lemma SemicontinuousAt.comp
 
 中文:
 引理 SemicontinuousAt.comp
-  结论: {r : α -> β -> 命题} {γ : 类型} [TopologicalSpace γ]
+  结论: {r : α -> β -> 命题} {γ : 类型} [拓扑空间 γ]
   证明: (hg <| h · ·)
 -/
 lemma SemicontinuousAt.comp {r : α -> β -> Prop} {γ : Type*} [TopologicalSpace γ]
@@ -803,7 +803,7 @@ lemma Semicontinuous.comp
 
 中文:
 引理 Semicontinuous.comp
-  结论: {r : α -> β -> 命题} {γ : 类型} [TopologicalSpace γ]
+  结论: {r : α -> β -> 命题} {γ : 类型} [拓扑空间 γ]
   证明: fun _ => (h.semicontinuousAt _).comp hg.continuousAt
 
 Depends on / 依赖: continuousAt, h.semicontinuousAt, hg.continuousAt, semicontinuousAt
@@ -841,7 +841,7 @@ abbreviation LowerSemicontinuousWithinAt
 
 中文:
 缩写 LowerSemicontinuousWithinAt
-  签名: (f : α -> β) (s : Set α) (x : α)
+  签名: (f : α -> β) (s : 集合 α) (x : α)
   定义体: SemicontinuousWithinAt (f · > ·) s x
 
 Depends on / 依赖: SemicontinuousWithinAt
@@ -859,7 +859,7 @@ abbreviation LowerSemicontinuousOn
 
 中文:
 缩写 LowerSemicontinuousOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: SemicontinuousOn (f · > ·) s
 
 Depends on / 依赖: SemicontinuousOn
@@ -913,7 +913,7 @@ abbreviation UpperSemicontinuousWithinAt
 
 中文:
 缩写 UpperSemicontinuousWithinAt
-  签名: (f : α -> β) (s : Set α) (x : α)
+  签名: (f : α -> β) (s : 集合 α) (x : α)
   定义体: SemicontinuousWithinAt (f · < ·) s x
 
 Depends on / 依赖: SemicontinuousWithinAt
@@ -931,7 +931,7 @@ abbreviation UpperSemicontinuousOn
 
 中文:
 缩写 UpperSemicontinuousOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: SemicontinuousOn (f · < ·) s
 
 Depends on / 依赖: SemicontinuousOn
@@ -985,7 +985,7 @@ lemma lowerSemicontinuousWithinAt_iff
 
 中文:
 引理 lowerSemicontinuousWithinAt_iff
-  条件: {f : α -> β} {s : Set α} {x : α}
+  条件: {f : α -> β} {s : 集合 α} {x : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1004,7 +1004,7 @@ lemma lowerSemicontinuousOn_iff
 
 中文:
 引理 lowerSemicontinuousOn_iff
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1061,7 +1061,7 @@ lemma upperSemicontinuousWithinAt_iff
 
 中文:
 引理 upperSemicontinuousWithinAt_iff
-  条件: {f : α -> β} {s : Set α} {x : α}
+  条件: {f : α -> β} {s : 集合 α} {x : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1080,7 +1080,7 @@ lemma upperSemicontinuousOn_iff
 
 中文:
 引理 upperSemicontinuousOn_iff
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1207,7 +1207,7 @@ theorem LowerSemicontinuousAt.lowerSemicontinuousWithinAt
 
 中文:
 定理 LowerSemicontinuousAt.lowerSemicontinuousWithinAt
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: h.semicontinuousWithinAt s
 
 Depends on / 依赖: h.semicontinuousWithinAt, semicontinuousWithinAt
@@ -1314,7 +1314,7 @@ theorem LowerSemicontinuous.lowerSemicontinuousWithinAt
 
 中文:
 定理 LowerSemicontinuous.lowerSemicontinuousWithinAt
-  结论: (h : LowerSemicontinuous f) (s : Set α)
+  结论: (h : LowerSemicontinuous f) (s : 集合 α)
   证明: (h x).semicontinuousWithinAt s
 
 Depends on / 依赖: semicontinuousWithinAt
@@ -1333,7 +1333,7 @@ theorem LowerSemicontinuous.lowerSemicontinuousOn
 
 中文:
 定理 LowerSemicontinuous.lowerSemicontinuousOn
-  条件: (h : LowerSemicontinuous f) (s : Set α)
+  条件: (h : LowerSemicontinuous f) (s : 集合 α)
   证明: h.semicontinuousOn s
 
 Depends on / 依赖: h.semicontinuousOn, semicontinuousOn
@@ -1568,7 +1568,7 @@ theorem upperSemicontinuousOn_iff_restrict
 
 中文:
 定理 upperSemicontinuousOn_iff_restrict
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: lowerSemicontinuous_restrict_iff (β := βᵒᵈ)
 -/
 @[simp] theorem upperSemicontinuousOn_iff_restrict {s : Set α} :
@@ -1585,7 +1585,7 @@ theorem UpperSemicontinuousAt.upperSemicontinuousWithinAt
 
 中文:
 定理 UpperSemicontinuousAt.upperSemicontinuousWithinAt
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: h.semicontinuousWithinAt s
 
 Depends on / 依赖: h.semicontinuousWithinAt, semicontinuousWithinAt
@@ -1675,7 +1675,7 @@ theorem UpperSemicontinuous.upperSemicontinuousWithinAt
 
 中文:
 定理 UpperSemicontinuous.upperSemicontinuousWithinAt
-  结论: (h : UpperSemicontinuous f) (s : Set α)
+  结论: (h : UpperSemicontinuous f) (s : 集合 α)
   证明: (h x).semicontinuousWithinAt s
 
 Depends on / 依赖: semicontinuousWithinAt
@@ -1694,7 +1694,7 @@ theorem UpperSemicontinuous.upperSemicontinuousOn
 
 中文:
 定理 UpperSemicontinuous.upperSemicontinuousOn
-  条件: (h : UpperSemicontinuous f) (s : Set α)
+  条件: (h : UpperSemicontinuous f) (s : 集合 α)
   证明: h.semicontinuousOn s
 
 Depends on / 依赖: h.semicontinuousOn, semicontinuousOn
@@ -2106,7 +2106,7 @@ abbreviation LowerHemicontinuousWithinAt
 
 中文:
 缩写 LowerHemicontinuousWithinAt
-  签名: (f : α -> Set β) (s : Set α) (x : α)
+  签名: (f : α -> 集合 β) (s : 集合 α) (x : α)
   定义体: SemicontinuousWithinAt (fun x t => IsOpen t ∧ ((f x) inter t).Nonempty) s x
 
 Depends on / 依赖: IsOpen, Nonempty, SemicontinuousWithinAt
@@ -2124,7 +2124,7 @@ abbreviation LowerHemicontinuousOn
 
 中文:
 缩写 LowerHemicontinuousOn
-  签名: (f : α -> Set β) (s : Set α)
+  签名: (f : α -> 集合 β) (s : 集合 α)
   定义体: SemicontinuousOn (fun x t => IsOpen t ∧ ((f x) inter t).Nonempty) s
 
 Depends on / 依赖: IsOpen, Nonempty, SemicontinuousOn
@@ -2142,7 +2142,7 @@ abbreviation LowerHemicontinuousAt
 
 中文:
 缩写 LowerHemicontinuousAt
-  签名: (f : α -> Set β) (x : α)
+  签名: (f : α -> 集合 β) (x : α)
   定义体: SemicontinuousAt (fun x t => IsOpen t ∧ ((f x) inter t).Nonempty) x
 
 Depends on / 依赖: IsOpen, Nonempty, SemicontinuousAt
@@ -2160,7 +2160,7 @@ abbreviation LowerHemicontinuous
 
 中文:
 缩写 LowerHemicontinuous
-  签名: (f : α -> Set β)
+  签名: (f : α -> 集合 β)
   定义体: Semicontinuous (fun x t => IsOpen t ∧ ((f x) inter t).Nonempty)
 
 Depends on / 依赖: IsOpen, Nonempty, Semicontinuous
@@ -2180,7 +2180,7 @@ abbreviation UpperHemicontinuousWithinAt
 
 中文:
 缩写 UpperHemicontinuousWithinAt
-  签名: (f : α -> Set β) (s : Set α) (x : α)
+  签名: (f : α -> 集合 β) (s : 集合 α) (x : α)
   定义体: SemicontinuousWithinAt (fun x t => t in 𝓝ˢ (f x)) s x
 
 Depends on / 依赖: SemicontinuousWithinAt
@@ -2198,7 +2198,7 @@ abbreviation UpperHemicontinuousOn
 
 中文:
 缩写 UpperHemicontinuousOn
-  签名: (f : α -> Set β) (s : Set α)
+  签名: (f : α -> 集合 β) (s : 集合 α)
   定义体: SemicontinuousOn (fun x t => t in 𝓝ˢ (f x)) s
 
 Depends on / 依赖: SemicontinuousOn
@@ -2216,7 +2216,7 @@ abbreviation UpperHemicontinuousAt
 
 中文:
 缩写 UpperHemicontinuousAt
-  签名: (f : α -> Set β) (x : α)
+  签名: (f : α -> 集合 β) (x : α)
   定义体: SemicontinuousAt (fun x t => t in 𝓝ˢ (f x)) x
 
 Depends on / 依赖: SemicontinuousAt
@@ -2234,7 +2234,7 @@ abbreviation UpperHemicontinuous
 
 中文:
 缩写 UpperHemicontinuous
-  签名: (f : α -> Set β)
+  签名: (f : α -> 集合 β)
   定义体: Semicontinuous (fun x t => t in 𝓝ˢ (f x))
 
 Depends on / 依赖: Semicontinuous
@@ -2253,7 +2253,7 @@ lemma lowerHemicontinuousWithinAt_iff
 
 中文:
 引理 lowerHemicontinuousWithinAt_iff
-  条件: {f : α -> Set β} {s : Set α} {x : α}
+  条件: {f : α -> 集合 β} {s : 集合 α} {x : α}
   证明: by
   simp +contextual [SemicontinuousWithinAt]
 
@@ -2274,7 +2274,7 @@ lemma lowerHemicontinuousOn_iff
 
 中文:
 引理 lowerHemicontinuousOn_iff
-  条件: {f : α -> Set β} {s : Set α}
+  条件: {f : α -> 集合 β} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2294,7 +2294,7 @@ lemma lowerHemicontinuousAt_iff
 
 中文:
 引理 lowerHemicontinuousAt_iff
-  条件: {f : α -> Set β} {x : α}
+  条件: {f : α -> 集合 β} {x : α}
   证明: by
   simp +contextual [SemicontinuousAt]
 
@@ -2315,7 +2315,7 @@ lemma lowerHemicontinuous_iff
 
 中文:
 引理 lowerHemicontinuous_iff
-  条件: {f : α -> Set β}
+  条件: {f : α -> 集合 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2334,7 +2334,7 @@ lemma upperHemicontinuousWithinAt_iff
 
 中文:
 引理 upperHemicontinuousWithinAt_iff
-  条件: {f : α -> Set β} {s : Set α} {x : α}
+  条件: {f : α -> 集合 β} {s : 集合 α} {x : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2353,7 +2353,7 @@ lemma upperHemicontinuousOn_iff
 
 中文:
 引理 upperHemicontinuousOn_iff
-  条件: {f : α -> Set β} {s : Set α}
+  条件: {f : α -> 集合 β} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2372,7 +2372,7 @@ lemma upperHemicontinuousAt_iff
 
 中文:
 引理 upperHemicontinuousAt_iff
-  条件: {f : α -> Set β} {x : α}
+  条件: {f : α -> 集合 β} {x : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2391,7 +2391,7 @@ lemma upperHemicontinuous_iff
 
 中文:
 引理 upperHemicontinuous_iff
-  条件: {f : α -> Set β}
+  条件: {f : α -> 集合 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2483,7 +2483,7 @@ theorem LowerHemicontinuousAt.lowerHemicontinuousWithinAt
 
 中文:
 定理 LowerHemicontinuousAt.lowerHemicontinuousWithinAt
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: h.semicontinuousWithinAt s
 
 Depends on / 依赖: h.semicontinuousWithinAt, semicontinuousWithinAt
@@ -2590,7 +2590,7 @@ theorem LowerHemicontinuous.lowerHemicontinuousWithinAt
 
 中文:
 定理 LowerHemicontinuous.lowerHemicontinuousWithinAt
-  结论: (h : LowerHemicontinuous f) (s : Set α)
+  结论: (h : LowerHemicontinuous f) (s : 集合 α)
   证明: (h x).semicontinuousWithinAt s
 
 Depends on / 依赖: semicontinuousWithinAt
@@ -2609,7 +2609,7 @@ theorem LowerHemicontinuous.lowerHemicontinuousOn
 
 中文:
 定理 LowerHemicontinuous.lowerHemicontinuousOn
-  条件: (h : LowerHemicontinuous f) (s : Set α)
+  条件: (h : LowerHemicontinuous f) (s : 集合 α)
   证明: h.semicontinuousOn s
 
 Depends on / 依赖: h.semicontinuousOn, semicontinuousOn
@@ -2975,7 +2975,7 @@ theorem upperHemicontinuousOn_iff_restrict
 
 中文:
 定理 upperHemicontinuousOn_iff_restrict
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: semicontinuous_restrict_iff (r := (fun x t => t in 𝓝ˢ (f x)))
 -/
 @[simp] theorem upperHemicontinuousOn_iff_restrict {s : Set α} :
@@ -2992,7 +2992,7 @@ theorem UpperHemicontinuousAt.upperHemicontinuousWithinAt
 
 中文:
 定理 UpperHemicontinuousAt.upperHemicontinuousWithinAt
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: h.semicontinuousWithinAt s
 
 Depends on / 依赖: h.semicontinuousWithinAt, semicontinuousWithinAt
@@ -3082,7 +3082,7 @@ theorem UpperHemicontinuous.upperHemicontinuousWithinAt
 
 中文:
 定理 UpperHemicontinuous.upperHemicontinuousWithinAt
-  结论: (h : UpperHemicontinuous f) (s : Set α)
+  结论: (h : UpperHemicontinuous f) (s : 集合 α)
   证明: (h x).semicontinuousWithinAt s
 
 Depends on / 依赖: semicontinuousWithinAt
@@ -3101,7 +3101,7 @@ theorem UpperHemicontinuous.upperHemicontinuousOn
 
 中文:
 定理 UpperHemicontinuous.upperHemicontinuousOn
-  条件: (h : UpperHemicontinuous f) (s : Set α)
+  条件: (h : UpperHemicontinuous f) (s : 集合 α)
   证明: h.semicontinuousOn s
 
 Depends on / 依赖: h.semicontinuousOn, semicontinuousOn
@@ -3404,7 +3404,7 @@ abbreviation HasOpenLowerSectionsOn
 
 中文:
 缩写 HasOpenLowerSectionsOn
-  签名: (f : α -> Set β) (s : Set α)
+  签名: (f : α -> 集合 β) (s : 集合 α)
   定义体: SemicontinuousOn (fun x b => b in f x) s
 
 Depends on / 依赖: SemicontinuousOn
@@ -3422,7 +3422,7 @@ abbreviation HasOpenLowerSections
 
 中文:
 缩写 HasOpenLowerSections
-  签名: (f : α -> Set β)
+  签名: (f : α -> 集合 β)
   定义体: Semicontinuous (fun x b => b in f x)
 
 Depends on / 依赖: Semicontinuous
@@ -3443,7 +3443,7 @@ theorem hasOpenLowerSections_iff_isOpen
 
 中文:
 定理 hasOpenLowerSections_iff_isOpen
-  结论: HasOpenLowerSections f ↔ 对任意 b, IsOpen {x | b in f x}
+  结论: HasOpenLowerSections f ↔ 对任意 b, 是开集 {x | b in f x}
   证明: by
   simp [semicontinuous_iff_isOpen]
 
@@ -3514,7 +3514,7 @@ theorem HasOpenLowerSections.hasOpenLowerSectionsOn
 
 中文:
 定理 HasOpenLowerSections.hasOpenLowerSectionsOn
-  条件: (h : HasOpenLowerSections f) (s : Set α)
+  条件: (h : HasOpenLowerSections f) (s : 集合 α)
   证明: h.semicontinuousOn s
 
 Depends on / 依赖: h.semicontinuousOn, semicontinuousOn
@@ -3571,7 +3571,7 @@ theorem HasOpenLowerSectionsOn.inter
 
 中文:
 定理 HasOpenLowerSectionsOn.inter
-  结论: {f g : α -> Set β} {s : Set α} (hf : HasOpenLowerSectionsOn f s)
+  结论: {f g : α -> 集合 β} {s : 集合 α} (hf : HasOpenLowerSectionsOn f s)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -3589,7 +3589,7 @@ theorem HasOpenLowerSectionsOn.union
 
 中文:
 定理 HasOpenLowerSectionsOn.union
-  结论: {f g : α -> Set β} {s : Set α} (hf : HasOpenLowerSectionsOn f s)
+  结论: {f g : α -> 集合 β} {s : 集合 α} (hf : HasOpenLowerSectionsOn f s)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -3607,7 +3607,7 @@ theorem HasOpenLowerSections.inter
 
 中文:
 定理 HasOpenLowerSections.inter
-  结论: {f g : α -> Set β} (hf : HasOpenLowerSections f)
+  结论: {f g : α -> 集合 β} (hf : HasOpenLowerSections f)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -3625,7 +3625,7 @@ theorem HasOpenLowerSections.union
 
 中文:
 定理 HasOpenLowerSections.union
-  结论: {f g : α -> Set β} (hf : HasOpenLowerSections f)
+  结论: {f g : α -> 集合 β} (hf : HasOpenLowerSections f)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -3698,7 +3698,7 @@ abbreviation HasOpenCGraph
 
 中文:
 缩写 HasOpenCGraph
-  签名: (f : α -> Set β)
+  签名: (f : α -> 集合 β)
   定义体: IsOpen {x : α × β | x.2 in f x.1}
 
 Depends on / 依赖: IsOpen
@@ -3716,7 +3716,7 @@ theorem HasOpenCGraph.const
 
 中文:
 定理 HasOpenCGraph.const
-  条件: {z : Set β} (hz : IsOpen z)
+  条件: {z : 集合 β} (hz : 是开集 z)
   结论: HasOpenCGraph (fun _x : α => z)
   证明: hz.preimage continuous_snd
 
@@ -3739,7 +3739,7 @@ theorem HasOpenCGraph.inter
 
 中文:
 定理 HasOpenCGraph.inter
-  结论: {f g : α -> Set β} (hf : HasOpenCGraph f)
+  结论: {f g : α -> 集合 β} (hf : HasOpenCGraph f)
   证明: by
   have : {x : α × β | x.2 in f x.1 inter g x.1} =
       {x | x.2 in f x.1} inter {x | x.2 in g x.1} := by ext; simp
@@ -3770,7 +3770,7 @@ theorem HasOpenCGraph.comp
 
 中文:
 定理 HasOpenCGraph.comp
-  条件: {f : α -> Set β} (hf : HasOpenCGraph f) (hg : Continuous g')
+  条件: {f : α -> 集合 β} (hf : HasOpenCGraph f) (hg : 连续 g')
   证明: hf.preimage (hg.prodMap continuous_id)
 
 Depends on / 依赖: continuous_id, hf.preimage, hg.prodMap, preimage, prodMap
@@ -3793,7 +3793,7 @@ theorem HasOpenLowerSections.lowerHemicontinuous
 
 中文:
 定理 HasOpenLowerSections.lowerHemicontinuous
-  条件: {f : α -> Set β} (hf : HasOpenLowerSections f)
+  条件: {f : α -> 集合 β} (hf : HasOpenLowerSections f)
   证明: fun x _ ⟨hopen, y, hyfx, hyt⟩ =>
       (hf x y hyfx).mono fun _ hy' => ⟨hopen, y, hy', hyt⟩
 -/

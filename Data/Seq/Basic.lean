@@ -40,7 +40,7 @@ theorem length'_of_terminates
 
 中文:
 定理 length'_of_terminates
-  条件: {s : Seq α} (h : s.Terminates)
+  条件: {s : 序列 α} (h : s.Terminates)
   证明: by
   simp [length', h]
 
@@ -61,7 +61,7 @@ theorem length'_of_not_terminates
 
 中文:
 定理 length'_of_not_terminates
-  条件: {s : Seq α} (h : ¬ s.Terminates)
+  条件: {s : 序列 α} (h : ¬ s.Terminates)
   证明: by
   simp [length', h]
 -/
@@ -83,7 +83,7 @@ theorem length_nil
 
 中文:
 定理 length_nil
-  结论: length (nil : Seq α) terminates_nil = 0
+  结论: length (nil : 序列 α) terminates_nil = 0
   证明: (Nat.find_eq_zero _).mpr terminatedAt_nil
 
 @[simp]
@@ -105,7 +105,7 @@ theorem length'_nil
 
 中文:
 定理 length'_nil
-  结论: length' (nil : Seq α) = 0
+  结论: length' (nil : 序列 α) = 0
   证明: by
   simp -implicitDefEqProofs [length']
 -/
@@ -126,7 +126,7 @@ theorem length_cons
 
 中文:
 定理 length_cons
-  条件: {x : α} {s : Seq α} (h : s.Terminates)
+  条件: {x : α} {s : 序列 α} (h : s.Terminates)
   证明: by
   apply Nat.find_comp_succ
   simp
@@ -154,7 +154,7 @@ theorem length'_cons
 
 中文:
 定理 length'_cons
-  条件: (x : α) (s : Seq α)
+  条件: (x : α) (s : 序列 α)
   证明: by
   by_cases h : (cons x s).Terminates <;> have h' := h <;> rw [terminates_cons_iff] at h'
   · simp [length'_of_terminates h, length'_of_terminates h', length_cons h']
@@ -181,7 +181,7 @@ theorem length_eq_zero
 
 中文:
 定理 length_eq_zero
-  条件: {s : Seq α} {h : s.Terminates}
+  条件: {s : 序列 α} {h : s.Terminates}
   证明: by
   simp [length, TerminatedAt]
 
@@ -205,7 +205,7 @@ theorem length'_eq_zero_iff_nil
 
 中文:
 定理 length'_eq_zero_iff_nil
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   证明: by
   cases s <;> simp
 -/
@@ -224,7 +224,7 @@ theorem length'_ne_zero_iff_cons
 
 中文:
 定理 length'_ne_zero_iff_cons
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   证明: by
   cases s <;> simp
 -/
@@ -249,7 +249,7 @@ theorem length_le_iff'
 
 中文:
 定理 length_le_iff'
-  条件: {s : Seq α} {n : 自然数}
+  条件: {s : 序列 α} {n : 自然数}
   证明: by
   simp only [length, Nat.find_le_iff, TerminatedAt, Terminates, exists_prop]
   refine ⟨?_, ?_⟩
@@ -280,7 +280,7 @@ theorem length_le_iff
 
 中文:
 定理 length_le_iff
-  条件: {s : Seq α} {n : 自然数} {h : s.Terminates}
+  条件: {s : 序列 α} {n : 自然数} {h : s.Terminates}
   证明: by
   rw [← length_le_iff']; simp [h]
 
@@ -303,7 +303,7 @@ theorem length'_le_iff
 
 中文:
 定理 length'_le_iff
-  条件: {s : Seq α} {n : 自然数}
+  条件: {s : 序列 α} {n : 自然数}
   证明: by
   by_cases h : s.Terminates
   · simpa [length'_of_terminates h] using length_le_iff
@@ -333,7 +333,7 @@ exact hn le_stable s hkn hk
 
 中文:
 定理 lt_length_iff'
-  条件: {s : Seq α} {n : 自然数}
+  条件: {s : 序列 α} {n : 自然数}
   证明: by
   simp only [Terminates, TerminatedAt, length, Nat.lt_find_iff, forall_exists_index, Option.mem_def,
     ← Option.ne_none_iff_exists', ne_eq]
@@ -366,7 +366,7 @@ theorem lt_length_iff
 
 中文:
 定理 lt_length_iff
-  条件: {s : Seq α} {n : 自然数} {h : s.Terminates}
+  条件: {s : 序列 α} {n : 自然数} {h : s.Terminates}
   证明: by
   rw [← lt_length_iff']; simp [h]
 
@@ -392,7 +392,7 @@ theorem lt_length'_iff
 
 中文:
 定理 lt_length'_iff
-  条件: {s : Seq α} {n : 自然数}
+  条件: {s : 序列 α} {n : 自然数}
   证明: by
   by_cases h : s.Terminates
   · simpa [length'_of_terminates h] using lt_length_iff
@@ -455,7 +455,7 @@ theorem terminatedAt_ofList
 
 中文:
 定理 terminatedAt_ofList
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   simp [ofList, TerminatedAt]
 
@@ -476,7 +476,7 @@ theorem terminates_ofList
 
 中文:
 定理 terminates_ofList
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (ofList l).Terminates
   证明: ⟨_, terminatedAt_ofList l⟩
 
@@ -505,7 +505,7 @@ theorem take_nil
 中文:
 定理 take_nil
   条件: {n : 自然数}
-  结论: (nil (α := α)).take n = List.nil
+  结论: (nil (α := α)).take n = 列表.nil
   证明: by
   cases n <;> rfl
 
@@ -531,7 +531,7 @@ theorem take_zero
 
 中文:
 定理 take_zero
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: s.take 0 = []
   证明: by
   cases s <;> rfl
@@ -555,7 +555,7 @@ theorem take_succ_cons
 
 中文:
 定理 take_succ_cons
-  条件: {n : 自然数} {x : α} {s : Seq α}
+  条件: {n : 自然数} {x : α} {s : 序列 α}
   证明: by
   rfl
 
@@ -575,7 +575,7 @@ theorem getElem?_take
 
 中文:
 定理 getElem?_take
-  结论: 对任意 (n k : 自然数) (s : Seq α),
+  结论: 对任意 (n k : 自然数) (s : 序列 α),
 -/
 theorem getElem?_take : forall (n k : Nat) (s : Seq α),
     (s.take k)[n]? = if n < k then s.get? n else none
@@ -612,7 +612,7 @@ theorem get?_mem_take
 
 中文:
 定理 get?_mem_take
-  结论: {s : Seq α} {m n : 自然数} (h_mn : m < n) {x : α}
+  结论: {s : 序列 α} {m n : 自然数} (h_mn : m < n) {x : α}
   证明: by
   induction m generalizing n s with
   | zero =>
@@ -665,7 +665,7 @@ theorem length_take_le
 
 中文:
 定理 length_take_le
-  条件: {s : Seq α} {n : 自然数}
+  条件: {s : 序列 α} {n : 自然数}
   结论: (s.take n).length <= n
   证明: by
   induction n generalizing s with
@@ -709,7 +709,7 @@ theorem length_take_of_le_length
 
 中文:
 定理 length_take_of_le_length
-  结论: {s : Seq α} {n : 自然数}
+  结论: {s : 序列 α} {n : 自然数}
   证明: by
   induction n generalizing s with
   | zero => simp [take]
@@ -757,7 +757,7 @@ theorem length_toList
 
 中文:
 定理 length_toList
-  条件: (s : Seq α) (h : s.Terminates)
+  条件: (s : 序列 α) (h : s.Terminates)
   结论: (toList s h).length = length s h
   证明: by
   rw [toList]; rw [length_take_of_le_length]
@@ -790,7 +790,7 @@ theorem getElem?_toList
 
 中文:
 定理 getElem?_toList
-  条件: (s : Seq α) (h : s.Terminates) (n : 自然数)
+  条件: (s : 序列 α) (h : s.Terminates) (n : 自然数)
   结论: (toList s h)[n]? = s.get? n
   证明: by
   ext k
@@ -825,7 +825,7 @@ theorem ofList_toList
 
 中文:
 定理 ofList_toList
-  条件: (s : Seq α) (h : s.Terminates)
+  条件: (s : 序列 α) (h : s.Terminates)
   证明: by
   ext n; simp [ofList]
 
@@ -849,7 +849,7 @@ theorem toList_ofList
 
 中文:
 定理 toList_ofList
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: toList (ofList l) (terminates_ofList l) = l
   证明: ofList_injective (by simp)
 
@@ -871,7 +871,7 @@ theorem toList_nil
 
 中文:
 定理 toList_nil
-  结论: toList (nil : Seq α) ⟨0, terminatedAt_zero_iff.2 rfl⟩ = []
+  结论: toList (nil : 序列 α) ⟨0, terminatedAt_zero_iff.2 rfl⟩ = []
   证明: by
   ext; simp [nil, toList, const]
 
@@ -891,7 +891,7 @@ theorem getLast?_toList
 
 中文:
 定理 getLast?_toList
-  条件: (s : Seq α) (h : s.Terminates)
+  条件: (s : 序列 α) (h : s.Terminates)
   证明: by
   rw [List.getLast?_eq_getElem?]; rw [getElem?_toList]; rw [length_toList]
 
@@ -958,7 +958,7 @@ theorem nil_append
 
 中文:
 定理 nil_append
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: append nil s = s
   证明: by
   apply coinduction2; intro s
@@ -1004,7 +1004,7 @@ theorem append_nil
 
 中文:
 定理 append_nil
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: append s nil = s
   证明: by
   apply coinduction2 s; intro s
@@ -1047,7 +1047,7 @@ theorem append_assoc
 
 中文:
 定理 append_assoc
-  条件: (s t u : Seq α)
+  条件: (s t u : 序列 α)
   结论: append (append s t) u = append s (append t u)
   证明: by
   apply eq_of_bisim fun s1 s2 => exists s t u, s1 = append (append s t) u ∧ s2 = append s (append t u)
@@ -1100,7 +1100,7 @@ theorem of_mem_append
 
 中文:
 定理 of_mem_append
-  条件: {s₁ s₂ : Seq α} {a : α} (h : a in append s₁ s₂)
+  条件: {s₁ s₂ : 序列 α} {a : α} (h : a in append s₁ s₂)
   结论: a in s₁ ∨ a in s₂
   证明: by
   have := h; revert this
@@ -1154,7 +1154,7 @@ theorem mem_append_left
 
 中文:
 定理 mem_append_left
-  条件: {s₁ s₂ : Seq α} {a : α} (h : a in s₁)
+  条件: {s₁ s₂ : 序列 α} {a : α} (h : a in s₁)
   结论: a in append s₁ s₂
   证明: by
   apply mem_rec_on h; intros; simp [*]
@@ -1181,7 +1181,7 @@ theorem ofList_append
 
 中文:
 定理 ofList_append
-  条件: (l l' : List α)
+  条件: (l l' : 列表 α)
   结论: ofList (l ++ l') = append (ofList l) (ofList l')
   证明: by
   induction l <;> simp [*]
@@ -1203,7 +1203,7 @@ theorem ofStream_append
 
 中文:
 定理 ofStream_append
-  条件: (l : List α) (s : Stream' α)
+  条件: (l : 列表 α) (s : Stream' α)
   证明: by
   induction l <;> simp [*, Stream'.nil_append_stream, Stream'.cons_append_stream]
 
@@ -1284,7 +1284,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: 对任意 s : Seq α, map id s = s
+  结论: 对任意 s : 序列 α, map id s = s
 -/
 theorem map_id : forall s : Seq α, map id s = s
   | ⟨s, al⟩ => by
@@ -1319,7 +1319,7 @@ theorem map_comp
 中文:
 定理 map_comp
   条件: (f : α -> β) (g : β -> γ)
-  结论: 对任意 s : Seq α, map (g ∘ f) s = map g (map f s)
+  结论: 对任意 s : 序列 α, map (g ∘ f) s = map g (map f s)
 -/
 theorem map_comp (f : α -> β) (g : β -> γ) : forall s : Seq α, map (g ∘ f) s = map g (map f s)
   | ⟨s, al⟩ => by
@@ -1341,7 +1341,7 @@ theorem terminatedAt_map_iff
 
 中文:
 定理 terminatedAt_map_iff
-  条件: {f : α -> β} {s : Seq α} {n : 自然数}
+  条件: {f : α -> β} {s : 序列 α} {n : 自然数}
   证明: by
   simp [TerminatedAt]
 
@@ -1367,7 +1367,7 @@ theorem terminates_map_iff
 
 中文:
 定理 terminates_map_iff
-  条件: {f : α -> β} {s : Seq α}
+  条件: {f : α -> β} {s : 序列 α}
   证明: by
   simp [Terminates]
 
@@ -1396,7 +1396,7 @@ theorem length_map
 
 中文:
 定理 length_map
-  条件: {s : Seq α} {f : α -> β} (h : (s.map f).Terminates)
+  条件: {s : 序列 α} {f : α -> β} (h : (s.map f).Terminates)
   证明: by
   rw [length]
   congr
@@ -1428,7 +1428,7 @@ theorem length'_map
 
 中文:
 定理 length'_map
-  条件: {s : Seq α} {f : α -> β}
+  条件: {s : 序列 α} {f : α -> β}
   证明: by
   by_cases h : (s.map f).Terminates <;> have h' := h <;> rw [terminates_map_iff] at h'
   · rw [length'_of_terminates h, length'_of_terminates h', length_map h]
@@ -1451,7 +1451,7 @@ theorem mem_map
 中文:
 定理 mem_map
   条件: (f : α -> β) {a : α}
-  结论: 对任意 {s : Seq α}, a in s -> f a in map f s
+  结论: 对任意 {s : 序列 α}, a in s -> f a in map f s
 -/
 theorem mem_map (f : α -> β) {a : α} : forall {s : Seq α}, a in s -> f a in map f s
   | ⟨_, _⟩ => Stream'.mem_map (Option.map f)
@@ -1473,9 +1473,9 @@ theorem exists_of_mem_map
 @[simp]
 
 中文:
-定理 exists_of_mem_map
+定理 存在_of_mem_map
   条件: {f} {b : β}
-  结论: 对任意 {s : Seq α}, b in map f s -> 存在 a, a in s ∧ f a = b
+  结论: 对任意 {s : 序列 α}, b in map f s -> 存在 a, a in s ∧ f a = b
   证明: fun {s} h => by match s with
   | ⟨g, al⟩ =>
     let ⟨o, om, oe⟩ := @Stream'.exists_of_mem_map _ _ (Option.map f) (some b) g h
@@ -1558,7 +1558,7 @@ theorem join_nil
 
 中文:
 定理 join_nil
-  结论: join nil = (nil : Seq α)
+  结论: join nil = (nil : 序列 α)
   证明: destruct_eq_none rfl
 
 Depends on / 依赖: destruct_eq_none
@@ -1693,7 +1693,7 @@ theorem join_append
 
 中文:
 定理 join_append
-  条件: (S T : Seq (Seq1 α))
+  条件: (S T : 序列 (Seq1 α))
   结论: join (append S T) = append (join S) (join T)
   证明: by
   apply
@@ -1752,7 +1752,7 @@ theorem drop_get?
 
 中文:
 定理 drop_get?
-  条件: {n m : 自然数} {s : Seq α}
+  条件: {n m : 自然数} {s : 序列 α}
   结论: (s.drop n).get? m = s.get? (n + m)
   证明: by
   induction n generalizing m with
@@ -1782,7 +1782,7 @@ theorem dropn_add
 
 中文:
 定理 dropn_add
-  条件: (s : Seq α) (m)
+  条件: (s : 序列 α) (m)
   结论: 对任意 n, drop s (m + n) = drop (drop s m) n
 -/
 theorem dropn_add (s : Seq α) (m) : forall n, drop s (m + n) = drop (drop s m) n
@@ -1803,7 +1803,7 @@ theorem dropn_tail
 
 中文:
 定理 dropn_tail
-  条件: (s : Seq α) (n)
+  条件: (s : 序列 α) (n)
   结论: drop (tail s) n = drop s (n + 1)
   证明: by
   rw [Nat.add_comm]; symm; apply dropn_add
@@ -1832,7 +1832,7 @@ theorem head_dropn
 
 中文:
 定理 head_dropn
-  条件: (s : Seq α) (n)
+  条件: (s : 序列 α) (n)
   结论: head (drop s n) = get? s n
   证明: by
   induction n generalizing s with
@@ -1862,7 +1862,7 @@ theorem drop_zero
 
 中文:
 定理 drop_zero
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: s.drop 0 = s
   证明: rfl
 
@@ -1884,7 +1884,7 @@ theorem drop_succ_cons
 
 中文:
 定理 drop_succ_cons
-  条件: {x : α} {s : Seq α} {n : 自然数}
+  条件: {x : α} {s : 序列 α} {n : 自然数}
   证明: by
   simp [← dropn_tail]
 
@@ -1951,7 +1951,7 @@ theorem drop_length'
 
 中文:
 定理 drop_length'
-  条件: {n : 自然数} {s : Seq α}
+  条件: {n : 自然数} {s : 序列 α}
   证明: by
   cases n with
   | zero => simp
@@ -1993,7 +1993,7 @@ theorem take_drop
 
 中文:
 定理 take_drop
-  条件: {s : Seq α} {n m : 自然数}
+  条件: {s : 序列 α} {n m : 自然数}
   证明: by
   ext
   grind
@@ -2042,7 +2042,7 @@ theorem get?_zip
 
 中文:
 定理 get?_zip
-  条件: (s : Seq α) (t : Seq β) (n : 自然数)
+  条件: (s : 序列 α) (t : 序列 β) (n : 自然数)
   证明: get?_zipWith _ _ _ _
 
 @[simp]
@@ -2088,8 +2088,8 @@ theorem get?_enum
 
 中文:
 定理 get?_enum
-  条件: (s : Seq α) (n : 自然数)
-  结论: get? (enum s) n = Option.map (Prod.mk n) (get? s n)
+  条件: (s : 序列 α) (n : 自然数)
+  结论: get? (enum s) n = 选项类型.map (积类型.mk n) (get? s n)
   证明: get?_zip _ _ _
 
 @[simp]
@@ -2186,7 +2186,7 @@ theorem zip_nil_left
 
 中文:
 定理 zip_nil_left
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   证明: rfl
 
 @[simp]
@@ -2208,7 +2208,7 @@ theorem zip_nil_right
 
 中文:
 定理 zip_nil_right
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   证明: zipWith_nil_right
 
 @[simp]
@@ -2232,7 +2232,7 @@ theorem zip_cons_cons
 
 中文:
 定理 zip_cons_cons
-  条件: {s s' : Seq α} {x x'}
+  条件: {s s' : 序列 α} {x x'}
   证明: zipWith_cons_cons
 
 @[simp]
@@ -2256,7 +2256,7 @@ theorem enum_nil
 
 中文:
 定理 enum_nil
-  结论: enum (nil : Seq α) = nil
+  结论: enum (nil : 序列 α) = nil
   证明: rfl
 
 @[simp]
@@ -2281,7 +2281,7 @@ universe u' v'
 
 中文:
 定理 enum_cons
-  条件: (s : Seq α) (x : α)
+  条件: (s : 序列 α) (x : α)
   证明: by
   ext ⟨n⟩ : 1
   · simp
@@ -2315,7 +2315,7 @@ theorem zipWith_map
 
 中文:
 定理 zipWith_map
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f₁ : α -> α') (f₂ : β -> β') (g : α' -> β' -> γ)
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f₁ : α -> α') (f₂ : β -> β') (g : α' -> β' -> γ)
   证明: by
   ext1 n
   simp only [get?_zipWith, map_get?]
@@ -2341,7 +2341,7 @@ theorem zipWith_map_left
 
 中文:
 定理 zipWith_map_left
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f : α -> α') (g : α' -> β -> γ)
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f : α -> α') (g : α' -> β -> γ)
   证明: by
   convert! zipWith_map _ _ _ (@id β) _
   simp
@@ -2365,7 +2365,7 @@ theorem zipWith_map_right
 
 中文:
 定理 zipWith_map_right
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f : β -> β') (g : α -> β' -> γ)
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f : β -> β') (g : α -> β' -> γ)
   证明: by
   convert! zipWith_map _ _ (@id α) _ _
   simp
@@ -2390,7 +2390,7 @@ theorem zip_map
 
 中文:
 定理 zip_map
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f₁ : α -> α') (f₂ : β -> β')
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f₁ : α -> α') (f₂ : β -> β')
   证明: by
   ext1 n
   simp
@@ -2414,7 +2414,7 @@ theorem zip_map_left
 
 中文:
 定理 zip_map_left
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f : α -> α')
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f : α -> α')
   证明: by
   convert! zip_map _ _ _ _
   simp
@@ -2438,7 +2438,7 @@ theorem zip_map_right
 
 中文:
 定理 zip_map_right
-  条件: (s₁ : Seq α) (s₂ : Seq β) (f : β -> β')
+  条件: (s₁ : 序列 α) (s₂ : 序列 β) (f : β -> β')
   证明: by
   convert! zip_map _ _ _ _
   simp
@@ -2502,7 +2502,7 @@ theorem fold_cons
 
 中文:
 定理 fold_cons
-  条件: (init : β) (f : β -> α -> β) (x : α) (s : Seq α)
+  条件: (init : β) (f : β -> α -> β) (x : α) (s : 序列 α)
   证明: by
   unfold fold
   dsimp only
@@ -2534,7 +2534,7 @@ theorem fold_head
 
 中文:
 定理 fold_head
-  条件: (init : β) (f : β -> α -> β) (s : Seq α)
+  条件: (init : β) (f : β -> α -> β) (s : 序列 α)
   证明: by
   simp [fold]
 -/
@@ -2565,7 +2565,7 @@ theorem get?_update
 
 中文:
 定理 get?_update
-  条件: (s : Seq α) (n : 自然数) (m : 自然数)
+  条件: (s : 序列 α) (n : 自然数) (m : 自然数)
   证明: by
   simp [update, Function.update]
   split_ifs with h_if
@@ -2751,7 +2751,7 @@ theorem get?_set_of_not_terminatedAt
 
 中文:
 定理 get?_set_of_not_terminatedAt
-  条件: {s : Seq α} {n : 自然数} (h_not_terminated : ¬ s.TerminatedAt n)
+  条件: {s : 序列 α} {n : 自然数} (h_not_terminated : ¬ s.TerminatedAt n)
   证明: by
   simpa [set, update, ← Option.ne_none_iff_exists'] using! h_not_terminated
 -/
@@ -2770,7 +2770,7 @@ theorem get?_set_of_terminatedAt
 
 中文:
 定理 get?_set_of_terminatedAt
-  条件: {s : Seq α} {n : 自然数} (h_terminated : s.TerminatedAt n)
+  条件: {s : 序列 α} {n : 自然数} (h_terminated : s.TerminatedAt n)
   证明: by
   simpa [set, get?_update] using! h_terminated
 -/
@@ -2790,7 +2790,7 @@ theorem get?_set_of_ne
 
 中文:
 定理 get?_set_of_ne
-  条件: (s : Seq α) {m n : 自然数} (h : n != m)
+  条件: (s : 序列 α) {m n : 自然数} (h : n != m)
   结论: (s.set m x).get? n = s.get? n
   证明: by
   simp [set, get?_update, h]
@@ -2811,7 +2811,7 @@ theorem drop_set_of_lt
 
 中文:
 定理 drop_set_of_lt
-  条件: (s : Seq α) {m n : 自然数} (h : m < n)
+  条件: (s : 序列 α) {m n : 自然数} (h : m < n)
   结论: (s.set m x).drop n = s.drop n
   证明: by
   ext1 i
@@ -2839,7 +2839,7 @@ theorem all_cons
 
 中文:
 定理 all_cons
-  条件: {p : α -> 命题} {hd : α} {tl : Seq α} (h_hd : p hd) (h_tl : 对任意 x in tl, p x)
+  条件: {p : α -> 命题} {hd : α} {tl : 序列 α} (h_hd : p hd) (h_tl : 对任意 x in tl, p x)
   证明: by
   simp only [mem_cons_iff, forall_eq_or_imp] at *
   exact ⟨h_hd, h_tl⟩
@@ -2862,7 +2862,7 @@ theorem all_get
 
 中文:
 定理 all_get
-  结论: {p : α -> 命题} {s : Seq α} (h : 对任意 x in s, p x) {n : 自然数} {x : α}
+  结论: {p : α -> 命题} {s : 序列 α} (h : 对任意 x in s, p x) {n : 自然数} {x : α}
   证明: by
   exact h _ (get?_mem hx)
 
@@ -2885,7 +2885,7 @@ theorem all_of_get
 
 中文:
 定理 all_of_get
-  条件: {p : α -> 命题} {s : Seq α} (h : 对任意 n x, s.get? n = .some x -> p x)
+  条件: {p : α -> 命题} {s : 序列 α} (h : 对任意 n x, s.get? n = .some x -> p x)
   证明: by
   simp only [mem_iff_exists_get?]
   grind
@@ -2915,7 +2915,7 @@ lemma all_coind_drop_motive
 
 中文:
 引理 all_coind_drop_motive
-  结论: {s : Seq α} (motive : Seq α -> 命题) (base : motive s)
+  结论: {s : 序列 α} (motive : 序列 α -> 命题) (base : motive s)
   证明: by
   induction n with
   | zero => simpa
@@ -2958,7 +2958,7 @@ theorem all_coind
 
 中文:
 定理 all_coind
-  结论: {s : Seq α} {p : α -> 命题}
+  结论: {s : 序列 α} {p : α -> 命题}
   证明: by
   apply all_of_get
   intro n
@@ -2999,7 +2999,7 @@ theorem map_all_iff
 
 中文:
 定理 map_all_iff
-  条件: {β : 类型u} {f : α -> β} {p : β -> 命题} {s : Seq α}
+  条件: {β : 类型u} {f : α -> β} {p : β -> 命题} {s : 序列 α}
   证明: by
   refine ⟨fun _ _ hx => ?_, fun _ _ hx => ?_⟩
   · solve_by_elim [mem_map f hx]
@@ -3036,7 +3036,7 @@ theorem take_all
 
 中文:
 定理 take_all
-  结论: {s : Seq α} {p : α -> 命题} (h_all : 对任意 x in s, p x) {n : 自然数} {x : α}
+  结论: {s : 序列 α} {p : α -> 命题} (h_all : 对任意 x in s, p x) {n : 自然数} {x : α}
   证明: by
   induction n generalizing s with
   | zero => simp [take] at hx
@@ -3080,7 +3080,7 @@ theorem set_all
 
 中文:
 定理 set_all
-  结论: {p : α -> 命题} {s : Seq α} (h_all : 对任意 x in s, p x) {n : 自然数} {x : α}
+  结论: {p : α -> 命题} {s : 序列 α} (h_all : 对任意 x in s, p x) {n : 自然数} {x : α}
   证明: by
   intro y hy
   simp only [mem_iff_exists_get?] at hy
@@ -3121,9 +3121,9 @@ theorem Pairwise.nil
   simp [Pairwise]
 
 中文:
-定理 Pairwise.nil
+定理 两两.nil
   条件: {R : α -> α -> 命题}
-  结论: Pairwise R (@nil α)
+  结论: 两两 R (@nil α)
   证明: by
   simp [Pairwise]
 
@@ -3152,8 +3152,8 @@ theorem Pairwise.cons
     | succ n 
 
 中文:
-定理 Pairwise.cons
-  结论: {R : α -> α -> 命题} {hd : α} {tl : Seq α}
+定理 两两.cons
+  结论: {R : α -> α -> 命题} {hd : α} {tl : 序列 α}
   证明: by
   simp only [Pairwise] at *
   intro i j h_ij x hx y hy
@@ -3201,8 +3201,8 @@ theorem Pairwise.cons_elim
 @[simp]
 
 中文:
-定理 Pairwise.cons_elim
-  结论: {R : α -> α -> 命题} {hd : α} {tl : Seq α}
+定理 两两.cons_elim
+  结论: {R : α -> α -> 命题} {hd : α} {tl : 序列 α}
   证明: by
   simp only [Pairwise] at *
   refine ⟨?_, fun i j h_ij => h (i + 1) (j + 1) (by lia)⟩
@@ -3238,7 +3238,7 @@ theorem Pairwise_cons_nil
 中文:
 定理 Pairwise_cons_nil
   条件: {R : α -> α -> 命题} {hd : α}
-  结论: Pairwise R (cons hd nil)
+  结论: 两两 R (cons hd nil)
   证明: by
   apply Pairwise.cons <;> simp
 
@@ -3259,7 +3259,7 @@ theorem Pairwise_cons_cons_head
 
 中文:
 定理 Pairwise_cons_cons_head
-  结论: {R : α -> α -> 命题} {hd tl_hd : α} {tl_tl : Seq α}
+  结论: {R : α -> α -> 命题} {hd tl_hd : α} {tl_tl : 序列 α}
   证明: by
   simp only [Pairwise] at h
   simpa using h 0 1 Nat.one_pos
@@ -3284,8 +3284,8 @@ theorem Pairwise.cons_cons_of_trans
   exact ⟨h_hd, fun x hx => Trans.simple h_hd ((cons_elim h_tl).left x hx)⟩
 
 中文:
-定理 Pairwise.cons_cons_of_trans
-  结论: {R : α -> α -> 命题} [IsTrans _ R] {hd tl_hd : α} {tl_tl : Seq α}
+定理 两两.cons_cons_of_trans
+  结论: {R : α -> α -> 命题} [是Trans _ R] {hd tl_hd : α} {tl_tl : 序列 α}
   证明: by
   apply Pairwise.cons _ h_tl
   simp only [mem_cons_iff, forall_eq_or_imp]
@@ -3314,8 +3314,8 @@ theorem Pairwise.coind
   have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right) 
 
 中文:
-定理 Pairwise.coind
-  结论: {R : α -> α -> 命题} {s : Seq α}
+定理 两两.coind
+  结论: {R : α -> α -> 命题} {s : 序列 α}
   证明: by
   simp only [Pairwise]
   intro i j h_ij x hx y hy
@@ -3356,8 +3356,8 @@ theorem Pairwise.coind_trans
   simp o
 
 中文:
-定理 Pairwise.coind_trans
-  结论: {R : α -> α -> 命题} [IsTrans α R] {s : Seq α}
+定理 两两.coind_trans
+  结论: {R : α -> α -> 命题} [是Trans α R] {s : 序列 α}
   证明: by
   have h_succ {n} {x y} (hx : s.get? n = some x) (hy : s.get? (n + 1) = some y) : R x y := by
     rw [← head_dropn] at hx
@@ -3398,7 +3398,7 @@ theorem Pairwise_tail
 
 中文:
 定理 Pairwise_tail
-  条件: {R : α -> α -> 命题} {s : Seq α} (h : s.Pairwise R)
+  条件: {R : α -> α -> 命题} {s : 序列 α} (h : s.两两 R)
   证明: by
   cases s
   · simp
@@ -3425,7 +3425,7 @@ theorem Pairwise_drop
 
 中文:
 定理 Pairwise_drop
-  条件: {R : α -> α -> 命题} {s : Seq α} (h : s.Pairwise R) {n : 自然数}
+  条件: {R : α -> α -> 命题} {s : 序列 α} (h : s.两两 R) {n : 自然数}
   证明: by
   induction n with
   | zero => simpa
@@ -3461,7 +3461,7 @@ theorem at_least_as_long_as_coind
 
 中文:
 定理 at_least_as_long_as_coind
-  结论: {a : Seq α} {b : Seq β}
+  结论: {a : 序列 α} {b : 序列 β}
   证明: by
   have (n) (hb : b.drop n != .nil) : motive (a.drop n) (b.drop n) := by
     induction n with
@@ -3524,7 +3524,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor Seq
+  签名: 函子 序列
   定义体: @map
 -/
 instance : Functor Seq where map := @map
@@ -3541,7 +3541,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor Seq
+  签名: Lawful函子 序列
   定义体: @map_id
   comp_map := @map_comp
   map_const := rfl
@@ -3570,7 +3570,7 @@ definition toSeq
 
 中文:
 定义 toSeq
-  签名: : Seq1 α -> Seq α
+  签名: : Seq1 α -> 序列 α
 -/
 def toSeq : Seq1 α -> Seq α
   | (a, s) => Seq.cons a s
@@ -3585,7 +3585,7 @@ instance coeSeq
 
 中文:
 实例 coeSeq
-  签名: : Coe (Seq1 α) (Seq α)
+  签名: : Coe (Seq1 α) (序列 α)
   定义体: ⟨toSeq⟩
 -/
 instance coeSeq : Coe (Seq1 α) (Seq α) :=
@@ -3617,7 +3617,7 @@ theorem map_pair
 中文:
 定理 map_pair
   条件: {f : α -> β} {a s}
-  结论: map f (a, s) = (f a, Seq.map f s)
+  结论: map f (a, s) = (f a, 序列.map f s)
   证明: rfl
 
 Depends on / 依赖: NormedAddCommGroup, Shrink, hf.small
@@ -3673,7 +3673,7 @@ theorem join_nil
 中文:
 定理 join_nil
   条件: (a : α) (S)
-  结论: join ((a, nil), S) = (a, Seq.join S)
+  结论: join ((a, nil), S) = (a, 序列.join S)
   证明: rfl
 
 @[simp]
@@ -3728,8 +3728,8 @@ instance [Inhabited
   body: ⟨ret default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Seq1 α)
+实例 [可居
+  签名: α] : 可居 (Seq1 α)
   定义体: ⟨ret default⟩
 -/
 instance [Inhabited α] : Inhabited (Seq1 α) :=
@@ -3768,8 +3768,8 @@ theorem join_map_ret
 
 中文:
 定理 join_map_ret
-  条件: (s : Seq α)
-  结论: Seq.join (Seq.map ret s) = s
+  条件: (s : 序列 α)
+  结论: 序列.join (序列.map ret s) = s
   证明: by
   apply coinduction2 s; intro s; cases s <;> simp [ret]
 
@@ -3851,7 +3851,7 @@ theorem map_join'
 中文:
 定理 map_join'
   条件: (f : α -> β) (S)
-  结论: Seq.map f (Seq.join S) = Seq.join (Seq.map (map f) S)
+  结论: 序列.map f (序列.join S) = 序列.join (序列.map (map f) S)
   证明: by
   apply
     Seq.eq_of_bisim fun s1 s2 =>
@@ -3924,7 +3924,7 @@ theorem join_join
 
 中文:
 定理 join_join
-  条件: (SS : Seq (Seq1 (Seq1 α)))
+  条件: (SS : 序列 (Seq1 (Seq1 α)))
   证明: by
   apply
     Seq.eq_of_bisim fun s1 s2 =>
@@ -4019,7 +4019,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad Seq1 where
+  签名: : 单子 Seq1 where
   定义体: @map
   pure := @ret
   bind := @bind
@@ -4043,7 +4043,7 @@ instance lawfulMonad
 
 中文:
 实例 lawfulMonad
-  签名: : LawfulMonad Seq1
+  签名: : 合法单子 Seq1
   定义体: LawfulMonad.mk'
   (id_map := @map_id)
   (bind_pure_comp := @bind_ret)

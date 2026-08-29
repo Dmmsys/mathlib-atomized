@@ -42,7 +42,7 @@ theorem charP_zero_or_prime_power
 
 中文:
 定理 charP_zero_or_prime_power
-  结论: (R : 类型) [CommRing R] [IsLocalRing R] (q : 自然数)
+  结论: (R : 类型) [交换环 R] [是局部环 R] (q : 自然数)
   证明: by
   -- Assume `q := char(R)` is not zero.
   apply or_iff_not_imp_left.2

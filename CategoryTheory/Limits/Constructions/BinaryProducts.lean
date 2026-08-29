@@ -46,7 +46,7 @@ definition isBinaryProductOfIsTerminalIsPullback
 
 中文:
 定义 isBinaryProductOfIsTerminalIsPullback
-  签名: (F : Discrete WalkingPair ⥤ C) (c : Cone F) {X : C}
+  签名: (F : 离散 WalkingPair ⥤ C) (c : 锥 F) {X : C}
   定义体: hc.lift
       (PullbackCone.mk (s.π.app ⟨WalkingPair.left⟩) (s.π.app ⟨WalkingPair.right⟩) (hX.hom_ext _ _))
   fac _ j :=
@@ -171,7 +171,7 @@ definition limitConeOfTerminalAndPullbacks
 
 中文:
 定义 limitConeOfTerminalAndPullbacks
-  签名: [HasTerminal C] [HasPullbacks C]
+  签名: [有终止 C] [有Pullbacks C]
   定义体: { pt :=
         pullback (terminal.from (F.obj ⟨WalkingPair.left⟩))
           (terminal.from (F.obj ⟨WalkingPair.right⟩))
@@ -207,7 +207,7 @@ theorem hasBinaryProducts_of_hasTerminal_and_pullbacks
 
 中文:
 定理 hasBinaryProducts_of_hasTerminal_and_pullbacks
-  条件: [HasTerminal C] [HasPullbacks C]
+  条件: [有终止 C] [有Pullbacks C]
   证明: { has_limit := fun F => HasLimit.mk (limitConeOfTerminalAndPullbacks F) }
 
 Depends on / 依赖: HasLimit, HasLimit.mk, has_limit, limitConeOfTerminalAndPullbacks
@@ -231,7 +231,7 @@ lemma preservesBinaryProducts_of_preservesTerminal_and_pullbacks
 
 中文:
 引理 preservesBinaryProducts_of_preservesTerminal_and_pullbacks
-  结论: [HasTerminal C]
+  结论: [有终止 C]
   证明: ⟨fun {K} =>
     preservesLimit_of_preserves_limit_cone (limitConeOfTerminalAndPullbacks K).2
       (by
@@ -263,7 +263,7 @@ definition prodIsoPullback
 
 中文:
 定义 prodIsoPullback
-  签名: [HasTerminal C] [HasPullbacks C] (X Y : C)
+  签名: [有终止 C] [有Pullbacks C] (X Y : C)
   定义体: limit.isoLimitCone (limitConeOfTerminalAndPullbacks _)
 
 @[reassoc (attr := simp)]
@@ -287,7 +287,7 @@ lemma prodIsoPullback_hom_fst
 
 中文:
 引理 prodIsoPullback_hom_fst
-  结论: [HasTerminal C] [HasPullbacks C] (X Y : C)
+  结论: [有终止 C] [有Pullbacks C] (X Y : C)
   证明: limit.isoLimitCone_hom_π (limitConeOfTerminalAndPullbacks _) ⟨.left⟩
 
 @[reassoc (attr := simp)]
@@ -311,7 +311,7 @@ lemma prodIsoPullback_hom_snd
 
 中文:
 引理 prodIsoPullback_hom_snd
-  结论: [HasTerminal C] [HasPullbacks C] (X Y : C)
+  结论: [有终止 C] [有Pullbacks C] (X Y : C)
   证明: limit.isoLimitCone_hom_π (limitConeOfTerminalAndPullbacks _) ⟨.right⟩
 
 @[reassoc (attr := simp)]
@@ -335,7 +335,7 @@ lemma prodIsoPullback_inv_fst
 
 中文:
 引理 prodIsoPullback_inv_fst
-  结论: [HasTerminal C] [HasPullbacks C] (X Y : C)
+  结论: [有终止 C] [有Pullbacks C] (X Y : C)
   证明: limit.isoLimitCone_inv_π (limitConeOfTerminalAndPullbacks _) ⟨.left⟩
 
 @[reassoc (attr := simp)]
@@ -357,7 +357,7 @@ lemma prodIsoPullback_inv_snd
 
 中文:
 引理 prodIsoPullback_inv_snd
-  结论: [HasTerminal C] [HasPullbacks C] (X Y : C)
+  结论: [有终止 C] [有Pullbacks C] (X Y : C)
   证明: limit.isoLimitCone_inv_π (limitConeOfTerminalAndPullbacks _) ⟨.right⟩
 
 Depends on / 依赖: limit.isoLimitCone_inv_, limitConeOfTerminalAndPullbacks
@@ -385,7 +385,7 @@ definition isBinaryCoproductOfIsInitialIsPushout
 
 中文:
 定义 isBinaryCoproductOfIsInitialIsPushout
-  签名: (F : Discrete WalkingPair ⥤ C) (c : Cocone F) {X : C}
+  签名: (F : 离散 WalkingPair ⥤ C) (c : 余锥 F) {X : C}
   定义体: hc.desc
       (PushoutCocone.mk (s.ι.app ⟨WalkingPair.left⟩) (s.ι.app ⟨WalkingPair.right⟩) (hX.hom_ext _ _))
   fac _ j :=
@@ -509,7 +509,7 @@ definition colimitCoconeOfInitialAndPushouts
 
 中文:
 定义 colimitCoconeOfInitialAndPushouts
-  签名: [HasInitial C] [HasPushouts C]
+  签名: [HasInitial C] [有Pushouts C]
   定义体: { pt := pushout (initial.to (F.obj ⟨WalkingPair.left⟩)) (initial.to (F.obj ⟨WalkingPair.right⟩))
       ι :=
         Discrete.natTrans fun x =>
@@ -539,7 +539,7 @@ theorem hasBinaryCoproducts_of_hasInitial_and_pushouts
 
 中文:
 定理 hasBinaryCoproducts_of_hasInitial_and_pushouts
-  条件: [HasInitial C] [HasPushouts C]
+  条件: [HasInitial C] [有Pushouts C]
   证明: { has_colimit := fun F => HasColimit.mk (colimitCoconeOfInitialAndPushouts F) }
 
 Depends on / 依赖: HasColimit, HasColimit.mk, colimitCoconeOfInitialAndPushouts, has_colimit
@@ -595,7 +595,7 @@ definition coprodIsoPushout
 
 中文:
 定义 coprodIsoPushout
-  签名: [HasInitial C] [HasPushouts C] (X Y : C)
+  签名: [HasInitial C] [有Pushouts C] (X Y : C)
   定义体: colimit.isoColimitCocone (colimitCoconeOfInitialAndPushouts _)
 
 @[reassoc (attr := simp)]
@@ -619,7 +619,7 @@ lemma inl_coprodIsoPushout_hom
 
 中文:
 引理 inl_coprodIsoPushout_hom
-  结论: [HasInitial C] [HasPushouts C] (X Y : C)
+  结论: [HasInitial C] [有Pushouts C] (X Y : C)
   证明: colimit.isoColimitCocone_ι_hom (colimitCoconeOfInitialAndPushouts _) _
 
 @[reassoc (attr := simp)]
@@ -643,7 +643,7 @@ lemma inr_coprodIsoPushout_hom
 
 中文:
 引理 inr_coprodIsoPushout_hom
-  结论: [HasInitial C] [HasPushouts C] (X Y : C)
+  结论: [HasInitial C] [有Pushouts C] (X Y : C)
   证明: colimit.isoColimitCocone_ι_hom (colimitCoconeOfInitialAndPushouts _) _
 
 @[reassoc (attr := simp)]
@@ -667,7 +667,7 @@ lemma inl_coprodIsoPushout_inv
 
 中文:
 引理 inl_coprodIsoPushout_inv
-  结论: [HasInitial C] [HasPushouts C] (X Y : C)
+  结论: [HasInitial C] [有Pushouts C] (X Y : C)
   证明: colimit.isoColimitCocone_ι_inv (colimitCoconeOfInitialAndPushouts (pair X Y)) ⟨.left⟩
 
 @[reassoc (attr := simp)]
@@ -689,7 +689,7 @@ lemma inr_coprodIsoPushout_inv
 
 中文:
 引理 inr_coprodIsoPushout_inv
-  结论: [HasInitial C] [HasPushouts C] (X Y : C)
+  结论: [HasInitial C] [有Pushouts C] (X Y : C)
   证明: colimit.isoColimitCocone_ι_inv (colimitCoconeOfInitialAndPushouts (pair X Y)) ⟨.right⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone_, colimitCoconeOfInitialAndPushouts

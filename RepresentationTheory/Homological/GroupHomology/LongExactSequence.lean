@@ -221,7 +221,7 @@ theorem epi_δ_of_isZero
 
 中文:
 定理 epi_δ_of_isZero
-  条件: (n : 自然数) (h : IsZero (groupHomology X.X₂ n))
+  条件: (n : 自然数) (h : 是零 (groupHomology X.X₂ n))
   证明: SnakeInput.epi_δ _ h
 
 Depends on / 依赖: SnakeInput, SnakeInput.epi_
@@ -239,7 +239,7 @@ theorem mono_δ_of_isZero
 
 中文:
 定理 mono_δ_of_isZero
-  条件: (n : 自然数) (h : IsZero (groupHomology X.X₂ (n + 1)))
+  条件: (n : 自然数) (h : 是零 (groupHomology X.X₂ (n + 1)))
   证明: SnakeInput.mono_δ _ h
 
 Depends on / 依赖: SnakeInput, SnakeInput.mono_
@@ -257,7 +257,7 @@ theorem isIso_δ_of_isZero
 
 中文:
 定理 isIso_δ_of_isZero
-  结论: (n : 自然数) (hs : IsZero (groupHomology X.X₂ (n + 1)))
+  结论: (n : 自然数) (hs : 是零 (groupHomology X.X₂ (n + 1)))
   证明: SnakeInput.isIso_δ _ hs h
 
 Depends on / 依赖: SnakeInput, SnakeInput.isIso_
@@ -279,7 +279,7 @@ abbreviation cyclesMkOfCompEqD
 
 中文:
 缩写 cyclesMkOfCompEqD
-  签名: {i j : 自然数} {y : (Fin i -> G) ->₀ X.X₂}
+  签名: {i j : 自然数} {y : (有限集 i -> G) ->₀ X.X₂}
   定义体: cyclesMk j _ rfl x by
     simpa using! (map_chainsFunctor_shortExact hX).d_eq_zero_of_f_eq_d_apply i j y x
       (by simpa using! hx) _

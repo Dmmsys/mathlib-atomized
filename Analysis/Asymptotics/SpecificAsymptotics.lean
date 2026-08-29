@@ -34,8 +34,8 @@ theorem Filter.IsBoundedUnder.isLittleO_sub_self_inv
   exact (tendsto_norm_sub_self_nhdsNE a).inv_tendsto_nhdsGT_zero
 
 中文:
-定理 Filter.IsBoundedUnder.isLittleO_sub_self_inv
-  结论: {𝕜 E : 类型} [NormedField 𝕜] [Norm E] {a : 𝕜}
+定理 滤子.IsBoundedUnder.isLittleO_sub_self_inv
+  结论: {𝕜 E : 类型} [赋范域 𝕜] [范数 E] {a : 𝕜}
   证明: by
   refine (h.isBigO_const (one_ne_zero' Real)).trans_isLittleO (isLittleO_const_left.2 <| Or.inr ?_)
   simp only [Function.comp_def, norm_inv]
@@ -212,7 +212,7 @@ theorem tendsto_pow_div_pow_atTop_zero
 
 中文:
 定理 tendsto_pow_div_pow_atTop_zero
-  结论: [TopologicalSpace 𝕜] [OrderTopology 𝕜] {p q : 自然数}
+  结论: [拓扑空间 𝕜] [Order拓扑 𝕜] {p q : 自然数}
   证明: by
   rw [tendsto_congr' pow_div_pow_eventuallyEq_atTop]
   apply tendsto_zpow_atTop_zero
@@ -269,7 +269,7 @@ theorem Asymptotics.IsBigO.trans_tendsto_norm_atTop
 
 中文:
 定理 Asymptotics.IsBigO.trans_tendsto_norm_atTop
-  结论: {α : 类型} {u v : α -> 𝕜} {l : Filter α}
+  结论: {α : 类型} {u v : α -> 𝕜} {l : 滤子 α}
   证明: by
   rcases huv.exists_pos with ⟨c, hc, hcuv⟩
   rw [IsBigOWith] at hcuv
@@ -307,7 +307,7 @@ theorem Asymptotics.IsEquivalent.rpow
 
 中文:
 定理 Asymptotics.IsEquivalent.rpow
-  结论: {α : 类型} {u v : α -> 实数} {l : Filter α}
+  结论: {α : 类型} {u v : α -> 实数} {l : 滤子 α}
   证明: by
   obtain ⟨φ, hφ, huφv⟩ := IsEquivalent.exists_eq_mul h
   rw [isEquivalent_iff_exists_eq_mul]
@@ -348,7 +348,7 @@ exact IsLittleO.isEquivalent cal
 
 中文:
 定理 Asymptotics.IsEquivalent.log
-  结论: {α : 类型} {l : Filter α} {f g : α -> 实数} (hfg : f ~[l] g)
+  结论: {α : 类型} {l : 滤子 α} {f g : α -> 实数} (hfg : f ~[l] g)
   证明: by
   have hg := g_tendsto.eventually_ne_atTop 0
 .eventually_ne_atTop 0 have hf := hfg.symm.tendsto_atTop g_tendsto
@@ -390,7 +390,7 @@ theorem Asymptotics.IsLittleO.sum_range
 
 中文:
 定理 Asymptotics.IsLittleO.sum_range
-  结论: {α : 类型} [NormedAddCommGroup α] {f : 自然数 -> α} {g : 自然数 -> 实数}
+  结论: {α : 类型} [赋范交换加群 α] {f : 自然数 -> α} {g : 自然数 -> 实数}
   证明: by
   have A : forall i, ‖g i‖ = g i := fun i => Real.norm_of_nonneg (hg i)
   have B : forall n, ‖∑ i in range n, g i‖ = ∑ i in range n, g i := fun n => by
@@ -444,7 +444,7 @@ theorem Asymptotics.isLittleO_sum_range_of_tendsto_zero
 
 中文:
 定理 Asymptotics.isLittleO_sum_range_of_tendsto_zero
-  结论: {α : 类型} [NormedAddCommGroup α]
+  结论: {α : 类型} [赋范交换加群 α]
   证明: by
   have := ((isLittleO_one_iff Real).2 h).sum_range fun i => zero_le_one
   simp only [sum_const, card_range, Nat.smul_one_eq_cast] at this
@@ -473,8 +473,8 @@ theorem Filter.Tendsto.cesaro_smul
  
 
 中文:
-定理 Filter.Tendsto.cesaro_smul
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] {u : 自然数 -> E}
+定理 滤子.收敛.cesaro_smul
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] {u : 自然数 -> E}
   证明: by
   rw [← tendsto_sub_nhds_zero_iff]; rw [← isLittleO_one_iff Real]
   have := Asymptotics.isLittleO_sum_range_of_tendsto_zero (tendsto_sub_nhds_zero_iff.2 h)
@@ -507,8 +507,8 @@ theorem Filter.Tendsto.cesaro
   proof: h.cesaro_smul
 
 中文:
-定理 Filter.Tendsto.cesaro
-  条件: {u : 自然数 -> 实数} {l : 实数} (h : Tendsto u atTop (𝓝 l))
+定理 滤子.收敛.cesaro
+  条件: {u : 自然数 -> 实数} {l : 实数} (h : 收敛 u atTop (𝓝 l))
   证明: h.cesaro_smul
 
 Depends on / 依赖: cesaro_smul, h.cesaro_smul
@@ -596,8 +596,8 @@ theorem Continuous.isBounded_range_iff_isBigO
   · simp_rw [isBigO_iff, Filter.Eventually
 
 中文:
-定理 Continuous.isBounded_range_iff_isBigO
-  条件: {f : D -> E} (hf : Continuous f)
+定理 连续.isBounded_range_iff_isBigO
+  条件: {f : D -> E} (hf : 连续 f)
   证明: by
   constructor <;> intro h
   · rw [isBounded_iff_forall_norm_le] at h
@@ -643,8 +643,8 @@ theorem Continuous.isBounded_range_iff_isBigO_atTop_atBot
   rw [hf.isBounded_range_iff_isBigO]; rw [cocompact_eq_atBot_atTop]; rw [isBigO_sup]; rw [and_comm]
 
 中文:
-定理 Continuous.isBounded_range_iff_isBigO_atTop_atBot
-  条件: {f : β -> E} (hf : Continuous f)
+定理 连续.isBounded_range_iff_isBigO_atTop_atBot
+  条件: {f : β -> E} (hf : 连续 f)
   证明: by
   rw [hf.isBounded_range_iff_isBigO]; rw [cocompact_eq_atBot_atTop]; rw [isBigO_sup]; rw [and_comm]
 
@@ -665,8 +665,8 @@ theorem Continuous.isBounded_range_iff_isBigO_atTop_of_even
      ⟨h, by simpa only [← neg_atTop, ← Filter.map_neg, isBigO_map, Function.comp_def, heven.eq]⟩⟩
 
 中文:
-定理 Continuous.isBounded_range_iff_isBigO_atTop_of_even
-  结论: [AddCommGroup β] [IsOrderedAddMonoid β]
+定理 连续.isBounded_range_iff_isBigO_atTop_of_even
+  结论: [加法交换群 β] [是OrderedAdd幺半群 β]
   证明: ⟨fun h => (hf.isBounded_range_iff_isBigO_atTop_atBot.mp h).1,
    fun h => hf.isBounded_range_iff_isBigO_atTop_atBot.mpr
      ⟨h, by simpa only [← neg_atTop, ← Filter.map_neg, isBigO_map, Function.comp_def, heven.eq]⟩⟩

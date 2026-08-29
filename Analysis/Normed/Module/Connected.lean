@@ -53,7 +53,7 @@ theorem Set.Countable.isPathConnected_compl_of_one_lt_rank
 
 
 中文:
-定理 Set.Countable.isPathConnected_compl_of_one_lt_rank
+定理 集合.可数.isPathConnected_compl_of_one_lt_rank
   证明: by
   have : Nontrivial E := (rank_pos_iff_nontrivial (R := Real)).1 (zero_lt_one.trans h)
   -- the set `sᶜ` is dense, therefore nonempty. Pick `a ∈ sᶜ`. We have to show that any
@@ -142,8 +142,8 @@ theorem Set.Countable.isConnected_compl_of_one_lt_rank
   proof: (hs.isPathConnected_compl_of_one_lt_rank h).isConnected
 
 中文:
-定理 Set.Countable.isConnected_compl_of_one_lt_rank
-  结论: (h : 1 < Module.rank 实数 E) {s : Set E}
+定理 集合.可数.isConnected_compl_of_one_lt_rank
+  结论: (h : 1 < 模.rank 实数 E) {s : 集合 E}
   证明: (hs.isPathConnected_compl_of_one_lt_rank h).isConnected
 
 Depends on / 依赖: hs.isPathConnected_compl_of_one_lt_rank, isConnected, isPathConnected_compl_of_one_lt_rank
@@ -162,7 +162,7 @@ theorem isPathConnected_compl_singleton_of_one_lt_rank
 
 中文:
 定理 isPathConnected_compl_singleton_of_one_lt_rank
-  条件: (h : 1 < Module.rank 实数 E) (x : E)
+  条件: (h : 1 < 模.rank 实数 E) (x : E)
   证明: Set.Countable.isPathConnected_compl_of_one_lt_rank h (countable_singleton x)
 
 Depends on / 依赖: Countable, Set.Countable.isPathConnected_compl_of_one_lt_rank, countable_singleton, isPathConnected_compl_of_one_lt_rank
@@ -181,7 +181,7 @@ theorem isConnected_compl_singleton_of_one_lt_rank
 
 中文:
 定理 isConnected_compl_singleton_of_one_lt_rank
-  条件: (h : 1 < Module.rank 实数 E) (x : E)
+  条件: (h : 1 < 模.rank 实数 E) (x : E)
   证明: (isPathConnected_compl_singleton_of_one_lt_rank h x).isConnected
 
 Depends on / 依赖: isConnected, isPathConnected_compl_singleton_of_one_lt_rank
@@ -382,7 +382,7 @@ theorem isPreconnected_ball
 中文:
 定理 isPreconnected_ball
   条件: {x : E} {r : 实数}
-  结论: IsPreconnected (ball x r)
+  结论: 是预连通 (ball x r)
   证明: (convex_ball _ _).isPreconnected
 
 Depends on / 依赖: convex_ball, isPreconnected
@@ -402,7 +402,7 @@ theorem isPreconnected_eball
 中文:
 定理 isPreconnected_eball
   条件: {x : E} {r : 实数>=0∞}
-  结论: IsPreconnected (eball x r)
+  结论: 是预连通 (eball x r)
   证明: (convex_eball _ _).isPreconnected
 
 Depends on / 依赖: convex_eball, isPreconnected
@@ -422,7 +422,7 @@ theorem isPreconnected_closedBall
 中文:
 定理 isPreconnected_closedBall
   条件: {x : E} {r : 实数}
-  结论: IsPreconnected (closedBall x r)
+  结论: 是预连通 (closedBall x r)
   证明: (convex_closedBall _ _).isPreconnected
 
 Depends on / 依赖: convex_closedBall, isPreconnected
@@ -442,7 +442,7 @@ theorem isPreconnected_closedEBall
 中文:
 定理 isPreconnected_closedEBall
   条件: {x : E} {r : 实数>=0∞}
-  结论: IsPreconnected (closedEBall x r)
+  结论: 是预连通 (closedEBall x r)
   证明: (convex_closedEBall _ _).isPreconnected
 
 Depends on / 依赖: convex_closedEBall, isPreconnected
@@ -500,7 +500,7 @@ theorem isConnected_closedBall
 中文:
 定理 isConnected_closedBall
   条件: {x : E} {r : 实数} (hr : 0 <= r)
-  结论: IsConnected (closedBall x r)
+  结论: 是连通 (closedBall x r)
   证明: ⟨⟨x, by simpa⟩, isPreconnected_closedBall⟩
 
 Depends on / 依赖: isPreconnected_closedBall
@@ -520,7 +520,7 @@ theorem isConnected_closedEBall
 中文:
 定理 isConnected_closedEBall
   条件: {x : E} {r : 实数>=0∞}
-  结论: IsConnected (closedEBall x r)
+  结论: 是连通 (closedEBall x r)
   证明: ⟨⟨x, mem_closedEBall_self⟩, isPreconnected_closedEBall⟩
 
 Depends on / 依赖: isPreconnected_closedEBall, mem_closedEBall_self
@@ -547,7 +547,7 @@ theorem isPathConnected_sphere
 
 中文:
 定理 isPathConnected_sphere
-  条件: (h : 1 < Module.rank 实数 E) (x : E) {r : 实数} (hr : 0 <= r)
+  条件: (h : 1 < 模.rank 实数 E) (x : E) {r : 实数} (hr : 0 <= r)
   证明: by
   /- when `r > 0`, we write the sphere as the image of `{0}ᶜ` under the map
   `y ↦ x + (r * ‖y‖⁻¹) • y`. Since the image under a continuous map of a path connected set
@@ -594,7 +594,7 @@ theorem isConnected_sphere
 
 中文:
 定理 isConnected_sphere
-  条件: (h : 1 < Module.rank 实数 E) (x : E) {r : 实数} (hr : 0 <= r)
+  条件: (h : 1 < 模.rank 实数 E) (x : E) {r : 实数} (hr : 0 <= r)
   证明: (isPathConnected_sphere h x hr).isConnected
 
 Depends on / 依赖: isConnected, isPathConnected_sphere
@@ -616,7 +616,7 @@ theorem isPreconnected_sphere
 
 中文:
 定理 isPreconnected_sphere
-  条件: (h : 1 < Module.rank 实数 E) (x : E) (r : 实数)
+  条件: (h : 1 < 模.rank 实数 E) (x : E) (r : 实数)
   证明: by
   rcases le_or_gt 0 r with hr | hr
   · exact (isConnected_sphere h x hr).isPreconnected
@@ -651,7 +651,7 @@ theorem isPathConnected_compl_of_one_lt_codim
 
 中文:
 定理 isPathConnected_compl_of_one_lt_codim
-  结论: {E : Submodule 实数 F}
+  结论: {E : 子模 实数 F}
   证明: by
   rcases E.exists_isCompl with ⟨E', hE'⟩
   refine isPathConnected_compl_of_isPathConnected_compl_zero hE'.symm
@@ -677,7 +677,7 @@ theorem isConnected_compl_of_one_lt_codim
 
 中文:
 定理 isConnected_compl_of_one_lt_codim
-  条件: {E : Submodule 实数 F} (hcodim : 1 < Module.rank 实数 (F ⧸ E))
+  条件: {E : 子模 实数 F} (hcodim : 1 < 模.rank 实数 (F ⧸ E))
   证明: (isPathConnected_compl_of_one_lt_codim hcodim).isConnected
 
 Depends on / 依赖: hcodim, isConnected, isPathConnected_compl_of_one_lt_codim
@@ -695,8 +695,8 @@ theorem Submodule.connectedComponentIn_eq_self_of_one_lt_codim
   proof: (isConnected_compl_of_one_lt_codim hcodim).2.connectedComponentIn hx
 
 中文:
-定理 Submodule.connectedComponentIn_eq_self_of_one_lt_codim
-  结论: (E : Submodule 实数 F)
+定理 子模.connectedComponentIn_eq_self_of_one_lt_codim
+  结论: (E : 子模 实数 F)
   证明: (isConnected_compl_of_one_lt_codim hcodim).2.connectedComponentIn hx
 
 Depends on / 依赖: connectedComponentIn, hcodim, isConnected_compl_of_one_lt_codim

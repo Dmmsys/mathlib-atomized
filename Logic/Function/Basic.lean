@@ -42,7 +42,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: {β : α -> Sort*} (x : α) (f : 对任意 x, β x)
+  签名: {β : α -> 类型层*} (x : α) (f : 对任意 x, β x)
   定义体: f x
 -/
 @[reducible, simp] def eval {β : α -> Sort*} (x : α) (f : forall x, β x) : β x := f x
@@ -58,7 +58,7 @@ theorem eval_apply
 
 中文:
 定理 eval_apply
-  条件: {β : α -> Sort*} (x : α) (f : 对任意 x, β x)
+  条件: {β : α -> 类型层*} (x : α) (f : 对任意 x, β x)
   结论: eval x f = f x
   证明: rfl
 -/
@@ -98,8 +98,8 @@ theorem const_injective
 
 中文:
 定理 const_injective
-  条件: [Nonempty α]
-  结论: Injective (const α : β -> α -> β)
+  条件: [非空 α]
+  结论: 单射 (const α : β -> α -> β)
   证明: fun _ _ h =>
   let ⟨x⟩ := ‹Nonempty α›
   congr_fun h x
@@ -122,7 +122,7 @@ theorem const_inj
 
 中文:
 定理 const_inj
-  条件: [Nonempty α] {y₁ y₂ : β}
+  条件: [非空 α] {y₁ y₂ : β}
   结论: const α y₁ = const α y₂ ↔ y₁ = y₂
   证明: ⟨fun h => const_injective h, fun h => h ▸ rfl⟩
 
@@ -161,7 +161,7 @@ theorem onFun_onFun_eq
 
 中文:
 定理 onFun_onFun_eq
-  条件: {δ : Sort*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β)
+  条件: {δ : 类型层*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β)
   证明: rfl
 -/
 theorem onFun_onFun_eq {δ : Sort*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β) :
@@ -177,7 +177,7 @@ theorem onFun_comp_eq
 
 中文:
 定理 onFun_comp_eq
-  条件: {δ : Sort*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β)
+  条件: {δ : 类型层*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β)
   证明: rfl
 -/
 theorem onFun_comp_eq {δ : Sort*} (f : α -> α -> γ) (g : β -> α) (h : δ -> β) :
@@ -250,9 +250,9 @@ theorem Injective.antisymm_onFun
   proof: hinj antisymm_of r hab hba
 
 中文:
-定理 Injective.antisymm_onFun
-  条件: (hinj : f.Injective) [Std.Antisymm r]
-  结论: Std.Antisymm (r on f) where
+定理 单射.antisymm_onFun
+  条件: (hinj : f.单射) [Std.反对称 r]
+  结论: Std.反对称 (r on f) where
   证明: hinj antisymm_of r hab hba
 
 Depends on / 依赖: Coprime, Ico_union_Ico_eq_Ico, a.Coprime, antisymm_of, card_union_le, coprime_comm, coprime_of_lt_prime, count_eq_card_filter_range, filter_union, h1.trans_le, le_self_add, p.Prime, primeCounting, range_eq_Ico, trans_le, zero_le
@@ -287,8 +287,8 @@ instance [IsTrans
   body: trans_of r
 
 中文:
-实例 [IsTrans
-  签名: β r] : IsTrans α (r on f) where
+实例 [是Trans
+  签名: β r] : 是Trans α (r on f) where
   定义体: trans_of r
 
 Depends on / 依赖: trans_of
@@ -305,8 +305,8 @@ instance [Std.Total
   body: total_of r _ _
 
 中文:
-实例 [Std.Total
-  签名: r] : Std.Total (r on f) where
+实例 [Std.全
+  签名: r] : Std.全 (r on f) where
   定义体: total_of r _ _
 
 Depends on / 依赖: total_of
@@ -324,8 +324,8 @@ theorem Injective.trichotomous_onFun
   proof: hinj Std.Trichotomous.trichotomous (f a) (f b) hab hba
 
 中文:
-定理 Injective.trichotomous_onFun
-  条件: (hinj : f.Injective) [Std.Trichotomous r]
+定理 单射.trichotomous_onFun
+  条件: (hinj : f.单射) [Std.三歧 r]
   证明: hinj Std.Trichotomous.trichotomous (f a) (f b) hab hba
 
 Depends on / 依赖: Std.Trichotomous.trichotomous, Trichotomous, trichotomous
@@ -342,8 +342,8 @@ instance [IsEquiv
   signature: β r] : IsEquiv α (r on f) where
 
 中文:
-实例 [IsEquiv
-  签名: β r] : IsEquiv α (r on f) where
+实例 [Is等价
+  签名: β r] : Is等价 α (r on f) where
 -/
 instance [IsEquiv β r] : IsEquiv α (r on f) where
 
@@ -355,8 +355,8 @@ instance [IsPreorder
   signature: β r] : IsPreorder α (r on f) where
 
 中文:
-实例 [IsPreorder
-  签名: β r] : IsPreorder α (r on f) where
+实例 [是预序
+  签名: β r] : 是预序 α (r on f) where
 -/
 instance [IsPreorder β r] : IsPreorder α (r on f) where
 
@@ -370,8 +370,8 @@ theorem Injective.isPartialOrder_onFun
   proof: { hinj.antisymm_onFun r with }
 
 中文:
-定理 Injective.isPartialOrder_onFun
-  条件: (hinj : f.Injective) [IsPartialOrder β r]
+定理 单射.isPartialOrder_onFun
+  条件: (hinj : f.单射) [是偏序 β r]
   证明: { hinj.antisymm_onFun r with }
 
 Depends on / 依赖: antisymm_onFun, hinj.antisymm_onFun
@@ -390,8 +390,8 @@ theorem Injective.isLinearOrder_onFun
   proof: { hinj.isPartialOrder_onFun r with }
 
 中文:
-定理 Injective.isLinearOrder_onFun
-  条件: (hinj : f.Injective) [IsLinearOrder β r]
+定理 单射.isLinearOrder_onFun
+  条件: (hinj : f.单射) [是线性序 β r]
   证明: { hinj.isPartialOrder_onFun r with }
 
 Depends on / 依赖: hinj.isPartialOrder_onFun, isPartialOrder_onFun
@@ -408,8 +408,8 @@ instance [IsStrictOrder
   signature: β r] : IsStrictOrder α (r on f) where
 
 中文:
-实例 [IsStrictOrder
-  签名: β r] : IsStrictOrder α (r on f) where
+实例 [是Strict序
+  签名: β r] : 是Strict序 α (r on f) where
 -/
 instance [IsStrictOrder β r] : IsStrictOrder α (r on f) where
 
@@ -422,8 +422,8 @@ instance [IsStrictWeakOrder
   body: IsStrictWeakOrder.incomp_trans (lt := r) _ _ _
 
 中文:
-实例 [IsStrictWeakOrder
-  签名: β r] : IsStrictWeakOrder α (r on f) where
+实例 [是StrictWeak序
+  签名: β r] : 是StrictWeak序 α (r on f) where
   定义体: IsStrictWeakOrder.incomp_trans (lt := r) _ _ _
 
 Depends on / 依赖: IsStrictWeakOrder, IsStrictWeakOrder.incomp_trans, incomp_trans
@@ -441,8 +441,8 @@ theorem Injective.isStrictTotalOrder_onFun
   proof: { hinj.trichotomous_onFun r with }
 
 中文:
-定理 Injective.isStrictTotalOrder_onFun
-  条件: (hinj : f.Injective) [IsStrictTotalOrder β r]
+定理 单射.isStrictTotalOrder_onFun
+  条件: (hinj : f.单射) [是StrictTotal序 β r]
   证明: { hinj.trichotomous_onFun r with }
 
 Depends on / 依赖: hinj.trichotomous_onFun, trichotomous_onFun
@@ -468,7 +468,7 @@ lemma hfunext
 
 中文:
 引理 hfunext
-  结论: {α α' : Sort u} {β : α -> Sort v} {β' : α' -> Sort v} {f : 对任意 a, β a} {f' : 对任意 a, β' a}
+  结论: {α α' : 类型层 u} {β : α -> 类型层 v} {β' : α' -> 类型层 v} {f : 对任意 a, β a} {f' : 对任意 a, β' a}
   证明: by
   subst hα
   have : forall a, f a ≍ f' a := fun a => h a a (HEq.refl a)
@@ -497,7 +497,7 @@ theorem ne_iff
 
 中文:
 定理 ne_iff
-  条件: {β : α -> Sort*} {f₁ f₂ : 对任意 a, β a}
+  条件: {β : α -> 类型层*} {f₁ f₂ : 对任意 a, β a}
   结论: f₁ != f₂ ↔ 存在 a, f₁ a != f₂ a
   证明: funext_iff.not.trans not_forall
 
@@ -519,7 +519,7 @@ lemma funext_iff_of_subsingleton
 
 中文:
 引理 funext_iff_of_subsingleton
-  条件: [Subsingleton α] {g : α -> β} (x y : α)
+  条件: [子单例 α] {g : α -> β} (x y : α)
   证明: by
   refine ⟨fun h => funext fun z => ?_, fun h => ?_⟩
   · rwa [Subsingleton.elim x z, Subsingleton.elim y z] at h
@@ -665,8 +665,8 @@ instance [Std.Antisymm
   body: antisymm_of r hab hba
 
 中文:
-实例 [Std.Antisymm
-  签名: r] : Std.Antisymm (swap r) where
+实例 [Std.反对称
+  签名: r] : Std.反对称 (swap r) where
   定义体: antisymm_of r hab hba
 
 Depends on / 依赖: antisymm_of
@@ -701,8 +701,8 @@ instance [IsTrans
   body: trans_of r hbc hab
 
 中文:
-实例 [IsTrans
-  签名: α r] : IsTrans α (swap r) where
+实例 [是Trans
+  签名: α r] : 是Trans α (swap r) where
   定义体: trans_of r hbc hab
 
 Depends on / 依赖: trans_of
@@ -719,8 +719,8 @@ instance [Std.Total
   body: total_of r _ _
 
 中文:
-实例 [Std.Total
-  签名: r] : Std.Total (swap r) where
+实例 [Std.全
+  签名: r] : Std.全 (swap r) where
   定义体: total_of r _ _
 
 Depends on / 依赖: total_of
@@ -737,8 +737,8 @@ instance [Std.Trichotomous
   body: Std.Trichotomous.trichotomous a b hba hab
 
 中文:
-实例 [Std.Trichotomous
-  签名: r] : Std.Trichotomous (swap r) where
+实例 [Std.三歧
+  签名: r] : Std.三歧 (swap r) where
   定义体: Std.Trichotomous.trichotomous a b hba hab
 
 Depends on / 依赖: Std.Trichotomous.trichotomous, Trichotomous, trichotomous
@@ -754,8 +754,8 @@ instance [IsEquiv
   signature: α r] : IsEquiv α (swap r) where
 
 中文:
-实例 [IsEquiv
-  签名: α r] : IsEquiv α (swap r) where
+实例 [Is等价
+  签名: α r] : Is等价 α (swap r) where
 -/
 instance [IsEquiv α r] : IsEquiv α (swap r) where
 
@@ -767,8 +767,8 @@ instance [IsPreorder
   signature: α r] : IsPreorder α (swap r) where
 
 中文:
-实例 [IsPreorder
-  签名: α r] : IsPreorder α (swap r) where
+实例 [是预序
+  签名: α r] : 是预序 α (swap r) where
 -/
 instance [IsPreorder α r] : IsPreorder α (swap r) where
 
@@ -780,8 +780,8 @@ instance [IsPartialOrder
   signature: α r] : IsPartialOrder α (swap r) where
 
 中文:
-实例 [IsPartialOrder
-  签名: α r] : IsPartialOrder α (swap r) where
+实例 [是偏序
+  签名: α r] : 是偏序 α (swap r) where
 -/
 instance [IsPartialOrder α r] : IsPartialOrder α (swap r) where
 
@@ -793,8 +793,8 @@ instance [IsLinearOrder
   signature: α r] : IsLinearOrder α (swap r) where
 
 中文:
-实例 [IsLinearOrder
-  签名: α r] : IsLinearOrder α (swap r) where
+实例 [是线性序
+  签名: α r] : 是线性序 α (swap r) where
 -/
 instance [IsLinearOrder α r] : IsLinearOrder α (swap r) where
 
@@ -806,8 +806,8 @@ instance [IsStrictOrder
   signature: α r] : IsStrictOrder α (swap r) where
 
 中文:
-实例 [IsStrictOrder
-  签名: α r] : IsStrictOrder α (swap r) where
+实例 [是Strict序
+  签名: α r] : 是Strict序 α (swap r) where
 -/
 instance [IsStrictOrder α r] : IsStrictOrder α (swap r) where
 
@@ -820,8 +820,8 @@ instance [IsStrictWeakOrder
   body: IsStrictWeakOrder.incomp_trans a b c hab.symm hbc.symm
 
 中文:
-实例 [IsStrictWeakOrder
-  签名: α r] : IsStrictWeakOrder α (swap r) where
+实例 [是StrictWeak序
+  签名: α r] : 是StrictWeak序 α (swap r) where
   定义体: IsStrictWeakOrder.incomp_trans a b c hab.symm hbc.symm
 
 Depends on / 依赖: IsStrictWeakOrder, IsStrictWeakOrder.incomp_trans, hab.symm, hbc.symm, incomp_trans
@@ -837,8 +837,8 @@ instance [IsStrictTotalOrder
   signature: α r] : IsStrictTotalOrder α (swap r) where
 
 中文:
-实例 [IsStrictTotalOrder
-  签名: α r] : IsStrictTotalOrder α (swap r) where
+实例 [是StrictTotal序
+  签名: α r] : 是StrictTotal序 α (swap r) where
 -/
 instance [IsStrictTotalOrder α r] : IsStrictTotalOrder α (swap r) where
 
@@ -854,9 +854,9 @@ theorem Bijective.injective
   proof: hf.1
 
 中文:
-定理 Bijective.injective
-  条件: {f : α -> β} (hf : Bijective f)
-  结论: Injective f
+定理 双射.injective
+  条件: {f : α -> β} (hf : 双射 f)
+  结论: 单射 f
   证明: hf.1
 -/
 protected theorem Bijective.injective {f : α -> β} (hf : Bijective f) : Injective f := hf.1
@@ -870,9 +870,9 @@ theorem Bijective.surjective
   proof: hf.2
 
 中文:
-定理 Bijective.surjective
-  条件: {f : α -> β} (hf : Bijective f)
-  结论: Surjective f
+定理 双射.surjective
+  条件: {f : α -> β} (hf : 双射 f)
+  结论: 满射 f
   证明: hf.2
 -/
 protected theorem Bijective.surjective {f : α -> β} (hf : Bijective f) : Surjective f := hf.2
@@ -888,7 +888,7 @@ theorem not_injective_iff
 
 中文:
 定理 not_injective_iff
-  结论: ¬ Injective f ↔ 存在 a b, f a = f b ∧ a != b
+  结论: ¬ 单射 f ↔ 存在 a b, f a = f b ∧ a != b
   证明: by
   simp only [Injective, not_forall, exists_prop]
 
@@ -910,7 +910,7 @@ lemma not_injective_const
 
 中文:
 引理 not_injective_const
-  条件: {α β : 类型} [Nontrivial α] {b : β}
+  条件: {α β : 类型} [非平凡 α] {b : β}
   证明: by
   rw [not_injective_iff]
   obtain ⟨a₁, a₂, h⟩ := exists_pair_ne α
@@ -931,8 +931,8 @@ definition Injective.decidableEq
   body: fun _ _ => decidable_of_iff _ I.eq_iff
 
 中文:
-定义 Injective.decidableEq
-  签名: [DecidableEq β] (I : Injective f)
+定义 单射.decidableEq
+  签名: [DecidableEq β] (I : 单射 f)
   定义体: fun _ _ => decidable_of_iff _ I.eq_iff
 -/
 protected def Injective.decidableEq [DecidableEq β] (I : Injective f) : DecidableEq α :=
@@ -950,9 +950,9 @@ theorem Injective.of_comp
 @[simp]
 
 中文:
-定理 Injective.of_comp
-  条件: {g : γ -> α} (I : Injective (f ∘ g))
-  结论: Injective g
+定理 单射.of_comp
+  条件: {g : γ -> α} (I : 单射 (f ∘ g))
+  结论: 单射 g
   证明: fun _ _ h => I congr_arg f h
 
 @[simp]
@@ -972,8 +972,8 @@ theorem Injective.of_comp_iff
   proof: ⟨Injective.of_comp, hf.comp⟩
 
 中文:
-定理 Injective.of_comp_iff
-  条件: (hf : Injective f) (g : γ -> α)
+定理 单射.of_comp_iff
+  条件: (hf : 单射 f) (g : γ -> α)
   证明: ⟨Injective.of_comp, hf.comp⟩
 
 Depends on / 依赖: Injective, Injective.of_comp, hf.comp, of_comp
@@ -994,8 +994,8 @@ theorem Injective.of_comp_right
   exact congr_arg g (I h)
 
 中文:
-定理 Injective.of_comp_right
-  条件: {g : γ -> α} (I : Injective (f ∘ g)) (hg : Surjective g)
+定理 单射.of_comp_right
+  条件: {g : γ -> α} (I : 单射 (f ∘ g)) (hg : 满射 g)
   证明: fun x y h => by
   obtain ⟨x, rfl⟩ := hg x
   obtain ⟨y, rfl⟩ := hg y
@@ -1020,8 +1020,8 @@ theorem Surjective.bijective₂_of_injective
 @[simp]
 
 中文:
-定理 Surjective.bijective₂_of_injective
-  结论: {g : γ -> α} (hf : Surjective f) (hg : Surjective g)
+定理 满射.bijective₂_of_injective
+  结论: {g : γ -> α} (hf : 满射 f) (hg : 满射 g)
   证明: ⟨⟨I.of_comp_right hg, hf⟩, I.of_comp, hg⟩
 
 @[simp]
@@ -1042,8 +1042,8 @@ theorem Injective.of_comp_iff'
   proof: ⟨fun I => I.of_comp_right hg.2, fun h => h.comp hg.injective⟩
 
 中文:
-定理 Injective.of_comp_iff'
-  条件: (f : α -> β) {g : γ -> α} (hg : Bijective g)
+定理 单射.of_comp_iff'
+  条件: (f : α -> β) {g : γ -> α} (hg : 双射 g)
   证明: ⟨fun I => I.of_comp_right hg.2, fun h => h.comp hg.injective⟩
 
 Depends on / 依赖: I.of_comp_right, h.comp, hg.injective, injective, of_comp_right
@@ -1062,8 +1062,8 @@ theorem Injective.piMap
 funext fun i => hf i congrFun h _
 
 中文:
-定理 Injective.piMap
-  结论: {ι : Sort*} {α β : ι -> Sort*} {f : 对任意 i, α i -> β i}
+定理 单射.piMap
+  结论: {ι : 类型层*} {α β : ι -> 类型层*} {f : 对任意 i, α i -> β i}
   证明: fun _ _ h =>
 funext fun i => hf i congrFun h _
 -/
@@ -1081,9 +1081,9 @@ theorem Injective.comp_left
   proof: .piMap fun _ => hg
 
 中文:
-定理 Injective.comp_left
-  条件: {g : β -> γ} (hg : Injective g)
-  结论: Injective (g ∘ · : (α -> β) -> α -> γ)
+定理 单射.comp_left
+  条件: {g : β -> γ} (hg : 单射 g)
+  结论: 单射 (g ∘ · : (α -> β) -> α -> γ)
   证明: .piMap fun _ => hg
 -/
 theorem Injective.comp_left {g : β -> γ} (hg : Injective g) : Injective (g ∘ · : (α -> β) -> α -> γ) :=
@@ -1100,7 +1100,7 @@ theorem injective_comp_left_iff
 
 中文:
 定理 injective_comp_left_iff
-  条件: [Nonempty α] {g : β -> γ}
+  条件: [非空 α] {g : β -> γ}
   证明: ⟨fun h b₁ b₂ eq => Nonempty.elim ‹_›
     (congr_fun <| h (a₁ := fun _ => b₁) (a₂ := fun _ => b₂) <| funext fun _ => eq), (·.comp_left)⟩
 
@@ -1122,8 +1122,8 @@ theorem injective_of_subsingleton
 
 中文:
 定理 injective_of_subsingleton
-  条件: [Subsingleton α] (f : α -> β)
-  结论: Injective f
+  条件: [子单例 α] (f : α -> β)
+  结论: 单射 f
   证明: fun _ _ _ => Subsingleton.elim _ _
 -/
 @[nontriviality] theorem injective_of_subsingleton [Subsingleton α] (f : α -> β) : Injective f :=
@@ -1140,8 +1140,8 @@ theorem bijective_of_subsingleton
 
 中文:
 定理 bijective_of_subsingleton
-  条件: [Subsingleton α] (f : α -> α)
-  结论: Bijective f
+  条件: [子单例 α] (f : α -> α)
+  结论: 双射 f
   证明: ⟨injective_of_subsingleton f, fun a => ⟨a, Subsingleton.elim ..⟩⟩
 -/
 @[nontriviality] theorem bijective_of_subsingleton [Subsingleton α] (f : α -> α) : Bijective f :=
@@ -1157,7 +1157,7 @@ lemma Injective.dite
   grind
 
 中文:
-引理 Injective.dite
+引理 单射.dite
   结论: (p : α -> 命题) [DecidablePred p]
   证明: fun x₁ x₂ h => by
   grind
@@ -1183,9 +1183,9 @@ theorem Surjective.of_comp
 @[simp]
 
 中文:
-定理 Surjective.of_comp
-  条件: {g : γ -> α} (S : Surjective (f ∘ g))
-  结论: Surjective f
+定理 满射.of_comp
+  条件: {g : γ -> α} (S : 满射 (f ∘ g))
+  结论: 满射 f
   证明: fun y =>
   let ⟨x, h⟩ := S y
   ⟨g x, h⟩
@@ -1206,8 +1206,8 @@ theorem Surjective.of_comp_iff
   proof: ⟨Surjective.of_comp, fun h => h.comp hg⟩
 
 中文:
-定理 Surjective.of_comp_iff
-  条件: (f : α -> β) {g : γ -> α} (hg : Surjective g)
+定理 满射.of_comp_iff
+  条件: (f : α -> β) {g : γ -> α} (hg : 满射 g)
   证明: ⟨Surjective.of_comp, fun h => h.comp hg⟩
 
 Depends on / 依赖: Surjective, Surjective.of_comp, h.comp, of_comp
@@ -1225,8 +1225,8 @@ theorem Surjective.of_comp_left
   proof: fun a => let ⟨c, hc⟩ := S (f a); ⟨c, hf hc⟩
 
 中文:
-定理 Surjective.of_comp_left
-  条件: {g : γ -> α} (S : Surjective (f ∘ g)) (hf : Injective f)
+定理 满射.of_comp_left
+  条件: {g : γ -> α} (S : 满射 (f ∘ g)) (hf : 单射 f)
   证明: fun a => let ⟨c, hc⟩ := S (f a); ⟨c, hf hc⟩
 -/
 theorem Surjective.of_comp_left {g : γ -> α} (S : Surjective (f ∘ g)) (hf : Injective f) :
@@ -1243,8 +1243,8 @@ theorem Injective.bijective₂_of_surjective
 @[simp]
 
 中文:
-定理 Injective.bijective₂_of_surjective
-  结论: {g : γ -> α} (hf : Injective f) (hg : Injective g)
+定理 单射.bijective₂_of_surjective
+  结论: {g : γ -> α} (hf : 单射 f) (hg : 单射 g)
   证明: ⟨⟨hf, S.of_comp⟩, hg, S.of_comp_left hf⟩
 
 @[simp]
@@ -1265,8 +1265,8 @@ theorem Surjective.of_comp_iff'
   proof: ⟨fun S => S.of_comp_left hf.1, hf.surjective.comp⟩
 
 中文:
-定理 Surjective.of_comp_iff'
-  条件: (hf : Bijective f) (g : γ -> α)
+定理 满射.of_comp_iff'
+  条件: (hf : 双射 f) (g : γ -> α)
   证明: ⟨fun S => S.of_comp_left hf.1, hf.surjective.comp⟩
 
 Depends on / 依赖: S.of_comp_left, hf.surjective.comp, of_comp_left, surjective
@@ -1284,7 +1284,7 @@ instance decidableEqPFun
 
 中文:
 实例 decidableEqPFun
-  签名: (p : 命题) [Decidable p] (α : p -> 类型) [对任意 hp, DecidableEq (α hp)]
+  签名: (p : 命题) [可判定 p] (α : p -> 类型) [对任意 hp, DecidableEq (α hp)]
 -/
 instance decidableEqPFun (p : Prop) [Decidable p] (α : p -> Type*) [forall hp, DecidableEq (α hp)] :
     DecidableEq (forall hp, α hp)
@@ -1301,8 +1301,8 @@ theorem Surjective.forall
     hx ▸ h x⟩
 
 中文:
-定理 Surjective.forall
-  条件: (hf : Surjective f) {p : β -> 命题}
+定理 满射.对任意
+  条件: (hf : 满射 f) {p : β -> 命题}
   证明: ⟨fun h x => h (f x), fun h y =>
     let ⟨x, hx⟩ := hf y
     hx ▸ h x⟩
@@ -1322,8 +1322,8 @@ theorem Surjective.forall₂
   proof: hf.forall.trans forall_congr' fun _ => hf.forall
 
 中文:
-定理 Surjective.forall₂
-  条件: (hf : Surjective f) {p : β -> β -> 命题}
+定理 满射.对任意₂
+  条件: (hf : 满射 f) {p : β -> β -> 命题}
   证明: hf.forall.trans forall_congr' fun _ => hf.forall
 -/
 protected theorem Surjective.forall₂ (hf : Surjective f) {p : β -> β -> Prop} :
@@ -1339,8 +1339,8 @@ theorem Surjective.forall₃
   proof: hf.forall.trans forall_congr' fun _ => hf.forall₂
 
 中文:
-定理 Surjective.forall₃
-  条件: (hf : Surjective f) {p : β -> β -> β -> 命题}
+定理 满射.对任意₃
+  条件: (hf : 满射 f) {p : β -> β -> β -> 命题}
   证明: hf.forall.trans forall_congr' fun _ => hf.forall₂
 -/
 protected theorem Surjective.forall₃ (hf : Surjective f) {p : β -> β -> β -> Prop} :
@@ -1359,8 +1359,8 @@ theorem Surjective.exists
     fun ⟨x, hx⟩ => ⟨f x, hx⟩⟩
 
 中文:
-定理 Surjective.exists
-  条件: (hf : Surjective f) {p : β -> 命题}
+定理 满射.存在
+  条件: (hf : 满射 f) {p : β -> 命题}
   证明: ⟨fun ⟨y, hy⟩ =>
     let ⟨x, hx⟩ := hf y
     ⟨x, hx.symm ▸ hy⟩,
@@ -1382,8 +1382,8 @@ theorem Surjective.exists₂
   proof: hf.exists.trans exists_congr fun _ => hf.exists
 
 中文:
-定理 Surjective.exists₂
-  条件: (hf : Surjective f) {p : β -> β -> 命题}
+定理 满射.存在₂
+  条件: (hf : 满射 f) {p : β -> β -> 命题}
   证明: hf.exists.trans exists_congr fun _ => hf.exists
 -/
 protected theorem Surjective.exists₂ (hf : Surjective f) {p : β -> β -> Prop} :
@@ -1399,8 +1399,8 @@ theorem Surjective.exists₃
   proof: hf.exists.trans exists_congr fun _ => hf.exists₂
 
 中文:
-定理 Surjective.exists₃
-  条件: (hf : Surjective f) {p : β -> β -> β -> 命题}
+定理 满射.存在₃
+  条件: (hf : 满射 f) {p : β -> β -> β -> 命题}
   证明: hf.exists.trans exists_congr fun _ => hf.exists₂
 
 Depends on / 依赖: _pos, beattySeq_symmDiff_beattySeq, hrs.symm, symmDiff_comm
@@ -1419,9 +1419,9 @@ theorem Surjective.injective_comp_right
   proof: fun _ _ h => funext hf.forall.2 congr_fun h
 
 中文:
-定理 Surjective.injective_comp_right
-  条件: (hf : Surjective f)
-  结论: Injective fun g : β -> γ => g ∘ f
+定理 满射.injective_comp_right
+  条件: (hf : 满射 f)
+  结论: 单射 fun g : β -> γ => g ∘ f
   证明: fun _ _ h => funext hf.forall.2 congr_fun h
 
 Depends on / 依赖: congr_fun, hf.forall
@@ -1445,7 +1445,7 @@ theorem injective_comp_right_iff_surjective
 
 中文:
 定理 injective_comp_right_iff_surjective
-  条件: {γ : 类型} [Nontrivial γ]
+  条件: {γ : 类型} [非平凡 γ]
   证明: by
   refine ⟨not_imp_not.mp fun not_surj inj => not_subsingleton γ ⟨fun c c' => ?_⟩,
     (·.injective_comp_right)⟩
@@ -1474,8 +1474,8 @@ theorem Surjective.right_cancellable
   proof: hf.injective_comp_right.eq_iff
 
 中文:
-定理 Surjective.right_cancellable
-  条件: (hf : Surjective f) {g₁ g₂ : β -> γ}
+定理 满射.right_cancellable
+  条件: (hf : 满射 f) {g₁ g₂ : β -> γ}
   证明: hf.injective_comp_right.eq_iff
 -/
 protected theorem Surjective.right_cancellable (hf : Surjective f) {g₁ g₂ : β -> γ} :
@@ -1514,9 +1514,9 @@ theorem bijective_iff_existsUnique
     fun he => ⟨fun {_a a'} h => (he (f a')).unique h rfl, fun b => (he b).exists⟩⟩
 
 中文:
-定理 bijective_iff_existsUnique
+定理 bijective_iff_存在Unique
   条件: (f : α -> β)
-  结论: Bijective f ↔ 对任意 b : β, 存在! a : α, f a = b
+  结论: 双射 f ↔ 对任意 b : β, 存在! a : α, f a = b
   证明: ⟨fun hf b =>
       let ⟨a, ha⟩ := hf.surjective b
       ⟨a, ha, fun _ ha' => hf.injective (ha'.trans ha.symm)⟩,
@@ -1539,8 +1539,8 @@ theorem Bijective.existsUnique
   proof: (bijective_iff_existsUnique f).mp hf b
 
 中文:
-定理 Bijective.existsUnique
-  条件: {f : α -> β} (hf : Bijective f) (b : β)
+定理 双射.存在Unique
+  条件: {f : α -> β} (hf : 双射 f) (b : β)
   证明: (bijective_iff_existsUnique f).mp hf b
 -/
 protected theorem Bijective.existsUnique {f : α -> β} (hf : Bijective f) (b : β) :
@@ -1562,8 +1562,8 @@ theorem Bijective.existsUnique_iff
       hz ▸ congr_arg f (hx _ (by simpa [hz]))⟩⟩
 
 中文:
-定理 Bijective.existsUnique_iff
-  条件: {f : α -> β} (hf : Bijective f) {p : β -> 命题}
+定理 双射.存在Unique_iff
+  条件: {f : α -> β} (hf : 双射 f) {p : β -> 命题}
   证明: ⟨fun ⟨y, hpy, hy⟩ =>
     let ⟨x, hx⟩ := hf.surjective y
 ⟨x, by simpa [hx], fun z (hz : p (f z)) => hf.injective hx.symm ▸ hy _ hz⟩,
@@ -1593,8 +1593,8 @@ theorem Bijective.of_comp_iff
   proof: and_congr (Injective.of_comp_iff' _ hg) (Surjective.of_comp_iff _ hg.surjective)
 
 中文:
-定理 Bijective.of_comp_iff
-  条件: (f : α -> β) {g : γ -> α} (hg : Bijective g)
+定理 双射.of_comp_iff
+  条件: (f : α -> β) {g : γ -> α} (hg : 双射 g)
   证明: and_congr (Injective.of_comp_iff' _ hg) (Surjective.of_comp_iff _ hg.surjective)
 
 Depends on / 依赖: Injective, Injective.of_comp_iff, Surjective, Surjective.of_comp_iff, and_congr, hg.surjective, of_comp_iff, surjective
@@ -1612,8 +1612,8 @@ theorem Bijective.of_comp_iff'
   proof: and_congr (Injective.of_comp_iff hf.injective _) (Surjective.of_comp_iff' hf _)
 
 中文:
-定理 Bijective.of_comp_iff'
-  条件: {f : α -> β} (hf : Bijective f) (g : γ -> α)
+定理 双射.of_comp_iff'
+  条件: {f : α -> β} (hf : 双射 f) (g : γ -> α)
   证明: and_congr (Injective.of_comp_iff hf.injective _) (Surjective.of_comp_iff' hf _)
 
 Depends on / 依赖: Injective, Injective.of_comp_iff, Surjective, Surjective.of_comp_iff, and_congr, hf.injective, injective, of_comp_iff
@@ -1631,8 +1631,8 @@ theorem Bijective.of_comp_left
   proof: ⟨hfg.1.of_comp, hfg.2.of_comp_left hf⟩
 
 中文:
-定理 Bijective.of_comp_left
-  结论: {f : α -> β} {g : γ -> α} (hfg : Function.Bijective (f ∘ g))
+定理 双射.of_comp_left
+  结论: {f : α -> β} {g : γ -> α} (hfg : 函数.双射 (f ∘ g))
   证明: ⟨hfg.1.of_comp, hfg.2.of_comp_left hf⟩
 
 Depends on / 依赖: of_comp, of_comp_left
@@ -1651,7 +1651,7 @@ theorem exists_fixed_point_of_surjective
   ⟨f a a, (congr_fun ha a).symm⟩
 
 中文:
-定理 exists_fixed_point_of_surjective
+定理 存在_fixed_point_of_surjective
   结论: {α β : 类型} (f : α -> α -> β)
   证明: let ⟨a, ha⟩ := hf fun a => g (f a a)
   ⟨f a a, (congr_fun ha a).symm⟩
@@ -1676,8 +1676,8 @@ iff_not_self .of_eq congrArg (a in ·) ha
 
 中文:
 定理 cantor_surjective
-  条件: {α} (f : α -> Set α)
-  结论: ¬Surjective f
+  条件: {α} (f : α -> 集合 α)
+  结论: ¬满射 f
   证明: fun hf =>
   let ⟨a, ha⟩ := hf {a | a ∉ f a}
 iff_not_self .of_eq congrArg (a in ·) ha
@@ -1696,8 +1696,8 @@ theorem cantor_injective
 
 中文:
 定理 cantor_injective
-  条件: {α : 类型} (f : Set α -> α)
-  结论: ¬Injective f
+  条件: {α : 类型} (f : 集合 α -> α)
+  结论: ¬单射 f
 -/
 theorem cantor_injective {α : Type*} (f : Set α -> α) : ¬Injective f
 | i => cantor_surjective (fun a => {b | forall U, a = f U -> b in U})
@@ -1723,8 +1723,8 @@ theorem not_surjective_Type
 
 中文:
 定理 not_surjective_Type
-  条件: {α : 类型u} (f : α -> Type max u v)
-  结论: ¬Surjective f
+  条件: {α : 类型u} (f : α -> 类型 最大值 u v)
+  结论: ¬满射 f
   证明: by
   intro hf
   let T : Type max u v := Sigma f
@@ -1761,7 +1761,7 @@ definition IsPartialInv
 
 中文:
 定义 IsPartialInv
-  签名: {α β} (f : α -> β) (g : β -> Option α)
+  签名: {α β} (f : α -> β) (g : β -> 选项类型 α)
   定义体: forall x y, g y = some x ↔ f x = y
 -/
 def IsPartialInv {α β} (f : α -> β) (g : β -> Option α) : Prop :=
@@ -1885,7 +1885,7 @@ theorem IsPartialInv.comp
 
 中文:
 定理 IsPartialInv.comp
-  结论: {α β γ} {f : α -> β} {g : β -> Option α} {h : β -> γ} {i : γ -> Option β}
+  结论: {α β γ} {f : α -> β} {g : β -> 选项类型 α} {h : β -> γ} {i : γ -> 选项类型 β}
   证明: by
   intros a b
   simp [Option.bind_eq_some_iff, hh _, hf _]
@@ -1908,8 +1908,8 @@ lemma LeftInverse.eq
   proof: h x
 
 中文:
-引理 LeftInverse.eq
-  条件: {g : β -> α} {f : α -> β} (h : LeftInverse g f) (x : α)
+引理 左逆.eq
+  条件: {g : β -> α} {f : α -> β} (h : 左逆 g f) (x : α)
   结论: g (f x) = x
   证明: h x
 -/
@@ -1925,8 +1925,8 @@ lemma RightInverse.eq
   proof: h x
 
 中文:
-引理 RightInverse.eq
-  条件: {g : β -> α} {f : α -> β} (h : RightInverse g f) (x : β)
+引理 右逆.eq
+  条件: {g : β -> α} {f : α -> β} (h : 右逆 g f) (x : β)
   结论: f (g x) = x
   证明: h x
 -/
@@ -1942,8 +1942,8 @@ theorem LeftInverse.comp_eq_id
   proof: funext h
 
 中文:
-定理 LeftInverse.comp_eq_id
-  条件: {f : α -> β} {g : β -> α} (h : LeftInverse f g)
+定理 左逆.comp_eq_id
+  条件: {f : α -> β} {g : β -> α} (h : 左逆 f g)
   结论: f ∘ g = id
   证明: funext h
 -/
@@ -1962,7 +1962,7 @@ theorem leftInverse_iff_comp
 中文:
 定理 leftInverse_iff_comp
   条件: {f : α -> β} {g : β -> α}
-  结论: LeftInverse f g ↔ f ∘ g = id
+  结论: 左逆 f g ↔ f ∘ g = id
   证明: ⟨LeftInverse.comp_eq_id, congr_fun⟩
 
 Depends on / 依赖: LeftInverse, LeftInverse.comp_eq_id, comp_eq_id, congr_fun
@@ -1980,8 +1980,8 @@ theorem RightInverse.comp_eq_id
   proof: funext h
 
 中文:
-定理 RightInverse.comp_eq_id
-  条件: {f : α -> β} {g : β -> α} (h : RightInverse f g)
+定理 右逆.comp_eq_id
+  条件: {f : α -> β} {g : β -> α} (h : 右逆 f g)
   结论: g ∘ f = id
   证明: funext h
 -/
@@ -2000,7 +2000,7 @@ theorem rightInverse_iff_comp
 中文:
 定理 rightInverse_iff_comp
   条件: {f : α -> β} {g : β -> α}
-  结论: RightInverse f g ↔ g ∘ f = id
+  结论: 右逆 f g ↔ g ∘ f = id
   证明: ⟨RightInverse.comp_eq_id, congr_fun⟩
 
 Depends on / 依赖: RightInverse, RightInverse.comp_eq_id, comp_eq_id, congr_fun
@@ -2017,8 +2017,8 @@ theorem LeftInverse.comp
   proof: fun a => show h (f (g (i a))) = a by rw [hf (i a), hh a]
 
 中文:
-定理 LeftInverse.comp
-  结论: {f : α -> β} {g : β -> α} {h : β -> γ} {i : γ -> β} (hf : LeftInverse f g)
+定理 左逆.comp
+  结论: {f : α -> β} {g : β -> α} {h : β -> γ} {i : γ -> β} (hf : 左逆 f g)
   证明: fun a => show h (f (g (i a))) = a by rw [hf (i a), hh a]
 -/
 theorem LeftInverse.comp {f : α -> β} {g : β -> α} {h : β -> γ} {i : γ -> β} (hf : LeftInverse f g)
@@ -2034,8 +2034,8 @@ theorem RightInverse.comp
   proof: LeftInverse.comp hh hf
 
 中文:
-定理 RightInverse.comp
-  结论: {f : α -> β} {g : β -> α} {h : β -> γ} {i : γ -> β} (hf : RightInverse f g)
+定理 右逆.comp
+  结论: {f : α -> β} {g : β -> α} {h : β -> γ} {i : γ -> β} (hf : 右逆 f g)
   证明: LeftInverse.comp hh hf
 
 Depends on / 依赖: LeftInverse, LeftInverse.comp
@@ -2054,9 +2054,9 @@ theorem LeftInverse.rightInverse
   proof: h
 
 中文:
-定理 LeftInverse.rightInverse
-  条件: {f : α -> β} {g : β -> α} (h : LeftInverse g f)
-  结论: RightInverse f g
+定理 左逆.rightInverse
+  条件: {f : α -> β} {g : β -> α} (h : 左逆 g f)
+  结论: 右逆 f g
   证明: h
 -/
 theorem LeftInverse.rightInverse {f : α -> β} {g : β -> α} (h : LeftInverse g f) : RightInverse f g :=
@@ -2072,9 +2072,9 @@ theorem RightInverse.leftInverse
   proof: h
 
 中文:
-定理 RightInverse.leftInverse
-  条件: {f : α -> β} {g : β -> α} (h : RightInverse g f)
-  结论: LeftInverse f g
+定理 右逆.leftInverse
+  条件: {f : α -> β} {g : β -> α} (h : 右逆 g f)
+  结论: 左逆 f g
   证明: h
 -/
 theorem RightInverse.leftInverse {f : α -> β} {g : β -> α} (h : RightInverse g f) : LeftInverse f g :=
@@ -2090,9 +2090,9 @@ theorem LeftInverse.surjective
   proof: h.rightInverse.surjective
 
 中文:
-定理 LeftInverse.surjective
-  条件: {f : α -> β} {g : β -> α} (h : LeftInverse f g)
-  结论: Surjective f
+定理 左逆.surjective
+  条件: {f : α -> β} {g : β -> α} (h : 左逆 f g)
+  结论: 满射 f
   证明: h.rightInverse.surjective
 
 Depends on / 依赖: h.rightInverse.surjective, rightInverse, surjective
@@ -2110,9 +2110,9 @@ theorem RightInverse.injective
   proof: h.leftInverse.injective
 
 中文:
-定理 RightInverse.injective
-  条件: {f : α -> β} {g : β -> α} (h : RightInverse f g)
-  结论: Injective f
+定理 右逆.injective
+  条件: {f : α -> β} {g : β -> α} (h : 右逆 f g)
+  结论: 单射 f
   证明: h.leftInverse.injective
 
 Depends on / 依赖: h.leftInverse.injective, injective, leftInverse
@@ -2129,8 +2129,8 @@ theorem LeftInverse.rightInverse_of_injective
   proof: fun x => hf h (f x)
 
 中文:
-定理 LeftInverse.rightInverse_of_injective
-  结论: {f : α -> β} {g : β -> α} (h : LeftInverse f g)
+定理 左逆.rightInverse_of_injective
+  结论: {f : α -> β} {g : β -> α} (h : 左逆 f g)
   证明: fun x => hf h (f x)
 -/
 theorem LeftInverse.rightInverse_of_injective {f : α -> β} {g : β -> α} (h : LeftInverse f g)
@@ -2146,8 +2146,8 @@ theorem LeftInverse.rightInverse_of_surjective
   proof: fun x => let ⟨y, hy⟩ := hg x; hy ▸ congr_arg g (h y)
 
 中文:
-定理 LeftInverse.rightInverse_of_surjective
-  结论: {f : α -> β} {g : β -> α} (h : LeftInverse f g)
+定理 左逆.rightInverse_of_surjective
+  结论: {f : α -> β} {g : β -> α} (h : 左逆 f g)
   证明: fun x => let ⟨y, hy⟩ := hg x; hy ▸ congr_arg g (h y)
 
 Depends on / 依赖: congr_arg
@@ -2165,7 +2165,7 @@ theorem RightInverse.leftInverse_of_surjective
   proof: LeftInverse.rightInverse_of_surjective
 
 中文:
-定理 RightInverse.leftInverse_of_surjective
+定理 右逆.leftInverse_of_surjective
   条件: {f : α -> β} {g : β -> α}
   证明: LeftInverse.rightInverse_of_surjective
 
@@ -2184,7 +2184,7 @@ theorem RightInverse.leftInverse_of_injective
   proof: LeftInverse.rightInverse_of_injective
 
 中文:
-定理 RightInverse.leftInverse_of_injective
+定理 右逆.leftInverse_of_injective
   条件: {f : α -> β} {g : β -> α}
   证明: LeftInverse.rightInverse_of_injective
 
@@ -2205,8 +2205,8 @@ theorem LeftInverse.eq_rightInverse
      _ = g₂ := by rw [← comp_assoc, h₁.comp_eq_id, id_comp]
 
 中文:
-定理 LeftInverse.eq_rightInverse
-  结论: {f : α -> β} {g₁ g₂ : β -> α} (h₁ : LeftInverse g₁ f)
+定理 左逆.eq_rightInverse
+  结论: {f : α -> β} {g₁ g₂ : β -> α} (h₁ : 左逆 g₁ f)
   证明: calc
     g₁ = g₁ ∘ f ∘ g₂ := by rw [h₂.comp_eq_id, comp_id]
      _ = g₂ := by rw [← comp_assoc, h₁.comp_eq_id, id_comp]
@@ -2258,8 +2258,8 @@ theorem Injective.isPartialInv
               (dif_pos
 
 中文:
-定理 Injective.isPartialInv
-  条件: {α β} {f : α -> β} (I : Injective f)
+定理 单射.isPartialInv
+  条件: {α β} {f : α -> β} (I : 单射 f)
   结论: IsPartialInv f (partialInv f)
   证明: rfl
     if h' : exists a, f a = b
@@ -2301,7 +2301,7 @@ theorem partialInv_left
 
 中文:
 定理 partialInv_left
-  条件: {α β} {f : α -> β} (I : Injective f)
+  条件: {α β} {f : α -> β} (I : 单射 f)
   结论: 对任意 x, partialInv f (f x) = some x
   证明: I.isPartialInv.eq
 
@@ -2328,7 +2328,7 @@ definition invFun
 
 中文:
 定义 invFun
-  签名: {α : Sort u} {β} [Nonempty α] (f : α -> β)
+  签名: {α : 类型层 u} {β} [非空 α] (f : α -> β)
   定义体: open scoped Classical in
   fun y => if h : (exists x, f x = y) then h.choose else Classical.arbitrary α
 
@@ -2391,7 +2391,7 @@ theorem invFun_neg
 中文:
 定理 invFun_neg
   条件: (h : ¬存在 a, f a = b)
-  结论: invFun f b = Classical.choice ‹_›
+  结论: invFun f b = 经典.choice ‹_›
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -2413,7 +2413,7 @@ theorem invFun_eq_of_injective_of_rightInverse
 
 中文:
 定理 invFun_eq_of_injective_of_rightInverse
-  结论: {g : β -> α} (hf : Injective f)
+  结论: {g : β -> α} (hf : 单射 f)
   证明: funext fun b =>
     hf
       (by
@@ -2441,8 +2441,8 @@ theorem rightInverse_invFun
 
 中文:
 定理 rightInverse_invFun
-  条件: (hf : Surjective f)
-  结论: RightInverse (invFun f) f
+  条件: (hf : 满射 f)
+  结论: 右逆 (invFun f) f
   证明: fun b => invFun_eq hf b
 
 Depends on / 依赖: invFun_eq
@@ -2461,8 +2461,8 @@ theorem leftInverse_invFun
 
 中文:
 定理 leftInverse_invFun
-  条件: (hf : Injective f)
-  结论: LeftInverse (invFun f) f
+  条件: (hf : 单射 f)
+  结论: 左逆 (invFun f) f
   证明: fun b => hf invFun_eq ⟨b, rfl⟩
 
 Depends on / 依赖: invFun_eq
@@ -2481,8 +2481,8 @@ theorem invFun_surjective
 
 中文:
 定理 invFun_surjective
-  条件: (hf : Injective f)
-  结论: Surjective (invFun f)
+  条件: (hf : 单射 f)
+  结论: 满射 (invFun f)
   证明: (leftInverse_invFun hf).surjective
 
 Depends on / 依赖: leftInverse_invFun, surjective
@@ -2501,7 +2501,7 @@ theorem invFun_comp
 
 中文:
 定理 invFun_comp
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: invFun f ∘ f = id
   证明: funext leftInverse_invFun hf
 
@@ -2520,8 +2520,8 @@ theorem Injective.hasLeftInverse
   proof: ⟨invFun f, leftInverse_invFun hf⟩
 
 中文:
-定理 Injective.hasLeftInverse
-  条件: (hf : Injective f)
+定理 单射.hasLeftInverse
+  条件: (hf : 单射 f)
   结论: HasLeftInverse f
   证明: ⟨invFun f, leftInverse_invFun hf⟩
 
@@ -2540,7 +2540,7 @@ theorem injective_iff_hasLeftInverse
 
 中文:
 定理 injective_iff_hasLeftInverse
-  结论: Injective f ↔ HasLeftInverse f
+  结论: 单射 f ↔ HasLeftInverse f
   证明: ⟨Injective.hasLeftInverse, HasLeftInverse.injective⟩
 
 Depends on / 依赖: HasLeftInverse, HasLeftInverse.injective, Injective, Injective.hasLeftInverse, hasLeftInverse, injective
@@ -2564,7 +2564,7 @@ definition surjInv
 
 中文:
 定义 surjInv
-  签名: {f : α -> β} (h : Surjective f) (b : β)
+  签名: {f : α -> β} (h : 满射 f) (b : β)
   定义体: Classical.choose (h b)
 
 Depends on / 依赖: Classical, Classical.choose
@@ -2585,7 +2585,7 @@ theorem surjInv_eq
 
 中文:
 定理 surjInv_eq
-  条件: (h : Surjective f) (b)
+  条件: (h : 满射 f) (b)
   结论: f (surjInv h b) = b
   证明: Classical.choose_spec (h b)
 
@@ -2608,7 +2608,7 @@ lemma comp_surjInv
 
 中文:
 引理 comp_surjInv
-  条件: (hf : f.Surjective)
+  条件: (hf : f.满射)
   结论: f ∘ f.surjInv hf = id
   证明: funext (Function.surjInv_eq _)
 
@@ -2628,8 +2628,8 @@ theorem rightInverse_surjInv
 
 中文:
 定理 rightInverse_surjInv
-  条件: (hf : Surjective f)
-  结论: RightInverse (surjInv hf) f
+  条件: (hf : 满射 f)
+  结论: 右逆 (surjInv hf) f
   证明: surjInv_eq hf
 
 Depends on / 依赖: surjInv_eq
@@ -2648,8 +2648,8 @@ theorem leftInverse_surjInv
 
 中文:
 定理 leftInverse_surjInv
-  条件: (hf : Bijective f)
-  结论: LeftInverse (surjInv hf.2) f
+  条件: (hf : 双射 f)
+  结论: 左逆 (surjInv hf.2) f
   证明: rightInverse_of_injective_of_leftInverse hf.1 (rightInverse_surjInv hf.2)
 
 Depends on / 依赖: rightInverse_of_injective_of_leftInverse, rightInverse_surjInv
@@ -2667,8 +2667,8 @@ theorem Surjective.hasRightInverse
   proof: ⟨_, rightInverse_surjInv hf⟩
 
 中文:
-定理 Surjective.hasRightInverse
-  条件: (hf : Surjective f)
+定理 满射.hasRightInverse
+  条件: (hf : 满射 f)
   结论: HasRightInverse f
   证明: ⟨_, rightInverse_surjInv hf⟩
 
@@ -2687,7 +2687,7 @@ theorem surjective_iff_hasRightInverse
 
 中文:
 定理 surjective_iff_hasRightInverse
-  结论: Surjective f ↔ HasRightInverse f
+  结论: 满射 f ↔ HasRightInverse f
   证明: ⟨Surjective.hasRightInverse, HasRightInverse.surjective⟩
 
 Depends on / 依赖: HasRightInverse, HasRightInverse.surjective, Surjective, Surjective.hasRightInverse, hasRightInverse, surjective
@@ -2706,7 +2706,7 @@ theorem bijective_iff_has_inverse
 
 中文:
 定理 bijective_iff_has_inverse
-  结论: Bijective f ↔ 存在 g, LeftInverse g f ∧ RightInverse g f
+  结论: 双射 f ↔ 存在 g, 左逆 g f ∧ 右逆 g f
   证明: ⟨fun hf => ⟨_, leftInverse_surjInv hf, rightInverse_surjInv hf.2⟩, fun ⟨_, gl, gr⟩ =>
     ⟨gl.injective, gr.surjective⟩⟩
 
@@ -2727,8 +2727,8 @@ theorem injective_surjInv
 
 中文:
 定理 injective_surjInv
-  条件: (h : Surjective f)
-  结论: Injective (surjInv h)
+  条件: (h : 满射 f)
+  结论: 单射 (surjInv h)
   证明: (rightInverse_surjInv h).injective
 
 Depends on / 依赖: injective, rightInverse_surjInv
@@ -2746,7 +2746,7 @@ theorem surjective_to_subsingleton
 
 中文:
 定理 surjective_to_subsingleton
-  条件: [na : Nonempty α] [Subsingleton β] (f : α -> β)
+  条件: [na : 非空 α] [子单例 β] (f : α -> β)
   证明: fun _ => let ⟨a⟩ := na; ⟨a, Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -2765,8 +2765,8 @@ theorem Surjective.piMap
   ⟨fun i => surjInv (hf i) (g i), funext fun _ => rightInverse_surjInv _ _⟩
 
 中文:
-定理 Surjective.piMap
-  结论: {ι : Sort*} {α β : ι -> Sort*} {f : 对任意 i, α i -> β i}
+定理 满射.piMap
+  结论: {ι : 类型层*} {α β : ι -> 类型层*} {f : 对任意 i, α i -> β i}
   证明: fun g =>
   ⟨fun i => surjInv (hf i) (g i), funext fun _ => rightInverse_surjInv _ _⟩
 -/
@@ -2783,8 +2783,8 @@ theorem Surjective.comp_left
   proof: .piMap fun _ => hg
 
 中文:
-定理 Surjective.comp_left
-  条件: {g : β -> γ} (hg : Surjective g)
+定理 满射.comp_left
+  条件: {g : β -> γ} (hg : 满射 g)
   证明: .piMap fun _ => hg
 -/
 theorem Surjective.comp_left {g : β -> γ} (hg : Surjective g) :
@@ -2804,7 +2804,7 @@ theorem surjective_comp_left_iff
 
 中文:
 定理 surjective_comp_left_iff
-  条件: [Nonempty α] {g : β -> γ}
+  条件: [非空 α] {g : β -> γ}
   证明: by
   refine ⟨fun h c => Nonempty.elim ‹_› fun a => ?_, (·.comp_left)⟩
   have ⟨f, hf⟩ := h fun _ => c
@@ -2827,8 +2827,8 @@ theorem Bijective.piMap
   proof: ⟨.piMap fun i => (hf i).1, .piMap fun i => (hf i).2⟩
 
 中文:
-定理 Bijective.piMap
-  结论: {ι : Sort*} {α β : ι -> Sort*} {f : 对任意 i, α i -> β i}
+定理 双射.piMap
+  结论: {ι : 类型层*} {α β : ι -> 类型层*} {f : 对任意 i, α i -> β i}
   证明: ⟨.piMap fun i => (hf i).1, .piMap fun i => (hf i).2⟩
 -/
 theorem Bijective.piMap {ι : Sort*} {α β : ι -> Sort*} {f : forall i, α i -> β i}
@@ -2844,8 +2844,8 @@ theorem Bijective.comp_left
   proof: ⟨hg.injective.comp_left, hg.surjective.comp_left⟩
 
 中文:
-定理 Bijective.comp_left
-  条件: {g : β -> γ} (hg : Bijective g)
+定理 双射.comp_left
+  条件: {g : β -> γ} (hg : 双射 g)
   证明: ⟨hg.injective.comp_left, hg.surjective.comp_left⟩
 
 Depends on / 依赖: comp_left, hg.injective.comp_left, hg.surjective.comp_left, injective, surjective
@@ -2949,7 +2949,7 @@ lemma update_congr
 
 中文:
 引理 update_congr
-  结论: {β : Sort*}
+  结论: {β : 类型层*}
   证明: by
   subst hf; subst ha'; subst hv; subst ha; rfl
 -/
@@ -2972,7 +2972,7 @@ theorem update_apply
 
 中文:
 定理 update_apply
-  条件: {β : Sort*} (f : α -> β) (a' : α) (b : β) (a : α)
+  条件: {β : 类型层*} (f : α -> β) (a' : α) (b : β) (a : α)
   证明: by
   rcases Decidable.eq_or_ne a a' with rfl | hne <;> simp [*]
 
@@ -2995,7 +2995,7 @@ theorem update_eq_const_of_subsingleton
 
 中文:
 定理 update_eq_const_of_subsingleton
-  条件: [Subsingleton α] (a : α) (v : α') (f : α -> α')
+  条件: [子单例 α] (a : α) (v : α') (f : α -> α')
   证明: funext fun a' => Subsingleton.elim a a' ▸ update_self ..
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, update_self
@@ -3016,7 +3016,7 @@ theorem surjective_eval
 
 中文:
 定理 surjective_eval
-  条件: {α : Sort u} {β : α -> Sort v} [h : 对任意 a, Nonempty (β a)] (a : α)
+  条件: {α : 类型层 u} {β : α -> 类型层 v} [h : 对任意 a, 非空 (β a)] (a : α)
   证明: fun b =>
   ⟨@update _ _ (Classical.decEq α) (fun a => (h a).some) a b,
    @update_self _ _ (Classical.decEq α) _ _ _⟩
@@ -3040,7 +3040,7 @@ theorem update_injective
 中文:
 定理 update_injective
   条件: (f : 对任意 a, β a) (a' : α)
-  结论: Injective (update f a')
+  结论: 单射 (update f a')
   证明: fun v v' h => by
   have := congr_fun h a'
   rwa [update_self, update_self] at this
@@ -3062,7 +3062,7 @@ lemma forall_update_iff
   simp +contextual
 
 中文:
-引理 forall_update_iff
+引理 对任意_update_iff
   条件: (f : 对任意 a, β a) {a : α} {b : β a} (p : 对任意 a, β a -> 命题)
   证明: by
   rw [← and_forall_ne a]; rw [update_self]
@@ -3086,7 +3086,7 @@ theorem exists_update_iff
   simp [-not_and, not_and_or]
 
 中文:
-定理 exists_update_iff
+定理 存在_update_iff
   条件: (f : 对任意 a, β a) {a : α} {b : β a} (p : 对任意 a, β a -> 命题)
   证明: by
   rw [← not_forall_not]; rw [forall_update_iff f fun a b => ¬p a b]
@@ -3235,7 +3235,7 @@ theorem update_comp_eq_of_forall_ne'
   proof: funext fun _ => update_of_ne (h _) _ _
 
 中文:
-定理 update_comp_eq_of_forall_ne'
+定理 update_comp_eq_of_对任意_ne'
   结论: {α'} (g : 对任意 a, β a) {f : α' -> α} {i : α} (a : β i)
   证明: funext fun _ => update_of_ne (h _) _ _
 
@@ -3256,8 +3256,8 @@ theorem update_comp_eq_of_forall_ne
   proof: update_comp_eq_of_forall_ne' g a h
 
 中文:
-定理 update_comp_eq_of_forall_ne
-  结论: {α β : Sort*} (g : α' -> β) {f : α -> α'} {i : α'} (a : β)
+定理 update_comp_eq_of_对任意_ne
+  结论: {α β : 类型层*} (g : α' -> β) {f : α -> α'} {i : α'} (a : β)
   证明: update_comp_eq_of_forall_ne' g a h
 
 Depends on / 依赖: update_comp_eq_of_forall_ne
@@ -3276,7 +3276,7 @@ theorem update_comp_eq_of_injective'
 
 中文:
 定理 update_comp_eq_of_injective'
-  结论: (g : 对任意 a, β a) {f : α' -> α} (hf : Function.Injective f)
+  结论: (g : 对任意 a, β a) {f : α' -> α} (hf : 函数.单射 f)
   证明: eq_update_iff.2 ⟨update_self .., fun _ hj => update_of_ne (hf.ne hj) _ _⟩
 
 Depends on / 依赖: eq_update_iff, hf.ne, update_of_ne, update_self
@@ -3314,7 +3314,7 @@ theorem update_comp_eq_of_injective
 
 中文:
 定理 update_comp_eq_of_injective
-  结论: {β : Sort*} (g : α' -> β) {f : α -> α'}
+  结论: {β : 类型层*} (g : α' -> β) {f : α -> α'}
   证明: update_comp_eq_of_injective' g hf i a
 
 Depends on / 依赖: update_comp_eq_of_injective
@@ -3346,7 +3346,7 @@ lemma rec_update
 
 中文:
 引理 rec_update
-  结论: {ι κ : Sort*} {α : κ -> Sort*} [DecidableEq ι] [DecidableEq κ]
+  结论: {ι κ : 类型层*} {α : κ -> 类型层*} [DecidableEq ι] [DecidableEq κ]
   证明: by
   grind
 
@@ -3373,8 +3373,8 @@ lemma _root_.Option.rec_update
     | _, _, none, _ => rfl) _ _ _
 
 中文:
-引理 _root_.Option.rec_update
-  结论: {α : 类型} {β : Option α -> Sort*} [DecidableEq α]
+引理 _root_.选项类型.rec_update
+  结论: {α : 类型} {β : 选项类型 α -> 类型层*} [DecidableEq α]
   证明: Function.rec_update (@Option.some.inj _) (Option.rec f) (fun _ _ => rfl) (fun
     | _, _, some _, h => (h _ rfl).elim
     | _, _, none, _ => rfl) _ _ _
@@ -3399,7 +3399,7 @@ theorem apply_update
 
 中文:
 定理 apply_update
-  结论: {ι : Sort*} [DecidableEq ι] {α β : ι -> Sort*} (f : 对任意 i, α i -> β i)
+  结论: {ι : 类型层*} [DecidableEq ι] {α β : ι -> 类型层*} (f : 对任意 i, α i -> β i)
   证明: by
   grind
 -/
@@ -3419,7 +3419,7 @@ theorem apply_update₂
 
 中文:
 定理 apply_update₂
-  结论: {ι : Sort*} [DecidableEq ι] {α β γ : ι -> Sort*} (f : 对任意 i, α i -> β i -> γ i)
+  结论: {ι : 类型层*} [DecidableEq ι] {α β γ : ι -> 类型层*} (f : 对任意 i, α i -> β i -> γ i)
   证明: by
   grind
 -/
@@ -3457,7 +3457,7 @@ theorem comp_update
 
 中文:
 定理 comp_update
-  条件: {α' : Sort*} {β : Sort*} (f : α' -> β) (g : α -> α') (i : α) (v : α')
+  条件: {α' : 类型层*} {β : 类型层*} (f : α' -> β) (g : α -> α') (i : α) (v : α')
   证明: funext apply_update _ _ _ _
 
 Depends on / 依赖: apply_update
@@ -3479,7 +3479,7 @@ theorem update_comm
 
 中文:
 定理 update_comm
-  结论: {α} [DecidableEq α] {β : α -> Sort*} {a b : α} (h : a != b) (v : β a) (w : β b)
+  结论: {α} [DecidableEq α] {β : α -> 类型层*} {a b : α} (h : a != b) (v : β a) (w : β b)
   证明: by
   grind
 
@@ -3503,7 +3503,7 @@ theorem update_idem
 
 中文:
 定理 update_idem
-  条件: {α} [DecidableEq α] {β : α -> Sort*} {a : α} (v w : β a) (f : 对任意 a, β a)
+  条件: {α} [DecidableEq α] {β : α -> 类型层*} {a : α} (v w : β a) (f : 对任意 a, β a)
   证明: by
   grind
 
@@ -3527,8 +3527,8 @@ theorem _root_.Pi.map_update
 @[simp]
 
 中文:
-定理 _root_.Pi.map_update
-  结论: {ι : Sort*} [DecidableEq ι] {α β : ι -> Sort*}
+定理 _root_.依赖函数类型.map_update
+  结论: {ι : 类型层*} [DecidableEq ι] {α β : ι -> 类型层*}
   证明: by
   ext j
   obtain rfl | hij := eq_or_ne j i <;> simp [*]
@@ -3559,7 +3559,7 @@ theorem _root_.Pi.map_injective
   mpr := .piMap
 
 中文:
-定理 _root_.Pi.map_injective
+定理 _root_.依赖函数类型.map_injective
   证明: by
     classical
     have : Inhabited (forall i, α i) := ⟨fun _ => Classical.choice inferInstance⟩
@@ -3636,7 +3636,7 @@ theorem extend_def
 
 中文:
 定理 extend_def
-  条件: (f : α -> β) (g : α -> γ) (e' : β -> γ) (b : β) [Decidable (存在 a, f a = b)]
+  条件: (f : α -> β) (g : α -> γ) (e' : β -> γ) (b : β) [可判定 (存在 a, f a = b)]
   证明: by
   unfold extend
   congr
@@ -3658,8 +3658,8 @@ lemma Injective.factorsThrough
   proof: fun _ _ h => congr_arg g (hf h)
 
 中文:
-引理 Injective.factorsThrough
-  条件: (hf : Injective f) (g : α -> γ)
+引理 单射.factorsThrough
+  条件: (hf : 单射 f) (g : α -> γ)
   结论: g.FactorsThrough f
   证明: fun _ _ h => congr_arg g (hf h)
 
@@ -3711,8 +3711,8 @@ theorem Injective.extend_apply
 @[simp]
 
 中文:
-定理 Injective.extend_apply
-  条件: (hf : Injective f) (g : α -> γ) (e' : β -> γ) (a : α)
+定理 单射.extend_apply
+  条件: (hf : 单射 f) (g : α -> γ) (e' : β -> γ) (a : α)
   证明: (hf.factorsThrough g).extend_apply e' a
 
 @[simp]
@@ -3790,8 +3790,8 @@ theorem Injective.extend_comp
     · rw [extend_apply' _ _ _ h₂, extend_apply', co
 
 中文:
-定理 Injective.extend_comp
-  结论: {α₁ α₂ α₃ : Sort*} {f₁₂ : α₁ -> α₂} (h₁₂ : Function.Injective f₁₂)
+定理 单射.extend_comp
+  结论: {α₁ α₂ α₃ : 类型层*} {f₁₂ : α₁ -> α₂} (h₁₂ : 函数.单射 f₁₂)
   证明: by
   ext a
   by_cases h₃ : exists b, f₂₃ b = a
@@ -3834,7 +3834,7 @@ lemma factorsThrough_iff
 
 中文:
 引理 factorsThrough_iff
-  条件: (g : α -> γ) [Nonempty γ]
+  条件: (g : α -> γ) [非空 γ]
   结论: g.FactorsThrough f ↔ 存在 (e : β -> γ), g = e ∘ f
   证明: ⟨fun hf => ⟨extend f g (const β (Classical.arbitrary γ)),
       funext (fun x => by simp only [comp_apply, hf.extend_apply])⟩,
@@ -3882,8 +3882,8 @@ theorem extend_injective
 
 中文:
 定理 extend_injective
-  条件: (hf : Injective f) (e' : β -> γ)
-  结论: Injective fun g => extend f g e'
+  条件: (hf : 单射 f) (e' : β -> γ)
+  结论: 单射 fun g => extend f g e'
   证明: by
   intro g₁ g₂ hg
   refine funext fun x => ?_
@@ -3960,7 +3960,7 @@ theorem extend_comp
 
 中文:
 定理 extend_comp
-  条件: (hf : Injective f) (g : α -> γ) (e' : β -> γ)
+  条件: (hf : 单射 f) (g : α -> γ) (e' : β -> γ)
   结论: extend f g e' ∘ f = g
   证明: funext fun a => hf.extend_apply g e' a
 
@@ -3978,8 +3978,8 @@ theorem Injective.surjective_comp_right'
   proof: fun g => ⟨extend f g g₀, Function.extend_comp hf _ _⟩
 
 中文:
-定理 Injective.surjective_comp_right'
-  条件: (hf : Injective f) (g₀ : β -> γ)
+定理 单射.surjective_comp_right'
+  条件: (hf : 单射 f) (g₀ : β -> γ)
   证明: fun g => ⟨extend f g g₀, Function.extend_comp hf _ _⟩
 
 Depends on / 依赖: Function, Function.extend_comp, extend, extend_comp
@@ -3997,8 +3997,8 @@ theorem Injective.surjective_comp_right
   proof: hf.surjective_comp_right' fun _ => Classical.choice ‹_›
 
 中文:
-定理 Injective.surjective_comp_right
-  条件: [Nonempty γ] (hf : Injective f)
+定理 单射.surjective_comp_right
+  条件: [非空 γ] (hf : 单射 f)
   证明: hf.surjective_comp_right' fun _ => Classical.choice ‹_›
 
 Depends on / 依赖: Classical, Classical.choice, Nat.eq_sq_add_sq_iff, choice, decidable_of_iff, eq_sq_add_sq_iff, hf.surjective_comp_right, surjective_comp_right
@@ -4025,7 +4025,7 @@ theorem surjective_comp_right_iff_injective
 
 中文:
 定理 surjective_comp_right_iff_injective
-  条件: {γ : 类型} [Nontrivial γ]
+  条件: {γ : 类型} [非平凡 γ]
   证明: by
   classical
   refine ⟨not_imp_not.mp fun not_inj surj => not_subsingleton γ ⟨fun c c' => ?_⟩,
@@ -4063,9 +4063,9 @@ theorem Bijective.comp_right
      by simp only [comp_assoc g _ f, (leftInverse_surjInv hf).comp_eq_id, comp_id]⟩⟩
 
 中文:
-定理 Bijective.comp_right
-  条件: (hf : Bijective f)
-  结论: Bijective fun g : β -> γ => g ∘ f
+定理 双射.comp_right
+  条件: (hf : 双射 f)
+  结论: 双射 fun g : β -> γ => g ∘ f
   证明: ⟨hf.surjective.injective_comp_right, fun g =>
     ⟨g ∘ surjInv hf.surjective,
      by simp only [comp_assoc g _ f, (leftInverse_surjInv hf).comp_eq_id, comp_id]⟩⟩
@@ -4092,7 +4092,7 @@ theorem rfl
 
 中文:
 定理 rfl
-  条件: {α β : Sort*} {f : α -> β}
+  条件: {α β : 类型层*} {f : α -> β}
   结论: FactorsThrough f f
   证明: fun _ _ => id
 -/
@@ -4109,7 +4109,7 @@ theorem comp_left
 
 中文:
 定理 comp_left
-  条件: {α β γ δ : Sort*} {f : α -> β} {g : α -> γ} (h : FactorsThrough g f) (g' : γ -> δ)
+  条件: {α β γ δ : 类型层*} {f : α -> β} {g : α -> γ} (h : FactorsThrough g f) (g' : γ -> δ)
   证明: fun _x _y hxy =>
   congr_arg g' (h hxy)
 -/
@@ -4128,7 +4128,7 @@ theorem comp_right
 
 中文:
 定理 comp_right
-  条件: {α β γ δ : Sort*} {f : α -> β} {g : α -> γ} (h : FactorsThrough g f) (g' : δ -> α)
+  条件: {α β γ δ : 类型层*} {f : α -> β} {g : α -> γ} (h : FactorsThrough g f) (g' : δ -> α)
   证明: fun _x _y hxy =>
   h hxy
 -/
@@ -4170,7 +4170,7 @@ theorem uncurry_injective
 中文:
 定理 uncurry_injective
   条件: {α β γ}
-  结论: Function.Injective (uncurry : (α -> β -> γ) -> _)
+  结论: 函数.单射 (uncurry : (α -> β -> γ) -> _)
   证明: LeftInverse.injective curry_uncurry
 
 Depends on / 依赖: LeftInverse, LeftInverse.injective, curry_uncurry, injective
@@ -4190,7 +4190,7 @@ theorem curry_injective
 中文:
 定理 curry_injective
   条件: {α β γ}
-  结论: Function.Injective (curry : (α × β -> γ) -> _)
+  结论: 函数.单射 (curry : (α × β -> γ) -> _)
   证明: LeftInverse.injective uncurry_curry
 
 Depends on / 依赖: LeftInverse, LeftInverse.injective, injective, uncurry_curry
@@ -4210,7 +4210,7 @@ theorem uncurry_flip
 中文:
 定理 uncurry_flip
   条件: {α β γ} (f : α -> β -> γ)
-  结论: uncurry (flip f) = uncurry f ∘ Prod.swap
+  结论: uncurry (flip f) = uncurry f ∘ 积类型.swap
   证明: rfl
 -/
 theorem uncurry_flip {α β γ} (f : α -> β -> γ) : uncurry (flip f) = uncurry f ∘ Prod.swap :=
@@ -4228,7 +4228,7 @@ theorem flip_curry
 中文:
 定理 flip_curry
   条件: {α β γ} (f : α × β -> γ)
-  结论: flip (curry f) = curry (f ∘ Prod.swap)
+  结论: flip (curry f) = curry (f ∘ 积类型.swap)
   证明: rfl
 -/
 theorem flip_curry {α β γ} (f : α × β -> γ) : flip (curry f) = curry (f ∘ Prod.swap) :=
@@ -4305,7 +4305,7 @@ class HasUncurry
     - uncurry : α -> β -> γ
 
 中文:
-类 HasUncurry
+类 有Uncurry
   参数: (α : 类型) (β : outParam 类型) (γ : outParam 类型)
   公理与运算 (1 个):
     - uncurry : α -> β -> γ
@@ -4328,7 +4328,7 @@ instance hasUncurryBase
 
 中文:
 实例 hasUncurryBase
-  签名: : HasUncurry (α -> β) α β
+  签名: : 有Uncurry (α -> β) α β
   定义体: ⟨id⟩
 -/
 instance hasUncurryBase : HasUncurry (α -> β) α β :=
@@ -4344,7 +4344,7 @@ instance hasUncurryInduction
 
 中文:
 实例 hasUncurryInduction
-  签名: [HasUncurry β γ δ]
+  签名: [有Uncurry β γ δ]
   定义体: ⟨fun f p => ↿(f p.1) p.2⟩
 -/
 instance hasUncurryInduction [HasUncurry β γ δ] : HasUncurry (α -> β) (α × γ) δ :=
@@ -4361,7 +4361,7 @@ definition Involutive
   body: forall x, f (f x) = x
 
 中文:
-定义 Involutive
+定义 对合
   签名: {α} (f : α -> α)
   定义体: forall x, f (f x) = x
 -/
@@ -4377,8 +4377,8 @@ theorem _root_.Bool.involutive_not
   proof: Bool.not_not
 
 中文:
-定理 _root_.Bool.involutive_not
-  结论: Involutive not
+定理 _root_.布尔值.involutive_not
+  结论: 对合 not
   证明: Bool.not_not
 
 Depends on / 依赖: Bool.not_not, not_not
@@ -4419,7 +4419,7 @@ theorem leftInverse
 
 中文:
 定理 leftInverse
-  结论: LeftInverse f f
+  结论: 左逆 f f
   证明: h
 -/
 protected theorem leftInverse : LeftInverse f f := h
@@ -4453,7 +4453,7 @@ theorem rightInverse
 
 中文:
 定理 rightInverse
-  结论: RightInverse f f
+  结论: 右逆 f f
   证明: h
 -/
 protected theorem rightInverse : RightInverse f f := h
@@ -4468,7 +4468,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective f
+  结论: 单射 f
   证明: h.leftInverse.injective
 -/
 protected theorem injective : Injective f := h.leftInverse.injective
@@ -4483,7 +4483,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: Surjective f
+  结论: 满射 f
   证明: fun x => ⟨f x, h x⟩
 -/
 protected theorem surjective : Surjective f := fun x => ⟨f x, h x⟩
@@ -4498,7 +4498,7 @@ theorem bijective
 
 中文:
 定理 bijective
-  结论: Bijective f
+  结论: 双射 f
   证明: ⟨h.injective, h.surjective⟩
 -/
 protected theorem bijective : Bijective f := ⟨h.injective, h.surjective⟩
@@ -4513,7 +4513,7 @@ theorem ite_not
 
 中文:
 定理 ite_not
-  条件: (P : 命题) [Decidable P] (x : α)
+  条件: (P : 命题) [可判定 P] (x : α)
   证明: by rw [apply_ite f, h, ite_not]
 -/
 protected theorem ite_not (P : Prop) [Decidable P] (x : α) :
@@ -4549,7 +4549,7 @@ lemma not_involutive
 
 中文:
 引理 not_involutive
-  结论: Involutive Not
+  结论: 对合 非
   证明: fun _ => propext not_not
 
 Depends on / 依赖: not_not, propext
@@ -4565,7 +4565,7 @@ lemma not_injective
 
 中文:
 引理 not_injective
-  结论: Injective Not
+  结论: 单射 非
   证明: not_involutive.injective
 
 Depends on / 依赖: injective, not_involutive, not_involutive.injective
@@ -4581,7 +4581,7 @@ lemma not_surjective
 
 中文:
 引理 not_surjective
-  结论: Surjective Not
+  结论: 满射 非
   证明: not_involutive.surjective
 
 Depends on / 依赖: not_involutive, not_involutive.surjective, surjective
@@ -4599,7 +4599,7 @@ lemma not_bijective
 
 中文:
 引理 not_bijective
-  结论: Bijective Not
+  结论: 双射 非
   证明: not_involutive.bijective
 
 @[simp]
@@ -4623,8 +4623,8 @@ lemma symm_apply_eq_iff
 
 中文:
 引理 symm_apply_eq_iff
-  条件: {α : Sort*} {f : α -> α}
-  结论: Std.Symm (f · = ·) ↔ Involutive f
+  条件: {α : 类型层*} {f : α -> α}
+  结论: Std.Symm (f · = ·) ↔ 对合 f
   证明: by
   simp [symm_def, Involutive]
 
@@ -4647,7 +4647,7 @@ definition Injective2
 
 中文:
 定义 Injective2
-  签名: {α β γ : Sort*} (f : α -> β -> γ)
+  签名: {α β γ : 类型层*} (f : α -> β -> γ)
   定义体: forall ⦃a₁ a₂ b₁ b₂⦄, f a₁ b₁ = f a₂ b₂ -> a₁ = a₂ ∧ b₁ = b₂
 -/
 def Injective2 {α β γ : Sort*} (f : α -> β -> γ) : Prop :=
@@ -4669,7 +4669,7 @@ theorem left
 中文:
 定理 left
   条件: (hf : Injective2 f) (b : β)
-  结论: Function.Injective fun a => f a b
+  结论: 函数.单射 fun a => f a b
   证明: fun _ _ h => (hf h).left
 -/
 protected theorem left (hf : Injective2 f) (b : β) : Function.Injective fun a => f a b :=
@@ -4687,7 +4687,7 @@ theorem right
 中文:
 定理 right
   条件: (hf : Injective2 f) (a : α)
-  结论: Function.Injective (f a)
+  结论: 函数.单射 (f a)
   证明: fun _ _ h => (hf h).right
 -/
 protected theorem right (hf : Injective2 f) (a : α) : Function.Injective (f a) :=
@@ -4723,8 +4723,8 @@ hf.left b (congr_fun h b :)
 
 中文:
 定理 left'
-  条件: (hf : Injective2 f) [Nonempty β]
-  结论: Function.Injective f
+  条件: (hf : Injective2 f) [非空 β]
+  结论: 函数.单射 f
   证明: fun _ _ h =>
   let ⟨b⟩ := ‹Nonempty β›
 hf.left b (congr_fun h b :)
@@ -4746,8 +4746,8 @@ hf.right a (congr_fun h a :)
 
 中文:
 定理 right'
-  条件: (hf : Injective2 f) [Nonempty α]
-  结论: Function.Injective fun b a => f a b
+  条件: (hf : Injective2 f) [非空 α]
+  结论: 函数.单射 fun b a => f a b
   证明: fun _ _ h =>
     let ⟨a⟩ := ‹Nonempty α›
 hf.right a (congr_fun h a :)
@@ -4792,7 +4792,7 @@ definition sometimes
 
 中文:
 定义 sometimes
-  签名: {α β} [Nonempty β] (f : α -> β)
+  签名: {α β} [非空 β] (f : α -> β)
   定义体: open scoped Classical in
   if h : Nonempty α then f (Classical.choice h) else Classical.choice ‹_›
 
@@ -4813,7 +4813,7 @@ theorem sometimes_eq
 
 中文:
 定理 sometimes_eq
-  条件: {p : 命题} {α} [Nonempty α] (f : p -> α) (a : p)
+  条件: {p : 命题} {α} [非空 α] (f : p -> α) (a : p)
   结论: sometimes f = f a
   证明: dif_pos ⟨a⟩
 
@@ -4833,7 +4833,7 @@ theorem sometimes_spec
 
 中文:
 定理 sometimes_spec
-  结论: {p : 命题} {α} [Nonempty α] (P : α -> 命题) (f : p -> α) (a : p)
+  结论: {p : 命题} {α} [非空 α] (P : α -> 命题) (f : p -> α) (a : p)
   证明: by
   rwa [sometimes_eq]
 
@@ -4863,7 +4863,7 @@ lemma forall_existsUnique_iff
     simp [hf]
 
 中文:
-引理 forall_existsUnique_iff
+引理 对任意_存在Unique_iff
   条件: {r : α -> β -> 命题}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
@@ -4892,7 +4892,7 @@ lemma forall_existsUnique_iff'
   simp [forall_existsUnique_iff, funext_iff]
 
 中文:
-引理 forall_existsUnique_iff'
+引理 对任意_存在Unique_iff'
   条件: {r : α -> β -> 命题}
   证明: by
   simp [forall_existsUnique_iff, funext_iff]
@@ -4918,7 +4918,7 @@ lemma Std.Symm.forall_existsUnique_iff'
 protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUni
 
 中文:
-引理 Std.Symm.forall_existsUnique_iff'
+引理 Std.Symm.对任意_存在Unique_iff'
   条件: {r : α -> α -> 命题} [Std.Symm r]
   证明: by
   refine ⟨fun h => ?_, fun ⟨f, _, hf⟩ => forall_existsUnique_iff'.2 ⟨f, hf⟩⟩
@@ -4950,7 +4950,7 @@ lemma Std.Symm.forall_existsUnique_iff
 protected alias Symmetric.forall_existsUnique_iff := Std.Symm.forall_existsUnique_iff
 
 中文:
-引理 Std.Symm.forall_existsUnique_iff
+引理 Std.Symm.对任意_存在Unique_iff
   条件: {r : α -> α -> 命题} [Std.Symm r]
   证明: by
   simp [Std.Symm.forall_existsUnique_iff', funext_iff]
@@ -4974,8 +4974,8 @@ definition Set.piecewise
   body: fun i => if i in s then f i else g i
 
 中文:
-定义 Set.piecewise
-  签名: {α : 类型u} {β : α -> Sort v} (s : Set α) (f g : 对任意 i, β i)
+定义 集合.piecewise
+  签名: {α : 类型u} {β : α -> 类型层 v} (s : 集合 α) (f g : 对任意 i, β i)
   定义体: fun i => if i in s then f i else g i
 -/
 def Set.piecewise {α : Type u} {β : α -> Sort v} (s : Set α) (f g : forall i, β i)
@@ -4993,7 +4993,7 @@ theorem eq_rec_on_bijective
 
 中文:
 定理 eq_rec_on_bijective
-  条件: {C : α -> Sort*}
+  条件: {C : α -> 类型层*}
 -/
 theorem eq_rec_on_bijective {C : α -> Sort*} :
     forall {a a' : α} (h : a = a'), Function.Bijective (@Eq.ndrec _ _ C · _ h)
@@ -5014,8 +5014,8 @@ theorem eq_mp_bijective
 
 中文:
 定理 eq_mp_bijective
-  条件: {α β : Sort _} (h : α = β)
-  结论: Function.Bijective (Eq.mp h)
+  条件: {α β : 类型层 _} (h : α = β)
+  结论: 函数.双射 (相等.mp h)
   证明: by
   -- TODO: mathlib3 uses `eq_rec_on_bijective`, difference in elaboration here
   -- due to `@[macro_inline]` possibly?
@@ -5041,8 +5041,8 @@ theorem eq_mpr_bijective
 
 中文:
 定理 eq_mpr_bijective
-  条件: {α β : Sort _} (h : α = β)
-  结论: Function.Bijective (Eq.mpr h)
+  条件: {α β : 类型层 _} (h : α = β)
+  结论: 函数.双射 (相等.mpr h)
   证明: by
   cases h
   exact ⟨fun _ _ => id, fun x => ⟨x, rfl⟩⟩
@@ -5064,8 +5064,8 @@ theorem cast_bijective
 
 中文:
 定理 cast_bijective
-  条件: {α β : Sort _} (h : α = β)
-  结论: Function.Bijective (cast h)
+  条件: {α β : 类型层 _} (h : α = β)
+  结论: 函数.双射 (cast h)
   证明: by
   cases h
   exact ⟨fun _ _ => id, fun x => ⟨x, rfl⟩⟩
@@ -5131,8 +5131,8 @@ theorem Function.LeftInverse.eq_rec_eq
   proof: eq_of_heq (eqRec_heq _ _).trans by rw [h]
 
 中文:
-定理 Function.LeftInverse.eq_rec_eq
-  结论: {γ : β -> Sort v} {f : α -> β} {g : β -> α}
+定理 函数.左逆.eq_rec_eq
+  结论: {γ : β -> 类型层 v} {f : α -> β} {g : β -> α}
   证明: eq_of_heq (eqRec_heq _ _).trans by rw [h]
 
 Depends on / 依赖: eqRec_heq, eq_of_heq
@@ -5152,8 +5152,8 @@ theorem Function.LeftInverse.eq_rec_on_eq
   proof: h.eq_rec_eq _ _
 
 中文:
-定理 Function.LeftInverse.eq_rec_on_eq
-  结论: {γ : β -> Sort v} {f : α -> β} {g : β -> α}
+定理 函数.左逆.eq_rec_on_eq
+  结论: {γ : β -> 类型层 v} {f : α -> β} {g : β -> α}
   证明: h.eq_rec_eq _ _
 
 Depends on / 依赖: eq_rec_eq, h.eq_rec_eq
@@ -5174,8 +5174,8 @@ theorem Function.LeftInverse.cast_eq
   grind
 
 中文:
-定理 Function.LeftInverse.cast_eq
-  结论: {γ : β -> Sort v} {f : α -> β} {g : β -> α}
+定理 函数.左逆.cast_eq
+  结论: {γ : β -> 类型层 v} {f : α -> β} {g : β -> α}
   证明: by
   grind
 -/
@@ -5193,8 +5193,8 @@ definition Set.SeparatesPoints
   body: forall ⦃x y : α⦄, x != y -> exists f in A, f x != f y
 
 中文:
-定义 Set.SeparatesPoints
-  签名: {α β : 类型} (A : Set (α -> β))
+定义 集合.SeparatesPoints
+  签名: {α β : 类型} (A : 集合 (α -> β))
   定义体: forall ⦃x y : α⦄, x != y -> exists f in A, f x != f y
 -/
 def Set.SeparatesPoints {α β : Type*} (A : Set (α -> β)) : Prop :=
@@ -5212,8 +5212,8 @@ theorem Set.separatesPoints_mono
   exact ⟨f, hAB hfA, hne'⟩
 
 中文:
-定理 Set.separatesPoints_mono
-  结论: {α β : 类型} {A B : Set (α -> β)} (hAB : A subseteq B)
+定理 集合.separatesPoints_mono
+  结论: {α β : 类型} {A B : 集合 (α -> β)} (hAB : A subseteq B)
   证明: by
   intro x y hne
   obtain ⟨f, hfA, hne'⟩ := hA hne
@@ -5235,7 +5235,7 @@ theorem InvImage.equivalence
 
 中文:
 定理 InvImage.equivalence
-  结论: {α : Sort u} {β : Sort v} (r : β -> β -> 命题) (f : α -> β)
+  结论: {α : 类型层 u} {β : 类型层 v} (r : β -> β -> 命题) (f : α -> β)
   证明: ⟨fun _ => h.1 _, h.symm, h.trans⟩
 
 Depends on / 依赖: h.symm, h.trans
@@ -5268,7 +5268,7 @@ theorem map_id
 中文:
 定理 map_id
   条件: {α : ι -> 类型}
-  结论: Pi.map (fun i => @id (α i)) = id
+  结论: 依赖函数类型.map (fun i => @id (α i)) = id
   证明: rfl
 -/
 @[simp] theorem map_id {α : ι -> Type*} : Pi.map (fun i => @id (α i)) = id := rfl
@@ -5285,7 +5285,7 @@ theorem map_id'
 中文:
 定理 map_id'
   条件: {α : ι -> 类型}
-  结论: Pi.map (fun i (a : α i) => a) = fun x => x
+  结论: 依赖函数类型.map (fun i (a : α i) => a) = fun x => x
   证明: rfl
 -/
 @[simp] theorem map_id' {α : ι -> Type*} : Pi.map (fun i (a : α i) => a) = fun x => x := rfl

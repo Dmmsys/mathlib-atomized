@@ -33,11 +33,11 @@ structure BddOrd
     - [isBoundedOrder : BoundedOrder toPartOrd]
 
 中文:
-结构 BddOrd
-  参数: extends PartOrd
-  继承: PartOrd
+结构 有界序
+  参数: extends 偏序
+  继承: 偏序
   公理与运算 (1 个):
-    - [isBoundedOrder : BoundedOrder toPartOrd]
+    - [isBoundedOrder : 有界序 toPartOrd]
 -/
 structure BddOrd extends PartOrd where
   [isBoundedOrder : BoundedOrder toPartOrd]
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort BddOrd 类型
+  签名: CoeSort 有界序 类型
   定义体: InducedCategory.hasCoeToSort toPartOrd
 
 Depends on / 依赖: InducedCategory, InducedCategory.hasCoeToSort, hasCoeToSort, toPartOrd
@@ -79,7 +79,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [PartialOrder X] [BoundedOrder X]
+  签名: (X : 类型) [偏序 X] [有界序 X]
   定义体: X
 -/
 abbrev of (X : Type*) [PartialOrder X] [BoundedOrder X] : BddOrd where
@@ -98,11 +98,11 @@ structure Hom
     - hom' : BoundedOrderHom X Y
 
 中文:
-结构 Hom
-  参数: (X Y : BddOrd.{u})
+结构 态射
+  参数: (X Y : 有界序.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : BoundedOrderHom X Y
+    - hom' : 有界序态射 X Y
 -/
 structure Hom (X Y : BddOrd.{u}) where
   private mk ::
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category BddOrd.{u}
+  签名: 范畴 有界序.{u}
   定义体: Hom X Y
   id _ := ⟨BoundedOrderHom.id _⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory BddOrd (BoundedOrderHom · ·)
+  签名: 余ncrete范畴 有界序 (有界序态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -165,8 +165,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := BddOrd) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : BddOrd.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 有界序.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BddOrd) f
 -/
 abbrev Hom.hom {X Y : BddOrd.{u}} (f : Hom X Y) :=
@@ -182,7 +182,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
+  签名: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
   定义体: ConcreteCategory.ofHom (C := BddOrd) f
 
 Depends on / 依赖: BddOrd, ConcreteCategory, ConcreteCategory.ofHom
@@ -203,8 +203,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : BddOrd.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 有界序.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -232,7 +232,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : BddOrd}
+  条件: {X : 有界序}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -254,7 +254,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : BddOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 有界序} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -275,7 +275,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : BddOrd} (f : X ⟶ Y)
+  条件: {X Y : 有界序} (f : X ⟶ Y)
   证明: rfl
 
 @[ext]
@@ -295,7 +295,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : BddOrd} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 有界序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -318,8 +318,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [PartialOrder X] [BoundedOrder X]
-  结论: (BddOrd.of X : 类型u) = X
+  条件: (X : 类型u) [偏序 X] [有界序 X]
+  结论: (有界序.of X : 类型u) = X
   证明: rfl
 
 @[simp]
@@ -338,8 +338,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : BddOrd}
-  结论: (𝟙 X : X ⟶ X).hom = BoundedOrderHom.id _
+  条件: {X : 有界序}
+  结论: (𝟙 X : X ⟶ X).hom = 有界序态射.id _
   证明: rfl
 -/
 lemma hom_id {X : BddOrd} : (𝟙 X : X ⟶ X).hom = BoundedOrderHom.id _ := rfl
@@ -356,7 +356,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : BddOrd) (x : X)
+  条件: (X : 有界序) (x : X)
   证明: by simp
 
 @[simp]
@@ -375,7 +375,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 有界序} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -393,7 +393,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 有界序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -415,7 +415,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : BddOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 有界序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -439,7 +439,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {X Y : 类型u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
+  结论: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
   证明: rfl
 
 @[simp]
@@ -461,7 +461,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : BddOrd} (f : X ⟶ Y)
+  条件: {X Y : 有界序} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -482,7 +482,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [PartialOrder X] [BoundedOrder X]
+  条件: {X : 类型u} [偏序 X] [有界序 X]
   证明: rfl
 
 @[simp]
@@ -501,7 +501,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y]
+  结论: {X Y Z : 类型u} [偏序 X] [有界序 X] [偏序 Y]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y]
@@ -520,7 +520,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {X Y : 类型u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
+  结论: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
@@ -539,7 +539,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : BddOrd} (e : X ≅ Y) (x : X)
+  条件: {X Y : 有界序} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -559,7 +559,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : BddOrd} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 有界序} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited BddOrd
+  签名: 可居 有界序
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited BddOrd :=
@@ -594,7 +594,7 @@ instance hasForgetToPartOrd
 
 中文:
 实例 hasForgetToPartOrd
-  签名: : HasForget₂ BddOrd PartOrd where
+  签名: : 有Forget₂ 有界序 偏序 where
   定义体: X.toPartOrd
   forget₂.map f := PartOrd.ofHom f.hom.toOrderHom
 
@@ -616,7 +616,7 @@ instance hasForgetToBipointed
 
 中文:
 实例 hasForgetToBipointed
-  签名: : HasForget₂ BddOrd Bipointed where
+  签名: : 有Forget₂ 有界序 Bipointed where
   定义体: { obj := fun X => ⟨X, ⊥, ⊤⟩
       map := fun f => ⟨f, f.hom.map_bot', f.hom.map_top'⟩ }
   forget_comp := rfl
@@ -642,7 +642,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : BddOrd ⥤ BddOrd where
+  签名: : 有界序 ⥤ 有界序 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.dual
 -/
@@ -664,8 +664,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : BddOrd.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 有界序.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -692,7 +692,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : BddOrd ≌ BddOrd where
+  签名: : 有界序 ≌ 有界序 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X

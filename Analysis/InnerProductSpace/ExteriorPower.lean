@@ -73,7 +73,7 @@ lemma innerProductForm_ιMulti_ιMulti
 
 中文:
 引理 innerProductForm_ιMulti_ιMulti
-  条件: (x y : Fin n -> E)
+  条件: (x y : 有限集 n -> E)
   证明: by
   simp [innerProductForm]
 
@@ -95,7 +95,7 @@ lemma innerProductForm_ιMulti_self
 
 中文:
 引理 innerProductForm_ιMulti_self
-  条件: (x : Fin n -> E)
+  条件: (x : 有限集 n -> E)
   证明: by
   simp [gram, innerProductForm_ιMulti_ιMulti, real_inner_comm]
 -/
@@ -180,7 +180,7 @@ lemma innerProductForm_ιMulti_family_of_orthonormal
 
 中文:
 引理 innerProductForm_ιMulti_family_of_orthonormal
-  结论: {ι : 类型} [LinearOrder ι] {v : ι -> E}
+  结论: {ι : 类型} [线性序 ι] {v : ι -> E}
   证明: by
   simp only [ιMulti_family]
   split_ifs with h
@@ -217,7 +217,7 @@ lemma innerProductForm_eq_sum
 
 中文:
 引理 innerProductForm_eq_sum
-  结论: {ι : 类型} [Fintype ι] [LinearOrder ι]
+  结论: {ι : 类型} [有限类型 ι] [线性序 ι]
   证明: by
   conv_lhs =>
     rw [← (b.toBasis.exteriorPower n).sum_repr x]; rw [← (b.toBasis.exteriorPower n).sum_repr y]
@@ -244,7 +244,7 @@ lemma innerProductForm_self
 
 中文:
 引理 innerProductForm_self
-  结论: (x : ⋀[实数]^n E) {ι : 类型} [Fintype ι] [LinearOrder ι]
+  结论: (x : ⋀[实数]^n E) {ι : 类型} [有限类型 ι] [线性序 ι]
   证明: by
   simp_rw [innerProductForm_eq_sum b, pow_two]
 -/
@@ -270,8 +270,8 @@ instance [FiniteDimensional
     rw [innerProductForm_self
 
 中文:
-实例 [FiniteDimensional
-  签名: 实数 E] : InnerProductSpace.Core 实数 (⋀[实数]^n E) where
+实例 [有限维
+  签名: 实数 E] : 内积空间.核 实数 (⋀[实数]^n E) where
   定义体: innerProductForm x y
   conj_inner_symm := innerProductForm_symm
   add_left := by simp
@@ -304,8 +304,8 @@ instance [FiniteDimensional
   body: InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := Real)
 
 中文:
-实例 [FiniteDimensional
-  签名: 实数 E] : NormedAddCommGroup (⋀[实数]^n E)
+实例 [有限维
+  签名: 实数 E] : 赋范交换加群 (⋀[实数]^n E)
   定义体: InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := Real)
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toNormedAddCommGroup, NontriviallyNormedField, NontriviallyNormedField.cobounded_neBot, cobounded, cobounded_neBot, toNormedAddCommGroup
@@ -322,8 +322,8 @@ instance [FiniteDimensional
   body: InnerProductSpace.ofCore _
 
 中文:
-实例 [FiniteDimensional
-  签名: 实数 E] : InnerProductSpace 实数 (⋀[实数]^n E)
+实例 [有限维
+  签名: 实数 E] : 内积空间 实数 (⋀[实数]^n E)
   定义体: InnerProductSpace.ofCore _
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.ofCore, NormedSpace, RealNormedSpace, RealNormedSpace.cobounded_neBot, cobounded_neBot, ofCore
@@ -341,7 +341,7 @@ lemma inner_ιMulti_ιMulti
 
 中文:
 引理 inner_ιMulti_ιMulti
-  条件: [FiniteDimensional 实数 E] (x y : Fin n -> E)
+  条件: [有限维 实数 E] (x y : 有限集 n -> E)
   证明: innerProductForm_ιMulti_ιMulti x y
 
 Depends on / 依赖: Infinite, NontriviallyNormedField, NontriviallyNormedField.infinite, infinite
@@ -360,7 +360,7 @@ lemma inner_ιMulti_self
 
 中文:
 引理 inner_ιMulti_self
-  条件: [FiniteDimensional 实数 E] (x : Fin n -> E)
+  条件: [有限维 实数 E] (x : 有限集 n -> E)
   证明: innerProductForm_ιMulti_self x
 
 Depends on / 依赖: NoncompactSpace, NormedField, NormedField.noncompactSpace, noncompactSpace
@@ -391,8 +391,8 @@ definition OrthonormalBasis.exteriorPower
 @[simp]
 
 中文:
-定义 OrthonormalBasis.exteriorPower
-  签名: (b : OrthonormalBasis I 实数 E) (n : 自然数)
+定义 正交标准基.exteriorPower
+  签名: (b : 正交标准基 I 实数 E) (n : 自然数)
   定义体: (b.toBasis.exteriorPower n).toOrthonormalBasis by
     rw [orthonormal_iff_ite]
     intro i j
@@ -421,8 +421,8 @@ lemma OrthonormalBasis.toBasis_exteriorPower
   proof: (b.toBasis.exteriorPower n).toBasis_toOrthonormalBasis _
 
 中文:
-引理 OrthonormalBasis.toBasis_exteriorPower
-  条件: (b : OrthonormalBasis I 实数 E) (n : 自然数)
+引理 正交标准基.toBasis_exteriorPower
+  条件: (b : 正交标准基 I 实数 E) (n : 自然数)
   证明: (b.toBasis.exteriorPower n).toBasis_toOrthonormalBasis _
 
 Depends on / 依赖: NormedAlgebra, NormedAlgebra.toNormedSpace, NormedSpace, b.toBasis.exteriorPower, exteriorPower, toBasis, toBasis_toOrthonormalBasis, toNormedSpace

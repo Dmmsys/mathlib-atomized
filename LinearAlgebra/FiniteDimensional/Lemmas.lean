@@ -52,7 +52,7 @@ theorem finrank_lt
 
 中文:
 定理 finrank_lt
-  条件: [FiniteDimensional K V] {s : Submodule K V} (h : s != ⊤)
+  条件: [有限维 K V] {s : 子模 K V} (h : s != ⊤)
   证明: by
   rw [← s.finrank_quotient_add_finrank]; rw [add_comm]
   rw [← Quotient.nontrivial_iff] at h
@@ -80,7 +80,7 @@ theorem finrank_sup_add_finrank_inf_eq
 
 中文:
 定理 finrank_sup_add_finrank_inf_eq
-  结论: (s t : Submodule K V) [FiniteDimensional K s]
+  结论: (s t : 子模 K V) [有限维 K s]
   证明: by
   have key : Module.rank K ↑(s ⊔ t) + Module.rank K ↑(s ⊓ t) = Module.rank K s + Module.rank K t :=
     rank_sup_add_rank_inf_eq s t
@@ -109,7 +109,7 @@ theorem finrank_add_le_finrank_add_finrank
 
 中文:
 定理 finrank_add_le_finrank_add_finrank
-  结论: (s t : Submodule K V) [FiniteDimensional K s]
+  结论: (s t : 子模 K V) [有限维 K s]
   证明: by
   rw [← finrank_sup_add_finrank_inf_eq]
   exact self_le_add_right _ _
@@ -133,7 +133,7 @@ theorem finrank_add_finrank_le_of_disjoint
 
 中文:
 定理 finrank_add_finrank_le_of_disjoint
-  结论: [FiniteDimensional K V]
+  结论: [有限维 K V]
   证明: by
   rw [← Submodule.finrank_sup_add_finrank_inf_eq s t]; rw [hdisjoint.eq_bot]; rw [finrank_bot]; rw [add_zero]
   exact Submodule.finrank_le _
@@ -162,7 +162,7 @@ theorem eq_top_of_disjoint
 
 中文:
 定理 eq_top_of_disjoint
-  结论: [FiniteDimensional K V] (s t : Submodule K V)
+  结论: [有限维 K V] (s t : 子模 K V)
   证明: by
   have h_finrank_inf : finrank K ↑(s ⊓ t) = 0 := by
     rw [disjoint_iff_inf_le]; rw [le_bot_iff] at hdisjoint
@@ -195,7 +195,7 @@ theorem isCompl_iff_disjoint
 
 中文:
 定理 isCompl_iff_disjoint
-  结论: [FiniteDimensional K V] (s t : Submodule K V)
+  结论: [有限维 K V] (s t : 子模 K V)
   证明: ⟨fun h => h.1, fun h => ⟨h, codisjoint_iff.mpr eq_top_of_disjoint s t hdim h⟩⟩
 
 Depends on / 依赖: codisjoint_iff, codisjoint_iff.mpr, eq_top_of_disjoint
@@ -220,7 +220,7 @@ theorem sup_span_singleton_eq_top_iff
 
 中文:
 定理 sup_span_singleton_eq_top_iff
-  条件: [Module.Finite K V] {W : Submodule K V} {v : V} (hv : v ∉ W)
+  条件: [模.有限 K V] {W : 子模 K V} {v : V} (hv : v ∉ W)
   证明: by
   refine ⟨fun hW => ?_, fun hW => ?_⟩
   · suffices W ⊓ span K {v} = ⊥ by
@@ -263,7 +263,7 @@ theorem finrank_sup_span_singleton
 
 中文:
 定理 finrank_sup_span_singleton
-  条件: [Module.Finite K V] {p : Submodule K V} {v : V} (hv : v ∉ p)
+  条件: [模.有限 K V] {p : 子模 K V} {v : V} (hv : v ∉ p)
   证明: by
   rw [← Nat.add_left_inj]; rw [finrank_sup_add_finrank_inf_eq]; rw [add_assoc]; rw [Nat.add_left_cancel_iff]; rw [finrank_span_singleton (by aesop)]; rw [Nat.left_eq_add]; rw [Submodule.finrank_eq_zero]; rw [eq_bot_iff]
   intro x
@@ -297,7 +297,7 @@ theorem eq_top_iff_finrank_eq
 
 中文:
 定理 eq_top_iff_finrank_eq
-  条件: [Module.Finite K V] {W : Submodule K V}
+  条件: [模.有限 K V] {W : 子模 K V}
   证明: by
   refine ⟨fun h => by rw [h, finrank_top], fun h => ?_⟩
   apply eq_of_le_of_finrank_eq le_top
@@ -335,8 +335,8 @@ definition LinearEquiv.quotEquivOfEquiv
       rw [← @add_right_cancel_iff _ _ _ (finrank K p)]; rw [Submodule.finrank_quotient_add_finrank]; rw [LinearEquiv.finrank_eq f₁]; rw [Submodule.finrank_quotient_add_finrank]; rw [LinearEquiv.finrank_eq f₂])
 
 中文:
-定义 LinearEquiv.quotEquivOfEquiv
-  签名: {p : Subspace K V} {q : Subspace K V₂}
+定义 线性等价.quotEquivOfEquiv
+  签名: {p : 子空间 K V} {q : 子空间 K V₂}
   定义体: LinearEquiv.ofFinrankEq _ _
     (by
       rw [← @add_right_cancel_iff _ _ _ (finrank K p)]; rw [Submodule.finrank_quotient_add_finrank]; rw [LinearEquiv.finrank_eq f₁]; rw [Submodule.finrank_quotient_add_finrank]; rw [LinearEquiv.finrank_eq f₂])
@@ -360,8 +360,8 @@ definition LinearEquiv.quotEquivOfQuotEquiv
     rw [← add_right_cancel_iff]; rw [Submodule.finrank_quotient_add_finrank]; rw [← LinearEquiv.finrank_eq f]; rw [add_comm]; rw [Submodule.finrank_quotient_add_finrank]
 
 中文:
-定义 LinearEquiv.quotEquivOfQuotEquiv
-  签名: {p q : Subspace K V} (f : (V ⧸ p) ≃ₗ[K] q)
+定义 线性等价.quotEquivOfQuotEquiv
+  签名: {p q : 子空间 K V} (f : (V ⧸ p) ≃ₗ[K] q)
   定义体: LinearEquiv.ofFinrankEq _ _ by
     rw [← add_right_cancel_iff]; rw [Submodule.finrank_quotient_add_finrank]; rw [← LinearEquiv.finrank_eq f]; rw [add_comm]; rw [Submodule.finrank_quotient_add_finrank]
 
@@ -397,7 +397,7 @@ theorem finrank_range_add_finrank_ker
 
 中文:
 定理 finrank_range_add_finrank_ker
-  条件: [FiniteDimensional K V] (f : V ->ₗ[K] V₂)
+  条件: [有限维 K V] (f : V ->ₗ[K] V₂)
   证明: by
   rw [← f.quotKerEquivRange.finrank_eq]
   exact Submodule.finrank_quotient_add_finrank _
@@ -423,7 +423,7 @@ lemma ker_ne_bot_of_finrank_lt
 
 中文:
 引理 ker_ne_bot_of_finrank_lt
-  结论: [FiniteDimensional K V] [FiniteDimensional K V₂] {f : V ->ₗ[K] V₂}
+  结论: [有限维 K V] [有限维 K V₂] {f : V ->ₗ[K] V₂}
   证明: by
   have h₁ := f.finrank_range_add_finrank_ker
   have h₂ : finrank K (LinearMap.range f) <= finrank K V₂ := (LinearMap.range f).finrank_le
@@ -467,7 +467,7 @@ theorem injective_iff_surjective_of_finrank_eq_finrank
 
 中文:
 定理 injective_iff_surjective_of_finrank_eq_finrank
-  结论: [FiniteDimensional K V]
+  结论: [有限维 K V]
   证明: by
   have := finrank_range_add_finrank_ker f
   rw [← ker_eq_bot]; rw [← range_eq_top]; refine ⟨fun h => ?_, fun h => ?_⟩
@@ -499,7 +499,7 @@ theorem ker_eq_bot_iff_range_eq_top_of_finrank_eq_finrank
 
 中文:
 定理 ker_eq_bot_iff_range_eq_top_of_finrank_eq_finrank
-  结论: [FiniteDimensional K V]
+  结论: [有限维 K V]
   证明: by
   rw [range_eq_top]; rw [ker_eq_bot]; rw [injective_iff_surjective_of_finrank_eq_finrank H]
 
@@ -523,7 +523,7 @@ definition linearEquivOfInjective
 
 中文:
 定义 linearEquivOfInjective
-  签名: [FiniteDimensional K V] [FiniteDimensional K V₂]
+  签名: [有限维 K V] [有限维 K V₂]
   定义体: LinearEquiv.ofBijective f
     ⟨hf, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).mp hf⟩
 
@@ -547,7 +547,7 @@ theorem linearEquivOfInjective_apply
 
 中文:
 定理 linearEquivOfInjective_apply
-  结论: [FiniteDimensional K V] [FiniteDimensional K V₂]
+  结论: [有限维 K V] [有限维 K V₂]
   证明: rfl
 -/
 theorem linearEquivOfInjective_apply [FiniteDimensional K V] [FiniteDimensional K V₂]
@@ -575,7 +575,7 @@ finrank_lt by simp [not_le_of_gt hst]
 
 中文:
 定理 finrank_lt_finrank_of_lt
-  条件: {s t : Submodule K V} [FiniteDimensional K t] (hst : s < t)
+  条件: {s t : 子模 K V} [有限维 K t] (hst : s < t)
   证明: (comapSubtypeEquivOfLe hst.le).finrank_eq.symm.trans_lt
 finrank_lt by simp [not_le_of_gt hst]
 
@@ -596,7 +596,7 @@ theorem finrank_strictMono
 
 中文:
 定理 finrank_strictMono
-  条件: [FiniteDimensional K V]
+  条件: [有限维 K V]
   证明: fun _ _ => finrank_lt_finrank_of_lt
 
 Depends on / 依赖: finrank_lt_finrank_of_lt
@@ -616,7 +616,7 @@ theorem finrank_add_eq_of_isCompl
 
 中文:
 定理 finrank_add_eq_of_isCompl
-  条件: [FiniteDimensional K V] {U W : Submodule K V} (h : IsCompl U W)
+  条件: [有限维 K V] {U W : 子模 K V} (h : 是补集 U W)
   证明: by
   rw [← finrank_sup_add_finrank_inf_eq]; rw [h.codisjoint.eq_top]; rw [h.disjoint.eq_bot]; rw [finrank_bot]; rw [add_zero]
   exact finrank_top _ _
@@ -652,7 +652,7 @@ theorem LinearIndependent.span_eq_top_of_card_eq_finrank'
 
 中文:
 定理 LinearIndependent.span_eq_top_of_card_eq_finrank'
-  结论: [FiniteDimensional K V] {b : ι -> V}
+  结论: [有限维 K V] {b : ι -> V}
   证明: by
   by_contra ne_top
   rw [← finrank_span_eq_card lin_ind] at card_eq
@@ -678,7 +678,7 @@ theorem LinearIndependent.span_eq_top_of_card_eq_finrank
 
 中文:
 定理 LinearIndependent.span_eq_top_of_card_eq_finrank
-  结论: [Nonempty ι]
+  结论: [非空 ι]
   证明: have : FiniteDimensional K V := .of_finrank_pos card_eq ▸ Fintype.card_pos
   lin_ind.span_eq_top_of_card_eq_finrank' card_eq
 
@@ -725,7 +725,7 @@ lemma coe_basisOfLinearIndependentOfCardEqFinrank'
 
 中文:
 引理 coe_basisOfLinearIndependentOfCardEqFinrank'
-  条件: [FiniteDimensional K V] (b : ι -> V) (hb hι)
+  条件: [有限维 K V] (b : ι -> V) (hb hι)
   证明: Basis.coe_mk ..
 
 Depends on / 依赖: Basis.coe_mk, coe_mk
@@ -747,7 +747,7 @@ definition basisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定义 basisOfLinearIndependentOfCardEqFinrank
-  签名: [Nonempty ι]
+  签名: [非空 ι]
   定义体: Basis.mk lin_ind (lin_ind.span_eq_top_of_card_eq_finrank card_eq).ge
 
 @[simp]
@@ -770,7 +770,7 @@ theorem coe_basisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定理 coe_basisOfLinearIndependentOfCardEqFinrank
-  结论: [Nonempty ι]
+  结论: [非空 ι]
   证明: Basis.coe_mk ..
 
 Depends on / 依赖: Basis.coe_mk, coe_mk
@@ -857,7 +857,7 @@ definition finsetBasisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定义 finsetBasisOfLinearIndependentOfCardEqFinrank
-  签名: {s : Finset V} (hs : s.Nonempty)
+  签名: {s : 有限集 V} (hs : s.非空)
   定义体: haveI : Nonempty s := ⟨⟨hs.choose, hs.choose_spec⟩⟩
   basisOfLinearIndependentOfCardEqFinrank lin_ind (_root_.trans (Fintype.card_coe _) card_eq)
 
@@ -883,7 +883,7 @@ theorem coe_finsetBasisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定理 coe_finsetBasisOfLinearIndependentOfCardEqFinrank
-  结论: {s : Finset V} (hs : s.Nonempty)
+  结论: {s : 有限集 V} (hs : s.非空)
   证明: by
   have : Nonempty s := ⟨⟨hs.choose, hs.choose_spec⟩⟩
   simp [finsetBasisOfLinearIndependentOfCardEqFinrank]
@@ -910,7 +910,7 @@ definition setBasisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定义 setBasisOfLinearIndependentOfCardEqFinrank
-  签名: {s : Set V} [Nonempty s] [Fintype s]
+  签名: {s : 集合 V} [非空 s] [有限类型 s]
   定义体: basisOfLinearIndependentOfCardEqFinrank lin_ind (_root_.trans s.toFinset_card.symm card_eq)
 
 @[simp]
@@ -934,7 +934,7 @@ theorem coe_setBasisOfLinearIndependentOfCardEqFinrank
 
 中文:
 定理 coe_setBasisOfLinearIndependentOfCardEqFinrank
-  结论: {s : Set V} [Nonempty s] [Fintype s]
+  结论: {s : 集合 V} [非空 s] [有限类型 s]
   证明: by
   simp [setBasisOfLinearIndependentOfCardEqFinrank]
 
@@ -969,7 +969,7 @@ theorem is_simple_module_of_finrank_eq_one
 
 中文:
 定理 is_simple_module_of_finrank_eq_one
-  结论: {A} [Semiring A] [Module A V] [SMul K A]
+  结论: {A} [半环 A] [模 A V] [标量乘法 K A]
   证明: by
   have := nontrivial_of_finrank_eq_succ h
   refine ⟨fun S => or_iff_not_imp_left.2 fun hn => ?_⟩
@@ -1014,7 +1014,7 @@ theorem Subalgebra.isSimpleOrder_of_finrank
       have : Fini
 
 中文:
-定理 Subalgebra.isSimpleOrder_of_finrank
+定理 子代数.isSimpleOrder_of_finrank
   条件: (hr : finrank F E = 2)
   证明: let i := nontrivial_of_finrank_pos (zero_lt_two.trans_eq hr.symm)
   { toNontrivial :=
@@ -1072,8 +1072,8 @@ theorem exists_ker_pow_eq_ker_pow_succ
       have h_ker_lt_ker : LinearM
 
 中文:
-定理 exists_ker_pow_eq_ker_pow_succ
-  条件: [FiniteDimensional K V] (f : End K V)
+定理 存在_ker_pow_eq_ker_pow_succ
+  条件: [有限维 K V] (f : End K V)
   证明: by
   by_contra h_contra
   simp_rw [not_exists, not_and] at h_contra
@@ -1129,7 +1129,7 @@ theorem ker_pow_eq_ker_pow_finrank_of_le
 
 中文:
 定理 ker_pow_eq_ker_pow_finrank_of_le
-  结论: [FiniteDimensional K V] {f : End K V} {m : 自然数}
+  结论: [有限维 K V] {f : End K V} {m : 自然数}
   证明: by
   obtain ⟨k, h_k_le, hk⟩ :
     exists k, k <= finrank K V ∧ LinearMap.ker (f ^ k) = LinearMap.ker (f ^ k.succ) :=
@@ -1167,7 +1167,7 @@ theorem ker_pow_le_ker_pow_finrank
 
 中文:
 定理 ker_pow_le_ker_pow_finrank
-  条件: [FiniteDimensional K V] (f : End K V) (m : 自然数)
+  条件: [有限维 K V] (f : End K V) (m : 自然数)
   证明: by
   by_cases! h_cases : m < finrank K V
   · rw [← add_tsub_cancel_of_le h_cases.le, add_comm, pow_add]

@@ -74,7 +74,7 @@ lemma decomposition_erase_inf
 
 中文:
 引理 decomposition_erase_inf
-  结论: {N : Submodule R M}
+  结论: {N : 子模 R M}
   证明: by
   induction s using Finset.eraseInduction with
   | H s IH =>
@@ -119,7 +119,7 @@ lemma isPrimary_decomposition_pairwise_ne_radical
 
 中文:
 引理 isPrimary_decomposition_pairwise_ne_radical
-  结论: {N : Submodule R M}
+  结论: {N : 子模 R M}
   证明: by
   refine ⟨(s.image fun J => {I in s | (I.colon .univ).radical = (J.colon .univ).radical}).image
     fun t => t.inf id, ?_, ?_, ?_⟩
@@ -169,7 +169,7 @@ lemma exists_minimal_isPrimary_decomposition_of_isPrimary_decomposition
   exact ⟨u, hu, fun _ hi => ht' (hut hi), ht''.mono hut, hu'⟩
 
 中文:
-引理 exists_minimal_isPrimary_decomposition_of_isPrimary_decomposition
+引理 存在_minimal_isPrimary_decomposition_of_isPrimary_decomposition
   证明: by
   obtain ⟨t, ht, ht', ht''⟩ := isPrimary_decomposition_pairwise_ne_radical hs hs'
   obtain ⟨u, hut, hu, hu'⟩ := decomposition_erase_inf ht
@@ -199,12 +199,12 @@ structure IsMinimalPrimaryDecomposition
     - minimal : forall ⦃J⦄, J in t -> ¬ (t.erase J).inf id <= J
 
 中文:
-结构 IsMinimalPrimaryDecomposition
+结构 是MinimalPrimaryDecomposition
   公理与运算 (4 个):
-    - inf_eq : t.inf id = N
-    - primary : 对任意 ⦃J⦄, J in t -> J.IsPrimary
-    - distinct : (t : Set (Submodule R M)).Pairwise ((· != ·) on fun J => (J.colon Set.univ).radical)
-    - minimal : 对任意 ⦃J⦄, J in t -> ¬ (t.erase J).inf id <= J
+    - inf_eq : t.下确界 id = N
+    - primary : 对任意 ⦃J⦄, J in t -> J.是准素
+    - distinct : (t : 集合 (子模 R M)).两两 ((· != ·) on fun J => (J.colon 集合.univ).radical)
+    - minimal : 对任意 ⦃J⦄, J in t -> ¬ (t.erase J).下确界 id <= J
 -/
 structure IsMinimalPrimaryDecomposition
     (N : Submodule R M) (t : Finset (Submodule R M)) where
@@ -225,7 +225,7 @@ lemma IsLasker.exists_isMinimalPrimaryDecomposition
   exact ⟨t, h1, h2, h3, h4⟩
 
 中文:
-引理 IsLasker.exists_isMinimalPrimaryDecomposition
+引理 IsLasker.存在_isMinimalPrimaryDecomposition
   证明: by
   obtain ⟨s, hs1, hs2⟩ := h N
   obtain ⟨t, h1, h2, h3, h4⟩ :=
@@ -254,7 +254,7 @@ lemma injOn
 
 中文:
 引理 injOn
-  结论: (N : Submodule R M)
+  结论: (N : 子模 R M)
   证明: Set.injOn_iff_pairwise_ne.mpr ht.distinct
 
 Depends on / 依赖: Set.injOn_iff_pairwise_ne.mpr, distinct, ht.distinct, injOn_iff_pairwise_ne
@@ -323,7 +323,7 @@ lemma mem_associatedPrimes
 
 中文:
 引理 mem_associatedPrimes
-  结论: {N : Submodule R M} {t : Finset (Submodule R M)}
+  结论: {N : 子模 R M} {t : 有限集 (子模 R M)}
   证明: by
   rw [← ht.image_radical_eq_associated_primes]
   exact Set.mem_image_of_mem _ hq
@@ -467,7 +467,7 @@ lemma Ideal.IsMinimalPrimaryDecomposition.minimalPrimes_subset_image_radical
   exact ⟨q, hqt, le_antisymm hqp (hp
 
 中文:
-引理 Ideal.IsMinimalPrimaryDecomposition.minimalPrimes_subset_image_radical
+引理 理想.是MinimalPrimaryDecomposition.minimalPrimes_subset_image_radical
   证明: by
   intro p hp
   have htp : t.inf radical <= p := by
@@ -543,8 +543,8 @@ lemma _root_.InfIrred.isPrimary
 
 中文:
 引理 _root_.InfIrred.isPrimary
-  条件: {N : Submodule R M} (h : InfIrred N)
-  结论: N.IsPrimary
+  条件: {N : 子模 R M} (h : InfIrred N)
+  结论: N.是准素
   证明: by
   rw [Submodule.IsPrimary]
   refine ⟨h.ne_top, fun {a b} hab => ?_⟩

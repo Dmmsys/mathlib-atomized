@@ -99,7 +99,7 @@ theorem eqOn_singleton
 
 中文:
 定理 eqOn_singleton
-  结论: Set.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
+  结论: 集合.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
   证明: by
   simp [Set.EqOn]
 
@@ -186,7 +186,7 @@ theorem eqOn_refl
 
 中文:
 定理 eqOn_refl
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: EqOn f f s
   证明: fun _ _ => rfl
 -/
@@ -245,7 +245,7 @@ theorem EqOn.image_eq_self
 
 中文:
 定理 EqOn.image_eq_self
-  条件: {f : α -> α} (h : Set.EqOn f id s)
+  条件: {f : α -> α} (h : 集合.EqOn f id s)
   结论: f '' s = s
   证明: by grind
 -/
@@ -263,7 +263,7 @@ theorem EqOn.inter_preimage_eq
 
 中文:
 定理 EqOn.inter_preimage_eq
-  条件: (heq : EqOn f₁ f₂ s) (t : Set β)
+  条件: (heq : EqOn f₁ f₂ s) (t : 集合 β)
   结论: s inter f₁ ⁻¹' t = s inter f₂ ⁻¹' t
   证明: by
   grind
@@ -384,7 +384,7 @@ alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
 
 中文:
 定理 eqOn_range
-  条件: {ι : Sort*} {f : ι -> α} {g₁ g₂ : α -> β}
+  条件: {ι : 类型层*} {f : ι -> α} {g₁ g₂ : α -> β}
   证明: forall_mem_range.trans funext_iff.symm
 
 alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
@@ -414,7 +414,7 @@ theorem mapsTo_iff_image_subset
 
 中文:
 定理 mapsTo_iff_image_subset
-  结论: MapsTo f s t ↔ f '' s subseteq t
+  结论: 映射到 f s t ↔ f '' s subseteq t
   证明: image_subset_iff.symm
 
 Depends on / 依赖: image_subset_iff, image_subset_iff.symm
@@ -432,8 +432,8 @@ theorem MapsTo.subset_preimage
   proof: hf
 
 中文:
-定理 MapsTo.subset_preimage
-  条件: (hf : MapsTo f s t)
+定理 映射到.subset_preimage
+  条件: (hf : 映射到 f s t)
   结论: s subseteq f ⁻¹' t
   证明: hf
 -/
@@ -449,7 +449,7 @@ theorem mapsTo_iff_subset_preimage
 
 中文:
 定理 mapsTo_iff_subset_preimage
-  结论: MapsTo f s t ↔ s subseteq f ⁻¹' t
+  结论: 映射到 f s t ↔ s subseteq f ⁻¹' t
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -468,7 +468,7 @@ theorem mapsTo_prodMap_diagonal
 
 中文:
 定理 mapsTo_prodMap_diagonal
-  结论: MapsTo (Prod.map f f) (diagonal α) (diagonal β)
+  结论: 映射到 (积类型.map f f) (diagonal α) (diagonal β)
   证明: mapsTo_iff_subset_preimage.mpr diagonal_subset_iff.2 fun _ => rfl
 
 @[simp]
@@ -491,7 +491,7 @@ theorem mapsTo_singleton
 中文:
 定理 mapsTo_singleton
   条件: {x : α}
-  结论: MapsTo f {x} t ↔ f x in t
+  结论: 映射到 f {x} t ↔ f x in t
   证明: mapsTo_iff_subset_preimage.trans singleton_subset_iff
 
 Depends on / 依赖: mapsTo_iff_subset_preimage, mapsTo_iff_subset_preimage.trans, singleton_subset_iff
@@ -510,8 +510,8 @@ theorem mapsTo_empty
 
 中文:
 定理 mapsTo_empty
-  条件: (f : α -> β) (t : Set β)
-  结论: MapsTo f ∅ t
+  条件: (f : α -> β) (t : 集合 β)
+  结论: 映射到 f ∅ t
   证明: fun _ => False.elim
 
 Depends on / 依赖: False.elim
@@ -530,7 +530,7 @@ theorem mapsTo_empty_iff
 
 中文:
 定理 mapsTo_empty_iff
-  结论: MapsTo f s ∅ ↔ s = ∅
+  结论: 映射到 f s ∅ ↔ s = ∅
   证明: by
   simp [mapsTo_iff_image_subset, subset_empty_iff]
 -/
@@ -547,9 +547,9 @@ theorem MapsTo.nonempty
   proof: (hs.image f).mono (mapsTo_iff_image_subset.mp h)
 
 中文:
-定理 MapsTo.nonempty
-  条件: (h : MapsTo f s t) (hs : s.Nonempty)
-  结论: t.Nonempty
+定理 映射到.nonempty
+  条件: (h : 映射到 f s t) (hs : s.非空)
+  结论: t.非空
   证明: (hs.image f).mono (mapsTo_iff_image_subset.mp h)
 
 Depends on / 依赖: hs.image, mapsTo_iff_image_subset, mapsTo_iff_image_subset.mp
@@ -567,8 +567,8 @@ theorem MapsTo.image_subset
   proof: mapsTo_iff_image_subset.1 h
 
 中文:
-定理 MapsTo.image_subset
-  条件: (h : MapsTo f s t)
+定理 映射到.image_subset
+  条件: (h : 映射到 f s t)
   结论: f '' s subseteq t
   证明: mapsTo_iff_image_subset.1 h
 
@@ -588,9 +588,9 @@ theorem MapsTo.congr
   h hx ▸ h₁ hx
 
 中文:
-定理 MapsTo.congr
-  条件: (h₁ : MapsTo f₁ s t) (h : EqOn f₁ f₂ s)
-  结论: MapsTo f₂ s t
+定理 映射到.congr
+  条件: (h₁ : 映射到 f₁ s t) (h : EqOn f₁ f₂ s)
+  结论: 映射到 f₂ s t
   证明: fun _ hx =>
   h hx ▸ h₁ hx
 -/
@@ -608,7 +608,7 @@ theorem EqOn.comp_right
 
 中文:
 定理 EqOn.comp_right
-  条件: (hg : t.EqOn g₁ g₂) (hf : s.MapsTo f t)
+  条件: (hg : t.EqOn g₁ g₂) (hf : s.映射到 f t)
   结论: s.EqOn (g₁ ∘ f) (g₂ ∘ f)
   证明: fun _ ha => hg hf ha
 -/
@@ -627,7 +627,7 @@ theorem EqOn.mapsTo_iff
 中文:
 定理 EqOn.mapsTo_iff
   条件: (H : EqOn f₁ f₂ s)
-  结论: MapsTo f₁ s t ↔ MapsTo f₂ s t
+  结论: 映射到 f₁ s t ↔ 映射到 f₂ s t
   证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
 
 Depends on / 依赖: H.symm, h.congr
@@ -646,9 +646,9 @@ theorem MapsTo.comp
   h₁ (h₂ h)
 
 中文:
-定理 MapsTo.comp
-  条件: (h₁ : MapsTo g t p) (h₂ : MapsTo f s t)
-  结论: MapsTo (g ∘ f) s p
+定理 映射到.comp
+  条件: (h₁ : 映射到 g t p) (h₂ : 映射到 f s t)
+  结论: 映射到 (g ∘ f) s p
   证明: fun _ h =>
   h₁ (h₂ h)
 -/
@@ -666,8 +666,8 @@ theorem mapsTo_id
 
 中文:
 定理 mapsTo_id
-  条件: (s : Set α)
-  结论: MapsTo id s s
+  条件: (s : 集合 α)
+  结论: 映射到 id s s
   证明: fun _ => id
 -/
 theorem mapsTo_id (s : Set α) : MapsTo id s s := fun _ => id
@@ -681,9 +681,9 @@ theorem MapsTo.iterate
   statement: forall n, MapsTo f^[n] s s
 
 中文:
-定理 MapsTo.iterate
-  条件: {f : α -> α} {s : Set α} (h : MapsTo f s s)
-  结论: 对任意 n, MapsTo f^[n] s s
+定理 映射到.iterate
+  条件: {f : α -> α} {s : 集合 α} (h : 映射到 f s s)
+  结论: 对任意 n, 映射到 f^[n] s s
 -/
 theorem MapsTo.iterate {f : α -> α} {s : Set α} (h : MapsTo f s s) : forall n, MapsTo f^[n] s s
   | 0 => fun _ => id
@@ -700,8 +700,8 @@ theorem MapsTo.iterate_restrict
   simpa using coe_iterate_restrict _ _ _
 
 中文:
-定理 MapsTo.iterate_restrict
-  条件: {f : α -> α} {s : Set α} (h : MapsTo f s s) (n : 自然数)
+定理 映射到.iterate_restrict
+  条件: {f : α -> α} {s : 集合 α} (h : 映射到 f s s) (n : 自然数)
   证明: by
   ext
   simpa using coe_iterate_restrict _ _ _
@@ -723,7 +723,7 @@ lemma mapsTo_of_subsingleton'
 
 中文:
 引理 mapsTo_of_subsingleton'
-  条件: [Subsingleton β] (f : α -> β) (h : s.Nonempty -> t.Nonempty)
+  条件: [子单例 β] (f : α -> β) (h : s.非空 -> t.非空)
   证明: fun a ha => Subsingleton.mem_iff_nonempty.2 h ⟨a, ha⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.mem_iff_nonempty, mem_iff_nonempty
@@ -745,8 +745,8 @@ lemma mapsTo_of_subsingleton
 
 中文:
 引理 mapsTo_of_subsingleton
-  条件: [Subsingleton α] (f : α -> α) (s : Set α)
-  结论: MapsTo f s s
+  条件: [子单例 α] (f : α -> α) (s : 集合 α)
+  结论: 映射到 f s s
   证明: mapsTo_of_subsingleton' _ id
 
 @[gcongr]
@@ -767,9 +767,9 @@ theorem MapsTo.mono
   proof: fun _ hx => ht (hf <| hs hx)
 
 中文:
-定理 MapsTo.mono
-  条件: (hf : MapsTo f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂)
-  结论: MapsTo f s₂ t₂
+定理 映射到.mono
+  条件: (hf : 映射到 f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂)
+  结论: 映射到 f s₂ t₂
   证明: fun _ hx => ht (hf <| hs hx)
 -/
 theorem MapsTo.mono (hf : MapsTo f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂) : MapsTo f s₂ t₂ :=
@@ -786,9 +786,9 @@ theorem MapsTo.mono_left
   hf (hs hx)
 
 中文:
-定理 MapsTo.mono_left
-  条件: (hf : MapsTo f s₁ t) (hs : s₂ subseteq s₁)
-  结论: MapsTo f s₂ t
+定理 映射到.mono_left
+  条件: (hf : 映射到 f s₁ t) (hs : s₂ subseteq s₁)
+  结论: 映射到 f s₂ t
   证明: fun _ hx =>
   hf (hs hx)
 -/
@@ -806,9 +806,9 @@ theorem MapsTo.mono_right
   ht (hf hx)
 
 中文:
-定理 MapsTo.mono_right
-  条件: (hf : MapsTo f s t₁) (ht : t₁ subseteq t₂)
-  结论: MapsTo f s t₂
+定理 映射到.mono_right
+  条件: (hf : 映射到 f s t₁) (ht : t₁ subseteq t₂)
+  结论: 映射到 f s t₂
   证明: fun _ hx =>
   ht (hf hx)
 -/
@@ -825,8 +825,8 @@ theorem MapsTo.union_union
 hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr h₂ hx
 
 中文:
-定理 MapsTo.union_union
-  条件: (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂)
+定理 映射到.union_union
+  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 映射到 f s₂ t₂)
   证明: fun _ hx =>
 hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr h₂ hx
 -/
@@ -846,9 +846,9 @@ theorem MapsTo.union
 @[simp]
 
 中文:
-定理 MapsTo.union
-  条件: (h₁ : MapsTo f s₁ t) (h₂ : MapsTo f s₂ t)
-  结论: MapsTo f (s₁ union s₂) t
+定理 映射到.union
+  条件: (h₁ : 映射到 f s₁ t) (h₂ : 映射到 f s₂ t)
+  结论: 映射到 f (s₁ union s₂) t
   证明: union_self t ▸ h₁.union_union h₂
 
 @[simp]
@@ -872,7 +872,7 @@ theorem mapsTo_union
 
 中文:
 定理 mapsTo_union
-  结论: MapsTo f (s₁ union s₂) t ↔ MapsTo f s₁ t ∧ MapsTo f s₂ t
+  结论: 映射到 f (s₁ union s₂) t ↔ 映射到 f s₁ t ∧ 映射到 f s₂ t
   证明: ⟨fun h =>
     ⟨h.mono subset_union_left (Subset.refl t),
       h.mono subset_union_right (Subset.refl t)⟩,
@@ -897,9 +897,9 @@ theorem MapsTo.inter
   ⟨h₁ hx, h₂ hx⟩
 
 中文:
-定理 MapsTo.inter
-  条件: (h₁ : MapsTo f s t₁) (h₂ : MapsTo f s t₂)
-  结论: MapsTo f s (t₁ inter t₂)
+定理 映射到.inter
+  条件: (h₁ : 映射到 f s t₁) (h₂ : 映射到 f s t₂)
+  结论: 映射到 f s (t₁ inter t₂)
   证明: fun _ hx =>
   ⟨h₁ hx, h₂ hx⟩
 -/
@@ -917,9 +917,9 @@ lemma MapsTo.insert
   simpa [← singleton_union] using h.mono_right subset_union_right
 
 中文:
-引理 MapsTo.insert
-  条件: (h : MapsTo f s t) (x : α)
-  结论: MapsTo f (insert x s) (insert (f x) t)
+引理 映射到.insert
+  条件: (h : 映射到 f s t) (x : α)
+  结论: 映射到 f (insert x s) (insert (f x) t)
   证明: by
   simpa [← singleton_union] using h.mono_right subset_union_right
 
@@ -939,8 +939,8 @@ theorem MapsTo.inter_inter
 @[simp]
 
 中文:
-定理 MapsTo.inter_inter
-  条件: (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂)
+定理 映射到.inter_inter
+  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 映射到 f s₂ t₂)
   证明: fun _ hx => ⟨h₁ hx.1, h₂ hx.2⟩
 
 @[simp]
@@ -962,7 +962,7 @@ theorem mapsTo_inter
 
 中文:
 定理 mapsTo_inter
-  结论: MapsTo f s (t₁ inter t₂) ↔ MapsTo f s t₁ ∧ MapsTo f s t₂
+  结论: 映射到 f s (t₁ inter t₂) ↔ 映射到 f s t₁ ∧ 映射到 f s t₂
   证明: ⟨fun h =>
     ⟨h.mono (Subset.refl s) inter_subset_left,
       h.mono (Subset.refl s) inter_subset_right⟩,
@@ -987,8 +987,8 @@ theorem mapsTo_univ
 
 中文:
 定理 mapsTo_univ
-  条件: (f : α -> β) (s : Set α)
-  结论: MapsTo f s univ
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 映射到 f s univ
   证明: fun _ _ => trivial
 -/
 @[simp] theorem mapsTo_univ (f : α -> β) (s : Set α) : MapsTo f s univ := fun _ _ => trivial
@@ -1006,8 +1006,8 @@ theorem mapsTo_range
 
 中文:
 定理 mapsTo_range
-  条件: (f : α -> β) (s : Set α)
-  结论: MapsTo f s (range f)
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 映射到 f s (range f)
   证明: (mapsTo_image f s).mono (Subset.refl s) (image_subset_range _ _)
 
 @[simp]
@@ -1028,7 +1028,7 @@ theorem mapsTo_image_iff
 
 中文:
 定理 mapsTo_image_iff
-  条件: {f : α -> β} {g : γ -> α} {s : Set γ} {t : Set β}
+  条件: {f : α -> β} {g : γ -> α} {s : 集合 γ} {t : 集合 β}
   证明: ⟨fun h c hc => h ⟨c, hc, rfl⟩, fun h _ ⟨_, hc⟩ => hc.2 ▸ h hc.1⟩
 -/
 theorem mapsTo_image_iff {f : α -> β} {g : γ -> α} {s : Set γ} {t : Set β} :
@@ -1045,9 +1045,9 @@ lemma MapsTo.comp_left
   proof: fun x hx => ⟨f x, hf hx, rfl⟩
 
 中文:
-引理 MapsTo.comp_left
-  条件: (g : β -> γ) (hf : MapsTo f s t)
-  结论: MapsTo (g ∘ f) s (g '' t)
+引理 映射到.comp_left
+  条件: (g : β -> γ) (hf : 映射到 f s t)
+  结论: 映射到 (g ∘ f) s (g '' t)
   证明: fun x hx => ⟨f x, hf hx, rfl⟩
 -/
 lemma MapsTo.comp_left (g : β -> γ) (hf : MapsTo f s t) : MapsTo (g ∘ f) s (g '' t) :=
@@ -1064,8 +1064,8 @@ lemma MapsTo.comp_right
 @[simp]
 
 中文:
-引理 MapsTo.comp_right
-  条件: {s : Set β} {t : Set γ} (hg : MapsTo g s t) (f : α -> β)
+引理 映射到.comp_right
+  条件: {s : 集合 β} {t : 集合 γ} (hg : 映射到 g s t) (f : α -> β)
   证明: fun _ hx => hg hx
 
 @[simp]
@@ -1084,7 +1084,7 @@ lemma mapsTo_univ_iff
 
 中文:
 引理 mapsTo_univ_iff
-  结论: MapsTo f univ t ↔ 对任意 x, f x in t
+  结论: 映射到 f univ t ↔ 对任意 x, f x in t
   证明: ⟨fun h _ => h (mem_univ _), fun h x _ => h x⟩
 
 Depends on / 依赖: mem_univ
@@ -1104,7 +1104,7 @@ lemma mapsTo_univ_iff_range_subset
 
 中文:
 引理 mapsTo_univ_iff_range_subset
-  结论: MapsTo f univ t ↔ range f subseteq t
+  结论: 映射到 f univ t ↔ range f subseteq t
   证明: mapsTo_univ_iff.trans range_subset_iff.symm
 
 @[simp]
@@ -1127,7 +1127,7 @@ lemma mapsTo_range_iff
 中文:
 引理 mapsTo_range_iff
   条件: {g : ι -> α}
-  结论: MapsTo f (range g) t ↔ 对任意 i, f (g i) in t
+  结论: 映射到 f (range g) t ↔ 对任意 i, f (g i) in t
   证明: forall_mem_range
 
 Depends on / 依赖: forall_mem_range
@@ -1145,8 +1145,8 @@ theorem MapsTo.mem_iff
   proof: ⟨fun ht => by_contra fun hs => hc hs ht, fun hx => h hx⟩
 
 中文:
-定理 MapsTo.mem_iff
-  条件: (h : MapsTo f s t) (hc : MapsTo f sᶜ tᶜ) {x}
+定理 映射到.mem_iff
+  条件: (h : 映射到 f s t) (hc : 映射到 f sᶜ tᶜ) {x}
   结论: f x in t ↔ x in s
   证明: ⟨fun ht => by_contra fun hs => hc hs ht, fun hx => h hx⟩
 -/
@@ -1171,9 +1171,9 @@ theorem Subsingleton.injOn
 @[simp]
 
 中文:
-定理 Subsingleton.injOn
-  条件: (hs : s.Subsingleton) (f : α -> β)
-  结论: InjOn f s
+定理 子单例.injOn
+  条件: (hs : s.子单例) (f : α -> β)
+  结论: 单射限制 f s
   证明: fun _ hx _ hy _ =>
   hs hx hy
 
@@ -1196,7 +1196,7 @@ theorem injOn_empty
 中文:
 定理 injOn_empty
   条件: (f : α -> β)
-  结论: InjOn f ∅
+  结论: 单射限制 f ∅
   证明: subsingleton_empty.injOn f
 @[simp]
 
@@ -1217,7 +1217,7 @@ theorem injOn_singleton
 中文:
 定理 injOn_singleton
   条件: (f : α -> β) (a : α)
-  结论: InjOn f {a}
+  结论: 单射限制 f {a}
   证明: subsingleton_singleton.injOn f
 
 Depends on / 依赖: subsingleton_singleton, subsingleton_singleton.injOn
@@ -1237,7 +1237,7 @@ lemma injOn_pair
 中文:
 引理 injOn_pair
   条件: {b : α}
-  结论: InjOn f {a, b} ↔ f a = f b -> a = b
+  结论: 单射限制 f {a, b} ↔ f a = f b -> a = b
   证明: by unfold InjOn; aesop
 -/
 @[simp] lemma injOn_pair {b : α} : InjOn f {a, b} ↔ f a = f b -> a = b := by unfold InjOn; aesop
@@ -1253,8 +1253,8 @@ lemma injOn_of_eq_iff_eq
 
 中文:
 引理 injOn_of_eq_iff_eq
-  条件: (s : Set α) (h : 对任意 x y, f x = f y ↔ x = y)
-  结论: Set.InjOn f s
+  条件: (s : 集合 α) (h : 对任意 x y, f x = f y ↔ x = y)
+  结论: 集合.单射限制 f s
   证明: fun x _ y _ => (h x y).mp
 -/
 @[simp low] lemma injOn_of_eq_iff_eq (s : Set α) (h : forall x y, f x = f y ↔ x = y) : Set.InjOn f s :=
@@ -1270,8 +1270,8 @@ theorem InjOn.eq_iff
   proof: ⟨h hx hy, fun h => h ▸ rfl⟩
 
 中文:
-定理 InjOn.eq_iff
-  条件: {x y} (h : InjOn f s) (hx : x in s) (hy : y in s)
+定理 单射限制.eq_iff
+  条件: {x y} (h : 单射限制 f s) (hx : x in s) (hy : y in s)
   结论: f x = f y ↔ x = y
   证明: ⟨h hx hy, fun h => h ▸ rfl⟩
 -/
@@ -1290,8 +1290,8 @@ theorem InjOn.ne_iff
 alias ⟨_, InjOn.ne⟩ := InjOn.ne_iff
 
 中文:
-定理 InjOn.ne_iff
-  条件: {x y} (h : InjOn f s) (hx : x in s) (hy : y in s)
+定理 单射限制.ne_iff
+  条件: {x y} (h : 单射限制 f s) (hx : x in s) (hy : y in s)
   结论: f x != f y ↔ x != y
   证明: (h.eq_iff hx hy).not
 
@@ -1315,9 +1315,9 @@ theorem InjOn.congr
   h hx ▸ h hy ▸ h₁ hx hy
 
 中文:
-定理 InjOn.congr
-  条件: (h₁ : InjOn f₁ s) (h : EqOn f₁ f₂ s)
-  结论: InjOn f₂ s
+定理 单射限制.congr
+  条件: (h₁ : 单射限制 f₁ s) (h : EqOn f₁ f₂ s)
+  结论: 单射限制 f₂ s
   证明: fun _ hx _ hy =>
   h hx ▸ h hy ▸ h₁ hx hy
 -/
@@ -1338,7 +1338,7 @@ theorem EqOn.injOn_iff
 中文:
 定理 EqOn.injOn_iff
   条件: (H : EqOn f₁ f₂ s)
-  结论: InjOn f₁ s ↔ InjOn f₂ s
+  结论: 单射限制 f₁ s ↔ 单射限制 f₂ s
   证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
 
 @[gcongr]
@@ -1360,9 +1360,9 @@ theorem InjOn.mono
   ht (h hx) (h hy) H
 
 中文:
-定理 InjOn.mono
-  条件: (h : s₁ subseteq s₂) (ht : InjOn f s₂)
-  结论: InjOn f s₁
+定理 单射限制.mono
+  条件: (h : s₁ subseteq s₂) (ht : 单射限制 f s₂)
+  结论: 单射限制 f s₁
   证明: fun _ hx _ hy H =>
   ht (h hx) (h hy) H
 -/
@@ -1420,7 +1420,7 @@ theorem injOn_insert
 
 中文:
 定理 injOn_insert
-  条件: {f : α -> β} {s : Set α} {a : α} (has : a ∉ s)
+  条件: {f : α -> β} {s : 集合 α} {a : α} (has : a ∉ s)
   证明: by
   rw [← union_singleton]; rw [injOn_union (disjoint_singleton_right.2 has)]
   simp
@@ -1442,7 +1442,7 @@ lemma injOn_univ
 
 中文:
 引理 injOn_univ
-  结论: InjOn f univ ↔ Injective f
+  结论: 单射限制 f univ ↔ 单射 f
   证明: by simp [InjOn, Injective]
 -/
 @[simp] lemma injOn_univ : InjOn f univ ↔ Injective f := by simp [InjOn, Injective]
@@ -1460,8 +1460,8 @@ alias _root_.Function.Injective.injOn := injOn_of_injective
 
 中文:
 定理 injOn_of_injective
-  条件: (h : Injective f) {s : Set α}
-  结论: InjOn f s
+  条件: (h : 单射 f) {s : 集合 α}
+  结论: 单射限制 f s
   证明: fun _ _ _ _ hxy => h hxy
 
 alias _root_.Function.Injective.injOn := injOn_of_injective
@@ -1482,8 +1482,8 @@ theorem injOn_subtype_val
 
 中文:
 定理 injOn_subtype_val
-  条件: {p : α -> 命题} {s : Set {x // p x}}
-  结论: Set.InjOn Subtype.val s
+  条件: {p : α -> 命题} {s : 集合 {x // p x}}
+  结论: 集合.单射限制 子类型.val s
   证明: Subtype.coe_injective.injOn
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.injOn, coe_injective
@@ -1502,8 +1502,8 @@ lemma injOn_id
 
 中文:
 引理 injOn_id
-  条件: (s : Set α)
-  结论: InjOn id s
+  条件: (s : 集合 α)
+  结论: 单射限制 id s
   证明: injective_id.injOn
 
 Depends on / 依赖: injective_id, injective_id.injOn
@@ -1520,9 +1520,9 @@ theorem InjOn.comp
   proof: fun _ hx _ hy heq => hf hx hy hg (h hx) (h hy) heq
 
 中文:
-定理 InjOn.comp
-  条件: (hg : InjOn g t) (hf : InjOn f s) (h : MapsTo f s t)
-  结论: InjOn (g ∘ f) s
+定理 单射限制.comp
+  条件: (hg : 单射限制 g t) (hf : 单射限制 f s) (h : 映射到 f s t)
+  结论: 单射限制 (g ∘ f) s
   证明: fun _ hx _ hy heq => hf hx hy hg (h hx) (h hy) heq
 -/
 theorem InjOn.comp (hg : InjOn g t) (hf : InjOn f s) (h : MapsTo f s t) : InjOn (g ∘ f) s :=
@@ -1538,9 +1538,9 @@ lemma InjOn.of_comp
   proof: fun _ hx _ hy heq => h hx hy (by simp [heq])
 
 中文:
-引理 InjOn.of_comp
-  条件: (h : InjOn (g ∘ f) s)
-  结论: InjOn f s
+引理 单射限制.of_comp
+  条件: (h : 单射限制 (g ∘ f) s)
+  结论: 单射限制 f s
   证明: fun _ hx _ hy heq => h hx hy (by simp [heq])
 -/
 lemma InjOn.of_comp (h : InjOn (g ∘ f) s) : InjOn f s :=
@@ -1556,9 +1556,9 @@ lemma InjOn.image_of_comp
   proof: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy heq => congr_arg f h hx hy heq
 
 中文:
-引理 InjOn.image_of_comp
-  条件: (h : InjOn (g ∘ f) s)
-  结论: InjOn g (f '' s)
+引理 单射限制.image_of_comp
+  条件: (h : 单射限制 (g ∘ f) s)
+  结论: 单射限制 g (f '' s)
   证明: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy heq => congr_arg f h hx hy heq
 
 Depends on / 依赖: congr_arg, forall_mem_image
@@ -1576,9 +1576,9 @@ lemma InjOn.comp_iff
   proof: ⟨image_of_comp, fun h => InjOn.comp h hf mapsTo_image f s⟩
 
 中文:
-引理 InjOn.comp_iff
-  条件: (hf : InjOn f s)
-  结论: InjOn (g ∘ f) s ↔ InjOn g (f '' s)
+引理 单射限制.comp_iff
+  条件: (hf : 单射限制 f s)
+  结论: 单射限制 (g ∘ f) s ↔ 单射限制 g (f '' s)
   证明: ⟨image_of_comp, fun h => InjOn.comp h hf mapsTo_image f s⟩
 
 Depends on / 依赖: InjOn.comp, image_of_comp, mapsTo_image
@@ -1594,8 +1594,8 @@ lemma InjOn.iterate
   given: {f : α -> α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s)
 
 中文:
-引理 InjOn.iterate
-  条件: {f : α -> α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s)
+引理 单射限制.iterate
+  条件: {f : α -> α} {s : 集合 α} (h : 单射限制 f s) (hf : 映射到 f s s)
 -/
 lemma InjOn.iterate {f : α -> α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s) :
     forall n, InjOn f^[n] s
@@ -1613,8 +1613,8 @@ lemma injOn_of_subsingleton
 
 中文:
 引理 injOn_of_subsingleton
-  条件: [Subsingleton α] (f : α -> β) (s : Set α)
-  结论: InjOn f s
+  条件: [子单例 α] (f : α -> β) (s : 集合 α)
+  结论: 单射限制 f s
   证明: (injective_of_subsingleton _).injOn
 
 Depends on / 依赖: injective_of_subsingleton
@@ -1634,9 +1634,9 @@ theorem _root_.Function.Injective.injOn_range
   exact congr_arg f (h H)
 
 中文:
-定理 _root_.Function.Injective.injOn_range
-  条件: (h : Injective (g ∘ f))
-  结论: InjOn g (range f)
+定理 _root_.函数.单射.injOn_range
+  条件: (h : 单射 (g ∘ f))
+  结论: 单射限制 g (range f)
   证明: by
   rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ H
   exact congr_arg f (h H)
@@ -1656,8 +1656,8 @@ theorem _root_.Set.InjOn.injective_iff
   proof: ⟨(·.of_comp), fun h _ => by aesop⟩
 
 中文:
-定理 _root_.Set.InjOn.injective_iff
-  条件: (s : Set β) (h : InjOn g s) (hs : range f subseteq s)
+定理 _root_.集合.单射限制.injective_iff
+  条件: (s : 集合 β) (h : 单射限制 g s) (hs : range f subseteq s)
   证明: ⟨(·.of_comp), fun h _ => by aesop⟩
 
 Depends on / 依赖: of_comp
@@ -1678,8 +1678,8 @@ theorem exists_injOn_iff_injective
     exact ⟨f, injOn_iff_injective.2 hf⟩⟩
 
 中文:
-定理 exists_injOn_iff_injective
-  条件: [Nonempty β]
+定理 存在_injOn_iff_injective
+  条件: [非空 β]
   证明: ⟨fun ⟨_, hf⟩ => ⟨_, hf.injective⟩,
    fun ⟨f, hf⟩ => by
     lift f to α -> β using trivial
@@ -1705,8 +1705,8 @@ theorem injOn_preimage
 
 中文:
 定理 injOn_preimage
-  条件: {B : Set (Set β)} (hB : B subseteq 𝒫 range f)
-  结论: InjOn (preimage f) B
+  条件: {B : 集合 (集合 β)} (hB : B subseteq 𝒫 range f)
+  结论: 单射限制 (原像 f) B
   证明: fun _ hs _ ht hst => (preimage_eq_preimage' (hB hs) (hB ht)).1 hst
 
 Depends on / 依赖: preimage_eq_preimage
@@ -1724,8 +1724,8 @@ theorem InjOn.mem_of_mem_image
   hf (hs h') h Eq ▸ h'
 
 中文:
-定理 InjOn.mem_of_mem_image
-  条件: {x} (hf : InjOn f s) (hs : s₁ subseteq s) (h : x in s) (h₁ : f x in f '' s₁)
+定理 单射限制.mem_of_mem_image
+  条件: {x} (hf : 单射限制 f s) (hs : s₁ subseteq s) (h : x in s) (h₁ : f x in f '' s₁)
   证明: let ⟨_, h', Eq⟩ := h₁
   hf (hs h') h Eq ▸ h'
 -/
@@ -1743,8 +1743,8 @@ theorem InjOn.mem_image_iff
   proof: ⟨hf.mem_of_mem_image hs hx, mem_image_of_mem f⟩
 
 中文:
-定理 InjOn.mem_image_iff
-  条件: {x} (hf : InjOn f s) (hs : s₁ subseteq s) (hx : x in s)
+定理 单射限制.mem_image_iff
+  条件: {x} (hf : 单射限制 f s) (hs : s₁ subseteq s) (hx : x in s)
   证明: ⟨hf.mem_of_mem_image hs hx, mem_image_of_mem f⟩
 
 Depends on / 依赖: hf.mem_of_mem_image, mem_image_of_mem, mem_of_mem_image
@@ -1763,8 +1763,8 @@ theorem InjOn.preimage_image_inter
   proof: ext fun _ => ⟨fun ⟨h₁, h₂⟩ => hf.mem_of_mem_image hs h₂ h₁, fun h => ⟨mem_image_of_mem _ h, hs h⟩⟩
 
 中文:
-定理 InjOn.preimage_image_inter
-  条件: (hf : InjOn f s) (hs : s₁ subseteq s)
+定理 单射限制.preimage_image_inter
+  条件: (hf : 单射限制 f s) (hs : s₁ subseteq s)
   结论: f ⁻¹' f '' s₁ inter s = s₁
   证明: ext fun _ => ⟨fun ⟨h₁, h₂⟩ => hf.mem_of_mem_image hs h₂ h₁, fun h => ⟨mem_image_of_mem _ h, hs h⟩⟩
 
@@ -1783,7 +1783,7 @@ theorem EqOn.cancel_left
 
 中文:
 定理 EqOn.cancel_left
-  结论: (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t)
+  结论: (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.单射限制 g) (hf₁ : s.映射到 f₁ t)
   证明: fun _ ha => hg (hf₁ ha) (hf₂ ha) (h ha)
 -/
 theorem EqOn.cancel_left (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t)
@@ -1798,8 +1798,8 @@ theorem InjOn.cancel_left
   proof: ⟨fun h => h.cancel_left hg hf₁ hf₂, EqOn.comp_left⟩
 
 中文:
-定理 InjOn.cancel_left
-  条件: (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t) (hf₂ : s.MapsTo f₂ t)
+定理 单射限制.cancel_left
+  条件: (hg : t.单射限制 g) (hf₁ : s.映射到 f₁ t) (hf₂ : s.映射到 f₂ t)
   证明: ⟨fun h => h.cancel_left hg hf₁ hf₂, EqOn.comp_left⟩
 
 Depends on / 依赖: EqOn.comp_left, cancel_left, comp_left, h.cancel_left
@@ -1824,8 +1824,8 @@ lemma InjOn.image_inter
   exact ⟨y, ⟨ys, zt⟩, hy⟩
 
 中文:
-引理 InjOn.image_inter
-  条件: {s t u : Set α} (hf : u.InjOn f) (hs : s subseteq u) (ht : t subseteq u)
+引理 单射限制.image_inter
+  条件: {s t u : 集合 α} (hf : u.单射限制 f) (hs : s subseteq u) (ht : t subseteq u)
   证明: by
   apply Subset.antisymm (image_inter_subset _ _ _)
   intro x ⟨⟨y, ys, hy⟩, ⟨z, zt, hz⟩⟩
@@ -1857,9 +1857,9 @@ lemma InjOn.image
   proof: fun s₁ hs₁ s₂ hs₂ h' => by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
 
 中文:
-引理 InjOn.image
-  条件: (h : s.InjOn f)
-  结论: s.powerset.InjOn (image f)
+引理 单射限制.像
+  条件: (h : s.单射限制 f)
+  结论: s.powerset.单射限制 (像 f)
   证明: fun s₁ hs₁ s₂ hs₂ h' => by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
 
 Depends on / 依赖: h.preimage_image_inter, preimage_image_inter
@@ -1876,8 +1876,8 @@ theorem InjOn.image_eq_image_iff
   proof: h.image.eq_iff h₁ h₂
 
 中文:
-定理 InjOn.image_eq_image_iff
-  条件: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
+定理 单射限制.image_eq_image_iff
+  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
   证明: h.image.eq_iff h₁ h₂
 
 Depends on / 依赖: eq_iff, h.image.eq_iff
@@ -1898,8 +1898,8 @@ lemma InjOn.image_subset_image_iff
   exact inter_subset_inter_left _ (preimage_mono h')
 
 中文:
-引理 InjOn.image_subset_image_iff
-  条件: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
+引理 单射限制.image_subset_image_iff
+  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
   证明: by
   refine ⟨fun h' => ?_, image_mono⟩
   rw [← h.preimage_image_inter h₁]; rw [← h.preimage_image_inter h₂]
@@ -1923,8 +1923,8 @@ lemma InjOn.image_ssubset_image_iff
   simp_rw [ssubset_def, h.image_subset_image_iff h₁ h₂, h.image_subset_image_iff h₂ h₁]
 
 中文:
-引理 InjOn.image_ssubset_image_iff
-  条件: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
+引理 单射限制.image_ssubset_image_iff
+  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
   证明: by
   simp_rw [ssubset_def, h.image_subset_image_iff h₁ h₂, h.image_subset_image_iff h₂ h₁]
 
@@ -1946,8 +1946,8 @@ theorem _root_.Disjoint.image
   rw [← hf.image_inter hs ht]; rw [h]; rw [image_empty]
 
 中文:
-定理 _root_.Disjoint.image
-  结论: {s t u : Set α} {f : α -> β} (h : Disjoint s t) (hf : u.InjOn f)
+定理 _root_.Disjoint.像
+  结论: {s t u : 集合 α} {f : α -> β} (h : Disjoint s t) (hf : u.单射限制 f)
   证明: by
   rw [disjoint_iff_inter_eq_empty] at h ⊢
   rw [← hf.image_inter hs ht]; rw [h]; rw [image_empty]
@@ -1974,8 +1974,8 @@ lemma InjOn.image_sdiff
 @[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdi
 
 中文:
-引理 InjOn.image_sdiff
-  条件: {t : Set α} (h : s.InjOn f)
+引理 单射限制.image_sdiff
+  条件: {t : 集合 α} (h : s.单射限制 f)
   结论: f '' (s \ t) = f '' s \ f '' (s inter t)
   证明: by
   refine subset_antisymm (subset_sdiff.2 ⟨image_mono sdiff_subset, ?_⟩)
@@ -2009,8 +2009,8 @@ alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
 @[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_
 
 中文:
-引理 InjOn.image_sdiff_subset
-  条件: {f : α -> β} {t : Set α} (h : InjOn f s) (hst : t subseteq s)
+引理 单射限制.image_sdiff_subset
+  条件: {f : α -> β} {t : 集合 α} (h : 单射限制 f s) (hst : t subseteq s)
   证明: by
   rw [h.image_sdiff]; rw [inter_eq_self_of_subset_right hst]
 
@@ -2041,8 +2041,8 @@ theorem InjOn.imageFactorization_injective
   proof: fun ⟨x, hx⟩ ⟨y, hy⟩ h' => by simpa [imageFactorization, h.eq_iff hx hy] using h'
 
 中文:
-定理 InjOn.imageFactorization_injective
-  条件: (h : InjOn f s)
+定理 单射限制.imageFactorization_injective
+  条件: (h : 单射限制 f s)
   证明: fun ⟨x, hx⟩ ⟨y, hy⟩ h' => by simpa [imageFactorization, h.eq_iff hx hy] using h'
 
 Depends on / 依赖: eq_iff, h.eq_iff, imageFactorization
@@ -2062,7 +2062,7 @@ theorem imageFactorization_injective_iff
 
 中文:
 定理 imageFactorization_injective_iff
-  结论: Injective (s.imageFactorization f) ↔ InjOn f s
+  结论: 单射 (s.imageFactorization f) ↔ 单射限制 f s
   证明: ⟨fun h x hx y hy _ => by simpa using @h ⟨x, hx⟩ ⟨y, hy⟩ (by simpa [imageFactorization]),
     InjOn.imageFactorization_injective⟩
 -/
@@ -2102,7 +2102,7 @@ lemma graphOn_univ_injective
 
 中文:
 引理 graphOn_univ_injective
-  结论: Injective (univ.graphOn : (α -> β) -> Set (α × β))
+  结论: 单射 (univ.graphOn : (α -> β) -> 集合 (α × β))
   证明: fun _f _g => graphOn_univ_inj.1
 
 Depends on / 依赖: graphOn_univ_inj
@@ -2128,8 +2128,8 @@ exact InjOn.image_of_comp injOn_id _
     rw [graphOn]; rw [image
 
 中文:
-引理 exists_eq_graphOn_image_fst
-  条件: [Nonempty β] {s : Set (α × β)}
+引理 存在_eq_graphOn_image_fst
+  条件: [非空 β] {s : 集合 (α × β)}
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨f, hf⟩
@@ -2166,8 +2166,8 @@ lemma exists_eq_graphOn
     exists_eq_graphOn_image_fst
 
 中文:
-引理 exists_eq_graphOn
-  条件: [Nonempty β] {s : Set (α × β)}
+引理 存在_eq_graphOn
+  条件: [非空 β] {s : 集合 (α × β)}
   证明: .trans ⟨fun ⟨f, t, hs⟩ => ⟨f, by rw [hs, image_fst_graphOn]⟩, fun ⟨f, hf⟩ => ⟨f, _, hf⟩⟩
     exists_eq_graphOn_image_fst
 
@@ -2193,8 +2193,8 @@ theorem SurjOn.subset_range
   proof: Subset.trans h image_subset_range f s
 
 中文:
-定理 SurjOn.subset_range
-  条件: (h : SurjOn f s t)
+定理 满射限制.subset_range
+  条件: (h : 满射限制 f s t)
   结论: t subseteq range f
   证明: Subset.trans h image_subset_range f s
 
@@ -2215,7 +2215,7 @@ theorem surjOn_iff_exists_map_subtype
     ⟨x, x.2, by rw [hfg, hx, Subtype.coe_mk]⟩⟩
 
 中文:
-定理 surjOn_iff_exists_map_subtype
+定理 surjOn_iff_存在_map_subtype
   证明: ⟨fun h =>
     ⟨_, (mapsTo_image f s).restrict f s _, h, surjective_mapsTo_image_restrict _ _, fun _ => rfl⟩,
     fun ⟨t', g, htt', hg, hfg⟩ y hy =>
@@ -2243,8 +2243,8 @@ theorem surjOn_empty
 
 中文:
 定理 surjOn_empty
-  条件: (f : α -> β) (s : Set α)
-  结论: SurjOn f s ∅
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 满射限制 f s ∅
   证明: empty_subset _
 
 Depends on / 依赖: empty_subset
@@ -2263,7 +2263,7 @@ theorem surjOn_empty_iff
 
 中文:
 定理 surjOn_empty_iff
-  结论: SurjOn f ∅ t ↔ t = ∅
+  结论: 满射限制 f ∅ t ↔ t = ∅
   证明: by
   simp [SurjOn, subset_empty_iff]
 -/
@@ -2280,7 +2280,7 @@ lemma surjOn_singleton
 
 中文:
 引理 surjOn_singleton
-  结论: SurjOn f s {b} ↔ b in f '' s
+  结论: 满射限制 f s {b} ↔ b in f '' s
   证明: singleton_subset_iff
 -/
 @[simp] lemma surjOn_singleton : SurjOn f s {b} ↔ b in f '' s := singleton_subset_iff
@@ -2296,7 +2296,7 @@ lemma surjOn_univ_of_subsingleton_nonempty
 
 中文:
 引理 surjOn_univ_of_subsingleton_nonempty
-  条件: [Subsingleton β] [Nonempty β]
+  条件: [子单例 β] [非空 β]
   证明: by
   cases nonempty_unique β; simp [univ_unique, Subsingleton.elim (f _) default, Set.Nonempty]
 -/
@@ -2315,8 +2315,8 @@ theorem surjOn_image
 
 中文:
 定理 surjOn_image
-  条件: (f : α -> β) (s : Set α)
-  结论: SurjOn f s (f '' s)
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 满射限制 f s (f '' s)
   证明: Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl
@@ -2334,9 +2334,9 @@ theorem SurjOn.comap_nonempty
   proof: (ht.mono h).of_image
 
 中文:
-定理 SurjOn.comap_nonempty
-  条件: (h : SurjOn f s t) (ht : t.Nonempty)
-  结论: s.Nonempty
+定理 满射限制.comap_nonempty
+  条件: (h : 满射限制 f s t) (ht : t.非空)
+  结论: s.非空
   证明: (ht.mono h).of_image
 
 Depends on / 依赖: ht.mono, of_image
@@ -2355,8 +2355,8 @@ lemma SurjOn.nonempty_or_eq_empty
   exact (h.comap_nonempty this.2).ne_empty this.1
 
 中文:
-引理 SurjOn.nonempty_or_eq_empty
-  条件: (h : SurjOn f s t)
+引理 满射限制.nonempty_or_eq_empty
+  条件: (h : 满射限制 f s t)
   证明: by
   by_contra!
   exact (h.comap_nonempty this.2).ne_empty this.1
@@ -2379,9 +2379,9 @@ theorem SurjOn.congr
   rwa [SurjOn, ← H.image_eq]
 
 中文:
-定理 SurjOn.congr
-  条件: (h : SurjOn f₁ s t) (H : EqOn f₁ f₂ s)
-  结论: SurjOn f₂ s t
+定理 满射限制.congr
+  条件: (h : 满射限制 f₁ s t) (H : EqOn f₁ f₂ s)
+  结论: 满射限制 f₂ s t
   证明: by
   rwa [SurjOn, ← H.image_eq]
 
@@ -2404,7 +2404,7 @@ theorem EqOn.surjOn_iff
 中文:
 定理 EqOn.surjOn_iff
   条件: (h : EqOn f₁ f₂ s)
-  结论: SurjOn f₁ s t ↔ SurjOn f₂ s t
+  结论: 满射限制 f₁ s t ↔ 满射限制 f₂ s t
   证明: ⟨fun H => H.congr h, fun H => H.congr h.symm⟩
 
 @[gcongr]
@@ -2425,9 +2425,9 @@ theorem SurjOn.mono
   proof: Subset.trans ht Subset.trans hf image_mono hs
 
 中文:
-定理 SurjOn.mono
-  条件: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (hf : SurjOn f s₁ t₂)
-  结论: SurjOn f s₂ t₁
+定理 满射限制.mono
+  条件: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (hf : 满射限制 f s₁ t₂)
+  结论: 满射限制 f s₂ t₁
   证明: Subset.trans ht Subset.trans hf image_mono hs
 
 Depends on / 依赖: Subset, Subset.trans, image_mono
@@ -2446,9 +2446,9 @@ theorem SurjOn.union
   hx.elim (fun hx => h₁ hx) fun hx => h₂ hx
 
 中文:
-定理 SurjOn.union
-  条件: (h₁ : SurjOn f s t₁) (h₂ : SurjOn f s t₂)
-  结论: SurjOn f s (t₁ union t₂)
+定理 满射限制.union
+  条件: (h₁ : 满射限制 f s t₁) (h₂ : 满射限制 f s t₂)
+  结论: 满射限制 f s (t₁ union t₂)
   证明: fun _ hx =>
   hx.elim (fun hx => h₁ hx) fun hx => h₂ hx
 -/
@@ -2465,8 +2465,8 @@ theorem SurjOn.union_union
     (h₂.mono subset_union_right (Subset.refl _))
 
 中文:
-定理 SurjOn.union_union
-  条件: (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂)
+定理 满射限制.union_union
+  条件: (h₁ : 满射限制 f s₁ t₁) (h₂ : 满射限制 f s₂ t₂)
   证明: (h₁.mono subset_union_left (Subset.refl _)).union
     (h₂.mono subset_union_right (Subset.refl _))
 
@@ -2491,8 +2491,8 @@ theorem SurjOn.inter_inter
   exact mem_image_of_mem f ⟨hx₁, hx₂⟩
 
 中文:
-定理 SurjOn.inter_inter
-  条件: (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
+定理 满射限制.inter_inter
+  条件: (h₁ : 满射限制 f s₁ t₁) (h₂ : 满射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
   证明: by
   intro y hy
   rcases h₁ hy.1 with ⟨x₁, hx₁, rfl⟩
@@ -2519,8 +2519,8 @@ theorem SurjOn.inter
   proof: inter_self t ▸ h₁.inter_inter h₂ h
 
 中文:
-定理 SurjOn.inter
-  条件: (h₁ : SurjOn f s₁ t) (h₂ : SurjOn f s₂ t) (h : InjOn f (s₁ union s₂))
+定理 满射限制.inter
+  条件: (h₁ : 满射限制 f s₁ t) (h₂ : 满射限制 f s₂ t) (h : 单射限制 f (s₁ union s₂))
   证明: inter_self t ▸ h₁.inter_inter h₂ h
 
 Depends on / 依赖: inter_inter, inter_self
@@ -2540,8 +2540,8 @@ lemma surjOn_id
 
 中文:
 引理 surjOn_id
-  条件: (s : Set α)
-  结论: SurjOn id s s
+  条件: (s : 集合 α)
+  结论: 满射限制 id s s
   证明: by simp [SurjOn]
 
 Depends on / 依赖: SurjOn
@@ -2558,9 +2558,9 @@ theorem SurjOn.comp
   proof: Subset.trans hg Subset.trans (image_mono hf) image_comp g f s ▸ Subset.refl _
 
 中文:
-定理 SurjOn.comp
-  条件: (hg : SurjOn g t p) (hf : SurjOn f s t)
-  结论: SurjOn (g ∘ f) s p
+定理 满射限制.comp
+  条件: (hg : 满射限制 g t p) (hf : 满射限制 f s t)
+  结论: 满射限制 (g ∘ f) s p
   证明: Subset.trans hg Subset.trans (image_mono hf) image_comp g f s ▸ Subset.refl _
 
 Depends on / 依赖: Subset, Subset.refl, Subset.trans, image_comp, image_mono
@@ -2581,9 +2581,9 @@ lemma SurjOn.of_comp
   exact ⟨f x, hr hx, rfl⟩
 
 中文:
-引理 SurjOn.of_comp
-  条件: (h : SurjOn (g ∘ f) s p) (hr : MapsTo f s t)
-  结论: SurjOn g t p
+引理 满射限制.of_comp
+  条件: (h : 满射限制 (g ∘ f) s p) (hr : 映射到 f s t)
+  结论: 满射限制 g t p
   证明: by
   intro z hz
   obtain ⟨x, hx, rfl⟩ := h hz
@@ -2604,7 +2604,7 @@ lemma surjOn_comp_iff
 
 中文:
 引理 surjOn_comp_iff
-  结论: SurjOn (g ∘ f) s p ↔ SurjOn g (f '' s) p
+  结论: 满射限制 (g ∘ f) s p ↔ 满射限制 g (f '' s) p
   证明: ⟨fun h => h.of_comp mapsTo_image f s, fun h => h.comp surjOn_image _ _⟩
 
 Depends on / 依赖: h.comp, h.of_comp, mapsTo_image, of_comp, surjOn_image
@@ -2621,9 +2621,9 @@ lemma SurjOn.iterate
   statement: forall n, SurjOn f^[n] s s
 
 中文:
-引理 SurjOn.iterate
-  条件: {f : α -> α} {s : Set α} (h : SurjOn f s s)
-  结论: 对任意 n, SurjOn f^[n] s s
+引理 满射限制.iterate
+  条件: {f : α -> α} {s : 集合 α} (h : 满射限制 f s s)
+  结论: 对任意 n, 满射限制 f^[n] s s
 -/
 lemma SurjOn.iterate {f : α -> α} {s : Set α} (h : SurjOn f s s) : forall n, SurjOn f^[n] s s
   | 0 => surjOn_id _
@@ -2640,9 +2640,9 @@ lemma SurjOn.comp_left
   rw [SurjOn]; rw [image_comp g f]; exact image_mono hf
 
 中文:
-引理 SurjOn.comp_left
-  条件: (hf : SurjOn f s t) (g : β -> γ)
-  结论: SurjOn (g ∘ f) s (g '' t)
+引理 满射限制.comp_left
+  条件: (hf : 满射限制 f s t) (g : β -> γ)
+  结论: 满射限制 (g ∘ f) s (g '' t)
   证明: by
   rw [SurjOn]; rw [image_comp g f]; exact image_mono hf
 
@@ -2661,8 +2661,8 @@ lemma SurjOn.comp_right
   rwa [SurjOn, image_comp g f, image_preimage_eq _ hf]
 
 中文:
-引理 SurjOn.comp_right
-  条件: {s : Set β} {t : Set γ} (hf : Surjective f) (hg : SurjOn g s t)
+引理 满射限制.comp_right
+  条件: {s : 集合 β} {t : 集合 γ} (hf : 满射 f) (hg : 满射限制 g s t)
   证明: by
   rwa [SurjOn, image_comp g f, image_preimage_eq _ hf]
 
@@ -2682,7 +2682,7 @@ lemma surjOn_of_subsingleton'
 
 中文:
 引理 surjOn_of_subsingleton'
-  条件: [Subsingleton β] (f : α -> β) (h : t.Nonempty -> s.Nonempty)
+  条件: [子单例 β] (f : α -> β) (h : t.非空 -> s.非空)
   证明: fun _ ha => Subsingleton.mem_iff_nonempty.2 (h ⟨_, ha⟩).image _
 
 Depends on / 依赖: Subsingleton, Subsingleton.mem_iff_nonempty, mem_iff_nonempty
@@ -2702,8 +2702,8 @@ lemma surjOn_of_subsingleton
 
 中文:
 引理 surjOn_of_subsingleton
-  条件: [Subsingleton α] (f : α -> α) (s : Set α)
-  结论: SurjOn f s s
+  条件: [子单例 α] (f : α -> α) (s : 集合 α)
+  结论: 满射限制 f s s
   证明: surjOn_of_subsingleton' _ id
 
 Depends on / 依赖: surjOn_of_subsingleton
@@ -2722,7 +2722,7 @@ lemma surjOn_univ
 
 中文:
 引理 surjOn_univ
-  结论: SurjOn f univ univ ↔ Surjective f
+  结论: 满射限制 f univ univ ↔ 满射 f
   证明: by
   simp [Surjective, SurjOn, subset_def]
 -/
@@ -2739,9 +2739,9 @@ lemma _root_.Function.Surjective.surjOn
   proof: (surjOn_univ.2 hf).mono .rfl (subset_univ _)
 
 中文:
-引理 _root_.Function.Surjective.surjOn
-  条件: (hf : Surjective f)
-  结论: SurjOn f univ t
+引理 _root_.函数.满射.surjOn
+  条件: (hf : 满射 f)
+  结论: 满射限制 f univ t
   证明: (surjOn_univ.2 hf).mono .rfl (subset_univ _)
 -/
 protected lemma _root_.Function.Surjective.surjOn (hf : Surjective f) : SurjOn f univ t :=
@@ -2757,9 +2757,9 @@ lemma SurjOn.surjective
   proof: surjOn_univ.1 hf.mono s.subset_univ .rfl
 
 中文:
-引理 SurjOn.surjective
-  条件: (hf : SurjOn f s .univ)
-  结论: f.Surjective
+引理 满射限制.surjective
+  条件: (hf : 满射限制 f s .univ)
+  结论: f.满射
   证明: surjOn_univ.1 hf.mono s.subset_univ .rfl
 
 Depends on / 依赖: hf.mono, s.subset_univ, subset_univ, surjOn_univ
@@ -2777,8 +2777,8 @@ theorem SurjOn.image_eq_of_mapsTo
   proof: eq_of_subset_of_subset h₂.image_subset h₁
 
 中文:
-定理 SurjOn.image_eq_of_mapsTo
-  条件: (h₁ : SurjOn f s t) (h₂ : MapsTo f s t)
+定理 满射限制.image_eq_of_mapsTo
+  条件: (h₁ : 满射限制 f s t) (h₂ : 映射到 f s t)
   结论: f '' s = t
   证明: eq_of_subset_of_subset h₂.image_subset h₁
 
@@ -2800,7 +2800,7 @@ theorem image_eq_iff_surjOn_mapsTo
 
 中文:
 定理 image_eq_iff_surjOn_mapsTo
-  结论: f '' s = t ↔ s.SurjOn f t ∧ s.MapsTo f t
+  结论: f '' s = t ↔ s.满射限制 f t ∧ s.映射到 f t
   证明: by
   refine ⟨?_, fun h => h.1.image_eq_of_mapsTo h.2⟩
   rintro rfl
@@ -2823,8 +2823,8 @@ lemma SurjOn.image_preimage
   proof: image_preimage_eq_iff.2 fun _ hx => mem_range_of_mem_image f s h ht hx
 
 中文:
-引理 SurjOn.image_preimage
-  条件: (h : Set.SurjOn f s t) (ht : t₁ subseteq t)
+引理 满射限制.image_preimage
+  条件: (h : 集合.满射限制 f s t) (ht : t₁ subseteq t)
   结论: f '' f ⁻¹' t₁ = t₁
   证明: image_preimage_eq_iff.2 fun _ hx => mem_range_of_mem_image f s h ht hx
 
@@ -2845,9 +2845,9 @@ theorem SurjOn.mapsTo_compl
 hs h' HEq ▸ hx'
 
 中文:
-定理 SurjOn.mapsTo_compl
-  条件: (h : SurjOn f s t) (h' : Injective f)
-  结论: MapsTo f sᶜ tᶜ
+定理 满射限制.mapsTo_compl
+  条件: (h : 满射限制 f s t) (h' : 单射 f)
+  结论: 映射到 f sᶜ tᶜ
   证明: fun _ hs ht =>
   let ⟨_, hx', HEq⟩ := h ht
 hs h' HEq ▸ hx'
@@ -2867,9 +2867,9 @@ theorem MapsTo.surjOn_compl
   proof: h'.forall.2 fun _ ht => (mem_image_of_mem _) fun hs => ht (h hs)
 
 中文:
-定理 MapsTo.surjOn_compl
-  条件: (h : MapsTo f s t) (h' : Surjective f)
-  结论: SurjOn f sᶜ tᶜ
+定理 映射到.surjOn_compl
+  条件: (h : 映射到 f s t) (h' : 满射 f)
+  结论: 满射限制 f sᶜ tᶜ
   证明: h'.forall.2 fun _ ht => (mem_image_of_mem _) fun hs => ht (h hs)
 
 Depends on / 依赖: mem_image_of_mem
@@ -2891,7 +2891,7 @@ theorem EqOn.cancel_right
 
 中文:
 定理 EqOn.cancel_right
-  条件: (hf : s.EqOn (g₁ ∘ f) (g₂ ∘ f)) (hf' : s.SurjOn f t)
+  条件: (hf : s.EqOn (g₁ ∘ f) (g₂ ∘ f)) (hf' : s.满射限制 f t)
   结论: t.EqOn g₁ g₂
   证明: by
   intro b hb
@@ -2912,8 +2912,8 @@ theorem SurjOn.cancel_right
   proof: ⟨fun h => h.cancel_right hf, fun h => h.comp_right hf'⟩
 
 中文:
-定理 SurjOn.cancel_right
-  条件: (hf : s.SurjOn f t) (hf' : s.MapsTo f t)
+定理 满射限制.cancel_right
+  条件: (hf : s.满射限制 f t) (hf' : s.映射到 f t)
   证明: ⟨fun h => h.cancel_right hf, fun h => h.comp_right hf'⟩
 
 Depends on / 依赖: cancel_right, comp_right, h.cancel_right, h.comp_right
@@ -2949,8 +2949,8 @@ theorem SurjOn.forall
   proof: ⟨fun H x hx => H (f x) (hf' hx), fun H _y hy => let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
 
 中文:
-定理 SurjOn.forall
-  条件: {p : β -> 命题} (hf : s.SurjOn f t) (hf' : s.MapsTo f t)
+定理 满射限制.对任意
+  条件: {p : β -> 命题} (hf : s.满射限制 f t) (hf' : s.映射到 f t)
   证明: ⟨fun H x hx => H (f x) (hf' hx), fun H _y hy => let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
 -/
 theorem SurjOn.forall {p : β -> Prop} (hf : s.SurjOn f t) (hf' : s.MapsTo f t) :
@@ -2968,8 +2968,8 @@ theorem _root_.Subtype.coind_surjective
   ⟨a, Subtype.coe_injective ha⟩
 
 中文:
-定理 _root_.Subtype.coind_surjective
-  结论: {α β} {f : α -> β} {p : Set β} (h : 对任意 a, f a in p)
+定理 _root_.子类型.coind_surjective
+  结论: {α β} {f : α -> β} {p : 集合 β} (h : 对任意 a, f a in p)
   证明: fun ⟨_, hb⟩ =>
   let ⟨a, _, ha⟩ := hf hb
   ⟨a, Subtype.coe_injective ha⟩
@@ -2989,8 +2989,8 @@ theorem _root_.Subtype.coind_bijective
   proof: ⟨Subtype.coind_injective h hf_inj, Subtype.coind_surjective h hf_surj⟩
 
 中文:
-定理 _root_.Subtype.coind_bijective
-  结论: {α β} {f : α -> β} {p : Set β} (h : 对任意 a, f a in p)
+定理 _root_.子类型.coind_bijective
+  结论: {α β} {f : α -> β} {p : 集合 β} (h : 对任意 a, f a in p)
   证明: ⟨Subtype.coind_injective h hf_inj, Subtype.coind_surjective h hf_surj⟩
 
 Depends on / 依赖: Subtype, Subtype.coind_injective, Subtype.coind_surjective, coind_injective, coind_surjective, hf_inj, hf_surj
@@ -3015,9 +3015,9 @@ theorem BijOn.mapsTo
   proof: h.left
 
 中文:
-定理 BijOn.mapsTo
-  条件: (h : BijOn f s t)
-  结论: MapsTo f s t
+定理 双射限制.mapsTo
+  条件: (h : 双射限制 f s t)
+  结论: 映射到 f s t
   证明: h.left
 
 Depends on / 依赖: h.left
@@ -3035,9 +3035,9 @@ theorem BijOn.injOn
   proof: h.right.left
 
 中文:
-定理 BijOn.injOn
-  条件: (h : BijOn f s t)
-  结论: InjOn f s
+定理 双射限制.injOn
+  条件: (h : 双射限制 f s t)
+  结论: 单射限制 f s
   证明: h.right.left
 
 Depends on / 依赖: h.right.left
@@ -3055,9 +3055,9 @@ theorem BijOn.surjOn
   proof: h.right.right
 
 中文:
-定理 BijOn.surjOn
-  条件: (h : BijOn f s t)
-  结论: SurjOn f s t
+定理 双射限制.surjOn
+  条件: (h : 双射限制 f s t)
+  结论: 满射限制 f s t
   证明: h.right.right
 
 Depends on / 依赖: h.right.right
@@ -3075,9 +3075,9 @@ theorem BijOn.mk
   proof: ⟨h₁, h₂, h₃⟩
 
 中文:
-定理 BijOn.mk
-  条件: (h₁ : MapsTo f s t) (h₂ : InjOn f s) (h₃ : SurjOn f s t)
-  结论: BijOn f s t
+定理 双射限制.mk
+  条件: (h₁ : 映射到 f s t) (h₂ : 单射限制 f s) (h₃ : 满射限制 f s t)
+  结论: 双射限制 f s t
   证明: ⟨h₁, h₂, h₃⟩
 -/
 theorem BijOn.mk (h₁ : MapsTo f s t) (h₂ : InjOn f s) (h₃ : SurjOn f s t) : BijOn f s t :=
@@ -3095,7 +3095,7 @@ theorem bijOn_empty
 中文:
 定理 bijOn_empty
   条件: (f : α -> β)
-  结论: BijOn f ∅ ∅
+  结论: 双射限制 f ∅ ∅
   证明: ⟨mapsTo_empty f ∅, injOn_empty f, surjOn_empty f ∅⟩
 
 Depends on / 依赖: injOn_empty, mapsTo_empty, surjOn_empty
@@ -3113,7 +3113,7 @@ theorem bijOn_empty_iff_left
 
 中文:
 定理 bijOn_empty_iff_left
-  结论: BijOn f s ∅ ↔ s = ∅
+  结论: 双射限制 f s ∅ ↔ s = ∅
   证明: ⟨fun h => by simpa using h.mapsTo, by rintro rfl; exact bijOn_empty f⟩
 -/
 @[simp] theorem bijOn_empty_iff_left : BijOn f s ∅ ↔ s = ∅ :=
@@ -3129,7 +3129,7 @@ theorem bijOn_empty_iff_right
 
 中文:
 定理 bijOn_empty_iff_right
-  结论: BijOn f ∅ t ↔ t = ∅
+  结论: 双射限制 f ∅ t ↔ t = ∅
   证明: ⟨fun h => by simpa using h.surjOn, by rintro rfl; exact bijOn_empty f⟩
 -/
 @[simp] theorem bijOn_empty_iff_right : BijOn f ∅ t ↔ t = ∅ :=
@@ -3145,7 +3145,7 @@ lemma bijOn_singleton
 
 中文:
 引理 bijOn_singleton
-  结论: BijOn f {a} {b} ↔ f a = b
+  结论: 双射限制 f {a} {b} ↔ f a = b
   证明: by simp [BijOn, eq_comm]
 -/
 @[simp] lemma bijOn_singleton : BijOn f {a} {b} ↔ f a = b := by simp [BijOn, eq_comm]
@@ -3161,8 +3161,8 @@ theorem BijOn.inter_mapsTo
     ⟨x, ⟨hx, h₃ ⟨hx, hxy.symm.subst hy.2⟩⟩, hxy⟩⟩
 
 中文:
-定理 BijOn.inter_mapsTo
-  条件: (h₁ : BijOn f s₁ t₁) (h₂ : MapsTo f s₂ t₂) (h₃ : s₁ inter f ⁻¹' t₂ subseteq s₂)
+定理 双射限制.inter_mapsTo
+  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 映射到 f s₂ t₂) (h₃ : s₁ inter f ⁻¹' t₂ subseteq s₂)
   证明: ⟨h₁.mapsTo.inter_inter h₂, h₁.injOn.mono inter_subset_left, fun _ hy =>
     let ⟨x, hx, hxy⟩ := h₁.surjOn hy.1
     ⟨x, ⟨hx, h₃ ⟨hx, hxy.symm.subst hy.2⟩⟩, hxy⟩⟩
@@ -3184,8 +3184,8 @@ theorem MapsTo.inter_bijOn
   proof: inter_comm s₂ s₁ ▸ inter_comm t₂ t₁ ▸ h₂.inter_mapsTo h₁ h₃
 
 中文:
-定理 MapsTo.inter_bijOn
-  条件: (h₁ : MapsTo f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h₃ : s₂ inter f ⁻¹' t₁ subseteq s₁)
+定理 映射到.inter_bijOn
+  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h₃ : s₂ inter f ⁻¹' t₁ subseteq s₁)
   证明: inter_comm s₂ s₁ ▸ inter_comm t₂ t₁ ▸ h₂.inter_mapsTo h₁ h₃
 
 Depends on / 依赖: inter_comm, inter_mapsTo
@@ -3204,8 +3204,8 @@ theorem BijOn.inter
     h₁.surjOn.inter_inter h₂.surjOn h⟩
 
 中文:
-定理 BijOn.inter
-  条件: (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
+定理 双射限制.inter
+  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
   证明: ⟨h₁.mapsTo.inter_inter h₂.mapsTo, h₁.injOn.mono inter_subset_left,
     h₁.surjOn.inter_inter h₂.surjOn h⟩
 
@@ -3225,8 +3225,8 @@ theorem BijOn.union
   proof: ⟨h₁.mapsTo.union_union h₂.mapsTo, h, h₁.surjOn.union_union h₂.surjOn⟩
 
 中文:
-定理 BijOn.union
-  条件: (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
+定理 双射限制.union
+  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
   证明: ⟨h₁.mapsTo.union_union h₂.mapsTo, h, h₁.surjOn.union_union h₂.surjOn⟩
 
 Depends on / 依赖: mapsTo, mapsTo.union_union, surjOn, surjOn.union_union, union_union
@@ -3245,8 +3245,8 @@ theorem BijOn.subset_range
   proof: h.surjOn.subset_range
 
 中文:
-定理 BijOn.subset_range
-  条件: (h : BijOn f s t)
+定理 双射限制.subset_range
+  条件: (h : 双射限制 f s t)
   结论: t subseteq range f
   证明: h.surjOn.subset_range
 
@@ -3265,9 +3265,9 @@ theorem InjOn.bijOn_image
   proof: BijOn.mk (mapsTo_image f s) h (Subset.refl _)
 
 中文:
-定理 InjOn.bijOn_image
-  条件: (h : InjOn f s)
-  结论: BijOn f s (f '' s)
+定理 单射限制.bijOn_image
+  条件: (h : 单射限制 f s)
+  结论: 双射限制 f s (f '' s)
   证明: BijOn.mk (mapsTo_image f s) h (Subset.refl _)
 
 Depends on / 依赖: BijOn.mk, Subset, Subset.refl, mapsTo_image
@@ -3288,9 +3288,9 @@ theorem SurjOn.preimage
   exact ⟨hu, mem_range.mpr (subset_range h hu)⟩
 
 中文:
-定理 SurjOn.preimage
-  条件: (h : SurjOn f s t)
-  结论: SurjOn f (f ⁻¹' t) t
+定理 满射限制.原像
+  条件: (h : 满射限制 f s t)
+  结论: 满射限制 f (f ⁻¹' t) t
   证明: by
   intro u hu
   rw [image_preimage_eq_inter_range]
@@ -3313,9 +3313,9 @@ theorem BijOn.congr
   proof: BijOn.mk (h₁.mapsTo.congr h) (h₁.injOn.congr h) (h₁.surjOn.congr h)
 
 中文:
-定理 BijOn.congr
-  条件: (h₁ : BijOn f₁ s t) (h : EqOn f₁ f₂ s)
-  结论: BijOn f₂ s t
+定理 双射限制.congr
+  条件: (h₁ : 双射限制 f₁ s t) (h : EqOn f₁ f₂ s)
+  结论: 双射限制 f₂ s t
   证明: BijOn.mk (h₁.mapsTo.congr h) (h₁.injOn.congr h) (h₁.surjOn.congr h)
 
 Depends on / 依赖: BijOn.mk, injOn.congr, mapsTo, mapsTo.congr, surjOn, surjOn.congr
@@ -3335,7 +3335,7 @@ theorem EqOn.bijOn_iff
 中文:
 定理 EqOn.bijOn_iff
   条件: (H : EqOn f₁ f₂ s)
-  结论: BijOn f₁ s t ↔ BijOn f₂ s t
+  结论: 双射限制 f₁ s t ↔ 双射限制 f₂ s t
   证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
 
 Depends on / 依赖: H.symm, h.congr
@@ -3353,8 +3353,8 @@ theorem BijOn.image_eq
   proof: h.surjOn.image_eq_of_mapsTo h.mapsTo
 
 中文:
-定理 BijOn.image_eq
-  条件: (h : BijOn f s t)
+定理 双射限制.image_eq
+  条件: (h : 双射限制 f s t)
   结论: f '' s = t
   证明: h.surjOn.image_eq_of_mapsTo h.mapsTo
 
@@ -3374,8 +3374,8 @@ lemma BijOn.forall
   mpr h b hb := by obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact h _ ha
 
 中文:
-引理 BijOn.forall
-  条件: {p : β -> 命题} (hf : BijOn f s t)
+引理 双射限制.对任意
+  条件: {p : β -> 命题} (hf : 双射限制 f s t)
   结论: (对任意 b in t, p b) ↔ 对任意 a in s, p (f a) where
   证明: h _ hf.mapsTo ha
   mpr h b hb := by obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact h _ ha
@@ -3397,8 +3397,8 @@ lemma BijOn.exists
   mpr := by rintro ⟨a, ha, h⟩; exact ⟨f a, hf.mapsTo ha, h⟩
 
 中文:
-引理 BijOn.exists
-  条件: {p : β -> 命题} (hf : BijOn f s t)
+引理 双射限制.存在
+  条件: {p : β -> 命题} (hf : 双射限制 f s t)
   结论: (存在 b in t, p b) ↔ 存在 a in s, p (f a) where
   证明: by rintro ⟨b, hb, h⟩; obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact ⟨a, ha, h⟩
   mpr := by rintro ⟨a, ha, h⟩; exact ⟨f a, hf.mapsTo ha, h⟩
@@ -3420,9 +3420,9 @@ lemma _root_.Equiv.image_eq_iff_bijOn
   BijOn.image_eq⟩
 
 中文:
-引理 _root_.Equiv.image_eq_iff_bijOn
+引理 _root_.等价.image_eq_iff_bijOn
   条件: (e : α ≃ β)
-  结论: e '' s = t ↔ BijOn e s t
+  结论: e '' s = t ↔ 双射限制 e s t
   证明: ⟨fun h => ⟨(mapsTo_image e s).mono_right h.subset, e.injective.injOn, h ▸ surjOn_image e s⟩,
   BijOn.image_eq⟩
 
@@ -3443,8 +3443,8 @@ lemma bijOn_id
 
 中文:
 引理 bijOn_id
-  条件: (s : Set α)
-  结论: BijOn id s s
+  条件: (s : 集合 α)
+  结论: 双射限制 id s s
   证明: ⟨s.mapsTo_id, s.injOn_id, s.surjOn_id⟩
 
 Depends on / 依赖: injOn_id, mapsTo_id, s.injOn_id, s.mapsTo_id, s.surjOn_id, surjOn_id
@@ -3461,9 +3461,9 @@ theorem BijOn.comp
   proof: BijOn.mk (hg.mapsTo.comp hf.mapsTo) (hg.injOn.comp hf.injOn hf.mapsTo) (hg.surjOn.comp hf.surjOn)
 
 中文:
-定理 BijOn.comp
-  条件: (hg : BijOn g t p) (hf : BijOn f s t)
-  结论: BijOn (g ∘ f) s p
+定理 双射限制.comp
+  条件: (hg : 双射限制 g t p) (hf : 双射限制 f s t)
+  结论: 双射限制 (g ∘ f) s p
   证明: BijOn.mk (hg.mapsTo.comp hf.mapsTo) (hg.injOn.comp hf.injOn hf.mapsTo) (hg.surjOn.comp hf.surjOn)
 
 Depends on / 依赖: BijOn.mk, hf.injOn, hf.mapsTo, hf.surjOn, hg.injOn.comp, hg.mapsTo.comp, hg.surjOn.comp, mapsTo, surjOn
@@ -3483,8 +3483,8 @@ theorem bijOn_comp_iff
 
 中文:
 定理 bijOn_comp_iff
-  条件: (hf : InjOn f s)
-  结论: BijOn (g ∘ f) s p ↔ BijOn g (f '' s) p
+  条件: (hf : 单射限制 f s)
+  结论: 双射限制 (g ∘ f) s p ↔ 双射限制 g (f '' s) p
   证明: by
   simp only [BijOn, InjOn.comp_iff, surjOn_comp_iff, mapsTo_image_iff, hf]
 
@@ -3539,9 +3539,9 @@ lemma BijOn.iterate
   statement: forall n, BijOn f^[n] s s
 
 中文:
-引理 BijOn.iterate
-  条件: {f : α -> α} {s : Set α} (h : BijOn f s s)
-  结论: 对任意 n, BijOn f^[n] s s
+引理 双射限制.iterate
+  条件: {f : α -> α} {s : 集合 α} (h : 双射限制 f s s)
+  结论: 对任意 n, 双射限制 f^[n] s s
 -/
 lemma BijOn.iterate {f : α -> α} {s : Set α} (h : BijOn f s s) : forall n, BijOn f^[n] s s
   | 0 => s.bijOn_id
@@ -3557,7 +3557,7 @@ lemma bijOn_of_subsingleton'
 
 中文:
 引理 bijOn_of_subsingleton'
-  结论: [Subsingleton α] [Subsingleton β] (f : α -> β)
+  结论: [子单例 α] [子单例 β] (f : α -> β)
   证明: ⟨mapsTo_of_subsingleton' _ h.1, injOn_of_subsingleton _ _, surjOn_of_subsingleton' _ h.2⟩
 
 Depends on / 依赖: injOn_of_subsingleton, mapsTo_of_subsingleton, surjOn_of_subsingleton
@@ -3577,8 +3577,8 @@ lemma bijOn_of_subsingleton
 
 中文:
 引理 bijOn_of_subsingleton
-  条件: [Subsingleton α] (f : α -> α) (s : Set α)
-  结论: BijOn f s s
+  条件: [子单例 α] (f : α -> α) (s : 集合 α)
+  结论: 双射限制 f s s
   证明: bijOn_of_subsingleton' _ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, bijOn_of_subsingleton
@@ -3598,9 +3598,9 @@ theorem BijOn.bijective
     ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
 
 中文:
-定理 BijOn.bijective
-  条件: (h : BijOn f s t)
-  结论: Bijective (h.mapsTo.restrict f s t)
+定理 双射限制.bijective
+  条件: (h : 双射限制 f s t)
+  结论: 双射 (h.mapsTo.restrict f s t)
   证明: ⟨fun x y h' => Subtype.ext h.injOn x.2 y.2 Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
     let ⟨x, hx, hxy⟩ := h.surjOn hy
     ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
@@ -3624,7 +3624,7 @@ protected alias ⟨_, _root_.Function.Bijective.bijOn_univ⟩ := bijOn_univ
 
 中文:
 引理 bijOn_univ
-  结论: BijOn f univ univ ↔ Bijective f
+  结论: 双射限制 f univ univ ↔ 双射 f
   证明: by simp [Bijective, BijOn]
 
 protected alias ⟨_, _root_.Function.Bijective.bijOn_univ⟩ := bijOn_univ
@@ -3643,9 +3643,9 @@ lemma _root_.Function.Injective.bijOn_image
   proof: hf.injOn.bijOn_image
 
 中文:
-引理 _root_.Function.Injective.bijOn_image
-  条件: (hf : f.Injective)
-  结论: BijOn f s (f '' s)
+引理 _root_.函数.单射.bijOn_image
+  条件: (hf : f.单射)
+  结论: 双射限制 f s (f '' s)
   证明: hf.injOn.bijOn_image
 
 Depends on / 依赖: bijOn_image, hf.injOn.bijOn_image
@@ -3663,9 +3663,9 @@ lemma _root_.Function.Surjective.surjOn_preimage
   proof: hf.surjOn.preimage
 
 中文:
-引理 _root_.Function.Surjective.surjOn_preimage
-  条件: (hf : f.Surjective)
-  结论: SurjOn f (f ⁻¹' t) t
+引理 _root_.函数.满射.surjOn_preimage
+  条件: (hf : f.满射)
+  结论: 满射限制 f (f ⁻¹' t) t
   证明: hf.surjOn.preimage
 
 Depends on / 依赖: hf.surjOn.preimage, preimage, surjOn
@@ -3683,9 +3683,9 @@ lemma _root_.Function.Bijective.bijOn_preimage
   proof: ⟨fun _ => id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
 
 中文:
-引理 _root_.Function.Bijective.bijOn_preimage
-  条件: (hf : f.Bijective)
-  结论: BijOn f (f ⁻¹' t) t
+引理 _root_.函数.双射.bijOn_preimage
+  条件: (hf : f.双射)
+  结论: 双射限制 f (f ⁻¹' t) t
   证明: ⟨fun _ => id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
 
 Depends on / 依赖: hf.injective.injOn, hf.surjective.surjOn_preimage, injective, surjOn_preimage, surjective
@@ -3703,9 +3703,9 @@ theorem BijOn.compl
   proof: ⟨hst.surjOn.mapsTo_compl hf.1, hf.1.injOn, hst.mapsTo.surjOn_compl hf.2⟩
 
 中文:
-定理 BijOn.compl
-  条件: (hst : BijOn f s t) (hf : Bijective f)
-  结论: BijOn f sᶜ tᶜ
+定理 双射限制.compl
+  条件: (hst : 双射限制 f s t) (hf : 双射 f)
+  结论: 双射限制 f sᶜ tᶜ
   证明: ⟨hst.surjOn.mapsTo_compl hf.1, hf.1.injOn, hst.mapsTo.surjOn_compl hf.2⟩
 
 Depends on / 依赖: hst.mapsTo.surjOn_compl, hst.surjOn.mapsTo_compl, mapsTo, mapsTo_compl, surjOn, surjOn_compl
@@ -3725,8 +3725,8 @@ theorem BijOn.subset_right
   exact ⟨y, ⟨hy, hx⟩, rfl⟩
 
 中文:
-定理 BijOn.subset_right
-  条件: {r : Set β} (hf : BijOn f s t) (hrt : r subseteq t)
+定理 双射限制.subset_right
+  条件: {r : 集合 β} (hf : 双射限制 f s t) (hrt : r subseteq t)
   证明: by
   refine ⟨inter_subset_right, hf.injOn.mono inter_subset_left, fun x hx => ?_⟩
   obtain ⟨y, hy, rfl⟩ := hf.surjOn (hrt hx)
@@ -3749,8 +3749,8 @@ theorem BijOn.subset_left
   proof: (hf.injOn.mono hrs).bijOn_image
 
 中文:
-定理 BijOn.subset_left
-  条件: {r : Set α} (hf : BijOn f s t) (hrs : r subseteq s)
+定理 双射限制.subset_left
+  条件: {r : 集合 α} (hf : 双射限制 f s t) (hrs : r subseteq s)
   证明: (hf.injOn.mono hrs).bijOn_image
 
 Depends on / 依赖: bijOn_image, hf.injOn.mono
@@ -3773,7 +3773,7 @@ theorem BijOn.insert_iff
       
 
 中文:
-定理 BijOn.insert_iff
+定理 双射限制.insert_iff
   条件: (ha : a ∉ s) (hfa : f a ∉ t)
   证明: by
     have := congrArg (· \ {f a}) (image_insert_eq ▸ h.image_eq)
@@ -3812,8 +3812,8 @@ theorem BijOn.insert
   proof: (insert_iff (h₂ <| h₁.mapsTo ·) h₂).mpr h₁
 
 中文:
-定理 BijOn.insert
-  条件: (h₁ : BijOn f s t) (h₂ : f a ∉ t)
+定理 双射限制.insert
+  条件: (h₁ : 双射限制 f s t) (h₂ : f a ∉ t)
   证明: (insert_iff (h₂ <| h₁.mapsTo ·) h₂).mpr h₁
 
 Depends on / 依赖: insert_iff, mapsTo
@@ -3833,8 +3833,8 @@ theorem BijOn.sdiff_singleton
   simp [h₁.injOn.image_sdiff, h₁.image_eq, h₂, inter_eq_self_of_subset_right]
 
 中文:
-定理 BijOn.sdiff_singleton
-  条件: (h₁ : BijOn f s t) (h₂ : a in s)
+定理 双射限制.sdiff_singleton
+  条件: (h₁ : 双射限制 f s t) (h₂ : a in s)
   证明: by
   convert! h₁.subset_left sdiff_subset
   simp [h₁.injOn.image_sdiff, h₁.image_eq, h₂, inter_eq_self_of_subset_right]
@@ -3897,7 +3897,7 @@ theorem congr_left
 
 中文:
 定理 congr_left
-  结论: (h₁ : LeftInvOn f₁' f s) {t : Set β} (h₁' : MapsTo f s t)
+  结论: (h₁ : LeftInvOn f₁' f s) {t : 集合 β} (h₁' : 映射到 f s t)
   证明: fun _ hx => heq (h₁' hx) ▸ h₁ hx
 -/
 theorem congr_left (h₁ : LeftInvOn f₁' f s) {t : Set β} (h₁' : MapsTo f s t)
@@ -3937,7 +3937,7 @@ x₁ = f₁' (f x₁) := Eq.symm h h₁
 中文:
 定理 injOn
   条件: (h : LeftInvOn f₁' f s)
-  结论: InjOn f s
+  结论: 单射限制 f s
   证明: fun x₁ h₁ x₂ h₂ heq =>
   calc
 x₁ = f₁' (f x₁) := Eq.symm h h₁
@@ -3962,8 +3962,8 @@ theorem surjOn
 
 中文:
 定理 surjOn
-  条件: (h : LeftInvOn f' f s) (hf : MapsTo f s t)
-  结论: SurjOn f' t s
+  条件: (h : LeftInvOn f' f s) (hf : 映射到 f s t)
+  结论: 满射限制 f' t s
   证明: fun x hx =>
   ⟨f x, hf hx, h hx⟩
 -/
@@ -3982,7 +3982,7 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  条件: (h : LeftInvOn f' f s) (hf : SurjOn f s t)
+  条件: (h : LeftInvOn f' f s) (hf : 满射限制 f s t)
   证明: fun y hy => by
   let ⟨x, hs, hx⟩ := hf hy
   rwa [← hx, h hs]
@@ -4002,8 +4002,8 @@ lemma _root_.Set.leftInvOn_id
   proof: fun _ _ => rfl
 
 中文:
-引理 _root_.Set.leftInvOn_id
-  条件: (s : Set α)
+引理 _root_.集合.leftInvOn_id
+  条件: (s : 集合 α)
   结论: LeftInvOn id id s
   证明: fun _ _ => rfl
 -/
@@ -4022,7 +4022,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : MapsTo f s t)
+  条件: (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : 映射到 f s t)
   证明: fun x h =>
   calc
     (f' ∘ g') ((g ∘ f) x) = f' (f x) := congr_arg f' (hg' (hf h))
@@ -4209,7 +4209,7 @@ theorem _root_.Set.LeftInvOn.rightInvOn_image
   proof: fun _y ⟨_x, hx, heq⟩ => heq ▸ (congr_arg f <| h.eq hx)
 
 中文:
-定理 _root_.Set.LeftInvOn.rightInvOn_image
+定理 _root_.集合.LeftInvOn.rightInvOn_image
   条件: (h : LeftInvOn f' f s)
   结论: RightInvOn f' f (f '' s)
   证明: fun _y ⟨_x, hx, heq⟩ => heq ▸ (congr_arg f <| h.eq hx)
@@ -4248,7 +4248,7 @@ theorem congr_right
 
 中文:
 定理 congr_right
-  条件: (h₁ : RightInvOn f' f₁ t) (hg : MapsTo f' t s) (heq : EqOn f₁ f₂ s)
+  条件: (h₁ : RightInvOn f' f₁ t) (hg : 映射到 f' t s) (heq : EqOn f₁ f₂ s)
   证明: LeftInvOn.congr_left h₁ hg heq
 
 Depends on / 依赖: LeftInvOn, LeftInvOn.congr_left, congr_left
@@ -4268,8 +4268,8 @@ theorem surjOn
 
 中文:
 定理 surjOn
-  条件: (hf : RightInvOn f' f t) (hf' : MapsTo f' t s)
-  结论: SurjOn f s t
+  条件: (hf : RightInvOn f' f t) (hf' : 映射到 f' t s)
+  结论: 满射限制 f s t
   证明: LeftInvOn.surjOn hf hf'
 
 Depends on / 依赖: LeftInvOn, LeftInvOn.surjOn, surjOn
@@ -4288,8 +4288,8 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  条件: (h : RightInvOn f' f t) (hf : SurjOn f' t s)
-  结论: MapsTo f s t
+  条件: (h : RightInvOn f' f t) (hf : 满射限制 f' t s)
+  结论: 映射到 f s t
   证明: LeftInvOn.mapsTo h hf
 
 Depends on / 依赖: LeftInvOn, LeftInvOn.mapsTo, mapsTo
@@ -4307,8 +4307,8 @@ lemma _root_.Set.rightInvOn_id
   proof: fun _ _ => rfl
 
 中文:
-引理 _root_.Set.rightInvOn_id
-  条件: (s : Set α)
+引理 _root_.集合.rightInvOn_id
+  条件: (s : 集合 α)
   结论: RightInvOn id id s
   证明: fun _ _ => rfl
 -/
@@ -4324,7 +4324,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : MapsTo g' p t)
+  条件: (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : 映射到 g' p t)
   证明: LeftInvOn.comp hg hf g'pt
 
 Depends on / 依赖: LeftInvOn, LeftInvOn.comp
@@ -4364,8 +4364,8 @@ theorem InjOn.rightInvOn_of_leftInvOn
   hf (h₂ <| h₁ h) h (hf' (h₁ h))
 
 中文:
-定理 InjOn.rightInvOn_of_leftInvOn
-  结论: (hf : InjOn f s) (hf' : LeftInvOn f f' t)
+定理 单射限制.rightInvOn_of_leftInvOn
+  结论: (hf : 单射限制 f s) (hf' : LeftInvOn f f' t)
   证明: fun _ h =>
   hf (h₂ <| h₁ h) h (hf' (h₁ h))
 -/
@@ -4409,8 +4409,8 @@ theorem SurjOn.leftInvOn_of_rightInvOn
   rw [← heq]; rw [hf' hx]
 
 中文:
-定理 SurjOn.leftInvOn_of_rightInvOn
-  条件: (hf : SurjOn f s t) (hf' : RightInvOn f f' s)
+定理 满射限制.leftInvOn_of_rightInvOn
+  条件: (hf : 满射限制 f s t) (hf' : RightInvOn f f' s)
   证明: fun y hy => by
   let ⟨x, hx, heq⟩ := hf hy
   rw [← heq]; rw [hf' hx]
@@ -4441,7 +4441,7 @@ alias image_eq
 
 中文:
 定理 image_eq_preimage_of_leftInvOn_injOn
-  结论: {f : α -> β} {g : β -> α} {s : Set α}
+  结论: {f : α -> β} {g : β -> α} {s : 集合 α}
   证明: by
   ext x
   constructor
@@ -4486,8 +4486,8 @@ lemma _root_.Set.invOn_id
   proof: ⟨s.leftInvOn_id, s.rightInvOn_id⟩
 
 中文:
-引理 _root_.Set.invOn_id
-  条件: (s : Set α)
+引理 _root_.集合.invOn_id
+  条件: (s : 集合 α)
   结论: InvOn id id s s
   证明: ⟨s.leftInvOn_id, s.rightInvOn_id⟩
 
@@ -4507,7 +4507,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : MapsTo f s t)
+  结论: (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : 映射到 f s t)
   证明: ⟨hf.1.comp hg.1 fst, hf.2.comp hg.2 g'pt⟩
 
 @[symm]
@@ -4567,8 +4567,8 @@ theorem bijOn
 
 中文:
 定理 bijOn
-  条件: (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : MapsTo f' t s)
-  结论: BijOn f s t
+  条件: (h : InvOn f' f s t) (hf : 映射到 f s t) (hf' : 映射到 f' t s)
+  结论: 双射限制 f s t
   证明: ⟨hf, h.left.injOn, h.right.surjOn hf'⟩
 
 Depends on / 依赖: h.left.injOn, h.right.surjOn, surjOn
@@ -4596,7 +4596,7 @@ definition invFunOn
 
 中文:
 定义 invFunOn
-  签名: [Nonempty α] (f : α -> β) (s : Set α) (b : β)
+  签名: [非空 α] (f : α -> β) (s : 集合 α) (b : β)
   定义体: open scoped Classical in
   if h : exists a, a in s ∧ f a = b then Classical.choose h else Classical.choice ‹Nonempty α›
 
@@ -4688,7 +4688,7 @@ theorem invFunOn_neg
 中文:
 定理 invFunOn_neg
   条件: (h : ¬存在 a in s, f a = b)
-  结论: invFunOn f s b = Classical.choice ‹Nonempty α›
+  结论: invFunOn f s b = 经典.choice ‹非空 α›
   证明: by
   rw [invFunOn]; rw [dif_neg h]
 
@@ -4758,8 +4758,8 @@ theorem InjOn.leftInvOn_invFunOn
   proof: fun _a ha => h (invFunOn_apply_mem ha) ha (invFunOn_apply_eq ha)
 
 中文:
-定理 InjOn.leftInvOn_invFunOn
-  条件: [Nonempty α] (h : InjOn f s)
+定理 单射限制.leftInvOn_invFunOn
+  条件: [非空 α] (h : 单射限制 f s)
   结论: LeftInvOn (invFunOn f s) f s
   证明: fun _a ha => h (invFunOn_apply_mem ha) ha (invFunOn_apply_eq ha)
 
@@ -4777,8 +4777,8 @@ theorem InjOn.invFunOn_image
   proof: h.leftInvOn_invFunOn.image_image' ht
 
 中文:
-定理 InjOn.invFunOn_image
-  条件: [Nonempty α] (h : InjOn f s₂) (ht : s₁ subseteq s₂)
+定理 单射限制.invFunOn_image
+  条件: [非空 α] (h : 单射限制 f s₂) (ht : s₁ subseteq s₂)
   证明: h.leftInvOn_invFunOn.image_image' ht
 
 Depends on / 依赖: h.leftInvOn_invFunOn.image_image, image_image, leftInvOn_invFunOn
@@ -4798,8 +4798,8 @@ theorem _root_.Function.leftInvOn_invFunOn_of_subset_image_image
     rw [invFunOn_apply_eq (f := f) hx']
 
 中文:
-定理 _root_.Function.leftInvOn_invFunOn_of_subset_image_image
-  结论: [Nonempty α]
+定理 _root_.函数.leftInvOn_invFunOn_of_subset_image_image
+  结论: [非空 α]
   证明: fun x hx => by
     obtain ⟨-, ⟨x, hx', rfl⟩, rfl⟩ := h hx
     rw [invFunOn_apply_eq (f := f) hx']
@@ -4823,7 +4823,7 @@ theorem injOn_iff_invFunOn_image_image_eq_self
 
 中文:
 定理 injOn_iff_invFunOn_image_image_eq_self
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: ⟨fun h => h.invFunOn_image Subset.rfl, fun h =>
     (Function.leftInvOn_invFunOn_of_subset_image_image h.symm.subset).injOn⟩
 
@@ -4845,8 +4845,8 @@ theorem _root_.Function.invFunOn_injOn_image
   rw [← invFunOn_apply_eq (f := f) hx]; rw [he]; rw [invFunOn_apply_eq (f := f) hx']
 
 中文:
-定理 _root_.Function.invFunOn_injOn_image
-  条件: [Nonempty α] (f : α -> β) (s : Set α)
+定理 _root_.函数.invFunOn_injOn_image
+  条件: [非空 α] (f : α -> β) (s : 集合 α)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨x', hx', rfl⟩ he
   rw [← invFunOn_apply_eq (f := f) hx]; rw [he]; rw [invFunOn_apply_eq (f := f) hx']
@@ -4868,8 +4868,8 @@ theorem _root_.Function.invFunOn_image_image_subset
   rintro _ ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact invFunOn_apply_mem hx
 
 中文:
-定理 _root_.Function.invFunOn_image_image_subset
-  条件: [Nonempty α] (f : α -> β) (s : Set α)
+定理 _root_.函数.invFunOn_image_image_subset
+  条件: [非空 α] (f : α -> β) (s : 集合 α)
   证明: by
   rintro _ ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact invFunOn_apply_mem hx
 
@@ -4888,8 +4888,8 @@ theorem SurjOn.rightInvOn_invFunOn
   proof: fun _y hy => invFunOn_eq h hy
 
 中文:
-定理 SurjOn.rightInvOn_invFunOn
-  条件: [Nonempty α] (h : SurjOn f s t)
+定理 满射限制.rightInvOn_invFunOn
+  条件: [非空 α] (h : 满射限制 f s t)
   证明: fun _y hy => invFunOn_eq h hy
 
 Depends on / 依赖: invFunOn_eq
@@ -4907,8 +4907,8 @@ theorem BijOn.invOn_invFunOn
   proof: ⟨h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn⟩
 
 中文:
-定理 BijOn.invOn_invFunOn
-  条件: [Nonempty α] (h : BijOn f s t)
+定理 双射限制.invOn_invFunOn
+  条件: [非空 α] (h : 双射限制 f s t)
   结论: InvOn (invFunOn f s) f s t
   证明: ⟨h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn⟩
 
@@ -4929,8 +4929,8 @@ theorem SurjOn.invOn_invFunOn
   rw [h.rightInvOn_invFunOn hy]
 
 中文:
-定理 SurjOn.invOn_invFunOn
-  条件: [Nonempty α] (h : SurjOn f s t)
+定理 满射限制.invOn_invFunOn
+  条件: [非空 α] (h : 满射限制 f s t)
   证明: by
   refine ⟨?_, h.rightInvOn_invFunOn⟩
   rintro _ ⟨y, hy, rfl⟩
@@ -4954,9 +4954,9 @@ theorem SurjOn.mapsTo_invFunOn
   proof: fun _y hy => mem_preimage.2 invFunOn_mem h hy
 
 中文:
-定理 SurjOn.mapsTo_invFunOn
-  条件: [Nonempty α] (h : SurjOn f s t)
-  结论: MapsTo (invFunOn f s) t s
+定理 满射限制.mapsTo_invFunOn
+  条件: [非空 α] (h : 满射限制 f s t)
+  结论: 映射到 (invFunOn f s) t s
   证明: fun _y hy => mem_preimage.2 invFunOn_mem h hy
 
 Depends on / 依赖: invFunOn_mem, mem_preimage
@@ -4973,8 +4973,8 @@ theorem SurjOn.image_invFunOn_image_of_subset
   proof: hf.rightInvOn_invFunOn.image_image' hrt
 
 中文:
-定理 SurjOn.image_invFunOn_image_of_subset
-  结论: [Nonempty α] {r : Set β} (hf : SurjOn f s t)
+定理 满射限制.image_invFunOn_image_of_subset
+  结论: [非空 α] {r : 集合 β} (hf : 满射限制 f s t)
   证明: hf.rightInvOn_invFunOn.image_image' hrt
 
 Depends on / 依赖: hf.rightInvOn_invFunOn.image_image, image_image, rightInvOn_invFunOn
@@ -4992,8 +4992,8 @@ theorem SurjOn.image_invFunOn_image
   proof: hf.rightInvOn_invFunOn.image_image
 
 中文:
-定理 SurjOn.image_invFunOn_image
-  条件: [Nonempty α] (hf : SurjOn f s t)
+定理 满射限制.image_invFunOn_image
+  条件: [非空 α] (hf : 满射限制 f s t)
   证明: hf.rightInvOn_invFunOn.image_image
 
 Depends on / 依赖: hf.rightInvOn_invFunOn.image_image, image_image, rightInvOn_invFunOn
@@ -5015,9 +5015,9 @@ theorem SurjOn.bijOn_subset
   rwa [h.rightInvOn_invFunOn hy]
 
 中文:
-定理 SurjOn.bijOn_subset
-  条件: [Nonempty α] (h : SurjOn f s t)
-  结论: BijOn f (invFunOn f s '' t) t
+定理 满射限制.bijOn_subset
+  条件: [非空 α] (h : 满射限制 f s t)
+  结论: 双射限制 f (invFunOn f s '' t) t
   证明: by
   refine h.invOn_invFunOn.bijOn ?_ (mapsTo_image _ _)
   rintro _ ⟨y, hy, rfl⟩
@@ -5047,8 +5047,8 @@ theorem surjOn_iff_exists_bijOn_subset
     
 
 中文:
-定理 surjOn_iff_exists_bijOn_subset
-  结论: SurjOn f s t ↔ 存在 s' subseteq s, BijOn f s' t
+定理 surjOn_iff_存在_bijOn_subset
+  结论: 满射限制 f s t ↔ 存在 s' subseteq s, 双射限制 f s' t
   证明: by
   constructor
   · rcases eq_empty_or_nonempty t with (rfl | ht)
@@ -5084,8 +5084,8 @@ lemma exists_subset_bijOn
   proof: surjOn_iff_exists_bijOn_subset.mp (surjOn_image f s)
 
 中文:
-引理 exists_subset_bijOn
-  结论: 存在 s' subseteq s, BijOn f s' (f '' s)
+引理 存在_subset_bijOn
+  结论: 存在 s' subseteq s, 双射限制 f s' (f '' s)
   证明: surjOn_iff_exists_bijOn_subset.mp (surjOn_image f s)
 
 Depends on / 依赖: surjOn_iff_exists_bijOn_subset, surjOn_iff_exists_bijOn_subset.mp, surjOn_image
@@ -5103,8 +5103,8 @@ lemma exists_image_eq_and_injOn
   ⟨u, hfu.image_eq, hfu.injOn⟩
 
 中文:
-引理 exists_image_eq_and_injOn
-  结论: 存在 u, f '' u = f '' s ∧ InjOn f u
+引理 存在_image_eq_and_injOn
+  结论: 存在 u, f '' u = f '' s ∧ 单射限制 f u
   证明: let ⟨u, _, hfu⟩ := exists_subset_bijOn s f
   ⟨u, hfu.image_eq, hfu.injOn⟩
 
@@ -5125,7 +5125,7 @@ lemma exists_image_eq_injOn_of_subset_range
   proof: image_preimage_eq_of_subset ht ▸ exists_image_eq_and_injOn _ _
 
 中文:
-引理 exists_image_eq_injOn_of_subset_range
+引理 存在_image_eq_injOn_of_subset_range
   条件: (ht : t subseteq range f)
   证明: image_preimage_eq_of_subset ht ▸ exists_image_eq_and_injOn _ _
 
@@ -5149,8 +5149,8 @@ theorem BijOn.exists_extend_of_subset
   · rw [
 
 中文:
-定理 BijOn.exists_extend_of_subset
-  结论: {t' : Set β} (h : BijOn f s t) (hss₁ : s subseteq s₁) (htt' : t subseteq t')
+定理 双射限制.存在_extend_of_subset
+  结论: {t' : 集合 β} (h : 双射限制 f s t) (hss₁ : s subseteq s₁) (htt' : t subseteq t')
   证明: by
   obtain ⟨r, hrss, hbij⟩ := exists_subset_bijOn ((s₁ inter f ⁻¹' t') \ f ⁻¹' t) f
   rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
@@ -5186,8 +5186,8 @@ theorem BijOn.exists_extend
   simpa using h.exists_extend_of_subset (subset_univ s) htt' (by simpa [SurjOn])
 
 中文:
-定理 BijOn.exists_extend
-  条件: {t' : Set β} (h : BijOn f s t) (htt' : t subseteq t') (ht' : t' subseteq range f)
+定理 双射限制.存在_extend
+  条件: {t' : 集合 β} (h : 双射限制 f s t) (htt' : t subseteq t') (ht' : t' subseteq range f)
   证明: by
   simpa using h.exists_extend_of_subset (subset_univ s) htt' (by simpa [SurjOn])
 
@@ -5209,8 +5209,8 @@ theorem InjOn.exists_subset_injOn_subset_range_eq
   exact ⟨u, hru, hus, h.image_eq, h.injOn⟩
 
 中文:
-定理 InjOn.exists_subset_injOn_subset_range_eq
-  条件: {r : Set α} (hinj : InjOn f r) (hrs : r subseteq s)
+定理 单射限制.存在_subset_injOn_subset_range_eq
+  条件: {r : 集合 α} (hinj : 单射限制 f r) (hrs : r subseteq s)
   证明: by
   obtain ⟨u, hru, hus, h⟩ := hinj.bijOn_image.exists_extend_of_subset hrs
     (image_mono hrs) Subset.rfl
@@ -5239,7 +5239,7 @@ theorem preimage_invFun_of_mem
 
 中文:
 定理 preimage_invFun_of_mem
-  结论: [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
+  结论: [n : 非空 α] {f : α -> β} (hf : 单射 f) {s : 集合 α}
   证明: by
   ext x
   rcases em (x in range f) with (⟨a, rfl⟩ | hx)
@@ -5272,7 +5272,7 @@ theorem preimage_invFun_of_notMem
 
 中文:
 定理 preimage_invFun_of_notMem
-  结论: [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
+  结论: [n : 非空 α] {f : α -> β} (hf : 单射 f) {s : 集合 α}
   证明: by
   ext x
   rcases em (x in range f) with (⟨a, rfl⟩ | hx)
@@ -5300,9 +5300,9 @@ lemma BijOn.symm
   proof: ⟨h.2.mapsTo hf.surjOn, h.1.injOn, h.2.surjOn hf.mapsTo⟩
 
 中文:
-引理 BijOn.symm
-  条件: {g : β -> α} (h : InvOn f g t s) (hf : BijOn f s t)
-  结论: BijOn g t s
+引理 双射限制.symm
+  条件: {g : β -> α} (h : InvOn f g t s) (hf : 双射限制 f s t)
+  结论: 双射限制 g t s
   证明: ⟨h.2.mapsTo hf.surjOn, h.1.injOn, h.2.surjOn hf.mapsTo⟩
 
 Depends on / 依赖: hf.mapsTo, hf.surjOn, mapsTo, surjOn
@@ -5322,7 +5322,7 @@ lemma bijOn_comm
 中文:
 引理 bijOn_comm
   条件: {g : β -> α} (h : InvOn f g t s)
-  结论: BijOn f s t ↔ BijOn g t s
+  结论: 双射限制 f s t ↔ 双射限制 g t s
   证明: ⟨BijOn.symm h, BijOn.symm h.symm⟩
 
 Depends on / 依赖: BijOn.symm, h.symm
@@ -5341,8 +5341,8 @@ lemma SurjOn.exists_subset_injOn_image_eq
   exact ⟨range (fun a : t => x a.2), by grind, fun _ => by grind, by aesop⟩
 
 中文:
-引理 SurjOn.exists_subset_injOn_image_eq
-  条件: (hfs : s.SurjOn f t)
+引理 满射限制.存在_subset_injOn_image_eq
+  条件: (hfs : s.满射限制 f t)
   证明: by
   choose x hmem heq using hfs
   exact ⟨range (fun a : t => x a.2), by grind, fun _ => by grind, by aesop⟩
@@ -5370,9 +5370,9 @@ theorem Injective.comp_injOn
   proof: hg.injOn.comp hf (mapsTo_univ _ _)
 
 中文:
-定理 Injective.comp_injOn
-  条件: (hg : Injective g) (hf : s.InjOn f)
-  结论: s.InjOn (g ∘ f)
+定理 单射.comp_injOn
+  条件: (hg : 单射 g) (hf : s.单射限制 f)
+  结论: s.单射限制 (g ∘ f)
   证明: hg.injOn.comp hf (mapsTo_univ _ _)
 
 Depends on / 依赖: hg.injOn.comp, mapsTo_univ
@@ -5390,8 +5390,8 @@ theorem LeftInverse.leftInvOn
   proof: fun x _ => h x
 
 中文:
-定理 LeftInverse.leftInvOn
-  条件: {g : β -> α} (h : LeftInverse f g) (s : Set β)
+定理 左逆.leftInvOn
+  条件: {g : β -> α} (h : 左逆 f g) (s : 集合 β)
   结论: LeftInvOn f g s
   证明: fun x _ => h x
 -/
@@ -5407,8 +5407,8 @@ theorem RightInverse.rightInvOn
   proof: fun x _ => h x
 
 中文:
-定理 RightInverse.rightInvOn
-  条件: {g : β -> α} (h : RightInverse f g) (s : Set α)
+定理 右逆.rightInvOn
+  条件: {g : β -> α} (h : 右逆 f g) (s : 集合 α)
   证明: fun x _ => h x
 -/
 theorem RightInverse.rightInvOn {g : β -> α} (h : RightInverse f g) (s : Set α) :
@@ -5423,8 +5423,8 @@ theorem LeftInverse.rightInvOn_range
   proof: forall_mem_range.2 fun i => congr_arg g (h i)
 
 中文:
-定理 LeftInverse.rightInvOn_range
-  条件: {g : β -> α} (h : LeftInverse f g)
+定理 左逆.rightInvOn_range
+  条件: {g : β -> α} (h : 左逆 f g)
   证明: forall_mem_range.2 fun i => congr_arg g (h i)
 
 Depends on / 依赖: congr_arg, forall_mem_range
@@ -5446,8 +5446,8 @@ theorem mapsTo_image
 
 中文:
 定理 mapsTo_image
-  条件: (h : Semiconj f fa fb) (ha : MapsTo fa s t)
-  结论: MapsTo fb (f '' s) (f '' t)
+  条件: (h : Semiconj f fa fb) (ha : 映射到 fa s t)
+  结论: 映射到 fb (f '' s) (f '' t)
   证明: fun _y ⟨x, hx, hy⟩ => hy ▸ ⟨fa x, ha hx, h x⟩
 -/
 theorem mapsTo_image (h : Semiconj f fa fb) (ha : MapsTo fa s t) : MapsTo fb (f '' s) (f '' t) :=
@@ -5463,7 +5463,7 @@ theorem mapsTo_image_right
 
 中文:
 定理 mapsTo_image_right
-  条件: {t : Set β} (h : Semiconj f fa fb) (hst : MapsTo f s t)
+  条件: {t : 集合 β} (h : Semiconj f fa fb) (hst : 映射到 f s t)
   证明: mapsTo_image_iff.2 fun x hx => ⟨f x, hst hx, (h x).symm⟩
 
 Depends on / 依赖: mapsTo_image_iff
@@ -5485,7 +5485,7 @@ theorem mapsTo_range
 中文:
 定理 mapsTo_range
   条件: (h : Semiconj f fa fb)
-  结论: MapsTo fb (range f) (range f)
+  结论: 映射到 fb (range f) (range f)
   证明: fun _y ⟨x, hy⟩ =>
   hy ▸ ⟨fa x, h x⟩
 -/
@@ -5507,8 +5507,8 @@ theorem surjOn_image
 
 中文:
 定理 surjOn_image
-  条件: (h : Semiconj f fa fb) (ha : SurjOn fa s t)
-  结论: SurjOn fb (f '' s) (f '' t)
+  条件: (h : Semiconj f fa fb) (ha : 满射限制 fa s t)
+  结论: 满射限制 fb (f '' s) (f '' t)
   证明: by
   rintro y ⟨x, hxt, rfl⟩
   rcases ha hxt with ⟨x, hxs, rfl⟩
@@ -5535,7 +5535,7 @@ theorem surjOn_range
 
 中文:
 定理 surjOn_range
-  条件: (h : Semiconj f fa fb) (ha : Surjective fa)
+  条件: (h : Semiconj f fa fb) (ha : 满射 fa)
   证明: by
   rw [← image_univ]
   exact h.surjOn_image ha.surjOn
@@ -5560,7 +5560,7 @@ theorem injOn_image
 
 中文:
 定理 injOn_image
-  条件: (h : Semiconj f fa fb) (ha : InjOn fa s) (hf : InjOn f (fa '' s))
+  条件: (h : Semiconj f fa fb) (ha : 单射限制 fa s) (hf : 单射限制 f (fa '' s))
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ H
   simp only [← h.eq] at H
@@ -5586,7 +5586,7 @@ theorem injOn_range
 
 中文:
 定理 injOn_range
-  条件: (h : Semiconj f fa fb) (ha : Injective fa) (hf : InjOn f (range fa))
+  条件: (h : Semiconj f fa fb) (ha : 单射 fa) (hf : 单射限制 f (range fa))
   证明: by
   rw [← image_univ] at *
   exact h.injOn_image ha.injOn hf
@@ -5609,7 +5609,7 @@ theorem bijOn_image
 
 中文:
 定理 bijOn_image
-  条件: (h : Semiconj f fa fb) (ha : BijOn fa s t) (hf : InjOn f t)
+  条件: (h : Semiconj f fa fb) (ha : 双射限制 fa s t) (hf : 单射限制 f t)
   证明: ⟨h.mapsTo_image ha.mapsTo, h.injOn_image ha.injOn (ha.image_eq.symm ▸ hf),
     h.surjOn_image ha.surjOn⟩
 
@@ -5632,7 +5632,7 @@ theorem bijOn_range
 
 中文:
 定理 bijOn_range
-  条件: (h : Semiconj f fa fb) (ha : Bijective fa) (hf : Injective f)
+  条件: (h : Semiconj f fa fb) (ha : 双射 fa) (hf : 单射 f)
   证明: by
   rw [← image_univ]
   exact h.bijOn_image ha.bijOn_univ hf.injOn
@@ -5654,7 +5654,7 @@ theorem mapsTo_preimage
 
 中文:
 定理 mapsTo_preimage
-  条件: (h : Semiconj f fa fb) {s t : Set β} (hb : MapsTo fb s t)
+  条件: (h : Semiconj f fa fb) {s t : 集合 β} (hb : 映射到 fb s t)
   证明: fun x hx => by simp only [mem_preimage, h x, hb hx]
 
 Depends on / 依赖: mem_preimage
@@ -5676,7 +5676,7 @@ theorem injOn_preimage
 
 中文:
 定理 injOn_preimage
-  结论: (h : Semiconj f fa fb) {s : Set β} (hb : InjOn fb s)
+  结论: (h : Semiconj f fa fb) {s : 集合 β} (hb : 单射限制 fb s)
   证明: by
   intro x hx y hy H
   have := congr_arg f H
@@ -5704,7 +5704,7 @@ theorem update_comp_eq_of_notMem_range'
 
 中文:
 定理 update_comp_eq_of_notMem_range'
-  结论: {α : Sort*} {β : 类型} {γ : β -> Sort*} [DecidableEq β]
+  结论: {α : 类型层*} {β : 类型} {γ : β -> 类型层*} [DecidableEq β]
   证明: (update_comp_eq_of_forall_ne' _ _) fun x hx => h ⟨x, hx⟩
 
 Depends on / 依赖: update_comp_eq_of_forall_ne
@@ -5724,7 +5724,7 @@ theorem update_comp_eq_of_notMem_range
 
 中文:
 定理 update_comp_eq_of_notMem_range
-  结论: {α : Sort*} {β : 类型} {γ : Sort*} [DecidableEq β]
+  结论: {α : 类型层*} {β : 类型} {γ : 类型层*} [DecidableEq β]
   证明: update_comp_eq_of_notMem_range' g a h
 
 Depends on / 依赖: update_comp_eq_of_notMem_range
@@ -5745,8 +5745,8 @@ theorem insert_injOn
 
 中文:
 定理 insert_injOn
-  条件: (s : Set α)
-  结论: sᶜ.InjOn fun a => insert a s
+  条件: (s : 集合 α)
+  结论: sᶜ.单射限制 fun a => insert a s
   证明: fun _a ha _ _ =>
   (insert_inj ha).1
 -/
@@ -5791,8 +5791,8 @@ lemma MapsTo.extendDomain
   rintro _ ⟨a, ha, rfl⟩; exact ⟨_, h ha, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
 
 中文:
-引理 MapsTo.extendDomain
-  条件: (h : MapsTo g s t)
+引理 映射到.extendDomain
+  条件: (h : 映射到 g s t)
   证明: by
   rintro _ ⟨a, ha, rfl⟩; exact ⟨_, h ha, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
 -/
@@ -5812,8 +5812,8 @@ lemma SurjOn.extendDomain
   exact ⟨_, ⟨_, hb, rfl⟩, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
 
 中文:
-引理 SurjOn.extendDomain
-  条件: (h : SurjOn g s t)
+引理 满射限制.extendDomain
+  条件: (h : 满射限制 g s t)
   证明: by
   rintro _ ⟨a, ha, rfl⟩
   obtain ⟨b, hb, rfl⟩ := h ha
@@ -5834,8 +5834,8 @@ lemma BijOn.extendDomain
   proof: ⟨h.mapsTo.extendDomain, (g.extendDomain f).injective.injOn, h.surjOn.extendDomain⟩
 
 中文:
-引理 BijOn.extendDomain
-  条件: (h : BijOn g s t)
+引理 双射限制.extendDomain
+  条件: (h : 双射限制 g s t)
   证明: ⟨h.mapsTo.extendDomain, (g.extendDomain f).injective.injOn, h.surjOn.extendDomain⟩
 -/
 protected lemma BijOn.extendDomain (h : BijOn g s t) :
@@ -5916,9 +5916,9 @@ lemma InjOn.left_prodMk
   proof: fun _ hx _ hy h => h₁ hx hy (Prod.ext_iff.1 h).1
 
 中文:
-引理 InjOn.left_prodMk
-  条件: (h₁ : s.InjOn f₁)
-  结论: s.InjOn fun x => (f₁ x, f₂ x)
+引理 单射限制.left_prodMk
+  条件: (h₁ : s.单射限制 f₁)
+  结论: s.单射限制 fun x => (f₁ x, f₂ x)
   证明: fun _ hx _ hy h => h₁ hx hy (Prod.ext_iff.1 h).1
 
 Depends on / 依赖: Prod.ext_iff, ext_iff
@@ -5936,9 +5936,9 @@ lemma InjOn.right_prodMk
   proof: fun _ hx _ hy h => h₂ hx hy (Prod.ext_iff.1 h).2
 
 中文:
-引理 InjOn.right_prodMk
-  条件: (h₂ : s.InjOn f₂)
-  结论: s.InjOn fun x => (f₁ x, f₂ x)
+引理 单射限制.right_prodMk
+  条件: (h₂ : s.单射限制 f₂)
+  结论: s.单射限制 fun x => (f₁ x, f₂ x)
   证明: fun _ hx _ hy h => h₂ hx hy (Prod.ext_iff.1 h).2
 
 Depends on / 依赖: Prod.ext_iff, ext_iff
@@ -5957,8 +5957,8 @@ lemma prod_surjOn_fst
 
 中文:
 引理 prod_surjOn_fst
-  条件: (h : t₂.Nonempty)
-  结论: (t₁ ×ˢ t₂).SurjOn Prod.fst t₁
+  条件: (h : t₂.非空)
+  结论: (t₁ ×ˢ t₂).满射限制 积类型.fst t₁
   证明: fun _ h => by simpa [h]
 -/
 lemma prod_surjOn_fst (h : t₂.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ :=
@@ -5974,8 +5974,8 @@ lemma prod_surjOn_snd
 
 中文:
 引理 prod_surjOn_snd
-  条件: (h : t₁.Nonempty)
-  结论: (t₁ ×ˢ t₂).SurjOn Prod.snd t₂
+  条件: (h : t₁.非空)
+  结论: (t₁ ×ˢ t₂).满射限制 积类型.snd t₂
   证明: fun _ h => by simpa [h]
 -/
 lemma prod_surjOn_snd (h : t₁.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ :=
@@ -5991,7 +5991,7 @@ lemma prod_surjOn_fst_iff
 
 中文:
 引理 prod_surjOn_fst_iff
-  结论: (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ ↔ t₁ = ∅ ∨ t₂.Nonempty
+  结论: (t₁ ×ˢ t₂).满射限制 积类型.fst t₁ ↔ t₁ = ∅ ∨ t₂.非空
   证明: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_fst]⟩
 
 Depends on / 依赖: contextual, or_imp, prod_surjOn_fst
@@ -6009,7 +6009,7 @@ lemma prod_surjOn_snd_iff
 
 中文:
 引理 prod_surjOn_snd_iff
-  结论: (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ ↔ t₁.Nonempty ∨ t₂ = ∅
+  结论: (t₁ ×ˢ t₂).满射限制 积类型.snd t₂ ↔ t₁.非空 ∨ t₂ = ∅
   证明: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_snd]⟩
 
 Depends on / 依赖: contextual, or_imp, prod_surjOn_snd
@@ -6026,8 +6026,8 @@ lemma MapsTo.prodMk
   proof: fun _ hx => ⟨h₁ hx, h₂ hx⟩
 
 中文:
-引理 MapsTo.prodMk
-  条件: (h₁ : MapsTo f₁ s t₁) (h₂ : MapsTo f₂ s t₂)
+引理 映射到.prodMk
+  条件: (h₁ : 映射到 f₁ s t₁) (h₂ : 映射到 f₂ s t₂)
   证明: fun _ hx => ⟨h₁ hx, h₂ hx⟩
 -/
 lemma MapsTo.prodMk (h₁ : MapsTo f₁ s t₁) (h₂ : MapsTo f₂ s t₂) :
@@ -6082,8 +6082,8 @@ lemma InjOn.prodMap
   proof: fun x hx y hy => by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
 
 中文:
-引理 InjOn.prodMap
-  条件: (h₁ : s₁.InjOn f₁) (h₂ : s₂.InjOn f₂)
+引理 单射限制.prodMap
+  条件: (h₁ : s₁.单射限制 f₁) (h₂ : s₂.单射限制 f₂)
   证明: fun x hx y hy => by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
 
 Depends on / 依赖: And.imp, Prod.ext_iff, ext_iff, simp_rw
@@ -6105,8 +6105,8 @@ lemma SurjOn.prodMap
   exact ⟨(a₁, a₂), ⟨ha₁, ha₂⟩, Prod.ext hx₁ hx₂⟩
 
 中文:
-引理 SurjOn.prodMap
-  条件: (h₁ : SurjOn f₁ s₁ t₁) (h₂ : SurjOn f₂ s₂ t₂)
+引理 满射限制.prodMap
+  条件: (h₁ : 满射限制 f₁ s₁ t₁) (h₂ : 满射限制 f₂ s₂ t₂)
   证明: by
   rintro x hx
   obtain ⟨a₁, ha₁, hx₁⟩ := h₁ hx.1
@@ -6131,8 +6131,8 @@ lemma MapsTo.prodMap
   proof: fun _x hx => ⟨h₁ hx.1, h₂ hx.2⟩
 
 中文:
-引理 MapsTo.prodMap
-  条件: (h₁ : MapsTo f₁ s₁ t₁) (h₂ : MapsTo f₂ s₂ t₂)
+引理 映射到.prodMap
+  条件: (h₁ : 映射到 f₁ s₁ t₁) (h₂ : 映射到 f₂ s₂ t₂)
   证明: fun _x hx => ⟨h₁ hx.1, h₂ hx.2⟩
 -/
 lemma MapsTo.prodMap (h₁ : MapsTo f₁ s₁ t₁) (h₂ : MapsTo f₂ s₂ t₂) :
@@ -6148,8 +6148,8 @@ lemma BijOn.prodMap
   proof: ⟨h₁.mapsTo.prodMap h₂.mapsTo, h₁.injOn.prodMap h₂.injOn, h₁.surjOn.prodMap h₂.surjOn⟩
 
 中文:
-引理 BijOn.prodMap
-  条件: (h₁ : BijOn f₁ s₁ t₁) (h₂ : BijOn f₂ s₂ t₂)
+引理 双射限制.prodMap
+  条件: (h₁ : 双射限制 f₁ s₁ t₁) (h₂ : 双射限制 f₂ s₂ t₂)
   证明: ⟨h₁.mapsTo.prodMap h₂.mapsTo, h₁.injOn.prodMap h₂.injOn, h₁.surjOn.prodMap h₂.surjOn⟩
 
 Depends on / 依赖: injOn.prodMap, mapsTo, mapsTo.prodMap, prodMap, surjOn, surjOn.prodMap
@@ -6235,8 +6235,8 @@ lemma bijOn'
 
 中文:
 引理 bijOn'
-  条件: (h₁ : MapsTo e s t) (h₂ : MapsTo e.symm t s)
-  结论: BijOn e s t
+  条件: (h₁ : 映射到 e s t) (h₂ : 映射到 e.symm t s)
+  结论: 双射限制 e s t
   证明: ⟨h₁, e.injective.injOn, fun b hb => ⟨e.symm b, h₂ hb, apply_symm_apply _ _⟩⟩
 
 Depends on / 依赖: apply_symm_apply, e.injective.injOn, e.symm, injective
@@ -6256,7 +6256,7 @@ lemma bijOn
 中文:
 引理 bijOn
   条件: (h : 对任意 a, e a in t ↔ a in s)
-  结论: BijOn e s t
+  结论: 双射限制 e s t
   证明: e.bijOn' (fun _ => (h _).2) fun b hb => (h _).1 by rwa [apply_symm_apply]
 -/
 protected lemma bijOn (h : forall a, e a in t ↔ a in s) : BijOn e s t :=
@@ -6290,7 +6290,7 @@ lemma bijOn_image
 
 中文:
 引理 bijOn_image
-  结论: BijOn e s (e '' s)
+  结论: 双射限制 e s (e '' s)
   证明: e.injective.injOn.bijOn_image
 
 Depends on / 依赖: bijOn_image, e.injective.injOn.bijOn_image, injective
@@ -6306,7 +6306,7 @@ lemma bijOn_symm_image
 
 中文:
 引理 bijOn_symm_image
-  结论: BijOn e.symm (e '' s) s
+  结论: 双射限制 e.symm (e '' s) s
   证明: e.bijOn_image.symm e.invOn
 
 Depends on / 依赖: bijOn_image, e.bijOn_image.symm, e.invOn
@@ -6327,7 +6327,7 @@ alias ⟨_root_.Set.BijOn.of_equiv_symm, _root_.Set.BijOn.equiv_symm⟩ := bijOn
 
 中文:
 引理 bijOn_symm
-  结论: BijOn e.symm t s ↔ BijOn e s t
+  结论: 双射限制 e.symm t s ↔ 双射限制 e s t
   证明: bijOn_comm e.symm.invOn
 
 alias ⟨_root_.Set.BijOn.of_equiv_symm, _root_.Set.BijOn.equiv_symm⟩ := bijOn_symm
@@ -6353,7 +6353,7 @@ lemma bijOn_swap
 中文:
 引理 bijOn_swap
   条件: (ha : a in s) (hb : b in s)
-  结论: BijOn (swap a b) s s
+  结论: 双射限制 (swap a b) s s
   证明: (swap a b).bijOn fun x => by
     obtain rfl | hxa := eq_or_ne x a <;>
     obtain rfl | hxb := eq_or_ne x b <;>

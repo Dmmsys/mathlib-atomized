@@ -95,7 +95,7 @@ instance isSuccArchimedean_of_isPredArchimedean
 
 中文:
 实例 isSuccArchimedean_of_isPredArchimedean
-  签名: [IsPredArchimedean ι]
+  签名: [是PredArchimedean ι]
   定义体: inferInstanceAs (IsSuccArchimedean ιᵒᵈᵒᵈ)
 
 Depends on / 依赖: IsSuccArchimedean
@@ -114,7 +114,7 @@ theorem isSuccArchimedean_iff_isPredArchimedean
 
 中文:
 定理 isSuccArchimedean_iff_isPredArchimedean
-  结论: IsSuccArchimedean ι ↔ IsPredArchimedean ι where
+  结论: 是SuccArchimedean ι ↔ 是PredArchimedean ι where
   证明: isPredArchimedean_of_isSuccArchimedean
   mpr _ := isSuccArchimedean_of_isPredArchimedean
 
@@ -158,7 +158,7 @@ theorem succFn_spec
 中文:
 定理 succFn_spec
   条件: (i : ι)
-  结论: IsGLB (Set.Ioi i) (succFn i)
+  结论: IsGLB (集合.左开右无界区间 i) (succFn i)
   证明: (exists_glb_Ioi i).choose_spec
 
 Depends on / 依赖: choose_spec, exists_glb_Ioi
@@ -207,7 +207,7 @@ theorem isGLB_Ioc_of_isGLB_Ioi
 
 中文:
 定理 isGLB_Ioc_of_isGLB_Ioi
-  条件: {i j k : ι} (hij_lt : i < j) (h : IsGLB (Set.Ioi i) k)
+  条件: {i j k : ι} (hij_lt : i < j) (h : IsGLB (集合.左开右无界区间 i) k)
   证明: by
   simp_rw [IsGLB, IsGreatest, mem_upperBounds, mem_lowerBounds] at h ⊢
   refine ⟨fun x hx => h.1 x hx.1, fun x hx => h.2 x ?_⟩
@@ -246,7 +246,7 @@ theorem isMax_of_succFn_le
 
 中文:
 定理 isMax_of_succFn_le
-  条件: [LocallyFiniteOrder ι] (i : ι) (hi : succFn i <= i)
+  条件: [局部有限序 ι] (i : ι) (hi : succFn i <= i)
   结论: IsMax i
   证明: by
   refine fun j _ => not_lt.mp fun hij_lt => ?_
@@ -351,7 +351,7 @@ definition succOrder
 
 中文:
 定义 succOrder
-  签名: [LocallyFiniteOrder ι]
+  签名: [局部有限序 ι]
   定义体: succFn
   le_succ := le_succFn
   max_of_succ_le h := isMax_of_succFn_le _ h
@@ -381,7 +381,7 @@ definition predOrder
 
 中文:
 定义 predOrder
-  签名: [LocallyFiniteOrder ι]
+  签名: [局部有限序 ι]
   定义体: letI := succOrder (ι := ιᵒᵈ)
   inferInstanceAs (PredOrder ιᵒᵈᵒᵈ)
 
@@ -813,7 +813,7 @@ theorem toZ_strictMono
 
 中文:
 定理 toZ_strictMono
-  结论: StrictMono (toZ i0)
+  结论: 严格递增 (toZ i0)
   证明: by
   intro j i h_le
   contrapose! h_le
@@ -848,7 +848,7 @@ theorem injective_toZ
 
 中文:
 定理 injective_toZ
-  结论: Function.Injective (toZ i0)
+  结论: 函数.单射 (toZ i0)
   证明: toZ_strictMono.injective
 
 @[simp]
@@ -967,7 +967,7 @@ theorem toZ_iterate_succ
 
 中文:
 定理 toZ_iterate_succ
-  条件: [NoMaxOrder ι] (n : 自然数)
+  条件: [NoMax序 ι] (n : 自然数)
   结论: toZ i0 (succ^[n] i0) = n
   证明: toZ_iterate_succ_of_not_isMax n (not_isMax _)
 
@@ -987,7 +987,7 @@ theorem toZ_iterate_pred
 
 中文:
 定理 toZ_iterate_pred
-  条件: [NoMinOrder ι] (n : 自然数)
+  条件: [NoMin序 ι] (n : 自然数)
   结论: toZ i0 (pred^[n] i0) = -n
   证明: toZ_iterate_pred_of_not_isMin n (not_isMin _)
 
@@ -1014,7 +1014,7 @@ definition orderIsoRangeToZOfLinearSuccPredArch
 
 中文:
 定义 orderIsoRangeToZOfLinearSuccPredArch
-  签名: [hι : Nonempty ι]
+  签名: [hι : 非空 ι]
   定义体: Equiv.ofInjective _ injective_toZ
   map_rel_iff' := by simp
 
@@ -1047,8 +1047,8 @@ definition orderIsoIntOfLinearSuccPredArch
     · have h_neg : 
 
 中文:
-定义 orderIsoIntOfLinearSuccPredArch
-  签名: [NoMaxOrder ι] [NoMinOrder ι] [hι : Nonempty ι]
+定义 orderIso整数OfLinearSuccPredArch
+  签名: [NoMax序 ι] [NoMin序 ι] [hι : 非空 ι]
   定义体: toZ hι.some
   invFun n := if 0 <= n then succ^[n.toNat] hι.some else pred^[(-n).toNat] hι.some
   left_inv i := by
@@ -1102,8 +1102,8 @@ definition orderIsoNatOfLinearSuccPredArch
     rw [← toZ_le_
 
 中文:
-定义 orderIsoNatOfLinearSuccPredArch
-  签名: [NoMaxOrder ι] [OrderBot ι]
+定义 orderIso自然数OfLinearSuccPredArch
+  签名: [NoMax序 ι] [有底序 ι]
   定义体: (toZ ⊥ i).toNat
   invFun n := succ^[n] ⊥
   left_inv i := by
@@ -1154,7 +1154,7 @@ definition orderIsoRangeOfLinearSuccPredArch
 
 中文:
 定义 orderIsoRangeOfLinearSuccPredArch
-  签名: [OrderBot ι] [OrderTop ι]
+  签名: [有底序 ι] [有顶序 ι]
   定义体: ⟨(toZ ⊥ i).toNat,
       Finset.mem_range_succ_iff.mpr (Int.toNat_le_toNat (toZ_le_toZ.mpr le_top))⟩
   invFun n := succ^[n] ⊥

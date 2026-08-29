@@ -100,8 +100,8 @@ theorem _root_.Monotone.finsetProd
   proof: fun _ _ hab => prod_le_prod (fun i hi => hf₀ i hi _) fun i hi => hf i hi hab
 
 中文:
-定理 _root_.Monotone.finsetProd
-  结论: {γ : 类型} [Preorder γ] {f : ι -> γ -> R}
+定理 _root_.递增.finsetProd
+  结论: {γ : 类型} [预序 γ] {f : ι -> γ -> R}
   证明: fun _ _ hab => prod_le_prod (fun i hi => hf₀ i hi _) fun i hi => hf i hi hab
 
 Depends on / 依赖: prod_le_prod
@@ -121,7 +121,7 @@ theorem _root_.MonotoneOn.finsetProd
 
 中文:
 定理 _root_.MonotoneOn.finsetProd
-  结论: {γ : 类型} [Preorder γ] {u : Set γ} {f : ι -> γ -> R}
+  结论: {γ : 类型} [预序 γ] {u : 集合 γ} {f : ι -> γ -> R}
   证明: fun _ ha _ hb hab => prod_le_prod (fun i hi => hf₀ i hi _ ha) fun i hi => hf i hi ha hb hab
 
 Depends on / 依赖: prod_le_prod
@@ -140,8 +140,8 @@ theorem _root_.Antitone.finsetProd
   proof: fun _ _ hab => prod_le_prod (fun i hi => hf₀ i hi _) fun i hi => hf i hi hab
 
 中文:
-定理 _root_.Antitone.finsetProd
-  结论: {γ : 类型} [Preorder γ] {f : ι -> γ -> R}
+定理 _root_.递减.finsetProd
+  结论: {γ : 类型} [预序 γ] {f : ι -> γ -> R}
   证明: fun _ _ hab => prod_le_prod (fun i hi => hf₀ i hi _) fun i hi => hf i hi hab
 
 Depends on / 依赖: prod_le_prod
@@ -161,7 +161,7 @@ theorem _root_.AntitoneOn.finsetProd
 
 中文:
 定理 _root_.AntitoneOn.finsetProd
-  结论: {γ : 类型} [Preorder γ] {u : Set γ} {f : ι -> γ -> R}
+  结论: {γ : 类型} [预序 γ] {u : 集合 γ} {f : ι -> γ -> R}
   证明: fun _ ha _ hb hab => prod_le_prod (fun i hi => hf₀ i hi _ hb) fun i hi => hf i hi ha hb hab
 
 Depends on / 依赖: prod_le_prod
@@ -235,7 +235,7 @@ lemma le_prod_max_one
 
 中文:
 引理 le_prod_max_one
-  结论: {M : 类型} [CommMonoidWithZero M] [LinearOrder M] [ZeroLEOneClass M]
+  结论: {M : 类型} [带零交换幺半群 M] [线性序 M] [ZeroLEOne类 M]
   证明: by
   classical
   rcases lt_or_ge (f i) 0 with hf | hf

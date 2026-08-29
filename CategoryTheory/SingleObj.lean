@@ -79,7 +79,7 @@ instance categoryStruct
 
 中文:
 实例 categoryStruct
-  签名: [One M] [Mul M]
+  签名: [幺 M] [乘法 M]
   定义体: M
   comp x y := y * x
   id _ := 1
@@ -103,7 +103,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (SingleObj M) where
+  签名: : 范畴 (SingleObj M) where
   定义体: one_mul
   id_comp := mul_one
   assoc x y z := (mul_assoc z y x).symm
@@ -162,7 +162,7 @@ instance finCategoryOfFintype
 
 中文:
 实例 finCategoryOfFintype
-  签名: (M : Type) [Fintype M] [Monoid M]
+  签名: (M : 类型) [有限类型 M] [幺半群 M]
 
 Depends on / 依赖: _iff_isBasis_inter_ground, _sdiff_sdiff_of_subset, contract_isBasis, hIX.contract_isBasis, inter_sdiff_assoc, isBasis, isBasis_inter_ground, sdiff_inter_distrib_right
 -/
@@ -182,7 +182,7 @@ instance groupoid
 
 中文:
 实例 groupoid
-  签名: : Groupoid (SingleObj G) where
+  签名: : 群胚 (SingleObj G) where
   定义体: x⁻¹
   inv_comp := mul_inv_cancel
   comp_inv := inv_mul_cancel
@@ -334,7 +334,7 @@ theorem mapHom_id
 
 中文:
 定理 mapHom_id
-  结论: mapHom M M (MonoidHom.id M) = 𝟭 _
+  结论: mapHom M M (幺半群态射.id M) = 𝟭 _
   证明: rfl
 -/
 theorem mapHom_id : mapHom M M (MonoidHom.id M) = 𝟭 _ :=
@@ -352,7 +352,7 @@ theorem mapHom_comp
 
 中文:
 定理 mapHom_comp
-  条件: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  条件: (f : M ->* N) {P : 类型 w} [幺半群 P] (g : N ->* P)
   证明: rfl
 
 Depends on / 依赖: and_assoc, and_comm, contract_dep_iff, contract_eq_contract_delete, delete_dep_iff, disjoint_comm, disjoint_union_right, hI.contract_eq_contract_delete, hI.indep.contract_dep_iff, hI.subset, sdiff_union_of_subset, subset
@@ -498,7 +498,7 @@ theorem comp_toFunctor
 
 中文:
 定理 comp_toFunctor
-  条件: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  条件: (f : M ->* N) {P : 类型 w} [幺半群 P] (g : N ->* P)
   证明: rfl
 -/
 theorem comp_toFunctor (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P) :
@@ -672,7 +672,7 @@ definition toCat
 
 中文:
 定义 toCat
-  签名: : MonCat ⥤ Cat where
+  签名: : 幺半群范畴 ⥤ Cat where
   定义体: Cat.of (SingleObj x)
   map {x y} f := (SingleObj.mapHom x y f.hom).toCatHom
 
@@ -693,7 +693,7 @@ instance toCat_full
 
 中文:
 实例 toCat_full
-  签名: : toCat.Full where
+  签名: : toCat.满 where
   定义体: let ⟨x, h⟩ := (SingleObj.mapHom _ _).surjective y.toFunctor
     ⟨ofHom x, Cat.Hom.ext h⟩
 
@@ -715,7 +715,7 @@ instance toCat_faithful
 
 中文:
 实例 toCat_faithful
-  签名: : toCat.Faithful where
+  签名: : toCat.忠实 where
   定义体: MonCat.hom_ext by simpa [toCat] using congr(($h).toFunctor)
 
 Depends on / 依赖: MonCat, MonCat.hom_ext, hom_ext, toFunctor

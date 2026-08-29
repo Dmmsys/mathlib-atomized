@@ -95,8 +95,8 @@ instance [Infinite
   body: .of_injective Sym2.diag Sym2.diag_injective
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite (Sym2 α)
+实例 [无限
+  签名: α] : 无限 (Sym2 α)
   定义体: .of_injective Sym2.diag Sym2.diag_injective
 
 Depends on / 依赖: Sym2.diag, Sym2.diag_injective, diag_injective, of_injective
@@ -113,8 +113,8 @@ instance [Infinite
   body: .of_injective (fun a : α => ⟨.diag a, rfl⟩) fun _ _ h => Sym2.diag_injective congr($h)
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite {a
+实例 [无限
+  签名: α] : 无限 {a
   定义体: .of_injective (fun a : α => ⟨.diag a, rfl⟩) fun _ _ h => Sym2.diag_injective congr($h)
 
 Depends on / 依赖: Sym2.diag_injective, diag_injective, of_injective
@@ -132,8 +132,8 @@ instance [Infinite
   .of_injective (fun n => ⟨s(e 0, e (n + 1)), by simp⟩) fun _ _ => by simp
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite {a
+实例 [无限
+  签名: α] : 无限 {a
   定义体: let e := Infinite.natEmbedding α
   .of_injective (fun n => ⟨s(e 0, e (n + 1)), by simp⟩) fun _ _ => by simp
 
@@ -202,7 +202,7 @@ lemma ncard_diagSet
 
 中文:
 引理 ncard_diagSet
-  结论: (diagSet : Set (Sym2 α)).ncard = 自然数.card α
+  结论: (diagSet : 集合 (Sym2 α)).ncard = 自然数.card α
   证明: natCard_subtype_diag _
 
 Depends on / 依赖: natCard_subtype_diag
@@ -220,7 +220,7 @@ lemma ncard_diagSet_compl
 
 中文:
 引理 ncard_diagSet_compl
-  结论: (diagSetᶜ : Set (Sym2 α)).ncard = (自然数.card α).choose 2
+  结论: (diagSetᶜ : 集合 (Sym2 α)).ncard = (自然数.card α).choose 2
   证明: natCard_subtype_not_diag _
 
 Depends on / 依赖: natCard_subtype_not_diag

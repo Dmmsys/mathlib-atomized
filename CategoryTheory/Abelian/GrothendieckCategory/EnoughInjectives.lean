@@ -130,7 +130,7 @@ lemma isomorphisms_le_pushouts_generatingMonomorphisms
 
 中文:
 引理 isomorphisms_le_pushouts_generatingMonomorphisms
-  条件: [HasZeroMorphisms C]
+  条件: [有ZeroMorphisms C]
   证明: MorphismProperty.isomorphisms_le_pushouts _
     (fun _ => ⟨_, _, _, ⟨⊤⟩, 0, inferInstance⟩)
 
@@ -164,7 +164,7 @@ lemma exists_pushouts
   -- we use the sub
 
 中文:
-引理 exists_pushouts
+引理 存在_pushouts
   证明: by
   rw [hG.isDetector.isIso_iff_of_mono] at hp
   simp only [ObjectProperty.singleton_iff, Function.Surjective, Functor.flip_obj_map, forall_eq',
@@ -216,7 +216,7 @@ lemma exists_larger_subobject
   refine Ar
 
 中文:
-引理 exists_larger_subobject
+引理 存在_larger_subobject
   条件: {X : C} (A : Subobject X) (hA : A != ⊤)
   证明: by
   induction A using Subobject.ind with | _ f
@@ -395,7 +395,7 @@ lemma top_mem_range
 
 中文:
 引理 top_mem_range
-  结论: (A₀ : Subobject X) {J : Type w} [LinearOrder J] [OrderBot J] [SuccOrder J]
+  结论: (A₀ : Subobject X) {J : 类型 w} [线性序 J] [有底序 J] [Succ序 J]
   证明: top_mem_range_transfiniteIterate (largerSubobject hG) A₀ (lt_largerSubobject hG) (by simp)
     (fun h => by simpa [hasCardinalLT_iff_cardinal_mk_lt] using hJ.of_injective _ h)
 
@@ -420,7 +420,7 @@ lemma exists_ordinal
   exact ⟨κ.ord, top_mem_range hG A₀ (lt_of_lt_of_le (Order.lt_succ _) (by simp [κ]))⟩
 
 中文:
-引理 exists_ordinal
+引理 存在_ordinal
   条件: (A₀ : Subobject X)
   证明: by
   let κ := Order.succ (Cardinal.mk (Shrink.{w} (Subobject X)))
@@ -506,7 +506,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor hG A₀ J).IsWellOrderContinuous
+  签名: (functor hG A₀ J).是WellOrderContinuous
   定义体: ⟨by
     have := hm.nonempty_Iio.to_subtype
     let c := (Set.principalSegIio m).cocone (functorToMonoOver hG A₀ J ⋙ MonoOver.forget _)
@@ -630,7 +630,7 @@ lemma exists_transfiniteCompositionOfShape
   exact ⟨_, _, _, _, _, ⟨transfiniteCompositionOfShapeOfEqTop hG hj⟩⟩
 
 中文:
-引理 exists_transfiniteCompositionOfShape
+引理 存在_transfiniteCompositionOfShape
   证明: by
   obtain ⟨o, j, hj⟩ := exists_ordinal hG (Subobject.mk f)
   have : Nonempty o.ToType := ⟨j⟩
@@ -670,7 +670,7 @@ lemma generatingMonomorphisms_rlp
 
 中文:
 引理 generatingMonomorphisms_rlp
-  条件: [IsGrothendieckAbelian.{w} C] (hG : IsSeparator G)
+  条件: [是GrothendieckAbelian.{w} C] (hG : IsSeparator G)
   证明: by
   apply le_antisymm
   · intro X Y p hp A B i (_ : Mono i)
@@ -710,7 +710,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSmallObjectArgument.{w} (generatingMonomorphisms G)
+  签名: 有SmallObjectArgument.{w} (generatingMonomorphisms G)
   定义体: by
   obtain ⟨κ, hκ', hκ⟩ := HasCardinalLT.exists_regular_cardinal.{w} (Subobject G)
   have : Fact κ.IsRegular := ⟨hκ'⟩
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFunctorialFactorization (monomorphisms C) (monomorphisms C).rlp
+  签名: 有FunctorialFactorization (monomorphisms C) (monomorphisms C).rlp
   定义体: by
   have hG := isSeparator_separator C
   rw [← generatingMonomorphisms_rlp hG]; rw [← llp_rlp_monomorphisms hG]; rw [← generatingMonomorphisms_rlp hG]
@@ -846,7 +846,7 @@ instance enoughInjectives
 
 中文:
 实例 enoughInjectives
-  签名: : EnoughInjectives C where
+  签名: : 有足够单射 C where
   定义体: ⟨{ J := _, f := (monoMapFactorizationDataRlp (0 : X ⟶ 0)).i }⟩
 
 Depends on / 依赖: monoMapFactorizationDataRlp

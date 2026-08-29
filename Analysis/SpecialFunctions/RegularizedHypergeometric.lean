@@ -72,7 +72,7 @@ definition regularizedHGFunCoeff
 
 中文:
 定义 regularizedHGFunCoeff
-  签名: (a : Multiset Complex) (b : Multiset Complex) (n : 自然数)
+  签名: (a : Multiset 复形) (b : Multiset 复形) (n : 自然数)
   定义体: (a.map (ascPochhammer Complex n).eval).prod / (n ! * (b.map (Gamma <| · + n)).prod)
 
 Depends on / 依赖: a.map, ascPochhammer, b.map
@@ -120,7 +120,7 @@ theorem regularizedHGFunCoeff_eq_zero_right
 
 中文:
 定理 regularizedHGFunCoeff_eq_zero_right
-  条件: (hb : -(n : Complex) - m in b := by grind)
+  条件: (hb : -(n : 复形) - m in b := by grind)
   证明: by grind
 
 Depends on / 依赖: regularizedHGFunCoeff
@@ -139,7 +139,7 @@ theorem regularizedHGFunCoeff_eq_zero_left
 
 中文:
 定理 regularizedHGFunCoeff_eq_zero_left
-  结论: (ha : -(m : Complex) in a := by grind)
+  结论: (ha : -(m : 复形) in a := by grind)
   证明: by grind
 
 Depends on / 依赖: regularizedHGFunCoeff
@@ -250,7 +250,7 @@ private
 
 中文:
 定理 multiset_prod_eq_pow_mul_multiset_prod
-  条件: (a : Multiset Complex) (hn : n != 0)
+  条件: (a : Multiset 复形) (hn : n != 0)
   证明: calc
   _ = (a.map (fun j => n * (j / (n : Complex) + 1))).prod := by
     congr; ext; field_simp
@@ -285,7 +285,7 @@ theorem multiset_prod_div_multiset_prod_mul
 
 中文:
 定理 multiset_prod_div_multiset_prod_mul
-  条件: (a : Multiset Complex) (b : Multiset Complex) (hn : n != 0)
+  条件: (a : Multiset 复形) (b : Multiset 复形) (hn : n != 0)
   证明: by
   rw [multiset_prod_eq_pow_mul_multiset_prod a hn]; rw [multiset_prod_eq_pow_mul_multiset_prod b hn]
   field_simp
@@ -326,7 +326,7 @@ definition regularizedHGFunSeries
 
 中文:
 定义 regularizedHGFunSeries
-  签名: : FormalMultilinearSeries Complex Complex Complex
+  签名: : FormalMultilinearSeries 复形 复形 复形
   定义体: .ofScalars Complex (regularizedHGFunCoeff a b)
 
 @[simp]
@@ -394,7 +394,7 @@ definition regularizedHGFun
 
 中文:
 定义 regularizedHGFun
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: (regularizedHGFunSeries a b).sum z
 
 Depends on / 依赖: regularizedHGFunSeries
@@ -738,7 +738,7 @@ definition regularizedGaussHGFunSeries
 
 中文:
 定义 regularizedGaussHGFunSeries
-  签名: (a b c : Complex)
+  签名: (a b c : 复形)
   定义体: regularizedHGFunSeries {a, b} {c}
 
 Depends on / 依赖: regularizedHGFunSeries
@@ -756,7 +756,7 @@ definition regularizedGaussHGFun
 
 中文:
 定义 regularizedGaussHGFun
-  签名: (a b c z : Complex)
+  签名: (a b c z : 复形)
   定义体: (regularizedGaussHGFunSeries a b c).sum z
 
 Depends on / 依赖: regularizedGaussHGFunSeries

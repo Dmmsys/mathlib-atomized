@@ -40,7 +40,7 @@ definition MulAction.toPerm
   body: ⟨fun x => a • x, fun x => a⁻¹ • x, inv_smul_smul a, smul_inv_smul a⟩
 
 中文:
-定义 MulAction.toPerm
+定义 乘法作用.toPerm
   签名: (a : α)
   定义体: ⟨fun x => a • x, fun x => a⁻¹ • x, inv_smul_smul a, smul_inv_smul a⟩
 
@@ -65,8 +65,8 @@ lemma MulAction.toPerm_injective
 @[to_additive]
 
 中文:
-引理 MulAction.toPerm_injective
-  条件: [FaithfulSMul α β]
+引理 乘法作用.toPerm_injective
+  条件: [忠实标量乘法 α β]
   证明: (show Function.Injective (Equiv.toFun ∘ MulAction.toPerm) from smul_left_injective').of_comp
 
 @[to_additive]
@@ -90,9 +90,9 @@ lemma MulAction.bijective
 @[to_additive]
 
 中文:
-引理 MulAction.bijective
+引理 乘法作用.bijective
   条件: (g : α)
-  结论: Function.Bijective (g • · : β -> β)
+  结论: 函数.双射 (g • · : β -> β)
   证明: (MulAction.toPerm g).bijective
 
 @[to_additive]
@@ -113,9 +113,9 @@ lemma MulAction.injective
 @[to_additive]
 
 中文:
-引理 MulAction.injective
+引理 乘法作用.injective
   条件: (g : α)
-  结论: Function.Injective (g • · : β -> β)
+  结论: 函数.单射 (g • · : β -> β)
   证明: (MulAction.bijective g).injective
 
 @[to_additive]
@@ -136,9 +136,9 @@ lemma MulAction.surjective
 @[to_additive]
 
 中文:
-引理 MulAction.surjective
+引理 乘法作用.surjective
   条件: (g : α)
-  结论: Function.Surjective (g • · : β -> β)
+  结论: 函数.满射 (g • · : β -> β)
   证明: (MulAction.bijective g).surjective
 
 @[to_additive]
@@ -342,7 +342,7 @@ definition arrowAction
 
 中文:
 定义 arrowAction
-  签名: : MulAction G (A -> B) where
+  签名: : 乘法作用 G (A -> B) where
   定义体: F (g⁻¹ • a)
   one_smul f := by
     change (fun x => f ((1 : G)⁻¹ • x)) = f
@@ -377,7 +377,7 @@ definition arrowMulDistribMulAction
 
 中文:
 定义 arrowMulDistribMulAction
-  签名: : MulDistribMulAction G (A -> M) where
+  签名: : MulDistribMul作用 G (A -> M) where
   定义体: rfl
   smul_mul _ _ _ := rfl
 -/
@@ -405,7 +405,7 @@ theorem smul_bijective
 
 中文:
 定理 smul_bijective
-  条件: {m : α} (hm : IsUnit m)
+  条件: {m : α} (hm : 是单位 m)
   证明: by
   lift m to αˣ using hm
   exact MulAction.bijective m
@@ -432,7 +432,7 @@ lemma smul_left_cancel
 
 中文:
 引理 smul_left_cancel
-  条件: {a : α} (ha : IsUnit a) {x y : β}
+  条件: {a : α} (ha : 是单位 a) {x y : β}
   结论: a • x = a • y ↔ x = y
   证明: let ⟨u, hu⟩ := ha
   hu ▸ smul_left_cancel_iff u
@@ -460,7 +460,7 @@ lemma isUnit_smul_iff
 中文:
 引理 isUnit_smul_iff
   条件: (g : α) (m : β)
-  结论: IsUnit (g • m) ↔ IsUnit m
+  结论: 是单位 (g • m) ↔ 是单位 m
   证明: ⟨fun h => inv_smul_smul g m ▸ h.smul g⁻¹, IsUnit.smul g⟩
 -/
 @[simp] lemma isUnit_smul_iff (g : α) (m : β) : IsUnit (g • m) ↔ IsUnit m :=
@@ -510,7 +510,7 @@ lemma toFun_apply
 中文:
 引理 toFun_apply
   条件: (x : M) (y : α)
-  结论: MulAction.toFun M α y x = x • y
+  结论: 乘法作用.toFun M α y x = x • y
   证明: rfl
 -/
 lemma toFun_apply (x : M) (y : α) : MulAction.toFun M α y x = x • y := rfl
@@ -532,8 +532,8 @@ smul_mul c x y := hf by simp only [smul, f.map_mul, smul_mul']
 smul_one c := hf by simp only [smul, f.map_one, smul_one]
 
 中文:
-缩写 Function.Injective.mulDistribMulAction
-  签名: [Monoid B] [SMul M B] (f : B ->* A)
+缩写 函数.单射.mulDistribMulAction
+  签名: [幺半群 B] [标量乘法 M B] (f : B ->* A)
   定义体: hf.mulAction f smul
 smul_mul c x y := hf by simp only [smul, f.map_mul, smul_mul']
 smul_one c := hf by simp only [smul, f.map_one, smul_one]
@@ -556,8 +556,8 @@ abbreviation Function.Surjective.mulDistribMulAction
   smul_one c := by rw [← f.map_one, ← smul, smul_one]
 
 中文:
-缩写 Function.Surjective.mulDistribMulAction
-  签名: [Monoid B] [SMul M B] (f : A ->* B)
+缩写 函数.满射.mulDistribMulAction
+  签名: [幺半群 B] [标量乘法 M B] (f : A ->* B)
   定义体: hf.mulAction f smul
   smul_mul c := by simp only [hf.forall, smul_mul', ← smul, ← f.map_mul, implies_true]
   smul_one c := by rw [← f.map_one, ← smul, smul_one]
@@ -580,7 +580,7 @@ definition MulDistribMulAction.toMonoidHom
   map_mul' := smul_mul' r
 
 中文:
-定义 MulDistribMulAction.toMonoidHom
+定义 MulDistribMul作用.toMonoidHom
   签名: (r : M)
   定义体: (r • ·)
   map_one' := smul_one r
@@ -623,8 +623,8 @@ map_one' := MonoidHom.ext one_smul M
 map_mul' x y := MonoidHom.ext mul_smul x y
 
 中文:
-定义 MulDistribMulAction.toMonoidEnd
-  签名: : M ->* Monoid.End A where
+定义 MulDistribMul作用.toMonoidEnd
+  签名: : M ->* 幺半群.End A where
   定义体: MulDistribMulAction.toMonoidHom A
 map_one' := MonoidHom.ext one_smul M
 map_mul' x y := MonoidHom.ext mul_smul x y

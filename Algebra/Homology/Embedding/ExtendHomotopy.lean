@@ -48,7 +48,7 @@ definition homAux
 
 中文:
 定义 homAux
-  签名: (i' j' : Option ι)
+  签名: (i' j' : 选项类型 ι)
   定义体: match i', j' with
   | none, _ => 0
   | _, none => 0
@@ -73,7 +73,7 @@ lemma homAux_eq
 
 中文:
 引理 homAux_eq
-  条件: (i' j' : Option ι) (i j : ι) (hi : i' = some i) (hj : j' = some j)
+  条件: (i' j' : 选项类型 ι) (i j : ι) (hi : i' = some i) (hj : j' = some j)
   证明: by
   subst hi hj
   simp [homAux, extend.XIso, extend.X]
@@ -176,7 +176,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (h : Homotopy f g) (e : c.Embedding c') [e.IsRelIff]
+  签名: (h : 同伦 f g) (e : c.嵌入 c') [e.是RelIff]
   定义体: extend.hom e h.hom
   comm i' := by
     by_cases hi' : exists i, e.f i = i'
@@ -230,7 +230,7 @@ lemma extend_hom_eq
 
 中文:
 引理 extend_hom_eq
-  结论: (h : Homotopy f g) (e : c.Embedding c') [e.IsRelIff]
+  结论: (h : 同伦 f g) (e : c.嵌入 c') [e.是RelIff]
   证明: extend.hom_eq _ _ _ _
 
 Depends on / 依赖: extend, extend.hom_eq, hom_eq
@@ -261,7 +261,7 @@ definition ofExtend
 
 中文:
 定义 ofExtend
-  签名: {e : c.Embedding c'} [e.IsRelIff]
+  签名: {e : c.嵌入 c'} [e.是RelIff]
   定义体: (K.extendXIso e rfl).inv ≫ h.hom (e.f i) (e.f j) ≫ (L.extendXIso e rfl).hom
   comm i := by
     have := h.comm (e.f i)
@@ -318,7 +318,7 @@ lemma extend_ofExtend
 
 中文:
 引理 extend_ofExtend
-  结论: {e : c.Embedding c'} [e.IsRelIff]
+  结论: {e : c.嵌入 c'} [e.是RelIff]
   证明: by
   ext i' j'
   by_cases hi' : exists i, e.f i = i'
@@ -356,7 +356,7 @@ lemma ofExtend_extend
 
 中文:
 引理 ofExtend_extend
-  条件: (h : Homotopy f g) (e : c.Embedding c') [e.IsRelIff]
+  条件: (h : 同伦 f g) (e : c.嵌入 c') [e.是RelIff]
   证明: by
   ext i j
   simp [ofExtend_hom, h.extend_hom_eq e rfl rfl]
@@ -382,7 +382,7 @@ definition extendEquiv
 
 中文:
 定义 extendEquiv
-  签名: (e : c.Embedding c') [e.IsRelIff]
+  签名: (e : c.嵌入 c') [e.是RelIff]
   定义体: h.extend e
   invFun h := h.ofExtend
   left_inv _ := by simp
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: (e.extendHomotopyFunctor C).Full
+  签名: (e.extendHomotopyFunctor C).满
   定义体: by
     obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
     obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
@@ -500,7 +500,7 @@ instance :
 
 中文:
 实例 :
-  签名: (e.extendHomotopyFunctor C).Faithful
+  签名: (e.extendHomotopyFunctor C).忠实
   定义体: by
     obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
     obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
@@ -534,7 +534,7 @@ lemma HomologicalComplex.homotopyEquivalences_extendMap_iff
   simp only [← Hom
 
 中文:
-引理 HomologicalComplex.homotopyEquivalences_extendMap_iff
+引理 同调复形.homotopyEquivalences_extendMap_iff
   证明: by
   #adaptation_note /-- Prior to nightly-2026-05-07, `dsimp%` was used directly inline as the last
   argument to the original `simp`; it now reports `made no progress` so we apply

@@ -616,7 +616,7 @@ omit [IsOrderedMonoid G] in
 中文:
 定理 mabs_le_max_mabs_mabs
   条件: (hab : a <= b) (hbc : b <= c)
-  结论: |b|ₘ <= max |a|ₘ |c|ₘ
+  结论: |b|ₘ <= 最大值 |a|ₘ |c|ₘ
   证明: mabs_le'.2
     ⟨by simp [hbc.trans (le_mabs_self c)], by
       simp [(inv_le_inv_iff.mpr hab).trans (inv_le_mabs a)]⟩
@@ -647,7 +647,7 @@ omit [IsOrderedMonoid G] in
 
 中文:
 定理 min_mabs_mabs_le_mabs_max
-  结论: min |a|ₘ |b|ₘ <= |max a b|ₘ
+  结论: 最小值 |a|ₘ |b|ₘ <= |最大值 a b|ₘ
   证明: (le_total a b).elim (fun h => (min_le_right _ _).trans_eq <| congr_arg _ (max_eq_right h).symm)
 fun h => (min_le_left _ _).trans_eq congr_arg _ (max_eq_left h).symm
 
@@ -676,7 +676,7 @@ omit [IsOrderedMonoid G] in
 
 中文:
 定理 min_mabs_mabs_le_mabs_min
-  结论: min |a|ₘ |b|ₘ <= |min a b|ₘ
+  结论: 最小值 |a|ₘ |b|ₘ <= |最小值 a b|ₘ
   证明: (le_total a b).elim (fun h => (min_le_left _ _).trans_eq <| congr_arg _ (min_eq_left h).symm)
 fun h => (min_le_right _ _).trans_eq congr_arg _ (min_eq_right h).symm
 
@@ -705,7 +705,7 @@ omit [IsOrderedMonoid G] in
 
 中文:
 定理 mabs_max_le_max_mabs_mabs
-  结论: |max a b|ₘ <= max |a|ₘ |b|ₘ
+  结论: |最大值 a b|ₘ <= 最大值 |a|ₘ |b|ₘ
   证明: (le_total a b).elim (fun h => (congr_arg _ <| max_eq_right h).trans_le <| le_max_right _ _)
 fun h => (congr_arg _ <| max_eq_left h).trans_le le_max_left _ _
 
@@ -733,7 +733,7 @@ theorem mabs_min_le_max_mabs_mabs
 
 中文:
 定理 mabs_min_le_max_mabs_mabs
-  结论: |min a b|ₘ <= max |a|ₘ |b|ₘ
+  结论: |最小值 a b|ₘ <= 最大值 |a|ₘ |b|ₘ
   证明: (le_total a b).elim (fun h => (congr_arg _ <| min_eq_left h).trans_le <| le_max_left _ _) fun h =>
 (congr_arg _ <| min_eq_right h).trans_le le_max_right _ _
 
@@ -954,7 +954,7 @@ lemma eq_of_mabs_div_le_all
 
 中文:
 引理 eq_of_mabs_div_le_all
-  条件: [DenselyOrdered G] {x y : G} (h : 对任意 ε > 1, |x / y|ₘ <= ε)
+  条件: [稠密序 G] {x y : G} (h : 对任意 ε > 1, |x / y|ₘ <= ε)
   结论: x = y
   证明: eq_of_mabs_div_le_one forall_gt_imp_ge_iff_le_of_dense.mp h
 
@@ -1104,7 +1104,7 @@ theorem max_one_mul_max_inv_one_eq_mabs_self
 中文:
 定理 max_one_mul_max_inv_one_eq_mabs_self
   条件: (a : G)
-  结论: max a 1 * max a⁻¹ 1 = |a|ₘ
+  结论: 最大值 a 1 * 最大值 a⁻¹ 1 = |a|ₘ
   证明: by
   symm
   rcases le_total 1 a with (ha | ha) <;> simp [ha]
@@ -1135,7 +1135,7 @@ theorem apply_abs_le_mul_of_one_le'
 
 中文:
 定理 apply_abs_le_mul_of_one_le'
-  结论: {H : 类型} [MulOneClass H] [LE H]
+  结论: {H : 类型} [MulOne类 H] [LE H]
   证明: (le_total a 0).rec (fun ha => (abs_of_nonpos ha).symm ▸ le_mul_of_one_le_left' h₁) fun ha =>
     (abs_of_nonneg ha).symm ▸ le_mul_of_one_le_right' h₂
 
@@ -1160,7 +1160,7 @@ theorem apply_abs_le_mul_of_one_le
 
 中文:
 定理 apply_abs_le_mul_of_one_le
-  结论: {H : 类型} [MulOneClass H] [LE H]
+  结论: {H : 类型} [MulOne类 H] [LE H]
   证明: apply_abs_le_mul_of_one_le' (h _) (h _)
 
 Depends on / 依赖: apply_abs_le_mul_of_one_le

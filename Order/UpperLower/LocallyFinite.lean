@@ -33,8 +33,8 @@ theorem Finite.upperClosure
   exact hs.biUnion fun _ _ => finite_Ici _
 
 中文:
-定理 Finite.upperClosure
-  条件: [LocallyFiniteOrderTop α] (hs : s.Finite)
+定理 有限.upperClosure
+  条件: [LocallyFiniteOrderTop α] (hs : s.有限)
   证明: by
   rw [coe_upperClosure]
   exact hs.biUnion fun _ _ => finite_Ici _
@@ -55,8 +55,8 @@ theorem Finite.lowerClosure
   exact hs.biUnion fun _ _ => finite_Iic _
 
 中文:
-定理 Finite.lowerClosure
-  条件: [LocallyFiniteOrderBot α] (hs : s.Finite)
+定理 有限.lowerClosure
+  条件: [LocallyFiniteOrderBot α] (hs : s.有限)
   证明: by
   rw [coe_lowerClosure]
   exact hs.biUnion fun _ _ => finite_Iic _

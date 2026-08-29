@@ -116,7 +116,7 @@ definition RingHom.ContainsIdentities
   body: forall (R : Type u) [CommRing R], P (RingHom.id R)
 
 中文:
-定义 RingHom.ContainsIdentities
+定义 环态射.余ntainsIdentities
   定义体: forall (R : Type u) [CommRing R], P (RingHom.id R)
 
 Depends on / 依赖: CommRing, RingHom, RingHom.id
@@ -134,7 +134,7 @@ definition RingHom.LocalizationPreserves
     P f -> P (IsLocalization.map S' f (Submonoid.le_comap_map M) : R' ->+* S')
 
 中文:
-定义 RingHom.LocalizationPreserves
+定义 环态射.LocalizationPreserves
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (M : Submonoid R) (R' S' : Type u)
     [CommRing R'] [CommRing S'] [Algebra R R'] [Algebra S S'] [IsLocalization M R']
     [IsLocalization (M.map f) S'],
@@ -159,7 +159,7 @@ definition RingHom.LocalizationAwayPreserves
     P f -> P (IsLocalization.Away.map R' S' f r : R' ->+* S')
 
 中文:
-定义 RingHom.LocalizationAwayPreserves
+定义 环态射.LocalizationAwayPreserves
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (r : R) (R' S' : Type u)
     [CommRing R'] [CommRing S'] [Algebra R R'] [Algebra S S'] [IsLocalization.Away r R']
     [IsLocalization.Away (f r) S'],
@@ -182,7 +182,7 @@ definition RingHom.OfLocalizationFiniteSpan
     (_ : Ideal.span (s : Set R) = ⊤) (_ : forall r : s, P (Localization.awayMap f r)), P f
 
 中文:
-定义 RingHom.OfLocalizationFiniteSpan
+定义 环态射.OfLocalizationFiniteSpan
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (s : Finset R)
     (_ : Ideal.span (s : Set R) = ⊤) (_ : forall r : s, P (Localization.awayMap f r)), P f
 
@@ -201,7 +201,7 @@ definition RingHom.OfLocalizationSpan
     (_ : forall r : s, P (Localization.awayMap f r)), P f
 
 中文:
-定义 RingHom.OfLocalizationSpan
+定义 环态射.OfLocalizationSpan
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (s : Set R) (_ : Ideal.span s = ⊤)
     (_ : forall r : s, P (Localization.awayMap f r)), P f
 
@@ -221,7 +221,7 @@ definition RingHom.HoldsForLocalization
     [IsLocalization M S], P (algebraMap R S)
 
 中文:
-定义 RingHom.HoldsForLocalization
+定义 环态射.HoldsForLocalization
   签名: : 命题
   定义体: forall ⦃R : Type u⦄ (S : Type u) [CommRing R] [CommRing S] [Algebra R S] (M : Submonoid R)
     [IsLocalization M S], P (algebraMap R S)
@@ -242,7 +242,7 @@ definition RingHom.HoldsForLocalizationAway
     [IsLocalization.Away r S], P (algebraMap R S)
 
 中文:
-定义 RingHom.HoldsForLocalizationAway
+定义 环态射.HoldsForLocalizationAway
   签名: : 命题
   定义体: forall ⦃R : Type u⦄ (S : Type u) [CommRing R] [CommRing S] [Algebra R S] (r : R)
     [IsLocalization.Away r S], P (algebraMap R S)
@@ -263,7 +263,7 @@ definition RingHom.StableUnderCompositionWithLocalizationAwaySource
     (r : R) [IsLocalization.Away r S] (f : S ->+* T), P f -> P (f.comp (algebraMap R S))
 
 中文:
-定义 RingHom.StableUnderCompositionWithLocalizationAwaySource
+定义 环态射.StableUnderCompositionWithLocalizationAwaySource
   签名: : 命题
   定义体: forall ⦃R : Type u⦄ (S : Type u) ⦃T : Type u⦄ [CommRing R] [CommRing S] [CommRing T] [Algebra R S]
     (r : R) [IsLocalization.Away r S] (f : S ->+* T), P f -> P (f.comp (algebraMap R S))
@@ -284,7 +284,7 @@ definition RingHom.StableUnderCompositionWithLocalizationAwayTarget
     [IsLocalization.Away s T] (f : R ->+* S), P f -> P ((algebraMap S T).comp f)
 
 中文:
-定义 RingHom.StableUnderCompositionWithLocalizationAwayTarget
+定义 环态射.StableUnderCompositionWithLocalizationAwayTarget
   签名: : 命题
   定义体: forall ⦃R S : Type u⦄ (T : Type u) [CommRing R] [CommRing S] [CommRing T] [Algebra S T] (s : S)
     [IsLocalization.Away s T] (f : R ->+* S), P f -> P ((algebraMap S T).comp f)
@@ -305,7 +305,7 @@ definition RingHom.StableUnderCompositionWithLocalizationAway
     StableUnderCompositionWithLocalizationAwayTarget P
 
 中文:
-定义 RingHom.StableUnderCompositionWithLocalizationAway
+定义 环态射.StableUnderCompositionWithLocalizationAway
   签名: : 命题
   定义体: StableUnderCompositionWithLocalizationAwaySource P ∧
     StableUnderCompositionWithLocalizationAwayTarget P
@@ -327,7 +327,7 @@ definition RingHom.OfLocalizationFiniteSpanTarget
     (_ : forall r : s, P ((algebraMap S (Localization.Away (r : S))).comp f)), P f
 
 中文:
-定义 RingHom.OfLocalizationFiniteSpanTarget
+定义 环态射.OfLocalizationFiniteSpanTarget
   签名: : 命题
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (s : Finset S)
     (_ : Ideal.span (s : Set S) = ⊤)
@@ -350,7 +350,7 @@ definition RingHom.OfLocalizationSpanTarget
     (_ : forall r : s, P ((algebraMap S (Localization.Away (r : S))).comp f)), P f
 
 中文:
-定义 RingHom.OfLocalizationSpanTarget
+定义 环态射.OfLocalizationSpanTarget
   签名: : 命题
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S) (s : Set S) (_ : Ideal.span s = ⊤)
     (_ : forall r : s, P ((algebraMap S (Localization.Away (r : S))).comp f)), P f
@@ -371,7 +371,7 @@ definition RingHom.OfLocalizationPrime
     (forall (J : Ideal S) (_ : J.IsPrime), P (Localization.localRingHom _ J f rfl)) -> P f
 
 中文:
-定义 RingHom.OfLocalizationPrime
+定义 环态射.OfLocalizationPrime
   签名: : 命题
   定义体: forall ⦃R S : Type u⦄ [CommRing R] [CommRing S] (f : R ->+* S),
     (forall (J : Ideal S) (_ : J.IsPrime), P (Localization.localRingHom _ J f rfl)) -> P f
@@ -395,13 +395,13 @@ structure RingHom.PropertyIsLocal
     - StableUnderCompositionWithLocalizationAwayTarget : RingHom.StableUnderCompositionWithLocalizationAwayTarget @P
 
 中文:
-结构 RingHom.PropertyIsLocal
+结构 环态射.PropertyIsLocal
   参数: : 命题 where
   公理与运算 (4 个):
-    - localizationAwayPreserves : RingHom.LocalizationAwayPreserves @P
-    - ofLocalizationSpanTarget : RingHom.OfLocalizationSpanTarget @P
-    - ofLocalizationSpan : RingHom.OfLocalizationSpan @P
-    - StableUnderCompositionWithLocalizationAwayTarget : RingHom.StableUnderCompositionWithLocalizationAwayTarget @P
+    - localizationAwayPreserves : 环态射.LocalizationAwayPreserves @P
+    - ofLocalizationSpanTarget : 环态射.OfLocalizationSpanTarget @P
+    - ofLocalizationSpan : 环态射.OfLocalizationSpan @P
+    - StableUnderCompositionWithLocalizationAwayTarget : 环态射.StableUnderCompositionWithLocalizationAwayTarget @P
 -/
 structure RingHom.PropertyIsLocal : Prop where
   localizationAwayPreserves : RingHom.LocalizationAwayPreserves @P
@@ -427,7 +427,7 @@ theorem RingHom.ofLocalizationSpan_iff_finite
     exact h s' h₂ fun x 
 
 中文:
-定理 RingHom.ofLocalizationSpan_iff_finite
+定理 环态射.ofLocalizationSpan_iff_finite
   证明: by
   delta RingHom.OfLocalizationSpan RingHom.OfLocalizationFiniteSpan
   apply forall₅_congr
@@ -470,7 +470,7 @@ theorem RingHom.ofLocalizationSpanTarget_iff_finite
     exact h 
 
 中文:
-定理 RingHom.ofLocalizationSpanTarget_iff_finite
+定理 环态射.ofLocalizationSpanTarget_iff_finite
   证明: by
   delta RingHom.OfLocalizationSpanTarget RingHom.OfLocalizationFiniteSpanTarget
   apply forall₅_congr
@@ -514,8 +514,8 @@ lemma RingHom.OfLocalizationSpan.mk
       ((IsLocalization.Away.tensorRightEquiv S r (Localization.Away r)).symm
 
 中文:
-引理 RingHom.OfLocalizationSpan.mk
-  结论: (hP : RingHom.RespectsIso P)
+引理 环态射.OfLocalizationSpan.mk
+  结论: (hP : 环态射.RespectsIso P)
   证明: by
   introv R hs hf
   algebraize [f]
@@ -562,7 +562,7 @@ lemma RingHom.HoldsForLocalization.mk
   exact hP.1 _ _ (H _)
 
 中文:
-引理 RingHom.HoldsForLocalization.mk
+引理 环态射.HoldsForLocalization.mk
   结论: (hP : RespectsIso P)
   证明: by
   introv R _
@@ -587,7 +587,7 @@ lemma RingHom.HoldsForLocalization.holdsForLocalizationAway
   proof: fun _ _ _ _ _ r _ => hP _ (Submonoid.powers r)
 
 中文:
-引理 RingHom.HoldsForLocalization.holdsForLocalizationAway
+引理 环态射.HoldsForLocalization.holdsForLocalizationAway
   条件: (hP : HoldsForLocalization P)
   证明: fun _ _ _ _ _ r _ => hP _ (Submonoid.powers r)
 
@@ -610,7 +610,7 @@ lemma RingHom.HoldsForLocalization.isLocalizationMap
     IsLocalization.localization_
 
 中文:
-引理 RingHom.HoldsForLocalization.isLocalizationMap
+引理 环态射.HoldsForLocalization.isLocalizationMap
   证明: by
   have hle : Submonoid.map f M <= T := by simpa [Submonoid.map_le_iff_le_comap]
   let : Algebra (Localization (M.map f)) S' :=
@@ -654,7 +654,7 @@ lemma RingHom.HoldsForLocalization.localRingHom
   proof: hPl.isLocalizationMap hPc hPp _ _ hf
 
 中文:
-引理 RingHom.HoldsForLocalization.localRingHom
+引理 环态射.HoldsForLocalization.localRingHom
   结论: (hPc : StableUnderComposition P)
   证明: hPl.isLocalizationMap hPc hPp _ _ hf
 
@@ -682,7 +682,7 @@ theorem RingHom.HoldsForLocalizationAway.of_bijective
   exact H _ 1
 
 中文:
-定理 RingHom.HoldsForLocalizationAway.of_bijective
+定理 环态射.HoldsForLocalizationAway.of_bijective
   证明: by
   let := f.toAlgebra
   have := IsLocalization.of_le_isUnit (S := .powers (1 : R)) (by simp)
@@ -716,7 +716,7 @@ lemma RingHom.StableUnderComposition.stableUnderCompositionWithLocalizationAway
     exact hPc _ _ hf (hPl T s)
 
 中文:
-引理 RingHom.StableUnderComposition.stableUnderCompositionWithLocalizationAway
+引理 环态射.StableUnderComposition.stableUnderCompositionWithLocalizationAway
   证明: by
   constructor
   · introv _ _ hf
@@ -746,7 +746,7 @@ lemma RingHom.HoldsForLocalizationAway.containsIdentities
   exact hPl.of_bijective _ _ Function.bijective_id
 
 中文:
-引理 RingHom.HoldsForLocalizationAway.containsIdentities
+引理 环态射.HoldsForLocalizationAway.containsIdentities
   条件: (hPl : HoldsForLocalizationAway P)
   证明: by
   introv R
@@ -773,7 +773,7 @@ lemma RingHom.LocalizationAwayPreserves.respectsIso
     convert! hP f 
 
 中文:
-引理 RingHom.LocalizationAwayPreserves.respectsIso
+引理 环态射.LocalizationAwayPreserves.respectsIso
   证明: by
     let := e.toRingHom.toAlgebra
     have : IsLocalization.Away (1 : R) R :=
@@ -826,7 +826,7 @@ lemma RingHom.StableUnderCompositionWithLocalizationAway.respectsIso
 
 
 中文:
-引理 RingHom.StableUnderCompositionWithLocalizationAway.respectsIso
+引理 环态射.StableUnderCompositionWithLocalizationAway.respectsIso
   证明: by
     let := e.toRingHom.toAlgebra
     have : IsLocalization.Away (1 : S) T :=
@@ -862,8 +862,8 @@ theorem RingHom.PropertyIsLocal.respectsIso
   proof: hP.localizationAwayPreserves.respectsIso
 
 中文:
-定理 RingHom.PropertyIsLocal.respectsIso
-  条件: (hP : RingHom.命题ertyIsLocal @P)
+定理 环态射.PropertyIsLocal.respectsIso
+  条件: (hP : 环态射.PropertyIsLocal @P)
   证明: hP.localizationAwayPreserves.respectsIso
 
 Depends on / 依赖: hP.localizationAwayPreserves.respectsIso, localizationAwayPreserves, respectsIso
@@ -885,8 +885,8 @@ theorem RingHom.LocalizationPreserves.away
   exact H f (Submonoid.powers r) R' S' hf
 
 中文:
-定理 RingHom.LocalizationPreserves.away
-  条件: (H : RingHom.LocalizationPreserves @P)
+定理 环态射.LocalizationPreserves.away
+  条件: (H : 环态射.LocalizationPreserves @P)
   证明: by
   intro R S _ _ f r R' S' _ _ _ _ _ _ hf
   have : IsLocalization ((Submonoid.powers r).map f) S' := by rw [Submonoid.map_powers]; assumption
@@ -914,8 +914,8 @@ lemma RingHom.PropertyIsLocal.HoldsForLocalizationAway
   apply hPi
 
 中文:
-引理 RingHom.PropertyIsLocal.HoldsForLocalizationAway
-  结论: (hP : RingHom.命题ertyIsLocal @P)
+引理 环态射.PropertyIsLocal.HoldsForLocalizationAway
+  结论: (hP : 环态射.PropertyIsLocal @P)
   证明: by
   introv R _
   have : algebraMap R S = (algebraMap R S).comp (RingHom.id R) := by simp
@@ -951,7 +951,7 @@ theorem RingHom.OfLocalizationSpanTarget.ofLocalizationSpan
     exact hs' ⟨r, hr
 
 中文:
-定理 RingHom.OfLocalizationSpanTarget.ofLocalizationSpan
+定理 环态射.OfLocalizationSpanTarget.ofLocalizationSpan
   证明: by
   introv R hs hs'
   apply_fun Ideal.map f at hs
@@ -994,7 +994,7 @@ lemma RingHom.OfLocalizationSpan.ofIsLocalization
   have : Localization.awayMa
 
 中文:
-引理 RingHom.OfLocalizationSpan.ofIsLocalization
+引理 环态射.OfLocalizationSpan.ofIsLocalization
   证明: by
   apply hP _ s hs
   intro r
@@ -1045,7 +1045,7 @@ lemma RingHom.OfLocalizationSpan.ofIsLocalization'
     inferInstance, inferInstance, IsLocalization.Away.map Rᵣ Sᵣ f r, IsLocalization.map_comp _, hf⟩
 
 中文:
-引理 RingHom.OfLocalizationSpan.ofIsLocalization'
+引理 环态射.OfLocalizationSpan.ofIsLocalization'
   证明: by
   apply hP.ofIsLocalization hPi _ s hs
   intro r
@@ -1082,7 +1082,7 @@ lemma RingHom.OfLocalizationSpanTarget.ofIsLocalization
   rw [← RingHom.comp_assoc]; rw [RingEquiv.toRingHom_eq_coe]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [Localization.coe_algEquiv_symm]
 
 中文:
-引理 RingHom.OfLocalizationSpanTarget.ofIsLocalization
+引理 环态射.OfLocalizationSpanTarget.ofIsLocalization
   证明: by
   apply hP _ s hs
   intro r
@@ -1118,7 +1118,7 @@ lemma RingHom.OfLocalizationSpanTarget.and
   exact ⟨hP f s hs fun r => (hf r).1, hQ f s hs fun r => (hf r).2⟩
 
 中文:
-引理 RingHom.OfLocalizationSpanTarget.and
+引理 环态射.OfLocalizationSpanTarget.and
   结论: (hP : OfLocalizationSpanTarget P)
   证明: by
   introv R hs hf
@@ -1143,7 +1143,7 @@ lemma RingHom.OfLocalizationSpan.and
   exact ⟨hP f s hs fun r => (hf r).1, hQ f s hs fun r => (hf r).2⟩
 
 中文:
-引理 RingHom.OfLocalizationSpan.and
+引理 环态射.OfLocalizationSpan.and
   条件: (hP : OfLocalizationSpan P) (hQ : OfLocalizationSpan Q)
   证明: by
   introv R hs hf
@@ -1167,7 +1167,7 @@ lemma RingHom.LocalizationAwayPreserves.and
   exact ⟨hP f r R' S' h.1, hQ f r R' S' h.2⟩
 
 中文:
-引理 RingHom.LocalizationAwayPreserves.and
+引理 环态射.LocalizationAwayPreserves.and
   结论: (hP : LocalizationAwayPreserves P)
   证明: by
   introv R h
@@ -1191,7 +1191,7 @@ lemma RingHom.StableUnderCompositionWithLocalizationAwayTarget.and
   exact ⟨hP T s f hf.1, hQ T s f hf.2⟩
 
 中文:
-引理 RingHom.StableUnderCompositionWithLocalizationAwayTarget.and
+引理 环态射.StableUnderCompositionWithLocalizationAwayTarget.and
   证明: by
   introv R h hf
   exact ⟨hP T s f hf.1, hQ T s f hf.2⟩
@@ -1218,8 +1218,8 @@ lemma RingHom.PropertyIsLocal.and
     hP.StableUnderComp
 
 中文:
-引理 RingHom.PropertyIsLocal.and
-  条件: (hP : 命题ertyIsLocal P) (hQ : 命题ertyIsLocal Q)
+引理 环态射.PropertyIsLocal.and
+  条件: (hP : PropertyIsLocal P) (hQ : PropertyIsLocal Q)
   证明: hP.localizationAwayPreserves.and hQ.localizationAwayPreserves
   ofLocalizationSpanTarget := hP.ofLocalizationSpanTarget.and hQ.ofLocalizationSpanTarget
   ofLocalizationSpan := hP.ofLocalizationSpan.and hQ.ofLocalizationSpan
@@ -1257,8 +1257,8 @@ lemma RingHom.IsStableUnderBaseChange.of_isLocalization
   hP R S Rᵣ Sᵣ h
 
 中文:
-引理 RingHom.IsStableUnderBaseChange.of_isLocalization
-  结论: [Algebra R S] [Algebra R Sᵣ] [Algebra Rᵣ Sᵣ]
+引理 环态射.是StableUnderBaseChange.of_isLocalization
+  结论: [代数 R S] [代数 R Sᵣ] [代数 Rᵣ Sᵣ]
   证明: letI : Algebra.IsPushout R S Rᵣ Sᵣ := Algebra.isPushout_of_isLocalization M Rᵣ S Sᵣ
   hP R S Rᵣ Sᵣ h
 
@@ -1285,8 +1285,8 @@ lemma RingHom.IsStableUnderBaseChange.isLocalization_map
   have : IsLocalization (Algebra.algebraM
 
 中文:
-引理 RingHom.IsStableUnderBaseChange.isLocalization_map
-  结论: (M : Submonoid R) [IsLocalization M Rᵣ]
+引理 环态射.是StableUnderBaseChange.isLocalization_map
+  结论: (M : 子幺半群 R) [是Localization M Rᵣ]
   证明: by
   algebraize [f, IsLocalization.map (S := Rᵣ) Sᵣ f M.le_comap_map,
     (IsLocalization.map (S := Rᵣ) Sᵣ f M.le_comap_map).comp (algebraMap R Rᵣ)]
@@ -1318,7 +1318,7 @@ lemma RingHom.IsStableUnderBaseChange.localizationPreserves
   exact hP.isLocalization_map _ _ hf
 
 中文:
-引理 RingHom.IsStableUnderBaseChange.localizationPreserves
+引理 环态射.是StableUnderBaseChange.localizationPreserves
   结论: LocalizationPreserves P
   证明: by
   introv R hf
@@ -1351,8 +1351,8 @@ theorem Ideal.localized'_eq_map
   rw [map]; rw [span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap]
 
 中文:
-定理 Ideal.localized'_eq_map
-  条件: (I : Ideal R)
+定理 理想.localized'_eq_map
+  条件: (I : 理想 R)
   证明: by
   rw [map]; rw [span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap]
 
@@ -1371,8 +1371,8 @@ theorem Ideal.localized₀_eq_restrictScalars_map
   proof: congr(Submodule.restrictScalars R $(localized'_eq_map S p I))
 
 中文:
-定理 Ideal.localized₀_eq_restrictScalars_map
-  条件: (I : Ideal R)
+定理 理想.localized₀_eq_restrictScalars_map
+  条件: (I : 理想 R)
   证明: congr(Submodule.restrictScalars R $(localized'_eq_map S p I))
 
 Depends on / 依赖: Submodule, Submodule.restrictScalars, _eq_map, localized, restrictScalars
@@ -1390,8 +1390,8 @@ theorem Algebra.idealMap_eq_ofEq_comp_toLocalized₀
   proof: rfl
 
 中文:
-定理 Algebra.idealMap_eq_ofEq_comp_toLocalized₀
-  条件: (I : Ideal R)
+定理 代数.idealMap_eq_ofEq_comp_toLocalized₀
+  条件: (I : 理想 R)
   证明: rfl
 -/
 theorem Algebra.idealMap_eq_ofEq_comp_toLocalized₀ (I : Ideal R) :
@@ -1410,8 +1410,8 @@ theorem Ideal.mem_of_localization_maximal
     apply (localized'_eq_map (Localization.AtPrime P) P.primeCompl J).symm ▸ h P hP
 
 中文:
-定理 Ideal.mem_of_localization_maximal
-  结论: {r : R} {J : Ideal R}
+定理 理想.mem_of_localization_maximal
+  结论: {r : R} {J : 理想 R}
   证明: Submodule.mem_of_localization_maximal _ _ _ _ fun P hP => by
     apply (localized'_eq_map (Localization.AtPrime P) P.primeCompl J).symm ▸ h P hP
 
@@ -1433,8 +1433,8 @@ theorem Ideal.le_of_localization_maximal
   proof: fun _ hm => mem_of_localization_maximal fun P hP => h P hP (mem_map_of_mem _ hm)
 
 中文:
-定理 Ideal.le_of_localization_maximal
-  结论: {I J : Ideal R}
+定理 理想.le_of_localization_maximal
+  结论: {I J : 理想 R}
   证明: fun _ hm => mem_of_localization_maximal fun P hP => h P hP (mem_map_of_mem _ hm)
 
 Depends on / 依赖: mem_map_of_mem, mem_of_localization_maximal
@@ -1461,8 +1461,8 @@ lemma Ideal.iInf_ker_le
   · simp [IsLocalization.AtPrime.map_eq_top_of_not_le _ hle]
 
 中文:
-引理 Ideal.iInf_ker_le
-  条件: (I : Ideal R)
+引理 理想.iInf_ker_le
+  条件: (I : 理想 R)
   证明: by
   intro x hx
   refine Ideal.mem_of_localization_maximal fun m hm => ?_
@@ -1493,8 +1493,8 @@ theorem Ideal.eq_of_localization_maximal
     (le_of_localization_maximal fun P hP => (h P hP).ge)
 
 中文:
-定理 Ideal.eq_of_localization_maximal
-  结论: {I J : Ideal R}
+定理 理想.eq_of_localization_maximal
+  结论: {I J : 理想 R}
   证明: le_antisymm (le_of_localization_maximal fun P hP => (h P hP).le)
     (le_of_localization_maximal fun P hP => (h P hP).ge)
 
@@ -1518,7 +1518,7 @@ theorem ideal_eq_bot_of_localization'
 
 中文:
 定理 ideal_eq_bot_of_localization'
-  结论: (I : Ideal R)
+  结论: (I : 理想 R)
   证明: Ideal.eq_of_localization_maximal fun P hP => by simpa using h P hP
 
 Depends on / 依赖: Ideal.eq_of_localization_maximal, eq_of_localization_maximal
@@ -1559,7 +1559,7 @@ theorem ideal_eq_bot_of_localization
 
 中文:
 定理 ideal_eq_bot_of_localization
-  结论: (I : Ideal R)
+  结论: (I : 理想 R)
   证明: bot_unique fun r hr => eq_zero_of_localization r fun J hJ => (h J hJ).le ⟨r, hr, rfl⟩
 
 Depends on / 依赖: bot_unique, eq_zero_of_localization

@@ -89,9 +89,9 @@ structure IsBoundedLinearMap
     - bound : exists M, 0 < M ∧ forall x : E, ‖f x‖ <= M * ‖x‖
 
 中文:
-结构 IsBoundedLinearMap
+结构 是BoundedLinear映射
   参数: : 命题
-  继承: IsLinearMap 𝕜 f
+  继承: 是线性映射 𝕜 f
   公理与运算 (1 个):
     - bound : 存在 M, 0 < M ∧ 对任意 x : E, ‖f x‖ <= M * ‖x‖
 -/
@@ -132,8 +132,8 @@ theorem IsLinearMap.with_bound
       fun (this : ¬M <= 0) => ⟨M, lt_of_not_ge this, h⟩⟩
 
 中文:
-定理 IsLinearMap.with_bound
-  结论: {f : E -> F} (hf : IsLinearMap 𝕜 f) (M : 实数)
+定理 是线性映射.with_bound
+  结论: {f : E -> F} (hf : 是线性映射 𝕜 f) (M : 实数)
   证明: ⟨hf,
     by_cases
       (fun (this : M <= 0) =>
@@ -164,7 +164,7 @@ definition toLinearMap
 
 中文:
 定义 toLinearMap
-  签名: (f : E -> F) (h : IsBoundedLinearMap 𝕜 f)
+  签名: (f : E -> F) (h : 是BoundedLinear映射 𝕜 f)
   定义体: IsLinearMap.mk' _ h.toIsLinearMap
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.mk, h.toIsLinearMap, toIsLinearMap
@@ -185,7 +185,7 @@ definition toContinuousLinearMap
 
 中文:
 定义 toContinuousLinearMap
-  签名: (f : E -> F) (hf : IsBoundedLinearMap 𝕜 f)
+  签名: (f : E -> F) (hf : 是BoundedLinear映射 𝕜 f)
   定义体: { toLinearMap f hf with
     cont :=
       let ⟨C, _, hC⟩ := hf.bound
@@ -209,7 +209,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: IsBoundedLinearMap 𝕜 fun _ : E => (0 : F)
+  结论: 是BoundedLinear映射 𝕜 fun _ : E => (0 : F)
   证明: (0 : E ->ₗ[𝕜] F).isLinear.with_bound 0 by simp
 
 Depends on / 依赖: isLinear, isLinear.with_bound, with_bound
@@ -227,7 +227,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsBoundedLinearMap 𝕜 fun x : E => x
+  结论: 是BoundedLinear映射 𝕜 fun x : E => x
   证明: LinearMap.id.isLinear.with_bound 1 by simp
 
 Depends on / 依赖: LinearMap, LinearMap.id.isLinear.with_bound, isLinear, with_bound
@@ -248,7 +248,7 @@ theorem fst
 
 中文:
 定理 fst
-  结论: IsBoundedLinearMap 𝕜 fun x : E × F => x.1
+  结论: 是BoundedLinear映射 𝕜 fun x : E × F => x.1
   证明: by
   refine (LinearMap.fst 𝕜 E F).isLinear.with_bound 1 fun x => ?_
   rw [one_mul]
@@ -274,7 +274,7 @@ theorem snd
 
 中文:
 定理 snd
-  结论: IsBoundedLinearMap 𝕜 fun x : E × F => x.2
+  结论: 是BoundedLinear映射 𝕜 fun x : E × F => x.2
   证明: by
   refine (LinearMap.snd 𝕜 E F).isLinear.with_bound 1 fun x => ?_
   rw [one_mul]
@@ -302,7 +302,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {𝕜' : 类型} (c : 𝕜') [SeminormedRing 𝕜'] [Module 𝕜' F] [IsBoundedSMul 𝕜' F]
+  结论: {𝕜' : 类型} (c : 𝕜') [Seminormed环 𝕜'] [模 𝕜' F] [是BoundedSMul 𝕜' F]
   证明: let ⟨hlf, M, _, hM⟩ := hf
   (c • hlf.mk' f).isLinear.with_bound (‖c‖ * M) fun x =>
     calc
@@ -332,8 +332,8 @@ theorem neg
 
 中文:
 定理 neg
-  条件: (hf : IsBoundedLinearMap 𝕜 f)
-  结论: IsBoundedLinearMap 𝕜 fun e => -f e
+  条件: (hf : 是BoundedLinear映射 𝕜 f)
+  结论: 是BoundedLinear映射 𝕜 fun e => -f e
   证明: ⟨(-hf.1.mk' _).isLinear, by simpa using hf.2⟩
 
 Depends on / 依赖: isLinear
@@ -356,7 +356,7 @@ theorem add
 
 中文:
 定理 add
-  条件: (hf : IsBoundedLinearMap 𝕜 f) (hg : IsBoundedLinearMap 𝕜 g)
+  条件: (hf : 是BoundedLinear映射 𝕜 f) (hg : 是BoundedLinear映射 𝕜 g)
   证明: let ⟨hlf, Mf, _, hMf⟩ := hf
   let ⟨hlg, Mg, _, hMg⟩ := hg
   (hlf.mk' _ + hlg.mk' _).isLinear.with_bound (Mf + Mg) fun x =>
@@ -385,7 +385,7 @@ theorem sub
 
 中文:
 定理 sub
-  条件: (hf : IsBoundedLinearMap 𝕜 f) (hg : IsBoundedLinearMap 𝕜 g)
+  条件: (hf : 是BoundedLinear映射 𝕜 f) (hg : 是BoundedLinear映射 𝕜 g)
   证明: by simpa [sub_eq_add_neg] using add hf (neg hg)
 
 Depends on / 依赖: sub_eq_add_neg
@@ -406,7 +406,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : F -> G} (hg : IsBoundedLinearMap 𝕜 g) (hf : IsBoundedLinearMap 𝕜 f)
+  条件: {g : F -> G} (hg : 是BoundedLinear映射 𝕜 g) (hf : 是BoundedLinear映射 𝕜 f)
   证明: let ⟨hlf, Mf, _, hMf⟩ := hf
   let ⟨hlg, Mg, _, hMg⟩ := hg
 .isLinear.with_bound (Mg * Mf) fun x => (hg.1.mk' _).comp (hf.1.mk' _)
@@ -432,8 +432,8 @@ theorem tendsto
 
 中文:
 定理 tendsto
-  条件: (x : E) (hf : IsBoundedLinearMap 𝕜 f)
-  结论: Tendsto f (𝓝 x) (𝓝 (f x))
+  条件: (x : E) (hf : 是BoundedLinear映射 𝕜 f)
+  结论: 收敛 f (𝓝 x) (𝓝 (f x))
   证明: hf.toContinuousLinearMap.continuous.tendsto x
 -/
 protected theorem tendsto (x : E) (hf : IsBoundedLinearMap 𝕜 f) : Tendsto f (𝓝 x) (𝓝 (f x)) :=
@@ -450,8 +450,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (hf : IsBoundedLinearMap 𝕜 f)
-  结论: Continuous f
+  条件: (hf : 是BoundedLinear映射 𝕜 f)
+  结论: 连续 f
   证明: hf.toContinuousLinearMap.continuous
 
 Depends on / 依赖: continuous, hf.toContinuousLinearMap.continuous, toContinuousLinearMap
@@ -470,8 +470,8 @@ theorem lim_zero_bounded_linear_map
 
 中文:
 定理 lim_zero_bounded_linear_map
-  条件: (hf : IsBoundedLinearMap 𝕜 f)
-  结论: Tendsto f (𝓝 0) (𝓝 0)
+  条件: (hf : 是BoundedLinear映射 𝕜 f)
+  结论: 收敛 f (𝓝 0) (𝓝 0)
   证明: (hf.1.mk' _).map_zero ▸ hf.tendsto 0
 
 Depends on / 依赖: hf.tendsto, map_zero, tendsto
@@ -495,7 +495,7 @@ theorem isBigO_id
 
 中文:
 定理 isBigO_id
-  条件: (h : IsBoundedLinearMap 𝕜 f) (l : Filter E)
+  条件: (h : 是BoundedLinear映射 𝕜 f) (l : 滤子 E)
   结论: f =O[l] fun x => x
   证明: let ⟨_, _, hM⟩ := h.bound
   IsBigO.of_bound _ (mem_of_superset univ_mem fun x _ => hM x)
@@ -516,7 +516,7 @@ theorem isBigO_comp
 
 中文:
 定理 isBigO_comp
-  结论: {E : 类型} {g : F -> G} (hg : IsBoundedLinearMap 𝕜 g) {f : E -> F}
+  结论: {E : 类型} {g : F -> G} (hg : 是BoundedLinear映射 𝕜 g) {f : E -> F}
   证明: (hg.isBigO_id ⊤).comp_tendsto le_top
 
 Depends on / 依赖: comp_tendsto, hg.isBigO_id, isBigO_id, le_top
@@ -535,7 +535,7 @@ theorem isBigO_sub
 
 中文:
 定理 isBigO_sub
-  条件: {f : E -> F} (h : IsBoundedLinearMap 𝕜 f) (l : Filter E) (x : E)
+  条件: {f : E -> F} (h : 是BoundedLinear映射 𝕜 f) (l : 滤子 E) (x : E)
   证明: isBigO_comp h l
 
 Depends on / 依赖: isBigO_comp
@@ -563,7 +563,7 @@ structure IsBoundedBilinearMap
     - bound : exists C > 0, forall (x : E) (y : F), ‖f (x, y)‖ <= C * ‖x‖ * ‖y‖
 
 中文:
-结构 IsBoundedBilinearMap
+结构 是BoundedBilinear映射
   参数: (f : E × F -> G)
   公理与运算 (5 个):
     - add_left : 对任意 (x₁ x₂ : E) (y : F), f (x₁ + x₂, y) = f (x₁, y) + f (x₂, y)
@@ -599,7 +599,7 @@ lemma symm
 
 中文:
 引理 symm
-  条件: (h : IsBoundedBilinearMap 𝕜 f)
+  条件: (h : 是BoundedBilinear映射 𝕜 f)
   证明: h.add_right _ _ _
   smul_left c x y := h.smul_right _ _ _
   add_right x y₁ y₂ := h.add_left _ _ _
@@ -637,7 +637,7 @@ lemma isBoundedLinearMap_right
 
 中文:
 引理 isBoundedLinearMap_right
-  条件: (h : IsBoundedBilinearMap 𝕜 f) (x : E)
+  条件: (h : 是BoundedBilinear映射 𝕜 f) (x : E)
   证明: h.add_right x
   map_smul := (h.smul_right · x ·)
   bound := by
@@ -671,7 +671,7 @@ lemma isBoundedLinearMap_left
 
 中文:
 引理 isBoundedLinearMap_left
-  条件: (h : IsBoundedBilinearMap 𝕜 f) (y : F)
+  条件: (h : 是BoundedBilinear映射 𝕜 f) (y : F)
   证明: h.symm.isBoundedLinearMap_right y
 
 Depends on / 依赖: h.symm.isBoundedLinearMap_right, isBoundedLinearMap_right
@@ -690,7 +690,7 @@ theorem map_sub_left
 
 中文:
 定理 map_sub_left
-  条件: (h : IsBoundedBilinearMap 𝕜 f) {x y : E} {z : F}
+  条件: (h : 是BoundedBilinear映射 𝕜 f) {x y : E} {z : F}
   证明: (h.isBoundedLinearMap_left z).map_sub x y
 
 Depends on / 依赖: h.isBoundedLinearMap_left, isBoundedLinearMap_left, map_sub
@@ -709,7 +709,7 @@ theorem map_sub_right
 
 中文:
 定理 map_sub_right
-  条件: (h : IsBoundedBilinearMap 𝕜 f) {x : E} {y z : F}
+  条件: (h : 是BoundedBilinear映射 𝕜 f) {x : E} {y z : F}
   证明: (h.isBoundedLinearMap_right x).map_sub y z
 
 Depends on / 依赖: h.isBoundedLinearMap_right, isBoundedLinearMap_right, map_sub
@@ -730,7 +730,7 @@ Asymptotics.IsBigO.of_bound C
 
 中文:
 定理 isBigO
-  条件: (h : IsBoundedBilinearMap 𝕜 f)
+  条件: (h : 是BoundedBilinear映射 𝕜 f)
   证明: let ⟨C, _, hC⟩ := h.bound
 Asymptotics.IsBigO.of_bound C
     Filter.Eventually.of_forall fun ⟨x, y⟩ => by simpa [mul_assoc] using hC x y
@@ -751,7 +751,7 @@ theorem isBigO_comp
 
 中文:
 定理 isBigO_comp
-  结论: {α : 类型} (H : IsBoundedBilinearMap 𝕜 f) {g : α -> E}
+  结论: {α : 类型} (H : 是BoundedBilinear映射 𝕜 f) {g : α -> E}
   证明: H.isBigO.comp_tendsto le_top
 
 Depends on / 依赖: H.isBigO.comp_tendsto, comp_tendsto, isBigO, le_top
@@ -772,7 +772,7 @@ theorem isBigO'
 
 中文:
 定理 isBigO'
-  条件: (h : IsBoundedBilinearMap 𝕜 f)
+  条件: (h : 是BoundedBilinear映射 𝕜 f)
   证明: h.isBigO.trans
     (@Asymptotics.isBigO_fst_prod' _ E F _ _ _ _).norm_norm.mul
       (@Asymptotics.isBigO_snd_prod' _ E F _ _ _ _).norm_norm
@@ -800,8 +800,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (h : IsBoundedBilinearMap 𝕜 f)
-  结论: Continuous f
+  条件: (h : 是BoundedBilinear映射 𝕜 f)
+  结论: 连续 f
   证明: by
   refine continuous_iff_continuousAt.2 fun x => tendsto_sub_nhds_zero_iff.1 ?_
   suffices Tendsto (fun y : E × F => f (y.1 - x.1, y.2) + f (x.1, y.2 - x.2)) (𝓝 x) (𝓝 (0 + 0)) by
@@ -837,7 +837,7 @@ theorem continuous_left
 
 中文:
 定理 continuous_left
-  条件: (h : IsBoundedBilinearMap 𝕜 f) {e₂ : F}
+  条件: (h : 是BoundedBilinear映射 𝕜 f) {e₂ : F}
   证明: h.continuous.comp (by fun_prop)
 
 Depends on / 依赖: continuous, fun_prop, h.continuous.comp
@@ -856,7 +856,7 @@ theorem continuous_right
 
 中文:
 定理 continuous_right
-  条件: (h : IsBoundedBilinearMap 𝕜 f) {e₁ : E}
+  条件: (h : 是BoundedBilinear映射 𝕜 f) {e₁ : E}
   证明: h.continuous.comp (by fun_prop)
 
 Depends on / 依赖: continuous, fun_prop, h.continuous.comp
@@ -887,7 +887,7 @@ theorem isBoundedBilinearMap_smul
 
 中文:
 定理 isBoundedBilinearMap_smul
-  结论: {E : 类型} [SeminormedAddCommGroup E] [Module 𝕜 E]
+  结论: {E : 类型} [SeminormedAddComm群 E] [模 𝕜 E]
   证明: add_smul
   add_right := smul_add
   smul_left := smul_assoc
@@ -938,9 +938,9 @@ theorem ContinuousLinearMap.isBoundedLinearMap
   proof: { f.toLinearMap.isLinear with bound := f.bound }
 
 中文:
-定理 ContinuousLinearMap.isBoundedLinearMap
+定理 连续线性映射.isBoundedLinearMap
   条件: (f : E ->L[𝕜] F)
-  结论: IsBoundedLinearMap 𝕜 f
+  结论: 是BoundedLinear映射 𝕜 f
   证明: { f.toLinearMap.isLinear with bound := f.bound }
 
 Depends on / 依赖: f.bound, f.toLinearMap.isLinear, isLinear, toLinearMap
@@ -989,7 +989,7 @@ theorem isBoundedLinearMap_prod_multilinear
 
 中文:
 定理 isBoundedLinearMap_prod_multilinear
-  结论: {E : ι -> 类型} [对任意 i, SeminormedAddCommGroup (E i)]
+  结论: {E : ι -> 类型} [对任意 i, SeminormedAddComm群 (E i)]
   证明: (ContinuousMultilinearMap.prodL 𝕜 E F G).toContinuousLinearEquiv
 .toContinuousLinearMap.isBoundedLinearMap
 
@@ -1047,7 +1047,7 @@ theorem ContinuousLinearMap.isBoundedBilinearMap
           gcongr; apply le_max_left ⟩ }
 
 中文:
-定理 ContinuousLinearMap.isBoundedBilinearMap
+定理 连续线性映射.isBoundedBilinearMap
   条件: (f : E ->L[𝕜] F ->L[𝕜] G)
   证明: { add_left := f.map_add₂
     smul_left := f.map_smul₂
@@ -1084,8 +1084,8 @@ definition IsBoundedBilinearMap.toContinuousLinearMap
 @[simp]
 
 中文:
-定义 IsBoundedBilinearMap.toContinuousLinearMap
-  签名: (hf : IsBoundedBilinearMap 𝕜 f)
+定义 是BoundedBilinear映射.toContinuousLinearMap
+  签名: (hf : 是BoundedBilinear映射 𝕜 f)
   定义体: LinearMap.mkContinuousOfExistsBound₂
 (LinearMap.mk₂ _ f.curry hf.add_left hf.smul_left hf.add_right hf.smul_right)
     hf.bound.imp fun _ => And.right
@@ -1110,8 +1110,8 @@ lemma IsBoundedBilinearMap.toContinuousLinearMap_apply
   proof: rfl
 
 中文:
-引理 IsBoundedBilinearMap.toContinuousLinearMap_apply
-  结论: (hf : IsBoundedBilinearMap 𝕜 f)
+引理 是BoundedBilinear映射.toContinuousLinearMap_apply
+  结论: (hf : 是BoundedBilinear映射 𝕜 f)
   证明: rfl
 -/
 lemma IsBoundedBilinearMap.toContinuousLinearMap_apply (hf : IsBoundedBilinearMap 𝕜 f)
@@ -1126,7 +1126,7 @@ theorem ContinuousLinearMap.continuous₂
   proof: f.isBoundedBilinearMap.continuous
 
 中文:
-定理 ContinuousLinearMap.continuous₂
+定理 连续线性映射.continuous₂
   条件: (f : E ->L[𝕜] F ->L[𝕜] G)
   证明: f.isBoundedBilinearMap.continuous
 
@@ -1162,7 +1162,7 @@ theorem ContinuousLinearMap.isBoundedLinearMap_comp_left
   proof: isBoundedBilinearMap_comp.isBoundedLinearMap_right g
 
 中文:
-定理 ContinuousLinearMap.isBoundedLinearMap_comp_left
+定理 连续线性映射.isBoundedLinearMap_comp_left
   条件: (g : F ->L[𝕜] G)
   证明: isBoundedBilinearMap_comp.isBoundedLinearMap_right g
 
@@ -1181,7 +1181,7 @@ theorem ContinuousLinearMap.isBoundedLinearMap_comp_right
   proof: (isBoundedBilinearMap_comp (G := G)).isBoundedLinearMap_left f
 
 中文:
-定理 ContinuousLinearMap.isBoundedLinearMap_comp_right
+定理 连续线性映射.isBoundedLinearMap_comp_right
   条件: (f : E ->L[𝕜] F)
   证明: (isBoundedBilinearMap_comp (G := G)).isBoundedLinearMap_left f
 
@@ -1201,7 +1201,7 @@ theorem isBoundedBilinearMap_apply
 
 中文:
 定理 isBoundedBilinearMap_apply
-  结论: IsBoundedBilinearMap 𝕜 fun p : (E ->L[𝕜] F) × E => p.1 p.2
+  结论: 是BoundedBilinear映射 𝕜 fun p : (E ->L[𝕜] F) × E => p.1 p.2
   证明: (ContinuousLinearMap.flip (apply 𝕜 F : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F)).isBoundedBilinearMap
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.flip, isBoundedBilinearMap
@@ -1237,7 +1237,7 @@ theorem isBoundedBilinearMap_compMultilinear
 
 中文:
 定理 isBoundedBilinearMap_compMultilinear
-  结论: {ι : 类型} {E : ι -> 类型} [Fintype ι]
+  结论: {ι : 类型} {E : ι -> 类型} [有限类型 ι]
   证明: (compContinuousMultilinearMapL 𝕜 E F G).isBoundedBilinearMap
 
 Depends on / 依赖: compContinuousMultilinearMapL, isBoundedBilinearMap
@@ -1257,8 +1257,8 @@ definition IsBoundedBilinearMap.linearDeriv
   body: (h.toContinuousLinearMap.deriv₂ p).toLinearMap
 
 中文:
-定义 IsBoundedBilinearMap.linearDeriv
-  签名: (h : IsBoundedBilinearMap 𝕜 f) (p : E × F)
+定义 是BoundedBilinear映射.linearDeriv
+  签名: (h : 是BoundedBilinear映射 𝕜 f) (p : E × F)
   定义体: (h.toContinuousLinearMap.deriv₂ p).toLinearMap
 
 Depends on / 依赖: h.toContinuousLinearMap.deriv, toContinuousLinearMap, toLinearMap
@@ -1277,8 +1277,8 @@ definition IsBoundedBilinearMap.deriv
 @[simp]
 
 中文:
-定义 IsBoundedBilinearMap.deriv
-  签名: (h : IsBoundedBilinearMap 𝕜 f) (p : E × F)
+定义 是BoundedBilinear映射.deriv
+  签名: (h : 是BoundedBilinear映射 𝕜 f) (p : E × F)
   定义体: h.toContinuousLinearMap.deriv₂ p
 
 @[simp]
@@ -1298,8 +1298,8 @@ theorem IsBoundedBilinearMap.deriv_apply
   proof: rfl
 
 中文:
-定理 IsBoundedBilinearMap.deriv_apply
-  条件: (h : IsBoundedBilinearMap 𝕜 f) (p q : E × F)
+定理 是BoundedBilinear映射.deriv_apply
+  条件: (h : 是BoundedBilinear映射 𝕜 f) (p q : E × F)
   证明: rfl
 -/
 theorem IsBoundedBilinearMap.deriv_apply (h : IsBoundedBilinearMap 𝕜 f) (p q : E × F) :
@@ -1316,8 +1316,8 @@ theorem ContinuousLinearMap.mulLeftRight_isBoundedBilinear
   proof: (ContinuousLinearMap.mulLeftRight 𝕜 𝕜').isBoundedBilinearMap
 
 中文:
-定理 ContinuousLinearMap.mulLeftRight_isBoundedBilinear
-  结论: (𝕜' : 类型) [SeminormedRing 𝕜']
+定理 连续线性映射.mulLeftRight_isBoundedBilinear
+  结论: (𝕜' : 类型) [Seminormed环 𝕜']
   证明: (ContinuousLinearMap.mulLeftRight 𝕜 𝕜').isBoundedBilinearMap
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mulLeftRight, isBoundedBilinearMap, mulLeftRight
@@ -1336,8 +1336,8 @@ theorem IsBoundedBilinearMap.isBoundedLinearMap_deriv
   proof: h.toContinuousLinearMap.deriv₂.isBoundedLinearMap
 
 中文:
-定理 IsBoundedBilinearMap.isBoundedLinearMap_deriv
-  条件: (h : IsBoundedBilinearMap 𝕜 f)
+定理 是BoundedBilinear映射.isBoundedLinearMap_deriv
+  条件: (h : 是BoundedBilinear映射 𝕜 f)
   证明: h.toContinuousLinearMap.deriv₂.isBoundedLinearMap
 
 Depends on / 依赖: h.toContinuousLinearMap.deriv, isBoundedLinearMap, toContinuousLinearMap
@@ -1362,7 +1362,7 @@ theorem Continuous.clm_comp
 @[fun_prop]
 
 中文:
-定理 Continuous.clm_comp
+定理 连续.clm_comp
   结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F}
   证明: (compL 𝕜 E F G).continuous₂.comp₂ hg hf
 
@@ -1459,7 +1459,7 @@ theorem Continuous.clm_apply
 @[fun_prop]
 
 中文:
-定理 Continuous.clm_apply
+定理 连续.clm_apply
   结论: {f : X -> E ->L[𝕜] F} {g : X -> E}
   证明: isBoundedBilinearMap_apply.continuous.comp₂ hf hg
 
@@ -1509,7 +1509,7 @@ theorem ContinuousAt.clm_apply
 
 中文:
 定理 ContinuousAt.clm_apply
-  结论: {X} [TopologicalSpace X] {f : X -> E ->L[𝕜] F} {g : X -> E} {x : X}
+  结论: {X} [拓扑空间 X] {f : X -> E ->L[𝕜] F} {g : X -> E} {x : X}
   证明: isBoundedBilinearMap_apply.continuous.continuousAt.comp₂ hf hg
 
 @[continuity, fun_prop]
@@ -1534,7 +1534,7 @@ theorem ContinuousWithinAt.clm_apply
 
 中文:
 定理 ContinuousWithinAt.clm_apply
-  结论: {X} [TopologicalSpace X] {f : X -> E ->L[𝕜] F} {g : X -> E}
+  结论: {X} [拓扑空间 X] {f : X -> E ->L[𝕜] F} {g : X -> E}
   证明: (isBoundedBilinearMap_apply (𝕜 := 𝕜) (F := F)).continuous.continuousAt.comp_continuousWithinAt
     (hf.prodMk hg)
 
@@ -1646,7 +1646,7 @@ theorem Continuous.continuousLinearMapCoprod
   fun_prop
 
 中文:
-定理 Continuous.continuousLinearMapCoprod
+定理 连续.continuousLinearMapCoprod
   证明: by
   apply continuousOn_univ.mp
   fun_prop
@@ -1688,8 +1688,8 @@ theorem isOpen
 
 中文:
 定理 isOpen
-  条件: [CompleteSpace E]
-  结论: IsOpen (range ((↑) : (E ≃L[𝕜] F) -> E ->L[𝕜] F))
+  条件: [完备空间 E]
+  结论: 是开集 (range ((↑) : (E ≃L[𝕜] F) -> E ->L[𝕜] F))
   证明: by
   rw [isOpen_iff_mem_nhds]; rw [forall_mem_range]
   refine fun e => IsOpen.mem_nhds ?_ (mem_range_self _)
@@ -1721,8 +1721,8 @@ theorem nhds
   proof: IsOpen.mem_nhds ContinuousLinearEquiv.isOpen (by simp)
 
 中文:
-定理 nhds
-  条件: [CompleteSpace E] (e : E ≃L[𝕜] F)
+定理 邻域滤子
+  条件: [完备空间 E] (e : E ≃L[𝕜] F)
   证明: IsOpen.mem_nhds ContinuousLinearEquiv.isOpen (by simp)
 -/
 protected theorem nhds [CompleteSpace E] (e : E ≃L[𝕜] F) :

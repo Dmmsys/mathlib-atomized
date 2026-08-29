@@ -319,7 +319,7 @@ theorem integral_cpow
 
 中文:
 定理 integral_cpow
-  条件: {r : Complex} (h : -1 < r.re ∨ r != -1 ∧ (0 : 实数) ∉ [[a, b]])
+  条件: {r : 复形} (h : -1 < r.re ∨ r != -1 ∧ (0 : 实数) ∉ [[a, b]])
   证明: by
   rw [sub_div]
   have hr : r + 1 != 0 := by
@@ -763,7 +763,7 @@ theorem integral_exp_mul_complex
 
 中文:
 定理 integral_exp_mul_complex
-  条件: {c : Complex} (hc : c != 0)
+  条件: {c : 复形} (hc : c != 0)
   证明: by
   have D : forall x : Real, HasDerivAt (fun y : Real => Complex.exp (c * y) / c) (Complex.exp (c * x)) x := by
     intro x
@@ -1053,7 +1053,7 @@ theorem integral_cos_mul_complex
 
 中文:
 定理 integral_cos_mul_complex
-  条件: {z : Complex} (hz : z != 0) (a b : 实数)
+  条件: {z : 复形} (hz : z != 0) (a b : 实数)
   证明: by
   apply integral_eq_sub_of_hasDerivAt
   swap
@@ -1316,7 +1316,7 @@ theorem integral_mul_cpow_one_add_sq
 
 中文:
 定理 integral_mul_cpow_one_add_sq
-  条件: {t : Complex} (ht : t != -1)
+  条件: {t : 复形} (ht : t != -1)
   证明: by
   have : t + 1 != 0 := by contrapose ht; rwa [add_eq_zero_iff_eq_neg] at ht
   apply integral_eq_sub_of_hasDerivAt
@@ -1645,7 +1645,7 @@ theorem integral_sin_pow_antitone
 
 中文:
 定理 integral_sin_pow_antitone
-  结论: Antitone fun n : 自然数 => ∫ x in 0..π, sin x ^ n
+  结论: 递减 fun n : 自然数 => ∫ x in 0..π, sin x ^ n
   证明: antitone_nat_of_succ_le integral_sin_pow_succ_le
 
 Depends on / 依赖: antitone_nat_of_succ_le, integral_sin_pow_succ_le

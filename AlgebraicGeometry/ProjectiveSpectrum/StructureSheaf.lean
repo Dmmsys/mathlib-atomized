@@ -81,7 +81,7 @@ definition IsFraction
 
 中文:
 定义 IsFraction
-  签名: {U : Opens (ProjectiveSpectrum.top 𝒜)} (f : 对任意 x : U, at x.1)
+  签名: {U : Opens (射影谱.top 𝒜)} (f : 对任意 x : U, at x.1)
   定义体: exists (i : Nat) (r s : 𝒜 i) (s_nin : forall x : U, s.1 ∉ x.1.asHomogeneousIdeal),
     forall x : U, f x = .mk ⟨i, r, s, s_nin x⟩
 
@@ -102,7 +102,7 @@ definition isFractionPrelocal
 
 中文:
 定义 isFractionPrelocal
-  签名: : PrelocalPredicate fun x : ProjectiveSpectrum.top 𝒜 => at x where
+  签名: : PrelocalPredicate fun x : 射影谱.top 𝒜 => at x where
   定义体: IsFraction f
   res := by rintro V U i f ⟨j, r, s, h, w⟩; exact ⟨j, r, s, (h <| i ·), (w <| i ·)⟩
 
@@ -123,7 +123,7 @@ definition isLocallyFraction
 
 中文:
 定义 isLocallyFraction
-  签名: : LocalPredicate fun x : ProjectiveSpectrum.top 𝒜 => at x
+  签名: : LocalPredicate fun x : 射影谱.top 𝒜 => at x
   定义体: (isFractionPrelocal 𝒜).sheafify
 
 Depends on / 依赖: isFractionPrelocal, sheafify
@@ -149,7 +149,7 @@ theorem zero_mem'
 
 中文:
 定理 zero_mem'
-  条件: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ)
+  条件: (U : (Opens (射影谱.top 𝒜))ᵒᵖ)
   证明: fun x =>
   ⟨unop U, x.2, 𝟙 (unop U), ⟨0, ⟨0, zero_mem _⟩, ⟨1, one_mem_graded _⟩, _, fun _ => rfl⟩⟩
 -/
@@ -169,7 +169,7 @@ theorem one_mem'
 
 中文:
 定理 one_mem'
-  条件: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ)
+  条件: (U : (Opens (射影谱.top 𝒜))ᵒᵖ)
   证明: fun x =>
   ⟨unop U, x.2, 𝟙 (unop U), ⟨0, ⟨1, one_mem_graded _⟩, ⟨1, one_mem_graded _⟩, _, fun _ => rfl⟩⟩
 -/
@@ -194,7 +194,7 @@ theorem add_mem'
 
 中文:
 定理 add_mem'
-  结论: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ) (a b : 对任意 x : U.unop, at x.1)
+  结论: (U : (Opens (射影谱.top 𝒜))ᵒᵖ) (a b : 对任意 x : U.unop, at x.1)
   证明: fun x => by
   rcases ha x with ⟨Va, ma, ia, ja, ⟨ra, ra_mem⟩, ⟨sa, sa_mem⟩, hwa, wa⟩
   rcases hb x with ⟨Vb, mb, ib, jb, ⟨rb, rb_mem⟩, ⟨sb, sb_mem⟩, hwb, wb⟩
@@ -236,7 +236,7 @@ theorem neg_mem'
 
 中文:
 定理 neg_mem'
-  结论: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ) (a : 对任意 x : U.unop, at x.1)
+  结论: (U : (Opens (射影谱.top 𝒜))ᵒᵖ) (a : 对任意 x : U.unop, at x.1)
   证明: fun x => by
   rcases ha x with ⟨V, m, i, j, ⟨r, r_mem⟩, ⟨s, s_mem⟩, nin, hy⟩
   refine ⟨V, m, i, j, ⟨-r, neg_mem r_mem⟩, ⟨s, s_mem⟩, nin, fun y => ?_⟩
@@ -269,7 +269,7 @@ theorem mul_mem'
 
 中文:
 定理 mul_mem'
-  结论: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ) (a b : 对任意 x : U.unop, at x.1)
+  结论: (U : (Opens (射影谱.top 𝒜))ᵒᵖ) (a b : 对任意 x : U.unop, at x.1)
   证明: fun x => by
   rcases ha x with ⟨Va, ma, ia, ja, ⟨ra, ra_mem⟩, ⟨sa, sa_mem⟩, hwa, wa⟩
   rcases hb x with ⟨Vb, mb, ib, jb, ⟨rb, rb_mem⟩, ⟨sb, sb_mem⟩, hwb, wb⟩
@@ -318,7 +318,7 @@ definition sectionsSubring
 
 中文:
 定义 sectionsSubring
-  签名: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ)
+  签名: (U : (Opens (射影谱.top 𝒜))ᵒᵖ)
   定义体: {f | (isLocallyFraction 𝒜).pred f}
   zero_mem' := zero_mem' U
   one_mem' := one_mem' U
@@ -349,7 +349,7 @@ definition structureSheafInType
 
 中文:
 定义 structureSheafInType
-  签名: : Sheaf (Type _) (ProjectiveSpectrum.top 𝒜)
+  签名: : 层 (类型 _) (射影谱.top 𝒜)
   定义体: subsheafToTypes (isLocallyFraction 𝒜)
 
 Depends on / 依赖: isLocallyFraction, subsheafToTypes
@@ -367,7 +367,7 @@ instance commRingStructureSheafInTypeObj
 
 中文:
 实例 commRingStructureSheafInTypeObj
-  签名: (U : (Opens (ProjectiveSpectrum.top 𝒜))ᵒᵖ)
+  签名: (U : (Opens (射影谱.top 𝒜))ᵒᵖ)
   定义体: (sectionsSubring U).toCommRing
 
 Depends on / 依赖: sectionsSubring, toCommRing
@@ -395,7 +395,7 @@ definition structurePresheafInCommRing
 
 中文:
 定义 structurePresheafInCommRing
-  签名: : Presheaf CommRingCat (ProjectiveSpectrum.top 𝒜) where
+  签名: : 预层 交换环范畴 (射影谱.top 𝒜) where
   定义体: CommRingCat.of ((structureSheafInType 𝒜).1.obj U)
   map i := CommRingCat.ofHom
     { toFun := (structureSheafInType 𝒜).1.map i
@@ -454,7 +454,7 @@ definition Proj.structureSheaf
 
 中文:
 定义 Proj.structureSheaf
-  签名: : Sheaf CommRingCat (ProjectiveSpectrum.top 𝒜)
+  签名: : 层 交换环范畴 (射影谱.top 𝒜)
   定义体: ⟨structurePresheafInCommRing 𝒜,
     (-- We check the sheaf condition under `forget CommRing`.
           isSheaf_iff_isSheaf_comp
@@ -615,7 +615,7 @@ definition Proj.toSheafedSpace
 
 中文:
 定义 Proj.toSheafedSpace
-  签名: : SheafedSpace CommRingCat where
+  签名: : Sheafed空间 交换环范畴 where
   定义体: TopCat.of (ProjectiveSpectrum 𝒜)
   presheaf := (Proj.structureSheaf 𝒜).1
   IsSheaf := (Proj.structureSheaf 𝒜).2
@@ -643,7 +643,7 @@ definition openToLocalization
 
 中文:
 定义 openToLocalization
-  签名: (U : Opens (ProjectiveSpectrum.top 𝒜)) (x : ProjectiveSpectrum.top 𝒜)
+  签名: (U : Opens (射影谱.top 𝒜)) (x : 射影谱.top 𝒜)
   定义体: CommRingCat.ofHom
   { toFun s := (s.1 ⟨x, hx⟩ :)
     map_one' := rfl
@@ -679,7 +679,7 @@ definition stalkToFiberRingHom
 
 中文:
 定义 stalkToFiberRingHom
-  签名: (x : ProjectiveSpectrum.top 𝒜)
+  签名: (x : 射影谱.top 𝒜)
   定义体: Limits.colimit.desc ((OpenNhds.inclusion x).op ⋙ (Proj.structureSheaf 𝒜).1)
     { pt := _
       ι :=
@@ -733,7 +733,7 @@ theorem stalkToFiberRingHom_germ
 
 中文:
 定理 stalkToFiberRingHom_germ
-  结论: (U : Opens (ProjectiveSpectrum.top 𝒜))
+  结论: (U : Opens (射影谱.top 𝒜))
   证明: RingHom.ext_iff.1 (CommRingCat.hom_ext_iff.mp (germ_comp_stalkToFiberRingHom 𝒜 U x hx)) s
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_ext_iff.mp, RingHom, RingHom.ext_iff, ext_iff, germ_comp_stalkToFiberRingHom, hom_ext_iff
@@ -756,7 +756,7 @@ theorem mem_basicOpen_den
 
 中文:
 定理 mem_basicOpen_den
-  结论: (x : ProjectiveSpectrum.top 𝒜)
+  结论: (x : 射影谱.top 𝒜)
   证明: by
   rw [ProjectiveSpectrum.mem_basicOpen]
   exact f.den_mem
@@ -783,7 +783,7 @@ definition sectionInBasicOpen
 
 中文:
 定义 sectionInBasicOpen
-  签名: (x : ProjectiveSpectrum.top 𝒜)
+  签名: (x : 射影谱.top 𝒜)
   定义体: fun f =>
   ⟨fun y => HomogeneousLocalization.mk ⟨f.deg, f.num, f.den, y.2⟩, fun y =>
     ⟨ProjectiveSpectrum.basicOpen 𝒜 f.den, y.2,
@@ -816,7 +816,7 @@ definition homogeneousLocalizationToStalk
 
 中文:
 定义 homogeneousLocalizationToStalk
-  签名: (x : ProjectiveSpectrum.top 𝒜) (y : at x)
+  签名: (x : 射影谱.top 𝒜) (y : at x)
   定义体: Quotient.liftOn' y (fun f =>
   (Proj.structureSheaf 𝒜).presheaf.germ _ x (mem_basicOpen_den _ x f) (sectionInBasicOpen _ x f))
   fun f g (e : f.embedding = g.embedding) => by
@@ -931,7 +931,7 @@ definition Proj.stalkIso'
 
 中文:
 定义 Proj.stalkIso'
-  签名: (x : ProjectiveSpectrum.top 𝒜)
+  签名: (x : 射影谱.top 𝒜)
   定义体: (stalkToFiberRingHom _ x).hom
   invFun := homogeneousLocalizationToStalk 𝒜 x
   left_inv := homogeneousLocalizationToStalk_stalkToFiberRingHom 𝒜 x
@@ -961,7 +961,7 @@ theorem Proj.stalkIso'_germ
 
 中文:
 定理 Proj.stalkIso'_germ
-  结论: (U : Opens (ProjectiveSpectrum.top 𝒜))
+  结论: (U : Opens (射影谱.top 𝒜))
   证明: stalkToFiberRingHom_germ 𝒜 U x hx s
 
 @[simp]
@@ -1003,7 +1003,7 @@ definition Proj.toLocallyRingedSpace
 
 中文:
 定义 Proj.toLocallyRingedSpace
-  签名: : LocallyRingedSpace
+  签名: : LocallyRinged空间
   定义体: { Proj.toSheafedSpace 𝒜 with
     isLocalRing := fun x =>
       @RingEquiv.isLocalRing _ _ _ (show IsLocalRing (at x) from inferInstance) _

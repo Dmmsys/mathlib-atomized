@@ -47,8 +47,8 @@ structure PreZeroHypercoverFamily
 结构 PreZeroHypercoverFamily
   参数: where
   公理与运算 (2 个):
-    - property(⦃X) : C⦄ : Object命题erty (PreZeroHypercover.{max u v} X)
-    - iff_shrink({X : C} {E : PreZeroHypercover.{max u v} X}) : property E ↔ property E.shrink
+    - property(⦃X) : C⦄ : ObjectProperty (PreZeroHypercover.{最大值 u v} X)
+    - iff_shrink({X : C} {E : PreZeroHypercover.{最大值 u v} X}) : property E ↔ property E.shrink
 -/
 structure PreZeroHypercoverFamily where
   /-- The condition on pre-`0`-hypercovers for every object. -/
@@ -87,7 +87,7 @@ inductive PreZeroHypercoverFamily.presieve
 归纳类型 PreZeroHypercoverFamily.presieve
   参数: (P : PreZeroHypercoverFamily C) {X : C}
   构造子 (1 个):
-    - mk: (E : PreZeroHypercover.{max u v} X) : P E -> presieve P E.presieve₀
+    - mk: (E : PreZeroHypercover.{最大值 u v} X) : P E -> presieve P E.presieve₀
 -/
 inductive PreZeroHypercoverFamily.presieve (P : PreZeroHypercoverFamily C) {X : C} :
     Presieve X -> Prop where
@@ -242,7 +242,7 @@ lemma Precoverage.HasIsos.of_preZeroHypercoverFamily
     refine .mk _ (h _)
 
 中文:
-引理 Precoverage.HasIsos.of_preZeroHypercoverFamily
+引理 Precoverage.有是os.of_preZeroHypercoverFamily
   结论: {P : PreZeroHypercoverFamily C}
   证明: by
     rw [← PreZeroHypercover.presieve₀_singleton.{_]; rw [_]; rw [max u v}]
@@ -274,7 +274,7 @@ lemma Precoverage.IsStableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosed
     rw
 
 中文:
-引理 Precoverage.IsStableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosedUnderIsomorphisms
+引理 Precoverage.是StableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosedUnderIsomorphisms
   证明: by
     let E : PreZeroHypercover S := ⟨ι, X, f⟩
     have (i : E.I₀) : HasPullback g (E.f i) := (h i).hasPullback
@@ -317,7 +317,7 @@ lemma Precoverage.IsStableUnderComposition.of_preZeroHypercoverFamily
       exact hg i
 
 中文:
-引理 Precoverage.IsStableUnderComposition.of_preZeroHypercoverFamily
+引理 Precoverage.是StableUnderComposition.of_preZeroHypercoverFamily
   证明: by
     let E : PreZeroHypercover S := ⟨_, _, f⟩
     let F (i : ι) : PreZeroHypercover (E.X i) := ⟨_, _, g i⟩
@@ -355,7 +355,7 @@ lemma Precoverage.IsStableUnderSup.of_preZeroHypercoverFamily
     exact h hR hS
 
 中文:
-引理 Precoverage.IsStableUnderSup.of_preZeroHypercoverFamily
+引理 Precoverage.是StableUnderSup.of_preZeroHypercoverFamily
   证明: by
     obtain ⟨E, rfl⟩ := R.exists_eq_preZeroHypercover
     obtain ⟨F, rfl⟩ := S.exists_eq_preZeroHypercover

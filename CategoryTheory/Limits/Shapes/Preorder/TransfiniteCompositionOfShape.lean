@@ -57,13 +57,13 @@ structure TransfiniteCompositionOfShape
 
 中文:
 结构 TransfiniteCompositionOfShape
-  参数: [SuccOrder J] [WellFoundedLT J]
+  参数: [Succ序 J] [WellFoundedLT J]
   公理与运算 (6 个):
     - F : J ⥤ C
     - isoBot : F.obj ⊥ ≅ X
-    - isWellOrderContinuous : F.IsWellOrderContinuous  [默认: by infer_instance]
-    - incl : F ⟶ (Functor.const _).obj Y
-    - isColimit : IsColimit (Cocone.mk Y incl)
+    - isWellOrderContinuous : F.是WellOrderContinuous  [默认: by infer_instance]
+    - incl : F ⟶ (函子.const _).obj Y
+    - isColimit : 是余极限 (余锥.mk Y incl)
     - fac : isoBot.inv ≫ incl.app ⊥ = f  [默认: by cat_disch]
 
 Depends on / 依赖: infer_instance
@@ -108,7 +108,7 @@ definition ofArrowIso
 
 中文:
 定义 ofArrowIso
-  签名: {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f')
+  签名: {X' Y' : C} {f' : X' ⟶ Y'} (e : 箭头.mk f ≅ 箭头.mk f')
   定义体: c.F
   isoBot := c.isoBot ≪≫ Arrow.leftFunc.mapIso e
   incl := c.incl ≫ (Functor.const J).map e.hom.right
@@ -173,7 +173,7 @@ definition ofOrderIso
 
 中文:
 定义 ofOrderIso
-  签名: {J' : Type w'} [LinearOrder J'] [OrderBot J']
+  签名: {J' : 类型 w'} [线性序 J'] [有底序 J']
   定义体: e.equivalence.functor ⋙ c.F
   isoBot := c.F.mapIso (eqToIso e.map_bot) ≪≫ c.isoBot
   incl := Functor.whiskerLeft e.equivalence.functor c.incl
@@ -209,7 +209,7 @@ definition map
 
 中文:
 定义 map
-  签名: (F : C ⥤ D) [PreservesWellOrderContinuousOfShape J F]
+  签名: (F : C ⥤ D) [保持WellOrderContinuousOfShape J F]
   定义体: c.F ⋙ F
   isoBot := F.mapIso c.isoBot
   incl := Functor.whiskerRight c.incl F ≫ (Functor.constComp _ _ _).hom

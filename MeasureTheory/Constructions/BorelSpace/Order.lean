@@ -66,7 +66,7 @@ theorem borel_eq_generateFrom_Iio
 
 中文:
 定理 borel_eq_generateFrom_Iio
-  结论: borel α = .generateFrom (range Iio)
+  结论: borel α = .generateFrom (range 左无界右开区间)
   证明: by
   refine le_antisymm ?_ (generateFrom_le ?_)
   · rw [borel_eq_generateFrom_of_subbasis (@OrderTopology.topology_eq_generate_intervals α _ _ _)]
@@ -107,7 +107,7 @@ theorem borel_eq_generateFrom_Ioi
 
 中文:
 定理 borel_eq_generateFrom_Ioi
-  结论: borel α = .generateFrom (range Ioi)
+  结论: borel α = .generateFrom (range 左开右无界区间)
   证明: @borel_eq_generateFrom_Iio αᵒᵈ _ (by infer_instance : SecondCountableTopology α) _ _
 
 Depends on / 依赖: SecondCountableTopology, borel_eq_generateFrom_Iio, infer_instance
@@ -165,7 +165,7 @@ theorem borel_eq_generateFrom_Ici
 
 中文:
 定理 borel_eq_generateFrom_Ici
-  结论: borel α = MeasurableSpace.generateFrom (range Ici)
+  结论: borel α = 可测空间.generateFrom (range 左闭右无界区间)
   证明: @borel_eq_generateFrom_Iic αᵒᵈ _ _ _ _
 
 Depends on / 依赖: borel_eq_generateFrom_Iic
@@ -196,8 +196,8 @@ theorem measurableSet_Ici
 
 中文:
 定理 measurableSet_Ici
-  条件: [ClosedIciTopology α]
-  结论: MeasurableSet (Ici a)
+  条件: [ClosedIci拓扑 α]
+  结论: 可测集 (左闭右无界区间 a)
   证明: isClosed_Ici.measurableSet
 
 Depends on / 依赖: isClosed_Ici, isClosed_Ici.measurableSet, measurableSet
@@ -218,8 +218,8 @@ theorem nullMeasurableSet_Ici
 
 中文:
 定理 nullMeasurableSet_Ici
-  条件: [ClosedIciTopology α]
-  结论: NullMeasurableSet (Ici a) μ
+  条件: [ClosedIci拓扑 α]
+  结论: NullMeasurableSet (左闭右无界区间 a) μ
   证明: measurableSet_Ici.nullMeasurableSet
 
 @[simp, measurability]
@@ -241,8 +241,8 @@ theorem measurableSet_Iic
 
 中文:
 定理 measurableSet_Iic
-  条件: [ClosedIicTopology α]
-  结论: MeasurableSet (Iic a)
+  条件: [ClosedIic拓扑 α]
+  结论: 可测集 (左无界右闭区间 a)
   证明: isClosed_Iic.measurableSet
 
 Depends on / 依赖: isClosed_Iic, isClosed_Iic.measurableSet, measurableSet
@@ -263,8 +263,8 @@ theorem nullMeasurableSet_Iic
 
 中文:
 定理 nullMeasurableSet_Iic
-  条件: [ClosedIicTopology α]
-  结论: NullMeasurableSet (Iic a) μ
+  条件: [ClosedIic拓扑 α]
+  结论: NullMeasurableSet (左无界右闭区间 a) μ
   证明: measurableSet_Iic.nullMeasurableSet
 
 @[simp, measurability]
@@ -286,8 +286,8 @@ theorem measurableSet_Icc
 
 中文:
 定理 measurableSet_Icc
-  条件: [OrderClosedTopology α]
-  结论: MeasurableSet (Icc a b)
+  条件: [OrderClosed拓扑 α]
+  结论: 可测集 (闭区间 a b)
   证明: isClosed_Icc.measurableSet
 
 Depends on / 依赖: isClosed_Icc, isClosed_Icc.measurableSet, measurableSet
@@ -306,8 +306,8 @@ theorem nullMeasurableSet_Icc
 
 中文:
 定理 nullMeasurableSet_Icc
-  条件: [OrderClosedTopology α]
-  结论: NullMeasurableSet (Icc a b) μ
+  条件: [OrderClosed拓扑 α]
+  结论: NullMeasurableSet (闭区间 a b) μ
   证明: measurableSet_Icc.nullMeasurableSet
 
 Depends on / 依赖: measurableSet_Icc, measurableSet_Icc.nullMeasurableSet, nullMeasurableSet
@@ -325,7 +325,7 @@ instance nhdsWithin_Ici_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_Ici_isMeasurablyGenerated
-  签名: [ClosedIciTopology α]
+  签名: [ClosedIci拓扑 α]
   定义体: measurableSet_Ici.nhdsWithin_isMeasurablyGenerated _
 
 Depends on / 依赖: measurableSet_Ici, measurableSet_Ici.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
@@ -344,7 +344,7 @@ instance nhdsWithin_Iic_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_Iic_isMeasurablyGenerated
-  签名: [ClosedIicTopology α]
+  签名: [ClosedIic拓扑 α]
   定义体: measurableSet_Iic.nhdsWithin_isMeasurablyGenerated _
 
 Depends on / 依赖: measurableSet_Iic, measurableSet_Iic.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
@@ -365,7 +365,7 @@ instance nhdsWithin_Icc_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_Icc_isMeasurablyGenerated
-  签名: [OrderClosedTopology α]
+  签名: [OrderClosed拓扑 α]
   定义体: by
   rw [← Ici_inter_Iic]; rw [nhdsWithin_inter]
   infer_instance
@@ -388,7 +388,7 @@ instance atTop_isMeasurablyGenerated
 
 中文:
 实例 atTop_isMeasurablyGenerated
-  签名: [ClosedIciTopology α]
+  签名: [ClosedIci拓扑 α]
   定义体: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
     (measurableSet_Ici : MeasurableSet (Ici a)).principal_isMeasurablyGenerated
 
@@ -410,7 +410,7 @@ instance atBot_isMeasurablyGenerated
 
 中文:
 实例 atBot_isMeasurablyGenerated
-  签名: [ClosedIicTopology α]
+  签名: [ClosedIic拓扑 α]
   定义体: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
     (measurableSet_Iic : MeasurableSet (Iic a)).principal_isMeasurablyGenerated
 
@@ -434,8 +434,8 @@ instance [R1Space
       (compl_subset_compl.2 subset_closure).trans hts⟩
 
 中文:
-实例 [R1Space
-  签名: α] : IsMeasurablyGenerated (cocompact α) where
+实例 [R1空间
+  签名: α] : 是MeasurablyGenerated (cocompact α) where
   定义体: by
     intro _ hs
     obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
@@ -469,7 +469,7 @@ theorem measurableSet_le'
 
 中文:
 定理 measurableSet_le'
-  结论: MeasurableSet { p : α × α | p.1 <= p.2 }
+  结论: 可测集 { p : α × α | p.1 <= p.2 }
   证明: OrderClosedTopology.isClosed_le'.measurableSet
 
 @[fun_prop]
@@ -490,7 +490,7 @@ theorem measurable_le
 
 中文:
 定理 measurable_le
-  结论: Measurable fun p : α × α => p.1 <= p.2
+  结论: 可测 fun p : α × α => p.1 <= p.2
   证明: measurableSet_setOfPred.mp measurableSet_le'
 
 Depends on / 依赖: measurableSet_le, measurableSet_setOfPred, measurableSet_setOfPred.mp
@@ -508,7 +508,7 @@ theorem measurableSet_le
 
 中文:
 定理 measurableSet_le
-  条件: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
+  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
   证明: hf.prodMk hg measurableSet_le'
 
 Depends on / 依赖: hf.prodMk, measurableSet_le, prodMk
@@ -527,8 +527,8 @@ theorem Measurable.le'
   fun_prop
 
 中文:
-定理 Measurable.le'
-  条件: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.le'
+  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
   证明: by
   fun_prop
 
@@ -559,8 +559,8 @@ theorem measurableSet_Iio
 
 中文:
 定理 measurableSet_Iio
-  条件: [ClosedIciTopology α]
-  结论: MeasurableSet (Iio a)
+  条件: [ClosedIci拓扑 α]
+  结论: 可测集 (左无界右开区间 a)
   证明: isOpen_Iio.measurableSet
 
 Depends on / 依赖: isOpen_Iio, isOpen_Iio.measurableSet, measurableSet
@@ -581,8 +581,8 @@ theorem nullMeasurableSet_Iio
 
 中文:
 定理 nullMeasurableSet_Iio
-  条件: [ClosedIciTopology α]
-  结论: NullMeasurableSet (Iio a) μ
+  条件: [ClosedIci拓扑 α]
+  结论: NullMeasurableSet (左无界右开区间 a) μ
   证明: measurableSet_Iio.nullMeasurableSet
 
 @[simp, measurability]
@@ -604,8 +604,8 @@ theorem measurableSet_Ioi
 
 中文:
 定理 measurableSet_Ioi
-  条件: [ClosedIicTopology α]
-  结论: MeasurableSet (Ioi a)
+  条件: [ClosedIic拓扑 α]
+  结论: 可测集 (左开右无界区间 a)
   证明: isOpen_Ioi.measurableSet
 
 Depends on / 依赖: isOpen_Ioi, isOpen_Ioi.measurableSet, measurableSet
@@ -626,8 +626,8 @@ theorem nullMeasurableSet_Ioi
 
 中文:
 定理 nullMeasurableSet_Ioi
-  条件: [ClosedIicTopology α]
-  结论: NullMeasurableSet (Ioi a) μ
+  条件: [ClosedIic拓扑 α]
+  结论: NullMeasurableSet (左开右无界区间 a) μ
   证明: measurableSet_Ioi.nullMeasurableSet
 
 @[simp, measurability]
@@ -649,8 +649,8 @@ theorem measurableSet_Ioo
 
 中文:
 定理 measurableSet_Ioo
-  条件: [OrderClosedTopology α]
-  结论: MeasurableSet (Ioo a b)
+  条件: [OrderClosed拓扑 α]
+  结论: 可测集 (开区间 a b)
   证明: isOpen_Ioo.measurableSet
 
 Depends on / 依赖: isOpen_Ioo, isOpen_Ioo.measurableSet, measurableSet
@@ -671,8 +671,8 @@ theorem nullMeasurableSet_Ioo
 
 中文:
 定理 nullMeasurableSet_Ioo
-  条件: [OrderClosedTopology α]
-  结论: NullMeasurableSet (Ioo a b) μ
+  条件: [OrderClosed拓扑 α]
+  结论: NullMeasurableSet (开区间 a b) μ
   证明: measurableSet_Ioo.nullMeasurableSet
 
 @[simp, measurability]
@@ -694,8 +694,8 @@ theorem measurableSet_Ioc
 
 中文:
 定理 measurableSet_Ioc
-  条件: [ClosedIicTopology α]
-  结论: MeasurableSet (Ioc a b)
+  条件: [ClosedIic拓扑 α]
+  结论: 可测集 (左开右闭区间 a b)
   证明: measurableSet_Ioi.inter measurableSet_Iic
 
 Depends on / 依赖: measurableSet_Iic, measurableSet_Ioi, measurableSet_Ioi.inter
@@ -716,8 +716,8 @@ theorem nullMeasurableSet_Ioc
 
 中文:
 定理 nullMeasurableSet_Ioc
-  条件: [ClosedIicTopology α]
-  结论: NullMeasurableSet (Ioc a b) μ
+  条件: [ClosedIic拓扑 α]
+  结论: NullMeasurableSet (左开右闭区间 a b) μ
   证明: measurableSet_Ioc.nullMeasurableSet
 
 @[simp, measurability]
@@ -739,8 +739,8 @@ theorem measurableSet_Ico
 
 中文:
 定理 measurableSet_Ico
-  条件: [ClosedIciTopology α]
-  结论: MeasurableSet (Ico a b)
+  条件: [ClosedIci拓扑 α]
+  结论: 可测集 (左闭右开区间 a b)
   证明: measurableSet_Ici.inter measurableSet_Iio
 
 Depends on / 依赖: measurableSet_Ici, measurableSet_Ici.inter, measurableSet_Iio
@@ -759,8 +759,8 @@ theorem nullMeasurableSet_Ico
 
 中文:
 定理 nullMeasurableSet_Ico
-  条件: [ClosedIciTopology α]
-  结论: NullMeasurableSet (Ico a b) μ
+  条件: [ClosedIci拓扑 α]
+  结论: NullMeasurableSet (左闭右开区间 a b) μ
   证明: measurableSet_Ico.nullMeasurableSet
 
 Depends on / 依赖: measurableSet_Ico, measurableSet_Ico.nullMeasurableSet, nullMeasurableSet
@@ -778,7 +778,7 @@ instance nhdsWithin_Ioi_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_Ioi_isMeasurablyGenerated
-  签名: [ClosedIicTopology α]
+  签名: [ClosedIic拓扑 α]
   定义体: measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated _
 
 Depends on / 依赖: measurableSet_Ioi, measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
@@ -797,7 +797,7 @@ instance nhdsWithin_Iio_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_Iio_isMeasurablyGenerated
-  签名: [ClosedIciTopology α]
+  签名: [ClosedIci拓扑 α]
   定义体: measurableSet_Iio.nhdsWithin_isMeasurablyGenerated _
 
 Depends on / 依赖: measurableSet_Iio, measurableSet_Iio.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
@@ -816,7 +816,7 @@ instance nhdsWithin_uIcc_isMeasurablyGenerated
 
 中文:
 实例 nhdsWithin_uIcc_isMeasurablyGenerated
-  签名: [OrderClosedTopology α]
+  签名: [OrderClosed拓扑 α]
   定义体: nhdsWithin_Icc_isMeasurablyGenerated
 
 Depends on / 依赖: nhdsWithin_Icc_isMeasurablyGenerated
@@ -837,7 +837,7 @@ theorem measurableSet_lt'
 
 中文:
 定理 measurableSet_lt'
-  条件: [SecondCountableTopology α] [OrderClosedTopology α]
+  条件: [第二可数拓扑 α] [OrderClosed拓扑 α]
   证明: (isOpen_lt continuous_fst continuous_snd).measurableSet
 
 @[fun_prop]
@@ -859,7 +859,7 @@ theorem measurable_lt
 
 中文:
 定理 measurable_lt
-  条件: [SecondCountableTopology α] [OrderClosedTopology α]
+  条件: [第二可数拓扑 α] [OrderClosed拓扑 α]
   证明: measurableSet_setOfPred.mp measurableSet_lt'
 
 Depends on / 依赖: measurableSet_lt, measurableSet_setOfPred, measurableSet_setOfPred.mp
@@ -878,7 +878,7 @@ theorem measurableSet_lt
 
 中文:
 定理 measurableSet_lt
-  结论: [SecondCountableTopology α] [OrderClosedTopology α]
+  结论: [第二可数拓扑 α] [OrderClosed拓扑 α]
   证明: hf.prodMk hg measurableSet_lt'
 
 Depends on / 依赖: hf.prodMk, measurableSet_lt, prodMk
@@ -898,8 +898,8 @@ theorem Measurable.lt
   fun_prop
 
 中文:
-定理 Measurable.lt
-  结论: [SecondCountableTopology α] [OrderClosedTopology α] {f g : δ -> α}
+定理 可测.lt
+  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {f g : δ -> α}
   证明: by
   fun_prop
 
@@ -920,7 +920,7 @@ theorem nullMeasurableSet_lt
 
 中文:
 定理 nullMeasurableSet_lt
-  结论: [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
+  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {μ : 测度 δ}
   证明: (hf.prodMk hg).nullMeasurable measurableSet_lt'
 
 Depends on / 依赖: hf.prodMk, measurableSet_lt, nullMeasurable, prodMk
@@ -940,7 +940,7 @@ theorem nullMeasurableSet_lt'
 
 中文:
 定理 nullMeasurableSet_lt'
-  结论: [SecondCountableTopology α] [OrderClosedTopology α]
+  结论: [第二可数拓扑 α] [OrderClosed拓扑 α]
   证明: measurableSet_lt'.nullMeasurableSet
 
 Depends on / 依赖: measurableSet_lt, nullMeasurableSet
@@ -960,7 +960,7 @@ theorem nullMeasurableSet_le
 
 中文:
 定理 nullMeasurableSet_le
-  结论: [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
+  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {μ : 测度 δ}
   证明: (hf.prodMk hg).nullMeasurable measurableSet_le'
 
 Depends on / 依赖: hf.prodMk, measurableSet_le, nullMeasurable, prodMk
@@ -984,8 +984,8 @@ theorem Set.OrdConnected.measurableSet
   have : u subseteq s := iUnion₂_subset fun x hx 
 
 中文:
-定理 Set.OrdConnected.measurableSet
-  条件: [OrderClosedTopology α] (h : OrdConnected s)
+定理 集合.序连通.measurableSet
+  条件: [OrderClosed拓扑 α] (h : 序连通 s)
   证明: by
   let u := ⋃ (x in s) (y in s), Ioo x y
   have huopen : IsOpen u := isOpen_biUnion fun _ _ => isOpen_biUnion fun _ _ => isOpen_Ioo
@@ -1015,8 +1015,8 @@ theorem IsPreconnected.measurableSet
   proof: h.ordConnected.measurableSet
 
 中文:
-定理 IsPreconnected.measurableSet
-  条件: [OrderClosedTopology α] (h : IsPreconnected s)
+定理 是预连通.measurableSet
+  条件: [OrderClosed拓扑 α] (h : 是预连通 s)
   证明: h.ordConnected.measurableSet
 
 Depends on / 依赖: h.ordConnected.measurableSet, measurableSet, ordConnected
@@ -1039,7 +1039,7 @@ theorem generateFrom_Icc_mem_le_borel
 
 中文:
 定理 generateFrom_Icc_mem_le_borel
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: by
   apply generateFrom_le
   borelize α
@@ -1072,8 +1072,8 @@ theorem Dense.borel_eq_generateFrom_Icc_mem_aux
   rcases hd.exists
 
 中文:
-定理 Dense.borel_eq_generateFrom_Icc_mem_aux
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Icc_mem_aux
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: by
   set S : Set (Set α) := { S | exists l in s, exists u in s, l <= u ∧ Icc l u = S }
   refine le_antisymm ?_ (generateFrom_Icc_mem_le_borel _ _)
@@ -1132,8 +1132,8 @@ theorem Dense.borel_eq_generateFrom_Icc_mem
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
 中文:
-定理 Dense.borel_eq_generateFrom_Icc_mem
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Icc_mem
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: hd.borel_eq_generateFrom_Icc_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
@@ -1159,7 +1159,7 @@ theorem borel_eq_generateFrom_Icc
 
 中文:
 定理 borel_eq_generateFrom_Icc
-  结论: (α : 类型) [TopologicalSpace α] [SecondCountableTopology α]
+  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Icc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
@@ -1188,7 +1188,7 @@ theorem generateFrom_Ico_mem_le_borel
 
 中文:
 定理 generateFrom_Ico_mem_le_borel
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: by
   apply generateFrom_le
   borelize α
@@ -1221,8 +1221,8 @@ theorem Dense.borel_eq_generateFrom_Ico_mem_aux
   rcases hd.exists_
 
 中文:
-定理 Dense.borel_eq_generateFrom_Ico_mem_aux
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Ico_mem_aux
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: by
   set S : Set (Set α) := { S | exists l in s, exists u in s, l < u ∧ Ico l u = S }
   refine le_antisymm ?_ (generateFrom_Ico_mem_le_borel _ _)
@@ -1278,8 +1278,8 @@ theorem Dense.borel_eq_generateFrom_Ico_mem
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
 中文:
-定理 Dense.borel_eq_generateFrom_Ico_mem
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Ico_mem
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: hd.borel_eq_generateFrom_Ico_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
@@ -1305,7 +1305,7 @@ theorem borel_eq_generateFrom_Ico
 
 中文:
 定理 borel_eq_generateFrom_Ico
-  结论: (α : 类型) [TopologicalSpace α] [SecondCountableTopology α]
+  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Ico_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
@@ -1336,8 +1336,8 @@ theorem Dense.borel_eq_generateFrom_Ioc_mem_aux
     exact he
 
 中文:
-定理 Dense.borel_eq_generateFrom_Ioc_mem_aux
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Ioc_mem_aux
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: by
   convert!
     hd.orderDual.borel_eq_generateFrom_Ico_mem_aux hbot fun x y hlt he => hIoo y x hlt _ using 2
@@ -1371,8 +1371,8 @@ theorem Dense.borel_eq_generateFrom_Ioc_mem
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
 中文:
-定理 Dense.borel_eq_generateFrom_Ioc_mem
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+定理 稠密.borel_eq_generateFrom_Ioc_mem
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: hd.borel_eq_generateFrom_Ioc_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
 
@@ -1398,7 +1398,7 @@ theorem borel_eq_generateFrom_Ioc
 
 中文:
 定理 borel_eq_generateFrom_Ioc
-  结论: (α : 类型) [TopologicalSpace α] [SecondCountableTopology α]
+  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Ioc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
@@ -1430,7 +1430,7 @@ theorem borel_eq_generateFrom_Ioc_le
 
 中文:
 定理 borel_eq_generateFrom_Ioc_le
-  结论: (α : 类型) [TopologicalSpace α] [SecondCountableTopology α]
+  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   apply le_antisymm
   · rw [borel_eq_generateFrom_Ioc]
@@ -1470,7 +1470,7 @@ theorem ext_of_Ico_finite
 
 中文:
 定理 ext_of_Ico_finite
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   refine
     ext_of_generate_finite _ (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α))
@@ -1504,7 +1504,7 @@ theorem ext_of_Ioc_finite
 
 中文:
 定理 ext_of_Ioc_finite
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   refine @ext_of_Ico_finite αᵒᵈ _ _ _ _ _ ‹_› μ ν _ hμν fun a b hab => ?_
   erw [Ico_toDual (α := α)]
@@ -1534,7 +1534,7 @@ theorem ext_of_Ico'
 
 中文:
 定理 ext_of_Ico'
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, _⟩
   have : (⋃ (l in s) (u in s) (_ : l < u), {Ico l u} : Set (Set α)).Countable :=
@@ -1578,7 +1578,7 @@ theorem ext_of_Ioc'
 
 中文:
 定理 ext_of_Ioc'
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   refine @ext_of_Ico' αᵒᵈ _ _ _ _ _ ‹_› _ μ ν ?_ ?_ <;> intro a b hab <;> erw [Ico_toDual (α := α)]
   exacts [hμ hab, h hab]
@@ -1602,7 +1602,7 @@ theorem ext_of_Ico
 
 中文:
 定理 ext_of_Ico
-  结论: {α : 类型} [TopologicalSpace α] {_m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
   证明: μ.ext_of_Ico' ν (fun _ _ _ => measure_Ico_lt_top.ne) h
 
 Depends on / 依赖: ext_of_Ico, measure_Ico_lt_top, measure_Ico_lt_top.ne
@@ -1623,7 +1623,7 @@ theorem ext_of_Ioc
 
 中文:
 定理 ext_of_Ioc
-  结论: {α : 类型} [TopologicalSpace α] {_m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
   证明: μ.ext_of_Ioc' ν (fun _ _ _ => measure_Ioc_lt_top.ne) h
 
 Depends on / 依赖: ext_of_Ioc, measure_Ioc_lt_top, measure_Ioc_lt_top.ne
@@ -1649,7 +1649,7 @@ theorem ext_of_Iic
 
 中文:
 定理 ext_of_Iic
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   refine ext_of_Ioc_finite μ ν ?_ fun a b hlt => ?_
   · rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, -, hst⟩
@@ -1682,7 +1682,7 @@ theorem ext_of_Ici
 
 中文:
 定理 ext_of_Ici
-  结论: {α : 类型} [TopologicalSpace α] {_ : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {_ : 可测空间 α}
   证明: @ext_of_Iic αᵒᵈ _ _ _ _ _ ‹_› _ _ _ h
 
 Depends on / 依赖: ext_of_Iic
@@ -1706,7 +1706,7 @@ theorem ext_of_Icc'
 
 中文:
 定理 ext_of_Icc'
-  结论: {α : 类型} [TopologicalSpace α] {m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
   证明: by
   rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, hst⟩
   have : (⋃ (l in s) (u in s) (_ : l <= u), {Icc l u} : Set (Set α)).Countable :=
@@ -1748,7 +1748,7 @@ theorem ext_of_Icc
 
 中文:
 定理 ext_of_Icc
-  结论: {α : 类型} [TopologicalSpace α] {_m : MeasurableSpace α}
+  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
   证明: μ.ext_of_Icc' ν (fun _ _ _ => measure_Icc_lt_top.ne) h
 
 Depends on / 依赖: ext_of_Icc, measure_Icc_lt_top, measure_Icc_lt_top.ne
@@ -1775,8 +1775,8 @@ theorem measurableSet_uIcc
 
 中文:
 定理 measurableSet_uIcc
-  条件: [OrderClosedTopology α]
-  结论: MeasurableSet (uIcc a b)
+  条件: [OrderClosed拓扑 α]
+  结论: 可测集 (uIcc a b)
   证明: measurableSet_Icc
 
 @[measurability]
@@ -1798,8 +1798,8 @@ theorem measurableSet_uIoc
 
 中文:
 定理 measurableSet_uIoc
-  条件: [ClosedIicTopology α]
-  结论: MeasurableSet (uIoc a b)
+  条件: [ClosedIic拓扑 α]
+  结论: 可测集 (uIoc a b)
   证明: measurableSet_Ioc
 
 Depends on / 依赖: measurableSet_Ioc
@@ -1825,8 +1825,8 @@ nonrec theorem AEMeasurable.max {f g : δ -> α} {μ : Measure δ} (hf : AEMeasu
   ⟨fun a => max (hf.mk f a) (hg.mk g a), hf.measur
 
 中文:
-定理 Measurable.max
-  条件: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.最大值
+  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
   证明: by
   simpa only [max_def'] using! hf.piecewise (measurableSet_le hg hf) hg
 
@@ -1863,8 +1863,8 @@ nonrec theorem AEMeasurable.min {f g : δ -> α} {μ : Measure δ} (hf : AEMeasu
   ⟨fun a => min (hf.mk f a) (hg.mk g a), hf.measura
 
 中文:
-定理 Measurable.min
-  条件: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.最小值
+  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
   证明: by
   simpa only [min_def] using! hf.piecewise (measurableSet_le hf hg) hg
 
@@ -1933,8 +1933,8 @@ theorem measurable_of_Iio
 
 中文:
 定理 measurable_of_Iio
-  条件: {f : δ -> α} (hf : 对任意 x, MeasurableSet (f ⁻¹' Iio x))
-  结论: Measurable f
+  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左无界右开区间 x))
+  结论: 可测 f
   证明: by
   convert! measurable_generateFrom (α := δ) _
   · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Iio _)
@@ -1957,7 +1957,7 @@ theorem UpperSemicontinuous.measurable
 
 中文:
 定理 UpperSemicontinuous.measurable
-  结论: [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
+  结论: [拓扑空间 δ] [OpensMeasurable空间 δ] {f : δ -> α}
   证明: measurable_of_Iio fun y => (hf.isOpen_preimage y).measurableSet
 
 Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage, measurableSet, measurable_of_Iio
@@ -1980,8 +1980,8 @@ theorem measurable_of_Ioi
 
 中文:
 定理 measurable_of_Ioi
-  条件: {f : δ -> α} (hf : 对任意 x, MeasurableSet (f ⁻¹' Ioi x))
-  结论: Measurable f
+  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左开右无界区间 x))
+  结论: 可测 f
   证明: by
   convert! measurable_generateFrom (α := δ) _
   · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ioi _)
@@ -2013,7 +2013,7 @@ lemma measurable_iSup_of_lowerSemicontinuous
 
 中文:
 引理 measurable_iSup_of_lowerSemicontinuous
-  结论: [CompleteLinearOrder β] [OrderTopology β]
+  结论: [完备线性序 β] [Order拓扑 β]
   证明: by
   refine measurable_of_Ioi fun c => ?_
   obtain ⟨J, cJ, dJ⟩ := TopologicalSpace.exists_countable_dense ι
@@ -2057,7 +2057,7 @@ lemma measurable_iInf_of_upperSemicontinuous
 
 中文:
 引理 measurable_iInf_of_upperSemicontinuous
-  结论: [CompleteLinearOrder β] [OrderTopology β]
+  结论: [完备线性序 β] [Order拓扑 β]
   证明: measurable_iSup_of_lowerSemicontinuous (β := βᵒᵈ) mf cf
 
 Depends on / 依赖: measurable_iSup_of_lowerSemicontinuous
@@ -2080,7 +2080,7 @@ theorem LowerSemicontinuous.measurable
 
 中文:
 定理 LowerSemicontinuous.measurable
-  结论: [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
+  结论: [拓扑空间 δ] [OpensMeasurable空间 δ] {f : δ -> α}
   证明: measurable_of_Ioi fun y => (hf.isOpen_preimage y).measurableSet
 
 Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage, measurableSet, measurable_of_Ioi
@@ -2103,8 +2103,8 @@ theorem measurable_of_Iic
 
 中文:
 定理 measurable_of_Iic
-  条件: {f : δ -> α} (hf : 对任意 x, MeasurableSet (f ⁻¹' Iic x))
-  结论: Measurable f
+  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左无界右闭区间 x))
+  结论: 可测 f
   证明: by
   apply measurable_of_Ioi
   simp_rw [← compl_Iic, preimage_compl, MeasurableSet.compl_iff]
@@ -2131,8 +2131,8 @@ theorem measurable_of_Ici
 
 中文:
 定理 measurable_of_Ici
-  条件: {f : δ -> α} (hf : 对任意 x, MeasurableSet (f ⁻¹' Ici x))
-  结论: Measurable f
+  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左闭右无界区间 x))
+  结论: 可测 f
   证明: by
   apply measurable_of_Iio
   simp_rw [← compl_Ici, preimage_compl, MeasurableSet.compl_iff]
@@ -2160,8 +2160,8 @@ theorem Measurable.isLUB
   exact MeasurableSet.iUnio
 
 中文:
-定理 Measurable.isLUB
-  结论: {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.isLUB
+  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: by
   change forall b, IsLUB (range fun i => f i b) (g b) at hg
   rw [‹BorelSpace α›.measurable_eq]; rw [borel_eq_generateFrom_Ioi α]
@@ -2198,8 +2198,8 @@ theorem Measurable.isLUB_of_mem
         int
 
 中文:
-定理 Measurable.isLUB_of_mem
-  结论: {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
+定理 可测.isLUB_of_mem
+  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g g' : δ -> α}
   证明: by
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨i⟩⟩
@@ -2259,8 +2259,8 @@ theorem AEMeasurable.isLUB
   let p : δ -> (
 
 中文:
-定理 AEMeasurable.isLUB
-  结论: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
+定理 几乎处处可测.isLUB
+  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α} {g : δ -> α}
   证明: by
   classical
   nontriviality α
@@ -2308,8 +2308,8 @@ theorem Measurable.isGLB
   proof: Measurable.isLUB (α := αᵒᵈ) hf hg
 
 中文:
-定理 Measurable.isGLB
-  结论: {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.isGLB
+  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: Measurable.isLUB (α := αᵒᵈ) hf hg
 
 Depends on / 依赖: Measurable, Measurable.isLUB
@@ -2327,8 +2327,8 @@ theorem Measurable.isGLB_of_mem
   proof: Measurable.isLUB_of_mem (α := αᵒᵈ) hf hs hg hg' g'_meas
 
 中文:
-定理 Measurable.isGLB_of_mem
-  结论: {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
+定理 可测.isGLB_of_mem
+  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g g' : δ -> α}
   证明: Measurable.isLUB_of_mem (α := αᵒᵈ) hf hs hg hg' g'_meas
 
 Depends on / 依赖: Measurable, Measurable.isLUB_of_mem, _meas, isLUB_of_mem
@@ -2348,8 +2348,8 @@ theorem AEMeasurable.isGLB
   proof: AEMeasurable.isLUB (α := αᵒᵈ) hf hg
 
 中文:
-定理 AEMeasurable.isGLB
-  结论: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
+定理 几乎处处可测.isGLB
+  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α} {g : δ -> α}
   证明: AEMeasurable.isLUB (α := αᵒᵈ) hf hg
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.isLUB
@@ -2369,8 +2369,8 @@ theorem Monotone.measurable
   fun _ => ordConnected_def.mpr fun _a ha _ _ _c hc => lt_of_lt_of_le ha (hf hc.1)
 
 中文:
-定理 Monotone.measurable
-  结论: [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
+定理 递增.measurable
+  结论: [线性序 β] [OrderClosed拓扑 β] {f : β -> α}
   证明: suffices h : forall x, OrdConnected (f ⁻¹' Ioi x) from measurable_of_Ioi fun x => (h x).measurableSet
   fun _ => ordConnected_def.mpr fun _a ha _ _ _c hc => lt_of_lt_of_le ha (hf hc.1)
 -/
@@ -2390,7 +2390,7 @@ theorem aemeasurable_restrict_of_monotoneOn
 
 中文:
 定理 aemeasurable_restrict_of_monotoneOn
-  结论: [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
+  结论: [线性序 β] [OrderClosed拓扑 β] {μ : 测度 β}
   证明: have : Monotone (f ∘ (↑) : s -> α) := fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (hxy : x <= y) => hf hx hy hxy
   aemeasurable_restrict_of_measurable_subtype hs this.measurable
 
@@ -2411,8 +2411,8 @@ theorem Antitone.measurable
   proof: @Monotone.measurable αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ hf
 
 中文:
-定理 Antitone.measurable
-  结论: [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
+定理 递减.measurable
+  结论: [线性序 β] [OrderClosed拓扑 β] {f : β -> α}
   证明: @Monotone.measurable αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ hf
 -/
 protected theorem Antitone.measurable [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
@@ -2429,7 +2429,7 @@ theorem aemeasurable_restrict_of_antitoneOn
 
 中文:
 定理 aemeasurable_restrict_of_antitoneOn
-  结论: [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
+  结论: [线性序 β] [OrderClosed拓扑 β] {μ : 测度 β}
   证明: @aemeasurable_restrict_of_monotoneOn αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ _ hs _ hf
 
 Depends on / 依赖: aemeasurable_restrict_of_monotoneOn
@@ -2454,8 +2454,8 @@ theorem MeasurableSet.of_mem_nhdsGT_aux
   have A : forall x in s, exists y in Ioi x, Ioo x y subset
 
 中文:
-定理 MeasurableSet.of_mem_nhdsGT_aux
-  结论: {s : Set α} (h : 对任意 x in s, s in 𝓝[>] x)
+定理 可测集.of_mem_nhdsGT_aux
+  结论: {s : 集合 α} (h : 对任意 x in s, s in 𝓝[>] x)
   证明: by
   choose! M hM using h'
   suffices H : (s \ interior s).Countable by
@@ -2505,9 +2505,9 @@ theorem MeasurableSet.of_mem_nhdsGT
     have A : forall x in s \ { x₀ }, x < x₀ := fun x hx => lt_of_le
 
 中文:
-定理 MeasurableSet.of_mem_nhdsGT
-  条件: {s : Set α} (h : 对任意 x in s, s in 𝓝[>] x)
-  结论: MeasurableSet s
+定理 可测集.of_mem_nhdsGT
+  条件: {s : 集合 α} (h : 对任意 x in s, s in 𝓝[>] x)
+  结论: 可测集 s
   证明: by
   by_cases H : exists x in s, IsTop x
   · rcases H with ⟨x₀, x₀s, h₀⟩
@@ -2552,7 +2552,7 @@ lemma measurableSet_bddAbove_range
 
 中文:
 引理 measurableSet_bddAbove_range
-  条件: {ι} [Countable ι] {f : ι -> δ -> α} (hf : 对任意 i, Measurable (f i))
+  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: by
   rcases isEmpty_or_nonempty α with hα | hα
   · have : forall b, range (fun i => f i b) = ∅ := fun b => eq_empty_of_isEmpty _
@@ -2599,7 +2599,7 @@ lemma measurableSet_bddBelow_range
 
 中文:
 引理 measurableSet_bddBelow_range
-  条件: {ι} [Countable ι] {f : ι -> δ -> α} (hf : 对任意 i, Measurable (f i))
+  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: measurableSet_bddAbove_range (α := αᵒᵈ) hf
 
 Depends on / 依赖: measurableSet_bddAbove_range
@@ -2629,8 +2629,8 @@ theorem Measurable.iSup_Prop
 @[fun_prop]
 
 中文:
-定理 Measurable.iSup_Prop
-  结论: {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
+定理 可测.iSup_Prop
+  结论: {α} {mα : 可测空间 α} [条件完备格 α]
   证明: by
   classical
   simp_rw [ciSup_eq_ite]
@@ -2665,8 +2665,8 @@ theorem Measurable.iInf_Prop
   · exact measurable_const
 
 中文:
-定理 Measurable.iInf_Prop
-  结论: {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
+定理 可测.iInf_Prop
+  结论: {α} {mα : 可测空间 α} [条件完备格 α]
   证明: by
   classical
   simp_rw [ciInf_eq_ite]
@@ -2707,8 +2707,8 @@ theorem Measurable.iSup
   
 
 中文:
-定理 Measurable.iSup
-  条件: {ι} [Countable ι] {f : ι -> δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.iSup
+  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: by
   rcases isEmpty_or_nonempty ι with hι | hι
   · simp [iSup_of_empty']
@@ -2756,8 +2756,8 @@ theorem AEMeasurable.iSup
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.iSup
-  结论: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
+定理 几乎处处可测.iSup
+  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α}
   证明: by
   refine ⟨fun b => ⨆ i, (hf i).mk (f i) b, .iSup (fun i => (hf i).measurable_mk), ?_⟩
   filter_upwards [ae_all_iff.2 (fun i => (hf i).ae_eq_mk)] with b hb using by simp [hb]
@@ -2781,8 +2781,8 @@ theorem Measurable.iInf
 @[fun_prop]
 
 中文:
-定理 Measurable.iInf
-  条件: {ι} [Countable ι] {f : ι -> δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.iInf
+  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: .iSup (α := αᵒᵈ) hf
 
 @[fun_prop]
@@ -2801,8 +2801,8 @@ theorem AEMeasurable.iInf
   proof: .iSup (α := αᵒᵈ) hf
 
 中文:
-定理 AEMeasurable.iInf
-  结论: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
+定理 几乎处处可测.iInf
+  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α}
   证明: .iSup (α := αᵒᵈ) hf
 -/
 protected theorem AEMeasurable.iInf {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
@@ -2821,8 +2821,8 @@ theorem Measurable.sSup
   exact .iSup fun i => hf i i.2
 
 中文:
-定理 Measurable.sSup
-  结论: {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
+定理 可测.sSup
+  结论: {ι} {f : ι -> δ -> α} {s : 集合 ι} (hs : s.可数)
   证明: by
   simp_rw [image_eq_range]
   have : Countable s := hs.to_subtype
@@ -2844,8 +2844,8 @@ theorem Measurable.sInf
   proof: .sSup (α := αᵒᵈ) hs hf
 
 中文:
-定理 Measurable.sInf
-  结论: {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
+定理 可测.sInf
+  结论: {ι} {f : ι -> δ -> α} {s : 集合 ι} (hs : s.可数)
   证明: .sSup (α := αᵒᵈ) hs hf
 -/
 protected theorem Measurable.sInf {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
@@ -2869,8 +2869,8 @@ theorem Measurable.biSup
   · have : forall b, ⨆ i in s, f i b = (⨆ (i 
 
 中文:
-定理 Measurable.biSup
-  结论: {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
+定理 可测.biSup
+  结论: {ι} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
   证明: by
   have : Encodable s := hs.toEncodable
   by_cases H : forall i, i in s
@@ -2912,8 +2912,8 @@ theorem AEMeasurable.biSup
   have : fo
 
 中文:
-定理 AEMeasurable.biSup
-  结论: {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
+定理 几乎处处可测.biSup
+  结论: {ι} {μ : 测度 δ} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
   证明: by
   classical
   let g : ι -> δ -> α := fun i => if hi : i in s then (hf i hi).mk (f i) else fun _b => sSup ∅
@@ -2947,8 +2947,8 @@ theorem Measurable.biInf
   proof: .biSup (α := αᵒᵈ) s hs hf
 
 中文:
-定理 Measurable.biInf
-  结论: {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
+定理 可测.biInf
+  结论: {ι} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
   证明: .biSup (α := αᵒᵈ) s hs hf
 -/
 theorem Measurable.biInf {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
@@ -2964,8 +2964,8 @@ theorem AEMeasurable.biInf
   proof: .biSup (α := αᵒᵈ) s hs hf
 
 中文:
-定理 AEMeasurable.biInf
-  结论: {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
+定理 几乎处处可测.biInf
+  结论: {ι} {μ : 测度 δ} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
   证明: .biSup (α := αᵒᵈ) s hs hf
 -/
 theorem AEMeasurable.biInf {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
@@ -2986,8 +2986,8 @@ theorem Measurable.liminf'
  
 
 中文:
-定理 Measurable.liminf'
-  结论: {ι ι'} {f : ι -> δ -> α} {v : Filter ι} (hf : 对任意 i, Measurable (f i))
+定理 可测.liminf'
+  结论: {ι ι'} {f : ι -> δ -> α} {v : 滤子 ι} (hf : 对任意 i, 可测 (f i))
   证明: by
   classical
   /- We would like to write the liminf as `⨆ (j : Subtype p), ⨅ (i : s j), f i x`, as the
@@ -3056,8 +3056,8 @@ theorem Measurable.limsup'
   proof: .liminf' (α := αᵒᵈ) hf hu hs
 
 中文:
-定理 Measurable.limsup'
-  结论: {ι ι'} {f : ι -> δ -> α} {u : Filter ι} (hf : 对任意 i, Measurable (f i))
+定理 可测.limsup'
+  结论: {ι ι'} {f : ι -> δ -> α} {u : 滤子 ι} (hf : 对任意 i, 可测 (f i))
   证明: .liminf' (α := αᵒᵈ) hf hu hs
 
 Depends on / 依赖: liminf
@@ -3079,8 +3079,8 @@ theorem Measurable.liminf
   proof: .liminf' hf atTop_countable_basis fun _ => to_countable _
 
 中文:
-定理 Measurable.liminf
-  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.liminf
+  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: .liminf' hf atTop_countable_basis fun _ => to_countable _
 
 Depends on / 依赖: atTop_countable_basis, liminf, to_countable
@@ -3101,8 +3101,8 @@ theorem Measurable.limsup
   proof: .limsup' hf atTop_countable_basis fun _ => to_countable _
 
 中文:
-定理 Measurable.limsup
-  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, Measurable (f i))
+定理 可测.limsup
+  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, 可测 (f i))
   证明: .limsup' hf atTop_countable_basis fun _ => to_countable _
 
 Depends on / 依赖: atTop_countable_basis, limsup, to_countable
@@ -3132,7 +3132,7 @@ theorem measure_eq_measure_preimage_add_measure_tsum_Ico_zpow
 
 中文:
 定理 measure_eq_measure_preimage_add_measure_tsum_Ico_zpow
-  结论: {α : 类型} {mα : MeasurableSpace α}
+  结论: {α : 类型} {mα : 可测空间 α}
   证明: by
   have A : μ s = μ (s inter f ⁻¹' {0}) + μ (s inter f ⁻¹' Ioi 0) := by
     rw [← measure_union]

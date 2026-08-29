@@ -38,7 +38,7 @@ definition etalePrecoverage
 
 中文:
 定义 etalePrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: precoverage @Etale
 
 Depends on / 依赖: precoverage
@@ -56,7 +56,7 @@ definition etalePretopology
 
 中文:
 定义 etalePretopology
-  签名: : Pretopology Scheme.{u}
+  签名: : Pretopology 概形.{u}
   定义体: pretopology @Etale
 
 Depends on / 依赖: pretopology
@@ -74,7 +74,7 @@ abbreviation etaleTopology
 
 中文:
 缩写 etaleTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: grothendieckTopology @Etale
 
 Depends on / 依赖: grothendieckTopology
@@ -119,7 +119,7 @@ definition smallEtaleTopology
 
 中文:
 定义 smallEtaleTopology
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: X.smallGrothendieckTopology (P := @Etale)
 
 Depends on / 依赖: X.smallGrothendieckTopology, smallGrothendieckTopology
@@ -138,7 +138,7 @@ definition smallEtalePretopology
 
 中文:
 定义 smallEtalePretopology
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: X.smallPretopology (Q := @Etale) (P := @Etale)
 
 Depends on / 依赖: X.smallPretopology, smallPretopology
@@ -223,7 +223,7 @@ definition geometricFiber
 
 中文:
 定义 geometricFiber
-  签名: (Ω : 类型u) [Field Ω] [IsSepClosed Ω]
+  签名: (Ω : 类型u) [域 Ω] [是SepClosed Ω]
   定义体: coyoneda.obj ⟨Spec (.of Ω)⟩
   jointly_surjective {S} R hR (f : Spec (.of Ω) ⟶ S) := by
     obtain ⟨⟨x, a⟩, rfl⟩ := (Scheme.SpecToEquivOfField Ω S).symm.surjective f

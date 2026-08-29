@@ -44,7 +44,7 @@ definition morphismPropertyWithGeneratedByTopologyEquiv
 
 中文:
 定义 morphismPropertyWithGeneratedByTopologyEquiv
-  签名: : Morphism命题erty TopCat.{v}
+  签名: : MorphismProperty 顶元素范畴.{v}
   定义体: MorphismProperty.ofHoms (GeneratedByTopCat.adjCounit (X := X)).app
 
 Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.adjCounit, MorphismProperty, MorphismProperty.ofHoms, adjCounit, ofHoms
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toContinuousGeneratedByCat.{v} X).IsLocalization
+  签名: (顶元素范畴.toContinuousGeneratedByCat.{v} X).是Localization
   定义体: ContinuousGeneratedByCat.adj.isLocalization_rightAdjoint _
     (by rintro _ _ _ ⟨Z⟩; infer_instance)
     (fun _ => by constructor)
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toGeneratedByTopCat.{v} (X := X)).IsLocalization
+  签名: (顶元素范畴.toGeneratedByTopCat.{v} (X := X)).是Localization
   定义体: GeneratedByTopCat.adj.isLocalization_rightAdjoint _
     (by rintro _ _ _ ⟨Z⟩; infer_instance)
     (fun _ => by constructor)

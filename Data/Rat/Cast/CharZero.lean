@@ -37,7 +37,7 @@ lemma cast_injective
 
 中文:
 引理 cast_injective
-  结论: Injective ((↑) : Rat -> α)
+  结论: 单射 ((↑) : 有理数 -> α)
   证明: Nat.cast_ne_zero.2 d₁0
     have d₂a : (d₂ : α) != 0 := Nat.cast_ne_zero.2 d₂0
     rw [mk_eq_divInt]; rw [mk_eq_divInt] at h ⊢
@@ -116,7 +116,7 @@ lemma cast_add
 
 中文:
 引理 cast_add
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: ↑(p + q) = (p + q : α)
   证明: cast_add_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')
 -/
@@ -134,7 +134,7 @@ lemma cast_sub
 
 中文:
 引理 cast_sub
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: ↑(p - q) = (p - q : α)
   证明: cast_sub_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')
 -/
@@ -152,7 +152,7 @@ lemma cast_mul
 
 中文:
 引理 cast_mul
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: ↑(p * q) = (p * q : α)
   证明: cast_mul_of_ne_zero (Nat.cast_ne_zero.2 p.pos.ne') (Nat.cast_ne_zero.2 q.pos.ne')
 -/
@@ -174,7 +174,7 @@ definition castHom
 
 中文:
 定义 castHom
-  签名: : Rat ->+* α where
+  签名: : 有理数 ->+* α where
   定义体: (↑)
   map_one' := cast_one
   map_mul' := cast_mul
@@ -198,7 +198,7 @@ lemma coe_castHom
 
 中文:
 引理 coe_castHom
-  结论: ⇑(castHom α) = ((↑) : Rat -> α)
+  结论: ⇑(castHom α) = ((↑) : 有理数 -> α)
   证明: rfl
 -/
 @[simp] lemma coe_castHom : ⇑(castHom α) = ((↑) : Rat -> α) := rfl
@@ -214,7 +214,7 @@ lemma cast_inv
 
 中文:
 引理 cast_inv
-  条件: (p : Rat)
+  条件: (p : 有理数)
   结论: ↑(p⁻¹) = (p⁻¹ : α)
   证明: map_inv₀ (castHom α) _
 -/
@@ -232,7 +232,7 @@ lemma cast_div
 
 中文:
 引理 cast_div
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: ↑(p / q) = (p / q : α)
   证明: map_div₀ (castHom α) ..
 
@@ -254,7 +254,7 @@ lemma cast_zpow
 
 中文:
 引理 cast_zpow
-  条件: (p : Rat) (n : 整数)
+  条件: (p : 有理数) (n : 整数)
   结论: ↑(p ^ n) = (p ^ n : α)
   证明: map_zpow₀ (castHom α) ..
 
@@ -276,7 +276,7 @@ theorem cast_divInt
   simp only [divInt_eq_div, cast_div, cast_intCast]
 
 中文:
-定理 cast_divInt
+定理 cast_div整数
   条件: (a b : 整数)
   结论: (a /. b : α) = a / b
   证明: by
@@ -309,7 +309,7 @@ lemma cast_injective
 
 中文:
 引理 cast_injective
-  结论: Injective ((↑) : Rat>=0 -> α)
+  结论: 单射 ((↑) : 有理数>=0 -> α)
   证明: by
   rintro p q hpq
   rw [NNRat.cast_def]; rw [NNRat.cast_def]; rw [Commute.div_eq_div_iff] at hpq
@@ -387,7 +387,7 @@ lemma cast_add
 
 中文:
 引理 cast_add
-  条件: (p q : Rat>=0)
+  条件: (p q : 有理数>=0)
   结论: ↑(p + q) = (p + q : α)
   证明: cast_add_of_ne_zero (Nat.cast_ne_zero.2 p.den_pos.ne') (Nat.cast_ne_zero.2 q.den_pos.ne')
 -/
@@ -406,7 +406,7 @@ lemma cast_mul
 中文:
 引理 cast_mul
   条件: (p q)
-  结论: (p * q : Rat>=0) = (p * q : α)
+  结论: (p * q : 有理数>=0) = (p * q : α)
   证明: cast_mul_of_ne_zero (Nat.cast_ne_zero.2 p.den_pos.ne') (Nat.cast_ne_zero.2 q.den_pos.ne')
 -/
 @[simp, norm_cast] lemma cast_mul (p q) : (p * q : Rat>=0) = (p * q : α) :=
@@ -427,7 +427,7 @@ definition castHom
 
 中文:
 定义 castHom
-  签名: : Rat>=0 ->+* α where
+  签名: : 有理数>=0 ->+* α where
   定义体: (↑)
   map_one' := cast_one
   map_mul' := cast_mul
@@ -468,7 +468,7 @@ lemma cast_inv
 中文:
 引理 cast_inv
   条件: (p)
-  结论: (p⁻¹ : Rat>=0) = (p : α)⁻¹
+  结论: (p⁻¹ : 有理数>=0) = (p : α)⁻¹
   证明: map_inv₀ (castHom α) _
 -/
 @[simp, norm_cast] lemma cast_inv (p) : (p⁻¹ : Rat>=0) = (p : α)⁻¹ := map_inv₀ (castHom α) _
@@ -486,7 +486,7 @@ lemma cast_div
 中文:
 引理 cast_div
   条件: (p q)
-  结论: (p / q : Rat>=0) = (p / q : α)
+  结论: (p / q : 有理数>=0) = (p / q : α)
   证明: map_div₀ (castHom α) ..
 
 @[simp, norm_cast]
@@ -507,7 +507,7 @@ lemma cast_zpow
 
 中文:
 引理 cast_zpow
-  条件: (q : Rat>=0) (p : 整数)
+  条件: (q : 有理数>=0) (p : 整数)
   结论: ↑(q ^ p) = ((q : α) ^ p : α)
   证明: map_zpow₀ (castHom α) ..
 
@@ -532,7 +532,7 @@ lemma cast_divNat
   apply Rat.mkRat_eq_div
 
 中文:
-引理 cast_divNat
+引理 cast_div自然数
   条件: (a b : 自然数)
   结论: (div自然数 a b : α) = a / b
   证明: by

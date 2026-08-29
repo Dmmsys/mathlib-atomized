@@ -68,7 +68,7 @@ definition SupIndep
 
 中文:
 定义 SupIndep
-  签名: (s : Finset ι) (f : ι -> α)
+  签名: (s : 有限集 ι) (f : ι -> α)
   定义体: forall ⦃t⦄, t subseteq s -> forall ⦃i⦄, i in s -> i ∉ t -> Disjoint (f i) (t.sup f)
 
 Depends on / 依赖: Disjoint, subseteq, t.sup
@@ -112,7 +112,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: ι] [DecidableEq α] : Decidable (SupIndep s f)
+  签名: ι] [DecidableEq α] : 可判定 (SupIndep s f)
   定义体: have : forall i, Decidable (Disjoint (f i) ((s.erase i).sup f)) := fun _ =>
     decidable_of_iff _ disjoint_iff.symm
   decidable_of_iff _ supIndep_iff_disjoint_erase.symm
@@ -184,7 +184,7 @@ theorem supIndep_empty
 中文:
 定理 supIndep_empty
   条件: (f : ι -> α)
-  结论: (∅ : Finset ι).SupIndep f
+  结论: (∅ : 有限集 ι).SupIndep f
   证明: fun _ _ a ha =>
   (notMem_empty a ha).elim
 
@@ -208,7 +208,7 @@ theorem supIndep_singleton
 中文:
 定理 supIndep_singleton
   条件: (i : ι) (f : ι -> α)
-  结论: ({i} : Finset ι).SupIndep f
+  结论: ({i} : 有限集 ι).SupIndep f
   证明: fun s hs j hji hj => by
     rw [eq_empty_of_ssubset_singleton ⟨hs]; rw [fun h => hj (h hji)⟩]; rw [sup_empty]
     exact disjoint_bot_right
@@ -233,7 +233,7 @@ sup_singleton.subst hs (singleton_subset_iff.2 hb) ha notMem_singleton.2 hab
 中文:
 定理 SupIndep.pairwiseDisjoint
   条件: (hs : s.SupIndep f)
-  结论: (s : Set ι).PairwiseDisjoint f
+  结论: (s : 集合 ι).PairwiseDisjoint f
   证明: fun _ ha _ hb hab =>
 sup_singleton.subst hs (singleton_subset_iff.2 hb) ha notMem_singleton.2 hab
 
@@ -303,8 +303,8 @@ theorem SupIndep.image
   exact hs hts his (hit <| mem_image_of_mem _ ·)
 
 中文:
-定理 SupIndep.image
-  结论: [DecidableEq ι] {s : Finset ι'} {g : ι' -> ι}
+定理 SupIndep.像
+  结论: [DecidableEq ι] {s : 有限集 ι'} {g : ι' -> ι}
   证明: by
   intro t ht i hi hit
   rcases subset_image_iff.mp ht with ⟨t, hts, rfl⟩
@@ -339,7 +339,7 @@ theorem supIndep_map
 
 中文:
 定理 supIndep_map
-  条件: {s : Finset ι'} {g : ι' ↪ ι}
+  条件: {s : 有限集 ι'} {g : ι' ↪ ι}
   结论: (s.map g).SupIndep f ↔ s.SupIndep (f ∘ g)
   证明: by
   refine ⟨fun hs t ht i hi hit => ?_, fun hs => ?_⟩
@@ -405,7 +405,7 @@ theorem supIndep_univ_bool
 
 中文:
 定理 supIndep_univ_bool
-  条件: (f : 布尔 -> α)
+  条件: (f : 布尔值 -> α)
   证明: haveI : true != false := by simp only [Ne, not_false_iff, reduceCtorEq]
   (supIndep_pair this).trans disjoint_comm
 
@@ -432,7 +432,7 @@ theorem supIndep_univ_fin_two
 
 中文:
 定理 supIndep_univ_fin_two
-  条件: (f : Fin 2 -> α)
+  条件: (f : 有限集 2 -> α)
   证明: have : (0 : Fin 2) != 1 := by simp
   supIndep_pair this
 
@@ -498,7 +498,7 @@ apply Disjoint.mono_right calc
 
 中文:
 定理 SupIndep.biUnion
-  结论: [DecidableEq ι] {s : Finset ι'} {g : ι' -> Finset ι} {f : ι -> α}
+  结论: [DecidableEq ι] {s : 有限集 ι'} {g : ι' -> 有限集 ι} {f : ι -> α}
   证明: by
   classical
   intro a ha b hb hab
@@ -539,8 +539,8 @@ theorem SupIndep.sup
   exact hs.biUnion hg
 
 中文:
-定理 SupIndep.sup
-  结论: [DecidableEq ι] {s : Finset ι'} {g : ι' -> Finset ι} {f : ι -> α}
+定理 SupIndep.上确界
+  结论: [DecidableEq ι] {s : 有限集 ι'} {g : ι' -> 有限集 ι} {f : ι -> α}
   证明: by
   rw [sup_eq_biUnion]
   exact hs.biUnion hg
@@ -566,7 +566,7 @@ theorem SupIndep.sigma
 
 中文:
 定理 SupIndep.sigma
-  结论: {β : ι -> 类型} {s : Finset ι} {g : 对任意 i, Finset (β i)}
+  结论: {β : ι -> 类型} {s : 有限集 ι} {g : 对任意 i, 有限集 (β i)}
   证明: by
   classical
   rw [Finset.sigma_eq_biUnion]
@@ -598,7 +598,7 @@ theorem SupIndep.product
 
 中文:
 定理 SupIndep.product
-  结论: {s : Finset ι} {t : Finset ι'} {f : ι × ι' -> α}
+  结论: {s : 有限集 ι} {t : 有限集 ι'} {f : ι × ι' -> α}
   证明: by
   classical
   rw [Finset.product_eq_biUnion]
@@ -630,7 +630,7 @@ theorem SupIndep.disjoint_sup_sup
 
 中文:
 定理 SupIndep.disjoint_sup_sup
-  结论: {s : Finset ι} {f : ι -> α} {u v : Finset ι}
+  结论: {s : 有限集 ι} {f : ι -> α} {u v : 有限集 ι}
   证明: by
   classical
   induction u using Finset.induction generalizing v with
@@ -662,7 +662,7 @@ theorem supIndep_sigma_iff'
 
 中文:
 定理 supIndep_sigma_iff'
-  结论: {β : ι -> 类型} {s : Finset ι} {g : 对任意 i, Finset (β i)}
+  结论: {β : ι -> 类型} {s : 有限集 ι} {g : 对任意 i, 有限集 (β i)}
   证明: by
   classical
   refine ⟨fun h => ⟨fun t _ i _ _ => ?_, fun i _ t _ j _ _ => ?_⟩, fun h => h.1.sigma h.2⟩
@@ -699,7 +699,7 @@ theorem supIndep_product_iff
 
 中文:
 定理 supIndep_product_iff
-  条件: {s : Finset ι} {t : Finset ι'} {f : ι × ι' -> α}
+  条件: {s : 有限集 ι} {t : 有限集 ι'} {f : ι × ι' -> α}
   证明: by
   classical
   refine ⟨fun h => ⟨fun u _ i _ _ => ?_, fun u _ i _ _ => ?_⟩, fun h => h.1.product h.2⟩
@@ -733,7 +733,7 @@ theorem SupIndep.union
 
 中文:
 定理 SupIndep.union
-  结论: [DecidableEq ι] {s t : Finset ι} {f : ι -> α}
+  结论: [DecidableEq ι] {s t : 有限集 ι} {f : ι -> α}
   证明: by
   rw [show s union t = ({s]; rw [t} : Finset _).biUnion id by simp]
   grind [SupIndep.biUnion, supIndep_pair]
@@ -755,7 +755,7 @@ theorem SupIndep.insert
 
 中文:
 定理 SupIndep.insert
-  结论: [DecidableEq ι] {i : ι} {s : Finset ι} {f : ι -> α}
+  结论: [DecidableEq ι] {i : ι} {s : 有限集 ι} {f : ι -> α}
   证明: by
   grind [insert_eq, SupIndep.union, sup_singleton]
 -/
@@ -782,7 +782,7 @@ alias ⟨_, _root_.Set.PairwiseDisjoint.supIndep⟩ := supIndep_iff_pairwiseDisj
 
 中文:
 定理 supIndep_iff_pairwiseDisjoint
-  结论: s.SupIndep f ↔ (s : Set ι).PairwiseDisjoint f
+  结论: s.SupIndep f ↔ (s : 集合 ι).PairwiseDisjoint f
   证明: ⟨SupIndep.pairwiseDisjoint, fun hs _ ht _ hi hit =>
     Finset.disjoint_sup_right.2 fun _ hj => hs hi (ht hj) (ne_of_mem_of_not_mem hj hit).symm⟩
 
@@ -817,7 +817,7 @@ definition sSupIndep
 
 中文:
 定义 sSupIndep
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall ⦃a⦄, a in s -> Disjoint a (sSup (s \ {a}))
 
 Depends on / 依赖: Disjoint
@@ -841,7 +841,7 @@ include hs in
 
 中文:
 定理 sSupIndep_empty
-  结论: sSupIndep (∅ : Set α)
+  结论: sSupIndep (∅ : 集合 α)
   证明: fun x hx =>
   (Set.notMem_empty x hx).elim
 
@@ -865,7 +865,7 @@ include hs in
 
 中文:
 定理 sSupIndep.mono
-  条件: {t : Set α} (hst : t subseteq s)
+  条件: {t : 集合 α} (hst : t subseteq s)
   结论: sSupIndep t
   证明: fun _ ha =>
   (hs (hst ha)).mono_right (sSup_le_sSup (sdiff_subset_sdiff_left hst))
@@ -907,7 +907,7 @@ theorem sSupIndep_singleton
 中文:
 定理 sSupIndep_singleton
   条件: (a : α)
-  结论: sSupIndep ({a} : Set α)
+  结论: sSupIndep ({a} : 集合 α)
   证明: fun i hi => by
   simp_all
 -/
@@ -974,7 +974,7 @@ theorem sSupIndep.disjoint_sSup
 
 中文:
 定理 sSupIndep.disjoint_sSup
-  条件: {x : α} {y : Set α} (hx : x in s) (hy : y subseteq s) (hxy : x ∉ y)
+  条件: {x : α} {y : 集合 α} (hx : x in s) (hy : y subseteq s) (hxy : x ∉ y)
   证明: by
   have := (hs.mono <| insert_subset_iff.mpr ⟨hx, hy⟩) (mem_insert x _)
   rw [insert_sdiff_of_mem _ (mem_singleton _)]; rw [sdiff_singleton_eq_self hxy] at this
@@ -998,7 +998,7 @@ definition iSupIndep
 
 中文:
 定义 iSupIndep
-  签名: {ι : Sort*} {α : 类型} [CompleteLattice α] (t : ι -> α)
+  签名: {ι : 类型层*} {α : 类型} [完备格 α] (t : ι -> α)
   定义体: forall i : ι, Disjoint (t i) (⨆ (j) (_ : j != i), t j)
 
 Depends on / 依赖: Disjoint
@@ -1019,7 +1019,7 @@ theorem sSupIndep_iff
 
 中文:
 定理 sSupIndep_iff
-  条件: {α : 类型} [CompleteLattice α] (s : Set α)
+  条件: {α : 类型} [完备格 α] (s : 集合 α)
   证明: by
   simp_rw [iSupIndep, sSupIndep, SetCoe.forall, sSup_eq_iSup]
   refine forall₂_congr fun a ha => ?_
@@ -1116,7 +1116,7 @@ include ht in
 
 中文:
 定理 iSupIndep_subsingleton
-  条件: [Subsingleton ι] (t : ι -> α)
+  条件: [子单例 ι] (t : ι -> α)
   结论: iSupIndep t
   证明: fun i => by simp [← Subsingleton.elim i]
 
@@ -1139,7 +1139,7 @@ theorem iSupIndep.pairwiseDisjoint
 
 中文:
 定理 iSupIndep.pairwiseDisjoint
-  结论: Pairwise (Disjoint on t)
+  结论: 两两 (Disjoint on t)
   证明: fun x y h =>
   disjoint_sSup_right (ht x) ⟨y, iSup_pos h.symm⟩
 -/
@@ -1177,7 +1177,7 @@ theorem iSupIndep.comp
 
 中文:
 定理 iSupIndep.comp
-  结论: {ι ι' : Sort*} {t : ι -> α} {f : ι' -> ι} (ht : iSupIndep t)
+  结论: {ι ι' : 类型层*} {t : ι -> α} {f : ι' -> ι} (ht : iSupIndep t)
   证明: fun i =>
 (ht (f i)).mono_right by
     refine (iSup_mono fun i => ?_).trans (iSup_comp_le _ f)
@@ -1203,7 +1203,7 @@ theorem iSupIndep.comp'
 
 中文:
 定理 iSupIndep.comp'
-  结论: {ι ι' : Sort*} {t : ι -> α} {f : ι' -> ι} (ht : iSupIndep <| t ∘ f)
+  结论: {ι ι' : 类型层*} {t : ι -> α} {f : ι' -> ι} (ht : iSupIndep <| t ∘ f)
   证明: by
   intro i
   obtain ⟨i', rfl⟩ := hf i
@@ -1318,7 +1318,7 @@ theorem iSupIndep.injOn
 中文:
 定理 iSupIndep.injOn
   条件: (ht : iSupIndep t)
-  结论: InjOn t {i | t i != ⊥}
+  结论: 单射限制 t {i | t i != ⊥}
   证明: by
   rintro i _ j (hj : t j != ⊥) h
   by_contra! contra
@@ -1397,7 +1397,7 @@ theorem iSupIndep.injective
 中文:
 定理 iSupIndep.injective
   条件: (ht : iSupIndep t) (h_ne_bot : 对任意 i, t i != ⊥)
-  结论: Injective t
+  结论: 单射 t
   证明: by
   suffices univ = {i | t i != ⊥} by simpa [← this] using ht.injOn
   simp_all
@@ -1464,7 +1464,7 @@ lemma iSup_fin_three
 
 中文:
 引理 iSup_fin_three
-  条件: {α : 类型} [CompleteLattice α] {f : Fin 3 -> α}
+  条件: {α : 类型} [完备格 α] {f : 有限集 3 -> α}
   证明: by
   suffices ⨆ i in Finset.univ, f i = f 0 ⊔ f 1 ⊔ f 2 by simp [← this]
   rw [← Finset.sup_eq_iSup]; rw [show (Finset.univ : Finset (Fin 3)) = {0]; rw [1]; rw [2} from rfl]
@@ -1494,7 +1494,7 @@ lemma iSupIndep_fin_three
 
 中文:
 引理 iSupIndep_fin_three
-  条件: {α : 类型} [CompleteLattice α] {f : Fin 3 -> α}
+  条件: {α : 类型} [完备格 α] {f : 有限集 3 -> α}
   证明: by
   rw [iSupIndep_def]; rw [sup_comm (f 2) (f 0)]
   refine ⟨fun h => ⟨?_, ?_, ?_⟩, fun ⟨h₀, h₁, h₂⟩ i => ?_⟩
@@ -1529,7 +1529,7 @@ theorem iSupIndep.map_orderIso
 
 中文:
 定理 iSupIndep.map_orderIso
-  结论: {ι : Sort*} {α β : 类型} [CompleteLattice α]
+  结论: {ι : 类型层*} {α β : 类型} [完备格 α]
   证明: fun i => ((ha i).map_orderIso f).mono_right (f.monotone.le_map_iSup₂ _)
 
 @[simp]
@@ -1554,7 +1554,7 @@ theorem iSupIndep_map_orderIso_iff
 
 中文:
 定理 iSupIndep_map_orderIso_iff
-  结论: {ι : Sort*} {α β : 类型} [CompleteLattice α]
+  结论: {ι : 类型层*} {α β : 类型} [完备格 α]
   证明: ⟨fun h =>
     have hf : f.symm ∘ f ∘ a = a := congr_arg (· ∘ a) f.left_inv.comp_eq_id
     hf ▸ h.map_orderIso f.symm,
@@ -1579,7 +1579,7 @@ theorem iSupIndep.disjoint_biSup
 
 中文:
 定理 iSupIndep.disjoint_biSup
-  结论: {ι : 类型} {α : 类型} [CompleteLattice α] {t : ι -> α}
+  结论: {ι : 类型} {α : 类型} [完备格 α] {t : ι -> α}
   证明: Disjoint.mono_right (biSup_mono fun _ hi => (ne_of_mem_of_not_mem hi hx :)) (ht x)
 
 Depends on / 依赖: Disjoint, Disjoint.mono_right, biSup_mono, mono_right, ne_of_mem_of_not_mem
@@ -1602,7 +1602,7 @@ lemma iSupIndep.of_coe_Iic_comp
 
 中文:
 引理 iSupIndep.of_coe_Iic_comp
-  结论: {ι : Sort*} {a : α} {t : ι -> Set.Iic a}
+  结论: {ι : 类型层*} {a : α} {t : ι -> 集合.左无界右闭区间 a}
   证明: by
   intro i x
   specialize ht i
@@ -1638,7 +1638,7 @@ alias ⟨iSupIndep.supIndep, Finset.SupIndep.indep
 
 中文:
 定理 iSupIndep_comp_coe_iff_supIndep
-  条件: {s : Finset ι} {f : ι -> α}
+  条件: {s : 有限集 ι} {f : ι -> α}
   证明: by
   classical
     rw [Finset.supIndep_iff_disjoint_erase]
@@ -1677,7 +1677,7 @@ theorem iSupIndep.supIndep'
 
 中文:
 定理 iSupIndep.supIndep'
-  条件: {f : ι -> α} (s : Finset ι) (h : iSupIndep f)
+  条件: {f : ι -> α} (s : 有限集 ι) (h : iSupIndep f)
   结论: s.SupIndep f
   证明: iSupIndep.supIndep (h.comp Subtype.coe_injective)
 
@@ -1700,7 +1700,7 @@ alias ⟨iSupIndep.sup_indep_univ, Finset.SupIndep.iSupIndep_of_univ⟩ := iSupI
 
 中文:
 定理 iSupIndep_iff_supIndep_univ
-  条件: [Fintype ι] {f : ι -> α}
+  条件: [有限类型 ι] {f : ι -> α}
   证明: by
   classical
     simp [Finset.supIndep_iff_disjoint_erase, iSupIndep, Finset.sup_eq_iSup]
@@ -1731,7 +1731,7 @@ lemma iSupIndep.le_iff_eq_of_iSup_eq_top
 
 中文:
 引理 iSupIndep.le_iff_eq_of_iSup_eq_top
-  结论: [IsModularLattice α] {f g : ι -> α}
+  结论: [是Modular格 α] {f g : ι -> α}
   证明: by
   refine ⟨fun h₃ => funext fun i => ?_, le_of_eq⟩
   replace h₁ : Disjoint (⨆ (j) (_ : j != i), f j) (g i) :=
@@ -1771,7 +1771,7 @@ lemma iSupIndep.disjoint_biSup_biSup'
 
 中文:
 引理 iSupIndep.disjoint_biSup_biSup'
-  结论: [IsModularLattice α]
+  结论: [是Modular格 α]
   证明: by
   suffices forall (s : Finset ι) (hst : Disjoint ↑s t), Disjoint (⨆ i in s, f i) (⨆ i in t, f i) by
     specialize this hs.toFinset
@@ -1822,7 +1822,7 @@ replace h₁ : Disjoint (f i) (⨆ i in s, f i) := (h₁ i).mono_right biSup_mon
 
 中文:
 引理 iSupIndep.mem_of_biSup_eq_top
-  结论: {f : ι -> α} {s : Set ι}
+  结论: {f : ι -> α} {s : 集合 ι}
   证明: by
   by_contra contra
 replace h₁ : Disjoint (f i) (⨆ i in s, f i) := (h₁ i).mono_right biSup_mono by aesop
@@ -1856,7 +1856,7 @@ alias ⟨_, _root_.Set.PairwiseDisjoint.sSupIndep⟩ := sSupIndep_iff_pairwiseDi
 
 中文:
 定理 sSupIndep_iff_pairwiseDisjoint
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: sSupIndep s ↔ s.PairwiseDisjoint id
   证明: ⟨sSupIndep.pairwiseDisjoint, fun hs _ hi =>
 disjoint_sSup_iff.2 fun _ hj => hs hi hj.1 Ne.symm hj.2⟩
@@ -1885,7 +1885,7 @@ theorem iSupIndep_iff_pairwiseDisjoint
 中文:
 定理 iSupIndep_iff_pairwiseDisjoint
   条件: {f : ι -> α}
-  结论: iSupIndep f ↔ Pairwise (Disjoint on f)
+  结论: iSupIndep f ↔ 两两 (Disjoint on f)
   证明: ⟨iSupIndep.pairwiseDisjoint, fun hs _ =>
     disjoint_iSup_iff.2 fun _ => disjoint_iSup_iff.2 fun hij => hs hij.symm⟩
 

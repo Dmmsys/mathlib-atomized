@@ -66,7 +66,7 @@ theorem condExp_stronglyMeasurable_simpleFunc_bilin
 
 中文:
 定理 condExp_stronglyMeasurable_simpleFunc_bilin
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   have : forall (s c) (f : Ω -> E),
       (fun ω => B (Set.indicator s (Function.const Ω c) ω) (f ω)) =
@@ -130,7 +130,7 @@ theorem condExp_stronglyMeasurable_bilin_of_bound
 
 中文:
 定理 condExp_stronglyMeasurable_bilin_of_bound
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   let fs := hf.approxBounded c
   have hfs_tendsto : forallᵐ ω ∂μ, Tendsto (fs · ω) atTop (𝓝 (f ω)) :=
@@ -208,7 +208,7 @@ theorem condExp_aestronglyMeasurable_bilin_of_bound
 
 中文:
 定理 condExp_aestronglyMeasurable_bilin_of_bound
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: calc
   μ[fun ω => B (f ω) (g ω) | m]
   _ =ᵐ[μ] μ[fun ω => B (hf.mk f ω) (g ω) | m] := by
@@ -248,7 +248,7 @@ swap; · exact ae_of_all _ by simp [condExp_of_not_sigmaFinite hm hμm]
 
 中文:
 定理 condExp_bilin_of_stronglyMeasurable_left
-  结论: [CompleteSpace E] {f : Ω -> F} {g : Ω -> E}
+  结论: [完备空间 E] {f : Ω -> F} {g : Ω -> E}
   证明: by
 by_cases hm : m <= mΩ; swap; · exact ae_of_all _ by simp [condExp_of_not_le hm]
   by_cases hμm : SigmaFinite (μ.trim hm)
@@ -309,7 +309,7 @@ theorem condExp_bilin_of_stronglyMeasurable_right
 
 中文:
 定理 condExp_bilin_of_stronglyMeasurable_right
-  结论: [CompleteSpace F] {f : Ω -> F} {g : Ω -> E}
+  结论: [完备空间 F] {f : Ω -> F} {g : Ω -> E}
   证明: by
   simp_rw [← B.flip_apply] at hfg ⊢
   exact condExp_bilin_of_stronglyMeasurable_left B.flip hg hfg hf
@@ -339,7 +339,7 @@ theorem condExp_bilin_of_aestronglyMeasurable_left
 
 中文:
 定理 condExp_bilin_of_aestronglyMeasurable_left
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: calc
   μ[fun ω => B (f ω) (g ω) | m]
   _ =ᵐ[μ] μ[fun ω => B (hf.mk f ω) (g ω) | m] := by
@@ -375,7 +375,7 @@ theorem condExp_bilin_of_aestronglyMeasurable_right
 
 中文:
 定理 condExp_bilin_of_aestronglyMeasurable_right
-  结论: [CompleteSpace F] {f : Ω -> F} {g : Ω -> E}
+  结论: [完备空间 F] {f : Ω -> F} {g : Ω -> E}
   证明: by
   simp_rw [← B.flip_apply] at hfg ⊢
   exact condExp_bilin_of_aestronglyMeasurable_left B.flip hg hfg hf
@@ -399,7 +399,7 @@ theorem condExp_smul_of_aestronglyMeasurable_left
 
 中文:
 定理 condExp_smul_of_aestronglyMeasurable_left
-  结论: [CompleteSpace E] {f : Ω -> 实数} {g : Ω -> E}
+  结论: [完备空间 E] {f : Ω -> 实数} {g : Ω -> E}
   证明: condExp_bilin_of_aestronglyMeasurable_left (.lsmul Real Real) hf hfg hg
 
 Depends on / 依赖: condExp_bilin_of_aestronglyMeasurable_left
@@ -419,7 +419,7 @@ theorem condExp_smul_of_aestronglyMeasurable_right
 
 中文:
 定理 condExp_smul_of_aestronglyMeasurable_right
-  结论: [CompleteSpace E] {f : Ω -> 实数} {g : Ω -> E}
+  结论: [完备空间 E] {f : Ω -> 实数} {g : Ω -> E}
   证明: condExp_bilin_of_aestronglyMeasurable_left (ContinuousLinearMap.lsmul Real Real).flip hg hfg hf
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, condExp_bilin_of_aestronglyMeasurable_left
@@ -540,7 +540,7 @@ theorem condExp_stronglyMeasurable_mul_of_bound
 
 中文:
 定理 condExp_stronglyMeasurable_mul_of_bound
-  结论: (hm : m <= mΩ) [IsFiniteMeasure μ] {f g : Ω -> 实数}
+  结论: (hm : m <= mΩ) [是有限测度 μ] {f g : Ω -> 实数}
   证明: condExp_stronglyMeasurable_bilin_of_bound (.mul Real Real) hm hf hg c hf_bound
 
 Depends on / 依赖: condExp_stronglyMeasurable_bilin_of_bound, hf_bound
@@ -560,7 +560,7 @@ theorem condExp_stronglyMeasurable_mul_of_bound₀
 
 中文:
 定理 condExp_stronglyMeasurable_mul_of_bound₀
-  结论: (hm : m <= mΩ) [IsFiniteMeasure μ] {f g : Ω -> 实数}
+  结论: (hm : m <= mΩ) [是有限测度 μ] {f g : Ω -> 实数}
   证明: condExp_aestronglyMeasurable_bilin_of_bound (.mul Real Real) hm hf hg c hf_bound
 
 Depends on / 依赖: condExp_aestronglyMeasurable_bilin_of_bound, hf_bound

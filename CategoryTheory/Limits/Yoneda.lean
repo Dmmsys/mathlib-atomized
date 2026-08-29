@@ -237,7 +237,7 @@ definition yonedaJointlyReflectsLimits
 
 中文:
 定义 yonedaJointlyReflectsLimits
-  签名: (F : J ⥤ Cᵒᵖ) (c : Cone F)
+  签名: (F : J ⥤ Cᵒᵖ) (c : 锥 F)
   定义体: ((hc s.pt.unop).lift ((yoneda.obj s.pt.unop).mapCone s) (𝟙 _)).op
   fac s j := Quiver.Hom.unop_inj (by
     simpa using congr_hom ((hc s.pt.unop).fac ((yoneda.obj s.pt.unop).mapCone s) j) (𝟙 (unop s.pt)))
@@ -270,8 +270,8 @@ definition Limits.Cocone.isColimitYonedaEquiv
   right_inv _ := by ext; apply Subsingleton.elim
 
 中文:
-定义 Limits.Cocone.isColimitYonedaEquiv
-  签名: {F : J ⥤ C} (c : Cocone F)
+定义 Limits.余锥.isColimitYonedaEquiv
+  签名: {F : J ⥤ C} (c : 余锥 F)
   定义体: isLimitOfPreserves _ h.op
   invFun h := IsLimit.unop (yonedaJointlyReflectsLimits _ _ h)
   left_inv _ := Subsingleton.elim _ _
@@ -380,7 +380,7 @@ definition coyonedaJointlyReflectsLimits
 
 中文:
 定义 coyonedaJointlyReflectsLimits
-  签名: (F : J ⥤ C) (c : Cone F)
+  签名: (F : J ⥤ C) (c : 锥 F)
   定义体: (hc (op s.pt)).lift ((coyoneda.obj (op s.pt)).mapCone s) (𝟙 _)
   fac s j := by simpa using congr_hom ((hc (op s.pt)).fac
     ((coyoneda.obj (op s.pt)).mapCone s) j) (𝟙 s.pt)
@@ -415,8 +415,8 @@ definition Limits.Cone.isLimitCoyonedaEquiv
   right_inv _ := by ext; apply Subsingleton.elim
 
 中文:
-定义 Limits.Cone.isLimitCoyonedaEquiv
-  签名: {F : J ⥤ C} (c : Cone F)
+定义 Limits.锥.isLimitCoyonedaEquiv
+  签名: {F : J ⥤ C} (c : 锥 F)
   定义体: isLimitOfPreserves _ h
   invFun h := coyonedaJointlyReflectsLimits _ _ h
   left_inv _ := Subsingleton.elim _ _
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{t, w} (uliftCoyoneda.{w'} : Cᵒᵖ ⥤ _)
+  签名: 保持LimitsOfSize.{t, w} (uliftCoyoneda.{w'} : Cᵒᵖ ⥤ _)
   定义体: by
   apply preservesLimits_of_evaluation
   intro K
@@ -658,7 +658,7 @@ exact inferInstanceAs PreservesLimitsOfSize (yoneda.obj _ ⋙ uliftFunctor)
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{t, w} F
+  签名: 保持LimitsOfSize.{t, w} F
   定义体: by
   suffices PreservesLimitsOfSize (F ⋙ uliftFunctor.{v}) from
     preservesLimits_of_reflects_of_preserves _ (uliftFunctor.{v})
@@ -693,7 +693,7 @@ exact inferInstanceAs PreservesLimitsOfSize (coyoneda.obj _ ⋙ uliftFunctor)
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{t, w} F
+  签名: 保持LimitsOfSize.{t, w} F
   定义体: by
   suffices PreservesLimitsOfSize (F ⋙ uliftFunctor.{v}) from
     preservesLimits_of_reflects_of_preserves _ (uliftFunctor.{v})

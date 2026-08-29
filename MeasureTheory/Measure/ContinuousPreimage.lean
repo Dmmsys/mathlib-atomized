@@ -132,7 +132,7 @@ theorem isClosed_setOfPred_preimage_ae_eq
 
 中文:
 定理 isClosed_setOfPred_preimage_ae_eq
-  结论: {f : Z -> C(X, Y)} (hf : Continuous f)
+  结论: {f : Z -> C(X, Y)} (hf : 连续 f)
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_mem_nhds]
   intro z hz

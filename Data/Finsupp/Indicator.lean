@@ -46,7 +46,7 @@ definition indicator
 
 中文:
 定义 indicator
-  签名: (s : Finset ι) (f : 对任意 i in s, α)
+  签名: (s : 有限集 ι) (f : 对任意 i in s, α)
   定义体: haveI := Classical.decEq ι
     if H : i in s then f i H else 0
   support :=
@@ -149,7 +149,7 @@ theorem indicator_injective
 
 中文:
 定理 indicator_injective
-  结论: Injective fun f : 对任意 i in s, α => indicator s f
+  结论: 单射 fun f : 对任意 i in s, α => indicator s f
   证明: by
   intro a b h
   ext i hi
@@ -209,7 +209,7 @@ lemma indicator_singleton
 
 中文:
 引理 indicator_singleton
-  条件: (a : ι) (f : 对任意 j in ({a} : Finset ι), α)
+  条件: (a : ι) (f : 对任意 j in ({a} : 有限集 ι), α)
   证明: by
   classical
   ext j
@@ -261,7 +261,7 @@ theorem indicator_eq_set_indicator
 
 中文:
 定理 indicator_eq_set_indicator
-  条件: (s : Finset ι) (g : ι -> α)
+  条件: (s : 有限集 ι) (g : ι -> α)
   证明: by
   classical
   ext i

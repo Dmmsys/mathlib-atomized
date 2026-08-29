@@ -55,7 +55,7 @@ definition ZFSet
 
 中文:
 定义 ZFSet
-  签名: : Type (u + 1)
+  签名: : 类型 (u + 1)
   定义体: Quotient PSet.setoid.{u}
 
 Depends on / 依赖: PSet.setoid, Quotient, setoid
@@ -77,7 +77,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : PSet -> ZFSet
+  签名: : 命题集合 -> ZFSet
   定义体: Quotient.mk''
 
 @[simp]
@@ -101,8 +101,8 @@ theorem mk_eq
 
 中文:
 定理 mk_eq
-  条件: (x : PSet)
-  结论: @Eq ZFSet ⟦x⟧ (mk x)
+  条件: (x : 命题集合)
+  结论: @相等 ZFSet ⟦x⟧ (mk x)
   证明: rfl
 
 @[simp]
@@ -141,9 +141,9 @@ class Definable
 
 中文:
 类 Definable
-  参数: (n) (f : (Fin n -> ZFSet.{u}) -> ZFSet.{u})
+  参数: (n) (f : (有限集 n -> ZFSet.{u}) -> ZFSet.{u})
   公理与运算 (2 个):
-    - out : (Fin n -> PSet.{u}) -> PSet.{u}
+    - out : (有限集 n -> 命题集合.{u}) -> 命题集合.{u}
     - mk_out(xs) : mk (out xs) = f (mk <| xs ·)  [默认: by simp]
 -/
 class Definable (n) (f : (Fin n -> ZFSet.{u}) -> ZFSet.{u}) where
@@ -331,7 +331,7 @@ lemma Definable.out_equiv
 
 中文:
 引理 Definable.out_equiv
-  结论: {n} (f : (Fin n -> ZFSet.{u}) -> ZFSet.{u}) [Definable n f]
+  结论: {n} (f : (有限集 n -> ZFSet.{u}) -> ZFSet.{u}) [Definable n f]
   证明: by
   rw [← Quotient.eq_iff_equiv]; rw [mk_eq]; rw [mk_eq]; rw [mk_out]; rw [mk_out]
   exact congrArg _ (funext fun i => Quotient.sound (h i))
@@ -402,7 +402,7 @@ definition allZFSetDefinable
 
 中文:
 定义 allZFSetDefinable
-  签名: {n} (F : (Fin n -> ZFSet.{u}) -> ZFSet.{u})
+  签名: {n} (F : (有限集 n -> ZFSet.{u}) -> ZFSet.{u})
   定义体: (F (mk <| xs ·)).out
 -/
 noncomputable def allZFSetDefinable {n} (F : (Fin n -> ZFSet.{u}) -> ZFSet.{u}) : Definable n F where
@@ -426,8 +426,8 @@ theorem eq
 
 中文:
 定理 eq
-  条件: {x y : PSet}
-  结论: mk x = mk y ↔ Equiv x y
+  条件: {x y : 命题集合}
+  结论: mk x = mk y ↔ 等价 x y
   证明: Quotient.eq
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -446,7 +446,7 @@ theorem sound
 
 中文:
 定理 sound
-  条件: {x y : PSet} (h : PSet.Equiv x y)
+  条件: {x y : 命题集合} (h : 命题集合.等价 x y)
   结论: mk x = mk y
   证明: Quotient.sound h
 
@@ -466,8 +466,8 @@ theorem exact
 
 中文:
 定理 exact
-  条件: {x y : PSet}
-  结论: mk x = mk y -> PSet.Equiv x y
+  条件: {x y : 命题集合}
+  结论: mk x = mk y -> 命题集合.等价 x y
   证明: Quotient.exact
 
 Depends on / 依赖: Quotient, Quotient.exact
@@ -523,7 +523,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike ZFSet.{u} ZFSet.{u}
+  签名: 集合状 ZFSet.{u} ZFSet.{u}
   定义体: toSet
   coe_injective x y hxy := by apply ext_aux; intro z; exact congr(z in $hxy)
 -/
@@ -564,7 +564,7 @@ theorem mk_mem_iff
 
 中文:
 定理 mk_mem_iff
-  条件: {x y : PSet}
+  条件: {x y : 命题集合}
   结论: mk x in mk y ↔ x in y
   证明: Iff.rfl
 
@@ -598,7 +598,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder ZFSet.{u}
+  签名: 偏序 ZFSet.{u}
   定义体: .ofSetLike ZFSet.{u} ZFSet.{u}
 
 Depends on / 依赖: ofSetLike
@@ -650,7 +650,7 @@ definition Nonempty
   body: (u : Set ZFSet.{u}).Nonempty
 
 中文:
-定义 Nonempty
+定义 非空
   签名: (u : ZFSet.{u})
   定义体: (u : Set ZFSet.{u}).Nonempty
 -/
@@ -668,7 +668,7 @@ theorem nonempty_def
 中文:
 定理 nonempty_def
   条件: (u : ZFSet)
-  结论: u.Nonempty ↔ 存在 x, x in u
+  结论: u.非空 ↔ 存在 x, x in u
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -688,7 +688,7 @@ theorem nonempty_of_mem
 中文:
 定理 nonempty_of_mem
   条件: {x u : ZFSet} (h : x in u)
-  结论: u.Nonempty
+  结论: u.非空
   证明: ⟨x, h⟩
 -/
 theorem nonempty_of_mem {x u : ZFSet} (h : x in u) : u.Nonempty :=
@@ -706,7 +706,7 @@ lemma nonempty_coe
 
 中文:
 引理 nonempty_coe
-  结论: (x : Set ZFSet.{u}).Nonempty ↔ x.Nonempty
+  结论: (x : 集合 ZFSet.{u}).非空 ↔ x.非空
   证明: .rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
@@ -794,7 +794,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans ZFSet (· subseteq ·)
+  签名: 是Trans ZFSet (· subseteq ·)
   定义体: ⟨fun _ _ _ hxy hyz _ ha => hyz (hxy ha)⟩
 
 @[simp]
@@ -814,7 +814,7 @@ theorem subset_iff
 
 中文:
 定理 subset_iff
-  结论: 对任意 {x y : PSet}, mk x subseteq mk y ↔ x subseteq y
+  结论: 对任意 {x y : 命题集合}, mk x subseteq mk y ↔ x subseteq y
   证明: h a
         ⟨b, za.trans ab⟩⟩
 -/
@@ -835,7 +835,7 @@ lemma coe_subset_coe
 
 中文:
 引理 coe_subset_coe
-  结论: (x : Set ZFSet.{u}) subseteq y ↔ x subseteq y
+  结论: (x : 集合 ZFSet.{u}) subseteq y ↔ x subseteq y
   证明: SetLike.coe_subset_coe
 
 Depends on / 依赖: SetLike, SetLike.coe_subset_coe, coe_subset_coe
@@ -852,7 +852,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Antisymm ZFSet (· subseteq ·)
+  签名: @Std.反对称 ZFSet (· subseteq ·)
   定义体: ⟨@le_antisymm ZFSet _⟩
 
 Depends on / 依赖: le_antisymm
@@ -870,7 +870,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNonstrictStrictOrder ZFSet (· subseteq ·) (· ⊂ ·)
+  签名: 是NonstrictStrict序 ZFSet (· subseteq ·) (· ⊂ ·)
   定义体: ⟨fun _ _ => Iff.rfl⟩
 
 Depends on / 依赖: Iff.rfl
@@ -924,7 +924,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ZFSet
+  签名: 可居 ZFSet
   定义体: ⟨∅⟩
 
 @[simp]
@@ -965,7 +965,7 @@ lemma coe_empty
 
 中文:
 引理 coe_empty
-  结论: ((∅ : ZFSet.{u}) : Set ZFSet.{u}) = ∅
+  结论: ((∅ : ZFSet.{u}) : 集合 ZFSet.{u}) = ∅
   证明: by ext; simp
 
 @[simp]
@@ -1010,7 +1010,7 @@ theorem not_nonempty_empty
 
 中文:
 定理 not_nonempty_empty
-  结论: ¬ZFSet.Nonempty ∅
+  结论: ¬ZFSet.非空 ∅
   证明: by simp [ZFSet.Nonempty]
 
 @[simp]
@@ -1035,8 +1035,8 @@ theorem nonempty_mk_iff
 
 中文:
 定理 nonempty_mk_iff
-  条件: {x : PSet}
-  结论: (mk x).Nonempty ↔ x.Nonempty
+  条件: {x : 命题集合}
+  结论: (mk x).非空 ↔ x.非空
   证明: by
   refine ⟨?_, fun ⟨a, h⟩ => ⟨mk a, h⟩⟩
   rintro ⟨a, h⟩
@@ -1087,7 +1087,7 @@ theorem eq_empty_or_nonempty
 中文:
 定理 eq_empty_or_nonempty
   条件: (u : ZFSet)
-  结论: u = ∅ ∨ u.Nonempty
+  结论: u = ∅ ∨ u.非空
   证明: by
   rw [eq_empty]; rw [← not_exists]
   apply em'
@@ -1179,7 +1179,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton ZFSet ZFSet
+  签名: 单例 ZFSet ZFSet
   定义体: ⟨fun x => insert x ∅⟩
 
 Depends on / 依赖: insert
@@ -1287,7 +1287,7 @@ lemma coe_insert
 中文:
 引理 coe_insert
   条件: (x y : ZFSet)
-  结论: ↑(insert x y) = (insert x ↑y : Set ZFSet)
+  结论: ↑(insert x y) = (insert x ↑y : 集合 ZFSet)
   证明: by ext; simp
 
 @[simp]
@@ -1354,7 +1354,7 @@ lemma coe_singleton
 中文:
 引理 coe_singleton
   条件: (x : ZFSet)
-  结论: (({x} : ZFSet) : Set ZFSet) = {x}
+  结论: (({x} : ZFSet) : 集合 ZFSet) = {x}
   证明: by ext; simp
 -/
 lemma coe_singleton (x : ZFSet) : (({x} : ZFSet) : Set ZFSet) = {x} := by ext; simp
@@ -1371,7 +1371,7 @@ theorem insert_nonempty
 中文:
 定理 insert_nonempty
   条件: (u v : ZFSet)
-  结论: (insert u v).Nonempty
+  结论: (insert u v).非空
   证明: ⟨u, mem_insert u v⟩
 
 Depends on / 依赖: mem_insert
@@ -1391,7 +1391,7 @@ theorem singleton_nonempty
 中文:
 定理 singleton_nonempty
   条件: (u : ZFSet)
-  结论: ZFSet.Nonempty {u}
+  结论: ZFSet.非空 {u}
   证明: insert_nonempty u ∅
 
 Depends on / 依赖: insert_nonempty
@@ -1746,7 +1746,7 @@ lemma coe_sep
 中文:
 引理 coe_sep
   条件: (a : ZFSet) (p : ZFSet -> 命题)
-  结论: (ZFSet.sep p a : Set ZFSet) = {x in a | p x}
+  结论: (ZFSet.sep p a : 集合 ZFSet) = {x in a | p x}
   证明: by
   ext
   simp
@@ -1838,7 +1838,7 @@ theorem sUnion_lem
 
 中文:
 定理 sUnion_lem
-  条件: {α β : 类型u} (A : α -> PSet) (B : β -> PSet) (αβ : 对任意 a, 存在 b, Equiv (A a) (B b))
+  条件: {α β : 类型u} (A : α -> 命题集合) (B : β -> 命题集合) (αβ : 对任意 a, 存在 b, 等价 (A a) (B b))
   证明: αβ a
     induction ea : A a with | _ γ Γ
     induction eb : B b with | _ δ Δ
@@ -1881,7 +1881,7 @@ definition sUnion
 scoped prefix:110 "⋃₀ " => Z
 
 中文:
-定义 sUnion
+定义 集合并集
   签名: : ZFSet -> ZFSet
   定义体: Quotient.map PSet.sUnion
     fun ⟨_, A⟩ ⟨_, B⟩ ⟨αβ, βα⟩ =>
@@ -1920,7 +1920,7 @@ scoped prefix:110 "⋂₀ " => ZFSet.sInter
 @[simp]
 
 中文:
-定义 sInter
+定义 集合交集
   签名: (x : ZFSet)
   定义体: (⋃₀ x).sep (fun y => forall z in x, y in z)
 
@@ -1976,8 +1976,8 @@ theorem mem_sInter
 @[simp]
 
 中文:
-定理 mem_sInter
-  条件: {x y : ZFSet} (h : x.Nonempty)
+定理 mem_s整数er
+  条件: {x y : ZFSet} (h : x.非空)
   结论: y in ⋂₀ x ↔ 对任意 z in x, y in z
   证明: by
   unfold sInter
@@ -2035,7 +2035,7 @@ theorem sInter_empty
   proof: by simp [sInter]
 
 中文:
-定理 sInter_empty
+定理 s整数er_empty
   结论: ⋂₀ (∅ : ZFSet) = ∅
   证明: by simp [sInter]
 
@@ -2056,7 +2056,7 @@ theorem mem_of_mem_sInter
   · exact (mem_sInter hx).1 hy z hz
 
 中文:
-定理 mem_of_mem_sInter
+定理 mem_of_mem_s整数er
   条件: {x y z : ZFSet} (hy : y in ⋂₀ x) (hz : z in x)
   结论: y in z
   证明: by
@@ -2103,7 +2103,7 @@ theorem notMem_sInter_of_notMem
 @[simp]
 
 中文:
-定理 notMem_sInter_of_notMem
+定理 notMem_s整数er_of_notMem
   条件: {x y z : ZFSet} (hy : y ∉ z) (hz : z in x)
   结论: y ∉ ⋂₀ x
   证明: fun hx => hy mem_of_mem_sInter hx hz
@@ -2153,7 +2153,7 @@ theorem sInter_singleton
 @[simp, norm_cast]
 
 中文:
-定理 sInter_singleton
+定理 s整数er_singleton
   条件: {x : ZFSet.{u}}
   结论: ⋂₀ ({x} : ZFSet) = x
   证明: ext fun y => by simp_rw [mem_sInter (singleton_nonempty x), mem_singleton, forall_eq]
@@ -2182,7 +2182,7 @@ lemma coe_sUnion
 中文:
 引理 coe_sUnion
   条件: (x : ZFSet.{u})
-  结论: (⋃₀ x : Set ZFSet) = ⋃₀ (SetLike.coe '' (x : Set ZFSet))
+  结论: (⋃₀ x : 集合 ZFSet) = ⋃₀ (集合状.coe '' (x : 集合 ZFSet))
   证明: by
   ext
   simp
@@ -2206,9 +2206,9 @@ lemma coe_sInter
   simp [mem_sInter h]
 
 中文:
-引理 coe_sInter
-  条件: (h : x.Nonempty)
-  结论: (⋂₀ x : Set ZFSet) = ⋂₀ (SetLike.coe '' (x : Set ZFSet))
+引理 coe_s整数er
+  条件: (h : x.非空)
+  结论: (⋂₀ x : 集合 ZFSet) = ⋂₀ (集合状.coe '' (x : 集合 ZFSet))
   证明: by
   ext
   simp [mem_sInter h]
@@ -2233,7 +2233,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Function.Injective (@singleton ZFSet ZFSet _)
+  结论: 函数.单射 (@singleton ZFSet ZFSet _)
   证明: fun x y H => by
   let := congr_arg sUnion H
   rwa [sUnion_singleton, sUnion_singleton] at this
@@ -2325,7 +2325,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union ZFSet
+  签名: 并集 ZFSet
   定义体: ⟨ZFSet.union⟩
 
 Depends on / 依赖: ZFSet.union
@@ -2343,7 +2343,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数er ZFSet
+  签名: 交集 ZFSet
   定义体: ⟨ZFSet.inter⟩
 
 Depends on / 依赖: ZFSet.inter
@@ -2361,7 +2361,7 @@ instance :
 
 中文:
 实例 :
-  签名: SDiff ZFSet
+  签名: 对称差 ZFSet
   定义体: ⟨ZFSet.diff⟩
 
 Depends on / 依赖: ZFSet.diff
@@ -2481,7 +2481,7 @@ lemma coe_union
 中文:
 引理 coe_union
   条件: (x y : ZFSet.{u})
-  结论: ↑(x union y) = (↑x union ↑y : Set ZFSet)
+  结论: ↑(x union y) = (↑x union ↑y : 集合 ZFSet)
   证明: by ext; simp
 
 @[simp, norm_cast]
@@ -2503,7 +2503,7 @@ lemma coe_inter
 中文:
 引理 coe_inter
   条件: (x y : ZFSet.{u})
-  结论: ↑(x inter y) = (↑x inter ↑y : Set ZFSet)
+  结论: ↑(x inter y) = (↑x inter ↑y : 集合 ZFSet)
   证明: by ext; simp
 
 @[simp, norm_cast]
@@ -2523,7 +2523,7 @@ lemma coe_sdiff
 中文:
 引理 coe_sdiff
   条件: (x y : ZFSet.{u})
-  结论: ↑(x \ y) = (↑x \ ↑y : Set ZFSet)
+  结论: ↑(x \ y) = (↑x \ ↑y : 集合 ZFSet)
   证明: by ext; simp
 -/
 lemma coe_sdiff (x y : ZFSet.{u}) : ↑(x \ y) = (↑x \ ↑y : Set ZFSet) := by ext; simp
@@ -2619,7 +2619,7 @@ theorem mem_wf
 
 中文:
 定理 mem_wf
-  结论: @WellFounded ZFSet (· in ·)
+  结论: @良基 ZFSet (· in ·)
   证明: (wellFounded_lift₂_iff (H := fun a b c d hx hy =>
     propext ((@Mem.congr_left a c hx).trans (@Mem.congr_right b d hy _)))).mpr PSet.mem_wf
 
@@ -2661,7 +2661,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsWellFounded ZFSet (· in ·)
+  签名: 是良基 ZFSet (· in ·)
   定义体: ⟨mem_wf⟩
 
 Depends on / 依赖: mem_wf
@@ -2679,7 +2679,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation ZFSet
+  签名: 良基关系 ZFSet
   定义体: ⟨_, mem_wf⟩
 
 Depends on / 依赖: mem_wf
@@ -2819,7 +2819,7 @@ definition image
        
 
 中文:
-定义 image
+定义 像
   签名: (f : ZFSet -> ZFSet) [Definable₁ f]
   定义体: let r := Definable₁.out f
   Quotient.map (PSet.image r)
@@ -2858,9 +2858,9 @@ theorem image.mk
 @[simp]
 
 中文:
-定理 image.mk
+定理 像.mk
   条件: (f : ZFSet.{u} -> ZFSet.{u}) [Definable₁ f] (x) {y}
-  结论: y in x -> f y in image f x
+  结论: y in x -> f y in 像 f x
   证明: Quotient.inductionOn₂ x y fun ⟨_, _⟩ _ ⟨a, ya⟩ => by
     simp only [mk_eq, ← Definable₁.mk_out (f := f)]
     exact ⟨a, Definable₁.out_equiv f ya⟩
@@ -3000,7 +3000,7 @@ lemma coe_range
 中文:
 引理 coe_range
   条件: (f : α -> ZFSet.{u})
-  结论: (range f : Set ZFSet) = .range f
+  结论: (range f : 集合 ZFSet) = .range f
   证明: by ext; simp
 -/
 lemma coe_range (f : α -> ZFSet.{u}) : (range f : Set ZFSet) = .range f := by ext; simp
@@ -3092,7 +3092,7 @@ lemma coe_iUnion
 中文:
 引理 coe_iUnion
   条件: (f : α -> ZFSet.{u})
-  结论: ↑(⋃ i, f i) = ⋃ i, (f i : Set ZFSet)
+  结论: ↑(⋃ i, f i) = ⋃ i, (f i : 集合 ZFSet)
   证明: by
   ext
   simp
@@ -3159,7 +3159,7 @@ lemma coe_pair
 中文:
 引理 coe_pair
   条件: (x y : ZFSet.{u})
-  结论: (pair x y : Set ZFSet) = {{x}, {x, y}}
+  结论: (pair x y : 集合 ZFSet) = {{x}, {x, y}}
   证明: by simp [pair]
 -/
 lemma coe_pair (x y : ZFSet.{u}) : (pair x y : Set ZFSet) = {{x}, {x, y}} := by simp [pair]
@@ -3229,7 +3229,7 @@ obtain rfl : x = x' := And.left by simpa [or_and_left] using (H {x}).1 (Or.inl r
 
 中文:
 定理 pair_injective
-  结论: Function.Injective2 pair
+  结论: 函数.Injective2 pair
   证明: by
   intro x x' y y' H
   simp_rw [ZFSet.ext_iff, pair, mem_pair] at H
@@ -3286,7 +3286,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: : ZFSet.{u} -> ZFSet.{u} -> ZFSet.{u}
   定义体: pairSep fun _ _ => True
 
@@ -3311,7 +3311,7 @@ theorem mem_prod
 中文:
 定理 mem_prod
   条件: {x y z : ZFSet.{u}}
-  结论: z in prod x y ↔ 存在 a in x, 存在 b in y, z = pair a b
+  结论: z in 乘积 x y ↔ 存在 a in x, 存在 b in y, z = pair a b
   证明: by
   simp [prod]
 -/
@@ -3331,7 +3331,7 @@ theorem pair_mem_prod
 中文:
 定理 pair_mem_prod
   条件: {x y a b : ZFSet.{u}}
-  结论: pair a b in prod x y ↔ a in x ∧ b in y
+  结论: pair a b in 乘积 x y ↔ a in x ∧ b in y
   证明: by
   simp
 -/

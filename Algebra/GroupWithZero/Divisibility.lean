@@ -111,7 +111,7 @@ theorem mul_dvd_mul_iff_left
 
 中文:
 定理 mul_dvd_mul_iff_left
-  条件: [MonoidWithZero α] [IsLeftCancelMulZero α] {a b c : α} (ha : a != 0)
+  条件: [带零幺半群 α] [是左消去MulZero α] {a b c : α} (ha : a != 0)
   证明: exists_congr fun d => by rw [mul_assoc, mul_right_inj' ha]
 
 Depends on / 依赖: exists_congr, mul_assoc, mul_right_inj
@@ -130,7 +130,7 @@ theorem mul_dvd_mul_iff_right
 
 中文:
 定理 mul_dvd_mul_iff_right
-  条件: [CommMonoidWithZero α] [IsCancelMulZero α] {a b c : α} (hc : c != 0)
+  条件: [带零交换幺半群 α] [是乘零消去 α] {a b c : α} (hc : c != 0)
   证明: exists_congr fun d => by rw [mul_right_comm, mul_left_inj' hc]
 
 Depends on / 依赖: exists_congr, mul_left_inj, mul_right_comm
@@ -213,7 +213,7 @@ theorem isRelPrime_zero_left
 
 中文:
 定理 isRelPrime_zero_left
-  结论: IsRelPrime 0 x ↔ IsUnit x
+  结论: IsRelPrime 0 x ↔ 是单位 x
   证明: ⟨(· (dvd_zero _) dvd_rfl), IsUnit.isRelPrime_right⟩
 
 Depends on / 依赖: IsUnit, IsUnit.isRelPrime_right, dvd_rfl, dvd_zero, isRelPrime_right
@@ -231,7 +231,7 @@ theorem isRelPrime_zero_right
 
 中文:
 定理 isRelPrime_zero_right
-  结论: IsRelPrime x 0 ↔ IsUnit x
+  结论: IsRelPrime x 0 ↔ 是单位 x
   证明: isRelPrime_comm.trans isRelPrime_zero_left
 
 Depends on / 依赖: isRelPrime_comm, isRelPrime_comm.trans, isRelPrime_zero_left
@@ -250,7 +250,7 @@ theorem not_isRelPrime_zero_zero
 
 中文:
 定理 not_isRelPrime_zero_zero
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: ¬IsRelPrime (0 : α) 0
   证明: mt isRelPrime_zero_right.mp not_isUnit_zero
 
@@ -270,7 +270,7 @@ theorem IsRelPrime.ne_zero_or_ne_zero
 
 中文:
 定理 IsRelPrime.ne_zero_or_ne_zero
-  条件: [Nontrivial α] (h : IsRelPrime x y)
+  条件: [非平凡 α] (h : IsRelPrime x y)
   结论: x != 0 ∨ y != 0
   证明: not_or_of_imp by rintro rfl rfl; exact not_isRelPrime_zero_zero h
 
@@ -293,7 +293,7 @@ theorem isRelPrime_of_no_nonunits_factors
 
 中文:
 定理 isRelPrime_of_no_nonunits_factors
-  结论: [MonoidWithZero α] {x y : α} (nonzero : ¬(x = 0 ∧ y = 0))
+  结论: [带零幺半群 α] {x y : α} (nonzero : ¬(x = 0 ∧ y = 0))
   证明: by
   refine fun z hx hy => by_contra fun h => H z h ?_ hx hy
   rintro rfl; exact nonzero ⟨zero_dvd_iff.1 hx, zero_dvd_iff.1 hy⟩
@@ -323,7 +323,7 @@ theorem dvd_and_not_dvd_iff
 
 中文:
 定理 dvd_and_not_dvd_iff
-  条件: [CommMonoidWithZero α] [IsCancelMulZero α] {x y : α}
+  条件: [带零交换幺半群 α] [是乘零消去 α] {x y : α}
   证明: ⟨fun ⟨⟨d, hd⟩, hyx⟩ =>
     ⟨fun hx0 => by simp [hx0] at hyx,
       ⟨d, mt isUnit_iff_dvd_one.1 fun ⟨e, he⟩ => hyx ⟨e, by rw [hd, mul_assoc, ← he, mul_one]⟩,
@@ -414,7 +414,7 @@ theorem IsPrimal.mul
 
 中文:
 定理 IsPrimal.mul
-  结论: {α} [CommMonoidWithZero α] [IsCancelMulZero α] {m n : α}
+  结论: {α} [带零交换幺半群 α] [是乘零消去 α] {m n : α}
   证明: by
   obtain rfl | h0 := eq_or_ne m 0; · rwa [zero_mul]
   intro b c h
@@ -509,7 +509,7 @@ theorem eq_of_forall_dvd
   proof: ((h _).2 dvd_rfl).antisymm (h _).1 dvd_rfl
 
 中文:
-定理 eq_of_forall_dvd
+定理 eq_of_对任意_dvd
   条件: (h : 对任意 c, a ∣ c ↔ b ∣ c)
   结论: a = b
   证明: ((h _).2 dvd_rfl).antisymm (h _).1 dvd_rfl
@@ -529,7 +529,7 @@ theorem eq_of_forall_dvd'
   proof: ((h _).1 dvd_rfl).antisymm (h _).2 dvd_rfl
 
 中文:
-定理 eq_of_forall_dvd'
+定理 eq_of_对任意_dvd'
   条件: (h : 对任意 c, c ∣ a ↔ c ∣ b)
   结论: a = b
   证明: ((h _).1 dvd_rfl).antisymm (h _).2 dvd_rfl
@@ -563,7 +563,7 @@ lemma pow_dvd_pow_iff
 
 中文:
 引理 pow_dvd_pow_iff
-  条件: (ha₀ : a != 0) (ha : ¬IsUnit a)
+  条件: (ha₀ : a != 0) (ha : ¬是单位 a)
   结论: a ^ n ∣ a ^ m ↔ n <= m
   证明: by
   constructor
@@ -616,7 +616,7 @@ lemma GroupWithZero.dvd_iff
     · rw [mul_inv_cancel_left₀ (mt h hn)]
 
 中文:
-引理 GroupWithZero.dvd_iff
+引理 带零群.dvd_iff
   条件: {m n : α}
   结论: m ∣ n ↔ (m = 0 -> n = 0)
   证明: by

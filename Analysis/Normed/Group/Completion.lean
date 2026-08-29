@@ -41,8 +41,8 @@ instance [UniformSpace
 @[simp]
 
 中文:
-实例 [UniformSpace
-  签名: E] [Norm E] : Norm (Completion E) where
+实例 [一致空间
+  签名: E] [范数 E] : 范数 (完备化 E) where
   定义体: Completion.extension Norm.norm
 
 @[simp]
@@ -64,8 +64,8 @@ theorem norm_coe
 
 中文:
 定理 norm_coe
-  条件: {E} [SeminormedAddCommGroup E] (x : E)
-  结论: ‖(x : Completion E)‖ = ‖x‖
+  条件: {E} [SeminormedAddComm群 E] (x : E)
+  结论: ‖(x : 完备化 E)‖ = ‖x‖
   证明: Completion.extension_coe uniformContinuous_norm x
 
 Depends on / 依赖: Completion, Completion.extension_coe, extension_coe, uniformContinuous_norm
@@ -86,8 +86,8 @@ instance [SeminormedAddCommGroup
     · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, 
 
 中文:
-实例 [SeminormedAddCommGroup
-  签名: E] : NormedAddCommGroup (Completion E) where
+实例 [SeminormedAddComm群
+  签名: E] : 赋范交换加群 (完备化 E) where
   定义体: by
     induction x, y using Completion.induction_on₂
     · refine isClosed_eq (Completion.uniformContinuous_extension₂ _).continuous ?_
@@ -119,8 +119,8 @@ theorem nnnorm_coe
 
 中文:
 定理 nnnorm_coe
-  条件: {E} [SeminormedAddCommGroup E] (x : E)
-  结论: ‖(x : Completion E)‖₊ = ‖x‖₊
+  条件: {E} [SeminormedAddComm群 E] (x : E)
+  结论: ‖(x : 完备化 E)‖₊ = ‖x‖₊
   证明: by
   simp [nnnorm]
 
@@ -144,8 +144,8 @@ lemma enorm_coe
 
 中文:
 引理 enorm_coe
-  条件: {E} [SeminormedAddCommGroup E] (x : E)
-  结论: ‖(x : Completion E)‖ₑ = ‖x‖ₑ
+  条件: {E} [SeminormedAddComm群 E] (x : E)
+  结论: ‖(x : 完备化 E)‖ₑ = ‖x‖ₑ
   证明: by
   simp [enorm]
 -/

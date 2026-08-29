@@ -70,8 +70,8 @@ class IsWeakUpperModularLattice
   (no additional axioms)
 
 中文:
-类 IsWeakUpperModularLattice
-  参数: (α : 类型) [Lattice α]
+类 是WeakUpperModular格
+  参数: (α : 类型) [格 α]
   (无附加公理)
 -/
 class IsWeakUpperModularLattice (α : Type*) [Lattice α] : Prop where
@@ -90,8 +90,8 @@ class IsWeakLowerModularLattice
   (no additional axioms)
 
 中文:
-类 IsWeakLowerModularLattice
-  参数: (α : 类型) [Lattice α]
+类 是WeakLowerModular格
+  参数: (α : 类型) [格 α]
   (无附加公理)
 -/
 class IsWeakLowerModularLattice (α : Type*) [Lattice α] : Prop where
@@ -107,8 +107,8 @@ class IsUpperModularLattice
   (no additional axioms)
 
 中文:
-类 IsUpperModularLattice
-  参数: (α : 类型) [Lattice α]
+类 是UpperModular格
+  参数: (α : 类型) [格 α]
   (无附加公理)
 -/
 class IsUpperModularLattice (α : Type*) [Lattice α] : Prop where
@@ -127,8 +127,8 @@ class IsLowerModularLattice
   (no additional axioms)
 
 中文:
-类 IsLowerModularLattice
-  参数: (α : 类型) [Lattice α]
+类 是LowerModular格
+  参数: (α : 类型) [格 α]
   (无附加公理)
 -/
 class IsLowerModularLattice (α : Type*) [Lattice α] : Prop where
@@ -144,8 +144,8 @@ class IsModularLattice
   (no additional axioms)
 
 中文:
-类 IsModularLattice
-  参数: (α : 类型) [Lattice α]
+类 是Modular格
+  参数: (α : 类型) [格 α]
   (无附加公理)
 -/
 class IsModularLattice (α : Type*) [Lattice α] : Prop where
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsWeakLowerModularLattice (OrderDual α)
+  签名: 是WeakLowerModular格 (OrderDual α)
   定义体: ⟨fun ha hb => (ha.ofDual.sup_of_inf_of_inf_left hb.ofDual).toDual⟩
 
 Depends on / 依赖: ha.ofDual.sup_of_inf_of_inf_left, hb.ofDual, ofDual, sup_of_inf_of_inf_left, toDual
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLowerModularLattice (OrderDual α)
+  签名: 是LowerModular格 (OrderDual α)
   定义体: ⟨fun h => h.ofDual.sup_of_inf_left.toDual⟩
 
 Depends on / 依赖: h.ofDual.sup_of_inf_left.toDual, ofDual, sup_of_inf_left, toDual
@@ -439,7 +439,7 @@ theorem IsModularLattice.inf_sup_inf_assoc
   proof: (sup_inf_assoc_of_le y inf_le_right).symm
 
 中文:
-定理 IsModularLattice.inf_sup_inf_assoc
+定理 是Modular格.inf_sup_inf_assoc
   条件: {x y z : α}
   结论: x ⊓ z ⊔ y ⊓ z = (x ⊓ z ⊔ y) ⊓ z
   证明: (sup_inf_assoc_of_le y inf_le_right).symm
@@ -463,7 +463,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsModularLattice αᵒᵈ
+  签名: 是Modular格 αᵒᵈ
   定义体: ⟨fun y z xz =>
     le_of_eq
       (by
@@ -573,7 +573,7 @@ theorem strictMono_inf_prod_sup
 
 中文:
 定理 strictMono_inf_prod_sup
-  结论: StrictMono fun x => (x ⊓ z, x ⊔ z)
+  结论: 严格递增 fun x => (x ⊓ z, x ⊔ z)
   证明: fun _x _y hxy =>
   ⟨⟨inf_le_inf_right _ hxy.le, sup_le_sup_right hxy.le _⟩,
     fun ⟨inf_le, sup_le⟩ => (sup_lt_sup_of_lt_of_inf_le_inf hxy inf_le).not_ge sup_le⟩
@@ -594,7 +594,7 @@ theorem wellFounded_lt_exact_sequence
 
 中文:
 定理 wellFounded_lt_exact_sequence
-  结论: {β γ : 类型} [Preorder β] [Preorder γ]
+  结论: {β γ : 类型} [预序 β] [预序 γ]
   证明: StrictMono.wellFoundedLT (f := fun A => (f₂ A, g₂ A)) fun A B hAB => by
     simp only [Prod.le_def, lt_iff_le_not_ge, ← gci.l_le_l_iff, ← gi.u_le_u_iff, hf, hg]
     exact strictMono_inf_prod_sup hAB
@@ -621,7 +621,7 @@ theorem wellFounded_gt_exact_sequence
 
 中文:
 定理 wellFounded_gt_exact_sequence
-  结论: {β γ : 类型} [Preorder β] [Preorder γ]
+  结论: {β γ : 类型} [预序 β] [预序 γ]
   证明: wellFounded_lt_exact_sequence (α := αᵒᵈ) (β := γᵒᵈ) (γ := βᵒᵈ)
     K g₁ g₂ f₁ f₂ gi.dual gci.dual hg hf
 
@@ -724,7 +724,7 @@ theorem inf_strictMonoOn_Icc_sup
 中文:
 定理 inf_strictMonoOn_Icc_sup
   条件: {a b : α}
-  结论: StrictMonoOn (fun c => a ⊓ c) (Icc b (a ⊔ b))
+  结论: StrictMonoOn (fun c => a ⊓ c) (闭区间 b (a ⊔ b))
   证明: StrictMono.of_domRestrict (infIccOrderIsoIccSup a b).symm.strictMono
 
 Depends on / 依赖: StrictMono, StrictMono.of_domRestrict, infIccOrderIsoIccSup, of_domRestrict, strictMono, symm.strictMono
@@ -744,7 +744,7 @@ theorem sup_strictMonoOn_Icc_inf
 中文:
 定理 sup_strictMonoOn_Icc_inf
   条件: {a b : α}
-  结论: StrictMonoOn (fun c => c ⊔ b) (Icc (a ⊓ b) a)
+  结论: StrictMonoOn (fun c => c ⊔ b) (闭区间 (a ⊓ b) a)
   证明: StrictMono.of_domRestrict (infIccOrderIsoIccSup a b).strictMono
 
 Depends on / 依赖: StrictMono, StrictMono.of_domRestrict, infIccOrderIsoIccSup, of_domRestrict, strictMono
@@ -863,7 +863,7 @@ definition IicOrderIsoIci
 
 中文:
 定义 IicOrderIsoIci
-  签名: {a b : α} (h : IsCompl a b)
+  签名: {a b : α} (h : 是补集 a b)
   定义体: (OrderIso.setCongr (Set.Iic a) (Set.Icc (a ⊓ b) a)
         (h.inf_eq_bot.symm ▸ Set.Icc_bot.symm)).trans <|
     (infIccOrderIsoIccSup a b).trans
@@ -890,7 +890,7 @@ lemma le_iff_eq_of_codisjoint_of_disjoint
 
 中文:
 引理 le_iff_eq_of_codisjoint_of_disjoint
-  结论: [Lattice α] [BoundedOrder α] [IsModularLattice α]
+  结论: [格 α] [有界序 α] [是Modular格 α]
   证明: ⟨fun h₂ => le_antisymm h₂ by simpa [h₀.eq_top, h₁.eq_bot] using sup_inf_le_assoc_of_le b h₂,
    le_of_eq⟩
 
@@ -913,7 +913,7 @@ theorem isModularLattice_iff_inf_sup_inf_assoc
 
 中文:
 定理 isModularLattice_iff_inf_sup_inf_assoc
-  条件: [Lattice α]
+  条件: [格 α]
   证明: ⟨fun h => @IsModularLattice.inf_sup_inf_assoc _ _ h, fun h =>
     ⟨fun y z xz => by rw [← inf_eq_left.2 xz, h]⟩⟩
 
@@ -952,7 +952,7 @@ theorem disjoint_sup_right_of_disjoint_sup_left
 
 中文:
 定理 disjoint_sup_right_of_disjoint_sup_left
-  结论: [Lattice α] [OrderBot α]
+  结论: [格 α] [有底序 α]
   证明: by
   rw [disjoint_iff_inf_le]; rw [← h.eq_bot]; rw [sup_comm]
   apply le_inf inf_le_left
@@ -987,7 +987,7 @@ theorem disjoint_sup_left_of_disjoint_sup_right
 
 中文:
 定理 disjoint_sup_left_of_disjoint_sup_right
-  结论: [Lattice α] [OrderBot α]
+  结论: [格 α] [有底序 α]
   证明: by
   rw [disjoint_comm]; rw [sup_comm]
   apply Disjoint.disjoint_sup_right_of_disjoint_sup_left h.symm
@@ -1020,7 +1020,7 @@ lemma _root_.disjoint_sup_right_of_disjoint_sup_right
 
 中文:
 引理 _root_.disjoint_sup_right_of_disjoint_sup_right
-  结论: [Lattice α] [OrderBot α] [IsModularLattice α]
+  结论: [格 α] [有底序 α] [是Modular格 α]
   证明: by
   rw [sup_comm] at h₂ ⊢
   rw [disjoint_comm]
@@ -1050,7 +1050,7 @@ theorem isCompl_sup_right_of_isCompl_sup_left
 
 中文:
 定理 isCompl_sup_right_of_isCompl_sup_left
-  结论: [Lattice α] [BoundedOrder α] [IsModularLattice α]
+  结论: [格 α] [有界序 α] [是Modular格 α]
   证明: ⟨h.disjoint_sup_right_of_disjoint_sup_left hcomp.disjoint, codisjoint_assoc.mp hcomp.codisjoint⟩
 
 @[to_dual]
@@ -1073,7 +1073,7 @@ theorem isCompl_sup_left_of_isCompl_sup_right
 
 中文:
 定理 isCompl_sup_left_of_isCompl_sup_right
-  结论: [Lattice α] [BoundedOrder α] [IsModularLattice α]
+  结论: [格 α] [有界序 α] [是Modular格 α]
   证明: ⟨h.disjoint_sup_left_of_disjoint_sup_right hcomp.disjoint, codisjoint_assoc.mpr hcomp.codisjoint⟩
 
 Depends on / 依赖: codisjoint, codisjoint_assoc, codisjoint_assoc.mpr, disjoint, disjoint_sup_left_of_disjoint_sup_right, h.disjoint_sup_left_of_disjoint_sup_right, hcomp.codisjoint, hcomp.disjoint
@@ -1098,8 +1098,8 @@ lemma Set.Iic.isCompl_inf_inf_of_isCompl_of_le
     simp [inf_of_le_left h₂, h₁.sup_eq_top]
 
 中文:
-引理 Set.Iic.isCompl_inf_inf_of_isCompl_of_le
-  结论: [Lattice α] [BoundedOrder α] [IsModularLattice α]
+引理 集合.左无界右闭区间.isCompl_inf_inf_of_isCompl_of_le
+  结论: [格 α] [有界序 α] [是Modular格 α]
   证明: by
   constructor
   · simp [disjoint_iff, Subtype.ext_iff, inf_comm a c, inf_assoc a, ← inf_assoc b, h₁.inf_eq_bot]
@@ -1130,7 +1130,7 @@ instance isModularLattice_Iic
 
 中文:
 实例 isModularLattice_Iic
-  签名: : IsModularLattice (Set.Iic a)
+  签名: : 是Modular格 (集合.左无界右闭区间 a)
   定义体: ⟨@fun x y z xz => (sup_inf_le_assoc_of_le (y : α) xz : (↑x ⊔ ↑y) ⊓ ↑z <= ↑x ⊔ ↑y ⊓ ↑z)⟩
 
 Depends on / 依赖: sup_inf_le_assoc_of_le
@@ -1148,7 +1148,7 @@ instance isModularLattice_Ici
 
 中文:
 实例 isModularLattice_Ici
-  签名: : IsModularLattice (Set.Ici a)
+  签名: : 是Modular格 (集合.左闭右无界区间 a)
   定义体: ⟨@fun x y z xz => (sup_inf_le_assoc_of_le (y : α) xz : (↑x ⊔ ↑y) ⊓ ↑z <= ↑x ⊔ ↑y ⊓ ↑z)⟩
 
 Depends on / 依赖: sup_inf_le_assoc_of_le
@@ -1174,7 +1174,7 @@ theorem exists_inf_eq_and_sup_eq
   · simp [← sup_inf_assoc_of_le _ hc, ← sup_assoc, hcodisjoint.eq_top]
 
 中文:
-定理 exists_inf_eq_and_sup_eq
+定理 存在_inf_eq_and_sup_eq
   条件: (hb : a <= b) (hc : b <= c)
   结论: 存在 b', b ⊓ b' = a ∧ b ⊔ b' = c
   证明: by
@@ -1203,7 +1203,7 @@ theorem exists_disjoint_and_sup_eq
   apply exists_inf_eq_and_sup_eq (by simp) h
 
 中文:
-定理 exists_disjoint_and_sup_eq
+定理 存在_disjoint_and_sup_eq
   条件: (h : a <= b)
   结论: 存在 a', Disjoint a a' ∧ a ⊔ a' = b
   证明: by
@@ -1228,7 +1228,7 @@ theorem exists_inf_eq_and_codisjoint
   apply exists_inf_eq_and_sup_eq h (by simp)
 
 中文:
-定理 exists_inf_eq_and_codisjoint
+定理 存在_inf_eq_and_codisjoint
   条件: (h : a <= b)
   结论: 存在 b', b ⊓ b' = a ∧ Codisjoint b b'
   证明: by
@@ -1281,7 +1281,7 @@ instance complementedLattice_Iic
 
 中文:
 实例 complementedLattice_Iic
-  签名: : ComplementedLattice (Set.Iic a) where
+  签名: : 有补格 (集合.左无界右闭区间 a) where
   定义体: fun ⟨x, hx⟩ => by
     simp_rw [Set.Iic.isCompl_iff]
     obtain ⟨y, hdisjoint, rfl⟩ := exists_disjoint_and_sup_eq hx
@@ -1308,7 +1308,7 @@ instance complementedLattice_Ici
 
 中文:
 实例 complementedLattice_Ici
-  签名: : ComplementedLattice (Set.Ici a) where
+  签名: : 有补格 (集合.左闭右无界区间 a) where
   定义体: fun ⟨x, hx⟩ => by
     simp_rw [Set.Ici.isCompl_iff]
     obtain ⟨y, rfl, hcodisjoint⟩ := exists_inf_eq_and_codisjoint hx
@@ -1335,7 +1335,7 @@ theorem _root_.Disjoint.exists_isCompl
   exact ⟨u ⊔ a, le_sup_right, hab.isCompl_sup_left_of_isCompl_sup_right hu.symm⟩
 
 中文:
-定理 _root_.Disjoint.exists_isCompl
+定理 _root_.Disjoint.存在_isCompl
   条件: {a b : α} (hab : Disjoint a b)
   证明: by
   obtain ⟨u, hu⟩ := ComplementedLattice.exists_isCompl (a ⊔ b)

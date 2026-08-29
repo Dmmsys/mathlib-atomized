@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder (WithBot E自然数)
+  签名: 完备线性序 (WithBot E自然数)
   定义体: inferInstanceAs (CompleteLinearOrder (WithBot (WithTop Nat)))
 
 Depends on / 依赖: CompleteLinearOrder, WithBot, WithTop
@@ -108,7 +108,7 @@ lemma iInf_natCast_eq_top
 
 中文:
 引理 iInf_natCast_eq_top
-  结论: ⨅ i, (f i : 自然数∞) = ⊤ ↔ IsEmpty ι
+  结论: ⨅ i, (f i : 自然数∞) = ⊤ ↔ 是空 ι
   证明: WithTop.iInf_coe_eq_top
 
 Depends on / 依赖: WithTop, WithTop.iInf_coe_eq_top, iInf_coe_eq_top
@@ -125,7 +125,7 @@ lemma iInf_natCast_ne_top
 
 中文:
 引理 iInf_natCast_ne_top
-  结论: ⨅ i, (f i : 自然数∞) != ⊤ ↔ Nonempty ι
+  结论: ⨅ i, (f i : 自然数∞) != ⊤ ↔ 非空 ι
   证明: by
   rw [Ne]; rw [iInf_natCast_eq_top]; rw [not_isEmpty_iff]
 
@@ -148,7 +148,7 @@ lemma iInf_natCast_lt_top
 
 中文:
 引理 iInf_natCast_lt_top
-  结论: ⨅ i, (f i : 自然数∞) < ⊤ ↔ Nonempty ι
+  结论: ⨅ i, (f i : 自然数∞) < ⊤ ↔ 非空 ι
   证明: WithTop.iInf_coe_lt_top
 
 @[deprecated (since := "2026-07-17")] alias iSup_coe_eq_top := iSup_natCast_eq_top
@@ -203,7 +203,7 @@ lemma natCast_sInf
 
 中文:
 引理 natCast_sInf
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: ↑(sInf s) = ⨅ a in s, (a : 自然数∞)
   证明: WithTop.coe_sInf hs (OrderBot.bddBelow s)
 
@@ -254,7 +254,7 @@ lemma natCast_iInf
 
 中文:
 引理 natCast_iInf
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: ↑(⨅ i, f i) = ⨅ i, (f i : 自然数∞)
   证明: WithTop.coe_iInf (OrderBot.bddBelow _)
 
@@ -279,7 +279,7 @@ lemma iInf_eq_top_of_isEmpty
 
 中文:
 引理 iInf_eq_top_of_isEmpty
-  条件: [IsEmpty ι]
+  条件: [是空 ι]
   结论: ⨅ i, (f i : 自然数∞) = ⊤
   证明: iInf_natCast_eq_top.mpr ‹_›
 
@@ -333,7 +333,7 @@ lemma iInf_toNat
   · norm_cast
 
 中文:
-引理 iInf_toNat
+引理 iInf_to自然数
   结论: (⨅ i, (f i : 自然数∞)).to自然数 = ⨅ i, f i
   证明: by
   cases isEmpty_or_nonempty ι
@@ -479,7 +479,7 @@ apply Finite.subset Finite.Set.finite_image {n : Nat | n <= x} (fun (n : Nat) =>
 
 中文:
 引理 sSup_eq_top_of_infinite
-  条件: (h : s.Infinite)
+  条件: (h : s.无限)
   结论: sSup s = ⊤
   证明: by
   apply (sSup_eq_top ..).mpr
@@ -525,7 +525,7 @@ lemma finite_of_sSup_lt_top
 中文:
 引理 finite_of_sSup_lt_top
   条件: (h : sSup s < ⊤)
-  结论: s.Finite
+  结论: s.有限
   证明: by
   contrapose! h
   simp only [top_le_iff]
@@ -549,7 +549,7 @@ lemma sSup_mem_of_nonempty_of_lt_top
 
 中文:
 引理 sSup_mem_of_nonempty_of_lt_top
-  条件: [Nonempty s] (hs' : sSup s < ⊤)
+  条件: [非空 s] (hs' : sSup s < ⊤)
   结论: sSup s in s
   证明: Nonempty.csSup_mem .of_subtype (finite_of_sSup_lt_top hs')
 
@@ -567,8 +567,8 @@ lemma exists_eq_iSup_of_lt_top
   proof: sSup_mem_of_nonempty_of_lt_top h
 
 中文:
-引理 exists_eq_iSup_of_lt_top
-  条件: [Nonempty ι] (h : ⨆ i, f i < ⊤)
+引理 存在_eq_iSup_of_lt_top
+  条件: [非空 ι] (h : ⨆ i, f i < ⊤)
   证明: sSup_mem_of_nonempty_of_lt_top h
 
 Depends on / 依赖: sSup_mem_of_nonempty_of_lt_top
@@ -587,8 +587,8 @@ lemma exists_eq_iInf
   proof: csInf_mem (range_nonempty fun i => f i)
 
 中文:
-引理 exists_eq_iInf
-  条件: [Nonempty ι] (f : ι -> 自然数∞)
+引理 存在_eq_iInf
+  条件: [非空 ι] (f : ι -> 自然数∞)
   结论: 存在 a, f a = ⨅ x, f x
   证明: csInf_mem (range_nonempty fun i => f i)
 
@@ -608,8 +608,8 @@ lemma exists_eq_iSup₂_of_lt_top
   exact Prod.exists'.mp (exists_eq_iSup_of_lt_top h)
 
 中文:
-引理 exists_eq_iSup₂_of_lt_top
-  结论: {ι₁ ι₂ : 类型} {f : ι₁ -> ι₂ -> 自然数∞} [Nonempty ι₁] [Nonempty ι₂]
+引理 存在_eq_iSup₂_of_lt_top
+  结论: {ι₁ ι₂ : 类型} {f : ι₁ -> ι₂ -> 自然数∞} [非空 ι₁] [非空 ι₂]
   证明: by
   rw [iSup_prod'] at h ⊢
   exact Prod.exists'.mp (exists_eq_iSup_of_lt_top h)
@@ -776,7 +776,7 @@ lemma mul_iInf
 
 中文:
 引理 mul_iInf
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: a * ⨅ i, f i = ⨅ i, a * f i
   证明: by
   refine (le_iInf fun x => by grw [iInf_le]).antisymm ?_
@@ -804,7 +804,7 @@ lemma iInf_mul
 
 中文:
 引理 iInf_mul
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: (⨅ i, f i) * a = ⨅ i, f i * a
   证明: by
   simp_rw [mul_comm, mul_iInf]
@@ -829,7 +829,7 @@ lemma mul_iInf'
 
 中文:
 引理 mul_iInf'
-  条件: (h₀ : a = 0 -> Nonempty ι)
+  条件: (h₀ : a = 0 -> 非空 ι)
   结论: a * ⨅ i, f i = ⨅ i, a * f i
   证明: by
   obtain hι | hι := isEmpty_or_nonempty ι
@@ -857,7 +857,7 @@ lemma iInf_mul'
 
 中文:
 引理 iInf_mul'
-  条件: (h₀ : a = 0 -> Nonempty ι)
+  条件: (h₀ : a = 0 -> 非空 ι)
   结论: (⨅ i, f i) * a = ⨅ i, f i * a
   证明: by
   simp_rw [mul_comm, mul_iInf' h₀]
@@ -923,7 +923,7 @@ exact iSup_le fun i => ENat.le_sub_of_add_le_left ha le_iSup (a + f ·) i
 
 中文:
 引理 add_iSup
-  条件: [Nonempty ι] (f : ι -> 自然数∞)
+  条件: [非空 ι] (f : ι -> 自然数∞)
   结论: a + ⨆ i, f i = ⨆ i, a + f i
   证明: by
   obtain rfl | ha := eq_or_ne a ⊤
@@ -953,7 +953,7 @@ lemma iSup_add
 
 中文:
 引理 iSup_add
-  条件: [Nonempty ι] (f : ι -> 自然数∞)
+  条件: [非空 ι] (f : ι -> 自然数∞)
   结论: (⨆ i, f i) + a = ⨆ i, f i + a
   证明: by
   simp [add_comm, add_iSup]
@@ -1015,7 +1015,7 @@ lemma add_biSup
 
 中文:
 引理 add_biSup
-  条件: {ι : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> 自然数∞)
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 自然数∞)
   证明: add_biSup' hs _
 
 Depends on / 依赖: add_biSup
@@ -1033,7 +1033,7 @@ lemma biSup_add
 
 中文:
 引理 biSup_add
-  条件: {ι : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> 自然数∞)
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 自然数∞)
   证明: biSup_add' hs _
 
 Depends on / 依赖: biSup_add
@@ -1053,7 +1053,7 @@ lemma add_sSup
 
 中文:
 引理 add_sSup
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: a + sSup s = ⨆ b in s, a + b
   证明: by
   rw [sSup_eq_iSup]; rw [add_biSup hs]
@@ -1075,7 +1075,7 @@ lemma sSup_add
 
 中文:
 引理 sSup_add
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: sSup s + a = ⨆ b in s, b + a
   证明: by
   rw [sSup_eq_iSup]; rw [biSup_add hs]
@@ -1095,7 +1095,7 @@ lemma iSup_add_iSup_le
 
 中文:
 引理 iSup_add_iSup_le
-  条件: [Nonempty ι] [Nonempty κ] {g : κ -> 自然数∞} (h : 对任意 i j, f i + g j <= a)
+  条件: [非空 ι] [非空 κ] {g : κ -> 自然数∞} (h : 对任意 i j, f i + g j <= a)
   证明: by simp_rw [iSup_add, add_iSup]; exact iSup₂_le h
 
 Depends on / 依赖: add_iSup, iSup_add, simp_rw
@@ -1138,7 +1138,7 @@ lemma biSup_add_biSup_le
 
 中文:
 引理 biSup_add_biSup_le
-  结论: {ι κ : 类型} {s : Set ι} {t : Set κ} (hs : s.Nonempty) (ht : t.Nonempty)
+  结论: {ι κ : 类型} {s : 集合 ι} {t : 集合 κ} (hs : s.非空) (ht : t.非空)
   证明: biSup_add_biSup_le' hs ht h
 
 Depends on / 依赖: biSup_add_biSup_le
@@ -1194,7 +1194,7 @@ lemma iSup_add_iSup_of_monotone
 
 中文:
 引理 iSup_add_iSup_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι] {f g : ι -> 自然数∞}
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι] {f g : ι -> 自然数∞}
   证明: iSup_add_iSup fun i j => (exists_ge_ge i j).imp fun _k ⟨hi, hj⟩ => by gcongr <;> apply_rules
 
 Depends on / 依赖: apply_rules, exists_ge_ge, iSup_add_iSup
@@ -1214,7 +1214,7 @@ lemma smul_iSup
 
 中文:
 引理 smul_iSup
-  条件: {R} [SMul R 自然数∞] [IsScalarTower R 自然数∞ 自然数∞] (f : ι -> 自然数∞) (c : R)
+  条件: {R} [标量乘法 R 自然数∞] [标量塔 R 自然数∞ 自然数∞] (f : ι -> 自然数∞) (c : R)
   证明: by
   simpa using mul_iSup (c • 1) f
 
@@ -1235,7 +1235,7 @@ lemma smul_sSup
 
 中文:
 引理 smul_sSup
-  条件: {R} [SMul R 自然数∞] [IsScalarTower R 自然数∞ 自然数∞] (s : Set 自然数∞) (c : R)
+  条件: {R} [标量乘法 R 自然数∞] [标量塔 R 自然数∞ 自然数∞] (s : 集合 自然数∞) (c : R)
   证明: by
   simp_rw [sSup_eq_iSup, smul_iSup]
 
@@ -1261,7 +1261,7 @@ refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
 
 中文:
 引理 sub_iSup
-  条件: [Nonempty ι] (ha : a != ⊤)
+  条件: [非空 ι] (ha : a != ⊤)
   结论: a - ⨆ i, f i = ⨅ i, a - f i
   证明: by
   obtain ⟨i, hi⟩ | h := em (exists i, a < f i)
@@ -1342,7 +1342,7 @@ theorem sInf_add
 
 中文:
 定理 sInf_add
-  条件: {s : Set 自然数∞}
+  条件: {s : 集合 自然数∞}
   结论: sInf s + a = ⨅ b in s, b + a
   证明: by simp [sInf_eq_iInf, iInf_add]
 
@@ -1417,7 +1417,7 @@ lemma iInf_add_iInf_of_monotone
 
 中文:
 引理 iInf_add_iInf_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsCodirectedOrder ι] {f g : ι -> 自然数∞}
+  结论: {ι : 类型} [预序 ι] [IsCodirectedOrder ι] {f g : ι -> 自然数∞}
   证明: iInf_add_iInf fun i j => (exists_le_le i j).imp fun _k ⟨hi, hj⟩ => by gcongr <;> apply_rules
 
 Depends on / 依赖: apply_rules, exists_le_le, iInf_add_iInf
@@ -1437,7 +1437,7 @@ lemma add_iInf₂
 
 中文:
 引理 add_iInf₂
-  条件: {κ : ι -> Sort*} (f : (i : ι) -> κ i -> 自然数∞)
+  条件: {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 自然数∞)
   证明: by
   simp [add_iInf]
 
@@ -1458,7 +1458,7 @@ lemma iInf₂_add
 
 中文:
 引理 iInf₂_add
-  条件: {κ : ι -> Sort*} (f : (i : ι) -> κ i -> 自然数∞)
+  条件: {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 自然数∞)
   证明: by
   simp only [add_comm, add_iInf₂]
 
@@ -1480,7 +1480,7 @@ lemma add_sInf
 
 中文:
 引理 add_sInf
-  条件: {s : Set 自然数∞}
+  条件: {s : 集合 自然数∞}
   结论: a + sInf s = ⨅ b in s, a + b
   证明: by
   rw [sInf_eq_iInf]; rw [add_iInf₂]
@@ -1525,7 +1525,7 @@ lemma le_iInf₂_add_iInf₂
 
 中文:
 引理 le_iInf₂_add_iInf₂
-  结论: {q₁ : ι -> Sort*} {q₂ : κ -> Sort*}
+  结论: {q₁ : ι -> 类型层*} {q₂ : κ -> 类型层*}
   证明: by
   simp_rw [iInf₂_add, add_iInf₂]
   exact le_iInf₂ fun i hi => le_iInf₂ (h i hi)

@@ -43,7 +43,7 @@ class IsCompatibleWithShift
     - condition : forall (a : A), W.inverseImage (shiftFunctor C a) = W
 
 中文:
-类 IsCompatibleWithShift
+类 是余mpatibleWithShift
   参数: : 命题 where
   公理与运算 (1 个):
     - condition : 对任意 (a : A), W.inverseImage (shiftFunctor C a) = W
@@ -173,8 +173,8 @@ definition HasShift.localized
     (fun _ => Localization.fac _ _ _)
 
 中文:
-定义 HasShift.localized
-  签名: : HasShift D A
+定义 有Shift.localized
+  签名: : 有Shift D A
   定义体: have := Localization.full_whiskeringLeft L W D
   have := Localization.faithful_whiskeringLeft L W D
   HasShift.induced L A
@@ -205,7 +205,7 @@ definition Functor.CommShift.localized
   Functor.CommShift.ofInduced _ _ _ _
 
 中文:
-定义 Functor.CommShift.localized
+定义 函子.交换Shift.localized
   签名: :
   定义体: have := Localization.full_whiskeringLeft L W D
   have := Localization.faithful_whiskeringLeft L W D
@@ -230,7 +230,7 @@ instance HasShift.localization
   body: HasShift.localized W.Q W A
 
 中文:
-实例 HasShift.localization
+实例 有Shift.localization
   签名: :
   定义体: HasShift.localized W.Q W A
 
@@ -272,7 +272,7 @@ instance HasShift.localization'
   body: HasShift.localized W.Q' W A
 
 中文:
-实例 HasShift.localization'
+实例 有Shift.localization'
   签名: :
   定义体: HasShift.localized W.Q' W A
 
@@ -435,7 +435,7 @@ definition commShiftOfLocalization
 
 中文:
 定义 commShiftOfLocalization
-  签名: : F'.CommShift A where
+  签名: : F'.交换Shift A where
   定义体: commShiftOfLocalization.iso L W F F'
   commShiftIso_zero := by
     ext1
@@ -572,7 +572,7 @@ instance NatTrans.commShift_iso_hom_of_localization
   
 
 中文:
-实例 NatTrans.commShift_iso_hom_of_localization
+实例 自然变换.commShift_iso_hom_of_localization
   签名: :
   定义体: Functor.commShiftOfLocalization L W A F F'
     NatTrans.CommShift (Lifting.iso L W F F').hom A := by
@@ -636,7 +636,7 @@ definition commShift
 
 中文:
 定义 commShift
-  签名: : G.CommShift M
+  签名: : G.交换Shift M
   定义体: by
   letI : Localization.Lifting L₁ W₁ (Φ.functor ⋙ L₂) G := ⟨e.symm⟩
   exact Functor.commShiftOfLocalization L₁ W₁ M (Φ.functor ⋙ L₂) G
@@ -766,7 +766,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.localizedFunctor L₁ L₂).CommShift M
+  签名: (Φ.localizedFunctor L₁ L₂).交换Shift M
   定义体: Φ.commShift M L₁ L₂ _ (CatCommSq.iso ..)
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, commShift

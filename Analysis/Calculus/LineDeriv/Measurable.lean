@@ -45,7 +45,7 @@ theorem measurableSet_lineDifferentiableAt
 
 中文:
 定理 measurableSet_lineDifferentiableAt
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   borelize 𝕜
   let g : E -> 𝕜 -> F := fun x t => f (x + t • v)
@@ -75,7 +75,7 @@ theorem measurable_lineDeriv
 
 中文:
 定理 measurable_lineDeriv
-  结论: [MeasurableSpace F] [BorelSpace F]
+  结论: [可测空间 F] [Borel空间 F]
   证明: by
   borelize 𝕜
   let g : E -> 𝕜 -> F := fun x t => f (x + t • v)
@@ -105,7 +105,7 @@ theorem stronglyMeasurable_lineDeriv
 
 中文:
 定理 stronglyMeasurable_lineDeriv
-  条件: [SecondCountableTopologyEither E F] (hf : Continuous f)
+  条件: [SecondCountableTopologyEither E F] (hf : 连续 f)
   证明: by
   borelize 𝕜
   let g : E -> 𝕜 -> F := fun x t => f (x + t • v)
@@ -131,7 +131,7 @@ theorem aemeasurable_lineDeriv
 
 中文:
 定理 aemeasurable_lineDeriv
-  结论: [MeasurableSpace F] [BorelSpace F]
+  结论: [可测空间 F] [Borel空间 F]
   证明: (measurable_lineDeriv hf).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_lineDeriv
@@ -186,7 +186,7 @@ hf.comp (continuous_fst.comp continuous_fst).add
 
 中文:
 定理 measurableSet_lineDifferentiableAt_uncurry
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   borelize 𝕜
   let g : (E × E) -> 𝕜 -> F := fun p t => f (p.1 + t • p.2)
@@ -225,7 +225,7 @@ hf.comp (continuous_fst.comp continuous_fst).add
 
 中文:
 定理 measurable_lineDeriv_uncurry
-  结论: [MeasurableSpace F] [BorelSpace F]
+  结论: [可测空间 F] [Borel空间 F]
   证明: by
   borelize 𝕜
   let g : (E × E) -> 𝕜 -> F := fun p t => f (p.1 + t • p.2)
@@ -261,7 +261,7 @@ hf.comp (continuous_fst.comp continuous_fst).add
 
 中文:
 定理 stronglyMeasurable_lineDeriv_uncurry
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   borelize 𝕜
   let g : (E × E) -> 𝕜 -> F := fun p t => f (p.1 + t • p.2)
@@ -291,7 +291,7 @@ theorem aemeasurable_lineDeriv_uncurry
 
 中文:
 定理 aemeasurable_lineDeriv_uncurry
-  结论: [MeasurableSpace F] [BorelSpace F]
+  结论: [可测空间 F] [Borel空间 F]
   证明: (measurable_lineDeriv_uncurry hf).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_lineDeriv_uncurry
@@ -311,7 +311,7 @@ theorem aestronglyMeasurable_lineDeriv_uncurry
 
 中文:
 定理 aestronglyMeasurable_lineDeriv_uncurry
-  条件: (hf : Continuous f) (μ : Measure (E × E))
+  条件: (hf : 连续 f) (μ : 测度 (E × E))
   证明: (stronglyMeasurable_lineDeriv_uncurry hf).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, stronglyMeasurable_lineDeriv_uncurry

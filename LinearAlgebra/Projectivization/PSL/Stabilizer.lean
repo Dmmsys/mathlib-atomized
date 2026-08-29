@@ -43,8 +43,8 @@ definition Matrix.SpecialLinearGroup.lineStab
     exact add_mem 
 
 中文:
-定义 Matrix.SpecialLinearGroup.lineStab
-  签名: (L : Submodule F (ι -> F))
+定义 矩阵.SpecialLinearGroup.lineStab
+  签名: (L : 子模 F (ι -> F))
   定义体: {A | forall w : ι -> F, A • w - w in L}
   one_mem' := by simp
   mul_mem' {A B} hA hB := fun w => by
@@ -76,7 +76,7 @@ lemma Matrix.SpecialLinearGroup.mem_lineStab_iff
   proof: Iff.rfl
 
 中文:
-引理 Matrix.SpecialLinearGroup.mem_lineStab_iff
+引理 矩阵.SpecialLinearGroup.mem_lineStab_iff
   结论: (A : SpecialLinearGroup ι F)
   证明: Iff.rfl
 
@@ -124,7 +124,7 @@ lemma PSL.smul_submodule
 
 中文:
 引理 PSL.smul_submodule
-  条件: (g : Matrix.SpecialLinearGroup ι F) (p : ℙ F (ι -> F))
+  条件: (g : 矩阵.SpecialLinearGroup ι F) (p : ℙ F (ι -> F))
   证明: by
   induction p using Projectivization.ind with | _ v hv => ?_
   simp [Submodule.ext_iff, Submodule.pointwise_smul_def, Submodule.mem_span_singleton, smul_comm]
@@ -150,7 +150,7 @@ lemma Matrix.SpecialLinearGroup.lineStab_smul
   · obtain ⟨v, hv, hvw⟩ := hA 
 
 中文:
-引理 Matrix.SpecialLinearGroup.lineStab_smul
+引理 矩阵.SpecialLinearGroup.lineStab_smul
   证明: by
   ext A
   rw [Subgroup.mem_pointwise_smul_iff_inv_smul_mem]
@@ -189,7 +189,7 @@ lemma PSL.iwasawaT_map_conj
 
 中文:
 引理 PSL.iwasawaT_map_conj
-  结论: (g : Matrix.SpecialLinearGroup ι F)
+  结论: (g : 矩阵.SpecialLinearGroup ι F)
   证明: by
   ext x
   simp only [Subgroup.mem_map, Subgroup.mem_pointwise_smul_iff_inv_smul_mem,
@@ -224,7 +224,7 @@ lemma LinearMap.exists_restrict_span_singleton_eq_smul_id
   · simp [Subtype.ext_iff, ← hc, smul
 
 中文:
-引理 LinearMap.exists_restrict_span_singleton_eq_smul_id
+引理 线性映射.存在_restrict_span_singleton_eq_smul_id
   证明: by
   obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.1 hAv
   refine ⟨c, hc.symm, fun w hw => ?_, LinearMap.ext fun ⟨w, hw⟩ => ?_⟩
@@ -256,7 +256,7 @@ lemma Matrix.SpecialLinearGroup.lineStab_fix_of_span
   have hQ : L.mapQ L A.toLin'.toLinearMap hcom
 
 中文:
-引理 Matrix.SpecialLinearGroup.lineStab_fix_of_span
+引理 矩阵.SpecialLinearGroup.lineStab_fix_of_span
   证明: by
   set L : Submodule F (ι -> F) := Submodule.span F {v}
   obtain ⟨c, hcv, hcomap, hres⟩ :=
@@ -297,7 +297,7 @@ refine Subtype.ext ext_iff_smul.2 fun w => ?_
   rw [← sub_add_cancel (A • w) w]; rw [← hα]; rw [← sub_add_can
 
 中文:
-引理 Matrix.SpecialLinearGroup.lineStab_isMulCommutative_of_span'
+引理 矩阵.SpecialLinearGroup.lineStab_isMulCommutative_of_span'
   证明: by
 refine Subtype.ext ext_iff_smul.2 fun w => ?_
   obtain ⟨α, hα⟩ := Submodule.mem_span_singleton.mp (hA w)
@@ -326,7 +326,7 @@ lemma Matrix.SpecialLinearGroup.lineStab_isMulCommutative_of_span
   proof: ⟨⟨fun ⟨A, hA⟩ ⟨B, hB⟩ => by simpa using lineStab_isMulCommutative_of_span' v hv A B hA hB⟩⟩
 
 中文:
-引理 Matrix.SpecialLinearGroup.lineStab_isMulCommutative_of_span
+引理 矩阵.SpecialLinearGroup.lineStab_isMulCommutative_of_span
   证明: ⟨⟨fun ⟨A, hA⟩ ⟨B, hB⟩ => by simpa using lineStab_isMulCommutative_of_span' v hv A B hA hB⟩⟩
 
 Depends on / 依赖: lineStab_isMulCommutative_of_span

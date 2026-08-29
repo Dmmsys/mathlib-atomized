@@ -56,7 +56,7 @@ theorem pf_add_c
 
 中文:
 定理 pf_add_c
-  条件: [Add α] (p : a = b) (c : α)
+  条件: [加法 α] (p : a = b) (c : α)
   结论: a + c = b + c
   证明: p ▸ rfl
 -/
@@ -72,7 +72,7 @@ theorem c_add_pf
 
 中文:
 定理 c_add_pf
-  条件: [Add α] (p : b = c) (a : α)
+  条件: [加法 α] (p : b = c) (a : α)
   结论: a + b = a + c
   证明: p ▸ rfl
 -/
@@ -88,7 +88,7 @@ theorem add_pf
 
 中文:
 定理 add_pf
-  条件: [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
+  条件: [加法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
   结论: a₁ + a₂ = b₁ + b₂
   证明: p₁ ▸ p₂ ▸ rfl
 -/
@@ -104,7 +104,7 @@ theorem pf_sub_c
 
 中文:
 定理 pf_sub_c
-  条件: [Sub α] (p : a = b) (c : α)
+  条件: [减法 α] (p : a = b) (c : α)
   结论: a - c = b - c
   证明: p ▸ rfl
 -/
@@ -120,7 +120,7 @@ theorem c_sub_pf
 
 中文:
 定理 c_sub_pf
-  条件: [Sub α] (p : b = c) (a : α)
+  条件: [减法 α] (p : b = c) (a : α)
   结论: a - b = a - c
   证明: p ▸ rfl
 -/
@@ -136,7 +136,7 @@ theorem sub_pf
 
 中文:
 定理 sub_pf
-  条件: [Sub α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
+  条件: [减法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
   结论: a₁ - a₂ = b₁ - b₂
   证明: p₁ ▸ p₂ ▸ rfl
 -/
@@ -152,7 +152,7 @@ theorem neg_pf
 
 中文:
 定理 neg_pf
-  条件: [Neg α] (p : (a : α) = b)
+  条件: [取负 α] (p : (a : α) = b)
   结论: -a = -b
   证明: p ▸ rfl
 -/
@@ -168,7 +168,7 @@ theorem pf_mul_c
 
 中文:
 定理 pf_mul_c
-  条件: [Mul α] (p : a = b) (c : α)
+  条件: [乘法 α] (p : a = b) (c : α)
   结论: a * c = b * c
   证明: p ▸ rfl
 -/
@@ -184,7 +184,7 @@ theorem c_mul_pf
 
 中文:
 定理 c_mul_pf
-  条件: [Mul α] (p : b = c) (a : α)
+  条件: [乘法 α] (p : b = c) (a : α)
   结论: a * b = a * c
   证明: p ▸ rfl
 -/
@@ -200,7 +200,7 @@ theorem mul_pf
 
 中文:
 定理 mul_pf
-  条件: [Mul α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
+  条件: [乘法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
   结论: a₁ * a₂ = b₁ * b₂
   证明: p₁ ▸ p₂ ▸ rfl
 -/
@@ -216,7 +216,7 @@ theorem inv_pf
 
 中文:
 定理 inv_pf
-  条件: [Inv α] (p : (a : α) = b)
+  条件: [取逆 α] (p : (a : α) = b)
   结论: a⁻¹ = b⁻¹
   证明: p ▸ rfl
 -/
@@ -232,7 +232,7 @@ theorem pf_div_c
 
 中文:
 定理 pf_div_c
-  条件: [Div α] (p : a = b) (c : α)
+  条件: [除法 α] (p : a = b) (c : α)
   结论: a / c = b / c
   证明: p ▸ rfl
 -/
@@ -248,7 +248,7 @@ theorem c_div_pf
 
 中文:
 定理 c_div_pf
-  条件: [Div α] (p : b = c) (a : α)
+  条件: [除法 α] (p : b = c) (a : α)
   结论: a / b = a / c
   证明: p ▸ rfl
 -/
@@ -264,7 +264,7 @@ theorem div_pf
 
 中文:
 定理 div_pf
-  条件: [Div α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
+  条件: [除法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
   结论: a₁ / a₂ = b₁ / b₂
   证明: p₁ ▸ p₂ ▸ rfl
 -/
@@ -282,8 +282,8 @@ inductive Expanded
 中文:
 归纳类型 Expanded
   构造子 (2 个):
-    - proof: (pf : Syntax.Term)
-    - const: (c : Syntax.Term)
+    - proof: (pf : Syntax.项)
+    - const: (c : Syntax.项)
 
 Depends on / 依赖: withRef
 -/
@@ -310,7 +310,7 @@ definition expandLinearCombo
 
 中文:
 定义 expandLinearCombo
-  签名: (ty : Expr) (stx : Syntax.Term)
+  签名: (ty : Expr) (stx : Syntax.项)
   定义体: withRef stx do
   match stx with
   | `(($e)) => expandLinearCombo ty e
@@ -399,7 +399,7 @@ theorem eq_of_add
 
 中文:
 定理 eq_of_add
-  条件: [AddGroup α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0)
+  条件: [加法群 α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0)
   结论: a' = b'
   证明: by
   rw [← sub_eq_zero] at p ⊢; rwa [sub_eq_zero, p] at H
@@ -420,7 +420,7 @@ theorem eq_of_add_pow
 
 中文:
 定理 eq_of_add_pow
-  结论: [Ring α] [IsReduced α] (n : 自然数) (p : (a : α) = b)
+  结论: [环 α] [是既约 α] (n : 自然数) (p : (a : α) = b)
   证明: by
   rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
 

@@ -140,7 +140,7 @@ lemma isStableUnderBaseChange
 
 中文:
 引理 isStableUnderBaseChange
-  结论: IsStableUnderBaseChange EssFiniteType
+  结论: 是StableUnderBaseChange EssFiniteType
   证明: .mk respectsIso fun R S T _ _ _ _ _ h => by
     rw [essFiniteType_algebraMap] at h ⊢
     infer_instance
@@ -191,7 +191,7 @@ lemma residueFieldMap
 
 中文:
 引理 residueFieldMap
-  结论: {f : R ->+* S} [IsLocalRing R] [IsLocalRing S] [IsLocalHom f]
+  结论: {f : R ->+* S} [是局部环 R] [是局部环 S] [是Local态射 f]
   证明: by
   refine .of_comp (IsLocalRing.residue R) ?_
   rw [IsLocalRing.ResidueField.map_comp_residue]

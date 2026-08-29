@@ -82,7 +82,7 @@ theorem isLocalHom_of_le_jacobson_bot
 
 中文:
 定理 isLocalHom_of_le_jacobson_bot
-  结论: {R : 类型} [CommRing R] (I : Ideal R)
+  结论: {R : 类型} [交换环 R] (I : 理想 R)
   证明: by
   constructor
   intro a h
@@ -124,11 +124,11 @@ class HenselianRing
     - is_henselian : forall (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in I) (_ : IsUnit (Ideal.Quotient.mk I (f.derivative.eval a₀))), exists a : R, f.IsRoot a ∧ a - a₀ in I
 
 中文:
-类 HenselianRing
-  参数: (R : 类型) [CommRing R] (I : Ideal R)
+类 Hensel环
+  参数: (R : 类型) [交换环 R] (I : 理想 R)
   公理与运算 (2 个):
-    - jac : I <= Ideal.jacobson ⊥
-    - is_henselian : 对任意 (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in I) (_ : IsUnit (Ideal.Quotient.mk I (f.derivative.eval a₀))), 存在 a : R, f.IsRoot a ∧ a - a₀ in I
+    - jac : I <= 理想.jacobson ⊥
+    - is_henselian : 对任意 (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in I) (_ : 是单位 (理想.商.mk I (f.derivative.eval a₀))), 存在 a : R, f.IsRoot a ∧ a - a₀ in I
 -/
 class HenselianRing (R : Type*) [CommRing R] (I : Ideal R) : Prop where
   jac : I <= Ideal.jacobson ⊥
@@ -147,11 +147,11 @@ class HenselianLocalRing
     - is_henselian : forall (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in maximalIdeal R) (_ : IsUnit (f.derivative.eval a₀)), exists a : R, f.IsRoot a ∧ a - a₀ in maximalIdeal R
 
 中文:
-类 HenselianLocalRing
-  参数: (R : 类型) [CommRing R]
-  继承: IsLocalRing R
+类 HenselianLocal环
+  参数: (R : 类型) [交换环 R]
+  继承: 是局部环 R
   公理与运算 (1 个):
-    - is_henselian : 对任意 (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in maximalIdeal R) (_ : IsUnit (f.derivative.eval a₀)), 存在 a : R, f.IsRoot a ∧ a - a₀ in maximalIdeal R
+    - is_henselian : 对任意 (f : R[X]) (_ : f.Monic) (a₀ : R) (_ : f.eval a₀ in maximalIdeal R) (_ : 是单位 (f.derivative.eval a₀)), 存在 a : R, f.IsRoot a ∧ a - a₀ in maximalIdeal R
 -/
 class HenselianLocalRing (R : Type*) [CommRing R] : Prop extends IsLocalRing R where
   is_henselian :
@@ -183,8 +183,8 @@ theorem HenselianLocalRing.TFAE
   
 
 中文:
-定理 HenselianLocalRing.TFAE
-  条件: (R : 类型u) [CommRing R] [IsLocalRing R]
+定理 HenselianLocal环.TFAE
+  条件: (R : 类型u) [交换环 R] [是局部环 R]
   证明: by
   tfae_have 3 -> 2
   | H => H (residue R) Ideal.Quotient.mk_surjective
@@ -360,8 +360,8 @@ theorem IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub
   by_con
 
 中文:
-定理 IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub
-  结论: {R : 类型} [CommRing R] [IsLocalRing R]
+定理 是局部环.eq_of_eval_eq_zero_of_not_isUnit_sub
+  结论: {R : 类型} [交换环 R] [是局部环 R]
   证明: by
   obtain ⟨c, _⟩ := exists_mul_sq_add_linear_part_eq_eval_add f a (b - a)
   have hc : (c * (b - a) + eval a (derivative f)) * (b - a) = 0 := by grind

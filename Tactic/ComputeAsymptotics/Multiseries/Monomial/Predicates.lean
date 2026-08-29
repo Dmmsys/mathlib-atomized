@@ -208,7 +208,7 @@ theorem replicate
 中文:
 定理 replicate
   条件: {n : 自然数}
-  结论: AllZero (List.replicate n 0)
+  结论: AllZero (列表.replicate n 0)
   证明: by
   induction n <;> grind [AllZero, sign]
 

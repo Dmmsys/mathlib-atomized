@@ -34,9 +34,9 @@ theorem Uncountable.of_not_small
   exact mt (@Countable.toSmall α) h
 
 中文:
-定理 Uncountable.of_not_small
+定理 不可数.of_not_small
   条件: {α : 类型v} (h : ¬ Small.{w} α)
-  结论: Uncountable α
+  结论: 不可数 α
   证明: by
   rw [uncountable_iff_not_countable]
   exact mt (@Countable.toSmall α) h

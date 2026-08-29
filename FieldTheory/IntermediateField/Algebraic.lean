@@ -31,8 +31,8 @@ theorem IntermediateField.coe_isIntegral_iff
   proof: isIntegral_algHom_iff (S.val.restrictScalars R) Subtype.val_injective
 
 中文:
-定理 IntermediateField.coe_isIntegral_iff
-  结论: {R : 类型} [CommRing R] [Algebra R K] [Algebra R L]
+定理 中间域.coe_is整数egral_iff
+  结论: {R : 类型} [交换环 R] [代数 R K] [代数 R L]
   证明: isIntegral_algHom_iff (S.val.restrictScalars R) Subtype.val_injective
 
 Depends on / 依赖: S.val.restrictScalars, Subtype, Subtype.val_injective, isIntegral_algHom_iff, restrictScalars, val_injective
@@ -52,8 +52,8 @@ definition Subalgebra.IsAlgebraic.toIntermediateField
     (Set.singleton_subset_iff.mpr hx) (hS x hx).isIntegral.inv_mem_adjoin
 
 中文:
-定义 Subalgebra.IsAlgebraic.toIntermediateField
-  签名: {S : Subalgebra K L} (hS : S.IsAlgebraic)
+定义 子代数.是代数.to整数ermediateField
+  签名: {S : 子代数 K L} (hS : S.是代数)
   定义体: S
   inv_mem' x hx := Algebra.adjoin_le_iff.mpr
     (Set.singleton_subset_iff.mpr hx) (hS x hx).isIntegral.inv_mem_adjoin
@@ -73,8 +73,8 @@ abbreviation Algebra.IsAlgebraic.toIntermediateField
   body: (S.isAlgebraic_iff.mpr ‹_›).toIntermediateField
 
 中文:
-缩写 Algebra.IsAlgebraic.toIntermediateField
-  签名: (S : Subalgebra K L) [Algebra.IsAlgebraic K S]
+缩写 代数.是代数.to整数ermediateField
+  签名: (S : 子代数 K L) [代数.是代数 K S]
   定义体: (S.isAlgebraic_iff.mpr ‹_›).toIntermediateField
 
 Depends on / 依赖: S.isAlgebraic_iff.mpr, isAlgebraic_iff, toIntermediateField
@@ -94,7 +94,7 @@ instance isAlgebraic_tower_bot
 
 中文:
 实例 isAlgebraic_tower_bot
-  签名: [Algebra.IsAlgebraic K L]
+  签名: [代数.是代数 K L]
   定义体: Algebra.IsAlgebraic.of_injective S.val S.val.injective
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.of_injective, IsAlgebraic, S.val, S.val.injective, injective, of_injective
@@ -112,7 +112,7 @@ instance isAlgebraic_tower_top
 
 中文:
 实例 isAlgebraic_tower_top
-  签名: [Algebra.IsAlgebraic K L]
+  签名: [代数.是代数 K L]
   定义体: Algebra.IsAlgebraic.tower_top (K := K) S
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.tower_top, IsAlgebraic, tower_top
@@ -134,7 +134,7 @@ instance finiteDimensional_left
 
 中文:
 实例 finiteDimensional_left
-  签名: [FiniteDimensional K L]
+  签名: [有限维 K L]
   定义体: .left K F L
 -/
 instance finiteDimensional_left [FiniteDimensional K L] : FiniteDimensional K F := .left K F L
@@ -150,7 +150,7 @@ instance finiteDimensional_right
 
 中文:
 实例 finiteDimensional_right
-  签名: [FiniteDimensional K L]
+  签名: [有限维 K L]
   定义体: .right K F L
 
 @[simp]
@@ -170,7 +170,7 @@ theorem rank_eq_rank_subalgebra
 
 中文:
 定理 rank_eq_rank_subalgebra
-  结论: Module.rank K F.toSubalgebra = Module.rank K F
+  结论: 模.rank K F.toSubalgebra = 模.rank K F
   证明: rfl
 
 @[simp]
@@ -208,7 +208,7 @@ toSubalgebra_injective Subalgebra.eq_of_le_of_finrank_le h_le h_finrank
 
 中文:
 定理 eq_of_le_of_finrank_le
-  结论: [hfin : FiniteDimensional K E] (h_le : F <= E)
+  结论: [hfin : 有限维 K E] (h_le : F <= E)
   证明: haveI : Module.Finite K E.toSubalgebra := hfin
 toSubalgebra_injective Subalgebra.eq_of_le_of_finrank_le h_le h_finrank
 
@@ -229,7 +229,7 @@ theorem eq_of_le_of_finrank_eq
 
 中文:
 定理 eq_of_le_of_finrank_eq
-  结论: [FiniteDimensional K E] (h_le : F <= E)
+  结论: [有限维 K E] (h_le : F <= E)
   证明: eq_of_le_of_finrank_le h_le h_finrank.ge
 
 Depends on / 依赖: eq_of_le_of_finrank_le, h_finrank, h_finrank.ge, h_le
@@ -248,7 +248,7 @@ theorem eq_iff_finrank_eq_of_le
 
 中文:
 定理 eq_iff_finrank_eq_of_le
-  条件: [FiniteDimensional K E] (h_le : F <= E)
+  条件: [有限维 K E] (h_le : F <= E)
   证明: ⟨fun h => by rw [h], eq_of_le_of_finrank_eq h_le⟩
 
 Depends on / 依赖: eq_of_le_of_finrank_eq, h_le
@@ -276,7 +276,7 @@ theorem eq_of_le_of_finrank_le''
 
 中文:
 定理 eq_of_le_of_finrank_le''
-  结论: [FiniteDimensional K L] (h_le : F <= E)
+  结论: [有限维 K L] (h_le : F <= E)
   证明: by
   apply eq_of_le_of_finrank_le h_le
   have h1 := finrank_mul_finrank K F L
@@ -305,7 +305,7 @@ theorem eq_of_le_of_finrank_le'
 
 中文:
 定理 eq_of_le_of_finrank_le'
-  结论: [FiniteDimensional F L] (h_le : F <= E)
+  结论: [有限维 F L] (h_le : F <= E)
   证明: by
   refine le_antisymm h_le (fun l hl => ?_)
   rwa [← mem_extendScalars (le_refl F), eq_of_le_of_finrank_le''
@@ -329,7 +329,7 @@ theorem eq_of_le_of_finrank_eq'
 
 中文:
 定理 eq_of_le_of_finrank_eq'
-  结论: [FiniteDimensional F L] (h_le : F <= E)
+  结论: [有限维 F L] (h_le : F <= E)
   证明: eq_of_le_of_finrank_le' h_le h_finrank.le
 
 Depends on / 依赖: eq_of_le_of_finrank_le, h_finrank, h_finrank.le, h_le
@@ -348,7 +348,7 @@ theorem eq_iff_finrank_eq_of_le'
 
 中文:
 定理 eq_iff_finrank_eq_of_le'
-  条件: [FiniteDimensional F L] (h_le : F <= E)
+  条件: [有限维 F L] (h_le : F <= E)
   证明: ⟨fun h => by rw [h], eq_of_le_of_finrank_eq' h_le⟩
 
 Depends on / 依赖: eq_of_le_of_finrank_eq, h_le
@@ -372,7 +372,7 @@ lemma finrank_lt_of_gt
 
 中文:
 引理 finrank_lt_of_gt
-  条件: [FiniteDimensional F L] (H : F < E)
+  条件: [有限维 F L] (H : F < E)
   证明: by
   let := (IntermediateField.inclusion H.le).toAlgebra
   have : IsScalarTower F E L := .of_algebraMap_eq' rfl
@@ -454,7 +454,7 @@ theorem finrank_le_of_le_left
 
 中文:
 定理 finrank_le_of_le_left
-  条件: [FiniteDimensional F L] (h : F <= E)
+  条件: [有限维 F L] (h : F <= E)
   结论: finrank E L <= finrank F L
   证明: Nat.le_of_dvd Module.finrank_pos (finrank_dvd_of_le_left h)
 
@@ -474,7 +474,7 @@ theorem finrank_le_of_le_right
 
 中文:
 定理 finrank_le_of_le_right
-  条件: [FiniteDimensional K E] (h : F <= E)
+  条件: [有限维 K E] (h : F <= E)
   结论: finrank K F <= finrank K E
   证明: Nat.le_of_dvd Module.finrank_pos (finrank_dvd_of_le_right h)
 
@@ -493,7 +493,7 @@ instance finiteDimensional_map
 
 中文:
 实例 finiteDimensional_map
-  签名: (f : L ->ₐ[K] L) [FiniteDimensional K E]
+  签名: (f : L ->ₐ[K] L) [有限维 K E]
   定义体: LinearEquiv.finiteDimensional (IntermediateField.equivMap E f).toLinearEquiv
 
 Depends on / 依赖: IntermediateField, IntermediateField.equivMap, LinearEquiv, LinearEquiv.finiteDimensional, equivMap, finiteDimensional, toLinearEquiv
@@ -516,7 +516,7 @@ theorem isAlgebraic_iff
 中文:
 定理 isAlgebraic_iff
   条件: {x : S}
-  结论: IsAlgebraic K x ↔ IsAlgebraic K (x : L)
+  结论: 是代数 K x ↔ 是代数 K (x : L)
   证明: (isAlgebraic_algebraMap_iff (algebraMap S L).injective).symm
 
 Depends on / 依赖: algebraMap, injective, isAlgebraic_algebraMap_iff
@@ -534,9 +534,9 @@ theorem isIntegral_iff
   proof: (isIntegral_algHom_iff S.val S.val.injective).symm
 
 中文:
-定理 isIntegral_iff
+定理 is整数egral_iff
   条件: {x : S}
-  结论: Is整数egral K x ↔ Is整数egral K (x : L)
+  结论: 是整 K x ↔ 是整 K (x : L)
   证明: (isIntegral_algHom_iff S.val S.val.injective).symm
 
 Depends on / 依赖: S.val, S.val.injective, injective, isIntegral_algHom_iff
@@ -582,8 +582,8 @@ definition subalgebraEquivIntermediateField
 @[simp]
 
 中文:
-定义 subalgebraEquivIntermediateField
-  签名: [Algebra.IsAlgebraic K L]
+定义 subalgebraEquiv整数ermediateField
+  签名: [代数.是代数 K L]
   定义体: S.toIntermediateField fun x hx => S.inv_mem_of_algebraic
     (Algebra.IsAlgebraic.isAlgebraic ((⟨x, hx⟩ : S) : L))
   invFun S := S.toSubalgebra
@@ -616,8 +616,8 @@ theorem mem_subalgebraEquivIntermediateField
 @[simp]
 
 中文:
-定理 mem_subalgebraEquivIntermediateField
-  结论: [Algebra.IsAlgebraic K L] {S : Subalgebra K L}
+定理 mem_subalgebraEquiv整数ermediateField
+  结论: [代数.是代数 K L] {S : 子代数 K L}
   证明: Iff.rfl
 
 @[simp]
@@ -638,8 +638,8 @@ theorem mem_subalgebraEquivIntermediateField_symm
   proof: Iff.rfl
 
 中文:
-定理 mem_subalgebraEquivIntermediateField_symm
-  结论: [Algebra.IsAlgebraic K L]
+定理 mem_subalgebraEquiv整数ermediateField_symm
+  结论: [代数.是代数 K L]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

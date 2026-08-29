@@ -123,7 +123,7 @@ theorem rat_inv_continuous_lemma
 
 中文:
 定理 rat_inv_continuous_lemma
-  结论: {β : 类型} [DivisionRing β] (abv : β -> α) [IsAbsoluteValue abv]
+  结论: {β : 类型} [除环 β] (abv : β -> α) [是绝对值 abv]
   证明: by
   refine ⟨K * ε * K, mul_pos (mul_pos K0 ε0) K0, fun {a b} ha hb h => ?_⟩
   have a0 := K0.trans_le ha
@@ -157,7 +157,7 @@ definition IsCauSeq
 
 中文:
 定义 IsCauSeq
-  签名: {α : 类型} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: {α : 类型} [域 α] [线性序 α] [是StrictOrdered环 α]
   定义体: forall ε > 0, exists i, forall j >= i, abv (f j - f i) < ε
 -/
 def IsCauSeq {α : Type*} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
@@ -418,7 +418,7 @@ definition CauSeq
 
 中文:
 定义 CauSeq
-  签名: {α : 类型} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: {α : 类型} [域 α] [线性序 α] [是StrictOrdered环 α]
   定义体: { f : Nat -> β // IsCauSeq abv f }
 
 Depends on / 依赖: IsCauSeq
@@ -617,7 +617,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (CauSeq β abv)
+  签名: 加法 (CauSeq β abv)
   定义体: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
 
 @[simp, norm_cast]
@@ -703,7 +703,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (x : β)
-  结论: (const x : 自然数 -> β) = Function.const 自然数 x
+  结论: (const x : 自然数 -> β) = 函数.const 自然数 x
   证明: rfl
 
 @[simp, norm_cast]
@@ -760,7 +760,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (CauSeq β abv)
+  签名: 零 (CauSeq β abv)
   定义体: ⟨const 0⟩
 -/
 instance : Zero (CauSeq β abv) :=
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (CauSeq β abv)
+  签名: 幺 (CauSeq β abv)
   定义体: ⟨const 1⟩
 -/
 instance : One (CauSeq β abv) :=
@@ -794,7 +794,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CauSeq β abv)
+  签名: 可居 (CauSeq β abv)
   定义体: ⟨0⟩
 
 @[simp, norm_cast]
@@ -958,7 +958,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (CauSeq β abv)
+  签名: 乘法 (CauSeq β abv)
   定义体: ⟨fun f g => ⟨f * g, f.2.mul g.2⟩⟩
 
 @[simp, norm_cast]
@@ -1039,7 +1039,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (CauSeq β abv)
+  签名: 取负 (CauSeq β abv)
   定义体: ⟨fun f => ⟨-f, f.2.neg⟩⟩
 
 @[simp, norm_cast]
@@ -1118,7 +1118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (CauSeq β abv)
+  签名: 减法 (CauSeq β abv)
   定义体: ⟨fun f g => ofEq (f + -g) (fun x => f x - g x) fun i => by simp [sub_eq_add_neg]⟩
 
 @[simp, norm_cast]
@@ -1204,7 +1204,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul G (CauSeq β abv)
+  签名: 标量乘法 G (CauSeq β abv)
   定义体: ⟨fun a f => (ofEq (const (a • (1 : β)) * f) (a • (f : Nat -> β))) fun _ => smul_one_mul _ _⟩
 
 @[simp, norm_cast]
@@ -1284,7 +1284,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower G (CauSeq β abv) (CauSeq β abv)
+  签名: 标量塔 G (CauSeq β abv) (CauSeq β abv)
   定义体: ⟨fun a f g => Subtype.ext smul_assoc a (f : Nat -> β) (g : Nat -> β)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -1305,7 +1305,7 @@ instance addGroup
 
 中文:
 实例 addGroup
-  签名: : AddGroup (CauSeq β abv)
+  签名: : 加法群 (CauSeq β abv)
   定义体: Function.Injective.addGroup Subtype.val Subtype.val_injective rfl coe_add coe_neg coe_sub
     (fun _ _ => coe_smul _ _) fun _ _ => coe_smul _ _
 
@@ -1324,8 +1324,8 @@ instance instNatCast
   body: ⟨fun n => const n⟩
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast (CauSeq β abv)
+实例 inst自然数Cast
+  签名: : 自然数嵌入 (CauSeq β abv)
   定义体: ⟨fun n => const n⟩
 -/
 instance instNatCast : NatCast (CauSeq β abv) := ⟨fun n => const n⟩
@@ -1339,8 +1339,8 @@ instance instIntCast
   body: ⟨fun n => const n⟩
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast (CauSeq β abv)
+实例 inst整数Cast
+  签名: : 整数嵌入 (CauSeq β abv)
   定义体: ⟨fun n => const n⟩
 -/
 instance instIntCast : IntCast (CauSeq β abv) := ⟨fun n => const n⟩
@@ -1360,7 +1360,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: : AddGroupWithOne (CauSeq β abv)
+  签名: : 加法带幺群 (CauSeq β abv)
   定义体: Function.Injective.addGroupWithOne Subtype.val Subtype.val_injective rfl rfl
   coe_add coe_neg coe_sub
   (by intros; rfl)
@@ -1391,7 +1391,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (CauSeq β abv) 自然数
+  签名: 幂 (CauSeq β abv) 自然数
   定义体: ⟨fun f n =>
 (ofEq (npowRec n f) fun i => f i ^ n) by induction n <;> simp [*, npowRec, pow_succ]⟩
 
@@ -1474,7 +1474,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: : Ring (CauSeq β abv)
+  签名: : 环 (CauSeq β abv)
   定义体: Function.Injective.ring Subtype.val Subtype.val_injective rfl rfl coe_add coe_mul coe_neg coe_sub
     (fun _ _ => coe_smul _ _) (fun _ _ => coe_smul _ _) coe_pow (fun _ => rfl) fun _ => rfl
 
@@ -1718,7 +1718,7 @@ instance equiv
 
 中文:
 实例 equiv
-  签名: : Setoid (CauSeq β abv)
+  签名: : 集合等价关系 (CauSeq β abv)
   定义体: ⟨fun f g => LimZero (f - g),
     ⟨fun f => by simp [zero_limZero],
     fun f ε hε => by simpa using neg_limZero f ε hε,
@@ -2094,7 +2094,7 @@ theorem smul_equiv_smul
 
 中文:
 定理 smul_equiv_smul
-  结论: {G : 类型} [SMul G β] [IsScalarTower G β β] {f1 f2 : CauSeq β abv} (c : G)
+  结论: {G : 类型} [标量乘法 G β] [标量塔 G β β] {f1 f2 : CauSeq β abv} (c : G)
   证明: by
   simpa [const_smul, smul_one_mul _ _] using
     mul_equiv_mul (const_equiv.mpr <| Eq.refl <| c • (1 : β)) hf
@@ -2740,7 +2740,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (CauSeq α abs)
+  签名: 预序 (CauSeq α abs)
   定义体: (· < ·)
   le f g := f < g ∨ f ≈ g
   le_refl _ := Or.inr (Setoid.refl _)
@@ -2885,7 +2885,7 @@ theorem le_of_exists
         (sub_pos.1 (lt_of_lt_of_le hK0 (hKj _ (le_max_right _ _)))))
 
 中文:
-定理 le_of_exists
+定理 le_of_存在
   条件: {f g : CauSeq α abs} (h : 存在 i, 对任意 j >= i, f j <= g j)
   结论: f <= g
   证明: let ⟨i, hi⟩ := h
@@ -2918,7 +2918,7 @@ theorem exists_gt
     exact le_of_lt (abs_lt.1 (H _)).2⟩
 
 中文:
-定理 exists_gt
+定理 存在_gt
   条件: (f : CauSeq α abs)
   结论: 存在 a : α, f < const a
   证明: let ⟨K, H⟩ := f.bounded
@@ -2945,7 +2945,7 @@ theorem exists_lt
   ⟨-a, show Pos _ by rwa [const_neg, sub_neg_eq_add, add_comm, ← sub_neg_eq_add]⟩
 
 中文:
-定理 exists_lt
+定理 存在_lt
   条件: (f : CauSeq α abs)
   结论: 存在 a : α, const a < f
   证明: let ⟨a, h⟩ := (-f).exists_gt
@@ -3013,7 +3013,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (CauSeq α abs)
+  签名: 最大值 (CauSeq α abs)
   定义体: ⟨fun f g =>
     ⟨f ⊔ g, fun _ ε0 =>
       (exists_forall_ge_and (f.cauchy₃ ε0) (g.cauchy₃ ε0)).imp fun _ H _ ij =>
@@ -3045,7 +3045,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (CauSeq α abs)
+  签名: 最小值 (CauSeq α abs)
   定义体: ⟨fun f g =>
     ⟨f ⊓ g, fun _ ε0 =>
       (exists_forall_ge_and (f.cauchy₃ ε0) (g.cauchy₃ ε0)).imp fun _ H _ ij =>

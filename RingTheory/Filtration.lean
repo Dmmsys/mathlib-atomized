@@ -61,10 +61,10 @@ structure Ideal.Filtration
     - smul_le : forall i, I • N i <= N (i + 1)
 
 中文:
-结构 Ideal.Filtration
-  参数: (M : 类型) [AddCommGroup M] [Module R M]
+结构 理想.滤子
+  参数: (M : 类型) [加法交换群 M] [模 R M]
   公理与运算 (3 个):
-    - N : 自然数 -> Submodule R M
+    - N : 自然数 -> 子模 R M
     - mono : 对任意 i, N (i + 1) <= N i
     - smul_le : 对任意 i, I • N i <= N (i + 1)
 -/
@@ -146,7 +146,7 @@ theorem antitone
 
 中文:
 定理 antitone
-  结论: Antitone F.N
+  结论: 递减 F.N
   证明: antitone_nat_of_succ_le F.mono
 -/
 protected theorem antitone : Antitone F.N :=
@@ -165,8 +165,8 @@ definition _root_.Ideal.trivialFiltration
   smul_le _ := Submodule.smul_le_right
 
 中文:
-定义 _root_.Ideal.trivialFiltration
-  签名: (I : Ideal R) (N : Submodule R M)
+定义 _root_.理想.trivialFiltration
+  签名: (I : 理想 R) (N : 子模 R M)
   定义体: N
   mono _ := le_rfl
   smul_le _ := Submodule.smul_le_right
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (I.Filtration M)
+  签名: 最大值 (I.滤子 M)
   定义体: ⟨fun F F' =>
     ⟨F.N ⊔ F'.N, fun i => sup_le_sup (F.mono i) (F'.mono i), fun i =>
 (Submodule.smul_sup _ _ _).trans_le sup_le_sup (F.smul_le i) (F'.smul_le i)⟩⟩
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (I.Filtration M)
+  签名: 上确界集 (I.滤子 M)
   定义体: ⟨fun S =>
     { N := sSup (Ideal.Filtration.N '' S)
       mono := fun i => by
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (I.Filtration M)
+  签名: 最小值 (I.滤子 M)
   定义体: ⟨fun F F' =>
     ⟨F.N ⊓ F'.N, fun i => inf_le_inf (F.mono i) (F'.mono i), fun i =>
 (smul_inf_le _ _ _).trans inf_le_inf (F.smul_le i) (F'.smul_le i)⟩⟩
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (I.Filtration M)
+  签名: 下确界集 (I.滤子 M)
   定义体: ⟨fun S =>
     { N := sInf (Ideal.Filtration.N '' S)
       mono := fun i => by
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (I.Filtration M)
+  签名: 顶元素 (I.滤子 M)
   定义体: ⟨I.trivialFiltration ⊤⟩
 
 Depends on / 依赖: I.trivialFiltration, trivialFiltration
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (I.Filtration M)
+  签名: 底元素 (I.滤子 M)
   定义体: ⟨I.trivialFiltration ⊥⟩
 
 @[simp]
@@ -384,8 +384,8 @@ theorem sSup_N
 
 中文:
 定理 sSup_N
-  条件: (S : Set (I.Filtration M))
-  结论: (sSup S).N = sSup (Ideal.Filtration.N '' S)
+  条件: (S : 集合 (I.滤子 M))
+  结论: (sSup S).N = sSup (理想.滤子.N '' S)
   证明: rfl
 
 @[simp]
@@ -428,8 +428,8 @@ theorem sInf_N
 
 中文:
 定理 sInf_N
-  条件: (S : Set (I.Filtration M))
-  结论: (sInf S).N = sInf (Ideal.Filtration.N '' S)
+  条件: (S : 集合 (I.滤子 M))
+  结论: (sInf S).N = sInf (理想.滤子.N '' S)
   证明: rfl
 
 @[simp]
@@ -450,7 +450,7 @@ theorem top_N
 
 中文:
 定理 top_N
-  结论: (⊤ : I.Filtration M).N = ⊤
+  结论: (⊤ : I.滤子 M).N = ⊤
   证明: rfl
 
 @[simp]
@@ -471,7 +471,7 @@ theorem bot_N
 
 中文:
 定理 bot_N
-  结论: (⊥ : I.Filtration M).N = ⊥
+  结论: (⊥ : I.滤子 M).N = ⊥
   证明: rfl
 
 @[simp]
@@ -493,7 +493,7 @@ theorem iSup_N
 
 中文:
 定理 iSup_N
-  条件: {ι : Sort*} (f : ι -> I.Filtration M)
+  条件: {ι : 类型层*} (f : ι -> I.滤子 M)
   结论: (iSup f).N = ⨆ i, (f i).N
   证明: congr_arg sSup (Set.range_comp _ _).symm
 
@@ -516,7 +516,7 @@ theorem iInf_N
 
 中文:
 定理 iInf_N
-  条件: {ι : Sort*} (f : ι -> I.Filtration M)
+  条件: {ι : 类型层*} (f : ι -> I.滤子 M)
   结论: (iInf f).N = ⨅ i, (f i).N
   证明: congr_arg sInf (Set.range_comp _ _).symm
 
@@ -535,7 +535,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (I.Filtration M)
+  签名: 偏序 (I.滤子 M)
   定义体: PartialOrder.lift _ fun _ _ => Ideal.Filtration.ext
 
 Depends on / 依赖: Filtration, Ideal.Filtration.ext, PartialOrder, PartialOrder.lift
@@ -555,7 +555,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (I.Filtration M)
+  签名: 完备格 (I.滤子 M)
   定义体: Function.Injective.completeLattice Ideal.Filtration.N
     (fun _ _ => Ideal.Filtration.ext) .rfl .rfl sup_N inf_N
     (fun _ => sSup_image) (fun _ => sInf_image) top_N bot_N
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (I.Filtration M)
+  签名: 可居 (I.滤子 M)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (I.Filtration M) :=
@@ -592,7 +592,7 @@ definition Stable
   body: exists n₀, forall n >= n₀, I • F.N n = F.N (n + 1)
 
 中文:
-定义 Stable
+定义 稳定
   签名: : 命题
   定义体: exists n₀, forall n >= n₀, I • F.N n = F.N (n + 1)
 -/
@@ -612,8 +612,8 @@ definition _root_.Ideal.stableFiltration
   smul_le i := by rw [add_comm, pow_add, mul_smul, pow_one]
 
 中文:
-定义 _root_.Ideal.stableFiltration
-  签名: (I : Ideal R) (N : Submodule R M)
+定义 _root_.理想.stableFiltration
+  签名: (I : 理想 R) (N : 子模 R M)
   定义体: I ^ i • N
   mono i := by rw [add_comm, pow_add, mul_smul]; exact Submodule.smul_le_right
   smul_le i := by rw [add_comm, pow_add, mul_smul, pow_one]
@@ -637,8 +637,8 @@ theorem _root_.Ideal.stableFiltration_stable
   rw [add_comm]; rw [pow_add]; rw [mul_smul]; rw [pow_one]
 
 中文:
-定理 _root_.Ideal.stableFiltration_stable
-  条件: (I : Ideal R) (N : Submodule R M)
+定理 _root_.理想.stableFiltration_stable
+  条件: (I : 理想 R) (N : 子模 R M)
   证明: by
   use 0
   intro n _
@@ -672,8 +672,8 @@ theorem Stable.exists_pow_smul_eq
   | succ _ ih => rw [← add_assoc, ← hn, ih, add_comm, pow_add, mul_smul, pow_one]; lia
 
 中文:
-定理 Stable.exists_pow_smul_eq
-  条件: (h : F.Stable)
+定理 稳定.存在_pow_smul_eq
+  条件: (h : F.稳定)
   结论: 存在 n₀, 对任意 k, F.N (n₀ + k) = I ^ k • F.N n₀
   证明: by
   obtain ⟨n₀, hn⟩ := h
@@ -707,8 +707,8 @@ theorem Stable.exists_pow_smul_eq_of_ge
   rw [add_comm]; rw [tsub_add_cancel_of_le hn]
 
 中文:
-定理 Stable.exists_pow_smul_eq_of_ge
-  条件: (h : F.Stable)
+定理 稳定.存在_pow_smul_eq_of_ge
+  条件: (h : F.稳定)
   证明: by
   obtain ⟨n₀, hn₀⟩ := h.exists_pow_smul_eq
   use n₀
@@ -736,7 +736,7 @@ theorem stable_iff_exists_pow_smul_eq_of_ge
   rw [h.choose_spec n hn]; rw [h.choose_spec (n + 1) (by lia)]; rw [smul_smul]; rw [← pow_succ']; rw [tsub_add_eq_add_tsub hn]
 
 中文:
-定理 stable_iff_exists_pow_smul_eq_of_ge
+定理 stable_iff_存在_pow_smul_eq_of_ge
   证明: by
   refine ⟨Stable.exists_pow_smul_eq_of_ge, fun h => ⟨h.choose, fun n hn => ?_⟩⟩
   rw [h.choose_spec n hn]; rw [h.choose_spec (n + 1) (by lia)]; rw [smul_smul]; rw [← pow_succ']; rw [tsub_add_eq_add_tsub hn]
@@ -766,8 +766,8 @@ theorem Stable.exists_forall_le
     simp
 
 中文:
-定理 Stable.exists_forall_le
-  条件: (h : F.Stable) (e : F.N 0 <= F'.N 0)
+定理 稳定.存在_对任意_le
+  条件: (h : F.稳定) (e : F.N 0 <= F'.N 0)
   证明: by
   obtain ⟨n₀, hF⟩ := h
   use n₀
@@ -807,8 +807,8 @@ theorem Stable.bounded_difference
   refine ⟨(F.antitone ?_).trans (h₁ n), (F'.antitone ?_).trans (h₂ n)⟩ <;> simp
 
 中文:
-定理 Stable.bounded_difference
-  条件: (h : F.Stable) (h' : F'.Stable) (e : F.N 0 = F'.N 0)
+定理 稳定.bounded_difference
+  条件: (h : F.稳定) (h' : F'.稳定) (e : F.N 0 = F'.N 0)
   证明: by
   obtain ⟨n₁, h₁⟩ := h.exists_forall_le (le_of_eq e)
   obtain ⟨n₂, h₂⟩ := h'.exists_forall_le (le_of_eq e.symm)
@@ -881,7 +881,7 @@ theorem mem_submodule
 
 中文:
 定理 mem_submodule
-  条件: (f : PolynomialModule R M)
+  条件: (f : 多项式模 R M)
   结论: f in F.submodule ↔ 对任意 i, f.coeff i in F.N i
   证明: Iff.rfl
 
@@ -1098,7 +1098,7 @@ theorem submodule_fg_iff_stable
 中文:
 定理 submodule_fg_iff_stable
   条件: (hF' : 对任意 i, (F.N i).FG)
-  结论: F.submodule.FG ↔ F.Stable
+  结论: F.submodule.FG ↔ F.稳定
   证明: by
   classical
   delta Ideal.Filtration.Stable
@@ -1157,8 +1157,8 @@ theorem Stable.of_le
   exact this _ (OrderHomClass.mono (submoduleInfHom M I) hf)
 
 中文:
-定理 Stable.of_le
-  结论: [IsNoetherianRing R] [Module.Finite R M] (hF : F.Stable)
+定理 稳定.of_le
+  结论: [是Noether环 R] [模.有限 R M] (hF : F.稳定)
   证明: by
   rw [← submodule_fg_iff_stable] at hF ⊢
   any_goals intro i; exact IsNoetherian.noetherian _
@@ -1185,8 +1185,8 @@ theorem Stable.inter_right
   proof: hF.of_le inf_le_left
 
 中文:
-定理 Stable.inter_right
-  条件: [IsNoetherianRing R] [Module.Finite R M] (hF : F.Stable)
+定理 稳定.inter_right
+  条件: [是Noether环 R] [模.有限 R M] (hF : F.稳定)
   证明: hF.of_le inf_le_left
 
 Depends on / 依赖: hF.of_le, inf_le_left, of_le
@@ -1204,8 +1204,8 @@ theorem Stable.inter_left
   proof: hF.of_le inf_le_right
 
 中文:
-定理 Stable.inter_left
-  条件: [IsNoetherianRing R] [Module.Finite R M] (hF : F.Stable)
+定理 稳定.inter_left
+  条件: [是Noether环 R] [模.有限 R M] (hF : F.稳定)
   证明: hF.of_le inf_le_right
 
 Depends on / 依赖: hF.of_le, inf_le_right, of_le
@@ -1227,8 +1227,8 @@ theorem Ideal.exists_pow_inf_eq_pow_smul
   proof: ((I.stableFiltration_stable ⊤).inter_right (I.trivialFiltration N)).exists_pow_smul_eq_of_ge
 
 中文:
-定理 Ideal.exists_pow_inf_eq_pow_smul
-  结论: [IsNoetherianRing R] [Module.Finite R M]
+定理 理想.存在_pow_inf_eq_pow_smul
+  结论: [是Noether环 R] [模.有限 R M]
   证明: ((I.stableFiltration_stable ⊤).inter_right (I.trivialFiltration N)).exists_pow_smul_eq_of_ge
 
 Depends on / 依赖: I.stableFiltration_stable, I.trivialFiltration, exists_pow_smul_eq_of_ge, inter_right, stableFiltration_stable, trivialFiltration
@@ -1252,8 +1252,8 @@ theorem Ideal.mem_iInf_smul_pow_eq_bot_iff
       Submodule.exists_mem_and_smul_eq_self_of_fg_
 
 中文:
-定理 Ideal.mem_iInf_smul_pow_eq_bot_iff
-  条件: [IsNoetherianRing R] [Module.Finite R M] (x : M)
+定理 理想.mem_iInf_smul_pow_eq_bot_iff
+  条件: [是Noether环 R] [模.有限 R M] (x : M)
   证明: by
   let N := (⨅ i : Nat, I ^ i • ⊤ : Submodule R M)
   have hN : forall k, (I.stableFiltration ⊤ ⊓ I.trivialFiltration N).N k = N :=
@@ -1302,8 +1302,8 @@ theorem Ideal.iInf_pow_smul_eq_bot_of_le_jacobson
   simp [sub_smul, hr]
 
 中文:
-定理 Ideal.iInf_pow_smul_eq_bot_of_le_jacobson
-  结论: [IsNoetherianRing R]
+定理 理想.iInf_pow_smul_eq_bot_of_le_jacobson
+  结论: [是Noether环 R]
   证明: by
   rw [eq_bot_iff]
   intro x hx
@@ -1334,8 +1334,8 @@ theorem Ideal.iInf_pow_smul_eq_bot_of_isLocalRing
     ((le_maximalIdeal h).trans (maximalIdeal_le_jacobson _))
 
 中文:
-定理 Ideal.iInf_pow_smul_eq_bot_of_isLocalRing
-  结论: [IsNoetherianRing R] [IsLocalRing R]
+定理 理想.iInf_pow_smul_eq_bot_of_isLocalRing
+  结论: [是Noether环 R] [是局部环 R]
   证明: Ideal.iInf_pow_smul_eq_bot_of_le_jacobson _
     ((le_maximalIdeal h).trans (maximalIdeal_le_jacobson _))
 
@@ -1358,8 +1358,8 @@ theorem Ideal.iInf_pow_eq_bot_of_isLocalRing
   rw [smul_eq_mul]; rw [← Ideal.one_eq_top]; rw [mul_one]
 
 中文:
-定理 Ideal.iInf_pow_eq_bot_of_isLocalRing
-  条件: [IsNoetherianRing R] [IsLocalRing R] (h : I != ⊤)
+定理 理想.iInf_pow_eq_bot_of_isLocalRing
+  条件: [是Noether环 R] [是局部环 R] (h : I != ⊤)
   证明: by
   convert! I.iInf_pow_smul_eq_bot_of_isLocalRing (M := R) h
   ext i
@@ -1390,8 +1390,8 @@ theorem Ideal.isIdempotentElem_iff_eq_bot_or_top_of_isLocalRing
   · rintro (rfl | rfl) <;> simp [IsIdempotentElem]
 
 中文:
-定理 Ideal.isIdempotentElem_iff_eq_bot_or_top_of_isLocalRing
-  结论: {R} [CommRing R]
+定理 理想.isIdempotentElem_iff_eq_bot_or_top_of_isLocalRing
+  结论: {R} [交换环 R]
   证明: by
   constructor
   · intro H
@@ -1436,8 +1436,8 @@ theorem Ideal.iInf_pow_smul_eq_bot_of_isTorsionFree
 alias Ideal.iI
 
 中文:
-定理 Ideal.iInf_pow_smul_eq_bot_of_isTorsionFree
-  结论: [IsDomain R]
+定理 理想.iInf_pow_smul_eq_bot_of_isTorsionFree
+  结论: [是整环 R]
   证明: by
   rw [eq_bot_iff]
   intro x hx
@@ -1478,8 +1478,8 @@ theorem Ideal.iInf_pow_eq_bot_of_isDomain
   simp
 
 中文:
-定理 Ideal.iInf_pow_eq_bot_of_isDomain
-  条件: [IsNoetherianRing R] [IsDomain R] (h : I != ⊤)
+定理 理想.iInf_pow_eq_bot_of_isDomain
+  条件: [是Noether环 R] [是整环 R] (h : I != ⊤)
   证明: by
   convert! I.iInf_pow_smul_eq_bot_of_isTorsionFree (M := R) h
   simp

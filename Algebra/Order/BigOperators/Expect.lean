@@ -111,7 +111,7 @@ lemma expect_le
 
 中文:
 引理 expect_le
-  条件: (hs : s.Nonempty) (h : 对任意 x in s, f x <= a)
+  条件: (hs : s.非空) (h : 对任意 x in s, f x <= a)
   结论: 𝔼 i in s, f i <= a
   证明: (inv_smul_le_iff_of_pos <| mod_cast hs.card_pos).2 by
     rw [Nat.cast_smul_eq_nsmul]; exact sum_le_card_nsmul _ _ _ h
@@ -134,7 +134,7 @@ lemma le_expect
 
 中文:
 引理 le_expect
-  条件: (hs : s.Nonempty) (h : 对任意 x in s, a <= f x)
+  条件: (hs : s.非空) (h : 对任意 x in s, a <= f x)
   结论: a <= 𝔼 i in s, f i
   证明: (le_inv_smul_iff_of_pos <| mod_cast hs.card_pos).2 by
     rw [Nat.cast_smul_eq_nsmul]; exact card_nsmul_le_sum _ _ _ h
@@ -384,7 +384,7 @@ lemma expect_pos
 
 中文:
 引理 expect_pos
-  条件: (hf : 对任意 i in s, 0 < f i) (hs : s.Nonempty)
+  条件: (hf : 对任意 i in s, 0 < f i) (hs : s.非空)
   结论: 0 < 𝔼 i in s, f i
   证明: smul_pos (inv_pos.2 <| mod_cast hs.card_pos) sum_pos hf hs
 
@@ -410,7 +410,7 @@ lemma exists_lt_of_expect_lt_expect
   contrapose! h; exact expect_le_expect h
 
 中文:
-引理 exists_lt_of_expect_lt_expect
+引理 存在_lt_of_expect_lt_expect
   条件: (h : 𝔼 i in s, g i < 𝔼 i in s, f i)
   证明: by
   contrapose! h; exact expect_le_expect h
@@ -432,8 +432,8 @@ lemma exists_lt_of_lt_expect
   contrapose! h; exact expect_le hs h
 
 中文:
-引理 exists_lt_of_lt_expect
-  条件: (hs : s.Nonempty) (h : a < 𝔼 i in s, f i)
+引理 存在_lt_of_lt_expect
+  条件: (hs : s.非空) (h : a < 𝔼 i in s, f i)
   结论: 存在 x in s, a < f x
   证明: by
   contrapose! h; exact expect_le hs h
@@ -454,8 +454,8 @@ lemma exists_lt_of_expect_lt
   contrapose! h; exact le_expect hs h
 
 中文:
-引理 exists_lt_of_expect_lt
-  条件: (hs : s.Nonempty) (h : 𝔼 i in s, f i < a)
+引理 存在_lt_of_expect_lt
+  条件: (hs : s.非空) (h : 𝔼 i in s, f i < a)
   结论: 存在 x in s, f x < a
   证明: by
   contrapose! h; exact le_expect hs h
@@ -483,8 +483,8 @@ lemma exists_le_of_expect_le_expect
   exact expect_lt_expect (fun _ hx => le_of_lt (h _ hx)) ⟨_, ⟨hx, h _ hx⟩⟩
 
 中文:
-引理 exists_le_of_expect_le_expect
-  条件: (hs : s.Nonempty) (h : 𝔼 i in s, g i <= 𝔼 i in s, f i)
+引理 存在_le_of_expect_le_expect
+  条件: (hs : s.非空) (h : 𝔼 i in s, g i <= 𝔼 i in s, f i)
   证明: by
   obtain ⟨_, hx⟩ := hs
   contrapose! h
@@ -508,8 +508,8 @@ lemma exists_le_of_le_expect
   proof: exists_le_of_expect_le_expect hs (by rwa [expect_const hs _])
 
 中文:
-引理 exists_le_of_le_expect
-  条件: (hs : s.Nonempty) (h : a <= 𝔼 i in s, f i)
+引理 存在_le_of_le_expect
+  条件: (hs : s.非空) (h : a <= 𝔼 i in s, f i)
   结论: 存在 x in s, a <= f x
   证明: exists_le_of_expect_le_expect hs (by rwa [expect_const hs _])
 
@@ -528,8 +528,8 @@ lemma exists_le_of_expect_le
   proof: exists_le_of_expect_le_expect hs (by rwa [expect_const hs _])
 
 中文:
-引理 exists_le_of_expect_le
-  条件: (hs : s.Nonempty) (h : 𝔼 i in s, f i <= a)
+引理 存在_le_of_expect_le
+  条件: (hs : s.非空) (h : 𝔼 i in s, f i <= a)
   结论: 存在 x in s, f x <= a
   证明: exists_le_of_expect_le_expect hs (by rwa [expect_const hs _])
 
@@ -554,7 +554,7 @@ lemma abs_expect_le
 
 中文:
 引理 abs_expect_le
-  条件: (s : Finset ι) (f : ι -> α)
+  条件: (s : 有限集 ι) (f : ι -> α)
   结论: |𝔼 i in s, f i| <= 𝔼 i in s, |f i|
   证明: le_expect_of_subadditive abs_zero abs_add_le (fun _ => abs_nnqsmul _)
 
@@ -582,7 +582,7 @@ lemma expect_mul_sq_le_sq_mul_sq
 
 中文:
 引理 expect_mul_sq_le_sq_mul_sq
-  条件: (s : Finset ι) (f g : ι -> R)
+  条件: (s : 有限集 ι) (f g : ι -> R)
   证明: by
   simp only [expect, smul_pow, inv_pow, smul_mul_smul_comm, ← sq]
   gcongr

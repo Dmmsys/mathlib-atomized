@@ -52,7 +52,7 @@ theorem ContinuousLinearMap.hasDerivAtFilter
   proof: e.hasFDerivAtFilter.hasDerivAtFilter
 
 中文:
-定理 ContinuousLinearMap.hasDerivAtFilter
+定理 连续线性映射.hasDerivAtFilter
   结论: HasDerivAtFilter e (e 1) L
   证明: e.hasFDerivAtFilter.hasDerivAtFilter
 -/
@@ -68,7 +68,7 @@ theorem ContinuousLinearMap.hasStrictDerivAt
   proof: e.hasDerivAtFilter
 
 中文:
-定理 ContinuousLinearMap.hasStrictDerivAt
+定理 连续线性映射.hasStrictDerivAt
   结论: HasStrictDerivAt e (e 1) x
   证明: e.hasDerivAtFilter
 -/
@@ -84,8 +84,8 @@ theorem ContinuousLinearMap.hasDerivAt
   proof: e.hasDerivAtFilter
 
 中文:
-定理 ContinuousLinearMap.hasDerivAt
-  结论: HasDerivAt e (e 1) x
+定理 连续线性映射.hasDerivAt
+  结论: 在点处可导 e (e 1) x
   证明: e.hasDerivAtFilter
 -/
 protected theorem ContinuousLinearMap.hasDerivAt : HasDerivAt e (e 1) x :=
@@ -102,7 +102,7 @@ theorem ContinuousLinearMap.hasDerivWithinAt
 @[simp]
 
 中文:
-定理 ContinuousLinearMap.hasDerivWithinAt
+定理 连续线性映射.hasDerivWithinAt
   结论: HasDerivWithinAt e (e 1) s x
   证明: e.hasDerivAtFilter
 
@@ -121,7 +121,7 @@ theorem ContinuousLinearMap.deriv
   proof: e.hasDerivAt.deriv
 
 中文:
-定理 ContinuousLinearMap.deriv
+定理 连续线性映射.deriv
   结论: deriv e x = e 1
   证明: e.hasDerivAt.deriv
 -/
@@ -137,7 +137,7 @@ theorem ContinuousLinearMap.derivWithin
   proof: e.hasDerivWithinAt.derivWithin hxs
 
 中文:
-定理 ContinuousLinearMap.derivWithin
+定理 连续线性映射.derivWithin
   条件: (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: e.hasDerivWithinAt.derivWithin hxs
 -/
@@ -162,7 +162,7 @@ theorem LinearMap.hasDerivAtFilter
   proof: e.toContinuousLinearMap₁.hasDerivAtFilter
 
 中文:
-定理 LinearMap.hasDerivAtFilter
+定理 线性映射.hasDerivAtFilter
   结论: HasDerivAtFilter e (e 1) L
   证明: e.toContinuousLinearMap₁.hasDerivAtFilter
 
@@ -180,7 +180,7 @@ theorem LinearMap.hasStrictDerivAt
   proof: e.hasDerivAtFilter
 
 中文:
-定理 LinearMap.hasStrictDerivAt
+定理 线性映射.hasStrictDerivAt
   结论: HasStrictDerivAt e (e 1) x
   证明: e.hasDerivAtFilter
 -/
@@ -196,8 +196,8 @@ theorem LinearMap.hasDerivAt
   proof: e.hasDerivAtFilter
 
 中文:
-定理 LinearMap.hasDerivAt
-  结论: HasDerivAt e (e 1) x
+定理 线性映射.hasDerivAt
+  结论: 在点处可导 e (e 1) x
   证明: e.hasDerivAtFilter
 -/
 protected theorem LinearMap.hasDerivAt : HasDerivAt e (e 1) x :=
@@ -214,7 +214,7 @@ theorem LinearMap.hasDerivWithinAt
 @[simp]
 
 中文:
-定理 LinearMap.hasDerivWithinAt
+定理 线性映射.hasDerivWithinAt
   结论: HasDerivWithinAt e (e 1) s x
   证明: e.hasDerivAtFilter
 
@@ -233,7 +233,7 @@ theorem LinearMap.deriv
   proof: e.hasDerivAt.deriv
 
 中文:
-定理 LinearMap.deriv
+定理 线性映射.deriv
   结论: deriv e x = e 1
   证明: e.hasDerivAt.deriv
 -/
@@ -249,7 +249,7 @@ theorem LinearMap.derivWithin
   proof: e.hasDerivWithinAt.derivWithin hxs
 
 中文:
-定理 LinearMap.derivWithin
+定理 线性映射.derivWithin
   条件: (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: e.hasDerivWithinAt.derivWithin hxs
 -/

@@ -60,7 +60,7 @@ theorem exists_isNilpotent_isSemisimple_of_separable_of_dvd_pow
     obtain ⟨a, b, h⟩ : IsCopr
 
 中文:
-定理 exists_isNilpotent_isSemisimple_of_separable_of_dvd_pow
+定理 存在_isNilpotent_isSemisimple_of_separable_of_dvd_pow
   结论: {P : K[X]} {k : 自然数}
   证明: by
   set ff : adjoin K {f} := ⟨f, self_mem_adjoin_singleton K f⟩
@@ -114,8 +114,8 @@ theorem exists_isNilpotent_isSemisimple
   exact exists_isNilpotent_isSemisimple_of_separable_of_dvd_pow sep nil
 
 中文:
-定理 exists_isNilpotent_isSemisimple
-  条件: [PerfectField K]
+定理 存在_isNilpotent_isSemisimple
+  条件: [完美域 K]
   证明: by
   obtain ⟨g, k, sep, -, nil⟩ := exists_squarefree_dvd_pow_of_ne_zero (minpoly.ne_zero_of_finite K f)
   rw [← PerfectField.separable_iff_squarefree] at sep
@@ -143,7 +143,7 @@ theorem isNilpotent_isSemisimple_unique
 
 中文:
 定理 isNilpotent_isSemisimple_unique
-  结论: [PerfectField K]
+  结论: [完美域 K]
   证明: by
   obtain ⟨n₀, hn₀, s₀, hs₀, hn₀_nil, hs₀_ss, h₀⟩ := (n₁ + s₁).exists_isNilpotent_isSemisimple
   suffices forall {n s}, IsNilpotent n -> s.IsSemisimple -> Commute n s -> n₁ + s₁ = n + s -> s = s₀ by grind

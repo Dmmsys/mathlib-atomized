@@ -37,9 +37,9 @@ structure AlgHom
     - commutes' : forall r : R, toFun (algebraMap R A r) = algebraMap R B r
 
 中文:
-结构 AlgHom
-  参数: (R : 类型u) (A : 类型v) (B : Type w) [CommSemiring R] [Semiring A] [Semiring B]
-  继承: RingHom A B
+结构 代数态射
+  参数: (R : 类型u) (A : 类型v) (B : 类型 w) [交换半环 R] [半环 A] [半环 B]
+  继承: 环态射 A B
   公理与运算 (1 个):
     - commutes' : 对任意 r : R, toFun (algebraMap R A r) = algebraMap R B r
 -/
@@ -67,9 +67,9 @@ class AlgHomClass
     - commutes : forall (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
 
 中文:
-类 AlgHomClass
+类 代数态射类
   参数: (F : 类型) (R A B : outParam 类型)
-  继承: RingHomClass F A B
+  继承: 环态射类 F A B
   公理与运算 (1 个):
     - commutes : 对任意 (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
 -/
@@ -109,7 +109,7 @@ definition toAlgHom
 
 中文:
 定义 toAlgHom
-  签名: {F : 类型} [FunLike F A B] [AlgHomClass F R A B] (f : F)
+  签名: {F : 类型} [函数状 F A B] [代数态射类 F R A B] (f : F)
   定义体: (f : A ->+* B)
   toFun := f
   commutes' := AlgHomClass.commutes f
@@ -144,7 +144,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (A ->ₐ[R] B) A B where
+  签名: : 函数状 (A ->ₐ[R] B) A B where
   定义体: f.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨⟨⟨_, _⟩, _⟩, _, _⟩, _⟩
@@ -174,7 +174,7 @@ instance algHomClass
 
 中文:
 实例 algHomClass
-  签名: : AlgHomClass (A ->ₐ[R] B) R A B where
+  签名: : 代数态射类 (A ->ₐ[R] B) R A B where
   定义体: f.map_add'
   map_zero f := f.map_zero'
   map_mul f := f.map_mul'
@@ -199,8 +199,8 @@ lemma _root_.AlgHomClass.toLinearMap_toAlgHom
   proof: rfl
 
 中文:
-引理 _root_.AlgHomClass.toLinearMap_toAlgHom
-  结论: {R A B F : 类型} [CommSemiring R]
+引理 _root_.代数态射类.toLinearMap_toAlgHom
+  结论: {R A B F : 类型} [交换半环 R]
   证明: rfl
 -/
 @[simp] lemma _root_.AlgHomClass.toLinearMap_toAlgHom {R A B F : Type*} [CommSemiring R]
@@ -221,7 +221,7 @@ initialize_simps_projections AlgHom (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: {R : 类型u} {α : 类型v} {β : Type w} [CommSemiring R]
+  签名: {R : 类型u} {α : 类型v} {β : 类型 w} [交换半环 R]
   定义体: f
 
 initialize_simps_projections AlgHom (toFun -> apply)
@@ -246,7 +246,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [FunLike F A B] [AlgHomClass F R A B] (f : F)
+  条件: {F : 类型} [函数状 F A B] [代数态射类 F R A B] (f : F)
   证明: rfl
 
 @[simp]
@@ -560,7 +560,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: @Function.Injective (A ->ₐ[R] B) (A -> B) (↑)
+  结论: @函数.单射 (A ->ₐ[R] B) (A -> B) (↑)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -599,7 +599,7 @@ coe_fn_injective show ((φ₁ : A ->+* B) : A -> B) = ((φ₂ : A ->+* B) : A ->
 
 中文:
 定理 coe_ringHom_injective
-  结论: Function.Injective ((↑) : (A ->ₐ[R] B) -> A ->+* B)
+  结论: 函数.单射 ((↑) : (A ->ₐ[R] B) -> A ->+* B)
   证明: fun φ₁ φ₂ H =>
 coe_fn_injective show ((φ₁ : A ->+* B) : A -> B) = ((φ₂ : A ->+* B) : A -> B) from congr_arg _ H
 -/
@@ -616,7 +616,7 @@ theorem coe_monoidHom_injective
 
 中文:
 定理 coe_monoidHom_injective
-  结论: Function.Injective ((↑) : (A ->ₐ[R] B) -> A ->* B)
+  结论: 函数.单射 ((↑) : (A ->ₐ[R] B) -> A ->* B)
   证明: RingHom.coe_monoidHom_injective.comp coe_ringHom_injective
 
 Depends on / 依赖: RingHom, RingHom.coe_monoidHom_injective.comp, coe_monoidHom_injective, coe_ringHom_injective
@@ -634,7 +634,7 @@ theorem coe_addMonoidHom_injective
 
 中文:
 定理 coe_addMonoidHom_injective
-  结论: Function.Injective ((↑) : (A ->ₐ[R] B) -> A ->+ B)
+  结论: 函数.单射 ((↑) : (A ->ₐ[R] B) -> A ->+ B)
   证明: RingHom.coe_addMonoidHom_injective.comp coe_ringHom_injective
 
 Depends on / 依赖: RingHom, RingHom.coe_addMonoidHom_injective.comp, coe_addMonoidHom_injective, coe_ringHom_injective
@@ -740,7 +740,7 @@ lemma addHomMk_coe
 中文:
 引理 addHomMk_coe
   条件: (f : A ->ₐ[R] B)
-  结论: AddHom.mk f (map_add f) = f
+  结论: 加法半群态射.mk f (map_add f) = f
   证明: rfl
 
 @[simp]
@@ -870,7 +870,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(AlgHom.id R A) = id
+  结论: ⇑(代数态射.id R A) = id
   证明: rfl
 
 @[simp]
@@ -889,7 +889,7 @@ theorem id_toRingHom
 
 中文:
 定理 id_toRingHom
-  结论: (AlgHom.id R A : A ->+* A) = RingHom.id _
+  结论: (代数态射.id R A : A ->+* A) = 环态射.id _
   证明: rfl
 -/
 theorem id_toRingHom : (AlgHom.id R A : A ->+* A) = RingHom.id _ :=
@@ -909,7 +909,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (p : A)
-  结论: AlgHom.id R A p = p
+  结论: 代数态射.id R A p = p
   证明: rfl
 -/
 theorem id_apply (p : A) : AlgHom.id R A p = p :=
@@ -1011,7 +1011,7 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  结论: φ.comp (AlgHom.id R A) = φ
+  结论: φ.comp (代数态射.id R A) = φ
   证明: rfl
 
 @[simp]
@@ -1030,7 +1030,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  结论: (AlgHom.id R B).comp φ = φ
+  结论: (代数态射.id R B).comp φ = φ
   证明: rfl
 -/
 theorem id_comp : (AlgHom.id R B).comp φ = φ :=
@@ -1175,7 +1175,7 @@ theorem toLinearMap_id
 
 中文:
 定理 toLinearMap_id
-  结论: toLinearMap (AlgHom.id R A) = LinearMap.id
+  结论: toLinearMap (代数态射.id R A) = 线性映射.id
   证明: rfl
 -/
 theorem toLinearMap_id : toLinearMap (AlgHom.id R A) = LinearMap.id :=
@@ -1193,7 +1193,7 @@ lemma linearMapMk_toAddHom
 中文:
 引理 linearMapMk_toAddHom
   条件: (f : A ->ₐ[R] B)
-  结论: LinearMap.mk f (map_smul f) = f.toLinearMap
+  结论: 线性映射.mk f (map_smul f) = f.toLinearMap
   证明: rfl
 -/
 @[simp] lemma linearMapMk_toAddHom (f : A ->ₐ[R] B) : LinearMap.mk f (map_smul f) = f.toLinearMap :=
@@ -1310,7 +1310,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A B R' R] (r : R')
+  结论: {R'} [标量乘法 R' A] [标量乘法 R' B] [线性映射.余mpatibleSMul A B R' R] (r : R')
   证明: φ.toLinearMap.map_smul_of_tower r x
 
 @[simps -isSimp toSemigroup_toMul_mul toOne_one]
@@ -1338,7 +1338,7 @@ instance End
 
 中文:
 实例 End
-  签名: : Monoid (A ->ₐ[R] A) where
+  签名: : 幺半群 (A ->ₐ[R] A) where
   定义体: comp
   mul_assoc _ _ _ := rfl
   one := AlgHom.id R A
@@ -1443,7 +1443,7 @@ lemma cancel_right
 
 中文:
 引理 cancel_right
-  条件: {g₁ g₂ : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hf : Function.Surjective f)
+  条件: {g₁ g₂ : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hf : 函数.满射 f)
   证明: ⟨fun h => AlgHom.ext hf.forall.2 (AlgHom.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 Depends on / 依赖: AlgHom, AlgHom.ext, AlgHom.ext_iff, ext_iff, hf.forall
@@ -1462,7 +1462,7 @@ lemma cancel_left
 
 中文:
 引理 cancel_left
-  条件: {g₁ g₂ : A ->ₐ[R] B} {f : B ->ₐ[R] C} (hf : Function.Injective f)
+  条件: {g₁ g₂ : A ->ₐ[R] B} {f : B ->ₐ[R] C} (hf : 函数.单射 f)
   证明: ⟨fun h => AlgHom.ext fun _ => hf.eq_iff.mp AlgHom.ext_iff.mp h _, fun h => h ▸ rfl⟩
 
 Depends on / 依赖: AlgHom, AlgHom.ext, AlgHom.ext_iff.mp, eq_iff, ext_iff, hf.eq_iff.mp
@@ -1483,7 +1483,7 @@ definition toEnd
 
 中文:
 定义 toEnd
-  签名: : (A ->ₐ[R] A) ->* Module.End R A where
+  签名: : (A ->ₐ[R] A) ->* 模.End R A where
   定义体: toLinearMap
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -1602,7 +1602,7 @@ lemma toRingHom_toAlgHom
 
 中文:
 引理 toRingHom_toAlgHom
-  结论: {R A B : 类型} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A]
+  结论: {R A B : 类型} [交换半环 R] [半环 A] [半环 B] [代数 R A]
   证明: rfl
 -/
 lemma toRingHom_toAlgHom {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A]
@@ -1628,8 +1628,8 @@ definition toNatAlgHom
 @[simp]
 
 中文:
-定义 toNatAlgHom
-  签名: [Semiring R] [Semiring S] (f : R ->+* S)
+定义 to自然数AlgHom
+  签名: [半环 R] [半环 S] (f : R ->+* S)
   定义体: { f with
     toFun := f
     commutes' := fun n => by simp }
@@ -1653,8 +1653,8 @@ lemma toNatAlgHom_coe
   proof: rfl
 
 中文:
-引理 toNatAlgHom_coe
-  条件: [Semiring R] [Semiring S] (f : R ->+* S)
+引理 to自然数AlgHom_coe
+  条件: [半环 R] [半环 S] (f : R ->+* S)
   证明: rfl
 -/
 lemma toNatAlgHom_coe [Semiring R] [Semiring S] (f : R ->+* S) :
@@ -1669,8 +1669,8 @@ lemma toNatAlgHom_apply
   proof: rfl
 
 中文:
-引理 toNatAlgHom_apply
-  条件: [Semiring R] [Semiring S] (f : R ->+* S) (x : R)
+引理 to自然数AlgHom_apply
+  条件: [半环 R] [半环 S] (f : R ->+* S) (x : R)
   证明: rfl
 -/
 lemma toNatAlgHom_apply [Semiring R] [Semiring S] (f : R ->+* S) (x : R) :
@@ -1689,8 +1689,8 @@ definition equivNatAlgHom
   invFun := AlgHom.toRingHom
 
 中文:
-定义 equivNatAlgHom
-  签名: [Semiring R] [Semiring S]
+定义 equiv自然数AlgHom
+  签名: [半环 R] [半环 S]
   定义体: RingHom.toNatAlgHom
   invFun := AlgHom.toRingHom
 
@@ -1711,8 +1711,8 @@ definition toIntAlgHom
 @[simp]
 
 中文:
-定义 toIntAlgHom
-  签名: [Ring R] [Ring S] (f : R ->+* S)
+定义 to整数AlgHom
+  签名: [环 R] [环 S] (f : R ->+* S)
   定义体: { f with commutes' := fun n => by simp }
 
 @[simp]
@@ -1732,8 +1732,8 @@ lemma toIntAlgHom_coe
   proof: rfl
 
 中文:
-引理 toIntAlgHom_coe
-  条件: [Ring R] [Ring S] (f : R ->+* S)
+引理 to整数AlgHom_coe
+  条件: [环 R] [环 S] (f : R ->+* S)
   证明: rfl
 -/
 lemma toIntAlgHom_coe [Ring R] [Ring S] (f : R ->+* S) :
@@ -1748,8 +1748,8 @@ lemma toIntAlgHom_apply
   proof: rfl
 
 中文:
-引理 toIntAlgHom_apply
-  条件: [Ring R] [Ring S] (f : R ->+* S) (x : R)
+引理 to整数AlgHom_apply
+  条件: [环 R] [环 S] (f : R ->+* S) (x : R)
   证明: rfl
 -/
 lemma toIntAlgHom_apply [Ring R] [Ring S] (f : R ->+* S) (x : R) :
@@ -1764,8 +1764,8 @@ lemma toIntAlgHom_injective
   proof: fun _ _ e => DFunLike.ext _ _ (fun x => DFunLike.congr_fun e x)
 
 中文:
-引理 toIntAlgHom_injective
-  条件: [Ring R] [Ring S]
+引理 to整数AlgHom_injective
+  条件: [环 R] [环 S]
   证明: fun _ _ e => DFunLike.ext _ _ (fun x => DFunLike.congr_fun e x)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext, congr_fun
@@ -1787,8 +1787,8 @@ definition equivIntAlgHom
   invFun := AlgHom.toRingHom
 
 中文:
-定义 equivIntAlgHom
-  签名: [Ring R] [Ring S]
+定义 equiv整数AlgHom
+  签名: [环 R] [环 S]
   定义体: RingHom.toIntAlgHom
   invFun := AlgHom.toRingHom
 
@@ -1888,7 +1888,7 @@ instance subsingleton_id
 
 中文:
 实例 subsingleton_id
-  签名: : Subsingleton (R ->ₐ[R] A)
+  签名: : 子单例 (R ->ₐ[R] A)
   定义体: ⟨fun f g => AlgHom.ext fun _ => (f.commutes _).trans (g.commutes _).symm⟩
 
 Depends on / 依赖: AlgHom, AlgHom.ext, commutes, f.commutes, g.commutes
@@ -1934,7 +1934,7 @@ theorem comp_ofId
 中文:
 定理 comp_ofId
   条件: (φ : A ->ₐ[R] B)
-  结论: φ.comp (Algebra.ofId R A) = Algebra.ofId R B
+  结论: φ.comp (代数.ofId R A) = 代数.ofId R B
   证明: by ext
 -/
 theorem comp_ofId (φ : A ->ₐ[R] B) : φ.comp (Algebra.ofId R A) = Algebra.ofId R B := by ext
@@ -1957,7 +1957,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (A ->ₐ[R] A) Aˣ
+  签名: MulDistribMul作用 (A ->ₐ[R] A) Aˣ
   定义体: Units.map f
   one_smul _ := by ext; rfl
   mul_smul _ _ _ := by ext; rfl
@@ -2117,7 +2117,7 @@ theorem toAlgHom_injective
 
 中文:
 定理 toAlgHom_injective
-  条件: [FaithfulSMul M A]
+  条件: [忠实标量乘法 M A]
   证明: fun _m₁ _m₂ h =>
   eq_of_smul_eq_smul fun r => AlgHom.ext_iff.1 h r
 
@@ -2147,7 +2147,7 @@ instance uniqueOfRight
 
 中文:
 实例 uniqueOfRight
-  签名: : Unique (S ->ₐ[R] T) where
+  签名: : 唯一 (S ->ₐ[R] T) where
   定义体: AlgHom.ofLinearMap default (Subsingleton.elim _ _) (fun _ _ => (Subsingleton.elim _ _))
   uniq _ := AlgHom.ext fun _ => Subsingleton.elim _ _
 
@@ -2170,7 +2170,7 @@ lemma AlgHom.default_apply
   proof: rfl
 
 中文:
-引理 AlgHom.default_apply
+引理 代数态射.default_apply
   条件: (x : S)
   结论: (default : S ->ₐ[R] T) x = 0
   证明: rfl

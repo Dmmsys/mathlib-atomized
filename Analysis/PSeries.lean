@@ -661,7 +661,7 @@ theorem summable_condensed_iff_of_eventually_nonneg
 
 中文:
 定理 summable_condensed_iff_of_eventually_nonneg
-  结论: {f : 自然数 -> 实数} (h_nonneg : 0 <=ᶠ[Filter.atTop] f)
+  结论: {f : 自然数 -> 实数} (h_nonneg : 0 <=ᶠ[滤子.atTop] f)
   证明: by
   rw [Filter.EventuallyLE]; rw [Filter.eventually_atTop] at h_nonneg
   rw [Filter.eventually_atTop] at h_mono
@@ -1134,7 +1134,7 @@ theorem sum_Ioo_inv_sq_le
 中文:
 定理 sum_Ioo_inv_sq_le
   条件: (k n : 自然数)
-  结论: (∑ i in Ioo k n, (i ^ 2 : α)⁻¹) <= 2 / (k + 1)
+  结论: (∑ i in 开区间 k n, (i ^ 2 : α)⁻¹) <= 2 / (k + 1)
   证明: calc
     (∑ i in Ioo k n, ((i : α) ^ 2)⁻¹) <= ∑ i in Ioc k (max (k + 1) n), ((i : α) ^ 2)⁻¹ := by
       apply sum_le_sum_of_subset_of_nonneg
@@ -1187,7 +1187,7 @@ lemma Real.not_summable_indicator_one_div_natCast
       if (n : ZMod m) = k - 1 then (1 / (n + 1) : Rea
 
 中文:
-引理 Real.not_summable_indicator_one_div_natCast
+引理 实数.not_summable_indicator_one_div_natCast
   条件: {m : 自然数} (hm : m != 0) (k : ZMod m)
   证明: by
   have : NeZero m := ⟨hm⟩ -- instance is needed below
@@ -1229,7 +1229,7 @@ lemma Real.summable_one_div_nat_add_rpow
     · filter_upwards [eventually_gt_atTop 
 
 中文:
-引理 Real.summable_one_div_nat_add_rpow
+引理 实数.summable_one_div_nat_add_rpow
   条件: (a : 实数) (s : 实数)
   证明: by
   have hnorm : Tendsto (fun n : Nat => ‖(n : Real)‖) atTop atTop :=
@@ -1263,7 +1263,7 @@ lemma Real.summable_one_div_int_add_rpow
     Int.cast_neg, neg_neg, Int.cast_natCast, summable_one_div_nat_add_rpow, and_self]
 
 中文:
-引理 Real.summable_one_div_int_add_rpow
+引理 实数.summable_one_div_int_add_rpow
   条件: (a : 实数) (s : 实数)
   证明: by
   simp_rw [summable_int_iff_summable_nat_and_neg, ← abs_neg (↑(-_ : Int) + a), neg_add,

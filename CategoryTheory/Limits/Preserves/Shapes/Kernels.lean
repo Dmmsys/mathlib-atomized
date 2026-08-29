@@ -70,7 +70,7 @@ definition map
 
 中文:
 定义 map
-  签名: : KernelFork (G.map f)
+  签名: : 核叉 (G.map f)
   定义体: KernelFork.ofι (G.map c.ι) (c.map_condition G)
 
 @[simp]
@@ -134,7 +134,7 @@ definition mapIsLimit
 
 中文:
 定义 mapIsLimit
-  签名: (hc : IsLimit c) (G : C ⥤ D)
+  签名: (hc : 是极限 c) (G : C ⥤ D)
   定义体: c.isLimitMapConeEquiv G (isLimitOfPreserves G hc)
 
 Depends on / 依赖: c.isLimitMapConeEquiv, isLimitMapConeEquiv, isLimitOfPreserves
@@ -183,7 +183,7 @@ definition isLimitForkMapOfIsLimit'
 
 中文:
 定义 isLimitForkMapOfIsLimit'
-  签名: [PreservesLimit (parallelPair f 0) G]
+  签名: [保持极限 (parallelPair f 0) G]
   定义体: isLimitMapConeForkEquiv' G w (isLimitOfPreserves G l)
 
 Depends on / 依赖: isLimitMapConeForkEquiv, isLimitOfPreserves
@@ -208,7 +208,7 @@ definition isLimitOfHasKernelOfPreservesLimit
 
 中文:
 定义 isLimitOfHasKernelOfPreservesLimit
-  签名: [PreservesLimit (parallelPair f 0) G]
+  签名: [保持极限 (parallelPair f 0) G]
   定义体: isLimitForkMapOfIsLimit' G (kernel.condition f) (kernelIsKernel f)
 
 Depends on / 依赖: condition, isLimitForkMapOfIsLimit, kernel, kernel.condition, kernelIsKernel
@@ -229,7 +229,7 @@ instance [PreservesLimit
   body: ⟨⟨_, isLimitOfHasKernelOfPreservesLimit G f⟩⟩
 
 中文:
-实例 [PreservesLimit
+实例 [保持极限
   签名: (parallelPair f 0) G] : HasKernel (G.map f) where
   定义体: ⟨⟨_, isLimitOfHasKernelOfPreservesLimit G f⟩⟩
 
@@ -253,7 +253,7 @@ lemma PreservesKernel.of_iso_comparison
 
 中文:
 引理 PreservesKernel.of_iso_comparison
-  条件: [i : IsIso (kernelComparison f G)]
+  条件: [i : 是同构 (kernelComparison f G)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone (kernelIsKernel f)
   apply (isLimitMapConeForkEquiv' G (kernel.condition f)).symm _
@@ -351,7 +351,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (kernelComparison f G)
+  签名: 是同构 (kernelComparison f G)
   定义体: by
   rw [← PreservesKernel.iso_hom]
   infer_instance
@@ -430,7 +430,7 @@ definition map
 
 中文:
 定义 map
-  签名: : CokernelCofork (G.map f)
+  签名: : 余核余叉 (G.map f)
   定义体: CokernelCofork.ofπ (G.map c.π) (c.map_condition G)
 
 @[simp]
@@ -494,7 +494,7 @@ definition mapIsColimit
 
 中文:
 定义 mapIsColimit
-  签名: (hc : IsColimit c) (G : C ⥤ D)
+  签名: (hc : 是余极限 c) (G : C ⥤ D)
   定义体: c.isColimitMapCoconeEquiv G (isColimitOfPreserves G hc)
 
 Depends on / 依赖: c.isColimitMapCoconeEquiv, isColimitMapCoconeEquiv, isColimitOfPreserves
@@ -543,7 +543,7 @@ definition isColimitCoforkMapOfIsColimit'
 
 中文:
 定义 isColimitCoforkMapOfIsColimit'
-  签名: [PreservesColimit (parallelPair f 0) G]
+  签名: [保持余极限 (parallelPair f 0) G]
   定义体: isColimitMapCoconeCoforkEquiv' G w (isColimitOfPreserves G l)
 
 Depends on / 依赖: isColimitMapCoconeCoforkEquiv, isColimitOfPreserves
@@ -568,7 +568,7 @@ definition isColimitOfHasCokernelOfPreservesColimit
 
 中文:
 定义 isColimitOfHasCokernelOfPreservesColimit
-  签名: [PreservesColimit (parallelPair f 0) G]
+  签名: [保持余极限 (parallelPair f 0) G]
   定义体: isColimitCoforkMapOfIsColimit' G (cokernel.condition f) (cokernelIsCokernel f)
 
 Depends on / 依赖: cokernel, cokernel.condition, cokernelIsCokernel, condition, isColimitCoforkMapOfIsColimit
@@ -589,7 +589,7 @@ instance [PreservesColimit
   body: ⟨⟨_, isColimitOfHasCokernelOfPreservesColimit G f⟩⟩
 
 中文:
-实例 [PreservesColimit
+实例 [保持余极限
   签名: (parallelPair f 0) G] : HasCokernel (G.map f) where
   定义体: ⟨⟨_, isColimitOfHasCokernelOfPreservesColimit G f⟩⟩
 
@@ -613,7 +613,7 @@ lemma PreservesCokernel.of_iso_comparison
 
 中文:
 引理 PreservesCokernel.of_iso_comparison
-  条件: [i : IsIso (cokernelComparison f G)]
+  条件: [i : 是同构 (cokernelComparison f G)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f)
   apply (isColimitMapCoconeCoforkEquiv' G (cokernel.condition f)).symm _
@@ -715,7 +715,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (cokernelComparison f G)
+  签名: 是同构 (cokernelComparison f G)
   定义体: by
   rw [← PreservesCokernel.iso_inv]
   infer_instance

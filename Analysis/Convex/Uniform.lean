@@ -48,8 +48,8 @@ class UniformConvexSpace
     - uniform_convex : forall ⦃ε : Real⦄, 0 < ε -> exists δ, 0 < δ ∧ forall ⦃x : E⦄, ‖x‖ = 1 -> forall ⦃y⦄, ‖y‖ = 1 -> ε <= ‖x - y‖ -> ‖x + y‖ <= 2 - δ
 
 中文:
-类 UniformConvexSpace
-  参数: (E : 类型) [SeminormedAddCommGroup E]
+类 UniformConvex空间
+  参数: (E : 类型) [SeminormedAddComm群 E]
   公理与运算 (1 个):
     - uniform_convex : 对任意 ⦃ε : 实数⦄, 0 < ε -> 存在 δ, 0 < δ ∧ 对任意 ⦃x : E⦄, ‖x‖ = 1 -> 对任意 ⦃y⦄, ‖y‖ = 1 -> ε <= ‖x - y‖ -> ‖x + y‖ <= 2 - δ
 
@@ -74,7 +74,7 @@ theorem exists_forall_sphere_dist_add_le_two_sub
   proof: UniformConvexSpace.uniform_convex hε
 
 中文:
-定理 exists_forall_sphere_dist_add_le_two_sub
+定理 存在_对任意_sphere_dist_add_le_two_sub
   条件: (hε : 0 < ε)
   证明: UniformConvexSpace.uniform_convex hε
 
@@ -100,7 +100,7 @@ refine ⟨δ', lt_min one_half_pos lt_min hε' (div_pos hδ zero_lt_three), fun 
   obtain hx' | hx' := le_or_gt ‖x
 
 中文:
-定理 exists_forall_closed_ball_dist_add_le_two_sub
+定理 存在_对任意_closed_ball_dist_add_le_two_sub
   条件: (hε : 0 < ε)
   证明: by
   have hε' : 0 < ε / 3 := div_pos hε zero_lt_three
@@ -172,7 +172,7 @@ h.trans (norm_sub_le _ _).trans add_nonpos (hx.trans hr) (hy.trans hr)).elim⟩
   refine ⟨δ * r, mul_pos hδ hr, fun x hx y 
 
 中文:
-定理 exists_forall_closed_ball_dist_add_le_two_mul_sub
+定理 存在_对任意_closed_ball_dist_add_le_two_mul_sub
   条件: (hε : 0 < ε) (r : 实数)
   证明: by
   obtain hr | hr := le_or_gt r 0

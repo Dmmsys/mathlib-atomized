@@ -27,7 +27,7 @@ theorem RingConGen.Rel.star
   statement: (hr : forall a b, r a b -> r (star a) (star b))
 
 中文:
-定理 RingConGen.Rel.star
+定理 RingConGen.关系.star
   结论: (hr : 对任意 a b, r a b -> r (star a) (star b))
 -/
 theorem RingConGen.Rel.star (hr : forall a b, r a b -> r (star a) (star b))

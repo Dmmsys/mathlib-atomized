@@ -59,11 +59,11 @@ class HasSheafify
     - isLeftExact : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
 
 中文:
-类 HasSheafify
+类 有Sheafify
   参数: : 命题 where
   公理与运算 (2 个):
     - isRightAdjoint : HasWeakSheafify J A
-    - isLeftExact : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
+    - isLeftExact : 保持FiniteLimits ((sheafToPresheaf J A).leftAdjoint)
 
 Depends on / 依赖: _apply, _eq_zero_iff_forall_adj, hA.reachable, reachable
 -/
@@ -82,7 +82,7 @@ instance [HasSheafify
 noncomputable section
 
 中文:
-实例 [HasSheafify
+实例 [有Sheafify
   签名: J A] : HasWeakSheafify J A
   定义体: HasSheafify.isRightAdjoint
 
@@ -103,8 +103,8 @@ instance [HasSheafify
   body: HasSheafify.isLeftExact
 
 中文:
-实例 [HasSheafify
-  签名: J A] : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
+实例 [有Sheafify
+  签名: J A] : 保持FiniteLimits ((sheafToPresheaf J A).leftAdjoint)
   定义体: HasSheafify.isLeftExact
 
 Depends on / 依赖: HasSheafify, HasSheafify.isLeftExact, isLeftExact
@@ -125,8 +125,8 @@ theorem HasSheafify.mk'
       (adj.leftAdjointUniq (Adjunction.ofIsRightAdjoint (sheafToPresheaf J A)))⟩
 
 中文:
-定理 HasSheafify.mk'
-  结论: {F : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A} (adj : F ⊣ sheafToPresheaf J A)
+定理 有Sheafify.mk'
+  结论: {F : (Cᵒᵖ ⥤ A) ⥤ 层 J A} (adj : F ⊣ sheafToPresheaf J A)
   证明: ⟨F, ⟨adj⟩⟩
   isLeftExact := ⟨by
     have : (sheafToPresheaf J A).IsRightAdjoint := ⟨_, ⟨adj⟩⟩
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSheafify (⊥ : GrothendieckTopology C) A
+  签名: 有Sheafify (⊥ : Grothendieck拓扑 C) A
   定义体: HasSheafify.mk' _ _
     (sheafBotEquivalence A).symm.toAdjunction
 
@@ -192,8 +192,8 @@ instance [HasSheafify
   body: HasSheafify.isLeftExact
 
 中文:
-实例 [HasSheafify
-  签名: J A] : PreservesFiniteLimits (presheafToSheaf J A)
+实例 [有Sheafify
+  签名: J A] : 保持FiniteLimits (presheafToSheaf J A)
   定义体: HasSheafify.isLeftExact
 
 Depends on / 依赖: HasSheafify, HasSheafify.isLeftExact, isLeftExact
@@ -229,7 +229,7 @@ instance [HasWeakSheafify
 
 中文:
 实例 [HasWeakSheafify
-  签名: J A] : (presheafToSheaf J A).IsLeftAdjoint
+  签名: J A] : (presheafToSheaf J A).是左伴随
   定义体: ⟨_, ⟨sheafificationAdjunction J A⟩⟩
 
 Depends on / 依赖: sheafificationAdjunction
@@ -248,7 +248,7 @@ instance [HasWeakSheafify
 
 中文:
 实例 [HasWeakSheafify
-  签名: J A] : Reflective (sheafToPresheaf J A) where
+  签名: J A] : 反射 (sheafToPresheaf J A) where
   定义体: presheafToSheaf J A
   adj := sheafificationAdjunction _ _
 
@@ -267,8 +267,8 @@ instance [HasSheafify
   body: inferInstanceAs (PreservesFiniteLimits (presheafToSheaf _ _))
 
 中文:
-实例 [HasSheafify
-  签名: J A] : PreservesFiniteLimits (reflector (sheafToPresheaf J A))
+实例 [有Sheafify
+  签名: J A] : 保持FiniteLimits (reflector (sheafToPresheaf J A))
   定义体: inferInstanceAs (PreservesFiniteLimits (presheafToSheaf _ _))
 
 Depends on / 依赖: PreservesFiniteLimits, presheafToSheaf
@@ -543,8 +543,8 @@ theorem isIso_toSheafify
 
 中文:
 定理 isIso_toSheafify
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  结论: IsIso (toSheafify J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
+  结论: 是同构 (toSheafify J P)
   证明: by
   refine ⟨(sheafificationAdjunction J D |>.counit.app ⟨P, hP⟩).hom, ?_, ?_⟩
 .right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
@@ -575,7 +575,7 @@ definition isoSheafify
 
 中文:
 定义 isoSheafify
-  签名: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  签名: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   定义体: letI := isIso_toSheafify J hP
   asIso (toSheafify J P)
 
@@ -598,7 +598,7 @@ theorem isoSheafify_hom
 
 中文:
 定理 isoSheafify_hom
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   证明: rfl
 -/
 theorem isoSheafify_hom {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) :
@@ -615,7 +615,7 @@ definition sheafifyLift
 
 中文:
 定义 sheafifyLift
-  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   定义体: .hom .symm η (sheafificationAdjunction J D).homEquiv P ⟨Q, hQ⟩
 
 Depends on / 依赖: homEquiv, sheafificationAdjunction
@@ -641,7 +641,7 @@ theorem sheafificationAdjunction_counit_app_val
 
 中文:
 定理 sheafificationAdjunction_counit_app_val
-  条件: (P : Sheaf J D)
+  条件: (P : 层 J D)
   证明: by
   unfold sheafifyLift
   rw [Adjunction.homEquiv_counit]
@@ -673,7 +673,7 @@ theorem toSheafify_sheafifyLift
 
 中文:
 定理 toSheafify_sheafifyLift
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   rw [toSheafify]; rw [sheafifyLift]; rw [Adjunction.homEquiv_counit]
   change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
@@ -713,7 +713,7 @@ theorem sheafifyLift_unique
 
 中文:
 定理 sheafifyLift_unique
-  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   intro h
   rw [toSheafify] at h
@@ -750,7 +750,7 @@ theorem isoSheafify_inv
 
 中文:
 定理 isoSheafify_inv
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   证明: by
   apply sheafifyLift_unique
   simp [Iso.comp_inv_eq]
@@ -776,7 +776,7 @@ theorem sheafify_hom_ext
 
 中文:
 定理 sheafify_hom_ext
-  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   rw [sheafifyLift_unique J _ hQ _ h]; rw [← h]
   exact (sheafifyLift_unique J _ hQ _ h.symm).symm
@@ -826,7 +826,7 @@ lemma sheafifyLift_comp
 
 中文:
 引理 sheafifyLift_comp
-  结论: {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : Presheaf.IsSheaf J P)
+  结论: {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : 预层.是层 J P)
   证明: (sheafifyLift_unique _ _ _ _ (by simp)).symm
 
 Depends on / 依赖: sheafifyLift_unique
@@ -857,7 +857,7 @@ definition sheafificationIso
 
 中文:
 定义 sheafificationIso
-  签名: (P : Sheaf J D)
+  签名: (P : 层 J D)
   定义体: ⟨(isoSheafify J P.2).hom⟩
   inv := ⟨(isoSheafify J P.2).inv⟩
   hom_inv_id := by
@@ -889,7 +889,7 @@ instance isIso_sheafificationAdjunction_counit
 
 中文:
 实例 isIso_sheafificationAdjunction_counit
-  签名: (P : Sheaf J D)
+  签名: (P : 层 J D)
   定义体: isIso_of_fully_faithful (sheafToPresheaf J D) _
 
 Depends on / 依赖: isIso_of_fully_faithful, sheafToPresheaf
@@ -912,7 +912,7 @@ instance sheafification_reflective
 
 中文:
 实例 sheafification_reflective
-  签名: : IsIso (sheafificationAdjunction J D).counit
+  签名: : 是同构 (sheafificationAdjunction J D).counit
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
@@ -934,7 +934,7 @@ lemma sheafifyLift_id_toSheafify
 
 中文:
 引理 sheafifyLift_id_toSheafify
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   证明: by
   rw [← cancel_mono ((sheafificationAdjunction J D).counit.app ⟨P]; rw [hP⟩).hom]
   cat_disch
@@ -960,7 +960,7 @@ definition sheafificationNatIso
   body: NatIso.ofComponents (fun P => sheafificationIso P) (by cat_disch)
 
 中文:
-定义 sheafificationNatIso
+定义 sheafification自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun P => sheafificationIso P) (by cat_disch)
 

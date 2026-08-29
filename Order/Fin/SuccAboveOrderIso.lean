@@ -35,8 +35,8 @@ definition Fin.succAboveOrderIso
         obtain rfl | ⟨i, rfl⟩ := Fin.eq_zero
 
 中文:
-定义 Fin.succAboveOrderIso
-  签名: {n : 自然数} (i : Fin (n + 2))
+定义 有限集.succAboveOrderIso
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: Equiv.ofBijective (f := fun a => ⟨Fin.succAboveOrderEmb i a, by simp⟩) (by
       constructor
       · intro a b h

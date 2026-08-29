@@ -49,11 +49,11 @@ structure PresheafedSpace.{u}
     - presheaf : carrier.Presheaf C
 
 中文:
-结构 PresheafedSpace.{u}
+结构 Presheafed空间.{u}
   参数: where
   公理与运算 (2 个):
-    - carrier : TopCat.{u}
-    - presheaf : carrier.Presheaf C
+    - carrier : 顶元素范畴.{u}
+    - presheaf : carrier.预层 C
 -/
 structure PresheafedSpace.{u} where
   carrier : TopCat.{u}
@@ -73,7 +73,7 @@ instance coeCarrier
 
 中文:
 实例 coeCarrier
-  签名: : CoeOut (PresheafedSpace C) TopCat where coe X
+  签名: : CoeOut (Presheafed空间 C) 顶元素范畴 where coe X
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (PresheafedSpace C) 类型
+  签名: CoeSort (Presheafed空间 C) 类型
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -113,7 +113,7 @@ definition const
 
 中文:
 定义 const
-  签名: (X : TopCat) (Z : C)
+  签名: (X : 顶元素范畴) (Z : C)
   定义体: X
   presheaf := (Functor.const _).obj Z
 -/
@@ -130,8 +130,8 @@ instance [Inhabited
   body: ⟨const (TopCat.of PEmpty) default⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (PresheafedSpace C)
+实例 [可居
+  签名: C] : 可居 (Presheafed空间 C)
   定义体: ⟨const (TopCat.of PEmpty) default⟩
 
 Depends on / 依赖: PEmpty, TopCat, TopCat.of
@@ -150,10 +150,10 @@ structure Hom
     - c : Y.presheaf ⟶ base _* X.presheaf
 
 中文:
-结构 Hom
-  参数: (X Y : PresheafedSpace C)
+结构 态射
+  参数: (X Y : Presheafed空间 C)
   公理与运算 (2 个):
-    - base : (X : TopCat) ⟶ (Y : TopCat)
+    - base : (X : 顶元素范畴) ⟶ (Y : 顶元素范畴)
     - c : Y.presheaf ⟶ base _* X.presheaf
 -/
 structure Hom (X Y : PresheafedSpace C) where
@@ -178,8 +178,8 @@ theorem Hom.ext
   rfl
 
 中文:
-定理 Hom.ext
-  结论: {X Y : PresheafedSpace C} (α β : Hom X Y) (w : α.base = β.base)
+定理 态射.ext
+  结论: {X Y : Presheafed空间 C} (α β : 态射 X Y) (w : α.base = β.base)
   证明: by
   rcases α with ⟨base, c⟩
   rcases β with ⟨base', c'⟩
@@ -215,7 +215,7 @@ theorem hext
 
 中文:
 定理 hext
-  条件: {X Y : PresheafedSpace C} (α β : Hom X Y) (w : α.base = β.base) (h : α.c ≍ β.c)
+  条件: {X Y : Presheafed空间 C} (α β : 态射 X Y) (w : α.base = β.base) (h : α.c ≍ β.c)
   证明: by
   cases α
   cases β
@@ -238,7 +238,7 @@ definition id
 
 中文:
 定义 id
-  签名: (X : PresheafedSpace C)
+  签名: (X : Presheafed空间 C)
   定义体: 𝟙 (X : TopCat)
   c := 𝟙 _
 
@@ -258,7 +258,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: (X : PresheafedSpace C)
+  签名: (X : Presheafed空间 C)
   定义体: ⟨id X⟩
 -/
 instance homInhabited (X : PresheafedSpace C) : Inhabited (Hom X X) :=
@@ -275,7 +275,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : PresheafedSpace C} (α : Hom X Y) (β : Hom Y Z)
+  签名: {X Y Z : Presheafed空间 C} (α : 态射 X Y) (β : 态射 Y Z)
   定义体: α.base ≫ β.base
   c := β.c ≫ (Presheaf.pushforward _ β.base).map α.c
 -/
@@ -293,7 +293,7 @@ theorem comp_c
 
 中文:
 定理 comp_c
-  条件: {X Y Z : PresheafedSpace C} (α : Hom X Y) (β : Hom Y Z)
+  条件: {X Y Z : Presheafed空间 C} (α : 态射 X Y) (β : 态射 Y Z)
   证明: rfl
 -/
 theorem comp_c {X Y Z : PresheafedSpace C} (α : Hom X Y) (β : Hom Y Z) :
@@ -319,7 +319,7 @@ instance categoryOfPresheafedSpaces
 
 中文:
 实例 categoryOfPresheafedSpaces
-  签名: : Category (PresheafedSpace C) where
+  签名: : 范畴 (Presheafed空间 C) where
   定义体: Hom
   id := id
   comp := comp
@@ -342,8 +342,8 @@ abbreviation Hom.toPshHom
 @[ext (iff := false)]
 
 中文:
-缩写 Hom.toPshHom
-  签名: {X Y : PresheafedSpace C} (f : Hom X Y)
+缩写 态射.toPshHom
+  签名: {X Y : Presheafed空间 C} (f : 态射 X Y)
   定义体: f
 
 @[ext (iff := false)]
@@ -361,7 +361,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {X Y : PresheafedSpace C} (α β : X ⟶ Y) (w : α.base = β.base)
+  结论: {X Y : Presheafed空间 C} (α β : X ⟶ Y) (w : α.base = β.base)
   证明: Hom.ext α β w h
 
 Depends on / 依赖: Hom.ext
@@ -388,8 +388,8 @@ theorem id_base
 
 中文:
 定理 id_base
-  条件: (X : PresheafedSpace C)
-  结论: (𝟙 X : X ⟶ X).base = 𝟙 (X : TopCat)
+  条件: (X : Presheafed空间 C)
+  结论: (𝟙 X : X ⟶ X).base = 𝟙 (X : 顶元素范畴)
   证明: rfl
 -/
 theorem id_base (X : PresheafedSpace C) : (𝟙 X : X ⟶ X).base = 𝟙 (X : TopCat) :=
@@ -405,7 +405,7 @@ theorem id_c
 
 中文:
 定理 id_c
-  条件: (X : PresheafedSpace C)
+  条件: (X : Presheafed空间 C)
   证明: rfl
 -/
 theorem id_c (X : PresheafedSpace C) :
@@ -428,7 +428,7 @@ theorem id_c_app
 
 中文:
 定理 id_c_app
-  条件: (X : PresheafedSpace C) (U)
+  条件: (X : Presheafed空间 C) (U)
   证明: by
   rw [id_c]; rw [map_id]
   rfl
@@ -453,7 +453,7 @@ theorem comp_base
 
 中文:
 定理 comp_base
-  条件: {X Y Z : PresheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : Presheafed空间 C} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem comp_base {X Y Z : PresheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -487,7 +487,7 @@ theorem comp_c_app
 
 中文:
 定理 comp_c_app
-  条件: {X Y Z : PresheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
+  条件: {X Y Z : Presheafed空间 C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
   证明: rfl
 -/
 theorem comp_c_app {X Y Z : PresheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) :
@@ -508,7 +508,7 @@ theorem congr_app
 
 中文:
 定理 congr_app
-  条件: {X Y : PresheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U)
+  条件: {X Y : Presheafed空间 C} {α β : X ⟶ Y} (h : α = β) (U)
   证明: by
   subst h
   simp
@@ -535,7 +535,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : PresheafedSpace C ⥤ TopCat where
+  签名: : Presheafed空间 C ⥤ 顶元素范畴 where
   定义体: (X : TopCat)
   map f := f.base
 
@@ -681,7 +681,7 @@ instance base_isIso_of_iso
 
 中文:
 实例 base_isIso_of_iso
-  签名: (f : X ⟶ Y) [IsIso f]
+  签名: (f : X ⟶ Y) [是同构 f]
   定义体: ((forget _).mapIso (asIso f)).isIso_hom
 
 Depends on / 依赖: forget, isIso_hom, mapIso
@@ -699,7 +699,7 @@ instance c_isIso_of_iso
 
 中文:
 实例 c_isIso_of_iso
-  签名: (f : X ⟶ Y) [IsIso f]
+  签名: (f : X ⟶ Y) [是同构 f]
   定义体: (sheafIsoOfIso (asIso f)).isIso_hom
 
 Depends on / 依赖: isIso_hom, sheafIsoOfIso
@@ -718,8 +718,8 @@ theorem isIso_of_components
 
 中文:
 定理 isIso_of_components
-  条件: (f : X ⟶ Y) [IsIso f.base] [IsIso f.c]
-  结论: IsIso f
+  条件: (f : X ⟶ Y) [是同构 f.base] [是同构 f.c]
+  结论: 是同构 f
   证明: (isoOfComponents (asIso f.base) (asIso f.c).symm).isIso_hom
 
 Depends on / 依赖: f.base, isIso_hom, isoOfComponents
@@ -745,7 +745,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {U : TopCat} (X : PresheafedSpace C) {f : U ⟶ (X : TopCat)}
+  签名: {U : 顶元素范畴} (X : Presheafed空间 C) {f : U ⟶ (X : 顶元素范畴)}
   定义体: U
   presheaf := h.functor.op ⋙ X.presheaf
 -/
@@ -774,7 +774,7 @@ definition ofRestrict
 
 中文:
 定义 ofRestrict
-  签名: {U : TopCat} (X : PresheafedSpace C) {f : U ⟶ (X : TopCat)}
+  签名: {U : 顶元素范畴} (X : Presheafed空间 C) {f : U ⟶ (X : 顶元素范畴)}
   定义体: f
   c :=
     { app := fun V => X.presheaf.map (h.isOpenMap.adjunction.counit.app V.unop).op
@@ -814,7 +814,7 @@ instance ofRestrict_mono
 
 中文:
 实例 ofRestrict_mono
-  签名: {U : TopCat} (X : PresheafedSpace C) (f : U ⟶ X.1)
+  签名: {U : 顶元素范畴} (X : Presheafed空间 C) (f : U ⟶ X.1)
   定义体: by
   have : Mono f := (TopCat.mono_iff_injective _).mpr hf.injective
   constructor
@@ -870,7 +870,7 @@ theorem restrict_top_presheaf
 
 中文:
 定理 restrict_top_presheaf
-  条件: (X : PresheafedSpace C)
+  条件: (X : Presheafed空间 C)
   证明: by
   dsimp
   rw [Opens.inclusion'_top_functor X.carrier]
@@ -903,7 +903,7 @@ theorem ofRestrict_top_c
 
 中文:
 定理 ofRestrict_top_c
-  条件: (X : PresheafedSpace C)
+  条件: (X : Presheafed空间 C)
   证明: by
   /- another approach would be to prove the left-hand side
        is a natural isomorphism, but I encountered a universe
@@ -942,7 +942,7 @@ definition toRestrictTop
 
 中文:
 定义 toRestrictTop
-  签名: (X : PresheafedSpace C)
+  签名: (X : Presheafed空间 C)
   定义体: (Opens.inclusionTopIso X.carrier).inv
   c := eqToHom (restrict_top_presheaf X)
 
@@ -976,7 +976,7 @@ definition restrictTopIso
 
 中文:
 定义 restrictTopIso
-  签名: (X : PresheafedSpace C)
+  签名: (X : Presheafed空间 C)
   定义体: X.ofRestrict _
   inv := X.toRestrictTop
   hom_inv_id := by
@@ -1024,7 +1024,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : (PresheafedSpace C)ᵒᵖ ⥤ C where
+  签名: : (Presheafed空间 C)ᵒᵖ ⥤ C where
   定义体: (unop X).presheaf.obj (op ⊤)
   map f := f.unop.c.app (op ⊤)
 
@@ -1045,7 +1045,7 @@ theorem Γ_obj_op
 
 中文:
 定理 Γ_obj_op
-  条件: (X : PresheafedSpace C)
+  条件: (X : Presheafed空间 C)
   结论: Γ.obj (op X) = X.presheaf.obj (op ⊤)
   证明: rfl
 -/
@@ -1063,7 +1063,7 @@ theorem Γ_map_op
 
 中文:
 定理 Γ_map_op
-  条件: {X Y : PresheafedSpace C} (f : X ⟶ Y)
+  条件: {X Y : Presheafed空间 C} (f : X ⟶ Y)
   结论: Γ.map f.op = f.c.app (op ⊤)
   证明: rfl
 -/
@@ -1143,7 +1143,7 @@ theorem mapPresheaf_obj_X
 
 中文:
 定理 mapPresheaf_obj_X
-  条件: (F : C ⥤ D) (X : PresheafedSpace C)
+  条件: (F : C ⥤ D) (X : Presheafed空间 C)
   证明: rfl
 
 @[simp]
@@ -1165,7 +1165,7 @@ theorem mapPresheaf_obj_presheaf
 
 中文:
 定理 mapPresheaf_obj_presheaf
-  条件: (F : C ⥤ D) (X : PresheafedSpace C)
+  条件: (F : C ⥤ D) (X : Presheafed空间 C)
   证明: rfl
 
 @[simp]
@@ -1187,7 +1187,7 @@ theorem mapPresheaf_map_f
 
 中文:
 定理 mapPresheaf_map_f
-  条件: (F : C ⥤ D) {X Y : PresheafedSpace C} (f : X ⟶ Y)
+  条件: (F : C ⥤ D) {X Y : Presheafed空间 C} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -1207,7 +1207,7 @@ theorem mapPresheaf_map_c
 
 中文:
 定理 mapPresheaf_map_c
-  条件: (F : C ⥤ D) {X Y : PresheafedSpace C} (f : X ⟶ Y)
+  条件: (F : C ⥤ D) {X Y : Presheafed空间 C} (f : X ⟶ Y)
   证明: rfl
 -/
 theorem mapPresheaf_map_c (F : C ⥤ D) {X Y : PresheafedSpace C} (f : X ⟶ Y) :

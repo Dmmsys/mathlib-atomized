@@ -100,7 +100,7 @@ theorem logMahlerMeasure_zero
 
 中文:
 定理 logMahlerMeasure_zero
-  结论: (0 : Complex[X]).logMahlerMeasure = 0
+  结论: (0 : 复形[X]).logMahlerMeasure = 0
   证明: by
   simp [logMahlerMeasure_def, circleAverage_def]
 
@@ -125,7 +125,7 @@ theorem logMahlerMeasure_one
 
 中文:
 定理 logMahlerMeasure_one
-  结论: (1 : Complex[X]).logMahlerMeasure = 0
+  结论: (1 : 复形[X]).logMahlerMeasure = 0
   证明: by
   simp [logMahlerMeasure_def, circleAverage_def]
 
@@ -151,7 +151,7 @@ theorem logMahlerMeasure_const
 
 中文:
 定理 logMahlerMeasure_const
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (C z).logMahlerMeasure = log ‖z‖
   证明: by
   simp [logMahlerMeasure_def, circleAverage_def, mul_assoc]
@@ -177,7 +177,7 @@ theorem logMahlerMeasure_X
 
 中文:
 定理 logMahlerMeasure_X
-  结论: (X : Complex[X]).logMahlerMeasure = 0
+  结论: (X : 复形[X]).logMahlerMeasure = 0
   证明: by
   simp [logMahlerMeasure_def, circleAverage_def]
 
@@ -201,7 +201,7 @@ theorem logMahlerMeasure_monomial
 
 中文:
 定理 logMahlerMeasure_monomial
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   结论: (monomial n z).logMahlerMeasure = log ‖z‖
   证明: by
   simp [logMahlerMeasure_def, circleAverage_def, mul_assoc]
@@ -293,7 +293,7 @@ theorem mahlerMeasure_zero
 
 中文:
 定理 mahlerMeasure_zero
-  结论: (0 : Complex[X]).mahlerMeasure = 0
+  结论: (0 : 复形[X]).mahlerMeasure = 0
   证明: by simp [mahlerMeasure]
 
 @[simp]
@@ -315,7 +315,7 @@ theorem mahlerMeasure_one
 
 中文:
 定理 mahlerMeasure_one
-  结论: (1 : Complex[X]).mahlerMeasure = 1
+  结论: (1 : 复形[X]).mahlerMeasure = 1
   证明: by simp [mahlerMeasure]
 
 @[simp]
@@ -340,7 +340,7 @@ theorem mahlerMeasure_const
 
 中文:
 定理 mahlerMeasure_const
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (C z).mahlerMeasure = ‖z‖
   证明: by
   simp only [mahlerMeasure, ne_eq, map_eq_zero, logMahlerMeasure_const, ite_not]
@@ -440,7 +440,7 @@ lemma intervalIntegrable_mahlerMeasure
   exact (analyticOnNhd_id.aeval_polynomial p).meromorphicOn.circleIntegrable_log_norm
 
 中文:
-引理 intervalIntegrable_mahlerMeasure
+引理 interval整数egrable_mahlerMeasure
   证明: by
   rw [← circleIntegrable_def fun z => log ‖p.eval z‖]
   exact (analyticOnNhd_id.aeval_polynomial p).meromorphicOn.circleIntegrable_log_norm
@@ -469,7 +469,7 @@ theorem mahlerMeasure_mul
 
 中文:
 定理 mahlerMeasure_mul
-  条件: (p q : Complex[X])
+  条件: (p q : 复形[X])
   证明: by
   by_cases hpq : p * q = 0
   · simpa [hpq, mahlerMeasure_zero] using mul_eq_zero.mp hpq
@@ -514,7 +514,7 @@ theorem prod_mahlerMeasure_eq_mahlerMeasure_prod
 
 中文:
 定理 prod_mahlerMeasure_eq_mahlerMeasure_prod
-  条件: (s : Multiset Complex[X])
+  条件: (s : Multiset 复形[X])
   证明: by
   induction s using Multiset.induction_on with
   | empty => simp
@@ -539,7 +539,7 @@ theorem logMahlerMeasure_mul_eq_add_logMahlerMeasure
 
 中文:
 定理 logMahlerMeasure_mul_eq_add_logMahlerMeasure
-  条件: {p q : Complex[X]} (hpq : p * q != 0)
+  条件: {p q : 复形[X]} (hpq : p * q != 0)
   证明: by
   simp_all [logMahlerMeasure_eq_log_MahlerMeasure, mahlerMeasure_mul, log_mul]
 
@@ -560,7 +560,7 @@ theorem logMahlerMeasure_C_mul
 
 中文:
 定理 logMahlerMeasure_C_mul
-  条件: {a : Complex} (ha : a != 0) {p : Complex[X]} (hp : p != 0)
+  条件: {a : 复形} (ha : a != 0) {p : 复形[X]} (hp : p != 0)
   证明: by
   rw [logMahlerMeasure_mul_eq_add_logMahlerMeasure (by simp [ha]; rw [hp]), logMahlerMeasure_const]
 
@@ -587,7 +587,7 @@ theorem logMahlerMeasure_X_sub_C
 
 中文:
 定理 logMahlerMeasure_X_sub_C
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (X - C z).logMahlerMeasure = log⁺ ‖z‖
   证明: by
   simp [logMahlerMeasure_def]
@@ -612,7 +612,7 @@ theorem logMahlerMeasure_X_add_C
 
 中文:
 定理 logMahlerMeasure_X_add_C
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (X + C z).logMahlerMeasure = log⁺ ‖z‖
   证明: by
   simp [← sub_neg_eq_add, ← map_neg]
@@ -634,7 +634,7 @@ theorem logMahlerMeasure_C_mul_X_add_C
 
 中文:
 定理 logMahlerMeasure_C_mul_X_add_C
-  条件: {a : Complex} (ha : a != 0) (b : Complex)
+  条件: {a : 复形} (ha : a != 0) (b : 复形)
   证明: by
   rw [show C a * X + C b = C a * (X + C (a⁻¹ * b)) by simp [mul_add]; rw [← map_mul]; rw [ha],
     logMahlerMeasure_C_mul ha (X_add_C_ne_zero (a⁻¹ * b)), logMahlerMeasure_X_add_C]
@@ -659,7 +659,7 @@ theorem logMahlerMeasure_of_degree_eq_one
 
 中文:
 定理 logMahlerMeasure_of_degree_eq_one
-  条件: {p : Complex[X]} (h : p.degree = 1)
+  条件: {p : 复形[X]} (h : p.degree = 1)
   结论: p.logMahlerMeasure =
   证明: by
   rw [eq_X_add_C_of_degree_le_one (le_of_eq h)]
@@ -693,8 +693,8 @@ theorem mahlerMeasure_X_sub_C
 
 中文:
 定理 mahlerMeasure_X_sub_C
-  条件: (z : Complex)
-  结论: (X - C z).mahlerMeasure = max 1 ‖z‖
+  条件: (z : 复形)
+  结论: (X - C z).mahlerMeasure = 最大值 1 ‖z‖
   证明: by
   have := logMahlerMeasure_X_sub_C z
   rw [logMahlerMeasure_eq_log_MahlerMeasure] at this
@@ -730,8 +730,8 @@ theorem mahlerMeasure_X_add_C
 
 中文:
 定理 mahlerMeasure_X_add_C
-  条件: (z : Complex)
-  结论: (X + C z).mahlerMeasure = max 1 ‖z‖
+  条件: (z : 复形)
+  结论: (X + C z).mahlerMeasure = 最大值 1 ‖z‖
   证明: by
   simp [← sub_neg_eq_add, ← map_neg]
 
@@ -757,7 +757,7 @@ theorem mahlerMeasure_C_mul_X_add_C
 
 中文:
 定理 mahlerMeasure_C_mul_X_add_C
-  条件: {a : Complex} (ha : a != 0) (b : Complex)
+  条件: {a : 复形} (ha : a != 0) (b : 复形)
   证明: by
   simp only [show C a * X + C b = C a * (X + C (a⁻¹ * b)) by simp [mul_add, ← map_mul, ha],
     mahlerMeasure_mul, mahlerMeasure_const, ← coe_nnnorm, mahlerMeasure_X_add_C]
@@ -785,7 +785,7 @@ theorem mahlerMeasure_of_degree_eq_one
 
 中文:
 定理 mahlerMeasure_of_degree_eq_one
-  条件: {p : Complex[X]} (h : p.degree = 1)
+  条件: {p : 复形[X]} (h : p.degree = 1)
   证明: by
   rw [eq_X_add_C_of_degree_le_one (le_of_eq h)]
   simp [mahlerMeasure_C_mul_X_add_C (show p.coeff 1 != 0 by exact coeff_ne_zero_of_eq_degree h)]
@@ -814,7 +814,7 @@ theorem logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots
 
 中文:
 定理 logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots
-  条件: (p : Complex[X])
+  条件: (p : 复形[X])
   结论: p.logMahlerMeasure =
   证明: by
   by_cases hp : p = 0
@@ -853,7 +853,7 @@ theorem mahlerMeasure_eq_leadingCoeff_mul_prod_roots
 
 中文:
 定理 mahlerMeasure_eq_leadingCoeff_mul_prod_roots
-  条件: (p : Complex[X])
+  条件: (p : 复形[X])
   结论: p.mahlerMeasure =
   证明: by
   by_cases hp : p = 0
@@ -888,8 +888,8 @@ lemma one_le_prod_max_one_norm_roots
 
 中文:
 引理 one_le_prod_max_one_norm_roots
-  条件: (p : Complex[X])
-  结论: 1 <= (p.roots.map (fun a => max 1 ‖a‖)).prod
+  条件: (p : 复形[X])
+  结论: 1 <= (p.roots.map (fun a => 最大值 1 ‖a‖)).乘积
   证明: by
   grind [Multiset.one_le_prod, Multiset.mem_map]
 
@@ -915,7 +915,7 @@ lemma leadingCoeff_le_mahlerMeasure
 
 中文:
 引理 leadingCoeff_le_mahlerMeasure
-  条件: (p : Complex[X])
+  条件: (p : 复形[X])
   结论: ‖p.leadingCoeff‖ <= p.mahlerMeasure
   证明: by
   rw [← mul_one ‖_‖]; rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]
@@ -948,7 +948,7 @@ exact zero_le_one.trans one_le_prod_max_one_norm_roots p
 
 中文:
 引理 prod_max_one_norm_roots_le_mahlerMeasure_of_one_le_leadingCoeff
-  结论: {p : Complex[X]}
+  结论: {p : 复形[X]}
   证明: by
   rw [← one_mul (Multiset.prod _)]; rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]
   gcongr
@@ -972,7 +972,7 @@ lemma one_le_mahlerMeasure_of_one_le_norm_leadingCoeff
 
 中文:
 引理 one_le_mahlerMeasure_of_one_le_norm_leadingCoeff
-  结论: {p : Complex[X]}
+  结论: {p : 复形[X]}
   证明: hlc.trans (leadingCoeff_le_mahlerMeasure p)
 
 Depends on / 依赖: hlc.trans, leadingCoeff_le_mahlerMeasure
@@ -999,8 +999,8 @@ theorem mahlerMeasure_le_sum_norm_coeff
 
 中文:
 定理 mahlerMeasure_le_sum_norm_coeff
-  条件: (p : Complex[X])
-  结论: p.mahlerMeasure <= p.sum fun _ a => ‖a‖
+  条件: (p : 复形[X])
+  结论: p.mahlerMeasure <= p.求和 fun _ a => ‖a‖
   证明: by
   by_cases hp : p = 0
   · simp [hp]
@@ -1056,7 +1056,7 @@ theorem mahlerMeasure_le_sqrt_sum_sq_norm_coeff
 
 中文:
 定理 mahlerMeasure_le_sqrt_sum_sq_norm_coeff
-  条件: (p : Polynomial Complex)
+  条件: (p : 多项式 复形)
   证明: by
   -- Proof: Jensen's inequality (twice) + Parseval's identity
   have : IsFiniteMeasure (volume.restrict (uIoc 0 (2 * π))) := by
@@ -1124,7 +1124,7 @@ theorem mahlerMeasure_le_sqrt_natDegree_add_one_mul_supNorm
 
 中文:
 定理 mahlerMeasure_le_sqrt_natDegree_add_one_mul_supNorm
-  条件: (p : Polynomial Complex)
+  条件: (p : 多项式 复形)
   证明: (p.mahlerMeasure_le_sqrt_sum_sq_norm_coeff).trans by
     rw [show √(↑(p.natDegree) + 1) * p.supNorm = √((p.natDegree + 1) * p.supNorm ^ 2) by
       rw [Real.sqrt_mul (by positivity)]; rw [Real.sqrt_sq p.supNorm_nonneg]]
@@ -1161,7 +1161,7 @@ theorem norm_coeff_le_choose_mul_mahlerMeasure
 
 中文:
 定理 norm_coeff_le_choose_mul_mahlerMeasure
-  条件: (n : 自然数) (p : Complex[X])
+  条件: (n : 自然数) (p : 复形[X])
   证明: by
   by_cases hp : p = 0
   · simp [hp]
@@ -1231,7 +1231,7 @@ theorem supNorm_le_choose_natDegree_div_two_mul_mahlerMeasure
 
 中文:
 定理 supNorm_le_choose_natDegree_div_two_mul_mahlerMeasure
-  条件: (p : Polynomial Complex)
+  条件: (p : 多项式 复形)
   证明: by
   obtain ⟨i, hi⟩ := p.exists_eq_supNorm
   calc p.supNorm = ‖p.coeff i‖ := hi
@@ -1267,7 +1267,7 @@ theorem norm_coeff_le_choose_mul_mahlerMeasure_of_one_le_mahlerMeasure
 
 中文:
 定理 norm_coeff_le_choose_mul_mahlerMeasure_of_one_le_mahlerMeasure
-  结论: (n : 自然数) (g h : Complex[X])
+  结论: (n : 自然数) (g h : 复形[X])
   证明: (g.norm_coeff_le_choose_mul_mahlerMeasure n).trans by
     gcongr
     rw [mahlerMeasure_mul]
@@ -1435,7 +1435,7 @@ lemma mapMahlerMeasure_const
 
 中文:
 引理 mapMahlerMeasure_const
-  条件: (hv : Isometry v) (z : A)
+  条件: (hv : 等距 v) (z : A)
   结论: (C z).mapMahlerMeasure v = ‖z‖
   证明: by
   simp [mapMahlerMeasure, hv.norm_map_of_map_zero (map_zero _)]
@@ -1461,7 +1461,7 @@ fun h => hp hv.injective h.trans (map_zero _).symm
 
 中文:
 引理 leadingCoeff_le_mapMahlerMeasure
-  条件: (hv : Isometry v)
+  条件: (hv : 等距 v)
   证明: by
   by_cases hp : p.leadingCoeff = 0
   · simp [hp, mapMahlerMeasure_nonneg]
@@ -1494,7 +1494,7 @@ lemma Monic.one_le_mapMahlerMeasure
 
 中文:
 引理 Monic.one_le_mapMahlerMeasure
-  条件: [NormOneClass A] (hv : Isometry v) (hp : p.Monic)
+  条件: [NormOne类 A] (hv : 等距 v) (hp : p.Monic)
   证明: by
   grw [← p.leadingCoeff_le_mapMahlerMeasure v hv, hp.leadingCoeff, norm_one]
 
@@ -1515,7 +1515,7 @@ theorem mapMahlerMeasure_pos_of_ne_zero
 
 中文:
 定理 mapMahlerMeasure_pos_of_ne_zero
-  条件: (hv : Isometry v) (hp : p != 0)
+  条件: (hv : 等距 v) (hp : p != 0)
   证明: mahlerMeasure_pos_of_ne_zero (Polynomial.map_eq_zero_iff hv.injective).not.mpr hp
 
 Depends on / 依赖: Polynomial, Polynomial.map_eq_zero_iff, hv.injective, injective, mahlerMeasure_pos_of_ne_zero, map_eq_zero_iff, not.mpr
@@ -1538,7 +1538,7 @@ theorem mapMahlerMeasure_le_sum_norm_coeff
 
 中文:
 定理 mapMahlerMeasure_le_sum_norm_coeff
-  条件: (hv : Isometry v)
+  条件: (hv : 等距 v)
   证明: by
 .trans_eq apply mahlerMeasure_le_sum_norm_coeff _
   rw [sum_def]; rw [sum_def]; rw [support_map_of_injective _ hv.injective]
@@ -1569,7 +1569,7 @@ theorem norm_coeff_le_choose_mul_mapMahlerMeasure
 
 中文:
 定理 norm_coeff_le_choose_mul_mapMahlerMeasure
-  条件: (hv : Isometry v) (n : 自然数) (p : A[X])
+  条件: (hv : 等距 v) (n : 自然数) (p : A[X])
   证明: by
   have hv_norm : ‖p.coeff n‖ = ‖v (p.coeff n)‖ :=
     (hv.norm_map_of_map_zero (map_zero _) _).symm

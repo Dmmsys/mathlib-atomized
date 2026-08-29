@@ -33,7 +33,7 @@ theorem euler_four_squares
 
 中文:
 定理 euler_four_squares
-  条件: {R : 类型} [CommRing R] (a b c d x y z w : R)
+  条件: {R : 类型} [交换环 R] (a b c d x y z w : R)
   证明: by ring
 -/
 theorem euler_four_squares {R : Type*} [CommRing R] (a b c d x y z w : R) :
@@ -53,7 +53,7 @@ theorem Nat.euler_four_squares
   simp only [sq_abs, _root_.euler_four_squares]
 
 中文:
-定理 Nat.euler_four_squares
+定理 自然数.euler_four_squares
   条件: (a b c d x y z w : 自然数)
   证明: by
   rw [← Int.natCast_inj]
@@ -144,8 +144,8 @@ theorem exists_sq_add_sq_add_one_eq_mul
     refine pos_of_mul_pos_left ?_ (Nat.cast_non
 
 中文:
-定理 exists_sq_add_sq_add_one_eq_mul
-  条件: (p : 自然数) [hp : Fact p.Prime]
+定理 存在_sq_add_sq_add_one_eq_mul
+  条件: (p : 自然数) [hp : Fact p.素]
   证明: by
   rcases hp.1.eq_two_or_odd' with (rfl | hodd)
   · use 1, 0, 1; simp
@@ -248,8 +248,8 @@ theorem Prime.sum_four_squares
     rw [
 
 中文:
-定理 Prime.sum_four_squares
-  条件: {p : 自然数} (hp : p.Prime)
+定理 素.sum_four_squares
+  条件: {p : 自然数} (hp : p.素)
   证明: by
   classical
   have := Fact.mk hp

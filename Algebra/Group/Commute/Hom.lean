@@ -34,7 +34,7 @@ theorem SemiconjBy.map
 
 中文:
 定理 SemiconjBy.map
-  条件: [MulHomClass F M N] (h : SemiconjBy a x y) (f : F)
+  条件: [乘法态射类 F M N] (h : SemiconjBy a x y) (f : F)
   证明: by simpa only [SemiconjBy, map_mul] using congr_arg f h
 
 @[to_additive (attr := simp)]
@@ -56,7 +56,7 @@ theorem Commute.map
 
 中文:
 定理 Commute.map
-  条件: [MulHomClass F M N] (h : Commute x y) (f : F)
+  条件: [乘法态射类 F M N] (h : Commute x y) (f : F)
   结论: Commute (f x) (f y)
   证明: SemiconjBy.map h f
 
@@ -78,7 +78,7 @@ theorem SemiconjBy.of_map
 
 中文:
 定理 SemiconjBy.of_map
-  结论: [MulHomClass F M N] {f : F} (hf : Function.Injective f)
+  结论: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f)
   证明: hf (by simpa only [SemiconjBy, map_mul] using h)
 
 @[to_additive]
@@ -100,7 +100,7 @@ theorem Commute.of_map
 
 中文:
 定理 Commute.of_map
-  结论: [MulHomClass F M N] {f : F} (hf : Function.Injective f)
+  结论: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f)
   证明: hf (by simpa only [map_mul] using h.eq)
 
 @[to_additive]
@@ -124,7 +124,7 @@ theorem semiconjBy_map_iff
 
 中文:
 定理 semiconjBy_map_iff
-  条件: [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M}
+  条件: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f) {x y : M}
   证明: ⟨.of_map hf, (.map · f)⟩
 
 @[to_additive]
@@ -146,7 +146,7 @@ theorem commute_map_iff
 
 中文:
 定理 commute_map_iff
-  条件: [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M}
+  条件: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f) {x y : M}
   证明: ⟨.of_map hf, (.map · f)⟩
 
 Depends on / 依赖: of_map

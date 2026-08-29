@@ -39,7 +39,7 @@ theorem hasLineDerivAt
 
 中文:
 定理 hasLineDerivAt
-  条件: (f : QuadraticMap 𝕜 E F) (a b : E)
+  条件: (f : 二次映射 𝕜 E F) (a b : E)
   证明: by
   simpa [HasLineDerivAt, QuadraticMap.map_add, f.map_smul] using!
     ((hasDerivAt_const (0 : 𝕜) (f a)).add <|
@@ -68,7 +68,7 @@ theorem lineDifferentiableAt
 
 中文:
 定理 lineDifferentiableAt
-  条件: (f : QuadraticMap 𝕜 E F) (a b : E)
+  条件: (f : 二次映射 𝕜 E F) (a b : E)
   结论: LineDifferentiableAt 𝕜 f a b
   证明: (f.hasLineDerivAt a b).lineDifferentiableAt
 
@@ -93,7 +93,7 @@ theorem lineDeriv
 
 中文:
 定理 lineDeriv
-  条件: (f : QuadraticMap 𝕜 E F)
+  条件: (f : 二次映射 𝕜 E F)
   结论: lineDeriv 𝕜 f = polar f
   证明: by
   ext a b

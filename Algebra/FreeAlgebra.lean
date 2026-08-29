@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Pre R X)
+  签名: 可居 (Pre R X)
   定义体: ⟨ofScalar 0⟩
 
 Depends on / 依赖: ofScalar
@@ -151,7 +151,7 @@ definition hasMul
 
 中文:
 定义 hasMul
-  签名: : Mul (Pre R X)
+  签名: : 乘法 (Pre R X)
   定义体: ⟨mul⟩
 -/
 def hasMul : Mul (Pre R X) := ⟨mul⟩
@@ -168,7 +168,7 @@ definition hasAdd
 
 中文:
 定义 hasAdd
-  签名: : Add (Pre R X)
+  签名: : 加法 (Pre R X)
   定义体: ⟨add⟩
 -/
 def hasAdd : Add (Pre R X) := ⟨add⟩
@@ -185,7 +185,7 @@ definition hasZero
 
 中文:
 定义 hasZero
-  签名: : Zero (Pre R X)
+  签名: : 零 (Pre R X)
   定义体: ⟨ofScalar 0⟩
 
 Depends on / 依赖: ofScalar
@@ -204,7 +204,7 @@ definition hasOne
 
 中文:
 定义 hasOne
-  签名: : One (Pre R X)
+  签名: : 幺 (Pre R X)
   定义体: ⟨ofScalar 1⟩
 
 Depends on / 依赖: ofScalar
@@ -225,7 +225,7 @@ definition hasSMul
 
 中文:
 定义 hasSMul
-  签名: : SMul R (Pre R X)
+  签名: : 标量乘法 R (Pre R X)
   定义体: ⟨fun r m => mul (ofScalar r) m⟩
 
 Depends on / 依赖: ofScalar
@@ -246,7 +246,7 @@ definition liftFun
 
 中文:
 定义 liftFun
-  签名: {A : 类型} [Semiring A] [Algebra R A] (f : X -> A)
+  签名: {A : 类型} [半环 A] [代数 R A] (f : X -> A)
 -/
 def liftFun {A : Type*} [Semiring A] [Algebra R A] (f : X -> A) :
     Pre R X -> A
@@ -281,26 +281,26 @@ inductive Rel
     - mul_compat_right: {a b c : Pre R X} : Rel a b -> Rel (c * a) (c * b)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : Pre R X -> Pre R X -> 命题
   构造子 (17 个):
-    - add_scalar: {r s : R} : Rel (↑(r + s)) (↑r + ↑s)
-    - mul_scalar: {r s : R} : Rel (↑(r * s)) (↑r * ↑s)
-    - central_scalar: {r : R} {a : Pre R X} : Rel (r * a) (a * r)
-    - add_assoc: {a b c : Pre R X} : Rel (a + b + c) (a + (b + c))
-    - add_comm: {a b : Pre R X} : Rel (a + b) (b + a)
-    - zero_add: {a : Pre R X} : Rel (0 + a) a
-    - mul_assoc: {a b c : Pre R X} : Rel (a * b * c) (a * (b * c))
-    - one_mul: {a : Pre R X} : Rel (1 * a) a
-    - mul_one: {a : Pre R X} : Rel (a * 1) a
-    - left_distrib: {a b c : Pre R X} : Rel (a * (b + c)) (a * b + a * c)
-    - right_distrib: {a b c : Pre R X} : Rel ((a + b) * c) (a * c + b * c)
-    - zero_mul: {a : Pre R X} : Rel (0 * a) 0
-    - mul_zero: {a : Pre R X} : Rel (a * 0) 0
-    - add_compat_left: {a b c : Pre R X} : Rel a b -> Rel (a + c) (b + c)
-    - add_compat_right: {a b c : Pre R X} : Rel a b -> Rel (c + a) (c + b)
-    - mul_compat_left: {a b c : Pre R X} : Rel a b -> Rel (a * c) (b * c)
-    - mul_compat_right: {a b c : Pre R X} : Rel a b -> Rel (c * a) (c * b)
+    - add_scalar: {r s : R} : 关系 (↑(r + s)) (↑r + ↑s)
+    - mul_scalar: {r s : R} : 关系 (↑(r * s)) (↑r * ↑s)
+    - central_scalar: {r : R} {a : Pre R X} : 关系 (r * a) (a * r)
+    - add_assoc: {a b c : Pre R X} : 关系 (a + b + c) (a + (b + c))
+    - add_comm: {a b : Pre R X} : 关系 (a + b) (b + a)
+    - zero_add: {a : Pre R X} : 关系 (0 + a) a
+    - mul_assoc: {a b c : Pre R X} : 关系 (a * b * c) (a * (b * c))
+    - one_mul: {a : Pre R X} : 关系 (1 * a) a
+    - mul_one: {a : Pre R X} : 关系 (a * 1) a
+    - left_distrib: {a b c : Pre R X} : 关系 (a * (b + c)) (a * b + a * c)
+    - right_distrib: {a b c : Pre R X} : 关系 ((a + b) * c) (a * c + b * c)
+    - zero_mul: {a : Pre R X} : 关系 (0 * a) 0
+    - mul_zero: {a : Pre R X} : 关系 (a * 0) 0
+    - add_compat_left: {a b c : Pre R X} : 关系 a b -> 关系 (a + c) (b + c)
+    - add_compat_right: {a b c : Pre R X} : 关系 a b -> 关系 (c + a) (c + b)
+    - mul_compat_left: {a b c : Pre R X} : 关系 a b -> 关系 (a * c) (b * c)
+    - mul_compat_right: {a b c : Pre R X} : 关系 a b -> 关系 (c * a) (c * b)
 -/
 inductive Rel : Pre R X -> Pre R X -> Prop
   -- force `ofScalar` to be a central semiring morphism
@@ -362,7 +362,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {A} [CommSemiring A] [Algebra R A]
+  签名: {A} [交换半环 A] [代数 R A]
   定义体: Quot.map (HMul.hMul (algebraMap R A r : Pre A X)) fun _ _ => Rel.mul_compat_right
 
 Depends on / 依赖: HMul.hMul, Quot.map, Rel.mul_compat_right, algebraMap, mul_compat_right
@@ -380,7 +380,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (FreeAlgebra R X) where zero
+  签名: : 零 (FreeAlgebra R X) where zero
   定义体: Quot.mk _ 0
 
 Depends on / 依赖: Quot.mk
@@ -397,7 +397,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (FreeAlgebra R X) where one
+  签名: : 幺 (FreeAlgebra R X) where one
   定义体: Quot.mk _ 1
 
 Depends on / 依赖: Quot.mk
@@ -414,7 +414,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (FreeAlgebra R X) where
+  签名: : 加法 (FreeAlgebra R X) where
   定义体: Quot.map₂ HAdd.hAdd (fun _ _ _ => Rel.add_compat_right) fun _ _ _ => Rel.add_compat_left
 
 Depends on / 依赖: HAdd.hAdd, Quot.map, Rel.add_compat_left, Rel.add_compat_right, add_compat_left, add_compat_right
@@ -432,7 +432,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (FreeAlgebra R X) where
+  签名: : 乘法 (FreeAlgebra R X) where
   定义体: Quot.map₂ HMul.hMul (fun _ _ _ => Rel.mul_compat_right) fun _ _ _ => Rel.mul_compat_left
 
 Depends on / 依赖: HMul.hMul, Quot.map, Rel.mul_compat_left, Rel.mul_compat_right, mul_compat_left, mul_compat_right
@@ -484,7 +484,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: : MonoidWithZero (FreeAlgebra R X) where
+  签名: : 带零幺半群 (FreeAlgebra R X) where
   定义体: by
     rintro ⟨⟩ ⟨⟩ ⟨⟩
     exact Quot.sound Rel.mul_assoc
@@ -576,7 +576,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (FreeAlgebra R X) where
+  签名: : 加法交换幺半群 (FreeAlgebra R X) where
   定义体: by
     rintro ⟨⟩ ⟨⟩ ⟨⟩
     exact Quot.sound Rel.add_assoc
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (FreeAlgebra R X)
+  签名: 半环 (FreeAlgebra R X)
   定义体: instMonoidWithZero R X
   __ := instAddCommMonoid R X
   __ := instDistrib R X
@@ -662,7 +662,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FreeAlgebra R X)
+  签名: 可居 (FreeAlgebra R X)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (FreeAlgebra R X) :=
@@ -687,7 +687,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: {A} [CommSemiring A] [Algebra R A]
+  签名: {A} [交换半环 A] [代数 R A]
   定义体: ({
       toFun := fun r => Quot.mk _ r
       map_one' := rfl
@@ -758,7 +758,7 @@ theorem quot_mk_eq_ι
 中文:
 定理 quot_mk_eq_ι
   条件: (m : X)
-  结论: Quot.mk (FreeAlgebra.Rel R X) m = ι R m
+  结论: 商.mk (FreeAlgebra.关系 R X) m = ι R m
   证明: by rw [ι_def]
 -/
 theorem quot_mk_eq_ι (m : X) : Quot.mk (FreeAlgebra.Rel R X) m = ι R m := by rw [ι_def]
@@ -1132,7 +1132,7 @@ definition equivMonoidAlgebraFreeMonoid
 
 中文:
 定义 equivMonoidAlgebraFreeMonoid
-  签名: : FreeAlgebra R X ≃ₐ[R] R[FreeMonoid X]
+  签名: : FreeAlgebra R X ≃ₐ[R] R[自由幺半群 X]
   定义体: .ofAlgHom (lift R fun x => .of R (FreeMonoid X) (.of x))
     (MonoidAlgebra.lift R (FreeAlgebra R X) (FreeMonoid X) (FreeMonoid.lift (ι R)))
     (MonoidAlgebra.algHom_ext' (by ext; simp) (by ext)) (by ext; simp)
@@ -1153,8 +1153,8 @@ instance [Nontrivial
   body: equivMonoidAlgebraFreeMonoid.surjective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (FreeAlgebra R X)
+实例 [非平凡
+  签名: R] : 非平凡 (FreeAlgebra R X)
   定义体: equivMonoidAlgebraFreeMonoid.surjective.nontrivial
 
 Depends on / 依赖: equivMonoidAlgebraFreeMonoid, equivMonoidAlgebraFreeMonoid.surjective.nontrivial, nontrivial, surjective
@@ -1172,7 +1172,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [NoZeroDivisors R]
+  签名: [无零因子 R]
   定义体: equivMonoidAlgebraFreeMonoid.toMulEquiv.noZeroDivisors
 
 Depends on / 依赖: equivMonoidAlgebraFreeMonoid, equivMonoidAlgebraFreeMonoid.toMulEquiv.noZeroDivisors, noZeroDivisors, toMulEquiv
@@ -1190,7 +1190,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: {R X} [CommRing R] [IsDomain R]
+  签名: {R X} [交换环 R] [是整环 R]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -1325,8 +1325,8 @@ have hfy0 : f (ι R y)
 
 中文:
 定理 ι_injective
-  条件: [Nontrivial R]
-  结论: Function.Injective (ι R : X -> FreeAlgebra R X)
+  条件: [非平凡 R]
+  结论: 函数.单射 (ι R : X -> FreeAlgebra R X)
   证明: fun x y hoxy =>
 by_contradiction by
     classical exact fun hxy : x != y =>
@@ -1361,7 +1361,7 @@ theorem ι_inj
 
 中文:
 定理 ι_inj
-  条件: [Nontrivial R] (x y : X)
+  条件: [非平凡 R] (x y : X)
   结论: ι R x = ι R y ↔ x = y
   证明: ι_injective.eq_iff
 
@@ -1390,7 +1390,7 @@ theorem ι_ne_algebraMap
 
 中文:
 定理 ι_ne_algebraMap
-  条件: [Nontrivial R] (x : X) (r : R)
+  条件: [非平凡 R] (x : X) (r : R)
   结论: ι R x != algebraMap R _ r
   证明: fun h => by
   let f0 : FreeAlgebra R X ->ₐ[R] R := lift R 0
@@ -1425,7 +1425,7 @@ theorem ι_ne_zero
 
 中文:
 定理 ι_ne_zero
-  条件: [Nontrivial R] (x : X)
+  条件: [非平凡 R] (x : X)
   结论: ι R x != 0
   证明: ι_ne_algebraMap x 0
 
@@ -1446,7 +1446,7 @@ theorem ι_ne_one
 
 中文:
 定理 ι_ne_one
-  条件: [Nontrivial R] (x : X)
+  条件: [非平凡 R] (x : X)
   结论: ι R x != 1
   证明: ι_ne_algebraMap x 1
 -/
@@ -1539,7 +1539,7 @@ theorem adjoin_range_ι
 
 中文:
 定理 adjoin_range_ι
-  结论: Algebra.adjoin R (Set.range (ι R : X -> FreeAlgebra R X)) = ⊤
+  结论: 代数.adjoin R (集合.range (ι R : X -> FreeAlgebra R X)) = ⊤
   证明: by
   set S := Algebra.adjoin R (Set.range (ι R : X -> FreeAlgebra R X))
   refine top_unique fun x hx => ?_; clear hx
@@ -1573,7 +1573,7 @@ theorem _root_.Algebra.adjoin_range_eq_range_freeAlgebra_lift
     Function.comp_def, lift_ι_apply]
 
 中文:
-定理 _root_.Algebra.adjoin_range_eq_range_freeAlgebra_lift
+定理 _root_.代数.adjoin_range_eq_range_freeAlgebra_lift
   条件: (f : X -> A)
   证明: by
   simp only [← Algebra.map_top, ← adjoin_range_ι, AlgHom.map_adjoin, ← Set.range_comp,
@@ -1596,8 +1596,8 @@ theorem _root_.Algebra.adjoin_eq_range_freeAlgebra_lift
   rw [← Algebra.adjoin_range_eq_range_freeAlgebra_lift]; rw [Subtype.range_coe]
 
 中文:
-定理 _root_.Algebra.adjoin_eq_range_freeAlgebra_lift
-  条件: (s : Set A)
+定理 _root_.代数.adjoin_eq_range_freeAlgebra_lift
+  条件: (s : 集合 A)
   证明: by
   rw [← Algebra.adjoin_range_eq_range_freeAlgebra_lift]; rw [Subtype.range_coe]
 

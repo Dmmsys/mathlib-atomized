@@ -39,8 +39,8 @@ theorem exists_idempotent_of_compact_t2_of_continuous_mul_left
   rsuffices
 
 中文:
-定理 exists_idempotent_of_compact_t2_of_continuous_mul_left
-  结论: {M} [Nonempty M] [Semigroup M]
+定理 存在_idempotent_of_compact_t2_of_continuous_mul_left
+  结论: {M} [非空 M] [半群 M]
   证明: by
   /- We apply Zorn's lemma to the poset of nonempty closed subsemigroups of `M`.
      It will turn out that any minimal element is `{m}` for an idempotent `m : M`. -/
@@ -117,8 +117,8 @@ theorem exists_idempotent_in_compact_subsemigroup
   have 
 
 中文:
-定理 exists_idempotent_in_compact_subsemigroup
-  结论: {M} [Semigroup M] [TopologicalSpace M] [T2Space M]
+定理 存在_idempotent_in_compact_subsemigroup
+  结论: {M} [半群 M] [拓扑空间 M] [T2空间 M]
   证明: by
   let M' := { m // m in s }
   let : Semigroup M' :=

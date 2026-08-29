@@ -303,7 +303,7 @@ abbreviation IsGE
   body: K.IsSupported (embeddingUpIntGE n)
 
 中文:
-缩写 IsGE
+缩写 是GE
   签名: (n : 整数)
   定义体: K.IsSupported (embeddingUpIntGE n)
 
@@ -320,7 +320,7 @@ abbreviation IsLE
   body: K.IsSupported (embeddingUpIntLE n)
 
 中文:
-缩写 IsLE
+缩写 是LE
   签名: (n : 整数)
   定义体: K.IsSupported (embeddingUpIntLE n)
 
@@ -383,7 +383,7 @@ lemma exactAt_of_isGE
 
 中文:
 引理 exactAt_of_isGE
-  条件: (n i : 整数) (hi : i < n := by lia) [K.IsGE n]
+  条件: (n i : 整数) (hi : i < n := by lia) [K.是GE n]
   证明: exactAt_of_isSupported K (embeddingUpIntGE n) i
     (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
 
@@ -405,7 +405,7 @@ lemma exactAt_of_isLE
 
 中文:
 引理 exactAt_of_isLE
-  条件: (n i : 整数) (hi : n < i := by lia) [K.IsLE n]
+  条件: (n i : 整数) (hi : n < i := by lia) [K.是LE n]
   证明: exactAt_of_isSupported K (embeddingUpIntLE n) i
     (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
 
@@ -426,7 +426,7 @@ lemma isZero_of_isGE
 
 中文:
 引理 isZero_of_isGE
-  条件: (n i : 整数) (hi : i < n := by lia) [K.IsGE n] [K.HasHomology i]
+  条件: (n i : 整数) (hi : i < n := by lia) [K.是GE n] [K.有同调 i]
   证明: (K.exactAt_of_isGE n i hi).isZero_homology
 
 Depends on / 依赖: HasHomology, IsZero, K.HasHomology, K.IsGE, K.exactAt_of_isGE, K.homology, exactAt_of_isGE, f_eq_iso_hom_iso_inv, homology, isZero_homology, restrictionToTruncGE
@@ -445,7 +445,7 @@ lemma isZero_of_isLE
 
 中文:
 引理 isZero_of_isLE
-  条件: (n i : 整数) (hi : n < i := by lia) [K.IsLE n] [K.HasHomology i]
+  条件: (n i : 整数) (hi : n < i := by lia) [K.是LE n] [K.有同调 i]
   证明: (K.exactAt_of_isLE n i hi).isZero_homology
 
 Depends on / 依赖: HasHomology, IsZero, K.HasHomology, K.IsLE, K.exactAt_of_isLE, K.homology, exactAt_of_isLE, homology, isZero_homology
@@ -677,7 +677,7 @@ lemma isLE_of_le
 
 中文:
 引理 isLE_of_le
-  条件: (p q : 整数) (hpq : p <= q) [K.IsLE p]
+  条件: (p q : 整数) (hpq : p <= q) [K.是LE p]
   证明: by
   rw [isLE_iff]
   intro i hi
@@ -704,7 +704,7 @@ lemma isGE_of_ge
 
 中文:
 引理 isGE_of_ge
-  条件: (p q : 整数) (hpq : p <= q) [K.IsGE q]
+  条件: (p q : 整数) (hpq : p <= q) [K.是GE q]
   证明: by
   rw [isGE_iff]
   intro i hi
@@ -780,8 +780,8 @@ lemma isLE_of_iso
 
 中文:
 引理 isLE_of_iso
-  条件: (n : 整数) [K.IsLE n]
-  结论: L.IsLE n
+  条件: (n : 整数) [K.是LE n]
+  结论: L.是LE n
   证明: by
   apply isSupported_of_iso e
 
@@ -802,8 +802,8 @@ lemma isGE_of_iso
 
 中文:
 引理 isGE_of_iso
-  条件: (n : 整数) [K.IsGE n]
-  结论: L.IsGE n
+  条件: (n : 整数) [K.是GE n]
+  结论: L.是GE n
   证明: by
   apply isSupported_of_iso e
 
@@ -843,7 +843,7 @@ lemma exists_iso_single
     
 
 中文:
-引理 exists_iso_single
+引理 存在_iso_single
   条件: (n : 整数) [K.IsStrictlyGE n] [K.IsStrictlyLE n]
   证明: ⟨K.X n, ⟨{
       hom := mkHomToSingle (𝟙 _) (fun i (hi : i + 1 = n) =>
@@ -895,7 +895,7 @@ instance [K.IsStrictlyGE
 
 中文:
 实例 [K.IsStrictlyGE
-  签名: n] : IsIso (K.πTruncGE n)
+  签名: n] : 是同构 (K.πTruncGE n)
   定义体: by dsimp [πTruncGE]; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -912,7 +912,7 @@ instance [K.IsStrictlyLE
 
 中文:
 实例 [K.IsStrictlyLE
-  签名: n] : IsIso (K.ιTruncLE n)
+  签名: n] : 是同构 (K.ιTruncLE n)
   定义体: by dsimp [ιTruncLE]; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -930,7 +930,7 @@ lemma isIso_πTruncGE_iff
 
 中文:
 引理 isIso_πTruncGE_iff
-  结论: IsIso (K.πTruncGE n) ↔ K.IsStrictlyGE n
+  结论: 是同构 (K.πTruncGE n) ↔ K.IsStrictlyGE n
   证明: by
   apply HomologicalComplex.isIso_πTruncGE_iff
 
@@ -950,7 +950,7 @@ lemma isIso_ιTruncLE_iff
 
 中文:
 引理 isIso_ιTruncLE_iff
-  结论: IsIso (K.ιTruncLE n) ↔ K.IsStrictlyLE n
+  结论: 是同构 (K.ιTruncLE n) ↔ K.IsStrictlyLE n
   证明: by
   apply HomologicalComplex.isIso_ιTruncLE_iff
 
@@ -969,7 +969,7 @@ lemma quasiIso_πTruncGE_iff
 
 中文:
 引理 quasiIso_πTruncGE_iff
-  结论: QuasiIso (K.πTruncGE n) ↔ K.IsGE n
+  结论: 拟同构 (K.πTruncGE n) ↔ K.是GE n
   证明: quasiIso_πTruncGE_iff_isSupported K (embeddingUpIntGE n)
 
 Depends on / 依赖: embeddingUpIntGE
@@ -987,7 +987,7 @@ lemma quasiIso_ιTruncLE_iff
 
 中文:
 引理 quasiIso_ιTruncLE_iff
-  结论: QuasiIso (K.ιTruncLE n) ↔ K.IsLE n
+  结论: 拟同构 (K.ιTruncLE n) ↔ K.是LE n
   证明: quasiIso_ιTruncLE_iff_isSupported K (embeddingUpIntLE n)
 
 Depends on / 依赖: embeddingUpIntLE
@@ -1006,8 +1006,8 @@ instance [K.IsGE
   infer_instance
 
 中文:
-实例 [K.IsGE
-  签名: n] : QuasiIso (K.πTruncGE n)
+实例 [K.是GE
+  签名: n] : 拟同构 (K.πTruncGE n)
   定义体: by
   rw [quasiIso_πTruncGE_iff]
   infer_instance
@@ -1029,8 +1029,8 @@ instance [K.IsLE
   infer_instance
 
 中文:
-实例 [K.IsLE
-  签名: n] : QuasiIso (K.ιTruncLE n)
+实例 [K.是LE
+  签名: n] : 拟同构 (K.ιTruncLE n)
   定义体: by
   rw [quasiIso_ιTruncLE_iff]
   infer_instance
@@ -1180,7 +1180,7 @@ instance [HasZeroObject
   body: inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n)
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] (A
   定义体: inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n)
 
@@ -1198,7 +1198,7 @@ instance [HasZeroObject
   body: inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n)
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] (A
   定义体: inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n)
 
@@ -1283,8 +1283,8 @@ lemma isLE_shift
 
 中文:
 引理 isLE_shift
-  条件: (n : 整数) [K.IsLE n] (a n' : 整数) (h : a + n' = n)
-  结论: (K⟦a⟧).IsLE n'
+  条件: (n : 整数) [K.是LE n] (a n' : 整数) (h : a + n' = n)
+  结论: (K⟦a⟧).是LE n'
   证明: by
   rw [isLE_iff]
   intro i hi
@@ -1317,8 +1317,8 @@ lemma isGE_shift
 
 中文:
 引理 isGE_shift
-  条件: (n : 整数) [K.IsGE n] (a n' : 整数) (h : a + n' = n)
-  结论: (K⟦a⟧).IsGE n'
+  条件: (n : 整数) [K.是GE n] (a n' : 整数) (h : a + n' = n)
+  结论: (K⟦a⟧).是GE n'
   证明: by
   rw [isGE_iff]
   intro i hi
@@ -1618,7 +1618,7 @@ lemma injective_opcycles
 
 中文:
 引理 injective_opcycles
-  结论: [Injective (K.X n₀)] [Injective (K.X n₁)]
+  结论: [单射 (K.X n₀)] [单射 (K.X n₁)]
   证明: by
   let S : ShortComplex C := ShortComplex.mk (K.d n₀ n₁) (K.pOpcycles n₁) (by simp)
   have : Mono S.f := by

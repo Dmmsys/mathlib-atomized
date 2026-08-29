@@ -47,7 +47,7 @@ definition curryLeft
 
 中文:
 定义 curryLeft
-  签名: (f : M [⋀^Fin n.succ]->ₗ[R] N)
+  签名: (f : M [⋀^有限集 n.succ]->ₗ[R] N)
   定义体: { f.toMultilinearMap.curryLeft m with
       map_eq_zero_of_eq' v i j hv hij :=
         f.map_eq_zero_of_eq _ (by simpa) ((Fin.succ_injective _).ne hij) }
@@ -79,7 +79,7 @@ theorem curryLeft_apply_apply
 
 中文:
 定理 curryLeft_apply_apply
-  条件: (f : M [⋀^Fin n.succ]->ₗ[R] N) (x : M) (v : Fin n -> M)
+  条件: (f : M [⋀^有限集 n.succ]->ₗ[R] N) (x : M) (v : 有限集 n -> M)
   证明: rfl
 
 @[simp]
@@ -101,7 +101,7 @@ theorem curryLeft_zero
 
 中文:
 定理 curryLeft_zero
-  结论: curryLeft (0 : M [⋀^Fin n.succ]->ₗ[R] N) = 0
+  结论: curryLeft (0 : M [⋀^有限集 n.succ]->ₗ[R] N) = 0
   证明: rfl
 
 @[simp]
@@ -122,7 +122,7 @@ theorem curryLeft_add
 
 中文:
 定理 curryLeft_add
-  条件: (f g : M [⋀^Fin n.succ]->ₗ[R] N)
+  条件: (f g : M [⋀^有限集 n.succ]->ₗ[R] N)
   证明: rfl
 
 @[simp]
@@ -142,7 +142,7 @@ theorem curryLeft_smul
 
 中文:
 定理 curryLeft_smul
-  条件: (r : R) (f : M [⋀^Fin n.succ]->ₗ[R] N)
+  条件: (r : R) (f : M [⋀^有限集 n.succ]->ₗ[R] N)
   证明: rfl
 -/
 theorem curryLeft_smul (r : R) (f : M [⋀^Fin n.succ]->ₗ[R] N) :
@@ -191,7 +191,7 @@ theorem curryLeft_same
 
 中文:
 定理 curryLeft_same
-  条件: (f : M [⋀^Fin n.succ.succ]->ₗ[R] N) (m : M)
+  条件: (f : M [⋀^有限集 n.succ.succ]->ₗ[R] N) (m : M)
   证明: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
 
 @[simp]
@@ -236,7 +236,7 @@ theorem curryLeft_compLinearMap
 
 中文:
 定理 curryLeft_compLinearMap
-  条件: (g : M₂ ->ₗ[R] M) (f : M [⋀^Fin n.succ]->ₗ[R] N) (m : M₂)
+  条件: (g : M₂ ->ₗ[R] M) (f : M [⋀^有限集 n.succ]->ₗ[R] N) (m : M₂)
   证明: ext fun v => congr_arg f funext fun i => by cases i using Fin.cases <;> simp
 
 Depends on / 依赖: Fin.cases, congr_arg

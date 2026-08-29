@@ -47,7 +47,7 @@ definition memPartition
 
 中文:
 定义 memPartition
-  签名: (f : 自然数 -> Set α)
+  签名: (f : 自然数 -> 集合 α)
 -/
 def memPartition (f : Nat -> Set α) : Nat -> Set (Set α)
   | 0 => {univ}
@@ -65,7 +65,7 @@ lemma memPartition_zero
 
 中文:
 引理 memPartition_zero
-  条件: (f : 自然数 -> Set α)
+  条件: (f : 自然数 -> 集合 α)
   结论: memPartition f 0 = {univ}
   证明: rfl
 -/
@@ -81,7 +81,7 @@ lemma memPartition_succ
 
 中文:
 引理 memPartition_succ
-  条件: (f : 自然数 -> Set α) (n : 自然数)
+  条件: (f : 自然数 -> 集合 α) (n : 自然数)
   证明: rfl
 -/
 lemma memPartition_succ (f : Nat -> Set α) (n : Nat) :
@@ -110,7 +110,7 @@ lemma disjoint_memPartition
 
 中文:
 引理 disjoint_memPartition
-  结论: (f : 自然数 -> Set α) (n : 自然数) {u v : Set α}
+  结论: (f : 自然数 -> 集合 α) (n : 自然数) {u v : 集合 α}
   证明: by
   revert u v
   induction n with
@@ -173,7 +173,7 @@ lemma sUnion_memPartition
 
 中文:
 引理 sUnion_memPartition
-  条件: (f : 自然数 -> Set α) (n : 自然数)
+  条件: (f : 自然数 -> 集合 α) (n : 自然数)
   结论: ⋃₀ memPartition f n = univ
   证明: by
   induction n with
@@ -223,8 +223,8 @@ lemma finite_memPartition
 
 中文:
 引理 finite_memPartition
-  条件: (f : 自然数 -> Set α) (n : 自然数)
-  结论: Set.Finite (memPartition f n)
+  条件: (f : 自然数 -> 集合 α) (n : 自然数)
+  结论: 集合.有限 (memPartition f n)
   证明: by
   induction n with
   | zero => simp
@@ -261,7 +261,7 @@ noncomputable
 
 中文:
 实例 instFinite_memPartition
-  签名: (f : 自然数 -> Set α) (n : 自然数)
+  签名: (f : 自然数 -> 集合 α) (n : 自然数)
   定义体: Set.finite_coe_iff.mp (finite_memPartition _ _)
 
 noncomputable
@@ -282,7 +282,7 @@ instance instFintype_memPartition
 
 中文:
 实例 instFintype_memPartition
-  签名: (f : 自然数 -> Set α) (n : 自然数)
+  签名: (f : 自然数 -> 集合 α) (n : 自然数)
   定义体: (finite_memPartition f n).fintype
 
 Depends on / 依赖: finite_memPartition, fintype
@@ -302,7 +302,7 @@ definition memPartitionSet
 
 中文:
 定义 memPartitionSet
-  签名: (f : 自然数 -> Set α)
+  签名: (f : 自然数 -> 集合 α)
 -/
 noncomputable def memPartitionSet (f : Nat -> Set α) : Nat -> α -> Set α
   | 0 => fun _ => univ
@@ -321,7 +321,7 @@ lemma memPartitionSet_zero
 
 中文:
 引理 memPartitionSet_zero
-  条件: (f : 自然数 -> Set α) (a : α)
+  条件: (f : 自然数 -> 集合 α) (a : α)
   结论: memPartitionSet f 0 a = univ
   证明: by
   simp [memPartitionSet]
@@ -342,7 +342,7 @@ lemma memPartitionSet_succ
 
 中文:
 引理 memPartitionSet_succ
-  条件: (f : 自然数 -> Set α) (n : 自然数) (a : α) [Decidable (a in f n)]
+  条件: (f : 自然数 -> 集合 α) (n : 自然数) (a : α) [可判定 (a in f n)]
   证明: by
   simp [memPartitionSet]
 
@@ -370,7 +370,7 @@ lemma memPartitionSet_mem
 
 中文:
 引理 memPartitionSet_mem
-  条件: (f : 自然数 -> Set α) (n : 自然数) (a : α)
+  条件: (f : 自然数 -> 集合 α) (n : 自然数) (a : α)
   证明: by
   induction n with
   | zero => simp [memPartitionSet]
@@ -409,7 +409,7 @@ lemma mem_memPartitionSet
 
 中文:
 引理 mem_memPartitionSet
-  条件: (f : 自然数 -> Set α) (n : 自然数) (a : α)
+  条件: (f : 自然数 -> 集合 α) (n : 自然数) (a : α)
   结论: a in memPartitionSet f n a
   证明: by
   induction n with
@@ -446,7 +446,7 @@ lemma memPartitionSet_eq_iff
 
 中文:
 引理 memPartitionSet_eq_iff
-  结论: {f : 自然数 -> Set α} {n : 自然数} (a : α) {s : Set α}
+  结论: {f : 自然数 -> 集合 α} {n : 自然数} (a : α) {s : 集合 α}
   证明: by
   refine ⟨fun h => h ▸ mem_memPartitionSet f n a, fun h => ?_⟩
   by_contra h_ne
@@ -479,7 +479,7 @@ lemma memPartitionSet_of_mem
 
 中文:
 引理 memPartitionSet_of_mem
-  结论: {f : 自然数 -> Set α} {n : 自然数} {a : α} {s : Set α}
+  结论: {f : 自然数 -> 集合 α} {n : 自然数} {a : α} {s : 集合 α}
   证明: (memPartitionSet_eq_iff a hs).mpr ha
 
 Depends on / 依赖: memPartitionSet_eq_iff

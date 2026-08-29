@@ -219,7 +219,7 @@ theorem image_fst_graph
 中文:
 定理 image_fst_graph
   条件: [DecidableEq α] (f : α ->₀ M)
-  结论: f.graph.image Prod.fst = f.support
+  结论: f.graph.像 积类型.fst = f.support
   证明: by
   classical
   simp_rw [graph, map_eq_image, image_image, Embedding.coeFn_mk, Function.comp_def, image_id']
@@ -248,8 +248,8 @@ refine ext_iff'.2 ⟨hsup, fun x hx => apply_eq_of_mem_graph h.symm ▸ ?_⟩
 
 中文:
 定理 graph_injective
-  条件: (α M) [Zero M]
-  结论: Injective (@graph α M _)
+  条件: (α M) [零 M]
+  结论: 单射 (@graph α M _)
   证明: by
   intro f g h
   classical
@@ -378,7 +378,7 @@ theorem mapRange_finsetSum
 
 中文:
 定理 mapRange_finsetSum
-  条件: (f : F) (s : Finset ι) (g : ι -> α ->₀ M)
+  条件: (f : F) (s : 有限集 ι) (g : ι -> α ->₀ M)
   证明: map_sum (mapRange.addMonoidHom (f : M ->+ N)) _ _
 
 @[deprecated (since := "2026-04-08")] alias mapRange_finset_sum := mapRange_finsetSum
@@ -484,7 +484,7 @@ theorem equivMapDomain_refl
 中文:
 定理 equivMapDomain_refl
   条件: (l : α ->₀ M)
-  结论: equivMapDomain (Equiv.refl _) l = l
+  结论: equivMapDomain (等价.refl _) l = l
   证明: by ext x; rfl
 -/
 theorem equivMapDomain_refl (l : α ->₀ M) : equivMapDomain (Equiv.refl _) l = l := by ext x; rfl
@@ -499,7 +499,7 @@ theorem equivMapDomain_refl'
 
 中文:
 定理 equivMapDomain_refl'
-  结论: equivMapDomain (Equiv.refl _) = @id (α ->₀ M)
+  结论: equivMapDomain (等价.refl _) = @id (α ->₀ M)
   证明: by ext x; rfl
 -/
 theorem equivMapDomain_refl' : equivMapDomain (Equiv.refl _) = @id (α ->₀ M) := by ext x; rfl
@@ -611,7 +611,7 @@ theorem prod_equivMapDomain
 
 中文:
 定理 prod_equivMapDomain
-  条件: [CommMonoid N] (f : α ≃ β) (l : α ->₀ M) (g : β -> M -> N)
+  条件: [交换幺半群 N] (f : α ≃ β) (l : α ->₀ M) (g : β -> M -> N)
   证明: by
   simp [prod, equivMapDomain]
 
@@ -715,7 +715,7 @@ theorem cast_finsuppProd
 
 中文:
 定理 cast_finsuppProd
-  条件: [CommSemiring R] (g : α -> M -> 自然数)
+  条件: [交换半环 R] (g : α -> M -> 自然数)
   证明: Nat.cast_prod _ _
 
 @[simp, norm_cast]
@@ -737,7 +737,7 @@ theorem cast_finsupp_sum
 
 中文:
 定理 cast_finsupp_sum
-  条件: [AddCommMonoidWithOne R] (g : α -> M -> 自然数)
+  条件: [加法交换带幺幺半群 R] (g : α -> M -> 自然数)
   证明: Nat.cast_sum _ _
 
 Depends on / 依赖: Nat.cast_sum, cast_sum
@@ -763,7 +763,7 @@ theorem cast_finsuppProd
 
 中文:
 定理 cast_finsuppProd
-  条件: [CommRing R] (g : α -> M -> 整数)
+  条件: [交换环 R] (g : α -> M -> 整数)
   证明: Int.cast_prod _ _
 
 @[simp, norm_cast]
@@ -785,7 +785,7 @@ theorem cast_finsupp_sum
 
 中文:
 定理 cast_finsupp_sum
-  条件: [AddCommGroupWithOne R] (g : α -> M -> 整数)
+  条件: [加法交换带幺群 R] (g : α -> M -> 整数)
   证明: Int.cast_sum _ _
 
 Depends on / 依赖: Int.cast_sum, cast_sum
@@ -811,7 +811,7 @@ theorem cast_finsupp_sum
 
 中文:
 定理 cast_finsupp_sum
-  条件: [DivisionRing R] [CharZero R] (g : α -> M -> Rat)
+  条件: [除环 R] [特征零 R] (g : α -> M -> 有理数)
   证明: cast_sum _ _
 
 @[simp, norm_cast]
@@ -833,7 +833,7 @@ theorem cast_finsuppProd
 
 中文:
 定理 cast_finsuppProd
-  条件: [Field R] [CharZero R] (g : α -> M -> Rat)
+  条件: [域 R] [特征零 R] (g : α -> M -> 有理数)
   证明: cast_prod _ _
 
 Depends on / 依赖: cast_prod
@@ -888,7 +888,7 @@ theorem mapDomain_apply
 
 中文:
 定理 mapDomain_apply
-  条件: {f : α -> β} (hf : Function.Injective f) (x : α ->₀ M) (a : α)
+  条件: {f : α -> β} (hf : 函数.单射 f) (x : α ->₀ M) (a : α)
   证明: by
   rw [mapDomain]; rw [sum_apply]; rw [sum_eq_single a]; rw [single_eq_same]
   · intro b _ hba
@@ -940,7 +940,7 @@ theorem mapDomain_of_notMem_range
 
 中文:
 定理 mapDomain_of_notMem_range
-  条件: {f : α -> β} (x : α ->₀ M) (a : β) (h : a ∉ Set.range f)
+  条件: {f : α -> β} (x : α ->₀ M) (a : β) (h : a ∉ 集合.range f)
   证明: mapDomain_of_not_mem_image_support by grw [Set.image_subset_range]; exact h
 
 @[deprecated (since := "2026-07-15")] alias mapDomain_notin_range := mapDomain_of_notMem_range
@@ -1135,7 +1135,7 @@ lemma mapDomain_sub
 
 中文:
 引理 mapDomain_sub
-  条件: {α β M : 类型} [AddCommGroup M] {v₁ v₂ : α ->₀ M} {f : α -> β}
+  条件: {α β M : 类型} [加法交换群 M] {v₁ v₂ : α ->₀ M} {f : α -> β}
   证明: by
   simp [mapDomain, sum_sub_index]
 
@@ -1250,7 +1250,7 @@ theorem mapDomain.addMonoidHom_id
 
 中文:
 定理 mapDomain.addMonoidHom_id
-  结论: mapDomain.addMonoidHom id = AddMonoidHom.id (α ->₀ M)
+  结论: mapDomain.addMonoidHom id = 加法幺半群态射.id (α ->₀ M)
   证明: AddMonoidHom.ext fun _ => mapDomain_id
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, mapDomain_id
@@ -1290,7 +1290,7 @@ theorem mapDomain_finsetSum
 
 中文:
 定理 mapDomain_finsetSum
-  条件: {f : α -> β} {s : Finset ι} {v : ι -> α ->₀ M}
+  条件: {f : α -> β} {s : 有限集 ι} {v : ι -> α ->₀ M}
   证明: map_sum (mapDomain.addMonoidHom f) _ _
 
 @[deprecated (since := "2026-04-08")] alias mapDomain_finset_sum := mapDomain_finsetSum
@@ -1313,7 +1313,7 @@ theorem mapDomain_sum
 
 中文:
 定理 mapDomain_sum
-  条件: [Zero N] {f : α -> β} {s : α ->₀ N} {v : α -> N -> α ->₀ M}
+  条件: [零 N] {f : α -> β} {s : α ->₀ N} {v : α -> N -> α ->₀ M}
   证明: map_finsuppSum (mapDomain.addMonoidHom f : (α ->₀ M) ->+ β ->₀ M) _ _
 
 Depends on / 依赖: addMonoidHom, mapDomain, mapDomain.addMonoidHom, map_finsuppSum
@@ -1365,7 +1365,7 @@ theorem mapDomain_apply'
 
 中文:
 定理 mapDomain_apply'
-  结论: (S : Set α) {f : α -> β} (x : α ->₀ M) (hS : (x.support : Set α) subseteq S)
+  结论: (S : 集合 α) {f : α -> β} (x : α ->₀ M) (hS : (x.support : 集合 α) subseteq S)
   证明: by
   classical
     rw [mapDomain]; rw [sum_apply]; rw [sum]
@@ -1446,7 +1446,7 @@ theorem mapDomain_support_of_injective
 
 中文:
 定理 mapDomain_support_of_injective
-  结论: [DecidableEq β] {f : α -> β} (hf : Function.Injective f)
+  结论: [DecidableEq β] {f : α -> β} (hf : 函数.单射 f)
   证明: mapDomain_support_of_injOn s hf.injOn
 
 @[to_additive]
@@ -1468,7 +1468,7 @@ theorem prod_mapDomain_index
 
 中文:
 定理 prod_mapDomain_index
-  结论: [CommMonoid N] {f : α -> β} {s : α ->₀ M} {h : β -> M -> N}
+  结论: [交换幺半群 N] {f : α -> β} {s : α ->₀ M} {h : β -> M -> N}
   证明: (prod_sum_index h_zero h_add).trans prod_congr fun _ _ => prod_single_index (h_zero _)
 
 Depends on / 依赖: h_add, h_zero, prod_congr, prod_single_index, prod_sum_index
@@ -1494,7 +1494,7 @@ theorem sum_mapDomain_index_addMonoidHom
 
 中文:
 定理 sum_mapDomain_index_addMonoidHom
-  结论: [AddCommMonoid N] {f : α -> β} {s : α ->₀ M}
+  结论: [加法交换幺半群 N] {f : α -> β} {s : α ->₀ M}
   证明: sum_mapDomain_index (fun b => (h b).map_zero) (fun b _ _ => (h b).map_add _ _)
 
 Depends on / 依赖: map_add, map_zero, sum_mapDomain_index
@@ -1553,7 +1553,7 @@ theorem prod_mapDomain_index_inj
 
 中文:
 定理 prod_mapDomain_index_inj
-  结论: [CommMonoid N] {f : α -> β} {s : α ->₀ M} {h : β -> M -> N}
+  结论: [交换幺半群 N] {f : α -> β} {s : α ->₀ M} {h : β -> M -> N}
   证明: by
   rw [← Function.Embedding.coeFn_mk f hf]; rw [← embDomain_eq_mapDomain]; rw [prod_embDomain]
 
@@ -1577,7 +1577,7 @@ theorem mapDomain_injective
 
 中文:
 定理 mapDomain_injective
-  条件: {f : α -> β} (hf : Function.Injective f)
+  条件: {f : α -> β} (hf : 函数.单射 f)
   证明: by
   intro v₁ v₂ eq
   ext a
@@ -1606,7 +1606,7 @@ theorem mapDomain_surjective
 
 中文:
 定理 mapDomain_surjective
-  条件: {f : α -> β} (hf : f.Surjective)
+  条件: {f : α -> β} (hf : f.满射)
   证明: by
   intro x
   use mapDomain (surjInv hf) x
@@ -1652,7 +1652,7 @@ theorem mapDomain.addMonoidHom_comp_mapRange
 
 中文:
 定理 mapDomain.addMonoidHom_comp_mapRange
-  条件: [AddCommMonoid N] (f : α -> β) (g : M ->+ N)
+  条件: [加法交换幺半群 N] (f : α -> β) (g : M ->+ N)
   证明: by
   ext
   simp
@@ -1677,7 +1677,7 @@ theorem mapDomain_mapRange
 
 中文:
 定理 mapDomain_mapRange
-  结论: [AddCommMonoid N] (f : α -> β) (v : α ->₀ M) (g : M -> N) (h0 : g 0 = 0)
+  结论: [加法交换幺半群 N] (f : α -> β) (v : α ->₀ M) (g : M -> N) (h0 : g 0 = 0)
   证明: let g' : M ->+ N :=
     { toFun := g
       map_zero' := h0
@@ -1710,7 +1710,7 @@ theorem sum_update_add
 
 中文:
 定理 sum_update_add
-  结论: [AddZeroClass α] [AddCommMonoid β] (f : ι ->₀ α) (i : ι) (a : α)
+  结论: [加法零类 α] [加法交换幺半群 β] (f : ι ->₀ α) (i : ι) (a : α)
   证明: by
   rw [update_eq_erase_add_single]; rw [sum_add_index' hg hgg]
   conv_rhs => rw [← Finsupp.update_self f i]
@@ -1748,7 +1748,7 @@ theorem mapDomain_injOn
 
 中文:
 定理 mapDomain_injOn
-  条件: (S : Set α) {f : α -> β} (hf : Set.InjOn f S)
+  条件: (S : 集合 α) {f : α -> β} (hf : 集合.单射限制 f S)
   证明: by
   intro v₁ hv₁ v₂ hv₂ eq
   ext a
@@ -1782,7 +1782,7 @@ theorem equivMapDomain_eq_mapDomain
 
 中文:
 定理 equivMapDomain_eq_mapDomain
-  条件: {M} [AddCommMonoid M] (f : α ≃ β) (l : α ->₀ M)
+  条件: {M} [加法交换幺半群 M] (f : α ≃ β) (l : α ->₀ M)
   证明: by ext x; simp
 -/
 theorem equivMapDomain_eq_mapDomain {M} [AddCommMonoid M] (f : α ≃ β) (l : α ->₀ M) :
@@ -1816,7 +1816,7 @@ definition comapDomain
 
 中文:
 定义 comapDomain
-  签名: [Zero M] (f : α -> β) (l : β ->₀ M) (hf : Set.InjOn f (f ⁻¹' ↑l.support))
+  签名: [零 M] (f : α -> β) (l : β ->₀ M) (hf : 集合.单射限制 f (f ⁻¹' ↑l.support))
   定义体: l.support.preimage f hf
   toFun a := l (f a)
   mem_support_toFun := by
@@ -1848,7 +1848,7 @@ theorem comapDomain_apply
 
 中文:
 定理 comapDomain_apply
-  结论: [Zero M] (f : α -> β) (l : β ->₀ M) (hf : Set.InjOn f (f ⁻¹' ↑l.support))
+  结论: [零 M] (f : α -> β) (l : β ->₀ M) (hf : 集合.单射限制 f (f ⁻¹' ↑l.support))
   证明: rfl
 -/
 theorem comapDomain_apply [Zero M] (f : α -> β) (l : β ->₀ M) (hf : Set.InjOn f (f ⁻¹' ↑l.support))
@@ -1865,7 +1865,7 @@ theorem sum_comapDomain
 
 中文:
 定理 sum_comapDomain
-  结论: [Zero M] [AddCommMonoid N] (f : α -> β) (l : β ->₀ M) (g : β -> M -> N)
+  结论: [零 M] [加法交换幺半群 N] (f : α -> β) (l : β ->₀ M) (g : β -> M -> N)
   证明: Finset.sum_preimage_of_bij f _ hf fun x => g x (l x)
 
 Depends on / 依赖: Finset, Finset.sum_preimage_of_bij, sum_preimage_of_bij
@@ -1892,7 +1892,7 @@ theorem eq_zero_of_comapDomain_eq_zero
 
 中文:
 定理 eq_zero_of_comapDomain_eq_zero
-  结论: [Zero M] (f : α -> β) (l : β ->₀ M)
+  结论: [零 M] (f : α -> β) (l : β ->₀ M)
   证明: by
   rw [← support_eq_empty]; rw [← support_eq_empty]; rw [comapDomain]
   simp_rw [Finset.ext_iff, Finset.notMem_empty, iff_false, mem_preimage]
@@ -1928,7 +1928,7 @@ lemma comapDomain_single_of_not_mem_range
 
 中文:
 引理 comapDomain_single_of_not_mem_range
-  结论: [Zero M] {f : α -> β} {b : β} (hb : b ∉ Set.range f)
+  结论: [零 M] {f : α -> β} {b : β} (hb : b ∉ 集合.range f)
   证明: by
   classical
   ext a
@@ -1970,7 +1970,7 @@ lemma embDomain_comapDomain
 
 中文:
 引理 embDomain_comapDomain
-  条件: {f : α ↪ β} {g : β ->₀ M} (hg : ↑g.support subseteq Set.range f)
+  条件: {f : α ↪ β} {g : β ->₀ M} (hg : ↑g.support subseteq 集合.range f)
   证明: by
   ext b
   by_cases hb : b in Set.range f
@@ -2092,7 +2092,7 @@ lemma comapDomain_surjective
 
 中文:
 引理 comapDomain_surjective
-  条件: {f : α -> β} (hf : Function.Injective f)
+  条件: {f : α -> β} (hf : 函数.单射 f)
   证明: by
   intro l'
   use l'.embDomain ⟨f, hf⟩
@@ -2124,7 +2124,7 @@ theorem comapDomain_add
 
 中文:
 定理 comapDomain_add
-  结论: (v₁ v₂ : β ->₀ M) (hv₁ : Set.InjOn f (f ⁻¹' ↑v₁.support))
+  结论: (v₁ v₂ : β ->₀ M) (hv₁ : 集合.单射限制 f (f ⁻¹' ↑v₁.support))
   证明: by
   ext
   simp
@@ -2145,7 +2145,7 @@ theorem comapDomain_add_of_injective
 
 中文:
 定理 comapDomain_add_of_injective
-  条件: (hf : Function.Injective f) (v₁ v₂ : β ->₀ M)
+  条件: (hf : 函数.单射 f) (v₁ v₂ : β ->₀ M)
   证明: comapDomain_add ..
 
 Depends on / 依赖: comapDomain_add
@@ -2169,7 +2169,7 @@ definition comapDomain.addMonoidHom
 
 中文:
 定义 comapDomain.addMonoidHom
-  签名: (hf : Function.Injective f)
+  签名: (hf : 函数.单射 f)
   定义体: comapDomain f x hf.injOn
   map_zero' := comapDomain_zero f
   map_add' := comapDomain_add_of_injective hf
@@ -2197,7 +2197,7 @@ theorem mapDomain_comapDomain
 
 中文:
 定理 mapDomain_comapDomain
-  结论: (hf : Function.Injective f) (l : β ->₀ M)
+  结论: (hf : 函数.单射 f) (l : β ->₀ M)
   证明: by
   conv_rhs => rw [← embDomain_comapDomain (f := ⟨f, hf⟩) hl (M := M), embDomain_eq_mapDomain]
   rfl
@@ -2248,7 +2248,7 @@ theorem comapDomain_mapDomain
 
 中文:
 定理 comapDomain_mapDomain
-  条件: (hf : Function.Injective f) (l : α ->₀ M)
+  条件: (hf : 函数.单射 f) (l : α ->₀ M)
   证明: by
   ext; rw [comapDomain_apply, mapDomain_apply hf]
 
@@ -2273,7 +2273,7 @@ lemma mem_range_mapDomain_iff
 
 中文:
 引理 mem_range_mapDomain_iff
-  条件: (hf : Function.Injective f) (x : β ->₀ M)
+  条件: (hf : 函数.单射 f) (x : β ->₀ M)
   证明: by
   refine ⟨fun ⟨y, hy⟩ x hx => hy ▸ Finsupp.mapDomain_of_notMem_range y x hx, fun h => ?_⟩
   refine ⟨Finsupp.comapDomain f x hf.injOn, Finsupp.mapDomain_comapDomain f hf _ fun i hi => ?_⟩
@@ -2399,7 +2399,7 @@ theorem filter_eq_indicator
 
 中文:
 定理 filter_eq_indicator
-  结论: ⇑(f.filter p) = Set.indicator { x | p x } f
+  结论: ⇑(f.filter p) = 集合.indicator { x | p x } f
   证明: by
   ext
   simp [filter_apply, Set.indicator_apply]
@@ -2614,7 +2614,7 @@ theorem prod_filter_index
 
 中文:
 定理 prod_filter_index
-  条件: [CommMonoid N] (g : α -> M -> N)
+  条件: [交换幺半群 N] (g : α -> M -> N)
   证明: by
   refine Finset.prod_congr rfl fun x hx => ?_
   rw [support_filter]; rw [Finset.mem_filter] at hx
@@ -2644,7 +2644,7 @@ theorem prod_filter_mul_prod_filter_not
 
 中文:
 定理 prod_filter_mul_prod_filter_not
-  条件: [CommMonoid N] (g : α -> M -> N)
+  条件: [交换幺半群 N] (g : α -> M -> N)
   证明: by
   simp_rw [prod_filter_index, support_filter, Finset.prod_filter_mul_prod_filter_not, Finsupp.prod]
 
@@ -2667,7 +2667,7 @@ theorem prod_div_prod_filter
 
 中文:
 定理 prod_div_prod_filter
-  条件: [CommGroup G] (g : α -> M -> G)
+  条件: [交换群 G] (g : α -> M -> G)
   证明: div_eq_of_eq_mul' (prod_filter_mul_prod_filter_not _ _ _).symm
 
 Depends on / 依赖: div_eq_of_eq_mul, prod_filter_mul_prod_filter_not
@@ -2757,7 +2757,7 @@ theorem mem_frange
 中文:
 定理 mem_frange
   条件: {f : α ->₀ M} {y : M}
-  结论: y in f.frange ↔ y != 0 ∧ y in Set.range f
+  结论: y in f.frange ↔ y != 0 ∧ y in 集合.range f
   证明: by
   rw [frange]; rw [@Finset.mem_image _ _ (Classical.decEq _) _ f.support]
   exact ⟨fun ⟨x, hx1, hx2⟩ => ⟨hx2 ▸ mem_support_iff.1 hx1, x, hx2⟩, fun ⟨hy, x, hx⟩ =>
@@ -2844,7 +2844,7 @@ theorem range_subset_insert_frange
 中文:
 定理 range_subset_insert_frange
   条件: (f : α ->₀ M)
-  结论: Set.range f subseteq insert 0 f.frange
+  结论: 集合.range f subseteq insert 0 f.frange
   证明: by
   grind
 -/
@@ -2863,7 +2863,7 @@ theorem finite_range
 中文:
 定理 finite_range
   条件: (f : α ->₀ M)
-  结论: (Set.range f).Finite
+  结论: (集合.range f).有限
   证明: .subset (by simp) (range_subset_insert_frange f)
 
 Depends on / 依赖: range_subset_insert_frange, subset
@@ -2951,7 +2951,7 @@ theorem subtypeDomain_apply
 
 中文:
 定理 subtypeDomain_apply
-  条件: {a : Subtype p} {v : α ->₀ M}
+  条件: {a : 子类型 p} {v : α ->₀ M}
   结论: (subtypeDomain p v) a = v a.val
   证明: rfl
 
@@ -2987,7 +2987,7 @@ theorem subtypeDomain_eq_iff_forall
   simp_rw [DFunLike.ext_iff, subtypeDomain_apply, Subtype.forall]
 
 中文:
-定理 subtypeDomain_eq_iff_forall
+定理 subtypeDomain_eq_iff_对任意
   条件: {f g : α ->₀ M}
   证明: by
   simp_rw [DFunLike.ext_iff, subtypeDomain_apply, Subtype.forall]
@@ -3082,7 +3082,7 @@ theorem prod_subtypeDomain_index
 
 中文:
 定理 prod_subtypeDomain_index
-  结论: [CommMonoid N] {v : α ->₀ M} {h : α -> M -> N}
+  结论: [交换幺半群 N] {v : α ->₀ M} {h : α -> M -> N}
   证明: by
   refine Finset.prod_bij (fun p _ => p) ?_ ?_ ?_ ?_ <;> aesop
 
@@ -3128,7 +3128,7 @@ definition subtypeDomainAddMonoidHom
 
 中文:
 定义 subtypeDomainAddMonoidHom
-  签名: : (α ->₀ M) ->+ Subtype p ->₀ M where
+  签名: : (α ->₀ M) ->+ 子类型 p ->₀ M where
   定义体: subtypeDomain p
   map_zero' := subtypeDomain_zero
   map_add' _ _ := subtypeDomain_add
@@ -3210,7 +3210,7 @@ theorem subtypeDomain_sum
 
 中文:
 定理 subtypeDomain_sum
-  条件: {s : Finset ι} {h : ι -> α ->₀ M}
+  条件: {s : 有限集 ι} {h : ι -> α ->₀ M}
   证明: map_sum subtypeDomainAddMonoidHom _ s
 
 Depends on / 依赖: map_sum, subtypeDomainAddMonoidHom
@@ -3229,7 +3229,7 @@ theorem subtypeDomain_finsupp_sum
 
 中文:
 定理 subtypeDomain_finsupp_sum
-  条件: [Zero N] {s : β ->₀ N} {h : β -> N -> α ->₀ M}
+  条件: [零 N] {s : β ->₀ N} {h : β -> N -> α ->₀ M}
   证明: subtypeDomain_sum
 
 Depends on / 依赖: subtypeDomain_sum
@@ -3248,7 +3248,7 @@ theorem filter_sum
 
 中文:
 定理 filter_sum
-  条件: [DecidablePred p] (s : Finset ι) (f : ι -> α ->₀ M)
+  条件: [DecidablePred p] (s : 有限集 ι) (f : ι -> α ->₀ M)
   证明: map_sum (filterAddHom p) f s
 
 Depends on / 依赖: filterAddHom, map_sum
@@ -3396,7 +3396,7 @@ theorem mem_support_multiset_sum
 
 中文:
 定理 mem_support_multiset_sum
-  条件: [AddCommMonoid M] {s : Multiset (α ->₀ M)} (a : α)
+  条件: [加法交换幺半群 M] {s : Multiset (α ->₀ M)} (a : α)
   证明: Multiset.induction_on s (fun h => False.elim (by simp at h))
     (by
       intro f s ih ha
@@ -3434,7 +3434,7 @@ theorem mem_support_finsetSum
 
 中文:
 定理 mem_support_finsetSum
-  结论: [AddCommMonoid M] {s : Finset ι} {h : ι -> α ->₀ M} (a : α)
+  结论: [加法交换幺半群 M] {s : 有限集 ι} {h : ι -> α ->₀ M} (a : α)
   证明: let ⟨_, hf, hfa⟩ := mem_support_multiset_sum a ha
   let ⟨c, hc, Eq⟩ := Multiset.mem_map.1 hf
   ⟨c, hc, Eq.symm ▸ hfa⟩
@@ -3565,7 +3565,7 @@ theorem sum_uncurry_index
 
 中文:
 定理 sum_uncurry_index
-  条件: [AddCommMonoid N] (f : α ->₀ β ->₀ M) (g : α × β -> M -> N)
+  条件: [加法交换幺半群 N] (f : α ->₀ β ->₀ M) (g : α × β -> M -> N)
   证明: by
   simp [Finsupp.sum, Finsupp.uncurry, Finset.sum_disjiUnion]
 
@@ -3585,7 +3585,7 @@ theorem sum_uncurry_index'
 
 中文:
 定理 sum_uncurry_index'
-  条件: [AddCommMonoid N] (f : α ->₀ β ->₀ M) (g : α -> β -> M -> N)
+  条件: [加法交换幺半群 N] (f : α ->₀ β ->₀ M) (g : α -> β -> M -> N)
   证明: sum_uncurry_index ..
 
 Depends on / 依赖: sum_uncurry_index
@@ -3768,7 +3768,7 @@ theorem sum_curry_index
 
 中文:
 定理 sum_curry_index
-  条件: [AddCommMonoid N] (f : α × β ->₀ M) (g : α -> β -> M -> N)
+  条件: [加法交换幺半群 N] (f : α × β ->₀ M) (g : α -> β -> M -> N)
   证明: by
   rw [← sum_uncurry_index']; rw [uncurry_curry]
 
@@ -3932,7 +3932,7 @@ theorem coe_sumElim
 中文:
 定理 coe_sumElim
   条件: (f : α ->₀ γ) (g : β ->₀ γ)
-  结论: ⇑(sumElim f g) = Sum.elim f g
+  结论: ⇑(sumElim f g) = 和.elim f g
   证明: rfl
 -/
 theorem coe_sumElim (f : α ->₀ γ) (g : β ->₀ γ) : ⇑(sumElim f g) = Sum.elim f g := rfl
@@ -3949,7 +3949,7 @@ theorem sumElim_apply
 中文:
 定理 sumElim_apply
   条件: (f : α ->₀ γ) (g : β ->₀ γ) (x : α oplus β)
-  结论: sumElim f g x = Sum.elim f g x
+  结论: sumElim f g x = 和.elim f g x
   证明: rfl
 -/
 theorem sumElim_apply (f : α ->₀ γ) (g : β ->₀ γ) (x : α oplus β) : sumElim f g x = Sum.elim f g x := rfl
@@ -3966,7 +3966,7 @@ lemma sumElim_inl
 中文:
 引理 sumElim_inl
   条件: (f : α ->₀ γ) (g : β ->₀ γ) (x : α)
-  结论: sumElim f g (Sum.inl x) = f x
+  结论: sumElim f g (和.inl x) = f x
   证明: rfl
 -/
 lemma sumElim_inl (f : α ->₀ γ) (g : β ->₀ γ) (x : α) : sumElim f g (Sum.inl x) = f x := rfl
@@ -3982,7 +3982,7 @@ lemma sumElim_inr
 中文:
 引理 sumElim_inr
   条件: (f : α ->₀ γ) (g : β ->₀ γ) (x : β)
-  结论: sumElim f g (Sum.inr x) = g x
+  结论: sumElim f g (和.inr x) = g x
   证明: rfl
 -/
 lemma sumElim_inr (f : α ->₀ γ) (g : β ->₀ γ) (x : β) : sumElim f g (Sum.inr x) = g x := rfl
@@ -4051,7 +4051,7 @@ lemma sumElim_single_single
 
 中文:
 引理 sumElim_single_single
-  条件: [AddMonoid M] (a : α) (b : β) (m₁ m₂ : M)
+  条件: [加法幺半群 M] (a : α) (b : β) (m₁ m₂ : M)
   证明: by
   classical ext (_ | _) <;> simp [single_apply]
 -/
@@ -4070,7 +4070,7 @@ lemma sumElim_eq_add
 
 中文:
 引理 sumElim_eq_add
-  条件: [AddCommMonoid M] (f : α ->₀ M) (g : β ->₀ M)
+  条件: [加法交换幺半群 M] (f : α ->₀ M) (g : β ->₀ M)
   证明: by
   ext (_ | _) <;> simp [mapDomain_of_notMem_range, Sum.inl_injective, Sum.inr_injective]
 
@@ -4093,7 +4093,7 @@ lemma mapDomain_swap_sumElim
 
 中文:
 引理 mapDomain_swap_sumElim
-  条件: [AddCommMonoid M] (f : α ->₀ M) (g : β ->₀ M)
+  条件: [加法交换幺半群 M] (f : α ->₀ M) (g : β ->₀ M)
   证明: by
   simp [sumElim_eq_add, mapDomain_add, ← mapDomain_comp, Function.comp_def, add_comm]
 
@@ -4117,7 +4117,7 @@ lemma prod_sumElim
 
 中文:
 引理 prod_sumElim
-  结论: {ι₁ ι₂ α M : 类型} [Zero α] [CommMonoid M]
+  结论: {ι₁ ι₂ α M : 类型} [零 α] [交换幺半群 M]
   证明: by
   simp [Finsupp.prod, Finset.prod_disjSum]
 
@@ -4267,7 +4267,7 @@ lemma sumElim_add
 
 中文:
 引理 sumElim_add
-  条件: [AddZeroClass M] (a b : α ->₀ M) (c d : β ->₀ M)
+  条件: [加法零类 M] (a b : α ->₀ M) (c d : β ->₀ M)
   证明: by
   ext (_ | _) <;> simp
 -/
@@ -4295,7 +4295,7 @@ definition sumFinsuppEquivProdFinsupp
 
 中文:
 定义 sumFinsuppEquivProdFinsupp
-  签名: {α β γ : 类型} [Zero γ]
+  签名: {α β γ : 类型} [零 γ]
   定义体: ⟨f.comapDomain Sum.inl Sum.inl_injective.injOn,
       f.comapDomain Sum.inr Sum.inr_injective.injOn⟩
   invFun fg := sumElim fg.1 fg.2
@@ -4326,7 +4326,7 @@ theorem fst_sumFinsuppEquivProdFinsupp
 
 中文:
 定理 fst_sumFinsuppEquivProdFinsupp
-  条件: {α β γ : 类型} [Zero γ] (f : α oplus β ->₀ γ) (x : α)
+  条件: {α β γ : 类型} [零 γ] (f : α oplus β ->₀ γ) (x : α)
   证明: rfl
 -/
 theorem fst_sumFinsuppEquivProdFinsupp {α β γ : Type*} [Zero γ] (f : α oplus β ->₀ γ) (x : α) :
@@ -4343,7 +4343,7 @@ theorem snd_sumFinsuppEquivProdFinsupp
 
 中文:
 定理 snd_sumFinsuppEquivProdFinsupp
-  条件: {α β γ : 类型} [Zero γ] (f : α oplus β ->₀ γ) (y : β)
+  条件: {α β γ : 类型} [零 γ] (f : α oplus β ->₀ γ) (y : β)
   证明: rfl
 -/
 theorem snd_sumFinsuppEquivProdFinsupp {α β γ : Type*} [Zero γ] (f : α oplus β ->₀ γ) (y : β) :
@@ -4360,7 +4360,7 @@ theorem sumFinsuppEquivProdFinsupp_symm_inl
 
 中文:
 定理 sumFinsuppEquivProdFinsupp_symm_inl
-  结论: {α β γ : 类型} [Zero γ] (fg : (α ->₀ γ) × (β ->₀ γ))
+  结论: {α β γ : 类型} [零 γ] (fg : (α ->₀ γ) × (β ->₀ γ))
   证明: rfl
 -/
 theorem sumFinsuppEquivProdFinsupp_symm_inl {α β γ : Type*} [Zero γ] (fg : (α ->₀ γ) × (β ->₀ γ))
@@ -4377,7 +4377,7 @@ theorem sumFinsuppEquivProdFinsupp_symm_inr
 
 中文:
 定理 sumFinsuppEquivProdFinsupp_symm_inr
-  结论: {α β γ : 类型} [Zero γ] (fg : (α ->₀ γ) × (β ->₀ γ))
+  结论: {α β γ : 类型} [零 γ] (fg : (α ->₀ γ) × (β ->₀ γ))
   证明: rfl
 -/
 theorem sumFinsuppEquivProdFinsupp_symm_inr {α β γ : Type*} [Zero γ] (fg : (α ->₀ γ) × (β ->₀ γ))
@@ -4507,7 +4507,7 @@ instance uniqueOfRight
 
 中文:
 实例 uniqueOfRight
-  签名: [Subsingleton R]
+  签名: [子单例 R]
   定义体: DFunLike.coe_injective.unique
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.unique, coe_injective, unique
@@ -4525,7 +4525,7 @@ instance uniqueOfLeft
 
 中文:
 实例 uniqueOfLeft
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: DFunLike.coe_injective.unique
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.unique, coe_injective, unique
@@ -4556,7 +4556,7 @@ support := (f.support.map (.subtype _)).disjUnion (g.support.map (.subtype _)) b
 
 中文:
 定义 piecewise
-  签名: (f : Subtype P ->₀ M) (g : {a // ¬ P a} ->₀ M)
+  签名: (f : 子类型 P ->₀ M) (g : {a // ¬ P a} ->₀ M)
   定义体: if h : P a then f ⟨a, h⟩ else g ⟨a, h⟩
 support := (f.support.map (.subtype _)).disjUnion (g.support.map (.subtype _)) by
     simp_rw [Finset.disjoint_left, mem_map, forall_exists_index, Embedding.coe_subtype,
@@ -4587,7 +4587,7 @@ theorem subtypeDomain_piecewise
 
 中文:
 定理 subtypeDomain_piecewise
-  条件: (f : Subtype P ->₀ M) (g : {a // ¬ P a} ->₀ M)
+  条件: (f : 子类型 P ->₀ M) (g : {a // ¬ P a} ->₀ M)
   证明: Finsupp.ext fun a => dif_pos a.prop
 
 @[simp]
@@ -4611,7 +4611,7 @@ theorem subtypeDomain_not_piecewise
 
 中文:
 定理 subtypeDomain_not_piecewise
-  条件: (f : Subtype P ->₀ M) (g : {a // ¬ P a} ->₀ M)
+  条件: (f : 子类型 P ->₀ M) (g : {a // ¬ P a} ->₀ M)
   证明: Finsupp.ext fun a => dif_neg a.prop
 
 #adaptation_note
@@ -4637,7 +4637,7 @@ definition extendDomain
 
 中文:
 定义 extendDomain
-  签名: (f : Subtype P ->₀ M)
+  签名: (f : 子类型 P ->₀ M)
   定义体: piecewise f 0
 
 Depends on / 依赖: piecewise
@@ -4659,7 +4659,7 @@ theorem extendDomain_eq_embDomain_subtype
 
 中文:
 定理 extendDomain_eq_embDomain_subtype
-  条件: (f : Subtype P ->₀ M)
+  条件: (f : 子类型 P ->₀ M)
   证明: by
   ext a
   by_cases h : P a
@@ -4690,7 +4690,7 @@ theorem support_extendDomain_subset
 
 中文:
 定理 support_extendDomain_subset
-  条件: (f : Subtype P ->₀ M)
+  条件: (f : 子类型 P ->₀ M)
   证明: by
   grind
 
@@ -4711,7 +4711,7 @@ theorem subtypeDomain_extendDomain
 
 中文:
 定理 subtypeDomain_extendDomain
-  条件: (f : Subtype P ->₀ M)
+  条件: (f : 子类型 P ->₀ M)
   证明: subtypeDomain_piecewise _ _
 
 Depends on / 依赖: subtypeDomain_piecewise
@@ -4765,7 +4765,7 @@ theorem extendDomain_single
 
 中文:
 定理 extendDomain_single
-  条件: (a : Subtype P) (m : M)
+  条件: (a : 子类型 P) (m : M)
   证明: by
   ext a'
   obtain rfl | ha := eq_or_ne a' a.val <;>
@@ -4796,7 +4796,7 @@ letI := Classical.decPred (· in s); Subtype.ext extendDomain_subtypeDomain f.1 
 
 中文:
 定义 restrictSupportEquiv
-  签名: (s : Set α) (M : 类型) [AddCommMonoid M]
+  签名: (s : 集合 α) (M : 类型) [加法交换幺半群 M]
   定义体: subtypeDomain (· in s) f.1
   invFun f := letI := Classical.decPred (· in s); ⟨f.extendDomain, support_extendDomain_subset _⟩
   left_inv f :=
@@ -4823,7 +4823,7 @@ lemma restrictSupportEquiv_symm_apply_coe
 
 中文:
 引理 restrictSupportEquiv_symm_apply_coe
-  结论: (s : Set α) (M : 类型) [AddCommMonoid M]
+  结论: (s : 集合 α) (M : 类型) [加法交换幺半群 M]
   证明: by
   rw [restrictSupportEquiv]; rw [Equiv.coe_fn_symm_mk]; rw [Subtype.coe_mk]; congr
 -/
@@ -4843,7 +4843,7 @@ lemma restrictSupportEquiv_symm_single
 
 中文:
 引理 restrictSupportEquiv_symm_single
-  结论: (s : Set α) (M : 类型) [AddCommMonoid M]
+  结论: (s : 集合 α) (M : 类型) [加法交换幺半群 M]
   证明: by
   classical simp
 -/
@@ -4876,7 +4876,7 @@ definition domCongr
 
 中文:
 定义 domCongr
-  签名: [AddCommMonoid M] (e : α ≃ β)
+  签名: [加法交换幺半群 M] (e : α ≃ β)
   定义体: equivMapDomain e
   invFun := equivMapDomain e.symm
   left_inv v := by
@@ -4913,7 +4913,7 @@ theorem domCongr_refl
 
 中文:
 定理 domCongr_refl
-  条件: [AddCommMonoid M]
+  条件: [加法交换幺半群 M]
   证明: AddEquiv.ext fun _ => equivMapDomain_refl _
 
 @[simp]
@@ -4937,7 +4937,7 @@ theorem domCongr_symm
 
 中文:
 定理 domCongr_symm
-  条件: [AddCommMonoid M] (e : α ≃ β)
+  条件: [加法交换幺半群 M] (e : α ≃ β)
   证明: AddEquiv.ext fun _ => rfl
 
 @[simp]
@@ -4959,7 +4959,7 @@ theorem domCongr_trans
 
 中文:
 定理 domCongr_trans
-  条件: [AddCommMonoid M] (e : α ≃ β) (f : β ≃ γ)
+  条件: [加法交换幺半群 M] (e : α ≃ β) (f : β ≃ γ)
   证明: AddEquiv.ext fun _ => (equivMapDomain_trans _ _ _).symm
 
 Depends on / 依赖: AddEquiv, AddEquiv.ext, equivMapDomain_trans
@@ -5088,7 +5088,7 @@ definition splitComp
 
 中文:
 定义 splitComp
-  签名: [Zero N] (g : 对任意 i, (αs i ->₀ M) -> N) (hg : 对任意 i x, x = 0 ↔ g i x = 0)
+  签名: [零 N] (g : 对任意 i, (αs i ->₀ M) -> N) (hg : 对任意 i x, x = 0 ↔ g i x = 0)
   定义体: splitSupport l
   toFun i := g i (split l i)
   mem_support_toFun := by
@@ -5142,7 +5142,7 @@ theorem sigma_sum
 
 中文:
 定理 sigma_sum
-  条件: [AddCommMonoid N] (f : (Σ i : ι, αs i) -> M -> N)
+  条件: [加法交换幺半群 N] (f : (Σ i : ι, αs i) -> M -> N)
   证明: by
   simp only [sum, sigma_support, sum_sigma, split_apply]
 
@@ -5235,7 +5235,7 @@ definition sigmaFinsuppAddEquivPiFinsupp
 
 中文:
 定义 sigmaFinsuppAddEquivPiFinsupp
-  签名: {α : 类型} {ιs : η -> 类型} [AddMonoid α]
+  签名: {α : 类型} {ιs : η -> 类型} [加法幺半群 α]
   定义体: { sigmaFinsuppEquivPiFinsupp with
     map_add' := fun f g => by
       ext
@@ -5263,7 +5263,7 @@ theorem sigmaFinsuppAddEquivPiFinsupp_apply
 
 中文:
 定理 sigmaFinsuppAddEquivPiFinsupp_apply
-  结论: {α : 类型} {ιs : η -> 类型} [AddMonoid α]
+  结论: {α : 类型} {ιs : η -> 类型} [加法幺半群 α]
   证明: rfl
 -/
 theorem sigmaFinsuppAddEquivPiFinsupp_apply {α : Type*} {ιs : η -> Type*} [AddMonoid α]
@@ -5285,7 +5285,7 @@ lemma mem_range_embDomain_iff
 
 中文:
 引理 mem_range_embDomain_iff
-  条件: [AddCommMonoid M] (f : α ↪ β) (x : β ->₀ M)
+  条件: [加法交换幺半群 M] (f : α ↪ β) (x : β ->₀ M)
   证明: by
   convert! mem_range_mapDomain_iff _ f.injective _
   · ext; rw [embDomain_eq_mapDomain]
@@ -5310,7 +5310,7 @@ theorem embDomain_trans_apply
 
 中文:
 定理 embDomain_trans_apply
-  条件: [AddCommMonoid M] (v : α ->₀ M) (f : α ↪ β) (g : β ↪ γ)
+  条件: [加法交换幺半群 M] (v : α ->₀ M) (f : α ↪ β) (g : β ↪ γ)
   证明: by
   simp only [embDomain_eq_mapDomain, ← mapDomain_comp, Embedding.coe_trans]
 
@@ -5335,7 +5335,7 @@ theorem mapDomain_support_of_subsingletonAddUnits
 
 中文:
 定理 mapDomain_support_of_subsingletonAddUnits
-  结论: [DecidableEq β] [AddCommMonoid M]
+  结论: [DecidableEq β] [加法交换幺半群 M]
   证明: by
   ext t
   rw [mem_support_iff]; rw [ne_eq]; rw [Finset.mem_image]
@@ -5365,7 +5365,7 @@ theorem mapDomain_apply_eq_sum
 
 中文:
 定理 mapDomain_apply_eq_sum
-  结论: [DecidableEq β] [AddCommMonoid M] (f : α -> β)
+  结论: [DecidableEq β] [加法交换幺半群 M] (f : α -> β)
   证明: by
   simp [mapDomain, sum, single_apply, Finset.sum_ite]
 
@@ -5389,7 +5389,7 @@ theorem mapDomain_apply_eq_zero_iff_of_subsingletonAddUnits
 
 中文:
 定理 mapDomain_apply_eq_zero_iff_of_subsingletonAddUnits
-  结论: [AddCommMonoid M] (f : α -> β)
+  结论: [加法交换幺半群 M] (f : α -> β)
   证明: by
   classical
   refine ⟨fun h => Finsupp.ext (fun i => ?_), fun h => by rw [h, mapDomain_zero]⟩

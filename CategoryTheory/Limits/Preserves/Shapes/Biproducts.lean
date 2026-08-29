@@ -106,7 +106,7 @@ theorem mapBicone_whisker
 
 中文:
 定理 mapBicone_whisker
-  条件: {K : Type w₂} {g : K ≃ J} {f : J -> C} (c : Bicone f)
+  条件: {K : 类型 w₂} {g : K ≃ J} {f : J -> C} (c : Bicone f)
   证明: rfl
 -/
 theorem mapBicone_whisker {K : Type w₂} {g : K ≃ J} {f : J -> C} (c : Bicone f) :
@@ -157,10 +157,10 @@ class PreservesBiproduct
     - preserves : forall {b : Bicone f}, b.IsBilimit -> Nonempty (F.mapBicone b).IsBilimit
 
 中文:
-类 PreservesBiproduct
-  参数: (f : J -> C) (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持Biproduct
+  参数: (f : J -> C) (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {b : Bicone f}, b.IsBilimit -> Nonempty (F.mapBicone b).IsBilimit
+    - preserves : 对任意 {b : Bicone f}, b.是Bilimit -> 非空 (F.mapBicone b).是Bilimit
 -/
 class PreservesBiproduct (f : J -> C) (F : C ⥤ D) [PreservesZeroMorphisms F] : Prop where
   preserves : forall {b : Bicone f}, b.IsBilimit -> Nonempty (F.mapBicone b).IsBilimit
@@ -177,7 +177,7 @@ definition isBilimitOfPreserves
 
 中文:
 定义 isBilimitOfPreserves
-  签名: {f : J -> C} (F : C ⥤ D) [PreservesZeroMorphisms F] [PreservesBiproduct f F]
+  签名: {f : J -> C} (F : C ⥤ D) [保持ZeroMorphisms F] [保持Biproduct f F]
   定义体: (PreservesBiproduct.preserves hb).some
 
 Depends on / 依赖: PreservesBiproduct, PreservesBiproduct.preserves, preserves
@@ -198,10 +198,10 @@ class PreservesBiproductsOfShape
     - preserves : forall {f : J -> C}, PreservesBiproduct f F
 
 中文:
-类 PreservesBiproductsOfShape
-  参数: (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持BiproductsOfShape
+  参数: (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {f : J -> C}, PreservesBiproduct f F
+    - preserves : 对任意 {f : J -> C}, 保持Biproduct f F
 -/
 class PreservesBiproductsOfShape (F : C ⥤ D) [PreservesZeroMorphisms F] : Prop where
   preserves : forall {f : J -> C}, PreservesBiproduct f F
@@ -222,10 +222,10 @@ class PreservesFiniteBiproducts
     - preserves : forall {J : Type} [Finite J], PreservesBiproductsOfShape J F
 
 中文:
-类 PreservesFiniteBiproducts
-  参数: (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持FiniteBiproducts
+  参数: (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {J : Type} [Finite J], PreservesBiproductsOfShape J F
+    - preserves : 对任意 {J : 类型} [有限 J], 保持BiproductsOfShape J F
 -/
 class PreservesFiniteBiproducts (F : C ⥤ D) [PreservesZeroMorphisms F] : Prop where
   preserves : forall {J : Type} [Finite J], PreservesBiproductsOfShape J F
@@ -243,10 +243,10 @@ class PreservesBiproducts
     - preserves : forall {J : Type w₁}, PreservesBiproductsOfShape J F
 
 中文:
-类 PreservesBiproducts
-  参数: (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持Biproducts
+  参数: (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {J : Type w₁}, PreservesBiproductsOfShape J F
+    - preserves : 对任意 {J : 类型 w₁}, 保持BiproductsOfShape J F
 -/
 class PreservesBiproducts (F : C ⥤ D) [PreservesZeroMorphisms F] : Prop where
   preserves : forall {J : Type w₁}, PreservesBiproductsOfShape J F
@@ -269,7 +269,7 @@ lemma preservesBiproducts_shrink
 
 中文:
 引理 preservesBiproducts_shrink
-  结论: (F : C ⥤ D) [PreservesZeroMorphisms F]
+  结论: (F : C ⥤ D) [保持ZeroMorphisms F]
   证明: ⟨fun {_} =>
     ⟨fun {_} =>
       ⟨fun {b} ib =>
@@ -300,10 +300,10 @@ class PreservesBinaryBiproduct
     - preserves : forall {b : BinaryBicone X Y}, b.IsBilimit -> Nonempty ((F.mapBinaryBicone b).IsBilimit)
 
 中文:
-类 PreservesBinaryBiproduct
-  参数: (X Y : C) (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持BinaryBiproduct
+  参数: (X Y : C) (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {b : BinaryBicone X Y}, b.IsBilimit -> Nonempty ((F.mapBinaryBicone b).IsBilimit)
+    - preserves : 对任意 {b : BinaryBicone X Y}, b.是Bilimit -> 非空 ((F.mapBinaryBicone b).是Bilimit)
 -/
 class PreservesBinaryBiproduct (X Y : C) (F : C ⥤ D) [PreservesZeroMorphisms F] : Prop where
   preserves : forall {b : BinaryBicone X Y}, b.IsBilimit -> Nonempty ((F.mapBinaryBicone b).IsBilimit)
@@ -320,7 +320,7 @@ definition isBinaryBilimitOfPreserves
 
 中文:
 定义 isBinaryBilimitOfPreserves
-  签名: {X Y : C} (F : C ⥤ D) [PreservesZeroMorphisms F]
+  签名: {X Y : C} (F : C ⥤ D) [保持ZeroMorphisms F]
   定义体: (PreservesBinaryBiproduct.preserves hb).some
 
 Depends on / 依赖: PreservesBinaryBiproduct, PreservesBinaryBiproduct.preserves, preserves
@@ -340,10 +340,10 @@ class PreservesBinaryBiproducts
     - preserves : forall {X Y : C}, PreservesBinaryBiproduct X Y F  [default: by infer_instance]
 
 中文:
-类 PreservesBinaryBiproducts
-  参数: (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持BinaryBiproducts
+  参数: (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (1 个):
-    - preserves : 对任意 {X Y : C}, PreservesBinaryBiproduct X Y F  [默认: by infer_instance]
+    - preserves : 对任意 {X Y : C}, 保持BinaryBiproduct X Y F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -410,7 +410,7 @@ lemma preservesBinaryBiproducts_of_preservesBiproducts
 
 中文:
 引理 preservesBinaryBiproducts_of_preservesBiproducts
-  结论: (F : C ⥤ D) [PreservesZeroMorphisms F]
+  结论: (F : C ⥤ D) [保持ZeroMorphisms F]
   证明: preservesBinaryBiproduct_of_preservesBiproduct F X Y
 
 Depends on / 依赖: preservesBinaryBiproduct_of_preservesBiproduct
@@ -561,7 +561,7 @@ definition splitEpiBiproductComparison
 
 中文:
 定义 splitEpiBiproductComparison
-  签名: : SplitEpi (biproductComparison F f) where
+  签名: : 分裂满态射 (biproductComparison F f) where
   定义体: biproductComparison' F f
   id := by simp
 -/
@@ -579,7 +579,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (biproductComparison F f)
+  签名: 是分裂满态射 (biproductComparison F f)
   定义体: IsSplitEpi.mk' (splitEpiBiproductComparison F f)
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, splitEpiBiproductComparison
@@ -600,7 +600,7 @@ definition splitMonoBiproductComparison'
 
 中文:
 定义 splitMonoBiproductComparison'
-  签名: : SplitMono (biproductComparison' F f) where
+  签名: : 分裂单态射 (biproductComparison' F f) where
   定义体: biproductComparison F f
   id := by simp
 
@@ -620,7 +620,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (biproductComparison' F f)
+  签名: 是分裂单态射 (biproductComparison' F f)
   定义体: IsSplitMono.mk' (splitMonoBiproductComparison' F f)
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, splitMonoBiproductComparison
@@ -644,7 +644,7 @@ instance hasBiproduct_of_preserves
 
 中文:
 实例 hasBiproduct_of_preserves
-  签名: : HasBiproduct (F.obj ∘ f)
+  签名: : 有Biproduct (F.obj ∘ f)
   定义体: HasBiproduct.mk
     { bicone := F.mapBicone (biproduct.bicone f)
       isBilimit := isBilimitOfPreserves _ (biproduct.isBilimit _) }
@@ -880,7 +880,7 @@ definition splitEpiBiprodComparison
 
 中文:
 定义 splitEpiBiprodComparison
-  签名: : SplitEpi (biprodComparison F X Y) where
+  签名: : 分裂满态射 (biprodComparison F X Y) where
   定义体: biprodComparison' F X Y
   id := by simp
 -/
@@ -898,7 +898,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (biprodComparison F X Y)
+  签名: 是分裂满态射 (biprodComparison F X Y)
   定义体: IsSplitEpi.mk' (splitEpiBiprodComparison F X Y)
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, splitEpiBiprodComparison
@@ -919,7 +919,7 @@ definition splitMonoBiprodComparison'
 
 中文:
 定义 splitMonoBiprodComparison'
-  签名: : SplitMono (biprodComparison' F X Y) where
+  签名: : 分裂单态射 (biprodComparison' F X Y) where
   定义体: biprodComparison F X Y
   id := by simp
 
@@ -939,7 +939,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (biprodComparison' F X Y)
+  签名: 是分裂单态射 (biprodComparison' F X Y)
   定义体: IsSplitMono.mk' (splitMonoBiprodComparison' F X Y)
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, splitMonoBiprodComparison
@@ -963,7 +963,7 @@ instance hasBinaryBiproduct_of_preserves
 
 中文:
 实例 hasBinaryBiproduct_of_preserves
-  签名: : HasBinaryBiproduct (F.obj X) (F.obj Y)
+  签名: : 有BinaryBiproduct (F.obj X) (F.obj Y)
   定义体: HasBinaryBiproduct.mk
     { bicone := F.mapBinaryBicone (BinaryBiproduct.bicone X Y)
       isBilimit := isBinaryBilimitOfPreserves F (BinaryBiproduct.isBilimit _ _) }

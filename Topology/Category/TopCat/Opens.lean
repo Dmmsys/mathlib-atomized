@@ -54,7 +54,7 @@ instance opensHom.instFunLike
 
 中文:
 实例 opensHom.instFunLike
-  签名: : FunLike (U ⟶ V) U V where
+  签名: : 函数状 (U ⟶ V) U V where
   定义体: Set.inclusion f.le
   coe_injective := by rintro ⟨⟨_⟩⟩ _ _; congr!
 
@@ -339,7 +339,7 @@ definition toTopCat
 
 中文:
 定义 toTopCat
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: TopCat.of U
   map i := TopCat.ofHom ⟨fun x => ⟨x.1, i.le x.2⟩,
     IsEmbedding.subtypeVal.continuous_iff.2 continuous_induced_dom⟩
@@ -364,7 +364,7 @@ theorem toTopCat_map
 
 中文:
 定理 toTopCat_map
-  条件: (X : TopCat.{u}) {U V : Opens X} {f : U ⟶ V} {x} {h}
+  条件: (X : 顶元素范畴.{u}) {U V : Opens X} {f : U ⟶ V} {x} {h}
   证明: rfl
 -/
 theorem toTopCat_map (X : TopCat.{u}) {U V : Opens X} {f : U ⟶ V} {x} {h} :
@@ -388,7 +388,7 @@ definition inclusion'
 
 中文:
 定义 inclusion'
-  签名: {X : TopCat.{u}} (U : Opens X)
+  签名: {X : 顶元素范畴.{u}} (U : Opens X)
   定义体: TopCat.ofHom
   { toFun := _
     continuous_toFun := continuous_subtype_val }
@@ -413,7 +413,7 @@ theorem coe_inclusion'
 
 中文:
 定理 coe_inclusion'
-  条件: {X : TopCat.{u}} {U : Opens X}
+  条件: {X : 顶元素范畴.{u}} {U : Opens X}
   证明: rfl
 -/
 theorem coe_inclusion' {X : TopCat.{u}} {U : Opens X} :
@@ -430,8 +430,8 @@ theorem isOpenEmbedding
 
 中文:
 定理 isOpenEmbedding
-  条件: {X : TopCat.{u}} (U : Opens X)
-  结论: IsOpenEmbedding (inclusion' U)
+  条件: {X : 顶元素范畴.{u}} (U : Opens X)
+  结论: 是开嵌入 (inclusion' U)
   证明: U.2.isOpenEmbedding_subtypeVal
 
 Depends on / 依赖: isOpenEmbedding_subtypeVal
@@ -450,7 +450,7 @@ definition inclusionTopIso
 
 中文:
 定义 inclusionTopIso
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: inclusion' ⊤
   inv := TopCat.ofHom ⟨fun x => ⟨x, trivial⟩, continuous_def.2 fun _ ⟨_, hS, hSU⟩ => hSU ▸ hS⟩
 
@@ -474,7 +474,7 @@ definition _root_.TopCat.Hom.frameHom
   map_sSup' _ := by ext; simp
 
 中文:
-定义 _root_.TopCat.Hom.frameHom
+定义 _root_.顶元素范畴.态射.frameHom
   签名: (f : X ⟶ Y)
   定义体: ⟨f ⁻¹' (U : Set Y), U.isOpen.preimage f.hom.continuous⟩
   map_inf' _ _ := rfl
@@ -547,7 +547,7 @@ theorem map_coe
 中文:
 定理 map_coe
   条件: (f : X ⟶ Y) (U : Opens Y)
-  结论: ((map f).obj U : Set X) = f ⁻¹' (U : Set Y)
+  结论: ((map f).obj U : 集合 X) = f ⁻¹' (U : 集合 Y)
   证明: rfl
 
 @[simp]
@@ -591,7 +591,7 @@ theorem map_obj
 中文:
 定理 map_obj
   条件: (f : X ⟶ Y) (U) (p)
-  结论: (map f).obj ⟨U, p⟩ = ⟨f ⁻¹' U, p.preimage f.hom.continuous⟩
+  结论: (map f).obj ⟨U, p⟩ = ⟨f ⁻¹' U, p.原像 f.hom.continuous⟩
   证明: rfl
 
 @[simp]
@@ -1028,7 +1028,7 @@ theorem mapIso_refl
 中文:
 定理 mapIso_refl
   条件: (f : X ⟶ Y) (h)
-  结论: mapIso f f h = Iso.refl (map _)
+  结论: mapIso f f h = 同构.refl (map _)
   证明: rfl
 
 @[simp]
@@ -1088,7 +1088,7 @@ definition mapMapIso
 
 中文:
 定义 mapMapIso
-  签名: {X Y : TopCat.{u}} (H : X ≅ Y)
+  签名: {X Y : 顶元素范畴.{u}} (H : X ≅ Y)
   定义体: (TopCat.homeoOfIso H).opensCongr.equivalence.symm
 
 @[simp]
@@ -1111,7 +1111,7 @@ lemma mapMapIso_functor
 
 中文:
 引理 mapMapIso_functor
-  条件: {X Y : TopCat.{u}} (H : X ≅ Y)
+  条件: {X Y : 顶元素范畴.{u}} (H : X ≅ Y)
   证明: rfl
 
 @[simp]
@@ -1132,7 +1132,7 @@ lemma mapMapIso_inverse
 
 中文:
 引理 mapMapIso_inverse
-  条件: {X Y : TopCat.{u}} (H : X ≅ Y)
+  条件: {X Y : 顶元素范畴.{u}} (H : X ≅ Y)
   证明: rfl
 
 @[simp]
@@ -1153,7 +1153,7 @@ lemma mapMapIso_unitIso
 
 中文:
 引理 mapMapIso_unitIso
-  条件: {X Y : TopCat.{u}} (H : X ≅ Y)
+  条件: {X Y : 顶元素范畴.{u}} (H : X ≅ Y)
   证明: rfl
 
 @[simp]
@@ -1173,7 +1173,7 @@ lemma mapMapIso_counitIso
 
 中文:
 引理 mapMapIso_counitIso
-  条件: {X Y : TopCat.{u}} (H : X ≅ Y)
+  条件: {X Y : 顶元素范畴.{u}} (H : X ≅ Y)
   证明: rfl
 -/
 lemma mapMapIso_counitIso {X Y : TopCat.{u}} (H : X ≅ Y) :
@@ -1191,8 +1191,8 @@ definition IsOpenMap.functorMap
   body: ⟨⟨Set.image_mono le⟩⟩
 
 中文:
-定义 IsOpenMap.functorMap
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} {U V : Opens X}
+定义 是开映射.functorMap
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} {U V : Opens X}
   定义体: ⟨⟨Set.image_mono le⟩⟩
 
 Depends on / 依赖: Set.image_mono, image_mono
@@ -1214,8 +1214,8 @@ definition IsOpenMap.functor
   map {U V} h := IsOpenMap.functorMap (hf _ U.2) (hf _ V.2) h.down.down
 
 中文:
-定义 IsOpenMap.functor
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f)
+定义 是开映射.functor
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开映射 f)
   定义体: ⟨f '' (U : Set X), hf (U : Set X) U.2⟩
   map {U V} h := IsOpenMap.functorMap (hf _ U.2) (hf _ V.2) h.down.down
 -/
@@ -1233,8 +1233,8 @@ definition IsOpenMap.adjunction
   counit := { app := fun _ => homOfLE fun _ ⟨_, hfxV, hxy⟩ => hxy ▸ hfxV }
 
 中文:
-定义 IsOpenMap.adjunction
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f)
+定义 是开映射.adjunction
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开映射 f)
   定义体: { app := fun _ => homOfLE fun x hxU => ⟨x, hxU, rfl⟩ }
   counit := { app := fun _ => homOfLE fun _ ⟨_, hfxV, hxy⟩ => hxy ▸ hfxV }
 
@@ -1256,8 +1256,8 @@ instance IsOpenMap.functorFullOfMono
       exact (TopCat.mono_iff_injective f).mp H eq ▸ hy, rfl⟩
 
 中文:
-实例 IsOpenMap.functorFullOfMono
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f)
+实例 是开映射.functorFullOfMono
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开映射 f)
   定义体: ⟨homOfLE fun x hx => by
       obtain ⟨y, hy, eq⟩ := i.le ⟨x, hx, rfl⟩
       exact (TopCat.mono_iff_injective f).mp H eq ▸ hy, rfl⟩
@@ -1279,8 +1279,8 @@ instance IsOpenMap.functor_faithful
   signature: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f)
 
 中文:
-实例 IsOpenMap.functor_faithful
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f)
+实例 是开映射.functor_faithful
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开映射 f)
 -/
 instance IsOpenMap.functor_faithful {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f) :
     hf.functor.Faithful where
@@ -1294,8 +1294,8 @@ abbreviation Topology.IsOpenEmbedding.functor
   body: hf.isOpenMap.functor
 
 中文:
-缩写 Topology.IsOpenEmbedding.functor
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenEmbedding f)
+缩写 拓扑.是开嵌入.functor
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开嵌入 f)
   定义体: hf.isOpenMap.functor
 
 Depends on / 依赖: functor, hf.isOpenMap.functor, isOpenMap
@@ -1312,8 +1312,8 @@ lemma Topology.IsOpenEmbedding.functor_obj_injective
   proof: fun _ _ e => Opens.ext (Set.image_injective.mpr hf.injective (congr_arg (↑· : Opens Y -> Set Y) e))
 
 中文:
-引理 Topology.IsOpenEmbedding.functor_obj_injective
-  结论: {X Y : TopCat.{u}} {f : X ⟶ Y}
+引理 拓扑.是开嵌入.functor_obj_injective
+  结论: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y}
   证明: fun _ _ e => Opens.ext (Set.image_injective.mpr hf.injective (congr_arg (↑· : Opens Y -> Set Y) e))
 
 Depends on / 依赖: Opens.ext, Set.image_injective.mpr, congr_arg, hf.injective, image_injective, injective
@@ -1335,8 +1335,8 @@ lemma Topology.IsOpenEmbedding.functor_obj_iInf
   exact hf.injective.injOn
 
 中文:
-引理 Topology.IsOpenEmbedding.functor_obj_iInf
-  结论: {X Y : TopCat.{u}} (f : X ⟶ Y)
+引理 拓扑.是开嵌入.functor_obj_iInf
+  结论: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: by
   ext : 1
   simp only [IsOpenMap.coe_functor_obj, TopologicalSpace.Opens.coe_iInf]
@@ -1369,7 +1369,7 @@ definition functorObj
 
 中文:
 定义 functorObj
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (_ : IsInducing f) (U : Opens X)
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (_ : 是Inducing f) (U : Opens X)
   定义体: sSup { s : Opens Y | (Opens.map f).obj s = U }
 
 Depends on / 依赖: Opens.map
@@ -1393,7 +1393,7 @@ lemma map_functorObj
 
 中文:
 引理 map_functorObj
-  结论: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f)
+  结论: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f)
   证明: by
   apply le_antisymm
   · rintro x ⟨_, ⟨s, rfl⟩, _, ⟨rfl : _ = U, rfl⟩, hx : f x in s⟩; exact hx
@@ -1426,7 +1426,7 @@ lemma mem_functorObj_iff
 
 中文:
 引理 mem_functorObj_iff
-  结论: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f) (U : Opens X)
+  结论: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f) (U : Opens X)
   证明: by
   conv_rhs => rw [← hf.map_functorObj U]
   rfl
@@ -1457,7 +1457,7 @@ lemma le_functorObj_iff
 
 中文:
 引理 le_functorObj_iff
-  结论: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f) {U : Opens X}
+  结论: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f) {U : Opens X}
   证明: by
   obtain ⟨U, hU⟩ := U
   obtain ⟨t, ht, rfl⟩ := hf.isOpen_iff.mp hU
@@ -1491,7 +1491,7 @@ definition opensGI
 
 中文:
 定义 opensGI
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f)
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f)
   定义体: ⟨_, fun _ _ => hf.le_functorObj_iff.symm, fun U => (hf.map_functorObj U).ge, fun _ _ => rfl⟩
 
 Depends on / 依赖: hf.le_functorObj_iff.symm, hf.map_functorObj, le_functorObj_iff, map_functorObj
@@ -1513,7 +1513,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f)
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f)
   定义体: hf.functorObj
   map {U V} h := homOfLE (hf.le_functorObj_iff.mpr ((hf.map_functorObj U).trans_le h.le))
 
@@ -1534,7 +1534,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsInducing f)
+  签名: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是Inducing f)
   定义体: hf.opensGI.gc.adjunction
 
 Depends on / 依赖: adjunction, hf.opensGI.gc.adjunction, opensGI
@@ -1564,7 +1564,7 @@ theorem isOpenEmbedding_obj_top
 
 中文:
 定理 isOpenEmbedding_obj_top
-  条件: {X : TopCat.{u}} (U : Opens X)
+  条件: {X : 顶元素范畴.{u}} (U : Opens X)
   证明: by
   ext1
   exact Set.image_univ.trans Subtype.range_coe
@@ -1593,7 +1593,7 @@ theorem inclusion'_map_eq_top
 
 中文:
 定理 inclusion'_map_eq_top
-  条件: {X : TopCat.{u}} (U : Opens X)
+  条件: {X : 顶元素范畴.{u}} (U : Opens X)
   证明: by
   ext1
   exact Subtype.coe_preimage_self _
@@ -1616,7 +1616,7 @@ theorem adjunction_counit_app_self
 
 中文:
 定理 adjunction_counit_app_self
-  条件: {X : TopCat.{u}} (U : Opens X)
+  条件: {X : 顶元素范畴.{u}} (U : Opens X)
   证明: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1639,7 +1639,7 @@ theorem inclusion'_top_functor
 
 中文:
 定理 inclusion'_top_functor
-  条件: (X : TopCat)
+  条件: (X : 顶元素范畴)
   证明: by
   refine CategoryTheory.Functor.ext ?_ ?_
   · intro U
@@ -1671,7 +1671,7 @@ theorem functor_obj_map_obj
 
 中文:
 定理 functor_obj_map_obj
-  条件: {X Y : TopCat.{u}} {f : X ⟶ Y} (hf : IsOpenMap f) (U : Opens Y)
+  条件: {X Y : 顶元素范畴.{u}} {f : X ⟶ Y} (hf : 是开映射 f) (U : Opens Y)
   证明: by
   ext
   constructor
@@ -1707,7 +1707,7 @@ lemma set_range_inclusion'
 
 中文:
 引理 set_range_inclusion'
-  条件: {X : TopCat.{u}} (U : Opens X)
+  条件: {X : 顶元素范畴.{u}} (U : Opens X)
   证明: by
   ext x
   constructor
@@ -1741,7 +1741,7 @@ theorem functor_map_eq_inf
 
 中文:
 定理 functor_map_eq_inf
-  条件: {X : TopCat.{u}} (U V : Opens X)
+  条件: {X : 顶元素范畴.{u}} (U V : Opens X)
   证明: by
   ext1
   simp only [IsOpenMap.coe_functor_obj, map_coe, coe_inf,
@@ -1767,7 +1767,7 @@ theorem map_functor_eq'
 
 中文:
 定理 map_functor_eq'
-  条件: {X U : TopCat.{u}} (f : U ⟶ X) (hf : IsOpenEmbedding f) (V)
+  条件: {X U : 顶元素范畴.{u}} (f : U ⟶ X) (hf : 是开嵌入 f) (V)
   证明: Opens.ext Set.preimage_image_eq _ hf.injective
 
 @[simp]
@@ -1789,7 +1789,7 @@ theorem map_functor_eq
 
 中文:
 定理 map_functor_eq
-  条件: {X : TopCat.{u}} {U : Opens X} (V : Opens U)
+  条件: {X : 顶元素范畴.{u}} {U : Opens X} (V : Opens U)
   证明: TopologicalSpace.Opens.map_functor_eq' _ U.isOpenEmbedding V
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.Opens.map_functor_eq, U.isOpenEmbedding, isOpenEmbedding, map_functor_eq
@@ -1811,7 +1811,7 @@ theorem adjunction_counit_map_functor
 
 中文:
 定理 adjunction_counit_map_functor
-  条件: {X : TopCat.{u}} {U : Opens X} (V : Opens U)
+  条件: {X : 顶元素范畴.{u}} {U : Opens X} (V : Opens U)
   证明: by
   subsingleton
 

@@ -41,10 +41,10 @@ class IsClosedUnderSubobjects
     - prop_of_mono({X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y)) : P X
 
 中文:
-类 IsClosedUnderSubobjects
+类 是ClosedUnderSubobjects
   参数: : 命题 where
   公理与运算 (1 个):
-    - prop_of_mono({X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y)) : P X
+    - prop_of_mono({X Y : C} (f : X ⟶ Y) [单态射 f] (hY : P Y)) : P X
 -/
 class IsClosedUnderSubobjects : Prop where
   prop_of_mono {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y) : P X
@@ -64,7 +64,7 @@ lemma prop_of_mono
 
 中文:
 引理 prop_of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y)
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] (hY : P Y)
   结论: P X
   证明: IsClosedUnderSubobjects.prop_of_mono f hY
 
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.IsClosedUnderIsomorphisms
+  签名: P.在同构下封闭
   定义体: P.prop_of_mono e.inv
 
 Depends on / 依赖: P.prop_of_mono, e.inv, prop_of_mono
@@ -103,7 +103,7 @@ lemma prop_X₁_of_shortExact
 
 中文:
 引理 prop_X₁_of_shortExact
-  结论: [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
+  结论: [有ZeroMorphisms C] {S : 短复形 C} (hS : S.短正合)
   证明: by
   have := hS.mono_f
   exact P.prop_of_mono S.f h₂
@@ -133,10 +133,10 @@ class IsClosedUnderQuotients
     - prop_of_epi({X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X)) : P Y
 
 中文:
-类 IsClosedUnderQuotients
+类 是ClosedUnderQuotients
   参数: : 命题 where
   公理与运算 (1 个):
-    - prop_of_epi({X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X)) : P Y
+    - prop_of_epi({X Y : C} (f : X ⟶ Y) [满态射 f] (hX : P X)) : P Y
 -/
 class IsClosedUnderQuotients : Prop where
   prop_of_epi {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X) : P Y
@@ -154,7 +154,7 @@ lemma prop_of_epi
 
 中文:
 引理 prop_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X)
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f] (hX : P X)
   结论: P Y
   证明: IsClosedUnderQuotients.prop_of_epi f hX
 
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.IsClosedUnderIsomorphisms
+  签名: P.在同构下封闭
   定义体: P.prop_of_epi e.hom
 
 Depends on / 依赖: P.prop_of_epi, e.hom, isGE_of_ge, isGE_of_iso, isGE_truncGE_obj, prop_of_epi, t.IsGE, t.isGE_of_ge, t.isGE_of_iso, t.isGE_truncGE_obj, t.truncGE
@@ -193,7 +193,7 @@ lemma prop_X₃_of_shortExact
 
 中文:
 引理 prop_X₃_of_shortExact
-  结论: [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
+  结论: [有ZeroMorphisms C] {S : 短复形 C} (hS : S.短正合)
   证明: by
   have := hS.epi_g
   exact P.prop_of_epi S.g h₂
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Object命题erty C).IsClosedUnderSubobjects
+  签名: (⊤ : ObjectProperty C).是ClosedUnderSubobjects
   定义体: by simp
 -/
 instance : (⊤ : ObjectProperty C).IsClosedUnderSubobjects where
@@ -237,7 +237,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Object命题erty C).IsClosedUnderQuotients
+  签名: (⊤ : ObjectProperty C).是ClosedUnderQuotients
   定义体: by simp
 
 Depends on / 依赖: infer_instance
@@ -254,8 +254,8 @@ instance [HasZeroMorphisms
   body: IsZero.of_mono f hX
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : IsClosedUnderSubobjects (IsZero (C := C)) where
+实例 [有ZeroMorphisms
+  签名: C] : 是ClosedUnderSubobjects (是零 (C := C)) where
   定义体: IsZero.of_mono f hX
 
 Depends on / 依赖: infer_instance
@@ -272,8 +272,8 @@ instance [HasZeroMorphisms
   body: IsZero.of_epi f hX
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : IsClosedUnderQuotients (IsZero (C := C)) where
+实例 [有ZeroMorphisms
+  签名: C] : 是ClosedUnderQuotients (是零 (C := C)) where
   定义体: IsZero.of_epi f hX
 -/
 instance [HasZeroMorphisms C] : IsClosedUnderQuotients (IsZero (C := C)) where

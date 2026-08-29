@@ -35,8 +35,8 @@ theorem Finite.Set.finite_of_finite_image
   proof: Finite.of_equiv _ (Equiv.ofBijective _ h.bijOn_image.bijective).symm
 
 中文:
-定理 Finite.Set.finite_of_finite_image
-  结论: (s : Set α) {f : α -> β} (h : s.InjOn f)
+定理 有限.集合.finite_of_finite_image
+  结论: (s : 集合 α) {f : α -> β} (h : s.单射限制 f)
   证明: Finite.of_equiv _ (Equiv.ofBijective _ h.bijOn_image.bijective).symm
 
 Depends on / 依赖: Equiv.ofBijective, Finite, Finite.of_equiv, bijOn_image, bijective, h.bijOn_image.bijective, ofBijective, of_equiv
@@ -54,8 +54,8 @@ theorem Finite.of_injective_finite_range
   proof: Finite.of_injective (Set.rangeFactorization f) (hf.codRestrict _)
 
 中文:
-定理 Finite.of_injective_finite_range
-  结论: {f : ι -> α} (hf : Function.Injective f)
+定理 有限.of_injective_finite_range
+  结论: {f : ι -> α} (hf : 函数.单射 f)
   证明: Finite.of_injective (Set.rangeFactorization f) (hf.codRestrict _)
 
 Depends on / 依赖: Finite, Finite.of_injective, Set.rangeFactorization, codRestrict, hf.codRestrict, of_injective, rangeFactorization

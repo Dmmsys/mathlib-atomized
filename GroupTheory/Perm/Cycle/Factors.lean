@@ -47,7 +47,7 @@ definition cycleOf
 
 中文:
 定义 cycleOf
-  签名: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  签名: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   定义体: ofSubtype (subtypePerm f fun _ => sameCycle_apply_right : Perm { y // SameCycle f x y })
 
 Depends on / 依赖: SameCycle, ofSubtype, sameCycle_apply_right, subtypePerm
@@ -71,7 +71,7 @@ theorem cycleOf_apply
 
 中文:
 定理 cycleOf_apply
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x y : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x y : α)
   证明: by
   dsimp only [cycleOf]
   split_ifs with h
@@ -105,7 +105,7 @@ theorem cycleOf_inv
 
 中文:
 定理 cycleOf_inv
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   证明: Equiv.ext fun y => by
     rw [inv_eq_iff_eq]; rw [cycleOf_apply]; rw [cycleOf_apply]
     split_ifs <;> simp_all [sameCycle_inv, sameCycle_symm_apply_right]
@@ -139,7 +139,7 @@ theorem cycleOf_pow_apply_self
 
 中文:
 定理 cycleOf_pow_apply_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   证明: by
   intro n
   induction n with
@@ -177,7 +177,7 @@ theorem cycleOf_zpow_apply_self
 
 中文:
 定理 cycleOf_zpow_apply_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   证明: by
   intro z
   cases z with
@@ -286,7 +286,7 @@ theorem cycleOf_apply_apply_zpow_self
 
 中文:
 定理 cycleOf_apply_apply_zpow_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α) (k : 整数)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α) (k : 整数)
   证明: by
   rw [SameCycle.cycleOf_apply]
   · rw [add_comm, zpow_add, zpow_one, mul_apply]
@@ -316,7 +316,7 @@ theorem cycleOf_apply_apply_pow_self
 
 中文:
 定理 cycleOf_apply_apply_pow_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α) (k : 自然数)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α) (k : 自然数)
   证明: by
   convert! cycleOf_apply_apply_zpow_self f x k using 1
 
@@ -342,7 +342,7 @@ theorem cycleOf_apply_apply_self
 
 中文:
 定理 cycleOf_apply_apply_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   证明: by
   convert! cycleOf_apply_apply_pow_self f x 1 using 1
 
@@ -366,7 +366,7 @@ theorem cycleOf_apply_self
 
 中文:
 定理 cycleOf_apply_self
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   结论: cycleOf f x x = f x
   证明: SameCycle.rfl.cycleOf_apply
 
@@ -389,7 +389,7 @@ theorem IsCycle.cycleOf_eq
 @[simp]
 
 中文:
-定理 IsCycle.cycleOf_eq
+定理 是环.cycleOf_eq
   结论: [DecidableRel f.SameCycle]
   证明: Equiv.ext fun y =>
     if h : SameCycle f x y then by rw [h.cycleOf_apply]
@@ -426,7 +426,7 @@ theorem cycleOf_eq_one_iff
 
 中文:
 定理 cycleOf_eq_one_iff
-  条件: (f : Perm α) [DecidableRel f.SameCycle]
+  条件: (f : 置换 α) [DecidableRel f.SameCycle]
   结论: cycleOf f x = 1 ↔ f x = x
   证明: by
   simp_rw [Perm.ext_iff, cycleOf_apply, one_apply]
@@ -459,7 +459,7 @@ theorem cycleOf_self_apply
 
 中文:
 定理 cycleOf_self_apply
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (x : α)
   证明: (sameCycle_apply_right.2 SameCycle.rfl).symm.cycleOf_eq
 
 @[simp]
@@ -483,7 +483,7 @@ theorem cycleOf_self_apply_pow
 
 中文:
 定理 cycleOf_self_apply_pow
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (n : 自然数) (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (n : 自然数) (x : α)
   证明: SameCycle.rfl.pow_left.cycleOf_eq
 
 @[simp]
@@ -505,7 +505,7 @@ theorem cycleOf_self_apply_zpow
 
 中文:
 定理 cycleOf_self_apply_zpow
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (n : 整数) (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (n : 整数) (x : α)
   证明: SameCycle.rfl.zpow_left.cycleOf_eq
 
 Depends on / 依赖: SameCycle, SameCycle.rfl.zpow_left.cycleOf_eq, cycleOf_eq, zpow_left
@@ -526,7 +526,7 @@ theorem IsCycle.cycleOf
   · rwa [if_neg hx, hf.cycleOf_eq]
 
 中文:
-定理 IsCycle.cycleOf
+定理 是环.cycleOf
   结论: [DecidableRel f.SameCycle] [DecidableEq α]
   证明: by
   by_cases hx : f x = x
@@ -549,7 +549,7 @@ theorem cycleOf_one
 
 中文:
 定理 cycleOf_one
-  条件: [DecidableRel (1 : Perm α).SameCycle] (x : α)
+  条件: [DecidableRel (1 : 置换 α).SameCycle] (x : α)
   证明: (cycleOf_eq_one_iff 1).mpr rfl
 
 Depends on / 依赖: cycleOf_eq_one_iff
@@ -574,7 +574,7 @@ theorem isCycle_cycleOf
 
 中文:
 定理 isCycle_cycleOf
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (hx : f x != x)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (hx : f x != x)
   证明: have : cycleOf f x x != x := by rwa [SameCycle.rfl.cycleOf_apply]
   (isCycle_iff_sameCycle this).2 @fun y =>
     ⟨fun h => mt h.apply_eq_self_iff.2 this, fun h =>
@@ -609,7 +609,7 @@ theorem pow_mod_orderOf_cycleOf_apply
 
 中文:
 定理 pow_mod_orderOf_cycleOf_apply
-  条件: (f : Perm α) [DecidableRel f.SameCycle] (n : 自然数) (x : α)
+  条件: (f : 置换 α) [DecidableRel f.SameCycle] (n : 自然数) (x : α)
   证明: by
   rw [← cycleOf_pow_apply_self f]; rw [← cycleOf_pow_apply_self f]; rw [pow_mod_orderOf]
 
@@ -717,7 +717,7 @@ theorem mem_support_cycleOf_iff_aux
 
 中文:
 定理 mem_support_cycleOf_iff_aux
-  条件: [DecidableRel f.SameCycle] [DecidableEq α] [Fintype α]
+  条件: [DecidableRel f.SameCycle] [DecidableEq α] [有限类型 α]
   证明: by
   by_cases hx : f x = x
   · rw [(cycleOf_eq_one_iff _).mpr hx]
@@ -776,7 +776,7 @@ theorem isCycle_cycleOf_iff
 
 中文:
 定理 isCycle_cycleOf_iff
-  条件: (f : Perm α) [DecidableRel f.SameCycle]
+  条件: (f : 置换 α) [DecidableRel f.SameCycle]
   证明: by
   refine ⟨fun hx => ?_, f.isCycle_cycleOf⟩
   rw [Ne]; rw [← cycleOf_eq_one_iff f]
@@ -805,7 +805,7 @@ theorem isCycleOn_support_cycleOf_aux
 
 中文:
 定理 isCycleOn_support_cycleOf_aux
-  结论: [DecidableEq α] [Fintype α] (f : Perm α)
+  结论: [DecidableEq α] [有限类型 α] (f : 置换 α)
   证明: ⟨f.bijOn by
     refine fun _ =>
         ⟨fun h => mem_support_cycleOf_iff_aux.2 ?_, fun h => mem_support_cycleOf_iff_aux.2 ?_⟩
@@ -838,8 +838,8 @@ theorem SameCycle.exists_pow_eq_of_mem_support_aux
     (by rw [mem_support_cycleOf_iff'_aux hx]) (by rwa [mem_support_cycleOf_iff'_aux hx])
 
 中文:
-定理 SameCycle.exists_pow_eq_of_mem_support_aux
-  结论: {f} [DecidableEq α] [Fintype α]
+定理 SameCycle.存在_pow_eq_of_mem_support_aux
+  结论: {f} [DecidableEq α] [有限类型 α]
   证明: by
   rw [mem_support] at hx
   exact Equiv.Perm.IsCycleOn.exists_pow_eq (b := y) (f.isCycleOn_support_cycleOf_aux x)
@@ -871,7 +871,7 @@ decidable_of_iff (y in List.iterate f x (Fintype.card α)) by
 
 中文:
 实例 instDecidableRelSameCycle
-  签名: [DecidableEq α] [Fintype α] (f : Perm α)
+  签名: [DecidableEq α] [有限类型 α] (f : 置换 α)
   定义体: fun x y =>
 decidable_of_iff (y in List.iterate f x (Fintype.card α)) by
     simp only [List.mem_iterate, iterate_eq_pow, eq_comm (a := y)]
@@ -919,7 +919,7 @@ theorem two_le_card_support_cycleOf_iff
 
 中文:
 定理 two_le_card_support_cycleOf_iff
-  条件: [DecidableEq α] [Fintype α]
+  条件: [DecidableEq α] [有限类型 α]
   证明: by
   refine ⟨fun h => ?_, fun h => by simpa using (isCycle_cycleOf _ h).two_le_card_support⟩
   contrapose! h
@@ -947,7 +947,7 @@ lemma support_cycleOf_nonempty
 
 中文:
 引理 support_cycleOf_nonempty
-  条件: [DecidableEq α] [Fintype α]
+  条件: [DecidableEq α] [有限类型 α]
   证明: by
   rw [← two_le_card_support_cycleOf_iff]; rw [← card_pos]; rw [← Nat.succ_le_iff]
   exact ⟨fun h => Or.resolve_left h.eq_or_lt (card_support_ne_one _).symm, zero_lt_two.trans_le⟩
@@ -967,7 +967,7 @@ theorem mem_support_cycleOf_iff
 
 中文:
 定理 mem_support_cycleOf_iff
-  条件: [DecidableEq α] [Fintype α]
+  条件: [DecidableEq α] [有限类型 α]
   证明: mem_support_cycleOf_iff_aux
 
 Depends on / 依赖: mem_support_cycleOf_iff_aux
@@ -986,7 +986,7 @@ theorem mem_support_cycleOf_iff'
 
 中文:
 定理 mem_support_cycleOf_iff'
-  条件: (hx : f x != x) [DecidableEq α] [Fintype α]
+  条件: (hx : f x != x) [DecidableEq α] [有限类型 α]
   证明: mem_support_cycleOf_iff'_aux hx
 
 Depends on / 依赖: _aux, mem_support_cycleOf_iff
@@ -1007,7 +1007,7 @@ theorem sameCycle_iff_cycleOf_eq_of_mem_support
 
 中文:
 定理 sameCycle_iff_cycleOf_eq_of_mem_support
-  结论: [DecidableEq α] [Fintype α]
+  结论: [DecidableEq α] [有限类型 α]
   证明: by
   refine ⟨SameCycle.cycleOf_eq, fun h => ?_⟩
   rw [← mem_support_cycleOf_iff' (mem_support.mp hx)]; rw [h]; rw [mem_support_cycleOf_iff' (mem_support.mp hy)]
@@ -1030,7 +1030,7 @@ theorem support_cycleOf_eq_nil_iff
 
 中文:
 定理 support_cycleOf_eq_nil_iff
-  条件: [DecidableEq α] [Fintype α]
+  条件: [DecidableEq α] [有限类型 α]
   证明: by simp
 -/
 theorem support_cycleOf_eq_nil_iff [DecidableEq α] [Fintype α] :
@@ -1046,7 +1046,7 @@ theorem isCycleOn_support_cycleOf
 
 中文:
 定理 isCycleOn_support_cycleOf
-  条件: [DecidableEq α] [Fintype α] (f : Perm α) (x : α)
+  条件: [DecidableEq α] [有限类型 α] (f : 置换 α) (x : α)
   证明: isCycleOn_support_cycleOf_aux f x
 
 Depends on / 依赖: isCycleOn_support_cycleOf_aux
@@ -1064,8 +1064,8 @@ theorem SameCycle.exists_pow_eq_of_mem_support
   proof: h.exists_pow_eq_of_mem_support_aux hx
 
 中文:
-定理 SameCycle.exists_pow_eq_of_mem_support
-  结论: {f} [DecidableEq α] [Fintype α] (h : SameCycle f x y)
+定理 SameCycle.存在_pow_eq_of_mem_support
+  结论: {f} [DecidableEq α] [有限类型 α] (h : SameCycle f x y)
   证明: h.exists_pow_eq_of_mem_support_aux hx
 
 Depends on / 依赖: exists_pow_eq_of_mem_support_aux, h.exists_pow_eq_of_mem_support_aux
@@ -1089,7 +1089,7 @@ theorem support_cycleOf_le
 
 中文:
 定理 support_cycleOf_le
-  条件: [DecidableEq α] [Fintype α] (f : Perm α) (x : α)
+  条件: [DecidableEq α] [有限类型 α] (f : 置换 α) (x : α)
   证明: by
   intro y hy
   rw [mem_support]; rw [cycleOf_apply] at hy
@@ -1118,7 +1118,7 @@ theorem SameCycle.mem_support_iff
 
 中文:
 定理 SameCycle.mem_support_iff
-  条件: {f} [DecidableEq α] [Fintype α] (h : SameCycle f x y)
+  条件: {f} [DecidableEq α] [有限类型 α] (h : SameCycle f x y)
   证明: ⟨fun hx => support_cycleOf_le f x (mem_support_cycleOf_iff.mpr ⟨h, hx⟩), fun hy =>
     support_cycleOf_le f y (mem_support_cycleOf_iff.mpr ⟨h.symm, hy⟩)⟩
 
@@ -1143,7 +1143,7 @@ theorem pow_mod_card_support_cycleOf_self_apply
 
 中文:
 定理 pow_mod_card_support_cycleOf_self_apply
-  结论: [DecidableEq α] [Fintype α]
+  结论: [DecidableEq α] [有限类型 α]
   证明: by
   by_cases hx : f x = x
   · rw [pow_apply_eq_self_of_apply_eq_self hx, pow_apply_eq_self_of_apply_eq_self hx]
@@ -1175,8 +1175,8 @@ theorem SameCycle.exists_pow_eq
       rw [← (isCycle_cycleOf _ <| mem_support.
 
 中文:
-定理 SameCycle.exists_pow_eq
-  条件: [DecidableEq α] [Fintype α] (f : Perm α) (h : SameCycle f x y)
+定理 SameCycle.存在_pow_eq
+  条件: [DecidableEq α] [有限类型 α] (f : 置换 α) (h : SameCycle f x y)
   证明: by
   by_cases hx : x in f.support
   · obtain ⟨k, hk, hk'⟩ := h.exists_pow_eq_of_mem_support hx
@@ -1219,7 +1219,7 @@ theorem zpow_eq_zpow_on_iff
 
 中文:
 定理 zpow_eq_zpow_on_iff
-  结论: [DecidableEq α] [Fintype α]
+  结论: [DecidableEq α] [有限类型 α]
   证明: by
   rw [Int.emod_eq_emod_iff_emod_sub_eq_zero]
   conv_lhs => rw [← Int.sub_add_cancel m n, Int.add_comm, zpow_add]
@@ -1262,7 +1262,7 @@ definition cycleFactorsAux
 
 中文:
 定义 cycleFactorsAux
-  签名: [DecidableEq α] [Fintype α]
+  签名: [DecidableEq α] [有限类型 α]
   定义体: go l f h (fun _ => rfl)
 -/
 def cycleFactorsAux [DecidableEq α] [Fintype α]
@@ -1343,7 +1343,7 @@ theorem mem_list_cycles_iff
 
 中文:
 定理 mem_list_cycles_iff
-  结论: {α : 类型} [Finite α] {l : List (Perm α)}
+  结论: {α : 类型} [有限 α] {l : 列表 (置换 α)}
   证明: by
   suffices σ.IsCycle -> (σ in l ↔ forall a, σ a != a -> σ a = l.prod a) by
     exact ⟨fun hσ => ⟨h1 σ hσ, (this (h1 σ hσ)).mp hσ⟩, fun hσ => (this hσ.1).mpr hσ.2⟩
@@ -1401,7 +1401,7 @@ theorem list_cycles_perm_list_cycles
 
 中文:
 定理 list_cycles_perm_list_cycles
-  结论: {α : 类型} [Finite α] {l₁ l₂ : List (Perm α)}
+  结论: {α : 类型} [有限 α] {l₁ l₂ : 列表 (置换 α)}
   证明: by
   refine
     (List.perm_ext_iff_of_nodup (nodup_of_pairwise_disjoint_cycles h₁l₁ h₂l₁)
@@ -1436,7 +1436,7 @@ definition cycleFactors
 
 中文:
 定义 cycleFactors
-  签名: [Fintype α] [LinearOrder α] (f : Perm α)
+  签名: [有限类型 α] [线性序 α] (f : 置换 α)
   定义体: cycleFactorsAux (sort (α := α) univ) f (fun {_ _} => (mem_sort _).2 (mem_univ _))
 
 Depends on / 依赖: cycleFactorsAux, mem_sort, mem_univ
@@ -1456,7 +1456,7 @@ definition truncCycleFactors
 
 中文:
 定义 truncCycleFactors
-  签名: [DecidableEq α] [Fintype α] (f : Perm α)
+  签名: [DecidableEq α] [有限类型 α] (f : 置换 α)
   定义体: Quotient.recOnSubsingleton (@univ α _).1 (fun l h => Trunc.mk (cycleFactorsAux l f (h _)))
     (show forall x, f x != x -> x in (@univ α _).1 from fun _ _ => mem_univ _)
 
@@ -1486,7 +1486,7 @@ Finset.eq_of_veq Multiset.coe_eq_coe.mpr
 
 中文:
 定义 cycleFactorsFinset
-  签名: : Finset (Perm α)
+  签名: : 有限集 (置换 α)
   定义体: (truncCycleFactors f).lift
     (fun l : { l : List (Perm α) // l.prod = f ∧ (forall g in l, IsCycle g) ∧ l.Pairwise Disjoint } =>
       ⟨↑l.val, nodup_of_pairwise_disjoint (fun h1 => not_isCycle_one <| l.2.2.1 _ h1) l.2.2.2⟩)
@@ -1524,7 +1524,7 @@ theorem cycleFactorsFinset_eq_list_toFinset
 
 中文:
 定理 cycleFactorsFinset_eq_list_toFinset
-  条件: {σ : Perm α} {l : List (Perm α)} (hn : l.Nodup)
+  条件: {σ : 置换 α} {l : 列表 (置换 α)} (hn : l.Nodup)
   证明: by
   obtain ⟨⟨l', hp', hc', hd'⟩, hl⟩ := Trunc.exists_rep σ.truncCycleFactors
   have ht : cycleFactorsFinset σ = l'.toFinset := by
@@ -1570,7 +1570,7 @@ theorem cycleFactorsFinset_eq_finset
 
 中文:
 定理 cycleFactorsFinset_eq_finset
-  条件: {σ : Perm α} {s : Finset (Perm α)}
+  条件: {σ : 置换 α} {s : 有限集 (置换 α)}
   证明: by
   obtain ⟨l, hl, rfl⟩ := s.exists_list_nodup_eq
   simp [cycleFactorsFinset_eq_list_toFinset, hl]
@@ -1612,7 +1612,7 @@ theorem cycleFactorsFinset_mem_commute
 
 中文:
 定理 cycleFactorsFinset_mem_commute
-  结论: (cycleFactorsFinset f : Set (Perm α)).Pairwise Commute
+  结论: (cycleFactorsFinset f : 集合 (置换 α)).两两 Commute
   证明: (cycleFactorsFinset_pairwise_disjoint _).mono' fun _ _ => Disjoint.commute
 
 Depends on / 依赖: Disjoint, Disjoint.commute, commute, cycleFactorsFinset_pairwise_disjoint
@@ -1633,7 +1633,7 @@ theorem cycleFactorsFinset_mem_commute'
 
 中文:
 定理 cycleFactorsFinset_mem_commute'
-  结论: {g1 g2 : Perm α}
+  结论: {g1 g2 : 置换 α}
   证明: by
   rcases eq_or_ne g1 g2 with rfl | h
   · apply Commute.refl
@@ -1682,7 +1682,7 @@ theorem mem_cycleFactorsFinset_iff
 
 中文:
 定理 mem_cycleFactorsFinset_iff
-  条件: {f p : Perm α}
+  条件: {f p : 置换 α}
   证明: by
   obtain ⟨l, hl, hl'⟩ := f.cycleFactorsFinset.exists_list_nodup_eq
   rw [← hl']
@@ -1722,7 +1722,7 @@ theorem cycleOf_mem_cycleFactorsFinset_iff
 
 中文:
 定理 cycleOf_mem_cycleFactorsFinset_iff
-  条件: {f : Perm α} {x : α}
+  条件: {f : 置换 α} {x : α}
   证明: by
   rw [mem_cycleFactorsFinset_iff]
   constructor
@@ -1768,7 +1768,7 @@ lemma cycleOf_ne_one_iff_mem_cycleFactorsFinset
 
 中文:
 引理 cycleOf_ne_one_iff_mem_cycleFactorsFinset
-  条件: {g : Equiv.Perm α} {x : α}
+  条件: {g : 等价.置换 α} {x : α}
   证明: by
   rw [cycleOf_mem_cycleFactorsFinset_iff]; rw [mem_support]; rw [ne_eq]; rw [cycleOf_eq_one_iff]
 
@@ -1791,7 +1791,7 @@ theorem mem_cycleFactorsFinset_support_le
 
 中文:
 定理 mem_cycleFactorsFinset_support_le
-  条件: {p f : Perm α} (h : p in cycleFactorsFinset f)
+  条件: {p f : 置换 α} (h : p in cycleFactorsFinset f)
   证明: by
   rw [mem_cycleFactorsFinset_iff] at h
   intro x hx
@@ -1818,7 +1818,7 @@ lemma support_zpowers_of_mem_cycleFactorsFinset_le
 
 中文:
 引理 support_zpowers_of_mem_cycleFactorsFinset_le
-  结论: {g : Perm α}
+  结论: {g : 置换 α}
   证明: by
   obtain ⟨m, hm⟩ := v.prop
   simp only [← hm]
@@ -1903,7 +1903,7 @@ lemma disjoint_ofSubtype_noncommPiCoprod
 
 中文:
 引理 disjoint_ofSubtype_noncommPiCoprod
-  结论: (u : Perm (Function.fixedPoints f))
+  结论: (u : 置换 (函数.fixedPoints f))
   证明: by
   apply Finset.noncommProd_induction
   · intro a _ b _ h
@@ -1941,7 +1941,7 @@ lemma commute_ofSubtype_noncommPiCoprod
 
 中文:
 引理 commute_ofSubtype_noncommPiCoprod
-  结论: (u : Perm (Function.fixedPoints f))
+  结论: (u : 置换 (函数.fixedPoints f))
   证明: Disjoint.commute (f.disjoint_ofSubtype_noncommPiCoprod u v)
 
 Depends on / 依赖: Disjoint, Disjoint.commute, commute, disjoint_ofSubtype_noncommPiCoprod, f.disjoint_ofSubtype_noncommPiCoprod
@@ -1968,7 +1968,7 @@ theorem mem_support_iff_mem_support_of_mem_cycleFactorsFinset
 
 中文:
 定理 mem_support_iff_mem_support_of_mem_cycleFactorsFinset
-  条件: {g : Equiv.Perm α} {x : α}
+  条件: {g : 等价.置换 α} {x : α}
   证明: by
   constructor
   · intro h
@@ -2005,7 +2005,7 @@ theorem cycleFactorsFinset_eq_empty_iff
 
 中文:
 定理 cycleFactorsFinset_eq_empty_iff
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: cycleFactorsFinset f = ∅ ↔ f = 1
   证明: by
   simpa [cycleFactorsFinset_eq_finset] using eq_comm
@@ -2031,7 +2031,7 @@ theorem cycleFactorsFinset_one
 
 中文:
 定理 cycleFactorsFinset_one
-  结论: cycleFactorsFinset (1 : Perm α) = ∅
+  结论: cycleFactorsFinset (1 : 置换 α) = ∅
   证明: by
   simp [cycleFactorsFinset_eq_empty_iff]
 
@@ -2053,7 +2053,7 @@ theorem cycleFactorsFinset_eq_singleton_self_iff
 
 中文:
 定理 cycleFactorsFinset_eq_singleton_self_iff
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   证明: by simp [cycleFactorsFinset_eq_finset]
 
 Depends on / 依赖: cycleFactorsFinset_eq_finset
@@ -2070,8 +2070,8 @@ theorem IsCycle.cycleFactorsFinset_eq_singleton
   proof: cycleFactorsFinset_eq_singleton_self_iff.mpr hf
 
 中文:
-定理 IsCycle.cycleFactorsFinset_eq_singleton
-  条件: {f : Perm α} (hf : IsCycle f)
+定理 是环.cycleFactorsFinset_eq_singleton
+  条件: {f : 置换 α} (hf : 是环 f)
   证明: cycleFactorsFinset_eq_singleton_self_iff.mpr hf
 
 Depends on / 依赖: cycleFactorsFinset_eq_singleton_self_iff, cycleFactorsFinset_eq_singleton_self_iff.mpr
@@ -2095,7 +2095,7 @@ theorem cycleFactorsFinset_eq_singleton_iff
 
 中文:
 定理 cycleFactorsFinset_eq_singleton_iff
-  条件: {f g : Perm α}
+  条件: {f g : 置换 α}
   证明: by
   suffices f = g -> (g.IsCycle ↔ f.IsCycle) by
     rw [cycleFactorsFinset_eq_finset]
@@ -2126,7 +2126,7 @@ theorem cycleFactorsFinset_injective
 
 中文:
 定理 cycleFactorsFinset_injective
-  结论: Function.Injective (@cycleFactorsFinset α _ _)
+  结论: 函数.单射 (@cycleFactorsFinset α _ _)
   证明: by
   intro f g h
   rw [← cycleFactorsFinset_noncommProd f]
@@ -2156,7 +2156,7 @@ theorem Disjoint.disjoint_cycleFactorsFinset
 
 中文:
 定理 Disjoint.disjoint_cycleFactorsFinset
-  条件: {f g : Perm α} (h : Disjoint f g)
+  条件: {f g : 置换 α} (h : Disjoint f g)
   证明: by
   rw [disjoint_iff_disjoint_support] at h
   rw [Finset.disjoint_left]
@@ -2196,7 +2196,7 @@ theorem Disjoint.cycleFactorsFinset_mul_eq_union
 
 中文:
 定理 Disjoint.cycleFactorsFinset_mul_eq_union
-  条件: {f g : Perm α} (h : Disjoint f g)
+  条件: {f g : 置换 α} (h : Disjoint f g)
   证明: by
   rw [cycleFactorsFinset_eq_finset]
   refine ⟨?_, ?_, ?_⟩
@@ -2239,7 +2239,7 @@ theorem disjoint_mul_inv_of_mem_cycleFactorsFinset
 
 中文:
 定理 disjoint_mul_inv_of_mem_cycleFactorsFinset
-  条件: {f g : Perm α} (h : f in cycleFactorsFinset g)
+  条件: {f g : 置换 α} (h : f in cycleFactorsFinset g)
   证明: by
   rw [mem_cycleFactorsFinset_iff] at h
   intro x
@@ -2279,7 +2279,7 @@ theorem cycle_is_cycleOf
 
 中文:
 定理 cycle_is_cycleOf
-  结论: {f c : Equiv.Perm α} {a : α} (ha : a in c.support)
+  结论: {f c : 等价.置换 α} {a : α} (ha : a in c.support)
   证明: by
   suffices f.cycleOf a = c.cycleOf a by
     rw [this]
@@ -2322,7 +2322,7 @@ theorem isCycleOn_support_of_mem_cycleFactorsFinset
 
 中文:
 定理 isCycleOn_support_of_mem_cycleFactorsFinset
-  结论: {g c : Equiv.Perm α}
+  结论: {g c : 等价.置换 α}
   证明: by
   obtain ⟨x, hx⟩ := IsCycle.nonempty_support (mem_cycleFactorsFinset_iff.mp hc).1
   rw [cycle_is_cycleOf hx hc]
@@ -2377,7 +2377,7 @@ theorem zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff
 
 中文:
 定理 zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff
-  结论: {g : Perm α}
+  结论: {g : 置换 α}
   证明: by
   rw [← g.eq_cycleOf_of_mem_cycleFactorsFinset_iff _ c.prop]; rw [cycleOf_self_apply_zpow]; rw [eq_cycleOf_of_mem_cycleFactorsFinset_iff _ _ c.prop]
 
@@ -2404,7 +2404,7 @@ theorem mem_cycleFactorsFinset_conj
 
 中文:
 定理 mem_cycleFactorsFinset_conj
-  条件: (g k c : Perm α)
+  条件: (g k c : 置换 α)
   证明: by
   suffices imp_lemma : forall {g k c : Perm α},
       c in g.cycleFactorsFinset -> k * c * k⁻¹ in (k * g * k⁻¹).cycleFactorsFinset by
@@ -2444,7 +2444,7 @@ theorem commute_of_mem_cycleFactorsFinset_commute
 
 中文:
 定理 commute_of_mem_cycleFactorsFinset_commute
-  结论: (k g : Perm α)
+  结论: (k g : 置换 α)
   证明: by
   rw [← cycleFactorsFinset_noncommProd g (cycleFactorsFinset_mem_commute g)]
   apply Finset.noncommProd_commute
@@ -2474,7 +2474,7 @@ theorem self_mem_cycle_factors_commute
 
 中文:
 定理 self_mem_cycle_factors_commute
-  结论: {g c : Perm α}
+  结论: {g c : 置换 α}
   证明: by
   apply commute_of_mem_cycleFactorsFinset_commute
   intro c' hc'
@@ -2509,7 +2509,7 @@ theorem mem_support_cycle_of_cycle
 
 中文:
 定理 mem_support_cycle_of_cycle
-  结论: {g d c : Perm α}
+  结论: {g d c : 置换 α}
   证明: by
   intro x
   simp only [mem_support, not_iff_not]
@@ -2542,7 +2542,7 @@ theorem mem_cycleFactorsFinset_support
 
 中文:
 定理 mem_cycleFactorsFinset_support
-  条件: {g c : Perm α} (hc : c in g.cycleFactorsFinset) (a : α)
+  条件: {g c : 置换 α} (hc : c in g.cycleFactorsFinset) (a : α)
   证明: mem_support_iff_of_commute (self_mem_cycle_factors_commute hc).symm a
 
 Depends on / 依赖: mem_support_iff_of_commute, self_mem_cycle_factors_commute
@@ -2573,7 +2573,7 @@ theorem cycle_induction_on
 
 中文:
 定理 cycle_induction_on
-  结论: [Finite β] (P : Perm β -> 命题) (σ : Perm β) (base_one : P 1)
+  结论: [有限 β] (P : 置换 β -> 命题) (σ : 置换 β) (base_one : P 1)
   证明: by
   cases nonempty_fintype β
   suffices forall l : List (Perm β),
@@ -2626,7 +2626,7 @@ theorem cycleFactorsFinset_mul_inv_mem_eq_sdiff
 
 中文:
 定理 cycleFactorsFinset_mul_inv_mem_eq_sdiff
-  结论: [DecidableEq α] [Fintype α] {f g : Perm α}
+  结论: [DecidableEq α] [有限类型 α] {f g : 置换 α}
   证明: by
   revert f
   refine
@@ -2699,8 +2699,8 @@ theorem IsCycle.forall_commute_iff
   exact IsCycle.commute_iff (mem_cycleFactorsFinset_iff.mp hc).1
 
 中文:
-定理 IsCycle.forall_commute_iff
-  条件: [DecidableEq α] [Fintype α] (g z : Perm α)
+定理 是环.对任意_commute_iff
+  条件: [DecidableEq α] [有限类型 α] (g z : 置换 α)
   证明: by
   apply forall_congr'
   intro c
@@ -2734,7 +2734,7 @@ theorem subtypePerm_on_cycleFactorsFinset
 
 中文:
 定理 subtypePerm_on_cycleFactorsFinset
-  结论: [DecidableEq α] [Fintype α]
+  结论: [DecidableEq α] [有限类型 α]
   证明: by
   ext ⟨x, hx⟩
   simp only [subtypePerm_apply, Subtype.coe_mk, subtypePermOfSupport]
@@ -2766,7 +2766,7 @@ theorem commute_iff_of_mem_cycleFactorsFinset
 
 中文:
 定理 commute_iff_of_mem_cycleFactorsFinset
-  结论: [DecidableEq α] [Fintype α] {g k c : Equiv.Perm α}
+  结论: [DecidableEq α] [有限类型 α] {g k c : 等价.置换 α}
   证明: by
   rw [IsCycle.commute_iff' (mem_cycleFactorsFinset_iff.mp hc).1]
   apply exists_congr

@@ -51,7 +51,7 @@ definition isPrincipalSubmonoid
 
 中文:
 定义 isPrincipalSubmonoid
-  签名: : Submonoid (Ideal R) where
+  签名: : 子幺半群 (理想 R) where
   定义体: {I | IsPrincipal I}
   mul_mem' := by
     rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩
@@ -77,7 +77,7 @@ theorem mem_isPrincipalSubmonoid_iff
 
 中文:
 定理 mem_isPrincipalSubmonoid_iff
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -119,7 +119,7 @@ definition isPrincipalNonZeroDivisorsSubmonoid
 
 中文:
 定义 isPrincipalNonZeroDivisorsSubmonoid
-  签名: : Submonoid (Ideal R)⁰ where
+  签名: : 子幺半群 (理想 R)⁰ where
   定义体: {I | IsPrincipal I.val}
   mul_mem' := by
     rintro ⟨_, _⟩ ⟨_, _⟩ ⟨x, rfl⟩ ⟨y, rfl⟩
@@ -204,7 +204,7 @@ theorem associatesEquivIsPrincipal_symm_apply
 
 中文:
 定理 associatesEquivIsPrincipal_symm_apply
-  条件: {I : Ideal R} (hI : IsPrincipal I)
+  条件: {I : 理想 R} (hI : 是Principal I)
   证明: rfl
 -/
 theorem associatesEquivIsPrincipal_symm_apply {I : Ideal R} (hI : IsPrincipal I) :
@@ -487,7 +487,7 @@ definition isoBaseOfIsPrincipal
 
 中文:
 定义 isoBaseOfIsPrincipal
-  签名: {I : Ideal R}
+  签名: {I : 理想 R}
   定义体: letI x := IsPrincipal.generator I
   have hx : x != 0 := by rwa [Ne, ← IsPrincipal.eq_bot_iff_generator_eq_zero]
   (LinearEquiv.toSpanNonzeroSingleton R R x hx).trans
@@ -515,7 +515,7 @@ theorem isoBaseOfIsPrincipal_apply
 
 中文:
 定理 isoBaseOfIsPrincipal_apply
-  条件: {I : Ideal R} [hprinc : I.IsPrincipal] (hI : I != ⊥) (x : R)
+  条件: {I : 理想 R} [hprinc : I.是Principal] (hI : I != ⊥) (x : R)
   证明: rfl
 -/
 theorem isoBaseOfIsPrincipal_apply {I : Ideal R} [hprinc : I.IsPrincipal] (hI : I != ⊥) (x : R) :
@@ -534,7 +534,7 @@ theorem subtype_isoBaseOfIsPrincipal_eq_mul
 
 中文:
 定理 subtype_isoBaseOfIsPrincipal_eq_mul
-  结论: {I : Ideal R}
+  结论: {I : 理想 R}
   证明: by
   ext
   simp

@@ -44,7 +44,7 @@ definition IsVertexCover
 
 中文:
 定义 IsVertexCover
-  签名: (G : SimpleGraph V) (c : Set V)
+  签名: (G : 简单图 V) (c : 集合 V)
   定义体: forall ⦃v w : V⦄, G.Adj v w -> v in c ∨ w in c
 
 @[simp]
@@ -117,7 +117,7 @@ theorem isVertexCover_bot
 
 中文:
 定理 isVertexCover_bot
-  条件: (c : Set V)
+  条件: (c : 集合 V)
   结论: IsVertexCover ⊥ c
   证明: by
   simp [IsVertexCover]
@@ -138,7 +138,7 @@ theorem IsVertexCover.subset
 
 中文:
 定理 IsVertexCover.subset
-  条件: {c d : Set V} (hcd : c subseteq d) (hc : IsVertexCover G c)
+  条件: {c d : 集合 V} (hcd : c subseteq d) (hc : IsVertexCover G c)
   证明: by
   grind [IsVertexCover]
 
@@ -158,7 +158,7 @@ theorem IsVertexCover.mono
 
 中文:
 定理 IsVertexCover.mono
-  条件: {c : Set V} (hG : G <= G') (hc : IsVertexCover G' c)
+  条件: {c : 集合 V} (hG : G <= G') (hc : IsVertexCover G' c)
   证明: fun _ _ hadj => hc (hG hadj)
 -/
 theorem IsVertexCover.mono {c : Set V} (hG : G <= G') (hc : IsVertexCover G' c) :
@@ -183,7 +183,7 @@ theorem isIndepSet_compl_iff_isVertexCover
 
 中文:
 定理 isIndepSet_compl_iff_isVertexCover
-  条件: {c : Set V}
+  条件: {c : 集合 V}
   结论: G.IsIndepSet cᶜ ↔ IsVertexCover G c
   证明: by
   refine ⟨fun hi v w hadj => ?_, by grind [IsVertexCover, Set.Pairwise]⟩
@@ -212,7 +212,7 @@ theorem isVertexCover_compl
 
 中文:
 定理 isVertexCover_compl
-  条件: {c : Set V}
+  条件: {c : 集合 V}
   结论: G.IsVertexCover cᶜ ↔ G.IsIndepSet c
   证明: by
   simp [← isIndepSet_compl_iff_isVertexCover]
@@ -233,8 +233,8 @@ theorem IsVertexCover.preimage
 @[simp]
 
 中文:
-定理 IsVertexCover.preimage
-  结论: {F : 类型} [FunLike F V W] [HomClass F G H]
+定理 IsVertexCover.原像
+  结论: {F : 类型} [函数状 F V W] [态射类 F G H]
   证明: fun _ _ hadj => hc (map_rel f hadj)
 
 @[simp]
@@ -262,7 +262,7 @@ theorem isVertexCover_preimage_iso
 
 中文:
 定理 isVertexCover_preimage_iso
-  条件: (f : G ≃g H) {c : Set W}
+  条件: (f : G ≃g H) {c : 集合 W}
   证明: by
     simpa [← RelIso.image_eq_preimage_symm, Set.image_preimage_eq _ f.surjective]
       using h.preimage f.symm
@@ -291,7 +291,7 @@ theorem isVertexCover_image_iso
 
 中文:
 定理 isVertexCover_image_iso
-  条件: (f : G ≃g H) {c : Set V}
+  条件: (f : G ≃g H) {c : 集合 V}
   证明: by
   simp [RelIso.image_eq_preimage_symm]
 
@@ -315,7 +315,7 @@ definition vertexCoverNum
 
 中文:
 定义 vertexCoverNum
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: ⨅ (s : Set V) (_ : IsVertexCover G s), s.encard
 
 Depends on / 依赖: IsVertexCover, encard, s.encard
@@ -354,7 +354,7 @@ theorem IsVertexCover.vertexCoverNum_le
 
 中文:
 定理 IsVertexCover.vertexCoverNum_le
-  条件: {c : Set V} (hc : IsVertexCover G c)
+  条件: {c : 集合 V} (hc : IsVertexCover G c)
   证明: vertexCoverNum_le_iff.mpr fun _ hm => hm c hc
 
 Depends on / 依赖: vertexCoverNum_le_iff, vertexCoverNum_le_iff.mpr
@@ -375,7 +375,7 @@ theorem vertexCoverNum_exists
   exact ⟨s.val, hs ▸ iInf_subtype, s.property⟩
 
 中文:
-定理 vertexCoverNum_exists
+定理 vertexCoverNum_存在
   条件: (G)
   证明: by
   have : Nonempty {s : Set V // IsVertexCover G s} := nonempty_subtype.mpr ⟨Set.univ, by simp⟩
@@ -405,7 +405,7 @@ theorem exists_of_le_vertexCoverNum
 @[simp]
 
 中文:
-定理 exists_of_le_vertexCoverNum
+定理 存在_of_le_vertexCoverNum
   结论: (n : 自然数) (h₁ : vertexCoverNum G <= n)
   证明: by
   obtain ⟨s, hs₁, hs₂⟩ := vertexCoverNum_exists G
@@ -462,7 +462,7 @@ theorem vertexCoverNum_of_subsingleton
 
 中文:
 定理 vertexCoverNum_of_subsingleton
-  条件: [Subsingleton V]
+  条件: [子单例 V]
   结论: vertexCoverNum G = 0
   证明: by
   simp [SimpleGraph.subsingleton_iff.mpr _ |>.allEq G ⊥]
@@ -545,7 +545,7 @@ theorem vertexCoverNum_ne_top_of_finite
 
 中文:
 定理 vertexCoverNum_ne_top_of_finite
-  条件: [Finite V]
+  条件: [有限 V]
   结论: vertexCoverNum G != ⊤
   证明: ne_top_of_le_ne_top (by simpa) (@vertexCoverNum_le_card_sub_one V G)
 
@@ -569,7 +569,7 @@ theorem vertexCoverNum_lt_card
 
 中文:
 定理 vertexCoverNum_lt_card
-  条件: [Nonempty V] [Finite V]
+  条件: [非空 V] [有限 V]
   结论: vertexCoverNum G < E自然数.card V
   证明: by
   refine (ENat.add_one_le_iff vertexCoverNum_ne_top_of_finite).mp ?_
@@ -637,7 +637,7 @@ theorem vertexCoverNum_ne_top_of_finite_edgeSet
 
 中文:
 定理 vertexCoverNum_ne_top_of_finite_edgeSet
-  条件: (h : G.edgeSet.Finite)
+  条件: (h : G.edgeSet.有限)
   结论: vertexCoverNum G != ⊤
   证明: ne_top_of_le_ne_top (Set.encard_ne_top_iff.mpr h) vertexCoverNum_le_encard_edgeSet
 
@@ -751,7 +751,7 @@ theorem vertexCoverNum_le_vertexCoverNum_of_injective
 
 中文:
 定理 vertexCoverNum_le_vertexCoverNum_of_injective
-  条件: (f : G ->g H) (hf : Function.Injective f)
+  条件: (f : G ->g H) (hf : 函数.单射 f)
   证明: IsContained.vertexCoverNum_le_vertexCoverNum ⟨f, hf⟩
 
 @[gcongr]

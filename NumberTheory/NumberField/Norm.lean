@@ -44,8 +44,8 @@ theorem Algebra.coe_norm_int
   proof: (Algebra.norm_localization (R := Int) (Rₘ := Rat) (S := 𝓞 K) (Sₘ := K) (nonZeroDivisors Int) x).symm
 
 中文:
-定理 Algebra.coe_norm_int
-  结论: (Algebra.norm 整数 x : Rat) = Algebra.norm Rat (x : K)
+定理 代数.coe_norm_int
+  结论: (代数.norm 整数 x : 有理数) = 代数.norm 有理数 (x : K)
   证明: (Algebra.norm_localization (R := Int) (Rₘ := Rat) (S := 𝓞 K) (Sₘ := K) (nonZeroDivisors Int) x).symm
 
 Depends on / 依赖: Algebra, Algebra.norm_localization, nonZeroDivisors, norm_localization
@@ -62,8 +62,8 @@ theorem Algebra.coe_trace_int
   proof: (Algebra.trace_localization (R := Int) (Rₘ := Rat) (S := 𝓞 K) (Sₘ := K) (nonZeroDivisors Int) x).symm
 
 中文:
-定理 Algebra.coe_trace_int
-  结论: (Algebra.trace 整数 _ x : Rat) = Algebra.trace Rat K (x : K)
+定理 代数.coe_trace_int
+  结论: (代数.trace 整数 _ x : 有理数) = 代数.trace 有理数 K (x : K)
   证明: (Algebra.trace_localization (R := Int) (Rₘ := Rat) (S := 𝓞 K) (Sₘ := K) (nonZeroDivisors Int) x).symm
 
 Depends on / 依赖: Algebra, Algebra.trace_localization, nonZeroDivisors, trace_localization
@@ -113,7 +113,7 @@ lemma coe_norm
 中文:
 引理 coe_norm
   条件: (x : 𝓞 L)
-  结论: norm K x = Algebra.norm K (x : L)
+  结论: norm K x = 代数.norm K (x : L)
   证明: rfl
 -/
 @[simp] lemma coe_norm (x : 𝓞 L) : norm K x = Algebra.norm K (x : L) :=
@@ -196,7 +196,7 @@ theorem dvd_norm
 
 中文:
 定理 dvd_norm
-  条件: [FiniteDimensional K L] [IsGalois K L] (x : 𝓞 L)
+  条件: [有限维 K L] [是Galois K L] (x : 𝓞 L)
   证明: by
   classical
   have hint :
@@ -232,7 +232,7 @@ theorem isUnit_norm_of_isGalois
 
 中文:
 定理 isUnit_norm_of_isGalois
-  条件: [FiniteDimensional K L] [IsGalois K L] {x : 𝓞 L}
+  条件: [有限维 K L] [是Galois K L] {x : 𝓞 L}
   证明: ⟨fun hx => isUnit_of_dvd_unit (dvd_norm K x) (hx.map _), IsUnit.map _⟩
 
 Depends on / 依赖: IsUnit, IsUnit.map, dvd_norm, hx.map, isUnit_of_dvd_unit
@@ -254,7 +254,7 @@ theorem norm_norm
 
 中文:
 定理 norm_norm
-  条件: [Algebra F L] [FiniteDimensional F L] [IsScalarTower K F L] (x : 𝓞 L)
+  条件: [代数 F L] [有限维 F L] [标量塔 K F L] (x : 𝓞 L)
   证明: by
   rw [RingOfIntegers.ext_iff]; rw [coe_norm]; rw [coe_norm]; rw [coe_norm]; rw [Algebra.norm_norm]
 
@@ -283,8 +283,8 @@ theorem isUnit_norm
 
 中文:
 定理 isUnit_norm
-  条件: [CharZero K] {x : 𝓞 F}
-  结论: IsUnit (norm K x) ↔ IsUnit x
+  条件: [特征零 K] {x : 𝓞 F}
+  结论: 是单位 (norm K x) ↔ 是单位 x
   证明: by
   let : Algebra K (AlgebraicClosure K) := AlgebraicClosure.instAlgebra K
   let L := normalClosure K F (AlgebraicClosure F)

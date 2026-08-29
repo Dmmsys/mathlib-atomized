@@ -30,8 +30,8 @@ instance [Semiring
   body: (equivShrink α).symm.algebra _
 
 中文:
-实例 [Semiring
-  签名: α] [Algebra R α] : Algebra R (Shrink.{v} α)
+实例 [半环
+  签名: α] [代数 R α] : 代数 R (Shrink.{v} α)
   定义体: (equivShrink α).symm.algebra _
 
 Depends on / 依赖: algebra, equivShrink, symm.algebra
@@ -51,7 +51,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: [Semiring α] [Algebra R α]
+  签名: [半环 α] [代数 R α]
   定义体: (equivShrink α).symm.algEquiv _
 
 Depends on / 依赖: algEquiv, equivShrink, symm.algEquiv

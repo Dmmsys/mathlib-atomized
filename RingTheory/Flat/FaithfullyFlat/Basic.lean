@@ -67,11 +67,11 @@ class FaithfullyFlat
     - submodule_ne_top : forall ⦃m : Ideal R⦄ (_ : Ideal.IsMaximal m), m • (⊤ : Submodule R M) != ⊤
 
 中文:
-类 FaithfullyFlat
-  参数: : 命题 extends Module.Flat R M where
-  继承: Module.Flat R M
+类 忠实平坦
+  参数: : 命题 extends 模.平坦 R M where
+  继承: 模.平坦 R M
   公理与运算 (1 个):
-    - submodule_ne_top : 对任意 ⦃m : Ideal R⦄ (_ : Ideal.IsMaximal m), m • (⊤ : Submodule R M) != ⊤
+    - submodule_ne_top : 对任意 ⦃m : 理想 R⦄ (_ : 理想.是极大 m), m • (⊤ : 子模 R M) != ⊤
 -/
 @[mk_iff] class FaithfullyFlat : Prop extends Module.Flat R M where
   submodule_ne_top : forall ⦃m : Ideal R⦄ (_ : Ideal.IsMaximal m), m • (⊤ : Submodule R M) != ⊤
@@ -88,7 +88,7 @@ instance self
 
 中文:
 实例 self
-  签名: : FaithfullyFlat R R where
+  签名: : 忠实平坦 R R where
   定义体: Ideal.eq_top_iff_one _
     simpa using show 1 in (m • ⊤ : Ideal R) from r.symm ▸ ⟨⟩
 
@@ -410,7 +410,7 @@ lemma of_linearEquiv
 
 中文:
 引理 of_linearEquiv
-  结论: {N : 类型} [AddCommGroup N] [Module R N] [FaithfullyFlat R M]
+  结论: {N : 类型} [加法交换群 N] [模 R N] [忠实平坦 R M]
   证明: by
   rw [iff_flat_and_lTensor_faithful]
   exact ⟨Flat.of_linearEquiv e,
@@ -443,7 +443,7 @@ instance directSum
 
 中文:
 实例 directSum
-  签名: {ι : 类型} [Nonempty ι] (M : ι -> 类型) [对任意 i, AddCommGroup (M i)]
+  签名: {ι : 类型} [非空 ι] (M : ι -> 类型) [对任意 i, 加法交换群 (M i)]
   定义体: by
   classical
   rw [iff_flat_and_lTensor_faithful]
@@ -477,7 +477,7 @@ instance finsupp
 
 中文:
 实例 finsupp
-  签名: (ι : 类型v) [Nonempty ι]
+  签名: (ι : 类型v) [非空 ι]
   定义体: by
   classical exact of_linearEquiv _ _ (finsuppLEquivDirectSum R R ι)
 
@@ -497,8 +497,8 @@ instance [Nontrivial
   body: of_linearEquiv _ _ (Free.chooseBasis R M).repr
 
 中文:
-实例 [Nontrivial
-  签名: M] [Module.Free R M] : FaithfullyFlat R M
+实例 [非平凡
+  签名: M] [模.自由 R M] : 忠实平坦 R M
   定义体: of_linearEquiv _ _ (Free.chooseBasis R M).repr
 
 Depends on / 依赖: Free.chooseBasis, chooseBasis, of_linearEquiv
@@ -523,7 +523,7 @@ lemma subsingleton_tensorProduct_iff_right
 
 中文:
 引理 subsingleton_tensorProduct_iff_right
-  条件: [Module.FaithfullyFlat R M]
+  条件: [模.忠实平坦 R M]
   证明: ⟨fun _ => lTensor_reflects_triviality R M N, fun _ => inferInstance⟩
 
 @[simp]
@@ -547,7 +547,7 @@ lemma subsingleton_tensorProduct_iff_left
 
 中文:
 引理 subsingleton_tensorProduct_iff_left
-  条件: [Module.FaithfullyFlat R N]
+  条件: [模.忠实平坦 R N]
   证明: ⟨fun _ => rTensor_reflects_triviality R N M, fun _ => inferInstance⟩
 
 @[simp]
@@ -572,7 +572,7 @@ lemma nontrivial_tensorProduct_iff_right
 
 中文:
 引理 nontrivial_tensorProduct_iff_right
-  条件: [Module.FaithfullyFlat R M]
+  条件: [模.忠实平坦 R M]
   证明: by
   contrapose!; exact subsingleton_tensorProduct_iff_right R M
 
@@ -596,7 +596,7 @@ lemma nontrivial_tensorProduct_iff_left
 
 中文:
 引理 nontrivial_tensorProduct_iff_left
-  条件: [Module.FaithfullyFlat R N]
+  条件: [模.忠实平坦 R N]
   证明: by
   contrapose!; exact subsingleton_tensorProduct_iff_left R M
 
@@ -657,7 +657,7 @@ lemma range_le_ker_of_exact_rTensor
 
 中文:
 引理 range_le_ker_of_exact_rTensor
-  结论: [fl : FaithfullyFlat R M]
+  结论: [fl : 忠实平坦 R M]
   证明: by
   -- let `n1 ∈ N1`. We need to show `l23 (l12 n1) = 0`. Suppose this is not the case.
   rintro _ ⟨n1, rfl⟩
@@ -722,7 +722,7 @@ lemma rTensor_reflects_exact
 
 中文:
 引理 rTensor_reflects_exact
-  结论: [fl : FaithfullyFlat R M]
+  结论: [fl : 忠实平坦 R M]
   证明: LinearMap.exact_iff.2 by
   have complex : LinearMap.range l12 <= LinearMap.ker l23 := range_le_ker_of_exact_rTensor R M _ _ ex
   -- By the previous lemma we have that range l12 ≤ ker l23 and hence the quotient
@@ -784,7 +784,7 @@ lemma lTensor_reflects_exact
 
 中文:
 引理 lTensor_reflects_exact
-  结论: [fl : FaithfullyFlat R M]
+  结论: [fl : 忠实平坦 R M]
   证明: rTensor_reflects_exact R M _ _ ex.of_ladder_linearEquiv_of_exact
     (e₁ := TensorProduct.comm _ _ _) (e₂ := TensorProduct.comm _ _ _)
     (e₃ := TensorProduct.comm _ _ _) (by ext; rfl) (by ext; rfl)
@@ -813,7 +813,7 @@ lemma rTensor_exact_iff_exact
 
 中文:
 引理 rTensor_exact_iff_exact
-  条件: [FaithfullyFlat R M]
+  条件: [忠实平坦 R M]
   证明: ⟨fun ex => rTensor_reflects_exact R M l12 l23 ex, fun e => Module.Flat.rTensor_exact _ e⟩
 
 @[simp]
@@ -835,7 +835,7 @@ lemma lTensor_exact_iff_exact
 
 中文:
 引理 lTensor_exact_iff_exact
-  条件: [FaithfullyFlat R M]
+  条件: [忠实平坦 R M]
   证明: ⟨fun ex => lTensor_reflects_exact R M l12 l23 ex, fun e => Module.Flat.lTensor_exact _ e⟩
 
 Depends on / 依赖: Module, Module.Flat.lTensor_exact, lTensor_exact, lTensor_reflects_exact
@@ -865,7 +865,7 @@ lemma lTensor_injective_iff_injective
 
 中文:
 引理 lTensor_injective_iff_injective
-  条件: [Module.FaithfullyFlat R M]
+  条件: [模.忠实平坦 R M]
   证明: by
   rw [← LinearMap.exact_zero_iff_injective (M otimes[R] Unit), ← LinearMap.exact_zero_iff_injective Unit]
   conv_rhs => rw [← lTensor_exact_iff_exact R M]
@@ -898,7 +898,7 @@ lemma lTensor_surjective_iff_surjective
 
 中文:
 引理 lTensor_surjective_iff_surjective
-  条件: [Module.FaithfullyFlat R M]
+  条件: [模.忠实平坦 R M]
   证明: by
   rw [← LinearMap.exact_zero_iff_surjective (M otimes[R] Unit),
     ← LinearMap.exact_zero_iff_surjective Unit]
@@ -928,7 +928,7 @@ lemma lTensor_bijective_iff_bijective
 
 中文:
 引理 lTensor_bijective_iff_bijective
-  条件: [Module.FaithfullyFlat R M]
+  条件: [模.忠实平坦 R M]
   证明: by
   simp [Function.Bijective]
 
@@ -1035,7 +1035,7 @@ lemma zero_iff_lTensor_zero
 
 中文:
 引理 zero_iff_lTensor_zero
-  结论: [h : FaithfullyFlat R M]
+  结论: [h : 忠实平坦 R M]
   证明: ⟨fun hf => hf.symm ▸ LinearMap.lTensor_zero M, fun hf => by
     have := lTensor_reflects_exact R M f LinearMap.id (by
       rw [LinearMap.exact_iff]; rw [hf]; rw [LinearMap.range_zero]; rw [LinearMap.ker_eq_bot]
@@ -1069,7 +1069,7 @@ ext m n; exact (TensorProduct.comm R M N').injective (by simpa using congr($h (n
 
 中文:
 引理 zero_iff_rTensor_zero
-  结论: [h: FaithfullyFlat R M]
+  结论: [h: 忠实平坦 R M]
   证明: .trans zero_iff_lTensor_zero R M f
 ⟨fun h => by ext n m; exact (TensorProduct.comm R N' M).injective
     (by simpa using congr($h (m otimesₜ n))), fun h => by
@@ -1109,7 +1109,7 @@ theorem one_tmul_eq_zero_iff
 
 中文:
 定理 one_tmul_eq_zero_iff
-  条件: {A : 类型} [Ring A] [Algebra R A] [FaithfullyFlat R A] (m : M)
+  条件: {A : 类型} [环 A] [代数 R A] [忠实平坦 R A] (m : M)
   证明: by
   constructor; swap
   · rintro rfl; rw [tmul_zero]
@@ -1233,7 +1233,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: FaithfullyFlat R M
+  结论: 忠实平坦 R M
   证明: by
   rw [iff_zero_iff_lTensor_zero]
   refine ⟨Module.Flat.trans R S M, @fun N _ _ N' _ _ f => ⟨fun aux => ?_, fun eq => eq ▸ by simp⟩⟩
@@ -1319,8 +1319,8 @@ lemma Flat.of_flat_tensorProduct
       (TensorProduct.assoc _ _ _ _).toLinear
 
 中文:
-引理 Flat.of_flat_tensorProduct
-  结论: (S : 类型) [CommRing S] [Algebra R S]
+引理 平坦.of_flat_tensorProduct
+  结论: (S : 类型) [交换环 S] [代数 R S]
   证明: by
   rw [Module.Flat.iff_lTensor_preserves_injective_linearMap]
   intro N P _ _ _ _ f hf
@@ -1353,8 +1353,8 @@ lemma Flat.iff_flat_tensorProduct
   proof: ⟨fun _ => .of_flat_tensorProduct R M S, fun _ => inferInstance⟩
 
 中文:
-引理 Flat.iff_flat_tensorProduct
-  结论: (S : 类型) [CommRing S] [Algebra R S]
+引理 平坦.iff_flat_tensorProduct
+  结论: (S : 类型) [交换环 S] [代数 R S]
   证明: ⟨fun _ => .of_flat_tensorProduct R M S, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_flat_tensorProduct
@@ -1454,7 +1454,7 @@ definition baseChangeOrderEmbedding
 
 中文:
 定义 baseChangeOrderEmbedding
-  签名: : Submodule R M ↪o Submodule A (A otimes[R] M) where
+  签名: : 子模 R M ↪o 子模 A (A otimes[R] M) where
   定义体: baseChange A
   inj' _ _ := baseChange_injective
   map_rel_iff' := baseChange_le_iff
@@ -1476,7 +1476,7 @@ theorem IsNoetherian.of_isNoetherian_tensorProduct_of_faithfullyFlat
   exact (baseChangeOrderEmbedding R M A).wellFoundedGT
 
 中文:
-定理 IsNoetherian.of_isNoetherian_tensorProduct_of_faithfullyFlat
+定理 是Noether.of_isNoetherian_tensorProduct_of_faithfullyFlat
   证明: by
   rw [isNoetherian_iff'] at h ⊢
   exact (baseChangeOrderEmbedding R M A).wellFoundedGT
@@ -1496,7 +1496,7 @@ theorem IsArtinian.of_isArtinian_tensorProduct_of_faithfullyFlat
   proof: (baseChangeOrderEmbedding R M A).wellFoundedLT
 
 中文:
-定理 IsArtinian.of_isArtinian_tensorProduct_of_faithfullyFlat
+定理 是Artin.of_isArtinian_tensorProduct_of_faithfullyFlat
   证明: (baseChangeOrderEmbedding R M A).wellFoundedLT
 
 Depends on / 依赖: baseChangeOrderEmbedding, wellFoundedLT

@@ -31,7 +31,7 @@ instance distribMulAction₀
 
 中文:
 实例 distribMulAction₀
-  签名: : DistribMulAction (ConjAct K) K
+  签名: : 分配乘法作用 (ConjAct K) K
   定义体: { ConjAct.mulAction₀ with
     smul_zero := by simp [smul_def]
     smul_add := by simp [smul_def, mul_add, add_mul] }

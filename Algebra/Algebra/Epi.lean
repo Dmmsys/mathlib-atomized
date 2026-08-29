@@ -35,10 +35,10 @@ class IsEpi
     - injective_lift_mul : Injective lift LinearMap.mul R A
 
 中文:
-类 IsEpi
+类 是满态射
   参数: : 命题 where
   公理与运算 (1 个):
-    - injective_lift_mul : Injective lift LinearMap.mul R A
+    - injective_lift_mul : 单射 lift 线性映射.mul R A
 -/
 protected class IsEpi : Prop where
 injective_lift_mul : Injective lift LinearMap.mul R A
@@ -58,7 +58,7 @@ refine ⟨fun h a => IsEpi.injective_lift_mul by simp, fun h => ⟨fun x y hxy =
       calc u otimesₜ[R] v
 
 中文:
-引理 isEpi_iff_forall_one_tmul_eq
+引理 isEpi_iff_对任意_one_tmul_eq
   证明: by
 refine ⟨fun h a => IsEpi.injective_lift_mul by simp, fun h => ⟨fun x y hxy => ?_⟩⟩
   have h' (x : A otimes[R] A) : exists a : A, x = a otimesₜ 1 := by
@@ -102,7 +102,7 @@ lemma isEpi_of_surjective_algebraMap
 
 中文:
 引理 isEpi_of_surjective_algebraMap
-  条件: (h : Surjective (algebraMap R A))
+  条件: (h : 满射 (algebraMap R A))
   证明: by
   refine (isEpi_iff_forall_one_tmul_eq R A).mpr fun a => ?_
   obtain ⟨r, rfl⟩ := h a
@@ -152,7 +152,7 @@ lemma isEpi_iff_surjective_algebraMap_of_finite
 
 中文:
 引理 isEpi_iff_surjective_algebraMap_of_finite
-  条件: [Module.Finite R A]
+  条件: [模.有限 R A]
   证明: by
   refine ⟨fun h => ?_, isEpi_of_surjective_algebraMap R A⟩
   let R' := (Algebra.linearMap R A).range
@@ -306,7 +306,7 @@ definition _root_.TensorProduct.lid'
     ⟨injective_lift_lsmul R A M, fun m => ⟨1 otimesₜ m, by simp⟩⟩
 
 中文:
-定义 _root_.TensorProduct.lid'
+定义 _root_.张量积.lid'
   签名: : A otimes[R] M ≃ₗ[A] M
   定义体: .ofBijective
     (AlgebraTensorModule.lift <| LinearMap.restrictScalarsₗ R A M M A ∘ₗ LinearMap.lsmul A M)
@@ -328,7 +328,7 @@ lemma _root_.TensorProduct.lid'_apply_tmul
   proof: rfl
 
 中文:
-引理 _root_.TensorProduct.lid'_apply_tmul
+引理 _root_.张量积.lid'_apply_tmul
   条件: (a : A) (m : M)
   证明: rfl
 
@@ -347,7 +347,7 @@ lemma _root_.TensorProduct.lid'_symm_apply
   proof: (TensorProduct.lid' R A M).injective by simp
 
 中文:
-引理 _root_.TensorProduct.lid'_symm_apply
+引理 _root_.张量积.lid'_symm_apply
   条件: (m : M)
   证明: (TensorProduct.lid' R A M).injective by simp
 

@@ -37,7 +37,7 @@ theorem tangentConeAt_nonempty_of_properSpace
 
 中文:
 定理 tangentConeAt_nonempty_of_properSpace
-  结论: [命题erSpace E]
+  结论: [真空间 E]
   证明: by
   /- Take a sequence `d n` tending to `0` such that `x + d n ∈ s`. Taking `c n` of the order
   of `1 / d n`. Then `c n • d n` belongs to a fixed annulus. By compactness, one can extract

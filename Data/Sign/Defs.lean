@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero SignType
+  签名: 零 SignType
   定义体: ⟨zero⟩
 -/
 instance : Zero SignType :=
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: One SignType
+  签名: 幺 SignType
   定义体: ⟨pos⟩
 -/
 instance : One SignType :=
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg SignType
+  签名: 取负 SignType
   定义体: ⟨fun s =>
     match s with
     | neg => pos
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul SignType
+  签名: 乘法 SignType
   定义体: ⟨fun x y =>
     match x with
     | neg => -y
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroupWithZero SignType
+  签名: 带零交换群 SignType
   定义体: id
   mul_zero a := by cases a <;> rfl
   zero_mul a := by cases a <;> rfl
@@ -342,7 +342,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder SignType
+  签名: 线性序 SignType
   定义体: by cases a <;> constructor
   le_total := by decide
   le_antisymm := by decide
@@ -374,7 +374,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder SignType
+  签名: 有界序 SignType
   定义体: 1
   le_top := LE.of_pos
   bot := -1
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg SignType
+  签名: 有DistribNeg SignType
   定义体: by rintro ⟨_⟩ <;> rfl
   neg_mul := by rintro ⟨_⟩ ⟨_⟩ <;> rfl
   mul_neg := by rintro ⟨_⟩ ⟨_⟩ <;> rfl
@@ -442,7 +442,7 @@ definition fin3Equiv
 
 中文:
 定义 fin3Equiv
-  签名: : SignType ≃* Fin 3 where
+  签名: : SignType ≃* 有限集 3 where
   定义体: match a with
     | 0 => ⟨0, by simp⟩
     | 1 => ⟨1, by simp⟩
@@ -977,7 +977,7 @@ lemma map_cast'
 
 中文:
 引理 map_cast'
-  结论: {β : 类型} [One β] [Neg β] [Zero β]
+  结论: {β : 类型} [幺 β] [取负 β] [零 β]
   证明: by
   cases s <;> simp only [SignType.cast, h₁, h₂, h₃]
 
@@ -1001,7 +1001,7 @@ lemma map_cast
 
 中文:
 引理 map_cast
-  结论: {α β F : 类型} [AddGroupWithOne α] [One β] [SubtractionMonoid β]
+  结论: {α β F : 类型} [加法带幺群 α] [幺 β] [Subtraction幺半群 β]
   证明: by
   apply map_cast' <;> simp
 
@@ -1089,7 +1089,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: {α : 类型} [One α] [SubtractionMonoid α] (s : SignType)
+  条件: {α : 类型} [幺 α] [Subtraction幺半群 α] (s : SignType)
   证明: by
   cases s <;> simp
 -/
@@ -1304,8 +1304,8 @@ lemma StrictMono.sign_comp
 @[simp]
 
 中文:
-引理 StrictMono.sign_comp
-  结论: {β F : 类型} [Zero β] [Preorder β] [DecidableLT β]
+引理 严格递增.sign_comp
+  结论: {β F : 类型} [零 β] [预序 β] [DecidableLT β]
   证明: by
   simp only [sign_apply, ← map_zero f, hf.lt_iff_lt]
 
@@ -1580,7 +1580,7 @@ theorem Int.sign_eq_sign
   obtain (n | _) | _ := n <;> simp [sign, negSucc_lt_zero]
 
 中文:
-定理 Int.sign_eq_sign
+定理 整数.sign_eq_sign
   条件: (n : 整数)
   结论: 整数.sign n = SignType.sign n
   证明: by

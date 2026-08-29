@@ -41,7 +41,7 @@ definition adj₁
 
 中文:
 定义 adj₁
-  签名: : discrete ⊣ forget TopCat.{u} where
+  签名: : discrete ⊣ forget 顶元素范畴.{u} where
   定义体: 𝟙 _
   counit := { app := fun X => TopCat.ofHom (X := discrete.obj X) ⟨id, continuous_bot⟩ }
 -/
@@ -63,7 +63,7 @@ definition adj₂
 
 中文:
 定义 adj₂
-  签名: : forget TopCat.{u} ⊣ trivial where
+  签名: : forget 顶元素范畴.{u} ⊣ trivial where
   定义体: { app := fun X => TopCat.ofHom (Y := trivial.obj X) ⟨id, continuous_top⟩ }
   counit := 𝟙 _
 
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget TopCat.{u}).IsRightAdjoint
+  签名: (forget 顶元素范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj₁⟩⟩
 -/
 instance : (forget TopCat.{u}).IsRightAdjoint :=
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget TopCat.{u}).IsLeftAdjoint
+  签名: (forget 顶元素范畴.{u}).是左伴随
   定义体: ⟨_, ⟨adj₂⟩⟩
 -/
 instance : (forget TopCat.{u}).IsLeftAdjoint :=

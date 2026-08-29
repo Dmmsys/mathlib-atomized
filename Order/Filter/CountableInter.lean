@@ -47,10 +47,10 @@ class CountableInterFilter
     - countable_sInter_mem : forall S : Set (Set α), S.Countable -> (forall s in S, s in l) -> ⋂₀ S in l
 
 中文:
-类 CountableInterFilter
-  参数: (l : Filter α)
+类 余untable整数erFilter
+  参数: (l : 滤子 α)
   公理与运算 (1 个):
-    - countable_sInter_mem : 对任意 S : Set (Set α), S.Countable -> (对任意 s in S, s in l) -> ⋂₀ S in l
+    - countable_sInter_mem : 对任意 S : 集合 (集合 α), S.可数 -> (对任意 s in S, s in l) -> ⋂₀ S in l
 -/
 class CountableInterFilter (l : Filter α) : Prop where
   /-- For a countable collection of sets `s ∈ l`, their intersection belongs to `l` as well. -/
@@ -69,8 +69,8 @@ theorem countable_sInter_mem
     CountableInterFilter.countable_sInter_mem _ hSc⟩
 
 中文:
-定理 countable_sInter_mem
-  条件: {S : Set (Set α)} (hSc : S.Countable)
+定理 countable_s整数er_mem
+  条件: {S : 集合 (集合 α)} (hSc : S.可数)
   结论: ⋂₀ S in l ↔ 对任意 s in S, s in l
   证明: ⟨fun hS _s hs => mem_of_superset hS (sInter_subset_of_mem hs),
     CountableInterFilter.countable_sInter_mem _ hSc⟩
@@ -91,8 +91,8 @@ theorem countable_iInter_mem
   proof: sInter_range s ▸ (countable_sInter_mem (countable_range _)).trans forall_mem_range
 
 中文:
-定理 countable_iInter_mem
-  条件: [Countable ι] {s : ι -> Set α}
+定理 countable_i整数er_mem
+  条件: [可数 ι] {s : ι -> 集合 α}
   结论: (⋂ i, s i) in l ↔ 对任意 i, s i in l
   证明: sInter_range s ▸ (countable_sInter_mem (countable_range _)).trans forall_mem_range
 
@@ -113,8 +113,8 @@ theorem countable_bInter_mem
   exact countable_iInter_mem.trans Subtype.forall
 
 中文:
-定理 countable_bInter_mem
-  条件: {ι : 类型} {S : Set ι} (hS : S.Countable) {s : 对任意 i in S, Set α}
+定理 countable_b整数er_mem
+  条件: {ι : 类型} {S : 集合 ι} (hS : S.可数) {s : 对任意 i in S, 集合 α}
   证明: by
   rw [biInter_eq_iInter]
   have := hS.toEncodable
@@ -139,8 +139,8 @@ theorem eventually_countable_forall
     @countable_iInter_mem _ _ l _ _ fun i => { x | p x i }
 
 中文:
-定理 eventually_countable_forall
-  条件: [Countable ι] {p : α -> ι -> 命题}
+定理 eventually_countable_对任意
+  条件: [可数 ι] {p : α -> ι -> 命题}
   证明: by
   simpa only [Filter.Eventually, ofPred_forall] using
     @countable_iInter_mem _ _ l _ _ fun i => { x | p x i }
@@ -164,7 +164,7 @@ theorem eventually_countable_ball
 
 中文:
 定理 eventually_countable_ball
-  结论: {ι : 类型} {S : Set ι} (hS : S.Countable)
+  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
   证明: by
   simpa only [Filter.Eventually, ofPred_forall] using
     @countable_bInter_mem _ l _ _ _ hS fun i hi => { x | p x i hi }
@@ -187,7 +187,7 @@ theorem eventually_finset_ball
 
 中文:
 定理 eventually_finset_ball
-  条件: {ι : 类型} {S : Finset ι} {p : α -> 对任意 i in S, 命题}
+  条件: {ι : 类型} {S : 有限集 ι} {p : α -> 对任意 i in S, 命题}
   证明: eventually_countable_ball S.countable_toSet
 
 Depends on / 依赖: S.countable_toSet, countable_toSet, eventually_countable_ball
@@ -211,7 +211,7 @@ theorem EventuallyLE.countable_iUnion
 
 中文:
 定理 EventuallyLE.countable_iUnion
-  条件: [Countable ι] {s t : ι -> Set α} (h : 对任意 i, s i <=ᶠ[l] t i)
+  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i <=ᶠ[l] t i)
   证明: (eventually_countable_forall.2 h).mono fun _ hst hs => mem_iUnion.2 (mem_iUnion.1 hs).imp hst
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iUnion :=
@@ -240,7 +240,7 @@ theorem EventuallyEq.countable_iUnion
 
 中文:
 定理 EventuallyEq.countable_iUnion
-  条件: [Countable ι] {s t : ι -> Set α} (h : 对任意 i, s i =ᶠ[l] t i)
+  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i =ᶠ[l] t i)
   证明: (EventuallyLE.countable_iUnion fun i => (h i).le).antisymm
     (EventuallyLE.countable_iUnion fun i => (h i).symm.le)
 
@@ -273,7 +273,7 @@ theorem EventuallyLE.countable_bUnion
 
 中文:
 定理 EventuallyLE.countable_bUnion
-  结论: {ι : 类型} {S : Set ι} (hS : S.Countable)
+  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
   证明: by
   simp only [biUnion_eq_iUnion]
   have := hS.toEncodable
@@ -308,7 +308,7 @@ theorem EventuallyEq.countable_bUnion
 
 中文:
 定理 EventuallyEq.countable_bUnion
-  结论: {ι : 类型} {S : Set ι} (hS : S.Countable)
+  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
   证明: (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).symm.le)
 
@@ -339,8 +339,8 @@ theorem EventuallyLE.countable_iInter
   EventuallyLE.countable_iInter
 
 中文:
-定理 EventuallyLE.countable_iInter
-  条件: [Countable ι] {s t : ι -> Set α} (h : 对任意 i, s i <=ᶠ[l] t i)
+定理 EventuallyLE.countable_i整数er
+  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i <=ᶠ[l] t i)
   证明: (eventually_countable_forall.2 h).mono fun _ hst hs =>
     mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
 
@@ -370,8 +370,8 @@ theorem EventuallyEq.countable_iInter
   EventuallyEq.countable_iInter
 
 中文:
-定理 EventuallyEq.countable_iInter
-  条件: [Countable ι] {s t : ι -> Set α} (h : 对任意 i, s i =ᶠ[l] t i)
+定理 EventuallyEq.countable_i整数er
+  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i =ᶠ[l] t i)
   证明: (EventuallyLE.countable_iInter fun i => (h i).le).antisymm
     (EventuallyLE.countable_iInter fun i => (h i).symm.le)
 
@@ -403,8 +403,8 @@ theorem EventuallyLE.countable_bInter
   EventuallyLE.countable_bInter
 
 中文:
-定理 EventuallyLE.countable_bInter
-  结论: {ι : 类型} {S : Set ι} (hS : S.Countable)
+定理 EventuallyLE.countable_b整数er
+  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
   证明: by
   simp only [biInter_eq_iInter]
   have := hS.toEncodable
@@ -438,8 +438,8 @@ theorem EventuallyEq.countable_bInter
   EventuallyEq.countable_bInter
 
 中文:
-定理 EventuallyEq.countable_bInter
-  结论: {ι : 类型} {S : Set ι} (hS : S.Countable)
+定理 EventuallyEq.countable_b整数er
+  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
   证明: (EventuallyLE.countable_bInter hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.countable_bInter hS fun i hi => (h i hi).symm.le)
 
@@ -470,8 +470,8 @@ definition ofCountableInter
     hl _ ((countable_singleton _).insert _) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
 
 中文:
-定义 ofCountableInter
-  签名: (l : Set (Set α))
+定义 ofCountable整数er
+  签名: (l : 集合 (集合 α))
   定义体: l
   univ_sets := @sInter_empty α ▸ hl _ countable_empty (empty_subset _)
   sets_of_superset := h_mono _ _
@@ -498,8 +498,8 @@ instance countableInter_ofCountableInter
 @[simp]
 
 中文:
-实例 countableInter_ofCountableInter
-  签名: (l : Set (Set α))
+实例 countable整数er_ofCountable整数er
+  签名: (l : 集合 (集合 α))
   定义体: ⟨hl⟩
 
 @[simp]
@@ -520,8 +520,8 @@ theorem mem_ofCountableInter
   proof: Iff.rfl
 
 中文:
-定理 mem_ofCountableInter
-  结论: {l : Set (Set α)}
+定理 mem_ofCountable整数er
+  结论: {l : 集合 (集合 α)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -550,7 +550,7 @@ definition ofCountableUnion
 
 中文:
 定义 ofCountableUnion
-  签名: (l : Set (Set α))
+  签名: (l : 集合 (集合 α))
   定义体: by
   refine .ofCountableInter {s | sᶜ in l} (fun S hSc hSp => ?_) fun s t ht hsub => ?_
   · rw [mem_ofPred_eq, compl_sInter]
@@ -589,8 +589,8 @@ instance countableInter_ofCountableUnion
 @[simp]
 
 中文:
-实例 countableInter_ofCountableUnion
-  签名: (l : Set (Set α)) (h₁ h₂)
+实例 countable整数er_ofCountableUnion
+  签名: (l : 集合 (集合 α)) (h₁ h₂)
   定义体: countableInter_ofCountableInter ..
 
 @[simp]
@@ -612,7 +612,7 @@ theorem mem_ofCountableUnion
 
 中文:
 定理 mem_ofCountableUnion
-  条件: {l : Set (Set α)} {hunion hmono s}
+  条件: {l : 集合 (集合 α)} {hunion hmono s}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -632,8 +632,8 @@ instance countableInterFilter_principal
   body: ⟨fun _ _ hS => subset_sInter hS⟩
 
 中文:
-实例 countableInterFilter_principal
-  签名: (s : Set α)
+实例 countable整数erFilter_principal
+  签名: (s : 集合 α)
   定义体: ⟨fun _ _ hS => subset_sInter hS⟩
 
 Depends on / 依赖: subset_sInter
@@ -652,8 +652,8 @@ instance countableInterFilter_bot
   apply countableInterFilter_principal
 
 中文:
-实例 countableInterFilter_bot
-  签名: : Countable整数erFilter (⊥ : Filter α)
+实例 countable整数erFilter_bot
+  签名: : 余untable整数erFilter (⊥ : 滤子 α)
   定义体: by
   rw [← principal_empty]
   apply countableInterFilter_principal
@@ -675,8 +675,8 @@ instance countableInterFilter_top
   apply countableInterFilter_principal
 
 中文:
-实例 countableInterFilter_top
-  签名: : Countable整数erFilter (⊤ : Filter α)
+实例 countable整数erFilter_top
+  签名: : 余untable整数erFilter (⊤ : 滤子 α)
   定义体: by
   rw [← principal_univ]
   apply countableInterFilter_principal
@@ -715,8 +715,8 @@ instance countableInterFilter_inf
   rw 
 
 中文:
-实例 countableInterFilter_inf
-  签名: (l₁ l₂ : Filter α) [Countable整数erFilter l₁]
+实例 countable整数erFilter_inf
+  签名: (l₁ l₂ : 滤子 α) [余untable整数erFilter l₁]
   定义体: by
   refine ⟨fun S hSc hS => ?_⟩
   choose s hs t ht hst using hS
@@ -748,8 +748,8 @@ instance countableInterFilter_sup
   exacts [(hS s hs).1, (hS s hs).2]
 
 中文:
-实例 countableInterFilter_sup
-  签名: (l₁ l₂ : Filter α) [Countable整数erFilter l₁]
+实例 countable整数erFilter_sup
+  签名: (l₁ l₂ : 滤子 α) [余untable整数erFilter l₁]
   定义体: by
   refine ⟨fun S hSc hS => ⟨?_, ?_⟩⟩ <;> refine (countable_sInter_mem hSc).2 fun s hs => ?_
   exacts [(hS s hs).1, (hS s hs).2]
@@ -774,8 +774,8 @@ instance CountableInterFilter.curry
   exact hS⟩
 
 中文:
-实例 CountableInterFilter.curry
-  签名: {α β : 类型} {l : Filter α} {m : Filter β}
+实例 余untable整数erFilter.curry
+  签名: {α β : 类型} {l : 滤子 α} {m : 滤子 β}
   定义体: ⟨by
   intro S Sct hS
   simp_rw [mem_curry_iff, mem_sInter, eventually_countable_ball (p := fun _ _ _ => (_, _) in _) Sct,
@@ -808,13 +808,13 @@ inductive CountableGenerateSets
     - sInter: {S : Set (Set α)} : S.Countable -> (forall s in S, CountableGenerateSets s) -> CountableGenerateSets (⋂₀ S)
 
 中文:
-归纳类型 CountableGenerateSets
-  参数: : Set α -> 命题
+归纳类型 余untableGenerateSets
+  参数: : 集合 α -> 命题
   构造子 (4 个):
-    - basic: {s : Set α} : s in g -> CountableGenerateSets s
-    - univ: CountableGenerateSets univ
-    - superset: {s t : Set α} : CountableGenerateSets s -> s subseteq t -> CountableGenerateSets t
-    - sInter: {S : Set (Set α)} : S.Countable -> (对任意 s in S, CountableGenerateSets s) -> CountableGenerateSets (⋂₀ S)
+    - basic: {s : 集合 α} : s in g -> 余untableGenerateSets s
+    - univ: 余untableGenerateSets univ
+    - superset: {s t : 集合 α} : 余untableGenerateSets s -> s subseteq t -> 余untableGenerateSets t
+    - sInter: {S : 集合 (集合 α)} : S.可数 -> (对任意 s in S, 余untableGenerateSets s) -> 余untableGenerateSets (⋂₀ S)
 -/
 inductive CountableGenerateSets : Set α -> Prop
   | basic {s : Set α} : s in g -> CountableGenerateSets s
@@ -835,7 +835,7 @@ deriving CountableInterFilter
 
 中文:
 定义 countableGenerate
-  签名: : Filter α
+  签名: : 滤子 α
   定义体: ofCountableInter {s | CountableGenerateSets g s} (fun _ => .sInter) fun _ _ => .superset
 deriving CountableInterFilter
 
@@ -865,7 +865,7 @@ theorem mem_countableGenerate_iff
 
 中文:
 定理 mem_countableGenerate_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   constructor <;> intro h
   · induction h with
@@ -913,8 +913,8 @@ theorem le_countableGenerate_iff_of_countableInterFilter
   | sInter Sct _ ih => exact (countable_sInter_mem Sct).mpr ih
 
 中文:
-定理 le_countableGenerate_iff_of_countableInterFilter
-  条件: {f : Filter α} [Countable整数erFilter f]
+定理 le_countableGenerate_iff_of_countable整数erFilter
+  条件: {f : 滤子 α} [余untable整数erFilter f]
   证明: by
   constructor <;> intro h
   · exact subset_trans (fun s => CountableGenerateSets.basic) h

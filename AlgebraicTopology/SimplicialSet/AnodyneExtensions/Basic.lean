@@ -75,7 +75,7 @@ deriving IsMultiplicative, RespectsIso, IsStableUnderCobaseChange,
 
 中文:
 定义 anodyneExtensions
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: (fibrations _).llp
 deriving IsMultiplicative, RespectsIso, IsStableUnderCobaseChange,
   IsStableUnderRetracts, IsStableUnderTransfiniteComposition,
@@ -98,7 +98,7 @@ lemma anodyneExtensions.of_isIso
 
 中文:
 引理 anodyneExtensions.of_isIso
-  条件: {X Y : SSet.{u}} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : SSet.{u}} (f : X ⟶ Y) [是同构 f]
   证明: MorphismProperty.of_isIso anodyneExtensions f
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_isIso, anodyneExtensions, of_isIso
@@ -134,7 +134,7 @@ lemma anodyneExtensions.horn_ι
 
 中文:
 引理 anodyneExtensions.horn_ι
-  条件: {n : 自然数} [NeZero n] (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (i : 有限集 (n + 1))
   证明: by
   rw [anodyneExtensions_eq_llp_rlp]
   exact le_llp_rlp _ _ (modelCategoryQuillen.horn_ι_mem_J n i)
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsSmall.{u} modelCategoryQuillen.J.{u}
+  签名: MorphismProperty.是Small.{u} modelCategoryQuillen.J.{u}
   定义体: isSmall_iSup ..
 
 Depends on / 依赖: isSmall_iSup
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalForSmallObjectArgument modelCategoryQuillen.J.{u} Cardinal.aleph0.{u}
+  签名: 是CardinalForSmallObjectArgument modelCategoryQuillen.J.{u} 基数.aleph0.{u}
   定义体: by
     have : IsFinitelyPresentable.{u} A := by
       simp only [modelCategoryQuillen.J, iSup_iff] at hi
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSmallObjectArgument.{u} modelCategoryQuillen.J.{u}
+  签名: 有SmallObjectArgument.{u} modelCategoryQuillen.J.{u}
   定义体: ⟨.aleph0, inferInstance, inferInstance, inferInstance⟩
 
 Depends on / 依赖: aleph0
@@ -272,7 +272,7 @@ definition strongAnodyneExtensions
 
 中文:
 定义 strongAnodyneExtensions
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: fun _ _ f => Mono f ∧ exists (P : (Subcomplex.range f).Pairing), P.IsRegular
 
 Depends on / 依赖: IsRegular, P.IsRegular, Pairing, Subcomplex, Subcomplex.range
@@ -308,8 +308,8 @@ lemma Subcomplex.Pairing.strongAnodyneExtensions
     exact ⟨P, inferInstance⟩⟩
 
 中文:
-引理 Subcomplex.Pairing.strongAnodyneExtensions
-  结论: {X : SSet.{u}} {A : X.Subcomplex}
+引理 子复形.Pairing.strongAnodyneExtensions
+  结论: {X : SSet.{u}} {A : X.子复形}
   证明: ⟨inferInstance, by
     generalize h : Subcomplex.range A.ι = B
     obtain rfl : B = A := by simpa using h.symm
@@ -341,7 +341,7 @@ lemma strongAnodyneExtensions_ι_iff
 
 中文:
 引理 strongAnodyneExtensions_ι_iff
-  条件: {X : SSet.{u}} (A : X.Subcomplex)
+  条件: {X : SSet.{u}} (A : X.子复形)
   证明: ⟨fun hA => by
     obtain ⟨_, P, _, rfl⟩ :
         exists (B : X.Subcomplex) (P : B.Pairing), P.IsRegular ∧ B = A := by
@@ -375,8 +375,8 @@ lemma Subcomplex.Pairing.anodyneExtensions
       simp only [pushouts_le_iff, cop
 
 中文:
-引理 Subcomplex.Pairing.anodyneExtensions
-  结论: {X : SSet.{u}} {A : X.Subcomplex}
+引理 子复形.Pairing.anodyneExtensions
+  结论: {X : SSet.{u}} {A : X.子复形}
   证明: transfiniteCompositionsOfShape_le _ _ _
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _

@@ -42,8 +42,8 @@ theorem natCast_mem_center
 
 中文:
 定理 natCast_mem_center
-  条件: [NonAssocSemiring M] (n : 自然数)
-  结论: (n : M) in Set.center M where
+  条件: [非结合半环 M] (n : 自然数)
+  结论: (n : M) in 集合.center M where
   证明: by rw [commute_iff_eq, Nat.commute_cast]
   left_assoc _ _ := by
     induction n with
@@ -78,8 +78,8 @@ theorem ofNat_mem_center
 @[simp]
 
 中文:
-定理 ofNat_mem_center
-  条件: [NonAssocSemiring M] (n : 自然数) [n.AtLeastTwo]
+定理 of自然数_mem_center
+  条件: [非结合半环 M] (n : 自然数) [n.AtLeastTwo]
   证明: natCast_mem_center M n
 
 @[simp]
@@ -106,8 +106,8 @@ theorem intCast_mem_center
 
 中文:
 定理 intCast_mem_center
-  条件: [NonAssocRing M] (n : 整数)
-  结论: (n : M) in Set.center M where
+  条件: [非结合环 M] (n : 整数)
+  结论: (n : M) in 集合.center M where
   证明: by rw [commute_iff_eq, Int.commute_cast]
   left_assoc _ _ := match n with
     | (n : Nat) => by rw [Int.cast_natCast, (natCast_mem_center _ n).left_assoc _ _]
@@ -145,7 +145,7 @@ theorem add_mem_center
 
 中文:
 定理 add_mem_center
-  条件: [Distrib M] {a b : M} (ha : a in Set.center M) (hb : b in Set.center M)
+  条件: [Distrib M] {a b : M} (ha : a in 集合.center M) (hb : b in 集合.center M)
   证明: by rw [commute_iff_eq, add_mul, mul_add, ha.comm, hb.comm]
   left_assoc _ _ := by rw [add_mul, ha.left_assoc, hb.left_assoc, ← add_mul, ← add_mul]
   right_assoc _ _ := by rw [mul_add, ha.right_assoc, hb.right_assoc, ← mul_add, ← mul_add]
@@ -173,7 +173,7 @@ theorem neg_mem_center
 
 中文:
 定理 neg_mem_center
-  条件: [NonUnitalNonAssocRing M] {a : M} (ha : a in Set.center M)
+  条件: [非幺非结合环 M] {a : M} (ha : a in 集合.center M)
   证明: by rw [commute_iff_eq, ← neg_mul_comm, ← ha.comm, neg_mul_comm]
   left_assoc _ _ := by rw [neg_mul, ha.left_assoc, neg_mul, neg_mul]
   right_assoc _ _ := by rw [mul_neg, ha.right_assoc, mul_neg, mul_neg]

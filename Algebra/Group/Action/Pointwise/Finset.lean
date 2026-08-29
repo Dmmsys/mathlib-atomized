@@ -47,7 +47,7 @@ instance smulCommClass_finset
 
 中文:
 实例 smulCommClass_finset
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ => Commute.finset_image smul_comm _ _⟩
 
 @[to_additive]
@@ -71,7 +71,7 @@ instance smulCommClass_finset'
 
 中文:
 实例 smulCommClass_finset'
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun a s t => coe_injective by simp only [coe_smul_finset, coe_smul, smul_comm]⟩
 
 @[to_additive]
@@ -96,7 +96,7 @@ instance smulCommClass_finset''
 
 中文:
 实例 smulCommClass_finset''
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: haveI := SMulCommClass.symm α β γ
   SMulCommClass.symm _ _ _
 
@@ -122,7 +122,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun s t u => coe_injective by simp_rw [coe_smul, smul_comm]⟩
 
 @[to_additive]
@@ -144,7 +144,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun a b s => by simp only [← image_smul, image_image, smul_assoc, Function.comp_def]⟩
 
 Depends on / 依赖: Function, Function.comp_def, comp_def, image_image, image_smul, smul_assoc
@@ -168,7 +168,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun a s t => coe_injective by simp only [coe_smul_finset, coe_smul, smul_assoc]⟩
 
 @[to_additive]
@@ -192,7 +192,7 @@ instance isScalarTower''
 
 中文:
 实例 isScalarTower''
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun a s t => coe_injective by simp only [coe_smul, smul_assoc]⟩
 
 @[to_additive]
@@ -214,7 +214,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β]
+  签名: [标量乘法 α β] [标量乘法 αᵐᵒᵖ β] [中心标量 α β]
   定义体: ⟨fun a s => coe_injective by simp only [coe_smul_finset, op_smul_eq_smul]⟩
 
 Depends on / 依赖: coe_injective, coe_smul_finset, op_smul_eq_smul
@@ -239,7 +239,7 @@ one_smul s := image₂_singleton_left.trans by simp_rw [one_smul, image_id']
 
 中文:
 定义 mulAction
-  签名: [DecidableEq α] [Monoid α] [MulAction α β]
+  签名: [DecidableEq α] [幺半群 α] [乘法作用 α β]
   定义体: image₂_assoc mul_smul
 one_smul s := image₂_singleton_left.trans by simp_rw [one_smul, image_id']
 -/
@@ -267,7 +267,7 @@ scoped[Pointwise]
 
 中文:
 定义 mulActionFinset
-  签名: [Monoid α] [MulAction α β]
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: coe_injective.mulAction _ coe_smul_finset
 
 scoped[Pointwise]
@@ -375,7 +375,7 @@ theorem biUnion_op_smul_finset
 
 中文:
 定理 biUnion_op_smul_finset
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (t.biUnion fun a => op a • s) = s * t
   证明: biUnion_image_right
 
@@ -441,7 +441,7 @@ theorem op_smul_finset_mul_eq_mul_smul_finset
 
 中文:
 定理 op_smul_finset_mul_eq_mul_smul_finset
-  条件: (a : α) (s : Finset α) (t : Finset α)
+  条件: (a : α) (s : 有限集 α) (t : 有限集 α)
   证明: op_smul_finset_smul_eq_smul_smul_finset _ _ _ fun _ _ _ => mul_assoc _ _ _
 
 Depends on / 依赖: mul_assoc, op_smul_finset_smul_eq_smul_smul_finset
@@ -467,7 +467,7 @@ theorem pairwiseDisjoint_smul_iff
 
 中文:
 定理 pairwiseDisjoint_smul_iff
-  条件: {s : Set α} {t : Finset β}
+  条件: {s : 集合 α} {t : 有限集 β}
   证明: by
   simp_rw [← pairwiseDisjoint_coe, coe_smul_finset, Set.pairwiseDisjoint_smul_iff]
 
@@ -490,7 +490,7 @@ theorem image_smul_distrib
 
 中文:
 定理 image_smul_distrib
-  结论: [DecidableEq α] [DecidableEq β] [Mul α] [Mul β] [FunLike F α β]
+  结论: [DecidableEq α] [DecidableEq β] [乘法 α] [乘法 β] [函数状 F α β]
   证明: image_comm map_mul _ _
 
 Depends on / 依赖: image_comm, map_mul
@@ -541,7 +541,7 @@ lemma mul_mem_smul_finset_iff
 
 中文:
 引理 mul_mem_smul_finset_iff
-  条件: [DecidableEq α] (a : α) {b : α} {s : Finset α}
+  条件: [DecidableEq α] (a : α) {b : α} {s : 有限集 α}
   证明: smul_mem_smul_finset_iff _
 
 @[to_additive]
@@ -766,8 +766,8 @@ theorem smul_finset_univ
 
 中文:
 定理 smul_finset_univ
-  条件: [Fintype β]
-  结论: a • (univ : Finset β) = univ
+  条件: [有限类型 β]
+  结论: a • (univ : 有限集 β) = univ
   证明: image_univ_of_surjective MulAction.surjective a
 
 @[to_additive (attr := simp)]
@@ -792,7 +792,7 @@ theorem smul_finset_eq_univ
 
 中文:
 定理 smul_finset_eq_univ
-  条件: [Fintype β]
+  条件: [有限类型 β]
   结论: a • s = univ ↔ s = univ
   证明: by
   rw [smul_eq_iff_eq_inv_smul]; rw [smul_finset_univ]
@@ -820,8 +820,8 @@ theorem smul_univ
 
 中文:
 定理 smul_univ
-  条件: [Fintype β] {s : Finset α} (hs : s.Nonempty)
-  结论: s • (univ : Finset β) = univ
+  条件: [有限类型 β] {s : 有限集 α} (hs : s.非空)
+  结论: s • (univ : 有限集 β) = univ
   证明: coe_injective by
     push_cast
     exact Set.smul_univ hs
@@ -847,7 +847,7 @@ theorem card_smul_finset
 
 中文:
 定理 card_smul_finset
-  条件: (a : α) (s : Finset β)
+  条件: (a : α) (s : 有限集 β)
   结论: (a • s).card = s.card
   证明: card_image_of_injective _ MulAction.injective _
 
@@ -870,7 +870,7 @@ theorem card_dvd_card_smul_right
 
 中文:
 定理 card_dvd_card_smul_right
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   证明: card_dvd_card_image₂_right fun _ _ => MulAction.injective _
 
 Depends on / 依赖: MulAction, MulAction.injective, injective
@@ -895,7 +895,7 @@ theorem card_dvd_card_mul_left
 
 中文:
 定理 card_dvd_card_mul_left
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   证明: card_dvd_card_image₂_left fun _ _ => mul_left_injective _
 
 Depends on / 依赖: mul_left_injective
@@ -921,7 +921,7 @@ theorem card_dvd_card_mul_right
 
 中文:
 定理 card_dvd_card_mul_right
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   证明: card_dvd_card_image₂_right fun _ _ => mul_right_injective _
 
 @[to_additive (attr := simp)]
@@ -947,7 +947,7 @@ lemma inv_smul_finset_distrib
 
 中文:
 引理 inv_smul_finset_distrib
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (a • s)⁻¹ = op a⁻¹ • s⁻¹
   证明: by
   ext; simp [← inv_smul_mem_iff]
@@ -972,7 +972,7 @@ lemma inv_op_smul_finset_distrib
 
 中文:
 引理 inv_op_smul_finset_distrib
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (op a • s)⁻¹ = a⁻¹ • s⁻¹
   证明: by
   ext; simp [← inv_smul_mem_iff]
@@ -1001,7 +1001,7 @@ lemma piFinset_smul
 
 中文:
 引理 piFinset_smul
-  条件: [对任意 i, SMul (α i) (β i)] (s : 对任意 i, Finset (α i)) (t : 对任意 i, Finset (β i))
+  条件: [对任意 i, 标量乘法 (α i) (β i)] (s : 对任意 i, 有限集 (α i)) (t : 对任意 i, 有限集 (β i))
   证明: piFinset_image₂ _ _ _
 
 @[to_additive]
@@ -1020,7 +1020,7 @@ lemma piFinset_smul_finset
 
 中文:
 引理 piFinset_smul_finset
-  条件: [对任意 i, SMul (α i) (β i)] (a : 对任意 i, α i) (s : 对任意 i, Finset (β i))
+  条件: [对任意 i, 标量乘法 (α i) (β i)] (a : 对任意 i, α i) (s : 对任意 i, 有限集 (β i))
   证明: piFinset_image _ _
 
 Depends on / 依赖: piFinset_image
@@ -1043,8 +1043,8 @@ instance Nat.decidablePred_mem_vadd_set
     simp only [Set.mem_vadd_set, vadd_eq_add]; aesop
 
 中文:
-实例 Nat.decidablePred_mem_vadd_set
-  签名: {s : Set 自然数} [DecidablePred (· in s)] (a : 自然数)
+实例 自然数.decidablePred_mem_vadd_set
+  签名: {s : 集合 自然数} [DecidablePred (· in s)] (a : 自然数)
   定义体: fun n => decidable_of_iff' (a <= n ∧ n - a in s) by
     simp only [Set.mem_vadd_set, vadd_eq_add]; aesop
 

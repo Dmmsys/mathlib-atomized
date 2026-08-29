@@ -56,7 +56,7 @@ abbreviation _root_.Tree.indexOf
   body: BinaryTree.indexOf lt x
 
 中文:
-缩写 _root_.Tree.indexOf
+缩写 _root_.树.indexOf
   签名: (lt : α -> α -> 命题) [DecidableRel lt] (x : α)
   定义体: BinaryTree.indexOf lt x
 
@@ -74,7 +74,7 @@ definition get
 
 中文:
 定义 get
-  签名: : PosNum -> BinaryTree α -> Option α
+  签名: : PosNum -> BinaryTree α -> 选项类型 α
 -/
 def get : PosNum -> BinaryTree α -> Option α
   | _, nil => none
@@ -93,8 +93,8 @@ abbreviation _root_.Tree.get
   body: BinaryTree.get n t
 
 中文:
-缩写 _root_.Tree.get
-  签名: (n : PosNum) (t : Tree α)
+缩写 _root_.树.get
+  签名: (n : PosNum) (t : 树 α)
   定义体: BinaryTree.get n t
 
 Depends on / 依赖: BinaryTree, BinaryTree.get
@@ -131,8 +131,8 @@ abbreviation _root_.Tree.getOrElse
   body: BinaryTree.getOrElse n t v
 
 中文:
-缩写 _root_.Tree.getOrElse
-  签名: (n : PosNum) (t : Tree α) (v : α)
+缩写 _root_.树.getOrElse
+  签名: (n : PosNum) (t : 树 α) (v : α)
   定义体: BinaryTree.getOrElse n t v
 
 Depends on / 依赖: BinaryTree, BinaryTree.getOrElse, getOrElse

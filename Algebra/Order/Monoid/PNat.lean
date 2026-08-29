@@ -29,7 +29,7 @@ definition PNat.equivNonZeroDivisorsNat
   map_le_map_iff' := by simp
 
 中文:
-定义 PNat.equivNonZeroDivisorsNat
+定义 正自然数.equivNonZeroDivisors自然数
   签名: : 自然数+ ≃*o nonZeroDivisors 自然数 where
   定义体: ⟨x.val, by simp⟩
   invFun x := ⟨x.val, by simp [Nat.pos_iff_ne_zero]⟩

@@ -48,10 +48,10 @@ class IsStrictlySupported
     - isZero((i' : ι') (hi' : forall i, e.f i != i')) : IsZero (K.X i')
 
 中文:
-类 IsStrictlySupported
+类 是StrictlySupported
   参数: : 命题 where
   公理与运算 (1 个):
-    - isZero((i' : ι') (hi' : 对任意 i, e.f i != i')) : IsZero (K.X i')
+    - isZero((i' : ι') (hi' : 对任意 i, e.f i != i')) : 是零 (K.X i')
 -/
 class IsStrictlySupported : Prop where
   isZero (i' : ι') (hi' : forall i, e.f i != i') : IsZero (K.X i')
@@ -68,7 +68,7 @@ include e' in
 
 中文:
 引理 isZero_X_of_isStrictlySupported
-  结论: [K.IsStrictlySupported e]
+  结论: [K.是StrictlySupported e]
   证明: IsStrictlySupported.isZero i' hi'
 
 include e' in
@@ -96,8 +96,8 @@ lemma isStrictlySupported_of_iso
 
 中文:
 引理 isStrictlySupported_of_iso
-  条件: [K.IsStrictlySupported e]
-  结论: L.IsStrictlySupported e where
+  条件: [K.是StrictlySupported e]
+  结论: L.是StrictlySupported e where
   证明: (K.isZero_X_of_isStrictlySupported e i' hi').of_iso
     ((eval _ _ i').mapIso e'.symm)
 
@@ -141,8 +141,8 @@ instance [K.IsStrictlySupported
   infer_instance
 
 中文:
-实例 [K.IsStrictlySupported
-  签名: e] : K.op.IsStrictlySupported e.op
+实例 [K.是StrictlySupported
+  签名: e] : K.op.是StrictlySupported e.op
   定义体: by
   rw [isStrictlySupported_op_iff]
   infer_instance
@@ -167,7 +167,7 @@ class IsSupported
     - exactAt((i' : ι') (hi' : forall i, e.f i != i')) : K.ExactAt i'
 
 中文:
-类 IsSupported
+类 是Supported
   参数: : 命题 where
   公理与运算 (1 个):
     - exactAt((i' : ι') (hi' : 对任意 i, e.f i != i')) : K.ExactAt i'
@@ -187,7 +187,7 @@ include e' in
 
 中文:
 引理 exactAt_of_isSupported
-  条件: [K.IsSupported e] (i' : ι') (hi' : 对任意 i, e.f i != i')
+  条件: [K.是Supported e] (i' : ι') (hi' : 对任意 i, e.f i != i')
   证明: IsSupported.exactAt i' hi'
 
 include e' in
@@ -211,8 +211,8 @@ lemma isSupported_of_iso
 
 中文:
 引理 isSupported_of_iso
-  条件: [K.IsSupported e]
-  结论: L.IsSupported e where
+  条件: [K.是Supported e]
+  结论: L.是Supported e where
   证明: (K.exactAt_of_isSupported e i' hi').of_iso e'
 
 Depends on / 依赖: K.exactAt_of_isSupported, exactAt_of_isSupported, of_iso
@@ -233,7 +233,7 @@ lemma isSupported_iff_of_quasiIso
 
 中文:
 引理 isSupported_iff_of_quasiIso
-  结论: [对任意 i, K.HasHomology i] [对任意 i, L.HasHomology i]
+  结论: [对任意 i, K.有同调 i] [对任意 i, L.有同调 i]
   证明: by
   simp [isSupported_iff, exactAt_iff_of_quasiIsoAt φ]
 
@@ -257,8 +257,8 @@ instance [K.IsStrictlySupported
 @[simp]
 
 中文:
-实例 [K.IsStrictlySupported
-  签名: e] : K.IsSupported e where
+实例 [K.是StrictlySupported
+  签名: e] : K.是Supported e where
   定义体: by
     rw [exactAt_iff]
     exact ShortComplex.exact_of_isZero_X₂ _ (K.isZero_X_of_isStrictlySupported e i' hi')
@@ -303,10 +303,10 @@ structure IsStrictlySupportedOutside
     - isZero((i : ι)) : IsZero (K.X (e.f i))
 
 中文:
-结构 IsStrictlySupportedOutside
+结构 是StrictlySupportedOutside
   参数: : 命题 where
   公理与运算 (1 个):
-    - isZero((i : ι)) : IsZero (K.X (e.f i))
+    - isZero((i : ι)) : 是零 (K.X (e.f i))
 -/
 structure IsStrictlySupportedOutside : Prop where
   isZero (i : ι) : IsZero (K.X (e.f i))
@@ -339,7 +339,7 @@ structure IsSupportedOutside
     - exactAt((i : ι)) : K.ExactAt (e.f i)
 
 中文:
-结构 IsSupportedOutside
+结构 是SupportedOutside
   参数: : 命题 where
   公理与运算 (1 个):
     - exactAt((i : ι)) : K.ExactAt (e.f i)
@@ -375,8 +375,8 @@ lemma IsStrictlySupportedOutside.isSupportedOutside
   proof: ShortComplex.exact_of_isZero_X₂ _ (h.isZero i)
 
 中文:
-引理 IsStrictlySupportedOutside.isSupportedOutside
-  条件: (h : K.IsStrictlySupportedOutside e)
+引理 是StrictlySupportedOutside.isSupportedOutside
+  条件: (h : K.是StrictlySupportedOutside e)
   证明: ShortComplex.exact_of_isZero_X₂ _ (h.isZero i)
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_of_isZero_X, h.isZero, isZero
@@ -394,7 +394,7 @@ instance [HasZeroObject
   body: (eval _ _ i).map_isZero (Limits.isZero_zero _)
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] : (0
   定义体: (eval _ _ i).map_isZero (Limits.isZero_zero _)
 
@@ -484,7 +484,7 @@ instance map_isStrictlySupported
 
 中文:
 实例 map_isStrictlySupported
-  签名: [K.IsStrictlySupported e]
+  签名: [K.是StrictlySupported e]
   定义体: by
     rw [IsZero.iff_id_eq_zero]
     dsimp
@@ -513,7 +513,7 @@ lemma isStrictlySupported_mapHomologicalComplex_obj_iff
 
 中文:
 引理 isStrictlySupported_mapHomologicalComplex_obj_iff
-  条件: [F.Faithful]
+  条件: [F.忠实]
   证明: by
   refine ⟨fun _ => ⟨fun i' hi' => ?_⟩, fun _ => inferInstance⟩
   rw [IsZero.iff_id_eq_zero]

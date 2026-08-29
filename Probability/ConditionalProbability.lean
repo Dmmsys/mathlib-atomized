@@ -90,7 +90,7 @@ scoped macro:max μ:term noWs "[" t:term " | " s:term "]" : term =>
 
 中文:
 定义 cond
-  签名: (s : Set Ω)
+  签名: (s : 集合 Ω)
   定义体: (μ s)⁻¹ • μ.restrict s
 
 @[inherit_doc ProbabilityTheory.cond]
@@ -219,7 +219,7 @@ theorem cond_isProbabilityMeasure
 
 中文:
 定理 cond_isProbabilityMeasure
-  条件: [IsFiniteMeasure μ] (hcs : μ s != 0)
+  条件: [是有限测度 μ] (hcs : μ s != 0)
   证明: cond_isProbabilityMeasure_of_finite hcs (measure_ne_top μ s)
 
 Depends on / 依赖: cond_isProbabilityMeasure_of_finite, measure_ne_top
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroOrProbabilityMeasure μ[|s]
+  签名: 是ZeroOrProbabilityMeasure μ[|s]
   定义体: by
   constructor
   simp only [cond, Measure.coe_smul, Pi.smul_apply, MeasurableSet.univ, Measure.restrict_apply,
@@ -329,7 +329,7 @@ lemma absolutelyContinuous_cond_univ
 
 中文:
 引理 absolutelyContinuous_cond_univ
-  条件: [IsFiniteMeasure μ]
+  条件: [是有限测度 μ]
   结论: μ ≪ μ[|univ]
   证明: by
   rw [cond]; rw [restrict_univ]
@@ -352,8 +352,8 @@ lemma ae_cond_of_forall_mem
   proof: ae_smul_measure (ae_restrict_of_forall_mem hs h) _
 
 中文:
-引理 ae_cond_of_forall_mem
-  条件: (hs : MeasurableSet s) {p : Ω -> 命题} (h : 对任意 x in s, p x)
+引理 ae_cond_of_对任意_mem
+  条件: (hs : 可测集 s) {p : Ω -> 命题} (h : 对任意 x in s, p x)
   证明: ae_smul_measure (ae_restrict_of_forall_mem hs h) _
 
 Depends on / 依赖: ae_restrict_of_forall_mem, ae_smul_measure
@@ -392,7 +392,7 @@ lemma ae_cond_mem
 
 中文:
 引理 ae_cond_mem
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: 对任意ᵐ x ∂μ[|s], x in s
   证明: ae_smul_measure (ae_restrict_mem hs) _
 
@@ -432,8 +432,8 @@ lemma cond_univ
 
 中文:
 引理 cond_univ
-  条件: [IsProbabilityMeasure μ]
-  结论: μ[|Set.univ] = μ
+  条件: [是概率测度 μ]
+  结论: μ[|集合.univ] = μ
   证明: by
   simp [cond, measure_univ, Measure.restrict_univ]
 -/
@@ -483,7 +483,7 @@ theorem cond_apply
 
 中文:
 定理 cond_apply
-  条件: (hms : MeasurableSet s) (μ : Measure Ω) (t : Set Ω)
+  条件: (hms : 可测集 s) (μ : 测度 Ω) (t : 集合 Ω)
   证明: by
   rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply' hms]; rw [Set.inter_comm]; rw [smul_eq_mul]
 
@@ -505,7 +505,7 @@ theorem cond_apply'
 
 中文:
 定理 cond_apply'
-  条件: (ht : MeasurableSet t) (μ : Measure Ω)
+  条件: (ht : 可测集 t) (μ : 测度 Ω)
   结论: μ[t | s] = (μ s)⁻¹ * μ (s inter t)
   证明: by
   rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply ht]; rw [Set.inter_comm]; rw [smul_eq_mul]
@@ -546,7 +546,7 @@ theorem cond_inter_self
 
 中文:
 定理 cond_inter_self
-  条件: (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω)
+  条件: (hms : 可测集 s) (t : 集合 Ω) (μ : 测度 Ω)
   证明: by
   rw [cond_apply hms]; rw [← Set.inter_assoc]; rw [Set.inter_self]; rw [← cond_apply hms]
 
@@ -569,7 +569,7 @@ theorem inter_pos_of_cond_ne_zero
 
 中文:
 定理 inter_pos_of_cond_ne_zero
-  条件: (hms : MeasurableSet s) (hcst : μ[t | s] != 0)
+  条件: (hms : 可测集 s) (hcst : μ[t | s] != 0)
   证明: by
   refine pos_iff_ne_zero.mpr (right_ne_zero_of_mul (a := (μ s)⁻¹) ?_)
   convert! hcst
@@ -596,7 +596,7 @@ lemma cond_pos_of_inter_ne_zero
 
 中文:
 引理 cond_pos_of_inter_ne_zero
-  条件: [IsFiniteMeasure μ] (hms : MeasurableSet s) (hci : μ (s inter t) != 0)
+  条件: [是有限测度 μ] (hms : 可测集 s) (hci : μ (s inter t) != 0)
   证明: by
   rw [cond_apply hms]
   refine ENNReal.mul_pos ?_ hci
@@ -626,7 +626,7 @@ lemma cond_cond_eq_cond_inter'
 
 中文:
 引理 cond_cond_eq_cond_inter'
-  条件: (hms : MeasurableSet s) (hmt : MeasurableSet t) (hcs : μ s != ∞)
+  条件: (hms : 可测集 s) (hmt : 可测集 t) (hcs : μ s != ∞)
   证明: by
   ext u
   obtain hst | hst := eq_or_ne (μ (s inter t)) 0
@@ -657,7 +657,7 @@ theorem cond_cond_eq_cond_inter
 
 中文:
 定理 cond_cond_eq_cond_inter
-  结论: (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
+  结论: (hms : 可测集 s) (hmt : 可测集 t) (μ : 测度 Ω)
   证明: cond_cond_eq_cond_inter' hms hmt (measure_ne_top μ s)
 
 Depends on / 依赖: cond_cond_eq_cond_inter, measure_ne_top
@@ -679,7 +679,7 @@ theorem cond_mul_eq_inter'
 
 中文:
 定理 cond_mul_eq_inter'
-  条件: (hms : MeasurableSet s) (hcs' : μ s != ∞) (t : Set Ω)
+  条件: (hms : 可测集 s) (hcs' : μ s != ∞) (t : 集合 Ω)
   证明: by
   obtain hcs | hcs := eq_or_ne (μ s) 0
   · simp [hcs, measure_inter_null_of_null_left]
@@ -703,7 +703,7 @@ theorem cond_mul_eq_inter
 
 中文:
 定理 cond_mul_eq_inter
-  条件: (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ]
+  条件: (hms : 可测集 s) (t : 集合 Ω) (μ : 测度 Ω) [是有限测度 μ]
   证明: cond_mul_eq_inter' hms (measure_ne_top _ s) t
 
 Depends on / 依赖: cond_mul_eq_inter, measure_ne_top
@@ -723,7 +723,7 @@ theorem cond_add_cond_compl_eq
 
 中文:
 定理 cond_add_cond_compl_eq
-  条件: (hms : MeasurableSet s) (μ : Measure Ω) [IsFiniteMeasure μ]
+  条件: (hms : 可测集 s) (μ : 测度 Ω) [是有限测度 μ]
   证明: by
   rw [cond_mul_eq_inter hms]; rw [cond_mul_eq_inter hms.compl]; rw [Set.inter_comm _ t]; rw [Set.inter_comm _ t]
   exact measure_inter_add_sdiff t hms
@@ -746,7 +746,7 @@ theorem cond_eq_inv_mul_cond_mul
 
 中文:
 定理 cond_eq_inv_mul_cond_mul
-  结论: (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
+  结论: (hms : 可测集 s) (hmt : 可测集 t) (μ : 测度 Ω)
   证明: by
   rw [mul_assoc]; rw [cond_mul_eq_inter hmt s]; rw [Set.inter_comm]; rw [cond_apply hms]
 
@@ -773,7 +773,7 @@ lemma comap_cond
 
 中文:
 引理 comap_cond
-  结论: {i : Ω' -> Ω} (hi : MeasurableEmbedding i) (hi' : 对任意ᵐ ω ∂μ, ω in range i)
+  结论: {i : Ω' -> Ω} (hi : 可测嵌入 i) (hi' : 对任意ᵐ ω ∂μ, ω in range i)
   证明: by
   ext t ht
   change μ (range i)ᶜ = 0 at hi'
@@ -816,7 +816,7 @@ lemma sum_meas_smul_cond_fiber
 
 中文:
 引理 sum_meas_smul_cond_fiber
-  条件: {X : Ω -> α} (hX : Measurable X) (μ : Measure Ω) [IsFiniteMeasure μ]
+  条件: {X : Ω -> α} (hX : 可测 X) (μ : 测度 Ω) [是有限测度 μ]
   证明: by
   ext E hE
   calc

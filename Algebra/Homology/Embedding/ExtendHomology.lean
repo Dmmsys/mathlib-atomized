@@ -130,7 +130,7 @@ definition kernelFork
 
 中文:
 定义 kernelFork
-  签名: : KernelFork ((K.extend e).d j' k')
+  签名: : 核叉 ((K.extend e).d j' k')
   定义体: KernelFork.ofι (cone.ι ≫ (extendXIso K e hj').inv)
     (by rw [assoc, ← comp_d_eq_zero_iff K e hj' hk hk' cone.ι, cone.condition])
 
@@ -151,7 +151,7 @@ definition isLimitKernelFork
 
 中文:
 定义 isLimitKernelFork
-  签名: : IsLimit (kernelFork K e hj' hk hk' cone)
+  签名: : 是极限 (kernelFork K e hj' hk hk' cone)
   定义体: KernelFork.isLimitOfIsLimitOfIff hcone ((K.extend e).d j' k')
     (extendXIso K e hj').symm (comp_d_eq_zero_iff K e hj' hk hk')
 
@@ -369,7 +369,7 @@ definition cokernelCofork
 
 中文:
 定义 cokernelCofork
-  签名: : CokernelCofork ((K.extend e).d i' j')
+  签名: : 余核余叉 ((K.extend e).d i' j')
   定义体: CokernelCofork.ofπ ((extendXIso K e hj').hom ≫ cocone.π) (by
     rw [← d_comp_eq_zero_iff K e hj' hi hi' cocone.π]; rw [cocone.condition])
 
@@ -390,7 +390,7 @@ definition isColimitCokernelCofork
 
 中文:
 定义 isColimitCokernelCofork
-  签名: : IsColimit (cokernelCofork K e hj' hi hi' cocone)
+  签名: : 是余极限 (cokernelCofork K e hj' hi hi' cocone)
   定义体: CokernelCofork.isColimitOfIsColimitOfIff hcocone ((K.extend e).d i' j')
     (extendXIso K e hj') (d_comp_eq_zero_iff K e hj' hi hi')
 
@@ -649,7 +649,7 @@ definition homologyData
 
 中文:
 定义 homologyData
-  签名: (h : (K.sc' i j k).HomologyData)
+  签名: (h : (K.sc' i j k).同调数据)
   定义体: leftHomologyData K e hj' hi hi' hk hk' h.left
   right := rightHomologyData K e hj' hi hi' hk hk' h.right
   iso := h.iso
@@ -676,7 +676,7 @@ definition homologyData'
 
 中文:
 定义 homologyData'
-  签名: (h : (K.sc' i j k).HomologyData)
+  签名: (h : (K.sc' i j k).同调数据)
   定义体: homologyData K e hj' hi rfl hk rfl h
 
 Depends on / 依赖: homologyData
@@ -698,7 +698,7 @@ lemma hasHomology
 
 中文:
 引理 hasHomology
-  条件: {j : ι} {j' : ι'} (hj' : e.f j = j') [K.HasHomology j]
+  条件: {j : ι} {j' : ι'} (hj' : e.f j = j') [K.有同调 j]
   证明: ShortComplex.HasHomology.mk'
     (homologyData' K e hj' rfl rfl ((K.sc j).homologyData))
 
@@ -727,8 +727,8 @@ instance [forall
       (ShortComplex.HomologyData.ofZeros _ (hj.eq_of_tgt _ _) (hj.eq_of_src _ _))
 
 中文:
-实例 [forall
-  签名: j, K.HasHomology j] (j'
+实例 [对任意
+  签名: j, K.有同调 j] (j'
   定义体: by
   by_cases h : exists j, e.f j = j'
   · obtain ⟨j, rfl⟩ := h
@@ -1194,7 +1194,7 @@ lemma quasiIso_extendMap_iff
 
 中文:
 引理 quasiIso_extendMap_iff
-  条件: [对任意 j, K.HasHomology j] [对任意 j, L.HasHomology j]
+  条件: [对任意 j, K.有同调 j] [对任意 j, L.有同调 j]
   证明: by
   simp only [quasiIso_iff, ← fun j => quasiIsoAt_extendMap_iff φ e (j := j) (hj' := rfl)]
   constructor
@@ -1232,8 +1232,8 @@ instance [forall
   rwa [quasiIso_extendMap_iff]
 
 中文:
-实例 [forall
-  签名: j, K.HasHomology j] [对任意 j, L.HasHomology j] [QuasiIso φ] :
+实例 [对任意
+  签名: j, K.有同调 j] [对任意 j, L.有同调 j] [拟同构 φ] :
   定义体: by
   rwa [quasiIso_extendMap_iff]
 

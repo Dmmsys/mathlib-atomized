@@ -66,7 +66,7 @@ definition inverseAux
 
 中文:
 定义 inverseAux
-  签名: : (C ⥤ₗ 类型v) ⥤ C ⥤ AddCommGrpCat.{v}
+  签名: : (C ⥤ₗ 类型v) ⥤ C ⥤ 加法交换群范畴.{v}
   定义体: Functor.mapCommGrpFunctor ⋙
     (Functor.whiskeringLeft _ _ _).obj Preadditive.commGrpEquivalence.functor ⋙
       (Functor.whiskeringRight _ _ _).obj
@@ -96,7 +96,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (C ⥤ₗ 类型v) ⥤ (C ⥤ₗ AddCommGrpCat.{v})
+  签名: : (C ⥤ₗ 类型v) ⥤ (C ⥤ₗ 加法交换群范畴.{v})
   定义体: ObjectProperty.lift _ inverseAux (by simp only [leftExactFunctor_iff]; infer_instance)
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.lift, infer_instance, inverseAux, leftExactFunctor_iff
@@ -123,7 +123,7 @@ definition unitIsoAux
 
 中文:
 定义 unitIsoAux
-  签名: (F : C ⥤ AddCommGrpCat.{v}) [PreservesFiniteLimits F] (X : C)
+  签名: (F : C ⥤ 加法交换群范畴.{v}) [保持FiniteLimits F] (X : C)
   定义体: .ofChosenFiniteProducts _
     commGrpTypeEquivalenceCommGrp.inverse.obj (AddCommGrpCat.toCommGrp.obj (F.obj X)) ≅
       (F ⋙ forget AddCommGrpCat).mapCommGrp.obj (Preadditive.commGrpEquivalence.functor.obj X) := by
@@ -167,7 +167,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (C ⥤ₗ AddCommGrpCat) ≅
+  签名: : 𝟭 (C ⥤ₗ 加法交换群范畴) ≅
   定义体: NatIso.ofComponents (fun F => InducedCategory.isoMk (NatIso.ofComponents (fun X =>
     commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
       (CommGrpCat.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app

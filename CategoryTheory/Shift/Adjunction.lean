@@ -283,7 +283,7 @@ lemma compatibilityUnit_isoZero
 
 中文:
 引理 compatibilityUnit_isoZero
-  结论: CompatibilityUnit adj (Functor.CommShift.isoZero F A)
+  结论: CompatibilityUnit adj (函子.交换Shift.isoZero F A)
   证明: by
   intro
   simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoZero_hom_app,
@@ -364,11 +364,11 @@ class CommShift
     - commShift_counit : NatTrans.CommShift adj.counit A  [default: by infer_instance]
 
 中文:
-类 CommShift
+类 交换Shift
   参数: : 命题 where
   公理与运算 (2 个):
-    - commShift_unit : 自然数Trans.CommShift adj.unit A  [默认: by infer_instance]
-    - commShift_counit : 自然数Trans.CommShift adj.counit A  [默认: by infer_instance]
+    - commShift_unit : 自然变换.交换Shift adj.unit A  [默认: by infer_instance]
+    - commShift_counit : 自然变换.交换Shift adj.counit A  [默认: by infer_instance]
 
 Depends on / 依赖: CommShift, NatTrans, NatTrans.CommShift, adj.counit, commShift_counit, counit, infer_instance
 -/
@@ -392,7 +392,7 @@ lemma unit_app_commShiftIso_hom_app
 
 中文:
 引理 unit_app_commShiftIso_hom_app
-  条件: [adj.CommShift A] (a : A) (X : C)
+  条件: [adj.交换Shift A] (a : A) (X : C)
   证明: by
   simpa using (NatTrans.shift_app_comm adj.unit a X).symm
 
@@ -415,7 +415,7 @@ lemma unit_app_shift_commShiftIso_inv_app
 
 中文:
 引理 unit_app_shift_commShiftIso_inv_app
-  条件: [adj.CommShift A] (a : A) (X : C)
+  条件: [adj.交换Shift A] (a : A) (X : C)
   证明: by
   simp [← cancel_mono (((F ⋙ G).commShiftIso _).hom.app _)]
 
@@ -440,7 +440,7 @@ lemma commShiftIso_hom_app_counit_app_shift
 
 中文:
 引理 commShiftIso_hom_app_counit_app_shift
-  条件: [adj.CommShift A] (a : A) (Y : D)
+  条件: [adj.交换Shift A] (a : A) (Y : D)
   证明: by
   simpa using (NatTrans.shift_app_comm adj.counit a Y)
 
@@ -464,7 +464,7 @@ lemma commShiftIso_inv_app_counit_app
 
 中文:
 引理 commShiftIso_inv_app_counit_app
-  条件: [adj.CommShift A] (a : A) (Y : D)
+  条件: [adj.交换Shift A] (a : A) (Y : D)
   证明: by
   simp [← cancel_epi (((G ⋙ F).commShiftIso _).hom.app _)]
 
@@ -493,7 +493,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: (_ : 自然数Trans.CommShift adj.unit A)
+  条件: (_ : 自然变换.交换Shift adj.unit A)
   证明: ⟨fun a => by
     ext
     simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
@@ -525,7 +525,7 @@ instance instId
 
 中文:
 实例 instId
-  签名: : (Adjunction.id (C := C)).CommShift A where
+  签名: : (伴随.id (C := C)).交换Shift A where
   定义体: inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.hom A)
   commShift_unit :=
     inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.inv A)
@@ -556,7 +556,7 @@ instance instComp
 
 中文:
 实例 instComp
-  签名: : (adj.comp adj').CommShift A where
+  签名: : (adj.comp adj').交换Shift A where
   定义体: by
     rw [comp_counit]
     infer_instance
@@ -591,7 +591,7 @@ lemma shift_unit_app
 
 中文:
 引理 shift_unit_app
-  条件: [adj.CommShift A] (a : A) (X : C)
+  条件: [adj.交换Shift A] (a : A) (X : C)
   证明: by
   simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X
 
@@ -621,7 +621,7 @@ lemma shift_counit_app
 
 中文:
 引理 shift_counit_app
-  条件: [adj.CommShift A] (a : A) (Y : D)
+  条件: [adj.交换Shift A] (a : A) (Y : D)
   证明: by
   have eq := NatTrans.shift_app_comm adj.counit a Y
   simp only [Functor.comp_obj, Functor.id_obj, Functor.commShiftIso_comp_hom_app, assoc,
@@ -833,7 +833,7 @@ definition rightAdjointCommShift
 
 中文:
 定义 rightAdjointCommShift
-  签名: [F.CommShift A]
+  签名: [F.交换Shift A]
   定义体: iso adj a
   commShiftIso_zero := by
     refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso 0) _ _
@@ -875,7 +875,7 @@ lemma commShift_of_leftAdjoint
 
 中文:
 引理 commShift_of_leftAdjoint
-  条件: [F.CommShift A]
+  条件: [F.交换Shift A]
   证明: adj.rightAdjointCommShift A
     adj.CommShift A := by
   let := adj.rightAdjointCommShift A
@@ -1062,7 +1062,7 @@ definition leftAdjointCommShift
 
 中文:
 定义 leftAdjointCommShift
-  签名: [G.CommShift A]
+  签名: [G.交换Shift A]
   定义体: iso adj a
   commShiftIso_zero := by
     refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso 0)
@@ -1104,7 +1104,7 @@ lemma commShift_of_rightAdjoint
 
 中文:
 引理 commShift_of_rightAdjoint
-  条件: [G.CommShift A]
+  条件: [G.交换Shift A]
   证明: adj.leftAdjointCommShift A
     adj.CommShift A := by
   let := adj.leftAdjointCommShift A
@@ -1145,8 +1145,8 @@ abbreviation CommShift
   body: E.toAdjunction.CommShift A
 
 中文:
-缩写 CommShift
-  签名: [E.functor.CommShift A] [E.inverse.CommShift A]
+缩写 交换Shift
+  签名: [E.functor.交换Shift A] [E.inverse.交换Shift A]
   定义体: E.toAdjunction.CommShift A
 
 Depends on / 依赖: CommShift, E.toAdjunction.CommShift, toAdjunction
@@ -1167,8 +1167,8 @@ instance [E.CommShift
   body: inferInstanceAs (NatTrans.CommShift E.toAdjunction.unit A)
 
 中文:
-实例 [E.CommShift
-  签名: A] : 自然数Trans.CommShift E.unitIso.hom A
+实例 [E.交换Shift
+  签名: A] : 自然变换.交换Shift E.unitIso.hom A
   定义体: inferInstanceAs (NatTrans.CommShift E.toAdjunction.unit A)
 
 Depends on / 依赖: CommShift, E.toAdjunction.unit, NatTrans, NatTrans.CommShift, toAdjunction
@@ -1185,8 +1185,8 @@ instance [E.CommShift
   body: inferInstanceAs (NatTrans.CommShift E.toAdjunction.counit A)
 
 中文:
-实例 [E.CommShift
-  签名: A] : 自然数Trans.CommShift E.counitIso.hom A
+实例 [E.交换Shift
+  签名: A] : 自然变换.交换Shift E.counitIso.hom A
   定义体: inferInstanceAs (NatTrans.CommShift E.toAdjunction.counit A)
 
 Depends on / 依赖: CommShift, E.toAdjunction.counit, NatTrans, NatTrans.CommShift, counit, toAdjunction
@@ -1204,7 +1204,7 @@ instance :
 
 中文:
 实例 :
-  签名: E.symm.inverse.CommShift A
+  签名: E.symm.inverse.交换Shift A
   定义体: inferInstanceAs (E.functor.CommShift A)
 
 Depends on / 依赖: CommShift, E.functor.CommShift, functor
@@ -1220,7 +1220,7 @@ instance :
 
 中文:
 实例 :
-  签名: E.symm.functor.CommShift A
+  签名: E.symm.functor.交换Shift A
   定义体: inferInstanceAs (E.inverse.CommShift A)
 
 Depends on / 依赖: CommShift, E.inverse.CommShift, inverse
@@ -1238,7 +1238,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: (h : 自然数Trans.CommShift E.unitIso.hom A)
+  条件: (h : 自然变换.交换Shift E.unitIso.hom A)
   证明: h
   commShift_counit := (Adjunction.CommShift.mk' E.toAdjunction A h).commShift_counit
 -/
@@ -1257,7 +1257,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Equivalence.refl (C := C)).functor.CommShift A
+  签名: (等价.refl (C := C)).functor.交换Shift A
   定义体: inferInstanceAs (𝟭 C).CommShift A
 
 Depends on / 依赖: CommShift, functor, functor.CommShift
@@ -1275,7 +1275,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Equivalence.refl (C := C)).inverse.CommShift A
+  签名: (等价.refl (C := C)).inverse.交换Shift A
   定义体: inferInstanceAs (𝟭 C).CommShift A
 
 Depends on / 依赖: CommShift, inverse, inverse.CommShift
@@ -1294,7 +1294,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Equivalence.refl (C := C)).CommShift A
+  签名: (等价.refl (C := C)).交换Shift A
   定义体: inferInstanceAs Adjunction.id.CommShift A
 
 Depends on / 依赖: CommShift
@@ -1311,8 +1311,8 @@ instance [E.CommShift
   body: mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
 
 中文:
-实例 [E.CommShift
-  签名: A] : E.symm.CommShift A
+实例 [E.交换Shift
+  签名: A] : E.symm.交换Shift A
   定义体: mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
 
 Depends on / 依赖: CommShift, E.counitIso.inv, E.symm, NatTrans, NatTrans.CommShift, counitIso
@@ -1331,7 +1331,7 @@ lemma mk''
 
 中文:
 引理 mk''
-  条件: (h : 自然数Trans.CommShift E.counitIso.hom A)
+  条件: (h : 自然变换.交换Shift E.counitIso.hom A)
   证明: have := mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
   inferInstanceAs (E.symm.symm.CommShift A)
 
@@ -1358,7 +1358,7 @@ instance :
 
 中文:
 实例 :
-  签名: (E.trans E').functor.CommShift A
+  签名: (E.trans E').functor.交换Shift A
   定义体: by
   dsimp
   infer_instance
@@ -1382,7 +1382,7 @@ instance :
 
 中文:
 实例 :
-  签名: (E.trans E').inverse.CommShift A
+  签名: (E.trans E').inverse.交换Shift A
   定义体: by
   dsimp
   infer_instance
@@ -1403,7 +1403,7 @@ instance :
 
 中文:
 实例 :
-  签名: (E.trans E').CommShift A
+  签名: (E.trans E').交换Shift A
   定义体: inferInstanceAs ((E.toAdjunction.comp E'.toAdjunction).CommShift A)
 
 Depends on / 依赖: CommShift, E.toAdjunction.comp, toAdjunction
@@ -1432,7 +1432,7 @@ definition commShiftInverse
 
 中文:
 定义 commShiftInverse
-  签名: [E.functor.CommShift A]
+  签名: [E.functor.交换Shift A]
   定义体: E.toAdjunction.rightAdjointCommShift A
 
 Depends on / 依赖: E.toAdjunction.rightAdjointCommShift, rightAdjointCommShift, toAdjunction
@@ -1453,7 +1453,7 @@ lemma commShift_of_functor
 
 中文:
 引理 commShift_of_functor
-  条件: [E.functor.CommShift A]
+  条件: [E.functor.交换Shift A]
   证明: E.commShiftInverse A
     E.CommShift A := by
   let := E.commShiftInverse A
@@ -1482,7 +1482,7 @@ definition commShiftFunctor
 
 中文:
 定义 commShiftFunctor
-  签名: [E.inverse.CommShift A]
+  签名: [E.inverse.交换Shift A]
   定义体: E.symm.toAdjunction.rightAdjointCommShift A
 
 Depends on / 依赖: E.symm.toAdjunction.rightAdjointCommShift, rightAdjointCommShift, toAdjunction
@@ -1505,7 +1505,7 @@ lemma commShift_of_inverse
 
 中文:
 引理 commShift_of_inverse
-  条件: [E.inverse.CommShift A]
+  条件: [E.inverse.交换Shift A]
   证明: E.commShiftFunctor A
     E.CommShift A := by
   let := E.commShiftFunctor A

@@ -52,8 +52,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: M] : Group (IsUnit.submonoid M)
+实例 [幺半群
+  签名: M] : 群 (是单位.submonoid M)
   定义体: { (inferInstance : Monoid (IsUnit.submonoid M)) with
     inv := fun x => ⟨x.prop.unit⁻¹.val, x.prop.unit⁻¹.isUnit⟩
     inv_mul_cancel := fun x =>
@@ -82,8 +82,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: M] : CommGroup (IsUnit.submonoid M)
+实例 [交换幺半群
+  签名: M] : 交换群 (是单位.submonoid M)
   定义体: { (inferInstance : Group (IsUnit.submonoid M)) with
     mul_comm := fun a b => by convert! mul_comm a b }
 
@@ -108,8 +108,8 @@ theorem _root_.IsUnit.submonoid.coe_inv
 alias _root_.AddSubmonoid.IsUnit.Submonoid.coe_neg := IsAddUnit.addSubmonoid.coe_neg
 
 中文:
-定理 _root_.IsUnit.submonoid.coe_inv
-  条件: [Monoid M] (x : IsUnit.submonoid M)
+定理 _root_.是单位.submonoid.coe_inv
+  条件: [幺半群 M] (x : 是单位.submonoid M)
   证明: rfl
 
 @[deprecated (since := "2026-05-24")]
@@ -147,7 +147,7 @@ definition leftInv
 
 中文:
 定义 leftInv
-  签名: : Submonoid M where
+  签名: : 子幺半群 M where
   定义体: { x : M | exists y : S, x * y = 1 }
   one_mem' := ⟨1, mul_one 1⟩
   mul_mem' := fun {a} _b ⟨a', ha⟩ ⟨b', hb⟩ =>
@@ -236,7 +236,7 @@ theorem leftInv_leftInv_eq
 
 中文:
 定理 leftInv_leftInv_eq
-  条件: (hS : S <= IsUnit.submonoid M)
+  条件: (hS : S <= 是单位.submonoid M)
   结论: S.leftInv.leftInv = S
   证明: by
   refine le_antisymm S.leftInv_leftInv_le ?_
@@ -375,7 +375,7 @@ theorem leftInv_le_isUnit
 
 中文:
 定理 leftInv_le_isUnit
-  结论: S.leftInv <= IsUnit.submonoid M
+  结论: S.leftInv <= 是单位.submonoid M
   证明: fun x ⟨y, hx⟩ =>
   ⟨⟨x, y, hx, mul_comm x y ▸ hx⟩, rfl⟩
 

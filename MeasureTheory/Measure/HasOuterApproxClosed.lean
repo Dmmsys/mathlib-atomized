@@ -62,7 +62,7 @@ theorem tendsto_lintegral_nn_filter_of_le_const
 
 中文:
 定理 tendsto_lintegral_nn_filter_of_le_const
-  结论: {ι : 类型} {L : Filter ι} [L.IsCountablyGenerated]
+  结论: {ι : 类型} {L : 滤子 ι} [L.是余untablyGenerated]
   证明: by
   refine tendsto_lintegral_filter_of_dominated_convergence (fun _ => c)
     (Eventually.of_forall fun i => (ENNReal.continuous_coe.comp (fs i).continuous).measurable) ?_
@@ -97,7 +97,7 @@ theorem measure_of_cont_bdd_of_tendsto_filter_indicator
 
 中文:
 定理 measure_of_cont_bdd_of_tendsto_filter_indicator
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   convert! tendsto_lintegral_nn_filter_of_le_const μ fs_bdd fs_lim
   have aux : forall ω, indicator E (fun _ => (1 : Real>=0∞)) ω = ↑(indicator E (fun _ => (1 : Real>=0)) ω) :=
@@ -170,7 +170,7 @@ theorem tendsto_lintegral_thickenedIndicator_of_isClosed
 
 中文:
 定理 tendsto_lintegral_thickenedIndicator_of_isClosed
-  结论: {Ω : 类型} {mΩ : MeasurableSpace Ω}
+  结论: {Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   apply measure_of_cont_bdd_of_tendsto_indicator μ F_closed.measurableSet
     (fun n => thickenedIndicator (δs_pos n) F) fun n ω => thickenedIndicator_le_one (δs_pos n) F ω
@@ -202,7 +202,7 @@ lemma integrable_thickenedIndicator
 
 中文:
 引理 integrable_thickenedIndicator
-  结论: {Ω : 类型} {mΩ : MeasurableSpace Ω}
+  结论: {Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   refine .of_bound (by fun_prop) 1 (ae_of_all _ fun x => ?_)
   simpa using thickenedIndicator_le_one δ_pos F x
@@ -230,7 +230,7 @@ lemma tendsto_integral_thickenedIndicator_of_isClosed
 
 中文:
 引理 tendsto_integral_thickenedIndicator_of_isClosed
-  结论: {Ω : 类型} {mΩ : MeasurableSpace Ω}
+  结论: {Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   -- we switch to the `lintegral` formulation and apply the corresponding lemma there
   let fs : Nat -> Ω -> Real := fun n ω => thickenedIndicator (δs_pos n) F ω
@@ -273,10 +273,10 @@ class HasOuterApproxClosed
     - exAppr : forall (F : Set X), IsClosed F -> exists (fseq : Nat -> (X ->ᵇ Real>=0)), (forall n x, fseq n x <= 1) ∧ (forall n x, x in F -> 1 <= fseq n x) ∧ Tendsto (fun n : Nat => (fun x => fseq n x)) atTop (𝓝 (indicator F fun _ => (1 : Real>=0)))
 
 中文:
-类 HasOuterApproxClosed
-  参数: (X : 类型) [TopologicalSpace X]
+类 有OuterApproxClosed
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - exAppr : 对任意 (F : Set X), IsClosed F -> 存在 (fseq : 自然数 -> (X ->ᵇ 实数>=0)), (对任意 n x, fseq n x <= 1) ∧ (对任意 n x, x in F -> 1 <= fseq n x) ∧ Tendsto (fun n : 自然数 => (fun x => fseq n x)) atTop (𝓝 (indicator F fun _ => (1 : 实数>=0)))
+    - exAppr : 对任意 (F : 集合 X), 是闭集 F -> 存在 (fseq : 自然数 -> (X ->ᵇ 实数>=0)), (对任意 n x, fseq n x <= 1) ∧ (对任意 n x, x in F -> 1 <= fseq n x) ∧ 收敛 (fun n : 自然数 => (fun x => fseq n x)) atTop (𝓝 (indicator F fun _ => (1 : 实数>=0)))
 -/
 class HasOuterApproxClosed (X : Type*) [TopologicalSpace X] : Prop where
   exAppr : forall (F : Set X), IsClosed F -> exists (fseq : Nat -> (X ->ᵇ Real>=0)),
@@ -297,7 +297,7 @@ definition _root_.IsClosed.apprSeq
   body: Exists.choose (HasOuterApproxClosed.exAppr F hF)
 
 中文:
-定义 _root_.IsClosed.apprSeq
+定义 _root_.是闭集.apprSeq
   签名: : 自然数 -> (X ->ᵇ 实数>=0)
   定义体: Exists.choose (HasOuterApproxClosed.exAppr F hF)
 
@@ -411,7 +411,7 @@ theorem measure_le_lintegral
 
 中文:
 定理 measure_le_lintegral
-  条件: [MeasurableSpace X] [OpensMeasurableSpace X] (μ : Measure X) (n : 自然数)
+  条件: [可测空间 X] [OpensMeasurable空间 X] (μ : 测度 X) (n : 自然数)
   证明: by
   convert_to ∫⁻ x, (F.indicator (fun _ => (1 : Real>=0∞))) x ∂μ <= ∫⁻ x, hF.apprSeq n x ∂μ
   · rw [lintegral_indicator hF.measurableSet]
@@ -445,7 +445,7 @@ lemma tendsto_lintegral_apprSeq
 
 中文:
 引理 tendsto_lintegral_apprSeq
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X]
+  结论: [可测空间 X] [OpensMeasurable空间 X]
   证明: measure_of_cont_bdd_of_tendsto_indicator μ hF.measurableSet hF.apprSeq
     (apprSeq_apply_le_one hF) (tendsto_apprSeq hF)
 
@@ -494,7 +494,7 @@ theorem measure_isClosed_eq_of_forall_lintegral_eq_of_isFiniteMeasure
   
 
 中文:
-定理 measure_isClosed_eq_of_forall_lintegral_eq_of_isFiniteMeasure
+定理 measure_isClosed_eq_of_对任意_lintegral_eq_of_isFiniteMeasure
   结论: {Ω : 类型}
   证明: by
   have ν_finite : IsFiniteMeasure ν := by
@@ -538,7 +538,7 @@ theorem ext_of_forall_lintegral_eq_of_IsFiniteMeasure
   · rw [BorelSpace.measurable_eq (α := Ω), borel_eq_generateFrom_isClosed]
 
 中文:
-定理 ext_of_forall_lintegral_eq_of_IsFiniteMeasure
+定理 ext_of_对任意_lintegral_eq_of_IsFiniteMeasure
   结论: {Ω : 类型}
   证明: by
   have key := @measure_isClosed_eq_of_forall_lintegral_eq_of_isFiniteMeasure Ω _ _ _ _ μ ν _ h
@@ -575,7 +575,7 @@ theorem ext_of_forall_integral_eq_of_IsFiniteMeasure
   exact h ⟨⟨fun x => (f x
 
 中文:
-定理 ext_of_forall_integral_eq_of_IsFiniteMeasure
+定理 ext_of_对任意_integral_eq_of_IsFiniteMeasure
   结论: {Ω : 类型}
   证明: by
   apply ext_of_forall_lintegral_eq_of_IsFiniteMeasure

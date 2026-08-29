@@ -35,7 +35,7 @@ abbreviation decompositionSubgroup
 
 中文:
 缩写 decompositionSubgroup
-  签名: (A : ValuationSubring L)
+  签名: (A : 赋值子环 L)
   定义体: MulAction.stabilizer (L ≃ₐ[K] L) A
 
 Depends on / 依赖: MulAction, MulAction.stabilizer, stabilizer
@@ -54,7 +54,7 @@ definition subMulAction
 
 中文:
 定义 subMulAction
-  签名: (A : ValuationSubring L)
+  签名: (A : 赋值子环 L)
   定义体: A
   smul_mem' g _ h := Set.mem_of_mem_of_subset (Set.smul_mem_smul_set h) g.prop.le
 -/
@@ -76,7 +76,7 @@ smul_mul := fun g k l => Subtype.ext smul_mul' (N := L) g k l }
 
 中文:
 实例 decompositionSubgroupMulSemiringAction
-  签名: (A : ValuationSubring L)
+  签名: (A : 赋值子环 L)
   定义体: { SubMulAction.mulAction (A.subMulAction K) with
 smul_add := fun g k l => Subtype.ext smul_add (A := L) g k l
 smul_zero := fun g => Subtype.ext smul_zero g
@@ -104,7 +104,7 @@ definition inertiaSubgroup
 
 中文:
 定义 inertiaSubgroup
-  签名: (A : ValuationSubring L)
+  签名: (A : 赋值子环 L)
   定义体: MonoidHom.ker
     MulSemiringAction.toRingAut (A.decompositionSubgroup K) (IsLocalRing.ResidueField A)
 

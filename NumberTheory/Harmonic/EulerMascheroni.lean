@@ -93,7 +93,7 @@ lemma strictMono_eulerMascheroniSeq
 
 中文:
 引理 strictMono_eulerMascheroniSeq
-  结论: StrictMono eulerMascheroniSeq
+  结论: 严格递增 eulerMascheroniSeq
   证明: by
   refine strictMono_nat_of_lt_succ (fun n => ?_)
   rw [eulerMascheroniSeq]; rw [eulerMascheroniSeq]; rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [add_comm]; rw [Rat.cast_add]; rw [add_sub_cancel_right]; rw [← log_div (by positivity) (by positivity)]; rw [add_div]; rw [Nat.cast_a
@@ -199,7 +199,7 @@ lemma strictAnti_eulerMascheroniSeq'
 
 中文:
 引理 strictAnti_eulerMascheroniSeq'
-  结论: StrictAnti eulerMascheroniSeq'
+  结论: 严格递减 eulerMascheroniSeq'
   证明: by
   refine strictAnti_nat_of_succ_lt (fun n => ?_)
   rcases Nat.eq_zero_or_pos n with rfl | hn

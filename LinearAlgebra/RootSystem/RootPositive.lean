@@ -59,11 +59,11 @@ structure InvariantForm
     - isOrthogonal_reflection((i : ι)) : form.IsOrthogonal (P.reflection i)
 
 中文:
-结构 InvariantForm
+结构 不变形式
   参数: (P : RootPairing ι R M N)
   公理与运算 (4 个):
-    - form : LinearMap.BilinForm R M
-    - symm : form.IsSymm
+    - form : 线性映射.BilinForm R M
+    - symm : form.是Symm
     - ne_zero((i : ι)) : form (P.root i) (P.root i) != 0
     - isOrthogonal_reflection((i : ι)) : form.IsOrthogonal (P.reflection i)
 -/
@@ -184,7 +184,7 @@ lemma apply_root_root_zero_iff
 
 中文:
 引理 apply_root_root_zero_iff
-  条件: [IsDomain R] [NeZero (2 : R)]
+  条件: [是整环 R] [NeZero (2 : R)]
   证明: by
   calc B.form (P.root i) (P.root j) = 0
       ↔ 2 * B.form (P.root i) (P.root j) = 0 := by simp [two_ne_zero]
@@ -218,10 +218,10 @@ structure RootPositiveForm
 
 中文:
 结构 RootPositiveForm
-  参数: (P : RootPairing ι R M N) [P.IsValuedIn S]
+  参数: (P : RootPairing ι R M N) [P.是ValuedIn S]
   公理与运算 (5 个):
-    - form : LinearMap.BilinForm R M
-    - symm : form.IsSymm
+    - form : 线性映射.BilinForm R M
+    - symm : form.是Symm
     - isOrthogonal_reflection((i : ι)) : form.IsOrthogonal (P.reflection i)
     - exists_eq((i j : ι)) : 存在 s, algebraMap S R s = form (P.root i) (P.root j)
     - exists_pos_eq((i : ι)) : 存在 s > 0, algebraMap S R s = form (P.root i) (P.root i)
@@ -279,7 +279,7 @@ omit [Module S M] [IsScalarTower S R M] in
 
 中文:
 定义 toInvariantForm
-  签名: : InvariantForm P where
+  签名: : 不变形式 P where
   定义体: B.form
   symm := B.symm
   ne_zero := B.form_apply_root_ne_zero
@@ -589,7 +589,7 @@ lemma zero_lt_apply_root_root_iff
 
 中文:
 引理 zero_lt_apply_root_root_iff
-  结论: [IsStrictOrderedRing S]
+  结论: [是StrictOrdered环 S]
   证明: by
   let ri : span S (range P.root) := ⟨P.root i, hi⟩
   let rj : span S (range P.root) := ⟨P.root j, hj⟩
@@ -626,7 +626,7 @@ lemma posForm_apply_root_root_le_zero_iff
 
 中文:
 引理 posForm_apply_root_root_le_zero_iff
-  结论: [IsStrictOrderedRing S]
+  结论: [是StrictOrdered环 S]
   证明: by
   rw [← not_iff_not]; rw [not_le]; rw [not_le]; rw [zero_lt_apply_root_root_iff]
 
@@ -653,7 +653,7 @@ lemma zero_lt_pairingIn_iff
 
 中文:
 引理 zero_lt_pairingIn_iff
-  条件: [IsStrictOrderedRing S]
+  条件: [是StrictOrdered环 S]
   证明: by
   rw [← B.zero_lt_apply_root_root_iff]; rw [← B.isSymm_posForm.eq]; rw [RingHom.id_apply]; rw [B.zero_lt_apply_root_root_iff]
 
@@ -679,7 +679,7 @@ lemma coxeterWeight_nonneg
 
 中文:
 引理 coxeterWeight_nonneg
-  条件: [IsStrictOrderedRing S]
+  条件: [是StrictOrdered环 S]
   结论: 0 <= P.coxeterWeightIn S i j
   证明: by
   dsimp [coxeterWeightIn]

@@ -99,7 +99,7 @@ definition iIndepSets
 
 中文:
 定义 iIndepSets
-  签名: {_mΩ : MeasurableSpace Ω}
+  签名: {_mΩ : 可测空间 Ω}
   定义体: Kernel.iIndepSets π (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: Kernel, Kernel.const, Kernel.iIndepSets, Measure, Measure.dirac, iIndepSets, volume_tac
@@ -118,7 +118,7 @@ definition IndepSets
 
 中文:
 定义 IndepSets
-  签名: {_mΩ : MeasurableSpace Ω}
+  签名: {_mΩ : 可测空间 Ω}
   定义体: Kernel.IndepSets s1 s2 (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets, Kernel.const, Measure, Measure.dirac, volume_tac
@@ -137,7 +137,7 @@ definition iIndep
 
 中文:
 定义 iIndep
-  签名: (m : ι -> MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (μ : Measure Ω := by volume_tac)
+  签名: (m : ι -> 可测空间 Ω) {_mΩ : 可测空间 Ω} (μ : 测度 Ω := by volume_tac)
   定义体: Kernel.iIndep m (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: Kernel, Kernel.const, Kernel.iIndep, Measure, Measure.dirac, iIndep, volume_tac
@@ -156,7 +156,7 @@ definition Indep
 
 中文:
 定义 Indep
-  签名: (m₁ m₂ : MeasurableSpace Ω)
+  签名: (m₁ m₂ : 可测空间 Ω)
   定义体: Kernel.Indep m₁ m₂ (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: Kernel, Kernel.Indep, Kernel.const, Measure, Measure.dirac, volume_tac
@@ -175,7 +175,7 @@ definition iIndepSet
 
 中文:
 定义 iIndepSet
-  签名: {_mΩ : MeasurableSpace Ω} (s : ι -> Set Ω) (μ : Measure Ω := by volume_tac)
+  签名: {_mΩ : 可测空间 Ω} (s : ι -> 集合 Ω) (μ : 测度 Ω := by volume_tac)
   定义体: Kernel.iIndepSet s (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: Kernel, Kernel.const, Kernel.iIndepSet, Measure, Measure.dirac, iIndepSet, volume_tac
@@ -193,7 +193,7 @@ definition IndepSet
 
 中文:
 定义 IndepSet
-  签名: {_mΩ : MeasurableSpace Ω} (s t : Set Ω) (μ : Measure Ω := by volume_tac)
+  签名: {_mΩ : 可测空间 Ω} (s t : 集合 Ω) (μ : 测度 Ω := by volume_tac)
   定义体: Kernel.IndepSet s t (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: IndepSet, Kernel, Kernel.IndepSet, Kernel.const, Measure, Measure.dirac, volume_tac
@@ -211,7 +211,7 @@ definition iIndepFun
 
 中文:
 定义 iIndepFun
-  签名: {_mΩ : MeasurableSpace Ω} {β : ι -> 类型} [m : 对任意 x : ι, MeasurableSpace (β x)]
+  签名: {_mΩ : 可测空间 Ω} {β : ι -> 类型} [m : 对任意 x : ι, 可测空间 (β x)]
   定义体: Kernel.iIndepFun f (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: Kernel, Kernel.const, Kernel.iIndepFun, Measure, Measure.dirac, iIndepFun, volume_tac
@@ -230,7 +230,7 @@ definition IndepFun
 
 中文:
 定义 IndepFun
-  签名: {β γ} {_mΩ : MeasurableSpace Ω} [MeasurableSpace β] [MeasurableSpace γ]
+  签名: {β γ} {_mΩ : 可测空间 Ω} [可测空间 β] [可测空间 γ]
   定义体: Kernel.IndepFun f g (Kernel.const Unit μ) (Measure.dirac () : Measure Unit)
 
 Depends on / 依赖: IndepFun, Kernel, Kernel.IndepFun, Kernel.const, Measure, Measure.dirac, volume_tac
@@ -262,7 +262,7 @@ lemma iIndepSets_iff
 
 中文:
 引理 iIndepSets_iff
-  条件: (π : ι -> Set (Set Ω)) (μ : Measure Ω)
+  条件: (π : ι -> 集合 (集合 Ω)) (μ : 测度 Ω)
   证明: by
   simp only [iIndepSets, Kernel.iIndepSets, ae_dirac_eq, Filter.eventually_pure, Kernel.const_apply]
 
@@ -282,8 +282,8 @@ lemma iIndepSets.meas_biInter
   proof: (iIndepSets_iff _ _).1 h s hf
 
 中文:
-引理 iIndepSets.meas_biInter
-  结论: (h : iIndepSets π μ) (s : Finset ι) {f : ι -> Set Ω}
+引理 iIndepSets.meas_bi整数er
+  结论: (h : iIndepSets π μ) (s : 有限集 ι) {f : ι -> 集合 Ω}
   证明: (iIndepSets_iff _ _).1 h s hf
 
 Depends on / 依赖: iIndepSets_iff
@@ -304,7 +304,7 @@ lemma iIndepSets.isProbabilityMeasure
 中文:
 引理 iIndepSets.isProbabilityMeasure
   条件: (h : iIndepSets π μ)
-  结论: IsProbabilityMeasure μ
+  结论: 是概率测度 μ
   证明: ⟨by simpa using h ∅ (f := fun _ => univ)⟩
 -/
 lemma iIndepSets.isProbabilityMeasure (h : iIndepSets π μ) : IsProbabilityMeasure μ :=
@@ -319,8 +319,8 @@ lemma iIndepSets.meas_iInter
   proof: by simp [← h.meas_biInter _ fun _i _ => hs _]
 
 中文:
-引理 iIndepSets.meas_iInter
-  条件: [Fintype ι] (h : iIndepSets π μ) (hs : 对任意 i, s i in π i)
+引理 iIndepSets.meas_i整数er
+  条件: [有限类型 ι] (h : iIndepSets π μ) (hs : 对任意 i, s i in π i)
   证明: by simp [← h.meas_biInter _ fun _i _ => hs _]
 
 Depends on / 依赖: h.meas_biInter, meas_biInter
@@ -339,7 +339,7 @@ lemma IndepSets_iff
 
 中文:
 引理 IndepSets_iff
-  条件: (s1 s2 : Set (Set Ω)) (μ : Measure Ω)
+  条件: (s1 s2 : 集合 (集合 Ω)) (μ : 测度 Ω)
   证明: by
   simp only [IndepSets, Kernel.IndepSets, ae_dirac_eq, Filter.eventually_pure, Kernel.const_apply]
 
@@ -360,7 +360,7 @@ lemma iIndep_iff_iIndepSets
 
 中文:
 引理 iIndep_iff_iIndepSets
-  条件: (m : ι -> MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (μ : Measure Ω)
+  条件: (m : ι -> 可测空间 Ω) {_mΩ : 可测空间 Ω} (μ : 测度 Ω)
   证明: by
   simp only [iIndep, iIndepSets, Kernel.iIndep]
 
@@ -380,7 +380,7 @@ lemma iIndep.iIndepSets'
 
 中文:
 引理 iIndep.iIndepSets'
-  结论: {m : ι -> MeasurableSpace Ω}
+  结论: {m : ι -> 可测空间 Ω}
   证明: (iIndep_iff_iIndepSets _ _).1 hμ
 
 Depends on / 依赖: iIndep_iff_iIndepSets
@@ -401,7 +401,7 @@ lemma iIndep.isProbabilityMeasure
 中文:
 引理 iIndep.isProbabilityMeasure
   条件: (h : iIndep m μ)
-  结论: IsProbabilityMeasure μ
+  结论: 是概率测度 μ
   证明: h.iIndepSets'.isProbabilityMeasure
 
 Depends on / 依赖: h.iIndepSets, iIndepSets, isProbabilityMeasure
@@ -420,7 +420,7 @@ lemma iIndep_iff
 
 中文:
 引理 iIndep_iff
-  条件: (m : ι -> MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (μ : Measure Ω)
+  条件: (m : ι -> 可测空间 Ω) {_mΩ : 可测空间 Ω} (μ : 测度 Ω)
   证明: by
   simp only [iIndep_iff_iIndepSets, iIndepSets_iff]; rfl
 
@@ -440,8 +440,8 @@ lemma iIndep.meas_biInter
   proof: (iIndep_iff _ _).1 hμ _ hs
 
 中文:
-引理 iIndep.meas_biInter
-  条件: (hμ : iIndep m μ) (hs : 对任意 i, i in S -> MeasurableSet[m i] (s i))
+引理 iIndep.meas_bi整数er
+  条件: (hμ : iIndep m μ) (hs : 对任意 i, i in S -> 可测集[m i] (s i))
   证明: (iIndep_iff _ _).1 hμ _ hs
 
 Depends on / 依赖: iIndep_iff
@@ -458,8 +458,8 @@ lemma iIndep.meas_iInter
   proof: by simp [← hμ.meas_biInter fun _ _ => hs _]
 
 中文:
-引理 iIndep.meas_iInter
-  条件: [Fintype ι] (hμ : iIndep m μ) (hs : 对任意 i, MeasurableSet[m i] (s i))
+引理 iIndep.meas_i整数er
+  条件: [有限类型 ι] (hμ : iIndep m μ) (hs : 对任意 i, 可测集[m i] (s i))
   证明: by simp [← hμ.meas_biInter fun _ _ => hs _]
 
 Depends on / 依赖: meas_biInter
@@ -478,7 +478,7 @@ lemma Indep_iff_IndepSets
 
 中文:
 引理 Indep_iff_IndepSets
-  条件: (m₁ m₂ : MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (μ : Measure Ω)
+  条件: (m₁ m₂ : 可测空间 Ω) {_mΩ : 可测空间 Ω} (μ : 测度 Ω)
   证明: by
   simp only [Indep, IndepSets, Kernel.Indep]
 
@@ -499,7 +499,7 @@ lemma Indep_iff
 
 中文:
 引理 Indep_iff
-  条件: (m₁ m₂ : MeasurableSpace Ω) {_mΩ : MeasurableSpace Ω} (μ : Measure Ω)
+  条件: (m₁ m₂ : 可测空间 Ω) {_mΩ : 可测空间 Ω} (μ : 测度 Ω)
   证明: by
   rw [Indep_iff_IndepSets]; rw [IndepSets_iff]; rfl
 
@@ -521,7 +521,7 @@ lemma iIndepSet_iff_iIndep
 
 中文:
 引理 iIndepSet_iff_iIndep
-  条件: (s : ι -> Set Ω) (μ : Measure Ω)
+  条件: (s : ι -> 集合 Ω) (μ : 测度 Ω)
   证明: by
   simp only [iIndepSet, iIndep, Kernel.iIndepSet]
 
@@ -543,7 +543,7 @@ lemma iIndepSet.isProbabilityMeasure
 中文:
 引理 iIndepSet.isProbabilityMeasure
   条件: (h : iIndepSet s μ)
-  结论: IsProbabilityMeasure μ
+  结论: 是概率测度 μ
   证明: ((iIndepSet_iff_iIndep _ _).1 h).isProbabilityMeasure
 
 Depends on / 依赖: iIndepSet_iff_iIndep, isProbabilityMeasure
@@ -562,7 +562,7 @@ lemma iIndepSet_iff
 
 中文:
 引理 iIndepSet_iff
-  条件: (s : ι -> Set Ω) (μ : Measure Ω)
+  条件: (s : ι -> 集合 Ω) (μ : 测度 Ω)
   证明: by
   simp only [iIndepSet_iff_iIndep, iIndep_iff]
 
@@ -585,7 +585,7 @@ lemma IndepSet_iff_Indep
 
 中文:
 引理 IndepSet_iff_Indep
-  条件: (s t : Set Ω) (μ : Measure Ω)
+  条件: (s t : 集合 Ω) (μ : 测度 Ω)
   证明: by
   simp only [IndepSet, Indep, Kernel.IndepSet]
 
@@ -606,7 +606,7 @@ lemma IndepSet_iff
 
 中文:
 引理 IndepSet_iff
-  条件: (s t : Set Ω) (μ : Measure Ω)
+  条件: (s t : 集合 Ω) (μ : 测度 Ω)
   证明: by
   simp only [IndepSet_iff_Indep, Indep_iff]
 
@@ -656,7 +656,7 @@ lemma iIndepSets.of_subsingleton
 
 中文:
 引理 iIndepSets.of_subsingleton
-  条件: [Subsingleton ι] {m : ι -> Set (Set Ω)} [IsProbabilityMeasure μ]
+  条件: [子单例 ι] {m : ι -> 集合 (集合 Ω)} [是概率测度 μ]
   证明: Kernel.iIndepSets.of_subsingleton
 
 @[nontriviality, simp]
@@ -679,7 +679,7 @@ lemma iIndep.of_subsingleton
 
 中文:
 引理 iIndep.of_subsingleton
-  条件: [Subsingleton ι] {m : ι -> MeasurableSpace Ω} [IsProbabilityMeasure μ]
+  条件: [子单例 ι] {m : ι -> 可测空间 Ω} [是概率测度 μ]
   证明: Kernel.iIndep.of_subsingleton
 
 @[nontriviality, simp]
@@ -700,7 +700,7 @@ lemma iIndepFun.of_subsingleton
 
 中文:
 引理 iIndepFun.of_subsingleton
-  结论: [Subsingleton ι] {β : ι -> 类型} {m : 对任意 i, MeasurableSpace (β i)}
+  结论: [子单例 ι] {β : ι -> 类型} {m : 对任意 i, 可测空间 (β i)}
   证明: Kernel.iIndepFun.of_subsingleton
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.of_subsingleton, iIndepFun, of_subsingleton
@@ -719,7 +719,7 @@ lemma iIndepFun.iIndep
 
 中文:
 引理 iIndepFun.iIndep
-  结论: {m : 对任意 i, MeasurableSpace (κ i)} {f : 对任意 x : ι, Ω -> κ x}
+  结论: {m : 对任意 i, 可测空间 (κ i)} {f : 对任意 x : ι, Ω -> κ x}
   证明: hf
 
 Depends on / 依赖: FractionRing, IsFractionRing, IsFractionRing.injective, IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff.mp, IsIntegrallyClosedIn, UniqueFactorizationMonoid, UniqueFactorizationMonoid.instIsIntegrallyClosed, hp.coeff, injective, instIsIntegrallyClosed, isIntegral_iff, isIntegrallyClosedIn_iff, isIntegrallyClosedIn_iff.mpr, lifts_iff_coeff_lifts, map_injective, of_isIntegrallyClosed_of_isIntegrallyClosedIn
@@ -761,8 +761,8 @@ lemma iIndepFun.meas_biInter
   proof: hf.iIndep.meas_biInter hs
 
 中文:
-引理 iIndepFun.meas_biInter
-  结论: {m : 对任意 i, MeasurableSpace (κ i)} {f : 对任意 x : ι, Ω -> κ x}
+引理 iIndepFun.meas_bi整数er
+  结论: {m : 对任意 i, 可测空间 (κ i)} {f : 对任意 x : ι, Ω -> κ x}
   证明: hf.iIndep.meas_biInter hs
 
 Depends on / 依赖: hf.iIndep.meas_biInter, iIndep, meas_biInter
@@ -780,8 +780,8 @@ lemma iIndepFun.meas_iInter
   proof: hf.iIndep.meas_iInter hs
 
 中文:
-引理 iIndepFun.meas_iInter
-  结论: [Fintype ι] {m : 对任意 i, MeasurableSpace (κ i)} {f : 对任意 x : ι, Ω -> κ x}
+引理 iIndepFun.meas_i整数er
+  结论: [有限类型 ι] {m : 对任意 i, 可测空间 (κ i)} {f : 对任意 x : ι, Ω -> κ x}
   证明: hf.iIndep.meas_iInter hs
 
 Depends on / 依赖: hf.iIndep.meas_iInter, iIndep, meas_iInter
@@ -801,7 +801,7 @@ lemma IndepFun_iff_Indep
 
 中文:
 引理 IndepFun_iff_Indep
-  结论: [mβ : MeasurableSpace β]
+  结论: [mβ : 可测空间 β]
   证明: by
   simp only [IndepFun, Indep, Kernel.IndepFun]
 
@@ -823,7 +823,7 @@ lemma IndepFun_iff
 
 中文:
 引理 IndepFun_iff
-  结论: {β γ} [mβ : MeasurableSpace β] [mγ : MeasurableSpace γ]
+  结论: {β γ} [mβ : 可测空间 β] [mγ : 可测空间 γ]
   证明: by
   rw [IndepFun_iff_Indep]; rw [Indep_iff]
 
@@ -845,7 +845,7 @@ lemma IndepFun.meas_inter
 
 中文:
 引理 IndepFun.meas_inter
-  结论: [mβ : MeasurableSpace β] [mγ : MeasurableSpace γ] {f : Ω -> β} {g : Ω -> γ}
+  结论: [mβ : 可测空间 β] [mγ : 可测空间 γ] {f : Ω -> β} {g : Ω -> γ}
   证明: (IndepFun_iff _ _ _).1 hfg _ _ hs ht
 
 Depends on / 依赖: IndepFun_iff
@@ -866,7 +866,7 @@ lemma iIndepSets.precomp
 
 中文:
 引理 iIndepSets.precomp
-  条件: (hg : Function.Injective g) (h : iIndepSets π μ)
+  条件: (hg : 函数.单射 g) (h : iIndepSets π μ)
   证明: Kernel.iIndepSets.precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets.precomp, iIndepSets, precomp
@@ -885,7 +885,7 @@ lemma iIndepSets.of_precomp
 
 中文:
 引理 iIndepSets.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndepSets (π ∘ g) μ)
+  条件: (hg : 函数.满射 g) (h : iIndepSets (π ∘ g) μ)
   证明: Kernel.iIndepSets.of_precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets.of_precomp, iIndepSets, of_precomp
@@ -904,7 +904,7 @@ lemma iIndepSets_precomp_of_bijective
 
 中文:
 引理 iIndepSets_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: Kernel.iIndepSets_precomp_of_bijective hg
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets_precomp_of_bijective, iIndepSets_precomp_of_bijective
@@ -923,7 +923,7 @@ lemma iIndep.precomp
 
 中文:
 引理 iIndep.precomp
-  条件: (hg : Function.Injective g) (h : iIndep m μ)
+  条件: (hg : 函数.单射 g) (h : iIndep m μ)
   证明: Kernel.iIndep.precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndep.precomp, iIndep, precomp
@@ -942,7 +942,7 @@ lemma iIndep.of_precomp
 
 中文:
 引理 iIndep.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndep (m ∘ g) μ)
+  条件: (hg : 函数.满射 g) (h : iIndep (m ∘ g) μ)
   证明: Kernel.iIndep.of_precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndep.of_precomp, iIndep, of_precomp
@@ -961,7 +961,7 @@ lemma iIndep_precomp_of_bijective
 
 中文:
 引理 iIndep_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: Kernel.iIndep_precomp_of_bijective hg
 
 Depends on / 依赖: Kernel, Kernel.iIndep_precomp_of_bijective, iIndep_precomp_of_bijective
@@ -980,7 +980,7 @@ lemma iIndepSet.precomp
 
 中文:
 引理 iIndepSet.precomp
-  条件: (hg : Function.Injective g) (h : iIndepSet s μ)
+  条件: (hg : 函数.单射 g) (h : iIndepSet s μ)
   证明: Kernel.iIndepSet.precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.precomp, iIndepSet, precomp
@@ -999,7 +999,7 @@ lemma iIndepSet.of_precomp
 
 中文:
 引理 iIndepSet.of_precomp
-  条件: (hg : Function.Surjective g) (h : iIndepSet (s ∘ g) μ)
+  条件: (hg : 函数.满射 g) (h : iIndepSet (s ∘ g) μ)
   证明: Kernel.iIndepSet.of_precomp hg h
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.of_precomp, iIndepSet, of_precomp
@@ -1018,7 +1018,7 @@ lemma iIndepSet_precomp_of_bijective
 
 中文:
 引理 iIndepSet_precomp_of_bijective
-  条件: (hg : Function.Bijective g)
+  条件: (hg : 函数.双射 g)
   证明: Kernel.iIndepSet_precomp_of_bijective hg
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet_precomp_of_bijective, iIndepSet_precomp_of_bijective
@@ -1039,7 +1039,7 @@ lemma iIndepFun.precomp
 
 中文:
 引理 iIndepFun.precomp
-  条件: (hg : g.Injective) (h : iIndepFun f μ)
+  条件: (hg : g.单射) (h : iIndepFun f μ)
   证明: Kernel.iIndepFun.precomp hg h
 -/
 lemma iIndepFun.precomp (hg : g.Injective) (h : iIndepFun f μ) :
@@ -1056,7 +1056,7 @@ lemma iIndepFun.of_precomp
 
 中文:
 引理 iIndepFun.of_precomp
-  结论: (hg : g.Surjective)
+  结论: (hg : g.满射)
   证明: Kernel.iIndepFun.of_precomp hg h
 
 Depends on / 依赖: iIndepFun
@@ -1075,7 +1075,7 @@ lemma iIndepFun_precomp_of_bijective
 
 中文:
 引理 iIndepFun_precomp_of_bijective
-  条件: (hg : g.Bijective)
+  条件: (hg : g.双射)
   证明: Kernel.iIndepFun_precomp_of_bijective hg
 
 Depends on / 依赖: iIndepFun
@@ -1105,7 +1105,7 @@ theorem IndepSets.symm
 
 中文:
 定理 IndepSets.symm
-  条件: {s₁ s₂ : Set (Set Ω)} (h : IndepSets s₁ s₂ μ)
+  条件: {s₁ s₂ : 集合 (集合 Ω)} (h : IndepSets s₁ s₂ μ)
   结论: IndepSets s₂ s₁ μ
   证明: Kernel.IndepSets.symm h
 
@@ -1147,7 +1147,7 @@ theorem indep_bot_right
 
 中文:
 定理 indep_bot_right
-  条件: [IsZeroOrProbabilityMeasure μ]
+  条件: [是ZeroOrProbabilityMeasure μ]
   结论: Indep m' ⊥ μ
   证明: Kernel.indep_bot_right m'
 
@@ -1167,7 +1167,7 @@ theorem indep_bot_left
 
 中文:
 定理 indep_bot_left
-  条件: [IsZeroOrProbabilityMeasure μ]
+  条件: [是ZeroOrProbabilityMeasure μ]
   结论: Indep ⊥ m' μ
   证明: (indep_bot_right m').symm
 
@@ -1186,7 +1186,7 @@ theorem indepSet_empty_right
 
 中文:
 定理 indepSet_empty_right
-  条件: [IsZeroOrProbabilityMeasure μ] (s : Set Ω)
+  条件: [是ZeroOrProbabilityMeasure μ] (s : 集合 Ω)
   结论: IndepSet s ∅ μ
   证明: Kernel.indepSet_empty_right s
 
@@ -1206,7 +1206,7 @@ theorem indepSet_empty_left
 
 中文:
 定理 indepSet_empty_left
-  条件: [IsZeroOrProbabilityMeasure μ] (s : Set Ω)
+  条件: [是ZeroOrProbabilityMeasure μ] (s : 集合 Ω)
   结论: IndepSet ∅ s μ
   证明: Kernel.indepSet_empty_left s
 
@@ -1225,7 +1225,7 @@ theorem indepSets_of_indepSets_of_le_left
 
 中文:
 定理 indepSets_of_indepSets_of_le_left
-  结论: {s₁ s₂ s₃ : Set (Set Ω)}
+  结论: {s₁ s₂ s₃ : 集合 (集合 Ω)}
   证明: Kernel.indepSets_of_indepSets_of_le_left h_indep h31
 
 Depends on / 依赖: Kernel, Kernel.indepSets_of_indepSets_of_le_left, h_indep, indepSets_of_indepSets_of_le_left
@@ -1245,7 +1245,7 @@ theorem indepSets_of_indepSets_of_le_right
 
 中文:
 定理 indepSets_of_indepSets_of_le_right
-  结论: {s₁ s₂ s₃ : Set (Set Ω)}
+  结论: {s₁ s₂ s₃ : 集合 (集合 Ω)}
   证明: Kernel.indepSets_of_indepSets_of_le_right h_indep h32
 
 Depends on / 依赖: Kernel, Kernel.indepSets_of_indepSets_of_le_right, h_indep, indepSets_of_indepSets_of_le_right
@@ -1322,7 +1322,7 @@ theorem iIndep_of_iIndep_of_le
 
 中文:
 定理 iIndep_of_iIndep_of_le
-  结论: {m₁ m₂ : ι -> MeasurableSpace Ω} (h_indep : iIndep m₂ μ)
+  结论: {m₁ m₂ : ι -> 可测空间 Ω} (h_indep : iIndep m₂ μ)
   证明: Kernel.iIndep_of_iIndep_of_le h_indep h_le
 
 Depends on / 依赖: Kernel, Kernel.iIndep_of_iIndep_of_le, h_indep, h_le, iIndep_of_iIndep_of_le
@@ -1343,7 +1343,7 @@ theorem IndepSets.union
 
 中文:
 定理 IndepSets.union
-  条件: {s₁ s₂ s' : Set (Set Ω)} (h₁ : IndepSets s₁ s' μ) (h₂ : IndepSets s₂ s' μ)
+  条件: {s₁ s₂ s' : 集合 (集合 Ω)} (h₁ : IndepSets s₁ s' μ) (h₂ : IndepSets s₂ s' μ)
   证明: Kernel.IndepSets.union h₁ h₂
 
 @[simp]
@@ -1365,7 +1365,7 @@ theorem IndepSets.union_iff
 
 中文:
 定理 IndepSets.union_iff
-  条件: {s₁ s₂ s' : Set (Set Ω)}
+  条件: {s₁ s₂ s' : 集合 (集合 Ω)}
   证明: Kernel.IndepSets.union_iff
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.union_iff, union_iff
@@ -1384,7 +1384,7 @@ theorem IndepSets.iUnion
 
 中文:
 定理 IndepSets.iUnion
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)}
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)}
   证明: Kernel.IndepSets.iUnion hyp
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.iUnion, iUnion
@@ -1404,7 +1404,7 @@ theorem IndepSets.biUnion
 
 中文:
 定理 IndepSets.biUnion
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)}
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)}
   证明: Kernel.IndepSets.biUnion hyp
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.biUnion, biUnion
@@ -1424,7 +1424,7 @@ theorem IndepSets.inter
 
 中文:
 定理 IndepSets.inter
-  条件: {s₁ s' : Set (Set Ω)} (s₂ : Set (Set Ω)) (h₁ : IndepSets s₁ s' μ)
+  条件: {s₁ s' : 集合 (集合 Ω)} (s₂ : 集合 (集合 Ω)) (h₁ : IndepSets s₁ s' μ)
   证明: Kernel.IndepSets.inter s₂ h₁
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.inter
@@ -1442,8 +1442,8 @@ theorem IndepSets.iInter
   proof: Kernel.IndepSets.iInter h
 
 中文:
-定理 IndepSets.iInter
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)}
+定理 IndepSets.i整数er
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)}
   证明: Kernel.IndepSets.iInter h
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.iInter, iInter
@@ -1462,8 +1462,8 @@ theorem IndepSets.bInter
   proof: Kernel.IndepSets.bInter h
 
 中文:
-定理 IndepSets.bInter
-  结论: {s : ι -> Set (Set Ω)} {s' : Set (Set Ω)}
+定理 IndepSets.b整数er
+  结论: {s : ι -> 集合 (集合 Ω)} {s' : 集合 (集合 Ω)}
   证明: Kernel.IndepSets.bInter h
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.bInter, bInter
@@ -1485,7 +1485,7 @@ theorem indepSets_singleton_iff
 
 中文:
 定理 indepSets_singleton_iff
-  条件: {s t : Set Ω}
+  条件: {s t : 集合 Ω}
   证明: by
   simp only [IndepSets, Kernel.indepSets_singleton_iff, ae_dirac_eq, Filter.eventually_pure,
     Kernel.const_apply]
@@ -1510,7 +1510,7 @@ lemma indepSets_iff_singleton_indepSets
 
 中文:
 引理 indepSets_iff_singleton_indepSets
-  条件: {𝒜 ℬ : Set (Set Ω)}
+  条件: {𝒜 ℬ : 集合 (集合 Ω)}
   证明: indepSets_of_indepSets_of_le_left h (Set.singleton_subset_iff.2 hA)
   mpr h := by
     rw [← 𝒜.biUnion_of_singleton]
@@ -1544,7 +1544,7 @@ theorem iIndepSets.indepSets
 
 中文:
 定理 iIndepSets.indepSets
-  结论: {s : ι -> Set (Set Ω)}
+  结论: {s : ι -> 集合 (集合 Ω)}
   证明: Kernel.iIndepSets.indepSets h_indep hij
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets.indepSets, h_indep, iIndepSets, indepSets
@@ -1633,7 +1633,7 @@ theorem Indep.indepSets
 
 中文:
 定理 Indep.indepSets
-  结论: {s1 s2 : Set (Set Ω)}
+  结论: {s1 s2 : 集合 (集合 Ω)}
   证明: Kernel.Indep.indepSets h_indep
 
 Depends on / 依赖: Kernel, Kernel.Indep.indepSets, h_indep, indepSets
@@ -1660,7 +1660,7 @@ theorem IndepSets.indep
 
 中文:
 定理 IndepSets.indep
-  结论: [IsZeroOrProbabilityMeasure μ]
+  结论: [是ZeroOrProbabilityMeasure μ]
   证明: Kernel.IndepSets.indep h1 h2 hp1 hp2 hpm1 hpm2 hyp
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.indep
@@ -1682,7 +1682,7 @@ theorem IndepSets.indep'
 
 中文:
 定理 IndepSets.indep'
-  结论: [IsZeroOrProbabilityMeasure μ]
+  结论: [是ZeroOrProbabilityMeasure μ]
   证明: Kernel.IndepSets.indep' hp1m hp2m hp1 hp2 hyp
 
 Depends on / 依赖: IndepSets, Kernel, Kernel.IndepSets.indep
@@ -1702,8 +1702,8 @@ theorem indepSets_piiUnionInter_of_disjoint
   proof: Kernel.indepSets_piiUnionInter_of_disjoint h_indep hST
 
 中文:
-定理 indepSets_piiUnionInter_of_disjoint
-  结论: {s : ι -> Set (Set Ω)}
+定理 indepSets_piiUnion整数er_of_disjoint
+  结论: {s : ι -> 集合 (集合 Ω)}
   证明: Kernel.indepSets_piiUnionInter_of_disjoint h_indep hST
 
 Depends on / 依赖: Kernel, Kernel.indepSets_piiUnionInter_of_disjoint, h_indep, indepSets_piiUnionInter_of_disjoint
@@ -1723,7 +1723,7 @@ theorem iIndepSet.indep_generateFrom_of_disjoint
 
 中文:
 定理 iIndepSet.indep_generateFrom_of_disjoint
-  结论: {s : ι -> Set Ω}
+  结论: {s : ι -> 集合 Ω}
   证明: Kernel.iIndepSet.indep_generateFrom_of_disjoint hsm hs S T hST
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.indep_generateFrom_of_disjoint, iIndepSet, indep_generateFrom_of_disjoint
@@ -1780,7 +1780,7 @@ theorem iIndepSet.indep_generateFrom_lt
 
 中文:
 定理 iIndepSet.indep_generateFrom_lt
-  结论: [Preorder ι] {s : ι -> Set Ω}
+  结论: [预序 ι] {s : ι -> 集合 Ω}
   证明: Kernel.iIndepSet.indep_generateFrom_lt hsm hs i
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.indep_generateFrom_lt, iIndepSet, indep_generateFrom_lt
@@ -1800,7 +1800,7 @@ theorem iIndepSet.indep_generateFrom_le
 
 中文:
 定理 iIndepSet.indep_generateFrom_le
-  结论: [Preorder ι]
+  结论: [预序 ι]
   证明: Kernel.iIndepSet.indep_generateFrom_le hsm hs i hk
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.indep_generateFrom_le, iIndepSet, indep_generateFrom_le
@@ -1821,7 +1821,7 @@ theorem iIndepSet.indep_generateFrom_le_nat
 
 中文:
 定理 iIndepSet.indep_generateFrom_le_nat
-  结论: {s : 自然数 -> Set Ω}
+  结论: {s : 自然数 -> 集合 Ω}
   证明: Kernel.iIndepSet.indep_generateFrom_le_nat hsm hs n
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.indep_generateFrom_le_nat, iIndepSet, indep_generateFrom_le_nat
@@ -1841,7 +1841,7 @@ theorem indep_iSup_of_monotone
 
 中文:
 定理 indep_iSup_of_monotone
-  结论: [SemilatticeSup ι] [IsZeroOrProbabilityMeasure μ]
+  结论: [SemilatticeSup ι] [是ZeroOrProbabilityMeasure μ]
   证明: Kernel.indep_iSup_of_monotone h_indep h_le h_le' hm
 
 Depends on / 依赖: Kernel, Kernel.indep_iSup_of_monotone, h_indep, h_le, indep_iSup_of_monotone
@@ -1861,7 +1861,7 @@ theorem indep_iSup_of_antitone
 
 中文:
 定理 indep_iSup_of_antitone
-  结论: [SemilatticeInf ι] [IsZeroOrProbabilityMeasure μ]
+  结论: [SemilatticeInf ι] [是ZeroOrProbabilityMeasure μ]
   证明: Kernel.indep_iSup_of_antitone h_indep h_le h_le' hm
 
 Depends on / 依赖: Kernel, Kernel.indep_iSup_of_antitone, h_indep, h_le, indep_iSup_of_antitone
@@ -1880,8 +1880,8 @@ theorem iIndepSets.piiUnionInter_of_notMem
   proof: Kernel.iIndepSets.piiUnionInter_of_notMem hp_ind haS
 
 中文:
-定理 iIndepSets.piiUnionInter_of_notMem
-  结论: {π : ι -> Set (Set Ω)} {a : ι} {S : Finset ι}
+定理 iIndepSets.piiUnion整数er_of_notMem
+  结论: {π : ι -> 集合 (集合 Ω)} {a : ι} {S : 有限集 ι}
   证明: Kernel.iIndepSets.piiUnionInter_of_notMem hp_ind haS
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets.piiUnionInter_of_notMem, hp_ind, iIndepSets, piiUnionInter_of_notMem
@@ -1934,7 +1934,7 @@ theorem indepSet_iff_indepSets_singleton
 
 中文:
 定理 indepSet_iff_indepSets_singleton
-  结论: (hs_meas : MeasurableSet s)
+  结论: (hs_meas : 可测集 s)
   证明: Kernel.indepSet_iff_indepSets_singleton hs_meas ht_meas _ _
 
 Depends on / 依赖: IndepSet, IndepSets, IsZeroOrProbabilityMeasure, Kernel, Kernel.indepSet_iff_indepSets_singleton, hs_meas, ht_meas, indepSet_iff_indepSets_singleton, volume_tac
@@ -1954,7 +1954,7 @@ theorem indepSet_iff_measure_inter_eq_mul
 
 中文:
 定理 indepSet_iff_measure_inter_eq_mul
-  结论: (hs_meas : MeasurableSet s)
+  结论: (hs_meas : 可测集 s)
   证明: (indepSet_iff_indepSets_singleton hs_meas ht_meas μ).trans indepSets_singleton_iff
 
 Depends on / 依赖: IndepSet, IsZeroOrProbabilityMeasure, hs_meas, ht_meas, indepSet_iff_indepSets_singleton, indepSets_singleton_iff, volume_tac
@@ -1975,7 +1975,7 @@ lemma IndepSet.measure_inter_eq_mul
 
 中文:
 引理 IndepSet.measure_inter_eq_mul
-  条件: {μ : Measure Ω} (h : IndepSet s t μ)
+  条件: {μ : 测度 Ω} (h : IndepSet s t μ)
   证明: by
   simpa using Kernel.IndepSet.measure_inter_eq_mul _ _ h
 
@@ -2034,8 +2034,8 @@ theorem indep_iff_forall_indepSet
   proof: Kernel.indep_iff_forall_indepSet m₁ m₂ _ _
 
 中文:
-定理 indep_iff_forall_indepSet
-  条件: (μ : Measure Ω)
+定理 indep_iff_对任意_indepSet
+  条件: (μ : 测度 Ω)
   证明: Kernel.indep_iff_forall_indepSet m₁ m₂ _ _
 
 Depends on / 依赖: Kernel, Kernel.indep_iff_forall_indepSet, indep_iff_forall_indepSet
@@ -2056,7 +2056,7 @@ alias ⟨_, iIndepSet.iIndep_comap_mem⟩ := iIndep_comap_mem_iff
 
 中文:
 定理 iIndep_comap_mem_iff
-  条件: {f : ι -> Set Ω}
+  条件: {f : ι -> 集合 Ω}
   证明: Kernel.iIndep_comap_mem_iff
 
 alias ⟨_, iIndepSet.iIndep_comap_mem⟩ := iIndep_comap_mem_iff
@@ -2081,7 +2081,7 @@ theorem iIndepSets_singleton_iff
 
 中文:
 定理 iIndepSets_singleton_iff
-  条件: {s : ι -> Set Ω}
+  条件: {s : ι -> 集合 Ω}
   证明: by
   simp_rw [iIndepSets, Kernel.iIndepSets_singleton_iff, ae_dirac_eq, Filter.eventually_pure,
     Kernel.const_apply]
@@ -2103,8 +2103,8 @@ theorem iIndepSet.meas_biInter
   simpa using Kernel.iIndepSet.meas_biInter h s
 
 中文:
-定理 iIndepSet.meas_biInter
-  条件: {f : ι -> Set Ω} (h : iIndepSet f μ) (s : Finset ι)
+定理 iIndepSet.meas_bi整数er
+  条件: {f : ι -> 集合 Ω} (h : iIndepSet f μ) (s : 有限集 ι)
   证明: by
   simpa using Kernel.iIndepSet.meas_biInter h s
 
@@ -2124,7 +2124,7 @@ theorem iIndepSet_iff_iIndepSets_singleton
 
 中文:
 定理 iIndepSet_iff_iIndepSets_singleton
-  条件: {f : ι -> Set Ω} (hf : 对任意 i, MeasurableSet (f i))
+  条件: {f : ι -> 集合 Ω} (hf : 对任意 i, 可测集 (f i))
   证明: Kernel.iIndepSet_iff_iIndepSets_singleton hf
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet_iff_iIndepSets_singleton, iIndepSet_iff_iIndepSets_singleton
@@ -2144,8 +2144,8 @@ theorem iIndepSet_iff_meas_biInter
     Kernel.const_apply]
 
 中文:
-定理 iIndepSet_iff_meas_biInter
-  条件: {f : ι -> Set Ω} (hf : 对任意 i, MeasurableSet (f i))
+定理 iIndepSet_iff_meas_bi整数er
+  条件: {f : ι -> 集合 Ω} (hf : 对任意 i, 可测集 (f i))
   证明: by
   simp_rw [iIndepSet, Kernel.iIndepSet_iff_meas_biInter hf, ae_dirac_eq, Filter.eventually_pure,
     Kernel.const_apply]
@@ -2167,7 +2167,7 @@ theorem iIndepSets.iIndepSet_of_mem
 
 中文:
 定理 iIndepSets.iIndepSet_of_mem
-  结论: {π : ι -> Set (Set Ω)} {f : ι -> Set Ω}
+  结论: {π : ι -> 集合 (集合 Ω)} {f : ι -> 集合 Ω}
   证明: Kernel.iIndepSets.iIndepSet_of_mem hfπ hf hπ
 
 Depends on / 依赖: Kernel, Kernel.iIndepSets.iIndepSet_of_mem, iIndepSet_of_mem, iIndepSets
@@ -2202,7 +2202,7 @@ alias ⟨IndepFun.measure_inter_preimage_eq_mul, _⟩ := indepFun_iff_measure_in
 
 中文:
 定理 indepFun_iff_measure_inter_preimage_eq_mul
-  结论: {mβ : MeasurableSpace β}
+  结论: {mβ : 可测空间 β}
   证明: by
   simp only [IndepFun, Kernel.indepFun_iff_measure_inter_preimage_eq_mul, ae_dirac_eq,
     Filter.eventually_pure, Kernel.const_apply]
@@ -2270,7 +2270,7 @@ nonrec lemma iIndepFun.comp {β γ : ι -> Type*} {mβ : forall i, MeasurableSpa
 
 中文:
 定理 iIndepFun_congr
-  结论: {β : ι -> 类型} {mβ : 对任意 i, MeasurableSpace (β i)}
+  结论: {β : ι -> 类型} {mβ : 对任意 i, 可测空间 (β i)}
   证明: Kernel.iIndepFun_congr' (by simp [h])
 
 alias ⟨iIndepFun.congr, _⟩ := iIndepFun_congr
@@ -2309,7 +2309,7 @@ theorem indepFun_iff_indepSet_preimage
 
 中文:
 定理 indepFun_iff_indepSet_preimage
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   simp only [IndepFun, IndepSet, Kernel.indepFun_iff_indepSet_preimage hf hg]
 
@@ -2336,7 +2336,7 @@ theorem indepFun_iff_map_prod_eq_prod_map_map'
 
 中文:
 定理 indepFun_iff_map_prod_eq_prod_map_map'
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   rw [indepFun_iff_measure_inter_preimage_eq_mul]
   have h₀ {s : Set β} {t : Set β'} (hs : MeasurableSet s) (ht : MeasurableSet t) :
@@ -2379,7 +2379,7 @@ nonrec theorem IndepFun.symm {_ : MeasurableSpace β} {_ : MeasurableSpace β'}
 
 中文:
 定理 indepFun_iff_map_prod_eq_prod_map_map
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   apply indepFun_iff_map_prod_eq_prod_map_map' hf hg <;> apply IsFiniteMeasure.toSigmaFinite
 
@@ -2413,7 +2413,7 @@ theorem IndepFun.congr
 
 中文:
 定理 IndepFun.congr
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: by
   refine Kernel.IndepFun.congr' hfg ?_ ?_ <;> simpa
 
@@ -2445,7 +2445,7 @@ lemma indepFun_prod
 
 中文:
 引理 indepFun_prod
-  条件: (mX : Measurable X) (mY : Measurable Y)
+  条件: (mX : 可测 X) (mY : 可测 Y)
   证明: by
 .2 ?_ refine indepFun_iff_map_prod_eq_prod_map_map (by fun_prop) (by fun_prop)
 .symm convert! Measure.map_prod_map μ ν mX mY
@@ -2481,7 +2481,7 @@ lemma indepFun_prod₀
 
 中文:
 引理 indepFun_prod₀
-  条件: (mX : AEMeasurable X μ) (mY : AEMeasurable Y ν)
+  条件: (mX : 几乎处处可测 X μ) (mY : 几乎处处可测 Y ν)
   证明: by
   have : (fun ω => mX.mk X ω.1) ⟂ᵢ[μ.prod ν] (fun ω => mY.mk Y ω.2) :=
     indepFun_prod mX.measurable_mk mY.measurable_mk
@@ -2521,7 +2521,7 @@ theorem IndepFun.comp
 
 中文:
 定理 IndepFun.comp
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'}
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'}
   证明: Kernel.IndepFun.comp hfg hφ hψ
 
 Depends on / 依赖: IndepFun, Kernel, Kernel.IndepFun.comp
@@ -2542,7 +2542,7 @@ theorem IndepFun.comp₀
 
 中文:
 定理 IndepFun.comp₀
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'}
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'}
   证明: Kernel.IndepFun.comp₀ hfg (by simp [hf]) (by simp [hg]) (by simp [hφ]) (by simp [hψ])
 
 Depends on / 依赖: IndepFun, Kernel, Kernel.IndepFun.comp
@@ -2564,7 +2564,7 @@ lemma indepFun_const_left
 
 中文:
 引理 indepFun_const_left
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: Kernel.indepFun_const_left c X
 
 Depends on / 依赖: Kernel, Kernel.indepFun_const_left, indepFun_const_left
@@ -2584,7 +2584,7 @@ lemma indepFun_const_right
 
 中文:
 引理 indepFun_const_right
-  结论: {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
+  结论: {mβ : 可测空间 β} {mβ' : 可测空间 β'}
   证明: Kernel.indepFun_const_right X c
 
 Depends on / 依赖: Kernel, Kernel.indepFun_const_right, indepFun_const_right
@@ -2604,7 +2604,7 @@ theorem IndepFun.neg_right
 
 中文:
 定理 IndepFun.neg_right
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β']
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'} [取负 β']
   证明: hfg.comp measurable_id measurable_neg
 
 Depends on / 依赖: hfg.comp, measurable_id, measurable_neg
@@ -2623,7 +2623,7 @@ theorem IndepFun.neg_left
 
 中文:
 定理 IndepFun.neg_left
-  结论: {_mβ : MeasurableSpace β} {_mβ' : MeasurableSpace β'} [Neg β]
+  结论: {_mβ : 可测空间 β} {_mβ' : 可测空间 β'} [取负 β]
   证明: hfg.comp measurable_neg measurable_id
 
 Depends on / 依赖: hfg.comp, measurable_id, measurable_neg
@@ -2647,7 +2647,7 @@ lemma iIndepFun.isProbabilityMeasure
 中文:
 引理 iIndepFun.isProbabilityMeasure
   条件: (h : iIndepFun f μ)
-  结论: IsProbabilityMeasure μ
+  结论: 是概率测度 μ
   证明: ⟨by simpa using h.meas_biInter (S := ∅) (s := fun _ => univ)⟩
 
 Depends on / 依赖: h.meas_biInter, meas_biInter
@@ -2665,7 +2665,7 @@ lemma iIndepFun.indepFun_finset
 
 中文:
 引理 iIndepFun.indepFun_finset
-  结论: (S T : Finset ι) (hST : Disjoint S T) (hf_Indep : iIndepFun f μ)
+  结论: (S T : 有限集 ι) (hST : Disjoint S T) (hf_Indep : iIndepFun f μ)
   证明: Kernel.iIndepFun.indepFun_finset S T hST hf_Indep hf_meas
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_finset, hf_Indep, hf_meas, iIndepFun, indepFun_finset
@@ -2685,7 +2685,7 @@ lemma iIndepFun.indepFun_finset₀
 
 中文:
 引理 iIndepFun.indepFun_finset₀
-  结论: (S T : Finset ι) (hST : Disjoint S T) (hf_Indep : iIndepFun f μ)
+  结论: (S T : 有限集 ι) (hST : Disjoint S T) (hf_Indep : iIndepFun f μ)
   证明: Kernel.iIndepFun.indepFun_finset₀ S T hST hf_Indep (by simp [hf_meas])
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_finset, hf_Indep, hf_meas, iIndepFun
@@ -2705,7 +2705,7 @@ lemma iIndepFun.indepFun_prodMk
 
 中文:
 引理 iIndepFun.indepFun_prodMk
-  结论: (hf_Indep : iIndepFun f μ) (hf_meas : 对任意 i, Measurable (f i))
+  结论: (hf_Indep : iIndepFun f μ) (hf_meas : 对任意 i, 可测 (f i))
   证明: Kernel.iIndepFun.indepFun_prodMk hf_Indep hf_meas i j k hik hjk
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_prodMk, hf_Indep, hf_meas, iIndepFun, indepFun_prodMk
@@ -2725,7 +2725,7 @@ lemma iIndepFun.indepFun_prodMk₀
 
 中文:
 引理 iIndepFun.indepFun_prodMk₀
-  结论: (hf_Indep : iIndepFun f μ) (hf_meas : 对任意 i, AEMeasurable (f i) μ)
+  结论: (hf_Indep : iIndepFun f μ) (hf_meas : 对任意 i, 几乎处处可测 (f i) μ)
   证明: Kernel.iIndepFun.indepFun_prodMk₀ hf_Indep (by simp [hf_meas]) i j k hik hjk
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_prodMk, hf_Indep, hf_meas, iIndepFun
@@ -2745,7 +2745,7 @@ lemma iIndepFun.indepFun_prodMk_prodMk
 
 中文:
 引理 iIndepFun.indepFun_prodMk_prodMk
-  结论: (h_indep : iIndepFun f μ) (hf : 对任意 i, Measurable (f i))
+  结论: (h_indep : iIndepFun f μ) (hf : 对任意 i, 可测 (f i))
   证明: Kernel.iIndepFun.indepFun_prodMk_prodMk h_indep hf i j k l hik hil hjk hjl
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_prodMk_prodMk, h_indep, iIndepFun, indepFun_prodMk_prodMk
@@ -2765,7 +2765,7 @@ lemma iIndepFun.indepFun_prodMk_prodMk₀
 
 中文:
 引理 iIndepFun.indepFun_prodMk_prodMk₀
-  结论: (h_indep : iIndepFun f μ) (hf : 对任意 i, AEMeasurable (f i) μ)
+  结论: (h_indep : iIndepFun f μ) (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: Kernel.iIndepFun.indepFun_prodMk_prodMk₀ h_indep (by simp [hf]) i j k l hik hil hjk hjl
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_prodMk_prodMk, h_indep, iIndepFun
@@ -2793,7 +2793,7 @@ alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff
 
 中文:
 引理 iIndepFun_iff_finset
-  结论: iIndepFun f μ ↔ 对任意 s : Finset ι, iIndepFun (s.restrict f) μ where
+  结论: iIndepFun f μ ↔ 对任意 s : 有限集 ι, iIndepFun (s.restrict f) μ where
   证明: h.precomp (g := ((↑) : s -> ι)) Subtype.val_injective
   mpr h := by
     rw [iIndepFun_iff]
@@ -2832,7 +2832,7 @@ theorem iIndepFun.map_fun_eq_pi_map
 
 中文:
 定理 iIndepFun.map_fun_eq_pi_map
-  结论: [Fintype ι] {β : ι -> 类型}
+  结论: [有限类型 ι] {β : ι -> 类型}
   证明: by
   have := h.isProbabilityMeasure
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at h
@@ -2878,7 +2878,7 @@ theorem iIndepFun_iff_map_fun_eq_pi_map
 
 中文:
 定理 iIndepFun_iff_map_fun_eq_pi_map
-  结论: [Fintype ι] {β : ι -> 类型}
+  结论: [有限类型 ι] {β : ι -> 类型}
   证明: by
   refine ⟨iIndepFun.map_fun_eq_pi_map hf, ?_⟩
   classical
@@ -2934,7 +2934,7 @@ lemma iIndepFun_pi
 
 中文:
 引理 iIndepFun_pi
-  条件: (mX : 对任意 i, AEMeasurable (X i) (μ i))
+  条件: (mX : 对任意 i, 几乎处处可测 (X i) (μ i))
   证明: by
 .2 ?_ refine iIndepFun_iff_map_fun_eq_pi_map ?_
   · exact fun i => (mX i).comp_quasiMeasurePreserving (Measure.quasiMeasurePreserving_eval _ i)
@@ -3403,7 +3403,7 @@ theorem iIndepSet.iIndepFun_indicator
 
 中文:
 定理 iIndepSet.iIndepFun_indicator
-  结论: [Zero β] [One β] {m : MeasurableSpace β} {s : ι -> Set Ω}
+  结论: [零 β] [幺 β] {m : 可测空间 β} {s : ι -> 集合 Ω}
   证明: Kernel.iIndepSet.iIndepFun_indicator hs
 
 Depends on / 依赖: Kernel, Kernel.iIndepSet.iIndepFun_indicator, iIndepFun_indicator, iIndepSet
@@ -3423,7 +3423,7 @@ lemma Indep.indicator_indepFun
 
 中文:
 引理 Indep.indicator_indepFun
-  结论: {m : MeasurableSpace Ω} {M 𝓧 : 类型}
+  结论: {m : 可测空间 Ω} {M 𝓧 : 类型}
   证明: Kernel.Indep.indicator_const_indepFun c hA h
 
 Depends on / 依赖: Kernel, Kernel.Indep.indicator_const_indepFun, indicator_const_indepFun
@@ -3456,8 +3456,8 @@ lemma cond_iInter
       rw [
 
 中文:
-引理 cond_iInter
-  结论: [Finite ι] (hY : 对任意 i, Measurable (Y i))
+引理 cond_i整数er
+  结论: [有限 ι] (hY : 对任意 i, 可测 (Y i))
   证明: by
   have : IsProbabilityMeasure (μ : Measure Ω) := hindep.isProbabilityMeasure
   classical
@@ -3524,7 +3524,7 @@ lemma iIndepFun.cond
 
 中文:
 引理 iIndepFun.cond
-  结论: [Finite ι] (hY : 对任意 i, Measurable (Y i))
+  结论: [有限 ι] (hY : 对任意 i, 可测 (Y i))
   证明: by
   rw [iIndepFun_iff]
   intro s f hf

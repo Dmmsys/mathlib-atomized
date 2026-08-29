@@ -43,8 +43,8 @@ lemma intervalIntegrable_inv_smul
   exact hf_int.continuousOn_smul (continuous
 
 中文:
-引理 intervalIntegrable_inv_smul
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a)
+引理 interval整数egrable_inv_smul
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a)
   证明: by
   have hsub : uIcc a b subseteq Ioi 0 := by simp [uIcc, Icc_subset_Ioi_iff, ha, hb]
   have hf_int : IntervalIntegrable f volume a b :=
@@ -76,8 +76,8 @@ lemma intervalIntegrable_inv_smul_comp_mul
         mul_pos hc hb]) isCo
 
 中文:
-引理 intervalIntegrable_inv_smul_comp_mul
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a)
+引理 interval整数egrable_inv_smul_comp_mul
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a)
   证明: by
   have hsub : uIcc a b subseteq Ioi 0 := by simp [uIcc, Icc_subset_Ioi_iff, ha, hb]
   have hf_cint : IntervalIntegrable f volume (c * a) (c * b) :=
@@ -156,7 +156,7 @@ lemma norm_integral_inv_smul_sub_le
 
 中文:
 引理 norm_integral_inv_smul_sub_le
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a)
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a)
   证明: by
   have hsub : uIcc a b subseteq Ioi 0 := by simp [uIcc, Icc_subset_Ioi_iff, ha, hb]
   have hint_f : IntervalIntegrable (fun x => x⁻¹ • f x) volume a b :=
@@ -217,7 +217,7 @@ lemma tendsto_integral_inv_smul_of_tendsto_uniform
 
 中文:
 引理 tendsto_integral_inv_smul_of_tendsto_uniform
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a)
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a)
   证明: by
   rw [Metric.tendsto_nhds]
   intro δ hδ
@@ -268,7 +268,7 @@ lemma tendsto_integral_inv_smul_nhdsWithin
 
 中文:
 引理 tendsto_integral_inv_smul_nhdsWithin
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a)
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a)
   证明: by
   apply tendsto_integral_inv_smul_of_tendsto_uniform hf ha hb self_mem_nhdsWithin
   intro δ hδ
@@ -324,7 +324,7 @@ lemma tendsto_integral_inv_smul_atTop
 
 中文:
 引理 tendsto_integral_inv_smul_atTop
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a) (hb : 0 < b)
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a) (hb : 0 < b)
   证明: by
   apply tendsto_integral_inv_smul_of_tendsto_uniform hf ha hb
     (eventually_atTop.2 ⟨1, fun r hr => zero_lt_one.trans_le hr⟩)
@@ -377,8 +377,8 @@ theorem tendsto_intervalIntegral
       (∫ x in (a * ε)..(b * ε), 
 
 中文:
-定理 tendsto_intervalIntegral
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a) (hb : 0 < b)
+定理 tendsto_interval整数egral
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a) (hb : 0 < b)
   证明: by
   let u := fun x => x⁻¹ • f x
   have hint {p q : Real} (hp : 0 < p) (hq : 0 < q) : IntervalIntegrable u volume p q :=
@@ -436,7 +436,7 @@ theorem integral_Ioi_eq
 
 中文:
 定理 integral_Ioi_eq
-  结论: (hf : Locally整数egrableOn f (Ioi 0)) (ha : 0 < a) (hb : 0 < b)
+  结论: (hf : Locally整数egrableOn f (左开右无界区间 0)) (ha : 0 < a) (hb : 0 < b)
   证明: by
   have h_lim := (tendsto_intervalIntegral hf ha hb hL hR).mono_left curry_le_prod
   set g := fun x => x⁻¹ • (f (a * x) - f (b * x)) with hg

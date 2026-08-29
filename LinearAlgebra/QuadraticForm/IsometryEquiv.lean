@@ -46,8 +46,8 @@ structure IsometryEquiv
     - map_app' : forall m, Q₂ (toFun m) = Q₁ m
 
 中文:
-结构 IsometryEquiv
-  参数: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
+结构 等距等价
+  参数: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
   继承: M₁ ≃ₗ[R] M₂
   公理与运算 (1 个):
     - map_app' : 对任意 m, Q₂ (toFun m) = Q₁ m
@@ -66,7 +66,7 @@ definition Equivalent
 
 中文:
 定义 Equivalent
-  签名: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
+  签名: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
   定义体: Nonempty (Q₁.IsometryEquiv Q₂)
 
 Depends on / 依赖: IsometryEquiv, Nonempty
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (Q₁.IsometryEquiv Q₂) M₁ M₂
+  签名: 等价状 (Q₁.等距等价 Q₂) M₁ M₂
   定义体: f.toLinearEquiv
   inv f := f.toLinearEquiv.symm
   left_inv f := f.toLinearEquiv.left_inv
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearEquivClass (Q₁.IsometryEquiv Q₂) R M₁ M₂
+  签名: LinearEquivClass (Q₁.等距等价 Q₂) R M₁ M₂
   定义体: map_add f.toLinearEquiv
   map_smulₛₗ f := map_smulₛₗ f.toLinearEquiv
 
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (Q₁.IsometryEquiv Q₂) (M₁ ≃ₗ[R] M₂)
+  签名: CoeOut (Q₁.等距等价 Q₂) (M₁ ≃ₗ[R] M₂)
   定义体: ⟨IsometryEquiv.toLinearEquiv⟩
 
 @[simp]
@@ -165,7 +165,7 @@ theorem coe_toLinearEquiv
 
 中文:
 定理 coe_toLinearEquiv
-  条件: (f : Q₁.IsometryEquiv Q₂)
+  条件: (f : Q₁.等距等价 Q₂)
   结论: ⇑(f : M₁ ≃ₗ[R] M₂) = f
   证明: rfl
 
@@ -186,7 +186,7 @@ theorem map_app
 
 中文:
 定理 map_app
-  条件: (f : Q₁.IsometryEquiv Q₂) (m : M₁)
+  条件: (f : Q₁.等距等价 Q₂) (m : M₁)
   结论: Q₂ (f m) = Q₁ m
   证明: f.map_app' m
 
@@ -207,7 +207,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (Q : QuadraticMap R M N)
+  签名: (Q : 二次映射 R M N)
   定义体: { LinearEquiv.refl R M with map_app' := fun _ => rfl }
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, map_app
@@ -228,7 +228,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (f : Q₁.IsometryEquiv Q₂)
+  签名: (f : Q₁.等距等价 Q₂)
   定义体: { (f : M₁ ≃ₗ[R] M₂).symm with
     map_app' := by intro m; rw [← f.map_app]; congr; exact f.toLinearEquiv.apply_symm_apply m }
 
@@ -251,7 +251,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (f : Q₁.IsometryEquiv Q₂) (g : Q₂.IsometryEquiv Q₃)
+  签名: (f : Q₁.等距等价 Q₂) (g : Q₂.等距等价 Q₃)
   定义体: { (f : M₁ ≃ₗ[R] M₂).trans (g : M₂ ≃ₗ[R] M₃) with
     map_app' := by intro m; rw [← f.map_app, ← g.map_app]; rfl }
 
@@ -274,7 +274,7 @@ definition toIsometry
 
 中文:
 定义 toIsometry
-  签名: (g : Q₁.IsometryEquiv Q₂)
+  签名: (g : Q₁.等距等价 Q₂)
   定义体: g x
   __ := g
 -/
@@ -293,7 +293,7 @@ lemma apply_symm_apply
 
 中文:
 引理 apply_symm_apply
-  条件: (f : Q₁.IsometryEquiv Q₂) (x : M₂)
+  条件: (f : Q₁.等距等价 Q₂) (x : M₂)
   结论: f (f.symm x) = x
   证明: f.toEquiv.apply_symm_apply x
 -/
@@ -311,7 +311,7 @@ lemma symm_apply_apply
 
 中文:
 引理 symm_apply_apply
-  条件: (f : Q₁.IsometryEquiv Q₂) (x : M₁)
+  条件: (f : Q₁.等距等价 Q₂) (x : M₁)
   结论: f.symm (f x) = x
   证明: f.toEquiv.symm_apply_apply x
 -/
@@ -328,7 +328,7 @@ theorem symm_apply_eq
 
 中文:
 定理 symm_apply_eq
-  条件: (f : Q₁.IsometryEquiv Q₂) {x y}
+  条件: (f : Q₁.等距等价 Q₂) {x y}
   证明: f.toEquiv.symm_apply_eq
 
 Depends on / 依赖: f.toEquiv.symm_apply_eq, symm_apply_eq, toEquiv
@@ -347,7 +347,7 @@ theorem eq_symm_apply
 
 中文:
 定理 eq_symm_apply
-  条件: (f : Q₁.IsometryEquiv Q₂) {x y}
+  条件: (f : Q₁.等距等价 Q₂) {x y}
   证明: f.toEquiv.eq_symm_apply
 
 Depends on / 依赖: eq_symm_apply, f.toEquiv.eq_symm_apply, toEquiv
@@ -367,7 +367,7 @@ lemma coe_symm_toLinearEquiv
 
 中文:
 引理 coe_symm_toLinearEquiv
-  条件: (f : Q₁.IsometryEquiv Q₂)
+  条件: (f : Q₁.等距等价 Q₂)
   结论: f.toLinearEquiv.symm = f.symm
   证明: rfl
 -/
@@ -394,7 +394,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (Q : QuadraticMap R M N)
+  条件: (Q : 二次映射 R M N)
   结论: Q.Equivalent Q
   证明: ⟨IsometryEquiv.refl Q⟩
 
@@ -467,7 +467,7 @@ definition isometryEquivOfCompLinearEquiv
 
 中文:
 定义 isometryEquivOfCompLinearEquiv
-  签名: (Q : QuadraticMap R M N) (f : M₁ ≃ₗ[R] M)
+  签名: (Q : 二次映射 R M N) (f : M₁ ≃ₗ[R] M)
   定义体: { f.symm with
     map_app' := by
       intro
@@ -496,7 +496,7 @@ definition isometryEquivBasisRepr
 
 中文:
 定义 isometryEquivBasisRepr
-  签名: (Q : QuadraticMap R M N) (v : Basis ι R M)
+  签名: (Q : 二次映射 R M N) (v : 基 ι R M)
   定义体: isometryEquivOfCompLinearEquiv Q v.equivFun.symm
 
 Depends on / 依赖: equivFun, isometryEquivOfCompLinearEquiv, v.equivFun.symm

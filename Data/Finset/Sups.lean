@@ -66,7 +66,7 @@ scoped[FinsetFamily] attribute [instance] Finset.hasSups
 
 中文:
 定义 hasSups
-  签名: : HasSups (Finset α)
+  签名: : 有Sups (有限集 α)
   定义体: ⟨image₂ (· ⊔ ·)⟩
 
 scoped[FinsetFamily] attribute [instance] Finset.hasSups
@@ -109,7 +109,7 @@ theorem coe_sups
 
 中文:
 定理 coe_sups
-  结论: (↑(s ⊻ t) : Set α) = ↑s ⊻ ↑t
+  结论: (↑(s ⊻ t) : 集合 α) = ↑s ⊻ ↑t
   证明: coe_image₂ _ _ _
 -/
 theorem coe_sups : (↑(s ⊻ t) : Set α) = ↑s ⊻ ↑t :=
@@ -140,7 +140,7 @@ theorem card_sups_iff
 
 中文:
 定理 card_sups_iff
-  结论: #(s ⊻ t) = #s * #t ↔ (s ×ˢ t : Set (α × α)).InjOn fun x => x.1 ⊔ x.2
+  结论: #(s ⊻ t) = #s * #t ↔ (s ×ˢ t : 集合 (α × α)).单射限制 fun x => x.1 ⊔ x.2
   证明: card_image₂_iff
 -/
 theorem card_sups_iff : #(s ⊻ t) = #s * #t ↔ (s ×ˢ t : Set (α × α)).InjOn fun x => x.1 ⊔ x.2 :=
@@ -222,7 +222,7 @@ lemma image_subset_sups_left
 
 中文:
 引理 image_subset_sups_left
-  结论: b in t -> s.image (· ⊔ b) subseteq s ⊻ t
+  结论: b in t -> s.像 (· ⊔ b) subseteq s ⊻ t
   证明: image_subset_image₂_left
 -/
 lemma image_subset_sups_left : b in t -> s.image (· ⊔ b) subseteq s ⊻ t := image_subset_image₂_left
@@ -237,7 +237,7 @@ lemma image_subset_sups_right
 
 中文:
 引理 image_subset_sups_right
-  结论: a in s -> t.image (a ⊔ ·) subseteq s ⊻ t
+  结论: a in s -> t.像 (a ⊔ ·) subseteq s ⊻ t
   证明: image_subset_image₂_right
 -/
 lemma image_subset_sups_right : a in s -> t.image (a ⊔ ·) subseteq s ⊻ t := image_subset_image₂_right
@@ -254,7 +254,7 @@ theorem forall_sups_iff
 @[simp]
 
 中文:
-定理 forall_sups_iff
+定理 对任意_sups_iff
   条件: {p : α -> 命题}
   结论: (对任意 c in s ⊻ t, p c) ↔ 对任意 a in s, 对任意 b in t, p (a ⊔ b)
   证明: forall_mem_image₂
@@ -298,7 +298,7 @@ theorem sups_nonempty
 
 中文:
 定理 sups_nonempty
-  结论: (s ⊻ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ⊻ t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -316,8 +316,8 @@ theorem Nonempty.sups
   proof: Nonempty.image₂
 
 中文:
-定理 Nonempty.sups
-  结论: s.Nonempty -> t.Nonempty -> (s ⊻ t).Nonempty
+定理 非空.sups
+  结论: s.非空 -> t.非空 -> (s ⊻ t).非空
   证明: Nonempty.image₂
 -/
 protected theorem Nonempty.sups : s.Nonempty -> t.Nonempty -> (s ⊻ t).Nonempty :=
@@ -332,8 +332,8 @@ theorem Nonempty.of_sups_left
   proof: Nonempty.of_image₂_left
 
 中文:
-定理 Nonempty.of_sups_left
-  结论: (s ⊻ t).Nonempty -> s.Nonempty
+定理 非空.of_sups_left
+  结论: (s ⊻ t).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 Depends on / 依赖: Nonempty, Nonempty.of_image
@@ -352,8 +352,8 @@ theorem Nonempty.of_sups_right
 @[simp]
 
 中文:
-定理 Nonempty.of_sups_right
-  结论: (s ⊻ t).Nonempty -> t.Nonempty
+定理 非空.of_sups_right
+  结论: (s ⊻ t).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 @[simp]
@@ -432,7 +432,7 @@ lemma singleton_sups
 
 中文:
 引理 singleton_sups
-  结论: {a} ⊻ t = t.image (a ⊔ ·)
+  结论: {a} ⊻ t = t.像 (a ⊔ ·)
   证明: image₂_singleton_left
 -/
 @[simp] lemma singleton_sups : {a} ⊻ t = t.image (a ⊔ ·) := image₂_singleton_left
@@ -447,7 +447,7 @@ lemma sups_singleton
 
 中文:
 引理 sups_singleton
-  结论: s ⊻ {b} = s.image (· ⊔ b)
+  结论: s ⊻ {b} = s.像 (· ⊔ b)
   证明: image₂_singleton_right
 -/
 @[simp] lemma sups_singleton : s ⊻ {b} = s.image (· ⊔ b) := image₂_singleton_right
@@ -462,7 +462,7 @@ theorem singleton_sups_singleton
 
 中文:
 定理 singleton_sups_singleton
-  结论: ({a} ⊻ {b} : Finset α) = {a ⊔ b}
+  结论: ({a} ⊻ {b} : 有限集 α) = {a ⊔ b}
   证明: image₂_singleton
 -/
 theorem singleton_sups_singleton : ({a} ⊻ {b} : Finset α) = {a ⊔ b} :=
@@ -542,7 +542,7 @@ theorem subset_sups
 
 中文:
 定理 subset_sups
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: subset_set_image₂
 -/
 theorem subset_sups {s t : Set α} :
@@ -560,8 +560,8 @@ lemma image_sups
 
 中文:
 引理 image_sups
-  条件: (f : F) (s t : Finset α)
-  结论: image f (s ⊻ t) = image f s ⊻ image f t
+  条件: (f : F) (s t : 有限集 α)
+  结论: 像 f (s ⊻ t) = 像 f s ⊻ 像 f t
   证明: image_image₂_distrib map_sup f
 
 Depends on / 依赖: map_sup
@@ -580,7 +580,7 @@ lemma map_sups
 
 中文:
 引理 map_sups
-  条件: (f : F) (hf) (s t : Finset α)
+  条件: (f : F) (hf) (s t : 有限集 α)
   证明: by
   simpa [map_eq_image] using image_sups f s t
 
@@ -616,7 +616,7 @@ lemma sups_subset_self
 
 中文:
 引理 sups_subset_self
-  结论: s ⊻ s subseteq s ↔ SupClosed (s : Set α)
+  结论: s ⊻ s subseteq s ↔ SupClosed (s : 集合 α)
   证明: sups_subset_iff
 
 Depends on / 依赖: sups_subset_iff
@@ -632,7 +632,7 @@ lemma sups_eq_self
 
 中文:
 引理 sups_eq_self
-  结论: s ⊻ s = s ↔ SupClosed (s : Set α)
+  结论: s ⊻ s = s ↔ SupClosed (s : 集合 α)
   证明: by simp [← coe_inj]
 -/
 @[simp] lemma sups_eq_self : s ⊻ s = s ↔ SupClosed (s : Set α) := by simp [← coe_inj]
@@ -648,8 +648,8 @@ lemma univ_sups_univ
 
 中文:
 引理 univ_sups_univ
-  条件: [Fintype α]
-  结论: (univ : Finset α) ⊻ univ = univ
+  条件: [有限类型 α]
+  结论: (univ : 有限集 α) ⊻ univ = univ
   证明: by simp
 -/
 @[simp] lemma univ_sups_univ [Fintype α] : (univ : Finset α) ⊻ univ = univ := by simp
@@ -665,7 +665,7 @@ lemma filter_sups_le
 
 中文:
 引理 filter_sups_le
-  条件: [DecidableLE α] (s t : Finset α) (a : α)
+  条件: [DecidableLE α] (s t : 有限集 α) (a : α)
   证明: by
   simp only [← coe_inj, coe_filter, coe_sups, ← mem_coe, Set.sep_sups_le]
 
@@ -687,7 +687,7 @@ lemma biUnion_image_sup_left
 
 中文:
 引理 biUnion_image_sup_left
-  结论: s.biUnion (fun a => t.image (a ⊔ ·)) = s ⊻ t
+  结论: s.biUnion (fun a => t.像 (a ⊔ ·)) = s ⊻ t
   证明: biUnion_image_left
 
 Depends on / 依赖: biUnion_image_left
@@ -704,7 +704,7 @@ lemma biUnion_image_sup_right
 
 中文:
 引理 biUnion_image_sup_right
-  结论: t.biUnion (fun b => s.image (· ⊔ b)) = s ⊻ t
+  结论: t.biUnion (fun b => s.像 (· ⊔ b)) = s ⊻ t
   证明: biUnion_image_right
 
 Depends on / 依赖: biUnion_image_right
@@ -722,8 +722,8 @@ theorem image_sup_product
 
 中文:
 定理 image_sup_product
-  条件: (s t : Finset α)
-  结论: (s ×ˢ t).image (uncurry (· ⊔ ·)) = s ⊻ t
+  条件: (s t : 有限集 α)
+  结论: (s ×ˢ t).像 (uncurry (· ⊔ ·)) = s ⊻ t
   证明: image_uncurry_product _ _ _
 
 Depends on / 依赖: image_uncurry_product
@@ -840,7 +840,7 @@ scoped[FinsetFamily] attribute [instance] Finset.hasInfs
 
 中文:
 定义 hasInfs
-  签名: : HasInfs (Finset α)
+  签名: : 有Infs (有限集 α)
   定义体: ⟨image₂ (· ⊓ ·)⟩
 
 scoped[FinsetFamily] attribute [instance] Finset.hasInfs
@@ -883,7 +883,7 @@ theorem coe_infs
 
 中文:
 定理 coe_infs
-  结论: (↑(s ⊼ t) : Set α) = ↑s ⊼ ↑t
+  结论: (↑(s ⊼ t) : 集合 α) = ↑s ⊼ ↑t
   证明: coe_image₂ _ _ _
 -/
 theorem coe_infs : (↑(s ⊼ t) : Set α) = ↑s ⊼ ↑t :=
@@ -914,7 +914,7 @@ theorem card_infs_iff
 
 中文:
 定理 card_infs_iff
-  结论: #(s ⊼ t) = #s * #t ↔ (s ×ˢ t : Set (α × α)).InjOn fun x => x.1 ⊓ x.2
+  结论: #(s ⊼ t) = #s * #t ↔ (s ×ˢ t : 集合 (α × α)).单射限制 fun x => x.1 ⊓ x.2
   证明: card_image₂_iff
 -/
 theorem card_infs_iff : #(s ⊼ t) = #s * #t ↔ (s ×ˢ t : Set (α × α)).InjOn fun x => x.1 ⊓ x.2 :=
@@ -996,7 +996,7 @@ lemma image_subset_infs_left
 
 中文:
 引理 image_subset_infs_left
-  结论: b in t -> s.image (· ⊓ b) subseteq s ⊼ t
+  结论: b in t -> s.像 (· ⊓ b) subseteq s ⊼ t
   证明: image_subset_image₂_left
 -/
 lemma image_subset_infs_left : b in t -> s.image (· ⊓ b) subseteq s ⊼ t := image_subset_image₂_left
@@ -1011,7 +1011,7 @@ lemma image_subset_infs_right
 
 中文:
 引理 image_subset_infs_right
-  结论: a in s -> t.image (a ⊓ ·) subseteq s ⊼ t
+  结论: a in s -> t.像 (a ⊓ ·) subseteq s ⊼ t
   证明: image_subset_image₂_right
 -/
 lemma image_subset_infs_right : a in s -> t.image (a ⊓ ·) subseteq s ⊼ t := image_subset_image₂_right
@@ -1028,7 +1028,7 @@ theorem forall_infs_iff
 @[simp]
 
 中文:
-定理 forall_infs_iff
+定理 对任意_infs_iff
   条件: {p : α -> 命题}
   结论: (对任意 c in s ⊼ t, p c) ↔ 对任意 a in s, 对任意 b in t, p (a ⊓ b)
   证明: forall_mem_image₂
@@ -1072,7 +1072,7 @@ theorem infs_nonempty
 
 中文:
 定理 infs_nonempty
-  结论: (s ⊼ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ⊼ t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -1090,8 +1090,8 @@ theorem Nonempty.infs
   proof: Nonempty.image₂
 
 中文:
-定理 Nonempty.infs
-  结论: s.Nonempty -> t.Nonempty -> (s ⊼ t).Nonempty
+定理 非空.infs
+  结论: s.非空 -> t.非空 -> (s ⊼ t).非空
   证明: Nonempty.image₂
 -/
 protected theorem Nonempty.infs : s.Nonempty -> t.Nonempty -> (s ⊼ t).Nonempty :=
@@ -1106,8 +1106,8 @@ theorem Nonempty.of_infs_left
   proof: Nonempty.of_image₂_left
 
 中文:
-定理 Nonempty.of_infs_left
-  结论: (s ⊼ t).Nonempty -> s.Nonempty
+定理 非空.of_infs_left
+  结论: (s ⊼ t).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 Depends on / 依赖: Nonempty, Nonempty.of_image
@@ -1126,8 +1126,8 @@ theorem Nonempty.of_infs_right
 @[simp]
 
 中文:
-定理 Nonempty.of_infs_right
-  结论: (s ⊼ t).Nonempty -> t.Nonempty
+定理 非空.of_infs_right
+  结论: (s ⊼ t).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 @[simp]
@@ -1206,7 +1206,7 @@ lemma singleton_infs
 
 中文:
 引理 singleton_infs
-  结论: {a} ⊼ t = t.image (a ⊓ ·)
+  结论: {a} ⊼ t = t.像 (a ⊓ ·)
   证明: image₂_singleton_left
 -/
 @[simp] lemma singleton_infs : {a} ⊼ t = t.image (a ⊓ ·) := image₂_singleton_left
@@ -1221,7 +1221,7 @@ lemma infs_singleton
 
 中文:
 引理 infs_singleton
-  结论: s ⊼ {b} = s.image (· ⊓ b)
+  结论: s ⊼ {b} = s.像 (· ⊓ b)
   证明: image₂_singleton_right
 -/
 @[simp] lemma infs_singleton : s ⊼ {b} = s.image (· ⊓ b) := image₂_singleton_right
@@ -1236,7 +1236,7 @@ theorem singleton_infs_singleton
 
 中文:
 定理 singleton_infs_singleton
-  结论: ({a} ⊼ {b} : Finset α) = {a ⊓ b}
+  结论: ({a} ⊼ {b} : 有限集 α) = {a ⊓ b}
   证明: image₂_singleton
 -/
 theorem singleton_infs_singleton : ({a} ⊼ {b} : Finset α) = {a ⊓ b} :=
@@ -1316,7 +1316,7 @@ theorem subset_infs
 
 中文:
 定理 subset_infs
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: subset_set_image₂
 -/
 theorem subset_infs {s t : Set α} :
@@ -1334,8 +1334,8 @@ lemma image_infs
 
 中文:
 引理 image_infs
-  条件: (f : F) (s t : Finset α)
-  结论: image f (s ⊼ t) = image f s ⊼ image f t
+  条件: (f : F) (s t : 有限集 α)
+  结论: 像 f (s ⊼ t) = 像 f s ⊼ 像 f t
   证明: image_image₂_distrib map_inf f
 
 Depends on / 依赖: map_inf
@@ -1354,7 +1354,7 @@ lemma map_infs
 
 中文:
 引理 map_infs
-  条件: (f : F) (hf) (s t : Finset α)
+  条件: (f : F) (hf) (s t : 有限集 α)
   证明: by
   simpa [map_eq_image] using image_infs f s t
 
@@ -1390,7 +1390,7 @@ lemma infs_self_subset
 
 中文:
 引理 infs_self_subset
-  结论: s ⊼ s subseteq s ↔ InfClosed (s : Set α)
+  结论: s ⊼ s subseteq s ↔ InfClosed (s : 集合 α)
   证明: infs_subset_iff
 
 Depends on / 依赖: infs_subset_iff
@@ -1406,7 +1406,7 @@ lemma infs_self
 
 中文:
 引理 infs_self
-  结论: s ⊼ s = s ↔ InfClosed (s : Set α)
+  结论: s ⊼ s = s ↔ InfClosed (s : 集合 α)
   证明: by simp [← coe_inj]
 -/
 @[simp] lemma infs_self : s ⊼ s = s ↔ InfClosed (s : Set α) := by simp [← coe_inj]
@@ -1422,8 +1422,8 @@ lemma univ_infs_univ
 
 中文:
 引理 univ_infs_univ
-  条件: [Fintype α]
-  结论: (univ : Finset α) ⊼ univ = univ
+  条件: [有限类型 α]
+  结论: (univ : 有限集 α) ⊼ univ = univ
   证明: by simp
 -/
 @[simp] lemma univ_infs_univ [Fintype α] : (univ : Finset α) ⊼ univ = univ := by simp
@@ -1439,7 +1439,7 @@ lemma filter_infs_le
 
 中文:
 引理 filter_infs_le
-  条件: [DecidableLE α] (s t : Finset α) (a : α)
+  条件: [DecidableLE α] (s t : 有限集 α) (a : α)
   证明: by
   simp only [← coe_inj, coe_filter, coe_infs, ← mem_coe, Set.sep_infs_le]
 
@@ -1461,7 +1461,7 @@ lemma biUnion_image_inf_left
 
 中文:
 引理 biUnion_image_inf_left
-  结论: s.biUnion (fun a => t.image (a ⊓ ·)) = s ⊼ t
+  结论: s.biUnion (fun a => t.像 (a ⊓ ·)) = s ⊼ t
   证明: biUnion_image_left
 
 Depends on / 依赖: biUnion_image_left
@@ -1478,7 +1478,7 @@ lemma biUnion_image_inf_right
 
 中文:
 引理 biUnion_image_inf_right
-  结论: t.biUnion (fun b => s.image (· ⊓ b)) = s ⊼ t
+  结论: t.biUnion (fun b => s.像 (· ⊓ b)) = s ⊼ t
   证明: biUnion_image_right
 
 Depends on / 依赖: biUnion_image_right
@@ -1496,8 +1496,8 @@ theorem image_inf_product
 
 中文:
 定理 image_inf_product
-  条件: (s t : Finset α)
-  结论: (s ×ˢ t).image (uncurry (· ⊓ ·)) = s ⊼ t
+  条件: (s t : 有限集 α)
+  结论: (s ×ˢ t).像 (uncurry (· ⊓ ·)) = s ⊼ t
   证明: image_uncurry_product _ _ _
 
 Depends on / 依赖: image_uncurry_product
@@ -1697,7 +1697,7 @@ lemma powerset_union
 
 中文:
 引理 powerset_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t).powerset = s.powerset ⊻ t.powerset
   证明: by
   ext u
@@ -1732,7 +1732,7 @@ lemma powerset_inter
 
 中文:
 引理 powerset_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s inter t).powerset = s.powerset ⊼ t.powerset
   证明: by
   ext u
@@ -1760,7 +1760,7 @@ lemma powerset_sups_powerset_self
 
 中文:
 引理 powerset_sups_powerset_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by simp [← powerset_union]
 -/
 @[simp] lemma powerset_sups_powerset_self (s : Finset α) :
@@ -1776,7 +1776,7 @@ lemma powerset_infs_powerset_self
 
 中文:
 引理 powerset_infs_powerset_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by simp [← powerset_inter]
 -/
 @[simp] lemma powerset_infs_powerset_self (s : Finset α) :
@@ -1836,7 +1836,7 @@ scoped[FinsetFamily] infixl:74 " ○ " => Finset.disjSups
 
 中文:
 定义 disjSups
-  签名: : Finset α
+  签名: : 有限集 α
   定义体: {ab in s ×ˢ t | Disjoint ab.1 ab.2}.image fun ab => ab.1 ⊔ ab.2
 
 @[inherit_doc]
@@ -1992,7 +1992,7 @@ theorem forall_disjSups_iff
 @[simp]
 
 中文:
-定理 forall_disjSups_iff
+定理 对任意_disjSups_iff
   条件: {p : α -> 命题}
   证明: by
   simp_rw [mem_disjSups]
@@ -2041,8 +2041,8 @@ theorem Nonempty.of_disjSups_left
   exact fun ⟨_, a, ha, _⟩ => ⟨a, ha⟩
 
 中文:
-定理 Nonempty.of_disjSups_left
-  结论: (s ○ t).Nonempty -> s.Nonempty
+定理 非空.of_disjSups_left
+  结论: (s ○ t).非空 -> s.非空
   证明: by
   simp_rw [Finset.Nonempty, mem_disjSups]
   exact fun ⟨_, a, ha, _⟩ => ⟨a, ha⟩
@@ -2066,8 +2066,8 @@ theorem Nonempty.of_disjSups_right
 @[simp]
 
 中文:
-定理 Nonempty.of_disjSups_right
-  结论: (s ○ t).Nonempty -> t.Nonempty
+定理 非空.of_disjSups_right
+  结论: (s ○ t).非空 -> t.非空
   证明: by
   simp_rw [Finset.Nonempty, mem_disjSups]
   exact fun ⟨_, _, _, b, hb, _⟩ => ⟨b, hb⟩
@@ -2131,7 +2131,7 @@ theorem disjSups_singleton
 
 中文:
 定理 disjSups_singleton
-  结论: ({a} ○ {b} : Finset α) = if Disjoint a b then {a ⊔ b} else ∅
+  结论: ({a} ○ {b} : 有限集 α) = if Disjoint a b then {a ⊔ b} else ∅
   证明: by
   split_ifs with h <;> simp [disjSups, filter_singleton, h]
 
@@ -2252,7 +2252,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Commutative (Finset α) (· ○ ·)
+  签名: @Std.交换 (有限集 α) (· ○ ·)
   定义体: ⟨disjSups_comm⟩
 
 Depends on / 依赖: OrderDual, OrderDual.Preorder.dual_dual, Preorder, disjSups_comm, dual_dual
@@ -2281,7 +2281,7 @@ theorem disjSups_assoc
 
 中文:
 定理 disjSups_assoc
-  结论: 对任意 s t u : Finset α, s ○ t ○ u = s ○ (t ○ u)
+  结论: 对任意 s t u : 有限集 α, s ○ t ○ u = s ○ (t ○ u)
   证明: by
   refine (associative_of_commutative_of_le inferInstance ?_).assoc
   simp only [disjSups_subset_iff, mem_disjSups]
@@ -2308,7 +2308,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Associative (Finset α) (· ○ ·)
+  签名: @Std.结合 (有限集 α) (· ○ ·)
   定义体: ⟨disjSups_assoc⟩
 
 Depends on / 依赖: disjSups_assoc
@@ -2392,7 +2392,7 @@ scoped[FinsetFamily] infixl:74 " \\\\ " => Finset.diffs
 
 中文:
 定义 diffs
-  签名: : Finset α -> Finset α -> Finset α
+  签名: : 有限集 α -> 有限集 α -> 有限集 α
   定义体: image₂ (· \ ·)
 
 @[inherit_doc]
@@ -2440,7 +2440,7 @@ lemma coe_diffs
 
 中文:
 引理 coe_diffs
-  结论: (↑(s \\ t) : Set α) = Set.image2 (· \ ·) s t
+  结论: (↑(s \\ t) : 集合 α) = 集合.image2 (· \ ·) s t
   证明: coe_image₂ _ _ _
 -/
 @[simp, norm_cast] lemma coe_diffs : (↑(s \\ t) : Set α) = Set.image2 (· \ ·) s t :=
@@ -2473,7 +2473,7 @@ lemma card_diffs_iff
 
 中文:
 引理 card_diffs_iff
-  结论: #(s \\ t) = #s * #t ↔ (s ×ˢ t : Set (α × α)).InjOn fun x => x.1 \ x.2
+  结论: #(s \\ t) = #s * #t ↔ (s ×ˢ t : 集合 (α × α)).单射限制 fun x => x.1 \ x.2
   证明: card_image₂_iff
 
 Depends on / 依赖: hl.node, hm.node
@@ -2551,7 +2551,7 @@ lemma image_subset_diffs_left
 
 中文:
 引理 image_subset_diffs_left
-  结论: b in t -> s.image (· \ b) subseteq s \\ t
+  结论: b in t -> s.像 (· \ b) subseteq s \\ t
   证明: image_subset_image₂_left
 -/
 lemma image_subset_diffs_left : b in t -> s.image (· \ b) subseteq s \\ t := image_subset_image₂_left
@@ -2566,7 +2566,7 @@ lemma image_subset_diffs_right
 
 中文:
 引理 image_subset_diffs_right
-  结论: a in s -> t.image (a \ ·) subseteq s \\ t
+  结论: a in s -> t.像 (a \ ·) subseteq s \\ t
   证明: image_subset_image₂_right
 
 Depends on / 依赖: BalancedSz, Nat.succ_inj, add_eq_zero, hl.node, hm.left, hm.right.node, revert, size_eq, succ_inj
@@ -2583,7 +2583,7 @@ lemma forall_mem_diffs
   proof: forall_mem_image₂
 
 中文:
-引理 forall_mem_diffs
+引理 对任意_mem_diffs
   条件: {p : α -> 命题}
   结论: (对任意 c in s \\ t, p c) ↔ 对任意 a in s, 对任意 b in t, p (a \ b)
   证明: forall_mem_image₂
@@ -2623,7 +2623,7 @@ lemma diffs_nonempty
 
 中文:
 引理 diffs_nonempty
-  结论: (s \\ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s \\ t).非空 ↔ s.非空 ∧ t.非空
   证明: image₂_nonempty_iff
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -2640,8 +2640,8 @@ lemma Nonempty.diffs
   proof: Nonempty.image₂
 
 中文:
-引理 Nonempty.diffs
-  结论: s.Nonempty -> t.Nonempty -> (s \\ t).Nonempty
+引理 非空.diffs
+  结论: s.非空 -> t.非空 -> (s \\ t).非空
   证明: Nonempty.image₂
 -/
 protected lemma Nonempty.diffs : s.Nonempty -> t.Nonempty -> (s \\ t).Nonempty := Nonempty.image₂
@@ -2655,8 +2655,8 @@ lemma Nonempty.of_diffs_left
   proof: Nonempty.of_image₂_left
 
 中文:
-引理 Nonempty.of_diffs_left
-  结论: (s \\ t).Nonempty -> s.Nonempty
+引理 非空.of_diffs_left
+  结论: (s \\ t).非空 -> s.非空
   证明: Nonempty.of_image₂_left
 
 Depends on / 依赖: H3.imp, H3_0, Nat.le_of_add_le_add_right, Nat.le_of_succ_le_succ, Nat.lt_succ_iff, Nonempty, Nonempty.of_image, le_of_add_le_add_right, le_of_succ_le_succ, lt_succ_iff, or_iff_left_of_imp, replace, size_eq
@@ -2671,8 +2671,8 @@ lemma Nonempty.of_diffs_right
   proof: Nonempty.of_image₂_right
 
 中文:
-引理 Nonempty.of_diffs_right
-  结论: (s \\ t).Nonempty -> t.Nonempty
+引理 非空.of_diffs_right
+  结论: (s \\ t).非空 -> t.非空
   证明: Nonempty.of_image₂_right
 
 Depends on / 依赖: Nonempty, Nonempty.of_image, add_comm, dual_iff, dual_rotateR, hl.dual, hr.dual.rotateL, rotateL, size_dual
@@ -2744,7 +2744,7 @@ lemma singleton_diffs
 
 中文:
 引理 singleton_diffs
-  结论: {a} \\ t = t.image (a \ ·)
+  结论: {a} \\ t = t.像 (a \ ·)
   证明: image₂_singleton_left
 
 Depends on / 依赖: balance, balance_eq_balance, hl.balance
@@ -2760,7 +2760,7 @@ lemma diffs_singleton
 
 中文:
 引理 diffs_singleton
-  结论: s \\ {b} = s.image (· \ b)
+  结论: s \\ {b} = s.像 (· \ b)
   证明: image₂_singleton_right
 
 Depends on / 依赖: Nat.eq_zero_or_pos, Nat.mul_le_mul_left, Nat.zero_le, Or.inl, _aux, balance, balanceL_eq_balance, balance_eq_balance, eq_zero_or_pos, hl.balance, le_trans, mul_le_mul_left, replace, zero_le
@@ -2776,7 +2776,7 @@ lemma singleton_diffs_singleton
 
 中文:
 引理 singleton_diffs_singleton
-  结论: ({a} \\ {b} : Finset α) = {a \ b}
+  结论: ({a} \\ {b} : 有限集 α) = {a \ b}
   证明: image₂_singleton
 
 Depends on / 依赖: Or.inl, Or.inr, balance, balanceL_eq_balance, dist_le, e.dist_le, hl.balance
@@ -2859,7 +2859,7 @@ lemma subset_diffs
 
 中文:
 引理 subset_diffs
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: subset_set_image₂
 -/
 lemma subset_diffs {s t : Set α} :
@@ -2878,7 +2878,7 @@ lemma biUnion_image_sdiff_left
 
 中文:
 引理 biUnion_image_sdiff_left
-  结论: s.biUnion (fun a => t.image (a \ ·)) = s \\ t
+  结论: s.biUnion (fun a => t.像 (a \ ·)) = s \\ t
   证明: biUnion_image_left
 
 Depends on / 依赖: Bounded, WithTop, _all, balanceR, biUnion_image_left, eraseMax_aux, findMax, hr.of_gt, le_of_lt, mono_left, of_gt, splitMax_eq, split_ifs, to_nil, to_nil.mono_left, zero_add
@@ -2894,7 +2894,7 @@ lemma biUnion_image_sdiff_right
 
 中文:
 引理 biUnion_image_sdiff_right
-  结论: t.biUnion (fun b => s.image (· \ b)) = s \\ t
+  结论: t.biUnion (fun b => s.像 (· \ b)) = s \\ t
   证明: biUnion_image_right
 
 Depends on / 依赖: biUnion_image_right, glue_aux, hl.trans_right, hr.trans_left, to_sep, trans_left, trans_right
@@ -2913,8 +2913,8 @@ lemma image_sdiff_product
 
 中文:
 引理 image_sdiff_product
-  条件: (s t : Finset α)
-  结论: (s ×ˢ t).image (uncurry (· \ ·)) = s \\ t
+  条件: (s t : 有限集 α)
+  结论: (s ×ˢ t).像 (uncurry (· \ ·)) = s \\ t
   证明: image_uncurry_product _ _ _
 
 Depends on / 依赖: image_uncurry_product
@@ -2957,7 +2957,7 @@ scoped[FinsetFamily] postfix:max "ᶜˢ" => Finset.compls
 
 中文:
 定义 compls
-  签名: : Finset α -> Finset α
+  签名: : 有限集 α -> 有限集 α
   定义体: map ⟨compl, compl_injective⟩
 
 @[inherit_doc]
@@ -3004,7 +3004,7 @@ lemma image_compl
 中文:
 引理 image_compl
   条件: [DecidableEq α]
-  结论: s.image compl = sᶜˢ
+  结论: s.像 compl = sᶜˢ
   证明: by simp [compls, map_eq_image]
 -/
 @[simp] lemma image_compl [DecidableEq α] : s.image compl = sᶜˢ := by simp [compls, map_eq_image]
@@ -3019,7 +3019,7 @@ lemma coe_compls
 
 中文:
 引理 coe_compls
-  结论: (↑sᶜˢ : Set α) = compl '' ↑s
+  结论: (↑sᶜˢ : 集合 α) = compl '' ↑s
   证明: coe_map _ _
 -/
 @[simp, norm_cast] lemma coe_compls : (↑sᶜˢ : Set α) = compl '' ↑s := coe_map _ _
@@ -3083,7 +3083,7 @@ lemma forall_mem_compls
   proof: forall_mem_map
 
 中文:
-引理 forall_mem_compls
+引理 对任意_mem_compls
   条件: {p : α -> 命题}
   结论: (对任意 a in sᶜˢ, p a) ↔ 对任意 a in s, p aᶜ
   证明: forall_mem_map
@@ -3101,7 +3101,7 @@ lemma exists_compls_iff
   proof: by aesop
 
 中文:
-引理 exists_compls_iff
+引理 存在_compls_iff
   条件: {p : α -> 命题}
   结论: (存在 a in sᶜˢ, p a) ↔ 存在 a in s, p aᶜ
   证明: by aesop
@@ -3121,7 +3121,7 @@ lemma compls_compls
 
 中文:
 引理 compls_compls
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: sᶜˢᶜˢ = s
   证明: by ext; simp
 -/
@@ -3161,7 +3161,7 @@ protected alias ⟨Nonempty.of_compls, Nonempty.compls⟩ := compls_nonempty
 
 中文:
 引理 compls_nonempty
-  结论: sᶜˢ.Nonempty ↔ s.Nonempty
+  结论: sᶜˢ.非空 ↔ s.非空
   证明: map_nonempty
 
 protected alias ⟨Nonempty.of_compls, Nonempty.compls⟩ := compls_nonempty
@@ -3183,7 +3183,7 @@ lemma compls_empty
 
 中文:
 引理 compls_empty
-  结论: (∅ : Finset α)ᶜˢ = ∅
+  结论: (∅ : 有限集 α)ᶜˢ = ∅
   证明: map_empty _
 -/
 @[simp] lemma compls_empty : (∅ : Finset α)ᶜˢ = ∅ := map_empty _
@@ -3228,8 +3228,8 @@ lemma compls_univ
 
 中文:
 引理 compls_univ
-  条件: [Fintype α]
-  结论: (univ : Finset α)ᶜˢ = univ
+  条件: [有限类型 α]
+  结论: (univ : 有限集 α)ᶜˢ = univ
   证明: by ext; simp
 -/
 @[simp] lemma compls_univ [Fintype α] : (univ : Finset α)ᶜˢ = univ := by ext; simp
@@ -3247,7 +3247,7 @@ lemma compls_union
 
 中文:
 引理 compls_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t)ᶜˢ = sᶜˢ union tᶜˢ
   证明: map_union _ _
 -/
@@ -3263,7 +3263,7 @@ lemma compls_inter
 
 中文:
 引理 compls_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s inter t)ᶜˢ = sᶜˢ inter tᶜˢ
   证明: map_inter _ _
 -/
@@ -3281,7 +3281,7 @@ lemma compls_infs
 
 中文:
 引理 compls_infs
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s ⊼ t)ᶜˢ = sᶜˢ ⊻ tᶜˢ
   证明: by
   simp_rw [← image_compl]; exact image_image₂_distrib fun _ _ => compl_inf
@@ -3301,7 +3301,7 @@ lemma compls_sups
 
 中文:
 引理 compls_sups
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s ⊻ t)ᶜˢ = sᶜˢ ⊼ tᶜˢ
   证明: by
   simp_rw [← image_compl]; exact image_image₂_distrib fun _ _ => compl_sup
@@ -3321,7 +3321,7 @@ lemma infs_compls_eq_diffs
 
 中文:
 引理 infs_compls_eq_diffs
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s ⊼ tᶜˢ = s \\ t
   证明: by
   ext; simp [sdiff_eq]; aesop
@@ -3341,7 +3341,7 @@ lemma compls_infs_eq_diffs
 
 中文:
 引理 compls_infs_eq_diffs
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: sᶜˢ ⊼ t = t \\ s
   证明: by
   rw [infs_comm]; rw [infs_compls_eq_diffs]
@@ -3361,7 +3361,7 @@ lemma diffs_compls_eq_infs
 
 中文:
 引理 diffs_compls_eq_infs
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \\ tᶜˢ = s ⊼ t
   证明: by
   rw [← infs_compls_eq_diffs]; rw [compls_compls]
@@ -3380,8 +3380,8 @@ lemma _root_.Set.Sized.compls
   proof: Finset.forall_mem_compls.2 fun s hs => by rw [Finset.card_compl, h𝒜 hs]
 
 中文:
-引理 _root_.Set.Sized.compls
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized n)
+引理 _root_.集合.Sized.compls
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized n)
   证明: Finset.forall_mem_compls.2 fun s hs => by rw [Finset.card_compl, h𝒜 hs]
 
 Depends on / 依赖: instDecidableEqBool
@@ -3401,7 +3401,7 @@ lemma sized_compls
 
 中文:
 引理 sized_compls
-  条件: (hn : n <= Fintype.card α)
+  条件: (hn : n <= 有限类型.card α)
   证明: by simpa using h𝒜.compls
   mpr h𝒜 := by simpa only [Nat.sub_sub_self hn] using h𝒜.compls
 

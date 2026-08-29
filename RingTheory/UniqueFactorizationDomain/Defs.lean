@@ -39,7 +39,7 @@ abbreviation WfDvdMonoid
 
 中文:
 缩写 WfDvdMonoid
-  签名: (α : 类型) [CommMonoidWithZero α]
+  签名: (α : 类型) [带零交换幺半群 α]
   定义体: IsWellFounded α DvdNotUnit
 
 Depends on / 依赖: DvdNotUnit, IsWellFounded
@@ -57,7 +57,7 @@ theorem wellFounded_dvdNotUnit
 
 中文:
 定理 wellFounded_dvdNotUnit
-  条件: {α : 类型} [CommMonoidWithZero α] [h : WfDvdMonoid α]
+  条件: {α : 类型} [带零交换幺半群 α] [h : WfDvdMonoid α]
   证明: h.wf
 -/
 theorem wellFounded_dvdNotUnit {α : Type*} [CommMonoidWithZero α] [h : WfDvdMonoid α] :
@@ -89,8 +89,8 @@ theorem exists_irreducible_factor
 @[e
 
 中文:
-定理 exists_irreducible_factor
-  条件: {a : α} (ha : ¬IsUnit a) (ha0 : a != 0)
+定理 存在_irreducible_factor
+  条件: {a : α} (ha : ¬是单位 a) (ha0 : a != 0)
   证明: let ⟨b, hs, hr⟩ := wellFounded_dvdNotUnit.has_min { b | b ∣ a ∧ ¬IsUnit b } ⟨a, dvd_rfl, ha⟩
   ⟨b,
     ⟨hs.2, fun c d he =>
@@ -174,7 +174,7 @@ theorem exists_factors
       rw [s.
 
 中文:
-定理 exists_factors
+定理 存在_factors
   条件: (a : α)
   证明: induction_on_irreducible a (fun h => (h rfl).elim)
     (fun _ hu _ => ⟨0, fun _ h => False.elim (Multiset.notMem_zero _ h), hu.unit, one_mul _⟩)
@@ -210,7 +210,7 @@ obtain ⟨b, h⟩ := Multiset.exists_mem_of_ne_zero fun h : f = 0 => hnu by simp
       
 
 中文:
-定理 not_isUnit_iff_exists_factors_eq
+定理 not_isUnit_iff_存在_factors_eq
   条件: (a : α) (hn0 : a != 0)
   证明: ⟨fun hnu => by
     obtain ⟨f, hi, u, rfl⟩ := exists_factors a hn0
@@ -300,11 +300,11 @@ class UniqueFactorizationMonoid
     - irreducible_iff_prime : forall {a : α}, Irreducible a ↔ Prime a
 
 中文:
-类 UniqueFactorizationMonoid
-  参数: (α : 类型) [CommMonoidWithZero α]
-  继承: IsCancelMulZero α, IsWellFounded α DvdNotUnit
+类 唯一分解幺半群
+  参数: (α : 类型) [带零交换幺半群 α]
+  继承: 是乘零消去 α, 是良基 α DvdNotUnit
   公理与运算 (1 个):
-    - irreducible_iff_prime : 对任意 {a : α}, Irreducible a ↔ Prime a
+    - irreducible_iff_prime : 对任意 {a : α}, 不可约 a ↔ 素 a
 -/
 class UniqueFactorizationMonoid (α : Type*) [CommMonoidWithZero α] : Prop
     extends IsCancelMulZero α, IsWellFounded α DvdNotUnit where
@@ -334,7 +334,7 @@ theorem exists_prime_factors
   apply WfDvdMonoid.exists_factors a
 
 中文:
-定理 exists_prime_factors
+定理 存在_prime_factors
   条件: (a : α)
   证明: by
   simp_rw [← UniqueFactorizationMonoid.irreducible_iff_prime]
@@ -360,7 +360,7 @@ lemma exists_prime_iff
 @[elab_as_elim]
 
 中文:
-引理 exists_prime_iff
+引理 存在_prime_iff
   证明: by
   refine ⟨fun ⟨p, hp⟩ => ⟨p, hp.ne_zero, hp.not_isUnit⟩, fun ⟨x, hx₀, hxu⟩ => ?_⟩
   obtain ⟨f, hf, -⟩ := WfDvdMonoid.exists_irreducible_factor hxu hx₀
@@ -389,7 +389,7 @@ theorem induction_on_prime
 
 中文:
 定理 induction_on_prime
-  结论: {P : α -> 命题} (a : α) (h₁ : P 0) (h₂ : 对任意 x : α, IsUnit x -> P x)
+  结论: {P : α -> 命题} (a : α) (h₁ : P 0) (h₂ : 对任意 x : α, 是单位 x -> P x)
   证明: by
   simp_rw [← UniqueFactorizationMonoid.irreducible_iff_prime] at h₃
   exact WfDvdMonoid.induction_on_irreducible a h₁ h₂ h₃
@@ -414,7 +414,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecompositionMonoid α
+  签名: 分解幺半群 α
   定义体: by
     obtain rfl | ha := eq_or_ne a 0; · exact isPrimal_zero
     obtain ⟨f, hf, u, rfl⟩ := exists_prime_factors a ha
@@ -449,8 +449,8 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton α]
-  结论: UniqueFactorizationMonoid α where
+  条件: [子单例 α]
+  结论: 唯一分解幺半群 α where
   证明: Subsingleton.elim a b
   mul_right_cancel_of_ne_zero _ a b _ := Subsingleton.elim a b
   wf := ⟨fun a => Acc.intro a fun b ⟨hb, _⟩ => (hb (Subsingleton.elim b 0)).elim⟩
@@ -501,7 +501,7 @@ theorem factors_prod
 中文:
 定理 factors_prod
   条件: {a : α} (ane0 : a != 0)
-  结论: Associated (factors a).prod a
+  结论: Associated (factors a).乘积 a
   证明: by
   rw [factors]; rw [dif_neg ane0]
   exact (Classical.choose_spec (exists_prime_factors a ane0)).2
@@ -590,7 +590,7 @@ theorem prime_of_factor
 中文:
 定理 prime_of_factor
   条件: {a : α} (x : α) (hx : x in factors a)
-  结论: Prime x
+  结论: 素 x
   证明: by
   have ane0 := ne_zero_of_mem_factors hx
   rw [factors]; rw [dif_neg ane0] at hx
@@ -616,7 +616,7 @@ theorem irreducible_of_factor
 中文:
 定理 irreducible_of_factor
   条件: {a : α}
-  结论: 对任意 x : α, x in factors a -> Irreducible x
+  结论: 对任意 x : α, x in factors a -> 不可约 x
   证明: fun x h =>
   (prime_of_factor x h).irreducible
 -/
@@ -641,7 +641,7 @@ theorem card_factors_of_irreducible
 
 中文:
 定理 card_factors_of_irreducible
-  条件: {a : α} (ha : Irreducible a)
+  条件: {a : α} (ha : 不可约 a)
   结论: (factors a).card = 1
   证明: by
   have hf : factors a != 0 := by

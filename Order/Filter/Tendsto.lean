@@ -38,7 +38,7 @@ theorem tendsto_def
 
 中文:
 定理 tendsto_def
-  条件: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β}
+  条件: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -57,7 +57,7 @@ theorem tendsto_iff_eventually
 
 中文:
 定理 tendsto_iff_eventually
-  条件: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β}
+  条件: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -75,8 +75,8 @@ theorem tendsto_iff_forall_eventually_mem
   proof: Iff.rfl
 
 中文:
-定理 tendsto_iff_forall_eventually_mem
-  条件: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β}
+定理 tendsto_iff_对任意_eventually_mem
+  条件: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -94,8 +94,8 @@ lemma Tendsto.eventually_mem
   proof: hf h
 
 中文:
-引理 Tendsto.eventually_mem
-  结论: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β}
+引理 收敛.eventually_mem
+  结论: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} {s : 集合 β}
   证明: hf h
 -/
 lemma Tendsto.eventually_mem {f : α -> β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β}
@@ -111,8 +111,8 @@ theorem Tendsto.eventually
   proof: hf h
 
 中文:
-定理 Tendsto.eventually
-  结论: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β} {p : β -> 命题}
+定理 收敛.eventually
+  结论: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} {p : β -> 命题}
   证明: hf h
 -/
 theorem Tendsto.eventually {f : α -> β} {l₁ : Filter α} {l₂ : Filter β} {p : β -> Prop}
@@ -129,8 +129,8 @@ theorem not_tendsto_iff_exists_frequently_notMem
   simp only [tendsto_iff_forall_eventually_mem, not_forall, exists_prop, not_eventually]
 
 中文:
-定理 not_tendsto_iff_exists_frequently_notMem
-  条件: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β}
+定理 not_tendsto_iff_存在_frequently_notMem
+  条件: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: by
   simp only [tendsto_iff_forall_eventually_mem, not_forall, exists_prop, not_eventually]
 
@@ -149,8 +149,8 @@ theorem Tendsto.frequently
   proof: mt hf.eventually h
 
 中文:
-定理 Tendsto.frequently
-  结论: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β} {p : β -> 命题}
+定理 收敛.frequently
+  结论: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} {p : β -> 命题}
   证明: mt hf.eventually h
 
 Depends on / 依赖: eventually, hf.eventually
@@ -170,8 +170,8 @@ theorem Tendsto.frequently_map
 @[simp]
 
 中文:
-定理 Tendsto.frequently_map
-  结论: {l₁ : Filter α} {l₂ : Filter β} {p : α -> 命题} {q : β -> 命题}
+定理 收敛.frequently_map
+  结论: {l₁ : 滤子 α} {l₂ : 滤子 β} {p : α -> 命题} {q : β -> 命题}
   证明: c.frequently (h.mono w)
 
 @[simp]
@@ -197,8 +197,8 @@ theorem tendsto_bot
 
 中文:
 定理 tendsto_bot
-  条件: {f : α -> β} {l : Filter β}
-  结论: Tendsto f ⊥ l
+  条件: {f : α -> β} {l : 滤子 β}
+  结论: 收敛 f ⊥ l
   证明: by simp [Tendsto]
 
 @[simp]
@@ -220,8 +220,8 @@ theorem tendsto_bot_right_iff
 
 中文:
 定理 tendsto_bot_right_iff
-  条件: {f : α -> β} {l : Filter α}
-  结论: Tendsto f l ⊥ ↔ l = ⊥
+  条件: {f : α -> β} {l : 滤子 α}
+  结论: 收敛 f l ⊥ ↔ l = ⊥
   证明: by
   simp [Tendsto]
 
@@ -242,8 +242,8 @@ theorem Tendsto.of_neBot_imp
   · exact h hla
 
 中文:
-定理 Tendsto.of_neBot_imp
-  结论: {f : α -> β} {la : Filter α} {lb : Filter β}
+定理 收敛.of_neBot_imp
+  结论: {f : α -> β} {la : 滤子 α} {lb : 滤子 β}
   证明: by
   rcases eq_or_neBot la with rfl | hla
   · exact tendsto_bot
@@ -268,8 +268,8 @@ theorem tendsto_top
 
 中文:
 定理 tendsto_top
-  条件: {f : α -> β} {l : Filter α}
-  结论: Tendsto f l ⊤
+  条件: {f : α -> β} {l : 滤子 α}
+  结论: 收敛 f l ⊤
   证明: le_top
 -/
 @[simp] theorem tendsto_top {f : α -> β} {l : Filter α} : Tendsto f l ⊤ := le_top
@@ -286,7 +286,7 @@ theorem le_map_of_right_inverse
 
 中文:
 定理 le_map_of_right_inverse
-  结论: {mab : α -> β} {mba : β -> α} {f : Filter α} {g : Filter β}
+  结论: {mab : α -> β} {mba : β -> α} {f : 滤子 α} {g : 滤子 β}
   证明: by
   rw [← @map_id _ g]; rw [← map_congr h₁]; rw [← map_map]
   exact map_mono h₂
@@ -308,7 +308,7 @@ theorem tendsto_of_isEmpty
 
 中文:
 定理 tendsto_of_isEmpty
-  条件: [IsEmpty α] {f : α -> β} {la : Filter α} {lb : Filter β}
+  条件: [是空 α] {f : α -> β} {la : 滤子 α} {lb : 滤子 β}
   证明: by simp only [filter_eq_bot_of_isEmpty la, tendsto_bot]
 
 Depends on / 依赖: filter_eq_bot_of_isEmpty, tendsto_bot
@@ -326,7 +326,7 @@ theorem eventuallyEq_of_left_inv_of_right_inv
 
 中文:
 定理 eventuallyEq_of_left_inv_of_right_inv
-  结论: {f : α -> β} {g₁ g₂ : β -> α} {fa : Filter α}
+  结论: {f : α -> β} {g₁ g₂ : β -> α} {fa : 滤子 α}
   证明: (htendsto.eventually hleft).mp hright.mono fun _ hr hl => (congr_arg g₁ hr.symm).trans hl
 
 Depends on / 依赖: congr_arg, eventually, hr.symm, hright, hright.mono, htendsto, htendsto.eventually
@@ -348,7 +348,7 @@ alias ⟨Tendsto.le_comap, _⟩ := tendsto_iff_comap
 
 中文:
 定理 tendsto_iff_comap
-  条件: {f : α -> β} {l₁ : Filter α} {l₂ : Filter β}
+  条件: {f : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: map_le_iff_le_comap
 
 alias ⟨Tendsto.le_comap, _⟩ := tendsto_iff_comap
@@ -370,8 +370,8 @@ theorem Tendsto.disjoint
   proof: (disjoint_comap hd).mono h₁.le_comap h₂.le_comap
 
 中文:
-定理 Tendsto.disjoint
-  结论: {f : α -> β} {la₁ la₂ : Filter α} {lb₁ lb₂ : Filter β}
+定理 收敛.disjoint
+  结论: {f : α -> β} {la₁ la₂ : 滤子 α} {lb₁ lb₂ : 滤子 β}
   证明: (disjoint_comap hd).mono h₁.le_comap h₂.le_comap
 -/
 protected theorem Tendsto.disjoint {f : α -> β} {la₁ la₂ : Filter α} {lb₁ lb₂ : Filter β}
@@ -388,7 +388,7 @@ theorem tendsto_congr'
 
 中文:
 定理 tendsto_congr'
-  条件: {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂)
+  条件: {f₁ f₂ : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} (hl : f₁ =ᶠ[l₁] f₂)
   证明: by rw [Tendsto, Tendsto, map_congr hl]
 
 Depends on / 依赖: Tendsto, map_congr
@@ -405,8 +405,8 @@ theorem Tendsto.congr'
   proof: (tendsto_congr' hl).1 h
 
 中文:
-定理 Tendsto.congr'
-  结论: {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂)
+定理 收敛.congr'
+  结论: {f₁ f₂ : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} (hl : f₁ =ᶠ[l₁] f₂)
   证明: (tendsto_congr' hl).1 h
 
 Depends on / 依赖: tendsto_congr
@@ -425,7 +425,7 @@ theorem tendsto_congr
 
 中文:
 定理 tendsto_congr
-  条件: {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂ : Filter β} (h : 对任意 x, f₁ x = f₂ x)
+  条件: {f₁ f₂ : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} (h : 对任意 x, f₁ x = f₂ x)
   证明: tendsto_congr' (univ_mem' h)
 
 Depends on / 依赖: tendsto_congr, univ_mem
@@ -443,8 +443,8 @@ theorem Tendsto.congr
   proof: (tendsto_congr h).1
 
 中文:
-定理 Tendsto.congr
-  条件: {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂ : Filter β} (h : 对任意 x, f₁ x = f₂ x)
+定理 收敛.congr
+  条件: {f₁ f₂ : α -> β} {l₁ : 滤子 α} {l₂ : 滤子 β} (h : 对任意 x, f₁ x = f₂ x)
   证明: (tendsto_congr h).1
 
 Depends on / 依赖: tendsto_congr
@@ -464,8 +464,8 @@ theorem tendsto_id'
 
 中文:
 定理 tendsto_id'
-  条件: {x y : Filter α}
-  结论: Tendsto id x y ↔ x <= y
+  条件: {x y : 滤子 α}
+  结论: 收敛 id x y ↔ x <= y
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -484,8 +484,8 @@ theorem tendsto_id
 
 中文:
 定理 tendsto_id
-  条件: {x : Filter α}
-  结论: Tendsto id x x
+  条件: {x : 滤子 α}
+  结论: 收敛 id x x
   证明: le_refl x
 
 Depends on / 依赖: le_refl
@@ -502,8 +502,8 @@ theorem Tendsto.comp
   proof: fun _ hs => hf (hg hs)
 
 中文:
-定理 Tendsto.comp
-  结论: {f : α -> β} {g : β -> γ} {x : Filter α} {y : Filter β} {z : Filter γ}
+定理 收敛.comp
+  结论: {f : α -> β} {g : β -> γ} {x : 滤子 α} {y : 滤子 β} {z : 滤子 γ}
   证明: fun _ hs => hf (hg hs)
 -/
 theorem Tendsto.comp {f : α -> β} {g : β -> γ} {x : Filter α} {y : Filter β} {z : Filter γ}
@@ -517,8 +517,8 @@ theorem Tendsto.iterate
   given: {f : α -> α} {l : Filter α} (h : Tendsto f l l)
 
 中文:
-定理 Tendsto.iterate
-  条件: {f : α -> α} {l : Filter α} (h : Tendsto f l l)
+定理 收敛.iterate
+  条件: {f : α -> α} {l : 滤子 α} (h : 收敛 f l l)
 -/
 protected theorem Tendsto.iterate {f : α -> α} {l : Filter α} (h : Tendsto f l l) :
     forall n, Tendsto (f^[n]) l l
@@ -534,8 +534,8 @@ theorem Tendsto.mono_left
   proof: (map_mono h).trans hx
 
 中文:
-定理 Tendsto.mono_left
-  结论: {f : α -> β} {x y : Filter α} {z : Filter β} (hx : Tendsto f x z)
+定理 收敛.mono_left
+  结论: {f : α -> β} {x y : 滤子 α} {z : 滤子 β} (hx : 收敛 f x z)
   证明: (map_mono h).trans hx
 
 Depends on / 依赖: map_mono
@@ -553,8 +553,8 @@ theorem Tendsto.mono_right
   proof: le_trans hy hz
 
 中文:
-定理 Tendsto.mono_right
-  结论: {f : α -> β} {x : Filter α} {y z : Filter β} (hy : Tendsto f x y)
+定理 收敛.mono_right
+  结论: {f : α -> β} {x : 滤子 α} {y z : 滤子 β} (hy : 收敛 f x y)
   证明: le_trans hy hz
 
 Depends on / 依赖: le_trans
@@ -572,8 +572,8 @@ theorem Tendsto.neBot
   proof: (hx.map _).mono h
 
 中文:
-定理 Tendsto.neBot
-  条件: {f : α -> β} {x : Filter α} {y : Filter β} (h : Tendsto f x y) [hx : NeBot x]
+定理 收敛.neBot
+  条件: {f : α -> β} {x : 滤子 α} {y : 滤子 β} (h : 收敛 f x y) [hx : NeBot x]
   证明: (hx.map _).mono h
 
 Depends on / 依赖: hx.map
@@ -595,8 +595,8 @@ theorem tendsto_map
 
 中文:
 定理 tendsto_map
-  条件: {f : α -> β} {x : Filter α}
-  结论: Tendsto f x (map f x)
+  条件: {f : α -> β} {x : 滤子 α}
+  结论: 收敛 f x (map f x)
   证明: le_refl (map f x)
 
 @[simp]
@@ -620,7 +620,7 @@ alias ⟨_, tendsto_map'⟩ := tendsto_map'_iff
 
 中文:
 定理 tendsto_map'_iff
-  条件: {f : β -> γ} {g : α -> β} {x : Filter α} {y : Filter γ}
+  条件: {f : β -> γ} {g : α -> β} {x : 滤子 α} {y : 滤子 γ}
   证明: by
   rw [Tendsto]; rw [Tendsto]; rw [map_map]
 
@@ -647,8 +647,8 @@ theorem tendsto_comap
 
 中文:
 定理 tendsto_comap
-  条件: {f : α -> β} {x : Filter β}
-  结论: Tendsto f (comap f x) x
+  条件: {f : α -> β} {x : 滤子 β}
+  结论: 收敛 f (comap f x) x
   证明: map_comap_le
 
 @[simp]
@@ -669,7 +669,7 @@ theorem tendsto_comap_iff
 
 中文:
 定理 tendsto_comap_iff
-  条件: {f : α -> β} {g : β -> γ} {a : Filter α} {c : Filter γ}
+  条件: {f : α -> β} {g : β -> γ} {a : 滤子 α} {c : 滤子 γ}
   证明: ⟨fun h => tendsto_comap.comp h, fun h => map_le_iff_le_comap.mp by rwa [map_map]⟩
 
 Depends on / 依赖: map_le_iff_le_comap, map_le_iff_le_comap.mp, map_map, tendsto_comap, tendsto_comap.comp
@@ -690,7 +690,7 @@ theorem tendsto_comap'_iff
 
 中文:
 定理 tendsto_comap'_iff
-  条件: {m : α -> β} {f : Filter α} {g : Filter β} {i : γ -> α} (h : range i in f)
+  条件: {m : α -> β} {f : 滤子 α} {g : 滤子 β} {i : γ -> α} (h : range i in f)
   证明: by
   rw [Tendsto]; rw [← map_compose]
   simp only [(· ∘ ·), map_comap_of_mem h, Tendsto]
@@ -715,8 +715,8 @@ theorem Tendsto.of_tendsto_comp
     _ <= comap f b := by simpa [comap_comap] using comap_mono hg
 
 中文:
-定理 Tendsto.of_tendsto_comp
-  结论: {f : α -> β} {g : β -> γ} {a : Filter α} {b : Filter β} {c : Filter γ}
+定理 收敛.of_tendsto_comp
+  结论: {f : α -> β} {g : β -> γ} {a : 滤子 α} {b : 滤子 β} {c : 滤子 γ}
   证明: by
   rw [tendsto_iff_comap] at hfg ⊢
   calc
@@ -744,7 +744,7 @@ theorem comap_eq_of_inverse
 
 中文:
 定理 comap_eq_of_inverse
-  结论: {f : Filter α} {g : Filter β} {φ : α -> β} (ψ : β -> α) (eq : ψ ∘ φ = id)
+  结论: {f : 滤子 α} {g : 滤子 β} {φ : α -> β} (ψ : β -> α) (eq : ψ ∘ φ = id)
   证明: by
   refine ((comap_mono <| map_le_iff_le_comap.1 hψ).trans ?_).antisymm (map_le_iff_le_comap.1 hφ)
   rw [comap_comap]; rw [eq]; rw [comap_id]
@@ -768,7 +768,7 @@ theorem map_eq_of_inverse
 
 中文:
 定理 map_eq_of_inverse
-  结论: {f : Filter α} {g : Filter β} {φ : α -> β} (ψ : β -> α) (eq : φ ∘ ψ = id)
+  结论: {f : 滤子 α} {g : 滤子 β} {φ : α -> β} (ψ : β -> α) (eq : φ ∘ ψ = id)
   证明: by
   refine le_antisymm hφ (le_trans ?_ (map_mono hψ))
   rw [map_map]; rw [eq]; rw [map_id]
@@ -791,7 +791,7 @@ theorem tendsto_inf
 
 中文:
 定理 tendsto_inf
-  条件: {f : α -> β} {x : Filter α} {y₁ y₂ : Filter β}
+  条件: {f : α -> β} {x : 滤子 α} {y₁ y₂ : 滤子 β}
   证明: by
   simp only [Tendsto, le_inf_iff]
 
@@ -811,7 +811,7 @@ theorem tendsto_inf_left
 
 中文:
 定理 tendsto_inf_left
-  条件: {f : α -> β} {x₁ x₂ : Filter α} {y : Filter β} (h : Tendsto f x₁ y)
+  条件: {f : α -> β} {x₁ x₂ : 滤子 α} {y : 滤子 β} (h : 收敛 f x₁ y)
   证明: le_trans (map_mono inf_le_left) h
 
 Depends on / 依赖: inf_le_left, le_trans, map_mono
@@ -830,7 +830,7 @@ theorem tendsto_inf_right
 
 中文:
 定理 tendsto_inf_right
-  条件: {f : α -> β} {x₁ x₂ : Filter α} {y : Filter β} (h : Tendsto f x₂ y)
+  条件: {f : α -> β} {x₁ x₂ : 滤子 α} {y : 滤子 β} (h : 收敛 f x₂ y)
   证明: le_trans (map_mono inf_le_right) h
 
 Depends on / 依赖: inf_le_right, le_trans, map_mono
@@ -850,8 +850,8 @@ theorem Tendsto.inf
 @[simp]
 
 中文:
-定理 Tendsto.inf
-  结论: {f : α -> β} {x₁ x₂ : Filter α} {y₁ y₂ : Filter β} (h₁ : Tendsto f x₁ y₁)
+定理 收敛.下确界
+  结论: {f : α -> β} {x₁ x₂ : 滤子 α} {y₁ y₂ : 滤子 β} (h₁ : 收敛 f x₁ y₁)
   证明: tendsto_inf.2 ⟨tendsto_inf_left h₁, tendsto_inf_right h₂⟩
 
 @[simp]
@@ -874,7 +874,7 @@ theorem tendsto_iInf
 
 中文:
 定理 tendsto_iInf
-  条件: {f : α -> β} {x : Filter α} {y : ι -> Filter β}
+  条件: {f : α -> β} {x : 滤子 α} {y : ι -> 滤子 β}
   证明: by
   simp only [Tendsto, le_iInf_iff]
 
@@ -894,7 +894,7 @@ theorem tendsto_iInf'
 
 中文:
 定理 tendsto_iInf'
-  结论: {f : α -> β} {x : ι -> Filter α} {y : Filter β} (i : ι)
+  结论: {f : α -> β} {x : ι -> 滤子 α} {y : 滤子 β} (i : ι)
   证明: hi.mono_left iInf_le _ _
 
 Depends on / 依赖: hi.mono_left, iInf_le, mono_left
@@ -915,7 +915,7 @@ theorem tendsto_iInf_iInf
 
 中文:
 定理 tendsto_iInf_iInf
-  结论: {f : α -> β} {x : ι -> Filter α} {y : ι -> Filter β}
+  结论: {f : α -> β} {x : ι -> 滤子 α} {y : ι -> 滤子 β}
   证明: tendsto_iInf.2 fun i => tendsto_iInf' i (h i)
 
 @[simp]
@@ -938,7 +938,7 @@ theorem tendsto_sup
 
 中文:
 定理 tendsto_sup
-  条件: {f : α -> β} {x₁ x₂ : Filter α} {y : Filter β}
+  条件: {f : α -> β} {x₁ x₂ : 滤子 α} {y : 滤子 β}
   证明: by
   simp only [Tendsto, map_sup, sup_le_iff]
 
@@ -957,8 +957,8 @@ theorem Tendsto.sup
   proof: fun h₁ h₂ => tendsto_sup.mpr ⟨h₁, h₂⟩
 
 中文:
-定理 Tendsto.sup
-  条件: {f : α -> β} {x₁ x₂ : Filter α} {y : Filter β}
+定理 收敛.上确界
+  条件: {f : α -> β} {x₁ x₂ : 滤子 α} {y : 滤子 β}
   证明: fun h₁ h₂ => tendsto_sup.mpr ⟨h₁, h₂⟩
 
 Depends on / 依赖: tendsto_sup, tendsto_sup.mpr
@@ -977,8 +977,8 @@ theorem Tendsto.sup_sup
 @[simp]
 
 中文:
-定理 Tendsto.sup_sup
-  结论: {f : α -> β} {x₁ x₂ : Filter α} {y₁ y₂ : Filter β}
+定理 收敛.sup_sup
+  结论: {f : α -> β} {x₁ x₂ : 滤子 α} {y₁ y₂ : 滤子 β}
   证明: tendsto_sup.mpr ⟨h₁.mono_right le_sup_left, h₂.mono_right le_sup_right⟩
 
 @[simp]
@@ -1000,7 +1000,7 @@ theorem tendsto_iSup
 
 中文:
 定理 tendsto_iSup
-  条件: {f : α -> β} {x : ι -> Filter α} {y : Filter β}
+  条件: {f : α -> β} {x : ι -> 滤子 α} {y : 滤子 β}
   证明: by simp only [Tendsto, map_iSup, iSup_le_iff]
 
 Depends on / 依赖: Tendsto, iSup_le_iff, map_iSup
@@ -1018,7 +1018,7 @@ theorem tendsto_iSup_iSup
 
 中文:
 定理 tendsto_iSup_iSup
-  结论: {f : α -> β} {x : ι -> Filter α} {y : ι -> Filter β}
+  结论: {f : α -> β} {x : ι -> 滤子 α} {y : ι -> 滤子 β}
   证明: tendsto_iSup.2 fun i => (h i).mono_right le_iSup _ _
 
 Depends on / 依赖: le_iSup, mono_right, tendsto_iSup
@@ -1038,7 +1038,7 @@ theorem tendsto_principal
 
 中文:
 定理 tendsto_principal
-  条件: {f : α -> β} {l : Filter α} {s : Set β}
+  条件: {f : α -> β} {l : 滤子 α} {s : 集合 β}
   证明: by
   simp only [Tendsto, le_principal_iff, mem_map', Filter.Eventually]
 -/
@@ -1057,7 +1057,7 @@ theorem tendsto_principal_principal
 
 中文:
 定理 tendsto_principal_principal
-  条件: {f : α -> β} {s : Set α} {t : Set β}
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β}
   证明: by
   simp
 -/
@@ -1076,7 +1076,7 @@ theorem tendsto_pure
 
 中文:
 定理 tendsto_pure
-  条件: {f : α -> β} {a : Filter α} {b : β}
+  条件: {f : α -> β} {a : 滤子 α} {b : β}
   证明: by
   simp only [Tendsto, le_pure_iff, mem_map', mem_singleton_iff, Filter.Eventually]
 -/
@@ -1096,7 +1096,7 @@ theorem tendsto_pure_pure
 中文:
 定理 tendsto_pure_pure
   条件: (f : α -> β) (a : α)
-  结论: Tendsto f (pure a) (pure (f a))
+  结论: 收敛 f (pure a) (pure (f a))
   证明: tendsto_pure.2 rfl
 
 Depends on / 依赖: tendsto_pure
@@ -1115,8 +1115,8 @@ theorem tendsto_const_pure
 
 中文:
 定理 tendsto_const_pure
-  条件: {a : Filter α} {b : β}
-  结论: Tendsto (fun _ => b) a (pure b)
+  条件: {a : 滤子 α} {b : β}
+  结论: 收敛 (fun _ => b) a (pure b)
   证明: tendsto_pure.2 univ_mem' fun _ => rfl
 
 Depends on / 依赖: tendsto_pure, univ_mem
@@ -1135,7 +1135,7 @@ theorem pure_le_iff
 
 中文:
 定理 pure_le_iff
-  条件: {a : α} {l : Filter α}
+  条件: {a : α} {l : 滤子 α}
   结论: pure a <= l ↔ 对任意 s in l, a in s
   证明: Iff.rfl
 
@@ -1156,7 +1156,7 @@ theorem tendsto_pure_left
 
 中文:
 定理 tendsto_pure_left
-  条件: {f : α -> β} {a : α} {l : Filter β}
+  条件: {f : α -> β} {a : α} {l : 滤子 β}
   证明: Iff.rfl
 
 @[simp]
@@ -1178,7 +1178,7 @@ theorem map_inf_principal_preimage
 
 中文:
 定理 map_inf_principal_preimage
-  条件: {f : α -> β} {s : Set β} {l : Filter α}
+  条件: {f : α -> β} {s : 集合 β} {l : 滤子 α}
   证明: Filter.ext fun t => by simp only [mem_map', mem_inf_principal, mem_ofPred_eq, mem_preimage]
 
 Depends on / 依赖: Filter, Filter.ext, mem_inf_principal, mem_map, mem_ofPred_eq, mem_preimage
@@ -1197,8 +1197,8 @@ theorem Tendsto.not_tendsto
   (tendsto_inf.2 ⟨hf, hf'⟩).neBot.ne hb.eq_bot
 
 中文:
-定理 Tendsto.not_tendsto
-  结论: {f : α -> β} {a : Filter α} {b₁ b₂ : Filter β} (hf : Tendsto f a b₁)
+定理 收敛.not_tendsto
+  结论: {f : α -> β} {a : 滤子 α} {b₁ b₂ : 滤子 β} (hf : 收敛 f a b₁)
   证明: fun hf' =>
   (tendsto_inf.2 ⟨hf, hf'⟩).neBot.ne hb.eq_bot
 -/
@@ -1221,8 +1221,8 @@ theorem Tendsto.if
   exacts [hp₀ h, hp₁ h]
 
 中文:
-定理 Tendsto.if
-  结论: {l₁ : Filter α} {l₂ : Filter β} {f g : α -> β} {p : α -> 命题}
+定理 收敛.if
+  结论: {l₁ : 滤子 α} {l₂ : 滤子 β} {f g : α -> β} {p : α -> 命题}
   证明: by
   simp only [tendsto_def, mem_inf_principal] at *
   intro s hs
@@ -1251,8 +1251,8 @@ theorem Tendsto.if'
   proof: (tendsto_inf_left hf).if (tendsto_inf_left hg)
 
 中文:
-定理 Tendsto.if'
-  结论: {α β : 类型} {l₁ : Filter α} {l₂ : Filter β} {f g : α -> β}
+定理 收敛.if'
+  结论: {α β : 类型} {l₁ : 滤子 α} {l₂ : 滤子 β} {f g : α -> β}
   证明: (tendsto_inf_left hf).if (tendsto_inf_left hg)
 -/
 protected theorem Tendsto.if' {α β : Type*} {l₁ : Filter α} {l₂ : Filter β} {f g : α -> β}
@@ -1269,8 +1269,8 @@ theorem Tendsto.piecewise
   proof: Tendsto.if h₀ h₁
 
 中文:
-定理 Tendsto.piecewise
-  结论: {l₁ : Filter α} {l₂ : Filter β} {f g : α -> β} {s : Set α}
+定理 收敛.piecewise
+  结论: {l₁ : 滤子 α} {l₂ : 滤子 β} {f g : α -> β} {s : 集合 α}
   证明: Tendsto.if h₀ h₁
 -/
 protected theorem Tendsto.piecewise {l₁ : Filter α} {l₂ : Filter β} {f g : α -> β} {s : Set α}
@@ -1289,8 +1289,8 @@ theorem Set.MapsTo.tendsto
   proof: Filter.tendsto_principal_principal.2 h
 
 中文:
-定理 Set.MapsTo.tendsto
-  条件: {s : Set α} {t : Set β} {f : α -> β} (h : MapsTo f s t)
+定理 集合.映射到.tendsto
+  条件: {s : 集合 α} {t : 集合 β} {f : α -> β} (h : 映射到 f s t)
   证明: Filter.tendsto_principal_principal.2 h
 
 Depends on / 依赖: Filter, Filter.tendsto_principal_principal, tendsto_principal_principal
@@ -1308,8 +1308,8 @@ theorem Filter.EventuallyEq.comp_tendsto
   proof: hg.eventually H
 
 中文:
-定理 Filter.EventuallyEq.comp_tendsto
-  结论: {l : Filter α} {f : α -> β} {f' : α -> β}
+定理 滤子.EventuallyEq.comp_tendsto
+  结论: {l : 滤子 α} {f : α -> β} {f' : α -> β}
   证明: hg.eventually H
 
 Depends on / 依赖: eventually, hg.eventually
@@ -1332,7 +1332,7 @@ theorem Filter.map_mapsTo_Iic_iff_tendsto
 alias ⟨_, Filter.Tendsto.map_mapsTo_Iic⟩ := Filter.map_mapsTo_Iic_iff_tendsto
 
 中文:
-定理 Filter.map_mapsTo_Iic_iff_tendsto
+定理 滤子.map_mapsTo_Iic_iff_tendsto
   条件: {m : α -> β}
   证明: ⟨fun hm => hm self_mem_Iic, fun hm _ => hm.mono_left⟩
 
@@ -1358,8 +1358,8 @@ theorem Filter.map_mapsTo_Iic_iff_mapsTo
 alias ⟨_, Set.MapsTo.filter_map_Iic⟩ := Filter.map_mapsTo_Iic_iff_mapsTo
 
 中文:
-定理 Filter.map_mapsTo_Iic_iff_mapsTo
-  条件: {s : Set α} {t : Set β} {m : α -> β}
+定理 滤子.map_mapsTo_Iic_iff_mapsTo
+  条件: {s : 集合 α} {t : 集合 β} {m : α -> β}
   证明: by
   rw [map_mapsTo_Iic_iff_tendsto]; rw [tendsto_principal_principal]; rw [MapsTo]
 

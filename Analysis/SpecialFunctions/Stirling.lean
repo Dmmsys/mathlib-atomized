@@ -206,7 +206,7 @@ sub_nonneg.mp (log_stirlingSeq_sdiff_hasSum n).nonneg fun m => by positivity
 
 中文:
 定理 log_stirlingSeq'_antitone
-  结论: Antitone (实数.log ∘ stirlingSeq ∘ succ)
+  结论: 递减 (实数.log ∘ stirlingSeq ∘ succ)
   证明: antitone_nat_of_succ_le fun n =>
 sub_nonneg.mp (log_stirlingSeq_sdiff_hasSum n).nonneg fun m => by positivity
 
@@ -460,7 +460,7 @@ theorem stirlingSeq'_antitone
 
 中文:
 定理 stirlingSeq'_antitone
-  结论: Antitone (stirlingSeq ∘ succ)
+  结论: 递减 (stirlingSeq ∘ succ)
   证明: fun n m h =>
   (log_le_log_iff (stirlingSeq'_pos m) (stirlingSeq'_pos n)).mp (log_stirlingSeq'_antitone h)
 -/
@@ -482,7 +482,7 @@ theorem stirlingSeq_has_pos_limit_a
 
 中文:
 定理 stirlingSeq_has_pos_limit_a
-  结论: 存在 a : 实数, 0 < a ∧ Tendsto stirlingSeq atTop (𝓝 a)
+  结论: 存在 a : 实数, 0 < a ∧ 收敛 stirlingSeq atTop (𝓝 a)
   证明: by
   obtain ⟨x, x_pos, hx⟩ := stirlingSeq'_bounded_by_pos_constant
   have hx' : x in lowerBounds (Set.range (stirlingSeq ∘ succ)) := by simpa [lowerBounds] using hx
@@ -599,7 +599,7 @@ theorem second_wallis_limit
 
 中文:
 定理 second_wallis_limit
-  条件: (a : 实数) (hane : a != 0) (ha : Tendsto stirlingSeq atTop (𝓝 a))
+  条件: (a : 实数) (hane : a != 0) (ha : 收敛 stirlingSeq atTop (𝓝 a))
   证明: by
   refine Tendsto.congr' (eventually_atTop.mpr ⟨1, fun n hn =>
     stirlingSeq_pow_four_div_stirlingSeq_pow_two_eq n (one_le_iff_ne_zero.mp hn)⟩) ?_
@@ -634,7 +634,7 @@ theorem tendsto_stirlingSeq_sqrt_pi
 
 中文:
 定理 tendsto_stirlingSeq_sqrt_pi
-  结论: Tendsto stirlingSeq atTop (𝓝 (√π))
+  结论: 收敛 stirlingSeq atTop (𝓝 (√π))
   证明: by
   obtain ⟨a, hapos, halimit⟩ := stirlingSeq_has_pos_limit_a
   have hπ : π / 2 = a ^ 2 / 2 :=

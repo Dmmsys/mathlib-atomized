@@ -157,7 +157,7 @@ theorem Ico_filter_dvd_card
 
 中文:
 定理 Ico_filter_dvd_card
-  结论: #{x in Ico a b | r ∣ x} = max (⌈b / (r : Rat)⌉ - ⌈a / (r : Rat)⌉) 0
+  结论: #{x in 左闭右开区间 a b | r ∣ x} = 最大值 (⌈b / (r : 有理数)⌉ - ⌈a / (r : 有理数)⌉) 0
   证明: by
   rw [Ico_filter_dvd_eq _ _ hr]; rw [card_map]; rw [card_Ico]; rw [toNat_eq_max]
 
@@ -177,7 +177,7 @@ theorem Ioc_filter_dvd_card
 
 中文:
 定理 Ioc_filter_dvd_card
-  结论: #{x in Ioc a b | r ∣ x} = max (⌊b / (r : Rat)⌋ - ⌊a / (r : Rat)⌋) 0
+  结论: #{x in 左开右闭区间 a b | r ∣ x} = 最大值 (⌊b / (r : 有理数)⌋ - ⌊a / (r : 有理数)⌋) 0
   证明: by
   rw [Ioc_filter_dvd_eq _ _ hr]; rw [card_map]; rw [card_Ioc]; rw [toNat_eq_max]
 

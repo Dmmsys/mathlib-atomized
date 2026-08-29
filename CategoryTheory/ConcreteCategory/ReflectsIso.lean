@@ -30,7 +30,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget 类型).ReflectsIsomorphisms
+  签名: (forget 类型).反映同构
   定义体: i
 -/
 instance : (forget Type*).ReflectsIsomorphisms where reflects _ _ _ {i} := i
@@ -56,7 +56,7 @@ instance reflectsIsomorphisms_forget₂
 
 中文:
 实例 reflectsIsomorphisms_forget₂
-  签名: [HasForget₂ C D] [(forget C).ReflectsIsomorphisms]
+  签名: [有Forget₂ C D] [(forget C).反映同构]
   定义体: { reflects := fun X Y f {i} => by
       have i' : IsIso ((forget D).map ((forget₂ C D).map f)) := Functor.map_isIso (forget D) _
       have : IsIso ((forget C).map f) := by

@@ -46,11 +46,11 @@ class IsCardinalLocallyPresentable
     - example((κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCardinalLocallyPresentable C κ]) : ObjectProperty.EssentiallySmall.{w} (isCardinalPresentable C κ)  [default: inferInstance]
 
 中文:
-类 IsCardinalLocallyPresentable
+类 是CardinalLocallyPresentable
   参数: : 命题
-  继承: HasCardinalFilteredGenerator C κ, HasColimitsOfSize.{w, w} C
+  继承: 有CardinalFilteredGenerator C κ, 有余limitsOfSize.{w, w} C
   公理与运算 (1 个):
-    - example((κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCardinalLocallyPresentable C κ]) : Object命题erty.EssentiallySmall.{w} (isCardinalPresentable C κ)  [默认: inferInstance]
+    - example((κ : 基数.{w}) [Fact κ.是正则] [是CardinalLocallyPresentable C κ]) : ObjectProperty.EssentiallySmall.{w} (isCardinalPresentable C κ)  [默认: inferInstance]
 -/
 class IsCardinalLocallyPresentable : Prop
   extends HasCardinalFilteredGenerator C κ, HasColimitsOfSize.{w, w} C where
@@ -68,9 +68,9 @@ class IsCardinalAccessibleCategory
   (no additional axioms)
 
 中文:
-类 IsCardinalAccessibleCategory
+类 是CardinalAccessible范畴
   参数: : 命题
-  继承: HasCardinalFilteredGenerator C κ, HasCardinalFilteredColimits.{w} C κ
+  继承: 有CardinalFilteredGenerator C κ, 有CardinalFilteredColimits.{w} C κ
   (无附加公理)
 -/
 class IsCardinalAccessibleCategory : Prop
@@ -85,8 +85,8 @@ instance [IsCardinalLocallyPresentable
   body: inferInstance
 
 中文:
-实例 [IsCardinalLocallyPresentable
-  签名: C κ] : IsCardinalAccessibleCategory C κ where
+实例 [是CardinalLocallyPresentable
+  签名: C κ] : 是CardinalAccessible范畴 C κ where
   定义体: inferInstance
 -/
 instance [IsCardinalLocallyPresentable C κ] : IsCardinalAccessibleCategory C κ where
@@ -150,10 +150,10 @@ class IsLocallyPresentable
     - exists_cardinal((C) [hC]) : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalLocallyPresentable C κ
 
 中文:
-类 IsLocallyPresentable
-  参数: (C : 类型u) [hC : Category.{v} C]
+类 是LocallyPresentable
+  参数: (C : 类型u) [hC : 范畴.{v} C]
   公理与运算 (1 个):
-    - exists_cardinal((C) [hC]) : 存在 (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalLocallyPresentable C κ
+    - exists_cardinal((C) [hC]) : 存在 (κ : 基数.{w}) (_ : Fact κ.是正则), 是CardinalLocallyPresentable C κ
 -/
 class IsLocallyPresentable (C : Type u) [hC : Category.{v} C] : Prop where
   exists_cardinal (C) [hC] : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular),
@@ -172,10 +172,10 @@ class IsAccessibleCategory
     - exists_cardinal((C) [hC]) : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalAccessibleCategory C κ
 
 中文:
-类 IsAccessibleCategory
-  参数: (C : 类型u) [hC : Category.{v} C]
+类 是Accessible范畴
+  参数: (C : 类型u) [hC : 范畴.{v} C]
   公理与运算 (1 个):
-    - exists_cardinal((C) [hC]) : 存在 (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalAccessibleCategory C κ
+    - exists_cardinal((C) [hC]) : 存在 (κ : 基数.{w}) (_ : Fact κ.是正则), 是CardinalAccessible范畴 C κ
 -/
 class IsAccessibleCategory (C : Type u) [hC : Category.{v} C] : Prop where
   exists_cardinal (C) [hC] : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular),
@@ -194,8 +194,8 @@ instance [IsLocallyPresentable.{w}
     exact ⟨κ, hκ, inferInstance⟩
 
 中文:
-实例 [IsLocallyPresentable.{w}
-  签名: C] : IsAccessibleCategory.{w} C where
+实例 [是LocallyPresentable.{w}
+  签名: C] : 是Accessible范畴.{w} C where
   定义体: by
     obtain ⟨κ, hκ, h'⟩ := IsLocallyPresentable.exists_cardinal C
     exact ⟨κ, hκ, inferInstance⟩
@@ -221,7 +221,7 @@ instance [IsAccessibleCategory.{w}
 example [IsLocallyPresentable.{w} C] (X : C) : IsPresentable.{w} X := inferInstance
 
 中文:
-实例 [IsAccessibleCategory.{w}
+实例 [是Accessible范畴.{w}
   签名: C] (X
   定义体: by
   obtain ⟨κ, _, _⟩ := IsAccessibleCategory.exists_cardinal C

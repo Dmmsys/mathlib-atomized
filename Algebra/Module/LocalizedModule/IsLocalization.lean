@@ -63,8 +63,8 @@ instance [IsLocalization
   body: isLocalizedModule_iff_isLocalization.mpr ‹_›
 
 中文:
-实例 [IsLocalization
-  签名: (Algebra.algebraMapSubmonoid A S) Aₛ] :
+实例 [是Localization
+  签名: (代数.algebraMapSubmonoid A S) Aₛ] :
   定义体: isLocalizedModule_iff_isLocalization.mpr ‹_›
 
 Depends on / 依赖: isLocalizedModule_iff_isLocalization, isLocalizedModule_iff_isLocalization.mpr
@@ -106,8 +106,8 @@ instance [IsLocalization
   body: (isLocalizedModule_iff_isLocalization' S _).mpr inferInstance
 
 中文:
-实例 [IsLocalization
-  签名: S A] : IsLocalizedModule S (Algebra.linearMap R A)
+实例 [是Localization
+  签名: S A] : 是Localized模 S (代数.linearMap R A)
   定义体: (isLocalizedModule_iff_isLocalization' S _).mpr inferInstance
 
 Depends on / 依赖: isLocalizedModule_iff_isLocalization
@@ -127,8 +127,8 @@ lemma IsLocalization.mk'_algebraMap_eq_mk'
   exact IsLocalization.smul_mk'_self (m := ⟨_, _⟩)
 
 中文:
-引理 IsLocalization.mk'_algebraMap_eq_mk'
-  结论: [IsLocalization (Algebra.algebraMapSubmonoid A S) Aₛ]
+引理 是Localization.mk'_algebraMap_eq_mk'
+  结论: [是Localization (代数.algebraMapSubmonoid A S) Aₛ]
   证明: by
   rw [← IsLocalizedModule.smul_inj (IsScalarTower.toAlgHom R A Aₛ).toLinearMap s]; rw [IsLocalizedModule.mk'_cancel']; rw [Submonoid.smul_def]; rw [← algebraMap_smul A]
   exact IsLocalization.smul_mk'_self (m := ⟨_, _⟩)
@@ -152,8 +152,8 @@ lemma IsLocalization.mk'_eq_mk'
   exact IsLocalization.smul_mk'_self
 
 中文:
-引理 IsLocalization.mk'_eq_mk'
-  条件: [IsLocalization S A] (x : R) (s : S)
+引理 是Localization.mk'_eq_mk'
+  条件: [是Localization S A] (x : R) (s : S)
   证明: by
   rw [← IsLocalizedModule.smul_inj (Algebra.linearMap R A) s]; rw [IsLocalizedModule.mk'_cancel']
   exact IsLocalization.smul_mk'_self

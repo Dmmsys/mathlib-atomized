@@ -193,7 +193,7 @@ theorem reflection_involutive
 
 中文:
 定理 reflection_involutive
-  结论: Function.Involutive K.reflection
+  结论: 函数.对合 K.reflection
   证明: K.reflection_reflection
 
 Depends on / 依赖: K.reflection_reflection, reflection_reflection
@@ -363,7 +363,7 @@ theorem reflection_map_apply
 
 中文:
 定理 reflection_map_apply
-  结论: {E E' : 类型} [NormedAddCommGroup E] [NormedAddCommGroup E']
+  结论: {E E' : 类型} [赋范交换加群 E] [赋范交换加群 E']
   证明: by
   simp [reflection_apply, starProjection_map_apply f K x]
 
@@ -385,7 +385,7 @@ theorem reflection_map
 
 中文:
 定理 reflection_map
-  结论: {E E' : 类型} [NormedAddCommGroup E] [NormedAddCommGroup E']
+  结论: {E E' : 类型} [赋范交换加群 E] [赋范交换加群 E']
   证明: LinearIsometryEquiv.ext reflection_map_apply f K
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.ext, reflection_map_apply
@@ -409,7 +409,7 @@ theorem reflection_bot
 
 中文:
 定理 reflection_bot
-  结论: reflection (⊥ : Submodule 𝕜 E) = LinearIsometryEquiv.neg 𝕜
+  结论: reflection (⊥ : 子模 𝕜 E) = 线性等距等价.neg 𝕜
   证明: by
   ext; simp [reflection_apply]
 

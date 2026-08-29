@@ -482,7 +482,7 @@ theorem hnot_eq_top_iff_exists_boundary
     exact hnot_boundary _⟩
 
 中文:
-定理 hnot_eq_top_iff_exists_boundary
+定理 hnot_eq_top_iff_存在_boundary
   结论: ￢a = ⊤ ↔ 存在 b, ∂ b = a
   证明: ⟨fun h => ⟨a, by rw [boundary, h, inf_top_eq]⟩, by
     rintro ⟨b, rfl⟩

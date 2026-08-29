@@ -28,7 +28,7 @@ instance toIsStrictOrderedRing
 
 中文:
 实例 toIsStrictOrderedRing
-  签名: [Field K] [LinearOrder K] [IsStrictOrderedRing K] (s : Subfield K)
+  签名: [域 K] [线性序 K] [是StrictOrdered环 K] (s : 子域 K)
   定义体: Function.Injective.isStrictOrderedRing
     Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
 

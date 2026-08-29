@@ -56,8 +56,8 @@ instance [CharZero
   exact ⟨f.toRingHom⟩
 
 中文:
-实例 [CharZero
-  签名: K] [Algebra.IsAlgebraic Rat K] [IsAlgClosed A] : Nonempty (K ->+* A)
+实例 [特征零
+  签名: K] [代数.是代数 有理数 K] [是代数闭 A] : 非空 (K ->+* A)
   定义体: by
   obtain ⟨f⟩ : Nonempty (K ->ₐ[Rat] A) := by
     apply IntermediateField.nonempty_algHom_of_splits
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (K ->+* A)
+  签名: 有限类型 (K ->+* A)
   定义体: Fintype.ofEquiv (K ->ₐ[Rat] A) (RingHom.equivRatAlgHom K A).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, RingHom, RingHom.equivRatAlgHom, equivRatAlgHom, ofEquiv
@@ -105,7 +105,7 @@ theorem card
 
 中文:
 定理 card
-  结论: Fintype.card (K ->+* A) = finrank Rat K
+  结论: 有限类型.card (K ->+* A) = finrank 有理数 K
   证明: by
   rw [Fintype.ofEquiv_card (RingHom.equivRatAlgHom K A).symm]; rw [AlgHom.card]
 
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (K ->+* A)
+  签名: 非空 (K ->+* A)
   定义体: by
   rw [← Fintype.card_pos_iff]; rw [NumberField.Embeddings.card K A]
   exact Module.finrank_pos
@@ -238,7 +238,7 @@ theorem finite_of_norm_le
 中文:
 定理 finite_of_norm_le
   条件: (B : 实数)
-  结论: {x : K | Is整数egral 整数 x ∧ 对任意 φ : K ->+* A, ‖φ x‖ <= B}.Finite
+  结论: {x : K | 是整 整数 x ∧ 对任意 φ : K ->+* A, ‖φ x‖ <= B}.有限
   证明: by
   classical
   let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
@@ -277,7 +277,7 @@ theorem pow_eq_one_of_norm_le_one
 
 中文:
 定理 pow_eq_one_of_norm_le_one
-  结论: {x : K} (hx₀ : x != 0) (hxi : Is整数egral 整数 x)
+  结论: {x : K} (hx₀ : x != 0) (hxi : 是整 整数 x)
   证明: by
   obtain ⟨a, -, b, -, habne, h⟩ :=
     Set.Infinite.exists_ne_map_eq_of_mapsTo (f := (x ^ · : Nat -> K)) Set.infinite_univ
@@ -315,7 +315,7 @@ apply pow_eq_one_of_norm_le_one K A _ hxi fun φ => le_of_eq hx φ
 
 中文:
 定理 pow_eq_one_of_norm_eq_one
-  条件: {x : K} (hxi : Is整数egral 整数 x) (hx : 对任意 φ : K ->+* A, ‖φ x‖ = 1)
+  条件: {x : K} (hxi : 是整 整数 x) (hx : 对任意 φ : K ->+* A, ‖φ x‖ = 1)
   证明: by
 apply pow_eq_one_of_norm_le_one K A _ hxi fun φ => le_of_eq hx φ
   intro rfl
@@ -350,8 +350,8 @@ definition NumberField.place
 @[simp]
 
 中文:
-定义 NumberField.place
-  签名: : AbsoluteValue K 实数
+定义 数域.place
+  签名: : 绝对值 K 实数
   定义体: (IsAbsoluteValue.toAbsoluteValue (norm : A -> Real)).comp φ.injective
 
 @[simp]
@@ -372,9 +372,9 @@ theorem NumberField.place_apply
   proof: rfl
 
 中文:
-定理 NumberField.place_apply
+定理 数域.place_apply
   条件: (x : K)
-  结论: (NumberField.place φ) x = norm (φ x)
+  结论: (数域.place φ) x = norm (φ x)
   证明: rfl
 -/
 theorem NumberField.place_apply (x : K) : (NumberField.place φ) x = norm (φ x) := rfl
@@ -403,7 +403,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex)
+  签名: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形)
   定义体: by
   letI := φ.toAlgebra
   exact (IsAlgClosed.lift (R := k)).toRingHom
@@ -432,7 +432,7 @@ theorem lift_comp_algebraMap
 
 中文:
 定理 lift_comp_algebraMap
-  条件: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex)
+  条件: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形)
   证明: by
   unfold lift
   let := φ.toAlgebra
@@ -459,7 +459,7 @@ theorem lift_algebraMap_apply
 
 中文:
 定理 lift_algebraMap_apply
-  条件: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) (x : k)
+  条件: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形) (x : k)
   证明: RingHom.congr_fun (lift_comp_algebraMap K φ) x
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun, lift_comp_algebraMap
@@ -482,7 +482,7 @@ abbreviation conjugate
 
 中文:
 缩写 conjugate
-  签名: (φ : K ->+* Complex)
+  签名: (φ : K ->+* 复形)
   定义体: star φ
 
 @[simp]
@@ -500,7 +500,7 @@ theorem conjugate_comp
 
 中文:
 定理 conjugate_comp
-  条件: (φ : K ->+* Complex) (σ : k ->+* K)
+  条件: (φ : K ->+* 复形) (σ : k ->+* K)
   证明: rfl
 -/
 theorem conjugate_comp (φ : K ->+* Complex) (σ : k ->+* K) :
@@ -541,7 +541,7 @@ theorem conjugate_coe_eq
 
 中文:
 定理 conjugate_coe_eq
-  条件: (φ : K ->+* Complex) (x : K)
+  条件: (φ : K ->+* 复形) (x : K)
   结论: (conjugate φ) x = conj (φ x)
   证明: rfl
 -/
@@ -559,7 +559,7 @@ theorem place_conjugate
 
 中文:
 定理 place_conjugate
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   结论: place (conjugate φ) = place φ
   证明: by
   ext; simp only [place_apply, norm_conj, conjugate_coe_eq]
@@ -578,8 +578,8 @@ abbreviation IsReal
   body: IsSelfAdjoint φ
 
 中文:
-缩写 IsReal
-  签名: (φ : K ->+* Complex)
+缩写 Is实数
+  签名: (φ : K ->+* 复形)
   定义体: IsSelfAdjoint φ
 
 Depends on / 依赖: IsSelfAdjoint
@@ -596,8 +596,8 @@ theorem isReal_iff
   proof: isSelfAdjoint_iff
 
 中文:
-定理 isReal_iff
-  条件: {φ : K ->+* Complex}
+定理 is实数_iff
+  条件: {φ : K ->+* 复形}
   结论: Is实数 φ ↔ conjugate φ = φ
   证明: isSelfAdjoint_iff
 
@@ -615,8 +615,8 @@ theorem isReal_conjugate_iff
   proof: IsSelfAdjoint.star_iff
 
 中文:
-定理 isReal_conjugate_iff
-  条件: {φ : K ->+* Complex}
+定理 is实数_conjugate_iff
+  条件: {φ : K ->+* 复形}
   结论: Is实数 (conjugate φ) ↔ Is实数 φ
   证明: IsSelfAdjoint.star_iff
 
@@ -640,8 +640,8 @@ definition IsReal.embedding
   map_add' := by simp only [map_add, add_re, forall_cons
 
 中文:
-定义 IsReal.embedding
-  签名: {φ : K ->+* Complex} (hφ : Is实数 φ)
+定义 Is实数.embedding
+  签名: {φ : K ->+* 复形} (hφ : Is实数 φ)
   定义体: (φ x).re
   map_one' := by simp only [map_one, one_re]
   map_mul' := by
@@ -673,8 +673,8 @@ theorem IsReal.coe_embedding_apply
     exact RingHom.congr_fun hφ x
 
 中文:
-定理 IsReal.coe_embedding_apply
-  条件: {φ : K ->+* Complex} (hφ : Is实数 φ) (x : K)
+定理 Is实数.coe_embedding_apply
+  条件: {φ : K ->+* 复形} (hφ : Is实数 φ) (x : K)
   证明: by
   apply Complex.ext
   · rfl
@@ -699,8 +699,8 @@ lemma IsReal.comp
   proof: by ext1 x; simpa using RingHom.congr_fun hφ (f x)
 
 中文:
-引理 IsReal.comp
-  条件: (f : k ->+* K) {φ : K ->+* Complex} (hφ : Is实数 φ)
+引理 Is实数.comp
+  条件: (f : k ->+* K) {φ : K ->+* 复形} (hφ : Is实数 φ)
   证明: by ext1 x; simpa using RingHom.congr_fun hφ (f x)
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun
@@ -717,8 +717,8 @@ lemma isReal_comp_iff
   proof: ⟨fun H => by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
 
 中文:
-引理 isReal_comp_iff
-  条件: {f : k ≃+* K} {φ : K ->+* Complex}
+引理 is实数_comp_iff
+  条件: {f : k ≃+* K} {φ : K ->+* 复形}
   证明: ⟨fun H => by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
 
 Depends on / 依赖: H.comp, IsReal, IsReal.comp, convert, f.symm.toRingHom, toRingHom
@@ -743,8 +743,8 @@ lemma exists_comp_symm_eq_of_comp_eq
   exact AlgHom
 
 中文:
-引理 exists_comp_symm_eq_of_comp_eq
-  结论: [Algebra k K] [IsGalois k K] (φ ψ : K ->+* Complex)
+引理 存在_comp_symm_eq_of_comp_eq
+  结论: [代数 k K] [是Galois k K] (φ ψ : K ->+* 复形)
   证明: by
   let := (φ.comp (algebraMap k K)).toAlgebra
   let := φ.toAlgebra
@@ -858,7 +858,7 @@ lemma IsConj.isReal_comp
     starRingEnd_apply, AlgEquiv.commutes]
 
 中文:
-引理 IsConj.isReal_comp
+引理 IsConj.is实数_comp
   条件: (h : IsConj φ σ)
   结论: Is实数 (φ.comp (algebraMap k K))
   证明: by
@@ -1033,7 +1033,7 @@ class LiesOver
 
 中文:
 类 LiesOver
-  参数: (φ : L ->+* Complex) (ψ : K ->+* Complex)
+  参数: (φ : L ->+* 复形) (ψ : K ->+* 复形)
   公理与运算 (1 个):
     - over((φ ψ)) : φ.comp (algebraMap K L) = ψ
 -/
@@ -1050,7 +1050,7 @@ theorem LiesOver.over_apply
 
 中文:
 定理 LiesOver.over_apply
-  条件: (φ : L ->+* Complex) (ψ : K ->+* Complex) [ComplexEmbedding.LiesOver φ ψ] {x : K}
+  条件: (φ : L ->+* 复形) (ψ : K ->+* 复形) [ComplexEmbedding.LiesOver φ ψ] {x : K}
   证明: RingHom.ext_iff.1 (LiesOver.over φ ψ) _
 
 Depends on / 依赖: LiesOver, LiesOver.over, RingHom, RingHom.ext_iff, ext_iff
@@ -1068,7 +1068,7 @@ theorem liesOver_iff
 
 中文:
 定理 liesOver_iff
-  条件: {φ : L ->+* Complex} {ψ : K ->+* Complex}
+  条件: {φ : L ->+* 复形} {ψ : K ->+* 复形}
   证明: ⟨fun _ => LiesOver.over φ ψ, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: LiesOver, LiesOver.over
@@ -1087,7 +1087,7 @@ abbreviation Extension
   body: { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
 
 中文:
-缩写 Extension
+缩写 扩张
   定义体: { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
 -/
 protected abbrev Extension := { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
@@ -1143,7 +1143,7 @@ theorem not_isReal_of_not_isReal
   proof: mt (IsReal.comp _) (comp_eq φ ▸ h)
 
 中文:
-定理 not_isReal_of_not_isReal
+定理 not_is实数_of_not_is实数
   条件: (h : ¬Is实数 ψ)
   结论: ¬Is实数 φ.1
   证明: mt (IsReal.comp _) (comp_eq φ ▸ h)
@@ -1167,7 +1167,7 @@ abbreviation IsMixed
 
 中文:
 缩写 IsMixed
-  签名: (φ : L ->+* Complex)
+  签名: (φ : L ->+* 复形)
   定义体: ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ∧ ¬ComplexEmbedding.IsReal φ
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsReal, IsReal, algebraMap
@@ -1185,7 +1185,7 @@ abbreviation IsUnmixed
 
 中文:
 缩写 IsUnmixed
-  签名: (φ : L ->+* Complex)
+  签名: (φ : L ->+* 复形)
   定义体: IsReal (φ.comp (algebraMap K L)) -> IsReal φ
 
 Depends on / 依赖: IsReal, algebraMap
@@ -1202,8 +1202,8 @@ theorem IsUnmixed.isReal_iff_isReal
   aesop (add simp [IsReal.comp])
 
 中文:
-定理 IsUnmixed.isReal_iff_isReal
-  条件: {φ : L ->+* Complex} (h : IsUnmixed K φ)
+定理 IsUnmixed.is实数_iff_is实数
+  条件: {φ : L ->+* 复形} (h : IsUnmixed K φ)
   证明: by
   aesop (add simp [IsReal.comp])
 
@@ -1225,7 +1225,7 @@ definition mixedEmbeddingsOver
 
 中文:
 定义 mixedEmbeddingsOver
-  签名: : Set (L ->+* Complex)
+  签名: : 集合 (L ->+* 复形)
   定义体: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsMixed K φ }
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.LiesOver, IsMixed, LiesOver
@@ -1241,7 +1241,7 @@ definition unmixedEmbeddingsOver
 
 中文:
 定义 unmixedEmbeddingsOver
-  签名: : Set (L ->+* Complex)
+  签名: : 集合 (L ->+* 复形)
   定义体: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsUnmixed K φ }
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.LiesOver, IsUnmixed, LiesOver

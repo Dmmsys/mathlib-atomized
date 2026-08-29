@@ -50,8 +50,8 @@ definition sup
   body: s.fold (· ⊔ ·) ⊥ f
 
 中文:
-定义 sup
-  签名: (s : Finset β) (f : β -> α)
+定义 上确界
+  签名: (s : 有限集 β) (f : β -> α)
   定义体: s.fold (· ⊔ ·) ⊥ f
 
 Depends on / 依赖: s.fold
@@ -74,7 +74,7 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  结论: s.sup f = (s.1.map f).sup
+  结论: s.上确界 f = (s.1.map f).上确界
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -95,7 +95,7 @@ theorem sup_empty
 
 中文:
 定理 sup_empty
-  结论: (∅ : Finset β).sup f = ⊥
+  结论: (∅ : 有限集 β).上确界 f = ⊥
   证明: fold_empty
 
 @[to_dual (attr := simp)]
@@ -120,7 +120,7 @@ theorem sup_cons
 中文:
 定理 sup_cons
   条件: {b : β} (h : b ∉ s)
-  结论: (cons b s h).sup f = f b ⊔ s.sup f
+  结论: (cons b s h).上确界 f = f b ⊔ s.上确界 f
   证明: fold_cons h
 
 @[to_dual (attr := simp, grind =)]
@@ -145,7 +145,7 @@ theorem sup_insert
 中文:
 定理 sup_insert
   条件: [DecidableEq β] {b : β}
-  结论: (insert b s : Finset β).sup f = f b ⊔ s.sup f
+  结论: (insert b s : 有限集 β).上确界 f = f b ⊔ s.上确界 f
   证明: fold_insert_idem
 
 @[to_dual (attr := simp)]
@@ -168,7 +168,7 @@ theorem sup_image
 
 中文:
 定理 sup_image
-  条件: [DecidableEq β] (s : Finset γ) (f : γ -> β) (g : β -> α)
+  条件: [DecidableEq β] (s : 有限集 γ) (f : γ -> β) (g : β -> α)
   证明: fold_image_idem
 
 @[to_dual (attr := simp)]
@@ -193,8 +193,8 @@ theorem sup_map
 
 中文:
 定理 sup_map
-  条件: (s : Finset γ) (f : γ ↪ β) (g : β -> α)
-  结论: (s.map f).sup g = s.sup (g ∘ f)
+  条件: (s : 有限集 γ) (f : γ ↪ β) (g : β -> α)
+  结论: (s.map f).上确界 g = s.上确界 (g ∘ f)
   证明: fold_map
 
 @[to_dual (attr := simp)]
@@ -219,7 +219,7 @@ theorem sup_singleton
 中文:
 定理 sup_singleton
   条件: {b : β}
-  结论: ({b} : Finset β).sup f = f b
+  结论: ({b} : 有限集 β).上确界 f = f b
   证明: Multiset.sup_singleton
 
 @[to_dual]
@@ -247,7 +247,7 @@ theorem sup_sup
 
 中文:
 定理 sup_sup
-  结论: s.sup (f ⊔ g) = s.sup f ⊔ s.sup g
+  结论: s.上确界 (f ⊔ g) = s.上确界 f ⊔ s.上确界 g
   证明: by
   induction s using Finset.cons_induction with
   | empty => rw [sup_empty, sup_empty, sup_empty, bot_sup_eq]
@@ -309,7 +309,7 @@ theorem _root_.map_finset_sup
 
 中文:
 定理 _root_.map_finset_sup
-  结论: [SemilatticeSup β] [OrderBot β]
+  结论: [SemilatticeSup β] [有底序 β]
   证明: Finset.cons_induction_on s (map_bot f) fun i s _ h => by
     rw [sup_cons]; rw [sup_cons]; rw [map_sup]; rw [h]; rw [Function.comp_apply]
 
@@ -343,7 +343,7 @@ theorem sup_le_iff
 中文:
 定理 sup_le_iff
   条件: {a : α}
-  结论: s.sup f <= a ↔ 对任意 b in s, f b <= a
+  结论: s.上确界 f <= a ↔ 对任意 b in s, f b <= a
   证明: by
   apply Iff.trans Multiset.sup_le
   simp only [Multiset.mem_map, and_imp, exists_imp]
@@ -375,7 +375,7 @@ theorem sup_const_le
 
 中文:
 定理 sup_const_le
-  结论: (s.sup fun _ => a) <= a
+  结论: (s.上确界 fun _ => a) <= a
   证明: Finset.sup_le fun _ _ => le_rfl
 
 @[deprecated (since := "2026-03-25")] alias le_inf_const_le := le_inf_const
@@ -404,7 +404,7 @@ theorem le_sup
 中文:
 定理 le_sup
   条件: {b : β} (hb : b in s)
-  结论: f b <= s.sup f
+  结论: f b <= s.上确界 f
   证明: Finset.sup_le_iff.1 le_rfl _ hb
 
 @[to_dual]
@@ -428,7 +428,7 @@ lemma isLUB_sup
 
 中文:
 引理 isLUB_sup
-  结论: IsLUB (f '' s) (s.sup f)
+  结论: IsLUB (f '' s) (s.上确界 f)
   证明: by
   simp +contextual [IsLUB, IsLeast, upperBounds, lowerBounds, le_sup]
 
@@ -453,8 +453,8 @@ lemma isLUB_sup_id
 
 中文:
 引理 isLUB_sup_id
-  条件: {s : Finset α}
-  结论: IsLUB s (s.sup id)
+  条件: {s : 有限集 α}
+  结论: IsLUB s (s.上确界 id)
   证明: by simpa using isLUB_sup (f := id)
 
 @[to_dual inf_le_of_le]
@@ -478,7 +478,7 @@ theorem le_sup_of_le
 中文:
 定理 le_sup_of_le
   条件: {b : β} (hb : b in s) (h : a <= f b)
-  结论: a <= s.sup f
+  结论: a <= s.上确界 f
   证明: h.trans le_sup hb
 
 @[to_dual (attr := grind _=_)]
@@ -502,7 +502,7 @@ theorem sup_union
 中文:
 定理 sup_union
   条件: [DecidableEq β]
-  结论: (s₁ union s₂).sup f = s₁.sup f ⊔ s₂.sup f
+  结论: (s₁ union s₂).上确界 f = s₁.上确界 f ⊔ s₂.上确界 f
   证明: eq_of_forall_ge_iff fun c => by simp [or_imp, forall_and]
 
 @[to_dual]
@@ -526,8 +526,8 @@ theorem sup_const
 
 中文:
 定理 sup_const
-  条件: {s : Finset β} (h : s.Nonempty) (c : α)
-  结论: (s.sup fun _ => c) = c
+  条件: {s : 有限集 β} (h : s.非空) (c : α)
+  结论: (s.上确界 fun _ => c) = c
   证明: eq_of_forall_ge_iff (fun _ => Finset.sup_le_iff.trans h.forall_const)
 
 @[to_dual (attr := simp)]
@@ -554,8 +554,8 @@ theorem sup_bot
 
 中文:
 定理 sup_bot
-  条件: (s : Finset β)
-  结论: (s.sup fun _ => ⊥) = (⊥ : α)
+  条件: (s : 有限集 β)
+  结论: (s.上确界 fun _ => ⊥) = (⊥ : α)
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · exact sup_empty
@@ -609,7 +609,7 @@ theorem sup_mono_fun
 中文:
 定理 sup_mono_fun
   条件: {g : β -> α} (h : 对任意 b in s, f b <= g b)
-  结论: s.sup f <= s.sup g
+  结论: s.上确界 f <= s.上确界 g
   证明: Finset.sup_le fun b hb => le_trans (h b hb) (le_sup hb)
 
 @[to_dual (attr := gcongr, grind ←)]
@@ -634,7 +634,7 @@ theorem sup_mono
 中文:
 定理 sup_mono
   条件: (h : s₁ subseteq s₂)
-  结论: s₁.sup f <= s₂.sup f
+  结论: s₁.上确界 f <= s₂.上确界 f
   证明: Finset.sup_le (fun _ hb => le_sup (h hb))
 
 @[to_dual]
@@ -657,7 +657,7 @@ theorem sup_comm
 
 中文:
 定理 sup_comm
-  条件: (s : Finset β) (t : Finset γ) (f : β -> γ -> α)
+  条件: (s : 有限集 β) (t : 有限集 γ) (f : β -> γ -> α)
   证明: eq_of_forall_ge_iff fun a => by simpa using forall₂_comm
 
 @[to_dual (attr := simp)]
@@ -680,8 +680,8 @@ theorem sup_attach
 
 中文:
 定理 sup_attach
-  条件: (s : Finset β) (f : β -> α)
-  结论: (s.attach.sup fun x => f x) = s.sup f
+  条件: (s : 有限集 β) (f : β -> α)
+  结论: (s.attach.上确界 fun x => f x) = s.上确界 f
   证明: (s.attach.sup_map (Function.Embedding.subtype _) f).symm.trans congr_arg _ attach_map_val
 
 @[to_dual (attr := simp)]
@@ -707,8 +707,8 @@ theorem sup_erase_bot
 
 中文:
 定理 sup_erase_bot
-  条件: [DecidableEq α] (s : Finset α)
-  结论: (s.erase ⊥).sup id = s.sup id
+  条件: [DecidableEq α] (s : 有限集 α)
+  结论: (s.erase ⊥).上确界 id = s.上确界 id
   证明: by
   refine (sup_mono (s.erase_subset _)).antisymm (Finset.sup_le_iff.2 fun a ha => ?_)
   obtain rfl | ha' := eq_or_ne a ⊥
@@ -738,7 +738,7 @@ theorem sup_sdiff_right
 
 中文:
 定理 sup_sdiff_right
-  结论: {α β : 类型} [Generalized布尔eanAlgebra α] (s : Finset β) (f : β -> α)
+  结论: {α β : 类型} [Generalized布尔ean代数 α] (s : 有限集 β) (f : β -> α)
   证明: by
   induction s using Finset.cons_induction with
   | empty => rw [sup_empty, sup_empty, bot_sdiff]
@@ -772,7 +772,7 @@ alias comp_inf_eq_inf_comp := apply_inf
 
 中文:
 定理 apply_sup_eq_sup_comp
-  结论: [SemilatticeSup γ] [OrderBot γ] {s : Finset β} {f : β -> α} (g : α -> γ)
+  结论: [SemilatticeSup γ] [有底序 γ] {s : 有限集 β} {f : β -> α} (g : α -> γ)
   证明: Finset.cons_induction_on s bot fun c t hc ih => by
     rw [sup_cons]; rw [sup_cons]; rw [g_sup]; rw [ih]; rw [Function.comp_apply]
 
@@ -815,7 +815,7 @@ theorem sup_coe
 
 中文:
 定理 sup_coe
-  结论: {P : α -> 命题} {Pbot : P ⊥} {Psup : 对任意 ⦃x y⦄, P x -> P y -> P (x ⊔ y)} (t : Finset β)
+  结论: {P : α -> 命题} {Pbot : P ⊥} {Psup : 对任意 ⦃x y⦄, P x -> P y -> P (x ⊔ y)} (t : 有限集 β)
   证明: Subtype.semilatticeSup Psup
     letI := Subtype.orderBot Pbot
     (t.sup f).val = t.sup fun x => ↑(f x) := by
@@ -849,7 +849,7 @@ theorem sup_toFinset
 
 中文:
 定理 sup_toFinset
-  条件: {α β} [DecidableEq β] (s : Finset α) (f : α -> Multiset β)
+  条件: {α β} [DecidableEq β] (s : 有限集 α) (f : α -> Multiset β)
   证明: apply_sup_eq_sup_comp Multiset.toFinset toFinset_union rfl
 
 @[to_dual]
@@ -872,8 +872,8 @@ theorem _root_.List.foldr_sup_eq_sup_toFinset
   rfl
 
 中文:
-定理 _root_.List.foldr_sup_eq_sup_toFinset
-  条件: [DecidableEq α] (l : List α)
+定理 _root_.列表.foldr_sup_eq_sup_toFinset
+  条件: [DecidableEq α] (l : 列表 α)
   证明: by
   rw [← coe_fold_r]; rw [← Multiset.fold_dedup_idem]; rw [sup_def]; rw [← List.toFinset_coe]; rw [toFinset_val]; rw [Multiset.map_id]
   rfl
@@ -899,8 +899,8 @@ mem_range.2 Nat.lt_succ_of_le @le_sup _ _ _ _ _ id _ hn
 
 中文:
 定理 subset_range_sup_succ
-  条件: (s : Finset 自然数)
-  结论: s subseteq range (s.sup id).succ
+  条件: (s : 有限集 自然数)
+  结论: s subseteq range (s.上确界 id).succ
   证明: fun _ hn =>
 mem_range.2 Nat.lt_succ_of_le @le_sup _ _ _ _ _ id _ hn
 
@@ -966,7 +966,7 @@ theorem sup_le_of_le_directed
 
 中文:
 定理 sup_le_of_le_directed
-  结论: {α : 类型} [SemilatticeSup α] [OrderBot α] (s : Set α)
+  结论: {α : 类型} [SemilatticeSup α] [有底序 α] (s : 集合 α)
   证明: by
   classical
     induction t using Finset.induction_on with
@@ -1017,7 +1017,7 @@ theorem sup_mem
 
 中文:
 定理 sup_mem
-  结论: (s : Set α) (w₁ : ⊥ in s) (w₂ : 对任意ᵉ (x in s) (y in s), x ⊔ y in s)
+  结论: (s : 集合 α) (w₁ : ⊥ in s) (w₂ : 对任意ᵉ (x in s) (y in s), x ⊔ y in s)
   证明: @sup_induction _ _ _ _ _ _ (· in s) w₁ w₂ h
 
 @[to_dual (attr := simp)]
@@ -1043,8 +1043,8 @@ theorem sup_eq_bot_iff
 
 中文:
 定理 sup_eq_bot_iff
-  条件: (f : β -> α) (S : Finset β)
-  结论: S.sup f = ⊥ ↔ 对任意 s in S, f s = ⊥
+  条件: (f : β -> α) (S : 有限集 β)
+  结论: S.上确界 f = ⊥ ↔ 对任意 s in S, f s = ⊥
   证明: by
   classical induction S using Finset.induction <;> simp [*]
 
@@ -1068,8 +1068,8 @@ lemma sup_eq_one
 
 中文:
 引理 sup_eq_one
-  条件: [One α] [IsBotOneClass α]
-  结论: s.sup f = 1 ↔ 对任意 i in s, f i = 1
+  条件: [幺 α] [是BotOne类 α]
+  结论: s.上确界 f = 1 ↔ 对任意 i in s, f i = 1
   证明: by
   simp [← bot_eq_one]
 
@@ -1093,7 +1093,7 @@ lemma sup_disjSum
 
 中文:
 引理 sup_disjSum
-  条件: (s : Finset β) (t : Finset γ) (f : β oplus γ -> α)
+  条件: (s : 有限集 β) (t : 有限集 γ) (f : β oplus γ -> α)
   证明: congr(fold _ $(bot_sup_eq _ |>.symm) _ _).trans (fold_disjSum _ _ _ _ _ _)
 
 @[to_dual (attr := simp)]
@@ -1120,8 +1120,8 @@ exact fun x _ => False.elim IsEmpty.false x
 
 中文:
 定理 sup_eq_bot_of_isEmpty
-  条件: [IsEmpty β] (f : β -> α) (S : Finset β)
-  结论: S.sup f = ⊥
+  条件: [是空 β] (f : β -> α) (S : 有限集 β)
+  结论: S.上确界 f = ⊥
   证明: by
   rw [Finset.sup_eq_bot_iff]
 exact fun x _ => False.elim IsEmpty.false x
@@ -1202,8 +1202,8 @@ theorem sup_eq_iSup
 
 中文:
 定理 sup_eq_iSup
-  条件: [CompleteLattice β] (s : Finset α) (f : α -> β)
-  结论: s.sup f = ⨆ a in s, f a
+  条件: [完备格 β] (s : 有限集 α) (f : α -> β)
+  结论: s.上确界 f = ⨆ a in s, f a
   证明: le_antisymm
     (Finset.sup_le (fun a ha => le_iSup_of_le a <| le_iSup (fun _ => f a) ha))
     (iSup_le fun _ => iSup_le fun ha => le_sup ha)
@@ -1230,8 +1230,8 @@ theorem sup_id_eq_sSup
 
 中文:
 定理 sup_id_eq_sSup
-  条件: [CompleteLattice α] (s : Finset α)
-  结论: s.sup id = sSup s
+  条件: [完备格 α] (s : 有限集 α)
+  结论: s.上确界 id = sSup s
   证明: by
   simp [sSup_eq_iSup, sup_eq_iSup]
 
@@ -1251,8 +1251,8 @@ theorem sup_id_set_eq_sUnion
 
 中文:
 定理 sup_id_set_eq_sUnion
-  条件: (s : Finset (Set α))
-  结论: s.sup id = ⋃₀ ↑s
+  条件: (s : 有限集 (集合 α))
+  结论: s.上确界 id = ⋃₀ ↑s
   证明: sup_id_eq_sSup _
 
 Depends on / 依赖: sup_id_eq_sSup
@@ -1272,9 +1272,9 @@ theorem inf_id_set_eq_sInter
 @[simp]
 
 中文:
-定理 inf_id_set_eq_sInter
-  条件: (s : Finset (Set α))
-  结论: s.inf id = ⋂₀ ↑s
+定理 inf_id_set_eq_s整数er
+  条件: (s : 有限集 (集合 α))
+  结论: s.下确界 id = ⋂₀ ↑s
   证明: inf_id_eq_sInf _
 
 @[simp]
@@ -1298,8 +1298,8 @@ theorem sup_set_eq_biUnion
 
 中文:
 定理 sup_set_eq_biUnion
-  条件: (s : Finset α) (f : α -> Set β)
-  结论: s.sup f = ⋃ x in s, f x
+  条件: (s : 有限集 α) (f : α -> 集合 β)
+  结论: s.上确界 f = ⋃ x in s, f x
   证明: sup_eq_iSup _ _
 
 @[simp]
@@ -1322,9 +1322,9 @@ theorem inf_set_eq_iInter
 @[to_dual]
 
 中文:
-定理 inf_set_eq_iInter
-  条件: (s : Finset α) (f : α -> Set β)
-  结论: s.inf f = ⋂ x in s, f x
+定理 inf_set_eq_i整数er
+  条件: (s : 有限集 α) (f : α -> 集合 β)
+  结论: s.下确界 f = ⋂ x in s, f x
   证明: inf_eq_iInf _ _
 
 @[to_dual]
@@ -1348,7 +1348,7 @@ theorem sup_eq_sSup_image
 
 中文:
 定理 sup_eq_sSup_image
-  条件: [CompleteLattice β] (s : Finset α) (f : α -> β)
+  条件: [完备格 β] (s : 有限集 α) (f : α -> β)
   证明: by
   classical rw [← Finset.coe_image, ← sup_id_eq_sSup, sup_image, Function.id_comp]
 
@@ -1379,8 +1379,8 @@ theorem exists_sup_ge
 @[to_dual]
 
 中文:
-定理 exists_sup_ge
-  条件: [SemilatticeSup β] [OrderBot β] [WellFoundedGT β] (f : α -> β)
+定理 存在_sup_ge
+  条件: [SemilatticeSup β] [有底序 β] [WellFoundedGT β] (f : α -> β)
   证明: by
   cases isEmpty_or_nonempty α
   · exact ⟨⊥, isEmptyElim⟩
@@ -1417,8 +1417,8 @@ theorem exists_sup_eq_iSup
 @[to_dual (attr := simp)]
 
 中文:
-定理 exists_sup_eq_iSup
-  条件: [CompleteLattice β] [WellFoundedGT β] (f : α -> β)
+定理 存在_sup_eq_iSup
+  条件: [完备格 β] [WellFoundedGT β] (f : α -> β)
   证明: have ⟨t, ht⟩ := exists_sup_ge f
 ⟨t, (Finset.sup_le fun _ _ => le_iSup ..).antisymm iSup_le ht⟩
 
@@ -1444,7 +1444,7 @@ theorem toDual_sup
 
 中文:
 定理 toDual_sup
-  条件: [SemilatticeSup α] [OrderBot α] (s : Finset β) (f : β -> α)
+  条件: [SemilatticeSup α] [有底序 α] (s : 有限集 β) (f : β -> α)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1464,7 +1464,7 @@ theorem ofDual_sup
 
 中文:
 定理 ofDual_sup
-  条件: [SemilatticeInf α] [OrderTop α] (s : Finset β) (f : β -> αᵒᵈ)
+  条件: [SemilatticeInf α] [有顶序 α] (s : 有限集 β) (f : β -> αᵒᵈ)
   证明: rfl
 -/
 theorem ofDual_sup [SemilatticeInf α] [OrderTop α] (s : Finset β) (f : β -> αᵒᵈ) :
@@ -1495,7 +1495,7 @@ theorem sup_inf_distrib_left
 
 中文:
 定理 sup_inf_distrib_left
-  条件: (s : Finset ι) (f : ι -> α) (a : α)
+  条件: (s : 有限集 ι) (f : ι -> α) (a : α)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp_rw [Finset.sup_empty, inf_bot_eq]
@@ -1526,7 +1526,7 @@ theorem sup_inf_distrib_right
 
 中文:
 定理 sup_inf_distrib_right
-  条件: (s : Finset ι) (f : ι -> α) (a : α)
+  条件: (s : 有限集 ι) (f : ι -> α) (a : α)
   证明: by
   rw [_root_.inf_comm]; rw [s.sup_inf_distrib_left]
   simp_rw [_root_.inf_comm]
@@ -1554,7 +1554,7 @@ theorem disjoint_sup_right
 
 中文:
 定理 disjoint_sup_right
-  结论: Disjoint a (s.sup f) ↔ 对任意 ⦃i⦄, i in s -> Disjoint a (f i)
+  结论: Disjoint a (s.上确界 f) ↔ 对任意 ⦃i⦄, i in s -> Disjoint a (f i)
   证明: by
   simp only [disjoint_iff, sup_inf_distrib_left, Finset.sup_eq_bot_iff]
 
@@ -1575,7 +1575,7 @@ theorem disjoint_sup_left
 
 中文:
 定理 disjoint_sup_left
-  结论: Disjoint (s.sup f) a ↔ 对任意 ⦃i⦄, i in s -> Disjoint (f i) a
+  结论: Disjoint (s.上确界 f) a ↔ 对任意 ⦃i⦄, i in s -> Disjoint (f i) a
   证明: by
   simp only [disjoint_iff, sup_inf_distrib_right, Finset.sup_eq_bot_iff]
 -/
@@ -1603,7 +1603,7 @@ theorem sup_sdiff_left
 
 中文:
 定理 sup_sdiff_left
-  条件: (s : Finset ι) (f : ι -> α) (a : α)
+  条件: (s : 有限集 ι) (f : ι -> α) (a : α)
   证明: by
   induction s using Finset.cons_induction with
   | empty => rw [sup_empty, inf_empty, sdiff_top]
@@ -1630,7 +1630,7 @@ theorem inf_sdiff_left
 
 中文:
 定理 inf_sdiff_left
-  条件: (hs : s.Nonempty) (f : ι -> α) (a : α)
+  条件: (hs : s.非空) (f : ι -> α) (a : α)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton => rw [sup_singleton, inf_singleton]
@@ -1657,7 +1657,7 @@ theorem inf_sdiff_right
 
 中文:
 定理 inf_sdiff_right
-  条件: (hs : s.Nonempty) (f : ι -> α) (a : α)
+  条件: (hs : s.非空) (f : ι -> α) (a : α)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton => rw [inf_singleton, inf_singleton]
@@ -1681,7 +1681,7 @@ theorem inf_himp_right
 
 中文:
 定理 inf_himp_right
-  条件: (s : Finset ι) (f : ι -> α) (a : α)
+  条件: (s : 有限集 ι) (f : ι -> α) (a : α)
   证明: @sup_sdiff_left αᵒᵈ _ _ _ _ _
 
 Depends on / 依赖: sup_sdiff_left
@@ -1700,7 +1700,7 @@ theorem sup_himp_right
 
 中文:
 定理 sup_himp_right
-  条件: (hs : s.Nonempty) (f : ι -> α) (a : α)
+  条件: (hs : s.非空) (f : ι -> α) (a : α)
   证明: @inf_sdiff_left αᵒᵈ _ _ _ hs _ _
 
 Depends on / 依赖: inf_sdiff_left
@@ -1721,7 +1721,7 @@ theorem sup_himp_left
 
 中文:
 定理 sup_himp_left
-  条件: (hs : s.Nonempty) (f : ι -> α) (a : α)
+  条件: (hs : s.非空) (f : ι -> α) (a : α)
   证明: @inf_sdiff_right αᵒᵈ _ _ _ hs _ _
 
 @[simp]
@@ -1746,8 +1746,8 @@ theorem compl_sup
 
 中文:
 定理 compl_sup
-  条件: (s : Finset ι) (f : ι -> α)
-  结论: (s.sup f)ᶜ = s.inf fun i => (f i)ᶜ
+  条件: (s : 有限集 ι) (f : ι -> α)
+  结论: (s.上确界 f)ᶜ = s.下确界 fun i => (f i)ᶜ
   证明: map_finset_sup (OrderIso.compl α) _ _
 
 @[simp]
@@ -1767,8 +1767,8 @@ theorem compl_inf
 
 中文:
 定理 compl_inf
-  条件: (s : Finset ι) (f : ι -> α)
-  结论: (s.inf f)ᶜ = s.sup fun i => (f i)ᶜ
+  条件: (s : 有限集 ι) (f : ι -> α)
+  结论: (s.下确界 f)ᶜ = s.上确界 fun i => (f i)ᶜ
   证明: map_finset_inf (OrderIso.compl α) _ _
 -/
 protected theorem compl_inf (s : Finset ι) (f : ι -> α) : (s.inf f)ᶜ = s.sup fun i => (f i)ᶜ :=
@@ -1803,7 +1803,7 @@ alias comp_inf_eq_inf_comp_of_is_total := apply_inf_eq_inf_comp_of_linearOrder
 
 中文:
 定理 apply_sup_eq_sup_comp_of_linearOrder
-  结论: [SemilatticeSup β] [OrderBot β] (g : α -> β)
+  结论: [SemilatticeSup β] [有底序 β] (g : α -> β)
   证明: apply_sup_eq_sup_comp g mono_g.map_sup bot
 
 @[deprecated (since := "2026-05-29")]
@@ -1847,7 +1847,7 @@ theorem le_sup_iff
 中文:
 定理 le_sup_iff
   条件: (ha : ⊥ < a)
-  结论: a <= s.sup f ↔ 存在 b in s, a <= f b
+  结论: a <= s.上确界 f ↔ 存在 b in s, a <= f b
   证明: by
   apply Iff.intro
   · induction s using cons_induction with
@@ -1884,7 +1884,7 @@ theorem sup_eq_top_iff
 
 中文:
 定理 sup_eq_top_iff
-  结论: {α : 类型} [LinearOrder α] [BoundedOrder α] [Nontrivial α]
+  结论: {α : 类型} [线性序 α] [有界序 α] [非平凡 α]
   证明: by
   simp only [← top_le_iff]
   exact Finset.le_sup_iff bot_lt_top
@@ -1911,8 +1911,8 @@ theorem Nonempty.sup_eq_top_iff
 @[to_dual (attr := simp) inf_lt_iff]
 
 中文:
-定理 Nonempty.sup_eq_top_iff
-  结论: {α : 类型} [LinearOrder α] [BoundedOrder α]
+定理 非空.sup_eq_top_iff
+  结论: {α : 类型} [线性序 α] [有界序 α]
   证明: by
   cases subsingleton_or_nontrivial α
   · simpa [Subsingleton.elim _ (⊤ : α)]
@@ -1945,7 +1945,7 @@ theorem lt_sup_iff
 
 中文:
 定理 lt_sup_iff
-  结论: a < s.sup f ↔ 存在 b in s, a < f b
+  结论: a < s.上确界 f ↔ 存在 b in s, a < f b
   证明: by
   apply Iff.intro
   · induction s using cons_induction with
@@ -1984,7 +1984,7 @@ theorem sup_lt_iff
 中文:
 定理 sup_lt_iff
   条件: (ha : ⊥ < a)
-  结论: s.sup f < a ↔ 对任意 b in s, f b < a
+  结论: s.上确界 f < a ↔ 对任意 b in s, f b < a
   证明: ⟨fun hs _ hb => lt_of_le_of_lt (le_sup hb) hs,
     Finset.cons_induction_on s (fun _ => ha) fun c t hc => by
       simpa only [sup_cons, sup_lt_iff, mem_cons, forall_eq_or_imp] using And.imp_right⟩
@@ -2017,8 +2017,8 @@ theorem sup_mem_of_nonempty
 
 中文:
 定理 sup_mem_of_nonempty
-  条件: (hs : s.Nonempty)
-  结论: s.sup f in f '' s
+  条件: (hs : s.非空)
+  结论: s.上确界 f in f '' s
   证明: by
   classical
   induction s using Finset.induction with
@@ -2067,7 +2067,7 @@ theorem sup_of_mem
 
 中文:
 定理 sup_of_mem
-  条件: {s : Finset β} (f : β -> α) {b : β} (h : b in s)
+  条件: {s : 有限集 β} (f : β -> α) {b : β} (h : b in s)
   证明: (WithBot.le_iff_forall.1 (le_sup (α := WithBot α) h) (f b) rfl).imp fun _ => And.left
 
 Depends on / 依赖: And.left, WithBot, WithBot.le_iff_forall, le_iff_forall, le_sup
@@ -2092,8 +2092,8 @@ definition sup'
   body: WithBot.unbot (s.sup ((↑) ∘ f)) (by simpa using! H)
 
 中文:
-定义 sup'
-  签名: (s : Finset β) (H : s.Nonempty) (f : β -> α)
+定义 上确界'
+  签名: (s : 有限集 β) (H : s.非空) (f : β -> α)
   定义体: WithBot.unbot (s.sup ((↑) ∘ f)) (by simpa using! H)
 -/
 def sup' (s : Finset β) (H : s.Nonempty) (f : β -> α) : α :=
@@ -2115,7 +2115,7 @@ theorem coe_sup'
 
 中文:
 定理 coe_sup'
-  结论: ((s.sup' H f : α) : WithBot α) = s.sup ((↑) ∘ f)
+  结论: ((s.上确界' H f : α) : WithBot α) = s.上确界 ((↑) ∘ f)
   证明: by
   rw [sup']; rw [WithBot.coe_unbot]
 
@@ -2140,7 +2140,7 @@ theorem sup'_cons
 @[to_dual (attr := simp)]
 
 中文:
-定理 sup'_cons
+定理 上确界'_cons
   条件: {b : β} {hb : b ∉ s}
   证明: by
   rw [← WithBot.coe_eq_coe]
@@ -2167,7 +2167,7 @@ theorem sup'_insert
 @[to_dual (attr := simp)]
 
 中文:
-定理 sup'_insert
+定理 上确界'_insert
   条件: [DecidableEq β] {b : β}
   证明: by
   rw [← WithBot.coe_eq_coe]
@@ -2193,9 +2193,9 @@ theorem sup'_singleton
 @[to_dual (attr := simp) le_inf'_iff]
 
 中文:
-定理 sup'_singleton
+定理 上确界'_singleton
   条件: {b : β}
-  结论: ({b} : Finset β).sup' (singleton_nonempty _) f = f b
+  结论: ({b} : 有限集 β).上确界' (singleton_nonempty _) f = f b
   证明: rfl
 
 @[to_dual (attr := simp) le_inf'_iff]
@@ -2219,9 +2219,9 @@ theorem sup'_le_iff
 @[to_dual inf'_le]
 
 中文:
-定理 sup'_le_iff
+定理 上确界'_le_iff
   条件: {a : α}
-  结论: s.sup' H f <= a ↔ 对任意 b in s, f b <= a
+  结论: s.上确界' H f <= a ↔ 对任意 b in s, f b <= a
   证明: by
   simp_rw [← @WithBot.coe_le_coe α, coe_sup', Finset.sup_le_iff]; rfl
 
@@ -2249,7 +2249,7 @@ theorem le_sup'
 中文:
 定理 le_sup'
   条件: {b : β} (h : b in s)
-  结论: f b <= s.sup' ⟨b, h⟩ f
+  结论: f b <= s.上确界' ⟨b, h⟩ f
   证明: (sup'_le_iff ⟨b, h⟩ f).1 le_rfl b h
 
 @[to_dual]
@@ -2273,8 +2273,8 @@ theorem isLUB_sup'
 
 中文:
 定理 isLUB_sup'
-  条件: {s : Finset α} (hs : s.Nonempty)
-  结论: IsLUB s (sup' s hs id)
+  条件: {s : 有限集 α} (hs : s.非空)
+  结论: IsLUB s (上确界' s hs id)
   证明: ⟨fun x h => id_eq x ▸ le_sup' id h, fun _ h => Finset.sup'_le hs id h⟩
 
 @[to_dual inf'_le_of_le]
@@ -2299,7 +2299,7 @@ theorem le_sup'_of_le
 中文:
 定理 le_sup'_of_le
   条件: {a : α} {b : β} (hb : b in s) (h : a <= f b)
-  结论: a <= s.sup' ⟨b, hb⟩ f
+  结论: a <= s.上确界' ⟨b, hb⟩ f
   证明: h.trans le_sup' _ hb
 
 @[to_dual]
@@ -2321,9 +2321,9 @@ lemma sup'_eq_of_forall
 @[to_dual (attr := simp)]
 
 中文:
-引理 sup'_eq_of_forall
+引理 上确界'_eq_of_对任意
   条件: {a : α} (h : 对任意 b in s, f b = a)
-  结论: s.sup' H f = a
+  结论: s.上确界' H f = a
   证明: le_antisymm (sup'_le _ _ (fun _ hb => (h _ hb).le))
     (le_sup'_of_le _ H.choose_spec (h _ H.choose_spec).ge)
 
@@ -2346,9 +2346,9 @@ theorem sup'_const
 @[to_dual]
 
 中文:
-定理 sup'_const
+定理 上确界'_const
   条件: (a : α)
-  结论: s.sup' H (fun _ => a) = a
+  结论: s.上确界' H (fun _ => a) = a
   证明: sup'_eq_of_forall H (fun _ => a) fun _ => congrFun rfl
 
 @[to_dual]
@@ -2368,8 +2368,8 @@ theorem sup'_union
 @[to_dual]
 
 中文:
-定理 sup'_union
-  结论: [DecidableEq β] {s₁ s₂ : Finset β} (h₁ : s₁.Nonempty) (h₂ : s₂.Nonempty)
+定理 上确界'_union
+  结论: [DecidableEq β] {s₁ s₂ : 有限集 β} (h₁ : s₁.非空) (h₂ : s₂.非空)
   证明: eq_of_forall_ge_iff fun a => by simp [or_imp, forall_and]
 
 @[to_dual]
@@ -2391,8 +2391,8 @@ theorem sup'_comm
 @[to_dual]
 
 中文:
-定理 sup'_comm
-  条件: {t : Finset γ} (hs : s.Nonempty) (ht : t.Nonempty) (f : β -> γ -> α)
+定理 上确界'_comm
+  条件: {t : 有限集 γ} (hs : s.非空) (ht : t.非空) (f : β -> γ -> α)
   证明: eq_of_forall_ge_iff fun a => by simpa using forall₂_comm
 
 @[to_dual]
@@ -2420,7 +2420,7 @@ theorem sup'_induction
 @[to_dual]
 
 中文:
-定理 sup'_induction
+定理 上确界'_induction
   结论: {p : α -> 命题} (hp : 对任意 a₁, p a₁ -> 对任意 a₂, p a₂ -> p (a₁ ⊔ a₂))
   证明: by
   change @WithBot.recBotCoe α (fun _ => Prop) True p ↑(s.sup' H f)
@@ -2455,8 +2455,8 @@ theorem sup'_mem
 @[to_dual (attr := congr)]
 
 中文:
-定理 sup'_mem
-  结论: (s : Set α) (w : 对任意ᵉ (x in s) (y in s), x ⊔ y in s) {ι : 类型}
+定理 上确界'_mem
+  结论: (s : 集合 α) (w : 对任意ᵉ (x in s) (y in s), x ⊔ y in s) {ι : 类型}
   证明: sup'_induction H p w h
 
 @[to_dual (attr := congr)]
@@ -2480,8 +2480,8 @@ theorem sup'_congr
 @[to_dual]
 
 中文:
-定理 sup'_congr
-  条件: {t : Finset β} {f g : β -> α} (h₁ : s = t) (h₂ : 对任意 x in s, f x = g x)
+定理 上确界'_congr
+  条件: {t : 有限集 β} {f g : β -> α} (h₁ : s = t) (h₂ : 对任意 x in s, f x = g x)
   证明: by
   subst s
   refine eq_of_forall_ge_iff fun c => ?_
@@ -2515,7 +2515,7 @@ alias comp_inf'_eq_inf'_comp := apply_sup'_eq_sup'_comp
 
 中文:
 定理 apply_sup'_eq_sup'_comp
-  结论: [SemilatticeSup γ] {s : Finset β} (H : s.Nonempty) {f : β -> α}
+  结论: [SemilatticeSup γ] {s : 有限集 β} (H : s.非空) {f : β -> α}
   证明: by
   refine H.cons_induction ?_ ?_ <;> intros <;> simp [*]
 
@@ -2551,7 +2551,7 @@ theorem _root_.map_finset_sup'
 
 中文:
 定理 _root_.map_finset_sup'
-  结论: [SemilatticeSup β] [FunLike F α β] [SupHomClass F α β]
+  结论: [SemilatticeSup β] [函数状 F α β] [并态射类 F α β]
   证明: by
   refine hs.cons_induction ?_ ?_ <;> intros <;> simp [*]
 
@@ -2574,8 +2574,8 @@ theorem sup'_image
   rw [← WithBot.coe_eq_coe]; simp only [coe_sup', sup_image]; rfl
 
 中文:
-定理 sup'_image
-  结论: [DecidableEq β] {s : Finset γ} {f : γ -> β} (hs : (s.image f).Nonempty)
+定理 上确界'_image
+  结论: [DecidableEq β] {s : 有限集 γ} {f : γ -> β} (hs : (s.像 f).非空)
   证明: by
   rw [← WithBot.coe_eq_coe]; simp only [coe_sup', sup_image]; rfl
 -/
@@ -2597,8 +2597,8 @@ lemma sup'_comp_eq_image
   proof: .symm sup'_image _ _
 
 中文:
-引理 sup'_comp_eq_image
-  条件: [DecidableEq β] {s : Finset γ} {f : γ -> β} (hs : s.Nonempty) (g : β -> α)
+引理 上确界'_comp_eq_image
+  条件: [DecidableEq β] {s : 有限集 γ} {f : γ -> β} (hs : s.非空) (g : β -> α)
   证明: .symm sup'_image _ _
 -/
 lemma sup'_comp_eq_image [DecidableEq β] {s : Finset γ} {f : γ -> β} (hs : s.Nonempty) (g : β -> α) :
@@ -2618,8 +2618,8 @@ theorem sup'_map
   rfl
 
 中文:
-定理 sup'_map
-  条件: {s : Finset γ} {f : γ ↪ β} (g : β -> α) (hs : (s.map f).Nonempty)
+定理 上确界'_map
+  条件: {s : 有限集 γ} {f : γ ↪ β} (g : β -> α) (hs : (s.map f).非空)
   证明: by
   rw [← WithBot.coe_eq_coe]; rw [coe_sup']; rw [sup_map]; rw [coe_sup']
   rfl
@@ -2645,8 +2645,8 @@ lemma sup'_comp_eq_map
 @[to_dual (attr := gcongr)]
 
 中文:
-引理 sup'_comp_eq_map
-  条件: {s : Finset γ} {f : γ ↪ β} (g : β -> α) (hs : s.Nonempty)
+引理 上确界'_comp_eq_map
+  条件: {s : 有限集 γ} {f : γ ↪ β} (g : β -> α) (hs : s.非空)
   证明: .symm sup'_map _ _
 
 
@@ -2669,8 +2669,8 @@ theorem sup'_mono
 @[to_dual (attr := gcongr)]
 
 中文:
-定理 sup'_mono
-  条件: {s₁ s₂ : Finset β} (h : s₁ subseteq s₂) (h₁ : s₁.Nonempty)
+定理 上确界'_mono
+  条件: {s₁ s₂ : 有限集 β} (h : s₁ subseteq s₂) (h₁ : s₁.非空)
   证明: Finset.sup'_le h₁ _ (fun _ hb => le_sup' _ (h hb))
 
 @[to_dual (attr := gcongr)]
@@ -2689,8 +2689,8 @@ lemma sup'_mono_fun
   proof: sup'_le _ _ fun b hb => (h b hb).trans (le_sup' _ hb)
 
 中文:
-引理 sup'_mono_fun
-  条件: {hs : s.Nonempty} {f g : β -> α} (h : 对任意 b in s, f b <= g b)
+引理 上确界'_mono_fun
+  条件: {hs : s.非空} {f g : β -> α} (h : 对任意 b in s, f b <= g b)
   证明: sup'_le _ _ fun b hb => (h b hb).trans (le_sup' _ hb)
 -/
 lemma sup'_mono_fun {hs : s.Nonempty} {f g : β -> α} (h : forall b in s, f b <= g b) :
@@ -2715,9 +2715,9 @@ theorem sup'_eq_sup
 @[to_additive (attr := simp)]
 
 中文:
-定理 sup'_eq_sup
-  条件: (H : s.Nonempty) (f : β -> α)
-  结论: s.sup' H f = s.sup f
+定理 上确界'_eq_sup
+  条件: (H : s.非空) (f : β -> α)
+  结论: s.上确界' H f = s.上确界 f
   证明: le_antisymm (sup'_le H f fun _ => le_sup) (Finset.sup_le fun _ => le_sup' f)
 
 @[to_additive (attr := simp)]
@@ -2739,9 +2739,9 @@ lemma sup'_eq_one
 @[to_dual]
 
 中文:
-引理 sup'_eq_one
-  条件: [One α] [IsBotOneClass α] (hs)
-  结论: s.sup' hs f = 1 ↔ 对任意 i in s, f i = 1
+引理 上确界'_eq_one
+  条件: [幺 α] [是BotOne类 α] (hs)
+  结论: s.上确界' hs f = 1 ↔ 对任意 i in s, f i = 1
   证明: by
   simp [sup'_eq_sup]
 
@@ -2761,7 +2761,7 @@ theorem coe_sup_of_nonempty
 
 中文:
 定理 coe_sup_of_nonempty
-  条件: (h : s.Nonempty) (f : β -> α)
+  条件: (h : s.非空) (f : β -> α)
   证明: by simp only [← sup'_eq_sup h, coe_sup' h]
 
 Depends on / 依赖: _eq_sup, coe_sup
@@ -2806,7 +2806,7 @@ theorem sup'_apply
 @[to_dual (attr := simp)]
 
 中文:
-定理 sup'_apply
+定理 上确界'_apply
   结论: {C : β -> 类型} [对任意 b : β, SemilatticeSup (C b)]
   证明: apply_sup'_eq_sup'_comp H (fun x : forall b : β, C b => x b) fun _ _ => rfl
 
@@ -2830,7 +2830,7 @@ theorem toDual_sup'
 
 中文:
 定理 toDual_sup'
-  条件: [SemilatticeSup α] {s : Finset ι} (hs : s.Nonempty) (f : ι -> α)
+  条件: [SemilatticeSup α] {s : 有限集 ι} (hs : s.非空) (f : ι -> α)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -2850,7 +2850,7 @@ theorem ofDual_sup'
 
 中文:
 定理 ofDual_sup'
-  条件: [SemilatticeInf α] {s : Finset ι} (hs : s.Nonempty) (f : ι -> αᵒᵈ)
+  条件: [SemilatticeInf α] {s : 有限集 ι} (hs : s.非空) (f : ι -> αᵒᵈ)
   证明: rfl
 -/
 theorem ofDual_sup' [SemilatticeInf α] {s : Finset ι} (hs : s.Nonempty) (f : ι -> αᵒᵈ) :
@@ -2876,7 +2876,7 @@ theorem sup'_inf_distrib_left
 @[to_dual]
 
 中文:
-定理 sup'_inf_distrib_left
+定理 上确界'_inf_distrib_left
   条件: (f : ι -> α) (a : α)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
@@ -2902,7 +2902,7 @@ theorem sup'_inf_distrib_right
   rw [inf_comm]; rw [sup'_inf_distrib_left]; simp_rw [inf_comm]
 
 中文:
-定理 sup'_inf_distrib_right
+定理 上确界'_inf_distrib_right
   条件: (f : ι -> α) (a : α)
   证明: by
   rw [inf_comm]; rw [sup'_inf_distrib_left]; simp_rw [inf_comm]
@@ -2935,7 +2935,7 @@ alias comp_sup_eq_sup_comp_of_nonempty := apply_sup_eq_sup_comp_of_nonempty
 
 中文:
 定理 apply_sup_eq_sup_comp_of_nonempty
-  结论: [OrderBot α] [SemilatticeSup β] [OrderBot β]
+  结论: [有底序 α] [SemilatticeSup β] [有底序 β]
   证明: by
   rw [← Finset.sup'_eq_sup H]; rw [← Finset.sup'_eq_sup H]
   exact Finset.apply_sup'_eq_sup'_comp H g (fun x y => Monotone.map_sup mono_g x y)
@@ -2970,7 +2970,7 @@ theorem le_sup'_iff
 
 中文:
 定理 le_sup'_iff
-  结论: a <= s.sup' H f ↔ 存在 b in s, a <= f b
+  结论: a <= s.上确界' H f ↔ 存在 b in s, a <= f b
   证明: by
   rw [← WithBot.coe_le_coe]; rw [coe_sup']; rw [Finset.le_sup_iff (WithBot.bot_lt_coe a)]
   exact exists_congr (fun _ => and_congr_right' WithBot.coe_le_coe)
@@ -2996,7 +2996,7 @@ theorem lt_sup'_iff
 
 中文:
 定理 lt_sup'_iff
-  结论: a < s.sup' H f ↔ 存在 b in s, a < f b
+  结论: a < s.上确界' H f ↔ 存在 b in s, a < f b
   证明: by
   rw [← WithBot.coe_lt_coe]; rw [coe_sup']; rw [Finset.lt_sup_iff]
   exact exists_congr (fun _ => and_congr_right' WithBot.coe_lt_coe)
@@ -3023,8 +3023,8 @@ theorem sup'_lt_iff
 @[to_dual]
 
 中文:
-定理 sup'_lt_iff
-  结论: s.sup' H f < a ↔ 对任意 i in s, f i < a
+定理 上确界'_lt_iff
+  结论: s.上确界' H f < a ↔ 对任意 i in s, f i < a
   证明: by
   rw [← WithBot.coe_lt_coe]; rw [coe_sup']; rw [Finset.sup_lt_iff (WithBot.bot_lt_coe a)]
   exact forall₂_congr (fun _ _ => WithBot.coe_lt_coe)
@@ -3053,9 +3053,9 @@ theorem exists_mem_eq_sup'
     | inl h => exact ⟨c, mem_cons.2 (Or.inl rfl), sup_eq_left
 
 中文:
-定理 exists_mem_eq_sup'
+定理 存在_mem_eq_sup'
   条件: (f : ι -> α)
-  结论: 存在 i, i in s ∧ s.sup' H f = f i
+  结论: 存在 i, i in s ∧ s.上确界' H f = f i
   证明: by
   induction H using Finset.Nonempty.cons_induction with
   | singleton c => exact ⟨c, mem_singleton_self c, rfl⟩
@@ -3087,8 +3087,8 @@ theorem exists_mem_eq_sup
   proof: sup'_eq_sup h f ▸ exists_mem_eq_sup' h f
 
 中文:
-定理 exists_mem_eq_sup
-  条件: [OrderBot α] (s : Finset ι) (h : s.Nonempty) (f : ι -> α)
+定理 存在_mem_eq_sup
+  条件: [有底序 α] (s : 有限集 ι) (h : s.非空) (f : ι -> α)
   证明: sup'_eq_sup h f ▸ exists_mem_eq_sup' h f
 
 Depends on / 依赖: _eq_sup, exists_mem_eq_sup
@@ -3113,7 +3113,7 @@ theorem map_finset_sup
 
 中文:
 定理 map_finset_sup
-  结论: [DecidableEq α] [DecidableEq β] (s : Finset γ) (f : γ -> Multiset β)
+  结论: [DecidableEq α] [DecidableEq β] (s : 有限集 γ) (f : γ -> Multiset β)
   证明: Finset.apply_sup_eq_sup_comp _ (fun _ _ => map_union hg) (map_zero _)
 
 Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp, apply_sup_eq_sup_comp, map_union, map_zero
@@ -3137,7 +3137,7 @@ theorem count_finset_sup
 
 中文:
 定理 count_finset_sup
-  条件: [DecidableEq β] (s : Finset α) (f : α -> Multiset β) (b : β)
+  条件: [DecidableEq β] (s : 有限集 α) (f : α -> Multiset β) (b : β)
   证明: by
   let := Classical.decEq α
   refine s.induction ?_ ?_
@@ -3166,7 +3166,7 @@ theorem mem_sup
 
 中文:
 定理 mem_sup
-  条件: {α β} [DecidableEq β] {s : Finset α} {f : α -> Multiset β} {x : β}
+  条件: {α β} [DecidableEq β] {s : 有限集 α} {f : α -> Multiset β} {x : β}
   证明: by
   induction s using Finset.cons_induction <;> simp [*]
 
@@ -3194,7 +3194,7 @@ lemma mem_sup'
 中文:
 引理 mem_sup'
   条件: (hs)
-  结论: a in s.sup' hs f ↔ 存在 i in s, a in f i
+  结论: a in s.上确界' hs f ↔ 存在 i in s, a in f i
   证明: by
   induction hs using Nonempty.cons_induction <;> simp [*]
 -/
@@ -3214,7 +3214,7 @@ lemma mem_inf'
 中文:
 引理 mem_inf'
   条件: (hs)
-  结论: a in s.inf' hs f ↔ 对任意 i in s, a in f i
+  结论: a in s.下确界' hs f ↔ 对任意 i in s, a in f i
   证明: by
   induction hs using Nonempty.cons_induction <;> simp [*]
 -/
@@ -3234,7 +3234,7 @@ lemma mem_sup
 
 中文:
 引理 mem_sup
-  结论: a in s.sup f ↔ 存在 i in s, a in f i
+  结论: a in s.上确界 f ↔ 存在 i in s, a in f i
   证明: by
   induction s using cons_induction <;> simp [*]
 
@@ -3259,7 +3259,7 @@ theorem sup_singleton_apply
 
 中文:
 定理 sup_singleton_apply
-  条件: (s : Finset β) (f : β -> α)
+  条件: (s : 有限集 β) (f : β -> α)
   证明: by
   ext a
   rw [mem_sup]; rw [mem_image]
@@ -3287,8 +3287,8 @@ theorem sup_singleton_eq_self
 
 中文:
 定理 sup_singleton_eq_self
-  条件: (s : Finset α)
-  结论: s.sup singleton = s
+  条件: (s : 有限集 α)
+  结论: s.上确界 singleton = s
   证明: (s.sup_singleton_apply _).trans image_id
 
 Depends on / 依赖: image_id, s.sup_singleton_apply, sup_singleton_apply

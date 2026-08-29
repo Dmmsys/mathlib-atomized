@@ -44,7 +44,7 @@ class AddModObj
     - add_vadd((X)) : σ ⊵ₗ X ≫ vadd = (αₗ M M X).hom ≫ M ⊴ₗ vadd ≫ vadd  [default: by cat_disch]
 
 中文:
-类 AddModObj
+类 加法ModObj
   参数: (X : D)
   公理与运算 (3 个):
     - vadd : M ⊙ₗ X ⟶ X
@@ -245,7 +245,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: {X : D} {N : C} [MonObj N] (e₁ : M ≅ N) [IsMonHom e₁.hom]
+  签名: {X : D} {N : C} [MonObj N] (e₁ : M ≅ N) [是幺半群态射 e₁.hom]
   定义体: (e₁.inv ⊙ₗₘ e₂.inv) ≫ γ ≫ e₂.hom
   one_smul := by
     have : η ⊵ₗ Y ≫ (e₁.inv ⊙ₗₘ e₂.inv) = _ ⊴ₗ e₂.inv ≫ (η ≫ e₁.inv) ⊵ₗ X := by
@@ -367,8 +367,8 @@ class IsAddModHom
     - vadd_hom : δ[M'] ≫ f = A ⊴ₗ f ≫ δ[N']  [default: by cat_disch]
 
 中文:
-类 IsAddModHom
-  参数: (A : C) [AddMonObj A] [AddModObj A M'] [AddModObj A N'] (f : M' ⟶ N')
+类 是加法取模态射
+  参数: (A : C) [加法MonObj A] [加法ModObj A M'] [加法ModObj A N'] (f : M' ⟶ N')
   公理与运算 (1 个):
     - vadd_hom : δ[M'] ≫ f = A ⊴ₗ f ≫ δ[N']  [默认: by cat_disch]
 
@@ -391,7 +391,7 @@ class IsModHom
     - smul_hom : γ[M] ≫ f = A ⊴ₗ f ≫ γ[N]  [default: by cat_disch]
 
 中文:
-类 IsModHom
+类 是取模态射
   参数: {M N : D} [ModObj A M] [ModObj A N] (f : M ⟶ N)
   公理与运算 (1 个):
     - smul_hom : γ[M] ≫ f = A ⊴ₗ f ≫ γ[N]  [默认: by cat_disch]
@@ -422,7 +422,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsModHom A (𝟙 M)
+  签名: 是取模态射 A (𝟙 M)
 -/
 instance : IsModHom A (𝟙 M) where
 
@@ -447,11 +447,11 @@ structure AddMod
     - [addMod : AddModObj A X]
 
 中文:
-结构 AddMod
-  参数: (A : C) [AddMonObj A]
+结构 加法取模
+  参数: (A : C) [加法MonObj A]
   公理与运算 (2 个):
     - X : D
-    - [addMod : AddModObj A X]
+    - [addMod : 加法ModObj A X]
 -/
 structure AddMod (A : C) [AddMonObj A] where
   /-- The underlying object in the ambient category -/
@@ -475,7 +475,7 @@ structure Mod
     - [mod : ModObj A X]
 
 中文:
-结构 Mod
+结构 取模
   参数: (A : C) [MonObj A]
   公理与运算 (2 个):
     - X : D
@@ -511,11 +511,11 @@ structure Hom
     - [isAddModHom : IsAddModHom A hom]
 
 中文:
-结构 Hom
-  参数: (M N : AddMod D A)
+结构 态射
+  参数: (M N : 加法取模 D A)
   公理与运算 (2 个):
     - hom : M.X ⟶ N.X
-    - [isAddModHom : IsAddModHom A hom]
+    - [isAddModHom : 是加法取模态射 A hom]
 -/
 structure Hom (M N : AddMod D A) where
   /-- The underlying morphism -/
@@ -559,11 +559,11 @@ structure Hom
     - [isModHom : IsModHom A hom]
 
 中文:
-结构 Hom
-  参数: (M N : Mod D A)
+结构 态射
+  参数: (M N : 取模 D A)
   公理与运算 (2 个):
     - hom : M.X ⟶ N.X
-    - [isModHom : IsModHom A hom]
+    - [isModHom : 是取模态射 A hom]
 -/
 structure Hom (M N : Mod D A) where
   /-- The underlying morphism -/
@@ -589,8 +589,8 @@ definition Hom.mk'
   ⟨f⟩
 
 中文:
-定义 Hom.mk'
-  签名: {M N : Mod D A} (f : M.X ⟶ N.X)
+定义 态射.mk'
+  签名: {M N : 取模 D A} (f : M.X ⟶ N.X)
   定义体: letI : IsModHom A f := ⟨smul_hom⟩
   ⟨f⟩
 -/
@@ -618,7 +618,7 @@ definition Hom.mk''
   ⟨f⟩
 
 中文:
-定义 Hom.mk''
+定义 态射.mk''
   签名: {M N : D} [ModObj A M] [ModObj A N] (f : M ⟶ N)
   定义体: letI : IsModHom A f := ⟨smul_hom⟩
   ⟨f⟩
@@ -645,7 +645,7 @@ definition id
 
 中文:
 定义 id
-  签名: (M : Mod D A)
+  签名: (M : 取模 D A)
   定义体: 𝟙 M.X
 
 @[to_additive]
@@ -663,7 +663,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: (M : Mod D A)
+  签名: (M : 取模 D A)
   定义体: ⟨id M⟩
 -/
 instance homInhabited (M : Mod D A) : Inhabited (Hom M M) :=
@@ -683,7 +683,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N O : Mod D A} (f : Hom M N) (g : Hom N O)
+  签名: {M N O : 取模 D A} (f : 态射 M N) (g : 态射 N O)
   定义体: f.hom ≫ g.hom
 
 @[to_additive]
@@ -709,7 +709,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Mod D A)
+  签名: 范畴 (取模 D A)
   定义体: Hom M N
   id := id
   comp f g := comp f g
@@ -734,7 +734,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : Mod D A} (f₁ f₂ : M ⟶ N) (h : f₁.hom = f₂.hom)
+  条件: {M N : 取模 D A} (f₁ f₂ : M ⟶ N) (h : f₁.hom = f₂.hom)
   证明: Hom.ext h
 
 @[to_additive (attr := simp)]
@@ -760,7 +760,7 @@ theorem id_hom'
 
 中文:
 定理 id_hom'
-  条件: (M : Mod D A)
+  条件: (M : 取模 D A)
   结论: (𝟙 M : M ⟶ M).hom = 𝟙 M.X
   证明: by
   rfl
@@ -781,7 +781,7 @@ theorem comp_hom'
 
 中文:
 定理 comp_hom'
-  条件: {M N K : Mod D A} (f : M ⟶ N) (g : N ⟶ K)
+  条件: {M N K : 取模 D A} (f : M ⟶ N) (g : N ⟶ K)
   证明: rfl
 -/
 theorem comp_hom' {M N K : Mod D A} (f : M ⟶ N) (g : N ⟶ K) :
@@ -805,7 +805,7 @@ definition regular
 
 中文:
 定义 regular
-  签名: : Mod C A
+  签名: : 取模 C A
   定义体: letI : ModObj A A := .regular A
   ⟨A⟩
 
@@ -828,7 +828,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Mod C A)
+  签名: 可居 (取模 C A)
   定义体: ⟨regular A⟩
 
 Depends on / 依赖: regular
@@ -850,7 +850,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Mod D A ⥤ D where
+  签名: : 取模 D A ⥤ D where
   定义体: A.X
   map f := f.hom
 -/
@@ -977,7 +977,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {A B : C} [MonObj A] [MonObj B] (f : A ⟶ B) [IsMonHom f]
+  签名: {A B : C} [MonObj A] [MonObj B] (f : A ⟶ B) [是幺半群态射 f]
   定义体: letI := scalarRestriction f M.X
     ⟨M.X⟩
   map {M N} g :=

@@ -158,8 +158,8 @@ instance [Inhabited
   body: ⟨pure default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (PMF α)
+实例 [可居
+  签名: α] : 可居 (PMF α)
   定义体: ⟨pure default⟩
 -/
 instance [Inhabited α] : Inhabited (PMF α) :=
@@ -225,7 +225,7 @@ theorem toMeasure_pure_apply
 
 中文:
 定理 toMeasure_pure_apply
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply (pure a) hs).trans (toOuterMeasure_pure_apply a s)
 
 Depends on / 依赖: toMeasure_apply_eq_toOuterMeasure_apply, toOuterMeasure_pure_apply
@@ -246,7 +246,7 @@ theorem toMeasure_pure
 
 中文:
 定理 toMeasure_pure
-  结论: (pure a).toMeasure = Measure.dirac a
+  结论: (pure a).toMeasure = 测度.dirac a
   证明: Measure.ext fun s hs => by rw [toMeasure_pure_apply a s hs, Measure.dirac_apply' a hs]; rfl
 
 @[simp]
@@ -268,7 +268,7 @@ theorem toPMF_dirac
 
 中文:
 定理 toPMF_dirac
-  条件: [Countable α] [h : MeasurableSingletonClass α]
+  条件: [可数 α] [h : MeasurableSingleton类 α]
   证明: by
   rw [toPMF_eq_iff_toMeasure_eq]; rw [toMeasure_pure]
 
@@ -568,7 +568,7 @@ theorem toMeasure_bind_apply
 
 中文:
 定理 toMeasure_bind_apply
-  条件: [MeasurableSpace β] (hs : MeasurableSet s)
+  条件: [可测空间 β] (hs : 可测集 s)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply (p.bind f) hs).trans
     ((toOuterMeasure_bind_apply p f s).trans
       (tsum_congr fun a =>
@@ -598,7 +598,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad PMF
+  签名: 单子 PMF
   定义体: pure a
   bind pa pb := pa.bind pb
 -/
@@ -981,7 +981,7 @@ theorem toMeasure_bindOnSupport_apply
 
 中文:
 定理 toMeasure_bindOnSupport_apply
-  条件: [MeasurableSpace β] (hs : MeasurableSet s)
+  条件: [可测空间 β] (hs : 可测集 s)
   证明: by
   simp only [toMeasure_apply_eq_toOuterMeasure_apply _ hs, toOuterMeasure_bindOnSupport_apply]
 

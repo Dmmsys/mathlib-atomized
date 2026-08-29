@@ -58,7 +58,7 @@ Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ by
       ex
 
 中文:
-引理 IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing
+引理 是局部环.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing
   证明: have : Ring.KrullDimLE 0 (R ⧸ I) := Ring.krullDimLE_zero_iff.mpr fun J prime =>
 Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ by
       convert! IsLocalRing.maximalIdeal.isMaximal R
@@ -91,7 +91,7 @@ lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
   rw [← WithBot.coe_inj]; rw [← IsLocalization.AtPrime.ringKrullDim_eq_height q (Localization.AtPrime q)]; rw [WithBot.coe_zero]; rw [← ringKrullDimZero_iff_ringKrullDim_eq_zero]; rw [← isAr
 
 中文:
-引理 Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
+引理 理想.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
   证明: by
   refine Ideal.height_le_iff.mpr fun q h₁ h₂ => ?_
   suffices q.height = 0 by rw [this]; exact zero_lt_one
@@ -153,7 +153,7 @@ lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes
   · rwa [IsLocalization.m
 
 中文:
-引理 Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes
+引理 理想.height_le_one_of_isPrincipal_of_mem_minimalPrimes
   证明: by
   have := hp.isPrime
   let f := algebraMap R (Localization.AtPrime p)
@@ -188,8 +188,8 @@ theorem Ideal.map_height_le_one_of_mem_minimalPrimes
       map_mono (le
 
 中文:
-定理 Ideal.map_height_le_one_of_mem_minimalPrimes
-  结论: {I p : Ideal R} {x : R}
+定理 理想.map_height_le_one_of_mem_minimalPrimes
+  结论: {I p : 理想 R} {x : R}
   证明: let f := Ideal.Quotient.mk I
   have : p.IsPrime := hp.isPrime
   have hfp : RingHom.ker f <= p := I.mk_ker.trans_le (le_sup_left.trans hp.le)
@@ -224,8 +224,8 @@ lemma Ideal.height_span_singleton_le_one
   exact Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes (span {x}) _ hp
 
 中文:
-引理 Ideal.height_span_singleton_le_one
-  条件: {x : R} (hx' : ¬ IsUnit x)
+引理 理想.height_span_singleton_le_one
+  条件: {x : R} (hx' : ¬ 是单位 x)
   证明: by
   obtain ⟨p, hp⟩ := (span {x}).nonempty_minimalPrimes (by simpa)
   refine le_trans (height_mono hp.1.2) ?_
@@ -249,7 +249,7 @@ lemma Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors
     (one_le_height_span_singleton_of_mem_nonZeroDivisors hx)
 
 中文:
-引理 Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors
+引理 理想.height_span_singleton_eq_one_of_mem_nonZeroDivisors
   结论: {x : R}
   证明: le_antisymm (height_span_singleton_le_one hx')
     (one_le_height_span_singleton_of_mem_nonZeroDivisors hx)
@@ -277,8 +277,8 @@ theorem Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert
   suffices h : 
 
 中文:
-定理 Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert
-  结论: {q p : Ideal R} [q.IsPrime]
+定理 理想.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert
+  结论: {q p : 理想 R} [q.是素]
   证明: by
   let f := Quotient.mk (span t)
   have hf : Function.Surjective f := Quotient.mk_surjective
@@ -393,8 +393,8 @@ lemma Ideal.height_le_card_of_mem_minimalPrimes_span_finset
   · simpa using Submodule.spanRank_span_le_card (s : Set R)
 
 中文:
-引理 Ideal.height_le_card_of_mem_minimalPrimes_span_finset
-  结论: {p : Ideal R} {s : Finset R}
+引理 理想.height_le_card_of_mem_minimalPrimes_span_finset
+  结论: {p : 理想 R} {s : 有限集 R}
   证明: by
   trans (Cardinal.toENat (Submodule.spanRank (Ideal.span (s : Set R))))
   · exact Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes _ _ hI
@@ -420,8 +420,8 @@ lemma Ideal.height_le_card_of_mem_minimalPrimes_span
   exact Ideal.height_le_card_of_mem_minimalPrimes_span_finset (by simpa)
 
 中文:
-引理 Ideal.height_le_card_of_mem_minimalPrimes_span
-  结论: {p : Ideal R} {s : Set R}
+引理 理想.height_le_card_of_mem_minimalPrimes_span
+  结论: {p : 理想 R} {s : 集合 R}
   证明: by
   rw [s.ncard_eq_toFinset_card hs]
   exact Ideal.height_le_card_of_mem_minimalPrimes_span_finset (by simpa)
@@ -446,8 +446,8 @@ lemma Ideal.height_le_spanRank_toENat
   exact (iInf₂_le J hJ).trans (I.height_le_spanRank_toENat_of_mem_minimalPrimes J hJ)
 
 中文:
-引理 Ideal.height_le_spanRank_toENat
-  条件: (I : Ideal R) (hI : I != ⊤)
+引理 理想.height_le_spanRank_toE自然数
+  条件: (I : 理想 R) (hI : I != ⊤)
   证明: by
   obtain ⟨J, hJ⟩ := nonempty_minimalPrimes hI
   rw [I.height_eq_inf_minimalPrimes]
@@ -473,8 +473,8 @@ lemma Ideal.height_le_spanFinrank
   exact this ▸ height_le_spanRank_toENat I hI
 
 中文:
-引理 Ideal.height_le_spanFinrank
-  条件: (I : Ideal R) (hI : I != ⊤)
+引理 理想.height_le_spanFinrank
+  条件: (I : 理想 R) (hI : I != ⊤)
   证明: by
   have : I.spanFinrank = I.spanRank.toENat := by
     rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)]; rw [map_natCast]
@@ -500,8 +500,8 @@ lemma Ideal.height_le_spanRank
   · exact I.spanRank.ofENat_toENat_le
 
 中文:
-引理 Ideal.height_le_spanRank
-  条件: (I : Ideal R) (hI : I != ⊤)
+引理 理想.height_le_spanRank
+  条件: (I : 理想 R) (hI : I != ⊤)
   证明: by
   trans ↑I.spanRank.toENat
   · exact_mod_cast I.height_le_spanRank_toENat hI
@@ -525,8 +525,8 @@ instance Ideal.finiteHeight_of_isNoetherianRing
 fun h => Or.inr (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
 
 中文:
-实例 Ideal.finiteHeight_of_isNoetherianRing
-  签名: (I : Ideal R)
+实例 理想.finiteHeight_of_isNoetherianRing
+  签名: (I : 理想 R)
   定义体: finiteHeight_iff_lt.mpr Or.elim (em (I = ⊤)) Or.inl
 fun h => Or.inr (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
 
@@ -552,7 +552,7 @@ instance [IsLocalRing
       (IsLocalRing.maximalIdeal R).f
 
 中文:
-实例 [IsLocalRing
+实例 [是局部环
   签名: R] : FiniteRingKrullDim R
   定义体: by
   apply finiteRingKrullDim_iff_ne_bot_and_top.mpr
@@ -589,8 +589,8 @@ lemma Ideal.exists_spanRank_eq_and_height_eq
     le_antisymm (Ideal.height_
 
 中文:
-引理 Ideal.exists_spanRank_eq_and_height_eq
-  条件: (I : Ideal R) (hI : I != ⊤)
+引理 理想.存在_spanRank_eq_and_height_eq
+  条件: (I : 理想 R) (hI : I != ⊤)
   证明: by
   obtain ⟨J, hJ₁, hJ₂, hJ₃⟩ := exists_spanRank_le_and_le_height_of_le_height I _
     (ENat.natCast_toNat_le_self I.height)
@@ -630,8 +630,8 @@ lemma Ideal.height_le_iff_exists_minimalPrimes
       (Ideal.height_le_spanRank_toENat_of_mem_minimal
 
 中文:
-引理 Ideal.height_le_iff_exists_minimalPrimes
-  结论: (p : Ideal R) [p.IsPrime]
+引理 理想.height_le_iff_存在_minimalPrimes
+  结论: (p : 理想 R) [p.是素]
   证明: by
   constructor
   · intro h
@@ -669,8 +669,8 @@ lemma Ideal.exists_finset_card_eq_height_of_isNoetherianRing
   rw [← Set.ncard_eq_toFinset_card (hs := hs)]; rw [(
 
 中文:
-引理 Ideal.exists_finset_card_eq_height_of_isNoetherianRing
-  条件: (p : Ideal R) [p.IsPrime]
+引理 理想.存在_finset_card_eq_height_of_isNoetherianRing
+  条件: (p : 理想 R) [p.是素]
   证明: by
   obtain ⟨I, hI, hr⟩ := (p.height_le_iff_exists_minimalPrimes <| p.height).mp le_rfl
   have hs : I.generators.Finite := (IsNoetherian.noetherian I).finite_generators
@@ -708,8 +708,8 @@ lemma Ideal.height_le_height_add_spanFinrank_of_le
   have : Set.
 
 中文:
-引理 Ideal.height_le_height_add_spanFinrank_of_le
-  条件: {I p : Ideal R} [p.IsPrime] (hrp : I <= p)
+引理 理想.height_le_height_add_spanFinrank_of_le
+  条件: {I p : 理想 R} [p.是素] (hrp : I <= p)
   证明: by
   classical
   let p' := p.map (algebraMap R (R ⧸ I))
@@ -763,7 +763,7 @@ lemma height_le_ringKrullDim_quotient_add_spanFinrank
 
 中文:
 引理 height_le_ringKrullDim_quotient_add_spanFinrank
-  条件: {p I : Ideal R} [p.IsPrime] (h : I <= p)
+  条件: {p I : 理想 R} [p.是素] (h : I <= p)
   证明: by
   trans (p.map (Ideal.Quotient.mk I)).height + I.spanFinrank
   · norm_cast; exact Ideal.height_le_height_add_spanFinrank_of_le h
@@ -798,7 +798,7 @@ le_trans h Ring.jacobson_le_of_isMaximal m
 
 中文:
 引理 ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank
-  结论: (I : Ideal R)
+  结论: (I : 理想 R)
   证明: by
   nontriviality R
   rw [ringKrullDim_le_iff_isMaximal_height_le]
@@ -830,8 +830,8 @@ lemma Ideal.height_le_height_add_encard_of_subset
     exact Submodule.spanFinrank_span_le_encard _
 
 中文:
-引理 Ideal.height_le_height_add_encard_of_subset
-  结论: (s : Set R) {p : Ideal R} [p.IsPrime]
+引理 理想.height_le_height_add_encard_of_subset
+  结论: (s : 集合 R) {p : 理想 R} [p.是素]
   证明: by
   apply le_trans (Ideal.height_le_height_add_spanFinrank_of_le (I := span s) (p := p) ?_) ?_
   · rwa [span_le]
@@ -859,8 +859,8 @@ lemma Ideal.height_le_ringKrullDim_quotient_add_encard
   · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
 
 中文:
-引理 Ideal.height_le_ringKrullDim_quotient_add_encard
-  结论: {p : Ideal R} [p.IsPrime]
+引理 理想.height_le_ringKrullDim_quotient_add_encard
+  结论: {p : 理想 R} [p.是素]
   证明: by
   refine le_trans (height_le_ringKrullDim_quotient_add_spanFinrank (I := .span s) ?_) ?_
   · simpa [span_le]
@@ -885,8 +885,8 @@ lemma Ideal.height_le_height_add_one_of_mem
   simp
 
 中文:
-引理 Ideal.height_le_height_add_one_of_mem
-  条件: {r : R} {p : Ideal R} [p.IsPrime] (hrm : r in p)
+引理 理想.height_le_height_add_one_of_mem
+  条件: {r : R} {p : 理想 R} [p.是素] (hrm : r in p)
   证明: by
   convert! height_le_height_add_encard_of_subset { r } (p := p) (by simpa)
   simp
@@ -909,8 +909,8 @@ lemma Ideal.height_le_ringKrullDim_quotient_add_one
   simp
 
 中文:
-引理 Ideal.height_le_ringKrullDim_quotient_add_one
-  结论: {r : R} {p : Ideal R} [p.IsPrime]
+引理 理想.height_le_ringKrullDim_quotient_add_one
+  结论: {r : R} {p : 理想 R} [p.是素]
   证明: by
   convert! Ideal.height_le_ringKrullDim_quotient_add_encard { r } (by simpa)
   simp
@@ -935,7 +935,7 @@ lemma ringKrullDim_le_ringKrullDim_quotient_add_encard
 
 中文:
 引理 ringKrullDim_le_ringKrullDim_quotient_add_encard
-  条件: (s : Set R) (hs : s subseteq Ring.jacobson R)
+  条件: (s : 集合 R) (hs : s subseteq 环.jacobson R)
   证明: by
   refine le_trans (ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (Ideal.span s) ?_) ?_
   · simpa [Ideal.span_le]
@@ -961,7 +961,7 @@ lemma ringKrullDim_le_ringKrullDim_quotient_add_card
 
 中文:
 引理 ringKrullDim_le_ringKrullDim_quotient_add_card
-  结论: (s : Finset R)
+  结论: (s : 有限集 R)
   证明: by
   convert! ringKrullDim_le_ringKrullDim_quotient_add_encard s hs
   norm_cast
@@ -999,8 +999,8 @@ lemma Ideal.height_le_height_add_of_liesOver
   have hsP'sub : (s' : Set <| S ⧸ (Ideal.map (algebraMap R S) p))
 
 中文:
-引理 Ideal.height_le_height_add_of_liesOver
-  结论: [IsNoetherianRing S] (p : Ideal R) [p.IsPrime]
+引理 理想.height_le_height_add_of_liesOver
+  结论: [是Noether环 S] (p : 理想 R) [p.是素]
   证明: by
   classical
   obtain ⟨s, hp, heq⟩ := p.exists_finset_card_eq_height_of_isNoetherianRing
@@ -1062,8 +1062,8 @@ lemma Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown
     lq.map (Prim
 
 中文:
-引理 Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown
-  结论: [IsNoetherianRing S]
+引理 理想.height_eq_height_add_of_liesOver_of_hasGoingDown
+  结论: [是Noether环 S]
   证明: by
   refine le_antisymm (height_le_height_add_of_liesOver p P) ?_
   obtain ⟨lp, hlp, hlenp⟩ := p.exists_ltSeries_length_eq_height
@@ -1114,7 +1114,7 @@ lemma ringKrullDim_le_spanFinrank_maximalIdeal
 
 中文:
 引理 ringKrullDim_le_spanFinrank_maximalIdeal
-  条件: [IsLocalRing R]
+  条件: [是局部环 R]
   证明: le_of_eq_of_le IsLocalRing.maximalIdeal_height_eq_ringKrullDim.symm
     (WithBot.coe_le_coe.mpr (Ideal.height_le_spanFinrank (IsLocalRing.maximalIdeal R)
       Ideal.IsPrime.ne_top'))

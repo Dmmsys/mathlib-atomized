@@ -131,8 +131,8 @@ Function.bijective_iff_has_inverse.mpr
     ⟨⟨_, e.symm, LinearMap.ext e.right_inv, Lin
 
 中文:
-定理 _root_.Module.End.isUnit_iff
-  条件: [Module R M] (f : Module.End R M)
+定理 _root_.模.End.isUnit_iff
+  条件: [模 R M] (f : 模.End R M)
   证明: ⟨fun h =>
 Function.bijective_iff_has_inverse.mpr
       ⟨h.unit.inv,
@@ -175,7 +175,7 @@ inv_mul_cancel f := ext f.left_inv
 
 中文:
 实例 automorphismGroup
-  签名: : Group (M ≃ₗ[R] M) where
+  签名: : 群 (M ≃ₗ[R] M) where
   定义体: g.trans f
   one := LinearEquiv.refl R M
   inv f := f.symm
@@ -280,7 +280,7 @@ lemma coe_toLinearMap_one
 
 中文:
 引理 coe_toLinearMap_one
-  结论: (↑(1 : M ≃ₗ[R] M) : M ->ₗ[R] M) = LinearMap.id
+  结论: (↑(1 : M ≃ₗ[R] M) : M ->ₗ[R] M) = 线性映射.id
   证明: rfl
 
 @[simp]
@@ -403,7 +403,7 @@ instance applyDistribMulAction
 
 中文:
 实例 applyDistribMulAction
-  签名: : DistribMulAction (M ≃ₗ[R] M) M where
+  签名: : 分配乘法作用 (M ≃ₗ[R] M) M where
   定义体: (· <| ·)
   smul_zero := map_zero
   smul_add := map_add
@@ -448,7 +448,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (M ≃ₗ[R] M) M
+  签名: : 忠实标量乘法 (M ≃ₗ[R] M) M
   定义体: ⟨LinearEquiv.ext⟩
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ext
@@ -466,7 +466,7 @@ instance apply_smulCommClass
 
 中文:
 实例 apply_smulCommClass
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: (e.map_smul_of_tower r m).symm
 
 Depends on / 依赖: e.map_smul_of_tower, map_smul_of_tower
@@ -485,7 +485,7 @@ instance apply_smulCommClass'
 
 中文:
 实例 apply_smulCommClass'
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -585,7 +585,7 @@ definition compHom.toLinearEquiv
 
 中文:
 定义 compHom.toLinearEquiv
-  签名: {R S : 类型} [Semiring R] [Semiring S] (g : R ≃+* S)
+  签名: {R S : 类型} [半环 R] [半环 S] (g : R ≃+* S)
   定义体: compHom S (↑g : R ->+* S)
     R ≃ₗ[R] S :=
   letI := compHom S (↑g : R ->+* S)
@@ -674,8 +674,8 @@ theorem LinearEquiv.smul_refl
     α • refl R M = DistribMulAction.toLinearEquiv R M α := rfl
 
 中文:
-定理 LinearEquiv.smul_refl
-  结论: [Semiring R] [Semiring S] [AddCommMonoid M] [Module R M] [Module S M]
+定理 线性等价.smul_refl
+  结论: [半环 R] [半环 S] [加法交换幺半群 M] [模 R M] [模 S M]
   证明: SMulCommClass.symm R Sˣ M
     α • refl R M = DistribMulAction.toLinearEquiv R M α := rfl
 
@@ -768,7 +768,7 @@ definition toNatLinearEquiv
 @[simp]
 
 中文:
-定义 toNatLinearEquiv
+定义 to自然数LinearEquiv
   签名: : M ≃ₗ[自然数] M₂
   定义体: e.toLinearEquiv fun c a => by rw [map_nsmul]
 
@@ -791,7 +791,7 @@ theorem coe_toNatLinearEquiv
 @[simp]
 
 中文:
-定理 coe_toNatLinearEquiv
+定理 coe_to自然数LinearEquiv
   结论: ⇑e.to自然数LinearEquiv = e
   证明: rfl
 
@@ -812,7 +812,7 @@ theorem coe_symm_toNatLinearEquiv
 @[simp]
 
 中文:
-定理 coe_symm_toNatLinearEquiv
+定理 coe_symm_to自然数LinearEquiv
   结论: ⇑e.to自然数LinearEquiv.symm = e.symm
   证明: rfl
 
@@ -833,7 +833,7 @@ theorem toNatLinearEquiv_toAddEquiv
 @[simp]
 
 中文:
-定理 toNatLinearEquiv_toAddEquiv
+定理 to自然数LinearEquiv_toAddEquiv
   结论: ↑e.to自然数LinearEquiv = e
   证明: rfl
 
@@ -854,7 +854,7 @@ theorem _root_.LinearEquiv.toAddEquiv_toNatLinearEquiv
 @[simp]
 
 中文:
-定理 _root_.LinearEquiv.toAddEquiv_toNatLinearEquiv
+定理 _root_.线性等价.toAddEquiv_to自然数LinearEquiv
   条件: (e : M ≃ₗ[自然数] M₂)
   证明: DFunLike.coe_injective rfl
 
@@ -878,7 +878,7 @@ theorem toNatLinearEquiv_symm
 @[simp]
 
 中文:
-定理 toNatLinearEquiv_symm
+定理 to自然数LinearEquiv_symm
   结论: e.symm.to自然数LinearEquiv = e.to自然数LinearEquiv.symm
   证明: rfl
 
@@ -899,8 +899,8 @@ theorem toNatLinearEquiv_refl
 @[simp]
 
 中文:
-定理 toNatLinearEquiv_refl
-  结论: (AddEquiv.refl M).to自然数LinearEquiv = LinearEquiv.refl 自然数 M
+定理 to自然数LinearEquiv_refl
+  结论: (加法等价.refl M).to自然数LinearEquiv = 线性等价.refl 自然数 M
   证明: rfl
 
 @[simp]
@@ -918,7 +918,7 @@ theorem toNatLinearEquiv_trans
   proof: rfl
 
 中文:
-定理 toNatLinearEquiv_trans
+定理 to自然数LinearEquiv_trans
   条件: (e₂ : M₂ ≃+ M₃)
   证明: rfl
 -/
@@ -949,7 +949,7 @@ definition toIntLinearEquiv
 @[simp]
 
 中文:
-定义 toIntLinearEquiv
+定义 to整数LinearEquiv
   签名: : M ≃ₗ[整数] M₂
   定义体: by
   refine e.toLinearEquiv fun c a => ?_
@@ -979,7 +979,7 @@ theorem coe_toIntLinearEquiv
 @[simp]
 
 中文:
-定理 coe_toIntLinearEquiv
+定理 coe_to整数LinearEquiv
   结论: ⇑(e.to整数LinearEquiv (modM := modM) (modM₂ := modM₂)) = e
   证明: rfl
 
@@ -998,7 +998,7 @@ theorem coe_symm_toIntLinearEquiv
 @[simp]
 
 中文:
-定理 coe_symm_toIntLinearEquiv
+定理 coe_symm_to整数LinearEquiv
   证明: rfl
 
 @[simp]
@@ -1023,7 +1023,7 @@ theorem toIntLinearEquiv_toAddEquiv
 @[simp]
 
 中文:
-定理 toIntLinearEquiv_toAddEquiv
+定理 to整数LinearEquiv_toAddEquiv
   结论: ↑e.to整数LinearEquiv = e
   证明: by
   ext
@@ -1047,7 +1047,7 @@ theorem _root_.LinearEquiv.toAddEquiv_toIntLinearEquiv
 @[simp]
 
 中文:
-定理 _root_.LinearEquiv.toAddEquiv_toIntLinearEquiv
+定理 _root_.线性等价.toAddEquiv_to整数LinearEquiv
   条件: (e : M ≃ₗ[整数] M₂)
   证明: DFunLike.coe_injective rfl
 
@@ -1070,7 +1070,7 @@ theorem toIntLinearEquiv_symm
 @[simp]
 
 中文:
-定理 toIntLinearEquiv_symm
+定理 to整数LinearEquiv_symm
   证明: rfl
 
 @[simp]
@@ -1092,8 +1092,8 @@ theorem toIntLinearEquiv_refl
 @[simp]
 
 中文:
-定理 toIntLinearEquiv_refl
-  结论: (AddEquiv.refl M).to整数LinearEquiv = LinearEquiv.refl 整数 M
+定理 to整数LinearEquiv_refl
+  结论: (加法等价.refl M).to整数LinearEquiv = 线性等价.refl 整数 M
   证明: rfl
 
 @[simp]
@@ -1111,7 +1111,7 @@ theorem toIntLinearEquiv_trans
   proof: rfl
 
 中文:
-定理 toIntLinearEquiv_trans
+定理 to整数LinearEquiv_trans
   条件: (e₂ : M₂ ≃+ M₃)
   证明: rfl
 -/
@@ -1142,7 +1142,7 @@ definition piApply
 
 中文:
 定义 piApply
-  签名: {V : M -> 类型} [CommSemiring R] [对任意 x, AddCommMonoid (V x)] [对任意 x, Module R (V x)]
+  签名: {V : M -> 类型} [交换半环 R] [对任意 x, 加法交换幺半群 (V x)] [对任意 x, 模 R (V x)]
   定义体: { toFun s x := e x (s x)
       map_add' := by intros; ext; simp
       map_smul' := by intros; ext; simp }
@@ -1234,7 +1234,7 @@ definition ringLmapEquivSelf
 
 中文:
 定义 ringLmapEquivSelf
-  签名: [Module S M] [SMulCommClass R S M]
+  签名: [模 S M] [标量交换类 R S M]
   定义体: { applyₗ' S (1 : R) with
     toFun := fun f => f 1
     invFun := smulRight (1 : R ->ₗ[R] R)
@@ -1272,8 +1272,8 @@ definition addMonoidHomLequivNat
   map_smul' _ _ := rfl
 
 中文:
-定义 addMonoidHomLequivNat
-  签名: {A B : 类型} (R : 类型) [Semiring R] [AddCommMonoid A]
+定义 addMonoidHomLequiv自然数
+  签名: {A B : 类型} (R : 类型) [半环 R] [加法交换幺半群 A]
   定义体: AddMonoidHom.toNatLinearMap
   invFun := LinearMap.toAddMonoidHom
   map_add' _ _ := rfl
@@ -1304,8 +1304,8 @@ definition addMonoidHomLequivInt
   map_smul' _ _ := rfl
 
 中文:
-定义 addMonoidHomLequivInt
-  签名: {A B : 类型} (R : 类型) [Semiring R] [AddCommGroup A] [AddCommGroup B]
+定义 addMonoidHomLequiv整数
+  签名: {A B : 类型} (R : 类型) [半环 R] [加法交换群 A] [加法交换群 B]
   定义体: AddMonoidHom.toIntLinearMap
   invFun := LinearMap.toAddMonoidHom
   map_add' _ _ := rfl
@@ -1330,8 +1330,8 @@ definition addMonoidEndRingEquivInt
     map_mul' := fun _ _ => rfl }
 
 中文:
-定义 addMonoidEndRingEquivInt
-  签名: (A : 类型) [AddCommGroup A]
+定义 addMonoidEndRingEquiv整数
+  签名: (A : 类型) [加法交换群 A]
   定义体: { addMonoidHomLequivInt (B := A) Int with
     map_mul' := fun _ _ => rfl }
 -/
@@ -1370,7 +1370,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ≃ₛₗ[σ₁₂] M₂)
+  签名: 零 (M ≃ₛₗ[σ₁₂] M₂)
   定义体: ⟨{ (0 : M ->ₛₗ[σ₁₂] M₂) with
       toFun := 0
       invFun := 0
@@ -1455,7 +1455,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (M ≃ₛₗ[σ₁₂] M₂)
+  签名: 唯一 (M ≃ₛₗ[σ₁₂] M₂)
   定义体: toLinearMap_injective (Subsingleton.elim _ _)
   default := 0
 
@@ -1480,7 +1480,7 @@ instance uniqueOfSubsingleton
 
 中文:
 实例 uniqueOfSubsingleton
-  签名: [Subsingleton R] [Subsingleton R₂]
+  签名: [子单例 R] [子单例 R₂]
   定义体: by
   haveI := Module.subsingleton R M
   haveI := Module.subsingleton R₂ M₂
@@ -1540,7 +1540,7 @@ theorem coe_curry
 
 中文:
 定理 coe_curry
-  结论: ⇑(LinearEquiv.curry R M V V₂) = curry
+  结论: ⇑(线性等价.curry R M V V₂) = curry
   证明: rfl
 
 @[simp]
@@ -1559,7 +1559,7 @@ theorem coe_curry_symm
 
 中文:
 定理 coe_curry_symm
-  结论: ⇑(LinearEquiv.curry R M V V₂).symm = uncurry
+  结论: ⇑(线性等价.curry R M V V₂).symm = uncurry
   证明: rfl
 -/
 theorem coe_curry_symm : ⇑(LinearEquiv.curry R M V V₂).symm = uncurry :=
@@ -1944,7 +1944,7 @@ definition domMulActCongrRight
 
 中文:
 定义 domMulActCongrRight
-  签名: [Semiring S] [Module S M₁]
+  签名: [半环 S] [模 S M₁]
   定义体: arrowCongrAddEquiv (.refl ..) e₂
   map_smul' := DomMulAct.mk.forall_congr_right.mp fun _ _ => by ext; simp
 -/
@@ -2191,7 +2191,7 @@ theorem conj_apply
 
 中文:
 定理 conj_apply
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₁' M₁')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : 模.End R₁' M₁')
   证明: rfl
 -/
 theorem conj_apply (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₁' M₁') :
@@ -2212,7 +2212,7 @@ theorem conj_apply_apply
 
 中文:
 定理 conj_apply_apply
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₁' M₁') (x : M₂')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : 模.End R₁' M₁') (x : M₂')
   证明: rfl
 -/
 theorem conj_apply_apply (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₁' M₁') (x : M₂') :
@@ -2229,7 +2229,7 @@ theorem symm_conj_apply
 
 中文:
 定理 symm_conj_apply
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₂' M₂')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : 模.End R₂' M₂')
   证明: rfl
 -/
 theorem symm_conj_apply (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₂' M₂') :
@@ -2246,7 +2246,7 @@ theorem conj_comp
 
 中文:
 定理 conj_comp
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f g : Module.End R₁' M₁')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f g : 模.End R₁' M₁')
   证明: arrowCongr_comp e e e f g
 
 Depends on / 依赖: arrowCongr_comp
@@ -2282,7 +2282,7 @@ lemma conj_conj_symm
 
 中文:
 引理 conj_conj_symm
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₂' M₂')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : 模.End R₂' M₂')
   证明: by ext; simp
 -/
 @[simp] lemma conj_conj_symm (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₂' M₂') :
@@ -2300,7 +2300,7 @@ lemma conj_symm_conj
 
 中文:
 引理 conj_symm_conj
-  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.End R₁' M₁')
+  条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : 模.End R₁' M₁')
   证明: by ext; simp
 
 @[simp]
@@ -2323,7 +2323,7 @@ theorem conj_id
 中文:
 定理 conj_id
   条件: (e : M₁' ≃ₛₗ[σ₁'₂'] M₂')
-  结论: e.conj LinearMap.id = LinearMap.id
+  结论: e.conj 线性映射.id = 线性映射.id
   证明: by ext; simp
 
 @[simp]
@@ -2342,7 +2342,7 @@ theorem conj_refl
 
 中文:
 定理 conj_refl
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   结论: (refl R M).conj f = f
   证明: rfl
 -/
@@ -2380,7 +2380,7 @@ definition congrLeft
 
 中文:
 定义 congrLeft
-  签名: {R} (S) [Semiring R] [Semiring S] [Module R M₂] [Module R M₃] [Module R M]
+  签名: {R} (S) [半环 R] [半环 S] [模 R M₂] [模 R M₃] [模 R M]
   定义体: e.arrowCongrAddEquiv (.refl ..)
   map_smul' _ _ := rfl
 -/
@@ -2436,7 +2436,7 @@ definition toLinearEquiv
 
 中文:
 定义 toLinearEquiv
-  签名: (e : M ≃ M₂) (h : IsLinearMap R (e : M -> M₂))
+  签名: (e : M ≃ M₂) (h : 是线性映射 R (e : M -> M₂))
   定义体: { e, h.mk' e with }
 
 Depends on / 依赖: h.mk
@@ -2548,7 +2548,7 @@ theorem funLeft_surjective_of_injective
 
 中文:
 定理 funLeft_surjective_of_injective
-  条件: (f : m -> n) (hf : Injective f)
+  条件: (f : m -> n) (hf : 单射 f)
   证明: hf.surjective_comp_right
 
 Depends on / 依赖: hf.surjective_comp_right, surjective_comp_right
@@ -2567,7 +2567,7 @@ theorem funLeft_injective_of_surjective
 
 中文:
 定理 funLeft_injective_of_surjective
-  条件: (f : m -> n) (hf : Surjective f)
+  条件: (f : m -> n) (hf : 满射 f)
   证明: hf.injective_comp_right
 
 Depends on / 依赖: hf.injective_comp_right, injective_comp_right
@@ -2648,7 +2648,7 @@ theorem funCongrLeft_id
 
 中文:
 定理 funCongrLeft_id
-  结论: funCongrLeft R M (Equiv.refl n) = LinearEquiv.refl R (n -> M)
+  结论: funCongrLeft R M (等价.refl n) = 线性等价.refl R (n -> M)
   证明: rfl
 
 @[simp]
@@ -2724,7 +2724,7 @@ definition sumPiEquivProdPi
 
 中文:
 定义 sumPiEquivProdPi
-  签名: (R : 类型) [Semiring R] (S T : 类型) (A : S oplus T -> 类型)
+  签名: (R : 类型) [半环 R] (S T : 类型) (A : S oplus T -> 类型)
   定义体: Equiv.sumPiEquivProdPi _
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2756,7 +2756,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: {α : 类型} [Unique α] (R : 类型) [Semiring R] (f : α -> 类型)
+  签名: {α : 类型} [唯一 α] (R : 类型) [半环 R] (f : α -> 类型)
   定义体: Equiv.piUnique _
   map_add' _ _ := rfl
   map_smul' _ _ := rfl

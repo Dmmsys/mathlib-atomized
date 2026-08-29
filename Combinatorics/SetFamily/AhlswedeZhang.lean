@@ -117,7 +117,7 @@ lemma Fintype.sum_div_mul_card_choose_card
     rw [mem_powe
 
 中文:
-引理 Fintype.sum_div_mul_card_choose_card
+引理 有限类型.sum_div_mul_card_choose_card
   证明: by
   rw [← powerset_univ]; rw [powerset_card_disjiUnion]; rw [sum_disjiUnion]
   have : forall {x : Nat}, forall s in powersetCard x (univ : Finset α),
@@ -171,7 +171,7 @@ lemma sup_aux
 中文:
 引理 sup_aux
   条件: [DecidableLE α]
-  结论: a in lowerClosure s -> {b in s | a <= b}.Nonempty
+  结论: a in lowerClosure s -> {b in s | a <= b}.非空
   证明: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
 -/
 private lemma sup_aux [DecidableLE α] : a in lowerClosure s -> {b in s | a <= b}.Nonempty :=
@@ -210,7 +210,7 @@ definition truncatedSup
 
 中文:
 定义 truncatedSup
-  签名: (s : Finset α) (a : α)
+  签名: (s : 有限集 α) (a : α)
   定义体: if h : a in lowerClosure s then {b in s | a <= b}.sup' (sup_aux h) id else ⊤
 
 Depends on / 依赖: lowerClosure, sup_aux
@@ -341,7 +341,7 @@ lemma map_truncatedSup
 
 中文:
 引理 map_truncatedSup
-  条件: [DecidableLE β] (e : α ≃o β) (s : Finset α) (a : α)
+  条件: [DecidableLE β] (e : α ≃o β) (s : 有限集 α) (a : α)
   证明: by
   have : e a in lowerClosure (s.map e.toEquiv.toEmbedding : Set β) ↔ a in lowerClosure s := by simp
   simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
@@ -373,7 +373,7 @@ lemma truncatedSup_of_isAntichain
 
 中文:
 引理 truncatedSup_of_isAntichain
-  条件: (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s)
+  条件: (hs : IsAntichain (· <= ·) (s : 集合 α)) (ha : a in s)
   证明: by
   refine le_antisymm ?_ le_truncatedSup
   simp_rw [truncatedSup_of_mem (subset_lowerClosure ha), sup'_le_iff, mem_filter]
@@ -497,7 +497,7 @@ lemma inf_aux
 中文:
 引理 inf_aux
   条件: [DecidableLE α]
-  结论: a in upperClosure s -> {b in s | b <= a}.Nonempty
+  结论: a in upperClosure s -> {b in s | b <= a}.非空
   证明: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
 -/
 private lemma inf_aux [DecidableLE α] : a in upperClosure s -> {b in s | b <= a}.Nonempty :=
@@ -536,7 +536,7 @@ definition truncatedInf
 
 中文:
 定义 truncatedInf
-  签名: (s : Finset α) (a : α)
+  签名: (s : 有限集 α) (a : α)
   定义体: if h : a in upperClosure s then {b in s | b <= a}.inf' (inf_aux h) id else ⊥
 
 Depends on / 依赖: inf_aux, upperClosure
@@ -673,7 +673,7 @@ lemma map_truncatedInf
 
 中文:
 引理 map_truncatedInf
-  条件: (e : α ≃o β) (s : Finset α) (a : α)
+  条件: (e : α ≃o β) (s : 有限集 α) (a : α)
   证明: by
   have : e a in upperClosure (s.map e.toEquiv.toEmbedding) ↔ a in upperClosure s := by simp
   simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
@@ -705,7 +705,7 @@ lemma truncatedInf_of_isAntichain
 
 中文:
 引理 truncatedInf_of_isAntichain
-  条件: (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s)
+  条件: (hs : IsAntichain (· <= ·) (s : 集合 α)) (ha : a in s)
   证明: by
   refine le_antisymm truncatedInf_le ?_
   simp_rw [truncatedInf_of_mem (subset_upperClosure ha), le_inf'_iff, mem_filter]
@@ -970,7 +970,7 @@ lemma compl_truncatedSup
 
 中文:
 引理 compl_truncatedSup
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   证明: map_truncatedSup (OrderIso.compl α) _ _
 -/
 @[simp] lemma compl_truncatedSup (s : Finset α) (a : α) :
@@ -986,7 +986,7 @@ lemma compl_truncatedInf
 
 中文:
 引理 compl_truncatedInf
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   证明: map_truncatedInf (OrderIso.compl α) _ _
 -/
 @[simp] lemma compl_truncatedInf (s : Finset α) (a : α) :
@@ -1012,7 +1012,7 @@ lemma card_truncatedSup_union_add_card_truncatedSup_infs
 
 中文:
 引理 card_truncatedSup_union_add_card_truncatedSup_infs
-  条件: (𝒜 ℬ : Finset (Finset α)) (s : Finset α)
+  条件: (𝒜 ℬ : 有限集 (有限集 α)) (s : 有限集 α)
   证明: by
   by_cases h𝒜 : s in lowerClosure (𝒜 : Set <| Finset α) <;>
     by_cases hℬ : s in lowerClosure (ℬ : Set <| Finset α)
@@ -1053,7 +1053,7 @@ lemma card_truncatedInf_union_add_card_truncatedInf_sups
 
 中文:
 引理 card_truncatedInf_union_add_card_truncatedInf_sups
-  条件: (𝒜 ℬ : Finset (Finset α)) (s : Finset α)
+  条件: (𝒜 ℬ : 有限集 (有限集 α)) (s : 有限集 α)
   证明: by
   by_cases h𝒜 : s in upperClosure (𝒜 : Set <| Finset α) <;>
     by_cases hℬ : s in upperClosure (ℬ : Set <| Finset α)
@@ -1096,7 +1096,7 @@ definition infSum
 
 中文:
 定义 infSum
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: ∑ s, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s)
 
 Depends on / 依赖: truncatedInf
@@ -1114,7 +1114,7 @@ definition supSum
 
 中文:
 定义 supSum
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: ∑ s, #(truncatedSup 𝒜 s) / ((card α - #s) * (card α).choose #s)
 
 Depends on / 依赖: truncatedSup
@@ -1136,7 +1136,7 @@ lemma supSum_union_add_supSum_infs
 
 中文:
 引理 supSum_union_add_supSum_infs
-  条件: (𝒜 ℬ : Finset (Finset α))
+  条件: (𝒜 ℬ : 有限集 (有限集 α))
   证明: by
   unfold supSum
   rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
@@ -1166,7 +1166,7 @@ lemma infSum_union_add_infSum_sups
 
 中文:
 引理 infSum_union_add_infSum_sups
-  条件: (𝒜 ℬ : Finset (Finset α))
+  条件: (𝒜 ℬ : 有限集 (有限集 α))
   证明: by
   unfold infSum
   rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
@@ -1198,7 +1198,7 @@ lemma IsAntichain.le_infSum
 
 中文:
 引理 IsAntichain.le_infSum
-  条件: (h𝒜 : IsAntichain (· subseteq ·) (𝒜 : Set (Finset α))) (h𝒜₀ : ∅ ∉ 𝒜)
+  条件: (h𝒜 : IsAntichain (· subseteq ·) (𝒜 : 集合 (有限集 α))) (h𝒜₀ : ∅ ∉ 𝒜)
   证明: by
   calc
     _ = ∑ s in 𝒜, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s : Rat) := ?_
@@ -1277,7 +1277,7 @@ lemma infSum_compls_add_supSum
 
 中文:
 引理 infSum_compls_add_supSum
-  条件: (𝒜 : Finset (Finset α))
+  条件: (𝒜 : 有限集 (有限集 α))
   证明: by
   unfold infSum supSum
   rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
@@ -1311,7 +1311,7 @@ lemma supSum_of_univ_notMem
 
 中文:
 引理 supSum_of_univ_notMem
-  条件: (h𝒜₁ : 𝒜.Nonempty) (h𝒜₂ : univ ∉ 𝒜)
+  条件: (h𝒜₁ : 𝒜.非空) (h𝒜₂ : univ ∉ 𝒜)
   证明: by
   set m := 𝒜.card with hm
   clear_value m
@@ -1357,7 +1357,7 @@ lemma infSum_eq_one
 
 中文:
 引理 infSum_eq_one
-  条件: (h𝒜₁ : 𝒜.Nonempty) (h𝒜₀ : ∅ ∉ 𝒜)
+  条件: (h𝒜₁ : 𝒜.非空) (h𝒜₀ : ∅ ∉ 𝒜)
   结论: infSum 𝒜 = 1
   证明: by
   rw [← compls_compls 𝒜]; rw [eq_sub_of_add_eq (infSum_compls_add_supSum _)]; rw [supSum_of_univ_notMem h𝒜₁.compls]; rw [add_sub_cancel_left]

@@ -171,7 +171,7 @@ theorem subsingleton_of_finrank_eq_one
 
 中文:
 定理 subsingleton_of_finrank_eq_one
-  条件: [Module.Free R V] (d1 : Module.finrank R V = 1)
+  条件: [模.自由 R V] (d1 : 模.finrank R V = 1)
   证明: by
     nontriviality R
     ext x
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (SpecialLinearGroup R V)
+  签名: 取逆 (SpecialLinearGroup R V)
   定义体: ⟨fun A => ⟨A⁻¹, by simp [A.prop]⟩⟩
 
 Depends on / 依赖: A.prop
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (SpecialLinearGroup R V)
+  签名: 乘法 (SpecialLinearGroup R V)
   定义体: ⟨fun A B => ⟨A * B, by simp [A.prop, B.prop]⟩⟩
 
 Depends on / 依赖: A.prop, B.prop
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (SpecialLinearGroup R V)
+  签名: 除法 (SpecialLinearGroup R V)
   定义体: ⟨fun A B => ⟨A / B, by simp [A.prop, B.prop]⟩⟩
 
 Depends on / 依赖: A.prop, B.prop
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (SpecialLinearGroup R V)
+  签名: 幺 (SpecialLinearGroup R V)
   定义体: ⟨⟨1, by simp⟩⟩
 -/
 instance : One (SpecialLinearGroup R V) :=
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (SpecialLinearGroup R V) 自然数
+  签名: 幂 (SpecialLinearGroup R V) 自然数
   定义体: ⟨x ^ n, by simp [x.prop]⟩
 
 Depends on / 依赖: x.prop
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (SpecialLinearGroup R V) 整数
+  签名: 幂 (SpecialLinearGroup R V) 整数
   定义体: ⟨x ^ n, by simp [x.prop]⟩
 
 Depends on / 依赖: x.prop
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SpecialLinearGroup R V)
+  签名: 可居 (SpecialLinearGroup R V)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (SpecialLinearGroup R V) :=
@@ -489,7 +489,7 @@ theorem det_coe
 
 中文:
 定理 det_coe
-  结论: LinearEquiv.det (A : V ≃ₗ[R] V) = 1
+  结论: 线性等价.det (A : V ≃ₗ[R] V) = 1
   证明: A.prop
 
 @[simp]
@@ -575,7 +575,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (SpecialLinearGroup R V)
+  签名: 群 (SpecialLinearGroup R V)
   定义体: fast_instance%
   Function.Injective.group _ Subtype.coe_injective coe_one coe_mul coe_inv coe_div coe_pow coe_zpow
 
@@ -718,7 +718,7 @@ definition toGeneralLinearGroup
 
 中文:
 定义 toGeneralLinearGroup
-  签名: : SpecialLinearGroup R V ->* LinearMap.GeneralLinearGroup R V
+  签名: : SpecialLinearGroup R V ->* 线性映射.GeneralLinearGroup R V
   定义体: (LinearMap.GeneralLinearGroup.generalLinearEquiv R V).symm.toMonoidHom.comp toLinearEquiv
 
 Depends on / 依赖: GeneralLinearGroup, LinearMap, LinearMap.GeneralLinearGroup.generalLinearEquiv, generalLinearEquiv, symm.toMonoidHom.comp, toLinearEquiv, toMonoidHom
@@ -793,7 +793,7 @@ lemma mem_range_toGeneralLinearGroup_iff
 
 中文:
 引理 mem_range_toGeneralLinearGroup_iff
-  条件: {u : LinearMap.GeneralLinearGroup R V}
+  条件: {u : 线性映射.GeneralLinearGroup R V}
   证明: by
   constructor
   · rintro ⟨v, hv⟩
@@ -822,7 +822,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction (SpecialLinearGroup R V) V
+  签名: 分配乘法作用 (SpecialLinearGroup R V) V
   定义体: DistribMulAction.compHom _ (SpecialLinearGroup.toLinearEquiv)
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, SpecialLinearGroup, SpecialLinearGroup.toLinearEquiv, compHom, toLinearEquiv
@@ -873,7 +873,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass (SpecialLinearGroup R V) R V
+  签名: 标量交换类 (SpecialLinearGroup R V) R V
   定义体: by
     simp [SpecialLinearGroup.smul_def]
 
@@ -1113,7 +1113,7 @@ definition toLin_equiv
 
 中文:
 定义 toLin_equiv
-  签名: (b : Module.Basis n R V)
+  签名: (b : 模.基 n R V)
   定义体: SpecialLinearGroup.toLin'_equiv.trans
     (SpecialLinearGroup.congr_linearEquiv b.equivFun.symm)
 
@@ -1181,7 +1181,7 @@ theorem center_eq_bot_of_finrank_le_one
 
 中文:
 定理 center_eq_bot_of_finrank_le_one
-  条件: (h : Module.finrank R V <= 1)
+  条件: (h : 模.finrank R V <= 1)
   证明: by
   nontriviality R
   let b := Module.Free.chooseBasis R V

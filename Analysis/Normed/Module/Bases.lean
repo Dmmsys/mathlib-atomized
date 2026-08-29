@@ -113,7 +113,7 @@ structure GeneralSchauderBasis
   公理与运算 (4 个):
     - basis : β -> X
     - coord : β -> StrongDual 𝕜 X
-    - ortho((i j : β)) : coord i (basis j) = (Pi.single j (1 : 𝕜) : β -> 𝕜) i
+    - ortho((i j : β)) : coord i (basis j) = (依赖函数类型.single j (1 : 𝕜) : β -> 𝕜) i
     - expansion((x : X)) : HasSum (fun i => (coord i) x • basis i) x L
 -/
 structure GeneralSchauderBasis (β : Type*) (𝕜 : Type*)
@@ -230,7 +230,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: (A : Finset β)
+  签名: (A : 有限集 β)
   定义体: ∑ i in A, (b.coord i).smulRight (b i)
 
 Depends on / 依赖: b.coord, smulRight
@@ -268,7 +268,7 @@ theorem proj_apply
 
 中文:
 定理 proj_apply
-  条件: (A : Finset β) (x : X)
+  条件: (A : 有限集 β) (x : X)
   结论: b.proj A x = ∑ i in A, b.coord i x • b i
   证明: by
   simp [proj, _root_.sum_apply, ContinuousLinearMap.smulRight_apply]
@@ -290,7 +290,7 @@ theorem proj_apply_basis_mem
 
 中文:
 定理 proj_apply_basis_mem
-  条件: (A : Finset β) (i : β)
+  条件: (A : 有限集 β) (i : β)
   证明: by
   simp [b.ortho, Pi.single_apply]
 
@@ -313,7 +313,7 @@ theorem tendsto_proj
 中文:
 定理 tendsto_proj
   条件: (x : X)
-  结论: Tendsto (fun A => b.proj A x) L.filter (𝓝 x)
+  结论: 收敛 (fun A => b.proj A x) L.filter (𝓝 x)
   证明: by
   simpa using! b.expansion x
 
@@ -341,7 +341,7 @@ theorem range_proj_eq_span
 
 中文:
 定理 range_proj_eq_span
-  条件: (A : Finset β)
+  条件: (A : 有限集 β)
   证明: by
   apply le_antisymm
   · rintro _ ⟨x, rfl⟩
@@ -385,7 +385,7 @@ theorem proj_comp
 
 中文:
 定理 proj_comp
-  条件: (A B : Finset β) (x : X)
+  条件: (A B : 有限集 β) (x : X)
   结论: b.proj A (b.proj B x) = b.proj (A inter B) x
   证明: by
   simp only [proj_apply, map_sum, map_smul, b.ortho, Pi.single_apply, ite_smul, one_smul, zero_smul,
@@ -416,7 +416,7 @@ theorem finrank_range_proj
 
 中文:
 定理 finrank_range_proj
-  条件: (A : Finset β)
+  条件: (A : 有限集 β)
   证明: by
   rw [range_proj_eq_span]; rw [Set.image_eq_range]; rw [finrank_span_eq_card]
   · exact Fintype.card_coe A
@@ -466,7 +466,7 @@ theorem enorm_proj_le_enormProjBound
 
 中文:
 定理 enorm_proj_le_enormProjBound
-  条件: (A : Finset β)
+  条件: (A : 有限集 β)
   结论: ‖b.proj A‖ₑ <= b.enormProjBound
   证明: le_iSup (fun A => ‖b.proj A‖ₑ) A
 
@@ -492,9 +492,9 @@ theorem exists_norm_proj_le
   have hdecomp : b.proj A x = b.proj (A inter A₀
 
 中文:
-定理 exists_norm_proj_le
-  条件: [CompleteSpace X]
-  结论: 存在 C : 实数, 对任意 A : Finset β, ‖b.proj A‖ <= C
+定理 存在_norm_proj_le
+  条件: [完备空间 X]
+  结论: 存在 C : 实数, 对任意 A : 有限集 β, ‖b.proj A‖ <= C
   证明: by
   classical
   apply banach_steinhaus
@@ -559,7 +559,7 @@ theorem bddAbove_range_nnnorm_proj
 
 中文:
 定理 bddAbove_range_nnnorm_proj
-  条件: [CompleteSpace X]
+  条件: [完备空间 X]
   证明: by
   obtain ⟨C, hC⟩ := b.exists_norm_proj_le
   have hCpos : 0 <= C := by simpa [GeneralSchauderBasis.proj_empty] using hC ∅
@@ -589,7 +589,7 @@ theorem nnnorm_proj_le_nnnormProjBound
 
 中文:
 定理 nnnorm_proj_le_nnnormProjBound
-  条件: [CompleteSpace X] (A : Finset β)
+  条件: [完备空间 X] (A : 有限集 β)
   证明: le_ciSup (bddAbove_range_nnnorm_proj b) A
 
 Depends on / 依赖: bddAbove_range_nnnorm_proj, le_ciSup
@@ -608,7 +608,7 @@ theorem norm_proj_le_nnnormProjBound
 
 中文:
 定理 norm_proj_le_nnnormProjBound
-  条件: [CompleteSpace X] (A : Finset β)
+  条件: [完备空间 X] (A : 有限集 β)
   证明: mod_cast b.nnnorm_proj_le_nnnormProjBound A
 
 Depends on / 依赖: b.nnnorm_proj_le_nnnormProjBound, mod_cast, nnnorm_proj_le_nnnormProjBound
@@ -676,7 +676,7 @@ theorem proj_apply
 中文:
 定理 proj_apply
   条件: (n : 自然数) (x : X)
-  结论: b.proj n x = ∑ i in Finset.range n, b.coord i x • b i
+  结论: b.proj n x = ∑ i in 有限集.range n, b.coord i x • b i
   证明: by
   rw [proj]; rw [GeneralSchauderBasis.proj_apply]
 
@@ -766,7 +766,7 @@ theorem tendsto_proj
 中文:
 定理 tendsto_proj
   条件: (x : X)
-  结论: Tendsto (fun n => b.proj n x) atTop (𝓝 x)
+  结论: 收敛 (fun n => b.proj n x) atTop (𝓝 x)
   证明: by
   have := GeneralSchauderBasis.tendsto_proj b x
   rwa [SummationFilter.conditional_filter_eq_map_range] at this
@@ -794,7 +794,7 @@ theorem proj_comp
 中文:
 定理 proj_comp
   条件: (n m : 自然数) (x : X)
-  结论: b.proj n (b.proj m x) = b.proj (min n m) x
+  结论: b.proj n (b.proj m x) = b.proj (最小值 n m) x
   证明: by
   simp only [proj, GeneralSchauderBasis.proj_comp]
   congr 2
@@ -826,8 +826,8 @@ theorem exists_norm_proj_le
   exact ⟨M, Set.forall_mem_range.mp hM⟩
 
 中文:
-定理 exists_norm_proj_le
-  条件: [CompleteSpace X]
+定理 存在_norm_proj_le
+  条件: [完备空间 X]
   结论: 存在 C : 实数, 对任意 n : 自然数, ‖b.proj n‖ <= C
   证明: by
   apply banach_steinhaus
@@ -915,7 +915,7 @@ theorem bddAbove_range_nnnorm_proj
 
 中文:
 定理 bddAbove_range_nnnorm_proj
-  条件: [CompleteSpace X]
+  条件: [完备空间 X]
   证明: by
   obtain ⟨C, hC⟩ := b.exists_norm_proj_le
   have hCpos : 0 <= C := by simpa [proj_zero] using hC 0
@@ -945,7 +945,7 @@ theorem nnnorm_proj_le_nnnormProjBound
 
 中文:
 定理 nnnorm_proj_le_nnnormProjBound
-  条件: [CompleteSpace X] (n : 自然数)
+  条件: [完备空间 X] (n : 自然数)
   证明: le_ciSup (bddAbove_range_nnnorm_proj b) n
 
 Depends on / 依赖: bddAbove_range_nnnorm_proj, le_ciSup
@@ -964,7 +964,7 @@ theorem norm_proj_le_nnnormProjBound
 
 中文:
 定理 norm_proj_le_nnnormProjBound
-  条件: [CompleteSpace X] (n : 自然数)
+  条件: [完备空间 X] (n : 自然数)
   证明: mod_cast b.nnnorm_proj_le_nnnormProjBound n
 
 Depends on / 依赖: b.nnnorm_proj_le_nnnormProjBound, mod_cast, nnnorm_proj_le_nnnormProjBound
@@ -1043,7 +1043,7 @@ lemma succSub_ortho
 
 中文:
 引理 succSub_ortho
-  结论: {P : 自然数 -> X ->L[𝕜] X} (hcomp : 对任意 n m, 对任意 x : X, P n (P m x) = P (min n m) x)
+  结论: {P : 自然数 -> X ->L[𝕜] X} (hcomp : 对任意 n m, 对任意 x : X, P n (P m x) = P (最小值 n m) x)
   证明: by
   simp only [succSub, _root_.sub_apply, map_sub, hcomp,
     Nat.add_min_add_right]
@@ -1157,9 +1157,9 @@ structure RankOneDecomposition
     - P : 自然数 -> X ->L[𝕜] X
     - e : 自然数 -> X
     - proj_zero : P 0 = 0
-    - finrank_range((n : 自然数)) : Module.finrank 𝕜 (P n).toLinearMap.range = n
-    - proj_comp((n m : 自然数) (x : X)) : P n (P m x) = P (min n m) x
-    - proj_tendsto((x : X)) : Tendsto (fun n => P n x) atTop (𝓝 x)
+    - finrank_range((n : 自然数)) : 模.finrank 𝕜 (P n).toLinearMap.range = n
+    - proj_comp((n m : 自然数) (x : X)) : P n (P m x) = P (最小值 n m) x
+    - proj_tendsto((x : X)) : 收敛 (fun n => P n x) atTop (𝓝 x)
     - e_mem_range((n : 自然数)) : e n in (succSub P n).toLinearMap.range
     - e_ne_zero((n : 自然数)) : e n != 0
 -/
@@ -1200,7 +1200,7 @@ lemma exists_coeff
     apply
 
 中文:
-引理 exists_coeff
+引理 存在_coeff
   条件: (n : 自然数) (x : X)
   证明: by
   let S := (succSub D.P n).toLinearMap

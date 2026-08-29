@@ -171,7 +171,7 @@ theorem exists_finsupp_eq_lexOrder_of_ne_zero
   exact ⟨ofLex p, by simp only [toLex_ofLex, hp]⟩
 
 中文:
-定理 exists_finsupp_eq_lexOrder_of_ne_zero
+定理 存在_finsupp_eq_lexOrder_of_ne_zero
   条件: {φ : MvPowerSeries σ R} (hφ : φ != 0)
   证明: by
   simp only [ne_eq, ← lexOrder_eq_top_iff_eq_zero, WithTop.ne_top_iff_exists] at hφ
@@ -493,7 +493,7 @@ theorem lexOrder_mul
 
 中文:
 定理 lexOrder_mul
-  条件: [NoZeroDivisors R] (φ ψ : MvPowerSeries σ R)
+  条件: [无零因子 R] (φ ψ : MvPowerSeries σ R)
   证明: by
   obtain rfl | hφ := eq_or_ne φ 0
   · simp

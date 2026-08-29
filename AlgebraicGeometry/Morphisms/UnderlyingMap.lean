@@ -48,7 +48,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.RespectsIso (topologically Function.Injective)
+  签名: MorphismProperty.RespectsIso (topologically 函数.单射)
   定义体: topologically_respectsIso _ (fun e => e.injective) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.injective, hg.comp, injective, topologically_respectsIso
@@ -104,10 +104,10 @@ class Surjective
     - surj : Function.Surjective f
 
 中文:
-类 Surjective
+类 满射
   参数: : 命题 where
   公理与运算 (1 个):
-    - surj : Function.Surjective f
+    - surj : 函数.满射 f
 -/
 class Surjective : Prop where
   surj : Function.Surjective f
@@ -143,9 +143,9 @@ lemma Scheme.Hom.surjective
   proof: Surjective.surj
 
 中文:
-引理 Scheme.Hom.surjective
-  条件: (f : X ⟶ Y) [Surjective f]
-  结论: Function.Surjective f
+引理 概形.态射.surjective
+  条件: (f : X ⟶ Y) [满射 f]
+  结论: 函数.满射 f
   证明: Surjective.surj
 
 Depends on / 依赖: Surjective, Surjective.surj
@@ -164,8 +164,8 @@ instance [Surjective
   body: ⟨g.surjective.comp f.surjective⟩
 
 中文:
-实例 [Surjective
-  签名: f] [Surjective g] : Surjective (f ≫ g)
+实例 [满射
+  签名: f] [满射 g] : 满射 (f ≫ g)
   定义体: ⟨g.surjective.comp f.surjective⟩
 
 Depends on / 依赖: f.surjective, g.surjective.comp, surjective
@@ -182,9 +182,9 @@ lemma Surjective.of_comp
   proof: Function.Surjective.of_comp (g := f) (f ≫ g).surjective
 
 中文:
-引理 Surjective.of_comp
-  条件: [Surjective (f ≫ g)]
-  结论: Surjective g where
+引理 满射.of_comp
+  条件: [满射 (f ≫ g)]
+  结论: 满射 g where
   证明: Function.Surjective.of_comp (g := f) (f ≫ g).surjective
 
 Depends on / 依赖: Function, Function.Surjective.of_comp, Surjective, of_comp, surjective
@@ -205,9 +205,9 @@ lemma Surjective.comp_iff
   proof: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 Surjective.comp_iff
-  条件: [Surjective f]
-  结论: Surjective (f ≫ g) ↔ Surjective g
+引理 满射.comp_iff
+  条件: [满射 f]
+  结论: 满射 (f ≫ g) ↔ 满射 g
   证明: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @Surjective.{u}
+  签名: MorphismProperty.是Multiplicative @满射.{u}
   定义体: inferInstance
   comp_mem _ _ hf hg := ⟨hg.1.comp hf.1⟩
 -/
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.RespectsIso @Surjective
+  签名: MorphismProperty.RespectsIso @满射
   定义体: surjective_eq_topologically ▸ topologically_respectsIso _ (fun e => e.surjective)
     (fun _ _ hf hg => hg.comp hf)
 
@@ -274,7 +274,7 @@ instance surjective_isZariskiLocalAtTarget
 
 中文:
 实例 surjective_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @Surjective
+  签名: : IsZariskiLocalAtTarget @满射
   定义体: by
   have : MorphismProperty.RespectsIso @Surjective := inferInstance
   rw [surjective_eq_topologically] at this ⊢
@@ -306,8 +306,8 @@ lemma range_eq_univ
 
 中文:
 引理 range_eq_univ
-  条件: [Surjective f]
-  结论: Set.range f = Set.univ
+  条件: [满射 f]
+  结论: 集合.range f = 集合.univ
   证明: by
   simpa [Set.range_eq_univ] using f.surjective
 
@@ -328,7 +328,7 @@ lemma range_eq_range_of_surjective
 
 中文:
 引理 range_eq_range_of_surjective
-  结论: {S : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S) (e : X ⟶ Y)
+  结论: {S : 概形.{u}} (f : X ⟶ S) (g : Y ⟶ S) (e : X ⟶ Y)
   证明: by
   rw [← hge]
   simp [Set.range_comp]
@@ -351,7 +351,7 @@ lemma mem_range_iff_of_surjective
 
 中文:
 引理 mem_range_iff_of_surjective
-  结论: {S : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S) (e : X ⟶ Y)
+  结论: {S : 概形.{u}} (f : X ⟶ S) (g : Y ⟶ S) (e : X ⟶ Y)
   证明: by
   rw [range_eq_range_of_surjective f g e hge]
 
@@ -375,8 +375,8 @@ lemma Surjective.sigmaDesc_of_union_range_eq_univ
   rw [← Scheme.Hom.comp_apply]; rw [Limits.Sigma.ι_desc]
 
 中文:
-引理 Surjective.sigmaDesc_of_union_range_eq_univ
-  结论: {X : Scheme.{u}}
+引理 满射.sigmaDesc_of_union_range_eq_univ
+  结论: {X : 概形.{u}}
   证明: by
   refine ⟨fun x => ?_⟩
   simp_rw [Set.eq_univ_iff_forall, Set.mem_iUnion] at H
@@ -414,8 +414,8 @@ definition Scheme.Hom.cover
 @[simp]
 
 中文:
-定义 Scheme.Hom.cover
-  签名: {P : Morphism命题erty Scheme.{u}} {X S : Scheme.{u}} (f : X ⟶ S) (hf : P f)
+定义 概形.态射.cover
+  签名: {P : MorphismProperty 概形.{u}} {X S : 概形.{u}} (f : X ⟶ S) (hf : P f)
   定义体: .singleton f by
     rw [singleton_mem_precoverage_iff]
     exact ⟨f.surjective, hf⟩
@@ -441,8 +441,8 @@ lemma Scheme.Hom.presieve₀_cover
   simp [cover]
 
 中文:
-引理 Scheme.Hom.presieve₀_cover
-  结论: {P : Morphism命题erty Scheme.{u}} {X S : Scheme.{u}} (f : X ⟶ S)
+引理 概形.态射.presieve₀_cover
+  结论: {P : MorphismProperty 概形.{u}} {X S : 概形.{u}} (f : X ⟶ S)
   证明: by
   simp [cover]
 -/
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topologically IsOpenMap).RespectsIso
+  签名: (topologically 是开映射).RespectsIso
   定义体: topologically_respectsIso _ (fun e => e.isOpenMap) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.isOpenMap, hg.comp, isOpenMap, topologically_respectsIso
@@ -509,7 +509,7 @@ instance isOpenMap_isZariskiLocalAtTarget
 
 中文:
 实例 isOpenMap_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget (topologically IsOpenMap)
+  签名: : IsZariskiLocalAtTarget (topologically 是开映射)
   定义体: topologically_isZariskiLocalAtTarget' _ fun _ _ _ hU _ => hU.isOpenMap_iff_restrictPreimage
 
 Depends on / 依赖: hU.isOpenMap_iff_restrictPreimage, isOpenMap_iff_restrictPreimage, topologically_isZariskiLocalAtTarget
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtSource (topologically IsOpenMap)
+  签名: IsZariskiLocalAtSource (topologically 是开映射)
   定义体: topologically_isZariskiLocalAtSource' (fun _ => _) fun _ _ _ hU _ => hU.isOpenMap_iff_comp
 
 Depends on / 依赖: hU.isOpenMap_iff_comp, isOpenMap_iff_comp, topologically_isZariskiLocalAtSource
@@ -549,7 +549,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topologically IsClosedMap).RespectsIso
+  签名: (topologically 是闭映射).RespectsIso
   定义体: topologically_respectsIso _ (fun e => e.isClosedMap) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.isClosedMap, hg.comp, isClosedMap, topologically_respectsIso
@@ -567,7 +567,7 @@ instance isClosedMap_isZariskiLocalAtTarget
 
 中文:
 实例 isClosedMap_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget (topologically IsClosedMap)
+  签名: : IsZariskiLocalAtTarget (topologically 是闭映射)
   定义体: topologically_isZariskiLocalAtTarget' _ fun _ _ _ hU _ => hU.isClosedMap_iff_restrictPreimage
 
 Depends on / 依赖: hU.isClosedMap_iff_restrictPreimage, isClosedMap_iff_restrictPreimage, topologically_isZariskiLocalAtTarget
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topologically IsEmbedding).RespectsIso
+  签名: (topologically 是嵌入).RespectsIso
   定义体: topologically_respectsIso _ (fun e => e.isEmbedding) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.isEmbedding, hg.comp, isEmbedding, topologically_respectsIso
@@ -607,7 +607,7 @@ instance isEmbedding_isZariskiLocalAtTarget
 
 中文:
 实例 isEmbedding_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget (topologically IsEmbedding)
+  签名: : IsZariskiLocalAtTarget (topologically 是嵌入)
   定义体: topologically_isZariskiLocalAtTarget' _ fun _ _ _ hU => hU.isEmbedding_iff_restrictPreimage
 
 Depends on / 依赖: hU.isEmbedding_iff_restrictPreimage, isEmbedding_iff_restrictPreimage, topologically_isZariskiLocalAtTarget
@@ -629,7 +629,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topologically IsOpenEmbedding).RespectsIso
+  签名: (topologically 是开嵌入).RespectsIso
   定义体: topologically_respectsIso _ (fun e => e.isOpenEmbedding) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.isOpenEmbedding, hg.comp, isOpenEmbedding, topologically_respectsIso
@@ -670,7 +670,7 @@ instance :
 
 中文:
 实例 :
-  签名: (topologically IsClosedEmbedding).RespectsIso
+  签名: (topologically 是闭嵌入).RespectsIso
   定义体: topologically_respectsIso _ (fun e => e.isClosedEmbedding) (fun _ _ hf hg => hg.comp hf)
 
 Depends on / 依赖: e.isClosedEmbedding, hg.comp, isClosedEmbedding, topologically_respectsIso
@@ -715,7 +715,7 @@ class IsDominant
     - denseRange : DenseRange f
 
 中文:
-类 IsDominant
+类 是Dominant
   参数: : 命题 where
   公理与运算 (1 个):
     - denseRange : DenseRange f
@@ -749,8 +749,8 @@ lemma Scheme.Hom.denseRange
   proof: IsDominant.denseRange
 
 中文:
-引理 Scheme.Hom.denseRange
-  条件: (f : X ⟶ Y) [IsDominant f]
+引理 概形.态射.denseRange
+  条件: (f : X ⟶ Y) [是Dominant f]
   结论: DenseRange f
   证明: IsDominant.denseRange
 
@@ -770,8 +770,8 @@ instance [IsDominant
   body: ⟨g.denseRange.comp f.denseRange g.continuous⟩
 
 中文:
-实例 [IsDominant
-  签名: f] [IsDominant g] : IsDominant (f ≫ g)
+实例 [是Dominant
+  签名: f] [是Dominant g] : 是Dominant (f ≫ g)
   定义体: ⟨g.denseRange.comp f.denseRange g.continuous⟩
 
 Depends on / 依赖: continuous, denseRange, f.denseRange, g.continuous, g.denseRange.comp
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsDominant
+  签名: MorphismProperty.是Multiplicative @是Dominant
   定义体: fun _ => inferInstance
   comp_mem := fun _ _ _ _ => inferInstance
 -/
@@ -810,9 +810,9 @@ lemma IsDominant.of_comp
   exact H.trans (closure_mono (Set.range_comp_subset_range f g))
 
 中文:
-引理 IsDominant.of_comp
-  条件: [H : IsDominant (f ≫ g)]
-  结论: IsDominant g
+引理 是Dominant.of_comp
+  条件: [H : 是Dominant (f ≫ g)]
+  结论: 是Dominant g
   证明: by
   rw [isDominant_iff]; rw [denseRange_iff_closure_range]; rw [← Set.univ_subset_iff] at H ⊢
   exact H.trans (closure_mono (Set.range_comp_subset_range f g))
@@ -833,9 +833,9 @@ lemma IsDominant.comp_iff
   proof: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 IsDominant.comp_iff
-  条件: [IsDominant f]
-  结论: IsDominant (f ≫ g) ↔ IsDominant g
+引理 是Dominant.comp_iff
+  条件: [是Dominant f]
+  结论: 是Dominant (f ≫ g) ↔ 是Dominant g
   证明: ⟨fun _ => of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -853,8 +853,8 @@ instance IsDominant.respectsIso
   body: MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) => inferInstance
 
 中文:
-实例 IsDominant.respectsIso
-  签名: : Morphism命题erty.RespectsIso @IsDominant
+实例 是Dominant.respectsIso
+  签名: : MorphismProperty.RespectsIso @是Dominant
   定义体: MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) => inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.respectsIso_of_isStableUnderComposition, respectsIso_of_isStableUnderComposition
@@ -874,8 +874,8 @@ instance IsDominant.isZariskiLocalAtTarget
     fun _ _ _ hU _ => hU.denseRange_iff_restrictPreimage
 
 中文:
-实例 IsDominant.isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @IsDominant
+实例 是Dominant.isZariskiLocalAtTarget
+  签名: : IsZariskiLocalAtTarget @是Dominant
   定义体: have : MorphismProperty.RespectsIso (topologically DenseRange) :=
     dominant_eq_topologically ▸ IsDominant.respectsIso
   dominant_eq_topologically ▸ topologically_isZariskiLocalAtTarget' DenseRange
@@ -899,7 +899,7 @@ lemma surjective_of_isDominant_of_isClosed_range
 
 中文:
 引理 surjective_of_isDominant_of_isClosed_range
-  结论: (f : X ⟶ Y) [IsDominant f]
+  结论: (f : X ⟶ Y) [是Dominant f]
   证明: ⟨by rw [← Set.range_eq_univ, ← hf.closure_eq, f.denseRange.closure_range]⟩
 
 Depends on / 依赖: Set.range_eq_univ, closure_eq, closure_range, denseRange, f.denseRange.closure_range, hf.closure_eq, range_eq_univ
@@ -921,7 +921,7 @@ lemma IsDominant.of_comp_of_isOpenImmersion
   rw [Set.preimage_image_eq _ g.isOpenEmbedding.injective]
 
 中文:
-引理 IsDominant.of_comp_of_isOpenImmersion
+引理 是Dominant.of_comp_of_isOpenImmersion
   证明: by
   rw [isDominant_iff]; rw [DenseRange] at H ⊢
   simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Set.range_comp] at H
@@ -949,8 +949,8 @@ lemma Opens.isDominant_ι
 
 中文:
 引理 Opens.isDominant_ι
-  条件: {U : X.Opens} (hU : Dense (X := X) U)
-  结论: IsDominant U.ι
+  条件: {U : X.Opens} (hU : 稠密 (X := X) U)
+  结论: 是Dominant U.ι
   证明: ⟨by simpa [DenseRange] using hU⟩
 
 Depends on / 依赖: IsDominant
@@ -969,7 +969,7 @@ lemma Opens.isDominant_homOfLE
 
 中文:
 引理 Opens.isDominant_homOfLE
-  条件: {U V : X.Opens} (hU : Dense (X := X) U) (hU' : U <= V)
+  条件: {U V : X.Opens} (hU : 稠密 (X := X) U) (hU' : U <= V)
   证明: have : IsDominant (X.homOfLE hU' ≫ V.ι) := by simpa using Opens.isDominant_ι hU
   IsDominant.of_comp_of_isOpenImmersion (g := V.ι) _
 -/

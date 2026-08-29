@@ -28,7 +28,7 @@ instance ContinuousMap.isUltrametricDist
   exact ContinuousMap.dist_apply_le_dist x
 
 中文:
-实例 ContinuousMap.isUltrametricDist
+实例 连续映射.isUltrametricDist
   签名: {X Y : 类型}
   定义体: by
   constructor

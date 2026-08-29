@@ -44,7 +44,7 @@ definition functorHomEquiv
 
 中文:
 定义 functorHomEquiv
-  签名: (G H : C ⥤ Type (max w v u))
+  签名: (G H : C ⥤ 类型 (最大值 w v u))
   定义体: (Functor.functorHomEquiv F H G).trans (homObjEquiv F H G)
 
 Depends on / 依赖: Functor, Functor.functorHomEquiv, functorHomEquiv, homObjEquiv
@@ -74,7 +74,7 @@ definition rightAdj
 
 中文:
 定义 rightAdj
-  签名: : (C ⥤ Type (max w v u)) ⥤ C ⥤ Type (max w v u) where
+  签名: : (C ⥤ 类型 (最大值 w v u)) ⥤ C ⥤ 类型 (最大值 w v u) where
   定义体: F.functorHom G
   map f := { app X := ↾fun a => {
     app d b := a.app d b ≫ f.app d
@@ -157,7 +157,7 @@ instance closed
 
 中文:
 实例 closed
-  签名: : Closed F where
+  签名: : 闭 F where
   定义体: rightAdj F
   adj := adj F
 
@@ -176,7 +176,7 @@ instance monoidalClosed
 
 中文:
 实例 monoidalClosed
-  签名: : MonoidalClosed (C ⥤ Type (max w v u)) where
+  签名: : 幺半群闭 (C ⥤ 类型 (最大值 w v u)) where
 
 Depends on / 依赖: coproductIsCoproduct
 -/

@@ -35,8 +35,8 @@ theorem Tendsto.one_eventuallyLE_mul_atTop
 @[to_additive]
 
 中文:
-定理 Tendsto.one_eventuallyLE_mul_atTop
-  条件: (hf : 1 <=ᶠ[l] f) (hg : Tendsto g l atTop)
+定理 收敛.one_eventuallyLE_mul_atTop
+  条件: (hf : 1 <=ᶠ[l] f) (hg : 收敛 g l atTop)
   证明: tendsto_atTop_mono' l (hf.mono fun _ => le_mul_of_one_le_left') hg
 
 @[to_additive]
@@ -59,8 +59,8 @@ theorem Tendsto.eventuallyLE_one_mul_atBot
 @[to_additive]
 
 中文:
-定理 Tendsto.eventuallyLE_one_mul_atBot
-  条件: (hf : f <=ᶠ[l] 1) (hg : Tendsto g l atBot)
+定理 收敛.eventuallyLE_one_mul_atBot
+  条件: (hf : f <=ᶠ[l] 1) (hg : 收敛 g l atBot)
   证明: hg.one_eventuallyLE_mul_atTop (M := Mᵒᵈ) hf
 
 @[to_additive]
@@ -83,8 +83,8 @@ theorem Tendsto.one_le_mul_atTop
 @[to_additive]
 
 中文:
-定理 Tendsto.one_le_mul_atTop
-  条件: (hf : 对任意 x, 1 <= f x) (hg : Tendsto g l atTop)
+定理 收敛.one_le_mul_atTop
+  条件: (hf : 对任意 x, 1 <= f x) (hg : 收敛 g l atTop)
   证明: hg.one_eventuallyLE_mul_atTop (.of_forall hf)
 
 @[to_additive]
@@ -107,8 +107,8 @@ theorem Tendsto.le_one_mul_atBot
 @[to_additive]
 
 中文:
-定理 Tendsto.le_one_mul_atBot
-  条件: (hf : 对任意 x, f x <= 1) (hg : Tendsto g l atBot)
+定理 收敛.le_one_mul_atBot
+  条件: (hf : 对任意 x, f x <= 1) (hg : 收敛 g l atBot)
   证明: hg.eventuallyLE_one_mul_atBot (.of_forall hf)
 
 @[to_additive]
@@ -131,8 +131,8 @@ theorem Tendsto.atTop_mul_one_eventuallyLE
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_mul_one_eventuallyLE
-  条件: (hf : Tendsto f l atTop) (hg : 1 <=ᶠ[l] g)
+定理 收敛.atTop_mul_one_eventuallyLE
+  条件: (hf : 收敛 f l atTop) (hg : 1 <=ᶠ[l] g)
   证明: tendsto_atTop_mono' l (hg.mono fun _ => le_mul_of_one_le_right') hf
 
 @[to_additive]
@@ -155,8 +155,8 @@ theorem Tendsto.atBot_mul_eventuallyLE_one
 @[to_additive]
 
 中文:
-定理 Tendsto.atBot_mul_eventuallyLE_one
-  条件: (hf : Tendsto f l atBot) (hg : g <=ᶠ[l] 1)
+定理 收敛.atBot_mul_eventuallyLE_one
+  条件: (hf : 收敛 f l atBot) (hg : g <=ᶠ[l] 1)
   证明: hf.atTop_mul_one_eventuallyLE (M := Mᵒᵈ) hg
 
 @[to_additive]
@@ -179,8 +179,8 @@ theorem Tendsto.atTop_mul_one_le
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_mul_one_le
-  条件: (hf : Tendsto f l atTop) (hg : 对任意 x, 1 <= g x)
+定理 收敛.atTop_mul_one_le
+  条件: (hf : 收敛 f l atTop) (hg : 对任意 x, 1 <= g x)
   证明: hf.atTop_mul_one_eventuallyLE .of_forall hg
 
 @[to_additive]
@@ -201,8 +201,8 @@ theorem Tendsto.atBot_mul_le_one
   proof: hf.atBot_mul_eventuallyLE_one (.of_forall hg)
 
 中文:
-定理 Tendsto.atBot_mul_le_one
-  条件: (hf : Tendsto f l atBot) (hg : 对任意 x, g x <= 1)
+定理 收敛.atBot_mul_le_one
+  条件: (hf : 收敛 f l atBot) (hg : 对任意 x, g x <= 1)
   证明: hf.atBot_mul_eventuallyLE_one (.of_forall hg)
 
 Depends on / 依赖: atBot_mul_eventuallyLE_one, hf.atBot_mul_eventuallyLE_one, of_forall
@@ -225,8 +225,8 @@ theorem Tendsto.atTop_mul_atTop
   proof: hf.atTop_mul_one_eventuallyLE hg.eventually_ge_atTop 1
 
 中文:
-定理 Tendsto.atTop_mul_atTop
-  条件: (hf : Tendsto f l atTop) (hg : Tendsto g l atTop)
+定理 收敛.atTop_mul_atTop
+  条件: (hf : 收敛 f l atTop) (hg : 收敛 g l atTop)
   证明: hf.atTop_mul_one_eventuallyLE hg.eventually_ge_atTop 1
 
 Depends on / 依赖: atTop_mul_one_eventuallyLE, eventually_ge_atTop, hf.atTop_mul_one_eventuallyLE, hg.eventually_ge_atTop
@@ -251,8 +251,8 @@ theorem Tendsto.atBot_mul_atBot
 @[to_additive nsmul_atTop]
 
 中文:
-定理 Tendsto.atBot_mul_atBot
-  条件: (hf : Tendsto f l atBot) (hg : Tendsto g l atBot)
+定理 收敛.atBot_mul_atBot
+  条件: (hf : 收敛 f l atBot) (hg : 收敛 g l atBot)
   证明: hf.atTop_mul_atTop (M := Mᵒᵈ) hg
 
 @[to_additive nsmul_atTop]
@@ -277,8 +277,8 @@ theorem Tendsto.atTop_pow
 @[to_additive nsmul_atBot]
 
 中文:
-定理 Tendsto.atTop_pow
-  条件: (hf : Tendsto f l atTop) {n : 自然数} (hn : 0 < n)
+定理 收敛.atTop_pow
+  条件: (hf : 收敛 f l atTop) {n : 自然数} (hn : 0 < n)
   证明: by
   refine tendsto_atTop_mono' _ ((hf.eventually_ge_atTop 1).mono fun x hx => ?_) hf
   simpa only [pow_one] using pow_le_pow_right' hx hn
@@ -302,8 +302,8 @@ theorem Tendsto.atBot_pow
   proof: Tendsto.atTop_pow (M := Mᵒᵈ) hf hn
 
 中文:
-定理 Tendsto.atBot_pow
-  条件: (hf : Tendsto f l atBot) {n : 自然数} (hn : 0 < n)
+定理 收敛.atBot_pow
+  条件: (hf : 收敛 f l atBot) {n : 自然数} (hn : 0 < n)
   证明: Tendsto.atTop_pow (M := Mᵒᵈ) hf hn
 
 Depends on / 依赖: Tendsto, Tendsto.atTop_pow, atTop_pow
@@ -335,9 +335,9 @@ theorem Tendsto.atTop_of_const_mul
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_const_mul
-  条件: (C : M) (hf : Tendsto (C * f ·) l atTop)
-  结论: Tendsto f l atTop
+定理 收敛.atTop_of_const_mul
+  条件: (C : M) (hf : 收敛 (C * f ·) l atTop)
+  结论: 收敛 f l atTop
   证明: tendsto_atTop.2 fun b => (tendsto_atTop.1 hf (C * b)).mono fun _ => le_of_mul_le_mul_left'
 
 @[to_additive]
@@ -358,9 +358,9 @@ theorem Tendsto.atBot_of_const_mul
   proof: hf.atTop_of_const_mul (M := Mᵒᵈ)
 
 中文:
-定理 Tendsto.atBot_of_const_mul
-  条件: (C : M) (hf : Tendsto (C * f ·) l atBot)
-  结论: Tendsto f l atBot
+定理 收敛.atBot_of_const_mul
+  条件: (C : M) (hf : 收敛 (C * f ·) l atBot)
+  结论: 收敛 f l atBot
   证明: hf.atTop_of_const_mul (M := Mᵒᵈ)
 
 Depends on / 依赖: atTop_of_const_mul, hf.atTop_of_const_mul
@@ -385,9 +385,9 @@ theorem Tendsto.atTop_of_mul_const
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_mul_const
-  条件: (C : M) (hf : Tendsto (f · * C) l atTop)
-  结论: Tendsto f l atTop
+定理 收敛.atTop_of_mul_const
+  条件: (C : M) (hf : 收敛 (f · * C) l atTop)
+  结论: 收敛 f l atTop
   证明: tendsto_atTop.2 fun b => (tendsto_atTop.1 hf (b * C)).mono fun _ => le_of_mul_le_mul_right'
 
 @[to_additive]
@@ -408,9 +408,9 @@ theorem Tendsto.atBot_of_mul_const
   proof: hf.atTop_of_mul_const (M := Mᵒᵈ)
 
 中文:
-定理 Tendsto.atBot_of_mul_const
-  条件: (C : M) (hf : Tendsto (f · * C) l atBot)
-  结论: Tendsto f l atBot
+定理 收敛.atBot_of_mul_const
+  条件: (C : M) (hf : 收敛 (f · * C) l atBot)
+  结论: 收敛 f l atBot
   证明: hf.atTop_of_mul_const (M := Mᵒᵈ)
 
 Depends on / 依赖: atTop_of_mul_const, hf.atTop_of_mul_const
@@ -436,7 +436,7 @@ refine .atTop_of_const_mul C tendsto_atTop_mono' l ?_ hfg
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_isBoundedUnder_le_mul
+定理 收敛.atTop_of_isBoundedUnder_le_mul
   结论: (hf : IsBoundedUnder (· <= ·) l f)
   证明: by
   obtain ⟨C, hC⟩ := hf
@@ -465,7 +465,7 @@ theorem Tendsto.atBot_of_isBoundedUnder_ge_mul
 @[to_additive]
 
 中文:
-定理 Tendsto.atBot_of_isBoundedUnder_ge_mul
+定理 收敛.atBot_of_isBoundedUnder_ge_mul
   结论: (hf : IsBoundedUnder (· >= ·) l f)
   证明: h.atTop_of_isBoundedUnder_le_mul (M := Mᵒᵈ) hf
 
@@ -489,7 +489,7 @@ theorem Tendsto.atTop_of_le_const_mul
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_le_const_mul
+定理 收敛.atTop_of_le_const_mul
   结论: (hf : 存在 C, 对任意 x, f x <= C)
   证明: hfg.atTop_of_isBoundedUnder_le_mul hf.imp fun _C hC => eventually_map.mpr .of_forall hC
 
@@ -513,7 +513,7 @@ theorem Tendsto.atBot_of_const_le_mul
 @[to_additive]
 
 中文:
-定理 Tendsto.atBot_of_const_le_mul
+定理 收敛.atBot_of_const_le_mul
   结论: (hf : 存在 C, 对任意 x, C <= f x)
   证明: Tendsto.atTop_of_le_const_mul (M := Mᵒᵈ) hf hfg
 
@@ -540,7 +540,7 @@ refine .atTop_of_mul_const C tendsto_atTop_mono' l ?_ h
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_mul_isBoundedUnder_le
+定理 收敛.atTop_of_mul_isBoundedUnder_le
   结论: (hg : IsBoundedUnder (· <= ·) l g)
   证明: by
   obtain ⟨C, hC⟩ := hg
@@ -569,7 +569,7 @@ theorem Tendsto.atBot_of_mul_isBoundedUnder_ge
 @[to_additive]
 
 中文:
-定理 Tendsto.atBot_of_mul_isBoundedUnder_ge
+定理 收敛.atBot_of_mul_isBoundedUnder_ge
   结论: (hg : IsBoundedUnder (· >= ·) l g)
   证明: h.atTop_of_mul_isBoundedUnder_le (M := Mᵒᵈ) hg
 
@@ -593,7 +593,7 @@ theorem Tendsto.atTop_of_mul_le_const
 @[to_additive]
 
 中文:
-定理 Tendsto.atTop_of_mul_le_const
+定理 收敛.atTop_of_mul_le_const
   结论: (hg : 存在 C, 对任意 x, g x <= C)
   证明: hfg.atTop_of_mul_isBoundedUnder_le hg.imp fun _C hC => eventually_map.mpr .of_forall hC
 
@@ -615,7 +615,7 @@ theorem Tendsto.atBot_of_mul_const_le
   proof: Tendsto.atTop_of_mul_le_const (M := Mᵒᵈ) hg hfg
 
 中文:
-定理 Tendsto.atBot_of_mul_const_le
+定理 收敛.atBot_of_mul_const_le
   结论: (hg : 存在 C, 对任意 x, C <= g x)
   证明: Tendsto.atTop_of_mul_le_const (M := Mᵒᵈ) hg hfg
 

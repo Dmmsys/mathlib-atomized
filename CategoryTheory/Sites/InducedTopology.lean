@@ -52,7 +52,7 @@ definition inducedTopology
 
 中文:
 定义 inducedTopology
-  签名: (F : C ⥤ D) (K : GrothendieckTopology D)
+  签名: (F : C ⥤ D) (K : Grothendieck拓扑 D)
   定义体: Sheaf.finestTopology Set.range fun G : Sheaf K (Type max u₁ v₁ u₂ v₂) => F.op ⋙ G.obj
 
 Depends on / 依赖: F.op, G.obj, Set.range, Sheaf.finestTopology, finestTopology
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.IsContinuous (F.inducedTopology K) K
+  签名: F.是连续 (F.inducedTopology K) K
   定义体: by
     apply Sheaf.sheaf_for_finestTopology
     use G
@@ -106,7 +106,7 @@ lemma le_inducedTopology_iff
 
 中文:
 引理 le_inducedTopology_iff
-  条件: {J : GrothendieckTopology C}
+  条件: {J : Grothendieck拓扑 C}
   证明: by
   refine ⟨fun h => ⟨fun G => ?_⟩, fun h => ?_⟩
   · apply Presieve.isSheaf_of_le _ h
@@ -143,7 +143,7 @@ lemma mem_inducedTopology_iff
 
 中文:
 引理 mem_inducedTopology_iff
-  结论: [LocallySmall.{max u₁ v₁ u₂ v₂} C] (X : C) (S : Sieve X)
+  结论: [LocallySmall.{最大值 u₁ v₁ u₂ v₂} C] (X : C) (S : 筛 X)
   证明: by
   refine ⟨?_, ?_⟩
   · intro hS Y f
@@ -185,7 +185,7 @@ lemma induced_induced_le
 
 中文:
 引理 induced_induced_le
-  条件: (G : D ⥤ E) (J : GrothendieckTopology E)
+  条件: (G : D ⥤ E) (J : Grothendieck拓扑 E)
   证明: by
   rw [le_inducedTopology_iff]
   exact Functor.isContinuous_comp _ _ _ (G.inducedTopology J) _
@@ -234,7 +234,7 @@ definition restrictedTopology
 
 中文:
 定义 restrictedTopology
-  签名: (F : C ⥤ D) (K : GrothendieckTopology D)
+  签名: (F : C ⥤ D) (K : Grothendieck拓扑 D)
   定义体: Precoverage.toGrothendieck (Precoverage.comap F K.toPrecoverage)
 
 Depends on / 依赖: K.toPrecoverage, Precoverage, Precoverage.comap, Precoverage.toGrothendieck, toGrothendieck, toPrecoverage
@@ -255,7 +255,7 @@ lemma mem_restrictedTopology_of_functorPushforward_mem
 
 中文:
 引理 mem_restrictedTopology_of_functorPushforward_mem
-  结论: {X : C} {S : Sieve X}
+  结论: {X : C} {S : 筛 X}
   证明: by
   rw [← Sieve.generate_sieve S]
   apply Precoverage.generate_mem_toGrothendieck
@@ -304,7 +304,7 @@ lemma restrictedTopology_eq_inducedTopology
 
 中文:
 引理 restrictedTopology_eq_inducedTopology
-  条件: [F.IsContinuous (F.restrictedTopology K) K]
+  条件: [F.是连续 (F.restrictedTopology K) K]
   证明: by
   refine le_antisymm ?_ inducedTopology_le_restrictedTopology
   rw [le_inducedTopology_iff]
@@ -330,7 +330,7 @@ lemma restrictedTopology_eq_inducedTopology_of_isContinuous
 
 中文:
 引理 restrictedTopology_eq_inducedTopology_of_isContinuous
-  结论: [F.IsContinuous J K]
+  结论: [F.是连续 J K]
   证明: by
   subst h
   rw [restrictedTopology_eq_inducedTopology]

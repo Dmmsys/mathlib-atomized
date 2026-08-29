@@ -62,11 +62,11 @@ structure PartialEquiv
     - toEquiv : dom ≃[L] cod
 
 中文:
-结构 PartialEquiv
+结构 部分等价
   参数: where
   公理与运算 (3 个):
-    - dom : L.Substructure M
-    - cod : L.Substructure N
+    - dom : L.子结构 M
+    - cod : L.子结构 N
     - toEquiv : dom ≃[L] cod
 -/
 structure PartialEquiv where
@@ -95,7 +95,7 @@ instance instInhabited_self
 
 中文:
 实例 instInhabited_self
-  签名: : Inhabited (M ≃ₚ[L] M)
+  签名: : 可居 (M ≃ₚ[L] M)
   定义体: ⟨⊤, ⊤, Equiv.refl L (⊤ : L.Substructure M)⟩
 
 Depends on / 依赖: Equiv.refl, L.Substructure, Substructure
@@ -162,7 +162,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (M ≃ₚ[L] N) -> _)
+  结论: 函数.双射 (symm : (M ≃ₚ[L] N) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -505,7 +505,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (M ≃ₚ[L] N)
+  签名: 偏序 (M ≃ₚ[L] N)
   定义体: private le_refl
   le_trans := le_trans
   le_antisymm := private le_antisymm
@@ -566,7 +566,7 @@ theorem monotone_symm
 
 中文:
 定理 monotone_symm
-  结论: Monotone (fun (f : M ≃ₚ[L] N) => f.symm)
+  结论: 递增 (fun (f : M ≃ₚ[L] N) => f.symm)
   证明: fun _ _ => symm_le_symm
 
 Depends on / 依赖: symm_le_symm
@@ -683,7 +683,7 @@ theorem monotone_dom
 
 中文:
 定理 monotone_dom
-  结论: Monotone (fun f : M ≃ₚ[L] N => f.dom)
+  结论: 递增 (fun f : M ≃ₚ[L] N => f.dom)
   证明: fun _ _ => dom_le_dom
 
 Depends on / 依赖: dom_le_dom
@@ -700,7 +700,7 @@ theorem monotone_cod
 
 中文:
 定理 monotone_cod
-  结论: Monotone (fun f : M ≃ₚ[L] N => f.cod)
+  结论: 递增 (fun f : M ≃ₚ[L] N => f.cod)
   证明: fun _ _ => cod_le_cod
 
 Depends on / 依赖: cod_le_cod, hs.prod, prod_mem_prod
@@ -723,7 +723,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : M ≃ₚ[L] N) {A : L.Substructure M} (h : A <= f.dom)
+  签名: (f : M ≃ₚ[L] N) {A : L.子结构 M} (h : A <= f.dom)
   定义体: by
   let g := (subtype _).comp (f.toEquiv.toEmbedding.comp (A.inclusion h))
   exact {
@@ -753,7 +753,7 @@ theorem domRestrict_le
 
 中文:
 定理 domRestrict_le
-  条件: (f : M ≃ₚ[L] N) {A : L.Substructure M} (h : A <= f.dom)
+  条件: (f : M ≃ₚ[L] N) {A : L.子结构 M} (h : A <= f.dom)
   证明: ⟨h, rfl⟩
 -/
 theorem domRestrict_le (f : M ≃ₚ[L] N) {A : L.Substructure M} (h : A <= f.dom) :
@@ -769,7 +769,7 @@ theorem le_domRestrict
 
 中文:
 定理 le_domRestrict
-  结论: (f g : M ≃ₚ[L] N) {A : L.Substructure M} (hf : f.dom <= A)
+  结论: (f g : M ≃ₚ[L] N) {A : L.子结构 M} (hf : f.dom <= A)
   证明: ⟨hf, by rw [← (subtype_toEquiv_inclusion hfg)]; rfl⟩
 
 Depends on / 依赖: subtype_toEquiv_inclusion
@@ -788,7 +788,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : M ≃ₚ[L] N) {A : L.Substructure N} (h : A <= f.cod)
+  签名: (f : M ≃ₚ[L] N) {A : L.子结构 N} (h : A <= f.cod)
   定义体: (f.symm.domRestrict h).symm
 
 Depends on / 依赖: domRestrict, f.symm.domRestrict
@@ -807,7 +807,7 @@ theorem codRestrict_le
 
 中文:
 定理 codRestrict_le
-  条件: (f : M ≃ₚ[L] N) {A : L.Substructure N} (h : A <= f.cod)
+  条件: (f : M ≃ₚ[L] N) {A : L.子结构 N} (h : A <= f.cod)
   证明: symm_le_iff.2 (f.symm.domRestrict_le h)
 
 Depends on / 依赖: domRestrict_le, f.symm.domRestrict_le, symm_le_iff
@@ -826,7 +826,7 @@ theorem le_codRestrict
 
 中文:
 定理 le_codRestrict
-  结论: (f g : M ≃ₚ[L] N) {A : L.Substructure N} (hf : f.cod <= A)
+  结论: (f g : M ≃ₚ[L] N) {A : L.子结构 N} (hf : f.cod <= A)
   证明: symm_le_iff.1 (le_domRestrict f.symm g.symm hf hg (monotone_symm hfg))
 
 Depends on / 依赖: f.symm, g.symm, le_domRestrict, monotone_symm, symm_le_iff
@@ -990,7 +990,7 @@ theorem dom_fg_iff_cod_fg
 
 中文:
 定理 dom_fg_iff_cod_fg
-  条件: {N : 类型} [L.Structure N] (f : M ≃ₚ[L] N)
+  条件: {N : 类型} [L.结构 N] (f : M ≃ₚ[L] N)
   证明: by
   rw [Substructure.fg_iff_structure_fg]; rw [f.toEquiv.fg_iff]; rw [Substructure.fg_iff_structure_fg]
 
@@ -1373,7 +1373,7 @@ theorem countable_self_fgequiv_of_countable
 
 中文:
 定理 countable_self_fgequiv_of_countable
-  条件: [Countable M]
+  条件: [可数 M]
   证明: by
   let g : L.FGEquiv M M ->
       Σ U : { S : L.Substructure M // S.FG }, U.val ->[L] M :=
@@ -1413,7 +1413,7 @@ instance inhabited_self_FGEquiv
 
 中文:
 实例 inhabited_self_FGEquiv
-  签名: : Inhabited (L.FGEquiv M M)
+  签名: : 可居 (L.FGEquiv M M)
   定义体: ⟨⟨⟨⊥, ⊥, Equiv.refl L (⊥ : L.Substructure M)⟩, fg_bot⟩⟩
 
 Depends on / 依赖: Equiv.refl, L.Substructure, Substructure, fg_bot
@@ -1533,7 +1533,7 @@ theorem isExtensionPair_iff_exists_embedding_closure_singleton_sup
       
 
 中文:
-定理 isExtensionPair_iff_exists_embedding_closure_singleton_sup
+定理 isExtensionPair_iff_存在_embedding_closure_singleton_sup
   证明: by
   refine ⟨fun h S S_FG f m => ?_, fun h ⟨f, f_FG⟩ m => ?_⟩
   · obtain ⟨⟨f', hf'⟩, mf', ff'1, ff'2⟩ := h ⟨⟨S, _, f.equivRange⟩, S_FG⟩ m
@@ -1628,7 +1628,7 @@ theorem embedding_from_cg
 
 中文:
 定理 embedding_from_cg
-  结论: (M_cg : Structure.CG L M) (g : L.FGEquiv M N)
+  结论: (M_cg : 结构.CG L M) (g : L.FGEquiv M N)
   证明: by
   rcases M_cg with ⟨X, _, X_gen⟩
   have _ : Countable (↑X : Type _) := by simpa only [countable_coe_iff]
@@ -1675,7 +1675,7 @@ theorem equiv_between_cg
 
 中文:
 定理 equiv_between_cg
-  结论: (M_cg : Structure.CG L M) (N_cg : Structure.CG L N)
+  结论: (M_cg : 结构.CG L M) (N_cg : 结构.CG L N)
   证明: by
   rcases M_cg with ⟨X, X_count, X_gen⟩
   rcases N_cg with ⟨Y, Y_count, Y_gen⟩

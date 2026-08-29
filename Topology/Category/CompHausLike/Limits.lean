@@ -75,7 +75,7 @@ abbreviation finiteCoproduct
 
 中文:
 缩写 finiteCoproduct
-  签名: : CompHausLike P
+  签名: : 余mpHausLike P
   定义体: CompHausLike.of P (Σ (a : α), X a)
 
 Depends on / 依赖: CompHausLike, CompHausLike.of
@@ -122,7 +122,7 @@ definition finiteCoproduct.desc
 
 中文:
 定义 finiteCoproduct.desc
-  签名: {B : CompHausLike P} (e : (a : α) -> (X a ⟶ B))
+  签名: {B : 余mpHausLike P} (e : (a : α) -> (X a ⟶ B))
   定义体: ofHom _
   { toFun := fun ⟨a, x⟩ => e a x
     continuous_toFun := by
@@ -152,7 +152,7 @@ lemma finiteCoproduct.ι_desc
 
 中文:
 引理 finiteCoproduct.ι_desc
-  条件: {B : CompHausLike P} (e : (a : α) -> (X a ⟶ B)) (a : α)
+  条件: {B : 余mpHausLike P} (e : (a : α) -> (X a ⟶ B)) (a : α)
   证明: rfl
 -/
 lemma finiteCoproduct.ι_desc {B : CompHausLike P} (e : (a : α) -> (X a ⟶ B)) (a : α) :
@@ -172,7 +172,7 @@ lemma finiteCoproduct.hom_ext
 
 中文:
 引理 finiteCoproduct.hom_ext
-  结论: {B : CompHausLike P} (f g : finiteCoproduct X ⟶ B)
+  结论: {B : 余mpHausLike P} (f g : finiteCoproduct X ⟶ B)
   证明: by
   ext ⟨a, x⟩
   specialize h a
@@ -220,7 +220,7 @@ definition finiteCoproduct.isColimit
 
 中文:
 定义 finiteCoproduct.isColimit
-  签名: : Limits.IsColimit (finiteCoproduct.cofan X)
+  签名: : Limits.是余极限 (finiteCoproduct.cofan X)
   定义体: Cofan.IsColimit.mk _
     (fun s => desc _ fun a => s.inj a)
     (fun _ _ => ι_desc _ _ _)
@@ -250,7 +250,7 @@ lemma finiteCoproduct.ι_injective
 中文:
 引理 finiteCoproduct.ι_injective
   条件: (a : α)
-  结论: Function.Injective (finiteCoproduct.ι X a)
+  结论: 函数.单射 (finiteCoproduct.ι X a)
   证明: by
   intro x y hxy
   exact eq_of_heq (Sigma.ext_iff.mp hxy).2
@@ -290,7 +290,7 @@ lemma finiteCoproduct.ι_desc_apply
 
 中文:
 引理 finiteCoproduct.ι_desc_apply
-  条件: {B : CompHausLike P} {π : (a : α) -> X a ⟶ B} (a : α)
+  条件: {B : 余mpHausLike P} {π : (a : α) -> X a ⟶ B} (a : α)
   证明: by
   tauto
 -/
@@ -333,10 +333,10 @@ class HasExplicitFiniteCoproducts
     - hasProp({α : Type w} [Finite α] (X : α -> CompHausLike.{max u w} P)) : HasExplicitFiniteCoproduct X
 
 中文:
-类 HasExplicitFiniteCoproducts
+类 有ExplicitFiniteCoproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasProp({α : Type w} [Finite α] (X : α -> CompHausLike.{max u w} P)) : HasExplicitFiniteCoproduct X
+    - hasProp({α : 类型 w} [有限 α] (X : α -> 余mpHausLike.{最大值 u w} P)) : HasExplicitFiniteCoproduct X
 -/
 class HasExplicitFiniteCoproducts : Prop where
   hasProp {α : Type w} [Finite α] (X : α -> CompHausLike.{max u w} P) : HasExplicitFiniteCoproduct X
@@ -352,7 +352,7 @@ instance [HasExplicitFiniteCoproducts.{w}
   body: hasColimit_of_iso Discrete.natIsoFunctor
 
 中文:
-实例 [HasExplicitFiniteCoproducts.{w}
+实例 [有ExplicitFiniteCoproducts.{w}
   签名: P] (α
   定义体: hasColimit_of_iso Discrete.natIsoFunctor
 
@@ -374,8 +374,8 @@ instance [HasExplicitFiniteCoproducts.{w}
     exact hasColimitsOfShape_of_equivalence e
 
 中文:
-实例 [HasExplicitFiniteCoproducts.{w}
-  签名: P] : HasFiniteCoproducts (CompHausLike.{max u w} P) where
+实例 [有ExplicitFiniteCoproducts.{w}
+  签名: P] : 有FiniteCoproducts (余mpHausLike.{最大值 u w} P) where
   定义体: by
     let α := ULift.{w} (Fin n)
     let e : Discrete α ≌ Discrete (Fin n) := Discrete.equivalence Equiv.ulift
@@ -429,7 +429,7 @@ lemma Sigma.isOpenEmbedding_ι
   simp
 
 中文:
-引理 Sigma.isOpenEmbedding_ι
+引理 依赖和类型.isOpenEmbedding_ι
   条件: (a : α)
   证明: by
   refine IsOpenEmbedding.of_comp _ (homeoOfIso ((colimit.isColimit _).coconePointUniqueUpToIso
@@ -504,7 +504,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: : CompHausLike P
+  签名: : 余mpHausLike P
   定义体: letI set := { xy : X × Y | f xy.fst = g xy.snd }
   haveI : CompactSpace set :=
     isCompact_iff_compactSpace.mp (isClosed_eq (f.hom.hom.continuous.comp continuous_fst)
@@ -601,7 +601,7 @@ definition pullback.lift
 
 中文:
 定义 pullback.lift
-  签名: {Z : CompHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
+  签名: {Z : 余mpHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
   定义体: ConcreteCategory.ofHom
   { toFun := fun z => ⟨⟨a z, b z⟩, by apply_fun (fun q => q z) at w; exact w⟩
     continuous_toFun := by fun_prop }
@@ -627,7 +627,7 @@ lemma pullback.lift_fst
 
 中文:
 引理 pullback.lift_fst
-  条件: {Z : CompHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
+  条件: {Z : 余mpHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -646,7 +646,7 @@ lemma pullback.lift_snd
 
 中文:
 引理 pullback.lift_snd
-  条件: {Z : CompHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
+  条件: {Z : 余mpHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g)
   证明: rfl
 -/
 lemma pullback.lift_snd {Z : CompHausLike P} (a : Z ⟶ X) (b : Z ⟶ Y) (w : a ≫ f = b ≫ g) :
@@ -668,7 +668,7 @@ lemma pullback.hom_ext
 
 中文:
 引理 pullback.hom_ext
-  结论: {Z : CompHausLike P} (a b : Z ⟶ pullback f g)
+  结论: {Z : 余mpHausLike P} (a b : Z ⟶ pullback f g)
   证明: by
   ext z
   apply_fun (fun q => q z) at hfst hsnd
@@ -725,7 +725,7 @@ definition pullback.isLimit
 
 中文:
 定义 pullback.isLimit
-  签名: : Limits.IsLimit (pullback.cone f g)
+  签名: : Limits.是极限 (pullback.cone f g)
   定义体: Limits.PullbackCone.isLimitAux _
     (fun s => pullback.lift f g s.fst s.snd s.condition)
     (fun _ => pullback.lift_fst _ _ _ _ _)
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimit (cospan f g)
+  签名: 有极限 (cospan f g)
   定义体: ⟨⟨pullback.cone f g, pullback.isLimit f g⟩⟩
 
 Depends on / 依赖: isLimit, pullback, pullback.cone, pullback.isLimit
@@ -769,7 +769,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimit (cospan f g) (compHausLikeToTop P)
+  签名: 创造极限 (cospan f g) (compHausLikeToTop P)
   定义体: createsLimitOfFullyFaithfulOfIso (pullback f g)
     ((((TopCat.pullbackConeIsLimit f.hom g.hom).conePointUniqueUpToIso
     (limit.isLimit _)) ≪≫ Limits.lim.mapIso (by rfl ≪≫ (diagramIsoCospan _).symm)))
@@ -791,7 +791,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan f g) (compHausLikeToTop P)
+  签名: 保持极限 (cospan f g) (compHausLikeToTop P)
   定义体: preservesLimit_of_createsLimit_and_hasLimit _ _
 
 Depends on / 依赖: preservesLimit_of_createsLimit_and_hasLimit
@@ -818,10 +818,10 @@ class HasExplicitPullbacks
     - hasProp({X Y B : CompHausLike P} (f : X ⟶ B) (g : Y ⟶ B)) : HasExplicitPullback f g
 
 中文:
-类 HasExplicitPullbacks
+类 有ExplicitPullbacks
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasProp({X Y B : CompHausLike P} (f : X ⟶ B) (g : Y ⟶ B)) : HasExplicitPullback f g
+    - hasProp({X Y B : 余mpHausLike P} (f : X ⟶ B) (g : Y ⟶ B)) : HasExplicitPullback f g
 -/
 class HasExplicitPullbacks : Prop where
   hasProp {X Y B : CompHausLike P} (f : X ⟶ B) (g : Y ⟶ B) : HasExplicitPullback f g
@@ -837,8 +837,8 @@ instance [HasExplicitPullbacks
   body: hasLimit_of_iso (diagramIsoCospan F).symm
 
 中文:
-实例 [HasExplicitPullbacks
-  签名: P] : HasPullbacks (CompHausLike P) where
+实例 [有ExplicitPullbacks
+  签名: P] : 有Pullbacks (余mpHausLike P) where
   定义体: hasLimit_of_iso (diagramIsoCospan F).symm
 
 Depends on / 依赖: diagramIsoCospan, hasLimit_of_iso
@@ -857,10 +857,10 @@ class HasExplicitPullbacksOfInclusions
     - hasProp : forall {X Y Z : CompHausLike P} (f : Z ⟶ X ⨿ Y), HasExplicitPullback coprod.inl f
 
 中文:
-类 HasExplicitPullbacksOfInclusions
-  参数: [HasExplicitFiniteCoproducts.{0} P]
+类 有ExplicitPullbacksOfInclusions
+  参数: [有ExplicitFiniteCoproducts.{0} P]
   公理与运算 (1 个):
-    - hasProp : 对任意 {X Y Z : CompHausLike P} (f : Z ⟶ X ⨿ Y), HasExplicitPullback coprod.inl f
+    - hasProp : 对任意 {X Y Z : 余mpHausLike P} (f : Z ⟶ X ⨿ Y), HasExplicitPullback coprod.inl f
 -/
 class HasExplicitPullbacksOfInclusions [HasExplicitFiniteCoproducts.{0} P] : Prop where
   hasProp : forall {X Y Z : CompHausLike P} (f : Z ⟶ X ⨿ Y), HasExplicitPullback coprod.inl f
@@ -876,8 +876,8 @@ instance [HasExplicitPullbacks
   body: inferInstance
 
 中文:
-实例 [HasExplicitPullbacks
-  签名: P] [HasExplicitFiniteCoproducts.{0} P] :
+实例 [有ExplicitPullbacks
+  签名: P] [有ExplicitFiniteCoproducts.{0} P] :
   定义体: inferInstance
 -/
 instance [HasExplicitPullbacks P] [HasExplicitFiniteCoproducts.{0} P] :
@@ -899,8 +899,8 @@ instance [HasExplicitPullbacksOfInclusions
   body: inferInstance
 
 中文:
-实例 [HasExplicitPullbacksOfInclusions
-  签名: P] : HasPullbacksOfInclusions (CompHausLike P) where
+实例 [有ExplicitPullbacksOfInclusions
+  签名: P] : 有PullbacksOfInclusions (余mpHausLike P) where
   定义体: inferInstance
 -/
 instance [HasExplicitPullbacksOfInclusions P] : HasPullbacksOfInclusions (CompHausLike P) where
@@ -945,7 +945,7 @@ instance [HasExplicitPullbacksOfInclusions
       infer_instance }
 
 中文:
-实例 [HasExplicitPullbacksOfInclusions
+实例 [有ExplicitPullbacksOfInclusions
   签名: P] :
   定义体: { preservesPullbackInl := by
       intro X Y Z f
@@ -968,8 +968,8 @@ instance [HasExplicitPullbacksOfInclusions
   body: finitaryExtensive_of_preserves_and_reflects (compHausLikeToTop P)
 
 中文:
-实例 [HasExplicitPullbacksOfInclusions
-  签名: P] : FinitaryExtensive (CompHausLike P)
+实例 [有ExplicitPullbacksOfInclusions
+  签名: P] : 有限广延 (余mpHausLike P)
   定义体: finitaryExtensive_of_preserves_and_reflects (compHausLikeToTop P)
 
 Depends on / 依赖: compHausLikeToTop, finitaryExtensive_of_preserves_and_reflects
@@ -988,7 +988,7 @@ theorem finitaryExtensive
 
 中文:
 定理 finitaryExtensive
-  结论: (hP' : 对任意 ⦃X Y B : CompHausLike.{u} P⦄ (f : X ⟶ B) (g : Y ⟶ B)
+  结论: (hP' : 对任意 ⦃X Y B : 余mpHausLike.{u} P⦄ (f : X ⟶ B) (g : Y ⟶ B)
   证明: have := hasPullbacksOfInclusions hP'
   finitaryExtensive_of_preserves_and_reflects (compHausLikeToTop P)
 
@@ -1018,7 +1018,7 @@ definition isTerminalPUnit
 
 中文:
 定义 isTerminalPUnit
-  签名: [Has命题 P PUnit.{u + 1}]
+  签名: [有命题 P 命题单元.{u + 1}]
   定义体: haveI : forall X, Unique (X ⟶ CompHausLike.of P PUnit.{u + 1}) := fun _ =>
     ⟨⟨ofHom _ ⟨fun _ => PUnit.unit, continuous_const⟩⟩, fun _ => rfl⟩
   Limits.IsTerminal.ofUnique _

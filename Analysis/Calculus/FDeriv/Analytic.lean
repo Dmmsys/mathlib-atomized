@@ -399,8 +399,8 @@ theorem HasFPowerSeriesWithinOnBall.differentiableOn
     r
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.differentiableOn
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.differentiableOn
+  结论: [完备空间 F]
   证明: by
   intro y hy
   have Z := (h.analyticWithinAt_of_mem hy).differentiableWithinAt
@@ -434,8 +434,8 @@ theorem HasFPowerSeriesOnBall.differentiableOn
   (h.analyticAt_of_mem hy).differentiableWithinAt
 
 中文:
-定理 HasFPowerSeriesOnBall.differentiableOn
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesOnBall.differentiableOn
+  结论: [完备空间 F]
   证明: fun _ hy =>
   (h.analyticAt_of_mem hy).differentiableWithinAt
 -/
@@ -521,8 +521,8 @@ theorem HasFPowerSeriesWithinOnBall.hasFDerivWithinAt
     rw [nhdsWithin_insert_of_
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.hasFDerivWithinAt
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.hasFDerivWithinAt
+  结论: [完备空间 F]
   证明: by
   rcases eq_or_ne y 0 with rfl | h''y
   · convert! (h.changeOrigin hy h'y).hasFPowerSeriesWithinAt.hasFDerivWithinAt
@@ -556,8 +556,8 @@ theorem HasFPowerSeriesOnBall.hasFDerivAt
   proof: (h.changeOrigin hy).hasFPowerSeriesAt.hasFDerivAt
 
 中文:
-定理 HasFPowerSeriesOnBall.hasFDerivAt
-  结论: [CompleteSpace F] (h : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.hasFDerivAt
+  结论: [完备空间 F] (h : 有FPowerSeriesOnBall f p x r)
   证明: (h.changeOrigin hy).hasFPowerSeriesAt.hasFDerivAt
 
 Depends on / 依赖: changeOrigin, h.changeOrigin, hasFDerivAt, hasFPowerSeriesAt, hasFPowerSeriesAt.hasFDerivAt
@@ -576,8 +576,8 @@ theorem HasFPowerSeriesWithinOnBall.fderivWithin_eq
   proof: (h.hasFDerivWithinAt hy h'y).fderivWithin (hu _ h'y)
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.fderivWithin_eq
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.fderivWithin_eq
+  结论: [完备空间 F]
   证明: (h.hasFDerivWithinAt hy h'y).fderivWithin (hu _ h'y)
 
 Depends on / 依赖: fderivWithin, h.hasFDerivWithinAt, hasFDerivWithinAt
@@ -598,8 +598,8 @@ theorem HasFPowerSeriesOnBall.fderiv_eq
   proof: (h.hasFDerivAt hy).fderiv
 
 中文:
-定理 HasFPowerSeriesOnBall.fderiv_eq
-  结论: [CompleteSpace F] (h : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.fderiv_eq
+  结论: [完备空间 F] (h : 有FPowerSeriesOnBall f p x r)
   证明: (h.hasFDerivAt hy).fderiv
 
 Depends on / 依赖: fderiv, h.hasFDerivAt, hasFDerivAt
@@ -623,8 +623,8 @@ theorem HasFPowerSeriesOnBall.fderiv
     simpa using! ((p.hasFPowerSeriesOnBall_changeOrigi
 
 中文:
-定理 HasFPowerSeriesOnBall.fderiv
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesOnBall.fderiv
+  结论: [完备空间 F]
   证明: by
   refine .congr (f := fun z => continuousMultilinearCurryFin1 𝕜 E F (p.changeOrigin (z - x) 1)) ?_
     fun z hz => ?_
@@ -656,7 +656,7 @@ theorem FormalMultilinearSeries.fderiv_sum
 
 中文:
 定理 FormalMultilinearSeries.fderiv_sum
-  条件: [CompleteSpace F] (h : ‖x‖ₑ < p.radius)
+  条件: [完备空间 F] (h : ‖x‖ₑ < p.radius)
   证明: by
   simpa using (p.hasFPowerSeriesOnBall (zero_le.trans_lt h)).fderiv.sum (by simpa using h)
 -/
@@ -677,7 +677,7 @@ theorem FormalMultilinearSeries.hasFDerivAt_sum
 
 中文:
 定理 FormalMultilinearSeries.hasFDerivAt_sum
-  条件: [CompleteSpace F] (h : ‖x‖ₑ < p.radius)
+  条件: [完备空间 F] (h : ‖x‖ₑ < p.radius)
   证明: by
   rw [← FormalMultilinearSeries.fderiv_sum h]
   exact p.hasFPowerSeriesOnBall (zero_le.trans_lt h)
@@ -703,8 +703,8 @@ theorem HasFPowerSeriesWithinOnBall.fderivWithin
     apply HasFPowerSeriesOnBall.hasFPowerSeri
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.fderivWithin
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.fderivWithin
+  结论: [完备空间 F]
   证明: by
   refine .congr' (f := fun z => continuousMultilinearCurryFin1 𝕜 E F (p.changeOrigin (z - x) 1)) ?_
     (fun z hz => ?_)
@@ -740,8 +740,8 @@ theorem HasFPowerSeriesWithinOnBall.fderivWithin_of_mem
   exact this.symm
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.fderivWithin_of_mem
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.fderivWithin_of_mem
+  结论: [完备空间 F]
   证明: by
   have : insert x s = s := insert_eq_of_mem hx
   rw [← this] at hu
@@ -770,7 +770,7 @@ theorem AnalyticAt.fderiv
 
 中文:
 定理 AnalyticAt.fderiv
-  条件: [CompleteSpace F] (h : AnalyticAt 𝕜 f x)
+  条件: [完备空间 F] (h : AnalyticAt 𝕜 f x)
   证明: by
   rcases h with ⟨p, r, hp⟩
   exact hp.fderiv.analyticAt
@@ -790,7 +790,7 @@ theorem AnalyticOnNhd.fderiv
 
 中文:
 定理 AnalyticOnNhd.fderiv
-  条件: [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s)
+  条件: [完备空间 F] (h : AnalyticOnNhd 𝕜 f s)
   证明: fun y hy => AnalyticAt.fderiv (h y hy)
 -/
 protected theorem AnalyticOnNhd.fderiv [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s) :
@@ -814,7 +814,7 @@ theorem AnalyticOnNhd.iteratedFDeriv
 
 中文:
 定理 AnalyticOnNhd.iteratedFDeriv
-  条件: [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s) (n : 自然数)
+  条件: [完备空间 F] (h : AnalyticOnNhd 𝕜 f s) (n : 自然数)
   证明: by
   induction n with
   | zero =>
@@ -852,7 +852,7 @@ lemma AnalyticOnNhd.hasFTaylorSeriesUpToOn
 
 中文:
 引理 AnalyticOnNhd.hasFTaylorSeriesUpToOn
-  结论: [CompleteSpace F]
+  结论: [完备空间 F]
   证明: by
   refine ⟨fun x _hx => rfl, fun m _hm x hx => ?_, fun m _hm x hx => ?_⟩
   · apply HasFDerivAt.hasFDerivWithinAt
@@ -885,8 +885,8 @@ lemma AnalyticWithinAt.exists_hasFTaylorSeriesUpToOn
       this
 
 中文:
-引理 AnalyticWithinAt.exists_hasFTaylorSeriesUpToOn
-  结论: [CompleteSpace F]
+引理 AnalyticWithinAt.存在_hasFTaylorSeriesUpToOn
+  结论: [完备空间 F]
   证明: by
   rcases h.exists_analyticAt with ⟨g, -, fg, hg⟩
   rcases hg.exists_mem_nhds_analyticOnNhd with ⟨v, vx, hv⟩
@@ -920,7 +920,7 @@ theorem HasFPowerSeriesWithinOnBall.hasSum_derivSeries_of_hasFDerivWithinAt
   the 
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.hasSum_derivSeries_of_hasFDerivWithinAt
+定理 有FPowerSeriesWithinOnBall.hasSum_derivSeries_of_hasFDerivWithinAt
   证明: by
   /- In the completion of the space, the derivative series is summable, and its sum is a derivative
   of the function. Therefore, by uniqueness of derivatives, its sum is the image of `f'` under
@@ -971,7 +971,7 @@ theorem HasFPowerSeriesWithinOnBall.fderivWithin_of_mem_of_analyticOn
     exact h.differentiable
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.fderivWithin_of_mem_of_analyticOn
+定理 有FPowerSeriesWithinOnBall.fderivWithin_of_mem_of_analyticOn
   证明: by
   refine ⟨hr.r_le.trans p.radius_le_radius_derivSeries, hr.r_pos, fun {y} hy h'y => ?_⟩
   apply hr.hasSum_derivSeries_of_hasFDerivWithinAt (by simpa [edist_zero_right] using! h'y) hy
@@ -1094,7 +1094,7 @@ lemma AnalyticOn.exists_hasFTaylorSeriesUpToOn
   proof: ⟨ftaylorSeriesWithin 𝕜 f s, h.hasFTaylorSeriesUpToOn hu, h.iteratedFDerivWithin hu⟩
 
 中文:
-引理 AnalyticOn.exists_hasFTaylorSeriesUpToOn
+引理 AnalyticOn.存在_hasFTaylorSeriesUpToOn
   证明: ⟨ftaylorSeriesWithin 𝕜 f s, h.hasFTaylorSeriesUpToOn hu, h.iteratedFDerivWithin hu⟩
 
 Depends on / 依赖: ftaylorSeriesWithin, h.hasFTaylorSeriesUpToOn, h.iteratedFDerivWithin, hasFTaylorSeriesUpToOn, iteratedFDerivWithin
@@ -1117,7 +1117,7 @@ theorem AnalyticOnNhd.fderiv_of_isOpen
 
 中文:
 定理 AnalyticOnNhd.fderiv_of_isOpen
-  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : IsOpen s)
+  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : 是开集 s)
   证明: by
   rw [← hs.analyticOn_iff_analyticOnNhd] at h ⊢
   exact (h.fderivWithin hs.uniqueDiffOn).congr (fun x hx => (fderivWithin_of_isOpen hs hx).symm)
@@ -1142,7 +1142,7 @@ theorem AnalyticOnNhd.iteratedFDeriv_of_isOpen
 
 中文:
 定理 AnalyticOnNhd.iteratedFDeriv_of_isOpen
-  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : IsOpen s) (n : 自然数)
+  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : 是开集 s) (n : 自然数)
   证明: by
   rw [← hs.analyticOn_iff_analyticOnNhd] at h ⊢
   exact (h.iteratedFDerivWithin hs.uniqueDiffOn n).congr
@@ -1281,7 +1281,7 @@ theorem AnalyticOnNhd.deriv
 
 中文:
 定理 AnalyticOnNhd.deriv
-  条件: [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s)
+  条件: [完备空间 F] (h : AnalyticOnNhd 𝕜 f s)
   证明: (ContinuousLinearMap.apply 𝕜 F (1 : 𝕜)).comp_analyticOnNhd h.fderiv
 -/
 protected theorem AnalyticOnNhd.deriv [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s) :
@@ -1298,7 +1298,7 @@ theorem AnalyticOnNhd.deriv_of_isOpen
 
 中文:
 定理 AnalyticOnNhd.deriv_of_isOpen
-  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : IsOpen s)
+  条件: (h : AnalyticOnNhd 𝕜 f s) (hs : 是开集 s)
   证明: (ContinuousLinearMap.apply 𝕜 F (1 : 𝕜)).comp_analyticOnNhd (h.fderiv_of_isOpen hs)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, comp_analyticOnNhd, fderiv_of_isOpen, h.fderiv_of_isOpen
@@ -1320,7 +1320,7 @@ theorem AnalyticOnNhd.iterated_deriv
 
 中文:
 定理 AnalyticOnNhd.iterated_deriv
-  条件: [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s) (n : 自然数)
+  条件: [完备空间 F] (h : AnalyticOnNhd 𝕜 f s) (n : 自然数)
   证明: by
   induction n with
   | zero => exact h
@@ -1346,7 +1346,7 @@ theorem AnalyticAt.deriv
 
 中文:
 定理 AnalyticAt.deriv
-  条件: [CompleteSpace F] (h : AnalyticAt 𝕜 f x)
+  条件: [完备空间 F] (h : AnalyticAt 𝕜 f x)
   证明: by
   obtain ⟨r, hr, h⟩ := h.exists_ball_analyticOnNhd
   exact h.deriv x (by simp [hr])
@@ -1369,7 +1369,7 @@ theorem AnalyticAt.iterated_deriv
 
 中文:
 定理 AnalyticAt.iterated_deriv
-  条件: [CompleteSpace F] (h : AnalyticAt 𝕜 f x) (n : 自然数)
+  条件: [完备空间 F] (h : AnalyticAt 𝕜 f x) (n : 自然数)
   证明: by
   induction n with
   | zero => exact h
@@ -1396,7 +1396,7 @@ theorem HasFiniteFPowerSeriesOnBall.differentiableOn
   proof: fun _ hy => (h.cpolynomialAt_of_mem hy).analyticAt.differentiableWithinAt
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.differentiableOn
+定理 有FiniteFPowerSeriesOnBall.differentiableOn
   证明: fun _ hy => (h.cpolynomialAt_of_mem hy).analyticAt.differentiableWithinAt
 
 Depends on / 依赖: analyticAt, analyticAt.differentiableWithinAt, cpolynomialAt_of_mem, differentiableWithinAt, h.cpolynomialAt_of_mem
@@ -1414,8 +1414,8 @@ theorem HasFiniteFPowerSeriesOnBall.hasStrictFDerivAt
   proof: (h.changeOrigin hy).toHasFPowerSeriesOnBall.hasFPowerSeriesAt.hasStrictFDerivAt
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.hasStrictFDerivAt
-  结论: (h : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.hasStrictFDerivAt
+  结论: (h : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: (h.changeOrigin hy).toHasFPowerSeriesOnBall.hasFPowerSeriesAt.hasStrictFDerivAt
 
 Depends on / 依赖: changeOrigin, h.changeOrigin, hasFPowerSeriesAt, hasStrictFDerivAt, toHasFPowerSeriesOnBall, toHasFPowerSeriesOnBall.hasFPowerSeriesAt.hasStrictFDerivAt
@@ -1434,8 +1434,8 @@ theorem HasFiniteFPowerSeriesOnBall.hasFDerivAt
   proof: (h.hasStrictFDerivAt hy).hasFDerivAt
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.hasFDerivAt
-  结论: (h : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.hasFDerivAt
+  结论: (h : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: (h.hasStrictFDerivAt hy).hasFDerivAt
 
 Depends on / 依赖: h.hasStrictFDerivAt, hasFDerivAt, hasStrictFDerivAt
@@ -1454,8 +1454,8 @@ theorem HasFiniteFPowerSeriesOnBall.fderiv_eq
   proof: (h.hasFDerivAt hy).fderiv
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.fderiv_eq
-  结论: (h : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.fderiv_eq
+  结论: (h : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: (h.hasFDerivAt hy).fderiv
 
 Depends on / 依赖: fderiv, h.hasFDerivAt, hasFDerivAt
@@ -1479,7 +1479,7 @@ theorem HasFiniteFPowerSeriesOnBall.fderiv
       ((p.hasFiniteFPowerSeries
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.fderiv
+定理 有FiniteFPowerSeriesOnBall.fderiv
   证明: by
   refine .congr (f := fun z => continuousMultilinearCurryFin1 𝕜 E F (p.changeOrigin (z - x) 1)) ?_
     fun z hz => ?_
@@ -1517,8 +1517,8 @@ theorem HasFiniteFPowerSeriesOnBall.fderiv'
   
 
 中文:
-定理 HasFiniteFPowerSeriesOnBall.fderiv'
-  条件: (h : HasFiniteFPowerSeriesOnBall f p x n r)
+定理 有FiniteFPowerSeriesOnBall.fderiv'
+  条件: (h : 有FiniteFPowerSeriesOnBall f p x n r)
   证明: by
   obtain rfl | hn := eq_or_ne n 0
   · rw [zero_tsub]
@@ -1689,7 +1689,7 @@ theorem changeOriginSeries_support
 
 中文:
 定理 changeOriginSeries_support
-  条件: {k l : 自然数} (h : k + l != Fintype.card ι)
+  条件: {k l : 自然数} (h : k + l != 有限类型.card ι)
   证明: Finset.sum_eq_zero fun _ _ => by
     simp_rw [FormalMultilinearSeries.changeOriginSeriesTerm,
       toFormalMultilinearSeries, dif_neg h.symm, LinearIsometryEquiv.map_zero]
@@ -1801,7 +1801,7 @@ theorem hasFDerivAt
 中文:
 定理 hasFDerivAt
   条件: [DecidableEq ι]
-  结论: HasFDerivAt f (f.linearDeriv x) x
+  结论: 在点处Fréchet可导 f (f.linearDeriv x) x
   证明: (f.hasStrictFDerivAt _).hasFDerivAt
 -/
 protected theorem hasFDerivAt [DecidableEq ι] : HasFDerivAt f (f.linearDeriv x) x :=
@@ -1949,7 +1949,7 @@ theorem _root_.HasFDerivAt.continuousMultilinearMap_apply
   exact hf.continuousMultilinearMap_apply hg
 
 中文:
-定理 _root_.HasFDerivAt.continuousMultilinearMap_apply
+定理 _root_.在点处Fréchet可导.continuousMultilinearMap_apply
   结论: {G : 类型}
   证明: by
   simp only [← hasFDerivWithinAt_univ] at *
@@ -2000,7 +2000,7 @@ theorem _root_.HasFDerivAt.multilinear_comp
   simpa using (hasFDerivAt_const f x).continuousMultilinearMap_apply hg
 
 中文:
-定理 _root_.HasFDerivAt.multilinear_comp
+定理 _root_.在点处Fréchet可导.multilinear_comp
   证明: by
   simpa using (hasFDerivAt_const f x).continuousMultilinearMap_apply hg
 
@@ -2031,7 +2031,7 @@ lemma _root_.Equiv.succ_embeddingFinSucc_fst_symm_apply
   simp [-Equiv.embeddingFinSucc_fst]
 
 中文:
-引理 _root_.Equiv.succ_embeddingFinSucc_fst_symm_apply
+引理 _root_.等价.succ_embeddingFinSucc_fst_symm_apply
   结论: {ι : 类型} [DecidableEq ι]
   证明: by
   rcases hk with ⟨j, rfl⟩
@@ -2295,7 +2295,7 @@ theorem factorial_smul'
 中文:
 定理 factorial_smul'
   条件: {n : 自然数}
-  结论: 对任意 {F : Type max u v} [NormedAddCommGroup F]
+  结论: 对任意 {F : 类型 最大值 u v} [赋范交换加群 F]
   证明: by
   induction n with | zero => _ | succ n ih => _ <;> intro F _ _ _ p f h
   · rw [factorial_zero, one_smul, h.iteratedFDeriv_zero_apply_diag]
@@ -2361,7 +2361,7 @@ theorem hasSum_iteratedFDeriv
 
 中文:
 定理 hasSum_iteratedFDeriv
-  条件: [CharZero 𝕜] {y : E} (hy : y in Metric.eball 0 r)
+  条件: [特征零 𝕜] {y : E} (hy : y in Metric.eball 0 r)
   证明: by
   convert! h.hasSum hy with n
   rw [← h.factorial_smul y n]; rw [smul_comm]; rw [← smul_assoc]; rw [nsmul_eq_mul]; rw [mul_inv_cancel₀ cast_ne_zero.mpr n.factorial_ne_zero]; rw [one_smul]
@@ -2442,7 +2442,7 @@ theorem _root_.HasFDerivAt.linear_multilinear_comp
   proof: (f.hasFDerivAt.comp x ha).continuousMultilinearMap_apply hb
 
 中文:
-定理 _root_.HasFDerivAt.linear_multilinear_comp
+定理 _root_.在点处Fréchet可导.linear_multilinear_comp
   结论: [DecidableEq ι] {a : H -> E} {a' : H ->L[𝕜] E}
   证明: (f.hasFDerivAt.comp x ha).continuousMultilinearMap_apply hb
 

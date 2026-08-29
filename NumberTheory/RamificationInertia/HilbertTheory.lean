@@ -64,8 +64,8 @@ class IsDecompositionField
   (no additional axioms)
 
 中文:
-类 IsDecompositionField
-  参数: [MulSemiringAction Gal(L/K) B]
+类 是DecompositionField
+  参数: [MulSemiring作用 Gal(L/K) B]
   (无附加公理)
 -/
 class IsDecompositionField [MulSemiringAction Gal(L/K) B] extends
@@ -80,7 +80,7 @@ instance [MulSemiringAction
   body: { toIsGaloisGroup := h }
 
 中文:
-实例 [MulSemiringAction
+实例 [MulSemiring作用
   签名: Gal(L/K) B] [h
   定义体: { toIsGaloisGroup := h }
 
@@ -106,8 +106,8 @@ class IsInertiaField
   (no additional axioms)
 
 中文:
-类 IsInertiaField
-  参数: [MulSemiringAction Gal(L/K) B]
+类 是InertiaField
+  参数: [MulSemiring作用 Gal(L/K) B]
   (无附加公理)
 -/
 class IsInertiaField [MulSemiringAction Gal(L/K) B] extends
@@ -122,7 +122,7 @@ instance [MulSemiringAction
   body: { toIsGaloisGroup := h }
 
 中文:
-实例 [MulSemiringAction
+实例 [MulSemiring作用
   签名: Gal(L/K) B] [h
   定义体: { toIsGaloisGroup := h }
 
@@ -142,8 +142,8 @@ instance [IsGalois
   body: IsGaloisGroup.subgroup Gal(L/K) K L (stabilizer Gal(L/K) P)
 
 中文:
-实例 [IsGalois
-  签名: K L] : IsDecompositionField K L P
+实例 [是Galois
+  签名: K L] : 是DecompositionField K L P
   定义体: IsGaloisGroup.subgroup Gal(L/K) K L (stabilizer Gal(L/K) P)
 
 Depends on / 依赖: IsGaloisGroup, IsGaloisGroup.subgroup, stabilizer, subgroup
@@ -161,8 +161,8 @@ instance [IsGalois
   body: IsGaloisGroup.subgroup Gal(L/K) K L (inertia Gal(L/K) P)
 
 中文:
-实例 [IsGalois
-  签名: K L] : IsInertiaField K L P
+实例 [是Galois
+  签名: K L] : 是InertiaField K L P
   定义体: IsGaloisGroup.subgroup Gal(L/K) K L (inertia Gal(L/K) P)
 
 Depends on / 依赖: IsGaloisGroup, IsGaloisGroup.subgroup, inertia, subgroup
@@ -192,8 +192,8 @@ refine (isDecompositionField_iff K L P D).mpr .of_mulEquiv (hG := h) ?_ fun _ x 
   · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.di
 
 中文:
-定理 IsDecompositionField.of_isGaloisGroup
-  条件: [h : IsGaloisGroup (stabilizer G P) D L]
+定理 是DecompositionField.of_isGaloisGroup
+  条件: [h : 是Galois群 (stabilizer G P) D L]
   证明: by
 refine (isDecompositionField_iff K L P D).mpr .of_mulEquiv (hG := h) ?_ fun _ x => ?_
   · refine (stabilizerEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
@@ -227,8 +227,8 @@ refine (isInertiaField_iff K L P E).mpr .of_mulEquiv (hG := h) ?_ fun _ x => ?_
   · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surject
 
 中文:
-定理 IsInertiaField.of_isGaloisGroup
-  条件: [h : IsGaloisGroup (inertia G P) E L]
+定理 是InertiaField.of_isGaloisGroup
+  条件: [h : 是Galois群 (inertia G P) E L]
   证明: by
 refine (isInertiaField_iff K L P E).mpr .of_mulEquiv (hG := h) ?_ fun _ x => ?_
   · refine (inertiaEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
@@ -263,8 +263,8 @@ definition IsDecompositionField.ringEquiv
 @[simp]
 
 中文:
-定义 IsDecompositionField.ringEquiv
-  签名: [IsDecompositionField K L P D]
+定义 是DecompositionField.ringEquiv
+  签名: [是DecompositionField K L P D]
   定义体: IsGaloisGroup.ringEquiv (stabilizer Gal(L/K) P) D D' L
 
 @[simp]
@@ -289,8 +289,8 @@ theorem IsDecompositionField.algebraMap_ringEquiv_apply
 @[simp]
 
 中文:
-定理 IsDecompositionField.algebraMap_ringEquiv_apply
-  结论: [IsDecompositionField K L P D]
+定理 是DecompositionField.algebraMap_ringEquiv_apply
+  结论: [是DecompositionField K L P D]
   证明: by
   simp [IsDecompositionField.ringEquiv, IsGaloisGroup.ringEquiv]
 
@@ -314,8 +314,8 @@ theorem IsDecompositionField.algebraMap_ringEquiv_symm_apply
   simp [IsDecompositionField.ringEquiv, IsGaloisGroup.ringEquiv]
 
 中文:
-定理 IsDecompositionField.algebraMap_ringEquiv_symm_apply
-  结论: [IsDecompositionField K L P D]
+定理 是DecompositionField.algebraMap_ringEquiv_symm_apply
+  结论: [是DecompositionField K L P D]
   证明: by
   simp [IsDecompositionField.ringEquiv, IsGaloisGroup.ringEquiv]
 
@@ -337,8 +337,8 @@ definition IsInertiaField.ringEquiv
 @[simp]
 
 中文:
-定义 IsInertiaField.ringEquiv
-  签名: [IsInertiaField K L P E] [IsInertiaField K L P E']
+定义 是InertiaField.ringEquiv
+  签名: [是InertiaField K L P E] [是InertiaField K L P E']
   定义体: IsGaloisGroup.ringEquiv (inertia Gal(L/K) P) E E' L
 
 @[simp]
@@ -362,8 +362,8 @@ theorem IsInertiaField.algebraMap_ringEquiv_apply
 @[simp]
 
 中文:
-定理 IsInertiaField.algebraMap_ringEquiv_apply
-  结论: [IsInertiaField K L P E]
+定理 是InertiaField.algebraMap_ringEquiv_apply
+  结论: [是InertiaField K L P E]
   证明: by
   simp [IsInertiaField.ringEquiv, IsGaloisGroup.ringEquiv]
 
@@ -387,8 +387,8 @@ theorem IsInertiaField.algebraMap_ringEquiv_symm_apply
   simp [IsInertiaField.ringEquiv, IsGaloisGroup.ringEquiv]
 
 中文:
-定理 IsInertiaField.algebraMap_ringEquiv_symm_apply
-  结论: [IsInertiaField K L P E]
+定理 是InertiaField.algebraMap_ringEquiv_symm_apply
+  结论: [是InertiaField K L P E]
   证明: by
   simp [IsInertiaField.ringEquiv, IsGaloisGroup.ringEquiv]
 
@@ -425,7 +425,7 @@ theorem IsDecompositionField.rank_left
   rw [← IsGaloisGroup.card_eq_finrank (stabilizer Gal(L/K) P) D L]; rw [card_stabilizer_eq p]
 
 中文:
-定理 IsDecompositionField.rank_left
+定理 是DecompositionField.rank_left
   条件: (hp : p != ⊥)
   证明: by
   have : p.IsMaximal := over_def P p ▸ Ideal.IsMaximal.under A P
@@ -454,8 +454,8 @@ theorem IsDecompositionField.rank_right
   rw [Module.finrank_mul_finrank]; rw [rank_left A K L P D hp]; rw [ncard_
 
 中文:
-定理 IsDecompositionField.rank_right
-  结论: [IsGalois K L] [Algebra K D] [IsScalarTower K D L]
+定理 是DecompositionField.rank_right
+  结论: [是Galois K L] [代数 K D] [标量塔 K D L]
   证明: by
   have : p.IsMaximal := over_def P p ▸ Ideal.IsMaximal.under A P
   have : FiniteDimensional D L := FiniteDimensional.right K D L
@@ -488,7 +488,7 @@ theorem IsInertiaField.rank_left
   rw [← IsGaloisGroup.card_eq_finrank (inertia Gal(L/K) P) E L]; rw [card_inertia_eq_ramificationIdxIn p]
 
 中文:
-定理 IsInertiaField.rank_left
+定理 是InertiaField.rank_left
   条件: (hp : p != ⊥)
   证明: by
   have : p.IsMaximal := over_def P p ▸ Ideal.IsMaximal.under A P
@@ -517,8 +517,8 @@ theorem IsInertiaField.rank_right
   rw [Module.finrank_mul_finrank]; rw [rank_left A K L P E hp]; rw [mul_as
 
 中文:
-定理 IsInertiaField.rank_right
-  条件: [IsGalois K L] [Algebra K E] [IsScalarTower K E L] (hp : p != ⊥)
+定理 是InertiaField.rank_right
+  条件: [是Galois K L] [代数 K E] [标量塔 K E L] (hp : p != ⊥)
   证明: by
   have : p.IsMaximal := over_def P p ▸ Ideal.IsMaximal.under A P
   have : FiniteDimensional E L := FiniteDimensional.right K E L
@@ -550,8 +550,8 @@ theorem IsInertiaField.rank_decompositionField
   exact IsDedekindDomain.primesOver_ncard_ne_zero p B
 
 中文:
-定理 IsInertiaField.rank_decompositionField
-  结论: [IsGalois K L] [Algebra K D] [Algebra K E]
+定理 是InertiaField.rank_decompositionField
+  结论: [是Galois K L] [代数 K D] [代数 K E]
   证明: by
   have : p.IsMaximal := over_def P p ▸ Ideal.IsMaximal.under A P
   have := Module.finrank_mul_finrank K D E
@@ -600,7 +600,7 @@ theorem primesOver_eq_singleton
 
 中文:
 定理 primesOver_eq_singleton
-  结论: [hP : P.IsPrime] [Finite (stabilizer Gal(L/K) P)]
+  结论: [hP : P.是素] [有限 (stabilizer Gal(L/K) P)]
   证明: by
   have := IsGaloisGroup.of_isFractionRing (stabilizer Gal(L/K) P) 𝓞D B D L
   refine Set.eq_singleton_iff_unique_mem.mpr ⟨⟨hP, hD⟩, ?_⟩

@@ -60,7 +60,7 @@ theorem pi_ext
 
 中文:
 定理 pi_ext
-  结论: [Finite ι] [对任意 i, Finite (κ i)] [对任意 i, DecidableEq (κ i)]
+  结论: [有限 ι] [对任意 i, 有限 (κ i)] [对任意 i, DecidableEq (κ i)]
   证明: by
   ext x
   change f (fun i => x i) = g (fun i => x i)
@@ -123,7 +123,7 @@ definition piFamily
 
 中文:
 定义 piFamily
-  签名: (f : Π (p : Π i, κ i), MultilinearMap R (fun i => M i (p i)) (N p))
+  签名: (f : Π (p : Π i, κ i), 多重线性映射 R (fun i => M i (p i)) (N p))
   定义体: fun p => f p (fun i => x i (p i))
   map_update_add' {dec} m i x y := funext fun p => by
     dsimp
@@ -164,7 +164,7 @@ theorem piFamily_single
 
 中文:
 定理 piFamily_single
-  结论: [Fintype ι] [对任意 i, DecidableEq (κ i)]
+  结论: [有限类型 ι] [对任意 i, DecidableEq (κ i)]
   证明: by
   ext q
   obtain rfl | hpq := eq_or_ne p q
@@ -207,7 +207,7 @@ theorem piFamily_single_left_apply
 
 中文:
 定理 piFamily_single_left_apply
-  结论: [Fintype ι] [对任意 i, DecidableEq (κ i)]
+  结论: [有限类型 ι] [对任意 i, DecidableEq (κ i)]
   证明: by
   ext p'
   obtain rfl | hp := eq_or_ne p p'
@@ -236,7 +236,7 @@ theorem piFamily_single_left
 
 中文:
 定理 piFamily_single_left
-  结论: [Fintype ι] [对任意 i, DecidableEq (κ i)]
+  结论: [有限类型 ι] [对任意 i, DecidableEq (κ i)]
   证明: ext piFamily_single_left_apply _ _
 
 @[simp]
@@ -262,7 +262,7 @@ theorem piFamily_compLinearMap_lsingle
 
 中文:
 定理 piFamily_compLinearMap_lsingle
-  结论: [Fintype ι] [对任意 i, DecidableEq (κ i)]
+  结论: [有限类型 ι] [对任意 i, DecidableEq (κ i)]
   证明: MultilinearMap.ext piFamily_single f p
 
 @[simp]
@@ -311,7 +311,7 @@ theorem piFamily_add
 
 中文:
 定理 piFamily_add
-  条件: (f g : Π (p : Π i, κ i), MultilinearMap R (fun i => M i (p i)) (N p))
+  条件: (f g : Π (p : Π i, κ i), 多重线性映射 R (fun i => M i (p i)) (N p))
   证明: by
   ext; simp
 

@@ -45,7 +45,7 @@ definition coeffs
 
 中文:
 定义 coeffs
-  签名: : Set R
+  签名: : 集合 R
   定义体: ⋃ (i : σ), (P.relation i).coeffs
 
 Depends on / 依赖: P.relation, coeffs, relation
@@ -82,8 +82,8 @@ lemma finite_coeffs
 
 中文:
 引理 finite_coeffs
-  条件: [Finite σ]
-  结论: P.coeffs.Finite
+  条件: [有限 σ]
+  结论: P.coeffs.有限
   证明: Set.finite_iUnion fun _ => Finset.finite_toSet _
 
 Depends on / 依赖: Finset, Finset.finite_toSet, Set.finite_iUnion, finite_iUnion, finite_toSet
@@ -104,7 +104,7 @@ definition core
 
 中文:
 定义 core
-  签名: : Subalgebra 整数 R
+  签名: : 子代数 整数 R
   定义体: Algebra.adjoin _ P.coeffs
 
 Depends on / 依赖: Algebra, Algebra.adjoin, P.coeffs, adjoin, coeffs
@@ -160,8 +160,8 @@ definition Core
   body: P.core
 
 中文:
-定义 Core
-  签名: : Type _
+定义 核
+  签名: : 类型 _
   定义体: P.core
 
 Depends on / 依赖: P.core
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing P.Core
+  签名: 交换环 P.核
   定义体: fast_instance% (inferInstanceAs <| CommRing P.core)
 
 Depends on / 依赖: CommRing, P.core, fast_instance
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra P.Core R
+  签名: 代数 P.核 R
   定义体: fast_instance% (inferInstanceAs <| Algebra P.core R)
 
 Depends on / 依赖: Algebra, P.core, fast_instance
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul P.Core R
+  签名: 忠实标量乘法 P.核 R
   定义体: inferInstanceAs FaithfulSMul P.core R
 
 Depends on / 依赖: FaithfulSMul, LiftHom, P.core, liftHomOf, of.map
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra P.Core S
+  签名: 代数 P.核 S
   定义体: fast_instance% (inferInstanceAs <| Algebra P.core S)
 
 Depends on / 依赖: Algebra, P.core, fast_instance
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower P.Core R S
+  签名: 标量塔 P.核 R S
   定义体: inferInstanceAs IsScalarTower P.core R S
 
 Depends on / 依赖: IsScalarTower, P.core
@@ -264,8 +264,8 @@ instance [Finite
   body: .adjoin_of_finite P.finite_coeffs
 
 中文:
-实例 [Finite
-  签名: σ] : FiniteType 整数 P.Core
+实例 [有限
+  签名: σ] : 有限型 整数 P.核
   定义体: .adjoin_of_finite P.finite_coeffs
 
 Depends on / 依赖: P.finite_coeffs, adjoin_of_finite, finite_coeffs
@@ -283,10 +283,10 @@ class HasCoeffs
     - coeffs_subset_range : P.coeffs subseteq Set.range (algebraMap R₀ R)
 
 中文:
-类 HasCoeffs
-  参数: (R₀ : 类型) [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S]
+类 有余effs
+  参数: (R₀ : 类型) [交换环 R₀] [代数 R₀ R] [代数 R₀ S]
   公理与运算 (1 个):
-    - coeffs_subset_range : P.coeffs subseteq Set.range (algebraMap R₀ R)
+    - coeffs_subset_range : P.coeffs subseteq 集合.range (algebraMap R₀ R)
 -/
 class HasCoeffs (R₀ : Type*) [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S]
     [IsScalarTower R₀ R S] where
@@ -305,7 +305,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.HasCoeffs P.Core
+  签名: P.有余effs P.核
   定义体: by
     refine subset_trans P.coeffs_subset_core ?_
     simp [Core, Subalgebra.algebraMap_eq]
@@ -330,7 +330,7 @@ lemma coeffs_subset_range
 
 中文:
 引理 coeffs_subset_range
-  结论: (P.coeffs : Set R) subseteq Set.range (algebraMap R₀ R)
+  结论: (P.coeffs : 集合 R) subseteq 集合.range (algebraMap R₀ R)
   证明: HasCoeffs.coeffs_subset_range
 
 Depends on / 依赖: HasCoeffs, HasCoeffs.coeffs_subset_range, coeffs_subset_range
@@ -349,8 +349,8 @@ lemma HasCoeffs.of_isScalarTower
   simp [IsScalarTower.algebraMap_eq R₀ R₁ R, RingHom.coe_comp, Set.range_comp]
 
 中文:
-引理 HasCoeffs.of_isScalarTower
-  结论: {R₁ : 类型} [CommRing R₁] [Algebra R₀ R₁] [Algebra R₁ R]
+引理 有余effs.of_isScalarTower
+  结论: {R₁ : 类型} [交换环 R₁] [代数 R₀ R₁] [代数 R₁ R]
   证明: by
   refine ⟨subset_trans (P.coeffs_subset_range R₀) ?_⟩
   simp [IsScalarTower.algebraMap_eq R₀ R₁ R, RingHom.coe_comp, Set.range_comp]
@@ -374,7 +374,7 @@ lemma HasCoeffs.coeffs_relation_mem_range
   proof: subset_trans (P.coeffs_relation_subset_coeffs x) HasCoeffs.coeffs_subset_range
 
 中文:
-引理 HasCoeffs.coeffs_relation_mem_range
+引理 有余effs.coeffs_relation_mem_range
   条件: (x : σ)
   证明: subset_trans (P.coeffs_relation_subset_coeffs x) HasCoeffs.coeffs_subset_range
 
@@ -395,7 +395,7 @@ lemma HasCoeffs.relation_mem_range_map
   exact HasCoeffs.coeffs_relation_mem_range R₀ x
 
 中文:
-引理 HasCoeffs.relation_mem_range_map
+引理 有余effs.relation_mem_range_map
   条件: (x : σ)
   证明: by
   rw [MvPolynomial.mem_range_map_iff_coeffs_subset]
@@ -508,7 +508,7 @@ abbreviation ModelOfHasCoeffs
 
 中文:
 缩写 ModelOfHasCoeffs
-  签名: : Type _
+  签名: : 类型 _
   定义体: MvPolynomial ι R₀ ⧸ (Ideal.span <| Set.range (P.relationOfHasCoeffs R₀))
 
 Depends on / 依赖: Ideal.span, MvPolynomial, P.relationOfHasCoeffs, Set.range, relationOfHasCoeffs
@@ -528,8 +528,8 @@ instance [Finite
   exact .quotient ⟨Finset.image (P.relationOfHasCoeffs R₀) .univ, by simp⟩
 
 中文:
-实例 [Finite
-  签名: ι] [Finite σ] : Algebra.FinitePresentation R₀ (P.ModelOfHasCoeffs R₀)
+实例 [有限
+  签名: ι] [有限 σ] : 代数.有限呈现 R₀ (P.ModelOfHasCoeffs R₀)
   定义体: by
   classical
   cases nonempty_fintype σ
@@ -591,7 +591,7 @@ lemma tensorModelOfHasCoeffsHom_tmul
 
 中文:
 引理 tensorModelOfHasCoeffsHom_tmul
-  条件: (x : R) (y : MvPolynomial ι R₀)
+  条件: (x : R) (y : 多元多项式 ι R₀)
   证明: rfl
 -/
 lemma tensorModelOfHasCoeffsHom_tmul (x : R) (y : MvPolynomial ι R₀) :
@@ -653,7 +653,7 @@ lemma tensorModelOfHasCoeffsInv_aeval_val
 
 中文:
 引理 tensorModelOfHasCoeffsInv_aeval_val
-  条件: (x : MvPolynomial ι R₀)
+  条件: (x : 多元多项式 ι R₀)
   证明: by
   rw [← MvPolynomial.aeval_map_algebraMap R]; rw [← Generators.algebraMap_apply]; rw [← quotientEquiv_mk]
   simp [tensorModelOfHasCoeffsInv, -quotientEquiv_symm, -quotientEquiv_mk]
@@ -763,7 +763,7 @@ lemma tensorModelOfHasCoeffsEquiv_tmul
 
 中文:
 引理 tensorModelOfHasCoeffsEquiv_tmul
-  条件: (x : R) (y : MvPolynomial ι R₀)
+  条件: (x : R) (y : 多元多项式 ι R₀)
   证明: rfl
 
 @[simp]
@@ -783,7 +783,7 @@ lemma tensorModelOfHasCoeffsEquiv_symm_tmul
 
 中文:
 引理 tensorModelOfHasCoeffsEquiv_symm_tmul
-  条件: (x : MvPolynomial ι R₀)
+  条件: (x : 多元多项式 ι R₀)
   证明: tensorModelOfHasCoeffsInv_aeval_val _ x
 
 Depends on / 依赖: tensorModelOfHasCoeffsInv_aeval_val
@@ -857,7 +857,7 @@ lemma exists_sum_eq_σ_jacobian_mul_σ_jacobian_inv_sub_one
   rwa [← P.span_range_relation_eq_ker, Ideal.mem_span_range_iff_exists_fun] at H
 
 中文:
-引理 exists_sum_eq_σ_jacobian_mul_σ_jacobian_inv_sub_one
+引理 存在_sum_eq_σ_jacobian_mul_σ_jacobian_inv_sub_one
   证明: by
   have H : P.jacobiMatrix.det * P.σ ↑(P.jacobian_isUnit.unit⁻¹) - 1 in P.ker := by
     simp [PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det]
@@ -911,7 +911,7 @@ lemma jacobianRelations_spec
 
 中文:
 引理 jacobianRelations_spec
-  条件: [DecidableEq σ] [Fintype σ]
+  条件: [DecidableEq σ] [有限类型 σ]
   证明: by
   delta jacobianRelations
   convert! P.exists_sum_eq_σ_jacobian_mul_σ_jacobian_inv_sub_one.choose_spec
@@ -937,7 +937,7 @@ definition coeffs
 
 中文:
 定义 coeffs
-  签名: : Set R
+  签名: : 集合 R
   定义体: P.toPresentation.coeffs union (P.σ (P.jacobian_isUnit.unit⁻¹ :)).coeffs union
     ⋃ i, (P.jacobianRelations i).coeffs
 
@@ -958,7 +958,7 @@ lemma finite_coeffs
 
 中文:
 引理 finite_coeffs
-  结论: P.coeffs.Finite
+  结论: P.coeffs.有限
   证明: .union (P.toPresentation.finite_coeffs.union (by simp))
     (.iUnion Set.finite_univ (by simp) (by simp))
 
@@ -996,8 +996,8 @@ class HasCoeffs
     - coeffs_subset_range : P.coeffs subseteq ↑(algebraMap R₀ R).range
 
 中文:
-类 HasCoeffs
-  参数: (R₀ : 类型) [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S]
+类 有余effs
+  参数: (R₀ : 类型) [交换环 R₀] [代数 R₀ R] [代数 R₀ S]
   公理与运算 (1 个):
     - coeffs_subset_range : P.coeffs subseteq ↑(algebraMap R₀ R).range
 -/
@@ -1027,7 +1027,7 @@ definition jacobianOfHasCoeffs
 
 中文:
 定义 jacobianOfHasCoeffs
-  签名: : MvPolynomial ι R₀
+  签名: : 多元多项式 ι R₀
   定义体: letI := Classical.decEq σ
   letI := Fintype.ofFinite σ
   (P.toPreSubmersivePresentation.ofHasCoeffs R₀).jacobiMatrix.det
@@ -1059,7 +1059,7 @@ lemma map_jacobianOfHasCoeffs
 
 中文:
 引理 map_jacobianOfHasCoeffs
-  条件: [Fintype σ] [DecidableEq σ]
+  条件: [有限类型 σ] [DecidableEq σ]
   证明: by
   rw [jacobianOfHasCoeffs]; rw [@RingHom.map_det]
   congr! 1
@@ -1122,7 +1122,7 @@ definition invJacobianOfHasCoeffs
 
 中文:
 定义 invJacobianOfHasCoeffs
-  签名: : MvPolynomial ι R₀
+  签名: : 多元多项式 ι R₀
   定义体: (MvPolynomial.mem_range_map_iff_coeffs_subset.mpr
     ((Set.subset_union_right.trans Set.subset_union_left).trans
       (HasCoeffs.coeffs_subset_range (P := P)))).choose
@@ -1257,7 +1257,7 @@ lemma sum_jacobianRelationsOfHasCoeffs_mul_relationOfHasCoeffs
 
 中文:
 引理 sum_jacobianRelationsOfHasCoeffs_mul_relationOfHasCoeffs
-  条件: [FaithfulSMul R₀ R] [Fintype σ]
+  条件: [忠实标量乘法 R₀ R] [有限类型 σ]
   证明: by
   classical
   apply MvPolynomial.map_injective _ (FaithfulSMul.algebraMap_injective R₀ R)
@@ -1291,7 +1291,7 @@ definition ofHasCoeffs
 
 中文:
 定义 ofHasCoeffs
-  签名: [FaithfulSMul R₀ R]
+  签名: [忠实标量乘法 R₀ R]
   定义体: P.toPreSubmersivePresentation.ofHasCoeffs R₀
   jacobian_isUnit := by
     classical

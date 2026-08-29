@@ -54,7 +54,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: [Zero M] [SMulZeroClass R M]
+  签名: [零 M] [SMulZero类 R M]
   定义体: v.mapRange (a • ·) (smul_zero _)
   smul_zero a := by
     ext
@@ -85,7 +85,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M)
+  条件: [零 M] [SMulZero类 R M] (b : R) (v : α ->₀ M)
   结论: ⇑(b • v) = b • ⇑v
   证明: rfl
 -/
@@ -102,7 +102,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) (a : α)
+  条件: [零 M] [SMulZero类 R M] (b : R) (v : α ->₀ M) (a : α)
   证明: rfl
 -/
 theorem smul_apply [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) (a : α) :
@@ -119,7 +119,7 @@ instance instSMulWithZero
 
 中文:
 实例 instSMulWithZero
-  签名: [Zero R] [Zero M] [SMulWithZero R M]
+  签名: [零 R] [零 M] [带零标量乘法 R M]
   定义体: by ext i; exact zero_smul _ _
 
 Depends on / 依赖: zero_smul
@@ -140,7 +140,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: [AddZeroClass M] [DistribSMul R M]
+  签名: [加法零类 M] [分配标量乘法 R M]
   定义体: ext fun _ => smul_add _ _ _
   smul_zero _ := ext fun _ => smul_zero _
 
@@ -160,7 +160,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMul R S]
+  签名: [零 M] [SMulZero类 R M] [SMulZero类 S M] [标量乘法 R S]
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -179,7 +179,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMulCommClass R S M]
+  签名: [零 M] [SMulZero类 R M] [SMulZero类 S M] [标量交换类 R S M]
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -198,7 +198,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass Rᵐᵒᵖ M] [IsCentralScalar R M]
+  签名: [零 M] [SMulZero类 R M] [SMulZero类 Rᵐᵒᵖ M] [中心标量 R M]
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -223,7 +223,7 @@ theorem support_smul
 
 中文:
 定理 support_smul
-  条件: [Zero M] [SMulZeroClass R M] {b : R} {g : α ->₀ M}
+  条件: [零 M] [SMulZero类 R M] {b : R} {g : α ->₀ M}
   证明: fun a => by
   simp only [smul_apply, mem_support_iff, Ne]
   exact mt fun h => h.symm ▸ smul_zero _
@@ -248,7 +248,7 @@ theorem smul_single
 
 中文:
 定理 smul_single
-  条件: [Zero M] [SMulZeroClass R M] (c : R) (a : α) (b : M)
+  条件: [零 M] [SMulZero类 R M] (c : R) (a : α) (b : M)
   证明: mapRange_single
 
 Depends on / 依赖: mapRange_single
@@ -269,7 +269,7 @@ theorem mapRange_smul'
 
 中文:
 定理 mapRange_smul'
-  结论: [Zero M] [SMulZeroClass R M] [Zero N]
+  结论: [零 M] [SMulZero类 R M] [零 N]
   证明: by
   ext
   simp [hsmul]
@@ -290,7 +290,7 @@ theorem mapRange_smul
 
 中文:
 定理 mapRange_smul
-  结论: [Zero M] [SMulZeroClass R M] [Zero N]
+  结论: [零 M] [SMulZero类 R M] [零 N]
   证明: mapRange_smul' c c v hsmul
 
 Depends on / 依赖: mapRange_smul

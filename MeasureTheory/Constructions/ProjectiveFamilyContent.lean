@@ -61,7 +61,7 @@ lemma isSetAlgebra_measurableCylinders
 
 中文:
 引理 isSetAlgebra_measurableCylinders
-  结论: IsSetAlgebra (measurableCylinders α) where
+  结论: 是集合代数 (measurableCylinders α) where
   证明: empty_mem_measurableCylinders α
   compl_mem _ := compl_mem_measurableCylinders
   union_mem _ _ := union_mem_measurableCylinders
@@ -83,7 +83,7 @@ lemma isSetRing_measurableCylinders
 
 中文:
 引理 isSetRing_measurableCylinders
-  结论: IsSetRing (measurableCylinders α)
+  结论: 是集合环 (measurableCylinders α)
   证明: isSetAlgebra_measurableCylinders.isSetRing
 
 Depends on / 依赖: isSetAlgebra_measurableCylinders, isSetAlgebra_measurableCylinders.isSetRing, isSetRing
@@ -101,7 +101,7 @@ lemma isSetSemiring_measurableCylinders
 
 中文:
 引理 isSetSemiring_measurableCylinders
-  结论: MeasureTheory.IsSetSemiring (measurableCylinders α)
+  结论: 测度论.是SetSemiring (measurableCylinders α)
   证明: isSetRing_measurableCylinders.isSetSemiring
 
 Depends on / 依赖: isSetRing_measurableCylinders, isSetRing_measurableCylinders.isSetSemiring, isSetSemiring
@@ -125,7 +125,7 @@ definition projectiveFamilyFun
 
 中文:
 定义 projectiveFamilyFun
-  签名: (P : 对任意 J : Finset ι, Measure (Π j : J, α j))
+  签名: (P : 对任意 J : 有限集 ι, 测度 (Π j : J, α j))
   定义体: if hs : s in measurableCylinders α
     then P (measurableCylinders.finset hs) (measurableCylinders.set hs) else 0
 
@@ -289,7 +289,7 @@ lemma projectiveFamilyContent_congr
 
 中文:
 引理 projectiveFamilyContent_congr
-  结论: (hP : IsProjectiveMeasureFamily P) (s : Set (Π i, α i))
+  结论: (hP : IsProjectiveMeasureFamily P) (s : 集合 (Π i, α i))
   证明: by
   rw [projectiveFamilyContent_eq]; rw [projectiveFamilyFun_congr hP ((mem_measurableCylinders s).mpr ⟨I]; rw [S]; rw [hS]; rw [hs_eq⟩) hs_eq hS]
 
@@ -310,7 +310,7 @@ lemma projectiveFamilyContent_cylinder
 
 中文:
 引理 projectiveFamilyContent_cylinder
-  条件: (hP : IsProjectiveMeasureFamily P) (hS : MeasurableSet S)
+  条件: (hP : IsProjectiveMeasureFamily P) (hS : 可测集 S)
   证明: projectiveFamilyContent_congr _ _ rfl hS
 
 Depends on / 依赖: projectiveFamilyContent_congr
@@ -383,7 +383,7 @@ lemma projectiveFamilyContent_ne_top
 
 中文:
 引理 projectiveFamilyContent_ne_top
-  结论: [对任意 J, IsFiniteMeasure (P J)]
+  结论: [对任意 J, 是有限测度 (P J)]
   证明: by
   rw [projectiveFamilyContent_eq hP]; rw [projectiveFamilyFun]
   finiteness
@@ -440,7 +440,7 @@ alias projectiveFamilyContent_diff_of_subset := projectiveFamilyContent_sdiff_of
 
 中文:
 引理 projectiveFamilyContent_sdiff_of_subset
-  结论: [对任意 J, IsFiniteMeasure (P J)]
+  结论: [对任意 J, 是有限测度 (P J)]
   证明: addContent_sdiff_of_ne_top (projectiveFamilyContent hP) isSetRing_measurableCylinders
     (fun _ _ => projectiveFamilyContent_ne_top hP) hs ht hts
 

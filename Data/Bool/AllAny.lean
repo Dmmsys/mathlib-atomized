@@ -31,7 +31,7 @@ theorem all_iff_forall_prop
   simp
 
 中文:
-定理 all_iff_forall_prop
+定理 all_iff_对任意_prop
   结论: (all l fun a => p a) ↔ 对任意 a in l, p a
   证明: by
   simp
@@ -48,7 +48,7 @@ theorem any_iff_exists_prop
   proof: by simp
 
 中文:
-定理 any_iff_exists_prop
+定理 any_iff_存在_prop
   结论: (any l fun a => p a) ↔ 存在 a in l, p a
   证明: by simp
 -/
@@ -65,7 +65,7 @@ theorem any_of_mem
 
 中文:
 定理 any_of_mem
-  条件: {p : α -> 布尔} (h₁ : a in l) (h₂ : p a)
+  条件: {p : α -> 布尔值} (h₁ : a in l) (h₂ : p a)
   结论: any l p
   证明: any_eq_true.2 ⟨_, h₁, h₂⟩
 

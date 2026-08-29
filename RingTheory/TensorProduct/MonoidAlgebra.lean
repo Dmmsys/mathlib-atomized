@@ -38,8 +38,8 @@ definition _root_.AddMonoidAlgebra.rTensorEquivAlgEquiv.invFun
       fun _ _ => .all ..
 
 中文:
-定义 _root_.AddMonoidAlgebra.rTensorEquivAlgEquiv.invFun
-  签名: [AddCommMonoid M]
+定义 _root_.加法幺半群代数.rTensorEquivAlgEquiv.invFun
+  签名: [加法交换幺半群 M]
   定义体: AddMonoidAlgebra.liftNCAlgHom
     (Algebra.TensorProduct.map (.id _ _) AddMonoidAlgebra.singleZeroAlgHom)
     (Algebra.TensorProduct.includeRight.toMonoidHom.comp <| AddMonoidAlgebra.of B M)
@@ -95,7 +95,7 @@ lemma _root_.AddMonoidAlgebra.rTensorEquivAlgEquiv.invFun_tmul
 @[to_additive existing (dont_translate := R) (attr := simp)]
 
 中文:
-引理 _root_.AddMonoidAlgebra.rTensorEquivAlgEquiv.invFun_tmul
+引理 _root_.加法幺半群代数.rTensorEquivAlgEquiv.invFun_tmul
   条件: (a : A) (m : M) (b : B)
   证明: by
   simp [AddMonoidAlgebra.rTensorEquivAlgEquiv.invFun]
@@ -368,7 +368,7 @@ mapAlgEquiv S M IsPushout.equiv R S A B).toLinearEquiv fun x => by
 
 中文:
 实例 instIsPushout
-  签名: [IsPushout R S A B]
+  签名: [是推出 R S A B]
   定义体: .of_equiv ((rTensorEquivAlgEquiv R S S A (M := M)).trans <|
 mapAlgEquiv S M IsPushout.equiv R S A B).toLinearEquiv fun x => by
     induction x using induction_linear <;> simp_all [IsPushout.equiv_tmul]
@@ -395,7 +395,7 @@ omit [CommMonoid M] [CommMonoid N]
 
 中文:
 实例 instIsPushout'
-  签名: [IsPushout R A S B]
+  签名: [是推出 R A S B]
   定义体: have : IsPushout R S A B := .symm ‹_›; .symm inferInstance
 
 omit [CommMonoid M] [CommMonoid N]

@@ -76,7 +76,7 @@ theorem local_lubell_yamamoto_meshalkin_inequality_mul
 
 中文:
 定理 local_lubell_yamamoto_meshalkin_inequality_mul
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   let i : DecidableRel ((· subseteq ·) : Finset α -> Finset α -> Prop) := fun _ _ => Classical.dec _
   refine card_mul_le_card_mul' (· subseteq ·) (fun s hs => ?_) (fun s hs => ?_)
@@ -182,7 +182,7 @@ definition falling
 
 中文:
 定义 falling
-  签名: : Finset (Finset α)
+  签名: : 有限集 (有限集 α)
   定义体: 𝒜.sup powersetCard k
 
 Depends on / 依赖: powersetCard
@@ -224,7 +224,7 @@ theorem sized_falling
 
 中文:
 定理 sized_falling
-  结论: (falling k 𝒜 : Set (Finset α)).Sized k
+  结论: (falling k 𝒜 : 集合 (有限集 α)).Sized k
   证明: fun _ hs => (mem_falling.1 hs).2
 
 Depends on / 依赖: mem_falling
@@ -370,7 +370,7 @@ theorem le_card_falling_div_choose
 
 中文:
 定理 le_card_falling_div_choose
-  结论: [Fintype α] (hk : k <= Fintype.card α)
+  结论: [有限类型 α] (hk : k <= 有限类型.card α)
   证明: by
   induction k with
   | zero =>
@@ -503,7 +503,7 @@ Nat.cast_pos.2 choose_pos (Nat.div_le_self _ _)
 
 中文:
 定理 _root_.IsAntichain.sperner
-  条件: (h𝒜 : IsAntichain (· subseteq ·) (SetLike.coe 𝒜))
+  条件: (h𝒜 : IsAntichain (· subseteq ·) (集合状.coe 𝒜))
   证明: by
   have : 0 < ((Fintype.card α).choose (Fintype.card α / 2) : Rat>=0) :=
 Nat.cast_pos.2 choose_pos (Nat.div_le_self _ _)

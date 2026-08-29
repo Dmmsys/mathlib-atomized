@@ -36,7 +36,7 @@ lemma Icc_eq_empty_of_lt
 中文:
 引理 Icc_eq_empty_of_lt
   条件: (hnm : n.blt m)
-  结论: Icc m n = ∅
+  结论: 闭区间 m n = ∅
   证明: by simpa using hnm
 -/
 private lemma Icc_eq_empty_of_lt (hnm : n.blt m) : Icc m n = ∅ := by simpa using hnm
@@ -51,7 +51,7 @@ lemma Icc_eq_insert_of_Icc_succ_eq
 
 中文:
 引理 Icc_eq_insert_of_Icc_succ_eq
-  条件: (hmn : m.ble n) (hs : Icc (m + 1) n = s)
+  条件: (hmn : m.ble n) (hs : 闭区间 (m + 1) n = s)
   证明: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
 -/
 private lemma Icc_eq_insert_of_Icc_succ_eq (hmn : m.ble n) (hs : Icc (m + 1) n = s) :
@@ -69,8 +69,8 @@ lemma Ico_succ_eq_of_Icc_eq
 
 中文:
 引理 Ico_succ_eq_of_Icc_eq
-  条件: (hs : Icc m n = s)
-  结论: Ico m (n + 1) = s
+  条件: (hs : 闭区间 m n = s)
+  结论: 左闭右开区间 m (n + 1) = s
   证明: by
   rw [← hs]; rw [Ico_add_one_right_eq_Icc]
 -/
@@ -89,7 +89,7 @@ lemma Ico_zero
 中文:
 引理 Ico_zero
   条件: (m : 自然数)
-  结论: Ico m 0 = ∅
+  结论: 左闭右开区间 m 0 = ∅
   证明: by simp
 -/
 private lemma Ico_zero (m : Nat) : Ico m 0 = ∅ := by simp
@@ -106,8 +106,8 @@ lemma Ioc_eq_of_Icc_succ_eq
 
 中文:
 引理 Ioc_eq_of_Icc_succ_eq
-  条件: (hs : Icc (m + 1) n = s)
-  结论: Ioc m n = s
+  条件: (hs : 闭区间 (m + 1) n = s)
+  结论: 左开右闭区间 m n = s
   证明: by
   rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
 -/
@@ -126,8 +126,8 @@ lemma Ioo_eq_of_Icc_succ_pred_eq
 
 中文:
 引理 Ioo_eq_of_Icc_succ_pred_eq
-  条件: (hs : Icc (m + 1) (n - 1) = s)
-  结论: Ioo m n = s
+  条件: (hs : 闭区间 (m + 1) (n - 1) = s)
+  结论: 开区间 m n = s
   证明: by
   rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
 -/
@@ -145,8 +145,8 @@ lemma Iic_eq_of_Icc_zero_eq
 
 中文:
 引理 Iic_eq_of_Icc_zero_eq
-  条件: (hs : Icc 0 n = s)
-  结论: Iic n = s
+  条件: (hs : 闭区间 0 n = s)
+  结论: 左无界右闭区间 n = s
   证明: hs
 -/
 private lemma Iic_eq_of_Icc_zero_eq (hs : Icc 0 n = s) : Iic n = s := hs
@@ -163,8 +163,8 @@ lemma Iio_succ_eq_of_Icc_zero_eq
 
 中文:
 引理 Iio_succ_eq_of_Icc_zero_eq
-  条件: (hs : Icc 0 n = s)
-  结论: Iio (n + 1) = s
+  条件: (hs : 闭区间 0 n = s)
+  结论: 左无界右开区间 (n + 1) = s
   证明: by
   rw [Iio_eq_Ico]; rw [Ico_add_one_right_eq_Icc]; rw [bot_eq_zero]; rw [hs]
 -/
@@ -181,7 +181,7 @@ lemma Iio_zero
 
 中文:
 引理 Iio_zero
-  结论: Iio 0 = ∅
+  结论: 左无界右开区间 0 = ∅
   证明: by simp
 -/
 private lemma Iio_zero : Iio 0 = ∅ := by simp
@@ -203,7 +203,7 @@ lemma Icc_eq_empty_of_lt
 中文:
 引理 Icc_eq_empty_of_lt
   条件: (hnm : n < m)
-  结论: Icc m n = ∅
+  结论: 闭区间 m n = ∅
   证明: by simpa using hnm
 
 Depends on / 依赖: F.germ, F.obj, ToType, g.base, g.germ, generateFrom
@@ -220,7 +220,7 @@ lemma Icc_eq_insert_of_Icc_succ_eq
 
 中文:
 引理 Icc_eq_insert_of_Icc_succ_eq
-  条件: (hmn : m <= n) (hs : Icc (m + 1) n = s)
+  条件: (hmn : m <= n) (hs : 闭区间 (m + 1) n = s)
   证明: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
 -/
 private lemma Icc_eq_insert_of_Icc_succ_eq (hmn : m <= n) (hs : Icc (m + 1) n = s) :
@@ -238,8 +238,8 @@ lemma Ico_eq_of_Icc_pred_eq
 
 中文:
 引理 Ico_eq_of_Icc_pred_eq
-  条件: (hs : Icc m (n - 1) = s)
-  结论: Ico m n = s
+  条件: (hs : 闭区间 m (n - 1) = s)
+  结论: 左闭右开区间 m n = s
   证明: by
   rw [← hs]; rw [Icc_sub_one_right_eq_Ico]
 -/
@@ -258,8 +258,8 @@ lemma Ioc_eq_of_Icc_succ_eq
 
 中文:
 引理 Ioc_eq_of_Icc_succ_eq
-  条件: (hs : Icc (m + 1) n = s)
-  结论: Ioc m n = s
+  条件: (hs : 闭区间 (m + 1) n = s)
+  结论: 左开右闭区间 m n = s
   证明: by
   rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
 -/
@@ -278,8 +278,8 @@ lemma Ioo_eq_of_Icc_succ_pred_eq
 
 中文:
 引理 Ioo_eq_of_Icc_succ_pred_eq
-  条件: (hs : Icc (m + 1) (n - 1) = s)
-  结论: Ioo m n = s
+  条件: (hs : 闭区间 (m + 1) (n - 1) = s)
+  结论: 开区间 m n = s
   证明: by
   rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
 -/
@@ -296,7 +296,7 @@ lemma Iio_zero
 
 中文:
 引理 Iio_zero
-  结论: Iio 0 = ∅
+  结论: 左无界右开区间 0 = ∅
   证明: by simp
 -/
 private lemma Iio_zero : Iio 0 = ∅ := by simp
@@ -320,7 +320,7 @@ have : em =Q en := ⟨⟩
     let hmn : Q(N
 
 中文:
-定义 evalFinsetIccNat
+定义 evalFinsetIcc自然数
   签名: (m n : 自然数) (em en : Q(自然数))
   定义体: do
   -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
@@ -368,7 +368,7 @@ have : em =Q en := ⟨⟩
     let hmn ← mkDecideP
 
 中文:
-定义 evalFinsetIccInt
+定义 evalFinsetIcc整数
   签名: (m n : 整数) (em en : Q(整数))
   定义体: do
   -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is

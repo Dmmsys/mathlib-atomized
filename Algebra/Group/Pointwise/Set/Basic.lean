@@ -92,7 +92,7 @@ scoped[Pointwise] attribute [instance] Set.one Set.zero
 
 中文:
 定义 one
-  签名: : One (Set α)
+  签名: : 幺 (集合 α)
   定义体: ⟨{1}⟩
 
 scoped[Pointwise] attribute [instance] Set.one Set.zero
@@ -119,7 +119,7 @@ theorem singleton_one
 
 中文:
 定理 singleton_one
-  结论: ({1} : Set α) = 1
+  结论: ({1} : 集合 α) = 1
   证明: rfl
 
 @[to_additive (attr := simp, push)]
@@ -140,7 +140,7 @@ theorem mem_one
 
 中文:
 定理 mem_one
-  结论: a in (1 : Set α) ↔ a = 1
+  结论: a in (1 : 集合 α) ↔ a = 1
   证明: Iff.rfl
 
 @[to_additive]
@@ -163,7 +163,7 @@ theorem one_mem_one
 
 中文:
 定理 one_mem_one
-  结论: (1 : α) in (1 : Set α)
+  结论: (1 : α) in (1 : 集合 α)
   证明: Eq.refl _
 
 @[to_additive (attr := simp)]
@@ -209,7 +209,7 @@ theorem one_nonempty
 
 中文:
 定理 one_nonempty
-  结论: (1 : Set α).Nonempty
+  结论: (1 : 集合 α).非空
   证明: ⟨1, rfl⟩
 
 @[to_additive (attr := simp)]
@@ -276,8 +276,8 @@ theorem Nonempty.subset_one_iff
   proof: h.subset_singleton_iff
 
 中文:
-定理 Nonempty.subset_one_iff
-  条件: (h : s.Nonempty)
+定理 非空.subset_one_iff
+  条件: (h : s.非空)
   结论: s subseteq 1 ↔ s = 1
   证明: h.subset_singleton_iff
 -/
@@ -298,7 +298,7 @@ definition singletonOneHom
 
 中文:
 定义 singletonOneHom
-  签名: : OneHom α (Set α) where
+  签名: : 幺态射 α (集合 α) where
   定义体: singleton; map_one' := singleton_one
 
 @[to_additive (attr := simp)]
@@ -319,7 +319,7 @@ theorem coe_singletonOneHom
 
 中文:
 定理 coe_singletonOneHom
-  结论: (singletonOneHom : α -> Set α) = singleton
+  结论: (singletonOneHom : α -> 集合 α) = singleton
   证明: rfl
 -/
 theorem coe_singletonOneHom : (singletonOneHom : α -> Set α) = singleton :=
@@ -337,7 +337,7 @@ lemma image_op_one
 
 中文:
 引理 image_op_one
-  结论: (1 : Set α).image op = 1
+  结论: (1 : 集合 α).像 op = 1
   证明: image_singleton
 
 @[to_additive (attr := simp) zero_prod_zero]
@@ -356,8 +356,8 @@ lemma one_prod_one
 
 中文:
 引理 one_prod_one
-  条件: [One β]
-  结论: (1 ×ˢ 1 : Set (α × β)) = 1
+  条件: [幺 β]
+  结论: (1 ×ˢ 1 : 集合 (α × β)) = 1
   证明: by ext; simp [Prod.ext_iff]
 
 Depends on / 依赖: Prod.ext_iff, ext_iff
@@ -388,7 +388,7 @@ scoped[Pointwise] attribute [instance] Set.inv Set.neg
 
 中文:
 定义 inv
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: ⟨preimage Inv.inv⟩
 
 scoped[Pointwise] attribute [instance] Set.inv Set.neg
@@ -474,7 +474,7 @@ theorem inv_preimage
 
 中文:
 定理 inv_preimage
-  结论: Inv.inv ⁻¹' s = s⁻¹
+  结论: 取逆.inv ⁻¹' s = s⁻¹
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -495,7 +495,7 @@ theorem inv_empty
 
 中文:
 定理 inv_empty
-  结论: (∅ : Set α)⁻¹ = ∅
+  结论: (∅ : 集合 α)⁻¹ = ∅
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -516,7 +516,7 @@ theorem inv_univ
 
 中文:
 定理 inv_univ
-  结论: (univ : Set α)⁻¹ = univ
+  结论: (univ : 集合 α)⁻¹ = univ
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -605,7 +605,7 @@ lemma inv_prod
 
 中文:
 引理 inv_prod
-  条件: [Inv β] (s : Set α) (t : Set β)
+  条件: [取逆 β] (s : 集合 α) (t : 集合 β)
   结论: (s ×ˢ t)⁻¹ = s⁻¹ ×ˢ t⁻¹
   证明: rfl
 -/
@@ -652,7 +652,7 @@ theorem nonempty_inv
 
 中文:
 定理 nonempty_inv
-  结论: s⁻¹.Nonempty ↔ s.Nonempty
+  结论: s⁻¹.非空 ↔ s.非空
   证明: inv_involutive.surjective.nonempty_preimage
 
 @[to_additive]
@@ -675,9 +675,9 @@ theorem Nonempty.inv
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.inv
-  条件: (h : s.Nonempty)
-  结论: s⁻¹.Nonempty
+定理 非空.inv
+  条件: (h : s.非空)
+  结论: s⁻¹.非空
   证明: nonempty_inv.2 h
 
 @[to_additive (attr := simp)]
@@ -748,7 +748,7 @@ instance involutiveInv
 
 中文:
 实例 involutiveInv
-  签名: : InvolutiveInv (Set α) where
+  签名: : InvolutiveInv (集合 α) where
   定义体: by simp only [← inv_preimage, preimage_preimage, inv_inv, preimage_id']
 
 @[to_additive (attr := simp)]
@@ -842,7 +842,7 @@ theorem inv_singleton
 中文:
 定理 inv_singleton
   条件: (a : α)
-  结论: ({a} : Set α)⁻¹ = {a⁻¹}
+  结论: ({a} : 集合 α)⁻¹ = {a⁻¹}
   证明: by
   rw [← image_inv_eq_inv]; rw [image_singleton]
 
@@ -868,7 +868,7 @@ theorem inv_insert
 
 中文:
 定理 inv_insert
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (insert a s)⁻¹ = insert a⁻¹ s⁻¹
   证明: by
   rw [insert_eq]; rw [union_inv]; rw [inv_singleton]; rw [insert_eq]
@@ -896,7 +896,7 @@ theorem inv_range
 
 中文:
 定理 inv_range
-  条件: {ι : Sort*} {f : ι -> α}
+  条件: {ι : 类型层*} {f : ι -> α}
   结论: (range f)⁻¹ = range fun i => (f i)⁻¹
   证明: by
   rw [← image_inv_eq_inv]
@@ -1001,7 +1001,7 @@ theorem forall_inv_mem
 @[to_additive (attr := simp)]
 
 中文:
-定理 forall_inv_mem
+定理 对任意_inv_mem
   条件: {p : α -> 命题}
   结论: (对任意 x, x⁻¹ in s -> p x) ↔ 对任意 x in s, p x⁻¹
   证明: by
@@ -1029,7 +1029,7 @@ theorem exists_inv_mem
   simp
 
 中文:
-定理 exists_inv_mem
+定理 存在_inv_mem
   条件: {p : α -> 命题}
   结论: (存在 x, x⁻¹ in s ∧ p x) ↔ 存在 x in s, p x⁻¹
   证明: by
@@ -1097,7 +1097,7 @@ scoped[Pointwise] attribute [instance] Set.mul Set.add
 
 中文:
 定义 mul
-  签名: : Mul (Set α)
+  签名: : 乘法 (集合 α)
   定义体: ⟨image2 (· * ·)⟩
 
 scoped[Pointwise] attribute [instance] Set.mul Set.add
@@ -1281,7 +1281,7 @@ theorem mul_nonempty
 
 中文:
 定理 mul_nonempty
-  结论: (s * t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s * t).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 @[to_additive]
@@ -1303,8 +1303,8 @@ theorem Nonempty.mul
 @[to_additive]
 
 中文:
-定理 Nonempty.mul
-  结论: s.Nonempty -> t.Nonempty -> (s * t).Nonempty
+定理 非空.mul
+  结论: s.非空 -> t.非空 -> (s * t).非空
   证明: Nonempty.image2
 
 @[to_additive]
@@ -1324,8 +1324,8 @@ theorem Nonempty.of_mul_left
 @[to_additive]
 
 中文:
-定理 Nonempty.of_mul_left
-  结论: (s * t).Nonempty -> s.Nonempty
+定理 非空.of_mul_left
+  结论: (s * t).非空 -> s.非空
   证明: Nonempty.of_image2_left
 
 @[to_additive]
@@ -1345,8 +1345,8 @@ theorem Nonempty.of_mul_right
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.of_mul_right
-  结论: (s * t).Nonempty -> t.Nonempty
+定理 非空.of_mul_right
+  结论: (s * t).非空 -> t.非空
   证明: Nonempty.of_image2_right
 
 @[to_additive (attr := simp)]
@@ -1413,7 +1413,7 @@ theorem singleton_mul_singleton
 
 中文:
 定理 singleton_mul_singleton
-  结论: ({a} : Set α) * {b} = {a * b}
+  结论: ({a} : 集合 α) * {b} = {a * b}
   证明: image2_singleton
 
 @[to_additive]
@@ -1498,7 +1498,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulLeftMono (Set α)
+  签名: MulLeftMono (集合 α)
   定义体: mul_subset_mul_left
 -/
 @[to_additive] instance : MulLeftMono (Set α) where elim _s _t₁ _t₂ := mul_subset_mul_left
@@ -1514,7 +1514,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulRightMono (Set α)
+  签名: MulRightMono (集合 α)
   定义体: mul_subset_mul_right
 
 @[to_additive]
@@ -1693,7 +1693,7 @@ definition singletonMulHom
 
 中文:
 定义 singletonMulHom
-  签名: : α ->ₙ* Set α where
+  签名: : α ->ₙ* 集合 α where
   定义体: singleton
   map_mul' _ _ := singleton_mul_singleton.symm
 
@@ -1718,7 +1718,7 @@ theorem coe_singletonMulHom
 
 中文:
 定理 coe_singletonMulHom
-  结论: (singletonMulHom : α -> Set α) = singleton
+  结论: (singletonMulHom : α -> 集合 α) = singleton
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1781,7 +1781,7 @@ lemma prod_mul_prod_comm
 
 中文:
 引理 prod_mul_prod_comm
-  条件: [Mul β] (s₁ s₂ : Set α) (t₁ t₂ : Set β)
+  条件: [乘法 β] (s₁ s₂ : 集合 α) (t₁ t₂ : 集合 β)
   证明: by ext; simp [mem_mul]; aesop
 
 Depends on / 依赖: mem_mul
@@ -1817,7 +1817,7 @@ scoped[Pointwise] attribute [instance] Set.div Set.sub
 
 中文:
 定义 div
-  签名: : Div (Set α)
+  签名: : 除法 (集合 α)
   定义体: ⟨image2 (· / ·)⟩
 
 scoped[Pointwise] attribute [instance] Set.div Set.sub
@@ -2001,7 +2001,7 @@ theorem div_nonempty
 
 中文:
 定理 div_nonempty
-  结论: (s / t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s / t).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 @[to_additive]
@@ -2023,8 +2023,8 @@ theorem Nonempty.div
 @[to_additive]
 
 中文:
-定理 Nonempty.div
-  结论: s.Nonempty -> t.Nonempty -> (s / t).Nonempty
+定理 非空.div
+  结论: s.非空 -> t.非空 -> (s / t).非空
   证明: Nonempty.image2
 
 @[to_additive]
@@ -2046,8 +2046,8 @@ theorem Nonempty.of_div_left
 @[to_additive]
 
 中文:
-定理 Nonempty.of_div_left
-  结论: (s / t).Nonempty -> s.Nonempty
+定理 非空.of_div_left
+  结论: (s / t).非空 -> s.非空
   证明: Nonempty.of_image2_left
 
 @[to_additive]
@@ -2067,8 +2067,8 @@ theorem Nonempty.of_div_right
 @[to_additive (attr := simp)]
 
 中文:
-定理 Nonempty.of_div_right
-  结论: (s / t).Nonempty -> t.Nonempty
+定理 非空.of_div_right
+  结论: (s / t).非空 -> t.非空
   证明: Nonempty.of_image2_right
 
 @[to_additive (attr := simp)]
@@ -2135,7 +2135,7 @@ theorem singleton_div_singleton
 
 中文:
 定理 singleton_div_singleton
-  结论: ({a} : Set α) / {b} = {a / b}
+  结论: ({a} : 集合 α) / {b} = {a / b}
   证明: image2_singleton
 
 @[to_additive (attr := mono, gcongr)]
@@ -2386,7 +2386,7 @@ lemma prod_div_prod_comm
 
 中文:
 引理 prod_div_prod_comm
-  条件: [Div β] (s₁ s₂ : Set α) (t₁ t₂ : Set β)
+  条件: [除法 β] (s₁ s₂ : 集合 α) (t₁ t₂ : 集合 β)
   证明: by aesop (add simp mem_div)
 
 Depends on / 依赖: mem_div
@@ -2411,8 +2411,8 @@ definition NPow
   body: ⟨fun s n => npowRec n s⟩
 
 中文:
-定义 NPow
-  签名: [One α] [Mul α]
+定义 自然数幂
+  签名: [幺 α] [乘法 α]
   定义体: ⟨fun s n => npowRec n s⟩
 -/
 protected def NPow [One α] [Mul α] : Pow (Set α) Nat :=
@@ -2434,8 +2434,8 @@ definition ZPow
 scoped[Pointwise] attribute [instance] Set.NSMul Set.NPow Set.ZSMul Set.ZPow
 
 中文:
-定义 ZPow
-  签名: [One α] [Mul α] [Inv α]
+定义 整数幂
+  签名: [幺 α] [乘法 α] [取逆 α]
   定义体: ⟨fun s n => zpowRec npowRec n s⟩
 
 scoped[Pointwise] attribute [instance] Set.NSMul Set.NPow Set.ZSMul Set.ZPow
@@ -2458,7 +2458,7 @@ definition semigroup
 
 中文:
 定义 semigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: { Set.mul with mul_assoc := fun _ _ _ => image2_assoc mul_assoc }
 -/
 protected def semigroup [Semigroup α] : Semigroup (Set α) :=
@@ -2483,7 +2483,7 @@ definition commSemigroup
 
 中文:
 定义 commSemigroup
-  签名: : CommSemigroup (Set α)
+  签名: : 交换半群 (集合 α)
   定义体: { Set.semigroup with mul_comm := fun _ _ => image2_comm mul_comm }
 
 @[to_additive]
@@ -2561,7 +2561,7 @@ scoped[Pointwise]
 
 中文:
 定义 mulOneClass
-  签名: : MulOneClass (Set α)
+  签名: : MulOne类 (集合 α)
   定义体: { Set.one, Set.mul with
     mul_one := image2_right_identity mul_one
     one_mul := image2_left_identity one_mul }
@@ -2598,7 +2598,7 @@ theorem subset_mul_left
 
 中文:
 定理 subset_mul_left
-  条件: (s : Set α) {t : Set α} (ht : (1 : α) in t)
+  条件: (s : 集合 α) {t : 集合 α} (ht : (1 : α) in t)
   结论: s subseteq s * t
   证明: fun x hx =>
   ⟨x, hx, 1, ht, mul_one _⟩
@@ -2621,7 +2621,7 @@ theorem subset_mul_right
 
 中文:
 定理 subset_mul_right
-  条件: {s : Set α} (t : Set α) (hs : (1 : α) in s)
+  条件: {s : 集合 α} (t : 集合 α) (hs : (1 : α) in s)
   结论: t subseteq s * t
   证明: fun x hx =>
   ⟨1, hs, x, hx, one_mul _⟩
@@ -2643,7 +2643,7 @@ definition singletonMonoidHom
 
 中文:
 定义 singletonMonoidHom
-  签名: : α ->* Set α
+  签名: : α ->* 集合 α
   定义体: { singletonMulHom, singletonOneHom with }
 
 @[to_additive (attr := simp)]
@@ -2666,7 +2666,7 @@ theorem coe_singletonMonoidHom
 
 中文:
 定理 coe_singletonMonoidHom
-  结论: (singletonMonoidHom : α -> Set α) = singleton
+  结论: (singletonMonoidHom : α -> 集合 α) = singleton
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2714,7 +2714,7 @@ scoped[Pointwise] attribute [instance] Set.monoid Set.addMonoid
 
 中文:
 定义 monoid
-  签名: : Monoid (Set α)
+  签名: : 幺半群 (集合 α)
   定义体: { Set.semigroup, Set.mulOneClass, @Set.NPow α _ _ with }
 
 scoped[Pointwise] attribute [instance] Set.monoid Set.addMonoid
@@ -2742,7 +2742,7 @@ lemma pow_right_monotone
 中文:
 引理 pow_right_monotone
   条件: (hs : 1 in s)
-  结论: Monotone (s ^ ·)
+  结论: 递增 (s ^ ·)
   证明: pow_right_monotone one_subset.2 hs
 
 @[to_additive]
@@ -2889,7 +2889,7 @@ lemma empty_pow
 中文:
 引理 empty_pow
   条件: (hn : n != 0)
-  结论: (∅ : Set α) ^ n = ∅
+  结论: (∅ : 集合 α) ^ n = ∅
   证明: match n with | n + 1 => by simp [pow_succ]
 
 @[to_additive]
@@ -2908,9 +2908,9 @@ lemma Nonempty.pow
   statement: forall {n}, (s ^ n).Nonempty
 
 中文:
-引理 Nonempty.pow
-  条件: (hs : s.Nonempty)
-  结论: 对任意 {n}, (s ^ n).Nonempty
+引理 非空.pow
+  条件: (hs : s.非空)
+  结论: 对任意 {n}, (s ^ n).非空
 -/
 lemma Nonempty.pow (hs : s.Nonempty) : forall {n}, (s ^ n).Nonempty
   | 0 => by simp
@@ -2968,7 +2968,7 @@ lemma singleton_pow
 中文:
 引理 singleton_pow
   条件: (a : α)
-  结论: 对任意 n, ({a} : Set α) ^ n = {a ^ n}
+  结论: 对任意 n, ({a} : 集合 α) ^ n = {a ^ n}
 -/
 lemma singleton_pow (a : α) : forall n, ({a} : Set α) ^ n = {a ^ n}
   | 0 => by simp [singleton_one]
@@ -3100,7 +3100,7 @@ theorem univ_mul_univ
 
 中文:
 定理 univ_mul_univ
-  结论: (univ : Set α) * univ = univ
+  结论: (univ : 集合 α) * univ = univ
   证明: mul_univ_of_one_mem mem_univ _
 
 @[to_additive (attr := simp) nsmul_univ]
@@ -3120,7 +3120,7 @@ theorem univ_pow
 
 中文:
 定理 univ_pow
-  结论: 对任意 {n : 自然数}, n != 0 -> (univ : Set α) ^ n = univ
+  结论: 对任意 {n : 自然数}, n != 0 -> (univ : 集合 α) ^ n = univ
 -/
 theorem univ_pow : forall {n : Nat}, n != 0 -> (univ : Set α) ^ n = univ
   | 0 => fun h => (h rfl).elim
@@ -3139,8 +3139,8 @@ theorem _root_.IsUnit.set
 @[to_additive nsmul_prod]
 
 中文:
-定理 _root_.IsUnit.set
-  结论: IsUnit a -> IsUnit ({a} : Set α)
+定理 _root_.是单位.set
+  结论: 是单位 a -> 是单位 ({a} : 集合 α)
   证明: IsUnit.map (singletonMonoidHom : α ->* Set α)
 
 @[to_additive nsmul_prod]
@@ -3159,7 +3159,7 @@ lemma prod_pow
 
 中文:
 引理 prod_pow
-  条件: [Monoid β] (s : Set α) (t : Set β)
+  条件: [幺半群 β] (s : 集合 α) (t : 集合 β)
   结论: 对任意 n, (s ×ˢ t) ^ n = (s ^ n) ×ˢ (t ^ n)
 -/
 lemma prod_pow [Monoid β] (s : Set α) (t : Set β) : forall n, (s ×ˢ t) ^ n = (s ^ n) ×ˢ (t ^ n)
@@ -3185,8 +3185,8 @@ lemma Nontrivial.mul_left
 @[to_additive]
 
 中文:
-引理 Nontrivial.mul_left
-  结论: t.Nontrivial -> s.Nonempty -> (s * t).Nontrivial
+引理 非平凡.mul_left
+  结论: t.非平凡 -> s.非空 -> (s * t).非平凡
   证明: by
   rintro ⟨a, ha, b, hb, hab⟩ ⟨c, hc⟩
   exact ⟨c * a, mul_mem_mul hc ha, c * b, mul_mem_mul hc hb, by simpa⟩
@@ -3208,9 +3208,9 @@ lemma Nontrivial.mul
   proof: ht.mul_left hs.nonempty
 
 中文:
-引理 Nontrivial.mul
-  条件: (hs : s.Nontrivial) (ht : t.Nontrivial)
-  结论: (s * t).Nontrivial
+引理 非平凡.mul
+  条件: (hs : s.非平凡) (ht : t.非平凡)
+  结论: (s * t).非平凡
   证明: ht.mul_left hs.nonempty
 -/
 lemma Nontrivial.mul (hs : s.Nontrivial) (ht : t.Nontrivial) : (s * t).Nontrivial :=
@@ -3233,8 +3233,8 @@ lemma Nontrivial.mul_right
   exact ⟨a * c, mul_mem_mul ha hc, b * c, mul_mem_mul hb hc, by simpa⟩
 
 中文:
-引理 Nontrivial.mul_right
-  结论: s.Nontrivial -> t.Nonempty -> (s * t).Nontrivial
+引理 非平凡.mul_right
+  结论: s.非平凡 -> t.非空 -> (s * t).非平凡
   证明: by
   rintro ⟨a, ha, b, hb, hab⟩ ⟨c, hc⟩
   exact ⟨a * c, mul_mem_mul ha hc, b * c, mul_mem_mul hb hc, by simpa⟩
@@ -3258,9 +3258,9 @@ lemma Nontrivial.pow
   statement: forall {n}, n != 0 -> (s ^ n).Nontrivial
 
 中文:
-引理 Nontrivial.pow
-  条件: (hs : s.Nontrivial)
-  结论: 对任意 {n}, n != 0 -> (s ^ n).Nontrivial
+引理 非平凡.pow
+  条件: (hs : s.非平凡)
+  结论: 对任意 {n}, n != 0 -> (s ^ n).非平凡
 -/
 lemma Nontrivial.pow (hs : s.Nontrivial) : forall {n}, n != 0 -> (s ^ n).Nontrivial
   | 1, _ => by simpa
@@ -3283,7 +3283,7 @@ scoped[Pointwise] attribute [instance] Set.commMonoid Set.addCommMonoid
 
 中文:
 定义 commMonoid
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: { Set.monoid, Set.commSemigroup with }
 
 scoped[Pointwise] attribute [instance] Set.commMonoid Set.addCommMonoid
@@ -3397,7 +3397,7 @@ definition divisionMonoid
 
 中文:
 定义 divisionMonoid
-  签名: : DivisionMonoid (Set α)
+  签名: : Division幺半群 (集合 α)
   定义体: { Set.monoid, Set.involutiveInv, Set.div, @Set.ZPow α _ _ _ with
     mul_inv_rev := fun s t => by
       simp_rw [← image_inv_eq_inv]
@@ -3441,7 +3441,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit s ↔ 存在 a, s = {a} ∧ IsUnit a
+  结论: 是单位 s ↔ 存在 a, s = {a} ∧ 是单位 a
   证明: by
   constructor
   · rintro ⟨u, rfl⟩
@@ -3477,7 +3477,7 @@ lemma univ_div_univ
 
 中文:
 引理 univ_div_univ
-  结论: (univ / univ : Set α) = univ
+  结论: (univ / univ : 集合 α) = univ
   证明: by simp [div_eq_mul_inv]
 
 Depends on / 依赖: div_eq_mul_inv
@@ -3543,7 +3543,7 @@ lemma empty_zpow
 中文:
 引理 empty_zpow
   条件: (hn : n != 0)
-  结论: (∅ : Set α) ^ n = ∅
+  结论: (∅ : 集合 α) ^ n = ∅
   证明: by cases n <;> aesop
 
 @[to_additive]
@@ -3560,9 +3560,9 @@ lemma Nonempty.zpow
   statement: forall {n : Int}, (s ^ n).Nonempty
 
 中文:
-引理 Nonempty.zpow
-  条件: (hs : s.Nonempty)
-  结论: 对任意 {n : 整数}, (s ^ n).Nonempty
+引理 非空.zpow
+  条件: (hs : s.非空)
+  结论: 对任意 {n : 整数}, (s ^ n).非空
 -/
 lemma Nonempty.zpow (hs : s.Nonempty) : forall {n : Int}, (s ^ n).Nonempty
   | (n : Nat) => hs.pow
@@ -3621,7 +3621,7 @@ lemma singleton_zpow
 中文:
 引理 singleton_zpow
   条件: (a : α) (n : 整数)
-  结论: ({a} : Set α) ^ n = {a ^ n}
+  结论: ({a} : 集合 α) ^ n = {a ^ n}
   证明: by cases n <;> simp
 -/
 lemma singleton_zpow (a : α) (n : Int) : ({a} : Set α) ^ n = {a ^ n} := by cases n <;> simp
@@ -3643,7 +3643,7 @@ scoped[Pointwise] attribute [instance] Set.divisionCommMonoid Set.subtractionCom
 
 中文:
 定义 divisionCommMonoid
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
   定义体: { Set.divisionMonoid, Set.commSemigroup with }
 
 scoped[Pointwise] attribute [instance] Set.divisionCommMonoid Set.subtractionCommMonoid
@@ -3774,8 +3774,8 @@ theorem Nonempty.one_mem_div
 @[to_additive]
 
 中文:
-定理 Nonempty.one_mem_div
-  条件: (h : s.Nonempty)
+定理 非空.one_mem_div
+  条件: (h : s.非空)
   结论: (1 : α) in s / s
   证明: let ⟨a, ha⟩ := h
   mem_div.2 ⟨a, ha, a, ha, div_self' _⟩
@@ -3801,7 +3801,7 @@ theorem isUnit_singleton
 中文:
 定理 isUnit_singleton
   条件: (a : α)
-  结论: IsUnit ({a} : Set α)
+  结论: 是单位 ({a} : 集合 α)
   证明: (Group.isUnit a).set
 
 @[to_additive (attr := simp)]
@@ -3825,7 +3825,7 @@ theorem isUnit_iff_singleton
 
 中文:
 定理 isUnit_iff_singleton
-  结论: IsUnit s ↔ 存在 a, s = {a}
+  结论: 是单位 s ↔ 存在 a, s = {a}
   证明: by
   simp only [isUnit_iff, Group.isUnit, and_true]
 
@@ -4156,8 +4156,8 @@ theorem mul_univ
 
 中文:
 定理 mul_univ
-  条件: (hs : s.Nonempty)
-  结论: s * (univ : Set α) = univ
+  条件: (hs : s.非空)
+  结论: s * (univ : 集合 α) = univ
   证明: let ⟨a, ha⟩ := hs
   eq_univ_of_forall fun b => ⟨a, ha, a⁻¹ * b, trivial, mul_inv_cancel_left ..⟩
 
@@ -4184,8 +4184,8 @@ theorem univ_mul
 
 中文:
 定理 univ_mul
-  条件: (ht : t.Nonempty)
-  结论: (univ : Set α) * t = univ
+  条件: (ht : t.非空)
+  结论: (univ : 集合 α) * t = univ
   证明: let ⟨a, ha⟩ := ht
   eq_univ_of_forall fun b => ⟨b * a⁻¹, trivial, a, ha, inv_mul_cancel_right ..⟩
 
@@ -4209,7 +4209,7 @@ lemma image_inv
 
 中文:
 引理 image_inv
-  条件: [DivisionMonoid β] [FunLike F α β] [MonoidHomClass F α β] (f : F) (s : Set α)
+  条件: [Division幺半群 β] [函数状 F α β] [幺半群态射类 F α β] (f : F) (s : 集合 α)
   证明: by
   rw [← image_inv_eq_inv]; rw [← image_inv_eq_inv]; exact image_comm (map_inv _)
 
@@ -4266,7 +4266,7 @@ lemma mul_subset_range
 
 中文:
 引理 mul_subset_range
-  条件: {s t : Set β} (hs : s subseteq range m) (ht : t subseteq range m)
+  条件: {s t : 集合 β} (hs : s subseteq range m) (ht : t subseteq range m)
   结论: s * t subseteq range m
   证明: by
   rintro _ ⟨a, ha, b, hb, rfl⟩
@@ -4300,7 +4300,7 @@ theorem preimage_mul_preimage_subset
 
 中文:
 定理 preimage_mul_preimage_subset
-  条件: {s t : Set β}
+  条件: {s t : 集合 β}
   结论: m ⁻¹' s * m ⁻¹' t subseteq m ⁻¹' (s * t)
   证明: by
   rintro _ ⟨_, _, _, _, rfl⟩
@@ -4326,7 +4326,7 @@ lemma preimage_mul
 
 中文:
 引理 preimage_mul
-  条件: (hm : Injective m) {s t : Set β} (hs : s subseteq range m) (ht : t subseteq range m)
+  条件: (hm : 单射 m) {s t : 集合 β} (hs : s subseteq range m) (ht : t subseteq range m)
   证明: hm.image_injective by
     rw [image_mul]; rw [image_preimage_eq_iff.2 hs]; rw [image_preimage_eq_iff.2 ht]; rw [image_preimage_eq_iff.2 (mul_subset_range m hs ht)]
 
@@ -4352,7 +4352,7 @@ lemma image_pow_of_ne_zero
 
 中文:
 引理 image_pow_of_ne_zero
-  条件: [MulHomClass F α β]
+  条件: [乘法态射类 F α β]
 -/
 lemma image_pow_of_ne_zero [MulHomClass F α β] :
     forall {n}, n != 0 -> forall (f : F) (s : Set α), f '' (s ^ n) = (f '' s) ^ n
@@ -4370,7 +4370,7 @@ lemma image_pow
 
 中文:
 引理 image_pow
-  条件: [MonoidHomClass F α β] (f : F) (s : Set α)
+  条件: [幺半群态射类 F α β] (f : F) (s : 集合 α)
   结论: 对任意 n, f '' (s ^ n) = (f '' s) ^ n
 -/
 lemma image_pow [MonoidHomClass F α β] (f : F) (s : Set α) : forall n, f '' (s ^ n) = (f '' s) ^ n
@@ -4387,7 +4387,7 @@ lemma preimage_pow_subset
 
 中文:
 引理 preimage_pow_subset
-  条件: [MonoidHomClass F α β] (f : F) (s : Set β)
+  条件: [幺半群态射类 F α β] (f : F) (s : 集合 β)
 -/
 lemma preimage_pow_subset [MonoidHomClass F α β] (f : F) (s : Set β) :
     forall n, (f ⁻¹' s) ^ n subseteq f ⁻¹' (s ^ n)
@@ -4442,7 +4442,7 @@ lemma div_subset_range
 
 中文:
 引理 div_subset_range
-  条件: {s t : Set β} (hs : s subseteq range m) (ht : t subseteq range m)
+  条件: {s t : 集合 β} (hs : s subseteq range m) (ht : t subseteq range m)
   结论: s / t subseteq range m
   证明: by
   rintro _ ⟨a, ha, b, hb, rfl⟩
@@ -4476,7 +4476,7 @@ theorem preimage_div_preimage_subset
 
 中文:
 定理 preimage_div_preimage_subset
-  条件: {s t : Set β}
+  条件: {s t : 集合 β}
   结论: m ⁻¹' s / m ⁻¹' t subseteq m ⁻¹' (s / t)
   证明: by
   rintro _ ⟨_, _, _, _, rfl⟩
@@ -4502,7 +4502,7 @@ lemma preimage_div
 
 中文:
 引理 preimage_div
-  条件: (hm : Injective m) {s t : Set β} (hs : s subseteq range m) (ht : t subseteq range m)
+  条件: (hm : 单射 m) {s t : 集合 β} (hs : s subseteq range m) (ht : t subseteq range m)
   证明: hm.image_injective by
     rw [image_div]; rw [image_preimage_eq_iff.2 hs]; rw [image_preimage_eq_iff.2 ht]; rw [image_preimage_eq_iff.2 (div_subset_range m hs ht)]
 
@@ -4531,7 +4531,7 @@ lemma inv_pi
 
 中文:
 引理 inv_pi
-  条件: (s : Set ι) (t : 对任意 i, Set (α i))
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
   结论: (s.pi t)⁻¹ = s.pi fun i => (t i)⁻¹
   证明: by ext x; simp
 -/
@@ -4555,8 +4555,8 @@ lemma MapsTo.mul
 @[to_additive]
 
 中文:
-引理 MapsTo.mul
-  结论: [Mul β] {A : Set α} {B₁ B₂ : Set β} {f₁ f₂ : α -> β}
+引理 映射到.mul
+  结论: [乘法 β] {A : 集合 α} {B₁ B₂ : 集合 β} {f₁ f₂ : α -> β}
   证明: fun _ h => mul_mem_mul (h₁ h) (h₂ h)
 
 @[to_additive]
@@ -4580,8 +4580,8 @@ lemma MapsTo.inv
 @[to_additive]
 
 中文:
-引理 MapsTo.inv
-  条件: [InvolutiveInv β] {A : Set α} {B : Set β} {f : α -> β} (h : MapsTo f A B)
+引理 映射到.inv
+  条件: [InvolutiveInv β] {A : 集合 α} {B : 集合 β} {f : α -> β} (h : 映射到 f A B)
   证明: fun _ ha => inv_mem_inv.2 (h ha)
 
 
@@ -4604,8 +4604,8 @@ lemma MapsTo.div
   proof: fun _ ha => div_mem_div (h₁ ha) (h₂ ha)
 
 中文:
-引理 MapsTo.div
-  结论: [Div β] {A : Set α} {B₁ B₂ : Set β} {f₁ f₂ : α -> β}
+引理 映射到.div
+  结论: [除法 β] {A : 集合 α} {B₁ B₂ : 集合 β} {f₁ f₂ : α -> β}
   证明: fun _ ha => div_mem_div (h₁ ha) (h₂ ha)
 
 Depends on / 依赖: div_mem_div

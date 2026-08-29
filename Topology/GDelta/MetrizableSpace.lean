@@ -63,7 +63,7 @@ theorem IsGδ.setOfPred_continuousAt
 
 中文:
 定理 IsGδ.setOfPred_continuousAt
-  条件: [PseudoMetrizableSpace Y] (f : X -> Y)
+  条件: [PseudoMetrizable空间 Y] (f : X -> Y)
   证明: by
   let := pseudoMetrizableSpaceUniformity Y
   have := pseudoMetrizableSpaceUniformity_countably_generated Y

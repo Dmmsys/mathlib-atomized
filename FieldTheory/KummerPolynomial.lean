@@ -129,7 +129,7 @@ lemma ne_zero_of_irreducible_X_pow_sub_C
 
 中文:
 引理 ne_zero_of_irreducible_X_pow_sub_C
-  条件: {n : 自然数} {a : K} (H : Irreducible (X ^ n - C a))
+  条件: {n : 自然数} {a : K} (H : 不可约 (X ^ n - C a))
   证明: by
   rintro rfl
   rw [pow_zero]; rw [← C.map_one]; rw [← map_sub] at H
@@ -185,7 +185,7 @@ lemma root_X_pow_sub_C_eq_zero_iff
 
 中文:
 引理 root_X_pow_sub_C_eq_zero_iff
-  条件: {n : 自然数} {a : K} (H : Irreducible (X ^ n - C a))
+  条件: {n : 自然数} {a : K} (H : 不可约 (X ^ n - C a))
   证明: by
   have hn := Nat.pos_iff_ne_zero.mpr (ne_zero_of_irreducible_X_pow_sub_C H)
   refine ⟨not_imp_not.mp (root_X_pow_sub_C_ne_zero' hn), ?_⟩
@@ -213,7 +213,7 @@ lemma root_X_pow_sub_C_ne_zero_iff
 
 中文:
 引理 root_X_pow_sub_C_ne_zero_iff
-  条件: {n : 自然数} {a : K} (H : Irreducible (X ^ n - C a))
+  条件: {n : 自然数} {a : K} (H : 不可约 (X ^ n - C a))
   证明: (root_X_pow_sub_C_eq_zero_iff H).not
 
 Depends on / 依赖: root_X_pow_sub_C_eq_zero_iff
@@ -287,7 +287,7 @@ theorem X_pow_sub_C_irreducible_of_prime
 
 中文:
 定理 X_pow_sub_C_irreducible_of_prime
-  条件: {p : 自然数} (hp : p.Prime) {a : K} (ha : 对任意 b : K, b ^ p != a)
+  条件: {p : 自然数} (hp : p.素) {a : K} (ha : 对任意 b : K, b ^ p != a)
   证明: by
   -- First of all, We may find an irreducible factor `g` of `X ^ p - C a`.
   have : ¬ IsUnit (X ^ p - C a) := by
@@ -329,7 +329,7 @@ theorem X_pow_sub_C_irreducible_iff_of_prime
 
 中文:
 定理 X_pow_sub_C_irreducible_iff_of_prime
-  条件: {p : 自然数} (hp : p.Prime) {a : K}
+  条件: {p : 自然数} (hp : p.素) {a : K}
   证明: ⟨(pow_ne_of_irreducible_X_pow_sub_C · dvd_rfl hp.ne_one), X_pow_sub_C_irreducible_of_prime hp⟩
 
 Depends on / 依赖: X_pow_sub_C_irreducible_of_prime, dvd_rfl, hp.ne_one, ne_one, pow_ne_of_irreducible_X_pow_sub_C

@@ -62,7 +62,7 @@ definition UnifTight
 
 中文:
 定义 UnifTight
-  签名: {_ : MeasurableSpace α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : Measure α)
+  签名: {_ : 可测空间 α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : 测度 α)
   定义体: forall ⦃ε : Real>=0⦄, 0 < ε -> exists s : Set α, μ s != ∞ ∧ forall i, eLpNorm (sᶜ.indicator (f i)) p μ <= ε
 
 Depends on / 依赖: eLpNorm, indicator
@@ -84,7 +84,7 @@ theorem unifTight_iff_ennreal
 
 中文:
 定理 unifTight_iff_ennreal
-  条件: {_ : MeasurableSpace α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : Measure α)
+  条件: {_ : 可测空间 α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   simp only [ENNReal.forall_ennreal, ENNReal.coe_pos]
   refine (and_iff_left ?_).symm
@@ -115,7 +115,7 @@ theorem unifTight_iff_real
 
 中文:
 定理 unifTight_iff_real
-  条件: {_ : MeasurableSpace α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : Measure α)
+  条件: {_ : 可测空间 α} (f : ι -> α -> β) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   refine ⟨fun hut rε hrε => hut (Real.toNNReal_pos.mpr hrε), fun hut ε hε => ?_⟩
   obtain ⟨s, hμs, hfε⟩ := hut hε
@@ -181,7 +181,7 @@ theorem exists_measurableSet_indicator
   ⟨sᶜ, hsm.compl, hμs, by rwa [compl_compl s]⟩
 
 中文:
-定理 exists_measurableSet_indicator
+定理 存在_measurableSet_indicator
   条件: (hf : UnifTight f p μ) {ε : 实数>=0∞} (hε : ε != 0)
   证明: let ⟨s, hμs, hsm, hfs⟩ := (hf.eventually_cofinite_indicator hε).exists_measurable_mem_of_smallSets
   ⟨sᶜ, hsm.compl, hμs, by rwa [compl_compl s]⟩
@@ -387,7 +387,7 @@ case neg => exact ⟨∅, (by simp), fun i => False.elim hι Nonempty.intro i⟩
 
 中文:
 定理 unifTight_of_subsingleton
-  结论: [Subsingleton ι] (hp_top : p != ∞)
+  结论: [子单例 ι] (hp_top : p != ∞)
   证明: fun ε hε => by
   by_cases hε_top : ε = ∞
   · exact ⟨∅, by simp, fun _ => hε_top.symm ▸ le_top⟩
@@ -428,7 +428,7 @@ theorem unifTight_fin
 
 中文:
 定理 unifTight_fin
-  结论: (hp_top : p != ∞) {n : 自然数} {f : Fin n -> α -> β}
+  结论: (hp_top : p != ∞) {n : 自然数} {f : 有限集 n -> α -> β}
   证明: by
   revert f
   induction n with
@@ -479,7 +479,7 @@ theorem unifTight_finite
 
 中文:
 定理 unifTight_finite
-  结论: [Finite ι] (hp_top : p != ∞) {f : ι -> α -> β}
+  结论: [有限 ι] (hp_top : p != ∞) {f : ι -> α -> β}
   证明: fun ε hε => by
   obtain ⟨n, hn⟩ := Finite.exists_equiv_fin ι
   set g : Fin n -> α -> β := f ∘ hn.some.symm

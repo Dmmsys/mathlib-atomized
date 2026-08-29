@@ -150,7 +150,7 @@ theorem IsTransitive.sUnion
   exact mem_sUnion_of_mem hz (h.mem_trans hw' hw)
 
 中文:
-定理 IsTransitive.sUnion
+定理 IsTransitive.集合并集
   条件: (h : x.IsTransitive)
   证明: fun y hy z hz => by
   rcases mem_sUnion.1 hy with ⟨w, hw, hw'⟩
@@ -172,7 +172,7 @@ theorem IsTransitive.sUnion'
   exact mem_sUnion_of_mem ((H w hw).mem_trans hz hw') hw
 
 中文:
-定理 IsTransitive.sUnion'
+定理 IsTransitive.集合并集'
   条件: (H : 对任意 y in x, IsTransitive y)
   证明: fun y hy z hz => by
   rcases mem_sUnion.1 hy with ⟨w, hw, hw'⟩
@@ -335,7 +335,7 @@ structure IsOrdinal
     - mem_trans'({y z w : ZFSet}) : y in z -> z in w -> w in x -> y in w
 
 中文:
-结构 IsOrdinal
+结构 是序数
   参数: (x : ZFSet)
   公理与运算 (2 个):
     - isTransitive : x.IsTransitive
@@ -360,7 +360,7 @@ theorem subset_of_mem
 
 中文:
 定理 subset_of_mem
-  条件: (h : x.IsOrdinal)
+  条件: (h : x.是序数)
   结论: y in x -> y subseteq x
   证明: h.isTransitive.subset_of_mem
 
@@ -380,7 +380,7 @@ theorem mem_trans
 
 中文:
 定理 mem_trans
-  条件: (h : z.IsOrdinal)
+  条件: (h : z.是序数)
   结论: x in y -> y in z -> x in z
   证明: h.isTransitive.mem_trans
 
@@ -400,8 +400,8 @@ theorem isTrans
 
 中文:
 定理 isTrans
-  条件: (h : x.IsOrdinal)
-  结论: IsTrans _ (Subrel (· in ·) (· in x))
+  条件: (h : x.是序数)
+  结论: 是Trans _ (Subrel (· in ·) (· in x))
   证明: ⟨fun _ _ c hab hbc => h.mem_trans' hab hbc c.2⟩
 -/
 protected theorem isTrans (h : x.IsOrdinal) : IsTrans _ (Subrel (· in ·) (· in x)) :=
@@ -452,8 +452,8 @@ theorem mem
 
 中文:
 定理 mem
-  条件: (hx : x.IsOrdinal) (hy : y in x)
-  结论: y.IsOrdinal
+  条件: (hx : x.是序数) (hy : y in x)
+  结论: y.是序数
   证明: have := hx.isTrans
   let f : _ ↪r Subrel (· in ·) (· in x) := Subrel.inclusionEmbedding (· in ·) (hx.subset_of_mem hy)
   isOrdinal_iff_isTrans.2 ⟨fun _ hz _ ha => hx.mem_trans' ha hz hy, f.isTrans⟩
@@ -472,7 +472,7 @@ theorem _root_.ZFSet.isOrdinal_iff_forall_mem_isTransitive
   mpr := fun ⟨h₁, h₂⟩ => ⟨h₁, fun hyz hzw hwx => (h₂ _ hwx).mem_trans hyz hzw⟩
 
 中文:
-定理 _root_.ZFSet.isOrdinal_iff_forall_mem_isTransitive
+定理 _root_.ZFSet.isOrdinal_iff_对任意_mem_isTransitive
   证明: ⟨h.isTransitive, fun _ hy => (h.mem hy).isTransitive⟩
   mpr := fun ⟨h₁, h₂⟩ => ⟨h₁, fun hyz hzw hwx => (h₂ _ hwx).mem_trans hyz hzw⟩
 
@@ -493,7 +493,7 @@ theorem _root_.ZFSet.isOrdinal_iff_forall_mem_isOrdinal
     ⟨h₁, fun y hy => (h₂ y hy).isTransitive⟩
 
 中文:
-定理 _root_.ZFSet.isOrdinal_iff_forall_mem_isOrdinal
+定理 _root_.ZFSet.isOrdinal_iff_对任意_mem_isOrdinal
   证明: ⟨h.isTransitive, fun _ => h.mem⟩
   mpr := fun ⟨h₁, h₂⟩ => isOrdinal_iff_forall_mem_isTransitive.2
     ⟨h₁, fun y hy => (h₂ y hy).isTransitive⟩
@@ -525,7 +525,7 @@ theorem subset_iff_eq_or_mem
 
 中文:
 定理 subset_iff_eq_or_mem
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: x subseteq y ↔ x = y ∨ x in y
   证明: by
   constructor
@@ -574,7 +574,7 @@ theorem mem_of_subset_of_mem
 
 中文:
 定理 mem_of_subset_of_mem
-  条件: (h : x.IsOrdinal) (hz : z.IsOrdinal) (hx : x subseteq y) (hy : y in z)
+  条件: (h : x.是序数) (hz : z.是序数) (hx : x subseteq y) (hy : y in z)
   证明: by
   obtain rfl | hx := h.eq_or_mem_of_subset (hz.mem hy) hx
   · exact hy
@@ -604,7 +604,7 @@ theorem notMem_iff_subset
 
 中文:
 定理 notMem_iff_subset
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: x ∉ y ↔ y subseteq x
   证明: by
   refine ⟨?_, fun hxy hyx => mem_irrefl _ (hxy hyx)⟩
@@ -634,7 +634,7 @@ theorem not_subset_iff_mem
 
 中文:
 定理 not_subset_iff_mem
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: ¬ x subseteq y ↔ y in x
   证明: by
   rw [not_iff_comm]; rw [notMem_iff_subset hy hx]
@@ -657,7 +657,7 @@ theorem mem_or_subset
 
 中文:
 定理 mem_or_subset
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: x in y ∨ y subseteq x
   证明: by
   rw [or_iff_not_imp_left]; rw [notMem_iff_subset hx hy]
@@ -683,7 +683,7 @@ theorem subset_total
 
 中文:
 定理 subset_total
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: x subseteq y ∨ y subseteq x
   证明: by
   obtain h | h := mem_or_subset hx hy
@@ -710,7 +710,7 @@ theorem mem_trichotomous
 
 中文:
 定理 mem_trichotomous
-  条件: (hx : x.IsOrdinal) (hy : y.IsOrdinal)
+  条件: (hx : x.是序数) (hy : y.是序数)
   结论: x in y ∨ x = y ∨ y in x
   证明: by
   rw [eq_comm]; rw [← subset_iff_eq_or_mem hy hx]
@@ -737,8 +737,8 @@ theorem trichotomous
 
 中文:
 定理 trichotomous
-  条件: (h : x.IsOrdinal)
-  结论: Std.Trichotomous (Subrel (· in ·) (· in x))
+  条件: (h : x.是序数)
+  结论: Std.三歧 (Subrel (· in ·) (· in x))
   证明: Std.trichotomous_of_rel_or_eq_or_rel_swap by
     intro ⟨a, ha⟩ ⟨b, hb⟩
     simpa using mem_trichotomous (h.mem ha) (h.mem hb)
@@ -808,8 +808,8 @@ theorem isWellOrder
 
 中文:
 定理 isWellOrder
-  条件: (h : x.IsOrdinal)
-  结论: IsWellOrder _ (Subrel (· in ·) (· in x)) where
+  条件: (h : x.是序数)
+  结论: 是良序 _ (Subrel (· in ·) (· in x)) where
   证明: (Subrel.relEmbedding _ _).wellFounded mem_wf
   trichotomous := h.trichotomous.1
 -/
@@ -831,7 +831,7 @@ theorem _root_.ZFSet.isOrdinal_iff_isWellOrder
 
 中文:
 定理 _root_.ZFSet.isOrdinal_iff_isWellOrder
-  结论: x.IsOrdinal ↔
+  结论: x.是序数 ↔
   证明: by
   use fun h => ⟨h.isTransitive, h.isWellOrder⟩
   rintro ⟨h₁, h₂⟩
@@ -860,7 +860,7 @@ theorem rank_lt_iff_mem
 
 中文:
 定理 rank_lt_iff_mem
-  条件: {x y : ZFSet} (hx : IsOrdinal x) (hy : IsOrdinal y)
+  条件: {x y : ZFSet} (hx : 是序数 x) (hy : 是序数 y)
   证明: by
   refine ⟨fun h => ?_, rank_lt_of_mem⟩
   rw [← hy.not_subset_iff_mem hx]
@@ -885,7 +885,7 @@ theorem rank_le_iff_subset
 
 中文:
 定理 rank_le_iff_subset
-  条件: {x y : ZFSet} (hx : IsOrdinal x) (hy : IsOrdinal y)
+  条件: {x y : ZFSet} (hx : 是序数 x) (hy : 是序数 y)
   证明: by
   rw [← notMem_iff_subset hy hx]; rw [← rank_lt_iff_mem hy hx]; rw [not_lt]
 
@@ -906,7 +906,7 @@ theorem rank_inj
 
 中文:
 定理 rank_inj
-  条件: {x y : ZFSet} (hx : IsOrdinal x) (hy : IsOrdinal y)
+  条件: {x y : ZFSet} (hx : 是序数 x) (hy : 是序数 y)
   证明: by
   rw [le_antisymm_iff]; rw [subset_antisymm_iff]; rw [rank_le_iff_subset hx hy]; rw [rank_le_iff_subset hy hx]
 
@@ -929,7 +929,7 @@ theorem isOrdinal_empty
 
 中文:
 定理 isOrdinal_empty
-  结论: IsOrdinal ∅
+  结论: 是序数 ∅
   证明: ⟨isTransitive_empty, fun _ _ H => (notMem_empty _ H).elim⟩
 
 Depends on / 依赖: isTransitive_empty, notMem_empty
@@ -954,8 +954,8 @@ theorem isOrdinal_succ
 
 中文:
 定理 isOrdinal_succ
-  条件: {x : ZFSet} (h : IsOrdinal x)
-  结论: IsOrdinal (insert x x)
+  条件: {x : ZFSet} (h : 是序数 x)
+  结论: 是序数 (insert x x)
   证明: by
   refine ⟨fun y hy => ?_, @fun y z w hyz hzw hw => ?_⟩
   · obtain rfl | hy := mem_insert_iff.1 hy
@@ -995,7 +995,7 @@ decreasing_by exact a.toOrd.prop
 
 中文:
 定义 toPSet
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: ⟨o.ToType, fun a => toPSet a⟩
 termination_by o
 decreasing_by exact a.toOrd.prop
@@ -1023,8 +1023,8 @@ theorem type_toPSet
 
 中文:
 定理 type_toPSet
-  条件: (o : Ordinal)
-  结论: o.toPSet.Type = o.ToType
+  条件: (o : 序数)
+  结论: o.toPSet.类型 = o.ToType
   证明: by
   rw [toPSet]
   rfl
@@ -1050,8 +1050,8 @@ theorem mem_toPSet_iff
 
 中文:
 定理 mem_toPSet_iff
-  条件: {o : Ordinal} {x : PSet}
-  结论: x in o.toPSet ↔ 存在 a < o, x.Equiv a.toPSet
+  条件: {o : 序数} {x : 命题集合}
+  结论: x in o.toPSet ↔ 存在 a < o, x.等价 a.toPSet
   证明: by
   rw [toPSet]; rw [PSet.mem_def]
   simpa using ((@ToType.mk o).exists_congr_left (p := fun y => x.Equiv y.1.toPSet)).symm
@@ -1082,7 +1082,7 @@ decreasing_by rename_i x; exact x.2
 
 中文:
 定理 rank_toPSet
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o.toPSet.rank = o
   证明: by
   rw [toPSet]; rw [PSet.rank]
@@ -1114,7 +1114,7 @@ definition toZFSet
 
 中文:
 定义 toZFSet
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: .mk o.toPSet
 
 @[simp]
@@ -1136,7 +1136,7 @@ theorem mk_toPSet
 
 中文:
 定理 mk_toPSet
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: .mk o.toPSet = o.toZFSet
   证明: rfl
 -/
@@ -1160,7 +1160,7 @@ theorem mem_toZFSet_iff
 
 中文:
 定理 mem_toZFSet_iff
-  条件: {o : Ordinal} {x : ZFSet}
+  条件: {o : 序数} {x : ZFSet}
   结论: x in o.toZFSet ↔ 存在 a < o, a.toZFSet = x
   证明: by
   induction x using Quotient.ind
@@ -1192,7 +1192,7 @@ theorem rank_toZFSet
 
 中文:
 定理 rank_toZFSet
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o.toZFSet.rank = o
   证明: rank_toPSet o
 
@@ -1217,8 +1217,8 @@ theorem coe_toZFSet
 
 中文:
 定理 coe_toZFSet
-  条件: {o : Ordinal}
-  结论: o.toZFSet = toZFSet '' Iio o
+  条件: {o : 序数}
+  结论: o.toZFSet = toZFSet '' 左无界右开区间 o
   证明: by
   ext
   simp [mem_toZFSet_iff]
@@ -1241,7 +1241,7 @@ theorem toZFSet_mem_toZFSet_of_lt
 
 中文:
 定理 toZFSet_mem_toZFSet_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   证明: by
   rw [mem_toZFSet_iff]
   exact ⟨a, h, rfl⟩
@@ -1266,7 +1266,7 @@ theorem toZFSet_monotone
 
 中文:
 定理 toZFSet_monotone
-  结论: Monotone toZFSet
+  结论: 递增 toZFSet
   证明: by
   intro a b h x hx
   obtain ⟨c, hc, rfl⟩ := mem_toZFSet_iff.1 hx
@@ -1298,7 +1298,7 @@ theorem toZFSet_mem_toZFSet_iff
 
 中文:
 定理 toZFSet_mem_toZFSet_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a.toZFSet in b.toZFSet ↔ a < b
   证明: by
   refine ⟨?_, toZFSet_mem_toZFSet_of_lt⟩
@@ -1329,7 +1329,7 @@ theorem toZFSet_subset_toZFSet_iff
 
 中文:
 定理 toZFSet_subset_toZFSet_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a.toZFSet subseteq b.toZFSet ↔ a <= b
   证明: by
   refine ⟨?_, fun h => toZFSet_monotone h⟩
@@ -1353,7 +1353,7 @@ theorem toZFSet_strictMono
 
 中文:
 定理 toZFSet_strictMono
-  结论: StrictMono toZFSet
+  结论: 严格递增 toZFSet
   证明: fun _ _ h => by rw [ssubset_iff_subset_not_subset]; simp [h, h.le]
 
 Depends on / 依赖: h.le, ssubset_iff_subset_not_subset
@@ -1373,7 +1373,7 @@ theorem toZFSet_injective
 
 中文:
 定理 toZFSet_injective
-  结论: Function.Injective toZFSet
+  结论: 函数.单射 toZFSet
   证明: toZFSet_strictMono.injective
 
 @[simp]
@@ -1423,7 +1423,7 @@ theorem toZFSet_add_one
 
 中文:
 定理 toZFSet_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: toZFSet (o + 1) = insert (toZFSet o) (toZFSet o)
   证明: by
   aesop (add simp [mem_toZFSet_iff, le_iff_eq_or_lt])
@@ -1449,7 +1449,7 @@ theorem toZFSet_succ
 
 中文:
 定理 toZFSet_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: toZFSet (Order.succ o) = insert (toZFSet o) (toZFSet o)
   证明: toZFSet_add_one o
 
@@ -1474,7 +1474,7 @@ theorem card_toZFSet
 
 中文:
 定理 card_toZFSet
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: (toZFSet o).card = o.card
   证明: by
   simpa [← coe_toZFSet, cardinalMk_coe_sort, Cardinal.mk_Iio_ordinal, ← lift_card] using
@@ -1509,8 +1509,8 @@ theorem isOrdinal_toZFSet
 
 中文:
 定理 isOrdinal_toZFSet
-  条件: (o : Ordinal)
-  结论: IsOrdinal o.toZFSet
+  条件: (o : 序数)
+  结论: 是序数 o.toZFSet
   证明: by
   refine ⟨fun x hx y hy => ?_, fun {z y x} hz hy hx => ?_⟩
   all_goals
@@ -1541,8 +1541,8 @@ theorem IsOrdinal.toZFSet_rank_eq
   proof: (IsOrdinal.rank_inj (isOrdinal_toZFSet _) hx).1 (rank_toZFSet _)
 
 中文:
-定理 IsOrdinal.toZFSet_rank_eq
-  条件: {x : ZFSet} (hx : IsOrdinal x)
+定理 是序数.toZFSet_rank_eq
+  条件: {x : ZFSet} (hx : 是序数 x)
   结论: x.rank.toZFSet = x
   证明: (IsOrdinal.rank_inj (isOrdinal_toZFSet _) hx).1 (rank_toZFSet _)
 
@@ -1600,8 +1600,8 @@ definition _root_.Ordinal.toZFSetIso
   map_rel_iff' {a b} := by simp
 
 中文:
-定义 _root_.Ordinal.toZFSetIso
-  签名: : Ordinal ≃o {x // ZFSet.IsOrdinal x} where
+定义 _root_.序数.toZFSetIso
+  签名: : 序数 ≃o {x // ZFSet.是序数 x} where
   定义体: ⟨_, isOrdinal_toZFSet o⟩
   invFun x := rank x.1
   left_inv o := rank_toZFSet o

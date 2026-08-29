@@ -86,7 +86,7 @@ definition leftUnitorNatIsoCat
   body: Cat.Hom.isoMk NatIso.ofComponents (fun_ ·)
 
 中文:
-定义 leftUnitorNatIsoCat
+定义 leftUnitor自然数IsoCat
   签名: (a b : B)
   定义体: Cat.Hom.isoMk NatIso.ofComponents (fun_ ·)
 
@@ -108,7 +108,7 @@ definition associatorNatIsoRightCat
   body: Cat.Hom.isoMk NatIso.ofComponents (α_ f g ·)
 
 中文:
-定义 associatorNatIsoRightCat
+定义 associator自然数IsoRightCat
   签名: {a b c : B} (f : a ⟶ b) (g : b ⟶ c) (d : B)
   定义体: Cat.Hom.isoMk NatIso.ofComponents (α_ f g ·)
 
@@ -132,7 +132,7 @@ definition associatorNatIsoMiddleCat
   body: Cat.Hom.isoMk NatIso.ofComponents (α_ f · h)
 
 中文:
-定义 associatorNatIsoMiddleCat
+定义 associator自然数IsoMiddleCat
   签名: {a b c d : B} (f : a ⟶ b) (h : c ⟶ d)
   定义体: Cat.Hom.isoMk NatIso.ofComponents (α_ f · h)
 
@@ -155,7 +155,7 @@ definition rightUnitorNatIsoCat
   body: Cat.Hom.isoMk NatIso.ofComponents (ρ_ ·)
 
 中文:
-定义 rightUnitorNatIsoCat
+定义 rightUnitor自然数IsoCat
   签名: (a b : B)
   定义体: Cat.Hom.isoMk NatIso.ofComponents (ρ_ ·)
 
@@ -176,7 +176,7 @@ definition associatorNatIsoLeftCat
   body: Cat.Hom.isoMk NatIso.ofComponents (α_ · g h)
 
 中文:
-定义 associatorNatIsoLeftCat
+定义 associator自然数IsoLeftCat
   签名: (a : B) {b c d : B} (g : b ⟶ c) (h : c ⟶ d)
   定义体: Cat.Hom.isoMk NatIso.ofComponents (α_ · g h)
 

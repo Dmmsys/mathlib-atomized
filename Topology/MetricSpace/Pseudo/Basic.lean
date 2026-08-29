@@ -157,7 +157,7 @@ theorem controlled_of_isUniformInducing
 
 中文:
 定理 controlled_of_isUniformInducing
-  结论: [PseudoMetricSpace β] {f : α -> β}
+  结论: [伪度量空间 β] {f : α -> β}
   证明: ⟨uniformContinuous_iff.1 h.uniformContinuous, (isUniformInducing_iff.1 h).2⟩
 
 @[deprecated controlled_of_isUniformInducing (since := "2026-04-01")]
@@ -181,7 +181,7 @@ theorem controlled_of_isUniformEmbedding
 
 中文:
 定理 controlled_of_isUniformEmbedding
-  结论: [PseudoMetricSpace β] {f : α -> β}
+  结论: [伪度量空间 β] {f : α -> β}
   证明: controlled_of_isUniformInducing h.toIsUniformInducing
 
 Depends on / 依赖: controlled_of_isUniformInducing, h.toIsUniformInducing, toIsUniformInducing
@@ -202,7 +202,7 @@ theorem totallyBounded_iff
 
 中文:
 定理 totallyBounded_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: uniformity_basis_dist.totallyBounded_iff
 
 Depends on / 依赖: totallyBounded_iff, uniformity_basis_dist, uniformity_basis_dist.totallyBounded_iff
@@ -230,7 +230,7 @@ theorem totallyBounded_of_finite_discretization
 
 中文:
 定理 totallyBounded_of_finite_discretization
-  结论: {s : Set α}
+  结论: {s : 集合 α}
   证明: by
   rcases s.eq_empty_or_nonempty with hs | hs
   · rw [hs]
@@ -275,7 +275,7 @@ theorem finite_approx_of_totallyBounded
 
 中文:
 定理 finite_approx_of_totallyBounded
-  条件: {s : Set α} (hs : TotallyBounded s)
+  条件: {s : 集合 α} (hs : 全有界 s)
   证明: by
   intro ε ε_pos
   rw [totallyBounded_iff_subset] at hs
@@ -302,7 +302,7 @@ theorem tendstoUniformlyOnFilter_iff
 
 中文:
 定理 tendstoUniformlyOnFilter_iff
-  条件: {F : ι -> β -> α} {f : β -> α} {p : Filter ι} {p' : Filter β}
+  条件: {F : ι -> β -> α} {f : β -> α} {p : 滤子 ι} {p' : 滤子 β}
   证明: by
   refine ⟨fun H ε hε => H _ (dist_mem_uniformity hε), fun H u hu => ?_⟩
   rcases mem_uniformity_dist.1 hu with ⟨ε, εpos, hε⟩
@@ -331,7 +331,7 @@ theorem tendstoLocallyUniformlyOn_iff
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff
-  结论: [TopologicalSpace β] {F : ι -> β -> α} {f : β -> α}
+  结论: [拓扑空间 β] {F : ι -> β -> α} {f : β -> α}
   证明: by
   refine ⟨fun H ε hε => H _ (dist_mem_uniformity hε), fun H u hu x hx => ?_⟩
   rcases mem_uniformity_dist.1 hu with ⟨ε, εpos, hε⟩
@@ -362,7 +362,7 @@ theorem tendstoUniformlyOn_iff
 
 中文:
 定理 tendstoUniformlyOn_iff
-  条件: {F : ι -> β -> α} {f : β -> α} {p : Filter ι} {s : Set β}
+  条件: {F : ι -> β -> α} {f : β -> α} {p : 滤子 ι} {s : 集合 β}
   证明: by
   refine ⟨fun H ε hε => H _ (dist_mem_uniformity hε), fun H u hu => ?_⟩
   rcases mem_uniformity_dist.1 hu with ⟨ε, εpos, hε⟩
@@ -388,7 +388,7 @@ theorem tendstoLocallyUniformly_iff
 
 中文:
 定理 tendstoLocallyUniformly_iff
-  结论: [TopologicalSpace β] {F : ι -> β -> α} {f : β -> α}
+  结论: [拓扑空间 β] {F : ι -> β -> α} {f : β -> α}
   证明: by
   simp only [← tendstoLocallyUniformlyOn_univ, tendstoLocallyUniformlyOn_iff, nhdsWithin_univ,
     mem_univ, forall_const]
@@ -414,7 +414,7 @@ theorem tendstoUniformly_iff
 
 中文:
 定理 tendstoUniformly_iff
-  条件: {F : ι -> β -> α} {f : β -> α} {p : Filter ι}
+  条件: {F : ι -> β -> α} {f : β -> α} {p : 滤子 ι}
   证明: by
   rw [← tendstoUniformlyOn_univ]; rw [tendstoUniformlyOn_iff]
   simp
@@ -436,7 +436,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   证明: uniformity_basis_dist.cauchy_iff
 -/
 protected theorem cauchy_iff {f : Filter α} :
@@ -454,8 +454,8 @@ theorem exists_ball_inter_eq_singleton_of_mem_discrete
   proof: nhds_basis_ball.exists_inter_eq_singleton_of_mem_discrete hs hx
 
 中文:
-定理 exists_ball_inter_eq_singleton_of_mem_discrete
-  条件: (hs : IsDiscrete s) {x : α} (hx : x in s)
+定理 存在_ball_inter_eq_singleton_of_mem_discrete
+  条件: (hs : 是离散 s) {x : α} (hx : x in s)
   证明: nhds_basis_ball.exists_inter_eq_singleton_of_mem_discrete hs hx
 
 Depends on / 依赖: exists_inter_eq_singleton_of_mem_discrete, nhds_basis_ball, nhds_basis_ball.exists_inter_eq_singleton_of_mem_discrete
@@ -473,8 +473,8 @@ theorem exists_closedBall_inter_eq_singleton_of_discrete
   proof: nhds_basis_closedBall.exists_inter_eq_singleton_of_mem_discrete hs hx
 
 中文:
-定理 exists_closedBall_inter_eq_singleton_of_discrete
-  条件: (hs : IsDiscrete s) {x : α} (hx : x in s)
+定理 存在_closedBall_inter_eq_singleton_of_discrete
+  条件: (hs : 是离散 s) {x : α} (hx : x in s)
   证明: nhds_basis_closedBall.exists_inter_eq_singleton_of_mem_discrete hs hx
 
 Depends on / 依赖: exists_inter_eq_singleton_of_mem_discrete, nhds_basis_closedBall, nhds_basis_closedBall.exists_inter_eq_singleton_of_mem_discrete
@@ -502,7 +502,7 @@ alias ⟨Inseparable.nndist_eq_zero, _⟩ := Metric.inseparable_iff_nndist
 中文:
 定理 Metric.inseparable_iff_nndist
   条件: {x y : α}
-  结论: Inseparable x y ↔ nndist x y = 0
+  结论: 不可分 x y ↔ nndist x y = 0
   证明: by
   rw [EMetric.inseparable_iff]; rw [edist_nndist]; rw [ENNReal.coe_eq_zero]
 
@@ -530,7 +530,7 @@ alias ⟨Inseparable.dist_eq_zero, _⟩ := Metric.inseparable_iff
 中文:
 定理 Metric.inseparable_iff
   条件: {x y : α}
-  结论: Inseparable x y ↔ dist x y = 0
+  结论: 不可分 x y ↔ dist x y = 0
   证明: by
   rw [Metric.inseparable_iff_nndist]; rw [dist_nndist]; rw [NNReal.coe_eq_zero]
 
@@ -553,7 +553,7 @@ theorem tendsto_nhds_unique_dist
 
 中文:
 定理 tendsto_nhds_unique_dist
-  结论: {f : β -> α} {l : Filter β} {x y : α} [NeBot l]
+  结论: {f : β -> α} {l : 滤子 β} {x y : α} [NeBot l]
   证明: (tendsto_nhds_unique_inseparable ha hb).dist_eq_zero
 
 Depends on / 依赖: dist_eq_zero, tendsto_nhds_unique_inseparable
@@ -576,7 +576,7 @@ theorem cauchySeq_iff_tendsto_dist_atTop_0
 
 中文:
 定理 cauchySeq_iff_tendsto_dist_atTop_0
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: by
   rw [cauchySeq_iff_tendsto]; rw [Metric.uniformity_eq_comap_nhds_zero]; rw [tendsto_comap_iff]; rw [Function.comp_def]
   simp_rw [Prod.map_fst, Prod.map_snd]
@@ -606,8 +606,8 @@ lemma IsInducing.isSeparable_preimage
   have : IsInducing ((mapsTo_
 
 中文:
-引理 IsInducing.isSeparable_preimage
-  结论: {α : 类型} [TopologicalSpace α]
+引理 是Inducing.isSeparable_preimage
+  结论: {α : 类型} [拓扑空间 α]
   证明: by
   let : UniformSpace α := TopologicalSpace.pseudoMetrizableSpaceUniformity α
   have := pseudoMetrizableSpaceUniformity_countably_generated
@@ -636,8 +636,8 @@ theorem IsEmbedding.isSeparable_preimage
   proof: hf.isInducing.isSeparable_preimage hs
 
 中文:
-定理 IsEmbedding.isSeparable_preimage
-  结论: {α : 类型} [TopologicalSpace α]
+定理 是嵌入.isSeparable_preimage
+  结论: {α : 类型} [拓扑空间 α]
   证明: hf.isInducing.isSeparable_preimage hs
 -/
 protected theorem IsEmbedding.isSeparable_preimage {α : Type*} [TopologicalSpace α]
@@ -657,8 +657,8 @@ theorem IsCompact.isSeparable
   .of_subtype s
 
 中文:
-定理 IsCompact.isSeparable
-  结论: {α : 类型} [TopologicalSpace α] [PseudoMetrizableSpace α]
+定理 是紧集.isSeparable
+  结论: {α : 类型} [拓扑空间 α] [PseudoMetrizable空间 α]
   证明: haveI : CompactSpace s := isCompact_iff_compactSpace.mp hs
   .of_subtype s
 
@@ -727,7 +727,7 @@ alias IsCompact.finite_cover_balls := finite_cover_balls_of_compact
 
 中文:
 定理 finite_cover_balls_of_compact
-  条件: (hs : IsCompact s) {e : 实数} (he : 0 < e)
+  条件: (hs : 是紧集 s) {e : 实数} (he : 0 < e)
   证明: let ⟨t, hts, ht⟩ := hs.elim_nhds_subcover _ (fun x _ => ball_mem_nhds x he)
   ⟨t, hts, t.finite_toSet, ht⟩
 
@@ -755,8 +755,8 @@ lemma exists_finite_cover_balls_of_isCompact_closure
   simpa using sub
 
 中文:
-引理 exists_finite_cover_balls_of_isCompact_closure
-  条件: (hs : IsCompact (closure s)) (hε : 0 < ε)
+引理 存在_finite_cover_balls_of_isCompact_closure
+  条件: (hs : 是紧集 (closure s)) (hε : 0 < ε)
   证明: by
   obtain ⟨t, hst⟩ := hs.elim_finite_subcover (fun x : s => ball x ε) (fun _ => isOpen_ball) fun x hx =>
     let ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ hε; mem_iUnion.2 ⟨⟨y, hy⟩, hxy⟩
@@ -786,7 +786,7 @@ theorem ContinuousOn.isSeparable_image
 
 中文:
 定理 ContinuousOn.isSeparable_image
-  结论: {α : 类型} [TopologicalSpace α] [PseudoMetrizableSpace α]
+  结论: {α : 类型} [拓扑空间 α] [PseudoMetrizable空间 α]
   证明: by
   rw [image_eq_range]; rw [← image_univ]
   exact (isSeparable_univ_iff.2 hs.separableSpace).image hf.domRestrict

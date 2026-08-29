@@ -58,7 +58,7 @@ definition antidiagonalTuple
 
 中文:
 定义 antidiagonalTuple
-  签名: : 对任意 k, 自然数 -> List (Fin k -> 自然数)
+  签名: : 对任意 k, 自然数 -> 列表 (有限集 k -> 自然数)
 -/
 def antidiagonalTuple : forall k, Nat -> List (Fin k -> Nat)
   | 0, 0 => [![]]
@@ -126,7 +126,7 @@ theorem mem_antidiagonalTuple
 
 中文:
 定理 mem_antidiagonalTuple
-  条件: {n : 自然数} {k : 自然数} {x : Fin k -> 自然数}
+  条件: {n : 自然数} {k : 自然数} {x : 有限集 k -> 自然数}
   证明: by
   induction x using Fin.consInduction generalizing n with
   | elim0 =>
@@ -174,7 +174,7 @@ theorem nodup_antidiagonalTuple
 中文:
 定理 nodup_antidiagonalTuple
   条件: (k n : 自然数)
-  结论: List.Nodup (antidiagonalTuple k n)
+  结论: 列表.Nodup (antidiagonalTuple k n)
   证明: by
   induction k generalizing n with
   | zero => cases n <;> simp
@@ -405,7 +405,7 @@ theorem mem_antidiagonalTuple
 
 中文:
 定理 mem_antidiagonalTuple
-  条件: {n : 自然数} {k : 自然数} {x : Fin k -> 自然数}
+  条件: {n : 自然数} {k : 自然数} {x : 有限集 k -> 自然数}
   证明: List.Nat.mem_antidiagonalTuple
 
 Depends on / 依赖: List.Nat.mem_antidiagonalTuple, mem_antidiagonalTuple
@@ -577,7 +577,7 @@ theorem mem_antidiagonalTuple
 
 中文:
 定理 mem_antidiagonalTuple
-  条件: {n : 自然数} {k : 自然数} {x : Fin k -> 自然数}
+  条件: {n : 自然数} {k : 自然数} {x : 有限集 k -> 自然数}
   证明: List.Nat.mem_antidiagonalTuple
 
 Depends on / 依赖: List.Nat.mem_antidiagonalTuple, mem_antidiagonalTuple

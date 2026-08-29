@@ -37,7 +37,7 @@ definition Elem
 
 中文:
 定义 Elem
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {x // x in s}
 -/
 @[coe, reducible] def Elem (s : Set α) : Type u := {x // x in s}
@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (Set α) (类型u)
+  签名: CoeSort (集合 α) (类型u)
   定义体: ⟨Elem⟩
 -/
 instance : CoeSort (Set α) (Type u) := ⟨Elem⟩

@@ -31,10 +31,10 @@ class IsSimpleRing
     - simple : IsSimpleOrder (TwoSidedIdeal R)
 
 中文:
-类 IsSimpleRing
-  参数: (R : 类型) [NonUnitalNonAssocRing R]
+类 是单环
+  参数: (R : 类型) [非幺非结合环 R]
   公理与运算 (1 个):
-    - simple : IsSimpleOrder (TwoSidedIdeal R)
+    - simple : 是单序 (TwoSided理想 R)
 -/
 @[mk_iff] class IsSimpleRing (R : Type*) [NonUnitalNonAssocRing R] : Prop where
   simple : IsSimpleOrder (TwoSidedIdeal R)

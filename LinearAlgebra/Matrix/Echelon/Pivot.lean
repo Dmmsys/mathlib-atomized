@@ -54,8 +54,8 @@ structure IsPivotedBy
     - isPivotEntry((i : m)) : (forall j : n, (j : WithTop n) < l i -> A i j = 0) ∧ forall c : n, l i = c -> A i c != 0
 
 中文:
-结构 IsPivotedBy
-  参数: [LT m] [LT n] (A : Matrix m n R) (l : m -> WithTop n)
+结构 是PivotedBy
+  参数: [LT m] [LT n] (A : 矩阵 m n R) (l : m -> WithTop n)
   公理与运算 (2 个):
     - isRowEchelon : A.IsRowEchelon
     - isPivotEntry((i : m)) : (对任意 j : n, (j : WithTop n) < l i -> A i j = 0) ∧ 对任意 c : n, l i = c -> A i c != 0
@@ -80,7 +80,7 @@ theorem isLeadingEntry
 
 中文:
 定理 isLeadingEntry
-  条件: [LT m] [LT n] {i : m} {c : n} (hA : A.IsPivotedBy l) (hc : l i = c)
+  条件: [LT m] [LT n] {i : m} {c : n} (hA : A.是PivotedBy l) (hc : l i = c)
   证明: by
   refine ⟨fun j hj => (hA.isPivotEntry i).1 j ?_, (hA.isPivotEntry i).2 c hc⟩
   rw [hc]
@@ -110,7 +110,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: [LT m] [LT n] {i : m} (hA : A.IsPivotedBy l)
+  条件: [LT m] [LT n] {i : m} (hA : A.是PivotedBy l)
   证明: by
   cases hc : l i with
   | top =>
@@ -223,7 +223,7 @@ theorem strictMonoOn
 
 中文:
 定理 strictMonoOn
-  条件: [Preorder m] (hA : A.IsPivotedBy l)
+  条件: [预序 m] (hA : A.是PivotedBy l)
   证明: fun _ h₁ _ _ hlt => hA.lt_of_lt_of_ne_top hlt h₁
 
 Depends on / 依赖: hA.lt_of_lt_of_ne_top, lt_of_lt_of_ne_top
@@ -249,7 +249,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  条件: (hA : A.IsPivotedBy l)
+  条件: (hA : A.是PivotedBy l)
   证明: by
   refine monotone_iff_forall_lt.mpr ?_
   intro i₁ i₂ hlt
@@ -285,7 +285,7 @@ theorem isPivotedBy_iff
 
 中文:
 定理 isPivotedBy_iff
-  条件: [PartialOrder m] [LinearOrder n]
+  条件: [偏序 m] [线性序 n]
   证明: by
   refine ⟨fun hA => ⟨hA.monotone, hA.strictMonoOn, hA.isPivotEntry⟩, ?_⟩
   refine fun ⟨hmono, hstrict, hlead⟩ => ⟨fun i₁ i₂ hlt j₂ hz => (hlead i₂).1 j₂ ?_, hlead⟩
@@ -324,7 +324,7 @@ refine and_congr_right' and_congr_right' forall_congr' fun i => ?_
 
 中文:
 定理 isPivotedBy_iff'
-  条件: [PartialOrder m] [LinearOrder n]
+  条件: [偏序 m] [线性序 n]
   证明: by
   rw [isPivotedBy_iff]
 refine and_congr_right' and_congr_right' forall_congr' fun i => ?_
@@ -365,7 +365,7 @@ theorem rank_eq
 
 中文:
 定理 rank_eq
-  条件: (hA : A.IsPivotedBy l)
+  条件: (hA : A.是PivotedBy l)
   结论: A.rank = #{i | l i != ⊤}
   证明: by
   refine le_antisymm (A.rank_le_card_of_support_subset _
@@ -416,8 +416,8 @@ instance [Fintype
   decidable_of_iff' _ isPivotedBy_iff
 
 中文:
-实例 [Fintype
-  签名: m] [LinearOrder m] [Fintype n] [LinearOrder n]
+实例 [有限类型
+  签名: m] [线性序 m] [有限类型 n] [线性序 n]
   定义体: -- instance resolution cannot nest `Fintype.decidableForallFintype` under another binder
   have : DecidablePred fun i : m =>
       (forall j : n, (j : WithTop n) < l i -> A i j = 0) ∧ forall c : n, l i = c -> A i c != 0 :=

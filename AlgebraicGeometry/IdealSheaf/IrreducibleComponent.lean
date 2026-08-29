@@ -128,7 +128,7 @@ definition irreducibleComponent
 
 中文:
 定义 irreducibleComponent
-  签名: : Scheme
+  签名: : 概形
   定义体: (X.irreducibleComponentIdeal Z hZ).subscheme
 
 Depends on / 依赖: X.irreducibleComponentIdeal, irreducibleComponentIdeal, subscheme
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedImmersion (X.irreducibleComponentι Z hZ)
+  签名: 是闭浸入 (X.irreducibleComponentι Z hZ)
   定义体: inferInstanceAs (IsClosedImmersion (X.irreducibleComponentIdeal Z hZ).subschemeι)
 
 Depends on / 依赖: IsClosedImmersion, X.irreducibleComponentIdeal, irreducibleComponentIdeal
@@ -201,7 +201,7 @@ include hZ in
 
 中文:
 实例 :
-  签名: IrreducibleSpace (X.irreducibleComponent Z hZ)
+  签名: 不可约空间 (X.irreducibleComponent Z hZ)
   定义体: Subtype.irreducibleSpace hZ.1
 
 include hZ in
@@ -224,7 +224,7 @@ theorem irreducibleComponentOpen_eq_top
 
 中文:
 定理 irreducibleComponentOpen_eq_top
-  条件: [IrreducibleSpace X]
+  条件: [不可约空间 X]
   证明: by
   rw [irreducibleComponents_eq_singleton]; rw [Set.mem_singleton_iff] at hZ
   simp [irreducibleComponentOpen, irreducibleComponents_eq_singleton, hZ]
@@ -251,8 +251,8 @@ instance [IrreducibleSpace
   exact
 
 中文:
-实例 [IrreducibleSpace
-  签名: X] : CategoryTheory.IsIso (X.irreducibleComponentι Z hZ)
+实例 [不可约空间
+  签名: X] : 范畴论.是同构 (X.irreducibleComponentι Z hZ)
   定义体: by
   have : CategoryTheory.IsIso (irreducibleComponentOpen X Z).ι := by
     rw [irreducibleComponentOpen_eq_top X Z hZ]

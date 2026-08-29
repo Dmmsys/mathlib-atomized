@@ -60,7 +60,7 @@ theorem one_mk_mul_one_mk
 
 中文:
 定理 one_mk_mul_one_mk
-  条件: [MulOneClass M] [Mul N] (b₁ b₂ : N)
+  条件: [MulOne类 M] [乘法 N] (b₁ b₂ : N)
   证明: by
   rw [mk_mul_mk]; rw [mul_one]
 
@@ -86,7 +86,7 @@ theorem mk_one_mul_mk_one
 
 中文:
 定理 mk_one_mul_mk_one
-  条件: [Mul M] [MulOneClass N] (a₁ a₂ : M)
+  条件: [乘法 M] [MulOne类 N] (a₁ a₂ : M)
   证明: by
   rw [mk_mul_mk]; rw [mul_one]
 
@@ -112,7 +112,7 @@ theorem fst_mul_snd
 
 中文:
 定理 fst_mul_snd
-  条件: [MulOneClass M] [MulOneClass N] (p : M × N)
+  条件: [MulOne类 M] [MulOne类 N] (p : M × N)
   结论: (p.fst, 1) * (1, p.snd) = p
   证明: Prod.ext (mul_one p.1) (one_mul p.2)
 
@@ -159,7 +159,7 @@ instance isMulCommutative
 
 中文:
 实例 isMulCommutative
-  签名: [Mul M] [Mul N] [IsMulCommutative M] [IsMulCommutative N]
+  签名: [乘法 M] [乘法 N] [是MulCommutative M] [是MulCommutative N]
   定义体: by ext <;> apply mul_comm'
 
 @[to_additive]
@@ -183,7 +183,7 @@ instance commMagma
 
 中文:
 实例 commMagma
-  签名: [CommMagma M] [CommMagma N]
+  签名: [交换原群 M] [交换原群 N]
   定义体: by ext <;> apply mul_comm
 
 @[to_additive]
@@ -206,7 +206,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: [Semigroup M] [Semigroup N]
+  签名: [半群 M] [半群 N]
   定义体: by ext <;> exact mul_assoc ..
 
 @[to_additive]
@@ -226,7 +226,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup G] [CommSemigroup H]
+  签名: [交换半群 G] [交换半群 H]
 -/
 instance instCommSemigroup [CommSemigroup G] [CommSemigroup H] : CommSemigroup (G × H) where
 
@@ -244,7 +244,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass M] [MulOneClass N]
+  签名: [MulOne类 M] [MulOne类 N]
   定义体: by ext <;> exact one_mul _
   mul_one _ := by ext <;> exact mul_one _
 
@@ -273,7 +273,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid M] [Monoid N]
+  签名: [幺半群 M] [幺半群 N]
   定义体: { npow := fun z a => ⟨NPow.npow z a.1, NPow.npow z a.2⟩,
     npow_zero := fun _ => Prod.ext (Monoid.npow_zero _) (Monoid.npow_zero _),
     npow_succ := fun _ _ => Prod.ext (Monoid.npow_succ _ _) (Monoid.npow_succ _ _),
@@ -305,7 +305,7 @@ instance instIsMulTorsionFree
 
 中文:
 实例 instIsMulTorsionFree
-  签名: [Monoid M] [Monoid N] [IsMulTorsionFree M] [IsMulTorsionFree N]
+  签名: [幺半群 M] [幺半群 N] [是MulTorsionFree M] [是MulTorsionFree N]
   定义体: by
     ext <;> apply pow_left_injective hn; exacts [congr(($hab).1), congr(($hab).2)]
 
@@ -334,8 +334,8 @@ instance [DivInvMonoid
 @[to_additive]
 
 中文:
-实例 [DivInvMonoid
-  签名: G] [DivInvMonoid H] : DivInvMonoid (G × H) where
+实例 [除逆幺半群
+  签名: G] [除逆幺半群 H] : 除逆幺半群 (G × H) where
   定义体: by ext <;> exact div_eq_mul_inv ..
   zpow z a := ⟨ZPow.zpow z a.1, ZPow.zpow z a.2⟩
   zpow_zero' _ := by ext <;> exact DivInvMonoid.zpow_zero' _
@@ -369,8 +369,8 @@ instance [DivisionMonoid
 @[to_additive SubtractionCommMonoid]
 
 中文:
-实例 [DivisionMonoid
-  签名: G] [DivisionMonoid H] : DivisionMonoid (G × H)
+实例 [Division幺半群
+  签名: G] [Division幺半群 H] : Division幺半群 (G × H)
   定义体: { mul_inv_rev := fun _ _ => Prod.ext (mul_inv_rev _ _) (mul_inv_rev _ _),
     inv_eq_of_mul := fun _ _ h =>
       Prod.ext (inv_eq_of_mul_eq_one_right <| congr_arg fst h)
@@ -400,8 +400,8 @@ instance [DivisionCommMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionCommMonoid
-  签名: G] [DivisionCommMonoid H] : DivisionCommMonoid (G × H)
+实例 [DivisionComm幺半群
+  签名: G] [DivisionComm幺半群 H] : DivisionComm幺半群 (G × H)
   定义体: { mul_comm := fun ⟨g₁, h₁⟩ ⟨_, _⟩ => by rw [mk_mul_mk, mul_comm g₁, mul_comm h₁]; rfl }
 
 @[to_additive]
@@ -424,7 +424,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group G] [Group H]
+  签名: [群 G] [群 H]
   定义体: by ext <;> exact inv_mul_cancel _
 
 @[to_additive]
@@ -446,8 +446,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: G] [Mul H] [IsLeftCancelMul G] [IsLeftCancelMul H] : IsLeftCancelMul (G × H) where
+实例 [乘法
+  签名: G] [乘法 H] [左乘消去 G] [左乘消去 H] : 左乘消去 (G × H) where
   定义体: Prod.ext (mul_left_cancel (Prod.ext_iff.1 h).1) (mul_left_cancel (Prod.ext_iff.1 h).2)
 
 @[to_additive]
@@ -470,8 +470,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: G] [Mul H] [IsRightCancelMul G] [IsRightCancelMul H] : IsRightCancelMul (G × H) where
+实例 [乘法
+  签名: G] [乘法 H] [右乘消去 G] [右乘消去 H] : 右乘消去 (G × H) where
   定义体: Prod.ext (mul_right_cancel (Prod.ext_iff.1 h).1) (mul_right_cancel (Prod.ext_iff.1 h).2)
 
 @[to_additive]
@@ -491,8 +491,8 @@ instance [Mul
   signature: G] [Mul H] [IsCancelMul G] [IsCancelMul H] : IsCancelMul (G × H) where
 
 中文:
-实例 [Mul
-  签名: G] [Mul H] [IsCancelMul G] [IsCancelMul H] : IsCancelMul (G × H) where
+实例 [乘法
+  签名: G] [乘法 H] [是消去乘法 G] [是消去乘法 H] : 是消去乘法 (G × H) where
 -/
 instance [Mul G] [Mul H] [IsCancelMul G] [IsCancelMul H] : IsCancelMul (G × H) where
 
@@ -508,8 +508,8 @@ instance [LeftCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [LeftCancelSemigroup
-  签名: G] [LeftCancelSemigroup H] : LeftCancelSemigroup (G × H)
+实例 [左消去半群
+  签名: G] [左消去半群 H] : 左消去半群 (G × H)
   定义体: { mul_left_cancel := fun _ _ _ => mul_left_cancel }
 
 @[to_additive]
@@ -531,8 +531,8 @@ instance [RightCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [RightCancelSemigroup
-  签名: G] [RightCancelSemigroup H] : RightCancelSemigroup (G × H)
+实例 [右消去半群
+  签名: G] [右消去半群 H] : 右消去半群 (G × H)
   定义体: { mul_right_cancel := fun _ _ _ => mul_right_cancel }
 
 @[to_additive]
@@ -554,8 +554,8 @@ instance [LeftCancelMonoid
 @[to_additive]
 
 中文:
-实例 [LeftCancelMonoid
-  签名: M] [LeftCancelMonoid N] : LeftCancelMonoid (M × N)
+实例 [左消去幺半群
+  签名: M] [左消去幺半群 N] : 左消去幺半群 (M × N)
   定义体: { mul_left_cancel _ _ := by simp }
 
 @[to_additive]
@@ -577,8 +577,8 @@ instance [RightCancelMonoid
 @[to_additive]
 
 中文:
-实例 [RightCancelMonoid
-  签名: M] [RightCancelMonoid N] : RightCancelMonoid (M × N)
+实例 [右消去幺半群
+  签名: M] [右消去幺半群 N] : 右消去幺半群 (M × N)
   定义体: { mul_right_cancel _ _ := by simp }
 
 @[to_additive]
@@ -600,8 +600,8 @@ instance [CancelMonoid
 @[to_additive]
 
 中文:
-实例 [CancelMonoid
-  签名: M] [CancelMonoid N] : CancelMonoid (M × N)
+实例 [消去幺半群
+  签名: M] [消去幺半群 N] : 消去幺半群 (M × N)
   定义体: { mul_right_cancel _ _ := by simp only [mul_left_inj, imp_self, forall_const] }
 
 @[to_additive]
@@ -624,7 +624,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid M] [CommMonoid N]
+  签名: [交换幺半群 M] [交换幺半群 N]
   定义体: { mul_comm := fun ⟨m₁, n₁⟩ ⟨_, _⟩ => by rw [mk_mul_mk, mk_mul_mk, mul_comm m₁, mul_comm n₁] }
 
 @[to_additive]
@@ -646,8 +646,8 @@ instance [CancelCommMonoid
 @[to_additive]
 
 中文:
-实例 [CancelCommMonoid
-  签名: M] [CancelCommMonoid N] : CancelCommMonoid (M × N)
+实例 [消去交换幺半群
+  签名: M] [消去交换幺半群 N] : 消去交换幺半群 (M × N)
   定义体: { mul_left_cancel _ _ := by simp }
 
 @[to_additive]
@@ -668,7 +668,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup G] [CommGroup H]
+  签名: [交换群 G] [交换群 H]
   定义体: { mul_comm := fun ⟨g₁, h₁⟩ ⟨_, _⟩ => by rw [mk_mul_mk, mk_mul_mk, mul_comm g₁, mul_comm h₁] }
 
 Depends on / 依赖: mk_mul_mk, mul_comm
@@ -693,7 +693,7 @@ theorem SemiconjBy.prod
 @[to_additive]
 
 中文:
-定理 SemiconjBy.prod
+定理 SemiconjBy.乘积
   结论: {x y z : M × N}
   证明: Prod.ext hm hn
 
@@ -717,7 +717,7 @@ theorem Prod.semiconjBy_iff
 @[to_additive AddCommute.prod]
 
 中文:
-定理 Prod.semiconjBy_iff
+定理 积类型.semiconjBy_iff
   条件: {x y z : M × N}
   证明: Prod.ext_iff
 
@@ -741,7 +741,7 @@ theorem Commute.prod
 @[to_additive]
 
 中文:
-定理 Commute.prod
+定理 Commute.乘积
   条件: {x y : M × N} (hm : Commute x.1 y.1) (hn : Commute x.2 y.2)
   结论: Commute x y
   证明: SemiconjBy.prod hm hn
@@ -763,7 +763,7 @@ theorem Prod.commute_iff
   proof: semiconjBy_iff
 
 中文:
-定理 Prod.commute_iff
+定理 积类型.commute_iff
   条件: {x y : M × N}
   证明: semiconjBy_iff
 
@@ -839,7 +839,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ⇑(fst M N) = Prod.fst
+  结论: ⇑(fst M N) = 积类型.fst
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -858,7 +858,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ⇑(snd M N) = Prod.snd
+  结论: ⇑(snd M N) = 积类型.snd
   证明: rfl
 -/
 theorem coe_snd : ⇑(snd M N) = Prod.snd :=
@@ -881,7 +881,7 @@ definition prod
 @[to_additive coe_prod]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : M ->ₙ* N) (g : M ->ₙ* P)
   定义体: Function.prod f g
   map_mul' x y := Prod.ext (f.map_mul x y) (g.map_mul x y)
@@ -908,7 +908,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : M ->ₙ* N) (g : M ->ₙ* P)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[to_additive (attr := simp) prod_apply]
@@ -931,7 +931,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (f : M ->ₙ* N) (g : M ->ₙ* P) (x)
-  结论: f.prod g x = (f x, g x)
+  结论: f.乘积 g x = (f x, g x)
   证明: rfl
 
 @[to_additive (attr := simp) fst_comp_prod]
@@ -954,7 +954,7 @@ theorem fst_comp_prod
 中文:
 定理 fst_comp_prod
   条件: (f : M ->ₙ* N) (g : M ->ₙ* P)
-  结论: (fst N P).comp (f.prod g) = f
+  结论: (fst N P).comp (f.乘积 g) = f
   证明: ext fun _ => rfl
 
 @[to_additive (attr := simp) snd_comp_prod]
@@ -977,7 +977,7 @@ theorem snd_comp_prod
 中文:
 定理 snd_comp_prod
   条件: (f : M ->ₙ* N) (g : M ->ₙ* P)
-  结论: (snd N P).comp (f.prod g) = g
+  结论: (snd N P).comp (f.乘积 g) = g
   证明: ext fun _ => rfl
 
 @[to_additive (attr := simp) prod_unique]
@@ -998,7 +998,7 @@ theorem prod_unique
 中文:
 定理 prod_unique
   条件: (f : M ->ₙ* N × P)
-  结论: ((fst N P).comp f).prod ((snd N P).comp f) = f
+  结论: ((fst N P).comp f).乘积 ((snd N P).comp f) = f
   证明: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
 
 Depends on / 依赖: coe_fst, coe_snd, comp_apply, prod_apply
@@ -1050,7 +1050,7 @@ theorem prodMap_def
 
 中文:
 定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst M N)).prod (g.comp (snd M N))
+  结论: prodMap f g = (f.comp (fst M N)).乘积 (g.comp (snd M N))
   证明: rfl
 
 @[to_additive (attr := simp) coe_prodMap]
@@ -1071,7 +1071,7 @@ theorem coe_prodMap
 
 中文:
 定理 coe_prodMap
-  结论: ⇑(prodMap f g) = Prod.map f g
+  结论: ⇑(prodMap f g) = 积类型.map f g
   证明: rfl
 
 @[to_additive prod_comp_prodMap]
@@ -1166,7 +1166,7 @@ theorem comp_coprod
 
 中文:
 定理 comp_coprod
-  条件: {Q : 类型} [CommSemigroup Q] (h : P ->ₙ* Q) (f : M ->ₙ* P) (g : N ->ₙ* P)
+  条件: {Q : 类型} [交换半群 Q] (h : P ->ₙ* Q) (f : M ->ₙ* P) (g : N ->ₙ* P)
   证明: ext fun x => by simp
 -/
 theorem comp_coprod {Q : Type*} [CommSemigroup Q] (h : P ->ₙ* Q) (f : M ->ₙ* P) (g : N ->ₙ* P) :
@@ -1308,7 +1308,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ⇑(fst M N) = Prod.fst
+  结论: ⇑(fst M N) = 积类型.fst
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1329,7 +1329,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ⇑(snd M N) = Prod.snd
+  结论: ⇑(snd M N) = 积类型.snd
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1510,7 +1510,7 @@ definition prod
 @[to_additive coe_prod]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : M ->* N) (g : M ->* P)
   定义体: Function.prod f g
   map_one' := Prod.ext f.map_one g.map_one
@@ -1539,7 +1539,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : M ->* N) (g : M ->* P)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[to_additive (attr := simp) prod_apply]
@@ -1564,7 +1564,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (f : M ->* N) (g : M ->* P) (x)
-  结论: f.prod g x = (f x, g x)
+  结论: f.乘积 g x = (f x, g x)
   证明: rfl
 
 @[to_additive (attr := simp) fst_comp_prod]
@@ -1589,7 +1589,7 @@ theorem fst_comp_prod
 中文:
 定理 fst_comp_prod
   条件: (f : M ->* N) (g : M ->* P)
-  结论: (fst N P).comp (f.prod g) = f
+  结论: (fst N P).comp (f.乘积 g) = f
   证明: ext fun _ => rfl
 
 @[to_additive (attr := simp) snd_comp_prod]
@@ -1612,7 +1612,7 @@ theorem snd_comp_prod
 中文:
 定理 snd_comp_prod
   条件: (f : M ->* N) (g : M ->* P)
-  结论: (snd N P).comp (f.prod g) = g
+  结论: (snd N P).comp (f.乘积 g) = g
   证明: ext fun _ => rfl
 
 @[to_additive (attr := simp) prod_unique]
@@ -1633,7 +1633,7 @@ theorem prod_unique
 中文:
 定理 prod_unique
   条件: (f : M ->* N × P)
-  结论: ((fst N P).comp f).prod ((snd N P).comp f) = f
+  结论: ((fst N P).comp f).乘积 ((snd N P).comp f) = f
   证明: ext fun _ => by simp
 -/
 theorem prod_unique (f : M ->* N × P) : ((fst N P).comp f).prod ((snd N P).comp f) = f :=
@@ -1683,7 +1683,7 @@ theorem prodMap_def
 
 中文:
 定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst M N)).prod (g.comp (snd M N))
+  结论: prodMap f g = (f.comp (fst M N)).乘积 (g.comp (snd M N))
   证明: rfl
 
 @[to_additive (attr := simp) coe_prodMap]
@@ -1704,7 +1704,7 @@ theorem coe_prodMap
 
 中文:
 定理 coe_prodMap
-  结论: ⇑(prodMap f g) = Prod.map f g
+  结论: ⇑(prodMap f g) = 积类型.map f g
   证明: rfl
 
 @[to_additive prod_comp_prodMap]
@@ -1872,7 +1872,7 @@ theorem coprod_inl_inr
 
 中文:
 定理 coprod_inl_inr
-  条件: {M N : 类型} [CommMonoid M] [CommMonoid N]
+  条件: {M N : 类型} [交换幺半群 M] [交换幺半群 N]
   证明: coprod_unique (id <| M × N)
 
 @[to_additive]
@@ -1894,7 +1894,7 @@ theorem comp_coprod
 
 中文:
 定理 comp_coprod
-  条件: {Q : 类型} [CommMonoid Q] (h : P ->* Q) (f : M ->* P) (g : N ->* P)
+  条件: {Q : 类型} [交换幺半群 Q] (h : P ->* Q) (f : M ->* P) (g : N ->* P)
   证明: ext fun x => by simp
 -/
 theorem comp_coprod {Q : Type*} [CommMonoid Q] (h : P ->* Q) (f : M ->* P) (g : N ->* P) :
@@ -1951,7 +1951,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm : M × N ≃* N × M) = Prod.swap
+  结论: ⇑(prodComm : M × N ≃* N × M) = 积类型.swap
   证明: rfl
 
 @[to_additive (attr := simp) coe_prodComm_symm]
@@ -1970,7 +1970,7 @@ theorem coe_prodComm_symm
 
 中文:
 定理 coe_prodComm_symm
-  结论: ⇑(prodComm : M × N ≃* N × M).symm = Prod.swap
+  结论: ⇑(prodComm : M × N ≃* N × M).symm = 积类型.swap
   证明: rfl
 -/
 theorem coe_prodComm_symm : ⇑(prodComm : M × N ≃* N × M).symm = Prod.swap :=
@@ -2016,7 +2016,7 @@ theorem coe_prodAssoc
 
 中文:
 定理 coe_prodAssoc
-  结论: ⇑(prodAssoc : (M × N) × P ≃* M × (N × P)) = Equiv.prodAssoc M N P
+  结论: ⇑(prodAssoc : (M × N) × P ≃* M × (N × P)) = 等价.prodAssoc M N P
   证明: rfl
 
 @[to_additive (attr := simp) coe_prodAssoc_symm]
@@ -2161,7 +2161,7 @@ definition uniqueProd
 
 中文:
 定义 uniqueProd
-  签名: [Unique N]
+  签名: [唯一 N]
   定义体: { Equiv.uniqueProd M N with map_mul' := fun _ _ => rfl }
 
 Depends on / 依赖: Equiv.uniqueProd, map_mul, uniqueProd
@@ -2186,7 +2186,7 @@ definition prodUnique
 
 中文:
 定义 prodUnique
-  签名: [Unique N]
+  签名: [唯一 N]
   定义体: { Equiv.prodUnique M N with map_mul' := fun _ _ => rfl }
 
 Depends on / 依赖: Equiv.prodUnique, map_mul, prodUnique
@@ -2256,9 +2256,9 @@ lemma _root_.Prod.isUnit_iff
 @[to_additive]
 
 中文:
-引理 _root_.Prod.isUnit_iff
+引理 _root_.积类型.isUnit_iff
   条件: {x : M × N}
-  结论: IsUnit x ↔ IsUnit x.1 ∧ IsUnit x.2 where
+  结论: 是单位 x ↔ 是单位 x.1 ∧ 是单位 x.2 where
   证明: ⟨(prodUnits h.unit).1.isUnit, (prodUnits h.unit).2.isUnit⟩
   mpr h := (prodUnits.symm (h.1.unit, h.2.unit)).isUnit
 
@@ -2280,8 +2280,8 @@ instance _root_.Prod.instSubsingletonUnits
   body: .units_of_isUnit by simp [Prod.isUnit_iff, Prod.ext_iff]
 
 中文:
-实例 _root_.Prod.instSubsingletonUnits
-  签名: [Subsingleton Mˣ] [Subsingleton Nˣ]
+实例 _root_.积类型.instSubsingletonUnits
+  签名: [子单例 Mˣ] [子单例 Nˣ]
   定义体: .units_of_isUnit by simp [Prod.isUnit_iff, Prod.ext_iff]
 
 Depends on / 依赖: Prod.ext_iff, Prod.isUnit_iff, ext_iff, isUnit_iff, units_of_isUnit
@@ -2318,7 +2318,7 @@ definition embedProduct
 
 中文:
 定义 embedProduct
-  签名: (α : 类型) [Monoid α]
+  签名: (α : 类型) [幺半群 α]
   定义体: ⟨x, op ↑x⁻¹⟩
   map_one' := by
     simp only [inv_one, Units.val_one, op_one, Prod.mk_eq_one, and_self_iff]
@@ -2344,8 +2344,8 @@ theorem embedProduct_injective
 
 中文:
 定理 embedProduct_injective
-  条件: (α : 类型) [Monoid α]
-  结论: Function.Injective (embedProduct α)
+  条件: (α : 类型) [幺半群 α]
+  结论: 函数.单射 (embedProduct α)
   证明: fun _ _ h => Units.ext (congr_arg Prod.fst h :)
 
 Depends on / 依赖: Prod.fst, Units.ext, congr_arg
@@ -2375,7 +2375,7 @@ definition mulMulHom
 
 中文:
 定义 mulMulHom
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: a.1 * a.2
   map_mul' _ _ := mul_mul_mul_comm _ _ _ _
 -/
@@ -2396,7 +2396,7 @@ definition mulMonoidHom
 
 中文:
 定义 mulMonoidHom
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: { mulMulHom with map_one' := mul_one _ }
 
 Depends on / 依赖: map_one, mulMulHom, mul_one
@@ -2418,7 +2418,7 @@ definition divMonoidHom
 
 中文:
 定义 divMonoidHom
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
   定义体: a.1 / a.2
   map_one' := div_one _
   map_mul' _ _ := mul_div_mul_comm _ _ _ _

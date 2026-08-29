@@ -34,7 +34,7 @@ structure GuessNameData
 结构 GuessNameData
   参数: where
   公理与运算 (2 个):
-    - nameDict : Std.HashMap String (List String)
+    - nameDict : Std.HashMap String (列表 String)
     - abbreviationDict : Std.HashMap String String
 -/
 structure GuessNameData where
@@ -71,7 +71,7 @@ definition endCapitalNames
 
 中文:
 定义 endCapitalNames
-  签名: : TreeMap String (List String) compare
+  签名: : TreeMap String (列表 String) compare
   定义体: -- todo: we want something like
   -- endCapitalNamesOfList ["LE", "LT", "GE", "GT", "WF", "CoeTC", "CoeT", "CoeHTCT"]
   .ofList [("LE", [""]), ("LT", [""]), ("GE", [""]), ("GT", [""]), ("WF", [""]),
@@ -102,7 +102,7 @@ definition String.splitCase
 
 中文:
 定义 String.splitCase
-  签名: (s : String) (i₀ : Pos.Raw := 0) (r : List String := [])
+  签名: (s : String) (i₀ : Pos.Raw := 0) (r : 列表 String := [])
   定义体: Id.run do
   -- We test if we need to split between `i₀` and `i₁`.
   let i₁ := i₀.next s
@@ -278,7 +278,7 @@ definition fixAbbreviation
 
 中文:
 定义 fixAbbreviation
-  签名: (g : GuessNameData) (l : List String)
+  签名: (g : GuessNameData) (l : 列表 String)
   定义体: fixAbbreviationAux g l []
 
 Depends on / 依赖: fixAbbreviationAux

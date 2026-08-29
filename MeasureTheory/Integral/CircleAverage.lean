@@ -132,7 +132,7 @@ lemma circleAverage_zero
 
 中文:
 引理 circleAverage_zero
-  条件: [CompleteSpace E]
+  条件: [完备空间 E]
   证明: by
   rw [circleAverage]
   simp only [circleMap_zero_radius, Function.const_apply,
@@ -197,8 +197,8 @@ theorem circleAverage_eq_circleIntegral
     match_scalar
 
 中文:
-定理 circleAverage_eq_circleIntegral
-  结论: {F : 类型} [NormedAddCommGroup F] [NormedSpace Complex F]
+定理 circleAverage_eq_circle整数egral
+  结论: {F : 类型} [赋范交换加群 F] [赋范空间 复形 F]
   证明: by
   calc circleAverage f c R
   _ = (↑(2 * π) : Complex)⁻¹ • ∫ θ in 0..2 * π, f (circleMap c R θ) := by
@@ -357,7 +357,7 @@ theorem circleAverage_congr_sphere
 
 中文:
 定理 circleAverage_congr_sphere
-  条件: {f₁ f₂ : Complex -> E} (hf : Set.EqOn f₁ f₂ (sphere c |R|))
+  条件: {f₁ f₂ : 复形 -> E} (hf : 集合.EqOn f₁ f₂ (sphere c |R|))
   证明: by
   unfold circleAverage
   congr 1
@@ -422,7 +422,7 @@ theorem circleAverage_zero_one_congr_inv
 
 中文:
 定理 circleAverage_zero_one_congr_inv
-  条件: {f : Complex -> E}
+  条件: {f : 复形 -> E}
   证明: by
   unfold circleAverage
   congr 1
@@ -463,7 +463,7 @@ lemma circleMap.continuous
 
 中文:
 引理 circleMap.continuous
-  条件: {c : Complex}
+  条件: {c : 复形}
   证明: by
   fun_prop [circleMap]
 -/
@@ -486,7 +486,7 @@ theorem ContinuousOn.circleAverage
 
 中文:
 定理 ContinuousOn.circleAverage
-  结论: {f : Complex -> E} {s : Set 实数} {c : Complex}
+  结论: {f : 复形 -> E} {s : 集合 实数} {c : 复形}
   证明: by
   rw [continuousOn_iff_continuous_domRestrict] at *
   apply (intervalIntegral.continuous_parametric_intervalIntegral_of_continuous' _ _ _).const_smul
@@ -518,8 +518,8 @@ theorem Continuous.circleAverage
   fun_prop
 
 中文:
-定理 Continuous.circleAverage
-  条件: {f : Complex -> E} (hf : Continuous f)
+定理 连续.circleAverage
+  条件: {f : 复形 -> E} (hf : 连续 f)
   证明: by
   apply (intervalIntegral.continuous_parametric_intervalIntegral_of_continuous' _ _ _).const_smul
   fun_prop
@@ -589,7 +589,7 @@ theorem circleAverage_const
 
 中文:
 定理 circleAverage_const
-  条件: [CompleteSpace E] (a : E) (c : Complex) (R : 实数)
+  条件: [完备空间 E] (a : E) (c : 复形) (R : 实数)
   证明: by
   simp only [circleAverage, intervalIntegral.integral_const, ← smul_assoc, sub_zero, smul_eq_mul]
   ring_nf
@@ -619,7 +619,7 @@ theorem circleAverage_const_on_circle
 
 中文:
 定理 circleAverage_const_on_circle
-  结论: [CompleteSpace E] {a : E}
+  结论: [完备空间 E] {a : E}
   证明: by
   rw [circleAverage]
   conv =>
@@ -661,7 +661,7 @@ theorem circleAverage_mono
 
 中文:
 定理 circleAverage_mono
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> 实数} (hf₁ : Circle整数egrable f₁ c R)
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> 实数} (hf₁ : Circle整数egrable f₁ c R)
   证明: by
   apply (mul_le_mul_iff_of_pos_left (by simp [pi_pos])).2
   apply intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos) hf₁ hf₂
@@ -689,7 +689,7 @@ theorem circleAverage_mono_on_of_le_circle
 
 中文:
 定理 circleAverage_mono_on_of_le_circle
-  结论: {f : Complex -> 实数} {a : 实数} (hf : Circle整数egrable f c R)
+  结论: {f : 复形 -> 实数} {a : 实数} (hf : Circle整数egrable f c R)
   证明: by
   rw [← circleAverage_const a c |R|]; rw [circleAverage]; rw [circleAverage]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
   exact intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos) hf
@@ -716,7 +716,7 @@ theorem abs_circleAverage_le_circleAverage_abs
 
 中文:
 定理 abs_circleAverage_le_circleAverage_abs
-  条件: {f : Complex -> 实数}
+  条件: {f : 复形 -> 实数}
   证明: by
   rw [circleAverage]; rw [circleAverage]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [abs_mul]; rw [abs_of_pos (inv_pos.2 two_pi_pos)]; rw [mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
   exact intervalIntegral.abs_integral_le_integral_abs (le_of_lt two_pi_pos)
@@ -743,7 +743,7 @@ theorem circleAverage_nonneg_of_nonneg
 
 中文:
 定理 circleAverage_nonneg_of_nonneg
-  结论: {c : Complex} {R : 实数} {f : Complex -> 实数}
+  结论: {c : 复形} {R : 实数} {f : 复形 -> 实数}
   证明: by
   by_cases hf : CircleIntegrable f c R
   · rw [← circleAverage_const 0 c |R|, circleAverage, circleAverage, smul_eq_mul, smul_eq_mul,
@@ -780,8 +780,8 @@ theorem _root_.ContinuousLinearMap.circleAverage_comp_comm
   exact L.intervalIntegral_comp_comm hf
 
 中文:
-定理 _root_.ContinuousLinearMap.circleAverage_comp_comm
-  结论: [CompleteSpace E] (L : E ->L[实数] F)
+定理 _root_.连续线性映射.circleAverage_comp_comm
+  结论: [完备空间 E] (L : E ->L[实数] F)
   证明: by
   unfold circleAverage
   rw [map_smul]
@@ -884,7 +884,7 @@ theorem circleAverage_fun_add
 
 中文:
 定理 circleAverage_fun_add
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> E} (hf₁ : Circle整数egrable f₁ c R)
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E} (hf₁ : Circle整数egrable f₁ c R)
   证明: circleAverage_add hf₁ hf₂
 
 Depends on / 依赖: circleAverage_add, isAtomistic_dual_iff_isCoatomistic
@@ -906,7 +906,7 @@ theorem circleAverage_sum
 
 中文:
 定理 circleAverage_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> Complex -> E}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 复形 -> E}
   证明: by
   unfold circleAverage
   simp [← Finset.smul_sum, intervalIntegral.integral_finsetSum h]
@@ -931,7 +931,7 @@ theorem circleAverage_fun_sum
 
 中文:
 定理 circleAverage_fun_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> Complex -> E}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 复形 -> E}
   证明: by
   convert! circleAverage_sum h
   simp

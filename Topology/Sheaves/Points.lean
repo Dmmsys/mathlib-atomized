@@ -89,7 +89,7 @@ definition pointsGrothendieckTopology
 
 中文:
 定义 pointsGrothendieckTopology
-  签名: : Object命题erty (Point.{u} (grothendieckTopology X))
+  签名: : ObjectProperty (Point.{u} (grothendieckTopology X))
   定义体: ObjectProperty.ofObj pointGrothendieckTopology
   deriving ObjectProperty.Small.{u}
 
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasEnoughPoints.{u} (grothendieckTopology X)
+  签名: 有EnoughPoints.{u} (grothendieckTopology X)
   定义体: ⟨_, inferInstance, isConservativeFamilyOfPoints_pointsGrothendieckTopology X⟩
 
 Depends on / 依赖: isConservativeFamilyOfPoints_pointsGrothendieckTopology
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver.IsThin (Point.{u} (grothendieckTopology X))
+  签名: 箭图.IsThin (Point.{u} (grothendieckTopology X))
   定义体: fun _ _ => ⟨fun _ _ => by ext; subsingleton⟩
 
 Depends on / 依赖: subsingleton

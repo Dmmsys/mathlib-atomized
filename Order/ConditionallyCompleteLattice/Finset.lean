@@ -35,9 +35,9 @@ theorem Finset.Nonempty.csSup_eq_max'
   proof: eq_of_forall_ge_iff fun _ => (csSup_le_iff s.bddAbove h.to_set).trans (s.max'_le_iff h).symm
 
 中文:
-定理 Finset.Nonempty.csSup_eq_max'
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: sSup ↑s = s.max' h
+定理 有限集.非空.csSup_eq_max'
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: sSup ↑s = s.最大值' h
   证明: eq_of_forall_ge_iff fun _ => (csSup_le_iff s.bddAbove h.to_set).trans (s.max'_le_iff h).symm
 
 Depends on / 依赖: _le_iff, bddAbove, csSup_le_iff, eq_of_forall_ge_iff, h.to_set, s.bddAbove, s.max, to_set
@@ -55,9 +55,9 @@ theorem Finset.Nonempty.csInf_eq_min'
   proof: @Finset.Nonempty.csSup_eq_max' αᵒᵈ _ s h
 
 中文:
-定理 Finset.Nonempty.csInf_eq_min'
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: sInf ↑s = s.min' h
+定理 有限集.非空.csInf_eq_min'
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: sInf ↑s = s.最小值' h
   证明: @Finset.Nonempty.csSup_eq_max' αᵒᵈ _ s h
 
 Depends on / 依赖: Finset, Finset.Nonempty.csSup_eq_max, Nonempty, csSup_eq_max
@@ -77,9 +77,9 @@ theorem Finset.Nonempty.csSup_mem
   exact s.max'_mem _
 
 中文:
-定理 Finset.Nonempty.csSup_mem
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: sSup (s : Set α) in s
+定理 有限集.非空.csSup_mem
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: sSup (s : 集合 α) in s
   证明: by
   rw [h.csSup_eq_max']
   exact s.max'_mem _
@@ -100,9 +100,9 @@ theorem Finset.Nonempty.csInf_mem
   proof: @Finset.Nonempty.csSup_mem αᵒᵈ _ _ h
 
 中文:
-定理 Finset.Nonempty.csInf_mem
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: sInf (s : Set α) in s
+定理 有限集.非空.csInf_mem
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: sInf (s : 集合 α) in s
   证明: @Finset.Nonempty.csSup_mem αᵒᵈ _ _ h
 
 Depends on / 依赖: Finset, Finset.Nonempty.csSup_mem, Nonempty, csSup_mem
@@ -122,8 +122,8 @@ theorem Set.Nonempty.csSup_mem
   exact Finset.Nonempty.csSup_mem h
 
 中文:
-定理 Set.Nonempty.csSup_mem
-  条件: (h : s.Nonempty) (hs : s.Finite)
+定理 集合.非空.csSup_mem
+  条件: (h : s.非空) (hs : s.有限)
   结论: sSup s in s
   证明: by
   lift s to Finset α using hs
@@ -145,8 +145,8 @@ theorem Set.Nonempty.csInf_mem
   proof: @Set.Nonempty.csSup_mem αᵒᵈ _ _ h hs
 
 中文:
-定理 Set.Nonempty.csInf_mem
-  条件: (h : s.Nonempty) (hs : s.Finite)
+定理 集合.非空.csInf_mem
+  条件: (h : s.非空) (hs : s.有限)
   结论: sInf s in s
   证明: @Set.Nonempty.csSup_mem αᵒᵈ _ _ h hs
 
@@ -165,8 +165,8 @@ theorem Set.Finite.csSup_lt_iff
   proof: ⟨fun h _ hx => (le_csSup hs.bddAbove hx).trans_lt h, fun H => H _ h.csSup_mem hs⟩
 
 中文:
-定理 Set.Finite.csSup_lt_iff
-  条件: (hs : s.Finite) (h : s.Nonempty)
+定理 集合.有限.csSup_lt_iff
+  条件: (hs : s.有限) (h : s.非空)
   结论: sSup s < a ↔ 对任意 x in s, x < a
   证明: ⟨fun h _ hx => (le_csSup hs.bddAbove hx).trans_lt h, fun H => H _ h.csSup_mem hs⟩
 
@@ -185,8 +185,8 @@ theorem Set.Finite.lt_csInf_iff
   proof: @Set.Finite.csSup_lt_iff αᵒᵈ _ _ _ hs h
 
 中文:
-定理 Set.Finite.lt_csInf_iff
-  条件: (hs : s.Finite) (h : s.Nonempty)
+定理 集合.有限.lt_csInf_iff
+  条件: (hs : s.有限) (h : s.非空)
   结论: a < sInf s ↔ 对任意 x in s, a < x
   证明: @Set.Finite.csSup_lt_iff αᵒᵈ _ _ _ hs h
 
@@ -210,8 +210,8 @@ theorem Set.Finite.map_sSup_of_monotone
     (hmono.csSup_image_le_map_csSup hne hfin.bddAbove)
 
 中文:
-定理 Set.Finite.map_sSup_of_monotone
-  条件: {s : Set α} (hne : s.Nonempty) (hfin : s.Finite)
+定理 集合.有限.map_sSup_of_monotone
+  条件: {s : 集合 α} (hne : s.非空) (hfin : s.有限)
   证明: le_antisymm (hmono.le_csSup_image (hne.csSup_mem hfin) hfin.bddAbove)
     (hmono.csSup_image_le_map_csSup hne hfin.bddAbove)
 
@@ -232,8 +232,8 @@ theorem Set.Finite.map_sInf_of_monotone
     (hmono.csInf_image_le (hne.csInf_mem hfin) hfin.bddBelow)
 
 中文:
-定理 Set.Finite.map_sInf_of_monotone
-  条件: {s : Set α} (hne : s.Nonempty) (hfin : s.Finite)
+定理 集合.有限.map_sInf_of_monotone
+  条件: {s : 集合 α} (hne : s.非空) (hfin : s.有限)
   证明: le_antisymm (hmono.map_csInf_le_csInf_image hne hfin.bddBelow)
     (hmono.csInf_image_le (hne.csInf_mem hfin) hfin.bddBelow)
 
@@ -264,8 +264,8 @@ theorem Finset.ciSup_eq_max'_image
     split_i
 
 中文:
-定理 Finset.ciSup_eq_max'_image
-  结论: {s : Finset ι} (h : 存在 x in s, sSup ∅ <= f x)
+定理 有限集.ciSup_eq_max'_image
+  结论: {s : 有限集 ι} (h : 存在 x in s, sSup ∅ <= f x)
   证明: by
   classical
   rw [iSup]; rw [← h'.csSup_eq_max']; rw [coe_image]
@@ -309,8 +309,8 @@ theorem Finset.ciInf_eq_min'_image
   congr
 
 中文:
-定理 Finset.ciInf_eq_min'_image
-  结论: {s : Finset ι} (h : 存在 x in s, f x <= sInf ∅)
+定理 有限集.ciInf_eq_min'_image
+  结论: {s : 有限集 ι} (h : 存在 x in s, f x <= sInf ∅)
   证明: by
   rw [← OrderDual.toDual_inj]; rw [toDual_min']; rw [toDual_iInf]
   simp only [toDual_iInf]
@@ -340,8 +340,8 @@ theorem Finset.ciSup_mem_image
   exact max'_mem (image f s) _
 
 中文:
-定理 Finset.ciSup_mem_image
-  条件: {s : Finset ι} (h : 存在 x in s, sSup ∅ <= f x)
+定理 有限集.ciSup_mem_image
+  条件: {s : 有限集 ι} (h : 存在 x in s, sSup ∅ <= f x)
   证明: by
   rw [ciSup_eq_max'_image _ h]
   exact max'_mem (image f s) _
@@ -364,8 +364,8 @@ theorem Finset.ciInf_mem_image
   exact min'_mem (image f s) _
 
 中文:
-定理 Finset.ciInf_mem_image
-  条件: {s : Finset ι} (h : 存在 x in s, f x <= sInf ∅)
+定理 有限集.ciInf_mem_image
+  条件: {s : 有限集 ι} (h : 存在 x in s, f x <= sInf ∅)
   证明: by
   rw [ciInf_eq_min'_image _ h]
   exact min'_mem (image f s) _
@@ -389,8 +389,8 @@ theorem Set.Finite.ciSup_mem_image
   simpa using Finset.ciSup_mem_image f h
 
 中文:
-定理 Set.Finite.ciSup_mem_image
-  条件: {s : Set ι} (hs : s.Finite) (h : 存在 x in s, sSup ∅ <= f x)
+定理 集合.有限.ciSup_mem_image
+  条件: {s : 集合 ι} (hs : s.有限) (h : 存在 x in s, sSup ∅ <= f x)
   证明: by
   lift s to Finset ι using hs
   simp only [Finset.mem_coe] at h
@@ -416,8 +416,8 @@ theorem Set.Finite.ciInf_mem_image
   simpa using Finset.ciInf_mem_image f h
 
 中文:
-定理 Set.Finite.ciInf_mem_image
-  条件: {s : Set ι} (hs : s.Finite) (h : 存在 x in s, f x <= sInf ∅)
+定理 集合.有限.ciInf_mem_image
+  条件: {s : 集合 ι} (hs : s.有限) (h : 存在 x in s, f x <= sInf ∅)
   证明: by
   lift s to Finset ι using hs
   simp only [Finset.mem_coe] at h
@@ -448,8 +448,8 @@ theorem Set.Finite.ciSup_lt_iff
         forall_e
 
 中文:
-定理 Set.Finite.ciSup_lt_iff
-  结论: {s : Set ι} {f : ι -> α} (hs : s.Finite)
+定理 集合.有限.ciSup_lt_iff
+  结论: {s : 集合 ι} {f : ι -> α} (hs : s.有限)
   证明: by
   constructor
   · intro h x hx
@@ -497,8 +497,8 @@ theorem Set.Finite.lt_ciInf_iff
         forall_ex
 
 中文:
-定理 Set.Finite.lt_ciInf_iff
-  结论: {s : Set ι} {f : ι -> α} (hs : s.Finite)
+定理 集合.有限.lt_ciInf_iff
+  结论: {s : 集合 ι} {f : ι -> α} (hs : s.有限)
   证明: by
   constructor
   · intro h x hx
@@ -546,8 +546,8 @@ lemma List.iSup_mem_map_of_exists_sSup_empty_le
   simpa using l.toFinset.ciSup_mem_image f (by simpa using h)
 
 中文:
-引理 List.iSup_mem_map_of_exists_sSup_empty_le
-  结论: {l : List ι} (f : ι -> α)
+引理 列表.iSup_mem_map_of_存在_sSup_empty_le
+  结论: {l : 列表 ι} (f : ι -> α)
   证明: by
   classical
   simpa using l.toFinset.ciSup_mem_image f (by simpa using h)
@@ -571,8 +571,8 @@ lemma List.iInf_mem_map_of_exists_le_sInf_empty
   simpa using l.toFinset.ciInf_mem_image f (by simpa using h)
 
 中文:
-引理 List.iInf_mem_map_of_exists_le_sInf_empty
-  结论: {l : List ι} (f : ι -> α)
+引理 列表.iInf_mem_map_of_存在_le_sInf_empty
+  结论: {l : 列表 ι} (f : ι -> α)
   证明: by
   classical
   simpa using l.toFinset.ciInf_mem_image f (by simpa using h)
@@ -596,7 +596,7 @@ lemma Multiset.iSup_mem_map_of_exists_sSup_empty_le
   simpa using s.toFinset.ciSup_mem_image f (by simpa using h)
 
 中文:
-引理 Multiset.iSup_mem_map_of_exists_sSup_empty_le
+引理 Multiset.iSup_mem_map_of_存在_sSup_empty_le
   结论: {s : Multiset ι} (f : ι -> α)
   证明: by
   classical
@@ -621,7 +621,7 @@ lemma Multiset.iInf_mem_map_of_exists_le_sInf_empty
   simpa using s.toFinset.ciInf_mem_image f (by simpa using h)
 
 中文:
-引理 Multiset.iInf_mem_map_of_exists_le_sInf_empty
+引理 Multiset.iInf_mem_map_of_存在_le_sInf_empty
   结论: {s : Multiset ι} (f : ι -> α)
   证明: by
   classical
@@ -645,8 +645,8 @@ theorem exists_eq_ciSup_of_finite
   proof: Nonempty.csSup_mem (range_nonempty f) (finite_range f)
 
 中文:
-定理 exists_eq_ciSup_of_finite
-  条件: [Nonempty ι] [Finite ι] {f : ι -> α}
+定理 存在_eq_ciSup_of_finite
+  条件: [非空 ι] [有限 ι] {f : ι -> α}
   结论: 存在 i, f i = ⨆ i, f i
   证明: Nonempty.csSup_mem (range_nonempty f) (finite_range f)
 
@@ -665,8 +665,8 @@ theorem exists_eq_ciInf_of_finite
   proof: Nonempty.csInf_mem (range_nonempty f) (finite_range f)
 
 中文:
-定理 exists_eq_ciInf_of_finite
-  条件: [Nonempty ι] [Finite ι] {f : ι -> α}
+定理 存在_eq_ciInf_of_finite
+  条件: [非空 ι] [有限 ι] {f : ι -> α}
   结论: 存在 i, f i = ⨅ i, f i
   证明: Nonempty.csInf_mem (range_nonempty f) (finite_range f)
 
@@ -696,7 +696,7 @@ theorem sSup_ne_of_notMem
 
 中文:
 定理 sSup_ne_of_notMem
-  条件: {s : Set α} (hfin : s.Finite) {a : α} (hne : a != ⊥) (hmem : a ∉ s)
+  条件: {s : 集合 α} (hfin : s.有限) {a : α} (hne : a != ⊥) (hmem : a ∉ s)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hnonempty
   · simp [eq_comm, hne]
@@ -720,7 +720,7 @@ theorem sInf_ne_of_notMem
 
 中文:
 定理 sInf_ne_of_notMem
-  条件: {s : Set α} (hfin : s.Finite) {a : α} (hne : a != ⊤) (hmem : a ∉ s)
+  条件: {s : 集合 α} (hfin : s.有限) {a : α} (hne : a != ⊤) (hmem : a ∉ s)
   证明: sSup_ne_of_notMem (α := αᵒᵈ) hfin hne hmem
 
 Depends on / 依赖: sSup_ne_of_notMem
@@ -740,7 +740,7 @@ theorem sSup_ne_top
 
 中文:
 定理 sSup_ne_top
-  条件: [Nontrivial α] {s : Set α} (hfin : s.Finite) (htop : ⊤ ∉ s)
+  条件: [非平凡 α] {s : 集合 α} (hfin : s.有限) (htop : ⊤ ∉ s)
   结论: sSup s != ⊤
   证明: sSup_ne_of_notMem hfin top_ne_bot htop
 
@@ -760,7 +760,7 @@ theorem sInf_ne_bot
 
 中文:
 定理 sInf_ne_bot
-  条件: [Nontrivial α] {s : Set α} (hfin : s.Finite) (hbot : ⊥ ∉ s)
+  条件: [非平凡 α] {s : 集合 α} (hfin : s.有限) (hbot : ⊥ ∉ s)
   结论: sInf s != ⊥
   证明: sSup_ne_top (α := αᵒᵈ) hfin hbot
 
@@ -779,7 +779,7 @@ theorem iSup_ne_of_notMem
 
 中文:
 定理 iSup_ne_of_notMem
-  条件: [Finite ι] {f : ι -> α} {a : α} (hne : a != ⊥) (h : 对任意 x, f x != a)
+  条件: [有限 ι] {f : ι -> α} {a : α} (hne : a != ⊥) (h : 对任意 x, f x != a)
   证明: sSup_ne_of_notMem (Set.finite_range f) hne by grind
 
 Depends on / 依赖: Set.finite_range, finite_range, sSup_ne_of_notMem
@@ -798,7 +798,7 @@ theorem iInf_ne_of_notMem
 
 中文:
 定理 iInf_ne_of_notMem
-  条件: [Finite ι] {f : ι -> α} {a : α} (hne : a != ⊤) (h : 对任意 x, f x != a)
+  条件: [有限 ι] {f : ι -> α} {a : α} (hne : a != ⊤) (h : 对任意 x, f x != a)
   证明: iSup_ne_of_notMem (α := αᵒᵈ) hne h
 
 Depends on / 依赖: iSup_ne_of_notMem
@@ -818,7 +818,7 @@ theorem iSup_ne_top
 
 中文:
 定理 iSup_ne_top
-  条件: [Finite ι] [Nontrivial α] {f : ι -> α} (h : 对任意 x, f x != ⊤)
+  条件: [有限 ι] [非平凡 α] {f : ι -> α} (h : 对任意 x, f x != ⊤)
   结论: iSup f != ⊤
   证明: iSup_ne_of_notMem top_ne_bot h
 
@@ -838,7 +838,7 @@ theorem iInf_ne_bot
 
 中文:
 定理 iInf_ne_bot
-  条件: [Finite ι] [Nontrivial α] {f : ι -> α} (h : 对任意 x, f x != ⊥)
+  条件: [有限 ι] [非平凡 α] {f : ι -> α} (h : 对任意 x, f x != ⊥)
   结论: iInf f != ⊥
   证明: iSup_ne_top (α := αᵒᵈ) h
 
@@ -871,8 +871,8 @@ theorem sup'_eq_csSup_image
     simp [csSup_le_iff (s.finite_toSet.image f).bddAbove (H.to_set.image f)]
 
 中文:
-定理 sup'_eq_csSup_image
-  条件: (s : Finset ι) (H : s.Nonempty) (f : ι -> α)
+定理 上确界'_eq_csSup_image
+  条件: (s : 有限集 ι) (H : s.非空) (f : ι -> α)
   证明: eq_of_forall_ge_iff fun a => by
     simp [csSup_le_iff (s.finite_toSet.image f).bddAbove (H.to_set.image f)]
 -/
@@ -890,8 +890,8 @@ theorem inf'_eq_csInf_image
   proof: sup'_eq_csSup_image (α := αᵒᵈ) _ H _
 
 中文:
-定理 inf'_eq_csInf_image
-  条件: (s : Finset ι) (H : s.Nonempty) (f : ι -> α)
+定理 下确界'_eq_csInf_image
+  条件: (s : 有限集 ι) (H : s.非空) (f : ι -> α)
   证明: sup'_eq_csSup_image (α := αᵒᵈ) _ H _
 -/
 theorem inf'_eq_csInf_image (s : Finset ι) (H : s.Nonempty) (f : ι -> α) :
@@ -909,9 +909,9 @@ theorem sup'_id_eq_csSup
   rw [sup'_eq_csSup_image s hs]; rw [Set.image_id]
 
 中文:
-定理 sup'_id_eq_csSup
-  条件: (s : Finset α) (hs)
-  结论: s.sup' hs id = sSup s
+定理 上确界'_id_eq_csSup
+  条件: (s : 有限集 α) (hs)
+  结论: s.上确界' hs id = sSup s
   证明: by
   rw [sup'_eq_csSup_image s hs]; rw [Set.image_id]
 -/
@@ -928,9 +928,9 @@ theorem inf'_id_eq_csInf
   proof: sup'_id_eq_csSup (α := αᵒᵈ) _ hs
 
 中文:
-定理 inf'_id_eq_csInf
-  条件: (s : Finset α) (hs)
-  结论: s.inf' hs id = sInf s
+定理 下确界'_id_eq_csInf
+  条件: (s : 有限集 α) (hs)
+  结论: s.下确界' hs id = sInf s
   证明: sup'_id_eq_csSup (α := αᵒᵈ) _ hs
 -/
 theorem inf'_id_eq_csInf (s : Finset α) (hs) : s.inf' hs id = sInf s :=
@@ -951,9 +951,9 @@ lemma sup'_univ_eq_ciSup
 @[to_dual existing]
 
 中文:
-引理 sup'_univ_eq_ciSup
+引理 上确界'_univ_eq_ciSup
   条件: (f : ι -> α)
-  结论: univ.sup' univ_nonempty f = ⨆ i, f i
+  结论: univ.上确界' univ_nonempty f = ⨆ i, f i
   证明: by
   simp [sup'_eq_csSup_image, iSup]
 
@@ -974,9 +974,9 @@ lemma inf'_univ_eq_ciInf
   simp [inf'_eq_csInf_image, iInf]
 
 中文:
-引理 inf'_univ_eq_ciInf
+引理 下确界'_univ_eq_ciInf
   条件: (f : ι -> α)
-  结论: univ.inf' univ_nonempty f = ⨅ i, f i
+  结论: univ.下确界' univ_nonempty f = ⨅ i, f i
   证明: by
   simp [inf'_eq_csInf_image, iInf]
 -/
@@ -1001,8 +1001,8 @@ lemma sup_univ_eq_ciSup
 
 中文:
 引理 sup_univ_eq_ciSup
-  条件: [Fintype ι] (f : ι -> α)
-  结论: univ.sup f = ⨆ i, f i
+  条件: [有限类型 ι] (f : ι -> α)
+  结论: univ.上确界 f = ⨆ i, f i
   证明: le_antisymm
     (Finset.sup_le fun _ _ => le_ciSup (finite_range _).bddAbove _)
     (ciSup_le' fun _ => Finset.le_sup (mem_univ _))
@@ -1029,7 +1029,7 @@ suffices forall st : Finset ι, BddAbove .range fun x => ⨆ (_ : x in st), f x 
 
 中文:
 定理 ciSup_union
-  条件: [DecidableEq ι] {f : ι -> α} {s t : Finset ι}
+  条件: [DecidableEq ι] {f : ι -> α} {s t : 有限集 ι}
   证明: by
 suffices forall st : Finset ι, BddAbove .range fun x => ⨆ (_ : x in st), f x by
     simp [ciSup_or', ciSup_sup_eq, this]
@@ -1064,8 +1064,8 @@ theorem Finset.Nonempty.ciSup_eq_max'_image
   proof: s.ciSup_eq_max'_image _ (h.imp (by simp)) _
 
 中文:
-定理 Finset.Nonempty.ciSup_eq_max'_image
-  结论: {s : Finset ι} (h : s.Nonempty)
+定理 有限集.非空.ciSup_eq_max'_image
+  结论: {s : 有限集 ι} (h : s.非空)
   证明: s.ciSup_eq_max'_image _ (h.imp (by simp)) _
 
 Depends on / 依赖: h.image
@@ -1084,8 +1084,8 @@ theorem Finset.Nonempty.ciSup_mem_image
   proof: s.ciSup_mem_image _ (h.imp (by simp))
 
 中文:
-定理 Finset.Nonempty.ciSup_mem_image
-  条件: {s : Finset ι} (h : s.Nonempty)
+定理 有限集.非空.ciSup_mem_image
+  条件: {s : 有限集 ι} (h : s.非空)
   证明: s.ciSup_mem_image _ (h.imp (by simp))
 
 Depends on / 依赖: ciSup_mem_image, h.imp, s.ciSup_mem_image
@@ -1103,8 +1103,8 @@ theorem Set.Nonempty.ciSup_mem_image
   proof: hs.ciSup_mem_image _ (h.imp (by simp))
 
 中文:
-定理 Set.Nonempty.ciSup_mem_image
-  条件: {s : Set ι} (h : s.Nonempty) (hs : s.Finite)
+定理 集合.非空.ciSup_mem_image
+  条件: {s : 集合 ι} (h : s.非空) (hs : s.有限)
   证明: hs.ciSup_mem_image _ (h.imp (by simp))
 
 Depends on / 依赖: ciSup_mem_image, h.imp, hs.ciSup_mem_image
@@ -1122,8 +1122,8 @@ theorem Set.Nonempty.ciSup_lt_iff
   proof: hs.ciSup_lt_iff (h.imp (by simp))
 
 中文:
-定理 Set.Nonempty.ciSup_lt_iff
-  条件: {s : Set ι} {a : α} {f : ι -> α} (h : s.Nonempty) (hs : s.Finite)
+定理 集合.非空.ciSup_lt_iff
+  条件: {s : 集合 ι} {a : α} {f : ι -> α} (h : s.非空) (hs : s.有限)
   证明: hs.ciSup_lt_iff (h.imp (by simp))
 
 Depends on / 依赖: ciSup_lt_iff, h.imp, hs.ciSup_lt_iff
@@ -1143,8 +1143,8 @@ lemma List.iSup_mem_map_of_ne_nil
   proof: l.iSup_mem_map_of_exists_sSup_empty_le _ (by simpa using exists_mem_of_ne_nil _ h)
 
 中文:
-引理 List.iSup_mem_map_of_ne_nil
-  条件: {l : List ι} (f : ι -> α) (h : l != [])
+引理 列表.iSup_mem_map_of_ne_nil
+  条件: {l : 列表 ι} (f : ι -> α) (h : l != [])
   证明: l.iSup_mem_map_of_exists_sSup_empty_le _ (by simpa using exists_mem_of_ne_nil _ h)
 
 Depends on / 依赖: exists_mem_of_ne_nil, iSup_mem_map_of_exists_sSup_empty_le, l.iSup_mem_map_of_exists_sSup_empty_le

@@ -53,7 +53,7 @@ theorem contDiffOn_clm_apply
 
 中文:
 定理 contDiffOn_clm_apply
-  条件: {f : D -> E ->L[𝕜] F} {s : Set D} [FiniteDimensional 𝕜 E]
+  条件: {f : D -> E ->L[𝕜] F} {s : 集合 D} [有限维 𝕜 E]
   证明: by
   refine ⟨fun h y => h.clm_apply contDiffOn_const, fun h => ?_⟩
   let d := finrank 𝕜 E
@@ -85,7 +85,7 @@ theorem contDiff_clm_apply_iff
 
 中文:
 定理 contDiff_clm_apply_iff
-  条件: {f : D -> E ->L[𝕜] F} [FiniteDimensional 𝕜 E]
+  条件: {f : D -> E ->L[𝕜] F} [有限维 𝕜 E]
   证明: by
   simp_rw [← contDiffOn_univ, contDiffOn_clm_apply]
 
@@ -106,7 +106,7 @@ theorem contDiff_succ_iff_fderiv_apply
 
 中文:
 定理 contDiff_succ_iff_fderiv_apply
-  条件: [FiniteDimensional 𝕜 D]
+  条件: [有限维 𝕜 D]
   证明: by
   rw [contDiff_succ_iff_fderiv]; rw [contDiff_clm_apply_iff]
 
@@ -127,7 +127,7 @@ theorem contDiffOn_succ_of_fderiv_apply
 
 中文:
 定理 contDiffOn_succ_of_fderiv_apply
-  结论: [FiniteDimensional 𝕜 D]
+  结论: [有限维 𝕜 D]
   证明: contDiffOn_succ_of_fderivWithin hf h'f contDiffOn_clm_apply.mpr h
 
 Depends on / 依赖: contDiffOn_clm_apply, contDiffOn_clm_apply.mpr, contDiffOn_succ_of_fderivWithin
@@ -149,7 +149,7 @@ theorem contDiffOn_succ_iff_fderiv_apply
 
 中文:
 定理 contDiffOn_succ_iff_fderiv_apply
-  条件: [FiniteDimensional 𝕜 D] (hs : UniqueDiffOn 𝕜 s)
+  条件: [有限维 𝕜 D] (hs : UniqueDiffOn 𝕜 s)
   证明: by
   rw [contDiffOn_succ_iff_fderivWithin hs]; rw [contDiffOn_clm_apply]
 

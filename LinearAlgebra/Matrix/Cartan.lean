@@ -66,7 +66,7 @@ definition E₆
 
 中文:
 定义 E₆
-  签名: : Matrix (Fin 6) (Fin 6) 整数
+  签名: : 矩阵 (有限集 6) (有限集 6) 整数
   定义体: !![ 2, 0, -1, 0, 0, 0;
       0, 2, 0, -1, 0, 0;
      -1, 0, 2, -1, 0, 0;
@@ -98,7 +98,7 @@ definition E₇
 
 中文:
 定义 E₇
-  签名: : Matrix (Fin 7) (Fin 7) 整数
+  签名: : 矩阵 (有限集 7) (有限集 7) 整数
   定义体: !![ 2, 0, -1, 0, 0, 0, 0;
       0, 2, 0, -1, 0, 0, 0;
      -1, 0, 2, -1, 0, 0, 0;
@@ -133,7 +133,7 @@ definition E₈
 
 中文:
 定义 E₈
-  签名: : Matrix (Fin 8) (Fin 8) 整数
+  签名: : 矩阵 (有限集 8) (有限集 8) 整数
   定义体: !![ 2, 0, -1, 0, 0, 0, 0, 0;
       0, 2, 0, -1, 0, 0, 0, 0;
      -1, 0, 2, -1, 0, 0, 0, 0;
@@ -166,7 +166,7 @@ definition F₄
 
 中文:
 定义 F₄
-  签名: : Matrix (Fin 4) (Fin 4) 整数
+  签名: : 矩阵 (有限集 4) (有限集 4) 整数
   定义体: !![ 2, -1, 0, 0;
      -1, 2, -2, 0;
       0, -1, 2, -1;
@@ -189,7 +189,7 @@ definition G₂
 
 中文:
 定义 G₂
-  签名: : Matrix (Fin 2) (Fin 2) 整数
+  签名: : 矩阵 (有限集 2) (有限集 2) 整数
   定义体: !![ 2, -3;
      -1, 2]
 -/
@@ -360,7 +360,7 @@ theorem B_diag
 
 中文:
 定理 B_diag
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: B n i i = 2
   证明: by simp [B, Matrix.of_apply]
 -/
@@ -376,7 +376,7 @@ theorem C_diag
 
 中文:
 定理 C_diag
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: C n i i = 2
   证明: by simp [C, Matrix.of_apply]
 -/
@@ -392,7 +392,7 @@ theorem D_diag
 
 中文:
 定理 D_diag
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: D n i i = 2
   证明: by simp [D, Matrix.of_apply]
 -/
@@ -410,7 +410,7 @@ theorem A_apply_le_zero_of_ne
 
 中文:
 定理 A_apply_le_zero_of_ne
-  条件: (i j : Fin n) (h : i != j)
+  条件: (i j : 有限集 n) (h : i != j)
   结论: A n i j <= 0
   证明: by
   simp only [A, Matrix.of_apply]; split_ifs <;> omega
@@ -432,7 +432,7 @@ theorem B_off_diag_nonpos
 
 中文:
 定理 B_off_diag_nonpos
-  条件: (i j : Fin n) (h : i != j)
+  条件: (i j : 有限集 n) (h : i != j)
   结论: B n i j <= 0
   证明: by
   simp only [B, Matrix.of_apply]; split_ifs <;> omega
@@ -454,7 +454,7 @@ theorem C_off_diag_nonpos
 
 中文:
 定理 C_off_diag_nonpos
-  条件: (i j : Fin n) (h : i != j)
+  条件: (i j : 有限集 n) (h : i != j)
   结论: C n i j <= 0
   证明: by
   simp only [C, Matrix.of_apply]; split_ifs <;> omega
@@ -476,7 +476,7 @@ theorem D_off_diag_nonpos
 
 中文:
 定理 D_off_diag_nonpos
-  条件: (i j : Fin n) (h : i != j)
+  条件: (i j : 有限集 n) (h : i != j)
   结论: D n i j <= 0
   证明: by
   simp only [D, Matrix.of_apply]; split_ifs <;> omega
@@ -515,7 +515,7 @@ theorem A_isSymm
 
 中文:
 定理 A_isSymm
-  结论: (A n).IsSymm
+  结论: (A n).是Symm
   证明: A_transpose n
 
 Depends on / 依赖: A_transpose
@@ -586,7 +586,7 @@ theorem D_isSymm
 
 中文:
 定理 D_isSymm
-  结论: (D n).IsSymm
+  结论: (D n).是Symm
   证明: D_transpose n
 
 Depends on / 依赖: D_transpose
@@ -799,7 +799,7 @@ theorem E₆_diag
 
 中文:
 定理 E₆_diag
-  条件: (i : Fin 6)
+  条件: (i : 有限集 6)
   结论: E₆ i i = 2
   证明: by fin_cases i <;> decide
 -/
@@ -816,7 +816,7 @@ theorem E₇_diag
 
 中文:
 定理 E₇_diag
-  条件: (i : Fin 7)
+  条件: (i : 有限集 7)
   结论: E₇ i i = 2
   证明: by fin_cases i <;> decide
 -/
@@ -833,7 +833,7 @@ theorem E₈_diag
 
 中文:
 定理 E₈_diag
-  条件: (i : Fin 8)
+  条件: (i : 有限集 8)
   结论: E₈ i i = 2
   证明: by fin_cases i <;> decide
 -/
@@ -850,7 +850,7 @@ theorem F₄_diag
 
 中文:
 定理 F₄_diag
-  条件: (i : Fin 4)
+  条件: (i : 有限集 4)
   结论: F₄ i i = 2
   证明: by fin_cases i <;> decide
 -/
@@ -867,7 +867,7 @@ theorem G₂_diag
 
 中文:
 定理 G₂_diag
-  条件: (i : Fin 2)
+  条件: (i : 有限集 2)
   结论: G₂ i i = 2
   证明: by fin_cases i <;> decide
 -/
@@ -887,7 +887,7 @@ theorem E₆_off_diag_nonpos
 
 中文:
 定理 E₆_off_diag_nonpos
-  条件: (i j : Fin 6) (h : i != j)
+  条件: (i j : 有限集 6) (h : i != j)
   结论: E₆ i j <= 0
   证明: by
   fin_cases i <;> fin_cases j <;> simp_all [E₆]
@@ -909,7 +909,7 @@ theorem E₇_off_diag_nonpos
 
 中文:
 定理 E₇_off_diag_nonpos
-  条件: (i j : Fin 7) (h : i != j)
+  条件: (i j : 有限集 7) (h : i != j)
   结论: E₇ i j <= 0
   证明: by
   fin_cases i <;> fin_cases j <;> simp_all [E₇]
@@ -931,7 +931,7 @@ theorem E₈_off_diag_nonpos
 
 中文:
 定理 E₈_off_diag_nonpos
-  条件: (i j : Fin 8) (h : i != j)
+  条件: (i j : 有限集 8) (h : i != j)
   结论: E₈ i j <= 0
   证明: by
   fin_cases i <;> fin_cases j <;> simp_all [E₈]
@@ -953,7 +953,7 @@ theorem F₄_off_diag_nonpos
 
 中文:
 定理 F₄_off_diag_nonpos
-  条件: (i j : Fin 4) (h : i != j)
+  条件: (i j : 有限集 4) (h : i != j)
   结论: F₄ i j <= 0
   证明: by
   fin_cases i <;> fin_cases j <;> simp_all [F₄]
@@ -975,7 +975,7 @@ theorem G₂_off_diag_nonpos
 
 中文:
 定理 G₂_off_diag_nonpos
-  条件: (i j : Fin 2) (h : i != j)
+  条件: (i j : 有限集 2) (h : i != j)
   结论: G₂ i j <= 0
   证明: by
   fin_cases i <;> fin_cases j <;> simp_all [G₂]
@@ -1039,7 +1039,7 @@ theorem E₆_isSymm
 
 中文:
 定理 E₆_isSymm
-  结论: E₆.IsSymm
+  结论: E₆.是Symm
   证明: E₆_transpose
 -/
 theorem E₆_isSymm : E₆.IsSymm := E₆_transpose
@@ -1053,7 +1053,7 @@ theorem E₇_isSymm
 
 中文:
 定理 E₇_isSymm
-  结论: E₇.IsSymm
+  结论: E₇.是Symm
   证明: E₇_transpose
 -/
 theorem E₇_isSymm : E₇.IsSymm := E₇_transpose
@@ -1067,7 +1067,7 @@ theorem E₈_isSymm
 
 中文:
 定理 E₈_isSymm
-  结论: E₈.IsSymm
+  结论: E₈.是Symm
   证明: E₈_transpose
 -/
 theorem E₈_isSymm : E₈.IsSymm := E₈_transpose
@@ -1173,8 +1173,8 @@ definition _root_.Matrix.IsSimplyLaced
   body: Pairwise fun i j => A i j = 0 ∨ A i j = -1
 
 中文:
-定义 _root_.Matrix.IsSimplyLaced
-  签名: {ι : 类型} (A : Matrix ι ι 整数)
+定义 _root_.矩阵.IsSimplyLaced
+  签名: {ι : 类型} (A : 矩阵 ι ι 整数)
   定义体: Pairwise fun i j => A i j = 0 ∨ A i j = -1
 
 Depends on / 依赖: Pairwise
@@ -1202,7 +1202,7 @@ lemma _root_.Matrix.isSimplyLaced_iff_of_linearOrder
     · exact h hij
 
 中文:
-引理 _root_.Matrix.isSimplyLaced_iff_of_linearOrder
+引理 _root_.矩阵.isSimplyLaced_iff_of_linearOrder
   证明: by
   constructor
   · intro h i j hij
@@ -1236,8 +1236,8 @@ theorem _root_.Matrix.isSimplyLaced_transpose
   aesop
 
 中文:
-定理 _root_.Matrix.isSimplyLaced_transpose
-  条件: {ι : 类型} (A : Matrix ι ι 整数)
+定理 _root_.矩阵.isSimplyLaced_transpose
+  条件: {ι : 类型} (A : 矩阵 ι ι 整数)
   证明: by
   rw [IsSimplyLaced]; rw [IsSimplyLaced]; rw [Pairwise]; rw [Pairwise]; rw [forall_comm]
   aesop

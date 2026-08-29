@@ -70,8 +70,8 @@ theorem natDegree_le
 
 中文:
 定理 natDegree_le
-  条件: [Module.Free A B]
-  结论: (minpoly A x).natDegree <= Module.finrank A B
+  条件: [模.自由 A B]
+  结论: (minpoly A x).natDegree <= 模.finrank A B
   证明: by
   nontriviality A
   simpa [Module.finrank_eq_spanFinrank_of_free] using natDegree_le_spanFinrank A x
@@ -93,8 +93,8 @@ theorem degree_le
 
 中文:
 定理 degree_le
-  条件: [Module.Free A B]
-  结论: (minpoly A x).degree <= Module.finrank A B
+  条件: [模.自由 A B]
+  结论: (minpoly A x).degree <= 模.finrank A B
   证明: degree_le_of_natDegree_le natDegree_le x
 
 Depends on / 依赖: degree_le_of_natDegree_le, natDegree_le

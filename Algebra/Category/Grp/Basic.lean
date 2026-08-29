@@ -39,11 +39,11 @@ structure AddGrpCat
     - [str : AddGroup carrier]
 
 中文:
-结构 AddGrpCat
-  参数: : Type (u + 1) where
+结构 加法群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : AddGroup carrier]
+    - [str : 加法群 carrier]
 -/
 structure AddGrpCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -63,11 +63,11 @@ structure GrpCat
     - [str : Group carrier]
 
 中文:
-结构 GrpCat
-  参数: : Type (u + 1) where
+结构 群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : Group carrier]
+    - [str : 群 carrier]
 -/
 structure GrpCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort GrpCat (类型u)
+  签名: CoeSort 群范畴 (类型u)
   定义体: ⟨GrpCat.carrier⟩
 
 Depends on / 依赖: GrpCat, GrpCat.carrier, carrier
@@ -114,7 +114,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [Group M]
+  签名: (M : 类型u) [群 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [Group M] : GrpCat := ⟨M⟩
@@ -134,8 +134,8 @@ structure AddGrpCat.Hom
     - hom' : A ->+ B
 
 中文:
-结构 AddGrpCat.Hom
-  参数: (A B : AddGrpCat.{u})
+结构 加法群范畴.态射
+  参数: (A B : 加法群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->+ B
@@ -158,8 +158,8 @@ structure GrpCat.Hom
     - hom' : A ->* B
 
 中文:
-结构 GrpCat.Hom
-  参数: (A B : GrpCat.{u})
+结构 群范畴.态射
+  参数: (A B : 群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->* B
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category GrpCat.{u}
+  签名: 范畴 群范畴.{u}
   定义体: Hom X Y
   id X := ⟨MonoidHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory GrpCat (· ->* ·)
+  签名: 余ncrete范畴 群范畴 (· ->* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -231,8 +231,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := GrpCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : GrpCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 群范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := GrpCat) f
 -/
 abbrev Hom.hom {X Y : GrpCat.{u}} (f : Hom X Y) :=
@@ -250,7 +250,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Group X] [Group Y] (f : X ->* Y)
+  签名: {X Y : 类型u} [群 X] [群 Y] (f : X ->* Y)
   定义体: ConcreteCategory.ofHom (C := GrpCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, GrpCat
@@ -271,8 +271,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddGrpCat.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : GrpCat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 群范畴.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -302,7 +302,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : GrpCat}
+  条件: {X : 群范畴}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -326,7 +326,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : GrpCat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -352,7 +352,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : GrpCat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -378,8 +378,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (R : 类型u) [Group R]
-  结论: ↑(GrpCat.of R) = R
+  条件: (R : 类型u) [群 R]
+  结论: ↑(群范畴.of R) = R
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -399,8 +399,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : GrpCat}
-  结论: (𝟙 X : X ⟶ X).hom = MonoidHom.id X
+  条件: {X : 群范畴}
+  结论: (𝟙 X : X ⟶ X).hom = 幺半群态射.id X
   证明: rfl
 -/
 lemma hom_id {X : GrpCat} : (𝟙 X : X ⟶ X).hom = MonoidHom.id X := rfl
@@ -419,7 +419,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : GrpCat) (x : X)
+  条件: (X : 群范畴) (x : X)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -438,7 +438,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y T : GrpCat} (f : X ⟶ Y) (g : Y ⟶ T)
+  条件: {X Y T : 群范畴} (f : X ⟶ Y) (g : Y ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {X Y T : GrpCat} (f : X ⟶ Y) (g : Y ⟶ T) :
@@ -458,7 +458,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y T : GrpCat} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
+  条件: {X Y T : 群范畴} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -480,7 +480,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : GrpCat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 群范畴} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -505,7 +505,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {R S : 类型u} [Group R] [Group S] (f : R ->* S)
+  条件: {R S : 类型u} [群 R] [群 S] (f : R ->* S)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -526,7 +526,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : GrpCat} (f : X ⟶ Y)
+  条件: {X Y : 群范畴} (f : X ⟶ Y)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -548,8 +548,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [Group X]
-  结论: ofHom (MonoidHom.id X) = 𝟙 (of X)
+  条件: {X : 类型u} [群 X]
+  结论: ofHom (幺半群态射.id X) = 𝟙 (of X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -569,7 +569,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Group X] [Group Y] [Group Z]
+  结论: {X Y Z : 类型u} [群 X] [群 Y] [群 Z]
   证明: rfl
 
 @[to_additive]
@@ -590,7 +590,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Group X] [Group Y] (f : X ->* Y) (x : X)
+  条件: {X Y : 类型u} [群 X] [群 Y] (f : X ->* Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [Group X] [Group Y] (f : X ->* Y) (x : X) :
@@ -610,7 +610,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : GrpCat} (e : X ≅ Y) (x : X)
+  条件: {X Y : 群范畴} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -634,7 +634,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : GrpCat} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 群范畴} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited GrpCat
+  签名: 可居 群范畴
   定义体: ⟨GrpCat.of PUnit⟩
 
 @[to_additive hasForgetToAddMonCat]
@@ -679,7 +679,7 @@ instance hasForgetToMonCat
 
 中文:
 实例 hasForgetToMonCat
-  签名: : HasForget₂ GrpCat MonCat where
+  签名: : 有Forget₂ 群范畴 幺半群范畴 where
   定义体: MonCat.of X
   forget₂.map f := MonCat.ofHom f.hom
 
@@ -699,7 +699,7 @@ lemma forget₂_map_ofHom
 
 中文:
 引理 forget₂_map_ofHom
-  结论: {X Y : 类型u} [Group X] [Group Y]
+  结论: {X Y : 类型u} [群 X] [群 Y]
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma forget₂_map_ofHom {X Y : Type u} [Group X] [Group Y]
@@ -718,7 +718,7 @@ lemma forget₂_map
 
 中文:
 引理 forget₂_map
-  条件: {R S : GrpCat} (f : R ⟶ S) (x)
+  条件: {R S : 群范畴} (f : R ⟶ S) (x)
   证明: rfl
 
 @[to_additive]
@@ -739,7 +739,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe GrpCat.{u} MonCat.{u}
+  签名: Coe 群范畴.{u} 幺半群范畴.{u}
   定义体: (forget₂ GrpCat MonCat).obj
 
 @[to_additive]
@@ -766,7 +766,7 @@ theorem one_apply
 
 中文:
 定理 one_apply
-  条件: (G H : GrpCat) (g : G)
+  条件: (G H : 群范畴) (g : G)
   结论: ((1 : G ⟶ H) : G -> H) g = 1
   证明: rfl
 
@@ -789,7 +789,7 @@ lemma ofHom_injective
 
 中文:
 引理 ofHom_injective
-  条件: {X Y : 类型u} [Group X] [Group Y]
+  条件: {X Y : 类型u} [群 X] [群 Y]
   证明: by
   intro _ _ h
   ext
@@ -818,7 +818,7 @@ definition fullyFaithfulForget₂ToMonCat
 
 中文:
 定义 fullyFaithfulForget₂ToMonCat
-  签名: : (forget₂ GrpCat.{u} MonCat).FullyFaithful where
+  签名: : (forget₂ 群范畴.{u} 幺半群范畴).满忠实 where
   定义体: ofHom f.hom
 
 @[to_additive]
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ GrpCat.{u} MonCat).Full
+  签名: (forget₂ 群范畴.{u} 幺半群范畴).满
   定义体: fullyFaithfulForget₂ToMonCat.full
 
 Depends on / 依赖: ToMonCat.full
@@ -868,7 +868,7 @@ MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
 
 中文:
 定义 uliftFunctor
-  签名: : GrpCat.{v} ⥤ GrpCat.{max v u} where
+  签名: : 群范畴.{v} ⥤ 群范畴.{最大值 v u} where
   定义体: GrpCat.of (ULift.{u, v} X)
 map {_ _} f := GrpCat.ofHom
 MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
@@ -897,11 +897,11 @@ structure AddCommGrpCat
     - [str : AddCommGroup carrier]
 
 中文:
-结构 AddCommGrpCat
-  参数: : Type (u + 1) where
+结构 加法交换群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : AddCommGroup carrier]
+    - [str : 加法交换群 carrier]
 -/
 structure AddCommGrpCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -921,11 +921,11 @@ structure CommGrpCat
     - [str : CommGroup carrier]
 
 中文:
-结构 CommGrpCat
-  参数: : Type (u + 1) where
+结构 交换群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : CommGroup carrier]
+    - [str : 交换群 carrier]
 -/
 structure CommGrpCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -965,7 +965,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CommGrpCat (类型u)
+  签名: CoeSort 交换群范畴 (类型u)
   定义体: ⟨CommGrpCat.carrier⟩
 
 Depends on / 依赖: CommGrpCat, CommGrpCat.carrier, carrier
@@ -987,7 +987,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [CommGroup M]
+  签名: (M : 类型u) [交换群 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [CommGroup M] : CommGrpCat := ⟨M⟩
@@ -1007,8 +1007,8 @@ structure AddCommGrpCat.Hom
     - hom' : A ->+ B
 
 中文:
-结构 AddCommGrpCat.Hom
-  参数: (A B : AddCommGrpCat.{u})
+结构 加法交换群范畴.态射
+  参数: (A B : 加法交换群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->+ B
@@ -1031,8 +1031,8 @@ structure CommGrpCat.Hom
     - hom' : A ->* B
 
 中文:
-结构 CommGrpCat.Hom
-  参数: (A B : CommGrpCat.{u})
+结构 交换群范畴.态射
+  参数: (A B : 交换群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->* B
@@ -1059,7 +1059,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category CommGrpCat.{u}
+  签名: 范畴 交换群范畴.{u}
   定义体: Hom X Y
   id X := ⟨MonoidHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -1083,7 +1083,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory CommGrpCat (· ->* ·)
+  签名: 余ncrete范畴 交换群范畴 (· ->* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -1104,8 +1104,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommGrpCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : CommGrpCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 交换群范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := CommGrpCat) f
 -/
 abbrev Hom.hom {X Y : CommGrpCat.{u}} (f : Hom X Y) :=
@@ -1123,7 +1123,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [CommGroup X] [CommGroup Y] (f : X ->* Y)
+  签名: {X Y : 类型u} [交换群 X] [交换群 Y] (f : X ->* Y)
   定义体: ConcreteCategory.ofHom (C := CommGrpCat) f
 
 Depends on / 依赖: CommGrpCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -1145,8 +1145,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddCommGrpCat.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : CommGrpCat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 交换群范畴.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -1176,7 +1176,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : CommGrpCat}
+  条件: {X : 交换群范畴}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -1200,7 +1200,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : CommGrpCat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 交换群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -1226,7 +1226,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : CommGrpCat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 交换群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -1250,7 +1250,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CommGrpCat
+  签名: 可居 交换群范畴
   定义体: ⟨CommGrpCat.of PUnit⟩
 
 @[to_additive]
@@ -1275,8 +1275,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (R : 类型u) [CommGroup R]
-  结论: ↑(CommGrpCat.of R) = R
+  条件: (R : 类型u) [交换群 R]
+  结论: ↑(交换群范畴.of R) = R
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1296,8 +1296,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : CommGrpCat}
-  结论: (𝟙 X : X ⟶ X).hom = MonoidHom.id X
+  条件: {X : 交换群范畴}
+  结论: (𝟙 X : X ⟶ X).hom = 幺半群态射.id X
   证明: rfl
 -/
 lemma hom_id {X : CommGrpCat} : (𝟙 X : X ⟶ X).hom = MonoidHom.id X := rfl
@@ -1316,7 +1316,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : CommGrpCat) (x : X)
+  条件: (X : 交换群范畴) (x : X)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -1335,7 +1335,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y T : CommGrpCat} (f : X ⟶ Y) (g : Y ⟶ T)
+  条件: {X Y T : 交换群范畴} (f : X ⟶ Y) (g : Y ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {X Y T : CommGrpCat} (f : X ⟶ Y) (g : Y ⟶ T) :
@@ -1355,7 +1355,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y T : CommGrpCat} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
+  条件: {X Y T : 交换群范畴} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -1377,7 +1377,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : CommGrpCat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 交换群范畴} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -1402,7 +1402,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [CommGroup X] [CommGroup Y] (f : X ->* Y)
+  条件: {X Y : 类型u} [交换群 X] [交换群 Y] (f : X ->* Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -1423,7 +1423,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : CommGrpCat} (f : X ⟶ Y)
+  条件: {X Y : 交换群范畴} (f : X ⟶ Y)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1445,8 +1445,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [CommGroup X]
-  结论: ofHom (MonoidHom.id X) = 𝟙 (of X)
+  条件: {X : 类型u} [交换群 X]
+  结论: ofHom (幺半群态射.id X) = 𝟙 (of X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1466,7 +1466,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [CommGroup X] [CommGroup Y] [CommGroup Z]
+  结论: {X Y Z : 类型u} [交换群 X] [交换群 Y] [交换群 Z]
   证明: rfl
 
 @[to_additive]
@@ -1487,7 +1487,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [CommGroup X] [CommGroup Y] (f : X ->* Y) (x : X)
+  条件: {X Y : 类型u} [交换群 X] [交换群 Y] (f : X ->* Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [CommGroup X] [CommGroup Y] (f : X ->* Y) (x : X) :
@@ -1507,7 +1507,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : CommGrpCat} (e : X ≅ Y) (x : X)
+  条件: {X Y : 交换群范畴} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -1531,7 +1531,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : CommGrpCat} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 交换群范畴} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -1553,7 +1553,7 @@ instance hasForgetToGroup
 
 中文:
 实例 hasForgetToGroup
-  签名: : HasForget₂ CommGrpCat GrpCat where
+  签名: : 有Forget₂ 交换群范畴 群范畴 where
   定义体: GrpCat.of X
   forget₂.map f := GrpCat.ofHom f.hom
 
@@ -1573,7 +1573,7 @@ lemma forget₂_grp_map_ofHom
 
 中文:
 引理 forget₂_grp_map_ofHom
-  结论: {X Y : 类型u} [CommGroup X] [CommGroup Y]
+  结论: {X Y : 类型u} [交换群 X] [交换群 Y]
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma forget₂_grp_map_ofHom {X Y : Type u} [CommGroup X] [CommGroup Y]
@@ -1592,7 +1592,7 @@ lemma forget₂_map
 
 中文:
 引理 forget₂_map
-  条件: {R S : CommGrpCat} (f : R ⟶ S) (x)
+  条件: {R S : 交换群范畴} (f : R ⟶ S) (x)
   证明: rfl
 
 @[to_additive]
@@ -1611,7 +1611,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe CommGrpCat.{u} GrpCat.{u}
+  签名: Coe 交换群范畴.{u} 群范畴.{u}
   定义体: (forget₂ CommGrpCat GrpCat).obj
 
 Depends on / 依赖: CommGrpCat, GrpCat
@@ -1633,7 +1633,7 @@ definition fullyFaithfulForget₂ToGrp
 
 中文:
 定义 fullyFaithfulForget₂ToGrp
-  签名: : (forget₂ CommGrpCat.{u} GrpCat).FullyFaithful where
+  签名: : (forget₂ 交换群范畴.{u} 群范畴).满忠实 where
   定义体: ofHom f.hom
 
 @[to_additive]
@@ -1656,7 +1656,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommGrpCat.{u} GrpCat).Full
+  签名: (forget₂ 交换群范畴.{u} 群范畴).满
   定义体: fullyFaithfulForget₂ToGrp.full
 
 @[to_additive hasForgetToAddCommMonCat]
@@ -1678,7 +1678,7 @@ instance hasForgetToCommMonCat
 
 中文:
 实例 hasForgetToCommMonCat
-  签名: : HasForget₂ CommGrpCat CommMonCat where
+  签名: : 有Forget₂ 交换群范畴 交换幺半群范畴 where
   定义体: CommMonCat.of X
   forget₂.map f := CommMonCat.ofHom f.hom
 
@@ -1722,7 +1722,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe CommGrpCat.{u} CommMonCat.{u}
+  签名: Coe 交换群范畴.{u} 交换幺半群范畴.{u}
   定义体: (forget₂ CommGrpCat CommMonCat).obj
 
 @[to_additive]
@@ -1749,7 +1749,7 @@ theorem one_apply
 
 中文:
 定理 one_apply
-  条件: (G H : CommGrpCat) (g : G)
+  条件: (G H : 交换群范畴) (g : G)
   结论: ((1 : G ⟶ H) : G -> H) g = 1
   证明: rfl
 
@@ -1772,7 +1772,7 @@ lemma ofHom_injective
 
 中文:
 引理 ofHom_injective
-  条件: {X Y : 类型u} [CommGroup X] [CommGroup Y]
+  条件: {X Y : 类型u} [交换群 X] [交换群 Y]
   证明: by
   intro _ _ h
   ext
@@ -1807,7 +1807,7 @@ MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
 
 中文:
 定义 uliftFunctor
-  签名: : CommGrpCat.{v} ⥤ CommGrpCat.{max v u} where
+  签名: : 交换群范畴.{v} ⥤ 交换群范畴.{最大值 v u} where
   定义体: CommGrpCat.of (ULift.{u, v} X)
 map {_ _} f := CommGrpCat.ofHom
 MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
@@ -1843,7 +1843,7 @@ definition asHom
 
 中文:
 定义 asHom
-  签名: {G : AddCommGrpCat.{0}} (g : G)
+  签名: {G : 加法交换群范畴.{0}} (g : G)
   定义体: ofHom (zmultiplesHom G g)
 
 Depends on / 依赖: zmultiplesHom
@@ -1865,8 +1865,8 @@ theorem asHom_injective
 
 中文:
 定理 asHom_injective
-  条件: {G : AddCommGrpCat.{0}}
-  结论: Function.Injective (@asHom G)
+  条件: {G : 加法交换群范畴.{0}}
+  结论: 函数.单射 (@asHom G)
   证明: fun h k w => by
   simpa using CategoryTheory.congr_fun w 1
 
@@ -1888,7 +1888,7 @@ theorem int_hom_ext
 
 中文:
 定理 int_hom_ext
-  结论: {G : AddCommGrpCat.{0}} (f g : AddCommGrpCat.of 整数 ⟶ G)
+  结论: {G : 加法交换群范畴.{0}} (f g : 加法交换群范畴.of 整数 ⟶ G)
   证明: hom_ext (AddMonoidHom.ext_int w)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext_int, ext_int, hom_ext
@@ -1913,8 +1913,8 @@ theorem injective_of_mono
 
 中文:
 定理 injective_of_mono
-  条件: {G H : AddCommGrpCat.{0}} (f : G ⟶ H) [Mono f]
-  结论: Function.Injective f
+  条件: {G H : 加法交换群范畴.{0}} (f : G ⟶ H) [单态射 f]
+  结论: 函数.单射 f
   证明: fun g₁ g₂ h => by
   have t0 : asHom g₁ ≫ f = asHom g₂ ≫ f := by cat_disch
   have t1 : asHom g₁ = asHom g₂ := (cancel_mono _).1 t0
@@ -1942,8 +1942,8 @@ definition MulEquiv.toGrpIso
   inv := GrpCat.ofHom e.symm.toMonoidHom
 
 中文:
-定义 MulEquiv.toGrpIso
-  签名: {X Y : GrpCat} (e : X ≃* Y)
+定义 乘法等价.toGrpIso
+  签名: {X Y : 群范畴} (e : X ≃* Y)
   定义体: GrpCat.ofHom e.toMonoidHom
   inv := GrpCat.ofHom e.symm.toMonoidHom
 
@@ -1969,8 +1969,8 @@ definition MulEquiv.toCommGrpIso
   inv := CommGrpCat.ofHom e.symm.toMonoidHom
 
 中文:
-定义 MulEquiv.toCommGrpIso
-  签名: {X Y : CommGrpCat} (e : X ≃* Y)
+定义 乘法等价.toCommGrpIso
+  签名: {X Y : 交换群范畴} (e : X ≃* Y)
   定义体: CommGrpCat.ofHom e.toMonoidHom
   inv := CommGrpCat.ofHom e.symm.toMonoidHom
 
@@ -1998,7 +1998,7 @@ definition groupIsoToMulEquiv
 
 中文:
 定义 groupIsoToMulEquiv
-  签名: {X Y : GrpCat} (i : X ≅ Y)
+  签名: {X Y : 群范畴} (i : X ≅ Y)
   定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -2021,7 +2021,7 @@ definition commGroupIsoToMulEquiv
 
 中文:
 定义 commGroupIsoToMulEquiv
-  签名: {X Y : CommGrpCat} (i : X ≅ Y)
+  签名: {X Y : 交换群范畴} (i : X ≅ Y)
   定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -2048,7 +2048,7 @@ definition mulEquivIsoGroupIso
 
 中文:
 定义 mulEquivIsoGroupIso
-  签名: {X Y : GrpCat.{u}}
+  签名: {X Y : 群范畴.{u}}
   定义体: ↾fun e => e.toGrpIso
   inv := ↾fun i => i.groupIsoToMulEquiv
 
@@ -2076,7 +2076,7 @@ definition mulEquivIsoCommGroupIso
 
 中文:
 定义 mulEquivIsoCommGroupIso
-  签名: {X Y : CommGrpCat.{u}}
+  签名: {X Y : 交换群范畴.{u}}
   定义体: ↾fun e => e.toCommGrpIso
   inv := ↾fun i => i.commGroupIsoToMulEquiv
 
@@ -2166,8 +2166,8 @@ instance GrpCat.forget_reflects_isos
 @[to_additive]
 
 中文:
-实例 GrpCat.forget_reflects_isos
-  签名: : (forget GrpCat.{u}).ReflectsIsomorphisms where
+实例 群范畴.forget_reflects_isos
+  签名: : (forget 群范畴.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget GrpCat).map f)
     let e : X ≃* Y := { i.toEquiv with map_mul' := by simp [Iso.toEquiv, i] }
@@ -2196,8 +2196,8 @@ instance CommGrpCat.forget_reflects_isos
     exact e.toCommGrpIso.isIso_hom
 
 中文:
-实例 CommGrpCat.forget_reflects_isos
-  签名: : (forget CommGrpCat.{u}).ReflectsIsomorphisms where
+实例 交换群范畴.forget_reflects_isos
+  签名: : (forget 交换群范畴.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget CommGrpCat).map f)
     let e : X ≃* Y := { i.toEquiv with map_mul' := by simp [Iso.toEquiv, i] }

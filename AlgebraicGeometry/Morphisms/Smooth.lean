@@ -69,10 +69,10 @@ class Smooth
     - smooth_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Smooth
 
 中文:
-类 Smooth
+类 光滑
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - smooth_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Smooth
+    - smooth_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.光滑
 
 Depends on / 依赖: Smooth, Smooth.smooth_appLE, smooth_appLE
 -/
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @Smooth RingHom.Smooth
+  签名: 有RingHomProperty @光滑 环态射.光滑
   定义体: RingHom.Smooth.propertyIsLocal
   eq_affineLocally' := by
     ext X Y f
@@ -128,7 +128,7 @@ lemma Smooth.iff_forall_exists_isStandardSmooth
     s
 
 中文:
-引理 Smooth.iff_forall_exists_isStandardSmooth
+引理 光滑.iff_对任意_存在_isStandardSmooth
   条件: (f : X ⟶ Y)
   证明: by
   have : HasRingHomProperty @Smooth.{u} (Locally IsStandardSmooth) := by
@@ -165,8 +165,8 @@ lemma Smooth.exists_isStandardSmooth
   proof: (iff_forall_exists_isStandardSmooth f).mp ‹_› x
 
 中文:
-引理 Smooth.exists_isStandardSmooth
-  条件: (f : X ⟶ Y) [Smooth f] (x : X)
+引理 光滑.存在_isStandardSmooth
+  条件: (f : X ⟶ Y) [光滑 f] (x : X)
   证明: (iff_forall_exists_isStandardSmooth f).mp ‹_› x
 
 Depends on / 依赖: iff_forall_exists_isStandardSmooth
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @Smooth
+  签名: MorphismProperty.是StableUnderComposition @光滑
   定义体: HasRingHomProperty.stableUnderComposition Smooth.stableUnderComposition
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.stableUnderComposition, Smooth, Smooth.stableUnderComposition, stableUnderComposition
@@ -204,7 +204,7 @@ instance smooth_comp
 
 中文:
 实例 smooth_comp
-  签名: {Z : Scheme.{u}} (g : Y ⟶ Z) [Smooth f] [Smooth g]
+  签名: {Z : 概形.{u}} (g : Y ⟶ Z) [光滑 f] [光滑 g]
   定义体: MorphismProperty.comp_mem _ f g ‹Smooth f› ‹Smooth g›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, Smooth, comp_mem
@@ -226,7 +226,7 @@ instance smooth_isStableUnderBaseChange
 
 中文:
 实例 smooth_isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @Smooth
+  签名: : MorphismProperty.是StableUnderBaseChange @光滑
   定义体: HasRingHomProperty.isStableUnderBaseChange Smooth.isStableUnderBaseChange
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, Smooth, Smooth.isStableUnderBaseChange, isStableUnderBaseChange
@@ -249,7 +249,7 @@ alias isSmooth_isStableUnderBaseChange := smooth_isStableUnderBaseChange
 
 中文:
 实例 :
-  签名: Morphism命题erty.Respects @Smooth @IsOpenImmersion
+  签名: MorphismProperty.Respects @光滑 @是开浸入
   定义体: HasRingHomProperty.respects_isOpenImmersion
     (RingHom.Smooth.stableUnderComposition.stableUnderCompositionWithLocalizationAway
       RingHom.Smooth.holdsForLocalizationAway).1
@@ -287,7 +287,7 @@ class SmoothOfRelativeDimension
 类 SmoothOfRelativeDimension
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_isStandardSmoothOfRelativeDimension : 对任意 (x : X), 存在 (U : Y.Opens) (_ : IsAffineOpen U) (V : X.Opens) (_ : IsAffineOpen V) (_ : x in V) (e : V <= f ⁻¹ᵁ U), IsStandardSmoothOfRelativeDimension n (f.appLE U V e).hom
+    - exists_isStandardSmoothOfRelativeDimension : 对任意 (x : X), 存在 (U : Y.Opens) (_ : 是仿射开集 U) (V : X.Opens) (_ : 是仿射开集 V) (_ : x in V) (e : V <= f ⁻¹ᵁ U), 是StandardSmoothOfRelativeDimension n (f.appLE U V e).hom
 -/
 class SmoothOfRelativeDimension : Prop where
   exists_isStandardSmoothOfRelativeDimension : forall (x : X), exists (U : Y.Opens) (_ : IsAffineOpen U)
@@ -315,7 +315,7 @@ alias IsSmoothOfRelativeDimension.isSmooth := S
 中文:
 引理 SmoothOfRelativeDimension.smooth
   条件: [SmoothOfRelativeDimension n f]
-  结论: Smooth f
+  结论: 光滑 f
   证明: by
   rw [Smooth.iff_forall_exists_isStandardSmooth]
   intro x
@@ -353,7 +353,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty (@SmoothOfRelativeDimension n)
+  签名: 有RingHomProperty (@SmoothOfRelativeDimension n)
   定义体: by
   apply HasRingHomProperty.locally_of_iff
   · exact (isStandardSmoothOfRelativeDimension_localizationPreserves n).away
@@ -454,7 +454,7 @@ instance smoothOfRelativeDimension_comp
 
 中文:
 实例 smoothOfRelativeDimension_comp
-  签名: {Z : Scheme.{u}} (g : Y ⟶ Z)
+  签名: {Z : 概形.{u}} (g : Y ⟶ Z)
   定义体: by
     obtain ⟨U₂, hU₂, V₂, hV₂, hfx₂, e₂, hf₂⟩ := hg.exists_isStandardSmoothOfRelativeDimension (f x)
     obtain ⟨U₁', hU₁', V₁', hV₁', hx₁', e₁', hf₁'⟩ :=
@@ -503,7 +503,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative (@SmoothOfRelativeDimension 0)
+  签名: MorphismProperty.是Multiplicative (@SmoothOfRelativeDimension 0)
   定义体: inferInstance
   comp_mem _ _ _ _ := inferInstance
 -/
@@ -578,7 +578,7 @@ lemma exists_smooth_of_formallySmooth_stalk
   a
 
 中文:
-引理 exists_smooth_of_formallySmooth_stalk
+引理 存在_smooth_of_formallySmooth_stalk
   证明: by
   obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
     Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
@@ -633,8 +633,8 @@ lemma Scheme.Hom.isOpen_smoothLocus
     (inferInstanceAs (Algebra.IsSmoothAt _ _)
 
 中文:
-引理 Scheme.Hom.isOpen_smoothLocus
-  条件: [LocallyOfFinitePresentation f]
+引理 概形.态射.isOpen_smoothLocus
+  条件: [局部有限呈现 f]
   证明: by
   refine isOpen_iff_forall_mem_open.mpr fun x hx => ?_
   obtain ⟨U, hU, V, hV, hVU, hxV, H⟩ := exists_smooth_of_formallySmooth_stalk f x hx
@@ -661,8 +661,8 @@ definition Scheme.Hom.smoothLocus
   body: ⟨{ x | (f.stalkMap x).hom.FormallySmooth }, f.isOpen_smoothLocus⟩
 
 中文:
-定义 Scheme.Hom.smoothLocus
-  签名: (f : X ⟶ Y) [LocallyOfFinitePresentation f]
+定义 概形.态射.smoothLocus
+  签名: (f : X ⟶ Y) [局部有限呈现 f]
   定义体: ⟨{ x | (f.stalkMap x).hom.FormallySmooth }, f.isOpen_smoothLocus⟩
 
 Depends on / 依赖: FormallySmooth, f.isOpen_smoothLocus, f.stalkMap, hom.FormallySmooth, isOpen_smoothLocus, stalkMap
@@ -679,8 +679,8 @@ lemma Scheme.Hom.mem_smoothLocus
   proof: .rfl
 
 中文:
-引理 Scheme.Hom.mem_smoothLocus
-  条件: {f : X ⟶ Y} [LocallyOfFinitePresentation f] {x : X}
+引理 概形.态射.mem_smoothLocus
+  条件: {f : X ⟶ Y} [局部有限呈现 f] {x : X}
   证明: .rfl
 -/
 lemma Scheme.Hom.mem_smoothLocus {f : X ⟶ Y} [LocallyOfFinitePresentation f] {x : X} :
@@ -702,8 +702,8 @@ lemma Scheme.Hom.smoothLocus_eq_top
   have := f.smoot
 
 中文:
-引理 Scheme.Hom.smoothLocus_eq_top
-  条件: (f : X ⟶ Y) [Smooth f]
+引理 概形.态射.smoothLocus_eq_top
+  条件: (f : X ⟶ Y) [光滑 f]
   证明: by
   rw [← top_le_iff]
   rintro x -
@@ -745,8 +745,8 @@ lemma Scheme.Hom.smoothLocus_eq_top_iff
   have : IsA
 
 中文:
-引理 Scheme.Hom.smoothLocus_eq_top_iff
-  条件: {f : X ⟶ Y} [LocallyOfFinitePresentation f]
+引理 概形.态射.smoothLocus_eq_top_iff
+  条件: {f : X ⟶ Y} [局部有限呈现 f]
   证明: by
   refine ⟨fun H => ?_, fun _ => f.smoothLocus_eq_top⟩
   refine IsZariskiLocalAtSource.iff_exists_resLE.mpr fun x => ?_
@@ -784,8 +784,8 @@ lemma Scheme.Hom.preimage_smoothLocus_eq
   rfl
 
 中文:
-引理 Scheme.Hom.preimage_smoothLocus_eq
-  结论: {U : Scheme.{u}}
+引理 概形.态射.preimage_smoothLocus_eq
+  结论: {U : 概形.{u}}
   证明: by
   ext x
   refine (RingHom.FormallySmooth.respectsIso.cancel_right_isIso _ (f.stalkMap x)).symm.trans ?_
@@ -816,7 +816,7 @@ lemma Scheme.Hom.genericPoint_mem_smoothLocus_of_perfectField
   let e : K ≃ₐ[K] K' := IsLocalization.atUnits _ (f (genericPoint X)).asIdeal.primeC
 
 中文:
-引理 Scheme.Hom.genericPoint_mem_smoothLocus_of_perfectField
+引理 概形.态射.genericPoint_mem_smoothLocus_of_perfectField
   证明: by
   have := LocallyOfFiniteType.stalkMap f (genericPoint X)
   rw [Scheme.Hom.mem_smoothLocus]
@@ -859,7 +859,7 @@ lemma Scheme.Hom.dense_smoothLocus_of_perfectField
     have := this (U.ι ≫ f) (isCompact_iff_compactSpace.mp
 
 中文:
-引理 Scheme.Hom.dense_smoothLocus_of_perfectField
+引理 概形.态射.dense_smoothLocus_of_perfectField
   证明: by
   wlog H : CompactSpace X generalizing X
   · rw [dense_iff_closure_eq, Set.eq_univ_iff_forall]

@@ -64,7 +64,7 @@ definition sum
   body: ∑' n : Nat, p n fun _ => x
 
 中文:
-定义 sum
+定义 求和
   签名: (p : FormalMultilinearSeries 𝕜 E F) (x : E)
   定义体: ∑' n : Nat, p n fun _ => x
 -/
@@ -81,7 +81,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  结论: {S : 类型} {s : S} [SetLike S F] [AddSubmonoidClass S F]
+  结论: {S : 类型} {s : S} [集合状 S F] [加法子幺半群类 S F]
   证明: tsum_mem h_closed h
 
 Depends on / 依赖: h_closed, tsum_mem
@@ -107,7 +107,7 @@ theorem const_smul_sum_apply
 
 中文:
 定理 const_smul_sum_apply
-  条件: [T2Space F] (a : 𝕜') (f : FormalMultilinearSeries 𝕜 E F) (z : E)
+  条件: [T2空间 F] (a : 𝕜') (f : FormalMultilinearSeries 𝕜 E F) (z : E)
   证明: by
   unfold FormalMultilinearSeries.sum
   simp [tsum_const_smul'']
@@ -131,7 +131,7 @@ theorem const_smul_sum
 
 中文:
 定理 const_smul_sum
-  条件: [T2Space F] (a : 𝕜') (f : FormalMultilinearSeries 𝕜 E F)
+  条件: [T2空间 F] (a : 𝕜') (f : FormalMultilinearSeries 𝕜 E F)
   证明: by
   ext z
   apply const_smul_sum_apply
@@ -345,7 +345,7 @@ theorem radius_eq_top_of_forall_nnreal_isBigO
   proof: ENNReal.eq_top_of_forall_nnreal_le fun r => p.le_radius_of_isBigO (h r)
 
 中文:
-定理 radius_eq_top_of_forall_nnreal_isBigO
+定理 radius_eq_top_of_对任意_nnreal_isBigO
   证明: ENNReal.eq_top_of_forall_nnreal_le fun r => p.le_radius_of_isBigO (h r)
 
 Depends on / 依赖: ENNReal, ENNReal.eq_top_of_forall_nnreal_le, eq_top_of_forall_nnreal_le, le_radius_of_isBigO, p.le_radius_of_isBigO
@@ -389,7 +389,7 @@ theorem radius_eq_top_of_forall_image_add_eq_zero
 @[simp]
 
 中文:
-定理 radius_eq_top_of_forall_image_add_eq_zero
+定理 radius_eq_top_of_对任意_image_add_eq_zero
   条件: (n : 自然数) (hn : 对任意 m, p (m + n) = 0)
   证明: p.radius_eq_top_of_eventually_eq_zero
     mem_atTop_sets.2 ⟨n, fun _ hk => tsub_add_cancel_of_le hk ▸ hn _⟩
@@ -561,7 +561,7 @@ theorem lt_radius_of_isBigO
 
 中文:
 定理 lt_radius_of_isBigO
-  结论: (h₀ : r != 0) {a : 实数} (ha : a in Ioo (-1 : 实数) 1)
+  结论: (h₀ : r != 0) {a : 实数} (ha : a in 开区间 (-1 : 实数) 1)
   证明: by
   have := ((TFAE_exists_lt_isLittleO_pow (fun n => ‖p n‖ * (r : Real) ^ n) 1).out 2 5)
   rcases this.mp ⟨a, ha, hp⟩ with ⟨a, ha, C, hC, hp⟩
@@ -803,7 +803,7 @@ theorem summable
 
 中文:
 定理 summable
-  结论: [CompleteSpace F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}
+  结论: [完备空间 F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}
   证明: (p.summable_norm_apply hx).of_norm
 -/
 protected theorem summable [CompleteSpace F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}
@@ -1015,7 +1015,7 @@ theorem radius_le_smul
 
 中文:
 定理 radius_le_smul
-  结论: {p : FormalMultilinearSeries 𝕜 E F} {𝕜' : 类型} {c : 𝕜'} [NormedRing 𝕜']
+  结论: {p : FormalMultilinearSeries 𝕜 E F} {𝕜' : 类型} {c : 𝕜'} [赋范环 𝕜']
   证明: by
   simp only [radius, smul_apply]
   refine iSup_mono fun r => iSup_mono' fun C => ⟨‖c‖ * C, iSup_mono' fun h => ?_⟩
@@ -1225,7 +1225,7 @@ theorem radius_compContinuousLinearMap_le
 
 中文:
 定理 radius_compContinuousLinearMap_le
-  结论: [Nontrivial F]
+  结论: [非平凡 F]
   证明: by
   have := (p.compContinuousLinearMap u.toContinuousLinearMap).div_le_radius_compContinuousLinearMap
     u.symm.toContinuousLinearMap
@@ -1261,7 +1261,7 @@ refine le_antisymm ?_ le_radius_compContinuousLinearMap _ _
 
 中文:
 定理 radius_compContinuousLinearMap_linearIsometryEquiv_eq
-  结论: [Nontrivial E]
+  结论: [非平凡 E]
   证明: by
 refine le_antisymm ?_ le_radius_compContinuousLinearMap _ _
   have _ : Nontrivial F := u.symm.toEquiv.nontrivial
@@ -1296,7 +1296,7 @@ theorem radius_compContinuousLinearMap_eq
 
 中文:
 定理 radius_compContinuousLinearMap_eq
-  结论: [Nontrivial E]
+  结论: [非平凡 E]
   证明: let v : E ≃ₗᵢ[𝕜] F :=
     { LinearEquiv.ofBijective u.toLinearMap ⟨hu_iso.injective, hu_surj⟩ with
       norm_map' := hu_iso.norm_map_of_map_zero (map_zero u) }
@@ -1328,7 +1328,7 @@ theorem radius_compNeg
 
 中文:
 定理 radius_compNeg
-  条件: [Nontrivial E] (p : FormalMultilinearSeries 𝕜 E F)
+  条件: [非平凡 E] (p : FormalMultilinearSeries 𝕜 E F)
   证明: radius_compContinuousLinearMap_linearIsometryEquiv_eq _ (.neg 𝕜)
 
 @[simp]
@@ -1448,7 +1448,7 @@ theorem hasSum
 
 中文:
 定理 hasSum
-  结论: [CompleteSpace F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}
+  结论: [完备空间 F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}
   证明: (p.summable hx).hasSum
 -/
 protected theorem hasSum [CompleteSpace F] (p : FormalMultilinearSeries 𝕜 E F) {x : E}

@@ -42,7 +42,7 @@ definition spectralSequenceNat
 @[simp]
 
 中文:
-定义 spectralSequenceNat
+定义 spectralSequence自然数
   签名: (u : 整数 × 整数)
   定义体: a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
   next_eq _ _ := by ext <;> lia
@@ -65,7 +65,7 @@ lemma spectralSequenceNat_rel_iff
   proof: Iff.rfl
 
 中文:
-引理 spectralSequenceNat_rel_iff
+引理 spectralSequence自然数_rel_iff
   条件: (u : 整数 × 整数) (a b : 自然数 × 自然数)
   证明: Iff.rfl
 
@@ -111,7 +111,7 @@ lemma spectralSequenceFin_rel_iff
 
 中文:
 引理 spectralSequenceFin_rel_iff
-  条件: {l : 自然数} (u : 整数 × 整数) (a b : 整数 × Fin l)
+  条件: {l : 自然数} (u : 整数 × 整数) (a b : 整数 × 有限集 l)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

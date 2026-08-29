@@ -40,7 +40,7 @@ abbreviation SSet
 
 中文:
 缩写 SSet
-  签名: : Type (u + 1)
+  签名: : 类型 (u + 1)
   定义体: SimplicialObject (Type u)
 
 Depends on / 依赖: SimplicialObject
@@ -205,7 +205,7 @@ definition uliftFunctor
 
 中文:
 定义 uliftFunctor
-  签名: : SSet.{u} ⥤ SSet.{max u v}
+  签名: : SSet.{u} ⥤ SSet.{最大值 u v}
   定义体: (SimplicialObject.whiskering _ _).obj CategoryTheory.uliftFunctor.{v, u}
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftFunctor, SimplicialObject, SimplicialObject.whiskering, uliftFunctor, whiskering
@@ -326,7 +326,7 @@ lemma id_app
 
 中文:
 引理 id_app
-  条件: {n : 自然数} (X : Truncated n) (d : (SimplexCategory.Truncated n)ᵒᵖ)
+  条件: {n : 自然数} (X : Truncated n) (d : (单纯形范畴.Truncated n)ᵒᵖ)
   证明: rfl
 
 @[simp, reassoc]
@@ -703,7 +703,7 @@ lemma δ_comp_δ_apply
 
 中文:
 引理 δ_comp_δ_apply
-  条件: {n} {i j : Fin (n + 2)} (H : i <= j) (x : S _⦋n + 2⦌)
+  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j) (x : S _⦋n + 2⦌)
   证明: congr_hom (S.δ_comp_δ H) x
 
 Depends on / 依赖: congr_hom
@@ -721,7 +721,7 @@ lemma δ_comp_δ'_apply
 
 中文:
 引理 δ_comp_δ'_apply
-  结论: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : Fin.castSucc i < j)
+  结论: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : 有限集.castSucc i < j)
   证明: congr_hom (S.δ_comp_δ' H) x
 
 Depends on / 依赖: congr_hom
@@ -741,7 +741,7 @@ lemma δ_comp_δ''_apply
 
 中文:
 引理 δ_comp_δ''_apply
-  结论: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j)
+  结论: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : i <= 有限集.castSucc j)
   证明: congr_hom (S.δ_comp_δ'' H) x
 
 Depends on / 依赖: congr_hom
@@ -761,7 +761,7 @@ lemma δ_comp_δ_self_apply
 
 中文:
 引理 δ_comp_δ_self_apply
-  条件: {n} {i : Fin (n + 2)} (x : S _⦋n + 2⦌)
+  条件: {n} {i : 有限集 (n + 2)} (x : S _⦋n + 2⦌)
   证明: congr_hom S.δ_comp_δ_self x
 
 Depends on / 依赖: congr_hom
@@ -779,7 +779,7 @@ lemma δ_comp_δ_self'_apply
 
 中文:
 引理 δ_comp_δ_self'_apply
-  结论: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = Fin.castSucc i)
+  结论: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : j = 有限集.castSucc i)
   证明: congr_hom (S.δ_comp_δ_self' H) x
 
 Depends on / 依赖: congr_hom
@@ -799,7 +799,7 @@ lemma δ_comp_σ_of_le_apply
 
 中文:
 引理 δ_comp_σ_of_le_apply
-  结论: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= Fin.castSucc j)
+  结论: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= 有限集.castSucc j)
   证明: congr_hom (S.δ_comp_σ_of_le H) x
 
 @[simp]
@@ -822,7 +822,7 @@ lemma δ_comp_σ_self_apply
 
 中文:
 引理 δ_comp_σ_self_apply
-  条件: {n} (i : Fin (n + 1)) (x : S _⦋n⦌)
+  条件: {n} (i : 有限集 (n + 1)) (x : S _⦋n⦌)
   结论: S.δ i.castSucc (S.σ i x) = x
   证明: congr_hom S.δ_comp_σ_self x
 
@@ -843,7 +843,7 @@ lemma δ_comp_σ_self'_apply
 
 中文:
 引理 δ_comp_σ_self'_apply
-  结论: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = Fin.castSucc i)
+  结论: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = 有限集.castSucc i)
   证明: congr_hom (S.δ_comp_σ_self' H) x
 
 @[simp]
@@ -865,7 +865,7 @@ lemma δ_comp_σ_succ_apply
 
 中文:
 引理 δ_comp_σ_succ_apply
-  条件: {n} (i : Fin (n + 1)) (x : S _⦋n⦌)
+  条件: {n} (i : 有限集 (n + 1)) (x : S _⦋n⦌)
   结论: S.δ i.succ (S.σ i x) = x
   证明: congr_hom S.δ_comp_σ_succ x
 
@@ -884,7 +884,7 @@ lemma δ_comp_σ_succ'_apply
 
 中文:
 引理 δ_comp_σ_succ'_apply
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ) (x : S _⦋n⦌)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.succ) (x : S _⦋n⦌)
   证明: congr_hom (S.δ_comp_σ_succ' H) x
 
 Depends on / 依赖: congr_hom
@@ -902,7 +902,7 @@ lemma δ_comp_σ_of_gt_apply
 
 中文:
 引理 δ_comp_σ_of_gt_apply
-  结论: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : Fin.castSucc j < i)
+  结论: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : 有限集.castSucc j < i)
   证明: congr_hom (S.δ_comp_σ_of_gt H) x
 
 Depends on / 依赖: congr_hom
@@ -921,7 +921,7 @@ lemma δ_comp_σ_of_gt'_apply
 
 中文:
 引理 δ_comp_σ_of_gt'_apply
-  结论: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i)
+  结论: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : j.succ < i)
   证明: congr_hom (S.δ_comp_σ_of_gt' H) x
 
 Depends on / 依赖: congr_hom
@@ -942,7 +942,7 @@ lemma σ_comp_σ_apply
 
 中文:
 引理 σ_comp_σ_apply
-  条件: {n} {i j : Fin (n + 1)} (H : i <= j) (x : S _⦋n⦌)
+  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j) (x : S _⦋n⦌)
   证明: congr_hom (S.σ_comp_σ H) x
 
 Depends on / 依赖: congr_hom
@@ -966,7 +966,7 @@ lemma δ_naturality_apply
 
 中文:
 引理 δ_naturality_apply
-  条件: {n : 自然数} (i : Fin (n + 2)) (x : S _⦋n + 1⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (x : S _⦋n + 1⦌)
   证明: by
   change (S.δ i ≫ f.app (op ⦋n⦌)) x = (f.app (op ⦋n + 1⦌) ≫ T.δ i) x
   exact congr_hom (SimplicialObject.δ_naturality f i) x
@@ -990,7 +990,7 @@ lemma σ_naturality_apply
 
 中文:
 引理 σ_naturality_apply
-  条件: {n : 自然数} (i : Fin (n + 1)) (x : S _⦋n⦌)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (x : S _⦋n⦌)
   证明: by
   change (S.σ i ≫ f.app (op ⦋n + 1⦌)) x = (f.app (op ⦋n⦌) ≫ T.σ i) x
   exact congr_hom (SimplicialObject.σ_naturality f i) x

@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopCat.toSSet.{u}.Monoidal
+  签名: 顶元素范畴.toSSet.{u}.幺半群
   定义体: .ofChosenFiniteProducts _
 
 Depends on / 依赖: ofChosenFiniteProducts
@@ -60,7 +60,7 @@ definition toTopHomeo
 
 中文:
 定义 toTopHomeo
-  签名: (n : SimplexCategory)
+  签名: (n : 单纯形范畴)
   定义体: (TopCat.homeoOfIso (toTopSimplex.{u}.app n)).trans Homeomorph.ulift
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift, TopCat, TopCat.homeoOfIso, homeoOfIso, toTopSimplex
@@ -82,7 +82,7 @@ lemma toTopHomeo_naturality
 
 中文:
 引理 toTopHomeo_naturality
-  条件: {n m : SimplexCategory} (f : n ⟶ m)
+  条件: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: by
   ext x : 1
   exact ULift.up_injective (ConcreteCategory.congr_hom ((forget TopCat).congr_map
@@ -107,7 +107,7 @@ lemma toTopHomeo_naturality_apply
 
 中文:
 引理 toTopHomeo_naturality_apply
-  结论: {n m : SimplexCategory} (f : n ⟶ m)
+  结论: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: congr_fun (toTopHomeo_naturality f) x
 
 Depends on / 依赖: congr_fun, toTopHomeo_naturality
@@ -131,7 +131,7 @@ lemma toTopHomeo_symm_naturality
 
 中文:
 引理 toTopHomeo_symm_naturality
-  条件: {n m : SimplexCategory} (f : n ⟶ m)
+  条件: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: by
   ext x : 1
   exact ConcreteCategory.congr_hom ((forget _).congr_map
@@ -156,7 +156,7 @@ lemma toTopHomeo_symm_naturality_apply
 
 中文:
 引理 toTopHomeo_symm_naturality_apply
-  结论: {n m : SimplexCategory} (f : n ⟶ m)
+  结论: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: congr_fun (toTopHomeo_symm_naturality f) x
 
 Depends on / 依赖: congr_fun, toTopHomeo_symm_naturality
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (stdSimplex 实数 (Fin (⦋0⦌.len + 1)))
+  签名: 唯一 (stdSimplex 实数 (有限集 (⦋0⦌.len + 1)))
   定义体: inferInstanceAs (Unique (stdSimplex Real (Fin 1)))
 
 Depends on / 依赖: Unique, stdSimplex
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique |(Δ[0] : SSet.{u})|
+  签名: 唯一 |(Δ[0] : SSet.{u})|
   定义体: ⦋0⦌.toTopHomeo.unique
 
 Depends on / 依赖: toTopHomeo, toTopHomeo.unique, unique
@@ -228,7 +228,7 @@ definition toSSetObj₀Equiv
 
 中文:
 定义 toSSetObj₀Equiv
-  签名: {X : TopCat.{u}}
+  签名: {X : 顶元素范畴.{u}}
   定义体: (toSSetObjEquiv X _).trans
     { toFun f := f.1 (default : _)
       invFun x := ⟨fun _ => x, by fun_prop⟩
@@ -264,7 +264,7 @@ lemma toSSet_map_const
 
 中文:
 引理 toSSet_map_const
-  条件: (X : TopCat.{u}) {Y : TopCat.{u}} (y : Y)
+  条件: (X : 顶元素范畴.{u}) {Y : 顶元素范畴.{u}} (y : Y)
   证明: rfl
 -/
 lemma toSSet_map_const (X : TopCat.{u}) {Y : TopCat.{u}} (y : Y) :
@@ -284,7 +284,7 @@ lemma toSSetObjEquiv_symm_naturality
 
 中文:
 引理 toSSetObjEquiv_symm_naturality
-  结论: {X : TopCat.{u}} {n m : SimplexCategory} (f : n ⟶ m)
+  结论: {X : 顶元素范畴.{u}} {n m : 单纯形范畴} (f : n ⟶ m)
   证明: rfl
 
 @[simp]
@@ -308,7 +308,7 @@ lemma toSSetObjEquiv_naturality_apply
 
 中文:
 引理 toSSetObjEquiv_naturality_apply
-  结论: {X : TopCat.{u}} {n m : SimplexCategory} (f : n ⟶ m)
+  结论: {X : 顶元素范畴.{u}} {n m : 单纯形范畴} (f : n ⟶ m)
   证明: rfl
 
 @[simp]
@@ -332,7 +332,7 @@ lemma toSSetObjEquiv_δ_apply
 
 中文:
 引理 toSSetObjEquiv_δ_apply
-  结论: {X : TopCat.{u}} {n : 自然数}
+  结论: {X : 顶元素范畴.{u}} {n : 自然数}
   证明: rfl
 
 @[simp]
@@ -354,7 +354,7 @@ lemma toSSetObjEquiv_σ_apply
 
 中文:
 引理 toSSetObjEquiv_σ_apply
-  结论: {X : TopCat.{u}} {n : 自然数}
+  结论: {X : 顶元素范畴.{u}} {n : 自然数}
   证明: rfl
 -/
 lemma toSSetObjEquiv_σ_apply {X : TopCat.{u}} {n : Nat}
@@ -380,7 +380,7 @@ lemma sSetTopAdj_homEquiv_stdSimplex_zero
 
 中文:
 引理 sSetTopAdj_homEquiv_stdSimplex_zero
-  结论: {X : TopCat.{u}}
+  结论: {X : 顶元素范畴.{u}}
   证明: by
   have : sSetTopAdj.unit.app Δ[0] =
       SSet.const (TopCat.toSSetObj₀Equiv.symm default) :=
@@ -411,7 +411,7 @@ definition TopCat.stdSimplexHomeomorphI
 @[simp]
 
 中文:
-定义 TopCat.stdSimplexHomeomorphI
+定义 顶元素范畴.stdSimplexHomeomorphI
   签名: :
   定义体: stdSimplexHomeomorphUnitInterval.trans Homeomorph.ulift.symm
 
@@ -434,7 +434,7 @@ lemma TopCat.stdSimplexHomeomorphI_vertex_zero
 @[simp]
 
 中文:
-引理 TopCat.stdSimplexHomeomorphI_vertex_zero
+引理 顶元素范畴.stdSimplexHomeomorphI_vertex_zero
   证明: rfl
 
 @[simp]
@@ -453,7 +453,7 @@ lemma TopCat.stdSimplexHomeomorphI_vertex_one
 @[simp]
 
 中文:
-引理 TopCat.stdSimplexHomeomorphI_vertex_one
+引理 顶元素范畴.stdSimplexHomeomorphI_vertex_one
   证明: rfl
 
 @[simp]
@@ -473,7 +473,7 @@ lemma TopCat.stdSimplexHomeomorphI_symm_zero
 @[simp]
 
 中文:
-引理 TopCat.stdSimplexHomeomorphI_symm_zero
+引理 顶元素范畴.stdSimplexHomeomorphI_symm_zero
   证明: by
   simp [← TopCat.stdSimplexHomeomorphI_vertex_zero]
 
@@ -495,7 +495,7 @@ lemma TopCat.stdSimplexHomeomorphI_symm_one
   simp [← TopCat.stdSimplexHomeomorphI_vertex_one]
 
 中文:
-引理 TopCat.stdSimplexHomeomorphI_symm_one
+引理 顶元素范畴.stdSimplexHomeomorphI_symm_one
   证明: by
   simp [← TopCat.stdSimplexHomeomorphI_vertex_one]
 
@@ -538,7 +538,7 @@ definition toSSetObjI
 
 中文:
 定义 toSSetObjI
-  签名: : Δ[1] ⟶ TopCat.toSSet.obj TopCat.I.{u}
+  签名: : Δ[1] ⟶ 顶元素范畴.toSSet.obj 顶元素范畴.I.{u}
   定义体: sSetTopAdj.homEquiv _ _ toTopObjIsoI.hom
 
 @[simp]
@@ -704,7 +704,7 @@ lemma ι₀_whiskerLeft_toSSetObjI_μ
 
 中文:
 引理 ι₀_whiskerLeft_toSSetObjI_μ
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   证明: by
   rw [← cancel_mono (μIso _ _ _).inv]; rw [Category.assoc]; rw [Category.assoc]; rw [μIso_inv]; rw [μ_δ]; rw [Category.comp_id]
   apply CartesianMonoidalCategory.hom_ext <;> simp [← Functor.map_comp]
@@ -731,7 +731,7 @@ lemma ι₁_whiskerLeft_toSSetObjI_μ
 
 中文:
 引理 ι₁_whiskerLeft_toSSetObjI_μ
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   证明: by
   rw [← cancel_mono (μIso _ _ _).inv]; rw [Category.assoc]; rw [Category.assoc]; rw [μIso_inv]; rw [μ_δ]; rw [Category.comp_id]
   apply CartesianMonoidalCategory.hom_ext <;> simp [← Functor.map_comp]

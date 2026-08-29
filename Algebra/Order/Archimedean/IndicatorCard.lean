@@ -44,7 +44,7 @@ lemma sum_indicator_eventually_eq_card
 
 中文:
 引理 sum_indicator_eventually_eq_card
-  结论: {α : 类型} [AddCommMonoid α] (a : α) {s : Set 自然数}
+  结论: {α : 类型} [加法交换幺半群 α] (a : α) {s : 集合 自然数}
   证明: by
   have key : forall x in hs.toFinset, s.indicator (fun _ => a) x = a := by
     intro x hx

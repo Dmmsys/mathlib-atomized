@@ -42,7 +42,7 @@ instance instTopologicalSpaceMulOpposite
 
 中文:
 实例 instTopologicalSpaceMulOpposite
-  签名: [TopologicalSpace M]
+  签名: [拓扑空间 M]
   定义体: TopologicalSpace.induced (unop : Mᵐᵒᵖ -> M) ‹_›
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, induced
@@ -65,7 +65,7 @@ theorem continuous_unop
 
 中文:
 定理 continuous_unop
-  结论: Continuous (unop : Mᵐᵒᵖ -> M)
+  结论: 连续 (unop : Mᵐᵒᵖ -> M)
   证明: continuous_induced_dom
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -86,7 +86,7 @@ theorem continuous_op
 
 中文:
 定理 continuous_op
-  结论: Continuous (op : M -> Mᵐᵒᵖ)
+  结论: 连续 (op : M -> Mᵐᵒᵖ)
   证明: continuous_induced_rng.2 continuous_id
 
 Depends on / 依赖: continuous_id, continuous_induced_rng
@@ -131,7 +131,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space M]
+  签名: [T2空间 M]
   定义体: opHomeomorph.t2Space
 
 @[to_additive]
@@ -153,7 +153,7 @@ instance instDiscreteTopology
 
 中文:
 实例 instDiscreteTopology
-  签名: [DiscreteTopology M]
+  签名: [离散拓扑 M]
   定义体: opHomeomorph.symm.isEmbedding.discreteTopology
 
 @[to_additive]
@@ -176,7 +176,7 @@ instance instCompactSpace
 
 中文:
 实例 instCompactSpace
-  签名: [CompactSpace M]
+  签名: [紧空间 M]
   定义体: opHomeomorph.compactSpace
 
 @[to_additive]
@@ -199,7 +199,7 @@ instance instWeaklyLocallyCompactSpace
 
 中文:
 实例 instWeaklyLocallyCompactSpace
-  签名: [WeaklyLocallyCompactSpace M]
+  签名: [WeaklyLocallyCompact空间 M]
   定义体: opHomeomorph.symm.isClosedEmbedding.weaklyLocallyCompactSpace
 
 @[to_additive]
@@ -223,7 +223,7 @@ instance instLocallyCompactSpace
 
 中文:
 实例 instLocallyCompactSpace
-  签名: [LocallyCompactSpace M]
+  签名: [局部紧空间 M]
   定义体: opHomeomorph.symm.isClosedEmbedding.locallyCompactSpace
 
 @[to_additive (attr := simp)]
@@ -353,7 +353,7 @@ instance instTopologicalSpaceUnits
 
 中文:
 实例 instTopologicalSpaceUnits
-  签名: : TopologicalSpace Mˣ
+  签名: : 拓扑空间 Mˣ
   定义体: TopologicalSpace.induced (embedProduct M) inferInstance
 
 @[to_additive]
@@ -376,7 +376,7 @@ theorem isInducing_embedProduct
 
 中文:
 定理 isInducing_embedProduct
-  结论: IsInducing (embedProduct M)
+  结论: 是Inducing (embedProduct M)
   证明: ⟨rfl⟩
 
 @[to_additive]
@@ -396,7 +396,7 @@ theorem isEmbedding_embedProduct
 
 中文:
 定理 isEmbedding_embedProduct
-  结论: IsEmbedding (embedProduct M)
+  结论: 是嵌入 (embedProduct M)
   证明: ⟨isInducing_embedProduct, embedProduct_injective M⟩
 
 @[to_additive]
@@ -419,7 +419,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space M]
+  签名: [T2空间 M]
   定义体: isEmbedding_embedProduct.t2Space
 
 @[to_additive]
@@ -439,7 +439,7 @@ instance instDiscreteTopology
 
 中文:
 实例 instDiscreteTopology
-  签名: [DiscreteTopology M]
+  签名: [离散拓扑 M]
   定义体: isEmbedding_embedProduct.discreteTopology
 
 Depends on / 依赖: discreteTopology, isEmbedding_embedProduct, isEmbedding_embedProduct.discreteTopology
@@ -487,7 +487,7 @@ lemma isEmbedding_val_mk'
 
 中文:
 引理 isEmbedding_val_mk'
-  结论: {M : 类型} [Monoid M] [TopologicalSpace M] {f : M -> M}
+  结论: {M : 类型} [幺半群 M] [拓扑空间 M] {f : M -> M}
   证明: by
   refine ⟨⟨?_⟩, val_injective⟩
   rw [topology_eq_inf]; rw [inf_eq_left]; rw [← continuous_iff_le_induced]; rw [@continuous_iff_continuousAt _ _ (.induced _ _)]
@@ -522,7 +522,7 @@ lemma embedding_val_mk
 
 中文:
 引理 embedding_val_mk
-  结论: {M : 类型} [DivisionMonoid M] [TopologicalSpace M]
+  结论: {M : 类型} [Division幺半群 M] [拓扑空间 M]
   证明: isEmbedding_val_mk' h fun u => (val_inv_eq_inv_val u).symm
 
 @[to_additive]
@@ -546,7 +546,7 @@ theorem continuous_embedProduct
 
 中文:
 定理 continuous_embedProduct
-  结论: Continuous (embedProduct M)
+  结论: 连续 (embedProduct M)
   证明: continuous_induced_dom
 
 @[to_additive (attr := fun_prop)]
@@ -569,7 +569,7 @@ theorem continuous_val
 
 中文:
 定理 continuous_val
-  结论: Continuous ((↑) : Mˣ -> M)
+  结论: 连续 ((↑) : Mˣ -> M)
   证明: (@continuous_embedProduct M _ _).fst
 
 @[to_additive]
@@ -622,7 +622,7 @@ theorem continuous_coe_inv
 
 中文:
 定理 continuous_coe_inv
-  结论: Continuous (fun u => ↑u⁻¹ : Mˣ -> M)
+  结论: 连续 (fun u => ↑u⁻¹ : Mˣ -> M)
   证明: (Units.continuous_iff.1 continuous_id).2
 
 @[to_additive]
@@ -646,8 +646,8 @@ lemma continuous_map
 
 中文:
 引理 continuous_map
-  条件: {f : M ->* N} (hf : Continuous f)
-  结论: Continuous (map f)
+  条件: {f : M ->* N} (hf : 连续 f)
+  结论: 连续 (map f)
   证明: Units.continuous_iff.mpr ⟨hf.comp continuous_val, hf.comp continuous_coe_inv⟩
 
 @[to_additive]
@@ -673,7 +673,7 @@ have hg_openMap := hf.prodMap opHomeomorph.isOpenMap.comp (hf.comp opHomeomorph.
 
 中文:
 引理 isOpenMap_map
-  条件: {f : M ->* N} (hf_inj : Function.Injective f) (hf : IsOpenMap f)
+  条件: {f : M ->* N} (hf_inj : 函数.单射 f) (hf : 是开映射 f)
   证明: by
   rintro _ ⟨U, hU, rfl⟩
 have hg_openMap := hf.prodMap opHomeomorph.isOpenMap.comp (hf.comp opHomeomorph.symm.isOpenMap)
@@ -709,8 +709,8 @@ lemma _root_.Topology.IsInducing.units_map
 @[to_additive]
 
 中文:
-引理 _root_.Topology.IsInducing.units_map
-  条件: {f : M ->* N} (hf : IsInducing f)
+引理 _root_.拓扑.是Inducing.units_map
+  条件: {f : M ->* N} (hf : 是Inducing f)
   证明: by
   refine .of_comp (continuous_map hf.continuous) continuous_embedProduct ?_
   exact hf.prodMap (opHomeomorph.isInducing.comp <| hf.comp opHomeomorph.symm.isInducing)
@@ -739,8 +739,8 @@ lemma _root_.Topology.IsEmbedding.units_map
 .comp isEmbedding_embedProduct
 
 中文:
-引理 _root_.Topology.IsEmbedding.units_map
-  条件: {f : M ->* N} (hf : IsEmbedding f)
+引理 _root_.拓扑.是嵌入.units_map
+  条件: {f : M ->* N} (hf : 是嵌入 f)
   证明: by
   refine .of_comp (continuous_map hf.continuous) continuous_embedProduct ?_
   exact hf.prodMap (opHomeomorph.isEmbedding.comp <| hf.comp opHomeomorph.symm.isEmbedding)

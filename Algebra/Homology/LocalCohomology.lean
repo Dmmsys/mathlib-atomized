@@ -73,7 +73,7 @@ map w := ModuleCat.ofHom Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
 
 中文:
 定义 ringModIdeals
-  签名: (I : D ⥤ Ideal R)
+  签名: (I : D ⥤ 理想 R)
   定义体: ModuleCat.of R R ⧸ I.obj t
 map w := ModuleCat.ofHom Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
 
@@ -93,7 +93,7 @@ definition diagram
 
 中文:
 定义 diagram
-  签名: (I : D ⥤ Ideal R) (i : 自然数)
+  签名: (I : D ⥤ 理想 R) (i : 自然数)
   定义体: (ringModIdeals I).op ⋙ Ext R (ModuleCat.{u} R) i
 
 Depends on / 依赖: ModuleCat, ringModIdeals
@@ -119,7 +119,7 @@ lemma hasColimitDiagram
 
 中文:
 引理 hasColimitDiagram
-  条件: (I : D ⥤ Ideal R) (i : 自然数)
+  条件: (I : D ⥤ 理想 R) (i : 自然数)
   证明: inferInstance
 -/
 lemma hasColimitDiagram (I : D ⥤ Ideal R) (i : Nat) :
@@ -143,7 +143,7 @@ definition ofDiagram
 
 中文:
 定义 ofDiagram
-  签名: (I : D ⥤ Ideal R) (i : 自然数)
+  签名: (I : D ⥤ 理想 R) (i : 自然数)
   定义体: have := hasColimitDiagram.{u, v} I i
   colimit (diagram I i)
 
@@ -192,7 +192,7 @@ definition isoOfFinal
 
 中文:
 定义 isoOfFinal
-  签名: [Functor.Initial I'] (i : 自然数)
+  签名: [函子.初始 I'] (i : 自然数)
   定义体: have := hasColimitDiagram.{max u v', v} I i
   have := hasColimitDiagram.{max u v, v'} (I' ⋙ I) i
   HasColimit.isoOfNatIso (diagramComp.{u} I' I i) ≪≫ Functor.Final.colimitIso _ _
@@ -222,7 +222,7 @@ definition idealPowersDiagram
 
 中文:
 定义 idealPowersDiagram
-  签名: (J : Ideal R)
+  签名: (J : 理想 R)
   定义体: J ^ unop t
   map w := ⟨⟨Ideal.pow_le_pow_right w.unop.down.down⟩⟩
 -/
@@ -241,7 +241,7 @@ deriving Category
 
 中文:
 定义 SelfLERadical
-  签名: (J : Ideal R)
+  签名: (J : 理想 R)
   定义体: ObjectProperty.FullSubcategory fun J' : Ideal R => J <= J'.radical
 deriving Category
 
@@ -261,7 +261,7 @@ instance SelfLERadical.inhabited
 
 中文:
 实例 SelfLERadical.inhabited
-  签名: (J : Ideal R)
+  签名: (J : 理想 R)
   定义体: ⟨J, Ideal.le_radical⟩
 
 Depends on / 依赖: Ideal.le_radical, le_radical
@@ -279,7 +279,7 @@ definition selfLERadicalDiagram
 
 中文:
 定义 selfLERadicalDiagram
-  签名: (J : Ideal R)
+  签名: (J : 理想 R)
   定义体: ObjectProperty.ι _
 
 Depends on / 依赖: ObjectProperty
@@ -312,7 +312,7 @@ definition localCohomology
 
 中文:
 定义 localCohomology
-  签名: (J : Ideal R) (i : 自然数)
+  签名: (J : 理想 R) (i : 自然数)
   定义体: ofDiagram (idealPowersDiagram J) i
 
 Depends on / 依赖: idealPowersDiagram, ofDiagram
@@ -330,7 +330,7 @@ definition localCohomology.ofSelfLERadical
 
 中文:
 定义 localCohomology.ofSelfLERadical
-  签名: (J : Ideal R) (i : 自然数)
+  签名: (J : 理想 R) (i : 自然数)
   定义体: ofDiagram.{u} (selfLERadicalDiagram.{u} J) i
 
 Depends on / 依赖: ofDiagram, selfLERadicalDiagram
@@ -368,7 +368,7 @@ definition idealPowersToSelfLERadical
 
 中文:
 定义 idealPowersToSelfLERadical
-  签名: (J : Ideal R)
+  签名: (J : 理想 R)
   定义体: ObjectProperty.lift _ (idealPowersDiagram J) fun k => by
     change _ <= (J ^ unop k).radical
     rcases unop k with - | n
@@ -401,7 +401,7 @@ instance ideal_powers_initial
 
 中文:
 实例 ideal_powers_initial
-  签名: [hR : IsNoetherian R R]
+  签名: [hR : 是Noether R R]
   定义体: by
     apply +allowSynthFailures zigzag_isConnected
     · obtain ⟨k, hk⟩ := Ideal.exists_pow_le_of_le_radical_of_fg J'.2 (isNoetherian_def.mp hR _)
@@ -438,7 +438,7 @@ definition isoSelfLERadical
 
 中文:
 定义 isoSelfLERadical
-  签名: (J : Ideal.{u} R) [IsNoetherian.{u, u} R R] (i : 自然数)
+  签名: (J : 理想.{u} R) [是Noether.{u, u} R R] (i : 自然数)
   定义体: (localCohomology.isoOfFinal.{u, u, 0} (idealPowersToSelfLERadical.{u} J)
     (selfLERadicalDiagram.{u} J) i).symm ≪≫
       HasColimit.isoOfNatIso.{0, 0, u + 1, u + 1} (Iso.refl.{u + 1, u + 1} _)
@@ -552,7 +552,7 @@ definition isoOfSameRadical
 
 中文:
 定义 isoOfSameRadical
-  签名: [IsNoetherian R R] (hJK : J.radical = K.radical) (i : 自然数)
+  签名: [是Noether R R] (hJK : J.radical = K.radical) (i : 自然数)
   定义体: (isoSelfLERadical J i).symm ≪≫ SelfLERadical.isoOfSameRadical hJK i ≪≫ isoSelfLERadical K i
 
 Depends on / 依赖: SelfLERadical, SelfLERadical.isoOfSameRadical, isoOfSameRadical, isoSelfLERadical

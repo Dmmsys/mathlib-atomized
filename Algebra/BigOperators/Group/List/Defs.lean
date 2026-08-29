@@ -35,7 +35,7 @@ definition alternatingSum
 
 中文:
 定义 alternatingSum
-  签名: {G : 类型} [Zero G] [Add G] [Neg G]
+  签名: {G : 类型} [零 G] [加法 G] [取负 G]
 -/
 def alternatingSum {G : Type*} [Zero G] [Add G] [Neg G] : List G -> G
   | [] => 0
@@ -53,7 +53,7 @@ definition alternatingProd
 
 中文:
 定义 alternatingProd
-  签名: {G : 类型} [One G] [Mul G] [Inv G]
+  签名: {G : 类型} [幺 G] [乘法 G] [取逆 G]
 -/
 def alternatingProd {G : Type*} [One G] [Mul G] [Inv G] : List G -> G
   | [] => 1
@@ -122,7 +122,7 @@ theorem prod_map_one
 
 中文:
 定理 prod_map_one
-  条件: {l : List ι}
+  条件: {l : 列表 ι}
   证明: by
   induction l with simp [*]
 
@@ -198,7 +198,7 @@ theorem prod_replicate
 中文:
 定理 prod_replicate
   条件: (n : 自然数) (a : M)
-  结论: (replicate n a).prod = a ^ n
+  结论: (replicate n a).乘积 = a ^ n
   证明: by
   induction n with
   | zero => rw [pow_zero, replicate_zero, prod_nil]
@@ -228,8 +228,8 @@ theorem prod_eq_pow_card
 
 中文:
 定理 prod_eq_pow_card
-  条件: (l : List M) (m : M) (h : 对任意 x in l, x = m)
-  结论: l.prod = m ^ l.length
+  条件: (l : 列表 M) (m : M) (h : 对任意 x in l, x = m)
+  结论: l.乘积 = m ^ l.length
   证明: by
   rw [← prod_replicate]; rw [← List.eq_replicate_iff.mpr ⟨rfl]; rw [h⟩]
 
@@ -251,7 +251,7 @@ theorem prod_hom_rel
 
 中文:
 定理 prod_hom_rel
-  结论: (l : List ι) {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N} (h₁ : r 1 1)
+  结论: (l : 列表 ι) {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N} (h₁ : r 1 1)
   证明: List.recOn l h₁ fun a l hl => by simp only [map_cons, prod_cons, h₂ hl]
 
 Depends on / 依赖: List.recOn, map_cons, prod_cons

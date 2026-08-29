@@ -58,9 +58,9 @@ theorem Finite.finite_subsets
     ← and_assoc, Finset.coeEmb] using h.subset
 
 中文:
-定理 Finite.finite_subsets
-  条件: {α : 类型u} {a : Set α} (h : a.Finite)
-  结论: { b | b subseteq a }.Finite
+定理 有限.finite_subsets
+  条件: {α : 类型u} {a : 集合 α} (h : a.有限)
+  结论: { b | b subseteq a }.有限
   证明: by
   convert! ((Finset.powerset h.toFinset).map Finset.coeEmb.1).finite_toSet
   ext s
@@ -85,9 +85,9 @@ theorem Finite.powerset
   proof: h.finite_subsets
 
 中文:
-定理 Finite.powerset
-  条件: {s : Set α} (h : s.Finite)
-  结论: (𝒫 s).Finite
+定理 有限.powerset
+  条件: {s : 集合 α} (h : s.有限)
+  结论: (𝒫 s).有限
   证明: h.finite_subsets
 -/
 protected theorem Finite.powerset {s : Set α} (h : s.Finite) : (𝒫 s).Finite :=

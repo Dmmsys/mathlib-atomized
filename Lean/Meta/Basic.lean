@@ -29,7 +29,7 @@ definition Lean.Meta.preservingMCtx
 
 中文:
 定义 Lean.Meta.preservingMCtx
-  签名: {α : Type} (x : MetaM α)
+  签名: {α : 类型} (x : MetaM α)
   定义体: do
   let mctx ← getMCtx
   try x finally setMCtx mctx
@@ -56,7 +56,7 @@ definition Lean.Meta.forallMetaTelescopeReducingUntilDefEq
   while !(← isDef
 
 中文:
-定义 Lean.Meta.forallMetaTelescopeReducingUntilDefEq
+定义 Lean.Meta.对任意MetaTelescopeReducingUntilDefEq
   定义体: do
   let (ms, bs, tp) ← forallMetaTelescopeReducing e (some 1) kind
   unless ms.size == 1 do
@@ -162,7 +162,7 @@ definition Lean.Meta.withEnsuringLocalInstance
 
 中文:
 定义 Lean.Meta.withEnsuringLocalInstance
-  签名: {α : Type} (inst : MVarId) (k : MetaM (Expr × α))
+  签名: {α : 类型} (inst : MVarId) (k : MetaM (Expr × α))
   定义体: do
   let instE := mkMVar inst
   match ← trySynthInstance (← inferType instE) with

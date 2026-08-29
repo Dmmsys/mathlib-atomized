@@ -37,7 +37,7 @@ theorem map_dvd
 
 中文:
 定理 map_dvd
-  结论: [Semigroup M] [Semigroup N] {F : 类型} [FunLike F M N] [MulHomClass F M N]
+  结论: [半群 M] [半群 N] {F : 类型} [函数状 F M N] [乘法态射类 F M N]
 -/
 theorem map_dvd [Semigroup M] [Semigroup N] {F : Type*} [FunLike F M N] [MulHomClass F M N]
     (f : F) {a b} : a ∣ b -> f a ∣ f b
@@ -53,8 +53,8 @@ theorem MulHom.map_dvd
   proof: _root_.map_dvd f
 
 中文:
-定理 MulHom.map_dvd
-  条件: [Semigroup M] [Semigroup N] (f : M ->ₙ* N) {a b}
+定理 乘法半群态射.map_dvd
+  条件: [半群 M] [半群 N] (f : M ->ₙ* N) {a b}
   结论: a ∣ b -> f a ∣ f b
   证明: _root_.map_dvd f
 
@@ -73,8 +73,8 @@ theorem MonoidHom.map_dvd
   proof: _root_.map_dvd f
 
 中文:
-定理 MonoidHom.map_dvd
-  条件: [Monoid M] [Monoid N] (f : M ->* N) {a b}
+定理 幺半群态射.map_dvd
+  条件: [幺半群 M] [幺半群 N] (f : M ->* N) {a b}
   结论: a ∣ b -> f a ∣ f b
   证明: _root_.map_dvd f
 

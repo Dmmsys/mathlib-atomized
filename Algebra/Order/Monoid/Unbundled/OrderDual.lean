@@ -33,7 +33,7 @@ instance mulLeftReflectLE
 
 中文:
 实例 mulLeftReflectLE
-  签名: [LE α] [Mul α] [MulLeftReflectLE α]
+  签名: [LE α] [乘法 α] [MulLeftReflectLE α]
   定义体: Contravariant.flip (μ := (· * ·)) (fun _ => ‹MulLeftReflectLE α›.le_of_mul_le_mul_left') _
 
 @[to_additive]
@@ -57,7 +57,7 @@ instance mulLeftMono
 
 中文:
 实例 mulLeftMono
-  签名: [LE α] [Mul α] [c : MulLeftMono α]
+  签名: [LE α] [乘法 α] [c : MulLeftMono α]
   定义体: ⟨c.1.flip⟩
 
 @[to_additive]
@@ -78,7 +78,7 @@ instance mulRightReflectLE
 
 中文:
 实例 mulRightReflectLE
-  签名: [LE α] [Mul α] [MulRightReflectLE α]
+  签名: [LE α] [乘法 α] [MulRightReflectLE α]
   定义体: Contravariant.flip (μ := swap (· * ·)) (fun _ => ‹MulRightReflectLE α›.le_of_mul_le_mul_right') _
 
 @[to_additive]
@@ -102,7 +102,7 @@ instance mulRightMono
 
 中文:
 实例 mulRightMono
-  签名: [LE α] [Mul α] [c : MulRightMono α]
+  签名: [LE α] [乘法 α] [c : MulRightMono α]
   定义体: ⟨c.1.flip⟩
 
 @[to_additive]
@@ -123,7 +123,7 @@ instance mulLeftReflectLT
 
 中文:
 实例 mulLeftReflectLT
-  签名: [LT α] [Mul α] [c : MulLeftReflectLT α]
+  签名: [LT α] [乘法 α] [c : MulLeftReflectLT α]
   定义体: ⟨c.1.flip⟩
 
 @[to_additive]
@@ -144,7 +144,7 @@ instance mulLeftStrictMono
 
 中文:
 实例 mulLeftStrictMono
-  签名: [LT α] [Mul α] [c : MulLeftStrictMono α]
+  签名: [LT α] [乘法 α] [c : MulLeftStrictMono α]
   定义体: ⟨c.1.flip⟩
 
 @[to_additive]
@@ -165,7 +165,7 @@ instance mulRightReflectLT
 
 中文:
 实例 mulRightReflectLT
-  签名: [LT α] [Mul α] [c : MulRightReflectLT α]
+  签名: [LT α] [乘法 α] [c : MulRightReflectLT α]
   定义体: ⟨c.1.flip⟩
 
 @[to_additive]
@@ -184,7 +184,7 @@ instance mulRightStrictMono
 
 中文:
 实例 mulRightStrictMono
-  签名: [LT α] [Mul α] [c : MulRightStrictMono α]
+  签名: [LT α] [乘法 α] [c : MulRightStrictMono α]
   定义体: ⟨c.1.flip⟩
 -/
 instance mulRightStrictMono [LT α] [Mul α] [c : MulRightStrictMono α] : MulRightStrictMono αᵒᵈ :=

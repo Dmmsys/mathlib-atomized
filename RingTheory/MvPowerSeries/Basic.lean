@@ -112,8 +112,8 @@ instance [Inhabited
   body: inferInstanceAs Inhabited ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [Inhabited
-  签名: R] : Inhabited (MvPowerSeries σ R)
+实例 [可居
+  签名: R] : 可居 (MvPowerSeries σ R)
   定义体: inferInstanceAs Inhabited ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: Inhabited
@@ -130,8 +130,8 @@ instance [Zero
   body: inferInstanceAs Zero ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [Zero
-  签名: R] : Zero (MvPowerSeries σ R)
+实例 [零
+  签名: R] : 零 (MvPowerSeries σ R)
   定义体: inferInstanceAs Zero ((σ ->₀ Nat) -> R)
 -/
 instance [Zero R] : Zero (MvPowerSeries σ R) :=
@@ -146,8 +146,8 @@ instance [AddMonoid
   body: inferInstanceAs AddMonoid ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [AddMonoid
-  签名: R] : AddMonoid (MvPowerSeries σ R)
+实例 [加法幺半群
+  签名: R] : 加法幺半群 (MvPowerSeries σ R)
   定义体: inferInstanceAs AddMonoid ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: AddMonoid
@@ -164,8 +164,8 @@ instance [AddGroup
   body: inferInstanceAs AddGroup ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [AddGroup
-  签名: R] : AddGroup (MvPowerSeries σ R)
+实例 [加法群
+  签名: R] : 加法群 (MvPowerSeries σ R)
   定义体: inferInstanceAs AddGroup ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: AddGroup
@@ -182,8 +182,8 @@ instance [AddCommMonoid
   body: inferInstanceAs AddCommMonoid ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [AddCommMonoid
-  签名: R] : AddCommMonoid (MvPowerSeries σ R)
+实例 [加法交换幺半群
+  签名: R] : 加法交换幺半群 (MvPowerSeries σ R)
   定义体: inferInstanceAs AddCommMonoid ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: AddCommMonoid
@@ -200,8 +200,8 @@ instance [AddCommGroup
   body: inferInstanceAs AddCommGroup ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [AddCommGroup
-  签名: R] : AddCommGroup (MvPowerSeries σ R)
+实例 [加法交换群
+  签名: R] : 加法交换群 (MvPowerSeries σ R)
   定义体: inferInstanceAs AddCommGroup ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: AddCommGroup
@@ -218,8 +218,8 @@ instance [Nontrivial
   body: inferInstanceAs Nontrivial ((σ ->₀ Nat) -> R)
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (MvPowerSeries σ R)
+实例 [非平凡
+  签名: R] : 非平凡 (MvPowerSeries σ R)
   定义体: inferInstanceAs Nontrivial ((σ ->₀ Nat) -> R)
 
 Depends on / 依赖: Nontrivial
@@ -471,7 +471,7 @@ theorem coeff_comp_monomial
 中文:
 定理 coeff_comp_monomial
   条件: (n : σ ->₀ 自然数)
-  结论: (coeff (R := R) n).comp (monomial n) = LinearMap.id
+  结论: (coeff (R := R) n).comp (monomial n) = 线性映射.id
   证明: LinearMap.ext coeff_monomial_same n
 
 @[simp]
@@ -509,7 +509,7 @@ theorem eq_zero_iff_forall_coeff_zero
   proof: MvPowerSeries.ext_iff
 
 中文:
-定理 eq_zero_iff_forall_coeff_zero
+定理 eq_zero_iff_对任意_coeff_zero
   条件: {f : MvPowerSeries σ R}
   证明: MvPowerSeries.ext_iff
 
@@ -529,7 +529,7 @@ theorem ne_zero_iff_exists_coeff_ne_zero
   simp only [MvPowerSeries.ext_iff, ne_eq, coeff_zero, not_forall]
 
 中文:
-定理 ne_zero_iff_exists_coeff_ne_zero
+定理 ne_zero_iff_存在_coeff_ne_zero
   条件: (f : MvPowerSeries σ R)
   证明: by
   simp only [MvPowerSeries.ext_iff, ne_eq, coeff_zero, not_forall]
@@ -552,7 +552,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (MvPowerSeries σ R)
+  签名: 幺 (MvPowerSeries σ R)
   定义体: ⟨monomial (0 : σ ->₀ Nat) 1⟩
 
 Depends on / 依赖: monomial
@@ -624,7 +624,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoidWithOne (MvPowerSeries σ R)
+  签名: 加法带幺幺半群 (MvPowerSeries σ R)
   定义体: fun n => monomial 0 n
   natCast_zero := by simp [Nat.cast]
   natCast_succ := by simp [Nat.cast, monomial_zero_one]
@@ -647,7 +647,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (MvPowerSeries σ R)
+  签名: 乘法 (MvPowerSeries σ R)
   定义体: letI := Classical.decEq σ
   ⟨fun φ ψ n => ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ⟩
 
@@ -1000,7 +1000,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (MvPowerSeries σ R)
+  签名: 半环 (MvPowerSeries σ R)
   定义体: MvPowerSeries.mul_one
   one_mul := MvPowerSeries.one_mul
   mul_assoc := MvPowerSeries.mul_assoc
@@ -1035,8 +1035,8 @@ instance [CommSemiring
         sum_antidiagonal_swap n fun a b => coeff a φ * coeff b ψ
 
 中文:
-实例 [CommSemiring
-  签名: R] : CommSemiring (MvPowerSeries σ R) where
+实例 [交换半环
+  签名: R] : 交换半环 (MvPowerSeries σ R) where
   定义体: fun φ ψ =>
     ext fun n => by
       classical
@@ -1058,8 +1058,8 @@ instance [Ring
   signature: R] : Ring (MvPowerSeries σ R) where
 
 中文:
-实例 [Ring
-  签名: R] : Ring (MvPowerSeries σ R) where
+实例 [环
+  签名: R] : 环 (MvPowerSeries σ R) where
 -/
 instance [Ring R] : Ring (MvPowerSeries σ R) where
 
@@ -1071,8 +1071,8 @@ instance [CommRing
   signature: R] : CommRing (MvPowerSeries σ R) where
 
 中文:
-实例 [CommRing
-  签名: R] : CommRing (MvPowerSeries σ R) where
+实例 [交换环
+  签名: R] : 交换环 (MvPowerSeries σ R) where
 -/
 instance [CommRing R] : CommRing (MvPowerSeries σ R) where
 
@@ -1296,7 +1296,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Function.Injective (C : R -> MvPowerSeries σ R)
+  结论: 函数.单射 (C : R -> MvPowerSeries σ R)
   证明: by
   intro a b h
   rw [← coeff_zero_C a]; rw [h]; rw [coeff_zero_C]
@@ -1318,8 +1318,8 @@ theorem C_surjective
 
 中文:
 定理 C_surjective
-  条件: [IsEmpty σ]
-  结论: Function.Surjective (C : R -> MvPowerSeries σ R)
+  条件: [是空 σ]
+  结论: 函数.满射 (C : R -> MvPowerSeries σ R)
   证明: fun p => ⟨p 0, by ext n; simpa [coeff_C, Subsingleton.eq_zero n] using! coeff_apply _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, coeff_C, coeff_apply, eq_zero
@@ -1808,7 +1808,7 @@ theorem constantCoeff_comp_C
 
 中文:
 定理 constantCoeff_comp_C
-  结论: (constantCoeff (σ := σ)).comp C = RingHom.id R
+  结论: (constantCoeff (σ := σ)).comp C = 环态射.id R
   证明: rfl
 
 @[simp]
@@ -1894,7 +1894,7 @@ theorem constantCoeff_smul
 
 中文:
 定理 constantCoeff_smul
-  结论: {S : 类型} [Semiring S] [Module R S]
+  结论: {S : 类型} [半环 S] [模 R S]
   证明: rfl
 -/
 theorem constantCoeff_smul {S : Type*} [Semiring S] [Module R S]
@@ -1913,7 +1913,7 @@ theorem isUnit_constantCoeff
 
 中文:
 定理 isUnit_constantCoeff
-  条件: (φ : MvPowerSeries σ R) (h : IsUnit φ)
+  条件: (φ : MvPowerSeries σ R) (h : 是单位 φ)
   证明: h.map _
 
 @[simp]
@@ -1988,7 +1988,7 @@ theorem X_inj
 
 中文:
 定理 X_inj
-  条件: [Nontrivial R] {s t : σ}
+  条件: [非平凡 R] {s t : σ}
   结论: (X s : MvPowerSeries σ R) = X t ↔ s = t
   证明: ⟨by
     classical
@@ -2095,7 +2095,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (σ := σ) (RingHom.id R) = RingHom.id _
+  结论: map (σ := σ) (环态射.id R) = 环态射.id _
   证明: rfl
 
 Depends on / 依赖: RingHom, RingHom.id
@@ -2263,7 +2263,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {S₁ S₂ : 类型} [CommSemiring S₁] [CommSemiring S₂]
+  结论: {S₁ S₂ : 类型} [交换半环 S₁] [交换半环 S₂]
   证明: by
   ext n
   simp
@@ -2375,7 +2375,7 @@ theorem map_eq_zero
 
 中文:
 定理 map_eq_zero
-  结论: {S : 类型} [DivisionSemiring R] [Semiring S] [Nontrivial S]
+  结论: {S : 类型} [除半环 R] [半环 S] [非平凡 S]
   证明: by
   simp only [MvPowerSeries.ext_iff]
   congr! with n
@@ -2603,7 +2603,7 @@ theorem prod_monomial
 
 中文:
 定理 prod_monomial
-  条件: (f : ι -> σ ->₀ 自然数) (g : ι -> R) (s : Finset ι)
+  条件: (f : ι -> σ ->₀ 自然数) (g : ι -> R) (s : 有限集 ι)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -2758,7 +2758,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (MvPowerSeries σ A)
+  签名: 代数 R (MvPowerSeries σ A)
   定义体: (MvPowerSeries.map (algebraMap R A)).comp C
   commutes' := fun a φ => by
     ext n
@@ -2881,8 +2881,8 @@ instance [Nonempty
       refine ⟨Finsupp.s
 
 中文:
-实例 [Nonempty
-  签名: σ] [Nontrivial R] : Nontrivial (Subalgebra R (MvPowerSeries σ R))
+实例 [非空
+  签名: σ] [非平凡 R] : 非平凡 (子代数 R (MvPowerSeries σ R))
   定义体: ⟨⟨⊥, ⊤, by
       classical
       rw [Ne]; rw [SetLike.ext_iff]; rw [not_forall]
@@ -2930,7 +2930,7 @@ definition toMvPowerSeries
 
 中文:
 定义 toMvPowerSeries
-  签名: : MvPolynomial σ R -> MvPowerSeries σ R
+  签名: : 多元多项式 σ R -> MvPowerSeries σ R
   定义体: fun φ n => coeff n φ
 -/
 def toMvPowerSeries : MvPolynomial σ R -> MvPowerSeries σ R :=
@@ -2946,7 +2946,7 @@ instance coeToMvPowerSeries
 
 中文:
 实例 coeToMvPowerSeries
-  签名: : Coe (MvPolynomial σ R) (MvPowerSeries σ R)
+  签名: : Coe (多元多项式 σ R) (MvPowerSeries σ R)
   定义体: ⟨toMvPowerSeries⟩
 
 Depends on / 依赖: toMvPowerSeries
@@ -3043,7 +3043,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ((0 : MvPolynomial σ R) : MvPowerSeries σ R) = 0
+  结论: ((0 : 多元多项式 σ R) : MvPowerSeries σ R) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -3064,7 +3064,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : MvPolynomial σ R) : MvPowerSeries σ R) = 1
+  结论: ((1 : 多元多项式 σ R) : MvPowerSeries σ R) = 1
   证明: coe_monomial _ _
 
 @[simp, norm_cast]
@@ -3087,7 +3087,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  结论: ((φ + ψ : MvPolynomial σ R) : MvPowerSeries σ R) = φ + ψ
+  结论: ((φ + ψ : 多元多项式 σ R) : MvPowerSeries σ R) = φ + ψ
   证明: rfl
 
 @[simp, norm_cast]
@@ -3110,7 +3110,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: ((φ * ψ : MvPolynomial σ R) : MvPowerSeries σ R) = φ * ψ
+  结论: ((φ * ψ : 多元多项式 σ R) : MvPowerSeries σ R) = φ * ψ
   证明: MvPowerSeries.ext fun n => by
     classical
     simp only [coeff_coe, MvPowerSeries.coeff_mul, coeff_mul]
@@ -3137,7 +3137,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (φ : MvPolynomial σ R) (r : R)
+  条件: (φ : 多元多项式 σ R) (r : R)
   证明: rfl
 
 @[simp, norm_cast]
@@ -3160,7 +3160,7 @@ theorem coe_C
 中文:
 定理 coe_C
   条件: (a : R)
-  结论: ((C a : MvPolynomial σ R) : MvPowerSeries σ R) = MvPowerSeries.C a
+  结论: ((C a : 多元多项式 σ R) : MvPowerSeries σ R) = MvPowerSeries.C a
   证明: coe_monomial _ _
 
 @[simp, norm_cast]
@@ -3183,7 +3183,7 @@ theorem coe_X
 中文:
 定理 coe_X
   条件: (s : σ)
-  结论: ((X s : MvPolynomial σ R) : MvPowerSeries σ R) = MvPowerSeries.X s
+  结论: ((X s : 多元多项式 σ R) : MvPowerSeries σ R) = MvPowerSeries.X s
   证明: coe_monomial _ _
 
 Depends on / 依赖: coe_monomial
@@ -3206,7 +3206,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : MvPolynomial σ R -> MvPowerSeries σ R)
+  结论: 函数.单射 ((↑) : 多元多项式 σ R -> MvPowerSeries σ R)
   证明: by
   intro x y h
   ext
@@ -3300,7 +3300,7 @@ definition coeToMvPowerSeries.ringHom
 
 中文:
 定义 coeToMvPowerSeries.ringHom
-  签名: : MvPolynomial σ R ->+* MvPowerSeries σ R where
+  签名: : 多元多项式 σ R ->+* MvPowerSeries σ R where
   定义体: (Coe.coe : MvPolynomial σ R -> MvPowerSeries σ R)
   map_zero' := coe_zero
   map_one' := coe_one
@@ -3473,7 +3473,7 @@ definition coeToMvPowerSeries.algHom
 
 中文:
 定义 coeToMvPowerSeries.algHom
-  签名: : MvPolynomial σ R ->ₐ[R] MvPowerSeries σ A
+  签名: : 多元多项式 σ R ->ₐ[R] MvPowerSeries σ A
   定义体: { (MvPowerSeries.map (algebraMap R A)).comp coeToMvPowerSeries.ringHom with
     commutes' := fun r => by simp [MvPowerSeries.algebraMap_apply] }
 
@@ -3603,7 +3603,7 @@ instance algebraMvPolynomial
 
 中文:
 实例 algebraMvPolynomial
-  签名: : Algebra (MvPolynomial σ R) (MvPowerSeries σ A)
+  签名: : 代数 (多元多项式 σ R) (MvPowerSeries σ A)
   定义体: RingHom.toAlgebra (MvPolynomial.coeToMvPowerSeries.algHom A).toRingHom
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeToMvPowerSeries.algHom, RingHom, RingHom.toAlgebra, algHom, coeToMvPowerSeries, toAlgebra, toRingHom
@@ -3621,7 +3621,7 @@ instance algebraMvPowerSeries
 
 中文:
 实例 algebraMvPowerSeries
-  签名: : Algebra (MvPowerSeries σ R) (MvPowerSeries σ A)
+  签名: : 代数 (MvPowerSeries σ R) (MvPowerSeries σ A)
   定义体: (map (algebraMap R A)).toAlgebra
 
 Depends on / 依赖: algebraMap, toAlgebra
@@ -3641,7 +3641,7 @@ theorem algebraMap_apply'
 
 中文:
 定理 algebraMap_apply'
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: rfl
 -/
 theorem algebraMap_apply' (p : MvPolynomial σ R) :

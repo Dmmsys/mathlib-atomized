@@ -58,7 +58,7 @@ inductive Nat.UnifyZeroOrSuccResult
     - succ: (n' : Q(Nat)) (pf : $n =Q Nat.succ $n')
 
 中文:
-归纳类型 Nat.UnifyZeroOrSuccResult
+归纳类型 自然数.UnifyZeroOrSuccResult
   参数: (n : Q(自然数))
   构造子 (2 个):
     - zero: (pf : $n =Q 0)
@@ -86,7 +86,7 @@ definition Nat.unifyZeroOrSucc
       throwError "could no
 
 中文:
-定义 Nat.unifyZeroOrSucc
+定义 自然数.unifyZeroOrSucc
   签名: (n : Q(自然数))
   定义体: do
   match ← isDefEqQ n q(0) with
@@ -118,11 +118,11 @@ inductive List.ProveNilOrConsResult
     - cons: (a : Q($α)) (s' : Q(List $α)) (pf : Q($s = List.cons $a $s'))
 
 中文:
-归纳类型 List.ProveNilOrConsResult
-  参数: {α : Q(类型u)} (s : Q(List $α))
+归纳类型 列表.ProveNilOrConsResult
+  参数: {α : Q(类型u)} (s : Q(列表 $α))
   构造子 (2 个):
     - nil: (pf : Q($s = []))
-    - cons: (a : Q($α)) (s' : Q(List $α)) (pf : Q($s = List.cons $a $s'))
+    - cons: (a : Q($α)) (s' : Q(列表 $α)) (pf : Q($s = 列表.cons $a $s'))
 -/
 inductive List.ProveNilOrConsResult {α : Q(Type u)} (s : Q(List $α))
   /-- The set is Nil. -/
@@ -138,7 +138,7 @@ definition List.ProveNilOrConsResult.uncheckedCast
   signature: {α : Q(Type u)} {β : Q(Type v)}
 
 中文:
-定义 List.ProveNilOrConsResult.uncheckedCast
+定义 列表.ProveNilOrConsResult.uncheckedCast
   签名: {α : Q(类型u)} {β : Q(类型v)}
 -/
 def List.ProveNilOrConsResult.uncheckedCast {α : Q(Type u)} {β : Q(Type v)}
@@ -155,8 +155,8 @@ definition List.ProveNilOrConsResult.eq_trans
   signature: {α : Q(Type u)} {s t : Q(List $α)}
 
 中文:
-定义 List.ProveNilOrConsResult.eq_trans
-  签名: {α : Q(类型u)} {s t : Q(List $α)}
+定义 列表.ProveNilOrConsResult.eq_trans
+  签名: {α : Q(类型u)} {s t : Q(列表 $α)}
 -/
 def List.ProveNilOrConsResult.eq_trans {α : Q(Type u)} {s t : Q(List $α)}
     (eq : Q($s = $t)) :
@@ -173,8 +173,8 @@ lemma List.range_zero'
   proof: by rw [pn.out, Nat.cast_zero, List.range_zero]
 
 中文:
-引理 List.range_zero'
-  条件: {n : 自然数} (pn : NormNum.Is自然数 n 0)
+引理 列表.range_zero'
+  条件: {n : 自然数} (pn : NormNum.是自然数 n 0)
   证明: by rw [pn.out, Nat.cast_zero, List.range_zero]
 
 Depends on / 依赖: List.range_zero, Nat.cast_zero, cast_zero, pn.out, range_zero
@@ -192,8 +192,8 @@ lemma List.range_succ_eq_map'
   rw [pn.out]; rw [Nat.cast_id]; rw [pn']; rw [List.range_succ_eq_map]
 
 中文:
-引理 List.range_succ_eq_map'
-  条件: {n nn n' : 自然数} (pn : NormNum.Is自然数 n nn) (pn' : nn = 自然数.succ n')
+引理 列表.range_succ_eq_map'
+  条件: {n nn n' : 自然数} (pn : NormNum.是自然数 n nn) (pn' : nn = 自然数.succ n')
   证明: by
   rw [pn.out]; rw [Nat.cast_id]; rw [pn']; rw [List.range_succ_eq_map]
 
@@ -218,8 +218,8 @@ definition List.proveNilOrCons
 haveI : s =Q a :: s' := 
 
 中文:
-定义 List.proveNilOrCons
-  签名: {u : Level} {α : Q(类型u)} (s : Q(List $α))
+定义 列表.proveNilOrCons
+  签名: {u : Level} {α : Q(类型u)} (s : Q(列表 $α))
   定义体: s.withApp fun e a =>
   match (e, e.constName, a) with
 | (_, ``EmptyCollection.emptyCollection, _) => haveI : s =Q {} := ⟨⟩; pure (.nil q(.refl []))
@@ -347,7 +347,7 @@ lemma Multiset.range_zero'
 
 中文:
 引理 Multiset.range_zero'
-  条件: {n : 自然数} (pn : NormNum.Is自然数 n 0)
+  条件: {n : 自然数} (pn : NormNum.是自然数 n 0)
   证明: by rw [pn.out, Nat.cast_zero, Multiset.range_zero]
 
 Depends on / 依赖: Multiset, Multiset.range_zero, Nat.cast_zero, cast_zero, pn.out, range_zero
@@ -366,7 +366,7 @@ lemma Multiset.range_succ'
 
 中文:
 引理 Multiset.range_succ'
-  条件: {n nn n' : 自然数} (pn : NormNum.Is自然数 n nn) (pn' : nn = 自然数.succ n')
+  条件: {n nn n' : 自然数} (pn : NormNum.是自然数 n nn) (pn' : nn = 自然数.succ n')
   证明: by
   rw [pn.out]; rw [Nat.cast_id]; rw [pn']; rw [Multiset.range_succ]
 
@@ -438,11 +438,11 @@ inductive Finset.ProveEmptyOrConsResult
     - cons: (a : Q($α)) (s' : Q(Finset $α)) (h : Q($a ∉ $s')) (pf : Q($s = Finset.cons $a $s' $h))
 
 中文:
-归纳类型 Finset.ProveEmptyOrConsResult
-  参数: {α : Q(类型u)} (s : Q(Finset $α))
+归纳类型 有限集.ProveEmptyOrConsResult
+  参数: {α : Q(类型u)} (s : Q(有限集 $α))
   构造子 (2 个):
     - empty: (pf : Q($s = ∅))
-    - cons: (a : Q($α)) (s' : Q(Finset $α)) (h : Q($a ∉ $s')) (pf : Q($s = Finset.cons $a $s' $h))
+    - cons: (a : Q($α)) (s' : Q(有限集 $α)) (h : Q($a ∉ $s')) (pf : Q($s = 有限集.cons $a $s' $h))
 -/
 inductive Finset.ProveEmptyOrConsResult {α : Q(Type u)} (s : Q(Finset $α))
   /-- The set is empty. -/
@@ -458,7 +458,7 @@ definition Finset.ProveEmptyOrConsResult.uncheckedCast
   signature: {α : Q(Type u)} {β : Q(Type v)}
 
 中文:
-定义 Finset.ProveEmptyOrConsResult.uncheckedCast
+定义 有限集.ProveEmptyOrConsResult.uncheckedCast
   签名: {α : Q(类型u)} {β : Q(类型v)}
 -/
 def Finset.ProveEmptyOrConsResult.uncheckedCast {α : Q(Type u)} {β : Q(Type v)}
@@ -475,8 +475,8 @@ definition Finset.ProveEmptyOrConsResult.eq_trans
   signature: {α : Q(Type u)} {s t : Q(Finset $α)}
 
 中文:
-定义 Finset.ProveEmptyOrConsResult.eq_trans
-  签名: {α : Q(类型u)} {s t : Q(Finset $α)}
+定义 有限集.ProveEmptyOrConsResult.eq_trans
+  签名: {α : Q(类型u)} {s t : Q(有限集 $α)}
 -/
 def Finset.ProveEmptyOrConsResult.eq_trans {α : Q(Type u)} {s t : Q(Finset $α)}
     (eq : Q($s = $t)) :
@@ -494,8 +494,8 @@ lemma Finset.insert_eq_cons
   simp
 
 中文:
-引理 Finset.insert_eq_cons
-  条件: {α : 类型} [DecidableEq α] (a : α) (s : Finset α) (h : a ∉ s)
+引理 有限集.insert_eq_cons
+  条件: {α : 类型} [DecidableEq α] (a : α) (s : 有限集 α) (h : a ∉ s)
   证明: by
   simp
 -/
@@ -512,8 +512,8 @@ lemma Finset.range_zero'
   proof: by rw [pn.out, Nat.cast_zero, Finset.range_zero]
 
 中文:
-引理 Finset.range_zero'
-  条件: {n : 自然数} (pn : NormNum.Is自然数 n 0)
+引理 有限集.range_zero'
+  条件: {n : 自然数} (pn : NormNum.是自然数 n 0)
   证明: by rw [pn.out, Nat.cast_zero, Finset.range_zero]
 
 Depends on / 依赖: Finset, Finset.range_zero, Nat.cast_zero, cast_zero, pn.out, range_zero
@@ -531,8 +531,8 @@ lemma Finset.range_succ'
   rw [pn.out]; rw [Nat.cast_id]; rw [pn']; rw [Finset.range_add_one]; rw [Finset.insert_eq_cons]
 
 中文:
-引理 Finset.range_succ'
-  条件: {n nn n' : 自然数} (pn : NormNum.Is自然数 n nn) (pn' : nn = 自然数.succ n')
+引理 有限集.range_succ'
+  条件: {n nn n' : 自然数} (pn : NormNum.是自然数 n nn) (pn' : nn = 自然数.succ n')
   证明: by
   rw [pn.out]; rw [Nat.cast_id]; rw [pn']; rw [Finset.range_add_one]; rw [Finset.insert_eq_cons]
 
@@ -552,8 +552,8 @@ lemma Finset.univ_eq_elems
   ext x; simpa using complete x
 
 中文:
-引理 Finset.univ_eq_elems
-  结论: {α : 类型} [Fintype α] (elems : Finset α)
+引理 有限集.univ_eq_elems
+  结论: {α : 类型} [有限类型 α] (elems : 有限集 α)
   证明: by
   ext x; simpa using complete x
 
@@ -578,8 +578,8 @@ haveI : s =Q .cons a s' h := ⟨⟩
   | (``Finset.mk, #[_, (val : Q(Mult
 
 中文:
-定义 Finset.proveEmptyOrCons
-  签名: {α : Q(类型u)} (s : Q(Finset $α))
+定义 有限集.proveEmptyOrCons
+  签名: {α : Q(类型u)} (s : Q(有限集 $α))
   定义体: match s.getAppFnArgs with
 | (``EmptyCollection.emptyCollection, _) => haveI : s =Q {} := ⟨⟩; pure (.empty q(rfl))
   | (``Finset.cons, #[_, (a : Q($α)), (s' : Q(Finset $α)), (h : Q($a ∉ $s'))]) =>
@@ -688,8 +688,8 @@ lemma Finset.sum_empty
   proof: ⟨by simp⟩
 
 中文:
-引理 Finset.sum_empty
-  条件: {β α : 类型} [CommSemiring β] (f : α -> β)
+引理 有限集.sum_empty
+  条件: {β α : 类型} [交换半环 β] (f : α -> β)
   证明: ⟨by simp⟩
 -/
 protected lemma Finset.sum_empty {β α : Type*} [CommSemiring β] (f : α -> β) :
@@ -705,8 +705,8 @@ lemma Finset.prod_empty
   proof: ⟨by simp⟩
 
 中文:
-引理 Finset.prod_empty
-  条件: {β α : 类型} [CommSemiring β] (f : α -> β)
+引理 有限集.prod_empty
+  条件: {β α : 类型} [交换半环 β] (f : α -> β)
   证明: ⟨by simp⟩
 -/
 protected lemma Finset.prod_empty {β α : Type*} [CommSemiring β] (f : α -> β) :

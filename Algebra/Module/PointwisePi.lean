@@ -41,7 +41,7 @@ theorem smul_pi_subset
 
 中文:
 定理 smul_pi_subset
-  条件: [对任意 i, SMul K (R i)] (r : K) (s : Set ι) (t : 对任意 i, Set (R i))
+  条件: [对任意 i, 标量乘法 K (R i)] (r : K) (s : 集合 ι) (t : 对任意 i, 集合 (R i))
   证明: piMap_image_pi_subset _
 
 @[to_additive]
@@ -65,7 +65,7 @@ theorem smul_univ_pi
 
 中文:
 定理 smul_univ_pi
-  条件: [对任意 i, SMul K (R i)] (r : K) (t : 对任意 i, Set (R i))
+  条件: [对任意 i, 标量乘法 K (R i)] (r : K) (t : 对任意 i, 集合 (R i))
   证明: piMap_image_univ_pi _ _
 
 @[to_additive]
@@ -87,7 +87,7 @@ theorem smul_pi
 
 中文:
 定理 smul_pi
-  条件: [Group K] [对任意 i, MulAction K (R i)] (r : K) (S : Set ι) (t : 对任意 i, Set (R i))
+  条件: [群 K] [对任意 i, 乘法作用 K (R i)] (r : K) (S : 集合 ι) (t : 对任意 i, 集合 (R i))
   证明: piMap_image_pi (fun _ _ => MulAction.surjective _) _
 
 Depends on / 依赖: MulAction, MulAction.surjective, piMap_image_pi, surjective
@@ -106,7 +106,7 @@ theorem smul_pi₀
 
 中文:
 定理 smul_pi₀
-  结论: [GroupWithZero K] [对任意 i, MulAction K (R i)] {r : K} (S : Set ι) (t : 对任意 i, Set (R i))
+  结论: [带零群 K] [对任意 i, 乘法作用 K (R i)] {r : K} (S : 集合 ι) (t : 对任意 i, 集合 (R i))
   证明: smul_pi (Units.mk0 r hr) S t
 
 Depends on / 依赖: Units.mk0, smul_pi

@@ -44,7 +44,7 @@ theorem of_zero
 
 中文:
 定理 of_zero
-  结论: [ContinuousConstVAdd R R]
+  结论: [连续常数向量加法 R R]
   证明: by
     simpa [← vadd_mem_nhds_vadd_iff (t := s) (-x), ← image_vadd, ← image_subset_iff] using
       h₀ ((x + ·) ⁻¹' s)
@@ -88,7 +88,7 @@ lemma v_eq_valuation
 
 中文:
 引理 v_eq_valuation
-  结论: {R : 类型} [Ring R] [ValuativeRel R] [UniformSpace R]
+  结论: {R : 类型} [环 R] [ValuativeRel R] [一致空间 R]
   证明: rfl
 -/
 lemma v_eq_valuation {R : Type*} [Ring R] [ValuativeRel R] [UniformSpace R]
@@ -112,7 +112,7 @@ lemma continuous_valuation
 
 中文:
 引理 continuous_valuation
-  结论: Continuous v
+  结论: 连续 v
   证明: by
   simp only [continuous_iff_continuousAt, ContinuousAt]
   rintro x

@@ -28,7 +28,7 @@ instance :
 
 中文:
 实例 :
-  签名: Groupoid (Discrete C)
+  签名: 群胚 (离散 C)
   定义体: { inv := fun h => ⟨⟨h.1.1.symm⟩⟩ }
 -/
 instance : Groupoid (Discrete C) := { inv := fun h => ⟨⟨h.1.1.symm⟩⟩ }
@@ -41,8 +41,8 @@ instance [Category*
   signature: C] [IsDiscrete C] : IsGroupoid C where
 
 中文:
-实例 [Category*
-  签名: C] [IsDiscrete C] : IsGroupoid C where
+实例 [范畴*
+  签名: C] [是离散 C] : 是群胚 C where
 -/
 instance [Category* C] [IsDiscrete C] : IsGroupoid C where
 

@@ -61,7 +61,7 @@ definition restrictScalarsEquiv
 
 中文:
 定义 restrictScalarsEquiv
-  签名: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  签名: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   定义体: { Quotient.congrRight fun _ _ => Iff.rfl with
     map_add' := fun x y => Quotient.inductionOn₂' x y fun _x' _y' => rfl
     map_smul' := fun _c x => Submodule.Quotient.induction_on _ x fun _x' => rfl }
@@ -89,7 +89,7 @@ theorem restrictScalarsEquiv_mk
 
 中文:
 定理 restrictScalarsEquiv_mk
-  结论: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  结论: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   证明: rfl
 
 @[simp]
@@ -110,7 +110,7 @@ theorem restrictScalarsEquiv_symm_mk
 
 中文:
 定理 restrictScalarsEquiv_symm_mk
-  结论: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  结论: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   证明: rfl
 -/
 theorem restrictScalarsEquiv_symm_mk [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
@@ -132,7 +132,7 @@ lemma nontrivial_iff
 
 中文:
 引理 nontrivial_iff
-  结论: Nontrivial (M ⧸ p) ↔ p != ⊤
+  结论: 非平凡 (M ⧸ p) ↔ p != ⊤
   证明: QuotientAddGroup.nontrivial_iff.trans (by simp)
 -/
 @[simp] protected lemma nontrivial_iff : Nontrivial (M ⧸ p) ↔ p != ⊤ :=
@@ -148,7 +148,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  结论: Subsingleton (M ⧸ p) ↔ p = ⊤
+  结论: 子单例 (M ⧸ p) ↔ p = ⊤
   证明: QuotientAddGroup.subsingleton_iff.trans (by simp)
 -/
 @[simp] protected lemma subsingleton_iff : Subsingleton (M ⧸ p) ↔ p = ⊤ :=
@@ -163,8 +163,8 @@ instance [Subsingleton
   body: by simpa using Subsingleton.elim ..
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (M ⧸ p)
+实例 [子单例
+  签名: M] : 子单例 (M ⧸ p)
   定义体: by simpa using Subsingleton.elim ..
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -184,7 +184,7 @@ sub_eq_zero.mp (Submodule.Quotient.eq ⊥).mp h
 
 中文:
 实例 QuotientBot.infinite
-  签名: [Infinite M]
+  签名: [无限 M]
   定义体: Infinite.of_injective Submodule.Quotient.mk fun _x _y h =>
 sub_eq_zero.mp (Submodule.Quotient.eq ⊥).mp h
 
@@ -206,7 +206,7 @@ instance QuotientTop.unique
 
 中文:
 实例 QuotientTop.unique
-  签名: : Unique (M ⧸ (⊤ : Submodule R M)) where
+  签名: : 唯一 (M ⧸ (⊤ : 子模 R M)) where
   定义体: 0
   uniq x := Submodule.Quotient.induction_on _ x fun _x =>
     (Submodule.Quotient.eq ⊤).mpr Submodule.mem_top
@@ -226,7 +226,7 @@ instance QuotientTop.fintype
 
 中文:
 实例 QuotientTop.fintype
-  签名: : Fintype (M ⧸ (⊤ : Submodule R M))
+  签名: : 有限类型 (M ⧸ (⊤ : 子模 R M))
   定义体: Fintype.ofSubsingleton 0
 
 Depends on / 依赖: Fintype, Fintype.ofSubsingleton, ofSubsingleton
@@ -246,7 +246,7 @@ theorem unique_quotient_iff_eq_top
 
 中文:
 定理 unique_quotient_iff_eq_top
-  结论: Nonempty (Unique (M ⧸ p)) ↔ p = ⊤
+  结论: 非空 (唯一 (M ⧸ p)) ↔ p = ⊤
   证明: ⟨fun ⟨h⟩ => Quotient.subsingleton_iff.mp (@Unique.instSubsingleton _ h),
     by rintro rfl; exact ⟨QuotientTop.unique⟩⟩
 
@@ -265,8 +265,8 @@ instance Quotient.fintype
   body: @_root_.Quotient.fintype _ _ _ fun _ _ => Classical.dec _
 
 中文:
-实例 Quotient.fintype
-  签名: [Fintype M] (S : Submodule R M)
+实例 商.fintype
+  签名: [有限类型 M] (S : 子模 R M)
   定义体: @_root_.Quotient.fintype _ _ _ fun _ _ => Classical.dec _
 -/
 noncomputable instance Quotient.fintype [Fintype M] (S : Submodule R M) : Fintype (M ⧸ S) :=
@@ -340,7 +340,7 @@ theorem liftQ_apply
 中文:
 定理 liftQ_apply
   条件: (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M)
-  结论: p.liftQ f h (Quotient.mk x) = f x
+  结论: p.liftQ f h (商.mk x) = f x
   证明: rfl
 
 @[simp]
@@ -488,7 +488,7 @@ theorem le_comap_mkQ
 
 中文:
 定理 le_comap_mkQ
-  条件: (p' : Submodule R (M ⧸ p))
+  条件: (p' : 子模 R (M ⧸ p))
   结论: p <= comap p.mkQ p'
   证明: by
   simpa using (comap_mono bot_le : ker p.mkQ <= comap p.mkQ p')
@@ -672,7 +672,7 @@ theorem mapQ_comp
 
 中文:
 定理 mapQ_comp
-  结论: {R₃ M₃ : 类型} [Ring R₃] [AddCommGroup M₃] [Module R₃ M₃] (p₂ : Submodule R₂ M₂)
+  结论: {R₃ M₃ : 类型} [环 R₃] [加法交换群 M₃] [模 R₃ M₃] (p₂ : 子模 R₂ M₂)
   证明: by
   ext
   simp
@@ -702,7 +702,7 @@ theorem mapQ_id
 
 中文:
 定理 mapQ_id
-  条件: (h : p <= p.comap LinearMap.id := (by rw [comap_id]))
+  条件: (h : p <= p.comap 线性映射.id := (by rw [comap_id]))
   证明: by
   ext
   simp
@@ -785,7 +785,7 @@ theorem map_liftQ
 
 中文:
 定理 map_liftQ
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : Submodule R (M ⧸ p))
+  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : 子模 R (M ⧸ p))
   证明: le_antisymm (by rintro _ ⟨⟨x⟩, hxq, rfl⟩; exact ⟨x, hxq, rfl⟩)
     (by rintro _ ⟨x, hxq, rfl⟩; exact ⟨Quotient.mk x, hxq, rfl⟩)
 
@@ -1061,7 +1061,7 @@ lemma factor_surjective
 中文:
 引理 factor_surjective
   条件: (H : p <= p')
-  结论: Function.Surjective (factor H)
+  结论: 函数.满射 (factor H)
   证明: by
   intro x
   use Quotient.mk x.out
@@ -1090,7 +1090,7 @@ map_rel_iff' := comap_le_comap_iff range_mkQ _
 
 中文:
 定义 comapMkQRelIso
-  签名: : Submodule R (M ⧸ p) ≃o Set.Ici p where
+  签名: : 子模 R (M ⧸ p) ≃o 集合.左闭右无界区间 p where
   定义体: ⟨comap p.mkQ p', le_comap_mkQ p _⟩
   invFun q := map p.mkQ q
 left_inv p' := map_comap_eq_self by simp
@@ -1118,7 +1118,7 @@ definition comapMkQOrderEmbedding
 
 中文:
 定义 comapMkQOrderEmbedding
-  签名: : Submodule R (M ⧸ p) ↪o Submodule R M
+  签名: : 子模 R (M ⧸ p) ↪o 子模 R M
   定义体: (RelIso.toRelEmbedding <| comapMkQRelIso p).trans (Subtype.relEmbedding (· <= ·) _)
 
 @[simp]
@@ -1139,7 +1139,7 @@ theorem comapMkQOrderEmbedding_eq
 
 中文:
 定理 comapMkQOrderEmbedding_eq
-  条件: (p' : Submodule R (M ⧸ p))
+  条件: (p' : 子模 R (M ⧸ p))
   证明: rfl
 -/
 theorem comapMkQOrderEmbedding_eq (p' : Submodule R (M ⧸ p)) :
@@ -1163,7 +1163,7 @@ theorem span_preimage_eq
 
 中文:
 定理 span_preimage_eq
-  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : Set M₂} (h₀ : s.Nonempty)
+  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : 集合 M₂} (h₀ : s.非空)
   证明: by
   suffices (span R₂ s).comap f <= span R (f ⁻¹' s) by exact le_antisymm (span_preimage_le f s) this
   have hk : ker f <= span R (f ⁻¹' s) := by
@@ -1209,7 +1209,7 @@ definition Quotient.equiv
 @[simp]
 
 中文:
-定义 Quotient.equiv
+定义 商.equiv
   签名: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
   定义体: P.mapQ Q (f : M ->ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le)
   invFun := Q.mapQ P (f.symm : N ->ₛₗ[σ₂₁] M) (hf.symm.trans (map_equiv_eq_comap_symm f _)).le
@@ -1239,7 +1239,7 @@ lemma Quotient.equiv_apply
 @[simp]
 
 中文:
-引理 Quotient.equiv_apply
+引理 商.equiv_apply
   条件: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) (a : M ⧸ P)
   证明: rfl
 
@@ -1261,7 +1261,7 @@ lemma Quotient.equiv_symm
 @[simp]
 
 中文:
-引理 Quotient.equiv_symm
+引理 商.equiv_symm
   条件: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
   证明: rfl
 
@@ -1286,8 +1286,8 @@ theorem Quotient.equiv_trans
   rw [mapQ_comp]; rw [LinearMap.comp_apply]
 
 中文:
-定理 Quotient.equiv_trans
-  结论: {R₃ : 类型} {O : 类型} [Ring R₃] [AddCommGroup O] [Module R₃ O]
+定理 商.equiv_trans
+  结论: {R₃ : 类型} {O : 类型} [环 R₃] [加法交换群 O] [模 R₃ O]
   证明: by
   ext
   -- `simp` can deal with `hef` depending on `e` and `f`
@@ -1506,8 +1506,8 @@ theorem Quotient.equiv_refl
   proof: rfl
 
 中文:
-定理 Quotient.equiv_refl
-  结论: (P : Submodule R M) (Q : Submodule R M)
+定理 商.equiv_refl
+  结论: (P : 子模 R M) (Q : 子模 R M)
   证明: rfl
 -/
 theorem Quotient.equiv_refl (P : Submodule R M) (Q : Submodule R M)

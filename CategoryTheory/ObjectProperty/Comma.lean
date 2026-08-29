@@ -32,7 +32,7 @@ definition comma
 
 中文:
 定义 comma
-  签名: : Object命题erty (Comma F₁ F₂)
+  签名: : ObjectProperty (交换a F₁ F₂)
   定义体: P₁.inverseImage (Comma.fst _ _) ⊓ P₂.inverseImage (Comma.snd _ _)
 
 Depends on / 依赖: Comma.fst, Comma.snd, inverseImage
@@ -52,7 +52,7 @@ lemma comma_iff
 
 中文:
 引理 comma_iff
-  条件: (X : Comma F₁ F₂)
+  条件: (X : 交换a F₁ F₂)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -70,8 +70,8 @@ instance [P₁.IsStableUnderRetracts]
       P₂.prop_of_retract (r.map (Comma.snd _ _)) h.2⟩
 
 中文:
-实例 [P₁.IsStableUnderRetracts]
-  签名: [P₂.IsStableUnderRetracts]
+实例 [P₁.是StableUnderRetracts]
+  签名: [P₂.是StableUnderRetracts]
   定义体: ⟨P₁.prop_of_retract (r.map (Comma.fst _ _)) h.1,
       P₂.prop_of_retract (r.map (Comma.snd _ _)) h.2⟩
 
@@ -93,8 +93,8 @@ instance [P₁.IsClosedUnderIsomorphisms]
       P₂.prop_of_iso ((Comma.snd _ _).mapIso e) h.2⟩
 
 中文:
-实例 [P₁.IsClosedUnderIsomorphisms]
-  签名: [P₂.IsClosedUnderIsomorphisms]
+实例 [P₁.在同构下封闭]
+  签名: [P₂.在同构下封闭]
   定义体: ⟨P₁.prop_of_iso ((Comma.fst _ _).mapIso e) h.1,
       P₂.prop_of_iso ((Comma.snd _ _).mapIso e) h.2⟩
 
@@ -119,7 +119,7 @@ instance [ObjectProperty.Small.{w}
 
 中文:
 实例 [ObjectProperty.Small.{w}
-  签名: P₁] [Object命题erty.Small.{w} P₂] [LocallySmall.{w} D] :
+  签名: P₁] [ObjectProperty.Small.{w} P₂] [LocallySmall.{w} D] :
   定义体: small_of_surjective
     (α := Σ (X₁ : Subtype P₁) (X₂ : Subtype P₂), F₁.obj X₁.val ⟶ F₂.obj X₂.val)
     (f := fun ⟨X₁, X₂, f⟩ => ⟨Comma.mk _ _ f, X₁.prop, X₂.prop⟩)

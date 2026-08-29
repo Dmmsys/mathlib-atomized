@@ -179,7 +179,7 @@ lemma expGrowthInf_monotone
 
 中文:
 引理 expGrowthInf_monotone
-  结论: Monotone expGrowthInf
+  结论: 递增 expGrowthInf
   证明: fun _ _ uv => expGrowthInf_eventually_monotone (Eventually.of_forall uv)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, expGrowthInf_eventually_monotone, of_forall
@@ -216,7 +216,7 @@ lemma expGrowthSup_monotone
 
 中文:
 引理 expGrowthSup_monotone
-  结论: Monotone expGrowthSup
+  结论: 递增 expGrowthSup
   证明: fun _ _ uv => expGrowthSup_eventually_monotone (Eventually.of_forall uv)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, expGrowthSup_eventually_monotone, of_forall
@@ -1160,7 +1160,7 @@ definition expGrowthInfTopHom
 
 中文:
 定义 expGrowthInfTopHom
-  签名: : InfTopHom (自然数 -> 实数>=0∞) E实数 where
+  签名: : InfTop态射 (自然数 -> 实数>=0∞) E实数 where
   定义体: expGrowthInf
   map_inf' _ _ := expGrowthInf_inf
   map_top' := expGrowthInf_top
@@ -1185,7 +1185,7 @@ lemma expGrowthInf_biInf
 
 中文:
 引理 expGrowthInf_biInf
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : Set α} (hs : s.Finite)
+  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : 集合 α} (hs : s.有限)
   证明: by
   have := map_finset_inf expGrowthInfTopHom hs.toFinset u
   simpa only [expGrowthInfTopHom, InfTopHom.coe_mk, InfHom.coe_mk, Finset.inf_eq_iInf,
@@ -1210,7 +1210,7 @@ lemma expGrowthInf_iInf
 
 中文:
 引理 expGrowthInf_iInf
-  条件: {ι : 类型} [Finite ι] (u : ι -> 自然数 -> 实数>=0∞)
+  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> 实数>=0∞)
   证明: by
   rw [← iInf_univ]; rw [expGrowthInf_biInf u Set.finite_univ]; rw [iInf_univ]
 
@@ -1261,7 +1261,7 @@ definition expGrowthSupBotHom
 
 中文:
 定义 expGrowthSupBotHom
-  签名: : SupBotHom (自然数 -> 实数>=0∞) E实数 where
+  签名: : SupBot态射 (自然数 -> 实数>=0∞) E实数 where
   定义体: expGrowthSup
   map_sup' _ _ := expGrowthSup_sup
   map_bot' := expGrowthSup_zero
@@ -1286,7 +1286,7 @@ lemma expGrowthSup_biSup
 
 中文:
 引理 expGrowthSup_biSup
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : Set α} (hs : s.Finite)
+  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : 集合 α} (hs : s.有限)
   证明: by
   have := map_finset_sup expGrowthSupBotHom hs.toFinset u
   simpa only [expGrowthSupBotHom, SupBotHom.coe_mk, SupHom.coe_mk, Finset.sup_eq_iSup,
@@ -1311,7 +1311,7 @@ lemma expGrowthSup_iSup
 
 中文:
 引理 expGrowthSup_iSup
-  条件: {ι : 类型} [Finite ι] (u : ι -> 自然数 -> 实数>=0∞)
+  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> 实数>=0∞)
   证明: by
   rw [← iSup_univ]; rw [expGrowthSup_biSup u Set.finite_univ]; rw [iSup_univ]
 
@@ -1395,7 +1395,7 @@ lemma expGrowthSup_sum
 
 中文:
 引理 expGrowthSup_sum
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) (s : Finset α)
+  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) (s : 有限集 α)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1436,7 +1436,7 @@ lemma le_expGrowthInf_comp
 
 中文:
 引理 le_expGrowthInf_comp
-  条件: (hu : 1 <=ᶠ[atTop] u) (hv : Tendsto v atTop atTop)
+  条件: (hu : 1 <=ᶠ[atTop] u) (hv : 收敛 v atTop atTop)
   证明: by
   apply le_linearGrowthInf_comp (hu.mono fun n h => ?_) hv
   rw [Pi.one_apply] at h
@@ -1489,8 +1489,8 @@ lemma _root_.Monotone.expGrowthInf_nonneg
   exact h'
 
 中文:
-引理 _root_.Monotone.expGrowthInf_nonneg
-  条件: (h : Monotone u) (h' : u != 0)
+引理 _root_.递增.expGrowthInf_nonneg
+  条件: (h : 递增 u) (h' : u != 0)
   证明: by
   apply (log_monotone.comp h).linearGrowthInf_nonneg
   simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
@@ -1513,8 +1513,8 @@ lemma _root_.Monotone.expGrowthSup_nonneg
   proof: (h.expGrowthInf_nonneg h').trans expGrowthInf_le_expGrowthSup
 
 中文:
-引理 _root_.Monotone.expGrowthSup_nonneg
-  条件: (h : Monotone u) (h' : u != 0)
+引理 _root_.递增.expGrowthSup_nonneg
+  条件: (h : 递增 u) (h' : u != 0)
   证明: (h.expGrowthInf_nonneg h').trans expGrowthInf_le_expGrowthSup
 
 Depends on / 依赖: expGrowthInf_le_expGrowthSup, expGrowthInf_nonneg, h.expGrowthInf_nonneg
@@ -1536,7 +1536,7 @@ lemma expGrowthInf_comp_nonneg
 
 中文:
 引理 expGrowthInf_comp_nonneg
-  条件: (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop)
+  条件: (h : 递增 u) (h' : u != 0) (hv : 收敛 v atTop atTop)
   证明: by
   apply linearGrowthInf_comp_nonneg (u := log ∘ u) (log_monotone.comp h) _ hv
   simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
@@ -1560,7 +1560,7 @@ lemma expGrowthSup_comp_nonneg
 
 中文:
 引理 expGrowthSup_comp_nonneg
-  条件: (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop)
+  条件: (h : 递增 u) (h' : u != 0) (hv : 收敛 v atTop atTop)
   证明: (expGrowthInf_comp_nonneg h h' hv).trans expGrowthInf_le_expGrowthSup
 
 Depends on / 依赖: expGrowthInf_comp_nonneg, expGrowthInf_le_expGrowthSup
@@ -1578,8 +1578,8 @@ lemma _root_.Monotone.expGrowthInf_comp_le
   proof: (log_monotone.comp h).linearGrowthInf_comp_le hv₀ hv₁
 
 中文:
-引理 _root_.Monotone.expGrowthInf_comp_le
-  结论: (h : Monotone u)
+引理 _root_.递增.expGrowthInf_comp_le
+  结论: (h : 递增 u)
   证明: (log_monotone.comp h).linearGrowthInf_comp_le hv₀ hv₁
 
 Depends on / 依赖: linearGrowthInf_comp_le, log_monotone, log_monotone.comp
@@ -1599,8 +1599,8 @@ lemma _root_.Monotone.le_expGrowthSup_comp
   proof: (log_monotone.comp h).le_linearGrowthSup_comp hv
 
 中文:
-引理 _root_.Monotone.le_expGrowthSup_comp
-  结论: (h : Monotone u)
+引理 _root_.递增.le_expGrowthSup_comp
+  结论: (h : 递增 u)
   证明: (log_monotone.comp h).le_linearGrowthSup_comp hv
 
 Depends on / 依赖: le_linearGrowthSup_comp, log_monotone, log_monotone.comp
@@ -1619,8 +1619,8 @@ lemma _root_.Monotone.expGrowthInf_comp
   proof: (log_monotone.comp h).linearGrowthInf_comp hv ha ha'
 
 中文:
-引理 _root_.Monotone.expGrowthInf_comp
-  结论: {a : E实数} (h : Monotone u)
+引理 _root_.递增.expGrowthInf_comp
+  结论: {a : E实数} (h : 递增 u)
   证明: (log_monotone.comp h).linearGrowthInf_comp hv ha ha'
 
 Depends on / 依赖: linearGrowthInf_comp, log_monotone, log_monotone.comp
@@ -1639,8 +1639,8 @@ lemma _root_.Monotone.expGrowthSup_comp
   proof: (log_monotone.comp h).linearGrowthSup_comp hv ha ha'
 
 中文:
-引理 _root_.Monotone.expGrowthSup_comp
-  结论: {a : E实数} (h : Monotone u)
+引理 _root_.递增.expGrowthSup_comp
+  结论: {a : E实数} (h : 递增 u)
   证明: (log_monotone.comp h).linearGrowthSup_comp hv ha ha'
 
 Depends on / 依赖: linearGrowthSup_comp, log_monotone, log_monotone.comp
@@ -1659,8 +1659,8 @@ lemma _root_.Monotone.expGrowthInf_comp_mul
   proof: (log_monotone.comp h).linearGrowthInf_comp_mul hm
 
 中文:
-引理 _root_.Monotone.expGrowthInf_comp_mul
-  条件: {m : 自然数} (h : Monotone u) (hm : m != 0)
+引理 _root_.递增.expGrowthInf_comp_mul
+  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
   证明: (log_monotone.comp h).linearGrowthInf_comp_mul hm
 
 Depends on / 依赖: linearGrowthInf_comp_mul, log_monotone, log_monotone.comp
@@ -1678,8 +1678,8 @@ lemma _root_.Monotone.expGrowthSup_comp_mul
   proof: (log_monotone.comp h).linearGrowthSup_comp_mul hm
 
 中文:
-引理 _root_.Monotone.expGrowthSup_comp_mul
-  条件: {m : 自然数} (h : Monotone u) (hm : m != 0)
+引理 _root_.递增.expGrowthSup_comp_mul
+  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
   证明: (log_monotone.comp h).linearGrowthSup_comp_mul hm
 
 Depends on / 依赖: linearGrowthSup_comp_mul, log_monotone, log_monotone.comp

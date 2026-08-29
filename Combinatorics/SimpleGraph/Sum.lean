@@ -41,8 +41,8 @@ definition sum
   signature: (G : SimpleGraph V) (H : SimpleGraph W)
 
 中文:
-定义 sum
-  签名: (G : SimpleGraph V) (H : SimpleGraph W)
+定义 求和
+  签名: (G : 简单图 V) (H : 简单图 W)
 -/
 protected def sum (G : SimpleGraph V) (H : SimpleGraph W) : SimpleGraph (V oplus W) where
   Adj
@@ -67,7 +67,7 @@ theorem sum_adj_inl
 
 中文:
 定理 sum_adj_inl
-  结论: (G oplusg H).Adj (.inl v) (.inl v') ↔ G.Adj v v'
+  结论: (G oplusg H).伴随 (.inl v) (.inl v') ↔ G.伴随 v v'
   证明: by
   simp
 -/
@@ -85,7 +85,7 @@ theorem sum_adj_inr
 
 中文:
 定理 sum_adj_inr
-  结论: (G oplusg H).Adj (.inr w) (.inr w') ↔ H.Adj w w'
+  结论: (G oplusg H).伴随 (.inr w) (.inr w') ↔ H.伴随 w w'
   证明: by
   simp
 -/
@@ -104,7 +104,7 @@ definition Iso.sumComm
   rintro (u | u) (v | v) <;> simp⟩
 
 中文:
-定义 Iso.sumComm
+定义 同构.sumComm
   签名: : G oplusg H ≃g H oplusg G
   定义体: ⟨Equiv.sumComm V W, by
   rintro (u | u) (v | v) <;> simp⟩
@@ -126,7 +126,7 @@ definition Iso.sumAssoc
   map_rel_iff' := by rintro ((u | u) | u) ((v | v) | v) <;> simp
 
 中文:
-定义 Iso.sumAssoc
+定义 同构.sumAssoc
   签名: : (G oplusg H) oplusg I ≃g G oplusg (H oplusg I) where
   定义体: .sumAssoc ..
   map_rel_iff' := by rintro ((u | u) | u) ((v | v) | v) <;> simp
@@ -151,7 +151,7 @@ definition Embedding.sumInl
   map_rel_iff' := by simp
 
 中文:
-定义 Embedding.sumInl
+定义 嵌入.sumInl
   签名: : G ↪g G oplusg H where
   定义体: _root_.Sum.inl u
   inj' u v := by simp
@@ -178,7 +178,7 @@ definition Embedding.sumInr
   map_rel_iff' := by simp
 
 中文:
-定义 Embedding.sumInr
+定义 嵌入.sumInr
   签名: : H ↪g G oplusg H where
   定义体: _root_.Sum.inr u
   inj' u v := by simp
@@ -204,7 +204,7 @@ definition Hom.sum
   map_rel' {u v} := by cases u <;> cases v <;> simp_all [f.map_rel, g.map_rel]
 
 中文:
-定义 Hom.sum
+定义 态射.求和
   签名: (f : G ->g G') (g : H ->g H')
   定义体: Sum.map f g
   map_rel' {u v} := by cases u <;> cases v <;> simp_all [f.map_rel, g.map_rel]
@@ -225,7 +225,7 @@ lemma Hom.sum_comp_sumComm
   ext (v | w) <;> simp
 
 中文:
-引理 Hom.sum_comp_sumComm
+引理 态射.sum_comp_sumComm
   条件: (f : G ->g G') (g : H ->g H')
   证明: by
   ext (v | w) <;> simp
@@ -244,7 +244,7 @@ lemma Hom.sum_sum_comp_sumAssoc
   ext ((v | w) | u) <;> simp
 
 中文:
-引理 Hom.sum_sum_comp_sumAssoc
+引理 态射.sum_sum_comp_sumAssoc
   条件: (f : G ->g G') (g : H ->g H') (h : I ->g I')
   证明: by
   ext ((v | w) | u) <;> simp
@@ -268,7 +268,7 @@ definition Embedding.sum
   map_rel_iff' {u v} := by cases u <;> cases v <;> simp
 
 中文:
-定义 Embedding.sum
+定义 嵌入.求和
   签名: (f : G ↪g G') (g : H ↪g H')
   定义体: Sum.map f g
   inj' u v := by cases u <;> cases v <;> simp
@@ -290,7 +290,7 @@ lemma Embedding.toHom_sum
   proof: rfl
 
 中文:
-引理 Embedding.toHom_sum
+引理 嵌入.toHom_sum
   条件: (f : G ↪g G') (g : H ↪g H')
   证明: rfl
 -/
@@ -307,7 +307,7 @@ lemma Embedding.sum_comp_sumComm
   ext (v | w) <;> simp
 
 中文:
-引理 Embedding.sum_comp_sumComm
+引理 嵌入.sum_comp_sumComm
   条件: (f : G ↪g G') (g : H ↪g H')
   证明: by
   ext (v | w) <;> simp
@@ -326,7 +326,7 @@ lemma Embedding.sum_sum_comp_sumAssoc
   ext ((v | w) | u) <;> simp
 
 中文:
-引理 Embedding.sum_sum_comp_sumAssoc
+引理 嵌入.sum_sum_comp_sumAssoc
   条件: (f : G ↪g G') (g : H ↪g H') (h : I ↪g I')
   证明: by
   ext ((v | w) | u) <;> simp
@@ -349,7 +349,7 @@ definition Iso.sumCongr
   map_rel_iff' {u v} := by cases u <;> cases v <;> simp [f.map_rel_iff, g.map_rel_iff]
 
 中文:
-定义 Iso.sumCongr
+定义 同构.sumCongr
   签名: (f : G ≃g G') (g : H ≃g H')
   定义体: f.toEquiv.sumCongr g.toEquiv
   map_rel_iff' {u v} := by cases u <;> cases v <;> simp [f.map_rel_iff, g.map_rel_iff]
@@ -369,7 +369,7 @@ lemma Iso.toHom_sumCongr
   proof: rfl
 
 中文:
-引理 Iso.toHom_sumCongr
+引理 同构.toHom_sumCongr
   条件: (f : G ≃g G') (g : H ≃g H')
   证明: rfl
 -/
@@ -385,7 +385,7 @@ lemma Iso.toEmbedding_sumCongr
   proof: rfl
 
 中文:
-引理 Iso.toEmbedding_sumCongr
+引理 同构.toEmbedding_sumCongr
   条件: (f : G ≃g G') (g : H ≃g H')
   证明: rfl
 -/
@@ -402,7 +402,7 @@ lemma Iso.sumComm_comp_sumCongr
   ext (v | w) <;> simp
 
 中文:
-引理 Iso.sumComm_comp_sumCongr
+引理 同构.sumComm_comp_sumCongr
   条件: (f : G ≃g G') (g : H ≃g H')
   证明: by
   ext (v | w) <;> simp
@@ -421,7 +421,7 @@ lemma Iso.sumAssoc_comp_sumCongr
   ext ((v | w) | u) <;> simp
 
 中文:
-引理 Iso.sumAssoc_comp_sumCongr
+引理 同构.sumAssoc_comp_sumCongr
   条件: (f : G ≃g G') (g : H ≃g H') (h : I ≃g I')
   证明: by
   ext ((v | w) | u) <;> simp
@@ -488,7 +488,7 @@ lemma not_adj_sum_inl_inr
 中文:
 引理 not_adj_sum_inl_inr
   条件: (v w)
-  结论: ¬(G oplusg H).Adj (.inl v) (.inr w)
+  结论: ¬(G oplusg H).伴随 (.inl v) (.inr w)
   证明: by simp
 -/
 lemma not_adj_sum_inl_inr (v w) : ¬(G oplusg H).Adj (.inl v) (.inr w) := by simp
@@ -545,8 +545,8 @@ lemma not_preconnected_sum
 
 中文:
 引理 not_preconnected_sum
-  条件: [Nonempty V] [Nonempty W]
-  结论: ¬(G oplusg H).Preconnected
+  条件: [非空 V] [非空 W]
+  结论: ¬(G oplusg H).预连通
   证明: fun h => not_reachable_sum_inl_inr (Classical.arbitrary _) (Classical.arbitrary _) (h ..)
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, not_reachable_sum_inl_inr
@@ -566,8 +566,8 @@ lemma not_connected_sum
 
 中文:
 引理 not_connected_sum
-  条件: [Nonempty V] [Nonempty W]
-  结论: ¬(G oplusg H).Connected
+  条件: [非空 V] [非空 W]
+  结论: ¬(G oplusg H).连通
   证明: by
   simp [connected_iff, not_preconnected_sum]
 
@@ -612,8 +612,8 @@ lemma Preconnected.sum_sup_edge
   · exact ((hH w₁ w₂).map Embedding.sumInr.toHom).mono le_sup_left
 
 中文:
-引理 Preconnected.sum_sup_edge
-  条件: (hG : G.Preconnected) (hH : H.Preconnected)
+引理 预连通.sum_sup_edge
+  条件: (hG : G.预连通) (hH : H.预连通)
   证明: by
   rintro (v₁ | w₁) (v₂ | w₂)
   · exact ((hG v₁ v₂).map Embedding.sumInl.toHom).mono le_sup_left
@@ -641,8 +641,8 @@ lemma Connected.sum_sup_edge
   obtain ⟨hG⟩ := hG; exact ⟨hG.sum_sup_edge hH.preconnected⟩
 
 中文:
-引理 Connected.sum_sup_edge
-  条件: (hG : G.Connected) (hH : H.Connected)
+引理 连通.sum_sup_edge
+  条件: (hG : G.连通) (hH : H.连通)
   证明: by
   obtain ⟨hG⟩ := hG; exact ⟨hG.sum_sup_edge hH.preconnected⟩
 
@@ -662,8 +662,8 @@ definition Coloring.sum
   map_rel' {u v} huv := by cases u <;> cases v <;> simp_all [cG.valid, cH.valid]
 
 中文:
-定义 Coloring.sum
-  签名: (cG : G.Coloring γ) (cH : H.Coloring γ)
+定义 染色.求和
+  签名: (cG : G.染色 γ) (cH : H.染色 γ)
   定义体: Sum.elim cG cH
   map_rel' {u v} huv := by cases u <;> cases v <;> simp_all [cG.valid, cH.valid]
 
@@ -682,8 +682,8 @@ definition Coloring.sumLeft
   body: c.comp Embedding.sumInl.toHom
 
 中文:
-定义 Coloring.sumLeft
-  签名: (c : (G oplusg H).Coloring γ)
+定义 染色.sumLeft
+  签名: (c : (G oplusg H).染色 γ)
   定义体: c.comp Embedding.sumInl.toHom
 
 Depends on / 依赖: Embedding, Embedding.sumInl.toHom, c.comp, sumInl
@@ -701,8 +701,8 @@ definition Coloring.sumRight
 @[simp]
 
 中文:
-定义 Coloring.sumRight
-  签名: (c : (G oplusg H).Coloring γ)
+定义 染色.sumRight
+  签名: (c : (G oplusg H).染色 γ)
   定义体: c.comp Embedding.sumInr.toHom
 
 @[simp]
@@ -724,9 +724,9 @@ theorem Coloring.sumLeft_sum
 @[simp]
 
 中文:
-定理 Coloring.sumLeft_sum
-  条件: (cG : G.Coloring γ) (cH : H.Coloring γ)
-  结论: (cG.sum cH).sumLeft = cG
+定理 染色.sumLeft_sum
+  条件: (cG : G.染色 γ) (cH : H.染色 γ)
+  结论: (cG.求和 cH).sumLeft = cG
   证明: rfl
 
 @[simp]
@@ -747,9 +747,9 @@ theorem Coloring.sumRight_sum
 @[simp]
 
 中文:
-定理 Coloring.sumRight_sum
-  条件: (cG : G.Coloring γ) (cH : H.Coloring γ)
-  结论: (cG.sum cH).sumRight = cH
+定理 染色.sumRight_sum
+  条件: (cG : G.染色 γ) (cH : H.染色 γ)
+  结论: (cG.求和 cH).sumRight = cH
   证明: rfl
 
 @[simp]
@@ -769,9 +769,9 @@ theorem Coloring.sum_sumLeft_sumRight
   ext (u | u) <;> rfl
 
 中文:
-定理 Coloring.sum_sumLeft_sumRight
-  条件: (c : (G oplusg H).Coloring γ)
-  结论: c.sumLeft.sum c.sumRight = c
+定理 染色.sum_sumLeft_sumRight
+  条件: (c : (G oplusg H).染色 γ)
+  结论: c.sumLeft.求和 c.sumRight = c
   证明: by
   ext (u | u) <;> rfl
 -/
@@ -789,8 +789,8 @@ definition Coloring.sumEquiv
   left_inv c := by simp [sum_sumLeft_sumRight c]
 
 中文:
-定义 Coloring.sumEquiv
-  签名: : (G oplusg H).Coloring γ ≃ G.Coloring γ × H.Coloring γ where
+定义 染色.sumEquiv
+  签名: : (G oplusg H).染色 γ ≃ G.染色 γ × H.染色 γ where
   定义体: ⟨c.sumLeft, c.sumRight⟩
   invFun p := p.1.sum p.2
   left_inv c := by simp [sum_sumLeft_sumRight c]
@@ -813,8 +813,8 @@ definition Coloring.sumFin
   (H.recolorOfEmbedding (Fin.castLEEmb (n.le_max_right m)) cH)
 
 中文:
-定义 Coloring.sumFin
-  签名: {n m : 自然数} (cG : G.Coloring (Fin n)) (cH : H.Coloring (Fin m))
+定义 染色.sumFin
+  签名: {n m : 自然数} (cG : G.染色 (有限集 n)) (cH : H.染色 (有限集 m))
   定义体: sum
   (G.recolorOfEmbedding (Fin.castLEEmb (n.le_max_left m)) cG)
   (H.recolorOfEmbedding (Fin.castLEEmb (n.le_max_right m)) cH)
@@ -999,7 +999,7 @@ lemma neighborSet_sum_inl
 中文:
 引理 neighborSet_sum_inl
   条件: (v : V)
-  结论: (G oplusg H).neighborSet (.inl v) = Sum.inl '' G.neighborSet v
+  结论: (G oplusg H).neighborSet (.inl v) = 和.inl '' G.neighborSet v
   证明: by
   ext (v' | w') <;> simp
 -/
@@ -1019,7 +1019,7 @@ lemma neighborSet_sum_inr
 中文:
 引理 neighborSet_sum_inr
   条件: (w : W)
-  结论: (G oplusg H).neighborSet (.inr w) = Sum.inr '' H.neighborSet w
+  结论: (G oplusg H).neighborSet (.inr w) = 和.inr '' H.neighborSet w
   证明: by
   ext (v' | w') <;> simp
 -/
@@ -1038,7 +1038,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: V] [DecidableEq W] [LocallyFinite G] [LocallyFinite H] :
+  签名: V] [DecidableEq W] [局部有限 G] [局部有限 H] :
   定义体: by
   rintro (v | w) <;> simp only [neighborSet_sum_inl, neighborSet_sum_inr] <;>
     infer_instance

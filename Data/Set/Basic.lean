@@ -80,7 +80,7 @@ theorem mem_injective
 
 中文:
 定理 mem_injective
-  结论: Injective (Membership.mem : Set α -> α -> 命题)
+  结论: 单射 (Membership.mem : 集合 α -> α -> 命题)
   证明: injective_id
 -/
 protected theorem mem_injective : Injective (Membership.mem : Set α -> α -> Prop) := injective_id
@@ -94,7 +94,7 @@ theorem mem_surjective
 
 中文:
 定理 mem_surjective
-  结论: Surjective (Membership.mem : Set α -> α -> 命题)
+  结论: 满射 (Membership.mem : 集合 α -> α -> 命题)
   证明: surjective_id
 -/
 protected theorem mem_surjective : Surjective (Membership.mem : Set α -> α -> Prop) := surjective_id
@@ -108,7 +108,7 @@ theorem mem_bijective
 
 中文:
 定理 mem_bijective
-  结论: Bijective (Membership.mem : Set α -> α -> 命题)
+  结论: 双射 (Membership.mem : 集合 α -> α -> 命题)
   证明: bijective_id
 -/
 protected theorem mem_bijective : Bijective (Membership.mem : Set α -> α -> Prop) := bijective_id
@@ -127,7 +127,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: : DistribLattice (Set α) where
+  签名: : Distrib格 (集合 α) where
   定义体: inferInstance
   le := (· <= ·)
   lt := fun s t => s subseteq t ∧ ¬t subseteq s
@@ -155,7 +155,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: : BoundedOrder (Set α) where
+  签名: : 有界序 (集合 α) where
   定义体: inferInstance
   bot := ∅
   top := univ
@@ -180,7 +180,7 @@ theorem top_eq_univ
 
 中文:
 定理 top_eq_univ
-  结论: (⊤ : Set α) = univ
+  结论: (⊤ : 集合 α) = univ
   证明: rfl
 
 @[simp]
@@ -201,7 +201,7 @@ theorem bot_eq_empty
 
 中文:
 定理 bot_eq_empty
-  结论: (⊥ : Set α) = ∅
+  结论: (⊥ : 集合 α) = ∅
   证明: rfl
 
 @[simp]
@@ -222,7 +222,7 @@ theorem sup_eq_union
 
 中文:
 定理 sup_eq_union
-  结论: ((· ⊔ ·) : Set α -> Set α -> Set α) = (· union ·)
+  结论: ((· ⊔ ·) : 集合 α -> 集合 α -> 集合 α) = (· union ·)
   证明: rfl
 
 @[simp]
@@ -243,7 +243,7 @@ theorem inf_eq_inter
 
 中文:
 定理 inf_eq_inter
-  结论: ((· ⊓ ·) : Set α -> Set α -> Set α) = (· inter ·)
+  结论: ((· ⊓ ·) : 集合 α -> 集合 α -> 集合 α) = (· inter ·)
   证明: rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
@@ -264,7 +264,7 @@ theorem le_eq_subset
 
 中文:
 定理 le_eq_subset
-  结论: ((· <= ·) : Set α -> Set α -> 命题) = (· subseteq ·)
+  结论: ((· <= ·) : 集合 α -> 集合 α -> 命题) = (· subseteq ·)
   证明: rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
@@ -285,7 +285,7 @@ theorem lt_eq_ssubset
 
 中文:
 定理 lt_eq_ssubset
-  结论: ((· < ·) : Set α -> Set α -> 命题) = (· ⊂ ·)
+  结论: ((· < ·) : 集合 α -> 集合 α -> 命题) = (· ⊂ ·)
   证明: rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
@@ -363,7 +363,7 @@ instance PiSetCoe.canLift
 
 中文:
 实例 PiSetCoe.canLift
-  签名: (ι : 类型u) (α : ι -> 类型v) [对任意 i, Nonempty (α i)] (s : Set ι)
+  签名: (ι : 类型u) (α : ι -> 类型v) [对任意 i, 非空 (α i)] (s : 集合 ι)
   定义体: PiSubtype.canLift ι α (· in s)
 
 Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
@@ -382,7 +382,7 @@ instance PiSetCoe.canLift'
 
 中文:
 实例 PiSetCoe.canLift'
-  签名: (ι : 类型u) (α : 类型v) [Nonempty α] (s : Set ι)
+  签名: (ι : 类型u) (α : 类型v) [非空 α] (s : 集合 ι)
   定义体: PiSetCoe.canLift ι (fun _ => α) s
 
 Depends on / 依赖: PiSetCoe, PiSetCoe.canLift, canLift
@@ -409,8 +409,8 @@ theorem Set.coe_eq_subtype
   proof: rfl
 
 中文:
-定理 Set.coe_eq_subtype
-  条件: (s : Set α)
+定理 集合.coe_eq_subtype
+  条件: (s : 集合 α)
   结论: ↥s = { x // x in s }
   证明: rfl
 -/
@@ -429,7 +429,7 @@ theorem Set.coe_ofPred
 @[deprecated (since := "2026-07-09")] alias Set.coe_setOf := Set.coe_ofPred
 
 中文:
-定理 Set.coe_ofPred
+定理 集合.coe_ofPred
   条件: (p : α -> 命题)
   结论: ↥{ x | p x } = { x // p x }
   证明: rfl
@@ -451,8 +451,8 @@ theorem SetCoe.forall
   proof: Subtype.forall
 
 中文:
-定理 SetCoe.forall
-  条件: {s : Set α} {p : s -> 命题}
+定理 SetCoe.对任意
+  条件: {s : 集合 α} {p : s -> 命题}
   结论: (对任意 x : s, p x) ↔ 对任意 (x) (h : x in s), p ⟨x, h⟩
   证明: Subtype.forall
 
@@ -470,8 +470,8 @@ theorem SetCoe.exists
   proof: Subtype.exists
 
 中文:
-定理 SetCoe.exists
-  条件: {s : Set α} {p : s -> 命题}
+定理 SetCoe.存在
+  条件: {s : 集合 α} {p : s -> 命题}
   证明: Subtype.exists
 
 Depends on / 依赖: Subtype, Subtype.exists
@@ -489,8 +489,8 @@ theorem SetCoe.exists'
   proof: (@SetCoe.exists _ _ fun x => p x.1 x.2).symm
 
 中文:
-定理 SetCoe.exists'
-  条件: {s : Set α} {p : 对任意 x, x in s -> 命题}
+定理 SetCoe.存在'
+  条件: {s : 集合 α} {p : 对任意 x, x in s -> 命题}
   证明: (@SetCoe.exists _ _ fun x => p x.1 x.2).symm
 
 Depends on / 依赖: SetCoe, SetCoe.exists
@@ -510,8 +510,8 @@ theorem SetCoe.forall'
 @[simp]
 
 中文:
-定理 SetCoe.forall'
-  条件: {s : Set α} {p : 对任意 x, x in s -> 命题}
+定理 SetCoe.对任意'
+  条件: {s : 集合 α} {p : 对任意 x, x in s -> 命题}
   证明: (@SetCoe.forall _ _ fun x => p x.1 x.2).symm
 
 @[simp]
@@ -547,7 +547,7 @@ theorem SetCoe.ext
 
 中文:
 定理 SetCoe.ext
-  条件: {s : Set α} {a b : s}
+  条件: {s : 集合 α} {a b : s}
   结论: (a : α) = b -> a = b
   证明: Subtype.ext
 
@@ -567,7 +567,7 @@ theorem SetCoe.ext_iff
 
 中文:
 定理 SetCoe.ext_iff
-  条件: {s : Set α} {a b : s}
+  条件: {s : 集合 α} {a b : s}
   结论: (↑a : α) = ↑b ↔ a = b
   证明: Iff.intro SetCoe.ext fun h => h ▸ rfl
 
@@ -588,8 +588,8 @@ theorem Subtype.mem
   proof: p.prop
 
 中文:
-定理 Subtype.mem
-  条件: {α : 类型} {s : Set α} (p : s)
+定理 子类型.mem
+  条件: {α : 类型} {s : 集合 α} (p : s)
   结论: (p : α) in s
   证明: p.prop
 
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Set α)
+  签名: 可居 (集合 α)
   定义体: ⟨∅⟩
 
 @[trans]
@@ -634,7 +634,7 @@ theorem mem_of_mem_of_subset
 
 中文:
 定理 mem_of_mem_of_subset
-  条件: {x : α} {s t : Set α} (hx : x in s) (h : s subseteq t)
+  条件: {x : α} {s t : 集合 α} (hx : x in s) (h : s subseteq t)
   结论: x in t
   证明: h hx
 
@@ -655,7 +655,7 @@ theorem ofPred_injective
 
 中文:
 定理 ofPred_injective
-  结论: Function.Injective (@ofPred α)
+  结论: 函数.单射 (@ofPred α)
   证明: injective_id
 
 @[deprecated (since := "2026-07-09")] alias setOf_injective := ofPred_injective
@@ -704,7 +704,7 @@ theorem ofPred_bijective
 
 中文:
 定理 ofPred_bijective
-  结论: Bijective (ofPred : (α -> 命题) -> Set α)
+  结论: 双射 (ofPred : (α -> 命题) -> 集合 α)
   证明: bijective_id
 
 @[deprecated (since := "2026-07-09")] alias setOf_bijective := ofPred_bijective
@@ -729,7 +729,7 @@ theorem subset_ofPred
 
 中文:
 定理 subset_ofPred
-  条件: {p : α -> 命题} {s : Set α}
+  条件: {p : α -> 命题} {s : 集合 α}
   结论: s subseteq ofPred p ↔ 对任意 x, x in s -> p x
   证明: Iff.rfl
 
@@ -757,7 +757,7 @@ theorem ofPred_subset
 
 中文:
 定理 ofPred_subset
-  条件: {p : α -> 命题} {s : Set α}
+  条件: {p : α -> 命题} {s : 集合 α}
   结论: ofPred p subseteq s ↔ 对任意 x, p x -> x in s
   证明: Iff.rfl
 
@@ -921,8 +921,8 @@ theorem Subset.refl
   proof: fun _ => id
 
 中文:
-定理 Subset.refl
-  条件: (a : Set α)
+定理 子集.refl
+  条件: (a : 集合 α)
   结论: a subseteq a
   证明: fun _ => id
 -/
@@ -940,8 +940,8 @@ theorem Subset.rfl
 @[trans]
 
 中文:
-定理 Subset.rfl
-  条件: {s : Set α}
+定理 子集.rfl
+  条件: {s : 集合 α}
   结论: s subseteq s
   证明: Subset.refl s
 
@@ -965,8 +965,8 @@ theorem Subset.trans
 @[trans]
 
 中文:
-定理 Subset.trans
-  条件: {a b c : Set α} (ab : a subseteq b) (bc : b subseteq c)
+定理 子集.trans
+  条件: {a b c : 集合 α} (ab : a subseteq b) (bc : b subseteq c)
   结论: a subseteq c
   证明: fun _ h => bc ab h
 
@@ -986,7 +986,7 @@ theorem mem_of_eq_of_mem
 
 中文:
 定理 mem_of_eq_of_mem
-  条件: {x y : α} {s : Set α} (hx : x = y) (h : y in s)
+  条件: {x y : α} {s : 集合 α} (hx : x = y) (h : y in s)
   结论: x in s
   证明: hx.symm ▸ h
 
@@ -1005,8 +1005,8 @@ theorem Subset.antisymm
   proof: Set.ext fun _ => ⟨@h₁ _, @h₂ _⟩
 
 中文:
-定理 Subset.antisymm
-  条件: {a b : Set α} (h₁ : a subseteq b) (h₂ : b subseteq a)
+定理 子集.antisymm
+  条件: {a b : 集合 α} (h₁ : a subseteq b) (h₂ : b subseteq a)
   结论: a = b
   证明: Set.ext fun _ => ⟨@h₁ _, @h₂ _⟩
 -/
@@ -1023,8 +1023,8 @@ theorem Subset.antisymm_iff
   proof: ⟨fun e => ⟨e.subset, e.symm.subset⟩, fun ⟨h₁, h₂⟩ => Subset.antisymm h₁ h₂⟩
 
 中文:
-定理 Subset.antisymm_iff
-  条件: {a b : Set α}
+定理 子集.antisymm_iff
+  条件: {a b : 集合 α}
   结论: a = b ↔ a subseteq b ∧ b subseteq a
   证明: ⟨fun e => ⟨e.subset, e.symm.subset⟩, fun ⟨h₁, h₂⟩ => Subset.antisymm h₁ h₂⟩
 -/
@@ -1043,7 +1043,7 @@ theorem eq_of_subset_of_subset
 
 中文:
 定理 eq_of_subset_of_subset
-  条件: {a b : Set α}
+  条件: {a b : 集合 α}
   结论: a subseteq b -> b subseteq a -> a = b
   证明: Subset.antisymm
 
@@ -1063,7 +1063,7 @@ theorem mem_of_subset_of_mem
 
 中文:
 定理 mem_of_subset_of_mem
-  条件: {s₁ s₂ : Set α} {a : α} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 α} {a : α} (h : s₁ subseteq s₂)
   结论: a in s₁ -> a in s₂
   证明: @h _
 -/
@@ -1183,7 +1183,7 @@ lemma eq_of_forall_subset_iff
   proof: eq_of_forall_ge_iff h
 
 中文:
-引理 eq_of_forall_subset_iff
+引理 eq_of_对任意_subset_iff
   条件: (h : 对任意 u, s subseteq u ↔ t subseteq u)
   结论: s = t
   证明: eq_of_forall_ge_iff h
@@ -1221,8 +1221,8 @@ theorem exists_of_ssubset
   proof: not_subset.1 h.2
 
 中文:
-定理 exists_of_ssubset
-  条件: {s t : Set α} (h : s ⊂ t)
+定理 存在_of_ssubset
+  条件: {s t : 集合 α} (h : s ⊂ t)
   结论: 存在 x in t, x ∉ s
   证明: not_subset.1 h.2
 
@@ -1242,7 +1242,7 @@ theorem ssubset_iff_subset_ne
 
 中文:
 定理 ssubset_iff_subset_ne
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s ⊂ t ↔ s subseteq t ∧ s != t
   证明: @lt_iff_le_and_ne (Set α) _ s t
 -/
@@ -1260,7 +1260,7 @@ theorem ssubset_iff_of_subset
 
 中文:
 定理 ssubset_iff_of_subset
-  条件: {s t : Set α} (h : s subseteq t)
+  条件: {s t : 集合 α} (h : s subseteq t)
   结论: s ⊂ t ↔ 存在 x in t, x ∉ s
   证明: ⟨exists_of_ssubset, fun ⟨_, hxt, hxs⟩ => ⟨h, fun h => hxs h hxt⟩⟩
 
@@ -1279,8 +1279,8 @@ theorem ssubset_iff_exists
   proof: ⟨fun h => ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ => (Set.ssubset_iff_of_subset h1).mpr h2⟩
 
 中文:
-定理 ssubset_iff_exists
-  条件: {s t : Set α}
+定理 ssubset_iff_存在
+  条件: {s t : 集合 α}
   结论: s ⊂ t ↔ s subseteq t ∧ 存在 x in t, x ∉ s
   证明: ⟨fun h => ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ => (Set.ssubset_iff_of_subset h1).mpr h2⟩
 
@@ -1299,7 +1299,7 @@ theorem ssubset_of_ssubset_of_subset
 
 中文:
 定理 ssubset_of_ssubset_of_subset
-  结论: {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ ⊂ s₂)
+  结论: {s₁ s₂ s₃ : 集合 α} (hs₁s₂ : s₁ ⊂ s₂)
   证明: ⟨Subset.trans hs₁s₂.1 hs₂s₃, fun hs₃s₁ => hs₁s₂.2 (Subset.trans hs₂s₃ hs₃s₁)⟩
 -/
 protected theorem ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ ⊂ s₂)
@@ -1316,7 +1316,7 @@ theorem ssubset_of_subset_of_ssubset
 
 中文:
 定理 ssubset_of_subset_of_ssubset
-  结论: {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ subseteq s₂)
+  结论: {s₁ s₂ s₃ : 集合 α} (hs₁s₂ : s₁ subseteq s₂)
   证明: ⟨Subset.trans hs₁s₂ hs₂s₃.1, fun hs₃s₁ => hs₂s₃.2 (Subset.trans hs₃s₁ hs₁s₂)⟩
 -/
 protected theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ subseteq s₂)
@@ -1335,7 +1335,7 @@ theorem notMem_empty
 中文:
 定理 notMem_empty
   条件: (x : α)
-  结论: x ∉ (∅ : Set α)
+  结论: x ∉ (∅ : 集合 α)
   证明: id
 -/
 theorem notMem_empty (x : α) : x ∉ (∅ : Set α) :=
@@ -1373,8 +1373,8 @@ alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
 
 中文:
 定理 nonempty_coe_sort
-  条件: {s : Set α}
-  结论: Nonempty ↥s ↔ s.Nonempty
+  条件: {s : 集合 α}
+  结论: 非空 ↥s ↔ s.非空
   证明: nonempty_subtype
 
 alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
@@ -1396,7 +1396,7 @@ theorem nonempty_def
 
 中文:
 定理 nonempty_def
-  结论: s.Nonempty ↔ 存在 x, x in s
+  结论: s.非空 ↔ 存在 x, x in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1416,7 +1416,7 @@ theorem nonempty_of_mem
 中文:
 定理 nonempty_of_mem
   条件: {x} (h : x in s)
-  结论: s.Nonempty
+  结论: s.非空
   证明: ⟨x, h⟩
 -/
 theorem nonempty_of_mem {x} (h : x in s) : s.Nonempty :=
@@ -1430,8 +1430,8 @@ theorem Nonempty.not_subset_empty
   statement: s.Nonempty -> ¬s subseteq ∅
 
 中文:
-定理 Nonempty.not_subset_empty
-  结论: s.Nonempty -> ¬s subseteq ∅
+定理 非空.not_subset_empty
+  结论: s.非空 -> ¬s subseteq ∅
 
 Depends on / 依赖: Classical, Classical.choose
 -/
@@ -1448,7 +1448,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Nonempty.some (h : s.Nonempty)
+  签名: def 非空.some (h : s.非空)
   定义体: Classical.choose h
 -/
 protected noncomputable def Nonempty.some (h : s.Nonempty) : α :=
@@ -1464,8 +1464,8 @@ theorem Nonempty.some_mem
   proof: Classical.choose_spec h
 
 中文:
-定理 Nonempty.some_mem
-  条件: (h : s.Nonempty)
+定理 非空.some_mem
+  条件: (h : s.非空)
   结论: h.some in s
   证明: Classical.choose_spec h
 -/
@@ -1482,9 +1482,9 @@ theorem Nonempty.mono
   proof: hs.imp ht
 
 中文:
-定理 Nonempty.mono
-  条件: (ht : s subseteq t) (hs : s.Nonempty)
-  结论: t.Nonempty
+定理 非空.mono
+  条件: (ht : s subseteq t) (hs : s.非空)
+  结论: t.非空
   证明: hs.imp ht
 -/
 @[gcongr] theorem Nonempty.mono (ht : s subseteq t) (hs : s.Nonempty) : t.Nonempty :=
@@ -1503,7 +1503,7 @@ theorem nonempty_of_not_subset
 中文:
 定理 nonempty_of_not_subset
   条件: (h : ¬s subseteq t)
-  结论: (s \ t).Nonempty
+  结论: (s \ t).非空
   证明: let ⟨x, xs, xt⟩ := not_subset.1 h
   ⟨x, xs, xt⟩
 
@@ -1525,7 +1525,7 @@ theorem nonempty_of_ssubset
 中文:
 定理 nonempty_of_ssubset
   条件: (ht : s ⊂ t)
-  结论: (t \ s).Nonempty
+  结论: (t \ s).非空
   证明: nonempty_of_not_subset ht.2
 
 Depends on / 依赖: nonempty_of_not_subset
@@ -1545,9 +1545,9 @@ theorem Nonempty.of_sdiff
 @[deprecated (since := "2026-06-03")] alias Nonempty.of_diff := Nonempty.of_sdiff
 
 中文:
-定理 Nonempty.of_sdiff
-  条件: (h : (s \ t).Nonempty)
-  结论: s.Nonempty
+定理 非空.of_sdiff
+  条件: (h : (s \ t).非空)
+  结论: s.非空
   证明: h.imp fun _ => And.left
 
 @[deprecated (since := "2026-06-03")] alias Nonempty.of_diff := Nonempty.of_sdiff
@@ -1571,7 +1571,7 @@ theorem nonempty_of_ssubset'
 中文:
 定理 nonempty_of_ssubset'
   条件: (ht : s ⊂ t)
-  结论: t.Nonempty
+  结论: t.非空
   证明: (nonempty_of_ssubset ht).of_sdiff
 
 Depends on / 依赖: nonempty_of_ssubset, of_sdiff
@@ -1589,9 +1589,9 @@ theorem Nonempty.inl
   proof: hs.imp fun _ => Or.inl
 
 中文:
-定理 Nonempty.inl
-  条件: (hs : s.Nonempty)
-  结论: (s union t).Nonempty
+定理 非空.inl
+  条件: (hs : s.非空)
+  结论: (s union t).非空
   证明: hs.imp fun _ => Or.inl
 -/
 theorem Nonempty.inl (hs : s.Nonempty) : (s union t).Nonempty :=
@@ -1609,9 +1609,9 @@ theorem Nonempty.inr
 @[simp]
 
 中文:
-定理 Nonempty.inr
-  条件: (ht : t.Nonempty)
-  结论: (s union t).Nonempty
+定理 非空.inr
+  条件: (ht : t.非空)
+  结论: (s union t).非空
   证明: ht.imp fun _ => Or.inr
 
 @[simp]
@@ -1630,7 +1630,7 @@ theorem union_nonempty
 
 中文:
 定理 union_nonempty
-  结论: (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty
+  结论: (s union t).非空 ↔ s.非空 ∨ t.非空
   证明: exists_or
 
 Depends on / 依赖: exists_or
@@ -1648,9 +1648,9 @@ theorem Nonempty.left
   proof: h.imp fun _ => And.left
 
 中文:
-定理 Nonempty.left
-  条件: (h : (s inter t).Nonempty)
-  结论: s.Nonempty
+定理 非空.left
+  条件: (h : (s inter t).非空)
+  结论: s.非空
   证明: h.imp fun _ => And.left
 
 Depends on / 依赖: And.left, h.imp
@@ -1668,9 +1668,9 @@ theorem Nonempty.right
   proof: h.imp fun _ => And.right
 
 中文:
-定理 Nonempty.right
-  条件: (h : (s inter t).Nonempty)
-  结论: t.Nonempty
+定理 非空.right
+  条件: (h : (s inter t).非空)
+  结论: t.非空
   证明: h.imp fun _ => And.right
 
 Depends on / 依赖: And.right, h.imp
@@ -1688,7 +1688,7 @@ theorem inter_nonempty
 
 中文:
 定理 inter_nonempty
-  结论: (s inter t).Nonempty ↔ 存在 x, x in s ∧ x in t
+  结论: (s inter t).非空 ↔ 存在 x, x in s ∧ x in t
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1706,8 +1706,8 @@ theorem inter_nonempty_iff_exists_left
   simp_rw [inter_nonempty]
 
 中文:
-定理 inter_nonempty_iff_exists_left
-  结论: (s inter t).Nonempty ↔ 存在 x in s, x in t
+定理 inter_nonempty_iff_存在_left
+  结论: (s inter t).非空 ↔ 存在 x in s, x in t
   证明: by
   simp_rw [inter_nonempty]
 
@@ -1726,8 +1726,8 @@ theorem inter_nonempty_iff_exists_right
   simp_rw [inter_nonempty, and_comm]
 
 中文:
-定理 inter_nonempty_iff_exists_right
-  结论: (s inter t).Nonempty ↔ 存在 x in t, x in s
+定理 inter_nonempty_iff_存在_right
+  结论: (s inter t).非空 ↔ 存在 x in t, x in s
   证明: by
   simp_rw [inter_nonempty, and_comm]
 
@@ -1748,7 +1748,7 @@ theorem nonempty_iff_univ_nonempty
 
 中文:
 定理 nonempty_iff_univ_nonempty
-  结论: Nonempty α ↔ (univ : Set α).Nonempty
+  结论: 非空 α ↔ (univ : 集合 α).非空
   证明: ⟨fun ⟨x⟩ => ⟨x, trivial⟩, fun ⟨x, _⟩ => ⟨x⟩⟩
 
 @[simp]
@@ -1766,7 +1766,7 @@ theorem univ_nonempty
 
 中文:
 定理 univ_nonempty
-  结论: 对任意 [Nonempty α], (univ : Set α).Nonempty
+  结论: 对任意 [非空 α], (univ : 集合 α).非空
 -/
 theorem univ_nonempty : forall [Nonempty α], (univ : Set α).Nonempty
   | ⟨x⟩ => ⟨x, trivial⟩
@@ -1780,8 +1780,8 @@ theorem Nonempty.to_subtype
   proof: nonempty_subtype.2
 
 中文:
-定理 Nonempty.to_subtype
-  结论: s.Nonempty -> Nonempty (↥s)
+定理 非空.to_subtype
+  结论: s.非空 -> 非空 (↥s)
   证明: nonempty_subtype.2
 -/
 theorem Nonempty.to_subtype : s.Nonempty -> Nonempty (↥s) :=
@@ -1796,8 +1796,8 @@ theorem Nonempty.to_type
   proof: fun ⟨x, _⟩ => ⟨x⟩
 
 中文:
-定理 Nonempty.to_type
-  结论: s.Nonempty -> Nonempty α
+定理 非空.to_type
+  结论: s.非空 -> 非空 α
   证明: fun ⟨x, _⟩ => ⟨x⟩
 -/
 theorem Nonempty.to_type : s.Nonempty -> Nonempty α := fun ⟨x, _⟩ => ⟨x⟩
@@ -1812,7 +1812,7 @@ instance univ.nonempty
 
 中文:
 实例 univ.nonempty
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: Set.univ_nonempty.to_subtype
 
 Depends on / 依赖: Set.univ_nonempty.to_subtype, to_subtype, univ_nonempty
@@ -1832,7 +1832,7 @@ instance instNonemptyTop
 
 中文:
 实例 instNonemptyTop
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: inferInstanceAs (Nonempty (univ : Set α))
 
 Depends on / 依赖: Nonempty
@@ -1850,9 +1850,9 @@ theorem Nonempty.of_subtype
   proof: nonempty_subtype.mp ‹_›
 
 中文:
-定理 Nonempty.of_subtype
-  条件: [Nonempty (↥s)]
-  结论: s.Nonempty
+定理 非空.of_subtype
+  条件: [非空 (↥s)]
+  结论: s.非空
   证明: nonempty_subtype.mp ‹_›
 
 Depends on / 依赖: nonempty_subtype, nonempty_subtype.mp
@@ -1872,7 +1872,7 @@ theorem empty_def
 
 中文:
 定理 empty_def
-  结论: (∅ : Set α) = { _x : α | False }
+  结论: (∅ : 集合 α) = { _x : α | 假 }
   证明: rfl
 
 @[simp, grind =, push]
@@ -1895,7 +1895,7 @@ theorem mem_empty_iff_false
 中文:
 定理 mem_empty_iff_false
   条件: (x : α)
-  结论: x in (∅ : Set α) ↔ False
+  结论: x in (∅ : 集合 α) ↔ 假
   证明: Iff.rfl
 
 @[simp, grind =]
@@ -1918,7 +1918,7 @@ theorem ofPred_false
 
 中文:
 定理 ofPred_false
-  结论: { _a : α | False } = ∅
+  结论: { _a : α | 假 } = ∅
   证明: rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_false := ofPred_false
@@ -1970,7 +1970,7 @@ theorem empty_subset
 
 中文:
 定理 empty_subset
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ∅ subseteq s
   证明: nofun
 
@@ -1991,7 +1991,7 @@ theorem subset_empty_iff
 
 中文:
 定理 subset_empty_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s subseteq ∅ ↔ s = ∅
   证明: (Subset.antisymm_iff.trans <| and_iff_left (empty_subset _)).symm
 
@@ -2010,8 +2010,8 @@ theorem eq_empty_iff_forall_notMem
   proof: subset_empty_iff.symm
 
 中文:
-定理 eq_empty_iff_forall_notMem
-  条件: {s : Set α}
+定理 eq_empty_iff_对任意_notMem
+  条件: {s : 集合 α}
   结论: s = ∅ ↔ 对任意 x, x ∉ s
   证明: subset_empty_iff.symm
 
@@ -2030,7 +2030,7 @@ theorem eq_empty_of_forall_notMem
   proof: subset_empty_iff.1 h
 
 中文:
-定理 eq_empty_of_forall_notMem
+定理 eq_empty_of_对任意_notMem
   条件: (h : 对任意 x, x ∉ s)
   结论: s = ∅
   证明: subset_empty_iff.1 h
@@ -2051,7 +2051,7 @@ theorem eq_empty_of_subset_empty
 
 中文:
 定理 eq_empty_of_subset_empty
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s subseteq ∅ -> s = ∅
   证明: subset_empty_iff.1
 
@@ -2073,7 +2073,7 @@ theorem not_nonempty_iff_eq_empty
 
 中文:
 定理 not_nonempty_iff_eq_empty
-  结论: ¬s.Nonempty ↔ s = ∅
+  结论: ¬s.非空 ↔ s = ∅
   证明: by
   simp only [Set.Nonempty, not_exists, eq_empty_iff_forall_notMem]
 
@@ -2094,7 +2094,7 @@ theorem nonempty_iff_ne_empty
 
 中文:
 定理 nonempty_iff_ne_empty
-  结论: s.Nonempty ↔ s != ∅
+  结论: s.非空 ↔ s != ∅
   证明: not_nonempty_iff_eq_empty.not_right
 
 Depends on / 依赖: not_nonempty_iff_eq_empty, not_nonempty_iff_eq_empty.not_right, not_right
@@ -2114,7 +2114,7 @@ theorem nonempty_iff_empty_ne
 
 中文:
 定理 nonempty_iff_empty_ne
-  结论: s.Nonempty ↔ ∅ != s
+  结论: s.非空 ↔ ∅ != s
   证明: nonempty_iff_ne_empty.trans ne_comm
 
 Depends on / 依赖: ne_comm, nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans
@@ -2133,7 +2133,7 @@ theorem not_nonempty_iff_eq_empty'
 
 中文:
 定理 not_nonempty_iff_eq_empty'
-  结论: ¬Nonempty s ↔ s = ∅
+  结论: ¬非空 s ↔ s = ∅
   证明: by
   rw [nonempty_subtype]; rw [not_exists]; rw [eq_empty_iff_forall_notMem]
 
@@ -2156,7 +2156,7 @@ alias ⟨Nonempty.ne_empty, _⟩ := nonempty_iff_ne_empty
 
 中文:
 定理 nonempty_iff_ne_empty'
-  结论: Nonempty s ↔ s != ∅
+  结论: 非空 s ↔ s != ∅
   证明: not_nonempty_iff_eq_empty'.not_right
 
 alias ⟨Nonempty.ne_empty, _⟩ := nonempty_iff_ne_empty
@@ -2183,7 +2183,7 @@ theorem not_nonempty_empty
 
 中文:
 定理 not_nonempty_empty
-  结论: ¬(∅ : Set α).Nonempty
+  结论: ¬(∅ : 集合 α).非空
   证明: fun ⟨_, hx⟩ => hx
 
 @[simp]
@@ -2202,8 +2202,8 @@ theorem isEmpty_coe_sort
 
 中文:
 定理 isEmpty_coe_sort
-  条件: {s : Set α}
-  结论: IsEmpty (↥s) ↔ s = ∅
+  条件: {s : 集合 α}
+  结论: 是空 (↥s) ↔ s = ∅
   证明: not_iff_not.1 by simpa using! nonempty_iff_ne_empty
 
 Depends on / 依赖: nonempty_iff_ne_empty, not_iff_not
@@ -2223,7 +2223,7 @@ lemma eq_empty_of_isEmpty
 
 中文:
 引理 eq_empty_of_isEmpty
-  条件: (s : Set α) [IsEmpty s]
+  条件: (s : 集合 α) [是空 s]
   结论: s = ∅
   证明: by
   simpa using ‹IsEmpty s›
@@ -2243,7 +2243,7 @@ instance uniqueEmpty
 
 中文:
 实例 uniqueEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: eq_empty_of_isEmpty _
 
 Depends on / 依赖: eq_empty_of_isEmpty
@@ -2262,8 +2262,8 @@ theorem eq_empty_or_nonempty
 
 中文:
 定理 eq_empty_or_nonempty
-  条件: (s : Set α)
-  结论: s = ∅ ∨ s.Nonempty
+  条件: (s : 集合 α)
+  结论: s = ∅ ∨ s.非空
   证明: or_iff_not_imp_left.2 nonempty_iff_ne_empty.2
 
 Depends on / 依赖: nonempty_iff_ne_empty, or_iff_not_imp_left
@@ -2282,7 +2282,7 @@ theorem subset_eq_empty
 
 中文:
 定理 subset_eq_empty
-  条件: {s t : Set α} (h : t subseteq s) (e : s = ∅)
+  条件: {s t : 集合 α} (h : t subseteq s) (e : s = ∅)
   结论: t = ∅
   证明: subset_empty_iff.1 e ▸ h
 
@@ -2301,9 +2301,9 @@ theorem forall_mem_empty
   proof: iff_true_intro fun _ => False.elim
 
 中文:
-定理 forall_mem_empty
+定理 对任意_mem_empty
   条件: {p : α -> 命题}
-  结论: (对任意 x in (∅ : Set α), p x) ↔ True
+  结论: (对任意 x in (∅ : 集合 α), p x) ↔ 真
   证明: iff_true_intro fun _ => False.elim
 
 Depends on / 依赖: False.elim, iff_true_intro
@@ -2324,8 +2324,8 @@ theorem Nonempty.forall_const
 @[simp]
 
 中文:
-定理 Nonempty.forall_const
-  条件: (h : s.Nonempty) {p : 命题}
+定理 非空.对任意_const
+  条件: (h : s.非空) {p : 命题}
   结论: (对任意 x in s, p) ↔ p
   证明: let ⟨x, hx⟩ := h
   ⟨fun h => h x hx, fun h _ _ => h⟩
@@ -2347,8 +2347,8 @@ theorem forall_mem_const
   proof: (nonempty_coe_sort.mp ‹_›).forall_const
 
 中文:
-定理 forall_mem_const
-  条件: {p : 命题} [Nonempty s]
+定理 对任意_mem_const
+  条件: {p : 命题} [非空 s]
   结论: (对任意 x in s, p) ↔ p
   证明: (nonempty_coe_sort.mp ‹_›).forall_const
 
@@ -2373,7 +2373,7 @@ alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
 
 中文:
 定理 empty_ssubset
-  结论: ∅ ⊂ s ↔ s.Nonempty
+  结论: ∅ ⊂ s ↔ s.非空
   证明: (@bot_lt_iff_ne_bot (Set α) _ _ _).trans nonempty_iff_ne_empty.symm
 
 alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
@@ -2408,7 +2408,7 @@ theorem ofPred_true
 
 中文:
 定理 ofPred_true
-  结论: { _x : α | True } = univ
+  结论: { _x : α | 真 } = univ
   证明: rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_true := ofPred_true
@@ -2458,7 +2458,7 @@ theorem univ_eq_empty_iff
 
 中文:
 定理 univ_eq_empty_iff
-  结论: (univ : Set α) = ∅ ↔ IsEmpty α
+  结论: (univ : 集合 α) = ∅ ↔ 是空 α
   证明: eq_empty_iff_forall_notMem.trans
     ⟨fun H => ⟨fun x => H x trivial⟩, fun H x _ => @IsEmpty.false α H x⟩
 
@@ -2482,8 +2482,8 @@ not_isEmpty_of_nonempty α univ_eq_empty_iff.1 e.symm
 
 中文:
 定理 empty_ne_univ
-  条件: [Nonempty α]
-  结论: (∅ : Set α) != univ
+  条件: [非空 α]
+  结论: (∅ : 集合 α) != univ
   证明: fun e =>
 not_isEmpty_of_nonempty α univ_eq_empty_iff.1 e.symm
 
@@ -2506,7 +2506,7 @@ theorem subset_univ
 
 中文:
 定理 subset_univ
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s subseteq univ
   证明: fun _ _ => trivial
 
@@ -2528,7 +2528,7 @@ alias ⟨eq_univ_of_univ_subset, _⟩ := univ_subset_iff
 
 中文:
 定理 univ_subset_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: univ subseteq s ↔ s = univ
   证明: @top_le_iff _ _ _ s
 
@@ -2551,8 +2551,8 @@ theorem eq_univ_iff_forall
   proof: univ_subset_iff.symm.trans forall_congr' fun _ => imp_iff_right trivial
 
 中文:
-定理 eq_univ_iff_forall
-  条件: {s : Set α}
+定理 eq_univ_iff_对任意
+  条件: {s : 集合 α}
   结论: s = univ ↔ 对任意 x, x in s
   证明: univ_subset_iff.symm.trans forall_congr' fun _ => imp_iff_right trivial
 
@@ -2571,8 +2571,8 @@ theorem eq_univ_of_forall
   proof: eq_univ_iff_forall.2
 
 中文:
-定理 eq_univ_of_forall
-  条件: {s : Set α}
+定理 eq_univ_of_对任意
+  条件: {s : 集合 α}
   结论: (对任意 x, x in s) -> s = univ
   证明: eq_univ_iff_forall.2
 
@@ -2593,9 +2593,9 @@ theorem Nonempty.eq_univ
   exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
 
 中文:
-定理 Nonempty.eq_univ
-  条件: [Subsingleton α]
-  结论: s.Nonempty -> s = univ
+定理 非空.eq_univ
+  条件: [子单例 α]
+  结论: s.非空 -> s = univ
   证明: by
   rintro ⟨x, hx⟩
   exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
@@ -2617,7 +2617,7 @@ theorem eq_univ_of_subset
 
 中文:
 定理 eq_univ_of_subset
-  条件: {s t : Set α} (h : s subseteq t) (hs : s = univ)
+  条件: {s t : 集合 α} (h : s subseteq t) (hs : s = univ)
   结论: t = univ
   证明: eq_univ_of_univ_subset (hs ▸ h : univ subseteq t)
 
@@ -2635,9 +2635,9 @@ theorem exists_mem_of_nonempty
   statement: forall [Nonempty α], exists x : α, x in (univ : Set α)
 
 中文:
-定理 exists_mem_of_nonempty
+定理 存在_mem_of_nonempty
   条件: (α)
-  结论: 对任意 [Nonempty α], 存在 x : α, x in (univ : Set α)
+  结论: 对任意 [非空 α], 存在 x : α, x in (univ : 集合 α)
 -/
 theorem exists_mem_of_nonempty (α) : forall [Nonempty α], exists x : α, x in (univ : Set α)
   | ⟨x⟩ => ⟨x, trivial⟩
@@ -2653,8 +2653,8 @@ theorem ne_univ_iff_exists_notMem
   rw [← not_forall]; rw [← eq_univ_iff_forall]
 
 中文:
-定理 ne_univ_iff_exists_notMem
-  条件: {α : 类型} (s : Set α)
+定理 ne_univ_iff_存在_notMem
+  条件: {α : 类型} (s : 集合 α)
   结论: s != univ ↔ 存在 a, a ∉ s
   证明: by
   rw [← not_forall]; rw [← eq_univ_iff_forall]
@@ -2673,8 +2673,8 @@ theorem not_subset_iff_exists_mem_notMem
   proof: by simp [subset_def]
 
 中文:
-定理 not_subset_iff_exists_mem_notMem
-  条件: {α : 类型} {s t : Set α}
+定理 not_subset_iff_存在_mem_notMem
+  条件: {α : 类型} {s t : 集合 α}
   证明: by simp [subset_def]
 
 Depends on / 依赖: subset_def
@@ -2693,8 +2693,8 @@ theorem univ_unique
 
 中文:
 定理 univ_unique
-  条件: [Unique α]
-  结论: @Set.univ α = {default}
+  条件: [唯一 α]
+  结论: @集合.univ α = {default}
   证明: Set.ext fun x => iff_of_true trivial Subsingleton.elim x default
 
 Depends on / 依赖: Set.ext, Subsingleton, Subsingleton.elim, iff_of_true
@@ -2734,7 +2734,7 @@ alias ⟨_, Nonempty.ssubset_univ⟩ := ssubset_univ_iff_nonempty_compl
 
 中文:
 定理 ssubset_univ_iff_nonempty_compl
-  结论: s ⊂ univ ↔ sᶜ.Nonempty
+  结论: s ⊂ univ ↔ sᶜ.非空
   证明: by
   rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
   simp
@@ -2763,7 +2763,7 @@ alias ⟨_, Nonempty.compl_ssubset_univ⟩ := compl_ssubset_univ
 
 中文:
 定理 compl_ssubset_univ
-  结论: sᶜ ⊂ univ ↔ s.Nonempty
+  结论: sᶜ ⊂ univ ↔ s.非空
   证明: by
   rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
   simp
@@ -2788,7 +2788,7 @@ instance nontrivial_of_nonempty
 
 中文:
 实例 nontrivial_of_nonempty
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: ⟨⟨∅, univ, empty_ne_univ⟩⟩
 
 Depends on / 依赖: empty_ne_univ
@@ -2808,7 +2808,7 @@ theorem union_def
 
 中文:
 定理 union_def
-  条件: {s₁ s₂ : Set α}
+  条件: {s₁ s₂ : 集合 α}
   结论: s₁ union s₂ = { a | a in s₁ ∨ a in s₂ }
   证明: rfl
 -/
@@ -2826,7 +2826,7 @@ theorem mem_union_left
 
 中文:
 定理 mem_union_left
-  条件: {x : α} {a : Set α} (b : Set α)
+  条件: {x : α} {a : 集合 α} (b : 集合 α)
   结论: x in a -> x in a union b
   证明: Or.inl
 
@@ -2846,7 +2846,7 @@ theorem mem_union_right
 
 中文:
 定理 mem_union_right
-  条件: {x : α} {b : Set α} (a : Set α)
+  条件: {x : α} {b : 集合 α} (a : 集合 α)
   结论: x in b -> x in a union b
   证明: Or.inr
 
@@ -2866,7 +2866,7 @@ theorem mem_or_mem_of_mem_union
 
 中文:
 定理 mem_or_mem_of_mem_union
-  条件: {x : α} {a b : Set α} (H : x in a union b)
+  条件: {x : α} {a b : 集合 α} (H : x in a union b)
   结论: x in a ∨ x in b
   证明: H
 -/
@@ -2885,7 +2885,7 @@ theorem MemUnion.elim
 
 中文:
 定理 MemUnion.elim
-  结论: {x : α} {a b : Set α} {P : 命题} (H₁ : x in a union b) (H₂ : x in a -> P)
+  结论: {x : α} {a b : 集合 α} {P : 命题} (H₁ : x in a union b) (H₂ : x in a -> P)
   证明: Or.elim H₁ H₂ H₃
 
 @[simp, grind =, push]
@@ -2910,7 +2910,7 @@ theorem mem_union
 
 中文:
 定理 mem_union
-  条件: (x : α) (a b : Set α)
+  条件: (x : α) (a b : 集合 α)
   结论: x in a union b ↔ x in a ∨ x in b
   证明: Iff.rfl
 
@@ -2935,7 +2935,7 @@ theorem union_self
 
 中文:
 定理 union_self
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: a union a = a
   证明: ext fun _ => or_self_iff
 
@@ -2960,7 +2960,7 @@ theorem union_empty
 
 中文:
 定理 union_empty
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: a union ∅ = a
   证明: ext fun _ => iff_of_eq (or_false _)
 
@@ -2983,7 +2983,7 @@ theorem empty_union
 
 中文:
 定理 empty_union
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: ∅ union a = a
   证明: ext fun _ => iff_of_eq (false_or _)
 
@@ -3003,7 +3003,7 @@ theorem union_comm
 
 中文:
 定理 union_comm
-  条件: (a b : Set α)
+  条件: (a b : 集合 α)
   结论: a union b = b union a
   证明: ext fun _ => or_comm
 
@@ -3023,7 +3023,7 @@ theorem union_assoc
 
 中文:
 定理 union_assoc
-  条件: (a b c : Set α)
+  条件: (a b c : 集合 α)
   结论: a union b union c = a union (b union c)
   证明: ext fun _ => or_assoc
 
@@ -3042,7 +3042,7 @@ instance union_isAssoc
 
 中文:
 实例 union_isAssoc
-  签名: : Std.Associative (α := Set α) (· union ·)
+  签名: : Std.结合 (α := 集合 α) (· union ·)
   定义体: ⟨union_assoc⟩
 -/
 instance union_isAssoc : Std.Associative (α := Set α) (· union ·) :=
@@ -3058,7 +3058,7 @@ instance union_isComm
 
 中文:
 实例 union_isComm
-  签名: : Std.Commutative (α := Set α) (· union ·)
+  签名: : Std.交换 (α := 集合 α) (· union ·)
   定义体: ⟨union_comm⟩
 -/
 instance union_isComm : Std.Commutative (α := Set α) (· union ·) :=
@@ -3075,7 +3075,7 @@ theorem union_left_comm
 
 中文:
 定理 union_left_comm
-  条件: (s₁ s₂ s₃ : Set α)
+  条件: (s₁ s₂ s₃ : 集合 α)
   结论: s₁ union (s₂ union s₃) = s₂ union (s₁ union s₃)
   证明: ext fun _ => or_left_comm
 
@@ -3097,7 +3097,7 @@ theorem union_right_comm
 
 中文:
 定理 union_right_comm
-  条件: (s₁ s₂ s₃ : Set α)
+  条件: (s₁ s₂ s₃ : 集合 α)
   结论: s₁ union s₂ union s₃ = s₁ union s₃ union s₂
   证明: ext fun _ => or_right_comm
 
@@ -3122,7 +3122,7 @@ theorem union_eq_left
 
 中文:
 定理 union_eq_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s union t = s ↔ t subseteq s
   证明: sup_eq_left
 
@@ -3145,7 +3145,7 @@ theorem union_eq_right
 
 中文:
 定理 union_eq_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s union t = t ↔ s subseteq t
   证明: sup_eq_right
 
@@ -3165,7 +3165,7 @@ theorem union_eq_self_of_subset_left
 
 中文:
 定理 union_eq_self_of_subset_left
-  条件: {s t : Set α} (h : s subseteq t)
+  条件: {s t : 集合 α} (h : s subseteq t)
   结论: s union t = t
   证明: union_eq_right.mpr h
 
@@ -3187,7 +3187,7 @@ theorem union_eq_self_of_subset_right
 
 中文:
 定理 union_eq_self_of_subset_right
-  条件: {s t : Set α} (h : t subseteq s)
+  条件: {s t : 集合 α} (h : t subseteq s)
   结论: s union t = s
   证明: union_eq_left.mpr h
 
@@ -3212,7 +3212,7 @@ theorem subset_union_left
 
 中文:
 定理 subset_union_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s subseteq s union t
   证明: fun _ => Or.inl
 
@@ -3234,7 +3234,7 @@ theorem subset_union_right
 
 中文:
 定理 subset_union_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: t subseteq s union t
   证明: fun _ => Or.inr
 
@@ -3256,7 +3256,7 @@ theorem union_subset
 
 中文:
 定理 union_subset
-  条件: {s t r : Set α} (sr : s subseteq r) (tr : t subseteq r)
+  条件: {s t r : 集合 α} (sr : s subseteq r) (tr : t subseteq r)
   结论: s union t subseteq r
   证明: fun _ =>
   Or.rec (@sr _) (@tr _)
@@ -3280,7 +3280,7 @@ theorem union_subset_iff
 
 中文:
 定理 union_subset_iff
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   结论: s union t subseteq u ↔ s subseteq u ∧ t subseteq u
   证明: (forall_congr' fun _ => or_imp).trans forall_and
 
@@ -3302,7 +3302,7 @@ theorem union_subset_union
 
 中文:
 定理 union_subset_union
-  条件: {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ subseteq t₂)
+  条件: {s₁ s₂ t₁ t₂ : 集合 α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ subseteq t₂)
   证明: sup_le_sup h₁ h₂
 
 Depends on / 依赖: ContMDiffMul, ContMDiffMul.of_le, le_top, of_le, sup_le_sup
@@ -3322,7 +3322,7 @@ theorem union_subset_union_left
 
 中文:
 定理 union_subset_union_left
-  条件: {s₁ s₂ : Set α} (t) (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 α} (t) (h : s₁ subseteq s₂)
   结论: s₁ union t subseteq s₂ union t
   证明: union_subset_union h Subset.rfl
 
@@ -3342,7 +3342,7 @@ theorem union_subset_union_right
 
 中文:
 定理 union_subset_union_right
-  条件: (s) {t₁ t₂ : Set α} (h : t₁ subseteq t₂)
+  条件: (s) {t₁ t₂ : 集合 α} (h : t₁ subseteq t₂)
   结论: s union t₁ subseteq s union t₂
   证明: union_subset_union Subset.rfl h
 
@@ -3362,7 +3362,7 @@ theorem subset_union_of_subset_left
 
 中文:
 定理 subset_union_of_subset_left
-  条件: {s t : Set α} (h : s subseteq t) (u : Set α)
+  条件: {s t : 集合 α} (h : s subseteq t) (u : 集合 α)
   结论: s subseteq t union u
   证明: h.trans subset_union_left
 
@@ -3382,7 +3382,7 @@ theorem subset_union_of_subset_right
 
 中文:
 定理 subset_union_of_subset_right
-  条件: {s u : Set α} (h : s subseteq u) (t : Set α)
+  条件: {s u : 集合 α} (h : s subseteq u) (t : 集合 α)
   结论: s subseteq t union u
   证明: h.trans subset_union_right
 
@@ -3487,7 +3487,7 @@ theorem union_empty_iff
 
 中文:
 定理 union_empty_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s union t = ∅ ↔ s = ∅ ∧ t = ∅
   证明: by
   simp only [← subset_empty_iff]
@@ -3515,7 +3515,7 @@ theorem union_univ
 
 中文:
 定理 union_univ
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s union univ = univ
   证明: sup_top_eq _
 
@@ -3539,7 +3539,7 @@ theorem univ_union
 
 中文:
 定理 univ_union
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: univ union s = univ
   证明: top_sup_eq _
 
@@ -3605,7 +3605,7 @@ theorem inter_def
 
 中文:
 定理 inter_def
-  条件: {s₁ s₂ : Set α}
+  条件: {s₁ s₂ : 集合 α}
   结论: s₁ inter s₂ = { a | a in s₁ ∧ a in s₂ }
   证明: rfl
 
@@ -3626,7 +3626,7 @@ theorem mem_inter_iff
 
 中文:
 定理 mem_inter_iff
-  条件: (x : α) (a b : Set α)
+  条件: (x : α) (a b : 集合 α)
   结论: x in a inter b ↔ x in a ∧ x in b
   证明: Iff.rfl
 
@@ -3646,7 +3646,7 @@ theorem mem_inter
 
 中文:
 定理 mem_inter
-  条件: {x : α} {a b : Set α} (ha : x in a) (hb : x in b)
+  条件: {x : α} {a b : 集合 α} (ha : x in a) (hb : x in b)
   结论: x in a inter b
   证明: ⟨ha, hb⟩
 -/
@@ -3664,7 +3664,7 @@ theorem mem_of_mem_inter_left
 
 中文:
 定理 mem_of_mem_inter_left
-  条件: {x : α} {a b : Set α} (h : x in a inter b)
+  条件: {x : α} {a b : 集合 α} (h : x in a inter b)
   结论: x in a
   证明: h.left
 
@@ -3686,7 +3686,7 @@ theorem mem_of_mem_inter_right
 
 中文:
 定理 mem_of_mem_inter_right
-  条件: {x : α} {a b : Set α} (h : x in a inter b)
+  条件: {x : α} {a b : 集合 α} (h : x in a inter b)
   结论: x in b
   证明: h.right
 
@@ -3711,7 +3711,7 @@ theorem inter_self
 
 中文:
 定理 inter_self
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: a inter a = a
   证明: ext fun _ => and_self_iff
 
@@ -3736,7 +3736,7 @@ theorem inter_empty
 
 中文:
 定理 inter_empty
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: a inter ∅ = ∅
   证明: ext fun _ => iff_of_eq (and_false _)
 
@@ -3759,7 +3759,7 @@ theorem empty_inter
 
 中文:
 定理 empty_inter
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: ∅ inter a = ∅
   证明: ext fun _ => iff_of_eq (false_and _)
 
@@ -3779,7 +3779,7 @@ theorem inter_comm
 
 中文:
 定理 inter_comm
-  条件: (a b : Set α)
+  条件: (a b : 集合 α)
   结论: a inter b = b inter a
   证明: ext fun _ => and_comm
 
@@ -3799,7 +3799,7 @@ theorem inter_assoc
 
 中文:
 定理 inter_assoc
-  条件: (a b c : Set α)
+  条件: (a b c : 集合 α)
   结论: a inter b inter c = a inter (b inter c)
   证明: ext fun _ => and_assoc
 
@@ -3818,7 +3818,7 @@ instance inter_isAssoc
 
 中文:
 实例 inter_isAssoc
-  签名: : Std.Associative (α := Set α) (· inter ·)
+  签名: : Std.结合 (α := 集合 α) (· inter ·)
   定义体: ⟨inter_assoc⟩
 -/
 instance inter_isAssoc : Std.Associative (α := Set α) (· inter ·) :=
@@ -3834,7 +3834,7 @@ instance inter_isComm
 
 中文:
 实例 inter_isComm
-  签名: : Std.Commutative (α := Set α) (· inter ·)
+  签名: : Std.交换 (α := 集合 α) (· inter ·)
   定义体: ⟨inter_comm⟩
 -/
 instance inter_isComm : Std.Commutative (α := Set α) (· inter ·) :=
@@ -3851,7 +3851,7 @@ theorem inter_left_comm
 
 中文:
 定理 inter_left_comm
-  条件: (s₁ s₂ s₃ : Set α)
+  条件: (s₁ s₂ s₃ : 集合 α)
   结论: s₁ inter (s₂ inter s₃) = s₂ inter (s₁ inter s₃)
   证明: ext fun _ => and_left_comm
 
@@ -3873,7 +3873,7 @@ theorem inter_right_comm
 
 中文:
 定理 inter_right_comm
-  条件: (s₁ s₂ s₃ : Set α)
+  条件: (s₁ s₂ s₃ : 集合 α)
   结论: s₁ inter s₂ inter s₃ = s₁ inter s₃ inter s₂
   证明: ext fun _ => and_right_comm
 
@@ -3898,7 +3898,7 @@ theorem inter_subset_left
 
 中文:
 定理 inter_subset_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s inter t subseteq s
   证明: fun _ => And.left
 
@@ -3920,7 +3920,7 @@ theorem inter_subset_right
 
 中文:
 定理 inter_subset_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s inter t subseteq t
   证明: fun _ => And.right
 
@@ -3942,7 +3942,7 @@ theorem subset_inter
 
 中文:
 定理 subset_inter
-  条件: {s t r : Set α} (rs : r subseteq s) (rt : r subseteq t)
+  条件: {s t r : 集合 α} (rs : r subseteq s) (rt : r subseteq t)
   结论: r subseteq s inter t
   证明: fun _ h =>
   ⟨rs h, rt h⟩
@@ -3964,7 +3964,7 @@ theorem subset_inter_iff
 
 中文:
 定理 subset_inter_iff
-  条件: {s t r : Set α}
+  条件: {s t r : 集合 α}
   结论: r subseteq s inter t ↔ r subseteq s ∧ r subseteq t
   证明: (forall_congr' fun _ => imp_and).trans forall_and
 
@@ -4044,7 +4044,7 @@ theorem inter_eq_self_of_subset_left
 
 中文:
 定理 inter_eq_self_of_subset_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s subseteq t -> s inter t = s
   证明: inter_eq_left.mpr
 
@@ -4064,7 +4064,7 @@ theorem inter_eq_self_of_subset_right
 
 中文:
 定理 inter_eq_self_of_subset_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: t subseteq s -> s inter t = t
   证明: inter_eq_right.mpr
 
@@ -4167,7 +4167,7 @@ theorem inter_univ
 
 中文:
 定理 inter_univ
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: a inter univ = a
   证明: inf_top_eq _
 
@@ -4191,7 +4191,7 @@ theorem univ_inter
 
 中文:
 定理 univ_inter
-  条件: (a : Set α)
+  条件: (a : 集合 α)
   结论: univ inter a = a
   证明: top_inf_eq _
 
@@ -4212,7 +4212,7 @@ theorem inter_subset_inter
 
 中文:
 定理 inter_subset_inter
-  条件: {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ subseteq t₂)
+  条件: {s₁ s₂ t₁ t₂ : 集合 α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ subseteq t₂)
   证明: inf_le_inf h₁ h₂
 
 Depends on / 依赖: inf_le_inf
@@ -4232,7 +4232,7 @@ theorem inter_subset_inter_left
 
 中文:
 定理 inter_subset_inter_left
-  条件: {s t : Set α} (u : Set α) (H : s subseteq t)
+  条件: {s t : 集合 α} (u : 集合 α) (H : s subseteq t)
   结论: s inter u subseteq t inter u
   证明: inter_subset_inter H Subset.rfl
 
@@ -4252,7 +4252,7 @@ theorem inter_subset_inter_right
 
 中文:
 定理 inter_subset_inter_right
-  条件: {s t : Set α} (u : Set α) (H : s subseteq t)
+  条件: {s t : 集合 α} (u : 集合 α) (H : s subseteq t)
   结论: u inter s subseteq u inter t
   证明: inter_subset_inter Subset.rfl H
 
@@ -4272,7 +4272,7 @@ theorem union_inter_cancel_left
 
 中文:
 定理 union_inter_cancel_left
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: (s union t) inter s = s
   证明: inter_eq_self_of_subset_right subset_union_left
 
@@ -4292,7 +4292,7 @@ theorem union_inter_cancel_right
 
 中文:
 定理 union_inter_cancel_right
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: (s union t) inter t = t
   证明: inter_eq_self_of_subset_right subset_union_right
 
@@ -4315,7 +4315,7 @@ alias inter_setOf_eq_sep := inter_ofPred_eq_sep
 
 中文:
 定理 inter_ofPred_eq_sep
-  条件: (s : Set α) (p : α -> 命题)
+  条件: (s : 集合 α) (p : α -> 命题)
   结论: s inter {a | p a} = {a in s | p a}
   证明: rfl
 
@@ -4341,7 +4341,7 @@ theorem ofPred_inter_eq_sep
 
 中文:
 定理 ofPred_inter_eq_sep
-  条件: (p : α -> 命题) (s : Set α)
+  条件: (p : α -> 命题) (s : 集合 α)
   结论: {a | p a} inter s = {a in s | p a}
   证明: inter_comm _ _
 
@@ -4367,7 +4367,7 @@ theorem sep_eq_inter_sep
 
 中文:
 定理 sep_eq_inter_sep
-  条件: {α : 类型} {s t : Set α} {p : α -> 命题} (hst : s subseteq t)
+  条件: {α : 类型} {s t : 集合 α} {p : α -> 命题} (hst : s subseteq t)
   证明: by
   rw [← inter_ofPred_eq_sep s p]; rw [← inter_ofPred_eq_sep t p]; rw [← inter_assoc]; rw [← left_eq_inter.mpr hst]
 
@@ -4433,7 +4433,7 @@ theorem inter_union_distrib_left
 
 中文:
 定理 inter_union_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter (t union u) = s inter t union s inter u
   证明: inf_sup_left _ _ _
 
@@ -4453,7 +4453,7 @@ theorem union_inter_distrib_right
 
 中文:
 定理 union_inter_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: (s union t) inter u = s inter u union t inter u
   证明: inf_sup_right _ _ _
 
@@ -4473,7 +4473,7 @@ theorem union_inter_distrib_left
 
 中文:
 定理 union_inter_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s union t inter u = (s union t) inter (s union u)
   证明: sup_inf_left _ _ _
 
@@ -4493,7 +4493,7 @@ theorem inter_union_distrib_right
 
 中文:
 定理 inter_union_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter t union u = (s union u) inter (t union u)
   证明: sup_inf_right _ _ _
 
@@ -4513,7 +4513,7 @@ theorem union_union_distrib_left
 
 中文:
 定理 union_union_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s union (t union u) = s union t union (s union u)
   证明: sup_sup_distrib_left _ _ _
 
@@ -4533,7 +4533,7 @@ theorem union_union_distrib_right
 
 中文:
 定理 union_union_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s union t union u = s union u union (t union u)
   证明: sup_sup_distrib_right _ _ _
 
@@ -4553,7 +4553,7 @@ theorem inter_inter_distrib_left
 
 中文:
 定理 inter_inter_distrib_left
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter (t inter u) = s inter t inter (s inter u)
   证明: inf_inf_distrib_left _ _ _
 
@@ -4573,7 +4573,7 @@ theorem inter_inter_distrib_right
 
 中文:
 定理 inter_inter_distrib_right
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   结论: s inter t inter u = s inter u inter (t inter u)
   证明: inf_inf_distrib_right _ _ _
 
@@ -4593,7 +4593,7 @@ theorem union_union_union_comm
 
 中文:
 定理 union_union_union_comm
-  条件: (s t u v : Set α)
+  条件: (s t u v : 集合 α)
   结论: s union t union (u union v) = s union u union (t union v)
   证明: sup_sup_sup_comm _ _ _ _
 
@@ -4613,7 +4613,7 @@ theorem inter_inter_inter_comm
 
 中文:
 定理 inter_inter_inter_comm
-  条件: (s t u v : Set α)
+  条件: (s t u v : 集合 α)
   结论: s inter t inter (u inter v) = s inter u inter (t inter v)
   证明: inf_inf_inf_comm _ _ _ _
 
@@ -4746,7 +4746,7 @@ theorem sep_subset
 
 中文:
 定理 sep_subset
-  条件: (s : Set α) (p : α -> 命题)
+  条件: (s : 集合 α) (p : α -> 命题)
   结论: { x in s | p x } subseteq s
   证明: fun _ => And.left
 
@@ -4770,7 +4770,7 @@ alias sep_subset_setOf := sep_subset_ofPred
 
 中文:
 定理 sep_subset_ofPred
-  条件: (s : Set α) (p : α -> 命题)
+  条件: (s : 集合 α) (p : α -> 命题)
   结论: { x in s | p x } subseteq { x | p x }
   证明: fun _ => And.right
 
@@ -4843,7 +4843,7 @@ theorem sep_true
 
 中文:
 定理 sep_true
-  结论: { x in s | True } = s
+  结论: { x in s | 真 } = s
   证明: inter_univ s
 
 Depends on / 依赖: inter_univ
@@ -4861,7 +4861,7 @@ theorem sep_false
 
 中文:
 定理 sep_false
-  结论: { x in s | False } = ∅
+  结论: { x in s | 假 } = ∅
   证明: inter_empty s
 
 Depends on / 依赖: inter_empty
@@ -4881,7 +4881,7 @@ theorem sep_empty
 中文:
 定理 sep_empty
   条件: (p : α -> 命题)
-  结论: { x in (∅ : Set α) | p x } = ∅
+  结论: { x in (∅ : 集合 α) | p x } = ∅
   证明: empty_inter {x | p x}
 
 Depends on / 依赖: empty_inter
@@ -4901,7 +4901,7 @@ theorem sep_univ
 
 中文:
 定理 sep_univ
-  结论: { x in (univ : Set α) | p x } = { x | p x }
+  结论: { x in (univ : 集合 α) | p x } = { x | p x }
   证明: univ_inter {x | p x}
 
 @[simp]
@@ -5043,7 +5043,7 @@ theorem mem_powerset
 
 中文:
 定理 mem_powerset
-  条件: {x s : Set α} (h : x subseteq s)
+  条件: {x s : 集合 α} (h : x subseteq s)
   结论: x in 𝒫 s
   证明: @h
 -/
@@ -5062,7 +5062,7 @@ theorem subset_of_mem_powerset
 
 中文:
 定理 subset_of_mem_powerset
-  条件: {x s : Set α} (h : x in 𝒫 s)
+  条件: {x s : 集合 α} (h : x in 𝒫 s)
   结论: x subseteq s
   证明: @h
 
@@ -5082,7 +5082,7 @@ theorem mem_powerset_iff
 
 中文:
 定理 mem_powerset_iff
-  条件: (x s : Set α)
+  条件: (x s : 集合 α)
   结论: x in 𝒫 s ↔ x subseteq s
   证明: Iff.rfl
 
@@ -5104,7 +5104,7 @@ theorem powerset_inter
 
 中文:
 定理 powerset_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: 𝒫 (s inter t) = 𝒫 s inter 𝒫 t
   证明: ext fun _ => subset_inter_iff
 
@@ -5144,7 +5144,7 @@ theorem monotone_powerset
 
 中文:
 定理 monotone_powerset
-  结论: Monotone (powerset : Set α -> Set (Set α))
+  结论: 递增 (powerset : 集合 α -> 集合 (集合 α))
   证明: fun _ _ => powerset_mono.2
 
 @[simp]
@@ -5166,7 +5166,7 @@ theorem powerset_nonempty
 
 中文:
 定理 powerset_nonempty
-  结论: (𝒫 s).Nonempty
+  结论: (𝒫 s).非空
   证明: ⟨∅, fun _ h => empty_subset s h⟩
 
 @[simp]
@@ -5189,7 +5189,7 @@ theorem powerset_empty
 
 中文:
 定理 powerset_empty
-  结论: 𝒫 (∅ : Set α) = {∅}
+  结论: 𝒫 (∅ : 集合 α) = {∅}
   证明: ext fun _ => subset_empty_iff
 
 @[simp]
@@ -5210,7 +5210,7 @@ theorem powerset_univ
 
 中文:
 定理 powerset_univ
-  结论: 𝒫 (univ : Set α) = univ
+  结论: 𝒫 (univ : 集合 α) = univ
   证明: eq_univ_of_forall subset_univ
 
 Depends on / 依赖: eq_univ_of_forall, subset_univ
@@ -5232,7 +5232,7 @@ theorem mem_dite_univ_right
 
 中文:
 定理 mem_dite_univ_right
-  条件: (p : 命题) [Decidable p] (t : p -> Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : p -> 集合 α) (x : α)
   证明: by
   simp [mem_dite]
 
@@ -5255,7 +5255,7 @@ theorem mem_ite_univ_right
 
 中文:
 定理 mem_ite_univ_right
-  条件: (p : 命题) [Decidable p] (t : Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
   证明: mem_dite_univ_right p (fun _ => t) x
 
 Depends on / 依赖: mem_dite_univ_right
@@ -5277,7 +5277,7 @@ theorem mem_dite_univ_left
 
 中文:
 定理 mem_dite_univ_left
-  条件: (p : 命题) [Decidable p] (t : ¬p -> Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : ¬p -> 集合 α) (x : α)
   证明: by
   split_ifs <;> simp_all
 
@@ -5300,7 +5300,7 @@ theorem mem_ite_univ_left
 
 中文:
 定理 mem_ite_univ_left
-  条件: (p : 命题) [Decidable p] (t : Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
   证明: mem_dite_univ_left p (fun _ => t) x
 
 Depends on / 依赖: mem_dite_univ_left
@@ -5323,7 +5323,7 @@ theorem mem_dite_empty_right
 
 中文:
 定理 mem_dite_empty_right
-  条件: (p : 命题) [Decidable p] (t : p -> Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : p -> 集合 α) (x : α)
   证明: by
   simp only [mem_dite, mem_empty_iff_false, imp_false, not_not]
   exact ⟨fun h => ⟨h.2, h.1 h.2⟩, fun ⟨h₁, h₂⟩ => ⟨fun _ => h₂, h₁⟩⟩
@@ -5348,7 +5348,7 @@ theorem mem_ite_empty_right
 
 中文:
 定理 mem_ite_empty_right
-  条件: (p : 命题) [Decidable p] (t : Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
   证明: (mem_dite_empty_right p (fun _ => t) x).trans (by simp)
 
 Depends on / 依赖: mem_dite_empty_right
@@ -5371,7 +5371,7 @@ theorem mem_dite_empty_left
 
 中文:
 定理 mem_dite_empty_left
-  条件: (p : 命题) [Decidable p] (t : ¬p -> Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : ¬p -> 集合 α) (x : α)
   证明: by
   simp only [mem_dite, mem_empty_iff_false, imp_false]
   exact ⟨fun h => ⟨h.1, h.2 h.1⟩, fun ⟨h₁, h₂⟩ => ⟨fun h => h₁ h, fun _ => h₂⟩⟩
@@ -5396,7 +5396,7 @@ theorem mem_ite_empty_left
 
 中文:
 定理 mem_ite_empty_left
-  条件: (p : 命题) [Decidable p] (t : Set α) (x : α)
+  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
   证明: (mem_dite_empty_left p (fun _ => t) x).trans (by simp)
 
 Depends on / 依赖: mem_dite_empty_left
@@ -5423,8 +5423,8 @@ theorem Injective.nonempty_apply_iff
   rw [nonempty_iff_ne_empty]; rw [← h2]; rw [nonempty_iff_ne_empty]; rw [hf.ne_iff]
 
 中文:
-定理 Injective.nonempty_apply_iff
-  结论: {f : Set α -> Set β} (hf : Injective f) (h2 : f ∅ = ∅)
+定理 单射.nonempty_apply_iff
+  结论: {f : 集合 α -> 集合 β} (hf : 单射 f) (h2 : f ∅ = ∅)
   证明: by
   rw [nonempty_iff_ne_empty]; rw [← h2]; rw [nonempty_iff_ne_empty]; rw [hf.ne_iff]
 
@@ -5454,8 +5454,8 @@ theorem eq_univ_of_nonempty
 
 中文:
 定理 eq_univ_of_nonempty
-  条件: {s : Set α}
-  结论: s.Nonempty -> s = univ
+  条件: {s : 集合 α}
+  结论: s.非空 -> s = univ
   证明: fun ⟨x, hx⟩ =>
   eq_univ_of_forall fun y => Subsingleton.elim x y ▸ hx
 
@@ -5476,7 +5476,7 @@ theorem set_cases
 
 中文:
 定理 set_cases
-  条件: {p : Set α -> 命题} (h0 : p ∅) (h1 : p univ) (s)
+  条件: {p : 集合 α -> 命题} (h0 : p ∅) (h1 : p univ) (s)
   结论: p s
   证明: (s.eq_empty_or_nonempty.elim fun h => h.symm ▸ h0) fun h => (eq_univ_of_nonempty h).symm ▸ h1
 
@@ -5496,8 +5496,8 @@ theorem mem_iff_nonempty
 
 中文:
 定理 mem_iff_nonempty
-  条件: {α : 类型} [Subsingleton α] {s : Set α} {x : α}
-  结论: x in s ↔ s.Nonempty
+  条件: {α : 类型} [子单例 α] {s : 集合 α} {x : α}
+  结论: x in s ↔ s.非空
   证明: ⟨fun hx => ⟨x, hx⟩, fun ⟨y, hy⟩ => Subsingleton.elim y x ▸ hy⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -5523,7 +5523,7 @@ instance decidableSdiff
 
 中文:
 实例 decidableSdiff
-  签名: [Decidable (a in s)] [Decidable (a in t)]
+  签名: [可判定 (a in s)] [可判定 (a in t)]
   定义体: inferInstanceAs (Decidable (a in s ∧ a ∉ t))
 
 Depends on / 依赖: Decidable
@@ -5540,8 +5540,8 @@ instance decidableInter
   body: inferInstanceAs (Decidable (a in s ∧ a in t))
 
 中文:
-实例 decidableInter
-  签名: [Decidable (a in s)] [Decidable (a in t)]
+实例 decidable整数er
+  签名: [可判定 (a in s)] [可判定 (a in t)]
   定义体: inferInstanceAs (Decidable (a in s ∧ a in t))
 
 Depends on / 依赖: Decidable
@@ -5559,7 +5559,7 @@ instance decidableUnion
 
 中文:
 实例 decidableUnion
-  签名: [Decidable (a in s)] [Decidable (a in t)]
+  签名: [可判定 (a in s)] [可判定 (a in t)]
   定义体: inferInstanceAs (Decidable (a in s ∨ a in t))
 
 Depends on / 依赖: Decidable
@@ -5577,7 +5577,7 @@ instance decidableCompl
 
 中文:
 实例 decidableCompl
-  签名: [Decidable (a in s)]
+  签名: [可判定 (a in s)]
   定义体: inferInstanceAs (Decidable (a ∉ s))
 
 Depends on / 依赖: ContMDiffRing, ContMDiffRing.toContMDiffMul, Decidable, ModelWithCorners, toContMDiffMul
@@ -5595,7 +5595,7 @@ instance decidableEmptyset
 
 中文:
 实例 decidableEmptyset
-  签名: : Decidable (a in (∅ : Set α))
+  签名: : 可判定 (a in (∅ : 集合 α))
   定义体: Decidable.isFalse (by simp)
 
 Depends on / 依赖: ContMDiffRing, ContMDiffRing.toLieAddGroup, Decidable, Decidable.isFalse, ModelWithCorners, isFalse, toLieAddGroup
@@ -5612,7 +5612,7 @@ instance decidableUniv
 
 中文:
 实例 decidableUniv
-  签名: : Decidable (a in univ)
+  签名: : 可判定 (a in univ)
   定义体: Decidable.isTrue (by simp)
 
 Depends on / 依赖: Decidable, Decidable.isTrue, instFieldContMDiffRing, isTrue
@@ -5629,7 +5629,7 @@ instance decidableInsert
 
 中文:
 实例 decidableInsert
-  签名: [Decidable (a = b)] [Decidable (a in s)]
+  签名: [可判定 (a = b)] [可判定 (a in s)]
   定义体: inferInstanceAs (Decidable (_ ∨ _))
 
 Depends on / 依赖: Decidable
@@ -5648,7 +5648,7 @@ instance decidableSetOf
 
 中文:
 实例 decidableSetOf
-  签名: (p : α -> 命题) [Decidable (p a)]
+  签名: (p : α -> 命题) [可判定 (p a)]
   定义体: by
   assumption
 -/
@@ -5665,7 +5665,7 @@ instance decidableEq
 
 中文:
 实例 decidableEq
-  签名: : DecidableEq (Set α)
+  签名: : DecidableEq (集合 α)
   定义体: Classical.typeDecidableEq (Set α)
 
 Depends on / 依赖: Classical, Classical.typeDecidableEq, typeDecidableEq
@@ -5721,7 +5721,7 @@ lemma setSubtypeComm_apply
 
 中文:
 引理 setSubtypeComm_apply
-  条件: (p : α -> 命题) (s : Set {a // p a})
+  条件: (p : α -> 命题) (s : 集合 {a // p a})
   证明: rfl
 
 @[simp]

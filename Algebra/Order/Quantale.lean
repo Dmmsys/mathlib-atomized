@@ -73,11 +73,11 @@ class IsAddQuantale
     - sSup_add_distrib((s : Set α) (y : α)) : sSup s + y = ⨆ x in s, x + y
 
 中文:
-类 IsAddQuantale
-  参数: (α : 类型) [AddSemigroup α] [CompleteLattice α]
+类 是加法Quantale
+  参数: (α : 类型) [加法半群 α] [完备格 α]
   公理与运算 (2 个):
-    - add_sSup_distrib((x : α) (s : Set α)) : x + sSup s = ⨆ y in s, x + y
-    - sSup_add_distrib((s : Set α) (y : α)) : sSup s + y = ⨆ x in s, x + y
+    - add_sSup_distrib((x : α) (s : 集合 α)) : x + sSup s = ⨆ y in s, x + y
+    - sSup_add_distrib((s : 集合 α) (y : α)) : sSup s + y = ⨆ x in s, x + y
 -/
 class IsAddQuantale (α : Type*) [AddSemigroup α] [CompleteLattice α] where
   /-- Addition is distributive over join in a quantale -/
@@ -96,7 +96,7 @@ structure AddQuantale
   (no additional axioms)
 
 中文:
-结构 AddQuantale
+结构 加法Quantale
   参数: (α : 类型)
   (无附加公理)
 -/
@@ -116,11 +116,11 @@ class IsQuantale
     - sSup_mul_distrib((s : Set α) (y : α)) : sSup s * y = ⨆ x in s, x * y
 
 中文:
-类 IsQuantale
-  参数: (α : 类型) [Semigroup α] [CompleteLattice α]
+类 是Quantale
+  参数: (α : 类型) [半群 α] [完备格 α]
   公理与运算 (2 个):
-    - mul_sSup_distrib((x : α) (s : Set α)) : x * sSup s = ⨆ y in s, x * y
-    - sSup_mul_distrib((s : Set α) (y : α)) : sSup s * y = ⨆ x in s, x * y
+    - mul_sSup_distrib((x : α) (s : 集合 α)) : x * sSup s = ⨆ y in s, x * y
+    - sSup_mul_distrib((s : 集合 α) (y : α)) : sSup s * y = ⨆ x in s, x * y
 -/
 class IsQuantale (α : Type*) [Semigroup α] [CompleteLattice α] where
   /-- Multiplication is distributive over join in a quantale -/

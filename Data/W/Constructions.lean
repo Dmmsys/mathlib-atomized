@@ -43,8 +43,8 @@ inductive Natα
     - succ: Natα
 
 中文:
-归纳类型 Natα
-  参数: : Type
+归纳类型 自然数α
+  参数: : 类型
   构造子 (2 个):
     - zero: 自然数α
     - succ: 自然数α
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 自然数α
+  签名: 可居 自然数α
   定义体: ⟨Natα.zero⟩
 -/
 instance : Inhabited Natα :=
@@ -77,8 +77,8 @@ definition Natβ
   signature: : Natα -> Type
 
 中文:
-定义 Natβ
-  签名: : 自然数α -> Type
+定义 自然数β
+  签名: : 自然数α -> 类型
 -/
 def Natβ : Natα -> Type
   | Natα.zero => Empty
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (自然数β 自然数α.succ)
+  签名: 可居 (自然数β 自然数α.succ)
   定义体: ⟨()⟩
 -/
 instance : Inhabited (Natβ Natα.succ) :=
@@ -110,7 +110,7 @@ definition ofNat
   signature: : Nat -> WType Natβ
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: : 自然数 -> WType 自然数β
 -/
 def ofNat : Nat -> WType Natβ
@@ -127,7 +127,7 @@ definition toNat
   signature: : WType Natβ -> Nat
 
 中文:
-定义 toNat
+定义 to自然数
   签名: : WType 自然数β -> 自然数
 -/
 def toNat : WType Natβ -> Nat
@@ -143,7 +143,7 @@ theorem leftInverse_nat
 
 中文:
 定理 leftInverse_nat
-  结论: Function.LeftInverse of自然数 to自然数
+  结论: 函数.左逆 of自然数 to自然数
 -/
 theorem leftInverse_nat : Function.LeftInverse ofNat toNat
   | WType.mk Natα.zero f => by
@@ -164,7 +164,7 @@ theorem rightInverse_nat
 
 中文:
 定理 rightInverse_nat
-  结论: Function.RightInverse of自然数 to自然数
+  结论: 函数.右逆 of自然数 to自然数
 -/
 theorem rightInverse_nat : Function.RightInverse ofNat toNat
   | Nat.zero => rfl
@@ -182,7 +182,7 @@ definition equivNat
   right_inv := rightInverse_nat
 
 中文:
-定义 equivNat
+定义 equiv自然数
   签名: : WType 自然数β ≃ 自然数 where
   定义体: toNat
   invFun := ofNat
@@ -224,8 +224,8 @@ definition NatαEquivPUnitSumPUnit
     | inr _ => rfl
 
 中文:
-定义 NatαEquivPUnitSumPUnit
-  签名: : 自然数α ≃ PUnit.{u + 1} oplus PUnit where
+定义 自然数αEquivPUnitSumPUnit
+  签名: : 自然数α ≃ 命题单元.{u + 1} oplus 命题单元 where
   定义体: match c with
     | Natα.zero => inl unit
     | Natα.succ => inr unit
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Listα γ)
+  签名: 可居 (Listα γ)
   定义体: ⟨Listα.nil⟩
 -/
 instance : Inhabited (Listα γ) :=
@@ -334,7 +334,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: : List γ -> WType (Listβ γ)
+  签名: : 列表 γ -> WType (Listβ γ)
 -/
 def ofList : List γ -> WType (Listβ γ)
   | List.nil => ⟨Listα.nil, PEmpty.elim⟩
@@ -351,7 +351,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : WType (Listβ γ) -> List γ
+  签名: : WType (Listβ γ) -> 列表 γ
 -/
 def toList : WType (Listβ γ) -> List γ
   | WType.mk Listα.nil _ => []
@@ -367,7 +367,7 @@ theorem leftInverse_list
 
 中文:
 定理 leftInverse_list
-  结论: Function.LeftInverse (ofList γ) (toList _)
+  结论: 函数.左逆 (ofList γ) (toList _)
 -/
 theorem leftInverse_list : Function.LeftInverse (ofList γ) (toList _)
   | WType.mk Listα.nil f => by
@@ -387,7 +387,7 @@ theorem rightInverse_list
 
 中文:
 定理 rightInverse_list
-  结论: Function.RightInverse (ofList γ) (toList _)
+  结论: 函数.右逆 (ofList γ) (toList _)
 -/
 theorem rightInverse_list : Function.RightInverse (ofList γ) (toList _)
   | List.nil => rfl
@@ -406,7 +406,7 @@ definition equivList
 
 中文:
 定义 equivList
-  签名: : WType (Listβ γ) ≃ List γ where
+  签名: : WType (Listβ γ) ≃ 列表 γ where
   定义体: toList _
   invFun := ofList _
   left_inv := leftInverse_list _
@@ -441,7 +441,7 @@ definition ListαEquivPUnitSum
 
 中文:
 定义 ListαEquivPUnitSum
-  签名: : Listα γ ≃ PUnit.{v + 1} oplus γ where
+  签名: : Listα γ ≃ 命题单元.{v + 1} oplus γ where
   定义体: match c with
     | Listα.nil => Sum.inl PUnit.unit
     | Listα.cons x => Sum.inr x

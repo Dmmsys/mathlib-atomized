@@ -84,7 +84,7 @@ lemma smul_eq_mul
 
 中文:
 引理 smul_eq_mul
-  条件: {α : 类型} [Mul α] (a b : α)
+  条件: {α : 类型} [乘法 α] (a b : α)
   结论: a • b = a * b
   证明: rfl
 
@@ -106,7 +106,7 @@ lemma op_smul_eq_mul
 
 中文:
 引理 op_smul_eq_mul
-  条件: {α : 类型} [Mul α] (a b : α)
+  条件: {α : 类型} [乘法 α] (a b : α)
   结论: MulOpposite.op a • b = b * a
   证明: rfl
 
@@ -126,7 +126,7 @@ lemma MulOpposite.smul_eq_mul_unop
 
 中文:
 引理 MulOpposite.smul_eq_mul_unop
-  条件: [Mul α] (a : αᵐᵒᵖ) (b : α)
+  条件: [乘法 α] (a : αᵐᵒᵖ) (b : α)
   结论: a • b = b * a.unop
   证明: rfl
 -/
@@ -143,9 +143,9 @@ class AddSemigroupAction
     - add_vadd : forall (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
 
 中文:
-类 AddSemigroupAction
-  参数: (G P : 类型) [AddSemigroup G]
-  继承: VAdd G P
+类 加法半群作用
+  参数: (G P : 类型) [加法半群 G]
+  继承: 向量加法 G P
   公理与运算 (1 个):
     - add_vadd : 对任意 (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
 -/
@@ -173,9 +173,9 @@ class SemigroupAction
     - mul_smul((x y : α) (b : β)) : (x * y) • b = x • y • b
 
 中文:
-类 SemigroupAction
-  参数: (α β : 类型) [Semigroup α]
-  继承: SMul α β
+类 半群作用
+  参数: (α β : 类型) [半群 α]
+  继承: 标量乘法 α β
   公理与运算 (1 个):
     - mul_smul((x y : α) (b : β)) : (x * y) • b = x • y • b
 -/
@@ -194,9 +194,9 @@ class AddAction
     - zero_vadd : forall p : P, (0 : G) +ᵥ p = p
 
 中文:
-类 AddAction
-  参数: (G : 类型) (P : 类型) [AddMonoid G]
-  继承: AddSemigroupAction G P
+类 加法作用
+  参数: (G : 类型) (P : 类型) [加法幺半群 G]
+  继承: 加法半群作用 G P
   公理与运算 (1 个):
     - zero_vadd : 对任意 p : P, (0 : G) +ᵥ p = p
 -/
@@ -227,9 +227,9 @@ class MulAction
     - one_smul : forall b : β, (1 : α) • b = b
 
 中文:
-类 MulAction
-  参数: (α : 类型) (β : 类型) [Monoid α]
-  继承: SemigroupAction α β
+类 乘法作用
+  参数: (α : 类型) (β : 类型) [幺半群 α]
+  继承: 半群作用 α β
   公理与运算 (1 个):
     - one_smul : 对任意 b : β, (1 : α) • b = b
 -/
@@ -249,8 +249,8 @@ class VAddCommClass
     - vadd_comm : forall (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
 
 中文:
-类 VAddCommClass
-  参数: (M N α : 类型) [VAdd M α] [VAdd N α]
+类 VAddComm类
+  参数: (M N α : 类型) [向量加法 M α] [向量加法 N α]
   公理与运算 (1 个):
     - vadd_comm : 对任意 (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
 -/
@@ -270,8 +270,8 @@ class SMulCommClass
     - smul_comm : forall (m : M) (n : N) (a : α), m • n • a = n • m • a
 
 中文:
-类 SMulCommClass
-  参数: (M N α : 类型) [SMul M α] [SMul N α]
+类 标量交换类
+  参数: (M N α : 类型) [标量乘法 M α] [标量乘法 N α]
   公理与运算 (1 个):
     - smul_comm : 对任意 (m : M) (n : N) (a : α), m • n • a = n • m • a
 -/
@@ -313,8 +313,8 @@ lemma SMulCommClass.symm
   proof: (smul_comm a a' b).symm
 
 中文:
-引理 SMulCommClass.symm
-  条件: (M N α : 类型) [SMul M α] [SMul N α] [SMulCommClass M N α]
+引理 标量交换类.symm
+  条件: (M N α : 类型) [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   证明: (smul_comm a a' b).symm
 
 Depends on / 依赖: smul_comm
@@ -338,8 +338,8 @@ lemma Function.Injective.smulCommClass
 @[to_additive]
 
 中文:
-引理 Function.Injective.smulCommClass
-  结论: [SMul M α] [SMul N α] [SMul M β] [SMul N β]
+引理 函数.单射.smulCommClass
+  结论: [标量乘法 M α] [标量乘法 N α] [标量乘法 M β] [标量乘法 N β]
   证明: hf by simp only [h₁, h₂, smul_comm c₁ c₂ (f x)]
 
 @[to_additive]
@@ -363,8 +363,8 @@ lemma Function.Surjective.smulCommClass
 @[to_additive]
 
 中文:
-引理 Function.Surjective.smulCommClass
-  结论: [SMul M α] [SMul N α] [SMul M β] [SMul N β]
+引理 函数.满射.smulCommClass
+  结论: [标量乘法 M α] [标量乘法 N α] [标量乘法 M β] [标量乘法 N β]
   证明: hf.forall.2 fun x => by simp only [← h₁, ← h₂, smul_comm c₁ c₂ x]
 
 @[to_additive]
@@ -387,7 +387,7 @@ instance smulCommClass_self
 
 中文:
 实例 smulCommClass_self
-  签名: (M α : 类型) [CommMonoid M] [MulAction M α]
+  签名: (M α : 类型) [交换幺半群 M] [乘法作用 M α]
   定义体: by rw [← mul_smul, mul_comm, mul_smul]
 
 Depends on / 依赖: mul_comm, mul_smul
@@ -405,8 +405,8 @@ class VAddAssocClass
     - vadd_assoc : forall (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
 
 中文:
-类 VAddAssocClass
-  参数: (M N α : 类型) [VAdd M N] [VAdd N α] [VAdd M α]
+类 VAddAssoc类
+  参数: (M N α : 类型) [向量加法 M N] [向量加法 N α] [向量加法 M α]
   公理与运算 (1 个):
     - vadd_assoc : 对任意 (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
 -/
@@ -428,8 +428,8 @@ class IsScalarTower
     - smul_assoc : forall (x : M) (y : N) (z : α), (x • y) • z = x • y • z
 
 中文:
-类 IsScalarTower
-  参数: (M N α : 类型) [SMul M N] [SMul N α] [SMul M α]
+类 标量塔
+  参数: (M N α : 类型) [标量乘法 M N] [标量乘法 N α] [标量乘法 M α]
   公理与运算 (1 个):
     - smul_assoc : 对任意 (x : M) (y : N) (z : α), (x • y) • z = x • y • z
 -/
@@ -450,7 +450,7 @@ lemma smul_assoc
 
 中文:
 引理 smul_assoc
-  结论: {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarTower M N α] (x : M) (y : N)
+  结论: {M N} [标量乘法 M N] [标量乘法 N α] [标量乘法 M α] [标量塔 M N α] (x : M) (y : N)
   证明: IsScalarTower.smul_assoc x y z
 
 @[to_additive]
@@ -470,8 +470,8 @@ instance Semigroup.isScalarTower
   body: ⟨mul_assoc⟩
 
 中文:
-实例 Semigroup.isScalarTower
-  签名: [Semigroup α]
+实例 半群.isScalarTower
+  签名: [半群 α]
   定义体: ⟨mul_assoc⟩
 
 Depends on / 依赖: mul_assoc
@@ -488,8 +488,8 @@ class SMulDistribClass
     - smul_distrib_smul((g : G) (r : R) (s : S)) : g • r • s = (g • r) • (g • s)
 
 中文:
-类 SMulDistribClass
-  参数: (G R S : 类型) [SMul G R] [SMul G S] [SMul R S]
+类 SMulDistrib类
+  参数: (G R S : 类型) [标量乘法 G R] [标量乘法 G S] [标量乘法 R S]
   公理与运算 (1 个):
     - smul_distrib_smul((g : G) (r : R) (s : S)) : g • r • s = (g • r) • (g • s)
 -/
@@ -508,8 +508,8 @@ class IsCentralVAdd
     - op_vadd_eq_vadd : forall (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
 
 中文:
-类 IsCentralVAdd
-  参数: (M α : 类型) [VAdd M α] [VAdd Mᵃᵒᵖ α]
+类 是CentralVAdd
+  参数: (M α : 类型) [向量加法 M α] [向量加法 Mᵃᵒᵖ α]
   公理与运算 (1 个):
     - op_vadd_eq_vadd : 对任意 (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
 -/
@@ -531,8 +531,8 @@ class IsCentralScalar
     - op_smul_eq_smul : forall (m : M) (a : α), MulOpposite.op m • a = m • a
 
 中文:
-类 IsCentralScalar
-  参数: (M α : 类型) [SMul M α] [SMul Mᵐᵒᵖ α]
+类 中心标量
+  参数: (M α : 类型) [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α]
   公理与运算 (1 个):
     - op_smul_eq_smul : 对任意 (m : M) (a : α), MulOpposite.op m • a = m • a
 -/
@@ -551,8 +551,8 @@ lemma IsCentralScalar.unop_smul_eq_smul
   induction m; exact (IsCentralScalar.op_smul_eq_smul _ a).symm
 
 中文:
-引理 IsCentralScalar.unop_smul_eq_smul
-  结论: {M α : 类型} [SMul M α] [SMul Mᵐᵒᵖ α]
+引理 中心标量.unop_smul_eq_smul
+  结论: {M α : 类型} [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α]
   证明: by
   induction m; exact (IsCentralScalar.op_smul_eq_smul _ a).symm
 
@@ -665,7 +665,7 @@ lemma comp.isScalarTower
 
 中文:
 引理 comp.isScalarTower
-  条件: [SMul M β] [SMul α β] [IsScalarTower M α β] (g : N -> M)
+  条件: [标量乘法 M β] [标量乘法 α β] [标量塔 M α β] (g : N -> M)
   结论: by
   证明: comp α g; haveI := comp β g; exact IsScalarTower N α β where
   __ := comp α g
@@ -698,7 +698,7 @@ lemma comp.smulCommClass
 
 中文:
 引理 comp.smulCommClass
-  条件: [SMul β α] [SMulCommClass M β α] (g : N -> M)
+  条件: [标量乘法 β α] [标量交换类 M β α] (g : N -> M)
   证明: comp α g
     SMulCommClass N β α where
   __ := comp α g
@@ -728,7 +728,7 @@ lemma comp.smulCommClass'
 
 中文:
 引理 comp.smulCommClass'
-  条件: [SMul β α] [SMulCommClass β M α] (g : N -> M)
+  条件: [标量乘法 β α] [标量交换类 β M α] (g : N -> M)
   证明: comp α g
     SMulCommClass β N α where
   __ := comp α g
@@ -756,7 +756,7 @@ lemma mul_smul_comm
 
 中文:
 引理 mul_smul_comm
-  条件: [Mul β] [SMul α β] [SMulCommClass α β β] (s : α) (x y : β)
+  条件: [乘法 β] [标量乘法 α β] [标量交换类 α β β] (s : α) (x y : β)
   证明: (smul_comm s x y).symm
 
 Depends on / 依赖: smul_comm
@@ -776,7 +776,7 @@ lemma smul_mul_assoc
 
 中文:
 引理 smul_mul_assoc
-  条件: [Mul β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β)
+  条件: [乘法 β] [标量乘法 α β] [标量塔 α β β] (r : α) (x y : β)
   证明: smul_assoc r x y
 
 Depends on / 依赖: smul_assoc
@@ -798,7 +798,7 @@ lemma smul_div_assoc
 
 中文:
 引理 smul_div_assoc
-  条件: [DivInvMonoid β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β)
+  条件: [除逆幺半群 β] [标量乘法 α β] [标量塔 α β β] (r : α) (x y : β)
   证明: by simp [div_eq_mul_inv, smul_mul_assoc]
 
 @[to_additive]
@@ -819,7 +819,7 @@ lemma smul_smul_smul_comm
 
 中文:
 引理 smul_smul_smul_comm
-  结论: [SMul α β] [SMul α γ] [SMul β δ] [SMul α δ] [SMul γ δ]
+  结论: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β δ] [标量乘法 α δ] [标量乘法 γ δ]
   证明: by rw [smul_assoc, smul_assoc, smul_comm b]
 
 Depends on / 依赖: smul_assoc, smul_comm
@@ -845,7 +845,7 @@ alias smul_mul_smul := smul_mul_smul_comm
 
 中文:
 引理 smul_mul_smul_comm
-  结论: [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
+  结论: [乘法 α] [乘法 β] [标量乘法 α β] [标量塔 α β β]
   证明: by
   have : SMulCommClass β α β := .symm ..; exact smul_smul_smul_comm a b c d
 
@@ -875,7 +875,7 @@ lemma mul_smul_mul_comm
 
 中文:
 引理 mul_smul_mul_comm
-  结论: [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
+  结论: [乘法 α] [乘法 β] [标量乘法 α β] [标量塔 α β β]
   证明: smul_smul_smul_comm a b c d
 
 Depends on / 依赖: smul_smul_smul_comm
@@ -900,7 +900,7 @@ lemma SemiconjBy.smul_right
 
 中文:
 引理 SemiconjBy.smul_right
-  结论: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
+  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {x a b : α}
   证明: by
   rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
 
@@ -926,7 +926,7 @@ lemma SemiconjBy.smul_left
 
 中文:
 引理 SemiconjBy.smul_left
-  结论: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
+  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {x a b : α}
   证明: by
   rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
 
@@ -951,7 +951,7 @@ lemma Commute.smul_right
 
 中文:
 引理 Commute.smul_right
-  结论: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
+  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {a b : α}
   证明: SemiconjBy.smul_right h r
 
 @[to_additive]
@@ -973,7 +973,7 @@ lemma Commute.smul_left
 
 中文:
 引理 Commute.smul_left
-  结论: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
+  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {a b : α}
   证明: SemiconjBy.smul_left h r
 
 Depends on / 依赖: SemiconjBy, SemiconjBy.smul_left, smul_left
@@ -1127,8 +1127,8 @@ abbreviation Function.Injective.mulAction
 mul_smul c₁ c₂ x := hf by simp only [smul, mul_smul]
 
 中文:
-缩写 Function.Injective.mulAction
-  签名: [SMul M β] (f : β -> α) (hf : Injective f)
+缩写 函数.单射.mulAction
+  签名: [标量乘法 M β] (f : β -> α) (hf : 单射 f)
   定义体: hf (smul _ _).trans one_smul _ (f x)
 mul_smul c₁ c₂ x := hf by simp only [smul, mul_smul]
 -/
@@ -1151,8 +1151,8 @@ abbreviation Function.Surjective.mulAction
   mul_smul := by simp [hf.forall, ← smul, mul_smul]
 
 中文:
-缩写 Function.Surjective.mulAction
-  签名: [SMul M β] (f : α -> β) (hf : Surjective f)
+缩写 函数.满射.mulAction
+  签名: [标量乘法 M β] (f : α -> β) (hf : 满射 f)
   定义体: by simp [hf.forall, ← smul]
   mul_smul := by simp [hf.forall, ← smul, mul_smul]
 -/
@@ -1189,8 +1189,8 @@ instance IsScalarTower.left
 @[to_additive]
 
 中文:
-实例 IsScalarTower.left
-  签名: : IsScalarTower M M α where
+实例 标量塔.left
+  签名: : 标量塔 M M α where
   定义体: mul_smul x y z
 
 @[to_additive]
@@ -1459,7 +1459,7 @@ lemma SMulCommClass.of_commMonoid
     rw [← one_smul G (s • x)]; rw [← smul_assoc]; rw [← one_smul G x]; rw [← smul_assoc s 1 x]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
 
 中文:
-引理 SMulCommClass.of_commMonoid
+引理 标量交换类.of_commMonoid
   证明: by
     rw [← one_smul G (s • x)]; rw [← smul_assoc]; rw [← one_smul G x]; rw [← smul_assoc s 1 x]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
 
@@ -1482,7 +1482,7 @@ lemma IsScalarTower.of_commMonoid
     mul_comm, ← smul_eq_mul]
 
 中文:
-引理 IsScalarTower.of_commMonoid
+引理 标量塔.of_commMonoid
   结论: (R₁ R : 类型)
   证明: by rw [smul_eq_mul, mul_comm, ← smul_eq_mul, ← smul_comm, smul_eq_mul,
     mul_comm, ← smul_eq_mul]
@@ -1532,7 +1532,7 @@ lemma smul_one_smul
 
 中文:
 引理 smul_one_smul
-  结论: {M} (N) [Monoid N] [SMul M N] [MulAction N α] [SMul M α]
+  结论: {M} (N) [幺半群 N] [标量乘法 M N] [乘法作用 N α] [标量乘法 M α]
   证明: by
   rw [smul_assoc]; rw [one_smul]
 
@@ -1557,7 +1557,7 @@ lemma smul_one_mul
 
 中文:
 引理 smul_one_mul
-  条件: {M N} [MulOneClass N] [SMul M N] [IsScalarTower M N N] (x : M) (y : N)
+  条件: {M N} [MulOne类 N] [标量乘法 M N] [标量塔 M N N] (x : M) (y : N)
   证明: by rw [smul_mul_assoc, one_mul]
 
 @[to_additive (attr := simp)]
@@ -1580,7 +1580,7 @@ lemma mul_smul_one
 
 中文:
 引理 mul_smul_one
-  条件: {M N} [MulOneClass N] [SMul M N] [SMulCommClass M N N] (x : M) (y : N)
+  条件: {M N} [MulOne类 N] [标量乘法 M N] [标量交换类 M N N] (x : M) (y : N)
   证明: by rw [← smul_eq_mul, ← smul_comm, smul_eq_mul, mul_one]
 
 @[to_additive]
@@ -1602,8 +1602,8 @@ lemma IsScalarTower.of_smul_one_mul
 @[to_additive]
 
 中文:
-引理 IsScalarTower.of_smul_one_mul
-  结论: {M N} [Monoid N] [SMul M N]
+引理 标量塔.of_smul_one_mul
+  结论: {M N} [幺半群 N] [标量乘法 M N]
   证明: ⟨fun x y z => by rw [← h, smul_eq_mul, mul_assoc, h, smul_eq_mul]⟩
 
 @[to_additive]
@@ -1624,8 +1624,8 @@ lemma SMulCommClass.of_mul_smul_one
   proof: ⟨fun x y z => by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
 
 中文:
-引理 SMulCommClass.of_mul_smul_one
-  结论: {M N} [Monoid N] [SMul M N]
+引理 标量交换类.of_mul_smul_one
+  结论: {M N} [幺半群 N] [标量乘法 M N]
   证明: ⟨fun x y z => by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
 
 Depends on / 依赖: mul_assoc, smul_eq_mul
@@ -1643,7 +1643,7 @@ lemma IsScalarTower.to₁₂₄
   proof: by rw [← smul_one_smul P, smul_assoc m, smul_assoc, smul_one_smul]
 
 中文:
-引理 IsScalarTower.to₁₂₄
+引理 标量塔.to₁₂₄
   结论: (M N P Q)
   证明: by rw [← smul_one_smul P, smul_assoc m, smul_assoc, smul_one_smul]
 -/
@@ -1661,7 +1661,7 @@ lemma IsScalarTower.to₁₃₄
   proof: by rw [← smul_one_smul N m, smul_assoc, smul_one_smul]
 
 中文:
-引理 IsScalarTower.to₁₃₄
+引理 标量塔.to₁₃₄
   结论: (M N P Q)
   证明: by rw [← smul_one_smul N m, smul_assoc, smul_one_smul]
 -/
@@ -1679,7 +1679,7 @@ lemma IsScalarTower.to₂₃₄
   proof: by obtain ⟨m, rfl⟩ := h n; simp_rw [smul_one_smul, smul_assoc]
 
 中文:
-引理 IsScalarTower.to₂₃₄
+引理 标量塔.to₂₃₄
   结论: (M N P Q)
   证明: by obtain ⟨m, rfl⟩ := h n; simp_rw [smul_one_smul, smul_assoc]
 -/
@@ -1713,9 +1713,9 @@ class MulDistribMulAction
     - smul_mul : forall (r : M) (x y : N), r • (x * y) = r • x * r • y
 
 中文:
-类 MulDistribMulAction
-  参数: (M N : 类型) [Monoid M] [Monoid N]
-  继承: MulAction M N
+类 MulDistribMul作用
+  参数: (M N : 类型) [幺半群 M] [幺半群 N]
+  继承: 乘法作用 M N
   公理与运算 (2 个):
     - smul_one : 对任意 r : M, r • (1 : N) = 1
     - smul_mul : 对任意 (r : M) (x y : N), r • (x * y) = r • x * r • y
@@ -1744,9 +1744,9 @@ class AddDistribAddAction
     - vadd_add : forall (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
 
 中文:
-类 AddDistribAddAction
-  参数: (M N : 类型) [AddMonoid M] [AddMonoid N]
-  继承: AddAction M N
+类 分配加法作用
+  参数: (M N : 类型) [加法幺半群 M] [加法幺半群 N]
+  继承: 加法作用 M N
   公理与运算 (2 个):
     - vadd_zero : 对任意 r : M, r +ᵥ (0 : N) = 0
     - vadd_add : 对任意 (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
@@ -1803,8 +1803,8 @@ class IsLeftCancelVAdd
     - left_cancel' : forall (a : G) (b c : P), a +ᵥ b = a +ᵥ c -> b = c
 
 中文:
-类 IsLeftCancelVAdd
-  参数: [VAdd G P]
+类 是左消去向量加法
+  参数: [向量加法 G P]
   公理与运算 (1 个):
     - left_cancel' : 对任意 (a : G) (b c : P), a +ᵥ b = a +ᵥ c -> b = c
 -/
@@ -1823,8 +1823,8 @@ class IsLeftCancelSMul
     - left_cancel' : forall (a : G) (b c : P), a • b = a • c -> b = c
 
 中文:
-类 IsLeftCancelSMul
-  参数: [SMul G P]
+类 是左消去标量乘法
+  参数: [标量乘法 G P]
   公理与运算 (1 个):
     - left_cancel' : 对任意 (a : G) (b c : P), a • b = a • c -> b = c
 -/
@@ -1843,8 +1843,8 @@ lemma IsLeftCancelSMul.left_cancel
 @[to_additive]
 
 中文:
-引理 IsLeftCancelSMul.left_cancel
-  条件: {G P} [SMul G P] [IsLeftCancelSMul G P] (a : G) (b c : P)
+引理 是左消去标量乘法.left_cancel
+  条件: {G P} [标量乘法 G P] [是左消去标量乘法 G P] (a : G) (b c : P)
   证明: IsLeftCancelSMul.left_cancel' a b c
 
 @[to_additive]
@@ -1864,8 +1864,8 @@ instance [Mul
   body: IsLeftCancelMul.mul_left_cancel
 
 中文:
-实例 [Mul
-  签名: G] [IsLeftCancelMul G] : IsLeftCancelSMul G G where
+实例 [乘法
+  签名: G] [左乘消去 G] : 是左消去标量乘法 G G where
   定义体: IsLeftCancelMul.mul_left_cancel
 
 Depends on / 依赖: IsLeftCancelMul, IsLeftCancelMul.mul_left_cancel, mul_left_cancel
@@ -1884,9 +1884,9 @@ class IsCancelVAdd
     - right_cancel' : forall (a b : G) (c : P), a +ᵥ c = b +ᵥ c -> a = b
 
 中文:
-类 IsCancelVAdd
-  参数: [VAdd G P]
-  继承: IsLeftCancelVAdd G P
+类 是消去向量加法
+  参数: [向量加法 G P]
+  继承: 是左消去向量加法 G P
   公理与运算 (1 个):
     - right_cancel' : 对任意 (a b : G) (c : P), a +ᵥ c = b +ᵥ c -> a = b
 -/
@@ -1909,9 +1909,9 @@ class IsCancelSMul
     - right_cancel' : forall (a b : G) (c : P), a • c = b • c -> a = b
 
 中文:
-类 IsCancelSMul
-  参数: [SMul G P]
-  继承: IsLeftCancelSMul G P
+类 是消去标量乘法
+  参数: [标量乘法 G P]
+  继承: 是左消去标量乘法 G P
   公理与运算 (1 个):
     - right_cancel' : 对任意 (a b : G) (c : P), a • c = b • c -> a = b
 -/
@@ -1930,8 +1930,8 @@ lemma IsCancelSMul.left_cancel
 @[to_additive]
 
 中文:
-引理 IsCancelSMul.left_cancel
-  条件: {G P} [SMul G P] [IsCancelSMul G P] (a : G) (b c : P)
+引理 是消去标量乘法.left_cancel
+  条件: {G P} [标量乘法 G P] [是消去标量乘法 G P] (a : G) (b c : P)
   证明: IsLeftCancelSMul.left_cancel' a b c
 
 @[to_additive]
@@ -1953,8 +1953,8 @@ lemma IsCancelSMul.right_cancel
 @[to_additive]
 
 中文:
-引理 IsCancelSMul.right_cancel
-  条件: {G P} [SMul G P] [IsCancelSMul G P] (a b : G) (c : P)
+引理 是消去标量乘法.right_cancel
+  条件: {G P} [标量乘法 G P] [是消去标量乘法 G P] (a b : G) (c : P)
   证明: IsCancelSMul.right_cancel' a b c
 
 @[to_additive]
@@ -1976,8 +1976,8 @@ lemma IsCancelSMul.eq_one_of_smul
 @[to_additive]
 
 中文:
-引理 IsCancelSMul.eq_one_of_smul
-  结论: {G P} [Monoid G] [MulAction G P] [IsCancelSMul G P] {g : G}
+引理 是消去标量乘法.eq_one_of_smul
+  结论: {G P} [幺半群 G] [乘法作用 G P] [是消去标量乘法 G P] {g : G}
   证明: IsCancelSMul.right_cancel g 1 x ((one_smul G x).symm ▸ h)
 
 @[to_additive]
@@ -2001,8 +2001,8 @@ instance [CancelMonoid
 @[to_additive]
 
 中文:
-实例 [CancelMonoid
-  签名: G] : IsCancelSMul G G where
+实例 [消去幺半群
+  签名: G] : 是消去标量乘法 G G where
   定义体: IsLeftCancelMul.mul_left_cancel
   right_cancel' _ _ _ := mul_right_cancel
 
@@ -2024,8 +2024,8 @@ instance [Group
   body: by rw [← inv_smul_smul a b, h, inv_smul_smul]
 
 中文:
-实例 [Group
-  签名: G] [MulAction G P] : IsLeftCancelSMul G P where
+实例 [群
+  签名: G] [乘法作用 G P] : 是左消去标量乘法 G P where
   定义体: by rw [← inv_smul_smul a b, h, inv_smul_smul]
 
 Depends on / 依赖: inv_smul_smul

@@ -58,7 +58,7 @@ lemma exists_map_eq_of_presieve
   · rw [← CategoryTheory.Ove
 
 中文:
-引理 exists_map_eq_of_presieve
+引理 存在_map_eq_of_presieve
   结论: (K : Precoverage C) (H : K <= P.precoverage)
   证明: by
   rw [Precoverage.mem_iff_exists_zeroHypercover] at hR

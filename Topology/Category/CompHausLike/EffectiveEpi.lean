@@ -50,7 +50,7 @@ definition effectiveEpiStruct
 
 中文:
 定义 effectiveEpiStruct
-  签名: {B X : CompHausLike P} (π : X ⟶ B) (hπ : Function.Surjective π)
+  签名: {B X : 余mpHausLike P} (π : X ⟶ B) (hπ : 函数.满射 π)
   定义体: ofHom _ ((IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).lift e.hom.hom
       fun a b hab =>
         CategoryTheory.congr_fun (h
@@ -106,7 +106,7 @@ theorem preregular
 
 中文:
 定理 preregular
-  结论: [HasExplicitPullbacks P]
+  结论: [有ExplicitPullbacks P]
   证明: by
     intro X Y Z f π hπ
     refine ⟨pullback f π, pullback.fst f π, ⟨⟨effectiveEpiStruct _ ?_⟩⟩, pullback.snd f π,
@@ -140,7 +140,7 @@ theorem precoherent
 
 中文:
 定理 precoherent
-  结论: [HasExplicitPullbacks P] [HasExplicitFiniteCoproducts.{0} P]
+  结论: [有ExplicitPullbacks P] [有ExplicitFiniteCoproducts.{0} P]
   证明: by
   have : Preregular (CompHausLike P) := preregular hs
   infer_instance

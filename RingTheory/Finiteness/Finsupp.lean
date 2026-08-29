@@ -88,7 +88,7 @@ theorem finsuppLinearMap_bijective_of_moduleFinite
 
 中文:
 定理 finsuppLinearMap_bijective_of_moduleFinite
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: by
   have ⟨s, span_s⟩ := Module.finite_def.mp ‹Module.Finite R M›
   classical refine ⟨finsuppLinearMap_injective ..,
@@ -117,7 +117,7 @@ theorem finsuppLinearMap_bijective_of_finite
 
 中文:
 定理 finsuppLinearMap_bijective_of_finite
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: finsuppLinearMap_injective ..
   right x := ⟨equivFunOnFinite.symm fun i => lapply i ∘ₗ x, by ext; simp⟩
 
@@ -158,7 +158,7 @@ theorem fg_of_fg_map_of_fg_inf_ker
 
 中文:
 定理 fg_of_fg_map_of_fg_inf_ker
-  结论: (f : M ->ₗ[R] P) {s : Submodule R M}
+  结论: (f : M ->ₗ[R] P) {s : 子模 R M}
   证明: by
   have := Classical.decEq R
   have := Classical.decEq M
@@ -298,7 +298,7 @@ lemma _root_.Module.Finite.of_exact
   · simp [LinearMap.exact_iff.1 h_exact]
 
 中文:
-引理 _root_.Module.Finite.of_exact
+引理 _root_.模.有限.of_exact
   结论: {f : M ->ₗ[R] N} {g : N ->ₗ[R] P}
   证明: by
   refine ⟨(⊤ : Submodule R _).fg_of_fg_map_of_fg_inf_ker g ?_ ?_⟩
@@ -327,8 +327,8 @@ theorem _root_.Module.Finite.of_submodule_quotient
   proof: .of_exact (LinearMap.exact_subtype_mkQ N) (Quotient.mk_surjective _)
 
 中文:
-定理 _root_.Module.Finite.of_submodule_quotient
-  结论: (N : Submodule R M) [Module.Finite R N]
+定理 _root_.模.有限.of_submodule_quotient
+  结论: (N : 子模 R M) [模.有限 R N]
   证明: .of_exact (LinearMap.exact_subtype_mkQ N) (Quotient.mk_surjective _)
 
 Depends on / 依赖: LinearMap, LinearMap.exact_subtype_mkQ, Quotient, Quotient.mk_surjective, exact_subtype_mkQ, mk_surjective, of_exact
@@ -352,8 +352,8 @@ instance Module.Finite.finsupp
   body: Module.Finite.equiv (Finsupp.linearEquivFunOnFinite R V ι).symm
 
 中文:
-实例 Module.Finite.finsupp
-  签名: {ι : 类型} [_root_.Finite ι] [Module.Finite R V]
+实例 模.有限.finsupp
+  签名: {ι : 类型} [_root_.有限 ι] [模.有限 R V]
   定义体: Module.Finite.equiv (Finsupp.linearEquivFunOnFinite R V ι).symm
 
 Depends on / 依赖: Finite, Finsupp, Finsupp.linearEquivFunOnFinite, Module, Module.Finite.equiv, linearEquivFunOnFinite
@@ -377,7 +377,7 @@ instance moduleFinite
 
 中文:
 实例 moduleFinite
-  签名: : Module.Finite R S[M]
+  签名: : 模.有限 R S[M]
   定义体: .equiv .symm coeffLinearEquiv _
 
 Depends on / 依赖: coeffLinearEquiv
@@ -399,7 +399,7 @@ instance moduleFinite
 
 中文:
 实例 moduleFinite
-  签名: : Module.Finite R S[M]
+  签名: : 模.有限 R S[M]
   定义体: .equiv .symm coeffLinearEquiv _
 
 Depends on / 依赖: coeffLinearEquiv
@@ -421,7 +421,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite 整数 (FreeAbelianGroup σ)
+  签名: 模.有限 整数 (自由交换群 σ)
   定义体: .of_surjective _ (FreeAbelianGroup.equivFinsupp σ).toIntLinearEquiv.symm.surjective
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.equivFinsupp, equivFinsupp, of_surjective, surjective, toIntLinearEquiv, toIntLinearEquiv.symm.surjective
@@ -440,7 +440,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid.FG (FreeAbelianGroup σ)
+  签名: 加法幺半群.FG (自由交换群 σ)
   定义体: by
   rw [← AddGroup.fg_iff_addMonoid_fg]; rw [← Module.Finite.iff_addGroup_fg]; infer_instance
 

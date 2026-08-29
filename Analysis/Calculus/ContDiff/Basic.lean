@@ -312,7 +312,7 @@ theorem contDiff_zero_fun
 
 中文:
 定理 contDiff_zero_fun
-  结论: ContDiff 𝕜 n fun _ : E => (0 : F)
+  结论: 连续可微 𝕜 n fun _ : E => (0 : F)
   证明: analyticOnNhd_const.contDiff
 
 Depends on / 依赖: analyticOnNhd_const, analyticOnNhd_const.contDiff, contDiff
@@ -336,7 +336,7 @@ theorem contDiff_const
 中文:
 定理 contDiff_const
   条件: {c : F}
-  结论: ContDiff 𝕜 n fun _ : E => c
+  结论: 连续可微 𝕜 n fun _ : E => c
   证明: analyticOnNhd_const.contDiff
 
 @[fun_prop]
@@ -360,7 +360,7 @@ theorem contDiffOn_const
 
 中文:
 定理 contDiffOn_const
-  条件: {c : F} {s : Set E}
+  条件: {c : F} {s : 集合 E}
   结论: ContDiffOn 𝕜 n (fun _ : E => c) s
   证明: contDiff_const.contDiffOn
 
@@ -436,8 +436,8 @@ theorem contDiff_of_subsingleton
 
 中文:
 定理 contDiff_of_subsingleton
-  条件: [Subsingleton F]
-  结论: ContDiff 𝕜 n f
+  条件: [子单例 F]
+  结论: 连续可微 𝕜 n f
   证明: by
   rw [Subsingleton.elim f fun _ => 0]; exact contDiff_const
 
@@ -463,7 +463,7 @@ theorem contDiffAt_of_subsingleton
 
 中文:
 定理 contDiffAt_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: ContDiffAt 𝕜 n f x
   证明: by
   rw [Subsingleton.elim f fun _ => 0]; exact contDiffAt_const
@@ -490,7 +490,7 @@ theorem contDiffWithinAt_of_subsingleton
 
 中文:
 定理 contDiffWithinAt_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: ContDiffWithinAt 𝕜 n f s x
   证明: by
   rw [Subsingleton.elim f fun _ => 0]; exact contDiffWithinAt_const
@@ -515,7 +515,7 @@ theorem contDiffOn_of_subsingleton
 
 中文:
 定理 contDiffOn_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   结论: ContDiffOn 𝕜 n f s
   证明: by
   rw [Subsingleton.elim f fun _ => 0]; exact contDiffOn_const
@@ -538,7 +538,7 @@ theorem iteratedFDerivWithin_const_of_ne
 
 中文:
 定理 iteratedFDerivWithin_const_of_ne
-  条件: {n : 自然数} (hn : n != 0) (c : F) (s : Set E)
+  条件: {n : 自然数} (hn : n != 0) (c : F) (s : 集合 E)
   证明: by
   cases n with
   | zero => contradiction
@@ -627,9 +627,9 @@ theorem IsBoundedLinearMap.contDiff
 @[fun_prop]
 
 中文:
-定理 IsBoundedLinearMap.contDiff
-  条件: (hf : IsBoundedLinearMap 𝕜 f)
-  结论: ContDiff 𝕜 n f
+定理 是BoundedLinear映射.contDiff
+  条件: (hf : 是BoundedLinear映射 𝕜 f)
+  结论: 连续可微 𝕜 n f
   证明: (ContinuousLinearMap.analyticOnNhd hf.toContinuousLinearMap univ).contDiff
 
 @[fun_prop]
@@ -652,9 +652,9 @@ theorem ContinuousLinearMap.contDiff
 @[fun_prop]
 
 中文:
-定理 ContinuousLinearMap.contDiff
+定理 连续线性映射.contDiff
   条件: (f : E ->L[𝕜] F)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: f.isBoundedLinearMap.contDiff
 
 @[fun_prop]
@@ -677,9 +677,9 @@ theorem ContinuousLinearEquiv.contDiff
 @[fun_prop]
 
 中文:
-定理 ContinuousLinearEquiv.contDiff
+定理 连续线性等价.contDiff
   条件: (f : E ≃L[𝕜] F)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: (f : E ->L[𝕜] F).contDiff
 
 @[fun_prop]
@@ -702,9 +702,9 @@ theorem LinearIsometry.contDiff
 @[fun_prop]
 
 中文:
-定理 LinearIsometry.contDiff
+定理 线性等距.contDiff
   条件: (f : E ->ₗᵢ[𝕜] F)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: f.toContinuousLinearMap.contDiff
 
 @[fun_prop]
@@ -725,9 +725,9 @@ theorem LinearIsometryEquiv.contDiff
   proof: (f : E ->L[𝕜] F).contDiff
 
 中文:
-定理 LinearIsometryEquiv.contDiff
+定理 线性等距等价.contDiff
   条件: (f : E ≃ₗᵢ[𝕜] F)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: (f : E ->L[𝕜] F).contDiff
 
 Depends on / 依赖: contDiff
@@ -749,7 +749,7 @@ theorem contDiff_id
 
 中文:
 定理 contDiff_id
-  结论: ContDiff 𝕜 n (id : E -> E)
+  结论: 连续可微 𝕜 n (id : E -> E)
   证明: IsBoundedLinearMap.id.contDiff
 
 @[to_fun (attr := fun_prop) contDiffWithinAt_fun_id]
@@ -840,9 +840,9 @@ theorem IsBoundedBilinearMap.contDiff
   proof: (hb.toContinuousLinearMap.analyticOnNhd_bilinear _).contDiff
 
 中文:
-定理 IsBoundedBilinearMap.contDiff
-  条件: (hb : IsBoundedBilinearMap 𝕜 b)
-  结论: ContDiff 𝕜 n b
+定理 是BoundedBilinear映射.contDiff
+  条件: (hb : 是BoundedBilinear映射 𝕜 b)
+  结论: 连续可微 𝕜 n b
   证明: (hb.toContinuousLinearMap.analyticOnNhd_bilinear _).contDiff
 
 Depends on / 依赖: analyticOnNhd_bilinear, contDiff, hb.toContinuousLinearMap.analyticOnNhd_bilinear, toContinuousLinearMap
@@ -863,7 +863,7 @@ theorem HasFTaylorSeriesUpToOn.continuousLinearMap_comp
     (fun _ : Fin m => E)
 
 中文:
-定理 HasFTaylorSeriesUpToOn.continuousLinearMap_comp
+定理 有FTaylorSeriesUpToOn.continuousLinearMap_comp
   结论: {n : 自然数∞ω} (g : F ->L[𝕜] G)
   证明: congr_arg g (hf.zero_eq x hx)
   fderivWithin m hm x hx := (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
@@ -975,8 +975,8 @@ theorem ContDiff.continuousLinearMap_comp
   proof: contDiffOn_univ.1 ContDiffOn.continuousLinearMap_comp _ (contDiffOn_univ.2 hf)
 
 中文:
-定理 ContDiff.continuousLinearMap_comp
-  条件: {f : E -> F} (g : F ->L[𝕜] G) (hf : ContDiff 𝕜 n f)
+定理 连续可微.continuousLinearMap_comp
+  条件: {f : E -> F} (g : F ->L[𝕜] G) (hf : 连续可微 𝕜 n f)
   证明: contDiffOn_univ.1 ContDiffOn.continuousLinearMap_comp _ (contDiffOn_univ.2 hf)
 
 Depends on / 依赖: ContDiffOn, ContDiffOn.continuousLinearMap_comp, contDiffOn_univ, continuousLinearMap_comp
@@ -999,7 +999,7 @@ exact .symm (hfU.ftaylorSeriesWithin (hs.inter hU)).continuousLinearMap_comp g
 .eq_iteratedFDerivWi
 
 中文:
-定理 ContinuousLinearMap.iteratedFDerivWithin_comp_left
+定理 连续线性映射.iteratedFDerivWithin_comp_left
   结论: {f : E -> F} (g : F ->L[𝕜] G)
   证明: by
   rcases hf.contDiffOn' hi (by simp) with ⟨U, hU, hxU, hfU⟩
@@ -1031,7 +1031,7 @@ theorem ContinuousLinearMap.iteratedFDeriv_comp_left
   exact g.iteratedFDerivWithin_comp_left hf.contDiffWithinAt uniqueDiffOn_univ (mem_univ x) hi
 
 中文:
-定理 ContinuousLinearMap.iteratedFDeriv_comp_left
+定理 连续线性映射.iteratedFDeriv_comp_left
   结论: {f : E -> F} (g : F ->L[𝕜] G)
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -1061,7 +1061,7 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_left
     have Z : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 
 
 中文:
-定理 ContinuousLinearEquiv.iteratedFDerivWithin_comp_left
+定理 连续线性等价.iteratedFDerivWithin_comp_left
   结论: (g : F ≃L[𝕜] G) (f : E -> F)
   证明: by
   induction i generalizing x with ext1 m
@@ -1103,7 +1103,7 @@ theorem ContinuousLinearEquiv.iteratedFDeriv_comp_left
   apply g.iteratedFDerivWithin_comp_left f uniqueDiffOn_univ trivial
 
 中文:
-定理 ContinuousLinearEquiv.iteratedFDeriv_comp_left
+定理 连续线性等价.iteratedFDeriv_comp_left
   条件: {f : E -> F} {x : E} (g : F ≃L[𝕜] G) {i : 自然数}
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -1132,7 +1132,7 @@ theorem LinearIsometry.norm_iteratedFDerivWithin_comp_left
   apply LinearIsometry.norm_compContinuousMultilinearMap
 
 中文:
-定理 LinearIsometry.norm_iteratedFDerivWithin_comp_left
+定理 线性等距.norm_iteratedFDerivWithin_comp_left
   结论: {f : E -> F} (g : F ->ₗᵢ[𝕜] G)
   证明: by
   have :
@@ -1165,7 +1165,7 @@ theorem LinearIsometry.norm_iteratedFDeriv_comp_left
   exact g.norm_iteratedFDerivWithin_comp_left hf.contDiffWithinAt uniqueDiffOn_univ (mem_univ x) hi
 
 中文:
-定理 LinearIsometry.norm_iteratedFDeriv_comp_left
+定理 线性等距.norm_iteratedFDeriv_comp_left
   结论: {f : E -> F} (g : F ->ₗᵢ[𝕜] G)
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -1194,7 +1194,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_left
   apply LinearIsometry.norm_compContinuousMultilinearMap g.toLinearIsometr
 
 中文:
-定理 LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_left
+定理 线性等距等价.norm_iteratedFDerivWithin_comp_left
   结论: (g : F ≃ₗᵢ[𝕜] G) (f : E -> F)
   证明: by
   have :
@@ -1227,7 +1227,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDeriv_comp_left
   apply g.norm_iteratedFDerivWithin_comp_left f uniqueDiffOn_univ (mem_univ x) i
 
 中文:
-定理 LinearIsometryEquiv.norm_iteratedFDeriv_comp_left
+定理 线性等距等价.norm_iteratedFDeriv_comp_left
   结论: (g : F ≃ₗᵢ[𝕜] G) (f : E -> F) (x : E)
   证明: by
   rw [← iteratedFDerivWithin_univ]; rw [← iteratedFDerivWithin_univ]
@@ -1252,7 +1252,7 @@ theorem ContinuousLinearEquiv.comp_contDiffWithinAt_iff
     fun H => H.continuousLinearMap_comp (e : F ->L[𝕜] G)⟩
 
 中文:
-定理 ContinuousLinearEquiv.comp_contDiffWithinAt_iff
+定理 连续线性等价.comp_contDiffWithinAt_iff
   条件: (e : F ≃L[𝕜] G)
   证明: ⟨fun H => by
     simpa only [Function.comp_def, e.symm.coe_coe, e.symm_apply_apply] using
@@ -1278,7 +1278,7 @@ theorem ContinuousLinearEquiv.comp_contDiffAt_iff
   simp only [← contDiffWithinAt_univ, e.comp_contDiffWithinAt_iff]
 
 中文:
-定理 ContinuousLinearEquiv.comp_contDiffAt_iff
+定理 连续线性等价.comp_contDiffAt_iff
   条件: (e : F ≃L[𝕜] G)
   证明: by
   simp only [← contDiffWithinAt_univ, e.comp_contDiffWithinAt_iff]
@@ -1299,7 +1299,7 @@ theorem ContinuousLinearEquiv.comp_contDiffOn_iff
   simp [ContDiffOn, e.comp_contDiffWithinAt_iff]
 
 中文:
-定理 ContinuousLinearEquiv.comp_contDiffOn_iff
+定理 连续线性等价.comp_contDiffOn_iff
   条件: (e : F ≃L[𝕜] G)
   证明: by
   simp [ContDiffOn, e.comp_contDiffWithinAt_iff]
@@ -1320,7 +1320,7 @@ theorem ContinuousLinearEquiv.comp_contDiff_iff
   simp only [← contDiffOn_univ, e.comp_contDiffOn_iff]
 
 中文:
-定理 ContinuousLinearEquiv.comp_contDiff_iff
+定理 连续线性等价.comp_contDiff_iff
   条件: (e : F ≃L[𝕜] G)
   证明: by
   simp only [← contDiffOn_univ, e.comp_contDiffOn_iff]
@@ -1347,7 +1347,7 @@ theorem HasFTaylorSeriesUpToOn.comp_continuousAffineMap
     sim
 
 中文:
-定理 HasFTaylorSeriesUpToOn.comp_continuousAffineMap
+定理 有FTaylorSeriesUpToOn.comp_continuousAffineMap
   证明: by
   let A : forall m : Nat, (E [×m]->L[𝕜] F) -> G [×m]->L[𝕜] F :=
     fun m h => h.compContinuousLinearMap fun _ => g.contLinear
@@ -1393,7 +1393,7 @@ theorem HasFTaylorSeriesUpToOn.compContinuousLinearMap
   proof: hf.comp_continuousAffineMap g.toContinuousAffineMap
 
 中文:
-定理 HasFTaylorSeriesUpToOn.compContinuousLinearMap
+定理 有FTaylorSeriesUpToOn.compContinuousLinearMap
   证明: hf.comp_continuousAffineMap g.toContinuousAffineMap
 
 Depends on / 依赖: comp_continuousAffineMap, g.toContinuousAffineMap, hf.comp_continuousAffineMap, toContinuousAffineMap
@@ -1483,8 +1483,8 @@ theorem ContDiff.comp_continuousLinearMap
   proof: contDiffOn_univ.1 ContDiffOn.comp_continuousLinearMap (contDiffOn_univ.2 hf) _
 
 中文:
-定理 ContDiff.comp_continuousLinearMap
-  条件: {f : E -> F} {g : G ->L[𝕜] E} (hf : ContDiff 𝕜 n f)
+定理 连续可微.comp_continuousLinearMap
+  条件: {f : E -> F} {g : G ->L[𝕜] E} (hf : 连续可微 𝕜 n f)
   证明: contDiffOn_univ.1 ContDiffOn.comp_continuousLinearMap (contDiffOn_univ.2 hf) _
 
 Depends on / 依赖: ContDiffOn, ContDiffOn.comp_continuousLinearMap, comp_continuousLinearMap, contDiffOn_univ
@@ -1503,7 +1503,7 @@ theorem ContinuousLinearMap.iteratedFDerivWithin_comp_right
     g).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl h's hx).symm
 
 中文:
-定理 ContinuousLinearMap.iteratedFDerivWithin_comp_right
+定理 连续线性映射.iteratedFDerivWithin_comp_right
   结论: {f : E -> F} (g : G ->L[𝕜] E)
   证明: ((((hf.of_le hi).ftaylorSeriesWithin hs).compContinuousLinearMap
     g).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl h's hx).symm
@@ -1534,7 +1534,7 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_right
       ContinuousLinearEquiv.coe_co
 
 中文:
-定理 ContinuousLinearEquiv.iteratedFDerivWithin_comp_right
+定理 连续线性等价.iteratedFDerivWithin_comp_right
   结论: (g : G ≃L[𝕜] E) (f : E -> F)
   证明: by
   induction i generalizing x with ext1 m
@@ -1581,7 +1581,7 @@ theorem ContinuousLinearMap.iteratedFDeriv_comp_right
       (mem_univ _) hi
 
 中文:
-定理 ContinuousLinearMap.iteratedFDeriv_comp_right
+定理 连续线性映射.iteratedFDeriv_comp_right
   结论: (g : G ->L[𝕜] E) {f : E -> F}
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -1611,7 +1611,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_right
   rw [this]; rw [ContinuousMultilinearMap.norm_compContinuous_linearIsometryEquiv]
 
 中文:
-定理 LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_right
+定理 线性等距等价.norm_iteratedFDerivWithin_comp_right
   结论: (g : G ≃ₗᵢ[𝕜] E) (f : E -> F)
   证明: by
   have : iteratedFDerivWithin 𝕜 i (f ∘ g) (g ⁻¹' s) x =
@@ -1640,7 +1640,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDeriv_comp_right
   apply g.norm_iteratedFDerivWithin_comp_right f uniqueDiffOn_univ (mem_univ (g x)) i
 
 中文:
-定理 LinearIsometryEquiv.norm_iteratedFDeriv_comp_right
+定理 线性等距等价.norm_iteratedFDeriv_comp_right
   结论: (g : G ≃ₗᵢ[𝕜] E) (f : E -> F) (x : G)
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -1668,7 +1668,7 @@ theorem ContinuousLinearEquiv.contDiffWithinAt_comp_iff
     exact H.comp_continuousLinearMap _
 
 中文:
-定理 ContinuousLinearEquiv.contDiffWithinAt_comp_iff
+定理 连续线性等价.contDiffWithinAt_comp_iff
   条件: (e : G ≃L[𝕜] E)
   证明: by
   constructor
@@ -1700,7 +1700,7 @@ theorem ContinuousLinearEquiv.contDiffAt_comp_iff
   exact e.contDiffWithinAt_comp_iff
 
 中文:
-定理 ContinuousLinearEquiv.contDiffAt_comp_iff
+定理 连续线性等价.contDiffAt_comp_iff
   条件: (e : G ≃L[𝕜] E)
   证明: by
   rw [← contDiffWithinAt_univ]; rw [← contDiffWithinAt_univ]; rw [← preimage_univ]
@@ -1723,7 +1723,7 @@ theorem ContinuousLinearEquiv.contDiffOn_comp_iff
     fun H => H.comp_continuousLinearMap (e : G ->L[𝕜] E)⟩
 
 中文:
-定理 ContinuousLinearEquiv.contDiffOn_comp_iff
+定理 连续线性等价.contDiffOn_comp_iff
   条件: (e : G ≃L[𝕜] E)
   证明: ⟨fun H => by simpa [Function.comp_def] using H.comp_continuousLinearMap (e.symm : E ->L[𝕜] G),
     fun H => H.comp_continuousLinearMap (e : G ->L[𝕜] E)⟩
@@ -1746,7 +1746,7 @@ theorem ContinuousLinearEquiv.contDiff_comp_iff
   exact e.contDiffOn_comp_iff
 
 中文:
-定理 ContinuousLinearEquiv.contDiff_comp_iff
+定理 连续线性等价.contDiff_comp_iff
   条件: (e : G ≃L[𝕜] E)
   证明: by
   rw [← contDiffOn_univ]; rw [← contDiffOn_univ]; rw [← preimage_univ]
@@ -1780,7 +1780,7 @@ theorem HasFTaylorSeriesUpToOn.prodMk
         ((hf.fderivWithin m hm x hx).prodMk (hg.fderivWithin
 
 中文:
-定理 HasFTaylorSeriesUpToOn.prodMk
+定理 有FTaylorSeriesUpToOn.prodMk
   结论: {n : 自然数∞ω}
   证明: by
   set L := fun m => ContinuousMultilinearMap.prodL 𝕜 (fun _ : Fin m => E) F G
@@ -1826,7 +1826,7 @@ theorem ContDiffWithinAt.prodMk
 
 中文:
 定理 ContDiffWithinAt.prodMk
-  结论: {s : Set E} {f : E -> F} {g : E -> G}
+  结论: {s : 集合 E} {f : E -> F} {g : E -> G}
   证明: by
   match n with
   | ω =>
@@ -1870,7 +1870,7 @@ theorem ContDiffOn.prodMk
 
 中文:
 定理 ContDiffOn.prodMk
-  结论: {s : Set E} {f : E -> F} {g : E -> G} (hf : ContDiffOn 𝕜 n f s)
+  结论: {s : 集合 E} {f : E -> F} {g : E -> G} (hf : ContDiffOn 𝕜 n f s)
   证明: fun x hx =>
   (hf x hx).prodMk (hg x hx)
 -/
@@ -1910,8 +1910,8 @@ theorem ContDiff.prodMk
   proof: contDiffOn_univ.1 hf.contDiffOn.prodMk hg.contDiffOn
 
 中文:
-定理 ContDiff.prodMk
-  条件: {f : E -> F} {g : E -> G} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.prodMk
+  条件: {f : E -> F} {g : E -> G} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: contDiffOn_univ.1 hf.contDiffOn.prodMk hg.contDiffOn
 
 Depends on / 依赖: contDiffOn, contDiffOn_univ, hf.contDiffOn.prodMk, hg.contDiffOn, prodMk
@@ -2022,7 +2022,7 @@ lemma contDiffOn_union_iff_of_isOpen
 
 中文:
 引理 contDiffOn_union_iff_of_isOpen
-  条件: (hs : IsOpen s) (ht : IsOpen t)
+  条件: (hs : 是开集 s) (ht : 是开集 t)
   证明: ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right⟩,
    fun ⟨hfs, hft⟩ => ContDiffOn.union_of_isOpen hfs hft hs ht⟩
 
@@ -2070,7 +2070,7 @@ lemma ContDiffOn.iUnion_of_isOpen
 
 中文:
 引理 ContDiffOn.iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: by
   rintro x ⟨si, ⟨i, rfl⟩, hxsi⟩
 .contDiffWithinAt exact (hf i).contDiffAt ((hs i).mem_nhds hxsi)
@@ -2094,7 +2094,7 @@ lemma contDiffOn_iUnion_iff_of_isOpen
 
 中文:
 引理 contDiffOn_iUnion_iff_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: ⟨fun h i => h.mono subset_iUnion_of_subset i fun _ a => a,
    fun h => ContDiffOn.iUnion_of_isOpen h hs⟩
 
@@ -2118,7 +2118,7 @@ lemma contDiff_of_contDiffOn_iUnion_of_isOpen
 
 中文:
 引理 contDiff_of_contDiffOn_iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: by
   rw [← contDiffOn_univ]; rw [← hs']
   exact ContDiffOn.iUnion_of_isOpen hf hs
@@ -2145,7 +2145,7 @@ theorem contDiff_prodAssoc
 中文:
 定理 contDiff_prodAssoc
   条件: {n : 自然数∞ω}
-  结论: ContDiff 𝕜 n Equiv.prodAssoc E F G
+  结论: 连续可微 𝕜 n 等价.prodAssoc E F G
   证明: (LinearIsometryEquiv.prodAssoc 𝕜 E F G).contDiff
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.prodAssoc, contDiff, prodAssoc
@@ -2165,7 +2165,7 @@ theorem contDiff_prodAssoc_symm
 中文:
 定理 contDiff_prodAssoc_symm
   条件: {n : 自然数∞ω}
-  结论: ContDiff 𝕜 n (Equiv.prodAssoc E F G).symm
+  结论: 连续可微 𝕜 n (等价.prodAssoc E F G).symm
   证明: (LinearIsometryEquiv.prodAssoc 𝕜 E F G).symm.contDiff
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.prodAssoc, contDiff, prodAssoc, symm.contDiff

@@ -43,7 +43,7 @@ instance preservesHomology_preadditiveYonedaObj_of_injective
 
 中文:
 实例 preservesHomology_preadditiveYonedaObj_of_injective
-  签名: (J : C) [hJ : Injective J]
+  签名: (J : C) [hJ : 单射 J]
   定义体: by
   let := (injective_iff_preservesEpimorphisms_preadditive_yoneda_obj' J).mp hJ
   apply Functor.preservesHomology_of_preservesEpis_and_kernels
@@ -66,7 +66,7 @@ instance preservesFiniteColimits_preadditiveYonedaObj_of_injective
 
 中文:
 实例 preservesFiniteColimits_preadditiveYonedaObj_of_injective
-  签名: (J : C) [hP : Injective J]
+  签名: (J : C) [hP : 单射 J]
   定义体: by
   apply Functor.preservesFiniteColimits_of_preservesHomology
 

@@ -52,7 +52,7 @@ abbreviation image
   body: kernel (cokernel.π f)
 
 中文:
-缩写 image
+缩写 像
   签名: : C
   定义体: kernel (cokernel.π f)
 -/
@@ -68,8 +68,8 @@ abbreviation image.ι
   body: kernel.ι (cokernel.π f)
 
 中文:
-缩写 image.ι
-  签名: : Abelian.image f ⟶ Q
+缩写 像.ι
+  签名: : 交换.像 f ⟶ Q
   定义体: kernel.ι (cokernel.π f)
 -/
 protected abbrev image.ι : Abelian.image f ⟶ Q :=
@@ -85,7 +85,7 @@ abbreviation factorThruImage
 
 中文:
 缩写 factorThruImage
-  签名: : P ⟶ Abelian.image f
+  签名: : P ⟶ 交换.像 f
   定义体: kernel.lift (cokernel.π f) f cokernel.condition f
 -/
 protected abbrev factorThruImage : P ⟶ Abelian.image f :=
@@ -100,8 +100,8 @@ theorem image.fac
   proof: kernel.lift_ι _ _ _
 
 中文:
-定理 image.fac
-  结论: Abelian.factorThruImage f ≫ image.ι f = f
+定理 像.fac
+  结论: 交换.factorThruImage f ≫ 像.ι f = f
   证明: kernel.lift_ι _ _ _
 -/
 protected theorem image.fac : Abelian.factorThruImage f ≫ image.ι f = f :=
@@ -117,7 +117,7 @@ instance mono_factorThruImage
 
 中文:
 实例 mono_factorThruImage
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: mono_of_mono_fac image.fac f
 
 Depends on / 依赖: image.fac, mono_of_mono_fac
@@ -157,7 +157,7 @@ abbreviation coimage.π
 
 中文:
 缩写 coimage.π
-  签名: : P ⟶ Abelian.coimage f
+  签名: : P ⟶ 交换.coimage f
   定义体: cokernel.π (kernel.ι f)
 -/
 protected abbrev coimage.π : P ⟶ Abelian.coimage f :=
@@ -173,7 +173,7 @@ abbreviation factorThruCoimage
 
 中文:
 缩写 factorThruCoimage
-  签名: : Abelian.coimage f ⟶ Q
+  签名: : 交换.coimage f ⟶ Q
   定义体: cokernel.desc (kernel.ι f) f kernel.condition f
 -/
 protected abbrev factorThruCoimage : Abelian.coimage f ⟶ Q :=
@@ -189,7 +189,7 @@ theorem coimage.fac
 
 中文:
 定理 coimage.fac
-  结论: coimage.π f ≫ Abelian.factorThruCoimage f = f
+  结论: coimage.π f ≫ 交换.factorThruCoimage f = f
   证明: cokernel.π_desc _ _ _
 -/
 protected theorem coimage.fac : coimage.π f ≫ Abelian.factorThruCoimage f = f :=
@@ -205,7 +205,7 @@ instance epi_factorThruCoimage
 
 中文:
 实例 epi_factorThruCoimage
-  签名: [Epi f]
+  签名: [满态射 f]
   定义体: epi_of_epi_fac coimage.fac f
 
 Depends on / 依赖: coimage, coimage.fac, epi_of_epi_fac
@@ -235,7 +235,7 @@ definition coimageImageComparison
 
 中文:
 定义 coimageImageComparison
-  签名: : Abelian.coimage f ⟶ Abelian.image f
+  签名: : 交换.coimage f ⟶ 交换.像 f
   定义体: cokernel.desc (kernel.ι f) (kernel.lift (cokernel.π f) f (by simp)) (by ext; simp)
 
 Depends on / 依赖: cokernel, cokernel.desc, kernel, kernel.lift
@@ -253,7 +253,7 @@ definition coimageImageComparison'
 
 中文:
 定义 coimageImageComparison'
-  签名: : Abelian.coimage f ⟶ Abelian.image f
+  签名: : 交换.coimage f ⟶ 交换.像 f
   定义体: kernel.lift (cokernel.π f) (cokernel.desc (kernel.ι f) f (by simp)) (by ext; simp)
 
 Depends on / 依赖: cokernel, cokernel.desc, kernel, kernel.lift
@@ -299,7 +299,7 @@ theorem coimage_image_factorisation
 
 中文:
 定理 coimage_image_factorisation
-  结论: coimage.π f ≫ coimageImageComparison f ≫ image.ι f = f
+  结论: coimage.π f ≫ coimageImageComparison f ≫ 像.ι f = f
   证明: by
   simp [coimageImageComparison]
 
@@ -328,7 +328,7 @@ definition coimageImageComparisonFunctor
 
 中文:
 定义 coimageImageComparisonFunctor
-  签名: : Arrow C ⥤ Arrow C where
+  签名: : 箭头 C ⥤ 箭头 C where
   定义体: Arrow.mk (coimageImageComparison f.hom)
   map {f g} η := Arrow.homMk
     (cokernel.map _ _ (kernel.map _ _ η.left η.right (by simp)) η.left (by simp))

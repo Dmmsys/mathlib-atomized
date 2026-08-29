@@ -56,10 +56,10 @@ inductive Rel
     - lie_compat: (x y : L) : Rel (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) (ιₜ x * ιₜ y)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : TensorAlgebra R L -> TensorAlgebra R L -> 命题
   构造子 (1 个):
-    - lie_compat: (x y : L) : Rel (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) (ιₜ x * ιₜ y)
+    - lie_compat: (x y : L) : 关系 (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) (ιₜ x * ιₜ y)
 -/
 inductive Rel : TensorAlgebra R L -> TensorAlgebra R L -> Prop
   | lie_compat (x y : L) : Rel (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) (ιₜ x * ιₜ y)

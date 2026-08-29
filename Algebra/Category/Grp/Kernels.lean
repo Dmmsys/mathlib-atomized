@@ -34,7 +34,7 @@ definition kernelCone
 
 中文:
 定义 kernelCone
-  签名: : KernelFork f
+  签名: : 核叉 f
   定义体: KernelFork.ofι (Z := of f.hom.ker) (ofHom f.hom.ker.subtype) ext fun x =>
     x.casesOn fun _ hx => hx
 
@@ -58,7 +58,7 @@ definition kernelIsLimit
 
 中文:
 定义 kernelIsLimit
-  签名: : IsLimit kernelCone f
+  签名: : 是极限 kernelCone f
   定义体: Fork.IsLimit.mk _
     (fun s => ofHom <| s.ι.hom.codRestrict _ fun c => mem_ker.mpr <|
       ConcreteCategory.congr_hom s.condition c)
@@ -85,7 +85,7 @@ definition cokernelCocone
 
 中文:
 定义 cokernelCocone
-  签名: : CokernelCofork f
+  签名: : 余核余叉 f
   定义体: CokernelCofork.ofπ (Z := of <| H ⧸ f.hom.range) (ofHom (mk' f.hom.range)) ext fun x =>
     (eq_zero_iff _).mpr ⟨x, rfl⟩
 
@@ -110,7 +110,7 @@ definition cokernelIsColimit
 
 中文:
 定义 cokernelIsColimit
-  签名: : IsColimit cokernelCocone f
+  签名: : 是余极限 cokernelCocone f
   定义体: Cofork.IsColimit.mk _
     (fun s => ofHom <| lift _ _ <| (range_le_ker_iff _ _).mpr <|
       congr_arg Hom.hom (CokernelCofork.condition s))

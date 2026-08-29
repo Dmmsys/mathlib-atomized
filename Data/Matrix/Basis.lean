@@ -221,7 +221,7 @@ theorem smul_single
 
 中文:
 定理 smul_single
-  条件: [SMulZeroClass R α] (r : R) (i : m) (j : n) (a : α)
+  条件: [SMulZero类 R α] (r : R) (i : m) (j : n) (a : α)
   证明: by
   unfold single
   ext
@@ -308,7 +308,7 @@ lemma map_single
 
 中文:
 引理 map_single
-  结论: (i : m) (j : n) (a : α) {β : 类型} [Zero β]
+  结论: (i : m) (j : n) (a : α) {β : 类型} [零 β]
   证明: by
   aesop (add unsafe unfold single)
 
@@ -332,7 +332,7 @@ theorem single_mem_matrix
 
 中文:
 定理 single_mem_matrix
-  条件: {S : Set α} (hS : 0 in S) {i : m} {j : n} {a : α}
+  条件: {S : 集合 α} (hS : 0 in S) {i : m} {j : n} {a : α}
   证明: by
   simp only [Set.mem_matrix, single, of_apply]
   conv_lhs => intro _ _; rw [ite_mem]
@@ -435,7 +435,7 @@ theorem single_add
 
 中文:
 定理 single_add
-  条件: [AddZeroClass α] (i : m) (j : n) (a b : α)
+  条件: [加法零类 α] (i : m) (j : n) (a b : α)
   证明: by
   ext
   simp only [single, of_apply]
@@ -459,7 +459,7 @@ lemma single_neg
 
 中文:
 引理 single_neg
-  条件: [NegZeroClass α] (i j : n) (b : α)
+  条件: [NegZero类 α] (i j : n) (b : α)
   证明: .trans ext fun x y => by simp [single, neg_ite] neg_of _
 
 Depends on / 依赖: neg_ite, neg_of, single
@@ -483,7 +483,7 @@ theorem single_mulVec
 
 中文:
 定理 single_mulVec
-  结论: [NonUnitalNonAssocSemiring α] [Fintype m]
+  结论: [非幺非结合半环 α] [有限类型 m]
   证明: by
   ext i'
   simp only [mulVec, dotProduct, single, of_apply, ite_mul, zero_mul]
@@ -514,7 +514,7 @@ lemma single_mulVec_eq
 
 中文:
 引理 single_mulVec_eq
-  条件: [Fintype n] [NonAssocSemiring α] (i j : n) (b : α) (w : n -> α)
+  条件: [有限类型 n] [非结合半环 α] (i j : n) (b : α) (w : n -> α)
   证明: by
   ext
   simp [Matrix.single_mulVec, Function.update_apply, Pi.single_apply]
@@ -538,7 +538,7 @@ lemma sum_single_eq_diagonal
 
 中文:
 引理 sum_single_eq_diagonal
-  条件: [AddCommMonoid α] [Fintype m] (f : m -> α)
+  条件: [加法交换幺半群 α] [有限类型 m] (f : m -> α)
   证明: by
   ext j k
   rw [sum_apply]; rw [diagonal_apply]; rw [Finset.sum_eq_single j] <;> simp +contextual [single]
@@ -560,7 +560,7 @@ lemma sum_single_one
 
 中文:
 引理 sum_single_one
-  条件: [AddCommMonoid α] [One α] [Fintype m]
+  条件: [加法交换幺半群 α] [幺 α] [有限类型 m]
   证明: sum_single_eq_diagonal _
 
 Depends on / 依赖: sum_single_eq_diagonal
@@ -579,7 +579,7 @@ lemma sum_single_natCast
 
 中文:
 引理 sum_single_natCast
-  条件: [AddCommMonoidWithOne α] [Fintype m] (n : 自然数)
+  条件: [加法交换带幺幺半群 α] [有限类型 m] (n : 自然数)
   证明: sum_single_eq_diagonal _
 
 Depends on / 依赖: sum_single_eq_diagonal
@@ -597,8 +597,8 @@ lemma sum_single_ofNat
   proof: sum_single_eq_diagonal _
 
 中文:
-引理 sum_single_ofNat
-  条件: [AddCommMonoidWithOne α] [Fintype m] (n : 自然数) [n.AtLeastTwo]
+引理 sum_single_of自然数
+  条件: [加法交换带幺幺半群 α] [有限类型 m] (n : 自然数) [n.AtLeastTwo]
   证明: sum_single_eq_diagonal _
 
 Depends on / 依赖: sum_single_eq_diagonal
@@ -617,7 +617,7 @@ lemma sum_single_intCast
 
 中文:
 引理 sum_single_intCast
-  条件: [AddCommGroupWithOne α] [Fintype m] (z : 整数)
+  条件: [加法交换带幺群 α] [有限类型 m] (z : 整数)
   证明: sum_single_eq_diagonal _
 
 Depends on / 依赖: sum_single_eq_diagonal
@@ -639,7 +639,7 @@ theorem sum_sum_single
 
 中文:
 定理 sum_sum_single
-  条件: [AddCommMonoid α] [Fintype m] [Fintype n] (x : m -> n -> α)
+  条件: [加法交换幺半群 α] [有限类型 m] [有限类型 n] (x : m -> n -> α)
   证明: by
   ext i j
   rw [← Fintype.sum_prod_type']
@@ -663,7 +663,7 @@ theorem matrix_eq_sum_single
 
 中文:
 定理 matrix_eq_sum_single
-  条件: [AddCommMonoid α] [Fintype m] [Fintype n] (x : Matrix m n α)
+  条件: [加法交换幺半群 α] [有限类型 m] [有限类型 n] (x : 矩阵 m n α)
   证明: .symm sum_sum_single _
 
 Depends on / 依赖: sum_sum_single
@@ -683,7 +683,7 @@ theorem single_eq_single_vecMulVec_single
 
 中文:
 定理 single_eq_single_vecMulVec_single
-  条件: [MulZeroOneClass α] (i : m) (j : n)
+  条件: [乘零幺类 α] (i : m) (j : n)
   证明: by
   simp [-mul_ite, single, vecMulVec, ite_and, Pi.single_apply, eq_comm]
 
@@ -777,7 +777,7 @@ definition singleAddMonoidHom
 
 中文:
 定义 singleAddMonoidHom
-  签名: [AddCommMonoid α] (i : m) (j : n)
+  签名: [加法交换幺半群 α] (i : m) (j : n)
   定义体: single i j
   map_zero' := single_zero _ _
   map_add' _ _ := single_add _ _ _ _
@@ -803,7 +803,7 @@ definition singleLinearMap
 
 中文:
 定义 singleLinearMap
-  签名: [Semiring R] [AddCommMonoid α] [Module R α] (i : m) (j : n)
+  签名: [半环 R] [加法交换幺半群 α] [模 R α] (i : m) (j : n)
   定义体: singleAddMonoidHom i j
 .symm map_smul' _ _ := smul_single _ _ _ _
 
@@ -902,7 +902,7 @@ definition liftLinear
 
 中文:
 定义 liftLinear
-  签名: : (m -> n -> α ->ₗ[R] β) ≃ₗ[S] (Matrix m n α ->ₗ[R] β)
+  签名: : (m -> n -> α ->ₗ[R] β) ≃ₗ[S] (矩阵 m n α ->ₗ[R] β)
   定义体: LinearEquiv.piCongrRight (fun _ => LinearMap.lsum R _ S) ≪≫ₗ LinearMap.lsum R _ S ≪≫ₗ
     LinearEquiv.congrLeft _ _ (ofLinearEquiv _)
 
@@ -924,7 +924,7 @@ theorem liftLinear_apply
 
 中文:
 定理 liftLinear_apply
-  条件: (f : m -> n -> α ->ₗ[R] β) (M : Matrix m n α)
+  条件: (f : m -> n -> α ->ₗ[R] β) (M : 矩阵 m n α)
   证明: by
   simp [liftLinear, map_sum, LinearEquiv.congrLeft]
 
@@ -1000,7 +1000,7 @@ theorem liftLinear_singleLinearMap
 
 中文:
 定理 liftLinear_singleLinearMap
-  条件: [Module S α] [SMulCommClass R S α]
+  条件: [模 S α] [标量交换类 R S α]
   证明: ext_linearMap _ liftLinear_comp_singleLinearMap _ _
 
 Depends on / 依赖: Matrix
@@ -1052,7 +1052,7 @@ theorem diag_single_same
 
 中文:
 定理 diag_single_same
-  结论: diag (single i i c) = Pi.single i c
+  结论: diag (single i i c) = 依赖函数类型.single i c
   证明: by
   ext j
   by_cases hij : i = j <;> (try rw [hij]) <;> simp [hij]
@@ -1081,7 +1081,7 @@ omit [DecidableEq l] in
 
 中文:
 定理 single_mul_apply_same
-  条件: (i : l) (j : m) (b : n) (M : Matrix m n α)
+  条件: (i : l) (j : m) (b : n) (M : 矩阵 m n α)
   证明: by simp [mul_apply, single]
 
 omit [DecidableEq l] in
@@ -1107,7 +1107,7 @@ omit [DecidableEq n] in
 
 中文:
 定理 mul_single_apply_same
-  条件: (i : m) (j : n) (a : l) (M : Matrix l m α)
+  条件: (i : m) (j : n) (a : l) (M : 矩阵 l m α)
   证明: by simp [mul_apply, single]
 
 omit [DecidableEq n] in
@@ -1133,7 +1133,7 @@ omit [DecidableEq l] in
 
 中文:
 定理 single_mul_apply_of_ne
-  条件: (i : l) (j : m) (a : l) (b : n) (h : a != i) (M : Matrix m n α)
+  条件: (i : l) (j : m) (a : l) (b : n) (h : a != i) (M : 矩阵 m n α)
   证明: by simp [mul_apply, h.symm]
 
 omit [DecidableEq l] in
@@ -1158,7 +1158,7 @@ theorem mul_single_apply_of_ne
 
 中文:
 定理 mul_single_apply_of_ne
-  条件: (i : m) (j : n) (a : l) (b : n) (hbj : b != j) (M : Matrix l m α)
+  条件: (i : m) (j : n) (a : l) (b : n) (hbj : b != j) (M : 矩阵 l m α)
   证明: by simp [mul_apply, hbj.symm]
 
 @[simp]
@@ -1216,7 +1216,7 @@ theorem single_mul_mul_single
 
 中文:
 定理 single_mul_mul_single
-  结论: [Fintype n]
+  结论: [有限类型 n]
   证明: by
   ext i'' j''
   simp only [mul_apply, single]
@@ -1285,7 +1285,7 @@ theorem row_eq_zero_of_commute_single
 
 中文:
 定理 row_eq_zero_of_commute_single
-  结论: {i j k : n} {M : Matrix n n α}
+  结论: {i j k : n} {M : 矩阵 n n α}
   证明: by
   have := ext_iff.mpr hM i k
   simp_all
@@ -1309,7 +1309,7 @@ theorem col_eq_zero_of_commute_single
 
 中文:
 定理 col_eq_zero_of_commute_single
-  结论: {i j k : n} {M : Matrix n n α}
+  结论: {i j k : n} {M : 矩阵 n n α}
   证明: by
   have := ext_iff.mpr hM k j
   simp_all
@@ -1333,7 +1333,7 @@ theorem diag_eq_of_commute_single
 
 中文:
 定理 diag_eq_of_commute_single
-  结论: {i j : n} {M : Matrix n n α}
+  结论: {i j : n} {M : 矩阵 n n α}
   证明: by
   have := ext_iff.mpr hM i j
   simp_all
@@ -1365,7 +1365,7 @@ theorem mem_range_scalar_of_commute_single
 
 中文:
 定理 mem_range_scalar_of_commute_single
-  结论: {M : Matrix n n α}
+  结论: {M : 矩阵 n n α}
   证明: by
   cases isEmpty_or_nonempty n
   · exact ⟨0, Subsingleton.elim _ _⟩
@@ -1411,7 +1411,7 @@ theorem mem_range_scalar_iff_commute_single
 
 中文:
 定理 mem_range_scalar_iff_commute_single
-  条件: {M : Matrix n n α}
+  条件: {M : 矩阵 n n α}
   证明: by
   refine ⟨fun ⟨r, hr⟩ i j _ => hr ▸ Commute.symm ?_, mem_range_scalar_of_commute_single⟩
   rw [scalar_commute_iff]
@@ -1439,7 +1439,7 @@ fun hM => mem_range_scalar_iff_commute_single.mpr fun i j _ => hM i j⟩
 
 中文:
 定理 mem_range_scalar_iff_commute_single'
-  条件: {M : Matrix n n α}
+  条件: {M : 矩阵 n n α}
   证明: by
   refine ⟨fun ⟨r, hr⟩ i j => hr ▸ Commute.symm ?_,
 fun hM => mem_range_scalar_iff_commute_single.mpr fun i j _ => hM i j⟩
@@ -1545,7 +1545,7 @@ theorem subringCenter_eq_scalar_map
 
 中文:
 定理 subringCenter_eq_scalar_map
-  条件: [Ring R]
+  条件: [环 R]
   证明: SetLike.coe_injective center_eq_scalar_image
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, center_eq_scalar_image, coe_injective
@@ -1565,7 +1565,7 @@ theorem center_eq_range
 
 中文:
 定理 center_eq_range
-  条件: [CommSemiring R]
+  条件: [交换半环 R]
   证明: by
   rw [center_eq_scalar_image]; rw [Set.center_eq_univ]; rw [Set.image_univ]
 -/

@@ -36,7 +36,7 @@ lemma map_add_left_Icc
 中文:
 引理 map_add_left_Icc
   条件: (a b c : α)
-  结论: (Icc a b).map (c + ·) = Icc (c + a) (c + b)
+  结论: (闭区间 a b).map (c + ·) = 闭区间 (c + a) (c + b)
   证明: by
   classical rw [Icc, Icc, ← Finset.image_add_left_Icc, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
@@ -61,7 +61,7 @@ lemma map_add_left_Ico
 中文:
 引理 map_add_left_Ico
   条件: (a b c : α)
-  结论: (Ico a b).map (c + ·) = Ico (c + a) (c + b)
+  结论: (左闭右开区间 a b).map (c + ·) = 左闭右开区间 (c + a) (c + b)
   证明: by
   classical rw [Ico, Ico, ← Finset.image_add_left_Ico, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
@@ -86,7 +86,7 @@ lemma map_add_left_Ioc
 中文:
 引理 map_add_left_Ioc
   条件: (a b c : α)
-  结论: (Ioc a b).map (c + ·) = Ioc (c + a) (c + b)
+  结论: (左开右闭区间 a b).map (c + ·) = 左开右闭区间 (c + a) (c + b)
   证明: by
   classical rw [Ioc, Ioc, ← Finset.image_add_left_Ioc, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
@@ -111,7 +111,7 @@ lemma map_add_left_Ioo
 中文:
 引理 map_add_left_Ioo
   条件: (a b c : α)
-  结论: (Ioo a b).map (c + ·) = Ioo (c + a) (c + b)
+  结论: (开区间 a b).map (c + ·) = 开区间 (c + a) (c + b)
   证明: by
   classical rw [Ioo, Ioo, ← Finset.image_add_left_Ioo, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
@@ -136,7 +136,7 @@ lemma map_add_right_Icc
 中文:
 引理 map_add_right_Icc
   条件: (a b c : α)
-  结论: ((Icc a b).map fun x => x + c) = Icc (a + c) (b + c)
+  结论: ((闭区间 a b).map fun x => x + c) = 闭区间 (a + c) (b + c)
   证明: by
   simp_rw [add_comm _ c]
   exact map_add_left_Icc _ _ _
@@ -161,7 +161,7 @@ lemma map_add_right_Ico
 中文:
 引理 map_add_right_Ico
   条件: (a b c : α)
-  结论: ((Ico a b).map fun x => x + c) = Ico (a + c) (b + c)
+  结论: ((左闭右开区间 a b).map fun x => x + c) = 左闭右开区间 (a + c) (b + c)
   证明: by
   simp_rw [add_comm _ c]
   exact map_add_left_Ico _ _ _
@@ -186,7 +186,7 @@ lemma map_add_right_Ioc
 中文:
 引理 map_add_right_Ioc
   条件: (a b c : α)
-  结论: ((Ioc a b).map fun x => x + c) = Ioc (a + c) (b + c)
+  结论: ((左开右闭区间 a b).map fun x => x + c) = 左开右闭区间 (a + c) (b + c)
   证明: by
   simp_rw [add_comm _ c]
   exact map_add_left_Ioc _ _ _
@@ -211,7 +211,7 @@ lemma map_add_right_Ioo
 中文:
 引理 map_add_right_Ioo
   条件: (a b c : α)
-  结论: ((Ioo a b).map fun x => x + c) = Ioo (a + c) (b + c)
+  结论: ((开区间 a b).map fun x => x + c) = 开区间 (a + c) (b + c)
   证明: by
   simp_rw [add_comm _ c]
   exact map_add_left_Ioo _ _ _

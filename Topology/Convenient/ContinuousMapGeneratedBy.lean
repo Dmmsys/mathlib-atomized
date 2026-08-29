@@ -202,7 +202,7 @@ lemma Continuous.continuousGeneratedBy
   exact fun _ f => hg.comp f.continuous
 
 中文:
-引理 Continuous.continuousGeneratedBy
+引理 连续.continuousGeneratedBy
   结论: {g : Y -> Z}
   证明: by
   rw [continuousGeneratedBy_def]
@@ -231,7 +231,7 @@ structure ContinuousMapGeneratedBy
     - prop : ContinuousGeneratedBy X toFun
 
 中文:
-结构 ContinuousMapGeneratedBy
+结构 余ntinuousMapGeneratedBy
   参数: where
   公理与运算 (2 个):
     - toFun : Y -> Z
@@ -255,7 +255,7 @@ initialize_simps_projections ContinuousMapGeneratedBy (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (ContinuousMapGeneratedBy X Y Z) Y Z
+  签名: 函数状 (余ntinuousMapGeneratedBy X Y Z) Y Z
   定义体: f.toFun
   coe_injective _ _ _ := by aesop
 
@@ -281,8 +281,8 @@ definition ContinuousMapGeneratedBy.id
   prop := continuous_id.continuousGeneratedBy
 
 中文:
-定义 ContinuousMapGeneratedBy.id
-  签名: : ContinuousMapGeneratedBy X Y Y where
+定义 余ntinuousMapGeneratedBy.id
+  签名: : 余ntinuousMapGeneratedBy X Y Y where
   定义体: _root_.id
   prop := continuous_id.continuousGeneratedBy
 
@@ -303,7 +303,7 @@ definition ContinuousMapGeneratedBy.comp
   prop := g.prop.comp f.prop
 
 中文:
-定义 ContinuousMapGeneratedBy.comp
+定义 余ntinuousMapGeneratedBy.comp
   定义体: g.toFun.comp f.toFun
   prop := g.prop.comp f.prop
 

@@ -32,8 +32,8 @@ instance [Fintype
   body: Quotient.fintype (IsConj.setoid α)
 
 中文:
-实例 [Fintype
-  签名: α] [DecidableRel (IsConj : α -> α -> 命题)] : Fintype (ConjClasses α)
+实例 [有限类型
+  签名: α] [DecidableRel (IsConj : α -> α -> 命题)] : 有限类型 (ConjClasses α)
   定义体: Quotient.fintype (IsConj.setoid α)
 
 Depends on / 依赖: IsConj, IsConj.setoid, Quotient, Quotient.fintype, fintype, setoid
@@ -50,8 +50,8 @@ instance [Finite
   body: Quotient.finite _
 
 中文:
-实例 [Finite
-  签名: α] : Finite (ConjClasses α)
+实例 [有限
+  签名: α] : 有限 (ConjClasses α)
   定义体: Quotient.finite _
 
 Depends on / 依赖: Quotient, Quotient.finite, finite
@@ -70,7 +70,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [Fintype α] : DecidableRel (IsConj
+  签名: α] [有限类型 α] : DecidableRel (IsConj
   定义体: fun a b =>
   inferInstanceAs (Decidable (exists c : αˣ, c.1 * a = b * c.1))
 -/
@@ -87,7 +87,7 @@ instance conjugatesOf.fintype
 
 中文:
 实例 conjugatesOf.fintype
-  签名: [Fintype α] [DecidableRel (IsConj : α -> α -> 命题)] {a : α}
+  签名: [有限类型 α] [DecidableRel (IsConj : α -> α -> 命题)] {a : α}
   定义体: @Subtype.fintype _ _ (‹DecidableRel IsConj› a) _
 
 Depends on / 依赖: DecidableRel, IsConj, Subtype, Subtype.fintype, fintype

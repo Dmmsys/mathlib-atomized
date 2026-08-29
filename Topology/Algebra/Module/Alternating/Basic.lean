@@ -39,8 +39,8 @@ structure ContinuousAlternatingMap
   (no additional axioms)
 
 中文:
-结构 ContinuousAlternatingMap
-  参数: (R M N ι : 类型) [Semiring R] [AddCommMonoid M] [Module R M]
+结构 余ntinuousAlternating映射
+  参数: (R M N ι : 类型) [半环 R] [加法交换幺半群 M] [模 R M]
   (无附加公理)
 -/
 structure ContinuousAlternatingMap (R M N ι : Type*) [Semiring R] [AddCommMonoid M] [Module R M]
@@ -110,7 +110,7 @@ coe_injective _ _ h := toContinuousMultilinearMap_injective DFunLike.ext' h
 
 中文:
 实例 funLike
-  签名: : FunLike (M [⋀^ι]->L[R] N) (ι -> M) N where
+  签名: : 函数状 (M [⋀^ι]->L[R] N) (ι -> M) N where
   定义体: f.toFun
 coe_injective _ _ h := toContinuousMultilinearMap_injective DFunLike.ext' h
 
@@ -134,7 +134,7 @@ initialize_simps_projections ContinuousAlternatingMap (toFun -> apply)
 
 中文:
 实例 continuousMapClass
-  签名: : ContinuousMapClass (M [⋀^ι]->L[R] N) (ι -> M) N where
+  签名: : 连续映射类 (M [⋀^ι]->L[R] N) (ι -> M) N where
   定义体: f.cont
 
 initialize_simps_projections ContinuousAlternatingMap (toFun -> apply)
@@ -161,7 +161,7 @@ theorem coe_continuous
 
 中文:
 定理 coe_continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: f.cont
 
 @[simp]
@@ -203,7 +203,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f : ContinuousMultilinearMap R (fun _ : ι => M) N) (h)
+  条件: (f : 连续多重线性映射 R (fun _ : ι => M) N) (h)
   结论: ⇑(mk f h) = f
   证明: rfl
 -/
@@ -401,7 +401,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: f 0 = 0
   证明: f.toMultilinearMap.map_zero
 
@@ -441,7 +441,7 @@ theorem map_eq_zero_of_not_injective
 
 中文:
 定理 map_eq_zero_of_not_injective
-  条件: (v : ι -> M) (hv : ¬Function.Injective v)
+  条件: (v : ι -> M) (hv : ¬函数.单射 v)
   结论: f v = 0
   证明: f.toAlternatingMap.map_eq_zero_of_not_injective v hv
 
@@ -462,7 +462,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : M [⋀^ι]->L[R] N) (p : Submodule R N) (h : 对任意 v, f v in p)
+  签名: (f : M [⋀^ι]->L[R] N) (p : 子模 R N) (h : 对任意 v, f v in p)
   定义体: { f.toAlternatingMap.codRestrict p h with toContinuousMultilinearMap := f.1.codRestrict p h }
 
 Depends on / 依赖: codRestrict, f.toAlternatingMap.codRestrict, toAlternatingMap, toContinuousMultilinearMap
@@ -480,7 +480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M [⋀^ι]->L[R] N)
+  签名: 零 (M [⋀^ι]->L[R] N)
   定义体: ⟨⟨0, (0 : M [⋀^ι]->ₗ[R] N).map_eq_zero_of_eq⟩⟩
 
 Depends on / 依赖: map_eq_zero_of_eq
@@ -500,7 +500,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M [⋀^ι]->L[R] N)
+  签名: 可居 (M [⋀^ι]->L[R] N)
   定义体: ⟨0⟩
 
 @[simp]
@@ -585,7 +585,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R' (M [⋀^ι]->L[A] N)
+  签名: 标量乘法 R' (M [⋀^ι]->L[A] N)
   定义体: ⟨fun c f => ⟨c • f.1, (c • f.toAlternatingMap).map_eq_zero_of_eq⟩⟩
 
 @[simp]
@@ -685,8 +685,8 @@ instance [SMulCommClass
   body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 中文:
-实例 [SMulCommClass
-  签名: R' R'' N] : SMulCommClass R' R'' (M [⋀^ι]->L[A] N)
+实例 [标量交换类
+  签名: R' R'' N] : 标量交换类 R' R'' (M [⋀^ι]->L[A] N)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -703,8 +703,8 @@ instance [SMul
   body: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 中文:
-实例 [SMul
-  签名: R' R''] [IsScalarTower R' R'' N] : IsScalarTower R' R'' (M [⋀^ι]->L[A] N)
+实例 [标量乘法
+  签名: R' R''] [标量塔 R' R'' N] : 标量塔 R' R'' (M [⋀^ι]->L[A] N)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc
@@ -721,8 +721,8 @@ instance [DistribMulAction
   body: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
 
 中文:
-实例 [DistribMulAction
-  签名: R'ᵐᵒᵖ N] [IsCentralScalar R' N] : IsCentralScalar R' (M [⋀^ι]->L[A] N)
+实例 [分配乘法作用
+  签名: R'ᵐᵒᵖ N] [中心标量 R' N] : 中心标量 R' (M [⋀^ι]->L[A] N)
   定义体: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: op_smul_eq_smul
@@ -741,7 +741,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction R' (M [⋀^ι]->L[A] N)
+  签名: 乘法作用 R' (M [⋀^ι]->L[A] N)
   定义体: fast_instance%
   toContinuousMultilinearMap_injective.mulAction toContinuousMultilinearMap fun _ _ => rfl
 
@@ -768,7 +768,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M [⋀^ι]->L[R] N)
+  签名: 加法 (M [⋀^ι]->L[R] N)
   定义体: ⟨fun f g => ⟨f.1 + g.1, (f.toAlternatingMap + g.toAlternatingMap).map_eq_zero_of_eq⟩⟩
 
 @[simp]
@@ -874,7 +874,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (M [⋀^ι]->L[R] N)
+  签名: : 加法交换幺半群 (M [⋀^ι]->L[R] N)
   定义体: fast_instance%
   toContinuousMultilinearMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -914,7 +914,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: {α : 类型} (f : α -> M [⋀^ι]->L[R] N) (m : ι -> M) {s : Finset α}
+  条件: {α : 类型} (f : α -> M [⋀^ι]->L[R] N) (m : ι -> M) {s : 有限集 α}
   证明: map_sum (applyAddHom m) f s
 
 Depends on / 依赖: applyAddHom, map_sum
@@ -935,7 +935,7 @@ definition toMultilinearAddHom
 
 中文:
 定义 toMultilinearAddHom
-  签名: : M [⋀^ι]->L[R] N ->+ ContinuousMultilinearMap R (fun _ : ι => M) N
+  签名: : M [⋀^ι]->L[R] N ->+ 连续多重线性映射 R (fun _ : ι => M) N
   定义体: ⟨⟨fun f => f.1, rfl⟩, fun _ _ => rfl⟩
 -/
 def toMultilinearAddHom : M [⋀^ι]->L[R] N ->+ ContinuousMultilinearMap R (fun _ : ι => M) N :=
@@ -976,7 +976,7 @@ definition prod
   body: ⟨f.1.prod g.1, (f.toAlternatingMap.prod g.toAlternatingMap).map_eq_zero_of_eq⟩
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : M [⋀^ι]->L[R] N) (g : M [⋀^ι]->L[R] N')
   定义体: ⟨f.1.prod g.1, (f.toAlternatingMap.prod g.toAlternatingMap).map_eq_zero_of_eq⟩
 
@@ -998,7 +998,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)] [对任意 i, TopologicalSpace (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)] [对任意 i, 拓扑空间 (M' i)]
   定义体: ⟨ContinuousMultilinearMap.pi fun i => (f i).1,
     (AlternatingMap.pi fun i => (f i).toAlternatingMap).map_eq_zero_of_eq⟩
 
@@ -1022,7 +1022,7 @@ theorem coe_pi
 
 中文:
 定理 coe_pi
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   证明: rfl
 -/
 theorem coe_pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
@@ -1040,7 +1040,7 @@ theorem pi_apply
 
 中文:
 定理 pi_apply
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   证明: rfl
 -/
 theorem pi_apply {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
@@ -1069,7 +1069,7 @@ right_inv _ := toContinuousMultilinearMap_injective
 
 中文:
 定义 ofSubsingleton
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: { AlternatingMap.ofSubsingleton R M N i f with
       toContinuousMultilinearMap := ContinuousMultilinearMap.ofSubsingleton R M N i f }
   invFun f := (ContinuousMultilinearMap.ofSubsingleton R M N i).symm f.1
@@ -1098,7 +1098,7 @@ theorem ofSubsingleton_toAlternatingMap
 
 中文:
 定理 ofSubsingleton_toAlternatingMap
-  条件: [Subsingleton ι] (i : ι) (f : M ->L[R] N)
+  条件: [子单例 ι] (i : ι) (f : M ->L[R] N)
   证明: rfl
 -/
 theorem ofSubsingleton_toAlternatingMap [Subsingleton ι] (i : ι) (f : M ->L[R] N) :
@@ -1122,7 +1122,7 @@ definition constOfIsEmpty
 
 中文:
 定义 constOfIsEmpty
-  签名: [IsEmpty ι] (m : N)
+  签名: [是空 ι] (m : N)
   定义体: { AlternatingMap.constOfIsEmpty R M ι m with
     toContinuousMultilinearMap := ContinuousMultilinearMap.constOfIsEmpty R (fun _ => M) m }
 
@@ -1145,7 +1145,7 @@ theorem constOfIsEmpty_toAlternatingMap
 
 中文:
 定理 constOfIsEmpty_toAlternatingMap
-  条件: [IsEmpty ι] (m : N)
+  条件: [是空 ι] (m : N)
   证明: rfl
 -/
 theorem constOfIsEmpty_toAlternatingMap [IsEmpty ι] (m : N) :
@@ -1209,7 +1209,7 @@ definition _root_.ContinuousLinearMap.compContinuousAlternatingMap
 @[simp]
 
 中文:
-定义 _root_.ContinuousLinearMap.compContinuousAlternatingMap
+定义 _root_.连续线性映射.compContinuousAlternatingMap
   签名: (g : N ->L[R] N') (f : M [⋀^ι]->L[R] N)
   定义体: { (g : N ->ₗ[R] N').compAlternatingMap f.toAlternatingMap with
     toContinuousMultilinearMap := g.compContinuousMultilinearMap f.1 }
@@ -1233,7 +1233,7 @@ theorem _root_.ContinuousLinearMap.compContinuousAlternatingMap_coe
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearMap.compContinuousAlternatingMap_coe
+定理 _root_.连续线性映射.compContinuousAlternatingMap_coe
   结论: (g : N ->L[R] N')
   证明: rfl
 -/
@@ -1261,7 +1261,7 @@ definition _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrLeftEquiv
   right_inv f := by ext; simp [Function.comp_def]
 
 中文:
-定义 _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrLeftEquiv
+定义 _root_.连续线性等价.continuousAlternatingMapCongrLeftEquiv
   签名: (e : M ≃L[R] M')
   定义体: f.compContinuousLinearMap ↑e.symm
   invFun f := f.compContinuousLinearMap ↑e
@@ -1294,7 +1294,7 @@ definition _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrRightEquiv
 @[simp]
 
 中文:
-定义 _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrRightEquiv
+定义 _root_.连续线性等价.continuousAlternatingMapCongrRightEquiv
   签名: (e : N ≃L[R] N')
   定义体: (e : N ->L[R] N').compContinuousAlternatingMap
   invFun := (e.symm : N' ->L[R] N).compContinuousAlternatingMap
@@ -1321,7 +1321,7 @@ theorem _root_.ContinuousLinearEquiv.compContinuousAlternatingMap_coe
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearEquiv.compContinuousAlternatingMap_coe
+定理 _root_.连续线性等价.compContinuousAlternatingMap_coe
   证明: rfl
 -/
 theorem _root_.ContinuousLinearEquiv.compContinuousAlternatingMap_coe
@@ -1337,7 +1337,7 @@ definition _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrEquiv
   body: e.continuousAlternatingMapCongrLeftEquiv.trans e'.continuousAlternatingMapCongrRightEquiv
 
 中文:
-定义 _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrEquiv
+定义 _root_.连续线性等价.continuousAlternatingMapCongrEquiv
   定义体: e.continuousAlternatingMapCongrLeftEquiv.trans e'.continuousAlternatingMapCongrRightEquiv
 
 Depends on / 依赖: continuousAlternatingMapCongrLeftEquiv, continuousAlternatingMapCongrRightEquiv, e.continuousAlternatingMapCongrLeftEquiv.trans
@@ -1359,7 +1359,7 @@ definition piEquiv
 
 中文:
 定义 piEquiv
-  签名: {ι' : 类型} {N : ι' -> 类型} [对任意 i, AddCommMonoid (N i)] [对任意 i, TopologicalSpace (N i)]
+  签名: {ι' : 类型} {N : ι' -> 类型} [对任意 i, 加法交换幺半群 (N i)] [对任意 i, 拓扑空间 (N i)]
   定义体: pi
   invFun f i := (ContinuousLinearMap.proj i : _ ->L[R] N i).compContinuousAlternatingMap f
 -/
@@ -1378,7 +1378,7 @@ theorem cons_add
 
 中文:
 定理 cons_add
-  条件: (f : ContinuousAlternatingMap R M N (Fin (n + 1))) (m : Fin n -> M) (x y : M)
+  条件: (f : 余ntinuousAlternating映射 R M N (有限集 (n + 1))) (m : 有限集 n -> M) (x y : M)
   证明: f.toMultilinearMap.cons_add m x y
 
 Depends on / 依赖: cons_add, f.toMultilinearMap.cons_add, toMultilinearMap
@@ -1397,7 +1397,7 @@ theorem vecCons_add
 
 中文:
 定理 vecCons_add
-  条件: (f : ContinuousAlternatingMap R M N (Fin (n + 1))) (m : Fin n -> M) (x y : M)
+  条件: (f : 余ntinuousAlternating映射 R M N (有限集 (n + 1))) (m : 有限集 n -> M) (x y : M)
   证明: f.toMultilinearMap.cons_add m x y
 
 Depends on / 依赖: cons_add, f.toMultilinearMap.cons_add, toMultilinearMap
@@ -1416,7 +1416,7 @@ theorem cons_smul
 
 中文:
 定理 cons_smul
-  结论: (f : ContinuousAlternatingMap R M N (Fin (n + 1))) (m : Fin n -> M) (c : R)
+  结论: (f : 余ntinuousAlternating映射 R M N (有限集 (n + 1))) (m : 有限集 n -> M) (c : R)
   证明: f.toMultilinearMap.cons_smul m c x
 
 Depends on / 依赖: cons_smul, f.toMultilinearMap.cons_smul, toMultilinearMap
@@ -1435,7 +1435,7 @@ theorem vecCons_smul
 
 中文:
 定理 vecCons_smul
-  结论: (f : ContinuousAlternatingMap R M N (Fin (n + 1))) (m : Fin n -> M) (c : R)
+  结论: (f : 余ntinuousAlternating映射 R M N (有限集 (n + 1))) (m : 有限集 n -> M) (c : R)
   证明: f.toMultilinearMap.cons_smul m c x
 
 Depends on / 依赖: cons_smul, f.toMultilinearMap.cons_smul, toMultilinearMap
@@ -1454,7 +1454,7 @@ theorem map_piecewise_add
 
 中文:
 定理 map_piecewise_add
-  条件: [DecidableEq ι] (m m' : ι -> M) (t : Finset ι)
+  条件: [DecidableEq ι] (m m' : ι -> M) (t : 有限集 ι)
   证明: f.toMultilinearMap.map_piecewise_add _ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_piecewise_add, map_piecewise_add, toMultilinearMap
@@ -1473,7 +1473,7 @@ theorem map_add_univ
 
 中文:
 定理 map_add_univ
-  条件: [DecidableEq ι] [Fintype ι] (m m' : ι -> M)
+  条件: [DecidableEq ι] [有限类型 ι] (m m' : ι -> M)
   证明: f.toMultilinearMap.map_add_univ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_add_univ, map_add_univ, toMultilinearMap
@@ -1515,7 +1515,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: [对任意 i, Fintype (α i)]
+  条件: [对任意 i, 有限类型 (α i)]
   证明: f.toMultilinearMap.map_sum _
 
 Depends on / 依赖: f.toMultilinearMap.map_sum, map_sum, toMultilinearMap
@@ -1620,7 +1620,7 @@ theorem map_vecCons_sub
 
 中文:
 定理 map_vecCons_sub
-  条件: {n} (f : M [⋀^Fin (n + 1)]->L[R] N) (x y : M) (v : Fin n -> M)
+  条件: {n} (f : M [⋀^有限集 (n + 1)]->L[R] N) (x y : M) (v : 有限集 n -> M)
   证明: by
   rw [vecCons]; rw [← Fin.update_cons_zero 0]; rw [map_update_sub]
   simp [vecCons]
@@ -1648,7 +1648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M [⋀^ι]->L[R] N)
+  签名: 取负 (M [⋀^ι]->L[R] N)
   定义体: ⟨fun f => { -f.toAlternatingMap with toContinuousMultilinearMap := -f.1 }⟩
 
 @[simp]
@@ -1704,7 +1704,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M [⋀^ι]->L[R] N)
+  签名: 减法 (M [⋀^ι]->L[R] N)
   定义体: ⟨fun f g =>
     { f.toAlternatingMap - g.toAlternatingMap with toContinuousMultilinearMap := f.1 - g.1 }⟩
 
@@ -1758,7 +1758,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (M [⋀^ι]->L[R] N)
+  签名: 加法交换群 (M [⋀^ι]->L[R] N)
   定义体: fast_instance%
   toContinuousMultilinearMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
@@ -1789,7 +1789,7 @@ theorem map_piecewise_smul
 
 中文:
 定理 map_piecewise_smul
-  条件: [DecidableEq ι] (c : ι -> R) (m : ι -> M) (s : Finset ι)
+  条件: [DecidableEq ι] (c : ι -> R) (m : ι -> M) (s : 有限集 ι)
   证明: f.toMultilinearMap.map_piecewise_smul _ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_piecewise_smul, map_piecewise_smul, toMultilinearMap
@@ -1808,7 +1808,7 @@ theorem map_smul_univ
 
 中文:
 定理 map_smul_univ
-  条件: [Fintype ι] (c : ι -> R) (m : ι -> M)
+  条件: [有限类型 ι] (c : ι -> R) (m : ι -> M)
   证明: f.toMultilinearMap.map_smul_univ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_smul_univ, map_smul_univ, toMultilinearMap
@@ -1832,7 +1832,7 @@ theorem ext_ring
 
 中文:
 定理 ext_ring
-  条件: [Finite ι] [TopologicalSpace R] ⦃f g
+  条件: [有限 ι] [拓扑空间 R] ⦃f g
   结论: R [⋀^ι]->L[R] M⦄
   证明: toAlternatingMap_injective AlternatingMap.ext_ring h
 
@@ -1852,7 +1852,7 @@ instance uniqueOfCommRing
 
 中文:
 实例 uniqueOfCommRing
-  签名: [Finite ι] [Nontrivial ι] [TopologicalSpace R]
+  签名: [有限 ι] [非平凡 ι] [拓扑空间 R]
   定义体: toAlternatingMap_injective Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, toAlternatingMap_injective
@@ -1880,8 +1880,8 @@ instance [ContinuousAdd
     toContinuousMultilinearMap_injective fun _ _ => rfl
 
 中文:
-实例 [ContinuousAdd
-  签名: N] : DistribMulAction R (M [⋀^ι]->L[A] N)
+实例 [连续加法
+  签名: N] : 分配乘法作用 R (M [⋀^ι]->L[A] N)
   定义体: fast_instance%
   Function.Injective.distribMulAction toMultilinearAddHom
     toContinuousMultilinearMap_injective fun _ _ => rfl
@@ -1912,7 +1912,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (M [⋀^ι]->L[A] N)
+  签名: 模 R (M [⋀^ι]->L[A] N)
   定义体: fast_instance%
   Function.Injective.module _ toMultilinearAddHom toContinuousMultilinearMap_injective fun _ _ =>
     rfl
@@ -1992,7 +1992,7 @@ definition piLinearEquiv
 
 中文:
 定义 piLinearEquiv
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   定义体: { piEquiv with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -2083,7 +2083,7 @@ definition _root_.ContinuousLinearMap.compContinuousAlternatingMapₗ
     (fun _ _ _ => rfl) (fun f g₁ g₂ => by ext1; apply f.map_add) fun c f g => by ext1; simp
 
 中文:
-定义 _root_.ContinuousLinearMap.compContinuousAlternatingMapₗ
+定义 _root_.连续线性映射.compContinuousAlternatingMapₗ
   签名: :
   定义体: LinearMap.mk₂ R ContinuousLinearMap.compContinuousAlternatingMap (fun _ _ _ => rfl)
     (fun _ _ _ => rfl) (fun f g₁ g₂ => by ext1; apply f.map_add) fun c f g => by ext1; simp
@@ -2122,7 +2122,7 @@ definition alternatization
 
 中文:
 定义 alternatization
-  签名: : ContinuousMultilinearMap R (fun _ : ι => M) N ->+ M [⋀^ι]->L[R] N where
+  签名: : 连续多重线性映射 R (fun _ : ι => M) N ->+ M [⋀^ι]->L[R] N where
   定义体: { toContinuousMultilinearMap := ∑ σ : Equiv.Perm ι, Equiv.Perm.sign σ • f.domDomCongr σ
       map_eq_zero_of_eq' := fun v i j hv hne => by
         simpa [MultilinearMap.alternatization_apply]

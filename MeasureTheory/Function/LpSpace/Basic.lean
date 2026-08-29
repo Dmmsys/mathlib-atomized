@@ -86,7 +86,7 @@ theorem eLpNorm_aeeqFun
 
 中文:
 定理 eLpNorm_aeeqFun
-  结论: {α E : 类型} [MeasurableSpace α] {μ : Measure α} [NormedAddCommGroup E]
+  结论: {α E : 类型} [可测空间 α] {μ : 测度 α} [赋范交换加群 E]
   证明: eLpNorm_congr_ae (AEEqFun.coeFn_mk _ _)
 
 Depends on / 依赖: AEEqFun, AEEqFun.coeFn_mk, coeFn_mk, eLpNorm_congr_ae
@@ -106,7 +106,7 @@ theorem MemLp.eLpNorm_mk_lt_top
 
 中文:
 定理 MemLp.eLpNorm_mk_lt_top
-  结论: {α E : 类型} [MeasurableSpace α] {μ : Measure α}
+  结论: {α E : 类型} [可测空间 α] {μ : 测度 α}
   证明: by simp [hfp.2]
 -/
 theorem MemLp.eLpNorm_mk_lt_top {α E : Type*} [MeasurableSpace α] {μ : Measure α}
@@ -128,7 +128,7 @@ definition Lp
 
 中文:
 定义 Lp
-  签名: {α} (E : 类型) {m : MeasurableSpace α} [NormedAddCommGroup E] (p : 实数>=0∞)
+  签名: {α} (E : 类型) {m : 可测空间 α} [赋范交换加群 E] (p : 实数>=0∞)
   定义体: { f | eLpNorm f p μ < ∞ }
   zero_mem' := by simp [eLpNorm_congr_ae AEEqFun.coeFn_zero, eLpNorm_zero]
   add_mem' {f g} hf hg := by
@@ -421,7 +421,7 @@ theorem antitone
 
 中文:
 定理 antitone
-  条件: [IsFiniteMeasure μ] {p q : 实数>=0∞} (hpq : p <= q)
+  条件: [是有限测度 μ] {p q : 实数>=0∞} (hpq : p <= q)
   结论: Lp E q μ <= Lp E p μ
   证明: fun f hf => (MemLp.mono_exponent ⟨f.aestronglyMeasurable, hf⟩ hpq).2
 
@@ -697,7 +697,7 @@ theorem coeFn_finsetSum
 
 中文:
 定理 coeFn_finsetSum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Lp E p μ)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> Lp E p μ)
   证明: by
   simp [AEEqFun.coeFn_finsetSum]
 
@@ -719,7 +719,7 @@ theorem coeFn_fun_finsetSum
 
 中文:
 定理 coeFn_fun_finsetSum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Lp E p μ)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> Lp E p μ)
   证明: by
   grw [coeFn_finsetSum]
   filter_upwards with x using by simp
@@ -741,7 +741,7 @@ theorem const_mem_Lp
 
 中文:
 定理 const_mem_Lp
-  条件: (α) {_ : MeasurableSpace α} (μ : Measure α) (c : E) [IsFiniteMeasure μ]
+  条件: (α) {_ : 可测空间 α} (μ : 测度 α) (c : E) [是有限测度 μ]
   证明: (memLp_const c).eLpNorm_mk_lt_top
 
 Depends on / 依赖: eLpNorm_mk_lt_top, memLp_const
@@ -760,7 +760,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm (Lp E p μ) where norm f
+  签名: : 范数 (Lp E p μ) where norm f
   定义体: ENNReal.toReal (eLpNorm f p μ)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, eLpNorm, toReal
@@ -779,7 +779,7 @@ instance instNNNorm
 
 中文:
 实例 instNNNorm
-  签名: : NNNorm (Lp E p μ) where nnnorm f
+  签名: : NN范数 (Lp E p μ) where nnnorm f
   定义体: .mk ‖f‖ ENNReal.toReal_nonneg
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, toReal_nonneg
@@ -830,7 +830,7 @@ theorem norm_def
 中文:
 定理 norm_def
   条件: (f : Lp E p μ)
-  结论: ‖f‖ = ENN实数.to实数 (eLpNorm f p μ)
+  结论: ‖f‖ = 广义非负实数.to实数 (eLpNorm f p μ)
   证明: rfl
 -/
 theorem norm_def (f : Lp E p μ) : ‖f‖ = ENNReal.toReal (eLpNorm f p μ) :=
@@ -850,7 +850,7 @@ theorem nnnorm_def
 中文:
 定理 nnnorm_def
   条件: (f : Lp E p μ)
-  结论: ‖f‖₊ = ENN实数.toNN实数 (eLpNorm f p μ)
+  结论: ‖f‖₊ = 广义非负实数.toNN实数 (eLpNorm f p μ)
   证明: rfl
 
 @[simp, norm_cast]
@@ -917,7 +917,7 @@ lemma norm_toLp
 中文:
 引理 norm_toLp
   条件: (f : α -> E) (hf : MemLp f p μ)
-  结论: ‖hf.toLp f‖ = ENN实数.to实数 (eLpNorm f p μ)
+  结论: ‖hf.toLp f‖ = 广义非负实数.to实数 (eLpNorm f p μ)
   证明: by
   rw [norm_def]; rw [eLpNorm_congr_ae (MemLp.coeFn_toLp hf)]
 
@@ -1247,7 +1247,7 @@ theorem norm_measure_zero
 
 中文:
 定理 norm_measure_zero
-  条件: (f : Lp E p (0 : MeasureTheory.Measure α))
+  条件: (f : Lp E p (0 : 测度论.测度 α))
   结论: ‖f‖ = 0
   证明: by
   -- Squeezed for performance reasons
@@ -1587,7 +1587,7 @@ theorem mem_Lp_of_ae_nnnorm_bound
 
 中文:
 定理 mem_Lp_of_ae_nnnorm_bound
-  结论: [IsFiniteMeasure μ] {f : α ->ₘ[μ] E} (C : 实数>=0)
+  结论: [是有限测度 μ] {f : α ->ₘ[μ] E} (C : 实数>=0)
   证明: mem_Lp_iff_memLp.2 MemLp.of_bound f.aestronglyMeasurable _ hfC
 
 Depends on / 依赖: MemLp.of_bound, aestronglyMeasurable, f.aestronglyMeasurable, mem_Lp_iff_memLp, of_bound
@@ -1606,7 +1606,7 @@ theorem mem_Lp_of_ae_bound
 
 中文:
 定理 mem_Lp_of_ae_bound
-  条件: [IsFiniteMeasure μ] {f : α ->ₘ[μ] E} (C : 实数) (hfC : 对任意ᵐ x ∂μ, ‖f x‖ <= C)
+  条件: [是有限测度 μ] {f : α ->ₘ[μ] E} (C : 实数) (hfC : 对任意ᵐ x ∂μ, ‖f x‖ <= C)
   证明: mem_Lp_iff_memLp.2 MemLp.of_bound f.aestronglyMeasurable _ hfC
 
 Depends on / 依赖: MemLp.of_bound, aestronglyMeasurable, f.aestronglyMeasurable, mem_Lp_iff_memLp, of_bound
@@ -1630,7 +1630,7 @@ theorem nnnorm_le_of_ae_bound
 
 中文:
 定理 nnnorm_le_of_ae_bound
-  结论: [IsFiniteMeasure μ] {f : Lp E p μ} {C : 实数>=0}
+  结论: [是有限测度 μ] {f : Lp E p μ} {C : 实数>=0}
   证明: by
   by_cases hμ : μ = 0
   · simp [hμ, nnnorm_def]
@@ -1661,7 +1661,7 @@ theorem norm_le_of_ae_bound
 
 中文:
 定理 norm_le_of_ae_bound
-  结论: [IsFiniteMeasure μ] {f : Lp E p μ} {C : 实数} (hC : 0 <= C)
+  结论: [是有限测度 μ] {f : Lp E p μ} {C : 实数} (hC : 0 <= C)
   证明: by
   lift C to Real>=0 using hC
   have := nnnorm_le_of_ae_bound hfC
@@ -1685,7 +1685,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (Lp E p μ)
+  签名: : 加法交换群 (Lp E p μ)
   定义体: inferInstance
 -/
 instance instAddCommGroup : AddCommGroup (Lp E p μ) := inferInstance
@@ -1785,7 +1785,7 @@ definition LpSubmodule
 
 中文:
 定义 LpSubmodule
-  签名: : Submodule 𝕜 (α ->ₘ[μ] E)
+  签名: : 子模 𝕜 (α ->ₘ[μ] E)
   定义体: { Lp E p μ with smul_mem' := fun c f hf => by simpa using const_smul_mem_Lp c ⟨f, hf⟩ }
 
 Depends on / 依赖: const_smul_mem_Lp, smul_mem
@@ -1821,7 +1821,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 (Lp E p μ)
+  签名: : 模 𝕜 (Lp E p μ)
   定义体: fast_instance% (LpSubmodule 𝕜 E p μ).module
 
 Depends on / 依赖: LpSubmodule, fast_instance, module
@@ -1859,7 +1859,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [Module 𝕜ᵐᵒᵖ E] [IsBoundedSMul 𝕜ᵐᵒᵖ E] [IsCentralScalar 𝕜 E]
+  签名: [模 𝕜ᵐᵒᵖ E] [是BoundedSMul 𝕜ᵐᵒᵖ E] [中心标量 𝕜 E]
   定义体: Subtype.ext op_smul_eq_smul k (f : α ->ₘ[μ] E)
 
 Depends on / 依赖: Subtype, Subtype.ext, op_smul_eq_smul
@@ -1878,7 +1878,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass 𝕜 𝕜' E]
+  签名: [标量交换类 𝕜 𝕜' E]
   定义体: Subtype.ext smul_comm k k' (f : α ->ₘ[μ] E)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -1896,7 +1896,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' E]
+  签名: [标量乘法 𝕜 𝕜'] [标量塔 𝕜 𝕜' E]
   定义体: Subtype.ext smul_assoc k k' (f : α ->ₘ[μ] E)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -2216,7 +2216,7 @@ theorem AEEqFun.compMeasurePreserving_mem_Lp
 
 中文:
 定理 AEEqFun.compMeasurePreserving_mem_Lp
-  结论: {β : 类型} [MeasurableSpace β]
+  结论: {β : 类型} [可测空间 β]
   证明: by
   rw [Lp.mem_Lp_iff_eLpNorm_lt_top] at hg ⊢
   rwa [eLpNorm_compMeasurePreserving]
@@ -2250,7 +2250,7 @@ definition compMeasurePreserving
 
 中文:
 定义 compMeasurePreserving
-  签名: (f : α -> β) (hf : MeasurePreserving f μ μb)
+  签名: (f : α -> β) (hf : 保测 f μ μb)
   定义体: ⟨g.1.compMeasurePreserving f hf, g.1.compMeasurePreserving_mem_Lp g.2 hf⟩
   map_zero' := rfl
   map_add' := by rintro ⟨⟨_⟩, _⟩ ⟨⟨_⟩, _⟩; rfl
@@ -2276,7 +2276,7 @@ theorem compMeasurePreserving_val
 
 中文:
 定理 compMeasurePreserving_val
-  条件: (g : Lp E p μb) (hf : MeasurePreserving f μ μb)
+  条件: (g : Lp E p μb) (hf : 保测 f μ μb)
   证明: rfl
 -/
 theorem compMeasurePreserving_val (g : Lp E p μb) (hf : MeasurePreserving f μ μb) :
@@ -2295,7 +2295,7 @@ theorem coeFn_compMeasurePreserving
 
 中文:
 定理 coeFn_compMeasurePreserving
-  条件: (g : Lp E p μb) (hf : MeasurePreserving f μ μb)
+  条件: (g : Lp E p μb) (hf : 保测 f μ μb)
   证明: g.1.coeFn_compMeasurePreserving hf
 
 @[simp]
@@ -2317,7 +2317,7 @@ theorem norm_compMeasurePreserving
 
 中文:
 定理 norm_compMeasurePreserving
-  条件: (g : Lp E p μb) (hf : MeasurePreserving f μ μb)
+  条件: (g : Lp E p μb) (hf : 保测 f μ μb)
   证明: congr_arg ENNReal.toReal g.1.eLpNorm_compMeasurePreserving hf
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, congr_arg, eLpNorm_compMeasurePreserving, toReal
@@ -2336,7 +2336,7 @@ theorem isometry_compMeasurePreserving
 
 中文:
 定理 isometry_compMeasurePreserving
-  条件: [Fact (1 <= p)] (hf : MeasurePreserving f μ μb)
+  条件: [Fact (1 <= p)] (hf : 保测 f μ μb)
   证明: AddMonoidHomClass.isometry_of_norm _ (norm_compMeasurePreserving · hf)
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, isometry_of_norm, norm_compMeasurePreserving
@@ -2357,7 +2357,7 @@ theorem toLp_compMeasurePreserving
 
 中文:
 定理 toLp_compMeasurePreserving
-  条件: {g : β -> E} (hg : MemLp g p μb) (hf : MeasurePreserving f μ μb)
+  条件: {g : β -> E} (hg : MemLp g p μb) (hf : 保测 f μ μb)
   证明: rfl
 
 @[simp]
@@ -2416,7 +2416,7 @@ theorem compMeasurePreserving_comp
 
 中文:
 定理 compMeasurePreserving_comp
-  结论: {γ : 类型} {mγ : MeasurableSpace γ} {μc : Measure γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ} {μc : 测度 γ}
   证明: by
   ext g
   simp [AEEqFun.compMeasurePreserving_comp _ hf hf']
@@ -2441,7 +2441,7 @@ theorem compMeasurePreserving_comp_apply
 
 中文:
 定理 compMeasurePreserving_comp_apply
-  结论: {γ : 类型} {mγ : MeasurableSpace γ} {μc : Measure γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ} {μc : 测度 γ}
   证明: by
   simp [compMeasurePreserving_comp hf hf']
 
@@ -2470,7 +2470,7 @@ theorem compMeasurePreserving_iterate
 
 中文:
 定理 compMeasurePreserving_iterate
-  条件: {f : α -> α} (hf : MeasurePreserving f μ μ) (n : 自然数)
+  条件: {f : α -> α} (hf : 保测 f μ μ) (n : 自然数)
   证明: by
   funext
   induction n with
@@ -2504,7 +2504,7 @@ definition compMeasurePreservingₗ
 
 中文:
 定义 compMeasurePreservingₗ
-  签名: (f : α -> β) (hf : MeasurePreserving f μ μb)
+  签名: (f : α -> β) (hf : 保测 f μ μb)
   定义体: compMeasurePreserving f hf
   map_smul' c g := by rcases g with ⟨⟨_⟩, _⟩; rfl
 
@@ -2528,7 +2528,7 @@ definition compMeasurePreservingₗᵢ
 
 中文:
 定义 compMeasurePreservingₗᵢ
-  签名: [Fact (1 <= p)] (f : α -> β) (hf : MeasurePreserving f μ μb)
+  签名: [Fact (1 <= p)] (f : α -> β) (hf : 保测 f μ μb)
   定义体: compMeasurePreservingₗ 𝕜 f hf
   norm_map' := (norm_compMeasurePreserving · hf)
 -/
@@ -2569,7 +2569,7 @@ theorem LipschitzWith.comp_memLp
 
 中文:
 定理 LipschitzWith.comp_memLp
-  结论: {α E F} {K} [MeasurableSpace α] {μ : Measure α}
+  结论: {α E F} {K} [可测空间 α] {μ : 测度 α}
   证明: have : forall x, ‖g (f x)‖ <= K * ‖f x‖ := fun x => by
     -- TODO: add `LipschitzWith.nnnorm_sub_le` and `LipschitzWith.nnnorm_le`
     simpa [g0] using hg.norm_sub_le (f x) 0
@@ -2599,8 +2599,8 @@ theorem MeasureTheory.MemLp.of_comp_antilipschitzWith
     (hg'.isUnifo
 
 中文:
-定理 MeasureTheory.MemLp.of_comp_antilipschitzWith
-  结论: {α E F} {K'} [MeasurableSpace α]
+定理 测度论.MemLp.of_comp_antilipschitzWith
+  结论: {α E F} {K'} [可测空间 α]
   证明: by
   have A : forall x, ‖f x‖ <= K' * ‖g (f x)‖ := by
     intro x
@@ -2632,7 +2632,7 @@ lemma MeasureTheory.MemLp.continuousLinearMap_comp
   proof: LipschitzWith.comp_memLp L.lipschitz (by simp) h_Lp
 
 中文:
-引理 MeasureTheory.MemLp.continuousLinearMap_comp
+引理 测度论.MemLp.continuousLinearMap_comp
   结论: [NontriviallyNormedField 𝕜]
   证明: LipschitzWith.comp_memLp L.lipschitz (by simp) h_Lp
 
@@ -2656,7 +2656,7 @@ theorem memLp_comp_iff_of_antilipschitz
 
 中文:
 定理 memLp_comp_iff_of_antilipschitz
-  结论: {α E F} {K K'} [MeasurableSpace α] {μ : Measure α}
+  结论: {α E F} {K K'} [可测空间 α] {μ : 测度 α}
   证明: ⟨fun h => h.of_comp_antilipschitzWith hg.uniformContinuous hg' g0, fun h => hg.comp_memLp g0 h⟩
 
 Depends on / 依赖: comp_memLp, h.of_comp_antilipschitzWith, hg.comp_memLp, hg.uniformContinuous, of_comp_antilipschitzWith, uniformContinuous
@@ -2958,7 +2958,7 @@ theorem _root_.MeasureTheory.MemLp.ofReal
   proof: (@RCLike.ofRealCLM K _).comp_memLp' hf
 
 中文:
-定理 _root_.MeasureTheory.MemLp.ofReal
+定理 _root_.测度论.MemLp.of实数
   条件: {f : α -> 实数} (hf : MemLp f p μ)
   证明: (@RCLike.ofRealCLM K _).comp_memLp' hf
 
@@ -2982,7 +2982,7 @@ theorem _root_.MeasureTheory.memLp_re_im_iff
   rw [Pi.add_apply]; rw [mul_comm]; rw [RCLike.re_add_im]
 
 中文:
-定理 _root_.MeasureTheory.memLp_re_im_iff
+定理 _root_.测度论.memLp_re_im_iff
   条件: {f : α -> K}
   证明: by
   refine ⟨?_, fun hf => ⟨hf.re, hf.im⟩⟩
@@ -3044,7 +3044,7 @@ theorem smul_compLp
 
 中文:
 定理 smul_compLp
-  结论: {𝕜''} [NormedRing 𝕜''] [Module 𝕜'' F] [IsBoundedSMul 𝕜'' F]
+  结论: {𝕜''} [赋范环 𝕜''] [模 𝕜'' F] [是BoundedSMul 𝕜'' F]
   证明: by
   ext1
   grw [Lp.coeFn_smul, coeFn_compLp', coeFn_compLp']
@@ -3190,7 +3190,7 @@ theorem smul_compLpL
 
 中文:
 定理 smul_compLpL
-  结论: [Fact (1 <= p)] {𝕜''} [NormedRing 𝕜''] [Module 𝕜'' F] [IsBoundedSMul 𝕜'' F]
+  结论: [Fact (1 <= p)] {𝕜''} [赋范环 𝕜''] [模 𝕜'' F] [是BoundedSMul 𝕜'' F]
   证明: by
   ext1 f; exact smul_compLp c L f
 
@@ -3529,7 +3529,7 @@ theorem lipschitzWith_pos_part
 
 中文:
 定理 lipschitzWith_pos_part
-  结论: LipschitzWith 1 fun x : 实数 => max x 0
+  结论: LipschitzWith 1 fun x : 实数 => 最大值 x 0
   证明: LipschitzWith.id.max_const _
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.id.max_const, max_const
@@ -3546,7 +3546,7 @@ theorem _root_.MeasureTheory.MemLp.pos_part
   proof: lipschitzWith_pos_part.comp_memLp (max_eq_right le_rfl) hf
 
 中文:
-定理 _root_.MeasureTheory.MemLp.pos_part
+定理 _root_.测度论.MemLp.pos_part
   条件: {f : α -> 实数} (hf : MemLp f p μ)
   证明: lipschitzWith_pos_part.comp_memLp (max_eq_right le_rfl) hf
 
@@ -3565,7 +3565,7 @@ theorem _root_.MeasureTheory.MemLp.neg_part
   proof: lipschitzWith_pos_part.comp_memLp (max_eq_right le_rfl) hf.neg
 
 中文:
-定理 _root_.MeasureTheory.MemLp.neg_part
+定理 _root_.测度论.MemLp.neg_part
   条件: {f : α -> 实数} (hf : MemLp f p μ)
   证明: lipschitzWith_pos_part.comp_memLp (max_eq_right le_rfl) hf.neg
 
@@ -3646,7 +3646,7 @@ theorem coeFn_posPart
 中文:
 定理 coeFn_posPart
   条件: (f : Lp 实数 p μ)
-  结论: ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0
+  结论: ⇑(posPart f) =ᵐ[μ] fun a => 最大值 (f a) 0
   证明: AEEqFun.coeFn_posPart _
 
 Depends on / 依赖: AEEqFun, AEEqFun.coeFn_posPart, coeFn_posPart
@@ -3669,7 +3669,7 @@ theorem coeFn_negPart_eq_max
 中文:
 定理 coeFn_negPart_eq_max
   条件: (f : Lp 实数 p μ)
-  结论: 对任意ᵐ a ∂μ, negPart f a = max (-f a) 0
+  结论: 对任意ᵐ a ∂μ, negPart f a = 最大值 (-f a) 0
   证明: by
   rw [negPart]
   filter_upwards [coeFn_posPart (-f), coeFn_neg f] with _ h₁ h₂
@@ -3694,7 +3694,7 @@ theorem coeFn_negPart
 中文:
 定理 coeFn_negPart
   条件: (f : Lp 实数 p μ)
-  结论: 对任意ᵐ a ∂μ, negPart f a = -min (f a) 0
+  结论: 对任意ᵐ a ∂μ, negPart f a = -最小值 (f a) 0
   证明: (coeFn_negPart_eq_max f).mono fun a h => by rw [h, ← max_neg_neg, neg_zero]
 
 Depends on / 依赖: coeFn_negPart_eq_max, max_neg_neg, neg_zero
@@ -3714,7 +3714,7 @@ theorem continuous_posPart
 中文:
 定理 continuous_posPart
   条件: [Fact (1 <= p)]
-  结论: Continuous fun f : Lp 实数 p μ => posPart f
+  结论: 连续 fun f : Lp 实数 p μ => posPart f
   证明: LipschitzWith.continuous_compLp _ _
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.continuous_compLp, continuous_compLp
@@ -3736,7 +3736,7 @@ theorem continuous_negPart
 中文:
 定理 continuous_negPart
   条件: [Fact (1 <= p)]
-  结论: Continuous fun f : Lp 实数 p μ => negPart f
+  结论: 连续 fun f : Lp 实数 p μ => negPart f
   证明: by
   unfold negPart
   exact continuous_posPart.comp continuous_neg

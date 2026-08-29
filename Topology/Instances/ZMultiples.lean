@@ -57,7 +57,7 @@ theorem tendsto_coe_cofinite
 
 中文:
 定理 tendsto_coe_cofinite
-  结论: Tendsto ((↑) : 整数 -> 实数) cofinite (cocompact 实数)
+  结论: 收敛 ((↑) : 整数 -> 实数) cofinite (cocompact 实数)
   证明: by
   apply (castAddHom Real).tendsto_coe_cofinite_of_discrete cast_injective
   rw [range_castAddHom]; rw [SetLike.isDiscrete_iff_discreteTopology]

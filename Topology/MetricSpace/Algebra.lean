@@ -48,8 +48,8 @@ class LipschitzAdd
     - lipschitz_add : exists C, LipschitzWith C fun p : β × β => p.1 + p.2
 
 中文:
-类 LipschitzAdd
-  参数: [AddMonoid β]
+类 Lipschitz加法
+  参数: [加法幺半群 β]
   公理与运算 (1 个):
     - lipschitz_add : 存在 C, LipschitzWith C fun p : β × β => p.1 + p.2
 -/
@@ -69,8 +69,8 @@ class LipschitzMul
     - lipschitz_mul : exists C, LipschitzWith C fun p : β × β => p.1 * p.2
 
 中文:
-类 LipschitzMul
-  参数: [Monoid β]
+类 Lipschitz乘法
+  参数: [幺半群 β]
   公理与运算 (1 个):
     - lipschitz_mul : 存在 C, LipschitzWith C fun p : β × β => p.1 * p.2
 -/
@@ -90,8 +90,8 @@ definition LipschitzMul.C
   body: Classical.choose _i.lipschitz_mul
 
 中文:
-定义 LipschitzMul.C
-  签名: [_i : LipschitzMul β]
+定义 Lipschitz乘法.C
+  签名: [_i : Lipschitz乘法 β]
   定义体: Classical.choose _i.lipschitz_mul
 
 Depends on / 依赖: Classical, Classical.choose, _i.lipschitz_mul, lipschitz_mul
@@ -111,7 +111,7 @@ theorem lipschitzWith_lipschitz_const_mul_edist
 
 中文:
 定理 lipschitzWith_lipschitz_const_mul_edist
-  条件: [_i : LipschitzMul β]
+  条件: [_i : Lipschitz乘法 β]
   证明: Classical.choose_spec _i.lipschitz_mul
 
 Depends on / 依赖: Classical, Classical.choose_spec, _i.lipschitz_mul, choose_spec, lipschitz_mul
@@ -164,8 +164,8 @@ instance Submonoid.lipschitzMul
 @[to_additive]
 
 中文:
-实例 Submonoid.lipschitzMul
-  签名: (s : Submonoid β)
+实例 子幺半群.lipschitzMul
+  签名: (s : 子幺半群 β)
   定义体: ⟨LipschitzMul.C β, by
     rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
     convert! lipschitzWith_lipschitz_const_mul_edist ⟨(x₁ : β), x₂⟩ ⟨y₁, y₂⟩ using 1⟩
@@ -192,7 +192,7 @@ instance MulOpposite.lipschitzMul
 
 中文:
 实例 MulOpposite.lipschitzMul
-  签名: : LipschitzMul βᵐᵒᵖ where
+  签名: : Lipschitz乘法 βᵐᵒᵖ where
   定义体: ⟨LipschitzMul.C β, fun ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ =>
     (lipschitzWith_lipschitz_const_mul_edist ⟨x₂.unop, x₁.unop⟩ ⟨y₂.unop, y₁.unop⟩).trans_eq
       (congr_arg _ <| max_comm _ _)⟩
@@ -219,8 +219,8 @@ instance Real.hasLipschitzAdd
     exact add_le_add (le_max_left _ _) (le_max_right _ _)⟩
 
 中文:
-实例 Real.hasLipschitzAdd
-  签名: : LipschitzAdd 实数 where
+实例 实数.hasLipschitzAdd
+  签名: : Lipschitz加法 实数 where
   定义体: ⟨2, LipschitzWith.of_dist_le_mul fun p q => by
     simp only [Real.dist_eq, Prod.dist_eq, NNReal.coe_ofNat,
       add_sub_add_comm, two_mul]
@@ -249,8 +249,8 @@ instance NNReal.hasLipschitzAdd
     exact lipschitzWith_lipschitz_const_add_edist ⟨(x₁ : Real), x₂⟩ ⟨y₁, y₂⟩⟩
 
 中文:
-实例 NNReal.hasLipschitzAdd
-  签名: : LipschitzAdd 实数>=0 where
+实例 非负实数.hasLipschitzAdd
+  签名: : Lipschitz加法 实数>=0 where
   定义体: ⟨LipschitzAdd.C Real, by
     rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
     exact lipschitzWith_lipschitz_const_add_edist ⟨(x₁ : Real), x₂⟩ ⟨y₁, y₂⟩⟩
@@ -279,7 +279,7 @@ class IsBoundedSMul
     - dist_pair_smul' : forall x₁ x₂ : α, forall y : β, dist (x₁ • y) (x₂ • y) <= dist x₁ x₂ * dist y 0
 
 中文:
-类 IsBoundedSMul
+类 是BoundedSMul
   参数: : 命题 where
   公理与运算 (2 个):
     - dist_smul_pair' : 对任意 x : α, 对任意 y₁ y₂ : β, dist (x • y₁) (x • y₂) <= dist x 0 * dist y₁ y₂
@@ -348,8 +348,8 @@ theorem Bornology.IsBounded.uniformContinuousOn_smul
   dsimp at hab
 
 中文:
-定理 Bornology.IsBounded.uniformContinuousOn_smul
-  条件: {s : Set (α × β)} (hs : IsBounded s)
+定理 有界结构.IsBounded.uniformContinuousOn_smul
+  条件: {s : 集合 (α × β)} (hs : IsBounded s)
   证明: by
   rcases hs.subset_ball_lt 0 0 with ⟨C, hC₀, hC⟩
   rw [Metric.uniformContinuousOn_iff_le]
@@ -408,7 +408,7 @@ theorem TendstoLocallyUniformlyOn.smul₀_of_isBoundedUnder
 
 中文:
 定理 TendstoLocallyUniformlyOn.smul₀_of_isBoundedUnder
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   have H := hF.prodMk hG
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at *
@@ -454,7 +454,7 @@ theorem TendstoLocallyUniformlyOn.mul₀_of_isBoundedUnder
 
 中文:
 定理 TendstoLocallyUniformlyOn.mul₀_of_isBoundedUnder
-  结论: {X M ι : 类型} [TopologicalSpace X]
+  结论: {X M ι : 类型} [拓扑空间 X]
   证明: hF.smul₀_of_isBoundedUnder hG hf hg
 
 @[to_fun]
@@ -485,7 +485,7 @@ theorem TendstoLocallyUniformly.smul₀_of_isBoundedUnder
 
 中文:
 定理 TendstoLocallyUniformly.smul₀_of_isBoundedUnder
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   rw [← tendstoLocallyUniformlyOn_univ] at *
   apply hF.smul₀_of_isBoundedUnder hG <;> simpa
@@ -516,7 +516,7 @@ theorem TendstoLocallyUniformly.mul₀_of_isBoundedUnder
 
 中文:
 定理 TendstoLocallyUniformly.mul₀_of_isBoundedUnder
-  结论: {X M ι : 类型} [TopologicalSpace X]
+  结论: {X M ι : 类型} [拓扑空间 X]
   证明: hF.smul₀_of_isBoundedUnder hG hf hg
 
 @[to_fun]
@@ -547,7 +547,7 @@ theorem TendstoLocallyUniformlyOn.smul₀
 
 中文:
 定理 TendstoLocallyUniformlyOn.smul₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: hF.smul₀_of_isBoundedUnder hG
     (fun x hx => ((hfc x hx).dist tendsto_const_nhds).isBoundedUnder_le)
     (fun x hx => ((hgc x hx).dist tendsto_const_nhds).isBoundedUnder_le)
@@ -578,7 +578,7 @@ theorem TendstoLocallyUniformlyOn.mul₀
 
 中文:
 定理 TendstoLocallyUniformlyOn.mul₀
-  结论: {X M ι : 类型} [TopologicalSpace X]
+  结论: {X M ι : 类型} [拓扑空间 X]
   证明: hF.smul₀ hG hf hg
 
 @[to_fun]
@@ -608,7 +608,7 @@ theorem TendstoLocallyUniformly.smul₀
 
 中文:
 定理 TendstoLocallyUniformly.smul₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: hF.smul₀_of_isBoundedUnder hG
     (fun x => ((hfc.tendsto x).dist tendsto_const_nhds).isBoundedUnder_le)
     (fun x => ((hgc.tendsto x).dist tendsto_const_nhds).isBoundedUnder_le)
@@ -637,7 +637,7 @@ theorem TendstoLocallyUniformly.mul₀
 
 中文:
 定理 TendstoLocallyUniformly.mul₀
-  结论: {X M ι : 类型} [TopologicalSpace X]
+  结论: {X M ι : 类型} [拓扑空间 X]
   证明: hF.smul₀ hG hf hg
 
 Depends on / 依赖: hF.smul
@@ -662,8 +662,8 @@ instance Real.isBoundedSMul
   dist_pair_smul' x₁ x₂ y := by simpa [Real.dist_eq, sub_mul] using (abs_mul (x₁ - x₂) y).le
 
 中文:
-实例 Real.isBoundedSMul
-  签名: : IsBoundedSMul 实数 实数 where
+实例 实数.isBoundedSMul
+  签名: : 是BoundedSMul 实数 实数 where
   定义体: by simpa [Real.dist_eq, mul_sub] using (abs_mul x (y₁ - y₂)).le
   dist_pair_smul' x₁ x₂ y := by simpa [Real.dist_eq, sub_mul] using (abs_mul (x₁ - x₂) y).le
 
@@ -683,8 +683,8 @@ instance NNReal.isBoundedSMul
   dist_pair_smul' x₁ x₂ y := by convert! dist_pair_smul (x₁ : Real) x₂ (y : Real) using 1
 
 中文:
-实例 NNReal.isBoundedSMul
-  签名: : IsBoundedSMul 实数>=0 实数>=0 where
+实例 非负实数.isBoundedSMul
+  签名: : 是BoundedSMul 实数>=0 实数>=0 where
   定义体: by convert! dist_smul_pair (x : Real) (y₁ : Real) y₂ using 1
   dist_pair_smul' x₁ x₂ y := by convert! dist_pair_smul (x₁ : Real) x₂ (y : Real) using 1
 
@@ -706,8 +706,8 @@ instance IsBoundedSMul.op
       MulOpposite.rec' fun x₂ y => by simpa only [op_smul_eq_smul] using! dist_pair_smul x₁ x₂ y
 
 中文:
-实例 IsBoundedSMul.op
-  签名: [SMul αᵐᵒᵖ β] [IsCentralScalar α β]
+实例 是BoundedSMul.op
+  签名: [标量乘法 αᵐᵒᵖ β] [中心标量 α β]
   定义体: MulOpposite.rec' fun x y₁ y₂ => by simpa only [op_smul_eq_smul] using! dist_smul_pair x y₁ y₂
   dist_pair_smul' :=
     MulOpposite.rec' fun x₁ =>
@@ -733,8 +733,8 @@ instance [Monoid
   body: ⟨@LipschitzMul.lipschitz_mul α _ _ _⟩
 
 中文:
-实例 [Monoid
-  签名: α] [LipschitzMul α] : LipschitzAdd (Additive α)
+实例 [幺半群
+  签名: α] [Lipschitz乘法 α] : Lipschitz加法 (加性 α)
   定义体: ⟨@LipschitzMul.lipschitz_mul α _ _ _⟩
 
 Depends on / 依赖: LipschitzMul, LipschitzMul.lipschitz_mul, lipschitz_mul
@@ -753,8 +753,8 @@ instance [AddMonoid
 @[to_additive]
 
 中文:
-实例 [AddMonoid
-  签名: α] [LipschitzAdd α] : LipschitzMul (Multiplicative α)
+实例 [加法幺半群
+  签名: α] [Lipschitz加法 α] : Lipschitz乘法 (Multiplicative α)
   定义体: ⟨@LipschitzAdd.lipschitz_add α _ _ _⟩
 
 @[to_additive]
@@ -774,8 +774,8 @@ instance [Monoid
   body: ‹LipschitzMul α›
 
 中文:
-实例 [Monoid
-  签名: α] [LipschitzMul α] : LipschitzMul αᵒᵈ
+实例 [幺半群
+  签名: α] [Lipschitz乘法 α] : Lipschitz乘法 αᵒᵈ
   定义体: ‹LipschitzMul α›
 
 Depends on / 依赖: LipschitzMul
@@ -798,8 +798,8 @@ instance Pi.instIsBoundedSMul
 (dist_pair_smul _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ 0 _) dist_no
 
 中文:
-实例 Pi.instIsBoundedSMul
-  签名: {α : 类型} {β : ι -> 类型} [PseudoMetricSpace α]
+实例 依赖函数类型.instIsBoundedSMul
+  签名: {α : 类型} {β : ι -> 类型} [伪度量空间 α]
   定义体: (dist_pi_le_iff <| by positivity).2 fun _ =>
 (dist_smul_pair _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ _ _) dist_nonneg
   dist_pair_smul' x₁ x₂ y :=
@@ -833,8 +833,8 @@ instance Pi.instIsBoundedSMul'
         mul_le_mul (dist_le_
 
 中文:
-实例 Pi.instIsBoundedSMul'
-  签名: {α β : ι -> 类型} [对任意 i, PseudoMetricSpace (α i)]
+实例 依赖函数类型.instIsBoundedSMul'
+  签名: {α β : ι -> 类型} [对任意 i, 伪度量空间 (α i)]
   定义体: (dist_pi_le_iff <| by positivity).2 fun _ =>
 (dist_smul_pair _ _ _).trans
         mul_le_mul (dist_le_pi_dist _ 0 _) (dist_le_pi_dist _ _ _) dist_nonneg dist_nonneg
@@ -869,8 +869,8 @@ instance Prod.instIsBoundedSMul
     max_le ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_
 
 中文:
-实例 Prod.instIsBoundedSMul
-  签名: {α β γ : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β]
+实例 积类型.instIsBoundedSMul
+  签名: {α β γ : 类型} [伪度量空间 α] [伪度量空间 β]
   定义体: max_le ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_left _ _) dist_nonneg)
       ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_right _ _) dist_nonneg)
   dist_pair_smul' _x₁ _x₂ _y :=

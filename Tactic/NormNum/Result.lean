@@ -52,7 +52,7 @@ definition instAddMonoidWithOne'
 
 中文:
 定义 instAddMonoidWithOne'
-  签名: {α : 类型u} [Semiring α]
+  签名: {α : 类型u} [半环 α]
   定义体: inferInstance
 -/
 def instAddMonoidWithOne' {α : Type u} [Semiring α] : AddMonoidWithOne α := inferInstance
@@ -69,7 +69,7 @@ definition instAddMonoidWithOne
 
 中文:
 定义 instAddMonoidWithOne
-  签名: {α : 类型u} [Ring α]
+  签名: {α : 类型u} [环 α]
   定义体: inferInstance
 -/
 def instAddMonoidWithOne {α : Type u} [Ring α] : AddMonoidWithOne α := inferInstance
@@ -182,8 +182,8 @@ structure IsNat
     - out : a = n
 
 中文:
-结构 IsNat
-  参数: {α : 类型u} [AddMonoidWithOne α] (a : α) (n : 自然数)
+结构 是自然数
+  参数: {α : 类型u} [加法带幺幺半群 α] (a : α) (n : 自然数)
   公理与运算 (1 个):
     - out : a = n
 -/
@@ -201,9 +201,9 @@ theorem IsNat.raw_refl
   proof: ⟨rfl⟩
 
 中文:
-定理 IsNat.raw_refl
+定理 是自然数.raw_refl
   条件: (n : 自然数)
-  结论: Is自然数 n n
+  结论: 是自然数 n n
   证明: ⟨rfl⟩
 -/
 theorem IsNat.raw_refl (n : Nat) : IsNat n n := ⟨rfl⟩
@@ -217,8 +217,8 @@ definition _root_.Nat.rawCast
   body: n
 
 中文:
-定义 _root_.Nat.rawCast
-  签名: {α : 类型u} [AddMonoidWithOne α] (n : 自然数)
+定义 _root_.自然数.rawCast
+  签名: {α : 类型u} [加法带幺幺半群 α] (n : 自然数)
   定义体: n
 -/
 @[simp] def _root_.Nat.rawCast {α : Type u} [AddMonoidWithOne α] (n : Nat) : α := n
@@ -232,9 +232,9 @@ theorem IsNat.to_eq
   statement: {a a' : α} -> IsNat a n -> n = a' -> a = a'
 
 中文:
-定理 IsNat.to_eq
-  条件: {α : 类型u} [AddMonoidWithOne α] {n}
-  结论: {a a' : α} -> Is自然数 a n -> n = a' -> a = a'
+定理 是自然数.to_eq
+  条件: {α : 类型u} [加法带幺幺半群 α] {n}
+  结论: {a a' : α} -> 是自然数 a n -> n = a' -> a = a'
 -/
 theorem IsNat.to_eq {α : Type u} [AddMonoidWithOne α] {n} : {a a' : α} -> IsNat a n -> n = a' -> a = a'
   | _, _, ⟨rfl⟩, rfl => rfl
@@ -248,9 +248,9 @@ theorem IsNat.to_raw_eq
   statement: IsNat (a : α) n -> a = n.rawCast
 
 中文:
-定理 IsNat.to_raw_eq
-  条件: {a : α} {n : 自然数} [AddMonoidWithOne α]
-  结论: Is自然数 (a : α) n -> a = n.rawCast
+定理 是自然数.to_raw_eq
+  条件: {a : α} {n : 自然数} [加法带幺幺半群 α]
+  结论: 是自然数 (a : α) n -> a = n.rawCast
 -/
 theorem IsNat.to_raw_eq {a : α} {n : Nat} [AddMonoidWithOne α] : IsNat (a : α) n -> a = n.rawCast
   | ⟨e⟩ => e
@@ -267,9 +267,9 @@ theorem IsNat.of_raw
 @[elab_as_elim]
 
 中文:
-定理 IsNat.of_raw
-  条件: (α) [AddMonoidWithOne α] (n : 自然数)
-  结论: Is自然数 (n.rawCast : α) n
+定理 是自然数.of_raw
+  条件: (α) [加法带幺幺半群 α] (n : 自然数)
+  结论: 是自然数 (n.rawCast : α) n
   证明: ⟨rfl⟩
 
 @[elab_as_elim]
@@ -286,9 +286,9 @@ theorem isNat.natElim
   statement: {n : Nat} -> {n' : Nat} -> IsNat n n' -> p n' -> p n
 
 中文:
-定理 isNat.natElim
+定理 is自然数.natElim
   条件: {p : 自然数 -> 命题}
-  结论: {n : 自然数} -> {n' : 自然数} -> Is自然数 n n' -> p n' -> p n
+  结论: {n : 自然数} -> {n' : 自然数} -> 是自然数 n n' -> p n' -> p n
 -/
 theorem isNat.natElim {p : Nat -> Prop} : {n : Nat} -> {n' : Nat} -> IsNat n n' -> p n' -> p n
   | _, _, ⟨rfl⟩, h => h
@@ -303,8 +303,8 @@ structure IsInt
     - out : a = n
 
 中文:
-结构 IsInt
-  参数: [Ring α] (a : α) (n : 整数)
+结构 是整数
+  参数: [环 α] (a : α) (n : 整数)
   公理与运算 (1 个):
     - out : a = n
 -/
@@ -321,8 +321,8 @@ definition _root_.Int.rawCast
   body: n
 
 中文:
-定义 _root_.Int.rawCast
-  签名: [Ring α] (n : 整数)
+定义 _root_.整数.rawCast
+  签名: [环 α] (n : 整数)
   定义体: n
 -/
 @[simp] def _root_.Int.rawCast [Ring α] (n : Int) : α := n
@@ -336,9 +336,9 @@ theorem IsInt.to_isNat
   statement: forall {a : α} {n}, IsInt a (.ofNat n) -> IsNat a n
 
 中文:
-定理 IsInt.to_isNat
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n}, Is整数 a (.of自然数 n) -> Is自然数 a n
+定理 是整数.to_is自然数
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n}, 是整数 a (.of自然数 n) -> 是自然数 a n
 -/
 theorem IsInt.to_isNat {α} [Ring α] : forall {a : α} {n}, IsInt a (.ofNat n) -> IsNat a n
   | _, _, ⟨rfl⟩ => ⟨by simp⟩
@@ -352,9 +352,9 @@ theorem IsNat.to_isInt
   statement: forall {a : α} {n}, IsNat a n -> IsInt a (.ofNat n)
 
 中文:
-定理 IsNat.to_isInt
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n}, Is自然数 a n -> Is整数 a (.of自然数 n)
+定理 是自然数.to_is整数
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n}, 是自然数 a n -> 是整数 a (.of自然数 n)
 -/
 theorem IsNat.to_isInt {α} [Ring α] : forall {a : α} {n}, IsNat a n -> IsInt a (.ofNat n)
   | _, _, ⟨rfl⟩ => ⟨by simp⟩
@@ -368,9 +368,9 @@ theorem IsInt.to_raw_eq
   statement: IsInt (a : α) n -> a = n.rawCast
 
 中文:
-定理 IsInt.to_raw_eq
-  条件: {a : α} {n : 整数} [Ring α]
-  结论: Is整数 (a : α) n -> a = n.rawCast
+定理 是整数.to_raw_eq
+  条件: {a : α} {n : 整数} [环 α]
+  结论: 是整数 (a : α) n -> a = n.rawCast
 -/
 theorem IsInt.to_raw_eq {a : α} {n : Int} [Ring α] : IsInt (a : α) n -> a = n.rawCast
   | ⟨e⟩ => e
@@ -385,9 +385,9 @@ theorem IsInt.of_raw
   proof: ⟨rfl⟩
 
 中文:
-定理 IsInt.of_raw
-  条件: (α) [Ring α] (n : 整数)
-  结论: Is整数 (n.rawCast : α) n
+定理 是整数.of_raw
+  条件: (α) [环 α] (n : 整数)
+  结论: 是整数 (n.rawCast : α) n
   证明: ⟨rfl⟩
 -/
 theorem IsInt.of_raw (α) [Ring α] (n : Int) : IsInt (n.rawCast : α) n := ⟨rfl⟩
@@ -400,8 +400,8 @@ theorem IsInt.neg_to_eq
   given: {α} [Ring α] {n}
 
 中文:
-定理 IsInt.neg_to_eq
-  条件: {α} [Ring α] {n}
+定理 是整数.neg_to_eq
+  条件: {α} [环 α] {n}
 -/
 theorem IsInt.neg_to_eq {α} [Ring α] {n} :
     {a a' : α} -> IsInt a (.negOfNat n) -> n = a' -> a = -a'
@@ -416,8 +416,8 @@ theorem IsInt.nonneg_to_eq
   proof: h.to_isNat.to_eq e
 
 中文:
-定理 IsInt.nonneg_to_eq
-  结论: {α} [Ring α] {n}
+定理 是整数.nonneg_to_eq
+  结论: {α} [环 α] {n}
   证明: h.to_isNat.to_eq e
 
 Depends on / 依赖: h.to_isNat.to_eq, to_eq, to_isNat
@@ -435,10 +435,10 @@ inductive IsRat
     - mk: (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
 
 中文:
-归纳类型 IsRat
-  参数: [Ring α] (a : α) (num : 整数) (denom : 自然数)
+归纳类型 是有理数
+  参数: [环 α] (a : α) (num : 整数) (denom : 自然数)
   构造子 (1 个):
-    - mk: (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
+    - mk: (inv : 可逆 (denom : α)) (eq : a = num * ⅟(denom : α))
 -/
 inductive IsRat [Ring α] (a : α) (num : Int) (denom : Nat) : Prop
   | mk (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
@@ -453,10 +453,10 @@ inductive IsNNRat
     - mk: (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
 
 中文:
-归纳类型 IsNNRat
-  参数: [Semiring α] (a : α) (num : 自然数) (denom : 自然数)
+归纳类型 是NNRat
+  参数: [半环 α] (a : α) (num : 自然数) (denom : 自然数)
   构造子 (1 个):
-    - mk: (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
+    - mk: (inv : 可逆 (denom : α)) (eq : a = num * ⅟(denom : α))
 -/
 inductive IsNNRat [Semiring α] (a : α) (num : Nat) (denom : Nat) : Prop
   | mk (inv : Invertible (denom : α)) (eq : a = num * ⅟(denom : α))
@@ -482,7 +482,7 @@ definition _root_.NNRat.rawCast
 
 中文:
 定义 _root_.NNRat.rawCast
-  签名: [DivisionSemiring α] (n : 自然数) (d : 自然数)
+  签名: [除半环 α] (n : 自然数) (d : 自然数)
   定义体: n / d
 -/
 def _root_.NNRat.rawCast [DivisionSemiring α] (n : Nat) (d : Nat) : α := n / d
@@ -510,8 +510,8 @@ definition _root_.Rat.rawCast
   body: n / d
 
 中文:
-定义 _root_.Rat.rawCast
-  签名: [DivisionRing α] (n : 整数) (d : 自然数)
+定义 _root_.有理数.rawCast
+  签名: [除环 α] (n : 整数) (d : 自然数)
   定义体: n / d
 -/
 def _root_.Rat.rawCast [DivisionRing α] (n : Int) (d : Nat) : α := n / d
@@ -526,9 +526,9 @@ theorem IsNNRat.to_isNat
   proof: @invertibleOne α _; ⟨by simp⟩
 
 中文:
-定理 IsNNRat.to_isNat
-  条件: {α} [Semiring α]
-  结论: 对任意 {a : α} {n}, IsNNRat a (n) (nat_lit 1) -> Is自然数 a n
+定理 是NNRat.to_is自然数
+  条件: {α} [半环 α]
+  结论: 对任意 {a : α} {n}, 是NNRat a (n) (nat_lit 1) -> 是自然数 a n
   证明: @invertibleOne α _; ⟨by simp⟩
 
 Depends on / 依赖: invertibleOne
@@ -545,9 +545,9 @@ theorem IsRat.to_isNNRat
   statement: forall {a : α} {n d}, IsRat a (.ofNat n) (d) -> IsNNRat a n d
 
 中文:
-定理 IsRat.to_isNNRat
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n d}, IsRat a (.of自然数 n) (d) -> IsNNRat a n d
+定理 是有理数.to_isNNRat
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n d}, 是有理数 a (.of自然数 n) (d) -> 是NNRat a n d
 -/
 theorem IsRat.to_isNNRat {α} [Ring α] : forall {a : α} {n d}, IsRat a (.ofNat n) (d) -> IsNNRat a n d
   | _, _, _, ⟨inv, rfl⟩ => ⟨inv, by simp⟩
@@ -561,9 +561,9 @@ theorem IsNat.to_isNNRat
   statement: forall {a : α} {n}, IsNat a n -> IsNNRat a (n) (nat_lit 1)
 
 中文:
-定理 IsNat.to_isNNRat
-  条件: {α} [Semiring α]
-  结论: 对任意 {a : α} {n}, Is自然数 a n -> IsNNRat a (n) (nat_lit 1)
+定理 是自然数.to_isNNRat
+  条件: {α} [半环 α]
+  结论: 对任意 {a : α} {n}, 是自然数 a n -> 是NNRat a (n) (nat_lit 1)
 -/
 theorem IsNat.to_isNNRat {α} [Semiring α] : forall {a : α} {n}, IsNat a n -> IsNNRat a (n) (nat_lit 1)
   | _, _, ⟨rfl⟩ => ⟨⟨1, by simp, by simp⟩, by simp⟩
@@ -577,9 +577,9 @@ theorem IsNNRat.to_isRat
   statement: forall {a : α} {n d}, IsNNRat a n d -> IsRat a (.ofNat n) d
 
 中文:
-定理 IsNNRat.to_isRat
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n d}, IsNNRat a n d -> IsRat a (.of自然数 n) d
+定理 是NNRat.to_isRat
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n d}, 是NNRat a n d -> 是有理数 a (.of自然数 n) d
 -/
 theorem IsNNRat.to_isRat {α} [Ring α] : forall {a : α} {n d}, IsNNRat a n d -> IsRat a (.ofNat n) d
   | _, _, _, ⟨inv, rfl⟩ => ⟨inv, by simp⟩
@@ -594,9 +594,9 @@ theorem IsRat.to_isInt
   proof: @invertibleOne α _; ⟨by simp⟩
 
 中文:
-定理 IsRat.to_isInt
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n}, IsRat a n (nat_lit 1) -> Is整数 a n
+定理 是有理数.to_is整数
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n}, 是有理数 a n (nat_lit 1) -> 是整数 a n
   证明: @invertibleOne α _; ⟨by simp⟩
 
 Depends on / 依赖: invertibleOne
@@ -613,9 +613,9 @@ theorem IsInt.to_isRat
   statement: forall {a : α} {n}, IsInt a n -> IsRat a n (nat_lit 1)
 
 中文:
-定理 IsInt.to_isRat
-  条件: {α} [Ring α]
-  结论: 对任意 {a : α} {n}, Is整数 a n -> IsRat a n (nat_lit 1)
+定理 是整数.to_isRat
+  条件: {α} [环 α]
+  结论: 对任意 {a : α} {n}, 是整数 a n -> 是有理数 a n (nat_lit 1)
 -/
 theorem IsInt.to_isRat {α} [Ring α] : forall {a : α} {n}, IsInt a n -> IsRat a n (nat_lit 1)
   | _, _, ⟨rfl⟩ => ⟨⟨1, by simp, by simp⟩, by simp⟩
@@ -628,8 +628,8 @@ theorem IsNNRat.to_raw_eq
   given: {n d : Nat} [DivisionSemiring α]
 
 中文:
-定理 IsNNRat.to_raw_eq
-  条件: {n d : 自然数} [DivisionSemiring α]
+定理 是NNRat.to_raw_eq
+  条件: {n d : 自然数} [除半环 α]
 -/
 theorem IsNNRat.to_raw_eq {n d : Nat} [DivisionSemiring α] :
     forall {a}, IsNNRat (a : α) n d -> a = NNRat.rawCast n d
@@ -643,8 +643,8 @@ theorem IsRat.to_raw_eq
   given: {n : Int} {d : Nat} [DivisionRing α]
 
 中文:
-定理 IsRat.to_raw_eq
-  条件: {n : 整数} {d : 自然数} [DivisionRing α]
+定理 是有理数.to_raw_eq
+  条件: {n : 整数} {d : 自然数} [除环 α]
 -/
 theorem IsRat.to_raw_eq {n : Int} {d : Nat} [DivisionRing α] :
     forall {a}, IsRat (a : α) n d -> a = Rat.rawCast n d
@@ -658,8 +658,8 @@ theorem IsRat.neg_to_eq
   given: {α} [DivisionRing α] {n d}
 
 中文:
-定理 IsRat.neg_to_eq
-  条件: {α} [DivisionRing α] {n d}
+定理 是有理数.neg_to_eq
+  条件: {α} [除环 α] {n d}
 -/
 theorem IsRat.neg_to_eq {α} [DivisionRing α] {n d} :
     {a n' d' : α} -> IsRat a (.negOfNat n) d -> n = n' -> d = d' -> a = -(n' / d')
@@ -673,8 +673,8 @@ theorem IsNNRat.to_eq
   given: {α} [DivisionSemiring α] {n d}
 
 中文:
-定理 IsNNRat.to_eq
-  条件: {α} [DivisionSemiring α] {n d}
+定理 是NNRat.to_eq
+  条件: {α} [除半环 α] {n d}
 -/
 theorem IsNNRat.to_eq {α} [DivisionSemiring α] {n d} :
     {a n' d' : α} -> IsNNRat a n d -> n = n' -> d = d' -> a = n' / d'
@@ -690,8 +690,8 @@ theorem IsNNRat.of_raw
   ⟨this, by simp [div_eq_mul_inv]⟩
 
 中文:
-定理 IsNNRat.of_raw
-  结论: (α) [DivisionSemiring α] (n : 自然数) (d : 自然数)
+定理 是NNRat.of_raw
+  结论: (α) [除半环 α] (n : 自然数) (d : 自然数)
   证明: have := invertibleOfNonzero h
   ⟨this, by simp [div_eq_mul_inv]⟩
 
@@ -712,8 +712,8 @@ theorem IsRat.of_raw
   ⟨this, by simp [div_eq_mul_inv]⟩
 
 中文:
-定理 IsRat.of_raw
-  结论: (α) [DivisionRing α] (n : 整数) (d : 自然数)
+定理 是有理数.of_raw
+  结论: (α) [除环 α] (n : 整数) (d : 自然数)
   证明: have := invertibleOfNonzero h
   ⟨this, by simp [div_eq_mul_inv]⟩
 
@@ -733,9 +733,9 @@ theorem IsNNRat.den_nz
   statement: IsNNRat (a : α) n d -> (d : α) != 0
 
 中文:
-定理 IsNNRat.den_nz
-  条件: {α} [DivisionSemiring α] {a n d}
-  结论: IsNNRat (a : α) n d -> (d : α) != 0
+定理 是NNRat.den_nz
+  条件: {α} [除半环 α] {a n d}
+  结论: 是NNRat (a : α) n d -> (d : α) != 0
 -/
 theorem IsNNRat.den_nz {α} [DivisionSemiring α] {a n d} : IsNNRat (a : α) n d -> (d : α) != 0
   | ⟨_, _⟩ => Invertible.ne_zero (d : α)
@@ -749,9 +749,9 @@ theorem IsRat.den_nz
   statement: IsRat (a : α) n d -> (d : α) != 0
 
 中文:
-定理 IsRat.den_nz
-  条件: {α} [DivisionRing α] {a n d}
-  结论: IsRat (a : α) n d -> (d : α) != 0
+定理 是有理数.den_nz
+  条件: {α} [除环 α] {a n d}
+  结论: 是有理数 (a : α) n d -> (d : α) != 0
 -/
 theorem IsRat.den_nz {α} [DivisionRing α] {a n d} : IsRat (a : α) n d -> (d : α) != 0
   | ⟨_, _⟩ => Invertible.ne_zero (d : α)
@@ -775,11 +775,11 @@ inductive Result'
 归纳类型 Result'
   参数: where
   构造子 (5 个):
-    - isBool: (val : 布尔) (proof : Expr)
+    - isBool: (val : 布尔值) (proof : Expr)
     - isNat: (inst lit proof : Expr)
     - isNegNat: (inst lit proof : Expr)
-    - isNNRat: (inst : Expr) (q : Rat) (n d proof : Expr)
-    - isNegNNRat: (inst : Expr) (q : Rat) (n d proof : Expr)
+    - isNNRat: (inst : Expr) (q : 有理数) (n d proof : Expr)
+    - isNegNNRat: (inst : Expr) (q : 有理数) (n d proof : Expr)
 -/
 inductive Result' where
   /-- Untyped version of `Result.isBool`. -/
@@ -858,7 +858,7 @@ definition Result.isNat
   body: Result'.isNat
 
 中文:
-定义 Result.isNat
+定义 Result.is自然数
   签名: {α : Q(类型u)} {x : Q($α)}
   定义体: Result'.isNat
 -/
@@ -875,7 +875,7 @@ definition Result.isNegNat
   body: Result'.isNegNat
 
 中文:
-定义 Result.isNegNat
+定义 Result.isNeg自然数
   签名: {α : Q(类型u)} {x : Q($α)}
   定义体: Result'.isNegNat
 -/
@@ -935,8 +935,8 @@ definition Result.isInt
     .isNegNat inst lit proof
 
 中文:
-定义 Result.isInt
-  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(Ring $α) := by assumption)
+定义 Result.is整数
+  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(环 $α) := by assumption)
   定义体: have lit : Q(Nat) := z.appArg!
   if 0 <= n then
     let proof : Q(IsInt $x (.ofNat $lit)) := proof
@@ -971,7 +971,7 @@ haveI : nat_lit 1 =Q d := ⟨⟩
 
 中文:
 定义 Result.isNNRat'
-  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(DivisionSemiring $α) := by assumption)
+  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(除半环 $α) := by assumption)
   定义体: if q.den = 1 then
 haveI : nat_lit 1 =Q d := ⟨⟩
     .isNat q(instAddMonoidWithOne') n q(IsNNRat.to_isNat $proof)
@@ -1006,7 +1006,7 @@ definition Result.isRat
 
 中文:
 定义 Result.isRat
-  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(DivisionRing $α) := by assumption)
+  签名: {α : Q(类型u)} {x : Q($α)} (inst : Q(除环 $α) := by assumption)
   定义体: have lit : Q(Nat) := n.appArg!
   if q.den = 1 then
     have proof : Q(IsRat $x $n (nat_lit 1)) := proof
@@ -1087,8 +1087,8 @@ definition Result.toInt
   | _ => failure
 
 中文:
-定义 Result.toInt
-  签名: {α : Q(类型u)} {e : Q($α)} (_i : Q(Ring $α) := by with_reducible assumption)
+定义 Result.to整数
+  签名: {α : Q(类型u)} {e : Q($α)} (_i : Q(环 $α) := by with_reducible assumption)
   定义体: proof
     pure ⟨lit.natLit!, q(.ofNat $lit), q(($proof).to_isInt)⟩
   | .isNegNat _ lit proof => pure ⟨-lit.natLit!, q(.negOfNat $lit), proof⟩
@@ -1220,7 +1220,7 @@ definition Result.toRawIntEq
   signature: {α : Q(Type u)} {e : Q($α)}
 
 中文:
-定义 Result.toRawIntEq
+定义 Result.toRaw整数Eq
   签名: {α : Q(类型u)} {e : Q($α)}
 -/
 def Result.toRawIntEq {α : Q(Type u)} {e : Q($α)} : Result e ->
@@ -1240,7 +1240,7 @@ definition Result.ofRawNat
   .isNat sα lit (q(IsNat.of_raw $α $lit) : Expr)
 
 中文:
-定义 Result.ofRawNat
+定义 Result.ofRaw自然数
   签名: {α : Q(类型u)} (e : Q($α))
   定义体: Id.run do
   let .app (.app _ (sα : Q(AddMonoidWithOne $α))) (lit : Q(Nat)) := e | panic! "not a raw nat cast"
@@ -1265,7 +1265,7 @@ definition Result.ofRawInt
     .isNegNat rα lit (q(IsInt.of_raw $α (.negOfNat $lit)) : Expr)
 
 中文:
-定义 Result.ofRawInt
+定义 Result.ofRaw整数
   签名: {α : Q(类型u)} (n : 整数) (e : Q($α))
   定义体: if 0 <= n then
     Result.ofRawNat e
@@ -1335,7 +1335,7 @@ definition Result.ofRawRat
 
 中文:
 定义 Result.ofRawRat
-  签名: {α : Q(类型u)} (q : Rat) (e : Q($α)) (hyp : Option Expr := none)
+  签名: {α : Q(类型u)} (q : 有理数) (e : Q($α)) (hyp : 选项类型 Expr := none)
   定义体: if q.den = 1 then
     Result.ofRawInt q.num e
   else if 0 <= q then
@@ -1412,8 +1412,8 @@ abbreviation BoolResult
   body: Q(Bool.rec (¬ $p) ($p) $b)
 
 中文:
-缩写 BoolResult
-  签名: (p : Q(命题)) (b : 布尔)
+缩写 布尔Result
+  签名: (p : Q(命题)) (b : 布尔值)
   定义体: Q(Bool.rec (¬ $p) ($p) $b)
 
 Depends on / 依赖: Bool.rec
@@ -1430,8 +1430,8 @@ definition Result.ofBoolResult
   body: Result'.isBool b prf
 
 中文:
-定义 Result.ofBoolResult
-  签名: {p : Q(命题)} {b : 布尔} (prf : 布尔Result p b)
+定义 Result.of布尔Result
+  签名: {p : Q(命题)} {b : 布尔值} (prf : 布尔Result p b)
   定义体: Result'.isBool b prf
 
 Depends on / 依赖: Result, isBool

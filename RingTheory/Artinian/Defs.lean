@@ -47,8 +47,8 @@ abbreviation IsArtinian
   body: WellFoundedLT (Submodule R M)
 
 中文:
-缩写 IsArtinian
-  签名: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
+缩写 是Artin
+  签名: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: WellFoundedLT (Submodule R M)
 
 Depends on / 依赖: Submodule, WellFoundedLT
@@ -67,8 +67,8 @@ theorem isArtinian_iff
 
 中文:
 定理 isArtinian_iff
-  条件: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
-  结论: IsArtinian R M ↔
+  条件: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
+  结论: 是Artin R M ↔
   证明: isWellFounded_iff _ _
 
 Depends on / 依赖: isWellFounded_iff
@@ -86,8 +86,8 @@ theorem IsArtinian.induction
   proof: WellFoundedLT.induction I hgt
 
 中文:
-定理 IsArtinian.induction
-  结论: {R M} [Semiring R] [AddCommMonoid M] [Module R M] [IsArtinian R M]
+定理 是Artin.induction
+  结论: {R M} [半环 R] [加法交换幺半群 M] [模 R M] [是Artin R M]
   证明: WellFoundedLT.induction I hgt
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction
@@ -116,8 +116,8 @@ abbreviation IsArtinianRing
   body: IsArtinian R R
 
 中文:
-缩写 IsArtinianRing
-  签名: (R) [Semiring R]
+缩写 是Artin环
+  签名: (R) [半环 R]
   定义体: IsArtinian R R
 
 Depends on / 依赖: IsArtinian
@@ -136,8 +136,8 @@ theorem isArtinianRing_iff
 
 中文:
 定理 isArtinianRing_iff
-  条件: {R} [Semiring R]
-  结论: IsArtinianRing R ↔ IsArtinian R R
+  条件: {R} [半环 R]
+  结论: 是Artin环 R ↔ 是Artin R R
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

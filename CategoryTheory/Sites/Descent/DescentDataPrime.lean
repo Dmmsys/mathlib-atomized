@@ -327,7 +327,7 @@ structure DescentData'
     - pullHom'_hom_comp((i₁ i₂ i₃ : ι)) : pullHom' hom (sq₃ i₁ i₂ i₃).p (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₂ ≫ pullHom' hom (sq₃ i₁ i₂ i₃).p (sq₃ i₁ i₂ i₃).p₂ (sq₃ i₁ i₂ i₃).p₃ = pullHom' hom (sq₃ i₁ i₂ i₃).p (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₃
 
 中文:
-结构 DescentData'
+结构 下降数据'
   参数: where
   公理与运算 (4 个):
     - obj((i : ι)) : F.obj (.mk (op (X i)))
@@ -368,7 +368,7 @@ lemma pullHom'_self
 
 中文:
 引理 pullHom'_self
-  结论: (D : F.DescentData' sq sq₃)
+  结论: (D : F.下降数据' sq sq₃)
   证明: pullHom'_self' _ D.pullHom'_hom_self _ _
 
 @[reassoc (attr := simp)]
@@ -389,7 +389,7 @@ lemma comp_pullHom'
 
 中文:
 引理 comp_pullHom'
-  结论: (D : F.DescentData' sq sq₃)
+  结论: (D : F.下降数据' sq sq₃)
   证明: comp_pullHom'' _ D.pullHom'_hom_comp _ _ _ _ hf₁ hf₂ hf₃
 
 Depends on / 依赖: D.hom, D.pullHom, _hom_comp, cat_disch, comp_pullHom, pullHom
@@ -420,7 +420,7 @@ lemma pullHom'_eq_hom
 
 中文:
 引理 pullHom'_eq_hom
-  条件: (D : F.DescentData' sq sq₃) (i₁ i₂ : ι)
+  条件: (D : F.下降数据' sq sq₃) (i₁ i₂ : ι)
   证明: by
   simp
 -/
@@ -445,8 +445,8 @@ structure Hom
     - comm((i₁ i₂ : ι)) : (F.map (sq i₁ i₂).p₁.op.toLoc).toFunctor.map (hom i₁) ≫ D₂.hom i₁ i₂ = D₁.hom i₁ i₂ ≫ (F.map (sq i₁ i₂).p₂.op.toLoc).toFunctor.map (hom i₂)  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (D₁ D₂ : F.DescentData' sq sq₃)
+结构 态射
+  参数: (D₁ D₂ : F.下降数据' sq sq₃)
   公理与运算 (2 个):
     - hom((i : ι)) : D₁.obj i ⟶ D₂.obj i
     - comm((i₁ i₂ : ι)) : (F.map (sq i₁ i₂).p₁.op.toLoc).toFunctor.map (hom i₁) ≫ D₂.hom i₁ i₂ = D₁.hom i₁ i₂ ≫ (F.map (sq i₁ i₂).p₂.op.toLoc).toFunctor.map (hom i₂)  [默认: by cat_disch]
@@ -474,7 +474,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (F.DescentData' sq sq₃)
+  签名: 箭图 (F.下降数据' sq sq₃)
   定义体: Hom
 
 @[simps id_hom comp_hom]
@@ -494,7 +494,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (F.DescentData' sq sq₃)
+  签名: 范畴 (F.下降数据' sq sq₃)
   定义体: { hom _ := 𝟙 _ }
   comp f g := { hom i := f.hom i ≫ g.hom i }
 -/
@@ -515,7 +515,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {D₁ D₂ : F.DescentData' sq sq₃} {f g : D₁ ⟶ D₂}
+  结论: {D₁ D₂ : F.下降数据' sq sq₃} {f g : D₁ ⟶ D₂}
   证明: Hom.ext (funext h)
 
 Depends on / 依赖: Hom.ext
@@ -539,7 +539,7 @@ lemma comm
 
 中文:
 引理 comm
-  结论: {D₁ D₂ : F.DescentData' sq sq₃} (φ : D₁ ⟶ D₂)
+  结论: {D₁ D₂ : F.下降数据' sq sq₃} (φ : D₁ ⟶ D₂)
   证明: by
   obtain ⟨p, _, _⟩ := (sq i₁ i₂).isPullback.exists_lift f₁ f₂ (by cat_disch)
   rw [← pullHom_pullHom' D₂.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [← pullHom_pullHom' D₁.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [pullHom'_p₁_p₂]; rw [pullHom'_p₁_p₂]
@@ -576,7 +576,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {D₁ D₂ : F.DescentData' sq sq₃} (e : 对任意 (i : ι), D₁.obj i ≅ D₂.obj i)
+  签名: {D₁ D₂ : F.下降数据' sq sq₃} (e : 对任意 (i : ι), D₁.obj i ≅ D₂.obj i)
   定义体: (e i).hom
   hom.comm := comm
   inv.hom i := (e i).inv
@@ -610,7 +610,7 @@ definition descentData
 
 中文:
 定义 descentData
-  签名: (D : F.DescentData' sq sq₃)
+  签名: (D : F.下降数据' sq sq₃)
   定义体: D.obj
   hom _ _ _ _ _ _ _ _ := pullHom' D.hom _ _ _
   pullHom_hom _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ :=
@@ -642,7 +642,7 @@ definition ofDescentData
 
 中文:
 定义 ofDescentData
-  签名: (D : F.DescentData f)
+  签名: (D : F.下降数据 f)
   定义体: D.obj
   hom i₁ i₂ := D.hom (sq i₁ i₂).p (sq i₁ i₂).p₁ (sq i₁ i₂).p₂
   pullHom'_hom_self i := by
@@ -682,7 +682,7 @@ lemma pullHom'_ofDescentData_hom
 
 中文:
 引理 pullHom'_ofDescentData_hom
-  结论: (D : F.DescentData f)
+  结论: (D : F.下降数据 f)
   证明: by
   obtain ⟨p, h₁, h₂⟩ := (sq i₁ i₂).isPullback.exists_lift f₁ f₂ (by cat_disch)
   rw [pullHom'_eq_pullHom _ _ _ _ p]
@@ -717,7 +717,7 @@ definition toDescentDataFunctor
 
 中文:
 定义 toDescentDataFunctor
-  签名: : F.DescentData' sq sq₃ ⥤ F.DescentData f where
+  签名: : F.下降数据' sq sq₃ ⥤ F.下降数据 f where
   定义体: D.descentData
   map φ :=
     { hom := φ.hom
@@ -746,7 +746,7 @@ definition fromDescentDataFunctor
 
 中文:
 定义 fromDescentDataFunctor
-  签名: : F.DescentData f ⥤ F.DescentData' sq sq₃ where
+  签名: : F.下降数据 f ⥤ F.下降数据' sq sq₃ where
   定义体: .ofDescentData _ _ D
   map φ := { hom := φ.hom }
 
@@ -773,7 +773,7 @@ definition descentDataEquivalence
 
 中文:
 定义 descentDataEquivalence
-  签名: : F.DescentData' sq sq₃ ≌ F.DescentData f where
+  签名: : F.下降数据' sq sq₃ ≌ F.下降数据 f where
   定义体: toDescentDataFunctor _ _ _
   inverse := fromDescentDataFunctor _ _ _
   unitIso := NatIso.ofComponents (fun D => isoMk (fun _ => Iso.refl _))

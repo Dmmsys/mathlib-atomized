@@ -87,7 +87,7 @@ definition mixedSpaceToRealMixedSpace
 @[simp]
 
 中文:
-定义 mixedSpaceToRealMixedSpace
+定义 mixedSpaceTo实数MixedSpace
   签名: : mixedSpace K ≃ₜ realMixedSpace K
   定义体: (Homeomorph.refl _).prodCongr .piCongrRight fun _ => Complex.equivRealProdCLM.toHomeomorph
 
@@ -108,7 +108,7 @@ theorem mixedSpaceToRealMixedSpace_apply
   proof: rfl
 
 中文:
-定理 mixedSpaceToRealMixedSpace_apply
+定理 mixedSpaceTo实数MixedSpace_apply
   条件: (x : mixedSpace K)
   证明: rfl
 -/
@@ -127,7 +127,7 @@ theorem volume_preserving_mixedSpaceToRealMixedSpace_symm
     volume_preserving_pi fun _ => Complex.volume_preserving_equiv_real_prod.symm
 
 中文:
-定理 volume_preserving_mixedSpaceToRealMixedSpace_symm
+定理 volume_preserving_mixedSpaceTo实数MixedSpace_symm
   证明: (MeasurePreserving.id _).prod
     volume_preserving_pi fun _ => Complex.volume_preserving_equiv_real_prod.symm
 
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddHaarMeasure (volume : Measure (realMixedSpace K))
+  签名: 是加法Haar测度 (volume : 测度 (realMixedSpace K))
   定义体: prod.instIsAddHaarMeasure _ _
 
 Depends on / 依赖: instIsAddHaarMeasure, prod.instIsAddHaarMeasure
@@ -170,7 +170,7 @@ definition polarCoordReal
   body: (OpenPartialHomeomorph.refl _).prod (OpenPartialHomeomorph.pi fun _ => polarCoord)
 
 中文:
-定义 polarCoordReal
+定义 polarCoord实数
   签名: : OpenPartialHomeomorph (realMixedSpace K) (realMixedSpace K)
   定义体: (OpenPartialHomeomorph.refl _).prod (OpenPartialHomeomorph.pi fun _ => polarCoord)
 
@@ -190,7 +190,7 @@ refine measurable_fst.prodMk Measurable.comp ?_ measurable_snd
     fun _ => continuous_polarCoord_symm.measurable.comp (measurable_pi_apply _)
 
 中文:
-定理 measurable_polarCoordReal_symm
+定理 measurable_polarCoord实数_symm
   证明: by
 refine measurable_fst.prodMk Measurable.comp ?_ measurable_snd
   exact measurable_pi_lambda _
@@ -212,7 +212,7 @@ theorem polarCoordReal_source
   proof: rfl
 
 中文:
-定理 polarCoordReal_source
+定理 polarCoord实数_source
   证明: rfl
 -/
 theorem polarCoordReal_source :
@@ -227,7 +227,7 @@ theorem abs_of_mem_polarCoordReal_target
   proof: abs_of_pos (hx.2 w (Set.mem_univ _)).1
 
 中文:
-定理 abs_of_mem_polarCoordReal_target
+定理 abs_of_mem_polarCoord实数_target
   结论: {x : realMixedSpace K}
   证明: abs_of_pos (hx.2 w (Set.mem_univ _)).1
 -/
@@ -246,7 +246,7 @@ definition FDerivPolarCoordRealSymm
   body: fun x => (fst Real _ _).prod (fderivPiPolarCoordSymm x.2).comp (snd Real _ _)
 
 中文:
-定义 FDerivPolarCoordRealSymm
+定义 FDerivPolarCoord实数Symm
   签名: : realMixedSpace K -> realMixedSpace K ->L[实数] realMixedSpace K
   定义体: fun x => (fst Real _ _).prod (fderivPiPolarCoordSymm x.2).comp (snd Real _ _)
 
@@ -266,7 +266,7 @@ theorem hasFDerivAt_polarCoordReal_symm
   exact (hasFDerivAt_id x.1).prodMap x (hasFDerivAt_pi_polarCoord_symm x.2)
 
 中文:
-定理 hasFDerivAt_polarCoordReal_symm
+定理 hasFDerivAt_polarCoord实数_symm
   条件: (x : realMixedSpace K)
   证明: by
   classical
@@ -292,7 +292,7 @@ theorem det_fderivPolarCoordRealSymm
   rw [ContinuousLinearMap.det]; rw [this]; rw [LinearMap.det_prodMap]; rw [LinearMap.det_id]; rw [one_mul]; rw [← ContinuousLinearMap.det]; rw [det_fderivPi
 
 中文:
-定理 det_fderivPolarCoordRealSymm
+定理 det_fderivPolarCoord实数Symm
   条件: (x : realMixedSpace K)
   证明: by
   have : (FDerivPolarCoordRealSymm K x).toLinearMap =
@@ -318,7 +318,7 @@ theorem polarCoordReal_symm_target_ae_eq_univ
   exact set_prod_ae_eq .rfl pi_polarCoord_symm_target_ae_eq_univ
 
 中文:
-定理 polarCoordReal_symm_target_ae_eq_univ
+定理 polarCoord实数_symm_target_ae_eq_univ
   证明: by
   rw [← Set.univ_prod_univ]; rw [volume_eq_prod]; rw [(polarCoordReal K).symm_image_target_eq_source]; rw [polarCoordReal_source]; rw [← polarCoord.symm_image_target_eq_source]; rw [← Set.piMap_image_univ_pi]
   exact set_prod_ae_eq .rfl pi_polarCoord_symm_target_ae_eq_univ
@@ -344,8 +344,8 @@ theorem integral_comp_polarCoordReal_symm
      
 
 中文:
-定理 integral_comp_polarCoordReal_symm
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+定理 integral_comp_polarCoord实数_symm
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set (polarCoordReal_symm_target_ae_eq_univ K)]; rw [integral_image_eq_integral_abs_det_fderiv_smul volume
       (polarCoordReal K).open_target.measurableSet
@@ -379,7 +379,7 @@ theorem lintegral_comp_polarCoordReal_symm
       (polarC
 
 中文:
-定理 lintegral_comp_polarCoordReal_symm
+定理 lintegral_comp_polarCoord实数_symm
   条件: (f : realMixedSpace K -> 实数>=0∞)
   证明: by
   rw [← setLIntegral_univ f]; rw [← setLIntegral_congr (polarCoordReal_symm_target_ae_eq_univ K)]; rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume
@@ -436,7 +436,7 @@ theorem polarCoord_target_eq_polarCoordReal_target
   proof: rfl
 
 中文:
-定理 polarCoord_target_eq_polarCoordReal_target
+定理 polarCoord_target_eq_polarCoord实数_target
   证明: rfl
 -/
 theorem polarCoord_target_eq_polarCoordReal_target :
@@ -489,7 +489,7 @@ theorem normAtPlace_polarCoord_symm_of_isReal
   simp [normAtPlace_apply_of_isReal hw]
 
 中文:
-定理 normAtPlace_polarCoord_symm_of_isReal
+定理 normAtPlace_polarCoord_symm_of_is实数
   结论: (x : realMixedSpace K) {w : InfinitePlace K}
   证明: by
   simp [normAtPlace_apply_of_isReal hw]
@@ -536,7 +536,7 @@ theorem integral_comp_polarCoord_symm
 
 中文:
 定理 integral_comp_polarCoord_symm
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← (volume_preserving_mixedSpaceToRealMixedSpace_symm K).integral_comp
     (mixedSpaceToRealMixedSpace K).symm.measurableEmbedding]; rw [← integral_comp_polarCoordReal_symm]; rw [polarCoord_target_eq_polarCoordReal_target]; rw [polarCoord_symm_eq]; rw [Function.comp_def]
@@ -610,7 +610,7 @@ MeasurableEquiv.trans prodAssoc.symm
        
 
 中文:
-定义 measurableEquivRealMixedSpacePolarSpace
+定义 measurableEquiv实数MixedSpacePolarSpace
   签名: : realMixedSpace K ≃ᵐ polarSpace K
   定义体: MeasurableEquiv.trans (prodCongr (refl _)
     (arrowProdEquivProdArrow Real Real _)) <|
@@ -646,7 +646,7 @@ definition homeoRealMixedSpacePolarSpace
     refine .prodMk (continuous_pi fun w => ?_) (by fun_p
 
 中文:
-定义 homeoRealMixedSpacePolarSpace
+定义 homeo实数MixedSpacePolarSpace
   签名: : realMixedSpace K ≃ₜ polarSpace K
   定义体: { measurableEquivRealMixedSpacePolarSpace K with
   continuous_toFun := by
@@ -678,7 +678,7 @@ theorem homeoRealMixedSpacePolarSpace_apply
   proof: rfl
 
 中文:
-定理 homeoRealMixedSpacePolarSpace_apply
+定理 homeo实数MixedSpacePolarSpace_apply
   条件: (x : realMixedSpace K)
   证明: rfl
 -/
@@ -697,7 +697,7 @@ theorem homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal
   simp_rw [homeoRealMixedSpacePolarSpace_apply, dif_pos w.prop]
 
 中文:
-定理 homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal
+定理 homeo实数MixedSpacePolarSpace_apply_fst_ofIs实数
   结论: (x : realMixedSpace K)
   证明: by
   simp_rw [homeoRealMixedSpacePolarSpace_apply, dif_pos w.prop]
@@ -719,7 +719,7 @@ theorem homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex
   simp_rw [homeoRealMixedSpacePolarSpace_apply, dif_neg (not_isReal_iff_isComplex.mpr w.prop)]
 
 中文:
-定理 homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex
+定理 homeo实数MixedSpacePolarSpace_apply_fst_ofIsComplex
   结论: (x : realMixedSpace K)
   证明: by
   simp_rw [homeoRealMixedSpacePolarSpace_apply, dif_neg (not_isReal_iff_isComplex.mpr w.prop)]
@@ -742,8 +742,8 @@ theorem homeoRealMixedSpacePolarSpace_apply_snd
 @[simp]
 
 中文:
-定理 homeoRealMixedSpacePolarSpace_apply_snd
-  条件: (x : realMixedSpace K) (w : {w // IsComplex w})
+定理 homeo实数MixedSpacePolarSpace_apply_snd
+  条件: (x : realMixedSpace K) (w : {w // 是复形 w})
   证明: rfl
 
 @[simp]
@@ -761,7 +761,7 @@ theorem homeoRealMixedSpacePolarSpace_symm_apply
   proof: rfl
 
 中文:
-定理 homeoRealMixedSpacePolarSpace_symm_apply
+定理 homeo实数MixedSpacePolarSpace_symm_apply
   条件: (x : polarSpace K)
   证明: rfl
 -/
@@ -782,8 +782,8 @@ theorem volume_preserving_homeoRealMixedSpacePolarSpace
           (MeasurableEquiv.refl Real) (.id volume))).prod (.id volum
 
 中文:
-定理 volume_preserving_homeoRealMixedSpacePolarSpace
-  条件: [NumberField K]
+定理 volume_preserving_homeo实数MixedSpacePolarSpace
+  条件: [数域 K]
   证明: ((MeasurePreserving.id volume).prod
     (volume_measurePreserving_arrowProdEquivProdArrow Real Real _)).trans <|
 (volume_preserving_prodAssoc.symm).trans
@@ -818,7 +818,7 @@ definition polarSpaceCoord
 
 中文:
 定义 polarSpaceCoord
-  签名: [NumberField K]
+  签名: [数域 K]
   定义体: (mixedEmbedding.polarCoord K).transHomeomorph (homeoRealMixedSpacePolarSpace K)
 
 Depends on / 依赖: homeoRealMixedSpacePolarSpace, mixedEmbedding, mixedEmbedding.polarCoord, polarCoord, transHomeomorph
@@ -838,7 +838,7 @@ theorem measurable_polarSpaceCoord_symm
 
 中文:
 定理 measurable_polarSpaceCoord_symm
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   rw [polarSpaceCoord]; rw [OpenPartialHomeomorph.transHomeomorph_symm_apply]
   exact (measurable_polarCoord_symm K).comp (Homeomorph.measurable _)
@@ -865,7 +865,7 @@ theorem polarSpaceCoord_target'
 
 中文:
 定理 polarSpaceCoord_target'
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   ext
   simp_rw [polarSpaceCoord_target, Set.mem_preimage, homeoRealMixedSpacePolarSpace_symm_apply,
@@ -896,7 +896,7 @@ theorem integral_comp_polarSpaceCoord_symm
 
 中文:
 定理 integral_comp_polarSpaceCoord_symm
-  结论: [NumberField K] {E : 类型} [NormedAddCommGroup E]
+  结论: [数域 K] {E : 类型} [赋范交换加群 E]
   证明: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setIntegral_preimage_emb
     (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.integral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_imag
@@ -926,7 +926,7 @@ theorem lintegral_comp_polarSpaceCoord_symm
 
 中文:
 定理 lintegral_comp_polarSpaceCoord_symm
-  条件: [NumberField K] (f : mixedSpace K -> 实数>=0∞)
+  条件: [数域 K] (f : mixedSpace K -> 实数>=0∞)
   证明: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setLIntegral_comp_preimage_emb
     (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.lintegral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preima
@@ -961,7 +961,7 @@ theorem normAtComplexPlaces_polarSpaceCoord_symm
 
 中文:
 定理 normAtComplexPlaces_polarSpaceCoord_symm
-  条件: [NumberField K] (x : polarSpace K)
+  条件: [数域 K] (x : polarSpace K)
   证明: by
   ext w
   obtain hw | hw := isReal_or_isComplex w
@@ -1040,7 +1040,7 @@ theorem volume_eq_two_pi_pow_mul_integral
 
 中文:
 定理 volume_eq_two_pi_pow_mul_integral
-  结论: [NumberField K]
+  结论: [数域 K]
   证明: by
   have hA' {x} : (A.indicator 1 x : Real>=0∞) =
       (normAtComplexPlaces '' A).indicator 1 (normAtComplexPlaces x) := by
@@ -1136,7 +1136,7 @@ theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral
 
 中文:
 定理 volume_eq_two_pow_mul_two_pi_pow_mul_integral
-  结论: [NumberField K]
+  结论: [数域 K]
   证明: by
   have hA₁ (x : mixedSpace K) : x in A ↔ (fun w => ‖x.1 w‖, x.2) in A := by
     rw [← hA]

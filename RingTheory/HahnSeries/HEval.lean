@@ -55,7 +55,7 @@ abbreviation powerSeriesFamily
 
 中文:
 缩写 powerSeriesFamily
-  签名: (x : V⟦Γ⟧) (f : PowerSeries R)
+  签名: (x : V⟦Γ⟧) (f : 幂级数 R)
   定义体: smulFamily (fun n => f.coeff n) (powers x)
 
 Depends on / 依赖: f.coeff, powers, smulFamily
@@ -126,7 +126,7 @@ theorem powerSeriesFamily_hsum_zero
 
 中文:
 定理 powerSeriesFamily_hsum_zero
-  条件: (f : PowerSeries R)
+  条件: (f : 幂级数 R)
   证明: by
   ext g
   by_cases hg : g = 0
@@ -162,7 +162,7 @@ theorem powerSeriesFamily_add
 
 中文:
 定理 powerSeriesFamily_add
-  条件: {x : V⟦Γ⟧} (f g : PowerSeries R)
+  条件: {x : V⟦Γ⟧} (f g : 幂级数 R)
   证明: by
   ext1 n
   by_cases hx : 0 < x.orderTop <;> · simp [hx, add_smul]
@@ -186,7 +186,7 @@ theorem powerSeriesFamily_smul
 
 中文:
 定理 powerSeriesFamily_smul
-  条件: {x : V⟦Γ⟧} (f : PowerSeries R) (r : R)
+  条件: {x : V⟦Γ⟧} (f : 幂级数 R) (r : R)
   证明: by
   ext1 n
   simp [mul_smul]
@@ -215,7 +215,7 @@ theorem support_powerSeriesFamily_subset
 
 中文:
 定理 support_powerSeriesFamily_subset
-  条件: {x : V⟦Γ⟧} (a b : PowerSeries R) (g : Γ)
+  条件: {x : V⟦Γ⟧} (a b : 幂级数 R) (g : Γ)
   证明: by
   by_cases h : 0 < x.orderTop
   · simp only [coeff_support, Set.Finite.toFinset_subset, support_subset_iff]
@@ -271,7 +271,7 @@ theorem hsum_powerSeriesFamily_mul
 
 中文:
 定理 hsum_powerSeriesFamily_mul
-  条件: {x : V⟦Γ⟧} (a b : PowerSeries R)
+  条件: {x : V⟦Γ⟧} (a b : 幂级数 R)
   证明: by
   by_cases h : 0 < x.orderTop;
   · ext g
@@ -350,7 +350,7 @@ definition heval
 
 中文:
 定义 heval
-  签名: : PowerSeries R ->ₐ[R] R⟦Γ⟧ where
+  签名: : 幂级数 R ->ₐ[R] R⟦Γ⟧ where
   定义体: (powerSeriesFamily x f).hsum
   map_one' := by
     simp only [hsum, smulFamily_toFun, coeff_one, powers_toFun, ite_smul, one_smul, zero_smul]
@@ -396,7 +396,7 @@ theorem heval_mul
 
 中文:
 定理 heval_mul
-  条件: {a b : PowerSeries R}
+  条件: {a b : 幂级数 R}
   结论: heval x (a * b) = heval x a * heval x b
   证明: map_mul (heval x) a b
 
@@ -487,8 +487,8 @@ theorem heval_unit
 
 中文:
 定理 heval_unit
-  条件: (u : (PowerSeries R)ˣ)
-  结论: IsUnit (heval x u)
+  条件: (u : (幂级数 R)ˣ)
+  结论: 是单位 (heval x u)
   证明: by
   refine isUnit_iff_exists_inv.mpr ?_
   use heval x u.inv
@@ -513,7 +513,7 @@ theorem coeff_heval
 
 中文:
 定理 coeff_heval
-  条件: (f : PowerSeries R) (g : Γ)
+  条件: (f : 幂级数 R) (g : Γ)
   证明: by
   rw [heval_apply]; rw [coeff_hsum]
   exact rfl
@@ -540,7 +540,7 @@ theorem coeff_heval_zero
 
 中文:
 定理 coeff_heval_zero
-  条件: (f : PowerSeries R)
+  条件: (f : 幂级数 R)
   证明: by
   rw [coeff_heval]; rw [finsum_eq_single (fun n => ((powerSeriesFamily x f).coeff 0) n) 0]; rw [← PowerSeries.coeff_zero_eq_constantCoeff_apply]
   · simp

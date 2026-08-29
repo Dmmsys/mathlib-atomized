@@ -38,8 +38,8 @@ theorem eventually_forall_ge_atTop
   exact hS fun z hz 
 
 中文:
-定理 eventually_forall_ge_atTop
-  条件: [Preorder α] {p : α -> 命题}
+定理 eventually_对任意_ge_atTop
+  条件: [预序 α] {p : α -> 命题}
   证明: by
   refine ⟨fun h => h.mono fun x hx => hx x le_rfl, fun h => ?_⟩
   rcases (hasBasis_iInf_principal_finite _).eventually_iff.1 h with ⟨S, hSf, hS⟩
@@ -66,8 +66,8 @@ theorem eventually_forall_le_atBot
   proof: eventually_forall_ge_atTop (α := αᵒᵈ)
 
 中文:
-定理 eventually_forall_le_atBot
-  条件: [Preorder α] {p : α -> 命题}
+定理 eventually_对任意_le_atBot
+  条件: [预序 α] {p : α -> 命题}
   证明: eventually_forall_ge_atTop (α := αᵒᵈ)
 
 Depends on / 依赖: eventually_forall_ge_atTop
@@ -86,8 +86,8 @@ theorem Tendsto.eventually_forall_ge_atTop
   rw [← Filter.eventually_forall_ge_atTop] at h_evtl; exact (h_evtl.comap f).filter_mono hf.le_comap
 
 中文:
-定理 Tendsto.eventually_forall_ge_atTop
-  结论: [Preorder β] {l : Filter α}
+定理 收敛.eventually_对任意_ge_atTop
+  结论: [预序 β] {l : 滤子 α}
   证明: by
   rw [← Filter.eventually_forall_ge_atTop] at h_evtl; exact (h_evtl.comap f).filter_mono hf.le_comap
 
@@ -108,8 +108,8 @@ theorem Tendsto.eventually_forall_le_atBot
   rw [← Filter.eventually_forall_le_atBot] at h_evtl; exact (h_evtl.comap f).filter_mono hf.le_comap
 
 中文:
-定理 Tendsto.eventually_forall_le_atBot
-  结论: [Preorder β] {l : Filter α}
+定理 收敛.eventually_对任意_le_atBot
+  结论: [预序 β] {l : 滤子 α}
   证明: by
   rw [← Filter.eventually_forall_le_atBot] at h_evtl; exact (h_evtl.comap f).filter_mono hf.le_comap
 
@@ -139,7 +139,7 @@ theorem high_scores
 
 中文:
 定理 high_scores
-  条件: [LinearOrder β] [NoMaxOrder β] {u : 自然数 -> β} (hu : Tendsto u atTop atTop)
+  条件: [线性序 β] [NoMax序 β] {u : 自然数 -> β} (hu : 收敛 u atTop atTop)
   证明: by
   intro N
   obtain ⟨k : Nat, - : k <= N, hku : forall l <= N, u l <= u k⟩ : exists k <= N, forall l <= N, u l <= u k :=
@@ -173,7 +173,7 @@ theorem low_scores
 
 中文:
 定理 low_scores
-  条件: [LinearOrder β] [NoMinOrder β] {u : 自然数 -> β} (hu : Tendsto u atTop atBot)
+  条件: [线性序 β] [NoMin序 β] {u : 自然数 -> β} (hu : 收敛 u atTop atBot)
   证明: @high_scores βᵒᵈ _ _ _ hu
 
 Depends on / 依赖: high_scores
@@ -193,7 +193,7 @@ theorem frequently_high_scores
 
 中文:
 定理 frequently_high_scores
-  结论: [LinearOrder β] [NoMaxOrder β] {u : 自然数 -> β}
+  结论: [线性序 β] [NoMax序 β] {u : 自然数 -> β}
   证明: by
   simpa [frequently_atTop] using high_scores hu
 
@@ -213,7 +213,7 @@ theorem frequently_low_scores
 
 中文:
 定理 frequently_low_scores
-  结论: [LinearOrder β] [NoMinOrder β] {u : 自然数 -> β}
+  结论: [线性序 β] [NoMin序 β] {u : 自然数 -> β}
   证明: @frequently_high_scores βᵒᵈ _ _ _ hu
 
 Depends on / 依赖: frequently_high_scores
@@ -233,7 +233,7 @@ theorem strictMono_subseq_of_tendsto_atTop
 
 中文:
 定理 strictMono_subseq_of_tendsto_atTop
-  结论: [LinearOrder β] [NoMaxOrder β] {u : 自然数 -> β}
+  结论: [线性序 β] [NoMax序 β] {u : 自然数 -> β}
   证明: let ⟨φ, h, h'⟩ := extraction_of_frequently_atTop (frequently_high_scores hu)
   ⟨φ, h, fun _ m hnm => h' m _ (h hnm)⟩
 
@@ -318,8 +318,8 @@ theorem HasAntitoneBasis.subbasis_with_rel
     (eventually_all_finite ht).2 fun m _ => (e
 
 中文:
-定理 HasAntitoneBasis.subbasis_with_rel
-  结论: {f : Filter α} {s : 自然数 -> Set α}
+定理 有AntitoneBasis.subbasis_with_rel
+  结论: {f : 滤子 α} {s : 自然数 -> 集合 α}
   证明: by
   rsuffices ⟨φ, hφ, hrφ⟩ : exists φ : Nat -> Nat, StrictMono φ ∧ forall m n, m < n -> r (φ m) (φ n)
   · exact ⟨φ, hφ, hrφ, hs.comp_strictMono hφ⟩

@@ -53,7 +53,7 @@ class ULiftable
     - congr({α β}) : α ≃ β -> f α ≃ g β
 
 中文:
-类 ULiftable
+类 可类型层提升
   参数: (f : outParam (类型u₀ -> 类型u₁)) (g : 类型v₀ -> 类型v₁)
   公理与运算 (1 个):
     - congr({α β}) : α ≃ β -> f α ≃ g β
@@ -73,7 +73,7 @@ abbreviation symm
 
 中文:
 缩写 symm
-  签名: (f : 类型u₀ -> 类型u₁) (g : 类型v₀ -> 类型v₁) [ULiftable f g]
+  签名: (f : 类型u₀ -> 类型u₁) (g : 类型v₀ -> 类型v₁) [可类型层提升 f g]
   定义体: (ULiftable.congr e.symm).symm
 
 Depends on / 依赖: ULiftable, ULiftable.congr, e.symm
@@ -91,7 +91,7 @@ instance refl
 
 中文:
 实例 refl
-  签名: (f : 类型u₀ -> 类型u₁) [Functor f] [LawfulFunctor f]
+  签名: (f : 类型u₀ -> 类型u₁) [函子 f] [Lawful函子 f]
   定义体: Functor.mapEquiv _ e
 
 Depends on / 依赖: Functor, Functor.mapEquiv, mapEquiv
@@ -109,7 +109,7 @@ abbreviation up
 
 中文:
 缩写 up
-  签名: {f : 类型u₀ -> 类型u₁} {g : Type max u₀ v -> 类型v₁} [ULiftable f g] {α}
+  签名: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v -> 类型v₁} [可类型层提升 f g] {α}
   定义体: (ULiftable.congr Equiv.ulift.symm).toFun
 
 Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr
@@ -128,7 +128,7 @@ abbreviation down
 
 中文:
 缩写 down
-  签名: {f : 类型u₀ -> 类型u₁} {g : Type max u₀ v -> 类型v₁} [ULiftable f g] {α}
+  签名: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v -> 类型v₁} [可类型层提升 f g] {α}
   定义体: (ULiftable.congr Equiv.ulift.symm).invFun
 
 Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, invFun, mem_dropLast_of_mem_of_ne_getLast
@@ -147,7 +147,7 @@ definition adaptUp
 
 中文:
 定义 adaptUp
-  签名: (F : 类型v₀ -> 类型v₁) (G : Type max v₀ u₀ -> 类型u₁) [ULiftable F G] [Monad G] {α β}
+  签名: (F : 类型v₀ -> 类型v₁) (G : 类型 最大值 v₀ u₀ -> 类型u₁) [可类型层提升 F G] [单子 G] {α β}
   定义体: up x >>= f ∘ ULift.down.{u₀}
 
 Depends on / 依赖: ULift.down
@@ -166,7 +166,7 @@ definition adaptDown
 
 中文:
 定义 adaptDown
-  签名: {F : Type max u₀ v₀ -> 类型u₁} {G : 类型v₀ -> 类型v₁} [L : ULiftable G F] [Monad F]
+  签名: {F : 类型 最大值 u₀ v₀ -> 类型u₁} {G : 类型v₀ -> 类型v₁} [L : 可类型层提升 G F] [单子 F]
   定义体: @down.{max u₀ v₀} G F L β x >>= @up.{max u₀ v₀} G F L β ∘ f
 -/
 def adaptDown {F : Type max u₀ v₀ -> Type u₁} {G : Type v₀ -> Type v₁} [L : ULiftable G F] [Monad F]
@@ -183,7 +183,7 @@ definition upMap
 
 中文:
 定义 upMap
-  签名: {F : 类型u₀ -> 类型u₁} {G : Type max u₀ v₀ -> 类型v₁} [ULiftable F G] [Functor G]
+  签名: {F : 类型u₀ -> 类型u₁} {G : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 F G] [函子 G]
   定义体: Functor.map (f ∘ ULift.down.{v₀}) (up x)
 
 Depends on / 依赖: Functor, Functor.map, ULift.down
@@ -202,7 +202,7 @@ definition downMap
 
 中文:
 定义 downMap
-  签名: {F : Type max u₀ v₀ -> 类型u₁} {G : 类型u₀ -> 类型v₁} [ULiftable G F]
+  签名: {F : 类型 最大值 u₀ v₀ -> 类型u₁} {G : 类型u₀ -> 类型v₁} [可类型层提升 G F]
   定义体: down (Functor.map (ULift.up.{v₀} ∘ f) x : F (ULift β))
 
 Depends on / 依赖: Functor, Functor.map, ULift.up, _eq_head, _getD
@@ -221,7 +221,7 @@ abbreviation up'
 
 中文:
 缩写 up'
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [ULiftable f g]
+  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [可类型层提升 f g]
   定义体: ULiftable.congr Equiv.punitEquivPUnit
 
 Depends on / 依赖: Equiv.punitEquivPUnit, ULiftable, ULiftable.congr, punitEquivPUnit
@@ -240,7 +240,7 @@ abbreviation down'
 
 中文:
 缩写 down'
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [ULiftable f g]
+  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [可类型层提升 f g]
   定义体: (ULiftable.congr Equiv.punitEquivPUnit).symm
 
 Depends on / 依赖: Equiv.punitEquivPUnit, Option.forall, ULiftable, ULiftable.congr, punitEquivPUnit
@@ -259,7 +259,7 @@ theorem up_down
 
 中文:
 定理 up_down
-  结论: {f : 类型u₀ -> 类型u₁} {g : Type max u₀ v₀ -> 类型v₁} [ULiftable f g] {α}
+  结论: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 f g] {α}
   证明: (ULiftable.congr Equiv.ulift.symm).right_inv _
 
 Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, right_inv
@@ -278,7 +278,7 @@ theorem down_up
 
 中文:
 定理 down_up
-  结论: {f : 类型u₀ -> 类型u₁} {g : Type max u₀ v₀ -> 类型v₁} [ULiftable f g] {α}
+  结论: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 f g] {α}
   证明: (ULiftable.congr Equiv.ulift.symm).left_inv _
 
 Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, left_inv
@@ -301,7 +301,7 @@ instance instULiftableId
 
 中文:
 实例 instULiftableId
-  签名: : ULiftable Id Id where
+  签名: : 可类型层提升 Id Id where
   定义体: F
 -/
 instance instULiftableId : ULiftable Id Id where
@@ -319,7 +319,7 @@ definition StateT.uliftable'
 
 中文:
 定义 StateT.uliftable'
-  签名: {m : 类型u₀ -> 类型v₀} {m' : 类型u₁ -> 类型v₁} [ULiftable m m']
+  签名: {m : 类型u₀ -> 类型v₀} {m' : 类型u₁ -> 类型v₁} [可类型层提升 m m']
   定义体: StateT.equiv Equiv.piCongr F fun _ => ULiftable.congr Equiv.prodCongr G F
 
 Depends on / 依赖: Equiv.piCongr, Equiv.prodCongr, StateT, StateT.equiv, ULiftable, ULiftable.congr, piCongr, prodCongr
@@ -342,7 +342,7 @@ instance StateT.instULiftableULiftULift
 
 中文:
 实例 StateT.instULiftableULiftULift
-  签名: {m m'} [ULiftable m m']
+  签名: {m m'} [可类型层提升 m m']
   定义体: StateT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
 
 Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, StateT, StateT.uliftable, _mem_head, _tail, cons_head, uliftable
@@ -363,7 +363,7 @@ definition ReaderT.uliftable'
 
 中文:
 定义 ReaderT.uliftable'
-  签名: {m m'} [ULiftable m m'] (F : s ≃ s')
+  签名: {m m'} [可类型层提升 m m'] (F : s ≃ s')
   定义体: ReaderT.equiv Equiv.piCongr F fun _ => ULiftable.congr G
 
 Depends on / 依赖: Equiv.piCongr, ReaderT, ReaderT.equiv, ULiftable, ULiftable.congr, _tail, cons_head, l.head, l.tail, mem_cons_self, piCongr
@@ -385,7 +385,7 @@ instance ReaderT.instULiftableULiftULift
 
 中文:
 实例 ReaderT.instULiftableULiftULift
-  签名: {m m'} [ULiftable m m']
+  签名: {m m'} [可类型层提升 m m']
   定义体: ReaderT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
 
 Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, ReaderT, ReaderT.uliftable, uliftable
@@ -406,7 +406,7 @@ definition ContT.uliftable'
 
 中文:
 定义 ContT.uliftable'
-  签名: {m m'} [ULiftable m m'] (F : r ≃ r')
+  签名: {m m'} [可类型层提升 m m'] (F : r ≃ r')
   定义体: ContT.equiv (ULiftable.congr F)
 
 Depends on / 依赖: ContT.equiv, ULiftable, ULiftable.congr
@@ -428,7 +428,7 @@ instance ContT.instULiftableULiftULift
 
 中文:
 实例 ContT.instULiftableULiftULift
-  签名: {m m'} [ULiftable m m']
+  签名: {m m'} [可类型层提升 m m']
   定义体: ContT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
 
 Depends on / 依赖: ContT.uliftable, Equiv.ulift.symm, Equiv.ulift.trans, uliftable
@@ -449,7 +449,7 @@ definition WriterT.uliftable'
 
 中文:
 定义 WriterT.uliftable'
-  签名: {m m'} [ULiftable m m'] (F : w ≃ w')
+  签名: {m m'} [可类型层提升 m m'] (F : w ≃ w')
   定义体: WriterT.equiv ULiftable.congr Equiv.prodCongr G F
 
 Depends on / 依赖: Equiv.prodCongr, ULiftable, ULiftable.congr, WriterT, WriterT.equiv, prodCongr
@@ -471,7 +471,7 @@ instance WriterT.instULiftableULiftULift
 
 中文:
 实例 WriterT.instULiftableULiftULift
-  签名: {m m'} [ULiftable m m']
+  签名: {m m'} [可类型层提升 m m']
   定义体: WriterT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
 
 Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, WriterT, WriterT.uliftable, uliftable
@@ -521,8 +521,8 @@ instance Option.instULiftable
       right_inv := fun f => by cases f <;> simp }
 
 中文:
-实例 Option.instULiftable
-  签名: : ULiftable Option.{u₀} Option.{u₁} where
+实例 选项类型.instULiftable
+  签名: : 可类型层提升 选项类型.{u₀} 选项类型.{u₁} where
   定义体: { toFun := Option.map e
       invFun := Option.map e.symm
       left_inv := fun f => by cases f <;> simp

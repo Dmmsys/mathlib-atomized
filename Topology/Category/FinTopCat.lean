@@ -34,11 +34,11 @@ structure FinTopCat
     - [fintype : Fintype toTop]
 
 中文:
-结构 FinTopCat
+结构 FinTop范畴
   参数: where
   公理与运算 (2 个):
-    - toTop : TopCat.{u} -- TODO: turn this into an `extends`?
-    - [fintype : Fintype toTop]
+    - toTop : 顶元素范畴.{u} -- TODO: turn this into an `extends`?
+    - [fintype : 有限类型 toTop]
 -/
 structure FinTopCat where
   /-- carrier of a finite topological space. -/
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited FinTopCat
+  签名: 可居 FinTop范畴
   定义体: ⟨{ toTop := TopCat.of PEmpty }⟩
 
 Depends on / 依赖: PEmpty, TopCat, TopCat.of
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort FinTopCat (类型u)
+  签名: CoeSort FinTop范畴 (类型u)
   定义体: ⟨fun X => X.toTop⟩
 
 Depends on / 依赖: X.toTop
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category FinTopCat
+  签名: 范畴 FinTop范畴
   定义体: inferInstanceAs Category (InducedCategory _ toTop)
 
 Depends on / 依赖: Category, InducedCategory
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory FinTopCat (C(·, ·))
+  签名: 余ncrete范畴 FinTop范畴 (C(·, ·))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory
@@ -134,7 +134,7 @@ definition of
 
 中文:
 定义 of
-  签名: (X : 类型u) [Fintype X] [TopologicalSpace X]
+  签名: (X : 类型u) [有限类型 X] [拓扑空间 X]
   定义体: TopCat.of X
   fintype := ‹_›
 
@@ -157,7 +157,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [Fintype X] [TopologicalSpace X]
+  条件: (X : 类型u) [有限类型 X] [拓扑空间 X]
   证明: rfl
 -/
 theorem coe_of (X : Type u) [Fintype X] [TopologicalSpace X] :
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ FinTopCat FintypeCat
+  签名: 有Forget₂ FinTop范畴 FintypeCat
   定义体: HasForget₂.mk' (fun X => .of X) (fun _ => rfl)
     (fun f => FintypeCat.homMk f) HEq.rfl
 
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ FinTopCat TopCat
+  签名: 有Forget₂ FinTop范畴 顶元素范畴
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toTop) _
 
 Depends on / 依赖: InducedCategory

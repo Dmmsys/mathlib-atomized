@@ -46,7 +46,7 @@ definition RelativeMorphism.botEquiv
   invFun f := { map := f }
 
 中文:
-定义 RelativeMorphism.botEquiv
+定义 Relative态射.botEquiv
   签名: :
   定义体: f.map
   invFun f := { map := f }
@@ -68,7 +68,7 @@ definition Homotopy
   body: (RelativeMorphism.botEquiv.symm f).Homotopy (RelativeMorphism.botEquiv.symm g)
 
 中文:
-定义 Homotopy
+定义 同伦
   签名: (f g : X ⟶ Y)
   定义体: (RelativeMorphism.botEquiv.symm f).Homotopy (RelativeMorphism.botEquiv.symm g)
 
@@ -95,7 +95,7 @@ lemma h₀
 
 中文:
 引理 h₀
-  条件: (H : Homotopy f g)
+  条件: (H : 同伦 f g)
   结论: ι₀ ≫ H.h = f
   证明: RelativeMorphism.Homotopy.h₀ H
 
@@ -118,7 +118,7 @@ lemma h₁
 
 中文:
 引理 h₁
-  条件: (H : Homotopy f g)
+  条件: (H : 同伦 f g)
   结论: ι₁ ≫ H.h = g
   证明: RelativeMorphism.Homotopy.h₁ H
 
@@ -145,7 +145,7 @@ definition toSimplicialObjectHomotopy
 
 中文:
 定义 toSimplicialObjectHomotopy
-  签名: (H : Homotopy f g)
+  签名: (H : 同伦 f g)
   定义体: ↾fun x =>
     (yonedaEquiv.symm x ▷ Δ[1] ≫ H.h).app _ (prodStdSimplex.nonDegenerateEquiv₁ i).1
   h_zero_comp_δ_zero n := by

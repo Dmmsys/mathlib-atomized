@@ -50,7 +50,7 @@ lemma addUnits_eq_zero
 
 中文:
 引理 addUnits_eq_zero
-  条件: (u : AddUnits 自然数)
+  条件: (u : 加法单位群 自然数)
   结论: u = 0
   证明: AddUnits.ext (Nat.eq_zero_of_add_eq_zero u.val_neg).1
 
@@ -70,7 +70,7 @@ instance unique_units
 
 中文:
 实例 unique_units
-  签名: : Unique 自然数ˣ where
+  签名: : 唯一 自然数ˣ where
   定义体: 1
   uniq := Nat.units_eq_one
 -/
@@ -89,7 +89,7 @@ instance unique_addUnits
 
 中文:
 实例 unique_addUnits
-  签名: : Unique (AddUnits 自然数) where
+  签名: : 唯一 (加法单位群 自然数) where
   定义体: 0
   uniq := Nat.addUnits_eq_zero
 -/
@@ -109,7 +109,7 @@ lemma isUnit_iff
 中文:
 引理 isUnit_iff
   条件: {n : 自然数}
-  结论: IsUnit n ↔ n = 1
+  结论: 是单位 n ↔ n = 1
   证明: isUnit_iff_eq_one
 -/
 protected lemma isUnit_iff {n : Nat} : IsUnit n ↔ n = 1 := isUnit_iff_eq_one

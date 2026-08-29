@@ -113,8 +113,8 @@ definition CurveIntegrable
   body: IntervalIntegrable (curveIntegralFun ω γ) volume 0 1
 
 中文:
-定义 CurveIntegrable
-  签名: (ω : E -> E ->L[𝕜] F) (γ : Path a b)
+定义 Curve整数egrable
+  签名: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b)
   定义体: IntervalIntegrable (curveIntegralFun ω γ) volume 0 1
 
 Depends on / 依赖: IntervalIntegrable, curveIntegralFun, volume
@@ -146,8 +146,8 @@ theorem curveIntegral_of_not_completeSpace
   simp [curveIntegral, intervalIntegral, integral, h]
 
 中文:
-定理 curveIntegral_of_not_completeSpace
-  结论: (h : ¬CompleteSpace F) (ω : E -> E ->L[𝕜] F)
+定理 curve整数egral_of_not_completeSpace
+  结论: (h : ¬完备空间 F) (ω : E -> E ->L[𝕜] F)
   证明: by
   simp [curveIntegral, intervalIntegral, integral, h]
 
@@ -167,8 +167,8 @@ theorem curveIntegralFun_def
   simp +instances only [curveIntegralFun, NormedSpace.restrictScalars_eq]
 
 中文:
-定理 curveIntegralFun_def
-  条件: [NormedSpace 实数 E] (ω : E -> E ->L[𝕜] F) (γ : Path a b) (t : 实数)
+定理 curve整数egralFun_def
+  条件: [赋范空间 实数 E] (ω : E -> E ->L[𝕜] F) (γ : 道路 a b) (t : 实数)
   证明: by
   simp +instances only [curveIntegralFun, NormedSpace.restrictScalars_eq]
 
@@ -188,8 +188,8 @@ theorem curveIntegral_def
   simp +instances only [curveIntegral, NormedSpace.restrictScalars_eq]
 
 中文:
-定理 curveIntegral_def
-  条件: [NormedSpace 实数 F] (ω : E -> E ->L[𝕜] F) (γ : Path a b)
+定理 curve整数egral_def
+  条件: [赋范空间 实数 F] (ω : E -> E ->L[𝕜] F) (γ : 道路 a b)
   证明: by
   simp +instances only [curveIntegral, NormedSpace.restrictScalars_eq]
 
@@ -213,8 +213,8 @@ theorem curveIntegral_eq_intervalIntegral_deriv
   rw [derivWithin_of_mem_nhds (by simpa)]
 
 中文:
-定理 curveIntegral_eq_intervalIntegral_deriv
-  结论: [NormedSpace 实数 E] [NormedSpace 实数 F]
+定理 curve整数egral_eq_interval整数egral_deriv
+  结论: [赋范空间 实数 E] [赋范空间 实数 F]
   证明: by
   simp only [curveIntegral_def, curveIntegralFun_def]
   apply intervalIntegral.integral_congr_ae_restrict
@@ -260,7 +260,7 @@ theorem curveIntegralFun_refl
 @[simp]
 
 中文:
-定理 curveIntegralFun_refl
+定理 curve整数egralFun_refl
   条件: (ω : E -> E ->L[𝕜] F) (a : E)
   结论: curve整数egralFun ω (.refl a) = 0
   证明: by
@@ -289,7 +289,7 @@ theorem curveIntegral_refl
 @[simp]
 
 中文:
-定理 curveIntegral_refl
+定理 curve整数egral_refl
   条件: (ω : E -> E ->L[𝕜] F) (a : E)
   结论: ∫ᶜ x in .refl a, ω x = 0
   证明: by
@@ -316,7 +316,7 @@ theorem CurveIntegrable.refl
 @[simp]
 
 中文:
-定理 CurveIntegrable.refl
+定理 Curve整数egrable.refl
   条件: (ω : E -> E ->L[𝕜] F) (a : E)
   结论: Curve整数egrable ω (.refl a)
   证明: by
@@ -343,8 +343,8 @@ theorem curveIntegralFun_cast
 @[simp]
 
 中文:
-定理 curveIntegralFun_cast
-  条件: (ω : E -> E ->L[𝕜] F) (γ : Path a b) (hc : c = a) (hd : d = b)
+定理 curve整数egralFun_cast
+  条件: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b) (hc : c = a) (hd : d = b)
   证明: by
   ext t
   simp only [curveIntegralFun_def', Path.extend_cast]
@@ -371,8 +371,8 @@ theorem curveIntegral_cast
 @[simp]
 
 中文:
-定理 curveIntegral_cast
-  条件: (ω : E -> E ->L[𝕜] F) (γ : Path a b) (hc : c = a) (hd : d = b)
+定理 curve整数egral_cast
+  条件: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b) (hc : c = a) (hd : d = b)
   证明: by
   simp [curveIntegral]
 
@@ -397,7 +397,7 @@ theorem curveIntegrable_cast_iff
 protected alias ⟨_, CurveIntegrable.cast⟩ := curveIntegrable_cast_iff
 
 中文:
-定理 curveIntegrable_cast_iff
+定理 curve整数egrable_cast_iff
   条件: (hc : c = a) (hd : d = b)
   证明: by
   simp [CurveIntegrable]
@@ -424,8 +424,8 @@ theorem curveIntegralFun_symm_apply
 @[simp]
 
 中文:
-定理 curveIntegralFun_symm_apply
-  条件: (ω : E -> E ->L[𝕜] F) (γ : Path a b) (t : 实数)
+定理 curve整数egralFun_symm_apply
+  条件: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b) (t : 实数)
   证明: by
   simp [curveIntegralFun, γ.extend_symm, derivWithin_comp_const_sub]
 
@@ -447,8 +447,8 @@ theorem curveIntegralFun_symm
   proof: funext curveIntegralFun_symm_apply ω γ
 
 中文:
-定理 curveIntegralFun_symm
-  条件: (ω : E -> E ->L[𝕜] F) (γ : Path a b)
+定理 curve整数egralFun_symm
+  条件: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b)
   证明: funext curveIntegralFun_symm_apply ω γ
 
 Depends on / 依赖: curveIntegralFun_symm_apply
@@ -470,7 +470,7 @@ theorem CurveIntegrable.symm
 @[simp]
 
 中文:
-定理 CurveIntegrable.symm
+定理 Curve整数egrable.symm
   条件: (h : Curve整数egrable ω γ)
   结论: Curve整数egrable ω γ.symm
   证明: by
@@ -493,7 +493,7 @@ theorem curveIntegrable_symm
 @[simp]
 
 中文:
-定理 curveIntegrable_symm
+定理 curve整数egrable_symm
   结论: Curve整数egrable ω γ.symm ↔ Curve整数egrable ω γ
   证明: ⟨fun h => by simpa using h.symm, .symm⟩
 
@@ -515,8 +515,8 @@ theorem curveIntegral_symm
   simp [curveIntegral, curveIntegralFun_symm]
 
 中文:
-定理 curveIntegral_symm
-  条件: (ω : E -> E ->L[𝕜] F) (γ : Path a b)
+定理 curve整数egral_symm
+  条件: (ω : E -> E ->L[𝕜] F) (γ : 道路 a b)
   证明: by
   simp [curveIntegral, curveIntegralFun_symm]
 
@@ -540,8 +540,8 @@ theorem curveIntegralFun_trans_of_lt_half
     rw [LinearOrderedField.smul_Icc two_pos];
 
 中文:
-定理 curveIntegralFun_trans_of_lt_half
-  结论: (ω : E -> E ->L[𝕜] F) (γab : Path a b) (γbc : Path b c)
+定理 curve整数egralFun_trans_of_lt_half
+  结论: (ω : E -> E ->L[𝕜] F) (γab : 道路 a b) (γbc : 道路 b c)
   证明: by
   let instE := NormedSpace.restrictScalars Real 𝕜 E
   have H₁ : (γab.trans γbc).extend =ᶠ[𝓝 t] (fun s => γab.extend (2 * s)) :=
@@ -578,8 +578,8 @@ theorem curveIntegralFun_trans_aeeq_left
   exact curveIntegralFun_trans_of_lt_half ω γab γbc ht
 
 中文:
-定理 curveIntegralFun_trans_aeeq_left
-  条件: (ω : E -> E ->L[𝕜] F) (γab : Path a b) (γbc : Path b c)
+定理 curve整数egralFun_trans_aeeq_left
+  条件: (ω : E -> E ->L[𝕜] F) (γab : 道路 a b) (γbc : 道路 b c)
   证明: by
   rw [uIoc_of_le (by positivity)]; rw [← restrict_Ioo_eq_restrict_Ioc]
   filter_upwards [ae_restrict_mem measurableSet_Ioo] with t ⟨ht₀, ht⟩
@@ -606,8 +606,8 @@ theorem curveIntegralFun_trans_of_half_lt
   ring
 
 中文:
-定理 curveIntegralFun_trans_of_half_lt
-  结论: (ω : E -> E ->L[𝕜] F) (γab : Path a b) (γbc : Path b c)
+定理 curve整数egralFun_trans_of_half_lt
+  结论: (ω : E -> E ->L[𝕜] F) (γab : 道路 a b) (γbc : 道路 b c)
   证明: by
   rw [← (γab.trans γbc).symm_symm]; rw [curveIntegralFun_symm_apply]; rw [Path.trans_symm]; rw [curveIntegralFun_trans_of_lt_half (ht := by linarith)]; rw [curveIntegralFun_symm_apply]; rw [smul_neg]; rw [neg_neg]
   congr 2
@@ -634,8 +634,8 @@ theorem curveIntegralFun_trans_aeeq_right
   exact curveIntegralFun_trans_of_half_lt ω γab γbc ht₁
 
 中文:
-定理 curveIntegralFun_trans_aeeq_right
-  条件: (ω : E -> E ->L[𝕜] F) (γab : Path a b) (γbc : Path b c)
+定理 curve整数egralFun_trans_aeeq_right
+  条件: (ω : E -> E ->L[𝕜] F) (γab : 道路 a b) (γbc : 道路 b c)
   证明: by
   rw [uIoc_of_le (by linarith)]; rw [← restrict_Ioo_eq_restrict_Ioc]
   filter_upwards [ae_restrict_mem measurableSet_Ioo] with t ⟨ht₁, ht₂⟩
@@ -660,7 +660,7 @@ theorem CurveIntegrable.intervalIntegrable_curveIntegralFun_trans_left
   simpa [ofNat_smul_eq_nsmul] using! h.comp_mul_left.smul (2 : 𝕜)
 
 中文:
-定理 CurveIntegrable.intervalIntegrable_curveIntegralFun_trans_left
+定理 Curve整数egrable.interval整数egrable_curve整数egralFun_trans_left
   证明: by
   refine .congr_ae ?_ (curveIntegralFun_trans_aeeq_left _ _ _).symm
   simpa [ofNat_smul_eq_nsmul] using! h.comp_mul_left.smul (2 : 𝕜)
@@ -683,7 +683,7 @@ theorem CurveIntegrable.intervalIntegrable_curveIntegralFun_trans_right
 .smul (2 : 𝕜) .comp_mul_left (c := 2) simpa [ofNat_smul_eq_nsmul] using! h.comp_sub_right 1
 
 中文:
-定理 CurveIntegrable.intervalIntegrable_curveIntegralFun_trans_right
+定理 Curve整数egrable.interval整数egrable_curve整数egralFun_trans_right
   证明: by
   refine .congr_ae ?_ (curveIntegralFun_trans_aeeq_right _ _ _).symm
 .smul (2 : 𝕜) .comp_mul_left (c := 2) simpa [ofNat_smul_eq_nsmul] using! h.comp_sub_right 1
@@ -706,7 +706,7 @@ theorem CurveIntegrable.trans
     (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)
 
 中文:
-定理 CurveIntegrable.trans
+定理 Curve整数egrable.trans
   条件: (h₁ : Curve整数egrable ω γab) (h₂ : Curve整数egrable ω γbc)
   证明: (h₁.intervalIntegrable_curveIntegralFun_trans_left γbc).trans
     (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)
@@ -729,7 +729,7 @@ theorem curveIntegral_trans
     (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)]; rw [intervalIntegral.integral_congr_ae_re
 
 中文:
-定理 curveIntegral_trans
+定理 curve整数egral_trans
   条件: (h₁ : Curve整数egrable ω γab) (h₂ : Curve整数egrable ω γbc)
   证明: by
   let instF := NormedSpace.restrictScalars Real 𝕜 F
@@ -763,8 +763,8 @@ theorem curveIntegralFun_segment
     (hasDerivWithinAt_lineMap ..).derivWithin (uniqueDiffOn_Icc_zero_one t ht)]
 
 中文:
-定理 curveIntegralFun_segment
-  结论: [NormedSpace 实数 E] (ω : E -> E ->L[𝕜] F) (a b : E)
+定理 curve整数egralFun_segment
+  结论: [赋范空间 实数 E] (ω : E -> E ->L[𝕜] F) (a b : E)
   证明: by
   have := Path.eqOn_extend_segment a b
   simp only [curveIntegralFun_def, this ht, derivWithin_congr this (this ht),
@@ -791,8 +791,8 @@ theorem curveIntegrable_segment
   exact .mono Ioc_subset_Icc_self fun _t => curveIntegralFun_segment ω a b
 
 中文:
-定理 curveIntegrable_segment
-  条件: [NormedSpace 实数 E]
+定理 curve整数egrable_segment
+  条件: [赋范空间 实数 E]
   证明: by
   rw [CurveIntegrable]; rw [intervalIntegrable_congr]
   rw [uIoc_of_le zero_le_one]
@@ -823,8 +823,8 @@ theorem curveIntegral_segment
 @[simp]
 
 中文:
-定理 curveIntegral_segment
-  条件: [NormedSpace 实数 E] [NormedSpace 实数 F] (ω : E -> E ->L[𝕜] F) (a b : E)
+定理 curve整数egral_segment
+  条件: [赋范空间 实数 E] [赋范空间 实数 F] (ω : E -> E ->L[𝕜] F) (a b : E)
   证明: by
   rw [curveIntegral_def]
   refine intervalIntegral.integral_congr fun t ht => ?_
@@ -854,8 +854,8 @@ theorem curveIntegral_segment_const
   simp [curveIntegral_segment]
 
 中文:
-定理 curveIntegral_segment_const
-  条件: [NormedSpace 实数 E] [CompleteSpace F] (ω : E ->L[𝕜] F) (a b : E)
+定理 curve整数egral_segment_const
+  条件: [赋范空间 实数 E] [完备空间 F] (ω : E ->L[𝕜] F) (a b : E)
   证明: by
   let : NormedSpace Real F := .restrictScalars Real 𝕜 F
   simp [curveIntegral_segment]
@@ -883,8 +883,8 @@ theorem norm_curveIntegral_segment_le
     rw [uIoc_of_le zero_le_on
 
 中文:
-定理 norm_curveIntegral_segment_le
-  条件: [NormedSpace 实数 E] {C : 实数} (h : 对任意 z in [a -[实数] b], ‖ω z‖ <= C)
+定理 norm_curve整数egral_segment_le
+  条件: [赋范空间 实数 E] {C : 实数} (h : 对任意 z in [a -[实数] b], ‖ω z‖ <= C)
   证明: calc
   ‖∫ᶜ x in .segment a b, ω x‖ <= C * ‖b - a‖ * |1 - 0| := by
     let : NormedSpace Real F := .restrictScalars Real 𝕜 F
@@ -918,8 +918,8 @@ theorem ContinuousOn.curveIntegrable_of_contDiffOn
   · exact hγ.continuousOn_derivWithin uniqueDiffOn_Icc_zero_one le_rfl
 
 中文:
-定理 ContinuousOn.curveIntegrable_of_contDiffOn
-  结论: [NormedSpace 实数 E] {s : Set E}
+定理 ContinuousOn.curve整数egrable_of_contDiffOn
+  结论: [赋范空间 实数 E] {s : 集合 E}
   证明: by
   apply ContinuousOn.intervalIntegrable_of_Icc zero_le_one
   simp only [funext (curveIntegralFun_def ω γ)]
@@ -960,7 +960,7 @@ theorem curveIntegralFun_add
   ext; simp [curveIntegralFun]
 
 中文:
-定理 curveIntegralFun_add
+定理 curve整数egralFun_add
   证明: by
   ext; simp [curveIntegralFun]
 
@@ -980,7 +980,7 @@ theorem CurveIntegrable.add
   simpa [CurveIntegrable] using! IntervalIntegrable.add h₁ h₂
 
 中文:
-定理 CurveIntegrable.add
+定理 Curve整数egrable.add
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: by
   simpa [CurveIntegrable] using! IntervalIntegrable.add h₁ h₂
@@ -1002,7 +1002,7 @@ theorem curveIntegral_add
   exact intervalIntegral.integral_add h₁ h₂
 
 中文:
-定理 curveIntegral_add
+定理 curve整数egral_add
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: by
   let : NormedSpace Real F := .restrictScalars Real 𝕜 F
@@ -1028,7 +1028,7 @@ theorem curveIntegral_fun_add
 @[simp]
 
 中文:
-定理 curveIntegral_fun_add
+定理 curve整数egral_fun_add
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: curveIntegral_add h₁ h₂
 
@@ -1053,7 +1053,7 @@ theorem curveIntegralFun_zero
 @[simp]
 
 中文:
-定理 curveIntegralFun_zero
+定理 curve整数egralFun_zero
   结论: curve整数egralFun (0 : E -> E ->L[𝕜] F) γ = 0
   证明: by
   ext; simp [curveIntegralFun]
@@ -1077,7 +1077,7 @@ theorem curveIntegralFun_fun_zero
 @[to_fun]
 
 中文:
-定理 curveIntegralFun_fun_zero
+定理 curve整数egralFun_fun_zero
   结论: curve整数egralFun (fun _ => 0 : E -> E ->L[𝕜] F) γ = 0
   证明: curveIntegralFun_zero
 
@@ -1101,7 +1101,7 @@ theorem CurveIntegrable.zero
 @[simp]
 
 中文:
-定理 CurveIntegrable.zero
+定理 Curve整数egrable.zero
   结论: Curve整数egrable (0 : E -> E ->L[𝕜] F) γ
   证明: by
   simp [CurveIntegrable, IntervalIntegrable.zero]
@@ -1125,7 +1125,7 @@ theorem curveIntegral_zero
 @[simp]
 
 中文:
-定理 curveIntegral_zero
+定理 curve整数egral_zero
   结论: curve整数egral (0 : E -> E ->L[𝕜] F) γ = 0
   证明: by simp [curveIntegral]
 
@@ -1147,7 +1147,7 @@ theorem curveIntegral_fun_zero
 @[simp]
 
 中文:
-定理 curveIntegral_fun_zero
+定理 curve整数egral_fun_zero
   结论: ∫ᶜ _ in γ, (0 : E ->L[𝕜] F) = 0
   证明: curveIntegral_zero
 
@@ -1170,7 +1170,7 @@ theorem curveIntegralFun_neg
 @[to_fun]
 
 中文:
-定理 curveIntegralFun_neg
+定理 curve整数egralFun_neg
   结论: curve整数egralFun (-ω) γ = -curve整数egralFun ω γ
   证明: by
   ext; simp [curveIntegralFun]
@@ -1196,7 +1196,7 @@ theorem CurveIntegrable.neg
 @[simp]
 
 中文:
-定理 CurveIntegrable.neg
+定理 Curve整数egrable.neg
   条件: (h : Curve整数egrable ω γ)
   结论: Curve整数egrable (-ω) γ
   证明: by
@@ -1221,7 +1221,7 @@ theorem curveIntegrable_neg_iff
 @[simp]
 
 中文:
-定理 curveIntegrable_neg_iff
+定理 curve整数egrable_neg_iff
   结论: Curve整数egrable (-ω) γ ↔ Curve整数egrable ω γ
   证明: ⟨fun h => by simpa using h.neg, .neg⟩
 
@@ -1244,7 +1244,7 @@ theorem curveIntegrable_fun_neg_iff
 @[simp]
 
 中文:
-定理 curveIntegrable_fun_neg_iff
+定理 curve整数egrable_fun_neg_iff
   结论: Curve整数egrable (-ω ·) γ ↔ Curve整数egrable ω γ
   证明: curveIntegrable_neg_iff
 
@@ -1268,7 +1268,7 @@ theorem curveIntegral_neg
 @[simp]
 
 中文:
-定理 curveIntegral_neg
+定理 curve整数egral_neg
   结论: curve整数egral (-ω) γ = -∫ᶜ x in γ, ω x
   证明: by
   simp [curveIntegral]
@@ -1292,7 +1292,7 @@ theorem curveIntegral_fun_neg
 @[simp]
 
 中文:
-定理 curveIntegral_fun_neg
+定理 curve整数egral_fun_neg
   结论: ∫ᶜ x in γ, -ω x = -∫ᶜ x in γ, ω x
   证明: curveIntegral_neg
 
@@ -1312,7 +1312,7 @@ theorem curveIntegralFun_sub
   simp [sub_eq_add_neg]
 
 中文:
-定理 curveIntegralFun_sub
+定理 curve整数egralFun_sub
   证明: by
   simp [sub_eq_add_neg]
 
@@ -1331,7 +1331,7 @@ theorem CurveIntegrable.sub
   proof: sub_eq_add_neg ω₁ ω₂ ▸ h₁.add h₂.neg
 
 中文:
-定理 CurveIntegrable.sub
+定理 Curve整数egrable.sub
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: sub_eq_add_neg ω₁ ω₂ ▸ h₁.add h₂.neg
 -/
@@ -1349,7 +1349,7 @@ theorem curveIntegral_sub
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [curveIntegral_add h₁ h₂.neg]; rw [curveIntegral_neg]
 
 中文:
-定理 curveIntegral_sub
+定理 curve整数egral_sub
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [curveIntegral_add h₁ h₂.neg]; rw [curveIntegral_neg]
@@ -1369,7 +1369,7 @@ theorem curveIntegral_fun_sub
   proof: curveIntegral_sub h₁ h₂
 
 中文:
-定理 curveIntegral_fun_sub
+定理 curve整数egral_fun_sub
   条件: (h₁ : Curve整数egrable ω₁ γ) (h₂ : Curve整数egrable ω₂ γ)
   证明: curveIntegral_sub h₁ h₂
 
@@ -1399,7 +1399,7 @@ theorem curveIntegralFun_restrictScalars
 @[simp]
 
 中文:
-定理 curveIntegralFun_restrictScalars
+定理 curve整数egralFun_restrictScalars
   证明: by
   ext
   let : NormedSpace Real E := .restrictScalars Real 𝕜 E
@@ -1427,7 +1427,7 @@ theorem curveIntegrable_restrictScalars_iff
 @[simp]
 
 中文:
-定理 curveIntegrable_restrictScalars_iff
+定理 curve整数egrable_restrictScalars_iff
   证明: by
   simp [CurveIntegrable]
 
@@ -1450,7 +1450,7 @@ theorem curveIntegral_restrictScalars
   simp [curveIntegral_def]
 
 中文:
-定理 curveIntegral_restrictScalars
+定理 curve整数egral_restrictScalars
   证明: by
   let : NormedSpace Real F := .restrictScalars Real 𝕜 F
   simp [curveIntegral_def]
@@ -1478,7 +1478,7 @@ theorem curveIntegralFun_smul
   simp [curveIntegralFun]
 
 中文:
-定理 curveIntegralFun_smul
+定理 curve整数egralFun_smul
   结论: curve整数egralFun (c • ω) γ = c • curve整数egralFun ω γ
   证明: by
   ext
@@ -1502,7 +1502,7 @@ theorem CurveIntegrable.smul
 @[simp]
 
 中文:
-定理 CurveIntegrable.smul
+定理 Curve整数egrable.smul
   条件: (h : Curve整数egrable ω γ)
   证明: by
   simpa [CurveIntegrable] using IntervalIntegrable.smul h c
@@ -1532,7 +1532,7 @@ theorem curveIntegrable_smul_iff
 @[simp]
 
 中文:
-定理 curveIntegrable_smul_iff
+定理 curve整数egrable_smul_iff
   结论: Curve整数egrable (c • ω) γ ↔ c = 0 ∨ Curve整数egrable ω γ
   证明: by
   rcases eq_or_ne c 0 with rfl | hc
@@ -1566,7 +1566,7 @@ theorem curveIntegral_smul
 @[simp]
 
 中文:
-定理 curveIntegral_smul
+定理 curve整数egral_smul
   结论: curve整数egral (c • ω) γ = c • curve整数egral ω γ
   证明: by
   let : NormedSpace Real F := .restrictScalars Real 𝕜 F
@@ -1590,7 +1590,7 @@ theorem curveIntegral_fun_smul
   proof: curveIntegral_smul
 
 中文:
-定理 curveIntegral_fun_smul
+定理 curve整数egral_fun_smul
   结论: ∫ᶜ x in γ, c • ω x = c • ∫ᶜ x in γ, ω x
   证明: curveIntegral_smul
 
@@ -1634,8 +1634,8 @@ theorem HasFDerivWithinAt.curveIntegral_segment_source'
     ≤ ∫ x in 0..1, ‖ω 
 
 中文:
-定理 HasFDerivWithinAt.curveIntegral_segment_source'
-  结论: (hs : Convex 实数 s)
+定理 HasFDerivWithinAt.curve整数egral_segment_source'
+  结论: (hs : 凸 实数 s)
   证明: by
   /- Given `ε > 0`, take a number `δ > 0` such that `ω` is continuous on `ball a δ ∩ s`
   and `‖ω z - ω a‖ ≤ ε` on this set.
@@ -1687,8 +1687,8 @@ theorem HasFDerivWithinAt.curveIntegral_segment_source
   proof: .curveIntegral_segment_source' hs (mem_of_superset self_mem_nhdsWithin hω) ha
 
 中文:
-定理 HasFDerivWithinAt.curveIntegral_segment_source
-  结论: (hs : Convex 实数 s) (hω : ContinuousOn ω s)
+定理 HasFDerivWithinAt.curve整数egral_segment_source
+  结论: (hs : 凸 实数 s) (hω : ContinuousOn ω s)
   证明: .curveIntegral_segment_source' hs (mem_of_superset self_mem_nhdsWithin hω) ha
 
 Depends on / 依赖: curveIntegral_segment_source, mem_of_superset, self_mem_nhdsWithin
@@ -1707,7 +1707,7 @@ theorem HasFDerivAt.curveIntegral_segment_source'
 .hasFDerivAt_of_univ (by simpa only [nhdsWithin_univ, continuousWithinAt_univ]) (mem_univ _)
 
 中文:
-定理 HasFDerivAt.curveIntegral_segment_source'
+定理 在点处Fréchet可导.curve整数egral_segment_source'
   条件: (hω : 对任意ᶠ z in 𝓝 a, ContinuousAt ω z)
   证明: HasFDerivWithinAt.curveIntegral_segment_source' convex_univ
 .hasFDerivAt_of_univ (by simpa only [nhdsWithin_univ, continuousWithinAt_univ]) (mem_univ _)
@@ -1728,8 +1728,8 @@ theorem HasFDerivAt.curveIntegral_segment_source
   proof: .curveIntegral_segment_source' .of_forall fun _ => hω.continuousAt
 
 中文:
-定理 HasFDerivAt.curveIntegral_segment_source
-  条件: (hω : Continuous ω)
+定理 在点处Fréchet可导.curve整数egral_segment_source
+  条件: (hω : 连续 ω)
   证明: .curveIntegral_segment_source' .of_forall fun _ => hω.continuousAt
 
 Depends on / 依赖: continuousAt, curveIntegral_segment_source, of_forall

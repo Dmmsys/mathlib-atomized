@@ -45,7 +45,7 @@ have : c ^ n != 0 := pow_ne_zero _ fun h => by simp [h, zero_le_one.not_gt] at h
   
 
 中文:
-引理 ProperSpace.of_nontriviallyNormedField_of_weaklyLocallyCompactSpace
+引理 真空间.of_nontriviallyNormedField_of_weaklyLocallyCompactSpace
   证明: by
   rcases exists_isCompact_closedBall (0 : 𝕜) with ⟨r, rpos, hr⟩
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩

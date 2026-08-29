@@ -52,7 +52,7 @@ definition IsPreirreducible
 
 中文:
 定义 IsPreirreducible
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall u v : Set X, IsOpen u -> IsOpen v -> (s inter u).Nonempty -> (s inter v).Nonempty -> (s inter (u inter v)).Nonempty
 
 Depends on / 依赖: IsOpen, Nonempty
@@ -72,8 +72,8 @@ definition IsIrreducible
   body: s.Nonempty ∧ IsPreirreducible s
 
 中文:
-定义 IsIrreducible
-  签名: (s : Set X)
+定义 是不可约
+  签名: (s : 集合 X)
   定义体: s.Nonempty ∧ IsPreirreducible s
 
 Depends on / 依赖: IsPreirreducible, Nonempty, s.Nonempty
@@ -91,9 +91,9 @@ theorem IsIrreducible.nonempty
   proof: h.1
 
 中文:
-定理 IsIrreducible.nonempty
-  条件: (h : IsIrreducible s)
-  结论: s.Nonempty
+定理 是不可约.nonempty
+  条件: (h : 是不可约 s)
+  结论: s.非空
   证明: h.1
 -/
 theorem IsIrreducible.nonempty (h : IsIrreducible s) : s.Nonempty :=
@@ -109,8 +109,8 @@ theorem IsIrreducible.isPreirreducible
   proof: h.2
 
 中文:
-定理 IsIrreducible.isPreirreducible
-  条件: (h : IsIrreducible s)
+定理 是不可约.isPreirreducible
+  条件: (h : 是不可约 s)
   结论: IsPreirreducible s
   证明: h.2
 -/
@@ -128,7 +128,7 @@ theorem isPreirreducible_empty
 
 中文:
 定理 isPreirreducible_empty
-  结论: IsPreirreducible (∅ : Set X)
+  结论: IsPreirreducible (∅ : 集合 X)
   证明: fun _ _ _ _ _ ⟨_, h1, _⟩ =>
   h1.elim
 -/
@@ -145,8 +145,8 @@ theorem Set.Subsingleton.isPreirreducible
   proof: fun _u _v _ _ ⟨_x, hxs, hxu⟩ ⟨y, hys, hyv⟩ => ⟨y, hys, hs hxs hys ▸ hxu, hyv⟩
 
 中文:
-定理 Set.Subsingleton.isPreirreducible
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.isPreirreducible
+  条件: (hs : s.子单例)
   结论: IsPreirreducible s
   证明: fun _u _v _ _ ⟨_x, hxs, hxu⟩ ⟨y, hys, hyv⟩ => ⟨y, hys, hs hxs hys ▸ hxu, hyv⟩
 -/
@@ -165,7 +165,7 @@ theorem isPreirreducible_singleton
 中文:
 定理 isPreirreducible_singleton
   条件: {x}
-  结论: IsPreirreducible ({x} : Set X)
+  结论: IsPreirreducible ({x} : 集合 X)
   证明: subsingleton_singleton.isPreirreducible
 
 Depends on / 依赖: isPreirreducible, subsingleton_singleton, subsingleton_singleton.isPreirreducible
@@ -185,7 +185,7 @@ theorem isIrreducible_singleton
 中文:
 定理 isIrreducible_singleton
   条件: {x}
-  结论: IsIrreducible ({x} : Set X)
+  结论: 是不可约 ({x} : 集合 X)
   证明: ⟨singleton_nonempty x, isPreirreducible_singleton⟩
 
 Depends on / 依赖: isPreirreducible_singleton, singleton_nonempty
@@ -236,7 +236,7 @@ protected alias ⟨_, IsIrreducible.closure⟩ := isIrreducible_iff_closure
 
 中文:
 定理 isIrreducible_iff_closure
-  结论: IsIrreducible (closure s) ↔ IsIrreducible s
+  结论: 是不可约 (closure s) ↔ 是不可约 s
   证明: and_congr closure_nonempty_iff isPreirreducible_iff_closure
 
 protected alias ⟨_, IsPreirreducible.closure⟩ := isPreirreducible_iff_closure
@@ -268,8 +268,8 @@ theorem exists_preirreducible
   
 
 中文:
-定理 exists_preirreducible
-  条件: (s : Set X) (H : IsPreirreducible s)
+定理 存在_preirreducible
+  条件: (s : 集合 X) (H : IsPreirreducible s)
   证明: let ⟨m, hsm, hm⟩ :=
     zorn_subset_nonempty { t : Set X | IsPreirreducible t }
       (fun c hc hcc _ =>
@@ -314,7 +314,7 @@ definition irreducibleComponents
 
 中文:
 定义 irreducibleComponents
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: {s | Maximal IsIrreducible s}
 
 @[stacks 004W "(2)"]
@@ -369,7 +369,7 @@ theorem irreducibleComponents_eq_maximals_closed
 
 中文:
 定理 irreducibleComponents_eq_maximals_closed
-  条件: (X : 类型) [TopologicalSpace X]
+  条件: (X : 类型) [拓扑空间 X]
   证明: by
   ext s
   constructor
@@ -408,8 +408,8 @@ lemma exists_mem_irreducibleComponents_subset_of_isIrreducible
   exact hu.right.left
 
 中文:
-引理 exists_mem_irreducibleComponents_subset_of_isIrreducible
-  条件: (s : Set X) (hs : IsIrreducible s)
+引理 存在_mem_irreducibleComponents_subset_of_isIrreducible
+  条件: (s : 集合 X) (hs : 是不可约 s)
   证明: by
   obtain ⟨u, hu⟩ := exists_preirreducible s hs.isPreirreducible
   use u, ⟨⟨hs.left.mono hu.right.left,hu.left⟩,fun _ h hl => (hu.right.right _ h.right hl).le⟩
@@ -503,7 +503,7 @@ theorem isIrreducible_irreducibleComponent
 中文:
 定理 isIrreducible_irreducibleComponent
   条件: {x : X}
-  结论: IsIrreducible (irreducibleComponent x)
+  结论: 是不可约 (irreducibleComponent x)
   证明: ⟨⟨x, mem_irreducibleComponent⟩, (irreducibleComponent_property x).1⟩
 
 Depends on / 依赖: irreducibleComponent_property, mem_irreducibleComponent
@@ -561,7 +561,7 @@ theorem isClosed_irreducibleComponent
 中文:
 定理 isClosed_irreducibleComponent
   条件: {x : X}
-  结论: IsClosed (irreducibleComponent x)
+  结论: 是闭集 (irreducibleComponent x)
   证明: isClosed_of_mem_irreducibleComponents _ (irreducibleComponent_mem_irreducibleComponents x)
 
 Depends on / 依赖: irreducibleComponent_mem_irreducibleComponents, isClosed_of_mem_irreducibleComponents
@@ -581,10 +581,10 @@ class PreirreducibleSpace
     - isPreirreducible_univ : IsPreirreducible (univ : Set X)
 
 中文:
-类 PreirreducibleSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 Preirreducible空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isPreirreducible_univ : IsPreirreducible (univ : Set X)
+    - isPreirreducible_univ : IsPreirreducible (univ : 集合 X)
 -/
 class PreirreducibleSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a preirreducible space, `Set.univ` is a preirreducible set. -/
@@ -604,11 +604,11 @@ class IrreducibleSpace
     - toNonempty : Nonempty X
 
 中文:
-类 IrreducibleSpace
-  参数: (X : 类型) [TopologicalSpace X]
-  继承: PreirreducibleSpace X
+类 不可约空间
+  参数: (X : 类型) [拓扑空间 X]
+  继承: Preirreducible空间 X
   公理与运算 (1 个):
-    - toNonempty : Nonempty X
+    - toNonempty : 非空 X
 -/
 class IrreducibleSpace (X : Type*) [TopologicalSpace X] : Prop extends PreirreducibleSpace X where
   toNonempty : Nonempty X
@@ -625,8 +625,8 @@ theorem IrreducibleSpace.isIrreducible_univ
   proof: ⟨univ_nonempty, PreirreducibleSpace.isPreirreducible_univ⟩
 
 中文:
-定理 IrreducibleSpace.isIrreducible_univ
-  条件: (X : 类型) [TopologicalSpace X] [IrreducibleSpace X]
+定理 不可约空间.isIrreducible_univ
+  条件: (X : 类型) [拓扑空间 X] [不可约空间 X]
   证明: ⟨univ_nonempty, PreirreducibleSpace.isPreirreducible_univ⟩
 
 Depends on / 依赖: PreirreducibleSpace, PreirreducibleSpace.isPreirreducible_univ, isPreirreducible_univ, univ_nonempty
@@ -647,7 +647,7 @@ theorem irreducibleSpace_def
 
 中文:
 定理 irreducibleSpace_def
-  条件: (X : 类型) [TopologicalSpace X]
+  条件: (X : 类型) [拓扑空间 X]
   证明: ⟨@IrreducibleSpace.isIrreducible_univ X _, fun h =>
     haveI : PreirreducibleSpace X := ⟨h.2⟩
     ⟨⟨h.1.some⟩⟩⟩
@@ -668,7 +668,7 @@ lemma PreirreducibleSpace.of_forall_nonempty_inter
   proof: by simp_all
 
 中文:
-引理 PreirreducibleSpace.of_forall_nonempty_inter
+引理 Preirreducible空间.of_对任意_nonempty_inter
   证明: by simp_all
 -/
 lemma PreirreducibleSpace.of_forall_nonempty_inter
@@ -688,7 +688,7 @@ theorem nonempty_preirreducible_inter
 
 中文:
 定理 nonempty_preirreducible_inter
-  条件: [PreirreducibleSpace X]
+  条件: [Preirreducible空间 X]
   证明: by
   simpa only [univ_inter, univ_subset_iff] using
     @PreirreducibleSpace.isPreirreducible_univ X _ _ s t
@@ -709,8 +709,8 @@ theorem IsOpen.dense
   proof: dense_iff_inter_open.2 fun _t hto htne => nonempty_preirreducible_inter hto ho htne hne
 
 中文:
-定理 IsOpen.dense
-  条件: [PreirreducibleSpace X] (ho : IsOpen s) (hne : s.Nonempty)
+定理 是开集.dense
+  条件: [Preirreducible空间 X] (ho : 是开集 s) (hne : s.非空)
   证明: dense_iff_inter_open.2 fun _t hto htne => nonempty_preirreducible_inter hto ho htne hne
 -/
 protected theorem IsOpen.dense [PreirreducibleSpace X] (ho : IsOpen s) (hne : s.Nonempty) :
@@ -726,8 +726,8 @@ lemma IsOpenMap.denseRange_of_isPreirreducibleSpace
   proof: hf.isOpen_range.dense (Set.range_nonempty f)
 
 中文:
-引理 IsOpenMap.denseRange_of_isPreirreducibleSpace
-  结论: {U X : 类型} [TopologicalSpace U]
+引理 是开映射.denseRange_of_isPreirreducibleSpace
+  结论: {U X : 类型} [拓扑空间 U]
   证明: hf.isOpen_range.dense (Set.range_nonempty f)
 
 Depends on / 依赖: Set.range_nonempty, hf.isOpen_range.dense, isOpen_range, range_nonempty
@@ -753,7 +753,7 @@ theorem IsPreirreducible.image
   rw [
 
 中文:
-定理 IsPreirreducible.image
+定理 IsPreirreducible.像
   条件: (H : IsPreirreducible s) (f : X -> Y) (hf : ContinuousOn f s)
   证明: by
   rintro u v hu hv ⟨_, ⟨⟨x, hx, rfl⟩, hxu⟩⟩ ⟨_, ⟨⟨y, hy, rfl⟩, hyv⟩⟩
@@ -793,8 +793,8 @@ theorem IsIrreducible.image
   proof: ⟨H.nonempty.image _, H.isPreirreducible.image f hf⟩
 
 中文:
-定理 IsIrreducible.image
-  条件: (H : IsIrreducible s) (f : X -> Y) (hf : ContinuousOn f s)
+定理 是不可约.像
+  条件: (H : 是不可约 s) (f : X -> Y) (hf : ContinuousOn f s)
   证明: ⟨H.nonempty.image _, H.isPreirreducible.image f hf⟩
 
 Depends on / 依赖: H.isPreirreducible.image, H.nonempty.image, isPreirreducible, nonempty
@@ -816,9 +816,9 @@ theorem Subtype.preirreducibleSpace
     exact ⟨⟨x, hxs⟩, ⟨Set.mem_univ _, ⟨hxu, hxv⟩⟩⟩
 
 中文:
-定理 Subtype.preirreducibleSpace
+定理 子类型.preirreducibleSpace
   条件: (h : IsPreirreducible s)
-  结论: PreirreducibleSpace s where
+  结论: Preirreducible空间 s where
   证明: by
     rintro _ _ ⟨u, hu, rfl⟩ ⟨v, hv, rfl⟩ ⟨⟨x, hxs⟩, -, hxu⟩ ⟨⟨y, hys⟩, -, hyv⟩
     rcases h u v hu hv ⟨x, hxs, hxu⟩ ⟨y, hys, hyv⟩ with ⟨x, hxs, ⟨hxu, hxv⟩⟩
@@ -843,9 +843,9 @@ theorem Subtype.irreducibleSpace
   toNonempty := h.nonempty.to_subtype
 
 中文:
-定理 Subtype.irreducibleSpace
-  条件: (h : IsIrreducible s)
-  结论: IrreducibleSpace s where
+定理 子类型.irreducibleSpace
+  条件: (h : 是不可约 s)
+  结论: 不可约空间 s where
   证明: (Subtype.preirreducibleSpace h.isPreirreducible).isPreirreducible_univ
   toNonempty := h.nonempty.to_subtype
 
@@ -870,7 +870,7 @@ lemma IsPreirreducible.of_subtype
 
 中文:
 引理 IsPreirreducible.of_subtype
-  条件: [PreirreducibleSpace s]
+  条件: [Preirreducible空间 s]
   结论: IsPreirreducible s
   证明: by
   rw [← Subtype.range_coe (s := s)]; rw [← Set.image_univ]
@@ -895,9 +895,9 @@ lemma IsIrreducible.of_subtype
   exact ⟨.of_subtype, .of_subtype⟩
 
 中文:
-引理 IsIrreducible.of_subtype
-  条件: [IrreducibleSpace s]
-  结论: IsIrreducible s
+引理 是不可约.of_subtype
+  条件: [不可约空间 s]
+  结论: 是不可约 s
   证明: by
   exact ⟨.of_subtype, .of_subtype⟩
 
@@ -967,7 +967,7 @@ theorem irreducibleComponents_eq_singleton
 
 中文:
 定理 irreducibleComponents_eq_singleton
-  条件: [IrreducibleSpace X]
+  条件: [不可约空间 X]
   证明: Set.ext fun _ => IsGreatest.maximal_iff (s := {s : Set X | IsIrreducible s})
     ⟨IrreducibleSpace.isIrreducible_univ X, fun _ _ => Set.subset_univ _⟩
 
@@ -993,7 +993,7 @@ theorem isIrreducible_iff_sInter
       exact h.2 _ _ hu.1 (U.finite_toSet.is
 
 中文:
-定理 isIrreducible_iff_sInter
+定理 isIrreducible_iff_s整数er
   证明: by
   refine ⟨fun h U hu hU => ?_, fun h => ⟨?_, ?_⟩⟩
   · induction U using Finset.induction_on with
@@ -1099,7 +1099,7 @@ theorem subset_closure_inter_of_isPreirreducible_of_isOpen
 
 中文:
 定理 subset_closure_inter_of_isPreirreducible_of_isOpen
-  结论: {S U : Set X} (hS : IsPreirreducible S)
+  结论: {S U : 集合 X} (hS : IsPreirreducible S)
   证明: by
   by_contra h'
   obtain ⟨x, h₁, h₂, h₃⟩ :=
@@ -1132,7 +1132,7 @@ suffices p ∉ closure (S inter b) from this (h b hb bS) pS
 
 中文:
 定理 isPreirreducible_iff_subset_closure_inter_open
-  条件: (S : Set X)
+  条件: (S : 集合 X)
   证明: by
   refine ⟨fun h _ => ?_, fun h => ?_⟩
   · exact subset_closure_inter_of_isPreirreducible_of_isOpen h
@@ -1169,7 +1169,7 @@ theorem preirreducibleSpace_iff_open_dense
 
 中文:
 定理 preirreducibleSpace_iff_open_dense
-  条件: (X : 类型) [TopologicalSpace X]
+  条件: (X : 类型) [拓扑空间 X]
   证明: by
   rw [preirreducibleSpace_iff]; rw [isPreirreducible_iff_subset_closure_inter_open]
   simp only [univ_inter, univ_subset_iff, Dense]
@@ -1194,7 +1194,7 @@ theorem sUnion_irreducibleComponents
 
 中文:
 定理 sUnion_irreducibleComponents
-  结论: ⋃₀ irreducibleComponents X = Set.univ
+  结论: ⋃₀ irreducibleComponents X = 集合.univ
   证明: Set.eq_univ_of_forall fun x => Set.mem_sUnion_of_mem mem_irreducibleComponent
     (irreducibleComponent_mem_irreducibleComponents x)
 
@@ -1219,7 +1219,7 @@ theorem mem_of_subset_sUnion_irreducibleComponents
 
 中文:
 定理 mem_of_subset_sUnion_irreducibleComponents
-  结论: (Z : Set X) (hZ : Z in irreducibleComponents X)
+  结论: (Z : 集合 X) (hZ : Z in irreducibleComponents X)
   证明: by
   obtain ⟨W, hWS, hZW⟩ := isIrreducible_iff_sUnion_isClosed.mp hZ.1 hS.toFinset
     (fun W hW => isClosed_of_mem_irreducibleComponents W (hSα (hS.mem_toFinset.mp hW)))
@@ -1292,7 +1292,7 @@ theorem IsPreirreducible.subset_irreducible
 
 中文:
 定理 IsPreirreducible.subset_irreducible
-  结论: {S U : Set X} (ht : IsPreirreducible t)
+  结论: {S U : 集合 X} (ht : IsPreirreducible t)
   证明: by
   obtain ⟨z, hz⟩ := hU
   replace ht : IsIrreducible t := ⟨⟨z, h₂ (h₁ hz)⟩, ht⟩
@@ -1331,7 +1331,7 @@ theorem IsPreirreducible.open_subset
 
 中文:
 定理 IsPreirreducible.open_subset
-  结论: {U : Set X} (ht : IsPreirreducible t) (hU : IsOpen U)
+  结论: {U : 集合 X} (ht : IsPreirreducible t) (hU : 是开集 U)
   证明: U.eq_empty_or_nonempty.elim (fun h => h.symm ▸ isPreirreducible_empty) fun h =>
     (ht.subset_irreducible h hU (fun _ => id) hU').2
 
@@ -1436,8 +1436,8 @@ lemma IsPreirreducible.preimage
     fun _ => (subsingleton_singleton.preimage hf.injective).isPreirreducible
 
 中文:
-引理 IsPreirreducible.preimage
-  条件: (ht : IsPreirreducible t) {f : Y -> X} (hf : IsOpenEmbedding f)
+引理 IsPreirreducible.原像
+  条件: (ht : IsPreirreducible t) {f : Y -> X} (hf : 是开嵌入 f)
   证明: ht.preimage_of_isPreirreducible_fiber f hf.isOpenMap
     fun _ => (subsingleton_singleton.preimage hf.injective).isPreirreducible
 
@@ -1460,8 +1460,8 @@ lemma IsIrreducible.preimage_of_isPreirreducible_fiber
   exact ⟨x, hx⟩
 
 中文:
-引理 IsIrreducible.preimage_of_isPreirreducible_fiber
-  结论: (ht : IsIrreducible t)
+引理 是不可约.preimage_of_isPreirreducible_fiber
+  结论: (ht : 是不可约 t)
   证明: by
   refine ⟨?_, IsPreirreducible.preimage_of_isPreirreducible_fiber ht.2 f hf₂ hf₃⟩
   obtain ⟨-, hx, x, rfl⟩ := h
@@ -1488,8 +1488,8 @@ lemma IsIrreducible.preimage
     (fun _ => (subsingleton_singleton.preimage hf.injective).isPreirreducible) h
 
 中文:
-引理 IsIrreducible.preimage
-  结论: (ht : IsIrreducible t) {f : Y -> X}
+引理 是不可约.原像
+  结论: (ht : 是不可约 t) {f : Y -> X}
   证明: by
   refine ht.preimage_of_isPreirreducible_fiber f hf.isOpenMap
     (fun _ => (subsingleton_singleton.preimage hf.injective).isPreirreducible) h
@@ -1512,8 +1512,8 @@ lemma Topology.IsOpenEmbedding.preirreducibleSpace
     exact .preimage PreirreducibleSpace.isPreirreducible_univ hf
 
 中文:
-引理 Topology.IsOpenEmbedding.preirreducibleSpace
-  结论: {f : Y -> X} (hf : Topology.IsOpenEmbedding f)
+引理 拓扑.是开嵌入.preirreducibleSpace
+  结论: {f : Y -> X} (hf : 拓扑.是开嵌入 f)
   证明: by
     rw [← Set.preimage_univ]
     exact .preimage PreirreducibleSpace.isPreirreducible_univ hf
@@ -1537,8 +1537,8 @@ lemma Topology.IsOpenEmbedding.irreducibleSpace
   __ := hf.preirreducibleSpace
 
 中文:
-引理 Topology.IsOpenEmbedding.irreducibleSpace
-  结论: {f : Y -> X} (hf : Topology.IsOpenEmbedding f)
+引理 拓扑.是开嵌入.irreducibleSpace
+  结论: {f : Y -> X} (hf : 拓扑.是开嵌入 f)
   证明: ‹_›
   __ := hf.preirreducibleSpace
 -/
@@ -1619,7 +1619,7 @@ lemma closure_image_preimage_of_isPreirreducible
 
 中文:
 引理 closure_image_preimage_of_isPreirreducible
-  结论: (f : Y -> X) (h : IsOpenMap f) (s : Set X)
+  结论: (f : Y -> X) (h : 是开映射 f) (s : 集合 X)
   证明: by
   refine subset_antisymm (closure_minimal (by simp) hs') ?_
   refine subset_trans (subset_closure_inter_of_isPreirreducible_of_isOpen hs h.isOpen_range ?_) ?_
@@ -1735,8 +1735,8 @@ lemma IsDiscrete.subsingleton_of_isPreirreducible
   exact (hUx.le (by grind)).symm.trans (b := z) (hVy.le (by g
 
 中文:
-引理 IsDiscrete.subsingleton_of_isPreirreducible
-  条件: (hs : IsDiscrete s) (hs' : IsPreirreducible s)
+引理 是离散.subsingleton_of_isPreirreducible
+  条件: (hs : 是离散 s) (hs' : IsPreirreducible s)
   证明: by
   intro x hxs y hys
   obtain ⟨U, hU, hUx⟩ := isDiscrete_iff_forall_mem_exists_isOpen.mp hs x hxs
@@ -1767,8 +1767,8 @@ lemma Function.Surjective.preirreducibleSpace
     exact (PreirreducibleSpace.isPreirreducible_univ).image _ hfc.continuousOn
 
 中文:
-引理 Function.Surjective.preirreducibleSpace
-  结论: {f : X -> Y} (hfc : Continuous f)
+引理 函数.满射.preirreducibleSpace
+  结论: {f : X -> Y} (hfc : 连续 f)
   证明: by
     rw [← hf.range_eq]; rw [← Set.image_univ]
     exact (PreirreducibleSpace.isPreirreducible_univ).image _ hfc.continuousOn
@@ -1793,8 +1793,8 @@ lemma Function.Surjective.irreducibleSpace
   toNonempty := Nonempty.map f inferInstance
 
 中文:
-引理 Function.Surjective.irreducibleSpace
-  结论: {f : X -> Y} (hfc : Continuous f)
+引理 函数.满射.irreducibleSpace
+  结论: {f : X -> Y} (hfc : 连续 f)
   证明: by
     rw [← hf.range_eq]; rw [← Set.image_univ]
     exact (PreirreducibleSpace.isPreirreducible_univ).image _ hfc.continuousOn
@@ -1818,7 +1818,7 @@ lemma Homeomorph.irreducibleSpace_iff
     fun _ => e.symm.surjective.irreducibleSpace e.symm.continuous⟩
 
 中文:
-引理 Homeomorph.irreducibleSpace_iff
+引理 同胚.irreducibleSpace_iff
   证明: ⟨fun _ => e.surjective.irreducibleSpace e.continuous,
     fun _ => e.symm.surjective.irreducibleSpace e.symm.continuous⟩
 

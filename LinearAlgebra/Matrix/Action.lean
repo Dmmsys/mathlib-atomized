@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (Matrix n n R) (n -> R)
+  签名: 模 (矩阵 n n R) (n -> R)
   定义体: mulVec
   one_smul := one_mulVec
   mul_smul _ _ _ := (mulVec_mulVec _ _ _).symm
@@ -74,7 +74,7 @@ lemma smul_eq_mulVec
 
 中文:
 引理 smul_eq_mulVec
-  条件: (A : Matrix n n R) (v : n -> R)
+  条件: (A : 矩阵 n n R) (v : n -> R)
   结论: A • v = A *ᵥ v
   证明: rfl
 -/
@@ -89,8 +89,8 @@ instance [DistribSMul
   body: letI := SMulCommClass.symm; mulVec_smul
 
 中文:
-实例 [DistribSMul
-  签名: S R] [SMulCommClass R S R] : SMulCommClass (Matrix n n R) S (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量交换类 R S R] : 标量交换类 (矩阵 n n R) S (n -> R) where
   定义体: letI := SMulCommClass.symm; mulVec_smul
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm, mulVec_smul
@@ -107,8 +107,8 @@ instance [DistribSMul
   body: (mulVec_smul A s v).symm
 
 中文:
-实例 [DistribSMul
-  签名: S R] [SMulCommClass S R R] : SMulCommClass S (Matrix n n R) (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量交换类 S R R] : 标量交换类 S (矩阵 n n R) (n -> R) where
   定义体: (mulVec_smul A s v).symm
 
 Depends on / 依赖: mulVec_smul
@@ -125,8 +125,8 @@ instance [DistribSMul
   body: smul_mulVec
 
 中文:
-实例 [DistribSMul
-  签名: S R] [IsScalarTower S R R] : IsScalarTower S (Matrix n n R) (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量塔 S R R] : 标量塔 S (矩阵 n n R) (n -> R) where
   定义体: smul_mulVec
 
 Depends on / 依赖: smul_mulVec
@@ -144,7 +144,7 @@ lemma ext_iff_smul
 
 中文:
 引理 ext_iff_smul
-  条件: {A B : Matrix n n R}
+  条件: {A B : 矩阵 n n R}
   证明: Matrix.ext_iff_mulVec
 
 Depends on / 依赖: Matrix, Matrix.ext_iff_mulVec, ext_iff_mulVec
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (Matrix n n R)ᵐᵒᵖ (n -> R)
+  签名: 模 (矩阵 n n R)ᵐᵒᵖ (n -> R)
   定义体: v ᵥ* A.unop
   one_smul := Matrix.vecMul_one
   mul_smul _ _ _ := (vecMul_vecMul _ _ _).symm
@@ -205,7 +205,7 @@ lemma op_smul_eq_vecMul
 
 中文:
 引理 op_smul_eq_vecMul
-  条件: (A : (Matrix n n R)ᵐᵒᵖ) (v : n -> R)
+  条件: (A : (矩阵 n n R)ᵐᵒᵖ) (v : n -> R)
   结论: A • v = v ᵥ* A.unop
   证明: rfl
 -/
@@ -220,8 +220,8 @@ instance [DistribSMul
   body: smul_vecMul s v A.unop
 
 中文:
-实例 [DistribSMul
-  签名: S R] [IsScalarTower S R R] : SMulCommClass (Matrix n n R)ᵐᵒᵖ S (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量塔 S R R] : 标量交换类 (矩阵 n n R)ᵐᵒᵖ S (n -> R) where
   定义体: smul_vecMul s v A.unop
 
 Depends on / 依赖: A.unop, smul_vecMul
@@ -238,8 +238,8 @@ instance [DistribSMul
   body: (smul_vecMul s v A.unop).symm
 
 中文:
-实例 [DistribSMul
-  签名: S R] [IsScalarTower S R R] : SMulCommClass S (Matrix n n R)ᵐᵒᵖ (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量塔 S R R] : 标量交换类 S (矩阵 n n R)ᵐᵒᵖ (n -> R) where
   定义体: (smul_vecMul s v A.unop).symm
 
 Depends on / 依赖: A.unop, smul_vecMul
@@ -256,8 +256,8 @@ instance [DistribSMul
   body: vecMul_smul v s A.unop
 
 中文:
-实例 [DistribSMul
-  签名: S R] [SMulCommClass S R R] : IsScalarTower S (Matrix n n R)ᵐᵒᵖ (n -> R) where
+实例 [分配标量乘法
+  签名: S R] [标量交换类 S R R] : 标量塔 S (矩阵 n n R)ᵐᵒᵖ (n -> R) where
   定义体: vecMul_smul v s A.unop
 
 Depends on / 依赖: A.unop, vecMul_smul

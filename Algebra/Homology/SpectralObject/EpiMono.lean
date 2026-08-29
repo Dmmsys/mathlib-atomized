@@ -195,7 +195,7 @@ lemma isIso_map_fourδ₄Toδ₃_of_isZero
 
 中文:
 引理 isIso_map_fourδ₄Toδ₃_of_isZero
-  结论: (h : IsZero ((X.H n₁).obj (mk₁ f₄)) := by cat_disch)
+  结论: (h : 是零 ((X.H n₁).obj (mk₁ f₄)) := by cat_disch)
   证明: X.isIso_map_fourδ₄Toδ₃ _ _ _ _ _ _ _ _ _ (h.eq_of_tgt _ _)
 
 @[reassoc (attr := simp)]
@@ -298,7 +298,7 @@ lemma isIso_map_fourδ₁Toδ₀_of_isZero
 
 中文:
 引理 isIso_map_fourδ₁Toδ₀_of_isZero
-  结论: (h : IsZero ((X.H n₂).obj (mk₁ f₂)))
+  结论: (h : 是零 ((X.H n₂).obj (mk₁ f₂)))
   证明: X.isIso_map_fourδ₁Toδ₀ _ _ _ _ _ _ _ _ _ (h.eq_of_src _ _)
 
 Depends on / 依赖: X.isIso_map_four, X.map, eq_of_src, h.eq_of_src

@@ -49,8 +49,8 @@ instance [Mul
   body: inferInstanceAs LeftDistribClass R
 
 中文:
-实例 [Mul
-  签名: R] [Add R] [LeftDistribClass R] : LeftDistribClass Rᵒᵈ
+实例 [乘法
+  签名: R] [加法 R] [LeftDistrib类 R] : LeftDistrib类 Rᵒᵈ
   定义体: inferInstanceAs LeftDistribClass R
 
 Depends on / 依赖: LeftDistribClass
@@ -67,8 +67,8 @@ instance [Mul
   body: inferInstanceAs RightDistribClass R
 
 中文:
-实例 [Mul
-  签名: R] [Add R] [RightDistribClass R] : RightDistribClass Rᵒᵈ
+实例 [乘法
+  签名: R] [加法 R] [RightDistrib类 R] : RightDistrib类 Rᵒᵈ
   定义体: inferInstanceAs RightDistribClass R
 -/
 instance [Mul R] [Add R] [RightDistribClass R] : RightDistribClass Rᵒᵈ :=
@@ -83,8 +83,8 @@ instance [NonUnitalNonAssocSemiring
   body: inferInstanceAs NonUnitalNonAssocSemiring R
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] : NonUnitalNonAssocSemiring Rᵒᵈ
+实例 [非幺非结合半环
+  签名: R] : 非幺非结合半环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalNonAssocSemiring R
 -/
 instance [NonUnitalNonAssocSemiring R] : NonUnitalNonAssocSemiring Rᵒᵈ :=
@@ -99,8 +99,8 @@ instance [NatCast
   body: inferInstanceAs NatCast R
 
 中文:
-实例 [NatCast
-  签名: R] : 自然数Cast Rᵒᵈ
+实例 [自然数嵌入
+  签名: R] : 自然数嵌入 Rᵒᵈ
   定义体: inferInstanceAs NatCast R
 -/
 instance [NatCast R] : NatCast Rᵒᵈ := inferInstanceAs NatCast R
@@ -114,8 +114,8 @@ instance [IntCast
   body: inferInstanceAs IntCast R
 
 中文:
-实例 [IntCast
-  签名: R] : 整数Cast Rᵒᵈ
+实例 [整数嵌入
+  签名: R] : 整数嵌入 Rᵒᵈ
   定义体: inferInstanceAs IntCast R
 -/
 instance [IntCast R] : IntCast Rᵒᵈ := inferInstanceAs IntCast R
@@ -129,8 +129,8 @@ instance [AddMonoidWithOne
   body: inferInstanceAs AddMonoidWithOne R
 
 中文:
-实例 [AddMonoidWithOne
-  签名: R] : AddMonoidWithOne Rᵒᵈ
+实例 [加法带幺幺半群
+  签名: R] : 加法带幺幺半群 Rᵒᵈ
   定义体: inferInstanceAs AddMonoidWithOne R
 -/
 instance [AddMonoidWithOne R] : AddMonoidWithOne Rᵒᵈ := inferInstanceAs AddMonoidWithOne R
@@ -144,8 +144,8 @@ instance [AddCommMonoidWithOne
   body: inferInstanceAs AddCommMonoidWithOne R
 
 中文:
-实例 [AddCommMonoidWithOne
-  签名: R] : AddCommMonoidWithOne Rᵒᵈ
+实例 [加法交换带幺幺半群
+  签名: R] : 加法交换带幺幺半群 Rᵒᵈ
   定义体: inferInstanceAs AddCommMonoidWithOne R
 -/
 instance [AddCommMonoidWithOne R] : AddCommMonoidWithOne Rᵒᵈ :=
@@ -160,8 +160,8 @@ instance [AddGroupWithOne
   body: inferInstanceAs AddGroupWithOne R
 
 中文:
-实例 [AddGroupWithOne
-  签名: R] : AddGroupWithOne Rᵒᵈ
+实例 [加法带幺群
+  签名: R] : 加法带幺群 Rᵒᵈ
   定义体: inferInstanceAs AddGroupWithOne R
 -/
 instance [AddGroupWithOne R] : AddGroupWithOne Rᵒᵈ := inferInstanceAs AddGroupWithOne R
@@ -175,8 +175,8 @@ instance [AddCommGroupWithOne
   body: inferInstanceAs AddCommGroupWithOne R
 
 中文:
-实例 [AddCommGroupWithOne
-  签名: R] : AddCommGroupWithOne Rᵒᵈ
+实例 [加法交换带幺群
+  签名: R] : 加法交换带幺群 Rᵒᵈ
   定义体: inferInstanceAs AddCommGroupWithOne R
 
 Depends on / 依赖: AddCommGroupWithOne
@@ -193,8 +193,8 @@ instance [NonUnitalSemiring
   body: inferInstanceAs NonUnitalSemiring R
 
 中文:
-实例 [NonUnitalSemiring
-  签名: R] : NonUnitalSemiring Rᵒᵈ
+实例 [非幺半环
+  签名: R] : 非幺半环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalSemiring R
 -/
 instance [NonUnitalSemiring R] : NonUnitalSemiring Rᵒᵈ := inferInstanceAs NonUnitalSemiring R
@@ -208,8 +208,8 @@ instance [NonAssocSemiring
   body: inferInstanceAs NonAssocSemiring R
 
 中文:
-实例 [NonAssocSemiring
-  签名: R] : NonAssocSemiring Rᵒᵈ
+实例 [非结合半环
+  签名: R] : 非结合半环 Rᵒᵈ
   定义体: inferInstanceAs NonAssocSemiring R
 -/
 instance [NonAssocSemiring R] : NonAssocSemiring Rᵒᵈ := inferInstanceAs NonAssocSemiring R
@@ -223,8 +223,8 @@ instance [Semiring
   body: inferInstanceAs Semiring R
 
 中文:
-实例 [Semiring
-  签名: R] : Semiring Rᵒᵈ
+实例 [半环
+  签名: R] : 半环 Rᵒᵈ
   定义体: inferInstanceAs Semiring R
 -/
 instance [Semiring R] : Semiring Rᵒᵈ := inferInstanceAs Semiring R
@@ -238,8 +238,8 @@ instance [NonUnitalCommSemiring
   body: inferInstanceAs NonUnitalCommSemiring R
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: R] : NonUnitalCommSemiring Rᵒᵈ
+实例 [非幺交换半环
+  签名: R] : 非幺交换半环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalCommSemiring R
 
 Depends on / 依赖: NonUnitalCommSemiring
@@ -256,8 +256,8 @@ instance [CommSemiring
   body: inferInstanceAs CommSemiring R
 
 中文:
-实例 [CommSemiring
-  签名: R] : CommSemiring Rᵒᵈ
+实例 [交换半环
+  签名: R] : 交换半环 Rᵒᵈ
   定义体: inferInstanceAs CommSemiring R
 
 Depends on / 依赖: CommSemiring
@@ -273,8 +273,8 @@ instance [Mul
   body: inferInstanceAs HasDistribNeg R
 
 中文:
-实例 [Mul
-  签名: R] [HasDistribNeg R] : HasDistribNeg Rᵒᵈ
+实例 [乘法
+  签名: R] [有DistribNeg R] : 有DistribNeg Rᵒᵈ
   定义体: inferInstanceAs HasDistribNeg R
 
 Depends on / 依赖: HasDistribNeg
@@ -290,8 +290,8 @@ instance [NonUnitalNonAssocRing
   body: inferInstanceAs NonUnitalNonAssocRing R
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] : NonUnitalNonAssocRing Rᵒᵈ
+实例 [非幺非结合环
+  签名: R] : 非幺非结合环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalNonAssocRing R
 
 Depends on / 依赖: NonUnitalNonAssocRing
@@ -308,8 +308,8 @@ instance [NonUnitalRing
   body: inferInstanceAs NonUnitalRing R
 
 中文:
-实例 [NonUnitalRing
-  签名: R] : NonUnitalRing Rᵒᵈ
+实例 [非幺环
+  签名: R] : 非幺环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalRing R
 
 Depends on / 依赖: NonUnitalRing
@@ -325,8 +325,8 @@ instance [NonAssocRing
   body: inferInstanceAs NonAssocRing R
 
 中文:
-实例 [NonAssocRing
-  签名: R] : NonAssocRing Rᵒᵈ
+实例 [非结合环
+  签名: R] : 非结合环 Rᵒᵈ
   定义体: inferInstanceAs NonAssocRing R
 
 Depends on / 依赖: NonAssocRing
@@ -342,8 +342,8 @@ instance [Ring
   body: inferInstanceAs Ring R
 
 中文:
-实例 [Ring
-  签名: R] : Ring Rᵒᵈ
+实例 [环
+  签名: R] : 环 Rᵒᵈ
   定义体: inferInstanceAs Ring R
 -/
 instance [Ring R] : Ring Rᵒᵈ := inferInstanceAs Ring R
@@ -357,8 +357,8 @@ instance [NonUnitalCommRing
   body: inferInstanceAs NonUnitalCommRing R
 
 中文:
-实例 [NonUnitalCommRing
-  签名: R] : NonUnitalCommRing Rᵒᵈ
+实例 [非幺交换环
+  签名: R] : 非幺交换环 Rᵒᵈ
   定义体: inferInstanceAs NonUnitalCommRing R
 
 Depends on / 依赖: NonUnitalCommRing
@@ -374,8 +374,8 @@ instance [CommRing
   body: inferInstanceAs CommRing R
 
 中文:
-实例 [CommRing
-  签名: R] : CommRing Rᵒᵈ
+实例 [交换环
+  签名: R] : 交换环 Rᵒᵈ
   定义体: inferInstanceAs CommRing R
 
 Depends on / 依赖: CommRing
@@ -391,8 +391,8 @@ instance [Ring
   body: inferInstanceAs IsDomain R
 
 中文:
-实例 [Ring
-  签名: R] [IsDomain R] : IsDomain Rᵒᵈ
+实例 [环
+  签名: R] [是整环 R] : 是整环 Rᵒᵈ
   定义体: inferInstanceAs IsDomain R
 -/
 instance [Ring R] [IsDomain R] : IsDomain Rᵒᵈ := inferInstanceAs IsDomain R
@@ -415,7 +415,7 @@ theorem toDual_natCast
 
 中文:
 定理 toDual_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: toDual (n : R) = n
   证明: rfl
 
@@ -436,8 +436,8 @@ theorem toDual_ofNat
 @[simp]
 
 中文:
-定理 toDual_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 toDual_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -460,7 +460,7 @@ theorem ofDual_natCast
 
 中文:
 定理 ofDual_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: (ofDual n : R) = n
   证明: rfl
 
@@ -479,8 +479,8 @@ theorem ofDual_ofNat
   proof: rfl
 
 中文:
-定理 ofDual_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 ofDual_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
 theorem ofDual_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
@@ -498,7 +498,7 @@ lemma toDual_intCast
 
 中文:
 引理 toDual_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: toDual (n : R) = n
   证明: rfl
 -/
@@ -515,7 +515,7 @@ lemma ofDual_intCast
 
 中文:
 引理 ofDual_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: (ofDual n : R) = n
   证明: rfl
 -/
@@ -551,8 +551,8 @@ instance [Mul
   body: inferInstanceAs LeftDistribClass R
 
 中文:
-实例 [Mul
-  签名: R] [Add R] [LeftDistribClass R] : LeftDistribClass (Lex R)
+实例 [乘法
+  签名: R] [加法 R] [LeftDistrib类 R] : LeftDistrib类 (Lex R)
   定义体: inferInstanceAs LeftDistribClass R
 
 Depends on / 依赖: LeftDistribClass
@@ -569,8 +569,8 @@ instance [Mul
   body: inferInstanceAs RightDistribClass R
 
 中文:
-实例 [Mul
-  签名: R] [Add R] [RightDistribClass R] : RightDistribClass (Lex R)
+实例 [乘法
+  签名: R] [加法 R] [RightDistrib类 R] : RightDistrib类 (Lex R)
   定义体: inferInstanceAs RightDistribClass R
 
 Depends on / 依赖: RightDistribClass
@@ -587,8 +587,8 @@ instance [NonUnitalNonAssocSemiring
   body: inferInstanceAs NonUnitalNonAssocSemiring R
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] : NonUnitalNonAssocSemiring (Lex R)
+实例 [非幺非结合半环
+  签名: R] : 非幺非结合半环 (Lex R)
   定义体: inferInstanceAs NonUnitalNonAssocSemiring R
 
 Depends on / 依赖: NonUnitalNonAssocSemiring
@@ -605,8 +605,8 @@ instance [NonUnitalSemiring
   body: inferInstanceAs NonUnitalSemiring R
 
 中文:
-实例 [NonUnitalSemiring
-  签名: R] : NonUnitalSemiring (Lex R)
+实例 [非幺半环
+  签名: R] : 非幺半环 (Lex R)
   定义体: inferInstanceAs NonUnitalSemiring R
 
 Depends on / 依赖: NonUnitalSemiring
@@ -622,8 +622,8 @@ instance [NatCast
   body: inferInstanceAs NatCast R
 
 中文:
-实例 [NatCast
-  签名: R] : 自然数Cast (Lex R)
+实例 [自然数嵌入
+  签名: R] : 自然数嵌入 (Lex R)
   定义体: inferInstanceAs NatCast R
 
 Depends on / 依赖: NatCast
@@ -639,8 +639,8 @@ instance [IntCast
   body: inferInstanceAs IntCast R
 
 中文:
-实例 [IntCast
-  签名: R] : 整数Cast (Lex R)
+实例 [整数嵌入
+  签名: R] : 整数嵌入 (Lex R)
   定义体: inferInstanceAs IntCast R
 
 Depends on / 依赖: IntCast
@@ -656,8 +656,8 @@ instance [AddMonoidWithOne
   body: inferInstanceAs AddMonoidWithOne R
 
 中文:
-实例 [AddMonoidWithOne
-  签名: R] : AddMonoidWithOne (Lex R)
+实例 [加法带幺幺半群
+  签名: R] : 加法带幺幺半群 (Lex R)
   定义体: inferInstanceAs AddMonoidWithOne R
 
 Depends on / 依赖: AddMonoidWithOne
@@ -673,8 +673,8 @@ instance [AddCommMonoidWithOne
   body: inferInstanceAs AddCommMonoidWithOne R
 
 中文:
-实例 [AddCommMonoidWithOne
-  签名: R] : AddCommMonoidWithOne (Lex R)
+实例 [加法交换带幺幺半群
+  签名: R] : 加法交换带幺幺半群 (Lex R)
   定义体: inferInstanceAs AddCommMonoidWithOne R
 
 Depends on / 依赖: AddCommMonoidWithOne
@@ -691,8 +691,8 @@ instance [AddGroupWithOne
   body: inferInstanceAs AddGroupWithOne R
 
 中文:
-实例 [AddGroupWithOne
-  签名: R] : AddGroupWithOne (Lex R)
+实例 [加法带幺群
+  签名: R] : 加法带幺群 (Lex R)
   定义体: inferInstanceAs AddGroupWithOne R
 
 Depends on / 依赖: AddGroupWithOne
@@ -708,8 +708,8 @@ instance [AddCommGroupWithOne
   body: inferInstanceAs AddCommGroupWithOne R
 
 中文:
-实例 [AddCommGroupWithOne
-  签名: R] : AddCommGroupWithOne (Lex R)
+实例 [加法交换带幺群
+  签名: R] : 加法交换带幺群 (Lex R)
   定义体: inferInstanceAs AddCommGroupWithOne R
 
 Depends on / 依赖: AddCommGroupWithOne
@@ -726,8 +726,8 @@ instance [NonAssocSemiring
   body: inferInstanceAs NonAssocSemiring R
 
 中文:
-实例 [NonAssocSemiring
-  签名: R] : NonAssocSemiring (Lex R)
+实例 [非结合半环
+  签名: R] : 非结合半环 (Lex R)
   定义体: inferInstanceAs NonAssocSemiring R
 
 Depends on / 依赖: NonAssocSemiring
@@ -743,8 +743,8 @@ instance [Semiring
   body: inferInstanceAs Semiring R
 
 中文:
-实例 [Semiring
-  签名: R] : Semiring (Lex R)
+实例 [半环
+  签名: R] : 半环 (Lex R)
   定义体: inferInstanceAs Semiring R
 
 Depends on / 依赖: Semiring
@@ -760,8 +760,8 @@ instance [NonUnitalCommSemiring
   body: inferInstanceAs NonUnitalCommSemiring R
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: R] : NonUnitalCommSemiring (Lex R)
+实例 [非幺交换半环
+  签名: R] : 非幺交换半环 (Lex R)
   定义体: inferInstanceAs NonUnitalCommSemiring R
 
 Depends on / 依赖: NonUnitalCommSemiring
@@ -778,8 +778,8 @@ instance [CommSemiring
   body: inferInstanceAs CommSemiring R
 
 中文:
-实例 [CommSemiring
-  签名: R] : CommSemiring (Lex R)
+实例 [交换半环
+  签名: R] : 交换半环 (Lex R)
   定义体: inferInstanceAs CommSemiring R
 
 Depends on / 依赖: CommSemiring
@@ -795,8 +795,8 @@ instance [Mul
   body: inferInstanceAs HasDistribNeg R
 
 中文:
-实例 [Mul
-  签名: R] [HasDistribNeg R] : HasDistribNeg (Lex R)
+实例 [乘法
+  签名: R] [有DistribNeg R] : 有DistribNeg (Lex R)
   定义体: inferInstanceAs HasDistribNeg R
 
 Depends on / 依赖: HasDistribNeg
@@ -812,8 +812,8 @@ instance [NonUnitalNonAssocRing
   body: inferInstanceAs NonUnitalNonAssocRing R
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] : NonUnitalNonAssocRing (Lex R)
+实例 [非幺非结合环
+  签名: R] : 非幺非结合环 (Lex R)
   定义体: inferInstanceAs NonUnitalNonAssocRing R
 
 Depends on / 依赖: NonUnitalNonAssocRing
@@ -830,8 +830,8 @@ instance [NonUnitalRing
   body: inferInstanceAs NonUnitalRing R
 
 中文:
-实例 [NonUnitalRing
-  签名: R] : NonUnitalRing (Lex R)
+实例 [非幺环
+  签名: R] : 非幺环 (Lex R)
   定义体: inferInstanceAs NonUnitalRing R
 
 Depends on / 依赖: NonUnitalRing
@@ -847,8 +847,8 @@ instance [NonAssocRing
   body: inferInstanceAs NonAssocRing R
 
 中文:
-实例 [NonAssocRing
-  签名: R] : NonAssocRing (Lex R)
+实例 [非结合环
+  签名: R] : 非结合环 (Lex R)
   定义体: inferInstanceAs NonAssocRing R
 
 Depends on / 依赖: NonAssocRing
@@ -864,8 +864,8 @@ instance [Ring
   body: inferInstanceAs Ring R
 
 中文:
-实例 [Ring
-  签名: R] : Ring (Lex R)
+实例 [环
+  签名: R] : 环 (Lex R)
   定义体: inferInstanceAs Ring R
 -/
 instance [Ring R] : Ring (Lex R) := inferInstanceAs Ring R
@@ -879,8 +879,8 @@ instance [NonUnitalCommRing
   body: inferInstanceAs NonUnitalCommRing R
 
 中文:
-实例 [NonUnitalCommRing
-  签名: R] : NonUnitalCommRing (Lex R)
+实例 [非幺交换环
+  签名: R] : 非幺交换环 (Lex R)
   定义体: inferInstanceAs NonUnitalCommRing R
 
 Depends on / 依赖: NonUnitalCommRing
@@ -896,8 +896,8 @@ instance [CommRing
   body: inferInstanceAs CommRing R
 
 中文:
-实例 [CommRing
-  签名: R] : CommRing (Lex R)
+实例 [交换环
+  签名: R] : 交换环 (Lex R)
   定义体: inferInstanceAs CommRing R
 
 Depends on / 依赖: CommRing
@@ -913,8 +913,8 @@ instance [Ring
   body: inferInstanceAs IsDomain R
 
 中文:
-实例 [Ring
-  签名: R] [IsDomain R] : IsDomain (Lex R)
+实例 [环
+  签名: R] [是整环 R] : 是整环 (Lex R)
   定义体: inferInstanceAs IsDomain R
 
 Depends on / 依赖: IsDomain
@@ -937,7 +937,7 @@ theorem toLex_natCast
 
 中文:
 定理 toLex_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: toLex (n : R) = n
   证明: rfl
 
@@ -958,8 +958,8 @@ theorem toLex_ofNat
 @[simp]
 
 中文:
-定理 toLex_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 toLex_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -982,7 +982,7 @@ theorem ofLex_natCast
 
 中文:
 定理 ofLex_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: (ofLex n : R) = n
   证明: rfl
 
@@ -1001,8 +1001,8 @@ theorem ofLex_ofNat
   proof: rfl
 
 中文:
-定理 ofLex_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 ofLex_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 Depends on / 依赖: IntCast, toLex_intCast
@@ -1021,7 +1021,7 @@ lemma toLex_intCast
 
 中文:
 引理 toLex_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: toLex (n : R) = n
   证明: rfl
 -/
@@ -1038,7 +1038,7 @@ lemma ofLex_intCast
 
 中文:
 引理 ofLex_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: (ofLex n : R) = n
   证明: rfl
 -/

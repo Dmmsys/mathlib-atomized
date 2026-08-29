@@ -69,10 +69,10 @@ class IsContMDiffRiemannianBundle
     - exists_contMDiff : exists g : Π (x : B), E x ->L[Real] E x ->L[Real] Real, ContMDiff IB (IB.prod 𝓘(Real, F ->L[Real] F ->L[Real] Real)) n (fun b => TotalSpace.mk' (F ->L[Real] F ->L[Real] Real) b (g b)) ∧ forall (x : B) (v w : E x), ⟪v, w⟫ = g x v w
 
 中文:
-类 IsContMDiffRiemannianBundle
+类 是余ntMDiffRiemannianBundle
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_contMDiff : 存在 g : Π (x : B), E x ->L[实数] E x ->L[实数] 实数, ContMDiff IB (IB.prod 𝓘(实数, F ->L[实数] F ->L[实数] 实数)) n (fun b => TotalSpace.mk' (F ->L[实数] F ->L[实数] 实数) b (g b)) ∧ 对任意 (x : B) (v w : E x), ⟪v, w⟫ = g x v w
+    - exists_contMDiff : 存在 g : Π (x : B), E x ->L[实数] E x ->L[实数] 实数, ContMDiff IB (IB.乘积 𝓘(实数, F ->L[实数] F ->L[实数] 实数)) n (fun b => 全空间.mk' (F ->L[实数] F ->L[实数] 实数) b (g b)) ∧ 对任意 (x : B) (v w : E x), ⟪v, w⟫ = g x v w
 -/
 class IsContMDiffRiemannianBundle : Prop where
   exists_contMDiff : exists g : Π (x : B), E x ->L[Real] E x ->L[Real] Real,
@@ -91,8 +91,8 @@ lemma IsContMDiffRiemannianBundle.of_le
   exact ⟨g, g_smooth.of_le h', hg⟩
 
 中文:
-引理 IsContMDiffRiemannianBundle.of_le
-  条件: [h : IsContMDiffRiemannianBundle IB n F E] (h' : n' <= n)
+引理 是余ntMDiffRiemannianBundle.of_le
+  条件: [h : 是余ntMDiffRiemannianBundle IB n F E] (h' : n' <= n)
   证明: by
   rcases h.exists_contMDiff with ⟨g, g_smooth, hg⟩
   exact ⟨g, g_smooth.of_le h', hg⟩
@@ -121,8 +121,8 @@ instance [IsContMDiffRiemannianBundle
   body: IsContMDiffRiemannianBundle.of_le zero_le_one
 
 中文:
-实例 [IsContMDiffRiemannianBundle
-  签名: IB 1 F E] : IsContMDiffRiemannianBundle IB 0 F E
+实例 [是余ntMDiffRiemannianBundle
+  签名: IB 1 F E] : 是余ntMDiffRiemannianBundle IB 0 F E
   定义体: IsContMDiffRiemannianBundle.of_le zero_le_one
 
 Depends on / 依赖: IsContMDiffRiemannianBundle, IsContMDiffRiemannianBundle.of_le, of_le, zero_le_one
@@ -139,8 +139,8 @@ instance [IsContMDiffRiemannianBundle
   body: IsContMDiffRiemannianBundle.of_le one_le_two
 
 中文:
-实例 [IsContMDiffRiemannianBundle
-  签名: IB 2 F E] : IsContMDiffRiemannianBundle IB 1 F E
+实例 [是余ntMDiffRiemannianBundle
+  签名: IB 2 F E] : 是余ntMDiffRiemannianBundle IB 1 F E
   定义体: IsContMDiffRiemannianBundle.of_le one_le_two
 
 Depends on / 依赖: IsContMDiffRiemannianBundle, IsContMDiffRiemannianBundle.of_le, of_le, one_le_two
@@ -157,8 +157,8 @@ instance [IsContMDiffRiemannianBundle
   body: IsContMDiffRiemannianBundle.of_le (n := 3) (by norm_cast)
 
 中文:
-实例 [IsContMDiffRiemannianBundle
-  签名: IB 3 F E] : IsContMDiffRiemannianBundle IB 2 F E
+实例 [是余ntMDiffRiemannianBundle
+  签名: IB 3 F E] : 是余ntMDiffRiemannianBundle IB 2 F E
   定义体: IsContMDiffRiemannianBundle.of_le (n := 3) (by norm_cast)
 
 Depends on / 依赖: IsContMDiffRiemannianBundle, IsContMDiffRiemannianBundle.of_le, of_le
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsContMDiffRiemannianBundle IB n F₁ (Bundle.Trivial B F₁)
+  签名: 是余ntMDiffRiemannianBundle IB n F₁ (Bundle.平凡 B F₁)
   定义体: by
   refine ⟨fun x => innerSL Real, fun x => ?_, fun x v w => rfl⟩
   simp only [contMDiffAt_section]
@@ -463,14 +463,14 @@ structure ContMDiffRiemannianMetric
     - contMDiff : ContMDiff IB (IB.prod 𝓘(Real, F ->L[Real] F ->L[Real] Real)) n (fun b => TotalSpace.mk' (F ->L[Real] F ->L[Real] Real) b (inner b))
 
 中文:
-结构 ContMDiffRiemannianMetric
+结构 余ntMDiffRiemannianMetric
   参数: where
   公理与运算 (5 个):
     - inner((b : B)) : E b ->L[实数] E b ->L[实数] 实数
     - symm((b : B) (v w : E b)) : inner b v w = inner b w v
     - pos((b : B) (v : E b) (hv : v != 0)) : 0 < inner b v v
     - isVonNBounded((b : B)) : IsVonNBounded 实数 {v : E b | inner b v v < 1}
-    - contMDiff : ContMDiff IB (IB.prod 𝓘(实数, F ->L[实数] F ->L[实数] 实数)) n (fun b => TotalSpace.mk' (F ->L[实数] F ->L[实数] 实数) b (inner b))
+    - contMDiff : ContMDiff IB (IB.乘积 𝓘(实数, F ->L[实数] F ->L[实数] 实数)) n (fun b => 全空间.mk' (F ->L[实数] F ->L[实数] 实数) b (inner b))
 -/
 structure ContMDiffRiemannianMetric where
   /-- The scalar product along the fibers of the bundle. -/
@@ -489,7 +489,7 @@ definition ContMDiffRiemannianMetric.toContinuousRiemannianMetric
   body: { g with continuous := g.contMDiff.continuous }
 
 中文:
-定义 ContMDiffRiemannianMetric.toContinuousRiemannianMetric
+定义 余ntMDiffRiemannianMetric.toContinuousRiemannianMetric
   定义体: { g with continuous := g.contMDiff.continuous }
 
 Depends on / 依赖: contMDiff, continuous, g.contMDiff.continuous
@@ -506,7 +506,7 @@ definition ContMDiffRiemannianMetric.toRiemannianMetric
   body: g.toContinuousRiemannianMetric.toRiemannianMetric
 
 中文:
-定义 ContMDiffRiemannianMetric.toRiemannianMetric
+定义 余ntMDiffRiemannianMetric.toRiemannianMetric
   定义体: g.toContinuousRiemannianMetric.toRiemannianMetric
 
 Depends on / 依赖: g.toContinuousRiemannianMetric.toRiemannianMetric, toContinuousRiemannianMetric, toRiemannianMetric

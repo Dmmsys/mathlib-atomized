@@ -37,7 +37,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: (δ : α -> Sort*)
+  签名: (δ : α -> 类型层*)
   定义体: nofun
 -/
 def empty (δ : α -> Sort*) : forall a in (0 : Multiset α), δ a :=
@@ -227,7 +227,7 @@ theorem forall_rel_cons_ext
   · exact hf _ _
 
 中文:
-定理 forall_rel_cons_ext
+定理 对任意_rel_cons_ext
   结论: {r : 对任意 ⦃a⦄, δ a -> δ a -> 命题} {b₁ b₂ : δ a} {f₁ f₂ : 对任意 a' in m, δ a'}
   证明: by
   intro a ha
@@ -359,7 +359,7 @@ theorem pi_zero
 中文:
 定理 pi_zero
   条件: (t : 对任意 a, Multiset (β a))
-  结论: pi 0 t = {Pi.empty β}
+  结论: pi 0 t = {依赖函数类型.empty β}
   证明: rfl
 
 @[simp]

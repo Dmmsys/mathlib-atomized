@@ -101,7 +101,7 @@ theorem SimpleFunc.exists_le_lowerSemicontinuous_lintegral_ge
      
 
 中文:
-定理 SimpleFunc.exists_le_lowerSemicontinuous_lintegral_ge
+定理 SimpleFunc.存在_le_lowerSemicontinuous_lintegral_ge
   结论: (f : α ->ₛ 实数>=0) {ε : 实数>=0∞}
   证明: by
   induction f using MeasureTheory.SimpleFunc.induction generalizing ε with
@@ -192,8 +192,8 @@ theorem exists_le_lowerSemicontinuous_lintegral_ge
     Sim
 
 中文:
-定理 exists_le_lowerSemicontinuous_lintegral_ge
-  结论: (f : α -> 实数>=0∞) (hf : Measurable f) {ε : 实数>=0∞}
+定理 存在_le_lowerSemicontinuous_lintegral_ge
+  结论: (f : α -> 实数>=0∞) (hf : 可测 f) {ε : 实数>=0∞}
   证明: by
   rcases ENNReal.exists_pos_sum_of_countable' εpos Nat with ⟨δ, δpos, hδ⟩
   have :
@@ -255,8 +255,8 @@ theorem exists_lt_lowerSemicontinuous_lintegral_ge
     ⟨g
 
 中文:
-定理 exists_lt_lowerSemicontinuous_lintegral_ge
-  结论: [SigmaFinite μ] (f : α -> 实数>=0)
+定理 存在_lt_lowerSemicontinuous_lintegral_ge
+  结论: [σ有限 μ] (f : α -> 实数>=0)
   证明: by
   have : ε / 2 != 0 := (ENNReal.half_pos ε0).ne'
   rcases exists_pos_lintegral_lt_of_sigmaFinite μ this with ⟨w, wpos, wmeas, wint⟩
@@ -303,8 +303,8 @@ theorem exists_lt_lowerSemicontinuous_lintegral_ge_of_aemeasurable
   rcases exists_le_lowerSemiconti
 
 中文:
-定理 exists_lt_lowerSemicontinuous_lintegral_ge_of_aemeasurable
-  结论: [SigmaFinite μ] (f : α -> 实数>=0)
+定理 存在_lt_lowerSemicontinuous_lintegral_ge_of_aemeasurable
+  结论: [σ有限 μ] (f : α -> 实数>=0)
   证明: by
   have : ε / 2 != 0 := (ENNReal.half_pos ε0).ne'
   rcases exists_lt_lowerSemicontinuous_lintegral_ge μ (fmeas.mk f) fmeas.measurable_mk this with
@@ -362,8 +362,8 @@ theorem exists_lt_lowerSemicontinuous_integral_gt_nnreal
   have int_f_ne_top : (∫⁻ a : α, f a ∂μ) !
 
 中文:
-定理 exists_lt_lowerSemicontinuous_integral_gt_nnreal
-  结论: [SigmaFinite μ] (f : α -> 实数>=0)
+定理 存在_lt_lowerSemicontinuous_integral_gt_nnreal
+  结论: [σ有限 μ] (f : α -> 实数>=0)
   证明: by
   have fmeas : AEMeasurable f μ := by
     convert! fint.aestronglyMeasurable.real_toNNReal.aemeasurable
@@ -435,7 +435,7 @@ theorem SimpleFunc.exists_upperSemicontinuous_le_lintegral_le
     have :
 
 中文:
-定理 SimpleFunc.exists_upperSemicontinuous_le_lintegral_le
+定理 SimpleFunc.存在_upperSemicontinuous_le_lintegral_le
   结论: (f : α ->ₛ 实数>=0)
   证明: by
   induction f using MeasureTheory.SimpleFunc.induction generalizing ε with
@@ -505,7 +505,7 @@ theorem exists_upperSemicontinuous_le_lintegral_le
     rw [ENNReal
 
 中文:
-定理 exists_upperSemicontinuous_le_lintegral_le
+定理 存在_upperSemicontinuous_le_lintegral_le
   结论: (f : α -> 实数>=0) (int_f : (∫⁻ x, f x ∂μ) != ∞)
   证明: by
   obtain ⟨fs, fs_le_f, int_fs⟩ :
@@ -558,7 +558,7 @@ theorem exists_upperSemicontinuous_le_integral_le
   have Ig : (∫⁻ x, g x ∂
 
 中文:
-定理 exists_upperSemicontinuous_le_integral_le
+定理 存在_upperSemicontinuous_le_integral_le
   结论: (f : α -> 实数>=0)
   证明: by
   lift ε to Real>=0 using εpos.le
@@ -615,8 +615,8 @@ theorem exists_lt_lowerSemicontinuous_integral_lt
 
 
 中文:
-定理 exists_lt_lowerSemicontinuous_integral_lt
-  结论: [SigmaFinite μ] (f : α -> 实数) (hf : 整数egrable f μ)
+定理 存在_lt_lowerSemicontinuous_integral_lt
+  结论: [σ有限 μ] (f : α -> 实数) (hf : 可积 f μ)
   证明: by
   let δ : Real>=0 := .mk (ε / 2) (half_pos εpos).le
   have δpos : 0 < δ := half_pos εpos
@@ -716,8 +716,8 @@ theorem exists_upperSemicontinuous_lt_integral_gt
       continuous_ne
 
 中文:
-定理 exists_upperSemicontinuous_lt_integral_gt
-  结论: [SigmaFinite μ] (f : α -> 实数) (hf : 整数egrable f μ)
+定理 存在_upperSemicontinuous_lt_integral_gt
+  结论: [σ有限 μ] (f : α -> 实数) (hf : 可积 f μ)
   证明: by
   rcases exists_lt_lowerSemicontinuous_integral_lt (fun x => -f x) hf.neg εpos with
     ⟨g, g_lt_f, gcont, g_integrable, g_lt_top, gint⟩

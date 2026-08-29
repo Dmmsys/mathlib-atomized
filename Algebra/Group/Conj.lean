@@ -168,7 +168,7 @@ theorem isConj_iff_eq
 
 中文:
 定理 isConj_iff_eq
-  条件: {α : 类型} [CommMonoid α] {a b : α}
+  条件: {α : 类型} [交换幺半群 α] {a b : α}
   结论: IsConj a b ↔ a = b
   证明: ⟨fun ⟨c, hc⟩ => by
     rw [SemiconjBy]; rw [mul_comm]; rw [← Units.mul_inv_eq_iff_eq_mul]; rw [mul_assoc]; rw [c.mul_inv]; rw [mul_one] at hc
@@ -193,7 +193,7 @@ theorem MonoidHom.map_isConj
   statement: IsConj a b -> IsConj (f a) (f b)
 
 中文:
-定理 MonoidHom.map_isConj
+定理 幺半群态射.map_isConj
   条件: (f : α ->* β) {a b : α}
   结论: IsConj a b -> IsConj (f a) (f b)
 -/
@@ -430,7 +430,7 @@ theorem conj_injective
 中文:
 定理 conj_injective
   条件: {x : α}
-  结论: Function.Injective fun g : α => x * g * x⁻¹
+  结论: 函数.单射 fun g : α => x * g * x⁻¹
   证明: fun a b => by simp
 -/
 theorem conj_injective {x : α} : Function.Injective fun g : α => x * g * x⁻¹ :=
@@ -456,7 +456,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: (α : 类型) [Monoid α]
+  签名: (α : 类型) [幺半群 α]
   定义体: IsConj
   iseqv := ⟨IsConj.refl, IsConj.symm, IsConj.trans⟩
 -/
@@ -481,7 +481,7 @@ definition ConjClasses
 
 中文:
 定义 ConjClasses
-  签名: (α : 类型) [Monoid α]
+  签名: (α : 类型) [幺半群 α]
   定义体: Quotient (IsConj.setoid α)
 
 Depends on / 依赖: IsConj, IsConj.setoid, Quotient, setoid
@@ -510,7 +510,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {α : 类型} [Monoid α] (a : α)
+  签名: {α : 类型} [幺半群 α] (a : α)
   定义体: ⟦a⟧
 
 @[to_additive]
@@ -530,7 +530,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ConjClasses α)
+  签名: 可居 (ConjClasses α)
   定义体: ⟨⟦1⟧⟩
 
 @[to_additive]
@@ -600,7 +600,7 @@ theorem quot_mk_eq_mk
 中文:
 定理 quot_mk_eq_mk
   条件: (a : α)
-  结论: Quot.mk Setoid.r a = ConjClasses.mk a
+  结论: 商.mk 集合等价关系.r a = ConjClasses.mk a
   证明: rfl
 
 @[to_additive]
@@ -621,7 +621,7 @@ theorem forall_isConj
 @[to_additive]
 
 中文:
-定理 forall_isConj
+定理 对任意_isConj
   条件: {p : ConjClasses α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (ConjClasses.mk a)
   证明: Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
@@ -646,7 +646,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (@ConjClasses.mk α _)
+  结论: 函数.满射 (@ConjClasses.mk α _)
   证明: forall_isConj.2 fun a => ⟨a, rfl⟩
 
 @[to_additive]
@@ -669,7 +669,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (ConjClasses α)
+  签名: 幺 (ConjClasses α)
   定义体: ⟨⟦1⟧⟩
 
 @[to_additive]
@@ -709,7 +709,7 @@ theorem exists_rep
   proof: Quot.exists_rep a
 
 中文:
-定理 exists_rep
+定理 存在_rep
   条件: (a : ConjClasses α)
   结论: 存在 a0 : α, ConjClasses.mk a0 = a
   证明: Quot.exists_rep a
@@ -763,7 +763,7 @@ these instances should be assigned a
 
 中文:
 定理 map_surjective
-  条件: {f : α ->* β} (hf : Function.Surjective f)
+  条件: {f : α ->* β} (hf : 函数.满射 f)
   证明: by
   intro b
   obtain ⟨b, rfl⟩ := ConjClasses.mk_surjective b
@@ -841,7 +841,7 @@ theorem mk_injective
 
 中文:
 定理 mk_injective
-  结论: Function.Injective (@ConjClasses.mk α _)
+  结论: 函数.单射 (@ConjClasses.mk α _)
   证明: fun _ _ =>
   (mk_eq_mk_iff_isConj.trans isConj_iff_eq).1
 
@@ -861,7 +861,7 @@ theorem mk_bijective
 
 中文:
 定理 mk_bijective
-  结论: Function.Bijective (@ConjClasses.mk α _)
+  结论: 函数.双射 (@ConjClasses.mk α _)
   证明: ⟨mk_injective, mk_surjective⟩
 
 Depends on / 依赖: mk_injective, mk_surjective
@@ -1027,7 +1027,7 @@ definition carrier
 
 中文:
 定义 carrier
-  签名: : ConjClasses α -> Set α
+  签名: : ConjClasses α -> 集合 α
   定义体: Quotient.lift conjugatesOf fun (_ : α) _ ab => IsConj.conjugatesOf_eq ab
 
 @[to_additive]

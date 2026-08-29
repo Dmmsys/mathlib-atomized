@@ -31,7 +31,7 @@ lemma rootsOfUnity_eq_top
 
 中文:
 引理 rootsOfUnity_eq_top
-  条件: {p : 自然数} [Fact p.Prime]
+  条件: {p : 自然数} [Fact p.素]
   证明: by
   ext
   simpa [Units.ext_iff] using pow_card_sub_one_eq_one (Units.ne_zero _)

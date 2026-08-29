@@ -60,7 +60,7 @@ lemma mono_of_isColimit_monoOver
 
 中文:
 引理 mono_of_isColimit_monoOver
-  结论: Mono f
+  结论: 单态射 f
   证明: by
   let α : F ⋙ MonoOver.forget _ ⋙ Over.forget _ ⟶ (Functor.const _).obj X :=
     { app j := (F.obj j).obj.hom }
@@ -184,7 +184,7 @@ lemma exists_isIso_of_functor_from_monoOver
   have h' : Function.Surjective (fun (j : J) => 
 
 中文:
-引理 exists_isIso_of_functor_from_monoOver
+引理 存在_isIso_of_functor_from_monoOver
   证明: by
   have := isFiltered_of_isCardinalFiltered J κ
   have := mono_of_isColimit_monoOver F hc f hf

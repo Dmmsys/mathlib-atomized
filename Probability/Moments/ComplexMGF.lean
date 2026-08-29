@@ -79,7 +79,7 @@ definition complexMGF
 
 中文:
 定义 complexMGF
-  签名: (X : Ω -> 实数) (μ : Measure Ω) (z : Complex)
+  签名: (X : Ω -> 实数) (μ : 测度 Ω) (z : 复形)
   定义体: ∫ ω, cexp (z * X ω) ∂μ
 -/
 def complexMGF (X : Ω -> Real) (μ : Measure Ω) (z : Complex) : Complex := ∫ ω, cexp (z * X ω) ∂μ
@@ -97,7 +97,7 @@ lemma complexMGF_undef
 
 中文:
 引理 complexMGF_undef
-  条件: (hX : AEMeasurable X μ) (h : ¬ 整数egrable (fun ω => rexp (z.re * X ω)) μ)
+  条件: (hX : 几乎处处可测 X μ) (h : ¬ 可积 (fun ω => rexp (z.re * X ω)) μ)
   证明: by
   rw [complexMGF]; rw [integral_undef]
   rw [← integrable_norm_iff (by fun_prop)]
@@ -126,7 +126,7 @@ lemma complexMGF_id_map
 
 中文:
 引理 complexMGF_id_map
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   结论: complexMGF id (μ.map X) = complexMGF X μ
   证明: by
   ext t
@@ -153,7 +153,7 @@ lemma complexMGF_congr_identDistrib
 
 中文:
 引理 complexMGF_congr_identDistrib
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ' : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ' : 测度 Ω'}
   证明: by
   rw [← complexMGF_id_map h.aemeasurable_fst]; rw [← complexMGF_id_map h.aemeasurable_snd]; rw [h.map_eq]
 
@@ -208,7 +208,7 @@ lemma complexMGF_ofReal
   norm_cast
 
 中文:
-引理 complexMGF_ofReal
+引理 complexMGF_of实数
   条件: (x : 实数)
   结论: complexMGF X μ x = mgf X μ x
   证明: by
@@ -232,7 +232,7 @@ lemma re_complexMGF_ofReal
   simp [complexMGF_ofReal]
 
 中文:
-引理 re_complexMGF_ofReal
+引理 re_complexMGF_of实数
   条件: (x : 实数)
   结论: (complexMGF X μ x).re = mgf X μ x
   证明: by
@@ -254,7 +254,7 @@ lemma re_complexMGF_ofReal'
   exact re_complexMGF_ofReal x
 
 中文:
-引理 re_complexMGF_ofReal'
+引理 re_complexMGF_of实数'
   结论: (fun x : 实数 => (complexMGF X μ x).re) = mgf X μ
   证明: by
   ext x
@@ -279,7 +279,7 @@ lemma complexMGF_id_mul_I
 
 中文:
 引理 complexMGF_id_mul_I
-  条件: {μ : Measure 实数} (t : 实数)
+  条件: {μ : 测度 实数} (t : 实数)
   证明: by
   simp only [complexMGF, id_eq, charFun, RCLike.inner_apply, conj_trivial, ofReal_mul]
   congr with x
@@ -304,7 +304,7 @@ lemma complexMGF_mul_I
 
 中文:
 引理 complexMGF_mul_I
-  条件: (hX : AEMeasurable X μ) (t : 实数)
+  条件: (hX : 几乎处处可测 X μ) (t : 实数)
   证明: by
   rw [← complexMGF_id_map hX]; rw [complexMGF_id_mul_I]
 
@@ -642,7 +642,7 @@ lemma integrableExpSet_eq_of_mgf
 
 中文:
 引理 integrableExpSet_eq_of_mgf
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   refine integrableExpSet_eq_of_mgf' hXY ?_
   simp only [IsProbabilityMeasure.ne_zero, false_iff]
@@ -738,7 +738,7 @@ lemma eqOn_complexMGF_of_mgf
 
 中文:
 引理 eqOn_complexMGF_of_mgf
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   refine eqOn_complexMGF_of_mgf' hXY ?_
   simp only [IsProbabilityMeasure.ne_zero, false_iff]
@@ -783,8 +783,8 @@ theorem _root_.MeasureTheory.Measure.ext_of_complexMGF_eq
   specialize h (Mult
 
 中文:
-定理 _root_.MeasureTheory.Measure.ext_of_complexMGF_eq
-  结论: [IsFiniteMeasure μ]
+定理 _root_.测度论.测度.ext_of_complexMGF_eq
+  结论: [是有限测度 μ]
   证明: by
   have inner_ne_zero (x : Real) (h : x != 0) : innerₗ Real x != 0 :=
     DFunLike.ne_iff.mpr ⟨x, inner_self_ne_zero.mpr h⟩
@@ -819,7 +819,7 @@ lemma _root_.MeasureTheory.Measure.ext_of_complexMGF_id_eq
   simpa using Measure.ext_of_complexMGF_eq aemeasurable_id aemeasurable_id h
 
 中文:
-引理 _root_.MeasureTheory.Measure.ext_of_complexMGF_id_eq
+引理 _root_.测度论.测度.ext_of_complexMGF_id_eq
   证明: by
   simpa using Measure.ext_of_complexMGF_eq aemeasurable_id aemeasurable_id h
 

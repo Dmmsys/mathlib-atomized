@@ -74,7 +74,7 @@ definition ltb.inductionOn.{u}
 
 中文:
 定义 ltb.inductionOn.{u}
-  签名: {motive : Legacy.Iterator -> Legacy.Iterator -> Sort u}
+  签名: {motive : Legacy.Iterator -> Legacy.Iterator -> 类型层 u}
   定义体: if h₂ : it₂.hasNext then
     if h₁ : it₁.hasNext then
       if heq : it₁.curr = it₂.curr then
@@ -157,7 +157,7 @@ theorem ltb_cons_addChar
 
 中文:
 定理 ltb_cons_addChar
-  条件: (c : Char) (cs₁ cs₂ : List Char) (i₁ i₂ : Pos.Raw)
+  条件: (c : Char) (cs₁ cs₂ : 列表 Char) (i₁ i₂ : Pos.Raw)
   证明: by
   rw [eq_comm]; rw [← ltb_cons_addChar' c]
   simp
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder String
+  签名: 线性序 String
   定义体: le_iff_toList_le.mpr le_rfl
   le_trans a b c := by
     simp only [le_iff_toList_le]
@@ -409,7 +409,7 @@ theorem ofList_eq
 
 中文:
 定理 ofList_eq
-  条件: {l : List Char} {s : String}
+  条件: {l : 列表 Char} {s : String}
   结论: ofList l = s ↔ l = s.toList
   证明: by
   simp [← toList_inj]

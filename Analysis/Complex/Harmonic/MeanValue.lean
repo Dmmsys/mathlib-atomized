@@ -52,7 +52,7 @@ theorem HarmonicContOnCl.comp_CLM
 
 中文:
 定理 HarmonicContOnCl.comp_CLM
-  结论: {f : E -> F} {s : Set E} (h : HarmonicContOnCl f s)
+  结论: {f : E -> F} {s : 集合 E} (h : HarmonicContOnCl f s)
   证明: ⟨h.1.comp_CLM l, l.continuous.comp_continuousOn h.2⟩
 
 Depends on / 依赖: comp_CLM, comp_continuousOn, continuous, l.continuous.comp_continuousOn

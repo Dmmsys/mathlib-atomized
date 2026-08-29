@@ -68,7 +68,7 @@ lemma trW_of_op
 
 中文:
 引理 trW_of_op
-  结论: (P : Object命题erty C) [P.IsTriangulated]
+  结论: (P : ObjectProperty C) [P.是三角]
   证明: by
   obtain ⟨Z, a, b, h₁, h₂⟩ := hf
   rw [ObjectProperty.trW_iff']
@@ -95,7 +95,7 @@ lemma trW_of_unop
 
 中文:
 引理 trW_of_unop
-  结论: (P : Object命题erty Cᵒᵖ) [P.IsTriangulated]
+  结论: (P : ObjectProperty Cᵒᵖ) [P.是三角]
   证明: by
   obtain ⟨Z, a, b, h₁, h₂⟩ := hf
   rw [ObjectProperty.trW_iff']
@@ -119,7 +119,7 @@ lemma trW_op_iff
 
 中文:
 引理 trW_op_iff
-  条件: (P : Object命题erty C) [P.IsTriangulated] {X Y : Cᵒᵖ} {f : X ⟶ Y}
+  条件: (P : ObjectProperty C) [P.是三角] {X Y : Cᵒᵖ} {f : X ⟶ Y}
   证明: ⟨P.trW_of_op, P.op.trW_of_unop⟩
 
 Depends on / 依赖: P.op.trW_of_unop, P.trW_of_op, trW_of_op, trW_of_unop
@@ -141,7 +141,7 @@ lemma trW_op
 
 中文:
 引理 trW_op
-  条件: (P : Object命题erty C) [P.IsTriangulated]
+  条件: (P : ObjectProperty C) [P.是三角]
   结论: P.op.trW = P.trW.op
   证明: by
   ext X Y f

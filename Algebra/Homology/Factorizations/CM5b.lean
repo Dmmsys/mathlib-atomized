@@ -48,7 +48,7 @@ definition I
 
 中文:
 定义 I
-  签名: : CochainComplex C 整数 where
+  签名: : 上链复形 C 整数 where
   定义体: Injective.under (K.X n)
   d _ _ := 0
 
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (i f)
+  签名: 单态射 (i f)
   定义体: HomologicalComplex.mono_of_mono_f (i f) inferInstance
 
 @[reassoc (attr := simp)]
@@ -253,7 +253,7 @@ definition homotopyEquiv
 
 中文:
 定义 homotopyEquiv
-  签名: : HomotopyEquiv (mappingCone (𝟙 (I K)) ⊞ L) L where
+  签名: : 同伦等价 (mappingCone (𝟙 (I K)) ⊞ L) L where
   定义体: p K L
   inv := biprod.inr
   homotopyHomInvId :=
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (p K L)
+  签名: 拟同构 (p K L)
   定义体: (homotopyEquiv K L).quasiIso_hom
 
 Depends on / 依赖: homotopyEquiv, quasiIso_hom

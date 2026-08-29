@@ -35,8 +35,8 @@ lemma finiteDimensional
 
 中文:
 引理 finiteDimensional
-  条件: (b : B) [FiniteDimensional R F]
-  结论: FiniteDimensional R (E b)
+  条件: (b : B) [有限维 R F]
+  结论: 有限维 R (E b)
   证明: (continuousLinearEquivAt R F E b).symm.finiteDimensional
 -/
 protected lemma finiteDimensional (b : B) [FiniteDimensional R F] : FiniteDimensional R (E b) :=
@@ -54,7 +54,7 @@ lemma finrank_eq
 中文:
 引理 finrank_eq
   条件: (b : B)
-  结论: Module.finrank R (E b) = Module.finrank R F
+  结论: 模.finrank R (E b) = 模.finrank R F
   证明: (continuousLinearEquivAt R F E b).finrank_eq
 -/
 protected lemma finrank_eq (b : B) : Module.finrank R (E b) = Module.finrank R F :=

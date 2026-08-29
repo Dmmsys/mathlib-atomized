@@ -101,7 +101,7 @@ have hfu := fun m : Int => mul_lt_of_lt_one_left hn fract_lt_one (ξ * ↑m)
   let D := Icc (0 : Int) n
 
 中文:
-定理 exists_int_int_abs_mul_sub_le
+定理 存在_int_int_abs_mul_sub_le
   条件: (ξ : 实数) {n : 自然数} (n_pos : 0 < n)
   证明: by
   let f : Int -> Int := fun m => ⌊fract (ξ * m) * (n + 1)⌋
@@ -161,7 +161,7 @@ theorem exists_nat_abs_mul_sub_round_le
   exact ⟨k.toNat, natCast_pos.mp hk₀, Nat.cast_le.mp hk₁, (round_le (↑k.toNat * ξ) j).trans h⟩
 
 中文:
-定理 exists_nat_abs_mul_sub_round_le
+定理 存在_nat_abs_mul_sub_round_le
   条件: (ξ : 实数) {n : 自然数} (n_pos : 0 < n)
   证明: by
   obtain ⟨j, k, hk₀, hk₁, h⟩ := exists_int_int_abs_mul_sub_le ξ n_pos
@@ -193,7 +193,7 @@ theorem exists_rat_abs_sub_le_and_den_le
   refine ⟨j / k, ?_, Nat.cast_le.mp (h
 
 中文:
-定理 exists_rat_abs_sub_le_and_den_le
+定理 存在_rat_abs_sub_le_and_den_le
   条件: (ξ : 实数) {n : 自然数} (n_pos : 0 < n)
   证明: by
   obtain ⟨j, k, hk₀, hk₁, h⟩ := exists_int_int_abs_mul_sub_le ξ n_pos
@@ -246,8 +246,8 @@ theorem exists_rat_abs_sub_lt_and_lt_of_irrational
   have den_pos : (0 : Real) < q'
 
 中文:
-定理 exists_rat_abs_sub_lt_and_lt_of_irrational
-  条件: {ξ : 实数} (hξ : Irrational ξ) (q : Rat)
+定理 存在_rat_abs_sub_lt_and_lt_of_irrational
+  条件: {ξ : 实数} (hξ : Irrational ξ) (q : 有理数)
   证明: by
   have h := abs_pos.mpr (sub_ne_zero.mpr <| Irrational.ne_rat hξ q)
   obtain ⟨m, hm⟩ := exists_nat_gt (1 / |ξ - q|)
@@ -342,7 +342,7 @@ theorem den_le_and_le_num_le_of_sub_lt_one_div_den_sq
 
 中文:
 定理 den_le_and_le_num_le_of_sub_lt_one_div_den_sq
-  结论: {ξ q : Rat}
+  结论: {ξ q : 有理数}
   证明: by
   have hq₀ : (0 : Rat) < q.den := Nat.cast_pos.mpr q.pos
   replace h : |ξ * q.den - q.num| < 1 / q.den := by
@@ -397,7 +397,7 @@ theorem finite_rat_abs_sub_lt_one_div_den_sq
 
 中文:
 定理 finite_rat_abs_sub_lt_one_div_den_sq
-  条件: (ξ : Rat)
+  条件: (ξ : 有理数)
   证明: by
   let f : Rat -> Int × Nat := fun q => (q.num, q.den)
   set s := {q : Rat | |ξ - q| < 1 / (q.den : Rat) ^ 2}
@@ -446,7 +446,7 @@ theorem Real.infinite_rat_abs_sub_lt_one_div_den_sq_iff_irrational
   rw [h]; rw [(by (push_cast; rfl) : (1 : Real) / (q.den : Real) ^
 
 中文:
-定理 Real.infinite_rat_abs_sub_lt_one_div_den_sq_iff_irrational
+定理 实数.infinite_rat_abs_sub_lt_one_div_den_sq_iff_irrational
   条件: (ξ : 实数)
   证明: by
   refine
@@ -503,7 +503,7 @@ definition convergent
 
 中文:
 定义 convergent
-  签名: : 实数 -> 自然数 -> Rat
+  签名: : 实数 -> 自然数 -> 有理数
 -/
 noncomputable def convergent : Real -> Nat -> Rat
   | ξ, 0 => ⌊ξ⌋
@@ -893,7 +893,7 @@ theorem exists_rat_eq_convergent'
     exact False.elim (lt_irref
 
 中文:
-定理 exists_rat_eq_convergent'
+定理 存在_rat_eq_convergent'
   条件: {v : 自然数} (h : ContfracLegendre.Ass ξ u v)
   证明: by
   induction v using Nat.strong_induction_on generalizing ξ u with | h v ih => ?_
@@ -958,8 +958,8 @@ theorem exists_rat_eq_convergent
 
 
 中文:
-定理 exists_rat_eq_convergent
-  条件: {q : Rat} (h : |ξ - q| < 1 / (2 * (q.den : 实数) ^ 2))
+定理 存在_rat_eq_convergent
+  条件: {q : 有理数} (h : |ξ - q| < 1 / (2 * (q.den : 实数) ^ 2))
   证明: by
   refine q.num_div_den ▸ exists_rat_eq_convergent' ⟨?_, fun hd => ?_, ?_⟩
   · exact isCoprime_iff_nat_coprime.mpr (natAbs_natCast q.den ▸ q.reduced)

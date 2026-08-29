@@ -84,7 +84,7 @@ structure ArchimedeanStrata
 结构 ArchimedeanStrata
   参数: where
   公理与运算 (3 个):
-    - stratum : FiniteArchimedeanClass M -> Submodule K M
+    - stratum : FiniteArchimedeanClass M -> 子模 K M
     - disjoint_ball_stratum((c : FiniteArchimedeanClass M)) : Disjoint (ball K c) (stratum c)
     - ball_sup_stratum_eq((c : FiniteArchimedeanClass M)) : ball K c ⊔ stratum c = closedBall K c
 -/
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (ArchimedeanStrata K M)
+  签名: 非空 (ArchimedeanStrata K M)
   定义体: by
   have hstratum (c : FiniteArchimedeanClass M) :
       exists G : Submodule K M, Disjoint (ball K c) G ∧ ball K c ⊔ G = closedBall K c :=
@@ -160,7 +160,7 @@ instance nontrivial_stratum
 
 中文:
 实例 nontrivial_stratum
-  签名: : Nontrivial (u.stratum c)
+  签名: : 非平凡 (u.stratum c)
   定义体: (Submodule.nontrivial_iff_ne_bot).mpr (stratum_ne_bot _)
 
 Depends on / 依赖: Submodule, Submodule.nontrivial_iff_ne_bot, nontrivial_iff_ne_bot, stratum_ne_bot
@@ -224,7 +224,7 @@ instance archimedean_stratum
 
 中文:
 实例 archimedean_stratum
-  签名: : Archimedean (u.stratum c)
+  签名: : 阿基米德 (u.stratum c)
   定义体: by
   apply ArchimedeanClass.archimedean_of_mk_eq_mk
   intro a ha b hb
@@ -387,8 +387,8 @@ theorem isInternal_stratum'
   simpa using! le_iSup _ 
 
 中文:
-定理 isInternal_stratum'
-  结论: DirectSum.Is整数ernal u.stratum'
+定理 is整数ernal_stratum'
+  结论: 直和.Is整数ernal u.stratum'
   证明: by
   apply DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top u.iSupIndep_stratum'
   apply Submodule.map_injective_of_injective u.baseDomain.subtype_injective
@@ -418,7 +418,7 @@ instance :
 
 中文:
 实例 :
-  签名: DirectSum.Decomposition u.stratum'
+  签名: 直和.分解 u.stratum'
   定义体: (u.isInternal_stratum').chooseDecomposition _
 
 Depends on / 依赖: chooseDecomposition, isInternal_stratum, u.isInternal_stratum
@@ -445,7 +445,7 @@ structure Seed
   继承: ArchimedeanStrata K M
   公理与运算 (2 个):
     - coeff((c : FiniteArchimedeanClass M)) : stratum c ->ₗ[K] R
-    - strictMono_coeff((c : FiniteArchimedeanClass M)) : StrictMono (coeff c)
+    - strictMono_coeff((c : FiniteArchimedeanClass M)) : 严格递增 (coeff c)
 -/
 structure Seed extends ArchimedeanStrata K M where
   /-- For each stratum, specify a linear map to `R` as the Hahn series coefficient. -/
@@ -656,13 +656,13 @@ structure IsPartial
     - truncLT_mem_range : forall x, forall c, toLex (HahnSeries.truncLTLinearMap K c (ofLex (f x))) in LinearMap.range f.toFun
 
 中文:
-结构 IsPartial
+结构 是Partial
   参数: (f : M ->ₗ.[K] Lex R⟦FiniteArchimedeanClass M⟧)
   继承: `baseEmbedding`. -/
   公理与运算 (3 个):
-    - strictMono : StrictMono f
+    - strictMono : 严格递增 f
     - baseEmbedding_le : seed.baseEmbedding <= f
-    - truncLT_mem_range : 对任意 x, 对任意 c, toLex (HahnSeries.truncLTLinearMap K c (ofLex (f x))) in LinearMap.range f.toFun
+    - truncLT_mem_range : 对任意 x, 对任意 c, toLex (Hahn级数.truncLTLinearMap K c (ofLex (f x))) in 线性映射.range f.toFun
 -/
 structure IsPartial (f : M ->ₗ.[K] Lex R⟦FiniteArchimedeanClass M⟧) : Prop where
   /-- A partial Hahn embedding is strictly monotone. -/
@@ -777,8 +777,8 @@ exact baseEmbedding_pos _ by simpa using h
 
 中文:
 定理 baseEmbedding_strictMono
-  条件: [IsOrderedAddMonoid R]
-  结论: StrictMono seed.baseEmbedding
+  条件: [是OrderedAdd幺半群 R]
+  结论: 严格递增 seed.baseEmbedding
   证明: by
   intro x y h
   apply lt_of_sub_pos
@@ -864,8 +864,8 @@ theorem isPartial_baseEmbedding
 
 中文:
 定理 isPartial_baseEmbedding
-  条件: [IsOrderedAddMonoid R]
-  结论: IsPartial seed seed.baseEmbedding where
+  条件: [是OrderedAdd幺半群 R]
+  结论: 是Partial seed seed.baseEmbedding where
   证明: seed.baseEmbedding_strictMono
   baseEmbedding_le := le_refl _
   truncLT_mem_range := seed.truncLT_mem_range_baseEmbedding
@@ -907,8 +907,8 @@ instance [IsOrderedAddMonoid
   body: ⟨seed.baseEmbedding, seed.isPartial_baseEmbedding⟩
 
 中文:
-实例 [IsOrderedAddMonoid
-  签名: R] : Inhabited (Partial seed) where
+实例 [是OrderedAdd幺半群
+  签名: R] : 可居 (Partial seed) where
   定义体: ⟨seed.baseEmbedding, seed.isPartial_baseEmbedding⟩
 
 Depends on / 依赖: baseEmbedding, isPartial_baseEmbedding, seed.baseEmbedding, seed.isPartial_baseEmbedding
@@ -967,7 +967,7 @@ theorem toOrderAddMonoidHom_injective
 
 中文:
 定理 toOrderAddMonoidHom_injective
-  结论: Function.Injective f.toOrderAddMonoidHom
+  结论: 函数.单射 f.toOrderAddMonoidHom
   证明: f.prop.strictMono.injective
 
 Depends on / 依赖: f.prop.strictMono.injective, injective, strictMono
@@ -1058,7 +1058,7 @@ theorem archimedeanClassMk_eq_iff
 
 中文:
 定理 archimedeanClassMk_eq_iff
-  条件: [IsOrderedAddMonoid R] (x y : f.val.domain)
+  条件: [是OrderedAdd幺半群 R] (x y : f.val.domain)
   证明: by
   simp_rw [← toOrderAddMonoidHom_apply, ← orderHom_mk]
   trans ArchimedeanClass.mk x = .mk y
@@ -1092,7 +1092,7 @@ theorem orderTop_eq_iff
 
 中文:
 定理 orderTop_eq_iff
-  条件: [IsOrderedAddMonoid R] [Archimedean R] (x y : f.val.domain)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] (x y : f.val.domain)
   证明: by
   obtain hsubsingleton | hnontrivial := subsingleton_or_nontrivial M
 · have : y = x := Subtype.ext hsubsingleton.allEq _ _
@@ -1132,7 +1132,7 @@ theorem orderTop_eq_archimedeanClassMk
 
 中文:
 定理 orderTop_eq_archimedeanClassMk
-  条件: [IsOrderedAddMonoid R] [Archimedean R] (x : f.val.domain)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] (x : f.val.domain)
   证明: by
   by_cases hx0 : x = 0
   · simp [hx0]
@@ -1176,7 +1176,7 @@ theorem orderTop_eq_finiteArchimedeanClassMk
 
 中文:
 定理 orderTop_eq_finiteArchimedeanClassMk
-  结论: [IsOrderedAddMonoid R] [Archimedean R]
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R]
   证明: by
   apply_fun FiniteArchimedeanClass.withTopOrderIso M
   simp [orderTop_eq_archimedeanClassMk]
@@ -1206,7 +1206,7 @@ theorem coeff_eq_zero_of_mem
 
 中文:
 定理 coeff_eq_zero_of_mem
-  结论: [IsOrderedAddMonoid R] [Archimedean R]
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R]
   证明: by
   obtain rfl | ne := eq_or_ne x 0
   · simp
@@ -1239,7 +1239,7 @@ theorem coeff_ne_zero
 
 中文:
 定理 coeff_ne_zero
-  条件: [IsOrderedAddMonoid R] [Archimedean R] {x : f.val.domain} (hx0 : x.val != 0)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] {x : f.val.domain} (hx0 : x.val != 0)
   证明: HahnSeries.coeff_orderTop_ne f.orderTop_eq_finiteArchimedeanClassMk hx0
 
 Depends on / 依赖: HahnSeries, HahnSeries.coeff_orderTop_ne, coeff_orderTop_ne, f.orderTop_eq_finiteArchimedeanClassMk, orderTop_eq_finiteArchimedeanClassMk
@@ -1266,7 +1266,7 @@ theorem coeff_eq_of_mem
 
 中文:
 定理 coeff_eq_of_mem
-  结论: [IsOrderedAddMonoid R] [Archimedean R] (x : M) {y z : f.val.domain}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] (x : M) {y z : f.val.domain}
   证明: by
   apply eq_of_sub_eq_zero
   rw [← HahnSeries.coeff_sub]; rw [← ofLex_sub]; rw [← LinearPMap.map_sub]
@@ -1349,7 +1349,7 @@ theorem evalCoeff_eq
 
 中文:
 定理 evalCoeff_eq
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M} {c : FiniteArchimedeanClass M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} {c : FiniteArchimedeanClass M}
   证明: by
   have hnonempty : exists y : f.val.domain, y.val - x in ball K c := ⟨y, hy⟩
   simpa [evalCoeff, dif_pos hnonempty] using coeff_eq_of_mem f x hnonempty.choose_spec hy le_rfl
@@ -1402,7 +1402,7 @@ theorem isWF_support_evalCoeff
 
 中文:
 定理 isWF_support_evalCoeff
-  条件: [IsOrderedAddMonoid R] [Archimedean R] (x : M)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] (x : M)
   证明: by
   rw [Set.isWF_iff_no_descending_seq]
   by_contra! ⟨seq, ⟨hanti, hmem⟩⟩
@@ -1450,7 +1450,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: [IsOrderedAddMonoid R] [Archimedean R] (x : M)
+  签名: [是OrderedAdd幺半群 R] [阿基米德 R] (x : M)
   定义体: toLex { coeff := f.evalCoeff x
           isPWO_support' := (f.isWF_support_evalCoeff x).isPWO }
 
@@ -1480,7 +1480,7 @@ theorem eval_zero
 
 中文:
 定理 eval_zero
-  条件: [IsOrderedAddMonoid R] [Archimedean R]
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R]
   结论: f.eval 0 = 0
   证明: by
   unfold eval
@@ -1517,7 +1517,7 @@ theorem eval_smul
 
 中文:
 定理 eval_smul
-  条件: [IsOrderedAddMonoid R] [Archimedean R] (k : K) (x : M)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] (k : K) (x : M)
   证明: by
   by_cases hk : k = 0
   · simp [hk]
@@ -1572,7 +1572,7 @@ theorem archimedeanClassMk_le_of_eval_eq
 
 中文:
 定理 archimedeanClassMk_le_of_eval_eq
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   have : x - y.val = x - z.val + (z.val - y.val) := by abel
   rw [this]
@@ -1651,7 +1651,7 @@ theorem eval_ne
 
 中文:
 定理 eval_ne
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   证明: by
   -- decompose `x - y = u + v`, where `v ∈ submodule (x - y)` and
   -- `u` is at higher class than `x - y`
@@ -1702,7 +1702,7 @@ theorem eval_eq_truncLT
 
 中文:
 定理 eval_eq_truncLT
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   unfold eval
   rw [toLex.injective.eq_iff]
@@ -1750,8 +1750,8 @@ theorem exists_sub_mem_ball
   exact f.eval_ne h _
 
 中文:
-定理 exists_sub_mem_ball
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+定理 存在_sub_mem_ball
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   证明: by
   set c := mk _ (val_sub_ne_zero f hx y)
   have hc : ArchimedeanClass.mk (y.val - x) = c := rfl
@@ -1791,7 +1791,7 @@ theorem eval_lt
 
 中文:
 定理 eval_lt
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   证明: by
   -- Expand the definition of `HahnSeries`' order. We need to find the first coefficient that
   -- dictates the < relation. This coefficient is exactly at the Archimedean class of `y - x`
@@ -1866,7 +1866,7 @@ definition extendFun
 
 中文:
 定义 extendFun
-  签名: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+  签名: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   定义体: .supSpanSingleton f.val x (eval f x) hx
 
 Depends on / 依赖: f.val, supSpanSingleton
@@ -1894,7 +1894,7 @@ theorem extendFun_strictMono
 
 中文:
 定理 extendFun_strictMono
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   have hx' {c : K} (hc : c != 0) : -c • x ∉ f.val.domain := by
     contrapose hx
@@ -1953,7 +1953,7 @@ exact le_trans f.prop.baseEmbedding_le LinearPMap.left_le_sup _ _ _
 
 中文:
 定理 baseEmbedding_le_extendFun
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   rw [extendFun]
 exact le_trans f.prop.baseEmbedding_le LinearPMap.left_le_sup _ _ _
@@ -1981,7 +1981,7 @@ theorem truncLT_eval_mem_range_extendFun
 
 中文:
 定理 truncLT_eval_mem_range_extendFun
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   rw [extendFun]; rw [LinearMap.mem_range]
   by_cases h : exists y : f.val.domain, y.val - x in ball K c
@@ -2043,7 +2043,7 @@ theorem truncLT_mem_range_extendFun
 
 中文:
 定理 truncLT_mem_range_extendFun
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: by
   obtain ⟨y', hy'⟩ := y
   rw [extendFun]; rw [LinearPMap.domain_supSpanSingleton] at hy'
@@ -2085,7 +2085,7 @@ theorem isPartial_extendFun
 
 中文:
 定理 isPartial_extendFun
-  结论: [IsOrderedAddMonoid R] [Archimedean R] {x : M}
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M}
   证明: f.extendFun_strictMono hx
   baseEmbedding_le := f.baseEmbedding_le_extendFun hx
   truncLT_mem_range := f.truncLT_mem_range_extendFun hx
@@ -2110,7 +2110,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+  签名: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   定义体: ⟨f.extendFun hx, f.isPartial_extendFun hx⟩
 
 Depends on / 依赖: extendFun, f.extendFun, f.isPartial_extendFun, isPartial_extendFun
@@ -2136,7 +2136,7 @@ theorem lt_extend
 
 中文:
 定理 lt_extend
-  条件: [IsOrderedAddMonoid R] [Archimedean R] {x : M} (hx : x ∉ f.val.domain)
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R] {x : M} (hx : x ∉ f.val.domain)
   证明: by
   apply lt_of_le_of_ne
   · change f.val <= (f.extend hx).val
@@ -2180,7 +2180,7 @@ definition sSupFun
 
 中文:
 定义 sSupFun
-  签名: {c : Set (Partial seed)} (hc : DirectedOn (· <= ·) c)
+  签名: {c : 集合 (Partial seed)} (hc : DirectedOn (· <= ·) c)
   定义体: LinearPMap.sSup ((·.val) '' c) (hc.mono_comp (by simp))
 
 Depends on / 依赖: LinearPMap, LinearPMap.sSup, hc.mono_comp, mono_comp
@@ -2207,7 +2207,7 @@ theorem sSupFun_strictMono
 
 中文:
 定理 sSupFun_strictMono
-  结论: [IsOrderedAddMonoid R] {c : Set (Partial seed)}
+  结论: [是OrderedAdd幺半群 R] {c : 集合 (Partial seed)}
   证明: by
   intro x y h
   apply lt_of_sub_pos
@@ -2249,7 +2249,7 @@ theorem le_sSupFun
 
 中文:
 定理 le_sSupFun
-  结论: {c : Set (Partial seed)} (hc : DirectedOn (· <= ·) c)
+  结论: {c : 集合 (Partial seed)} (hc : DirectedOn (· <= ·) c)
   证明: LinearPMap.le_sSup _ (Set.mem_image _ _ _).mpr ⟨f, hf, rfl⟩
 
 Depends on / 依赖: LinearPMap, LinearPMap.le_sSup, Set.mem_image, le_sSup, mem_image
@@ -2271,7 +2271,7 @@ theorem baseEmbedding_le_sSupFun
 
 中文:
 定理 baseEmbedding_le_sSupFun
-  结论: {c : Set (Partial seed)}
+  结论: {c : 集合 (Partial seed)}
   证明: by
   obtain ⟨f, hf⟩ := hnonempty
   exact le_trans f.prop.baseEmbedding_le (le_sSupFun hc hf)
@@ -2299,7 +2299,7 @@ theorem truncLT_mem_range_sSupFun
 
 中文:
 定理 truncLT_mem_range_sSupFun
-  结论: {c : Set (Partial seed)}
+  结论: {c : 集合 (Partial seed)}
   证明: by
   obtain hx := x.prop
   simp_rw [sSupFun, LinearPMap.domain_sSup] at hx
@@ -2343,7 +2343,7 @@ theorem isPartial_sSupFun
 
 中文:
 定理 isPartial_sSupFun
-  结论: [IsOrderedAddMonoid R]
+  结论: [是OrderedAdd幺半群 R]
   证明: sSupFun_strictMono hnonempty hc
   baseEmbedding_le := baseEmbedding_le_sSupFun hnonempty hc
   truncLT_mem_range := truncLT_mem_range_sSupFun hnonempty hc
@@ -2369,7 +2369,7 @@ definition sSup
 
 中文:
 定义 sSup
-  签名: [IsOrderedAddMonoid R] {c : Set (Partial seed)}
+  签名: [是OrderedAdd幺半群 R] {c : 集合 (Partial seed)}
   定义体: ⟨_, isPartial_sSupFun hnonempty hc⟩
 
 Depends on / 依赖: hnonempty, isPartial_sSupFun
@@ -2391,8 +2391,8 @@ theorem exists_isMax
   exact ⟨sSup hnonempty hc.directedOn, mem_upperBounds.mpr fun _ hf => le_sSupFun hc.directedOn hf⟩
 
 中文:
-定理 exists_isMax
-  条件: [IsOrderedAddMonoid R]
+定理 存在_isMax
+  条件: [是OrderedAdd幺半群 R]
   证明: by
   apply zorn_le_nonempty
   intro c hc hnonempty
@@ -2422,8 +2422,8 @@ theorem exists_domain_eq_top
   exact ⟨f.extend hx, f.lt_extend hx⟩
 
 中文:
-定理 exists_domain_eq_top
-  条件: [IsOrderedAddMonoid R] [Archimedean R]
+定理 存在_domain_eq_top
+  条件: [是OrderedAdd幺半群 R] [阿基米德 R]
   证明: by
   obtain ⟨f, hf⟩ := exists_isMax seed
   refine ⟨f, Submodule.eq_top_iff'.mpr ?_⟩
@@ -2464,7 +2464,7 @@ theorem hahnEmbedding_isOrderedModule
 
 中文:
 定理 hahnEmbedding_isOrderedModule
-  结论: [IsOrderedAddMonoid R] [Archimedean R]
+  结论: [是OrderedAdd幺半群 R] [阿基米德 R]
   证明: by
   obtain ⟨e, hdomain⟩ := HahnEmbedding.Partial.exists_domain_eq_top h.some
   obtain harch := e.orderTop_eq_archimedeanClassMk

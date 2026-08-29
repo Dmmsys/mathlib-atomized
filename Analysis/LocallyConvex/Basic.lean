@@ -72,7 +72,7 @@ definition Balanced
 
 中文:
 定义 Balanced
-  签名: (A : Set E)
+  签名: (A : 集合 E)
   定义体: forall a : 𝕜, ‖a‖ <= 1 -> a • A subseteq A
 
 Depends on / 依赖: subseteq
@@ -115,7 +115,7 @@ lemma Absorbs.exists_pos
   ⟨r, one_pos.trans_le hr₁, hr⟩
 
 中文:
-引理 Absorbs.exists_pos
+引理 Absorbs.存在_pos
   条件: (h : Absorbs 𝕜 A B)
   结论: 存在 r > 0, 对任意 c : 𝕜, r <= ‖c‖ -> B subseteq c • A
   证明: let ⟨r, hr₁, hr⟩ := (Filter.atTop_basis' 1).cobounded_of_norm.eventually_iff.1 h
@@ -188,7 +188,7 @@ theorem balanced_empty
 
 中文:
 定理 balanced_empty
-  结论: Balanced 𝕜 (∅ : Set E)
+  结论: Balanced 𝕜 (∅ : 集合 E)
   证明: fun _ _ => by rw [smul_set_empty]
 
 @[simp]
@@ -208,7 +208,7 @@ theorem balanced_univ
 
 中文:
 定理 balanced_univ
-  结论: Balanced 𝕜 (univ : Set E)
+  结论: Balanced 𝕜 (univ : 集合 E)
   证明: fun _a _ha => subset_univ _
 
 Depends on / 依赖: subset_univ
@@ -266,7 +266,7 @@ theorem balanced_iUnion
 
 中文:
 定理 balanced_iUnion
-  条件: {f : ι -> Set E} (h : 对任意 i, Balanced 𝕜 (f i))
+  条件: {f : ι -> 集合 E} (h : 对任意 i, Balanced 𝕜 (f i))
   结论: Balanced 𝕜 (⋃ i, f i)
   证明: fun _a ha => (smul_set_iUnion _ _).subset.trans iUnion_mono fun _ => h _ _ ha
 
@@ -285,7 +285,7 @@ theorem balanced_iUnion₂
 
 中文:
 定理 balanced_iUnion₂
-  条件: {f : 对任意 i, κ i -> Set E} (h : 对任意 i j, Balanced 𝕜 (f i j))
+  条件: {f : 对任意 i, κ i -> 集合 E} (h : 对任意 i j, Balanced 𝕜 (f i j))
   证明: balanced_iUnion fun _ => balanced_iUnion h _
 
 Depends on / 依赖: OrderDual, OrderDual.instHasSolidNorm, balanced_iUnion, instHasSolidNorm
@@ -304,8 +304,8 @@ theorem Balanced.sInter
   proof: fun _ _ => (smul_set_sInter_subset ..).trans (fun _ _ => by aesop)
 
 中文:
-定理 Balanced.sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, Balanced 𝕜 s)
+定理 Balanced.集合交集
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, Balanced 𝕜 s)
   结论: Balanced 𝕜 (⋂₀ S)
   证明: fun _ _ => (smul_set_sInter_subset ..).trans (fun _ _ => by aesop)
 
@@ -324,8 +324,8 @@ theorem balanced_iInter
   proof: fun _a ha => (smul_set_iInter_subset _ _).trans iInter_mono fun _ => h _ _ ha
 
 中文:
-定理 balanced_iInter
-  条件: {f : ι -> Set E} (h : 对任意 i, Balanced 𝕜 (f i))
+定理 balanced_i整数er
+  条件: {f : ι -> 集合 E} (h : 对任意 i, Balanced 𝕜 (f i))
   结论: Balanced 𝕜 (⋂ i, f i)
   证明: fun _a ha => (smul_set_iInter_subset _ _).trans iInter_mono fun _ => h _ _ ha
 
@@ -343,8 +343,8 @@ theorem balanced_iInter₂
   proof: balanced_iInter fun _ => balanced_iInter h _
 
 中文:
-定理 balanced_iInter₂
-  条件: {f : 对任意 i, κ i -> Set E} (h : 对任意 i j, Balanced 𝕜 (f i j))
+定理 balanced_i整数er₂
+  条件: {f : 对任意 i, κ i -> 集合 E} (h : 对任意 i j, Balanced 𝕜 (f i j))
   证明: balanced_iInter fun _ => balanced_iInter h _
 
 Depends on / 依赖: balanced_iInter
@@ -365,7 +365,7 @@ theorem Balanced.mulActionHom_preimage
 
 中文:
 定理 Balanced.mulActionHom_preimage
-  结论: [SMul 𝕜 F] {s : Set F} (hs : Balanced 𝕜 s)
+  结论: [标量乘法 𝕜 F] {s : 集合 F} (hs : Balanced 𝕜 s)
   证明: fun a ha x ⟨y,⟨hy₁,hy₂⟩⟩ => by
   rw [mem_preimage]; rw [← hy₂]; rw [map_smul]
   exact hs a ha (smul_mem_smul_set hy₁)
@@ -458,7 +458,7 @@ theorem Balanced.neg_mem_iff
 
 中文:
 定理 Balanced.neg_mem_iff
-  条件: [NormOneClass 𝕜] (h : Balanced 𝕜 s) {x : E}
+  条件: [NormOne类 𝕜] (h : Balanced 𝕜 s) {x : E}
   结论: -x in s ↔ x in s
   证明: ⟨fun hx => by simpa using h.smul_mem (a := -1) (by simp) hx,
     fun hx => by simpa using h.smul_mem (a := -1) (by simp) hx⟩
@@ -480,7 +480,7 @@ theorem Balanced.neg_eq
 
 中文:
 定理 Balanced.neg_eq
-  条件: [NormOneClass 𝕜] (h : Balanced 𝕜 s)
+  条件: [NormOne类 𝕜] (h : Balanced 𝕜 s)
   结论: -s = s
   证明: Set.ext fun _ => h.neg_mem_iff
 
@@ -544,7 +544,7 @@ theorem balanced_zero
 
 中文:
 定理 balanced_zero
-  结论: Balanced 𝕜 (0 : Set E)
+  结论: Balanced 𝕜 (0 : 集合 E)
   证明: fun _a _ha => (smul_zero _).subset
 
 Depends on / 依赖: smul_zero, subset
@@ -715,7 +715,7 @@ theorem Balanced.smul_mem_mono
 
 中文:
 定理 Balanced.smul_mem_mono
-  结论: [SMulCommClass 𝕝 𝕜 E] (hs : Balanced 𝕝 s) {b : 𝕝}
+  结论: [标量交换类 𝕝 𝕜 E] (hs : Balanced 𝕝 s) {b : 𝕝}
   证明: by
   rcases eq_or_ne a 0 with rfl | ha₀
   · simp_all
@@ -1014,7 +1014,7 @@ theorem Absorbent.eq_univ_of_smulMemClass
 
 中文:
 定理 Absorbent.eq_univ_of_smulMemClass
-  条件: {V : S} (hV : Absorbent 𝕜 (V : Set E))
+  条件: {V : S} (hV : Absorbent 𝕜 (V : 集合 E))
   证明: by
   rw [eq_univ_iff_forall]
   intro x
@@ -1045,7 +1045,7 @@ theorem Absorbent.submodule_eq_top
 
 中文:
 定理 Absorbent.submodule_eq_top
-  条件: {V : Submodule 𝕜 E} (hV : Absorbent 𝕜 (V : Set E))
+  条件: {V : 子模 𝕜 E} (hV : Absorbent 𝕜 (V : 集合 E))
   证明: (StrictMono.apply_eq_top_iff (α := Submodule 𝕜 E) (β := Set E) (fun _ _ a_1 => a_1)).mp
   hV.eq_univ_of_smulMemClass
 
@@ -1068,7 +1068,7 @@ theorem Absorbent.subset_range_iff_surjective
 
 中文:
 定理 Absorbent.subset_range_iff_surjective
-  结论: [RingHomSurjective σ] {f : F ->ₛₗ[σ] E} {s : Set E}
+  结论: [RingHomSurjective σ] {f : F ->ₛₗ[σ] E} {s : 集合 E}
   证明: ⟨fun hs_sub => LinearMap.range_eq_top.mp ((hs_abs.mono hs_sub).submodule_eq_top), fun h a _ => h a⟩
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_top.mp, hs_abs, hs_abs.mono, hs_sub, range_eq_top, submodule_eq_top
@@ -1098,7 +1098,7 @@ theorem balanced_iff_neg_mem
 
 中文:
 定理 balanced_iff_neg_mem
-  条件: (hs : Convex 实数 s)
+  条件: (hs : 凸 实数 s)
   结论: Balanced 实数 s ↔ 对任意 ⦃x⦄, x in s -> -x in s
   证明: by
   refine ⟨fun h x => h.neg_mem_iff.2, fun h a ha => smul_set_subset_iff.2 fun x hx => ?_⟩

@@ -57,10 +57,10 @@ class QuasiSeparated
     - quasiCompact_diagonal : QuasiCompact (pullback.diagonal f)  [default: by infer_instance]
 
 中文:
-类 QuasiSeparated
+类 拟分离
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - quasiCompact_diagonal : QuasiCompact (pullback.diagonal f)  [默认: by infer_instance]
+    - quasiCompact_diagonal : 拟紧 (pullback.diagonal f)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -87,8 +87,8 @@ theorem quasiSeparatedSpace_iff_forall_affineOpens
       by intro U V hU hU' hV hV'; exact this ⟨U,
 
 中文:
-定理 quasiSeparatedSpace_iff_forall_affineOpens
-  条件: {X : Scheme}
+定理 quasiSeparatedSpace_iff_对任意_affineOpens
+  条件: {X : 概形}
   证明: by
   rw [quasiSeparatedSpace_iff]
   constructor
@@ -144,7 +144,7 @@ theorem quasiCompact_affineProperty_iff_quasiSeparatedSpace
 
 中文:
 定理 quasiCompact_affineProperty_iff_quasiSeparatedSpace
-  条件: [IsAffine Y] (f : X ⟶ Y)
+  条件: [是仿射 Y] (f : X ⟶ Y)
   证明: by
   delta AffineTargetMorphismProperty.diagonal
   rw [quasiSeparatedSpace_iff_forall_affineOpens]
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAffine命题erty @QuasiSeparated (fun X _ _ _ => QuasiSeparatedSpace X)
+  签名: 有AffineProperty @拟分离 (fun X _ _ _ => 拟分离空间 X)
   定义体: HasAffineProperty.copy
     quasiSeparated_eq_diagonal_is_quasiCompact.symm
     (by ext; exact quasiCompact_affineProperty_iff_quasiSeparatedSpace _)
@@ -251,7 +251,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @QuasiSeparated
+  签名: MorphismProperty.是Multiplicative @拟分离
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @QuasiSeparated where
@@ -287,7 +287,7 @@ instance quasiSeparated_comp
 
 中文:
 实例 quasiSeparated_comp
-  签名: (f : X ⟶ Y) (g : Y ⟶ Z) [QuasiSeparated f]
+  签名: (f : X ⟶ Y) (g : Y ⟶ Z) [拟分离 f]
   定义体: MorphismProperty.comp_mem _ f g inferInstance inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -307,7 +307,7 @@ theorem quasiSeparatedSpace_iff_quasiSeparated
 
 中文:
 定理 quasiSeparatedSpace_iff_quasiSeparated
-  条件: (X : Scheme)
+  条件: (X : 概形)
   证明: (HasAffineProperty.iff_of_isAffine (P := @QuasiSeparated)).symm
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, QuasiSeparated, choose_spec, exists.choose_spec, iff_of_isAffine
@@ -373,8 +373,8 @@ lemma Scheme.Hom.isQuasiSeparated_preimage
     (quasiSeparatedSpace_of_quasiSeparated (f ∣_ U))
 
 中文:
-引理 Scheme.Hom.isQuasiSeparated_preimage
-  结论: [QuasiSeparated f] {U : Opens Y}
+引理 概形.态射.isQuasiSeparated_preimage
+  结论: [拟分离 f] {U : Opens Y}
   证明: by
   have : QuasiSeparatedSpace U := (isQuasiSeparated_iff_quasiSeparatedSpace _ U.2).mp hU
   exact (isQuasiSeparated_iff_quasiSeparatedSpace _ (f ⁻¹ᵁ U).2).mpr
@@ -398,7 +398,7 @@ instance quasiSeparatedSpace_of_isAffine
 
 中文:
 实例 quasiSeparatedSpace_of_isAffine
-  签名: (X : Scheme) [IsAffine X]
+  签名: (X : 概形) [是仿射 X]
   定义体: (quasiSeparatedSpace_congr X.isoSpec.hom.homeomorph).2 PrimeSpectrum.instQuasiSeparatedSpace
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.instQuasiSeparatedSpace, X.isoSpec.hom.homeomorph, homeomorph, instQuasiSeparatedSpace, isoSpec, quasiSeparatedSpace_congr
@@ -417,8 +417,8 @@ theorem IsAffineOpen.isQuasiSeparated
   exacts [@AlgebraicGeometry.quasiSeparatedSpace_of_isAffine _ hU, U.isOpen]
 
 中文:
-定理 IsAffineOpen.isQuasiSeparated
-  条件: {U : X.Opens} (hU : IsAffineOpen U)
+定理 是仿射开集.isQuasiSeparated
+  条件: {U : X.Opens} (hU : 是仿射开集 U)
   证明: by
   rw [isQuasiSeparated_iff_quasiSeparatedSpace]
   exacts [@AlgebraicGeometry.quasiSeparatedSpace_of_isAffine _ hU, U.isOpen]
@@ -440,8 +440,8 @@ instance [QuasiSeparatedSpace
   body: HasAffineProperty.iff_of_isAffine.mpr ‹_›
 
 中文:
-实例 [QuasiSeparatedSpace
-  签名: X] : QuasiSeparated X.toSpecΓ
+实例 [拟分离空间
+  签名: X] : 拟分离 X.toSpecΓ
   定义体: HasAffineProperty.iff_of_isAffine.mpr ‹_›
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine.mpr, iff_of_isAffine
@@ -464,7 +464,7 @@ theorem Scheme.quasiSeparatedSpace_of_isOpenCover
     (Scheme.openCove
 
 中文:
-定理 Scheme.quasiSeparatedSpace_of_isOpenCover
+定理 概形.quasiSeparatedSpace_of_isOpenCover
   证明: by
   let := HasAffineProperty.isLocal_affineProperty @QuasiCompact
   rw [← quasiCompact_affineProperty_iff_quasiSeparatedSpace X.toSpecΓ]
@@ -522,8 +522,8 @@ instance [QuasiSeparatedSpace
   rwa [← quasiSeparatedSpace_iff_quasiCompact_prod_lift]
 
 中文:
-实例 [QuasiSeparatedSpace
-  签名: X] : QuasiCompact (prod.lift (𝟙 X) (𝟙 X))
+实例 [拟分离空间
+  签名: X] : 拟紧 (乘积.lift (𝟙 X) (𝟙 X))
   定义体: by
   rwa [← quasiSeparatedSpace_iff_quasiCompact_prod_lift]
 
@@ -542,7 +542,7 @@ instance [QuasiSeparatedSpace
     (isPullback_equalizer_prod f g).flip inferInstance
 
 中文:
-实例 [QuasiSeparatedSpace
+实例 [拟分离空间
   签名: Y] (f g
   定义体: MorphismProperty.of_isPullback (P := @QuasiCompact)
     (isPullback_equalizer_prod f g).flip inferInstance
@@ -564,8 +564,8 @@ instance [CompactSpace
   simpa using QuasiCompact.isCompact_preimage (f := equalizer.ι f g) _ isOpen_univ isCompact_univ
 
 中文:
-实例 [CompactSpace
-  签名: X] [QuasiSeparatedSpace Y] (f g
+实例 [紧空间
+  签名: X] [拟分离空间 Y] (f g
   定义体: by
   constructor
   simpa using QuasiCompact.isCompact_preimage (f := equalizer.ι f g) _ isOpen_univ isCompact_univ
@@ -594,8 +594,8 @@ theorem QuasiSeparated.of_comp
   refine @quasiSepa
 
 中文:
-定理 QuasiSeparated.of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [QuasiSeparated (f ≫ g)]
+定理 拟分离.of_comp
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [拟分离 (f ≫ g)]
   证明: by
   let 𝒰 := (Z.affineCover.pullback₁ g).bind fun x => Scheme.affineCover _
   have (i : _) : IsAffine (𝒰.X i) := by dsimp [𝒰]; infer_instance
@@ -636,7 +636,7 @@ theorem quasiSeparated_iff_quasiSeparatedSpace
 
 中文:
 定理 quasiSeparated_iff_quasiSeparatedSpace
-  条件: (f : X ⟶ Y) [QuasiSeparatedSpace Y]
+  条件: (f : X ⟶ Y) [拟分离空间 Y]
   证明: ⟨fun _ => quasiSeparatedSpace_of_quasiSeparated f, fun _ => inferInstance⟩
 
 Depends on / 依赖: quasiSeparatedSpace_of_quasiSeparated
@@ -655,7 +655,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @QuasiSeparated ⊤
+  签名: MorphismProperty.有OfPostcompProperty @拟分离 ⊤
   定义体: .of_comp f g
 
 Depends on / 依赖: of_comp
@@ -674,7 +674,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @QuasiCompact @QuasiSeparated
+  签名: MorphismProperty.有OfPostcompProperty @拟紧 @拟分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     (by rw [quasiSeparated_eq_diagonal_is_quasiCompact])
 
@@ -693,8 +693,8 @@ lemma QuasiCompact.of_comp
   proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 中文:
-引理 QuasiCompact.of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [QuasiCompact (f ≫ g)] [QuasiSeparated g]
+引理 拟紧.of_comp
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [拟紧 (f ≫ g)] [拟分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -719,7 +719,7 @@ theorem quasiCompact_iff_compactSpace
 
 中文:
 定理 quasiCompact_iff_compactSpace
-  条件: (f : X ⟶ Y) [QuasiSeparatedSpace Y] [CompactSpace Y]
+  条件: (f : X ⟶ Y) [拟分离空间 Y] [紧空间 Y]
   证明: ⟨fun _ => QuasiCompact.compactSpace_of_compactSpace f, fun _ => inferInstance⟩
 
 Depends on / 依赖: QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, compactSpace_of_compactSpace
@@ -741,8 +741,8 @@ theorem exists_eq_pow_mul_of_isAffineOpen
   simpa [mul_comm x] using! d.symm
 
 中文:
-定理 exists_eq_pow_mul_of_isAffineOpen
-  结论: (X : Scheme) (U : X.Opens) (hU : IsAffineOpen U)
+定理 存在_eq_pow_mul_of_isAffineOpen
+  结论: (X : 概形) (U : X.Opens) (hU : 是仿射开集 U)
   证明: by
   have := (hU.isLocalization_basicOpen f).1.2
   obtain ⟨⟨y, _, n, rfl⟩, d⟩ := this x
@@ -774,8 +774,8 @@ theorem exists_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux_aux
   rw [e₁
 
 中文:
-定理 exists_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux_aux
-  结论: {X : TopCat.{u}}
+定理 存在_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux_aux
+  结论: {X : 顶元素范畴.{u}}
   证明: by
   apply_fun (fun x : F.obj (op U₅) => x |_ U₇) at e₁
   apply_fun (fun x : F.obj (op U₆) => x |_ U₇) at e₂
@@ -816,8 +816,8 @@ theorem exists_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux
     apply exists_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux_aux (e₁ := e₁)
 
 中文:
-定理 exists_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux
-  结论: (X : Scheme)
+定理 存在_eq_pow_mul_of_is_compact_of_quasi_separated_space_aux
+  结论: (X : 概形)
   证明: by
   obtain ⟨⟨_, n, rfl⟩, e⟩ :=
     (@IsLocalization.eq_iff_exists _ _ _ _ _ _
@@ -877,8 +877,8 @@ theorem exists_eq_pow_mul_of_isCompact_of_isQuasiSeparated
     exac
 
 中文:
-定理 exists_eq_pow_mul_of_isCompact_of_isQuasiSeparated
-  结论: (X : Scheme.{u}) (U : X.Opens)
+定理 存在_eq_pow_mul_of_isCompact_of_isQuasiSeparated
+  结论: (X : 概形.{u}) (U : X.Opens)
   证明: by
   dsimp only [TopCat.Presheaf.restrictOpenCommRingCat_apply]
   revert hU' f x
@@ -990,7 +990,7 @@ theorem isLocalization_basicOpen_of_qcqs
 
 中文:
 定理 isLocalization_basicOpen_of_qcqs
-  结论: {X : Scheme} {U : X.Opens} (hU : IsCompact U.1)
+  结论: {X : 概形} {U : X.Opens} (hU : 是紧集 U.1)
   证明: by
   constructor; constructor
   · rintro ⟨_, n, rfl⟩
@@ -1033,8 +1033,8 @@ lemma exists_of_res_eq_of_qcqs
   use n
 
 中文:
-引理 exists_of_res_eq_of_qcqs
-  结论: {X : Scheme.{u}} {U : TopologicalSpace.Opens X}
+引理 存在_of_res_eq_of_qcqs
+  结论: {X : 概形.{u}} {U : 拓扑空间.Opens X}
   证明: by
   obtain ⟨n, hc⟩ := (isLocalization_basicOpen_of_qcqs hU hU' s).exists_of_eq s hfg
   use n
@@ -1057,8 +1057,8 @@ lemma exists_of_res_eq_of_qcqs_of_top
   proof: exists_of_res_eq_of_qcqs (U := ⊤) CompactSpace.isCompact_univ isQuasiSeparated_univ hfg
 
 中文:
-引理 exists_of_res_eq_of_qcqs_of_top
-  结论: {X : Scheme.{u}} [CompactSpace X] [QuasiSeparatedSpace X]
+引理 存在_of_res_eq_of_qcqs_of_top
+  结论: {X : 概形.{u}} [紧空间 X] [拟分离空间 X]
   证明: exists_of_res_eq_of_qcqs (U := ⊤) CompactSpace.isCompact_univ isQuasiSeparated_univ hfg
 
 Depends on / 依赖: Classical, Classical.arbitrary, CompactSpace, CompactSpace.isCompact_univ, arbitrary, exists_of_res_eq_of_qcqs, isCompact_univ, isQuasiSeparated_univ
@@ -1081,8 +1081,8 @@ lemma exists_of_res_zero_of_qcqs
   simpa
 
 中文:
-引理 exists_of_res_zero_of_qcqs
-  结论: {X : Scheme.{u}} {U : TopologicalSpace.Opens X}
+引理 存在_of_res_zero_of_qcqs
+  结论: {X : 概形.{u}} {U : 拓扑空间.Opens X}
   证明: by
   suffices h : exists n, s ^ n * f = s ^ n * 0 by
     simpa using h
@@ -1109,8 +1109,8 @@ lemma exists_of_res_zero_of_qcqs_of_top
   proof: exists_of_res_zero_of_qcqs (U := ⊤) CompactSpace.isCompact_univ isQuasiSeparated_univ hf
 
 中文:
-引理 exists_of_res_zero_of_qcqs_of_top
-  结论: {X : Scheme} [CompactSpace X] [QuasiSeparatedSpace X]
+引理 存在_of_res_zero_of_qcqs_of_top
+  结论: {X : 概形} [紧空间 X] [拟分离空间 X]
   证明: exists_of_res_zero_of_qcqs (U := ⊤) CompactSpace.isCompact_univ isQuasiSeparated_univ hf
 
 Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ, exists_of_res_zero_of_qcqs, isCompact_univ, isQuasiSeparated_univ

@@ -41,8 +41,8 @@ definition Sieve.EffectiveEpimorphic
   body: Nonempty (IsColimit (S : Presieve X).cocone)
 
 中文:
-定义 Sieve.EffectiveEpimorphic
-  签名: {X : C} (S : Sieve X)
+定义 筛.EffectiveEpimorphic
+  签名: {X : C} (S : 筛 X)
   定义体: Nonempty (IsColimit (S : Presieve X).cocone)
 
 Depends on / 依赖: IsColimit, Nonempty, Presieve, cocone
@@ -80,7 +80,7 @@ definition Sieve.generateSingleton
     exact ⟨q ≫ e, by simp⟩
 
 中文:
-定义 Sieve.generateSingleton
+定义 筛.generateSingleton
   签名: {X Y : C} (f : Y ⟶ X)
   定义体: exists (e : Z ⟶ Y), e ≫ f = g
   downward_closed := by
@@ -108,7 +108,7 @@ lemma Sieve.generateSingleton_eq
     exact ⟨Y, g, f, ⟨⟩, h⟩
 
 中文:
-引理 Sieve.generateSingleton_eq
+引理 筛.generateSingleton_eq
   条件: {X Y : C} (f : Y ⟶ X)
   证明: by
   ext Z g
@@ -136,8 +136,8 @@ lemma Sieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda
   proof: S.forallYonedaIsSheaf_iff_colimit.symm
 
 中文:
-引理 Sieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda
-  条件: {X : C} (S : Sieve X)
+引理 筛.EffectiveEpimorphic.iff_对任意_isSheafFor_yoneda
+  条件: {X : C} (S : 筛 X)
   证明: S.forallYonedaIsSheaf_iff_colimit.symm
 
 Depends on / 依赖: S.forallYonedaIsSheaf_iff_colimit.symm, forallYonedaIsSheaf_iff_colimit
@@ -157,7 +157,7 @@ lemma Presieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda
     Presieve.EffectiveEpimorphic, Sieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda]
 
 中文:
-引理 Presieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda
+引理 Presieve.EffectiveEpimorphic.iff_对任意_isSheafFor_yoneda
   条件: {X : C} (R : Presieve X)
   证明: by
   simp_rw [Presieve.isSheafFor_iff_generate R,
@@ -349,7 +349,7 @@ theorem Sieve.effectiveEpimorphic_singleton
     apply Nonempty.map (isColimitOfEffectiveEpiStruct _) h
 
 中文:
-定理 Sieve.effectiveEpimorphic_singleton
+定理 筛.effectiveEpimorphic_singleton
   条件: {X Y : C} (f : Y ⟶ X)
   证明: by
   constructor
@@ -411,7 +411,7 @@ definition Sieve.generateFamily
     exact ⟨a, e ≫ q, by simp⟩
 
 中文:
-定义 Sieve.generateFamily
+定义 筛.generateFamily
   签名: {B : C} {α : 类型} (X : α -> C) (π : (a : α) -> (X a ⟶ B))
   定义体: exists (a : α) (g : Y ⟶ X a), g ≫ π a = f
   downward_closed := by
@@ -440,7 +440,7 @@ lemma Sieve.generateFamily_eq
     exact ⟨_, g, π a, ⟨a⟩, rfl⟩
 
 中文:
-引理 Sieve.generateFamily_eq
+引理 筛.generateFamily_eq
   条件: {B : C} {α : 类型} (X : α -> C) (π : (a : α) -> (X a ⟶ B))
   证明: by
   ext Y g
@@ -603,7 +603,7 @@ theorem Sieve.effectiveEpimorphic_family
     apply Nonempty.map (isColimitOfEffectiveEpiFamilyStruct _ _) 
 
 中文:
-定理 Sieve.effectiveEpimorphic_family
+定理 筛.effectiveEpimorphic_family
   结论: {B : C} {α : 类型}
   证明: by
   constructor

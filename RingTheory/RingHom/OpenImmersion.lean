@@ -35,10 +35,10 @@ class IsStandardOpenImmersion
     - exists_away((R S)) : exists r : R, IsLocalization.Away r S
 
 中文:
-类 IsStandardOpenImmersion
-  参数: (R S : 类型) [CommSemiring R] [CommSemiring S]
+类 是StandardOpenImmersion
+  参数: (R S : 类型) [交换半环 R] [交换半环 S]
   公理与运算 (1 个):
-    - exists_away((R S)) : 存在 r : R, IsLocalization.Away r S
+    - exists_away((R S)) : 存在 r : R, 是Localization.Away r S
 -/
 @[mk_iff] class IsStandardOpenImmersion (R S : Type*) [CommSemiring R] [CommSemiring S]
     [Algebra R S] : Prop where
@@ -64,7 +64,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: let ⟨r, _⟩ := exists_away R S
   let ⟨s, _⟩ := exists_away S T
   have : Away (algebraMap R S (sec r s).1) T :=
@@ -91,8 +91,8 @@ instance [IsStandardOpenImmersion
   ⟨algebraMap R S r, inferInstance⟩
 
 中文:
-实例 [IsStandardOpenImmersion
-  签名: R T] : IsStandardOpenImmersion S (S otimes[R] T)
+实例 [是StandardOpenImmersion
+  签名: R T] : 是StandardOpenImmersion S (S otimes[R] T)
   定义体: let ⟨r, _⟩ := exists_away R T
   ⟨algebraMap R S r, inferInstance⟩
 
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStandardOpenImmersion R R
+  签名: 是StandardOpenImmersion R R
   定义体: ⟨1, IsLocalization.away_of_isUnit_of_bijective R isUnit_one Function.bijective_id⟩
 
 Depends on / 依赖: Function, Function.bijective_id, IsLocalization, IsLocalization.away_of_isUnit_of_bijective, away_of_isUnit_of_bijective, bijective_id, isUnit_one
@@ -133,7 +133,7 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: (h : Function.Bijective (algebraMap R S))
+  条件: (h : 函数.双射 (algebraMap R S))
   证明: by
   rw [Algebra.isStandardOpenImmersion_iff]
   use 1
@@ -161,7 +161,7 @@ lemma of_algEquiv
 
 中文:
 引理 of_algEquiv
-  结论: {T : 类型} [CommSemiring T] [Algebra R T] (e : S ≃ₐ[R] T)
+  结论: {T : 类型} [交换半环 T] [代数 R T] (e : S ≃ₐ[R] T)
   证明: by
   rw [Algebra.isStandardOpenImmersion_iff] at *
   obtain ⟨r, hr⟩ := h
@@ -188,7 +188,7 @@ lemma iff_of_algEquiv
 
 中文:
 引理 iff_of_algEquiv
-  结论: {T : 类型} [CommSemiring T] [Algebra R T]
+  结论: {T : 类型} [交换半环 T] [代数 R T]
   证明: ⟨fun _ => .of_algEquiv e, fun _ => .of_algEquiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_algEquiv
@@ -210,7 +210,7 @@ lemma of_isPushout
 
 中文:
 引理 of_isPushout
-  结论: (R' S' : 类型) [CommSemiring R'] [CommSemiring S']
+  结论: (R' S' : 类型) [交换半环 R'] [交换半环 S']
   证明: have : IsPushout R R' S S' := by rwa [IsPushout.comm]
   .of_algEquiv (IsPushout.equiv R _ S _)
 
@@ -241,7 +241,7 @@ definition IsStandardOpenImmersion
   Algebra.IsStandardOpenImmersion R S
 
 中文:
-定义 IsStandardOpenImmersion
+定义 是StandardOpenImmersion
   签名: : 命题
   定义体: letI := f.toAlgebra
   Algebra.IsStandardOpenImmersion R S
@@ -263,7 +263,7 @@ lemma isStandardOpenImmersion_algebraMap
 
 中文:
 引理 isStandardOpenImmersion_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [IsStandardOpenImmersion]; rw [toAlgebra_algebraMap]
 
@@ -285,7 +285,7 @@ lemma algebraMap
 
 中文:
 引理 algebraMap
-  条件: [Algebra R S] (r : R) [IsLocalization.Away r S]
+  条件: [代数 R S] (r : R) [是Localization.Away r S]
   证明: isStandardOpenImmersion_algebraMap.2 ⟨r, inferInstance⟩
 -/
 protected lemma algebraMap [Algebra R S] (r : R) [IsLocalization.Away r S] :
@@ -302,7 +302,7 @@ lemma toAlgebra
 
 中文:
 引理 toAlgebra
-  条件: {f : R ->+* S} (hf : f.IsStandardOpenImmersion)
+  条件: {f : R ->+* S} (hf : f.是StandardOpenImmersion)
   证明: letI := f.toAlgebra; hf
 
 Depends on / 依赖: f.toAlgebra, toAlgebra
@@ -323,8 +323,8 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
-  结论: f.IsStandardOpenImmersion
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
+  结论: f.是StandardOpenImmersion
   证明: letI := f.toAlgebra
   ⟨1, IsLocalization.away_of_isUnit_of_bijective _ isUnit_one hf⟩
 
@@ -345,7 +345,7 @@ lemma id
 
 中文:
 引理 id
-  结论: (RingHom.id R).IsStandardOpenImmersion
+  结论: (环态射.id R).是StandardOpenImmersion
   证明: of_bijective Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id, of_bijective
@@ -368,7 +368,7 @@ lemma comp
 
 中文:
 引理 comp
-  条件: (hf : f.IsStandardOpenImmersion) (hg : g.IsStandardOpenImmersion)
+  条件: (hf : f.是StandardOpenImmersion) (hg : g.是StandardOpenImmersion)
   证明: by
   algebraize [f, g, g.comp f]
   obtain ⟨r, hr⟩ := hf
@@ -394,7 +394,7 @@ theorem containsIdentities
 
 中文:
 定理 containsIdentities
-  结论: ContainsIdentities.{u} IsStandardOpenImmersion
+  结论: 余ntainsIdentities.{u} 是StandardOpenImmersion
   证明: id
 -/
 theorem containsIdentities : ContainsIdentities.{u} IsStandardOpenImmersion := id
@@ -409,7 +409,7 @@ theorem stableUnderComposition
 
 中文:
 定理 stableUnderComposition
-  结论: StableUnderComposition.{u} IsStandardOpenImmersion
+  结论: StableUnderComposition.{u} 是StandardOpenImmersion
   证明: @comp
 -/
 theorem stableUnderComposition : StableUnderComposition.{u} IsStandardOpenImmersion := @comp
@@ -424,7 +424,7 @@ theorem respectsIso
 
 中文:
 定理 respectsIso
-  结论: RespectsIso.{u} IsStandardOpenImmersion
+  结论: RespectsIso.{u} 是StandardOpenImmersion
   证明: stableUnderComposition.respectsIso fun e => of_bijective e.bijective
 
 Depends on / 依赖: bijective, e.bijective, of_bijective, respectsIso, stableUnderComposition, stableUnderComposition.respectsIso
@@ -446,7 +446,7 @@ theorem isStableUnderBaseChange
 
 中文:
 定理 isStableUnderBaseChange
-  结论: IsStableUnderBaseChange.{u} IsStandardOpenImmersion
+  结论: 是StableUnderBaseChange.{u} 是StandardOpenImmersion
   证明: by
   refine .mk respectsIso ?_
   introv h
@@ -473,7 +473,7 @@ theorem holdsForLocalizationAway
 
 中文:
 定理 holdsForLocalizationAway
-  结论: HoldsForLocalizationAway.{u} IsStandardOpenImmersion
+  结论: HoldsForLocalizationAway.{u} 是StandardOpenImmersion
   证明: by
   introv R h
   exact .algebraMap r

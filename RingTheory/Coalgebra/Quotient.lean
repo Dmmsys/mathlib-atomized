@@ -47,11 +47,11 @@ class Submodule.IsCoideal
     - map_mkQ_comul_eq_zero : forall ⦃x : C⦄, x in I -> TensorProduct.map I.mkQ I.mkQ (comul x) = 0
 
 中文:
-类 Submodule.IsCoideal
-  参数: (I : Submodule R C)
+类 子模.是余ideal
+  参数: (I : 子模 R C)
   公理与运算 (2 个):
     - counit_eq_zero : 对任意 ⦃x : C⦄, x in I -> counit (R := R) x = 0
-    - map_mkQ_comul_eq_zero : 对任意 ⦃x : C⦄, x in I -> TensorProduct.map I.mkQ I.mkQ (comul x) = 0
+    - map_mkQ_comul_eq_zero : 对任意 ⦃x : C⦄, x in I -> 张量积.map I.mkQ I.mkQ (comul x) = 0
 -/
 class Submodule.IsCoideal (I : Submodule R C) : Prop where
   counit_eq_zero : forall ⦃x : C⦄, x in I -> counit (R := R) x = 0
@@ -69,8 +69,8 @@ lemma Submodule.isCoideal_iff_comul_mem
       (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective]
 
 中文:
-引理 Submodule.isCoideal_iff_comul_mem
-  条件: (I : Submodule R C)
+引理 子模.isCoideal_iff_comul_mem
+  条件: (I : 子模 R C)
   证明: by
   simp_rw [isCoideal_iff, ← LinearMap.mem_ker,
     TensorProduct.map_ker (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoalgebraStruct R (C ⧸ I)
+  签名: 余algebraStruct R (C ⧸ I)
   定义体: I.liftQ (map I.mkQ I.mkQ ∘ₗ comul) Submodule.IsCoideal.map_mkQ_comul_eq_zero
   counit := I.liftQ counit Submodule.IsCoideal.counit_eq_zero
 
@@ -162,7 +162,7 @@ lemma counit_mk
 中文:
 引理 counit_mk
   条件: (x : C)
-  结论: counit (R := R) (Submodule.Quotient.mk (p := I) x) = counit x
+  结论: counit (R := R) (子模.商.mk (p := I) x) = counit x
   证明: rfl
 
 @[simp]
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coalgebra R (C ⧸ I)
+  签名: 余algebra R (C ⧸ I)
   定义体: by
   constructor <;> ext : 1 <;>
     simp only [coassoc_simps, comul_comp_mkQ, counit_comp_mkQ]

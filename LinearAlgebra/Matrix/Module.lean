@@ -56,7 +56,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (N : Matrix ι ι R) (v : ι -> M)
+  条件: (N : 矩阵 ι ι R) (v : ι -> M)
   证明: rfl
 -/
 lemma smul_def (N : Matrix ι ι R) (v : ι -> M) :
@@ -76,7 +76,7 @@ lemma smul_def'
 
 中文:
 引理 smul_def'
-  条件: (N : Matrix ι ι R) (v : ι -> M)
+  条件: (N : 矩阵 ι ι R) (v : ι -> M)
   结论: N • v = ∑ j : ι, fun i => N i j • v j
   证明: by
   ext; simp [smul_def]
@@ -101,7 +101,7 @@ lemma smul_apply
 
 中文:
 引理 smul_apply
-  条件: (N : Matrix ι ι R) (v : ι -> M) (i : ι)
+  条件: (N : 矩阵 ι ι R) (v : ι -> M) (i : ι)
   证明: rfl
 
 @[simp]

@@ -83,7 +83,7 @@ lemma irreducible_mul_X_add
 
 中文:
 引理 irreducible_mul_X_add
-  结论: {n : 类型} {R : 类型} [CommRing R] [IsDomain R]
+  结论: {n : 类型} {R : 类型} [交换环 R] [是整环 R]
   证明: by
   classical
   let S := MvPolynomial { j // j != i } R
@@ -129,7 +129,7 @@ lemma irreducible_of_disjoint_support
 
 中文:
 引理 irreducible_of_disjoint_support
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   classical
   have hfd : f.coeff d != 0 := by simpa using hd
@@ -192,7 +192,7 @@ instance instModuleSelf
 
 中文:
 实例 instModuleSelf
-  签名: : Module R (MvPolynomial n R)
+  签名: : 模 R (多元多项式 n R)
   定义体: inferInstanceAs Module R (AddMonoidAlgebra R (n ->₀ Nat))
 
 Depends on / 依赖: AddMonoidAlgebra, Module
@@ -279,7 +279,7 @@ theorem irreducible_sumSMulX
 
 中文:
 定理 irreducible_sumSMulX
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   apply irreducible_of_totalDegree_eq_one
   · apply le_antisymm
@@ -353,7 +353,7 @@ theorem irreducible_sumSMulXSMulY
 
 中文:
 定理 irreducible_sumSMulXSMulY
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   classical
   let ι : n ↪ ((n oplus n) ->₀ Nat) :=

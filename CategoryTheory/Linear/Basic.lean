@@ -55,10 +55,10 @@ class Linear
     - comp_smul : forall (X Y Z : C) (f : X ⟶ Y) (r : R) (g : Y ⟶ Z), f ≫ (r • g) = r • f ≫ g  [default: by cat_disch]
 
 中文:
-类 Linear
-  参数: (R : Type w) [Semiring R] (C : 类型u) [Category.{v} C] [Preadditive C]
+类 线性
+  参数: (R : 类型 w) [半环 R] (C : 类型u) [范畴.{v} C] [预加性 C]
   公理与运算 (3 个):
-    - homModule : 对任意 X Y : C, Module R (X ⟶ Y)  [默认: by infer_instance]
+    - homModule : 对任意 X Y : C, 模 R (X ⟶ Y)  [默认: by infer_instance]
     - smul_comp : 对任意 (X Y Z : C) (r : R) (f : X ⟶ Y) (g : Y ⟶ Z), (r • f) ≫ g = r • f ≫ g  [默认: by cat_disch]
     - comp_smul : 对任意 (X Y Z : C) (f : X ⟶ Y) (r : R) (g : Y ⟶ Z), f ≫ (r • g) = r • f ≫ g  [默认: by cat_disch]
 
@@ -96,8 +96,8 @@ instance preadditiveNatLinear
   comp_smul _X _Y Z f r g := by exact (Preadditive.leftComp Z f).map_nsmul r g
 
 中文:
-实例 preadditiveNatLinear
-  签名: : Linear 自然数 C where
+实例 preadditive自然数Linear
+  签名: : 线性 自然数 C where
   定义体: by exact (Preadditive.rightComp X g).map_nsmul r f
   comp_smul _X _Y Z f r g := by exact (Preadditive.leftComp Z f).map_nsmul r g
 
@@ -117,8 +117,8 @@ instance preadditiveIntLinear
   comp_smul _X _Y Z f r g := by exact (Preadditive.leftComp Z f).map_zsmul r g
 
 中文:
-实例 preadditiveIntLinear
-  签名: : Linear 整数 C where
+实例 preadditive整数Linear
+  签名: : 线性 整数 C where
   定义体: by exact (Preadditive.rightComp X g).map_zsmul r f
   comp_smul _X _Y Z f r g := by exact (Preadditive.leftComp Z f).map_zsmul r g
 
@@ -141,8 +141,8 @@ instance [Semiring
   body: inferInstanceAs Module R (X ⟶ X)
 
 中文:
-实例 [Semiring
-  签名: R] [Linear R C] (X
+实例 [半环
+  签名: R] [线性 R C] (X
   定义体: inferInstanceAs Module R (X ⟶ X)
 
 Depends on / 依赖: Module
@@ -159,8 +159,8 @@ instance [CommSemiring
   body: Algebra.ofModule (fun _ _ _ => comp_smul _ _ _ _ _ _) fun _ _ _ => smul_comp _ _ _ _ _ _
 
 中文:
-实例 [CommSemiring
-  签名: R] [Linear R C] (X
+实例 [交换半环
+  签名: R] [线性 R C] (X
   定义体: Algebra.ofModule (fun _ _ _ => comp_smul _ _ _ _ _ _) fun _ _ _ => smul_comp _ _ _ _ _ _
 
 Depends on / 依赖: Algebra, Algebra.ofModule, comp_smul, ofModule, smul_comp
@@ -192,7 +192,7 @@ instance inducedCategory
 
 中文:
 实例 inducedCategory
-  签名: : Linear.{w, v} R (InducedCategory C F) where
+  签名: : 线性.{w, v} R (InducedCategory C F) where
   定义体: Equiv.module _ InducedCategory.homEquiv
   smul_comp _ _ _ _ _ _ := by ext; apply smul_comp
   comp_smul _ _ _ _ _ _ := by ext; apply comp_smul
@@ -217,7 +217,7 @@ definition _root_.CategoryTheory.InducedCategory.homLinearEquiv
   map_smul' := by cat_disch
 
 中文:
-定义 _root_.CategoryTheory.InducedCategory.homLinearEquiv
+定义 _root_.范畴论.InducedCategory.homLinearEquiv
   定义体: InducedCategory.homAddEquiv
   map_smul' := by cat_disch
 
@@ -241,7 +241,7 @@ instance fullSubcategory
 
 中文:
 实例 fullSubcategory
-  签名: (Z : Object命题erty C)
+  签名: (Z : ObjectProperty C)
   定义体: inducedCategory _
 
 Depends on / 依赖: inducedCategory
@@ -326,7 +326,7 @@ definition homCongr
 
 中文:
 定义 homCongr
-  签名: (k : 类型) {C : 类型} [Category* C] [Semiring k] [Preadditive C] [Linear k C]
+  签名: (k : 类型) {C : 类型} [范畴* C] [半环 k] [预加性 C] [线性 k C]
   定义体: {
     (rightComp k Y f₂.hom).comp
       (leftComp k W
@@ -364,7 +364,7 @@ theorem homCongr_apply
 
 中文:
 定理 homCongr_apply
-  结论: (k : 类型) {C : 类型} [Category* C] [Semiring k] [Preadditive C]
+  结论: (k : 类型) {C : 类型} [范畴* C] [半环 k] [预加性 C]
   证明: rfl
 -/
 theorem homCongr_apply (k : Type*) {C : Type*} [Category* C] [Semiring k] [Preadditive C]
@@ -382,7 +382,7 @@ theorem homCongr_symm_apply
 
 中文:
 定理 homCongr_symm_apply
-  结论: (k : 类型) {C : 类型} [Category* C] [Semiring k] [Preadditive C]
+  结论: (k : 类型) {C : 类型} [范畴* C] [半环 k] [预加性 C]
   证明: rfl
 -/
 theorem homCongr_symm_apply (k : Type*) {C : Type*} [Category* C] [Semiring k] [Preadditive C]

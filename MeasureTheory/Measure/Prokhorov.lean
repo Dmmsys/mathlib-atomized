@@ -80,7 +80,7 @@ theorem isCompact_setOfPred_finiteMeasure_le_of_compactSpace
 
 中文:
 定理 isCompact_setOfPred_finiteMeasure_le_of_compactSpace
-  条件: [CompactSpace E] (C : 实数>=0)
+  条件: [紧空间 E] (C : 实数>=0)
   证明: by
   /- To prove the compactness, we will show that any sequence has a converging subsequence, in
   ultrafilters terms as things are not second countable. The integral against any bounded continuous
@@ -197,7 +197,7 @@ alias isCo
 
 中文:
 引理 isCompact_setOfPred_finiteMeasure_eq_of_compactSpace
-  条件: [CompactSpace E] (C : 实数>=0)
+  条件: [紧空间 E] (C : 实数>=0)
   证明: by
   have : {μ : FiniteMeasure E | μ.mass = C} = {μ | μ.mass <= C} inter {μ | μ.mass = C} := by grind
   rw [this]
@@ -232,8 +232,8 @@ instance [CompactSpace
   simpa using isCompact_setOfPred_finiteMeasure_eq_of_compactSpace E 1
 
 中文:
-实例 [CompactSpace
-  签名: E] : CompactSpace (ProbabilityMeasure E)
+实例 [紧空间
+  签名: E] : 紧空间 (概率测度 E)
   定义体: by
   constructor
   apply (ProbabilityMeasure.toFiniteMeasure_isEmbedding E).isCompact_iff.2
@@ -694,7 +694,7 @@ lemma isCompact_closure_of_isTightMeasureSet
 
 中文:
 引理 isCompact_closure_of_isTightMeasureSet
-  结论: {S : Set (ProbabilityMeasure E)}
+  结论: {S : 集合 (概率测度 E)}
   证明: by
   obtain ⟨u, -, u_pos, u_lim⟩ :
       exists u : Nat -> Real>=0, StrictAnti u ∧ (forall n, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
@@ -760,7 +760,7 @@ lemma exists_measure_iUnion_gt_of_isCompact_closure
       ← NNReal.coe
 
 中文:
-引理 exists_measure_iUnion_gt_of_isCompact_closure
+引理 存在_measure_iUnion_gt_of_isCompact_closure
   证明: by
   have εfin : ε != ∞ := ne_top_of_le_ne_top (by simp) hεbound
   lift ε to Real>=0 using εfin
@@ -845,7 +845,7 @@ theorem isTightMeasureSet_of_isCompact_closure
 
 中文:
 定理 isTightMeasureSet_of_isCompact_closure
-  条件: (hcomp : IsCompact (closure S))
+  条件: (hcomp : 是紧集 (closure S))
   证明: by
   rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le]
   rcases isEmpty_or_nonempty 𝓧 with hempty | hnonempty

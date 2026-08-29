@@ -43,7 +43,7 @@ definition IsChord
 
 中文:
 定义 IsChord
-  签名: (p : G.Walk u v) (e : Sym2 V)
+  签名: (p : G.途径 u v) (e : Sym2 V)
   定义体: e in G.edgeSet ∧ e ∉ p.edges ∧
     e.lift ⟨fun v w => v in p.support ∧ w in p.support, by grind⟩
 
@@ -63,7 +63,7 @@ theorem isChord_sym2Mk
 
 中文:
 定理 isChord_sym2Mk
-  条件: {p : G.Walk u v} {u' v' : V}
+  条件: {p : G.途径 u v} {u' v' : V}
   证明: .rfl
 -/
 theorem isChord_sym2Mk {p : G.Walk u v} {u' v' : V} :
@@ -82,7 +82,7 @@ definition IsChordless
 
 中文:
 定义 IsChordless
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: forall ⦃e : Sym2 V⦄, ¬ p.IsChord e
 
 Depends on / 依赖: IsChord, p.IsChord
@@ -100,8 +100,8 @@ theorem isChordless_iff_forall_mem_edges
   simp [IsChordless, Sym2.forall, isChord_sym2Mk]; grind
 
 中文:
-定理 isChordless_iff_forall_mem_edges
-  条件: {p : G.Walk u v}
+定理 isChordless_iff_对任意_mem_edges
+  条件: {p : G.途径 u v}
   证明: by
   simp [IsChordless, Sym2.forall, isChord_sym2Mk]; grind
 
@@ -122,7 +122,7 @@ theorem IsChordless.mem_edges
 
 中文:
 定理 IsChordless.mem_edges
-  结论: {p : G.Walk u v} (h : p.IsChordless) {u' v' : V}
+  结论: {p : G.途径 u v} (h : p.IsChordless) {u' v' : V}
   证明: isChordless_iff_forall_mem_edges.mp h hu' hv' hadj
 
 Depends on / 依赖: isChordless_iff_forall_mem_edges, isChordless_iff_forall_mem_edges.mp
@@ -142,8 +142,8 @@ theorem _root_.SimpleGraph.Adj.isChordless_toWalk
   grind [isChordless_iff_forall_mem_edges, h.support_toWalk, h.edges_toWalk, Adj.ne]
 
 中文:
-定理 _root_.SimpleGraph.Adj.isChordless_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.isChordless_toWalk
+  条件: (h : G.伴随 u v)
   结论: h.toWalk.IsChordless
   证明: by
   grind [isChordless_iff_forall_mem_edges, h.support_toWalk, h.edges_toWalk, Adj.ne]

@@ -40,7 +40,7 @@ lemma mk_biUnion_le_of_le_lift
 
 中文:
 引理 mk_biUnion_le_of_le_lift
-  结论: {β : 类型v} {o : Ordinal.{u}} {c : Cardinal.{v}}
+  结论: {β : 类型v} {o : 序数.{u}} {c : 基数.{v}}
   证明: by
   simp_rw [← mem_Iio, biUnion_eq_iUnion, iUnion, iSup, ← ToType.mk.symm.surjective.range_comp]
   rw [← lift_le.{u}]
@@ -81,7 +81,7 @@ alias mk_iUnion_Ordinal_le_of_le := mk_biUnion_le_of_le
 
 中文:
 引理 mk_biUnion_le_of_le
-  结论: {β : 类型} {o : Ordinal} {c : Cardinal}
+  结论: {β : 类型} {o : 序数} {c : 基数}
   证明: by
   apply mk_biUnion_le_of_le_lift _ hc A hA
   rwa [Cardinal.lift_le]
@@ -122,7 +122,7 @@ theorem lift_card_iSup_le_sum_card
 
 中文:
 定理 lift_card_iSup_le_sum_card
-  条件: {ι : 类型u} (f : ι -> Ordinal.{v})
+  条件: {ι : 类型u} (f : ι -> 序数.{v})
   证明: by
   by_cases! hf : ¬ BddAbove (range f)
   · simp [ciSup_of_not_bddAbove hf]
@@ -158,7 +158,7 @@ theorem card_iSup_le_sum_card
 
 中文:
 定理 card_iSup_le_sum_card
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
   证明: by
   have := lift_card_iSup_le_sum_card f
   rwa [Cardinal.lift_id'] at this
@@ -182,7 +182,7 @@ theorem card_iSup_Iio_le_sum_card
 
 中文:
 定理 card_iSup_Iio_le_sum_card
-  条件: {o : Ordinal.{u}} (f : Iio o -> Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 左无界右开区间 o -> 序数.{最大值 u v})
   证明: by
   apply le_of_eq_of_le (congr_arg _ _).symm (card_iSup_le_sum_card _)
   simpa using ToType.mk.symm.iSup_comp (g := fun x => f x)
@@ -208,7 +208,7 @@ theorem card_iSup_Iio_le_card_mul_iSup
 
 中文:
 定理 card_iSup_Iio_le_card_mul_iSup
-  条件: {o : Ordinal.{u}} (f : Iio o -> Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 左无界右开区间 o -> 序数.{最大值 u v})
   证明: by
   apply (card_iSup_Iio_le_sum_card f).trans
   convert! ← sum_le_lift_mk_mul_iSup _
@@ -242,7 +242,7 @@ theorem card_iSup_le_lift
 
 中文:
 定理 card_iSup_le_lift
-  结论: {ι : 类型u} {c : Cardinal} {f : ι -> Ordinal.{v}}
+  结论: {ι : 类型u} {c : 基数} {f : ι -> 序数.{v}}
   证明: by
   by_cases! hc : c < ℵ₀
   · obtain ⟨n, rfl⟩ := lt_aleph0.1 hc
@@ -281,7 +281,7 @@ theorem card_iSup_le
 
 中文:
 定理 card_iSup_le
-  结论: {ι : 类型} {c : Cardinal} {f : ι -> Ordinal}
+  结论: {ι : 类型} {c : 基数} {f : ι -> 序数}
   证明: by
   rw [← Cardinal.lift_le] at hι
   simpa using card_iSup_le_lift hι hf
@@ -307,7 +307,7 @@ theorem card_iSup_Iio_le_of_lift
 
 中文:
 定理 card_iSup_Iio_le_of_lift
-  结论: {o : Ordinal.{u}} {c : Cardinal} {f : Iio o -> Ordinal.{v}}
+  结论: {o : 序数.{u}} {c : 基数} {f : 左无界右开区间 o -> 序数.{v}}
   证明: by
   apply card_iSup_le_lift _ hf
   conv_rhs => rw [← Cardinal.lift_lift.{u, u + 1}]
@@ -336,7 +336,7 @@ theorem card_iSup_Iio_le
 
 中文:
 定理 card_iSup_Iio_le
-  结论: {o : Ordinal} {c : Cardinal} {f : Iio o -> Ordinal}
+  结论: {o : 序数} {c : 基数} {f : 左无界右开区间 o -> 序数}
   证明: by
   rw [← Cardinal.lift_le] at hι
   simpa using card_iSup_Iio_le_of_lift hι hf
@@ -362,7 +362,7 @@ theorem card_sSup_le
 
 中文:
 定理 card_sSup_le
-  结论: {c : Cardinal} {s : Set Ordinal.{u}}
+  结论: {c : 基数} {s : 集合 序数.{u}}
   证明: by
   rw [sSup_eq_iSup']
   apply card_iSup_le_lift
@@ -395,7 +395,7 @@ theorem card_opow_le_of_omega0_le_left
 
 中文:
 定理 card_opow_le_of_omega0_le_left
-  条件: {a : Ordinal} (ha : ω <= a) (b : Ordinal)
+  条件: {a : 序数} (ha : ω <= a) (b : 序数)
   证明: by
   induction b using limitRecOn with
   | zero => simpa using one_lt_omega0.le.trans ha
@@ -440,7 +440,7 @@ theorem card_opow_le_of_omega0_le_right
 
 中文:
 定理 card_opow_le_of_omega0_le_right
-  条件: (a : Ordinal) {b : Ordinal} (hb : ω <= b)
+  条件: (a : 序数) {b : 序数} (hb : ω <= b)
   证明: by
   obtain ⟨n, rfl⟩ | ha := eq_natCast_or_omega0_le a
   · apply (card_le_card <| opow_le_opow_left b (natCast_lt_omega0 n).le).trans
@@ -475,8 +475,8 @@ theorem card_opow_le
 
 中文:
 定理 card_opow_le
-  条件: (a b : Ordinal)
-  结论: (a ^ b).card <= max ℵ₀ (max a.card b.card)
+  条件: (a b : 序数)
+  结论: (a ^ b).card <= 最大值 ℵ₀ (最大值 a.card b.card)
   证明: by
   obtain ⟨n, rfl⟩ | ha := eq_natCast_or_omega0_le a
   · obtain ⟨m, rfl⟩ | hb := eq_natCast_or_omega0_le b
@@ -508,7 +508,7 @@ theorem card_opow_eq_of_omega0_le_left
 
 中文:
 定理 card_opow_eq_of_omega0_le_left
-  条件: {a b : Ordinal} (ha : ω <= a) (hb : 0 < b)
+  条件: {a b : 序数} (ha : ω <= a) (hb : 0 < b)
   证明: by
   apply (card_opow_le_of_omega0_le_left ha b).antisymm (max_le _ _) <;> apply card_le_card
   · exact left_le_opow a hb
@@ -535,7 +535,7 @@ theorem card_opow_eq_of_omega0_le_right
 
 中文:
 定理 card_opow_eq_of_omega0_le_right
-  条件: {a b : Ordinal} (ha : 1 < a) (hb : ω <= b)
+  条件: {a b : 序数} (ha : 1 < a) (hb : ω <= b)
   证明: by
   apply (card_opow_le_of_omega0_le_right a hb).antisymm (max_le _ _) <;> apply card_le_card
   · exact left_le_opow a (omega0_pos.trans_le hb)
@@ -561,8 +561,8 @@ theorem card_omega0_opow
 
 中文:
 定理 card_omega0_opow
-  条件: {a : Ordinal} (h : a != 0)
-  结论: card (ω ^ a) = max ℵ₀ a.card
+  条件: {a : 序数} (h : a != 0)
+  结论: card (ω ^ a) = 最大值 ℵ₀ a.card
   证明: by
   rw [card_opow_eq_of_omega0_le_left le_rfl h.bot_lt]; rw [card_omega0]
 
@@ -583,8 +583,8 @@ theorem card_opow_omega0
 
 中文:
 定理 card_opow_omega0
-  条件: {a : Ordinal} (h : 1 < a)
-  结论: card (a ^ ω) = max ℵ₀ a.card
+  条件: {a : 序数} (h : 1 < a)
+  结论: card (a ^ ω) = 最大值 ℵ₀ a.card
   证明: by
   rw [card_opow_eq_of_omega0_le_right h le_rfl]; rw [card_omega0]; rw [max_comm]
 
@@ -613,8 +613,8 @@ theorem isPrincipal_opow_omega
 
 中文:
 定理 isPrincipal_opow_omega
-  条件: (o : Ordinal)
-  结论: IsPrincipal (· ^ ·) (ω_ o)
+  条件: (o : 序数)
+  结论: 是Principal (· ^ ·) (ω_ o)
   证明: by
   obtain rfl | ho := eq_zero_or_pos o
   · rw [omega_zero]
@@ -653,7 +653,7 @@ theorem IsInitial.isPrincipal_opow
 
 中文:
 定理 IsInitial.isPrincipal_opow
-  条件: {o : Ordinal} (h : IsInitial o) (ho : ω <= o)
+  条件: {o : 序数} (h : IsInitial o) (ho : ω <= o)
   证明: by
   obtain ⟨a, rfl⟩ := mem_range_omega_iff.2 ⟨ho, h⟩
   exact isPrincipal_opow_omega a
@@ -684,8 +684,8 @@ theorem isPrincipal_opow_ord
 
 中文:
 定理 isPrincipal_opow_ord
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
-  结论: IsPrincipal (· ^ ·) c.ord
+  条件: {c : 基数} (hc : ℵ₀ <= c)
+  结论: 是Principal (· ^ ·) c.ord
   证明: by
   apply (isInitial_ord c).isPrincipal_opow
   rwa [omega0_le_ord]
@@ -717,8 +717,8 @@ theorem isPrincipal_add_ord
 
 中文:
 定理 isPrincipal_add_ord
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
-  结论: IsPrincipal (· + ·) c.ord
+  条件: {c : 基数} (hc : ℵ₀ <= c)
+  结论: 是Principal (· + ·) c.ord
   证明: by
   intro a b ha hb
   rw [lt_ord]; rw [card_add] at *
@@ -750,7 +750,7 @@ theorem IsInitial.isPrincipal_add
 
 中文:
 定理 IsInitial.isPrincipal_add
-  条件: {o : Ordinal} (h : IsInitial o) (ho : ω <= o)
+  条件: {o : 序数} (h : IsInitial o) (ho : ω <= o)
   证明: by
   rw [← h.ord_card]
   apply isPrincipal_add_ord
@@ -781,8 +781,8 @@ theorem isPrincipal_add_omega
 
 中文:
 定理 isPrincipal_add_omega
-  条件: (o : Ordinal)
-  结论: IsPrincipal (· + ·) (ω_ o)
+  条件: (o : 序数)
+  结论: 是Principal (· + ·) (ω_ o)
   证明: (isInitial_omega o).isPrincipal_add (omega0_le_omega o)
 
 @[deprecated (since := "2026-03-18")] alias principal_add_omega := isPrincipal_add_omega
@@ -810,8 +810,8 @@ theorem isPrincipal_mul_ord
 
 中文:
 定理 isPrincipal_mul_ord
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
-  结论: IsPrincipal (· * ·) c.ord
+  条件: {c : 基数} (hc : ℵ₀ <= c)
+  结论: 是Principal (· * ·) c.ord
   证明: by
   intro a b ha hb
   rw [lt_ord]; rw [card_mul] at *
@@ -843,7 +843,7 @@ theorem IsInitial.isPrincipal_mul
 
 中文:
 定理 IsInitial.isPrincipal_mul
-  条件: {o : Ordinal} (h : IsInitial o) (ho : ω <= o)
+  条件: {o : 序数} (h : IsInitial o) (ho : ω <= o)
   证明: by
   rw [← h.ord_card]
   apply isPrincipal_mul_ord
@@ -874,8 +874,8 @@ theorem isPrincipal_mul_omega
 
 中文:
 定理 isPrincipal_mul_omega
-  条件: (o : Ordinal)
-  结论: IsPrincipal (· * ·) (ω_ o)
+  条件: (o : 序数)
+  结论: 是Principal (· * ·) (ω_ o)
   证明: (isInitial_omega o).isPrincipal_mul (omega0_le_omega o)
 
 @[deprecated (since := "2026-03-18")] alias principal_mul_omega := isPrincipal_mul_omega

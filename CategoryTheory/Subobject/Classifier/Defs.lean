@@ -83,16 +83,16 @@ structure Classifier
 
 中文:
 结构 Classifier
-  参数: (C : 类型u) [Category.{v} C]
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (8 个):
     - Ω₀ : C
     - Ω : C
     - truth : Ω₀ ⟶ Ω
-    - mono_truth : Mono truth  [默认: by infer_instance]
+    - mono_truth : 单态射 truth  [默认: by infer_instance]
     - χ₀((U : C)) : U ⟶ Ω₀
-    - χ({U X : C} (m : U ⟶ X) [Mono m]) : X ⟶ Ω
-    - isPullback({U X : C} (m : U ⟶ X) [Mono m]) : IsPullback m (χ₀ U) (χ m) truth
-    - uniq({U X : C} (m : U ⟶ X) [Mono m] {χ₀' : U ⟶ Ω₀} {χ' : X ⟶ Ω} (hχ' : IsPullback m χ₀' χ' truth)) : χ' = χ m
+    - χ({U X : C} (m : U ⟶ X) [单态射 m]) : X ⟶ Ω
+    - isPullback({U X : C} (m : U ⟶ X) [单态射 m]) : 是拉回 m (χ₀ U) (χ m) truth
+    - uniq({U X : C} (m : U ⟶ X) [单态射 m] {χ₀' : U ⟶ Ω₀} {χ' : X ⟶ Ω} (hχ' : 是拉回 m χ₀' χ' truth)) : χ' = χ m
 
 Depends on / 依赖: infer_instance
 -/
@@ -255,10 +255,10 @@ class HasSubobjectClassifier
     - exists_classifier : Nonempty (Subobject.Classifier C)
 
 中文:
-类 HasSubobjectClassifier
-  参数: (C : 类型u) [Category.{v} C]
+类 有SubobjectClassifier
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - exists_classifier : Nonempty (Subobject.Classifier C)
+    - exists_classifier : 非空 (Subobject.Classifier C)
 -/
 class HasSubobjectClassifier (C : Type u) [Category.{v} C] : Prop where
   /-- There is some classifier. -/
@@ -394,7 +394,7 @@ alias _root_.CategoryTheory.HasClassifier.isPullback_χ := isPullback_χ
 
 中文:
 引理 isPullback_χ
-  结论: IsPullback m (Classifier.χ₀ _ U) (χ m) (truth C)
+  结论: 是拉回 m (Classifier.χ₀ _ U) (χ m) (truth C)
   证明: Classifier.isPullback _ m
 
 @[deprecated (since := "2026-03-06")]
@@ -458,7 +458,7 @@ alias _root_.CategoryTheory.HasClassifier.unique := unique
 
 中文:
 引理 unique
-  条件: (χ' : X ⟶ Ω C) (hχ' : IsPullback m (Classifier.χ₀ _ U) χ' (truth C))
+  条件: (χ' : X ⟶ Ω C) (hχ' : 是拉回 m (Classifier.χ₀ _ U) χ' (truth C))
   结论: χ' = χ m
   证明: Classifier.uniq _ m hχ'
 
@@ -486,7 +486,7 @@ alias _root_.CategoryTheory.HasClassifier.truthIsSplitMono := truthIsSplitMono
 
 中文:
 实例 truthIsSplitMono
-  签名: : IsSplitMono (truth C)
+  签名: : 是分裂单态射 (truth C)
   定义体: Subobject.Classifier.isTerminalΩ₀.isSplitMono_from _
 
 @[deprecated (since := "2026-03-06")]
@@ -513,7 +513,7 @@ alias _root_.CategoryTheory.HasClassifier.truthIsRegularMono := truthIsRegularMo
 
 中文:
 定义 truthIsRegularMono
-  签名: : RegularMono (truth C)
+  签名: : 正则单态射 (truth C)
   定义体: RegularMono.ofIsSplitMono (truth C)
 
 @[deprecated (since := "2026-03-06")]
@@ -537,7 +537,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularMono (truth C)
+  签名: 是正则单态射 (truth C)
   定义体: ⟨⟨truthIsRegularMono⟩⟩
 
 Depends on / 依赖: truthIsRegularMono
@@ -558,7 +558,7 @@ alias _root_.CategoryTheory.HasClassifier.isRegularMonoCategory := isRegularMono
 
 中文:
 实例 isRegularMonoCategory
-  签名: : IsRegularMonoCategory C where
+  签名: : 是正则单态射范畴 C where
   定义体: fun m => ⟨⟨regularOfIsPullbackFstOfRegular truthIsRegularMono
       (isPullback_χ m).w (isPullback_χ m).isLimit⟩⟩
 
@@ -588,7 +588,7 @@ alias _root_.CategoryTheory.HasClassifier.reflectsIsomorphisms := reflectsIsomor
 
 中文:
 实例 reflectsIsomorphisms
-  签名: (D : 类型u₀) [Category.{v₀} D] (F : C ⥤ D) [Functor.Faithful F]
+  签名: (D : 类型u₀) [范畴.{v₀} D] (F : C ⥤ D) [函子.忠实 F]
   定义体: reflectsIsomorphisms_of_reflectsMonomorphisms_of_reflectsEpimorphisms F
 
 @[deprecated (since := "2026-03-06")]
@@ -616,7 +616,7 @@ alias _root_.CategoryTheory.HasClassifier.reflectsIsomorphismsOp := reflectsIsom
 
 中文:
 实例 reflectsIsomorphismsOp
-  签名: (D : 类型u₀) [Category.{v₀} D] (F : Cᵒᵖ ⥤ D)
+  签名: (D : 类型u₀) [范畴.{v₀} D] (F : Cᵒᵖ ⥤ D)
   定义体: reflectsIsomorphisms_of_reflectsMonomorphisms_of_reflectsEpimorphisms F
 
 @[deprecated (since := "2026-03-06")]
@@ -723,7 +723,7 @@ alias _root_.CategoryTheory.Classifier.pullback_χ_obj_mk_truth := pullback_χ_o
 
 中文:
 引理 pullback_χ_obj_mk_truth
-  条件: {Z X : C} (i : Z ⟶ X) [Mono i]
+  条件: {Z X : C} (i : Z ⟶ X) [单态射 i]
   证明: Subobject.pullback_obj_mk (𝒞.isPullback i).flip
 
 @[deprecated (since := "2026-03-06")]
@@ -1110,7 +1110,7 @@ lemma isPullback
 
 中文:
 引理 isPullback
-  条件: {U X : C} (m : U ⟶ X) [Mono m]
+  条件: {U X : C} (m : U ⟶ X) [单态射 m]
   证明: by
   fapply (Subobject.isPullback (h.χ m) h.Ω₀).flip.of_iso
     (((MonoOver.forget _ ⋙ Over.forget _).mapIso (h.iso m)).symm) (Iso.refl _)
@@ -1183,7 +1183,7 @@ definition isTerminalΩ₀
 
 中文:
 定义 isTerminalΩ₀
-  签名: : IsTerminal (h.Ω₀ : C)
+  签名: : 是终止 (h.Ω₀ : C)
   定义体: IsTerminal.ofUniqueHom (fun X => h.π (𝟙 X)) (fun X π' => by
     have : IsPullback (𝟙 X) π' (π' ≫ h.Ω₀.arrow) h.Ω₀.arrow :=
       { isLimit' := ⟨PullbackCone.IsLimit.mk _ (fun s => s.fst) (by simp)
@@ -1240,7 +1240,7 @@ lemma hasTerminal
 
 中文:
 引理 hasTerminal
-  结论: HasTerminal C
+  结论: 有终止 C
   证明: h.isTerminalΩ₀.hasTerminal
 
 Depends on / 依赖: h.isTerminal, hasTerminal
@@ -1355,7 +1355,7 @@ alias isRepresentable_hasClassifier_if
 
 中文:
 定理 hasSubobjectClassifier_iff_isRepresentable
-  条件: [HasPullbacks C]
+  条件: [有Pullbacks C]
   证明: by
   constructor <;> intro h
   · obtain ⟨⟨𝒞⟩⟩ := h
@@ -1500,7 +1500,7 @@ alias _root_.CategoryTheory.Classifier.χ_comp_hom := χ_comp_hom
 
 中文:
 引理 χ_comp_hom
-  条件: {𝒞₁ 𝒞₂ : Classifier C} {X Y : C} (m : X ⟶ Y) [Mono m]
+  条件: {𝒞₁ 𝒞₂ : Classifier C} {X Y : C} (m : X ⟶ Y) [单态射 m]
   证明: 𝒞₂.uniq m ((𝒞₁.isPullback m).paste_vert (𝒞₂.isPullback 𝒞₁.truth))
 
 @[deprecated (since := "2026-03-06")]

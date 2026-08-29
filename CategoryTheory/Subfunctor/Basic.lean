@@ -46,10 +46,10 @@ structure Subfunctor
     - map : forall {U V : C} (i : U ⟶ V), obj U subseteq F.map i ⁻¹' obj V
 
 中文:
-结构 Subfunctor
-  参数: (F : C ⥤ Type w)
+结构 子函子
+  参数: (F : C ⥤ 类型 w)
   公理与运算 (2 个):
-    - obj : 对任意 U, Set (F.obj U)
+    - obj : 对任意 U, 集合 (F.obj U)
     - map : 对任意 {U V : C} (i : U ⟶ V), obj U subseteq F.map i ⁻¹' obj V
 -/
 structure Subfunctor (F : C ⥤ Type w) where
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Subfunctor F)
+  签名: 偏序 (子函子 F)
   定义体: PartialOrder.lift Subfunctor.obj (fun _ _ => Subfunctor.ext)
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, Subfunctor, Subfunctor.ext, Subfunctor.obj
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subfunctor F)
+  签名: 完备格 (子函子 F)
   定义体: { obj U := F.obj U ⊔ G.obj U
       map _ _ := by
         rintro (h | h)
@@ -172,7 +172,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: (S T : Subfunctor F)
+  条件: (S T : 子函子 F)
   结论: S <= T ↔ 对任意 U, S.obj U <= T.obj U
   证明: Iff.rfl
 
@@ -194,7 +194,7 @@ lemma top_obj
 中文:
 引理 top_obj
   条件: (i : C)
-  结论: (⊤ : Subfunctor F).obj i = ⊤
+  结论: (⊤ : 子函子 F).obj i = ⊤
   证明: rfl
 -/
 @[simp] lemma top_obj (i : C) : (⊤ : Subfunctor F).obj i = ⊤ := rfl
@@ -210,7 +210,7 @@ lemma bot_obj
 中文:
 引理 bot_obj
   条件: (i : C)
-  结论: (⊥ : Subfunctor F).obj i = ⊥
+  结论: (⊥ : 子函子 F).obj i = ⊥
   证明: rfl
 -/
 @[simp] lemma bot_obj (i : C) : (⊥ : Subfunctor F).obj i = ⊥ := rfl
@@ -227,7 +227,7 @@ lemma sSup_obj
 
 中文:
 引理 sSup_obj
-  条件: (S : Set (Subfunctor F)) (U : C)
+  条件: (S : 集合 (子函子 F)) (U : C)
   证明: rfl
 -/
 lemma sSup_obj (S : Set (Subfunctor F)) (U : C) :
@@ -245,7 +245,7 @@ lemma sInf_obj
 
 中文:
 引理 sInf_obj
-  条件: (S : Set (Subfunctor F)) (U : C)
+  条件: (S : 集合 (子函子 F)) (U : C)
   证明: rfl
 
 @[simp]
@@ -267,7 +267,7 @@ lemma iSup_obj
 
 中文:
 引理 iSup_obj
-  条件: {ι : Sort*} (S : ι -> Subfunctor F) (U : C)
+  条件: {ι : 类型层*} (S : ι -> 子函子 F) (U : C)
   证明: by
   simp [iSup, sSup_obj]
 
@@ -293,7 +293,7 @@ lemma iInf_obj
 
 中文:
 引理 iInf_obj
-  条件: {ι : Sort*} (S : ι -> Subfunctor F) (U : C)
+  条件: {ι : 类型层*} (S : ι -> 子函子 F) (U : C)
   证明: by
   simp [iInf, sInf_obj]
 
@@ -318,7 +318,7 @@ lemma max_obj
 
 中文:
 引理 max_obj
-  条件: (S T : Subfunctor F) (i : C)
+  条件: (S T : 子函子 F) (i : C)
   证明: rfl
 
 @[simp]
@@ -337,7 +337,7 @@ lemma min_obj
 
 中文:
 引理 min_obj
-  条件: (S T : Subfunctor F) (i : C)
+  条件: (S T : 子函子 F) (i : C)
   证明: rfl
 -/
 lemma min_obj (S T : Subfunctor F) (i : C) :
@@ -354,7 +354,7 @@ lemma max_min
 
 中文:
 引理 max_min
-  条件: (S₁ S₂ T : Subfunctor F)
+  条件: (S₁ S₂ T : 子函子 F)
   证明: by
   aesop
 -/
@@ -373,7 +373,7 @@ lemma iSup_min
 
 中文:
 引理 iSup_min
-  条件: {ι : Sort*} (S : ι -> Subfunctor F) (T : Subfunctor F)
+  条件: {ι : 类型层*} (S : ι -> 子函子 F) (T : 子函子 F)
   证明: by
   aesop
 -/
@@ -391,7 +391,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Subfunctor F)
+  签名: 非空 (子函子 F)
   定义体: inferInstance
 -/
 instance : Nonempty (Subfunctor F) :=
@@ -410,7 +410,7 @@ definition toFunctor
 
 中文:
 定义 toFunctor
-  签名: : C ⥤ Type w where
+  签名: : C ⥤ 类型 w where
   定义体: G.obj U
   map i := ↾fun x => ⟨F.map i x, G.map i x.prop⟩
 
@@ -451,7 +451,7 @@ NatTrans.ext funext fun U => hom_ext _ _ fun x => Subtype.ext congr_hom (congr_a
 
 中文:
 实例 :
-  签名: Mono G.ι
+  签名: 单态射 G.ι
   定义体: ⟨@fun _ _ _ e =>
 NatTrans.ext funext fun U => hom_ext _ _ fun x => Subtype.ext congr_hom (congr_app e U) x⟩
 
@@ -473,7 +473,7 @@ definition homOfLe
 
 中文:
 定义 homOfLe
-  签名: {G G' : Subfunctor F} (h : G <= G')
+  签名: {G G' : 子函子 F} (h : G <= G')
   定义体: ↾fun x => ⟨x, h U x.prop⟩
 
 Depends on / 依赖: x.prop
@@ -498,7 +498,7 @@ theorem homOfLe_ι
 
 中文:
 定理 homOfLe_ι
-  条件: {G G' : Subfunctor F} (h : G <= G')
+  条件: {G G' : 子函子 F} (h : G <= G')
   证明: by
   ext
   rfl
@@ -522,7 +522,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (Subfunctor.ι (⊤ : Subfunctor F))
+  签名: 是同构 (子函子.ι (⊤ : 子函子 F))
   定义体: by
   refine @NatIso.isIso_of_isIso_app _ _ _ _ _ _ _ ?_
   intro X
@@ -555,7 +555,7 @@ theorem eq_top_iff_isIso
 
 中文:
 定理 eq_top_iff_isIso
-  结论: G = ⊤ ↔ IsIso G.ι
+  结论: G = ⊤ ↔ 是同构 G.ι
   证明: by
   constructor
   · rintro rfl

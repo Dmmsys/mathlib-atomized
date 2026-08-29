@@ -52,8 +52,8 @@ definition Presheaf
   body: (Opens X)ᵒᵖ ⥤ C
 
 中文:
-定义 Presheaf
-  签名: (X : TopCat.{w})
+定义 预层
+  签名: (X : 顶元素范畴.{w})
   定义体: (Opens X)ᵒᵖ ⥤ C
 -/
 def Presheaf (X : TopCat.{w}) : Type max u v w :=
@@ -78,7 +78,7 @@ theorem comp_app
 
 中文:
 定理 comp_app
-  结论: {X : TopCat.{w}} {U : (Opens X)ᵒᵖ} {P Q R : Presheaf C X}
+  结论: {X : 顶元素范畴.{w}} {U : (Opens X)ᵒᵖ} {P Q R : 预层 C X}
   证明: rfl
 
 @[ext]
@@ -102,7 +102,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {X : TopCat.{w}} {P Q : Presheaf C X} {f g : P ⟶ Q}
+  结论: {X : 顶元素范畴.{w}} {P Q : 预层 C X} {f g : P ⟶ Q}
   证明: by
   apply NatTrans.ext
   ext U
@@ -166,7 +166,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {F : X.Presheaf C}
+  签名: {F : X.预层 C}
   定义体: F.map h.op x
 
 Depends on / 依赖: F.map, h.op
@@ -193,7 +193,7 @@ abbreviation restrictOpen
 
 中文:
 缩写 restrictOpen
-  签名: {F : X.Presheaf C}
+  签名: {F : X.预层 C}
   定义体: x |_ₗ U ⟪e⟫
 
 Depends on / 依赖: F.obj, ToType, restrict_tac
@@ -271,7 +271,7 @@ lemma restrict_self
 
 中文:
 引理 restrict_self
-  条件: {F : X.Presheaf C} {U : Opens X} (x : ToType (F.obj (op U)))
+  条件: {F : X.预层 C} {U : Opens X} (x : ToType (F.obj (op U)))
   证明: by
   simp [restrictOpen, restrict]
 
@@ -297,7 +297,7 @@ definition pushforward
 
 中文:
 定义 pushforward
-  签名: {X Y : TopCat.{w}} (f : X ⟶ Y)
+  签名: {X Y : 顶元素范畴.{w}} (f : X ⟶ Y)
   定义体: (whiskeringLeft _ _ _).obj (Opens.map f).op
 
 Depends on / 依赖: Opens.map, whiskeringLeft
@@ -320,7 +320,7 @@ theorem pushforward_map_app'
 
 中文:
 定理 pushforward_map_app'
-  结论: {X Y : TopCat.{w}} (f : X ⟶ Y) {ℱ 𝒢 : X.Presheaf C} (α : ℱ ⟶ 𝒢)
+  结论: {X Y : 顶元素范畴.{w}} (f : X ⟶ Y) {ℱ 𝒢 : X.预层 C} (α : ℱ ⟶ 𝒢)
   证明: rfl
 -/
 theorem pushforward_map_app' {X Y : TopCat.{w}} (f : X ⟶ Y) {ℱ 𝒢 : X.Presheaf C} (α : ℱ ⟶ 𝒢)
@@ -338,8 +338,8 @@ lemma id_pushforward
 
 中文:
 引理 id_pushforward
-  条件: (X : TopCat.{w})
-  结论: pushforward C (𝟙 X) = 𝟭 (X.Presheaf C)
+  条件: (X : 顶元素范畴.{w})
+  结论: pushforward C (𝟙 X) = 𝟭 (X.预层 C)
   证明: rfl
 -/
 lemma id_pushforward (X : TopCat.{w}) : pushforward C (𝟙 X) = 𝟭 (X.Presheaf C) := rfl
@@ -360,7 +360,7 @@ definition id
 
 中文:
 定义 id
-  签名: {X : TopCat.{w}} (ℱ : X.Presheaf C)
+  签名: {X : 顶元素范畴.{w}} (ℱ : X.预层 C)
   定义体: Iso.refl _
 
 @[simp]
@@ -383,7 +383,7 @@ theorem id_hom_app
 
 中文:
 定理 id_hom_app
-  条件: {X : TopCat.{w}} (ℱ : X.Presheaf C) (U)
+  条件: {X : 顶元素范畴.{w}} (ℱ : X.预层 C) (U)
   结论: (id ℱ).hom.app U = 𝟙 _
   证明: rfl
 
@@ -402,7 +402,7 @@ theorem id_inv_app
 
 中文:
 定理 id_inv_app
-  条件: {X : TopCat.{w}} (ℱ : X.Presheaf C) (U)
+  条件: {X : 顶元素范畴.{w}} (ℱ : X.预层 C) (U)
   证明: rfl
 -/
 theorem id_inv_app {X : TopCat.{w}} (ℱ : X.Presheaf C) (U) :
@@ -419,7 +419,7 @@ theorem id_eq
 
 中文:
 定理 id_eq
-  条件: {X : TopCat.{w}} (ℱ : X.Presheaf C)
+  条件: {X : 顶元素范畴.{w}} (ℱ : X.预层 C)
   结论: 𝟙 X _* ℱ = ℱ
   证明: rfl
 -/
@@ -435,7 +435,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : TopCat.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.Presheaf C)
+  签名: {X Y Z : 顶元素范畴.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.预层 C)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -455,7 +455,7 @@ theorem comp_eq
 
 中文:
 定理 comp_eq
-  条件: {X Y Z : TopCat.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.Presheaf C)
+  条件: {X Y Z : 顶元素范畴.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.预层 C)
   证明: rfl
 
 @[simp]
@@ -477,7 +477,7 @@ theorem comp_hom_app
 
 中文:
 定理 comp_hom_app
-  条件: {X Y Z : TopCat.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.Presheaf C) (U)
+  条件: {X Y Z : 顶元素范畴.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.预层 C) (U)
   证明: rfl
 
 @[simp]
@@ -496,7 +496,7 @@ theorem comp_inv_app
 
 中文:
 定理 comp_inv_app
-  条件: {X Y Z : TopCat.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.Presheaf C) (U)
+  条件: {X Y Z : 顶元素范畴.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.预层 C) (U)
   证明: rfl
 -/
 theorem comp_inv_app {X Y Z : TopCat.{w}} (f : X ⟶ Y) (g : Y ⟶ Z) (ℱ : X.Presheaf C) (U) :
@@ -514,7 +514,7 @@ definition pushforwardEq
 
 中文:
 定义 pushforwardEq
-  签名: {X Y : TopCat.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.Presheaf C)
+  签名: {X Y : 顶元素范畴.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.预层 C)
   定义体: isoWhiskerRight (NatIso.op (Opens.mapIso f g h).symm) ℱ
 
 Depends on / 依赖: NatIso, NatIso.op, Opens.mapIso, isoWhiskerRight, mapIso
@@ -533,7 +533,7 @@ theorem pushforward_eq'
 
 中文:
 定理 pushforward_eq'
-  条件: {X Y : TopCat.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.Presheaf C)
+  条件: {X Y : 顶元素范畴.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.预层 C)
   证明: by rw [h]
 -/
 theorem pushforward_eq' {X Y : TopCat.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.Presheaf C) :
@@ -553,7 +553,7 @@ theorem pushforwardEq_hom_app
 
 中文:
 定理 pushforwardEq_hom_app
-  结论: {X Y : TopCat.{w}} {f g : X ⟶ Y}
+  结论: {X Y : 顶元素范畴.{w}} {f g : X ⟶ Y}
   证明: by
   simp [pushforwardEq]
 
@@ -583,7 +583,7 @@ definition presheafEquivOfIso
 
 中文:
 定义 presheafEquivOfIso
-  签名: {X Y : TopCat.{w}} (H : X ≅ Y)
+  签名: {X Y : 顶元素范畴.{w}} (H : X ≅ Y)
   定义体: Equivalence.congrLeft (Opens.mapMapIso H).symm.op
 
 Depends on / 依赖: Equivalence, Equivalence.congrLeft, Opens.mapMapIso, congrLeft, mapMapIso, symm.op
@@ -603,7 +603,7 @@ definition toPushforwardOfIso
 
 中文:
 定义 toPushforwardOfIso
-  签名: {X Y : TopCat.{w}} (H : X ≅ Y) {ℱ : X.Presheaf C} {𝒢 : Y.Presheaf C}
+  签名: {X Y : 顶元素范畴.{w}} (H : X ≅ Y) {ℱ : X.预层 C} {𝒢 : Y.预层 C}
   定义体: (presheafEquivOfIso _ H).toAdjunction.homEquiv ℱ 𝒢 α
 
 Depends on / 依赖: homEquiv, presheafEquivOfIso, toAdjunction, toAdjunction.homEquiv
@@ -626,7 +626,7 @@ theorem toPushforwardOfIso_app
 
 中文:
 定理 toPushforwardOfIso_app
-  结论: {X Y : TopCat.{w}} (H₁ : X ≅ Y) {ℱ : X.Presheaf C} {𝒢 : Y.Presheaf C}
+  结论: {X Y : 顶元素范畴.{w}} (H₁ : X ≅ Y) {ℱ : X.预层 C} {𝒢 : Y.预层 C}
   证明: by
   simp [toPushforwardOfIso, Adjunction.homEquiv_unit]
 
@@ -649,7 +649,7 @@ definition pushforwardToOfIso
 
 中文:
 定义 pushforwardToOfIso
-  签名: {X Y : TopCat.{w}} (H₁ : X ≅ Y) {ℱ : Y.Presheaf C} {𝒢 : X.Presheaf C}
+  签名: {X Y : 顶元素范畴.{w}} (H₁ : X ≅ Y) {ℱ : Y.预层 C} {𝒢 : X.预层 C}
   定义体: ((presheafEquivOfIso _ H₁.symm).toAdjunction.homEquiv ℱ 𝒢).symm H₂
 
 Depends on / 依赖: homEquiv, presheafEquivOfIso, toAdjunction, toAdjunction.homEquiv
@@ -672,7 +672,7 @@ theorem pushforwardToOfIso_app
 
 中文:
 定理 pushforwardToOfIso_app
-  结论: {X Y : TopCat.{w}} (H₁ : X ≅ Y) {ℱ : Y.Presheaf C} {𝒢 : X.Presheaf C}
+  结论: {X Y : 顶元素范畴.{w}} (H₁ : X ≅ Y) {ℱ : Y.预层 C} {𝒢 : X.预层 C}
   证明: by
   simp [pushforwardToOfIso, Equivalence.toAdjunction, Adjunction.homEquiv_counit]
 
@@ -701,7 +701,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: {X Y : TopCat.{v}} (f : X ⟶ Y)
+  签名: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y)
   定义体: (Opens.map f).op.lan
 
 Depends on / 依赖: Opens.map, op.lan
@@ -722,7 +722,7 @@ alias pushforwardPullbackAdjunction := pullbackPushforwardAdjunction
 
 中文:
 定义 pullbackPushforwardAdjunction
-  签名: {X Y : TopCat.{v}} (f : X ⟶ Y)
+  签名: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y)
   定义体: Functor.lanAdjunction _ _
 
 @[deprecated (since := "2026-03-03")]
@@ -748,7 +748,7 @@ definition pullbackHomIsoPushforwardInv
 
 中文:
 定义 pullbackHomIsoPushforwardInv
-  签名: {X Y : TopCat.{v}} (H : X ≅ Y)
+  签名: {X Y : 顶元素范畴.{v}} (H : X ≅ Y)
   定义体: Adjunction.leftAdjointUniq (pullbackPushforwardAdjunction C H.hom)
     (presheafEquivOfIso C H.symm).toAdjunction
 
@@ -770,7 +770,7 @@ definition pullbackInvIsoPushforwardHom
 
 中文:
 定义 pullbackInvIsoPushforwardHom
-  签名: {X Y : TopCat.{v}} (H : X ≅ Y)
+  签名: {X Y : 顶元素范畴.{v}} (H : X ≅ Y)
   定义体: Adjunction.leftAdjointUniq (pullbackPushforwardAdjunction C H.inv)
     (presheafEquivOfIso C H).toAdjunction
 
@@ -799,7 +799,7 @@ definition pullbackObjObjOfImageOpen
 
 中文:
 定义 pullbackObjObjOfImageOpen
-  签名: {X Y : TopCat.{v}} (f : X ⟶ Y) (ℱ : Y.Presheaf C) (U : Opens X)
+  签名: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y) (ℱ : Y.预层 C) (U : Opens X)
   定义体: by
   let x : CostructuredArrow (Opens.map f).op (op U) := CostructuredArrow.mk
     (@homOfLE _ _ _ ((Opens.map f).obj ⟨_, H⟩) (Set.image_preimage.le_u_l _)).op
@@ -843,7 +843,7 @@ theorem pullbackObjObjOfImageOpen_hom_naturality
 
 中文:
 定理 pullbackObjObjOfImageOpen_hom_naturality
-  结论: {X Y : TopCat.{v}} (f : X ⟶ Y) (ℱ : Y.Presheaf C)
+  结论: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y) (ℱ : Y.预层 C)
   证明: by
   dsimp [pullbackObjObjOfImageOpen]
   refine ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit ℱ (op V)).hom_ext
@@ -902,7 +902,7 @@ definition pullbackObjIso
 
 中文:
 定义 pullbackObjIso
-  签名: {X Y : TopCat.{v}} {f : X ⟶ Y} (hf : IsOpenMap f) (ℱ : Y.Presheaf C)
+  签名: {X Y : 顶元素范畴.{v}} {f : X ⟶ Y} (hf : 是开映射 f) (ℱ : Y.预层 C)
   定义体: NatIso.ofComponents
     (fun U => pullbackObjObjOfImageOpen f ℱ U.1 (hf (unop U).1 (unop U).2))
     (fun {U V} i => (pullbackObjObjOfImageOpen_hom_naturality f ℱ (hf (unop V).1 (unop V).2)
@@ -935,7 +935,7 @@ lemma pullbackObjIso_hom_naturality
 
 中文:
 引理 pullbackObjIso_hom_naturality
-  结论: {X Y : TopCat.{v}} {f : X ⟶ Y} (hf : IsOpenMap f)
+  结论: {X Y : 顶元素范畴.{v}} {f : X ⟶ Y} (hf : 是开映射 f)
   证明: by
   ext U
   dsimp [pullbackObjIso, pullbackObjObjOfImageOpen]
@@ -986,7 +986,7 @@ definition pullbackIso
 
 中文:
 定义 pullbackIso
-  签名: {X Y : TopCat.{v}} {f : X ⟶ Y} (hf : IsOpenMap f)
+  签名: {X Y : 顶元素范畴.{v}} {f : X ⟶ Y} (hf : 是开映射 f)
   定义体: NatIso.ofComponents hf.pullbackObjIso hf.pullbackObjIso_hom_naturality
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, hf.pullbackObjIso, hf.pullbackObjIso_hom_naturality, ofComponents, pullbackObjIso, pullbackObjIso_hom_naturality

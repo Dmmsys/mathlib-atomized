@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monomorphisms C).IsStableUnderCobaseChange
+  签名: (monomorphisms C).是StableUnderCobaseChange
   定义体: IsStableUnderCobaseChange.mk' (fun _ _ _ f g _ hf => by
     simp only [monomorphisms.iff] at hf ⊢
     infer_instance)
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: (epimorphisms C).IsStableUnderBaseChange
+  签名: (epimorphisms C).是StableUnderBaseChange
   定义体: IsStableUnderBaseChange.mk' (fun _ _ _ f g _ hf => by
     simp only [epimorphisms.iff] at hf ⊢
     infer_instance)

@@ -53,7 +53,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (OuterMeasure α)
+  签名: : 零 (外测度 α)
   定义体: ⟨{ measureOf _ := 0
       empty := rfl
       mono _ := le_rfl
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (OuterMeasure α) (Set α) 实数>=0∞
+  签名: 是ZeroApply (外测度 α) (集合 α) 实数>=0∞
   定义体: rfl
 
 @[deprecated (since := "2026-06-23")] alias coe_zero := FunLike.coe_zero
@@ -99,7 +99,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (OuterMeasure α)
+  签名: : 可居 (外测度 α)
   定义体: ⟨0⟩
 -/
 instance instInhabited : Inhabited (OuterMeasure α) :=
@@ -122,7 +122,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (OuterMeasure α)
+  签名: : 加法 (外测度 α)
   定义体: ⟨fun m₁ m₂ =>
     { measureOf := fun s => m₁ s + m₂ s
       empty := show m₁ ∅ + m₂ ∅ = 0 by simp
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (OuterMeasure α) (Set α) 实数>=0∞
+  签名: 是加法Apply (外测度 α) (集合 α) 实数>=0∞
   定义体: rfl
 
 @[deprecated (since := "2026-06-23")] alias coe_add := FunLike.coe_add
@@ -195,7 +195,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R (OuterMeasure α)
+  签名: : 标量乘法 R (外测度 α)
   定义体: ⟨fun c m =>
     { measureOf := fun s => c • m s
       empty := by simp only [measure_empty]; rw [← smul_one_mul c]; simp
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R (OuterMeasure α) (Set α) 实数>=0∞
+  签名: 是SMulApply R (外测度 α) (集合 α) 实数>=0∞
   定义体: rfl
 
 @[deprecated (since := "2026-06-23")] alias coe_smul := FunLike.coe_smul
@@ -256,7 +256,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass R R' 实数>=0∞]
+  签名: [标量交换类 R R' 实数>=0∞]
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -274,7 +274,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul R R'] [IsScalarTower R R' 实数>=0∞]
+  签名: [标量乘法 R R'] [标量塔 R R' 实数>=0∞]
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -292,7 +292,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul Rᵐᵒᵖ 实数>=0∞] [IsCentralScalar R 实数>=0∞]
+  签名: [标量乘法 Rᵐᵒᵖ 实数>=0∞] [中心标量 R 实数>=0∞]
   定义体: FunLike.isCentralScalar
 
 Depends on / 依赖: FunLike, FunLike.isCentralScalar, isCentralScalar
@@ -312,7 +312,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: {R : 类型} [Monoid R] [MulAction R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: {R : 类型} [幺半群 R] [乘法作用 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: fast_instance% FunLike.mulAction
 
 Depends on / 依赖: FunLike, FunLike.mulAction, fast_instance, mulAction
@@ -334,7 +334,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (OuterMeasure α)
+  签名: : 加法交换幺半群 (外测度 α)
   定义体: fast_instance% FunLike.addCommMonoid
 
 @[deprecated (since := "2026-06-23")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
@@ -359,7 +359,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: {R : 类型} [Monoid R] [DistribMulAction R 实数>=0∞]
+  签名: {R : 类型} [幺半群 R] [分配乘法作用 R 实数>=0∞]
   定义体: fast_instance% FunLike.distribMulAction
 
 Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
@@ -378,7 +378,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {R : 类型} [Semiring R] [Module R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: {R : 类型} [半环 R] [模 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -398,7 +398,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (OuterMeasure α)
+  签名: : 底元素 (外测度 α)
   定义体: ⟨0⟩
 
 @[simp]
@@ -417,7 +417,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: (⊥ : OuterMeasure α) = 0
+  结论: (⊥ : 外测度 α) = 0
   证明: rfl
 -/
 theorem coe_bot : (⊥ : OuterMeasure α) = 0 :=
@@ -436,7 +436,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (OuterMeasure α) where
+  签名: : 偏序 (外测度 α) where
   定义体: forall s, m₁ s <= m₂ s
   le_refl _ _ := le_rfl
   le_trans _ _ _ hab hbc s := le_trans (hab s) (hbc s)
@@ -477,7 +477,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (OuterMeasure α)
+  签名: : 有底序 (外测度 α)
   定义体: { bot := 0,
     bot_le := fun a s => by simp only [zero_apply, zero_le] }
 
@@ -498,7 +498,7 @@ theorem univ_eq_zero_iff
 
 中文:
 定理 univ_eq_zero_iff
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: m univ = 0 ↔ m = 0
   证明: ⟨fun h => bot_unique fun s => (measure_mono <| subset_univ s).trans_eq h, fun h => h.symm ▸ rfl⟩
 
@@ -526,7 +526,7 @@ empty := nonpos_iff_eq_zero.1 iSup₂_le fun m _ => le_of_eq m.empty
 
 中文:
 实例 instSupSet
-  签名: : SupSet (OuterMeasure α)
+  签名: : 上确界集 (外测度 α)
   定义体: ⟨fun ms =>
     { measureOf := fun s => ⨆ m in ms, (m : OuterMeasure α) s
 empty := nonpos_iff_eq_zero.1 iSup₂_le fun m _ => le_of_eq m.empty
@@ -565,7 +565,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (OuterMeasure α)
+  签名: : 完备格 (外测度 α)
   定义体: { OuterMeasure.orderBot,
     completeLatticeOfSup (OuterMeasure α) fun ms =>
       ⟨fun m hm s => by apply le_iSup₂ m hm, fun _ hm s => iSup₂_le fun _ hm' => hm hm' s⟩ with }
@@ -592,7 +592,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: (ms : Set (OuterMeasure α)) (s : Set α)
+  条件: (ms : 集合 (外测度 α)) (s : 集合 α)
   证明: rfl
 
 @[simp]
@@ -616,7 +616,7 @@ theorem iSup_apply
 
 中文:
 定理 iSup_apply
-  条件: {ι} (f : ι -> OuterMeasure α) (s : Set α)
+  条件: {ι} (f : ι -> 外测度 α) (s : 集合 α)
   结论: (⨆ i : ι, f i) s = ⨆ i, f i s
   证明: by
   rw [iSup]; rw [sSup_apply]; rw [iSup_range]
@@ -642,7 +642,7 @@ theorem coe_iSup
 
 中文:
 定理 coe_iSup
-  条件: {ι} (f : ι -> OuterMeasure α)
+  条件: {ι} (f : ι -> 外测度 α)
   结论: ⇑(⨆ i, f i) = ⨆ i, ⇑(f i)
   证明: funext fun s => by simp
 
@@ -664,7 +664,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: (m₁ m₂ : OuterMeasure α) (s : Set α)
+  条件: (m₁ m₂ : 外测度 α) (s : 集合 α)
   结论: (m₁ ⊔ m₂) s = m₁ s ⊔ m₂ s
   证明: by
   have := iSup_apply (fun b => cond b m₁ m₂) s; rwa [iSup_bool_eq, iSup_bool_eq] at this
@@ -684,7 +684,7 @@ theorem smul_iSup
 
 中文:
 定理 smul_iSup
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ext fun s => by simp only [smul_apply, iSup_apply, ENNReal.smul_iSup]
 
 Depends on / 依赖: ENNReal, ENNReal.smul_iSup, iSup_apply, smul_apply, smul_iSup
@@ -707,7 +707,7 @@ theorem mono''
 
 中文:
 定理 mono''
-  条件: {m₁ m₂ : OuterMeasure α} {s₁ s₂ : Set α} (hm : m₁ <= m₂) (hs : s₁ subseteq s₂)
+  条件: {m₁ m₂ : 外测度 α} {s₁ s₂ : 集合 α} (hm : m₁ <= m₂) (hs : s₁ subseteq s₂)
   证明: (hm s₁).trans (m₂.mono hs)
 -/
 theorem mono'' {m₁ m₂ : OuterMeasure α} {s₁ s₂ : Set α} (hm : m₁ <= m₂) (hs : s₁ subseteq s₂) :
@@ -766,7 +766,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: {β} (f : α -> β) (m : OuterMeasure α) (s : Set β)
+  条件: {β} (f : α -> β) (m : 外测度 α) (s : 集合 β)
   结论: map f m s = m (f ⁻¹' s)
   证明: rfl
 
@@ -789,7 +789,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: map id m = m
   证明: ext fun _ => rfl
 
@@ -811,7 +811,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {β γ} (f : α -> β) (g : β -> γ) (m : OuterMeasure α)
+  条件: {β γ} (f : α -> β) (g : β -> γ) (m : 外测度 α)
   证明: ext fun _ => rfl
 
 @[gcongr, mono]
@@ -835,7 +835,7 @@ theorem map_mono
 中文:
 定理 map_mono
   条件: {β} (f : α -> β)
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: fun _ _ h _ => h _
 
 @[simp]
@@ -856,7 +856,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: {β} (f : α -> β) (m m' : OuterMeasure α)
+  条件: {β} (f : α -> β) (m m' : 外测度 α)
   结论: map f (m ⊔ m') = map f m ⊔ map f m'
   证明: ext fun s => by simp only [map_apply, sup_apply]
 
@@ -879,7 +879,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {β ι} (f : α -> β) (m : ι -> OuterMeasure α)
+  条件: {β ι} (f : α -> β) (m : ι -> 外测度 α)
   结论: map f (⨆ i, m i) = ⨆ i, map f (m i)
   证明: ext fun s => by simp only [map_apply, iSup_apply]
 
@@ -898,7 +898,7 @@ instance instFunctor
 
 中文:
 实例 instFunctor
-  签名: : Functor OuterMeasure where map {_ _} f
+  签名: : 函子 外测度 where map {_ _} f
   定义体: map f
 -/
 instance instFunctor : Functor OuterMeasure where map {_ _} f := map f
@@ -913,7 +913,7 @@ instance instLawfulFunctor
 
 中文:
 实例 instLawfulFunctor
-  签名: : LawfulFunctor OuterMeasure
+  签名: : Lawful函子 外测度
   定义体: by constructor <;> intros <;> rfl
 
 Depends on / 依赖: intros
@@ -972,7 +972,7 @@ theorem dirac_apply
 
 中文:
 定理 dirac_apply
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: dirac a s = indicator s (fun _ => 1) a
   证明: rfl
 -/
@@ -994,8 +994,8 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
-  签名: {ι} (f : ι -> OuterMeasure α)
+定义 求和
+  签名: {ι} (f : ι -> 外测度 α)
   定义体: ∑' i, f i s
   empty := by simp
   mono {_ _} h := ENNReal.tsum_le_tsum fun _ => measure_mono h
@@ -1023,8 +1023,8 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: {ι} (f : ι -> OuterMeasure α) (s : Set α)
-  结论: sum f s = ∑' i, f i s
+  条件: {ι} (f : ι -> 外测度 α) (s : 集合 α)
+  结论: 求和 f s = ∑' i, f i s
   证明: rfl
 -/
 theorem sum_apply {ι} (f : ι -> OuterMeasure α) (s : Set α) : sum f s = ∑' i, f i s :=
@@ -1041,7 +1041,7 @@ theorem smul_dirac_apply
 
 中文:
 定理 smul_dirac_apply
-  条件: (a : 实数>=0∞) (b : α) (s : Set α)
+  条件: (a : 实数>=0∞) (b : α) (s : 集合 α)
   证明: by
   simp only [smul_apply, smul_eq_mul, dirac_apply, ← indicator_mul_right _ fun _ => a, mul_one]
 
@@ -1103,7 +1103,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: {β} (f : α -> β) (m : OuterMeasure β) (s : Set α)
+  条件: {β} (f : α -> β) (m : 外测度 β) (s : 集合 α)
   结论: comap f m s = m (f '' s)
   证明: rfl
 
@@ -1127,7 +1127,7 @@ theorem comap_mono
 中文:
 定理 comap_mono
   条件: {β} (f : α -> β)
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: fun _ _ h _ => h _
 
 @[simp]
@@ -1145,7 +1145,7 @@ theorem comap_iSup
 
 中文:
 定理 comap_iSup
-  条件: {β ι} (f : α -> β) (m : ι -> OuterMeasure β)
+  条件: {β ι} (f : α -> β) (m : ι -> 外测度 β)
   证明: ext fun s => by simp only [comap_apply, iSup_apply]
 
 Depends on / 依赖: comap_apply, iSup_apply
@@ -1164,7 +1164,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: (map (↑)).comp (comap ((↑) : s -> α))
 -/
 def restrict (s : Set α) : OuterMeasure α ->ₗ[Real>=0∞] OuterMeasure α :=
@@ -1186,7 +1186,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (s t : Set α) (m : OuterMeasure α)
+  条件: (s t : 集合 α) (m : 外测度 α)
   结论: restrict s m t = m (t inter s)
   证明: by
   simp [restrict, inter_comm t]
@@ -1213,7 +1213,7 @@ theorem restrict_mono
 
 中文:
 定理 restrict_mono
-  条件: {s t : Set α} (h : s subseteq t) {m m' : OuterMeasure α} (hm : m <= m')
+  条件: {s t : 集合 α} (h : s subseteq t) {m m' : 外测度 α} (hm : m <= m')
   证明: fun u => by
   simp only [restrict_apply]
   exact (hm _).trans (m'.mono <| inter_subset_inter_right _ h)
@@ -1241,7 +1241,7 @@ theorem restrict_univ
 
 中文:
 定理 restrict_univ
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: restrict univ m = m
   证明: ext fun s => by simp
 
@@ -1264,7 +1264,7 @@ theorem restrict_empty
 
 中文:
 定理 restrict_empty
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: restrict ∅ m = 0
   证明: ext fun s => by simp
 
@@ -1284,7 +1284,7 @@ theorem restrict_iSup
 
 中文:
 定理 restrict_iSup
-  条件: {ι} (s : Set α) (m : ι -> OuterMeasure α)
+  条件: {ι} (s : 集合 α) (m : ι -> 外测度 α)
   证明: by simp [restrict]
 
 Depends on / 依赖: restrict
@@ -1303,7 +1303,7 @@ theorem map_comap
 
 中文:
 定理 map_comap
-  条件: {β} (f : α -> β) (m : OuterMeasure β)
+  条件: {β} (f : α -> β) (m : 外测度 β)
   结论: map f (comap f m) = restrict (range f) m
   证明: ext fun s => congr_arg m by simp only [image_preimage_eq_inter_range, Subtype.range_coe]
 
@@ -1324,7 +1324,7 @@ m.mono image_preimage_subset _ _
 
 中文:
 定理 map_comap_le
-  条件: {β} (f : α -> β) (m : OuterMeasure β)
+  条件: {β} (f : α -> β) (m : 外测度 β)
   结论: map f (comap f m) <= m
   证明: fun _ =>
 m.mono image_preimage_subset _ _
@@ -1345,7 +1345,7 @@ theorem restrict_le_self
 
 中文:
 定理 restrict_le_self
-  条件: (m : OuterMeasure α) (s : Set α)
+  条件: (m : 外测度 α) (s : 集合 α)
   结论: restrict s m <= m
   证明: map_comap_le _ _
 
@@ -1367,7 +1367,7 @@ theorem map_le_restrict_range
 
 中文:
 定理 map_le_restrict_range
-  条件: {β} {ma : OuterMeasure α} {mb : OuterMeasure β} {f : α -> β}
+  条件: {β} {ma : 外测度 α} {mb : 外测度 β} {f : α -> β}
   证明: ⟨fun h => h.trans (restrict_le_self _ _), fun h s => by simpa using h (s inter range f)⟩
 
 Depends on / 依赖: h.trans, restrict_le_self
@@ -1386,7 +1386,7 @@ theorem map_comap_of_surjective
 
 中文:
 定理 map_comap_of_surjective
-  条件: {β} {f : α -> β} (hf : Surjective f) (m : OuterMeasure β)
+  条件: {β} {f : α -> β} (hf : 满射 f) (m : 外测度 β)
   证明: ext fun s => by rw [map_apply, comap_apply, hf.image_preimage]
 
 Depends on / 依赖: comap_apply, hf.image_preimage, image_preimage, map_apply
@@ -1407,7 +1407,7 @@ m.mono subset_preimage_image _ _
 
 中文:
 定理 le_comap_map
-  条件: {β} (f : α -> β) (m : OuterMeasure α)
+  条件: {β} (f : α -> β) (m : 外测度 α)
   结论: m <= comap f (map f m)
   证明: fun _ =>
 m.mono subset_preimage_image _ _
@@ -1428,7 +1428,7 @@ theorem comap_map
 
 中文:
 定理 comap_map
-  条件: {β} {f : α -> β} (hf : Injective f) (m : OuterMeasure α)
+  条件: {β} {f : α -> β} (hf : 单射 f) (m : 外测度 α)
   结论: comap f (map f m) = m
   证明: ext fun s => by rw [comap_apply, map_apply, hf.preimage_image]
 
@@ -1452,8 +1452,8 @@ top_unique le_trans (by simp [as]) (le_iSup₂ (∞ • dirac a) trivial)
 
 中文:
 定理 top_apply
-  条件: {s : Set α} (h : s.Nonempty)
-  结论: (⊤ : OuterMeasure α) s = ∞
+  条件: {s : 集合 α} (h : s.非空)
+  结论: (⊤ : 外测度 α) s = ∞
   证明: let ⟨a, as⟩ := h
 top_unique le_trans (by simp [as]) (le_iSup₂ (∞ • dirac a) trivial)
 
@@ -1476,8 +1476,8 @@ theorem top_apply'
 
 中文:
 定理 top_apply'
-  条件: (s : Set α)
-  结论: (⊤ : OuterMeasure α) s = ⨅ _ : s = ∅, 0
+  条件: (s : 集合 α)
+  结论: (⊤ : 外测度 α) s = ⨅ _ : s = ∅, 0
   证明: s.eq_empty_or_nonempty.elim (fun h => by simp [h]) fun h => by simp [h, h.ne_empty]
 
 @[simp]
@@ -1548,7 +1548,7 @@ theorem map_top_of_surjective
 
 中文:
 定理 map_top_of_surjective
-  条件: (f : α -> β) (hf : Surjective f)
+  条件: (f : α -> β) (hf : 满射 f)
   结论: map f ⊤ = ⊤
   证明: by
   rw [map_top]; rw [hf.range_eq]; rw [restrict_univ]

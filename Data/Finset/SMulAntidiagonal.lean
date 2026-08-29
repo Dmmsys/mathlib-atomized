@@ -44,7 +44,7 @@ theorem IsPWO.smul
 
 中文:
 定理 IsPWO.smul
-  结论: [Preorder G] [Preorder P] [SMul G P] [IsOrderedSMul G P]
+  结论: [预序 G] [预序 P] [标量乘法 G P] [是OrderedSMul G P]
   证明: by
   rw [← @image_smul_prod]
   exact (hs.prod ht).image_of_monotone (monotone_fst.smul monotone_snd)
@@ -71,7 +71,7 @@ theorem IsWF.smul
 
 中文:
 定理 IsWF.smul
-  结论: [LinearOrder G] [LinearOrder P] [SMul G P] [IsOrderedSMul G P] {s : Set G}
+  结论: [线性序 G] [线性序 P] [标量乘法 G P] [是OrderedSMul G P] {s : 集合 G}
   证明: (hs.isPWO.smul ht.isPWO).isWF
 
 @[to_additive]
@@ -97,7 +97,7 @@ theorem IsWF.min_smul
 
 中文:
 定理 IsWF.min_smul
-  结论: [LinearOrder G] [LinearOrder P] [SMul G P] [IsOrderedSMul G P]
+  结论: [线性序 G] [线性序 P] [标量乘法 G P] [是OrderedSMul G P]
   证明: by
   refine le_antisymm (IsWF.min_le _ _ (mem_smul.2 ⟨_, hs.min_mem _, _, ht.min_mem _, rfl⟩)) ?_
   rw [IsWF.le_min_iff]
@@ -142,7 +142,7 @@ definition SMulAntidiagonal
 
 中文:
 定义 SMulAntidiagonal
-  签名: {s : Set G}
+  签名: {s : 集合 G}
   定义体: h.toFinset
 
 @[to_additive (attr := simp)]
@@ -168,7 +168,7 @@ theorem mem_smulAntidiagonal
 
 中文:
 定理 mem_smulAntidiagonal
-  结论: {s : Set G}
+  结论: {s : 集合 G}
   证明: by
   simp only [SMulAntidiagonal, Set.Finite.mem_toFinset]
   exact Set.mem_sep_iff
@@ -196,7 +196,7 @@ theorem smulAntidiagonal_mono_left
 
 中文:
 定理 smulAntidiagonal_mono_left
-  结论: {s u : Set G} {t : Set P} (a : P) (h : u subseteq s)
+  结论: {s u : 集合 G} {t : 集合 P} (a : P) (h : u subseteq s)
   证明: Set.Finite.toFinset_mono Set.smulAntidiagonal_mono_left h
 
 @[to_additive]
@@ -221,7 +221,7 @@ theorem smulAntidiagonal_mono_right
 
 中文:
 定理 smulAntidiagonal_mono_right
-  结论: {s : Set G}
+  结论: {s : 集合 G}
   证明: Set.Finite.toFinset_mono Set.smulAntidiagonal_mono_right h
 
 @[to_additive]
@@ -246,7 +246,7 @@ theorem support_smulAntidiagonal_subset_smul
 
 中文:
 定理 support_smulAntidiagonal_subset_smul
-  结论: {s : Set G}
+  结论: {s : 集合 G}
   证明: by
   grind [mem_smul, mem_smulAntidiagonal]
 
@@ -303,7 +303,7 @@ theorem smulAntidiagonal_min_smul_min
 
 中文:
 定理 smulAntidiagonal_min_smul_min
-  结论: [LinearOrder G] [LinearOrder P] [SMul G P]
+  结论: [线性序 G] [线性序 P] [标量乘法 G P]
   证明: by
   ext ⟨a, b⟩
   simp only [mem_smulAntidiagonal, mem_singleton, Prod.ext_iff]

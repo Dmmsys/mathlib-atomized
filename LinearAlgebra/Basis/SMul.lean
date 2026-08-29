@@ -48,7 +48,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul G (Basis ι R M)
+  签名: 标量乘法 G (基 ι R M)
   定义体: b.map DistribMulAction.toLinearEquiv _ _ g
 
 @[simp]
@@ -70,7 +70,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (g : G) (b : Basis ι R M) (i : ι)
+  条件: (g : G) (b : 基 ι R M) (i : ι)
   结论: (g • b) i = g • b i
   证明: rfl
 -/
@@ -87,7 +87,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: (g : G) (b : Basis ι R M)
+  条件: (g : G) (b : 基 ι R M)
   结论: ⇑(g • b) = g • ⇑b
   证明: rfl
 -/
@@ -106,7 +106,7 @@ theorem smul_eq_map
 
 中文:
 定理 smul_eq_map
-  条件: (g : M ≃ₗ[R] M) (b : Basis ι R M)
+  条件: (g : M ≃ₗ[R] M) (b : 基 ι R M)
   结论: g • b = b.map g
   证明: rfl
 -/
@@ -122,7 +122,7 @@ theorem repr_smul
 
 中文:
 定理 repr_smul
-  条件: (g : G) (b : Basis ι R M)
+  条件: (g : G) (b : 基 ι R M)
   证明: rfl
 -/
 @[simp] theorem repr_smul (g : G) (b : Basis ι R M) :
@@ -138,7 +138,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (Basis ι R M)
+  签名: 乘法作用 G (基 ι R M)
   定义体: Function.Injective.mulAction _ DFunLike.coe_injective coe_smul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.Injective.mulAction, Injective, coe_injective, coe_smul, mulAction
@@ -155,8 +155,8 @@ instance [SMulCommClass
   body: DFunLike.ext _ _ fun _ => smul_comm _ _ _
 
 中文:
-实例 [SMulCommClass
-  签名: G G' M] : SMulCommClass G G' (Basis ι R M) where
+实例 [标量交换类
+  签名: G G' M] : 标量交换类 G G' (基 ι R M) where
   定义体: DFunLike.ext _ _ fun _ => smul_comm _ _ _
 
 Depends on / 依赖: DFunLike, DFunLike.ext, smul_comm
@@ -173,8 +173,8 @@ instance [SMul
   body: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: G G'] [IsScalarTower G G' M] : IsScalarTower G G' (Basis ι R M) where
+实例 [标量乘法
+  签名: G G'] [标量塔 G G' M] : 标量塔 G G' (基 ι R M) where
   定义体: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: DFunLike, DFunLike.ext, smul_assoc
@@ -206,7 +206,7 @@ theorem groupSMul_span_eq_top
 
 中文:
 定理 groupSMul_span_eq_top
-  结论: {G : 类型} [Group G] [SMul G R] [MulAction G M]
+  结论: {G : 类型} [群 G] [标量乘法 G R] [乘法作用 G M]
   证明: by
   rw [eq_top_iff]
   intro j hj
@@ -241,7 +241,7 @@ definition groupSMul
 
 中文:
 定义 groupSMul
-  签名: {G : 类型} [Group G] [DistribMulAction G R] [DistribMulAction G M]
+  签名: {G : 类型} [群 G] [分配乘法作用 G R] [分配乘法作用 G M]
   定义体: Basis.mk (LinearIndependent.group_smul v.linearIndependent w) (groupSMul_span_eq_top v.span_eq).ge
 
 Depends on / 依赖: Basis.mk, LinearIndependent, LinearIndependent.group_smul, groupSMul_span_eq_top, group_smul, linearIndependent, span_eq, v.linearIndependent, v.span_eq
@@ -261,7 +261,7 @@ theorem groupSMul_apply
 
 中文:
 定理 groupSMul_apply
-  结论: {G : 类型} [Group G] [DistribMulAction G R] [DistribMulAction G M]
+  结论: {G : 类型} [群 G] [分配乘法作用 G R] [分配乘法作用 G M]
   证明: mk_apply (LinearIndependent.group_smul v.linearIndependent w)
     (groupSMul_span_eq_top v.span_eq).ge i
 
@@ -283,7 +283,7 @@ theorem units_smul_span_eq_top
 
 中文:
 定理 units_smul_span_eq_top
-  条件: {v : ι -> M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι -> Rˣ}
+  条件: {v : ι -> M} (hv : 子模.span R (集合.range v) = ⊤) {w : ι -> Rˣ}
   证明: groupSMul_span_eq_top hv
 
 Depends on / 依赖: groupSMul_span_eq_top
@@ -303,7 +303,7 @@ definition unitsSMul
 
 中文:
 定义 unitsSMul
-  签名: (v : Basis ι R M) (w : ι -> Rˣ)
+  签名: (v : 基 ι R M) (w : ι -> Rˣ)
   定义体: Basis.mk (LinearIndependent.units_smul v.linearIndependent w)
     (units_smul_span_eq_top v.span_eq).ge
 
@@ -325,7 +325,7 @@ theorem unitsSMul_apply
 
 中文:
 定理 unitsSMul_apply
-  条件: {v : Basis ι R M} {w : ι -> Rˣ} (i : ι)
+  条件: {v : 基 ι R M} {w : ι -> Rˣ} (i : ι)
   结论: unitsSMul v w i = w i • v i
   证明: mk_apply (LinearIndependent.units_smul v.linearIndependent w)
     (units_smul_span_eq_top v.span_eq).ge i
@@ -358,7 +358,7 @@ theorem coord_unitsSMul
 
 中文:
 定理 coord_unitsSMul
-  条件: (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (i : ι)
+  条件: (e : 基 ι R₂ M) (w : ι -> R₂ˣ) (i : ι)
   证明: by
   classical
     apply e.ext
@@ -393,7 +393,7 @@ theorem repr_unitsSMul
 
 中文:
 定理 repr_unitsSMul
-  条件: (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι)
+  条件: (e : 基 ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι)
   证明: congr_arg (fun f : M ->ₗ[R₂] R₂ => f v) (e.coord_unitsSMul w i)
 
 Depends on / 依赖: congr_arg, coord_unitsSMul, e.coord_unitsSMul
@@ -412,7 +412,7 @@ definition isUnitSMul
 
 中文:
 定义 isUnitSMul
-  签名: (v : Basis ι R M) {w : ι -> R} (hw : 对任意 i, IsUnit (w i))
+  签名: (v : 基 ι R M) {w : ι -> R} (hw : 对任意 i, 是单位 (w i))
   定义体: unitsSMul v fun i => (hw i).unit
 
 Depends on / 依赖: unitsSMul
@@ -430,7 +430,7 @@ theorem isUnitSMul_apply
 
 中文:
 定理 isUnitSMul_apply
-  条件: {v : Basis ι R M} {w : ι -> R} (hw : 对任意 i, IsUnit (w i)) (i : ι)
+  条件: {v : 基 ι R M} {w : ι -> R} (hw : 对任意 i, 是单位 (w i)) (i : ι)
   证明: unitsSMul_apply i
 
 Depends on / 依赖: unitsSMul_apply
@@ -449,7 +449,7 @@ theorem repr_isUnitSMul
 
 中文:
 定理 repr_isUnitSMul
-  条件: {v : Basis ι R₂ M} {w : ι -> R₂} (hw : 对任意 i, IsUnit (w i)) (x : M) (i : ι)
+  条件: {v : 基 ι R₂ M} {w : ι -> R₂} (hw : 对任意 i, 是单位 (w i)) (x : M) (i : ι)
   证明: repr_unitsSMul _ _ _ _
 
 Depends on / 依赖: repr_unitsSMul

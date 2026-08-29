@@ -56,7 +56,7 @@ definition pullbacks
 
 中文:
 定义 pullbacks
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun A B q =>
   exists (X Y : C) (p : X ⟶ Y) (f : A ⟶ X) (g : B ⟶ Y) (_ : P p),
     IsPullback f q p g
@@ -118,7 +118,7 @@ lemma pullbacks_monotone
 
 中文:
 引理 pullbacks_monotone
-  结论: Monotone (pullbacks (C := C))
+  结论: 递增 (pullbacks (C := C))
   证明: by
   rintro _ _ h _ _ _ ⟨_, _, _, _, _, hp, sq⟩
   exact ⟨_, _, _, _, _, h _ hp, sq⟩
@@ -139,7 +139,7 @@ definition pushouts
 
 中文:
 定义 pushouts
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun X Y q =>
   exists (A B : C) (p : A ⟶ B) (f : A ⟶ X) (g : B ⟶ Y) (_ : P p),
     IsPushout f p q g
@@ -201,7 +201,7 @@ lemma pushouts_monotone
 
 中文:
 引理 pushouts_monotone
-  结论: Monotone (pushouts (C := C))
+  结论: 递增 (pushouts (C := C))
   证明: by
   rintro _ _ h _ _ _ ⟨_, _, _, _, _, hp, sq⟩
   exact ⟨_, _, _, _, _, h _ hp, sq⟩
@@ -303,10 +303,10 @@ class IsStableUnderBaseChange
     - of_isPullback({X Y Y' S : C} {f : X ⟶ S} {g : Y ⟶ S} {f' : Y' ⟶ Y} {g' : Y' ⟶ X} (sq : IsPullback f' g' g f) (hg : P g)) : P g'
 
 中文:
-类 IsStableUnderBaseChange
+类 是StableUnderBaseChange
   参数: : 命题 where
   公理与运算 (1 个):
-    - of_isPullback({X Y Y' S : C} {f : X ⟶ S} {g : Y ⟶ S} {f' : Y' ⟶ Y} {g' : Y' ⟶ X} (sq : IsPullback f' g' g f) (hg : P g)) : P g'
+    - of_isPullback({X Y Y' S : C} {f : X ⟶ S} {g : Y ⟶ S} {f' : Y' ⟶ Y} {g' : Y' ⟶ X} (sq : 是拉回 f' g' g f) (hg : P g)) : P g'
 -/
 class IsStableUnderBaseChange : Prop where
   of_isPullback {X Y Y' S : C} {f : X ⟶ S} {g : Y ⟶ S} {f' : Y' ⟶ Y} {g' : Y' ⟶ X}
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.pullbacks.IsStableUnderBaseChange
+  签名: P.pullbacks.是StableUnderBaseChange
   定义体: by
     rintro _ _ _ _ _ _ _ _ h ⟨_, _, _, _, _, hp, hq⟩
     exact P.pullbacks_mk (h.paste_horiz hq) hp
@@ -346,10 +346,10 @@ class IsStableUnderCobaseChange
     - of_isPushout({A A' B B' : C} {f : A ⟶ A'} {g : A ⟶ B} {f' : B ⟶ B'} {g' : A' ⟶ B'} (sq : IsPushout g f f' g') (hf : P f)) : P f'
 
 中文:
-类 IsStableUnderCobaseChange
+类 是StableUnderCobaseChange
   参数: : 命题 where
   公理与运算 (1 个):
-    - of_isPushout({A A' B B' : C} {f : A ⟶ A'} {g : A ⟶ B} {f' : B ⟶ B'} {g' : A' ⟶ B'} (sq : IsPushout g f f' g') (hf : P f)) : P f'
+    - of_isPushout({A A' B B' : C} {f : A ⟶ A'} {g : A ⟶ B} {f' : B ⟶ B'} {g' : A' ⟶ B'} (sq : 是推出 g f f' g') (hf : P f)) : P f'
 -/
 class IsStableUnderCobaseChange : Prop where
   of_isPushout {A A' B B' : C} {f : A ⟶ A'} {g : A ⟶ B} {f' : B ⟶ B'} {g' : A' ⟶ B'}
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.pushouts.IsStableUnderCobaseChange
+  签名: P.pushouts.是StableUnderCobaseChange
   定义体: by
     rintro _ _ _ _ _ _ _ _ h ⟨_, _, _, _, _, hp, hq⟩
     exact P.pushouts_mk (hq.paste_horiz h) hp
@@ -389,7 +389,7 @@ class HasPullbacksAlong
     - hasPullback({W} (g : W ⟶ Y)) : P g -> HasPullback g f
 
 中文:
-类 HasPullbacksAlong
+类 有PullbacksAlong
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
     - hasPullback({W} (g : W ⟶ Y)) : P g -> HasPullback g f
@@ -410,7 +410,7 @@ class HasPushoutsAlong
     - hasPushout({W} (g : X ⟶ W)) : P g -> HasPushout g f
 
 中文:
-类 HasPushoutsAlong
+类 有PushoutsAlong
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
     - hasPushout({W} (g : X ⟶ W)) : P g -> HasPushout g f
@@ -431,10 +431,10 @@ class IsStableUnderBaseChangeAlong
     - of_isPullback({Z W : C} {f' : W ⟶ Z} {g' : W ⟶ X} {g : Z ⟶ Y} (pb : IsPullback f' g' g f)) : P g -> P g'
 
 中文:
-类 IsStableUnderBaseChangeAlong
+类 是StableUnderBaseChangeAlong
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - of_isPullback({Z W : C} {f' : W ⟶ Z} {g' : W ⟶ X} {g : Z ⟶ Y} (pb : IsPullback f' g' g f)) : P g -> P g'
+    - of_isPullback({Z W : C} {f' : W ⟶ Z} {g' : W ⟶ X} {g : Z ⟶ Y} (pb : 是拉回 f' g' g f)) : P g -> P g'
 -/
 class IsStableUnderBaseChangeAlong {X Y : C} (f : X ⟶ Y) : Prop where
   of_isPullback {Z W : C} {f' : W ⟶ Z} {g' : W ⟶ X} {g : Z ⟶ Y}
@@ -449,7 +449,7 @@ instance [P.IsStableUnderBaseChange]
   body: IsStableUnderBaseChange.of_isPullback
 
 中文:
-实例 [P.IsStableUnderBaseChange]
+实例 [P.是StableUnderBaseChange]
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: IsStableUnderBaseChange.of_isPullback
 
@@ -468,10 +468,10 @@ class IsStableUnderCobaseChangeAlong
     - of_isPushout({Z W : C} {f' : Z ⟶ W} {g' : Y ⟶ W} {g : X ⟶ Z} (pb : IsPushout f g g' f')) : P g -> P g'
 
 中文:
-类 IsStableUnderCobaseChangeAlong
+类 是StableUnderCobaseChangeAlong
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - of_isPushout({Z W : C} {f' : Z ⟶ W} {g' : Y ⟶ W} {g : X ⟶ Z} (pb : IsPushout f g g' f')) : P g -> P g'
+    - of_isPushout({Z W : C} {f' : Z ⟶ W} {g' : Y ⟶ W} {g : X ⟶ Z} (pb : 是推出 f g g' f')) : P g -> P g'
 -/
 class IsStableUnderCobaseChangeAlong {X Y : C} (f : X ⟶ Y) : Prop where
   of_isPushout {Z W : C} {f' : Z ⟶ W} {g' : Y ⟶ W} {g : X ⟶ Z}
@@ -488,7 +488,7 @@ instance [P.IsStableUnderCobaseChange]
 alias of_isPullback := IsStableUnderBaseChange.of_isPullback
 
 中文:
-实例 [P.IsStableUnderCobaseChange]
+实例 [P.是StableUnderCobaseChange]
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: IsStableUnderCobaseChange.of_isPushout
 
@@ -551,7 +551,7 @@ lemma pullbacks_le
 
 中文:
 引理 pullbacks_le
-  条件: [P.IsStableUnderBaseChange]
+  条件: [P.是StableUnderBaseChange]
   结论: P.pullbacks <= P
   证明: by
   rwa [← isStableUnderBaseChange_iff_pullbacks_le]
@@ -575,7 +575,7 @@ theorem IsStableUnderBaseChange.mk'
     exact hP₂ _ _ _ f g hg
 
 中文:
-定理 IsStableUnderBaseChange.mk'
+定理 是StableUnderBaseChange.mk'
   结论: [RespectsIso P]
   证明: by
     have : HasPullback f g := sq.flip.hasPullback
@@ -607,8 +607,8 @@ lemma IsStableUnderBaseChange.of_forall_exists_isPullback
   rwa [← h.isoPullback_inv_fst, P.cancel_left_of_respectsIso]
 
 中文:
-引理 IsStableUnderBaseChange.of_forall_exists_isPullback
-  结论: {P : Morphism命题erty C} [P.RespectsIso]
+引理 是StableUnderBaseChange.of_对任意_存在_isPullback
+  结论: {P : MorphismProperty C} [P.RespectsIso]
   证明: by
   refine .mk' fun X Y S f g _ hg => ?_
   obtain ⟨T, fst, snd, h, hfst⟩ := H f g hg
@@ -635,7 +635,7 @@ instance IsStableUnderBaseChange.isomorphisms
   body: h.isIso_snd_of_isIso
 
 中文:
-实例 IsStableUnderBaseChange.isomorphisms
+实例 是StableUnderBaseChange.isomorphisms
   签名: :
   定义体: h.isIso_snd_of_isIso
 
@@ -654,7 +654,7 @@ instance IsStableUnderBaseChange.monomorphisms
   body: h.mono_snd_of_mono
 
 中文:
-实例 IsStableUnderBaseChange.monomorphisms
+实例 是StableUnderBaseChange.monomorphisms
   签名: :
   定义体: h.mono_snd_of_mono
 
@@ -749,7 +749,7 @@ alias baseChange_map' := pul
 
 中文:
 定理 pullbackLift_fst_snd
-  结论: [IsStableUnderBaseChange P] {S S' X Y : C} (f : S' ⟶ S)
+  结论: [是StableUnderBaseChange P] {S S' X Y : C} (f : S' ⟶ S)
   证明: by
   subst hv₁₂
   refine of_isPullback (f' := pullback.fst (g ≫ v₂₂) f)
@@ -788,7 +788,7 @@ alias baseChange_map := overPullbackMap
 
 中文:
 定理 overPullbackMap
-  结论: [IsStableUnderBaseChange P] {S S' : C} (f : S' ⟶ S)
+  结论: [是StableUnderBaseChange P] {S S' : C} (f : S' ⟶ S)
   证明: pullbackLift_fst_snd f (g.w.symm) H
 
 @[deprecated (since := "2026-03-20")]
@@ -866,7 +866,7 @@ instance IsStableUnderBaseChange.hasOfPostcompProperty_monomorphisms
 alias of_isPushout := IsStableUnderCobaseChange.of_isPushout
 
 中文:
-实例 IsStableUnderBaseChange.hasOfPostcompProperty_monomorphisms
+实例 是StableUnderBaseChange.hasOfPostcompProperty_monomorphisms
   定义体: by
     have : f = (asIso (pullback.fst (f ≫ g) g)).inv ≫ pullback.snd (f ≫ g) g := by
       simp [← cancel_mono g, pullback.condition]
@@ -938,7 +938,7 @@ lemma pushouts_le
 
 中文:
 引理 pushouts_le
-  条件: [P.IsStableUnderCobaseChange]
+  条件: [P.是StableUnderCobaseChange]
   结论: P.pushouts <= P
   证明: by
   rwa [← isStableUnderCobaseChange_iff_pushouts_le]
@@ -965,7 +965,7 @@ lemma pushouts_le_iff
 
 中文:
 引理 pushouts_le_iff
-  条件: {P Q : Morphism命题erty C} [Q.IsStableUnderCobaseChange]
+  条件: {P Q : MorphismProperty C} [Q.是StableUnderCobaseChange]
   证明: by
   constructor
   · exact le_trans P.le_pushouts
@@ -994,7 +994,7 @@ theorem IsStableUnderCobaseChange.mk'
     exact hP₂ _ _ _ f g hf
 
 中文:
-定理 IsStableUnderCobaseChange.mk'
+定理 是StableUnderCobaseChange.mk'
   结论: [RespectsIso P]
   证明: by
     have : HasPushout f g := sq.flip.hasPushout
@@ -1026,8 +1026,8 @@ lemma IsStableUnderCobaseChange.of_forall_exists_isPullback
   rwa [← h.inr_isoPushout_hom, P.cancel_right_of_respectsIso]
 
 中文:
-引理 IsStableUnderCobaseChange.of_forall_exists_isPullback
-  结论: {P : Morphism命题erty C} [P.RespectsIso]
+引理 是StableUnderCobaseChange.of_对任意_存在_isPullback
+  结论: {P : MorphismProperty C} [P.RespectsIso]
   证明: by
   refine .mk' fun X Y S f g _ hg => ?_
   obtain ⟨T, inl, inr, h, hinl⟩ := H f g hg
@@ -1052,7 +1052,7 @@ instance IsStableUnderCobaseChange.isomorphisms
   body: h.isIso_inl_of_isIso
 
 中文:
-实例 IsStableUnderCobaseChange.isomorphisms
+实例 是StableUnderCobaseChange.isomorphisms
   签名: :
   定义体: h.isIso_inl_of_isIso
 
@@ -1072,7 +1072,7 @@ instance IsStableUnderCobaseChange.epimorphisms
   body: h.epi_inl_of_epi
 
 中文:
-实例 IsStableUnderCobaseChange.epimorphisms
+实例 是StableUnderCobaseChange.epimorphisms
   签名: :
   定义体: h.epi_inl_of_epi
 
@@ -1091,7 +1091,7 @@ instance IsStableUnderCobaseChange.respectsIso
     of_isPushout (IsPushout.of_horiz_isIso (CommSq.mk e.hom.w))
 
 中文:
-实例 IsStableUnderCobaseChange.respectsIso
+实例 是StableUnderCobaseChange.respectsIso
   定义体: RespectsIso.of_respects_arrow_iso _ fun _ _ e =>
     of_isPushout (IsPushout.of_horiz_isIso (CommSq.mk e.hom.w))
 
@@ -1157,7 +1157,7 @@ theorem pushoutDesc_inl_inr
 
 中文:
 定理 pushoutDesc_inl_inr
-  结论: [IsStableUnderCobaseChange P] {S S' X Y : C} (f : S ⟶ S')
+  结论: [是StableUnderCobaseChange P] {S S' X Y : C} (f : S ⟶ S')
   证明: by
   subst hv₁₂
   refine IsStableUnderCobaseChangeAlong.of_isPushout (f' := pushout.inl (v₂₂ ≫ g) f)
@@ -1188,7 +1188,7 @@ theorem underPushoutMap
 
 中文:
 定理 underPushoutMap
-  结论: [IsStableUnderCobaseChange P] {S S' : C} (f : S' ⟶ S)
+  结论: [是StableUnderCobaseChange P] {S S' : C} (f : S' ⟶ S)
   证明: pushoutDesc_inl_inr f g.w.symm H
 
 Depends on / 依赖: g.w.symm, pushoutDesc_inl_inr
@@ -1253,7 +1253,7 @@ instance IsStableUnderCobaseChange.hasOfPrecompProperty_epimorphisms
     exact P.pushout_inr _ _ hcomp
 
 中文:
-实例 IsStableUnderCobaseChange.hasOfPrecompProperty_epimorphisms
+实例 是StableUnderCobaseChange.hasOfPrecompProperty_epimorphisms
   定义体: by
     have : g = pushout.inr (f ≫ g) f ≫ (asIso (pushout.inl (f ≫ g) f)).inv := by
       rw [asIso_inv]; rw [IsIso.eq_comp_inv]; rw [← cancel_epi f]; rw [← pushout.condition]; rw [assoc]
@@ -1279,8 +1279,8 @@ instance IsStableUnderCobaseChange.op
   body: P.of_isPushout sq.unop hg
 
 中文:
-实例 IsStableUnderCobaseChange.op
-  签名: [IsStableUnderCobaseChange P]
+实例 是StableUnderCobaseChange.op
+  签名: [是StableUnderCobaseChange P]
   定义体: P.of_isPushout sq.unop hg
 
 Depends on / 依赖: P.of_isPushout, of_isPushout, sq.unop
@@ -1298,8 +1298,8 @@ instance IsStableUnderCobaseChange.unop
   body: P.of_isPushout sq.op hg
 
 中文:
-实例 IsStableUnderCobaseChange.unop
-  签名: {P : Morphism命题erty Cᵒᵖ} [IsStableUnderCobaseChange P]
+实例 是StableUnderCobaseChange.unop
+  签名: {P : MorphismProperty Cᵒᵖ} [是StableUnderCobaseChange P]
   定义体: P.of_isPushout sq.op hg
 
 Depends on / 依赖: P.of_isPushout, of_isPushout, sq.op
@@ -1317,8 +1317,8 @@ instance IsStableUnderBaseChange.op
   body: P.of_isPullback sq.unop hf
 
 中文:
-实例 IsStableUnderBaseChange.op
-  签名: [IsStableUnderBaseChange P]
+实例 是StableUnderBaseChange.op
+  签名: [是StableUnderBaseChange P]
   定义体: P.of_isPullback sq.unop hf
 
 Depends on / 依赖: P.of_isPullback, of_isPullback, sq.unop
@@ -1336,8 +1336,8 @@ instance IsStableUnderBaseChange.unop
   body: P.of_isPullback sq.op hf
 
 中文:
-实例 IsStableUnderBaseChange.unop
-  签名: {P : Morphism命题erty Cᵒᵖ} [IsStableUnderBaseChange P]
+实例 是StableUnderBaseChange.unop
+  签名: {P : MorphismProperty Cᵒᵖ} [是StableUnderBaseChange P]
   定义体: P.of_isPullback sq.op hf
 
 Depends on / 依赖: P.of_isPullback, of_isPullback, sq.op
@@ -1355,8 +1355,8 @@ instance IsStableUnderBaseChange.inf
   body: ⟨of_isPullback hp hg.left, of_isPullback hp hg.right⟩
 
 中文:
-实例 IsStableUnderBaseChange.inf
-  签名: {P Q : Morphism命题erty C} [IsStableUnderBaseChange P]
+实例 是StableUnderBaseChange.下确界
+  签名: {P Q : MorphismProperty C} [是StableUnderBaseChange P]
   定义体: ⟨of_isPullback hp hg.left, of_isPullback hp hg.right⟩
 
 Depends on / 依赖: hg.left, hg.right, of_isPullback
@@ -1375,8 +1375,8 @@ instance IsStableUnderCobaseChange.inf
   body: ⟨of_isPushout hp hg.left, of_isPushout hp hg.right⟩
 
 中文:
-实例 IsStableUnderCobaseChange.inf
-  签名: {P Q : Morphism命题erty C} [IsStableUnderCobaseChange P]
+实例 是StableUnderCobaseChange.下确界
+  签名: {P Q : MorphismProperty C} [是StableUnderCobaseChange P]
   定义体: ⟨of_isPushout hp hg.left, of_isPushout hp hg.right⟩
 
 Depends on / 依赖: hg.left, hg.right, of_isPushout
@@ -1396,7 +1396,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Morphism命题erty C).IsStableUnderBaseChange
+  签名: (⊤ : MorphismProperty C).是StableUnderBaseChange
   定义体: trivial
 -/
 instance : (⊤ : MorphismProperty C).IsStableUnderBaseChange where
@@ -1412,7 +1412,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Morphism命题erty C).IsStableUnderCobaseChange
+  签名: (⊤ : MorphismProperty C).是StableUnderCobaseChange
   定义体: trivial
 -/
 instance : (⊤ : MorphismProperty C).IsStableUnderCobaseChange where
@@ -1435,9 +1435,9 @@ inductive limitsOfShape
 
 中文:
 归纳类型 limitsOfShape
-  参数: : Morphism命题erty C
+  参数: : MorphismProperty C
   构造子 (1 个):
-    - mk: (X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂) (_ : IsLimit c₁) (h₂ : IsLimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) : limitsOfShape (h₂.lift (Cone.mk _ (c₁.π ≫ f)))
+    - mk: (X₁ X₂ : J ⥤ C) (c₁ : 锥 X₁) (c₂ : 锥 X₂) (_ : 是极限 c₁) (h₂ : 是极限 c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) : limitsOfShape (h₂.lift (锥.mk _ (c₁.π ≫ f)))
 -/
 inductive limitsOfShape : MorphismProperty C
   | mk (X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂)
@@ -1457,7 +1457,7 @@ lemma limitsOfShape.mk'
 
 中文:
 引理 limitsOfShape.mk'
-  结论: (X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂)
+  结论: (X₁ X₂ : J ⥤ C) (c₁ : 锥 X₁) (c₂ : 锥 X₂)
   证明: by
   obtain rfl : φ = h₂.lift (Cone.mk _ (c₁.π ≫ f)) := h₂.hom_ext (fun j => by simp [hφ])
   exact ⟨_, _, _, _, h₁, _, _, hf⟩
@@ -1483,7 +1483,7 @@ lemma limitsOfShape_monotone
 
 中文:
 引理 limitsOfShape_monotone
-  结论: {W₁ W₂ : Morphism命题erty C} (h : W₁ <= W₂)
+  结论: {W₁ W₂ : MorphismProperty C} (h : W₁ <= W₂)
   证明: by
   rintro _ _ _ ⟨_, _, _, _, h₁, _, f, hf⟩
   exact ⟨_, _, _, _, h₁, _, f, fun j => h _ (hf j)⟩
@@ -1571,10 +1571,10 @@ class IsStableUnderLimitsOfShape
     - condition((X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂) (_ : IsLimit c₁) (h₂ : IsLimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : forall j, φ ≫ c₂.π.app j = c₁.π.app j ≫ f.app j)) : W φ
 
 中文:
-类 IsStableUnderLimitsOfShape
+类 是StableUnderLimitsOfShape
   参数: : 命题 where
   公理与运算 (1 个):
-    - condition((X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂) (_ : IsLimit c₁) (h₂ : IsLimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : 对任意 j, φ ≫ c₂.π.app j = c₁.π.app j ≫ f.app j)) : W φ
+    - condition((X₁ X₂ : J ⥤ C) (c₁ : 锥 X₁) (c₂ : 锥 X₂) (_ : 是极限 c₁) (h₂ : 是极限 c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : 对任意 j, φ ≫ c₂.π.app j = c₁.π.app j ≫ f.app j)) : W φ
 -/
 class IsStableUnderLimitsOfShape : Prop where
   condition (X₁ X₂ : J ⥤ C) (c₁ : Cone X₁) (c₂ : Cone X₂)
@@ -1631,7 +1631,7 @@ lemma limitsOfShape_le
 
 中文:
 引理 limitsOfShape_le
-  条件: [W.IsStableUnderLimitsOfShape J]
+  条件: [W.是StableUnderLimitsOfShape J]
   证明: by
   rwa [← isStableUnderLimitsOfShape_iff_limitsOfShape_le]
 
@@ -1651,7 +1651,7 @@ lemma limMap
 
 中文:
 引理 limMap
-  结论: [W.IsStableUnderLimitsOfShape J] {X Y : J ⥤ C}
+  结论: [W.是StableUnderLimitsOfShape J] {X Y : J ⥤ C}
   证明: limitsOfShape_le _ (limitsOfShape_limMap _ hf)
 -/
 protected lemma limMap [W.IsStableUnderLimitsOfShape J] {X Y : J ⥤ C}
@@ -1676,9 +1676,9 @@ inductive colimitsOfShape
 
 中文:
 归纳类型 colimitsOfShape
-  参数: : Morphism命题erty C
+  参数: : MorphismProperty C
   构造子 (1 个):
-    - mk: (X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂) (h₁ : IsColimit c₁) (h₂ : IsColimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) : colimitsOfShape (h₁.desc (Cocone.mk _ (f ≫ c₂.ι)))
+    - mk: (X₁ X₂ : J ⥤ C) (c₁ : 余锥 X₁) (c₂ : 余锥 X₂) (h₁ : 是余极限 c₁) (h₂ : 是余极限 c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) : colimitsOfShape (h₁.desc (余锥.mk _ (f ≫ c₂.ι)))
 -/
 inductive colimitsOfShape : MorphismProperty C
   | mk (X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂)
@@ -1699,7 +1699,7 @@ lemma colimitsOfShape.mk'
 
 中文:
 引理 colimitsOfShape.mk'
-  结论: (X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂)
+  结论: (X₁ X₂ : J ⥤ C) (c₁ : 余锥 X₁) (c₂ : 余锥 X₂)
   证明: by
   obtain rfl : φ = h₁.desc (Cocone.mk _ (f ≫ c₂.ι)) := h₁.hom_ext (fun j => by simp [hφ])
   exact ⟨_, _, _, _, _, h₂, _, hf⟩
@@ -1725,7 +1725,7 @@ lemma colimitsOfShape_monotone
 
 中文:
 引理 colimitsOfShape_monotone
-  结论: {W₁ W₂ : Morphism命题erty C} (h : W₁ <= W₂)
+  结论: {W₁ W₂ : MorphismProperty C} (h : W₁ <= W₂)
   证明: by
   rintro _ _ _ ⟨_, _, _, _, _, h₂, f, hf⟩
   exact ⟨_, _, _, _, _, h₂, f, fun j => h _ (hf j)⟩
@@ -1756,7 +1756,7 @@ lemma colimitsOfShape_le_of_final
 
 中文:
 引理 colimitsOfShape_le_of_final
-  条件: {J' : 类型} [Category* J'] (F : J ⥤ J') [F.Final]
+  条件: {J' : 类型} [范畴* J'] (F : J ⥤ J') [F.终]
   证明: by
   intro _ _ _ ⟨X₁, X₂, c₁, c₂, h₁, h₂, f, hf⟩
   have h₁' : IsColimit (c₁.whisker F) := (Functor.Final.isColimitWhiskerEquiv F c₁).symm h₁
@@ -1792,7 +1792,7 @@ lemma colimitsOfShape_eq_of_equivalence
 
 中文:
 引理 colimitsOfShape_eq_of_equivalence
-  条件: {J' : 类型} [Category* J'] (e : J ≌ J')
+  条件: {J' : 类型} [范畴* J'] (e : J ≌ J')
   证明: le_antisymm (W.colimitsOfShape_le_of_final e.inverse)
     (W.colimitsOfShape_le_of_final e.functor)
 
@@ -1914,10 +1914,10 @@ class IsStableUnderColimitsOfShape
     - condition((X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂) (h₁ : IsColimit c₁) (h₁ : IsColimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : forall j, c₁.ι.app j ≫ φ = f.app j ≫ c₂.ι.app j)) : W φ
 
 中文:
-类 IsStableUnderColimitsOfShape
+类 是StableUnderColimitsOfShape
   参数: : 命题 where
   公理与运算 (1 个):
-    - condition((X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂) (h₁ : IsColimit c₁) (h₁ : IsColimit c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : 对任意 j, c₁.ι.app j ≫ φ = f.app j ≫ c₂.ι.app j)) : W φ
+    - condition((X₁ X₂ : J ⥤ C) (c₁ : 余锥 X₁) (c₂ : 余锥 X₂) (h₁ : 是余极限 c₁) (h₁ : 是余极限 c₂) (f : X₁ ⟶ X₂) (_ : W.functorCategory J f) (φ : c₁.pt ⟶ c₂.pt) (hφ : 对任意 j, c₁.ι.app j ≫ φ = f.app j ≫ c₂.ι.app j)) : W φ
 -/
 class IsStableUnderColimitsOfShape : Prop where
   condition (X₁ X₂ : J ⥤ C) (c₁ : Cocone X₁) (c₂ : Cocone X₂)
@@ -1975,7 +1975,7 @@ lemma colimitsOfShape_le
 
 中文:
 引理 colimitsOfShape_le
-  条件: [W.IsStableUnderColimitsOfShape J]
+  条件: [W.是StableUnderColimitsOfShape J]
   证明: by
   rwa [← isStableUnderColimitsOfShape_iff_colimitsOfShape_le]
 
@@ -1995,7 +1995,7 @@ lemma colimMap
 
 中文:
 引理 colimMap
-  结论: [W.IsStableUnderColimitsOfShape J] {X Y : J ⥤ C}
+  结论: [W.是StableUnderColimitsOfShape J] {X Y : J ⥤ C}
   证明: colimitsOfShape_le _ (colimitsOfShape_colimMap _ hf)
 -/
 protected lemma colimMap [W.IsStableUnderColimitsOfShape J] {X Y : J ⥤ C}
@@ -2019,7 +2019,7 @@ instance IsStableUnderColimitsOfShape.isomorphisms
       h₂.hom_ext (by simp [hφ])⟩
 
 中文:
-实例 IsStableUnderColimitsOfShape.isomorphisms
+实例 是StableUnderColimitsOfShape.isomorphisms
   签名: :
   定义体: by
     have := NatIso.isIso_of_isIso_app f
@@ -2051,10 +2051,10 @@ class IsStableUnderFilteredColimits
     - isStableUnderColimitsOfShape((J : Type w') [Category.{w} J] [IsFiltered J]) : W.IsStableUnderColimitsOfShape J  [default: by infer_instance]
 
 中文:
-类 IsStableUnderFilteredColimits
-  参数: (W : Morphism命题erty C)
+类 是StableUnderFilteredColimits
+  参数: (W : MorphismProperty C)
   公理与运算 (1 个):
-    - isStableUnderColimitsOfShape((J : Type w') [Category.{w} J] [IsFiltered J]) : W.IsStableUnderColimitsOfShape J  [默认: by infer_instance]
+    - isStableUnderColimitsOfShape((J : 类型 w') [范畴.{w} J] [是Filtered J]) : W.是StableUnderColimitsOfShape J  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -2073,7 +2073,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderFilteredColimits.{w, w'} (isomorphisms C)
+  签名: 是StableUnderFilteredColimits.{w, w'} (isomorphisms C)
 -/
 instance : IsStableUnderFilteredColimits.{w, w'} (isomorphisms C) where
 
@@ -2094,7 +2094,7 @@ definition coproducts
 
 中文:
 定义 coproducts
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: ⨆ (J : Type w), W.colimitsOfShape (Discrete J)
 
 Depends on / 依赖: Discrete, W.colimitsOfShape, colimitsOfShape
@@ -2111,7 +2111,7 @@ lemma colimitsOfShape_le_coproducts
 
 中文:
 引理 colimitsOfShape_le_coproducts
-  条件: (J : Type w)
+  条件: (J : 类型 w)
   证明: le_iSup (f := fun (J : Type w) => W.colimitsOfShape (Discrete J)) J
 
 Depends on / 依赖: Discrete, W.colimitsOfShape, colimitsOfShape, le_iSup
@@ -2154,7 +2154,7 @@ lemma coproducts_of_small
 
 中文:
 引理 coproducts_of_small
-  结论: {X Y : C} (f : X ⟶ Y) {J : Type w'}
+  结论: {X Y : C} (f : X ⟶ Y) {J : 类型 w'}
   证明: by
   rw [coproducts_iff]
   refine ⟨Shrink J, ?_⟩
@@ -2188,7 +2188,7 @@ lemma le_colimitsOfShape_punit
 
 中文:
 引理 le_colimitsOfShape_punit
-  结论: W <= W.colimitsOfShape (Discrete PUnit.{w + 1})
+  结论: W <= W.colimitsOfShape (离散 命题单元.{w + 1})
   证明: by
   intro X₁ X₂ f hf
   have h := initialIsInitial (C := Discrete (PUnit.{w + 1}))
@@ -2250,7 +2250,7 @@ lemma coproducts_monotone
 
 中文:
 引理 coproducts_monotone
-  结论: Monotone (coproducts.{w} (C := C))
+  结论: 递增 (coproducts.{w} (C := C))
   证明: by
   rintro W₁ W₂ h X Y f hf
   rw [coproducts_iff] at hf
@@ -2421,10 +2421,10 @@ class IsStableUnderFiniteProducts
     - isStableUnderProductsOfShape((J : Type) [Finite J]) : W.IsStableUnderProductsOfShape J
 
 中文:
-类 IsStableUnderFiniteProducts
+类 是StableUnderFiniteProducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - isStableUnderProductsOfShape((J : Type) [Finite J]) : W.IsStableUnderProductsOfShape J
+    - isStableUnderProductsOfShape((J : 类型) [有限 J]) : W.IsStableUnderProductsOfShape J
 -/
 class IsStableUnderFiniteProducts : Prop where
   isStableUnderProductsOfShape (J : Type) [Finite J] : W.IsStableUnderProductsOfShape J
@@ -2441,10 +2441,10 @@ class IsStableUnderFiniteCoproducts
     - isStableUnderCoproductsOfShape((J : Type) [Finite J]) : W.IsStableUnderCoproductsOfShape J
 
 中文:
-类 IsStableUnderFiniteCoproducts
+类 是StableUnderFiniteCoproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - isStableUnderCoproductsOfShape((J : Type) [Finite J]) : W.IsStableUnderCoproductsOfShape J
+    - isStableUnderCoproductsOfShape((J : 类型) [有限 J]) : W.IsStableUnderCoproductsOfShape J
 -/
 class IsStableUnderFiniteCoproducts : Prop where
   isStableUnderCoproductsOfShape (J : Type) [Finite J] : W.IsStableUnderCoproductsOfShape J
@@ -2463,10 +2463,10 @@ class IsStableUnderCoproducts
     - isStableUnderCoproductsOfShape((J : Type w)) : W.IsStableUnderCoproductsOfShape J  [default: by infer_instance]
 
 中文:
-类 IsStableUnderCoproducts
+类 是StableUnderCoproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - isStableUnderCoproductsOfShape((J : Type w)) : W.IsStableUnderCoproductsOfShape J  [默认: by infer_instance]
+    - isStableUnderCoproductsOfShape((J : 类型 w)) : W.IsStableUnderCoproductsOfShape J  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -2492,7 +2492,7 @@ lemma coproducts_le
 
 中文:
 引理 coproducts_le
-  条件: [IsStableUnderCoproducts.{w} W]
+  条件: [是StableUnderCoproducts.{w} W]
   证明: by
   intro X Y f hf
   rw [coproducts_iff] at hf
@@ -2523,7 +2523,7 @@ lemma coproducts_eq_self
 
 中文:
 引理 coproducts_eq_self
-  条件: [IsStableUnderCoproducts.{w} W]
+  条件: [是StableUnderCoproducts.{w} W]
   证明: le_antisymm W.coproducts_le W.le_coproducts
 
 @[simp]
@@ -2549,7 +2549,7 @@ lemma coproducts_le_iff
 
 中文:
 引理 coproducts_le_iff
-  条件: {P Q : Morphism命题erty C} [IsStableUnderCoproducts.{w} Q]
+  条件: {P Q : MorphismProperty C} [是StableUnderCoproducts.{w} Q]
   证明: by
   constructor
   · exact le_trans P.le_coproducts
@@ -2581,7 +2581,7 @@ definition diagonal
 
 中文:
 定义 diagonal
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun _ _ f => P (pullback.diagonal f)
 
 Depends on / 依赖: diagonal, pullback, pullback.diagonal
@@ -2659,7 +2659,7 @@ instance diagonal_isStableUnderComposition
 
 中文:
 实例 diagonal_isStableUnderComposition
-  签名: [P.IsStableUnderComposition] [RespectsIso P]
+  签名: [P.是StableUnderComposition] [RespectsIso P]
   定义体: by
     rw [diagonal_iff]; rw [pullback.diagonal_comp]
     exact P.comp_mem _ _ h₁
@@ -2683,7 +2683,7 @@ instance [P.ContainsIdentities]
   body: P.of_isIso _
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: [P.RespectsIso]
   定义体: P.of_isIso _
 
@@ -2700,8 +2700,8 @@ instance [P.IsMultiplicative]
   signature: [P.IsStableUnderBaseChange]
 
 中文:
-实例 [P.IsMultiplicative]
-  签名: [P.IsStableUnderBaseChange]
+实例 [P.是Multiplicative]
+  签名: [P.是StableUnderBaseChange]
 -/
 instance [P.IsMultiplicative] [P.IsStableUnderBaseChange] : P.diagonal.IsMultiplicative where
 
@@ -2719,8 +2719,8 @@ instance IsStableUnderBaseChange.diagonal
       exact P.overPullbackMap f _ (by simpa))
 
 中文:
-实例 IsStableUnderBaseChange.diagonal
-  签名: [IsStableUnderBaseChange P] [P.RespectsIso]
+实例 是StableUnderBaseChange.diagonal
+  签名: [是StableUnderBaseChange P] [P.RespectsIso]
   定义体: IsStableUnderBaseChange.mk'
     (by
       introv h
@@ -2772,7 +2772,7 @@ lemma hasOfPostcompProperty_iff_le_diagonal
 
 中文:
 引理 hasOfPostcompProperty_iff_le_diagonal
-  结论: [P.IsStableUnderBaseChange]
+  结论: [P.是StableUnderBaseChange]
   证明: by
   refine ⟨fun hP X Y f hf => ?_, fun hP => ⟨fun {Y X S} g f hf hcomp => ?_⟩⟩
   · exact hP.of_postcomp _ _ (Q.pullback_fst _ _ hf) (by simpa using P.id_mem X)
@@ -2810,7 +2810,7 @@ definition universally
 
 中文:
 定义 universally
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun X Y f =>
   forall ⦃X' Y' : C⦄ (i₁ : X' ⟶ X) (i₂ : Y' ⟶ Y) (f' : X' ⟶ Y') (_ : IsPullback f' i₁ i₂ f), P f'
 -/
@@ -2834,7 +2834,7 @@ instance universally_respectsIso
 
 中文:
 实例 universally_respectsIso
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: by
   apply RespectsIso.mk
   · intro X Y Z e f hf X' Z' i₁ i₂ f' H
@@ -2870,7 +2870,7 @@ instance universally_isStableUnderBaseChange
 
 中文:
 实例 universally_isStableUnderBaseChange
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: h₁ _ _ _ (H'.paste_vert H.flip)
 
 Depends on / 依赖: H.flip, paste_vert
@@ -2892,8 +2892,8 @@ instance IsStableUnderComposition.universally
     exact hf _ _ _ (H.of_right (pullback.lift_snd _ _ _) (IsPullback.of_hasPullback i₂ g))
 
 中文:
-实例 IsStableUnderComposition.universally
-  签名: [HasPullbacks C] (P : Morphism命题erty C)
+实例 是StableUnderComposition.universally
+  签名: [有Pullbacks C] (P : MorphismProperty C)
   定义体: by
     have := pullback.lift_fst _ _ (H.w.trans (Category.assoc _ _ _).symm)
     rw [← this] at H ⊢
@@ -2923,7 +2923,7 @@ theorem universally_le
 
 中文:
 定理 universally_le
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: P.universally <= P
   证明: by
   intro X Y f hf
@@ -2949,7 +2949,7 @@ theorem universally_inf
 
 中文:
 定理 universally_inf
-  条件: (P Q : Morphism命题erty C)
+  条件: (P Q : MorphismProperty C)
   证明: by
   ext X Y f
   change _ ↔ _ ∧ _
@@ -2976,7 +2976,7 @@ theorem universally_eq_iff
 
 中文:
 定理 universally_eq_iff
-  条件: {P : Morphism命题erty C}
+  条件: {P : MorphismProperty C}
   证明: ⟨(· ▸ P.universally_isStableUnderBaseChange),
     fun hP => P.universally_le.antisymm fun _ _ _ hf _ _ _ _ _ H => hP.of_isPullback H.flip hf⟩
 
@@ -2996,8 +2996,8 @@ theorem IsStableUnderBaseChange.universally_eq
   proof: universally_eq_iff.mpr hP
 
 中文:
-定理 IsStableUnderBaseChange.universally_eq
-  结论: {P : Morphism命题erty C}
+定理 是StableUnderBaseChange.universally_eq
+  结论: {P : MorphismProperty C}
   证明: universally_eq_iff.mpr hP
 
 Depends on / 依赖: universally_eq_iff, universally_eq_iff.mpr
@@ -3015,7 +3015,7 @@ theorem universally_mono
 
 中文:
 定理 universally_mono
-  结论: Monotone (universally : Morphism命题erty C -> Morphism命题erty C)
+  结论: 递增 (universally : MorphismProperty C -> MorphismProperty C)
   证明: fun _ _ h _ _ _ h₁ _ _ _ _ _ H => h _ (h₁ _ _ _ H)
 -/
 theorem universally_mono : Monotone (universally : MorphismProperty C -> MorphismProperty C) :=
@@ -3035,7 +3035,7 @@ lemma universally_mk'
 
 中文:
 引理 universally_mk'
-  结论: (P : Morphism命题erty C) [P.RespectsIso] {X Y : C} (g : X ⟶ Y)
+  结论: (P : MorphismProperty C) [P.RespectsIso] {X Y : C} (g : X ⟶ Y)
   证明: by
   introv X' h
   have := h.hasPullback
@@ -3066,7 +3066,7 @@ class HasPullbacks
     - hasPullback({X Y S : C} {f : X ⟶ S} (g : Y ⟶ S)) : P f -> HasPullback f g  [default: by infer_instance]
 
 中文:
-类 HasPullbacks
+类 有Pullbacks
   参数: : 命题 where
   公理与运算 (1 个):
     - hasPullback({X Y S : C} {f : X ⟶ S} (g : Y ⟶ S)) : P f -> HasPullback f g  [默认: by infer_instance]
@@ -3083,8 +3083,8 @@ instance [HasPullbacks
   body: HasPullbacks.hasPullback
 
 中文:
-实例 [HasPullbacks
-  签名: C] : P.HasPullbacks where
+实例 [有Pullbacks
+  签名: C] : P.有Pullbacks where
   定义体: HasPullbacks.hasPullback
 
 Depends on / 依赖: HasPullbacks, HasPullbacks.hasPullback, hasPullback
@@ -3102,7 +3102,7 @@ instance [P.HasPullbacks]
   body: hasPullback _
 
 中文:
-实例 [P.HasPullbacks]
+实例 [P.有Pullbacks]
   签名: {X Y : C} {f : X ⟶ Y}
   定义体: hasPullback _
 
@@ -3121,7 +3121,7 @@ class HasPushouts
     - hasPushout({X Y S : C} {f : S ⟶ X} (g : S ⟶ Y)) : P f -> HasPushout f g  [default: by infer_instance]
 
 中文:
-类 HasPushouts
+类 有Pushouts
   参数: : 命题 where
   公理与运算 (1 个):
     - hasPushout({X Y S : C} {f : S ⟶ X} (g : S ⟶ Y)) : P f -> HasPushout f g  [默认: by infer_instance]
@@ -3138,8 +3138,8 @@ instance [HasPushouts
   body: HasPushouts.hasPushout
 
 中文:
-实例 [HasPushouts
-  签名: C] : P.HasPushouts where
+实例 [有Pushouts
+  签名: C] : P.有Pushouts where
   定义体: HasPushouts.hasPushout
 
 Depends on / 依赖: HasPushouts, HasPushouts.hasPushout, hasPushout
@@ -3157,7 +3157,7 @@ instance [P.HasPushouts]
   body: hasPushout _
 
 中文:
-实例 [P.HasPushouts]
+实例 [P.有Pushouts]
   签名: {X Y : C} {f : X ⟶ Y}
   定义体: hasPushout _
 
@@ -3210,9 +3210,9 @@ class IsStableUnderBaseChangeAgainst
     - isStableUnderBaseChangeAlong(⦃X Y) : C⦄ (f : X ⟶ Y) (hf : P' f) : P.IsStableUnderBaseChangeAlong f
 
 中文:
-类 IsStableUnderBaseChangeAgainst
+类 是StableUnderBaseChangeAgainst
   公理与运算 (1 个):
-    - isStableUnderBaseChangeAlong(⦃X Y) : C⦄ (f : X ⟶ Y) (hf : P' f) : P.IsStableUnderBaseChangeAlong f
+    - isStableUnderBaseChangeAlong(⦃X Y) : C⦄ (f : X ⟶ Y) (hf : P' f) : P.是StableUnderBaseChangeAlong f
 -/
 class IsStableUnderBaseChangeAgainst
     (P P' : MorphismProperty C) : Prop where
@@ -3258,9 +3258,9 @@ class HasPullbacksAgainst
     - hasPullbacksAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.HasPullbacksAlong f
 
 中文:
-类 HasPullbacksAgainst
+类 有PullbacksAgainst
   公理与运算 (1 个):
-    - hasPullbacksAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.HasPullbacksAlong f
+    - hasPullbacksAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.有PullbacksAlong f
 -/
 class HasPullbacksAgainst
     (P P' : MorphismProperty C) : Prop where
@@ -3306,7 +3306,7 @@ lemma _root_.CategoryTheory.Limits.hasPullback_ofHasPullbacksAgainst
   MorphismProperty.HasPullbacksAlong.hasPullback f hf
 
 中文:
-引理 _root_.CategoryTheory.Limits.hasPullback_ofHasPullbacksAgainst
+引理 _root_.范畴论.Limits.hasPullback_ofHasPullbacksAgainst
   证明: letI : P.HasPullbacksAlong g :=
     MorphismProperty.HasPullbacksAgainst.hasPullbacksAlong g hg
   MorphismProperty.HasPullbacksAlong.hasPullback f hf
@@ -3330,9 +3330,9 @@ class IsStableUnderCobaseChangeAgainst
     - isStableUnderCobaseChangeAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.IsStableUnderCobaseChangeAlong f
 
 中文:
-类 IsStableUnderCobaseChangeAgainst
+类 是StableUnderCobaseChangeAgainst
   公理与运算 (1 个):
-    - isStableUnderCobaseChangeAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.IsStableUnderCobaseChangeAlong f
+    - isStableUnderCobaseChangeAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.是StableUnderCobaseChangeAlong f
 
 Depends on / 依赖: P.ext_of_isTriangulatedClosed, P.prop_of_iso, prop_of_iso
 -/
@@ -3380,9 +3380,9 @@ class HasPushoutsAgainst
     - hasPushoutsAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.HasPushoutsAlong f
 
 中文:
-类 HasPushoutsAgainst
+类 有PushoutsAgainst
   公理与运算 (1 个):
-    - hasPushoutsAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.HasPushoutsAlong f
+    - hasPushoutsAlong(⦃X Y) : C ⦄ (f : X ⟶ Y) (hf : P' f) : P.有PushoutsAlong f
 -/
 class HasPushoutsAgainst
     (P P' : MorphismProperty C) : Prop where
@@ -3428,7 +3428,7 @@ lemma _root_.CategoryTheory.Limits.hasPushout_ofHasPushoutsAgainst
   MorphismProperty.HasPushoutsAlong.hasPushout f hf
 
 中文:
-引理 _root_.CategoryTheory.Limits.hasPushout_ofHasPushoutsAgainst
+引理 _root_.范畴论.Limits.hasPushout_ofHasPushoutsAgainst
   证明: letI : P.HasPushoutsAlong g :=
     MorphismProperty.HasPushoutsAgainst.hasPushoutsAlong g hg
   MorphismProperty.HasPushoutsAlong.hasPushout f hf

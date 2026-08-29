@@ -45,8 +45,8 @@ haveI : lit =Q k + 2 := ⟨⟩
     q(OfNat.ofNat $lit)
 
 中文:
-定义 ofNatQ
-  签名: (α : Q(Type $u)) (_ : Q(Semiring $α)) (n : 自然数)
+定义 of自然数Q
+  签名: (α : Q(类型 $u)) (_ : Q(半环 $α)) (n : 自然数)
   定义体: match n with
   | 0 => q(0 : $α)
   | 1 => q(1 : $α)
@@ -89,7 +89,7 @@ definition mulExpr'
 
 中文:
 定义 mulExpr'
-  签名: {u : Level} (n : 自然数) {α : Q(Type $u)} (inst : Q(Semiring $α)) (e : Q($α))
+  签名: {u : Level} (n : 自然数) {α : Q(类型 $u)} (inst : Q(半环 $α)) (e : Q($α))
   定义体: if n = 1 then e else
     let n := ofNatQ α inst n
     q($n * $e)
@@ -134,7 +134,7 @@ definition addExprs'
 
 中文:
 定义 addExprs'
-  签名: {u : Level} {α : Q(Type $u)} (_inst : Q(AddMonoid $α))
+  签名: {u : Level} {α : Q(类型 $u)} (_inst : Q(加法幺半群 $α))
 -/
 def addExprs' {u : Level} {α : Q(Type $u)} (_inst : Q(AddMonoid $α)) : List Q($α) -> Q($α)
   | [] => q(0)
@@ -155,7 +155,7 @@ definition addExprs
 
 中文:
 定义 addExprs
-  签名: : List Expr -> MetaM Expr
+  签名: : 列表 Expr -> MetaM Expr
 -/
 def addExprs : List Expr -> MetaM Expr
   | [] => return q(0) -- This may not be of the intended type; use with caution.
@@ -196,7 +196,7 @@ definition mkLTZeroProof
 
 中文:
 定义 mkLTZeroProof
-  签名: : List (Expr × 自然数) -> MetaM Expr
+  签名: : 列表 (Expr × 自然数) -> MetaM Expr
 -/
 def mkLTZeroProof : List (Expr × Nat) -> MetaM Expr
   | [] => throwError "no linear hypotheses found"
@@ -294,7 +294,7 @@ definition addNegEqProofsIdx
 
 中文:
 定义 addNegEqProofsIdx
-  签名: : List (Expr × 自然数) -> MetaM (List (Expr × 自然数))
+  签名: : 列表 (Expr × 自然数) -> MetaM (列表 (Expr × 自然数))
   定义体: mkAppN (← mkAppM `Iff.mpr #[← mkAppOptM ``neg_eq_zero #[none, none, t]]) #[h]
       let tl ← addNegEqProofsIdx tl
       return (h, i)::(nep, i)::tl
@@ -327,7 +327,7 @@ definition proveEqZeroUsing
 
 中文:
 定义 proveEqZeroUsing
-  签名: (tac : TacticM Unit) (e : Expr)
+  签名: (tac : TacticM 单元) (e : Expr)
   定义体: do
   let ⟨u, α, e⟩ ← inferTypeQ' e
   let _h : Q(Zero $α) ← synthInstanceQ q(Zero $α)

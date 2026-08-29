@@ -94,7 +94,7 @@ lemma res_id
 
 中文:
 引理 res_id
-  结论: res (MonoidHom.id G) M = M
+  结论: res (幺半群态射.id G) M = M
   证明: rfl
 -/
 lemma res_id : res (MonoidHom.id G) M = M := rfl
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: (resFunctor (k := k) f).Faithful
+  签名: (resFunctor (k := k) f).忠实
   定义体: by
     simpa [Rep.hom_ext_iff, Representation.IntertwiningMap.ext_iff] using h
 
@@ -233,7 +233,7 @@ abbreviation liftHomOfSurj
 
 中文:
 缩写 liftHomOfSurj
-  签名: {X Y : Rep k G} (hf : Function.Surjective f) (f' : res f X ⟶ res f Y)
+  签名: {X Y : Rep k G} (hf : 函数.满射 f) (f' : res f X ⟶ res f Y)
   定义体: ofHom ⟨f'.hom.toLinearMap, fun g => by obtain ⟨h, rfl⟩ := hf g; simpa using f'.hom.2 h⟩
 
 @[simp]
@@ -254,7 +254,7 @@ lemma liftHomOfSurj_toLinearMap
 
 中文:
 引理 liftHomOfSurj_toLinearMap
-  结论: {X Y : Rep k G} (hf : Function.Surjective f)
+  结论: {X Y : Rep k G} (hf : 函数.满射 f)
   证明: rfl
 -/
 lemma liftHomOfSurj_toLinearMap {X Y : Rep k G} (hf : Function.Surjective f)
@@ -272,8 +272,8 @@ lemma full_res
 
 中文:
 引理 full_res
-  条件: (hf : (⇑f).Surjective)
-  结论: (resFunctor (k := k) f).Full where
+  条件: (hf : (⇑f).满射)
+  结论: (resFunctor (k := k) f).满 where
   证明: ⟨liftHomOfSurj f hf f', by ext; simp⟩
 -/
 lemma full_res (hf : (⇑f).Surjective) : (resFunctor (k := k) f).Full where
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: (resFunctor (k := k) f).Additive
+  签名: (resFunctor (k := k) f).加性
   定义体: by ext : 2; simp [add_hom]
 
 Depends on / 依赖: Additive
@@ -385,7 +385,7 @@ lemma res_map_exact
 
 中文:
 引理 res_map_exact
-  结论: {k : 类型u} [CommRing k]
+  结论: {k : 类型u} [交换环 k]
   证明: by
   rw [ShortComplex.exact_map_iff_of_faithful]
 
@@ -416,7 +416,7 @@ lemma shortExact_res
 
 中文:
 引理 shortExact_res
-  条件: {k : 类型u} [CommRing k] (φ : H ->* G) {S : ShortComplex (Rep.{w} k G)}
+  条件: {k : 类型u} [交换环 k] (φ : H ->* G) {S : 短复形 (Rep.{w} k G)}
   证明: by
   constructor
   · intro h
@@ -482,7 +482,7 @@ abbreviation resOfQuotientIso
 
 中文:
 缩写 resOfQuotientIso
-  签名: : (res (QuotientGroup.mk' S) (A.ofQuotient S)) ≅ A
+  签名: : (res (商群.mk' S) (A.ofQuotient S)) ≅ A
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl

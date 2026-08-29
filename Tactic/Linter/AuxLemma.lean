@@ -82,7 +82,7 @@ definition nameRefersToAuxLemma
 
 中文:
 定义 nameRefersToAuxLemma
-  签名: : Name -> 布尔
+  签名: : Name -> 布尔值
 -/
 private def nameRefersToAuxLemma : Name -> Bool
   | .str p s => isAuxName s || nameRefersToAuxLemma p

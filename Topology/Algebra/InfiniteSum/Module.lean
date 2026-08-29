@@ -70,7 +70,7 @@ theorem Summable.tsum_const_smul
 
 中文:
 定理 Summable.tsum_const_smul
-  条件: [T2Space α] [L.NeBot] (b : γ) (hf : Summable f L)
+  条件: [T2空间 α] [L.NeBot] (b : γ) (hf : Summable f L)
   证明: (hf.hasSum.const_smul _).tsum_eq
 -/
 protected theorem Summable.tsum_const_smul [T2Space α] [L.NeBot] (b : γ) (hf : Summable f L) :
@@ -90,7 +90,7 @@ lemma tsum_const_smul'
 
 中文:
 引理 tsum_const_smul'
-  结论: {γ : 类型} [Group γ] [DistribMulAction γ α] [ContinuousConstSMul γ α]
+  结论: {γ : 类型} [群 γ] [分配乘法作用 γ α] [连续常数标量乘法 γ α]
   证明: ((Homeomorph.smul g).isClosedEmbedding.map_tsum f (g := show α ≃+ α from
     { DistribSMul.toAddMonoidHom _ g with
       invFun := DistribSMul.toAddMonoidHom _ g⁻¹
@@ -119,7 +119,7 @@ lemma tsum_const_smul''
 
 中文:
 引理 tsum_const_smul''
-  结论: {γ : 类型} [DivisionSemiring γ] [Module γ α] [ContinuousConstSMul γ α]
+  结论: {γ : 类型} [除半环 γ] [模 γ α] [连续常数标量乘法 γ α]
   证明: by
   rcases eq_or_ne g 0 with rfl | hg
   · simp
@@ -194,7 +194,7 @@ theorem Summable.tsum_smul_const
 
 中文:
 定理 Summable.tsum_smul_const
-  条件: [T2Space M] [L.NeBot] (hf : Summable f L) (a : M)
+  条件: [T2空间 M] [L.NeBot] (hf : Summable f L) (a : M)
   证明: (hf.hasSum.smul_const _).tsum_eq
 -/
 protected theorem Summable.tsum_smul_const [T2Space M] [L.NeBot] (hf : Summable f L) (a : M) :
@@ -307,7 +307,7 @@ theorem ContinuousLinearMap.hasSum
 alias HasSum.mapL := ContinuousLinearMap.hasSum
 
 中文:
-定理 ContinuousLinearMap.hasSum
+定理 连续线性映射.hasSum
   结论: {f : ι -> M} (φ : M ->SL[σ] M₂) {x : M}
   证明: by
   simpa only using! hf.map φ.toLinearMap.toAddMonoidHom φ.continuous
@@ -331,7 +331,7 @@ theorem ContinuousLinearMap.summable
 alias Summable.mapL := ContinuousLinearMap.summable
 
 中文:
-定理 ContinuousLinearMap.summable
+定理 连续线性映射.summable
   条件: {f : ι -> M} (φ : M ->SL[σ] M₂) (hf : Summable f L)
   证明: (hf.hasSum.mapL φ).summable
 
@@ -352,8 +352,8 @@ theorem ContinuousLinearMap.map_tsum
   proof: (hf.hasSum.mapL φ).tsum_eq.symm
 
 中文:
-定理 ContinuousLinearMap.map_tsum
-  结论: [T2Space M₂] [L.NeBot] {f : ι -> M} (φ : M ->SL[σ] M₂)
+定理 连续线性映射.map_tsum
+  结论: [T2空间 M₂] [L.NeBot] {f : ι -> M} (φ : M ->SL[σ] M₂)
   证明: (hf.hasSum.mapL φ).tsum_eq.symm
 -/
 protected theorem ContinuousLinearMap.map_tsum [T2Space M₂] [L.NeBot] {f : ι -> M} (φ : M ->SL[σ] M₂)
@@ -370,7 +370,7 @@ theorem ContinuousLinearEquiv.hasSum
     fun h => by simpa only [e.coe_coe, e.apply_symm_apply] using (e : M ->SL[σ] M₂).hasSum h⟩
 
 中文:
-定理 ContinuousLinearEquiv.hasSum
+定理 连续线性等价.hasSum
   条件: {f : ι -> M} (e : M ≃SL[σ] M₂) {y : M₂}
   证明: ⟨fun h => by simpa only [e.symm.coe_coe, e.symm_apply_apply] using h.mapL (e.symm : M₂ ->SL[σ'] M),
     fun h => by simpa only [e.coe_coe, e.apply_symm_apply] using (e : M ->SL[σ] M₂).hasSum h⟩
@@ -390,7 +390,7 @@ theorem ContinuousLinearEquiv.hasSum'
   rw [e.hasSum]; rw [ContinuousLinearEquiv.symm_apply_apply]
 
 中文:
-定理 ContinuousLinearEquiv.hasSum'
+定理 连续线性等价.hasSum'
   条件: {f : ι -> M} (e : M ≃SL[σ] M₂) {x : M}
   证明: by
   rw [e.hasSum]; rw [ContinuousLinearEquiv.symm_apply_apply]
@@ -408,7 +408,7 @@ theorem ContinuousLinearEquiv.summable
   proof: ⟨fun hf => (e.hasSum.1 hf.hasSum).summable, (e : M ->SL[σ] M₂).summable⟩
 
 中文:
-定理 ContinuousLinearEquiv.summable
+定理 连续线性等价.summable
   条件: {f : ι -> M} (e : M ≃SL[σ] M₂)
   证明: ⟨fun hf => (e.hasSum.1 hf.hasSum).summable, (e : M ->SL[σ] M₂).summable⟩
 -/
@@ -432,8 +432,8 @@ theorem ContinuousLinearEquiv.tsum_eq_iff
       exacts [e.m
 
 中文:
-定理 ContinuousLinearEquiv.tsum_eq_iff
-  结论: [T2Space M] [T2Space M₂]
+定理 连续线性等价.tsum_eq_iff
+  结论: [T2空间 M] [T2空间 M₂]
   证明: by
   by_cases hf : Summable f L
   · by_cases hL : L.NeBot
@@ -473,8 +473,8 @@ theorem ContinuousLinearEquiv.map_tsum
   rw [e.symm_apply_apply _]
 
 中文:
-定理 ContinuousLinearEquiv.map_tsum
-  结论: [T2Space M] [T2Space M₂]
+定理 连续线性等价.map_tsum
+  结论: [T2空间 M] [T2空间 M₂]
   证明: by
   refine symm (e.tsum_eq_iff.mpr ?_)
   rw [e.symm_apply_apply _]
@@ -516,8 +516,8 @@ definition MulAction.automorphize
   simp only [mul_smul]
 
 中文:
-定义 MulAction.automorphize
-  签名: [Group α] [MulAction α β] (f : β -> M)
+定义 乘法作用.automorphize
+  签名: [群 α] [乘法作用 α β] (f : β -> M)
   定义体: by
   refine @Quotient.lift _ _ (_) (fun b => ∑' (a : α), f (a • b)) ?_
   intro b₁ b₂ ⟨a, (ha : a • b₂ = b₁)⟩
@@ -564,8 +564,8 @@ lemma MulAction.automorphize_smul_left
     apply (@Quotient.eq _ (MulAct
 
 中文:
-引理 MulAction.automorphize_smul_left
-  结论: [Group α] [MulAction α β] (f : β -> M)
+引理 乘法作用.automorphize_smul_left
+  结论: [群 α] [乘法作用 α β] (f : β -> M)
   证明: by
   ext x
   induction x using Quotient.inductionOn with | _ b
@@ -611,7 +611,7 @@ definition QuotientGroup.automorphize
   body: MulAction.automorphize f
 
 中文:
-定义 QuotientGroup.automorphize
+定义 商群.automorphize
   签名: (f : G -> M)
   定义体: MulAction.automorphize f
 
@@ -628,7 +628,7 @@ lemma QuotientGroup.automorphize_smul_left
   proof: MulAction.automorphize_smul_left f g
 
 中文:
-引理 QuotientGroup.automorphize_smul_left
+引理 商群.automorphize_smul_left
   条件: (f : G -> M) (g : G ⧸ Γ -> R)
   证明: MulAction.automorphize_smul_left f g
 

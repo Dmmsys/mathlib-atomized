@@ -41,7 +41,7 @@ class IsSmall
     - small_toSet : Small.{w} W.toSet
 
 中文:
-类 IsSmall
+类 是Small
   参数: : 命题 where
   公理与运算 (1 个):
     - small_toSet : Small.{w} W.toSet
@@ -66,7 +66,7 @@ instance isSmall_ofHoms
 
 中文:
 实例 isSmall_ofHoms
-  签名: {ι : Type t} [Small.{w} ι] {A B : ι -> C} (f : 对任意 i, A i ⟶ B i)
+  签名: {ι : 类型 t} [Small.{w} ι] {A B : ι -> C} (f : 对任意 i, A i ⟶ B i)
   定义体: by
   let φ (i : ι) : (ofHoms f).toSet := ⟨Arrow.mk (f i), ⟨i⟩⟩
   have hφ : Function.Surjective φ := by
@@ -150,7 +150,7 @@ instance isSmall_iSup
 
 中文:
 实例 isSmall_iSup
-  签名: {α : 类型} (W : α -> Morphism命题erty C)
+  签名: {α : 类型} (W : α -> MorphismProperty C)
   定义体: by
     rw [toSet_iSup]
     refine small_of_surjective (f := fun (⟨i, f⟩ : Σ i, (W i).toSet) =>

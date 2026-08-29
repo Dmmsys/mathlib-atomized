@@ -52,8 +52,8 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_toContinuousMultilinearMap_co
     apply 
 
 中文:
-定理 ContinuousAlternatingMap.hasStrictFDerivAt_toContinuousMultilinearMap_comp_iff
-  条件: [Finite ι]
+定理 余ntinuousAlternating映射.hasStrictFDerivAt_toContinuousMultilinearMap_comp_iff
+  条件: [有限 ι]
   证明: by
   cases nonempty_fintype ι
   constructor <;> intro h
@@ -95,7 +95,7 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_compContinuousLinearMap
   have H₃ := hasStrictFDerivAt_pi.mpr fun i
 
 中文:
-定理 ContinuousAlternatingMap.hasStrictFDerivAt_compContinuousLinearMap
+定理 余ntinuousAlternating映射.hasStrictFDerivAt_compContinuousLinearMap
   证明: by
   rw [← hasStrictFDerivAt_toContinuousMultilinearMap_comp_iff]
   have H₁ := ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap
@@ -149,7 +149,7 @@ theorem HasFDerivAt.continuousAlternatingMapCompContinuousLinearMap
 .comp x (hf.prodMk hg) .hasFDerivAt hasStrictFDerivAt_compContinuousLinearMap (f x, (g x))
 
 中文:
-定理 HasFDerivAt.continuousAlternatingMapCompContinuousLinearMap
+定理 在点处Fréchet可导.continuousAlternatingMapCompContinuousLinearMap
   证明: by
   convert!
 .comp x (hf.prodMk hg) .hasFDerivAt hasStrictFDerivAt_compContinuousLinearMap (f x, (g x))
@@ -357,7 +357,7 @@ theorem hasFDerivAt
 中文:
 定理 hasFDerivAt
   条件: (f : E [⋀^ι]->L[𝕜] F) (x : ι -> E)
-  结论: HasFDerivAt f (f.1.linearDeriv x) x
+  结论: 在点处Fréchet可导 f (f.1.linearDeriv x) x
   证明: f.1.hasFDerivAt x
 
 Depends on / 依赖: hasFDerivAt
@@ -375,7 +375,7 @@ theorem hasFDerivWithinAt
 
 中文:
 定理 hasFDerivWithinAt
-  条件: (f : E [⋀^ι]->L[𝕜] F) (s : Set (ι -> E)) (x : ι -> E)
+  条件: (f : E [⋀^ι]->L[𝕜] F) (s : 集合 (ι -> E)) (x : ι -> E)
   证明: (f.hasFDerivAt x).hasFDerivWithinAt
 
 Depends on / 依赖: f.hasFDerivAt, hasFDerivAt, hasFDerivWithinAt
@@ -422,8 +422,8 @@ theorem HasFDerivAt.continuousAlternatingMap_apply
 .continuousMultilinearMap_apply hg
 
 中文:
-定理 HasFDerivAt.continuousAlternatingMap_apply
-  结论: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.continuousAlternatingMap_apply
+  结论: (hf : 在点处Fréchet可导 f f' x)
   证明: (toContinuousMultilinearMapCLM 𝕜).hasFDerivAt.comp x hf
 .continuousMultilinearMap_apply hg
 
@@ -652,8 +652,8 @@ theorem Differentiable.continuousAlternatingMap_apply
   proof: fun x => (hf x).continuousAlternatingMap_apply (hg · x)
 
 中文:
-定理 Differentiable.continuousAlternatingMap_apply
-  结论: (hf : Differentiable 𝕜 f)
+定理 可微.continuousAlternatingMap_apply
+  结论: (hf : 可微 𝕜 f)
   证明: fun x => (hf x).continuousAlternatingMap_apply (hg · x)
 
 Depends on / 依赖: continuousAlternatingMap_apply
@@ -674,9 +674,9 @@ theorem ContinuousAlternatingMap.differentiable
   apply Differentiable.continuousAlternatingMap_apply <;> fun_prop
 
 中文:
-定理 ContinuousAlternatingMap.differentiable
+定理 余ntinuousAlternating映射.differentiable
   条件: (f : E [⋀^ι]->L[𝕜] F)
-  结论: Differentiable 𝕜 f
+  结论: 可微 𝕜 f
   证明: by
   cases nonempty_fintype ι
   apply Differentiable.continuousAlternatingMap_apply <;> fun_prop

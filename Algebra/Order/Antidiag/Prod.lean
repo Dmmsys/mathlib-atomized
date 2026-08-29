@@ -71,10 +71,10 @@ class HasAntidiagonal
     - mem_antidiagonal({n} {a}) : a in antidiagonal n ↔ a.fst + a.snd = n
 
 中文:
-类 HasAntidiagonal
-  参数: (A : 类型) [AddMonoid A]
+类 有Antidiagonal
+  参数: (A : 类型) [加法幺半群 A]
   公理与运算 (2 个):
-    - antidiagonal : A -> Finset (A × A)
+    - antidiagonal : A -> 有限集 (A × A)
     - mem_antidiagonal({n} {a}) : a in antidiagonal n ↔ a.fst + a.snd = n
 -/
 class HasAntidiagonal (A : Type*) [AddMonoid A] where
@@ -99,10 +99,10 @@ class HasMulAntidiagonal
     - mem_mulAntidiagonal({n} {a}) : a in mulAntidiagonal n ↔ a.fst * a.snd = n
 
 中文:
-类 HasMulAntidiagonal
-  参数: (A : 类型) [Monoid A]
+类 有MulAntidiagonal
+  参数: (A : 类型) [幺半群 A]
   公理与运算 (2 个):
-    - mulAntidiagonal : A -> Finset (A × A)
+    - mulAntidiagonal : A -> 有限集 (A × A)
     - mem_mulAntidiagonal({n} {a}) : a in mulAntidiagonal n ↔ a.fst * a.snd = n
 -/
 class HasMulAntidiagonal (A : Type*) [Monoid A] where
@@ -138,8 +138,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: A] : Subsingleton (HasMulAntidiagonal A) where
+实例 [幺半群
+  签名: A] : 子单例 (有MulAntidiagonal A) where
   定义体: by
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     congr with n xy
@@ -164,7 +164,7 @@ lemma nonempty_antidiagonal
 
 中文:
 引理 nonempty_antidiagonal
-  条件: {M : 类型} [Monoid M] [Finset.HasMulAntidiagonal M] (a : M)
+  条件: {M : 类型} [幺半群 M] [有限集.有MulAntidiagonal M] (a : M)
   证明: ⟨(1, a), by simp⟩
 -/
 lemma nonempty_antidiagonal {M : Type*} [Monoid M] [Finset.HasMulAntidiagonal M] (a : M) :
@@ -187,7 +187,7 @@ lemma congr
 
 中文:
 引理 congr
-  结论: (A : 类型) [Monoid A]
+  结论: (A : 类型) [幺半群 A]
   证明: by congr!; subsingleton
 
 @[to_additive]
@@ -212,7 +212,7 @@ theorem swap_mem_mulAntidiagonal
 
 中文:
 定理 swap_mem_mulAntidiagonal
-  条件: [CommMonoid A] [HasMulAntidiagonal A] {n : A} {xy : A × A}
+  条件: [交换幺半群 A] [有MulAntidiagonal A] {n : A} {xy : A × A}
   证明: by
   simp [mul_comm]
 
@@ -235,7 +235,7 @@ theorem map_prodComm_mulAntidiagonal
 
 中文:
 定理 map_prodComm_mulAntidiagonal
-  条件: [CommMonoid A] [HasMulAntidiagonal A] {n : A}
+  条件: [交换幺半群 A] [有MulAntidiagonal A] {n : A}
   证明: Finset.ext fun ⟨a, b⟩ => by simp [mul_comm]
 
 Depends on / 依赖: Finset, Finset.ext, mul_comm
@@ -256,7 +256,7 @@ theorem map_swap_mulAntidiagonal
 
 中文:
 定理 map_swap_mulAntidiagonal
-  条件: [CommMonoid A] [HasMulAntidiagonal A] {n : A}
+  条件: [交换幺半群 A] [有MulAntidiagonal A] {n : A}
   证明: map_prodComm_mulAntidiagonal
 
 Depends on / 依赖: map_prodComm_mulAntidiagonal
@@ -485,7 +485,7 @@ theorem filter_fst_eq_antidiagonal
 
 中文:
 定理 filter_fst_eq_antidiagonal
-  条件: (n m : A) [DecidablePred (· = m)] [Decidable (m <= n)]
+  条件: (n m : A) [DecidablePred (· = m)] [可判定 (m <= n)]
   证明: by
   ext ⟨a, b⟩
   suffices a = m -> (a + b = n ↔ m <= n ∧ b = n - m) by
@@ -520,7 +520,7 @@ theorem filter_snd_eq_antidiagonal
 
 中文:
 定理 filter_snd_eq_antidiagonal
-  条件: (n m : A) [DecidablePred (· = m)] [Decidable (m <= n)]
+  条件: (n m : A) [DecidablePred (· = m)] [可判定 (m <= n)]
   证明: by
   rw [← map_swap_antidiagonal]; rw [filter_map]
   simp [filter_fst_eq_antidiagonal, apply_ite (Finset.map _)]
@@ -558,7 +558,7 @@ definition sigmaMulAntidiagonalEquivProd
 
 中文:
 定义 sigmaMulAntidiagonalEquivProd
-  签名: [Monoid A] [HasMulAntidiagonal A]
+  签名: [幺半群 A] [有MulAntidiagonal A]
   定义体: x.2
   invFun x := ⟨x.1 * x.2, x, mem_mulAntidiagonal.mpr rfl⟩
   left_inv := by
@@ -603,7 +603,7 @@ abbreviation mulAntidiagonalOfLocallyFinite
 
 中文:
 缩写 mulAntidiagonalOfLocallyFinite
-  签名: : HasMulAntidiagonal A where
+  签名: : 有MulAntidiagonal A where
   定义体: {uv in Iic n ×ˢ Iic n | uv.fst * uv.snd = n}
   mem_mulAntidiagonal {n} {a} := by
     simp only [mem_filter, and_iff_right_iff_imp]
@@ -639,7 +639,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasMulAntidiagonal (Multiplicative A)
+  签名: 有MulAntidiagonal (Multiplicative A)
   定义体: (antidiagonal (toAdd a)).map ⟨fun p => (ofAdd p.1 , ofAdd p.2), fun _ _ h => by aesop⟩
   mem_mulAntidiagonal {a p} := by aesop
 

@@ -38,12 +38,12 @@ structure BoolRing
     - [booleanRing : BooleanRing carrier]
 
 中文:
-结构 BoolRing
+结构 布尔值环
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [booleanRing : 布尔eanRing carrier]
+    - [booleanRing : 布尔ean环 carrier]
 -/
 structure BoolRing where
   /-- Construct a bundled `BoolRing` from a `BooleanRing`. -/
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort 布尔Ring 类型
+  签名: CoeSort 布尔值环 类型
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -89,7 +89,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [布尔eanRing α]
+  条件: (α : 类型) [布尔ean环 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 布尔Ring
+  签名: 可居 布尔值环
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited BoolRing :=
@@ -126,8 +126,8 @@ structure Hom
     - hom' : R ->+* S
 
 中文:
-结构 Hom
-  参数: (R S : 布尔Ring)
+结构 态射
+  参数: (R S : 布尔值环)
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : R ->+* S
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category 布尔Ring
+  签名: 范畴 布尔值环
   定义体: Hom R S
   id R := ⟨RingHom.id R⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory 布尔Ring (· ->+* ·)
+  签名: 余ncrete范畴 布尔值环 (· ->+* ·)
   定义体: f.hom'
   ofHom f := ⟨f⟩
 
@@ -193,8 +193,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := BoolRing) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : 布尔Ring} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 布尔值环} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BoolRing) f
 
 Depends on / 依赖: BoolRing, ConcreteCategory, ConcreteCategory.hom
@@ -214,7 +214,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {R S : 类型u} [布尔eanRing R] [布尔eanRing S] (f : R ->+* S)
+  签名: {R S : 类型u} [布尔ean环 R] [布尔ean环 S] (f : R ->+* S)
   定义体: ConcreteCategory.ofHom f
 
 @[ext]
@@ -236,7 +236,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R S : 布尔Ring} {f g : R ⟶ S} (hf : f.hom = g.hom)
+  条件: {R S : 布尔值环} {f g : R ⟶ S} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -256,7 +256,7 @@ instance hasForgetToCommRing
 
 中文:
 实例 hasForgetToCommRing
-  签名: : HasForget₂ 布尔Ring CommRingCat where
+  签名: : 有Forget₂ 布尔值环 交换环范畴 where
   定义体: { obj := fun R => CommRingCat.of R
       map := fun f => CommRingCat.ofHom f.hom }
 
@@ -283,8 +283,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : 布尔Ring.{u}} (e : α ≃+* β)
+定义 同构.mk
+  签名: {α β : 布尔值环.{u}} (e : α ≃+* β)
   定义体: ⟨e⟩
   inv := ⟨e.symm⟩
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -323,8 +323,8 @@ instance BoolRing.hasForgetToBoolAlg
 @[simps]
 
 中文:
-实例 BoolRing.hasForgetToBoolAlg
-  签名: : HasForget₂ 布尔Ring 布尔Alg where
+实例 布尔值环.hasForgetTo布尔Alg
+  签名: : 有Forget₂ 布尔值环 布尔Alg where
   定义体: .of (AsBoolAlg X)
   forget₂.map f := BoolAlg.ofHom f.hom.asBoolAlg
 
@@ -347,8 +347,8 @@ instance BoolAlg.hasForgetToBoolRing
 forget₂.map f := BoolRing.ofHom BoundedLatticeHom.asBoolRing f.hom
 
 中文:
-实例 BoolAlg.hasForgetToBoolRing
-  签名: : HasForget₂ 布尔Alg 布尔Ring where
+实例 布尔Alg.hasForgetTo布尔Ring
+  签名: : 有Forget₂ 布尔Alg 布尔值环 where
   定义体: .of (AsBoolRing X)
 forget₂.map f := BoolRing.ofHom BoundedLatticeHom.asBoolRing f.hom
 
@@ -374,8 +374,8 @@ definition boolRingCatEquivBoolAlg
     OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ =
 
 中文:
-定义 boolRingCatEquivBoolAlg
-  签名: : 布尔Ring ≌ 布尔Alg where
+定义 boolRingCatEquiv布尔Alg
+  签名: : 布尔值环 ≌ 布尔Alg where
   定义体: forget₂ BoolRing BoolAlg
   inverse := forget₂ BoolAlg BoolRing
   unitIso := NatIso.ofComponents (fun X => BoolRing.Iso.mk <|

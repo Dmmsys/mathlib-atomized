@@ -52,7 +52,7 @@ definition toSemiSimplexCategory
 
 中文:
 定义 toSemiSimplexCategory
-  签名: : X.N ⥤ SemiSimplexCategory where
+  签名: : X.N ⥤ SemiSimplex范畴 where
   定义体: ⦋s.dim⦌ₛ
   map f := SemiSimplexCategory.homOfMono (N.monoOfLE (leOfHom f))
   map_id _ := SemiSimplexCategory.toSimplexCategory.map_injective (by simp)
@@ -98,7 +98,7 @@ definition functorN'Iso
     simp [← cancel_mono (Subcomplex.ι _)])
 
 中文:
-定义 functorN'Iso
+定义 functorN'同构
   签名: : X.functorN' ≅ X.functorN
   定义体: NatIso.ofComponents (fun x => Nonsingular.iso _ x.nonDegenerate) (fun _ => by
     simp [← cancel_mono (Subcomplex.ι _)])
@@ -122,7 +122,7 @@ definition coconeN'
 
 中文:
 定义 coconeN'
-  签名: : Cocone X.functorN' where
+  签名: : 余锥 X.functorN' where
   定义体: X
   ι.app s := yonedaEquiv.symm s.simplex
   ι.naturality _ _ f := N.stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex (leOfHom f)
@@ -143,7 +143,7 @@ definition isColimitCoconeN'
 
 中文:
 定义 isColimitCoconeN'
-  签名: : IsColimit X.coconeN'
+  签名: : 是余极限 X.coconeN'
   定义体: (IsColimit.equivOfNatIsoOfIso
     X.functorN'Iso.symm _ _ (Cocone.ext (Iso.refl _))).1 X.isColimitCoconeN
 

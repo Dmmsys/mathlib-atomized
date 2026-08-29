@@ -50,10 +50,10 @@ class CardinalInterFilter
     - cardinal_sInter_mem : forall S : Set (Set α), (#S < c) -> (forall s in S, s in l) -> ⋂₀ S in l
 
 中文:
-类 CardinalInterFilter
-  参数: (l : Filter α) (c : Cardinal.{u})
+类 Cardinal整数erFilter
+  参数: (l : 滤子 α) (c : 基数.{u})
   公理与运算 (1 个):
-    - cardinal_sInter_mem : 对任意 S : Set (Set α), (#S < c) -> (对任意 s in S, s in l) -> ⋂₀ S in l
+    - cardinal_sInter_mem : 对任意 S : 集合 (集合 α), (#S < c) -> (对任意 s in S, s in l) -> ⋂₀ S in l
 
 Depends on / 依赖: UniqueFactorizationMonoid, to_uniqueFactorizationMonoid
 -/
@@ -74,8 +74,8 @@ theorem cardinal_sInter_mem
   CardinalInterFilter.cardinal_sInter_mem _ hSc⟩
 
 中文:
-定理 cardinal_sInter_mem
-  条件: {S : Set (Set α)} [Cardinal整数erFilter l c] (hSc : #S < c)
+定理 cardinal_s整数er_mem
+  条件: {S : 集合 (集合 α)} [Cardinal整数erFilter l c] (hSc : #S < c)
   证明: ⟨fun hS _s hs => mem_of_superset hS (sInter_subset_of_mem hs),
   CardinalInterFilter.cardinal_sInter_mem _ hSc⟩
 
@@ -97,8 +97,8 @@ theorem _root_.Filter.cardinalInterFilter_aleph0
       implies_true]
 
 中文:
-定理 _root_.Filter.cardinalInterFilter_aleph0
-  条件: (l : Filter α)
+定理 _root_.滤子.cardinal整数erFilter_aleph0
+  条件: (l : 滤子 α)
   结论: Cardinal整数erFilter l ℵ₀ where
   证明: by
     simp_all only [lt_aleph0_iff_subtype_finite, ofPred_mem_eq, sInter_mem,
@@ -120,8 +120,8 @@ theorem CardinalInterFilter.toCountableInterFilter
   proof: CardinalInterFilter.cardinal_sInter_mem S (lt_of_le_of_lt (Set.Countable.le_aleph0 hS) hc) a
 
 中文:
-定理 CardinalInterFilter.toCountableInterFilter
-  结论: (l : Filter α) [Cardinal整数erFilter l c]
+定理 Cardinal整数erFilter.toCountable整数erFilter
+  结论: (l : 滤子 α) [Cardinal整数erFilter l c]
   证明: CardinalInterFilter.cardinal_sInter_mem S (lt_of_le_of_lt (Set.Countable.le_aleph0 hS) hc) a
 
 Depends on / 依赖: CardinalInterFilter, CardinalInterFilter.cardinal_sInter_mem, Countable, Set.Countable.le_aleph0, cardinal_sInter_mem, le_aleph0, lt_of_le_of_lt
@@ -142,8 +142,8 @@ instance CountableInterFilter.toCardinalInterFilter
     rwa [← le_aleph0_iff_set_countable, ← lt_aleph_one_iff]
 
 中文:
-实例 CountableInterFilter.toCardinalInterFilter
-  签名: (l : Filter α) [Countable整数erFilter l]
+实例 余untable整数erFilter.toCardinal整数erFilter
+  签名: (l : 滤子 α) [余untable整数erFilter l]
   定义体: by
     apply CountableInterFilter.countable_sInter_mem S _ a
     rwa [← le_aleph0_iff_set_countable, ← lt_aleph_one_iff]
@@ -168,8 +168,8 @@ theorem cardinalInterFilter_aleph_one_iff
     rwa [lt_aleph_one_iff, le_aleph0_iff_set_countable]
 
 中文:
-定理 cardinalInterFilter_aleph_one_iff
-  结论: Cardinal整数erFilter l ℵ₁ ↔ Countable整数erFilter l where
+定理 cardinal整数erFilter_aleph_one_iff
+  结论: Cardinal整数erFilter l ℵ₁ ↔ 余untable整数erFilter l where
   证明: CountableInterFilter.toCardinalInterFilter l
   mp _ := by
     refine ⟨fun S h a => CardinalInterFilter.cardinal_sInter_mem (c := ℵ₁) S ?_ a⟩
@@ -192,8 +192,8 @@ theorem CardinalInterFilter.of_cardinalInterFilter_of_le
   proof: CardinalInterFilter.cardinal_sInter_mem S (lt_of_lt_of_le hS hac) a
 
 中文:
-定理 CardinalInterFilter.of_cardinalInterFilter_of_le
-  结论: (l : Filter α) [Cardinal整数erFilter l c]
+定理 Cardinal整数erFilter.of_cardinal整数erFilter_of_le
+  结论: (l : 滤子 α) [Cardinal整数erFilter l c]
   证明: CardinalInterFilter.cardinal_sInter_mem S (lt_of_lt_of_le hS hac) a
 
 Depends on / 依赖: CardinalInterFilter, CardinalInterFilter.cardinal_sInter_mem, cardinal_sInter_mem, lt_of_lt_of_le
@@ -213,8 +213,8 @@ theorem CardinalInterFilter.of_cardinalInterFilter_of_lt
   proof: CardinalInterFilter.of_cardinalInterFilter_of_le l (hac.le)
 
 中文:
-定理 CardinalInterFilter.of_cardinalInterFilter_of_lt
-  结论: (l : Filter α) [Cardinal整数erFilter l c]
+定理 Cardinal整数erFilter.of_cardinal整数erFilter_of_lt
+  结论: (l : 滤子 α) [Cardinal整数erFilter l c]
   证明: CardinalInterFilter.of_cardinalInterFilter_of_le l (hac.le)
 
 Depends on / 依赖: CardinalInterFilter, CardinalInterFilter.of_cardinalInterFilter_of_le, hac.le, of_cardinalInterFilter_of_le
@@ -239,8 +239,8 @@ theorem cardinal_iInter_mem
   exact forall_mem_range
 
 中文:
-定理 cardinal_iInter_mem
-  条件: {s : ι -> Set α} (hic : #ι < c)
+定理 cardinal_i整数er_mem
+  条件: {s : ι -> 集合 α} (hic : #ι < c)
   证明: by
   rw [← sInter_range _]
   apply (cardinal_sInter_mem (lt_of_le_of_lt Cardinal.mk_range_le hic)).trans
@@ -265,8 +265,8 @@ theorem cardinal_bInter_mem
   exact (cardinal_iInter_mem hS).trans Subtype.forall
 
 中文:
-定理 cardinal_bInter_mem
-  结论: {S : Set ι} (hS : #S < c)
+定理 cardinal_b整数er_mem
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: by
   rw [biInter_eq_iInter]
   exact (cardinal_iInter_mem hS).trans Subtype.forall
@@ -290,7 +290,7 @@ theorem eventually_cardinal_forall
   exact cardinal_iInter_mem hic
 
 中文:
-定理 eventually_cardinal_forall
+定理 eventually_cardinal_对任意
   条件: {p : α -> ι -> 命题} (hic : #ι < c)
   证明: by
   simp only [Filter.Eventually, ofPred_forall]
@@ -315,7 +315,7 @@ theorem eventually_cardinal_ball
 
 中文:
 定理 eventually_cardinal_ball
-  结论: {S : Set ι} (hS : #S < c)
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: by
   simp only [Filter.Eventually, ofPred_forall]
   exact cardinal_bInter_mem hS
@@ -339,7 +339,7 @@ theorem EventuallyLE.cardinal_iUnion
 
 中文:
 定理 EventuallyLE.cardinal_iUnion
-  结论: {s t : ι -> Set α} (hic : #ι < c)
+  结论: {s t : ι -> 集合 α} (hic : #ι < c)
   证明: ((eventually_cardinal_forall hic).2 h).mono fun _ hst hs => mem_iUnion.2
     (mem_iUnion.1 hs).imp hst
 
@@ -361,7 +361,7 @@ theorem EventuallyEq.cardinal_iUnion
 
 中文:
 定理 EventuallyEq.cardinal_iUnion
-  结论: {s t : ι -> Set α} (hic : #ι < c)
+  结论: {s t : ι -> 集合 α} (hic : #ι < c)
   证明: (EventuallyLE.cardinal_iUnion hic fun i => (h i).le).antisymm
     (EventuallyLE.cardinal_iUnion hic fun i => (h i).symm.le)
 
@@ -384,7 +384,7 @@ theorem EventuallyLE.cardinal_bUnion
 
 中文:
 定理 EventuallyLE.cardinal_bUnion
-  结论: {S : Set ι} (hS : #S < c)
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: by
   simp only [biUnion_eq_iUnion]
   exact EventuallyLE.cardinal_iUnion hS fun i => h i i.2
@@ -408,7 +408,7 @@ theorem EventuallyEq.cardinal_bUnion
 
 中文:
 定理 EventuallyEq.cardinal_bUnion
-  结论: {S : Set ι} (hS : #S < c)
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: (EventuallyLE.cardinal_bUnion hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.cardinal_bUnion hS fun i hi => (h i hi).symm.le)
 
@@ -430,8 +430,8 @@ theorem EventuallyLE.cardinal_iInter
     mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
 
 中文:
-定理 EventuallyLE.cardinal_iInter
-  结论: {s t : ι -> Set α} (hic : #ι < c)
+定理 EventuallyLE.cardinal_i整数er
+  结论: {s t : ι -> 集合 α} (hic : #ι < c)
   证明: ((eventually_cardinal_forall hic).2 h).mono fun _ hst hs =>
     mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
 
@@ -452,8 +452,8 @@ theorem EventuallyEq.cardinal_iInter
     (EventuallyLE.cardinal_iInter hic fun i => (h i).symm.le)
 
 中文:
-定理 EventuallyEq.cardinal_iInter
-  结论: {s t : ι -> Set α} (hic : #ι < c)
+定理 EventuallyEq.cardinal_i整数er
+  结论: {s t : ι -> 集合 α} (hic : #ι < c)
   证明: (EventuallyLE.cardinal_iInter hic fun i => (h i).le).antisymm
     (EventuallyLE.cardinal_iInter hic fun i => (h i).symm.le)
 
@@ -475,8 +475,8 @@ theorem EventuallyLE.cardinal_bInter
   exact EventuallyLE.cardinal_iInter hS fun i => h i i.2
 
 中文:
-定理 EventuallyLE.cardinal_bInter
-  结论: {S : Set ι} (hS : #S < c)
+定理 EventuallyLE.cardinal_b整数er
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: by
   simp only [biInter_eq_iInter]
   exact EventuallyLE.cardinal_iInter hS fun i => h i i.2
@@ -499,8 +499,8 @@ theorem EventuallyEq.cardinal_bInter
     (EventuallyLE.cardinal_bInter hS fun i hi => (h i hi).symm.le)
 
 中文:
-定理 EventuallyEq.cardinal_bInter
-  结论: {S : Set ι} (hS : #S < c)
+定理 EventuallyEq.cardinal_b整数er
+  结论: {S : 集合 ι} (hS : #S < c)
   证明: (EventuallyLE.cardinal_bInter hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.cardinal_bInter hS fun i hi => (h i hi).symm.le)
 
@@ -527,8 +527,8 @@ definition ofCardinalInter
     have : #({s, t} : Set (Se
 
 中文:
-定义 ofCardinalInter
-  签名: (l : Set (Set α)) (hc : 2 < c)
+定义 ofCardinal整数er
+  签名: (l : 集合 (集合 α)) (hc : 2 < c)
   定义体: l
   univ_sets :=
     sInter_empty ▸ hl ∅ (mk_eq_zero (∅ : Set (Set α)) ▸ lt_trans zero_lt_two hc) (empty_subset _)
@@ -563,8 +563,8 @@ instance cardinalInter_ofCardinalInter
 @[simp]
 
 中文:
-实例 cardinalInter_ofCardinalInter
-  签名: (l : Set (Set α)) (hc : 2 < c)
+实例 cardinal整数er_ofCardinal整数er
+  签名: (l : 集合 (集合 α)) (hc : 2 < c)
   定义体: ⟨hl⟩
 
 @[simp]
@@ -585,8 +585,8 @@ theorem mem_ofCardinalInter
   proof: Iff.rfl
 
 中文:
-定理 mem_ofCardinalInter
-  结论: {l : Set (Set α)} (hc : 2 < c)
+定理 mem_ofCardinal整数er
+  结论: {l : 集合 (集合 α)} (hc : 2 < c)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -614,7 +614,7 @@ definition ofCardinalUnion
 
 中文:
 定义 ofCardinalUnion
-  签名: (l : Set (Set α)) (hc : 2 < c)
+  签名: (l : 集合 (集合 α)) (hc : 2 < c)
   定义体: by
   refine .ofCardinalInter {s | sᶜ in l} hc (fun S hSc hSp => ?_) fun s t ht hsub => ?_
   · rw [mem_ofPred_eq, compl_sInter]
@@ -652,8 +652,8 @@ instance cardinalInter_ofCardinalUnion
 @[simp]
 
 中文:
-实例 cardinalInter_ofCardinalUnion
-  签名: (l : Set (Set α)) (hc : 2 < c) (h₁ h₂)
+实例 cardinal整数er_ofCardinalUnion
+  签名: (l : 集合 (集合 α)) (hc : 2 < c) (h₁ h₂)
   定义体: cardinalInter_ofCardinalInter ..
 
 @[simp]
@@ -675,7 +675,7 @@ theorem mem_ofCardinalUnion
 
 中文:
 定理 mem_ofCardinalUnion
-  条件: {l : Set (Set α)} (hc : 2 < c) {hunion hmono s}
+  条件: {l : 集合 (集合 α)} (hc : 2 < c) {hunion hmono s}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -693,8 +693,8 @@ instance cardinalInterFilter_principal
   body: ⟨fun _ _ hS => subset_sInter hS⟩
 
 中文:
-实例 cardinalInterFilter_principal
-  签名: (s : Set α)
+实例 cardinal整数erFilter_principal
+  签名: (s : 集合 α)
   定义体: ⟨fun _ _ hS => subset_sInter hS⟩
 
 Depends on / 依赖: subset_sInter
@@ -713,8 +713,8 @@ instance cardinalInterFilter_bot
   apply cardinalInterFilter_principal
 
 中文:
-实例 cardinalInterFilter_bot
-  签名: : Cardinal整数erFilter (⊥ : Filter α) c
+实例 cardinal整数erFilter_bot
+  签名: : Cardinal整数erFilter (⊥ : 滤子 α) c
   定义体: by
   rw [← principal_empty]
   apply cardinalInterFilter_principal
@@ -736,8 +736,8 @@ instance cardinalInterFilter_top
   apply cardinalInterFilter_principal
 
 中文:
-实例 cardinalInterFilter_top
-  签名: : Cardinal整数erFilter (⊤ : Filter α) c
+实例 cardinal整数erFilter_top
+  签名: : Cardinal整数erFilter (⊤ : 滤子 α) c
   定义体: by
   rw [← principal_univ]
   apply cardinalInterFilter_principal
@@ -776,8 +776,8 @@ instance cardinalInterFilter_inf_eq
   rw [h
 
 中文:
-实例 cardinalInterFilter_inf_eq
-  签名: (l₁ l₂ : Filter α) [Cardinal整数erFilter l₁ c]
+实例 cardinal整数erFilter_inf_eq
+  签名: (l₁ l₂ : 滤子 α) [Cardinal整数erFilter l₁ c]
   定义体: by
   refine ⟨fun S hSc hS => ?_⟩
   choose s hs t ht hst using hS
@@ -812,8 +812,8 @@ instance cardinalInterFilter_inf
   exact cardinalInterFilter_inf_eq _ _
 
 中文:
-实例 cardinalInterFilter_inf
-  签名: (l₁ l₂ : Filter α) {c₁ c₂ : Cardinal.{u}}
+实例 cardinal整数erFilter_inf
+  签名: (l₁ l₂ : 滤子 α) {c₁ c₂ : 基数.{u}}
   定义体: by
   have : CardinalInterFilter l₁ (c₁ ⊓ c₂) :=
     CardinalInterFilter.of_cardinalInterFilter_of_le l₁ inf_le_left
@@ -843,8 +843,8 @@ instance cardinalInterFilter_sup_eq
   exacts [(hS s hs).1, (hS s hs).2]
 
 中文:
-实例 cardinalInterFilter_sup_eq
-  签名: (l₁ l₂ : Filter α) [Cardinal整数erFilter l₁ c]
+实例 cardinal整数erFilter_sup_eq
+  签名: (l₁ l₂ : 滤子 α) [Cardinal整数erFilter l₁ c]
   定义体: by
   refine ⟨fun S hSc hS => ⟨?_, ?_⟩⟩ <;> refine (cardinal_sInter_mem hSc).2 fun s hs => ?_
   exacts [(hS s hs).1, (hS s hs).2]
@@ -870,8 +870,8 @@ instance cardinalInterFilter_sup
   exact cardinalInterFilter_sup_eq _ _
 
 中文:
-实例 cardinalInterFilter_sup
-  签名: (l₁ l₂ : Filter α) {c₁ c₂ : Cardinal.{u}}
+实例 cardinal整数erFilter_sup
+  签名: (l₁ l₂ : 滤子 α) {c₁ c₂ : 基数.{u}}
   定义体: by
   have : CardinalInterFilter l₁ (c₁ ⊓ c₂) :=
     CardinalInterFilter.of_cardinalInterFilter_of_le l₁ inf_le_left
@@ -906,12 +906,12 @@ inductive CardinalGenerateSets
 
 中文:
 归纳类型 CardinalGenerateSets
-  参数: : Set α -> 命题
+  参数: : 集合 α -> 命题
   构造子 (4 个):
-    - basic: {s : Set α} : s in g -> CardinalGenerateSets s
+    - basic: {s : 集合 α} : s in g -> CardinalGenerateSets s
     - univ: CardinalGenerateSets univ
-    - superset: {s t : Set α} : CardinalGenerateSets s -> s subseteq t -> CardinalGenerateSets t
-    - sInter: {S : Set (Set α)} : (#S < c) -> (对任意 s in S, CardinalGenerateSets s) -> CardinalGenerateSets (⋂₀ S)
+    - superset: {s t : 集合 α} : CardinalGenerateSets s -> s subseteq t -> CardinalGenerateSets t
+    - sInter: {S : 集合 (集合 α)} : (#S < c) -> (对任意 s in S, CardinalGenerateSets s) -> CardinalGenerateSets (⋂₀ S)
 -/
 inductive CardinalGenerateSets : Set α -> Prop
   | basic {s : Set α} : s in g -> CardinalGenerateSets s
@@ -949,7 +949,7 @@ lemma cardinalInter_ofCardinalGenerate
   apply cardinalInter_ofCardinalInter _ _ _
 
 中文:
-引理 cardinalInter_ofCardinalGenerate
+引理 cardinal整数er_ofCardinalGenerate
   条件: (hc : 2 < c)
   证明: by
   delta cardinalGenerate
@@ -982,7 +982,7 @@ theorem mem_cardinalGenerate_iff
 
 中文:
 定理 mem_cardinalGenerate_iff
-  条件: {s : Set α} {hreg : c.IsRegular}
+  条件: {s : 集合 α} {hreg : c.是正则}
   证明: by
   constructor <;> intro h
   · induction h with
@@ -1035,8 +1035,8 @@ theorem le_cardinalGenerate_iff_of_cardinalInterFilter
   | sInter Sct _ ih => exact (cardinal_sInter_mem Sct).mpr ih
 
 中文:
-定理 le_cardinalGenerate_iff_of_cardinalInterFilter
-  结论: {f : Filter α} [Cardinal整数erFilter f c]
+定理 le_cardinalGenerate_iff_of_cardinal整数erFilter
+  结论: {f : 滤子 α} [Cardinal整数erFilter f c]
   证明: by
   constructor <;> intro h
   · exact subset_trans (fun s => CardinalGenerateSets.basic) h

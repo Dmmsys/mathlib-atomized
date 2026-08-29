@@ -35,7 +35,7 @@ theorem infinite_setOfPred_prime
 
 中文:
 定理 infinite_setOfPred_prime
-  结论: { p | Prime p }.Infinite
+  结论: { p | 素 p }.无限
   证明: Set.infinite_of_not_bddAbove not_bddAbove_setOfPred_prime
 
 @[deprecated (since := "2026-07-09")] alias infinite_setOf_prime := infinite_setOfPred_prime
@@ -57,7 +57,7 @@ instance Primes.infinite
 
 中文:
 实例 Primes.infinite
-  签名: : Infinite Primes
+  签名: : 无限 Primes
   定义体: infinite_setOfPred_prime.to_subtype
 
 Depends on / 依赖: infinite_setOfPred_prime, infinite_setOfPred_prime.to_subtype, to_subtype
@@ -74,7 +74,7 @@ instance Primes.countable
 
 中文:
 实例 Primes.countable
-  签名: : Countable Primes
+  签名: : 可数 Primes
   定义体: ⟨⟨coeNat.coe, coe_nat_injective⟩⟩
 
 Depends on / 依赖: coeNat, coeNat.coe, coe_nat_injective
@@ -126,7 +126,7 @@ lemma mem_primeFactors
 
 中文:
 引理 mem_primeFactors
-  结论: p in n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n != 0
+  结论: p in n.primeFactors ↔ p.素 ∧ p ∣ n ∧ n != 0
   证明: by
   simp_rw [← toFinset_factors, List.mem_toFinset, mem_primeFactorsList']
 -/
@@ -146,7 +146,7 @@ lemma mem_primeFactors_of_ne_zero
 中文:
 引理 mem_primeFactors_of_ne_zero
   条件: (hn : n != 0)
-  结论: p in n.primeFactors ↔ p.Prime ∧ p ∣ n
+  结论: p in n.primeFactors ↔ p.素 ∧ p ∣ n
   证明: by
   simp [hn]
 -/
@@ -163,8 +163,8 @@ lemma Prime.mem_primeFactors
   proof: Nat.mem_primeFactors.mpr ⟨hp, hdvd, hn⟩
 
 中文:
-引理 Prime.mem_primeFactors
-  条件: (hp : p.Prime) (hdvd : p ∣ n) (hn : n != 0)
+引理 素.mem_primeFactors
+  条件: (hp : p.素) (hdvd : p ∣ n) (hn : n != 0)
   结论: p in n.primeFactors
   证明: Nat.mem_primeFactors.mpr ⟨hp, hdvd, hn⟩
 
@@ -183,8 +183,8 @@ lemma Prime.mem_primeFactors'
   proof: hp.mem_primeFactors hdvd (NeZero.ne n)
 
 中文:
-引理 Prime.mem_primeFactors'
-  条件: (hp : p.Prime) (hdvd : p ∣ n) [NeZero n]
+引理 素.mem_primeFactors'
+  条件: (hp : p.素) (hdvd : p ∣ n) [NeZero n]
   结论: p in n.primeFactors
   证明: hp.mem_primeFactors hdvd (NeZero.ne n)
 
@@ -203,8 +203,8 @@ lemma Prime.mem_primeFactors_self
   proof: hp.mem_primeFactors p.dvd_refl hp.ne_zero
 
 中文:
-引理 Prime.mem_primeFactors_self
-  条件: (hp : p.Prime)
+引理 素.mem_primeFactors_self
+  条件: (hp : p.素)
   结论: p in p.primeFactors
   证明: hp.mem_primeFactors p.dvd_refl hp.ne_zero
 
@@ -270,7 +270,7 @@ lemma prime_of_mem_primeFactors
 中文:
 引理 prime_of_mem_primeFactors
   条件: (hp : p in n.primeFactors)
-  结论: p.Prime
+  结论: p.素
   证明: (mem_primeFactors.1 hp).1
 
 Depends on / 依赖: mem_primeFactors
@@ -429,7 +429,7 @@ lemma nonempty_primeFactors
 中文:
 引理 nonempty_primeFactors
   条件: {n : 自然数}
-  结论: n.primeFactors.Nonempty ↔ 1 < n
+  结论: n.primeFactors.非空 ↔ 1 < n
   证明: by
   contrapose!
   rw [primeFactors_eq_empty]; rw [Nat.le_one_iff_eq_zero_or_eq_one]
@@ -451,8 +451,8 @@ lemma Prime.primeFactors
   simp [Nat.primeFactors, primeFactorsList_prime hp]
 
 中文:
-引理 Prime.primeFactors
-  条件: (hp : p.Prime)
+引理 素.primeFactors
+  条件: (hp : p.素)
   结论: p.primeFactors = {p}
   证明: by
   simp [Nat.primeFactors, primeFactorsList_prime hp]
@@ -635,7 +635,7 @@ lemma primeFactors_prime_pow
 
 中文:
 引理 primeFactors_prime_pow
-  条件: (hk : k != 0) (hp : Prime p)
+  条件: (hk : k != 0) (hp : 素 p)
   证明: by simp [primeFactors_pow p hk, hp]
 
 Depends on / 依赖: primeFactors_pow

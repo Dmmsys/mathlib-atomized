@@ -52,8 +52,8 @@ lemma Matrix.mulVec_fin_two
   simp [mulVec_eq_sum]
 
 中文:
-引理 Matrix.mulVec_fin_two
-  条件: (m : Matrix (Fin 2) (Fin 2) R) (v : Fin 2 -> R)
+引理 矩阵.mulVec_fin_two
+  条件: (m : 矩阵 (有限集 2) (有限集 2) R) (v : 有限集 2 -> R)
   证明: by
   ext i
   fin_cases i <;>
@@ -77,8 +77,8 @@ lemma Matrix.GeneralLinearGroup.fin_two_smul
 @[deprecated "use Fin 2 -> R instead" (since := "2026-04-19")]
 
 中文:
-引理 Matrix.GeneralLinearGroup.fin_two_smul
-  结论: {R : 类型} [CommRing R]
+引理 矩阵.GeneralLinearGroup.fin_two_smul
+  结论: {R : 类型} [交换环 R]
   证明: by
   simp [Units.smul_def]
 
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (Matrix (Fin 2) (Fin 2) R) (R × R)
+  签名: 模 (矩阵 (有限集 2) (有限集 2) R) (R × R)
   定义体: (LinearEquiv.finTwoArrow R R).symm.toAddEquiv.module _
 
 @[deprecated "use Fin 2 -> R instead" (since := "2026-04-19")]
@@ -131,8 +131,8 @@ lemma Matrix.fin_two_smul_prod
 @[deprecated Matrix.GeneralLinearGroup.fin_two_smul (since := "2026-04-19")]
 
 中文:
-引理 Matrix.fin_two_smul_prod
-  条件: (g : Matrix (Fin 2) (Fin 2) R) (v : R × R)
+引理 矩阵.fin_two_smul_prod
+  条件: (g : 矩阵 (有限集 2) (有限集 2) R) (v : R × R)
   证明: by
   simp [Equiv.smul_def, smul_eq_mulVec, Matrix.mulVec_eq_sum]
 
@@ -155,8 +155,8 @@ lemma Matrix.GeneralLinearGroup.fin_two_smul_prod
   simp [Units.smul_def, Matrix.fin_two_smul_prod]
 
 中文:
-引理 Matrix.GeneralLinearGroup.fin_two_smul_prod
-  结论: {R : 类型} [CommRing R]
+引理 矩阵.GeneralLinearGroup.fin_two_smul_prod
+  结论: {R : 类型} [交换环 R]
   证明: by
   simp [Units.smul_def, Matrix.fin_two_smul_prod]
 
@@ -191,7 +191,7 @@ definition equivProjectivization
 
 中文:
 定义 equivProjectivization
-  签名: : OnePoint K ≃ ℙ K (Fin 2 -> K) where
+  签名: : OnePoint K ≃ ℙ K (有限集 2 -> K) where
   定义体: p.elim (mk K ![1, 0] (by simp)) (fun t => mk K ![t, 1] (by simp))
   invFun p := by
     refine Projectivization.lift
@@ -272,7 +272,7 @@ lemma equivProjectivization_symm_apply_mk
 
 中文:
 引理 equivProjectivization_symm_apply_mk
-  条件: (v : Fin 2 -> K) (h : v != 0)
+  条件: (v : 有限集 2 -> K) (h : v != 0)
   证明: by
   simp [equivProjectivization]
 
@@ -298,7 +298,7 @@ instance instGLAction
 
 中文:
 实例 instGLAction
-  签名: : MulAction (GL (Fin 2) K) (OnePoint K)
+  签名: : 乘法作用 (GL (有限集 2) K) (OnePoint K)
   定义体: (equivProjectivization K).mulAction (GL (Fin 2) K)
 
 Depends on / 依赖: equivProjectivization, mulAction
@@ -317,7 +317,7 @@ lemma equivProjectivization_smul
 
 中文:
 引理 equivProjectivization_smul
-  条件: {g : GL (Fin 2) K} (x : OnePoint K)
+  条件: {g : GL (有限集 2) K} (x : OnePoint K)
   证明: by
   rw [Equiv.smul_def]; rw [Equiv.apply_symm_apply]
 
@@ -339,7 +339,7 @@ lemma smul_infty_def
 
 中文:
 引理 smul_infty_def
-  条件: {g : GL (Fin 2) K}
+  条件: {g : GL (有限集 2) K}
   证明: by
   simp [Equiv.smul_def, mulVec_eq_sum, Units.smul_def]
 
@@ -363,7 +363,7 @@ lemma smul_infty_eq_ite
 
 中文:
 引理 smul_infty_eq_ite
-  条件: (g : GL (Fin 2) K)
+  条件: (g : GL (有限集 2) K)
   证明: by
   by_cases h : g 1 0 = 0 <;>
   simp [h, div_eq_inv_mul, smul_infty_def]
@@ -386,7 +386,7 @@ lemma smul_infty_eq_self_iff
 
 中文:
 引理 smul_infty_eq_self_iff
-  条件: {g : GL (Fin 2) K}
+  条件: {g : GL (有限集 2) K}
   证明: by
   simp [smul_infty_eq_ite]
 
@@ -407,7 +407,7 @@ lemma smul_some_eq_ite
 
 中文:
 引理 smul_some_eq_ite
-  条件: {g : GL (Fin 2) K} {k : K}
+  条件: {g : GL (有限集 2) K} {k : K}
   证明: by
   simp [Equiv.smul_def, mulVec_eq_sum, div_eq_inv_mul, mul_comm, Units.smul_def]
 
@@ -431,7 +431,7 @@ lemma map_smul
 
 中文:
 引理 map_smul
-  结论: {L : 类型} [Field L] [DecidableEq L]
+  结论: {L : 类型} [域 L] [DecidableEq L]
   证明: by
   cases c with
   | infty => simp [smul_infty_eq_ite, apply_ite]
@@ -471,7 +471,7 @@ lemma fixpointPolynomial_aeval_eq_zero_iff
 
 中文:
 引理 fixpointPolynomial_aeval_eq_zero_iff
-  条件: {c : K} {g : GL (Fin 2) K}
+  条件: {c : K} {g : GL (有限集 2) K}
   证明: by
   simp only [fixpointPolynomial, map_sub, map_mul, map_add, aeval_X_pow, aeval_C, aeval_X,
     Algebra.algebraMap_self_apply, OnePoint.smul_some_eq_ite]
@@ -504,7 +504,7 @@ definition parabolicFixedPoint
 
 中文:
 定义 parabolicFixedPoint
-  签名: (g : GL (Fin 2) K)
+  签名: (g : GL (有限集 2) K)
   定义体: if g 1 0 = 0 then ∞ else ↑((g 0 0 - g 1 1) / (2 * g 1 0))
 -/
 def parabolicFixedPoint (g : GL (Fin 2) K) : OnePoint K :=
@@ -526,7 +526,7 @@ lemma IsParabolic.smul_eq_self_iff
 
 中文:
 引理 IsParabolic.smul_eq_self_iff
-  结论: {g : GL (Fin 2) K} (hg : g.IsParabolic) [NeZero (2 : K)]
+  结论: {g : GL (有限集 2) K} (hg : g.IsParabolic) [NeZero (2 : K)]
   证明: by
   rcases hg with ⟨hg, hdisc⟩
   rw [discr_fin_two]; rw [trace_fin_two]; rw [det_fin_two] at hdisc
@@ -571,7 +571,7 @@ lemma IsParabolic.parabolicFixedPoint_pow
 
 中文:
 引理 IsParabolic.parabolicFixedPoint_pow
-  结论: {g : GL (Fin 2) K} (hg : IsParabolic g) [CharZero K]
+  结论: {g : GL (有限集 2) K} (hg : IsParabolic g) [特征零 K]
   证明: by
   rw [eq_comm]; rw [← IsParabolic.smul_eq_self_iff (hg.pow hn)]
   clear hn
@@ -610,8 +610,8 @@ lemma IsElliptic.smul_ne_self
     refine fun h =>
 
 中文:
-引理 IsElliptic.smul_ne_self
-  结论: [LinearOrder K] [IsStrictOrderedRing K]
+引理 是Elliptic.smul_ne_self
+  结论: [线性序 K] [是StrictOrdered环 K]
   证明: by
   cases c with
   | infty =>

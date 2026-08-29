@@ -67,8 +67,8 @@ definition IsImage
   body: forall ⦃x⦄, x in e.source -> (e x in t ↔ x in s)
 
 中文:
-定义 IsImage
-  签名: (s : Set X) (t : Set Y)
+定义 是像
+  签名: (s : 集合 X) (t : 集合 Y)
   定义体: forall ⦃x⦄, x in e.source -> (e x in t ↔ x in s)
 
 Depends on / 依赖: e.source, source
@@ -91,8 +91,8 @@ theorem toPartialEquiv
 
 中文:
 定理 toPartialEquiv
-  条件: (h : e.IsImage s t)
-  结论: e.toPartialEquiv.IsImage s t
+  条件: (h : e.是像 s t)
+  结论: e.toPartialEquiv.是像 s t
   证明: h
 -/
 theorem toPartialEquiv (h : e.IsImage s t) : e.toPartialEquiv.IsImage s t :=
@@ -109,7 +109,7 @@ theorem apply_mem_iff
 
 中文:
 定理 apply_mem_iff
-  条件: (h : e.IsImage s t) (hx : x in e.source)
+  条件: (h : e.是像 s t) (hx : x in e.source)
   结论: e x in t ↔ x in s
   证明: h hx
 -/
@@ -127,8 +127,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : e.IsImage s t)
-  结论: e.symm.IsImage t s
+  条件: (h : e.是像 s t)
+  结论: e.symm.是像 t s
   证明: h.toPartialEquiv.symm
 -/
 protected theorem symm (h : e.IsImage s t) : e.symm.IsImage t s :=
@@ -147,7 +147,7 @@ theorem symm_apply_mem_iff
 
 中文:
 定理 symm_apply_mem_iff
-  条件: (h : e.IsImage s t) (hy : y in e.target)
+  条件: (h : e.是像 s t) (hy : y in e.target)
   结论: e.symm y in s ↔ y in t
   证明: h.symm hy
 
@@ -169,7 +169,7 @@ theorem symm_iff
 
 中文:
 定理 symm_iff
-  结论: e.symm.IsImage t s ↔ e.IsImage s t
+  结论: e.symm.是像 t s ↔ e.是像 s t
   证明: ⟨fun h => h.symm, fun h => h.symm⟩
 
 Depends on / 依赖: h.symm
@@ -188,8 +188,8 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  条件: (h : e.IsImage s t)
-  结论: MapsTo e (e.source inter s) (e.target inter t)
+  条件: (h : e.是像 s t)
+  结论: 映射到 e (e.source inter s) (e.target inter t)
   证明: h.toPartialEquiv.mapsTo
 -/
 protected theorem mapsTo (h : e.IsImage s t) : MapsTo e (e.source inter s) (e.target inter t) :=
@@ -206,8 +206,8 @@ theorem symm_mapsTo
 
 中文:
 定理 symm_mapsTo
-  条件: (h : e.IsImage s t)
-  结论: MapsTo e.symm (e.target inter t) (e.source inter s)
+  条件: (h : e.是像 s t)
+  结论: 映射到 e.symm (e.target inter t) (e.source inter s)
   证明: h.symm.mapsTo
 
 Depends on / 依赖: h.symm.mapsTo, mapsTo
@@ -226,7 +226,7 @@ theorem image_eq
 
 中文:
 定理 image_eq
-  条件: (h : e.IsImage s t)
+  条件: (h : e.是像 s t)
   结论: e '' (e.source inter s) = e.target inter t
   证明: h.toPartialEquiv.image_eq
 
@@ -246,7 +246,7 @@ theorem symm_image_eq
 
 中文:
 定理 symm_image_eq
-  条件: (h : e.IsImage s t)
+  条件: (h : e.是像 s t)
   结论: e.symm '' (e.target inter t) = e.source inter s
   证明: h.symm.image_eq
 
@@ -267,7 +267,7 @@ alias ⟨preimage_eq, of_preimage_eq⟩ := iff_preimage_eq
 
 中文:
 定理 iff_preimage_eq
-  结论: e.IsImage s t ↔ e.source inter e ⁻¹' t = e.source inter s
+  结论: e.是像 s t ↔ e.source inter e ⁻¹' t = e.source inter s
   证明: PartialEquiv.IsImage.iff_preimage_eq
 
 alias ⟨preimage_eq, of_preimage_eq⟩ := iff_preimage_eq
@@ -291,7 +291,7 @@ alias ⟨symm_preimage_eq, of_symm_preimage_eq⟩ := iff_symm_preimage_eq
 
 中文:
 定理 iff_symm_preimage_eq
-  结论: e.IsImage s t ↔ e.target inter e.symm ⁻¹' s = e.target inter t
+  结论: e.是像 s t ↔ e.target inter e.symm ⁻¹' s = e.target inter t
   证明: symm_iff.symm.trans iff_preimage_eq
 
 alias ⟨symm_preimage_eq, of_symm_preimage_eq⟩ := iff_symm_preimage_eq
@@ -340,7 +340,7 @@ alias ⟨preimage_eq', of_preimage_eq'⟩ := iff_preimage_eq'
 
 中文:
 定理 iff_preimage_eq'
-  结论: e.IsImage s t ↔ e.source inter e ⁻¹' (e.target inter t) = e.source inter s
+  结论: e.是像 s t ↔ e.source inter e ⁻¹' (e.target inter t) = e.source inter s
   证明: symm_iff.symm.trans iff_symm_preimage_eq'
 
 alias ⟨preimage_eq', of_preimage_eq'⟩ := iff_preimage_eq'
@@ -364,7 +364,7 @@ theorem of_image_eq
 中文:
 定理 of_image_eq
   条件: (h : e '' (e.source inter s) = e.target inter t)
-  结论: e.IsImage s t
+  结论: e.是像 s t
   证明: PartialEquiv.IsImage.of_image_eq h
 
 Depends on / 依赖: IsImage, PartialEquiv, PartialEquiv.IsImage.of_image_eq, of_image_eq
@@ -384,7 +384,7 @@ theorem of_symm_image_eq
 中文:
 定理 of_symm_image_eq
   条件: (h : e.symm '' (e.target inter t) = e.source inter s)
-  结论: e.IsImage s t
+  结论: e.是像 s t
   证明: PartialEquiv.IsImage.of_symm_image_eq h
 
 Depends on / 依赖: IsImage, PartialEquiv, PartialEquiv.IsImage.of_symm_image_eq, of_symm_image_eq
@@ -403,8 +403,8 @@ theorem compl
 
 中文:
 定理 compl
-  条件: (h : e.IsImage s t)
-  结论: e.IsImage sᶜ tᶜ
+  条件: (h : e.是像 s t)
+  结论: e.是像 sᶜ tᶜ
   证明: fun _ hx => (h hx).not
 -/
 protected theorem compl (h : e.IsImage s t) : e.IsImage sᶜ tᶜ := fun _ hx => (h hx).not
@@ -419,7 +419,7 @@ theorem inter
 
 中文:
 定理 inter
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: fun _ hx => (h hx).and (h' hx)
 -/
 protected theorem inter {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -435,7 +435,7 @@ theorem union
 
 中文:
 定理 union
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: fun _ hx => (h hx).or (h' hx)
 -/
 protected theorem union {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -451,7 +451,7 @@ theorem diff
 
 中文:
 定理 diff
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: h.inter h'.compl
 -/
 protected theorem diff {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -468,7 +468,7 @@ theorem leftInvOn_piecewise
 
 中文:
 定理 leftInvOn_piecewise
-  结论: {e' : OpenPartialHomeomorph X Y} [对任意 i, Decidable (i in s)]
+  结论: {e' : OpenPartialHomeomorph X Y} [对任意 i, 可判定 (i in s)]
   证明: h.toPartialEquiv.leftInvOn_piecewise h'
 
 Depends on / 依赖: h.toPartialEquiv.leftInvOn_piecewise, leftInvOn_piecewise, toPartialEquiv
@@ -488,7 +488,7 @@ theorem inter_eq_of_inter_eq_of_eqOn
 
 中文:
 定理 inter_eq_of_inter_eq_of_eqOn
-  结论: {e' : OpenPartialHomeomorph X Y} (h : e.IsImage s t)
+  结论: {e' : OpenPartialHomeomorph X Y} (h : e.是像 s t)
   证明: h.toPartialEquiv.inter_eq_of_inter_eq_of_eqOn h' hs Heq
 
 Depends on / 依赖: h.toPartialEquiv.inter_eq_of_inter_eq_of_eqOn, inter_eq_of_inter_eq_of_eqOn, toPartialEquiv
@@ -508,7 +508,7 @@ theorem symm_eqOn_of_inter_eq_of_eqOn
 
 中文:
 定理 symm_eqOn_of_inter_eq_of_eqOn
-  结论: {e' : OpenPartialHomeomorph X Y} (h : e.IsImage s t)
+  结论: {e' : OpenPartialHomeomorph X Y} (h : e.是像 s t)
   证明: h.toPartialEquiv.symm_eq_on_of_inter_eq_of_eqOn hs Heq
 
 Depends on / 依赖: h.toPartialEquiv.symm_eq_on_of_inter_eq_of_eqOn, symm_eq_on_of_inter_eq_of_eqOn, toPartialEquiv
@@ -530,7 +530,7 @@ theorem map_nhdsWithin_eq
 
 中文:
 定理 map_nhdsWithin_eq
-  条件: (h : e.IsImage s t) (hx : x in e.source)
+  条件: (h : e.是像 s t) (hx : x in e.source)
   结论: map e (𝓝[s] x) = 𝓝[t] e x
   证明: by
   rw [e.map_nhdsWithin_eq hx]; rw [h.image_eq]; rw [e.nhdsWithin_target_inter (e.map_source hx)]
@@ -552,8 +552,8 @@ theorem closure
 
 中文:
 定理 closure
-  条件: (h : e.IsImage s t)
-  结论: e.IsImage (closure s) (closure t)
+  条件: (h : e.是像 s t)
+  结论: e.是像 (closure s) (closure t)
   证明: fun x hx => by
   simp only [mem_closure_iff_nhdsWithin_neBot, ← h.map_nhdsWithin_eq hx, map_neBot_iff]
 -/
@@ -572,8 +572,8 @@ theorem interior
 
 中文:
 定理 interior
-  条件: (h : e.IsImage s t)
-  结论: e.IsImage (interior s) (interior t)
+  条件: (h : e.是像 s t)
+  结论: e.是像 (interior s) (interior t)
   证明: by
   simpa only [closure_compl, compl_compl] using h.compl.closure.compl
 -/
@@ -591,8 +591,8 @@ theorem frontier
 
 中文:
 定理 frontier
-  条件: (h : e.IsImage s t)
-  结论: e.IsImage (frontier s) (frontier t)
+  条件: (h : e.是像 s t)
+  结论: e.是像 (frontier s) (frontier t)
   证明: h.closure.diff h.interior
 -/
 protected theorem frontier (h : e.IsImage s t) : e.IsImage (frontier s) (frontier t) :=
@@ -610,8 +610,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (h : e.IsImage s t)
-  结论: IsOpen (e.source inter s) ↔ IsOpen (e.target inter t)
+  条件: (h : e.是像 s t)
+  结论: 是开集 (e.source inter s) ↔ 是开集 (e.target inter t)
   证明: ⟨fun hs => h.symm_preimage_eq' ▸ e.symm.isOpen_inter_preimage hs, fun hs =>
     h.preimage_eq' ▸ e.isOpen_inter_preimage hs⟩
 
@@ -637,7 +637,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: (h : e.IsImage s t) (hs : IsOpen (e.source inter s))
+  签名: (h : e.是像 s t) (hs : 是开集 (e.source inter s))
   定义体: h.toPartialEquiv.restr
   open_source := hs
   open_target := h.isOpen_iff.1 hs
@@ -665,7 +665,7 @@ theorem isImage_source_target
 
 中文:
 定理 isImage_source_target
-  结论: e.IsImage e.source e.target
+  结论: e.是像 e.source e.target
   证明: e.toPartialEquiv.isImage_source_target
 
 Depends on / 依赖: e.toPartialEquiv.isImage_source_target, isImage_source_target, toPartialEquiv
@@ -703,7 +703,7 @@ theorem preimage_interior
 
 中文:
 定理 preimage_interior
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: (IsImage.of_preimage_eq rfl).interior.preimage_eq
 
 Depends on / 依赖: IsImage, IsImage.of_preimage_eq, interior, interior.preimage_eq, of_preimage_eq, preimage_eq
@@ -723,7 +723,7 @@ theorem preimage_closure
 
 中文:
 定理 preimage_closure
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   结论: e.source inter e ⁻¹' closure s = e.source inter closure (e ⁻¹' s)
   证明: (IsImage.of_preimage_eq rfl).closure.preimage_eq
 
@@ -742,7 +742,7 @@ theorem preimage_frontier
 
 中文:
 定理 preimage_frontier
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: (IsImage.of_preimage_eq rfl).frontier.preimage_eq
 
 Depends on / 依赖: IsImage, IsImage.of_preimage_eq, frontier, frontier.preimage_eq, of_preimage_eq, preimage_eq
@@ -772,7 +772,7 @@ definition restrOpen
 
 中文:
 定义 restrOpen
-  签名: (s : Set X) (hs : IsOpen s)
+  签名: (s : 集合 X) (hs : 是开集 s)
   定义体: (@IsImage.of_symm_preimage_eq X Y _ _ e s (e.symm ⁻¹' s) rfl).restr
     (IsOpen.inter e.open_source hs)
 
@@ -793,7 +793,7 @@ theorem restrOpen_toPartialEquiv
 
 中文:
 定理 restrOpen_toPartialEquiv
-  条件: (s : Set X) (hs : IsOpen s)
+  条件: (s : 集合 X) (hs : 是开集 s)
   证明: rfl
 -/
 theorem restrOpen_toPartialEquiv (s : Set X) (hs : IsOpen s) :
@@ -812,7 +812,7 @@ theorem restrOpen_source
 
 中文:
 定理 restrOpen_source
-  条件: (s : Set X) (hs : IsOpen s)
+  条件: (s : 集合 X) (hs : 是开集 s)
   结论: (e.restrOpen s hs).source = e.source inter s
   证明: rfl
 -/
@@ -832,7 +832,7 @@ theorem coe_restrOpen
 
 中文:
 定理 coe_restrOpen
-  条件: {s : Set X} (hs : IsOpen s)
+  条件: {s : 集合 X} (hs : 是开集 s)
   结论: ⇑(e.restrOpen s hs) = e
   证明: rfl
 
@@ -852,7 +852,7 @@ theorem coe_restrOpen_symm
 
 中文:
 定理 coe_restrOpen_symm
-  条件: {s : Set X} (hs : IsOpen s)
+  条件: {s : 集合 X} (hs : 是开集 s)
   结论: ⇑(e.restrOpen s hs).symm = e.symm
   证明: rfl
 -/
@@ -876,7 +876,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: e.restrOpen (interior s) isOpen_interior
 
 @[simp, mfld_simps]
@@ -895,7 +895,7 @@ theorem restr_toPartialEquiv
 
 中文:
 定理 restr_toPartialEquiv
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: rfl
 -/
 theorem restr_toPartialEquiv (s : Set X) :
@@ -914,7 +914,7 @@ theorem restr_source'
 
 中文:
 定理 restr_source'
-  条件: (s : Set X) (hs : IsOpen s)
+  条件: (s : 集合 X) (hs : 是开集 s)
   结论: (e.restr s).source = e.source inter s
   证明: by
   grind
@@ -933,7 +933,7 @@ theorem restr_toPartialEquiv'
 
 中文:
 定理 restr_toPartialEquiv'
-  条件: (s : Set X) (hs : IsOpen s)
+  条件: (s : 集合 X) (hs : 是开集 s)
   证明: by
   rw [e.restr_toPartialEquiv]; rw [hs.interior_eq]
 
@@ -956,7 +956,7 @@ theorem restr_eq_of_source_subset
 
 中文:
 定理 restr_eq_of_source_subset
-  条件: {e : OpenPartialHomeomorph X Y} {s : Set X} (h : e.source subseteq s)
+  条件: {e : OpenPartialHomeomorph X Y} {s : 集合 X} (h : e.source subseteq s)
   证明: toPartialEquiv_injective PartialEquiv.restr_eq_of_source_subset
     interior_maximal h e.open_source
 
@@ -1008,7 +1008,7 @@ theorem restr_source_inter
 
 中文:
 定理 restr_source_inter
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: e.restr (e.source inter s) = e.restr s
   证明: by
   refine OpenPartialHomeomorph.ext _ _ (fun x => rfl) (fun x => rfl) ?_
@@ -1049,7 +1049,7 @@ definition ofSet
 
 中文:
 定义 ofSet
-  签名: (s : Set X) (hs : IsOpen s)
+  签名: (s : 集合 X) (hs : 是开集 s)
   定义体: PartialEquiv.ofSet s
   open_source := hs
   open_target := hs
@@ -1080,7 +1080,7 @@ theorem ofSet_toPartialEquiv
 
 中文:
 定理 ofSet_toPartialEquiv
-  结论: (ofSet s hs).toPartialEquiv = PartialEquiv.ofSet s
+  结论: (ofSet s hs).toPartialEquiv = 部分等价.ofSet s
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1182,7 +1182,7 @@ instance eqOnSourceSetoid
 
 中文:
 实例 eqOnSourceSetoid
-  签名: : Setoid (OpenPartialHomeomorph X Y)
+  签名: : 集合等价关系 (OpenPartialHomeomorph X Y)
   定义体: { PartialEquiv.eqOnSourceSetoid.comap
     (fun x => (toPartialHomeomorph x).toPartialEquiv) with r := EqOnSource }
 
@@ -1308,7 +1308,7 @@ theorem EqOnSource.restr
 
 中文:
 定理 EqOnSource.restr
-  条件: {e e' : OpenPartialHomeomorph X Y} (he : e ≈ e') (s : Set X)
+  条件: {e e' : OpenPartialHomeomorph X Y} (he : e ≈ e') (s : 集合 X)
   证明: PartialEquiv.EqOnSource.restr he _
 -/
 theorem EqOnSource.restr {e e' : OpenPartialHomeomorph X Y} (he : e ≈ e') (s : Set X) :
@@ -1330,7 +1330,7 @@ theorem Set.EqOn.restr_eqOn_source
     refine (EqOn.trans ?_ h).trans ?_ <;> simp only [mfld_simps, eqOn_refl]
 
 中文:
-定理 Set.EqOn.restr_eqOn_source
+定理 集合.EqOn.restr_eqOn_source
   结论: {e e' : OpenPartialHomeomorph X Y}
   证明: by
   constructor
@@ -1363,7 +1363,7 @@ theorem restr_eqOnSource_of_eqOn
 
 中文:
 定理 restr_eqOnSource_of_eqOn
-  结论: {e e' : OpenPartialHomeomorph X Y} {s : Set X}
+  结论: {e e' : OpenPartialHomeomorph X Y} {s : 集合 X}
   证明: by
   refine ⟨?_, fun z hz => heq (by simpa [e'.open_source.interior_eq] using hz.2)⟩
   rw [e'.restr_source s]; rw [e.restr_source' _ (e'.open_source.inter isOpen_interior)]; rw [inter_eq_right.mpr hsub]
@@ -1386,7 +1386,7 @@ theorem restr_eqOnSource_of_eqOn'
 
 中文:
 定理 restr_eqOnSource_of_eqOn'
-  结论: {e e' : OpenPartialHomeomorph X Y} {s : Set X} (hs : IsOpen s)
+  结论: {e e' : OpenPartialHomeomorph X Y} {s : 集合 X} (hs : 是开集 s)
   证明: (hs.interior_eq ▸ restr_eqOnSource_of_eqOn) (heq.mono Set.inter_subset_right) hsub
 
 Depends on / 依赖: Set.inter_subset_right, heq.mono, hs.interior_eq, inter_subset_right, interior_eq, restr_eqOnSource_of_eqOn
@@ -1430,7 +1430,7 @@ lemma restr_eqOnSource_restr
 
 中文:
 引理 restr_eqOnSource_restr
-  结论: {s' : Set X}
+  结论: {s' : 集合 X}
   证明: by
   constructor
   · simpa [e.restr_source]

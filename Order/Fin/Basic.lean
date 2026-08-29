@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Fin n)
+  签名: 最大值 (有限集 n)
   定义体: ⟨max x y, max_rec' (· < n) x.2 y.2⟩
 
 Depends on / 依赖: max_rec
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Fin n)
+  签名: 最小值 (有限集 n)
   定义体: ⟨min x y, min_rec' (· < n) x.2 y.2⟩
 
 @[simp, norm_cast]
@@ -97,8 +97,8 @@ theorem coe_max
 
 中文:
 定理 coe_max
-  条件: (a b : Fin n)
-  结论: ↑(max a b) = (max a b : 自然数)
+  条件: (a b : 有限集 n)
+  结论: ↑(最大值 a b) = (最大值 a b : 自然数)
   证明: rfl
 
 @[simp, norm_cast]
@@ -117,8 +117,8 @@ theorem coe_min
 
 中文:
 定理 coe_min
-  条件: (a b : Fin n)
-  结论: ↑(min a b) = (min a b : 自然数)
+  条件: (a b : 有限集 n)
+  结论: ↑(最小值 a b) = (最小值 a b : 自然数)
   证明: rfl
 -/
 theorem coe_min (a b : Fin n) : ↑(min a b) = (min a b : Nat) := rfl
@@ -134,7 +134,7 @@ theorem compare_eq_compare_val
 
 中文:
 定理 compare_eq_compare_val
-  条件: (a b : Fin n)
+  条件: (a b : 有限集 n)
   结论: compare a b = compare a.val b.val
   证明: rfl
 -/
@@ -151,7 +151,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder (Fin n)
+  签名: : 线性序 (有限集 n)
   定义体: Fin.val_injective.linearOrder _
     Fin.le_iff_val_le_val Fin.lt_def coe_min coe_max compare_eq_compare_val
 
@@ -221,7 +221,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Fin n)
+  签名: : 偏序 (有限集 n)
   定义体: inferInstance
 -/
 instance instPartialOrder : PartialOrder (Fin n) := inferInstance
@@ -235,7 +235,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice (Fin n)
+  签名: : 格 (有限集 n)
   定义体: inferInstance
 -/
 instance instLattice : Lattice (Fin n) := inferInstance
@@ -281,7 +281,7 @@ instance [NeZero
 
 中文:
 实例 [NeZero
-  签名: n] : IsBotZeroClass (Fin n) where
+  签名: n] : 是BotZero类 (有限集 n) where
   定义体: isBot_bot
 
 @[deprecated _root_.bot_eq_zero (since := "2026-05-07")]
@@ -304,7 +304,7 @@ lemma bot_eq_zero
 中文:
 引理 bot_eq_zero
   条件: (n : 自然数) [NeZero n]
-  结论: ⊥ = (0 : Fin n)
+  结论: ⊥ = (0 : 有限集 n)
   证明: _root_.bot_eq_zero
 -/
 protected lemma bot_eq_zero (n : Nat) [NeZero n] : ⊥ = (0 : Fin n) := _root_.bot_eq_zero
@@ -321,7 +321,7 @@ lemma top_eq_last
 中文:
 引理 top_eq_last
   条件: (n : 自然数)
-  结论: ⊤ = Fin.last n
+  结论: ⊤ = 有限集.last n
   证明: rfl
 -/
 lemma top_eq_last (n : Nat) : ⊤ = Fin.last n := rfl
@@ -338,7 +338,7 @@ theorem rev_bot
 中文:
 定理 rev_bot
   条件: [NeZero n]
-  结论: rev (⊥ : Fin n) = ⊤
+  结论: rev (⊥ : 有限集 n) = ⊤
   证明: rfl
 -/
 @[simp] theorem rev_bot [NeZero n] : rev (⊥ : Fin n) = ⊤ := rfl
@@ -354,7 +354,7 @@ theorem rev_top
 中文:
 定理 rev_top
   条件: [NeZero n]
-  结论: rev (⊤ : Fin n) = ⊥
+  结论: rev (⊤ : 有限集 n) = ⊥
   证明: rev_rev _
 -/
 @[simp] theorem rev_top [NeZero n] : rev (⊤ : Fin n) = ⊥ := rev_rev _
@@ -371,7 +371,7 @@ theorem rev_zero_eq_top
 中文:
 定理 rev_zero_eq_top
   条件: (n : 自然数) [NeZero n]
-  结论: rev (0 : Fin n) = ⊤
+  结论: rev (0 : 有限集 n) = ⊤
   证明: rfl
 -/
 theorem rev_zero_eq_top (n : Nat) [NeZero n] : rev (0 : Fin n) = ⊤ := rfl
@@ -414,7 +414,7 @@ theorem succ_top
 中文:
 定理 succ_top
   条件: (n : 自然数) [NeZero n]
-  结论: (⊤ : Fin n).succ = ⊤
+  结论: (⊤ : 有限集 n).succ = ⊤
   证明: by
   rw [← rev_zero_eq_top]; rw [← rev_zero_eq_top]; rw [← rev_castSucc]; rw [castSucc_zero']
 
@@ -440,7 +440,7 @@ theorem val_top
 中文:
 定理 val_top
   条件: (n : 自然数) [NeZero n]
-  结论: ((⊤ : Fin n) : 自然数) = n - 1
+  结论: ((⊤ : 有限集 n) : 自然数) = n - 1
   证明: rfl
 
 @[simp]
@@ -463,7 +463,7 @@ theorem zero_eq_top
 中文:
 定理 zero_eq_top
   条件: {n : 自然数} [NeZero n]
-  结论: (0 : Fin n) = ⊤ ↔ n = 1
+  结论: (0 : 有限集 n) = ⊤ ↔ n = 1
   证明: by
   rw [← bot_eq_zero]; rw [subsingleton_iff_bot_eq_top]; rw [subsingleton_iff_le_one]; rw [le_one_iff_eq_zero_or_eq_one]; rw [or_iff_right (NeZero.ne n)]
 
@@ -489,7 +489,7 @@ theorem top_eq_zero
 中文:
 定理 top_eq_zero
   条件: {n : 自然数} [NeZero n]
-  结论: (⊤ : Fin n) = 0 ↔ n = 1
+  结论: (⊤ : 有限集 n) = 0 ↔ n = 1
   证明: eq_comm.trans zero_eq_top
 
 @[simp]
@@ -513,7 +513,7 @@ theorem cast_top
 中文:
 定理 cast_top
   条件: {m n : 自然数} [NeZero m] [NeZero n] (h : m = n)
-  结论: (⊤ : Fin m).cast h = ⊤
+  结论: (⊤ : 有限集 m).cast h = ⊤
   证明: by
   simp [← val_inj, h]
 
@@ -535,7 +535,7 @@ lemma strictMono_pred_comp
 
 中文:
 引理 strictMono_pred_comp
-  条件: (hf : 对任意 a, f a != 0) (hf₂ : StrictMono f)
+  条件: (hf : 对任意 a, f a != 0) (hf₂ : 严格递增 f)
   证明: fun _ _ h => pred_lt_pred_iff.2 (hf₂ h)
 
 Depends on / 依赖: pred_lt_pred_iff
@@ -553,7 +553,7 @@ lemma monotone_pred_comp
 
 中文:
 引理 monotone_pred_comp
-  条件: (hf : 对任意 a, f a != 0) (hf₂ : Monotone f)
+  条件: (hf : 对任意 a, f a != 0) (hf₂ : 递增 f)
   证明: fun _ _ h => pred_le_pred_iff.2 (hf₂ h)
 
 Depends on / 依赖: pred_le_pred_iff
@@ -571,7 +571,7 @@ lemma strictMono_castPred_comp
 
 中文:
 引理 strictMono_castPred_comp
-  条件: (hf : 对任意 a, f a != last n) (hf₂ : StrictMono f)
+  条件: (hf : 对任意 a, f a != last n) (hf₂ : 严格递增 f)
   证明: fun _ _ h => castPred_lt_castPred_iff.2 (hf₂ h)
 
 Depends on / 依赖: castPred_lt_castPred_iff
@@ -589,7 +589,7 @@ lemma monotone_castPred_comp
 
 中文:
 引理 monotone_castPred_comp
-  条件: (hf : 对任意 a, f a != last n) (hf₂ : Monotone f)
+  条件: (hf : 对任意 a, f a != last n) (hf₂ : 递增 f)
   证明: fun _ _ h => castPred_le_castPred_iff.2 (hf₂ h)
 
 Depends on / 依赖: castPred_le_castPred_iff
@@ -612,7 +612,7 @@ lemma strictMono_iff_lt_succ
 
 中文:
 引理 strictMono_iff_lt_succ
-  结论: StrictMono f ↔ 对任意 i : Fin n, f (castSucc i) < f i.succ
+  结论: 严格递增 f ↔ 对任意 i : 有限集 n, f (castSucc i) < f i.succ
   证明: liftFun_iff_succ (· < ·)
 
 Depends on / 依赖: liftFun_iff_succ
@@ -630,7 +630,7 @@ lemma monotone_iff_le_succ
 
 中文:
 引理 monotone_iff_le_succ
-  结论: Monotone f ↔ 对任意 i : Fin n, f (castSucc i) <= f i.succ
+  结论: 递增 f ↔ 对任意 i : 有限集 n, f (castSucc i) <= f i.succ
   证明: monotone_iff_forall_lt.trans liftFun_iff_succ (· <= ·)
 
 Depends on / 依赖: liftFun_iff_succ, monotone_iff_forall_lt, monotone_iff_forall_lt.trans
@@ -648,7 +648,7 @@ lemma strictAnti_iff_succ_lt
 
 中文:
 引理 strictAnti_iff_succ_lt
-  结论: StrictAnti f ↔ 对任意 i : Fin n, f i.succ < f (castSucc i)
+  结论: 严格递减 f ↔ 对任意 i : 有限集 n, f i.succ < f (castSucc i)
   证明: liftFun_iff_succ (· > ·)
 
 Depends on / 依赖: liftFun_iff_succ
@@ -666,7 +666,7 @@ lemma antitone_iff_succ_le
 
 中文:
 引理 antitone_iff_succ_le
-  结论: Antitone f ↔ 对任意 i : Fin n, f i.succ <= f (castSucc i)
+  结论: 递减 f ↔ 对任意 i : 有限集 n, f i.succ <= f (castSucc i)
   证明: antitone_iff_forall_lt.trans liftFun_iff_succ (· >= ·)
 
 Depends on / 依赖: antitone_iff_forall_lt, antitone_iff_forall_lt.trans, liftFun_iff_succ
@@ -691,7 +691,7 @@ lemma orderHom_injective_iff
 
 中文:
 引理 orderHom_injective_iff
-  条件: {α : 类型} [PartialOrder α] {n : 自然数} (f : Fin (n + 1) ->o α)
+  条件: {α : 类型} [偏序 α] {n : 自然数} (f : 有限集 (n + 1) ->o α)
   证明: by
   constructor
   · intro hf i hi
@@ -726,7 +726,7 @@ lemma val_strictMono
 
 中文:
 引理 val_strictMono
-  结论: StrictMono (val : Fin n -> 自然数)
+  结论: 严格递增 (val : 有限集 n -> 自然数)
   证明: fun _ _ => id
 -/
 lemma val_strictMono : StrictMono (val : Fin n -> Nat) := fun _ _ => id
@@ -742,7 +742,7 @@ lemma cast_strictMono
 中文:
 引理 cast_strictMono
   条件: {k l : 自然数} (h : k = l)
-  结论: StrictMono (Fin.cast h)
+  结论: 严格递增 (有限集.cast h)
   证明: fun {_ _} h => h
 -/
 lemma cast_strictMono {k l : Nat} (h : k = l) : StrictMono (Fin.cast h) := fun {_ _} h => h
@@ -757,7 +757,7 @@ lemma strictMono_succ
 
 中文:
 引理 strictMono_succ
-  结论: StrictMono (succ : Fin n -> Fin (n + 1))
+  结论: 严格递增 (succ : 有限集 n -> 有限集 (n + 1))
   证明: fun _ _ => succ_lt_succ
 
 Depends on / 依赖: succ_lt_succ
@@ -775,7 +775,7 @@ lemma strictMono_castLE
 中文:
 引理 strictMono_castLE
   条件: (h : n <= m)
-  结论: StrictMono (castLE h : Fin n -> Fin m)
+  结论: 严格递增 (castLE h : 有限集 n -> 有限集 m)
   证明: fun _ _ => id
 -/
 lemma strictMono_castLE (h : n <= m) : StrictMono (castLE h : Fin n -> Fin m) := fun _ _ => id
@@ -791,7 +791,7 @@ lemma strictMono_castAdd
 中文:
 引理 strictMono_castAdd
   条件: (m)
-  结论: StrictMono (castAdd m : Fin n -> Fin (n + m))
+  结论: 严格递增 (castAdd m : 有限集 n -> 有限集 (n + m))
   证明: strictMono_castLE _
 
 Depends on / 依赖: strictMono_castLE
@@ -807,7 +807,7 @@ lemma strictMono_castSucc
 
 中文:
 引理 strictMono_castSucc
-  结论: StrictMono (castSucc : Fin n -> Fin (n + 1))
+  结论: 严格递增 (castSucc : 有限集 n -> 有限集 (n + 1))
   证明: strictMono_castAdd _
 
 Depends on / 依赖: strictMono_castAdd
@@ -825,7 +825,7 @@ lemma strictMono_natAdd
 中文:
 引理 strictMono_natAdd
   条件: (n)
-  结论: StrictMono (natAdd n : Fin m -> Fin (n + m))
+  结论: 严格递增 (natAdd n : 有限集 m -> 有限集 (n + m))
   证明: fun i j h => Nat.add_lt_add_left (show i.val < j.val from h) _
 
 Depends on / 依赖: Nat.add_lt_add_left, add_lt_add_left, i.val, j.val
@@ -842,9 +842,9 @@ lemma strictMono_addNat
   proof: fun i j h => Nat.add_lt_add_right (show i.val < j.val from h) _
 
 中文:
-引理 strictMono_addNat
+引理 strictMono_add自然数
   条件: (m)
-  结论: StrictMono ((add自然数 · m) : Fin n -> Fin (n + m))
+  结论: 严格递增 ((add自然数 · m) : 有限集 n -> 有限集 (n + m))
   证明: fun i j h => Nat.add_lt_add_right (show i.val < j.val from h) _
 
 Depends on / 依赖: Nat.add_lt_add_right, add_lt_add_right, i.val, j.val
@@ -864,8 +864,8 @@ lemma strictMono_succAbove
 
 中文:
 引理 strictMono_succAbove
-  条件: (p : Fin (n + 1))
-  结论: StrictMono (succAbove p)
+  条件: (p : 有限集 (n + 1))
+  结论: 严格递增 (succAbove p)
   证明: strictMono_castSucc.ite strictMono_succ
     (fun _ _ hij hj => (castSucc_lt_castSucc_iff.mpr hij).trans hj) fun _ => castSucc_lt_succ.le
 
@@ -958,7 +958,7 @@ theorem natAdd_inj
 
 中文:
 定理 natAdd_inj
-  条件: (m) {i j : Fin n}
+  条件: (m) {i j : 有限集 n}
   结论: natAdd m i = natAdd m j ↔ i = j
   证明: (strictMono_natAdd _).injective.eq_iff
 
@@ -1004,7 +1004,7 @@ theorem natAdd_le_natAdd_iff
 
 中文:
 定理 natAdd_le_natAdd_iff
-  条件: (m) {i j : Fin n}
+  条件: (m) {i j : 有限集 n}
   结论: natAdd m i <= natAdd m j ↔ i <= j
   证明: (strictMono_natAdd _).le_iff_le
 
@@ -1029,7 +1029,7 @@ theorem natAdd_lt_natAdd_iff
 
 中文:
 定理 natAdd_lt_natAdd_iff
-  条件: (m) {i j : Fin n}
+  条件: (m) {i j : 有限集 n}
   结论: natAdd m i < natAdd m j ↔ i < j
   证明: (strictMono_natAdd _).lt_iff_lt
 
@@ -1053,8 +1053,8 @@ theorem addNat_inj
 @[simp, gcongr]
 
 中文:
-定理 addNat_inj
-  条件: (m) {i j : Fin n}
+定理 add自然数_inj
+  条件: (m) {i j : 有限集 n}
   结论: i.add自然数 m = j.add自然数 m ↔ i = j
   证明: (strictMono_addNat _).injective.eq_iff
 
@@ -1078,8 +1078,8 @@ theorem addNat_le_addNat_iff
 @[simp, gcongr]
 
 中文:
-定理 addNat_le_addNat_iff
-  条件: (m) {i j : Fin n}
+定理 add自然数_le_add自然数_iff
+  条件: (m) {i j : 有限集 n}
   结论: i.add自然数 m <= j.add自然数 m ↔ i <= j
   证明: (strictMono_addNat _).le_iff_le
 
@@ -1103,8 +1103,8 @@ theorem addNat_lt_addNat_iff
 @[simp, gcongr]
 
 中文:
-定理 addNat_lt_addNat_iff
-  条件: (m) {i j : Fin n}
+定理 add自然数_lt_add自然数_iff
+  条件: (m) {i j : 有限集 n}
   结论: i.add自然数 m < j.add自然数 m ↔ i < j
   证明: (strictMono_addNat _).lt_iff_lt
 
@@ -1129,7 +1129,7 @@ theorem castLE_le_castLE_iff
 
 中文:
 定理 castLE_le_castLE_iff
-  条件: {i j : Fin n} (h : n <= m)
+  条件: {i j : 有限集 n} (h : n <= m)
   结论: i.castLE h <= j.castLE h ↔ i <= j
   证明: .rfl
 
@@ -1149,7 +1149,7 @@ theorem castLE_lt_castLE_iff
 
 中文:
 定理 castLE_lt_castLE_iff
-  条件: {i j : Fin n} (h : n <= m)
+  条件: {i j : 有限集 n} (h : n <= m)
   结论: i.castLE h < j.castLE h ↔ i < j
   证明: .rfl
 -/
@@ -1175,8 +1175,8 @@ lemma predAbove_right_monotone
 
 中文:
 引理 predAbove_right_monotone
-  条件: (p : Fin n)
-  结论: Monotone p.predAbove
+  条件: (p : 有限集 n)
+  结论: 递增 p.predAbove
   证明: fun a b H => by
   dsimp [predAbove]
   split_ifs with ha hb hb
@@ -1221,8 +1221,8 @@ lemma predAbove_left_monotone
 
 中文:
 引理 predAbove_left_monotone
-  条件: (i : Fin (n + 1))
-  结论: Monotone fun p => predAbove p i
+  条件: (i : 有限集 (n + 1))
+  结论: 递增 fun p => predAbove p i
   证明: fun a b H => by
   dsimp [predAbove]
   split_ifs with ha hb hb
@@ -1256,7 +1256,7 @@ lemma predAbove_le_predAbove
 
 中文:
 引理 predAbove_le_predAbove
-  条件: {p q : Fin n} (hpq : p <= q) {i j : Fin (n + 1)} (hij : i <= j)
+  条件: {p q : 有限集 n} (hpq : p <= q) {i j : 有限集 (n + 1)} (hij : i <= j)
   证明: (predAbove_right_monotone p hij).trans (predAbove_left_monotone j hpq)
 
 Depends on / 依赖: predAbove_left_monotone, predAbove_right_monotone
@@ -1275,7 +1275,7 @@ definition predAboveOrderHom
 
 中文:
 定义 predAboveOrderHom
-  签名: (p : Fin n)
+  签名: (p : 有限集 n)
   定义体: ⟨p.predAbove, p.predAbove_right_monotone⟩
 -/
 @[simps!] def predAboveOrderHom (p : Fin n) : Fin (n + 1) ->o Fin n :=
@@ -1299,7 +1299,7 @@ lemma predAbove_left_injective
 
 中文:
 引理 predAbove_left_injective
-  结论: Injective (@predAbove n)
+  结论: 单射 (@predAbove n)
   证明: by
   intro i j hij
   obtain ⟨n, rfl⟩ := Nat.exists_add_one_eq.2 i.size_positive
@@ -1334,7 +1334,7 @@ lemma predAbove_left_inj
 
 中文:
 引理 predAbove_left_inj
-  条件: {x y : Fin n}
+  条件: {x y : 有限集 n}
   结论: x.predAbove = y.predAbove ↔ x = y
   证明: predAbove_left_injective.eq_iff
 -/
@@ -1355,7 +1355,7 @@ definition orderIsoSubtype
 
 中文:
 定义 orderIsoSubtype
-  签名: : Fin n ≃o {i // i < n}
+  签名: : 有限集 n ≃o {i // i < n}
   定义体: equivSubtype.toOrderIso (by simp [Monotone]) (by simp [Monotone])
 
 Depends on / 依赖: Monotone, equivSubtype, equivSubtype.toOrderIso, toOrderIso
@@ -1427,7 +1427,7 @@ lemma castOrderIso_refl
 中文:
 引理 castOrderIso_refl
   条件: (h : n = n := rfl)
-  结论: castOrderIso h = OrderIso.refl (Fin n)
+  结论: castOrderIso h = OrderIso.refl (有限集 n)
   证明: by ext; simp
 
 Depends on / 依赖: OrderIso, OrderIso.refl, castOrderIso
@@ -1447,7 +1447,7 @@ lemma castOrderIso_toEquiv
 中文:
 引理 castOrderIso_toEquiv
   条件: (h : n = m)
-  结论: (castOrderIso h).toEquiv = Equiv.cast (h ▸ rfl)
+  结论: (castOrderIso h).toEquiv = 等价.cast (h ▸ rfl)
   证明: by
   subst h; rfl
 -/
@@ -1468,7 +1468,7 @@ definition revOrderIso
 
 中文:
 定义 revOrderIso
-  签名: : (Fin n)ᵒᵈ ≃o Fin n
+  签名: : (有限集 n)ᵒᵈ ≃o 有限集 n
   定义体: ⟨OrderDual.ofDual.trans revPerm, rev_le_rev⟩
 
 @[simp]
@@ -1489,7 +1489,7 @@ lemma revOrderIso_symm_apply
 
 中文:
 引理 revOrderIso_symm_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: revOrderIso.symm i = OrderDual.toDual (rev i)
   证明: rfl
 -/
@@ -1505,7 +1505,7 @@ lemma rev_strictAnti
 
 中文:
 引理 rev_strictAnti
-  结论: StrictAnti (@rev n)
+  结论: 严格递减 (@rev n)
   证明: fun _ _ => rev_lt_rev.mpr
 
 Depends on / 依赖: rev_lt_rev, rev_lt_rev.mpr
@@ -1522,7 +1522,7 @@ lemma rev_anti
 
 中文:
 引理 rev_anti
-  结论: Antitone (@rev n)
+  结论: 递减 (@rev n)
   证明: rev_strictAnti.antitone
 
 Depends on / 依赖: antitone, rev_strictAnti, rev_strictAnti.antitone
@@ -1563,7 +1563,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Fin n ↪o 自然数)
+  签名: 可居 (有限集 n ↪o 自然数)
   定义体: Fin.valOrderEmb n
 
 Depends on / 依赖: Fin.valOrderEmb, valOrderEmb
@@ -1617,7 +1617,7 @@ lemma coe_succOrderEmb
 
 中文:
 引理 coe_succOrderEmb
-  结论: ⇑(succOrderEmb n) = Fin.succ
+  结论: ⇑(succOrderEmb n) = 有限集.succ
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_succOrderEmb : ⇑(succOrderEmb n) = Fin.succ := rfl
@@ -1693,7 +1693,7 @@ definition castSuccOrderEmb
 
 中文:
 定义 castSuccOrderEmb
-  签名: : Fin n ↪o Fin (n + 1)
+  签名: : 有限集 n ↪o 有限集 (n + 1)
   定义体: .ofStrictMono castSucc strictMono_castSucc
 
 Depends on / 依赖: castSucc, ofStrictMono, strictMono_castSucc
@@ -1713,7 +1713,7 @@ definition addNatOrderEmb
   body: .ofStrictMono (addNat · m) (strictMono_addNat m)
 
 中文:
-定义 addNatOrderEmb
+定义 add自然数OrderEmb
   签名: (m)
   定义体: .ofStrictMono (addNat · m) (strictMono_addNat m)
 
@@ -1756,7 +1756,7 @@ definition succAboveOrderEmb
 
 中文:
 定义 succAboveOrderEmb
-  签名: (p : Fin (n + 1))
+  签名: (p : 有限集 (n + 1))
   定义体: OrderEmbedding.ofStrictMono (succAbove p) (strictMono_succAbove p)
 
 @[simp]
@@ -1778,7 +1778,7 @@ lemma range_succAboveOrderEmb
 
 中文:
 引理 range_succAboveOrderEmb
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   aesop
 -/
@@ -1808,7 +1808,7 @@ lemma coe_orderIso_apply
 
 中文:
 引理 coe_orderIso_apply
-  条件: (e : Fin n ≃o Fin m) (i : Fin n)
+  条件: (e : 有限集 n ≃o 有限集 m) (i : 有限集 n)
   结论: (e i : 自然数) = i
   证明: by
   rcases i with ⟨i, hi⟩

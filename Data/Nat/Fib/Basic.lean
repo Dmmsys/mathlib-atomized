@@ -207,7 +207,7 @@ theorem fib_mono
 
 中文:
 定理 fib_mono
-  结论: Monotone fib
+  结论: 递增 fib
   证明: monotone_nat_of_le_succ fun _ => fib_le_fib_succ
 
 Depends on / 依赖: fib_le_fib_succ, monotone_nat_of_le_succ
@@ -311,7 +311,7 @@ theorem fib_add_two_strictMono
 
 中文:
 定理 fib_add_two_strictMono
-  结论: StrictMono fun n => fib (n + 2)
+  结论: 严格递增 fun n => fib (n + 2)
   证明: by
   refine strictMono_nat_of_lt_succ fun n => ?_
   rw [add_right_comm]
@@ -333,7 +333,7 @@ lemma fib_strictMonoOn
 
 中文:
 引理 fib_strictMonoOn
-  结论: StrictMonoOn fib (Set.Ici 2)
+  结论: StrictMonoOn fib (集合.左闭右无界区间 2)
 -/
 lemma fib_strictMonoOn : StrictMonoOn fib (Set.Ici 2)
 | _m + 2, _, _n + 2, _, hmn => fib_add_two_strictMono lt_of_add_lt_add_right hmn
@@ -802,7 +802,7 @@ theorem gcd_fib_add_self
 中文:
 定理 gcd_fib_add_self
   条件: (m n : 自然数)
-  结论: gcd (fib m) (fib (n + m)) = gcd (fib m) (fib n)
+  结论: 最大公约数 (fib m) (fib (n + m)) = 最大公约数 (fib m) (fib n)
   证明: by
   rcases Nat.eq_zero_or_pos n with rfl | h
   · simp
@@ -841,7 +841,7 @@ theorem gcd_fib_add_mul_self
 中文:
 定理 gcd_fib_add_mul_self
   条件: (m n : 自然数)
-  结论: 对任意 k, gcd (fib m) (fib (n + k * m)) = gcd (fib m) (fib n)
+  结论: 对任意 k, 最大公约数 (fib m) (fib (n + k * m)) = 最大公约数 (fib m) (fib n)
 -/
 theorem gcd_fib_add_mul_self (m n : Nat) : forall k, gcd (fib m) (fib (n + k * m)) = gcd (fib m) (fib n)
   | 0 => by simp
@@ -866,7 +866,7 @@ theorem fib_gcd
 中文:
 定理 fib_gcd
   条件: (m n : 自然数)
-  结论: fib (gcd m n) = gcd (fib m) (fib n)
+  结论: fib (最大公约数 m n) = 最大公约数 (fib m) (fib n)
   证明: by
   induction m, n using Nat.gcd.induction with
   | H0 => simp
@@ -969,7 +969,7 @@ theorem fib_succ_eq_succ_sum
 中文:
 定理 fib_succ_eq_succ_sum
   条件: (n : 自然数)
-  结论: fib (n + 1) = (∑ k in Finset.range n, fib k) + 1
+  结论: fib (n + 1) = (∑ k in 有限集.range n, fib k) + 1
   证明: by
   induction n with
   | zero => simp

@@ -59,7 +59,7 @@ abbreviation IsFractionRing
 
 中文:
 缩写 IsFractionRing
-  签名: (R : 类型) [CommSemiring R] (K : 类型) [CommSemiring K] [Algebra R K]
+  签名: (R : 类型) [交换半环 R] (K : 类型) [交换半环 K] [代数 R K]
   定义体: IsLocalization (nonZeroDivisors R) K
 
 Depends on / 依赖: IsLocalization, nonZeroDivisors
@@ -80,7 +80,7 @@ theorem IsFractionRing.of_algEquiv
 
 中文:
 定理 IsFractionRing.of_algEquiv
-  结论: {R : 类型} [CommSemiring R] {K L : 类型}
+  结论: {R : 类型} [交换半环 R] {K L : 类型}
   证明: IsLocalization.isLocalization_of_algEquiv _ e
 
 Depends on / 依赖: IsLocalization, IsLocalization.isLocalization_of_algEquiv, isLocalization_of_algEquiv
@@ -106,8 +106,8 @@ instance Rat.isFractionRing
     rw [mem_nonZeroDivisors_iff_ne_zero]; rw [Int.
 
 中文:
-实例 Rat.isFractionRing
-  签名: : IsFractionRing 整数 Rat where
+实例 有理数.isFractionRing
+  签名: : IsFractionRing 整数 有理数 where
   定义体: by
     rintro ⟨x, hx⟩
     rw [mem_nonZeroDivisors_iff_ne_zero] at hx
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (Submonoid.pos 整数) Rat
+  签名: 是Localization (子幺半群.pos 整数) 有理数
   定义体: by simpa using y.prop.ne'
   surj z := by
     obtain ⟨⟨x1, x2⟩, hx⟩ := IsLocalization.surj (nonZeroDivisors Int) z
@@ -182,7 +182,7 @@ instance NNRat.isFractionRing
 
 中文:
 实例 NNRat.isFractionRing
-  签名: : IsFractionRing 自然数 Rat>=0 where
+  签名: : IsFractionRing 自然数 有理数>=0 where
   定义体: by simp
   surj z := ⟨⟨z.num, ⟨z.den, by simp⟩⟩, by simp⟩
   exists_of_eq {x y} h := ⟨1, by simpa using h⟩
@@ -215,7 +215,7 @@ theorem of_field
 
 中文:
 定理 of_field
-  结论: [Field K] [Algebra R K] [FaithfulSMul R K]
+  结论: [域 K] [代数 R K] [忠实标量乘法 R K]
   证明: have inj := FaithfulSMul.algebraMap_injective R K
   have := inj.noZeroDivisors _ (map_zero _) (map_mul _)
   have := Module.nontrivial R K
@@ -258,7 +258,7 @@ theorem of_ringEquiv_left
 
 中文:
 定理 of_ringEquiv_left
-  结论: {R : 类型} [CommSemiring R] {S : 类型} [CommSemiring S]
+  结论: {R : 类型} [交换半环 R] {S : 类型} [交换半环 S]
   证明: IsLocalization.of_ringEquiv_left e (MulEquivClass.map_nonZeroDivisors e) h
 
 Depends on / 依赖: IsLocalization, IsLocalization.of_ringEquiv_left, MulEquivClass, MulEquivClass.map_nonZeroDivisors, map_nonZeroDivisors, of_ringEquiv_left
@@ -308,7 +308,7 @@ include R in
 
 中文:
 定理 injective
-  结论: Function.Injective (algebraMap R K)
+  结论: 函数.单射 (algebraMap R K)
   证明: IsLocalization.injective _ (le_of_eq rfl)
 
 include R in
@@ -334,7 +334,7 @@ inc
 
 中文:
 定理 nonZeroDivisors_eq_isUnit
-  结论: K⁰ = IsUnit.submonoid K
+  结论: K⁰ = 是单位.submonoid K
   证明: by
   refine le_antisymm (fun x hx => ?_) (isUnit_le_nonZeroDivisors K)
   have ⟨r, eq⟩ := surj R⁰ x
@@ -366,7 +366,7 @@ include R in
 
 中文:
 定义 algEquiv
-  签名: (L) [CommRing L] [Algebra K L] [IsFractionRing K L]
+  签名: (L) [交换环 L] [代数 K L] [IsFractionRing K L]
   定义体: atUnits K _ (nonZeroDivisors_eq_isUnit R K).le
 
 include R in
@@ -404,7 +404,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: (L) [CommRing L] [Algebra K L] [IsFractionRing K L] [Algebra R L]
+  结论: (L) [交换环 L] [代数 K L] [IsFractionRing K L] [代数 R L]
   证明: isLocalization_of_algEquiv _ (algEquiv R K L).restrictScalars R
 
 Depends on / 依赖: algEquiv, isLocalization_of_algEquiv, restrictScalars
@@ -429,7 +429,7 @@ theorem self_iff_nonZeroDivisors_eq_isUnit
 
 中文:
 定理 self_iff_nonZeroDivisors_eq_isUnit
-  结论: IsFractionRing R R ↔ R⁰ = IsUnit.submonoid R where
+  结论: IsFractionRing R R ↔ R⁰ = 是单位.submonoid R where
   证明: nonZeroDivisors_eq_isUnit R R
   mpr h := IsLocalization.self h.le
 
@@ -450,7 +450,7 @@ theorem self_iff_nonZeroDivisors_le_isUnit
 
 中文:
 定理 self_iff_nonZeroDivisors_le_isUnit
-  结论: IsFractionRing R R ↔ R⁰ <= IsUnit.submonoid R
+  结论: IsFractionRing R R ↔ R⁰ <= 是单位.submonoid R
   证明: by
   rw [self_iff_nonZeroDivisors_eq_isUnit]; rw [le_antisymm_iff]; rw [and_iff_left (isUnit_le_nonZeroDivisors R)]
 
@@ -470,7 +470,7 @@ theorem self_iff_bijective
 
 中文:
 定理 self_iff_bijective
-  结论: IsFractionRing R R ↔ Function.Bijective (algebraMap R K) where
+  结论: IsFractionRing R R ↔ 函数.双射 (algebraMap R K) where
   证明: (atUnits R _ <| self_iff_nonZeroDivisors_le_isUnit.mp h).bijective
   mpr h := isLocalization_of_algEquiv _ (AlgEquiv.ofBijective (Algebra.ofId R K) h).symm
 
@@ -491,7 +491,7 @@ theorem self_iff_surjective
 
 中文:
 定理 self_iff_surjective
-  结论: IsFractionRing R R ↔ Function.Surjective (algebraMap R K)
+  结论: IsFractionRing R R ↔ 函数.满射 (algebraMap R K)
   证明: by
   rw [self_iff_bijective K]; rw [Function.Bijective]; rw [and_iff_right (IsFractionRing.injective R K)]
 
@@ -534,7 +534,7 @@ theorem to_map_ne_zero_of_mem_nonZeroDivisors
 
 中文:
 定理 to_map_ne_zero_of_mem_nonZeroDivisors
-  结论: [Nontrivial R] {x : R}
+  结论: [非平凡 R] {x : R}
   证明: IsLocalization.to_map_ne_zero_of_mem_nonZeroDivisors _ le_rfl hx
 -/
 protected theorem to_map_ne_zero_of_mem_nonZeroDivisors [Nontrivial R] {x : R}
@@ -554,7 +554,7 @@ theorem isDomain
 
 中文:
 定理 isDomain
-  结论: IsDomain K
+  结论: 是整环 K
   证明: isDomain_of_le_nonZeroDivisors _ (le_refl (nonZeroDivisors A))
 -/
 protected theorem isDomain : IsDomain K :=
@@ -625,7 +625,7 @@ abbreviation toField
 
 中文:
 缩写 toField
-  签名: : Field K where
+  签名: : 域 K where
   定义体: IsFractionRing.isDomain A
   inv := IsFractionRing.inv A
   mul_inv_cancel := IsFractionRing.mul_inv_cancel A
@@ -663,8 +663,8 @@ lemma surjective_iff_isField
 
 中文:
 引理 surjective_iff_isField
-  条件: [IsDomain R]
-  结论: Function.Surjective (algebraMap R K) ↔ IsField R where
+  条件: [是整环 R]
+  结论: 函数.满射 (algebraMap R K) ↔ 是域 R where
   证明: (RingEquiv.ofBijective (algebraMap R K)
       ⟨IsFractionRing.injective R K, h⟩).toMulEquiv.isField (IsFractionRing.toField R).toIsField
   mpr h :=
@@ -773,7 +773,7 @@ IsUnit.mk0 (g y)
 
 中文:
 定理 isUnit_map_of_injective
-  条件: (hg : Function.Injective g) (y : nonZeroDivisors A)
+  条件: (hg : 函数.单射 g) (y : nonZeroDivisors A)
   证明: haveI := g.domain_nontrivial
 IsUnit.mk0 (g y)
     show g.toMonoidWithZeroHom y != 0 from map_ne_zero_of_mem_nonZeroDivisors g hg y.2
@@ -798,7 +798,7 @@ theorem mk'_eq_zero_iff_eq_zero
 
 中文:
 定理 mk'_eq_zero_iff_eq_zero
-  条件: [Algebra R K] [IsFractionRing R K] {x : R} {y : nonZeroDivisors R}
+  条件: [代数 R K] [IsFractionRing R K] {x : R} {y : nonZeroDivisors R}
   证明: by
   have := (algebraMap R K).domain_nontrivial
   simp [nonZeroDivisors.ne_zero]
@@ -860,7 +860,7 @@ refine IsFractionRing.of_algEquiv .symm .ofBijective f ⟨f.injective, fun x => 
 
 中文:
 定理 of_algHom
-  条件: [Algebra A L] (f : L ->ₐ[A] K)
+  条件: [代数 A L] (f : L ->ₐ[A] K)
   结论: IsFractionRing A L
   证明: by
 refine IsFractionRing.of_algEquiv .symm .ofBijective f ⟨f.injective, fun x => ?_⟩
@@ -948,7 +948,7 @@ theorem closure_range_algebraMap
 
 中文:
 定理 closure_range_algebraMap
-  结论: Subfield.closure (Set.range (algebraMap A K)) = ⊤
+  结论: 子域.closure (集合.range (algebraMap A K)) = ⊤
   证明: top_unique fun z _ => by
     obtain ⟨_, _, -, rfl⟩ := div_surjective A z
     apply div_mem <;> exact Subfield.subset_closure ⟨_, rfl⟩
@@ -973,7 +973,7 @@ theorem ringHom_fieldRange_eq_of_comp_eq
 
 中文:
 定理 ringHom_fieldRange_eq_of_comp_eq
-  条件: (h : RingHom.comp f (algebraMap A K) = g)
+  条件: (h : 环态射.comp f (algebraMap A K) = g)
   证明: by
   rw [f.fieldRange_eq_map]; rw [← closure_range_algebraMap A K]; rw [f.map_field_closure]; rw [← Set.range_comp]; rw [← f.coe_comp]; rw [h]; rw [g.coe_range]
 
@@ -996,7 +996,7 @@ theorem ringHom_fieldRange_eq_of_comp_eq_of_range_eq
 
 中文:
 定理 ringHom_fieldRange_eq_of_comp_eq_of_range_eq
-  结论: (h : RingHom.comp f (algebraMap A K) = g)
+  结论: (h : 环态射.comp f (algebraMap A K) = g)
   证明: by
   rw [ringHom_fieldRange_eq_of_comp_eq h]; rw [hs]
   ext
@@ -1024,7 +1024,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (hg : Injective g)
+  签名: (hg : 单射 g)
   定义体: IsLocalization.lift fun y : nonZeroDivisors A => isUnit_map_of_injective hg y
 
 Depends on / 依赖: IsLocalization, IsLocalization.lift, isUnit_map_of_injective, nonZeroDivisors
@@ -1042,7 +1042,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (hg : Function.Injective g) {f : K ->+* L}
+  结论: (hg : 函数.单射 g) {f : K ->+* L}
   证明: IsLocalization.lift_unique _ hf1
 
 Depends on / 依赖: IsLocalization, IsLocalization.lift_unique, lift_unique
@@ -1187,7 +1187,7 @@ theorem lift_algebraMap
 
 中文:
 定理 lift_algebraMap
-  条件: (hg : Injective g) (x)
+  条件: (hg : 单射 g) (x)
   结论: lift hg (algebraMap A K x) = g x
   证明: lift_eq _ _
 
@@ -1206,7 +1206,7 @@ theorem lift_fieldRange
 
 中文:
 定理 lift_fieldRange
-  条件: (hg : Injective g)
+  条件: (hg : 单射 g)
   证明: ringHom_fieldRange_eq_of_comp_eq (by ext; simp)
 
 Depends on / 依赖: ringHom_fieldRange_eq_of_comp_eq
@@ -1225,7 +1225,7 @@ theorem lift_fieldRange_eq_of_range_eq
 
 中文:
 定理 lift_fieldRange_eq_of_range_eq
-  结论: (hg : Injective g)
+  结论: (hg : 单射 g)
   证明: ringHom_fieldRange_eq_of_comp_eq_of_range_eq (by ext; simp) hs
 
 Depends on / 依赖: ringHom_fieldRange_eq_of_comp_eq_of_range_eq
@@ -1245,7 +1245,7 @@ theorem lift_mk'
 
 中文:
 定理 lift_mk'
-  条件: (hg : Injective g) (x) (y : nonZeroDivisors A)
+  条件: (hg : 单射 g) (x) (y : nonZeroDivisors A)
   证明: by simp only [mk'_eq_div, map_div₀, lift_algebraMap]
 
 Depends on / 依赖: _eq_div, lift_algebraMap
@@ -1265,7 +1265,7 @@ definition map
 
 中文:
 定义 map
-  签名: {A B K L : 类型} [CommRing A] [CommRing B] [IsDomain B] [CommRing K]
+  签名: {A B K L : 类型} [交换环 A] [交换环 B] [是整环 B] [交换环 K]
   定义体: IsLocalization.map L j
     (show nonZeroDivisors A <= (nonZeroDivisors B).comap j from
       nonZeroDivisors_le_comap_nonZeroDivisors_of_injective j hj)
@@ -1376,7 +1376,7 @@ theorem ringEquivOfRingEquiv_comp
 
 中文:
 定理 ringEquivOfRingEquiv_comp
-  结论: {C : 类型} (M : 类型) [CommRing C]
+  结论: {C : 类型} (M : 类型) [交换环 C]
   证明: by
   ext a
   simp [IsLocalization.map_map]
@@ -1451,7 +1451,7 @@ lemma ringEquivOfRingEquivHom_injective
 
 中文:
 引理 ringEquivOfRingEquivHom_injective
-  结论: Function.Injective (ringEquivOfRingEquivHom A K)
+  结论: 函数.单射 (ringEquivOfRingEquivHom A K)
   证明: by
   intro f g h
   ext b
@@ -1568,7 +1568,7 @@ lemma semilinearEquivOfRingEquiv_comp
 
 中文:
 引理 semilinearEquivOfRingEquiv_comp
-  结论: {C : 类型} (M : 类型) [CommRing C] [CommRing M]
+  结论: {C : 类型} (M : 类型) [交换环 C] [交换环 M]
   证明: ⟨rfl⟩
     let : RingHomCompTriple g.symm (f.symm : B ->+* A) ((f.trans g).symm : C ->+* A) := ⟨rfl⟩
     (semilinearEquivOfRingEquiv K M (f.trans g)) =
@@ -1927,7 +1927,7 @@ theorem nontrivial_iff_nontrivial
 
 中文:
 定理 nontrivial_iff_nontrivial
-  结论: Nontrivial R ↔ Nontrivial S
+  结论: 非平凡 R ↔ 非平凡 S
   证明: by
   by_contra! ⟨_, _⟩ | ⟨_, _⟩
   · obtain ⟨c, hc⟩ := h.exists_of_eq (x := 1) (y := 0) (Subsingleton.elim _ _)
@@ -1955,8 +1955,8 @@ theorem nontrivial
 
 中文:
 定理 nontrivial
-  条件: [hR : Nontrivial R]
-  结论: Nontrivial S
+  条件: [hR : 非平凡 R]
+  结论: 非平凡 S
   证明: h.nontrivial_iff_nontrivial.mp hR
 -/
 protected theorem nontrivial [hR : Nontrivial R] : Nontrivial S :=
@@ -2042,8 +2042,8 @@ theorem faithfulSMul
 
 中文:
 定理 faithfulSMul
-  条件: [FaithfulSMul G B]
-  结论: FaithfulSMul G L
+  条件: [忠实标量乘法 G B]
+  结论: 忠实标量乘法 G L
   证明: ⟨fun h => eq_of_smul_eq_smul fun x => by simpa [← algebraMap.coe_smul'] using h (algebraMap B L x)⟩
 -/
 protected theorem faithfulSMul [FaithfulSMul G B] : FaithfulSMul G L :=
@@ -2065,8 +2065,8 @@ theorem smulCommClass
 
 中文:
 定理 smulCommClass
-  条件: [SMulCommClass G A B]
-  结论: SMulCommClass G K L
+  条件: [标量交换类 G A B]
+  结论: 标量交换类 G K L
   证明: ⟨fun g x y => by
     obtain ⟨a, b, hb, rfl⟩ := IsFractionRing.div_surjective A x
     obtain ⟨c, d, hd, rfl⟩ := IsFractionRing.div_surjective B y
@@ -2101,7 +2101,7 @@ theorem algebraMap_injective_of_field_isFractionRing
 
 中文:
 定理 algebraMap_injective_of_field_isFractionRing
-  结论: (K L : 类型) [Field K] [Semiring L]
+  结论: (K L : 类型) [域 K] [半环 L]
   证明: by
   refine Function.Injective.of_comp (f := algebraMap S L) ?_
   rw [← RingHom.coe_comp]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R K L]
@@ -2126,8 +2126,8 @@ theorem FaithfulSMul.of_field_isFractionRing
     algebraMap_injective_of_field_isFractionRing R S K L
 
 中文:
-定理 FaithfulSMul.of_field_isFractionRing
-  结论: (K L : 类型) [Field K] [Semiring L]
+定理 忠实标量乘法.of_field_isFractionRing
+  结论: (K L : 类型) [域 K] [半环 L]
   证明: (faithfulSMul_iff_algebraMap_injective R S).mpr
     algebraMap_injective_of_field_isFractionRing R S K L
 
@@ -2188,7 +2188,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [Subsingleton R]
+  签名: [子单例 R]
   定义体: inferInstance
 -/
 instance unique [Subsingleton R] : Unique (FractionRing R) := inferInstance
@@ -2202,8 +2202,8 @@ instance [Nontrivial
   body: inferInstance
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (FractionRing R)
+实例 [非平凡
+  签名: R] : 非平凡 (FractionRing R)
   定义体: inferInstance
 -/
 instance [Nontrivial R] : Nontrivial (FractionRing R) := inferInstance
@@ -2255,7 +2255,7 @@ instance field
 
 中文:
 实例 field
-  签名: : Field (FractionRing A)
+  签名: : 域 (FractionRing A)
   定义体: inferInstance
 
 @[simp]
@@ -2300,7 +2300,7 @@ abbreviation liftAlgebra
 
 中文:
 缩写 liftAlgebra
-  签名: : Algebra (FractionRing R) K
+  签名: : 代数 (FractionRing R) K
   定义体: have := IsDomain.of_faithfulSMul R K
   RingHom.toAlgebra (IsFractionRing.lift (FaithfulSMul.algebraMap_injective R K))
 
@@ -2324,7 +2324,7 @@ instance isScalarTower_liftAlgebra
 
 中文:
 实例 isScalarTower_liftAlgebra
-  签名: : IsScalarTower R (FractionRing R) K
+  签名: : 标量塔 R (FractionRing R) K
   定义体: have := IsDomain.of_faithfulSMul R K
   .of_algebraMap_eq fun x =>
     (IsFractionRing.lift_algebraMap (FaithfulSMul.algebraMap_injective R K) x).symm
@@ -2373,7 +2373,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: (K : 类型) [CommRing K] [Algebra A K] [IsFractionRing A K]
+  签名: (K : 类型) [交换环 K] [代数 A K] [IsFractionRing A K]
   定义体: Localization.algEquiv (nonZeroDivisors A) K
 
 Depends on / 依赖: Localization, Localization.algEquiv, algEquiv, nonZeroDivisors
@@ -2394,8 +2394,8 @@ instance [Algebra
     (FaithfulSMul.algebraMap_injective R A)
 
 中文:
-实例 [Algebra
-  签名: R A] [FaithfulSMul R A] : FaithfulSMul R (FractionRing A)
+实例 [代数
+  签名: R A] [忠实标量乘法 R A] : 忠实标量乘法 R (FractionRing A)
   定义体: by
   rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq R A]
   exact (FaithfulSMul.algebraMap_injective A (FractionRing A)).comp

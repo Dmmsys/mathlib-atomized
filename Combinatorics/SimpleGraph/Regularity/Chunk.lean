@@ -70,7 +70,7 @@ else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₂ hP hU 
 
 中文:
 定义 chunk
-  签名: : Finpartition U
+  签名: : 有限分拆 U
   定义体: if hUcard : #U = m * 4 ^ #P.parts + (card α / #P.parts - m * 4 ^ #P.parts) then
 (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₁ hUcard
 else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₂ hP hU hUcard
@@ -94,7 +94,7 @@ definition star
 
 中文:
 定义 star
-  签名: (V : Finset α)
+  签名: (V : 有限集 α)
   定义体: {A in (chunk hP G ε hU).parts | A subseteq G.nonuniformWitness ε U V}
 
 Depends on / 依赖: G.nonuniformWitness, nonuniformWitness, subseteq
@@ -473,7 +473,7 @@ theorem one_sub_le_m_div_m_add_one_sq
 
 中文:
 定理 one_sub_le_m_div_m_add_one_sq
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   have : (m : Real) / (m + 1) = 1 - 1 / (m + 1) := by
     rw [one_sub_div coe_m_add_one_pos.ne']; rw [add_sub_cancel_right]
@@ -512,7 +512,7 @@ theorem m_add_one_div_m_le_one_add
 
 中文:
 定理 m_add_one_div_m_le_one_add
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   have : 0 <= ε := by sz_positivity
   rw [same_add_div (by sz_positivity)]
@@ -553,7 +553,7 @@ theorem density_sub_eps_le_sum_density_div_card
 
 中文:
 定理 density_sub_eps_le_sum_density_div_card
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   have : ↑(G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / ↑50 <=
       (↑1 - ε ^ 5 / 50) * G.edgeDensity (A.biUnion id) (B.biUnion id) := by
@@ -611,7 +611,7 @@ theorem sum_density_div_card_le_density_add_eps
 
 中文:
 定理 sum_density_div_card_le_density_add_eps
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   have : (↑1 + ε ^ 5 / ↑49) * G.edgeDensity (A.biUnion id) (B.biUnion id) <=
       G.edgeDensity (A.biUnion id) (B.biUnion id) + ε ^ 5 / 49 := by
@@ -674,7 +674,7 @@ theorem average_density_near_total_density
 
 中文:
 定理 average_density_near_total_density
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   rw [abs_sub_le_iff]
   constructor
@@ -716,7 +716,7 @@ theorem edgeDensity_chunk_aux
 
 中文:
 定理 edgeDensity_chunk_aux
-  结论: [Nonempty α] (hP)
+  结论: [非空 α] (hP)
   证明: by
   obtain hGε | hGε := le_total (G.edgeDensity U V : Real) (ε ^ 5 / 50)
   · refine (sub_nonpos_of_le <| (sq_le ?_ ?_).trans <| hGε.trans ?_).trans (sq_nonneg _)
@@ -805,7 +805,7 @@ theorem eps_le_card_star_div
 
 中文:
 定理 eps_le_card_star_div
-  结论: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   证明: by
   have hm : (0 : Real) <= 1 - (↑m)⁻¹ := sub_nonneg_of_le (inv_le_one_of_one_le₀ <| one_le_m_coe hPα)
   have hε : 0 <= 1 - ε / 10 :=
@@ -871,7 +871,7 @@ theorem edgeDensity_star_not_uniform
 
 中文:
 定理 edgeDensity_star_not_uniform
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]
   set p : Real :=
@@ -929,7 +929,7 @@ theorem edgeDensity_chunk_not_uniform
 
 中文:
 定理 edgeDensity_chunk_not_uniform
-  结论: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   证明: calc
     ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / 25 + ε ^ 4 / ↑3 <= ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / ↑25 +
         #(star hP G ε hU V) * #(star hP G ε hV U) / ↑16 ^ #P.parts *
@@ -1001,7 +1001,7 @@ theorem edgeDensity_chunk_uniform
 
 中文:
 定理 edgeDensity_chunk_uniform
-  结论: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
+  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
   证明: by
   apply (edgeDensity_chunk_aux (hP := hP) hPα hPε hU hV).trans
   have key : (16 : Real) ^ #P.parts = #((chunk hP G ε hU).parts ×ˢ (chunk hP G ε hV).parts) := by

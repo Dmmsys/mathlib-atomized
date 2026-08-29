@@ -73,10 +73,10 @@ structure TStructure
 结构 TStructure
   参数: where
   公理与运算 (10 个):
-    - le((n : 整数)) : Object命题erty C
-    - ge((n : 整数)) : Object命题erty C
-    - le_isClosedUnderIsomorphisms((n : 整数)) : (le n).IsClosedUnderIsomorphisms  [默认: by infer_instance]
-    - ge_isClosedUnderIsomorphisms((n : 整数)) : (ge n).IsClosedUnderIsomorphisms  [默认: by infer_instance]
+    - le((n : 整数)) : ObjectProperty C
+    - ge((n : 整数)) : ObjectProperty C
+    - le_isClosedUnderIsomorphisms((n : 整数)) : (le n).在同构下封闭  [默认: by infer_instance]
+    - ge_isClosedUnderIsomorphisms((n : 整数)) : (ge n).在同构下封闭  [默认: by infer_instance]
     - le_shift((n a n' : 整数) (h : a + n' = n) (X : C) (hX : le n X)) : le n' (X⟦a⟧)
     - ge_shift((n a n' : 整数) (h : a + n' = n) (X : C) (hX : ge n X)) : ge n' (X⟦a⟧)
     - zero'(⦃X Y) : C⦄ (f : X ⟶ Y) (hX : le 0 X) (hY : ge 1 Y) : f = 0
@@ -124,7 +124,7 @@ lemma exists_triangle
     refine isomorp
 
 中文:
-引理 exists_triangle
+引理 存在_triangle
   条件: (A : C) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁)
   证明: by
   obtain ⟨X, Y, hX, hY, f, g, h, mem⟩ := t.exists_triangle_zero_one (A⟦n₀⟧)
@@ -245,7 +245,7 @@ lemma le_monotone
 
 中文:
 引理 le_monotone
-  结论: Monotone t.le
+  结论: 递增 t.le
   证明: by
   let H := fun (a : Nat) => forall (n : Int), t.le n <= t.le (n + a)
   suffices forall (a : Nat), H a by
@@ -301,7 +301,7 @@ lemma ge_antitone
 
 中文:
 引理 ge_antitone
-  结论: Antitone t.ge
+  结论: 递减 t.ge
   证明: by
   let H := fun (a : Nat) => forall (n : Int), t.ge (n + a) <= t.ge n
   suffices forall (a : Nat), H a by
@@ -348,7 +348,7 @@ class IsLE
     - le : t.le n X
 
 中文:
-类 IsLE
+类 是LE
   参数: (X : C) (n : 整数)
   公理与运算 (1 个):
     - le : t.le n X
@@ -366,7 +366,7 @@ class IsGE
     - ge : t.ge n X
 
 中文:
-类 IsGE
+类 是GE
   参数: (X : C) (n : 整数)
   公理与运算 (1 个):
     - ge : t.ge n X
@@ -385,7 +385,7 @@ lemma le_of_isLE
 
 中文:
 引理 le_of_isLE
-  条件: (X : C) (n : 整数) [t.IsLE X n]
+  条件: (X : C) (n : 整数) [t.是LE X n]
   结论: t.le n X
   证明: IsLE.le
 
@@ -404,7 +404,7 @@ lemma ge_of_isGE
 
 中文:
 引理 ge_of_isGE
-  条件: (X : C) (n : 整数) [t.IsGE X n]
+  条件: (X : C) (n : 整数) [t.是GE X n]
   结论: t.ge n X
   证明: IsGE.ge
 
@@ -423,8 +423,8 @@ lemma isLE_of_iso
 
 中文:
 引理 isLE_of_iso
-  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.IsLE X n]
-  结论: t.IsLE Y n where
+  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.是LE X n]
+  结论: t.是LE Y n where
   证明: (t.le n).prop_of_iso e (t.le_of_isLE X n)
 
 Depends on / 依赖: le_of_isLE, prop_of_iso, t.le, t.le_of_isLE
@@ -443,8 +443,8 @@ lemma isGE_of_iso
 
 中文:
 引理 isGE_of_iso
-  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.IsGE X n]
-  结论: t.IsGE Y n where
+  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.是GE X n]
+  结论: t.是GE Y n where
   证明: (t.ge n).prop_of_iso e (t.ge_of_isGE X n)
 
 Depends on / 依赖: ge_of_isGE, prop_of_iso, t.ge, t.ge_of_isGE
@@ -463,8 +463,8 @@ lemma isLE_of_le
 
 中文:
 引理 isLE_of_le
-  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.IsLE X p]
-  结论: t.IsLE X q where
+  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.是LE X p]
+  结论: t.是LE X q where
   证明: le_monotone t hpq _ (t.le_of_isLE X p)
 
 Depends on / 依赖: le_monotone, le_of_isLE, t.IsLE, t.le_of_isLE
@@ -488,8 +488,8 @@ lemma isGE_of_ge
 
 中文:
 引理 isGE_of_ge
-  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.IsGE X q]
-  结论: t.IsGE X p where
+  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.是GE X q]
+  结论: t.是GE X p where
   证明: ge_antitone t hpq _ (t.ge_of_isGE X q)
 
 @[deprecated (since := "2026-01-30")] alias isLE_of_LE := isLE_of_le
@@ -520,7 +520,7 @@ lemma le_iff_isLE
 中文:
 引理 le_iff_isLE
   条件: (X : C) (n : 整数)
-  结论: t.le n X ↔ t.IsLE X n
+  结论: t.le n X ↔ t.是LE X n
   证明: ⟨fun h => ⟨h⟩, fun _ => t.le_of_isLE X n⟩
 
 @[simp]
@@ -543,7 +543,7 @@ lemma ge_iff_isGE
 中文:
 引理 ge_iff_isGE
   条件: (X : C) (n : 整数)
-  结论: t.ge n X ↔ t.IsGE X n
+  结论: t.ge n X ↔ t.是GE X n
   证明: ⟨fun h => ⟨h⟩, fun _ => t.ge_of_isGE X n⟩
 
 Depends on / 依赖: ge_of_isGE, t.ge_of_isGE
@@ -571,7 +571,7 @@ lemma isLE_shift
 
 中文:
 引理 isLE_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.IsLE X n]
+  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是LE X n]
   证明: ⟨t.le_shift n a n' hn' X (t.le_of_isLE X n)⟩
 
 Depends on / 依赖: le_of_isLE, le_shift, t.IsLE, t.le_of_isLE, t.le_shift
@@ -590,7 +590,7 @@ lemma isGE_shift
 
 中文:
 引理 isGE_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.IsGE X n]
+  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是GE X n]
   证明: ⟨t.ge_shift n a n' hn' X (t.ge_of_isGE X n)⟩
 
 Depends on / 依赖: ge_of_isGE, ge_shift, t.IsGE, t.ge_of_isGE, t.ge_shift
@@ -611,7 +611,7 @@ lemma isLE_of_shift
 
 中文:
 引理 isLE_of_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.IsLE (X⟦a⟧) n']
+  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是LE (X⟦a⟧) n']
   证明: by
   have h := t.isLE_shift (X⟦a⟧) n' (-a) n
   exact t.isLE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
@@ -635,7 +635,7 @@ lemma isGE_of_shift
 
 中文:
 引理 isGE_of_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.IsGE (X⟦a⟧) n']
+  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是GE (X⟦a⟧) n']
   证明: by
   have h := t.isGE_shift (X⟦a⟧) n' (-a) n
   exact t.isGE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
@@ -808,7 +808,7 @@ definition minus
 
 中文:
 定义 minus
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (n : Int), t.IsLE X n
 
 Depends on / 依赖: t.IsLE
@@ -825,7 +825,7 @@ definition plus
 
 中文:
 定义 plus
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => exists (n : Int), t.IsGE X n
 
 Depends on / 依赖: t.IsGE
@@ -842,7 +842,7 @@ definition bounded
 
 中文:
 定义 bounded
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: t.plus ⊓ t.minus
 
 Depends on / 依赖: t.minus, t.plus
@@ -859,7 +859,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.minus.IsClosedUnderIsomorphisms
+  签名: t.minus.在同构下封闭
   定义体: by rintro ⟨n, _⟩; exact ⟨_, t.isLE_of_iso e n⟩
 
 Depends on / 依赖: isLE_of_iso, t.isLE_of_iso
@@ -879,7 +879,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.minus.IsStableUnderShift 整数
+  签名: t.minus.是StableUnderShift 整数
   定义体: { le_shift := by
         rintro X ⟨i, _⟩
         exact ⟨i - n, t.isLE_shift _ i _ _ (by omega)⟩ }
@@ -902,7 +902,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.plus.IsClosedUnderIsomorphisms
+  签名: t.plus.在同构下封闭
   定义体: by rintro ⟨n, _⟩; exact ⟨_, t.isGE_of_iso e n⟩
 
 Depends on / 依赖: isGE_of_iso, t.isGE_of_iso
@@ -922,7 +922,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.plus.IsStableUnderShift 整数
+  签名: t.plus.是StableUnderShift 整数
   定义体: { le_shift := by
         rintro X ⟨i, _⟩
         exact ⟨i - n, t.isGE_shift _ i _ _ (by omega)⟩ }
@@ -947,7 +947,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.bounded.IsClosedUnderIsomorphisms
+  签名: t.bounded.在同构下封闭
   定义体: by
   dsimp [bounded]
   infer_instance
@@ -970,7 +970,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.bounded.IsStableUnderShift 整数
+  签名: t.bounded.是StableUnderShift 整数
   定义体: by
   dsimp [bounded]
   infer_instance

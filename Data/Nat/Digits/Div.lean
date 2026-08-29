@@ -34,7 +34,7 @@ theorem modEq_three_digits_sum
 中文:
 定理 modEq_three_digits_sum
   条件: (n : 自然数)
-  结论: n ≡ (digits 10 n).sum [MOD 3]
+  结论: n ≡ (digits 10 n).求和 [MOD 3]
   证明: modEq_digits_sum 3 10 (by simp) n
 
 Depends on / 依赖: modEq_digits_sum
@@ -54,7 +54,7 @@ theorem modEq_nine_digits_sum
 中文:
 定理 modEq_nine_digits_sum
   条件: (n : 自然数)
-  结论: n ≡ (digits 10 n).sum [MOD 9]
+  结论: n ≡ (digits 10 n).求和 [MOD 9]
   证明: modEq_digits_sum 9 10 (by simp) n
 
 Depends on / 依赖: modEq_digits_sum
@@ -126,7 +126,7 @@ theorem three_dvd_iff
 中文:
 定理 three_dvd_iff
   条件: (n : 自然数)
-  结论: 3 ∣ n ↔ 3 ∣ (digits 10 n).sum
+  结论: 3 ∣ n ↔ 3 ∣ (digits 10 n).求和
   证明: dvd_iff_dvd_digits_sum 3 10 (by simp) n
 
 Depends on / 依赖: dvd_iff_dvd_digits_sum
@@ -146,7 +146,7 @@ theorem nine_dvd_iff
 中文:
 定理 nine_dvd_iff
   条件: (n : 自然数)
-  结论: 9 ∣ n ↔ 9 ∣ (digits 10 n).sum
+  结论: 9 ∣ n ↔ 9 ∣ (digits 10 n).求和
   证明: dvd_iff_dvd_digits_sum 9 10 (by simp) n
 
 Depends on / 依赖: dvd_iff_dvd_digits_sum

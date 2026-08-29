@@ -316,7 +316,7 @@ lemma ofLp_single
 中文:
 引理 ofLp_single
   条件: (i : ι) (a : β i)
-  结论: ofLp (single p i a) = Pi.single i a
+  结论: ofLp (single p i a) = 依赖函数类型.single i a
   证明: rfl
 
 @[simp]
@@ -338,7 +338,7 @@ lemma toLp_single
 中文:
 引理 toLp_single
   条件: (i : ι) (a : β i)
-  结论: toLp p (Pi.single i a) = single p i a
+  结论: toLp p (依赖函数类型.single i a) = single p i a
   证明: rfl
 
 @[simp]
@@ -433,7 +433,7 @@ lemma single_apply
 
 中文:
 引理 single_apply
-  条件: [Zero 𝕜] (i : ι) (a : 𝕜) (j : ι)
+  条件: [零 𝕜] (i : ι) (a : 𝕜) (j : ι)
   证明: by
   rw [← toLp_single]; rw [PiLp.toLp_apply]; rw [← Pi.single_apply i a j]
 
@@ -548,7 +548,7 @@ theorem linearIndependent_single
 
 中文:
 定理 linearIndependent_single
-  结论: [Semiring 𝕜] {η : 类型} {ιs : η -> 类型}
+  结论: [半环 𝕜] {η : 类型} {ιs : η -> 类型}
   证明: by
   suffices LinearIndependent 𝕜 ((WithLp.linearEquiv p 𝕜 _).symm.toLinearMap ∘
       fun ji : Σ j, ιs j => Pi.single ji.1 (v ji.1 ji.2)) by
@@ -583,7 +583,7 @@ theorem linearIndependent_single_one
 
 中文:
 定理 linearIndependent_single_one
-  条件: [Ring 𝕜]
+  条件: [环 𝕜]
   证明: by
   suffices LinearIndependent 𝕜 ((WithLp.linearEquiv p 𝕜 _).symm.toLinearMap ∘
       fun i : ι => Pi.single i (1 : 𝕜)) by
@@ -616,7 +616,7 @@ theorem linearIndependent_single_of_ne_zero
 
 中文:
 定理 linearIndependent_single_of_ne_zero
-  结论: [Ring 𝕜] [IsDomain 𝕜] {M : 类型}
+  结论: [环 𝕜] [是整环 𝕜] {M : 类型}
   证明: by
   suffices LinearIndependent 𝕜 ((WithLp.linearEquiv p 𝕜 _).symm.toLinearMap ∘
       fun i : ι => Pi.single i (v i)) by
@@ -914,7 +914,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm (PiLp p β) where
+  签名: : 范数 (PiLp p β) where
   定义体: if p = 0 then {i | ‖f i‖ != 0}.toFinite.toFinset.card
     else if p = ∞ then ⨆ i, ‖f i‖ else (∑ i, ‖f i‖ ^ p.toReal) ^ (1 / p.toReal)
 
@@ -1038,7 +1038,7 @@ definition pseudoEmetricAux
 
 中文:
 定义 pseudoEmetricAux
-  签名: : PseudoEMetricSpace (PiLp p β) where
+  签名: : PseudoEMetric空间 (PiLp p β) where
   定义体: PiLp.edist_self p
   edist_comm := PiLp.edist_comm p
   edist_triangle f g h := by
@@ -1091,7 +1091,7 @@ theorem iSup_edist_ne_top_aux
 
 中文:
 定理 iSup_edist_ne_top_aux
-  结论: {ι : 类型} [Finite ι] {α : ι -> 类型}
+  结论: {ι : 类型} [有限 ι] {α : ι -> 类型}
   证明: by
   cases nonempty_fintype ι
   obtain ⟨M, hM⟩ := Finite.exists_le fun i => (⟨dist (f i) (g i), dist_nonneg⟩ : Real>=0)
@@ -1127,7 +1127,7 @@ abbreviation pseudoMetricAux
 
 中文:
 缩写 pseudoMetricAux
-  签名: : PseudoMetricSpace (PiLp p α)
+  签名: : 伪度量空间 (PiLp p α)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist
     (fun f g => by
       rcases p.dichotomy with (rfl | h)
@@ -1288,7 +1288,7 @@ lemma isUniformInducing_ofLp_aux
 
 中文:
 引理 isUniformInducing_ofLp_aux
-  结论: IsUniformInducing (@ofLp p (对任意 i, β i))
+  结论: 是UniformInducing (@ofLp p (对任意 i, β i))
   证明: (antilipschitzWith_ofLp_aux p β).isUniformInducing
       (lipschitzWith_ofLp_aux p β).uniformContinuous
 -/
@@ -1309,7 +1309,7 @@ lemma uniformity_aux
 
 中文:
 引理 uniformity_aux
-  结论: 𝓤 (PiLp p β) = 𝓤[UniformSpace.comap ofLp inferInstance]
+  结论: 𝓤 (PiLp p β) = 𝓤[一致空间.comap ofLp inferInstance]
   证明: by
   rw [← (isUniformInducing_ofLp_aux p β).comap_uniformity]
   rfl
@@ -1328,7 +1328,7 @@ instance bornology
 
 中文:
 实例 bornology
-  签名: (p : 实数>=0∞) (β : ι -> 类型) [对任意 i, Bornology (β i)]
+  签名: (p : 实数>=0∞) (β : ι -> 类型) [对任意 i, 有界结构 (β i)]
   定义体: Bornology.induced ofLp
 
 Depends on / 依赖: Bornology, Bornology.induced, induced
@@ -1348,7 +1348,7 @@ lemma cobounded_aux
 
 中文:
 引理 cobounded_aux
-  结论: @cobounded _ PseudoMetricSpace.toBornology = cobounded (PiLp p α)
+  结论: @cobounded _ 伪度量空间.toBornology = cobounded (PiLp p α)
   证明: le_antisymm (antilipschitzWith_ofLp_aux p α).tendsto_cobounded.le_comap
     (lipschitzWith_ofLp_aux p α).comap_cobounded_le
 -/
@@ -1371,7 +1371,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: [对任意 i, TopologicalSpace (β i)]
+  签名: [对任意 i, 拓扑空间 (β i)]
   定义体: Pi.topologicalSpace.induced ofLp
 
 @[fun_prop, continuity]
@@ -1395,8 +1395,8 @@ theorem continuous_ofLp
 
 中文:
 定理 continuous_ofLp
-  条件: [对任意 i, TopologicalSpace (β i)]
-  结论: Continuous (@ofLp p (对任意 i, β i))
+  条件: [对任意 i, 拓扑空间 (β i)]
+  结论: 连续 (@ofLp p (对任意 i, β i))
   证明: continuous_induced_dom
 
 @[fun_prop, continuity]
@@ -1419,7 +1419,7 @@ lemma continuous_apply
 
 中文:
 引理 continuous_apply
-  条件: [对任意 i, TopologicalSpace (β i)] (i : ι)
+  条件: [对任意 i, 拓扑空间 (β i)] (i : ι)
   证明: (continuous_apply i).comp (continuous_ofLp p β)
 
 @[fun_prop, continuity]
@@ -1439,8 +1439,8 @@ theorem continuous_toLp
 
 中文:
 定理 continuous_toLp
-  条件: [对任意 i, TopologicalSpace (β i)]
-  结论: Continuous (@toLp p (对任意 i, β i))
+  条件: [对任意 i, 拓扑空间 (β i)]
+  结论: 连续 (@toLp p (对任意 i, β i))
   证明: continuous_induced_rng.2 continuous_id
 
 Depends on / 依赖: continuous_id, continuous_induced_rng
@@ -1460,7 +1460,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: [对任意 i, TopologicalSpace (β i)]
+  签名: [对任意 i, 拓扑空间 (β i)]
   定义体: WithLp.equiv p (Π i, β i)
 
 @[simp]
@@ -1481,7 +1481,7 @@ lemma toEquiv_homeomorph
 
 中文:
 引理 toEquiv_homeomorph
-  条件: [对任意 i, TopologicalSpace (β i)]
+  条件: [对任意 i, 拓扑空间 (β i)]
   证明: rfl
 -/
 lemma toEquiv_homeomorph [forall i, TopologicalSpace (β i)] :
@@ -1497,7 +1497,7 @@ lemma isOpenMap_apply
 
 中文:
 引理 isOpenMap_apply
-  条件: [对任意 i, TopologicalSpace (β i)] (i : ι)
+  条件: [对任意 i, 拓扑空间 (β i)] (i : ι)
   证明: (isOpenMap_eval i).comp (homeomorph p β).isOpenMap
 
 Depends on / 依赖: homeomorph, isOpenMap, isOpenMap_eval
@@ -1515,7 +1515,7 @@ instance instProdT0Space
 
 中文:
 实例 instProdT0Space
-  签名: [对任意 i, TopologicalSpace (β i)] [对任意 i, T0Space (β i)]
+  签名: [对任意 i, 拓扑空间 (β i)] [对任意 i, T0空间 (β i)]
   定义体: (homeomorph p β).symm.t0Space
 
 Depends on / 依赖: homeomorph, symm.t0Space, t0Space
@@ -1534,7 +1534,7 @@ instance secondCountableTopology
 
 中文:
 实例 secondCountableTopology
-  签名: [Countable ι] [对任意 i, TopologicalSpace (β i)]
+  签名: [可数 ι] [对任意 i, 拓扑空间 (β i)]
   定义体: (homeomorph p β).secondCountableTopology
 
 Depends on / 依赖: homeomorph, secondCountableTopology
@@ -1555,7 +1555,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: [对任意 i, UniformSpace (β i)]
+  签名: [对任意 i, 一致空间 (β i)]
   定义体: (Pi.uniformSpace β).comap ofLp
 
 @[fun_prop]
@@ -1578,7 +1578,7 @@ lemma uniformContinuous_ofLp
 
 中文:
 引理 uniformContinuous_ofLp
-  条件: [对任意 i, UniformSpace (β i)]
+  条件: [对任意 i, 一致空间 (β i)]
   证明: uniformContinuous_comap
 
 @[fun_prop]
@@ -1600,7 +1600,7 @@ lemma uniformContinuous_toLp
 
 中文:
 引理 uniformContinuous_toLp
-  条件: [对任意 i, UniformSpace (β i)]
+  条件: [对任意 i, 一致空间 (β i)]
   证明: uniformContinuous_comap' uniformContinuous_id
 
 Depends on / 依赖: uniformContinuous_comap, uniformContinuous_id
@@ -1623,7 +1623,7 @@ definition uniformEquiv
 
 中文:
 定义 uniformEquiv
-  签名: [对任意 i, UniformSpace (β i)]
+  签名: [对任意 i, 一致空间 (β i)]
   定义体: WithLp.equiv p (Π i, β i)
   uniformContinuous_toFun := uniformContinuous_ofLp p β
   uniformContinuous_invFun := uniformContinuous_toLp p β
@@ -1650,7 +1650,7 @@ lemma toHomeomorph_uniformEquiv
 
 中文:
 引理 toHomeomorph_uniformEquiv
-  条件: [对任意 i, UniformSpace (β i)]
+  条件: [对任意 i, 一致空间 (β i)]
   证明: rfl
 
 @[simp]
@@ -1669,7 +1669,7 @@ lemma toEquiv_uniformEquiv
 
 中文:
 引理 toEquiv_uniformEquiv
-  条件: [对任意 i, UniformSpace (β i)]
+  条件: [对任意 i, 一致空间 (β i)]
   证明: rfl
 -/
 lemma toEquiv_uniformEquiv [forall i, UniformSpace (β i)] :
@@ -1685,7 +1685,7 @@ instance completeSpace
 
 中文:
 实例 completeSpace
-  签名: [对任意 i, UniformSpace (β i)] [对任意 i, CompleteSpace (β i)]
+  签名: [对任意 i, 一致空间 (β i)] [对任意 i, 完备空间 (β i)]
   定义体: (uniformEquiv p β).completeSpace_iff.2 inferInstance
 
 Depends on / 依赖: completeSpace_iff, uniformEquiv
@@ -1709,8 +1709,8 @@ instance [forall
   body: (pseudoEmetricAux p β).replaceUniformity (uniformity_aux p β).symm
 
 中文:
-实例 [forall
-  签名: i, PseudoEMetricSpace (β i)] : PseudoEMetricSpace (PiLp p β)
+实例 [对任意
+  签名: i, PseudoEMetric空间 (β i)] : PseudoEMetric空间 (PiLp p β)
   定义体: (pseudoEmetricAux p β).replaceUniformity (uniformity_aux p β).symm
 
 Depends on / 依赖: pseudoEmetricAux, replaceUniformity, uniformity_aux
@@ -1727,8 +1727,8 @@ instance [forall
   body: EMetricSpace.ofT0PseudoEMetricSpace (PiLp p α)
 
 中文:
-实例 [forall
-  签名: i, EMetricSpace (α i)] : EMetricSpace (PiLp p α)
+实例 [对任意
+  签名: i, 广义度量空间 (α i)] : 广义度量空间 (PiLp p α)
   定义体: EMetricSpace.ofT0PseudoEMetricSpace (PiLp p α)
 
 Depends on / 依赖: EMetricSpace, EMetricSpace.ofT0PseudoEMetricSpace, ofT0PseudoEMetricSpace
@@ -1748,8 +1748,8 @@ instance [forall
     Filter.ext_iff.1 (cobounded_aux p β).symm sᶜ
 
 中文:
-实例 [forall
-  签名: i, PseudoMetricSpace (β i)] : PseudoMetricSpace (PiLp p β)
+实例 [对任意
+  签名: i, 伪度量空间 (β i)] : 伪度量空间 (PiLp p β)
   定义体: ((pseudoMetricAux p β).replaceUniformity (uniformity_aux p β).symm).replaceBornology fun s =>
     Filter.ext_iff.1 (cobounded_aux p β).symm sᶜ
 
@@ -1768,8 +1768,8 @@ instance [forall
   body: MetricSpace.ofT0PseudoMetricSpace _
 
 中文:
-实例 [forall
-  签名: i, MetricSpace (α i)] : MetricSpace (PiLp p α)
+实例 [对任意
+  签名: i, 度量空间 (α i)] : 度量空间 (PiLp p α)
   定义体: MetricSpace.ofT0PseudoMetricSpace _
 
 Depends on / 依赖: MetricSpace, MetricSpace.ofT0PseudoMetricSpace, ofT0PseudoMetricSpace
@@ -1789,7 +1789,7 @@ theorem nndist_eq_sum
 
 中文:
 定理 nndist_eq_sum
-  结论: {p : 实数>=0∞} [Fact (1 <= p)] {β : ι -> 类型} [对任意 i, PseudoMetricSpace (β i)]
+  结论: {p : 实数>=0∞} [Fact (1 <= p)] {β : ι -> 类型} [对任意 i, 伪度量空间 (β i)]
   证明: NNReal.eq by
     push_cast
     exact dist_eq_sum (p.toReal_pos_iff_ne_top.mpr hp) _ _
@@ -1815,7 +1815,7 @@ theorem nndist_eq_iSup
 
 中文:
 定理 nndist_eq_iSup
-  条件: {β : ι -> 类型} [对任意 i, PseudoMetricSpace (β i)] (x y : PiLp ∞ β)
+  条件: {β : ι -> 类型} [对任意 i, 伪度量空间 (β i)] (x y : PiLp ∞ β)
   证明: NNReal.eq by
     push_cast
     exact dist_eq_iSup _ _
@@ -1841,7 +1841,7 @@ theorem edist_apply_le
 
 中文:
 定理 edist_apply_le
-  条件: [对任意 i, PseudoEMetricSpace (β i)] (x y : PiLp p β) (i : ι)
+  条件: [对任意 i, PseudoEMetric空间 (β i)] (x y : PiLp p β) (i : ι)
   证明: edist_apply_le_edist_aux x y i
 
 Depends on / 依赖: edist_apply_le_edist_aux
@@ -1861,7 +1861,7 @@ theorem nndist_apply_le
 
 中文:
 定理 nndist_apply_le
-  条件: [对任意 i, PseudoMetricSpace (β i)] (x y : PiLp p β) (i : ι)
+  条件: [对任意 i, 伪度量空间 (β i)] (x y : PiLp p β) (i : ι)
   证明: by
   simpa [← coe_nnreal_ennreal_nndist] using edist_apply_le x y i
 
@@ -1881,7 +1881,7 @@ theorem dist_apply_le
 
 中文:
 定理 dist_apply_le
-  条件: [对任意 i, PseudoMetricSpace (β i)] (x y : PiLp p β) (i : ι)
+  条件: [对任意 i, 伪度量空间 (β i)] (x y : PiLp p β) (i : ι)
   证明: nndist_apply_le x y i
 
 Depends on / 依赖: nndist_apply_le
@@ -1902,7 +1902,7 @@ lemma lipschitzWith_ofLp
 
 中文:
 引理 lipschitzWith_ofLp
-  条件: [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [对任意 i, PseudoEMetric空间 (β i)]
   证明: lipschitzWith_ofLp_aux p β
 
 Depends on / 依赖: lipschitzWith_ofLp_aux
@@ -1921,7 +1921,7 @@ lemma antilipschitzWith_toLp
 
 中文:
 引理 antilipschitzWith_toLp
-  条件: [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [对任意 i, PseudoEMetric空间 (β i)]
   证明: (lipschitzWith_ofLp p β).to_rightInverse (ofLp_toLp p)
 
 Depends on / 依赖: lipschitzWith_ofLp, ofLp_toLp, to_rightInverse
@@ -1940,7 +1940,7 @@ theorem antilipschitzWith_ofLp
 
 中文:
 定理 antilipschitzWith_ofLp
-  条件: [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [对任意 i, PseudoEMetric空间 (β i)]
   证明: antilipschitzWith_ofLp_aux p β
 
 Depends on / 依赖: antilipschitzWith_ofLp_aux
@@ -1959,7 +1959,7 @@ lemma lipschitzWith_toLp
 
 中文:
 引理 lipschitzWith_toLp
-  条件: [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [对任意 i, PseudoEMetric空间 (β i)]
   证明: (antilipschitzWith_ofLp p β).to_rightInverse (ofLp_toLp p)
 
 Depends on / 依赖: antilipschitzWith_ofLp, ofLp_toLp, to_rightInverse
@@ -1981,7 +1981,7 @@ lemma isometry_ofLp_infty
 
 中文:
 引理 isometry_ofLp_infty
-  条件: [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [对任意 i, PseudoEMetric空间 (β i)]
   证明: fun x y =>
   le_antisymm (by simpa only [ENNReal.coe_one, one_mul] using lipschitzWith_ofLp ∞ β x y)
     (by simpa only [ENNReal.div_top, ENNReal.toReal_zero, NNReal.rpow_zero, ENNReal.coe_one,
@@ -2013,7 +2013,7 @@ instance seminormedAddCommGroup
 
 中文:
 实例 seminormedAddCommGroup
-  签名: [对任意 i, SeminormedAddCommGroup (β i)]
+  签名: [对任意 i, SeminormedAddComm群 (β i)]
   定义体: fun x y => by
     rcases p.dichotomy with (rfl | h)
     · simp only [dist_eq_iSup, norm_eq_ciSup, dist_eq_norm, add_apply, neg_apply, norm_neg_add]
@@ -2050,7 +2050,7 @@ lemma isUniformInducing_toLp
 
 中文:
 引理 isUniformInducing_toLp
-  条件: [Finite ι] [对任意 i, PseudoEMetricSpace (β i)]
+  条件: [有限 ι] [对任意 i, PseudoEMetric空间 (β i)]
   证明: have := Fintype.ofFinite ι
   (antilipschitzWith_toLp p β).isUniformInducing
     (lipschitzWith_toLp p β).uniformContinuous
@@ -2077,7 +2077,7 @@ theorem enorm_apply_le
 
 中文:
 定理 enorm_apply_le
-  条件: [对任意 i, SeminormedAddCommGroup (β i)] (x : PiLp p β) (i : ι)
+  条件: [对任意 i, SeminormedAddComm群 (β i)] (x : PiLp p β) (i : ι)
   证明: by
   simpa using edist_apply_le x 0 i
 
@@ -2098,7 +2098,7 @@ theorem nnnorm_apply_le
 
 中文:
 定理 nnnorm_apply_le
-  条件: [对任意 i, SeminormedAddCommGroup (β i)] (x : PiLp p β) (i : ι)
+  条件: [对任意 i, SeminormedAddComm群 (β i)] (x : PiLp p β) (i : ι)
   证明: by
   simpa using nndist_apply_le x 0 i
 
@@ -2119,7 +2119,7 @@ theorem norm_apply_le
 
 中文:
 定理 norm_apply_le
-  条件: [对任意 i, SeminormedAddCommGroup (β i)] (x : PiLp p β) (i : ι)
+  条件: [对任意 i, SeminormedAddComm群 (β i)] (x : PiLp p β) (i : ι)
   证明: by
   simpa using dist_apply_le x 0 i
 
@@ -2142,7 +2142,7 @@ instance normedAddCommGroup
 
 中文:
 实例 normedAddCommGroup
-  签名: [对任意 i, NormedAddCommGroup (α i)]
+  签名: [对任意 i, 赋范交换加群 (α i)]
   定义体: { PiLp.seminormedAddCommGroup p α with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -2487,7 +2487,7 @@ theorem norm_sq_eq_of_L2
 
 中文:
 定理 norm_sq_eq_of_L2
-  条件: (β : ι -> 类型) [对任意 i, SeminormedAddCommGroup (β i)] (x : PiLp 2 β)
+  条件: (β : ι -> 类型) [对任意 i, SeminormedAddComm群 (β i)] (x : PiLp 2 β)
   证明: by
   suffices ‖x‖₊ ^ 2 = ∑ i : ι, ‖x i‖₊ ^ 2 by
     simpa only [NNReal.coe_sum] using! congr_arg ((↑) : Real>=0 -> Real) this
@@ -2604,7 +2604,7 @@ instance instIsBoundedSMul
 
 中文:
 实例 instIsBoundedSMul
-  签名: [SeminormedRing 𝕜] [对任意 i, SeminormedAddCommGroup (β i)]
+  签名: [Seminormed环 𝕜] [对任意 i, SeminormedAddComm群 (β i)]
   定义体: .of_nnnorm_smul_le fun c f => by
     rcases p.dichotomy with (rfl | hp)
     · rw [← nnnorm_ofLp, ← nnnorm_ofLp, ofLp_smul]
@@ -2644,7 +2644,7 @@ instance instNormSMulClass
 
 中文:
 实例 instNormSMulClass
-  签名: [SeminormedRing 𝕜] [对任意 i, SeminormedAddCommGroup (β i)]
+  签名: [Seminormed环 𝕜] [对任意 i, SeminormedAddComm群 (β i)]
   定义体: .of_nnnorm_smul fun c f => by
     rcases p.dichotomy with (rfl | hp)
     · rw [← nnnorm_ofLp, ← nnnorm_ofLp, WithLp.ofLp_smul, nnnorm_smul]
@@ -2675,7 +2675,7 @@ instance normedSpace
 
 中文:
 实例 normedSpace
-  签名: [NormedField 𝕜] [对任意 i, SeminormedAddCommGroup (β i)]
+  签名: [赋范域 𝕜] [对任意 i, SeminormedAddComm群 (β i)]
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -2730,7 +2730,7 @@ definition _root_.LinearIsometryEquiv.piLpCongrLeft
     · simp only [norm_eq_sum
 
 中文:
-定义 _root_.LinearIsometryEquiv.piLpCongrLeft
+定义 _root_.线性等距等价.piLpCongrLeft
   签名: (e : ι ≃ ι')
   定义体: (WithLp.linearEquiv p 𝕜 (ι -> E)).trans
     ((LinearEquiv.piCongrLeft' 𝕜 (fun _ : ι => E) e).trans (WithLp.linearEquiv p 𝕜 (ι' -> E)).symm)
@@ -2768,7 +2768,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrLeft_apply
 @[simp]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrLeft_apply
+定理 _root_.线性等距等价.piLpCongrLeft_apply
   条件: (e : ι ≃ ι') (v : PiLp p fun _ : ι => E)
   证明: rfl
 
@@ -2792,7 +2792,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrLeft_symm
 @[simp high]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrLeft_symm
+定理 _root_.线性等距等价.piLpCongrLeft_symm
   条件: (e : ι ≃ ι')
   证明: by
   ext
@@ -2821,7 +2821,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrLeft_single
     Pi.single, Function.update, Equiv.symm_apply_eq]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrLeft_single
+定理 _root_.线性等距等价.piLpCongrLeft_single
   结论: [DecidableEq ι] [DecidableEq ι']
   证明: by
   ext x
@@ -2857,7 +2857,7 @@ definition _root_.LinearIsometryEquiv.piLpCongrRight
     obtai
 
 中文:
-定义 _root_.LinearIsometryEquiv.piLpCongrRight
+定义 _root_.线性等距等价.piLpCongrRight
   签名: (e : 对任意 i, α i ≃ₗᵢ[𝕜] β i)
   定义体: WithLp.linearEquiv _ _ _
       ≪≫ₗ (LinearEquiv.piCongrRight fun i => (e i).toLinearEquiv)
@@ -2893,7 +2893,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrRight_apply
 @[simp]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrRight_apply
+定理 _root_.线性等距等价.piLpCongrRight_apply
   条件: (e : 对任意 i, α i ≃ₗᵢ[𝕜] β i) (x : PiLp p α)
   证明: rfl
 
@@ -2913,7 +2913,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrRight_refl
 @[simp]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrRight_refl
+定理 _root_.线性等距等价.piLpCongrRight_refl
   证明: rfl
 
 @[simp]
@@ -2934,7 +2934,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrRight_symm
 @[simp high]
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrRight_symm
+定理 _root_.线性等距等价.piLpCongrRight_symm
   条件: (e : 对任意 i, α i ≃ₗᵢ[𝕜] β i)
   证明: rfl
 
@@ -2955,7 +2955,7 @@ theorem _root_.LinearIsometryEquiv.piLpCongrRight_single
   proof: PiLp.ext Pi.apply_single (e ·) (fun _ => map_zero _) _ _
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCongrRight_single
+定理 _root_.线性等距等价.piLpCongrRight_single
   结论: (e : 对任意 i, α i ≃ₗᵢ[𝕜] β i) [DecidableEq ι]
   证明: PiLp.ext Pi.apply_single (e ·) (fun _ => map_zero _) _ _
 
@@ -2989,7 +2989,7 @@ definition _root_.LinearIsometryEquiv.piLpCurry
     simp_rw [← coe_nnnorm, NNReal.coe_inj,
 
 中文:
-定义 _root_.LinearIsometryEquiv.piLpCurry
+定义 _root_.线性等距等价.piLpCurry
   签名: :
   定义体: WithLp.linearEquiv _ _ _
       ≪≫ₗ LinearEquiv.piCurry 𝕜 α
@@ -3022,7 +3022,7 @@ theorem _root_.LinearIsometryEquiv.piLpCurry_apply
   proof: rfl
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCurry_apply
+定理 _root_.线性等距等价.piLpCurry_apply
   证明: rfl
 -/
 @[simp] theorem _root_.LinearIsometryEquiv.piLpCurry_apply
@@ -3039,7 +3039,7 @@ theorem _root_.LinearIsometryEquiv.piLpCurry_symm_apply
   proof: rfl
 
 中文:
-定理 _root_.LinearIsometryEquiv.piLpCurry_symm_apply
+定理 _root_.线性等距等价.piLpCurry_symm_apply
   证明: rfl
 -/
 @[simp] theorem _root_.LinearIsometryEquiv.piLpCurry_symm_apply
@@ -3177,7 +3177,7 @@ theorem nnnorm_toLp_single
 中文:
 定理 nnnorm_toLp_single
   条件: (i : ι) (b : β i)
-  结论: ‖toLp p (Pi.single i b)‖₊ = ‖b‖₊
+  结论: ‖toLp p (依赖函数类型.single i b)‖₊ = ‖b‖₊
   证明: nnnorm_single p β i b
 
 @[simp]
@@ -3227,7 +3227,7 @@ lemma norm_toLp_single
 中文:
 引理 norm_toLp_single
   条件: (i : ι) (b : β i)
-  结论: ‖toLp p (Pi.single i b)‖ = ‖b‖
+  结论: ‖toLp p (依赖函数类型.single i b)‖ = ‖b‖
   证明: norm_single p β i b
 
 @[simp]
@@ -3399,7 +3399,7 @@ lemma nnnorm_toLp_const
 
 中文:
 引理 nnnorm_toLp_const
-  条件: {β} [SeminormedAddCommGroup β] (hp : p != ∞) (b : β)
+  条件: {β} [SeminormedAddComm群 β] (hp : p != ∞) (b : β)
   证明: by
   rcases p.dichotomy with (h | h)
   · exact False.elim (hp h)
@@ -3434,7 +3434,7 @@ rcases em p = ∞ with (rfl | hp)
 
 中文:
 引理 nnnorm_toLp_const'
-  条件: {β} [SeminormedAddCommGroup β] [Nonempty ι] (b : β)
+  条件: {β} [SeminormedAddComm群 β] [非空 ι] (b : β)
   证明: by
 rcases em p = ∞ with (rfl | hp)
   · simp only [ENNReal.div_top, ENNReal.toReal_zero, NNReal.rpow_zero,
@@ -3461,7 +3461,7 @@ lemma norm_toLp_const
 
 中文:
 引理 norm_toLp_const
-  条件: {β} [SeminormedAddCommGroup β] (hp : p != ∞) (b : β)
+  条件: {β} [SeminormedAddComm群 β] (hp : p != ∞) (b : β)
   证明: (congr_arg ((↑) : Real>=0 -> Real) <| nnnorm_toLp_const hp b).trans by simp
 
 Depends on / 依赖: congr_arg, nnnorm_toLp_const
@@ -3481,7 +3481,7 @@ lemma norm_toLp_const'
 
 中文:
 引理 norm_toLp_const'
-  条件: {β} [SeminormedAddCommGroup β] [Nonempty ι] (b : β)
+  条件: {β} [SeminormedAddComm群 β] [非空 ι] (b : β)
   证明: (congr_arg ((↑) : Real>=0 -> Real) <| nnnorm_toLp_const' b).trans by simp
 
 Depends on / 依赖: congr_arg, nnnorm_toLp_const
@@ -3501,7 +3501,7 @@ lemma nnnorm_toLp_one
 
 中文:
 引理 nnnorm_toLp_one
-  条件: {β} [SeminormedAddCommGroup β] (hp : p != ∞) [One β]
+  条件: {β} [SeminormedAddComm群 β] (hp : p != ∞) [幺 β]
   证明: (nnnorm_toLp_const hp (1 : β)).trans rfl
 
 Depends on / 依赖: nnnorm_toLp_const
@@ -3520,7 +3520,7 @@ lemma norm_toLp_one
 
 中文:
 引理 norm_toLp_one
-  条件: {β} [SeminormedAddCommGroup β] (hp : p != ∞) [One β]
+  条件: {β} [SeminormedAddComm群 β] (hp : p != ∞) [幺 β]
   证明: (norm_toLp_const hp (1 : β)).trans rfl
 
 Depends on / 依赖: norm_toLp_const
@@ -3599,7 +3599,7 @@ definition equivOfUnique
 
 中文:
 定义 equivOfUnique
-  签名: [Unique ι]
+  签名: [唯一 ι]
   定义体: (continuousLinearEquiv p 𝕜 β).trans .piUnique 𝕜 β
 
 Depends on / 依赖: continuousLinearEquiv, piUnique
@@ -3654,7 +3654,7 @@ definition basisFun
 
 中文:
 定义 basisFun
-  签名: : Basis ι 𝕜 (PiLp p fun _ : ι => 𝕜)
+  签名: : 基 ι 𝕜 (PiLp p fun _ : ι => 𝕜)
   定义体: Basis.ofEquivFun (WithLp.linearEquiv p 𝕜 (ι -> 𝕜))
 
 @[simp]
@@ -3809,7 +3809,7 @@ abbreviation pseudoMetricSpaceToPi
 
 中文:
 缩写 pseudoMetricSpaceToPi
-  签名: [对任意 i, PseudoMetricSpace (α i)]
+  签名: [对任意 i, 伪度量空间 (α i)]
   定义体: (isUniformInducing_toLp p α).comapPseudoMetricSpace.replaceBornology
     fun s => Filter.ext_iff.1
       (le_antisymm (antilipschitzWith_toLp p α).tendsto_cobounded.le_comap
@@ -3834,7 +3834,7 @@ lemma dist_pseudoMetricSpaceToPi
 
 中文:
 引理 dist_pseudoMetricSpaceToPi
-  条件: [对任意 i, PseudoMetricSpace (α i)] (x y : Π i, α i)
+  条件: [对任意 i, 伪度量空间 (α i)] (x y : Π i, α i)
   证明: rfl
 -/
 lemma dist_pseudoMetricSpaceToPi [forall i, PseudoMetricSpace (α i)] (x y : Π i, α i) :
@@ -3853,7 +3853,7 @@ abbreviation seminormedAddCommGroupToPi
 
 中文:
 缩写 seminormedAddCommGroupToPi
-  签名: [对任意 i, SeminormedAddCommGroup (α i)]
+  签名: [对任意 i, SeminormedAddComm群 (α i)]
   定义体: ‖toLp p x‖
   toPseudoMetricSpace := pseudoMetricSpaceToPi p α
   dist_eq x y := by
@@ -3876,7 +3876,7 @@ lemma norm_seminormedAddCommGroupToPi
 
 中文:
 引理 norm_seminormedAddCommGroupToPi
-  条件: [对任意 i, SeminormedAddCommGroup (α i)] (x : Π i, α i)
+  条件: [对任意 i, SeminormedAddComm群 (α i)] (x : Π i, α i)
   证明: rfl
 -/
 lemma norm_seminormedAddCommGroupToPi [forall i, SeminormedAddCommGroup (α i)] (x : Π i, α i) :
@@ -3892,7 +3892,7 @@ lemma nnnorm_seminormedAddCommGroupToPi
 
 中文:
 引理 nnnorm_seminormedAddCommGroupToPi
-  条件: [对任意 i, SeminormedAddCommGroup (α i)] (x : Π i, α i)
+  条件: [对任意 i, SeminormedAddComm群 (α i)] (x : Π i, α i)
   证明: rfl
 -/
 lemma nnnorm_seminormedAddCommGroupToPi [forall i, SeminormedAddCommGroup (α i)] (x : Π i, α i) :
@@ -4009,7 +4009,7 @@ abbreviation normedAddCommGroupToPi
 
 中文:
 缩写 normedAddCommGroupToPi
-  签名: [对任意 i, NormedAddCommGroup (α i)]
+  签名: [对任意 i, 赋范交换加群 (α i)]
   定义体: ‖toLp p x‖
   toPseudoMetricSpace := pseudoMetricSpaceToPi p α
   dist_eq x y := by

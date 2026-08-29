@@ -37,7 +37,7 @@ lemma toReal_eLpNorm
   rw [lpNorm]; rw [if_pos hf]
 
 中文:
-引理 toReal_eLpNorm
+引理 to实数_eLpNorm
   条件: (hf : AEStronglyMeasurable f μ)
   结论: (eLpNorm f p μ).to实数 = lpNorm f p μ
   证明: by
@@ -61,7 +61,7 @@ lemma ofReal_lpNorm
 @[simp]
 
 中文:
-引理 ofReal_lpNorm
+引理 of实数_lpNorm
   条件: (hf : MemLp f p μ)
   结论: .of实数 (lpNorm f p μ) = eLpNorm f p μ
   证明: by
@@ -149,7 +149,7 @@ lemma lpNorm_eq_integral_norm_rpow_toReal
   · exact .of_forall fun x => ENNReal.rpow_lt_top_of_nonneg (by positivity) (
 
 中文:
-引理 lpNorm_eq_integral_norm_rpow_toReal
+引理 lpNorm_eq_integral_norm_rpow_to实数
   结论: (hp₀ : p != 0) (hp : p != ∞)
   证明: by
   rw [← toReal_eLpNorm hf]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp₀ hp]; rw [← ENNReal.toReal_rpow]; rw [← integral_toReal]
@@ -241,7 +241,7 @@ lemma lpNorm_measure_zero
 中文:
 引理 lpNorm_measure_zero
   条件: (f : α -> E)
-  结论: lpNorm f p (0 : Measure α) = 0
+  结论: lpNorm f p (0 : 测度 α) = 0
   证明: by simp [lpNorm]
 -/
 @[simp] lemma lpNorm_measure_zero (f : α -> E) : lpNorm f p (0 : Measure α) = 0 := by simp [lpNorm]
@@ -317,7 +317,7 @@ lemma lpNorm_zero
 
 中文:
 引理 lpNorm_zero
-  条件: (p : 实数>=0∞) (μ : Measure α)
+  条件: (p : 实数>=0∞) (μ : 测度 α)
   结论: lpNorm (0 : α -> E) p μ = 0
   证明: by simp [lpNorm]
 
@@ -342,7 +342,7 @@ lemma lpNorm_fun_zero
 
 中文:
 引理 lpNorm_fun_zero
-  条件: (p : 实数>=0∞) (μ : Measure α)
+  条件: (p : 实数>=0∞) (μ : 测度 α)
   结论: lpNorm (fun _ => 0 : α -> E) p μ = 0
   证明: by
   simp [lpNorm]
@@ -392,7 +392,7 @@ lemma lpNorm_of_isEmpty
 
 中文:
 引理 lpNorm_of_isEmpty
-  条件: [IsEmpty α] (f : α -> E) (p : 实数>=0∞)
+  条件: [是空 α] (f : α -> E) (p : 实数>=0∞)
   结论: lpNorm f p μ = 0
   证明: by
   simp [Subsingleton.elim f 0]
@@ -414,7 +414,7 @@ lpNorm_of_not_aestronglyMeasurable fun h => hf by simpa using h.neg]
 
 中文:
 引理 lpNorm_neg
-  条件: (f : α -> E) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> E) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   by_cases hf : AEStronglyMeasurable f μ
   · simp [← toReal_eLpNorm, hf, hf.neg]
@@ -438,7 +438,7 @@ lemma lpNorm_fun_neg
 
 中文:
 引理 lpNorm_fun_neg
-  条件: (f : α -> E) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> E) (p : 实数>=0∞) (μ : 测度 α)
   证明: lpNorm_neg ..
 -/
 @[simp] lemma lpNorm_fun_neg (f : α -> E) (p : Real>=0∞) (μ : Measure α) :
@@ -454,7 +454,7 @@ lemma lpNorm_sub_comm
 
 中文:
 引理 lpNorm_sub_comm
-  条件: (f g : α -> E) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f g : α -> E) (p : 实数>=0∞) (μ : 测度 α)
   证明: by rw [← lpNorm_neg]; simp
 
 Depends on / 依赖: lpNorm_neg
@@ -590,7 +590,7 @@ lemma lpNorm_one'
 
 中文:
 引理 lpNorm_one'
-  条件: (hp₀ : p != 0) (hp : p != ∞) (μ : Measure α)
+  条件: (hp₀ : p != 0) (hp : p != ∞) (μ : 测度 α)
   证明: by
   simp [Pi.one_def, lpNorm_const' hp₀ hp, Measure.real, ENNReal.toReal_rpow]
 -/
@@ -615,7 +615,7 @@ lemma lpNorm_const_smul
 
 中文:
 引理 lpNorm_const_smul
-  条件: [Module 𝕜 E] [NormSMulClass 𝕜 E] (c : 𝕜) (f : α -> E) (μ : Measure α)
+  条件: [模 𝕜 E] [NormSMul类 𝕜 E] (c : 𝕜) (f : α -> E) (μ : 测度 α)
   证明: by
   by_cases hf : AEStronglyMeasurable f μ
   · simp [lpNorm, eLpNorm_const_smul, hf, hf.const_smul]
@@ -648,7 +648,7 @@ lemma lpNorm_nsmul
 
 中文:
 引理 lpNorm_nsmul
-  条件: [NormedSpace 实数 E] (n : 自然数) (f : α -> E) (μ : Measure α)
+  条件: [赋范空间 实数 E] (n : 自然数) (f : α -> E) (μ : 测度 α)
   证明: by
   simpa [Nat.cast_smul_eq_nsmul] using lpNorm_const_smul (n : Real) f μ (p := p)
 
@@ -671,7 +671,7 @@ lemma lpNorm_natCast_mul
 
 中文:
 引理 lpNorm_natCast_mul
-  条件: (n : 自然数) (f : α -> 𝕜) (p : 实数>=0∞) (μ : Measure α)
+  条件: (n : 自然数) (f : α -> 𝕜) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   simpa only [nsmul_eq_mul] using lpNorm_nsmul n f μ
 
@@ -691,7 +691,7 @@ lemma lpNorm_fun_natCast_mul
 
 中文:
 引理 lpNorm_fun_natCast_mul
-  条件: (n : 自然数) (f : α -> 𝕜) (p : 实数>=0∞) (μ : Measure α)
+  条件: (n : 自然数) (f : α -> 𝕜) (p : 实数>=0∞) (μ : 测度 α)
   证明: lpNorm_natCast_mul ..
 
 Depends on / 依赖: lpNorm_natCast_mul
@@ -710,7 +710,7 @@ lemma lpNorm_mul_natCast
 
 中文:
 引理 lpNorm_mul_natCast
-  条件: (f : α -> 𝕜) (n : 自然数) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> 𝕜) (n : 自然数) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   simpa only [mul_comm] using lpNorm_natCast_mul n f p μ
 
@@ -730,7 +730,7 @@ lemma lpNorm_fun_mul_natCast
 
 中文:
 引理 lpNorm_fun_mul_natCast
-  条件: (f : α -> 𝕜) (n : 自然数) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> 𝕜) (n : 自然数) (p : 实数>=0∞) (μ : 测度 α)
   证明: lpNorm_mul_natCast ..
 
 Depends on / 依赖: lpNorm_mul_natCast
@@ -749,7 +749,7 @@ lemma lpNorm_div_natCast
 
 中文:
 引理 lpNorm_div_natCast
-  结论: [CharZero 𝕜] {n : 自然数} (hn : n != 0) (f : α -> 𝕜) (p : 实数>=0∞)
+  结论: [特征零 𝕜] {n : 自然数} (hn : n != 0) (f : α -> 𝕜) (p : 实数>=0∞)
   证明: by
   rw [eq_div_iff (by positivity)]; rw [← lpNorm_mul_natCast]; simp [Pi.mul_def, hn]
 
@@ -769,7 +769,7 @@ lemma lpNorm_fun_div_natCast
 
 中文:
 引理 lpNorm_fun_div_natCast
-  结论: [CharZero 𝕜] {n : 自然数} (hn : n != 0) (f : α -> 𝕜) (p : 实数>=0∞)
+  结论: [特征零 𝕜] {n : 自然数} (hn : n != 0) (f : α -> 𝕜) (p : 实数>=0∞)
   证明: lpNorm_div_natCast hn ..
 
 Depends on / 依赖: lpNorm_div_natCast
@@ -956,7 +956,7 @@ lemma lpNorm_sum_le
 
 中文:
 引理 lpNorm_sum_le
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> α -> E} (hf : 对任意 i in s, MemLp (f i) p μ)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α -> E} (hf : 对任意 i in s, MemLp (f i) p μ)
   证明: by
   rw [← Finset.sum_congr rfl fun i hi => toReal_eLpNorm (hf i hi).aestronglyMeasurable]; rw [← ENNReal.toReal_sum fun i hi => (hf i hi).2.ne]; rw [← toReal_eLpNorm (Finset.aestronglyMeasurable_sum _ fun i hi => (hf i hi).aestronglyMeasurable)]
   grw [eLpNorm_sum_le (fun i hi => (hf _ hi).aestrong
@@ -985,7 +985,7 @@ lemma lpNorm_expect_le
 
 中文:
 引理 lpNorm_expect_le
-  结论: [Module Rat>=0 E] [NormedSpace 实数 E] {ι : 类型} {s : Finset ι}
+  结论: [模 有理数>=0 E] [赋范空间 实数 E] {ι : 类型} {s : 有限集 ι}
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · simp
@@ -1127,7 +1127,7 @@ lemma lpNorm_conj
 
 中文:
 引理 lpNorm_conj
-  条件: {K : 类型} [RCLike K] (f : α -> K) (p : 实数>=0∞) (μ : Measure α)
+  条件: {K : 类型} [RCLike K] (f : α -> K) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   by_cases hf : AEStronglyMeasurable f μ
   · rw [← lpNorm_norm hf, ← lpNorm_norm]

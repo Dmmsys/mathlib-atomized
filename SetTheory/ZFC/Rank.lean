@@ -41,7 +41,7 @@ definition rank
 
 中文:
 定义 rank
-  签名: : PSet.{u} -> Ordinal.{u}
+  签名: : 命题集合.{u} -> 序数.{u}
 -/
 noncomputable def rank : PSet.{u} -> Ordinal.{u}
   | ⟨_, A⟩ => ⨆ a, succ (rank (A a))
@@ -61,7 +61,7 @@ theorem rank_congr
 
 中文:
 定理 rank_congr
-  结论: 对任意 {x y : PSet}, Equiv x y -> rank x = rank y
+  结论: 对任意 {x y : 命题集合}, 等价 x y -> rank x = rank y
   证明: αβ a
       exists b
       rw [← h]; rw [rank_congr h']
@@ -90,7 +90,7 @@ theorem rank_lt_of_mem
 
 中文:
 定理 rank_lt_of_mem
-  结论: 对任意 {x y : PSet}, y in x -> rank y < rank x
+  结论: 对任意 {x y : 命题集合}, y in x -> rank y < rank x
 -/
 theorem rank_lt_of_mem : forall {x y : PSet}, y in x -> rank y < rank x
   | ⟨_, _⟩, _, ⟨_, h⟩ => by
@@ -107,8 +107,8 @@ theorem rank_le_iff
 
 中文:
 定理 rank_le_iff
-  条件: {o : Ordinal}
-  结论: 对任意 {x : PSet}, rank x <= o ↔ 对任意 ⦃y⦄, y in x -> rank y < o
+  条件: {o : 序数}
+  结论: 对任意 {x : 命题集合}, rank x <= o ↔ 对任意 ⦃y⦄, y in x -> rank y < o
 -/
 theorem rank_le_iff {o : Ordinal} : forall {x : PSet}, rank x <= o ↔ forall ⦃y⦄, y in x -> rank y < o
   | ⟨_, A⟩ => by
@@ -128,7 +128,7 @@ theorem lt_rank_iff
 
 中文:
 定理 lt_rank_iff
-  条件: {o : Ordinal} {x : PSet}
+  条件: {o : 序数} {x : 命题集合}
   结论: o < rank x ↔ 存在 y in x, o <= rank y
   证明: by
   contrapose!; exact rank_le_iff
@@ -206,8 +206,8 @@ theorem rank_insert
 
 中文:
 定理 rank_insert
-  条件: (x y : PSet)
-  结论: rank (insert x y) = max (succ (rank x)) (rank y)
+  条件: (x y : 命题集合)
+  结论: rank (insert x y) = 最大值 (succ (rank x)) (rank y)
   证明: by
   apply le_antisymm
   · simp_rw [rank_le_iff, mem_insert_iff]
@@ -244,7 +244,7 @@ theorem rank_singleton
 
 中文:
 定理 rank_singleton
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: rank {x} = succ (rank x)
   证明: (rank_insert _ _).trans (by simp)
 
@@ -267,8 +267,8 @@ theorem rank_pair
 
 中文:
 定理 rank_pair
-  条件: (x y : PSet)
-  结论: rank {x, y} = max (succ (rank x)) (succ (rank y))
+  条件: (x y : 命题集合)
+  结论: rank {x, y} = 最大值 (succ (rank x)) (succ (rank y))
   证明: by
   simp
 
@@ -296,7 +296,7 @@ theorem rank_powerset
 
 中文:
 定理 rank_powerset
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: rank (powerset x) = succ (rank x)
   证明: by
   apply le_antisymm
@@ -332,7 +332,7 @@ theorem rank_sUnion_le
 
 中文:
 定理 rank_sUnion_le
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: rank (⋃₀ x) <= rank x
   证明: by
   simp_rw [rank_le_iff, mem_sUnion]
@@ -365,7 +365,7 @@ theorem le_succ_rank_sUnion
 
 中文:
 定理 le_succ_rank_sUnion
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: rank x <= succ (rank (⋃₀ x))
   证明: by
   rw [← rank_powerset]
@@ -407,7 +407,7 @@ theorem rank_eq_wfRank
 
 中文:
 定理 rank_eq_wfRank
-  结论: lift.{u + 1, u} (rank x) = IsWellFounded.rank (α := PSet) (· in ·) x
+  结论: lift.{u + 1, u} (rank x) = 是良基.rank (α := 命题集合) (· in ·) x
   证明: by
   induction x using mem_wf.induction with | _ x ih
   rw [IsWellFounded.rank_eq]
@@ -450,7 +450,7 @@ definition rank
 
 中文:
 定义 rank
-  签名: : ZFSet.{u} -> Ordinal.{u}
+  签名: : ZFSet.{u} -> 序数.{u}
   定义体: Quotient.lift _ fun _ _ => PSet.rank_congr
 
 @[simp]
@@ -472,7 +472,7 @@ theorem rank_mk
 
 中文:
 定理 rank_mk
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: rank (.mk x) = x.rank
   证明: rfl
 -/
@@ -510,7 +510,7 @@ theorem rank_le_iff
 
 中文:
 定理 rank_le_iff
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: rank x <= o ↔ 对任意 ⦃y⦄, y in x -> rank y < o
   证明: ⟨fun h _ h' => (rank_lt_of_mem h').trans_le h,
     Quotient.inductionOn x fun _ h =>
@@ -535,7 +535,7 @@ theorem lt_rank_iff
 
 中文:
 定理 lt_rank_iff
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: o < rank x ↔ 存在 y in x, o <= rank y
   证明: by
   contrapose!; exact rank_le_iff
@@ -604,7 +604,7 @@ theorem rank_insert
 中文:
 定理 rank_insert
   条件: (x y : ZFSet)
-  结论: rank (insert x y) = max (succ (rank x)) (rank y)
+  结论: rank (insert x y) = 最大值 (succ (rank x)) (rank y)
   证明: Quotient.inductionOn₂ x y PSet.rank_insert
 
 @[simp]
@@ -650,7 +650,7 @@ theorem rank_pair
 中文:
 定理 rank_pair
   条件: (x y : ZFSet)
-  结论: rank {x, y} = max (succ (rank x)) (succ (rank y))
+  结论: rank {x, y} = 最大值 (succ (rank x)) (succ (rank y))
   证明: by
   simp
 
@@ -679,7 +679,7 @@ theorem rank_union
 中文:
 定理 rank_union
   条件: (x y : ZFSet)
-  结论: rank (x union y) = max (rank x) (rank y)
+  结论: rank (x union y) = 最大值 (rank x) (rank y)
   证明: by
   apply le_antisymm
   · simp_rw [rank_le_iff, mem_union, lt_max_iff]
@@ -875,7 +875,7 @@ theorem rank_eq_wfRank
 
 中文:
 定理 rank_eq_wfRank
-  结论: lift.{u + 1, u} (rank x) = IsWellFounded.rank (α := ZFSet) (· in ·) x
+  结论: lift.{u + 1, u} (rank x) = 是良基.rank (α := ZFSet) (· in ·) x
   证明: by
   induction x using inductionOn with | _ x ih
   rw [IsWellFounded.rank_eq]

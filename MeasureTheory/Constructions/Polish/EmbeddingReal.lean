@@ -31,8 +31,8 @@ theorem exists_nat_measurableEquiv_range_coe_fin_of_finite
   exact Equiv.ofInjective _ (Nat.cast_injective.comp Fin.val_injective)
 
 中文:
-定理 exists_nat_measurableEquiv_range_coe_fin_of_finite
-  条件: [Finite α]
+定理 存在_nat_measurableEquiv_range_coe_fin_of_finite
+  条件: [有限 α]
   证明: by
   obtain ⟨n, ⟨n_equiv⟩⟩ := Finite.exists_equiv_fin α
   refine ⟨n, ⟨PolishSpace.Equiv.measurableEquiv (n_equiv.trans ?_)⟩⟩
@@ -61,7 +61,7 @@ theorem measurableEquiv_range_coe_nat_of_infinite_of_countable
 
 中文:
 定理 measurableEquiv_range_coe_nat_of_infinite_of_countable
-  条件: [Infinite α] [Countable α]
+  条件: [无限 α] [可数 α]
   证明: by
   have : PolishSpace (range ((↑) : Nat -> Real)) :=
     Nat.isClosedEmbedding_coe_real.isClosedMap.isClosed_range.polishSpace
@@ -94,8 +94,8 @@ theorem exists_subset_real_measurableEquiv
     · refine ⟨_, ?_, measurableEquiv_rang
 
 中文:
-定理 exists_subset_real_measurableEquiv
-  结论: 存在 s : Set 实数, MeasurableSet s ∧ Nonempty (α ≃ᵐ s)
+定理 存在_subset_real_measurableEquiv
+  结论: 存在 s : 集合 实数, 可测集 s ∧ 非空 (α ≃ᵐ s)
   证明: by
   by_cases hα : Countable α
   · cases finite_or_infinite α
@@ -131,8 +131,8 @@ theorem exists_measurableEmbedding_real
   exact ⟨(↑) ∘ e, (MeasurableEmbedding.subtype_coe hs).comp e.measurableEmbedding⟩
 
 中文:
-定理 exists_measurableEmbedding_real
-  结论: 存在 f : α -> 实数, MeasurableEmbedding f
+定理 存在_measurableEmbedding_real
+  结论: 存在 f : α -> 实数, 可测嵌入 f
   证明: by
   obtain ⟨s, hs, ⟨e⟩⟩ := exists_subset_real_measurableEquiv α
   exact ⟨(↑) ∘ e, (MeasurableEmbedding.subtype_coe hs).comp e.measurableEmbedding⟩
@@ -154,8 +154,8 @@ definition embeddingReal
   body: (exists_measurableEmbedding_real Ω).choose
 
 中文:
-定义 embeddingReal
-  签名: (Ω : 类型) [MeasurableSpace Ω] [StandardBorelSpace Ω]
+定义 embedding实数
+  签名: (Ω : 类型) [可测空间 Ω] [StandardBorel空间 Ω]
   定义体: (exists_measurableEmbedding_real Ω).choose
 
 Depends on / 依赖: exists_measurableEmbedding_real
@@ -174,8 +174,8 @@ lemma measurableEmbedding_embeddingReal
 @[fun_prop]
 
 中文:
-引理 measurableEmbedding_embeddingReal
-  条件: (Ω : 类型) [MeasurableSpace Ω] [StandardBorelSpace Ω]
+引理 measurableEmbedding_embedding实数
+  条件: (Ω : 类型) [可测空间 Ω] [StandardBorel空间 Ω]
   证明: (exists_measurableEmbedding_real Ω).choose_spec
 
 @[fun_prop]
@@ -196,8 +196,8 @@ lemma measurable_embeddingReal
   proof: (measurableEmbedding_embeddingReal Ω).measurable
 
 中文:
-引理 measurable_embeddingReal
-  条件: (Ω : 类型) [MeasurableSpace Ω] [StandardBorelSpace Ω]
+引理 measurable_embedding实数
+  条件: (Ω : 类型) [可测空间 Ω] [StandardBorel空间 Ω]
   证明: (measurableEmbedding_embeddingReal Ω).measurable
 
 Depends on / 依赖: measurable, measurableEmbedding_embeddingReal

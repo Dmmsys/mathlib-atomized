@@ -66,7 +66,7 @@ lemma IsCollinear_iff
 
 中文:
 引理 IsCollinear_iff
-  结论: IsCollinear S ↔ 存在 (M : Subspace K V), Module.Finite K M.submodule ∧
+  结论: IsCollinear S ↔ 存在 (M : 子空间 K V), 模.有限 K M.submodule ∧
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -121,7 +121,7 @@ lemma isCollinear_empty
 
 中文:
 引理 isCollinear_empty
-  结论: IsCollinear (∅ : Set (Projectivization K V))
+  结论: IsCollinear (∅ : 集合 (Projectivization K V))
   证明: by
   rw [IsCollinear_iff_rank]
   use ⊥
@@ -153,7 +153,7 @@ lemma isCollinear_subset
 
 中文:
 引理 isCollinear_subset
-  条件: (s t : Set (ℙ K V)) (hst : s subseteq t) (h : IsCollinear t)
+  条件: (s t : 集合 (ℙ K V)) (hst : s subseteq t) (h : IsCollinear t)
   结论: IsCollinear s
   证明: by
   obtain ⟨M, hMfin, hM1, hM2⟩ := h
@@ -219,7 +219,7 @@ lemma isCollinear_subsingleton
 
 中文:
 引理 isCollinear_subsingleton
-  条件: (hS : S.Subsingleton)
+  条件: (hS : S.子单例)
   证明: by
   obtain hS' | ⟨x, hx⟩ := hS.eq_empty_or_singleton <;> simp_all
 
@@ -347,7 +347,7 @@ lemma line_unique
 
 中文:
 引理 line_unique
-  结论: {x y : ℙ K V} (hxy : x != y) (p q : Submodule K V) (hp1 : Module.finrank K p = 2)
+  结论: {x y : ℙ K V} (hxy : x != y) (p q : 子模 K V) (hp1 : 模.finrank K p = 2)
   证明: by
   induction x using ind with | h v hv =>
   induction y using ind with | h w hw =>

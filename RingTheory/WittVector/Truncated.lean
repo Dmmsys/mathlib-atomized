@@ -93,7 +93,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (x : Fin n -> R)
+  签名: (x : 有限集 n -> R)
   定义体: x
 -/
 def mk (x : Fin n -> R) : TruncatedWittVector p n R :=
@@ -111,7 +111,7 @@ definition coeff
 
 中文:
 定义 coeff
-  签名: (i : Fin n) (x : TruncatedWittVector p n R)
+  签名: (i : 有限集 n) (x : TruncatedWittVector p n R)
   定义体: x i
 
 @[ext]
@@ -156,7 +156,7 @@ theorem coeff_mk
 
 中文:
 定理 coeff_mk
-  条件: (x : Fin n -> R) (i : Fin n)
+  条件: (x : 有限集 n -> R) (i : 有限集 n)
   结论: (mk p x).coeff i = x i
   证明: rfl
 
@@ -225,7 +225,7 @@ theorem coeff_out
 
 中文:
 定理 coeff_out
-  条件: (x : TruncatedWittVector p n R) (i : Fin n)
+  条件: (x : TruncatedWittVector p n R) (i : 有限集 n)
   结论: x.out.coeff i = x.coeff i
   证明: by
   rw [out]; dsimp only; rw [dif_pos i.is_lt, Fin.eta]
@@ -249,7 +249,7 @@ theorem out_injective
 
 中文:
 定理 out_injective
-  结论: Injective (@out p n R _)
+  结论: 单射 (@out p n R _)
   证明: by
   intro x y h
   ext i
@@ -307,7 +307,7 @@ theorem coeff_truncateFun
 
 中文:
 定理 coeff_truncateFun
-  条件: (x : 𝕎 R) (i : Fin n)
+  条件: (x : 𝕎 R) (i : 有限集 n)
   结论: (truncateFun n x).coeff i = x.coeff i
   证明: by
   rw [truncateFun]; rw [TruncatedWittVector.coeff_mk]
@@ -395,7 +395,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (TruncatedWittVector p n R)
+  签名: 零 (TruncatedWittVector p n R)
   定义体: ⟨truncateFun n 0⟩
 
 Depends on / 依赖: truncateFun
@@ -413,7 +413,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (TruncatedWittVector p n R)
+  签名: 幺 (TruncatedWittVector p n R)
   定义体: ⟨truncateFun n 1⟩
 
 Depends on / 依赖: truncateFun
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (TruncatedWittVector p n R)
+  签名: 自然数嵌入 (TruncatedWittVector p n R)
   定义体: ⟨fun i => truncateFun n i⟩
 
 Depends on / 依赖: truncateFun
@@ -449,7 +449,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (TruncatedWittVector p n R)
+  签名: 整数嵌入 (TruncatedWittVector p n R)
   定义体: ⟨fun i => truncateFun n i⟩
 
 Depends on / 依赖: truncateFun
@@ -467,7 +467,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (TruncatedWittVector p n R)
+  签名: 加法 (TruncatedWittVector p n R)
   定义体: ⟨fun x y => truncateFun n (x.out + y.out)⟩
 
 Depends on / 依赖: truncateFun, x.out, y.out
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (TruncatedWittVector p n R)
+  签名: 乘法 (TruncatedWittVector p n R)
   定义体: ⟨fun x y => truncateFun n (x.out * y.out)⟩
 
 Depends on / 依赖: truncateFun, x.out, y.out
@@ -503,7 +503,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (TruncatedWittVector p n R)
+  签名: 取负 (TruncatedWittVector p n R)
   定义体: ⟨fun x => truncateFun n (-x.out)⟩
 
 Depends on / 依赖: truncateFun, x.out
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (TruncatedWittVector p n R)
+  签名: 减法 (TruncatedWittVector p n R)
   定义体: ⟨fun x y => truncateFun n (x.out - y.out)⟩
 
 Depends on / 依赖: truncateFun, x.out, y.out
@@ -538,8 +538,8 @@ instance hasNatScalar
   body: ⟨fun m x => truncateFun n (m • x.out)⟩
 
 中文:
-实例 hasNatScalar
-  签名: : SMul 自然数 (TruncatedWittVector p n R)
+实例 has自然数Scalar
+  签名: : 标量乘法 自然数 (TruncatedWittVector p n R)
   定义体: ⟨fun m x => truncateFun n (m • x.out)⟩
 
 Depends on / 依赖: truncateFun, x.out
@@ -556,8 +556,8 @@ instance hasIntScalar
   body: ⟨fun m x => truncateFun n (m • x.out)⟩
 
 中文:
-实例 hasIntScalar
-  签名: : SMul 整数 (TruncatedWittVector p n R)
+实例 has整数Scalar
+  签名: : 标量乘法 整数 (TruncatedWittVector p n R)
   定义体: ⟨fun m x => truncateFun n (m • x.out)⟩
 
 Depends on / 依赖: truncateFun, x.out
@@ -576,8 +576,8 @@ instance hasNatPow
 @[simp]
 
 中文:
-实例 hasNatPow
-  签名: : Pow (TruncatedWittVector p n R) 自然数
+实例 has自然数Pow
+  签名: : 幂 (TruncatedWittVector p n R) 自然数
   定义体: ⟨fun x m => truncateFun n (x.out ^ m)⟩
 
 @[simp]
@@ -601,7 +601,7 @@ theorem coeff_zero
 
 中文:
 定理 coeff_zero
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: (0 : TruncatedWittVector p n R).coeff i = 0
   证明: by
   change coeff i (truncateFun _ 0 : TruncatedWittVector p n R) = 0
@@ -645,7 +645,7 @@ theorem truncateFun_surjective
 
 中文:
 定理 truncateFun_surjective
-  结论: Surjective (@truncateFun p n R)
+  结论: 满射 (@truncateFun p n R)
   证明: Function.RightInverse.surjective TruncatedWittVector.truncateFun_out
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, TruncatedWittVector, TruncatedWittVector.truncateFun_out, surjective, truncateFun_out
@@ -907,7 +907,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (TruncatedWittVector p n R)
+  签名: : 交换环 (TruncatedWittVector p n R)
   定义体: (truncateFun_surjective p n R).commRing _ (truncateFun_zero p n R) (truncateFun_one p n R)
     (truncateFun_add n) (truncateFun_mul n) (truncateFun_neg n) (truncateFun_sub n)
     (truncateFun_nsmul n) (truncateFun_zsmul n) (truncateFun_pow n) (truncateFun_natCast n)
@@ -973,7 +973,7 @@ theorem truncate_surjective
 
 中文:
 定理 truncate_surjective
-  结论: Surjective (truncate n : 𝕎 R -> TruncatedWittVector p n R)
+  结论: 满射 (truncate n : 𝕎 R -> TruncatedWittVector p n R)
   证明: truncateFun_surjective p n R
 
 Depends on / 依赖: truncateFun_surjective
@@ -995,7 +995,7 @@ theorem coeff_truncate
 
 中文:
 定理 coeff_truncate
-  条件: (x : 𝕎 R) (i : Fin n)
+  条件: (x : 𝕎 R) (i : 有限集 n)
   结论: (truncate n x).coeff i = x.coeff i
   证明: coeff_truncateFun _ _
 
@@ -1223,7 +1223,7 @@ theorem truncate_surjective
 中文:
 定理 truncate_surjective
   条件: {m : 自然数} (hm : n <= m)
-  结论: Surjective (truncate (p := p) (R := R) hm)
+  结论: 满射 (truncate (p := p) (R := R) hm)
   证明: by
   intro x
   obtain ⟨x, rfl⟩ := WittVector.truncate_surjective (p := p) _ R x
@@ -1251,7 +1251,7 @@ theorem coeff_truncate
 
 中文:
 定理 coeff_truncate
-  条件: {m : 自然数} (hm : n <= m) (i : Fin n) (x : TruncatedWittVector p m R)
+  条件: {m : 自然数} (hm : n <= m) (i : 有限集 n) (x : TruncatedWittVector p m R)
   证明: by
   obtain ⟨y, rfl⟩ := @WittVector.truncate_surjective p _ _ _ _ x
   simp only [truncate_wittVector_truncate, WittVector.coeff_truncate, Fin.val_castLE]
@@ -1283,7 +1283,7 @@ theorem card
 
 中文:
 定理 card
-  条件: {R : 类型} [Fintype R]
+  条件: {R : 类型} [有限类型 R]
   证明: by
   simp only [TruncatedWittVector, Fintype.card_fin, Fintype.card_fun]
 
@@ -1312,7 +1312,7 @@ theorem iInf_ker_truncate
 
 中文:
 定理 iInf_ker_truncate
-  结论: ⨅ i : 自然数, RingHom.ker (WittVector.truncate (p := p) (R := R) i) = ⊥
+  结论: ⨅ i : 自然数, 环态射.ker (Witt向量.truncate (p := p) (R := R) i) = ⊥
   证明: by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -1383,7 +1383,7 @@ theorem truncate_liftFun
 中文:
 定理 truncate_liftFun
   条件: (s : S)
-  结论: WittVector.truncate n (liftFun f s) = f n s
+  结论: Witt向量.truncate n (liftFun f s) = f n s
   证明: by
   ext i
   simp only [liftFun, TruncatedWittVector.coeff_mk, WittVector.truncate_mk']
@@ -1456,7 +1456,7 @@ theorem truncate_lift
 中文:
 定理 truncate_lift
   条件: (s : S)
-  结论: WittVector.truncate n (lift _ f_compat s) = f n s
+  结论: Witt向量.truncate n (lift _ f_compat s) = f n s
   证明: truncate_liftFun _ f_compat s
 
 @[simp]
@@ -1478,7 +1478,7 @@ theorem truncate_comp_lift
 
 中文:
 定理 truncate_comp_lift
-  结论: (WittVector.truncate n).comp (lift _ f_compat) = f n
+  结论: (Witt向量.truncate n).comp (lift _ f_compat) = f n
   证明: by
   ext1; rw [RingHom.comp_apply, truncate_lift]
 
@@ -1501,7 +1501,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (g : S ->+* 𝕎 R) (g_compat : 对任意 k, (WittVector.truncate k).comp g = f k)
+  条件: (g : S ->+* 𝕎 R) (g_compat : 对任意 k, (Witt向量.truncate k).comp g = f k)
   证明: by
   ext1 x
   rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← iInf_ker_truncate]; rw [Ideal.mem_iInf]

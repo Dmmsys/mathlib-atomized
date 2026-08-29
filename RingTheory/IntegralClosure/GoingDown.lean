@@ -39,7 +39,7 @@ lemma Polynomial.coeff_mem_radical_span_coeff_of_dvd
     
 
 中文:
-引理 Polynomial.coeff_mem_radical_span_coeff_of_dvd
+引理 多项式.coeff_mem_radical_span_coeff_of_dvd
   证明: by
   rw [Ideal.radical_eq_sInf]; rw [Ideal.mem_sInf]
   rintro P ⟨hPJ, hP⟩
@@ -88,8 +88,8 @@ instance [IsDomain
       (Ideal.comap_map_eq_self_iff_of_isPrime _).mp (this.antisymm Ideal.le
 
 中文:
-实例 [IsDomain
-  签名: S] [FaithfulSMul R S] [Algebra.Is整数egral R S] [Is整数egrallyClosed R] :
+实例 [是整环
+  签名: S] [忠实标量乘法 R S] [代数.是整 R S] [是整闭 R] :
   定义体: by
   have := (FaithfulSMul.algebraMap_injective R S).isDomain
   constructor

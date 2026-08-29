@@ -58,8 +58,8 @@ lemma CompactlySupportedContinuousMap.monotone_of_nnreal
   simp
 
 中文:
-引理 CompactlySupportedContinuousMap.monotone_of_nnreal
-  结论: Monotone Λ
+引理 余mpactlySupportedContinuous映射.monotone_of_nnreal
+  结论: 递增 Λ
   证明: by
   intro f₁ f₂ h
   obtain ⟨g, hg⟩ := CompactlySupportedContinuousMap.exists_add_of_le h
@@ -87,7 +87,7 @@ definition rieszContentAux
 
 中文:
 定义 rieszContentAux
-  签名: : Compacts X -> 实数>=0
+  签名: : 余mpacts X -> 实数>=0
   定义体: fun K =>
   sInf (Λ '' { f : C_c(X, Real>=0) | forall x in K, (1 : Real>=0) <= f x })
 -/
@@ -114,7 +114,7 @@ theorem rieszContentAux_image_nonempty
 
 中文:
 定理 rieszContentAux_image_nonempty
-  条件: (K : Compacts X)
+  条件: (K : 余mpacts X)
   证明: by
   rw [image_nonempty]
   obtain ⟨V, hVcp, hKsubintV⟩ := exists_compact_superset K.2
@@ -159,7 +159,7 @@ theorem rieszContentAux_mono
 
 中文:
 定理 rieszContentAux_mono
-  条件: {K₁ K₂ : Compacts X} (h : K₁ <= K₂)
+  条件: {K₁ K₂ : 余mpacts X} (h : K₁ <= K₂)
   证明: by
   unfold rieszContentAux
   gcongr
@@ -187,7 +187,7 @@ theorem rieszContentAux_le
 
 中文:
 定理 rieszContentAux_le
-  条件: {K : Compacts X} {f : C_c(X, 实数>=0)} (h : 对任意 x in K, (1 : 实数>=0) <= f x)
+  条件: {K : 余mpacts X} {f : C_c(X, 实数>=0)} (h : 对任意 x in K, (1 : 实数>=0) <= f x)
   证明: csInf_le (OrderBot.bddBelow _) ⟨f, ⟨h, rfl⟩⟩
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, csInf_le
@@ -214,8 +214,8 @@ theorem exists_lt_rieszContentAux_add_pos
   exact α_hyp
 
 中文:
-定理 exists_lt_rieszContentAux_add_pos
-  条件: (K : Compacts X) {ε : 实数>=0} (εpos : 0 < ε)
+定理 存在_lt_rieszContentAux_add_pos
+  条件: (K : 余mpacts X) {ε : 实数>=0} (εpos : 0 < ε)
   证明: by
   --choose a test function `f` s.t. `Λf = α < λ(K) + ε`
   obtain ⟨α, ⟨⟨f, f_hyp⟩, α_hyp⟩⟩ :=
@@ -250,7 +250,7 @@ theorem rieszContentAux_sup_le
 
 中文:
 定理 rieszContentAux_sup_le
-  条件: (K1 K2 : Compacts X)
+  条件: (K1 K2 : 余mpacts X)
   证明: by
   apply _root_.le_of_forall_pos_le_add
   intro ε εpos
@@ -301,7 +301,7 @@ exact IsCompact.isClosed s₀_compact
     · simp only [hso, Fin.isValue, Fin.mk_on
 
 中文:
-引理 exists_continuous_add_one_of_isCompact_nnreal
+引理 存在_continuous_add_one_of_isCompact_nnreal
   证明: by
   set so : Fin 2 -> Set X := fun j => if j = 0 then s₀ᶜ else s₁ᶜ with hso
   have soopen (j : Fin 2) : IsOpen (so j) := by
@@ -410,7 +410,7 @@ exact ne_of_gt lt_of_lt_of_le (zero_lt_one' Real>=0
 
 中文:
 引理 rieszContentAux_union
-  结论: {K₁ K₂ : TopologicalSpace.Compacts X}
+  结论: {K₁ K₂ : 拓扑空间.余mpacts X}
   证明: by
   refine le_antisymm (rieszContentAux_sup_le Λ K₁ K₂) ?_
   refine le_csInf (rieszContentAux_image_nonempty Λ (K₁ ⊔ K₂)) ?_
@@ -501,7 +501,7 @@ lemma rieszContent_ne_top
 
 中文:
 引理 rieszContent_ne_top
-  条件: {K : Compacts X}
+  条件: {K : 余mpacts X}
   结论: rieszContent Λ K != ⊤
   证明: by
   simp [rieszContent, ne_eq, not_false_eq_true]
@@ -655,7 +655,7 @@ lemma le_rieszMeasure_of_tsupport_subset
 
 中文:
 引理 le_rieszMeasure_of_tsupport_subset
-  结论: {f : C_c(X, 实数>=0)} (hf : 对任意 x, f x <= 1) {V : Set X}
+  结论: {f : C_c(X, 实数>=0)} (hf : 对任意 x, f x <= 1) {V : 集合 X}
   证明: by
   apply le_trans _ (measure_mono h)
   apply le_rieszMeasure_of_isCompact_tsupport_subset Λ hf f.hasCompactSupport

@@ -62,7 +62,7 @@ lemma fst_mem_orbit_of_mem_orbit
 
 中文:
 引理 fst_mem_orbit_of_mem_orbit
-  条件: {x y : α × β} (h : x in MulAction.orbit M y)
+  条件: {x y : α × β} (h : x in 乘法作用.orbit M y)
   证明: by
   rcases h with ⟨g, rfl⟩
   exact mem_orbit _ _
@@ -91,7 +91,7 @@ lemma snd_mem_orbit_of_mem_orbit
 
 中文:
 引理 snd_mem_orbit_of_mem_orbit
-  条件: {x y : α × β} (h : x in MulAction.orbit M y)
+  条件: {x y : α × β} (h : x in 乘法作用.orbit M y)
   证明: by
   rcases h with ⟨g, rfl⟩
   exact mem_orbit _ _
@@ -116,9 +116,9 @@ lemma _root_.Finite.finite_mulAction_orbit
   proof: Set.finite_range _
 
 中文:
-引理 _root_.Finite.finite_mulAction_orbit
-  条件: [Finite M] (a : α)
-  结论: Set.Finite (orbit M a)
+引理 _root_.有限.finite_mulAction_orbit
+  条件: [有限 M] (a : α)
+  结论: 集合.有限 (orbit M a)
   证明: Set.finite_range _
 
 Depends on / 依赖: Set.finite_range, finite_range
@@ -140,8 +140,8 @@ theorem orbit_eq_univ
 
 中文:
 定理 orbit_eq_univ
-  条件: [IsPretransitive M α] (a : α)
-  结论: orbit M a = Set.univ
+  条件: [是Pretransitive M α] (a : α)
+  结论: orbit M a = 集合.univ
   证明: (surjective_smul M a).range_eq
 
 Depends on / 依赖: range_eq, surjective_smul
@@ -209,7 +209,7 @@ theorem mem_fixedPoints_iff_card_orbit_eq_one
 
 中文:
 定理 mem_fixedPoints_iff_card_orbit_eq_one
-  条件: {a : α} [Fintype (orbit M a)]
+  条件: {a : α} [有限类型 (orbit M a)]
   证明: by
   simp only [← subsingleton_orbit_iff_mem_fixedPoints, le_antisymm_iff,
     Fintype.card_le_one_iff_subsingleton, Nat.add_one_le_iff, Fintype.card_pos_iff,
@@ -248,7 +248,7 @@ theorem smul_cancel_of_non_zero_divisor
 
 中文:
 定理 smul_cancel_of_non_zero_divisor
-  结论: {M G : 类型} [Monoid M] [AddGroup G]
+  结论: {M G : 类型} [幺半群 M] [加法群 G]
   证明: by
   rw [← sub_eq_zero]
   refine h _ ?_
@@ -280,7 +280,7 @@ theorem fixedPoints_of_subsingleton
 
 中文:
 定理 fixedPoints_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   证明: by
   apply Set.eq_univ_of_forall
   simp only [mem_fixedPoints]
@@ -372,7 +372,7 @@ lemma orbitRel_subgroup_le
 
 中文:
 引理 orbitRel_subgroup_le
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: orbitRel H α <= orbitRel G α
   证明: Setoid.le_def.2 mem_orbit_of_mem_orbit_subgroup
 
@@ -404,7 +404,7 @@ lemma orbitRel_subgroupOf
 
 中文:
 引理 orbitRel_subgroupOf
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   证明: by
   rw [← Subgroup.subgroupOf_map_subtype]
   ext x
@@ -490,7 +490,7 @@ theorem pretransitive_iff_unique_quotient_of_nonempty
 
 中文:
 定理 pretransitive_iff_unique_quotient_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   rw [unique_iff_subsingleton_and_nonempty]; rw [pretransitive_iff_subsingleton_quotient]; rw [iff_self_and]
   exact fun _ => (nonempty_quotient_iff _).mpr inferInstance
@@ -538,9 +538,9 @@ lemma _root_.Finite.of_finite_mulAction_orbitRel_quotient
   exact Finite.instSigma
 
 中文:
-引理 _root_.Finite.of_finite_mulAction_orbitRel_quotient
-  条件: [Finite G] [Finite Ω]
-  结论: Finite α
+引理 _root_.有限.of_finite_mulAction_orbitRel_quotient
+  条件: [有限 G] [有限 Ω]
+  结论: 有限 α
   证明: by
   rw [(selfEquivSigmaOrbits' G _).finite_iff]
   have : forall g : Ω, Finite g.orbit := by
@@ -617,8 +617,8 @@ lemma _root_.IsCancelSMul.stabilizer_eq_bot
 @[to_additive]
 
 中文:
-引理 _root_.IsCancelSMul.stabilizer_eq_bot
-  条件: [IsCancelSMul G α] (a : α)
+引理 _root_.是消去标量乘法.stabilizer_eq_bot
+  条件: [是消去标量乘法 G α] (a : α)
   证明: .mpr fun _ hg => IsCancelSMul.eq_one_of_smul hg Subgroup.eq_bot_iff_forall _
 
 @[to_additive]
@@ -905,8 +905,8 @@ theorem Equiv.swap_mem_stabilizer
   exact ⟨fun h => by simpa [Iff.comm] using h a, by intros; split_ifs <;> simp [*]⟩
 
 中文:
-定理 Equiv.swap_mem_stabilizer
-  条件: {α : 类型} [DecidableEq α] {S : Set α} {a b : α}
+定理 等价.swap_mem_stabilizer
+  条件: {α : 类型} [DecidableEq α] {S : 集合 α} {a b : α}
   证明: by
   rw [MulAction.mem_stabilizer_iff]; rw [Set.ext_iff]; rw [← swap_inv]
   simp_rw [Set.mem_inv_smul_set_iff, Perm.smul_def, swap_apply_def]
@@ -950,7 +950,7 @@ theorem le_stabilizer_iff_smul_le
 
 中文:
 定理 le_stabilizer_iff_smul_le
-  条件: (s : Set α) (H : Subgroup G)
+  条件: (s : 集合 α) (H : 子群 G)
   证明: by
   constructor
   · intro hyp g hg
@@ -1004,7 +1004,7 @@ lemma Module.stabilizer_units_eq_bot_of_ne_zero
   rw [← sub_eq_zero]; rw [← smul_eq_zero_iff_left hx]; rw [Units.val_one]; rw [sub_smul]; rw [hg]; rw [one_smul]; rw [sub_self]
 
 中文:
-引理 Module.stabilizer_units_eq_bot_of_ne_zero
+引理 模.stabilizer_units_eq_bot_of_ne_zero
   条件: {x : M} (hx : x != 0)
   证明: by
   rw [eq_bot_iff]
@@ -1033,7 +1033,7 @@ lemma Multiplicative.mulAction_orbit
 
 中文:
 引理 Multiplicative.mulAction_orbit
-  条件: {α β : 类型} [VAdd α β] (b : β)
+  条件: {α β : 类型} [向量加法 α β] (b : β)
   证明: rfl
 -/
 @[simp] lemma Multiplicative.mulAction_orbit {α β : Type*} [VAdd α β] (b : β) :
@@ -1049,8 +1049,8 @@ lemma Additive.mulAction_orbit
   proof: rfl
 
 中文:
-引理 Additive.mulAction_orbit
-  条件: {α β : 类型} [SMul α β] (b : β)
+引理 加性.mulAction_orbit
+  条件: {α β : 类型} [标量乘法 α β] (b : β)
   证明: rfl
 -/
 @[simp] lemma Additive.mulAction_orbit {α β : Type*} [SMul α β] (b : β) :

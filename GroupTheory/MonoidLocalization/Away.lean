@@ -54,7 +54,7 @@ abbreviation AwayMap
 
 中文:
 缩写 AwayMap
-  签名: (N' : 类型) [CommMonoid N']
+  签名: (N' : 类型) [交换幺半群 N']
   定义体: LocalizationMap (powers x) N'
 
 Depends on / 依赖: LocalizationMap, powers
@@ -96,7 +96,7 @@ definition AwayMap.lift
 
 中文:
 定义 AwayMap.lift
-  签名: (hg : IsUnit (g x))
+  签名: (hg : 是单位 (g x))
   定义体: Submonoid.LocalizationMap.lift F fun y =>
     show IsUnit (g y.1) by
       obtain ⟨n, hn⟩ := y.2
@@ -128,7 +128,7 @@ theorem AwayMap.lift_eq
 
 中文:
 定理 AwayMap.lift_eq
-  条件: (hg : IsUnit (g x)) (a : M)
+  条件: (hg : 是单位 (g x)) (a : M)
   结论: F.lift x hg (F a) = g a
   证明: Submonoid.LocalizationMap.lift_eq _ _ _
 
@@ -151,7 +151,7 @@ theorem AwayMap.lift_comp
 
 中文:
 定理 AwayMap.lift_comp
-  条件: (hg : IsUnit (g x))
+  条件: (hg : 是单位 (g x))
   结论: (F.lift x hg).comp F = g
   证明: Submonoid.LocalizationMap.lift_comp _ _
 
@@ -398,7 +398,7 @@ abbreviation Away.monoidOf
 
 中文:
 缩写 Away.monoidOf
-  签名: : Submonoid.LocalizationMap.AwayMap x (Away x)
+  签名: : 子幺半群.Localization映射.AwayMap x (Away x)
   定义体: Localization.monoidOf (Submonoid.powers x)
 
 @[to_additive]
@@ -444,7 +444,7 @@ definition Away.mulEquivOfQuotient
 
 中文:
 定义 Away.mulEquivOfQuotient
-  签名: (f : Submonoid.LocalizationMap.AwayMap x N)
+  签名: (f : 子幺半群.Localization映射.AwayMap x N)
   定义体: Localization.mulEquivOfQuotient f
 
 Depends on / 依赖: Localization, Localization.mulEquivOfQuotient, mulEquivOfQuotient

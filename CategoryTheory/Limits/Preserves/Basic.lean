@@ -60,10 +60,10 @@ class PreservesLimit
     - preserves({c : Cone K} (hc : IsLimit c)) : Nonempty (IsLimit (F.mapCone c))
 
 中文:
-类 PreservesLimit
+类 保持极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves({c : Cone K} (hc : IsLimit c)) : Nonempty (IsLimit (F.mapCone c))
+    - preserves({c : 锥 K} (hc : 是极限 c)) : 非空 (是极限 (F.mapCone c))
 
 Depends on / 依赖: hom_ext, isTerminalUnit, isTerminalUnit.hom_ext
 -/
@@ -80,10 +80,10 @@ class PreservesColimit
     - preserves({c : Cocone K} (hc : IsColimit c)) : Nonempty (IsColimit (F.mapCocone c))
 
 中文:
-类 PreservesColimit
+类 保持余极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves({c : Cocone K} (hc : IsColimit c)) : Nonempty (IsColimit (F.mapCocone c))
+    - preserves({c : 余锥 K} (hc : 是余极限 c)) : 非空 (是余极限 (F.mapCocone c))
 
 Depends on / 依赖: IsIso.hom_inv_id, MonoidalCategory, MonoidalCategory.tensorHom_comp_tensorHom, cat_disch, copy_comp_natural, hom_inv_id, infer_instance, tensorHom_comp_tensorHom
 -/
@@ -100,10 +100,10 @@ class PreservesLimitsOfShape
     - preservesLimit : forall {K : J ⥤ C}, PreservesLimit K F  [default: by infer_instance]
 
 中文:
-类 PreservesLimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 保持形状极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesLimit : 对任意 {K : J ⥤ C}, PreservesLimit K F  [默认: by infer_instance]
+    - preservesLimit : 对任意 {K : J ⥤ C}, 保持极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -120,10 +120,10 @@ class PreservesColimitsOfShape
     - preservesColimit : forall {K : J ⥤ C}, PreservesColimit K F  [default: by infer_instance]
 
 中文:
-类 PreservesColimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 保持形状余极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesColimit : 对任意 {K : J ⥤ C}, PreservesColimit K F  [默认: by infer_instance]
+    - preservesColimit : 对任意 {K : J ⥤ C}, 保持余极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -149,10 +149,10 @@ class PreservesLimitsOfSize
     - preservesLimitsOfShape : forall {J : Type w} [Category.{w'} J], PreservesLimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 PreservesLimitsOfSize
+类 保持LimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesLimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], PreservesLimitsOfShape J F  [默认: by infer_instance]
+    - preservesLimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 保持形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -192,10 +192,10 @@ class PreservesColimitsOfSize
     - preservesColimitsOfShape : forall {J : Type w} [Category.{w'} J], PreservesColimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 PreservesColimitsOfSize
+类 保持余limitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesColimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], PreservesColimitsOfShape J F  [默认: by infer_instance]
+    - preservesColimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 保持形状余极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -238,7 +238,7 @@ definition isLimitOfPreserves
 
 中文:
 定义 isLimitOfPreserves
-  签名: (F : C ⥤ D) {c : Cone K} (t : IsLimit c) [PreservesLimit K F]
+  签名: (F : C ⥤ D) {c : 锥 K} (t : 是极限 c) [保持极限 K F]
   定义体: (PreservesLimit.preserves t).some
 
 Depends on / 依赖: PreservesLimit, PreservesLimit.preserves, preserves
@@ -257,7 +257,7 @@ definition isColimitOfPreserves
 
 中文:
 定义 isColimitOfPreserves
-  签名: (F : C ⥤ D) {c : Cocone K} (t : IsColimit c) [PreservesColimit K F]
+  签名: (F : C ⥤ D) {c : 余锥 K} (t : 是余极限 c) [保持余极限 K F]
   定义体: (PreservesColimit.preserves t).some
 
 Depends on / 依赖: PreservesColimit, PreservesColimit.preserves, preserves
@@ -315,7 +315,7 @@ instance preservesLimitsOfShape_subsingleton
 
 中文:
 实例 preservesLimitsOfShape_subsingleton
-  签名: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+  签名: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   定义体: by
   constructor; rintro ⟨a⟩ ⟨b⟩; congr!
 -/
@@ -334,7 +334,7 @@ instance preservesColimitsOfShape_subsingleton
 
 中文:
 实例 preservesColimitsOfShape_subsingleton
-  签名: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+  签名: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   定义体: by
   constructor; rintro ⟨a⟩ ⟨b⟩; congr!
 -/
@@ -395,7 +395,7 @@ instance id_preservesLimitsOfSize
 
 中文:
 实例 id_preservesLimitsOfSize
-  签名: : PreservesLimitsOfSize.{w', w} (𝟭 C) where
+  签名: : 保持LimitsOfSize.{w', w} (𝟭 C) where
   定义体: {
       preservesLimit := fun {K} =>
         ⟨fun {c} h =>
@@ -430,7 +430,7 @@ instance id_preservesColimitsOfSize
 
 中文:
 实例 id_preservesColimitsOfSize
-  签名: : PreservesColimitsOfSize.{w', w} (𝟭 C) where
+  签名: : 保持余limitsOfSize.{w', w} (𝟭 C) where
   定义体: {
       preservesColimit := fun {K} =>
         ⟨fun {c} h =>
@@ -459,7 +459,7 @@ instance [HasLimit
   body: ⟨_, isLimitOfPreserves F (limit.isLimit K)⟩
 
 中文:
-实例 [HasLimit
+实例 [有极限
   签名: K] {F
   定义体: ⟨_, isLimitOfPreserves F (limit.isLimit K)⟩
 
@@ -477,7 +477,7 @@ instance [HasColimit
   body: ⟨_, isColimitOfPreserves F (colimit.isColimit K)⟩
 
 中文:
-实例 [HasColimit
+实例 [有余极限
   签名: K] {F
   定义体: ⟨_, isColimitOfPreserves F (colimit.isColimit K)⟩
 
@@ -495,8 +495,8 @@ lemma PreservesLimit.mk'
   proof: (h ⟨_, hc⟩).preserves hc
 
 中文:
-引理 PreservesLimit.mk'
-  条件: {F : C ⥤ D} (h : HasLimit K -> PreservesLimit K F)
+引理 保持极限.mk'
+  条件: {F : C ⥤ D} (h : 有极限 K -> 保持极限 K F)
   证明: (h ⟨_, hc⟩).preserves hc
 
 Depends on / 依赖: preserves
@@ -514,8 +514,8 @@ lemma PreservesColimit.mk'
   proof: (h ⟨_, hc⟩).preserves hc
 
 中文:
-引理 PreservesColimit.mk'
-  条件: {F : C ⥤ D} (h : HasColimit K -> PreservesColimit K F)
+引理 保持余极限.mk'
+  条件: {F : C ⥤ D} (h : 有余极限 K -> 保持余极限 K F)
   证明: (h ⟨_, hc⟩).preserves hc
 
 Depends on / 依赖: preserves
@@ -539,7 +539,7 @@ instance comp_preservesLimit
 
 中文:
 实例 comp_preservesLimit
-  签名: [PreservesLimit K F] [PreservesLimit (K ⋙ F) G]
+  签名: [保持极限 K F] [保持极限 (K ⋙ F) G]
   定义体: ⟨isLimitOfPreserves G (isLimitOfPreserves F hc)⟩
 
 Depends on / 依赖: isLimitOfPreserves
@@ -557,7 +557,7 @@ instance comp_preservesLimitsOfShape
 
 中文:
 实例 comp_preservesLimitsOfShape
-  签名: [PreservesLimitsOfShape J F] [PreservesLimitsOfShape J G]
+  签名: [保持形状极限 J F] [保持形状极限 J G]
 
 Depends on / 依赖: Coalgebra, Comonad, Comonad.Coalgebra.isoMk, Iso.refl, X.coassoc, X.counit, coassoc, counit
 -/
@@ -573,7 +573,7 @@ instance comp_preservesLimits
 
 中文:
 实例 comp_preservesLimits
-  签名: [PreservesLimitsOfSize.{w', w} F] [PreservesLimitsOfSize.{w', w} G]
+  签名: [保持LimitsOfSize.{w', w} F] [保持LimitsOfSize.{w', w} G]
 -/
 instance comp_preservesLimits [PreservesLimitsOfSize.{w', w} F] [PreservesLimitsOfSize.{w', w} G] :
     PreservesLimitsOfSize.{w', w} (F ⋙ G) where
@@ -588,7 +588,7 @@ instance comp_preservesColimit
 
 中文:
 实例 comp_preservesColimit
-  签名: [PreservesColimit K F] [PreservesColimit (K ⋙ F) G]
+  签名: [保持余极限 K F] [保持余极限 (K ⋙ F) G]
   定义体: ⟨isColimitOfPreserves G (isColimitOfPreserves F hc)⟩
 
 Depends on / 依赖: isColimitOfPreserves
@@ -606,7 +606,7 @@ instance comp_preservesColimitsOfShape
 
 中文:
 实例 comp_preservesColimitsOfShape
-  签名: [PreservesColimitsOfShape J F]
+  签名: [保持形状余极限 J F]
 
 Depends on / 依赖: MonadicRightAdjoint, MonadicRightAdjoint.eqv
 -/
@@ -622,7 +622,7 @@ instance comp_preservesColimits
 
 中文:
 实例 comp_preservesColimits
-  签名: [PreservesColimitsOfSize.{w', w} F]
+  签名: [保持余limitsOfSize.{w', w} F]
 
 Depends on / 依赖: isRightAdjoint, monadicAdjunction
 -/
@@ -641,7 +641,7 @@ lemma preservesLimit_of_preserves_limit_cone
 
 中文:
 引理 preservesLimit_of_preserves_limit_cone
-  结论: {F : C ⥤ D} {t : Cone K} (h : IsLimit t)
+  结论: {F : C ⥤ D} {t : 锥 K} (h : 是极限 t)
   证明: ⟨IsLimit.ofIsoLimit hF (Functor.mapIso _ (IsLimit.uniqueUpToIso h h'))⟩
 
 Depends on / 依赖: Functor, Functor.mapIso, IsLimit, IsLimit.ofIsoLimit, IsLimit.uniqueUpToIso, T.free, mapIso, ofIsoLimit, uniqueUpToIso
@@ -660,7 +660,7 @@ lemma preservesLimit_iff_isLimit_mapCone
 
 中文:
 引理 preservesLimit_iff_isLimit_mapCone
-  条件: {F : C ⥤ D} {t : Cone K} (h : IsLimit t)
+  条件: {F : C ⥤ D} {t : 锥 K} (h : 是极限 t)
   证明: ⟨fun _ => ⟨isLimitOfPreserves _ h⟩, fun h' => preservesLimit_of_preserves_limit_cone h h'.some⟩
 
 Depends on / 依赖: isLimitOfPreserves, preservesLimit_of_preserves_limit_cone
@@ -730,7 +730,7 @@ lemma preservesLimit_of_natIso
 
 中文:
 引理 preservesLimit_of_natIso
-  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [PreservesLimit K F]
+  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [保持极限 K F]
   证明: ⟨IsLimit.mapConeEquiv h (isLimitOfPreserves F t)⟩
 
 Depends on / 依赖: IsLimit, IsLimit.mapConeEquiv, comonadicAdjunction, isLeftAdjoint, isLimitOfPreserves, mapConeEquiv
@@ -768,7 +768,7 @@ lemma preservesLimitsOfShape_of_natIso
 
 中文:
 引理 preservesLimitsOfShape_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfShape J F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持形状极限 J F]
   证明: preservesLimit_of_natIso K h
 
 Depends on / 依赖: preservesLimit_of_natIso
@@ -806,7 +806,7 @@ lemma preservesLimits_of_natIso
 
 中文:
 引理 preservesLimits_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfSize.{w, w'} F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持LimitsOfSize.{w, w'} F]
   证明: preservesLimitsOfShape_of_natIso h
 
 Depends on / 依赖: preservesLimitsOfShape_of_natIso
@@ -851,7 +851,7 @@ lemma preservesLimitsOfShape_of_equiv
 
 中文:
 引理 preservesLimitsOfShape_of_equiv
-  结论: {J' : Type w₂} [Category.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
+  结论: {J' : 类型 w₂} [范畴.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
   证明: { preserves := fun {c} t => ⟨by
         let equ := e.invFunIdAssoc (K ⋙ F)
         have := (isLimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
@@ -903,7 +903,7 @@ lemma preservesLimitsOfSize_shrink
 
 中文:
 引理 preservesLimitsOfSize_shrink
-  条件: (F : C ⥤ D) [PreservesLimitsOfSize.{max w w₂, max w' w₂'} F]
+  条件: (F : C ⥤ D) [保持LimitsOfSize.{最大值 w w₂, 最大值 w' w₂'} F]
   证明: preservesLimitsOfSize_of_univLE.{max w w₂, max w' w₂'} F
 
 Depends on / 依赖: preservesLimitsOfSize_of_univLE
@@ -921,7 +921,7 @@ lemma preservesSmallestLimits_of_preservesLimits
 
 中文:
 引理 preservesSmallestLimits_of_preservesLimits
-  条件: (F : C ⥤ D) [PreservesLimitsOfSize.{v₃, u₃} F]
+  条件: (F : C ⥤ D) [保持LimitsOfSize.{v₃, u₃} F]
   证明: preservesLimitsOfSize_shrink F
 
 Depends on / 依赖: preservesLimitsOfSize_shrink
@@ -940,7 +940,7 @@ lemma preservesColimit_of_preserves_colimit_cocone
 
 中文:
 引理 preservesColimit_of_preserves_colimit_cocone
-  结论: {F : C ⥤ D} {t : Cocone K} (h : IsColimit t)
+  结论: {F : C ⥤ D} {t : 余锥 K} (h : 是余极限 t)
   证明: ⟨fun h' => ⟨IsColimit.ofIsoColimit hF (Functor.mapIso _ (IsColimit.uniqueUpToIso h h'))⟩⟩
 
 Depends on / 依赖: Functor, Functor.mapIso, IsColimit, IsColimit.ofIsoColimit, IsColimit.uniqueUpToIso, Reflective, mapIso, monadicOfReflective, ofIsoColimit, uniqueUpToIso
@@ -960,7 +960,7 @@ lemma preservesColimit_iff_isColimit_mapCocone
 
 中文:
 引理 preservesColimit_iff_isColimit_mapCocone
-  条件: {F : C ⥤ D} {t : Cocone K} (h : IsColimit t)
+  条件: {F : C ⥤ D} {t : 余锥 K} (h : 是余极限 t)
   证明: ⟨fun _ => ⟨isColimitOfPreserves _ h⟩,
     fun h' => preservesColimit_of_preserves_colimit_cocone h h'.some⟩
 
@@ -1033,7 +1033,7 @@ lemma preservesColimit_of_natIso
 
 中文:
 引理 preservesColimit_of_natIso
-  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [PreservesColimit K F]
+  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [保持余极限 K F]
   证明: ⟨IsColimit.mapCoconeEquiv h (isColimitOfPreserves F t)⟩
 
 Depends on / 依赖: IsColimit, IsColimit.mapCoconeEquiv, isColimitOfPreserves, mapCoconeEquiv
@@ -1071,7 +1071,7 @@ lemma preservesColimitsOfShape_of_natIso
 
 中文:
 引理 preservesColimitsOfShape_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesColimitsOfShape J F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持形状余极限 J F]
   证明: preservesColimit_of_natIso K h
 
 Depends on / 依赖: preservesColimit_of_natIso
@@ -1109,7 +1109,7 @@ lemma preservesColimits_of_natIso
 
 中文:
 引理 preservesColimits_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesColimitsOfSize.{w, w'} F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持余limitsOfSize.{w, w'} F]
   证明: preservesColimitsOfShape_of_natIso h
 
 Depends on / 依赖: preservesColimitsOfShape_of_natIso
@@ -1154,7 +1154,7 @@ lemma preservesColimitsOfShape_of_equiv
 
 中文:
 引理 preservesColimitsOfShape_of_equiv
-  结论: {J' : Type w₂} [Category.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
+  结论: {J' : 类型 w₂} [范畴.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
   证明: { preserves := fun {c} t => ⟨by
         let equ := e.invFunIdAssoc (K ⋙ F)
         have := (isColimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
@@ -1245,10 +1245,10 @@ class ReflectsLimit
     - reflects({c : Cone K} (hc : IsLimit (F.mapCone c))) : Nonempty (IsLimit c)
 
 中文:
-类 ReflectsLimit
+类 反映极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects({c : Cone K} (hc : IsLimit (F.mapCone c))) : Nonempty (IsLimit c)
+    - reflects({c : 锥 K} (hc : 是极限 (F.mapCone c))) : 非空 (是极限 c)
 -/
 class ReflectsLimit (K : J ⥤ C) (F : C ⥤ D) : Prop where
   reflects {c : Cone K} (hc : IsLimit (F.mapCone c)) : Nonempty (IsLimit c)
@@ -1263,10 +1263,10 @@ class ReflectsColimit
     - reflects({c : Cocone K} (hc : IsColimit (F.mapCocone c))) : Nonempty (IsColimit c)
 
 中文:
-类 ReflectsColimit
+类 反映余极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects({c : Cocone K} (hc : IsColimit (F.mapCocone c))) : Nonempty (IsColimit c)
+    - reflects({c : 余锥 K} (hc : 是余极限 (F.mapCocone c))) : 非空 (是余极限 c)
 -/
 class ReflectsColimit (K : J ⥤ C) (F : C ⥤ D) : Prop where
   reflects {c : Cocone K} (hc : IsColimit (F.mapCocone c)) : Nonempty (IsColimit c)
@@ -1281,10 +1281,10 @@ class ReflectsLimitsOfShape
     - reflectsLimit : forall {K : J ⥤ C}, ReflectsLimit K F  [default: by infer_instance]
 
 中文:
-类 ReflectsLimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 反映形状极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflectsLimit : 对任意 {K : J ⥤ C}, ReflectsLimit K F  [默认: by infer_instance]
+    - reflectsLimit : 对任意 {K : J ⥤ C}, 反映极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1301,10 +1301,10 @@ class ReflectsColimitsOfShape
     - reflectsColimit : forall {K : J ⥤ C}, ReflectsColimit K F  [default: by infer_instance]
 
 中文:
-类 ReflectsColimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 反映形状余极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflectsColimit : 对任意 {K : J ⥤ C}, ReflectsColimit K F  [默认: by infer_instance]
+    - reflectsColimit : 对任意 {K : J ⥤ C}, 反映余极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1331,7 +1331,7 @@ class ReflectsLimitsOfSize
 类 ReflectsLimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflectsLimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], ReflectsLimitsOfShape J F  [默认: by infer_instance]
+    - reflectsLimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 反映形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1377,7 +1377,7 @@ class ReflectsColimitsOfSize
 类 ReflectsColimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflectsColimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], ReflectsColimitsOfShape J F  [默认: by infer_instance]
+    - reflectsColimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 反映形状余极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1413,7 +1413,7 @@ definition isLimitOfReflects
 
 中文:
 定义 isLimitOfReflects
-  签名: (F : C ⥤ D) {c : Cone K} (t : IsLimit (F.mapCone c))
+  签名: (F : C ⥤ D) {c : 锥 K} (t : 是极限 (F.mapCone c))
   定义体: (ReflectsLimit.reflects t).some
 
 Depends on / 依赖: ReflectsLimit, ReflectsLimit.reflects, reflects
@@ -1432,7 +1432,7 @@ definition isColimitOfReflects
 
 中文:
 定义 isColimitOfReflects
-  签名: (F : C ⥤ D) {c : Cocone K} (t : IsColimit (F.mapCocone c))
+  签名: (F : C ⥤ D) {c : 余锥 K} (t : 是余极限 (F.mapCocone c))
   定义体: (ReflectsColimit.reflects t).some
 
 Depends on / 依赖: ReflectsColimit, ReflectsColimit.reflects, reflects
@@ -1489,7 +1489,7 @@ instance reflectsLimitsOfShape_subsingleton
 
 中文:
 实例 reflectsLimitsOfShape_subsingleton
-  签名: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+  签名: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   定义体: by
   constructor; rintro ⟨a⟩ ⟨b⟩; congr!
 -/
@@ -1508,7 +1508,7 @@ instance reflectsColimitsOfShape_subsingleton
 
 中文:
 实例 reflectsColimitsOfShape_subsingleton
-  签名: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+  签名: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   定义体: by
   constructor; rintro ⟨a⟩ ⟨b⟩; congr!
 -/
@@ -1654,7 +1654,7 @@ instance comp_reflectsLimit
 
 中文:
 实例 comp_reflectsLimit
-  签名: [ReflectsLimit K F] [ReflectsLimit (K ⋙ F) G]
+  签名: [反映极限 K F] [反映极限 (K ⋙ F) G]
   定义体: ⟨fun h => ReflectsLimit.reflects (isLimitOfReflects G h)⟩
 
 Depends on / 依赖: ReflectsLimit, ReflectsLimit.reflects, isLimitOfReflects, reflects
@@ -1672,7 +1672,7 @@ instance comp_reflectsLimitsOfShape
 
 中文:
 实例 comp_reflectsLimitsOfShape
-  签名: [ReflectsLimitsOfShape J F] [ReflectsLimitsOfShape J G]
+  签名: [反映形状极限 J F] [反映形状极限 J G]
 -/
 instance comp_reflectsLimitsOfShape [ReflectsLimitsOfShape J F] [ReflectsLimitsOfShape J G] :
     ReflectsLimitsOfShape J (F ⋙ G) where
@@ -1703,7 +1703,7 @@ instance comp_reflectsColimit
 
 中文:
 实例 comp_reflectsColimit
-  签名: [ReflectsColimit K F] [ReflectsColimit (K ⋙ F) G]
+  签名: [反映余极限 K F] [反映余极限 (K ⋙ F) G]
   定义体: ⟨fun h => ReflectsColimit.reflects (isColimitOfReflects G h)⟩
 
 Depends on / 依赖: ReflectsColimit, ReflectsColimit.reflects, isColimitOfReflects, reflects
@@ -1721,7 +1721,7 @@ instance comp_reflectsColimitsOfShape
 
 中文:
 实例 comp_reflectsColimitsOfShape
-  签名: [ReflectsColimitsOfShape J F] [ReflectsColimitsOfShape J G]
+  签名: [反映形状余极限 J F] [反映形状余极限 J G]
 -/
 instance comp_reflectsColimitsOfShape [ReflectsColimitsOfShape J F] [ReflectsColimitsOfShape J G] :
     ReflectsColimitsOfShape J (F ⋙ G) where
@@ -1752,7 +1752,7 @@ lemma preservesLimit_of_reflects_of_preserves
 
 中文:
 引理 preservesLimit_of_reflects_of_preserves
-  条件: [PreservesLimit K (F ⋙ G)] [ReflectsLimit (K ⋙ F) G]
+  条件: [保持极限 K (F ⋙ G)] [反映极限 (K ⋙ F) G]
   证明: ⟨fun h => ⟨by
     apply isLimitOfReflects G
     apply isLimitOfPreserves (F ⋙ G) h⟩⟩
@@ -1775,7 +1775,7 @@ lemma preservesLimitsOfShape_of_reflects_of_preserves
 
 中文:
 引理 preservesLimitsOfShape_of_reflects_of_preserves
-  结论: [PreservesLimitsOfShape J (F ⋙ G)]
+  结论: [保持形状极限 J (F ⋙ G)]
   证明: preservesLimit_of_reflects_of_preserves F G
 
 Depends on / 依赖: preservesLimit_of_reflects_of_preserves
@@ -1794,7 +1794,7 @@ lemma preservesLimits_of_reflects_of_preserves
 
 中文:
 引理 preservesLimits_of_reflects_of_preserves
-  结论: [PreservesLimitsOfSize.{w', w} (F ⋙ G)]
+  结论: [保持LimitsOfSize.{w', w} (F ⋙ G)]
   证明: preservesLimitsOfShape_of_reflects_of_preserves F G
 
 Depends on / 依赖: preservesLimitsOfShape_of_reflects_of_preserves
@@ -1817,7 +1817,7 @@ lemma reflectsLimit_of_iso_diagram
 
 中文:
 引理 reflectsLimit_of_iso_diagram
-  条件: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [ReflectsLimit K₁ F]
+  条件: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [反映极限 K₁ F]
   证明: ⟨by
     apply IsLimit.postcomposeInvEquiv h c (isLimitOfReflects F _)
     apply ((IsLimit.postcomposeInvEquiv (Functor.isoWhiskerRight h F :) _).symm t).ofIsoLimit _
@@ -1842,7 +1842,7 @@ lemma reflectsLimit_of_natIso
 
 中文:
 引理 reflectsLimit_of_natIso
-  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [ReflectsLimit K F]
+  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [反映极限 K F]
   证明: ReflectsLimit.reflects (IsLimit.mapConeEquiv h.symm t)
 
 Depends on / 依赖: IsLimit, IsLimit.mapConeEquiv, ReflectsLimit, ReflectsLimit.reflects, h.symm, mapConeEquiv, reflects
@@ -1861,7 +1861,7 @@ lemma reflectsLimitsOfShape_of_natIso
 
 中文:
 引理 reflectsLimitsOfShape_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [ReflectsLimitsOfShape J F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [反映形状极限 J F]
   证明: reflectsLimit_of_natIso K h
 
 Depends on / 依赖: reflectsLimit_of_natIso
@@ -1903,7 +1903,7 @@ lemma reflectsLimitsOfShape_of_equiv
 
 中文:
 引理 reflectsLimitsOfShape_of_equiv
-  结论: {J' : Type w₂} [Category.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
+  结论: {J' : 类型 w₂} [范畴.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
   证明: { reflects := fun {c} t => ⟨by
         apply IsLimit.ofWhiskerEquivalence e
         apply isLimitOfReflects F
@@ -1953,7 +1953,7 @@ lemma reflectsLimitsOfSize_shrink
 
 中文:
 引理 reflectsLimitsOfSize_shrink
-  条件: (F : C ⥤ D) [ReflectsLimitsOfSize.{max w w₂, max w' w₂'} F]
+  条件: (F : C ⥤ D) [ReflectsLimitsOfSize.{最大值 w w₂, 最大值 w' w₂'} F]
   证明: reflectsLimitsOfSize_of_univLE.{max w w₂, max w' w₂'} F
 
 Depends on / 依赖: reflectsLimitsOfSize_of_univLE
@@ -2000,7 +2000,7 @@ lemma reflectsLimit_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsLimit_of_reflectsIsomorphisms
-  结论: (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms]
+  结论: (F : J ⥤ C) (G : C ⥤ D) [G.反映同构]
   证明: by
     suffices IsIso (IsLimit.lift (limit.isLimit F) c) from ⟨by
       apply IsLimit.ofPointIso (limit.isLimit F)⟩
@@ -2033,7 +2033,7 @@ lemma reflectsLimitsOfShape_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsLimitsOfShape_of_reflectsIsomorphisms
-  结论: {G : C ⥤ D} [G.ReflectsIsomorphisms]
+  结论: {G : C ⥤ D} [G.反映同构]
   证明: reflectsLimit_of_reflectsIsomorphisms F G
 
 Depends on / 依赖: reflectsLimit_of_reflectsIsomorphisms
@@ -2052,7 +2052,7 @@ lemma reflectsLimits_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsLimits_of_reflectsIsomorphisms
-  结论: {G : C ⥤ D} [G.ReflectsIsomorphisms]
+  结论: {G : C ⥤ D} [G.反映同构]
   证明: reflectsLimitsOfShape_of_reflectsIsomorphisms
 
 Depends on / 依赖: reflectsLimitsOfShape_of_reflectsIsomorphisms
@@ -2096,7 +2096,7 @@ lemma preservesColimitsOfShape_of_reflects_of_preserves
 
 中文:
 引理 preservesColimitsOfShape_of_reflects_of_preserves
-  结论: [PreservesColimitsOfShape J (F ⋙ G)]
+  结论: [保持形状余极限 J (F ⋙ G)]
   证明: preservesColimit_of_reflects_of_preserves F G
 
 Depends on / 依赖: preservesColimit_of_reflects_of_preserves
@@ -2115,7 +2115,7 @@ lemma preservesColimits_of_reflects_of_preserves
 
 中文:
 引理 preservesColimits_of_reflects_of_preserves
-  结论: [PreservesColimitsOfSize.{w', w} (F ⋙ G)]
+  结论: [保持余limitsOfSize.{w', w} (F ⋙ G)]
   证明: preservesColimitsOfShape_of_reflects_of_preserves F G
 
 Depends on / 依赖: preservesColimitsOfShape_of_reflects_of_preserves
@@ -2164,7 +2164,7 @@ lemma reflectsColimit_of_natIso
 
 中文:
 引理 reflectsColimit_of_natIso
-  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [ReflectsColimit K F]
+  条件: (K : J ⥤ C) {F G : C ⥤ D} (h : F ≅ G) [反映余极限 K F]
   证明: ReflectsColimit.reflects (IsColimit.mapCoconeEquiv h.symm t)
 
 Depends on / 依赖: IsColimit, IsColimit.mapCoconeEquiv, ReflectsColimit, ReflectsColimit.reflects, h.symm, mapCoconeEquiv, reflects
@@ -2183,7 +2183,7 @@ lemma reflectsColimitsOfShape_of_natIso
 
 中文:
 引理 reflectsColimitsOfShape_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [ReflectsColimitsOfShape J F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [反映形状余极限 J F]
   证明: reflectsColimit_of_natIso K h
 
 Depends on / 依赖: reflectsColimit_of_natIso
@@ -2225,7 +2225,7 @@ lemma reflectsColimitsOfShape_of_equiv
 
 中文:
 引理 reflectsColimitsOfShape_of_equiv
-  结论: {J' : Type w₂} [Category.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
+  结论: {J' : 类型 w₂} [范畴.{w₂'} J'] (e : J ≌ J') (F : C ⥤ D)
   证明: { reflects := fun {c} t => ⟨by
         apply IsColimit.ofWhiskerEquivalence e
         apply isColimitOfReflects F
@@ -2275,7 +2275,7 @@ lemma reflectsColimitsOfSize_shrink
 
 中文:
 引理 reflectsColimitsOfSize_shrink
-  条件: (F : C ⥤ D) [ReflectsColimitsOfSize.{max w w₂, max w' w₂'} F]
+  条件: (F : C ⥤ D) [ReflectsColimitsOfSize.{最大值 w w₂, 最大值 w' w₂'} F]
   证明: reflectsColimitsOfSize_of_univLE.{max w w₂, max w' w₂'} F
 
 Depends on / 依赖: reflectsColimitsOfSize_of_univLE
@@ -2322,7 +2322,7 @@ lemma reflectsColimit_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsColimit_of_reflectsIsomorphisms
-  结论: (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms]
+  结论: (F : J ⥤ C) (G : C ⥤ D) [G.反映同构]
   证明: by
     suffices IsIso (IsColimit.desc (colimit.isColimit F) c) from ⟨by
       apply IsColimit.ofPointIso (colimit.isColimit F)⟩
@@ -2355,7 +2355,7 @@ lemma reflectsColimitsOfShape_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsColimitsOfShape_of_reflectsIsomorphisms
-  结论: {G : C ⥤ D} [G.ReflectsIsomorphisms]
+  结论: {G : C ⥤ D} [G.反映同构]
   证明: reflectsColimit_of_reflectsIsomorphisms F G
 
 Depends on / 依赖: reflectsColimit_of_reflectsIsomorphisms
@@ -2374,7 +2374,7 @@ lemma reflectsColimits_of_reflectsIsomorphisms
 
 中文:
 引理 reflectsColimits_of_reflectsIsomorphisms
-  结论: {G : C ⥤ D} [G.ReflectsIsomorphisms]
+  结论: {G : C ⥤ D} [G.反映同构]
   证明: reflectsColimitsOfShape_of_reflectsIsomorphisms
 
 Depends on / 依赖: reflectsColimitsOfShape_of_reflectsIsomorphisms
@@ -2449,7 +2449,7 @@ instance fullyFaithful_reflectsLimits
 
 中文:
 实例 fullyFaithful_reflectsLimits
-  签名: [F.Full] [F.Faithful]
+  签名: [F.满] [F.忠实]
   定义体: { reflectsLimit := fun {K} =>
         { reflects := fun {c} t =>
             ⟨(IsLimit.mkConeMorphism fun _ =>
@@ -2487,7 +2487,7 @@ instance fullyFaithful_reflectsColimits
 
 中文:
 实例 fullyFaithful_reflectsColimits
-  签名: [F.Full] [F.Faithful]
+  签名: [F.满] [F.忠实]
   定义体: { reflectsColimit := fun {K} =>
         { reflects := fun {c} t =>
             ⟨(IsColimit.mkCoconeMorphism fun _ =>

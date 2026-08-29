@@ -41,7 +41,7 @@ theorem isUnit_iff_not_dvd_char_of_ringChar_ne_zero
 
 中文:
 定理 isUnit_iff_not_dvd_char_of_ringChar_ne_zero
-  结论: (R : 类型) [CommRing R] (p : 自然数) [Fact p.Prime]
+  结论: (R : 类型) [交换环 R] (p : 自然数) [Fact p.素]
   证明: by
   have hch := CharP.cast_eq_zero R (ringChar R)
   have hp : p.Prime := Fact.out
@@ -86,7 +86,7 @@ theorem isUnit_iff_not_dvd_char
 
 中文:
 定理 isUnit_iff_not_dvd_char
-  条件: (R : 类型) [CommRing R] (p : 自然数) [Fact p.Prime] [Finite R]
+  条件: (R : 类型) [交换环 R] (p : 自然数) [Fact p.素] [有限 R]
   证明: isUnit_iff_not_dvd_char_of_ringChar_ne_zero R p CharP.char_ne_zero_of_finite R (ringChar R)
 
 Depends on / 依赖: CharP.char_ne_zero_of_finite, char_ne_zero_of_finite, f.hom, isUnit_iff_not_dvd_char_of_ringChar_ne_zero, ringChar
@@ -115,7 +115,7 @@ Int.natCast_dvd_natCast.mp
 
 中文:
 定理 prime_dvd_char_iff_dvd_card
-  条件: {R : 类型} [CommRing R] [Fintype R] (p : 自然数) [Fact p.Prime]
+  条件: {R : 类型} [交换环 R] [有限类型 R] (p : 自然数) [Fact p.素]
   证明: by
   refine
     ⟨fun h =>
@@ -159,7 +159,7 @@ theorem not_isUnit_prime_of_dvd_card
 
 中文:
 定理 not_isUnit_prime_of_dvd_card
-  结论: {R : 类型} [CommRing R] [Fintype R] {p : 自然数} [Fact p.Prime]
+  结论: {R : 类型} [交换环 R] [有限类型 R] {p : 自然数} [Fact p.素]
   证明: mt (isUnit_iff_not_dvd_char R p).mp
     (Classical.not_not.mpr ((prime_dvd_char_iff_dvd_card p).mpr hp))
 
@@ -181,7 +181,7 @@ lemma charP_of_card_eq_prime
 
 中文:
 引理 charP_of_card_eq_prime
-  结论: {R : 类型} [NonAssocRing R] [Fintype R] {p : 自然数} [hp : Fact p.Prime]
+  结论: {R : 类型} [非结合环 R] [有限类型 R] {p : 自然数} [hp : Fact p.素]
   证明: have := Fintype.one_lt_card_iff_nontrivial.1 (hR ▸ hp.1.one_lt)
   (CharP.charP_iff_prime_eq_zero hp.1).2 (hR ▸ Nat.cast_card_eq_zero R)
 
@@ -205,7 +205,7 @@ Fintype.card_le_one_iff_subsingleton.mp by simpa [h0] using hR.le
 
 中文:
 引理 charP_of_card_eq_prime_pow
-  结论: {R : 类型} [CommRing R] [IsDomain R] [Fintype R] {p f : 自然数}
+  结论: {R : 类型} [交换环 R] [是整环 R] [有限类型 R] {p f : 自然数}
   证明: have hf : f != 0 := fun h0 => not_subsingleton R
 Fintype.card_le_one_iff_subsingleton.mp by simpa [h0] using hR.le
   (CharP.charP_iff_prime_eq_zero hp.out).mpr

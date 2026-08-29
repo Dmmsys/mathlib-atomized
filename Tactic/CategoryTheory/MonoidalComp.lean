@@ -55,7 +55,7 @@ class MonoidalCoherence
     - iso : X ≅ Y
 
 中文:
-类 MonoidalCoherence
+类 幺半群相干
   参数: (X Y : C)
   公理与运算 (1 个):
     - iso : X ≅ Y
@@ -78,7 +78,7 @@ abbreviation monoidalIso
 
 中文:
 缩写 monoidalIso
-  签名: (X Y : C) [MonoidalCoherence X Y]
+  签名: (X Y : C) [幺半群相干 X Y]
   定义体: MonoidalCoherence.iso
 
 Depends on / 依赖: MonoidalCoherence, MonoidalCoherence.iso
@@ -99,7 +99,7 @@ scoped[CategoryTheory.MonoidalCategory] infixr:80 " otimes≫ " =>
 
 中文:
 定义 monoidalComp
-  签名: {W X Y Z : C} [MonoidalCoherence X Y] (f : W ⟶ X) (g : Y ⟶ Z)
+  签名: {W X Y Z : C} [幺半群相干 X Y] (f : W ⟶ X) (g : Y ⟶ Z)
   定义体: f ≫ otimes𝟙.hom ≫ g
 
 @[inherit_doc monoidalComp]
@@ -127,7 +127,7 @@ scoped[CategoryTheory.MonoidalCategory] infixr:80 " ≪otimes≫ " =>
 
 中文:
 定义 monoidalIsoComp
-  签名: {W X Y Z : C} [MonoidalCoherence X Y] (f : W ≅ X) (g : Y ≅ Z)
+  签名: {W X Y Z : C} [幺半群相干 X Y] (f : W ≅ X) (g : Y ≅ Z)
   定义体: f ≪≫ otimes𝟙 ≪≫ g
 
 @[inherit_doc monoidalIsoComp]
@@ -180,7 +180,7 @@ instance whiskerLeft
 
 中文:
 实例 whiskerLeft
-  签名: (X Y Z : C) [MonoidalCoherence Y Z]
+  签名: (X Y Z : C) [幺半群相干 Y Z]
   定义体: ⟨whiskerLeftIso X otimes𝟙⟩
 
 @[simps]
@@ -204,7 +204,7 @@ instance whiskerRight
 
 中文:
 实例 whiskerRight
-  签名: (X Y Z : C) [MonoidalCoherence X Y]
+  签名: (X Y Z : C) [幺半群相干 X Y]
   定义体: ⟨whiskerRightIso otimes𝟙 Z⟩
 
 @[simps]
@@ -228,7 +228,7 @@ instance tensor_right
 
 中文:
 实例 tensor_right
-  签名: (X Y : C) [MonoidalCoherence (𝟙_ C) Y]
+  签名: (X Y : C) [幺半群相干 (𝟙_ C) Y]
   定义体: ⟨(ρ_ X).symm ≪≫ (whiskerLeftIso X otimes𝟙)⟩
 
 @[simps]
@@ -252,7 +252,7 @@ instance tensor_right'
 
 中文:
 实例 tensor_right'
-  签名: (X Y : C) [MonoidalCoherence Y (𝟙_ C)]
+  签名: (X Y : C) [幺半群相干 Y (𝟙_ C)]
   定义体: ⟨whiskerLeftIso X otimes𝟙 ≪≫ (ρ_ X)⟩
 
 @[simps]
@@ -276,7 +276,7 @@ instance left
 
 中文:
 实例 left
-  签名: (X Y : C) [MonoidalCoherence X Y]
+  签名: (X Y : C) [幺半群相干 X Y]
   定义体: ⟨fun_ X ≪≫ otimes𝟙⟩
 
 @[simps]
@@ -300,7 +300,7 @@ instance left'
 
 中文:
 实例 left'
-  签名: (X Y : C) [MonoidalCoherence X Y]
+  签名: (X Y : C) [幺半群相干 X Y]
   定义体: ⟨otimes𝟙 ≪≫ (fun_ Y).symm⟩
 
 @[simps]
@@ -324,7 +324,7 @@ instance right
 
 中文:
 实例 right
-  签名: (X Y : C) [MonoidalCoherence X Y]
+  签名: (X Y : C) [幺半群相干 X Y]
   定义体: ⟨ρ_ X ≪≫ otimes𝟙⟩
 
 @[simps]
@@ -346,7 +346,7 @@ instance right'
 
 中文:
 实例 right'
-  签名: (X Y : C) [MonoidalCoherence X Y]
+  签名: (X Y : C) [幺半群相干 X Y]
   定义体: ⟨otimes𝟙 ≪≫ (ρ_ Y).symm⟩
 
 @[simps]
@@ -368,7 +368,7 @@ instance assoc
 
 中文:
 实例 assoc
-  签名: (X Y Z W : C) [MonoidalCoherence (X otimes (Y otimes Z)) W]
+  签名: (X Y Z W : C) [幺半群相干 (X otimes (Y otimes Z)) W]
   定义体: ⟨α_ X Y Z ≪≫ otimes𝟙⟩
 
 @[simps]
@@ -388,7 +388,7 @@ instance assoc'
 
 中文:
 实例 assoc'
-  签名: (W X Y Z : C) [MonoidalCoherence W (X otimes (Y otimes Z))]
+  签名: (W X Y Z : C) [幺半群相干 W (X otimes (Y otimes Z))]
   定义体: ⟨otimes𝟙 ≪≫ (α_ X Y Z).symm⟩
 -/
 instance assoc' (W X Y Z : C) [MonoidalCoherence W (X otimes (Y otimes Z))] :

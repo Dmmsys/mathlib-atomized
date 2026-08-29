@@ -47,7 +47,7 @@ class HasPointwiseRightDerivedFunctorAt
     - hasColimit' : HasPointwiseLeftKanExtensionAt W.Q F (W.Q.obj X)
 
 中文:
-类 HasPointwiseRightDerivedFunctorAt
+类 有PointwiseRightDerivedFunctorAt
   参数: (X : C)
   公理与运算 (1 个):
     - hasColimit' : HasPointwiseLeftKanExtensionAt W.Q F (W.Q.obj X)
@@ -88,7 +88,7 @@ lemma hasPointwiseRightDerivedFunctorAt_iff
 
 中文:
 引理 hasPointwiseRightDerivedFunctorAt_iff
-  条件: [L.IsLocalization W] (X : C)
+  条件: [L.是Localization W] (X : C)
   证明: by
   rw [← hasPointwiseLeftKanExtensionAt_iff_of_equivalence W.Q L F
     (Localization.uniq W.Q L W) (Localization.compUniqFunctor W.Q L W) (W.Q.obj X) (L.obj X)
@@ -114,7 +114,7 @@ lemma HasPointwiseRightDerivedFunctorAt.hasColimit
   rwa [← hasPointwiseRightDerivedFunctorAt_iff F L W]
 
 中文:
-引理 HasPointwiseRightDerivedFunctorAt.hasColimit
+引理 有PointwiseRightDerivedFunctorAt.hasColimit
   证明: by
   rwa [← hasPointwiseRightDerivedFunctorAt_iff F L W]
 
@@ -167,7 +167,7 @@ lemma hasPointwiseLeftKanExtension_of_hasPointwiseRightDerivedFunctor
 
 中文:
 引理 hasPointwiseLeftKanExtension_of_hasPointwiseRightDerivedFunctor
-  条件: [L.IsLocalization W]
+  条件: [L.是Localization W]
   证明: fun Y => by
   have := Localization.essSurj L W
   rw [← hasPointwiseLeftKanExtensionAt_iff_of_iso _ F (L.objObjPreimageIso Y)]; rw [← F.hasPointwiseRightDerivedFunctorAt_iff L W]
@@ -394,7 +394,7 @@ instance [L.IsLocalization
   body: isRightDerivedFunctor_of_inverts W _ _
 
 中文:
-实例 [L.IsLocalization
+实例 [L.是Localization
   签名: W] (hF
   定义体: isRightDerivedFunctor_of_inverts W _ _
 
@@ -419,7 +419,7 @@ lemma isIso_of_isRightDerivedFunctor_of_inverts
 
 中文:
 引理 isIso_of_isRightDerivedFunctor_of_inverts
-  结论: [L.IsLocalization W]
+  结论: [L.是Localization W]
   证明: by
   have : α = (Localization.fac F hF L).inv ≫
     whiskerLeft _ (rightDerivedUnique _ _ (Localization.fac F hF L).inv α W).hom := by simp
@@ -449,7 +449,7 @@ lemma isRightDerivedFunctor_iff_of_inverts
 
 中文:
 引理 isRightDerivedFunctor_iff_of_inverts
-  结论: [L.IsLocalization W]
+  结论: [L.是Localization W]
   证明: ⟨fun _ => isIso_of_isRightDerivedFunctor_of_inverts RF α hF, fun _ =>
     isRightDerivedFunctor_of_inverts W RF (asIso α).symm⟩
 

@@ -81,8 +81,8 @@ theorem Group.fg_of_descent
 suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_l
 
 中文:
-定理 Group.fg_of_descent
-  结论: {G : 类型} [Group G] {f : G ->* G} (hf : 对任意 U : Subgroup G, U.map f <= U)
+定理 群.fg_of_descent
+  结论: {G : 类型} [群 G] {f : G ->* G} (hf : 对任意 U : 子群 G, U.map f <= U)
   证明: by
   set q := QuotientGroup.mk (s := map f ⊤)
   -- Main proof idea: `s` together with elements of sufficiently small "height" `h` generates `G`.
@@ -151,8 +151,8 @@ obtain ⟨g, hg₁, hg₂⟩ := s.exists_max_image c s.toFinite Set.range_nonemp
     ref
 
 中文:
-定理 CommGroup.fg_of_descent
-  结论: {G : 类型} [CommGroup G] {n : 自然数} {h : G -> 实数} {a b c₀ : 实数}
+定理 交换群.fg_of_descent
+  结论: {G : 类型} [交换群 G] {n : 自然数} {h : G -> 实数} {a b c₀ : 实数}
   证明: by
   let f : G ->* G := powMonoidHom n
   let q := QuotientGroup.mk (s := f.range)
@@ -213,8 +213,8 @@ theorem CommGroup.fg_of_descent'
   exact fg_of_descent (b := 4) (by norm_num) (by norm_num) H₁ H₂' H₃'
 
 中文:
-定理 CommGroup.fg_of_descent'
-  结论: {G : 类型} [CommGroup G] {h : G -> 实数} {C : 实数}
+定理 交换群.fg_of_descent'
+  结论: {G : 类型} [交换群 G] {h : G -> 实数} {C : 实数}
   证明: by
   have H₃' x : 4 * h x - (h 1 + C) <= h (x ^ 2) := by grind [pow_two, div_self']
   have H₂' g x : h x <= 2 * h (g * x) + (2 * h g⁻¹ + C) := by grind [mul_inv_cancel_comm]
@@ -257,8 +257,8 @@ theorem Monoid.finite_set_isOfFiniteOrder_of_descent
     fun g hg => Finite.le_ciSup (fun g : Submonoid.powers 
 
 中文:
-定理 Monoid.finite_set_isOfFiniteOrder_of_descent
-  结论: {M : 类型} [Monoid M] {n : 自然数} {h : M -> 实数}
+定理 幺半群.finite_set_isOfFiniteOrder_of_descent
+  结论: {M : 类型} [幺半群 M] {n : 自然数} {h : M -> 实数}
   证明: by
   refine (Northcott.finite_le (h := h) (c₀ / (b - 1))).subset fun t ht => ?_
   have : Finite ↥(Submonoid.powers t) := ht.finite_powers
@@ -302,8 +302,8 @@ theorem CommGroup.finite_torsion_of_descent
   proof: Monoid.finite_set_isOfFiniteOrder_of_descent hb H
 
 中文:
-定理 CommGroup.finite_torsion_of_descent
-  结论: {G : 类型} [CommGroup G] {n : 自然数} {h : G -> 实数}
+定理 交换群.finite_torsion_of_descent
+  结论: {G : 类型} [交换群 G] {n : 自然数} {h : G -> 实数}
   证明: Monoid.finite_set_isOfFiniteOrder_of_descent hb H
 
 Depends on / 依赖: Monoid, Monoid.finite_set_isOfFiniteOrder_of_descent, finite_set_isOfFiniteOrder_of_descent
@@ -336,8 +336,8 @@ theorem CommGroup.finite_torsion_of_descent'
   exact finite_torsion_of_descent (b := 4) (by norm_num) H'
 
 中文:
-定理 CommGroup.finite_torsion_of_descent'
-  结论: {G : 类型} [CommGroup G] {h : G -> 实数} {C : 实数}
+定理 交换群.finite_torsion_of_descent'
+  结论: {G : 类型} [交换群 G] {h : G -> 实数} {C : 实数}
   证明: by
   have H' x : 4 * h x - (h 1 + C) <= h (x ^ 2) := by grind [pow_two, div_self']
   exact finite_torsion_of_descent (b := 4) (by norm_num) H'

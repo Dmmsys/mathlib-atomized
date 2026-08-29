@@ -274,7 +274,7 @@ lemma gc_toENNReal_floor
   proof: fun _ _ => le_floor.symm
 
 中文:
-引理 gc_toENNReal_floor
+引理 gc_toENN实数_floor
   结论: GaloisConnection (↑) floor
   证明: fun _ _ => le_floor.symm
 
@@ -290,7 +290,7 @@ lemma gc_ceil_toENNReal
   proof: fun _ _ => ceil_le
 
 中文:
-引理 gc_ceil_toENNReal
+引理 gc_ceil_toENN实数
   结论: GaloisConnection ceil (↑)
   证明: fun _ _ => ceil_le
 
@@ -439,7 +439,7 @@ lemma floor_mono
 
 中文:
 引理 floor_mono
-  结论: Monotone (floor : 实数>=0∞ -> 自然数∞)
+  结论: 递增 (floor : 实数>=0∞ -> 自然数∞)
   证明: fun r s hrs => by simpa using hrs.trans' floor_le_self
 
 Depends on / 依赖: floor_le_self, hrs.trans
@@ -457,7 +457,7 @@ lemma ceil_mono
 
 中文:
 引理 ceil_mono
-  结论: Monotone (ceil : 实数>=0∞ -> 自然数∞)
+  结论: 递增 (ceil : 实数>=0∞ -> 自然数∞)
   证明: fun r s hrs => by simpa using hrs.trans le_ceil_self
 
 Depends on / 依赖: hrs.trans, le_ceil_self
@@ -595,7 +595,7 @@ lemma floor_ofNat
   proof: ENat.floor_natCast n
 
 中文:
-引理 floor_ofNat
+引理 floor_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌊of自然数(n)⌋ₑ = of自然数(n)
   证明: ENat.floor_natCast n
@@ -611,7 +611,7 @@ lemma ceil_ofNat
   proof: ENat.ceil_natCast n
 
 中文:
-引理 ceil_ofNat
+引理 ceil_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌈of自然数(n)⌉ₑ = of自然数(n)
   证明: ENat.ceil_natCast n
@@ -774,7 +774,7 @@ lemma floor_add_toENNReal
   statement: forall (r : Real>=0∞) (n : Nat∞), ⌊r + n⌋ₑ = ⌊r⌋ₑ + n
 
 中文:
-引理 floor_add_toENNReal
+引理 floor_add_toENN实数
   结论: 对任意 (r : 实数>=0∞) (n : 自然数∞), ⌊r + n⌋ₑ = ⌊r⌋ₑ + n
 -/
 @[simp] lemma floor_add_toENNReal : forall (r : Real>=0∞) (n : Nat∞), ⌊r + n⌋ₑ = ⌊r⌋ₑ + n
@@ -792,7 +792,7 @@ lemma ceil_add_toENNReal
   statement: forall (r : Real>=0∞) (n : Nat∞), ⌈r + n⌉ₑ = ⌈r⌉ₑ + n
 
 中文:
-引理 ceil_add_toENNReal
+引理 ceil_add_toENN实数
   结论: 对任意 (r : 实数>=0∞) (n : 自然数∞), ⌈r + n⌉ₑ = ⌈r⌉ₑ + n
 
 Depends on / 依赖: MulActionWithZero
@@ -815,7 +815,7 @@ lemma floor_toENNReal_add
   simp [add_comm, floor_add_toENNReal]
 
 中文:
-引理 floor_toENNReal_add
+引理 floor_toENN实数_add
   条件: (r : 实数>=0∞) (n : 自然数∞)
   结论: ⌊n + r⌋ₑ = n + ⌊r⌋ₑ
   证明: by
@@ -837,7 +837,7 @@ lemma ceil_toENNReal_add
   simp [add_comm, ceil_add_toENNReal]
 
 中文:
-引理 ceil_toENNReal_add
+引理 ceil_toENN实数_add
   条件: (r : 实数>=0∞) (n : 自然数∞)
   结论: ⌈n + r⌉ₑ = n + ⌈r⌉ₑ
   证明: by
@@ -962,7 +962,7 @@ lemma floor_add_ofNat
 @[simp]
 
 中文:
-引理 floor_add_ofNat
+引理 floor_add_of自然数
   条件: (r : 实数>=0∞) (n : 自然数) [n.AtLeastTwo]
   结论: ⌊r + of自然数(n)⌋ₑ = ⌊r⌋ₑ + of自然数(n)
   证明: floor_add_natCast r n
@@ -985,7 +985,7 @@ lemma ceil_add_ofNat
   proof: ceil_add_natCast r n
 
 中文:
-引理 ceil_add_ofNat
+引理 ceil_add_of自然数
   条件: (r : 实数>=0∞) (n : 自然数) [n.AtLeastTwo]
   结论: ⌈r + of自然数(n)⌉ₑ = ⌈r⌉ₑ + of自然数(n)
   证明: ceil_add_natCast r n
@@ -1003,7 +1003,7 @@ lemma floor_sub_toENNReal
   statement: forall (r : Real>=0∞) (n : Nat∞), ⌊r - n⌋ₑ = ⌊r⌋ₑ - n
 
 中文:
-引理 floor_sub_toENNReal
+引理 floor_sub_toENN实数
   结论: 对任意 (r : 实数>=0∞) (n : 自然数∞), ⌊r - n⌋ₑ = ⌊r⌋ₑ - n
 -/
 @[simp] lemma floor_sub_toENNReal : forall (r : Real>=0∞) (n : Nat∞), ⌊r - n⌋ₑ = ⌊r⌋ₑ - n
@@ -1022,7 +1022,7 @@ lemma ceil_sub_toENNReal
   statement: forall (r : Real>=0∞) (n : Nat∞), ⌈r - n⌉ₑ = ⌈r⌉ₑ - n
 
 中文:
-引理 ceil_sub_toENNReal
+引理 ceil_sub_toENN实数
   结论: 对任意 (r : 实数>=0∞) (n : 自然数∞), ⌈r - n⌉ₑ = ⌈r⌉ₑ - n
 -/
 @[simp] lemma ceil_sub_toENNReal : forall (r : Real>=0∞) (n : Nat∞), ⌈r - n⌉ₑ = ⌈r⌉ₑ - n
@@ -1116,7 +1116,7 @@ lemma floor_sub_ofNat
   proof: floor_sub_toENNReal r n
 
 中文:
-引理 floor_sub_ofNat
+引理 floor_sub_of自然数
   条件: (r : 实数>=0∞) (n : 自然数) [n.AtLeastTwo]
   结论: ⌊r - of自然数(n)⌋ₑ = ⌊r⌋ₑ - of自然数(n)
   证明: floor_sub_toENNReal r n
@@ -1137,7 +1137,7 @@ lemma ceil_sub_ofNat
 @[bound]
 
 中文:
-引理 ceil_sub_ofNat
+引理 ceil_sub_of自然数
   条件: (r : 实数>=0∞) (n : 自然数) [n.AtLeastTwo]
   证明: ceil_sub_toENNReal r n
 
@@ -1201,8 +1201,8 @@ lemma toENNReal_iSup
   proof: eq_of_forall_ge_iff fun _ => by simp [← le_floor]
 
 中文:
-引理 toENNReal_iSup
-  条件: {ι : Sort*} (f : ι -> 自然数∞)
+引理 toENN实数_iSup
+  条件: {ι : 类型层*} (f : ι -> 自然数∞)
   证明: eq_of_forall_ge_iff fun _ => by simp [← le_floor]
 -/
 @[simp] lemma toENNReal_iSup {ι : Sort*} (f : ι -> Nat∞) :
@@ -1217,8 +1217,8 @@ lemma toENNReal_iInf
   proof: eq_of_forall_le_iff fun _ => by simp [← ceil_le]
 
 中文:
-引理 toENNReal_iInf
-  条件: {ι : Sort*} (f : ι -> 自然数∞)
+引理 toENN实数_iInf
+  条件: {ι : 类型层*} (f : ι -> 自然数∞)
   证明: eq_of_forall_le_iff fun _ => by simp [← ceil_le]
 -/
 @[simp] lemma toENNReal_iInf {ι : Sort*} (f : ι -> Nat∞) :
@@ -1233,7 +1233,7 @@ lemma preimage_toENNReal_Ioi
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Ioi
+引理 preimage_toENN实数_Ioi
   条件: (a : 实数>=0∞)
   证明: by ext; simp
 -/
@@ -1249,7 +1249,7 @@ lemma preimage_toENNReal_Iio
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Iio
+引理 preimage_toENN实数_Iio
   条件: (a : 实数>=0∞)
   证明: by ext; simp
 
@@ -1267,7 +1267,7 @@ lemma preimage_toENNReal_Iic
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Iic
+引理 preimage_toENN实数_Iic
   条件: (a : 实数>=0∞)
   证明: by ext; simp
 
@@ -1285,7 +1285,7 @@ lemma preimage_toENNReal_Ici
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Ici
+引理 preimage_toENN实数_Ici
   条件: (a : 实数>=0∞)
   证明: by ext; simp
 
@@ -1303,7 +1303,7 @@ lemma preimage_toENNReal_Icc
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Icc
+引理 preimage_toENN实数_Icc
   条件: (a b : 实数>=0∞)
   证明: by ext; simp
 -/
@@ -1319,7 +1319,7 @@ lemma preimage_toENNReal_Ico
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Ico
+引理 preimage_toENN实数_Ico
   条件: (a b : 实数>=0∞)
   证明: by ext; simp
 -/
@@ -1335,7 +1335,7 @@ lemma preimage_toENNReal_Ioc
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Ioc
+引理 preimage_toENN实数_Ioc
   条件: (a b : 实数>=0∞)
   证明: by ext; simp
 -/
@@ -1351,7 +1351,7 @@ lemma preimage_toENNReal_Ioo
   proof: by ext; simp
 
 中文:
-引理 preimage_toENNReal_Ioo
+引理 preimage_toENN实数_Ioo
   条件: (a b : 实数>=0∞)
   证明: by ext; simp
 -/

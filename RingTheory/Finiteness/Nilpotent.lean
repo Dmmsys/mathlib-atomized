@@ -36,8 +36,8 @@ theorem Module.End.isNilpotent_iff_of_finite
   | mem x hx => exact p
 
 中文:
-定理 Module.End.isNilpotent_iff_of_finite
-  条件: [Module.Finite R M] {f : End R M}
+定理 模.End.isNilpotent_iff_of_finite
+  条件: [模.有限 R M] {f : End R M}
   证明: by
   refine ⟨fun ⟨n, hn⟩ m => ⟨n, by simp [hn]⟩, fun h => ?_⟩
   rcases Module.Finite.fg_top (R := R) (M := M) with ⟨S, hS⟩
@@ -126,7 +126,7 @@ theorem isNilpotent_iff_forall_row
     suffices forall i, (A ^ ⨆ j, n j) i = 0 from ⟨⨆ j, n j, by simp [mulVec_eq_sum, t
 
 中文:
-定理 isNilpotent_iff_forall_row
+定理 isNilpotent_iff_对任意_row
   证明: by
   rw [← isNilpotent_transpose_iff]; rw [isNilpotent_iff]
   refine ⟨fun h i => ?_, fun h v => ?_⟩
@@ -157,7 +157,7 @@ theorem isNilpotent_iff_forall_col
   simp_rw [← transpose_pow, row_transpose]
 
 中文:
-定理 isNilpotent_iff_forall_col
+定理 isNilpotent_iff_对任意_col
   证明: by
   rw [← isNilpotent_transpose_iff]; rw [isNilpotent_iff_forall_row]
   simp_rw [← transpose_pow, row_transpose]

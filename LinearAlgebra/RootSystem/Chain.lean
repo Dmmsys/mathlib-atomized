@@ -354,7 +354,7 @@ omit h in
 
 中文:
 引理 one_le_chainTopCoeff_of_root_add_mem
-  条件: [P.IsReduced] (h : P.root i + P.root j in range P.root)
+  条件: [P.是既约] (h : P.root i + P.root j in range P.root)
   证明: by
   have h' := P.linearIndependent_of_add_mem_range_root' h
   rwa [← root_add_nsmul_mem_range_iff_le_chainTopCoeff h', one_smul, add_comm]
@@ -382,7 +382,7 @@ lemma one_le_chainBotCoeff_of_root_add_mem
 
 中文:
 引理 one_le_chainBotCoeff_of_root_add_mem
-  条件: [P.IsReduced] (h : P.root i - P.root j in range P.root)
+  条件: [P.是既约] (h : P.root i - P.root j in range P.root)
   证明: by
   have h' := P.linearIndependent_of_sub_mem_range_root' h
   rwa [← root_sub_nsmul_mem_range_iff_le_chainBotCoeff h', one_smul, ← neg_mem_range_root_iff,
@@ -1311,7 +1311,7 @@ lemma chainBotCoeff_add_chainTopCoeff_le_three
 
 中文:
 引理 chainBotCoeff_add_chainTopCoeff_le_three
-  条件: [P.IsReduced]
+  条件: [P.是既约]
   证明: by
   by_cases h : LinearIndependent R ![P.root i, P.root j]
   swap; · simp [chainTopCoeff_of_not_linearIndependent, chainBotCoeff_of_not_linearIndependent, h]

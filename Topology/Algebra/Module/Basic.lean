@@ -46,8 +46,8 @@ theorem ContinuousSMul.of_nhds_zero
       simpa [ContinuousAt]
 
 中文:
-定理 ContinuousSMul.of_nhds_zero
-  结论: [IsTopologicalRing R] [IsTopologicalAddGroup M]
+定理 连续标量乘法.of_nhds_zero
+  结论: [是拓扑环 R] [是拓扑加群 M]
   证明: by
     rw [← nhds_prod_eq] at hmul
     refine continuous_of_continuousAt_zero₂ (AddMonoidHom.smul : R ->+ M ->+ M) ?_ ?_ ?_ <;>
@@ -76,9 +76,9 @@ theorem ContinuousNeg.of_continuousConstSMul
   proof: by simpa using continuous_const_smul (T := M) (-1 : R)
 
 中文:
-定理 ContinuousNeg.of_continuousConstSMul
-  条件: [ContinuousConstSMul R M]
-  结论: ContinuousNeg M where
+定理 连续取负.of_continuousConstSMul
+  条件: [连续常数标量乘法 R M]
+  结论: 连续取负 M where
   证明: by simpa using continuous_const_smul (T := M) (-1 : R)
 
 Depends on / 依赖: continuous_const_smul
@@ -108,8 +108,8 @@ theorem Submodule.eq_top_of_nonempty_interior'
   rw [ad
 
 中文:
-定理 Submodule.eq_top_of_nonempty_interior'
-  结论: [NeBot (𝓝[{ x : R | IsUnit x }] 0)]
+定理 子模.eq_top_of_nonempty_interior'
+  结论: [NeBot (𝓝[{ x : R | 是单位 x }] 0)]
   证明: by
   rcases hs with ⟨y, hy⟩
   refine Submodule.eq_top_iff'.2 fun x => ?_
@@ -151,8 +151,8 @@ theorem Module.punctured_nhds_neBot
     simp
 
 中文:
-定理 Module.punctured_nhds_neBot
-  结论: [Nontrivial M] [NeBot (𝓝[!=] (0 : R))] [Module.IsTorsionFree R M]
+定理 模.punctured_nhds_neBot
+  结论: [非平凡 M] [NeBot (𝓝[!=] (0 : R))] [模.是无挠 R M]
   证明: by
   rcases exists_ne (0 : M) with ⟨y, hy⟩
   suffices Tendsto (fun c : R => x + c • y) (𝓝[!=] 0) (𝓝[!=] x) from this.neBot
@@ -197,8 +197,8 @@ theorem continuousSMul_inducedₛₗ
 
 中文:
 定理 continuousSMul_inducedₛₗ
-  条件: (hφ : Continuous φ)
-  结论: @ContinuousSMul R M₁ _ u (t'.induced f')
+  条件: (hφ : 连续 φ)
+  结论: @连续标量乘法 R M₁ _ u (t'.induced f')
   证明: let _ : TopologicalSpace M₁ := t'.induced f'
   IsInducing.continuousSMul ⟨rfl⟩ hφ (map_smulₛₗ f' _ _)
 
@@ -218,7 +218,7 @@ theorem continuousSMul_induced
 
 中文:
 定理 continuousSMul_induced
-  结论: @ContinuousSMul R M₁ _ u (t.induced f)
+  结论: @连续标量乘法 R M₁ _ u (t.induced f)
   证明: continuousSMul_inducedₛₗ f continuous_id
 
 Depends on / 依赖: continuous_id
@@ -243,8 +243,8 @@ lemma TopologicalSpace.IsSeparable.span
   · apply continuous
 
 中文:
-引理 TopologicalSpace.IsSeparable.span
-  结论: {R M : 类型} [AddCommMonoid M] [Semiring R] [Module R M]
+引理 拓扑空间.是可分.span
+  结论: {R M : 类型} [加法交换幺半群 M] [半环 R] [模 R M]
   证明: by
   rw [Submodule.span_eq_iUnion_nat]
   refine .iUnion fun n => .image ?_ ?_
@@ -279,7 +279,7 @@ instance topologicalAddGroup
 
 中文:
 实例 topologicalAddGroup
-  签名: {R M : 类型} [Ring R] [AddCommGroup M] [Module R M]
+  签名: {R M : 类型} [环 R] [加法交换群 M] [模 R M]
   定义体: inferInstanceAs (IsTopologicalAddGroup S.toAddSubgroup)
 
 Depends on / 依赖: IsTopologicalAddGroup, S.toAddSubgroup, toAddSubgroup
@@ -305,8 +305,8 @@ theorem Submodule.mapsTo_smul_closure
   this.closure (continuous_const_smul c)
 
 中文:
-定理 Submodule.mapsTo_smul_closure
-  条件: (s : Submodule R M) (c : R)
+定理 子模.mapsTo_smul_closure
+  条件: (s : 子模 R M) (c : R)
   证明: have : Set.MapsTo (c • ·) (s : Set M) s := fun _ h => s.smul_mem c h
   this.closure (continuous_const_smul c)
 
@@ -326,8 +326,8 @@ theorem Submodule.smul_closure_subset
   proof: (s.mapsTo_smul_closure c).image_subset
 
 中文:
-定理 Submodule.smul_closure_subset
-  条件: (s : Submodule R M) (c : R)
+定理 子模.smul_closure_subset
+  条件: (s : 子模 R M) (c : R)
   证明: (s.mapsTo_smul_closure c).image_subset
 
 Depends on / 依赖: image_subset, mapsTo_smul_closure, s.mapsTo_smul_closure
@@ -350,8 +350,8 @@ definition Submodule.topologicalClosure
 @[simp, norm_cast]
 
 中文:
-定义 Submodule.topologicalClosure
-  签名: (s : Submodule R M)
+定义 子模.topologicalClosure
+  签名: (s : 子模 R M)
   定义体: { s.toAddSubmonoid.topologicalClosure with
     smul_mem' := s.mapsTo_smul_closure }
 
@@ -373,8 +373,8 @@ theorem Submodule.topologicalClosure_coe
   proof: rfl
 
 中文:
-定理 Submodule.topologicalClosure_coe
-  条件: (s : Submodule R M)
+定理 子模.topologicalClosure_coe
+  条件: (s : 子模 R M)
   证明: rfl
 -/
 theorem Submodule.topologicalClosure_coe (s : Submodule R M) :
@@ -391,8 +391,8 @@ theorem Submodule.le_topologicalClosure
   proof: subset_closure
 
 中文:
-定理 Submodule.le_topologicalClosure
-  条件: (s : Submodule R M)
+定理 子模.le_topologicalClosure
+  条件: (s : 子模 R M)
   结论: s <= s.topologicalClosure
   证明: subset_closure
 
@@ -412,8 +412,8 @@ theorem Submodule.closure_subset_topologicalClosure_span
   exact closure_mono subset_span
 
 中文:
-定理 Submodule.closure_subset_topologicalClosure_span
-  条件: (s : Set M)
+定理 子模.closure_subset_topologicalClosure_span
+  条件: (s : 集合 M)
   证明: by
   rw [Submodule.topologicalClosure_coe]
   exact closure_mono subset_span
@@ -434,8 +434,8 @@ theorem Submodule.isClosed_topologicalClosure
   proof: isClosed_closure
 
 中文:
-定理 Submodule.isClosed_topologicalClosure
-  条件: (s : Submodule R M)
+定理 子模.isClosed_topologicalClosure
+  条件: (s : 子模 R M)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -454,8 +454,8 @@ theorem Submodule.topologicalClosure_minimal
 @[gcongr]
 
 中文:
-定理 Submodule.topologicalClosure_minimal
-  结论: (s : Submodule R M) {t : Submodule R M} (h : s <= t)
+定理 子模.topologicalClosure_minimal
+  结论: (s : 子模 R M) {t : 子模 R M} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -476,8 +476,8 @@ theorem Submodule.topologicalClosure_mono
   proof: closure_mono h
 
 中文:
-定理 Submodule.topologicalClosure_mono
-  条件: {s : Submodule R M} {t : Submodule R M} (h : s <= t)
+定理 子模.topologicalClosure_mono
+  条件: {s : 子模 R M} {t : 子模 R M} (h : s <= t)
   证明: closure_mono h
 
 Depends on / 依赖: closure_mono
@@ -495,8 +495,8 @@ theorem IsClosed.submodule_topologicalClosure_eq
   proof: SetLike.ext' hs.closure_eq
 
 中文:
-定理 IsClosed.submodule_topologicalClosure_eq
-  条件: {s : Submodule R M} (hs : IsClosed (s : Set M))
+定理 是闭集.submodule_topologicalClosure_eq
+  条件: {s : 子模 R M} (hs : 是闭集 (s : 集合 M))
   证明: SetLike.ext' hs.closure_eq
 
 Depends on / 依赖: SetLike, SetLike.ext, closure_eq, hs.closure_eq
@@ -516,8 +516,8 @@ theorem Submodule.dense_iff_topologicalClosure_eq_top
   simp
 
 中文:
-定理 Submodule.dense_iff_topologicalClosure_eq_top
-  条件: {s : Submodule R M}
+定理 子模.dense_iff_topologicalClosure_eq_top
+  条件: {s : 子模 R M}
   证明: by
   rw [← SetLike.coe_set_eq]; rw [dense_iff_closure_eq]
   simp
@@ -538,8 +538,8 @@ instance Submodule.topologicalClosure.completeSpace
   body: isClosed_closure.completeSpace_coe
 
 中文:
-实例 Submodule.topologicalClosure.completeSpace
-  签名: {M' : 类型} [AddCommMonoid M'] [Module R M']
+实例 子模.topologicalClosure.completeSpace
+  签名: {M' : 类型} [加法交换幺半群 M'] [模 R M']
   定义体: isClosed_closure.completeSpace_coe
 
 Depends on / 依赖: completeSpace_coe, isClosed_closure, isClosed_closure.completeSpace_coe
@@ -560,8 +560,8 @@ theorem Submodule.isClosed_or_dense_of_isCoatom
   exact fun h => h ▸ isClosed_closure
 
 中文:
-定理 Submodule.isClosed_or_dense_of_isCoatom
-  条件: (s : Submodule R M) (hs : IsCoatom s)
+定理 子模.isClosed_or_dense_of_isCoatom
+  条件: (s : 子模 R M) (hs : IsCoatom s)
   证明: by
   refine (hs.le_iff.mp s.le_topologicalClosure).symm.imp ?_ dense_iff_topologicalClosure_eq_top.mpr
   exact fun h => h ▸ isClosed_closure
@@ -605,7 +605,7 @@ refine (closure_mono ?_).antisymm closure_minimal ?_ isClosed_closure
 
 中文:
 定理 closure_coe_iSup_map_single
-  条件: (s : 对任意 i, Submodule R (M i))
+  条件: (s : 对任意 i, 子模 R (M i))
   证明: by
   rw [← closure_pi_set]
 refine (closure_mono ?_).antisymm closure_minimal ?_ isClosed_closure
@@ -640,7 +640,7 @@ theorem topologicalClosure_iSup_map_single
 
 中文:
 定理 topologicalClosure_iSup_map_single
-  结论: [对任意 i, ContinuousAdd (M i)]
+  结论: [对任意 i, 连续加法 (M i)]
   证明: SetLike.coe_injective closure_coe_iSup_map_single _
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, closure_coe_iSup_map_single, coe_injective
@@ -671,8 +671,8 @@ theorem LinearMap.continuous_on_pi
       exact f.pi_apply_eq_sum_un
 
 中文:
-定理 LinearMap.continuous_on_pi
-  结论: {ι : 类型} {R : 类型} {M : 类型} [Finite ι] [Semiring R]
+定理 线性映射.continuous_on_pi
+  结论: {ι : 类型} {R : 类型} {M : 类型} [有限 ι] [半环 R]
   证明: by
   cases nonempty_fintype ι
   classical
@@ -769,8 +769,8 @@ theorem LinearMap.isClosed_range_coe
   proof: isClosed_of_closure_subset fun f hf => ⟨linearMapOfMemClosureRangeCoe f hf, rfl⟩
 
 中文:
-定理 LinearMap.isClosed_range_coe
-  结论: IsClosed (Set.range ((↑) : (M₁ ->ₛₗ[σ] M₂) -> M₁ -> M₂))
+定理 线性映射.isClosed_range_coe
+  结论: 是闭集 (集合.range ((↑) : (M₁ ->ₛₗ[σ] M₂) -> M₁ -> M₂))
   证明: isClosed_of_closure_subset fun f hf => ⟨linearMapOfMemClosureRangeCoe f hf, rfl⟩
 
 Depends on / 依赖: isClosed_of_closure_subset, linearMapOfMemClosureRangeCoe
@@ -796,8 +796,8 @@ instance _root_.QuotientModule.Quotient.topologicalSpace
   body: inferInstanceAs (TopologicalSpace (Quotient S.quotientRel))
 
 中文:
-实例 _root_.QuotientModule.Quotient.topologicalSpace
-  签名: : TopologicalSpace (M ⧸ S)
+实例 _root_.QuotientModule.商.topologicalSpace
+  签名: : 拓扑空间 (M ⧸ S)
   定义体: inferInstanceAs (TopologicalSpace (Quotient S.quotientRel))
 
 Depends on / 依赖: Quotient, S.quotientRel, TopologicalSpace, quotientRel
@@ -816,8 +816,8 @@ theorem isOpenMap_mkQ
 
 中文:
 定理 isOpenMap_mkQ
-  条件: [ContinuousAdd M]
-  结论: IsOpenMap S.mkQ
+  条件: [连续加法 M]
+  结论: 是开映射 S.mkQ
   证明: QuotientAddGroup.isOpenMap_coe
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.isOpenMap_coe, isOpenMap_coe
@@ -836,8 +836,8 @@ theorem isOpenQuotientMap_mkQ
 
 中文:
 定理 isOpenQuotientMap_mkQ
-  条件: [ContinuousAdd M]
-  结论: IsOpenQuotientMap S.mkQ
+  条件: [连续加法 M]
+  结论: 是OpenQuotient映射 S.mkQ
   证明: QuotientAddGroup.isOpenQuotientMap_mk
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.isOpenQuotientMap_mk, isOpenQuotientMap_mk
@@ -857,7 +857,7 @@ theorem isQuotientMap_mkQ
 
 中文:
 定理 isQuotientMap_mkQ
-  结论: IsQuotientMap S.mkQ
+  结论: 是商映射 S.mkQ
   证明: isQuotientMap_quot_mk
 
 @[continuity, fun_prop]
@@ -877,7 +877,7 @@ theorem continuous_mkQ
 
 中文:
 定理 continuous_mkQ
-  结论: Continuous S.mkQ
+  结论: 连续 S.mkQ
   证明: continuous_quot_mk
 
 Depends on / 依赖: continuous_quot_mk
@@ -894,7 +894,7 @@ instance topologicalAddGroup_quotient
 
 中文:
 实例 topologicalAddGroup_quotient
-  签名: [IsTopologicalAddGroup M]
+  签名: [是拓扑加群 M]
   定义体: inferInstanceAs IsTopologicalAddGroup (M ⧸ S.toAddSubgroup)
 
 Depends on / 依赖: IsTopologicalAddGroup, S.toAddSubgroup, toAddSubgroup
@@ -914,7 +914,7 @@ instance continuousSMul_quotient
 
 中文:
 实例 continuousSMul_quotient
-  签名: [TopologicalSpace R] [IsTopologicalAddGroup M]
+  签名: [拓扑空间 R] [是拓扑加群 M]
   定义体: by
     rw [← (IsOpenQuotientMap.id.prodMap S.isOpenQuotientMap_mkQ).continuous_comp_iff]
     exact continuous_quot_mk.comp continuous_smul
@@ -938,7 +938,7 @@ instance t3_quotient_of_isClosed
 
 中文:
 实例 t3_quotient_of_isClosed
-  签名: [IsTopologicalAddGroup M] [IsClosed (S : Set M)]
+  签名: [是拓扑加群 M] [是闭集 (S : 集合 M)]
   定义体: letI : IsClosed (S.toAddSubgroup : Set M) := ‹_›
   QuotientAddGroup.instT3Space S.toAddSubgroup
 

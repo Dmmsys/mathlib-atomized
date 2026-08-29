@@ -59,7 +59,7 @@ definition partitionFiltration
 
 中文:
 定义 partitionFiltration
-  签名: (ht : 对任意 n, MeasurableSet (t n))
+  签名: (ht : 对任意 n, 可测集 (t n))
   定义体: generateFrom (memPartition t n)
   mono' := monotone_nat_of_le_succ (generateFrom_memPartition_le_succ _)
   le' := generateFrom_memPartition_le ht
@@ -82,7 +82,7 @@ lemma measurableSet_partitionFiltration_of_mem
 
 中文:
 引理 measurableSet_partitionFiltration_of_mem
-  结论: (ht : 对任意 n, MeasurableSet (t n)) (n : 自然数) {s : Set α}
+  结论: (ht : 对任意 n, 可测集 (t n)) (n : 自然数) {s : 集合 α}
   证明: measurableSet_generateFrom hs
 
 Depends on / 依赖: measurableSet_generateFrom
@@ -102,7 +102,7 @@ lemma measurableSet_partitionFiltration_memPartitionSet
 
 中文:
 引理 measurableSet_partitionFiltration_memPartitionSet
-  结论: (ht : 对任意 n, MeasurableSet (t n))
+  结论: (ht : 对任意 n, 可测集 (t n))
   证明: measurableSet_partitionFiltration_of_mem ht n (memPartitionSet_mem t n a)
 
 Depends on / 依赖: measurableSet_partitionFiltration_of_mem, memPartitionSet_mem
@@ -131,7 +131,7 @@ lemma measurable_memPartitionSet_subtype
 
 中文:
 引理 measurable_memPartitionSet_subtype
-  结论: (ht : 对任意 n, MeasurableSet (t n)) (n : 自然数)
+  结论: (ht : 对任意 n, 可测集 (t n)) (n : 自然数)
   证明: by
   refine @measurable_to_countable' (memPartition t n) α m _
     (partitionFiltration ht n) _ (fun s => ?_)
@@ -169,7 +169,7 @@ lemma measurable_partitionFiltration_memPartitionSet
 
 中文:
 引理 measurable_partitionFiltration_memPartitionSet
-  条件: (ht : 对任意 n, MeasurableSet (t n)) (n : 自然数)
+  条件: (ht : 对任意 n, 可测集 (t n)) (n : 自然数)
   证明: measurable_subtype_coe.comp (measurable_memPartitionSet_subtype ht _ _)
 
 Depends on / 依赖: measurable_memPartitionSet_subtype, measurable_subtype_coe, measurable_subtype_coe.comp
@@ -188,7 +188,7 @@ lemma measurable_memPartitionSet
 
 中文:
 引理 measurable_memPartitionSet
-  条件: (ht : 对任意 n, MeasurableSet (t n)) (n : 自然数)
+  条件: (ht : 对任意 n, 可测集 (t n)) (n : 自然数)
   证明: (measurable_partitionFiltration_memPartitionSet ht n).mono ((partitionFiltration ht).le n) le_rfl
 
 Depends on / 依赖: le_rfl, measurable_partitionFiltration_memPartitionSet, partitionFiltration
@@ -209,7 +209,7 @@ lemma iSup_partitionFiltration_eq_generateFrom_range
 
 中文:
 引理 iSup_partitionFiltration_eq_generateFrom_range
-  条件: (ht : 对任意 n, MeasurableSet (t n))
+  条件: (ht : 对任意 n, 可测集 (t n))
   证明: by
   conv_rhs => rw [← generateFrom_iUnion_memPartition t, ← iSup_generateFrom]
   rfl
@@ -232,7 +232,7 @@ lemma iSup_partitionFiltration
 
 中文:
 引理 iSup_partitionFiltration
-  结论: (ht : 对任意 n, MeasurableSet (t n))
+  结论: (ht : 对任意 n, 可测集 (t n))
   证明: by
   rw [iSup_partitionFiltration_eq_generateFrom_range ht]; rw [ht_range]
 
@@ -263,7 +263,7 @@ definition countableFiltration
 
 中文:
 定义 countableFiltration
-  签名: (α : 类型) [m : MeasurableSpace α] [CountablyGenerated α]
+  签名: (α : 类型) [m : 可测空间 α] [余untablyGenerated α]
   定义体: generateFrom (countablePartition α n)
   mono' := monotone_nat_of_le_succ (generateFrom_countablePartition_le_succ _)
   le' := generateFrom_countablePartition_le α
@@ -286,7 +286,7 @@ lemma measurableSet_countableFiltration_of_mem
 
 中文:
 引理 measurableSet_countableFiltration_of_mem
-  结论: (n : 自然数) {s : Set α}
+  结论: (n : 自然数) {s : 集合 α}
   证明: measurableSet_generateFrom hs
 
 Depends on / 依赖: measurableSet_generateFrom
@@ -370,7 +370,7 @@ lemma measurable_countablePartitionSet
 
 中文:
 引理 measurable_countablePartitionSet
-  结论: (α : 类型) [MeasurableSpace α] [CountablyGenerated α]
+  结论: (α : 类型) [可测空间 α] [余untablyGenerated α]
   证明: (measurable_countableFiltration_countablePartitionSet α n).mono ((countableFiltration α).le n)
     le_rfl
 -/
@@ -392,7 +392,7 @@ lemma iSup_countableFiltration
 
 中文:
 引理 iSup_countableFiltration
-  条件: (α : 类型) [m : MeasurableSpace α] [CountablyGenerated α]
+  条件: (α : 类型) [m : 可测空间 α] [余untablyGenerated α]
   证明: by
   conv_rhs => rw [← generateFrom_iUnion_countablePartition α, ← iSup_generateFrom]
   rfl

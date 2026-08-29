@@ -67,7 +67,7 @@ theorem isCoveringMap_exp
 
 中文:
 定理 isCoveringMap_exp
-  结论: IsCoveringMap fun z : Complex => (⟨_, z.exp_ne_zero⟩ : {z : Complex // z != 0})
+  结论: IsCoveringMap fun z : 复形 => (⟨_, z.exp_ne_zero⟩ : {z : 复形 // z != 0})
   证明: isAddQuotientCoveringMap_exp.isCoveringMap
 
 Depends on / 依赖: isAddQuotientCoveringMap_exp, isAddQuotientCoveringMap_exp.isCoveringMap, isCoveringMap
@@ -85,7 +85,7 @@ theorem isCoveringMapOn_exp
 
 中文:
 定理 isCoveringMapOn_exp
-  结论: IsCoveringMapOn Complex.exp {0}ᶜ
+  结论: IsCoveringMapOn 复形.exp {0}ᶜ
   证明: .of_isCoveringMap_subtype (by simp) _ isCoveringMap_exp
 
 Depends on / 依赖: isCoveringMap_exp, of_isCoveringMap_subtype
@@ -116,7 +116,7 @@ theorem Polynomial.isCoveringMapOn_eval
   · simpa only [
 
 中文:
-定理 Polynomial.isCoveringMapOn_eval
+定理 多项式.isCoveringMapOn_eval
   条件: (p : 𝕜[X])
   证明: by
   refine p.isClosedMap_eval.isCoveringMapOn_of_isLocalHomeomorphOn (fun x hx => ?_)
@@ -323,7 +323,7 @@ theorem Complex.isQuotientCoveringMap_npow
   proof: isQuotientCoveringMap_npow n (by simp [NeZero.ne]) fun _ => ⟨_, cpow_nat_inv_pow _ (NeZero.ne n)⟩
 
 中文:
-定理 Complex.isQuotientCoveringMap_npow
+定理 复形.isQuotientCoveringMap_npow
   条件: (n : 自然数) [NeZero n]
   证明: isQuotientCoveringMap_npow n (by simp [NeZero.ne]) fun _ => ⟨_, cpow_nat_inv_pow _ (NeZero.ne n)⟩
 -/

@@ -43,7 +43,7 @@ definition commProb
 
 中文:
 定义 commProb
-  签名: : Rat
+  签名: : 有理数
   定义体: Nat.card { p : M × M // Commute p.1 p.2 } / (Nat.card M : Rat) ^ 2
 
 Depends on / 依赖: Commute, Nat.card
@@ -82,7 +82,7 @@ theorem commProb_prod
 
 中文:
 定理 commProb_prod
-  条件: (M' : 类型) [Mul M']
+  条件: (M' : 类型) [乘法 M']
   结论: commProb (M × M') = commProb M * commProb M'
   证明: by
   simp_rw [commProb_def, div_mul_div_comm, Nat.card_prod, Nat.cast_mul, mul_pow, ← Nat.cast_mul,
@@ -115,7 +115,7 @@ theorem commProb_pi
 
 中文:
 定理 commProb_pi
-  条件: {α : 类型} (i : α -> 类型) [Fintype α] [对任意 a, Mul (i a)]
+  条件: {α : 类型} (i : α -> 类型) [有限类型 α] [对任意 a, 乘法 (i a)]
   证明: by
   simp_rw [commProb_def, Finset.prod_div_distrib, Finset.prod_pow, ← Nat.cast_prod,
     ← Nat.card_pi, Commute, SemiconjBy, funext_iff]
@@ -146,7 +146,7 @@ theorem commProb_function
 
 中文:
 定理 commProb_function
-  条件: {α β : 类型} [Fintype α] [Mul β]
+  条件: {α β : 类型} [有限类型 α] [乘法 β]
   证明: by
   rw [commProb_pi]; rw [Finset.prod_const]; rw [Finset.card_univ]
 
@@ -170,7 +170,7 @@ theorem commProb_eq_zero_of_infinite
 
 中文:
 定理 commProb_eq_zero_of_infinite
-  条件: [Infinite M]
+  条件: [无限 M]
   结论: commProb M = 0
   证明: div_eq_zero_iff.2 (Or.inl (Nat.cast_eq_zero.2 Nat.card_eq_zero_of_infinite))
 
@@ -194,7 +194,7 @@ theorem commProb_pos
 
 中文:
 定理 commProb_pos
-  条件: [h : Nonempty M]
+  条件: [h : 非空 M]
   结论: 0 < commProb M
   证明: h.elim fun x =>
     div_pos (Nat.cast_pos.mpr (Finite.card_pos_iff.mpr ⟨⟨(x, x), rfl⟩⟩))
@@ -253,8 +253,8 @@ theorem commProb_eq_one_iff
 
 中文:
 定理 commProb_eq_one_iff
-  条件: [h : Nonempty M]
-  结论: commProb M = 1 ↔ IsMulCommutative M
+  条件: [h : 非空 M]
+  结论: commProb M = 1 ↔ 是MulCommutative M
   证明: by
   classical
   have := Fintype.ofFinite M
@@ -317,8 +317,8 @@ theorem Subgroup.commProb_subgroup_le
   rw [commProb_def]; rw [commProb_def]; rw [div_le_iff₀]; rw [mul_assoc]; rw [← mul_pow]; rw [← Nat.cast_mul]; rw [mul_comm H.index]; rw [H.card_mul_index]; rw [div_mul_ca
 
 中文:
-定理 Subgroup.commProb_subgroup_le
-  结论: commProb H <= commProb G * (H.index : Rat) ^ 2
+定理 子群.commProb_subgroup_le
+  结论: commProb H <= commProb G * (H.index : 有理数) ^ 2
   证明: by
   /- After rewriting with `commProb_def`, we reduce to showing that `G` has at least as many
       commuting pairs as `H`. -/
@@ -346,8 +346,8 @@ theorem Subgroup.commProb_quotient_le
   rw [commProb_def']; rw [commProb_def']; rw [div_le_iff₀]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [← Subgroup.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀];
 
 中文:
-定理 Subgroup.commProb_quotient_le
-  条件: [H.Normal]
+定理 子群.commProb_quotient_le
+  条件: [H.正规]
   结论: commProb (G ⧸ H) <= commProb G * 自然数.card H
   证明: by
   /- After rewriting with `commProb_def'`, we reduce to showing that `G` has at least as many
@@ -563,8 +563,8 @@ abbreviation Product
   body: forall i : Fin l.length, DihedralGroup l[i]
 
 中文:
-缩写 Product
-  签名: (l : List 自然数)
+缩写 积
+  签名: (l : 列表 自然数)
   定义体: forall i : Fin l.length, DihedralGroup l[i]
 
 Depends on / 依赖: DihedralGroup, l.length, length
@@ -583,7 +583,7 @@ lemma commProb_nil
 
 中文:
 引理 commProb_nil
-  结论: commProb (Product []) = 1
+  结论: commProb (积 []) = 1
   证明: by
   simp [Product, commProb_pi]
 
@@ -605,7 +605,7 @@ lemma commProb_cons
 
 中文:
 引理 commProb_cons
-  条件: (n : 自然数) (l : List 自然数)
+  条件: (n : 自然数) (l : 列表 自然数)
   证明: by
   simp only [commProb_pi, Fin.prod_univ_succ, Fin.getElem_fin, Fin.val_succ, Fin.val_zero,
     List.getElem_cons_zero, List.length_cons, List.getElem_cons_succ]

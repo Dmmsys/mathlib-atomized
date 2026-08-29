@@ -38,7 +38,7 @@ definition linarithGetProofsMessage
 
 中文:
 定义 linarithGetProofsMessage
-  签名: (l : List Expr)
+  签名: (l : 列表 Expr)
   定义体: do
   return m!"{← l.mapM fun e => do instantiateMVars (← inferType e)}"
 -/
@@ -57,7 +57,7 @@ addRawTrace .trace { cls := `linarith } (toMessageData s) #[← linarithGetProof
 
 中文:
 定义 linarithTraceProofs
-  签名: {α} [ToMessageData α] (s : α) (l : List Expr)
+  签名: {α} [ToMessageData α] (s : α) (l : 列表 Expr)
   定义体: do
   if ← isTracingEnabledFor `linarith then
 addRawTrace .trace { cls := `linarith } (toMessageData s) #[← linarithGetProofsMessage l]
@@ -78,7 +78,7 @@ abbreviation Linexp
 
 中文:
 缩写 Linexp
-  签名: : Type
+  签名: : 类型
   定义体: List (Nat × Int)
 -/
 abbrev Linexp : Type := List (Nat × Int)
@@ -251,8 +251,8 @@ structure Comp
     - coeffs : Linexp
 
 中文:
-结构 Comp
-  参数: : Type where
+结构 复合
+  参数: : 类型 where
   公理与运算 (2 个):
     - str : Ineq
     - coeffs : Linexp
@@ -277,8 +277,8 @@ definition Comp.vars
   body: Linexp.vars ∘ Comp.coeffs
 
 中文:
-定义 Comp.vars
-  签名: : Comp -> List 自然数
+定义 复合.vars
+  签名: : 复合 -> 列表 自然数
   定义体: Linexp.vars ∘ Comp.coeffs
 
 Depends on / 依赖: Comp.coeffs, Linexp, Linexp.vars, coeffs
@@ -294,8 +294,8 @@ definition Comp.coeffOf
   body: c.coeffs.zfind a
 
 中文:
-定义 Comp.coeffOf
-  签名: (c : Comp) (a : 自然数)
+定义 复合.coeffOf
+  签名: (c : 复合) (a : 自然数)
   定义体: c.coeffs.zfind a
 
 Depends on / 依赖: c.coeffs.zfind, coeffs
@@ -312,8 +312,8 @@ definition Comp.scale
   body: { c with coeffs := c.coeffs.scale n }
 
 中文:
-定义 Comp.scale
-  签名: (c : Comp) (n : 自然数)
+定义 复合.scale
+  签名: (c : 复合) (n : 自然数)
   定义体: { c with coeffs := c.coeffs.scale n }
 
 Depends on / 依赖: c.coeffs.scale, coeffs
@@ -330,8 +330,8 @@ definition Comp.add
   body: ⟨c1.str.max c2.str, c1.coeffs.add c2.coeffs⟩
 
 中文:
-定义 Comp.add
-  签名: (c1 c2 : Comp)
+定义 复合.add
+  签名: (c1 c2 : 复合)
   定义体: ⟨c1.str.max c2.str, c1.coeffs.add c2.coeffs⟩
 
 Depends on / 依赖: c1.coeffs.add, c1.str.max, c2.coeffs, c2.str, coeffs
@@ -347,8 +347,8 @@ definition Comp.cmp
   signature: : Comp -> Comp -> Ordering
 
 中文:
-定义 Comp.cmp
-  签名: : Comp -> Comp -> Ordering
+定义 复合.cmp
+  签名: : 复合 -> 复合 -> Ordering
 -/
 def Comp.cmp : Comp -> Comp -> Ordering
   | ⟨str1, coeffs1⟩, ⟨str2, coeffs2⟩ =>
@@ -366,8 +366,8 @@ definition Comp.isContr
   body: c.coeffs.isEmpty && c.str = Ineq.lt
 
 中文:
-定义 Comp.isContr
-  签名: (c : Comp)
+定义 复合.isContr
+  签名: (c : 复合)
   定义体: c.coeffs.isEmpty && c.str = Ineq.lt
 
 Depends on / 依赖: Ineq.lt, c.coeffs.isEmpty, c.str, coeffs, isEmpty
@@ -383,8 +383,8 @@ instance Comp.ToFormat
   body: ⟨fun p => format p.coeffs ++ toString p.str ++ "0"⟩
 
 中文:
-实例 Comp.ToFormat
-  签名: : ToFormat Comp
+实例 复合.ToFormat
+  签名: : ToFormat 复合
   定义体: ⟨fun p => format p.coeffs ++ toString p.str ++ "0"⟩
 
 Depends on / 依赖: coeffs, format, p.coeffs, p.str, toString
@@ -409,7 +409,7 @@ structure PreprocessorBase
 
 中文:
 结构 PreprocessorBase
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (2 个):
     - name : Name  [默认: by exact decl_name%]
     - description : String
@@ -434,10 +434,10 @@ structure Preprocessor
 
 中文:
 结构 Preprocessor
-  参数: : Type extends PreprocessorBase where
+  参数: : 类型 extends PreprocessorBase where
   继承: PreprocessorBase
   公理与运算 (1 个):
-    - transform : Expr -> MetaM (List Expr)
+    - transform : Expr -> MetaM (列表 Expr)
 -/
 structure Preprocessor : Type extends PreprocessorBase where
   /-- Replace a hypothesis by a list of hypotheses. These expressions are the proof terms. -/
@@ -455,10 +455,10 @@ structure GlobalPreprocessor
 
 中文:
 结构 GlobalPreprocessor
-  参数: : Type extends PreprocessorBase where
+  参数: : 类型 extends PreprocessorBase where
   继承: PreprocessorBase
   公理与运算 (1 个):
-    - transform : List Expr -> MetaM (List Expr)
+    - transform : 列表 Expr -> MetaM (列表 Expr)
 -/
 structure GlobalPreprocessor : Type extends PreprocessorBase where
   /-- Replace the collection of all hypotheses with new hypotheses.
@@ -475,7 +475,7 @@ definition Branch
 
 中文:
 定义 Branch
-  签名: : Type
+  签名: : 类型
   定义体: MVarId × List Expr
 -/
 @[expose] def Branch : Type := MVarId × List Expr
@@ -492,10 +492,10 @@ structure GlobalBranchingPreprocessor
 
 中文:
 结构 GlobalBranchingPreprocessor
-  参数: : Type extends PreprocessorBase where
+  参数: : 类型 extends PreprocessorBase where
   继承: PreprocessorBase
   公理与运算 (1 个):
-    - transform : MVarId -> List Expr -> MetaM (List Branch)
+    - transform : MVarId -> 列表 Expr -> MetaM (列表 Branch)
 -/
 structure GlobalBranchingPreprocessor : Type extends PreprocessorBase where
   /-- Given a goal, and a list of hypotheses,
@@ -629,9 +629,9 @@ structure CertificateOracle
 
 中文:
 结构 CertificateOracle
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (1 个):
-    - produceCertificate((hyps : List Comp) (max_var : 自然数)) : MetaM (Std.HashMap 自然数 自然数)
+    - produceCertificate((hyps : 列表 复合) (max_var : 自然数)) : MetaM (Std.HashMap 自然数 自然数)
 -/
 structure CertificateOracle : Type where
   /-- `produceCertificate hyps max_var` tries to derive a contradiction from the comparisons in

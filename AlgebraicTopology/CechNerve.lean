@@ -92,7 +92,7 @@ definition mapCechNerve
 
 中文:
 定义 mapCechNerve
-  签名: {f g : Arrow C}
+  签名: {f g : 箭头 C}
   定义体: WidePullback.lift (WidePullback.base _ ≫ F.right) (fun i => WidePullback.π _ i ≫ F.left)
       fun j => by simp
 
@@ -148,7 +148,7 @@ definition mapAugmentedCechNerve
 
 中文:
 定义 mapAugmentedCechNerve
-  签名: {f g : Arrow C}
+  签名: {f g : 箭头 C}
   定义体: mapCechNerve F
   right := F.right
 
@@ -185,7 +185,7 @@ definition cechNerve
 
 中文:
 定义 cechNerve
-  签名: : Arrow C ⥤ SimplicialObject C where
+  签名: : 箭头 C ⥤ SimplicialObject C where
   定义体: f.cechNerve
   map F := Arrow.mapCechNerve F
 
@@ -210,7 +210,7 @@ definition augmentedCechNerve
 
 中文:
 定义 augmentedCechNerve
-  签名: : Arrow C ⥤ SimplicialObject.Augmented C where
+  签名: : 箭头 C ⥤ SimplicialObject.Augmented C where
   定义体: f.augmentedCechNerve
   map F := Arrow.mapAugmentedCechNerve F
 
@@ -239,7 +239,7 @@ definition equivalenceRightToLeft
 
 中文:
 定义 equivalenceRightToLeft
-  签名: (X : SimplicialObject.Augmented C) (F : Arrow C)
+  签名: (X : SimplicialObject.Augmented C) (F : 箭头 C)
   定义体: G.left.app _ ≫ WidePullback.π _ 0
   right := G.right
   w := by
@@ -279,7 +279,7 @@ definition equivalenceLeftToRight
 
 中文:
 定义 equivalenceLeftToRight
-  签名: (X : SimplicialObject.Augmented C) (F : Arrow C)
+  签名: (X : SimplicialObject.Augmented C) (F : 箭头 C)
   定义体: { app := fun x =>
         Limits.WidePullback.lift (X.hom.app _ ≫ G.right)
           (fun i => X.left.map (SimplexCategory.const _ x.unop i).op ≫ G.left) fun i => by simp
@@ -329,7 +329,7 @@ definition cechNerveEquiv
 
 中文:
 定义 cechNerveEquiv
-  签名: (X : SimplicialObject.Augmented C) (F : Arrow C)
+  签名: (X : SimplicialObject.Augmented C) (F : 箭头 C)
   定义体: equivalenceLeftToRight _ _
   invFun := equivalenceRightToLeft _ _
   left_inv A := by ext <;> simp
@@ -373,7 +373,7 @@ abbreviation cechNerveAdjunction
 
 中文:
 缩写 cechNerveAdjunction
-  签名: : (Augmented.toArrow : _ ⥤ Arrow C) ⊣ augmentedCechNerve
+  签名: : (Augmented.toArrow : _ ⥤ 箭头 C) ⊣ augmentedCechNerve
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := cechNerveEquiv
       homEquiv_naturality_left_symm := by dsimp [cechNerveEquiv]; cat_disch
@@ -454,7 +454,7 @@ definition mapCechConerve
 
 中文:
 定义 mapCechConerve
-  签名: {f g : Arrow C}
+  签名: {f g : 箭头 C}
   定义体: WidePushout.desc (F.left ≫ WidePushout.head _)
     (fun i => F.right ≫ (by apply WidePushout.ι _ i))
     (fun i => (by rw [← Arrow.w_assoc F, ← WidePushout.arrow_ι]))
@@ -514,7 +514,7 @@ definition mapAugmentedCechConerve
 
 中文:
 定义 mapAugmentedCechConerve
-  签名: {f g : Arrow C}
+  签名: {f g : 箭头 C}
   定义体: F.left
   right := mapCechConerve F
 
@@ -551,7 +551,7 @@ definition cechConerve
 
 中文:
 定义 cechConerve
-  签名: : Arrow C ⥤ CosimplicialObject C where
+  签名: : 箭头 C ⥤ CosimplicialObject C where
   定义体: f.cechConerve
   map F := Arrow.mapCechConerve F
 
@@ -576,7 +576,7 @@ definition augmentedCechConerve
 
 中文:
 定义 augmentedCechConerve
-  签名: : Arrow C ⥤ CosimplicialObject.Augmented C where
+  签名: : 箭头 C ⥤ CosimplicialObject.Augmented C where
   定义体: f.augmentedCechConerve
   map F := Arrow.mapAugmentedCechConerve F
 
@@ -603,7 +603,7 @@ definition equivalenceLeftToRight
 
 中文:
 定义 equivalenceLeftToRight
-  签名: (F : Arrow C) (X : CosimplicialObject.Augmented C)
+  签名: (F : 箭头 C) (X : CosimplicialObject.Augmented C)
   定义体: Arrow.homMk G.left (WidePushout.ι _ 0 ≫ G.right.app ⦋0⦌ :) (by
     dsimp
     rw [WidePushout.arrow_ι_assoc (fun (_ : Fin 1) => F.hom)]
@@ -640,7 +640,7 @@ definition equivalenceRightToLeft
 
 中文:
 定义 equivalenceRightToLeft
-  签名: (F : Arrow C) (X : CosimplicialObject.Augmented C)
+  签名: (F : 箭头 C) (X : CosimplicialObject.Augmented C)
   定义体: G.left
   right :=
     { app := fun x =>
@@ -699,7 +699,7 @@ definition cechConerveEquiv
 
 中文:
 定义 cechConerveEquiv
-  签名: (F : Arrow C) (X : CosimplicialObject.Augmented C)
+  签名: (F : 箭头 C) (X : CosimplicialObject.Augmented C)
   定义体: equivalenceLeftToRight _ _
   invFun := equivalenceRightToLeft _ _
   left_inv := by
@@ -754,7 +754,7 @@ abbreviation cechConerveAdjunction
 
 中文:
 缩写 cechConerveAdjunction
-  签名: : augmentedCechConerve ⊣ (Augmented.toArrow : _ ⥤ Arrow C)
+  签名: : augmentedCechConerve ⊣ (Augmented.toArrow : _ ⥤ 箭头 C)
   定义体: Adjunction.mkOfHomEquiv { homEquiv := cechConerveEquiv }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, cechConerveEquiv, homEquiv, mkOfHomEquiv
@@ -776,7 +776,7 @@ definition cechNerveTerminalFrom
 
 中文:
 定义 cechNerveTerminalFrom
-  签名: {C : 类型u} [Category.{v} C] [HasFiniteProducts C] (X : C)
+  签名: {C : 类型u} [范畴.{v} C] [有FiniteProducts C] (X : C)
   定义体: ∏ᶜ fun _ : Fin (n.unop.len + 1) => X
   map f := Limits.Pi.lift fun i => Limits.Pi.π _ (f.unop.toOrderHom i)
 
@@ -856,7 +856,7 @@ definition wideCospan.limitCone
 
 中文:
 定义 wideCospan.limitCone
-  签名: [Finite ι] (X : C)
+  签名: [有限 ι] (X : C)
   定义体: { pt := ∏ᶜ fun _ : ι => X
       π :=
         { app := fun X => Option.casesOn X (terminal.from _) fun i => limit.π _ ⟨i⟩
@@ -902,7 +902,7 @@ instance hasWidePullback
 
 中文:
 实例 hasWidePullback
-  签名: [Finite ι] (X : C)
+  签名: [有限 ι] (X : C)
   定义体: by
   cases nonempty_fintype ι
   exact ⟨⟨wideCospan.limitCone ι X⟩⟩
@@ -926,7 +926,7 @@ instance hasWidePullback'
 
 中文:
 实例 hasWidePullback'
-  签名: [Finite ι] (X : C)
+  签名: [有限 ι] (X : C)
   定义体: hasWidePullback _ _
 
 Depends on / 依赖: hasWidePullback
@@ -947,7 +947,7 @@ instance hasLimit_wideCospan
 
 中文:
 实例 hasLimit_wideCospan
-  签名: [Finite ι] (X : C)
+  签名: [有限 ι] (X : C)
   定义体: hasWidePullback _ _
 
 Depends on / 依赖: hasWidePullback
@@ -967,7 +967,7 @@ definition wideCospan.limitIsoPi
 
 中文:
 定义 wideCospan.limitIsoPi
-  签名: [Finite ι] (X : C)
+  签名: [有限 ι] (X : C)
   定义体: (IsLimit.conePointUniqueUpToIso (limit.isLimit _)
     (wideCospan.limitCone ι X).2)
 
@@ -991,7 +991,7 @@ lemma wideCospan.limitIsoPi_inv_comp_pi
 
 中文:
 引理 wideCospan.limitIsoPi_inv_comp_pi
-  条件: [Finite ι] (X : C) (j : ι)
+  条件: [有限 ι] (X : C) (j : ι)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
@@ -1013,7 +1013,7 @@ lemma wideCospan.limitIsoPi_hom_comp_pi
 
 中文:
 引理 wideCospan.limitIsoPi_hom_comp_pi
-  条件: [Finite ι] (X : C) (j : ι)
+  条件: [有限 ι] (X : C) (j : ι)
   证明: by
   rw [← wideCospan.limitIsoPi_inv_comp_pi]; rw [Iso.hom_inv_id_assoc]
 

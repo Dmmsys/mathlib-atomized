@@ -37,7 +37,7 @@ theorem isIdempotentElem_iff_of_fg
 
 中文:
 定理 isIdempotentElem_iff_of_fg
-  条件: {R : 类型} [CommRing R] (I : Ideal R) (h : I.FG)
+  条件: {R : 类型} [交换环 R] (I : 理想 R) (h : I.FG)
   证明: by
   constructor
   · intro e
@@ -86,7 +86,7 @@ theorem isIdempotentElem_iff_eq_bot_or_top
 
 中文:
 定理 isIdempotentElem_iff_eq_bot_or_top
-  结论: {R : 类型} [CommRing R] [IsDomain R] (I : Ideal R)
+  结论: {R : 类型} [交换环 R] [是整环 R] (I : 理想 R)
   证明: by
   constructor
   · intro H

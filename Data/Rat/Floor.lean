@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: FloorRing Rat
+  签名: Floor环 有理数
   定义体: (FloorRing.ofFloor Rat Rat.floor) fun _ _ => Rat.le_floor_iff.symm
 
 Depends on / 依赖: FloorRing, FloorRing.ofFloor, Rat.floor, Rat.le_floor_iff.symm, le_floor_iff, ofFloor
@@ -64,7 +64,7 @@ theorem floor_def'
 
 中文:
 定理 floor_def'
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: ⌊q⌋ = q.num / q.den
   证明: Rat.floor_def q
 -/
@@ -86,7 +86,7 @@ theorem ceil_def'
 
 中文:
 定理 ceil_def'
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ⌈q⌉ = -(-q.num / ↑q.den)
   证明: by
   change -⌊-q⌋ = _
@@ -120,7 +120,7 @@ theorem floor_intCast_div_natCast
 中文:
 定理 floor_intCast_div_natCast
   条件: (n : 整数) (d : 自然数)
-  结论: ⌊(↑n / ↑d : Rat)⌋ = n / (↑d : 整数)
+  结论: ⌊(↑n / ↑d : 有理数)⌋ = n / (↑d : 整数)
   证明: by
   rw [Rat.floor_def']
   obtain rfl | hd := eq_zero_or_pos (a := d)
@@ -161,7 +161,7 @@ theorem ceil_intCast_div_natCast
 中文:
 定理 ceil_intCast_div_natCast
   条件: (n : 整数) (d : 自然数)
-  结论: ⌈(↑n / ↑d : Rat)⌉ = -((-n) / (↑d : 整数))
+  结论: ⌈(↑n / ↑d : 有理数)⌉ = -((-n) / (↑d : 整数))
   证明: by
   conv_lhs => rw [← neg_neg ⌈_⌉, ← floor_neg]
   rw [← neg_div]; rw [← Int.cast_neg]; rw [floor_intCast_div_natCast]
@@ -189,7 +189,7 @@ theorem floor_natCast_div_natCast
 中文:
 定理 floor_natCast_div_natCast
   条件: (n d : 自然数)
-  结论: ⌊(↑n / ↑d : Rat)⌋ = n / d
+  结论: ⌊(↑n / ↑d : 有理数)⌋ = n / d
   证明: floor_intCast_div_natCast n d
 
 @[norm_cast]
@@ -214,7 +214,7 @@ theorem ceil_natCast_div_natCast
 中文:
 定理 ceil_natCast_div_natCast
   条件: (n d : 自然数)
-  结论: ⌈(↑n / ↑d : Rat)⌉ = -((-n) / d)
+  结论: ⌈(↑n / ↑d : 有理数)⌉ = -((-n) / d)
   证明: ceil_intCast_div_natCast n d
 
 @[norm_cast]
@@ -242,7 +242,7 @@ theorem natFloor_natCast_div_natCast
 中文:
 定理 natFloor_natCast_div_natCast
   条件: (n d : 自然数)
-  结论: ⌊(↑n / ↑d : Rat)⌋₊ = n / d
+  结论: ⌊(↑n / ↑d : 有理数)⌋₊ = n / d
   证明: by
   rw [← Int.ofNat_inj]; rw [Int.natCast_floor_eq_floor (by positivity)]
   push_cast
@@ -271,7 +271,7 @@ theorem floor_cast
 
 中文:
 定理 floor_cast
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: ⌊(x : α)⌋ = ⌊x⌋
   证明: floor_eq_iff.2 (mod_cast floor_eq_iff.1 (Eq.refl ⌊x⌋))
 
@@ -297,7 +297,7 @@ theorem ceil_cast
 
 中文:
 定理 ceil_cast
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: ⌈(x : α)⌉ = ⌈x⌉
   证明: by
   rw [← neg_inj]; rw [← floor_neg]; rw [← floor_neg]; rw [← Rat.cast_neg]; rw [Rat.floor_cast]
@@ -325,7 +325,7 @@ theorem round_cast
 
 中文:
 定理 round_cast
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: round (x : α) = round x
   证明: by
   have : ((x + 1 / 2 : Rat) : α) = x + 1 / 2 := by simp
@@ -354,7 +354,7 @@ theorem cast_fract
 
 中文:
 定理 cast_fract
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: (↑(fract x) : α) = fract (x : α)
   证明: by
   simp only [fract, cast_sub, cast_intCast, floor_cast]
@@ -378,7 +378,7 @@ theorem den_intFract
 
 中文:
 定理 den_intFract
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: (fract x).den = x.den
   证明: Rat.sub_intCast_den _ _
 
@@ -400,8 +400,8 @@ theorem isNat_intFloor
   proof: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_intFloor
-  结论: {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is自然数_intFloor
+  结论: {R} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
 theorem isNat_intFloor {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
@@ -417,8 +417,8 @@ theorem isInt_intFloor
   proof: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isInt_intFloor
-  结论: {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is整数_intFloor
+  结论: {R} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
 theorem isInt_intFloor {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
@@ -438,7 +438,7 @@ theorem isNat_intFloor_ofIsNNRat
   rw [← Int.ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [← floor_cast (α := α)]; rw [Rat.cast_div]; rw [cast_natCast]; rw [cast_natCast]
 
 中文:
-定理 isNat_intFloor_ofIsNNRat
+定理 is自然数_intFloor_ofIsNNRat
   条件: (r : α) (n : 自然数) (d : 自然数)
   证明: by
   rintro ⟨inv, rfl⟩
@@ -469,7 +469,7 @@ theorem isInt_intFloor_ofIsRat_neg
   rw [@negOfNat_eq (toNat _)]; rw [ofNat_eq_natCast]; rw [natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]; rw 
 
 中文:
-定理 isInt_intFloor_ofIsRat_neg
+定理 is整数_intFloor_ofIsRat_neg
   条件: (r : α) (n : 自然数) (d : 自然数)
   证明: by
   rintro ⟨inv, rfl⟩
@@ -529,8 +529,8 @@ theorem isNat_intCeil
   proof: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_intCeil
-  结论: {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is自然数_intCeil
+  结论: {R} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
 theorem isNat_intCeil {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
@@ -546,8 +546,8 @@ theorem isInt_intCeil
   proof: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isInt_intCeil
-  结论: {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is整数_intCeil
+  结论: {R} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
 theorem isInt_intCeil {R} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
@@ -567,7 +567,7 @@ theorem isNat_intCeil_ofIsNNRat
   rw [← ceil_intCast_div_natCast n d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]; rw [Int.cast_natCast]; rw [Int.natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg
 
 中文:
-定理 isNat_intCeil_ofIsNNRat
+定理 is自然数_intCeil_ofIsNNRat
   条件: (r : α) (n : 自然数) (d : 自然数)
   证明: by
   rintro ⟨inv, rfl⟩
@@ -597,7 +597,7 @@ theorem isInt_intCeil_ofIsRat_neg
   rw [@negOfNat_eq (n / d)]; rw [ofNat_eq_natCast]; rw [← ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [floor_natCast_div_natCast n d]; rw [← neg_neg (n : Int)]; rw [← ofNat_eq_natCast]; rw 
 
 中文:
-定理 isInt_intCeil_ofIsRat_neg
+定理 is整数_intCeil_ofIsRat_neg
   条件: (r : α) (n : 自然数) (d : 自然数)
   证明: by
   rintro ⟨inv, rfl⟩
@@ -657,9 +657,9 @@ theorem isNat_intFract_of_isNat
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_intFract_of_isNat
+定理 is自然数_intFract_of_is自然数
   条件: (r : R) (m : 自然数)
-  结论: Is自然数 r m -> Is自然数 (整数.fract r) 0
+  结论: 是自然数 r m -> 是自然数 (整数.fract r) 0
   证明: by
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
@@ -677,9 +677,9 @@ theorem isNat_intFract_of_isInt
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_intFract_of_isInt
+定理 is自然数_intFract_of_is整数
   条件: (r : R) (m : 整数)
-  结论: Is整数 r m -> Is自然数 (整数.fract r) 0
+  结论: 是整数 r m -> 是自然数 (整数.fract r) 0
   证明: by
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
@@ -726,7 +726,7 @@ theorem isRat_intFract_of_isRat_negOfNat
     negOfNat_eq, ofNat_eq_natCast]
 
 中文:
-定理 isRat_intFract_of_isRat_negOfNat
+定理 isRat_intFract_of_isRat_negOf自然数
   条件: (r : α) (n d : 自然数)
   证明: by
   rintro ⟨inv, rfl⟩
@@ -789,8 +789,8 @@ theorem isNat_round
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_round
-  结论: {R : 类型} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is自然数_round
+  结论: {R : 类型} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
@@ -808,8 +808,8 @@ theorem isInt_round
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isInt_round
-  结论: {R : 类型} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorRing R]
+定理 is整数_round
+  结论: {R : 类型} [环 R] [线性序 R] [是StrictOrdered环 R] [Floor环 R]
   证明: by
   rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
@@ -831,8 +831,8 @@ theorem IsRat.isInt_round
   norm_cast
 
 中文:
-定理 IsRat.isInt_round
-  结论: {R : 类型} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是有理数.is整数_round
+  结论: {R : 类型} [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rintro ⟨inv, rfl⟩
   subst res
@@ -902,9 +902,9 @@ theorem Int.mod_nat_eq_sub_mul_floor_rat_div
   rw [Int.emod_def]; rw [Rat.floor_intCast_div_natCast]
 
 中文:
-定理 Int.mod_nat_eq_sub_mul_floor_rat_div
+定理 整数.mod_nat_eq_sub_mul_floor_rat_div
   条件: {n : 整数} {d : 自然数}
-  结论: n % d = n - d * ⌊(n : Rat) / d⌋
+  结论: n % d = n - d * ⌊(n : 有理数) / d⌋
   证明: by
   rw [Int.emod_def]; rw [Rat.floor_intCast_div_natCast]
 
@@ -926,7 +926,7 @@ theorem Nat.coprime_sub_mul_floor_rat_div_of_coprime
   rwa [Nat.Coprime, Nat.gcd_rec] at this
 
 中文:
-定理 Nat.coprime_sub_mul_floor_rat_div_of_coprime
+定理 自然数.coprime_sub_mul_floor_rat_div_of_coprime
   条件: {n d : 自然数} (n_coprime_d : n.Coprime d)
   证明: by
   have : (n : Int) % d = n - d * ⌊(n : Rat) / d⌋ := Int.mod_nat_eq_sub_mul_floor_rat_div
@@ -962,7 +962,7 @@ have : (⌊q⌋ : Rat) = q - fract q := eq_sub_of_add_eq floor_add_fract q
 
 中文:
 定理 num_lt_succ_floor_mul_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: q.num < (⌊q⌋ + 1) * q.den
   证明: by
   suffices (q.num : Rat) < (⌊q⌋ + 1) * q.den from mod_cast this
@@ -1011,7 +1011,7 @@ theorem fract_inv_num_lt_num_of_pos
 
 中文:
 定理 fract_inv_num_lt_num_of_pos
-  条件: {q : Rat} (q_pos : 0 < q)
+  条件: {q : 有理数} (q_pos : 0 < q)
   结论: (fract q⁻¹).num < q.num
   证明: by
   -- we know that the numerator must be positive

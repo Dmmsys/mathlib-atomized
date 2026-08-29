@@ -78,7 +78,7 @@ theorem lex_fibration
 
 中文:
 定理 lex_fibration
-  条件: [对任意 (i) (s : Set ι), Decidable (i in s)]
+  条件: [对任意 (i) (s : 集合 ι), 可判定 (i in s)]
   证明: by
   rintro ⟨p, x₁, x₂⟩ x ⟨i, hr, hs⟩
   simp_rw [piecewise_apply] at hs hr
@@ -169,7 +169,7 @@ theorem Lex.acc_zero
 中文:
 定理 Lex.acc_zero
   条件: (hbot : 对任意 ⦃i a⦄, ¬s i a 0)
-  结论: Acc (DFinsupp.Lex r s) 0
+  结论: Acc (直和有限支撑.Lex r s) 0
   证明: Acc.intro 0 fun _ ⟨_, _, h⟩ => (hbot h).elim
 
 Depends on / 依赖: Acc.intro
@@ -246,7 +246,7 @@ theorem Lex.acc_single
 
 中文:
 定理 Lex.acc_single
-  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, WellFounded (s i))
+  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, 良基 (s i))
   证明: by
   induction hi with | _ i _ ih
   refine fun a => WellFounded.induction (hs i)
@@ -293,7 +293,7 @@ theorem Lex.acc
 
 中文:
 定理 Lex.acc
-  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, WellFounded (s i))
+  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, 良基 (s i))
   证明: Lex.acc_of_single hbot x fun i hi => Lex.acc_single hbot hs (h i hi) _
 
 Depends on / 依赖: Lex.acc_of_single, Lex.acc_single, acc_of_single, acc_single
@@ -313,7 +313,7 @@ theorem Lex.wellFounded
 
 中文:
 定理 Lex.wellFounded
-  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, WellFounded (s i))
+  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, 良基 (s i))
   证明: ⟨fun x => by classical exact Lex.acc hbot hs x fun i _ => hr.apply i⟩
 
 Depends on / 依赖: Lex.acc, classical, hr.apply
@@ -333,7 +333,7 @@ theorem Lex.wellFounded'
 
 中文:
 定理 Lex.wellFounded'
-  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, WellFounded (s i))
+  结论: (hbot : 对任意 ⦃i a⦄, ¬s i a 0) (hs : 对任意 i, 良基 (s i))
   证明: Lex.wellFounded hbot hs Subrelation.wf
     (fun {i j} h => Not.imp_symm (@Std.Trichotomous.trichotomous ι r _ i j h.left) h.right) hr
 
@@ -356,7 +356,7 @@ instance Lex.wellFoundedLT
 
 中文:
 实例 Lex.wellFoundedLT
-  签名: [LT ι] [@Std.Trichotomous ι (· < ·)] [hι : WellFoundedGT ι]
+  签名: [LT ι] [@Std.三歧 ι (· < ·)] [hι : WellFoundedGT ι]
   定义体: ⟨Lex.wellFounded' (fun _ _ => not_lt_zero) (fun i => (hα i).wf) hι.wf⟩
 
 Depends on / 依赖: Lex.wellFounded, not_lt_zero, wellFounded
@@ -378,7 +378,7 @@ instance Colex.wellFoundedLT
 
 中文:
 实例 Colex.wellFoundedLT
-  签名: [LT ι] [@Std.Trichotomous ι (· < ·)] [WellFoundedLT ι]
+  签名: [LT ι] [@Std.三歧 ι (· < ·)] [WellFoundedLT ι]
   定义体: Lex.wellFoundedLT (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.wellFoundedLT, wellFoundedLT
@@ -410,8 +410,8 @@ theorem Pi.Lex.wellFounded
   exacts [(hs i).not_lt_min ⊤ 
 
 中文:
-定理 Pi.Lex.wellFounded
-  条件: [IsStrictTotalOrder ι r] [Finite ι] (hs : 对任意 i, WellFounded (s i))
+定理 依赖函数类型.Lex.wellFounded
+  条件: [是StrictTotal序 ι r] [有限 ι] (hs : 对任意 i, 良基 (s i))
   证明: by
   obtain h | ⟨⟨x⟩⟩ := isEmpty_or_nonempty (forall i, α i)
   · convert! emptyWf.wf
@@ -440,8 +440,8 @@ instance Pi.Lex.wellFoundedLT
   body: ⟨Pi.Lex.wellFounded (· < ·) fun i => (hwf i).1⟩
 
 中文:
-实例 Pi.Lex.wellFoundedLT
-  签名: [LinearOrder ι] [Finite ι] [对任意 i, LT (α i)]
+实例 依赖函数类型.Lex.wellFoundedLT
+  签名: [线性序 ι] [有限 ι] [对任意 i, LT (α i)]
   定义体: ⟨Pi.Lex.wellFounded (· < ·) fun i => (hwf i).1⟩
 
 Depends on / 依赖: Pi.Lex.wellFounded, wellFounded
@@ -460,8 +460,8 @@ instance Pi.Colex.wellFoundedLT
   body: Pi.Lex.wellFoundedLT (ι := ιᵒᵈ)
 
 中文:
-实例 Pi.Colex.wellFoundedLT
-  签名: [LinearOrder ι] [Finite ι] [对任意 i, LT (α i)]
+实例 依赖函数类型.Colex.wellFoundedLT
+  签名: [线性序 ι] [有限 ι] [对任意 i, LT (α i)]
   定义体: Pi.Lex.wellFoundedLT (ι := ιᵒᵈ)
 
 Depends on / 依赖: Pi.Lex.wellFoundedLT, wellFoundedLT
@@ -479,8 +479,8 @@ instance Function.Lex.wellFoundedLT
   body: Pi.Lex.wellFoundedLT
 
 中文:
-实例 Function.Lex.wellFoundedLT
-  签名: {α} [LinearOrder ι] [Finite ι] [LT α] [WellFoundedLT α]
+实例 函数.Lex.wellFoundedLT
+  签名: {α} [线性序 ι] [有限 ι] [LT α] [WellFoundedLT α]
   定义体: Pi.Lex.wellFoundedLT
 
 Depends on / 依赖: Pi.Lex.wellFoundedLT, wellFoundedLT
@@ -499,8 +499,8 @@ theorem DFinsupp.Lex.wellFounded_of_finite
   InvImage.wf equivFunOnFintype (Pi.Lex.wellFounded r hs)
 
 中文:
-定理 DFinsupp.Lex.wellFounded_of_finite
-  结论: [IsStrictTotalOrder ι r] [Finite ι] [对任意 i, Zero (α i)]
+定理 直和有限支撑.Lex.wellFounded_of_finite
+  结论: [是StrictTotal序 ι r] [有限 ι] [对任意 i, 零 (α i)]
   证明: have := Fintype.ofFinite ι
   InvImage.wf equivFunOnFintype (Pi.Lex.wellFounded r hs)
 
@@ -520,8 +520,8 @@ instance DFinsupp.Lex.wellFoundedLT_of_finite
   body: ⟨DFinsupp.Lex.wellFounded_of_finite (· < ·) fun i => (hwf i).1⟩
 
 中文:
-实例 DFinsupp.Lex.wellFoundedLT_of_finite
-  签名: [LinearOrder ι] [Finite ι] [对任意 i, Zero (α i)]
+实例 直和有限支撑.Lex.wellFoundedLT_of_finite
+  签名: [线性序 ι] [有限 ι] [对任意 i, 零 (α i)]
   定义体: ⟨DFinsupp.Lex.wellFounded_of_finite (· < ·) fun i => (hwf i).1⟩
 
 Depends on / 依赖: DFinsupp, DFinsupp.Lex.wellFounded_of_finite, wellFounded_of_finite
@@ -540,8 +540,8 @@ instance DFinsupp.Colex.wellFoundedLT_of_finite
   body: DFinsupp.Lex.wellFoundedLT_of_finite (ι := ιᵒᵈ)
 
 中文:
-实例 DFinsupp.Colex.wellFoundedLT_of_finite
-  签名: [LinearOrder ι] [Finite ι] [对任意 i, Zero (α i)]
+实例 直和有限支撑.Colex.wellFoundedLT_of_finite
+  签名: [线性序 ι] [有限 ι] [对任意 i, 零 (α i)]
   定义体: DFinsupp.Lex.wellFoundedLT_of_finite (ι := ιᵒᵈ)
 
 Depends on / 依赖: DFinsupp, DFinsupp.Lex.wellFoundedLT_of_finite, wellFoundedLT_of_finite
@@ -564,8 +564,8 @@ theorem DFinsupp.wellFoundedLT
         (fun _ => (· < ·) : (i : ι) 
 
 中文:
-定理 DFinsupp.wellFoundedLT
-  结论: [对任意 i, Zero (α i)] [对任意 i, Preorder (α i)]
+定理 直和有限支撑.wellFoundedLT
+  结论: [对任意 i, 零 (α i)] [对任意 i, 预序 (α i)]
   证明: ⟨by
     set β := fun i => Antisymmetrization (α i) (· <= ·)
     set e : (i : ι) -> α i -> β i := fun i => toAntisymmetrization (· <= ·)
@@ -598,7 +598,7 @@ instance DFinsupp.wellFoundedLT'
   body: DFinsupp.wellFoundedLT fun _ _ => not_lt_zero
 
 中文:
-实例 DFinsupp.wellFoundedLT'
+实例 直和有限支撑.wellFoundedLT'
   定义体: DFinsupp.wellFoundedLT fun _ _ => not_lt_zero
 
 Depends on / 依赖: DFinsupp, DFinsupp.wellFoundedLT, not_lt_zero, wellFoundedLT
@@ -623,8 +623,8 @@ instance Pi.wellFoundedLT
     exact (hw i
 
 中文:
-实例 Pi.wellFoundedLT
-  签名: [Finite ι] [对任意 i, Preorder (α i)] [hw : 对任意 i, WellFoundedLT (α i)]
+实例 依赖函数类型.wellFoundedLT
+  签名: [有限 ι] [对任意 i, 预序 (α i)] [hw : 对任意 i, WellFoundedLT (α i)]
   定义体: ⟨by
     obtain h | ⟨⟨x⟩⟩ := isEmpty_or_nonempty (forall i, α i)
     · convert! emptyWf.wf
@@ -654,8 +654,8 @@ instance Function.wellFoundedLT
   body: Pi.wellFoundedLT
 
 中文:
-实例 Function.wellFoundedLT
-  签名: {α} [Finite ι] [Preorder α] [WellFoundedLT α]
+实例 函数.wellFoundedLT
+  签名: {α} [有限 ι] [预序 α] [WellFoundedLT α]
   定义体: Pi.wellFoundedLT
 
 Depends on / 依赖: Pi.wellFoundedLT, wellFoundedLT
@@ -674,8 +674,8 @@ instance DFinsupp.wellFoundedLT_of_finite
   ⟨InvImage.wf equivFunOnFintype Pi.wellFoundedLT.wf⟩
 
 中文:
-实例 DFinsupp.wellFoundedLT_of_finite
-  签名: [Finite ι] [对任意 i, Zero (α i)] [对任意 i, Preorder (α i)]
+实例 直和有限支撑.wellFoundedLT_of_finite
+  签名: [有限 ι] [对任意 i, 零 (α i)] [对任意 i, 预序 (α i)]
   定义体: have := Fintype.ofFinite ι
   ⟨InvImage.wf equivFunOnFintype Pi.wellFoundedLT.wf⟩
 

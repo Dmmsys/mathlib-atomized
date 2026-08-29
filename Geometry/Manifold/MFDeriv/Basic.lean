@@ -63,7 +63,7 @@ theorem uniqueMDiffWithinAt_univ
 
 中文:
 定理 uniqueMDiffWithinAt_univ
-  结论: UniqueMDiffAt[(univ : Set M)] x
+  结论: UniqueMDiffAt[(univ : 集合 M)] x
   证明: by
   unfold UniqueMDiffWithinAt
   simp only [preimage_univ, univ_inter]
@@ -88,7 +88,7 @@ theorem uniqueMDiffWithinAt_iff_inter_range
 
 中文:
 定理 uniqueMDiffWithinAt_iff_inter_range
-  条件: {s : Set M} {x : M}
+  条件: {s : 集合 M} {x : M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -114,7 +114,7 @@ hs.mono_nhds by simpa only [← map
 
 中文:
 定理 uniqueMDiffWithinAt_iff
-  条件: {s : Set M} {x : M}
+  条件: {s : 集合 M} {x : M}
   证明: by
   apply uniqueDiffWithinAt_congr
   rw [nhdsWithin_inter]; rw [nhdsWithin_inter]; rw [nhdsWithin_extChartAt_target_eq]
@@ -146,7 +146,7 @@ theorem UniqueMDiffWithinAt.mono_of_mem_nhdsWithin
 
 中文:
 定理 UniqueMDiffWithinAt.mono_of_mem_nhdsWithin
-  结论: {s t : Set M} {x : M}
+  结论: {s t : 集合 M} {x : M}
   证明: hs.mono_nhds (nhdsWithin_le_iff.2 ht)
 
 Depends on / 依赖: hs.mono_nhds, mono_nhds, nhdsWithin_le_iff
@@ -222,8 +222,8 @@ theorem IsOpen.uniqueMDiffWithinAt
   proof: (uniqueMDiffWithinAt_univ I).mono_of_mem_nhdsWithin nhdsWithin_le_nhds hs.mem_nhds xs
 
 中文:
-定理 IsOpen.uniqueMDiffWithinAt
-  条件: (hs : IsOpen s) (xs : x in s)
+定理 是开集.uniqueMDiffWithinAt
+  条件: (hs : 是开集 s) (xs : x in s)
   结论: UniqueMDiffAt[s] x
   证明: (uniqueMDiffWithinAt_univ I).mono_of_mem_nhdsWithin nhdsWithin_le_nhds hs.mem_nhds xs
 
@@ -243,7 +243,7 @@ theorem UniqueMDiffOn.inter
 
 中文:
 定理 UniqueMDiffOn.inter
-  条件: (hs : UniqueMDiff[s]) (ht : IsOpen t)
+  条件: (hs : UniqueMDiff[s]) (ht : 是开集 t)
   结论: UniqueMDiff[s inter t]
   证明: fun _x hx => UniqueMDiffWithinAt.inter (hs _ hx.1) (ht.mem_nhds hx.2)
 
@@ -262,8 +262,8 @@ theorem IsOpen.uniqueMDiffOn
   proof: fun _x hx => hs.uniqueMDiffWithinAt hx
 
 中文:
-定理 IsOpen.uniqueMDiffOn
-  条件: (hs : IsOpen s)
+定理 是开集.uniqueMDiffOn
+  条件: (hs : 是开集 s)
   结论: UniqueMDiff[s]
   证明: fun _x hx => hs.uniqueMDiffWithinAt hx
 
@@ -288,7 +288,7 @@ nonrec theorem UniqueMDiffWithinAt.prod {x : M} {y : M'} {s : Set M} {t : Set M'
 
 中文:
 定理 uniqueMDiffOn_univ
-  结论: UniqueMDiff[(univ : Set M)]
+  结论: UniqueMDiff[(univ : 集合 M)]
   证明: isOpen_univ.uniqueMDiffOn
 
 nonrec theorem UniqueMDiffWithinAt.prod {x : M} {y : M'} {s : Set M} {t : Set M'}
@@ -318,8 +318,8 @@ theorem UniqueMDiffOn.prod
   (hs x.1 h.1).prod (ht x.2 h.2)
 
 中文:
-定理 UniqueMDiffOn.prod
-  结论: {s : Set M} {t : Set M'} (hs : UniqueMDiff[s])
+定理 UniqueMDiffOn.乘积
+  结论: {s : 集合 M} {t : 集合 M'} (hs : UniqueMDiff[s])
   证明: fun x h =>
   (hs x.1 h.1).prod (ht x.2 h.2)
 -/
@@ -619,7 +619,7 @@ theorem mdifferentiableWithinAt_iff_target_inter
 
 中文:
 定理 mdifferentiableWithinAt_iff_target_inter
-  条件: {f : M -> M'} {s : Set M} {x : M}
+  条件: {f : M -> M'} {s : 集合 M} {x : M}
   证明: by
   rw [mdifferentiableWithinAt_iff']
   refine and_congr Iff.rfl (exists_congr fun f' => ?_)
@@ -959,7 +959,7 @@ theorem mdifferentiableWithinAt_iff_of_mem_source
 
 中文:
 定理 mdifferentiableWithinAt_iff_of_mem_source
-  结论: [IsManifold I 1 M] [IsManifold I' 1 M']
+  结论: [是流形 I 1 M] [是流形 I' 1 M']
   证明: mdifferentiableWithinAt_iff_of_mem_maximalAtlas (chart_mem_maximalAtlas x)
     (chart_mem_maximalAtlas y) hx hy
 
@@ -991,7 +991,7 @@ theorem mdifferentiableWithinAt_iff_of_mem_source'
 
 中文:
 定理 mdifferentiableWithinAt_iff_of_mem_source'
-  结论: [IsManifold I 1 M] [IsManifold I' 1 M']
+  结论: [是流形 I 1 M] [是流形 I' 1 M']
   证明: by
   refine (mdifferentiableWithinAt_iff_of_mem_source hx hy).trans ?_
   rw [← extChartAt_source I] at hx
@@ -1030,7 +1030,7 @@ theorem mdifferentiableAt_iff_of_mem_source
 
 中文:
 定理 mdifferentiableAt_iff_of_mem_source
-  结论: [IsManifold I 1 M] [IsManifold I' 1 M']
+  结论: [是流形 I 1 M] [是流形 I' 1 M']
   证明: (mdifferentiableWithinAt_iff_of_mem_source hx hy).trans by
     rw [continuousWithinAt_univ]; rw [preimage_univ]; rw [univ_inter]
 
@@ -1466,7 +1466,7 @@ theorem MDifferentiable.continuous
 中文:
 定理 MDifferentiable.continuous
   条件: (h : MDiff f)
-  结论: Continuous f
+  结论: 连续 f
   证明: continuous_iff_continuousAt.2 fun x => (h x).continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt
@@ -1636,7 +1636,7 @@ theorem mdifferentiable_of_subsingleton
 
 中文:
 定理 mdifferentiable_of_subsingleton
-  条件: [Subsingleton E]
+  条件: [子单例 E]
   结论: MDiff f
   证明: by
   intro x
@@ -1668,7 +1668,7 @@ theorem mdifferentiableWithinAt_of_subsingleton
 
 中文:
 定理 mdifferentiableWithinAt_of_subsingleton
-  条件: [Subsingleton E]
+  条件: [子单例 E]
   结论: MDiffAt[s] f x
   证明: (mdifferentiable_of_subsingleton x).mdifferentiableWithinAt
 
@@ -1692,7 +1692,7 @@ lemma mdifferentiableWithinAt_of_mfderivWithin_injective
 
 中文:
 引理 mdifferentiableWithinAt_of_mfderivWithin_injective
-  条件: (hf : Injective (mfderiv[s] f x))
+  条件: (hf : 单射 (mfderiv[s] f x))
   证明: by
   nontriviality E
   have : Nontrivial (TangentSpace% x) := inferInstanceAs (Nontrivial E)
@@ -1722,7 +1722,7 @@ lemma mdifferentiableAt_of_mfderiv_injective
 
 中文:
 引理 mdifferentiableAt_of_mfderiv_injective
-  条件: {f : M -> M'} (hf : Injective (mfderiv% f x))
+  条件: {f : M -> M'} (hf : 单射 (mfderiv% f x))
   证明: by
   simp only [← mdifferentiableWithinAt_univ, ← mfderivWithin_univ] at hf ⊢
   exact mdifferentiableWithinAt_of_mfderivWithin_injective hf
@@ -2064,7 +2064,7 @@ theorem mdifferentiableWithinAt_iff_exists_hasMFDerivWithinAt
   exact hf'.mdifferentiableWithinAt
 
 中文:
-定理 mdifferentiableWithinAt_iff_exists_hasMFDerivWithinAt
+定理 mdifferentiableWithinAt_iff_存在_hasMFDerivWithinAt
   证明: by
   refine ⟨fun h => ⟨mfderiv[s] f x, h.hasMFDerivWithinAt⟩, ?_⟩
   rintro ⟨f', hf'⟩
@@ -2088,7 +2088,7 @@ theorem MDifferentiableWithinAt.mono_of_mem_nhdsWithin
 
 中文:
 定理 MDifferentiableWithinAt.mono_of_mem_nhdsWithin
-  结论: (h : MDiffAt[s] f x) {t : Set M}
+  结论: (h : MDiffAt[s] f x) {t : 集合 M}
   证明: (h.hasMFDerivWithinAt.mono_of_mem_nhdsWithin hst).mdifferentiableWithinAt
 
 Depends on / 依赖: h.hasMFDerivWithinAt.mono_of_mem_nhdsWithin, hasMFDerivWithinAt, mdifferentiableWithinAt, mono_of_mem_nhdsWithin
@@ -2107,7 +2107,7 @@ theorem MDifferentiableWithinAt.congr_nhds
 
 中文:
 定理 MDifferentiableWithinAt.congr_nhds
-  结论: (h : MDiffAt[s] f x) {t : Set M}
+  结论: (h : MDiffAt[s] f x) {t : 集合 M}
   证明: h.mono_of_mem_nhdsWithin hst ▸ self_mem_nhdsWithin
 
 Depends on / 依赖: h.mono_of_mem_nhdsWithin, mono_of_mem_nhdsWithin, self_mem_nhdsWithin
@@ -2126,7 +2126,7 @@ theorem mdifferentiableWithinAt_congr_nhds
 
 中文:
 定理 mdifferentiableWithinAt_congr_nhds
-  条件: {t : Set M} (hst : 𝓝[s] x = 𝓝[t] x)
+  条件: {t : 集合 M} (hst : 𝓝[s] x = 𝓝[t] x)
   证明: ⟨fun h => h.congr_nhds hst, fun h => h.congr_nhds hst.symm⟩
 
 Depends on / 依赖: congr_nhds, h.congr_nhds, hst.symm
@@ -2375,7 +2375,7 @@ lemma mfderivWithin_of_isOpen
 
 中文:
 引理 mfderivWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   结论: mfderiv[s] f x = mfderiv% f x
   证明: mfderivWithin_of_mem_nhds (hs.mem_nhds hx)
 
@@ -2631,7 +2631,7 @@ lemma mdifferentiableOn_union_iff_of_isOpen
 
 中文:
 引理 mdifferentiableOn_union_iff_of_isOpen
-  条件: (hs : IsOpen s) (ht : IsOpen t)
+  条件: (hs : 是开集 s) (ht : 是开集 t)
   证明: ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right⟩,
     fun ⟨hfs, hft⟩ => MDifferentiableOn.union_of_isOpen hfs hft hs ht⟩
 
@@ -2700,7 +2700,7 @@ lemma mdifferentiableOn_iUnion_iff_of_isOpen
 
 中文:
 引理 mdifferentiableOn_iUnion_iff_of_isOpen
-  条件: {ι : 类型} {s : ι -> Set M} (hs : 对任意 i, IsOpen (s i))
+  条件: {ι : 类型} {s : ι -> 集合 M} (hs : 对任意 i, 是开集 (s i))
   证明: ⟨fun h i => h.mono subset_iUnion_of_subset i fun _ a => a,
    fun h => MDifferentiableOn.iUnion_of_isOpen h hs⟩
 
@@ -2723,7 +2723,7 @@ lemma mdifferentiable_of_mdifferentiableOn_iUnion_of_isOpen
 
 中文:
 引理 mdifferentiable_of_mdifferentiableOn_iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set M}
+  结论: {ι : 类型} {s : ι -> 集合 M}
   证明: by
   rw [← mdifferentiableOn_univ]; rw [← hs']
   exact MDifferentiableOn.iUnion_of_isOpen hf hs
@@ -2808,7 +2808,7 @@ theorem tangentMapWithin_univ
 
 中文:
 定理 tangentMapWithin_univ
-  结论: tangentMap[(univ : Set M)] f = tangentMap% f
+  结论: tangentMap[(univ : 集合 M)] f = tangentMap% f
   证明: by
   ext p : 1
   simp only [tangentMapWithin, tangentMap, mfld_simps]
@@ -2834,7 +2834,7 @@ theorem tangentMapWithin_eq_tangentMap
 
 中文:
 定理 tangentMapWithin_eq_tangentMap
-  结论: {p : TangentBundle I M} (hs : UniqueMDiffAt[s] p.1)
+  结论: {p : 切丛 I M} (hs : UniqueMDiffAt[s] p.1)
   证明: by
   rw [← mdifferentiableWithinAt_univ] at h
   rw [← tangentMapWithin_univ]
@@ -2864,7 +2864,7 @@ theorem tangentMapWithin_proj
 
 中文:
 定理 tangentMapWithin_proj
-  条件: {p : TangentBundle I M}
+  条件: {p : 切丛 I M}
   结论: (tangentMap[s] f p).proj = f p.proj
   证明: rfl
 
@@ -2910,7 +2910,7 @@ theorem tangentMap_proj
 
 中文:
 定理 tangentMap_proj
-  条件: {p : TangentBundle I M}
+  条件: {p : 切丛 I M}
   结论: (tangentMap% f p).proj = f p.proj
   证明: rfl
 
@@ -3367,7 +3367,7 @@ theorem Filter.EventuallyEq.mdifferentiablefWithinAt_iff
   proof: differentiableWithinAt_localInvariantProp.liftPropWithinAt_congr_iff_of_eventuallyEq h₁ hx
 
 中文:
-定理 Filter.EventuallyEq.mdifferentiablefWithinAt_iff
+定理 滤子.EventuallyEq.mdifferentiablefWithinAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: differentiableWithinAt_localInvariantProp.liftPropWithinAt_congr_iff_of_eventuallyEq h₁ hx
 
@@ -3439,7 +3439,7 @@ theorem Filter.EventuallyEq.mdifferentiableWithinAt_iff
   proof: mdifferentiablefWithinAt_iff h₁.symm hx.symm
 
 中文:
-定理 Filter.EventuallyEq.mdifferentiableWithinAt_iff
+定理 滤子.EventuallyEq.mdifferentiableWithinAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: mdifferentiablefWithinAt_iff h₁.symm hx.symm
 
@@ -3511,7 +3511,7 @@ theorem Filter.EventuallyEq.mdifferentiableAt_iff
   proof: differentiableWithinAt_localInvariantProp.liftPropAt_congr_iff_of_eventuallyEq h₁
 
 中文:
-定理 Filter.EventuallyEq.mdifferentiableAt_iff
+定理 滤子.EventuallyEq.mdifferentiableAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝 x] f)
   证明: differentiableWithinAt_localInvariantProp.liftPropAt_congr_iff_of_eventuallyEq h₁
 
@@ -3672,7 +3672,7 @@ theorem Filter.EventuallyEq.mfderivWithin_eq
     
 
 中文:
-定理 Filter.EventuallyEq.mfderivWithin_eq
+定理 滤子.EventuallyEq.mfderivWithin_eq
   条件: (hL : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: by
   by_cases h : MDiffAt[s] f x
@@ -3708,7 +3708,7 @@ theorem Filter.EventuallyEq.mfderivWithin_eq_of_mem
   proof: hL.mfderivWithin_eq (mem_of_mem_nhdsWithin hx hL :)
 
 中文:
-定理 Filter.EventuallyEq.mfderivWithin_eq_of_mem
+定理 滤子.EventuallyEq.mfderivWithin_eq_of_mem
   条件: (hL : f₁ =ᶠ[𝓝[s] x] f) (hx : x in s)
   证明: hL.mfderivWithin_eq (mem_of_mem_nhdsWithin hx hL :)
 
@@ -3768,7 +3768,7 @@ theorem tangentMapWithin_congr
 
 中文:
 定理 tangentMapWithin_congr
-  条件: (h : 对任意 x in s, f x = f₁ x) (p : TangentBundle I M) (hp : p.1 in s)
+  条件: (h : 对任意 x in s, f x = f₁ x) (p : 切丛 I M) (hp : p.1 in s)
   证明: by
   refine TotalSpace.ext (h p.1 hp) ?_
   rw [tangentMapWithin]; rw [h p.1 hp]; rw [tangentMapWithin]; rw [mfderivWithin_congr h (h _ hp)]
@@ -3794,7 +3794,7 @@ theorem Filter.EventuallyEq.mfderiv_eq
   exact hL.mfderivWithin_eq A
 
 中文:
-定理 Filter.EventuallyEq.mfderiv_eq
+定理 滤子.EventuallyEq.mfderiv_eq
   条件: (hL : f₁ =ᶠ[𝓝 x] f)
   结论: mfderiv% f₁ x = mfderiv% f x
   证明: by
@@ -4440,7 +4440,7 @@ theorem tangentMapWithin_comp_at
 
 中文:
 定理 tangentMapWithin_comp_at
-  结论: (p : TangentBundle I M) (hg : MDiffAt[u] g (f p.1))
+  结论: (p : 切丛 I M) (hg : MDiffAt[u] g (f p.1))
   证明: by
   simp only [tangentMapWithin, mfld_simps]
   rw [mfderivWithin_comp p.1 hg hf h hps]
@@ -4468,7 +4468,7 @@ theorem tangentMap_comp_at
 
 中文:
 定理 tangentMap_comp_at
-  条件: (p : TangentBundle I M) (hg : MDiffAt g (f p.1)) (hf : MDiffAt f p.1)
+  条件: (p : 切丛 I M) (hg : MDiffAt g (f p.1)) (hf : MDiffAt f p.1)
   证明: by
   simp only [tangentMap, mfld_simps]
   rw [mfderiv_comp p.1 hg hf]

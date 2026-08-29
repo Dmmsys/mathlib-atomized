@@ -83,8 +83,8 @@ lemma _root_.MonoidHom.exists_nhds_isBounded
       iUnion_ball_nat, preimage_univ, inter_univ]
 
 中文:
-引理 _root_.MonoidHom.exists_nhds_isBounded
-  条件: (f : G ->* H) (hf : Measurable f) (x : G)
+引理 _root_.幺半群态射.存在_nhds_isBounded
+  条件: (f : G ->* H) (hf : 可测 f) (x : G)
   证明: by
   let K : PositiveCompacts G := Classical.arbitrary _
   obtain ⟨n, hn⟩ : exists n : Nat, 0 < haar (interior K inter f ⁻¹' ball 1 n) := by
@@ -123,7 +123,7 @@ lemma AddMonoidHom.continuous_of_measurable
   proof: let ⟨_s, hs, hbdd⟩ := f.exists_nhds_isBounded hf 0; f.continuous_of_isBounded_nhds_zero hs hbdd
 
 中文:
-引理 AddMonoidHom.continuous_of_measurable
+引理 加法幺半群态射.continuous_of_measurable
   结论: {G H : 类型}
   证明: let ⟨_s, hs, hbdd⟩ := f.exists_nhds_isBounded hf 0; f.continuous_of_isBounded_nhds_zero hs hbdd
 
@@ -266,8 +266,8 @@ theorem setIntegral_comp_smul
   _ = |(R ^ finrank R
 
 中文:
-定理 setIntegral_comp_smul
-  条件: (f : E -> F) {R : 实数} (s : Set E) (hR : R != 0)
+定理 set整数egral_comp_smul
+  条件: (f : E -> F) {R : 实数} (s : 集合 E) (hR : R != 0)
   证明: by
   let e : E ≃ᵐ E := (Homeomorph.smul (Units.mk0 R hR)).toMeasurableEquiv
   calc
@@ -303,8 +303,8 @@ theorem setIntegral_comp_smul_of_pos
   rw [setIntegral_comp_smul μ f s hR.ne']; rw [abs_of_nonneg (inv_nonneg.2 (pow_nonneg hR.le _))]
 
 中文:
-定理 setIntegral_comp_smul_of_pos
-  条件: (f : E -> F) {R : 实数} (s : Set E) (hR : 0 < R)
+定理 set整数egral_comp_smul_of_pos
+  条件: (f : E -> F) {R : 实数} (s : 集合 E) (hR : 0 < R)
   证明: by
   rw [setIntegral_comp_smul μ f s hR.ne']; rw [abs_of_nonneg (inv_nonneg.2 (pow_nonneg hR.le _))]
 
@@ -438,7 +438,7 @@ theorem integrable_comp_smul_iff
 
 中文:
 定理 integrable_comp_smul_iff
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   -- reduce to one-way implication
   suffices
@@ -472,8 +472,8 @@ theorem Integrable.comp_smul
   proof: (integrable_comp_smul_iff μ f hR).2 hf
 
 中文:
-定理 Integrable.comp_smul
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+定理 可积.comp_smul
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: (integrable_comp_smul_iff μ f hR).2 hf
 
 Depends on / 依赖: integrable_comp_smul_iff
@@ -513,8 +513,8 @@ theorem Integrable.comp_mul_left'
   proof: (integrable_comp_mul_left_iff g hR).2 hg
 
 中文:
-定理 Integrable.comp_mul_left'
-  条件: {g : 实数 -> F} (hg : 整数egrable g) {R : 实数} (hR : R != 0)
+定理 可积.comp_mul_left'
+  条件: {g : 实数 -> F} (hg : 可积 g) {R : 实数} (hR : R != 0)
   证明: (integrable_comp_mul_left_iff g hR).2 hg
 
 Depends on / 依赖: integrable_comp_mul_left_iff
@@ -553,8 +553,8 @@ theorem Integrable.comp_mul_right'
   proof: (integrable_comp_mul_right_iff g hR).2 hg
 
 中文:
-定理 Integrable.comp_mul_right'
-  条件: {g : 实数 -> F} (hg : 整数egrable g) {R : 实数} (hR : R != 0)
+定理 可积.comp_mul_right'
+  条件: {g : 实数 -> F} (hg : 可积 g) {R : 实数} (hR : R != 0)
   证明: (integrable_comp_mul_right_iff g hR).2 hg
 
 Depends on / 依赖: integrable_comp_mul_right_iff
@@ -591,8 +591,8 @@ theorem Integrable.comp_div
   proof: (integrable_comp_div_iff g hR).2 hg
 
 中文:
-定理 Integrable.comp_div
-  条件: {g : 实数 -> F} (hg : 整数egrable g) {R : 实数} (hR : R != 0)
+定理 可积.comp_div
+  条件: {g : 实数 -> F} (hg : 可积 g) {R : 实数} (hR : R != 0)
   证明: (integrable_comp_div_iff g hR).2 hg
 
 Depends on / 依赖: integrable_comp_div_iff
@@ -624,7 +624,7 @@ theorem integrable_comp
 中文:
 定理 integrable_comp
   条件: (g : F' -> A)
-  结论: 整数egrable (g ∘ f) ↔ 整数egrable g
+  结论: 可积 (g ∘ f) ↔ 可积 g
   证明: f.measurePreserving.integrable_comp_emb f.toMeasurableEquiv.measurableEmbedding
 
 Depends on / 依赖: f.measurePreserving.integrable_comp_emb, f.toMeasurableEquiv.measurableEmbedding, integrable_comp_emb, measurableEmbedding, measurePreserving, toMeasurableEquiv
@@ -643,7 +643,7 @@ theorem integral_comp
 
 中文:
 定理 integral_comp
-  条件: [NormedSpace 实数 A] (g : F' -> A)
+  条件: [赋范空间 实数 A] (g : F' -> A)
   结论: ∫ (x : E'), g (f x) = ∫ (y : F'), g y
   证明: f.measurePreserving.integral_comp' (f := f.toMeasurableEquiv) g
 

@@ -38,7 +38,7 @@ theorem smul_Ioo
 
 中文:
 定理 smul_Ioo
-  结论: r • Ioo a b = Ioo (r * a) (r * b)
+  结论: r • 开区间 a b = 开区间 (r * a) (r * b)
   证明: (OrderIso.mulLeft₀ r hr).image_Ioo a b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioo
@@ -54,7 +54,7 @@ theorem smul_Icc
 
 中文:
 定理 smul_Icc
-  结论: r • Icc a b = Icc (r * a) (r * b)
+  结论: r • 闭区间 a b = 闭区间 (r * a) (r * b)
   证明: (OrderIso.mulLeft₀ r hr).image_Icc a b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Icc
@@ -70,7 +70,7 @@ theorem smul_Ico
 
 中文:
 定理 smul_Ico
-  结论: r • Ico a b = Ico (r * a) (r * b)
+  结论: r • 左闭右开区间 a b = 左闭右开区间 (r * a) (r * b)
   证明: (OrderIso.mulLeft₀ r hr).image_Ico a b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ico
@@ -86,7 +86,7 @@ theorem smul_Ioc
 
 中文:
 定理 smul_Ioc
-  结论: r • Ioc a b = Ioc (r * a) (r * b)
+  结论: r • 左开右闭区间 a b = 左开右闭区间 (r * a) (r * b)
   证明: (OrderIso.mulLeft₀ r hr).image_Ioc a b
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioc
@@ -102,7 +102,7 @@ theorem smul_Ioi
 
 中文:
 定理 smul_Ioi
-  结论: r • Ioi a = Ioi (r * a)
+  结论: r • 左开右无界区间 a = 左开右无界区间 (r * a)
   证明: (OrderIso.mulLeft₀ r hr).image_Ioi a
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioi
@@ -118,7 +118,7 @@ theorem smul_Iio
 
 中文:
 定理 smul_Iio
-  结论: r • Iio a = Iio (r * a)
+  结论: r • 左无界右开区间 a = 左无界右开区间 (r * a)
   证明: (OrderIso.mulLeft₀ r hr).image_Iio a
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iio
@@ -134,7 +134,7 @@ theorem smul_Ici
 
 中文:
 定理 smul_Ici
-  结论: r • Ici a = Ici (r * a)
+  结论: r • 左闭右无界区间 a = 左闭右无界区间 (r * a)
   证明: (OrderIso.mulLeft₀ r hr).image_Ici a
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ici
@@ -150,7 +150,7 @@ theorem smul_Iic
 
 中文:
 定理 smul_Iic
-  结论: r • Iic a = Iic (r * a)
+  结论: r • 左无界右闭区间 a = 左无界右闭区间 (r * a)
   证明: (OrderIso.mulLeft₀ r hr).image_Iic a
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iic

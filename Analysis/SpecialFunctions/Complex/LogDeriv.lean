@@ -36,7 +36,7 @@ theorem isOpenMap_exp
 
 中文:
 定理 isOpenMap_exp
-  结论: IsOpenMap exp
+  结论: 是开映射 exp
   证明: isOpenMap_of_hasStrictDerivAt hasStrictDerivAt_exp exp_ne_zero
 
 Depends on / 依赖: exp_ne_zero, hasStrictDerivAt_exp, isOpenMap_of_hasStrictDerivAt
@@ -57,7 +57,7 @@ expOpenPartialHomeomorph.hasStrictDerivAt_symm h h0 by
 
 中文:
 定理 hasStrictDerivAt_log
-  条件: {x : Complex} (h : x in slitPlane)
+  条件: {x : 复形} (h : x in slitPlane)
   结论: HasStrictDerivAt log x⁻¹ x
   证明: have h0 : x != 0 := slitPlane_ne_zero h
 expOpenPartialHomeomorph.hasStrictDerivAt_symm h h0 by
@@ -83,8 +83,8 @@ lemma hasDerivAt_log
 
 中文:
 引理 hasDerivAt_log
-  条件: {z : Complex} (hz : z in slitPlane)
-  结论: HasDerivAt log z⁻¹ z
+  条件: {z : 复形} (hz : z in slitPlane)
+  结论: 在点处可导 log z⁻¹ z
   证明: HasStrictDerivAt.hasDerivAt hasStrictDerivAt_log hz
 
 @[fun_prop]
@@ -108,8 +108,8 @@ lemma differentiableAt_log
 
 中文:
 引理 differentiableAt_log
-  条件: {z : Complex} (hz : z in slitPlane)
-  结论: DifferentiableAt Complex log z
+  条件: {z : 复形} (hz : z in slitPlane)
+  结论: DifferentiableAt 复形 log z
   证明: (hasDerivAt_log hz).differentiableAt
 
 @[fun_prop]
@@ -130,7 +130,7 @@ theorem hasStrictFDerivAt_log_real
 
 中文:
 定理 hasStrictFDerivAt_log_real
-  条件: {x : Complex} (h : x in slitPlane)
+  条件: {x : 复形} (h : x in slitPlane)
   证明: (hasStrictDerivAt_log h).complexToReal_fderiv
 
 Depends on / 依赖: complexToReal_fderiv, hasStrictDerivAt_log
@@ -151,8 +151,8 @@ theorem contDiffAt_log
 
 中文:
 定理 contDiffAt_log
-  条件: {x : Complex} (h : x in slitPlane) {n : WithTop 自然数∞}
-  结论: ContDiffAt Complex n log x
+  条件: {x : 复形} (h : x in slitPlane) {n : WithTop 自然数∞}
+  结论: ContDiffAt 复形 n log x
   证明: expOpenPartialHomeomorph.contDiffAt_symm_deriv (exp_ne_zero <| log x) h (hasDerivAt_exp _)
     contDiff_exp.contDiffAt
 
@@ -173,7 +173,7 @@ theorem deriv_log
 
 中文:
 定理 deriv_log
-  条件: {x : Complex} (h : x in slitPlane)
+  条件: {x : 复形} (h : x in slitPlane)
   结论: deriv log x = x⁻¹
   证明: (hasDerivAt_log h).deriv
 
@@ -202,7 +202,7 @@ theorem HasStrictFDerivAt.clog
 
 中文:
 定理 HasStrictFDerivAt.clog
-  结论: {f : E -> Complex} {f' : StrongDual Complex E} {x : E}
+  结论: {f : E -> 复形} {f' : StrongDual 复形 E} {x : E}
   证明: (hasStrictDerivAt_log h₂).comp_hasStrictFDerivAt x h₁
 
 Depends on / 依赖: comp_hasStrictFDerivAt, hasStrictDerivAt_log
@@ -223,7 +223,7 @@ theorem HasStrictDerivAt.clog
 
 中文:
 定理 HasStrictDerivAt.clog
-  结论: {f : Complex -> Complex} {f' x : Complex} (h₁ : HasStrictDerivAt f f' x)
+  结论: {f : 复形 -> 复形} {f' x : 复形} (h₁ : HasStrictDerivAt f f' x)
   证明: by
   rw [div_eq_inv_mul]; exact (hasStrictDerivAt_log h₂).comp x h₁
 
@@ -244,7 +244,7 @@ theorem HasStrictDerivAt.clog_real
 
 中文:
 定理 HasStrictDerivAt.clog_real
-  结论: {f : 实数 -> Complex} {x : 实数} {f' : Complex} (h₁ : HasStrictDerivAt f f' x)
+  结论: {f : 实数 -> 复形} {x : 实数} {f' : 复形} (h₁ : HasStrictDerivAt f f' x)
   证明: by
   simpa only [div_eq_inv_mul] using! (hasStrictFDerivAt_log_real h₂).comp_hasStrictDerivAt x h₁
 
@@ -263,8 +263,8 @@ theorem HasFDerivAt.clog
   proof: (hasStrictDerivAt_log h₂).hasDerivAt.comp_hasFDerivAt x h₁
 
 中文:
-定理 HasFDerivAt.clog
-  结论: {f : E -> Complex} {f' : StrongDual Complex E} {x : E} (h₁ : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.clog
+  结论: {f : E -> 复形} {f' : StrongDual 复形 E} {x : E} (h₁ : 在点处Fréchet可导 f f' x)
   证明: (hasStrictDerivAt_log h₂).hasDerivAt.comp_hasFDerivAt x h₁
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt, hasDerivAt.comp_hasFDerivAt, hasStrictDerivAt_log
@@ -283,8 +283,8 @@ theorem HasDerivAt.clog
   rw [div_eq_inv_mul]; exact (hasStrictDerivAt_log h₂).hasDerivAt.comp x h₁
 
 中文:
-定理 HasDerivAt.clog
-  结论: {f : Complex -> Complex} {f' x : Complex} (h₁ : HasDerivAt f f' x)
+定理 在点处可导.clog
+  结论: {f : 复形 -> 复形} {f' x : 复形} (h₁ : 在点处可导 f f' x)
   证明: by
   rw [div_eq_inv_mul]; exact (hasStrictDerivAt_log h₂).hasDerivAt.comp x h₁
 
@@ -305,8 +305,8 @@ theorem HasDerivAt.clog_real
     (hasStrictFDerivAt_log_real h₂).hasFDerivAt.comp_hasDerivAt x h₁
 
 中文:
-定理 HasDerivAt.clog_real
-  结论: {f : 实数 -> Complex} {x : 实数} {f' : Complex} (h₁ : HasDerivAt f f' x)
+定理 在点处可导.clog_real
+  结论: {f : 实数 -> 复形} {x : 实数} {f' : 复形} (h₁ : 在点处可导 f f' x)
   证明: by
   simpa only [div_eq_inv_mul] using!
     (hasStrictFDerivAt_log_real h₂).hasFDerivAt.comp_hasDerivAt x h₁
@@ -328,7 +328,7 @@ theorem DifferentiableAt.clog
 
 中文:
 定理 DifferentiableAt.clog
-  结论: {f : E -> Complex} {x : E} (h₁ : DifferentiableAt Complex f x)
+  结论: {f : E -> 复形} {x : E} (h₁ : DifferentiableAt 复形 f x)
   证明: (h₁.hasFDerivAt.clog h₂).differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt, hasFDerivAt.clog
@@ -347,7 +347,7 @@ theorem HasFDerivWithinAt.clog
 
 中文:
 定理 HasFDerivWithinAt.clog
-  结论: {f : E -> Complex} {f' : StrongDual Complex E} {s : Set E} {x : E}
+  结论: {f : E -> 复形} {f' : StrongDual 复形 E} {s : 集合 E} {x : E}
   证明: (hasStrictDerivAt_log h₂).hasDerivAt.comp_hasFDerivWithinAt x h₁
 
 Depends on / 依赖: comp_hasFDerivWithinAt, hasDerivAt, hasDerivAt.comp_hasFDerivWithinAt, hasStrictDerivAt_log
@@ -369,7 +369,7 @@ theorem HasDerivWithinAt.clog
 
 中文:
 定理 HasDerivWithinAt.clog
-  结论: {f : Complex -> Complex} {f' x : Complex} {s : Set Complex} (h₁ : HasDerivWithinAt f f' s x)
+  结论: {f : 复形 -> 复形} {f' x : 复形} {s : 集合 复形} (h₁ : HasDerivWithinAt f f' s x)
   证明: by
   rw [div_eq_inv_mul]
   exact (hasStrictDerivAt_log h₂).hasDerivAt.comp_hasDerivWithinAt x h₁
@@ -393,7 +393,7 @@ theorem HasDerivWithinAt.clog_real
 
 中文:
 定理 HasDerivWithinAt.clog_real
-  结论: {f : 实数 -> Complex} {s : Set 实数} {x : 实数} {f' : Complex}
+  结论: {f : 实数 -> 复形} {s : 集合 实数} {x : 实数} {f' : 复形}
   证明: by
   simpa only [div_eq_inv_mul] using!
     (hasStrictFDerivAt_log_real h₂).hasFDerivAt.comp_hasDerivWithinAt x h₁
@@ -416,7 +416,7 @@ theorem DifferentiableWithinAt.clog
 
 中文:
 定理 DifferentiableWithinAt.clog
-  结论: {f : E -> Complex} {s : Set E} {x : E}
+  结论: {f : E -> 复形} {s : 集合 E} {x : E}
   证明: (h₁.hasFDerivWithinAt.clog h₂).differentiableWithinAt
 
 Depends on / 依赖: differentiableWithinAt, hasFDerivWithinAt, hasFDerivWithinAt.clog
@@ -436,7 +436,7 @@ theorem DifferentiableOn.clog
 
 中文:
 定理 DifferentiableOn.clog
-  结论: {f : E -> Complex} {s : Set E} (h₁ : DifferentiableOn Complex f s)
+  结论: {f : E -> 复形} {s : 集合 E} (h₁ : DifferentiableOn 复形 f s)
   证明: fun x hx => (h₁ x hx).clog (h₂ x hx)
 -/
 theorem DifferentiableOn.clog {f : E -> Complex} {s : Set E} (h₁ : DifferentiableOn Complex f s)
@@ -453,8 +453,8 @@ theorem Differentiable.clog
   (h₁ x).clog (h₂ x)
 
 中文:
-定理 Differentiable.clog
-  结论: {f : E -> Complex} (h₁ : Differentiable Complex f)
+定理 可微.clog
+  结论: {f : E -> 复形} (h₁ : 可微 复形 f)
   证明: fun x =>
   (h₁ x).clog (h₂ x)
 -/
@@ -474,8 +474,8 @@ lemma Complex.deriv_log_comp_eq_logDeriv
   simp only [logDeriv, Pi.div_apply, ← A, Function.comp_def]
 
 中文:
-引理 Complex.deriv_log_comp_eq_logDeriv
-  结论: {f : Complex -> Complex} {x : Complex} (h₁ : DifferentiableAt Complex f x)
+引理 复形.deriv_log_comp_eq_logDeriv
+  结论: {f : 复形 -> 复形} {x : 复形} (h₁ : DifferentiableAt 复形 f x)
   证明: by
   have A := (HasDerivAt.clog h₁.hasDerivAt h₂).deriv
   rw [← h₁.hasDerivAt.deriv] at A

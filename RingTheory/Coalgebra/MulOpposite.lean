@@ -35,8 +35,8 @@ instance [CoalgebraStruct
   counit := counit ∘ₗ (opLinearEquiv R).symm.toLinearMap
 
 中文:
-实例 [CoalgebraStruct
-  签名: R A] : CoalgebraStruct R Aᵐᵒᵖ where
+实例 [余algebraStruct
+  签名: R A] : 余algebraStruct R Aᵐᵒᵖ where
   定义体: map (opLinearEquiv R).toLinearMap (opLinearEquiv R).toLinearMap ∘ₗ
     comul ∘ₗ (opLinearEquiv R).symm.toLinearMap
   counit := counit ∘ₗ (opLinearEquiv R).symm.toLinearMap
@@ -58,7 +58,7 @@ lemma comul_def
 
 中文:
 引理 comul_def
-  条件: [CoalgebraStruct R A]
+  条件: [余algebraStruct R A]
   证明: rfl
 
 Depends on / 依赖: opLinearEquiv, toLinearMap
@@ -77,7 +77,7 @@ lemma counit_def
 
 中文:
 引理 counit_def
-  条件: [CoalgebraStruct R A]
+  条件: [余algebraStruct R A]
   证明: rfl
 
 Depends on / 依赖: counit, opLinearEquiv, symm.toLinearMap, toLinearMap
@@ -99,8 +99,8 @@ instance [Coalgebra
   rTensor_counit_comp
 
 中文:
-实例 [Coalgebra
-  签名: R A] : Coalgebra R Aᵐᵒᵖ where
+实例 [余algebra
+  签名: R A] : 余algebra R Aᵐᵒᵖ where
   定义体: ext fun _ => by
     rw [comul_def]; rw [rTensor_comp]; rw [rTensor_comp]
     simp only [coe_comp, LinearEquiv.coe_coe, Function.comp_apply, lTensor_map, rTensor_def]

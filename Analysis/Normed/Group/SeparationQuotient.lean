@@ -60,7 +60,7 @@ definition normedMk
 
 中文:
 定义 normedMk
-  签名: : NormedAddGroupHom M (SeparationQuotient M) where
+  签名: : 赋范加群态射 M (SeparationQuotient M) where
   定义体: mkAddMonoidHom
   bound' := ⟨1, by simp⟩
 
@@ -99,7 +99,7 @@ lemma apply_eq_apply_of_inseparable
 
 中文:
 引理 apply_eq_apply_of_inseparable
-  结论: {F : 类型} [FunLike F M N] [AddMonoidHomClass F M N] (f : F)
+  结论: {F : 类型} [函数状 F M N] [加法幺半群态射类 F M N] (f : F)
   证明: fun x y h => eq_of_sub_eq_zero by
     rw [← map_sub]
     rw [Metric.inseparable_iff]; rw [dist_eq_norm] at h
@@ -131,7 +131,7 @@ definition liftNormedAddGroupHom
 
 中文:
 定义 liftNormedAddGroupHom
-  签名: (f : NormedAddGroupHom M N)
+  签名: (f : 赋范加群态射 M N)
   定义体: SeparationQuotient.liftContinuousAddMonoidHom f apply_eq_apply_of_inseparable f hf
   map_add' v₁ v₂ := map_add ..
   bound' := by
@@ -162,7 +162,7 @@ theorem norm_liftNormedAddGroupHom_apply_le
 
 中文:
 定理 norm_liftNormedAddGroupHom_apply_le
-  结论: (f : NormedAddGroupHom M N)
+  结论: (f : 赋范加群态射 M N)
   证明: by
   obtain ⟨x, rfl⟩ := surjective_mk x
   exact le_opNorm f x
@@ -196,7 +196,7 @@ definition liftNormedAddGroupHomEquiv
 
 中文:
 定义 liftNormedAddGroupHomEquiv
-  签名: {N : 类型} [SeminormedAddCommGroup N]
+  签名: {N : 类型} [SeminormedAddComm群 N]
   定义体: liftNormedAddGroupHom f f.prop
   invFun g := ⟨g.comp normedMk, by
     intro x hx
@@ -232,7 +232,7 @@ theorem norm_liftNormedAddGroupHom_le
 
 中文:
 定理 norm_liftNormedAddGroupHom_le
-  结论: {N : 类型} [SeminormedAddCommGroup N]
+  结论: {N : 类型} [SeminormedAddComm群 N]
   证明: NormedAddGroupHom.opNorm_le_bound _ (norm_nonneg f) (norm_liftNormedAddGroupHom_apply_le f hf)
 
 Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.opNorm_le_bound, norm_liftNormedAddGroupHom_apply_le, norm_nonneg, opNorm_le_bound
@@ -252,7 +252,7 @@ theorem liftNormedAddGroupHom_norm_le
 
 中文:
 定理 liftNormedAddGroupHom_norm_le
-  结论: {N : 类型} [SeminormedAddCommGroup N]
+  结论: {N : 类型} [SeminormedAddComm群 N]
   证明: (norm_liftNormedAddGroupHom_le f hf).trans fb
 
 Depends on / 依赖: norm_liftNormedAddGroupHom_le
@@ -275,7 +275,7 @@ theorem liftNormedAddGroupHom_normNoninc
 
 中文:
 定理 liftNormedAddGroupHom_normNoninc
-  结论: {N : 类型} [SeminormedAddCommGroup N]
+  结论: {N : 类型} [SeminormedAddComm群 N]
   证明: fun x => by
   have fb' : ‖f‖ <= 1 := NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.mp fb
   exact le_trans (norm_liftNormedAddGroupHom_apply_le f hf x)
@@ -305,7 +305,7 @@ theorem norm_normedMk_eq_one
 
 中文:
 定理 norm_normedMk_eq_one
-  条件: [NontrivialTopology M]
+  条件: [非平凡拓扑 M]
   证明: by
   apply NormedAddGroupHom.opNorm_eq_of_bounds _ zero_le_one
   · simpa only [normedMk_apply, one_mul] using! fun _ => le_rfl

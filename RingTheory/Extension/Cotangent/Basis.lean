@@ -55,11 +55,11 @@ structure Aux
 结构 Aux
   参数: where
   公理与运算 (5 个):
-    - f : P.toExtension.Cotangent -> P.toExtension.ker
-    - hf : 对任意 (b : P.toExtension.Cotangent), Extension.Cotangent.mk (f b) = b
-    - g : P.Ring
+    - f : P.toExtension.余切 -> P.toExtension.ker
+    - hf : 对任意 (b : P.toExtension.余切), 扩张.余切.mk (f b) = b
+    - g : P.环
     - hgmem : g - 1 in P.ker
-    - hg : g • P.ker <= Ideal.span (Set.range <| Subtype.val ∘ f ∘ b)
+    - hg : g • P.ker <= 理想.span (集合.range <| 子类型.val ∘ f ∘ b)
 -/
 structure Aux where
   /-- A section of the projection `I → I/I²`. -/
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra D.T S
+  签名: 代数 D.T S
   定义体: D.hom.toAlgebra
 
 Depends on / 依赖: D.hom.toAlgebra, toAlgebra
@@ -148,8 +148,8 @@ instance [Nontrivial
   body: RingHom.domain_nontrivial (algebraMap D.T S)
 
 中文:
-实例 [Nontrivial
-  签名: S] : Nontrivial D.T
+实例 [非平凡
+  签名: S] : 非平凡 D.T
   定义体: RingHom.domain_nontrivial (algebraMap D.T S)
 
 Depends on / 依赖: RingHom, RingHom.domain_nontrivial, algebraMap, domain_nontrivial, fields, include, instSomething
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower P.Ring D.T S
+  签名: 标量塔 P.环 D.T S
   定义体: by
   refine ⟨fun x y z => ?_⟩
   obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization.Away D.gbar S
+  签名: 是Localization.Away D.gbar S
   定义体: by
   refine .of_surjective_of_isScalarTower (n := 1) ?_ ?_ _ ?_ (by simpa using! D.hg)
   · refine .of_comp (g := algebraMap P.Ring D.T) ?_
@@ -262,7 +262,7 @@ definition presLeft
 
 中文:
 定义 presLeft
-  签名: : Presentation R D.T ι σ
+  签名: : 呈现 R D.T ι σ
   定义体: .naive (fun x => if x = 0 then 0 else if x = -1 then -1 else
       Function.surjInv Ideal.Quotient.mk_surjective x) fun x => by
     split_ifs
@@ -313,7 +313,7 @@ definition fhom
 
 中文:
 定义 fhom
-  签名: : D.presLeft.Hom P where
+  签名: : D.presLeft.态射 P where
   定义体: X i
   aeval_val i := by simp [RingHom.algebraMap_toAlgebra, presLeft, hom, T]
 
@@ -336,7 +336,7 @@ lemma toAlgHom_fhom
 
 中文:
 引理 toAlgHom_fhom
-  结论: D.fhom.toAlgHom = AlgHom.id R P.Ring
+  结论: D.fhom.toAlgHom = 代数态射.id R P.环
   证明: by
   ext : 1
   simp [fhom]
@@ -387,7 +387,7 @@ definition tensorCotangentHom
 
 中文:
 定义 tensorCotangentHom
-  签名: : S otimes[D.T] D.presLeft.toExtension.Cotangent ->ₗ[S] P.toExtension.Cotangent
+  签名: : S otimes[D.T] D.presLeft.toExtension.余切 ->ₗ[S] P.toExtension.余切
   定义体: LinearMap.liftBaseChange _ (Extension.Cotangent.map D.fhom.toExtensionHom)
 
 Depends on / 依赖: Cotangent, D.fhom.toExtensionHom, Extension, Extension.Cotangent.map, LinearMap, LinearMap.liftBaseChange, liftBaseChange, toExtensionHom
@@ -440,7 +440,7 @@ definition tensorCotangentInv
 
 中文:
 定义 tensorCotangentInv
-  签名: : P.toExtension.Cotangent ->ₗ[S] S otimes[D.T] D.presLeft.toExtension.Cotangent
+  签名: : P.toExtension.余切 ->ₗ[S] S otimes[D.T] D.presLeft.toExtension.余切
   定义体: b.constr S fun i : σ => 1 otimesₜ Extension.Cotangent.mk (D.kerGen i)
 
 @[simp]
@@ -485,7 +485,7 @@ lemma span_range_mk_kerGen
 
 中文:
 引理 span_range_mk_kerGen
-  结论: Submodule.span D.T
+  结论: 子模.span D.T
   证明: by
   refine Extension.Cotangent.span_eq_top_of_span_eq_ker _ ?_
   dsimp only [presLeft, Presentation.naive_toGenerators]
@@ -569,7 +569,7 @@ definition presRight
 
 中文:
 定义 presRight
-  签名: : Presentation D.T S Unit Unit
+  签名: : 呈现 D.T S 单元 单元
   定义体: Presentation.localizationAway S D.gbar
 
 Depends on / 依赖: D.gbar, Presentation, Presentation.localizationAway, localizationAway
@@ -588,7 +588,7 @@ definition pres
 
 中文:
 定义 pres
-  签名: : Presentation R S (Unit oplus ι) (Unit oplus σ)
+  签名: : 呈现 R S (单元 oplus ι) (单元 oplus σ)
   定义体: D.presRight.comp D.presLeft
 
 Depends on / 依赖: D.presLeft, D.presRight.comp, presLeft, presRight
@@ -613,7 +613,7 @@ lemma map_ofComp_mk
 
 中文:
 引理 map_ofComp_mk
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   证明: by
   simp_rw [Extension.Cotangent.map_mk, Generators.Hom.toExtensionHom_toAlgHom_apply]
   congr 2
@@ -651,7 +651,7 @@ definition cotangentEquivProd
 
 中文:
 定义 cotangentEquivProd
-  签名: [Nontrivial S]
+  签名: [非平凡 S]
   定义体: (D.presLeft.cotangentCompLocalizationAwayEquiv (T := S) D.gbar D.map_ofComp_mk) ≪≫ₗ
     LinearEquiv.prodComm _ _ _
 
@@ -673,7 +673,7 @@ lemma cotangentEquivProd_symm_apply
 
 中文:
 引理 cotangentEquivProd_symm_apply
-  结论: [Nontrivial S] (x : D.presRight.toExtension.Cotangent)
+  结论: [非平凡 S] (x : D.presRight.toExtension.余切)
   证明: rfl
 
 Depends on / 依赖: D.gbar, D.map_ofComp_mk, map_ofComp_mk
@@ -695,7 +695,7 @@ definition basisLeft
 
 中文:
 定义 basisLeft
-  签名: : Module.Basis σ S (S otimes[D.T] D.presLeft.toExtension.Cotangent)
+  签名: : 模.基 σ S (S otimes[D.T] D.presLeft.toExtension.余切)
   定义体: b.map D.tensorCotangentEquiv.symm
 
 Depends on / 依赖: D.tensorCotangentEquiv.symm, b.map, tensorCotangentEquiv
@@ -714,7 +714,7 @@ definition basisRight
 
 中文:
 定义 basisRight
-  签名: : Module.Basis Unit S D.presRight.toExtension.Cotangent
+  签名: : 模.基 单元 S D.presRight.toExtension.余切
   定义体: Generators.basisCotangentAway S D.gbar
 
 Depends on / 依赖: D.gbar, Generators, Generators.basisCotangentAway, basisCotangentAway
@@ -733,7 +733,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: [Nontrivial S]
+  签名: [非平凡 S]
   定义体: (Module.Basis.prod D.basisRight D.basisLeft).map D.cotangentEquivProd.symm
 
 Depends on / 依赖: D.basisLeft, D.basisRight, D.cotangentEquivProd.symm, Module, Module.Basis.prod, basisLeft, basisRight, cotangentEquivProd
@@ -753,7 +753,7 @@ lemma basis_inl
 
 中文:
 引理 basis_inl
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   证明: by
   simpa [basis] using! Generators.basisCotangentAway_apply _ _
 
@@ -776,7 +776,7 @@ lemma basis_inr
 
 中文:
 引理 basis_inr
-  条件: [Nontrivial S] (i : σ)
+  条件: [非平凡 S] (i : σ)
   证明: by
   simp [basis]
 -/
@@ -794,7 +794,7 @@ lemma pres_val_comp_inr
 
 中文:
 引理 pres_val_comp_inr
-  结论: D.pres.val ∘ Sum.inr = P.val
+  结论: D.pres.val ∘ 和.inr = P.val
   证明: funext (aeval_X _)
 
 Depends on / 依赖: aeval_X
@@ -817,7 +817,7 @@ lemma basis_apply
 
 中文:
 引理 basis_apply
-  条件: [Nontrivial S] (r : Unit oplus σ)
+  条件: [非平凡 S] (r : 单元 oplus σ)
   证明: by
   obtain (r | r) := r
   · rw [basis_inl, cotangentEquivProd_symm_apply]

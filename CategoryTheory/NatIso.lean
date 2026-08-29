@@ -461,7 +461,7 @@ theorem naturality_1'
 
 中文:
 定理 naturality_1'
-  条件: (α : F ⟶ G) (f : X ⟶ Y) {_ : IsIso (α.app X)}
+  条件: (α : F ⟶ G) (f : X ⟶ Y) {_ : 是同构 (α.app X)}
   证明: by simp
 
 @[to_dual none, reassoc (attr := simp)]
@@ -480,7 +480,7 @@ theorem naturality_2'
 
 中文:
 定理 naturality_2'
-  条件: (α : F ⟶ G) (f : X ⟶ Y) {_ : IsIso (α.app Y)}
+  条件: (α : F ⟶ G) (f : X ⟶ Y) {_ : 是同构 (α.app Y)}
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -502,7 +502,7 @@ instance isIso_app_of_isIso
 
 中文:
 实例 isIso_app_of_isIso
-  签名: (α : F ⟶ G) [IsIso α] (X)
+  签名: (α : F ⟶ G) [是同构 α] (X)
   定义体: ⟨⟨(inv α).app X, ⟨by grind, by grind⟩⟩⟩
 
 @[simp, push ←, to_dual self]
@@ -524,7 +524,7 @@ theorem isIso_inv_app
 
 中文:
 定理 isIso_inv_app
-  条件: (α : F ⟶ G) [IsIso α] (X)
+  条件: (α : F ⟶ G) [是同构 α] (X)
   结论: (inv α).app X = inv (α.app X)
   证明: by cat_disch
 
@@ -633,8 +633,8 @@ theorem isIso_of_isIso_app
 
 中文:
 定理 isIso_of_isIso_app
-  条件: (α : F ⟶ G) [对任意 X : C, IsIso (α.app X)]
-  结论: IsIso α
+  条件: (α : F ⟶ G) [对任意 X : C, 是同构 (α.app X)]
+  结论: 是同构 α
   证明: (ofComponents (fun X => asIso (α.app X)) (by simp)).isIso_hom
 
 Depends on / 依赖: isIso_hom, ofComponents
@@ -711,7 +711,7 @@ lemma NatTrans.isIso_iff_isIso_app
   proof: ⟨fun _ => inferInstance, fun _ => NatIso.isIso_of_isIso_app _⟩
 
 中文:
-引理 NatTrans.isIso_iff_isIso_app
+引理 自然变换.isIso_iff_isIso_app
   条件: {F G : C ⥤ D} (τ : F ⟶ G)
   证明: ⟨fun _ => inferInstance, fun _ => NatIso.isIso_of_isIso_app _⟩
 
@@ -783,7 +783,7 @@ lemma NatTrans.naturality_1
 @[to_dual none, reassoc]
 
 中文:
-引理 NatTrans.naturality_1
+引理 自然变换.naturality_1
   条件: {F G : C ⥤ D} (α : F ⟶ G) {X Y : C} (e : X ≅ Y)
   证明: by
   simp
@@ -805,7 +805,7 @@ lemma NatTrans.naturality_2
   simp
 
 中文:
-引理 NatTrans.naturality_2
+引理 自然变换.naturality_2
   条件: {F G : C ⥤ D} (α : F ⟶ G) {X Y : C} (e : X ≅ Y)
   证明: by
   simp

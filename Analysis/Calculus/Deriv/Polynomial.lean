@@ -111,7 +111,7 @@ theorem hasDerivAt
 中文:
 定理 hasDerivAt
   条件: (x : 𝕜)
-  结论: HasDerivAt (fun x => p.eval x) (p.derivative.eval x) x
+  结论: 在点处可导 (fun x => p.eval x) (p.derivative.eval x) x
   证明: (p.hasStrictDerivAt x).hasDerivAt
 -/
 protected theorem hasDerivAt (x : 𝕜) : HasDerivAt (fun x => p.eval x) (p.derivative.eval x) x :=
@@ -144,7 +144,7 @@ theorem hasDerivWithinAt
 
 中文:
 定理 hasDerivWithinAt
-  条件: (x : 𝕜) (s : Set 𝕜)
+  条件: (x : 𝕜) (s : 集合 𝕜)
   证明: (p.hasDerivAt x).hasDerivWithinAt
 -/
 protected theorem hasDerivWithinAt (x : 𝕜) (s : Set 𝕜) :
@@ -161,7 +161,7 @@ theorem hasDerivWithinAt_aeval
 
 中文:
 定理 hasDerivWithinAt_aeval
-  条件: (x : 𝕜) (s : Set 𝕜)
+  条件: (x : 𝕜) (s : 集合 𝕜)
   证明: (q.hasDerivAt_aeval x).hasDerivWithinAt
 -/
 protected theorem hasDerivWithinAt_aeval (x : 𝕜) (s : Set 𝕜) :
@@ -246,7 +246,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 fun x => p.eval x
+  结论: 可微 𝕜 fun x => p.eval x
   证明: fun _ => p.differentiableAt
 -/
 protected theorem differentiable : Differentiable 𝕜 fun x => p.eval x := fun _ => p.differentiableAt
@@ -262,7 +262,7 @@ theorem differentiable_aeval
 
 中文:
 定理 differentiable_aeval
-  结论: Differentiable 𝕜 fun x : 𝕜 => aeval x q
+  结论: 可微 𝕜 fun x : 𝕜 => aeval x q
   证明: fun _ =>
   q.differentiableAt_aeval
 -/

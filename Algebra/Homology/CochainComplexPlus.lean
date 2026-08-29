@@ -36,7 +36,7 @@ definition plus
 
 中文:
 定义 plus
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: fun K => exists (n : Int), K.IsStrictlyGE n
 -/
 protected def plus [HasZeroMorphisms C] : ObjectProperty (CochainComplex C Int) :=
@@ -52,7 +52,7 @@ lemma plus_iff
 
 中文:
 引理 plus_iff
-  条件: [HasZeroMorphisms C] (K : CochainComplex C 整数)
+  条件: [有ZeroMorphisms C] (K : 上链复形 C 整数)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -71,8 +71,8 @@ instance [HasZeroMorphisms
     exact ⟨n, isStrictlyGE_of_iso e n⟩
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : (CochainComplex.plus C).IsClosedUnderIsomorphisms where
+实例 [有ZeroMorphisms
+  签名: C] : (上链复形.plus C).在同构下封闭 where
   定义体: by
     rintro _ _ e ⟨n, _⟩
     exact ⟨n, isStrictlyGE_of_iso e n⟩
@@ -94,7 +94,7 @@ abbreviation Plus
 
 中文:
 缩写 Plus
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: (CochainComplex.plus C).FullSubcategory
 
 Depends on / 依赖: CochainComplex, CochainComplex.plus, FullSubcategory
@@ -118,7 +118,7 @@ abbreviation ι
 
 中文:
 缩写 ι
-  签名: : Plus C ⥤ CochainComplex C 整数
+  签名: : Plus C ⥤ 上链复形 C 整数
   定义体: ObjectProperty.ι _
 
 Depends on / 依赖: ObjectProperty
@@ -135,7 +135,7 @@ definition fullyFaithfulι
 
 中文:
 定义 fullyFaithfulι
-  签名: : (ι C).FullyFaithful
+  签名: : (ι C).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
@@ -182,8 +182,8 @@ instance [HasFiniteLimits
   body: by infer_instance
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] : HasFiniteLimits (Plus C) where
+实例 [有有限极限
+  签名: C] : 有有限极限 (Plus C) where
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -200,8 +200,8 @@ instance [HasFiniteColimits
   body: by infer_instance
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] : HasFiniteColimits (Plus C) where
+实例 [有有限余极限
+  签名: C] : 有有限余极限 (Plus C) where
   定义体: by infer_instance
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.subcategoryAcyclic, Shift.linear_of_localization, infer_instance, linear_of_localization, subcategoryAcyclic
@@ -221,7 +221,7 @@ lemma mono_iff
 
 中文:
 引理 mono_iff
-  条件: [HasLimitsOfShape WalkingCospan C] {X Y : Plus C} (f : X ⟶ Y)
+  条件: [有形状极限 WalkingCospan C] {X Y : Plus C} (f : X ⟶ Y)
   证明: ⟨fun _ => inferInstanceAs (Mono ((ι C).map f)),
     fun _ => Functor.mono_of_mono_map (ι C) (by assumption)⟩
 
@@ -242,7 +242,7 @@ instance [HasLimitsOfShape
   rwa [← mono_iff]
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: WalkingCospan C] {X Y
   定义体: by
   rwa [← mono_iff]
@@ -263,7 +263,7 @@ definition quasiIso
 
 中文:
 定义 quasiIso
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: (HomologicalComplex.quasiIso C (ComplexShape.up Int)).inverseImage (ι C)
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.quasiIso, inverseImage, quasiIso
@@ -282,8 +282,8 @@ instance [CategoryWithHomology
   infer_instance
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (quasiIso C).HasTwoOutOfThree命题erty
+实例 [带同调范畴
+  签名: C] : (quasiIso C).有TwoOutOfThreeProperty
   定义体: by
   dsimp [quasiIso]
   infer_instance
@@ -305,8 +305,8 @@ instance [CategoryWithHomology
   infer_instance
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : (quasiIso C).IsStableUnderRetracts
+实例 [带同调范畴
+  签名: C] : (quasiIso C).是StableUnderRetracts
   定义体: by
   dsimp [quasiIso]
   infer_instance
@@ -328,8 +328,8 @@ instance [Preadditive
   body: ⟨fun K ⟨k, hk⟩ => ⟨k - n, K.isStrictlyGE_shift k n _ (by lia)⟩⟩
 
 中文:
-实例 [Preadditive
-  签名: C] : (CochainComplex.plus C).IsStableUnderShift 整数 where
+实例 [预加性
+  签名: C] : (上链复形.plus C).是StableUnderShift 整数 where
   定义体: ⟨fun K ⟨k, hk⟩ => ⟨k - n, K.isStrictlyGE_shift k n _ (by lia)⟩⟩
 
 Depends on / 依赖: K.isStrictlyGE_shift, isStrictlyGE_shift
@@ -370,7 +370,7 @@ definition mapCochainComplexPlus
 
 中文:
 定义 mapCochainComplexPlus
-  签名: : CochainComplex.Plus C ⥤ CochainComplex.Plus D
+  签名: : 上链复形.Plus C ⥤ 上链复形.Plus D
   定义体: ObjectProperty.lift _ (CochainComplex.Plus.ι C ⋙ F.mapHomologicalComplex _) (fun K => by
     obtain ⟨i, hi⟩ := K.2
     refine ⟨i, ?_⟩

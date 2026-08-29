@@ -35,7 +35,7 @@ definition FormallyUnramified
   Algebra.FormallyUnramified R S
 
 中文:
-定义 FormallyUnramified
+定义 形式非分歧
   签名: (f : R ->+* S)
   定义体: letI := f.toAlgebra
   Algebra.FormallyUnramified R S
@@ -57,7 +57,7 @@ lemma formallyUnramified_algebraMap
 
 中文:
 引理 formallyUnramified_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [FormallyUnramified]; rw [toAlgebra_algebraMap]
 
@@ -82,8 +82,8 @@ lemma of_surjective
 
 中文:
 引理 of_surjective
-  条件: {f : R ->+* S} (hf : Function.Surjective f)
-  结论: f.FormallyUnramified
+  条件: {f : R ->+* S} (hf : 函数.满射 f)
+  结论: f.形式非分歧
   证明: by
   algebraize [f]
   exact Algebra.FormallyUnramified.of_surjective (Algebra.ofId R S) hf
@@ -106,7 +106,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: {T : 类型} [CommRing T] {f : R ->+* S} {g : S ->+* T}
+  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T}
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallyUnramified.of_restrictScalars R _ _
@@ -131,7 +131,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: {T : 类型} [CommRing T] {f : R ->+* S} {g : S ->+* T} (hf : f.FormallyUnramified)
+  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T} (hf : f.形式非分歧)
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallyUnramified.comp R S T
@@ -154,7 +154,7 @@ lemma stableUnderComposition
 
 中文:
 引理 stableUnderComposition
-  结论: StableUnderComposition FormallyUnramified
+  结论: StableUnderComposition 形式非分歧
   证明: fun _ _ _ _ _ _ _ _ hf hg => .comp hf hg
 -/
 lemma stableUnderComposition : StableUnderComposition FormallyUnramified :=
@@ -390,8 +390,8 @@ lemma FormallyEtale.of_comp
   exact Algebra.FormallyEtale.of_restrictScalars (R := R)
 
 中文:
-引理 FormallyEtale.of_comp
-  结论: {T : 类型} [CommRing T] {f : R ->+* S} {g : S ->+* T}
+引理 形式平展.of_comp
+  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T}
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallyEtale.of_restrictScalars (R := R)

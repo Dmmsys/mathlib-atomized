@@ -51,7 +51,7 @@ lemma tilted_mul_apply_mgf'
 
 中文:
 引理 tilted_mul_apply_mgf'
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rw [tilted_apply' _ _ hs]; rw [mgf]
 
@@ -72,7 +72,7 @@ lemma tilted_mul_apply_mgf
 
 中文:
 引理 tilted_mul_apply_mgf
-  条件: [SFinite μ] (s : Set Ω)
+  条件: [SFinite μ] (s : 集合 Ω)
   证明: by
   rw [tilted_apply]; rw [mgf]
 
@@ -95,7 +95,7 @@ lemma tilted_mul_apply_cgf'
 
 中文:
 引理 tilted_mul_apply_cgf'
-  结论: {s : Set Ω} (hs : MeasurableSet s)
+  结论: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -123,7 +123,7 @@ lemma tilted_mul_apply_cgf
 
 中文:
 引理 tilted_mul_apply_cgf
-  条件: [SFinite μ] (s : Set Ω) (ht : 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: [SFinite μ] (s : 集合 Ω) (ht : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -147,8 +147,8 @@ lemma tilted_mul_apply_eq_ofReal_integral_mgf'
   rw [tilted_apply_eq_ofReal_integral' _ hs]; rw [mgf]
 
 中文:
-引理 tilted_mul_apply_eq_ofReal_integral_mgf'
-  条件: {s : Set Ω} (hs : MeasurableSet s)
+引理 tilted_mul_apply_eq_of实数_integral_mgf'
+  条件: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rw [tilted_apply_eq_ofReal_integral' _ hs]; rw [mgf]
 
@@ -168,8 +168,8 @@ lemma tilted_mul_apply_eq_ofReal_integral_mgf
   rw [tilted_apply_eq_ofReal_integral _ s]; rw [mgf]
 
 中文:
-引理 tilted_mul_apply_eq_ofReal_integral_mgf
-  条件: [SFinite μ] (s : Set Ω)
+引理 tilted_mul_apply_eq_of实数_integral_mgf
+  条件: [SFinite μ] (s : 集合 Ω)
   证明: by
   rw [tilted_apply_eq_ofReal_integral _ s]; rw [mgf]
 
@@ -192,8 +192,8 @@ lemma tilted_mul_apply_eq_ofReal_integral_cgf'
     rwa [exp_cgf]
 
 中文:
-引理 tilted_mul_apply_eq_ofReal_integral_cgf'
-  结论: {s : Set Ω} (hs : MeasurableSet s)
+引理 tilted_mul_apply_eq_of实数_integral_cgf'
+  结论: {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -223,8 +223,8 @@ lemma tilted_mul_apply_eq_ofReal_integral_cgf
     rwa [exp_cgf]
 
 中文:
-引理 tilted_mul_apply_eq_ofReal_integral_cgf
-  结论: [SFinite μ] (s : Set Ω)
+引理 tilted_mul_apply_eq_of实数_integral_cgf
+  结论: [SFinite μ] (s : 集合 Ω)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -259,8 +259,8 @@ lemma setIntegral_tilted_mul_eq_mgf'
   rw [setIntegral_tilted' _ _ hs]; rw [mgf]
 
 中文:
-引理 setIntegral_tilted_mul_eq_mgf'
-  条件: (g : Ω -> E) {s : Set Ω} (hs : MeasurableSet s)
+引理 set整数egral_tilted_mul_eq_mgf'
+  条件: (g : Ω -> E) {s : 集合 Ω} (hs : 可测集 s)
   证明: by
   rw [setIntegral_tilted' _ _ hs]; rw [mgf]
 
@@ -280,8 +280,8 @@ lemma setIntegral_tilted_mul_eq_mgf
   rw [setIntegral_tilted]; rw [mgf]
 
 中文:
-引理 setIntegral_tilted_mul_eq_mgf
-  条件: [SFinite μ] (g : Ω -> E) (s : Set Ω)
+引理 set整数egral_tilted_mul_eq_mgf
+  条件: [SFinite μ] (g : Ω -> E) (s : 集合 Ω)
   证明: by
   rw [setIntegral_tilted]; rw [mgf]
 
@@ -303,8 +303,8 @@ lemma setIntegral_tilted_mul_eq_cgf'
   · simp_rw [setIntegral_tilted_mul_eq_mgf' _ hs, exp_sub, exp_cgf ht]
 
 中文:
-引理 setIntegral_tilted_mul_eq_cgf'
-  结论: (g : Ω -> E) {s : Set Ω}
+引理 set整数egral_tilted_mul_eq_cgf'
+  结论: (g : Ω -> E) {s : 集合 Ω}
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -331,8 +331,8 @@ lemma setIntegral_tilted_mul_eq_cgf
   · simp_rw [setIntegral_tilted_mul_eq_mgf, exp_sub, exp_cgf ht]
 
 中文:
-引理 setIntegral_tilted_mul_eq_cgf
-  结论: [SFinite μ] (g : Ω -> E) (s : Set Ω)
+引理 set整数egral_tilted_mul_eq_cgf
+  结论: [SFinite μ] (g : Ω -> E) (s : 集合 Ω)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp
@@ -382,7 +382,7 @@ lemma integral_tilted_mul_eq_cgf
 
 中文:
 引理 integral_tilted_mul_eq_cgf
-  条件: (g : Ω -> E) (ht : 整数egrable (fun ω => exp (t * X ω)) μ)
+  条件: (g : Ω -> E) (ht : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   rcases eq_zero_or_neZero μ with rfl | hμ
   · simp

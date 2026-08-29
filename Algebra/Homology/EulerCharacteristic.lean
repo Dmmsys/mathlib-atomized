@@ -66,7 +66,7 @@ class EulerCharSigns
   参数: where
   公理与运算 (2 个):
     - χ : ι -> 整数ˣ
-    - χ_next({i j : ι} (h : c.Rel i j)) : χ j = - χ i
+    - χ_next({i j : ι} (h : c.关系 i j)) : χ j = - χ i
 -/
 class EulerCharSigns where
   /-- The sign for each index -/
@@ -104,7 +104,7 @@ lemma χ_next
 
 中文:
 引理 χ_next
-  条件: {i j : ι} (h : c.Rel i j)
+  条件: {i j : ι} (h : c.关系 i j)
   结论: c.χ j = - c.χ i
   证明: EulerCharSigns.χ_next h
 
@@ -125,7 +125,7 @@ lemma χ_prev
 
 中文:
 引理 χ_prev
-  条件: {i j : ι} (h : c.Rel i j)
+  条件: {i j : ι} (h : c.关系 i j)
   结论: c.χ i = - c.χ j
   证明: by simp [c.χ_next h]
 
@@ -146,7 +146,7 @@ instance eulerCharSignsUpInt
 @[simps]
 
 中文:
-实例 eulerCharSignsUpInt
+实例 eulerCharSignsUp整数
   签名: : (up 整数).EulerCharSigns where
   定义体: Int.negOnePow
   χ_next := by rintro _ _ rfl; rw [Int.negOnePow_succ]
@@ -170,7 +170,7 @@ instance eulerCharSignsDownInt
   χ_next := by rintro _ _ rfl; simp [Int.negOnePow_succ]
 
 中文:
-实例 eulerCharSignsDownInt
+实例 eulerCharSignsDown整数
   签名: : (down 整数).EulerCharSigns where
   定义体: Int.negOnePow
   χ_next := by rintro _ _ rfl; simp [Int.negOnePow_succ]
@@ -193,7 +193,7 @@ instance eulerCharSignsUpNat
   χ_next := by rintro _ _ rfl; simp [pow_add]
 
 中文:
-实例 eulerCharSignsUpNat
+实例 eulerCharSignsUp自然数
   签名: : (up 自然数).EulerCharSigns where
   定义体: (-1) ^ n
   χ_next := by rintro _ _ rfl; simp [pow_add]
@@ -214,7 +214,7 @@ instance eulerCharSignsDownNat
   χ_next := by rintro _ _ rfl; simp [pow_add]
 
 中文:
-实例 eulerCharSignsDownNat
+实例 eulerCharSignsDown自然数
   签名: : (down 自然数).EulerCharSigns where
   定义体: (-1) ^ n
   χ_next := by rintro _ _ rfl; simp [pow_add]
@@ -245,7 +245,7 @@ definition finrankSupport
 
 中文:
 定义 finrankSupport
-  签名: (X : CategoryTheory.GradedObject ι (ModuleCat R))
+  签名: (X : 范畴论.GradedObject ι (模范畴 R))
   定义体: Function.support (fun i => Module.finrank R (X i))
 
 Depends on / 依赖: Function, Function.support, Module, Module.finrank, finrank, support
@@ -263,7 +263,7 @@ lemma finrankSupport_subset_iff
 
 中文:
 引理 finrankSupport_subset_iff
-  条件: (X : CategoryTheory.GradedObject ι (ModuleCat R)) (s : Set ι)
+  条件: (X : 范畴论.GradedObject ι (模范畴 R)) (s : 集合 ι)
   证明: Function.support_subset_iff'
 
 Depends on / 依赖: Function, Function.support_subset_iff, support_subset_iff
@@ -282,7 +282,7 @@ definition eulerChar
 
 中文:
 定义 eulerChar
-  签名: (X : CategoryTheory.GradedObject ι (ModuleCat R))
+  签名: (X : 范畴论.GradedObject ι (模范畴 R))
   定义体: ∑ᶠ i : ι, (c.χ i : Int) * Module.finrank R (X i)
 
 Depends on / 依赖: Module, Module.finrank, finrank
@@ -302,7 +302,7 @@ lemma support_eulerChar_summand
 
 中文:
 引理 support_eulerChar_summand
-  条件: (X : CategoryTheory.GradedObject ι (ModuleCat R))
+  条件: (X : 范畴论.GradedObject ι (模范畴 R))
   证明: by
   simp only [finrankSupport, Function.support_mul_of_ne_zero_left (fun i => Units.ne_zero (c.χ i))]
   ext i; simp [Function.mem_support]
@@ -355,7 +355,7 @@ abbreviation eulerChar
 
 中文:
 缩写 eulerChar
-  签名: (C : HomologicalComplex (ModuleCat R) c)
+  签名: (C : 同调复形 (模范畴 R) c)
   定义体: GradedObject.eulerChar c C.X
 
 Depends on / 依赖: GradedObject, GradedObject.eulerChar, eulerChar
@@ -373,7 +373,7 @@ abbreviation homologyEulerChar
 
 中文:
 缩写 homologyEulerChar
-  签名: (C : HomologicalComplex (ModuleCat R) c)
+  签名: (C : 同调复形 (模范畴 R) c)
   定义体: GradedObject.eulerChar c (fun i => C.homology i)
 
 Depends on / 依赖: C.homology, GradedObject, GradedObject.eulerChar, eulerChar, homology
@@ -392,7 +392,7 @@ theorem eulerChar_eq_sum_finSet_of_finrankSupport_subset
 
 中文:
 定理 eulerChar_eq_sum_finSet_of_finrankSupport_subset
-  结论: (C : HomologicalComplex (ModuleCat R) c)
+  结论: (C : 同调复形 (模范畴 R) c)
   证明: GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c C.X indices h_support
 
 Depends on / 依赖: GradedObject, GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset, eulerChar_eq_sum_finSet_of_finrankSupport_subset, h_support, indices

@@ -52,7 +52,7 @@ definition toCatCenter
 
 中文:
 定义 toCatCenter
-  签名: [Linear R C]
+  签名: [线性 R C]
   定义体: { app := fun X => a • 𝟙 X }
   map_one' := by cat_disch
   map_mul' a b := by
@@ -97,7 +97,7 @@ definition smulOfRingMorphism
 
 中文:
 定义 smulOfRingMorphism
-  签名: : SMul R (X ⟶ Y) where
+  签名: : 标量乘法 R (X ⟶ Y) where
   定义体: (φ a).app X ≫ f
 -/
 def smulOfRingMorphism : SMul R (X ⟶ Y) where
@@ -176,7 +176,7 @@ definition homModuleOfRingMorphism
 
 中文:
 定义 homModuleOfRingMorphism
-  签名: : Module R (X ⟶ Y)
+  签名: : 模 R (X ⟶ Y)
   定义体: by
   letI := smulOfRingMorphism φ X Y
   exact
@@ -224,7 +224,7 @@ definition ofRingMorphism
 
 中文:
 定义 ofRingMorphism
-  签名: : Linear R C
+  签名: : 线性 R C
   定义体: by
   letI := homModuleOfRingMorphism φ
   exact

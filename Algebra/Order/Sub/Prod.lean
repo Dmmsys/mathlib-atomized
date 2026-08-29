@@ -28,7 +28,7 @@ instance Prod.orderedSub
    fun w => ⟨tsub_le_iff_right.mpr w.1, tsub_le_iff_right.mpr w.2⟩⟩
 
 中文:
-实例 Prod.orderedSub
+实例 积类型.orderedSub
   定义体: ⟨fun w => ⟨tsub_le_iff_right.mp w.1, tsub_le_iff_right.mp w.2⟩,
    fun w => ⟨tsub_le_iff_right.mpr w.1, tsub_le_iff_right.mpr w.2⟩⟩
 
@@ -50,7 +50,7 @@ instance Pi.orderedSub
   body: ⟨fun w i => tsub_le_iff_right.mp (w i), fun w i => tsub_le_iff_right.mpr (w i)⟩
 
 中文:
-实例 Pi.orderedSub
+实例 依赖函数类型.orderedSub
   签名: {ι : 类型} {α : ι -> 类型}
   定义体: ⟨fun w i => tsub_le_iff_right.mp (w i), fun w i => tsub_le_iff_right.mpr (w i)⟩
 

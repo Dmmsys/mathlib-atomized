@@ -457,7 +457,7 @@ theorem surjective_fontaineTheta
 
 中文:
 定理 surjective_fontaineTheta
-  条件: (hF : Function.Surjective (frobenius (ModP R p) p))
+  条件: (hF : 函数.满射 (frobenius (ModP R p) p))
   证明: by
   have : Ideal.map (fontaineTheta R p) (span {(p : 𝕎 R♭)}) = 𝔭 := by
     simp [map_span]

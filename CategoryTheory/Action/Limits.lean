@@ -44,8 +44,8 @@ instance [HasFiniteProducts
   body: Adjunction.hasLimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasFiniteProducts
-  签名: V] : HasFiniteProducts (Action V G) where
+实例 [有FiniteProducts
+  签名: V] : 有FiniteProducts (作用 V G) where
   定义体: Adjunction.hasLimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasLimitsOfShape_of_equivalence
@@ -63,8 +63,8 @@ instance [HasFiniteLimits
   body: Adjunction.hasLimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasFiniteLimits
-  签名: V] : HasFiniteLimits (Action V G) where
+实例 [有有限极限
+  签名: V] : 有有限极限 (作用 V G) where
   定义体: Adjunction.hasLimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasLimitsOfShape_of_equivalence
@@ -82,8 +82,8 @@ instance [HasLimits
   body: Adjunction.has_limits_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasLimits
-  签名: V] : HasLimits (Action V G)
+实例 [有极限
+  签名: V] : 有极限 (作用 V G)
   定义体: Adjunction.has_limits_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.has_limits_of_equivalence, functor, functorCategoryEquivalence, has_limits_of_equivalence
@@ -101,7 +101,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: {J : 类型} [Category* J] [HasLimitsOfShape J V]
+  签名: {J : 类型} [范畴* J] [有形状极限 J V]
   定义体: Adjunction.hasLimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasLimitsOfShape_of_equivalence
@@ -119,8 +119,8 @@ instance [HasFiniteCoproducts
   body: Adjunction.hasColimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasFiniteCoproducts
-  签名: V] : HasFiniteCoproducts (Action V G) where
+实例 [有FiniteCoproducts
+  签名: V] : 有FiniteCoproducts (作用 V G) where
   定义体: Adjunction.hasColimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasColimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasColimitsOfShape_of_equivalence
@@ -138,8 +138,8 @@ instance [HasFiniteColimits
   body: Adjunction.hasColimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasFiniteColimits
-  签名: V] : HasFiniteColimits (Action V G) where
+实例 [有有限余极限
+  签名: V] : 有有限余极限 (作用 V G) where
   定义体: Adjunction.hasColimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasColimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasColimitsOfShape_of_equivalence
@@ -157,8 +157,8 @@ instance [HasColimits
   body: Adjunction.has_colimits_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 中文:
-实例 [HasColimits
-  签名: V] : HasColimits (Action V G)
+实例 [有余极限
+  签名: V] : 有余极限 (作用 V G)
   定义体: Adjunction.has_colimits_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.has_colimits_of_equivalence, functor, functorCategoryEquivalence, has_colimits_of_equivalence
@@ -176,7 +176,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: {J : 类型} [Category* J]
+  签名: {J : 类型} [范畴* J]
   定义体: Adjunction.hasColimitsOfShape_of_equivalence (Action.functorCategoryEquivalence _ _).functor
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, Adjunction, Adjunction.hasColimitsOfShape_of_equivalence, functor, functorCategoryEquivalence, hasColimitsOfShape_of_equivalence
@@ -231,7 +231,7 @@ lemma preservesLimit_of_preserves
 
 中文:
 引理 preservesLimit_of_preserves
-  结论: (F : C ⥤ Action V G) {J : 类型}
+  结论: (F : C ⥤ 作用 V G) {J : 类型}
   证明: by
   let F' : C ⥤ SingleObj G ⥤ V := F ⋙ (Action.functorCategoryEquivalence V G).functor
   have : PreservesLimit K F' := SingleObj.preservesLimit _ _ h
@@ -260,7 +260,7 @@ lemma preservesLimitsOfShape_of_preserves
 
 中文:
 引理 preservesLimitsOfShape_of_preserves
-  结论: (F : C ⥤ Action V G) {J : 类型}
+  结论: (F : C ⥤ 作用 V G) {J : 类型}
   证明: by
   constructor
   intro K
@@ -291,7 +291,7 @@ lemma preservesLimitsOfSize_of_preserves
 
 中文:
 引理 preservesLimitsOfSize_of_preserves
-  结论: (F : C ⥤ Action V G)
+  结论: (F : C ⥤ 作用 V G)
   证明: by
   constructor
   intro J _
@@ -348,7 +348,7 @@ lemma preservesColimit_of_preserves
 
 中文:
 引理 preservesColimit_of_preserves
-  结论: (F : C ⥤ Action V G) {J : 类型}
+  结论: (F : C ⥤ 作用 V G) {J : 类型}
   证明: by
   let F' : C ⥤ SingleObj G ⥤ V := F ⋙ (Action.functorCategoryEquivalence V G).functor
   have : PreservesColimit K F' := SingleObj.preservesColimit _ _ h
@@ -377,7 +377,7 @@ lemma preservesColimitsOfShape_of_preserves
 
 中文:
 引理 preservesColimitsOfShape_of_preserves
-  结论: (F : C ⥤ Action V G) {J : 类型}
+  结论: (F : C ⥤ 作用 V G) {J : 类型}
   证明: by
   constructor
   intro K
@@ -408,7 +408,7 @@ lemma preservesColimitsOfSize_of_preserves
 
 中文:
 引理 preservesColimitsOfSize_of_preserves
-  结论: (F : C ⥤ Action V G)
+  结论: (F : C ⥤ 作用 V G)
   证明: by
   constructor
   intro J _
@@ -474,8 +474,8 @@ instance [HasFiniteLimits
   apply comp_pre
 
 中文:
-实例 [HasFiniteLimits
-  签名: V] : PreservesFiniteLimits (Action.forget V G)
+实例 [有有限极限
+  签名: V] : 保持FiniteLimits (作用.forget V G)
   定义体: by
   change PreservesFiniteLimits ((Action.functorCategoryEquivalence V G).functor ⋙
     (evaluation (SingleObj G) V).obj (SingleObj.star G))
@@ -512,8 +512,8 @@ instance [HasFiniteColimits
   apply comp
 
 中文:
-实例 [HasFiniteColimits
-  签名: V] : PreservesFiniteColimits (Action.forget V G)
+实例 [有有限余极限
+  签名: V] : 保持FiniteColimits (作用.forget V G)
   定义体: by
   change PreservesFiniteColimits ((Action.functorCategoryEquivalence V G).functor ⋙
     (evaluation (SingleObj G) V).obj (SingleObj.star G))
@@ -552,7 +552,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsLimits (Action.forget V G)
+  签名: ReflectsLimits (作用.forget V G)
 -/
 instance : ReflectsLimits (Action.forget V G) where
 
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsColimits (Action.forget V G)
+  签名: ReflectsColimits (作用.forget V G)
 -/
 noncomputable instance : ReflectsColimits (Action.forget V G) where
 
@@ -595,7 +595,7 @@ instance mapActionPreservesLimit_of_preserves
 
 中文:
 实例 mapActionPreservesLimit_of_preserves
-  签名: (K : J ⥤ Action V G) [HasLimit (K ⋙ forget V G)]
+  签名: (K : J ⥤ 作用 V G) [有极限 (K ⋙ forget V G)]
   定义体: Action.preservesLimit_of_preserves (F.mapAction G) K
     inferInstanceAs (PreservesLimit K (forget V G ⋙ F))
 
@@ -615,7 +615,7 @@ instance mapActionPreservesLimitsOfShapeOfPreserves
 
 中文:
 实例 mapActionPreservesLimitsOfShapeOfPreserves
-  签名: [PreservesLimitsOfShape J F]
+  签名: [保持形状极限 J F]
 -/
 instance mapActionPreservesLimitsOfShapeOfPreserves [PreservesLimitsOfShape J F]
     [HasLimitsOfShape J V] : PreservesLimitsOfShape J (F.mapAction G) where
@@ -629,7 +629,7 @@ instance preservesLimitsOfSize_of_preserves
 
 中文:
 实例 preservesLimitsOfSize_of_preserves
-  签名: [PreservesLimitsOfSize.{w₂, w₁} F]
+  签名: [保持LimitsOfSize.{w₂, w₁} F]
 -/
 instance preservesLimitsOfSize_of_preserves [PreservesLimitsOfSize.{w₂, w₁} F]
     [HasLimitsOfSize.{w₂, w₁} V] : PreservesLimitsOfSize.{w₂, w₁} (F.mapAction G) where
@@ -643,8 +643,8 @@ instance [PreservesFiniteLimits
   body: inferInstance
 
 中文:
-实例 [PreservesFiniteLimits
-  签名: F] [HasFiniteLimits V] :
+实例 [保持FiniteLimits
+  签名: F] [有有限极限 V] :
   定义体: inferInstance
 -/
 instance [PreservesFiniteLimits F] [HasFiniteLimits V] :
@@ -662,7 +662,7 @@ instance mapActionPreservesColimit_of_preserves
 
 中文:
 实例 mapActionPreservesColimit_of_preserves
-  签名: (K : J ⥤ Action V G) [HasColimit (K ⋙ forget V G)]
+  签名: (K : J ⥤ 作用 V G) [有余极限 (K ⋙ forget V G)]
   定义体: Action.preservesColimit_of_preserves (F.mapAction G) K
     inferInstanceAs (PreservesColimit K (forget V G ⋙ F))
 
@@ -682,7 +682,7 @@ instance mapActionPreservesColimitsOfShapeOfPreserves
 
 中文:
 实例 mapActionPreservesColimitsOfShapeOfPreserves
-  签名: [PreservesColimitsOfShape J F]
+  签名: [保持形状余极限 J F]
 -/
 instance mapActionPreservesColimitsOfShapeOfPreserves [PreservesColimitsOfShape J F]
     [HasColimitsOfShape J V] : PreservesColimitsOfShape J (F.mapAction G) where
@@ -696,7 +696,7 @@ instance preservesColimitsOfSize_of_preserves
 
 中文:
 实例 preservesColimitsOfSize_of_preserves
-  签名: [PreservesColimitsOfSize.{w₂, w₁} F]
+  签名: [保持余limitsOfSize.{w₂, w₁} F]
 
 Depends on / 依赖: isPretransitive_of_surjective, surjective, toAut_bijective
 -/
@@ -712,8 +712,8 @@ instance [PreservesFiniteColimits
   body: inferInstance
 
 中文:
-实例 [PreservesFiniteColimits
-  签名: F] [HasFiniteColimits V] :
+实例 [保持FiniteColimits
+  签名: F] [有有限余极限 V] :
   定义体: inferInstance
 -/
 instance [PreservesFiniteColimits F] [HasFiniteColimits V] :
@@ -740,7 +740,7 @@ theorem zero_hom
 
 中文:
 定理 zero_hom
-  条件: {X Y : Action V G}
+  条件: {X Y : 作用 V G}
   结论: (0 : X ⟶ Y).hom = 0
   证明: rfl
 -/
@@ -756,7 +756,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (Action V G)
+  签名: 有ZeroMorphisms (作用 V G)
 -/
 instance : HasZeroMorphisms (Action V G) where
 
@@ -769,7 +769,7 @@ instance forget_preservesZeroMorphisms
 
 中文:
 实例 forget_preservesZeroMorphisms
-  签名: : Functor.PreservesZeroMorphisms (forget V G) where
+  签名: : 函子.保持ZeroMorphisms (forget V G) where
 -/
 instance forget_preservesZeroMorphisms : Functor.PreservesZeroMorphisms (forget V G) where
 
@@ -818,7 +818,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (X ⟶ Y)
+  签名: 加法 (X ⟶ Y)
   定义体: ⟨f.hom + g.hom, by simp [f.comm, g.comm]⟩
 
 Depends on / 依赖: f.comm, f.hom, g.comm, g.hom
@@ -836,7 +836,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (X ⟶ Y)
+  签名: 取负 (X ⟶ Y)
   定义体: ⟨-f.hom, by simp [f.comm]⟩
 
 Depends on / 依赖: X.obj, f.comm, f.hom
@@ -854,7 +854,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (X ⟶ Y)
+  签名: 减法 (X ⟶ Y)
   定义体: ⟨f.hom - g.hom, by simp [f.comm, g.comm]⟩
 
 Depends on / 依赖: f.comm, f.hom, g.comm, g.hom
@@ -872,7 +872,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (X ⟶ Y)
+  签名: 标量乘法 自然数 (X ⟶ Y)
   定义体: ⟨n • f.hom, by simp [f.comm]⟩
 
 Depends on / 依赖: f.comm, f.hom
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (X ⟶ Y)
+  签名: 标量乘法 整数 (X ⟶ Y)
   定义体: ⟨n • f.hom, by simp [f.comm]⟩
 
 Depends on / 依赖: f.comm, f.hom, f.val
@@ -992,7 +992,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Action V G)
+  签名: 预加性 (作用 V G)
   定义体: hom_injective.addCommGroup (M₂ := X.V ⟶ Y.V) _ zero_hom add_hom neg_hom sub_hom
       (fun _ _ => rfl) (fun _ _ => rfl)
   add_comp := by intros; ext; exact Preadditive.add_comp _ _ _ _ _ _
@@ -1016,7 +1016,7 @@ instance forget_additive
 
 中文:
 实例 forget_additive
-  签名: : Functor.Additive (forget V G) where
+  签名: : 函子.加性 (forget V G) where
 -/
 instance forget_additive : Functor.Additive (forget V G) where
 
@@ -1060,7 +1060,7 @@ theorem sum_hom
 
 中文:
 定理 sum_hom
-  条件: {ι : 类型} (f : ι -> (X ⟶ Y)) (s : Finset ι)
+  条件: {ι : 类型} (f : ι -> (X ⟶ Y)) (s : 有限集 ι)
   证明: (forget V G).map_sum f s
 
 Depends on / 依赖: forget, map_sum
@@ -1090,7 +1090,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (Action V G)
+  签名: 线性 R (作用 V G)
   定义体: { smul := fun r f => ⟨r • f.hom, by simp [f.comm]⟩
       one_smul := by intros; ext; exact one_smul _ _
       smul_zero := by intros; ext; exact smul_zero _
@@ -1121,7 +1121,7 @@ instance forget_linear
 
 中文:
 实例 forget_linear
-  签名: : Functor.Linear R (forget V G) where
+  签名: : 函子.线性 R (forget V G) where
 -/
 instance forget_linear : Functor.Linear R (forget V G) where
 
@@ -1166,7 +1166,7 @@ theorem smul_hom
 
 中文:
 定理 smul_hom
-  条件: {X Y : Action V G} (r : R) (f : X ⟶ Y)
+  条件: {X Y : 作用 V G} (r : R) (f : X ⟶ Y)
   结论: (r • f).hom = r • f.hom
   证明: rfl
 -/
@@ -1184,7 +1184,7 @@ instance res_additive
 
 中文:
 实例 res_additive
-  签名: : (res V f).Additive where
+  签名: : (res V f).加性 where
 -/
 instance res_additive : (res V f).Additive where
 
@@ -1197,7 +1197,7 @@ instance res_linear
 
 中文:
 实例 res_linear
-  签名: : (res V f).Linear R where
+  签名: : (res V f).线性 R where
 -/
 instance res_linear : (res V f).Linear R where
 
@@ -1215,7 +1215,7 @@ definition abelianAux
 
 中文:
 定义 abelianAux
-  签名: : Action V G ≌ (SingleObj G) ⥤ V
+  签名: : 作用 V G ≌ (SingleObj G) ⥤ V
   定义体: functorCategoryEquivalence V G
 
 Depends on / 依赖: functorCategoryEquivalence
@@ -1232,8 +1232,8 @@ instance [Abelian
   body: abelianOfEquivalence abelianAux.functor
 
 中文:
-实例 [Abelian
-  签名: V] : Abelian (Action V G)
+实例 [交换
+  签名: V] : 交换 (作用 V G)
   定义体: abelianOfEquivalence abelianAux.functor
 
 Depends on / 依赖: abelianAux, abelianAux.functor, abelianOfEquivalence, functor
@@ -1259,7 +1259,7 @@ instance mapAction_preadditive
 
 中文:
 实例 mapAction_preadditive
-  签名: [F.Additive]
+  签名: [F.加性]
 -/
 instance mapAction_preadditive [F.Additive] : (F.mapAction G).Additive where
 
@@ -1274,7 +1274,7 @@ instance mapAction_linear
 
 中文:
 实例 mapAction_linear
-  签名: [F.Linear R]
+  签名: [F.线性 R]
 -/
 instance mapAction_linear [F.Linear R] : (F.mapAction G).Linear R where
 

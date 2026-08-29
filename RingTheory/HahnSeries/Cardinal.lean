@@ -64,7 +64,7 @@ theorem cardSupp_congr
 
 中文:
 定理 cardSupp_congr
-  条件: [Zero S] {x : R⟦Γ⟧} {y : S⟦Γ⟧} (h : x.support = y.support)
+  条件: [零 S] {x : R⟦Γ⟧} {y : S⟦Γ⟧} (h : x.support = y.support)
   证明: by
   simp_rw [cardSupp, h]
 
@@ -86,7 +86,7 @@ theorem cardSupp_mono
 
 中文:
 定理 cardSupp_mono
-  条件: [Zero S] {x : R⟦Γ⟧} {y : S⟦Γ⟧} (h : x.support subseteq y.support)
+  条件: [零 S] {x : R⟦Γ⟧} {y : S⟦Γ⟧} (h : x.support subseteq y.support)
   证明: mk_le_mk_of_subset h
 
 @[simp]
@@ -178,7 +178,7 @@ theorem cardSupp_one_le
 
 中文:
 定理 cardSupp_one_le
-  条件: [Zero Γ] [One R]
+  条件: [零 Γ] [幺 R]
   结论: cardSupp (1 : R⟦Γ⟧) <= 1
   证明: cardSupp_single_le ..
 
@@ -201,7 +201,7 @@ theorem cardSupp_one
 
 中文:
 定理 cardSupp_one
-  条件: [Zero Γ] [One R] [NeZero (1 : R)]
+  条件: [零 Γ] [幺 R] [NeZero (1 : R)]
   结论: cardSupp (1 : R⟦Γ⟧) = 1
   证明: cardSupp_single_of_ne _ one_ne_zero
 
@@ -221,7 +221,7 @@ theorem cardSupp_map_le
 
 中文:
 定理 cardSupp_map_le
-  条件: [Zero S] (x : R⟦Γ⟧) (f : ZeroHom R S)
+  条件: [零 S] (x : R⟦Γ⟧) (f : 保零态射 R S)
   结论: (x.map f).cardSupp <= x.cardSupp
   证明: cardSupp_mono support_map_subset ..
 
@@ -260,7 +260,7 @@ theorem cardSupp_smul_le
 
 中文:
 定理 cardSupp_smul_le
-  条件: (s : S) (x : R⟦Γ⟧) [SMulZeroClass S R]
+  条件: (s : S) (x : R⟦Γ⟧) [SMulZero类 S R]
   结论: (s • x).cardSupp <= x.cardSupp
   证明: cardSupp_mono support_smul_subset ..
 
@@ -282,7 +282,7 @@ theorem cardSupp_neg_le
 
 中文:
 定理 cardSupp_neg_le
-  条件: [NegZeroClass R] (x : R⟦Γ⟧)
+  条件: [NegZero类 R] (x : R⟦Γ⟧)
   结论: (-x).cardSupp <= x.cardSupp
   证明: cardSupp_mono support_neg_subset ..
 
@@ -304,7 +304,7 @@ theorem cardSupp_add_le
 
 中文:
 定理 cardSupp_add_le
-  条件: [AddMonoid R] (x y : R⟦Γ⟧)
+  条件: [加法幺半群 R] (x y : R⟦Γ⟧)
   结论: (x + y).cardSupp <= x.cardSupp + y.cardSupp
   证明: (mk_le_mk_of_subset (support_add_subset ..)).trans (mk_union_le ..)
 
@@ -327,7 +327,7 @@ theorem cardSupp_neg
 
 中文:
 定理 cardSupp_neg
-  条件: [AddGroup R] (x : R⟦Γ⟧)
+  条件: [加法群 R] (x : R⟦Γ⟧)
   结论: (-x).cardSupp = x.cardSupp
   证明: cardSupp_congr support_neg
 
@@ -347,7 +347,7 @@ theorem cardSupp_sub_le
 
 中文:
 定理 cardSupp_sub_le
-  条件: [AddGroup R] (x y : R⟦Γ⟧)
+  条件: [加法群 R] (x y : R⟦Γ⟧)
   结论: (x - y).cardSupp <= x.cardSupp + y.cardSupp
   证明: (mk_le_mk_of_subset (support_sub_subset ..)).trans (mk_union_le ..)
 
@@ -366,7 +366,7 @@ theorem cardSupp_mul_le
 
 中文:
 定理 cardSupp_mul_le
-  结论: [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ] [NonUnitalNonAssocSemiring R]
+  结论: [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ] [非幺非结合半环 R]
   证明: (mk_le_mk_of_subset (support_mul_subset ..)).trans mk_add_le
 
 Depends on / 依赖: mk_add_le, mk_le_mk_of_subset, support_mul_subset
@@ -386,7 +386,7 @@ theorem cardSupp_single_mul_le
 
 中文:
 定理 cardSupp_single_mul_le
-  结论: [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: by
   simpa using (cardSupp_mul_le ..).trans (mul_le_mul_left (cardSupp_single_le ..) _)
 
@@ -408,7 +408,7 @@ theorem cardSupp_mul_single_le
 
 中文:
 定理 cardSupp_mul_single_le
-  结论: [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: by
   simpa using (cardSupp_mul_le ..).trans (mul_le_mul_right (cardSupp_single_le ..) _)
 
@@ -433,7 +433,7 @@ simpa [pow_succ] using (cardSupp_mul_le ..).trans mul_le_mul_left IH _
 
 中文:
 定理 cardSupp_pow_le
-  结论: [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ] [Semiring R]
+  结论: [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ] [半环 R]
   证明: by
   induction n with
   | zero => simp
@@ -460,7 +460,7 @@ theorem cardSupp_hsum_le
 
 中文:
 定理 cardSupp_hsum_le
-  条件: [AddCommMonoid R] (s : SummableFamily Γ R α)
+  条件: [加法交换幺半群 R] (s : SummableFamily Γ R α)
   证明: (lift_le.2 <| mk_le_mk_of_subset (SummableFamily.support_hsum_subset ..)).trans
     mk_iUnion_le_sum_mk_lift
 
@@ -492,7 +492,7 @@ theorem cardSupp_hsum_powers_le
 
 中文:
 定理 cardSupp_hsum_powers_le
-  结论: [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ] [CommRing R]
+  结论: [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ] [交换环 R]
   证明: by
   grw [← lift_uzero (cardSupp _), ← sum_pow_le_max_aleph0, cardSupp_hsum_le, sum_le_sum]
   intro i
@@ -527,7 +527,7 @@ refine (cardSupp_single_mul_le _ (-x.order) x.leadingCoeff⁻¹).trans' cardSupp
 
 中文:
 定理 cardSupp_inv_le
-  条件: [AddCommGroup Γ] [IsOrderedAddMonoid Γ] [Field R] (x : R⟦Γ⟧)
+  条件: [加法交换群 Γ] [是OrderedAdd幺半群 Γ] [域 R] (x : R⟦Γ⟧)
   证明: by
   obtain rfl | hx := eq_or_ne x 0; · simp
 .trans apply (cardSupp_single_mul_le ..).trans (cardSupp_hsum_powers_le ..)
@@ -555,7 +555,7 @@ theorem cardSupp_div_le
 
 中文:
 定理 cardSupp_div_le
-  条件: [AddCommGroup Γ] [IsOrderedAddMonoid Γ] [Field R] (x y : R⟦Γ⟧)
+  条件: [加法交换群 Γ] [是OrderedAdd幺半群 Γ] [域 R] (x y : R⟦Γ⟧)
   证明: (cardSupp_mul_le ..).trans mul_le_mul_right (cardSupp_inv_le y) _
 
 Depends on / 依赖: cardSupp_inv_le, cardSupp_mul_le, mul_le_mul_right
@@ -590,7 +590,7 @@ add_mem' hx hy := (cardSupp_add_le ..).trans_lt add_lt_of_lt hκ.out hx hy
 
 中文:
 定义 cardSuppLTAddSubmonoid
-  签名: : AddSubmonoid R⟦Γ⟧ where
+  签名: : 加法子幺半群 R⟦Γ⟧ where
   定义体: {x | x.cardSupp < κ}
   zero_mem' := by simpa using aleph0_pos.trans_le hκ.out
 add_mem' hx hy := (cardSupp_add_le ..).trans_lt add_lt_of_lt hκ.out hx hy
@@ -646,7 +646,7 @@ definition cardSuppLTAddSubgroup
 
 中文:
 定义 cardSuppLTAddSubgroup
-  签名: : AddSubgroup R⟦Γ⟧ where
+  签名: : 加法子群 R⟦Γ⟧ where
   定义体: by simp
   __ := cardSuppLTAddSubmonoid Γ R κ
 
@@ -700,7 +700,7 @@ mul_mem' hx hy := (cardSupp_mul_le ..).trans_lt mul_lt_of_lt hκ.out hx hy
 
 中文:
 定义 cardSuppLTSubring
-  签名: : Subring R⟦Γ⟧ where
+  签名: : 子环 R⟦Γ⟧ where
   定义体: cardSupp_one_le.trans_lt one_lt_aleph0.trans_le hκ.out
 mul_mem' hx hy := (cardSupp_mul_le ..).trans_lt mul_lt_of_lt hκ.out hx hy
   __ := cardSuppLTAddSubgroup Γ R κ
@@ -754,7 +754,7 @@ definition cardSuppLTSubfield
 
 中文:
 定义 cardSuppLTSubfield
-  签名: : Subfield R⟦Γ⟧ where
+  签名: : 子域 R⟦Γ⟧ where
   定义体: (cardSupp_inv_le _).trans_lt by simpa [hκ.out]
   __ := have : Fact (ℵ₀ <= κ) := ⟨hκ.out.le⟩; cardSuppLTSubring Γ R κ
 

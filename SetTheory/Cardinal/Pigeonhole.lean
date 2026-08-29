@@ -83,7 +83,7 @@ theorem infinite_pigeonhole_card
 
 中文:
 定理 infinite_pigeonhole_card
-  结论: {β α : 类型u} (f : β -> α) (θ : Cardinal) (hθ : θ <= #β)
+  结论: {β α : 类型u} (f : β -> α) (θ : 基数) (hθ : θ <= #β)
   证明: by
   rcases le_mk_iff_exists_set.1 hθ with ⟨s, rfl⟩
   obtain ⟨a, ha⟩ := infinite_pigeonhole (f ∘ Subtype.val : s -> α) h₁ h₂
@@ -118,7 +118,7 @@ theorem infinite_pigeonhole_set
 
 中文:
 定理 infinite_pigeonhole_set
-  结论: {β α : 类型u} {s : Set β} (f : s -> α) (θ : Cardinal)
+  结论: {β α : 类型u} {s : 集合 β} (f : s -> α) (θ : 基数)
   证明: by
   obtain ⟨a, ha⟩ := infinite_pigeonhole_card f θ hθ h₁ h₂
   refine ⟨a, { x | exists h, f ⟨x, h⟩ = a }, ?_, ?_, ?_⟩
@@ -199,8 +199,8 @@ theorem exists_infinite_fiber
     exact ⟨a, hα.trans ha.le⟩
 
 中文:
-定理 exists_infinite_fiber
-  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [Infinite β]
+定理 存在_infinite_fiber
+  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [无限 β]
   证明: by
   simp_rw [Cardinal.infinite_iff]
   rcases lt_or_ge #α ℵ₀ with hα | hα
@@ -231,8 +231,8 @@ theorem exists_infinite_fiber'
   exact .of_cardinalMk_le h.le
 
 中文:
-定理 exists_infinite_fiber'
-  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [Infinite α]
+定理 存在_infinite_fiber'
+  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [无限 α]
   证明: by
   suffices Infinite β from exists_infinite_fiber f h
   exact .of_cardinalMk_le h.le
@@ -258,8 +258,8 @@ theorem exists_uncountable_fiber
   · obtain ⟨a, ha⟩ := infinite_pigeonhole_card_
 
 中文:
-定理 exists_uncountable_fiber
-  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [Uncountable β]
+定理 存在_uncountable_fiber
+  条件: {β α : 类型u} (f : β -> α) (h : #α < #β) [不可数 β]
   证明: by
   simp_rw [← Cardinal.aleph0_lt_mk_iff, ← aleph_one_le_iff]
   rcases lt_or_ge #α ℵ₀ with hα | hα
@@ -296,7 +296,7 @@ theorem le_range_of_union_finset_eq_univ
 
 中文:
 定理 le_range_of_union_finset_eq_univ
-  结论: {α β : 类型} [Infinite β] (f : α -> Finset β)
+  结论: {α β : 类型} [无限 β] (f : α -> 有限集 β)
   证明: by
   by_contra h
   simp only [not_le] at h

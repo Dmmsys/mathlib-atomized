@@ -32,8 +32,8 @@ lemma Algebra.norm_one_add_smul
   simp only [map_add, map_one, map_smul, Matrix.det_one_add_
 
 中文:
-引理 Algebra.norm_one_add_smul
-  结论: {A B} [CommRing A] [CommRing B] [Algebra A B]
+引理 代数.norm_one_add_smul
+  结论: {A B} [交换环 A] [交换环 B] [代数 A B]
   证明: by
   classical
   let ι := Module.Free.ChooseBasisIndex A B

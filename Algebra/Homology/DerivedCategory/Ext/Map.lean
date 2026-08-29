@@ -68,7 +68,7 @@ lemma DerivedCategory.map_triangleOfSESδ
     (Q.map (CochainComplex.mappingCone.descShortComplex S)))]; rw [← Functor.map_comp]; rw [descShortComplex_triangleOfSESδ]; rw [F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [←
 
 中文:
-引理 DerivedCategory.map_triangleOfSESδ
+引理 导出范畴.map_triangleOfSESδ
   结论: [HasDerivedCategory.{t} C] [HasDerivedCategory.{t'} D]
   证明: by
   have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
@@ -108,7 +108,7 @@ lemma ShortComplex.ShortExact.mapShiftedHom_singleδ'
   generalize_proofs _ _ _ _ _ _ h1 _ _ 
 
 中文:
-引理 ShortComplex.ShortExact.mapShiftedHom_singleδ'
+引理 短复形.短正合.mapShiftedHom_singleδ'
   证明: by
   dsimp [ShiftedHom.map, ShortComplex.ShortExact.singleδ]
   simp only [Functor.map_comp, Category.assoc, Functor.commShiftIso_hom_naturality,
@@ -149,7 +149,7 @@ lemma ShortComplex.ShortExact.mapShiftedHom_singleδ
   simp [← hS.mapShiftedHom_singleδ'_assoc, ← Functor.map_comp]
 
 中文:
-引理 ShortComplex.ShortExact.mapShiftedHom_singleδ
+引理 短复形.短正合.mapShiftedHom_singleδ
   证明: by
   simp [← hS.mapShiftedHom_singleδ'_assoc, ← Functor.map_comp]
 
@@ -202,7 +202,7 @@ definition Abelian.Ext.mapExactFunctor
     ((F.mapCochainComplexSingleFunctor 0).app X) ((F.mapCochainComplexSingleFunctor 0).app Y) f
 
 中文:
-定义 Abelian.Ext.mapExactFunctor
+定义 交换.Ext.mapExactFunctor
   签名: [HasExt.{w} C] [HasExt.{w'} D] {X Y : C} {n : 自然数}
   定义体: (F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
     (ComplexShape.up Int)).smallShiftedHomMap
@@ -230,7 +230,7 @@ lemma Abelian.Ext.mapExactFunctor_hom
         
 
 中文:
-引理 Abelian.Ext.mapExactFunctor_hom
+引理 交换.Ext.mapExactFunctor_hom
   证明: by
   have : (e.mapExactFunctor F).hom = _ :=
     ((F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
@@ -278,7 +278,7 @@ lemma Abelian.Ext.mapExactFunctor_zero
 @[simp]
 
 中文:
-引理 Abelian.Ext.mapExactFunctor_zero
+引理 交换.Ext.mapExactFunctor_zero
   结论: (0 : Ext X Y n).mapExactFunctor F = 0
   证明: by
   aesop
@@ -299,7 +299,7 @@ lemma Abelian.Ext.mapExactFunctor_add
   aesop
 
 中文:
-引理 Abelian.Ext.mapExactFunctor_add
+引理 交换.Ext.mapExactFunctor_add
   条件: (f g : Ext.{w} X Y n)
   证明: by
   aesop
@@ -321,7 +321,7 @@ definition Functor.mapExtAddHom
 @[simp]
 
 中文:
-定义 Functor.mapExtAddHom
+定义 函子.mapExtAddHom
   签名: (X Y : C) (n : 自然数)
   定义体: e.mapExactFunctor F
   map_zero' := by simp
@@ -347,7 +347,7 @@ lemma Functor.mapExtAddHom_coe
   proof: rfl
 
 中文:
-引理 Functor.mapExtAddHom_coe
+引理 函子.mapExtAddHom_coe
   结论: ⇑(F.mapExtAddHom X Y n) = Ext.mapExactFunctor F
   证明: rfl
 -/
@@ -363,7 +363,7 @@ lemma Functor.mapExtAddHom_apply
   proof: rfl
 
 中文:
-引理 Functor.mapExtAddHom_apply
+引理 函子.mapExtAddHom_apply
   条件: (e : Ext X Y n)
   结论: F.mapExtAddHom X Y n e = e.mapExactFunctor F
   证明: rfl
@@ -384,7 +384,7 @@ lemma Functor.mapExactFunctor_smul
   aesop
 
 中文:
-引理 Functor.mapExactFunctor_smul
+引理 函子.mapExactFunctor_smul
   条件: (r : R) (f : Ext.{w} X Y n)
   证明: by
   aesop
@@ -405,7 +405,7 @@ definition Functor.mapExtLinearMap
 @[simp]
 
 中文:
-定义 Functor.mapExtLinearMap
+定义 函子.mapExtLinearMap
   签名: (X Y : C) (n : 自然数)
   定义体: F.mapExtAddHom X Y n
   map_smul' := by simp
@@ -429,7 +429,7 @@ lemma Functor.mapExtLinearMap_toAddMonoidHom
   proof: rfl
 
 中文:
-引理 Functor.mapExtLinearMap_toAddMonoidHom
+引理 函子.mapExtLinearMap_toAddMonoidHom
   结论: F.mapExtLinearMap R X Y n = F.mapExtAddHom X Y n
   证明: rfl
 -/
@@ -445,7 +445,7 @@ lemma Functor.mapExtLinearMap_coe
   proof: rfl
 
 中文:
-引理 Functor.mapExtLinearMap_coe
+引理 函子.mapExtLinearMap_coe
   结论: ⇑(F.mapExtLinearMap R X Y n) = Ext.mapExactFunctor F
   证明: rfl
 -/
@@ -460,7 +460,7 @@ lemma Functor.mapExtLinearMap_apply
   proof: rfl
 
 中文:
-引理 Functor.mapExtLinearMap_apply
+引理 函子.mapExtLinearMap_apply
   条件: (e : Ext X Y n)
   证明: rfl
 -/
@@ -573,7 +573,7 @@ lemma mapExactFunctor_extClass
 
 中文:
 引理 mapExactFunctor_extClass
-  结论: [HasExt.{w} C] [HasExt.{w'} D] {S : ShortComplex C}
+  结论: [HasExt.{w} C] [HasExt.{w'} D] {S : 短复形 C}
   证明: by
   ext
   rw [Ext.mapExactFunctor_hom]; rw [hS.extClass_hom]

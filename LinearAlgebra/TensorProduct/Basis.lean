@@ -49,7 +49,7 @@ definition tensorProduct
 
 中文:
 定义 tensorProduct
-  签名: (b : Basis ι S M) (c : Basis κ R N)
+  签名: (b : 基 ι S M) (c : 基 κ R N)
   定义体: Finsupp.basisSingleOne.map
     ((TensorProduct.AlgebraTensorModule.congr b.repr c.repr).trans <|
 (finsuppTensorFinsupp R S _ _ _ _).trans
@@ -78,7 +78,7 @@ theorem tensorProduct_apply
 
 中文:
 定理 tensorProduct_apply
-  条件: (b : Basis ι S M) (c : Basis κ R N) (i : ι) (j : κ)
+  条件: (b : 基 ι S M) (c : 基 κ R N) (i : ι) (j : κ)
   证明: by
   simp [tensorProduct]
 
@@ -101,7 +101,7 @@ theorem tensorProduct_apply'
 
 中文:
 定理 tensorProduct_apply'
-  条件: (b : Basis ι S M) (c : Basis κ R N) (i : ι × κ)
+  条件: (b : 基 ι S M) (c : 基 κ R N) (i : ι × κ)
   证明: by
   simp [tensorProduct]
 
@@ -125,7 +125,7 @@ theorem tensorProduct_repr_tmul_apply
 
 中文:
 定理 tensorProduct_repr_tmul_apply
-  结论: (b : Basis ι S M) (c : Basis κ R N) (m : M) (n : N)
+  结论: (b : 基 ι S M) (c : 基 κ R N) (m : M) (n : N)
   证明: by
   simp [tensorProduct]
 
@@ -152,7 +152,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: (b : Basis ι R M)
+  签名: (b : 基 ι R M)
   定义体: (tensorProduct (.singleton Unit S) b).reindex (Equiv.punitProd ι)
 
 @[simp]
@@ -176,7 +176,7 @@ lemma baseChange_repr_tmul
 
 中文:
 引理 baseChange_repr_tmul
-  条件: (b : Basis ι R M) (x y i)
+  条件: (b : 基 ι R M) (x y i)
   证明: by
   simp [baseChange, tensorProduct]
 
@@ -200,7 +200,7 @@ lemma baseChange_apply
 
 中文:
 引理 baseChange_apply
-  条件: (b : Basis ι R M) (i)
+  条件: (b : 基 ι R M) (i)
   证明: by
   simp [baseChange, tensorProduct]
 
@@ -228,7 +228,7 @@ definition TensorProduct.equivFinsuppOfBasisRight
 @[simp]
 
 中文:
-定义 TensorProduct.equivFinsuppOfBasisRight
+定义 张量积.equivFinsuppOfBasisRight
   签名: : M otimes[R] N ≃ₗ[R] κ ->₀ M
   定义体: LinearEquiv.lTensor M 𝒞.repr ≪≫ₗ TensorProduct.finsuppScalarRight R R M κ
 
@@ -250,7 +250,7 @@ lemma TensorProduct.equivFinsuppOfBasisRight_apply_tmul
   ext; simp [equivFinsuppOfBasisRight]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisRight_apply_tmul
+引理 张量积.equivFinsuppOfBasisRight_apply_tmul
   条件: (m : M) (n : N)
   证明: by
   ext; simp [equivFinsuppOfBasisRight]
@@ -271,7 +271,7 @@ lemma TensorProduct.equivFinsuppOfBasisRight_apply_tmul_apply
   simp only [equivFinsuppOfBasisRight_apply_tmul, Finsupp.mapRange_apply]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisRight_apply_tmul_apply
+引理 张量积.equivFinsuppOfBasisRight_apply_tmul_apply
   证明: by
   simp only [equivFinsuppOfBasisRight_apply_tmul, Finsupp.mapRange_apply]
 
@@ -294,7 +294,7 @@ lemma TensorProduct.equivFinsuppOfBasisRight_symm
 @[simp]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisRight_symm
+引理 张量积.equivFinsuppOfBasisRight_symm
   证明: by
   ext; simp [equivFinsuppOfBasisRight]
 
@@ -319,7 +319,7 @@ lemma TensorProduct.equivFinsuppOfBasisRight_symm_apply
 omit [DecidableEq κ] in
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisRight_symm_apply
+引理 张量积.equivFinsuppOfBasisRight_symm_apply
   条件: (b : κ ->₀ M)
   证明: congr($(TensorProduct.equivFinsuppOfBasisRight_symm 𝒞) b)
 
@@ -344,7 +344,7 @@ lemma TensorProduct.sum_tmul_basis_right_injective
 omit [DecidableEq κ] in
 
 中文:
-引理 TensorProduct.sum_tmul_basis_right_injective
+引理 张量积.sum_tmul_basis_right_injective
   证明: have := Classical.decEq κ
   (equivFinsuppOfBasisRight_symm (M := M) 𝒞).symm ▸
     (TensorProduct.equivFinsuppOfBasisRight 𝒞).symm.injective
@@ -369,7 +369,7 @@ lemma TensorProduct.sum_tmul_basis_right_eq_zero
 (TensorProduct.equivFinsuppOfBasisRight 𝒞).symm.injective (a₂ := 0) by simpa
 
 中文:
-引理 TensorProduct.sum_tmul_basis_right_eq_zero
+引理 张量积.sum_tmul_basis_right_eq_zero
   证明: have := Classical.decEq κ
 (TensorProduct.equivFinsuppOfBasisRight 𝒞).symm.injective (a₂ := 0) by simpa
 
@@ -391,7 +391,7 @@ definition TensorProduct.equivFinsuppOfBasisLeft
 @[simp]
 
 中文:
-定义 TensorProduct.equivFinsuppOfBasisLeft
+定义 张量积.equivFinsuppOfBasisLeft
   签名: : M otimes[R] N ≃ₗ[R] ι ->₀ N
   定义体: TensorProduct.comm R M N ≪≫ₗ TensorProduct.equivFinsuppOfBasisRight ℬ
 
@@ -413,7 +413,7 @@ lemma TensorProduct.equivFinsuppOfBasisLeft_apply_tmul
   simp [equivFinsuppOfBasisLeft]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisLeft_apply_tmul
+引理 张量积.equivFinsuppOfBasisLeft_apply_tmul
   条件: (m : M) (n : N)
   证明: by
   simp [equivFinsuppOfBasisLeft]
@@ -434,7 +434,7 @@ lemma TensorProduct.equivFinsuppOfBasisLeft_apply_tmul_apply
   simp only [equivFinsuppOfBasisLeft_apply_tmul, Finsupp.mapRange_apply]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisLeft_apply_tmul_apply
+引理 张量积.equivFinsuppOfBasisLeft_apply_tmul_apply
   证明: by
   simp only [equivFinsuppOfBasisLeft_apply_tmul, Finsupp.mapRange_apply]
 
@@ -456,7 +456,7 @@ lemma TensorProduct.equivFinsuppOfBasisRight_apply
   induction x <;> simp_all
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisRight_apply
+引理 张量积.equivFinsuppOfBasisRight_apply
   条件: (x : M otimes[R] N) (i : κ)
   证明: by
   induction x <;> simp_all
@@ -475,7 +475,7 @@ lemma TensorProduct.equivFinsuppOfBasisLeft_apply
   induction x <;> simp_all
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisLeft_apply
+引理 张量积.equivFinsuppOfBasisLeft_apply
   条件: (x : M otimes[R] N) (i : ι)
   证明: by
   induction x <;> simp_all
@@ -495,7 +495,7 @@ lemma TensorProduct.equivFinsuppOfBasisLeft_symm
 @[simp]
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisLeft_symm
+引理 张量积.equivFinsuppOfBasisLeft_symm
   证明: by
   ext; simp [equivFinsuppOfBasisLeft]
 
@@ -520,7 +520,7 @@ lemma TensorProduct.equivFinsuppOfBasisLeft_symm_apply
 omit [DecidableEq κ] in
 
 中文:
-引理 TensorProduct.equivFinsuppOfBasisLeft_symm_apply
+引理 张量积.equivFinsuppOfBasisLeft_symm_apply
   条件: (b : ι ->₀ N)
   证明: congr($(TensorProduct.equivFinsuppOfBasisLeft_symm ℬ) b)
 
@@ -544,7 +544,7 @@ lemma TensorProduct.eq_repr_basis_right
 omit [DecidableEq ι] in
 
 中文:
-引理 TensorProduct.eq_repr_basis_right
+引理 张量积.eq_repr_basis_right
   证明: by
   classical simpa using (TensorProduct.equivFinsuppOfBasisRight 𝒞).symm.surjective x
 
@@ -569,7 +569,7 @@ exact ⟨c, (TensorProduct.comm R M N).injective by simp [Finsupp.sum]⟩
 omit [DecidableEq ι] in
 
 中文:
-引理 TensorProduct.eq_repr_basis_left
+引理 张量积.eq_repr_basis_left
   证明: by
   classical obtain ⟨c, rfl⟩ := (TensorProduct.equivFinsuppOfBasisLeft ℬ).symm.surjective x
 exact ⟨c, (TensorProduct.comm R M N).injective by simp [Finsupp.sum]⟩
@@ -596,7 +596,7 @@ lemma TensorProduct.sum_tmul_basis_left_injective
 omit [DecidableEq ι] in
 
 中文:
-引理 TensorProduct.sum_tmul_basis_left_injective
+引理 张量积.sum_tmul_basis_left_injective
   证明: have := Classical.decEq ι
   (equivFinsuppOfBasisLeft_symm (N := N) ℬ).symm ▸
     (TensorProduct.equivFinsuppOfBasisLeft ℬ).symm.injective
@@ -621,7 +621,7 @@ lemma TensorProduct.sum_tmul_basis_left_eq_zero
 (TensorProduct.equivFinsuppOfBasisLeft ℬ).symm.injective (a₂ := 0) by simpa
 
 中文:
-引理 TensorProduct.sum_tmul_basis_left_eq_zero
+引理 张量积.sum_tmul_basis_left_eq_zero
   证明: have := Classical.decEq ι
 (TensorProduct.equivFinsuppOfBasisLeft ℬ).symm.injective (a₂ := 0) by simpa
 
@@ -645,8 +645,8 @@ instance Module.Free.tensor
   of_basis (bM.2.tensorProduct bN.2)
 
 中文:
-实例 Module.Free.tensor
-  签名: [Module.Free S M] [Module.Free R N]
+实例 模.自由.tensor
+  签名: [模.自由 S M] [模.自由 R N]
   定义体: let ⟨bM⟩ := exists_basis (R := S) (M := M)
   let ⟨bN⟩ := exists_basis (R := R) (M := N)
   of_basis (bM.2.tensorProduct bN.2)

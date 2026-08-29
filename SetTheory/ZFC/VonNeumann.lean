@@ -43,7 +43,7 @@ scoped notation "V_ " => vonNeumann
 
 中文:
 定义 vonNeumann
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: ⋃ a : Set.Iio o, powerset (vonNeumann a)
 termination_by o
 decreasing_by exact a.2
@@ -94,7 +94,7 @@ termination_by o
 
 中文:
 定理 isTransitive_vonNeumann
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: IsTransitive (V_ o)
   证明: by
   rw [vonNeumann]
@@ -166,7 +166,7 @@ theorem subset_vonNeumann
 
 中文:
 定理 subset_vonNeumann
-  条件: {o : Ordinal} {x : ZFSet}
+  条件: {o : 序数} {x : ZFSet}
   结论: x subseteq V_ o ↔ rank x <= o
   证明: by
   rw [rank_le_iff]
@@ -272,7 +272,7 @@ theorem exists_mem_vonNeumann
 @[simp]
 
 中文:
-定理 exists_mem_vonNeumann
+定理 存在_mem_vonNeumann
   条件: (x : ZFSet)
   结论: 存在 o, x in V_ o
   证明: ⟨_, mem_vonNeumann_succ x⟩
@@ -300,7 +300,7 @@ termination_by o
 
 中文:
 定理 rank_vonNeumann
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: rank (V_ o) = o
   证明: le_antisymm (by rw [← subset_vonNeumann]) le_of_forall_lt fun a ha =>
     rank_vonNeumann a ▸ rank_lt_of_mem (vonNeumann_mem_of_lt ha)
@@ -396,7 +396,7 @@ theorem vonNeumann_strictMono
 
 中文:
 定理 vonNeumann_strictMono
-  结论: StrictMono vonNeumann
+  结论: 严格递增 vonNeumann
   证明: strictMono_of_le_iff_le (by simp)
 
 Depends on / 依赖: strictMono_of_le_iff_le
@@ -416,7 +416,7 @@ theorem vonNeumann_injective
 
 中文:
 定理 vonNeumann_injective
-  结论: Function.Injective vonNeumann
+  结论: 函数.单射 vonNeumann
   证明: vonNeumann_strictMono.injective
 
 @[simp]
@@ -486,7 +486,7 @@ theorem vonNeumann_add_one
 
 中文:
 定理 vonNeumann_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: V_ (o + 1) = powerset (V_ o)
   证明: ext fun z => by rw [mem_vonNeumann, mem_powerset, subset_vonNeumann, lt_add_one_iff]
 
@@ -509,7 +509,7 @@ theorem vonNeumann_succ
 
 中文:
 定理 vonNeumann_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: V_ (succ o) = powerset (V_ o)
   证明: vonNeumann_add_one o
 
@@ -547,7 +547,7 @@ theorem iUnion_vonNeumann
 
 中文:
 定理 iUnion_vonNeumann
-  结论: ⋃ o, (V_ o : Class) = Class.univ
+  结论: ⋃ o, (V_ o : 类) = 类.univ
   证明: Class.eq_univ_of_forall fun x => Set.mem_iUnion.2 exists_mem_vonNeumann x
 
 Depends on / 依赖: Class.eq_univ_of_forall, Set.mem_iUnion, eq_univ_of_forall, exists_mem_vonNeumann, mem_iUnion
@@ -566,8 +566,8 @@ theorem _root_.Ordinal.toZFSet_subset_vonNeumann
   simp [subset_vonNeumann]
 
 中文:
-定理 _root_.Ordinal.toZFSet_subset_vonNeumann
-  条件: (o : Ordinal)
+定理 _root_.序数.toZFSet_subset_vonNeumann
+  条件: (o : 序数)
   结论: o.toZFSet subseteq V_ o
   证明: by
   simp [subset_vonNeumann]
@@ -588,8 +588,8 @@ lemma _root_.Ordinal.card_le_card_vonNeumann
   simpa using card_mono o.toZFSet_subset_vonNeumann
 
 中文:
-引理 _root_.Ordinal.card_le_card_vonNeumann
-  条件: (o : Ordinal)
+引理 _root_.序数.card_le_card_vonNeumann
+  条件: (o : 序数)
   结论: o.card <= card (V_ o)
   证明: by
   simpa using card_mono o.toZFSet_subset_vonNeumann
@@ -619,7 +619,7 @@ theorem card_vonNeumann
 
 中文:
 定理 card_vonNeumann
-  条件: (o : Ordinal.{u})
+  条件: (o : 序数.{u})
   结论: card (V_ o) = preBeth o
   证明: by
   induction o using Ordinal.limitRecOn with

@@ -57,8 +57,8 @@ structure RingPreordering
 
 中文:
 结构 RingPreordering
-  参数: extends Subsemiring R
-  继承: Subsemiring R
+  参数: extends 子半环 R
+  继承: 子半环 R
   公理与运算 (2 个):
     - mem_of_isSquare'({x : R} (hx : IsSquare x)) : x in carrier  [默认: by aesop]
     - neg_one_notMem' : -1 ∉ carrier  [默认: by aesop]
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (RingPreordering R) R
+  签名: 集合状 (RingPreordering R) R
   定义体: P.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
 
@@ -106,7 +106,7 @@ initialize_simps_projections RingPreordering (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (RingPreordering R)
+  签名: 偏序 (RingPreordering R)
   定义体: .ofSetLike (RingPreordering R) R
 
 initialize_simps_projections RingPreordering (carrier -> coe, as_prefix coe)
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubsemiringClass (RingPreordering R) R
+  签名: 子半环类 (RingPreordering R) R
   定义体: Subsemiring.zero_mem _
   one_mem _ := Subsemiring.one_mem _
   add_mem := Subsemiring.add_mem _
@@ -310,7 +310,7 @@ theorem coe_toSubsemiring
 中文:
 定理 coe_toSubsemiring
   条件: (P : RingPreordering R)
-  结论: (P.toSubsemiring : Set R) = P
+  结论: (P.toSubsemiring : 集合 R) = P
   证明: rfl
 
 @[simp]
@@ -330,7 +330,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {toSubsemiring : Subsemiring R} (mem_of_isSquare neg_one_notMem) {x : R}
+  条件: {toSubsemiring : 子半环 R} (mem_of_isSquare neg_one_notMem) {x : R}
   证明: .rfl
 
 @[simp]
@@ -349,7 +349,7 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (toSubsemiring : Subsemiring R) (mem_of_isSquare neg_one_notMem)
+  条件: (toSubsemiring : 子半环 R) (mem_of_isSquare neg_one_notMem)
   证明: rfl
 -/
 theorem coe_set_mk (toSubsemiring : Subsemiring R) (mem_of_isSquare neg_one_notMem) :
@@ -446,7 +446,7 @@ definition supportAddSubgroup
 
 中文:
 定义 supportAddSubgroup
-  签名: : AddSubgroup R where
+  签名: : 加法子群 R where
   定义体: P inter -P
   zero_mem' := by aesop
   add_mem' := by aesop
@@ -484,7 +484,7 @@ theorem coe_supportAddSubgroup
 
 中文:
 定理 coe_supportAddSubgroup
-  结论: P.supportAddSubgroup = (P inter -P : Set R)
+  结论: P.supportAddSubgroup = (P inter -P : 集合 R)
   证明: rfl
 -/
 theorem coe_supportAddSubgroup : P.supportAddSubgroup = (P inter -P : Set R) := rfl
@@ -501,7 +501,7 @@ class HasIdealSupport
     - smul_mem_support((P) (x : R) {a : R} (ha : a in P.supportAddSubgroup)) : x * a in P.supportAddSubgroup
 
 中文:
-类 HasIdealSupport
+类 有IdealSupport
   参数: (P : RingPreordering R)
   公理与运算 (1 个):
     - smul_mem_support((P) (x : R) {a : R} (ha : a in P.supportAddSubgroup)) : x * a in P.supportAddSubgroup
@@ -543,8 +543,8 @@ instance [HasMemOrNegMem
     | .inr hx => ⟨by simpa using mul_mem hx ha.2, by simpa using mul_mem hx ha.1⟩
 
 中文:
-实例 [HasMemOrNegMem
-  签名: P] : P.HasIdealSupport where
+实例 [有MemOrNegMem
+  签名: P] : P.有IdealSupport where
   定义体: match mem_or_neg_mem P x with
     | .inl hx => ⟨by simpa using mul_mem hx ha.1, by simpa using mul_mem hx ha.2⟩
     | .inr hx => ⟨by simpa using mul_mem hx ha.2, by simpa using mul_mem hx ha.1⟩
@@ -573,7 +573,7 @@ definition support
 
 中文:
 定义 support
-  签名: : Ideal R where
+  签名: : 理想 R where
   定义体: P.supportAddSubgroup
   smul_mem' := by simpa using smul_mem_support P
 
@@ -609,7 +609,7 @@ theorem coe_support
 
 中文:
 定理 coe_support
-  结论: P.support = (P : Set R) inter -(P : Set R)
+  结论: P.support = (P : 集合 R) inter -(P : 集合 R)
   证明: rfl
 -/
 theorem coe_support : P.support = (P : Set R) inter -(P : Set R) := rfl
@@ -641,9 +641,9 @@ class IsOrdering
   (no additional axioms)
 
 中文:
-类 IsOrdering
+类 是Ordering
   参数: (P : RingPreordering R)
-  继承: HasMemOrNegMem P, P.support.IsPrime
+  继承: 有MemOrNegMem P, P.support.是素
   (无附加公理)
 -/
 class IsOrdering (P : RingPreordering R) extends HasMemOrNegMem P, P.support.IsPrime

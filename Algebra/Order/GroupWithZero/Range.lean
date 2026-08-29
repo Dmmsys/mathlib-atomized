@@ -80,7 +80,7 @@ lemma embedding_strictMono
 
 中文:
 引理 embedding_strictMono
-  结论: StrictMono (embedding (f := f))
+  结论: 严格递增 (embedding (f := f))
   证明: by
   intro x y hxy
   rw [← monoidWithZeroHom_strictMono.lt_iff_lt] at hxy
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedMonoid (ValueGroup₀ f)
+  签名: 是Ordered幺半群 (ValueGroup₀ f)
   定义体: Function.Injective.isOrderedMonoid embedding (map_mul _) embedding_strictMono.le_iff_le
 
 Depends on / 依赖: Function, Function.Injective.isOrderedMonoid, Injective, embedding, embedding_strictMono, embedding_strictMono.le_iff_le, isOrderedMonoid, le_iff_le, map_mul
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedCommGroupWithZero (ValueGroup₀ f)
+  签名: 带零LinearOrderedComm群 (ValueGroup₀ f)
   定义体: by simp
   mul_lt_mul_of_pos_left a ha b c hbc := by
     simp only [← (embedding_strictMono (f := f)).lt_iff_lt, map_mul] at *

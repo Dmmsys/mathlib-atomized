@@ -92,7 +92,7 @@ theorem cast_ite
 
 中文:
 定理 cast_ite
-  条件: [整数Cast R] (P : 命题) [Decidable P] (m n : 整数)
+  条件: [整数嵌入 R] (P : 命题) [可判定 P] (m n : 整数)
   证明: apply_ite _ _ _ _
 
 Depends on / 依赖: apply_ite
@@ -188,7 +188,7 @@ theorem cast_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 cast_ofNat
+定理 cast_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: by
   simpa only [OfNat.ofNat] using! AddGroupWithOne.intCast_ofNat (R := R) n
@@ -260,7 +260,7 @@ theorem cast_subNatNat
 @[simp]
 
 中文:
-定理 cast_subNatNat
+定理 cast_sub自然数自然数
   条件: (m n)
   结论: ((整数.sub自然数自然数 m n : 整数) : R) = m - n
   证明: by
@@ -292,7 +292,7 @@ theorem cast_negOfNat
 @[simp, norm_cast]
 
 中文:
-定理 cast_negOfNat
+定理 cast_negOf自然数
   条件: (n : 自然数)
   结论: ((negOf自然数 n : 整数) : R) = -n
   证明: by simp [Int.cast_neg, negOfNat_eq]
@@ -415,7 +415,7 @@ lemma zsmul_one
 
 中文:
 引理 zsmul_one
-  条件: [AddGroupWithOne R] (n : 整数)
+  条件: [加法带幺群 R] (n : 整数)
   结论: n • (1 : R) = n
   证明: by cases n <;> simp
 -/

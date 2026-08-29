@@ -110,10 +110,10 @@ structure Entries
 结构 Entries
   参数: where
   公理与运算 (4 个):
-    - rw : Array (Key × LazyEntry × RwLemma)  [默认: #[]]
-    - grw : Array (Key × LazyEntry × GrwLemma)  [默认: #[]]
-    - app : Array (Key × LazyEntry × ApplyLemma)  [默认: #[]]
-    - appAt : Array (Key × LazyEntry × ApplyAtLemma)  [默认: #[]]
+    - rw : 数组 (Key × LazyEntry × RwLemma)  [默认: #[]]
+    - grw : 数组 (Key × LazyEntry × GrwLemma)  [默认: #[]]
+    - app : 数组 (Key × LazyEntry × ApplyLemma)  [默认: #[]]
+    - appAt : 数组 (Key × LazyEntry × ApplyAtLemma)  [默认: #[]]
 -/
 structure Entries where
   /-- Entries for the `rw` discrimination tree. -/
@@ -139,7 +139,7 @@ definition pushEntry
 
 中文:
 定义 pushEntry
-  签名: {α} (arr : Array (Key × LazyEntry × α)) (key : Expr) (a : α)
+  签名: {α} (arr : 数组 (Key × LazyEntry × α)) (key : Expr) (a : α)
   定义体: do
   let entries ← initializeLazyEntryWithEta key
   return entries.foldl (init := arr) fun arr (key, lazy) => arr.push (key, lazy, a)
@@ -202,8 +202,8 @@ definition Choice.any
   body: c.rw || c.grw || c.app || c.appAt
 
 中文:
-定义 Choice.any
-  签名: (c : Choice)
+定义 选择.any
+  签名: (c : 选择)
   定义体: c.rw || c.grw || c.app || c.appAt
 
 Depends on / 依赖: c.app, c.appAt, c.grw, c.rw
@@ -257,7 +257,7 @@ definition Entries.addConst
 
 中文:
 定义 Entries.addConst
-  签名: (choice : Choice) (env : Environment) (entries : Entries)
+  签名: (choice : 选择) (env : Environment) (entries : Entries)
   定义体: do
   if cinfo.isUnsafe then return entries
   if blacklist env name then return entries
@@ -325,7 +325,7 @@ definition Entries.addFVar
 
 中文:
 定义 Entries.addFVar
-  签名: (choice : Choice) (entries : Entries) (decl : LocalDecl)
+  签名: (choice : 选择) (entries : Entries) (decl : LocalDecl)
   定义体: do
   let (xs, _, e) ← forallMetaTelescopeReducing (← instantiateMVars decl.type)
   let mut { rw, grw, app, appAt } := entries
@@ -412,7 +412,7 @@ definition librarySearchIndexConfig
 
 中文:
 定义 librarySearchIndexConfig
-  签名: : Config where
+  签名: : 余nfig where
   定义体: .reducible
   proj := .no
 

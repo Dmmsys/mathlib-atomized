@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChartedSpace R Rˣ
+  签名: Charted空间 R Rˣ
   定义体: isOpenEmbedding_val.singletonChartedSpace
 
 Depends on / 依赖: isOpenEmbedding_val, isOpenEmbedding_val.singletonChartedSpace, singletonChartedSpace
@@ -87,7 +87,7 @@ theorem chartAt_source
 中文:
 定理 chartAt_source
   条件: {a : Rˣ}
-  结论: (chartAt R a).source = Set.univ
+  结论: (chartAt R a).source = 集合.univ
   证明: rfl
 -/
 theorem chartAt_source {a : Rˣ} : (chartAt R a).source = Set.univ :=
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsManifold 𝓘(𝕜, R) n Rˣ
+  签名: 是流形 𝓘(𝕜, R) n Rˣ
   定义体: isOpenEmbedding_val.isManifold_singleton
 
 Depends on / 依赖: isManifold_singleton, isOpenEmbedding_val, isOpenEmbedding_val.isManifold_singleton
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieGroup 𝓘(𝕜, R) n Rˣ
+  签名: Lie群 𝓘(𝕜, R) n Rˣ
   定义体: by
     apply ContMDiff.of_comp_isOpenEmbedding Units.isOpenEmbedding_val
     have : (val : Rˣ -> R) ∘ (fun x : Rˣ × Rˣ => x.1 * x.2) =
@@ -190,7 +190,7 @@ instance contMDiffSMul
 
 中文:
 实例 contMDiffSMul
-  签名: [MulAction R M] [ContMDiffSMul 𝓘(𝕜, R) I n R M]
+  签名: [乘法作用 R M] [余ntMDiffSMul 𝓘(𝕜, R) I n R M]
   定义体: MulAction.contMDiffSMul_compHom (f := coeHom R) contMDiff_val
 
 Depends on / 依赖: MulAction, MulAction.contMDiffSMul_compHom, coeHom, contMDiffSMul_compHom, contMDiff_val, finsuppTensorFinsuppLid_single_tmul_single

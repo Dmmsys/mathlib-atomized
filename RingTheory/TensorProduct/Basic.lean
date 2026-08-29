@@ -155,7 +155,7 @@ lemma liftBaseChange_comp
 
 中文:
 引理 liftBaseChange_comp
-  结论: {P} [AddCommMonoid P] [Module A P] [Module R P] [IsScalarTower R A P]
+  结论: {P} [加法交换幺半群 P] [模 A P] [模 R P] [标量塔 R A P]
   证明: by
   ext
   simp
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (A otimes[R] B)
+  签名: 幺 (A otimes[R] B)
   定义体: 1 otimesₜ 1
 -/
 instance : One (A otimes[R] B) where one := 1 otimesₜ 1
@@ -284,7 +284,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: : AddCommMonoidWithOne (A otimes[R] B) where
+  签名: : 加法交换带幺幺半群 (A otimes[R] B) where
   定义体: n otimesₜ 1
   natCast_zero := by simp
   natCast_succ n := by simp [add_tmul, one_def]
@@ -405,7 +405,7 @@ unseal mul in
 
 中文:
 实例 instMul
-  签名: : Mul (A otimes[R] B) where
+  签名: : 乘法 (A otimes[R] B) where
   定义体: mul a b
 
 unseal mul in
@@ -486,7 +486,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring (A otimes[R] B) where
+  签名: : 非幺非结合半环 (A otimes[R] B) where
   定义体: by simp [HMul.hMul, Mul.mul]
   right_distrib a b c := by simp [HMul.hMul, Mul.mul]
   zero_mul a := by simp [HMul.hMul, Mul.mul]
@@ -591,7 +591,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: : NonAssocSemiring (A otimes[R] B) where
+  签名: : 非结合半环 (A otimes[R] B) where
   定义体: Algebra.TensorProduct.one_mul
   mul_one := Algebra.TensorProduct.mul_one
   toNonUnitalNonAssocSemiring := instNonUnitalNonAssocSemiring
@@ -657,7 +657,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: : NonUnitalSemiring (A otimes[R] B) where
+  签名: : 非幺半环 (A otimes[R] B) where
   定义体: Algebra.TensorProduct.mul_assoc
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.mul_assoc, TensorProduct, mul_assoc
@@ -689,7 +689,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (A otimes[R] B) where
+  签名: : 半环 (A otimes[R] B) where
   定义体: by simp [HMul.hMul, Mul.mul]
   right_distrib a b c := by simp [HMul.hMul, Mul.mul]
   zero_mul a := by simp [HMul.hMul, Mul.mul]
@@ -783,7 +783,7 @@ instance leftAlgebra
 
 中文:
 实例 leftAlgebra
-  签名: [SMulCommClass R S A]
+  签名: [标量交换类 R S A]
   定义体: { commutes' := fun r x => by
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply, includeLeftRingHom_apply]
       rw [algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [← one_def]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_one]; rw [one_mul]
@@ -813,7 +813,7 @@ example : (Semiring.toNatAlgebra : Algebra Nat (Nat otimes[Nat] B)) = leftAlgebr
 
 中文:
 引理 algebraMap_def
-  条件: [SMulCommClass R S A]
+  条件: [标量交换类 R S A]
   证明: rfl
 
 example : (Semiring.toNatAlgebra : Algebra Nat (Nat otimes[Nat] B)) = leftAlgebra := rfl
@@ -836,7 +836,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R (A otimes[R] B)
+  签名: : 代数 R (A otimes[R] B)
   定义体: inferInstance
 
 @[simp]
@@ -855,7 +855,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: [SMulCommClass R S A] (r : S)
+  条件: [标量交换类 R S A] (r : S)
   证明: rfl
 -/
 theorem algebraMap_apply [SMulCommClass R S A] (r : S) :
@@ -895,7 +895,7 @@ definition includeLeft
 
 中文:
 定义 includeLeft
-  签名: [SMulCommClass R S A]
+  签名: [标量交换类 R S A]
   定义体: { includeLeftRingHom with commutes' := by simp }
 
 @[simp]
@@ -916,7 +916,7 @@ theorem includeLeft_apply
 
 中文:
 定理 includeLeft_apply
-  条件: [SMulCommClass R S A] (a : A)
+  条件: [标量交换类 R S A] (a : A)
   证明: rfl
 -/
 theorem includeLeft_apply [SMulCommClass R S A] (a : A) :
@@ -933,7 +933,7 @@ theorem toLinearMap_includeLeft
 
 中文:
 定理 toLinearMap_includeLeft
-  条件: [SMulCommClass R S A]
+  条件: [标量交换类 R S A]
   证明: rfl
 -/
 @[simp] theorem toLinearMap_includeLeft [SMulCommClass R S A] :
@@ -1112,7 +1112,7 @@ lemma ringHom_ext
 
 中文:
 引理 ringHom_ext
-  结论: {C : 类型} [Semiring C] {f g : A otimes[R] B ->+* C}
+  结论: {C : 类型} [半环 C] {f g : A otimes[R] B ->+* C}
   证明: by
   ext x
   induction x with
@@ -1154,7 +1154,7 @@ instance instAddCommGroupWithOne
 
 中文:
 实例 instAddCommGroupWithOne
-  签名: : AddCommGroupWithOne (A otimes[R] B) where
+  签名: : 加法交换带幺群 (A otimes[R] B) where
   定义体: TensorProduct.addCommGroup
   __ := instAddCommMonoidWithOne
   intCast z := z otimesₜ (1 : B)
@@ -1207,7 +1207,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: : NonUnitalNonAssocRing (A otimes[R] B) where
+  签名: : 非幺非结合环 (A otimes[R] B) where
   定义体: TensorProduct.addCommGroup
   __ := instNonUnitalNonAssocSemiring
 
@@ -1236,7 +1236,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: : NonAssocRing (A otimes[R] B) where
+  签名: : 非结合环 (A otimes[R] B) where
   定义体: TensorProduct.addCommGroup
   __ := instNonAssocSemiring
   __ := instAddCommGroupWithOne
@@ -1266,7 +1266,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: : NonUnitalRing (A otimes[R] B) where
+  签名: : 非幺环 (A otimes[R] B) where
   定义体: TensorProduct.addCommGroup
   __ := instNonUnitalSemiring
 
@@ -1304,7 +1304,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring (A otimes[R] B) where
+  签名: : 交换半环 (A otimes[R] B) where
   定义体: inferInstance
   mul_comm x y := by
     refine TensorProduct.induction_on x ?_ ?_ ?_
@@ -1354,7 +1354,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (A otimes[R] B) where
+  签名: : 环 (A otimes[R] B) where
   定义体: instSemiring
   __ := TensorProduct.addCommGroup
   __ := instNonAssocRing
@@ -1378,7 +1378,7 @@ theorem intCast_def'
 
 中文:
 定理 intCast_def'
-  条件: {B} [Ring B] [Algebra R B] (z : 整数)
+  条件: {B} [环 B] [代数 R B] (z : 整数)
   结论: (z : A otimes[R] B) = (1 : A) otimesₜ (z : B)
   证明: by
   rw [intCast_def]; rw [← zsmul_one]; rw [smul_tmul]; rw [zsmul_one]
@@ -1412,7 +1412,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (A otimes[R] B)
+  签名: : 交换环 (A otimes[R] B)
   定义体: { toRing := inferInstance
     mul_comm := mul_comm }
 
@@ -1444,7 +1444,7 @@ abbreviation rightAlgebra
 
 中文:
 缩写 rightAlgebra
-  签名: : Algebra B (A otimes[R] B)
+  签名: : 代数 B (A otimes[R] B)
   定义体: includeRight.toRingHom.toAlgebra' fun b x => by
     suffices LinearMap.mulLeft R (includeRight b) = LinearMap.mulRight R (includeRight b) from
       congr($this x)
@@ -1491,7 +1491,7 @@ instance right_isScalarTower
 
 中文:
 实例 right_isScalarTower
-  签名: : IsScalarTower R B (A otimes[R] B)
+  签名: : 标量塔 R B (A otimes[R] B)
   定义体: IsScalarTower.of_algebraMap_eq fun r => (Algebra.TensorProduct.includeRight.commutes r).symm
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight.commutes, IsScalarTower, IsScalarTower.of_algebraMap_eq, TensorProduct, commutes, fast_instance, includeRight, of_algebraMap_eq
@@ -1530,7 +1530,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass A B (A otimes[R] B)
+  签名: 标量交换类 A B (A otimes[R] B)
   定义体: x.induction_on (by simp)
     (fun _ _ => by simp [Algebra.smul_def, right_algebraMap_apply, smul_tmul'])
     fun _ _ h₁ h₂ => by simpa using congr($h₁ + $h₂)
@@ -1552,7 +1552,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass B A (A otimes[R] B)
+  签名: 标量交换类 B A (A otimes[R] B)
   定义体: .symm ..
 -/
 instance : SMulCommClass B A (A otimes[R] B) := .symm ..
@@ -1590,7 +1590,7 @@ lemma closure_range_union_range_eq_top
 
 中文:
 引理 closure_range_union_range_eq_top
-  结论: [CommRing R] [Ring A] [Ring B]
+  结论: [交换环 R] [环 A] [环 B]
   证明: by
   rw [← top_le_iff]
   rintro x -
@@ -1635,7 +1635,7 @@ lemma adjoin_one_tmul_image_eq_top
 
 中文:
 引理 adjoin_one_tmul_image_eq_top
-  结论: [CommSemiring R] [CommSemiring A]
+  结论: [交换半环 R] [交换半环 A]
   证明: by
   suffices h : adjoin A ((⊤ : Subalgebra R B).map (includeRight (A := A)) : Set (A otimes[R] B)) = ⊤ by
     simp [← h, ← hs, AlgHom.map_adjoin, adjoin_adjoin_of_tower]
@@ -1666,7 +1666,7 @@ lemma mk_one_injective_of_isScalarTower
 
 中文:
 引理 mk_one_injective_of_isScalarTower
-  结论: (M : 类型) [AddCommMonoid M]
+  结论: (M : 类型) [加法交换幺半群 M]
   证明: by
   apply Function.RightInverse.injective (g := LinearMap.liftBaseChange S LinearMap.id)
   intro m
@@ -1696,8 +1696,8 @@ lemma Algebra.baseChange_lmul
   simp
 
 中文:
-引理 Algebra.baseChange_lmul
-  结论: {R B : 类型} [CommSemiring R] [Semiring B] [Algebra R B]
+引理 代数.baseChange_lmul
+  结论: {R B : 类型} [交换半环 R] [半环 B] [代数 R B]
   证明: by
   ext i
   simp
@@ -1806,7 +1806,7 @@ definition module
 
 中文:
 定义 module
-  签名: : Module (A otimes[R] B) M where
+  签名: : 模 (A otimes[R] B) M where
   定义体: moduleAux x m
   zero_smul m := by simp only [(· • ·), map_zero, LinearMap.zero_apply]
   smul_zero x := by simp only [(· • ·), map_zero]
@@ -1922,8 +1922,8 @@ lemma Submodule.map_range_rTensor_subtype_lid
   exact t.induction_on (by simp) (by simp +contextual [Submodule.smul_m
 
 中文:
-引理 Submodule.map_range_rTensor_subtype_lid
-  结论: {R Q} [CommSemiring R] [AddCommMonoid Q]
+引理 子模.map_range_rTensor_subtype_lid
+  结论: {R Q} [交换半环 R] [加法交换幺半群 Q]
   证明: by
   rw [← map_top]; rw [← Submodule.map_comp]; rw [map_top]
   refine le_antisymm ?_ fun q h => Submodule.smul_induction_on h
@@ -1963,8 +1963,8 @@ theorem TensorProduct.mk_surjective
   exact ⟨x • y, rfl⟩
 
 中文:
-定理 TensorProduct.mk_surjective
-  条件: (h : Function.Surjective (algebraMap R S))
+定理 张量积.mk_surjective
+  条件: (h : 函数.满射 (algebraMap R S))
   证明: by
   rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← span_tmul_eq_top]; rw [Submodule.span_le]
   rintro _ ⟨x, y, rfl⟩
@@ -1997,8 +1997,8 @@ lemma TensorProduct.flip_mk_surjective
   exact ⟨r • s, rfl⟩
 
 中文:
-引理 TensorProduct.flip_mk_surjective
-  条件: (h : Function.Surjective (algebraMap R T))
+引理 张量积.flip_mk_surjective
+  条件: (h : 函数.满射 (algebraMap R T))
   证明: by
   rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← span_tmul_eq_top]; rw [Submodule.span_le]
   rintro _ ⟨s, t, rfl⟩
@@ -2026,8 +2026,8 @@ lemma Algebra.TensorProduct.includeRight_surjective
   proof: TensorProduct.mk_surjective _ _ _ h
 
 中文:
-引理 Algebra.TensorProduct.includeRight_surjective
-  条件: (h : Function.Surjective (algebraMap R S))
+引理 代数.张量积.includeRight_surjective
+  条件: (h : 函数.满射 (algebraMap R S))
   证明: TensorProduct.mk_surjective _ _ _ h
 
 Depends on / 依赖: TensorProduct, TensorProduct.mk_surjective, mk_surjective
@@ -2044,7 +2044,7 @@ lemma Algebra.TensorProduct.includeLeft_surjective
   proof: TensorProduct.flip_mk_surjective _ h
 
 中文:
-引理 Algebra.TensorProduct.includeLeft_surjective
+引理 代数.张量积.includeLeft_surjective
   证明: TensorProduct.flip_mk_surjective _ h
 
 Depends on / 依赖: TensorProduct, TensorProduct.flip_mk_surjective, flip_mk_surjective
@@ -2072,7 +2072,7 @@ theorem TensorProduct.Algebra.mul'_comp_tensorTensorTensorComm
   simp
 
 中文:
-定理 TensorProduct.Algebra.mul'_comp_tensorTensorTensorComm
+定理 张量积.代数.mul'_comp_tensorTensorTensorComm
   证明: by
   ext
   simp
@@ -2091,7 +2091,7 @@ lemma LinearMap.mul'_tensor
   proof: ext_fourfold' by simp
 
 中文:
-引理 LinearMap.mul'_tensor
+引理 线性映射.mul'_tensor
   证明: ext_fourfold' by simp
 -/
 lemma LinearMap.mul'_tensor :
@@ -2108,7 +2108,7 @@ lemma LinearMap.mulLeft_tmul
   ext; simp
 
 中文:
-引理 LinearMap.mulLeft_tmul
+引理 线性映射.mulLeft_tmul
   条件: (a : A) (b : B)
   证明: by
   ext; simp
@@ -2127,7 +2127,7 @@ lemma LinearMap.mulRight_tmul
   ext; simp
 
 中文:
-引理 LinearMap.mulRight_tmul
+引理 线性映射.mulRight_tmul
   条件: (a : A) (b : B)
   证明: by
   ext; simp
@@ -2180,7 +2180,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (A otimes[R] B)
+  签名: 对合环 (A otimes[R] B)
   定义体: by simp
 -/
 noncomputable instance : StarRing (A otimes[R] B) where
@@ -2272,7 +2272,7 @@ lemma _root_.Algebra.TensorProduct.ext_ring
   proof: .symm.injective h liftEquiv ..
 
 中文:
-引理 _root_.Algebra.TensorProduct.ext_ring
+引理 _root_.代数.张量积.ext_ring
   结论: {f g : S otimes[R] A ->ₐ[S] B}
   证明: .symm.injective h liftEquiv ..
 

@@ -59,7 +59,7 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  条件: (m n : P自然数)
+  条件: (m n : 正自然数)
   结论: m = n ↔ (m : 自然数) = (n : 自然数)
   证明: by simp
 
@@ -81,7 +81,7 @@ lemma coe_le_coe
 
 中文:
 引理 coe_le_coe
-  条件: (m n : P自然数)
+  条件: (m n : 正自然数)
   结论: m <= n ↔ (m : 自然数) <= (n : 自然数)
   证明: by simp
 
@@ -101,7 +101,7 @@ lemma coe_lt_coe
 
 中文:
 引理 coe_lt_coe
-  条件: (m n : P自然数)
+  条件: (m n : 正自然数)
   结论: m < n ↔ (m : 自然数) < (n : 自然数)
   证明: by simp
 -/
@@ -126,8 +126,8 @@ lemma sub_coe
 
 中文:
 引理 sub_coe
-  条件: (a b : P自然数)
-  结论: ((a - b : P自然数) : 自然数) = a.val - 1 - b.val + 1
+  条件: (a b : 正自然数)
+  结论: ((a - b : 正自然数) : 自然数) = a.val - 1 - b.val + 1
   证明: by
   cases a
   cases b

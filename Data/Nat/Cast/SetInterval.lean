@@ -35,7 +35,7 @@ theorem range_cast_int
 
 中文:
 定理 range_cast_int
-  结论: range ((↑) : 自然数 -> 整数) = Ici 0
+  结论: range ((↑) : 自然数 -> 整数) = 左闭右无界区间 0
   证明: Subset.antisymm (range_subset_iff.2 Int.natCast_nonneg) CanLift.prf
 
 Depends on / 依赖: CanLift, CanLift.prf, Int.natCast_nonneg, Subset, Subset.antisymm, antisymm, natCast_nonneg, range_subset_iff
@@ -55,7 +55,7 @@ theorem image_cast_int_Icc
 中文:
 定理 image_cast_int_Icc
   条件: (a b : 自然数)
-  结论: (↑) '' Icc a b = Icc (a : 整数) b
+  结论: (↑) '' 闭区间 a b = 闭区间 (a : 整数) b
   证明: (castOrderEmbedding (α := Int)).image_Icc (by simp [ordConnected_Ici]) a b
 
 Depends on / 依赖: castOrderEmbedding, image_Icc, ordConnected_Ici
@@ -75,7 +75,7 @@ theorem image_cast_int_Ico
 中文:
 定理 image_cast_int_Ico
   条件: (a b : 自然数)
-  结论: (↑) '' Ico a b = Ico (a : 整数) b
+  结论: (↑) '' 左闭右开区间 a b = 左闭右开区间 (a : 整数) b
   证明: (castOrderEmbedding (α := Int)).image_Ico (by simp [ordConnected_Ici]) a b
 
 Depends on / 依赖: castOrderEmbedding, image_Ico, ordConnected_Ici
@@ -95,7 +95,7 @@ theorem image_cast_int_Ioc
 中文:
 定理 image_cast_int_Ioc
   条件: (a b : 自然数)
-  结论: (↑) '' Ioc a b = Ioc (a : 整数) b
+  结论: (↑) '' 左开右闭区间 a b = 左开右闭区间 (a : 整数) b
   证明: (castOrderEmbedding (α := Int)).image_Ioc (by simp [ordConnected_Ici]) a b
 
 Depends on / 依赖: castOrderEmbedding, image_Ioc, ordConnected_Ici
@@ -115,7 +115,7 @@ theorem image_cast_int_Ioo
 中文:
 定理 image_cast_int_Ioo
   条件: (a b : 自然数)
-  结论: (↑) '' Ioo a b = Ioo (a : 整数) b
+  结论: (↑) '' 开区间 a b = 开区间 (a : 整数) b
   证明: (castOrderEmbedding (α := Int)).image_Ioo (by simp [ordConnected_Ici]) a b
 
 Depends on / 依赖: castOrderEmbedding, image_Ioo, ordConnected_Ici
@@ -136,7 +136,7 @@ theorem image_cast_int_Iic
 中文:
 定理 image_cast_int_Iic
   条件: (a : 自然数)
-  结论: (↑) '' Iic a = Icc (0 : 整数) a
+  结论: (↑) '' 左无界右闭区间 a = 闭区间 (0 : 整数) a
   证明: by
   rw [← Icc_bot]; rw [image_cast_int_Icc]; rfl
 
@@ -158,7 +158,7 @@ theorem image_cast_int_Iio
 中文:
 定理 image_cast_int_Iio
   条件: (a : 自然数)
-  结论: (↑) '' Iio a = Ico (0 : 整数) a
+  结论: (↑) '' 左无界右开区间 a = 左闭右开区间 (0 : 整数) a
   证明: by
   rw [← Ico_bot]; rw [image_cast_int_Ico]; rfl
 
@@ -179,7 +179,7 @@ theorem image_cast_int_Ici
 中文:
 定理 image_cast_int_Ici
   条件: (a : 自然数)
-  结论: (↑) '' Ici a = Ici (a : 整数)
+  结论: (↑) '' 左闭右无界区间 a = 左闭右无界区间 (a : 整数)
   证明: (castOrderEmbedding (α := Int)).image_Ici (by simp [isUpperSet_Ici]) a
 
 Depends on / 依赖: castOrderEmbedding, image_Ici, isUpperSet_Ici
@@ -199,7 +199,7 @@ theorem image_cast_int_Ioi
 中文:
 定理 image_cast_int_Ioi
   条件: (a : 自然数)
-  结论: (↑) '' Ioi a = Ioi (a : 整数)
+  结论: (↑) '' 左开右无界区间 a = 左开右无界区间 (a : 整数)
   证明: (castOrderEmbedding (α := Int)).image_Ioi (by simp [isUpperSet_Ici]) a
 
 Depends on / 依赖: castOrderEmbedding, image_Ioi, isUpperSet_Ici

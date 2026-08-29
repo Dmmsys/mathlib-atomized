@@ -159,7 +159,7 @@ lemma RightTotal.rel_forall
   proof: fun _ _ Hrel H b => Exists.elim (h b) (fun _ Rab => Hrel Rab (H _))
 
 中文:
-引理 RightTotal.rel_forall
+引理 RightTotal.rel_对任意
   条件: (h : RightTotal R)
   证明: fun _ _ Hrel H b => Exists.elim (h b) (fun _ Rab => Hrel Rab (H _))
 
@@ -178,7 +178,7 @@ lemma LeftTotal.rel_exists
   proof: fun _ _ Hrel ⟨a, pa⟩ => (h a).imp fun _ Rab => Hrel Rab pa
 
 中文:
-引理 LeftTotal.rel_exists
+引理 LeftTotal.rel_存在
   条件: (h : LeftTotal R)
   证明: fun _ _ Hrel ⟨a, pa⟩ => (h a).imp fun _ Rab => Hrel Rab pa
 -/
@@ -197,7 +197,7 @@ lemma BiTotal.rel_forall
       fun H a => Exists.elim (h.left a) (fun _ Rab => (Hrel Rab).mpr (H _))⟩
 
 中文:
-引理 BiTotal.rel_forall
+引理 BiTotal.rel_对任意
   条件: (h : BiTotal R)
   证明: fun _ _ Hrel =>
     ⟨fun H b => Exists.elim (h.right b) (fun _ Rab => (Hrel Rab).mp (H _)),
@@ -222,7 +222,7 @@ lemma BiTotal.rel_exists
       fun ⟨b, qb⟩ => (h.right b).imp fun _ Rab => (Hrel Rab).2 qb⟩
 
 中文:
-引理 BiTotal.rel_exists
+引理 BiTotal.rel_存在
   条件: (h : BiTotal R)
   证明: fun _ _ Hrel =>
     ⟨fun ⟨a, pa⟩ => (h.left a).imp fun _ Rab => (Hrel Rab).1 pa,
@@ -247,7 +247,7 @@ lemma left_unique_of_rel_eq
 
 中文:
 引理 left_unique_of_rel_eq
-  条件: {eq' : β -> β -> 命题} (he : (R ⇒ (R ⇒ Iff)) Eq eq')
+  条件: {eq' : β -> β -> 命题} (he : (R ⇒ (R ⇒ 当且仅当)) 相等 eq')
   结论: LeftUnique R
   证明: fun a b c (ac : R a c) (bc : R b c) => (he ac bc).mpr ((he bc bc).mp rfl)
 -/
@@ -266,7 +266,7 @@ lemma rel_imp
 
 中文:
 引理 rel_imp
-  结论: (Iff ⇒ (Iff ⇒ Iff)) (· -> ·) (· -> ·)
+  结论: (当且仅当 ⇒ (当且仅当 ⇒ 当且仅当)) (· -> ·) (· -> ·)
   证明: fun _ _ h _ _ l => imp_congr h l
 
 Depends on / 依赖: imp_congr
@@ -284,7 +284,7 @@ lemma rel_not
 
 中文:
 引理 rel_not
-  结论: (Iff ⇒ Iff) Not Not
+  结论: (当且仅当 ⇒ 当且仅当) 非 非
   证明: fun _ _ h => not_congr h
 
 Depends on / 依赖: not_congr
@@ -304,7 +304,7 @@ lemma bi_total_eq
 中文:
 引理 bi_total_eq
   条件: {α : 类型u₁}
-  结论: Relator.BiTotal (@Eq α)
+  结论: Relator.BiTotal (@相等 α)
   证明: { left := fun a => ⟨a, rfl⟩, right := fun a => ⟨a, rfl⟩ }
 -/
 lemma bi_total_eq {α : Type u₁} : Relator.BiTotal (@Eq α) :=

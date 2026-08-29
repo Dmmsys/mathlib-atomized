@@ -95,8 +95,8 @@ instance [Faithful
     · exact congr_arg TriangleMorphism.hom₃ h
 
 中文:
-实例 [Faithful
-  签名: F] : Faithful F.mapTriangle where
+实例 [忠实
+  签名: F] : 忠实 F.mapTriangle where
   定义体: by
     ext <;> apply F.map_injective
     · exact congr_arg TriangleMorphism.hom₁ h
@@ -129,8 +129,8 @@ instance [Full
         (by simpa only [mapTriangle_obj, map_comp, map_preimage] 
 
 中文:
-实例 [Full
-  签名: F] [Faithful F] : Full F.mapTriangle where
+实例 [满
+  签名: F] [忠实 F] : 满 F.mapTriangle where
   定义体: ⟨{hom₁ := F.preimage f.hom₁
       hom₂ := F.preimage f.hom₂
       hom₃ := F.preimage f.hom₃
@@ -241,8 +241,8 @@ instance [forall
   commShiftIso_add _ _ := mapTriangleCommShiftIso_add ..
 
 中文:
-实例 [forall
-  签名: (n : 整数), (shiftFunctor C n).Additive]
+实例 [对任意
+  签名: (n : 整数), (shiftFunctor C n).加性]
   定义体: F.mapTriangleCommShiftIso
   commShiftIso_add _ _ := mapTriangleCommShiftIso_add ..
 
@@ -382,7 +382,7 @@ definition mapTriangleIso
 
 中文:
 定义 mapTriangleIso
-  签名: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.CommShift 整数] [F₂.CommShift 整数]
+  签名: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.交换Shift 整数] [F₂.交换Shift 整数]
   定义体: NatIso.ofComponents (fun T =>
     Triangle.isoMk _ _ (e.app _) (e.app _) (e.app _) (by simp) (by simp) (by
       dsimp
@@ -417,7 +417,7 @@ class IsTriangulated
     - map_distinguished((T : Triangle C)) : (T in distTriang C) -> F.mapTriangle.obj T in distTriang D
 
 中文:
-类 IsTriangulated
+类 是三角
   参数: : 命题 where
   公理与运算 (1 个):
     - map_distinguished((T : Triangle C)) : (T in distTriang C) -> F.mapTriangle.obj T in distTriang D
@@ -435,7 +435,7 @@ lemma map_distinguished
 
 中文:
 引理 map_distinguished
-  条件: [F.IsTriangulated] (T : Triangle C) (hT : T in distTriang C)
+  条件: [F.是三角] (T : Triangle C) (hT : T in distTriang C)
   证明: IsTriangulated.map_distinguished _ hT
 
 Depends on / 依赖: IsTriangulated, IsTriangulated.map_distinguished, map_distinguished
@@ -476,7 +476,7 @@ instance [F.IsTriangulated]
   let φ : F.mapTriangle.obj (binaryProductTriangle X₁ X₃) 
 
 中文:
-实例 [F.IsTriangulated]
+实例 [F.是三角]
   签名: :
   定义体: by
   suffices forall (X₁ X₃ : C), IsIso (prodComparison F X₁ X₃) by
@@ -526,7 +526,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟭 C).IsTriangulated
+  签名: (𝟭 C).是三角
   定义体: isomorphic_distinguished _ hT _ ((mapTriangleIdIso C).app T)
 
 Depends on / 依赖: isomorphic_distinguished, mapTriangleIdIso
@@ -545,8 +545,8 @@ instance [F.IsTriangulated]
       ((mapTriangleCompIso F G).app T)
 
 中文:
-实例 [F.IsTriangulated]
-  签名: [G.IsTriangulated]
+实例 [F.是三角]
+  签名: [G.是三角]
   定义体: isomorphic_distinguished _ (G.map_distinguished _ (F.map_distinguished T hT)) _
       ((mapTriangleCompIso F G).app T)
 
@@ -575,7 +575,7 @@ lemma map_distinguished_iff
 
 中文:
 引理 map_distinguished_iff
-  条件: [F.IsTriangulated] [Full F] [Faithful F] (T : Triangle C)
+  条件: [F.是三角] [满 F] [忠实 F] (T : Triangle C)
   证明: by
   refine ⟨fun hT => ?_, F.map_distinguished T⟩
   obtain ⟨Z, g, h, mem⟩ := distinguished_cocone_triangle T.mor₁
@@ -603,7 +603,7 @@ lemma isTriangulated_of_iso
 
 中文:
 引理 isTriangulated_of_iso
-  结论: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.CommShift 整数] [F₂.CommShift 整数]
+  结论: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.交换Shift 整数] [F₂.交换Shift 整数]
   证明: isomorphic_distinguished _ (F₁.map_distinguished T hT) _ ((mapTriangleIso e).app T).symm
 
 Depends on / 依赖: isomorphic_distinguished, mapTriangleIso, map_distinguished
@@ -629,7 +629,7 @@ lemma isTriangulated_iff_of_iso
 
 中文:
 引理 isTriangulated_iff_of_iso
-  结论: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.CommShift 整数] [F₂.CommShift 整数]
+  结论: {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂) [F₁.交换Shift 整数] [F₂.交换Shift 整数]
   证明: by
   constructor
   · intro
@@ -755,7 +755,7 @@ lemma isTriangulated_of_precomp_iso
 
 中文:
 引理 isTriangulated_of_precomp_iso
-  结论: {H : C ⥤ E} (e : F ⋙ G ≅ H) [H.CommShift 整数]
+  结论: {H : C ⥤ E} (e : F ⋙ G ≅ H) [H.交换Shift 整数]
   证明: by
   have := (isTriangulated_iff_of_iso e).2 inferInstance
   exact isTriangulated_of_precomp F G
@@ -806,7 +806,7 @@ definition map
 
 中文:
 定义 map
-  签名: : Octahedron (by dsimp; rw [← F.map_comp, comm])
+  签名: : 八面体 (by dsimp; rw [← F.map_comp, comm])
   定义体: F.map h.m₁
   m₃ := F.map h.m₃
   comm₁ := by simpa using F.congr_map h.comm₁
@@ -893,7 +893,7 @@ lemma IsTriangulated.of_fully_faithful_triangulated_functor
         c
 
 中文:
-引理 IsTriangulated.of_fully_faithful_triangulated_functor
+引理 是三角.of_fully_faithful_triangulated_functor
   证明: by
     have comm' : F.map u₁₂ ≫ F.map u₂₃ = F.map u₁₃ := by rw [← comm, F.map_comp]
     let H := Triangulated.someOctahedron comm' (F.map_distinguished _ h₁₂)

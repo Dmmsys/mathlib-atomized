@@ -36,7 +36,7 @@ lemma ofAdd_image_setAdd
 
 中文:
 引理 ofAdd_image_setAdd
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   证明: by
   rw [← Set.image2_add]; rw [Set.image_image2_distrib ofAdd_add]; rw [Set.image2_mul]
 
@@ -64,7 +64,7 @@ lemma ofAdd_image_nsmul
 
 中文:
 引理 ofAdd_image_nsmul
-  条件: (n : 自然数) (s : Set M)
+  条件: (n : 自然数) (s : 集合 M)
   证明: by
   induction n with
   | zero => simp; rfl
@@ -94,7 +94,7 @@ lemma toAdd_image_setMul
 
 中文:
 引理 toAdd_image_setMul
-  条件: (s t : Set (Multiplicative M))
+  条件: (s t : 集合 (Multiplicative M))
   证明: by
   rw [← Set.image2_mul]; rw [Set.image_image2_distrib toAdd_mul]; rw [Set.image2_add]
 
@@ -120,7 +120,7 @@ lemma toAdd_image_nsmul
 
 中文:
 引理 toAdd_image_nsmul
-  条件: (n : 自然数) (s : Set (Multiplicative M))
+  条件: (n : 自然数) (s : 集合 (Multiplicative M))
   证明: by
   induction n with
   | zero => simp; rfl

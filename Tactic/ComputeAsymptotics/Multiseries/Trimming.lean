@@ -46,11 +46,11 @@ inductive IsZero
     - nil: {basis_hd} {basis_tl} (f) : @IsZero (basis_hd :: basis_tl) (mk .nil f)
 
 中文:
-归纳类型 IsZero
-  参数: : {basis : Basis} -> MultiseriesExpansion basis -> 命题
+归纳类型 是零
+  参数: : {basis : 基} -> MultiseriesExpansion basis -> 命题
   构造子 (2 个):
-    - const: {c : MultiseriesExpansion []} (hc : c.to实数 = 0) : IsZero c
-    - nil: {basis_hd} {basis_tl} (f) : @IsZero (basis_hd :: basis_tl) (mk .nil f)
+    - const: {c : MultiseriesExpansion []} (hc : c.to实数 = 0) : 是零 c
+    - nil: {basis_hd} {basis_tl} (f) : @是零 (basis_hd :: basis_tl) (mk .nil f)
 -/
 inductive IsZero : {basis : Basis} -> MultiseriesExpansion basis -> Prop
 | const {c : MultiseriesExpansion []} (hc : c.toReal = 0) : IsZero c
@@ -74,7 +74,7 @@ theorem const_iff
 中文:
 定理 const_iff
   条件: {c : MultiseriesExpansion []}
-  结论: IsZero c ↔ c.to实数 = 0
+  结论: 是零 c ↔ c.to实数 = 0
   证明: by
   constructor <;> grind [IsZero]
 
@@ -127,7 +127,7 @@ theorem approximates_zero
 
 中文:
 定理 approximates_zero
-  结论: {basis : Basis} {ms : MultiseriesExpansion basis}
+  结论: {basis : 基} {ms : MultiseriesExpansion basis}
   证明: by
   cases h_zero with
   | const hc => simp [hc, Pi.zero_def]
@@ -177,11 +177,11 @@ inductive Trimmed
 
 中文:
 归纳类型 Trimmed
-  参数: : {basis : Basis} -> MultiseriesExpansion basis -> 命题
+  参数: : {basis : 基} -> MultiseriesExpansion basis -> 命题
   构造子 (3 个):
     - const: {c : 实数} : @Trimmed [] c
     - nil: {basis_hd} {basis_tl} {f} : @Trimmed (basis_hd :: basis_tl) (mk .nil f)
-    - cons: {basis_hd} {basis_tl} {exp : 实数} {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl} {f : 实数 -> 实数} (h_trimmed : coef.Trimmed) (h_ne_zero : ¬ IsZero coef) : @Trimmed (basis_hd :: basis_tl) (mk (.cons exp coef tl) f)
+    - cons: {basis_hd} {basis_tl} {exp : 实数} {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl} {f : 实数 -> 实数} (h_trimmed : coef.Trimmed) (h_ne_zero : ¬ 是零 coef) : @Trimmed (basis_hd :: basis_tl) (mk (.cons exp coef tl) f)
 -/
 inductive Trimmed : {basis : Basis} -> MultiseriesExpansion basis -> Prop
 | const {c : Real} : @Trimmed [] c
@@ -201,7 +201,7 @@ definition Multiseries.Trimmed
 
 中文:
 定义 Multiseries.Trimmed
-  签名: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  签名: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   定义体: (mk ms 0).Trimmed
 
 Depends on / 依赖: Trimmed
@@ -229,7 +229,7 @@ theorem trimmed_iff_seq_trimmed
 
 中文:
 定理 trimmed_iff_seq_trimmed
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
     cases h <;> constructor <;> grind
   mpr h := by

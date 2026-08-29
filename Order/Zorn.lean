@@ -85,7 +85,7 @@ hub a by
       rw [maxChain_spec.r
 
 中文:
-定理 exists_maximal_of_chains_bounded
+定理 存在_maximal_of_chains_bounded
   结论: (h : 对任意 c, IsChain r c -> 存在 ub, 对任意 a in c, a ≺ ub)
   证明: have : exists ub, forall a in maxChain r, a ≺ ub := h _ maxChain_spec.left
   let ⟨ub, (hub : forall a in maxChain r, a ≺ ub)⟩ := this
@@ -121,8 +121,8 @@ theorem exists_maximal_of_nonempty_chains_bounded
     trans
 
 中文:
-定理 exists_maximal_of_nonempty_chains_bounded
-  结论: [Nonempty α]
+定理 存在_maximal_of_nonempty_chains_bounded
+  结论: [非空 α]
   证明: exists_maximal_of_chains_bounded
     (fun c hc =>
       (eq_empty_or_nonempty c).elim
@@ -155,7 +155,7 @@ theorem zorn_le
 
 中文:
 定理 zorn_le
-  条件: (h : 对任意 c : Set α, IsChain (· <= ·) c -> BddAbove c)
+  条件: (h : 对任意 c : 集合 α, IsChain (· <= ·) c -> BddAbove c)
   结论: 存在 m : α, IsMax m
   证明: exists_maximal_of_chains_bounded h le_trans
 
@@ -174,7 +174,7 @@ theorem zorn_le_nonempty
 
 中文:
 定理 zorn_le_nonempty
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: exists_maximal_of_nonempty_chains_bounded h le_trans
 
 Depends on / 依赖: exists_maximal_of_nonempty_chains_bounded, le_trans
@@ -200,7 +200,7 @@ theorem zorn_le₀
 
 中文:
 定理 zorn_le₀
-  条件: (s : Set α) (ih : 对任意 c subseteq s, IsChain (· <= ·) c -> 存在 ub in s, 对任意 z in c, z <= ub)
+  条件: (s : 集合 α) (ih : 对任意 c subseteq s, IsChain (· <= ·) c -> 存在 ub in s, 对任意 z in c, z <= ub)
   证明: let ⟨⟨m, hms⟩, h⟩ :=
     @zorn_le s _ fun c hc =>
       let ⟨ub, hubs, hub⟩ :=
@@ -240,7 +240,7 @@ theorem zorn_le_nonempty₀
 
 中文:
 定理 zorn_le_nonempty₀
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: by
   have H := zorn_le₀ ({ y in s | x <= y }) fun c hcs hc => ?_
   · rcases H with ⟨m, ⟨hms, hxm⟩, hm⟩
@@ -305,7 +305,7 @@ theorem zorn_subset
 
 中文:
 定理 zorn_subset
-  结论: (S : Set (Set α))
+  结论: (S : 集合 (集合 α))
   证明: zorn_le₀ S h
 -/
 theorem zorn_subset (S : Set (Set α))
@@ -322,7 +322,7 @@ theorem zorn_subset_nonempty
 
 中文:
 定理 zorn_subset_nonempty
-  结论: (S : Set (Set α))
+  结论: (S : 集合 (集合 α))
   证明: zorn_le_nonempty₀ _ (fun _ cS hc y yc => H _ cS hc ⟨y, yc⟩) _ hx
 -/
 theorem zorn_subset_nonempty (S : Set (Set α))
@@ -340,7 +340,7 @@ theorem zorn_superset
 
 中文:
 定理 zorn_superset
-  结论: (S : Set (Set α))
+  结论: (S : 集合 (集合 α))
   证明: (@zorn_le₀ (Set α)ᵒᵈ _ S) fun c cS hc => h c cS hc.symm
 
 Depends on / 依赖: hc.symm
@@ -359,7 +359,7 @@ theorem zorn_superset_nonempty
 
 中文:
 定理 zorn_superset_nonempty
-  结论: (S : Set (Set α))
+  结论: (S : 集合 (集合 α))
   证明: @zorn_le_nonempty₀ (Set α)ᵒᵈ _ S (fun _ cS hc y yc => H _ cS hc.symm ⟨y, yc⟩) _ hx
 
 Depends on / 依赖: hc.symm
@@ -385,7 +385,7 @@ theorem IsChain.exists_maxChain
     ⟨⋃₀cs, ⟨fun _ ha => Set.mem_sUnion_of_mem ((hc
 
 中文:
-定理 IsChain.exists_maxChain
+定理 IsChain.存在_maxChain
   条件: (hc : IsChain r c)
   结论: 存在 M, @IsMaxChain _ r M ∧ c subseteq M
   证明: by
@@ -429,9 +429,9 @@ lemma _root_.IsChain.exists_subset_flag
   proof: let ⟨s, hs, hcs⟩ := hc.exists_maxChain; ⟨ofIsMaxChain s hs, hcs⟩
 
 中文:
-引理 _root_.IsChain.exists_subset_flag
+引理 _root_.IsChain.存在_subset_flag
   条件: (hc : IsChain (· <= ·) c)
-  结论: 存在 s : Flag α, c subseteq s
+  结论: 存在 s : 旗 α, c subseteq s
   证明: let ⟨s, hs, hcs⟩ := hc.exists_maxChain; ⟨ofIsMaxChain s hs, hcs⟩
 
 Depends on / 依赖: exists_maxChain, hc.exists_maxChain, ofIsMaxChain
@@ -450,9 +450,9 @@ lemma exists_mem
   ⟨s, hs rfl⟩
 
 中文:
-引理 exists_mem
+引理 存在_mem
   条件: (a : α)
-  结论: 存在 s : Flag α, a in s
+  结论: 存在 s : 旗 α, a in s
   证明: let ⟨s, hs⟩ := Set.subsingleton_singleton (a := a).isChain.exists_subset_flag
   ⟨s, hs rfl⟩
 
@@ -473,9 +473,9 @@ lemma exists_mem_mem
   simpa [Set.insert_subset_iff] using (IsChain.pair hab).exists_subset_flag
 
 中文:
-引理 exists_mem_mem
+引理 存在_mem_mem
   条件: (hab : a <= b)
-  结论: 存在 s : Flag α, a in s ∧ b in s
+  结论: 存在 s : 旗 α, a in s ∧ b in s
   证明: by
   simpa [Set.insert_subset_iff] using (IsChain.pair hab).exists_subset_flag
 
@@ -494,7 +494,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Flag α)
+  签名: 非空 (旗 α)
   定义体: ⟨.ofIsMaxChain _ maxChain_spec⟩
 
 Depends on / 依赖: maxChain_spec, ofIsMaxChain

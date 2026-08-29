@@ -43,8 +43,8 @@ instance [W.IsStableUnderRetracts]
   body: W.of_retract (hfg.map ((evaluation _ _).obj j)) (hg j)
 
 中文:
-实例 [W.IsStableUnderRetracts]
-  签名: (J : 类型u'') [Category.{v''} J]
+实例 [W.是StableUnderRetracts]
+  签名: (J : 类型u'') [范畴.{v''} J]
   定义体: W.of_retract (hfg.map ((evaluation _ _).obj j)) (hg j)
 
 Depends on / 依赖: W.of_retract, evaluation, hfg.map, of_retract
@@ -67,7 +67,7 @@ instance IsStableUnderLimitsOfShape.functorCategory
       (fun k => hf k j) (φ.app j) (fun k => congr_app (hφ k) j))
 
 中文:
-实例 IsStableUnderLimitsOfShape.functorCategory
+实例 是StableUnderLimitsOfShape.functorCategory
   定义体: MorphismProperty.limitsOfShape_le _
       (limitsOfShape.mk' (X₁ ⋙ (evaluation _ _).obj j) (X₂ ⋙ (evaluation _ _).obj j)
       _ _ (isLimitOfPreserves _ hc₁) (isLimitOfPreserves _ hc₂) (Functor.whiskerRight f _)
@@ -96,7 +96,7 @@ instance IsStableUnderColimitsOfShape.functorCategory
       (fun k => hf k j) (φ.app j) (fun k => congr_app (hφ k) j))
 
 中文:
-实例 IsStableUnderColimitsOfShape.functorCategory
+实例 是StableUnderColimitsOfShape.functorCategory
   定义体: MorphismProperty.colimitsOfShape_le _
       (colimitsOfShape.mk' (X₁ ⋙ (evaluation _ _).obj j) (X₂ ⋙ (evaluation _ _).obj j)
       _ _ (isColimitOfPreserves _ hc₁) (isColimitOfPreserves _ hc₂) (Functor.whiskerRight f _)
@@ -123,8 +123,8 @@ instance [W.IsStableUnderBaseChange]
   body: W.of_isPullback (sq.map ((evaluation _ _).obj j)) (hr j)
 
 中文:
-实例 [W.IsStableUnderBaseChange]
-  签名: (J : 类型u'') [Category.{v''} J] [HasPullbacks C]
+实例 [W.是StableUnderBaseChange]
+  签名: (J : 类型u'') [范畴.{v''} J] [有Pullbacks C]
   定义体: W.of_isPullback (sq.map ((evaluation _ _).obj j)) (hr j)
 
 Depends on / 依赖: W.of_isPullback, evaluation, of_isPullback, sq.map
@@ -143,8 +143,8 @@ instance [W.IsStableUnderCobaseChange]
   body: W.of_isPushout (sq.map ((evaluation _ _).obj j)) (hr j)
 
 中文:
-实例 [W.IsStableUnderCobaseChange]
-  签名: (J : 类型u'') [Category.{v''} J] [HasPushouts C]
+实例 [W.是StableUnderCobaseChange]
+  签名: (J : 类型u'') [范畴.{v''} J] [有Pushouts C]
   定义体: W.of_isPushout (sq.map ((evaluation _ _).obj j)) (hr j)
 
 Depends on / 依赖: W.of_isPushout, evaluation, of_isPushout, sq.map
@@ -199,7 +199,7 @@ lemma functorCategory_monomorphisms
 
 中文:
 引理 functorCategory_monomorphisms
-  条件: [HasPullbacks C]
+  条件: [有Pullbacks C]
   证明: by
   ext _ _ f
   simp only [functorCategory, monomorphisms.iff, NatTrans.mono_iff_mono_app]
@@ -223,7 +223,7 @@ lemma functorCategory_epimorphisms
 
 中文:
 引理 functorCategory_epimorphisms
-  条件: [HasPushouts C]
+  条件: [有Pushouts C]
   证明: by
   ext _ _ f
   simp only [functorCategory, epimorphisms.iff, NatTrans.epi_iff_epi_app]
@@ -256,7 +256,7 @@ instance [IsStableUnderCoproducts.{u'}
   signature: (monomorphisms C)]
 
 中文:
-实例 [IsStableUnderCoproducts.{u'}
+实例 [是StableUnderCoproducts.{u'}
   签名: (monomorphisms C)]
 -/
 instance [IsStableUnderCoproducts.{u'} (monomorphisms C)]

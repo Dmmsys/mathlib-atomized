@@ -37,8 +37,8 @@ alias AddMonoidHom.coe_finset_sum := AddMonoidHom.coe_finsetSum
 alias MonoidHom.coe_finset_prod := MonoidHom.coe_finsetProd
 
 中文:
-定理 MonoidHom.coe_finsetProd
-  条件: [MulOneClass M] [CommMonoid N] (f : ι -> M ->* N) (s : Finset ι)
+定理 幺半群态射.coe_finsetProd
+  条件: [MulOne类 M] [交换幺半群 N] (f : ι -> M ->* N) (s : 有限集 ι)
   证明: map_prod (MonoidHom.coeFn M N) _ _
 
 @[deprecated (since := "2026-04-08")]
@@ -79,8 +79,8 @@ alias AddMonoidHom.finset_sum_apply := AddMonoidHom.finsetSum_apply
 alias MonoidHom.finset_prod_apply := MonoidHom.finsetProd_apply
 
 中文:
-定理 MonoidHom.finsetProd_apply
-  结论: [MulOneClass M] [CommMonoid N] (f : ι -> M ->* N) (s : Finset ι)
+定理 幺半群态射.finsetProd_apply
+  结论: [MulOne类 M] [交换幺半群 N] (f : ι -> M ->* N) (s : 有限集 ι)
   证明: map_prod (MonoidHom.eval b) _ _
 
 @[deprecated (since := "2026-04-08")]
@@ -121,7 +121,7 @@ lemma mulSupport_prod
 
 中文:
 引理 mulSupport_prod
-  条件: (s : Finset ι) (f : ι -> κ -> M)
+  条件: (s : 有限集 ι) (f : ι -> κ -> M)
   证明: by
   simp only [mulSupport_subset_iff', Set.mem_iUnion, not_exists, notMem_mulSupport]
   exact fun x => prod_eq_one
@@ -153,7 +153,7 @@ lemma isSquare_prod
 
 中文:
 引理 isSquare_prod
-  条件: {s : Finset ι} (f : ι -> M) (h : 对任意 c in s, IsSquare (f c))
+  条件: {s : 有限集 ι} (f : ι -> M) (h : 对任意 c in s, IsSquare (f c))
   证明: by
   rw [isSquare_iff_exists_sq]
   use (∏ (x : s), ((isSquare_iff_exists_sq _).mp (h _ x.2)).choose)

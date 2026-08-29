@@ -49,8 +49,8 @@ abbreviation Function.Surjective.moduleLeft
     add_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_add, hsmul, add_smul] }
 
 中文:
-缩写 Function.Surjective.moduleLeft
-  签名: {R S M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+缩写 函数.满射.moduleLeft
+  签名: {R S M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { hf.distribMulActionLeft f.toMonoidHom hsmul with
     zero_smul := fun x => by rw [← f.map_zero, hsmul, zero_smul]
     add_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_add, hsmul, add_smul] }
@@ -78,8 +78,8 @@ abbreviation Module.compHom
     -- 
 
 中文:
-缩写 Module.compHom
-  签名: [Semiring S] (f : S ->+* R)
+缩写 模.compHom
+  签名: [半环 S] (f : S ->+* R)
   定义体: { MulActionWithZero.compHom M f.toMonoidWithZeroHom, DistribMulAction.compHom M (f : S ->* R) with
     -- Porting note: the `show f (r + s) • x = f r • x + f s • x` wasn't needed in mathlib3.
     -- Somehow, now that `SMul` is heterogeneous, it can't unfold earlier fields of a definition for
@@ -107,8 +107,8 @@ abbreviation RingHom.toModule
   body: Module.compHom S f
 
 中文:
-缩写 RingHom.toModule
-  签名: [Semiring R] [Semiring S] (f : R ->+* S)
+缩写 环态射.toModule
+  签名: [半环 R] [半环 S] (f : R ->+* S)
   定义体: Module.compHom S f
 
 Depends on / 依赖: Module, Module.compHom, compHom
@@ -127,8 +127,8 @@ lemma RingHom.toModule_smul
   rfl
 
 中文:
-引理 RingHom.toModule_smul
-  条件: [Semiring R] [Semiring S] (f : R ->+* S) (x : R) (y : S)
+引理 环态射.toModule_smul
+  条件: [半环 R] [半环 S] (f : R ->+* S) (x : R) (y : S)
   证明: f.toModule
     x • y = f x * y :=
   rfl
@@ -150,7 +150,7 @@ definition RingHom.smulOneHom
   map_add' := (add_smul · · 1)
 
 中文:
-定义 RingHom.smulOneHom
+定义 环态射.smulOneHom
   定义体: MonoidHom.smulOneHom
   map_zero' := zero_smul R 1
   map_add' := (add_smul · · 1)
@@ -174,7 +174,7 @@ right_inv := fun ⟨_, _⟩ => Subtype.ext Module.ext funext₂ smul_one_smul S
 
 中文:
 定义 ringHomEquivModuleIsScalarTower
-  签名: [Semiring R] [Semiring S]
+  签名: [半环 R] [半环 S]
   定义体: ⟨Module.compHom S f, SMul.comp.isScalarTower _⟩
   invFun := fun ⟨_, _⟩ => RingHom.smulOneHom
   left_inv f := RingHom.ext fun r => mul_one (f r)

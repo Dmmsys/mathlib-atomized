@@ -39,8 +39,8 @@ instance [Monoid
   body: (m : M) • a
 
 中文:
-实例 [Monoid
-  签名: M] [SMul M α] : SMul Mˣ α where smul m a
+实例 [幺半群
+  签名: M] [标量乘法 M α] : 标量乘法 Mˣ α where smul m a
   定义体: (m : M) • a
 -/
 @[to_additive] instance [Monoid M] [SMul M α] : SMul Mˣ α where smul m a := (m : M) • a
@@ -58,7 +58,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: [Monoid M] [SMul M α] (m : Mˣ) (a : α)
+  条件: [幺半群 M] [标量乘法 M α] (m : Mˣ) (a : α)
   结论: m • a = (m : M) • a
   证明: rfl
 
@@ -79,7 +79,7 @@ lemma smul_mk_apply
 
 中文:
 引理 smul_mk_apply
-  条件: {M α : 类型} [Monoid M] [SMul M α] (m n : M) (h₁) (h₂) (a : α)
+  条件: {M α : 类型} [幺半群 M] [标量乘法 M α] (m n : M) (h₁) (h₂) (a : α)
   证明: rfl
 
 @[simp]
@@ -101,7 +101,7 @@ lemma smul_isUnit
 
 中文:
 引理 smul_isUnit
-  条件: [Monoid M] [SMul M α] {m : M} (hm : IsUnit m) (a : α)
+  条件: [幺半群 M] [标量乘法 M α] {m : M} (hm : 是单位 m) (a : α)
   结论: hm.unit • a = m • a
   证明: rfl
 
@@ -122,8 +122,8 @@ lemma _root_.IsUnit.inv_smul
 @[to_additive]
 
 中文:
-引理 _root_.IsUnit.inv_smul
-  条件: [Monoid α] {a : α} (h : IsUnit a)
+引理 _root_.是单位.inv_smul
+  条件: [幺半群 α] {a : α} (h : 是单位 a)
   结论: h.unit⁻¹ • a = 1
   证明: h.val_inv_mul
 
@@ -145,8 +145,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: M] [SMul M α] [FaithfulSMul M α] : FaithfulSMul Mˣ α where
+实例 [幺半群
+  签名: M] [标量乘法 M α] [忠实标量乘法 M α] : 忠实标量乘法 Mˣ α where
   定义体: Units.ext eq_of_smul_eq_smul h
 
 @[to_additive]
@@ -170,7 +170,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid M] [MulAction M α]
+  签名: [幺半群 M] [乘法作用 M α]
   定义体: one_smul M
   mul_smul m n := mul_smul (m : M) n
 
@@ -195,7 +195,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [Monoid M] [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [幺半群 M] [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: smul_comm (m : M) n
 
 @[to_additive]
@@ -218,7 +218,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [Monoid N] [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [幺半群 N] [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: smul_comm m (n : N)
 
 @[to_additive]
@@ -238,8 +238,8 @@ instance [Monoid
   body: smul_assoc (m : M) n
 
 中文:
-实例 [Monoid
-  签名: M] [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α] :
+实例 [幺半群
+  签名: M] [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α] :
   定义体: smul_assoc (m : M) n
 
 Depends on / 依赖: smul_assoc
@@ -266,7 +266,7 @@ mul_smul _ _ _ := Units.ext mul_smul _ _ _
 
 中文:
 实例 mulAction'
-  签名: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M]
+  签名: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M]
   定义体: ⟨g • (m : M), (g⁻¹ • ((m⁻¹ : Mˣ) : M)),
       by rw [smul_mul_smul_comm, Units.mul_inv, mul_inv_cancel, one_smul],
       by rw [smul_mul_smul_comm, Units.inv_mul, inv_mul_cancel, one_smul]⟩
@@ -311,7 +311,7 @@ lemma smul_eq_mul
 
 中文:
 引理 smul_eq_mul
-  条件: {M} [CommMonoid M] (u₁ u₂ : Mˣ)
+  条件: {M} [交换幺半群 M] (u₁ u₂ : Mˣ)
   证明: by
   ext
   rfl
@@ -334,7 +334,7 @@ lemma val_smul
 
 中文:
 引理 val_smul
-  结论: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
+  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
   证明: rfl
 -/
 lemma val_smul [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
@@ -352,7 +352,7 @@ lemma smul_inv
 
 中文:
 引理 smul_inv
-  结论: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
+  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
   证明: ext rfl
 -/
 lemma smul_inv [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
@@ -370,7 +370,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: [Group G] [Group H] [Monoid M] [MulAction G M] [SMulCommClass G M M]
+  签名: [群 G] [群 H] [幺半群 M] [乘法作用 G M] [标量交换类 G M M]
   定义体: Units.ext smul_comm g h (m : M)
 
 Depends on / 依赖: Units.ext, smul_comm
@@ -392,7 +392,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul G H] [Group G] [Group H] [Monoid M] [MulAction G M]
+  签名: [标量乘法 G H] [群 G] [群 H] [幺半群 M] [乘法作用 G M]
   定义体: Units.ext smul_assoc g h (m : M)
 
 Depends on / 依赖: Units.ext, smul_assoc
@@ -414,7 +414,7 @@ instance isScalarTower'_left
 
 中文:
 实例 isScalarTower'_left
-  签名: [Group G] [Monoid M] [MulAction G M] [SMul M α] [SMul G α]
+  签名: [群 G] [幺半群 M] [乘法作用 G M] [标量乘法 M α] [标量乘法 G α]
   定义体: smul_assoc g (m : M)
 -/
 instance isScalarTower'_left [Group G] [Monoid M] [MulAction G M] [SMul M α] [SMul G α]
@@ -442,7 +442,7 @@ smul_one m := Units.ext smul_one m
 
 中文:
 缩写 mulDistribMulActionRight
-  签名: : MulDistribMulAction M Nˣ where
+  签名: : MulDistribMul作用 M Nˣ where
   定义体: ⟨m • u, m • u⁻¹, by simp [← smul_mul', smul_one], by simp [← smul_mul', smul_one]⟩
 one_smul u := Units.ext one_smul ..
 mul_smul m₁ m₂ u := Units.ext mul_smul ..
@@ -507,8 +507,8 @@ lemma IsUnit.smul
   hu ▸ ⟨g • u, Units.val_smul _ _⟩
 
 中文:
-引理 IsUnit.smul
-  结论: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
+引理 是单位.smul
+  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
   证明: let ⟨u, hu⟩ := h
   hu ▸ ⟨g • u, Units.val_smul _ _⟩
 

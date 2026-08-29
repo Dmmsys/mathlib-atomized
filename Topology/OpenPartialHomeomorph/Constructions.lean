@@ -61,7 +61,7 @@ definition const
 
 中文:
 定义 const
-  签名: (ha : IsOpen {a}) (hb : IsOpen {b})
+  签名: (ha : 是开集 {a}) (hb : 是开集 {b})
   定义体: PartialEquiv.single a b
   open_source := ha
   open_target := hb
@@ -93,7 +93,7 @@ lemma const_apply
 
 中文:
 引理 const_apply
-  条件: (ha : IsOpen {a}) (hb : IsOpen {b}) (x : X)
+  条件: (ha : 是开集 {a}) (hb : 是开集 {b}) (x : X)
   结论: (const ha hb) x = b
   证明: rfl
 
@@ -115,7 +115,7 @@ lemma const_source
 
 中文:
 引理 const_source
-  条件: (ha : IsOpen {a}) (hb : IsOpen {b})
+  条件: (ha : 是开集 {a}) (hb : 是开集 {b})
   结论: (const ha hb).source = {a}
   证明: rfl
 
@@ -135,7 +135,7 @@ lemma const_target
 
 中文:
 引理 const_target
-  条件: (ha : IsOpen {a}) (hb : IsOpen {b})
+  条件: (ha : 是开集 {a}) (hb : 是开集 {b})
   结论: (const ha hb).target = {b}
   证明: rfl
 -/
@@ -169,7 +169,7 @@ definition prod
 @[deprecated
 
 中文:
-定义 prod
+定义 乘积
   签名: (eX : OpenPartialHomeomorph X X') (eY : OpenPartialHomeomorph Y Y')
   定义体: eX.open_source.prod eY.open_source
   open_target := eX.open_target.prod eY.open_target
@@ -246,7 +246,7 @@ theorem refl_prod_refl
 
 中文:
 定理 refl_prod_refl
-  结论: (OpenPartialHomeomorph.refl X).prod (OpenPartialHomeomorph.refl Y) =
+  结论: (OpenPartialHomeomorph.refl X).乘积 (OpenPartialHomeomorph.refl Y) =
   证明: OpenPartialHomeomorph.ext _ _ (fun _ => rfl) (fun _ => rfl) univ_prod_univ
 
 @[simp, mfld_simps]
@@ -435,7 +435,7 @@ e.open_target.ite e'.open_target H.frontier.inter_eq_of_inter_eq_of_eqOn H'.fron
 
 中文:
 定义 piecewise
-  签名: (e e' : OpenPartialHomeomorph X Y) (s : Set X) (t : Set Y) [对任意 x, Decidable (x in s)]
+  签名: (e e' : OpenPartialHomeomorph X Y) (s : 集合 X) (t : 集合 Y) [对任意 x, 可判定 (x in s)]
   定义体: e.toPartialEquiv.piecewise e'.toPartialEquiv s t H H'
   open_source := e.open_source.ite e'.open_source Hs
   open_target :=
@@ -469,7 +469,7 @@ theorem symm_piecewise
 
 中文:
 定理 symm_piecewise
-  结论: (e e' : OpenPartialHomeomorph X Y) {s : Set X} {t : Set Y}
+  结论: (e e' : OpenPartialHomeomorph X Y) {s : 集合 X} {t : 集合 Y}
   证明: rfl
 -/
 theorem symm_piecewise (e e' : OpenPartialHomeomorph X Y) {s : Set X} {t : Set Y}
@@ -497,7 +497,7 @@ definition disjointUnion
 
 中文:
 定义 disjointUnion
-  签名: (e e' : OpenPartialHomeomorph X Y) [对任意 x, Decidable (x in e.source)]
+  签名: (e e' : OpenPartialHomeomorph X Y) [对任意 x, 可判定 (x in e.source)]
   定义体: (e.piecewise e' e.source e.target e.isImage_source_target
         (e'.isImage_source_target_of_disjoint e Hs.symm Ht.symm)
         (by rw [e.open_source.inter_frontier_eq, (Hs.symm.frontier_right e'.open_source).inter_eq])
@@ -769,7 +769,7 @@ lemma subtypeRestr_target_subset
 
 中文:
 引理 subtypeRestr_target_subset
-  条件: (hs : Nonempty s)
+  条件: (hs : 非空 s)
   结论: (e.subtypeRestr hs).target subseteq e.target
   证明: by
   rw [← e.image_source_eq_target]; rw [← OpenPartialHomeomorph.image_source_eq_target]; rw [e.subtypeRestr_source]
@@ -842,7 +842,7 @@ theorem subtypeRestr_symm_apply
 
 中文:
 定理 subtypeRestr_symm_apply
-  结论: {U : Opens X} (hU : Nonempty U)
+  结论: {U : Opens X} (hU : 非空 U)
   证明: by
   rw [e.eq_symm_apply _ hy.1]
   · change domRestrict _ e _ = _
@@ -871,7 +871,7 @@ theorem subtypeRestr_symm_eqOn
 
 中文:
 定理 subtypeRestr_symm_eqOn
-  条件: {U : Opens X} (hU : Nonempty U)
+  条件: {U : Opens X} (hU : 非空 U)
   证明: fun _y hy => (e.subtypeRestr_symm_apply hU hy).symm
 
 Depends on / 依赖: e.subtypeRestr_symm_apply, subtypeRestr_symm_apply
@@ -897,7 +897,7 @@ theorem subtypeRestr_symm_eqOn_of_le
 
 中文:
 定理 subtypeRestr_symm_eqOn_of_le
-  结论: {U V : Opens X} (hU : Nonempty U) (hV : Nonempty V)
+  结论: {U V : Opens X} (hU : 非空 U) (hV : 非空 V)
   证明: by
   set i := Set.inclusion hUV
   intro y hy
@@ -952,7 +952,7 @@ definition lift_openEmbedding
 
 中文:
 定义 lift_openEmbedding
-  签名: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  签名: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   定义体: extend f e (fun _ => (Classical.arbitrary Z))
   invFun := f ∘ e.invFun
   source := f '' e.source
@@ -1012,7 +1012,7 @@ lemma lift_openEmbedding_toFun
 
 中文:
 引理 lift_openEmbedding_toFun
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: rfl
 -/
 lemma lift_openEmbedding_toFun (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f) :
@@ -1032,7 +1032,7 @@ lemma lift_openEmbedding_apply
 
 中文:
 引理 lift_openEmbedding_apply
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f) {x : X}
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f) {x : X}
   证明: by
   simp_rw [e.lift_openEmbedding_toFun]
   apply hf.injective.extend_apply
@@ -1059,7 +1059,7 @@ lemma lift_openEmbedding_source
 
 中文:
 引理 lift_openEmbedding_source
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1080,7 +1080,7 @@ lemma lift_openEmbedding_target
 
 中文:
 引理 lift_openEmbedding_target
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1101,7 +1101,7 @@ lemma lift_openEmbedding_symm
 
 中文:
 引理 lift_openEmbedding_symm
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1122,7 +1122,7 @@ lemma lift_openEmbedding_symm_source
 
 中文:
 引理 lift_openEmbedding_symm_source
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1142,7 +1142,7 @@ lemma lift_openEmbedding_symm_target
 
 中文:
 引理 lift_openEmbedding_symm_target
-  条件: (e : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: by
   rw [OpenPartialHomeomorph.symm_target]; rw [e.lift_openEmbedding_source]
 
@@ -1193,7 +1193,7 @@ lemma lift_openEmbedding_trans
 
 中文:
 引理 lift_openEmbedding_trans
-  条件: (e e' : OpenPartialHomeomorph X Z) (hf : IsOpenEmbedding f)
+  条件: (e e' : OpenPartialHomeomorph X Z) (hf : 是开嵌入 f)
   证明: by
   ext z
   · exact e.lift_openEmbedding_trans_apply e' hf z

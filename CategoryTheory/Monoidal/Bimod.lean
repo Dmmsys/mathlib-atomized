@@ -153,8 +153,8 @@ structure Bimod
     - middle_assoc : actLeft ▷ B.X ≫ actRight = (α_ A.X X B.X).hom ≫ A.X ◁ actRight ≫ actLeft  [default: by cat_disch]
 
 中文:
-结构 Bimod
-  参数: (A B : Mon C)
+结构 双模
+  参数: (A B : 幺半群 C)
   公理与运算 (8 个):
     - X : C
     - actLeft : A.X otimes X ⟶ X
@@ -206,8 +206,8 @@ structure Hom
     - right_act_hom : M.actRight ≫ hom = (hom ▷ B.X) ≫ N.actRight  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (M N : Bimod A B)
+结构 态射
+  参数: (M N : 双模 A B)
   公理与运算 (3 个):
     - hom : M.X ⟶ N.X
     - left_act_hom : M.actLeft ≫ hom = (A.X ◁ hom) ≫ N.actLeft  [默认: by cat_disch]
@@ -235,7 +235,7 @@ definition id'
 
 中文:
 定义 id'
-  签名: (M : Bimod A B)
+  签名: (M : 双模 A B)
   定义体: 𝟙 M.X
 -/
 def id' (M : Bimod A B) : Hom M M where hom := 𝟙 M.X
@@ -250,7 +250,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: (M : Bimod A B)
+  签名: (M : 双模 A B)
   定义体: ⟨id' M⟩
 -/
 instance homInhabited (M : Bimod A B) : Inhabited (Hom M M) :=
@@ -268,7 +268,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N O : Bimod A B} (f : Hom M N) (g : Hom N O)
+  签名: {M N O : 双模 A B} (f : 态射 M N) (g : 态射 N O)
   定义体: f.hom ≫ g.hom
 
 Depends on / 依赖: f.hom, g.hom
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Bimod A B)
+  签名: 范畴 (双模 A B)
   定义体: Hom M N
   id := id'
   comp f g := comp f g
@@ -315,7 +315,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.hom)
+  条件: {M N : 双模 A B} (f g : M ⟶ N) (h : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext h
 
@@ -340,8 +340,8 @@ theorem id_hom'
 
 中文:
 定理 id_hom'
-  条件: (M : Bimod A B)
-  结论: (𝟙 M : Hom M M).hom = 𝟙 M.X
+  条件: (M : 双模 A B)
+  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.X
   证明: rfl
 
 @[simp]
@@ -360,7 +360,7 @@ theorem comp_hom'
 
 中文:
 定理 comp_hom'
-  条件: {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K)
+  条件: {M N K : 双模 A B} (f : M ⟶ N) (g : N ⟶ K)
   证明: rfl
 -/
 theorem comp_hom' {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K) :
@@ -385,7 +385,7 @@ definition isoOfIso
 
 中文:
 定义 isoOfIso
-  签名: {X Y : Mon C} {P Q : Bimod X Y} (f : P.X ≅ Q.X)
+  签名: {X Y : 幺半群 C} {P Q : 双模 X Y} (f : P.X ≅ Q.X)
   定义体: { hom := f.hom }
   inv :=
     { hom := f.inv
@@ -424,7 +424,7 @@ definition regular
 
 中文:
 定义 regular
-  签名: : Bimod A A where
+  签名: : 双模 A A where
   定义体: A.X
   actLeft := μ
   actRight := μ
@@ -444,7 +444,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Bimod A A)
+  签名: 可居 (双模 A A)
   定义体: ⟨regular A⟩
 
 Depends on / 依赖: regular
@@ -463,7 +463,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Bimod A B ⥤ C where
+  签名: : 双模 A B ⥤ C where
   定义体: A.X
   map f := f.hom
 -/
@@ -901,7 +901,7 @@ definition tensorBimod
 
 中文:
 定义 tensorBimod
-  签名: {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z)
+  签名: {X Y Z : 幺半群 C} (M : 双模 X Y) (N : 双模 Y Z)
   定义体: TensorBimod.X M N
   actLeft := TensorBimod.actLeft M N
   actRight := TensorBimod.actRight M N
@@ -944,7 +944,7 @@ definition whiskerLeft
 
 中文:
 定义 whiskerLeft
-  签名: {X Y Z : Mon C} (M : Bimod X Y) {N₁ N₂ : Bimod Y Z} (f : N₁ ⟶ N₂)
+  签名: {X Y Z : 幺半群 C} (M : 双模 X Y) {N₁ N₂ : 双模 Y Z} (f : N₁ ⟶ N₂)
   定义体: colimMap
       (parallelPairHom _ _ _ _ (_ ◁ f.hom) (_ ◁ f.hom)
         (by rw [whisker_exchange])
@@ -1010,7 +1010,7 @@ definition whiskerRight
 
 中文:
 定义 whiskerRight
-  签名: {X Y Z : Mon C} {M₁ M₂ : Bimod X Y} (f : M₁ ⟶ M₂) (N : Bimod Y Z)
+  签名: {X Y Z : 幺半群 C} {M₁ M₂ : 双模 X Y} (f : M₁ ⟶ M₂) (N : 双模 Y Z)
   定义体: colimMap
       (parallelPairHom _ _ _ _ (f.hom ▷ _ ▷ _) (f.hom ▷ _)
         (by rw [← comp_whiskerRight, Hom.right_act_hom, comp_whiskerRight])
@@ -1834,7 +1834,7 @@ definition associatorBimod
 
 中文:
 定义 associatorBimod
-  签名: {W X Y Z : Mon C} (L : Bimod W X) (M : Bimod X Y)
+  签名: {W X Y Z : 幺半群 C} (L : 双模 W X) (M : 双模 X Y)
   定义体: isoOfIso
     { hom := AssociatorBimod.hom L M N
       inv := AssociatorBimod.inv L M N
@@ -1868,7 +1868,7 @@ definition leftUnitorBimod
 
 中文:
 定义 leftUnitorBimod
-  签名: {X Y : Mon C} (M : Bimod X Y)
+  签名: {X Y : 幺半群 C} (M : 双模 X Y)
   定义体: isoOfIso
     { hom := LeftUnitorBimod.hom M
       inv := LeftUnitorBimod.inv M
@@ -1901,7 +1901,7 @@ definition rightUnitorBimod
 
 中文:
 定义 rightUnitorBimod
-  签名: {X Y : Mon C} (M : Bimod X Y)
+  签名: {X Y : 幺半群 C} (M : 双模 X Y)
   定义体: isoOfIso
     { hom := RightUnitorBimod.hom M
       inv := RightUnitorBimod.inv M
@@ -1934,7 +1934,7 @@ theorem whiskerLeft_id_bimod
 
 中文:
 定理 whiskerLeft_id_bimod
-  条件: {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z}
+  条件: {X Y Z : 幺半群 C} {M : 双模 X Y} {N : 双模 Y Z}
   证明: by
   ext
   apply Limits.coequalizer.hom_ext
@@ -1963,7 +1963,7 @@ theorem id_whiskerRight_bimod
 
 中文:
 定理 id_whiskerRight_bimod
-  条件: {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z}
+  条件: {X Y Z : 幺半群 C} {M : 双模 X Y} {N : 双模 Y Z}
   证明: by
   ext
   apply Limits.coequalizer.hom_ext
@@ -1991,7 +1991,7 @@ theorem whiskerLeft_comp_bimod
 
 中文:
 定理 whiskerLeft_comp_bimod
-  结论: {X Y Z : Mon C} (M : Bimod X Y) {N P Q : Bimod Y Z} (f : N ⟶ P)
+  结论: {X Y Z : 幺半群 C} (M : 双模 X Y) {N P Q : 双模 Y Z} (f : N ⟶ P)
   证明: by
   ext
   apply Limits.coequalizer.hom_ext
@@ -2027,7 +2027,7 @@ theorem id_whiskerLeft_bimod
 
 中文:
 定理 id_whiskerLeft_bimod
-  条件: {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N)
+  条件: {X Y : 幺半群 C} {M N : 双模 X Y} (f : M ⟶ N)
   证明: by
   dsimp [tensorHom, regular, leftUnitorBimod]
   ext
@@ -2092,7 +2092,7 @@ theorem comp_whiskerLeft_bimod
 
 中文:
 定理 comp_whiskerLeft_bimod
-  结论: {W X Y Z : Mon C} (M : Bimod W X) (N : Bimod X Y)
+  结论: {W X Y Z : 幺半群 C} (M : 双模 W X) (N : 双模 X Y)
   证明: by
   dsimp [tensorHom, tensorBimod, associatorBimod]
   ext
@@ -2147,7 +2147,7 @@ theorem comp_whiskerRight_bimod
 
 中文:
 定理 comp_whiskerRight_bimod
-  结论: {X Y Z : Mon C} {M N P : Bimod X Y} (f : M ⟶ N) (g : N ⟶ P)
+  结论: {X Y Z : 幺半群 C} {M N P : 双模 X Y} (f : M ⟶ N) (g : N ⟶ P)
   证明: by
   ext
   apply Limits.coequalizer.hom_ext
@@ -2183,7 +2183,7 @@ theorem whiskerRight_id_bimod
 
 中文:
 定理 whiskerRight_id_bimod
-  条件: {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N)
+  条件: {X Y : 幺半群 C} {M N : 双模 X Y} (f : M ⟶ N)
   证明: by
   dsimp [tensorHom, regular, rightUnitorBimod]
   ext
@@ -2237,7 +2237,7 @@ theorem whiskerRight_comp_bimod
 
 中文:
 定理 whiskerRight_comp_bimod
-  结论: {W X Y Z : Mon C} {M M' : Bimod W X} (f : M ⟶ M') (N : Bimod X Y)
+  结论: {W X Y Z : 幺半群 C} {M M' : 双模 W X} (f : M ⟶ M') (N : 双模 X Y)
   证明: by
   dsimp [tensorHom, tensorBimod, associatorBimod]
   ext
@@ -2299,7 +2299,7 @@ theorem whisker_assoc_bimod
 
 中文:
 定理 whisker_assoc_bimod
-  结论: {W X Y Z : Mon C} (M : Bimod W X) {N N' : Bimod X Y} (f : N ⟶ N')
+  结论: {W X Y Z : 幺半群 C} (M : 双模 W X) {N N' : 双模 X Y} (f : N ⟶ N')
   证明: by
   dsimp [tensorHom, tensorBimod, associatorBimod]
   ext
@@ -2358,7 +2358,7 @@ theorem whisker_exchange_bimod
 
 中文:
 定理 whisker_exchange_bimod
-  结论: {X Y Z : Mon C} {M N : Bimod X Y} {P Q : Bimod Y Z} (f : M ⟶ N)
+  结论: {X Y Z : 幺半群 C} {M N : 双模 X Y} {P Q : 双模 Y Z} (f : M ⟶ N)
   证明: by
   ext
   apply coequalizer.hom_ext
@@ -2403,7 +2403,7 @@ theorem pentagon_bimod
 
 中文:
 定理 pentagon_bimod
-  结论: {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : Bimod X Y)
+  结论: {V W X Y Z : 幺半群 C} (M : 双模 V W) (N : 双模 W X) (P : 双模 X Y)
   证明: by
   dsimp [associatorBimod]
   ext
@@ -2477,7 +2477,7 @@ theorem triangle_bimod
 
 中文:
 定理 triangle_bimod
-  条件: {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z)
+  条件: {X Y Z : 幺半群 C} (M : 双模 X Y) (N : 双模 Y Z)
   证明: by
   dsimp [associatorBimod, leftUnitorBimod, rightUnitorBimod]
   ext
@@ -2534,7 +2534,7 @@ definition monBicategory
 
 中文:
 定义 monBicategory
-  签名: : Bicategory (Mon C) where
+  签名: : 双范畴 (幺半群 C) where
   定义体: Bimod X Y
   homCategory X Y := (inferInstance : Category (Bimod X Y))
   id X := regular X

@@ -299,7 +299,7 @@ theorem carmichael_finset_lcm
 
 中文:
 定理 carmichael_finset_lcm
-  条件: {α : 类型} (s : Finset α) (f : α -> 自然数)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 自然数)
   证明: by
   classical
   refine s.induction ?_ fun a s ha ih => ?_
@@ -329,7 +329,7 @@ theorem carmichael_finsetProd
 
 中文:
 定理 carmichael_finsetProd
-  结论: {α : 类型} {s : Finset α} {f : α -> 自然数}
+  结论: {α : 类型} {s : 有限集 α} {f : α -> 自然数}
   证明: s.lcm_eq_prod h ▸ carmichael_finset_lcm ..
 
 @[deprecated (since := "2026-04-08")] alias carmichael_finset_prod := carmichael_finsetProd
@@ -505,7 +505,7 @@ exact IsCyclic.iff_exponent_eq_card.mp ZMod.isCyclic_units_of_prime_pow p hp hp�
 
 中文:
 定理 carmichael_pow_of_prime_ne_two
-  条件: {p : 自然数} (n : 自然数) (hp : p.Prime) (hp₂ : p != 2)
+  条件: {p : 自然数} (n : 自然数) (hp : p.素) (hp₂ : p != 2)
   证明: by
   have : NeZero p := ⟨hp.ne_zero⟩
   rw [carmichael_eq_exponent']; rw [← ZMod.card_units_eq_totient]; rw [Fintype.card_eq_nat_card]

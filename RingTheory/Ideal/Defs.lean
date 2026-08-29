@@ -44,8 +44,8 @@ abbreviation Ideal
   body: Submodule R R
 
 中文:
-缩写 Ideal
-  签名: (R : 类型u) [Semiring R]
+缩写 理想
+  签名: (R : 类型u) [半环 R]
   定义体: Submodule R R
 
 Depends on / 依赖: Submodule
@@ -69,7 +69,7 @@ class IsTwoSided
     - mul_mem_of_left({a : α} (b : α)) : a in I -> a * b in I
 
 中文:
-类 IsTwoSided
+类 是TwoSided
   参数: : 命题 where
   公理与运算 (1 个):
     - mul_mem_of_left({a : α} (b : α)) : a in I -> a * b in I
@@ -139,7 +139,7 @@ theorem mul_mem_right
 
 中文:
 定理 mul_mem_right
-  结论: {α} {a : α} (b : α) [Semiring α] (I : Ideal α) [I.IsTwoSided]
+  结论: {α} {a : α} (b : α) [半环 α] (I : 理想 α) [I.是TwoSided]
   证明: IsTwoSided.mul_mem_of_left b h
 
 Depends on / 依赖: IsTwoSided, IsTwoSided.mul_mem_of_left, mul_mem_of_left
@@ -164,7 +164,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {I J : Ideal α} (h : 对任意 x, x in I ↔ x in J)
+  条件: {I J : 理想 α} (h : 对任意 x, x in I ↔ x in J)
   结论: I = J
   证明: Submodule.ext h
 
@@ -191,7 +191,7 @@ theorem unit_mul_mem_iff_mem
 
 中文:
 定理 unit_mul_mem_iff_mem
-  条件: {x y : α} (hy : IsUnit y)
+  条件: {x y : α} (hy : 是单位 y)
   结论: y * x in I ↔ x in I
   证明: by
   refine ⟨fun h => ?_, fun h => I.mul_mem_left y h⟩
@@ -269,8 +269,8 @@ definition Module.eqIdeal
   smul_mem' _ _ h := by simpa [mul_smul] using congr(_ • $h)
 
 中文:
-定义 Module.eqIdeal
-  签名: (R) {M} [Semiring R] [AddCommMonoid M] [Module R M] (m m' : M)
+定义 模.eqIdeal
+  签名: (R) {M} [半环 R] [加法交换幺半群 M] [模 R M] (m m' : M)
   定义体: {r : R | r • m = r • m'}
   add_mem' h h' := by simpa [add_smul] using congr($h + $h')
   zero_mem' := by simp_rw [Set.mem_ofPred, zero_smul]
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: I.IsTwoSided
+  签名: I.是TwoSided
   定义体: ⟨fun b ha => mul_comm b _ ▸ I.smul_mem _ ha⟩
 
 Depends on / 依赖: I.smul_mem, mul_comm, smul_mem
@@ -324,7 +324,7 @@ theorem mul_unit_mem_iff_mem
 
 中文:
 定理 mul_unit_mem_iff_mem
-  条件: {x y : α} (hy : IsUnit y)
+  条件: {x y : α} (hy : 是单位 y)
   结论: x * y in I ↔ x in I
   证明: mul_comm y x ▸ unit_mul_mem_iff_mem I hy
 
@@ -441,7 +441,7 @@ theorem mul_sub_mul_mem
 
 中文:
 定理 mul_sub_mul_mem
-  结论: [I.IsTwoSided]
+  结论: [I.是TwoSided]
   证明: by
   rw [show a * c - b * d = (a - b) * c + b * (c - d) by rw [sub_mul]; rw [mul_sub]; abel]
   exact I.add_mem (I.mul_mem_right _ h1) (I.mul_mem_left _ h2)
@@ -467,7 +467,7 @@ abbreviation inertia
 
 中文:
 缩写 inertia
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: I.toAddSubgroup.inertia G
 
 Depends on / 依赖: I.toAddSubgroup.inertia, inertia, toAddSubgroup
@@ -486,7 +486,7 @@ theorem coe_mem_inertia
 
 中文:
 定理 coe_mem_inertia
-  条件: {H : Subgroup G} {σ : H}
+  条件: {H : 子群 G} {σ : H}
   结论: ↑σ in I.inertia G ↔ σ in I.inertia H
   证明: I.toAddSubgroup.coe_mem_inertia
 

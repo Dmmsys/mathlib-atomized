@@ -36,7 +36,7 @@ class Functor.IsLocallyDirected
     - cond((F)) : forall {i j k} (fi : i ⟶ k) (fj : j ⟶ k) (xi : F.obj i) (xj : F.obj j), F.map fi xi = F.map fj xj -> exists (l : J) (fli : l ⟶ i) (flj : l ⟶ j) (x : _), F.map fli x = xi ∧ F.map flj x = xj
 
 中文:
-类 Functor.IsLocallyDirected
+类 函子.是LocallyDirected
   参数: (F : J ⥤ 类型)
   公理与运算 (1 个):
     - cond((F)) : 对任意 {i j k} (fi : i ⟶ k) (fj : j ⟶ k) (xi : F.obj i) (xj : F.obj j), F.map fi xi = F.map fj xj -> 存在 (l : J) (fli : l ⟶ i) (flj : l ⟶ j) (x : _), F.map fli x = xi ∧ F.map flj x = xj

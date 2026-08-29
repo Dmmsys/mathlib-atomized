@@ -161,7 +161,7 @@ definition _root_.Complex.UnitI
   inv_val := by simp
 
 中文:
-定义 _root_.Complex.UnitI
+定义 _root_.复形.UnitI
   签名: : Complexˣ where
   定义体: I
   inv := -I
@@ -184,7 +184,7 @@ abbreviation mulI
 
 中文:
 缩写 mulI
-  签名: (S : ClosedSubmodule 实数 H)
+  签名: (S : 闭子模 实数 H)
   定义体: S.mapEquiv (scalarSMulCLE H UnitI)
 
 Depends on / 依赖: S.mapEquiv, mapEquiv, scalarSMulCLE
@@ -201,7 +201,7 @@ abbreviation symplComp
 
 中文:
 缩写 symplComp
-  签名: (S : ClosedSubmodule 实数 H)
+  签名: (S : 闭子模 实数 H)
   定义体: (S.mulI)ᗮ
 
 Depends on / 依赖: S.mulI
@@ -220,7 +220,7 @@ lemma mem_iff
 
 中文:
 引理 mem_iff
-  条件: (S : ClosedSubmodule 实数 H) {x : H}
+  条件: (S : 闭子模 实数 H) {x : H}
   结论: x in S ↔ x in S.toSubmodule.carrier
   证明: by
   exact Eq.to_iff rfl
@@ -247,7 +247,7 @@ lemma mem_symplComp_iff
 
 中文:
 引理 mem_symplComp_iff
-  条件: {x : H} {S : ClosedSubmodule 实数 H}
+  条件: {x : H} {S : 闭子模 实数 H}
   证明: by
   simp only [mem_orthogonal, mem_mapEquiv_iff, scalarSMulCLE_symm_apply, Units.smul_def,
     Units.val_inv_eq_inv_val, val_UnitI, inv_I, neg_smul]
@@ -286,7 +286,7 @@ lemma mulI_orthogonal_eq_symplComp
 
 中文:
 引理 mulI_orthogonal_eq_symplComp
-  条件: (S : ClosedSubmodule 实数 H)
+  条件: (S : 闭子模 实数 H)
   结论: Sᗮ.mulI = S.symplComp
   证明: by
   ext x
@@ -315,7 +315,7 @@ lemma mulI_orthogonal
 
 中文:
 引理 mulI_orthogonal
-  条件: (S : ClosedSubmodule 实数 H)
+  条件: (S : 闭子模 实数 H)
   结论: Sᗮ.mulI = S.mulIᗮ
   证明: by
   rw [mulI_orthogonal_eq_symplComp]
@@ -341,7 +341,7 @@ lemma mulI_symplComp
 
 中文:
 引理 mulI_symplComp
-  条件: {S : ClosedSubmodule 实数 H}
+  条件: {S : 闭子模 实数 H}
   证明: by
   rw [symplComp]; rw [symplComp]; rw [mulI_orthogonal_eq_symplComp]
 
@@ -373,7 +373,7 @@ lemma mulI_mulI_eq
 
 中文:
 引理 mulI_mulI_eq
-  条件: (S : ClosedSubmodule 实数 H)
+  条件: (S : 闭子模 实数 H)
   结论: S.mulI.mulI = S
   证明: by
   ext x
@@ -429,7 +429,7 @@ lemma symplComp_symplComp_eq
 
 中文:
 引理 symplComp_symplComp_eq
-  条件: [CompleteSpace H] {S : ClosedSubmodule 实数 H}
+  条件: [完备空间 H] {S : 闭子模 实数 H}
   证明: by simp [symplComp]
 
 Depends on / 依赖: symplComp
@@ -448,7 +448,7 @@ lemma mulI_sup
 
 中文:
 引理 mulI_sup
-  条件: (S T : ClosedSubmodule 实数 H)
+  条件: (S T : 闭子模 实数 H)
   证明: by
   rw [mulI]; rw [← mapEquiv_sup_eq]
 
@@ -471,7 +471,7 @@ lemma mulI_inf
 
 中文:
 引理 mulI_inf
-  条件: (S T : ClosedSubmodule 实数 H)
+  条件: (S T : 闭子模 实数 H)
   证明: by
   rw [mulI]; rw [← mapEquiv_inf_eq]
 
@@ -498,7 +498,7 @@ lemma symplComp_sup
 
 中文:
 引理 symplComp_sup
-  条件: (S T : ClosedSubmodule 实数 H)
+  条件: (S T : 闭子模 实数 H)
   证明: by
   rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_sup]
   exact Eq.symm (inf_orthogonal S.mulI T.mulI)
@@ -525,7 +525,7 @@ lemma symplComp_inf
 
 中文:
 引理 symplComp_inf
-  条件: [CompleteSpace H] (S T : ClosedSubmodule 实数 H)
+  条件: [完备空间 H] (S T : 闭子模 实数 H)
   证明: by
   rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_inf]
   exact Eq.symm (sup_orthogonal S.mulI T.mulI)
@@ -561,7 +561,7 @@ structure StandardSubspace
 结构 StandardSubspace
   参数: where
   公理与运算 (3 个):
-    - toClosedSubmodule : ClosedSubmodule 实数 H
+    - toClosedSubmodule : 闭子模 实数 H
     - IsSeparating : toClosedSubmodule ⊓ toClosedSubmodule.mulI = ⊥
     - IsCyclic : toClosedSubmodule ⊔ toClosedSubmodule.mulI = ⊤
 -/
@@ -611,7 +611,7 @@ lemma toClosedSubmodule_injective
 
 中文:
 引理 toClosedSubmodule_injective
-  结论: Function.Injective (toClosedSubmodule (H := H))
+  结论: 函数.单射 (toClosedSubmodule (H := H))
   证明: fun _ _ => toClosedSubmodule_inj.mp
 -/
 lemma toClosedSubmodule_injective : Function.Injective (toClosedSubmodule (H := H)) :=
@@ -657,7 +657,7 @@ definition symplComp
 
 中文:
 定义 symplComp
-  签名: [CompleteSpace H] (S : StandardSubspace H)
+  签名: [完备空间 H] (S : StandardSubspace H)
   定义体: S.toClosedSubmodule.symplComp
   IsSeparating := by
     simp [mulI_symplComp, ClosedSubmodule.inf_orthogonal, sup_comm, S.IsCyclic]
@@ -686,7 +686,7 @@ theorem symplComp_symplComp_eq
 
 中文:
 定理 symplComp_symplComp_eq
-  条件: [CompleteSpace H] (S : StandardSubspace H)
+  条件: [完备空间 H] (S : StandardSubspace H)
   证明: toClosedSubmodule_inj.mp ClosedSubmodule.symplComp_symplComp_eq
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.symplComp_symplComp_eq, symplComp_symplComp_eq, toClosedSubmodule_inj, toClosedSubmodule_inj.mp
@@ -704,7 +704,7 @@ lemma involutive_symplComp
 
 中文:
 引理 involutive_symplComp
-  条件: [CompleteSpace H]
+  条件: [完备空间 H]
   证明: symplComp_symplComp_eq
 
 Depends on / 依赖: symplComp_symplComp_eq

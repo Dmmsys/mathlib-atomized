@@ -196,8 +196,8 @@ definition HasFiniteIntegral
   body: ∫⁻ a, ‖f a‖ₑ ∂μ < ∞
 
 中文:
-定义 HasFiniteIntegral
-  签名: {_ : MeasurableSpace α} (f : α -> ε)
+定义 HasFinite整数egral
+  签名: {_ : 可测空间 α} (f : α -> ε)
   定义体: ∫⁻ a, ‖f a‖ₑ ∂μ < ∞
 
 Depends on / 依赖: volume_tac
@@ -215,8 +215,8 @@ theorem hasFiniteIntegral_def
   proof: Iff.rfl
 
 中文:
-定理 hasFiniteIntegral_def
-  条件: {_ : MeasurableSpace α} (f : α -> ε) (μ : Measure α)
+定理 hasFinite整数egral_def
+  条件: {_ : 可测空间 α} (f : α -> ε) (μ : 测度 α)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -236,7 +236,7 @@ theorem hasFiniteIntegral_iff_enorm
   simp only [HasFiniteIntegral]
 
 中文:
-定理 hasFiniteIntegral_iff_enorm
+定理 hasFinite整数egral_iff_enorm
   条件: {f : α -> ε}
   结论: HasFinite整数egral f μ ↔ ∫⁻ a, ‖f a‖ₑ ∂μ < ∞
   证明: by
@@ -257,7 +257,7 @@ theorem hasFiniteIntegral_iff_norm
   simp only [hasFiniteIntegral_iff_enorm, ofReal_norm]
 
 中文:
-定理 hasFiniteIntegral_iff_norm
+定理 hasFinite整数egral_iff_norm
   条件: (f : α -> β)
   证明: by
   simp only [hasFiniteIntegral_iff_enorm, ofReal_norm]
@@ -278,7 +278,7 @@ theorem hasFiniteIntegral_iff_edist
   simp only [hasFiniteIntegral_iff_norm, edist_dist, dist_zero_right]
 
 中文:
-定理 hasFiniteIntegral_iff_edist
+定理 hasFinite整数egral_iff_edist
   条件: (f : α -> β)
   证明: by
   simp only [hasFiniteIntegral_iff_norm, edist_dist, dist_zero_right]
@@ -299,7 +299,7 @@ theorem hasFiniteIntegral_iff_ofReal
   rw [hasFiniteIntegral_iff_enorm]; rw [lintegral_enorm_of_ae_nonneg h]
 
 中文:
-定理 hasFiniteIntegral_iff_ofReal
+定理 hasFinite整数egral_iff_of实数
   条件: {f : α -> 实数} (h : 0 <=ᵐ[μ] f)
   证明: by
   rw [hasFiniteIntegral_iff_enorm]; rw [lintegral_enorm_of_ae_nonneg h]
@@ -320,7 +320,7 @@ theorem hasFiniteIntegral_iff_ofNNReal
   simp [hasFiniteIntegral_iff_norm]
 
 中文:
-定理 hasFiniteIntegral_iff_ofNNReal
+定理 hasFinite整数egral_iff_ofNN实数
   条件: {f : α -> 实数>=0}
   证明: by
   simp [hasFiniteIntegral_iff_norm]
@@ -344,7 +344,7 @@ theorem HasFiniteIntegral.mono_enorm
     _ < ∞ := hg
 
 中文:
-定理 HasFiniteIntegral.mono_enorm
+定理 HasFinite整数egral.mono_enorm
   结论: {f : α -> ε} {g : α -> ε'} (hg : HasFinite整数egral g μ)
   证明: by
   simp only [hasFiniteIntegral_iff_enorm] at *
@@ -370,7 +370,7 @@ theorem HasFiniteIntegral.mono
   proof: hg.mono_enorm h.mono fun _x hx => enorm_le_iff_norm_le.mpr hx
 
 中文:
-定理 HasFiniteIntegral.mono
+定理 HasFinite整数egral.mono
   结论: {f : α -> β} {g : α -> γ} (hg : HasFinite整数egral g μ)
   证明: hg.mono_enorm h.mono fun _x hx => enorm_le_iff_norm_le.mpr hx
 
@@ -393,8 +393,8 @@ theorem HasFiniteIntegral.mono_nonneg
   rwa [abs_of_nonneg hn, abs_of_nonneg (hn.trans ha)]
 
 中文:
-定理 HasFiniteIntegral.mono_nonneg
-  结论: [Lattice β] [HasSolidNorm β] [AddLeftMono β] {f g : α -> β}
+定理 HasFinite整数egral.mono_nonneg
+  结论: [格 β] [有Solid范数 β] [AddLeftMono β] {f g : α -> β}
   证明: by
   refine HasFiniteIntegral.mono hg ?_
   filter_upwards [hnonneg, h] with a hn ha
@@ -420,7 +420,7 @@ theorem HasFiniteIntegral.mono'_enorm
   proof: hg.mono_enorm h.mono fun _x hx => le_trans hx le_rfl
 
 中文:
-定理 HasFiniteIntegral.mono'_enorm
+定理 HasFinite整数egral.mono'_enorm
   结论: {f : α -> ε} {g : α -> 实数>=0∞} (hg : HasFinite整数egral g μ)
   证明: hg.mono_enorm h.mono fun _x hx => le_trans hx le_rfl
 
@@ -439,7 +439,7 @@ theorem HasFiniteIntegral.mono'
   proof: hg.mono h.mono fun _x hx => le_trans hx (le_abs_self _)
 
 中文:
-定理 HasFiniteIntegral.mono'
+定理 HasFinite整数egral.mono'
   结论: {f : α -> β} {g : α -> 实数} (hg : HasFinite整数egral g μ)
   证明: hg.mono h.mono fun _x hx => le_trans hx (le_abs_self _)
 -/
@@ -456,7 +456,7 @@ theorem HasFiniteIntegral.congr'_enorm
   proof: hf.mono_enorm EventuallyEq.le EventuallyEq.symm h
 
 中文:
-定理 HasFiniteIntegral.congr'_enorm
+定理 HasFinite整数egral.congr'_enorm
   结论: {f : α -> ε} {g : α -> ε'} (hf : HasFinite整数egral f μ)
   证明: hf.mono_enorm EventuallyEq.le EventuallyEq.symm h
 
@@ -475,7 +475,7 @@ theorem HasFiniteIntegral.congr'
   proof: hf.mono EventuallyEq.le EventuallyEq.symm h
 
 中文:
-定理 HasFiniteIntegral.congr'
+定理 HasFinite整数egral.congr'
   结论: {f : α -> β} {g : α -> γ} (hf : HasFinite整数egral f μ)
   证明: hf.mono EventuallyEq.le EventuallyEq.symm h
 -/
@@ -492,7 +492,7 @@ theorem hasFiniteIntegral_congr'_enorm
   proof: ⟨fun hf => hf.congr'_enorm h, fun hg => hg.congr'_enorm EventuallyEq.symm h⟩
 
 中文:
-定理 hasFiniteIntegral_congr'_enorm
+定理 hasFinite整数egral_congr'_enorm
   条件: {f : α -> ε} {g : α -> ε'} (h : 对任意ᵐ a ∂μ, ‖f a‖ₑ = ‖g a‖ₑ)
   证明: ⟨fun hf => hf.congr'_enorm h, fun hg => hg.congr'_enorm EventuallyEq.symm h⟩
 
@@ -511,7 +511,7 @@ theorem hasFiniteIntegral_congr'
   proof: ⟨fun hf => hf.congr' h, fun hg => hg.congr' EventuallyEq.symm h⟩
 
 中文:
-定理 hasFiniteIntegral_congr'
+定理 hasFinite整数egral_congr'
   条件: {f : α -> β} {g : α -> γ} (h : 对任意ᵐ a ∂μ, ‖f a‖ = ‖g a‖)
   证明: ⟨fun hf => hf.congr' h, fun hg => hg.congr' EventuallyEq.symm h⟩
 -/
@@ -528,7 +528,7 @@ theorem HasFiniteIntegral.congr
   proof: hf.congr'_enorm h.fun_comp enorm
 
 中文:
-定理 HasFiniteIntegral.congr
+定理 HasFinite整数egral.congr
   条件: {f g : α -> ε} (hf : HasFinite整数egral f μ) (h : f =ᵐ[μ] g)
   证明: hf.congr'_enorm h.fun_comp enorm
 
@@ -547,7 +547,7 @@ theorem hasFiniteIntegral_congr
   proof: hasFiniteIntegral_congr'_enorm h.fun_comp enorm
 
 中文:
-定理 hasFiniteIntegral_congr
+定理 hasFinite整数egral_congr
   条件: {f g : α -> ε} (h : f =ᵐ[μ] g)
   证明: hasFiniteIntegral_congr'_enorm h.fun_comp enorm
 
@@ -568,7 +568,7 @@ theorem hasFiniteIntegral_const_iff_enorm
     or_iff_not_imp_left, isFiniteMeasure_iff] using fun h h' => (hc h').elim
 
 中文:
-定理 hasFiniteIntegral_const_iff_enorm
+定理 hasFinite整数egral_const_iff_enorm
   条件: {c : ε} (hc : ‖c‖ₑ != ∞)
   证明: by
   simpa [hasFiniteIntegral_iff_enorm, lt_top_iff_ne_top, ENNReal.mul_eq_top,
@@ -591,7 +591,7 @@ theorem hasFiniteIntegral_const_iff
   simp [hasFiniteIntegral_const_iff_enorm enorm_ne_top]
 
 中文:
-定理 hasFiniteIntegral_const_iff
+定理 hasFinite整数egral_const_iff
   条件: {c : β}
   证明: by
   simp [hasFiniteIntegral_const_iff_enorm enorm_ne_top]
@@ -612,7 +612,7 @@ lemma hasFiniteIntegral_const_iff_isFiniteMeasure_enorm
   simp [hasFiniteIntegral_const_iff_enorm hc', hc, isFiniteMeasure_iff]
 
 中文:
-引理 hasFiniteIntegral_const_iff_isFiniteMeasure_enorm
+引理 hasFinite整数egral_const_iff_isFiniteMeasure_enorm
   条件: {c : ε} (hc : ‖c‖ₑ != 0) (hc' : ‖c‖ₑ != ∞)
   证明: by
   simp [hasFiniteIntegral_const_iff_enorm hc', hc, isFiniteMeasure_iff]
@@ -634,7 +634,7 @@ lemma hasFiniteIntegral_const_iff_isFiniteMeasure
 @[fun_prop]
 
 中文:
-引理 hasFiniteIntegral_const_iff_isFiniteMeasure
+引理 hasFinite整数egral_const_iff_isFiniteMeasure
   条件: {c : β} (hc : c != 0)
   证明: hasFiniteIntegral_const_iff_isFiniteMeasure_enorm (enorm_ne_zero.mpr hc) enorm_ne_top
 
@@ -658,8 +658,8 @@ theorem hasFiniteIntegral_const_enorm
 @[fun_prop]
 
 中文:
-定理 hasFiniteIntegral_const_enorm
-  条件: [IsFiniteMeasure μ] {c : ε} (hc : ‖c‖ₑ != ∞)
+定理 hasFinite整数egral_const_enorm
+  条件: [是有限测度 μ] {c : ε} (hc : ‖c‖ₑ != ∞)
   证明: (hasFiniteIntegral_const_iff_enorm hc).2 .inr ‹_›
 
 @[fun_prop]
@@ -680,8 +680,8 @@ theorem hasFiniteIntegral_const
   proof: hasFiniteIntegral_const_iff.2 .inr ‹_›
 
 中文:
-定理 hasFiniteIntegral_const
-  条件: [IsFiniteMeasure μ] (c : β)
+定理 hasFinite整数egral_const
+  条件: [是有限测度 μ] (c : β)
   证明: hasFiniteIntegral_const_iff.2 .inr ‹_›
 
 Depends on / 依赖: hasFiniteIntegral_const_iff
@@ -702,8 +702,8 @@ theorem HasFiniteIntegral.of_mem_Icc_of_ne_top
   filter_upwards [h.mono fun ω h => h.1, h.mono fun ω h => h.2] with ω h₁ h₂ using by simp [h₂]
 
 中文:
-定理 HasFiniteIntegral.of_mem_Icc_of_ne_top
-  结论: [IsFiniteMeasure μ]
+定理 HasFinite整数egral.of_mem_Icc_of_ne_top
+  结论: [是有限测度 μ]
   证明: by
   have : ‖max ‖a‖ₑ ‖b‖ₑ‖ₑ != ⊤ := by simp [ha, hb]
   apply (hasFiniteIntegral_const_enorm this (μ := μ)).mono'_enorm
@@ -729,8 +729,8 @@ theorem HasFiniteIntegral.of_mem_Icc
   filter_upwards [h.mono fun ω h => h.1, h.mono fun ω h => h.2] with ω using abs_le_max_abs_abs
 
 中文:
-定理 HasFiniteIntegral.of_mem_Icc
-  结论: [IsFiniteMeasure μ] (a b : 实数) {X : α -> 实数}
+定理 HasFinite整数egral.of_mem_Icc
+  结论: [是有限测度 μ] (a b : 实数) {X : α -> 实数}
   证明: by
   apply (hasFiniteIntegral_const (max ‖a‖ ‖b‖)).mono'
   filter_upwards [h.mono fun ω h => h.1, h.mono fun ω h => h.2] with ω using abs_le_max_abs_abs
@@ -752,8 +752,8 @@ theorem HasFiniteIntegral.of_bounded_enorm
   proof: (hasFiniteIntegral_const_enorm hC').mono'_enorm hC
 
 中文:
-定理 HasFiniteIntegral.of_bounded_enorm
-  结论: [IsFiniteMeasure μ] {f : α -> ε} {C : 实数>=0∞}
+定理 HasFinite整数egral.of_bounded_enorm
+  结论: [是有限测度 μ] {f : α -> ε} {C : 实数>=0∞}
   证明: (hasFiniteIntegral_const_enorm hC').mono'_enorm hC
 
 Depends on / 依赖: HasFiniteIntegral, _enorm, finiteness, hasFiniteIntegral_const_enorm
@@ -771,8 +771,8 @@ theorem HasFiniteIntegral.of_bounded
   proof: (hasFiniteIntegral_const C).mono' hC
 
 中文:
-定理 HasFiniteIntegral.of_bounded
-  结论: [IsFiniteMeasure μ] {f : α -> β} {C : 实数}
+定理 HasFinite整数egral.of_bounded
+  结论: [是有限测度 μ] {f : α -> β} {C : 实数}
   证明: (hasFiniteIntegral_const C).mono' hC
 
 Depends on / 依赖: hasFiniteIntegral_const
@@ -794,8 +794,8 @@ theorem HasFiniteIntegral.of_finite
 .of_bounded ae_of_all μ norm_le_pi_norm f
 
 中文:
-定理 HasFiniteIntegral.of_finite
-  条件: [Finite α] [IsFiniteMeasure μ] {f : α -> β}
+定理 HasFinite整数egral.of_finite
+  条件: [有限 α] [是有限测度 μ] {f : α -> β}
   证明: let ⟨_⟩ := nonempty_fintype α
 .of_bounded ae_of_all μ norm_le_pi_norm f
 
@@ -817,7 +817,7 @@ theorem HasFiniteIntegral.mono_measure
 @[fun_prop]
 
 中文:
-定理 HasFiniteIntegral.mono_measure
+定理 HasFinite整数egral.mono_measure
   条件: {f : α -> ε} (h : HasFinite整数egral f ν) (hμ : μ <= ν)
   证明: lt_of_le_of_lt (lintegral_mono' hμ le_rfl) h
 
@@ -841,7 +841,7 @@ theorem HasFiniteIntegral.add_measure
   exact add_lt_top.2 ⟨hμ, hν⟩
 
 中文:
-定理 HasFiniteIntegral.add_measure
+定理 HasFinite整数egral.add_measure
   结论: {f : α -> ε} (hμ : HasFinite整数egral f μ)
   证明: by
   simp only [HasFiniteIntegral, lintegral_add_measure] at *
@@ -863,7 +863,7 @@ theorem HasFiniteIntegral.left_of_add_measure
   proof: h.mono_measure Measure.le_add_right le_rfl
 
 中文:
-定理 HasFiniteIntegral.left_of_add_measure
+定理 HasFinite整数egral.left_of_add_measure
   条件: {f : α -> ε} (h : HasFinite整数egral f (μ + ν))
   证明: h.mono_measure Measure.le_add_right le_rfl
 
@@ -884,7 +884,7 @@ theorem HasFiniteIntegral.right_of_add_measure
 @[simp]
 
 中文:
-定理 HasFiniteIntegral.right_of_add_measure
+定理 HasFinite整数egral.right_of_add_measure
   条件: {f : α -> ε} (h : HasFinite整数egral f (μ + ν))
   证明: h.mono_measure Measure.le_add_left le_rfl
 
@@ -906,7 +906,7 @@ theorem hasFiniteIntegral_add_measure
   proof: ⟨fun h => ⟨h.left_of_add_measure, h.right_of_add_measure⟩, fun h => h.1.add_measure h.2⟩
 
 中文:
-定理 hasFiniteIntegral_add_measure
+定理 hasFinite整数egral_add_measure
   条件: {f : α -> ε}
   证明: ⟨fun h => ⟨h.left_of_add_measure, h.right_of_add_measure⟩, fun h => h.1.add_measure h.2⟩
 
@@ -929,7 +929,7 @@ theorem HasFiniteIntegral.smul_measure
 @[fun_prop, simp]
 
 中文:
-定理 HasFiniteIntegral.smul_measure
+定理 HasFinite整数egral.smul_measure
   结论: {f : α -> ε} (h : HasFinite整数egral f μ) {c : 实数>=0∞}
   证明: by
   simp only [HasFiniteIntegral, lintegral_smul_measure] at *
@@ -955,8 +955,8 @@ theorem hasFiniteIntegral_zero_measure
   simp only [HasFiniteIntegral, lintegral_zero_measure, zero_lt_top]
 
 中文:
-定理 hasFiniteIntegral_zero_measure
-  条件: {m : MeasurableSpace α} (f : α -> ε)
+定理 hasFinite整数egral_zero_measure
+  条件: {m : 可测空间 α} (f : α -> ε)
   证明: by
   simp only [HasFiniteIntegral, lintegral_zero_measure, zero_lt_top]
 
@@ -980,8 +980,8 @@ theorem hasFiniteIntegral_zero
 @[fun_prop]
 
 中文:
-定理 hasFiniteIntegral_zero
-  条件: {ε : 类型} [TopologicalSpace ε] [ESeminormedAddMonoid ε]
+定理 hasFinite整数egral_zero
+  条件: {ε : 类型} [拓扑空间 ε] [ESeminormedAdd幺半群 ε]
   证明: by
   simp [hasFiniteIntegral_iff_enorm]
 
@@ -1005,7 +1005,7 @@ theorem HasFiniteIntegral.neg
 @[simp]
 
 中文:
-定理 HasFiniteIntegral.neg
+定理 HasFinite整数egral.neg
   条件: {f : α -> β} (hfi : HasFinite整数egral f μ)
   证明: by simpa [hasFiniteIntegral_iff_enorm] using hfi
 
@@ -1029,7 +1029,7 @@ theorem hasFiniteIntegral_neg_iff
 @[fun_prop]
 
 中文:
-定理 hasFiniteIntegral_neg_iff
+定理 hasFinite整数egral_neg_iff
   条件: {f : α -> β}
   结论: HasFinite整数egral (-f) μ ↔ HasFinite整数egral f μ
   证明: ⟨fun h => neg_neg f ▸ h.neg, HasFiniteIntegral.neg⟩
@@ -1053,7 +1053,7 @@ theorem HasFiniteIntegral.enorm
 @[fun_prop]
 
 中文:
-定理 HasFiniteIntegral.enorm
+定理 HasFinite整数egral.enorm
   条件: {f : α -> ε} (hfi : HasFinite整数egral f μ)
   证明: by simpa [hasFiniteIntegral_iff_enorm] using hfi
 
@@ -1074,7 +1074,7 @@ theorem HasFiniteIntegral.norm
   proof: by simpa [hasFiniteIntegral_iff_enorm] using hfi
 
 中文:
-定理 HasFiniteIntegral.norm
+定理 HasFinite整数egral.norm
   条件: {f : α -> β} (hfi : HasFinite整数egral f μ)
   证明: by simpa [hasFiniteIntegral_iff_enorm] using hfi
 
@@ -1092,7 +1092,7 @@ theorem hasFiniteIntegral_enorm_iff
   proof: hasFiniteIntegral_congr'_enorm Eventually.of_forall fun x => enorm_enorm (f x)
 
 中文:
-定理 hasFiniteIntegral_enorm_iff
+定理 hasFinite整数egral_enorm_iff
   条件: (f : α -> ε)
   证明: hasFiniteIntegral_congr'_enorm Eventually.of_forall fun x => enorm_enorm (f x)
 
@@ -1111,7 +1111,7 @@ theorem hasFiniteIntegral_norm_iff
   proof: hasFiniteIntegral_congr' Eventually.of_forall fun x => norm_norm (f x)
 
 中文:
-定理 hasFiniteIntegral_norm_iff
+定理 hasFinite整数egral_norm_iff
   条件: (f : α -> β)
   证明: hasFiniteIntegral_congr' Eventually.of_forall fun x => norm_norm (f x)
 
@@ -1130,8 +1130,8 @@ theorem HasFiniteIntegral.of_subsingleton
   proof: .of_finite
 
 中文:
-定理 HasFiniteIntegral.of_subsingleton
-  条件: [Subsingleton α] [IsFiniteMeasure μ] {f : α -> β}
+定理 HasFinite整数egral.of_subsingleton
+  条件: [子单例 α] [是有限测度 μ] {f : α -> β}
   证明: .of_finite
 
 Depends on / 依赖: of_finite
@@ -1151,8 +1151,8 @@ theorem HasFiniteIntegral.of_isEmpty
 @[simp]
 
 中文:
-定理 HasFiniteIntegral.of_isEmpty
-  条件: [IsEmpty α] {f : α -> β}
+定理 HasFinite整数egral.of_isEmpty
+  条件: [是空 α] {f : α -> β}
   证明: .of_finite
 
 @[simp]
@@ -1172,7 +1172,7 @@ theorem HasFiniteIntegral.of_subsingleton_codomain
   proof: .congr .of_forall fun _ => Subsingleton.elim _ _ hasFiniteIntegral_zero _ _
 
 中文:
-定理 HasFiniteIntegral.of_subsingleton_codomain
+定理 HasFinite整数egral.of_subsingleton_codomain
   证明: .congr .of_forall fun _ => Subsingleton.elim _ _ hasFiniteIntegral_zero _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, hasFiniteIntegral_zero, of_forall
@@ -1198,7 +1198,7 @@ theorem hasFiniteIntegral_toReal_of_lintegral_ne_top
   · lift f x to Real>=0 us
 
 中文:
-定理 hasFiniteIntegral_toReal_of_lintegral_ne_top
+定理 hasFinite整数egral_to实数_of_lintegral_ne_top
   条件: {f : α -> 实数>=0∞} (hf : ∫⁻ x, f x ∂μ != ∞)
   证明: by
   have h x : ‖(f x).toReal‖ₑ = .ofReal (f x).toReal := by
@@ -1234,7 +1234,7 @@ lemma hasFiniteIntegral_toReal_iff
     lintegral_congr_ae this, lt_top_iff_ne_top]
 
 中文:
-引理 hasFiniteIntegral_toReal_iff
+引理 hasFinite整数egral_to实数_iff
   条件: {f : α -> 实数>=0∞} (hf : 对任意ᵐ x ∂μ, f x != ∞)
   证明: by
   have : forallᵐ x ∂μ, .ofReal (f x).toReal = f x := by filter_upwards [hf] with x hx; simp [hx]
@@ -1260,7 +1260,7 @@ theorem isFiniteMeasure_withDensity_ofReal
   exact Real.ofReal_le_enorm (f x)
 
 中文:
-定理 isFiniteMeasure_withDensity_ofReal
+定理 isFiniteMeasure_withDensity_of实数
   条件: {f : α -> 实数} (hfi : HasFinite整数egral f μ)
   证明: by
   refine isFiniteMeasure_withDensity ((lintegral_mono fun x => ?_).trans_lt hfi).ne
@@ -1292,7 +1292,7 @@ theorem all_ae_norm_ofReal_F_le_bound
 all_ae_ofReal_F_le_bound := all_ae_norm_ofReal_F_le_bound
 
 中文:
-定理 all_ae_norm_ofReal_F_le_bound
+定理 all_ae_norm_of实数_F_le_bound
   条件: (h : 对任意 n, 对任意ᵐ a ∂μ, ‖F n a‖ <= bound a)
   证明: fun n =>
   (h n).mono fun _ h => ENNReal.ofReal_le_ofReal h
@@ -1317,7 +1317,7 @@ theorem ae_tendsto_enorm
 
 中文:
 定理 ae_tendsto_enorm
-  条件: (h : 对任意ᵐ a ∂μ, Tendsto (fun n => F' n a) atTop <| 𝓝 <| f' a)
+  条件: (h : 对任意ᵐ a ∂μ, 收敛 (fun n => F' n a) atTop <| 𝓝 <| f' a)
   证明: h.mono fun _ h => Tendsto.comp (Continuous.tendsto continuous_enorm _) h
 
 Depends on / 依赖: Continuous, Continuous.tendsto, Tendsto, Tendsto.comp, continuous_enorm, h.mono, tendsto
@@ -1338,8 +1338,8 @@ theorem ae_tendsto_ofReal_norm
 @[deprecated (since := "2026-01-26")] alias all_ae_tendsto_ofReal_norm := ae_tendsto_ofReal_norm
 
 中文:
-定理 ae_tendsto_ofReal_norm
-  条件: (h : 对任意ᵐ a ∂μ, Tendsto (fun n => F n a) atTop <| 𝓝 <| f a)
+定理 ae_tendsto_of实数_norm
+  条件: (h : 对任意ᵐ a ∂μ, 收敛 (fun n => F n a) atTop <| 𝓝 <| f a)
   证明: by
   convert! ae_tendsto_enorm h <;> simp
 
@@ -1369,7 +1369,7 @@ theorem ae_norm_ofReal_f_le_bound
 @[deprecated (since := "2026-01-26")] alias all_ae_ofReal_f_
 
 中文:
-定理 ae_norm_ofReal_f_le_bound
+定理 ae_norm_of实数_f_le_bound
   结论: (h_bound : 对任意 n, 对任意ᵐ a ∂μ, ‖F n a‖ <= bound a)
   证明: by
   have F_le_bound := all_ae_norm_ofReal_F_le_bound h_bound
@@ -1438,7 +1438,7 @@ theorem hasFiniteIntegral_of_dominated_convergence_enorm
 lintegral_mono_ae ae_enorm_le_bound h_bound h_lim
 
 中文:
-定理 hasFiniteIntegral_of_dominated_convergence_enorm
+定理 hasFinite整数egral_of_dominated_convergence_enorm
   证明: by
   /- `‖F' n a‖ₑ ≤ bound' a` and `‖F' n a‖ₑ --> ‖f' a‖ₑ` implies `‖f a‖ₑ ≤ bound' a`,
     and so `∫ ‖f'‖ₑ ≤ ∫ bound' < ∞` since `bound'` has finite integral -/
@@ -1473,7 +1473,7 @@ theorem hasFiniteIntegral_of_dominated_convergence
 lintegral_mono_ae ae_norm_ofRea
 
 中文:
-定理 hasFiniteIntegral_of_dominated_convergence
+定理 hasFinite整数egral_of_dominated_convergence
   证明: by
   /- `‖F n a‖ ≤ bound a` and `‖F n a‖ --> ‖f a‖` implies `‖f a‖ ≤ bound a`,
     and so `∫ ‖f‖ ≤ ∫ bound < ∞` since `bound` is has_finite_integral -/
@@ -1588,7 +1588,7 @@ theorem HasFiniteIntegral.max_zero
 @[fun_prop]
 
 中文:
-定理 HasFiniteIntegral.max_zero
+定理 HasFinite整数egral.max_zero
   条件: {f : α -> 实数} (hf : HasFinite整数egral f μ)
   证明: hf.mono Eventually.of_forall fun x => by simp [abs_le, le_abs_self]
 
@@ -1610,7 +1610,7 @@ theorem HasFiniteIntegral.min_zero
   proof: hf.mono Eventually.of_forall fun x => by simpa [abs_le] using neg_abs_le _
 
 中文:
-定理 HasFiniteIntegral.min_zero
+定理 HasFinite整数egral.min_zero
   条件: {f : α -> 实数} (hf : HasFinite整数egral f μ)
   证明: hf.mono Eventually.of_forall fun x => by simpa [abs_le] using neg_abs_le _
 
@@ -1642,8 +1642,8 @@ theorem HasFiniteIntegral.smul
       exacts [mul_lt_top coe_lt_top hf, coe_ne_top]
 
 中文:
-定理 HasFiniteIntegral.smul
-  结论: [NormedAddCommGroup 𝕜] [SMulZeroClass 𝕜 β] [IsBoundedSMul 𝕜 β]
+定理 HasFinite整数egral.smul
+  结论: [赋范交换加群 𝕜] [SMulZero类 𝕜 β] [是BoundedSMul 𝕜 β]
   证明: by
   simp only [HasFiniteIntegral]
   calc
@@ -1683,8 +1683,8 @@ theorem HasFiniteIntegral.smul_enorm
       exacts [mul_lt_top coe_lt_top hf, coe_ne_top]
 
 中文:
-定理 HasFiniteIntegral.smul_enorm
-  结论: [NormedAddGroup 𝕜] [SMul 𝕜 ε''] [ENormSMulClass 𝕜 ε'']
+定理 HasFinite整数egral.smul_enorm
+  结论: [赋范加群 𝕜] [标量乘法 𝕜 ε''] [ENormSMul类 𝕜 ε'']
   证明: by
   simp only [HasFiniteIntegral]
   calc
@@ -1720,8 +1720,8 @@ theorem hasFiniteIntegral_smul_iff
 @[fun_prop]
 
 中文:
-定理 hasFiniteIntegral_smul_iff
-  结论: [NormedRing 𝕜] [MulActionWithZero 𝕜 β] [IsBoundedSMul 𝕜 β]
+定理 hasFinite整数egral_smul_iff
+  结论: [赋范环 𝕜] [带零乘法作用 𝕜 β] [是BoundedSMul 𝕜 β]
   证明: by
   obtain ⟨c, rfl⟩ := hc
   constructor
@@ -1754,8 +1754,8 @@ theorem HasFiniteIntegral.const_mul
 @[fun_prop]
 
 中文:
-定理 HasFiniteIntegral.const_mul
-  条件: [NormedRing 𝕜] {f : α -> 𝕜} (h : HasFinite整数egral f μ) (c : 𝕜)
+定理 HasFinite整数egral.const_mul
+  条件: [赋范环 𝕜] {f : α -> 𝕜} (h : HasFinite整数egral f μ) (c : 𝕜)
   证明: h.smul c
 
 @[fun_prop]
@@ -1776,8 +1776,8 @@ theorem HasFiniteIntegral.mul_const
   proof: h.smul (MulOpposite.op c)
 
 中文:
-定理 HasFiniteIntegral.mul_const
-  条件: [NormedRing 𝕜] {f : α -> 𝕜} (h : HasFinite整数egral f μ) (c : 𝕜)
+定理 HasFinite整数egral.mul_const
+  条件: [赋范环 𝕜] {f : α -> 𝕜} (h : HasFinite整数egral f μ) (c : 𝕜)
   证明: h.smul (MulOpposite.op c)
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, h.smul
@@ -1801,7 +1801,7 @@ lemma hasFiniteIntegral_count_iff_enorm
   simp only [hasFiniteIntegral_iff_enorm, lintegral_count]
 
 中文:
-引理 hasFiniteIntegral_count_iff_enorm
+引理 hasFinite整数egral_count_iff_enorm
   条件: {f : α -> ε}
   证明: by
   simp only [hasFiniteIntegral_iff_enorm, lintegral_count]
@@ -1823,7 +1823,7 @@ lemma hasFiniteIntegral_count_iff
     tsum_coe_ne_top_iff_summable, ← summable_coe, coe_nnnorm]
 
 中文:
-引理 hasFiniteIntegral_count_iff
+引理 hasFinite整数egral_count_iff
   条件: {f : α -> β}
   证明: by
   simp only [hasFiniteIntegral_iff_enorm, enorm, lintegral_count, lt_top_iff_ne_top,
@@ -1854,8 +1854,8 @@ lemma HasFiniteIntegral.restrict
   simpa [Measure.restrict_univ] using lintegral_mono_set (subset_univ s)
 
 中文:
-引理 HasFiniteIntegral.restrict
-  条件: (h : HasFinite整数egral f μ) {s : Set α}
+引理 HasFinite整数egral.restrict
+  条件: (h : HasFinite整数egral f μ) {s : 集合 α}
   证明: by
   refine lt_of_le_of_lt ?_ h
   simpa [Measure.restrict_univ] using lintegral_mono_set (subset_univ s)

@@ -42,7 +42,7 @@ theorem exist_openNormalSubgroup_sub_clopen_nhds_of_one
 
 中文:
 定理 exist_openNormalSubgroup_sub_clopen_nhds_of_one
-  结论: {G : 类型} [Group G] [TopologicalSpace G]
+  结论: {G : 类型} [群 G] [拓扑空间 G]
   证明: by
   rcases exist_openSubgroup_sub_clopen_nhds_of_one WClopen einW with ⟨H, hH⟩
   have : Subgroup.FiniteIndex H.toSubgroup := H.finiteIndex_of_finite_quotient
@@ -125,7 +125,7 @@ theorem closedSubgroup_eq_sInf_open
 
 中文:
 定理 closedSubgroup_eq_sInf_open
-  条件: (H : ClosedSubgroup G)
+  条件: (H : 闭子群 G)
   证明: by
   apply le_antisymm
   · exact le_sInf fun N hN => hN.2

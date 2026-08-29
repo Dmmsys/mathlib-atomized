@@ -44,7 +44,7 @@ lemma linear_of_localization
 
 中文:
 引理 linear_of_localization
-  结论: [L.IsLocalization W] [L.Linear R] [HasShift D M]
+  结论: [L.是Localization W] [L.线性 R] [有Shift D M]
   证明: by
   have : Localization.Lifting L W (shiftFunctor C n ⋙ L) (shiftFunctor D n) :=
     ⟨(L.commShiftIso n).symm⟩
@@ -69,8 +69,8 @@ instance [HasShift
   body: linear_of_localization _ W.Q W _
 
 中文:
-实例 [HasShift
-  签名: W.Localization M] [W.Q.CommShift M] [Preadditive W.Localization]
+实例 [有Shift
+  签名: W.Localization M] [W.Q.交换Shift M] [预加性 W.Localization]
   定义体: linear_of_localization _ W.Q W _
 
 Depends on / 依赖: linear_of_localization

@@ -73,7 +73,7 @@ if h : p₀ in unop V then eqToHom by rw [if_pos h, if_pos (by simpa using i.uno
 
 中文:
 定义 skyscraperPresheaf
-  签名: : Presheaf C X where
+  签名: : 预层 C X where
   定义体: if p₀ in unop U then A else terminal C
   map {U V} i :=
 if h : p₀ in unop V then eqToHom by rw [if_pos h, if_pos (by simpa using i.unop.le h)]
@@ -240,7 +240,7 @@ definition skyscraperPresheafFunctor
 
 中文:
 定义 skyscraperPresheafFunctor
-  签名: : C ⥤ Presheaf C X where
+  签名: : C ⥤ 预层 C X where
   定义体: skyscraperPresheaf p₀
   map := SkyscraperPresheafFunctor.map' p₀
   map_id _ := SkyscraperPresheafFunctor.map'_id p₀
@@ -366,7 +366,7 @@ definition skyscraperPresheafStalkOfSpecializes
 
 中文:
 定义 skyscraperPresheafStalkOfSpecializes
-  签名: [HasColimits C] {y : X} (h : p₀ ⤳ y)
+  签名: [有余极限 C] {y : X} (h : p₀ ⤳ y)
   定义体: colimit.isoColimitCocone ⟨_, skyscraperPresheafCoconeIsColimitOfSpecializes p₀ A h⟩
 
 @[reassoc (attr := simp)]
@@ -388,7 +388,7 @@ lemma germ_skyscraperPresheafStalkOfSpecializes_hom
 
 中文:
 引理 germ_skyscraperPresheafStalkOfSpecializes_hom
-  条件: [HasColimits C] {y : X} (h : p₀ ⤳ y) (U hU)
+  条件: [有余极限 C] {y : X} (h : p₀ ⤳ y) (U hU)
   证明: colimit.isoColimitCocone_ι_hom _ _
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone_
@@ -486,7 +486,7 @@ definition skyscraperPresheafStalkOfNotSpecializes
 
 中文:
 定义 skyscraperPresheafStalkOfNotSpecializes
-  签名: [HasColimits C] {y : X} (h : ¬p₀ ⤳ y)
+  签名: [有余极限 C] {y : X} (h : ¬p₀ ⤳ y)
   定义体: colimit.isoColimitCocone ⟨_, skyscraperPresheafCoconeIsColimitOfNotSpecializes _ A h⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isoColimitCocone, skyscraperPresheafCoconeIsColimitOfNotSpecializes
@@ -505,7 +505,7 @@ definition skyscraperPresheafStalkOfNotSpecializesIsTerminal
 
 中文:
 定义 skyscraperPresheafStalkOfNotSpecializesIsTerminal
-  签名: [HasColimits C] {y : X} (h : ¬p₀ ⤳ y)
+  签名: [有余极限 C] {y : X} (h : ¬p₀ ⤳ y)
   定义体: IsTerminal.ofIso terminalIsTerminal (skyscraperPresheafStalkOfNotSpecializes _ _ h).symm
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofIso, skyscraperPresheafStalkOfNotSpecializes, terminalIsTerminal
@@ -532,7 +532,7 @@ theorem skyscraperPresheaf_isSheaf
 
 中文:
 定理 skyscraperPresheaf_isSheaf
-  结论: (skyscraperPresheaf p₀ A).IsSheaf
+  结论: (skyscraperPresheaf p₀ A).是层
   证明: by
   classical exact
 (Presheaf.isSheaf_iso_iff (eqToIso <| skyscraperPresheaf_eq_pushforward p₀ A)).mpr
@@ -572,7 +572,7 @@ definition skyscraperSheaf
 
 中文:
 定义 skyscraperSheaf
-  签名: : Sheaf C X
+  签名: : 层 C X
   定义体: ⟨skyscraperPresheaf p₀ A, skyscraperPresheaf_isSheaf _ _⟩
 
 Depends on / 依赖: skyscraperPresheaf, skyscraperPresheaf_isSheaf
@@ -593,7 +593,7 @@ map_comp _ _ := Sheaf.hom_ext (skyscraperPresheafFunctor p₀).map_comp _ _
 
 中文:
 定义 skyscraperSheafFunctor
-  签名: : C ⥤ Sheaf C X where
+  签名: : C ⥤ 层 C X where
   定义体: skyscraperSheaf p₀ c
 map f := ObjectProperty.homMk (skyscraperPresheafFunctor p₀).map f
 map_id _ := Sheaf.hom_ext (skyscraperPresheafFunctor p₀).map_id _
@@ -634,7 +634,7 @@ definition toSkyscraperPresheaf
 
 中文:
 定义 toSkyscraperPresheaf
-  签名: {𝓕 : Presheaf C X} {c : C} (f : 𝓕.stalk p₀ ⟶ c)
+  签名: {𝓕 : 预层 C X} {c : C} (f : 𝓕.stalk p₀ ⟶ c)
   定义体: if h : p₀ in U.unop then 𝓕.germ _ p₀ h ≫ f ≫ eqToHom (if_pos h).symm
     else ((if_neg h).symm.ndrec terminalIsTerminal).from _
   naturality U V inc := by
@@ -677,7 +677,7 @@ Cocone.mk c
 
 中文:
 定义 fromStalk
-  签名: {𝓕 : Presheaf C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c)
+  签名: {𝓕 : 预层 C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c)
   定义体: let χ : Cocone ((OpenNhds.inclusion p₀).op ⋙ 𝓕) :=
 Cocone.mk c
       { app := fun U => f.app ((OpenNhds.inclusion p₀).op.obj U) ≫ eqToHom (if_pos U.unop.2)
@@ -710,7 +710,7 @@ lemma germ_fromStalk
 
 中文:
 引理 germ_fromStalk
-  条件: {𝓕 : Presheaf C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c) (U) (hU)
+  条件: {𝓕 : 预层 C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c) (U) (hU)
   证明: colimit.ι_desc _ _
 
 Depends on / 依赖: colimit
@@ -737,7 +737,7 @@ theorem to_skyscraper_fromStalk
 
 中文:
 定理 to_skyscraper_fromStalk
-  条件: {𝓕 : Presheaf C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c)
+  条件: {𝓕 : 预层 C X} {c : C} (f : 𝓕 ⟶ skyscraperPresheaf p₀ c)
   证明: by
   apply NatTrans.ext
   ext U
@@ -770,7 +770,7 @@ theorem fromStalk_to_skyscraper
 
 中文:
 定理 fromStalk_to_skyscraper
-  条件: {𝓕 : Presheaf C X} {c : C} (f : 𝓕.stalk p₀ ⟶ c)
+  条件: {𝓕 : 预层 C X} {c : C} (f : 𝓕.stalk p₀ ⟶ c)
   证明: by
   refine 𝓕.stalk_hom_ext fun U hxU => ?_
   rw [germ_fromStalk]; rw [toSkyscraperPresheaf_app]; rw [dif_pos hxU]; rw [Category.assoc]; rw [Category.assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [Presheaf.germ]
@@ -871,7 +871,7 @@ definition skyscraperPresheafStalkAdjunction
 
 中文:
 定义 skyscraperPresheafStalkAdjunction
-  签名: [HasColimits C]
+  签名: [有余极限 C]
   定义体: StalkSkyscraperPresheafAdjunctionAuxs.unit _
   counit := StalkSkyscraperPresheafAdjunctionAuxs.counit _
   left_triangle_components X := by
@@ -920,7 +920,7 @@ instance [HasColimits
   body: (skyscraperPresheafStalkAdjunction _).isRightAdjoint
 
 中文:
-实例 [HasColimits
+实例 [有余极限
   签名: C] : (skyscraperPresheafFunctor p₀
   定义体: (skyscraperPresheafStalkAdjunction _).isRightAdjoint
 
@@ -940,8 +940,8 @@ instance [HasColimits
   (skyscraperPresheafStalkAdjunction _).isLeftAdjoint
 
 中文:
-实例 [HasColimits
-  签名: C] : (Presheaf.stalkFunctor C p₀).IsLeftAdjoint
+实例 [有余极限
+  签名: C] : (预层.stalkFunctor C p₀).是左伴随
   定义体: -- Use a classical instance instead of the one from `variable`s
   have : forall U : Opens X, Decidable (p₀ in U) := fun _ => Classical.dec _
   (skyscraperPresheafStalkAdjunction _).isLeftAdjoint
@@ -966,7 +966,7 @@ naturality := fun 𝓐 𝓑 f => Sheaf.hom_ext by
 
 中文:
 定义 stalkSkyscraperSheafAdjunction
-  签名: [HasColimits C]
+  签名: [有余极限 C]
   定义体: { app := fun 𝓕 => ⟨(StalkSkyscraperPresheafAdjunctionAuxs.unit p₀).app 𝓕.1⟩
 naturality := fun 𝓐 𝓑 f => Sheaf.hom_ext by
         apply (StalkSkyscraperPresheafAdjunctionAuxs.unit p₀).naturality }
@@ -999,8 +999,8 @@ instance [HasColimits
   (stalkSkyscraperSheafAdjunction p₀).isLeftAdjoint
 
 中文:
-实例 [HasColimits
-  签名: C] : (Sheaf.forget C X ⋙ Presheaf.stalkFunctor C p₀).IsLeftAdjoint
+实例 [有余极限
+  签名: C] : (层.forget C X ⋙ 预层.stalkFunctor C p₀).是左伴随
   定义体: have : forall U : Opens X, Decidable (p₀ in U) := fun _ => Classical.dec _
   (stalkSkyscraperSheafAdjunction p₀).isLeftAdjoint
 
@@ -1019,7 +1019,7 @@ instance [HasColimits
   body: (stalkSkyscraperSheafAdjunction _).isRightAdjoint
 
 中文:
-实例 [HasColimits
+实例 [有余极限
   签名: C] : (skyscraperSheafFunctor p₀
   定义体: (stalkSkyscraperSheafAdjunction _).isRightAdjoint
 
@@ -1038,7 +1038,7 @@ definition skyscraperSheafForgetAdjunction
 
 中文:
 定义 skyscraperSheafForgetAdjunction
-  签名: [HasColimits C]
+  签名: [有余极限 C]
   定义体: skyscraperPresheafStalkAdjunction p₀
 
 Depends on / 依赖: skyscraperPresheafStalkAdjunction

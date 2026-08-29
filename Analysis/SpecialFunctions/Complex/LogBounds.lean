@@ -43,7 +43,7 @@ lemma continuousOn_one_add_mul_inv
 
 中文:
 引理 continuousOn_one_add_mul_inv
-  条件: {z : Complex} (hz : 1 + z in slitPlane)
+  条件: {z : 复形} (hz : 1 + z in slitPlane)
   证明: ContinuousOn.inv₀ (by fun_prop)
     (fun _ ht => slitPlane_ne_zero <| StarConvex.add_smul_mem starConvex_one_slitPlane hz ht.1 ht.2)
 
@@ -71,7 +71,7 @@ hasDerivAt_log
 
 中文:
 引理 log_eq_integral
-  条件: {z : Complex} (hz : 1 + z in slitPlane)
+  条件: {z : 复形} (hz : 1 + z in slitPlane)
   证明: by
   convert!
     (integral_unitInterval_deriv_eq_sub (continuousOn_one_add_mul_inv hz)
@@ -105,7 +105,7 @@ lemma log_inv_eq_integral
 
 中文:
 引理 log_inv_eq_integral
-  条件: {z : Complex} (hz : 1 - z in slitPlane)
+  条件: {z : 复形} (hz : 1 - z in slitPlane)
   证明: by
   rw [sub_eq_add_neg 1 z] at hz ⊢
   rw [log_inv _ <| slitPlane_arg_ne_pi hz]; rw [neg_eq_iff_eq_neg]; rw [← neg_mul]
@@ -241,7 +241,7 @@ lemma hasDerivAt_logTaylor
 
 中文:
 引理 hasDerivAt_logTaylor
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   证明: by
   induction n with
   | zero => simp [logTaylor_succ, logTaylor_zero, Pi.add_def, hasDerivAt_const]
@@ -290,7 +290,7 @@ lemma hasDerivAt_log_sub_logTaylor
 
 中文:
 引理 hasDerivAt_log_sub_logTaylor
-  条件: (n : 自然数) {z : Complex} (hz : 1 + z in slitPlane)
+  条件: (n : 自然数) {z : 复形} (hz : 1 + z in slitPlane)
   证明: by
   convert! ((hasDerivAt_log hz).comp_const_add 1 z).sub (hasDerivAt_logTaylor n z) using 1
   have hz' : -z != 1 := by
@@ -333,7 +333,7 @@ lemma norm_one_add_mul_inv_le
 
 中文:
 引理 norm_one_add_mul_inv_le
-  条件: {t : 实数} (ht : t in Set.Icc 0 1) {z : Complex} (hz : ‖z‖ < 1)
+  条件: {t : 实数} (ht : t in 集合.闭区间 0 1) {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   rw [Set.mem_Icc] at ht
   rw [norm_inv]
@@ -376,7 +376,7 @@ have := continuousOn_one_add_mul_inv mem_slitPlane_of_norm_lt_one hz
 
 中文:
 引理 integrable_pow_mul_norm_one_add_mul_inv
-  条件: (n : 自然数) {z : Complex} (hz : ‖z‖ < 1)
+  条件: (n : 自然数) {z : 复形} (hz : ‖z‖ < 1)
   证明: by
 have := continuousOn_one_add_mul_inv mem_slitPlane_of_norm_lt_one hz
   rw [← Set.uIcc_of_le zero_le_one] at this
@@ -405,7 +405,7 @@ lemma norm_log_sub_logTaylor_le
 
 中文:
 引理 norm_log_sub_logTaylor_le
-  条件: (n : 自然数) {z : Complex} (hz : ‖z‖ < 1)
+  条件: (n : 自然数) {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   have help : IntervalIntegrable (fun t : Real => t ^ n * (1 - ‖z‖)⁻¹) MeasureTheory.volume 0 1 :=
     IntervalIntegrable.mul_const (Continuous.intervalIntegrable (by fun_prop) 0 1) (1 - ‖z‖)⁻¹
@@ -464,7 +464,7 @@ lemma norm_log_one_add_sub_self_le
 
 中文:
 引理 norm_log_one_add_sub_self_le
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   convert! norm_log_sub_logTaylor_le 1 hz using 2
   · simp [logTaylor_succ, logTaylor_zero, sub_eq_add_neg]
@@ -559,7 +559,7 @@ lemma norm_log_one_add_le
 
 中文:
 引理 norm_log_one_add_le
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   rw [← sub_add_cancel (log (1 + z)) z]
   exact norm_add_le_of_le (Complex.norm_log_one_add_sub_self_le hz) le_rfl
@@ -592,7 +592,7 @@ lemma norm_log_one_add_half_le_self
 
 中文:
 引理 norm_log_one_add_half_le_self
-  条件: {z : Complex} (hz : ‖z‖ <= 1 / 2)
+  条件: {z : 复形} (hz : ‖z‖ <= 1 / 2)
   结论: ‖log (1 + z)‖ <= (3 / 2) * ‖z‖
   证明: by
   apply le_trans (norm_log_one_add_le (lt_of_le_of_lt hz one_half_lt_one))
@@ -636,7 +636,7 @@ convert! norm_log_sub_logTaylor_le n (norm_neg z).symm ▸ hz using 4 <;> rw [no
 
 中文:
 引理 norm_log_one_sub_inv_add_logTaylor_neg_le
-  条件: (n : 自然数) {z : Complex} (hz : ‖z‖ < 1)
+  条件: (n : 自然数) {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   rw [sub_eq_add_neg]; rw [log_inv _ slitPlane_arg_ne_pi mem_slitPlane_of_norm_lt_one (norm_neg z).symm ▸ hz]; rw [← sub_neg_eq_add]; rw [← neg_sub']; rw [norm_neg]
 convert! norm_log_sub_logTaylor_le n (norm_neg z).symm ▸ hz using 4 <;> rw [norm_neg]
@@ -661,7 +661,7 @@ lemma norm_log_one_sub_inv_sub_self_le
 
 中文:
 引理 norm_log_one_sub_inv_sub_self_le
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   convert! norm_log_one_sub_inv_add_logTaylor_neg_le 1 hz using 2
   · simp [logTaylor_succ, logTaylor_zero, sub_eq_add_neg]
@@ -691,7 +691,7 @@ lemma hasSum_taylorSeries_log
 
 中文:
 引理 hasSum_taylorSeries_log
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   refine (hasSum_iff_tendsto_nat_of_summable_norm ?_).mpr ?_
   · refine (summable_geometric_of_norm_lt_one hz).norm.of_nonneg_of_le (fun _ => norm_nonneg _) ?_
@@ -749,7 +749,7 @@ lemma hasSum_taylorSeries_neg_log
 
 中文:
 引理 hasSum_taylorSeries_neg_log
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   conv => enter [1, n]; rw [← neg_neg (z ^ n / n)]
   refine HasSum.neg ?_
@@ -781,7 +781,7 @@ lemma hasSum_taylorSeries_neg_log'
 
 中文:
 引理 hasSum_taylorSeries_neg_log'
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   rw_mod_cast [hasSum_nat_add_iff 1 (f := fun n => z ^ n / n) (g := -log (1 - z))]
   simpa using hasSum_taylorSeries_neg_log hz
@@ -820,7 +820,7 @@ lemma tendsto_mul_log_one_add_of_tendsto
 
 中文:
 引理 tendsto_mul_log_one_add_of_tendsto
-  结论: {g : 实数 -> Complex} {t : Complex}
+  结论: {g : 实数 -> 复形} {t : 复形}
   证明: by
   apply hg.congr_dist
   refine IsBigO.trans_tendsto ?_ tendsto_inv_atTop_zero.ofReal
@@ -864,7 +864,7 @@ lemma tendsto_one_add_cpow_exp_of_tendsto
 
 中文:
 引理 tendsto_one_add_cpow_exp_of_tendsto
-  结论: {g : 实数 -> Complex} {t : Complex}
+  结论: {g : 实数 -> 复形} {t : 复形}
   证明: by
   apply ((continuous_exp.tendsto _).comp (tendsto_mul_log_one_add_of_tendsto hg)).congr'
   have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
@@ -900,7 +900,7 @@ lemma tendsto_one_add_div_cpow_exp
 
 中文:
 引理 tendsto_one_add_div_cpow_exp
-  条件: (t : Complex)
+  条件: (t : 复形)
   证明: by
   apply tendsto_one_add_cpow_exp_of_tendsto
   apply tendsto_nhds_of_eventually_eq
@@ -927,7 +927,7 @@ lemma tendsto_nat_mul_log_one_add_of_tendsto
 
 中文:
 引理 tendsto_nat_mul_log_one_add_of_tendsto
-  结论: {g : 自然数 -> Complex} {t : Complex}
+  结论: {g : 自然数 -> 复形} {t : 复形}
   证明: tendsto_mul_log_one_add_of_tendsto (tendsto_smul_comp_nat_floor_of_tendsto_mul hg)
 .congr (by simp) .comp tendsto_natCast_atTop_atTop
 
@@ -950,7 +950,7 @@ lemma tendsto_one_add_pow_exp_of_tendsto
 
 中文:
 引理 tendsto_one_add_pow_exp_of_tendsto
-  结论: {g : 自然数 -> Complex} {t : Complex}
+  结论: {g : 自然数 -> 复形} {t : 复形}
   证明: tendsto_one_add_cpow_exp_of_tendsto (tendsto_smul_comp_nat_floor_of_tendsto_mul hg)
 .congr (by simp) .comp tendsto_natCast_atTop_atTop
 
@@ -972,7 +972,7 @@ lemma tendsto_one_add_div_pow_exp
 
 中文:
 引理 tendsto_one_add_div_pow_exp
-  条件: (t : Complex)
+  条件: (t : 复形)
   证明: .congr (by simp) .comp tendsto_natCast_atTop_atTop tendsto_one_add_div_cpow_exp t
 
 Depends on / 依赖: tendsto_natCast_atTop_atTop, tendsto_one_add_div_cpow_exp
@@ -997,7 +997,7 @@ lemma tendsto_pow_exp_of_isLittleO_sub_add_div
 
 中文:
 引理 tendsto_pow_exp_of_isLittleO_sub_add_div
-  结论: {f : 自然数 -> Complex} (t : Complex)
+  结论: {f : 自然数 -> 复形} (t : 复形)
   证明: by
   rw [show (fun n => f n ^ n) = (fun n => (1 + (f n - 1)) ^ n) by ext; simp]
   refine tendsto_one_add_pow_exp_of_tendsto (tendsto_sub_nhds_zero_iff.1 ?_)

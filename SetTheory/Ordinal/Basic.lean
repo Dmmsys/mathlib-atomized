@@ -86,12 +86,12 @@ structure WellOrder
     - wo : IsWellOrder α r
 
 中文:
-结构 WellOrder
-  参数: : Type (u + 1) where
+结构 良序
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - α : 类型u
     - r : α -> α -> 命题
-    - wo : IsWellOrder α r
+    - wo : 是良序 α r
 -/
 structure WellOrder : Type (u + 1) where
   /-- The underlying type of the order. -/
@@ -115,7 +115,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited WellOrder
+  签名: : 可居 良序
   定义体: ⟨⟨PEmpty, _, (inferInstance : IsWellOrder PEmpty emptyRelation)⟩⟩
 
 Depends on / 依赖: IsWellOrder, PEmpty, emptyRelation
@@ -136,8 +136,8 @@ instance Ordinal.isEquivalent
     ⟨fun _ => ⟨RelIso.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
 
 中文:
-实例 Ordinal.isEquivalent
-  签名: : Setoid WellOrder where
+实例 序数.isEquivalent
+  签名: : 集合等价关系 良序 where
   定义体: fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Nonempty (r ≃r s)
   iseqv :=
     ⟨fun _ => ⟨RelIso.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
@@ -160,8 +160,8 @@ definition Ordinal
   body: Quotient Ordinal.isEquivalent
 
 中文:
-定义 Ordinal
-  签名: : Type (u + 1)
+定义 序数
+  签名: : 类型 (u + 1)
   定义体: Quotient Ordinal.isEquivalent
 
 Depends on / 依赖: Ordinal, Ordinal.isEquivalent, Quotient, isEquivalent
@@ -192,8 +192,8 @@ definition Ordinal.ToType
 @[no_expose]
 
 中文:
-定义 Ordinal.ToType
-  签名: (o : Ordinal.{u})
+定义 序数.ToType
+  签名: (o : 序数.{u})
   定义体: o.out.α
 
 @[no_expose]
@@ -214,7 +214,7 @@ instance linearOrder_toType
 
 中文:
 实例 linearOrder_toType
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: @IsWellOrder.linearOrder _ o.out.r o.out.wo
 
 Depends on / 依赖: IsWellOrder, IsWellOrder.linearOrder, linearOrder, o.out.r, o.out.wo
@@ -232,7 +232,7 @@ instance wellFoundedLT_toType
 
 中文:
 实例 wellFoundedLT_toType
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: o.out.wo.toIsWellFounded
 
 Depends on / 依赖: o.out.wo.toIsWellFounded, toIsWellFounded
@@ -250,7 +250,7 @@ instance hasWellFounded_toType
 
 中文:
 实例 hasWellFounded_toType
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: WellFoundedLT.toWellFoundedRelation
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.toWellFoundedRelation, toWellFoundedRelation
@@ -276,7 +276,7 @@ definition type
 
 中文:
 定义 type
-  签名: (r : α -> α -> 命题) [wo : IsWellOrder α r]
+  签名: (r : α -> α -> 命题) [wo : 是良序 α r]
   定义体: ⟦⟨α, r, wo⟩⟧
 -/
 def type (r : α -> α -> Prop) [wo : IsWellOrder α r] : Ordinal :=
@@ -299,7 +299,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : Zero Ordinal
+  签名: : 零 序数
   定义体: ⟨type @emptyRelation PEmpty⟩
 
 Depends on / 依赖: PEmpty, emptyRelation
@@ -317,7 +317,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited Ordinal
+  签名: : 可居 序数
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited Ordinal :=
@@ -335,7 +335,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One Ordinal
+  签名: : 幺 序数
   定义体: ⟨type @emptyRelation PUnit⟩
 
 @[simp]
@@ -357,7 +357,7 @@ theorem type_toType
 
 中文:
 定理 type_toType
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: typeLT o.ToType = o
   证明: o.out_eq
 
@@ -376,7 +376,7 @@ theorem type_eq
 
 中文:
 定理 type_eq
-  条件: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r] [IsWellOrder β s]
+  条件: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r] [是良序 β s]
   证明: Quotient.eq'
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -423,7 +423,7 @@ theorem _root_.OrderIso.ordinalType_congr
 
 中文:
 定理 _root_.OrderIso.ordinalType_congr
-  结论: {α β} [LinearOrder α] [LinearOrder β]
+  结论: {α β} [线性序 α] [线性序 β]
   证明: h.toRelIsoLT.ordinalType_congr
 
 Depends on / 依赖: h.toRelIsoLT.ordinalType_congr, ordinalType_congr, toRelIsoLT
@@ -445,7 +445,7 @@ theorem type_eq_zero_of_empty
 
 中文:
 定理 type_eq_zero_of_empty
-  条件: (r) [IsWellOrder α r] [IsEmpty α]
+  条件: (r) [是良序 α r] [是空 α]
   结论: type r = 0
   证明: (RelIso.relIsoOfIsEmpty r _).ordinalType_congr
 
@@ -471,8 +471,8 @@ theorem type_eq_zero_iff_isEmpty
 
 中文:
 定理 type_eq_zero_iff_isEmpty
-  条件: [IsWellOrder α r]
-  结论: type r = 0 ↔ IsEmpty α
+  条件: [是良序 α r]
+  结论: type r = 0 ↔ 是空 α
   证明: by
   refine ⟨fun h => ?_, fun _ => type_eq_zero_of_empty r⟩
   let ⟨s⟩ := type_eq.1 h
@@ -496,8 +496,8 @@ theorem type_ne_zero_iff_nonempty
 
 中文:
 定理 type_ne_zero_iff_nonempty
-  条件: [IsWellOrder α r]
-  结论: type r != 0 ↔ Nonempty α
+  条件: [是良序 α r]
+  结论: type r != 0 ↔ 非空 α
   证明: by simp
 -/
 theorem type_ne_zero_iff_nonempty [IsWellOrder α r] : type r != 0 ↔ Nonempty α := by simp
@@ -513,7 +513,7 @@ theorem type_ne_zero_of_nonempty
 
 中文:
 定理 type_ne_zero_of_nonempty
-  条件: (r) [IsWellOrder α r] [h : Nonempty α]
+  条件: (r) [是良序 α r] [h : 非空 α]
   结论: type r != 0
   证明: type_ne_zero_iff_nonempty.2 h
 
@@ -532,7 +532,7 @@ theorem type_pEmpty
 
 中文:
 定理 type_pEmpty
-  结论: type (@emptyRelation PEmpty) = 0
+  结论: type (@emptyRelation 命题空) = 0
   证明: rfl
 -/
 theorem type_pEmpty : type (@emptyRelation PEmpty) = 0 :=
@@ -548,7 +548,7 @@ theorem type_empty
 
 中文:
 定理 type_empty
-  结论: type (@emptyRelation Empty) = 0
+  结论: type (@emptyRelation 空) = 0
   证明: type_eq_zero_of_empty _
 
 Depends on / 依赖: type_eq_zero_of_empty
@@ -571,7 +571,7 @@ theorem type_eq_one_of_unique
 
 中文:
 定理 type_eq_one_of_unique
-  条件: (r) [IsWellOrder α r] [Nonempty α] [Subsingleton α]
+  条件: (r) [是良序 α r] [非空 α] [子单例 α]
   结论: type r = 1
   证明: by
   cases nonempty_unique α
@@ -598,8 +598,8 @@ theorem type_eq_one_iff_unique
 
 中文:
 定理 type_eq_one_iff_unique
-  条件: [IsWellOrder α r]
-  结论: type r = 1 ↔ Nonempty (Unique α)
+  条件: [是良序 α r]
+  结论: type r = 1 ↔ 非空 (唯一 α)
   证明: ⟨fun h => let ⟨s⟩ := type_eq.1 h; ⟨s.toEquiv.unique⟩,
     fun ⟨_⟩ => type_eq_one_of_unique r⟩
 
@@ -619,7 +619,7 @@ theorem type_pUnit
 
 中文:
 定理 type_pUnit
-  结论: type (@emptyRelation PUnit) = 1
+  结论: type (@emptyRelation 命题单元) = 1
   证明: rfl
 -/
 theorem type_pUnit : type (@emptyRelation PUnit) = 1 :=
@@ -637,7 +637,7 @@ theorem type_unit
 
 中文:
 定理 type_unit
-  结论: type (@emptyRelation Unit) = 1
+  结论: type (@emptyRelation 单元) = 1
   证明: rfl
 
 @[simp]
@@ -660,8 +660,8 @@ theorem isEmpty_toType_iff
 
 中文:
 定理 isEmpty_toType_iff
-  条件: {o : Ordinal}
-  结论: IsEmpty o.ToType ↔ o = 0
+  条件: {o : 序数}
+  结论: 是空 o.ToType ↔ o = 0
   证明: by
   rw [← @type_eq_zero_iff_isEmpty o.ToType (· < ·)]; rw [type_toType]
 
@@ -686,7 +686,7 @@ instance isEmpty_toType_zero
 
 中文:
 实例 isEmpty_toType_zero
-  签名: : IsEmpty (ToType 0)
+  签名: : 是空 (ToType 0)
   定义体: isEmpty_toType_iff.2 rfl
 
 @[simp]
@@ -711,8 +711,8 @@ theorem nonempty_toType_iff
 
 中文:
 定理 nonempty_toType_iff
-  条件: {o : Ordinal}
-  结论: Nonempty o.ToType ↔ o != 0
+  条件: {o : 序数}
+  结论: 非空 o.ToType ↔ o != 0
   证明: by
   rw [← @type_ne_zero_iff_nonempty o.ToType (· < ·)]; rw [type_toType]
 
@@ -737,7 +737,7 @@ instance instNeZeroOne
 
 中文:
 实例 instNeZeroOne
-  签名: : NeZero (1 : Ordinal)
+  签名: : NeZero (1 : 序数)
   定义体: ⟨type_ne_zero_of_nonempty _⟩
 
 @[deprecated _root_.one_ne_zero (since := "2026-05-12")]
@@ -758,7 +758,7 @@ theorem one_ne_zero
 
 中文:
 定理 one_ne_zero
-  结论: (1 : Ordinal) != 0
+  结论: (1 : 序数) != 0
   证明: _root_.one_ne_zero
 -/
 protected theorem one_ne_zero : (1 : Ordinal) != 0 :=
@@ -774,7 +774,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: : Nontrivial Ordinal.{u}
+  签名: : 非平凡 序数.{u}
   定义体: ⟨⟨1, 0, one_ne_zero⟩⟩
 
 Depends on / 依赖: one_ne_zero
@@ -796,7 +796,7 @@ theorem inductionOn
 
 中文:
 定理 inductionOn
-  结论: {motive : Ordinal -> 命题} (o : Ordinal)
+  结论: {motive : 序数 -> 命题} (o : 序数)
   证明: Quot.inductionOn o fun ⟨α, r, _⟩ => type α r
 
 Depends on / 依赖: Quot.inductionOn, inductionOn
@@ -819,7 +819,7 @@ theorem inductionOn₂
 
 中文:
 定理 inductionOn₂
-  结论: {motive : Ordinal -> Ordinal -> 命题} (o₁ o₂ : Ordinal)
+  结论: {motive : 序数 -> 序数 -> 命题} (o₁ o₂ : 序数)
   证明: Quotient.inductionOn₂ o₁ o₂ fun ⟨α, r, _⟩ ⟨β, s, _⟩ => type α r β s
 
 Depends on / 依赖: Quotient, Quotient.inductionOn
@@ -843,7 +843,7 @@ theorem inductionOn₃
 
 中文:
 定理 inductionOn₃
-  结论: {motive : Ordinal -> Ordinal -> Ordinal -> 命题} (o₁ o₂ o₃ : Ordinal)
+  结论: {motive : 序数 -> 序数 -> 序数 -> 命题} (o₁ o₂ o₃ : 序数)
   证明: Quotient.inductionOn₃ o₁ o₂ o₃ fun ⟨α, r, _⟩ ⟨β, s, _⟩ ⟨γ, t, _⟩ => type α r β s γ t
 
 Depends on / 依赖: Quotient, Quotient.inductionOn
@@ -866,7 +866,7 @@ theorem inductionOnWellOrder
 
 中文:
 定理 inductionOnWellOrder
-  结论: {motive : Ordinal -> 命题} (o : Ordinal)
+  结论: {motive : 序数 -> 命题} (o : 序数)
   证明: inductionOn o fun α r wo => @type α (linearOrderOfSTO r) wo.toIsWellFounded
 
 Depends on / 依赖: inductionOn, linearOrderOfSTO, toIsWellFounded, wo.toIsWellFounded
@@ -892,7 +892,7 @@ definition liftOnWellOrder
 
 中文:
 定义 liftOnWellOrder
-  签名: {δ : Sort v} (o : Ordinal) (f : 对任意 (α) [LinearOrder α] [WellFoundedLT α], δ)
+  签名: {δ : 类型层 v} (o : 序数) (f : 对任意 (α) [线性序 α] [WellFoundedLT α], δ)
   定义体: Quotient.liftOn o (fun w => @f w.α (linearOrderOfSTO w.r) w.wo.toIsWellFounded)
     fun w₁ w₂ h => @c
       w₁.α (linearOrderOfSTO w₁.r) w₁.wo.toIsWellFounded
@@ -927,7 +927,7 @@ theorem liftOnWellOrder_type
 
 中文:
 定理 liftOnWellOrder_type
-  结论: {δ : Sort v} (f : 对任意 (α) [LinearOrder α] [WellFoundedLT α], δ)
+  结论: {δ : 类型层 v} (f : 对任意 (α) [线性序 α] [WellFoundedLT α], δ)
   证明: by
   change Quotient.liftOn' ⟦_⟧ _ _ = _
   rw [Quotient.liftOn'_mk]
@@ -962,7 +962,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder Ordinal where
+  签名: : 偏序 序数 where
   定义体: Quotient.liftOn₂ a b (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Nonempty (r ≼i s))
       fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
 ⟨fun ⟨h⟩ => ⟨f.symm.toInitialSeg.trans h.trans g.toInitialSeg⟩, fun ⟨h⟩ =>
@@ -1007,7 +1007,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder Ordinal
+  签名: 线性序 序数
   定义体: { (inferInstance : PartialOrder Ordinal) with
     le_total := fun a b => Quotient.inductionOn₂ a b fun ⟨_, r, _⟩ ⟨_, s, _⟩ =>
       (InitialSeg.total r s).recOn (fun f => Or.inl ⟨f⟩) fun f => Or.inr ⟨f⟩
@@ -1030,7 +1030,7 @@ theorem _root_.InitialSeg.ordinal_type_le
   proof: ⟨h⟩
 
 中文:
-定理 _root_.InitialSeg.ordinal_type_le
+定理 _root_.初始段.ordinal_type_le
   结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题}
   证明: ⟨h⟩
 -/
@@ -1047,7 +1047,7 @@ theorem _root_.RelEmbedding.ordinal_type_le
   proof: ⟨h.collapse⟩
 
 中文:
-定理 _root_.RelEmbedding.ordinal_type_le
+定理 _root_.关系嵌入.ordinal_type_le
   结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题}
   证明: ⟨h.collapse⟩
 
@@ -1066,7 +1066,7 @@ theorem _root_.PrincipalSeg.ordinal_type_lt
   proof: ⟨h⟩
 
 中文:
-定理 _root_.PrincipalSeg.ordinal_type_lt
+定理 _root_.主段.ordinal_type_lt
   结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题}
   证明: ⟨h⟩
 -/
@@ -1087,7 +1087,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot Ordinal
+  签名: 有底序 序数
   定义体: 0
   bot_le o := inductionOn o fun _ r _ => (InitialSeg.ofIsEmpty _ r).ordinal_type_le
 
@@ -1108,7 +1108,7 @@ theorem bot_eq_zero
 
 中文:
 定理 bot_eq_zero
-  结论: (⊥ : Ordinal) = 0
+  结论: (⊥ : 序数) = 0
   证明: rfl
 -/
 theorem bot_eq_zero : (⊥ : Ordinal) = 0 :=
@@ -1124,7 +1124,7 @@ theorem type_le_iff
 
 中文:
 定理 type_le_iff
-  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r]
+  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1143,7 +1143,7 @@ theorem type_le_iff'
 
 中文:
 定理 type_le_iff'
-  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r]
+  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r]
   证明: ⟨fun ⟨f⟩ => ⟨f⟩, fun ⟨f⟩ => ⟨f.collapse⟩⟩
 
 Depends on / 依赖: collapse, f.collapse
@@ -1162,7 +1162,7 @@ theorem type_lt_iff
 
 中文:
 定理 type_lt_iff
-  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r]
+  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1185,7 +1185,7 @@ theorem type_set_le
 
 中文:
 定理 type_set_le
-  条件: [LinearOrder α] [WellFoundedLT α] (s : Set α)
+  条件: [线性序 α] [WellFoundedLT α] (s : 集合 α)
   结论: typeLT s <= typeLT α
   证明: by
   rw [type_le_iff']
@@ -1212,7 +1212,7 @@ theorem type_mono
 
 中文:
 定理 type_mono
-  条件: [LinearOrder α] [WellFoundedLT α] {s t : Set α} (h : s subseteq t)
+  条件: [线性序 α] [WellFoundedLT α] {s t : 集合 α} (h : s subseteq t)
   证明: by
   rw [type_le_iff']
   refine ⟨⟨embeddingOfSubset _ _ h, ?_⟩⟩
@@ -1241,7 +1241,7 @@ definition initialSegToType
 
 中文:
 定义 initialSegToType
-  签名: {α β : Ordinal} (h : α <= β)
+  签名: {α β : 序数} (h : α <= β)
   定义体: by
   apply Classical.choice (type_le_iff.mp _)
   rwa [type_toType, type_toType]
@@ -1267,7 +1267,7 @@ definition principalSegToType
 
 中文:
 定义 principalSegToType
-  签名: {α β : Ordinal} (h : α < β)
+  签名: {α β : 序数} (h : α < β)
   定义体: by
   apply Classical.choice (type_lt_iff.mp _)
   rwa [type_toType, type_toType]
@@ -1298,7 +1298,7 @@ definition typein
 
 中文:
 定义 typein
-  签名: (r : α -> α -> 命题) [IsWellOrder α r]
+  签名: (r : α -> α -> 命题) [是良序 α r]
   定义体: by
   refine ⟨RelEmbedding.ofMonotone _ fun a b ha =>
     ((PrincipalSeg.ofElement r a).codRestrict _ ?_ ?_).ordinal_type_lt, type r, fun a => ⟨?_, ?_⟩⟩
@@ -1336,7 +1336,7 @@ theorem type_subrel
 
 中文:
 定理 type_subrel
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] (a : α)
+  条件: (r : α -> α -> 命题) [是良序 α r] (a : α)
   证明: rfl
 
 @[simp]
@@ -1357,7 +1357,7 @@ theorem top_typein
 
 中文:
 定理 top_typein
-  条件: (r : α -> α -> 命题) [IsWellOrder α r]
+  条件: (r : α -> α -> 命题) [是良序 α r]
   结论: (typein r).top = type r
   证明: rfl
 -/
@@ -1375,7 +1375,7 @@ theorem typein_lt_type
 
 中文:
 定理 typein_lt_type
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] (a : α)
+  条件: (r : α -> α -> 命题) [是良序 α r] (a : α)
   结论: typein r a < type r
   证明: (typein r).lt_top a
 
@@ -1399,7 +1399,7 @@ theorem typein_lt_self
 
 中文:
 定理 typein_lt_self
-  条件: {o : Ordinal} (i : o.ToType)
+  条件: {o : 序数} (i : o.ToType)
   结论: typein (α := o.ToType) (· < ·) i < o
   证明: by
   simp_rw [← type_toType o]
@@ -1450,7 +1450,7 @@ theorem typein_lt_typein
 
 中文:
 定理 typein_lt_typein
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {a b : α}
+  条件: (r : α -> α -> 命题) [是良序 α r] {a b : α}
   证明: (typein r).map_rel_iff
 
 @[simp]
@@ -1473,7 +1473,7 @@ theorem typein_le_typein
 
 中文:
 定理 typein_le_typein
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {a b : α}
+  条件: (r : α -> α -> 命题) [是良序 α r] {a b : α}
   证明: by
   rw [← not_lt]; rw [typein_lt_typein]
 
@@ -1494,8 +1494,8 @@ theorem typein_injective
 
 中文:
 定理 typein_injective
-  条件: (r : α -> α -> 命题) [IsWellOrder α r]
-  结论: Injective (typein r)
+  条件: (r : α -> α -> 命题) [是良序 α r]
+  结论: 单射 (typein r)
   证明: (typein r).injective
 
 Depends on / 依赖: injective, typein
@@ -1514,7 +1514,7 @@ theorem typein_inj
 
 中文:
 定理 typein_inj
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {a b}
+  条件: (r : α -> α -> 命题) [是良序 α r] {a b}
   结论: typein r a = typein r b ↔ a = b
   证明: (typein_injective r).eq_iff
 
@@ -1533,7 +1533,7 @@ theorem mem_range_typein_iff
 
 中文:
 定理 mem_range_typein_iff
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {o}
+  条件: (r : α -> α -> 命题) [是良序 α r] {o}
   证明: (typein r).mem_range_iff_rel
 
 Depends on / 依赖: mem_range_iff_rel, typein
@@ -1552,7 +1552,7 @@ theorem typein_surj
 
 中文:
 定理 typein_surj
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {o} (h : o < type r)
+  条件: (r : α -> α -> 命题) [是良序 α r] {o} (h : o < type r)
   证明: (typein r).mem_range_of_rel_top h
 
 Depends on / 依赖: DilationClass, DilationEquivClass, EquivLike, mem_range_of_rel_top, typein
@@ -1573,7 +1573,7 @@ theorem typein_surjOn
 
 中文:
 定理 typein_surjOn
-  条件: (r : α -> α -> 命题) [IsWellOrder α r]
+  条件: (r : α -> α -> 命题) [是良序 α r]
   证明: (typein r).surjOn
 
 @[simp]
@@ -1595,7 +1595,7 @@ theorem type_Iio_lt
 
 中文:
 定理 type_Iio_lt
-  条件: [LinearOrder α] [WellFoundedLT α] (x : α)
+  条件: [线性序 α] [WellFoundedLT α] (x : α)
   证明: rfl
 
 Depends on / 依赖: LT.lt, typein
@@ -1622,7 +1622,7 @@ definition enum
 
 中文:
 定义 enum
-  签名: (r : α -> α -> 命题) [IsWellOrder α r]
+  签名: (r : α -> α -> 命题) [是良序 α r]
   定义体: (typein r).subrelIso
 
 @[simp]
@@ -1643,7 +1643,7 @@ theorem typein_enum
 
 中文:
 定理 typein_enum
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {o} (h : o < type r)
+  条件: (r : α -> α -> 命题) [是良序 α r] {o} (h : o < type r)
   证明: (typein r).apply_subrelIso _
 
 Depends on / 依赖: apply_subrelIso, typein
@@ -1664,7 +1664,7 @@ theorem enum_type
 
 中文:
 定理 enum_type
-  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r] [IsWellOrder β s]
+  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r] [是良序 β s]
   证明: (typein r).injective (typein_enum _ _).trans (typein_top _).symm
 
 @[simp]
@@ -1686,7 +1686,7 @@ theorem enum_typein
 
 中文:
 定理 enum_typein
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] (a : α)
+  条件: (r : α -> α -> 命题) [是良序 α r] (a : α)
   证明: enum_type (PrincipalSeg.ofElement r a)
 
 Depends on / 依赖: PrincipalSeg, PrincipalSeg.ofElement, enum_type, ofElement
@@ -1705,7 +1705,7 @@ theorem enum_lt_enum
 
 中文:
 定理 enum_lt_enum
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] {o₁ o₂ : Iio (type r)}
+  条件: {r : α -> α -> 命题} [是良序 α r] {o₁ o₂ : 左无界右开区间 (type r)}
   证明: (enum _).map_rel_iff
 
 Depends on / 依赖: e.symm, map_rel_iff
@@ -1725,7 +1725,7 @@ theorem enum_le_enum
 
 中文:
 定理 enum_le_enum
-  条件: (r : α -> α -> 命题) [IsWellOrder α r] {o₁ o₂ : Iio (type r)}
+  条件: (r : α -> α -> 命题) [是良序 α r] {o₁ o₂ : 左无界右开区间 (type r)}
   证明: by
   rw [enum_lt_enum (r := r)]; rw [not_lt]
 
@@ -1748,7 +1748,7 @@ theorem enum_le_enum'
 
 中文:
 定理 enum_le_enum'
-  条件: (a : Ordinal) {o₁ o₂ : Iio (type (· < ·))}
+  条件: (a : 序数) {o₁ o₂ : 左无界右开区间 (type (· < ·))}
   证明: by
   rw [← enum_le_enum]; rw [not_lt]
 
@@ -1768,7 +1768,7 @@ theorem enum_inj
 
 中文:
 定理 enum_inj
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] {o₁ o₂ : Iio (type r)}
+  条件: {r : α -> α -> 命题} [是良序 α r] {o₁ o₂ : 左无界右开区间 (type r)}
   证明: EmbeddingLike.apply_eq_iff_eq _
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq
@@ -1789,7 +1789,7 @@ theorem enum_zero_le
 
 中文:
 定理 enum_zero_le
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] (h0 : 0 < type r) (a : α)
+  条件: {r : α -> α -> 命题} [是良序 α r] (h0 : 0 < type r) (a : α)
   证明: by
   rw [← enum_typein r a]; rw [enum_le_enum r]
   exact bot_le (α := Ordinal)
@@ -1813,7 +1813,7 @@ theorem enum_zero_le'
 
 中文:
 定理 enum_zero_le'
-  条件: {o : Ordinal} (h0 : 0 < o) (a : o.ToType)
+  条件: {o : 序数} (h0 : 0 < o) (a : o.ToType)
   证明: by
   rw [← not_lt]
   apply enum_zero_le
@@ -1838,7 +1838,7 @@ theorem relIso_enum'
 
 中文:
 定理 relIso_enum'
-  结论: {α β : 类型u} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r]
+  结论: {α β : 类型u} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r]
   证明: by
   refine inductionOn o ?_; rintro γ t wo ⟨g⟩ ⟨h⟩
   rw [enum_type g]; rw [enum_type (g.transRelIso f)]; rfl
@@ -1861,7 +1861,7 @@ theorem relIso_enum
 
 中文:
 定理 relIso_enum
-  结论: {α β : 类型u} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r]
+  结论: {α β : 类型u} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r]
   证明: relIso_enum' _ _ _ _
 
 Depends on / 依赖: relIso_enum
@@ -1887,7 +1887,7 @@ definition ToType.mk
 
 中文:
 定义 ToType.mk
-  签名: {o : Ordinal}
+  签名: {o : 序数}
   定义体: enum (α := o.ToType) (· < ·) ⟨x.1, type_toType _ ▸ x.2⟩
   invFun x := ⟨typein (α := o.ToType) (· < ·) x, typein_lt_self x⟩
   left_inv _ := Subtype.ext (typein_enum _ _)
@@ -1913,7 +1913,7 @@ abbreviation ToType.toOrd
 
 中文:
 缩写 ToType.toOrd
-  签名: {o : Ordinal} (α : o.ToType)
+  签名: {o : 序数} (α : o.ToType)
   定义体: ToType.mk.symm α
 
 Depends on / 依赖: ToType, ToType.mk.symm
@@ -1935,7 +1935,7 @@ instance small_Iio
 
 中文:
 实例 small_Iio
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: ⟨_, ⟨ToType.mk.toEquiv⟩⟩
 
 Depends on / 依赖: ToType, ToType.mk.toEquiv, toEquiv
@@ -1955,7 +1955,7 @@ instance small_Iic
 
 中文:
 实例 small_Iic
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: by
   rw [← Iio_union_right]
   infer_instance
@@ -1976,7 +1976,7 @@ instance small_Ico
 
 中文:
 实例 small_Ico
-  签名: (a b : Ordinal.{u})
+  签名: (a b : 序数.{u})
   定义体: small_subset Ico_subset_Iio_self
 
 Depends on / 依赖: Ico_subset_Iio_self, small_subset
@@ -1992,7 +1992,7 @@ instance small_Icc
 
 中文:
 实例 small_Icc
-  签名: (a b : Ordinal.{u})
+  签名: (a b : 序数.{u})
   定义体: small_subset Icc_subset_Iic_self
 
 Depends on / 依赖: Icc_subset_Iic_self, small_subset
@@ -2008,7 +2008,7 @@ instance small_Ioo
 
 中文:
 实例 small_Ioo
-  签名: (a b : Ordinal.{u})
+  签名: (a b : 序数.{u})
   定义体: small_subset Ioo_subset_Iio_self
 
 Depends on / 依赖: Ioo_subset_Iio_self, small_subset
@@ -2024,7 +2024,7 @@ instance small_Ioc
 
 中文:
 实例 small_Ioc
-  签名: (a b : Ordinal.{u})
+  签名: (a b : 序数.{u})
   定义体: small_subset Ioc_subset_Iic_self
 
 Depends on / 依赖: Ioc_subset_Iic_self, small_subset
@@ -2047,7 +2047,7 @@ definition toTypeOrderBot
 
 中文:
 定义 toTypeOrderBot
-  签名: {o : Ordinal} (ho : o != 0)
+  签名: {o : 序数} (ho : o != 0)
   定义体: (enum (· < ·)) ⟨0, _⟩
   bot_le := enum_zero_le' (bot_lt_iff_ne_bot.2 ho)
 
@@ -2072,7 +2072,7 @@ theorem enum_zero_eq_bot
 
 中文:
 定理 enum_zero_eq_bot
-  条件: {o : Ordinal} (ho : 0 < o)
+  条件: {o : 序数} (ho : 0 < o)
   证明: toTypeOrderBot (o := o) (by rintro rfl; simp at ho)
       (⊥ : o.ToType) :=
   rfl
@@ -2096,7 +2096,7 @@ theorem lt_wf
 
 中文:
 定理 lt_wf
-  结论: @WellFounded Ordinal (· < ·)
+  结论: @良基 序数 (· < ·)
   证明: wellFounded_iff_wellFounded_subrel.mpr (·.induction_on fun ⟨_, _, wo⟩ =>
     RelHomClass.wellFounded (enum _) wo.wf)
 
@@ -2116,7 +2116,7 @@ instance wellFoundedRelation
 
 中文:
 实例 wellFoundedRelation
-  签名: : WellFoundedRelation Ordinal
+  签名: : 良基关系 序数
   定义体: ⟨(· < ·), lt_wf⟩
 
 Depends on / 依赖: lt_wf
@@ -2134,7 +2134,7 @@ instance wellFoundedLT
 
 中文:
 实例 wellFoundedLT
-  签名: : WellFoundedLT Ordinal
+  签名: : WellFoundedLT 序数
   定义体: ⟨lt_wf⟩
 
 Depends on / 依赖: lt_wf
@@ -2154,7 +2154,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrderBot Ordinal
+  签名: 余nditionallyCompleteLinearOrderBot 序数
   定义体: WellFoundedLT.conditionallyCompleteLinearOrderBot _
 
 @[deprecated WellFoundedLT.induction (since := "2026-02-27")]
@@ -2175,7 +2175,7 @@ theorem induction
 
 中文:
 定理 induction
-  条件: {p : Ordinal.{u} -> 命题} (i : Ordinal.{u}) (h : 对任意 j, (对任意 k, k < j -> p k) -> p j)
+  条件: {p : 序数.{u} -> 命题} (i : 序数.{u}) (h : 对任意 j, (对任意 k, k < j -> p k) -> p j)
   证明: WellFoundedLT.induction i h
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction
@@ -2195,7 +2195,7 @@ theorem typein_apply
 
 中文:
 定理 typein_apply
-  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [IsWellOrder α r] [IsWellOrder β s]
+  结论: {α β} {r : α -> α -> 命题} {s : β -> β -> 命题} [是良序 α r] [是良序 β s]
   证明: by
   rw [← f.transPrincipal_apply _ a]; rw [(f.transPrincipal _).eq]
 
@@ -2219,7 +2219,7 @@ definition card
 
 中文:
 定义 card
-  签名: : Ordinal -> Cardinal
+  签名: : 序数 -> 基数
   定义体: Quotient.map WellOrder.α fun _ _ ⟨e⟩ => ⟨e.toEquiv⟩
 
 @[simp]
@@ -2243,7 +2243,7 @@ theorem card_type
 
 中文:
 定理 card_type
-  条件: (r : α -> α -> 命题) [IsWellOrder α r]
+  条件: (r : α -> α -> 命题) [是良序 α r]
   结论: card (type r) = #α
   证明: rfl
 
@@ -2265,7 +2265,7 @@ theorem card_typein
 
 中文:
 定理 card_typein
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] (x : α)
+  条件: {r : α -> α -> 命题} [是良序 α r] (x : α)
   证明: rfl
 
 @[gcongr]
@@ -2288,7 +2288,7 @@ theorem card_le_card
 
 中文:
 定理 card_le_card
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   结论: o₁ <= o₂ -> card o₁ <= card o₂
   证明: inductionOn o₁ fun _ _ _ => inductionOn o₂ fun _ _ _ ⟨⟨⟨f, _⟩, _⟩⟩ => ⟨f⟩
 
@@ -2354,8 +2354,8 @@ theorem _root_.Cardinal.mk_toType
   proof: (Ordinal.card_type _).symm.trans by rw [Ordinal.type_toType]
 
 中文:
-定理 _root_.Cardinal.mk_toType
-  条件: (o : Ordinal)
+定理 _root_.基数.mk_toType
+  条件: (o : 序数)
   结论: #o.ToType = o.card
   证明: (Ordinal.card_type _).symm.trans by rw [Ordinal.type_toType]
 
@@ -2375,7 +2375,7 @@ theorem card_typein_min_le_mk
 
 中文:
 定理 card_typein_min_le_mk
-  条件: [IsWellOrder α r] {s : Set α} (hs : sᶜ.Nonempty)
+  条件: [是良序 α r] {s : 集合 α} (hs : sᶜ.非空)
   证明: IsWellFounded.wf.cardinalMk_subtype_lt_min_compl_le hs
 -/
 theorem card_typein_min_le_mk [IsWellOrder α r] {s : Set α} (hs : sᶜ.Nonempty) :
@@ -2402,7 +2402,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (o : Ordinal.{v})
+  签名: (o : 序数.{v})
   定义体: Quotient.liftOn o (fun w => type <| ULift.down ⁻¹'o w.r) fun ⟨_, r, _⟩ ⟨_, s, _⟩ ⟨f⟩ =>
     Quot.sound
 ⟨(RelIso.preimage Equiv.ulift r).trans f.trans (RelIso.preimage Equiv.ulift s).symm⟩
@@ -2431,7 +2431,7 @@ theorem type_ulift
 
 中文:
 定理 type_ulift
-  条件: (r : α -> α -> 命题) [IsWellOrder α r]
+  条件: (r : α -> α -> 命题) [是良序 α r]
   证明: rfl
 
 @[deprecated (since := "2026-02-20")] alias type_uLift := type_ulift
@@ -2455,7 +2455,7 @@ theorem type_lt_ulift
 
 中文:
 定理 type_lt_ulift
-  条件: [LinearOrder α] [WellFoundedLT α]
+  条件: [线性序 α] [WellFoundedLT α]
   证明: rfl
 -/
 theorem type_lt_ulift [LinearOrder α] [WellFoundedLT α] :
@@ -2501,7 +2501,7 @@ theorem type_preimage
 
 中文:
 定理 type_preimage
-  条件: {α β : 类型u} (r : α -> α -> 命题) [IsWellOrder α r] (f : β ≃ α)
+  条件: {α β : 类型u} (r : α -> α -> 命题) [是良序 α r] (f : β ≃ α)
   证明: (RelIso.preimage f r).ordinalType_congr
 
 @[simp]
@@ -2523,7 +2523,7 @@ theorem type_lift_preimage
 
 中文:
 定理 type_lift_preimage
-  结论: (r : α -> α -> 命题) [IsWellOrder α r]
+  结论: (r : α -> α -> 命题) [是良序 α r]
   证明: (RelIso.preimage f r).ordinal_lift_type_eq
 
 Depends on / 依赖: RelIso, RelIso.preimage, ordinal_lift_type_eq, preimage
@@ -2544,7 +2544,7 @@ theorem lift_umax
 
 中文:
 定理 lift_umax
-  结论: lift.{max u v, u} = lift.{v, u}
+  结论: lift.{最大值 u v, u} = lift.{v, u}
   证明: funext fun a =>
     inductionOn a fun _ r _ =>
       Quotient.sound ⟨(RelIso.preimage Equiv.ulift r).trans (RelIso.preimage Equiv.ulift r).symm⟩
@@ -2567,7 +2567,7 @@ theorem lift_id'
 
 中文:
 定理 lift_id'
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: lift a = a
   证明: inductionOn a fun _ r _ => Quotient.sound ⟨RelIso.preimage Equiv.ulift r⟩
 
@@ -2609,7 +2609,7 @@ theorem lift_uzero
 
 中文:
 定理 lift_uzero
-  条件: (a : Ordinal.{u})
+  条件: (a : 序数.{u})
   结论: lift.{0} a = a
   证明: lift_id' a
 
@@ -2633,7 +2633,7 @@ theorem lift_type_le
 
 中文:
 定理 lift_type_le
-  条件: {α : 类型u} {β : 类型v} {r s} [IsWellOrder α r] [IsWellOrder β s]
+  条件: {α : 类型u} {β : 类型v} {r s} [是良序 α r] [是良序 β s]
   证明: by
   constructor <;> refine fun ⟨f⟩ => ⟨?_⟩
   · exact (RelIso.preimage Equiv.ulift r).symm.toInitialSeg.trans
@@ -2664,7 +2664,7 @@ theorem lift_type_eq
 
 中文:
 定理 lift_type_eq
-  条件: {α : 类型u} {β : 类型v} {r s} [IsWellOrder α r] [IsWellOrder β s]
+  条件: {α : 类型u} {β : 类型v} {r s} [是良序 α r] [是良序 β s]
   证明: by
   refine Quotient.eq'.trans ⟨?_, ?_⟩ <;> refine fun ⟨f⟩ => ⟨?_⟩
 · exact (RelIso.preimage Equiv.ulift r).symm.trans f.trans (RelIso.preimage Equiv.ulift s)
@@ -2695,7 +2695,7 @@ theorem lift_type_lt
 
 中文:
 定理 lift_type_lt
-  条件: {α : 类型u} {β : 类型v} {r s} [IsWellOrder α r] [IsWellOrder β s]
+  条件: {α : 类型u} {β : 类型v} {r s} [是良序 α r] [是良序 β s]
   证明: by
   constructor <;> refine fun ⟨f⟩ => ⟨?_⟩
   · exact (f.relIsoTrans (RelIso.preimage Equiv.ulift r).symm).transInitial
@@ -2731,7 +2731,7 @@ theorem lift_le
 
 中文:
 定理 lift_le
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: lift.{u, v} a <= lift.{u, v} b ↔ a <= b
   证明: inductionOn₂ a b fun α r _ β s _ => by
     rw [← lift_umax]
@@ -2761,7 +2761,7 @@ theorem lift_inj
 
 中文:
 定理 lift_inj
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: lift.{u, v} a = lift.{u, v} b ↔ a = b
   证明: by
   simp_rw [le_antisymm_iff, lift_le]
@@ -2788,7 +2788,7 @@ theorem lift_lt
 
 中文:
 定理 lift_lt
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: lift.{u, v} a < lift.{u, v} b ↔ a < b
   证明: by
   simp_rw [lt_iff_le_not_ge, lift_le]
@@ -2838,7 +2838,7 @@ theorem typein_ordinal
 
 中文:
 定理 typein_ordinal
-  条件: (o : Ordinal.{u})
+  条件: (o : 序数.{u})
   结论: typein LT.lt o = lift.{u + 1} o
   证明: by
   nth_rw 2 [← o.type_toType]
@@ -2861,8 +2861,8 @@ theorem type_lt_Iio
 
 中文:
 定理 type_lt_Iio
-  条件: (o : Ordinal.{u})
-  结论: typeLT (Iio o) = lift.{u + 1} o
+  条件: (o : 序数.{u})
+  结论: typeLT (左无界右开区间 o) = lift.{u + 1} o
   证明: by simp
 -/
 theorem type_lt_Iio (o : Ordinal.{u}) : typeLT (Iio o) = lift.{u + 1} o := by simp
@@ -2883,7 +2883,7 @@ definition liftInitialSeg
 
 中文:
 定义 liftInitialSeg
-  签名: : Ordinal.{v} <=i Ordinal.{max u v}
+  签名: : 序数.{v} <=i 序数.{最大值 u v}
   定义体: by
   refine ⟨RelEmbedding.ofMonotone lift.{u} (by simp),
     fun a b => Ordinal.inductionOn₂ a b fun α r _ β s _ h => ?_⟩
@@ -2915,7 +2915,7 @@ theorem liftInitialSeg_coe
 
 中文:
 定理 liftInitialSeg_coe
-  结论: (liftInitialSeg.{v, u} : Ordinal -> Ordinal) = lift.{v, u}
+  结论: (liftInitialSeg.{v, u} : 序数 -> 序数) = lift.{v, u}
   证明: rfl
 
 @[simp]
@@ -2937,8 +2937,8 @@ theorem lift_lift
 
 中文:
 定理 lift_lift
-  条件: (a : Ordinal.{u})
-  结论: lift.{w} (lift.{v} a) = lift.{max v w} a
+  条件: (a : 序数.{u})
+  结论: lift.{w} (lift.{v} a) = lift.{最大值 v w} a
   证明: (liftInitialSeg.trans liftInitialSeg).eq liftInitialSeg a
 
 @[simp]
@@ -3007,7 +3007,7 @@ theorem lift_card
 中文:
 定理 lift_card
   条件: (a)
-  结论: Cardinal.lift.{u, v} (card a) = card (lift.{u} a)
+  结论: 基数.lift.{u, v} (card a) = card (lift.{u} a)
   证明: inductionOn a fun _ _ _ => rfl
 
 Depends on / 依赖: MetricSpace, SeparationQuotient, gluePremetric, inductionOn, toTopologicalSpace, toUniformSpace, toUniformSpace.toTopologicalSpace
@@ -3025,7 +3025,7 @@ theorem mem_range_lift_of_le
 
 中文:
 定理 mem_range_lift_of_le
-  条件: {a : Ordinal.{u}} {b : Ordinal.{max u v}} (h : b <= lift.{v} a)
+  条件: {a : 序数.{u}} {b : 序数.{最大值 u v}} (h : b <= lift.{v} a)
   证明: liftInitialSeg.mem_range_of_le h
 
 Depends on / 依赖: liftInitialSeg, liftInitialSeg.mem_range_of_le, mem_range_of_le
@@ -3044,7 +3044,7 @@ theorem le_lift_iff
 
 中文:
 定理 le_lift_iff
-  条件: {a : Ordinal.{u}} {b : Ordinal.{max u v}}
+  条件: {a : 序数.{u}} {b : 序数.{最大值 u v}}
   证明: liftInitialSeg.le_apply_iff
 
 Depends on / 依赖: le_apply_iff, liftInitialSeg, liftInitialSeg.le_apply_iff
@@ -3065,7 +3065,7 @@ theorem lt_lift_iff
 
 中文:
 定理 lt_lift_iff
-  条件: {a : Ordinal.{u}} {b : Ordinal.{max u v}}
+  条件: {a : 序数.{u}} {b : 序数.{最大值 u v}}
   证明: liftInitialSeg.lt_apply_iff
 
 @[simp]
@@ -3090,8 +3090,8 @@ theorem _root_.Cardinal.mk_Iio_ordinal
 @[deprecated (since := "2026-03-13")] alias mk_Iio_ordinal := Cardinal.mk_Iio_ordinal
 
 中文:
-定理 _root_.Cardinal.mk_Iio_ordinal
-  条件: (o : Ordinal.{u})
+定理 _root_.基数.mk_Iio_ordinal
+  条件: (o : 序数.{u})
   证明: by
   rw [lift_card]; rw [← typein_ordinal]
   rfl
@@ -3122,7 +3122,7 @@ recommended_spelling "omega0" for "ω" in [omega0, «termω»]
 
 中文:
 定义 omega0
-  签名: : Ordinal.{u}
+  签名: : 序数.{u}
   定义体: lift (typeLT Nat)
 
 @[inherit_doc] scoped notation "ω" => Ordinal.omega0
@@ -3221,7 +3221,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add Ordinal.{u}
+  签名: : 加法 序数.{u}
   定义体: ⟨fun o₁ o₂ => Quotient.liftOn₂ o₁ o₂ (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => type (Sum.Lex r s))
     fun _ _ _ _ ⟨f⟩ ⟨g⟩ => (RelIso.sumLexCongr f g).ordinalType_congr⟩
 
@@ -3247,7 +3247,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne Ordinal.{u} where
+  签名: : 加法带幺幺半群 序数.{u} where
   定义体: inductionOn o fun α _ _ => (RelIso.emptySumLex _ _).ordinalType_congr
   add_zero o := inductionOn o fun α _ _ => (RelIso.sumLexEmpty _ _).ordinalType_congr
   add_assoc o₁ o₂ o₃ :=
@@ -3277,7 +3277,7 @@ theorem card_add
 
 中文:
 定理 card_add
-  条件: (o₁ o₂ : Ordinal)
+  条件: (o₁ o₂ : 序数)
   结论: card (o₁ + o₂) = card o₁ + card o₂
   证明: inductionOn₂ o₁ o₂ fun _ _ _ _ _ _ => rfl
 -/
@@ -3298,7 +3298,7 @@ theorem card_add_one
 
 中文:
 定理 card_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: card (o + 1) = card o + 1
   证明: by
   simp
@@ -3321,7 +3321,7 @@ theorem type_sum_lex
 
 中文:
 定理 type_sum_lex
-  结论: {α β : 类型u} (r : α -> α -> 命题) (s : β -> β -> 命题) [IsWellOrder α r]
+  结论: {α β : 类型u} (r : α -> α -> 命题) (s : β -> β -> 命题) [是良序 α r]
   证明: rfl
 
 @[simp]
@@ -3367,7 +3367,7 @@ theorem card_ofNat
   proof: card_nat n
 
 中文:
-定理 card_ofNat
+定理 card_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: card_nat n
 
@@ -3390,7 +3390,7 @@ instance instAddLeftMono
 
 中文:
 实例 instAddLeftMono
-  签名: : AddLeftMono Ordinal.{u} where
+  签名: : AddLeftMono 序数.{u} where
   定义体: by
     refine inductionOn₃ a b c fun α r _ β s _ γ t _ ⟨f⟩ =>
       (RelEmbedding.ofMonotone (Sum.recOn · Sum.inl (Sum.inr ∘ f)) ?_).ordinal_type_le
@@ -3417,7 +3417,7 @@ instance instAddRightMono
 
 中文:
 实例 instAddRightMono
-  签名: : AddRightMono Ordinal.{u} where
+  签名: : AddRightMono 序数.{u} where
   定义体: by
     refine inductionOn₃ a b c fun α r _ β s _ γ t _ ⟨f⟩ =>
       (RelEmbedding.ofMonotone (Sum.recOn · (Sum.inl ∘ f) Sum.inr) ?_).ordinal_type_le
@@ -3443,8 +3443,8 @@ instance existsAddOfLE
     exact ⟨type t, g.ordinalType_congr.symm⟩
 
 中文:
-实例 existsAddOfLE
-  签名: : ExistsAddOfLE Ordinal where
+实例 存在AddOfLE
+  签名: : ExistsAddOfLE 序数 where
   定义体: by
     refine inductionOn₂ a b fun α r _ β s _ ⟨f⟩ => ?_
     obtain ⟨γ, t, _, ⟨g⟩⟩ := f.exists_sum_relIso
@@ -3471,7 +3471,7 @@ instance canonicallyOrderedAdd
 
 中文:
 实例 canonicallyOrderedAdd
-  签名: : CanonicallyOrderedAdd Ordinal where
+  签名: : 典范有序加法 序数 where
   定义体: by simpa using add_le_add_left bot_le a
   le_self_add a b := by simpa using add_le_add_right bot_le a
 
@@ -3496,7 +3496,7 @@ theorem max_zero_left
 
 中文:
 定理 max_zero_left
-  结论: 对任意 a : Ordinal, max 0 a = a
+  结论: 对任意 a : 序数, 最大值 0 a = a
   证明: zero_max
 
 @[deprecated max_zero (since := "2026-05-07")]
@@ -3519,7 +3519,7 @@ theorem max_zero_right
 
 中文:
 定理 max_zero_right
-  结论: 对任意 a : Ordinal, max a 0 = a
+  结论: 对任意 a : 序数, 最大值 a 0 = a
   证明: max_zero
 
 @[deprecated _root_.max_eq_zero (since := "2026-05-07")]
@@ -3543,8 +3543,8 @@ theorem max_eq_zero
 
 中文:
 定理 max_eq_zero
-  条件: {a b : Ordinal}
-  结论: max a b = 0 ↔ a = 0 ∧ b = 0
+  条件: {a b : 序数}
+  结论: 最大值 a b = 0 ↔ a = 0 ∧ b = 0
   证明: max_eq_zero
 
 @[simp]
@@ -3563,7 +3563,7 @@ theorem sInf_empty
 
 中文:
 定理 sInf_empty
-  结论: sInf (∅ : Set Ordinal) = 0
+  结论: sInf (∅ : 集合 序数) = 0
   证明: dif_neg Set.not_nonempty_empty
 
 Depends on / 依赖: Set.not_nonempty_empty, dif_neg, not_nonempty_empty
@@ -3588,7 +3588,7 @@ theorem succ_le_iff'
 
 中文:
 定理 succ_le_iff'
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a + 1 <= b ↔ a < b
   证明: by
   refine inductionOn₂ a b fun α r _ β s _ => ⟨?_, ?_⟩ <;> rintro ⟨f⟩
@@ -3614,7 +3614,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMaxOrder Ordinal
+  签名: NoMax序 序数
   定义体: ⟨fun _ => ⟨_, succ_le_iff'.1 le_rfl⟩⟩
 
 Depends on / 依赖: le_rfl, succ_le_iff
@@ -3632,7 +3632,7 @@ instance :
 
 中文:
 实例 :
-  签名: SuccOrder Ordinal.{u}
+  签名: Succ序 序数.{u}
   定义体: SuccOrder.ofSuccLeIff (fun o => o + 1) (by exact succ_le_iff')
 
 Depends on / 依赖: SuccOrder, SuccOrder.ofSuccLeIff, ofSuccLeIff, succ_le_iff
@@ -3652,7 +3652,7 @@ instance :
 
 中文:
 实例 :
-  签名: SuccAddOrder Ordinal
+  签名: SuccAdd序 序数
   定义体: ⟨fun _ => rfl⟩
 
 @[deprecated succ_eq_add_one (since := "2026-02-26")]
@@ -3673,7 +3673,7 @@ theorem add_one_eq_succ
 
 中文:
 定理 add_one_eq_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o + 1 = succ o
   证明: rfl
 
@@ -3695,7 +3695,7 @@ theorem succ_zero
 
 中文:
 定理 succ_zero
-  结论: succ (0 : Ordinal) = 1
+  结论: succ (0 : 序数) = 1
   证明: zero_add 1
 
 @[deprecated one_add_one_eq_two (since := "2026-02-26")]
@@ -3718,7 +3718,7 @@ theorem succ_one
 
 中文:
 定理 succ_one
-  结论: succ (1 : Ordinal) = 2
+  结论: succ (1 : 序数) = 2
   证明: one_add_one_eq_two
 
 @[deprecated add_assoc (since := "2026-02-26")]
@@ -3741,7 +3741,7 @@ theorem add_succ
 
 中文:
 定理 add_succ
-  条件: (o₁ o₂ : Ordinal)
+  条件: (o₁ o₂ : 序数)
   结论: o₁ + succ o₂ = succ (o₁ + o₂)
   证明: (add_assoc _ _ _).symm
 
@@ -3766,7 +3766,7 @@ theorem one_le_iff_ne_zero
 
 中文:
 定理 one_le_iff_ne_zero
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: 1 <= o ↔ o != 0
   证明: Order.one_le_iff_ne_zero
 
@@ -3789,7 +3789,7 @@ theorem succ_pos
 
 中文:
 定理 succ_pos
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: 0 < succ o
   证明: add_pos_of_right zero_lt_one o
 
@@ -3814,7 +3814,7 @@ theorem add_one_ne_zero
 
 中文:
 定理 add_one_ne_zero
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o + 1 != 0
   证明: (add_pos_of_right zero_lt_one o).ne'
 
@@ -3839,7 +3839,7 @@ theorem succ_ne_zero
 
 中文:
 定理 succ_ne_zero
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: succ o != 0
   证明: (add_pos_of_right zero_lt_one o).ne'
 
@@ -3864,7 +3864,7 @@ theorem lt_one_iff_zero
 
 中文:
 定理 lt_one_iff_zero
-  条件: {a : Ordinal}
+  条件: {a : 序数}
   结论: a < 1 ↔ a = 0
   证明: Order.lt_one_iff
 
@@ -3889,7 +3889,7 @@ theorem le_one_iff
 
 中文:
 定理 le_one_iff
-  条件: {a : Ordinal}
+  条件: {a : 序数}
   结论: a <= 1 ↔ a = 0 ∨ a = 1
   证明: Order.le_one_iff
 
@@ -3913,7 +3913,7 @@ theorem card_succ
 
 中文:
 定理 card_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: card (succ o) = card o + 1
   证明: by
   simp
@@ -3936,7 +3936,7 @@ theorem natCast_succ
 中文:
 定理 natCast_succ
   条件: (n : 自然数)
-  结论: ↑n.succ = succ (n : Ordinal)
+  结论: ↑n.succ = succ (n : 序数)
   证明: n.cast_add_one
 
 Depends on / 依赖: cast_add_one, n.cast_add_one
@@ -3957,7 +3957,7 @@ uniq a := Subtype.ext lt_one_iff.1 a.2
 
 中文:
 实例 uniqueIioOne
-  签名: : Unique (Iio (1 : Ordinal)) where
+  签名: : 唯一 (左无界右开区间 (1 : 序数)) where
   定义体: ⟨0, zero_lt_one' Ordinal⟩
 uniq a := Subtype.ext lt_one_iff.1 a.2
 
@@ -3980,7 +3980,7 @@ theorem Iio_one_default_eq
 
 中文:
 定理 Iio_one_default_eq
-  结论: (default : Iio (1 : Ordinal)) = ⟨0, zero_lt_one' Ordinal⟩
+  结论: (default : 左无界右开区间 (1 : 序数)) = ⟨0, zero_lt_one' 序数⟩
   证明: rfl
 -/
 theorem Iio_one_default_eq : (default : Iio (1 : Ordinal)) = ⟨0, zero_lt_one' Ordinal⟩ :=
@@ -4001,7 +4001,7 @@ instance uniqueToTypeOne
 
 中文:
 实例 uniqueToTypeOne
-  签名: : Unique (ToType 1) where
+  签名: : 唯一 (ToType 1) where
   定义体: enum (α := ToType 1) (· < ·) ⟨0, by simp⟩
   uniq a := by
     rw [← enum_typein (α := ToType 1) (· < ·) a]
@@ -4057,7 +4057,7 @@ theorem type_lt_mem_range_succ_iff
 
 中文:
 定理 type_lt_mem_range_succ_iff
-  条件: [LinearOrder α] [WellFoundedLT α]
+  条件: [线性序 α] [WellFoundedLT α]
   证明: by
   simp_rw [← isTop_iff_isMax]
   constructor <;> intro ⟨a, ha⟩
@@ -4094,7 +4094,7 @@ theorem type_lt_mem_range_succ
 
 中文:
 定理 type_lt_mem_range_succ
-  条件: [LinearOrder α] [WellFoundedLT α] [OrderTop α]
+  条件: [线性序 α] [WellFoundedLT α] [有顶序 α]
   证明: type_lt_mem_range_succ_iff.2 ⟨⊤, isMax_top⟩
 
 Depends on / 依赖: infer_instance, isMax_top, metric, type_lt_mem_range_succ_iff
@@ -4115,7 +4115,7 @@ theorem isSuccPrelimit_type_lt_iff
 
 中文:
 定理 isSuccPrelimit_type_lt_iff
-  条件: [LinearOrder α] [WellFoundedLT α]
+  条件: [线性序 α] [WellFoundedLT α]
   证明: by
   rw [← not_iff_not]; rw [noMaxOrder_iff]; rw [not_isSuccPrelimit_iff_mem_range_succ]; rw [type_lt_mem_range_succ_iff]
   simp [IsMax]
@@ -4137,7 +4137,7 @@ theorem isSuccPrelimit_type_lt
 
 中文:
 定理 isSuccPrelimit_type_lt
-  条件: [LinearOrder α] [WellFoundedLT α] [h : NoMaxOrder α]
+  条件: [线性序 α] [WellFoundedLT α] [h : NoMax序 α]
   证明: isSuccPrelimit_type_lt_iff.2 h
 
 Depends on / 依赖: isSuccPrelimit_type_lt_iff
@@ -4185,7 +4185,7 @@ theorem typein_le_typein'
 
 中文:
 定理 typein_le_typein'
-  条件: (o : Ordinal) {x y : o.ToType}
+  条件: (o : 序数) {x y : o.ToType}
   证明: by
   simp
 
@@ -4208,7 +4208,7 @@ theorem le_enum_succ
 
 中文:
 定理 le_enum_succ
-  条件: {o : Ordinal} (a : (succ o).ToType)
+  条件: {o : 序数} (a : (succ o).ToType)
   证明: by
   rw [← enum_typein (α := (succ o).ToType) (· < ·) a]; rw [enum_le_enum']; rw [Subtype.mk_le_mk]; rw [← lt_succ_iff]
   apply typein_lt_self
@@ -4245,7 +4245,7 @@ refine congr_arg sInf ext fun o => ⟨?_, ?_⟩ <;>
 
 中文:
 定义 ord
-  签名: (c : Cardinal)
+  签名: (c : 基数)
   定义体: Quot.liftOn c (fun α : Type u => ⨅ r : { r // IsWellOrder α r }, @type α r.1 r.2) by
   rintro α β ⟨f⟩
 refine congr_arg sInf ext fun o => ⟨?_, ?_⟩ <;>
@@ -4277,7 +4277,7 @@ theorem ord_eq_iInf
 中文:
 定理 ord_eq_iInf
   条件: (α : 类型u)
-  结论: ord #α = ⨅ r : { r // IsWellOrder α r }, @type α r.1 r.2
+  结论: ord #α = ⨅ r : { r // 是良序 α r }, @type α r.1 r.2
   证明: (rfl)
 
 @[deprecated (since := "2026-03-15")] alias ord_eq_Inf := ord_eq_iInf
@@ -4300,9 +4300,9 @@ theorem exists_ord_eq
 @[deprecated (since := "2026-03-29")] alias ord_eq := exists_ord_eq
 
 中文:
-定理 exists_ord_eq
+定理 存在_ord_eq
   条件: (α)
-  结论: 存在 (r : α -> α -> 命题) (_ : IsWellOrder α r), ord #α = type r
+  结论: 存在 (r : α -> α -> 命题) (_ : 是良序 α r), ord #α = type r
   证明: let ⟨r, wo⟩ := ciInf_mem fun r : { r // IsWellOrder α r } => @type α r.1 r.2
   ⟨r.1, r.2, wo.symm⟩
 
@@ -4329,7 +4329,7 @@ theorem exists_ord_eq_type_lt
   exact ⟨this, inferInstance, hr⟩
 
 中文:
-定理 exists_ord_eq_type_lt
+定理 存在_ord_eq_type_lt
   条件: (α)
   证明: by
   classical
@@ -4359,7 +4359,7 @@ theorem ord_le_type
 
 中文:
 定理 ord_le_type
-  条件: (r : α -> α -> 命题) [h : IsWellOrder α r]
+  条件: (r : α -> α -> 命题) [h : 是良序 α r]
   结论: ord #α <= type r
   证明: ciInf_le' _ (Subtype.mk r h)
 
@@ -4445,7 +4445,7 @@ definition gciOrdCard
 
 中文:
 定义 gciOrdCard
-  签名: : GaloisCoinsertion ord card
+  签名: : Galois余嵌入 ord card
   定义体: gc_ord_card.toGaloisCoinsertion fun c => c.card_ord.le
 
 Depends on / 依赖: c.card_ord.le, card_ord, gc_ord_card, gc_ord_card.toGaloisCoinsertion, toGaloisCoinsertion
@@ -4503,7 +4503,7 @@ theorem card_surjective
 
 中文:
 定理 card_surjective
-  结论: Function.Surjective card
+  结论: 函数.满射 card
   证明: fun c => ⟨_, card_ord c⟩
 
 Depends on / 依赖: card_ord
@@ -4522,7 +4522,7 @@ theorem bddAbove_ord_image_iff
 
 中文:
 定理 bddAbove_ord_image_iff
-  条件: {s : Set Cardinal}
+  条件: {s : 集合 基数}
   结论: BddAbove (ord '' s) ↔ BddAbove s
   证明: gc_ord_card.bddAbove_l_image
 
@@ -4542,7 +4542,7 @@ theorem ord_card_le
 
 中文:
 定理 ord_card_le
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o.card.ord <= o
   证明: gc_ord_card.l_u_le _
 
@@ -4562,7 +4562,7 @@ theorem lt_ord_succ_card
 
 中文:
 定理 lt_ord_succ_card
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o < (succ o.card).ord
   证明: lt_ord.2 lt_succ _
 
@@ -4583,7 +4583,7 @@ theorem card_le_iff
 
 中文:
 定理 card_le_iff
-  条件: {o : Ordinal} {c : Cardinal}
+  条件: {o : 序数} {c : 基数}
   结论: o.card <= c ↔ o < (succ c).ord
   证明: by
   rw [lt_ord]; rw [lt_succ_iff]
@@ -4607,7 +4607,7 @@ lemma card_le_of_le_ord
 
 中文:
 引理 card_le_of_le_ord
-  条件: {o : Ordinal} {c : Cardinal} (ho : o <= c.ord)
+  条件: {o : 序数} {c : 基数} (ho : o <= c.ord)
   结论: o.card <= c
   证明: by
   rw [← card_ord c]; exact Ordinal.card_le_card ho
@@ -4632,7 +4632,7 @@ theorem ord_strictMono
 
 中文:
 定理 ord_strictMono
-  结论: StrictMono ord
+  结论: 严格递增 ord
   证明: gciOrdCard.strictMono_l
 
 @[gcongr, mono]
@@ -4653,7 +4653,7 @@ theorem ord_mono
 
 中文:
 定理 ord_mono
-  结论: Monotone ord
+  结论: 递增 ord
   证明: gc_ord_card.monotone_l
 
 Depends on / 依赖: gc_ord_card, gc_ord_card.monotone_l, monotone_l
@@ -4673,7 +4673,7 @@ theorem ord_injective
 
 中文:
 定理 ord_injective
-  结论: Injective ord
+  结论: 单射 ord
   证明: ord_strictMono.injective
 
 @[simp]
@@ -4836,7 +4836,7 @@ theorem ord_ofNat
 @[simp]
 
 中文:
-定理 ord_ofNat
+定理 ord_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ord of自然数(n) = Of自然数.of自然数 n
   证明: ord_natCast n
@@ -4883,7 +4883,7 @@ theorem isNormal_ord
 
 中文:
 定理 isNormal_ord
-  结论: Order.IsNormal ord where
+  结论: Order.是正规 ord where
   证明: ord_strictMono
   mem_lowerBounds_upperBounds_of_isSuccLimit := by
     intro a ha
@@ -4954,7 +4954,7 @@ theorem lift_ord
 中文:
 定理 lift_ord
   条件: (c)
-  结论: Ordinal.lift.{u, v} (ord c) = ord (lift.{u, v} c)
+  结论: 序数.lift.{u, v} (ord c) = ord (lift.{u, v} c)
   证明: by
   refine le_antisymm (le_of_forall_lt fun a ha => ?_) ?_
   · rcases Ordinal.lt_lift_iff.1 ha with ⟨a, _, rfl⟩
@@ -4980,7 +4980,7 @@ theorem mk_ord_toType
 
 中文:
 定理 mk_ord_toType
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: #c.ord.ToType = c
   证明: by simp
 -/
@@ -4998,7 +4998,7 @@ theorem card_typein_lt
 
 中文:
 定理 card_typein_lt
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] (x : α) (h : ord #α = type r)
+  条件: {r : α -> α -> 命题} [是良序 α r] (x : α) (h : ord #α = type r)
   证明: by
   rw [← lt_ord]; rw [h]
   apply typein_lt_type
@@ -5020,7 +5020,7 @@ theorem mk_Iio_lt
 
 中文:
 定理 mk_Iio_lt
-  条件: [LinearOrder α] [WellFoundedLT α] (i : α) (h : ord #α = typeLT α)
+  条件: [线性序 α] [WellFoundedLT α] (i : α) (h : ord #α = typeLT α)
   证明: card_typein_lt (r := LT.lt) i h
 
 Depends on / 依赖: LT.lt, card_typein_lt
@@ -5041,7 +5041,7 @@ theorem mk_Ioi_lt
 
 中文:
 定理 mk_Ioi_lt
-  条件: {α : 类型} [LinearOrder α] [WellFoundedGT α] (i : α) (h : ord #α = typeLT αᵒᵈ)
+  条件: {α : 类型} [线性序 α] [WellFoundedGT α] (i : α) (h : ord #α = typeLT αᵒᵈ)
   证明: mk_Iio_lt (OrderDual.toDual i) h
 
 @[deprecated mk_Iio_lt (since := "2026-04-12")]
@@ -5069,8 +5069,8 @@ theorem mk_Iio_toType_ord_lt
 
 中文:
 定理 mk_Iio_toType_ord_lt
-  条件: {c : Cardinal} (i : c.ord.ToType)
-  结论: #(Iio i) < c
+  条件: {c : 基数} (i : c.ord.ToType)
+  结论: #(左无界右开区间 i) < c
   证明: by
   simpa using mk_Iio_lt i
 
@@ -5098,7 +5098,7 @@ theorem card_typein_toType_lt
 
 中文:
 定理 card_typein_toType_lt
-  条件: (c : Cardinal) (x : c.ord.ToType)
+  条件: (c : 基数) (x : c.ord.ToType)
   证明: mk_Iio_toType_ord_lt x
 
 @[simp]
@@ -5123,7 +5123,7 @@ theorem ord_eq_zero
 
 中文:
 定理 ord_eq_zero
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a.ord = 0 ↔ a = 0
   证明: ord_injective.eq_iff' ord_zero
 
@@ -5148,7 +5148,7 @@ theorem ord_eq_one
 
 中文:
 定理 ord_eq_one
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a.ord = 1 ↔ a = 1
   证明: ord_injective.eq_iff' ord_one
 
@@ -5174,7 +5174,7 @@ theorem ord_pos
 
 中文:
 定理 ord_pos
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: 0 < a.ord ↔ 0 < a
   证明: by
   rw [← ord_zero]; rw [ord_lt_ord]
@@ -5201,7 +5201,7 @@ theorem omega0_le_ord
 
 中文:
 定理 omega0_le_ord
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: ω <= a.ord ↔ ℵ₀ <= a
   证明: by
   rw [← ord_aleph0]; rw [ord_le_ord]
@@ -5228,7 +5228,7 @@ theorem ord_le_omega0
 
 中文:
 定理 ord_le_omega0
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a.ord <= ω ↔ a <= ℵ₀
   证明: by
   rw [← ord_aleph0]; rw [ord_le_ord]
@@ -5254,7 +5254,7 @@ theorem ord_lt_omega0
 
 中文:
 定理 ord_lt_omega0
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a.ord < ω ↔ a < ℵ₀
   证明: le_iff_le_iff_lt_iff_lt.1 omega0_le_ord
 
@@ -5279,7 +5279,7 @@ theorem omega0_lt_ord
 
 中文:
 定理 omega0_lt_ord
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: ω < a.ord ↔ ℵ₀ < a
   证明: le_iff_le_iff_lt_iff_lt.1 ord_le_omega0
 
@@ -5302,7 +5302,7 @@ theorem ord_eq_omega0
 
 中文:
 定理 ord_eq_omega0
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a.ord = ω ↔ a = ℵ₀
   证明: ord_injective.eq_iff' ord_aleph0
 
@@ -5327,7 +5327,7 @@ definition ord.orderEmbedding
 
 中文:
 定义 ord.orderEmbedding
-  签名: : Cardinal ↪o Ordinal
+  签名: : 基数 ↪o 序数
   定义体: OrderEmbedding.ofStrictMono _ fun _ _ => Cardinal.ord_lt_ord.2
 
 @[deprecated ord (since := "2026-02-27")]
@@ -5348,7 +5348,7 @@ theorem ord.orderEmbedding_coe
 
 中文:
 定理 ord.orderEmbedding_coe
-  结论: (ord.orderEmbedding : Cardinal -> Ordinal) = ord
+  结论: (ord.orderEmbedding : 基数 -> 序数) = ord
   证明: rfl
 -/
 theorem ord.orderEmbedding_coe : (ord.orderEmbedding : Cardinal -> Ordinal) = ord :=
@@ -5365,7 +5365,7 @@ lemma nonempty_ord_toType
 
 中文:
 引理 nonempty_ord_toType
-  条件: {c : Cardinal} (h : c != 0)
+  条件: {c : 基数} (h : c != 0)
   证明: by
   rwa [Ordinal.nonempty_toType_iff, ne_eq, ord_eq_zero]
 
@@ -5395,7 +5395,7 @@ theorem nat_le_card
 中文:
 定理 nat_le_card
   条件: {o} {n : 自然数}
-  结论: (n : Cardinal) <= card o ↔ (n : Ordinal) <= o
+  结论: (n : 基数) <= card o ↔ (n : 序数) <= o
   证明: by
   rw [← Cardinal.ord_le]; rw [Cardinal.ord_natCast]
 
@@ -5445,7 +5445,7 @@ theorem ofNat_le_card
 @[simp]
 
 中文:
-定理 ofNat_le_card
+定理 of自然数_le_card
   条件: {o} {n : 自然数} [n.AtLeastTwo]
   证明: nat_le_card
 
@@ -5526,7 +5526,7 @@ theorem nat_lt_card
 中文:
 定理 nat_lt_card
   条件: {o} {n : 自然数}
-  结论: (n : Cardinal) < card o ↔ (n : Ordinal) < o
+  结论: (n : 基数) < card o ↔ (n : 序数) < o
   证明: by
   rw [← natCast_add_one_le_iff]; rw [← succ_le_iff]; rw [← Nat.cast_add_one]; rw [nat_le_card]
   rfl
@@ -5605,7 +5605,7 @@ theorem ofNat_lt_card
 @[simp]
 
 中文:
-定理 ofNat_lt_card
+定理 of自然数_lt_card
   条件: {o} {n : 自然数} [n.AtLeastTwo]
   证明: nat_lt_card
 
@@ -5654,7 +5654,7 @@ theorem card_lt_ofNat
 @[simp]
 
 中文:
-定理 card_lt_ofNat
+定理 card_lt_of自然数
   条件: {o} {n : 自然数} [n.AtLeastTwo]
   证明: card_lt_nat
 
@@ -5730,7 +5730,7 @@ theorem card_le_ofNat
 @[simp]
 
 中文:
-定理 card_le_ofNat
+定理 card_le_of自然数
   条件: {o} {n : 自然数} [n.AtLeastTwo]
   证明: card_le_nat
 
@@ -5830,8 +5830,8 @@ theorem _root_.Cardinal.le_ord_iff_card_le_of_lt_aleph0
   simp
 
 中文:
-定理 _root_.Cardinal.le_ord_iff_card_le_of_lt_aleph0
-  条件: (o : Ordinal) {c : Cardinal} (hc : c < ℵ₀)
+定理 _root_.基数.le_ord_iff_card_le_of_lt_aleph0
+  条件: (o : 序数) {c : 基数} (hc : c < ℵ₀)
   证明: by
   rcases lt_aleph0.mp hc with ⟨n, rfl⟩
   simp
@@ -5857,7 +5857,7 @@ theorem mem_range_lift_of_card_le
 
 中文:
 定理 mem_range_lift_of_card_le
-  结论: {a : Cardinal.{u}} {b : Ordinal.{max u v}}
+  结论: {a : 基数.{u}} {b : 序数.{最大值 u v}}
   证明: by
   rw [card_le_iff]; rw [← lift_succ]; rw [← lift_ord] at h
   exact mem_range_lift_of_le h.le
@@ -5881,7 +5881,7 @@ theorem card_eq_ofNat
   proof: card_eq_nat
 
 中文:
-定理 card_eq_ofNat
+定理 card_eq_of自然数
   条件: {o} {n : 自然数} [n.AtLeastTwo]
   证明: card_eq_nat
 
@@ -5903,7 +5903,7 @@ theorem type_fintype
 
 中文:
 定理 type_fintype
-  条件: [IsWellOrder α r] [Fintype α]
+  条件: [是良序 α r] [有限类型 α]
   证明: by rw [← card_eq_nat, card_type, mk_fintype]
 
 Depends on / 依赖: card_eq_nat, card_type, mk_fintype
@@ -5923,7 +5923,7 @@ theorem type_fin
 中文:
 定理 type_fin
   条件: (n : 自然数)
-  结论: typeLT (Fin n) = n
+  结论: typeLT (有限集 n) = n
   证明: by simp
 -/
 theorem type_fin (n : Nat) : typeLT (Fin n) = n := by simp
@@ -5942,7 +5942,7 @@ theorem ord_mk_le_type
 
 中文:
 定理 ord_mk_le_type
-  条件: [IsWellOrder α r] (s : Set α)
+  条件: [是良序 α r] (s : 集合 α)
   结论: (#s).ord <= type r
   证明: by
   grw [← ord_le_type, ord_le_ord, le_mk_iff_exists_set]
@@ -5967,7 +5967,7 @@ theorem ord_mk_lt_type
 
 中文:
 定理 ord_mk_lt_type
-  条件: [IsWellOrder α r] {s : Set α} (hfin : s.Finite) (h : sᶜ.Nonempty)
+  条件: [是良序 α r] {s : 集合 α} (hfin : s.有限) (h : sᶜ.非空)
   证明: by
   grw [← ord_le_type, ord_lt_ord, ← mk_univ (α := α)]
   exact card_lt_card_of_left_finite hfin h.ssubset_univ
@@ -5992,7 +5992,7 @@ theorem not_lt_enum_ord_mk_min_compl
 
 中文:
 定理 not_lt_enum_ord_mk_min_compl
-  结论: [IsWellOrder α r] {s : Set α} (hfin : s.Finite)
+  结论: [是良序 α r] {s : 集合 α} (hfin : s.有限)
   证明: by
   grw [← typein_le_typein, typein_enum, Cardinal.le_ord_iff_card_le_of_lt_aleph0 _ hfin.lt_aleph0,
     card_typein_min_le_mk]
@@ -6028,8 +6028,8 @@ theorem List.SortedGT.lt_ord_of_lt
 
 
 中文:
-定理 List.SortedGT.lt_ord_of_lt
-  结论: [LinearOrder α] [WellFoundedLT α] {l m : List α}
+定理 列表.SortedGT.lt_ord_of_lt
+  结论: [线性序 α] [WellFoundedLT α] {l m : 列表 α}
   证明: by
   replace hmltl : List.Lex (· < ·) m l := hmltl
   cases l with

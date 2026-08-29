@@ -53,7 +53,7 @@ structure Cubic
     - d : R
 
 中文:
-结构 Cubic
+结构 三次
   参数: (R : 类型)
   公理与运算 (4 个):
     - a : R
@@ -86,8 +86,8 @@ instance [Inhabited
   body: ⟨⟨default, default, default, default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: R] : Inhabited (Cubic R)
+实例 [可居
+  签名: R] : 可居 (三次 R)
   定义体: ⟨⟨default, default, default, default⟩⟩
 -/
 instance [Inhabited R] : Inhabited (Cubic R) :=
@@ -102,8 +102,8 @@ instance [Zero
   body: ⟨⟨0, 0, 0, 0⟩⟩
 
 中文:
-实例 [Zero
-  签名: R] : Zero (Cubic R)
+实例 [零
+  签名: R] : 零 (三次 R)
   定义体: ⟨⟨0, 0, 0, 0⟩⟩
 -/
 instance [Zero R] : Zero (Cubic R) :=
@@ -123,7 +123,7 @@ definition toPoly
 
 中文:
 定义 toPoly
-  签名: (P : Cubic R)
+  签名: (P : 三次 R)
   定义体: C P.a * X ^ 3 + C P.b * X ^ 2 + C P.c * X + C P.d
 -/
 def toPoly (P : Cubic R) : R[X] :=
@@ -141,7 +141,7 @@ theorem C_mul_prod_X_sub_C_eq
 
 中文:
 定理 C_mul_prod_X_sub_C_eq
-  条件: [CommRing S] {w x y z : S}
+  条件: [交换环 S] {w x y z : S}
   证明: by
   simp only [toPoly, C_neg, C_add, C_mul]
   ring1
@@ -165,7 +165,7 @@ theorem prod_X_sub_C_eq
 
 中文:
 定理 prod_X_sub_C_eq
-  条件: [CommRing S] {x y z : S}
+  条件: [交换环 S] {x y z : S}
   证明: by
   rw [← one_mul <| X - C x]; rw [← C_1]; rw [C_mul_prod_X_sub_C_eq]; rw [one_mul]; rw [one_mul]; rw [one_mul]
 
@@ -410,7 +410,7 @@ theorem toPoly_injective
 
 中文:
 定理 toPoly_injective
-  条件: (P Q : Cubic R)
+  条件: (P Q : 三次 R)
   结论: P.toPoly = Q.toPoly ↔ P = Q
   证明: ⟨fun h => Cubic.ext (a_of_eq h) (b_of_eq h) (c_of_eq h) (d_of_eq h), congr_arg toPoly⟩
 
@@ -570,7 +570,7 @@ theorem of_d_eq_zero'
 
 中文:
 定理 of_d_eq_zero'
-  结论: (⟨0, 0, 0, 0⟩ : Cubic R).toPoly = 0
+  结论: (⟨0, 0, 0, 0⟩ : 三次 R).toPoly = 0
   证明: of_d_eq_zero rfl rfl rfl rfl
 
 Depends on / 依赖: of_d_eq_zero
@@ -588,7 +588,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: (0 : Cubic R).toPoly = 0
+  结论: (0 : 三次 R).toPoly = 0
   证明: of_d_eq_zero'
 
 Depends on / 依赖: of_d_eq_zero
@@ -608,7 +608,7 @@ theorem toPoly_eq_zero_iff
 
 中文:
 定理 toPoly_eq_zero_iff
-  条件: (P : Cubic R)
+  条件: (P : 三次 R)
   结论: P.toPoly = 0 ↔ P = 0
   证明: by
   rw [← zero]; rw [toPoly_injective]
@@ -1100,7 +1100,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : Cubic R ≃ { p : R[X] // p.degree <= 3 } where
+  签名: : 三次 R ≃ { p : R[X] // p.degree <= 3 } where
   定义体: ⟨P.toPoly, degree_cubic_le⟩
   invFun f := ⟨coeff f 3, coeff f 2, coeff f 1, coeff f 0⟩
   left_inv P := by ext <;> simp only [coeffs]
@@ -1462,7 +1462,7 @@ theorem degree_of_d_eq_zero'
 
 中文:
 定理 degree_of_d_eq_zero'
-  结论: (⟨0, 0, 0, 0⟩ : Cubic R).toPoly.degree = ⊥
+  结论: (⟨0, 0, 0, 0⟩ : 三次 R).toPoly.degree = ⊥
   证明: degree_of_d_eq_zero rfl rfl rfl rfl
 
 @[simp]
@@ -1485,7 +1485,7 @@ theorem degree_of_zero
 
 中文:
 定理 degree_of_zero
-  结论: (0 : Cubic R).toPoly.degree = ⊥
+  结论: (0 : 三次 R).toPoly.degree = ⊥
   证明: degree_of_d_eq_zero'
 
 @[simp]
@@ -1768,7 +1768,7 @@ theorem natDegree_of_zero
 
 中文:
 定理 natDegree_of_zero
-  结论: (0 : Cubic R).toPoly.natDegree = 0
+  结论: (0 : 三次 R).toPoly.natDegree = 0
   证明: natDegree_of_c_eq_zero'
 
 Depends on / 依赖: natDegree_of_c_eq_zero
@@ -1795,7 +1795,7 @@ definition map
 
 中文:
 定义 map
-  签名: (φ : R ->+* S) (P : Cubic R)
+  签名: (φ : R ->+* S) (P : 三次 R)
   定义体: ⟨φ P.a, φ P.b, φ P.c, φ P.d⟩
 -/
 def map (φ : R ->+* S) (P : Cubic R) : Cubic S :=
@@ -1812,7 +1812,7 @@ theorem map_toPoly
 
 中文:
 定理 map_toPoly
-  结论: (map φ P).toPoly = Polynomial.map φ P.toPoly
+  结论: (map φ P).toPoly = 多项式.map φ P.toPoly
   证明: by
   simp only [map, toPoly, map_C, map_X, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow]
 
@@ -1846,7 +1846,7 @@ definition roots
 
 中文:
 定义 roots
-  签名: [IsDomain R] (P : Cubic R)
+  签名: [是整环 R] (P : 三次 R)
   定义体: P.toPoly.roots
 
 Depends on / 依赖: P.toPoly.roots, toPoly
@@ -1866,8 +1866,8 @@ theorem map_roots
 
 中文:
 定理 map_roots
-  条件: [IsDomain S]
-  结论: (map φ P).roots = (Polynomial.map φ P.toPoly).roots
+  条件: [是整环 S]
+  结论: (map φ P).roots = (多项式.map φ P.toPoly).roots
   证明: by
   rw [roots]; rw [map_toPoly]
 
@@ -1888,7 +1888,7 @@ theorem mem_roots_iff
 
 中文:
 定理 mem_roots_iff
-  条件: [IsDomain R] (h0 : P.toPoly != 0) (x : R)
+  条件: [是整环 R] (h0 : P.toPoly != 0) (x : R)
   证明: by
   rw [roots]; rw [mem_roots h0]; rw [IsRoot]; rw [toPoly]
   simp only [eval_C, eval_X, eval_add, eval_mul, eval_pow]
@@ -1915,7 +1915,7 @@ theorem card_roots_le
 
 中文:
 定理 card_roots_le
-  条件: [IsDomain R] [DecidableEq R]
+  条件: [是整环 R] [DecidableEq R]
   结论: P.roots.toFinset.card <= 3
   证明: by
   apply (toFinset_card_le P.toPoly.roots).trans
@@ -2124,7 +2124,7 @@ definition discr
 
 中文:
 定义 discr
-  签名: {R : 类型} [Ring R] (P : Cubic R)
+  签名: {R : 类型} [环 R] (P : 三次 R)
   定义体: P.b ^ 2 * P.c ^ 2 - 4 * P.a * P.c ^ 3 - 4 * P.b ^ 3 * P.d - 27 * P.a ^ 2 * P.d ^ 2 +
     18 * P.a * P.b * P.c * P.d
 -/

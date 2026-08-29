@@ -47,8 +47,8 @@ theorem Fintype.isPrimePow_card_of_field
   FiniteField.isPrimePow_card α
 
 中文:
-定理 Fintype.isPrimePow_card_of_field
-  条件: {α} [Fintype α] [Field α]
+定理 有限类型.isPrimePow_card_of_field
+  条件: {α} [有限类型 α] [域 α]
   结论: IsPrimePow ‖α‖
   证明: -- TODO: `Algebra` version of `CharP.exists`, of type `∀ p, Algebra (ZMod p) α`
   FiniteField.isPrimePow_card α
@@ -73,9 +73,9 @@ theorem Fintype.nonempty_field_iff
     (((Fintype.card_eq_nat_card).trans (GaloisField.card p n hn.ne')).tran
 
 中文:
-定理 Fintype.nonempty_field_iff
-  条件: {α} [Fintype α]
-  结论: Nonempty (Field α) ↔ IsPrimePow ‖α‖
+定理 有限类型.nonempty_field_iff
+  条件: {α} [有限类型 α]
+  结论: 非空 (域 α) ↔ IsPrimePow ‖α‖
   证明: by
   refine ⟨fun ⟨h⟩ => Fintype.isPrimePow_card_of_field, ?_⟩
   rintro ⟨p, n, hp, hn, hα⟩
@@ -103,8 +103,8 @@ theorem Fintype.not_isField_of_card_not_prime_pow
   proof: mt fun h => Fintype.nonempty_field_iff.mp ⟨h.toField⟩
 
 中文:
-定理 Fintype.not_isField_of_card_not_prime_pow
-  条件: {α} [Fintype α] [Ring α]
+定理 有限类型.not_isField_of_card_not_prime_pow
+  条件: {α} [有限类型 α] [环 α]
   证明: mt fun h => Fintype.nonempty_field_iff.mp ⟨h.toField⟩
 
 Depends on / 依赖: Fintype, Fintype.nonempty_field_iff.mp, h.toField, nonempty_field_iff, toField
@@ -126,9 +126,9 @@ theorem Infinite.nonempty_field
   simp
 
 中文:
-定理 Infinite.nonempty_field
-  条件: {α : 类型u} [Infinite α]
-  结论: Nonempty (Field α)
+定理 无限.nonempty_field
+  条件: {α : 类型u} [无限 α]
+  结论: 非空 (域 α)
   证明: by
   suffices #α = #(FractionRing (MvPolynomial α <| ULift.{u} Rat)) from
     (Cardinal.eq.1 this).map (·.field)
@@ -156,9 +156,9 @@ theorem Field.nonempty_iff
   · simpa only [← Cardinal.infinite_iff, h, true_or, iff_true] using Infinit
 
 中文:
-定理 Field.nonempty_iff
+定理 域.nonempty_iff
   条件: {α : 类型u}
-  结论: Nonempty (Field α) ↔ IsPrimePow #α
+  结论: 非空 (域 α) ↔ IsPrimePow #α
   证明: by
   rw [Cardinal.isPrimePow_iff]
   obtain h | h := fintypeOrInfinite α

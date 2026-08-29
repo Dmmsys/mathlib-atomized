@@ -47,8 +47,8 @@ lemma Convex.condExp_mem_of_hereditarilyLindelofSpace
   have h2 := condExp_mono (m := m) ((L n).integrable_comp hf_int) (
 
 中文:
-引理 Convex.condExp_mem_of_hereditarilyLindelofSpace
-  结论: [IsFiniteMeasure μ]
+引理 凸.condExp_mem_of_hereditarilyLindelofSpace
+  结论: [是有限测度 μ]
   证明: by
   obtain ⟨L, c, hLc⟩ := RCLike.iInter_countable_halfSpaces_eq (𝕜 := Real) hc hs
   simp_all only [← hLc, RCLike.re_to_real, mem_iInter, ae_all_iff]
@@ -83,8 +83,8 @@ lemma Convex.condExp_mem_of_isFiniteMeasure
   have : SecondCountableTopology Y := ht.span.closure.secondCountabl
 
 中文:
-引理 Convex.condExp_mem_of_isFiniteMeasure
-  结论: [IsFiniteMeasure μ] (hm : m <= mα)
+引理 凸.condExp_mem_of_isFiniteMeasure
+  结论: [是有限测度 μ] (hm : m <= mα)
   证明: by
   borelize E
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
@@ -141,8 +141,8 @@ lemma Convex.condExp_mem
   have : IsFiniteMeasure (μ.res
 
 中文:
-引理 Convex.condExp_mem
-  结论: (hm : m <= mα) [SigmaFinite (μ.trim hm)]
+引理 凸.condExp_mem
+  结论: (hm : m <= mα) [σ有限 (μ.trim hm)]
   证明: by
   apply (isCountablySpanning_spanningSets (μ.trim hm)).null_of_forall_restrict_null <;>
     rintro - ⟨n, rfl⟩
@@ -180,7 +180,7 @@ lemma ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace
 
 中文:
 引理 ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   obtain ⟨L, c, hLc1, hLc2⟩ := hφ_cvx.real_sSup_of_nat_affine_eq hs hφ_cont
   have hp := ae_all_iff.2 fun i => (L i).comp_condExp_add_const_comm hm hf_int (c i)
@@ -217,7 +217,7 @@ theorem ConvexOn.map_condExp_le_of_isFiniteMeasure
 
 中文:
 定理 ConvexOn.map_condExp_le_of_isFiniteMeasure
-  结论: [IsFiniteMeasure μ] (hm : m <= mα)
+  结论: [是有限测度 μ] (hm : m <= mα)
   证明: by
   borelize E
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
@@ -288,7 +288,7 @@ theorem ConvexOn.map_condExp_le
 
 中文:
 定理 ConvexOn.map_condExp_le
-  结论: (hm : m <= mα) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= mα) [σ有限 (μ.trim hm)]
   证明: by
   apply (isCountablySpanning_spanningSets (μ.trim hm)).null_of_forall_restrict_null <;>
     rintro - ⟨n, rfl⟩
@@ -326,7 +326,7 @@ theorem ConvexOn.map_condExp_le_trim
 
 中文:
 定理 ConvexOn.map_condExp_le_trim
-  结论: {mE : MeasurableSpace E} [BorelSpace E]
+  结论: {mE : 可测空间 E} [Borel空间 E]
   证明: by
   rw [StronglyMeasurable.ae_le_trim_iff hm (by fun_prop) (by fun_prop)]
   exact hφ_cvx.map_condExp_le hm hφ_cont hf hs hf_int hφ_int
@@ -355,7 +355,7 @@ theorem ConcaveOn.condExp_map_le
 
 中文:
 定理 ConcaveOn.condExp_map_le
-  结论: (hm : m <= mα) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= mα) [σ有限 (μ.trim hm)]
   证明: by
   filter_upwards [hφ_cvx.neg.map_condExp_le hm hφ_cont.neg hf hs hf_int hφ_int.neg,
     condExp_neg (φ ∘ f) m] with a h ha
@@ -383,7 +383,7 @@ theorem ConcaveOn.condExp_map_le_trim
 
 中文:
 定理 ConcaveOn.condExp_map_le_trim
-  结论: {mE : MeasurableSpace E} [BorelSpace E]
+  结论: {mE : 可测空间 E} [Borel空间 E]
   证明: by
   rw [StronglyMeasurable.ae_le_trim_iff hm (by fun_prop) (by fun_prop)]
   exact hφ_cvx.condExp_map_le hm hφ_cont hf hs hf_int hφ_int
@@ -410,7 +410,7 @@ theorem ConvexOn.map_condExp_le_univ
 
 中文:
 定理 ConvexOn.map_condExp_le_univ
-  结论: (hm : m <= mα) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= mα) [σ有限 (μ.trim hm)]
   证明: ConvexOn.map_condExp_le hm hφ_cvx (lowerSemicontinuousOn_univ_iff.2 hφ_cont) (by simp)
     isClosed_univ hf_int hφ_int
 
@@ -435,7 +435,7 @@ theorem ConvexOn.map_condExp_le_trim_univ
 
 中文:
 定理 ConvexOn.map_condExp_le_trim_univ
-  结论: {mE : MeasurableSpace E} [BorelSpace E]
+  结论: {mE : 可测空间 E} [Borel空间 E]
   证明: by
   rw [StronglyMeasurable.ae_le_trim_iff hm (by fun_prop) (by fun_prop)]
   exact hφ_cvx.map_condExp_le_univ hm hφ_cont hf_int hφ_int
@@ -463,7 +463,7 @@ theorem ConcaveOn.condExp_map_le_univ
 
 中文:
 定理 ConcaveOn.condExp_map_le_univ
-  结论: (hm : m <= mα) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= mα) [σ有限 (μ.trim hm)]
   证明: by
   filter_upwards [hφ_cvx.neg.map_condExp_le_univ hm hφ_cont.neg hf_int hφ_int.neg,
     condExp_neg (φ ∘ f) m] with a h ha
@@ -491,7 +491,7 @@ theorem ConcaveOn.condExp_map_le_trim_univ
 
 中文:
 定理 ConcaveOn.condExp_map_le_trim_univ
-  结论: {mE : MeasurableSpace E} [BorelSpace E]
+  结论: {mE : 可测空间 E} [Borel空间 E]
   证明: by
   rw [StronglyMeasurable.ae_le_trim_iff hm (by fun_prop) (by fun_prop)]
   exact hφ_cvx.condExp_map_le_univ hm hφ_cont hf_int hφ_int
@@ -565,7 +565,7 @@ theorem Integrable.norm_condExp_rpow_le
   · sim
 
 中文:
-定理 Integrable.norm_condExp_rpow_le
+定理 可积.norm_condExp_rpow_le
   结论: {p : 实数} (hp : 1 <= p)
   证明: by
   have hp' : 0 < p := by linarith
@@ -607,7 +607,7 @@ theorem ConvexOn.map_condExp_le_of_finiteDimensional
 
 中文:
 定理 ConvexOn.map_condExp_le_of_finiteDimensional
-  结论: [FiniteDimensional 实数 E] (hm : m <= mα)
+  结论: [有限维 实数 E] (hm : m <= mα)
   证明: hφ_cvx.map_condExp_le_univ hm
     (continuousOn_univ.1 (hφ_cvx.continuousOn isOpen_univ)).lowerSemicontinuous hf_int hφ_int
 
@@ -633,7 +633,7 @@ theorem ConcaveOn.condExp_map_le_of_finiteDimensional
 
 中文:
 定理 ConcaveOn.condExp_map_le_of_finiteDimensional
-  结论: [FiniteDimensional 实数 E] (hm : m <= mα)
+  结论: [有限维 实数 E] (hm : m <= mα)
   证明: by
   filter_upwards [hφ_cvx.neg.map_condExp_le_of_finiteDimensional hm hf_int hφ_int.neg,
     condExp_neg (φ ∘ f) m] with a h ha

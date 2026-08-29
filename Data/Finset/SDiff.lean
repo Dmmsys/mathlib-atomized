@@ -58,7 +58,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff (Finset α)
+  签名: : 对称差 (有限集 α)
   定义体: ⟨fun s₁ s₂ => ⟨s₁.1 - s₂.1, nodup_of_le (Multiset.sub_le_self ..) s₁.2⟩⟩
 
 @[simp]
@@ -82,7 +82,7 @@ theorem sdiff_val
 
 中文:
 定理 sdiff_val
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: (s₁ \ s₂).val = s₁.val - s₂.val
   证明: rfl
 
@@ -126,7 +126,7 @@ theorem inter_sdiff_self
 
 中文:
 定理 inter_sdiff_self
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: s₁ inter (s₂ \ s₁) = ∅
   证明: by grind
 -/
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Generalized布尔eanAlgebra (Finset α)
+  签名: Generalized布尔ean代数 (有限集 α)
   定义体: by grind
   inf_inf_sdiff := by grind
 
@@ -215,7 +215,7 @@ theorem sdiff_union_of_subset
 
 中文:
 定理 sdiff_union_of_subset
-  条件: {s₁ s₂ : Finset α} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 有限集 α} (h : s₁ subseteq s₂)
   结论: s₂ \ s₁ union s₁ = s₂
   证明: by grind
 -/
@@ -232,7 +232,7 @@ lemma inter_sdiff_assoc
 
 中文:
 引理 inter_sdiff_assoc
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: (s inter t) \ u = s inter (t \ u)
   证明: inf_sdiff_assoc ..
 
@@ -251,7 +251,7 @@ lemma sdiff_inter_right_comm
 
 中文:
 引理 sdiff_inter_right_comm
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s \ t inter u = (s inter u) \ t
   证明: sdiff_inf_right_comm ..
 
@@ -272,7 +272,7 @@ lemma inter_sdiff_left_comm
 
 中文:
 引理 inter_sdiff_left_comm
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s inter (t \ u) = t inter (s \ u)
   证明: inf_sdiff_left_comm ..
 
@@ -294,7 +294,7 @@ theorem sdiff_inter_self
 
 中文:
 定理 sdiff_inter_self
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: s₂ \ s₁ inter s₁ = ∅
   证明: inf_sdiff_self_left
 
@@ -314,7 +314,7 @@ theorem sdiff_self
 
 中文:
 定理 sdiff_self
-  条件: (s₁ : Finset α)
+  条件: (s₁ : 有限集 α)
   结论: s₁ \ s₁ = ∅
   证明: _root_.sdiff_self
 -/
@@ -334,7 +334,7 @@ theorem sdiff_inter_distrib_right
 
 中文:
 定理 sdiff_inter_distrib_right
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s \ (t inter u) = s \ t union s \ u
   证明: sdiff_inf
 
@@ -359,7 +359,7 @@ theorem sdiff_inter_self_left
 
 中文:
 定理 sdiff_inter_self_left
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \ (s inter t) = s \ t
   证明: sdiff_inf_self_left _ _
 
@@ -384,7 +384,7 @@ theorem sdiff_inter_self_right
 
 中文:
 定理 sdiff_inter_self_right
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \ (t inter s) = s \ t
   证明: sdiff_inf_self_right _ _
 
@@ -484,7 +484,7 @@ theorem sdiff_subset_sdiff_iff_subset
 
 中文:
 定理 sdiff_subset_sdiff_iff_subset
-  条件: {r : Finset α} (hs : s subseteq r) (ht : t subseteq r)
+  条件: {r : 有限集 α} (hs : s subseteq r) (ht : t subseteq r)
   证明: sdiff_le_sdiff_iff_le hs ht
 
 @[simp, grind =, norm_cast]
@@ -509,8 +509,8 @@ theorem coe_sdiff
 
 中文:
 定理 coe_sdiff
-  条件: (s₁ s₂ : Finset α)
-  结论: ↑(s₁ \ s₂) = (s₁ \ s₂ : Set α)
+  条件: (s₁ s₂ : 有限集 α)
+  结论: ↑(s₁ \ s₂) = (s₁ \ s₂ : 集合 α)
   证明: Set.ext fun _ => mem_sdiff
 
 @[simp]
@@ -573,7 +573,7 @@ theorem union_sdiff_left
 
 中文:
 定理 union_sdiff_left
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t) \ s = t \ s
   证明: sup_sdiff_left_self
 
@@ -593,7 +593,7 @@ theorem union_sdiff_right
 
 中文:
 定理 union_sdiff_right
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t) \ t = s \ t
   证明: sup_sdiff_right_self
 
@@ -654,8 +654,8 @@ lemma disjoint_injOn_union_left
 
 中文:
 引理 disjoint_injOn_union_left
-  条件: (s : Finset α)
-  结论: {t | Disjoint s t}.InjOn (· union s)
+  条件: (s : 有限集 α)
+  结论: {t | Disjoint s t}.单射限制 (· union s)
   证明: by
   grind [Set.InjOn, union_sdiff_cancel_right]
 
@@ -676,8 +676,8 @@ lemma superset_injOn_sdiff
 
 中文:
 引理 superset_injOn_sdiff
-  条件: (s : Finset α)
-  结论: {t | s subseteq t}.InjOn (· \ s)
+  条件: (s : 有限集 α)
+  结论: {t | s subseteq t}.单射限制 (· \ s)
   证明: by
   grind [Set.InjOn, sdiff_union_of_subset]
 
@@ -714,7 +714,7 @@ theorem sdiff_union_inter
 
 中文:
 定理 sdiff_union_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \ t union s inter t = s
   证明: sup_sdiff_inf _ _
 
@@ -734,7 +734,7 @@ theorem sdiff_idem
 
 中文:
 定理 sdiff_idem
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s \ t) \ t = s \ t
   证明: _root_.sdiff_idem
 
@@ -801,7 +801,7 @@ theorem sdiff_nonempty
 
 中文:
 定理 sdiff_nonempty
-  结论: (s \ t).Nonempty ↔ ¬s subseteq t
+  结论: (s \ t).非空 ↔ ¬s subseteq t
   证明: nonempty_iff_ne_empty.trans sdiff_eq_empty_iff_subset.not
 
 @[simp]
@@ -823,7 +823,7 @@ theorem empty_sdiff
 
 中文:
 定理 empty_sdiff
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ \ s = ∅
   证明: bot_sdiff
 
@@ -842,7 +842,7 @@ theorem insert_sdiff_of_notMem
 
 中文:
 定理 insert_sdiff_of_notMem
-  条件: (s : Finset α) {t : Finset α} {x : α} (h : x ∉ t)
+  条件: (s : 有限集 α) {t : 有限集 α} {x : α} (h : x ∉ t)
   证明: by grind
 -/
 theorem insert_sdiff_of_notMem (s : Finset α) {t : Finset α} {x : α} (h : x ∉ t) :
@@ -859,7 +859,7 @@ theorem insert_sdiff_of_mem
 
 中文:
 定理 insert_sdiff_of_mem
-  条件: (s : Finset α) {x : α} (h : x in t)
+  条件: (s : 有限集 α) {x : α} (h : x in t)
   结论: insert x s \ t = s \ t
   证明: by grind
 -/
@@ -915,7 +915,7 @@ theorem insert_sdiff_insert
 
 中文:
 定理 insert_sdiff_insert
-  条件: (s t : Finset α) (x : α)
+  条件: (s t : 有限集 α) (x : α)
   结论: insert x s \ insert x t = s \ insert x t
   证明: insert_sdiff_of_mem _ (mem_insert_self _ _)
 
@@ -973,7 +973,7 @@ theorem sdiff_insert_of_notMem
 
 中文:
 定理 sdiff_insert_of_notMem
-  条件: {x : α} (h : x ∉ s) (t : Finset α)
+  条件: {x : α} (h : x ∉ s) (t : 有限集 α)
   结论: s \ insert x t = s \ t
   证明: by
   grind
@@ -992,7 +992,7 @@ theorem sdiff_subset
 
 中文:
 定理 sdiff_subset
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s \ t subseteq s
   证明: by simp
 -/
@@ -1009,7 +1009,7 @@ theorem sdiff_ssubset
 
 中文:
 定理 sdiff_ssubset
-  条件: (h : t subseteq s) (ht : t.Nonempty)
+  条件: (h : t subseteq s) (ht : t.非空)
   结论: s \ t ⊂ s
   证明: by grind
 -/
@@ -1026,7 +1026,7 @@ theorem union_sdiff_distrib
 
 中文:
 定理 union_sdiff_distrib
-  条件: (s₁ s₂ t : Finset α)
+  条件: (s₁ s₂ t : 有限集 α)
   结论: (s₁ union s₂) \ t = s₁ \ t union s₂ \ t
   证明: sup_sdiff
 
@@ -1046,7 +1046,7 @@ theorem sdiff_union_distrib
 
 中文:
 定理 sdiff_union_distrib
-  条件: (s t₁ t₂ : Finset α)
+  条件: (s t₁ t₂ : 有限集 α)
   结论: s \ (t₁ union t₂) = s \ t₁ inter (s \ t₂)
   证明: sdiff_sup
 
@@ -1066,7 +1066,7 @@ theorem union_sdiff_self
 
 中文:
 定理 union_sdiff_self
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t) \ t = s \ t
   证明: sup_sdiff_right_self
 
@@ -1084,8 +1084,8 @@ theorem Nontrivial.sdiff_singleton_nonempty
   proof: by grind
 
 中文:
-定理 Nontrivial.sdiff_singleton_nonempty
-  条件: {c : α} {s : Finset α} (hS : s.Nontrivial)
+定理 非平凡.sdiff_singleton_nonempty
+  条件: {c : α} {s : 有限集 α} (hS : s.非平凡)
   证明: by grind
 -/
 theorem Nontrivial.sdiff_singleton_nonempty {c : α} {s : Finset α} (hS : s.Nontrivial) :
@@ -1102,7 +1102,7 @@ theorem sdiff_sdiff_left'
 
 中文:
 定理 sdiff_sdiff_left'
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: (s \ t) \ u = s \ t inter (s \ u)
   证明: _root_.sdiff_sdiff_left'
 
@@ -1162,7 +1162,7 @@ theorem sdiff_sdiff_self_left
 
 中文:
 定理 sdiff_sdiff_self_left
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \ (s \ t) = s inter t
   证明: sdiff_sdiff_right_self
 
@@ -1201,7 +1201,7 @@ theorem sdiff_eq_sdiff_iff_inter_eq_inter
 
 中文:
 定理 sdiff_eq_sdiff_iff_inter_eq_inter
-  条件: {s t₁ t₂ : Finset α}
+  条件: {s t₁ t₂ : 有限集 α}
   证明: sdiff_eq_sdiff_iff_inf_eq_inf
 
 Depends on / 依赖: sdiff_eq_sdiff_iff_inf_eq_inf
@@ -1221,7 +1221,7 @@ theorem union_eq_sdiff_union_sdiff_union_inter
 
 中文:
 定理 union_eq_sdiff_union_sdiff_union_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s union t = s \ t union t \ s union s inter t
   证明: sup_eq_sdiff_sup_sdiff_sup_inf
 

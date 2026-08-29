@@ -55,7 +55,7 @@ definition χ₄
 
 中文:
 定义 χ₄
-  签名: : MulChar (ZMod 4) 整数 where
+  签名: : 乘法特征 (ZMod 4) 整数 where
   定义体: match a with
     | 0 | 2 => 0
     | 1 => 1
@@ -374,7 +374,7 @@ definition χ₈
 
 中文:
 定义 χ₈
-  签名: : MulChar (ZMod 8) 整数 where
+  签名: : 乘法特征 (ZMod 8) 整数 where
   定义体: match a with
     | 0 | 2 | 4 | 6 => 0
     | 1 | 7 => 1
@@ -533,7 +533,7 @@ definition χ₈'
 
 中文:
 定义 χ₈'
-  签名: : MulChar (ZMod 8) 整数 where
+  签名: : 乘法特征 (ZMod 8) 整数 where
   定义体: match a with
     | 0 | 2 | 4 | 6 => 0
     | 1 | 3 => 1

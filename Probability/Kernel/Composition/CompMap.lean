@@ -48,7 +48,7 @@ theorem deterministic_comp_eq_map
 
 中文:
 定理 deterministic_comp_eq_map
-  条件: (hf : Measurable f) (κ : Kernel α β)
+  条件: (hf : 可测 f) (κ : 核 α β)
   证明: by
   ext a s hs
   simp_rw [map_apply' _ hf _ hs, comp_apply' _ _ _ hs, deterministic_apply' hf _ hs,
@@ -75,7 +75,7 @@ theorem comp_deterministic_eq_comap
 
 中文:
 定理 comp_deterministic_eq_comap
-  条件: (κ : Kernel α β) (hg : Measurable g)
+  条件: (κ : 核 α β) (hg : 可测 g)
   证明: by
   ext a s hs
   simp_rw [comap_apply' _ _ _ s, comp_apply' _ _ _ hs, deterministic_apply hg a,
@@ -102,7 +102,7 @@ lemma deterministic_comp_deterministic
 
 中文:
 引理 deterministic_comp_deterministic
-  条件: (hf : Measurable f) (hg : Measurable g)
+  条件: (hf : 可测 f) (hg : 可测 g)
   证明: by
   ext; simp [comp_deterministic_eq_comap, comap_apply, deterministic_apply]
 
@@ -126,7 +126,7 @@ lemma swap_swap
 
 中文:
 引理 swap_swap
-  结论: (swap α β) ∘ₖ (swap β α) = Kernel.id
+  结论: (swap α β) ∘ₖ (swap β α) = 核.id
   证明: by
   simp_rw [swap, Kernel.deterministic_comp_deterministic, Prod.swap_swap_eq, Kernel.id]
 
@@ -147,8 +147,8 @@ lemma swap_comp_eq_map
 
 中文:
 引理 swap_comp_eq_map
-  条件: {κ : Kernel α (β × γ)}
-  结论: (swap β γ) ∘ₖ κ = κ.map Prod.swap
+  条件: {κ : 核 α (β × γ)}
+  结论: (swap β γ) ∘ₖ κ = κ.map 积类型.swap
   证明: by
   rw [swap]; rw [deterministic_comp_eq_map]
 
@@ -173,7 +173,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: (κ : Kernel α β) (η : Kernel β γ) (f : γ -> δ)
+  条件: (κ : 核 α β) (η : 核 β γ) (f : γ -> δ)
   证明: by
   by_cases hf : Measurable f
   · ext a s hs
@@ -206,7 +206,7 @@ lemma comp_map
 
 中文:
 引理 comp_map
-  条件: (κ : Kernel α β) (η : Kernel γ δ) {f : β -> γ} (hf : Measurable f)
+  条件: (κ : 核 α β) (η : 核 γ δ) {f : β -> γ} (hf : 可测 f)
   证明: by
   ext x s ms
   rw [comp_apply' _ _ _ ms]; rw [lintegral_map _ hf _ (η.measurable_coe ms)]; rw [comp_apply' _ _ _ ms]
@@ -232,7 +232,7 @@ lemma fst_comp
 
 中文:
 引理 fst_comp
-  条件: (κ : Kernel α β) (η : Kernel β (γ × δ))
+  条件: (κ : 核 α β) (η : 核 β (γ × δ))
   结论: (η ∘ₖ κ).fst = η.fst ∘ₖ κ
   证明: by
   simp [fst_eq, map_comp κ η _]
@@ -254,7 +254,7 @@ lemma snd_comp
 
 中文:
 引理 snd_comp
-  条件: (κ : Kernel α β) (η : Kernel β (γ × δ))
+  条件: (κ : 核 α β) (η : 核 β (γ × δ))
   结论: (η ∘ₖ κ).snd = η.snd ∘ₖ κ
   证明: by
   simp_rw [snd_eq, map_comp κ η _]

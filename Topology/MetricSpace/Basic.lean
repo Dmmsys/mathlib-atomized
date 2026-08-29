@@ -45,7 +45,7 @@ theorem isUniformEmbedding_iff'
 
 中文:
 定理 isUniformEmbedding_iff'
-  条件: [PseudoMetricSpace β] {f : γ -> β}
+  条件: [伪度量空间 β] {f : γ -> β}
   证明: by
   rw [isUniformEmbedding_iff_isUniformInducing]; rw [isUniformInducing_iff]; rw [uniformContinuous_iff]
 
@@ -67,8 +67,8 @@ abbreviation _root_.MetricSpace.ofT0PseudoMetricSpace
   eq_of_dist_eq_zero hdist := (Metric.inseparable_iff.2 hdist).eq
 
 中文:
-缩写 _root_.MetricSpace.ofT0PseudoMetricSpace
-  签名: (α : 类型) [PseudoMetricSpace α] [T0Space α]
+缩写 _root_.度量空间.ofT0PseudoMetricSpace
+  签名: (α : 类型) [伪度量空间 α] [T0空间 α]
   定义体: ‹_›
   eq_of_dist_eq_zero hdist := (Metric.inseparable_iff.2 hdist).eq
 -/
@@ -92,7 +92,7 @@ theorem isClosed_of_pairwise_le_dist
 
 中文:
 定理 isClosed_of_pairwise_le_dist
-  结论: {s : Set γ} {ε : 实数} (hε : 0 < ε)
+  结论: {s : 集合 γ} {ε : 实数} (hε : 0 < ε)
   证明: isClosed_of_spaced_out (dist_mem_uniformity hε) by simpa using hs
 
 Depends on / 依赖: dist_mem_uniformity, isClosed_of_spaced_out
@@ -111,7 +111,7 @@ theorem isClosedEmbedding_of_pairwise_le_dist
 
 中文:
 定理 isClosedEmbedding_of_pairwise_le_dist
-  结论: {α : 类型} [TopologicalSpace α] [DiscreteTopology α]
+  结论: {α : 类型} [拓扑空间 α] [离散拓扑 α]
   证明: isClosedEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
 
 Depends on / 依赖: dist_mem_uniformity, isClosedEmbedding_of_spaced_out
@@ -153,8 +153,8 @@ abbreviation EMetricSpace.toMetricSpaceOfDist
   MetricSpace.ofT0PseudoMetricSpace _
 
 中文:
-缩写 EMetricSpace.toMetricSpaceOfDist
-  签名: {α : 类型u} [EMetricSpace α] (dist : α -> α -> 实数)
+缩写 广义度量空间.toMetricSpaceOfDist
+  签名: {α : 类型u} [广义度量空间 α] (dist : α -> α -> 实数)
   定义体: letI := PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist dist_nonneg h
   MetricSpace.ofT0PseudoMetricSpace _
 
@@ -175,8 +175,8 @@ abbreviation EMetricSpace.toMetricSpace
   body: EMetricSpace.toMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
 
 中文:
-缩写 EMetricSpace.toMetricSpace
-  签名: {α : 类型u} [EMetricSpace α] (h : 对任意 x y : α, edist x y != ⊤)
+缩写 广义度量空间.toMetricSpace
+  签名: {α : 类型u} [广义度量空间 α] (h : 对任意 x y : α, edist x y != ⊤)
   定义体: EMetricSpace.toMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
 
 Depends on / 依赖: EMetricSpace, EMetricSpace.toMetricSpaceOfDist, ENNReal, ENNReal.toReal, toMetricSpaceOfDist, toReal
@@ -195,8 +195,8 @@ abbreviation MetricSpace.induced
     eq_of_dist_eq_zero := fun h => hf (dist_eq_zero.1 h) }
 
 中文:
-缩写 MetricSpace.induced
-  签名: {γ β} (f : γ -> β) (hf : Function.Injective f) (m : MetricSpace β)
+缩写 度量空间.induced
+  签名: {γ β} (f : γ -> β) (hf : 函数.单射 f) (m : 度量空间 β)
   定义体: { PseudoMetricSpace.induced f m.toPseudoMetricSpace with
     eq_of_dist_eq_zero := fun h => hf (dist_eq_zero.1 h) }
 
@@ -216,8 +216,8 @@ abbreviation IsUniformEmbedding.comapMetricSpace
   body: .replaceUniformity (.induced f h.injective m) h.comap_uniformity.symm
 
 中文:
-缩写 IsUniformEmbedding.comapMetricSpace
-  签名: {α β} [UniformSpace α] [m : MetricSpace β] (f : α -> β)
+缩写 是一致嵌入.comapMetricSpace
+  签名: {α β} [一致空间 α] [m : 度量空间 β] (f : α -> β)
   定义体: .replaceUniformity (.induced f h.injective m) h.comap_uniformity.symm
 
 Depends on / 依赖: comap_uniformity, h.comap_uniformity.symm, h.injective, induced, injective, replaceUniformity
@@ -235,8 +235,8 @@ abbreviation Topology.IsEmbedding.comapMetricSpace
   body: .replaceTopology (.induced f h.injective m) h.eq_induced
 
 中文:
-缩写 Topology.IsEmbedding.comapMetricSpace
-  签名: {α β} [TopologicalSpace α] [m : MetricSpace β]
+缩写 拓扑.是嵌入.comapMetricSpace
+  签名: {α β} [拓扑空间 α] [m : 度量空间 β]
   定义体: .replaceTopology (.induced f h.injective m) h.eq_induced
 
 Depends on / 依赖: eq_induced, h.eq_induced, h.injective, induced, injective, replaceTopology
@@ -256,8 +256,8 @@ instance Subtype.metricSpace
 @[to_additive]
 
 中文:
-实例 Subtype.metricSpace
-  签名: {α : 类型} {p : α -> 命题} [MetricSpace α]
+实例 子类型.metricSpace
+  签名: {α : 类型} {p : α -> 命题} [度量空间 α]
   定义体: .induced Subtype.val Subtype.coe_injective ‹_›
 
 @[to_additive]
@@ -279,7 +279,7 @@ instance MulOpposite.instMetricSpace
 
 中文:
 实例 MulOpposite.instMetricSpace
-  签名: {α : 类型} [MetricSpace α]
+  签名: {α : 类型} [度量空间 α]
   定义体: MetricSpace.induced MulOpposite.unop MulOpposite.unop_injective ‹_›
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, MulOpposite, MulOpposite.unop, MulOpposite.unop_injective, induced, unop_injective
@@ -298,8 +298,8 @@ instance Real.metricSpace
   body: .ofT0PseudoMetricSpace Real
 
 中文:
-实例 Real.metricSpace
-  签名: : MetricSpace 实数
+实例 实数.metricSpace
+  签名: : 度量空间 实数
   定义体: .ofT0PseudoMetricSpace Real
 
 Depends on / 依赖: ofT0PseudoMetricSpace
@@ -320,7 +320,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace 实数>=0
+  签名: 度量空间 实数>=0
   定义体: inferInstanceAs MetricSpace (Subtype _)
 -/
 instance : MetricSpace Real>=0 :=
@@ -335,8 +335,8 @@ theorem NNReal.isUniformEmbedding_coe
   proof: isUniformEmbedding_subtype_val
 
 中文:
-定理 NNReal.isUniformEmbedding_coe
-  结论: IsUniformEmbedding NN实数.to实数
+定理 非负实数.isUniformEmbedding_coe
+  结论: 是一致嵌入 非负实数.to实数
   证明: isUniformEmbedding_subtype_val
 
 Depends on / 依赖: isUniformEmbedding_subtype_val
@@ -353,8 +353,8 @@ theorem NNReal.isEmbedding_coe
   proof: isUniformEmbedding_coe.isEmbedding
 
 中文:
-定理 NNReal.isEmbedding_coe
-  结论: Topology.IsEmbedding NN实数.to实数
+定理 非负实数.isEmbedding_coe
+  结论: 拓扑.是嵌入 非负实数.to实数
   证明: isUniformEmbedding_coe.isEmbedding
 
 Depends on / 依赖: isEmbedding, isUniformEmbedding_coe, isUniformEmbedding_coe.isEmbedding
@@ -371,8 +371,8 @@ theorem NNReal.isClosedEmbedding_coe
   proof: isClosed_Ici.isClosedEmbedding_subtypeVal
 
 中文:
-定理 NNReal.isClosedEmbedding_coe
-  结论: Topology.IsClosedEmbedding NN实数.to实数
+定理 非负实数.isClosedEmbedding_coe
+  结论: 拓扑.是闭嵌入 非负实数.to实数
   证明: isClosed_Ici.isClosedEmbedding_subtypeVal
 
 Depends on / 依赖: isClosedEmbedding_subtypeVal, isClosed_Ici, isClosed_Ici.isClosedEmbedding_subtypeVal
@@ -391,8 +391,8 @@ instance [MetricSpace
   body: fast_instance% MetricSpace.induced ULift.down ULift.down_injective ‹_›
 
 中文:
-实例 [MetricSpace
-  签名: β] : MetricSpace (ULift β)
+实例 [度量空间
+  签名: β] : 度量空间 (类型层提升 β)
   定义体: fast_instance% MetricSpace.induced ULift.down ULift.down_injective ‹_›
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, ULift.down, ULift.down_injective, down_injective, fast_instance, induced
@@ -411,8 +411,8 @@ instance Prod.metricSpaceMax
   body: .ofT0PseudoMetricSpace _
 
 中文:
-实例 Prod.metricSpaceMax
-  签名: [MetricSpace β]
+实例 积类型.metricSpaceMax
+  签名: [度量空间 β]
   定义体: .ofT0PseudoMetricSpace _
 
 Depends on / 依赖: ofT0PseudoMetricSpace
@@ -438,7 +438,7 @@ instance metricSpacePi
 
 中文:
 实例 metricSpacePi
-  签名: : MetricSpace (对任意 b, X b)
+  签名: : 度量空间 (对任意 b, X b)
   定义体: .ofT0PseudoMetricSpace _
 
 Depends on / 依赖: ofT0PseudoMetricSpace
@@ -471,7 +471,7 @@ theorem secondCountable_of_countable_discretization
 
 中文:
 定理 secondCountable_of_countable_discretization
-  结论: {α : 类型u} [PseudoMetricSpace α]
+  结论: {α : 类型u} [伪度量空间 α]
   证明: by
   refine secondCountable_of_almost_dense_set fun ε ε0 => ?_
   rcases H ε ε0 with ⟨β, fβ, F, hF⟩
@@ -513,7 +513,7 @@ instance SeparationQuotient.instDist
 
 中文:
 实例 SeparationQuotient.instDist
-  签名: {α : 类型u} [PseudoMetricSpace α]
+  签名: {α : 类型u} [伪度量空间 α]
   定义体: lift₂ dist fun x y x' y' hx hy => by rw [dist_edist, dist_edist, ← edist_mk x,
     ← edist_mk x', mk_eq_mk.2 hx, mk_eq_mk.2 hy]
 
@@ -534,7 +534,7 @@ theorem SeparationQuotient.dist_mk
 
 中文:
 定理 SeparationQuotient.dist_mk
-  条件: {α : 类型u} [PseudoMetricSpace α] (p q : α)
+  条件: {α : 类型u} [伪度量空间 α] (p q : α)
   证明: rfl
 -/
 theorem SeparationQuotient.dist_mk {α : Type u} [PseudoMetricSpace α] (p q : α) :
@@ -552,7 +552,7 @@ instance SeparationQuotient.instMetricSpace
 
 中文:
 实例 SeparationQuotient.instMetricSpace
-  签名: {α : 类型u} [PseudoMetricSpace α]
+  签名: {α : 类型u} [伪度量空间 α]
   定义体: EMetricSpace.toMetricSpaceOfDist dist (surjective_mk.forall₂.2 fun _ _ => dist_nonneg)
     surjective_mk.forall₂.2 edist_dist
 
@@ -588,7 +588,7 @@ abbreviation replaceEDist
 
 中文:
 缩写 replaceEDist
-  签名: : PseudoEMetricSpace X where
+  签名: : PseudoEMetric空间 X where
   定义体: d
   edist_self := by simp [hd]
   edist_comm := by simp [hd, edist_comm]
@@ -647,7 +647,7 @@ abbreviation replaceDist
 
 中文:
 缩写 replaceDist
-  签名: : PseudoMetricSpace X where
+  签名: : 伪度量空间 X where
   定义体: d
   dist_self := by simp [hd]
   dist_comm := by simp [hd, dist_comm]
@@ -714,7 +714,7 @@ abbreviation replaceEDist
 
 中文:
 缩写 replaceEDist
-  签名: : EMetricSpace X where
+  签名: : 广义度量空间 X where
   定义体: d
   edist_self := by simp [hd]
   edist_comm := by simp [hd, edist_comm]
@@ -768,7 +768,7 @@ abbreviation replaceDist
 
 中文:
 缩写 replaceDist
-  签名: : MetricSpace X where
+  签名: : 度量空间 X where
   定义体: d
   dist_self := by simp [hd]
   dist_comm := by simp [hd, dist_comm]

@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors (MvPowerSeries σ R)
+  签名: 无零因子 (MvPowerSeries σ R)
   定义体: by
     rcases exists_wellFoundedGT σ
     simpa only [← lexOrder_eq_top_iff_eq_zero, lexOrder_mul, WithTop.add_eq_top] using h
@@ -403,7 +403,7 @@ theorem weightedOrder_prod
 
 中文:
 定理 weightedOrder_prod
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R] [Nontrivial R]
+  结论: {R : 类型} [交换半环 R] [无零因子 R] [非平凡 R]
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -447,7 +447,7 @@ theorem order_prod
 
 中文:
 定理 order_prod
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R] [Nontrivial R]
+  结论: {R : 类型} [交换半环 R] [无零因子 R] [非平凡 R]
   证明: weightedOrder_prod _ _ _
 
 Depends on / 依赖: weightedOrder_prod

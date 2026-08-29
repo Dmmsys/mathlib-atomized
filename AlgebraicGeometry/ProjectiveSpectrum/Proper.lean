@@ -126,7 +126,7 @@ instance isSeparated
 
 中文:
 实例 isSeparated
-  签名: : IsSeparated (toSpecZero 𝒜)
+  签名: : 是分离 (toSpecZero 𝒜)
   定义体: by
   refine ⟨IsZariskiLocalAtTarget.of_openCover (Pullback.openCoverOfLeftRight
     (affineOpenCover 𝒜).openCover (affineOpenCover 𝒜).openCover _ _) ?_⟩
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: Scheme.IsSeparated (Proj 𝒜)
+  签名: 概形.是分离 (Proj 𝒜)
   定义体: (HasAffineProperty.iff_of_isAffine (P := @IsSeparated)).mp (isSeparated 𝒜)
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsSeparated, iff_of_isAffine, isSeparated
@@ -220,8 +220,8 @@ instance [Algebra.FiniteType
     (Proj.iSup_basicOpen_eq_top' 𝒜 (ι := x) (↑) (fun i => ⟨_]; rw [hxd _ i.2⟩) (by simpa using hx)
 
 中文:
-实例 [Algebra.FiniteType
-  签名: (𝒜 0) A] : LocallyOfFiniteType (Proj.toSpecZero 𝒜)
+实例 [代数.有限型
+  签名: (𝒜 0) A] : 局部有限型 (Proj.toSpecZero 𝒜)
   定义体: by
   obtain ⟨x, hx, hx'⟩ := GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous_ne_zero 𝒜
   choose d hd hxd using hx'
@@ -259,8 +259,8 @@ instance [Algebra.FiniteType
     rw [← Proj.opensRange_awayι _ _ (hxd _ i.2) (h
 
 中文:
-实例 [Algebra.FiniteType
-  签名: (𝒜 0) A] : QuasiCompact (Proj.toSpecZero 𝒜)
+实例 [代数.有限型
+  签名: (𝒜 0) A] : 拟紧 (Proj.toSpecZero 𝒜)
   定义体: by
   rw [HasAffineProperty.iff_of_isAffine (P := @QuasiCompact)]
   obtain ⟨x, hx, hx'⟩ := GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous_ne_zero 𝒜
@@ -471,7 +471,7 @@ lemma valuativeCriterion_existence
 
 中文:
 引理 valuativeCriterion_existence
-  条件: [Algebra.FiniteType (𝒜 0) A]
+  条件: [代数.有限型 (𝒜 0) A]
   证明: by
   rintro ⟨O, K, i₁, i₂, w⟩
   obtain ⟨x, hx, hx'⟩ := GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous_ne_zero 𝒜
@@ -538,8 +538,8 @@ instance [Algebra.FiniteType
   exact ⟨valuativeCriterion_existence 𝒜, inferInstance⟩
 
 中文:
-实例 [Algebra.FiniteType
-  签名: (𝒜 0) A] : UniversallyClosed (Proj.toSpecZero 𝒜)
+实例 [代数.有限型
+  签名: (𝒜 0) A] : 普遍闭 (Proj.toSpecZero 𝒜)
   定义体: by
   rw [UniversallyClosed.eq_valuativeCriterion]
   exact ⟨valuativeCriterion_existence 𝒜, inferInstance⟩
@@ -560,8 +560,8 @@ instance [Algebra.FiniteType
   signature: (𝒜 0) A] : IsProper (Proj.toSpecZero 𝒜) where
 
 中文:
-实例 [Algebra.FiniteType
-  签名: (𝒜 0) A] : Is命题er (Proj.toSpecZero 𝒜) where
+实例 [代数.有限型
+  签名: (𝒜 0) A] : 是真 (Proj.toSpecZero 𝒜) where
 -/
 instance [Algebra.FiniteType (𝒜 0) A] : IsProper (Proj.toSpecZero 𝒜) where
 

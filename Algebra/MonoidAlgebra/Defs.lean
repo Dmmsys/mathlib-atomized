@@ -68,8 +68,8 @@ structure AddMonoidAlgebra
     - coeff : M ->₀ R
 
 中文:
-结构 AddMonoidAlgebra
-  参数: (R M : 类型) [Semiring R]
+结构 加法幺半群代数
+  参数: (R M : 类型) [半环 R]
   公理与运算 (2 个):
     - ofCoeff : :
     - coeff : M ->₀ R
@@ -97,8 +97,8 @@ structure MonoidAlgebra
     - coeff : M ->₀ R
 
 中文:
-结构 MonoidAlgebra
-  参数: (R M : 类型) [Semiring R]
+结构 幺半群代数
+  参数: (R M : 类型) [半环 R]
   公理与运算 (2 个):
     - ofCoeff : :
     - coeff : M ->₀ R
@@ -228,7 +228,7 @@ lemma «forall»
   proof: coeffEquiv.forall_congr_left
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {P : R[M] -> 命题}
   结论: (对任意 p, P p) ↔ 对任意 q, P (ofCoeff q)
   证明: coeffEquiv.forall_congr_left
@@ -248,7 +248,7 @@ lemma «exists»
 @[to_additive]
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {P : R[M] -> 命题}
   结论: (存在 p, P p) ↔ 存在 q, P (ofCoeff q)
   证明: coeffEquiv.exists_congr_left
@@ -271,7 +271,7 @@ lemma coeff_injective
 
 中文:
 引理 coeff_injective
-  结论: (coeff : R[M] -> M ->₀ R).Injective
+  结论: (coeff : R[M] -> M ->₀ R).单射
   证明: coeffEquiv.injective
 
 @[to_additive]
@@ -293,7 +293,7 @@ lemma ofCoeff_injective
 
 中文:
 引理 ofCoeff_injective
-  结论: (ofCoeff : (M ->₀ R) -> R[M]).Injective
+  结论: (ofCoeff : (M ->₀ R) -> R[M]).单射
   证明: coeffEquiv.symm.injective
 
 @[to_additive (attr := simp)]
@@ -368,7 +368,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited R[M]
+  签名: : 可居 R[M]
   定义体: fast_instance% coeffEquiv.inhabited
 
 @[to_additive]
@@ -390,7 +390,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial R] [Nonempty M]
+  签名: [非平凡 R] [非空 M]
   定义体: coeffEquiv.nontrivial
 
 @[to_additive]
@@ -412,7 +412,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Subsingleton R]
+  签名: [子单例 R]
   定义体: fast_instance% coeffEquiv.unique
 
 @[to_additive]
@@ -457,7 +457,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid R[M]
+  签名: : 加法幺半群 R[M]
   定义体: fast_instance% coeffEquiv.addMonoid
 
 @[to_additive instAddCommMonoid]
@@ -479,7 +479,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid R[M]
+  签名: : 加法交换幺半群 R[M]
   定义体: fast_instance% coeffEquiv.addCommMonoid
 
 @[to_additive]
@@ -499,7 +499,7 @@ instance instIsCancelAdd
 
 中文:
 实例 instIsCancelAdd
-  签名: [IsCancelAdd R]
+  签名: [是消去加法 R]
   定义体: coeffEquiv.isCancelAdd
 
 Depends on / 依赖: coeffEquiv, coeffEquiv.isCancelAdd, isCancelAdd
@@ -648,7 +648,7 @@ lemma coeff_sum
 
 中文:
 引理 coeff_sum
-  条件: (s : Finset ι) (f : ι -> R[M])
+  条件: (s : 有限集 ι) (f : ι -> R[M])
   证明: map_sum coeffAddEquiv ..
 
 @[to_additive (attr := simp)]
@@ -671,7 +671,7 @@ lemma ofCoeff_sum
 
 中文:
 引理 ofCoeff_sum
-  条件: (s : Finset ι) (f : ι -> M ->₀ R)
+  条件: (s : 有限集 ι) (f : ι -> M ->₀ R)
   证明: map_sum coeffAddEquiv.symm ..
 
 @[to_additive (attr := simp)]
@@ -694,7 +694,7 @@ lemma coeff_finsuppSum
 
 中文:
 引理 coeff_finsuppSum
-  条件: [AddCommMonoid N] (f : ι ->₀ N) (g : ι -> N -> R[M])
+  条件: [加法交换幺半群 N] (f : ι ->₀ N) (g : ι -> N -> R[M])
   证明: map_finsuppSum coeffAddEquiv ..
 
 @[to_additive (attr := simp)]
@@ -715,7 +715,7 @@ lemma ofCoeff_finsuppSum
 
 中文:
 引理 ofCoeff_finsuppSum
-  条件: [AddCommMonoid N] (f : ι ->₀ N) (g : ι -> N -> M ->₀ R)
+  条件: [加法交换幺半群 N] (f : ι ->₀ N) (g : ι -> N -> M ->₀ R)
   证明: map_finsuppSum coeffAddEquiv.symm ..
 
 Depends on / 依赖: coeffAddEquiv, coeffAddEquiv.symm, map_finsuppSum
@@ -877,7 +877,7 @@ lemma single_left_injective
 中文:
 引理 single_left_injective
   条件: (hr : r != 0)
-  结论: Function.Injective fun m : M => single m r
+  结论: 函数.单射 fun m : M => single m r
   证明: fun _ _ => (single_left_inj hr).1
 
 @[to_additive]
@@ -900,7 +900,7 @@ lemma single_right_injective
 
 中文:
 引理 single_right_injective
-  结论: (single m : R -> R[M]).Injective
+  结论: (single m : R -> R[M]).单射
   证明: fun _ _ => single_right_inj.1
 
 @[to_additive]
@@ -1127,7 +1127,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: : SMulZeroClass A R[M]
+  签名: : SMulZero类 A R[M]
   定义体: fast_instance% coeffEquiv.smulZeroClass _
 
 Depends on / 依赖: coeffEquiv, coeffEquiv.smulZeroClass, fast_instance, smulZeroClass
@@ -1274,7 +1274,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: [DistribSMul N R]
+  签名: [分配标量乘法 N R]
   定义体: fast_instance% coeffEquiv.distribSMul _
 
 @[to_additive (dont_translate := N) isScalarTower]
@@ -1297,7 +1297,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMulZeroClass N R] [SMulZeroClass O R] [SMul N O] [IsScalarTower N O R]
+  签名: [SMulZero类 N R] [SMulZero类 O R] [标量乘法 N O] [标量塔 N O R]
   定义体: coeffEquiv.isScalarTower ..
 
 @[to_additive (dont_translate := N) smulCommClass]
@@ -1320,7 +1320,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulZeroClass N R] [SMulZeroClass O R] [SMulCommClass N O R]
+  签名: [SMulZero类 N R] [SMulZero类 O R] [标量交换类 N O R]
   定义体: coeffEquiv.smulCommClass ..
 
 @[to_additive (dont_translate := N) isCentralScalar]
@@ -1341,7 +1341,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMulZeroClass N R] [SMulZeroClass Nᵐᵒᵖ R] [IsCentralScalar N R]
+  签名: [SMulZero类 N R] [SMulZero类 Nᵐᵒᵖ R] [中心标量 N R]
   定义体: coeffEquiv.isCentralScalar _
 
 Depends on / 依赖: coeffEquiv, coeffEquiv.isCentralScalar, isCentralScalar
@@ -1507,7 +1507,7 @@ lemma addMonoidHom_ext
 
 中文:
 引理 addMonoidHom_ext
-  条件: [AddZeroClass N] ⦃f g
+  条件: [加法零类 N] ⦃f g
   结论: R[M] ->+ N⦄
   证明: by
   have : f.comp coeffAddEquiv.symm.toAddMonoidHom = g.comp coeffAddEquiv.symm.toAddMonoidHom :=
@@ -1551,7 +1551,7 @@ lemma addHom_ext'
 
 中文:
 引理 addHom_ext'
-  条件: {N : 类型} [AddZeroClass N] ⦃f g
+  条件: {N : 类型} [加法零类 N] ⦃f g
   结论: R[M] ->+ N⦄
   证明: addMonoidHom_ext by simpa [DFunLike.ext_iff] using hfg
 
@@ -1577,7 +1577,7 @@ lemma sum_single_index
 
 中文:
 引理 sum_single_index
-  条件: [AddCommMonoid N] {m : M} {r : R} {h : M -> R -> N} (h_zero : h m 0 = 0)
+  条件: [加法交换幺半群 N] {m : M} {r : R} {h : M -> R -> N} (h_zero : h m 0 = 0)
   证明: by
   simp [h_zero]
 
@@ -1607,7 +1607,7 @@ alias sum_single := sum_coeff_single
 中文:
 引理 sum_coeff_single
   条件: (f : R[M])
-  结论: f.coeff.sum single = f
+  结论: f.coeff.求和 single = f
   证明: by ext; simp
 
 @[to_additive (attr := deprecated sum_coeff_single (since := "2026-06-18"))]
@@ -1635,7 +1635,7 @@ theorem coeff_single_apply
 
 中文:
 定理 coeff_single_apply
-  条件: {a a' : M} {b : R} [Decidable (a = a')]
+  条件: {a a' : M} {b : R} [可判定 (a = a')]
   证明: Finsupp.single_apply
 
 @[deprecated (since := "2026-06-18")] protected alias single_apply := coeff_single_apply
@@ -1786,7 +1786,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One R[M] where one
+  签名: : 幺 R[M] where one
   定义体: single 1 1
 
 @[to_additive (dont_translate := R) one_def]
@@ -1860,8 +1860,8 @@ definition _root_.AddMonoidAlgebra.mul'
   body: x.coeff.sum fun m₁ r₁ => y.coeff.sum fun m₂ r₂ => .single (m₁ + m₂) (r₁ * r₂)
 
 中文:
-定义 _root_.AddMonoidAlgebra.mul'
-  签名: [Add M] (x y : AddMonoidAlgebra R M)
+定义 _root_.加法幺半群代数.mul'
+  签名: [加法 M] (x y : 加法幺半群代数 R M)
   定义体: x.coeff.sum fun m₁ r₁ => y.coeff.sum fun m₂ r₂ => .single (m₁ + m₂) (r₁ * r₂)
 
 Depends on / 依赖: single, x.coeff.sum, y.coeff.sum
@@ -1907,7 +1907,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul R[M] where mul
+  签名: : 乘法 R[M] where mul
   定义体: mul'
 
 @[to_additive (dont_translate := R) mul_def]
@@ -1956,7 +1956,7 @@ instance nonUnitalNonAssocSemiring
 
 中文:
 实例 nonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring R[M] where
+  签名: : 非幺非结合半环 R[M] where
   定义体: by simp [mul_def]
   mul_zero := by simp [mul_def]
   left_distrib := by classical simp [mul_def, mul_add, sum_add, sum_add_index]
@@ -2025,7 +2025,7 @@ lemma coeff_mul_antidiag
 
 中文:
 引理 coeff_mul_antidiag
-  结论: (x y : R[M]) (m : M) (s : Finset (M × M))
+  结论: (x y : R[M]) (m : M) (s : 有限集 (M × M))
   证明: by
   classical
   let F (p : M × M) : R := if p.1 * p.2 = m then x.coeff p.1 * y.coeff p.2 else 0
@@ -2220,7 +2220,7 @@ lemma coeff_mul_single_of_forall_mul_ne
   proof: by classical simp [coeff_mul, h]
 
 中文:
-引理 coeff_mul_single_of_forall_mul_ne
+引理 coeff_mul_single_of_对任意_mul_ne
   条件: (r : R) (x : R[M]) (h : 对任意 d, d * m != m')
   证明: by classical simp [coeff_mul, h]
 
@@ -2240,7 +2240,7 @@ lemma coeff_single_mul_of_forall_mul_ne
   proof: by classical simp [coeff_mul, h]
 
 中文:
-引理 coeff_single_mul_of_forall_mul_ne
+引理 coeff_single_mul_of_对任意_mul_ne
   条件: (r : R) (x : R[M]) (h : 对任意 d, m * d != m')
   证明: by classical simp [coeff_mul, h]
 
@@ -2264,7 +2264,7 @@ lemma mul_single_apply_of_not_exists_mul
   (dont_translate := R)]
 
 中文:
-引理 mul_single_apply_of_not_exists_mul
+引理 mul_single_apply_of_not_存在_mul
   结论: (r : R) {g g' : M} (x : R[M])
   证明: coeff_mul_single_of_forall_mul_ne _ _ by simpa [eq_comm] using h
 
@@ -2288,7 +2288,7 @@ lemma single_mul_apply_of_not_exists_mul
   proof: coeff_single_mul_of_forall_mul_ne _ _ by simpa [eq_comm] using h
 
 中文:
-引理 single_mul_apply_of_not_exists_mul
+引理 single_mul_apply_of_not_存在_mul
   结论: (r : R) {g g' : M} (x : R[M])
   证明: coeff_single_mul_of_forall_mul_ne _ _ by simpa [eq_comm] using h
 
@@ -2338,7 +2338,7 @@ instance nonUnitalSemiring
 
 中文:
 实例 nonUnitalSemiring
-  签名: : NonUnitalSemiring R[M] where
+  签名: : 非幺半环 R[M] where
   定义体: by simp [mul_def, sum_sum_index, mul_add, add_mul, mul_assoc]
 
 Depends on / 依赖: add_mul, mul_add, mul_assoc, mul_def, sum_sum_index
@@ -2368,7 +2368,7 @@ instance nonAssocSemiring
 
 中文:
 实例 nonAssocSemiring
-  签名: : NonAssocSemiring R[M] where
+  签名: : 非结合半环 R[M] where
   定义体: single 1 n
   natCast_zero := by simp
   natCast_succ := by simp [one_def]
@@ -2421,7 +2421,7 @@ lemma ofNat_def
 @[to_additive (dont_translate := R) (attr := simp)]
 
 中文:
-引理 ofNat_def
+引理 of自然数_def
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R[M]) = single 1 of自然数(n)
   证明: rfl
@@ -2465,7 +2465,7 @@ lemma coeff_ofNat
 @[to_additive (dont_translate := R) coeff_mul_single_zero]
 
 中文:
-引理 coeff_ofNat
+引理 coeff_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R[M]).coeff = .single 1 of自然数(n)
   证明: rfl
@@ -2566,8 +2566,8 @@ lemma of_injective
 
 中文:
 引理 of_injective
-  条件: [Nontrivial R]
-  结论: Function.Injective (of R M)
+  条件: [非平凡 R]
+  结论: 函数.单射 (of R M)
   证明: fun a b h => by
   simpa [← coeff_inj, Finsupp.single_eq_single_iff] using h
 
@@ -2668,7 +2668,7 @@ lemma ringHom_ext
 
 中文:
 引理 ringHom_ext
-  结论: [Semiring S] {f g : R[M] ->+* S}
+  结论: [半环 S] {f g : R[M] ->+* S}
   证明: RingHom.coe_addMonoidHom_injective addMonoidHom_ext fun m r => by
     simpa [← map_mul] using! congr($(h₁ r) * $(h_of m))
 
@@ -2695,7 +2695,7 @@ lemma ringHom_ext'
 
 中文:
 引理 ringHom_ext'
-  结论: [Semiring S] {f g : R[M] ->+* S}
+  结论: [半环 S] {f g : R[M] ->+* S}
   证明: ringHom_ext (by simpa [DFunLike.ext_iff] using h₁) (by simpa [DFunLike.ext_iff] using h_of)
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, h_of, ringHom_ext
@@ -2721,7 +2721,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring R[M] where
+  签名: : 半环 R[M] where
 -/
 instance semiring : Semiring R[M] where
 
@@ -2792,7 +2792,7 @@ instance isLocalHom_singleOneRingHom
 
 中文:
 实例 isLocalHom_singleOneRingHom
-  签名: : IsLocalHom (singleOneRingHom (R := R) (M := M)) where
+  签名: : 是Local态射 (singleOneRingHom (R := R) (M := M)) where
   定义体: by
     simp_rw [isUnit_iff_exists]
     rintro a ⟨x, hax, hxa⟩
@@ -2826,7 +2826,7 @@ definition uniqueRingEquiv
 
 中文:
 定义 uniqueRingEquiv
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: coeffAddEquiv.trans Finsupp.uniqueAddEquiv 1
   map_mul' x y := by
     let : Unique M := ⟨⟨1⟩, fun _ => Subsingleton.elim ..⟩
@@ -2855,7 +2855,7 @@ lemma uniqueRingEquiv_symm_apply
 
 中文:
 引理 uniqueRingEquiv_symm_apply
-  条件: [Subsingleton M] (r : R)
+  条件: [子单例 M] (r : R)
   证明: by ext; simp [uniqueRingEquiv]
 
 Depends on / 依赖: uniqueRingEquiv
@@ -2878,7 +2878,7 @@ alias uniqueRingEquiv_symm_apply_apply := coeff_uniqueRingEquiv_symm
 
 中文:
 引理 coeff_uniqueRingEquiv_symm
-  条件: [Subsingleton M] (r : R) (m : M)
+  条件: [子单例 M] (r : R) (m : M)
   证明: by simp [Subsingleton.elim m 1]
 
 @[deprecated (since := "2026-06-18")]
@@ -3216,7 +3216,7 @@ instance nonUnitalCommSemiring
 
 中文:
 实例 nonUnitalCommSemiring
-  签名: [CommSemigroup M]
+  签名: [交换半群 M]
   定义体: by simp [mul_def, Finsupp.sum, mul_comm, f.coeff.support.sum_comm]
 
 @[to_additive (dont_translate := R)]
@@ -3237,7 +3237,7 @@ lemma single_one_comm
 
 中文:
 引理 single_one_comm
-  条件: [MulOneClass M] (r : R) (f : R[M])
+  条件: [MulOne类 M] (r : R) (f : R[M])
   证明: single_commute .one_left (.all _) f
 
 Depends on / 依赖: one_left, single_commute
@@ -3259,7 +3259,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring R[M] where
+  签名: : 交换半环 R[M] where
 -/
 instance commSemiring : CommSemiring R[M] where
 
@@ -3276,7 +3276,7 @@ lemma prod_single
 
 中文:
 引理 prod_single
-  条件: (s : Finset ι) (m : ι -> M) (r : ι -> R)
+  条件: (s : 有限集 ι) (m : ι -> M) (r : ι -> R)
   证明: Finset.cons_induction_on s rfl fun i s hi ih => by
     rw [prod_cons]; rw [ih]; rw [single_mul_single]; rw [prod_cons]; rw [prod_cons]
 
@@ -3299,7 +3299,7 @@ lemma finsuppProd_single
 
 中文:
 引理 finsuppProd_single
-  条件: [AddCommMonoid N] (f : ι ->₀ N) (m : ι -> N -> M) (r : ι -> N -> R)
+  条件: [加法交换幺半群 N] (f : ι ->₀ N) (m : ι -> N -> M) (r : ι -> N -> R)
   证明: prod_single ..
 
 Depends on / 依赖: prod_single
@@ -3326,7 +3326,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup R[M]
+  签名: : 加法交换群 R[M]
   定义体: fast_instance% coeffEquiv.addCommGroup
 
 @[to_additive (attr := simp)]
@@ -3477,7 +3477,7 @@ instance nonUnitalNonAssocRing
 
 中文:
 实例 nonUnitalNonAssocRing
-  签名: [Mul M]
+  签名: [乘法 M]
 -/
 instance nonUnitalNonAssocRing [Mul M] : NonUnitalNonAssocRing R[M] where
 
@@ -3491,7 +3491,7 @@ instance nonUnitalRing
 
 中文:
 实例 nonUnitalRing
-  签名: [Semigroup M]
+  签名: [半群 M]
 -/
 instance nonUnitalRing [Semigroup M] : NonUnitalRing R[M] where
 
@@ -3510,7 +3510,7 @@ instance nonAssocRing
 
 中文:
 实例 nonAssocRing
-  签名: [MulOneClass M]
+  签名: [MulOne类 M]
   定义体: single 1 z
   intCast_ofNat n := by simp [natCast_def]
   intCast_negSucc n := by simp [natCast_def, one_def]
@@ -3538,7 +3538,7 @@ lemma intCast_def
 
 中文:
 引理 intCast_def
-  条件: [MulOneClass M] (z : 整数)
+  条件: [MulOne类 M] (z : 整数)
   结论: (z : R[M]) = single 1 (z : R)
   证明: rfl
 
@@ -3556,7 +3556,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: [Monoid M]
+  签名: [幺半群 M]
 -/
 instance ring [Monoid M] : Ring R[M] where
 
@@ -3593,7 +3593,7 @@ instance nonUnitalCommRing
 
 中文:
 实例 nonUnitalCommRing
-  签名: [CommSemigroup M]
+  签名: [交换半群 M]
 -/
 instance nonUnitalCommRing [CommSemigroup M] : NonUnitalCommRing R[M] where
 
@@ -3607,7 +3607,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: [CommMonoid M]
+  签名: [交换幺半群 M]
 -/
 instance commRing [CommMonoid M] : CommRing R[M] where
 
@@ -3636,7 +3636,7 @@ definition ofMagma
 
 中文:
 定义 ofMagma
-  签名: [Add M]
+  签名: [加法 M]
   定义体: single a.toAdd 1
   map_mul' := by simp [mul_def]
 
@@ -3657,7 +3657,7 @@ definition of
 
 中文:
 定义 of
-  签名: [AddZeroClass M]
+  签名: [加法零类 M]
   定义体: ofMagma R M
   map_one' := rfl
 
@@ -3700,7 +3700,7 @@ theorem of_apply
 
 中文:
 定理 of_apply
-  条件: [AddZeroClass M] (a : Multiplicative M)
+  条件: [加法零类 M] (a : Multiplicative M)
   结论: of R M a = single a.toAdd 1
   证明: rfl
 
@@ -3739,7 +3739,7 @@ theorem of'_eq_of
 
 中文:
 定理 of'_eq_of
-  条件: [AddZeroClass M] (a : M)
+  条件: [加法零类 M] (a : M)
   结论: of' R M a = of R M (.ofAdd a)
   证明: rfl
 -/
@@ -3757,8 +3757,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: [Nontrivial R] [AddZeroClass M]
-  结论: Function.Injective (of R M)
+  条件: [非平凡 R] [加法零类 M]
+  结论: 函数.单射 (of R M)
   证明: fun a b h => by
   simpa [← coeff_inj, Finsupp.single_eq_single_iff] using h
 
@@ -3777,7 +3777,7 @@ lemma of'_commute
 
 中文:
 引理 of'_commute
-  条件: [AddZeroClass M] {a : M} (h : 对任意 a', AddCommute a a') (f : AddMonoidAlgebra R M)
+  条件: [加法零类 M] {a : M} (h : 对任意 a', AddCommute a a') (f : 加法幺半群代数 R M)
   证明: single_commute h .one_left f
 -/
 lemma of'_commute [AddZeroClass M] {a : M} (h : forall a', AddCommute a a') (f : AddMonoidAlgebra R M) :
@@ -3802,7 +3802,7 @@ definition singleHom
 
 中文:
 定义 singleHom
-  签名: [AddZeroClass M]
+  签名: [加法零类 M]
   定义体: single a.2.toAdd a.1
   map_one' := rfl
   map_mul' _a _b := (single_mul_single ..).symm
@@ -3828,7 +3828,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: [AddMonoid M] {motive : R[M] -> 命题} (x : R[M])
+  结论: [加法幺半群 M] {motive : R[M] -> 命题} (x : R[M])
   证明: Finsupp.induction_linear (motive := fun x => motive (ofCoeff x)) x.coeff
     (by simpa using smul 0 (.of R M 1) (of 0))
     (fun x y hf hg => add (ofCoeff x) (ofCoeff y) hf hg)
@@ -3860,7 +3860,7 @@ theorem ringHom_ext'
 
 中文:
 定理 ringHom_ext'
-  结论: [Semiring S] [AddMonoid M] {f g : R[M] ->+* S}
+  结论: [半环 S] [加法幺半群 M] {f g : R[M] ->+* S}
   证明: ringHom_ext (RingHom.congr_fun h₁) (DFunLike.congr_fun h_of)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, RingHom, RingHom.congr_fun, congr_fun, h_of, ringHom_ext

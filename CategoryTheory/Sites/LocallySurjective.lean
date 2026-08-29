@@ -217,7 +217,7 @@ class IsLocallySurjective
     - imageSieve_mem({U : C} (s : ToType (G.obj (op U)))) : imageSieve f s in J U
 
 中文:
-类 IsLocallySurjective
+类 是LocallySurjective
   参数: {F G : Cᵒᵖ ⥤ A} (f : F ⟶ G)
   公理与运算 (1 个):
     - imageSieve_mem({U : C} (s : ToType (G.obj (op U)))) : imageSieve f s in J U
@@ -235,7 +235,7 @@ lemma imageSieve_mem
 
 中文:
 引理 imageSieve_mem
-  结论: {F G : Cᵒᵖ ⥤ A} (f : F ⟶ G) [IsLocallySurjective J f] {U : Cᵒᵖ}
+  结论: {F G : Cᵒᵖ ⥤ A} (f : F ⟶ G) [是LocallySurjective J f] {U : Cᵒᵖ}
   证明: IsLocallySurjective.imageSieve_mem _
 
 Depends on / 依赖: IsLocallySurjective, IsLocallySurjective.imageSieve_mem, imageSieve_mem
@@ -286,7 +286,7 @@ theorem isLocallySurjective_iff_range_sheafify_eq_top'
 
 中文:
 定理 isLocallySurjective_iff_range_sheafify_eq_top'
-  条件: {F G : Cᵒᵖ ⥤ Type w} (f : F ⟶ G)
+  条件: {F G : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ G)
   证明: by
   apply isLocallySurjective_iff_range_sheafify_eq_top
 
@@ -363,7 +363,7 @@ instance isLocallySurjective_of_iso
 
 中文:
 实例 isLocallySurjective_of_iso
-  签名: {F G : Cᵒᵖ ⥤ A} (f : F ⟶ G) [IsIso f]
+  签名: {F G : Cᵒᵖ ⥤ A} (f : F ⟶ G) [是同构 f]
   定义体: by
   apply isLocallySurjective_of_surjective
   intro U
@@ -540,7 +540,7 @@ lemma isLocallySurjective_of_le
 
 中文:
 引理 isLocallySurjective_of_le
-  结论: {K : GrothendieckTopology C} (hJK : J <= K) {F G : Cᵒᵖ ⥤ A}
+  结论: {K : Grothendieck拓扑 C} (hJK : J <= K) {F G : Cᵒᵖ ⥤ A}
   证明: by apply hJK; exact h.1 _
 -/
 lemma isLocallySurjective_of_le {K : GrothendieckTopology C} (hJK : J <= K) {F G : Cᵒᵖ ⥤ A}
@@ -768,7 +768,7 @@ Subfunctor.sheafify_isSheaf _
 
 中文:
 定义 sheafificationIsoImagePresheaf
-  签名: (F : Cᵒᵖ ⥤ Type (max u v))
+  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: J.sheafifyLift (Subfunctor.toRangeSheafify J _)
       ((isSheaf_iff_isSheaf_of_type J _).mpr <|
 Subfunctor.sheafify_isSheaf _
@@ -816,7 +816,7 @@ instance isLocallySurjective_toPlus
 
 中文:
 实例 isLocallySurjective_toPlus
-  签名: (P : Cᵒᵖ ⥤ Type (max u v))
+  签名: (P : Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: by
     obtain ⟨S, x, rfl⟩ := exists_rep x
     refine J.superset_covering (fun Y f hf => ⟨x.1 ⟨Y, f, hf⟩, ?_⟩) S.2
@@ -853,7 +853,7 @@ instance isLocallySurjective_toSheafify
 
 中文:
 实例 isLocallySurjective_toSheafify
-  签名: (P : Cᵒᵖ ⥤ Type (max u v))
+  签名: (P : Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: by
   dsimp [GrothendieckTopology.toSheafify]
   rw [GrothendieckTopology.plusMap_toPlus]
@@ -879,7 +879,7 @@ instance isLocallySurjective_toSheafify'
 
 中文:
 实例 isLocallySurjective_toSheafify'
-  签名: {D : 类型} [Category* D] {FD : D -> D -> 类型}
+  签名: {D : 类型} [范畴* D] {FD : D -> D -> 类型}
   定义体: by
   rw [isLocallySurjective_iff_whisker_forget]; rw [← sheafComposeIso_hom_fac]; rw [← toSheafify_plusPlusIsoSheafify_hom]
   infer_instance
@@ -912,7 +912,7 @@ abbreviation IsLocallySurjective
   body: Presheaf.IsLocallySurjective J φ.hom
 
 中文:
-缩写 IsLocallySurjective
+缩写 是LocallySurjective
   定义体: Presheaf.IsLocallySurjective J φ.hom
 
 Depends on / 依赖: IsLocallySurjective, Presheaf, Presheaf.IsLocallySurjective
@@ -943,7 +943,7 @@ instance isLocallySurjective_comp
 
 中文:
 实例 isLocallySurjective_comp
-  签名: [IsLocallySurjective φ] [IsLocallySurjective ψ]
+  签名: [是LocallySurjective φ] [是LocallySurjective ψ]
   定义体: Presheaf.isLocallySurjective_comp J φ.hom ψ.hom
 
 Depends on / 依赖: Presheaf, Presheaf.isLocallySurjective_comp, isLocallySurjective_comp
@@ -964,7 +964,7 @@ instance isLocallySurjective_of_iso
 
 中文:
 实例 isLocallySurjective_of_iso
-  签名: [IsIso φ]
+  签名: [是同构 φ]
   定义体: by
   have : IsIso φ.hom := (inferInstance : IsIso ((sheafToPresheaf J A).map φ))
   infer_instance
@@ -992,7 +992,7 @@ instance [IsLocallySurjective
   body: (Presheaf.isLocallySurjective_iff_whisker_forget J φ.hom).1 inferInstance
 
 中文:
-实例 [IsLocallySurjective
+实例 [是LocallySurjective
   签名: φ] :
   定义体: (Presheaf.isLocallySurjective_iff_whisker_forget J φ.hom).1 inferInstance
 
@@ -1015,7 +1015,7 @@ theorem isLocallySurjective_iff_isIso
 
 中文:
 定理 isLocallySurjective_iff_isIso
-  条件: {F G : Sheaf J (Type w)} (f : F ⟶ G)
+  条件: {F G : 层 J (类型 w)} (f : F ⟶ G)
   证明: by
   dsimp only [IsLocallySurjective]
   rw [Sheaf.imageι]; rw [Presheaf.isLocallySurjective_iff_range_sheafify_eq_top']; rw [Subfunctor.eq_top_iff_isIso]
@@ -1046,7 +1046,7 @@ instance epi_of_isLocallySurjective'
 
 中文:
 实例 epi_of_isLocallySurjective'
-  签名: {F₁ F₂ : Sheaf J (Type w)} (φ : F₁ ⟶ F₂)
+  签名: {F₁ F₂ : 层 J (类型 w)} (φ : F₁ ⟶ F₂)
   定义体: by
     ext X x
     apply (((isSheaf_iff_isSheaf_of_type _ _).1 Z.2).isSeparated _
@@ -1082,7 +1082,7 @@ instance epi_of_isLocallySurjective
 
 中文:
 实例 epi_of_isLocallySurjective
-  签名: [IsLocallySurjective φ]
+  签名: [是LocallySurjective φ]
   定义体: (sheafCompose J (forget A)).epi_of_epi_map inferInstance
 
 Depends on / 依赖: epi_of_epi_map, forget, sheafCompose
@@ -1107,7 +1107,7 @@ lemma isLocallySurjective_iff_epi
 
 中文:
 引理 isLocallySurjective_iff_epi
-  结论: {F G : Sheaf J (Type w)} (φ : F ⟶ G)
+  结论: {F G : 层 J (类型 w)} (φ : F ⟶ G)
   证明: by
   constructor
   · intro

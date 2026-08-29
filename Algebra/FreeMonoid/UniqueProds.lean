@@ -29,7 +29,7 @@ instance FreeMonoid.instTwoUniqueProds
     (fun _ _ _ _ h h' => List.append_inj h <| Equiv.injective Multiplicative.ofAdd h'.1)
 
 中文:
-实例 FreeMonoid.instTwoUniqueProds
+实例 自由幺半群.instTwoUniqueProds
   签名: {κ : 类型}
   定义体: .of_mulHom ⟨Multiplicative.ofAdd ∘ List.length, fun _ _ => congr_arg _ List.length_append⟩
     (fun _ _ _ _ h h' => List.append_inj h <| Equiv.injective Multiplicative.ofAdd h'.1)

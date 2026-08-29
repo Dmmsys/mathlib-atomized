@@ -85,7 +85,7 @@ theorem newtonMap_apply_of_isUnit
 
 中文:
 定理 newtonMap_apply_of_isUnit
-  条件: (h : IsUnit <| aeval x (derivative P))
+  条件: (h : 是单位 <| aeval x (derivative P))
   证明: by
   simp [newtonMap_apply, Ring.inverse, h]
 
@@ -106,7 +106,7 @@ theorem newtonMap_apply_of_not_isUnit
 
 中文:
 定理 newtonMap_apply_of_not_isUnit
-  条件: (h : ¬ (IsUnit <| aeval x (derivative P)))
+  条件: (h : ¬ (是单位 <| aeval x (derivative P)))
   证明: by
   simp [newtonMap_apply, Ring.inverse, h]
 
@@ -133,7 +133,7 @@ refine (Commute.all _ _).isNilpotent_sub ih (Commute.all _ _).isNilpotent_mul_le
 
 中文:
 定理 isNilpotent_iterate_newtonMap_sub_of_isNilpotent
-  条件: (h : IsNilpotent <| aeval x P) (n : 自然数)
+  条件: (h : 是幂零 <| aeval x P) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -187,7 +187,7 @@ theorem isFixedPt_newtonMap_of_isUnit_iff
 
 中文:
 定理 isFixedPt_newtonMap_of_isUnit_iff
-  条件: (h : IsUnit <| aeval x (derivative P))
+  条件: (h : 是单位 <| aeval x (derivative P))
   证明: by
   rw [IsFixedPt]; rw [newtonMap_apply]; rw [sub_eq_self]; rw [Ring.inverse_mul_eq_iff_eq_mul _ _ _ h]; rw [mul_zero]
 
@@ -257,7 +257,7 @@ theorem existsUnique_nilpotent_sub_and_aeval_eq_zero
     rw [← zero_dvd_iff]; rw
 
 中文:
-定理 existsUnique_nilpotent_sub_and_aeval_eq_zero
+定理 存在Unique_nilpotent_sub_and_aeval_eq_zero
   证明: by
   simp_rw [(neg_sub _ x).symm, isNilpotent_neg_iff]
   refine existsUnique_of_exists_of_unique ?_ fun r₁ r₂ ⟨hr₁, hr₁'⟩ ⟨hr₂, hr₂'⟩ => ?_

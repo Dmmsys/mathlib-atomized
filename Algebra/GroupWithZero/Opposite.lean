@@ -32,7 +32,7 @@ mul_zero _ := unop_injective zero_mul _
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass α]
+  签名: [乘零类 α]
   定义体: unop_injective mul_zero _
 mul_zero _ := unop_injective zero_mul _
 
@@ -53,7 +53,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass α]
+  签名: [乘零幺类 α]
   定义体: instMulOneClass
   __ := instMulZeroClass
 
@@ -74,7 +74,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero α]
+  签名: [带零半群 α]
   定义体: instSemigroup
   __ := instMulZeroClass
 
@@ -95,7 +95,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [MonoidWithZero α]
+  签名: [带零幺半群 α]
   定义体: instMonoid
   __ := instMulZeroOneClass
 
@@ -119,7 +119,7 @@ mul_inv_cancel _ hx := unop_injective inv_mul_cancel₀ unop_injective.ne hx
 
 中文:
 实例 instGroupWithZero
-  签名: [GroupWithZero α]
+  签名: [带零群 α]
   定义体: instMonoidWithZero
   __ := instNontrivial
   __ := instDivInvMonoid
@@ -146,7 +146,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [Zero α] [Mul α] [NoZeroDivisors α]
+  签名: [零 α] [乘法 α] [无零因子 α]
   定义体: Or.casesOn (eq_zero_or_eq_zero_of_mul_eq_zero <| op_injective H)
 (fun hy => Or.inr <| unop_injective <| hy) fun hx => Or.inl unop_injective hx
 
@@ -167,8 +167,8 @@ instance [Mul
     mul_left_cancel₀ (unop_injective.ne_iff.mpr h) (congr_arg unop eq)
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsLeftCancelMulZero α] : IsRightCancelMulZero αᵐᵒᵖ where
+实例 [乘法
+  签名: α] [零 α] [是左消去MulZero α] : 是右消去MulZero αᵐᵒᵖ where
   定义体: unop_injective
     mul_left_cancel₀ (unop_injective.ne_iff.mpr h) (congr_arg unop eq)
 
@@ -188,8 +188,8 @@ instance [Mul
     mul_right_cancel₀ (unop_injective.ne_iff.mpr h) (congr_arg unop eq)
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsRightCancelMulZero α] : IsLeftCancelMulZero αᵐᵒᵖ where
+实例 [乘法
+  签名: α] [零 α] [是右消去MulZero α] : 是左消去MulZero αᵐᵒᵖ where
   定义体: unop_injective
     mul_right_cancel₀ (unop_injective.ne_iff.mpr h) (congr_arg unop eq)
 
@@ -207,8 +207,8 @@ instance [Mul
   signature: α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero αᵐᵒᵖ where
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero αᵐᵒᵖ where
+实例 [乘法
+  签名: α] [零 α] [是乘零消去 α] : 是乘零消去 αᵐᵒᵖ where
 
 Depends on / 依赖: nullHomotopicMap, nullHomotopicMap_comp, split_ifs, zero_comp
 -/
@@ -225,7 +225,7 @@ theorem isLeftCancelMulZero_iff
 
 中文:
 定理 isLeftCancelMulZero_iff
-  条件: [Mul α] [Zero α]
+  条件: [乘法 α] [零 α]
   证明: (op_injective.comp op_injective).isRightCancelMulZero _ rfl fun _ _ => rfl
   mpr _ := inferInstance
 -/
@@ -245,7 +245,7 @@ theorem isRightCancelMulZero_iff
 
 中文:
 定理 isRightCancelMulZero_iff
-  条件: [Mul α] [Zero α]
+  条件: [乘法 α] [零 α]
   证明: (op_injective.comp op_injective).isLeftCancelMulZero _ rfl fun _ _ => rfl
   mpr _ := inferInstance
 -/
@@ -265,7 +265,7 @@ theorem isCancelMulZero_iff
 
 中文:
 定理 isCancelMulZero_iff
-  条件: [Mul α] [Zero α]
+  条件: [乘法 α] [零 α]
   证明: (op_injective.comp op_injective).isCancelMulZero _ rfl fun _ _ => rfl
   mpr _ := inferInstance
 -/
@@ -289,7 +289,7 @@ mul_zero _ := unop_injective mul_zero _
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass α]
+  签名: [乘零类 α]
   定义体: unop_injective zero_mul _
 mul_zero _ := unop_injective mul_zero _
 
@@ -310,7 +310,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass α]
+  签名: [乘零幺类 α]
   定义体: instMulOneClass
   __ := instMulZeroClass
 
@@ -331,7 +331,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [SemigroupWithZero α]
+  签名: [带零半群 α]
   定义体: instSemigroup
   __ := instMulZeroClass
 
@@ -352,7 +352,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [MonoidWithZero α]
+  签名: [带零幺半群 α]
   定义体: instMonoid
   __ := instMulZeroOneClass
 
@@ -373,7 +373,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [Zero α] [Mul α] [NoZeroDivisors α]
+  签名: [零 α] [乘法 α] [无零因子 α]
   定义体: Or.imp (fun hx => unop_injective hx) (fun hy => unop_injective hy)
     (@eq_zero_or_eq_zero_of_mul_eq_zero α _ _ _ _ _ <| op_injective H)
 
@@ -398,7 +398,7 @@ mul_inv_cancel _ hx := unop_injective mul_inv_cancel₀ unop_injective.ne hx
 
 中文:
 实例 instGroupWithZero
-  签名: [GroupWithZero α]
+  签名: [带零群 α]
   定义体: instMonoidWithZero
   __ := instNontrivial
   __ := instDivInvMonoid

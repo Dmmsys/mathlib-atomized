@@ -50,7 +50,7 @@ scoped[Pointwise] attribute [instance] Set.star
 
 中文:
 定义 star
-  签名: [Star α]
+  签名: [对合 α]
   定义体: ⟨preimage Star.star⟩
 
 scoped[Pointwise] attribute [instance] Set.star
@@ -75,8 +75,8 @@ theorem star_empty
 
 中文:
 定理 star_empty
-  条件: [Star α]
-  结论: (∅ : Set α)⋆ = ∅
+  条件: [对合 α]
+  结论: (∅ : 集合 α)⋆ = ∅
   证明: rfl
 
 @[simp]
@@ -97,8 +97,8 @@ theorem star_univ
 
 中文:
 定理 star_univ
-  条件: [Star α]
-  结论: (univ : Set α)⋆ = univ
+  条件: [对合 α]
+  结论: (univ : 集合 α)⋆ = univ
   证明: rfl
 
 @[simp]
@@ -117,8 +117,8 @@ theorem nonempty_star
 
 中文:
 定理 nonempty_star
-  条件: [InvolutiveStar α] {s : Set α}
-  结论: s⋆.Nonempty ↔ s.Nonempty
+  条件: [InvolutiveStar α] {s : 集合 α}
+  结论: s⋆.非空 ↔ s.非空
   证明: star_involutive.surjective.nonempty_preimage
 
 Depends on / 依赖: nonempty_preimage, star_involutive, star_involutive.surjective.nonempty_preimage, surjective
@@ -138,9 +138,9 @@ theorem Nonempty.star
 @[simp, push]
 
 中文:
-定理 Nonempty.star
-  条件: [InvolutiveStar α] {s : Set α} (h : s.Nonempty)
-  结论: s⋆.Nonempty
+定理 非空.star
+  条件: [InvolutiveStar α] {s : 集合 α} (h : s.非空)
+  结论: s⋆.非空
   证明: nonempty_star.2 h
 
 @[simp, push]
@@ -162,7 +162,7 @@ theorem mem_star
 
 中文:
 定理 mem_star
-  条件: [Star α]
+  条件: [对合 α]
   结论: a in s⋆ ↔ a⋆ in s
   证明: Iff.rfl
 
@@ -207,8 +207,8 @@ theorem star_preimage
 
 中文:
 定理 star_preimage
-  条件: [Star α]
-  结论: Star.star ⁻¹' s = s⋆
+  条件: [对合 α]
+  结论: 对合.star ⁻¹' s = s⋆
   证明: rfl
 
 @[simp]
@@ -232,7 +232,7 @@ theorem image_star
 中文:
 定理 image_star
   条件: [InvolutiveStar α]
-  结论: Star.star '' s = s⋆
+  结论: 对合.star '' s = s⋆
   证明: by
   simp only [← star_preimage]
   rw [image_eq_preimage_of_inverse] <;> intro <;> simp only [star_star]
@@ -259,7 +259,7 @@ theorem inter_star
 
 中文:
 定理 inter_star
-  条件: [Star α]
+  条件: [对合 α]
   结论: (s inter t)⋆ = s⋆ inter t⋆
   证明: preimage_inter
 
@@ -283,7 +283,7 @@ theorem union_star
 
 中文:
 定理 union_star
-  条件: [Star α]
+  条件: [对合 α]
   结论: (s union t)⋆ = s⋆ union t⋆
   证明: preimage_union
 
@@ -306,8 +306,8 @@ theorem iInter_star
 @[simp]
 
 中文:
-定理 iInter_star
-  条件: {ι : Sort*} [Star α] (s : ι -> Set α)
+定理 i整数er_star
+  条件: {ι : 类型层*} [对合 α] (s : ι -> 集合 α)
   结论: (⋂ i, s i)⋆ = ⋂ i, (s i)⋆
   证明: preimage_iInter
 
@@ -332,7 +332,7 @@ theorem iUnion_star
 
 中文:
 定理 iUnion_star
-  条件: {ι : Sort*} [Star α] (s : ι -> Set α)
+  条件: {ι : 类型层*} [对合 α] (s : ι -> 集合 α)
   结论: (⋃ i, s i)⋆ = ⋃ i, (s i)⋆
   证明: preimage_iUnion
 
@@ -357,7 +357,7 @@ theorem compl_star
 
 中文:
 定理 compl_star
-  条件: [Star α]
+  条件: [对合 α]
   结论: sᶜ⋆ = s⋆ᶜ
   证明: preimage_compl
 
@@ -380,7 +380,7 @@ instance [InvolutiveStar
 
 中文:
 实例 [InvolutiveStar
-  签名: α] : InvolutiveStar (Set α) where
+  签名: α] : InvolutiveStar (集合 α) where
   定义体: by simp only [← star_preimage, preimage_preimage, star_star, preimage_id']
 
 @[simp]
@@ -402,7 +402,7 @@ theorem star_subset_star
 
 中文:
 定理 star_subset_star
-  条件: [InvolutiveStar α] {s t : Set α}
+  条件: [InvolutiveStar α] {s t : 集合 α}
   结论: s⋆ subseteq t⋆ ↔ s subseteq t
   证明: Equiv.Perm.star.surjective.preimage_subset_preimage_iff
 
@@ -423,7 +423,7 @@ theorem star_subset
 
 中文:
 定理 star_subset
-  条件: [InvolutiveStar α] {s t : Set α}
+  条件: [InvolutiveStar α] {s t : 集合 α}
   结论: s⋆ subseteq t ↔ s subseteq t⋆
   证明: by
   rw [← star_subset_star]; rw [star_star]
@@ -443,9 +443,9 @@ theorem Finite.star
   proof: hs.preimage star_injective.injOn
 
 中文:
-定理 Finite.star
-  条件: [InvolutiveStar α] {s : Set α} (hs : s.Finite)
-  结论: s⋆.Finite
+定理 有限.star
+  条件: [InvolutiveStar α] {s : 集合 α} (hs : s.有限)
+  结论: s⋆.有限
   证明: hs.preimage star_injective.injOn
 
 Depends on / 依赖: hs.preimage, preimage, star_injective, star_injective.injOn
@@ -467,7 +467,7 @@ theorem star_singleton
 中文:
 定理 star_singleton
   条件: {β : 类型} [InvolutiveStar β] (x : β)
-  结论: ({x} : Set β)⋆ = {x⋆}
+  结论: ({x} : 集合 β)⋆ = {x⋆}
   证明: by
   ext1 y
   rw [mem_star]; rw [mem_singleton_iff]; rw [mem_singleton_iff]; rw [star_eq_iff_star_eq]; rw [eq_comm]
@@ -491,7 +491,7 @@ theorem star_mul
 
 中文:
 定理 star_mul
-  条件: [Mul α] [StarMul α] (s t : Set α)
+  条件: [乘法 α] [StarMul α] (s t : 集合 α)
   结论: (s * t)⋆ = t⋆ * s⋆
   证明: by
   simp_rw [← image_star, ← image2_mul, image_image2, image2_image_left, image2_image_right,
@@ -516,7 +516,7 @@ theorem star_add
 
 中文:
 定理 star_add
-  条件: [AddMonoid α] [StarAddMonoid α] (s t : Set α)
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (s t : 集合 α)
   结论: (s + t)⋆ = s⋆ + t⋆
   证明: by
   simp_rw [← image_star, ← image2_add, image_image2, image2_image_left, image2_image_right,
@@ -541,8 +541,8 @@ instance [Star
     simp [star_trivial]
 
 中文:
-实例 [Star
-  签名: α] [TrivialStar α] : TrivialStar (Set α) where
+实例 [对合
+  签名: α] [TrivialStar α] : TrivialStar (集合 α) where
   定义体: by
     rw [← star_preimage]
     ext1
@@ -569,7 +569,7 @@ theorem star_inv
 
 中文:
 定理 star_inv
-  条件: [Group α] [StarMul α] (s : Set α)
+  条件: [群 α] [StarMul α] (s : 集合 α)
   结论: s⁻¹⋆ = s⋆⁻¹
   证明: by
   ext
@@ -592,7 +592,7 @@ theorem star_inv'
 
 中文:
 定理 star_inv'
-  条件: [GroupWithZero α] [StarMul α] (s : Set α)
+  条件: [带零群 α] [StarMul α] (s : 集合 α)
   结论: s⁻¹⋆ = s⋆⁻¹
   证明: by
   ext
@@ -616,8 +616,8 @@ lemma StarMemClass.star_coe_eq
   simpa using star_mem_iff
 
 中文:
-引理 StarMemClass.star_coe_eq
-  结论: {S α : 类型} [InvolutiveStar α] [SetLike S α]
+引理 StarMem类.star_coe_eq
+  结论: {S α : 类型} [InvolutiveStar α] [集合状 S α]
   证明: by
   ext
   simpa using star_mem_iff

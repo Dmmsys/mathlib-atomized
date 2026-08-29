@@ -58,7 +58,7 @@ definition inducedMap
 
 中文:
 定义 inducedMap
-  签名: : Σ s : Set (自然数 -> β), s -> α
+  签名: : Σ s : 集合 (自然数 -> β), s -> α
   定义体: ⟨{x | Set.Nonempty (⋂ n : Nat, A (res x n))}, fun x => x.property.some⟩
 
 Depends on / 依赖: Nonempty, Set.Nonempty, property, x.property.some
@@ -77,7 +77,7 @@ definition Antitone
   body: forall l : List β, forall a : β, A (a :: l) subseteq A l
 
 中文:
-定义 Antitone
+定义 递减
   签名: : 命题
   定义体: forall l : List β, forall a : β, A (a :: l) subseteq A l
 -/
@@ -94,7 +94,7 @@ definition ClosureAntitone
 
 中文:
 定义 ClosureAntitone
-  签名: [TopologicalSpace α]
+  签名: [拓扑空间 α]
   定义体: forall l : List β, forall a : β, closure (A (a :: l)) subseteq A l
 
 Depends on / 依赖: closure, subseteq
@@ -158,7 +158,7 @@ theorem ClosureAntitone.antitone
 
 中文:
 定理 ClosureAntitone.antitone
-  条件: [TopologicalSpace α] (hA : ClosureAntitone A)
+  条件: [拓扑空间 α] (hA : ClosureAntitone A)
   证明: fun l a => subset_closure.trans (hA l a)
 -/
 protected theorem ClosureAntitone.antitone [TopologicalSpace α] (hA : ClosureAntitone A) :
@@ -174,8 +174,8 @@ theorem Antitone.closureAntitone
   (hclosed _).closure_eq.subset.trans (hanti _ _)
 
 中文:
-定理 Antitone.closureAntitone
-  结论: [TopologicalSpace α] (hanti : CantorScheme.Antitone A)
+定理 递减.closureAntitone
+  结论: [拓扑空间 α] (hanti : CantorScheme.递减 A)
   证明: fun _ _ =>
   (hclosed _).closure_eq.subset.trans (hanti _ _)
 -/
@@ -207,7 +207,7 @@ theorem Disjoint.map_injective
 中文:
 定理 Disjoint.map_injective
   条件: (hA : CantorScheme.Disjoint A)
-  结论: Injective (inducedMap A).2
+  结论: 单射 (inducedMap A).2
   证明: by
   rintro x y hxy
   ext1
@@ -334,7 +334,7 @@ theorem VanishingDiam.map_continuous
 
 中文:
 定理 VanishingDiam.map_continuous
-  结论: [TopologicalSpace β] [DiscreteTopology β]
+  结论: [拓扑空间 β] [离散拓扑 β]
   证明: by
   rw [Metric.continuous_iff']
   rintro x ε ε_pos
@@ -383,7 +383,7 @@ theorem ClosureAntitone.map_of_vanishingDiam
 
 中文:
 定理 ClosureAntitone.map_of_vanishingDiam
-  结论: [CompleteSpace α] (hdiam : VanishingDiam A)
+  结论: [完备空间 α] (hdiam : VanishingDiam A)
   证明: by
   rw [eq_univ_iff_forall]
   intro x

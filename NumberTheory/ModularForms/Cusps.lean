@@ -42,8 +42,8 @@ lemma exists_mem_SL2
     exact ⟨g, by simp [hg0, hg1, smul_infty_eq_ite]⟩
 
 中文:
-引理 exists_mem_SL2
-  结论: (A : 类型) [CommRing A] [IsDomain A] [Algebra A K] [IsFractionRing A K]
+引理 存在_mem_SL2
+  结论: (A : 类型) [交换环 A] [是整环 A] [代数 A K] [IsFractionRing A K]
   证明: by
   cases c with
   | infty => exact ⟨1, by simp⟩
@@ -102,7 +102,7 @@ definition IsCusp
 
 中文:
 定义 IsCusp
-  签名: (c : OnePoint 实数) (𝒢 : Subgroup (GL (Fin 2) 实数))
+  签名: (c : OnePoint 实数) (𝒢 : 子群 (GL (有限集 2) 实数))
   定义体: exists g in 𝒢, g.IsParabolic ∧ g • c = c
 
 Depends on / 依赖: IsParabolic, g.IsParabolic
@@ -125,7 +125,7 @@ lemma IsCusp.smul
 
 中文:
 引理 IsCusp.smul
-  结论: {c : OnePoint 实数} {𝒢 : Subgroup (GL (Fin 2) 实数)} (hc : IsCusp c 𝒢)
+  结论: {c : OnePoint 实数} {𝒢 : 子群 (GL (有限集 2) 实数)} (hc : IsCusp c 𝒢)
   证明: by
   obtain ⟨p, hp𝒢, hpp, hpc⟩ := hc
   refine ⟨_, 𝒢.smul_mem_pointwise_smul _ _ hp𝒢, ?_, ?_⟩
@@ -154,7 +154,7 @@ lemma IsCusp.smul_of_mem
 
 中文:
 引理 IsCusp.smul_of_mem
-  结论: {c : OnePoint 实数} {𝒢 : Subgroup (GL (Fin 2) 实数)} (hc : IsCusp c 𝒢)
+  结论: {c : OnePoint 实数} {𝒢 : 子群 (GL (有限集 2) 实数)} (hc : IsCusp c 𝒢)
   证明: by
   convert! hc.smul g
   ext x
@@ -183,7 +183,7 @@ lemma isCusp_iff_of_relIndex_ne_zero
 
 中文:
 引理 isCusp_iff_of_relIndex_ne_zero
-  结论: {𝒢 𝒢' : Subgroup (GL (Fin 2) 实数)}
+  结论: {𝒢 𝒢' : 子群 (GL (有限集 2) 实数)}
   证明: by
   refine ⟨fun ⟨g, hg, hgp, hgc⟩ => ⟨g, h𝒢 hg, hgp, hgc⟩, fun ⟨g, hg, hgp, hgc⟩ => ?_⟩
   obtain ⟨n, hn, -, hgn⟩ := Subgroup.exists_pow_mem_of_relIndex_ne_zero h𝒢' hg
@@ -214,8 +214,8 @@ lemma Subgroup.Commensurable.isCusp_iff
   · simpa [Subgroup.inf_relIndex_left] using h𝒢.2
 
 中文:
-引理 Subgroup.Commensurable.isCusp_iff
-  结论: {𝒢 𝒢' : Subgroup (GL (Fin 2) 实数)}
+引理 子群.Commensurable.isCusp_iff
+  结论: {𝒢 𝒢' : 子群 (GL (有限集 2) 实数)}
   证明: by
   rw [← isCusp_iff_of_relIndex_ne_zero inf_le_left]; rw [isCusp_iff_of_relIndex_ne_zero inf_le_right]
   · simpa [Subgroup.inf_relIndex_right] using h𝒢.1
@@ -240,7 +240,7 @@ lemma IsCusp.mono
 
 中文:
 引理 IsCusp.mono
-  结论: {𝒢 ℋ : Subgroup (GL (Fin 2) 实数)} {c : OnePoint 实数} (hGH : 𝒢 <= ℋ)
+  结论: {𝒢 ℋ : 子群 (GL (有限集 2) 实数)} {c : OnePoint 实数} (hGH : 𝒢 <= ℋ)
   证明: match hc with | ⟨h, hh, hp, hc⟩ => ⟨h, hGH hh, hp, hc⟩
 -/
 lemma IsCusp.mono {𝒢 ℋ : Subgroup (GL (Fin 2) Real)} {c : OnePoint Real} (hGH : 𝒢 <= ℋ)
@@ -261,7 +261,7 @@ lemma IsCusp.of_isFiniteRelIndex
 
 中文:
 引理 IsCusp.of_isFiniteRelIndex
-  结论: {𝒢 ℋ : Subgroup (GL (Fin 2) 实数)} {c : OnePoint 实数}
+  结论: {𝒢 ℋ : 子群 (GL (有限集 2) 实数)} {c : OnePoint 实数}
   证明: by
   have hGH : 𝒢.relIndex ℋ != 0 := 𝒢.relIndex_ne_zero
   rw [← Subgroup.inf_relIndex_right] at hGH
@@ -292,7 +292,7 @@ lemma IsCusp.of_isFiniteRelIndex_conj
 
 中文:
 引理 IsCusp.of_isFiniteRelIndex_conj
-  结论: {𝒢 ℋ : Subgroup (GL (Fin 2) 实数)} {c : OnePoint 实数}
+  结论: {𝒢 ℋ : 子群 (GL (有限集 2) 实数)} {c : OnePoint 实数}
   证明: by
   suffices (ConjAct.toConjAct h • 𝒢).IsFiniteRelIndex ℋ from hc.of_isFiniteRelIndex
   constructor
@@ -329,7 +329,7 @@ lemma isCusp_SL2Z_iff
 中文:
 引理 isCusp_SL2Z_iff
   条件: {c : OnePoint 实数}
-  结论: IsCusp c 𝒮ℒ ↔ c in Set.range (OnePoint.map Rat.cast)
+  结论: IsCusp c 𝒮ℒ ↔ c in 集合.range (OnePoint.map 有理数.cast)
   证明: by
   constructor
   · rintro ⟨-, ⟨g, rfl⟩, hgp, hgc⟩
@@ -410,8 +410,8 @@ lemma Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z
   proof: is_commensurable.isCusp_iff
 
 中文:
-引理 Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z
-  结论: (𝒢 : Subgroup (GL (Fin 2) 实数)) [𝒢.IsArithmetic]
+引理 子群.是Arithmetic.isCusp_iff_isCusp_SL2Z
+  结论: (𝒢 : 子群 (GL (有限集 2) 实数)) [𝒢.是Arithmetic]
   证明: is_commensurable.isCusp_iff
 
 Depends on / 依赖: isCusp_iff, is_commensurable, is_commensurable.isCusp_iff
@@ -441,7 +441,7 @@ definition cuspsSubMulAction
 
 中文:
 定义 cuspsSubMulAction
-  签名: (𝒢 : Subgroup (GL (Fin 2) 实数))
+  签名: (𝒢 : 子群 (GL (有限集 2) 实数))
   定义体: {c | IsCusp c 𝒢}
   smul_mem' g _ hc := IsCusp.smul_of_mem hc g.property
 
@@ -462,7 +462,7 @@ abbreviation CuspOrbits
 
 中文:
 缩写 CuspOrbits
-  签名: (𝒢 : Subgroup (GL (Fin 2) 实数))
+  签名: (𝒢 : 子群 (GL (有限集 2) 实数))
   定义体: MulAction.orbitRel.Quotient 𝒢 (cuspsSubMulAction 𝒢)
 
 Depends on / 依赖: MulAction, MulAction.orbitRel.Quotient, Quotient, cuspsSubMulAction, orbitRel
@@ -486,7 +486,7 @@ definition cosetToCuspOrbit
 
 中文:
 定义 cosetToCuspOrbit
-  签名: (𝒢 : Subgroup (GL (Fin 2) 实数)) [𝒢.IsArithmetic]
+  签名: (𝒢 : 子群 (GL (有限集 2) 实数)) [𝒢.是Arithmetic]
   定义体: Quotient.lift
     (fun g => ⟦⟨mapGL Real g⁻¹ • ∞,
 (Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z 𝒢).mpr isCusp_SL2Z_iff.mpr
@@ -520,7 +520,7 @@ lemma cosetToCuspOrbit_apply_mk
 
 中文:
 引理 cosetToCuspOrbit_apply_mk
-  条件: {𝒢 : Subgroup (GL (Fin 2) 实数)} [𝒢.IsArithmetic] (g : SL(2, 整数))
+  条件: {𝒢 : 子群 (GL (有限集 2) 实数)} [𝒢.是Arithmetic] (g : SL(2, 整数))
   证明: rfl
 -/
 lemma cosetToCuspOrbit_apply_mk {𝒢 : Subgroup (GL (Fin 2) Real)} [𝒢.IsArithmetic] (g : SL(2, Int)) :
@@ -545,7 +545,7 @@ lemma surjective_cosetToCuspOrbit
 
 中文:
 引理 surjective_cosetToCuspOrbit
-  条件: (𝒢 : Subgroup (GL (Fin 2) 实数)) [𝒢.IsArithmetic]
+  条件: (𝒢 : 子群 (GL (有限集 2) 实数)) [𝒢.是Arithmetic]
   证明: by
   rintro ⟨c, (hc : IsCusp c _)⟩
   rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z]; rw [isCusp_SL2Z_iff'] at hc
@@ -595,7 +595,7 @@ definition strictPeriods
 
 中文:
 定义 strictPeriods
-  签名: : AddSubgroup R
+  签名: : 加法子群 R
   定义体: (toAddSubgroup 𝒢).comap upperRightHom.toAddMonoidHom
 
 Depends on / 依赖: toAddMonoidHom, toAddSubgroup, upperRightHom, upperRightHom.toAddMonoidHom
@@ -824,7 +824,7 @@ instance instDiscreteTopStrictPeriods
 
 中文:
 实例 instDiscreteTopStrictPeriods
-  签名: [hG : DiscreteTopology 𝒢]
+  签名: [hG : 离散拓扑 𝒢]
   定义体: by
   let H : Set (GL (Fin 2) R) := 𝒢 inter Set.range upperRightHom
   have hH : DiscreteTopology H := hG.of_subset Set.inter_subset_left
@@ -853,7 +853,7 @@ instance instDiscreteTopPeriods
 
 中文:
 实例 instDiscreteTopPeriods
-  签名: [T2Space R] [hG : DiscreteTopology 𝒢]
+  签名: [T2空间 R] [hG : 离散拓扑 𝒢]
   定义体: inferInstanceAs (DiscreteTopology 𝒢.adjoinNegOne.strictPeriods)
 
 Depends on / 依赖: DiscreteTopology, adjoinNegOne, adjoinNegOne.strictPeriods, strictPeriods
@@ -882,7 +882,7 @@ lemma strictPeriods_eq_zmultiples_one_of_T_mem
 
 中文:
 引理 strictPeriods_eq_zmultiples_one_of_T_mem
-  条件: {Γ : Subgroup SL(2, 整数)} (hΓ : ModularGroup.T in Γ)
+  条件: {Γ : 子群 SL(2, 整数)} (hΓ : ModularGroup.T in Γ)
   证明: by
   ext x
   simp only [mem_strictPeriods_iff, Subgroup.mem_map, Units.ext_iff, mapGL_coe_matrix,
@@ -917,7 +917,7 @@ lemma strictPeriods_SL2Z
 
 中文:
 引理 strictPeriods_SL2Z
-  结论: strictPeriods 𝒮ℒ = AddSubgroup.zmultiples 1
+  结论: strictPeriods 𝒮ℒ = 加法子群.zmultiples 1
   证明: by
   simpa [MonoidHom.range_eq_map] using strictPeriods_eq_zmultiples_one_of_T_mem (mem_top _)
 -/
@@ -1024,7 +1024,7 @@ Exists.choose_spec 𝒢.strictPeriods.isAddCyclic_iff_exists_zmultiples_eq_top.m
 
 中文:
 引理 strictPeriods_eq_zmultiples_strictWidthInfty
-  条件: [DiscreteTopology 𝒢.strictPeriods]
+  条件: [离散拓扑 𝒢.strictPeriods]
   证明: by
   simp [Subgroup.strictWidthInfty, dif_pos,
 Exists.choose_spec 𝒢.strictPeriods.isAddCyclic_iff_exists_zmultiples_eq_top.mp
@@ -1054,7 +1054,7 @@ lemma strictWidthInfty_eq_one_of_T_mem
 
 中文:
 引理 strictWidthInfty_eq_one_of_T_mem
-  条件: {Γ : Subgroup SL(2, 整数)} (hΓ : ModularGroup.T in Γ)
+  条件: {Γ : 子群 SL(2, 整数)} (hΓ : ModularGroup.T in Γ)
   证明: by
   have hsp := strictPeriods_eq_zmultiples_one_of_T_mem hΓ
   have : DiscreteTopology (Γ : Subgroup (GL (Fin 2) Real)).strictPeriods := by
@@ -1134,7 +1134,7 @@ lemma periods_eq_zmultiples_widthInfty
 
 中文:
 引理 periods_eq_zmultiples_widthInfty
-  条件: [DiscreteTopology 𝒢.periods]
+  条件: [离散拓扑 𝒢.periods]
   证明: have : DiscreteTopology 𝒢.adjoinNegOne.strictPeriods := ‹_›
   𝒢.adjoinNegOne.strictPeriods_eq_zmultiples_strictWidthInfty
 
@@ -1209,7 +1209,7 @@ lemma strictWidthInfty_pos_iff
 
 中文:
 引理 strictWidthInfty_pos_iff
-  条件: [DiscreteTopology 𝒢.strictPeriods] [𝒢.HasDetPlusMinusOne]
+  条件: [离散拓扑 𝒢.strictPeriods] [𝒢.有DetPlusMinusOne]
   证明: by
   constructor
   · refine fun h => ⟨_, mem_strictPeriods_iff.mpr 𝒢.strictWidthInfty_mem_strictPeriods, ?_, ?_⟩
@@ -1257,7 +1257,7 @@ lemma strictWidthInfty_pos
 
 中文:
 引理 strictWidthInfty_pos
-  条件: [𝒢.IsArithmetic]
+  条件: [𝒢.是Arithmetic]
   结论: 0 < 𝒢.strictWidthInfty
   证明: by
   rw [strictWidthInfty_pos_iff]
@@ -1309,7 +1309,7 @@ lemma widthInfty_pos_iff
 
 中文:
 引理 widthInfty_pos_iff
-  条件: [DiscreteTopology 𝒢.periods] [𝒢.HasDetPlusMinusOne]
+  条件: [离散拓扑 𝒢.periods] [𝒢.有DetPlusMinusOne]
   证明: by
   have : DiscreteTopology 𝒢.adjoinNegOne.strictPeriods := ‹_›
   rw [widthInfty]; rw [strictWidthInfty_pos_iff]; rw [(commensurable_adjoinNegOne_self 𝒢).isCusp_iff]
@@ -1335,7 +1335,7 @@ lemma isRegularAtInfty_iff
 
 中文:
 引理 isRegularAtInfty_iff
-  条件: [DiscreteTopology 𝒢.periods]
+  条件: [离散拓扑 𝒢.periods]
   证明: by
   refine ⟨fun h => h ▸ widthInfty_mem_periods 𝒢, fun h => ?_⟩
   apply 𝒢.strictPeriods_le_periods.antisymm
@@ -1361,7 +1361,7 @@ lemma widthInfty_pos
 
 中文:
 引理 widthInfty_pos
-  条件: [𝒢.IsArithmetic]
+  条件: [𝒢.是Arithmetic]
   结论: 0 < 𝒢.widthInfty
   证明: by
   apply strictWidthInfty_pos

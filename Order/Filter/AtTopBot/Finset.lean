@@ -33,7 +33,7 @@ theorem tendsto_finset_range
 
 中文:
 定理 tendsto_finset_range
-  结论: Tendsto Finset.range atTop atTop
+  结论: 收敛 有限集.range atTop atTop
   证明: Finset.range_mono.tendsto_atTop_atTop Finset.exists_nat_subset_range
 
 Depends on / 依赖: Finset, Finset.exists_nat_subset_range, Finset.range_mono.tendsto_atTop_atTop, exists_nat_subset_range, range_mono, tendsto_atTop_atTop
@@ -57,7 +57,7 @@ le_principal_iff.2 mem_iInf_of_iInter s.finite_toSet (fun i => mem_principal_sel
 
 中文:
 定理 atTop_finset_eq_iInf
-  结论: (atTop : Filter (Finset α)) = ⨅ x : α, 𝓟 (Ici {x})
+  结论: (atTop : 滤子 (有限集 α)) = ⨅ x : α, 𝓟 (左闭右无界区间 {x})
   证明: by
   refine le_antisymm (le_iInf fun i => le_principal_iff.2 <| mem_atTop ({i} : Finset α)) ?_
   refine
@@ -93,7 +93,7 @@ alias _root_.Monotone.tendsto_atTop_finset := tendsto_atTop_finset_of_monotone
 
 中文:
 定理 tendsto_atTop_finset_of_monotone
-  结论: [Preorder β] {f : β -> Finset α} (h : Monotone f)
+  结论: [预序 β] {f : β -> 有限集 α} (h : 递增 f)
   证明: by
   simp only [atTop_finset_eq_iInf, tendsto_iInf, tendsto_principal]
   intro a
@@ -146,7 +146,7 @@ theorem tendsto_finset_preimage_atTop_atTop
 
 中文:
 定理 tendsto_finset_preimage_atTop_atTop
-  条件: {f : α -> β} (hf : Function.Injective f)
+  条件: {f : α -> β} (hf : 函数.单射 f)
   证明: (Finset.monotone_preimage hf).tendsto_atTop_finset fun x =>
 ⟨{f x}, Finset.mem_preimage.2 Finset.mem_singleton_self _⟩
 
@@ -226,7 +226,7 @@ exact Finset.mem_powerset.mpr (Finset.le_sup_of_le hv fun _ h => h).trans hu
 
 中文:
 定理 tendsto_finset_powerset_atTop_atTop
-  结论: Tendsto (Finset.powerset (α := α)) atTop atTop
+  结论: 收敛 (有限集.powerset (α := α)) atTop atTop
   证明: by
   classical
   refine tendsto_atTop_atTop.mpr fun t => ⟨t.sup id, fun _ hu _ hv => ?_⟩
@@ -256,7 +256,7 @@ theorem tendsto_finset_Iic_atTop_atTop
 
 中文:
 定理 tendsto_finset_Iic_atTop_atTop
-  条件: [Preorder α] [LocallyFiniteOrderBot α]
+  条件: [预序 α] [LocallyFiniteOrderBot α]
   证明: by
   rcases isEmpty_or_nonempty α with _ | _
   · exact tendsto_of_isEmpty
@@ -289,7 +289,7 @@ theorem tendsto_finset_Ici_atBot_atTop
 
 中文:
 定理 tendsto_finset_Ici_atBot_atTop
-  条件: [Preorder α] [LocallyFiniteOrderTop α]
+  条件: [预序 α] [LocallyFiniteOrderTop α]
   证明: tendsto_finset_Iic_atTop_atTop (α := αᵒᵈ)
 -/
 theorem tendsto_finset_Ici_atBot_atTop [Preorder α] [LocallyFiniteOrderTop α] :
@@ -309,8 +309,8 @@ lemma eventually_finset_atTop_subset
 
 中文:
 引理 eventually_finset_atTop_subset
-  条件: (i : Finset α)
-  结论: 对任意ᶠ s : Finset α in atTop, i subseteq s
+  条件: (i : 有限集 α)
+  结论: 对任意ᶠ s : 有限集 α in atTop, i subseteq s
   证明: eventually_ge_atTop _
 
 Depends on / 依赖: eventually_ge_atTop
@@ -331,7 +331,7 @@ lemma eventually_finset_mem_atTop
 中文:
 引理 eventually_finset_mem_atTop
   条件: (i : α)
-  结论: 对任意ᶠ s : Finset α in atTop, i in s
+  结论: 对任意ᶠ s : 有限集 α in atTop, i in s
   证明: by
   simpa using eventually_finset_atTop_subset {i}
 
@@ -355,7 +355,7 @@ lemma map_card_atTop
 
 中文:
 引理 map_card_atTop
-  条件: [Infinite α]
+  条件: [无限 α]
   证明: by
   rw [map_atTop_eq]; rw [atTop]
   refine Function.Surjective.iInf_congr Finset.card Finset.exists_card_eq fun s => congr(𝓟 $(?_))
@@ -384,7 +384,7 @@ lemma map_card_atTop_of_fintype
 
 中文:
 引理 map_card_atTop_of_fintype
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   simp [OrderTop.atTop_eq]
 
@@ -405,7 +405,7 @@ lemma tendsto_card_atTop_atTop
 
 中文:
 引理 tendsto_card_atTop_atTop
-  条件: [Infinite α]
+  条件: [无限 α]
   证明: by
   rw [Tendsto]; rw [map_card_atTop]
 
@@ -426,7 +426,7 @@ lemma tendsto_card_atTop_pure_of_fintype
 
 中文:
 引理 tendsto_card_atTop_pure_of_fintype
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   rw [Tendsto]; rw [map_card_atTop_of_fintype]
 
@@ -448,7 +448,7 @@ lemma tendsto_comp_card_atTop_iff
 
 中文:
 引理 tendsto_comp_card_atTop_iff
-  条件: [Infinite α] {f : 自然数 -> β} {l : Filter β}
+  条件: [无限 α] {f : 自然数 -> β} {l : 滤子 β}
   证明: by
   rw [← map_card_atTop (α := α)]; rw [tendsto_map'_iff]
   rfl
@@ -472,7 +472,7 @@ lemma tendsto_comp_card_atTop_iff_of_fintype
 
 中文:
 引理 tendsto_comp_card_atTop_iff_of_fintype
-  条件: [Fintype α] {f : 自然数 -> β} {l : Filter β}
+  条件: [有限类型 α] {f : 自然数 -> β} {l : 滤子 β}
   证明: by
   rw [← map_card_atTop_of_fintype]; rw [tendsto_map'_iff]
   rfl

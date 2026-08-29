@@ -46,8 +46,8 @@ class Closed
     - adj : tensorLeft X ⊣ rightAdj
 
 中文:
-类 Closed
-  参数: {C : 类型u} [Category.{v} C] [MonoidalCategory.{v} C] (X : C)
+类 闭
+  参数: {C : 类型u} [范畴.{v} C] [幺半群范畴.{v} C] (X : C)
   公理与运算 (2 个):
     - rightAdj : C ⥤ C
     - adj : tensorLeft X ⊣ rightAdj
@@ -68,10 +68,10 @@ class MonoidalClosed
     - closed((X : C)) : Closed X  [default: by infer_instance]
 
 中文:
-类 MonoidalClosed
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 幺半群闭
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   公理与运算 (1 个):
-    - closed((X : C)) : Closed X  [默认: by infer_instance]
+    - closed((X : C)) : 闭 X  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -98,7 +98,7 @@ definition tensorClosed
 
 中文:
 定义 tensorClosed
-  签名: {X Y : C} (hX : Closed X) (hY : Closed Y)
+  签名: {X Y : C} (hX : 闭 X) (hY : 闭 Y)
   定义体: Closed.rightAdj X ⋙ Closed.rightAdj Y
   adj := (hY.adj.comp hX.adj).ofNatIsoLeft (MonoidalCategory.tensorLeftTensor X Y).symm
 
@@ -124,7 +124,7 @@ definition unitClosed
 
 中文:
 定义 unitClosed
-  签名: : Closed (𝟙_ C) where
+  签名: : 闭 (𝟙_ C) where
   定义体: 𝟭 C
   adj := Adjunction.id.ofNatIsoLeft (MonoidalCategory.leftUnitorNatIso C).symm
 -/
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tensorLeft A).IsLeftAdjoint
+  签名: (tensorLeft A).是左伴随
   定义体: (ihom.adjunction A).isLeftAdjoint
 
 Depends on / 依赖: adjunction, ihom.adjunction, isLeftAdjoint
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ihom A).IsRightAdjoint
+  签名: (ihom A).是右伴随
   定义体: (ihom.adjunction A).isRightAdjoint
 
 Depends on / 依赖: adjunction, ihom.adjunction, isRightAdjoint
@@ -715,7 +715,7 @@ theorem curry_injective
 
 中文:
 定理 curry_injective
-  结论: Function.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
+  结论: 函数.单射 (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
   证明: (Closed.adj.homEquiv _ _).injective
 
 Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, injective
@@ -733,7 +733,7 @@ theorem uncurry_injective
 
 中文:
 定理 uncurry_injective
-  结论: Function.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+  结论: 函数.单射 (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
   证明: (Closed.adj.homEquiv _ _).symm.injective
 
 Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, injective, symm.injective
@@ -846,8 +846,8 @@ definition unitNatIso
     (leftUnitorNatIso C)
 
 中文:
-定义 unitNatIso
-  签名: [Closed (𝟙_ C)]
+定义 unit自然数Iso
+  签名: [闭 (𝟙_ C)]
   定义体: conjugateIsoEquiv (Adjunction.id (C := C)) (ihom.adjunction (𝟙_ C))
     (leftUnitorNatIso C)
 
@@ -867,7 +867,7 @@ definition unitIsoSelf
 
 中文:
 定义 unitIsoSelf
-  签名: [Closed (𝟙_ C)]
+  签名: [闭 (𝟙_ C)]
   定义体: (unitNatIso.app X).symm
 
 Depends on / 依赖: unitNatIso, unitNatIso.app
@@ -1045,7 +1045,7 @@ theorem pre_id
 
 中文:
 定理 pre_id
-  条件: (A : C) [Closed A]
+  条件: (A : C) [闭 A]
   结论: pre (𝟙 A) = 𝟙 _
   证明: by
   rw [pre]; rw [Functor.map_id]
@@ -1071,7 +1071,7 @@ theorem pre_map
 
 中文:
 定理 pre_map
-  条件: {A₁ A₂ A₃ : C} [Closed A₁] [Closed A₂] [Closed A₃] (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
+  条件: {A₁ A₂ A₃ : C} [闭 A₁] [闭 A₂] [闭 A₃] (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
   证明: by
   rw [pre]; rw [pre]; rw [pre]; rw [conjugateEquiv_comp]; rw [(tensoringLeft C).map_comp]
 
@@ -1091,7 +1091,7 @@ theorem pre_comm_ihom_map
 
 中文:
 定理 pre_comm_ihom_map
-  条件: {W X Y Z : C} [Closed W] [Closed X] (f : W ⟶ X) (g : Y ⟶ Z)
+  条件: {W X Y Z : C} [闭 W] [闭 X] (f : W ⟶ X) (g : Y ⟶ Z)
   证明: by simp
 -/
 theorem pre_comm_ihom_map {W X Y Z : C} [Closed W] [Closed X] (f : W ⟶ X) (g : Y ⟶ Z) :
@@ -1112,7 +1112,7 @@ definition internalHom
 
 中文:
 定义 internalHom
-  签名: [MonoidalClosed C]
+  签名: [幺半群闭 C]
   定义体: ihom X.unop
   map f := pre f.unop
 
@@ -1133,7 +1133,7 @@ instance [MonoidalClosed
   infer_instance
 
 中文:
-实例 [MonoidalClosed
+实例 [幺半群闭
   签名: C] (X
   定义体: by
   bdsimp
@@ -1160,7 +1160,7 @@ definition internalHomAdjunction₂
 
 中文:
 定义 internalHomAdjunction₂
-  签名: [MonoidalClosed C]
+  签名: [幺半群闭 C]
   定义体: ihom.adjunction _
 
 Depends on / 依赖: adjunction, ihom.adjunction
@@ -1191,7 +1191,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: : MonoidalClosed C where
+  签名: : 幺半群闭 C where
   定义体: { rightAdj := F ⋙ ihom (F.obj X) ⋙ G
       adj := (adj.comp ((ihom.adjunction (F.obj X)).comp
           adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft
@@ -1310,7 +1310,7 @@ definition id
 
 中文:
 定义 id
-  签名: (x : C) [Closed x]
+  签名: (x : C) [闭 x]
   定义体: curry (ρ_ x).hom
 -/
 def id (x : C) [Closed x] : 𝟙_ C ⟶ (ihom x).obj x := curry (ρ_ x).hom
@@ -1326,7 +1326,7 @@ definition compTranspose
 
 中文:
 定义 compTranspose
-  签名: (x y z : C) [Closed x] [Closed y]
+  签名: (x y z : C) [闭 x] [闭 y]
   定义体: (α_ x ((ihom x).obj y) ((ihom y).obj z)).inv ≫
     (ihom.ev x).app y ▷ ((ihom y).obj z) ≫ (ihom.ev y).app z
 
@@ -1346,7 +1346,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (x y z : C) [Closed x] [Closed y]
+  签名: (x y z : C) [闭 x] [闭 y]
   定义体: curry (compTranspose x y z)
 
 Depends on / 依赖: compTranspose
@@ -1365,7 +1365,7 @@ lemma id_eq
 
 中文:
 引理 id_eq
-  条件: (x : C) [Closed x]
+  条件: (x : C) [闭 x]
   结论: id x = curry (ρ_ x).hom
   证明: rfl
 -/
@@ -1381,7 +1381,7 @@ lemma compTranspose_eq
 
 中文:
 引理 compTranspose_eq
-  条件: (x y z : C) [Closed x] [Closed y]
+  条件: (x y z : C) [闭 x] [闭 y]
   证明: rfl
 -/
 lemma compTranspose_eq (x y z : C) [Closed x] [Closed y] :
@@ -1399,7 +1399,7 @@ lemma comp_eq
 
 中文:
 引理 comp_eq
-  条件: (x y z : C) [Closed x] [Closed y]
+  条件: (x y z : C) [闭 x] [闭 y]
   结论: comp x y z = curry (compTranspose x y z)
   证明: rfl
 -/
@@ -1427,7 +1427,7 @@ lemma id_comp
 
 中文:
 引理 id_comp
-  条件: (x y : C) [Closed x]
+  条件: (x y : C) [闭 x]
   证明: by
   apply uncurry_injective
   rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_
@@ -1454,7 +1454,7 @@ lemma comp_id
 
 中文:
 引理 comp_id
-  条件: (x y : C) [Closed x] [Closed y]
+  条件: (x y : C) [闭 x] [闭 y]
   证明: by
   apply uncurry_injective
   rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← u
@@ -1487,7 +1487,7 @@ lemma assoc
 
 中文:
 引理 assoc
-  条件: (w x y z : C) [Closed w] [Closed x] [Closed y]
+  条件: (w x y z : C) [闭 w] [闭 x] [闭 y]
   证明: by
   apply uncurry_injective
   simp only [uncurry_natural_left, comp_eq]
@@ -1520,7 +1520,7 @@ definition curry'
 
 中文:
 定义 curry'
-  签名: {X Y : C} [Closed X] (f : X ⟶ Y)
+  签名: {X Y : C} [闭 X] (f : X ⟶ Y)
   定义体: curry ((ρ_ _).hom ≫ f)
 -/
 def curry' {X Y : C} [Closed X] (f : X ⟶ Y) : 𝟙_ C ⟶ (ihom X).obj Y :=
@@ -1536,7 +1536,7 @@ definition uncurry'
 
 中文:
 定义 uncurry'
-  签名: {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
+  签名: {X Y : C} [闭 X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
   定义体: (ρ_ _).inv ≫ uncurry g
 
 Depends on / 依赖: uncurry
@@ -1557,7 +1557,7 @@ lemma curry'_uncurry'
 
 中文:
 引理 curry'_uncurry'
-  条件: {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
+  条件: {X Y : C} [闭 X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
   证明: by
   simp [curry', uncurry']
 -/
@@ -1578,7 +1578,7 @@ lemma uncurry'_curry'
 
 中文:
 引理 uncurry'_curry'
-  条件: {X Y : C} [Closed X] (f : X ⟶ Y)
+  条件: {X Y : C} [闭 X] (f : X ⟶ Y)
   证明: by
   simp [curry', uncurry']
 -/
@@ -1601,7 +1601,7 @@ definition curryHomEquiv'
 
 中文:
 定义 curryHomEquiv'
-  签名: {X Y : C} [Closed X]
+  签名: {X Y : C} [闭 X]
   定义体: curry'
   invFun := uncurry'
   left_inv _ := by simp
@@ -1624,7 +1624,7 @@ lemma curry'_injective
 
 中文:
 引理 curry'_injective
-  条件: {X Y : C} [Closed X] {f f' : X ⟶ Y} (h : curry' f = curry' f')
+  条件: {X Y : C} [闭 X] {f f' : X ⟶ Y} (h : curry' f = curry' f')
   证明: curryHomEquiv'.injective h
 -/
 lemma curry'_injective {X Y : C} [Closed X] {f f' : X ⟶ Y} (h : curry' f = curry' f') :
@@ -1643,7 +1643,7 @@ lemma uncurry'_injective
 
 中文:
 引理 uncurry'_injective
-  结论: {X Y : C} [Closed X] {f f' : 𝟙_ C ⟶ (ihom X).obj Y}
+  结论: {X Y : C} [闭 X] {f f' : 𝟙_ C ⟶ (ihom X).obj Y}
   证明: curryHomEquiv'.symm.injective h
 
 @[simp]
@@ -1669,7 +1669,7 @@ lemma curry'_id
 
 中文:
 引理 curry'_id
-  条件: (X : C) [Closed X]
+  条件: (X : C) [闭 X]
   结论: curry' (𝟙 X) = id X
   证明: by
   dsimp [curry']
@@ -1696,7 +1696,7 @@ lemma whiskerLeft_curry'_ihom_ev_app
 
 中文:
 引理 whiskerLeft_curry'_ihom_ev_app
-  条件: {X Y : C} [Closed X] (f : X ⟶ Y)
+  条件: {X Y : C} [闭 X] (f : X ⟶ Y)
   证明: by
   dsimp [curry']
   simp only [whiskerLeft_curry_ihom_ev_app]
@@ -1723,7 +1723,7 @@ lemma curry'_whiskerRight_comp
 
 中文:
 引理 curry'_whiskerRight_comp
-  条件: {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y)
+  条件: {X Y Z : C} [闭 X] [闭 Y] (f : X ⟶ Y)
   证明: by
   rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
@@ -1751,7 +1751,7 @@ lemma whiskerLeft_curry'_comp
 
 中文:
 引理 whiskerLeft_curry'_comp
-  条件: {X Y Z : C} [Closed X] [Closed Y] (f : Y ⟶ Z)
+  条件: {X Y Z : C} [闭 X] [闭 Y] (f : Y ⟶ Z)
   证明: by
   rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
@@ -1777,7 +1777,7 @@ lemma curry'_ihom_map
 
 中文:
 引理 curry'_ihom_map
-  条件: {X Y Z : C} [Closed X] (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : C} [闭 X] (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: by
   simp only [curry', ← curry_natural_right, Category.assoc]
 -/
@@ -1796,7 +1796,7 @@ lemma curry'_comp
 
 中文:
 引理 curry'_comp
-  条件: {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : C} [闭 X] [闭 Y] (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: by
   rw [tensorHom_def_assoc]; rw [whiskerLeft_curry'_comp]; rw [MonoidalCategory.whiskerRight_id]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [← unitors_equal]; rw [Iso.inv_hom_id_assoc]; rw [curry'_ihom_map]
 -/

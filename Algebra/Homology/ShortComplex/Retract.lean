@@ -43,7 +43,7 @@ lemma quasiIso_of_retract
 
 中文:
 引理 quasiIso_of_retract
-  条件: (h : RetractArrow f₁ f₂) [hf₂ : QuasiIso f₂]
+  条件: (h : RetractArrow f₁ f₂) [hf₂ : 拟同构 f₂]
   证明: by
   rw [quasiIso_iff] at hf₂ ⊢
   have h : RetractArrow (homologyMap f₁) (homologyMap f₂) :=

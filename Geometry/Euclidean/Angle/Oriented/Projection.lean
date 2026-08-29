@@ -41,7 +41,7 @@ lemma oangle_self_orthogonalProjection
 
 中文:
 引理 oangle_self_orthogonalProjection
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     ∡ p (orthogonalProjection s p) p' = (π / 2 : Real) ∨
       ∡ p (orthogonalProjection s p) p' = (-π / 2 : Real) := by
@@ -76,7 +76,7 @@ lemma oangle_orthogonalProjection_self
 
 中文:
 引理 oangle_orthogonalProjection_self
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     ∡ p' (orthogonalProjection s p) p = (π / 2 : Real) ∨
       ∡ p' (orthogonalProjection s p) p = (-π / 2 : Real) := by
@@ -106,7 +106,7 @@ lemma two_zsmul_oangle_self_orthogonalProjection
 
 中文:
 引理 two_zsmul_oangle_self_orthogonalProjection
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     (2 : Int) • ∡ p (orthogonalProjection s p) p' = π := by
   rw [Real.Angle.two_zsmul_eq_pi_iff]
@@ -135,7 +135,7 @@ lemma two_zsmul_oangle_orthogonalProjection_self
 
 中文:
 引理 two_zsmul_oangle_orthogonalProjection_self
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     (2 : Int) • ∡ p' (orthogonalProjection s p) p = π := by
   rw [Real.Angle.two_zsmul_eq_pi_iff]

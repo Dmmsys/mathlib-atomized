@@ -70,11 +70,11 @@ class HasPDF
     - absolutelyContinuous' : map X ℙ ≪ μ
 
 中文:
-类 HasPDF
-  参数: {m : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω) (μ : Measure E := by volume_tac)
+类 有PDF
+  参数: {m : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω) (μ : 测度 E := by volume_tac)
   公理与运算 (3 个):
-    - aemeasurable' : AEMeasurable X ℙ
-    - haveLebesgueDecomposition' : (map X ℙ).HaveLebesgueDecomposition μ
+    - aemeasurable' : 几乎处处可测 X ℙ
+    - haveLebesgueDecomposition' : (map X ℙ).有Lebesgue分解 μ
     - absolutelyContinuous' : map X ℙ ≪ μ
 
 Depends on / 依赖: AEMeasurable, HaveLebesgueDecomposition, NonUnitalNonAssocCommSemiring, absolutelyContinuous, aemeasurable, haveLebesgueDecomposition, protected, toNonUnitalNonAssocCommSemiring, volume_tac
@@ -116,7 +116,7 @@ theorem hasPDF_iff_of_aemeasurable
 
 中文:
 定理 hasPDF_iff_of_aemeasurable
-  条件: (hX : AEMeasurable X ℙ)
+  条件: (hX : 几乎处处可测 X ℙ)
   证明: by
   rw [hasPDF_iff]
   simp only [hX, true_and]
@@ -139,9 +139,9 @@ theorem HasPDF.aemeasurable
   proof: HasPDF.aemeasurable' μ
 
 中文:
-定理 HasPDF.aemeasurable
-  条件: [HasPDF X ℙ μ]
-  结论: AEMeasurable X ℙ
+定理 有PDF.aemeasurable
+  条件: [有PDF X ℙ μ]
+  结论: 几乎处处可测 X ℙ
   证明: HasPDF.aemeasurable' μ
 
 Depends on / 依赖: HasPDF, HasPDF.aemeasurable, aemeasurable
@@ -157,8 +157,8 @@ instance HasPDF.haveLebesgueDecomposition
   body: HasPDF.haveLebesgueDecomposition'
 
 中文:
-实例 HasPDF.haveLebesgueDecomposition
-  签名: [HasPDF X ℙ μ]
+实例 有PDF.haveLebesgueDecomposition
+  签名: [有PDF X ℙ μ]
   定义体: HasPDF.haveLebesgueDecomposition'
 
 Depends on / 依赖: HasPDF, HasPDF.haveLebesgueDecomposition, haveLebesgueDecomposition
@@ -176,8 +176,8 @@ theorem HasPDF.absolutelyContinuous
   proof: HasPDF.absolutelyContinuous'
 
 中文:
-定理 HasPDF.absolutelyContinuous
-  条件: [HasPDF X ℙ μ]
+定理 有PDF.absolutelyContinuous
+  条件: [有PDF X ℙ μ]
   结论: map X ℙ ≪ μ
   证明: HasPDF.absolutelyContinuous'
 
@@ -195,8 +195,8 @@ theorem HasPDF.quasiMeasurePreserving_of_measurable
     absolutelyContinuous := HasPDF.absolutelyContinuous .. }
 
 中文:
-定理 HasPDF.quasiMeasurePreserving_of_measurable
-  结论: (X : Ω -> E) (ℙ : Measure Ω) (μ : Measure E)
+定理 有PDF.quasiMeasurePreserving_of_measurable
+  结论: (X : Ω -> E) (ℙ : 测度 Ω) (μ : 测度 E)
   证明: { measurable := h
     absolutelyContinuous := HasPDF.absolutelyContinuous .. }
 
@@ -218,9 +218,9 @@ theorem HasPDF.congr
     ℙ.map_congr hXY ▸ hX.absolutelyContinuous⟩
 
 中文:
-定理 HasPDF.congr
-  条件: (hXY : X =ᵐ[ℙ] Y) [hX : HasPDF X ℙ μ]
-  结论: HasPDF Y ℙ μ
+定理 有PDF.congr
+  条件: (hXY : X =ᵐ[ℙ] Y) [hX : 有PDF X ℙ μ]
+  结论: 有PDF Y ℙ μ
   证明: ⟨(HasPDF.aemeasurable X ℙ μ).congr hXY, ℙ.map_congr hXY ▸ hX.haveLebesgueDecomposition,
     ℙ.map_congr hXY ▸ hX.absolutelyContinuous⟩
 
@@ -240,9 +240,9 @@ theorem HasPDF.congr_iff
   proof: ⟨fun _ => HasPDF.congr hXY, fun _ => HasPDF.congr hXY.symm⟩
 
 中文:
-定理 HasPDF.congr_iff
+定理 有PDF.congr_iff
   条件: (hXY : X =ᵐ[ℙ] Y)
-  结论: HasPDF X ℙ μ ↔ HasPDF Y ℙ μ
+  结论: 有PDF X ℙ μ ↔ 有PDF Y ℙ μ
   证明: ⟨fun _ => HasPDF.congr hXY, fun _ => HasPDF.congr hXY.symm⟩
 
 Depends on / 依赖: HasPDF, HasPDF.congr, hXY.symm
@@ -264,7 +264,7 @@ theorem hasPDF_of_map_eq_withDensity
 
 中文:
 定理 hasPDF_of_map_eq_withDensity
-  结论: (hX : AEMeasurable X ℙ) (f : E -> 实数>=0∞) (hf : AEMeasurable f μ)
+  结论: (hX : 几乎处处可测 X ℙ) (f : E -> 实数>=0∞) (hf : 几乎处处可测 f μ)
   证明: by
   refine ⟨hX, ?_, ?_⟩ <;> rw [h]
   · rw [withDensity_congr_ae hf.ae_eq_mk]
@@ -292,7 +292,7 @@ definition pdf
 
 中文:
 定义 pdf
-  签名: {_ : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω) (μ : Measure E := by volume_tac)
+  签名: {_ : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω) (μ : 测度 E := by volume_tac)
   定义体: (map X ℙ).rnDeriv μ
 
 Depends on / 依赖: rnDeriv, volume_tac
@@ -311,7 +311,7 @@ theorem pdf_def
 
 中文:
 定理 pdf_def
-  条件: {_ : MeasurableSpace Ω} {ℙ : Measure Ω} {μ : Measure E} {X : Ω -> E}
+  条件: {_ : 可测空间 Ω} {ℙ : 测度 Ω} {μ : 测度 E} {X : Ω -> E}
   证明: rfl
 -/
 theorem pdf_def {_ : MeasurableSpace Ω} {ℙ : Measure Ω} {μ : Measure E} {X : Ω -> E} :
@@ -329,7 +329,7 @@ theorem pdf_of_not_aemeasurable
 
 中文:
 定理 pdf_of_not_aemeasurable
-  结论: {_ : MeasurableSpace Ω} {ℙ : Measure Ω} {μ : Measure E}
+  结论: {_ : 可测空间 Ω} {ℙ : 测度 Ω} {μ : 测度 E}
   证明: by
   rw [pdf_def]; rw [map_of_not_aemeasurable hX]
   exact rnDeriv_zero μ
@@ -351,7 +351,7 @@ theorem pdf_of_not_haveLebesgueDecomposition
 
 中文:
 定理 pdf_of_not_haveLebesgueDecomposition
-  结论: {_ : MeasurableSpace Ω} {ℙ : Measure Ω}
+  结论: {_ : 可测空间 Ω} {ℙ : 测度 Ω}
   证明: rnDeriv_of_not_haveLebesgueDecomposition h
 
 Depends on / 依赖: rnDeriv_of_not_haveLebesgueDecomposition
@@ -372,7 +372,7 @@ theorem aemeasurable_of_pdf_ne_zero
 
 中文:
 定理 aemeasurable_of_pdf_ne_zero
-  结论: {m : MeasurableSpace Ω} {ℙ : Measure Ω} {μ : Measure E}
+  结论: {m : 可测空间 Ω} {ℙ : 测度 Ω} {μ : 测度 E}
   证明: by
   contrapose h
   exact pdf_of_not_aemeasurable h
@@ -401,7 +401,7 @@ theorem hasPDF_of_pdf_ne_zero
 
 中文:
 定理 hasPDF_of_pdf_ne_zero
-  结论: {m : MeasurableSpace Ω} {ℙ : Measure Ω} {μ : Measure E} {X : Ω -> E}
+  结论: {m : 可测空间 Ω} {ℙ : 测度 Ω} {μ : 测度 E} {X : Ω -> E}
   证明: by
   refine ⟨?_, ?_, hac⟩
   · exact aemeasurable_of_pdf_ne_zero X hpdf
@@ -433,7 +433,7 @@ theorem measurable_pdf
 
 中文:
 定理 measurable_pdf
-  结论: {m : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω)
+  结论: {m : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω)
   证明: by
   exact measurable_rnDeriv _ _
 
@@ -453,7 +453,7 @@ theorem withDensity_pdf_le_map
 
 中文:
 定理 withDensity_pdf_le_map
-  结论: {_ : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω)
+  结论: {_ : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω)
   证明: withDensity_rnDeriv_le _ _
 
 Depends on / 依赖: volume_tac, withDensity, withDensity_rnDeriv_le
@@ -473,8 +473,8 @@ theorem setLIntegral_pdf_le_map
   exact withDensity_pdf_le_map _ _ _ s
 
 中文:
-定理 setLIntegral_pdf_le_map
-  结论: {m : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω)
+定理 setL整数egral_pdf_le_map
+  结论: {m : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω)
   证明: by
   apply (withDensity_apply_le _ s).trans
   exact withDensity_pdf_le_map _ _ _ s
@@ -498,7 +498,7 @@ theorem map_eq_withDensity_pdf
 
 中文:
 定理 map_eq_withDensity_pdf
-  结论: {m : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω)
+  结论: {m : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω)
   证明: by
   rw [pdf_def]; rw [withDensity_rnDeriv_eq _ _ hX.absolutelyContinuous]
 
@@ -519,8 +519,8 @@ theorem map_eq_setLIntegral_pdf
   rw [← withDensity_apply _ hs]; rw [map_eq_withDensity_pdf X ℙ μ]
 
 中文:
-定理 map_eq_setLIntegral_pdf
-  结论: {m : MeasurableSpace Ω} (X : Ω -> E) (ℙ : Measure Ω)
+定理 map_eq_setL整数egral_pdf
+  结论: {m : 可测空间 Ω} (X : Ω -> E) (ℙ : 测度 Ω)
   证明: by
   rw [← withDensity_apply _ hs]; rw [map_eq_withDensity_pdf X ℙ μ]
 
@@ -568,7 +568,7 @@ theorem lintegral_eq_measure_univ
 
 中文:
 定理 lintegral_eq_measure_univ
-  条件: {X : Ω -> E} [HasPDF X ℙ μ]
+  条件: {X : Ω -> E} [有PDF X ℙ μ]
   证明: by
   rw [← setLIntegral_univ]; rw [← map_eq_setLIntegral_pdf X ℙ μ MeasurableSet.univ]; rw [map_apply_of_aemeasurable (HasPDF.aemeasurable X ℙ μ) MeasurableSet.univ]; rw [Set.preimage_univ]
 
@@ -592,7 +592,7 @@ theorem eq_of_map_eq_withDensity
 
 中文:
 定理 eq_of_map_eq_withDensity
-  结论: [IsFiniteMeasure ℙ] {X : Ω -> E} [HasPDF X ℙ μ] (f : E -> 实数>=0∞)
+  结论: [是有限测度 ℙ] {X : Ω -> E} [有PDF X ℙ μ] (f : E -> 实数>=0∞)
   证明: by
   rw [map_eq_withDensity_pdf X ℙ μ]
   apply withDensity_eq_iff (measurable_pdf X ℙ μ).aemeasurable hmf
@@ -625,7 +625,7 @@ nonrec theorem ofReal_toReal_ae_eq [IsFiniteMea
 
 中文:
 定理 eq_of_map_eq_withDensity'
-  结论: [SigmaFinite μ] {X : Ω -> E} [HasPDF X ℙ μ] (f : E -> 实数>=0∞)
+  结论: [σ有限 μ] {X : Ω -> E} [有PDF X ℙ μ] (f : E -> 实数>=0∞)
   证明: map_eq_withDensity_pdf X ℙ μ ▸
     withDensity_eq_iff_of_sigmaFinite (measurable_pdf X ℙ μ).aemeasurable hmf
 
@@ -663,7 +663,7 @@ theorem lintegral_pdf_mul
 
 中文:
 定理 lintegral_pdf_mul
-  结论: {X : Ω -> E} [HasPDF X ℙ μ] {f : E -> 实数>=0∞}
+  结论: {X : Ω -> E} [有PDF X ℙ μ] {f : E -> 实数>=0∞}
   证明: by
   rw [pdf_def]; rw [← lintegral_map' (hf.mono_ac HasPDF.absolutelyContinuous) (HasPDF.aemeasurable X ℙ μ)]; rw [lintegral_rnDeriv_mul HasPDF.absolutelyContinuous hf]
 
@@ -687,7 +687,7 @@ theorem integrable_pdf_smul_iff
 
 中文:
 定理 integrable_pdf_smul_iff
-  结论: [IsFiniteMeasure ℙ] {X : Ω -> E} [HasPDF X ℙ μ] {f : E -> F}
+  结论: [是有限测度 ℙ] {X : Ω -> E} [有PDF X ℙ μ] {f : E -> F}
   证明: by
   rw [← Function.comp_def]; rw [← integrable_map_measure (hf.mono_ac HasPDF.absolutelyContinuous) (HasPDF.aemeasurable X ℙ μ)]; rw [map_eq_withDensity_pdf X ℙ μ]; rw [pdf_def]; rw [integrable_rnDeriv_smul_iff HasPDF.absolutelyContinuous]
   rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuou
@@ -711,7 +711,7 @@ theorem integral_pdf_smul
 
 中文:
 定理 integral_pdf_smul
-  结论: [IsFiniteMeasure ℙ] {X : Ω -> E} [HasPDF X ℙ μ] {f : E -> F}
+  结论: [是有限测度 ℙ] {X : Ω -> E} [有PDF X ℙ μ] {f : E -> F}
   证明: by
   rw [← integral_map (HasPDF.aemeasurable X ℙ μ) (hf.mono_ac HasPDF.absolutelyContinuous)]; rw [map_eq_withDensity_pdf X ℙ μ]; rw [pdf_def]; rw [integral_rnDeriv_smul HasPDF.absolutelyContinuous]; rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuous]
 
@@ -741,7 +741,7 @@ theorem quasiMeasurePreserving_hasPDF
 
 中文:
 定理 quasiMeasurePreserving_hasPDF
-  结论: (hg : QuasiMeasurePreserving g μ ν)
+  结论: (hg : 拟保测 g μ ν)
   证明: by
   have hgm : AEMeasurable g (map X ℙ) := hg.aemeasurable.mono_ac HasPDF.absolutelyContinuous
   rw [hasPDF_iff]; rw [← AEMeasurable.map_map_of_aemeasurable hgm (HasPDF.aemeasurable X ℙ μ)]
@@ -767,7 +767,7 @@ theorem quasiMeasurePreserving_hasPDF'
 
 中文:
 定理 quasiMeasurePreserving_hasPDF'
-  结论: [SFinite ℙ] [SigmaFinite ν]
+  结论: [SFinite ℙ] [σ有限 ν]
   证明: quasiMeasurePreserving_hasPDF X hg inferInstance
 
 Depends on / 依赖: quasiMeasurePreserving_hasPDF
@@ -807,7 +807,7 @@ theorem integral_mul_eq_integral
 
 中文:
 定理 integral_mul_eq_integral
-  条件: [HasPDF X ℙ]
+  条件: [有PDF X ℙ]
   结论: ∫ x, x * (pdf X ℙ volume x).to实数 = ∫ x, X x ∂ℙ
   证明: calc
     _ = ∫ x, (pdf X ℙ volume x).toReal * x := by congr with x; exact mul_comm _ _
@@ -834,7 +834,7 @@ theorem hasFiniteIntegral_mul
     refine .fun_m
 
 中文:
-定理 hasFiniteIntegral_mul
+定理 hasFinite整数egral_mul
   结论: {f : 实数 -> 实数} {g : 实数 -> 实数>=0∞} (hg : pdf X ℙ =ᵐ[volume] g)
   证明: by
   rw [hasFiniteIntegral_iff_enorm]
@@ -933,7 +933,7 @@ theorem IndepFun.mul_hasPDF'
 
 中文:
 定理 IndepFun.mul_hasPDF'
-  结论: [SFinite μ] [HasPDF X ℙ μ] [HasPDF Y ℙ μ]
+  结论: [SFinite μ] [有PDF X ℙ μ] [有PDF Y ℙ μ]
   证明: by
   have : AEMeasurable X ℙ := HasPDF.aemeasurable' μ
   have : AEMeasurable Y ℙ := HasPDF.aemeasurable' μ
@@ -966,7 +966,7 @@ theorem IndepFun.mul_hasPDF
 
 中文:
 定理 IndepFun.mul_hasPDF
-  结论: [SFinite μ] [HasPDF X ℙ μ] [HasPDF Y ℙ μ] [IsFiniteMeasure ℙ]
+  结论: [SFinite μ] [有PDF X ℙ μ] [有PDF Y ℙ μ] [是有限测度 ℙ]
   证明: by
   apply hXY.mul_hasPDF' <;> apply IsFiniteMeasure.toSigmaFinite
 
@@ -993,7 +993,7 @@ theorem IndepFun.pdf_mul_eq_mlconvolution_pdf'
 
 中文:
 定理 IndepFun.pdf_mul_eq_mlconvolution_pdf'
-  结论: [SigmaFinite μ] [HasPDF X ℙ μ] [HasPDF Y ℙ μ]
+  结论: [σ有限 μ] [有PDF X ℙ μ] [有PDF Y ℙ μ]
   证明: by
   rw [pdf]; rw [hXY.map_mul_eq_map_mconv_map₀' (HasPDF.aemeasurable' μ) (HasPDF.aemeasurable' μ) σX σY]
   apply rnDeriv_mconv' <;> exact HasPDF.absolutelyContinuous
@@ -1021,7 +1021,7 @@ theorem IndepFun.pdf_mul_eq_mlconvolution_pdf
 
 中文:
 定理 IndepFun.pdf_mul_eq_mlconvolution_pdf
-  结论: [SFinite μ] [HasPDF X ℙ μ] [HasPDF Y ℙ μ]
+  结论: [SFinite μ] [有PDF X ℙ μ] [有PDF Y ℙ μ]
   证明: by
   rw [pdf]; rw [hXY.map_mul_eq_map_mconv_map₀ (HasPDF.aemeasurable' μ) (HasPDF.aemeasurable' μ)]
   apply rnDeriv_mconv <;> exact HasPDF.absolutelyContinuous

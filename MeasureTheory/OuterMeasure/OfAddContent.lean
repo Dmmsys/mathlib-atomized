@@ -64,7 +64,7 @@ theorem ofFunction_eq
 
 中文:
 定理 ofFunction_eq
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: by
   refine le_antisymm (OuterMeasure.ofFunction_le s) ?_
   rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
@@ -106,7 +106,7 @@ theorem inducedOuterMeasure_eq
 
 中文:
 定理 inducedOuterMeasure_eq
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: by
   suffices inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s = m.extend hC s by
     rwa [m.extend_eq hC hs] at this
@@ -148,7 +148,7 @@ theorem isCaratheodory_ofFunction_of_mem
 
 中文:
 定理 isCaratheodory_ofFunction_of_mem
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: by
   rw [OuterMeasure.isCaratheodory_iff_le']
   intro t
@@ -200,7 +200,7 @@ theorem isCaratheodory_inducedOuterMeasure_of_mem
 
 中文:
 定理 isCaratheodory_inducedOuterMeasure_of_mem
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: isCaratheodory_ofFunction_of_mem hC (m.extend hC) (fun _ => m.extend_eq_top hC) hs
 
 Depends on / 依赖: _id_eq_csSup, extend, extend_eq_top, isCaratheodory_ofFunction_of_mem, m.extend, m.extend_eq_top
@@ -225,7 +225,7 @@ theorem isCaratheodory_inducedOuterMeasure
 
 中文:
 定理 isCaratheodory_inducedOuterMeasure
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: by
   induction hs with
   | basic u hu => exact isCaratheodory_inducedOuterMeasure_of_mem hC m hu
@@ -259,7 +259,7 @@ definition measureCaratheodory
 
 中文:
 定义 measureCaratheodory
-  签名: (m : AddContent 实数>=0∞ C) (hC : IsSetSemiring C)
+  签名: (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
   定义体: letI : MeasurableSpace α :=
     (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).caratheodory
   { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
@@ -294,7 +294,7 @@ theorem measureCaratheodory_eq_inducedOuterMeasure
 
 中文:
 定理 measureCaratheodory_eq_inducedOuterMeasure
-  结论: (hC : IsSetSemiring C) (m : AddContent 实数>=0∞ C)
+  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
   证明: rfl
 -/
 theorem measureCaratheodory_eq_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
@@ -312,7 +312,7 @@ theorem measureCaratheodory_eq
 
 中文:
 定理 measureCaratheodory_eq
-  结论: (m : AddContent 实数>=0∞ C) (hC : IsSetSemiring C)
+  结论: (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
   证明: m.inducedOuterMeasure_eq hC m_sigma_subadd hs
 
 Depends on / 依赖: inducedOuterMeasure_eq, m.inducedOuterMeasure_eq, m_sigma_subadd
@@ -333,7 +333,7 @@ definition measure
 
 中文:
 定义 measure
-  签名: [mα : MeasurableSpace α] (m : AddContent 实数>=0∞ C) (hC : IsSetSemiring C)
+  签名: [mα : 可测空间 α] (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
   定义体: (m.measureCaratheodory hC m_sigma_subadd).trim
     fun s a => isCaratheodory_inducedOuterMeasure hC m s (hC_gen s a)
 
@@ -360,7 +360,7 @@ theorem measure_eq
 
 中文:
 定理 measure_eq
-  结论: [mα : MeasurableSpace α] (m : AddContent 实数>=0∞ C) (hC : IsSetSemiring C)
+  结论: [mα : 可测空间 α] (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
   证明: by
   rw [measure]; rw [trim_measurableSet_eq]
   · exact m.measureCaratheodory_eq hC m_sigma_subadd hs

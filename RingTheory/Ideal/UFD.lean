@@ -107,7 +107,7 @@ theorem isPrincipal_of_height_eq_one
 
 中文:
 定理 isPrincipal_of_height_eq_one
-  结论: [UniqueFactorizationMonoid R]
+  结论: [唯一分解幺半群 R]
   证明: by
   have hpn : p != ⊥ := p.ne_bot_of_height_eq_one hph
   obtain ⟨x, hxmem, hxp⟩ := Ideal.IsPrime.exists_mem_prime_of_ne_bot ‹_› hpn
@@ -138,7 +138,7 @@ have hpn : p != ⊥ := fun hpb => hx0
 Ideal.span_singleton_eq_
 
 中文:
-定理 of_forall_isPrincipal_of_height_eq_one
+定理 of_对任意_isPrincipal_of_height_eq_one
   证明: by
   rw [iff_exists_prime_mem_of_isPrime]
   intro I hIn _
@@ -176,7 +176,7 @@ theorem iff_forall_isPrincipal_of_height_eq_one
   proof: ⟨fun _ _ _ => isPrincipal_of_height_eq_one, of_forall_isPrincipal_of_height_eq_one⟩
 
 中文:
-定理 iff_forall_isPrincipal_of_height_eq_one
+定理 iff_对任意_isPrincipal_of_height_eq_one
   证明: ⟨fun _ _ _ => isPrincipal_of_height_eq_one, of_forall_isPrincipal_of_height_eq_one⟩
 
 Depends on / 依赖: isPrincipal_of_height_eq_one, of_forall_isPrincipal_of_height_eq_one
@@ -202,7 +202,7 @@ theorem iff_of_isLocalizationAway_of_prime
 
 中文:
 定理 iff_of_isLocalizationAway_of_prime
-  结论: {x : R} (hx : Prime x)
+  结论: {x : R} (hx : 素 x)
   证明: by
   have : IsDomain S := IsLocalization.Away.isDomain S hx.ne_zero
   refine ⟨fun _ => of_isLocalization (Submonoid.powers x) S, fun _ => ?_⟩
@@ -239,7 +239,7 @@ theorem iff_localizationAway_of_prime
 
 中文:
 定理 iff_localizationAway_of_prime
-  条件: {x : R} (hx : Prime x)
+  条件: {x : R} (hx : 素 x)
   证明: iff_of_isLocalizationAway_of_prime hx (Localization.Away x)
 
 Depends on / 依赖: Localization, Localization.Away, iff_of_isLocalizationAway_of_prime

@@ -45,7 +45,7 @@ theorem mvPolynomial_zeroLocus_definable
 
 中文:
 定理 mvPolynomial_zeroLocus_definable
-  结论: {ι K : 类型} [Field K]
+  结论: {ι K : 类型} [域 K]
   证明: by
   rw [Set.definable_iff_exists_formula_sum]
   let p' := genericPolyMap (fun p : S => p.1.support)

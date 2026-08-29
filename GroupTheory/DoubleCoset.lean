@@ -43,7 +43,7 @@ definition doubleCoset
 
 中文:
 定义 doubleCoset
-  签名: (a : α) (s t : Set α)
+  签名: (a : α) (s t : 集合 α)
   定义体: s * {a} * t
 -/
 def doubleCoset (a : α) (s t : Set α) : Set α :=
@@ -60,7 +60,7 @@ lemma doubleCoset_eq_image2
 
 中文:
 引理 doubleCoset_eq_image2
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   证明: by
   simp_rw [doubleCoset, Set.mul_singleton, ← Set.image2_mul, Set.image2_image_left]
 
@@ -81,7 +81,7 @@ lemma mem_doubleCoset
 
 中文:
 引理 mem_doubleCoset
-  条件: {s t : Set α} {a b : α}
+  条件: {s t : 集合 α} {a b : α}
   证明: by
   simp only [doubleCoset_eq_image2, Set.mem_image2, eq_comm]
 
@@ -102,7 +102,7 @@ lemma mem_doubleCoset_self
 
 中文:
 引理 mem_doubleCoset_self
-  条件: (H K : Subgroup G) (a : G)
+  条件: (H K : 子群 G) (a : G)
   结论: a in doubleCoset a H K
   证明: mem_doubleCoset.mpr ⟨1, H.one_mem, 1, K.one_mem, (one_mul a).symm.trans (mul_one (1 * a)).symm⟩
 
@@ -123,7 +123,7 @@ lemma doubleCoset_eq_of_mem
 
 中文:
 引理 doubleCoset_eq_of_mem
-  条件: {H K : Subgroup G} {a b : G} (hb : b in doubleCoset a H K)
+  条件: {H K : 子群 G} {a b : G} (hb : b in doubleCoset a H K)
   证明: by
   obtain ⟨h, hh, k, hk, rfl⟩ := mem_doubleCoset.1 hb
   rw [doubleCoset]; rw [doubleCoset]; rw [← Set.singleton_mul_singleton]; rw [← Set.singleton_mul_singleton]; rw [mul_assoc]; rw [mul_assoc]; rw [Subgroup.singleton_mul_subgroup hk]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Subgroup.subgroup_mul
@@ -150,7 +150,7 @@ lemma mem_doubleCoset_of_not_disjoint
 
 中文:
 引理 mem_doubleCoset_of_not_disjoint
-  结论: {H K : Subgroup G} {a b : G}
+  结论: {H K : 子群 G} {a b : G}
   证明: by
   rw [Set.not_disjoint_iff] at h
   simp only [mem_doubleCoset] at *
@@ -181,7 +181,7 @@ lemma eq_of_not_disjoint
 
 中文:
 引理 eq_of_not_disjoint
-  结论: {H K : Subgroup G} {a b : G}
+  结论: {H K : 子群 G} {a b : G}
   证明: by
   rw [disjoint_comm] at h
   have ha : a in doubleCoset b H K := mem_doubleCoset_of_not_disjoint h
@@ -208,7 +208,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: (H K : Set G)
+  签名: (H K : 集合 G)
   定义体: Setoid.ker fun x => doubleCoset x H K
 
 Depends on / 依赖: Setoid, Setoid.ker, doubleCoset
@@ -225,8 +225,8 @@ definition Quotient
   body: _root_.Quotient (setoid H K)
 
 中文:
-定义 Quotient
-  签名: (H K : Set G)
+定义 商
+  签名: (H K : 集合 G)
   定义体: _root_.Quotient (setoid H K)
 
 Depends on / 依赖: Quotient, _root_, _root_.Quotient, setoid
@@ -246,7 +246,7 @@ lemma rel_iff
 
 中文:
 引理 rel_iff
-  条件: {H K : Subgroup G} {x y : G}
+  条件: {H K : 子群 G} {x y : G}
   证明: Iff.trans
     ⟨fun (hxy : doubleCoset x H K = doubleCoset y H K) => hxy ▸ mem_doubleCoset_self H K y,
       fun hxy => (doubleCoset_eq_of_mem hxy).symm⟩ mem_doubleCoset
@@ -276,7 +276,7 @@ lemma bot_rel_eq_leftRel
 
 中文:
 引理 bot_rel_eq_leftRel
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   ext a b
   rw [rel_iff]; rw [QuotientGroup.leftRel_apply]
@@ -315,7 +315,7 @@ lemma rel_bot_eq_right_group_rel
 
 中文:
 引理 rel_bot_eq_right_group_rel
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   ext a b
   rw [rel_iff]; rw [QuotientGroup.rightRel_apply]
@@ -349,7 +349,7 @@ definition quotToDoubleCoset
 
 中文:
 定义 quotToDoubleCoset
-  签名: (H K : Subgroup G) (q : Quotient (H : Set G) K)
+  签名: (H K : 子群 G) (q : 商 (H : 集合 G) K)
   定义体: doubleCoset q.out H K
 
 Depends on / 依赖: doubleCoset, q.out
@@ -367,7 +367,7 @@ abbreviation mk
 
 中文:
 缩写 mk
-  签名: (H K : Subgroup G) (a : G)
+  签名: (H K : 子群 G) (a : G)
   定义体: Quotient.mk'' a
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -389,7 +389,7 @@ lemma eq''
 
 中文:
 引理 eq''
-  条件: {a b : G} (H K : Subgroup G)
+  条件: {a b : G} (H K : 子群 G)
   结论: mk H K a = mk H K b ↔ setoid H K a b
   证明: Quotient.eq
 
@@ -410,7 +410,7 @@ lemma eq
 
 中文:
 引理 eq
-  条件: (H K : Subgroup G) (a b : G)
+  条件: (H K : 子群 G) (a b : G)
   证明: by
   rw [eq'']
   exact rel_iff
@@ -433,7 +433,7 @@ lemma out_eq'
 
 中文:
 引理 out_eq'
-  条件: (H K : Subgroup G) (q : Quotient ↑H ↑K)
+  条件: (H K : 子群 G) (q : 商 ↑H ↑K)
   结论: mk H K q.out = q
   证明: Quotient.out_eq' q
 
@@ -457,7 +457,7 @@ lemma mk_out_eq_mul
 
 中文:
 引理 mk_out_eq_mul
-  条件: (H K : Subgroup G) (g : G)
+  条件: (H K : 子群 G) (g : G)
   证明: by
   have := eq H K (mk H K g : Quotient ↑H ↑K).out g
   rw [out_eq'] at this
@@ -487,7 +487,7 @@ lemma mk_eq_of_doubleCoset_eq
 
 中文:
 引理 mk_eq_of_doubleCoset_eq
-  结论: {H K : Subgroup G} {a b : G}
+  结论: {H K : 子群 G} {a b : G}
   证明: by
   rw [eq]
   exact mem_doubleCoset.mp (h.symm ▸ mem_doubleCoset_self H K b)
@@ -513,7 +513,7 @@ lemma mem_quotToDoubleCoset_iff
 
 中文:
 引理 mem_quotToDoubleCoset_iff
-  条件: {H K : Subgroup G} (i : Quotient (H : Set G) K) (a : G)
+  条件: {H K : 子群 G} (i : 商 (H : 集合 G) K) (a : G)
   证明: by
   refine ⟨fun hg => by simp [mk_eq_of_doubleCoset_eq (doubleCoset_eq_of_mem hg)], fun hg => ?_⟩
   rw [← out_eq' _ _ i] at hg
@@ -540,7 +540,7 @@ lemma disjoint_out
 
 中文:
 引理 disjoint_out
-  条件: {H K : Subgroup G} {a b : Quotient H K}
+  条件: {H K : 子群 G} {a b : 商 H K}
   证明: by
   contrapose
   intro h
@@ -572,8 +572,8 @@ lemma iUnion_quotToDoubleCoset
 
 中文:
 引理 iUnion_quotToDoubleCoset
-  条件: (H K : Subgroup G)
-  结论: ⋃ q, quotToDoubleCoset H K q = Set.univ
+  条件: (H K : 子群 G)
+  结论: ⋃ q, quotToDoubleCoset H K q = 集合.univ
   证明: by
   ext x
   simp only [Set.mem_iUnion, quotToDoubleCoset, mem_doubleCoset, SetLike.mem_coe, Set.mem_univ,
@@ -616,7 +616,7 @@ lemma doubleCoset_union_rightCoset
 
 中文:
 引理 doubleCoset_union_rightCoset
-  条件: (H K : Subgroup G) (a : G)
+  条件: (H K : 子群 G) (a : G)
   证明: by
   ext x
   simp only [mem_rightCoset_iff, mul_inv_rev, Set.mem_iUnion, mem_doubleCoset,
@@ -661,7 +661,7 @@ lemma doubleCoset_union_leftCoset
 
 中文:
 引理 doubleCoset_union_leftCoset
-  条件: (H K : Subgroup G) (a : G)
+  条件: (H K : 子群 G) (a : G)
   证明: by
   ext x
   simp only [mem_leftCoset_iff, mul_inv_rev, Set.mem_iUnion, mem_doubleCoset]
@@ -702,7 +702,7 @@ lemma left_bot_eq_left_quot
 
 中文:
 引理 left_bot_eq_left_quot
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   unfold Quotient
   congr
@@ -732,7 +732,7 @@ lemma right_bot_eq_right_quot
 
 中文:
 引理 right_bot_eq_right_quot
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   unfold Quotient
   congr
@@ -765,8 +765,8 @@ lemma finite_quotient_iff_exists_finset_iUnion_eq_univ
     rw
 
 中文:
-引理 finite_quotient_iff_exists_finset_iUnion_eq_univ
-  条件: (H K : Subgroup G)
+引理 finite_quotient_iff_存在_finset_iUnion_eq_univ
+  条件: (H K : 子群 G)
   证明: by
   constructor
   · intro _
@@ -812,7 +812,7 @@ lemma iUnion_image_mk_leftRel
 
 中文:
 引理 iUnion_image_mk_leftRel
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   证明: by
   have cover := iUnion_quotToDoubleCoset H K
   rw [Set.iUnion_eq_univ_iff]
@@ -854,7 +854,7 @@ lemma iUnion_image_mk_rightRel
 
 中文:
 引理 iUnion_image_mk_rightRel
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   证明: by
   have cover := iUnion_quotToDoubleCoset H K
   rw [Set.iUnion_eq_univ_iff]
@@ -894,7 +894,7 @@ lemma iUnion_finset_leftRel_eq_univ_of_leftRel
 
 中文:
 引理 iUnion_finset_leftRel_eq_univ_of_leftRel
-  结论: {H K : Subgroup G} {t : Finset (Quotient H K)}
+  结论: {H K : 子群 G} {t : 有限集 (商 H K)}
   证明: by
   contrapose ht
   simp only [Set.univ_subset_iff, ← ne_eq] at ⊢ ht
@@ -938,7 +938,7 @@ lemma iUnion_finset_rightRel_eq_univ_of_rightRel
 
 中文:
 引理 iUnion_finset_rightRel_eq_univ_of_rightRel
-  结论: {H K : Subgroup G} {t : Finset (Quotient H K)}
+  结论: {H K : 子群 G} {t : 有限集 (商 H K)}
   证明: by
   contrapose ht
   simp only [Set.univ_subset_iff, ← ne_eq] at ⊢ ht

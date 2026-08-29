@@ -32,7 +32,7 @@ instance finite
 
 中文:
 实例 finite
-  签名: {R : 类型} [CommRing R] {ι : 类型} [Finite ι]
+  签名: {R : 类型} [交换环 R] {ι : 类型} [有限 ι]
   定义体: by
   choose n γ hg using fun i => Module.Finite.exists_fin (R := R) (M := M i)
   rw [Module.finite_def]; rw [← submodule_span_eq_top hg]

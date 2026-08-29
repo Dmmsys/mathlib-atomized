@@ -44,8 +44,8 @@ structure ContinuousAddMonoidHom
   (no additional axioms)
 
 中文:
-结构 ContinuousAddMonoidHom
-  参数: (A B : 类型) [AddMonoid A] [AddMonoid B] [TopologicalSpace A]
+结构 余ntinuousAdd幺半群态射
+  参数: (A B : 类型) [加法幺半群 A] [加法幺半群 B] [拓扑空间 A]
   继承: A ->+ B, C(A, B)
   (无附加公理)
 -/
@@ -71,7 +71,7 @@ structure ContinuousMonoidHom
   (no additional axioms)
 
 中文:
-结构 ContinuousMonoidHom
+结构 余ntinuous幺半群态射
   参数: extends A ->* B, C(A, B)
   继承: A ->* B, C(A, B)
   (无附加公理)
@@ -116,7 +116,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (A ->ₜ* B) A B where
+  签名: : 函数状 (A ->ₜ* B) A B where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f
@@ -148,7 +148,7 @@ instance instMonoidHomClass
 
 中文:
 实例 instMonoidHomClass
-  签名: : MonoidHomClass (A ->ₜ* B) A B where
+  签名: : 幺半群态射类 (A ->ₜ* B) A B where
   定义体: f.map_mul'
   map_one f := f.map_one'
 
@@ -173,7 +173,7 @@ instance instContinuousMapClass
 
 中文:
 实例 instContinuousMapClass
-  签名: : ContinuousMapClass (A ->ₜ* B) A B where
+  签名: : 连续映射类 (A ->ₜ* B) A B where
   定义体: f.continuous_toFun
 
 @[to_additive (attr := simp)]
@@ -244,7 +244,7 @@ definition toContinuousMonoidHom
 
 中文:
 定义 toContinuousMonoidHom
-  签名: [MonoidHomClass F A B] [ContinuousMapClass F A B] (f : F)
+  签名: [幺半群态射类 F A B] [连续映射类 F A B] (f : F)
   定义体: { MonoidHomClass.toMonoidHom f with
     continuous_toFun := by dsimp; fun_prop }
 
@@ -269,8 +269,8 @@ instance [MonoidHomClass
 @[to_additive (attr := simp)]
 
 中文:
-实例 [MonoidHomClass
-  签名: F A B] [ContinuousMapClass F A B] : CoeOut F (A ->ₜ* B)
+实例 [幺半群态射类
+  签名: F A B] [连续映射类 F A B] : CoeOut F (A ->ₜ* B)
   定义体: ⟨ContinuousMonoidHom.toContinuousMonoidHom⟩
 
 @[to_additive (attr := simp)]
@@ -293,7 +293,7 @@ lemma coe_coe
 
 中文:
 引理 coe_coe
-  条件: [MonoidHomClass F A B] [ContinuousMapClass F A B] (f : F)
+  条件: [幺半群态射类 F A B] [连续映射类 F A B] (f : F)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -314,7 +314,7 @@ lemma toMonoidHom_toContinuousMonoidHom
 
 中文:
 引理 toMonoidHom_toContinuousMonoidHom
-  条件: [MonoidHomClass F A B] [ContinuousMapClass F A B] (f : F)
+  条件: [幺半群态射类 F A B] [连续映射类 F A B] (f : F)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -333,7 +333,7 @@ lemma toContinuousMap_toContinuousMonoidHom
 
 中文:
 引理 toContinuousMap_toContinuousMonoidHom
-  结论: [MonoidHomClass F A B] [ContinuousMapClass F A B]
+  结论: [幺半群态射类 F A B] [连续映射类 F A B]
   证明: rfl
 -/
 lemma toContinuousMap_toContinuousMonoidHom [MonoidHomClass F A B] [ContinuousMapClass F A B]
@@ -380,7 +380,7 @@ ext by convert! DFunLike.ext_iff.1 h
 
 中文:
 定理 toContinuousMap_injective
-  结论: Injective (toContinuousMap : _ -> C(A, B))
+  结论: 单射 (toContinuousMap : _ -> C(A, B))
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h
 
@@ -401,7 +401,7 @@ ext by convert! DFunLike.ext_iff.1 h
 
 中文:
 定理 toMonoidHom_injective
-  结论: Injective (toMonoidHom : _ -> A ->* B)
+  结论: 单射 (toMonoidHom : _ -> A ->* B)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h
 -/
@@ -443,7 +443,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: (g : ContinuousMonoidHom B C) (f : ContinuousMonoidHom A B)
+  条件: (g : 余ntinuous幺半群态射 B C) (f : 余ntinuous幺半群态射 A B)
   证明: rfl
 -/
 lemma coe_comp (g : ContinuousMonoidHom B C) (f : ContinuousMonoidHom A B) :
@@ -461,7 +461,7 @@ definition prod
   body: ⟨f.toMonoidHom.prod g.toMonoidHom, f.continuous_toFun.prodMk g.continuous_toFun⟩
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : A ->ₜ* B) (g : A ->ₜ* C)
   定义体: ⟨f.toMonoidHom.prod g.toMonoidHom, f.continuous_toFun.prodMk g.continuous_toFun⟩
 
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (A ->ₜ* B)
+  签名: 幺 (A ->ₜ* B)
   定义体: ⟨1, continuous_const⟩
 
 @[to_additive (attr := simp)]
@@ -550,7 +550,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ->ₜ* B)
+  签名: 可居 (A ->ₜ* B)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (A ->ₜ* B) := ⟨1⟩
@@ -589,7 +589,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  结论: ⇑(ContinuousMonoidHom.id A) = _root_.id
+  结论: ⇑(余ntinuous幺半群态射.id A) = _root_.id
   证明: rfl
 -/
 lemma coe_id : ⇑(ContinuousMonoidHom.id A) = _root_.id :=
@@ -750,7 +750,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (A ->ₜ* E)
+  签名: 交换幺半群 (A ->ₜ* E)
   定义体: (mul E).comp (f.prod g)
   mul_comm f g := ext fun x => mul_comm (f x) (g x)
   mul_assoc f g h := ext fun x => mul_assoc (f x) (g x) (h x)
@@ -834,7 +834,7 @@ definition coprod
 
 中文:
 定义 coprod
-  签名: (f : ContinuousMonoidHom A E) (g : ContinuousMonoidHom B E)
+  签名: (f : 余ntinuous幺半群态射 A E) (g : 余ntinuous幺半群态射 B E)
   定义体: (mul E).comp (f.prodMap g)
 
 Depends on / 依赖: f.prodMap, prodMap
@@ -862,7 +862,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : ContinuousMonoidHom E E
+  签名: : 余ntinuous幺半群态射 E E
   定义体: ⟨invMonoidHom, continuous_inv⟩
 
 @[to_additive]
@@ -887,7 +887,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroup (ContinuousMonoidHom A E)
+  签名: 交换群 (余ntinuous幺半群态射 A E)
   定义体: inferInstance
   inv f := (inv E).comp f
   inv_mul_cancel f := ext fun x => inv_mul_cancel (f x)
@@ -917,7 +917,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: (F : 类型) [FunLike F A B] [ContinuousMapClass F A B]
+  签名: (F : 类型) [函数状 F A B] [连续映射类 F A B]
   定义体: toContinuousMonoidHom f
 
 Depends on / 依赖: toContinuousMonoidHom
@@ -952,8 +952,8 @@ structure ContinuousAddEquiv
   (no additional axioms)
 
 中文:
-结构 ContinuousAddEquiv
-  参数: [Add G] [Add H]
+结构 连续加法等价
+  参数: [加法 G] [加法 H]
   继承: G ≃+ H, G ≃ₜ H
   (无附加公理)
 -/
@@ -972,8 +972,8 @@ structure ContinuousMulEquiv
   (no additional axioms)
 
 中文:
-结构 ContinuousMulEquiv
-  参数: [Mul G] [Mul H]
+结构 连续乘法等价
+  参数: [乘法 G] [乘法 H]
   继承: G ≃* H, G ≃ₜ H
   (无附加公理)
 -/
@@ -1020,7 +1020,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (M ≃ₜ* N) M N
+  签名: 等价状 (M ≃ₜ* N) M N
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -1059,7 +1059,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulEquivClass (M ≃ₜ* N) M N
+  签名: 乘法等价类 (M ≃ₜ* N) M N
   定义体: f.map_mul'
 
 @[to_additive]
@@ -1081,7 +1081,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomeomorphClass (M ≃ₜ* N) M N
+  签名: 同胚类 (M ≃ₜ* N) M N
   定义体: f.continuous_toFun
   inv_continuous f := f.continuous_invFun
 
@@ -1270,7 +1270,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : M ≃ₜ* N)
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: EquivLike.bijective e
 
 @[to_additive]
@@ -1293,7 +1293,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : M ≃ₜ* N)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: EquivLike.injective e
 
 @[to_additive]
@@ -1316,7 +1316,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : M ≃ₜ* N)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: EquivLike.surjective e
 
 @[to_additive]
@@ -1396,7 +1396,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ≃ₜ* M)
+  签名: 可居 (M ≃ₜ* M)
   定义体: ⟨ContinuousMulEquiv.refl M⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1491,7 +1491,7 @@ initialize_simps_projections ContinuousAddEquiv (toFun -> apply, invFun -> symm_
 
 中文:
 定义 Simps.symm_apply
-  签名: [Mul G] [Mul H] (e : G ≃ₜ* H)
+  签名: [乘法 G] [乘法 H] (e : G ≃ₜ* H)
   定义体: e.symm
 
 initialize_simps_projections ContinuousMulEquiv (toFun -> apply, invFun -> symm_apply)
@@ -1566,7 +1566,7 @@ theorem equivLike_inv_eq_symm
 中文:
 定理 equivLike_inv_eq_symm
   条件: (f : M ≃ₜ* N)
-  结论: EquivLike.inv f = f.symm
+  结论: 等价状.inv f = f.symm
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1606,7 +1606,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : M ≃ₜ* N -> _)
+  结论: 函数.双射 (symm : M ≃ₜ* N -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -2044,7 +2044,7 @@ definition ofUnique
 
 中文:
 定义 ofUnique
-  签名: {M N} [Unique M] [Unique N] [Mul M] [Mul N]
+  签名: {M N} [唯一 M] [唯一 N] [乘法 M] [乘法 N]
   定义体: MulEquiv.ofUnique
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofUnique, ofUnique

@@ -66,8 +66,8 @@ definition intrinsicInterior
   body: (↑) '' interior ((↑) ⁻¹' s : Set <| affineSpan 𝕜 s)
 
 中文:
-定义 intrinsicInterior
-  签名: (s : Set P)
+定义 intrinsic整数erior
+  签名: (s : 集合 P)
   定义体: (↑) '' interior ((↑) ⁻¹' s : Set <| affineSpan 𝕜 s)
 
 Depends on / 依赖: affineSpan, interior
@@ -85,7 +85,7 @@ definition intrinsicFrontier
 
 中文:
 定义 intrinsicFrontier
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: (↑) '' frontier ((↑) ⁻¹' s : Set <| affineSpan 𝕜 s)
 
 Depends on / 依赖: affineSpan, frontier
@@ -103,7 +103,7 @@ definition intrinsicClosure
 
 中文:
 定义 intrinsicClosure
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: (↑) '' closure ((↑) ⁻¹' s : Set <| affineSpan 𝕜 s)
 
 Depends on / 依赖: affineSpan, closure
@@ -124,7 +124,7 @@ theorem mem_intrinsicInterior
 @[simp]
 
 中文:
-定理 mem_intrinsicInterior
+定理 mem_intrinsic整数erior
   证明: mem_image _ _ _
 
 @[simp]
@@ -184,7 +184,7 @@ theorem intrinsicInterior_subset
   proof: image_subset_iff.2 interior_subset
 
 中文:
-定理 intrinsicInterior_subset
+定理 intrinsic整数erior_subset
   结论: intrinsic整数erior 𝕜 s subseteq s
   证明: image_subset_iff.2 interior_subset
 
@@ -204,7 +204,7 @@ theorem intrinsicFrontier_subset
 
 中文:
 定理 intrinsicFrontier_subset
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   结论: intrinsicFrontier 𝕜 s subseteq s
   证明: image_subset_iff.2 (hs.preimage continuous_induced_dom).frontier_subset
 
@@ -265,8 +265,8 @@ theorem intrinsicInterior_empty
 @[simp]
 
 中文:
-定理 intrinsicInterior_empty
-  结论: intrinsic整数erior 𝕜 (∅ : Set P) = ∅
+定理 intrinsic整数erior_empty
+  结论: intrinsic整数erior 𝕜 (∅ : 集合 P) = ∅
   证明: by simp [intrinsicInterior]
 
 @[simp]
@@ -288,7 +288,7 @@ theorem intrinsicFrontier_empty
 
 中文:
 定理 intrinsicFrontier_empty
-  结论: intrinsicFrontier 𝕜 (∅ : Set P) = ∅
+  结论: intrinsicFrontier 𝕜 (∅ : 集合 P) = ∅
   证明: by simp [intrinsicFrontier]
 
 @[simp]
@@ -310,7 +310,7 @@ theorem intrinsicClosure_empty
 
 中文:
 定理 intrinsicClosure_empty
-  结论: intrinsicClosure 𝕜 (∅ : Set P) = ∅
+  结论: intrinsicClosure 𝕜 (∅ : 集合 P) = ∅
   证明: by simp [intrinsicClosure]
 
 @[simp]
@@ -335,7 +335,7 @@ alias ⟨Set.Nonempty.ofIntrinsicClosure, Set.Nonempty.intrinsicClosure⟩ := in
 
 中文:
 定理 intrinsicClosure_nonempty
-  结论: (intrinsicClosure 𝕜 s).Nonempty ↔ s.Nonempty
+  结论: (intrinsicClosure 𝕜 s).非空 ↔ s.非空
   证明: ⟨by simp_rw [nonempty_iff_ne_empty]; rintro h rfl; exact h intrinsicClosure_empty,
     Nonempty.mono subset_intrinsicClosure⟩
 
@@ -366,9 +366,9 @@ theorem intrinsicInterior_singleton
 @[simp]
 
 中文:
-定理 intrinsicInterior_singleton
+定理 intrinsic整数erior_singleton
   条件: (x : P)
-  结论: intrinsic整数erior 𝕜 ({x} : Set P) = {x}
+  结论: intrinsic整数erior 𝕜 ({x} : 集合 P) = {x}
   证明: by
   simp only [intrinsicInterior, preimage_coe_affineSpan_singleton, interior_univ, image_univ,
     Subtype.range_coe_subtype, mem_affineSpan_singleton, ofPred_eq_eq_singleton]
@@ -397,7 +397,7 @@ theorem intrinsicFrontier_singleton
 中文:
 定理 intrinsicFrontier_singleton
   条件: (x : P)
-  结论: intrinsicFrontier 𝕜 ({x} : Set P) = ∅
+  结论: intrinsicFrontier 𝕜 ({x} : 集合 P) = ∅
   证明: by
   rw [intrinsicFrontier]; rw [preimage_coe_affineSpan_singleton]; rw [frontier_univ]; rw [image_empty]
 
@@ -423,7 +423,7 @@ theorem intrinsicClosure_singleton
 中文:
 定理 intrinsicClosure_singleton
   条件: (x : P)
-  结论: intrinsicClosure 𝕜 ({x} : Set P) = {x}
+  结论: intrinsicClosure 𝕜 ({x} : 集合 P) = {x}
   证明: by
   simp only [intrinsicClosure, preimage_coe_affineSpan_singleton, closure_univ, image_univ,
     Subtype.range_coe_subtype, mem_affineSpan_singleton, ofPred_eq_eq_singleton]
@@ -477,7 +477,7 @@ theorem interior_subset_intrinsicInterior
     preimage_interior_subset_interior_preimage continuous_subtype_val hx, rfl⟩
 
 中文:
-定理 interior_subset_intrinsicInterior
+定理 interior_subset_intrinsic整数erior
   结论: interior s subseteq intrinsic整数erior 𝕜 s
   证明: fun x hx => ⟨⟨x, subset_affineSpan _ _ interior_subset hx⟩,
     preimage_interior_subset_interior_preimage continuous_subtype_val hx, rfl⟩
@@ -563,7 +563,7 @@ alias intrinsicClosure_diff_intrinsicFrontier := intrinsicClosure_sdiff_intrinsi
 
 中文:
 定理 intrinsicClosure_sdiff_intrinsicFrontier
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: (image_sdiff Subtype.coe_injective _ _).symm.trans by
     rw [closure_sdiff_frontier]; rw [intrinsicInterior]
 
@@ -597,8 +597,8 @@ alias intrinsicClosure_diff_intrinsicInterior := intrinsicClosure_sdiff_intrinsi
 @[simp]
 
 中文:
-定理 intrinsicClosure_sdiff_intrinsicInterior
-  条件: (s : Set P)
+定理 intrinsicClosure_sdiff_intrinsic整数erior
+  条件: (s : 集合 P)
   证明: (image_sdiff Subtype.coe_injective _ _).symm
 
 @[deprecated (since := "2026-06-03")]
@@ -629,8 +629,8 @@ theorem intrinsicInterior_union_intrinsicFrontier
 @[simp]
 
 中文:
-定理 intrinsicInterior_union_intrinsicFrontier
-  条件: (s : Set P)
+定理 intrinsic整数erior_union_intrinsicFrontier
+  条件: (s : 集合 P)
   证明: by
   simp [intrinsicClosure, intrinsicInterior, intrinsicFrontier, closure_eq_interior_union_frontier,
     image_union]
@@ -655,8 +655,8 @@ theorem intrinsicFrontier_union_intrinsicInterior
   rw [union_comm]; rw [intrinsicInterior_union_intrinsicFrontier]
 
 中文:
-定理 intrinsicFrontier_union_intrinsicInterior
-  条件: (s : Set P)
+定理 intrinsicFrontier_union_intrinsic整数erior
+  条件: (s : 集合 P)
   证明: by
   rw [union_comm]; rw [intrinsicInterior_union_intrinsicFrontier]
 
@@ -676,7 +676,7 @@ theorem isClosed_intrinsicClosure
 
 中文:
 定理 isClosed_intrinsicClosure
-  条件: (hs : IsClosed (affineSpan 𝕜 s : Set P))
+  条件: (hs : 是闭集 (affineSpan 𝕜 s : 集合 P))
   证明: hs.isClosedEmbedding_subtypeVal.isClosedMap _ isClosed_closure
 
 Depends on / 依赖: hs.isClosedEmbedding_subtypeVal.isClosedMap, isClosedEmbedding_subtypeVal, isClosedMap, isClosed_closure
@@ -697,7 +697,7 @@ theorem isClosed_intrinsicFrontier
 
 中文:
 定理 isClosed_intrinsicFrontier
-  条件: (hs : IsClosed (affineSpan 𝕜 s : Set P))
+  条件: (hs : 是闭集 (affineSpan 𝕜 s : 集合 P))
   证明: hs.isClosedEmbedding_subtypeVal.isClosedMap _ isClosed_frontier
 
 @[simp]
@@ -720,7 +720,7 @@ theorem affineSpan_intrinsicClosure
 
 中文:
 定理 affineSpan_intrinsicClosure
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: (affineSpan_le.2 intrinsicClosure_subset_affineSpan).antisymm
     affineSpan_mono _ subset_intrinsicClosure
 
@@ -744,8 +744,8 @@ theorem IsClosed.intrinsicClosure
 @[simp]
 
 中文:
-定理 IsClosed.intrinsicClosure
-  条件: (hs : IsClosed ((↑) ⁻¹' s : Set <| affineSpan 𝕜 s))
+定理 是闭集.intrinsicClosure
+  条件: (hs : 是闭集 ((↑) ⁻¹' s : 集合 <| affineSpan 𝕜 s))
   证明: by
   rw [intrinsicClosure]; rw [hs.closure_eq]; rw [image_preimage_eq_of_subset]
   exact (subset_affineSpan _ _).trans Subtype.range_coe.superset
@@ -774,7 +774,7 @@ theorem intrinsicClosure_idem
 
 中文:
 定理 intrinsicClosure_idem
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: by
   refine IsClosed.intrinsicClosure ?_
   set t := affineSpan 𝕜 (intrinsicClosure 𝕜 s) with ht
@@ -808,7 +808,7 @@ theorem intrinsicClosure_eq_closure_inter_affineSpan
 
 中文:
 定理 intrinsicClosure_eq_closure_inter_affineSpan
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: by
   have h : Topology.IsInducing ((↑) : affineSpan 𝕜 s -> P) := .subtypeVal
   rw [intrinsicClosure]; rw [h.closure_eq_preimage_closure_image]; rw [Set.image_preimage_eq_inter_range]; rw [Set.image_preimage_eq_of_subset ?_]; rw [Subtype.range_coe]
@@ -837,8 +837,8 @@ theorem intrinsicInterior_prod_eq
   have h : ((↑) ⁻¹' (s ×ˢ t) : Set _) = e ⁻¹' (((↑) ⁻¹' s) ×ˢ ((↑) ⁻¹' t)) := r
 
 中文:
-定理 intrinsicInterior_prod_eq
-  结论: [AddCommGroup W] [Module 𝕜 W] [TopologicalSpace Q]
+定理 intrinsic整数erior_prod_eq
+  结论: [加法交换群 W] [模 𝕜 W] [拓扑空间 Q]
   证明: by
   let e : affineSpan 𝕜 (s ×ˢ t) ≃ₜ affineSpan 𝕜 s × affineSpan 𝕜 t :=
     (Homeomorph.setCongr (by simp [affineSpan_prod_eq])).trans (Homeomorph.Set.prod _ _)
@@ -911,7 +911,7 @@ theorem intrinsicInterior_image_of_homeomorph_affineSpan
     rw [intrinsicInterior]; rw [← image_interior_preimage_comp e he_homeo]; rw [(funext he : (↑) ∘ e = f ∘ (↑))]; rw [preimage_image_eq_of_homeomorph_affineSpan e he_homeo he]; rw [image_comp]; rfl
 
 中文:
-定理 intrinsicInterior_image_of_homeomorph_affineSpan
+定理 intrinsic整数erior_image_of_homeomorph_affineSpan
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · simp
@@ -999,8 +999,8 @@ theorem intrinsicInterior_image
     (fun [_] => e.toHomeomorph) (fun [_] => e.toHomeomorph.isHomeomorph) (fun [_] _ => 
 
 中文:
-定理 intrinsicInterior_image
-  条件: (φ : P ≃ᴬ[𝕜] Q) (s : Set P)
+定理 intrinsic整数erior_image
+  条件: (φ : P ≃ᴬ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 (φ.affineSubspaceMap (affineSpan 𝕜 s)).trans ofEq (map_span φ.toAffineMap s)
   intrinsicInterior_image_of_homeomorph_affineSpan
@@ -1029,7 +1029,7 @@ theorem intrinsicFrontier_image
 
 中文:
 定理 intrinsicFrontier_image
-  条件: (φ : P ≃ᴬ[𝕜] Q) (s : Set P)
+  条件: (φ : P ≃ᴬ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 (φ.affineSubspaceMap (affineSpan 𝕜 s)).trans ofEq (map_span φ.toAffineMap s)
   intrinsicFrontier_image_of_homeomorph_affineSpan
@@ -1058,7 +1058,7 @@ theorem intrinsicClosure_image
 
 中文:
 定理 intrinsicClosure_image
-  条件: (φ : P ≃ᴬ[𝕜] Q) (s : Set P)
+  条件: (φ : P ≃ᴬ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 (φ.affineSubspaceMap (affineSpan 𝕜 s)).trans ofEq (map_span φ.toAffineMap s)
   intrinsicClosure_image_of_homeomorph_affineSpan
@@ -1095,8 +1095,8 @@ theorem intrinsicInterior_image
     (fun [_
 
 中文:
-定理 intrinsicInterior_image
-  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : Set P)
+定理 intrinsic整数erior_image
+  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 ((affineSpan 𝕜 s).isometryEquivMap φ).toContinuousAffineEquiv.trans ofEq
 (map_span φ.toAffineMap s).trans congrArg _ congrArg (· '' s) φ.coe_toAffineMap
@@ -1128,7 +1128,7 @@ theorem intrinsicFrontier_image
 
 中文:
 定理 intrinsicFrontier_image
-  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : Set P)
+  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 ((affineSpan 𝕜 s).isometryEquivMap φ).toContinuousAffineEquiv.trans ofEq
 (map_span φ.toAffineMap s).trans congrArg _ congrArg (· '' s) φ.coe_toAffineMap
@@ -1160,7 +1160,7 @@ theorem intrinsicClosure_image
 
 中文:
 定理 intrinsicClosure_image
-  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : Set P)
+  条件: (φ : P ->ᵃⁱ[𝕜] Q) (s : 集合 P)
   证明: let e : [Nonempty s] -> (affineSpan 𝕜 s) ≃ᴬ[𝕜] (affineSpan 𝕜 (φ '' s)) := fun [_] =>
 ((affineSpan 𝕜 s).isometryEquivMap φ).toContinuousAffineEquiv.trans ofEq
 (map_span φ.toAffineMap s).trans congrArg _ congrArg (· '' s) φ.coe_toAffineMap
@@ -1208,8 +1208,8 @@ theorem intrinsicInterior_image
 @[simp]
 
 中文:
-定理 intrinsicInterior_image
-  条件: (φ : P ≃ᵃ[𝕜] Q) (s : Set P)
+定理 intrinsic整数erior_image
+  条件: (φ : P ≃ᵃ[𝕜] Q) (s : 集合 P)
   证明: φ.toContinuousAffineEquiv.intrinsicInterior_image s
 
 @[simp]
@@ -1233,7 +1233,7 @@ theorem intrinsicFrontier_image
 
 中文:
 定理 intrinsicFrontier_image
-  条件: (φ : P ≃ᵃ[𝕜] Q) (s : Set P)
+  条件: (φ : P ≃ᵃ[𝕜] Q) (s : 集合 P)
   证明: φ.toContinuousAffineEquiv.intrinsicFrontier_image s
 
 @[simp]
@@ -1255,7 +1255,7 @@ theorem intrinsicClosure_image
 
 中文:
 定理 intrinsicClosure_image
-  条件: (φ : P ≃ᵃ[𝕜] Q) (s : Set P)
+  条件: (φ : P ≃ᵃ[𝕜] Q) (s : 集合 P)
   证明: φ.toContinuousAffineEquiv.intrinsicClosure_image s
 
 Depends on / 依赖: intrinsicClosure_image, toContinuousAffineEquiv, toContinuousAffineEquiv.intrinsicClosure_image
@@ -1334,8 +1334,8 @@ alias closure_diff_intrinsicInterior := closure_sdiff_intrinsicInterior
 @[simp]
 
 中文:
-定理 closure_sdiff_intrinsicInterior
-  条件: (s : Set P)
+定理 closure_sdiff_intrinsic整数erior
+  条件: (s : 集合 P)
   证明: intrinsicClosure_eq_closure 𝕜 s ▸ intrinsicClosure_sdiff_intrinsicInterior s
 
 @[deprecated (since := "2026-06-03")]
@@ -1366,7 +1366,7 @@ alias closure_diff_intrinsicFrontier := closure_sdiff_intrinsicFrontier
 
 中文:
 定理 closure_sdiff_intrinsicFrontier
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: intrinsicClosure_eq_closure 𝕜 s ▸ intrinsicClosure_sdiff_intrinsicFrontier s
 
 @[deprecated (since := "2026-06-03")]
@@ -1400,9 +1400,9 @@ theorem Convex.intrinsicClosure
   exact hs.closure.inter (affineSpan 𝕜 s).convex
 
 中文:
-定理 Convex.intrinsicClosure
-  条件: (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 (intrinsicClosure 𝕜 s)
+定理 凸.intrinsicClosure
+  条件: (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 (intrinsicClosure 𝕜 s)
   证明: by
   rw [intrinsicClosure_eq_closure_inter_affineSpan]
   exact hs.closure.inter (affineSpan 𝕜 s).convex
@@ -1424,7 +1424,7 @@ theorem aux
 
 中文:
 定理 aux
-  结论: {α β : 类型} [TopologicalSpace α] [TopologicalSpace β] (φ : α ≃ₜ β)
+  结论: {α β : 类型} [拓扑空间 α] [拓扑空间 β] (φ : α ≃ₜ β)
   证明: by
   rw [← φ.image_symm]; rw [← φ.symm.image_interior]; rw [image_nonempty]
 -/
@@ -1447,8 +1447,8 @@ theorem Set.Nonempty.intrinsicInterior
   rw [intrinsicInterior]; rw [image_nonempty]; rw [aux (AffineIsometryEquiv.constVSub Real p').symm.toHomeomorph]; rw [Convex.interior_nonempty_iff_affineSpan_eq_top]; rw [AffineI
 
 中文:
-定理 Set.Nonempty.intrinsicInterior
-  条件: (hscv : Convex 实数 s) (hsne : s.Nonempty)
+定理 集合.非空.intrinsic整数erior
+  条件: (hscv : 凸 实数 s) (hsne : s.非空)
   证明: by
   have := hsne.coe_sort
   obtain ⟨p, hp⟩ := hsne
@@ -1476,8 +1476,8 @@ theorem intrinsicInterior_nonempty
     Set.Nonempty.intrinsicInterior hs⟩
 
 中文:
-定理 intrinsicInterior_nonempty
-  条件: (hs : Convex 实数 s)
+定理 intrinsic整数erior_nonempty
+  条件: (hs : 凸 实数 s)
   证明: ⟨by simp_rw [nonempty_iff_ne_empty]; rintro h rfl; exact h intrinsicInterior_empty,
     Set.Nonempty.intrinsicInterior hs⟩
 

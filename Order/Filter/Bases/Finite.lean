@@ -39,7 +39,7 @@ theorem hasBasis_generate
 
 中文:
 定理 hasBasis_generate
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: ⟨fun U => by simp only [mem_generate_iff, and_assoc, and_left_comm]⟩
 
 Depends on / 依赖: and_assoc, and_left_comm, mem_generate_iff
@@ -62,8 +62,8 @@ definition FilterBasis.ofSets
         (sInt
 
 中文:
-定义 FilterBasis.ofSets
-  签名: (s : Set (Set α))
+定义 滤子基.ofSets
+  签名: (s : 集合 (集合 α))
   定义体: sInter '' { t | Set.Finite t ∧ t subseteq s }
   nonempty := ⟨univ, ∅, ⟨⟨finite_empty, empty_subset s⟩, sInter_empty⟩⟩
   inter_sets := by
@@ -90,8 +90,8 @@ lemma FilterBasis.ofSets_sets
   proof: rfl
 
 中文:
-引理 FilterBasis.ofSets_sets
-  条件: (s : Set (Set α))
+引理 滤子基.ofSets_sets
+  条件: (s : 集合 (集合 α))
   证明: rfl
 -/
 lemma FilterBasis.ofSets_sets (s : Set (Set α)) :
@@ -109,7 +109,7 @@ theorem generate_eq_generate_inter
 
 中文:
 定理 generate_eq_generate_inter
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: by
   rw [← FilterBasis.ofSets_sets]; rw [FilterBasis.generate]; rw [← (hasBasis_generate s).filter_eq]; rfl
 
@@ -130,7 +130,7 @@ theorem ofSets_filter_eq_generate
 
 中文:
 定理 ofSets_filter_eq_generate
-  条件: (s : Set (Set α))
+  条件: (s : 集合 (集合 α))
   证明: by
   rw [← (FilterBasis.ofSets s).generate]; rw [FilterBasis.ofSets_sets]; rw [← generate_eq_generate_inter]
 
@@ -150,7 +150,7 @@ theorem generate_neBot_iff
 
 中文:
 定理 generate_neBot_iff
-  条件: {s : Set (Set α)}
+  条件: {s : 集合 (集合 α)}
   证明: (hasBasis_generate s).neBot_iff.trans by simp only [← and_imp, and_comm]
 
 Depends on / 依赖: and_comm, and_imp, hasBasis_generate, neBot_iff, neBot_iff.trans
@@ -177,8 +177,8 @@ theorem HasBasis.iInf'
 exact (biInter_me
 
 中文:
-定理 HasBasis.iInf'
-  结论: {ι : 类型} {ι' : ι -> 类型} {l : ι -> Filter α}
+定理 有基.iInf'
+  结论: {ι : 类型} {ι' : ι -> 类型} {l : ι -> 滤子 α}
   证明: ⟨by
     intro t
     constructor
@@ -221,8 +221,8 @@ theorem HasBasis.iInf
 exact iI
 
 中文:
-定理 HasBasis.iInf
-  结论: {ι : 类型} {ι' : ι -> 类型} {l : ι -> Filter α}
+定理 有基.iInf
+  结论: {ι : 类型} {ι' : ι -> 类型} {l : ι -> 滤子 α}
   证明: by
   refine ⟨fun t => ⟨fun ht => ?_, ?_⟩⟩
   · rcases (HasBasis.iInf' hl).mem_iff.mp ht with ⟨⟨I, f⟩, ⟨hI, hf⟩, hsub⟩
@@ -258,8 +258,8 @@ theorem _root_.Pairwise.exists_mem_filter_basis_of_disjoint
   exact ⟨ind, hp, hd.mono fun i j hij => hij.mono (ht _) (ht _)⟩
 
 中文:
-定理 _root_.Pairwise.exists_mem_filter_basis_of_disjoint
-  结论: {I} [Finite I] {l : I -> Filter α}
+定理 _root_.两两.存在_mem_filter_basis_of_disjoint
+  结论: {I} [有限 I] {l : I -> 滤子 α}
   证明: by
   rcases hd.exists_mem_filter_of_disjoint with ⟨t, htl, hd⟩
   choose ind hp ht using fun i => (h i).mem_iff.1 (htl i)
@@ -287,8 +287,8 @@ theorem _root_.Set.PairwiseDisjoint.exists_mem_filter_basis
   exact ⟨ind, hp, hd.mono ht⟩
 
 中文:
-定理 _root_.Set.PairwiseDisjoint.exists_mem_filter_basis
-  结论: {I : 类型} {l : I -> Filter α}
+定理 _root_.集合.PairwiseDisjoint.存在_mem_filter_basis
+  结论: {I : 类型} {l : I -> 滤子 α}
   证明: by
   rcases hd.exists_mem_filter hS with ⟨t, htl, hd⟩
   choose ind hp ht using fun i => (h i).mem_iff.1 (htl i)
@@ -317,7 +317,7 @@ theorem hasBasis_iInf_principal_finite
 
 中文:
 定理 hasBasis_iInf_principal_finite
-  条件: {ι : 类型} (s : ι -> Set α)
+  条件: {ι : 类型} (s : ι -> 集合 α)
   证明: by
   refine ⟨fun U => (mem_iInf_finite _).trans ?_⟩
   simp only [iInf_principal_finset, mem_principal,

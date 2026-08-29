@@ -88,7 +88,7 @@ definition localizerMorphismInv
 
 中文:
 定义 localizerMorphismInv
-  签名: [W₂.HasTwoOutOfThree命题erty]
+  签名: [W₂.有TwoOutOfThreeProperty]
   定义体: ρ
   map := by
     rw [hW₁]

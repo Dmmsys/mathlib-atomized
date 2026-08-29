@@ -176,7 +176,7 @@ theorem legendreSym.to_jacobiSym
 
 中文:
 定理 legendreSym.to_jacobiSym
-  条件: (p : 自然数) [fp : Fact p.Prime] (a : 整数)
+  条件: (p : 自然数) [fp : Fact p.素] (a : 整数)
   证明: by
   simp only [jacobiSym, primeFactorsList_prime fp.1, List.prod_cons, List.prod_nil, mul_one,
     List.pmap]
@@ -354,7 +354,7 @@ theorem eq_zero_iff_not_coprime
 中文:
 定理 eq_zero_iff_not_coprime
   条件: {a : 整数} {b : 自然数} [NeZero b]
-  结论: J(a | b) = 0 ↔ a.gcd b != 1
+  结论: J(a | b) = 0 ↔ a.最大公约数 b != 1
   证明: List.prod_eq_zero_iff.trans
     (by
       rw [List.mem_pmap]; rw [Int.gcd_eq_natAbs]; rw [Ne]; rw [Prime.not_coprime_iff_dvd]
@@ -386,7 +386,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: {a : 整数} {b : 自然数} (h : a.gcd b = 1)
+  条件: {a : 整数} {b : 自然数} (h : a.最大公约数 b = 1)
   结论: J(a | b) != 0
   证明: by
   rcases eq_zero_or_neZero b with hb | _
@@ -416,7 +416,7 @@ exact ⟨hb, mt jacobiSym.ne_zero Classical.not_not.2 h⟩, fun ⟨hb, h⟩ => b
 中文:
 定理 eq_zero_iff
   条件: {a : 整数} {b : 自然数}
-  结论: J(a | b) = 0 ↔ b != 0 ∧ a.gcd b != 1
+  结论: J(a | b) = 0 ↔ b != 0 ∧ a.最大公约数 b != 1
   证明: ⟨fun h => by
     rcases eq_or_ne b 0 with hb | hb
     · rw [hb, zero_right] at h; cases h
@@ -466,7 +466,7 @@ theorem eq_one_or_neg_one
 
 中文:
 定理 eq_one_or_neg_one
-  条件: {a : 整数} {b : 自然数} (h : a.gcd b = 1)
+  条件: {a : 整数} {b : 自然数} (h : a.最大公约数 b = 1)
   结论: J(a | b) = 1 ∨ J(a | b) = -1
   证明: (trichotomy a b).resolve_left jacobiSym.ne_zero h
 
@@ -547,7 +547,7 @@ theorem sq_one
 
 中文:
 定理 sq_one
-  条件: {a : 整数} {b : 自然数} (h : a.gcd b = 1)
+  条件: {a : 整数} {b : 自然数} (h : a.最大公约数 b = 1)
   结论: J(a | b) ^ 2 = 1
   证明: by
   rcases eq_one_or_neg_one h with h₁ | h₁ <;> rw [h₁] <;> rfl
@@ -568,7 +568,7 @@ theorem sq_one'
 
 中文:
 定理 sq_one'
-  条件: {a : 整数} {b : 自然数} (h : a.gcd b = 1)
+  条件: {a : 整数} {b : 自然数} (h : a.最大公约数 b = 1)
   结论: J(a ^ 2 | b) = 1
   证明: by rw [pow_left, sq_one h]
 
@@ -648,7 +648,7 @@ theorem prime_dvd_of_eq_neg_one
 
 中文:
 定理 prime_dvd_of_eq_neg_one
-  结论: {p : 自然数} [Fact p.Prime] {a : 整数} (h : J(a | p) = -1) {x y : 整数}
+  结论: {p : 自然数} [Fact p.素] {a : 整数} (h : J(a | p) = -1) {x y : 整数}
   证明: by
   rw [← legendreSym.to_jacobiSym] at h
   exact legendreSym.prime_dvd_of_eq_neg_one h hxy
@@ -674,8 +674,8 @@ theorem list_prod_left
 
 中文:
 定理 list_prod_left
-  条件: {l : List 整数} {n : 自然数}
-  结论: J(l.prod | n) = (l.map fun a => J(a | n)).prod
+  条件: {l : 列表 整数} {n : 自然数}
+  结论: J(l.乘积 | n) = (l.map fun a => J(a | n)).乘积
   证明: by
   induction l with
   | nil => simp only [List.prod_nil, List.map_nil, one_left]
@@ -706,7 +706,7 @@ theorem list_prod_right
 
 中文:
 定理 list_prod_right
-  条件: {a : 整数} {l : List 自然数} (hl : 对任意 n in l, n != 0)
+  条件: {a : 整数} {l : 列表 自然数} (hl : 对任意 n in l, n != 0)
   证明: by
   induction l with
   | nil => simp only [List.prod_nil, one_right, List.map_nil]
@@ -820,7 +820,7 @@ theorem nonsquare_iff_jacobiSym_eq_neg_one
 
 中文:
 定理 nonsquare_iff_jacobiSym_eq_neg_one
-  条件: {a : 整数} {p : 自然数} [Fact p.Prime]
+  条件: {a : 整数} {p : 自然数} [Fact p.素]
   证明: by
   rw [← legendreSym.to_jacobiSym]
   exact legendreSym.eq_neg_one_iff p
@@ -842,7 +842,7 @@ theorem isSquare_of_jacobiSym_eq_one
 
 中文:
 定理 isSquare_of_jacobiSym_eq_one
-  条件: {a : 整数} {p : 自然数} [Fact p.Prime] (h : J(a | p) = 1)
+  条件: {a : 整数} {p : 自然数} [Fact p.素] (h : J(a | p) = 1)
   证明: Classical.not_not.mp by rw [← nonsquare_iff_jacobiSym_eq_neg_one, h]; decide
 
 Depends on / 依赖: Classical, Classical.not_not.mp, nonsquare_iff_jacobiSym_eq_neg_one, not_not
@@ -875,7 +875,7 @@ theorem value_at
 
 中文:
 定理 value_at
-  结论: (a : 整数) {R : 类型} [Semiring R] (χ : R ->* 整数)
+  结论: (a : 整数) {R : 类型} [半环 R] (χ : R ->* 整数)
   证明: by
   conv_rhs => rw [← prod_primeFactorsList hb.pos.ne', cast_list_prod, map_list_prod χ]
   rw [jacobiSym]; rw [List.map_map]; rw [← List.pmap_eq_map
@@ -1515,7 +1515,7 @@ definition fastJacobiSymAux
 
 中文:
 定义 fastJacobiSymAux
-  签名: (a b : 自然数) (flip : 布尔) (ha0 : a > 0)
+  签名: (a b : 自然数) (flip : 布尔值) (ha0 : a > 0)
   定义体: if ha4 : a % 4 = 0 then
     fastJacobiSymAux (a / 4) b flip
       (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero ha4)) (by decide))
@@ -1558,7 +1558,7 @@ theorem fastJacobiSymAux.eq_jacobiSym
 
 中文:
 定理 fastJacobiSymAux.eq_jacobiSym
-  结论: {a b : 自然数} {flip : 布尔} {ha0 : a > 0}
+  结论: {a b : 自然数} {flip : 布尔值} {ha0 : a > 0}
   证明: by
   induction a using Nat.strongRecOn generalizing b flip with | ind a IH =>
   unfold fastJacobiSymAux
@@ -1708,7 +1708,7 @@ definition fastLegendreSym
 
 中文:
 定义 fastLegendreSym
-  签名: (p : 自然数) [Fact p.Prime] (a : 整数)
+  签名: (p : 自然数) [Fact p.素] (a : 整数)
   定义体: J(a | p)
 -/
 private def fastLegendreSym (p : Nat) [Fact p.Prime] (a : Int) : Int := J(a | p)

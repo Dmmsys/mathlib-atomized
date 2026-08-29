@@ -74,7 +74,7 @@ definition isExplicitNumber
 
 中文:
 定义 isExplicitNumber
-  签名: : Expr -> 布尔
+  签名: : Expr -> 布尔值
 -/
 def isExplicitNumber : Expr -> Bool
   | .lit _ => true

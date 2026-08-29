@@ -88,7 +88,7 @@ theorem delta_lt_false
 中文:
 定理 delta_lt_false
   条件: {a b : 自然数} (h₁ : delta * a < b) (h₂ : delta * b < a)
-  结论: False
+  结论: 假
   证明: not_le_of_gt (lt_trans (mul_lt_mul_of_pos_left h₁ <| by decide) h₂) by
     simpa [mul_assoc] using Nat.mul_le_mul_right a (by decide : 1 <= delta * delta)
 
@@ -1449,7 +1449,7 @@ theorem all_iff_forall
   statement: forall {t}, All P t ↔ forall x, Emem x t -> P x
 
 中文:
-定理 all_iff_forall
+定理 all_iff_对任意
   条件: {P : α -> 命题}
   结论: 对任意 {t}, All P t ↔ 对任意 x, Emem x t -> P x
 -/
@@ -1466,7 +1466,7 @@ theorem any_iff_exists
   statement: forall {t}, Any P t ↔ exists x, Emem x t ∧ P x
 
 中文:
-定理 any_iff_exists
+定理 any_iff_存在
   条件: {P : α -> 命题}
   结论: 对任意 {t}, Any P t ↔ 存在 x, Emem x t ∧ P x
 -/
@@ -1676,7 +1676,7 @@ theorem foldr_cons_eq_toList
 
 中文:
 定理 foldr_cons_eq_toList
-  结论: 对任意 (t : Ordnode α) (r : List α), t.foldr List.cons r = toList t ++ r
+  结论: 对任意 (t : Ordnode α) (r : 列表 α), t.foldr 列表.cons r = toList t ++ r
 -/
 theorem foldr_cons_eq_toList : forall (t : Ordnode α) (r : List α), t.foldr List.cons r = toList t ++ r
   | nil, _ => rfl
@@ -2090,7 +2090,7 @@ theorem dual_insert
 
 中文:
 定理 dual_insert
-  条件: [LE α] [@Std.Total α (· <= ·)] [DecidableLE α] (x : α)
+  条件: [LE α] [@Std.全 α (· <= ·)] [DecidableLE α] (x : α)
   证明: rfl
     rw [Ordnode.insert]; rw [dual]; rw [Ordnode.insert]; rw [this]; rw [← cmpLE_swap x y]
     cases cmpLE x y <;>
@@ -2663,7 +2663,7 @@ definition Bounded
   signature: : Ordnode α -> WithBot α -> WithTop α -> Prop
 
 中文:
-定义 Bounded
+定义 有界
   签名: : Ordnode α -> WithBot α -> WithTop α -> 命题
 -/
 def Bounded : Ordnode α -> WithBot α -> WithTop α -> Prop
@@ -2678,7 +2678,7 @@ English:
 theorem Bounded.dual
 
 中文:
-定理 Bounded.dual
+定理 有界.dual
 -/
 theorem Bounded.dual :
     forall {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> @Bounded αᵒᵈ _ (dual t) o₂ o₁
@@ -2696,7 +2696,7 @@ theorem Bounded.dual_iff
     have := Bounded.dual h; rwa [dual_dual, OrderDual.Preorder.dual_dual] at this⟩
 
 中文:
-定理 Bounded.dual_iff
+定理 有界.dual_iff
   条件: {t : Ordnode α} {o₁ o₂}
   证明: ⟨Bounded.dual, fun h => by
     have := Bounded.dual h; rwa [dual_dual, OrderDual.Preorder.dual_dual] at this⟩
@@ -2716,8 +2716,8 @@ theorem Bounded.weak_left
   statement: forall {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t ⊥ o₂
 
 中文:
-定理 Bounded.weak_left
-  结论: 对任意 {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t ⊥ o₂
+定理 有界.weak_left
+  结论: 对任意 {t : Ordnode α} {o₁ o₂}, 有界 t o₁ o₂ -> 有界 t ⊥ o₂
 -/
 theorem Bounded.weak_left : forall {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t ⊥ o₂
   | nil, o₁, o₂, h => by cases o₂ <;> trivial
@@ -2731,8 +2731,8 @@ theorem Bounded.weak_right
   statement: forall {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t o₁ ⊤
 
 中文:
-定理 Bounded.weak_right
-  结论: 对任意 {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t o₁ ⊤
+定理 有界.weak_right
+  结论: 对任意 {t : Ordnode α} {o₁ o₂}, 有界 t o₁ o₂ -> 有界 t o₁ ⊤
 -/
 theorem Bounded.weak_right : forall {t : Ordnode α} {o₁ o₂}, Bounded t o₁ o₂ -> Bounded t o₁ ⊤
   | nil, o₁, o₂, h => by cases o₁ <;> trivial
@@ -2748,9 +2748,9 @@ theorem Bounded.weak
   proof: h.weak_left.weak_right
 
 中文:
-定理 Bounded.weak
-  条件: {t : Ordnode α} {o₁ o₂} (h : Bounded t o₁ o₂)
-  结论: Bounded t ⊥ ⊤
+定理 有界.weak
+  条件: {t : Ordnode α} {o₁ o₂} (h : 有界 t o₁ o₂)
+  结论: 有界 t ⊥ ⊤
   证明: h.weak_left.weak_right
 
 Depends on / 依赖: h.weak_left.weak_right, weak_left, weak_right
@@ -2766,7 +2766,7 @@ theorem Bounded.mono_left
   given: {x y : α} (xy : x <= y)
 
 中文:
-定理 Bounded.mono_left
+定理 有界.mono_left
   条件: {x y : α} (xy : x <= y)
 -/
 theorem Bounded.mono_left {x y : α} (xy : x <= y) :
@@ -2783,7 +2783,7 @@ theorem Bounded.mono_right
   given: {x y : α} (xy : x <= y)
 
 中文:
-定理 Bounded.mono_right
+定理 有界.mono_right
   条件: {x y : α} (xy : x <= y)
 -/
 theorem Bounded.mono_right {x y : α} (xy : x <= y) :
@@ -2800,8 +2800,8 @@ theorem Bounded.to_lt
   statement: forall {t : Ordnode α} {x y : α}, Bounded t x y -> x < y
 
 中文:
-定理 Bounded.to_lt
-  结论: 对任意 {t : Ordnode α} {x y : α}, Bounded t x y -> x < y
+定理 有界.to_lt
+  结论: 对任意 {t : Ordnode α} {x y : α}, 有界 t x y -> x < y
 -/
 theorem Bounded.to_lt : forall {t : Ordnode α} {x y : α}, Bounded t x y -> x < y
   | nil, _, _, h => h
@@ -2816,9 +2816,9 @@ theorem Bounded.to_nil
   statement: forall {o₁ o₂}, Bounded t o₁ o₂ -> Bounded nil o₁ o₂
 
 中文:
-定理 Bounded.to_nil
+定理 有界.to_nil
   条件: {t : Ordnode α}
-  结论: 对任意 {o₁ o₂}, Bounded t o₁ o₂ -> Bounded nil o₁ o₂
+  结论: 对任意 {o₁ o₂}, 有界 t o₁ o₂ -> 有界 nil o₁ o₂
 -/
 theorem Bounded.to_nil {t : Ordnode α} : forall {o₁ o₂}, Bounded t o₁ o₂ -> Bounded nil o₁ o₂
   | none, _, _ => ⟨⟩
@@ -2833,7 +2833,7 @@ theorem Bounded.trans_left
   given: {t₁ t₂ : Ordnode α} {x : α}
 
 中文:
-定理 Bounded.trans_left
+定理 有界.trans_left
   条件: {t₁ t₂ : Ordnode α} {x : α}
 -/
 theorem Bounded.trans_left {t₁ t₂ : Ordnode α} {x : α} :
@@ -2849,7 +2849,7 @@ theorem Bounded.trans_right
   given: {t₁ t₂ : Ordnode α} {x : α}
 
 中文:
-定理 Bounded.trans_right
+定理 有界.trans_right
   条件: {t₁ t₂ : Ordnode α} {x : α}
 -/
 theorem Bounded.trans_right {t₁ t₂ : Ordnode α} {x : α} :
@@ -2865,8 +2865,8 @@ theorem Bounded.mem_lt
   statement: forall {t o} {x : α}, Bounded t o x -> All (· < x) t
 
 中文:
-定理 Bounded.mem_lt
-  结论: 对任意 {t o} {x : α}, Bounded t o x -> All (· < x) t
+定理 有界.mem_lt
+  结论: 对任意 {t o} {x : α}, 有界 t o x -> All (· < x) t
 -/
 theorem Bounded.mem_lt : forall {t o} {x : α}, Bounded t o x -> All (· < x) t
   | nil, _, _, _ => ⟨⟩
@@ -2881,8 +2881,8 @@ theorem Bounded.mem_gt
   statement: forall {t o} {x : α}, Bounded t x o -> All (· > x) t
 
 中文:
-定理 Bounded.mem_gt
-  结论: 对任意 {t o} {x : α}, Bounded t x o -> All (· > x) t
+定理 有界.mem_gt
+  结论: 对任意 {t o} {x : α}, 有界 t x o -> All (· > x) t
 -/
 theorem Bounded.mem_gt : forall {t o} {x : α}, Bounded t x o -> All (· > x) t
   | nil, _, _, _ => ⟨⟩
@@ -2895,7 +2895,7 @@ English:
 theorem Bounded.of_lt
 
 中文:
-定理 Bounded.of_lt
+定理 有界.of_lt
 -/
 theorem Bounded.of_lt :
     forall {t o₁ o₂} {x : α}, Bounded t o₁ o₂ -> Bounded nil o₁ x -> All (· < x) t -> Bounded t o₁ x
@@ -2909,7 +2909,7 @@ English:
 theorem Bounded.of_gt
 
 中文:
-定理 Bounded.of_gt
+定理 有界.of_gt
 -/
 theorem Bounded.of_gt :
     forall {t o₁ o₂} {x : α}, Bounded t o₁ o₂ -> Bounded nil x o₂ -> All (· > x) t -> Bounded t x o₂
@@ -2927,7 +2927,7 @@ theorem Bounded.to_sep
   exact h₂.mem_gt.imp fun z xz => lt_trans yx xz
 
 中文:
-定理 Bounded.to_sep
+定理 有界.to_sep
   结论: {t₁ t₂ o₁ o₂} {x : α}
   证明: by
   refine h₁.mem_lt.imp fun y yx => ?_

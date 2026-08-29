@@ -50,7 +50,7 @@ theorem tendsto_nhdsGT_of_tendsto_atTop
 
 中文:
 定理 tendsto_nhdsGT_of_tendsto_atTop
-  条件: (h : Tendsto (fun x => f (c + x⁻¹)) atTop l)
+  条件: (h : 收敛 (fun x => f (c + x⁻¹)) atTop l)
   证明: by
   simpa [← Function.comp_def, Tendsto, ← Filter.map_map] using h
 
@@ -74,7 +74,7 @@ theorem tendsto_nhdsLT_of_tendsto_atTop
 
 中文:
 定理 tendsto_nhdsLT_of_tendsto_atTop
-  条件: (h : Tendsto (fun x => f (c - x⁻¹)) atTop l)
+  条件: (h : 收敛 (fun x => f (c - x⁻¹)) atTop l)
   证明: by
   convert_to Tendsto (f ∘ (fun x => c + x) ∘ Neg.neg ∘ Inv.inv) atTop l at h
   · ext
@@ -102,7 +102,7 @@ theorem tendsto_nhdsNE_of_tendsto_atTop
 
 中文:
 定理 tendsto_nhdsNE_of_tendsto_atTop
-  结论: (h_neg : Tendsto (fun x => f (c - x⁻¹)) atTop l)
+  结论: (h_neg : 收敛 (fun x => f (c - x⁻¹)) atTop l)
   证明: by
   simpa [Tendsto, ← nhdsLT_sup_nhdsGT] using
     ⟨tendsto_nhdsLT_of_tendsto_atTop _ _ h_neg, tendsto_nhdsGT_of_tendsto_atTop _ _ h_pos⟩
@@ -127,7 +127,7 @@ theorem tendsto_nhdsNE_of_tendsto_atTop_nhds_of_eq
 
 中文:
 定理 tendsto_nhdsNE_of_tendsto_atTop_nhds_of_eq
-  结论: [TopologicalSpace α] {a b : α}
+  结论: [拓扑空间 α] {a b : α}
   证明: by
   apply tendsto_nhdsNE_of_tendsto_atTop _ _ h_neg
   convert! h_pos
@@ -151,7 +151,7 @@ theorem isBigOWith_of_tendsto_top
 
 中文:
 定理 isBigOWith_of_tendsto_top
-  结论: {C : 实数} {f g : 实数 -> 实数} {l : Filter 实数}
+  结论: {C : 实数} {f g : 实数 -> 实数} {l : 滤子 实数}
   证明: Asymptotics.IsLittleO.forall_isBigOWith (.of_tendsto_div_atTop h) hC
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsLittleO.forall_isBigOWith, IsLittleO, forall_isBigOWith, of_tendsto_div_atTop
@@ -171,7 +171,7 @@ theorem isBigOWith_of_tendsto_bot
 
 中文:
 定理 isBigOWith_of_tendsto_bot
-  结论: {C : 实数} {f g : 实数 -> 实数} {l : Filter 实数}
+  结论: {C : 实数} {f g : 实数 -> 实数} {l : 滤子 实数}
   证明: Asymptotics.IsLittleO.forall_isBigOWith (.of_tendsto_div_atBot h) hC
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsLittleO.forall_isBigOWith, IsLittleO, forall_isBigOWith, of_tendsto_div_atBot
@@ -191,7 +191,7 @@ theorem isBigO_of_div_tendsto_atTop
 
 中文:
 定理 isBigO_of_div_tendsto_atTop
-  结论: {f g : 实数 -> 实数} {l : Filter 实数}
+  结论: {f g : 实数 -> 实数} {l : 滤子 实数}
   证明: Asymptotics.IsLittleO.isBigO (.of_tendsto_div_atTop h)
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsLittleO.isBigO, IsLittleO, isBigO, of_tendsto_div_atTop
@@ -211,7 +211,7 @@ theorem isBigO_of_div_tendsto_atBot
 
 中文:
 定理 isBigO_of_div_tendsto_atBot
-  结论: {f g : 实数 -> 实数} {l : Filter 实数}
+  结论: {f g : 实数 -> 实数} {l : 滤子 实数}
   证明: Asymptotics.IsLittleO.isBigO (.of_tendsto_div_atBot h)
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsLittleO.isBigO, IsLittleO, isBigO, of_tendsto_div_atBot

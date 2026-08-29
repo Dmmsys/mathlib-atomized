@@ -39,7 +39,7 @@ instance [ConditionallyCompletePartialOrderSup
   body: h_dir.isLUB_csSup (α := α) h_non h_bdd
 
 中文:
-实例 [ConditionallyCompletePartialOrderSup
+实例 [余nditionallyCompletePartialOrderSup
   签名: α] :
   定义体: h_dir.isLUB_csSup (α := α) h_non h_bdd
 
@@ -58,7 +58,7 @@ instance [ConditionallyCompletePartialOrderInf
   body: h_dir.isGLB_csInf (α := α) h_non h_bdd
 
 中文:
-实例 [ConditionallyCompletePartialOrderInf
+实例 [余nditionallyCompletePartialOrderInf
   签名: α] :
   定义体: h_dir.isGLB_csInf (α := α) h_non h_bdd
 
@@ -76,7 +76,7 @@ instance [ConditionallyCompletePartialOrder
   signature: α] :
 
 中文:
-实例 [ConditionallyCompletePartialOrder
+实例 [余nditionallyCompletePartial序
   签名: α] :
 -/
 instance [ConditionallyCompletePartialOrder α] :
@@ -258,7 +258,7 @@ theorem DirectedOn.notMem_of_csSup_lt
 
 中文:
 定理 DirectedOn.notMem_of_csSup_lt
-  结论: {x : α} {s : Set α} (hd : DirectedOn (· <= ·) s)
+  结论: {x : α} {s : 集合 α} (hd : DirectedOn (· <= ·) s)
   证明: fun hx => lt_irrefl _ (hd.le_csSup hs hx).trans_lt h
 -/
 protected theorem DirectedOn.notMem_of_csSup_lt {x : α} {s : Set α} (hd : DirectedOn (· <= ·) s)
@@ -282,7 +282,7 @@ theorem DirectedOn.csSup_eq_of_forall_le_of_forall_lt_exists_gt
 lt_irrefl _ ha'.trans_le hd.le_csSup ⟨b, H⟩ ha
 
 中文:
-定理 DirectedOn.csSup_eq_of_forall_le_of_forall_lt_exists_gt
+定理 DirectedOn.csSup_eq_of_对任意_le_of_对任意_lt_存在_gt
   证明: (eq_of_le_of_not_lt (hd.csSup_le hs H)) fun hb =>
     let ⟨_, ha, ha'⟩ := H' _ hb
 lt_irrefl _ ha'.trans_le hd.le_csSup ⟨b, H⟩ ha
@@ -361,7 +361,7 @@ theorem csInf_Ici
 
 中文:
 定理 csInf_Ici
-  条件: {α : 类型} [ConditionallyCompletePartialOrderInf α] {a : α}
+  条件: {α : 类型} [余nditionallyCompletePartialOrderInf α] {a : α}
   证明: isLeast_Ici.csInf_eq
 
 @[simp]
@@ -385,7 +385,7 @@ theorem csInf_Ico
 
 中文:
 定理 csInf_Ico
-  条件: {α : 类型} [ConditionallyCompletePartialOrderInf α] {a b : α} (h : a < b)
+  条件: {α : 类型} [余nditionallyCompletePartialOrderInf α] {a b : α} (h : a < b)
   证明: (isLeast_Ico h).csInf_eq
 
 @[simp]
@@ -409,7 +409,7 @@ theorem csInf_Icc
 
 中文:
 定理 csInf_Icc
-  结论: {α : 类型} [ConditionallyCompletePartialOrderInf α] {a b : α}
+  结论: {α : 类型} [余nditionallyCompletePartialOrderInf α] {a b : α}
   证明: (isLeast_Icc h).csInf_eq
 
 @[to_dual existing, simp]
@@ -433,7 +433,7 @@ theorem csSup_Iic
 
 中文:
 定理 csSup_Iic
-  结论: sSup (Iic a) = a
+  结论: sSup (左无界右闭区间 a) = a
   证明: isGreatest_Iic.csSup_eq
 
 @[to_dual existing, simp]
@@ -458,7 +458,7 @@ theorem csSup_Ioc
 中文:
 定理 csSup_Ioc
   条件: (h : a < b)
-  结论: sSup (Ioc a b) = b
+  结论: sSup (左开右闭区间 a b) = b
   证明: (isGreatest_Ioc h).csSup_eq
 
 @[simp]
@@ -483,7 +483,7 @@ theorem csSup_Icc
 中文:
 定理 csSup_Icc
   条件: {a b : α} (h : a <= b)
-  结论: sSup (Icc a b) = b
+  结论: sSup (闭区间 a b) = b
   证明: (isGreatest_Icc h).csSup_eq
 
 @[to_dual]
@@ -505,7 +505,7 @@ lemma sup_eq_top_of_top_mem
 
 中文:
 引理 sup_eq_top_of_top_mem
-  条件: [OrderTop α] (h : ⊤ in s)
+  条件: [有顶序 α] (h : ⊤ in s)
   结论: sSup s = ⊤
   证明: IsGreatest.csSup_eq ⟨h, fun _ _ => le_top⟩
 

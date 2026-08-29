@@ -52,7 +52,7 @@ deriving Category, HasPullbacks
 
 中文:
 定义 AffineEtale
-  签名: (S : Scheme.{u})
+  签名: (S : 概形.{u})
   定义体: MorphismProperty.CostructuredArrow @Etale.{u} ⊤ Scheme.Spec.{u} S
 deriving Category, HasPullbacks
 
@@ -76,7 +76,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {R : CommRingCat.{u}} (f : Spec R ⟶ S) [Etale f]
+  签名: {R : 交换环范畴.{u}} (f : Spec R ⟶ S) [平展 f]
   定义体: MorphismProperty.CostructuredArrow.mk ⊤ f ‹_›
 -/
 protected def mk {R : CommRingCat.{u}} (f : Spec R ⟶ S) [Etale f] : AffineEtale S :=
@@ -94,7 +94,7 @@ definition Spec
 
 中文:
 定义 Spec
-  签名: (S : Scheme.{u})
+  签名: (S : 概形.{u})
   定义体: MorphismProperty.CostructuredArrow.toOver _ _ _
 -/
 protected def Spec (S : Scheme.{u}) : S.AffineEtale ⥤ S.Etale :=
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: (AffineEtale.Spec S).Faithful
+  签名: (AffineEtale.Spec S).忠实
   定义体: inferInstanceAs (MorphismProperty.CostructuredArrow.toOver _ _ _).Faithful
 
 Depends on / 依赖: CostructuredArrow, Faithful, MorphismProperty, MorphismProperty.CostructuredArrow.toOver, toOver
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: (AffineEtale.Spec S).Full
+  签名: (AffineEtale.Spec S).满
   定义体: inferInstanceAs (MorphismProperty.CostructuredArrow.toOver _ _ _).Full
 
 Depends on / 依赖: CostructuredArrow, MorphismProperty, MorphismProperty.CostructuredArrow.toOver, toOver
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: (AffineEtale.Spec S).IsCoverDense S.smallEtaleTopology
+  签名: (AffineEtale.Spec S).是余verDense S.smallEtaleTopology
   定义体: inferInstanceAs (MorphismProperty.CostructuredArrow.toOver _ _ _).IsCoverDense
     (S.smallGrothendieckTopology _)
 
@@ -171,7 +171,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: : GrothendieckTopology S.AffineEtale
+  签名: : Grothendieck拓扑 S.AffineEtale
   定义体: (AffineEtale.Spec S).inducedTopology S.smallEtaleTopology
 
 Depends on / 依赖: AffineEtale, AffineEtale.Spec, S.smallEtaleTopology, inducedTopology, smallEtaleTopology
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.IsDenseSubsite (topology S) S.smallEtaleTopology (AffineEtale.Spec S)
+  签名: 函子.是DenseSubsite (topology S) S.smallEtaleTopology (AffineEtale.Spec S)
   定义体: by
   dsimp [topology]
   infer_instance
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.IsOneHypercoverDense.{u} (AffineEtale.Spec S)
+  签名: 函子.是OneHypercoverDense.{u} (AffineEtale.Spec S)
   定义体: isOneHypercoverDense_toOver_Spec _
 
 Depends on / 依赖: isOneHypercoverDense_toOver_Spec
@@ -262,7 +262,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSheafify (AffineEtale.topology S) A
+  签名: 有Sheafify (AffineEtale.topology S) A
   定义体: hasSheafifyEssentiallySmallSite.{u} _ _
 
 Depends on / 依赖: hasSheafifyEssentiallySmallSite
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSheafify S.smallEtaleTopology A
+  签名: 有Sheafify S.smallEtaleTopology A
   定义体: Functor.IsDenseSubsite.hasSheafify_of_isEquivalence
     (AffineEtale.topology S) S.smallEtaleTopology (AffineEtale.Spec S)
 
@@ -381,8 +381,8 @@ instance [Abelian
   body: inferInstance
 
 中文:
-实例 [Abelian
-  签名: A] : Abelian (Sheaf (AffineEtale.topology S) A)
+实例 [交换
+  签名: A] : 交换 (层 (AffineEtale.topology S) A)
   定义体: inferInstance
 -/
 instance [Abelian A] : Abelian (Sheaf (AffineEtale.topology S) A) := inferInstance
@@ -396,8 +396,8 @@ instance [Abelian
   body: inferInstance
 
 中文:
-实例 [Abelian
-  签名: A] : Abelian (Sheaf S.smallEtaleTopology A)
+实例 [交换
+  签名: A] : 交换 (层 S.smallEtaleTopology A)
   定义体: inferInstance
 -/
 instance [Abelian A] : Abelian (Sheaf S.smallEtaleTopology A) := inferInstance
@@ -418,7 +418,7 @@ definition AffineEtale.sheafEquiv
 
 中文:
 定义 AffineEtale.sheafEquiv
-  签名: : Sheaf (AffineEtale.topology S) A ≌ Sheaf S.smallEtaleTopology A
+  签名: : 层 (AffineEtale.topology S) A ≌ 层 S.smallEtaleTopology A
   定义体: ((AffineEtale.Spec S).sheafPushforwardContinuous A
       (topology S) S.smallEtaleTopology).asEquivalence.symm
 

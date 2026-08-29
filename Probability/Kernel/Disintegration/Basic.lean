@@ -63,7 +63,7 @@ class IsCondKernel
     - disintegrate : ρ.fst otimesₘ ρCond = ρ
 
 中文:
-类 IsCondKernel
+类 是余ndKernel
   参数: : 命题 where
   公理与运算 (1 个):
     - disintegrate : ρ.fst otimesₘ ρCond = ρ
@@ -101,9 +101,9 @@ lemma IsCondKernel.isSFiniteKernel
   contrapose hρ; rwa [← ρ.disintegrate ρCond, Measure.compProd_of_not_isSFiniteKernel]
 
 中文:
-引理 IsCondKernel.isSFiniteKernel
+引理 是余ndKernel.isSFiniteKernel
   条件: (hρ : ρ != 0)
-  结论: IsSFiniteKernel ρCond
+  结论: 是SFiniteKernel ρCond
   证明: by
   contrapose hρ; rwa [← ρ.disintegrate ρCond, Measure.compProd_of_not_isSFiniteKernel]
 
@@ -127,8 +127,8 @@ lemma IsCondKernel.apply_of_ne_zero_of_measurableSet
   have (a : _) : ρCond a (Prod.mk a ⁻¹' {x} ×ˢ s) = ({x} : Set α).indicator (ρCond · s) a := 
 
 中文:
-引理 IsCondKernel.apply_of_ne_zero_of_measurableSet
-  结论: [MeasurableSingletonClass α] {x : α}
+引理 是余ndKernel.apply_of_ne_zero_of_measurableSet
+  结论: [MeasurableSingleton类 α] {x : α}
   证明: by
   have := isSFiniteKernel ρ ρCond (by rintro rfl; simp at hx)
   nth_rewrite 2 [← ρ.disintegrate ρCond]
@@ -168,8 +168,8 @@ lemma IsCondKernel.apply_of_ne_zero
   simp [this, (measurableEmbedding_prodMk_left x).com
 
 中文:
-引理 IsCondKernel.apply_of_ne_zero
-  结论: [MeasurableSingletonClass α] {x : α}
+引理 是余ndKernel.apply_of_ne_zero
+  结论: [MeasurableSingleton类 α] {x : α}
   证明: by
   have : ρCond x s = ((ρ.fst {x})⁻¹ • ρ).comap (fun (y : Ω) => (x, y)) s := by
     congr 2 with s hs
@@ -199,8 +199,8 @@ lemma IsCondKernel.isProbabilityMeasure
     (measurableSet_singleton _)]; rw [ENNReal.inv_mul_cancel ha (measure_ne_top _ _)]
 
 中文:
-引理 IsCondKernel.isProbabilityMeasure
-  条件: [MeasurableSingletonClass α] {a : α} (ha : ρ.fst {a} != 0)
+引理 是余ndKernel.isProbabilityMeasure
+  条件: [MeasurableSingleton类 α] {a : α} (ha : ρ.fst {a} != 0)
   证明: by
   constructor
   rw [IsCondKernel.apply_of_ne_zero _ _ ha]; rw [prod_univ]; rw [← Measure.fst_apply
@@ -223,8 +223,8 @@ lemma IsCondKernel.isMarkovKernel
   proof: ⟨fun _ => isProbabilityMeasure _ _ (hρ _)⟩
 
 中文:
-引理 IsCondKernel.isMarkovKernel
-  条件: [MeasurableSingletonClass α] (hρ : 对任意 a, ρ.fst {a} != 0)
+引理 是余ndKernel.isMarkovKernel
+  条件: [MeasurableSingleton类 α] (hρ : 对任意 a, ρ.fst {a} != 0)
   证明: ⟨fun _ => isProbabilityMeasure _ _ (hρ _)⟩
 
 Depends on / 依赖: isProbabilityMeasure
@@ -258,7 +258,7 @@ class IsCondKernel
     - disintegrate : κ.fst otimesₖ κCond = κ
 
 中文:
-类 IsCondKernel
+类 是余ndKernel
   参数: : 命题 where
   公理与运算 (1 个):
     - disintegrate : κ.fst otimesₖ κCond = κ
@@ -276,7 +276,7 @@ instance instIsCondKernel_zero
 
 中文:
 实例 instIsCondKernel_zero
-  签名: (κCond : Kernel (α × β) Ω)
+  签名: (κCond : 核 (α × β) Ω)
   定义体: by simp
 -/
 instance instIsCondKernel_zero (κCond : Kernel (α × β) Ω) : IsCondKernel 0 κCond where
@@ -293,7 +293,7 @@ lemma disintegrate
 
 中文:
 引理 disintegrate
-  条件: [κ.IsCondKernel κCond]
+  条件: [κ.是余ndKernel κCond]
   结论: κ.fst otimesₖ κCond = κ
   证明: IsCondKernel.disintegrate
 
@@ -316,8 +316,8 @@ lemma IsCondKernel.isProbabilityMeasure_ae
     exact ⟨fun _ => measure_univ, fun h => ⟨
 
 中文:
-引理 IsCondKernel.isProbabilityMeasure_ae
-  条件: [IsFiniteKernel κ.fst] [κ.IsCondKernel κCond] (a : α)
+引理 是余ndKernel.isProbabilityMeasure_ae
+  条件: [是FiniteKernel κ.fst] [κ.是余ndKernel κCond] (a : α)
   证明: by
   have h := disintegrate κ κCond
   by_cases h_sfin : IsSFiniteKernel κCond
@@ -437,7 +437,7 @@ instance condKernelCountable.instIsMarkovKernel
 
 中文:
 实例 condKernelCountable.instIsMarkovKernel
-  签名: [对任意 a, IsMarkovKernel (κCond a)]
+  签名: [对任意 a, 是MarkovKernel (κCond a)]
   定义体: (‹forall a, IsMarkovKernel (κCond a)› p.1).isProbabilityMeasure p.2
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AtPrime, IsLocalRing, IsLocalRing.maximalIdeal, IsMarkovKernel, IsScalarTower, IsScalarTower.toAlgHom, LiesOver, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, P.ResidueField, P.primeCompl, ResidueField, RingHom, RingHom.surjectiveOnStalks_of_isLocalization, algebraOfLiesOver, e.symm.surjective, e.symm.toLinearMap
@@ -462,7 +462,7 @@ instance condKernelCountable.instIsCondKernel
 
 中文:
 实例 condKernelCountable.instIsCondKernel
-  签名: [对任意 a, IsMarkovKernel (κCond a)]
+  签名: [对任意 a, 是MarkovKernel (κCond a)]
   定义体: by
   constructor
   ext a s hs

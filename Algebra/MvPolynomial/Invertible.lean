@@ -29,8 +29,8 @@ instance MvPolynomial.invertibleC
   body: Invertible.map (C : R ->+* MvPolynomial σ R) _
 
 中文:
-实例 MvPolynomial.invertibleC
-  签名: (σ : 类型) {R : 类型} [CommSemiring R] (r : R)
+实例 多元多项式.invertibleC
+  签名: (σ : 类型) {R : 类型} [交换半环 R] (r : R)
   定义体: Invertible.map (C : R ->+* MvPolynomial σ R) _
 
 Depends on / 依赖: Invertible, Invertible.map, MvPolynomial
@@ -48,8 +48,8 @@ instance MvPolynomial.invertibleCoeNat
   body: IsScalarTower.invertibleAlgebraCoeNat R _ _
 
 中文:
-实例 MvPolynomial.invertibleCoeNat
-  签名: (σ R : 类型) (p : 自然数) [CommSemiring R]
+实例 多元多项式.invertibleCoe自然数
+  签名: (σ R : 类型) (p : 自然数) [交换半环 R]
   定义体: IsScalarTower.invertibleAlgebraCoeNat R _ _
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.invertibleAlgebraCoeNat, invertibleAlgebraCoeNat

@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (Φ.rightDerivedFunctorComparison L₁ L₂ F F₁ α₁ F₂ α₂)
+  签名: 是同构 (Φ.rightDerivedFunctorComparison L₁ L₂ F F₁ α₁ F₂ α₂)
   定义体: by
   have : F.HasPointwiseRightDerivedFunctor W₂ := by
     rw [Φ.hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure]

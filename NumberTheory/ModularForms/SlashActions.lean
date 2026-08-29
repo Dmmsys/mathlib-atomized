@@ -45,8 +45,8 @@ class SlashAction
     - add_slash : forall (k : β) (g : G) (a b : α), map k g (a + b) = map k g a + map k g b
 
 中文:
-类 SlashAction
-  参数: (β G α : 类型) [Monoid G] [AddMonoid α]
+类 Slash作用
+  参数: (β G α : 类型) [幺半群 G] [加法幺半群 α]
   公理与运算 (5 个):
     - map : β -> G -> α -> α
     - zero_slash : 对任意 (k : β) (g : G), map k g 0 = 0
@@ -76,8 +76,8 @@ theorem SlashAction.neg_slash
     rw [← add_slash]; rw [neg_add_cancel]; rw [zero_slash]
 
 中文:
-定理 SlashAction.neg_slash
-  结论: {β G α : 类型} [Monoid G] [AddGroup α]
+定理 Slash作用.neg_slash
+  结论: {β G α : 类型} [幺半群 G] [加法群 α]
   证明: eq_neg_of_add_eq_zero_left by
     rw [← add_slash]; rw [neg_add_cancel]; rw [zero_slash]
 
@@ -103,8 +103,8 @@ lemma SlashAction.sum_slash
   | insert i t hi IH => simp [hi, IH]
 
 中文:
-引理 SlashAction.sum_slash
-  结论: {β G α ι : 类型} [Monoid G] [AddCommGroup α]
+引理 Slash作用.sum_slash
+  结论: {β G α ι : 类型} [幺半群 G] [加法交换群 α]
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -137,7 +137,7 @@ definition monoidHomSlashAction
 
 中文:
 定义 monoidHomSlashAction
-  签名: {β G H α : 类型} [Monoid G] [AddMonoid α] [Monoid H]
+  签名: {β G H α : 类型} [幺半群 G] [加法幺半群 α] [幺半群 H]
   定义体: SlashAction.map k (h g)
   zero_slash k g := SlashAction.zero_slash k (h g)
   slash_one k a := by simp only [map_one, SlashAction.slash_one]
@@ -169,8 +169,8 @@ lemma SlashAction.slash_eq_zero_iff
   simpa [← SlashAction.slash_mul] using h
 
 中文:
-引理 SlashAction.slash_eq_zero_iff
-  结论: {β G α : 类型} [Group G] [AddGroup α] [SlashAction β G α]
+引理 Slash作用.slash_eq_zero_iff
+  结论: {β G α : 类型} [群 G] [加法群 α] [Slash作用 β G α]
   证明: by
   refine ⟨fun h => ?_, by simp +contextual⟩
   apply_fun (· ∣[k] g⁻¹) at h
@@ -203,7 +203,7 @@ definition privateSlash
 
 中文:
 定义 privateSlash
-  签名: (k : 整数) (γ : GL (Fin 2) 实数) (f : ℍ -> Complex) (x : ℍ)
+  签名: (k : 整数) (γ : GL (有限集 2) 实数) (f : ℍ -> 复形) (x : ℍ)
   定义体: σ γ (f (γ • x)) * |γ.det.val| ^ (k - 1) * UpperHalfPlane.denom γ x ^ (-k)
 -/
 private def privateSlash (k : Int) (γ : GL (Fin 2) Real) (f : ℍ -> Complex) (x : ℍ) : Complex :=
@@ -229,7 +229,7 @@ theorem slash_mul
 
 中文:
 定理 slash_mul
-  条件: (k : 整数) (A B : GL (Fin 2) 实数) (f : ℍ -> Complex)
+  条件: (k : 整数) (A B : GL (有限集 2) 实数) (f : ℍ -> 复形)
   证明: by
   ext1 τ
   calc σ (A * B) (f ((A * B) • τ)) * |(A * B).det.val| ^ (k - 1) * denom (A * B) τ ^ (-k)
@@ -263,7 +263,7 @@ theorem add_slash
 
 中文:
 定理 add_slash
-  条件: (k : 整数) (A : GL (Fin 2) 实数) (f g : ℍ -> Complex)
+  条件: (k : 整数) (A : GL (有限集 2) 实数) (f g : ℍ -> 复形)
   证明: by
   ext1 τ
   simp [privateSlash, add_mul]
@@ -285,7 +285,7 @@ theorem slash_one
 
 中文:
 定理 slash_one
-  条件: (k : 整数) (f : ℍ -> Complex)
+  条件: (k : 整数) (f : ℍ -> 复形)
   结论: f ∣[k] 1 = f
   证明: funext by simp [privateSlash, σ, denom]
 -/
@@ -304,8 +304,8 @@ theorem zero_slash
 
 中文:
 定理 zero_slash
-  条件: (k : 整数) (A : GL (Fin 2) 实数)
-  结论: (0 : ℍ -> Complex) ∣[k] A = 0
+  条件: (k : 整数) (A : GL (有限集 2) 实数)
+  结论: (0 : ℍ -> 复形) ∣[k] A = 0
   证明: funext fun _ => by simp [privateSlash]
 -/
 private theorem zero_slash (k : Int) (A : GL (Fin 2) Real) : (0 : ℍ -> Complex) ∣[k] A = 0 :=
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: SlashAction 整数 (GL (Fin 2) 实数) (ℍ -> Complex)
+  签名: Slash作用 整数 (GL (有限集 2) 实数) (ℍ -> 复形)
   定义体: privateSlash
   zero_slash := zero_slash
   slash_one := slash_one
@@ -355,7 +355,7 @@ theorem slash_def
 
 中文:
 定理 slash_def
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   证明: rfl
 -/
 theorem slash_def (g : GL (Fin 2) Real) :
@@ -372,7 +372,7 @@ theorem slash_apply
 
 中文:
 定理 slash_apply
-  条件: (g : GL (Fin 2) 实数) (τ : ℍ)
+  条件: (g : GL (有限集 2) 实数) (τ : ℍ)
   证明: rfl
 -/
 theorem slash_apply (g : GL (Fin 2) Real) (τ : ℍ) :
@@ -391,7 +391,7 @@ theorem smul_slash
 
 中文:
 定理 smul_slash
-  条件: (k : 整数) (A : GL (Fin 2) 实数) (f : ℍ -> Complex) (c : Complex)
+  条件: (k : 整数) (A : GL (有限集 2) 实数) (f : ℍ -> 复形) (c : 复形)
   证明: by
   ext τ : 1
   simp only [slash_apply, Pi.smul_apply, smul_eq_mul, map_mul, mul_assoc]
@@ -413,7 +413,7 @@ instance SLAction
 
 中文:
 实例 SLAction
-  签名: : SlashAction 整数 SL(2, 整数) (ℍ -> Complex)
+  签名: : Slash作用 整数 SL(2, 整数) (ℍ -> 复形)
   定义体: monoidHomSlashAction (Matrix.SpecialLinearGroup.mapGL Real)
 
 Depends on / 依赖: Matrix, Matrix.SpecialLinearGroup.mapGL, SpecialLinearGroup, monoidHomSlashAction
@@ -433,7 +433,7 @@ theorem SL_slash
 中文:
 定理 SL_slash
   条件: (γ : SL(2, 整数))
-  结论: f ∣[k] γ = f ∣[k] (γ : GL (Fin 2) 实数)
+  结论: f ∣[k] γ = f ∣[k] (γ : GL (有限集 2) 实数)
   证明: rfl
 -/
 theorem SL_slash (γ : SL(2, Int)) : f ∣[k] γ = f ∣[k] (γ : GL (Fin 2) Real) :=
@@ -498,7 +498,7 @@ theorem SL_smul_slash
 
 中文:
 定理 SL_smul_slash
-  结论: {α : 类型} [SMul α Complex] [IsScalarTower α Complex Complex]
+  结论: {α : 类型} [标量乘法 α 复形] [标量塔 α 复形 复形]
   证明: by
   ext τ : 1
   simp [SL_slash_apply, Pi.smul_apply, smul_mul_assoc]
@@ -523,7 +523,7 @@ theorem is_invariant_const
 
 中文:
 定理 is_invariant_const
-  条件: (A : SL(2, 整数)) (x : Complex)
+  条件: (A : SL(2, 整数)) (x : 复形)
   证明: by
   funext
   simp [SL_slash, slash_def, σ, zero_lt_one]
@@ -547,7 +547,7 @@ theorem is_invariant_one
 中文:
 定理 is_invariant_one
   条件: (A : SL(2, 整数))
-  结论: (1 : ℍ -> Complex) ∣[(0 : 整数)] A = (1 : ℍ -> Complex)
+  结论: (1 : ℍ -> 复形) ∣[(0 : 整数)] A = (1 : ℍ -> 复形)
   证明: is_invariant_const _ _
 
 Depends on / 依赖: is_invariant_const
@@ -570,7 +570,7 @@ theorem is_invariant_one'
 中文:
 定理 is_invariant_one'
   条件: (A : SL(2, 整数))
-  结论: (1 : ℍ -> Complex) ∣[(0 : 整数)] (A : GL (Fin 2) 实数) = 1
+  结论: (1 : ℍ -> 复形) ∣[(0 : 整数)] (A : GL (有限集 2) 实数) = 1
   证明: by
   simpa using! is_invariant_one A
 
@@ -594,7 +594,7 @@ theorem slash_action_eq'_iff
 
 中文:
 定理 slash_action_eq'_iff
-  条件: (k : 整数) (f : ℍ -> Complex) (γ : SL(2, 整数)) (z : ℍ)
+  条件: (k : 整数) (f : ℍ -> 复形) (γ : SL(2, 整数)) (z : ℍ)
   证明: by
   simp only [SL_slash_apply]
   convert! inv_mul_eq_iff_eq_mul₀ (G₀ := Complex) _ using 2
@@ -628,7 +628,7 @@ have : d != 0 := ofReal_ne_zero.mpr abs_ne_zero.mpr NeZero.ne _
 
 中文:
 定理 mul_slash
-  条件: (k1 k2 : 整数) (A : GL (Fin 2) 实数) (f g : ℍ -> Complex)
+  条件: (k1 k2 : 整数) (A : GL (有限集 2) 实数) (f g : ℍ -> 复形)
   证明: by
   ext1 x
   simp only [slash_apply, Pi.mul_apply, Pi.smul_apply, real_smul, map_mul, neg_add,
@@ -663,7 +663,7 @@ theorem mul_slash_SL2
 
 中文:
 定理 mul_slash_SL2
-  条件: (k1 k2 : 整数) (A : SL(2, 整数)) (f g : ℍ -> Complex)
+  条件: (k1 k2 : 整数) (A : SL(2, 整数)) (f g : ℍ -> 复形)
   证明: by
   simp [SL_slash, mul_slash]
 
@@ -686,7 +686,7 @@ theorem div_slash_SL2
 
 中文:
 定理 div_slash_SL2
-  条件: (k1 k2 : 整数) (A : SL(2, 整数)) (f g : ℍ -> Complex)
+  条件: (k1 k2 : 整数) (A : SL(2, 整数)) (f g : ℍ -> 复形)
   证明: by
   ext τ
   simp [SL_slash_apply, zpow_sub₀ (denom_ne_zero A τ)]
@@ -721,7 +721,7 @@ lemma prod_slash_sum_weights
 
 中文:
 引理 prod_slash_sum_weights
-  结论: {ι : 类型} {k : ι -> 整数} {g : GL (Fin 2) 实数} {f : ι -> ℍ -> Complex}
+  结论: {ι : 类型} {k : ι -> 整数} {g : GL (有限集 2) 实数} {f : ι -> ℍ -> 复形}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -773,7 +773,7 @@ lemma prod_slash
 
 中文:
 引理 prod_slash
-  结论: {ι : 类型} {k : 整数} {g : GL (Fin 2) 实数} {f : ι -> ℍ -> Complex}
+  结论: {ι : 类型} {k : 整数} {g : GL (有限集 2) 实数} {f : ι -> ℍ -> 复形}
   证明: by
   have : k * (#s) = ∑ i in s, k := by
     rw [Finset.sum_const]; rw [nsmul_eq_mul']
@@ -805,7 +805,7 @@ lemma prod_fintype_slash
 
 中文:
 引理 prod_fintype_slash
-  结论: {ι : 类型} [Fintype ι] [Nonempty ι] {k : 整数} {g : GL (Fin 2) 实数}
+  结论: {ι : 类型} [有限类型 ι] [非空 ι] {k : 整数} {g : GL (有限集 2) 实数}
   证明: by
   have : 0 < Fintype.card ι := Fintype.card_pos
   simpa [← zpow_natCast, this] using ModularForm.prod_slash (s := (.univ : Finset ι))

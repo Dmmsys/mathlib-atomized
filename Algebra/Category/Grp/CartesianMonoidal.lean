@@ -36,7 +36,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: (G H : GrpCat.{u})
+  签名: (G H : 群范畴.{u})
   定义体: BinaryFan.mk (ofHom (MonoidHom.fst G H)) (ofHom (MonoidHom.snd G H))
   isLimit := BinaryFan.IsLimit.mk _ (fun l r => ofHom (MonoidHom.prod l.hom r.hom))
     (fun _ _ => rfl) (fun _ _ => rfl) (by cat_disch)
@@ -59,7 +59,7 @@ instance cartesianMonoidalCategoryGrp
 
 中文:
 实例 cartesianMonoidalCategoryGrp
-  签名: : CartesianMonoidalCategory GrpCat.{u}
+  签名: : CartesianMonoidal范畴 群范畴.{u}
   定义体: .ofChosenFiniteProducts ⟨_, (isZero_of_subsingleton (GrpCat.of PUnit.{u + 1})).isTerminal⟩
     fun G H => binaryProductLimitCone G H
 
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory GrpCat.{u}
+  签名: 辫范畴 群范畴.{u}
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget GrpCat.{u}).Braided
+  签名: (forget 群范畴.{u}).辫
   定义体: .ofChosenFiniteProducts _
 
 Depends on / 依赖: ofChosenFiniteProducts
@@ -116,7 +116,7 @@ theorem tensorObj_eq
 
 中文:
 定理 tensorObj_eq
-  条件: (G H : GrpCat.{u})
+  条件: (G H : 群范畴.{u})
   结论: (G otimes H) = of (G × H)
   证明: rfl
 
@@ -138,7 +138,7 @@ theorem μ_forget_apply
 
 中文:
 定理 μ_forget_apply
-  条件: {G H : GrpCat.{u}} (p : G) (q : H)
+  条件: {G H : 群范畴.{u}} (p : G) (q : H)
   证明: by
   apply Prod.ext
   · exact congr_hom (CC := fun X => X) (Functor.Monoidal.μ_fst (forget GrpCat.{u}) G H) (p, q)
@@ -170,7 +170,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: (G H : AddGrpCat.{u})
+  签名: (G H : 加法群范畴.{u})
   定义体: BinaryFan.mk (ofHom (AddMonoidHom.fst G H)) (ofHom (AddMonoidHom.snd G H))
   isLimit := BinaryFan.IsLimit.mk _ (fun l r => ofHom (AddMonoidHom.prod l.hom r.hom))
     (fun _ _ => rfl) (fun _ _ => rfl) (by cat_disch)
@@ -193,7 +193,7 @@ instance cartesianMonoidalCategoryAddGrp
 
 中文:
 实例 cartesianMonoidalCategoryAddGrp
-  签名: : CartesianMonoidalCategory AddGrpCat.{u}
+  签名: : CartesianMonoidal范畴 加法群范畴.{u}
   定义体: .ofChosenFiniteProducts ⟨_, (isZero_of_subsingleton (AddGrpCat.of PUnit.{u + 1})).isTerminal⟩
     fun G H => binaryProductLimitCone G H
 
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory AddGrpCat.{u}
+  签名: 辫范畴 加法群范畴.{u}
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -230,7 +230,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget AddGrpCat.{u}).Braided
+  签名: (forget 加法群范畴.{u}).辫
   定义体: .ofChosenFiniteProducts _
 
 Depends on / 依赖: ofChosenFiniteProducts
@@ -250,7 +250,7 @@ theorem tensorObj_eq
 
 中文:
 定理 tensorObj_eq
-  条件: (G H : AddGrpCat.{u})
+  条件: (G H : 加法群范畴.{u})
   结论: (G otimes H) = of (G × H)
   证明: rfl
 
@@ -272,7 +272,7 @@ theorem μ_forget_apply
 
 中文:
 定理 μ_forget_apply
-  条件: {G H : AddGrpCat.{u}} (p : G) (q : H)
+  条件: {G H : 加法群范畴.{u}} (p : G) (q : H)
   证明: by
   apply Prod.ext
   · exact congr_hom (CC := fun X => X) (Functor.Monoidal.μ_fst (forget AddGrpCat.{u}) G H) (p, q)
@@ -304,7 +304,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: (G H : CommGrpCat.{u})
+  签名: (G H : 交换群范畴.{u})
   定义体: BinaryFan.mk (ofHom (MonoidHom.fst G H)) (ofHom (MonoidHom.snd G H))
   isLimit := BinaryFan.IsLimit.mk _ (fun l r => ofHom (MonoidHom.prod l.hom r.hom))
     (fun _ _ => rfl) (fun _ _ => rfl) (by cat_disch)
@@ -327,7 +327,7 @@ instance cartesianMonoidalCategory
 
 中文:
 实例 cartesianMonoidalCategory
-  签名: : CartesianMonoidalCategory CommGrpCat.{u}
+  签名: : CartesianMonoidal范畴 交换群范畴.{u}
   定义体: .ofChosenFiniteProducts ⟨_, (isZero_of_subsingleton (CommGrpCat.of PUnit.{u + 1})).isTerminal⟩
     fun G H => binaryProductLimitCone G H
 
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory CommGrpCat.{u}
+  签名: 辫范畴 交换群范畴.{u}
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget CommGrpCat.{u}).Braided
+  签名: (forget 交换群范畴.{u}).辫
   定义体: .ofChosenFiniteProducts _
 
 Depends on / 依赖: ofChosenFiniteProducts
@@ -384,7 +384,7 @@ theorem tensorObj_eq
 
 中文:
 定理 tensorObj_eq
-  条件: (G H : CommGrpCat.{u})
+  条件: (G H : 交换群范畴.{u})
   结论: (G otimes H) = of (G × H)
   证明: rfl
 
@@ -406,7 +406,7 @@ theorem μ_forget_apply
 
 中文:
 定理 μ_forget_apply
-  条件: {G H : CommGrpCat.{u}} (p : G) (q : H)
+  条件: {G H : 交换群范畴.{u}} (p : G) (q : H)
   证明: by
   apply Prod.ext
   · exact congr_hom (CC := fun X => X) (Functor.Monoidal.μ_fst (forget CommGrpCat.{u}) G H) (p, q)
@@ -438,7 +438,7 @@ definition cartesianMonoidalCategory
 
 中文:
 定义 cartesianMonoidalCategory
-  签名: : CartesianMonoidalCategory AddCommGrpCat.{u}
+  签名: : CartesianMonoidal范畴 加法交换群范畴.{u}
   定义体: .ofChosenFiniteProducts ⟨_, (isZero_of_subsingleton (AddCommGrpCat.of PUnit.{u + 1})).isTerminal⟩
     fun G H => binaryProductLimitCone G H
 
@@ -460,7 +460,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory AddCommGrpCat.{u}
+  签名: 辫范畴 加法交换群范畴.{u}
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -477,7 +477,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget AddCommGrpCat.{u}).Braided
+  签名: (forget 加法交换群范畴.{u}).辫
   定义体: .ofChosenFiniteProducts _
 
 Depends on / 依赖: ofChosenFiniteProducts
@@ -497,7 +497,7 @@ theorem tensorObj_eq
 
 中文:
 定理 tensorObj_eq
-  条件: (G H : AddCommGrpCat.{u})
+  条件: (G H : 加法交换群范畴.{u})
   结论: (G otimes H) = of (G × H)
   证明: rfl
 
@@ -519,7 +519,7 @@ theorem μ_forget_apply
 
 中文:
 定理 μ_forget_apply
-  条件: {G H : AddCommGrpCat.{u}} (p : G) (q : H)
+  条件: {G H : 加法交换群范畴.{u}} (p : G) (q : H)
   证明: by
   apply Prod.ext
   · exact congr_hom (CC := fun X => X) (Functor.Monoidal.μ_fst (forget AddCommGrpCat.{u}) G H) (p, q)

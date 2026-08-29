@@ -59,7 +59,7 @@ definition functorialityRightAdjoint
 
 中文:
 定义 functorialityRightAdjoint
-  签名: : Cocone (K ⋙ F) ⥤ Cocone K
+  签名: : 余锥 (K ⋙ F) ⥤ 余锥 K
   定义体: Cocone.functoriality _ G ⋙
     Cocone.precompose (K.rightUnitor.inv ≫ whiskerLeft K adj.unit ≫ (associator _ _ _).inv)
 
@@ -137,7 +137,7 @@ include adj in
 
 中文:
 定义 functorialityAdjunction
-  签名: : Cocone.functoriality K F ⊣ functorialityRightAdjoint adj K where
+  签名: : 余锥.functoriality K F ⊣ functorialityRightAdjoint adj K where
   定义体: functorialityUnit adj K
   counit := functorialityCounit adj K
 
@@ -168,7 +168,7 @@ noncomputable
 
 中文:
 引理 leftAdjoint_preservesColimits
-  结论: PreservesColimitsOfSize.{v, u} F where
+  结论: 保持余limitsOfSize.{v, u} F where
   证明: { preservesColimit :=
         { preserves := fun hc =>
             ⟨IsColimit.isoUniqueCoconeMorphism.inv fun _ =>
@@ -198,7 +198,7 @@ instance colim_preservesColimits
 
 中文:
 实例 colim_preservesColimits
-  签名: [HasColimitsOfShape J C]
+  签名: [有形状余极限 J C]
   定义体: colimConstAdj.leftAdjoint_preservesColimits
 -/
 instance colim_preservesColimits [HasColimitsOfShape J C] :
@@ -250,7 +250,7 @@ theorem hasColimit_comp_equivalence
 
 中文:
 定理 hasColimit_comp_equivalence
-  条件: (E : C ⥤ D) [E.IsEquivalence] [HasColimit K]
+  条件: (E : C ⥤ D) [E.是等价] [有余极限 K]
   证明: HasColimit.mk
     { cocone := E.mapCocone (colimit.cocone K)
       isColimit := isColimitOfPreserves _ (colimit.isColimit K) }
@@ -276,7 +276,7 @@ theorem hasColimit_of_comp_equivalence
 
 中文:
 定理 hasColimit_of_comp_equivalence
-  条件: (E : C ⥤ D) [E.IsEquivalence] [HasColimit (K ⋙ E)]
+  条件: (E : C ⥤ D) [E.是等价] [有余极限 (K ⋙ E)]
   证明: by
   rw [hasColimit_iff_of_iso
     ((Functor.rightUnitor _).symm ≪≫ isoWhiskerLeft K E.asEquivalence.unitIso)]
@@ -300,7 +300,7 @@ theorem hasColimitsOfShape_of_equivalence
 
 中文:
 定理 hasColimitsOfShape_of_equivalence
-  条件: (E : C ⥤ D) [E.IsEquivalence] [HasColimitsOfShape J D]
+  条件: (E : C ⥤ D) [E.是等价] [有形状余极限 J D]
   证明: ⟨fun F => hasColimit_of_comp_equivalence F E⟩
 
 Depends on / 依赖: hasColimit_of_comp_equivalence
@@ -319,7 +319,7 @@ theorem has_colimits_of_equivalence
 
 中文:
 定理 has_colimits_of_equivalence
-  条件: (E : C ⥤ D) [E.IsEquivalence] [HasColimitsOfSize.{v, u} D]
+  条件: (E : C ⥤ D) [E.是等价] [有余limitsOfSize.{v, u} D]
   证明: ⟨fun _ _ => hasColimitsOfShape_of_equivalence E⟩
 
 Depends on / 依赖: hasColimitsOfShape_of_equivalence
@@ -345,7 +345,7 @@ definition functorialityLeftAdjoint
 
 中文:
 定义 functorialityLeftAdjoint
-  签名: : Cone (K ⋙ G) ⥤ Cone K
+  签名: : 锥 (K ⋙ G) ⥤ 锥 K
   定义体: Cone.functoriality _ F ⋙
     Cone.postcompose ((associator _ _ _).hom ≫ whiskerLeft K adj.counit ≫ K.rightUnitor.hom)
 
@@ -423,7 +423,7 @@ include adj in
 
 中文:
 定义 functorialityAdjunction'
-  签名: : functorialityLeftAdjoint adj K ⊣ Cone.functoriality K G where
+  签名: : functorialityLeftAdjoint adj K ⊣ 锥.functoriality K G where
   定义体: functorialityUnit' adj K
   counit := functorialityCounit' adj K
 
@@ -452,7 +452,7 @@ lemma rightAdjoint_preservesLimits
 
 中文:
 引理 rightAdjoint_preservesLimits
-  结论: PreservesLimitsOfSize.{v, u} G where
+  结论: 保持LimitsOfSize.{v, u} G where
   证明: { preservesLimit :=
         { preserves := fun hc =>
             ⟨IsLimit.isoUniqueConeMorphism.inv fun _ =>
@@ -479,7 +479,7 @@ instance lim_preservesLimits
 
 中文:
 实例 lim_preservesLimits
-  签名: [HasLimitsOfShape J C]
+  签名: [有形状极限 J C]
   定义体: constLimAdj.rightAdjoint_preservesLimits
 -/
 instance lim_preservesLimits [HasLimitsOfShape J C] :
@@ -531,8 +531,8 @@ theorem hasLimit_comp_equivalence
 
 中文:
 定理 hasLimit_comp_equivalence
-  条件: (E : D ⥤ C) [E.IsEquivalence] [HasLimit K]
-  结论: HasLimit (K ⋙ E)
+  条件: (E : D ⥤ C) [E.是等价] [有极限 K]
+  结论: 有极限 (K ⋙ E)
   证明: HasLimit.mk
     { cone := E.mapCone (limit.cone K)
       isLimit := isLimitOfPreserves _ (limit.isLimit K) }
@@ -557,7 +557,7 @@ theorem hasLimit_of_comp_equivalence
 
 中文:
 定理 hasLimit_of_comp_equivalence
-  条件: (E : D ⥤ C) [E.IsEquivalence] [HasLimit (K ⋙ E)]
+  条件: (E : D ⥤ C) [E.是等价] [有极限 (K ⋙ E)]
   证明: by
   rw [← hasLimit_iff_of_iso
     (isoWhiskerLeft K E.asEquivalence.unitIso.symm ≪≫ Functor.rightUnitor _)]
@@ -581,7 +581,7 @@ theorem hasLimitsOfShape_of_equivalence
 
 中文:
 定理 hasLimitsOfShape_of_equivalence
-  条件: (E : D ⥤ C) [E.IsEquivalence] [HasLimitsOfShape J C]
+  条件: (E : D ⥤ C) [E.是等价] [有形状极限 J C]
   证明: ⟨fun F => hasLimit_of_comp_equivalence F E⟩
 
 Depends on / 依赖: hasLimit_of_comp_equivalence
@@ -600,7 +600,7 @@ theorem has_limits_of_equivalence
 
 中文:
 定理 has_limits_of_equivalence
-  条件: (E : D ⥤ C) [E.IsEquivalence] [HasLimitsOfSize.{v, u} C]
+  条件: (E : D ⥤ C) [E.是等价] [有LimitsOfSize.{v, u} C]
   证明: ⟨fun _ _ => hasLimitsOfShape_of_equivalence E⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_equivalence
@@ -628,7 +628,7 @@ definition coconesIsoComponentHom
 
 中文:
 定义 coconesIsoComponentHom
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ C} (Y : D)
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ C} (Y : D)
   定义体: (adj.homEquiv (K.obj j) Y) (t.app j)
   naturality j j' f := by
     rw [← adj.homEquiv_naturality_left]; rw [← Functor.comp_map]; rw [t.naturality]
@@ -659,7 +659,7 @@ definition coconesIsoComponentInv
 
 中文:
 定义 coconesIsoComponentInv
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ C} (Y : D)
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ C} (Y : D)
   定义体: (adj.homEquiv (K.obj j) Y).symm (t.app j)
   naturality j j' f := by
     erw [← adj.homEquiv_naturality_left_symm, ← adj.homEquiv_naturality_right_symm, t.naturality]
@@ -689,7 +689,7 @@ definition conesIsoComponentHom
 
 中文:
 定义 conesIsoComponentHom
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ D} (X : Cᵒᵖ)
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ D} (X : Cᵒᵖ)
   定义体: (adj.homEquiv (unop X) (K.obj j)) (t.app j)
   naturality j j' f := by
     erw [← adj.homEquiv_naturality_right, ← t.naturality, Category.id_comp, Category.id_comp]
@@ -718,7 +718,7 @@ definition conesIsoComponentInv
 
 中文:
 定义 conesIsoComponentInv
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ D} (X : Cᵒᵖ)
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ D} (X : Cᵒᵖ)
   定义体: (adj.homEquiv (unop X) (K.obj j)).symm (t.app j)
   naturality j j' f := by
     erw [← adj.homEquiv_naturality_right_symm, ← t.naturality, Category.id_comp, Category.id_comp]
@@ -753,7 +753,7 @@ definition coconesIso
 
 中文:
 定义 coconesIso
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ C}
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ C}
   定义体: NatIso.ofComponents fun Y =>
     { hom := ↾(coconesIsoComponentHom adj Y)
       inv := ↾(coconesIsoComponentInv adj Y) }
@@ -781,7 +781,7 @@ definition conesIso
 
 中文:
 定义 conesIso
-  签名: {J : 类型u} [Category.{v} J] {K : J ⥤ D}
+  签名: {J : 类型u} [范畴.{v} J] {K : J ⥤ D}
   定义体: NatIso.ofComponents fun X =>
     { hom := ↾(conesIsoComponentHom adj X)
       inv := ↾(conesIsoComponentInv adj X) }
@@ -810,8 +810,8 @@ instance [IsLeftAdjoint
   body: (Adjunction.ofIsLeftAdjoint F).leftAdjoint_preservesColimits.preservesColimitsOfShape
 
 中文:
-实例 [IsLeftAdjoint
-  签名: F] : PreservesColimitsOfShape J F
+实例 [是左伴随
+  签名: F] : 保持形状余极限 J F
   定义体: (Adjunction.ofIsLeftAdjoint F).leftAdjoint_preservesColimits.preservesColimitsOfShape
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, leftAdjoint_preservesColimits, leftAdjoint_preservesColimits.preservesColimitsOfShape, ofIsLeftAdjoint, preservesColimitsOfShape
@@ -827,8 +827,8 @@ instance [IsLeftAdjoint
   signature: F] : PreservesColimitsOfSize.{v, u} F where
 
 中文:
-实例 [IsLeftAdjoint
-  签名: F] : PreservesColimitsOfSize.{v, u} F where
+实例 [是左伴随
+  签名: F] : 保持余limitsOfSize.{v, u} F where
 -/
 noncomputable instance [IsLeftAdjoint F] : PreservesColimitsOfSize.{v, u} F where
 
@@ -841,8 +841,8 @@ instance [IsRightAdjoint
   body: (Adjunction.ofIsRightAdjoint F).rightAdjoint_preservesLimits.preservesLimitsOfShape
 
 中文:
-实例 [IsRightAdjoint
-  签名: F] : PreservesLimitsOfShape J F
+实例 [是右伴随
+  签名: F] : 保持形状极限 J F
   定义体: (Adjunction.ofIsRightAdjoint F).rightAdjoint_preservesLimits.preservesLimitsOfShape
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, preservesLimitsOfShape, rightAdjoint_preservesLimits, rightAdjoint_preservesLimits.preservesLimitsOfShape
@@ -858,8 +858,8 @@ instance [IsRightAdjoint
   signature: F] : PreservesLimitsOfSize.{v, u} F where
 
 中文:
-实例 [IsRightAdjoint
-  签名: F] : PreservesLimitsOfSize.{v, u} F where
+实例 [是右伴随
+  签名: F] : 保持LimitsOfSize.{v, u} F where
 -/
 noncomputable instance [IsRightAdjoint F] : PreservesLimitsOfSize.{v, u} F where
 

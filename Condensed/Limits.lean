@@ -32,7 +32,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits CondensedSet.{u}
+  签名: 有极限 CondensedSet.{u}
   定义体: by
   change HasLimits (Sheaf _ _)
   infer_instance
@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfSize.{u, u + 1} CondensedSet.{u}
+  签名: 有LimitsOfSize.{u, u + 1} CondensedSet.{u}
   定义体: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
 
 Depends on / 依赖: hasLimitsOfSizeShrink
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits (CondensedMod.{u} R)
+  签名: 有极限 (CondensedMod.{u} R)
   定义体: inferInstanceAs (HasLimits (Sheaf _ _))
 
 Depends on / 依赖: HasLimits
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits (CondensedMod.{u} R)
+  签名: 有余极限 (CondensedMod.{u} R)
   定义体: inferInstanceAs (HasColimits (Sheaf _ _))
 
 Depends on / 依赖: HasColimits
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfSize.{u, u + 1} (CondensedMod.{u} R)
+  签名: 有LimitsOfSize.{u, u + 1} (CondensedMod.{u} R)
   定义体: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
 
 Depends on / 依赖: hasLimitsOfSizeShrink

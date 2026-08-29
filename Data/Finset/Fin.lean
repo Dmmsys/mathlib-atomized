@@ -37,7 +37,7 @@ definition attachFin
 
 中文:
 定义 attachFin
-  签名: (s : Finset 自然数) {n : 自然数} (h : 对任意 m in s, m < n)
+  签名: (s : 有限集 自然数) {n : 自然数} (h : 对任意 m in s, m < n)
   定义体: ⟨s.1.pmap (fun a ha => ⟨a, ha⟩) h, s.nodup.pmap fun _ _ _ _ => Fin.val_eq_of_eq⟩
 
 @[simp]
@@ -63,7 +63,7 @@ theorem mem_attachFin
 
 中文:
 定理 mem_attachFin
-  条件: {s : Finset 自然数} (h : 对任意 m in s, m < n) {a : Fin n}
+  条件: {s : 有限集 自然数} (h : 对任意 m in s, m < n) {a : 有限集 n}
   证明: ⟨fun h =>
     let ⟨_, hb₁, hb₂⟩ := Multiset.mem_pmap.1 h
     hb₂ ▸ hb₁,
@@ -94,7 +94,7 @@ lemma coe_attachFin
 
 中文:
 引理 coe_attachFin
-  条件: {s : Finset 自然数} (h : 对任意 m in s, m < n)
+  条件: {s : 有限集 自然数} (h : 对任意 m in s, m < n)
   证明: by
   ext; simp
 
@@ -117,7 +117,7 @@ theorem card_attachFin
 
 中文:
 定理 card_attachFin
-  条件: (s : Finset 自然数) (h : 对任意 m in s, m < n)
+  条件: (s : 有限集 自然数) (h : 对任意 m in s, m < n)
   证明: Multiset.card_pmap _ _ _
 
 @[simp]
@@ -144,7 +144,7 @@ lemma image_val_attachFin
 
 中文:
 引理 image_val_attachFin
-  条件: {s : Finset 自然数} (h : 对任意 m in s, m < n)
+  条件: {s : 有限集 自然数} (h : 对任意 m in s, m < n)
   证明: by
   apply coe_injective
   rw [coe_image]; rw [coe_attachFin]; rw [Set.image_preimage_eq_iff]
@@ -174,7 +174,7 @@ lemma map_valEmbedding_attachFin
 
 中文:
 引理 map_valEmbedding_attachFin
-  条件: {s : Finset 自然数} (h : 对任意 m in s, m < n)
+  条件: {s : 有限集 自然数} (h : 对任意 m in s, m < n)
   证明: by
   simp [map_eq_image]
 
@@ -200,7 +200,7 @@ lemma attachFin_subset_attachFin_iff
 
 中文:
 引理 attachFin_subset_attachFin_iff
-  条件: {s t : Finset 自然数} (hs : 对任意 m in s, m < n) (ht : 对任意 m in t, m < n)
+  条件: {s t : 有限集 自然数} (hs : 对任意 m in s, m < n) (ht : 对任意 m in t, m < n)
   证明: by
   simp [← map_subset_map (f := Fin.valEmbedding)]
 
@@ -225,7 +225,7 @@ lemma attachFin_subset_attachFin
 
 中文:
 引理 attachFin_subset_attachFin
-  条件: {s t : Finset 自然数} (hst : s subseteq t) (ht : 对任意 m in t, m < n)
+  条件: {s t : 有限集 自然数} (hst : s subseteq t) (ht : 对任意 m in t, m < n)
   证明: by simpa
 
 @[simp]
@@ -247,7 +247,7 @@ lemma attachFin_ssubset_attachFin_iff
 
 中文:
 引理 attachFin_ssubset_attachFin_iff
-  条件: {s t : Finset 自然数} (hs : 对任意 m in s, m < n) (ht : 对任意 m in t, m < n)
+  条件: {s t : 有限集 自然数} (hs : 对任意 m in s, m < n) (ht : 对任意 m in t, m < n)
   证明: by
   simp [← map_ssubset_map (f := Fin.valEmbedding)]
 
@@ -270,7 +270,7 @@ lemma attachFin_ssubset_attachFin
 
 中文:
 引理 attachFin_ssubset_attachFin
-  条件: {s t : Finset 自然数} (hst : s ⊂ t) (ht : 对任意 m in t, m < n)
+  条件: {s t : 有限集 自然数} (hst : s ⊂ t) (ht : 对任意 m in t, m < n)
   证明: by simpa
 -/
 lemma attachFin_ssubset_attachFin {s t : Finset Nat} (hst : s ⊂ t) (ht : forall m in t, m < n) :

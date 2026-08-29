@@ -56,8 +56,8 @@ definition _root_.NumberField.canonicalEmbedding
   body: RingHom.pi fun φ => φ
 
 中文:
-定义 _root_.NumberField.canonicalEmbedding
-  签名: : K ->+* ((K ->+* Complex) -> Complex)
+定义 _root_.数域.canonicalEmbedding
+  签名: : K ->+* ((K ->+* 复形) -> 复形)
   定义体: RingHom.pi fun φ => φ
 
 Depends on / 依赖: RingHom, RingHom.pi
@@ -73,8 +73,8 @@ theorem _root_.NumberField.canonicalEmbedding_injective
   proof: RingHom.injective _
 
 中文:
-定理 _root_.NumberField.canonicalEmbedding_injective
-  条件: [NumberField K]
+定理 _root_.数域.canonicalEmbedding_injective
+  条件: [数域 K]
   证明: RingHom.injective _
 
 Depends on / 依赖: RingHom, RingHom.injective, injective
@@ -96,8 +96,8 @@ theorem apply_at
 
 中文:
 定理 apply_at
-  条件: (φ : K ->+* Complex) (x : K)
-  结论: (NumberField.canonicalEmbedding K x) φ = φ x
+  条件: (φ : K ->+* 复形) (x : K)
+  结论: (数域.canonicalEmbedding K x) φ = φ x
   证明: rfl
 -/
 theorem apply_at (φ : K ->+* Complex) (x : K) : (NumberField.canonicalEmbedding K x) φ = φ x := rfl
@@ -120,7 +120,7 @@ theorem conj_apply
 
 中文:
 定理 conj_apply
-  结论: {x : ((K ->+* Complex) -> Complex)} (φ : K ->+* Complex)
+  结论: {x : ((K ->+* 复形) -> 复形)} (φ : K ->+* 复形)
   证明: by
   refine Submodule.span_induction ?_ ?_ (fun _ _ _ _ hx hy => ?_) (fun a _ _ hx => ?_) hx
   · rintro _ ⟨x, rfl⟩
@@ -153,7 +153,7 @@ theorem nnnorm_eq
 
 中文:
 定理 nnnorm_eq
-  条件: [NumberField K] (x : K)
+  条件: [数域 K] (x : K)
   证明: by
   simp_rw [Pi.nnnorm_def, apply_at]
 
@@ -180,7 +180,7 @@ theorem norm_le_iff
 
 中文:
 定理 norm_le_iff
-  条件: [NumberField K] (x : K) (r : 实数)
+  条件: [数域 K] (x : K) (r : 实数)
   证明: by
   obtain hr | hr := lt_or_ge r 0
   · obtain ⟨φ⟩ := (inferInstance : Nonempty (K ->+* Complex))
@@ -215,7 +215,7 @@ definition integerLattice
 
 中文:
 定义 integerLattice
-  签名: : Subring ((K ->+* Complex) -> Complex)
+  签名: : 子环 ((K ->+* 复形) -> 复形)
   定义体: (RingHom.range (algebraMap (𝓞 K) K)).map (canonicalEmbedding K)
 
 Depends on / 依赖: RingHom, RingHom.range, algebraMap, canonicalEmbedding
@@ -239,7 +239,7 @@ theorem integerLattice.inter_ball_finite
 
 中文:
 定理 integerLattice.inter_ball_finite
-  条件: [NumberField K] (r : 实数)
+  条件: [数域 K] (r : 实数)
   证明: by
   obtain hr | _ := lt_or_ge r 0
   · simp [Metric.closedBall_eq_empty.2 hr]
@@ -280,7 +280,7 @@ definition latticeBasis
 
 中文:
 定义 latticeBasis
-  签名: [NumberField K]
+  签名: [数域 K]
   定义体: by
   classical
   -- Let `B` be the canonical basis of `(K →+* ℂ) → ℂ`. We prove that the determinant of
@@ -330,7 +330,7 @@ theorem latticeBasis_apply
 
 中文:
 定理 latticeBasis_apply
-  条件: [NumberField K] (i : Free.ChooseBasisIndex 整数 (𝓞 K))
+  条件: [数域 K] (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
   证明: by
   simp [latticeBasis, integralBasis_apply, coe_basisOfPiSpaceOfLinearIndependent,
     Function.comp_apply, Equiv.apply_symm_apply]
@@ -356,7 +356,7 @@ theorem mem_span_latticeBasis
 
 中文:
 定理 mem_span_latticeBasis
-  条件: [NumberField K] {x : (K ->+* Complex) -> Complex}
+  条件: [数域 K] {x : (K ->+* 复形) -> 复形}
   证明: by
   rw [show Set.range (latticeBasis K) =
       (canonicalEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (integralBasis K)) by
@@ -391,7 +391,7 @@ theorem mem_rat_span_latticeBasis
 
 中文:
 定理 mem_rat_span_latticeBasis
-  条件: [NumberField K] (x : K)
+  条件: [数域 K] (x : K)
   证明: by
   rw [← Basis.sum_repr (integralBasis K) x]; rw [map_sum]
   simp_rw [map_rat_smul]
@@ -424,7 +424,7 @@ theorem integralBasis_repr_apply
 
 中文:
 定理 integralBasis_repr_apply
-  条件: [NumberField K] (x : K) (i : Free.ChooseBasisIndex 整数 (𝓞 K))
+  条件: [数域 K] (x : K) (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
   证明: by
   rw [← Basis.restrictScalars_repr_apply Rat _ ⟨_]; rw [mem_rat_span_latticeBasis K x⟩]; rw [eq_ratCast]; rw [Rat.cast_inj]
   let f := (canonicalEmbedding K).toRatAlgHom.toLinearMap.codRestrict _
@@ -481,7 +481,7 @@ definition _root_.NumberField.mixedEmbedding
 @[simp]
 
 中文:
-定义 _root_.NumberField.mixedEmbedding
+定义 _root_.数域.mixedEmbedding
   签名: : K ->+* (mixedSpace K)
   定义体: RingHom.prod (RingHom.pi fun w => embedding_of_isReal w.prop)
     (RingHom.pi fun w => w.val.embedding)
@@ -507,7 +507,7 @@ theorem mixedEmbedding_apply_isReal
 @[simp]
 
 中文:
-定理 mixedEmbedding_apply_isReal
+定理 mixedEmbedding_apply_is实数
   条件: (x : K) (w : {w // Is实数 w})
   证明: by
   simp_rw [mixedEmbedding, RingHom.prod_apply, RingHom.pi_apply]
@@ -532,7 +532,7 @@ theorem mixedEmbedding_apply_isComplex
 
 中文:
 定理 mixedEmbedding_apply_isComplex
-  条件: (x : K) (w : {w // IsComplex w})
+  条件: (x : K) (w : {w // 是复形 w})
   证明: by
   simp_rw [mixedEmbedding, RingHom.prod_apply, RingHom.pi_apply]
 
@@ -557,8 +557,8 @@ instance [NumberField
     exact nontrivial_prod_
 
 中文:
-实例 [NumberField
-  签名: K] : Nontrivial (mixedSpace K)
+实例 [数域
+  签名: K] : 非平凡 (mixedSpace K)
   定义体: by
   obtain ⟨w⟩ := (inferInstance : Nonempty (InfinitePlace K))
   obtain hw | hw := w.isReal_or_isComplex
@@ -590,8 +590,8 @@ theorem finrank
 
 中文:
 定理 finrank
-  条件: [NumberField K]
-  结论: finrank 实数 (mixedSpace K) = finrank Rat K
+  条件: [数域 K]
+  结论: finrank 实数 (mixedSpace K) = finrank 有理数 K
   证明: by
   classical
   rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberFiel
@@ -610,8 +610,8 @@ theorem _root_.NumberField.mixedEmbedding_injective
   exact RingHom.injective _
 
 中文:
-定理 _root_.NumberField.mixedEmbedding_injective
-  条件: [NumberField K]
+定理 _root_.数域.mixedEmbedding_injective
+  条件: [数域 K]
   证明: by
   exact RingHom.injective _
 
@@ -638,7 +638,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddHaarMeasure (volume : Measure (mixedSpace K))
+  签名: 是加法Haar测度 (volume : 测度 (mixedSpace K))
   定义体: prod.instIsAddHaarMeasure volume volume
 
 Depends on / 依赖: instIsAddHaarMeasure, prod.instIsAddHaarMeasure, volume
@@ -663,7 +663,7 @@ instance :
 
 中文:
 实例 :
-  签名: NullSingletonClass (volume : Measure (mixedSpace K))
+  签名: NullSingleton类 (volume : 测度 (mixedSpace K))
   定义体: by
   obtain ⟨w⟩ := (inferInstance : Nonempty (InfinitePlace K))
   by_cases hw : IsReal w
@@ -737,7 +737,7 @@ definition commMap
 
 中文:
 定义 commMap
-  签名: : ((K ->+* Complex) -> Complex) ->ₗ[实数] (mixedSpace K) where
+  签名: : ((K ->+* 复形) -> 复形) ->ₗ[实数] (mixedSpace K) where
   定义体: fun x => ⟨fun w => (x w.val.embedding).re, fun w => x w.val.embedding⟩
   map_add' := by
     simp only [Pi.add_apply, Complex.add_re, Prod.mk_add_mk, Prod.mk.injEq]
@@ -767,8 +767,8 @@ theorem commMap_apply_of_isReal
   proof: rfl
 
 中文:
-定理 commMap_apply_of_isReal
-  条件: (x : (K ->+* Complex) -> Complex) {w : InfinitePlace K} (hw : Is实数 w)
+定理 commMap_apply_of_is实数
+  条件: (x : (K ->+* 复形) -> 复形) {w : InfinitePlace K} (hw : Is实数 w)
   证明: rfl
 -/
 theorem commMap_apply_of_isReal (x : (K ->+* Complex) -> Complex) {w : InfinitePlace K} (hw : IsReal w) :
@@ -786,7 +786,7 @@ theorem commMap_apply_of_isComplex
 
 中文:
 定理 commMap_apply_of_isComplex
-  条件: (x : (K ->+* Complex) -> Complex) {w : InfinitePlace K} (hw : IsComplex w)
+  条件: (x : (K ->+* 复形) -> 复形) {w : InfinitePlace K} (hw : 是复形 w)
   证明: rfl
 
 @[simp]
@@ -838,7 +838,7 @@ theorem disjoint_span_commMap_ker
 
 中文:
 定理 disjoint_span_commMap_ker
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   refine LinearMap.disjoint_ker.mpr (fun x h_mem h_zero => ?_)
   replace h_mem : x in Submodule.span Real (Set.range (canonicalEmbedding K)) := by
@@ -1034,7 +1034,7 @@ theorem normAtPlace_apply_of_isReal
   rw [normAtPlace]; rw [MonoidWithZeroHom.coe_mk]; rw [ZeroHom.coe_mk]; rw [dif_pos]
 
 中文:
-定理 normAtPlace_apply_of_isReal
+定理 normAtPlace_apply_of_is实数
   条件: {w : InfinitePlace K} (hw : Is实数 w) (x : mixedSpace K)
   证明: by
   rw [normAtPlace]; rw [MonoidWithZeroHom.coe_mk]; rw [ZeroHom.coe_mk]; rw [dif_pos]
@@ -1058,7 +1058,7 @@ theorem normAtPlace_apply_of_isComplex
 
 中文:
 定理 normAtPlace_apply_of_isComplex
-  条件: {w : InfinitePlace K} (hw : IsComplex w) (x : mixedSpace K)
+  条件: {w : InfinitePlace K} (hw : 是复形 w) (x : mixedSpace K)
   证明: by
   rw [normAtPlace]; rw [MonoidWithZeroHom.coe_mk]; rw [ZeroHom.coe_mk]; rw [dif_neg (not_isReal_iff_isComplex.mpr hw)]
 
@@ -1114,7 +1114,7 @@ theorem forall_normAtPlace_eq_zero_iff
 @[simp]
 
 中文:
-定理 forall_normAtPlace_eq_zero_iff
+定理 对任意_normAtPlace_eq_zero_iff
   条件: {x : mixedSpace K}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -1148,7 +1148,7 @@ theorem exists_normAtPlace_ne_zero_iff
 @[fun_prop]
 
 中文:
-定理 exists_normAtPlace_ne_zero_iff
+定理 存在_normAtPlace_ne_zero_iff
   条件: {x : mixedSpace K}
   证明: by
   rw [ne_eq]; rw [← forall_normAtPlace_eq_zero_iff]; rw [not_forall]
@@ -1483,7 +1483,7 @@ theorem norm_eq_zero_iff'
 
 中文:
 定理 norm_eq_zero_iff'
-  条件: {x : mixedSpace K} (hx : x in Set.range (mixedEmbedding K))
+  条件: {x : mixedSpace K} (hx : x in 集合.range (mixedEmbedding K))
   证明: by
   obtain ⟨a, rfl⟩ := hx
   rw [norm_eq_norm]; rw [Rat.cast_abs]; rw [abs_eq_zero]; rw [Rat.cast_eq_zero]; rw [Algebra.norm_eq_zero_iff]; rw [map_eq_zero]
@@ -1510,7 +1510,7 @@ theorem continuous_norm
 
 中文:
 定理 continuous_norm
-  结论: Continuous (mixedEmbedding.norm : (mixedSpace K) -> 实数)
+  结论: 连续 (mixedEmbedding.norm : (mixedSpace K) -> 实数)
   证明: by
   refine continuous_finsetProd Finset.univ fun _ _ => ?_
   simp_rw [normAtPlace, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, dite_pow]
@@ -1556,7 +1556,7 @@ definition stdBasis
 
 中文:
 定义 stdBasis
-  签名: : Basis (index K) 实数 (mixedSpace K)
+  签名: : 基 (index K) 实数 (mixedSpace K)
   定义体: Basis.prod (Pi.basisFun Real _)
     (Basis.reindex (Pi.basis fun _ => basisOneI) (Equiv.sigmaEquivProd _ _))
 
@@ -1580,7 +1580,7 @@ theorem stdBasis_apply_isReal
 @[simp]
 
 中文:
-定理 stdBasis_apply_isReal
+定理 stdBasis_apply_is实数
   条件: (x : mixedSpace K) (w : {w : InfinitePlace K // Is实数 w})
   证明: rfl
 
@@ -1694,7 +1694,7 @@ definition indexEquiv
 
 中文:
 定义 indexEquiv
-  签名: : (index K) ≃ (K ->+* Complex)
+  签名: : (index K) ≃ (K ->+* 复形)
   定义体: by
   refine Equiv.ofBijective (fun c => ?_)
     ((Fintype.bijective_iff_surjective_and_card _).mpr ⟨?_, ?_⟩)
@@ -1736,7 +1736,7 @@ theorem indexEquiv_apply_isReal
 @[simp]
 
 中文:
-定理 indexEquiv_apply_isReal
+定理 indexEquiv_apply_is实数
   条件: (w : {w : InfinitePlace K // Is实数 w})
   证明: rfl
 
@@ -1758,7 +1758,7 @@ theorem indexEquiv_apply_isComplex_fst
 
 中文:
 定理 indexEquiv_apply_isComplex_fst
-  条件: (w : {w : InfinitePlace K // IsComplex w})
+  条件: (w : {w : InfinitePlace K // 是复形 w})
   证明: rfl
 
 @[simp]
@@ -1777,7 +1777,7 @@ theorem indexEquiv_apply_isComplex_snd
 
 中文:
 定理 indexEquiv_apply_isComplex_snd
-  条件: (w : {w : InfinitePlace K // IsComplex w})
+  条件: (w : {w : InfinitePlace K // 是复形 w})
   证明: rfl
 -/
 theorem indexEquiv_apply_isComplex_snd (w : {w : InfinitePlace K // IsComplex w}) :
@@ -1797,7 +1797,7 @@ definition matrixToStdBasis
 
 中文:
 定义 matrixToStdBasis
-  签名: : Matrix (index K) (index K) Complex
+  签名: : 矩阵 (index K) (index K) 复形
   定义体: fromBlocks (diagonal fun _ => 1) 0 0 reindex (Equiv.prodComm _ _) (Equiv.prodComm _ _)
     (blockDiagonal (fun _ => (2 : Complex)⁻¹ • !![1, 1; -I, I]))
 
@@ -1854,7 +1854,7 @@ theorem stdBasis_repr_eq_matrixToStdBasis_mul
 
 中文:
 定理 stdBasis_repr_eq_matrixToStdBasis_mul
-  结论: (x : (K ->+* Complex) -> Complex)
+  结论: (x : (K ->+* 复形) -> 复形)
   证明: by
   simp_rw [commMap, matrixToStdBasis, LinearMap.coe_mk, AddHom.coe_mk,
     mulVec, dotProduct, Function.comp_apply, index, Fintype.sum_sum_type,
@@ -1916,7 +1916,7 @@ abbreviation integerLattice
 
 中文:
 缩写 integerLattice
-  签名: : Submodule 整数 (mixedSpace K)
+  签名: : 子模 整数 (mixedSpace K)
   定义体: LinearMap.range ((mixedEmbedding K).comp (algebraMap (𝓞 K) K)).toIntAlgHom.toLinearMap
 -/
 protected abbrev integerLattice : Submodule Int (mixedSpace K) :=
@@ -2053,7 +2053,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (mixedEmbedding.integerLattice K)
+  签名: 离散拓扑 (mixedEmbedding.integerLattice K)
   定义体: by
   classical
   rw [← span_latticeBasis]
@@ -2079,7 +2079,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZLattice 实数 (mixedEmbedding.integerLattice K)
+  签名: 是Z格 实数 (mixedEmbedding.integerLattice K)
   定义体: by
   simp_rw [← span_latticeBasis]
   infer_instance
@@ -2198,7 +2198,7 @@ abbreviation idealLattice
 
 中文:
 缩写 idealLattice
-  签名: (K : 类型) [Field K] (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
+  签名: (K : 类型) [域 K] (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
   定义体: LinearMap.range
   (mixedEmbedding K).toIntAlgHom.toLinearMap ∘ₗ ((I : Submodule (𝓞 K) K).subtype.restrictScalars Int)
 
@@ -2219,7 +2219,7 @@ theorem mem_idealLattice
 
 中文:
 定理 mem_idealLattice
-  结论: (K : 类型) [Field K]
+  结论: (K : 类型) [域 K]
   证明: by
   simp [idealLattice]
 
@@ -2397,7 +2397,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (mixedEmbedding.idealLattice K I)
+  签名: 离散拓扑 (mixedEmbedding.idealLattice K I)
   定义体: by
   classical
   rw [← span_idealLatticeBasis]
@@ -2423,7 +2423,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZLattice 实数 (mixedEmbedding.idealLattice K I)
+  签名: 是Z格 实数 (mixedEmbedding.idealLattice K I)
   定义体: by
   simp_rw [← span_idealLatticeBasis]
   infer_instance
@@ -2495,7 +2495,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (euclidean.mixedSpace K)
+  签名: 环 (euclidean.mixedSpace K)
   定义体: have : Ring (EuclideanSpace Real {w : InfinitePlace K // IsReal w}) := (WithLp.equiv 2 _).ring
   have : Ring (EuclideanSpace Complex {w : InfinitePlace K // IsComplex w}) := (WithLp.equiv 2 _).ring
   (WithLp.equiv 2 _).ring
@@ -2541,7 +2541,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (euclidean.mixedSpace K)
+  签名: 非平凡 (euclidean.mixedSpace K)
   定义体: (toMixed K).toEquiv.nontrivial
 
 Depends on / 依赖: nontrivial, toEquiv, toEquiv.nontrivial, toMixed
@@ -2577,7 +2577,7 @@ definition stdOrthonormalBasis
 
 中文:
 定义 stdOrthonormalBasis
-  签名: : OrthonormalBasis (index K) 实数 (euclidean.mixedSpace K)
+  签名: : 正交标准基 (index K) 实数 (euclidean.mixedSpace K)
   定义体: OrthonormalBasis.prod (EuclideanSpace.basisFun _ Real)
     ((Pi.orthonormalBasis fun _ => Complex.orthonormalBasisOneI).reindex (Equiv.sigmaEquivProd _ _))
 
@@ -2664,7 +2664,7 @@ definition integerLattice
 
 中文:
 定义 integerLattice
-  签名: : Submodule 整数 (euclidean.mixedSpace K)
+  签名: : 子模 整数 (euclidean.mixedSpace K)
   定义体: ZLattice.comap Real (mixedEmbedding.integerLattice K) (toMixed K).toLinearMap
 -/
 protected def integerLattice : Submodule Int (euclidean.mixedSpace K) :=
@@ -2682,7 +2682,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (euclidean.integerLattice K)
+  签名: 离散拓扑 (euclidean.integerLattice K)
   定义体: by
   rw [euclidean.integerLattice]
   infer_instance
@@ -2706,7 +2706,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZLattice 实数 (euclidean.integerLattice K)
+  签名: 是Z格 实数 (euclidean.integerLattice K)
   定义体: by
   simp_rw [euclidean.integerLattice]
   infer_instance
@@ -2766,7 +2766,7 @@ theorem negAt_apply_isReal_and_mem
 @[simp]
 
 中文:
-定理 negAt_apply_isReal_and_mem
+定理 negAt_apply_is实数_and_mem
   条件: (x : mixedSpace K) {w : {w // Is实数 w}} (hw : w in s)
   证明: by
   simp_rw [negAt, prodCongr_apply, piCongrRight_apply, if_pos hw,
@@ -2795,7 +2795,7 @@ theorem negAt_apply_isReal_and_notMem
 @[simp]
 
 中文:
-定理 negAt_apply_isReal_and_notMem
+定理 negAt_apply_is实数_and_notMem
   条件: (x : mixedSpace K) {w : {w // Is实数 w}} (hw : w ∉ s)
   证明: by
   simp_rw [negAt, prodCongr_apply, piCongrRight_apply, if_neg hw,
@@ -2823,7 +2823,7 @@ theorem negAt_apply_isComplex
 
 中文:
 定理 negAt_apply_isComplex
-  条件: (x : mixedSpace K) (w : {w // IsComplex w})
+  条件: (x : mixedSpace K) (w : {w // 是复形 w})
   证明: rfl
 
 @[simp]
@@ -2858,7 +2858,7 @@ theorem negAt_apply_norm_isReal
   by_cases hw : w in s <;> simp [hw]
 
 中文:
-定理 negAt_apply_norm_isReal
+定理 negAt_apply_norm_is实数
   条件: (x : mixedSpace K) (w : {w // Is实数 w})
   证明: by
   by_cases hw : w in s <;> simp [hw]
@@ -2884,7 +2884,7 @@ theorem volume_preserving_negAt
 
 中文:
 定理 volume_preserving_negAt
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   refine MeasurePreserving.prod (volume_preserving_pi fun w => ?_) (MeasurePreserving.id _)
   by_cases hw : w in s
@@ -2946,7 +2946,7 @@ theorem norm_negAt
 
 中文:
 定理 norm_negAt
-  条件: [NumberField K] (x : mixedSpace K)
+  条件: [数域 K] (x : mixedSpace K)
   证明: norm_eq_of_normAtPlace_eq (fun w => normAtPlace_negAt _ _ w)
 
 Depends on / 依赖: normAtPlace_negAt, norm_eq_of_normAtPlace_eq
@@ -3030,7 +3030,7 @@ theorem negAt_signSet_apply_isReal
 @[simp]
 
 中文:
-定理 negAt_signSet_apply_isReal
+定理 negAt_signSet_apply_is实数
   条件: (x : mixedSpace K) (w : {w // Is实数 w})
   证明: by
   by_cases hw : x.1 w <= 0
@@ -3058,7 +3058,7 @@ theorem negAt_signSet_apply_isComplex
 
 中文:
 定理 negAt_signSet_apply_isComplex
-  条件: (x : mixedSpace K) (w : {w // IsComplex w})
+  条件: (x : mixedSpace K) (w : {w // 是复形 w})
   证明: rfl
 -/
 theorem negAt_signSet_apply_isComplex (x : mixedSpace K) (w : {w // IsComplex w}) :
@@ -3097,7 +3097,7 @@ abbreviation plusPart
 
 中文:
 缩写 plusPart
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: A inter {x | forall w, 0 < x.1 w}
 
 Depends on / 依赖: RelIso, RelIso.refl
@@ -3175,7 +3175,7 @@ theorem disjoint_negAt_plusPart
 
 中文:
 定理 disjoint_negAt_plusPart
-  结论: Pairwise (Disjoint on (fun s => negAt s '' (plusPart A)))
+  结论: 两两 (Disjoint on (fun s => negAt s '' (plusPart A)))
   证明: by
   intro s t hst
   refine Set.disjoint_left.mpr fun _ hx hx' => ?_
@@ -3335,7 +3335,7 @@ theorem measurableSet_plusPart
 
 中文:
 定理 measurableSet_plusPart
-  条件: (hm : MeasurableSet A)
+  条件: (hm : 可测集 A)
   证明: by
   convert_to MeasurableSet (A inter (⋂ w, {x | 0 < x.1 w}))
   · ext; simp
@@ -3362,7 +3362,7 @@ theorem measurableSet_negAt_plusPart
 
 中文:
 定理 measurableSet_negAt_plusPart
-  条件: (hm : MeasurableSet A)
+  条件: (hm : 可测集 A)
   证明: negAt_preimage s _ ▸ (measurableSet_plusPart hm).preimage (negAt s).continuous.measurable
 
 Depends on / 依赖: continuous, continuous.measurable, measurable, measurableSet_plusPart, negAt_preimage, preimage
@@ -3387,7 +3387,7 @@ include hA in
 
 中文:
 定理 volume_negAt_plusPart
-  条件: (hm : MeasurableSet A)
+  条件: (hm : 可测集 A)
   证明: by
   rw [← negAt_symm]; rw [ContinuousLinearEquiv.image_symm_eq_preimage]; rw [volume_preserving_negAt.measure_preimage (measurableSet_plusPart hm).nullMeasurableSet]
 
@@ -3415,7 +3415,7 @@ theorem volume_eq_two_pow_mul_volume_plusPart
 
 中文:
 定理 volume_eq_two_pow_mul_volume_plusPart
-  条件: (hm : MeasurableSet A)
+  条件: (hm : 可测集 A)
   证明: by
   simp only [← measure_congr (iUnion_negAt_plusPart_ae A hA),
     measure_iUnion (disjoint_negAt_plusPart A) (fun _ => measurableSet_negAt_plusPart _ A hm),
@@ -3469,7 +3469,7 @@ theorem realSpace.volume_eq_zero
 
 中文:
 定理 realSpace.volume_eq_zero
-  条件: [NumberField K] (w : InfinitePlace K)
+  条件: [数域 K] (w : InfinitePlace K)
   证明: by
   let A : AffineSubspace Real (realSpace K) :=
     Submodule.toAffineSubspace (Submodule.mk ⟨⟨{x | x w = 0}, by simp_all⟩, rfl⟩ (by simp_all))
@@ -3494,7 +3494,7 @@ definition mixedSpaceOfRealSpace
   body: .prod (.pi fun w => .proj w.1) (.pi fun w => Complex.ofRealCLM.comp (.proj w.1))
 
 中文:
-定义 mixedSpaceOfRealSpace
+定义 mixedSpaceOf实数Space
   签名: : realSpace K ->L[实数] mixedSpace K
   定义体: .prod (.pi fun w => .proj w.1) (.pi fun w => Complex.ofRealCLM.comp (.proj w.1))
 
@@ -3512,7 +3512,7 @@ theorem mixedSpaceOfRealSpace_apply
   proof: rfl
 
 中文:
-定理 mixedSpaceOfRealSpace_apply
+定理 mixedSpaceOf实数Space_apply
   条件: (x : realSpace K)
   证明: rfl
 -/
@@ -3534,7 +3534,7 @@ theorem injective_mixedSpaceOfRealSpace
 · exact Complex.ofReal_inj.mp h.2 ⟨w, hw⟩
 
 中文:
-定理 injective_mixedSpaceOfRealSpace
+定理 injective_mixedSpaceOf实数Space
   证明: by
   refine (injective_iff_map_eq_zero mixedSpaceOfRealSpace).mpr fun _ h => ?_
   rw [mixedSpaceOfRealSpace_apply]; rw [Prod.mk_eq_zero]; rw [funext_iff]; rw [funext_iff] at h
@@ -3567,7 +3567,7 @@ theorem normAtPlace_mixedSpaceOfRealSpace
   · rw [normAtPlace_apply_of_isComplex hw, Complex.norm_of_nonneg hx]
 
 中文:
-定理 normAtPlace_mixedSpaceOfRealSpace
+定理 normAtPlace_mixedSpaceOf实数Space
   条件: {x : realSpace K} {w : InfinitePlace K} (hx : 0 <= x w)
   证明: by
   simp only [mixedSpaceOfRealSpace_apply]
@@ -3620,7 +3620,7 @@ theorem normAtComplexPlaces_apply_isReal
 @[simp]
 
 中文:
-定理 normAtComplexPlaces_apply_isReal
+定理 normAtComplexPlaces_apply_is实数
   条件: {x : mixedSpace K} (w : {w // Is实数 w})
   证明: by
   rw [normAtComplexPlaces]; rw [dif_pos]
@@ -3645,7 +3645,7 @@ theorem normAtComplexPlaces_apply_isComplex
 
 中文:
 定理 normAtComplexPlaces_apply_isComplex
-  条件: {x : mixedSpace K} (w : {w // IsComplex w})
+  条件: {x : mixedSpace K} (w : {w // 是复形 w})
   证明: by
   rw [normAtComplexPlaces]; rw [dif_neg (not_isReal_iff_isComplex.mpr w.prop)]; rw [normAtPlace_apply_of_isComplex]
 
@@ -3669,7 +3669,7 @@ theorem normAtComplexPlaces_mixedSpaceOfRealSpace
       Complex.norm_of_nonneg (hx w hw)]
 
 中文:
-定理 normAtComplexPlaces_mixedSpaceOfRealSpace
+定理 normAtComplexPlaces_mixedSpaceOf实数Space
   结论: {x : realSpace K}
   证明: by
   ext w
@@ -3774,7 +3774,7 @@ theorem normAtAllPlaces_mixedSpaceOfRealSpace
   rw [normAtAllPlaces_apply]; rw [normAtPlace_mixedSpaceOfRealSpace (hx _)]
 
 中文:
-定理 normAtAllPlaces_mixedSpaceOfRealSpace
+定理 normAtAllPlaces_mixedSpaceOf实数Space
   条件: {x : realSpace K} (hx : 对任意 w, 0 <= x w)
   证明: by
   ext
@@ -3927,7 +3927,7 @@ theorem normAtAllPlaces_image_preimage_of_nonneg
 
 中文:
 定理 normAtAllPlaces_image_preimage_of_nonneg
-  结论: {s : Set (realSpace K)}
+  结论: {s : 集合 (realSpace K)}
   证明: by
   rw [Set.image_preimage_eq_iff]
   rintro x hx

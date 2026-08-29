@@ -81,7 +81,7 @@ theorem linearCombination_apply
 中文:
 定理 linearCombination_apply
   条件: (l : α ->₀ R)
-  结论: linearCombination R v l = l.sum fun i a => a • v i
+  结论: linearCombination R v l = l.求和 fun i a => a • v i
   证明: rfl
 -/
 theorem linearCombination_apply (l : α ->₀ R) : linearCombination R v l = l.sum fun i a => a • v i :=
@@ -100,7 +100,7 @@ theorem linearCombination_apply_of_mem_supported
 
 中文:
 定理 linearCombination_apply_of_mem_supported
-  结论: {l : α ->₀ R} {s : Finset α}
+  结论: {l : α ->₀ R} {s : 有限集 α}
   证明: Finset.sum_subset hs fun x _ hxg =>
     show l x • v x = 0 by rw [notMem_support_iff.1 hxg, zero_smul]
 
@@ -285,7 +285,7 @@ theorem linearCombination_unique
 
 中文:
 定理 linearCombination_unique
-  条件: [Unique α] (l : α ->₀ R) (v : α -> M)
+  条件: [唯一 α] (l : α ->₀ R) (v : α -> M)
   证明: by
   rw [← linearCombination_single]; rw [← unique_single l]
 
@@ -308,7 +308,7 @@ theorem linearCombination_surjective
 
 中文:
 定理 linearCombination_surjective
-  条件: (h : Function.Surjective v)
+  条件: (h : 函数.满射 v)
   证明: by
   intro x
   obtain ⟨y, hy⟩ := h x
@@ -332,7 +332,7 @@ theorem linearCombination_range
 
 中文:
 定理 linearCombination_range
-  条件: (h : Function.Surjective v)
+  条件: (h : 函数.满射 v)
   证明: range_eq_top.2 linearCombination_surjective R h
 
 Depends on / 依赖: linearCombination_surjective, range_eq_top
@@ -351,7 +351,7 @@ theorem linearCombination_id_surjective
 
 中文:
 定理 linearCombination_id_surjective
-  条件: (M) [AddCommMonoid M] [Module R M]
+  条件: (M) [加法交换幺半群 M] [模 R M]
   证明: linearCombination_surjective R Function.surjective_id
 
 Depends on / 依赖: Function, Function.surjective_id, linearCombination_surjective, surjective_id
@@ -382,7 +382,7 @@ theorem range_linearCombination
 
 中文:
 定理 range_linearCombination
-  结论: LinearMap.range (linearCombination R v) = span R (range v)
+  结论: 线性映射.range (linearCombination R v) = span R (range v)
   证明: by
   ext x
   constructor
@@ -568,7 +568,7 @@ theorem span_eq_range_linearCombination
 
 中文:
 定理 span_eq_range_linearCombination
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   rw [range_linearCombination]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
 
@@ -588,7 +588,7 @@ theorem mem_span_iff_linearCombination
 
 中文:
 定理 mem_span_iff_linearCombination
-  条件: (s : Set M) (x : M)
+  条件: (s : 集合 M) (x : M)
   证明: (SetLike.ext_iff.1 <| span_eq_range_linearCombination _ _) x
 
 Depends on / 依赖: SetLike, SetLike.ext_iff, ext_iff, span_eq_range_linearCombination
@@ -608,7 +608,7 @@ theorem mem_span_range_iff_exists_finsupp
   simp only [← Finsupp.range_linearCombination, LinearMap.mem_range, linearCombination_apply]
 
 中文:
-定理 mem_span_range_iff_exists_finsupp
+定理 mem_span_range_iff_存在_finsupp
   条件: {v : α -> M} {x : M}
   证明: by
   simp only [← Finsupp.range_linearCombination, LinearMap.mem_range, linearCombination_apply]
@@ -639,7 +639,7 @@ theorem span_image_eq_map_linearCombination
 
 中文:
 定理 span_image_eq_map_linearCombination
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   apply span_eq_of_le
   · intro x hx
@@ -685,7 +685,7 @@ theorem mem_span_image_iff_linearCombination
 
 中文:
 定理 mem_span_image_iff_linearCombination
-  条件: {s : Set α} {x : M}
+  条件: {s : 集合 α} {x : M}
   证明: by
   rw [span_image_eq_map_linearCombination]
   simp
@@ -708,7 +708,7 @@ theorem linearCombination_option
 
 中文:
 定理 linearCombination_option
-  条件: (v : Option α -> M) (f : Option α ->₀ R)
+  条件: (v : 选项类型 α -> M) (f : 选项类型 α ->₀ R)
   证明: by
   rw [linearCombination_apply]; rw [sum_option_index_smul]; rw [linearCombination_apply]; simp
 
@@ -769,7 +769,7 @@ theorem linearCombination_smul
 
 中文:
 定理 linearCombination_smul
-  条件: [Module R S] [Module S M] [IsScalarTower R S M] {w : α' -> S}
+  条件: [模 R S] [模 S M] [标量塔 R S M] {w : α' -> S}
   证明: by
   ext; simp
 
@@ -794,7 +794,7 @@ theorem linearCombination_fin_zero
 
 中文:
 定理 linearCombination_fin_zero
-  条件: (f : Fin 0 -> M)
+  条件: (f : 有限集 0 -> M)
   结论: linearCombination R f = 0
   证明: by
   ext i
@@ -819,7 +819,7 @@ definition linearCombinationOn
 
 中文:
 定义 linearCombinationOn
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: LinearMap.codRestrict _ ((linearCombination _ v).comp (Submodule.subtype (supported R R s)))
     fun ⟨l, hl⟩ => (mem_span_image_iff_linearCombination _).2 ⟨l, hl, rfl⟩
 
@@ -843,7 +843,7 @@ theorem linearCombinationOn_range
 
 中文:
 定理 linearCombinationOn_range
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   rw [linearCombinationOn]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [LinearMap.range_comp]; rw [range_subtype]
   exact (span_image_eq_map_linearCombination _ _).le
@@ -867,7 +867,7 @@ theorem linearCombination_restrict
 
 中文:
 定理 linearCombination_restrict
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   ext; simp [linearCombinationOn]
 
@@ -940,7 +940,7 @@ theorem linearCombination_onFinset
 
 中文:
 定理 linearCombination_onFinset
-  结论: {s : Finset α} {f : α -> R} (g : α -> M)
+  结论: {s : 有限集 α} {f : α -> R} (g : α -> M)
   证明: by
   classical
   simp only [linearCombination_apply, Finsupp.sum, Finsupp.onFinset_apply, Finsupp.support_onFinset]
@@ -1029,7 +1029,7 @@ definition Fintype.linearCombination
   map_smul' r f := by simp_rw [Finset.smul_sum, smul_smul]; rfl
 
 中文:
-定义 Fintype.linearCombination
+定义 有限类型.linearCombination
   签名: : (α -> R) ->ₗ[R] M where
   定义体: ∑ i, f i • v i
   map_add' f g := by simp_rw [← Finset.sum_add_distrib, ← add_smul]; rfl
@@ -1052,9 +1052,9 @@ theorem Fintype.linearCombination_apply
 @[simp]
 
 中文:
-定理 Fintype.linearCombination_apply
+定理 有限类型.linearCombination_apply
   条件: (f)
-  结论: Fintype.linearCombination R v f = ∑ i, f i • v i
+  结论: 有限类型.linearCombination R v f = ∑ i, f i • v i
   证明: rfl
 
 @[simp]
@@ -1074,7 +1074,7 @@ theorem Fintype.linearCombination_apply_single
   rw [Finset.sum_ite_eq']; rw [if_pos (Finset.mem_univ _)]
 
 中文:
-定理 Fintype.linearCombination_apply_single
+定理 有限类型.linearCombination_apply_single
   条件: [DecidableEq α] (i : α) (r : R)
   证明: by
   simp_rw [Fintype.linearCombination_apply, Pi.single_apply, ite_smul, zero_smul]
@@ -1101,7 +1101,7 @@ theorem Finsupp.linearCombination_eq_fintype_linearCombination_apply
     exact zero_smul _ _
 
 中文:
-定理 Finsupp.linearCombination_eq_fintype_linearCombination_apply
+定理 有限支撑.linearCombination_eq_fintype_linearCombination_apply
   条件: (x : α -> R)
   证明: by
   apply Finset.sum_subset
@@ -1131,7 +1131,7 @@ theorem Finsupp.linearCombination_eq_fintype_linearCombination
 @[simp]
 
 中文:
-定理 Finsupp.linearCombination_eq_fintype_linearCombination
+定理 有限支撑.linearCombination_eq_fintype_linearCombination
   证明: LinearMap.ext linearCombination_eq_fintype_linearCombination_apply R v
 
 @[simp]
@@ -1153,7 +1153,7 @@ theorem Fintype.range_linearCombination
   rw [← Finsupp.linearCombination_eq_fintype_linearCombination]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
 
 中文:
-定理 Fintype.range_linearCombination
+定理 有限类型.range_linearCombination
   证明: by
   rw [← Finsupp.linearCombination_eq_fintype_linearCombination]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
 
@@ -1195,7 +1195,7 @@ definition Fintype.bilinearCombination
   map_smul' r v := by ext; simp [Fintype.linearCombination, Finset.smul_sum, smul_comm]
 
 中文:
-定义 Fintype.bilinearCombination
+定义 有限类型.bilinearCombination
   签名: : (α -> M) ->ₗ[S] (α -> R) ->ₗ[R] M where
   定义体: Fintype.linearCombination R v
   map_add' u v := by ext; simp [Fintype.linearCombination,
@@ -1219,7 +1219,7 @@ theorem Fintype.bilinearCombination_apply
   proof: rfl
 
 中文:
-定理 Fintype.bilinearCombination_apply
+定理 有限类型.bilinearCombination_apply
   证明: rfl
 -/
 theorem Fintype.bilinearCombination_apply :
@@ -1236,7 +1236,7 @@ theorem Fintype.bilinearCombination_apply_single
   simp [Fintype.bilinearCombination]
 
 中文:
-定理 Fintype.bilinearCombination_apply_single
+定理 有限类型.bilinearCombination_apply_single
   条件: [DecidableEq α] (i : α) (r : R)
   证明: by
   simp [Fintype.bilinearCombination]
@@ -1262,7 +1262,7 @@ theorem Submodule.mem_span_range_iff_exists_fun
 exact exists_congr fun c => Eq.congr_left Finsupp.sum_fintype _ _ fun i => zero_smul _ _
 
 中文:
-定理 Submodule.mem_span_range_iff_exists_fun
+定理 子模.mem_span_range_iff_存在_fun
   证明: by
   rw [Finsupp.equivFunOnFinite.surjective.exists]
   simp only [Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.equivFunOnFinite_apply]
@@ -1288,7 +1288,7 @@ theorem Submodule.top_le_span_range_iff_forall_exists_fun
 omit [Fintype α]
 
 中文:
-定理 Submodule.top_le_span_range_iff_forall_exists_fun
+定理 子模.top_le_span_range_iff_对任意_存在_fun
   证明: by
   simp_rw [← mem_span_range_iff_exists_fun]
   exact ⟨fun h x => h trivial, fun h x _ => h x⟩
@@ -1320,8 +1320,8 @@ theorem Submodule.mem_span_image_iff_exists_fun
 exact sum_smul_mem (span R (v '' s)) c fun a _ =
 
 中文:
-定理 Submodule.mem_span_image_iff_exists_fun
-  条件: {s : Set α}
+定理 子模.mem_span_image_iff_存在_fun
+  条件: {s : 集合 α}
   证明: by
   refine ⟨fun h => ?_, fun ⟨t, ht, c, hx⟩ => ?_⟩
   · obtain ⟨l, hl, hx⟩ := (Finsupp.mem_span_image_iff_linearCombination R).mp h
@@ -1354,8 +1354,8 @@ theorem Submodule.mem_span_image_finset_iff_exists_fun
   rfl
 
 中文:
-定理 Submodule.mem_span_image_finset_iff_exists_fun
-  条件: {s : Finset α}
+定理 子模.mem_span_image_finset_iff_存在_fun
+  条件: {s : 有限集 α}
   证明: by
   rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
   rfl
@@ -1384,8 +1384,8 @@ theorem Submodule.mem_span_image_finset_iff_exists_fun'
     rw [← hc]; rw [← Finset.sum_
 
 中文:
-定理 Submodule.mem_span_image_finset_iff_exists_fun'
-  条件: {s : Finset α}
+定理 子模.mem_span_image_finset_iff_存在_fun'
+  条件: {s : 有限集 α}
   证明: by
   classical
   rw [Submodule.mem_span_image_finset_iff_exists_fun]
@@ -1419,8 +1419,8 @@ theorem Fintype.mem_span_image_iff_exists_fun
   rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
 
 中文:
-定理 Fintype.mem_span_image_iff_exists_fun
-  条件: {s : Set α} [Fintype s]
+定理 有限类型.mem_span_image_iff_存在_fun
+  条件: {s : 集合 α} [有限类型 s]
   证明: by
   rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
 
@@ -1461,8 +1461,8 @@ theorem Span.finsupp_linearCombination_repr
   exact ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose_spec
 
 中文:
-定理 Span.finsupp_linearCombination_repr
-  条件: {w : Set M} (x : span R w)
+定理 张成.finsupp_linearCombination_repr
+  条件: {w : 集合 M} (x : span R w)
   证明: by
   rw [Span.repr_def]
   exact ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose_spec
@@ -1485,7 +1485,7 @@ theorem LinearMap.map_finsupp_linearCombination
   proof: apply_linearCombination _ _ _ _
 
 中文:
-定理 LinearMap.map_finsupp_linearCombination
+定理 线性映射.map_finsupp_linearCombination
   结论: (f : M ->ₗ[R] N) {ι : 类型} {g : ι -> M}
   证明: apply_linearCombination _ _ _ _
 
@@ -1509,8 +1509,8 @@ lemma Submodule.mem_span_iff_exists_finset_subset
 rintro ⟨n, t, hts, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hts hx
 
 中文:
-引理 Submodule.mem_span_iff_exists_finset_subset
-  条件: {s : Set M} {x : M}
+引理 子模.mem_span_iff_存在_finset_subset
+  条件: {s : 集合 M} {x : M}
   证明: by
     rw [← s.image_id]; rw [mem_span_image_iff_linearCombination]
     rintro ⟨l, hl, rfl⟩
@@ -1544,8 +1544,8 @@ refine ⟨f, hf.trans hts, .symm Finset.sum_subset hts ?_⟩
 mpr := by rintro ⟨f, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hx
 
 中文:
-引理 Submodule.mem_span_finset
-  条件: {s : Finset M} {x : M}
+引理 子模.mem_span_finset
+  条件: {s : 有限集 M} {x : M}
   证明: by
     rw [mem_span_iff_exists_finset_subset]
     rintro ⟨f, t, hts, hf, rfl⟩
@@ -1575,8 +1575,8 @@ lemma Submodule.mem_span_iff_of_fintype
   exact mem_span_range_iff_exists_fun _
 
 中文:
-引理 Submodule.mem_span_iff_of_fintype
-  条件: {s : Set M} [Fintype s] {x : M}
+引理 子模.mem_span_iff_of_fintype
+  条件: {s : 集合 M} [有限类型 s] {x : M}
   证明: by
   conv_lhs => rw [← Subtype.range_val (s := s)]
   exact mem_span_range_iff_exists_fun _
@@ -1597,8 +1597,8 @@ lemma Submodule.mem_span_finset'
   proof: mem_span_iff_of_fintype
 
 中文:
-引理 Submodule.mem_span_finset'
-  条件: {s : Finset M} {x : M}
+引理 子模.mem_span_finset'
+  条件: {s : 有限集 M} {x : M}
   证明: mem_span_iff_of_fintype
 
 Depends on / 依赖: mem_span_iff_of_fintype
@@ -1618,8 +1618,8 @@ theorem Submodule.mem_span_set
   exact Finsupp.mem_span_image_iff_linearCombination R (v := _root_.id (α := M))
 
 中文:
-定理 Submodule.mem_span_set
-  条件: {m : M} {s : Set M}
+定理 子模.mem_span_set
+  条件: {m : M} {s : 集合 M}
   证明: by
   conv_lhs => rw [← Set.image_id s]
   exact Finsupp.mem_span_image_iff_linearCombination R (v := _root_.id (α := M))
@@ -1647,8 +1647,8 @@ lemma Submodule.mem_span_set'
     exact Fintype.su
 
 中文:
-引理 Submodule.mem_span_set'
-  条件: {m : M} {s : Set M}
+引理 子模.mem_span_set'
+  条件: {m : M} {s : 集合 M}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · rcases mem_span_set.1 h with ⟨c, cs, rfl⟩
@@ -1687,8 +1687,8 @@ lemma Submodule.span_eq_iUnion_nat
     exact ⟨fun i => (f i).1, fun i => ⟨(f i).2, (hf i)⟩, rfl⟩
 
 中文:
-引理 Submodule.span_eq_iUnion_nat
-  条件: (s : Set M)
+引理 子模.span_eq_iUnion_nat
+  条件: (s : 集合 M)
   证明: by
   ext m
   simp only [SetLike.mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, mem_span_set']
@@ -1731,7 +1731,7 @@ definition Finsupp.addSingleEquiv
   · simp [hk]
 
 中文:
-定义 Finsupp.addSingleEquiv
+定义 有限支撑.addSingleEquiv
   签名: : (ι ->₀ R) ≃ₗ[R] (ι ->₀ R)
   定义体: by
   refine .ofLinearMap (linearCombination _ fun j => single j 1 + single i (c j))
@@ -1763,7 +1763,7 @@ theorem Finsupp.linearCombination_comp_addSingleEquiv
   ext; simp [addSingleEquiv]
 
 中文:
-定理 Finsupp.linearCombination_comp_addSingleEquiv
+定理 有限支撑.linearCombination_comp_addSingleEquiv
   条件: (v : ι -> M)
   证明: by
   ext; simp [addSingleEquiv]

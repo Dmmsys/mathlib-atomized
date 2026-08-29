@@ -44,8 +44,8 @@ include i in
 
 中文:
 定理 isScalarTower
-  条件: [SMul M M'] [IsScalarTower M M' β]
-  结论: IsScalarTower M M' F where
+  条件: [标量乘法 M M'] [标量塔 M M' β]
+  结论: 标量塔 M M' F where
   证明: by apply DFunLike.ext; simp
 
 include i in
@@ -65,8 +65,8 @@ theorem smulCommClass
 
 中文:
 定理 smulCommClass
-  条件: [SMulCommClass M M' β]
-  结论: SMulCommClass M M' F where
+  条件: [标量交换类 M M' β]
+  结论: 标量交换类 M M' F where
   证明: by apply DFunLike.ext; simp [smul_comm]
 -/
 protected theorem smulCommClass [SMulCommClass M M' β] : SMulCommClass M M' F where
@@ -87,7 +87,7 @@ theorem isCentralScalar
 
 中文:
 定理 isCentralScalar
-  结论: [SMul M F] [SMul Mᵐᵒᵖ F] [SMul M β] [SMul Mᵐᵒᵖ β]
+  结论: [标量乘法 M F] [标量乘法 Mᵐᵒᵖ F] [标量乘法 M β] [标量乘法 Mᵐᵒᵖ β]
   证明: by apply DFunLike.ext; simp [op_smul_eq_smul]
 -/
 protected theorem isCentralScalar [SMul M F] [SMul Mᵐᵒᵖ F] [SMul M β] [SMul Mᵐᵒᵖ β]
@@ -105,7 +105,7 @@ abbreviation distribSMul
 
 中文:
 缩写 distribSMul
-  签名: [AddZeroClass β] [AddZeroClass F] [DistribSMul M β]
+  签名: [加法零类 β] [加法零类 F] [分配标量乘法 M β]
   定义体: DFunLike.coe_injective.distribSMul (coeAddMonoidHom F α β) FunLike.coe_smul
 -/
 protected abbrev distribSMul [AddZeroClass β] [AddZeroClass F] [DistribSMul M β]
@@ -127,7 +127,7 @@ abbreviation mulAction
 
 中文:
 缩写 mulAction
-  签名: [SMul M F] [Monoid M] [MulAction M β] [IsSMulApply M F α β]
+  签名: [标量乘法 M F] [幺半群 M] [乘法作用 M β] [是SMulApply M F α β]
   定义体: DFunLike.coe_injective.mulAction _ FunLike.coe_smul
 -/
 protected abbrev mulAction [SMul M F] [Monoid M] [MulAction M β] [IsSMulApply M F α β] :
@@ -144,7 +144,7 @@ abbreviation distribMulAction
 
 中文:
 缩写 distribMulAction
-  签名: [Monoid M] [AddMonoid β] [AddMonoid F] [DistribMulAction M β]
+  签名: [幺半群 M] [加法幺半群 β] [加法幺半群 F] [分配乘法作用 M β]
   定义体: DFunLike.coe_injective.distribMulAction (coeAddMonoidHom F α β) FunLike.coe_smul
 -/
 protected abbrev distribMulAction [Monoid M] [AddMonoid β] [AddMonoid F] [DistribMulAction M β]
@@ -165,7 +165,7 @@ abbreviation module
 
 中文:
 缩写 module
-  签名: : Module M F
+  签名: : 模 M F
   定义体: coeAddHom_injective.module M (coeAddMonoidHom F α β) coe_smul
 -/
 protected abbrev module : Module M F :=

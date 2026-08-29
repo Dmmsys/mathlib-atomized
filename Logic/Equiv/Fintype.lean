@@ -48,8 +48,8 @@ definition Function.Embedding.toEquivRange
 @[simp]
 
 中文:
-定义 Function.Embedding.toEquivRange
-  签名: : α ≃ Set.range f where
+定义 函数.嵌入.toEquivRange
+  签名: : α ≃ 集合.range f where
   定义体: fun a => ⟨f a, Set.mem_range_self a⟩
   invFun := f.invOfMemRange
   left_inv := fun _ => by simp
@@ -77,7 +77,7 @@ theorem Function.Embedding.toEquivRange_apply
 @[simp]
 
 中文:
-定理 Function.Embedding.toEquivRange_apply
+定理 函数.嵌入.toEquivRange_apply
   条件: (a : α)
   证明: rfl
 
@@ -97,7 +97,7 @@ theorem Function.Embedding.toEquivRange_symm_apply_self
   proof: by simp [Equiv.symm_apply_eq]
 
 中文:
-定理 Function.Embedding.toEquivRange_symm_apply_self
+定理 函数.嵌入.toEquivRange_symm_apply_self
   条件: (a : α)
   证明: by simp [Equiv.symm_apply_eq]
 
@@ -116,7 +116,7 @@ theorem Function.Embedding.toEquivRange_eq_ofInjective
   simp
 
 中文:
-定理 Function.Embedding.toEquivRange_eq_ofInjective
+定理 函数.嵌入.toEquivRange_eq_ofInjective
   证明: by
   ext
   simp
@@ -137,8 +137,8 @@ definition Equiv.Perm.viaFintypeEmbedding
 @[simp]
 
 中文:
-定义 Equiv.Perm.viaFintypeEmbedding
-  签名: : Equiv.Perm β
+定义 等价.置换.viaFintypeEmbedding
+  签名: : 等价.置换 β
   定义体: e.extendDomain f.toEquivRange
 
 @[simp]
@@ -160,7 +160,7 @@ theorem Equiv.Perm.viaFintypeEmbedding_apply_image
   convert! Equiv.Perm.extendDomain_apply_image e (Function.Embedding.toEquivRange f) a
 
 中文:
-定理 Equiv.Perm.viaFintypeEmbedding_apply_image
+定理 等价.置换.viaFintypeEmbedding_apply_image
   条件: (a : α)
   证明: by
   rw [Equiv.Perm.viaFintypeEmbedding]
@@ -185,8 +185,8 @@ theorem Equiv.Perm.viaFintypeEmbedding_apply_mem_range
   congr
 
 中文:
-定理 Equiv.Perm.viaFintypeEmbedding_apply_mem_range
-  条件: {b : β} (h : b in Set.range f)
+定理 等价.置换.viaFintypeEmbedding_apply_mem_range
+  条件: {b : β} (h : b in 集合.range f)
   证明: by
   simp only [viaFintypeEmbedding, Function.Embedding.invOfMemRange]
   rw [Equiv.Perm.extendDomain_apply_subtype _ _ h]
@@ -210,8 +210,8 @@ theorem Equiv.Perm.viaFintypeEmbedding_apply_notMem_range
   rwa [Equiv.Perm.viaFintypeEmbedding, Equiv.Perm.extendDomain_apply_not_subtype]
 
 中文:
-定理 Equiv.Perm.viaFintypeEmbedding_apply_notMem_range
-  条件: {b : β} (h : b ∉ Set.range f)
+定理 等价.置换.viaFintypeEmbedding_apply_notMem_range
+  条件: {b : β} (h : b ∉ 集合.range f)
   证明: by
   rwa [Equiv.Perm.viaFintypeEmbedding, Equiv.Perm.extendDomain_apply_not_subtype]
 
@@ -243,7 +243,7 @@ definition setDiffEquiv
 
 中文:
 定义 setDiffEquiv
-  签名: {s t : Set α} [Fintype s] [Fintype t]
+  签名: {s t : 集合 α} [有限类型 s] [有限类型 t]
   定义体: by
   classical
   let fs : Finset α := Finset.univ.map (Function.Embedding.subtype (· in s))
@@ -286,7 +286,7 @@ definition toCompl
 
 中文:
 定义 toCompl
-  签名: {p q : α -> 命题} [Finite {x | p x}]
+  签名: {p q : α -> 命题} [有限 {x | p x}]
   定义体: let sp : Set α := {x | p x}
   let sq : Set α := {x | q x}
   letI : Fintype sp := Fintype.ofFinite sp
@@ -430,8 +430,8 @@ theorem Perm.exists_extending_pair
   simp [Equiv.extendSubtype_apply_of_mem]
 
 中文:
-定理 Perm.exists_extending_pair
-  结论: [Finite α]
+定理 置换.存在_extending_pair
+  结论: [有限 α]
   证明: by
   classical
   have : Finite {x | x in Set.range f} := .of_surjective _ (Set.codRestrict_range_surjective f)
@@ -461,7 +461,7 @@ theorem Perm.exists_map_finset_eq
   obtain ⟨a, ha, rf
 
 中文:
-定理 Perm.exists_map_finset_eq
+定理 置换.存在_map_finset_eq
   证明: by
   obtain ⟨σ, hσ⟩ := Perm.exists_extending_pair
     (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))

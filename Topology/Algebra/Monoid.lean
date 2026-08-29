@@ -43,8 +43,8 @@ theorem continuous_one
 
 中文:
 定理 continuous_one
-  条件: [TopologicalSpace M] [One M]
-  结论: Continuous (1 : X -> M)
+  条件: [拓扑空间 M] [幺 M]
+  结论: 连续 (1 : X -> M)
   证明: @continuous_const _ _ _ _ 1
 
 Depends on / 依赖: continuous_const
@@ -66,8 +66,8 @@ instance [TopologicalSpace
   continuous_const_mul := continuous_op.comp (continuous_unop.mul_const (unop _))
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Mul α] [SeparatelyContinuousMul α] :
+实例 [拓扑空间
+  签名: α] [乘法 α] [SeparatelyContinuousMul α] :
   定义体: continuous_op.comp (continuous_unop.const_mul (unop _))
   continuous_const_mul := continuous_op.comp (continuous_unop.mul_const (unop _))
 
@@ -89,8 +89,8 @@ instance [TopologicalSpace
   body: ⟨continuous_op.comp (continuous_unop.snd'.mul continuous_unop.fst')⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Mul α] [ContinuousMul α] : ContinuousMul αᵐᵒᵖ
+实例 [拓扑空间
+  签名: α] [乘法 α] [连续乘法 α] : 连续乘法 αᵐᵒᵖ
   定义体: ⟨continuous_op.comp (continuous_unop.snd'.mul continuous_unop.fst')⟩
 
 Depends on / 依赖: continuous_op, continuous_op.comp, continuous_unop, continuous_unop.fst, continuous_unop.snd
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: SeparatelyContinuousMul (ULift.{u} M)
+  签名: SeparatelyContinuousMul (类型层提升.{u} M)
   定义体: ⟨continuous_uliftUp.comp (by fun_prop), continuous_uliftUp.comp (by fun_prop)⟩
 
 @[to_additive]
@@ -163,7 +163,7 @@ instance SeparatelyContinuousMul.to_continuousSMul
 
 中文:
 实例 SeparatelyContinuousMul.to_continuousSMul
-  签名: : ContinuousConstSMul M M
+  签名: : 连续常数标量乘法 M M
   定义体: ⟨fun _ => continuous_const_mul⟩
 
 @[to_additive]
@@ -184,7 +184,7 @@ instance SeparatelyContinuousMul.to_continuousSMul_op
 
 中文:
 实例 SeparatelyContinuousMul.to_continuousSMul_op
-  签名: : ContinuousConstSMul Mᵐᵒᵖ M
+  签名: : 连续常数标量乘法 Mᵐᵒᵖ M
   定义体: ⟨fun _ => continuous_mul_const⟩
 
 Depends on / 依赖: continuous_mul_const
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul Mᵒᵈ
+  签名: 连续乘法 Mᵒᵈ
   定义体: ‹ContinuousMul M›
 
 @[to_additive]
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul (ULift.{u} M)
+  签名: 连续乘法 (类型层提升.{u} M)
   定义体: ⟨continuous_uliftUp.comp (by fun_prop)⟩
 
 @[to_additive]
@@ -255,8 +255,8 @@ instance ContinuousMul.to_continuousSMul
 @[to_additive]
 
 中文:
-实例 ContinuousMul.to_continuousSMul
-  签名: : ContinuousSMul M M
+实例 连续乘法.to_continuousSMul
+  签名: : 连续标量乘法 M M
   定义体: ⟨continuous_mul⟩
 
 @[to_additive]
@@ -279,8 +279,8 @@ instance ContinuousMul.to_continuousSMul_op
 @[to_additive]
 
 中文:
-实例 ContinuousMul.to_continuousSMul_op
-  签名: : ContinuousSMul Mᵐᵒᵖ M
+实例 连续乘法.to_continuousSMul_op
+  签名: : 连续标量乘法 Mᵐᵒᵖ M
   定义体: ⟨show Continuous ((fun p : M × M => p.1 * p.2) ∘ Prod.swap ∘ Prod.map MulOpposite.unop id) by
     fun_prop⟩
 
@@ -310,8 +310,8 @@ theorem ContinuousMul.induced
 @[t
 
 中文:
-定理 ContinuousMul.induced
-  结论: {α : 类型} {β : 类型} {F : 类型} [FunLike F α β] [Mul α]
+定理 连续乘法.induced
+  结论: {α : 类型} {β : 类型} {F : 类型} [函数状 F α β] [乘法 α]
   证明: by
   let tα := tβ.induced f
   refine ⟨continuous_induced_rng.2 ?_⟩
@@ -354,7 +354,7 @@ theorem tendsto_mul
 中文:
 定理 tendsto_mul
   条件: {a b : M}
-  结论: Tendsto (fun p : M × M => p.fst * p.snd) (𝓝 (a, b)) (𝓝 (a * b))
+  结论: 收敛 (fun p : M × M => p.fst * p.snd) (𝓝 (a, b)) (𝓝 (a * b))
   证明: continuous_iff_continuousAt.mp ContinuousMul.continuous_mul (a, b)
 
 @[to_additive]
@@ -408,7 +408,7 @@ le_mul_of_one_le_left' pure_le_nhds 1
 
 中文:
 定理 nhds_one_mul_nhds
-  条件: {M} [MulOneClass M] [TopologicalSpace M] [ContinuousMul M] (a : M)
+  条件: {M} [MulOne类 M] [拓扑空间 M] [连续乘法 M] (a : M)
   证明: ((le_nhds_mul _ _).trans_eq <| congr_arg _ (one_mul a)).antisymm
 le_mul_of_one_le_left' pure_le_nhds 1
 
@@ -433,7 +433,7 @@ le_mul_of_one_le_right' pure_le_nhds 1
 
 中文:
 定理 nhds_mul_nhds_one
-  条件: {M} [MulOneClass M] [TopologicalSpace M] [ContinuousMul M] (a : M)
+  条件: {M} [MulOne类 M] [拓扑空间 M] [连续乘法 M] (a : M)
   证明: ((le_nhds_mul _ _).trans_eq <| congr_arg _ (mul_one a)).antisymm
 le_mul_of_one_le_right' pure_le_nhds 1
 
@@ -459,7 +459,7 @@ theorem one_le_nhds_iff
 
 中文:
 定理 one_le_nhds_iff
-  条件: [T1Space X] [One X] {b : X}
+  条件: [T1空间 X] [幺 X] {b : X}
   结论: 1 <= 𝓝 b ↔ 1 = b
   证明: pure_le_nhds_iff
 
@@ -485,8 +485,8 @@ theorem Filter.TendstoNhdsWithinIoi.const_mul
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Ioi] at *; gcongr
 
 中文:
-定理 Filter.TendstoNhdsWithinIoi.const_mul
-  条件: [PosMulStrictMono 𝕜] (h : Tendsto f l (𝓝[>] c))
+定理 滤子.TendstoNhdsWithinIoi.const_mul
+  条件: [正乘严格递增 𝕜] (h : 收敛 f l (𝓝[>] c))
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
 ((tendsto_nhds_of_tendsto_nhdsWithin h).const_mul b)
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Ioi] at *; gcongr
@@ -510,8 +510,8 @@ theorem Filter.TendstoNhdsWithinIio.const_mul
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Iio] at *; gcongr
 
 中文:
-定理 Filter.TendstoNhdsWithinIio.const_mul
-  条件: [PosMulStrictMono 𝕜] (h : Tendsto f l (𝓝[<] c))
+定理 滤子.TendstoNhdsWithinIio.const_mul
+  条件: [正乘严格递增 𝕜] (h : 收敛 f l (𝓝[<] c))
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
 ((tendsto_nhds_of_tendsto_nhdsWithin h).const_mul b)
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Iio] at *; gcongr
@@ -535,8 +535,8 @@ theorem Filter.TendstoNhdsWithinIoi.mul_const
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Ioi] at *; gcongr
 
 中文:
-定理 Filter.TendstoNhdsWithinIoi.mul_const
-  条件: [MulPosStrictMono 𝕜] (h : Tendsto f l (𝓝[>] c))
+定理 滤子.TendstoNhdsWithinIoi.mul_const
+  条件: [乘正严格递增 𝕜] (h : 收敛 f l (𝓝[>] c))
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
 ((tendsto_nhds_of_tendsto_nhdsWithin h).mul_const b)
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Ioi] at *; gcongr
@@ -560,8 +560,8 @@ theorem Filter.TendstoNhdsWithinIio.mul_const
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Iio] at *; gcongr
 
 中文:
-定理 Filter.TendstoNhdsWithinIio.mul_const
-  条件: [MulPosStrictMono 𝕜] (h : Tendsto f l (𝓝[<] c))
+定理 滤子.TendstoNhdsWithinIio.mul_const
+  条件: [乘正严格递增 𝕜] (h : 收敛 f l (𝓝[<] c))
   证明: tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
 ((tendsto_nhds_of_tendsto_nhdsWithin h).mul_const b)
     (tendsto_nhdsWithin_iff.mp h).2.mono fun _ _ => by rw [Set.mem_Iio] at *; gcongr
@@ -611,8 +611,8 @@ theorem Inseparable.mul
 @[to_additive]
 
 中文:
-定理 Inseparable.mul
-  条件: {a b c d : M} (hab : Inseparable a b) (hcd : Inseparable c d)
+定理 不可分.mul
+  条件: {a b c d : M} (hab : 不可分 a b) (hcd : 不可分 c d)
   证明: hab.smul hcd
 
 @[to_additive]
@@ -635,7 +635,7 @@ theorem Specializes.pow
 
 中文:
 定理 Specializes.pow
-  结论: {M : 类型} [Monoid M] [TopologicalSpace M] [ContinuousMul M]
+  结论: {M : 类型} [幺半群 M] [拓扑空间 M] [连续乘法 M]
   证明: Nat.recOn n (by simp only [pow_zero, specializes_rfl]) fun _ ihn => by
     simpa only [pow_succ] using ihn.mul h
 
@@ -656,8 +656,8 @@ theorem Inseparable.pow
   proof: (h.specializes.pow n).antisymm (h.specializes'.pow n)
 
 中文:
-定理 Inseparable.pow
-  结论: {M : 类型} [Monoid M] [TopologicalSpace M] [ContinuousMul M]
+定理 不可分.pow
+  结论: {M : 类型} [幺半群 M] [拓扑空间 M] [连续乘法 M]
   证明: (h.specializes.pow n).antisymm (h.specializes'.pow n)
 -/
 protected theorem Inseparable.pow {M : Type*} [Monoid M] [TopologicalSpace M] [ContinuousMul M]
@@ -685,8 +685,8 @@ definition Filter.Tendsto.units
 @[to_additive]
 
 中文:
-定义 Filter.Tendsto.units
-  签名: [TopologicalSpace N] [Monoid N] [ContinuousMul N] [T2Space N]
+定义 滤子.收敛.units
+  签名: [拓扑空间 N] [幺半群 N] [连续乘法 N] [T2空间 N]
   定义体: r₁
   inv := r₂
   val_inv := by
@@ -722,8 +722,8 @@ instance Prod.continuousMul
 @[to_additive]
 
 中文:
-实例 Prod.continuousMul
-  签名: [TopologicalSpace N] [Mul N] [ContinuousMul N]
+实例 积类型.continuousMul
+  签名: [拓扑空间 N] [乘法 N] [连续乘法 N]
   定义体: ⟨by apply Continuous.prodMk <;> fun_prop⟩
 
 @[to_additive]
@@ -747,7 +747,7 @@ instance Prod.separatelyContinuousMul
 @[to_additive]
 
 中文:
-实例 Prod.separatelyContinuousMul
+实例 积类型.separatelyContinuousMul
   签名: {M N : 类型}
   定义体: by apply Continuous.prodMk <;> fun_prop
   continuous_mul_const {_} := by apply Continuous.prodMk <;> fun_prop
@@ -775,8 +775,8 @@ instance Pi.continuousMul
 @[to_additive]
 
 中文:
-实例 Pi.continuousMul
-  签名: {C : ι -> 类型} [对任意 i, TopologicalSpace (C i)] [对任意 i, Mul (C i)]
+实例 依赖函数类型.continuousMul
+  签名: {C : ι -> 类型} [对任意 i, 拓扑空间 (C i)] [对任意 i, 乘法 (C i)]
   定义体: continuous_pi fun i => (continuous_apply i).fst'.mul (continuous_apply i).snd'
 
 @[to_additive]
@@ -799,8 +799,8 @@ instance Pi.separatelyContinuousMul
   continuous_const_mul {_} := continuous_pi fun i => (continuous_apply i).const_mul _
 
 中文:
-实例 Pi.separatelyContinuousMul
-  签名: {C : ι -> 类型} [对任意 i, TopologicalSpace (C i)] [对任意 i, Mul (C i)]
+实例 依赖函数类型.separatelyContinuousMul
+  签名: {C : ι -> 类型} [对任意 i, 拓扑空间 (C i)] [对任意 i, 乘法 (C i)]
   定义体: continuous_pi fun i => (continuous_apply i).mul_const _
   continuous_const_mul {_} := continuous_pi fun i => (continuous_apply i).const_mul _
 
@@ -826,8 +826,8 @@ instance Pi.continuousMul'
 @[to_additive]
 
 中文:
-实例 Pi.continuousMul'
-  签名: : ContinuousMul (ι -> M)
+实例 依赖函数类型.continuousMul'
+  签名: : 连续乘法 (ι -> M)
   定义体: Pi.continuousMul
 
 @[to_additive]
@@ -868,8 +868,8 @@ theorem ContinuousMul.of_nhds_one
     have key₂ : ((fun x => x₀ * x) ∘ fun x => y₀ * x) = fun x => x₀
 
 中文:
-定理 ContinuousMul.of_nhds_one
-  结论: {M : 类型u} [Monoid M] [TopologicalSpace M]
+定理 连续乘法.of_nhds_one
+  结论: {M : 类型u} [幺半群 M] [拓扑空间 M]
   证明: ⟨by
     rw [continuous_iff_continuousAt]
     rintro ⟨x₀, y₀⟩
@@ -921,7 +921,7 @@ theorem continuousMul_of_comm_of_nhds_one
 
 中文:
 定理 continuousMul_of_comm_of_nhds_one
-  结论: (M : 类型u) [CommMonoid M] [TopologicalSpace M]
+  结论: (M : 类型u) [交换幺半群 M] [拓扑空间 M]
   证明: by
   apply ContinuousMul.of_nhds_one hmul hleft
   intro x₀
@@ -960,8 +960,8 @@ theorem isClosed_setOfPred_map_one
 
 中文:
 定理 isClosed_setOfPred_map_one
-  条件: [One M₁] [One M₂]
-  结论: IsClosed { f : M₁ -> M₂ | f 1 = 1 }
+  条件: [幺 M₁] [幺 M₂]
+  结论: 是闭集 { f : M₁ -> M₂ | f 1 = 1 }
   证明: isClosed_eq (continuous_apply 1) continuous_const
 
 @[deprecated (since := "2026-07-09")] alias isClosed_setOf_map_one := isClosed_setOfPred_map_one
@@ -996,7 +996,7 @@ theorem isClosed_setOfPred_map_mul
 
 中文:
 定理 isClosed_setOfPred_map_mul
-  条件: [Mul M₁] [Mul M₂] [ContinuousMul M₂]
+  条件: [乘法 M₁] [乘法 M₂] [连续乘法 M₂]
   证明: by
   simp only [ofPred_forall]
   exact isClosed_iInter fun x => isClosed_iInter fun y =>
@@ -1089,8 +1089,8 @@ theorem MulHom.isClosed_range_coe
   proof: isClosed_of_closure_subset fun f hf => ⟨mulHomOfMemClosureRangeCoe f hf, rfl⟩
 
 中文:
-定理 MulHom.isClosed_range_coe
-  结论: IsClosed (Set.range ((↑) : (M₁ ->ₙ* M₂) -> M₁ -> M₂))
+定理 乘法半群态射.isClosed_range_coe
+  结论: 是闭集 (集合.range ((↑) : (M₁ ->ₙ* M₂) -> M₁ -> M₂))
   证明: isClosed_of_closure_subset fun f hf => ⟨mulHomOfMemClosureRangeCoe f hf, rfl⟩
 
 Depends on / 依赖: isClosed_of_closure_subset, mulHomOfMemClosureRangeCoe
@@ -1179,8 +1179,8 @@ theorem MonoidHom.isClosed_range_coe
   proof: isClosed_of_closure_subset fun f hf => ⟨monoidHomOfMemClosureRangeCoe f hf, rfl⟩
 
 中文:
-定理 MonoidHom.isClosed_range_coe
-  结论: IsClosed (Set.range ((↑) : (M₁ ->* M₂) -> M₁ -> M₂))
+定理 幺半群态射.isClosed_range_coe
+  结论: 是闭集 (集合.range ((↑) : (M₁ ->* M₂) -> M₁ -> M₂))
   证明: isClosed_of_closure_subset fun f hf => ⟨monoidHomOfMemClosureRangeCoe f hf, rfl⟩
 
 Depends on / 依赖: isClosed_of_closure_subset, monoidHomOfMemClosureRangeCoe
@@ -1204,8 +1204,8 @@ theorem Topology.IsInducing.continuousMul
 @[to_additive]
 
 中文:
-定理 Topology.IsInducing.continuousMul
-  结论: {M N F : 类型} [Mul M] [Mul N] [FunLike F M N]
+定理 拓扑.是Inducing.continuousMul
+  结论: {M N F : 类型} [乘法 M] [乘法 N] [函数状 F M N]
   证明: ⟨(hf.continuousSMul hf.continuous (map_mul f _ _)).1⟩
 
 @[to_additive]
@@ -1231,7 +1231,7 @@ theorem continuousMul_induced
 
 中文:
 定理 continuousMul_induced
-  结论: {M N F : 类型} [Mul M] [Mul N] [FunLike F M N] [MulHomClass F M N]
+  结论: {M N F : 类型} [乘法 M] [乘法 N] [函数状 F M N] [乘法态射类 F M N]
   证明: letI := induced f ‹_›
   IsInducing.continuousMul f ⟨rfl⟩
 
@@ -1256,8 +1256,8 @@ instance Subsemigroup.continuousMul
 @[to_additive]
 
 中文:
-实例 Subsemigroup.continuousMul
-  签名: [TopologicalSpace M] [Semigroup M] [ContinuousMul M]
+实例 子半群.continuousMul
+  签名: [拓扑空间 M] [半群 M] [连续乘法 M]
   定义体: IsInducing.continuousMul ({ toFun := (↑), map_mul' := fun _ _ => rfl } : MulHom S M) ⟨rfl⟩
 
 @[to_additive]
@@ -1278,8 +1278,8 @@ instance Submonoid.continuousMul
   body: S.toSubsemigroup.continuousMul
 
 中文:
-实例 Submonoid.continuousMul
-  签名: [TopologicalSpace M] [Monoid M] [ContinuousMul M]
+实例 子幺半群.continuousMul
+  签名: [拓扑空间 M] [幺半群 M] [连续乘法 M]
   定义体: S.toSubsemigroup.continuousMul
 
 Depends on / 依赖: S.toSubsemigroup.continuousMul, continuousMul, toSubsemigroup
@@ -1305,8 +1305,8 @@ continuous_unop.comp this.comp continuous_op
 @[to_additive]
 
 中文:
-定理 Topology.IsInducing.separatelyContinuousMul
-  结论: {M N F : 类型} [Mul M] [Mul N] [FunLike F M N]
+定理 拓扑.是Inducing.separatelyContinuousMul
+  结论: {M N F : 类型} [乘法 M] [乘法 N] [函数状 F M N]
   证明: (hf.continuousConstSMul f (map_mul f _ _)).1 _
   continuous_mul_const {m} :=
     have := ((opHomeomorph.isInducing.comp hf).comp (opHomeomorph.symm.isInducing)
@@ -1340,7 +1340,7 @@ theorem separatelyContinuousMul_induced
 
 中文:
 定理 separatelyContinuousMul_induced
-  结论: {M N F : 类型} [Mul M] [Mul N] [FunLike F M N]
+  结论: {M N F : 类型} [乘法 M] [乘法 N] [函数状 F M N]
   证明: letI := induced f ‹_›
   IsInducing.separatelyContinuousMul f ⟨rfl⟩
 
@@ -1367,8 +1367,8 @@ instance Subsemigroup.separatelyContinuousMul
 @[to_additive]
 
 中文:
-实例 Subsemigroup.separatelyContinuousMul
-  签名: [TopologicalSpace M] [Semigroup M]
+实例 子半群.separatelyContinuousMul
+  签名: [拓扑空间 M] [半群 M]
   定义体: IsInducing.separatelyContinuousMul
     ({ toFun := (↑), map_mul' := fun _ _ => rfl } : MulHom S M) ⟨rfl⟩
 
@@ -1391,8 +1391,8 @@ instance Submonoid.separatelyContinuousMul
   body: S.toSubsemigroup.separatelyContinuousMul
 
 中文:
-实例 Submonoid.separatelyContinuousMul
-  签名: [TopologicalSpace M] [Monoid M]
+实例 子幺半群.separatelyContinuousMul
+  签名: [拓扑空间 M] [幺半群 M]
   定义体: S.toSubsemigroup.separatelyContinuousMul
 
 Depends on / 依赖: S.toSubsemigroup.separatelyContinuousMul, separatelyContinuousMul, toSubsemigroup
@@ -1424,7 +1424,7 @@ theorem exists_mem_nhds_zero_mul_subset
       union_subset ((mul_subset_m
 
 中文:
-定理 exists_mem_nhds_zero_mul_subset
+定理 存在_mem_nhds_zero_mul_subset
   证明: by
   refine hK.induction_on ?_ ?_ ?_ ?_
   · exact ⟨univ, by simp⟩
@@ -1471,7 +1471,7 @@ map_mono nhds_prod_le_of_disjoint_cocompact 0 hl
 
 中文:
 定理 tendsto_mul_nhds_zero_prod_of_disjoint_cocompact
-  结论: {l : Filter M}
+  结论: {l : 滤子 M}
   证明: calc
   map (fun x : M × M => x.1 * x.2) (𝓝 0 ×ˢ l)
   _ <= map (fun x : M × M => x.1 * x.2) (𝓝ˢ ({0} ×ˢ Set.univ)) :=
@@ -1500,7 +1500,7 @@ map_mono prod_nhds_le_of_disjoint_cocompact 0 hl
 
 中文:
 定理 tendsto_mul_prod_nhds_zero_of_disjoint_cocompact
-  结论: {l : Filter M}
+  结论: {l : 滤子 M}
   证明: calc
   map (fun x : M × M => x.1 * x.2) (l ×ˢ 𝓝 0)
   _ <= map (fun x : M × M => x.1 * x.2) (𝓝ˢ (Set.univ ×ˢ {0})) :=
@@ -1533,7 +1533,7 @@ theorem tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact
 
 中文:
 定理 tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact
-  结论: {l : Filter (M × M)}
+  结论: {l : 滤子 (M × M)}
   证明: by
   have := calc
     (𝓝 0).coprod (𝓝 0) ⊓ l
@@ -1572,7 +1572,7 @@ theorem tendsto_mul_nhds_zero_of_disjoint_cocompact
 
 中文:
 定理 tendsto_mul_nhds_zero_of_disjoint_cocompact
-  结论: {l : Filter (M × M)}
+  结论: {l : 滤子 (M × M)}
   证明: by
   simpa [inf_eq_right.mpr h'l] using tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact hl
 
@@ -1592,8 +1592,8 @@ theorem Tendsto.tendsto_mul_zero_of_disjoint_cocompact_right
   proof: .comp (hf.prodMk tendsto_map) tendsto_mul_nhds_zero_prod_of_disjoint_cocompact hg
 
 中文:
-定理 Tendsto.tendsto_mul_zero_of_disjoint_cocompact_right
-  结论: {f g : α -> M} {l : Filter α}
+定理 收敛.tendsto_mul_zero_of_disjoint_cocompact_right
+  结论: {f g : α -> M} {l : 滤子 α}
   证明: .comp (hf.prodMk tendsto_map) tendsto_mul_nhds_zero_prod_of_disjoint_cocompact hg
 
 Depends on / 依赖: hf.prodMk, prodMk, tendsto_map, tendsto_mul_nhds_zero_prod_of_disjoint_cocompact
@@ -1612,8 +1612,8 @@ theorem Tendsto.tendsto_mul_zero_of_disjoint_cocompact_left
   proof: .comp (tendsto_map.prodMk hg) tendsto_mul_prod_nhds_zero_of_disjoint_cocompact hf
 
 中文:
-定理 Tendsto.tendsto_mul_zero_of_disjoint_cocompact_left
-  结论: {f g : α -> M} {l : Filter α}
+定理 收敛.tendsto_mul_zero_of_disjoint_cocompact_left
+  结论: {f g : α -> M} {l : 滤子 α}
   证明: .comp (tendsto_map.prodMk hg) tendsto_mul_prod_nhds_zero_of_disjoint_cocompact hf
 
 Depends on / 依赖: prodMk, tendsto_map, tendsto_map.prodMk, tendsto_mul_prod_nhds_zero_of_disjoint_cocompact
@@ -1638,7 +1638,7 @@ have K_me
 
 中文:
 定理 tendsto_mul_cocompact_nhds_zero
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   set l : Filter (M × M) := map (Prod.map f g) (cocompact (α × β)) with l_def
   set K : Set (M × M) := (insert 0 (range f)) ×ˢ (insert 0 (range g))
@@ -1724,8 +1724,8 @@ lemma GroupWithZero.isOpen_singleton_zero
     cases h1U (hW' (by simpa [hx] using Set.mul_mem_mul (Set.mem_uni
 
 中文:
-引理 GroupWithZero.isOpen_singleton_zero
-  结论: [GroupWithZero M] [TopologicalSpace M]
+引理 带零群.isOpen_singleton_zero
+  结论: [带零群 M] [拓扑空间 M]
   证明: by
   obtain ⟨U, hU, h0U, h1U⟩ := t1Space_iff_exists_open.mp ‹_› zero_ne_one
   obtain ⟨W, hW, hW'⟩ := exists_mem_nhds_zero_mul_subset isCompact_univ (hU.mem_nhds h0U)
@@ -1768,8 +1768,8 @@ theorem exists_open_nhds_one_split
 @[to_additive exists_nhds_zero_half]
 
 中文:
-定理 exists_open_nhds_one_split
-  条件: {s : Set M} (hs : s in 𝓝 (1 : M))
+定理 存在_open_nhds_one_split
+  条件: {s : 集合 M} (hs : s in 𝓝 (1 : M))
   证明: by
   have : (fun a : M × M => a.1 * a.2) ⁻¹' s in 𝓝 ((1, 1) : M × M) :=
     tendsto_mul (by simpa only [one_mul] using! hs)
@@ -1796,8 +1796,8 @@ theorem exists_nhds_one_split
   ⟨V, IsOpen.mem_nhds Vo V1, hV⟩
 
 中文:
-定理 exists_nhds_one_split
-  条件: {s : Set M} (hs : s in 𝓝 (1 : M))
+定理 存在_nhds_one_split
+  条件: {s : 集合 M} (hs : s in 𝓝 (1 : M))
   证明: let ⟨V, Vo, V1, hV⟩ := exists_open_nhds_one_split hs
   ⟨V, IsOpen.mem_nhds Vo V1, hV⟩
 
@@ -1824,8 +1824,8 @@ theorem exists_open_nhds_one_mul_subset
 @[to_additive]
 
 中文:
-定理 exists_open_nhds_one_mul_subset
-  条件: {U : Set M} (hU : U in 𝓝 (1 : M))
+定理 存在_open_nhds_one_mul_subset
+  条件: {U : 集合 M} (hU : U in 𝓝 (1 : M))
   证明: by
   simpa only [mul_subset_iff] using exists_open_nhds_one_split hU
 
@@ -1849,8 +1849,8 @@ theorem Filter.HasBasis.mul_self
   simpa only [← image_mul_prod] using! h.prod_self.map _
 
 中文:
-定理 Filter.HasBasis.mul_self
-  条件: {p : ι -> 命题} {s : ι -> Set M} (h : (𝓝 1).HasBasis p s)
+定理 滤子.有基.mul_self
+  条件: {p : ι -> 命题} {s : ι -> 集合 M} (h : (𝓝 1).有基 p s)
   证明: by
   rw [← nhds_mul_nhds_one]; rw [← map₂_mul]; rw [← map_uncurry_prod]
   simpa only [← image_mul_prod] using! h.prod_self.map _
@@ -1882,8 +1882,8 @@ theorem Subsemigroup.top_closure_mul_self_subset
       hx hy fun _ ha _ hb => s.mul_mem ha hb
 
 中文:
-定理 Subsemigroup.top_closure_mul_self_subset
-  条件: (s : Subsemigroup M)
+定理 子半群.top_closure_mul_self_subset
+  条件: (s : 子半群 M)
   证明: image2_subset_iff.2 fun _ hx _ hy =>
     map_mem_closure₂' continuous_const_mul continuous_mul_const
       hx hy fun _ ha _ hb => s.mul_mem ha hb
@@ -1912,8 +1912,8 @@ definition Subsemigroup.topologicalClosure
 @[to_additive]
 
 中文:
-定义 Subsemigroup.topologicalClosure
-  签名: (s : Subsemigroup M)
+定义 子半群.topologicalClosure
+  签名: (s : 子半群 M)
   定义体: _root_.closure (s : Set M)
   mul_mem' ha hb := s.top_closure_mul_self_subset ⟨_, ha, _, hb, rfl⟩
 
@@ -1937,8 +1937,8 @@ theorem Subsemigroup.coe_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subsemigroup.coe_topologicalClosure
-  条件: (s : Subsemigroup M)
+定理 子半群.coe_topologicalClosure
+  条件: (s : 子半群 M)
   证明: rfl
 
 @[to_additive]
@@ -1959,8 +1959,8 @@ theorem Subsemigroup.le_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subsemigroup.le_topologicalClosure
-  条件: (s : Subsemigroup M)
+定理 子半群.le_topologicalClosure
+  条件: (s : 子半群 M)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -1983,8 +1983,8 @@ theorem Subsemigroup.isClosed_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subsemigroup.isClosed_topologicalClosure
-  条件: (s : Subsemigroup M)
+定理 子半群.isClosed_topologicalClosure
+  条件: (s : 子半群 M)
   证明: isClosed_closure
 
 @[to_additive]
@@ -2006,8 +2006,8 @@ theorem Subsemigroup.topologicalClosure_minimal
 @[to_additive (attr := gcongr)]
 
 中文:
-定理 Subsemigroup.topologicalClosure_minimal
-  结论: (s : Subsemigroup M) {t : Subsemigroup M}
+定理 子半群.topologicalClosure_minimal
+  结论: (s : 子半群 M) {t : 子半群 M}
   证明: closure_minimal h ht
 
 @[to_additive (attr := gcongr)]
@@ -2027,8 +2027,8 @@ theorem Subsemigroup.topologicalClosure_mono
   proof: _root_.closure_mono h
 
 中文:
-定理 Subsemigroup.topologicalClosure_mono
-  条件: {s t : Subsemigroup M} (h : s <= t)
+定理 子半群.topologicalClosure_mono
+  条件: {s t : 子半群 M} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -2061,8 +2061,8 @@ Subtype.ext by
    
 
 中文:
-缩写 Subsemigroup.commSemigroupTopologicalClosure
-  签名: [T2Space M] (s : Subsemigroup M)
+缩写 子半群.commSemigroupTopologicalClosure
+  签名: [T2空间 M] (s : 子半群 M)
   定义体: { MulMemClass.toSemigroup s.topologicalClosure with
     mul_comm :=
       have : forall x in s, forall y in s, x * y = y * x := fun x hx y hy =>
@@ -2097,8 +2097,8 @@ theorem IsCompact.mul
   exact (hs.prod ht).image continuous_mul
 
 中文:
-定理 IsCompact.mul
-  结论: [TopologicalSpace N] [Mul N] [ContinuousMul N] {s t : Set N}
+定理 是紧集.mul
+  结论: [拓扑空间 N] [乘法 N] [连续乘法 N] {s t : 集合 N}
   证明: by
   rw [← image_mul_prod]
   exact (hs.prod ht).image continuous_mul
@@ -2132,8 +2132,8 @@ theorem Submonoid.top_closure_mul_self_subset
 @[to_additive]
 
 中文:
-定理 Submonoid.top_closure_mul_self_subset
-  条件: (s : Submonoid M)
+定理 子幺半群.top_closure_mul_self_subset
+  条件: (s : 子幺半群 M)
   证明: image2_subset_iff.2 fun _ hx _ hy =>
     map_mem_closure₂' continuous_const_mul continuous_mul_const hx hy
       fun _ ha _ hb => s.mul_mem ha hb
@@ -2159,8 +2159,8 @@ theorem Submonoid.top_closure_mul_self_eq
     ⟨x, hx, 1, _root_.subset_closure s.one_mem, mul_one _⟩
 
 中文:
-定理 Submonoid.top_closure_mul_self_eq
-  条件: (s : Submonoid M)
+定理 子幺半群.top_closure_mul_self_eq
+  条件: (s : 子幺半群 M)
   证明: Subset.antisymm s.top_closure_mul_self_subset fun x hx =>
     ⟨x, hx, 1, _root_.subset_closure s.one_mem, mul_one _⟩
 
@@ -2188,8 +2188,8 @@ definition Submonoid.topologicalClosure
 @[to_additive]
 
 中文:
-定义 Submonoid.topologicalClosure
-  签名: (s : Submonoid M)
+定义 子幺半群.topologicalClosure
+  签名: (s : 子幺半群 M)
   定义体: _root_.closure (s : Set M)
   one_mem' := _root_.subset_closure s.one_mem
   mul_mem' ha hb := s.top_closure_mul_self_subset ⟨_, ha, _, hb, rfl⟩
@@ -2215,8 +2215,8 @@ theorem Submonoid.coe_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Submonoid.coe_topologicalClosure
-  条件: (s : Submonoid M)
+定理 子幺半群.coe_topologicalClosure
+  条件: (s : 子幺半群 M)
   证明: rfl
 
 @[to_additive]
@@ -2237,8 +2237,8 @@ theorem Submonoid.le_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Submonoid.le_topologicalClosure
-  条件: (s : Submonoid M)
+定理 子幺半群.le_topologicalClosure
+  条件: (s : 子幺半群 M)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -2261,8 +2261,8 @@ theorem Submonoid.isClosed_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Submonoid.isClosed_topologicalClosure
-  条件: (s : Submonoid M)
+定理 子幺半群.isClosed_topologicalClosure
+  条件: (s : 子幺半群 M)
   证明: isClosed_closure
 
 @[to_additive]
@@ -2284,8 +2284,8 @@ theorem Submonoid.topologicalClosure_minimal
 @[to_additive (attr := gcongr)]
 
 中文:
-定理 Submonoid.topologicalClosure_minimal
-  结论: (s : Submonoid M) {t : Submonoid M} (h : s <= t)
+定理 子幺半群.topologicalClosure_minimal
+  结论: (s : 子幺半群 M) {t : 子幺半群 M} (h : s <= t)
   证明: closure_minimal h ht
 
 @[to_additive (attr := gcongr)]
@@ -2305,8 +2305,8 @@ theorem Submonoid.topologicalClosure_mono
   proof: _root_.closure_mono h
 
 中文:
-定理 Submonoid.topologicalClosure_mono
-  条件: {s t : Submonoid M} (h : s <= t)
+定理 子幺半群.topologicalClosure_mono
+  条件: {s t : 子幺半群 M} (h : s <= t)
   证明: _root_.closure_mono h
 
 Depends on / 依赖: _root_, _root_.closure_mono, closure_mono
@@ -2329,8 +2329,8 @@ abbreviation Submonoid.commMonoidTopologicalClosure
   body: { s.topologicalClosure.toMonoid, s.toSubsemigroup.commSemigroupTopologicalClosure hs with }
 
 中文:
-缩写 Submonoid.commMonoidTopologicalClosure
-  签名: [T2Space M] (s : Submonoid M)
+缩写 子幺半群.commMonoidTopologicalClosure
+  签名: [T2空间 M] (s : 子幺半群 M)
   定义体: { s.topologicalClosure.toMonoid, s.toSubsemigroup.commSemigroupTopologicalClosure hs with }
 
 Depends on / 依赖: commSemigroupTopologicalClosure, s.toSubsemigroup.commSemigroupTopologicalClosure, s.topologicalClosure.toMonoid, toMonoid, toSubsemigroup, topologicalClosure
@@ -2352,7 +2352,7 @@ theorem Filter.tendsto_cocompact_mul_left
   simp [← mul_assoc, ha]
 
 中文:
-定理 Filter.tendsto_cocompact_mul_left
+定理 滤子.tendsto_cocompact_mul_left
   条件: {a b : M} (ha : b * a = 1)
   证明: by
   refine Filter.Tendsto.of_tendsto_comp ?_ (Filter.comap_cocompact_le (continuous_const_mul b))
@@ -2381,7 +2381,7 @@ theorem Filter.tendsto_cocompact_mul_right
   exact Filter.tendsto_id
 
 中文:
-定理 Filter.tendsto_cocompact_mul_right
+定理 滤子.tendsto_cocompact_mul_right
   条件: {a b : M} (ha : a * b = 1)
   证明: by
   refine Filter.Tendsto.of_tendsto_comp ?_ (Filter.comap_cocompact_le (continuous_mul_const b))
@@ -2417,8 +2417,8 @@ theorem exists_nhds_one_split4
 @[to_additive]
 
 中文:
-定理 exists_nhds_one_split4
-  条件: {u : Set M} (hu : u in 𝓝 (1 : M))
+定理 存在_nhds_one_split4
+  条件: {u : 集合 M} (hu : u in 𝓝 (1 : M))
   证明: by
   rcases exists_nhds_one_split hu with ⟨W, W1, h⟩
   rcases exists_nhds_one_split W1 with ⟨V, V1, h'⟩
@@ -2448,7 +2448,7 @@ theorem tendsto_list_prod
 
 中文:
 定理 tendsto_list_prod
-  条件: {f : ι -> α -> M} {x : Filter α} {a : ι -> M}
+  条件: {f : ι -> α -> M} {x : 滤子 α} {a : ι -> M}
 -/
 theorem tendsto_list_prod {f : ι -> α -> M} {x : Filter α} {a : ι -> M} :
     forall l : List ι,
@@ -2475,7 +2475,7 @@ theorem continuous_list_prod
 
 中文:
 定理 continuous_list_prod
-  条件: {f : ι -> X -> M} (l : List ι) (h : 对任意 i in l, Continuous (f i))
+  条件: {f : ι -> X -> M} (l : 列表 ι) (h : 对任意 i in l, 连续 (f i))
   证明: continuous_iff_continuousAt.2 fun x =>
     tendsto_list_prod l fun c hc => continuous_iff_continuousAt.1 (h c hc) x
 
@@ -2507,7 +2507,7 @@ theorem continuousOn_list_prod
 
 中文:
 定理 continuousOn_list_prod
-  结论: {f : ι -> X -> M} (l : List ι) {t : Set X}
+  结论: {f : ι -> X -> M} (l : 列表 ι) {t : 集合 X}
   证明: by
   intro x hx
   rw [continuousWithinAt_iff_continuousAt_domRestrict _ hx]
@@ -2540,7 +2540,7 @@ theorem continuous_pow
 
 中文:
 定理 continuous_pow
-  结论: 对任意 n : 自然数, Continuous fun a : M => a ^ n
+  结论: 对任意 n : 自然数, 连续 fun a : M => a ^ n
 -/
 theorem continuous_pow : forall n : Nat, Continuous fun a : M => a ^ n
   | 0 => by simpa using continuous_const
@@ -2557,8 +2557,8 @@ instance AddMonoid.continuousConstSMul_nat
   body: ⟨continuous_nsmul⟩
 
 中文:
-实例 AddMonoid.continuousConstSMul_nat
-  签名: {A} [AddMonoid A] [TopologicalSpace A]
+实例 加法幺半群.continuousConstSMul_nat
+  签名: {A} [加法幺半群 A] [拓扑空间 A]
   定义体: ⟨continuous_nsmul⟩
 
 Depends on / 依赖: continuous_nsmul
@@ -2576,8 +2576,8 @@ instance AddMonoid.continuousSMul_nat
   body: ⟨continuous_prod_of_discrete_left.mpr continuous_nsmul⟩
 
 中文:
-实例 AddMonoid.continuousSMul_nat
-  签名: {A} [AddMonoid A] [TopologicalSpace A]
+实例 加法幺半群.continuousSMul_nat
+  签名: {A} [加法幺半群 A] [拓扑空间 A]
   定义体: ⟨continuous_prod_of_discrete_left.mpr continuous_nsmul⟩
 
 Depends on / 依赖: continuous_nsmul, continuous_prod_of_discrete_left, continuous_prod_of_discrete_left.mpr
@@ -2608,9 +2608,9 @@ theorem Continuous.pow
 @[to_additive]
 
 中文:
-定理 Continuous.pow
-  条件: {f : X -> M} (h : Continuous f) (n : 自然数)
-  结论: Continuous (f ^ n)
+定理 连续.pow
+  条件: {f : X -> M} (h : 连续 f) (n : 自然数)
+  结论: 连续 (f ^ n)
   证明: (continuous_pow n).comp h
 
 @[to_additive]
@@ -2634,7 +2634,7 @@ theorem continuousOn_pow
 
 中文:
 定理 continuousOn_pow
-  条件: {s : Set M} (n : 自然数)
+  条件: {s : 集合 M} (n : 自然数)
   结论: ContinuousOn (fun (x : M) => x ^ n) s
   证明: (continuous_pow n).continuousOn
 
@@ -2682,8 +2682,8 @@ theorem Filter.Tendsto.pow
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 Filter.Tendsto.pow
-  条件: {l : Filter α} {f : α -> M} {x : M} (hf : Tendsto f l (𝓝 x)) (n : 自然数)
+定理 滤子.收敛.pow
+  条件: {l : 滤子 α} {f : α -> M} {x : M} (hf : 收敛 f l (𝓝 x)) (n : 自然数)
   证明: (continuousAt_pow _ _).tendsto.comp hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -2707,7 +2707,7 @@ theorem ContinuousWithinAt.pow
 
 中文:
 定理 ContinuousWithinAt.pow
-  结论: {f : X -> M} {x : X} {s : Set X} (hf : ContinuousWithinAt f s x)
+  结论: {f : X -> M} {x : X} {s : 集合 X} (hf : ContinuousWithinAt f s x)
   证明: Filter.Tendsto.pow hf n
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -2753,7 +2753,7 @@ theorem ContinuousOn.pow
 
 中文:
 定理 ContinuousOn.pow
-  条件: {f : X -> M} {s : Set X} (hf : ContinuousOn f s) (n : 自然数)
+  条件: {f : X -> M} {s : 集合 X} (hf : ContinuousOn f s) (n : 自然数)
   证明: fun x hx => (hf x hx).pow n
 -/
 theorem ContinuousOn.pow {f : X -> M} {s : Set X} (hf : ContinuousOn f s) (n : Nat) :
@@ -2815,7 +2815,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul αˣ
+  签名: 连续乘法 αˣ
   定义体: isInducing_embedProduct.continuousMul (embedProduct α)
 
 Depends on / 依赖: continuousMul, embedProduct, isInducing_embedProduct, isInducing_embedProduct.continuousMul
@@ -2834,8 +2834,8 @@ theorem Continuous.units_map
   proof: Units.continuous_iff.2 ⟨hf.comp Units.continuous_val, hf.comp Units.continuous_coe_inv⟩
 
 中文:
-定理 Continuous.units_map
-  结论: [Monoid M] [Monoid N] [TopologicalSpace M] [TopologicalSpace N]
+定理 连续.units_map
+  结论: [幺半群 M] [幺半群 N] [拓扑空间 M] [拓扑空间 N]
   证明: Units.continuous_iff.2 ⟨hf.comp Units.continuous_val, hf.comp Units.continuous_coe_inv⟩
 
 Depends on / 依赖: Units.continuous_coe_inv, Units.continuous_iff, Units.continuous_val, continuous_coe_inv, continuous_iff, continuous_val, hf.comp
@@ -2858,8 +2858,8 @@ theorem Submonoid.mem_nhds_one
   proof: IsOpen.mem_nhds oS S.one_mem
 
 中文:
-定理 Submonoid.mem_nhds_one
-  条件: (S : Submonoid M) (oS : IsOpen (S : Set M))
+定理 子幺半群.mem_nhds_one
+  条件: (S : 子幺半群 M) (oS : 是开集 (S : 集合 M))
   证明: IsOpen.mem_nhds oS S.one_mem
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, S.one_mem, mem_nhds, one_mem
@@ -2885,7 +2885,7 @@ theorem tendsto_multiset_prod
 
 中文:
 定理 tendsto_multiset_prod
-  条件: {f : ι -> α -> M} {x : Filter α} {a : ι -> M} (s : Multiset ι)
+  条件: {f : ι -> α -> M} {x : 滤子 α} {a : ι -> M} (s : Multiset ι)
   证明: by
   rcases s with ⟨l⟩
   simpa using tendsto_list_prod l
@@ -2918,7 +2918,7 @@ alias tendsto_finset_prod := tendsto_finsetProd
 
 中文:
 定理 tendsto_finsetProd
-  条件: {f : ι -> α -> M} {x : Filter α} {a : ι -> M} (s : Finset ι)
+  条件: {f : ι -> α -> M} {x : 滤子 α} {a : ι -> M} (s : 有限集 ι)
   证明: tendsto_multiset_prod _
 
 @[deprecated (since := "2026-04-08")] alias tendsto_finset_sum := tendsto_finsetSum
@@ -2984,7 +2984,7 @@ theorem continuousOn_multiset_prod
 
 中文:
 定理 continuousOn_multiset_prod
-  条件: {f : ι -> X -> M} (s : Multiset ι) {t : Set X}
+  条件: {f : ι -> X -> M} (s : Multiset ι) {t : 集合 X}
   证明: by
   rcases s with ⟨l⟩
   simpa using continuousOn_list_prod l
@@ -3016,7 +3016,7 @@ alias continuous_finset_prod := continuous_finsetProd
 
 中文:
 定理 continuous_finsetProd
-  条件: {f : ι -> X -> M} (s : Finset ι)
+  条件: {f : ι -> X -> M} (s : 有限集 ι)
   证明: continuous_multiset_prod _
 
 @[deprecated (since := "2026-04-08")] alias continuous_finset_sum := continuous_finsetSum
@@ -3055,7 +3055,7 @@ alias continuousOn_finset_prod := continuousOn_finsetProd
 
 中文:
 定理 continuousOn_finsetProd
-  条件: {f : ι -> X -> M} (s : Finset ι) {t : Set X}
+  条件: {f : ι -> X -> M} (s : 有限集 ι) {t : 集合 X}
   证明: continuousOn_multiset_prod _
 
 @[deprecated (since := "2026-04-08")] alias continuousOn_finset_sum := continuousOn_finsetSum
@@ -3090,7 +3090,7 @@ theorem eventuallyEq_prod
 
 中文:
 定理 eventuallyEq_prod
-  结论: {X M : 类型} [CommMonoid M] {s : Finset ι} {l : Filter X}
+  结论: {X M : 类型} [交换幺半群 M] {s : 有限集 ι} {l : 滤子 X}
   证明: by
   replace hs : forallᶠ x in l, forall i in s, f i x = g i x := by rwa [eventually_all_finset]
   filter_upwards [hs] with x hx
@@ -3122,8 +3122,8 @@ theorem LocallyFinite.exists_finset_mulSupport
 @[to_additive]
 
 中文:
-定理 LocallyFinite.exists_finset_mulSupport
-  结论: {M : 类型} [One M] {f : ι -> X -> M}
+定理 局部有限.存在_finset_mulSupport
+  结论: {M : 类型} [幺 M] {f : ι -> X -> M}
   证明: by
   rcases hf x₀ with ⟨U, hxU, hUf⟩
   refine ⟨hUf.toFinset, mem_of_superset hxU fun y hy i hi => ?_⟩
@@ -3156,7 +3156,7 @@ theorem finprod_eventually_eq_prod
 
 中文:
 定理 finprod_eventually_eq_prod
-  结论: {M : 类型} [CommMonoid M] {f : ι -> X -> M}
+  结论: {M : 类型} [交换幺半群 M] {f : ι -> X -> M}
   证明: let ⟨I, hI⟩ := hf.exists_finset_mulSupport x
   ⟨I, hI.mono fun _ hy => finprod_eq_prod_of_mulSupport_subset _ fun _ hi => hy hi⟩
 
@@ -3187,7 +3187,7 @@ theorem continuous_finprod
 
 中文:
 定理 continuous_finprod
-  结论: {f : ι -> X -> M} (hc : 对任意 i, Continuous (f i))
+  结论: {f : ι -> X -> M} (hc : 对任意 i, 连续 (f i))
   证明: by
   refine continuous_iff_continuousAt.2 fun x => ?_
   rcases finprod_eventually_eq_prod hf x with ⟨s, hs⟩
@@ -3218,7 +3218,7 @@ theorem continuous_finprod_cond
 
 中文:
 定理 continuous_finprod_cond
-  结论: {f : ι -> X -> M} {p : ι -> 命题} (hc : 对任意 i, p i -> Continuous (f i))
+  结论: {f : ι -> X -> M} {p : ι -> 命题} (hc : 对任意 i, p i -> 连续 (f i))
   证明: by
   simp only [← finprod_subtype_eq_finprod_cond]
   exact continuous_finprod (fun i => hc i i.2) (hf.comp_injective Subtype.coe_injective)
@@ -3242,8 +3242,8 @@ instance [TopologicalSpace
   body: @continuous_mul M _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: M] [Mul M] [ContinuousMul M] : ContinuousAdd (Additive M) where
+实例 [拓扑空间
+  签名: M] [乘法 M] [连续乘法 M] : 连续加法 (加性 M) where
   定义体: @continuous_mul M _ _ _
 
 Depends on / 依赖: continuous_mul
@@ -3260,8 +3260,8 @@ instance [TopologicalSpace
   body: @continuous_add M _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: M] [Add M] [ContinuousAdd M] : ContinuousMul (Multiplicative M) where
+实例 [拓扑空间
+  签名: M] [加法 M] [连续加法 M] : 连续乘法 (Multiplicative M) where
   定义体: @continuous_add M _ _ _
 
 Depends on / 依赖: continuous_add
@@ -3279,8 +3279,8 @@ instance [TopologicalSpace
   continuous_add_const := @continuous_mul_const M _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: M] [Mul M] [SeparatelyContinuousMul M] :
+实例 [拓扑空间
+  签名: M] [乘法 M] [SeparatelyContinuousMul M] :
   定义体: @continuous_const_mul M _ _ _
   continuous_add_const := @continuous_mul_const M _ _ _
 
@@ -3301,8 +3301,8 @@ instance [TopologicalSpace
   continuous_mul_const := @continuous_add_const M _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: M] [Add M] [SeparatelyContinuousAdd M] :
+实例 [拓扑空间
+  签名: M] [加法 M] [SeparatelyContinuousAdd M] :
   定义体: @continuous_const_add M _ _ _
   continuous_mul_const := @continuous_add_const M _ _ _
 
@@ -3333,7 +3333,7 @@ theorem continuousMul_sInf
 
 中文:
 定理 continuousMul_sInf
-  结论: {ts : Set (TopologicalSpace M)}
+  结论: {ts : 集合 (拓扑空间 M)}
   证明: letI := sInf ts
   { continuous_mul :=
       continuous_sInf_rng.2 fun t ht =>
@@ -3365,7 +3365,7 @@ theorem continuousMul_iInf
 
 中文:
 定理 continuousMul_iInf
-  结论: {ts : ι' -> TopologicalSpace M}
+  结论: {ts : ι' -> 拓扑空间 M}
   证明: by
   rw [← sInf_range]
   exact continuousMul_sInf (Set.forall_mem_range.mpr h')
@@ -3393,7 +3393,7 @@ theorem continuousMul_inf
 
 中文:
 定理 continuousMul_inf
-  结论: {t₁ t₂ : TopologicalSpace M} (h₁ : @ContinuousMul M t₁ _)
+  结论: {t₁ t₂ : 拓扑空间 M} (h₁ : @连续乘法 M t₁ _)
   证明: by
   rw [inf_eq_iInf]
   refine continuousMul_iInf fun b => ?_
@@ -3450,7 +3450,7 @@ theorem coe_mulRight
 中文:
 定理 coe_mulRight
   条件: (x : X)
-  结论: ⇑(ContinuousMap.mulRight x) = fun y => y * x
+  结论: ⇑(连续映射.mulRight x) = fun y => y * x
   证明: rfl
 
 @[to_additive]
@@ -3470,7 +3470,7 @@ lemma mulRight_mul
 
 中文:
 引理 mulRight_mul
-  结论: {X : 类型} [Semigroup X] [TopologicalSpace X] [SeparatelyContinuousMul X]
+  结论: {X : 类型} [半群 X] [拓扑空间 X] [SeparatelyContinuousMul X]
   证明: by
   ext; simp [mul_assoc]
 
@@ -3518,7 +3518,7 @@ theorem coe_mulLeft
 中文:
 定理 coe_mulLeft
   条件: (x : X)
-  结论: ⇑(ContinuousMap.mulLeft x) = fun y => x * y
+  结论: ⇑(连续映射.mulLeft x) = fun y => x * y
   证明: rfl
 
 @[to_additive]
@@ -3538,7 +3538,7 @@ lemma mulLeft_mul
 
 中文:
 引理 mulLeft_mul
-  结论: {X : 类型} [Semigroup X] [TopologicalSpace X] [SeparatelyContinuousMul X]
+  结论: {X : 类型} [半群 X] [拓扑空间 X] [SeparatelyContinuousMul X]
   证明: by
   ext; simp [mul_assoc]
 

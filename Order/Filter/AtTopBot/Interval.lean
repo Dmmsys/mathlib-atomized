@@ -60,7 +60,7 @@ lemma tendsto_Ioc_atBot_prod_atTop
 
 中文:
 引理 tendsto_Ioc_atBot_prod_atTop
-  条件: [NoBotOrder α]
+  条件: [无底序 α]
   证明: by
   simpa [tendsto_atTop, ← coe_subset, Set.subset_def, -eventually_and]
     using fun b i _ => (eventually_lt_atBot i).prod_mk (eventually_ge_atTop i)
@@ -84,7 +84,7 @@ lemma tendsto_Ico_atBot_prod_atTop
 
 中文:
 引理 tendsto_Ico_atBot_prod_atTop
-  条件: [NoTopOrder α]
+  条件: [无顶序 α]
   证明: by
   simpa [tendsto_atTop, ← coe_subset, Set.subset_def, -eventually_and]
     using fun b i _ => (eventually_le_atBot i).prod_mk (eventually_gt_atTop i)
@@ -108,7 +108,7 @@ lemma tendsto_Ioo_atBot_prod_atTop
 
 中文:
 引理 tendsto_Ioo_atBot_prod_atTop
-  条件: [NoBotOrder α] [NoTopOrder α]
+  条件: [无底序 α] [无顶序 α]
   证明: by
   simpa [tendsto_atTop, ← coe_subset, Set.subset_def, -eventually_and]
     using fun b i _ => (eventually_lt_atBot i).prod_mk (eventually_gt_atTop i)
@@ -154,7 +154,7 @@ lemma tendsto_Ioc_neg_atTop_atTop
 
 中文:
 引理 tendsto_Ioc_neg_atTop_atTop
-  条件: [NoBotOrder α]
+  条件: [无底序 α]
   证明: tendsto_Ioc_atBot_prod_atTop.comp (tendsto_neg_atTop_atBot.prodMk tendsto_id)
 
 Depends on / 依赖: prodMk, tendsto_Ioc_atBot_prod_atTop, tendsto_Ioc_atBot_prod_atTop.comp, tendsto_id, tendsto_neg_atTop_atBot, tendsto_neg_atTop_atBot.prodMk
@@ -173,7 +173,7 @@ lemma tendsto_Ico_neg_atTop_atTop
 
 中文:
 引理 tendsto_Ico_neg_atTop_atTop
-  条件: [NoTopOrder α]
+  条件: [无顶序 α]
   证明: tendsto_Ico_atBot_prod_atTop.comp (tendsto_neg_atTop_atBot.prodMk tendsto_id)
 
 Depends on / 依赖: prodMk, tendsto_Ico_atBot_prod_atTop, tendsto_Ico_atBot_prod_atTop.comp, tendsto_id, tendsto_neg_atTop_atBot, tendsto_neg_atTop_atBot.prodMk
@@ -192,7 +192,7 @@ lemma tendsto_Ioo_neg_atTop_atTop
 
 中文:
 引理 tendsto_Ioo_neg_atTop_atTop
-  条件: [NoBotOrder α] [NoTopOrder α]
+  条件: [无底序 α] [无顶序 α]
   证明: tendsto_Ioo_atBot_prod_atTop.comp (tendsto_neg_atTop_atBot.prodMk tendsto_id)
 
 Depends on / 依赖: prodMk, tendsto_Ioo_atBot_prod_atTop, tendsto_Ioo_atBot_prod_atTop.comp, tendsto_id, tendsto_neg_atTop_atBot, tendsto_neg_atTop_atBot.prodMk
@@ -237,7 +237,7 @@ lemma tendsto_Ioc_neg
 
 中文:
 引理 tendsto_Ioc_neg
-  结论: Tendsto (fun n : 自然数 => Ioc (-n : R) n) atTop atTop
+  结论: 收敛 (fun n : 自然数 => 左开右闭区间 (-n : R) n) atTop atTop
   证明: tendsto_Ioc_neg_atTop_atTop.comp tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: tendsto_Ioc_neg_atTop_atTop, tendsto_Ioc_neg_atTop_atTop.comp, tendsto_natCast_atTop_atTop
@@ -255,7 +255,7 @@ lemma tendsto_Ico_neg
 
 中文:
 引理 tendsto_Ico_neg
-  结论: Tendsto (fun n : 自然数 => Ico (-n : R) n) atTop atTop
+  结论: 收敛 (fun n : 自然数 => 左闭右开区间 (-n : R) n) atTop atTop
   证明: tendsto_Ico_neg_atTop_atTop.comp tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: tendsto_Ico_neg_atTop_atTop, tendsto_Ico_neg_atTop_atTop.comp, tendsto_natCast_atTop_atTop
@@ -273,7 +273,7 @@ lemma tendsto_Ioo_neg
 
 中文:
 引理 tendsto_Ioo_neg
-  结论: Tendsto (fun n : 自然数 => Ioo (-n : R) n) atTop atTop
+  结论: 收敛 (fun n : 自然数 => 开区间 (-n : R) n) atTop atTop
   证明: tendsto_Ioo_neg_atTop_atTop.comp tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: tendsto_Ioo_neg_atTop_atTop, tendsto_Ioo_neg_atTop_atTop.comp, tendsto_natCast_atTop_atTop

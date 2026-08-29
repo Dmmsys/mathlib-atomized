@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Symm (α := List α) Perm
+  签名: Std.Symm (α := 列表 α) 置换
   定义体: ⟨fun _ _ => .symm⟩
 -/
 instance : Std.Symm (α := List α) Perm := ⟨fun _ _ => .symm⟩
@@ -77,8 +77,8 @@ theorem Perm.subset_congr_left
   proof: ⟨h.symm.subset.trans, h.subset.trans⟩
 
 中文:
-定理 Perm.subset_congr_left
-  条件: {l₁ l₂ l₃ : List α} (h : l₁ ~ l₂)
+定理 置换.subset_congr_left
+  条件: {l₁ l₂ l₃ : 列表 α} (h : l₁ ~ l₂)
   结论: l₁ subseteq l₃ ↔ l₂ subseteq l₃
   证明: ⟨h.symm.subset.trans, h.subset.trans⟩
 
@@ -97,8 +97,8 @@ theorem Perm.subset_congr_right
   proof: ⟨fun h' => h'.trans h.subset, fun h' => h'.trans h.symm.subset⟩
 
 中文:
-定理 Perm.subset_congr_right
-  条件: {l₁ l₂ l₃ : List α} (h : l₁ ~ l₂)
+定理 置换.subset_congr_right
+  条件: {l₁ l₂ l₃ : 列表 α} (h : l₁ ~ l₂)
   结论: l₃ subseteq l₁ ↔ l₃ subseteq l₂
   证明: ⟨fun h' => h'.trans h.subset, fun h' => h'.trans h.symm.subset⟩
 
@@ -173,7 +173,7 @@ alias ⟨_, Perm.insertIdx_of_le⟩ := perm_insertIdx_iff_of_le
 
 中文:
 定理 perm_insertIdx_iff_of_le
-  结论: {l₁ l₂ : List α} {m n : 自然数} (hm : m <= l₁.length)
+  结论: {l₁ l₂ : 列表 α} {m n : 自然数} (hm : m <= l₁.length)
   证明: by
   rw [rel_congr_left (perm_insertIdx _ _ hm)]; rw [rel_congr_right (perm_insertIdx _ _ hn)]; rw [perm_cons]
 
@@ -208,7 +208,7 @@ theorem perm_insertIdx_iff
 
 中文:
 定理 perm_insertIdx_iff
-  条件: {l₁ l₂ : List α} {n : 自然数} {a : α}
+  条件: {l₁ l₂ : 列表 α} {n : 自然数} {a : α}
   证明: by
   wlog hle : length l₁ <= length l₂ generalizing l₁ l₂
   · rw [perm_comm, this (Nat.le_of_not_ge hle), perm_comm]
@@ -249,8 +249,8 @@ theorem Perm.insertIdx
   proof: perm_insertIdx_iff.mpr h
 
 中文:
-定理 Perm.insertIdx
-  条件: {l₁ l₂ : List α} (h : l₁ ~ l₂) (n : 自然数) (a : α)
+定理 置换.insertIdx
+  条件: {l₁ l₂ : 列表 α} (h : l₁ ~ l₂) (n : 自然数) (a : α)
   证明: perm_insertIdx_iff.mpr h
 -/
 protected theorem Perm.insertIdx {l₁ l₂ : List α} (h : l₁ ~ l₂) (n : Nat) (a : α) :
@@ -274,7 +274,7 @@ theorem perm_eraseIdx_of_getElem?_eq
 
 中文:
 定理 perm_eraseIdx_of_getElem?_eq
-  条件: {l₁ l₂ : List α} {m n : 自然数} (h : l₁[m]? = l₂[n]?)
+  条件: {l₁ l₂ : 列表 α} {m n : 自然数} (h : l₁[m]? = l₂[n]?)
   证明: by
   cases Nat.lt_or_ge m l₁.length with
   | inl hm =>
@@ -323,7 +323,7 @@ theorem perm_comp_perm
 
 中文:
 定理 perm_comp_perm
-  结论: (Perm ∘r Perm : List α -> List α -> 命题) = Perm
+  结论: (置换 ∘r 置换 : 列表 α -> 列表 α -> 命题) = 置换
   证明: by
   funext a c; apply propext
   constructor
@@ -356,8 +356,8 @@ theorem perm_comp_forall₂
  
 
 中文:
-定理 perm_comp_forall₂
-  条件: {l u v} (hlu : Perm l u) (huv : Forall₂ r u v)
+定理 perm_comp_对任意₂
+  条件: {l u v} (hlu : 置换 l u) (huv : Forall₂ r u v)
   证明: by
   induction hlu generalizing v with
   | nil => cases huv; exact ⟨[], Forall₂.nil, Perm.nil⟩
@@ -405,8 +405,8 @@ theorem forall₂_comp_perm_eq_perm_comp_forall₂
   · exact fun ⟨l₂, h₁₂, h₂₃⟩ => perm_comp_forall₂ h₁₂ h₂₃
 
 中文:
-定理 forall₂_comp_perm_eq_perm_comp_forall₂
-  结论: Forall₂ r ∘r Perm = Perm ∘r Forall₂ r
+定理 对任意₂_comp_perm_eq_perm_comp_对任意₂
+  结论: Forall₂ r ∘r 置换 = 置换 ∘r Forall₂ r
   证明: by
   funext l₁ l₃; apply propext
   constructor
@@ -471,7 +471,7 @@ theorem rel_perm_imp
 中文:
 定理 rel_perm_imp
   条件: (hr : RightUnique r)
-  结论: (Forall₂ r ⇒ Forall₂ r ⇒ (· -> ·)) Perm Perm
+  结论: (Forall₂ r ⇒ Forall₂ r ⇒ (· -> ·)) 置换 置换
   证明: fun a b h₁ c d h₂ h =>
   have : (flip (Forall₂ r) ∘r Perm ∘r Forall₂ r) b d := ⟨a, h₁, c, h, h₂⟩
   have : ((flip (Forall₂ r) ∘r Forall₂ r) ∘r Perm) b d := by
@@ -503,7 +503,7 @@ theorem rel_perm
 中文:
 定理 rel_perm
   条件: (hr : BiUnique r)
-  结论: (Forall₂ r ⇒ Forall₂ r ⇒ (· ↔ ·)) Perm Perm
+  结论: (Forall₂ r ⇒ Forall₂ r ⇒ (· ↔ ·)) 置换 置换
   证明: fun _a _b hab _c _d hcd =>
   Iff.intro (rel_perm_imp hr.2 hab hcd) (rel_perm_imp hr.left.flip hab.flip hcd.flip)
 
@@ -552,8 +552,8 @@ theorem Perm.foldl_eq
   proof: p.foldl_eq' fun x _hx y _hy z => rcomm.right_comm z x y
 
 中文:
-定理 Perm.foldl_eq
-  条件: {f : β -> α -> β} {l₁ l₂ : List α} [rcomm : RightCommutative f] (p : l₁ ~ l₂)
+定理 置换.foldl_eq
+  条件: {f : β -> α -> β} {l₁ l₂ : 列表 α} [rcomm : 右交换 f] (p : l₁ ~ l₂)
   证明: p.foldl_eq' fun x _hx y _hy z => rcomm.right_comm z x y
 
 Depends on / 依赖: foldl_eq, p.foldl_eq, rcomm.right_comm, right_comm
@@ -577,8 +577,8 @@ theorem Perm.foldr_eq
   | trans _ _ r₁ r₂ => exact Eq.trans (r₁ b) (r₂ b)
 
 中文:
-定理 Perm.foldr_eq
-  条件: {f : α -> β -> β} {l₁ l₂ : List α} [lcomm : LeftCommutative f] (p : l₁ ~ l₂)
+定理 置换.foldr_eq
+  条件: {f : α -> β -> β} {l₁ l₂ : 列表 α} [lcomm : 左交换 f] (p : l₁ ~ l₂)
   证明: by
   intro b
   induction p using Perm.recOnSwap' generalizing b with
@@ -616,8 +616,8 @@ theorem Perm.foldl_op_eq
   proof: h.foldl_eq _
 
 中文:
-定理 Perm.foldl_op_eq
-  条件: {l₁ l₂ : List α} {a : α} (h : l₁ ~ l₂)
+定理 置换.foldl_op_eq
+  条件: {l₁ l₂ : 列表 α} {a : α} (h : l₁ ~ l₂)
   结论: (l₁ <*> a) = l₂ <*> a
   证明: h.foldl_eq _
 
@@ -636,8 +636,8 @@ theorem Perm.foldr_op_eq
   proof: h.foldr_eq _
 
 中文:
-定理 Perm.foldr_op_eq
-  条件: {l₁ l₂ : List α} {a : α} (h : l₁ ~ l₂)
+定理 置换.foldr_op_eq
+  条件: {l₁ l₂ : 列表 α} {a : α} (h : l₁ ~ l₂)
   结论: l₁.foldr op a = l₂.foldr op a
   证明: h.foldr_eq _
 
@@ -664,7 +664,7 @@ theorem perm_option_toList
 
 中文:
 定理 perm_option_toList
-  条件: {o₁ o₂ : Option α}
+  条件: {o₁ o₂ : 选项类型 α}
   结论: o₁.toList ~ o₂.toList ↔ o₁ = o₂
   证明: by
   refine ⟨fun p => ?_, fun e => e ▸ Perm.refl _⟩
@@ -727,7 +727,7 @@ theorem map_perm_map_iff
 
 中文:
 定理 map_perm_map_iff
-  条件: {l' : List α} {f : α -> β} (hf : f.Injective)
+  条件: {l' : 列表 α} {f : α -> β} (hf : f.单射)
   证明: calc
   map f l ~ map f l' ↔ Relation.Comp (· = map f ·) (· ~ ·) (map f l) l' := by rw [eq_map_comp_perm]
   _ ↔ l ~ l' := by simp [Relation.Comp, map_inj_right hf]
@@ -749,8 +749,8 @@ theorem Perm.flatMap_left
 @[gcongr]
 
 中文:
-定理 Perm.flatMap_left
-  条件: (l : List α) {f g : α -> List β} (h : 对任意 a in l, f a ~ g a)
+定理 置换.flatMap_left
+  条件: (l : 列表 α) {f g : α -> 列表 β} (h : 对任意 a in l, f a ~ g a)
   证明: Perm.flatten_congr by
     rwa [List.forall₂_map_right_iff, List.forall₂_map_left_iff, List.forall₂_same]
 
@@ -773,8 +773,8 @@ theorem Perm.flatMap
   proof: .trans (.flatMap_left _ hfg) (h.flatMap_right _)
 
 中文:
-定理 Perm.flatMap
-  结论: {l₁ l₂ : List α} {f g : α -> List β} (h : l₁ ~ l₂)
+定理 置换.flatMap
+  结论: {l₁ l₂ : 列表 α} {f g : α -> 列表 β} (h : l₁ ~ l₂)
   证明: .trans (.flatMap_left _ hfg) (h.flatMap_right _)
 -/
 protected theorem Perm.flatMap {l₁ l₂ : List α} {f g : α -> List β} (h : l₁ ~ l₂)
@@ -796,7 +796,7 @@ theorem flatMap_append_perm
 
 中文:
 定理 flatMap_append_perm
-  条件: (l : List α) (f g : α -> List β)
+  条件: (l : 列表 α) (f g : α -> 列表 β)
   证明: by
   induction l with | nil => simp | cons a l IH => ?_
   simp only [flatMap_cons, append_assoc]
@@ -825,7 +825,7 @@ theorem map_append_flatMap_perm
 
 中文:
 定理 map_append_flatMap_perm
-  条件: (l : List α) (f : α -> β) (g : α -> List β)
+  条件: (l : 列表 α) (f : α -> β) (g : α -> 列表 β)
   证明: by
   simpa [← map_eq_flatMap] using flatMap_append_perm l (fun x => [f x]) g
 
@@ -844,8 +844,8 @@ theorem Perm.product_right
   proof: p.flatMap_right _
 
 中文:
-定理 Perm.product_right
-  条件: {l₁ l₂ : List α} (t₁ : List β) (p : l₁ ~ l₂)
+定理 置换.product_right
+  条件: {l₁ l₂ : 列表 α} (t₁ : 列表 β) (p : l₁ ~ l₂)
   证明: p.flatMap_right _
 
 Depends on / 依赖: flatMap_right, p.flatMap_right
@@ -865,8 +865,8 @@ theorem Perm.product_left
 @[gcongr]
 
 中文:
-定理 Perm.product_left
-  条件: (l : List α) {t₁ t₂ : List β} (p : t₁ ~ t₂)
+定理 置换.product_left
+  条件: (l : 列表 α) {t₁ t₂ : 列表 β} (p : t₁ ~ t₂)
   证明: (Perm.flatMap_left _) fun _ _ => p.map _
 
 @[gcongr]
@@ -887,8 +887,8 @@ theorem Perm.product
   proof: (p₁.product_right t₁).trans (p₂.product_left l₂)
 
 中文:
-定理 Perm.product
-  条件: {l₁ l₂ : List α} {t₁ t₂ : List β} (p₁ : l₁ ~ l₂) (p₂ : t₁ ~ t₂)
+定理 置换.product
+  条件: {l₁ l₂ : 列表 α} {t₁ t₂ : 列表 β} (p₁ : l₁ ~ l₂) (p₂ : t₁ ~ t₂)
   证明: (p₁.product_right t₁).trans (p₂.product_left l₂)
 
 Depends on / 依赖: product_left, product_right

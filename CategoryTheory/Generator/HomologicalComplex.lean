@@ -144,8 +144,8 @@ instance [HasSeparator
   body: ⟨_, isSeparator_coproduct_separatingFamily c (isSeparator_separator C)⟩
 
 中文:
-实例 [HasSeparator
-  签名: C] : HasSeparator (HomologicalComplex C c)
+实例 [有Separator
+  签名: C] : 有Separator (同调复形 C c)
   定义体: ⟨_, isSeparator_coproduct_separatingFamily c (isSeparator_separator C)⟩
 
 Depends on / 依赖: isSeparator_coproduct_separatingFamily, isSeparator_separator

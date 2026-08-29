@@ -62,7 +62,7 @@ lemma nnreal_of_nonneg
 
 中文:
 引理 nnreal_of_nonneg
-  条件: [PartialOrder A] [NonnegSpectrumClass 实数 A] {a : A} (ha : 0 <= a)
+  条件: [偏序 A] [NonnegSpectrum类 实数 A] {a : A} (ha : 0 <= a)
   证明: nnreal_iff.mpr spectrum_nonneg_of_nonneg ha
 
 Depends on / 依赖: nnreal_iff, nnreal_iff.mpr, spectrum_nonneg_of_nonneg
@@ -179,7 +179,7 @@ lemma nnreal_iff
 
 中文:
 引理 nnreal_iff
-  条件: [Module 实数 A] [IsScalarTower 实数 A A] [SMulCommClass 实数 A A] {a : A}
+  条件: [模 实数 A] [标量塔 实数 A A] [标量交换类 实数 A A] {a : A}
   证明: by
   rw [quasispectrumRestricts_iff_spectrumRestricts_inr]; rw [Unitization.quasispectrum_eq_spectrum_inr' _ Real]; rw [SpectrumRestricts.nnreal_iff]
 
@@ -199,7 +199,7 @@ lemma nnreal_of_nonneg
 
 中文:
 引理 nnreal_of_nonneg
-  结论: [Module 实数 A] [IsScalarTower 实数 A A] [SMulCommClass 实数 A A] [PartialOrder A]
+  结论: [模 实数 A] [标量塔 实数 A A] [标量交换类 实数 A A] [偏序 A]
   证明: nnreal_iff.mpr quasispectrum_nonneg_of_nonneg _ ha
 
 Depends on / 依赖: infer_instance, nnreal_iff, nnreal_iff.mpr, quasispectrum_nonneg_of_nonneg
@@ -220,7 +220,7 @@ lemma le_nnreal_iff
 
 中文:
 引理 le_nnreal_iff
-  结论: [Module 实数 A] [IsScalarTower 实数 A A] [SMulCommClass 实数 A A] {a : A}
+  结论: [模 实数 A] [标量塔 实数 A A] [标量交换类 实数 A A] {a : A}
   证明: by
   simp [← ha.algebraMap_image]
 
@@ -242,7 +242,7 @@ lemma lt_nnreal_iff
 
 中文:
 引理 lt_nnreal_iff
-  结论: [Module 实数 A] [IsScalarTower 实数 A A] [SMulCommClass 实数 A A] {a : A}
+  结论: [模 实数 A] [标量塔 实数 A A] [标量交换类 实数 A A] {a : A}
   证明: by
   simp [← ha.algebraMap_image]
 
@@ -271,7 +271,7 @@ lemma coe_mem_spectrum_real_of_nonneg
 
 中文:
 引理 coe_mem_spectrum_real_of_nonneg
-  结论: [Algebra 实数 A] [NonnegSpectrumClass 实数 A] {a : A} {x : 实数>=0}
+  结论: [代数 实数 A] [NonnegSpectrum类 实数 A] {a : A} {x : 实数>=0}
   证明: by
   simp [← (SpectrumRestricts.nnreal_of_nonneg ha).algebraMap_image, Set.mem_image,
     NNReal.algebraMap_eq_coe]

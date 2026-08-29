@@ -176,7 +176,7 @@ definition UniformOnFun
 
 中文:
 定义 UniformOnFun
-  签名: (α β : 类型) (_ : Set (Set α))
+  签名: (α β : 类型) (_ : 集合 (集合 α))
   定义体: α -> β
 
 @[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ " β:0 => UniformFun α β
@@ -203,8 +203,8 @@ instance [Nonempty
   body: Pi.instNonempty
 
 中文:
-实例 [Nonempty
-  签名: β] : Nonempty (α ->ᵤ β)
+实例 [非空
+  签名: β] : 非空 (α ->ᵤ β)
   定义体: Pi.instNonempty
 
 Depends on / 依赖: Pi.instNonempty, instNonempty
@@ -220,8 +220,8 @@ instance [Nonempty
   body: Pi.instNonempty
 
 中文:
-实例 [Nonempty
-  签名: β] : Nonempty (α ->ᵤ[𝔖] β)
+实例 [非空
+  签名: β] : 非空 (α ->ᵤ[𝔖] β)
   定义体: Pi.instNonempty
 
 Depends on / 依赖: Pi.instNonempty, instNonempty
@@ -237,8 +237,8 @@ instance [Subsingleton
   body: inferInstanceAs Subsingleton α -> β
 
 中文:
-实例 [Subsingleton
-  签名: β] : Subsingleton (α ->ᵤ β)
+实例 [子单例
+  签名: β] : 子单例 (α ->ᵤ β)
   定义体: inferInstanceAs Subsingleton α -> β
 
 Depends on / 依赖: Subsingleton
@@ -255,8 +255,8 @@ instance [Subsingleton
   body: inferInstanceAs Subsingleton α -> β
 
 中文:
-实例 [Subsingleton
-  签名: β] : Subsingleton (α ->ᵤ[𝔖] β)
+实例 [子单例
+  签名: β] : 子单例 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Subsingleton α -> β
 
 Depends on / 依赖: Subsingleton
@@ -418,7 +418,7 @@ definition gen
 
 中文:
 定义 gen
-  签名: (V : Set (β × β))
+  签名: (V : 集合 (β × β))
   定义体: { uv : (α ->ᵤ β) × (α ->ᵤ β) | forall x, (toFun uv.1 x, toFun uv.2 x) in V }
 -/
 protected def gen (V : Set (β × β)) : Set ((α ->ᵤ β) × (α ->ᵤ β)) :=
@@ -435,7 +435,7 @@ theorem isBasis_gen
 
 中文:
 定理 isBasis_gen
-  条件: (𝓑 : Filter <| β × β)
+  条件: (𝓑 : 滤子 <| β × β)
   证明: ⟨⟨univ, univ_mem⟩, @fun U V hU hV =>
     ⟨U inter V, inter_mem hU hV, fun _ huv => ⟨fun x => (huv x).left, fun x => (huv x).right⟩⟩⟩
 -/
@@ -454,7 +454,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: (𝓕 : Filter <| β × β)
+  签名: (𝓕 : 滤子 <| β × β)
   定义体: (UniformFun.isBasis_gen α β 𝓕).filterBasis
 -/
 protected def basis (𝓕 : Filter <| β × β) : FilterBasis ((α ->ᵤ β) × (α ->ᵤ β)) :=
@@ -470,7 +470,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (𝓕 : Filter <| β × β)
+  签名: (𝓕 : 滤子 <| β × β)
   定义体: (UniformFun.basis α β 𝓕).filter
 -/
 protected def filter (𝓕 : Filter <| β × β) : Filter ((α ->ᵤ β) × (α ->ᵤ β)) :=
@@ -567,7 +567,7 @@ definition uniformCore
 
 中文:
 定义 uniformCore
-  签名: : UniformSpace.Core (α ->ᵤ β)
+  签名: : 一致空间.核 (α ->ᵤ β)
   定义体: UniformSpace.Core.mkOfBasis (UniformFun.basis α β (𝓤 β))
     (fun _ ⟨_, hV, hVU⟩ _ => hVU ▸ fun _ => refl_mem_uniformity hV)
     (fun _ ⟨V, hV, hVU⟩ =>
@@ -598,7 +598,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (α ->ᵤ β)
+  签名: : 一致空间 (α ->ᵤ β)
   定义体: UniformSpace.ofCore (UniformFun.uniformCore α β)
 
 Depends on / 依赖: UniformFun, UniformFun.uniformCore, UniformSpace, UniformSpace.ofCore, ofCore, uniformCore
@@ -618,7 +618,7 @@ local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
 
 中文:
 实例 topologicalSpace
-  签名: : TopologicalSpace (α ->ᵤ β)
+  签名: : 拓扑空间 (α ->ᵤ β)
   定义体: inferInstance
 
 local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
@@ -657,7 +657,7 @@ theorem hasBasis_uniformity_of_basis
 
 中文:
 定理 hasBasis_uniformity_of_basis
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set (β × β)}
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 (β × β)}
   证明: (UniformFun.hasBasis_uniformity α β).to_hasBasis
     (fun _ hU =>
       let ⟨i, hi, hiU⟩ := h.mem_iff.mp hU
@@ -682,7 +682,7 @@ theorem hasBasis_nhds_of_basis
 
 中文:
 定理 hasBasis_nhds_of_basis
-  结论: (f) {p : ι -> 命题} {s : ι -> Set (β × β)}
+  结论: (f) {p : ι -> 命题} {s : ι -> 集合 (β × β)}
   证明: nhds_basis_uniformity' (UniformFun.hasBasis_uniformity_of_basis α β h)
 -/
 protected theorem hasBasis_nhds_of_basis (f) {p : ι -> Prop} {s : ι -> Set (β × β)}
@@ -749,7 +749,7 @@ lemma mem_gen
 
 中文:
 引理 mem_gen
-  条件: {β} {f g : α ->ᵤ β} {V : Set (β × β)}
+  条件: {β} {f g : α ->ᵤ β} {V : 集合 (β × β)}
   证明: .rfl
 -/
 protected lemma mem_gen {β} {f g : α ->ᵤ β} {V : Set (β × β)} :
@@ -767,7 +767,7 @@ theorem mono
 
 中文:
 定理 mono
-  结论: Monotone (@UniformFun.uniformSpace α γ)
+  结论: 递增 (@UniformFun.uniformSpace α γ)
   证明: fun _ _ hu =>
   (UniformFun.gc α γ).monotone_u hu
 -/
@@ -791,7 +791,7 @@ theorem iInf_eq
 
 中文:
 定理 iInf_eq
-  条件: {u : ι -> UniformSpace γ}
+  条件: {u : ι -> 一致空间 γ}
   结论: 𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i)
   证明: by
   -- This follows directly from the fact that the upper adjoint in a Galois connection maps
@@ -824,7 +824,7 @@ theorem inf_eq
 
 中文:
 定理 inf_eq
-  条件: {u₁ u₂ : UniformSpace γ}
+  条件: {u₁ u₂ : 一致空间 γ}
   证明: by
   -- This follows directly from the fact that the upper adjoint in a Galois connection maps
   -- infimas to infimas.
@@ -851,7 +851,7 @@ lemma postcomp_isUniformInducing
 
 中文:
 引理 postcomp_isUniformInducing
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: ⟨((UniformFun.hasBasis_uniformity _ _).comap _).eq_of_same_basis
     UniformFun.hasBasis_uniformity_of_basis _ _ (hf.basis_uniformity (𝓤 β).basis_sets)⟩
 
@@ -873,7 +873,7 @@ theorem postcomp_isUniformEmbedding
 
 中文:
 定理 postcomp_isUniformEmbedding
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: UniformFun.postcomp_isUniformInducing hf.isUniformInducing
   injective _ _ H := funext fun _ => hf.injective (congrFun H _)
 -/
@@ -922,7 +922,7 @@ theorem postcomp_uniformContinuous
 
 中文:
 定理 postcomp_uniformContinuous
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: by
   -- This is a direct consequence of `UniformFun.comap_eq`
     refine uniformContinuous_iff_le_comap.mpr ?_
@@ -953,7 +953,7 @@ definition congrRight
 
 中文:
 定义 congrRight
-  签名: [UniformSpace γ] (e : γ ≃ᵤ β)
+  签名: [一致空间 γ] (e : γ ≃ᵤ β)
   定义体: { Equiv.piCongrRight fun _ => e.toEquiv with
     uniformContinuous_toFun := UniformFun.postcomp_uniformContinuous e.uniformContinuous
     uniformContinuous_invFun := UniformFun.postcomp_uniformContinuous e.symm.uniformContinuous }
@@ -1024,7 +1024,7 @@ theorem uniformContinuous_toFun
 
 中文:
 定理 uniformContinuous_toFun
-  结论: UniformContinuous (toFun : (α ->ᵤ β) -> α -> β)
+  结论: 一致连续 (toFun : (α ->ᵤ β) -> α -> β)
   证明: by
   -- By definition of the product uniform structure, this is just `uniform_continuous_eval`.
   rw [uniformContinuous_pi]
@@ -1046,8 +1046,8 @@ instance [T2Space
   body: .of_injective_continuous toFun.injective UniformFun.uniformContinuous_toFun.continuous
 
 中文:
-实例 [T2Space
-  签名: β] : T2Space (α ->ᵤ β)
+实例 [T2空间
+  签名: β] : T2空间 (α ->ᵤ β)
   定义体: .of_injective_continuous toFun.injective UniformFun.uniformContinuous_toFun.continuous
 
 Depends on / 依赖: UniformFun, UniformFun.uniformContinuous_toFun.continuous, continuous, injective, of_injective_continuous, toFun.injective, uniformContinuous_toFun
@@ -1092,7 +1092,7 @@ definition uniformEquivProdArrow
 
 中文:
 定义 uniformEquivProdArrow
-  签名: [UniformSpace γ]
+  签名: [一致空间 γ]
   定义体: -- Denote `φ` this bijection. We want to show that
   -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
@@ -1137,7 +1137,7 @@ definition uniformEquivPiComm
 
 中文:
 定义 uniformEquivPiComm
-  签名: : UniformEquiv (α ->ᵤ 对任意 i, δ i) (对任意 i, α ->ᵤ δ i)
+  签名: : 一致等价 (α ->ᵤ 对任意 i, δ i) (对任意 i, α ->ᵤ δ i)
   定义体: -- Denote `φ` this bijection. We want to show that
     -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
     -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
@@ -1181,7 +1181,7 @@ alias isClosed_setOf_continuous := isClosed_setOfPred_c
 
 中文:
 定理 isClosed_setOfPred_continuous
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   refine isClosed_iff_forall_filter.2 fun f u _ hu huf => ?_
   rw [← tendsto_id']; rw [UniformFun.tendsto_iff_tendstoUniformly] at huf
@@ -1309,7 +1309,7 @@ definition gen
 
 中文:
 定义 gen
-  签名: (𝔖) (S : Set α) (V : Set (β × β))
+  签名: (𝔖) (S : 集合 α) (V : 集合 (β × β))
   定义体: { uv : (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β) | forall x in S, (toFun 𝔖 uv.1 x, toFun 𝔖 uv.2 x) in V }
 -/
 protected def gen (𝔖) (S : Set α) (V : Set (β × β)) : Set ((α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β)) :=
@@ -1327,7 +1327,7 @@ theorem gen_eq_preimage_restrict
 
 中文:
 定理 gen_eq_preimage_restrict
-  条件: {𝔖} (S : Set α) (V : Set (β × β))
+  条件: {𝔖} (S : 集合 α) (V : 集合 (β × β))
   证明: by
   ext uv
   exact ⟨fun h ⟨x, hx⟩ => h x hx, fun h x hx => h ⟨x, hx⟩⟩
@@ -1349,7 +1349,7 @@ theorem gen_mono
 
 中文:
 定理 gen_mono
-  条件: {𝔖} {S S' : Set α} {V V' : Set (β × β)} (hS : S' subseteq S) (hV : V subseteq V')
+  条件: {𝔖} {S S' : 集合 α} {V V' : 集合 (β × β)} (hS : S' subseteq S) (hV : V subseteq V')
   证明: fun _uv h x hx => hV (h x <| hS hx)
 -/
 protected theorem gen_mono {𝔖} {S S' : Set α} {V V' : Set (β × β)} (hS : S' subseteq S) (hV : V subseteq V') :
@@ -1370,7 +1370,7 @@ theorem isBasis_gen
 
 中文:
 定理 isBasis_gen
-  结论: (𝔖 : Set (Set α)) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
+  结论: (𝔖 : 集合 (集合 α)) (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
   证明: ⟨h.prod 𝓑.nonempty, fun {U₁V₁ U₂V₂} h₁ h₂ =>
     let ⟨U₃, hU₃, hU₁₃, hU₂₃⟩ := h' U₁V₁.1 h₁.1 U₂V₂.1 h₂.1
     let ⟨V₃, hV₃, hV₁₂₃⟩ := 𝓑.inter_sets h₁.2 h₂.2
@@ -1404,7 +1404,7 @@ local notation "𝒱(" α ", " β ", " 𝔖 ", " u ")" => @UniformOnFun.uniformS
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace (α ->ᵤ[𝔖] β)
+  签名: : 一致空间 (α ->ᵤ[𝔖] β)
   定义体: ⨅ (s : Set α) (_ : s in 𝔖),
     .comap (UniformFun.ofFun ∘ s.domRestrict ∘ UniformOnFun.toFun 𝔖) 𝒰(s, β, _)
 
@@ -1428,7 +1428,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: : TopologicalSpace (α ->ᵤ[𝔖] β)
+  签名: : 拓扑空间 (α ->ᵤ[𝔖] β)
   定义体: 𝒱(α, β, 𝔖, _).toTopologicalSpace
 
 Depends on / 依赖: toTopologicalSpace
@@ -1471,7 +1471,7 @@ theorem hasBasis_uniformity_of_basis_aux₁
 
 中文:
 定理 hasBasis_uniformity_of_basis_aux₁
-  结论: {p : ι -> 命题} {s : ι -> Set (β × β)}
+  结论: {p : ι -> 命题} {s : ι -> 集合 (β × β)}
   证明: by
   simp_rw [UniformOnFun.gen_eq_preimage_restrict, uniformity_comap]
   exact (UniformFun.hasBasis_uniformity_of_basis S β hb).comap _
@@ -1530,7 +1530,7 @@ theorem hasBasis_uniformity_of_basis
 
 中文:
 定理 hasBasis_uniformity_of_basis
-  结论: (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
+  结论: (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
   证明: by
   simp only [iInf_uniformity]
   exact
@@ -1558,7 +1558,7 @@ theorem hasBasis_uniformity
 
 中文:
 定理 hasBasis_uniformity
-  条件: (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
+  条件: (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
   证明: UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' (𝓤 β).basis_sets
 -/
 protected theorem hasBasis_uniformity (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖) :
@@ -1583,7 +1583,7 @@ theorem hasBasis_uniformity_of_covering_of_basis
 
 中文:
 定理 hasBasis_uniformity_of_covering_of_basis
-  结论: {ι ι' : 类型} [Nonempty ι]
+  结论: {ι ι' : 类型} [非空 ι]
   证明: by
   have hne : 𝔖.Nonempty := (range_nonempty t).mono (range_subset_iff.2 ht)
   have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
@@ -1622,7 +1622,7 @@ theorem hasAntitoneBasis_uniformity
 
 中文:
 定理 hasAntitoneBasis_uniformity
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι]
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
   证明: by
   have := hb.nonempty
   refine ⟨(UniformOnFun.hasBasis_uniformity_of_covering_of_basis 𝔖
@@ -1655,7 +1655,7 @@ theorem isCountablyGenerated_uniformity
 
 中文:
 定理 isCountablyGenerated_uniformity
-  结论: [IsCountablyGenerated (𝓤 β)] {t : 自然数 -> Set α}
+  结论: [是余untablyGenerated (𝓤 β)] {t : 自然数 -> 集合 α}
   证明: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
   (UniformOnFun.hasAntitoneBasis_uniformity 𝔖 ht hmono hex hV).isCountablyGenerated
 -/
@@ -1678,7 +1678,7 @@ theorem hasBasis_nhds_of_basis
 
 中文:
 定理 hasBasis_nhds_of_basis
-  结论: (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty)
+  结论: (f : α ->ᵤ[𝔖] β) (h : 𝔖.非空)
   证明: letI : UniformSpace (α -> β) := UniformOnFun.uniformSpace α β 𝔖
   nhds_basis_uniformity (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' hb)
 -/
@@ -1699,7 +1699,7 @@ theorem hasBasis_nhds
 
 中文:
 定理 hasBasis_nhds
-  条件: (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
+  条件: (f : α ->ᵤ[𝔖] β) (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
   证明: UniformOnFun.hasBasis_nhds_of_basis α β 𝔖 f h h' (Filter.basis_sets _)
 -/
 protected theorem hasBasis_nhds (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖) :
@@ -1802,7 +1802,7 @@ theorem uniformity_eq_of_basis
 
 中文:
 定理 uniformity_eq_of_basis
-  结论: {ι : Sort*} {p : ι -> 命题} {V : ι -> Set (β × β)}
+  结论: {ι : 类型层*} {p : ι -> 命题} {V : ι -> 集合 (β × β)}
   证明: by
   simp_rw [iInf_uniformity, uniformity_comap,
     (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
@@ -1845,7 +1845,7 @@ theorem gen_mem_uniformity
 
 中文:
 定理 gen_mem_uniformity
-  条件: (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β)
+  条件: (hs : s in 𝔖) {V : 集合 (β × β)} (hV : V in 𝓤 β)
   证明: by
   rw [UniformOnFun.uniformity_eq]
   apply_rules [mem_iInf_of_mem, mem_principal_self]
@@ -1867,7 +1867,7 @@ theorem nhds_eq_of_basis
 
 中文:
 定理 nhds_eq_of_basis
-  结论: {ι : Sort*} {p : ι -> 命题} {V : ι -> Set (β × β)}
+  结论: {ι : 类型层*} {p : ι -> 命题} {V : ι -> 集合 (β × β)}
   证明: by
   simp_rw [nhds_eq_comap_uniformity, UniformOnFun.uniformity_eq_of_basis _ _ h, comap_iInf,
     comap_principal, UniformOnFun.gen, preimage_ofPred_eq]
@@ -1907,7 +1907,7 @@ theorem gen_mem_nhds
 
 中文:
 定理 gen_mem_nhds
-  条件: (f : α ->ᵤ[𝔖] β) (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β)
+  条件: (f : α ->ᵤ[𝔖] β) (hs : s in 𝔖) {V : 集合 (β × β)} (hV : V in 𝓤 β)
   证明: by
   rw [UniformOnFun.nhds_eq]
   apply_rules [mem_iInf_of_mem, mem_principal_self]
@@ -1992,7 +1992,7 @@ lemma uniformContinuous_ofFun_toFun
 
 中文:
 引理 uniformContinuous_ofFun_toFun
-  条件: (𝔗 : Set (Set α)) (h : 对任意 s in 𝔖, 存在 T subseteq 𝔗, T.Finite ∧ s subseteq ⋃₀ T)
+  条件: (𝔗 : 集合 (集合 α)) (h : 对任意 s in 𝔖, 存在 T subseteq 𝔗, T.有限 ∧ s subseteq ⋃₀ T)
   证明: by
   simp only [UniformContinuous, UniformOnFun.uniformity_eq, iInf₂_comm (ι₂ := Set (β × β))]
   refine tendsto_iInf_iInf fun V => tendsto_iInf_iInf fun hV => ?_
@@ -2026,7 +2026,7 @@ theorem uniformContinuous_ofFun_toFun_of_subset
 
 中文:
 定理 uniformContinuous_ofFun_toFun_of_subset
-  条件: (𝔗 : Set (Set α)) (h : 𝔖 subseteq 𝔗)
+  条件: (𝔗 : 集合 (集合 α)) (h : 𝔖 subseteq 𝔗)
   证明: uniformContinuous_ofFun_toFun _ _ _ fun s _ => ⟨{s}, by grind, by simp⟩
 
 Depends on / 依赖: uniformContinuous_ofFun_toFun
@@ -2045,7 +2045,7 @@ theorem uniformContinuous_ofFun_toFun_of_mem
 
 中文:
 定理 uniformContinuous_ofFun_toFun_of_mem
-  条件: (s : Set α) (h : s in 𝔖)
+  条件: (s : 集合 α) (h : s in 𝔖)
   证明: uniformContinuous_ofFun_toFun_of_subset _ _ _ (by simpa)
 
 Depends on / 依赖: uniformContinuous_ofFun_toFun_of_subset
@@ -2069,7 +2069,7 @@ _ <= 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.coma
 中文:
 定理 mono
   条件: ⦃u₁ u₂
-  结论: UniformSpace γ⦄ (hu : u₁ <= u₂) ⦃𝔖₁ 𝔖₂ : Set (Set α)⦄
+  结论: 一致空间 γ⦄ (hu : u₁ <= u₂) ⦃𝔖₁ 𝔖₂ : 集合 (集合 α)⦄
   证明: calc
     𝒱(α, γ, 𝔖₁, u₁) <= 𝒱(α, γ, 𝔖₂, u₁) := iInf_le_iInf_of_subset h𝔖
 _ <= 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.comap_mono UniformFun.mono hu
@@ -2158,7 +2158,7 @@ theorem iInf_eq
 
 中文:
 定理 iInf_eq
-  条件: {u : ι -> UniformSpace γ}
+  条件: {u : ι -> 一致空间 γ}
   证明: by
   simp_rw [UniformOnFun.uniformSpace, UniformFun.iInf_eq, UniformSpace.comap_iInf]
   rw [iInf_comm]
@@ -2183,7 +2183,7 @@ theorem inf_eq
 
 中文:
 定理 inf_eq
-  条件: {u₁ u₂ : UniformSpace γ}
+  条件: {u₁ u₂ : 一致空间 γ}
   证明: by
   rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformOnFun.iInf_eq]
   refine iInf_congr fun i => ?_
@@ -2242,7 +2242,7 @@ theorem postcomp_uniformContinuous
 
 中文:
 定理 postcomp_uniformContinuous
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: by
   -- This is a direct consequence of `UniformOnFun.comap_eq`
   rw [uniformContinuous_iff_le_comap]
@@ -2273,7 +2273,7 @@ lemma postcomp_isUniformInducing
 
 中文:
 引理 postcomp_isUniformInducing
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: by
   -- This is a direct consequence of `UniformOnFun.comap_eq`
   constructor
@@ -2305,7 +2305,7 @@ theorem postcomp_isUniformEmbedding
 
 中文:
 定理 postcomp_isUniformEmbedding
-  结论: [UniformSpace γ] {f : γ -> β}
+  结论: [一致空间 γ] {f : γ -> β}
   证明: UniformOnFun.postcomp_isUniformInducing hf.isUniformInducing
   injective _ _ H := funext fun _ => hf.injective (congrFun H _)
 -/
@@ -2326,7 +2326,7 @@ definition congrRight
 
 中文:
 定义 congrRight
-  签名: [UniformSpace γ] (e : γ ≃ᵤ β)
+  签名: [一致空间 γ] (e : γ ≃ᵤ β)
   定义体: { Equiv.piCongrRight fun _a => e.toEquiv with
     uniformContinuous_toFun := UniformOnFun.postcomp_uniformContinuous e.uniformContinuous
     uniformContinuous_invFun := UniformOnFun.postcomp_uniformContinuous e.symm.uniformContinuous }
@@ -2351,7 +2351,7 @@ tendsto_iInf' V tendsto_iInf' hV ?_
 
 中文:
 定理 precomp_uniformContinuous
-  结论: {𝔗 : Set (Set γ)} {f : γ -> α}
+  结论: {𝔗 : 集合 (集合 γ)} {f : γ -> α}
   证明: by
   -- This follows from the fact that `(· ∘ f) × (· ∘ f)` maps `gen (f '' t) V` to `gen t V`.
   simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
@@ -2383,7 +2383,7 @@ definition congrLeft
 
 中文:
 定义 congrLeft
-  签名: {𝔗 : Set (Set γ)} (e : γ ≃ α) (he : 𝔗 subseteq image e ⁻¹' 𝔖)
+  签名: {𝔗 : 集合 (集合 γ)} (e : γ ≃ α) (he : 𝔗 subseteq 像 e ⁻¹' 𝔖)
   定义体: { Equiv.arrowCongr e (Equiv.refl _) with
     uniformContinuous_toFun := UniformOnFun.precomp_uniformContinuous fun s hs => by
       change e.symm '' s in 𝔗
@@ -2414,8 +2414,8 @@ theorem t2Space_of_covering
 
 中文:
 定理 t2Space_of_covering
-  条件: [T2Space β] (h : ⋃₀ 𝔖 = univ)
-  结论: T2Space (α ->ᵤ[𝔖] β) where
+  条件: [T2空间 β] (h : ⋃₀ 𝔖 = univ)
+  结论: T2空间 (α ->ᵤ[𝔖] β) where
   证明: by
     obtain ⟨x, hx⟩ := not_forall.mp (mt funext hfg)
     obtain ⟨s, hs, hxs⟩ : exists s in 𝔖, x in s := mem_sUnion.mp (h.symm ▸ True.intro)
@@ -2521,7 +2521,7 @@ theorem continuousAt_eval₂
 
 中文:
 定理 continuousAt_eval₂
-  结论: [TopologicalSpace α] {f : α ->ᵤ[𝔖] β} {x : α}
+  结论: [拓扑空间 α] {f : α ->ᵤ[𝔖] β} {x : α}
   证明: by
   rw [ContinuousAt]; rw [nhds_eq_comap_uniformity]; rw [tendsto_comap_iff]; rw [← lift'_comp_uniformity]; rw [tendsto_lift']
   intro U hU
@@ -2550,7 +2550,7 @@ theorem continuousOn_eval₂
 
 中文:
 定理 continuousOn_eval₂
-  条件: [TopologicalSpace α] (h𝔖 : 对任意 x, 存在 V in 𝔖, V in 𝓝 x)
+  条件: [拓扑空间 α] (h𝔖 : 对任意 x, 存在 V in 𝔖, V in 𝓝 x)
   证明: fun (_f, x) hc =>
   (UniformOnFun.continuousAt_eval₂ (h𝔖 x) hc).continuousWithinAt
 -/
@@ -2595,7 +2595,7 @@ lemma continuous_rng_iff
 
 中文:
 引理 continuous_rng_iff
-  条件: {X : 类型} [TopologicalSpace X] {f : X -> (α ->ᵤ[𝔖] β)}
+  条件: {X : 类型} [拓扑空间 X] {f : X -> (α ->ᵤ[𝔖] β)}
   证明: by
   simp only [continuous_iff_continuousAt, ContinuousAt,
     UniformOnFun.tendsto_iff_tendstoUniformlyOn, UniformFun.tendsto_iff_tendstoUniformly,
@@ -2627,8 +2627,8 @@ instance [CompleteSpace
 
 
 中文:
-实例 [CompleteSpace
-  签名: β] : CompleteSpace (α ->ᵤ[𝔖] β)
+实例 [完备空间
+  签名: β] : 完备空间 (α ->ᵤ[𝔖] β)
   定义体: by
   rcases isEmpty_or_nonempty β
   · infer_instance
@@ -2674,7 +2674,7 @@ definition uniformEquivProdArrow
 
 中文:
 定义 uniformEquivProdArrow
-  签名: [UniformSpace γ]
+  签名: [一致空间 γ]
   定义体: -- Denote `φ` this bijection. We want to show that
   -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
@@ -2763,7 +2763,7 @@ exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.conti
 
 中文:
 定理 isClosed_setOfPred_continuous
-  条件: [TopologicalSpace α] (h : IsCoherentWith 𝔖)
+  条件: [拓扑空间 α] (h : 是余herentWith 𝔖)
   证明: by
   refine isClosed_iff_forall_filter.2 fun f u _ hu huf => h.continuous_iff.2 fun s hs => ?_
   rw [← tendsto_id']; rw [UniformOnFun.tendsto_iff_tendstoUniformlyOn] at huf
@@ -2988,7 +2988,7 @@ theorem UniformContinuousOn.comp_tendstoUniformlyOn_eventually
 
 中文:
 定理 UniformContinuousOn.comp_tendstoUniformlyOn_eventually
-  结论: {t : Set α}
+  结论: {t : 集合 α}
   证明: by
   rw [tendstoUniformlyOn_iff_restrict]
   apply UniformContinuousOn.comp_tendstoUniformly_eventually (by simpa using hF)

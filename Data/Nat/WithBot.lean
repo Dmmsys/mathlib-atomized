@@ -32,7 +32,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation (WithBot 自然数)
+  签名: 良基关系 (WithBot 自然数)
   定义体: (· < ·)
   wf := IsWellFounded.wf
 -/

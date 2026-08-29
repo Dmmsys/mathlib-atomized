@@ -50,8 +50,8 @@ lemma smooth_of_grpObj_of_isAlgClosed
 
 中文:
 引理 smooth_of_grpObj_of_isAlgClosed
-  条件: [IsReduced G] [IsAlgClosed K]
-  结论: Smooth f
+  条件: [是既约 G] [是代数闭 K]
+  结论: 光滑 f
   证明: by
   have := LocallyOfFiniteType.jacobsonSpace f
   have : Nonempty G := ⟨η[Over.mk f].1 (IsLocalRing.closedPoint _)⟩
@@ -99,8 +99,8 @@ lemma smooth_of_grpObj
 
 中文:
 引理 smooth_of_grpObj
-  条件: [GeometricallyReduced f]
-  结论: Smooth f
+  条件: [几何既约 f]
+  结论: 光滑 f
   证明: by
   let Ω : Type u := AlgebraicClosure K
   let g : Spec (.of Ω) ⟶ Spec (.of K) := Spec.map (CommRingCat.ofHom <| algebraMap K Ω)

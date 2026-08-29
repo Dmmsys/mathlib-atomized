@@ -45,7 +45,7 @@ definition colon
 
 中文:
 定义 colon
-  签名: (N : Submodule R M) (S : Set M)
+  签名: (N : 子模 R M) (S : 集合 M)
   定义体: {r : R | (r • S : Set M) subseteq N}
   add_mem' ha hb :=
     (Set.add_smul_subset _ _ _).trans ((Set.add_subset_add ha hb).trans_eq (by simp))
@@ -134,8 +134,8 @@ theorem colon_univ
 
 中文:
 定理 colon_univ
-  条件: {I : Ideal R} [I.IsTwoSided]
-  结论: I.colon Set.univ = I
+  条件: {I : 理想 R} [I.是TwoSided]
+  结论: I.colon 集合.univ = I
   证明: by
   simp_rw [SetLike.ext_iff, mem_colon, smul_eq_mul]
   exact fun x => ⟨fun h => mul_one x ▸ h 1 trivial, fun h _ _ => I.mul_mem_right _ h⟩
@@ -165,7 +165,7 @@ theorem bot_colon
 
 中文:
 定理 bot_colon
-  结论: colon (⊥ : Submodule R M) (N : Set M) = N.annihilator
+  结论: colon (⊥ : 子模 R M) (N : 集合 M) = N.annihilator
   证明: by
   ext x
   simp [mem_colon, mem_annihilator]
@@ -206,8 +206,8 @@ theorem _root_.Ideal.le_colon
   proof: colon_univ.symm.trans_le (colon_mono le_rfl S.subset_univ)
 
 中文:
-定理 _root_.Ideal.le_colon
-  条件: {I : Ideal R} {S : Set R} [I.IsTwoSided]
+定理 _root_.理想.le_colon
+  条件: {I : 理想 R} {S : 集合 R} [I.是TwoSided]
   结论: I <= I.colon S
   证明: colon_univ.symm.trans_le (colon_mono le_rfl S.subset_univ)
 
@@ -229,7 +229,7 @@ theorem iInf_colon_iUnion
 
 中文:
 定理 iInf_colon_iUnion
-  条件: (ι₁ : Sort*) (f : ι₁ -> Submodule R M) (ι₂ : Sort*) (g : ι₂ -> Set M)
+  条件: (ι₁ : 类型层*) (f : ι₁ -> 子模 R M) (ι₂ : 类型层*) (g : ι₂ -> 集合 M)
   证明: by
   aesop (add simp mem_colon)
 
@@ -257,7 +257,7 @@ lemma colon_inf_eq_left_of_subset
 
 中文:
 引理 colon_inf_eq_left_of_subset
-  条件: (h : S subseteq (N₂ : Set M))
+  条件: (h : S subseteq (N₂ : 集合 M))
   结论: (N₁ ⊓ N₂).colon S = N₁.colon S
   证明: by
   aesop (add simp mem_colon)
@@ -284,7 +284,7 @@ lemma colon_eq_top_iff_subset
 
 中文:
 引理 colon_eq_top_iff_subset
-  条件: (S : Set M)
+  条件: (S : 集合 M)
   结论: N.colon S = ⊤ ↔ S subseteq N
   证明: by
   aesop (add simp [mem_colon, Ideal.eq_top_iff_one])
@@ -336,7 +336,7 @@ lemma iInf_colon
 
 中文:
 引理 iInf_colon
-  条件: {ι : Sort*} (f : ι -> Submodule R M)
+  条件: {ι : 类型层*} (f : ι -> 子模 R M)
   结论: (⨅ i, f i).colon S = ⨅ i, (f i).colon S
   证明: by
   aesop (add simp mem_colon)
@@ -362,7 +362,7 @@ lemma colon_finsetInf
 
 中文:
 引理 colon_finsetInf
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Submodule R M)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 子模 R M)
   证明: by
   aesop (add simp mem_colon)
 
@@ -388,7 +388,7 @@ lemma top_colon
 
 中文:
 引理 top_colon
-  结论: (⊤ : Submodule R M).colon S = ⊤
+  结论: (⊤ : 子模 R M).colon S = ⊤
   证明: by
   aesop (add simp mem_colon)
 
@@ -439,7 +439,7 @@ lemma colon_iUnion
 
 中文:
 引理 colon_iUnion
-  条件: {ι : Sort*} (f : ι -> Set M)
+  条件: {ι : 类型层*} (f : ι -> 集合 M)
   结论: N.colon (⋃ i, f i) = ⨅ i, N.colon (f i)
   证明: by
   aesop (add simp mem_colon)
@@ -463,7 +463,7 @@ lemma colon_empty
 
 中文:
 引理 colon_empty
-  结论: N.colon (∅ : Set M) = ⊤
+  结论: N.colon (∅ : 集合 M) = ⊤
   证明: by
   aesop (add simp mem_colon)
 
@@ -501,7 +501,7 @@ lemma colon_bot
 
 中文:
 引理 colon_bot
-  结论: N.colon ((⊥ : Submodule R M) : Set M) = ⊤
+  结论: N.colon ((⊥ : 子模 R M) : 集合 M) = ⊤
   证明: by
   simp
 -/
@@ -528,7 +528,7 @@ theorem mem_colon'
 中文:
 定理 mem_colon'
   条件: {r}
-  结论: r in N.colon S ↔ S <= comap (r • (LinearMap.id : M ->ₗ[R] M)) N
+  结论: r in N.colon S ↔ S <= comap (r • (线性映射.id : M ->ₗ[R] M)) N
   证明: mem_colon
 
 Depends on / 依赖: mem_colon
@@ -571,7 +571,7 @@ theorem bot_colon'
 
 中文:
 定理 bot_colon'
-  结论: (⊥ : Submodule R M).colon S = (span R S).annihilator
+  结论: (⊥ : 子模 R M).colon S = (span R S).annihilator
   证明: by
   aesop (add simp [mem_colon, mem_annihilator_span])
 
@@ -629,9 +629,9 @@ theorem _root_.Ideal.colon_span
   simp
 
 中文:
-定理 _root_.Ideal.colon_span
-  条件: {I : Ideal R} {S : Set R}
-  结论: I.colon (Ideal.span S) = I.colon S
+定理 _root_.理想.colon_span
+  条件: {I : 理想 R} {S : 集合 R}
+  结论: I.colon (理想.span S) = I.colon S
   证明: by
   simp
 -/
@@ -668,8 +668,8 @@ theorem _root_.Ideal.mem_colon_span_singleton
   simp
 
 中文:
-定理 _root_.Ideal.mem_colon_span_singleton
-  条件: {I : Ideal R} {x r : R}
+定理 _root_.理想.mem_colon_span_singleton
+  条件: {I : 理想 R} {x r : R}
   证明: by
   simp
 -/
@@ -699,7 +699,7 @@ lemma annihilator_map_mkQ_eq_colon
 
 中文:
 引理 annihilator_map_mkQ_eq_colon
-  结论: annihilator (P.map N.mkQ) = N.colon (P : Set M)
+  结论: annihilator (P.map N.mkQ) = N.colon (P : 集合 M)
   证明: by
   ext
   rw [mem_annihilator]; rw [mem_colon]
@@ -728,7 +728,7 @@ theorem annihilator_quotient
 
 中文:
 定理 annihilator_quotient
-  结论: Module.annihilator R (M ⧸ N) = N.colon Set.univ
+  结论: 模.annihilator R (M ⧸ N) = N.colon 集合.univ
   证明: by
   ext r
   have htop : (⊤ : Submodule R (M ⧸ N)) = (⊤ : Submodule R M).map N.mkQ := by
@@ -753,8 +753,8 @@ theorem _root_.Ideal.annihilator_quotient
   rw [Submodule.annihilator_quotient]; rw [colon_univ]
 
 中文:
-定理 _root_.Ideal.annihilator_quotient
-  条件: {I : Ideal R} [I.IsTwoSided]
+定理 _root_.理想.annihilator_quotient
+  条件: {I : 理想 R} [I.是TwoSided]
   证明: by
   rw [Submodule.annihilator_quotient]; rw [colon_univ]
 

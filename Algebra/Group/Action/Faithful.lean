@@ -47,8 +47,8 @@ class FaithfulVAdd
     - eq_of_vadd_eq_vadd : forall {g₁ g₂ : G}, (forall p : P, g₁ +ᵥ p = g₂ +ᵥ p) -> g₁ = g₂
 
 中文:
-类 FaithfulVAdd
-  参数: (G : 类型) (P : 类型) [VAdd G P]
+类 忠实向量加法
+  参数: (G : 类型) (P : 类型) [向量加法 G P]
   公理与运算 (1 个):
     - eq_of_vadd_eq_vadd : 对任意 {g₁ g₂ : G}, (对任意 p : P, g₁ +ᵥ p = g₂ +ᵥ p) -> g₁ = g₂
 -/
@@ -68,8 +68,8 @@ class FaithfulSMul
     - eq_of_smul_eq_smul : forall {m₁ m₂ : M}, (forall a : α, m₁ • a = m₂ • a) -> m₁ = m₂
 
 中文:
-类 FaithfulSMul
-  参数: (M : 类型) (α : 类型) [SMul M α]
+类 忠实标量乘法
+  参数: (M : 类型) (α : 类型) [标量乘法 M α]
   公理与运算 (1 个):
     - eq_of_smul_eq_smul : 对任意 {m₁ m₂ : M}, (对任意 a : α, m₁ • a = m₂ • a) -> m₁ = m₂
 -/
@@ -95,8 +95,8 @@ lemma smul_left_injective'
 
 中文:
 引理 smul_left_injective'
-  条件: [SMul M α] [FaithfulSMul M α]
-  结论: Injective ((· • ·) : M -> α -> α)
+  条件: [标量乘法 M α] [忠实标量乘法 M α]
+  结论: 单射 ((· • ·) : M -> α -> α)
   证明: fun _ _ h => FaithfulSMul.eq_of_smul_eq_smul (congr_fun h)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, congr_fun, eq_of_smul_eq_smul
@@ -139,9 +139,9 @@ lemma RightCancelMonoid.faithfulSMul
   proof: inferInstance
 
 中文:
-引理 RightCancelMonoid.faithfulSMul
-  条件: [RightCancelMonoid α]
-  结论: FaithfulSMul α α
+引理 右消去幺半群.faithfulSMul
+  条件: [右消去幺半群 α]
+  结论: 忠实标量乘法 α α
   证明: inferInstance
 -/
 lemma RightCancelMonoid.faithfulSMul [RightCancelMonoid α] : FaithfulSMul α α :=
@@ -165,9 +165,9 @@ lemma LeftCancelMonoid.to_faithfulSMul_mulOpposite
 @[to_additive]
 
 中文:
-引理 LeftCancelMonoid.to_faithfulSMul_mulOpposite
-  条件: [LeftCancelMonoid α]
-  结论: FaithfulSMul αᵐᵒᵖ α
+引理 左消去幺半群.to_faithfulSMul_mulOpposite
+  条件: [左消去幺半群 α]
+  结论: 忠实标量乘法 αᵐᵒᵖ α
   证明: inferInstance
 
 @[to_additive]
@@ -228,7 +228,7 @@ theorem faithfulSMul_iff
 
 中文:
 定理 faithfulSMul_iff
-  条件: [Group G] [MulAction G α]
+  条件: [群 G] [乘法作用 G α]
   证明: by
   refine ⟨fun h a ha => h.eq_of_smul_eq_smul ?_, fun h => ⟨fun {a₁ a₂} h' => ?_⟩⟩
   · simpa only [one_smul]
@@ -261,8 +261,8 @@ lemma FaithfulSMul.tower_bot
 @[to_additive]
 
 中文:
-引理 FaithfulSMul.tower_bot
-  结论: (R S T : 类型) [Monoid S] [MulOneClass T]
+引理 忠实标量乘法.tower_bot
+  结论: (R S T : 类型) [幺半群 S] [MulOne类 T]
   证明: by
   rw [faithfulSMul_iff_injective_smul_one]
   refine .of_comp (f := (· • (1 : T))) ?_
@@ -293,8 +293,8 @@ lemma FaithfulSMul.trans
       ((faithfulSMul_iff_injective_smul_one R S).mp ‹_›)
 
 中文:
-引理 FaithfulSMul.trans
-  结论: (R S T : 类型) [Monoid S] [MulOneClass T]
+引理 忠实标量乘法.trans
+  结论: (R S T : 类型) [幺半群 S] [MulOne类 T]
   证明: by
   simpa [faithfulSMul_iff_injective_smul_one, Function.comp_def] using
     ((faithfulSMul_iff_injective_smul_one S T).mp ‹_›).comp
@@ -319,7 +319,7 @@ lemma IsScalarTower.to₁₂₃
   proof: by simp_rw [← (smul_left_injective' (α := Q)).eq_iff, smul_assoc]
 
 中文:
-引理 IsScalarTower.to₁₂₃
+引理 标量塔.to₁₂₃
   结论: (M N P Q)
   证明: by simp_rw [← (smul_left_injective' (α := Q)).eq_iff, smul_assoc]
 -/
@@ -338,8 +338,8 @@ instance [SMul
   body: FaithfulSMul.eq_of_smul_eq_smul fun m => op_inj.mp h (op m)
 
 中文:
-实例 [SMul
-  签名: α M] [FaithfulSMul α M] : FaithfulSMul α Mᵐᵒᵖ where
+实例 [标量乘法
+  签名: α M] [忠实标量乘法 α M] : 忠实标量乘法 α Mᵐᵒᵖ where
   定义体: FaithfulSMul.eq_of_smul_eq_smul fun m => op_inj.mp h (op m)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, eq_of_smul_eq_smul, op_inj, op_inj.mp

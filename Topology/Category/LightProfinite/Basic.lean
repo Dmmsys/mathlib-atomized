@@ -73,7 +73,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+  签名: (X : 类型) [拓扑空间 X] [紧空间 X] [T2空间 X]
   定义体: CompHausLike.of _ X
 
 Depends on / 依赖: CompHausLike, CompHausLike.of
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited LightProfinite
+  签名: 可居 LightProfinite
   定义体: ⟨LightProfinite.of PEmpty⟩
 
 Depends on / 依赖: LightProfinite, LightProfinite.of, PEmpty
@@ -136,7 +136,7 @@ abbreviation lightToProfiniteFullyFaithful
 
 中文:
 缩写 lightToProfiniteFullyFaithful
-  签名: : lightToProfinite.FullyFaithful
+  签名: : lightToProfinite.满忠实
   定义体: fullyFaithfulToCompHausLike _
 
 Depends on / 依赖: fullyFaithfulToCompHausLike
@@ -172,7 +172,7 @@ abbreviation LightProfinite.toTopCat
 
 中文:
 缩写 LightProfinite.toTopCat
-  签名: : LightProfinite ⥤ TopCat
+  签名: : LightProfinite ⥤ 顶元素范畴
   定义体: CompHausLike.compHausLikeToTop _
 
 Depends on / 依赖: CompHausLike, CompHausLike.compHausLikeToTop, compHausLikeToTop
@@ -221,7 +221,7 @@ definition FintypeCat.toLightProfiniteFullyFaithful
 
 中文:
 定义 FintypeCat.toLightProfiniteFullyFaithful
-  签名: : toLightProfinite.FullyFaithful where
+  签名: : toLightProfinite.满忠实 where
   定义体: InducedCategory.homMk (↾(f.hom.hom.1))
   map_preimage _ := rfl
   preimage_map _ := rfl
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: FintypeCat.toLightProfinite.Faithful
+  签名: FintypeCat.toLightProfinite.忠实
   定义体: FintypeCat.toLightProfiniteFullyFaithful.faithful
 -/
 instance : FintypeCat.toLightProfinite.Faithful :=
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: FintypeCat.toLightProfinite.Full
+  签名: FintypeCat.toLightProfinite.满
   定义体: FintypeCat.toLightProfiniteFullyFaithful.full
 
 Depends on / 依赖: FintypeCat, FintypeCat.toLightProfiniteFullyFaithful.full, toLightProfiniteFullyFaithful
@@ -300,7 +300,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: {J : 类型v} [SmallCategory J] [CountableCategory J]
+  签名: {J : 类型v} [小范畴 J] [余untable范畴 J]
   定义体: { toTop := (CompHaus.limitCone.{v, u} (F ⋙ lightProfiniteToCompHaus)).pt.toTop
       prop := by
         constructor
@@ -346,7 +346,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: {J : 类型v} [SmallCategory J] [CountableCategory J]
+  签名: {J : 类型v} [小范畴 J] [余untable范畴 J]
   定义体: ConcreteCategory.ofHom
     ((CompHaus.limitConeIsLimit.{v, u} (F ⋙ lightProfiniteToCompHaus)).lift
       (lightProfiniteToCompHaus.mapCone S)).hom.hom
@@ -382,7 +382,7 @@ instance createsCountableLimits
 
 中文:
 实例 createsCountableLimits
-  签名: {J : 类型v} [SmallCategory J] [CountableCategory J]
+  签名: {J : 类型v} [小范畴 J] [余untable范畴 J]
   定义体: createsLimitOfFullyFaithfulOfIso (limitCone.{v, u} F).pt
       (Profinite.limitConeIsLimit.{v, u} (F ⋙ lightToProfinite)).conePointUniqueUpToIso
         (limit.isLimit _)
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCountableLimits LightProfinite
+  签名: 有余untableLimits LightProfinite
   定义体: { has_limit := fun F => ⟨limitCone F, limitConeIsLimit F⟩ }
 
 Depends on / 依赖: has_limit, limitCone, limitConeIsLimit
@@ -425,7 +425,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape 自然数ᵒᵖ (forget LightProfinite.{u})
+  签名: 保持形状极限 自然数ᵒᵖ (forget LightProfinite.{u})
   定义体: have : PreservesLimitsOfSize.{0, 0} (forget Profinite.{u}) := preservesLimitsOfSize_shrink _
   inferInstanceAs (PreservesLimitsOfShape Natᵒᵖ (lightToProfinite ⋙ forget Profinite))
 
@@ -447,7 +447,7 @@ theorem isClosedMap
 
 中文:
 定理 isClosedMap
-  结论: IsClosedMap f
+  结论: 是闭映射 f
   证明: CompHausLike.isClosedMap _
 
 Depends on / 依赖: CompHausLike, CompHausLike.isClosedMap, isClosedMap
@@ -467,8 +467,8 @@ theorem isIso_of_bijective
 
 中文:
 定理 isIso_of_bijective
-  条件: (bij : Function.Bijective f)
-  结论: IsIso f
+  条件: (bij : 函数.双射 f)
+  结论: 是同构 f
   证明: haveI := CompHausLike.isIso_of_bijective (lightProfiniteToCompHaus.map f) bij
   isIso_of_fully_faithful lightProfiniteToCompHaus _
 
@@ -489,7 +489,7 @@ definition isoOfBijective
 
 中文:
 定义 isoOfBijective
-  签名: (bij : Function.Bijective f)
+  签名: (bij : 函数.双射 f)
   定义体: letI := LightProfinite.isIso_of_bijective f bij
   asIso f
 
@@ -513,7 +513,7 @@ instance forget_reflectsIsomorphisms
 
 中文:
 实例 forget_reflectsIsomorphisms
-  签名: : (forget LightProfinite).ReflectsIsomorphisms
+  签名: : (forget LightProfinite).反映同构
   定义体: by
   constructor
   intro A B f hf
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightToProfinite.PreservesEpimorphisms
+  签名: lightToProfinite.保持Epimorphisms
   定义体: (Profinite.epi_iff_surjective _).mpr ((epi_iff_surjective f).mp inferInstance)
 
 Depends on / 依赖: Profinite, Profinite.epi_iff_surjective, epi_iff_surjective
@@ -630,11 +630,11 @@ structure LightDiagram
 
 中文:
 结构 LightDiagram
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - diagram : 自然数ᵒᵖ ⥤ FintypeCat
-    - cone : Cone (diagram ⋙ FintypeCat.toProfinite.{u})
-    - isLimit : IsLimit cone
+    - cone : 锥 (diagram ⋙ FintypeCat.toProfinite.{u})
+    - isLimit : 是极限 cone
 -/
 structure LightDiagram : Type (u + 1) where
   /-- The indexing diagram. -/
@@ -678,7 +678,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category LightDiagram
+  签名: 范畴 LightDiagram
   定义体: inferInstanceAs Category (InducedCategory _ toProfinite)
 
 Depends on / 依赖: Category, InducedCategory, toProfinite
@@ -696,7 +696,7 @@ instance hasForget
 
 中文:
 实例 hasForget
-  签名: : ConcreteCategory LightDiagram (fun X Y => C(X.toProfinite, Y.toProfinite))
+  签名: : 余ncrete范畴 LightDiagram (fun X Y => C(X.toProfinite, Y.toProfinite))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toProfinite) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory, toProfinite
@@ -735,7 +735,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightDiagramToProfinite.Faithful
+  签名: lightDiagramToProfinite.忠实
   定义体: show (inducedFunctor _).Faithful from inferInstance
 
 Depends on / 依赖: Faithful, inducedFunctor
@@ -752,7 +752,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightDiagramToProfinite.Full
+  签名: lightDiagramToProfinite.满
   定义体: show (inducedFunctor _).Full from inferInstance
 -/
 instance : lightDiagramToProfinite.Full := show (inducedFunctor _).Full from inferInstance
@@ -936,7 +936,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightProfiniteToLightDiagram.IsEquivalence
+  签名: lightProfiniteToLightDiagram.是等价
   定义体: show LightProfinite.equivDiagram.functor.IsEquivalence from inferInstance
 
 Depends on / 依赖: IsEquivalence, LightProfinite, LightProfinite.equivDiagram.functor.IsEquivalence, equivDiagram, functor
@@ -956,7 +956,7 @@ noncomputable section EssentiallySmall
 
 中文:
 实例 :
-  签名: lightDiagramToLightProfinite.IsEquivalence
+  签名: lightDiagramToLightProfinite.是等价
   定义体: show LightProfinite.equivDiagram.inverse.IsEquivalence from inferInstance
 
 noncomputable section EssentiallySmall
@@ -1017,7 +1017,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category LightDiagram'
+  签名: 范畴 LightDiagram'
   定义体: inferInstanceAs (Category (InducedCategory _ LightDiagram'.toProfinite))
 -/
 instance : Category LightDiagram' :=
@@ -1054,7 +1054,7 @@ instance :
 
 中文:
 实例 :
-  签名: LightDiagram'.toLightFunctor.{u}.Faithful
+  签名: LightDiagram'.toLightFunctor.{u}.忠实
   定义体: by
     apply InducedCategory.homEquiv.injective
     apply InducedCategory.homEquiv.symm.injective h
@@ -1076,7 +1076,7 @@ instance :
 
 中文:
 实例 :
-  签名: LightDiagram'.toLightFunctor.{u}.Full
+  签名: LightDiagram'.toLightFunctor.{u}.满
   定义体: ⟨InducedCategory.homMk f.hom, rfl⟩
 -/
 instance : LightDiagram'.toLightFunctor.{u}.Full where
@@ -1095,7 +1095,7 @@ instance :
 
 中文:
 实例 :
-  签名: LightDiagram'.toLightFunctor.{u}.EssSurj
+  签名: LightDiagram'.toLightFunctor.{u}.本质满射
   定义体: ⟨⟨Y.diagram ⋙ Skeleton.equivalence.inverse⟩, ⟨lightDiagramToProfinite.preimageIso (
       (Limits.lim.mapIso (Functor.isoWhiskerRight ((Functor.isoWhiskerLeft Y.diagram
       Skeleton.equivalence.counitIso)) toProfinite)) ≪≫
@@ -1117,7 +1117,7 @@ instance :
 
 中文:
 实例 :
-  签名: LightDiagram'.toLightFunctor.IsEquivalence
+  签名: LightDiagram'.toLightFunctor.是等价
 -/
 instance : LightDiagram'.toLightFunctor.IsEquivalence where
 

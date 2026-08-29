@@ -56,7 +56,7 @@ theorem riesz_lemma
 
 中文:
 定理 riesz_lemma
-  结论: {F : Subspace 𝕜 E} (hFc : IsClosed (F : Set E)) (hF : 存在 x : E, x ∉ F) {r : 实数}
+  结论: {F : 子空间 𝕜 E} (hFc : 是闭集 (F : 集合 E)) (hF : 存在 x : E, x ∉ F) {r : 实数}
   证明: by
   obtain ⟨x, hx⟩ : exists x : E, x ∉ F := hF
   let d := Metric.infDist x F
@@ -117,7 +117,7 @@ theorem riesz_lemma_of_norm_lt
 
 中文:
 定理 riesz_lemma_of_norm_lt
-  结论: {c : 𝕜} (hc : 1 < ‖c‖) {R : 实数} (hR : ‖c‖ < R) {F : Subspace 𝕜 E}
+  结论: {c : 𝕜} (hc : 1 < ‖c‖) {R : 实数} (hR : ‖c‖ < R) {F : 子空间 𝕜 E}
   证明: by
   have Rpos : 0 < R := (norm_nonneg _).trans_lt hR
   have : ‖c‖ / R < 1 := by
@@ -169,7 +169,7 @@ theorem Metric.closedBall_infDist_compl_subset_closure
 
 中文:
 定理 Metric.closedBall_infDist_compl_subset_closure
-  条件: {x : F} {s : Set F} (hx : x in s)
+  条件: {x : F} {s : 集合 F} (hx : x in s)
   证明: by
   rcases eq_or_ne (infDist x sᶜ) 0 with h₀ | h₀
   · rw [h₀, closedBall_zero']

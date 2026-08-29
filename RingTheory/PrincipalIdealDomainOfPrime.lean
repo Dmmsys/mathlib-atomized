@@ -40,7 +40,7 @@ theorem isOka_isPrincipal
 
 中文:
 定理 isOka_isPrincipal
-  结论: IsOka (Submodule.IsPrincipal (R := R)) where
+  结论: 是Oka (子模.是Principal (R := R)) where
   证明: top_isPrincipal
   oka {I a} := by
     intro ⟨x, hx⟩ ⟨y, hy⟩
@@ -87,8 +87,8 @@ theorem IsPrincipalIdealRing.of_prime
   exact ⟨I, hI⟩
 
 中文:
-定理 IsPrincipalIdealRing.of_prime
-  条件: (H : 对任意 P : Ideal R, P.IsPrime -> P.IsPrincipal)
+定理 是主理想环.of_prime
+  条件: (H : 对任意 P : 理想 R, P.是素 -> P.是Principal)
   证明: by
   refine ⟨isOka_isPrincipal.forall_of_forall_prime (fun I hI => exists_maximal_not_isPrincipal ?_) H⟩
   rw [isPrincipalIdealRing_iff]; rw [not_forall]
@@ -110,7 +110,7 @@ theorem IsPrincipalIdealRing.of_prime_ne_bot
   proof: .of_prime fun P hp => (eq_or_ne P ⊥).elim (· ▸ inferInstance) H _ hp
 
 中文:
-定理 IsPrincipalIdealRing.of_prime_ne_bot
+定理 是主理想环.of_prime_ne_bot
   证明: .of_prime fun P hp => (eq_or_ne P ⊥).elim (· ▸ inferInstance) H _ hp
 
 Depends on / 依赖: eq_or_ne, of_prime

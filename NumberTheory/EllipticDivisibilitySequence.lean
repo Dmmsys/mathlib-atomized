@@ -1436,7 +1436,7 @@ lemma preNormEDS_ofNat
 @[simp]
 
 中文:
-引理 preNormEDS_ofNat
+引理 preNormEDS_of自然数
   条件: (n : 自然数)
   结论: preNormEDS b c d n = preNormEDS' b c d n
   证明: by
@@ -1940,7 +1940,7 @@ lemma normEDS_ofNat
 @[simp]
 
 中文:
-引理 normEDS_ofNat
+引理 normEDS_of自然数
   条件: (n : 自然数)
   证明: by
   simp [normEDS]
@@ -2250,7 +2250,7 @@ definition normEDSRec'
 
 中文:
 定义 normEDSRec'
-  签名: {P : 自然数 -> Sort*}
+  签名: {P : 自然数 -> 类型层*}
   定义体: n.evenOddStrongRec (by rintro (_ | _ | _ | _) h; exacts [zero, two, four, even _ h])
     (by rintro (_ | _ | _) h; exacts [one, three, odd _ h])
 
@@ -2283,7 +2283,7 @@ definition normEDSRec
 
 中文:
 定义 normEDSRec
-  签名: {P : 自然数 -> Sort*}
+  签名: {P : 自然数 -> 类型层*}
   定义体: normEDSRec' zero one two three four (fun _ ih => by apply even <;> exact ih _ <| by linarith only)
     (fun _ ih => by apply odd <;> exact ih _ <| by linarith only) n
 
@@ -2464,7 +2464,7 @@ lemma complEDS_ofNat
 @[simp]
 
 中文:
-引理 complEDS_ofNat
+引理 complEDS_of自然数
   条件: (n : 自然数)
   结论: complEDS b c d k n = complEDS' b c d k n
   证明: by
@@ -2667,7 +2667,7 @@ definition complEDSRec'
 
 中文:
 定义 complEDSRec'
-  签名: {P : 自然数 -> Sort*} (zero : P 0) (one : P 1)
+  签名: {P : 自然数 -> 类型层*} (zero : P 0) (one : P 1)
   定义体: n.evenOddStrongRec (by rintro (_ | _) h; exacts [zero, even _ h])
     (by rintro (_ | _) h; exacts [one, odd _ h])
 
@@ -2699,7 +2699,7 @@ definition complEDSRec
 
 中文:
 定义 complEDSRec
-  签名: {P : 自然数 -> Sort*} (zero : P 0) (one : P 1)
+  签名: {P : 自然数 -> 类型层*} (zero : P 0) (one : P 1)
   定义体: complEDSRec' zero one (fun _ ih => even _ <| ih _ <| by linarith only)
     (fun _ ih => odd _ (ih _ <| by linarith only) <| ih _ <| by linarith only) n
 

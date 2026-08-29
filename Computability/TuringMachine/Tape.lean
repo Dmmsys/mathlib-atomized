@@ -50,7 +50,7 @@ definition BlankExtends
 
 中文:
 定义 BlankExtends
-  签名: {Γ} [Inhabited Γ] (l₁ l₂ : List Γ)
+  签名: {Γ} [可居 Γ] (l₁ l₂ : 列表 Γ)
   定义体: exists n, l₂ = l₁ ++ List.replicate n default
 
 @[refl]
@@ -74,7 +74,7 @@ theorem BlankExtends.refl
 
 中文:
 定理 BlankExtends.refl
-  条件: {Γ} [Inhabited Γ] (l : List Γ)
+  条件: {Γ} [可居 Γ] (l : 列表 Γ)
   结论: BlankExtends l l
   证明: ⟨0, by simp⟩
 
@@ -96,7 +96,7 @@ theorem BlankExtends.trans
 
 中文:
 定理 BlankExtends.trans
-  条件: {Γ} [Inhabited Γ] {l₁ l₂ l₃ : List Γ}
+  条件: {Γ} [可居 Γ] {l₁ l₂ l₃ : 列表 Γ}
   证明: by
   rintro ⟨i, rfl⟩ ⟨j, rfl⟩
   exact ⟨i + j, by simp⟩
@@ -119,7 +119,7 @@ theorem BlankExtends.below_of_le
 
 中文:
 定理 BlankExtends.below_of_le
-  条件: {Γ} [Inhabited Γ] {l l₁ l₂ : List Γ}
+  条件: {Γ} [可居 Γ] {l l₁ l₂ : 列表 Γ}
   证明: by
   rintro ⟨i, rfl⟩ ⟨j, rfl⟩ h; use j - i
   simp only [List.length_append, Nat.add_le_add_iff_left, List.length_replicate] at h
@@ -144,7 +144,7 @@ definition BlankExtends.above
 
 中文:
 定义 BlankExtends.above
-  签名: {Γ} [Inhabited Γ] {l l₁ l₂ : List Γ} (h₁ : BlankExtends l l₁)
+  签名: {Γ} [可居 Γ] {l l₁ l₂ : 列表 Γ} (h₁ : BlankExtends l l₁)
   定义体: if h : l₁.length <= l₂.length then ⟨l₂, h₁.below_of_le h₂ h, BlankExtends.refl _⟩
   else ⟨l₁, BlankExtends.refl _, h₂.below_of_le h₁ (le_of_not_ge h)⟩
 
@@ -171,7 +171,7 @@ theorem BlankExtends.above_of_le
 
 中文:
 定理 BlankExtends.above_of_le
-  条件: {Γ} [Inhabited Γ] {l l₁ l₂ : List Γ}
+  条件: {Γ} [可居 Γ] {l l₁ l₂ : 列表 Γ}
   证明: by
   rintro ⟨i, rfl⟩ ⟨j, e⟩ h; use i - j
   refine List.append_cancel_right (e.symm.trans ?_)
@@ -203,7 +203,7 @@ definition BlankRel
 
 中文:
 定义 BlankRel
-  签名: {Γ} [Inhabited Γ] (l₁ l₂ : List Γ)
+  签名: {Γ} [可居 Γ] (l₁ l₂ : 列表 Γ)
   定义体: BlankExtends l₁ l₂ ∨ BlankExtends l₂ l₁
 
 @[refl]
@@ -227,7 +227,7 @@ theorem BlankRel.refl
 
 中文:
 定理 BlankRel.refl
-  条件: {Γ} [Inhabited Γ] (l : List Γ)
+  条件: {Γ} [可居 Γ] (l : 列表 Γ)
   结论: BlankRel l l
   证明: Or.inl (BlankExtends.refl _)
 
@@ -252,7 +252,7 @@ theorem BlankRel.symm
 
 中文:
 定理 BlankRel.symm
-  条件: {Γ} [Inhabited Γ] {l₁ l₂ : List Γ}
+  条件: {Γ} [可居 Γ] {l₁ l₂ : 列表 Γ}
   结论: BlankRel l₁ l₂ -> BlankRel l₂ l₁
   证明: Or.symm
 
@@ -275,7 +275,7 @@ theorem BlankRel.trans
 
 中文:
 定理 BlankRel.trans
-  条件: {Γ} [Inhabited Γ] {l₁ l₂ l₃ : List Γ}
+  条件: {Γ} [可居 Γ] {l₁ l₂ l₃ : 列表 Γ}
   证明: by
   grind [eq_def, BlankExtends.below_of_le, BlankExtends.above_of_le, BlankExtends.trans]
 
@@ -300,7 +300,7 @@ definition BlankRel.above
 
 中文:
 定义 BlankRel.above
-  签名: {Γ} [Inhabited Γ] {l₁ l₂ : List Γ} (h : BlankRel l₁ l₂)
+  签名: {Γ} [可居 Γ] {l₁ l₂ : 列表 Γ} (h : BlankRel l₁ l₂)
   定义体: by
   refine
     if hl : l₁.length <= l₂.length then ⟨l₂, Or.elim h id fun h' => ?_, BlankExtends.refl _⟩
@@ -333,7 +333,7 @@ definition BlankRel.below
 
 中文:
 定义 BlankRel.below
-  签名: {Γ} [Inhabited Γ] {l₁ l₂ : List Γ} (h : BlankRel l₁ l₂)
+  签名: {Γ} [可居 Γ] {l₁ l₂ : 列表 Γ} (h : BlankRel l₁ l₂)
   定义体: by
   refine
     if hl : l₁.length <= l₂.length then ⟨l₁, BlankExtends.refl _, Or.elim h id fun h' => ?_⟩
@@ -362,8 +362,8 @@ theorem BlankRel.equivalence
 
 中文:
 定理 BlankRel.equivalence
-  条件: (Γ) [Inhabited Γ]
-  结论: Equivalence (@BlankRel Γ _)
+  条件: (Γ) [可居 Γ]
+  结论: 等价 (@BlankRel Γ _)
   证明: ⟨BlankRel.refl, @BlankRel.symm _ _, @BlankRel.trans _ _⟩
 
 Depends on / 依赖: BlankRel, BlankRel.refl, BlankRel.symm, BlankRel.trans
@@ -383,7 +383,7 @@ definition BlankRel.setoid
 
 中文:
 定义 BlankRel.setoid
-  签名: (Γ) [Inhabited Γ]
+  签名: (Γ) [可居 Γ]
   定义体: ⟨_, BlankRel.equivalence _⟩
 
 Depends on / 依赖: BlankRel, BlankRel.equivalence, equivalence
@@ -401,7 +401,7 @@ definition ListBlank
 
 中文:
 定义 ListBlank
-  签名: (Γ) [Inhabited Γ]
+  签名: (Γ) [可居 Γ]
   定义体: Quotient (BlankRel.setoid Γ)
 
 Depends on / 依赖: BlankRel, BlankRel.setoid, Quotient, setoid
@@ -419,7 +419,7 @@ instance ListBlank.inhabited
 
 中文:
 实例 ListBlank.inhabited
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
   定义体: ⟨Quotient.mk'' []⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -437,7 +437,7 @@ instance ListBlank.hasEmptyc
 
 中文:
 实例 ListBlank.hasEmptyc
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
   定义体: ⟨Quotient.mk'' []⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -455,7 +455,7 @@ abbreviation ListBlank.liftOn
 
 中文:
 缩写 ListBlank.liftOn
-  签名: {Γ} [Inhabited Γ] {α} (l : ListBlank Γ) (f : List Γ -> α)
+  签名: {Γ} [可居 Γ] {α} (l : ListBlank Γ) (f : 列表 Γ -> α)
   定义体: l.liftOn' f by rintro a b (h | h) <;> [exact H _ _ h; exact (H _ _ h).symm]
 -/
 protected abbrev ListBlank.liftOn {Γ} [Inhabited Γ] {α} (l : ListBlank Γ) (f : List Γ -> α)
@@ -474,7 +474,7 @@ definition ListBlank.mk
 
 中文:
 定义 ListBlank.mk
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
   定义体: Quotient.mk''
 
 @[elab_as_elim]
@@ -495,7 +495,7 @@ theorem ListBlank.induction_on
 
 中文:
 定理 ListBlank.induction_on
-  结论: {Γ} [Inhabited Γ] {p : ListBlank Γ -> 命题}
+  结论: {Γ} [可居 Γ] {p : ListBlank Γ -> 命题}
   证明: Quotient.inductionOn' q h
 -/
 protected theorem ListBlank.induction_on {Γ} [Inhabited Γ] {p : ListBlank Γ -> Prop}
@@ -519,7 +519,7 @@ definition ListBlank.head
 
 中文:
 定义 ListBlank.head
-  签名: {Γ} [Inhabited Γ] (l : ListBlank Γ)
+  签名: {Γ} [可居 Γ] (l : ListBlank Γ)
   定义体: by
   apply l.liftOn List.headI
   rintro a _ ⟨i, rfl⟩
@@ -549,7 +549,7 @@ theorem ListBlank.head_mk
 
 中文:
 定理 ListBlank.head_mk
-  条件: {Γ} [Inhabited Γ] (l : List Γ)
+  条件: {Γ} [可居 Γ] (l : 列表 Γ)
   证明: rfl
 -/
 theorem ListBlank.head_mk {Γ} [Inhabited Γ] (l : List Γ) :
@@ -574,7 +574,7 @@ definition ListBlank.tail
 
 中文:
 定义 ListBlank.tail
-  签名: {Γ} [Inhabited Γ] (l : ListBlank Γ)
+  签名: {Γ} [可居 Γ] (l : ListBlank Γ)
   定义体: by
   apply l.liftOn (fun l => ListBlank.mk l.tail)
   rintro a _ ⟨i, rfl⟩
@@ -606,7 +606,7 @@ theorem ListBlank.tail_mk
 
 中文:
 定理 ListBlank.tail_mk
-  条件: {Γ} [Inhabited Γ] (l : List Γ)
+  条件: {Γ} [可居 Γ] (l : 列表 Γ)
   证明: rfl
 -/
 theorem ListBlank.tail_mk {Γ} [Inhabited Γ] (l : List Γ) :
@@ -628,7 +628,7 @@ definition ListBlank.cons
 
 中文:
 定义 ListBlank.cons
-  签名: {Γ} [Inhabited Γ] (a : Γ) (l : ListBlank Γ)
+  签名: {Γ} [可居 Γ] (a : Γ) (l : ListBlank Γ)
   定义体: by
   apply l.liftOn (fun l => ListBlank.mk (List.cons a l))
   rintro _ _ ⟨i, rfl⟩
@@ -656,7 +656,7 @@ theorem ListBlank.cons_mk
 
 中文:
 定理 ListBlank.cons_mk
-  条件: {Γ} [Inhabited Γ] (a : Γ) (l : List Γ)
+  条件: {Γ} [可居 Γ] (a : Γ) (l : 列表 Γ)
   证明: rfl
 
 @[simp]
@@ -679,7 +679,7 @@ theorem ListBlank.head_cons
 
 中文:
 定理 ListBlank.head_cons
-  条件: {Γ} [Inhabited Γ] (a : Γ)
+  条件: {Γ} [可居 Γ] (a : Γ)
   结论: 对任意 l : ListBlank Γ, (l.cons a).head = a
   证明: Quotient.ind' fun _ => rfl
 
@@ -702,7 +702,7 @@ theorem ListBlank.tail_cons
 
 中文:
 定理 ListBlank.tail_cons
-  条件: {Γ} [Inhabited Γ] (a : Γ)
+  条件: {Γ} [可居 Γ] (a : Γ)
   结论: 对任意 l : ListBlank Γ, (l.cons a).tail = l
   证明: Quotient.ind' fun _ => rfl
 
@@ -730,7 +730,7 @@ theorem ListBlank.cons_head_tail
 
 中文:
 定理 ListBlank.cons_head_tail
-  条件: {Γ} [Inhabited Γ]
+  条件: {Γ} [可居 Γ]
   结论: 对任意 l : ListBlank Γ, l.tail.cons l.head = l
   证明: by
   apply Quotient.ind'
@@ -757,8 +757,8 @@ theorem ListBlank.exists_cons
   proof: ⟨_, _, (ListBlank.cons_head_tail _).symm⟩
 
 中文:
-定理 ListBlank.exists_cons
-  条件: {Γ} [Inhabited Γ] (l : ListBlank Γ)
+定理 ListBlank.存在_cons
+  条件: {Γ} [可居 Γ] (l : ListBlank Γ)
   证明: ⟨_, _, (ListBlank.cons_head_tail _).symm⟩
 
 Depends on / 依赖: ListBlank, ListBlank.cons_head_tail, cons_head_tail
@@ -785,7 +785,7 @@ definition ListBlank.nth
 
 中文:
 定义 ListBlank.nth
-  签名: {Γ} [Inhabited Γ] (l : ListBlank Γ) (n : 自然数)
+  签名: {Γ} [可居 Γ] (l : ListBlank Γ) (n : 自然数)
   定义体: by
   apply l.liftOn (fun l => List.getI l n)
   rintro l _ ⟨i, rfl⟩
@@ -821,7 +821,7 @@ theorem ListBlank.nth_mk
 
 中文:
 定理 ListBlank.nth_mk
-  条件: {Γ} [Inhabited Γ] (l : List Γ) (n : 自然数)
+  条件: {Γ} [可居 Γ] (l : 列表 Γ) (n : 自然数)
   证明: rfl
 
 @[simp]
@@ -847,7 +847,7 @@ theorem ListBlank.nth_zero
 
 中文:
 定理 ListBlank.nth_zero
-  条件: {Γ} [Inhabited Γ] (l : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (l : ListBlank Γ)
   结论: l.nth 0 = l.head
   证明: by
   rw [← ListBlank.cons_head_tail l]
@@ -879,7 +879,7 @@ theorem ListBlank.nth_succ
 
 中文:
 定理 ListBlank.nth_succ
-  条件: {Γ} [Inhabited Γ] (l : ListBlank Γ) (n : 自然数)
+  条件: {Γ} [可居 Γ] (l : ListBlank Γ) (n : 自然数)
   证明: by
   rw [← ListBlank.cons_head_tail l]
   induction l.tail using Quotient.inductionOn'
@@ -913,7 +913,7 @@ theorem ListBlank.ext
 
 中文:
 定理 ListBlank.ext
-  条件: {Γ} [i : Inhabited Γ] {L₁ L₂ : ListBlank Γ}
+  条件: {Γ} [i : 可居 Γ] {L₁ L₂ : ListBlank Γ}
   证明: by
   refine ListBlank.induction_on L₁ fun l₁ => ListBlank.induction_on L₂ fun l₂ H => ?_
   wlog h : l₁.length <= l₂.length
@@ -952,7 +952,7 @@ definition ListBlank.modifyNth
 
 中文:
 定义 ListBlank.modifyNth
-  签名: {Γ} [Inhabited Γ] (f : Γ -> Γ)
+  签名: {Γ} [可居 Γ] (f : Γ -> Γ)
 -/
 def ListBlank.modifyNth {Γ} [Inhabited Γ] (f : Γ -> Γ) : Nat -> ListBlank Γ -> ListBlank Γ
   | 0, L => L.tail.cons (f L.head)
@@ -976,7 +976,7 @@ theorem ListBlank.nth_modifyNth
 
 中文:
 定理 ListBlank.nth_modifyNth
-  条件: {Γ} [Inhabited Γ] (f : Γ -> Γ) (n i) (L : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (f : Γ -> Γ) (n i) (L : ListBlank Γ)
   证明: by
   induction n generalizing i L with
   | zero =>
@@ -1042,7 +1042,7 @@ theorem PointedMap.mk_val
 
 中文:
 定理 PointedMap.mk_val
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : Γ -> Γ') (pt)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : Γ -> Γ') (pt)
   证明: rfl
 
 @[simp]
@@ -1064,7 +1064,7 @@ theorem PointedMap.map_pt
 
 中文:
 定理 PointedMap.map_pt
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: PointedMap.map_pt' _
 
 @[simp]
@@ -1087,7 +1087,7 @@ theorem PointedMap.headI_map
 
 中文:
 定理 PointedMap.headI_map
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   cases l <;> [exact (PointedMap.map_pt f).symm; rfl]
 
@@ -1112,7 +1112,7 @@ definition ListBlank.map
 
 中文:
 定义 ListBlank.map
-  签名: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (l : ListBlank Γ)
+  签名: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (l : ListBlank Γ)
   定义体: by
   apply l.liftOn (fun l => ListBlank.mk (List.map f l))
   rintro l _ ⟨i, rfl⟩; refine Quotient.sound' (Or.inl ⟨i, ?_⟩)
@@ -1141,7 +1141,7 @@ theorem ListBlank.map_mk
 
 中文:
 定理 ListBlank.map_mk
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (l : List Γ)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (l : 列表 Γ)
   证明: rfl
 
 @[simp]
@@ -1168,7 +1168,7 @@ theorem ListBlank.head_map
 
 中文:
 定理 ListBlank.head_map
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   rw [← ListBlank.cons_head_tail l]
   induction l using Quotient.inductionOn'
@@ -1200,7 +1200,7 @@ theorem ListBlank.tail_map
 
 中文:
 定理 ListBlank.tail_map
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   rw [← ListBlank.cons_head_tail l]
   induction l using Quotient.inductionOn'
@@ -1231,7 +1231,7 @@ theorem ListBlank.map_cons
 
 中文:
 定理 ListBlank.map_cons
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   refine (ListBlank.cons_head_tail _).symm.trans ?_
   simp only [ListBlank.head_map, ListBlank.head_cons, ListBlank.tail_map, ListBlank.tail_cons]
@@ -1260,7 +1260,7 @@ theorem ListBlank.nth_map
 
 中文:
 定理 ListBlank.nth_map
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   refine l.induction_on fun l => ?_
   simp only [ListBlank.map_mk, ListBlank.nth_mk, ← List.getD_default_eq_getI]
@@ -1286,7 +1286,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: {ι : 类型} {Γ : ι -> 类型} [对任意 i, Inhabited (Γ i)] (i : ι)
+  签名: {ι : 类型} {Γ : ι -> 类型} [对任意 i, 可居 (Γ i)] (i : ι)
   定义体: ⟨fun a => a i, rfl⟩
 -/
 def proj {ι : Type*} {Γ : ι -> Type*} [forall i, Inhabited (Γ i)] (i : ι) :
@@ -1304,7 +1304,7 @@ theorem proj_map_nth
 
 中文:
 定理 proj_map_nth
-  条件: {ι : 类型} {Γ : ι -> 类型} [对任意 i, Inhabited (Γ i)] (i : ι) (L n)
+  条件: {ι : 类型} {Γ : ι -> 类型} [对任意 i, 可居 (Γ i)] (i : ι) (L n)
   证明: by
   rw [ListBlank.nth_map]; rfl
 
@@ -1326,7 +1326,7 @@ theorem ListBlank.map_modifyNth
 
 中文:
 定理 ListBlank.map_modifyNth
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (F : PointedMap Γ Γ')
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (F : PointedMap Γ Γ')
   证明: by
   induction n generalizing L <;>
     simp only [*, ListBlank.head_map, ListBlank.modifyNth, ListBlank.map_cons, ListBlank.tail_map]
@@ -1350,7 +1350,7 @@ definition ListBlank.append
 
 中文:
 定义 ListBlank.append
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
 -/
 def ListBlank.append {Γ} [Inhabited Γ] : List Γ -> ListBlank Γ -> ListBlank Γ
   | [], L => L
@@ -1369,7 +1369,7 @@ theorem ListBlank.append_mk
 
 中文:
 定理 ListBlank.append_mk
-  条件: {Γ} [Inhabited Γ] (l₁ l₂ : List Γ)
+  条件: {Γ} [可居 Γ] (l₁ l₂ : 列表 Γ)
   证明: by
   induction l₁ <;>
     simp only [*, ListBlank.append, List.nil_append, List.cons_append, ListBlank.cons_mk]
@@ -1393,7 +1393,7 @@ theorem ListBlank.append_assoc
 
 中文:
 定理 ListBlank.append_assoc
-  条件: {Γ} [Inhabited Γ] (l₁ l₂ : List Γ) (l₃ : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (l₁ l₂ : 列表 Γ) (l₃ : ListBlank Γ)
   证明: by
   refine l₃.induction_on fun l => ?_
   simp only [ListBlank.append_mk, List.append_assoc]
@@ -1422,7 +1422,7 @@ definition ListBlank.flatMap
 
 中文:
 定义 ListBlank.flatMap
-  签名: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (l : ListBlank Γ) (f : Γ -> List Γ')
+  签名: {Γ Γ'} [可居 Γ] [可居 Γ'] (l : ListBlank Γ) (f : Γ -> 列表 Γ')
   定义体: by
   apply l.liftOn (fun l => ListBlank.mk (l.flatMap f))
   rintro l _ ⟨i, rfl⟩; obtain ⟨n, e⟩ := hf; refine Quotient.sound' (Or.inl ⟨i * n, ?_⟩)
@@ -1479,7 +1479,7 @@ theorem ListBlank.cons_flatMap
 
 中文:
 定理 ListBlank.cons_flatMap
-  结论: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (a : Γ) (l : ListBlank Γ)
+  结论: {Γ Γ'} [可居 Γ] [可居 Γ'] (a : Γ) (l : ListBlank Γ)
   证明: by
   refine l.induction_on fun l => ?_
   simp only [ListBlank.append_mk, ListBlank.flatMap_mk, ListBlank.cons_mk, List.flatMap_cons]
@@ -1508,7 +1508,7 @@ structure Tape
 
 中文:
 结构 Tape
-  参数: (Γ : 类型) [Inhabited Γ]
+  参数: (Γ : 类型) [可居 Γ]
   公理与运算 (3 个):
     - head : Γ
     - left : ListBlank Γ
@@ -1532,7 +1532,7 @@ instance Tape.inhabited
 
 中文:
 实例 Tape.inhabited
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
   定义体: ⟨by constructor <;> apply default⟩
 -/
 instance Tape.inhabited {Γ} [Inhabited Γ] : Inhabited (Tape Γ) :=
@@ -1568,7 +1568,7 @@ definition Tape.left₀
 
 中文:
 定义 Tape.left₀
-  签名: {Γ} [Inhabited Γ] (T : Tape Γ)
+  签名: {Γ} [可居 Γ] (T : Tape Γ)
   定义体: T.left.cons T.head
 
 Depends on / 依赖: T.head, T.left.cons
@@ -1586,7 +1586,7 @@ definition Tape.right₀
 
 中文:
 定义 Tape.right₀
-  签名: {Γ} [Inhabited Γ] (T : Tape Γ)
+  签名: {Γ} [可居 Γ] (T : Tape Γ)
   定义体: T.right.cons T.head
 
 Depends on / 依赖: T.head, T.right.cons
@@ -1603,7 +1603,7 @@ definition Tape.move
 
 中文:
 定义 Tape.move
-  签名: {Γ} [Inhabited Γ]
+  签名: {Γ} [可居 Γ]
 -/
 def Tape.move {Γ} [Inhabited Γ] : Dir -> Tape Γ -> Tape Γ
   | Dir.left, ⟨a, L, R⟩ => ⟨L.head, L.tail, R.cons a⟩
@@ -1623,7 +1623,7 @@ theorem Tape.move_left_right
 
 中文:
 定理 Tape.move_left_right
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ)
+  条件: {Γ} [可居 Γ] (T : Tape Γ)
   证明: by
   simp [Tape.move]
 
@@ -1647,7 +1647,7 @@ theorem Tape.move_right_left
 
 中文:
 定理 Tape.move_right_left
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ)
+  条件: {Γ} [可居 Γ] (T : Tape Γ)
   证明: by
   simp [Tape.move]
 
@@ -1669,7 +1669,7 @@ definition Tape.mk'
 
 中文:
 定义 Tape.mk'
-  签名: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  签名: {Γ} [可居 Γ] (L R : ListBlank Γ)
   定义体: ⟨R.head, L, R.tail⟩
 
 @[simp]
@@ -1693,7 +1693,7 @@ theorem Tape.mk'_left
 
 中文:
 定理 Tape.mk'_left
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   结论: (Tape.mk' L R).left = L
   证明: rfl
 
@@ -1716,7 +1716,7 @@ theorem Tape.mk'_head
 
 中文:
 定理 Tape.mk'_head
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   结论: (Tape.mk' L R).head = R.head
   证明: rfl
 
@@ -1739,7 +1739,7 @@ theorem Tape.mk'_right
 
 中文:
 定理 Tape.mk'_right
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   结论: (Tape.mk' L R).right = R.tail
   证明: rfl
 
@@ -1762,7 +1762,7 @@ theorem Tape.mk'_right₀
 
 中文:
 定理 Tape.mk'_right₀
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   结论: (Tape.mk' L R).right₀ = R
   证明: ListBlank.cons_head_tail _
 
@@ -1784,7 +1784,7 @@ theorem Tape.mk'_left_right₀
 
 中文:
 定理 Tape.mk'_left_right₀
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ)
+  条件: {Γ} [可居 Γ] (T : Tape Γ)
   结论: Tape.mk' T.left T.right₀ = T
   证明: by
   simp only [Tape.right₀, Tape.mk', ListBlank.head_cons, ListBlank.tail_cons]
@@ -1804,8 +1804,8 @@ theorem Tape.exists_mk'
 @[simp]
 
 中文:
-定理 Tape.exists_mk'
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ)
+定理 Tape.存在_mk'
+  条件: {Γ} [可居 Γ] (T : Tape Γ)
   结论: 存在 L R, T = Tape.mk' L R
   证明: ⟨_, _, (Tape.mk'_left_right₀ _).symm⟩
 
@@ -1831,7 +1831,7 @@ theorem Tape.move_left_mk'
 
 中文:
 定理 Tape.move_left_mk'
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   证明: by
   simp only [Tape.move, Tape.mk', ListBlank.head_cons, ListBlank.cons_head_tail,
     ListBlank.tail_cons]
@@ -1857,7 +1857,7 @@ theorem Tape.move_right_mk'
 
 中文:
 定理 Tape.move_right_mk'
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ)
   证明: by
   simp only [Tape.move, Tape.mk']
 
@@ -1877,7 +1877,7 @@ definition Tape.mk₂
 
 中文:
 定义 Tape.mk₂
-  签名: {Γ} [Inhabited Γ] (L R : List Γ)
+  签名: {Γ} [可居 Γ] (L R : 列表 Γ)
   定义体: Tape.mk' (ListBlank.mk L) (ListBlank.mk R)
 
 Depends on / 依赖: ListBlank, ListBlank.mk, Tape.mk
@@ -1895,7 +1895,7 @@ definition Tape.mk₁
 
 中文:
 定义 Tape.mk₁
-  签名: {Γ} [Inhabited Γ] (l : List Γ)
+  签名: {Γ} [可居 Γ] (l : 列表 Γ)
   定义体: Tape.mk₂ [] l
 
 Depends on / 依赖: Tape.mk
@@ -1912,7 +1912,7 @@ definition Tape.nth
 
 中文:
 定义 Tape.nth
-  签名: {Γ} [Inhabited Γ] (T : Tape Γ)
+  签名: {Γ} [可居 Γ] (T : Tape Γ)
 -/
 def Tape.nth {Γ} [Inhabited Γ] (T : Tape Γ) : Int -> Γ
   | 0 => T.head
@@ -1931,7 +1931,7 @@ theorem Tape.nth_zero
 
 中文:
 定理 Tape.nth_zero
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ)
+  条件: {Γ} [可居 Γ] (T : Tape Γ)
   结论: T.nth 0 = T.1
   证明: rfl
 -/
@@ -1953,7 +1953,7 @@ theorem Tape.right₀_nth
 
 中文:
 定理 Tape.right₀_nth
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ) (n : 自然数)
+  条件: {Γ} [可居 Γ] (T : Tape Γ) (n : 自然数)
   结论: T.right₀.nth n = T.nth n
   证明: by
   cases n <;> simp only [Tape.nth, Tape.right₀, ListBlank.nth_zero,
@@ -1981,7 +1981,7 @@ theorem Tape.mk'_nth_nat
 
 中文:
 定理 Tape.mk'_nth_nat
-  条件: {Γ} [Inhabited Γ] (L R : ListBlank Γ) (n : 自然数)
+  条件: {Γ} [可居 Γ] (L R : ListBlank Γ) (n : 自然数)
   证明: by
   rw [← Tape.right₀_nth]; rw [Tape.mk'_right₀]
 
@@ -2001,7 +2001,7 @@ theorem Tape.move_left_nth
 
 中文:
 定理 Tape.move_left_nth
-  条件: {Γ} [Inhabited Γ]
+  条件: {Γ} [可居 Γ]
 -/
 theorem Tape.move_left_nth {Γ} [Inhabited Γ] :
     forall (T : Tape Γ) (i : Int), (T.move Dir.left).nth i = T.nth (i - 1)
@@ -2028,7 +2028,7 @@ theorem Tape.move_right_nth
 
 中文:
 定理 Tape.move_right_nth
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ) (i : 整数)
+  条件: {Γ} [可居 Γ] (T : Tape Γ) (i : 整数)
   证明: by
   conv => rhs; rw [← T.move_right_left]
   rw [Tape.move_left_nth]; rw [add_sub_cancel_right]
@@ -2056,7 +2056,7 @@ theorem Tape.move_right_n_head
 
 中文:
 定理 Tape.move_right_n_head
-  条件: {Γ} [Inhabited Γ] (T : Tape Γ) (i : 自然数)
+  条件: {Γ} [可居 Γ] (T : Tape Γ) (i : 自然数)
   证明: by
   induction i generalizing T
   · rfl
@@ -2082,7 +2082,7 @@ definition Tape.write
 
 中文:
 定义 Tape.write
-  签名: {Γ} [Inhabited Γ] (b : Γ) (T : Tape Γ)
+  签名: {Γ} [可居 Γ] (b : Γ) (T : Tape Γ)
   定义体: { T with head := b }
 
 @[simp]
@@ -2105,7 +2105,7 @@ theorem Tape.write_self
 
 中文:
 定理 Tape.write_self
-  条件: {Γ} [Inhabited Γ]
+  条件: {Γ} [可居 Γ]
   结论: 对任意 T : Tape Γ, T.write T.1 = T
   证明: by
   rintro ⟨⟩; rfl
@@ -2125,7 +2125,7 @@ theorem Tape.write_nth
 
 中文:
 定理 Tape.write_nth
-  条件: {Γ} [Inhabited Γ] (b : Γ)
+  条件: {Γ} [可居 Γ] (b : Γ)
 -/
 theorem Tape.write_nth {Γ} [Inhabited Γ] (b : Γ) :
     forall (T : Tape Γ) {i : Int}, (T.write b).nth i = if i = 0 then b else T.nth i
@@ -2146,7 +2146,7 @@ theorem Tape.write_mk
 
 中文:
 定理 Tape.write_mk
-  条件: {Γ} [Inhabited Γ] (a b : Γ) (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (a b : Γ) (L R : ListBlank Γ)
   证明: rfl
 
 @[simp]
@@ -2165,7 +2165,7 @@ theorem Tape.write_mk'
 
 中文:
 定理 Tape.write_mk'
-  条件: {Γ} [Inhabited Γ] (b : Γ) (L R : ListBlank Γ)
+  条件: {Γ} [可居 Γ] (b : Γ) (L R : ListBlank Γ)
   证明: by simp [mk']
 -/
 theorem Tape.write_mk' {Γ} [Inhabited Γ] (b : Γ) (L R : ListBlank Γ) :
@@ -2183,7 +2183,7 @@ definition Tape.map
 
 中文:
 定义 Tape.map
-  签名: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (T : Tape Γ)
+  签名: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (T : Tape Γ)
   定义体: ⟨f T.1, T.2.map f, T.3.map f⟩
 
 @[simp]
@@ -2205,7 +2205,7 @@ theorem Tape.map_fst
 
 中文:
 定理 Tape.map_fst
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ')
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ')
   证明: by
   rintro ⟨⟩; rfl
 
@@ -2229,7 +2229,7 @@ theorem Tape.map_write
 
 中文:
 定理 Tape.map_write
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (b : Γ)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (b : Γ)
   证明: by
   rintro ⟨⟩; rfl
 
@@ -2251,7 +2251,7 @@ theorem Tape.write_move_right_n
 
 中文:
 定理 Tape.write_move_right_n
-  条件: {Γ} [Inhabited Γ] (f : Γ -> Γ) (L R : ListBlank Γ) (n : 自然数)
+  条件: {Γ} [可居 Γ] (f : Γ -> Γ) (L R : ListBlank Γ) (n : 自然数)
   证明: by
   induction n generalizing L R <;> simp [*]
 
@@ -2275,7 +2275,7 @@ theorem Tape.map_move
 
 中文:
 定理 Tape.map_move
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (T : Tape Γ) (d)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (T : Tape Γ) (d)
   证明: by
   cases T
   cases d <;> simp only [Tape.move, Tape.map, ListBlank.head_map,
@@ -2301,7 +2301,7 @@ theorem Tape.map_mk'
 
 中文:
 定理 Tape.map_mk'
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (L R : ListBlank Γ)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (L R : ListBlank Γ)
   证明: by
   simp only [Tape.mk', Tape.map, ListBlank.head_map,
     ListBlank.tail_map]
@@ -2324,7 +2324,7 @@ theorem Tape.map_mk₂
 
 中文:
 定理 Tape.map_mk₂
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (L R : List Γ)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (L R : 列表 Γ)
   证明: by
   simp only [Tape.mk₂, Tape.map_mk', ListBlank.map_mk]
 
@@ -2344,7 +2344,7 @@ theorem Tape.map_mk₁
 
 中文:
 定理 Tape.map_mk₁
-  条件: {Γ Γ'} [Inhabited Γ] [Inhabited Γ'] (f : PointedMap Γ Γ') (l : List Γ)
+  条件: {Γ Γ'} [可居 Γ] [可居 Γ'] (f : PointedMap Γ Γ') (l : 列表 Γ)
   证明: Tape.map_mk₂ _ _ _
 
 Depends on / 依赖: Tape.map_mk

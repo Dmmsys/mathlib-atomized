@@ -48,7 +48,7 @@ theorem has_injective_coseparator
 
 中文:
 定理 has_injective_coseparator
-  条件: [HasLimits C] [EnoughInjectives C] (G : C) (hG : IsSeparator G)
+  条件: [有极限 C] [有足够单射 C] (G : C) (hG : IsSeparator G)
   证明: by
   have : WellPowered.{v} C := wellPowered_of_isDetector G hG.isDetector
   have : HasProductsOfShape (Subobject (op G)) C := hasProductsOfShape_of_small.{v} _ _
@@ -88,7 +88,7 @@ theorem has_projective_separator
 
 中文:
 定理 has_projective_separator
-  结论: [HasColimits C] [EnoughProjectives C] (G : C)
+  结论: [有余极限 C] [有足够投射 C] (G : C)
   证明: by
   obtain ⟨T, hT₁, hT₂⟩ := has_injective_coseparator (op G) ((isSeparator_op_iff _).2 hG)
   exact ⟨unop T, inferInstance, (isSeparator_unop_iff _).2 hT₂⟩

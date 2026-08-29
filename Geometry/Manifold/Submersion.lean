@@ -1495,8 +1495,8 @@ lemma id
 
 中文:
 引理 id
-  条件: [IsManifold I n M]
-  结论: IsSubmersionOfComplement PUnit I I n (@id M)
+  条件: [是流形 I n M]
+  结论: IsSubmersionOfComplement 命题单元 I I n (@id M)
   证明: by
   intro x
   apply IsSubmersionAtOfComplement.mk_of_continuousAt (continuousAt_id)
@@ -1650,7 +1650,7 @@ lemma id
 
 中文:
 引理 id
-  条件: [IsManifold I n M]
+  条件: [是流形 I n M]
   结论: IsSubmersion I I n (@id M)
   证明: by
   use PUnit, by infer_instance, by infer_instance

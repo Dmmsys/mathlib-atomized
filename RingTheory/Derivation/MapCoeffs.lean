@@ -49,7 +49,7 @@ definition mapCoeffs
 
 中文:
 定义 mapCoeffs
-  签名: : Derivation R A[X] (PolynomialModule A M) where
+  签名: : 导子 R A[X] (多项式模 A M) where
   定义体: (PolynomialModule.map A d.toLinearMap).comp
     PolynomialModule.equivPolynomial.symm.toLinearMap
   map_one_eq_zero' := by simp
@@ -182,7 +182,7 @@ theorem apply_aeval_eq'
 
 中文:
 定理 apply_aeval_eq'
-  结论: (d' : Derivation R B M') (f : M ->ₗ[A] M')
+  结论: (d' : 导子 R B M') (f : M ->ₗ[A] M')
   证明: by
   induction p using Polynomial.induction_on' with
   | add => simp_all only [map_add, add_smul]; abel
@@ -216,7 +216,7 @@ theorem apply_aeval_eq
 
 中文:
 定理 apply_aeval_eq
-  结论: [IsScalarTower R A B] [IsScalarTower A B M'] (d : Derivation R B M')
+  结论: [标量塔 R A B] [标量塔 A B M'] (d : 导子 R B M')
   证明: apply_aeval_eq' (d.compAlgebraMap A) d LinearMap.id (fun _a => rfl) x p
 
 Depends on / 依赖: LinearMap, LinearMap.id, apply_aeval_eq, compAlgebraMap, d.compAlgebraMap
@@ -273,7 +273,7 @@ definition mapCoeffs
 
 中文:
 定义 mapCoeffs
-  签名: : Derivation 整数 A[X] A[X]
+  签名: : 导子 整数 A[X] A[X]
   定义体: PolynomialModule.equivPolynomialSelf.compDer Differential.deriv.mapCoeffs
 
 @[simp]
@@ -508,7 +508,7 @@ lemma algHom_deriv
 
 中文:
 引理 algHom_deriv
-  条件: (f : R ->ₐ[A] R') (hf : Function.Injective f) (x : R) (h : IsSeparable A x)
+  条件: (f : R ->ₐ[A] R') (hf : 函数.单射 f) (x : R) (h : 是可分 A x)
   证明: by
   let p := minpoly A x
   apply mul_left_cancel₀ (a := aeval (f x) (derivative p))
@@ -545,7 +545,7 @@ lemma algEquiv_deriv
 
 中文:
 引理 algEquiv_deriv
-  条件: (f : R ≃ₐ[A] R') (x : R) (h : IsSeparable A x)
+  条件: (f : R ≃ₐ[A] R') (x : R) (h : 是可分 A x)
   证明: haveI := f.nontrivial
   algHom_deriv f.toAlgHom f.injective x h
 
@@ -570,7 +570,7 @@ omit [Nontrivial R] in
 
 中文:
 引理 algHom_deriv'
-  条件: (f : R ->ₐ[A] R') (hf : Function.Injective f) (x : R)
+  条件: (f : R ->ₐ[A] R') (hf : 函数.单射 f) (x : R)
   证明: algHom_deriv f hf x (Algebra.IsSeparable.isSeparable' x)
 
 omit [Nontrivial R] in

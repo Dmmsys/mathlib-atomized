@@ -37,7 +37,7 @@ definition error
 
 中文:
 定义 error
-  签名: {α : Type _} (trace : Array Name) (m : MessageData)
+  签名: {α : 类型 _} (trace : 数组 Name) (m : MessageData)
   定义体: throwError "\
     {m}\n\n\
     Use `set_option trace.Elab.fast_instance true` to analyze the error.\n\n\
@@ -66,7 +66,7 @@ definition makeFastInstance
 
 中文:
 定义 makeFastInstance
-  签名: (inst expectedType : Expr) (root := true) (trace : Array Name := #[])
+  签名: (inst expectedType : Expr) (root := true) (trace : 数组 Name := #[])
   定义体: withReducible do
   withTraceNode `Elab.fast_instance (fun _ => return m!"type: {expectedType}") do
   let some className ← isClass? expectedType

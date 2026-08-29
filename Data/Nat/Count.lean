@@ -138,7 +138,7 @@ theorem count_eq_card_fintype
 中文:
 定理 count_eq_card_fintype
   条件: (n : 自然数)
-  结论: count p n = Fintype.card { k : 自然数 // k < n ∧ p k }
+  结论: count p n = 有限类型.card { k : 自然数 // k < n ∧ p k }
   证明: by
   rw [count_eq_card_filter_range]; rw [Fintype.card_of_subtype]
   simp
@@ -216,7 +216,7 @@ theorem count_monotone
 
 中文:
 定理 count_monotone
-  结论: Monotone (count p)
+  结论: 递增 (count p)
   证明: monotone_nat_of_le_succ (by grind)
 
 Depends on / 依赖: monotone_nat_of_le_succ
@@ -459,7 +459,7 @@ theorem count_le_card
 
 中文:
 定理 count_le_card
-  条件: (hp : (Set.ofPred p).Finite) (n : 自然数)
+  条件: (hp : (集合.ofPred p).有限) (n : 自然数)
   结论: count p n <= #hp.toFinset
   证明: by
   rw [count_eq_card_filter_range]
@@ -482,7 +482,7 @@ theorem count_lt_card
 
 中文:
 定理 count_lt_card
-  条件: {n : 自然数} (hp : (Set.ofPred p).Finite) (hpn : p n)
+  条件: {n : 自然数} (hp : (集合.ofPred p).有限) (hpn : p n)
   结论: count p n < #hp.toFinset
   证明: (count_lt_count_succ_iff.2 hpn).trans_le (count_le_card hp _)
 
@@ -505,7 +505,7 @@ theorem count_iff_forall
 alias ⟨_, count_of_forall⟩ := count_iff_forall
 
 中文:
-定理 count_iff_forall
+定理 count_iff_对任意
   条件: {n : 自然数}
   结论: count p n = n ↔ 对任意 n' < n, p n'
   证明: by
@@ -534,7 +534,7 @@ theorem count_true
 中文:
 定理 count_true
   条件: (n : 自然数)
-  结论: count (fun _ => True) n = n
+  结论: count (fun _ => 真) n = n
   证明: count_of_forall fun _ _ => trivial
 -/
 @[simp] theorem count_true (n : Nat) : count (fun _ => True) n = n := count_of_forall fun _ _ => trivial
@@ -552,7 +552,7 @@ theorem count_iff_forall_not
 alias ⟨_, count_of_forall_not⟩ := count_iff_forall_not
 
 中文:
-定理 count_iff_forall_not
+定理 count_iff_对任意_not
   条件: {n : 自然数}
   结论: count p n = 0 ↔ 对任意 m < n, ¬p m
   证明: by
@@ -578,7 +578,7 @@ theorem count_ne_iff_exists
   simp [Nat.count_iff_forall_not]
 
 中文:
-定理 count_ne_iff_exists
+定理 count_ne_iff_存在
   条件: {n : 自然数}
   结论: n.count p != 0 ↔ 存在 m < n, p m
   证明: by
@@ -601,7 +601,7 @@ theorem count_false
 中文:
 定理 count_false
   条件: (n : 自然数)
-  结论: count (fun _ => False) n = 0
+  结论: count (fun _ => 假) n = 0
   证明: count_of_forall_not fun _ _ => id
 -/
 @[simp] theorem count_false (n : Nat) : count (fun _ => False) n = 0 :=
@@ -622,9 +622,9 @@ lemma exists_of_count_lt_count
   exact ⟨a + t, by grind⟩
 
 中文:
-引理 exists_of_count_lt_count
+引理 存在_of_count_lt_count
   条件: {a b : 自然数} (h : a.count p < b.count p)
-  结论: 存在 x in Set.Ico a b, p x
+  结论: 存在 x in 集合.左闭右开区间 a b, p x
   证明: by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_lt (lt_of_count_lt_count h)
   rw [add_assoc]; rw [count_add]; rw [Nat.lt_add_right_iff_pos] at h

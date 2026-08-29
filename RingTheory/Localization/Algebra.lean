@@ -50,8 +50,8 @@ instance Algebra.idealMap_isLocalizedModule
  
 
 中文:
-实例 Algebra.idealMap_isLocalizedModule
-  签名: (I : Ideal R)
+实例 代数.idealMap_isLocalizedModule
+  签名: (I : 理想 R)
   定义体: (Module.End.isUnit_iff _).mpr ⟨fun a b e => Subtype.ext ((map_units S x).mul_right_injective
       (by simpa [Algebra.smul_def] using congr(($e).1))),
       fun a => ⟨⟨_, Ideal.mul_mem_left _ (map_units S x).unit⁻¹.1 a.2⟩,
@@ -84,8 +84,8 @@ lemma IsLocalization.ker_map
     IsLocalization.mk'_mem_map_algebraMap_iff, ← hT]
 
 中文:
-引理 IsLocalization.ker_map
-  条件: (hT : Submonoid.map g M = T)
+引理 是Localization.ker_map
+  条件: (hT : 子幺半群.map g M = T)
   证明: by
   ext x
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
@@ -117,8 +117,8 @@ definition RingHom.toKerIsLocalization
       Algebra.smul_d
 
 中文:
-定义 RingHom.toKerIsLocalization
-  签名: (hy : M <= Submonoid.comap g T)
+定义 环态射.toKerIsLocalization
+  签名: (hy : M <= 子幺半群.comap g T)
   定义体: ⟨algebraMap R S x, by simp [RingHom.mem_ker, RingHom.mem_ker.mp x.property]⟩
   map_add' x y := by
     simp only [Submodule.coe_add, map_add, AddMemClass.mk_add_mk]
@@ -147,8 +147,8 @@ lemma RingHom.toKerIsLocalization_apply
   proof: rfl
 
 中文:
-引理 RingHom.toKerIsLocalization_apply
-  条件: (hy : M <= Submonoid.comap g T) (r : RingHom.ker g)
+引理 环态射.toKerIsLocalization_apply
+  条件: (hy : M <= 子幺半群.comap g T) (r : 环态射.ker g)
   证明: rfl
 -/
 lemma RingHom.toKerIsLocalization_apply (hy : M <= Submonoid.comap g T) (r : RingHom.ker g) :
@@ -168,8 +168,8 @@ lemma RingHom.toKerIsLocalization_isLocalizedModule
   apply IsLocalizedModule.of_linearEquiv
 
 中文:
-引理 RingHom.toKerIsLocalization_isLocalizedModule
-  条件: (hT : Submonoid.map g M = T)
+引理 环态射.toKerIsLocalization_isLocalizedModule
+  条件: (hT : 子幺半群.map g M = T)
   证明: by
   let e := LinearEquiv.ofEq _ _ (IsLocalization.ker_map (S := S) Q g hT).symm
   convert_to! IsLocalizedModule M ((e.restrictScalars R).toLinearMap ∘ₗ
@@ -281,7 +281,7 @@ lemma mapₐ_injective_of_injective
 
 中文:
 引理 mapₐ_injective_of_injective
-  条件: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+  条件: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: IsLocalization.map_injective_of_injective _ _ _ hf
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_injective_of_injective, map_injective_of_injective
@@ -300,7 +300,7 @@ lemma mapₐ_surjective_of_surjective
 
 中文:
 引理 mapₐ_surjective_of_surjective
-  条件: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+  条件: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   证明: IsLocalization.map_surjective_of_surjective _ _ _ hf
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_surjective_of_surjective, map_surjective_of_surjective
@@ -411,7 +411,7 @@ definition AlgHom.toKerIsLocalization
 @[simp]
 
 中文:
-定义 AlgHom.toKerIsLocalization
+定义 代数态射.toKerIsLocalization
   签名: (f : A ->ₐ[R] B)
   定义体: RingHom.toKerIsLocalization Aₚ Bₚ f.toRingHom (algebraMapSubmonoid_le_comap M f)
 
@@ -433,8 +433,8 @@ lemma AlgHom.toKerIsLocalization_apply
   proof: rfl
 
 中文:
-引理 AlgHom.toKerIsLocalization_apply
-  条件: (f : A ->ₐ[R] B) (x : RingHom.ker f)
+引理 代数态射.toKerIsLocalization_apply
+  条件: (f : A ->ₐ[R] B) (x : 环态射.ker f)
   证明: rfl
 -/
 lemma AlgHom.toKerIsLocalization_apply (f : A ->ₐ[R] B) (x : RingHom.ker f) :
@@ -452,7 +452,7 @@ lemma AlgHom.toKerIsLocalization_isLocalizedModule
     (algebraMapSubmonoid_map_eq M f)
 
 中文:
-引理 AlgHom.toKerIsLocalization_isLocalizedModule
+引理 代数态射.toKerIsLocalization_isLocalizedModule
   条件: (f : A ->ₐ[R] B)
   证明: RingHom.toKerIsLocalization_isLocalizedModule Bₚ f.toRingHom
     (algebraMapSubmonoid_map_eq M f)
@@ -481,7 +481,7 @@ lemma isLocalization
 
 中文:
 引理 isLocalization
-  结论: {R} [CommSemiring R] (S : Submonoid R) (A) [CommSemiring A] [Algebra R A]
+  结论: {R} [交换半环 R] (S : 子幺半群 R) (A) [交换半环 A] [代数 R A]
   证明: isLocalizedModule_iff_isLocalization.mp (isLocalizedModule_iff_isBaseChange S A _).mpr
     .of_equiv (polyEquivTensor' R A).symm.toLinearEquiv fun _ => by simp
 

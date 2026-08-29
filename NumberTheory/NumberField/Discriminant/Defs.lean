@@ -59,7 +59,7 @@ theorem coe_discr
 
 中文:
 定理 coe_discr
-  结论: (discr K : Rat) = Algebra.discr Rat (integralBasis K)
+  结论: (discr K : 有理数) = 代数.discr 有理数 (integralBasis K)
   证明: (Algebra.discr_localizationLocalization Int _ K (RingOfIntegers.basis K)).symm
 
 Depends on / 依赖: Algebra, Algebra.discr_localizationLocalization, RingOfIntegers, RingOfIntegers.basis, discr_localizationLocalization
@@ -102,7 +102,7 @@ theorem discr_eq_discr
 
 中文:
 定理 discr_eq_discr
-  条件: {ι : 类型} [Fintype ι] [DecidableEq ι] (b : Basis ι 整数 (𝓞 K))
+  条件: {ι : 类型} [有限类型 ι] [DecidableEq ι] (b : 基 ι 整数 (𝓞 K))
   证明: by
   let b₀ := Basis.reindex (RingOfIntegers.basis K) (Basis.indexEquiv (RingOfIntegers.basis K) b)
   rw [Algebra.discr_eq_discr (𝓞 K) b b₀]; rw [Basis.coe_reindex]; rw [Algebra.discr_reindex]
@@ -128,7 +128,7 @@ theorem discr_eq_discr_of_algEquiv
 
 中文:
 定理 discr_eq_discr_of_algEquiv
-  条件: {L : 类型} [Field L] [NumberField L] (f : K ≃ₐ[Rat] L)
+  条件: {L : 类型} [域 L] [数域 L] (f : K ≃ₐ[有理数] L)
   证明: by
   let f₀ : 𝓞 K ≃ₗ[Int] 𝓞 L := (f.restrictScalars Int).mapIntegralClosure.toLinearEquiv
   rw [← Rat.intCast_inj]; rw [coe_discr]; rw [Algebra.discr_eq_discr_of_algEquiv (integralBasis K) f]; rw [← discr_eq_discr L ((RingOfIntegers.basis K).map f₀)]
@@ -159,7 +159,7 @@ theorem discr_eq_discr_of_ringEquiv
 
 中文:
 定理 discr_eq_discr_of_ringEquiv
-  条件: {L : 类型} [Field L] [NumberField L] (f : K ≃+* L)
+  条件: {L : 类型} [域 L] [数域 L] (f : K ≃+* L)
   证明: discr_eq_discr_of_algEquiv _ AlgEquiv.ofRingEquiv (f := f) fun _ => by simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofRingEquiv, discr_eq_discr_of_algEquiv, ofRingEquiv
@@ -191,7 +191,7 @@ theorem numberField_discr
 
 中文:
 定理 numberField_discr
-  结论: discr Rat = 1
+  结论: discr 有理数 = 1
   证明: by
   let b : Basis (Fin 1) Int (𝓞 Rat) :=
     Basis.map (Basis.singleton (Fin 1) Int) ringOfIntegersEquiv.toAddEquiv.toIntLinearEquiv.symm
@@ -232,8 +232,8 @@ theorem Algebra.discr_eq_discr_of_toMatrix_coeff_isIntegral
   rw [← (b.reindex (b.indexEquiv b')).toMatrix_map_vecMul b']; rw [discr_of_matrix_vecMul]; rw [← one_mul (dis
 
 中文:
-定理 Algebra.discr_eq_discr_of_toMatrix_coeff_isIntegral
-  结论: [NumberField K]
+定理 代数.discr_eq_discr_of_toMatrix_coeff_is整数egral
+  结论: [数域 K]
   证明: by
   replace h' : forall i j, IsIntegral Int (b'.toMatrix (b.reindex (b.indexEquiv b')) i j) := by
     intro i j

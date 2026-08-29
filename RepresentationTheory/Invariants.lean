@@ -154,7 +154,7 @@ definition invariants
 
 中文:
 定义 invariants
-  签名: : Submodule k V where
+  签名: : 子模 k V where
   定义体: Set.ofPred fun v => forall g : G, ρ g v = v
   zero_mem' g := by simp only [map_zero]
   add_mem' hv hw g := by simp only [hv g, hw g, map_add]
@@ -199,7 +199,7 @@ theorem invariants_eq_inter
 
 中文:
 定理 invariants_eq_inter
-  结论: (invariants ρ).carrier = ⋂ g : G, Function.fixedPoints (ρ g)
+  结论: (invariants ρ).carrier = ⋂ g : G, 函数.fixedPoints (ρ g)
   证明: by
   ext; simp [Function.IsFixedPt]
 
@@ -218,7 +218,7 @@ theorem invariants_eq_top
 
 中文:
 定理 invariants_eq_top
-  条件: [ρ.IsTrivial]
+  条件: [ρ.是平凡]
   证明: eq_top_iff.2 (fun x _ g => ρ.isTrivial_apply g x)
 
 Depends on / 依赖: eq_top_iff, isTrivial_apply
@@ -238,7 +238,7 @@ lemma mem_invariants_iff_of_forall_mem_zpowers
     simpa [neg_sub_comm _ (1 : Int), zpow_sub] using congr(ρ g⁻¹ $(h.trans hx.symm))⟩
 
 中文:
-引理 mem_invariants_iff_of_forall_mem_zpowers
+引理 mem_invariants_iff_of_对任意_mem_zpowers
   证明: ⟨fun h => h g, fun hx γ => by
     rcases hg γ with ⟨i, rfl⟩
     induction i with | zero => simp | succ i _ => simp_all [zpow_add_one] | pred i h => _
@@ -270,7 +270,7 @@ lemma mem_linHom_invariants_iff_isIntertwining
     simp [hf.isIntertwining]
 
 中文:
-引理 mem_linHom_invariants_iff_isIntertwining
+引理 mem_linHom_invariants_iff_is整数ertwining
   条件: (f : V ->ₗ[k] W)
   证明: by
   refine ⟨fun hf => ⟨fun γ v => ?_⟩, fun hf γ => ?_⟩
@@ -304,8 +304,8 @@ definition invariantsEquivIntertwiningMap
       property := (mem_linH
 
 中文:
-定义 invariantsEquivIntertwiningMap
-  签名: : (linHom ρ σ).invariants ≃ₗ[k] 整数ertwiningMap ρ σ where
+定义 invariantsEquiv整数ertwiningMap
+  签名: : (linHom ρ σ).invariants ≃ₗ[k] 整数ertwining映射 ρ σ where
   定义体: f.val.intertwiningMap_of_isIntertwiningMap ρ σ
     ((mem_linHom_invariants_iff_isIntertwining f.val).mp f.property).isIntertwining
   map_add' _ _ := IntertwiningMap.ext_iff.mpr rfl
@@ -408,7 +408,7 @@ theorem isProj_averageMap
 
 中文:
 定理 isProj_averageMap
-  结论: LinearMap.IsProj ρ.invariants ρ.averageMap
+  结论: 线性映射.是Proj ρ.invariants ρ.averageMap
   证明: ⟨ρ.averageMap_invariant, ρ.averageMap_id⟩
 
 Depends on / 依赖: averageMap_id, averageMap_invariant
@@ -474,7 +474,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrivial ((toInvariants ρ S).comp S.subtype)
+  签名: 是平凡 ((toInvariants ρ S).comp S.subtype)
   定义体: LinearMap.ext fun ⟨x, hx⟩ => Subtype.ext by simpa using (hx g)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Subtype, Subtype.ext
@@ -704,7 +704,7 @@ map {A B} f := ModuleCat.ofHom (f.hom ∘ₗ A.ρ.invariants.subtype).codRestric
 
 中文:
 定义 invariantsFunctor
-  签名: : Rep.{w} k G ⥤ ModuleCat k where
+  签名: : Rep.{w} k G ⥤ 模范畴 k where
   定义体: ModuleCat.of k A.ρ.invariants
 map {A B} f := ModuleCat.ofHom (f.hom ∘ₗ A.ρ.invariants.subtype).codRestrict
     B.ρ.invariants fun ⟨c, hc⟩ g => by
@@ -729,7 +729,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invariantsFunctor k G).PreservesZeroMorphisms
+  签名: (invariantsFunctor k G).保持ZeroMorphisms
 -/
 instance : (invariantsFunctor k G).PreservesZeroMorphisms where
 /--
@@ -741,7 +741,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invariantsFunctor k G).Additive
+  签名: (invariantsFunctor k G).加性
 -/
 instance : (invariantsFunctor k G).Additive where
 /--
@@ -753,7 +753,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invariantsFunctor k G).Linear k
+  签名: (invariantsFunctor k G).线性 k
 -/
 instance : (invariantsFunctor k G).Linear k where
 
@@ -770,7 +770,7 @@ definition quotientToInvariantsFunctor
 
 中文:
 定义 quotientToInvariantsFunctor
-  签名: (S : Subgroup G) [S.Normal]
+  签名: (S : 子群 G) [S.正规]
   定义体: X.quotientToInvariants S
   map {X Y} f := Rep.ofHom ⟨((invariantsFunctor k S).map ((Rep.resFunctor S.subtype).map f)).hom,
     fun g => QuotientGroup.induction_on g fun g => by ext; simp [hom_comm_apply]⟩
@@ -860,7 +860,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invariantsFunctor k G).IsRightAdjoint
+  签名: (invariantsFunctor k G).是右伴随
   定义体: (invariantsAdjunction k G).isRightAdjoint
 
 Depends on / 依赖: invariantsAdjunction, isRightAdjoint

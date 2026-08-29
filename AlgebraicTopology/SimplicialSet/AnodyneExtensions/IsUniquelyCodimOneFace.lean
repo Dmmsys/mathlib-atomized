@@ -148,7 +148,7 @@ lemma existsUnique_δ_cast_simplex
 include hxy in
 
 中文:
-引理 existsUnique_δ_cast_simplex
+引理 存在Unique_δ_cast_simplex
   证明: by
   simpa only [S.cast, iff] using hxy.cast hd
 
@@ -172,7 +172,7 @@ definition index
 
 中文:
 定义 index
-  签名: : Fin (d + 2)
+  签名: : 有限集 (d + 2)
   定义体: (hxy.existsUnique_δ_cast_simplex hd).exists.choose
 
 Depends on / 依赖: exists.choose, hxy.existsUnique_
@@ -210,7 +210,7 @@ include hxy in
 
 中文:
 引理 δ_eq_iff
-  条件: (i : Fin (d + 2))
+  条件: (i : 有限集 (d + 2))
   证明: ⟨fun h => (hxy.existsUnique_δ_cast_simplex hd).unique h (hxy.δ_index hd),
     by rintro rfl; apply δ_index⟩
 
@@ -267,7 +267,7 @@ lemma unique
 
 中文:
 引理 unique
-  结论: (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [Mono f]
+  结论: (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [单态射 f]
   证明: (hxy.cast hd).2.unique ⟨by dsimp; infer_instance, hf⟩
     ⟨by dsimp; infer_instance, hxy.δ_index hd⟩
 

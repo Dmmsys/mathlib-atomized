@@ -286,8 +286,8 @@ lemma exists_integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport
     · exact (H hf)
 
 中文:
-引理 exists_integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport
-  结论: (μ' μ : Measure G)
+引理 存在_integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport
+  结论: (μ' μ : 测度 G)
   证明: by
   -- The group has to be locally compact, otherwise all integrals vanish and the result is trivial.
   by_cases H : LocallyCompactSpace G; swap
@@ -430,7 +430,7 @@ lemma haarScalarFactor_eq_integral_div
 
 中文:
 引理 haarScalarFactor_eq_integral_div
-  结论: (μ' μ : Measure G) [IsHaarMeasure μ]
+  结论: (μ' μ : 测度 G) [是Haar测度 μ]
   证明: by
   have := integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport μ' μ hf h'f
   rw [integral_smul_nnreal_measure] at this
@@ -502,7 +502,7 @@ lemma haarScalarFactor_smul
 
 中文:
 引理 haarScalarFactor_smul
-  结论: [LocallyCompactSpace G] (μ' μ : Measure G) [IsHaarMeasure μ]
+  结论: [局部紧空间 G] (μ' μ : 测度 G) [是Haar测度 μ]
   证明: by
   obtain ⟨g, hg⟩ := exists_continuous_nonneg_pos (1 : G)
   apply NNReal.coe_injective
@@ -544,7 +544,7 @@ lemma mul_haarScalarFactor_smul
 
 中文:
 引理 mul_haarScalarFactor_smul
-  结论: [LocallyCompactSpace G] (μ' μ : Measure G)
+  结论: [局部紧空间 G] (μ' μ : 测度 G)
   证明: IsHaarMeasure.nnreal_smul _ hc
     c * haarScalarFactor μ' (c • μ) = haarScalarFactor μ' μ := by
   have : IsHaarMeasure (c • μ) := IsHaarMeasure.nnreal_smul _ hc
@@ -588,7 +588,7 @@ lemma haarScalarFactor_smul_smul
 
 中文:
 引理 haarScalarFactor_smul_smul
-  结论: [LocallyCompactSpace G] (μ' μ : Measure G)
+  结论: [局部紧空间 G] (μ' μ : 测度 G)
   证明: IsHaarMeasure.nnreal_smul _ hc
     haarScalarFactor (c • μ') (c • μ) = haarScalarFactor μ' μ := by
   rw [haarScalarFactor_smul]; rw [smul_eq_mul]; rw [mul_haarScalarFactor_smul _ _ hc]
@@ -622,7 +622,7 @@ lemma haarScalarFactor_self
 
 中文:
 引理 haarScalarFactor_self
-  条件: (μ : Measure G) [IsHaarMeasure μ]
+  条件: (μ : 测度 G) [是Haar测度 μ]
   证明: by
   by_cases hG : LocallyCompactSpace G; swap
   · simp [haarScalarFactor, hG]
@@ -664,7 +664,7 @@ lemma haarScalarFactor_eq_mul
 
 中文:
 引理 haarScalarFactor_eq_mul
-  结论: (μ' μ ν : Measure G)
+  结论: (μ' μ ν : 测度 G)
   证明: by
   -- The group has to be locally compact, otherwise the scalar factor is 1 by definition.
   by_cases hG : LocallyCompactSpace G; swap
@@ -711,7 +711,7 @@ lemma haarScalarFactor_map
 
 中文:
 引理 haarScalarFactor_map
-  条件: (μ' μ : Measure G) [IsHaarMeasure μ] [IsHaarMeasure μ'] (φ : G ≃ₜ* G)
+  条件: (μ' μ : 测度 G) [是Haar测度 μ] [是Haar测度 μ'] (φ : G ≃ₜ* G)
   证明: by
   -- The group has to be locally compact, otherwise the scalar factor is 1 by definition.
   by_cases hG : LocallyCompactSpace G; swap
@@ -748,7 +748,7 @@ lemma haarScalarFactor_pos_of_isHaarMeasure
 
 中文:
 引理 haarScalarFactor_pos_of_isHaarMeasure
-  结论: (μ' μ : Measure G) [IsHaarMeasure μ]
+  结论: (μ' μ : 测度 G) [是Haar测度 μ]
   证明: pos_iff_ne_zero.2 (fun H => by simpa [H] using haarScalarFactor_eq_mul μ' μ μ')
 
 Depends on / 依赖: haarScalarFactor_eq_mul, pos_iff_ne_zero
@@ -919,7 +919,7 @@ lemma smul_measure_isMulInvariant_le_of_isCompact_closure
 
 中文:
 引理 smul_measure_isMulInvariant_le_of_isCompact_closure
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   apply le_of_forall_lt (fun r hr => ?_)
   let ν := haarScalarFactor μ' μ • μ
@@ -1039,7 +1039,7 @@ lemma measure_isMulInvariant_eq_smul_of_isCompact_closure_of_measurableSet
 
 中文:
 引理 measure_isMulInvariant_eq_smul_of_isCompact_closure_of_measurableSet
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   let ν : Measure G := haar
   have A : μ' s = haarScalarFactor μ' ν • ν s :=
@@ -1086,7 +1086,7 @@ measure_mono subset_inter (subset_toMeasurable ν s) subset_closure
 
 中文:
 定理 measure_isMulInvariant_eq_smul_of_isCompact_closure
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   let ν := haarScalarFactor μ' μ • μ
   apply le_antisymm
@@ -1142,7 +1142,7 @@ lemma isMulInvariant_eq_smul_of_compactSpace
 
 中文:
 引理 isMulInvariant_eq_smul_of_compactSpace
-  结论: [CompactSpace G] (μ' μ : Measure G)
+  结论: [紧空间 G] (μ' μ : 测度 G)
   证明: by
   ext s _hs
   exact measure_isMulInvariant_eq_smul_of_isCompact_closure _ _ isClosed_closure.isCompact
@@ -1193,7 +1193,7 @@ lemma isHaarMeasure_eq_of_isProbabilityMeasure
 
 中文:
 引理 isHaarMeasure_eq_of_isProbabilityMeasure
-  结论: [LocallyCompactSpace G] (μ' μ : Measure G)
+  结论: [局部紧空间 G] (μ' μ : 测度 G)
   证明: by
   have : CompactSpace G := by
     by_contra H
@@ -1243,7 +1243,7 @@ theorem measure_isHaarMeasure_eq_smul_of_isEverywherePos
 
 中文:
 定理 measure_isHaarMeasure_eq_smul_of_isEverywherePos
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   let ν := haarScalarFactor μ' μ • μ
   change μ' s = ν s
@@ -1370,7 +1370,7 @@ theorem measure_isHaarMeasure_eq_smul_of_isOpen
 
 中文:
 定理 measure_isHaarMeasure_eq_smul_of_isOpen
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: measure_isHaarMeasure_eq_smul_of_isEverywherePos μ' μ hs.measurableSet hs.isEverywherePos
 
 Depends on / 依赖: hs.isEverywherePos, hs.measurableSet, isEverywherePos, measurableSet, measure_isHaarMeasure_eq_smul_of_isEverywherePos
@@ -1409,7 +1409,7 @@ lemma measure_isMulLeftInvariant_eq_smul_of_ne_top
 
 中文:
 引理 measure_isMulLeftInvariant_eq_smul_of_ne_top
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   /- We know that the measures integrate in the same way continuous compactly supported functions,
   up to the factor `c = haarScalarFactor μ' μ`. -/
@@ -1472,7 +1472,7 @@ lemma isMulLeftInvariant_eq_smul_of_innerRegular
 
 中文:
 引理 isMulLeftInvariant_eq_smul_of_innerRegular
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   ext s hs
   rw [hs.measure_eq_iSup_isCompact]; rw [hs.measure_eq_iSup_isCompact]
@@ -1515,7 +1515,7 @@ lemma isMulLeftInvariant_eq_smul_of_regular
 
 中文:
 引理 isMulLeftInvariant_eq_smul_of_regular
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   have A : forall U, IsOpen U -> μ' U = (haarScalarFactor μ' μ • μ) U := by
     intro U hU
@@ -1554,7 +1554,7 @@ lemma isMulLeftInvariant_eq_smul
 
 中文:
 引理 isMulLeftInvariant_eq_smul
-  结论: [LocallyCompactSpace G] [SecondCountableTopology G]
+  结论: [局部紧空间 G] [第二可数拓扑 G]
   证明: isMulLeftInvariant_eq_smul_of_regular μ' μ
   -- one could use as well `isMulLeftInvariant_eq_smul_of_innerRegular`, as in a
   -- second countable topological space all Haar measures are regular and inner regular
@@ -1588,7 +1588,7 @@ theorem absolutelyContinuous_isHaarMeasure
 
 中文:
 定理 absolutelyContinuous_isHaarMeasure
-  结论: [LocallyCompactSpace G]
+  结论: [局部紧空间 G]
   证明: by
   have K : PositiveCompacts G := Classical.arbitrary _
   have h : haarMeasure K = (haarScalarFactor (haarMeasure K) ν : Real>=0∞) • ν :=
@@ -1628,7 +1628,7 @@ theorem _root_.MonoidHom.measurePreserving
     have hC : μ.map f = C • ν := isMulLeftInvariant_eq_
 
 中文:
-定理 _root_.MonoidHom.measurePreserving
+定理 _root_.幺半群态射.measurePreserving
   证明: hcont.measurable
   map_eq := by
     have : IsFiniteMeasure μ := ⟨by rw [huniv]; apply measure_lt_top⟩
@@ -1728,7 +1728,7 @@ theorem measurePreserving_zpow
 
 中文:
 定理 measurePreserving_zpow
-  条件: [CompactSpace G] [RootableBy G 整数] {n : 整数} (hn : n != 0)
+  条件: [紧空间 G] [RootableBy G 整数] {n : 整数} (hn : n != 0)
   证明: (zpowGroupHom n).measurePreserving (μ := μ) (continuous_zpow n)
     (RootableBy.surjective_pow G Int hn) rfl
 
@@ -1751,8 +1751,8 @@ theorem MeasurePreserving.zpow
   proof: (measurePreserving_zpow μ hn).comp hf
 
 中文:
-定理 MeasurePreserving.zpow
-  结论: [CompactSpace G] [RootableBy G 整数]
+定理 保测.zpow
+  结论: [紧空间 G] [RootableBy G 整数]
   证明: (measurePreserving_zpow μ hn).comp hf
 
 Depends on / 依赖: measurePreserving_zpow

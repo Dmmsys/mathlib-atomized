@@ -45,7 +45,7 @@ abbreviation RestrictScalarsData
 
 中文:
 缩写 RestrictScalarsData
-  签名: : Type _
+  签名: : 类型 _
   定义体: (presB.finsupp presM.G).CokernelData
     (LinearMap.restrictScalars A presM.map)
     (fun (⟨g, g'⟩ : presB.G × presM.R) => presB.var g • Finsupp.single g' (1 : B))
@@ -78,7 +78,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: : Presentation A M
+  签名: : 呈现 A M
   定义体: ofExact (g := LinearMap.restrictScalars A presM.π) (presB.finsupp presM.G) data
     presM.exact presM.surjective_π (by
       ext v

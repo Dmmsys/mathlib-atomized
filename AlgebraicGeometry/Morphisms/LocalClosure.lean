@@ -34,7 +34,7 @@ definition sourceLocalClosure
 
 中文:
 定义 sourceLocalClosure
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: fun X _ f => exists (𝒰 : Scheme.Cover.{u} (Scheme.precoverage W) X), forall (i : 𝒰.I₀), P (𝒰.f i ≫ f)
 
 Depends on / 依赖: Scheme, Scheme.Cover, Scheme.precoverage, precoverage
@@ -96,7 +96,7 @@ lemma le
 
 中文:
 引理 le
-  条件: [W.ContainsIdentities] [W.RespectsIso]
+  条件: [W.余ntainsIdentities] [W.RespectsIso]
   结论: P <= sourceLocalClosure W P
   证明: fun X Y f hf => ⟨X.coverOfIsIso (𝟙 X), by simpa⟩
 
@@ -120,7 +120,7 @@ lemma iff_forall_exists
     exact ⟨.mkOfCovers X (fun x => U x) (fun _ => (U _).
 
 中文:
-引理 iff_forall_exists
+引理 iff_对任意_存在
   条件: [P.RespectsIso] {f : X ⟶ Y}
   证明: by
   refine ⟨fun ⟨𝒰, hf⟩ x => ?_, fun H => ?_⟩
@@ -159,7 +159,7 @@ instance [P.RespectsLeft
 
 中文:
 实例 [P.RespectsLeft
-  签名: Q] [Q.IsStableUnderBaseChange] :
+  签名: Q] [Q.是StableUnderBaseChange] :
   定义体: by
   refine ⟨fun {X Y} Z f hf g ⟨𝒰, hg⟩ => ⟨𝒰.pullback₁ f, fun i => ?_⟩⟩
   simpa [pullback.condition_assoc] using
@@ -230,7 +230,7 @@ instance [P.RespectsIso]
 
 中文:
 实例 [P.RespectsIso]
-  签名: [P.RespectsLeft @IsOpenImmersion]
+  签名: [P.RespectsLeft @是开浸入]
   定义体: by
   refine .mk_of_iff_of_zeroHypercover fun f 𝒰 => ?_
   refine ⟨fun ⟨𝒱, h⟩ => fun i => ⟨𝒱.pullback₁ (𝒰.f i), fun j => ?_⟩, fun h => ?_⟩
@@ -264,8 +264,8 @@ instance [P.IsStableUnderBaseChange]
     P.pullback_fst _ _ (hg i)
 
 中文:
-实例 [P.IsStableUnderBaseChange]
-  签名: : (sourceLocalClosure W P).IsStableUnderBaseChange
+实例 [P.是StableUnderBaseChange]
+  签名: : (sourceLocalClosure W P).是StableUnderBaseChange
   定义体: by
   refine .mk' fun X Y S f g _ ⟨𝒰, hg⟩ => ⟨𝒰.pullback₁ (pullback.snd f g), fun i => ?_⟩
   simpa [← pullbackLeftPullbackSndIso_hom_fst, P.cancel_left_of_respectsIso] using
@@ -287,8 +287,8 @@ instance [W.ContainsIdentities]
   body: ⟨fun X => ⟨X.coverOfIsIso (𝟙 X), fun _ => P.id_mem _⟩⟩
 
 中文:
-实例 [W.ContainsIdentities]
-  签名: [P.ContainsIdentities]
+实例 [W.余ntainsIdentities]
+  签名: [P.余ntainsIdentities]
   定义体: ⟨fun X => ⟨X.coverOfIsIso (𝟙 X), fun _ => P.id_mem _⟩⟩
 
 Depends on / 依赖: P.id_mem, X.coverOfIsIso, coverOfIsIso, id_mem
@@ -312,8 +312,8 @@ instance [W.IsStableUnderComposition]
     P.comp_mem _ _ (P.pullback_snd _ _ (hf _)) (hg r)
 
 中文:
-实例 [W.IsStableUnderComposition]
-  签名: [P.IsStableUnderBaseChange] [P.IsStableUnderComposition]
+实例 [W.是StableUnderComposition]
+  签名: [P.是StableUnderBaseChange] [P.是StableUnderComposition]
   定义体: by
   refine ⟨fun {X Y Z} f g ⟨𝒰, hf⟩ ⟨𝒱, hg⟩ => ?_⟩
   refine ⟨𝒰.bind fun i => (𝒱.pullback₁ (𝒰.f i ≫ f)), fun ⟨l, r⟩ => ?_⟩
@@ -337,8 +337,8 @@ instance [W.IsMultiplicative]
   signature: [P.IsStableUnderBaseChange] [P.IsMultiplicative]
 
 中文:
-实例 [W.IsMultiplicative]
-  签名: [P.IsStableUnderBaseChange] [P.IsMultiplicative]
+实例 [W.是Multiplicative]
+  签名: [P.是StableUnderBaseChange] [P.是Multiplicative]
 -/
 instance [W.IsMultiplicative] [P.IsStableUnderBaseChange] [P.IsMultiplicative] :
     (sourceLocalClosure W P).IsMultiplicative where

@@ -170,8 +170,8 @@ theorem Differentiable.fderiv_norm_rpow
   proof: .fderiv .comp x (hf x).hasFDerivAt hasFDerivAt_norm_rpow (f x) hp
 
 中文:
-定理 Differentiable.fderiv_norm_rpow
-  结论: {f : F -> E} (hf : Differentiable 实数 f)
+定理 可微.fderiv_norm_rpow
+  结论: {f : F -> E} (hf : 可微 实数 f)
   证明: .fderiv .comp x (hf x).hasFDerivAt hasFDerivAt_norm_rpow (f x) hp
 
 Depends on / 依赖: fderiv, hasFDerivAt, hasFDerivAt_norm_rpow
@@ -198,7 +198,7 @@ abs_eq_self.mpr zero_le_one.trans hp.le, mul_assoc]
 
 中文:
 定理 norm_fderiv_norm_rpow_le
-  结论: {f : F -> E} (hf : Differentiable 实数 f) {x : F}
+  结论: {f : F -> E} (hf : 可微 实数 f) {x : F}
   证明: by
   rw [hf.fderiv_norm_rpow hp]; rw [norm_smul]; rw [norm_mul]
   simp_rw [norm_rpow_of_nonneg (norm_nonneg _), norm_norm, norm_eq_abs,
@@ -264,7 +264,7 @@ theorem nnnorm_fderiv_norm_rpow_le
 
 中文:
 定理 nnnorm_fderiv_norm_rpow_le
-  结论: {f : F -> E} (hf : Differentiable 实数 f)
+  结论: {f : F -> E} (hf : 可微 实数 f)
   证明: norm_fderiv_norm_rpow_le hf hp
 
 Depends on / 依赖: norm_fderiv_norm_rpow_le
@@ -286,7 +286,7 @@ lemma enorm_fderiv_norm_rpow_le
 
 中文:
 引理 enorm_fderiv_norm_rpow_le
-  结论: {f : F -> E} (hf : Differentiable 实数 f)
+  结论: {f : F -> E} (hf : 可微 实数 f)
   证明: by
   simpa [enorm, ← ENNReal.coe_rpow_of_nonneg _ (sub_nonneg.2 <| NNReal.one_le_coe.2 hp.le),
     ← ENNReal.coe_mul] using nnnorm_fderiv_norm_rpow_le hf hp
@@ -318,7 +318,7 @@ theorem contDiff_norm_rpow
 中文:
 定理 contDiff_norm_rpow
   条件: {p : 实数} (hp : 1 < p)
-  结论: ContDiff 实数 1 (fun x : E => ‖x‖ ^ p)
+  结论: 连续可微 实数 1 (fun x : E => ‖x‖ ^ p)
   证明: by
   rw [contDiff_one_iff_fderiv]
 .differentiableAt, ?_⟩ refine ⟨fun x => hasFDerivAt_norm_rpow x hp
@@ -355,8 +355,8 @@ theorem ContDiff.norm_rpow
   proof: .comp hf contDiff_norm_rpow hp
 
 中文:
-定理 ContDiff.norm_rpow
-  条件: {f : F -> E} (hf : ContDiff 实数 1 f) {p : 实数} (hp : 1 < p)
+定理 连续可微.norm_rpow
+  条件: {f : F -> E} (hf : 连续可微 实数 1 f) {p : 实数} (hp : 1 < p)
   证明: .comp hf contDiff_norm_rpow hp
 
 Depends on / 依赖: contDiff_norm_rpow
@@ -374,8 +374,8 @@ theorem Differentiable.norm_rpow
   proof: .comp hf .differentiable one_ne_zero contDiff_norm_rpow hp
 
 中文:
-定理 Differentiable.norm_rpow
-  条件: {f : F -> E} (hf : Differentiable 实数 f) {p : 实数} (hp : 1 < p)
+定理 可微.norm_rpow
+  条件: {f : F -> E} (hf : 可微 实数 f) {p : 实数} (hp : 1 < p)
   证明: .comp hf .differentiable one_ne_zero contDiff_norm_rpow hp
 
 Depends on / 依赖: contDiff_norm_rpow, differentiable, one_ne_zero

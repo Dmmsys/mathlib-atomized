@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Submonoid M)
+  签名: 下确界集 (子幺半群 M)
   定义体: ⟨fun s =>
     { carrier := ⋂ t in s, ↑t
       one_mem' := Set.mem_biInter fun i _ => i.one_mem
@@ -118,8 +118,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Submonoid M))
-  结论: ((sInf S : Submonoid M) : Set M) = ⋂ s in S, ↑s
+  条件: (S : 集合 (子幺半群 M))
+  结论: ((sInf S : 子幺半群 M) : 集合 M) = ⋂ s in S, ↑s
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -141,7 +141,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Submonoid M)} {x : M}
+  条件: {S : 集合 (子幺半群 M)} {x : M}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -167,7 +167,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Submonoid M} {x : M}
+  条件: {ι : 类型层*} {S : ι -> 子幺半群 M} {x : M}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -192,8 +192,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Submonoid M}
-  结论: (↑(⨅ i, S i) : Set M) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子幺半群 M}
+  结论: (↑(⨅ i, S i) : 集合 M) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Submonoid M)
+  签名: 完备格 (子幺半群 M)
   定义体: { (completeLatticeOfInf (Submonoid M)) fun _ =>
       .of_image SetLike.coe_subset_coe isGLB_biInf with
     le := (· <= ·)
@@ -266,7 +266,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: sInf { S | s subseteq S }
 
 @[to_additive]
@@ -289,7 +289,7 @@ theorem mem_closure
 中文:
 定理 mem_closure
   条件: {x : M}
-  结论: x in closure s ↔ 对任意 S : Submonoid M, s subseteq S -> x in S
+  结论: x in closure s ↔ 对任意 S : 子幺半群 M, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -335,7 +335,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set M} {x : M} (hx : x in s)
+  条件: {s : 集合 M} {x : M} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -410,7 +410,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set M⦄ (h : s subseteq t) : closure s <= closure t
+  结论: 集合 M⦄ (h : s subseteq t) : closure s <= closure t
   证明: closure_le.2 Subset.trans h subset_closure
 
 @[to_additive]
@@ -463,7 +463,7 @@ theorem closure_induction
 
 中文:
 定理 closure_induction
-  结论: {s : Set M} {motive : (x : M) -> x in closure s -> 命题}
+  结论: {s : 集合 M} {motive : (x : M) -> x in closure s -> 命题}
   证明: let S : Submonoid M :=
     { carrier := { x | exists hx, motive x hx }
       one_mem' := ⟨_, one⟩
@@ -551,7 +551,7 @@ theorem dense_induction
 
 中文:
 定理 dense_induction
-  结论: {motive : M -> 命题} (s : Set M) (closure : closure s = ⊤)
+  结论: {motive : M -> 命题} (s : 集合 M) (closure : closure s = ⊤)
   证明: by
   induction closure.symm ▸ mem_top x using closure_induction with
   | mem _ h => exact mem _ h
@@ -600,7 +600,7 @@ lemma closure_eq_one_union
 
 中文:
 引理 closure_eq_one_union
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   apply le_antisymm
   · intro x hx
@@ -646,7 +646,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure M _) SetLike.coe where
+  签名: : Galois嵌入 (@closure M _) 集合状.coe where
   定义体: closure s
   gc _ _ := closure_le
   le_l_u _ := subset_closure
@@ -674,7 +674,7 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  结论: closure (S : Set M) = S
+  结论: closure (S : 集合 M) = S
   证明: (Submonoid.gi M).l_u_eq S
 
 @[to_additive (attr := simp)]
@@ -697,7 +697,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set M) = ⊥
+  结论: closure (∅ : 集合 M) = ⊥
   证明: (Submonoid.gi M).gc.l_bot
 
 @[to_additive (attr := simp)]
@@ -720,7 +720,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (univ : Set M) = ⊤
+  结论: closure (univ : 集合 M) = ⊤
   证明: @coe_top M _ ▸ closure_eq ⊤
 
 @[to_additive]
@@ -744,7 +744,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (Submonoid.gi M).gc.l_sup
 
@@ -770,8 +770,8 @@ theorem sup_eq_closure
 
 中文:
 定理 sup_eq_closure
-  条件: (N N' : Submonoid M)
-  结论: N ⊔ N' = closure ((N : Set M) union (N' : Set M))
+  条件: (N N' : 子幺半群 M)
+  结论: N ⊔ N' = closure ((N : 集合 M) union (N' : 集合 M))
   证明: by
   simp_rw [closure_union, closure_eq]
 
@@ -796,7 +796,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set M)
+  条件: {ι} (s : ι -> 集合 M)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (Submonoid.gi M).gc.l_iSup
 
@@ -822,7 +822,7 @@ theorem closure_singleton_le_iff_mem
 
 中文:
 定理 closure_singleton_le_iff_mem
-  条件: (m : M) (p : Submonoid M)
+  条件: (m : M) (p : 子幺半群 M)
   结论: closure {m} <= p ↔ m in p
   证明: by
   rw [closure_le]; rw [singleton_subset_iff]; rw [SetLike.mem_coe]
@@ -850,7 +850,7 @@ theorem closure_insert_one
 
 中文:
 定理 closure_insert_one
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: closure (insert 1 s) = closure s
   证明: by
   rw [insert_eq]; rw [closure_union]; rw [sup_eq_right]; rw [closure_singleton_le_iff_mem]
@@ -879,7 +879,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {ι : Sort*} (p : ι -> Submonoid M) {m : M}
+  条件: {ι : 类型层*} (p : ι -> 子幺半群 M) {m : M}
   证明: by
   rw [← closure_singleton_le_iff_mem]; rw [le_iSup_iff]
   simp only [closure_singleton_le_iff_mem]
@@ -907,7 +907,7 @@ theorem iSup_eq_closure
 
 中文:
 定理 iSup_eq_closure
-  条件: {ι : Sort*} (p : ι -> Submonoid M)
+  条件: {ι : 类型层*} (p : ι -> 子幺半群 M)
   证明: by
   simp_rw [Submonoid.closure_iUnion, Submonoid.closure_eq]
 
@@ -933,7 +933,7 @@ theorem disjoint_def
 
 中文:
 定理 disjoint_def
-  条件: {p₁ p₂ : Submonoid M}
+  条件: {p₁ p₂ : 子幺半群 M}
   证明: by
   simp_rw [disjoint_iff_inf_le, SetLike.le_def, mem_inf, and_imp, mem_bot]
 
@@ -956,7 +956,7 @@ theorem disjoint_def'
 
 中文:
 定理 disjoint_def'
-  条件: {p₁ p₂ : Submonoid M}
+  条件: {p₁ p₂ : 子幺半群 M}
   证明: disjoint_def.trans ⟨fun h _ _ hx hy hxy => h hx hxy.symm ▸ hy, fun h _ hx hx' => h hx hx' rfl⟩
 
 Depends on / 依赖: disjoint_def, disjoint_def.trans, hxy.symm
@@ -1018,7 +1018,7 @@ lemma closure_sdiff_singleton_one
 
 中文:
 引理 closure_sdiff_singleton_one
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: closure (s \ {1}) = closure s
   证明: closure_sdiff_eq_closure by simp [one_mem]
 
@@ -1052,8 +1052,8 @@ theorem eqOn_closureM
 
 中文:
 定理 eqOn_closureM
-  条件: {f g : M ->* N} {s : Set M} (h : Set.EqOn f g s)
-  结论: Set.EqOn f g (closure s)
+  条件: {f g : M ->* N} {s : 集合 M} (h : 集合.EqOn f g s)
+  结论: 集合.EqOn f g (closure s)
   证明: show closure s <= f.eqLocusM g from closure_le.2 h
 
 @[to_additive]
@@ -1074,7 +1074,7 @@ theorem eq_of_eqOn_denseM
 
 中文:
 定理 eq_of_eqOn_denseM
-  条件: {s : Set M} (hs : closure s = ⊤) {f g : M ->* N} (h : s.EqOn f g)
+  条件: {s : 集合 M} (hs : closure s = ⊤) {f g : M ->* N} (h : s.EqOn f g)
   证明: eq_of_eqOn_topM hs ▸ eqOn_closureM h
 
 Depends on / 依赖: eqOn_closureM, eq_of_eqOn_topM
@@ -1111,8 +1111,8 @@ definition IsUnit.submonoid
 @[to_additive]
 
 中文:
-定义 IsUnit.submonoid
-  签名: (M : 类型) [Monoid M]
+定义 是单位.submonoid
+  签名: (M : 类型) [幺半群 M]
   定义体: Set.ofPred IsUnit
   one_mem' := by simp only [isUnit_one, Set.mem_ofPred_eq]
   mul_mem' := by
@@ -1144,8 +1144,8 @@ theorem IsUnit.mem_submonoid_iff
   rw [Set.mem_ofPred_eq]
 
 中文:
-定理 IsUnit.mem_submonoid_iff
-  条件: {M : 类型} [Monoid M] (a : M)
+定理 是单位.mem_submonoid_iff
+  条件: {M : 类型} [幺半群 M] (a : M)
   证明: by
   change a in Set.ofPred IsUnit ↔ IsUnit a
   rw [Set.mem_ofPred_eq]
@@ -1169,8 +1169,8 @@ lemma Submonoid.commute_coe_coe
   simp [commute_iff_eq, Subtype.ext_iff]
 
 中文:
-引理 Submonoid.commute_coe_coe
-  结论: {S M : 类型} [Mul M] [SetLike S M]
+引理 子幺半群.commute_coe_coe
+  结论: {S M : 类型} [乘法 M] [集合状 S M]
   证明: by
   simp [commute_iff_eq, Subtype.ext_iff]
 -/
@@ -1205,7 +1205,7 @@ definition ofClosureMEqTopLeft
 
 中文:
 定义 ofClosureMEqTopLeft
-  签名: {M N} [Monoid M] [Monoid N] {s : Set M} (f : M -> N) (hs : closure s = ⊤)
+  签名: {M N} [幺半群 M] [幺半群 N] {s : 集合 M} (f : M -> N) (hs : closure s = ⊤)
   定义体: f
   map_one' := h1
   map_mul' x :=
@@ -1265,7 +1265,7 @@ definition ofClosureMEqTopRight
 
 中文:
 定义 ofClosureMEqTopRight
-  签名: {M N} [Monoid M] [Monoid N] {s : Set M} (f : M -> N) (hs : closure s = ⊤)
+  签名: {M N} [幺半群 M] [幺半群 N] {s : 集合 M} (f : M -> N) (hs : closure s = ⊤)
   定义体: f
   map_one' := h1
   map_mul' x y :=

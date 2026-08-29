@@ -44,9 +44,9 @@ theorem Countable.of_moduleFinite
   rwa [h] at this
 
 中文:
-定理 Countable.of_moduleFinite
-  条件: [Countable R] [Module.Finite R M]
-  结论: Countable M
+定理 可数.of_moduleFinite
+  条件: [可数 R] [模.有限 R M]
+  结论: 可数 M
   证明: by
   obtain ⟨n, s, h⟩ := Module.Finite.exists_fin (R := R) (M := M)
   rw [← Set.countable_univ_iff]
@@ -73,9 +73,9 @@ theorem Uncountable.of_moduleFinite
 exact (uncountable_iff_not_countable _).mp hM Countable.of_moduleFinite (R := R)
 
 中文:
-定理 Uncountable.of_moduleFinite
-  条件: [hM : Uncountable M] [Module.Finite R M]
-  结论: Uncountable R
+定理 不可数.of_moduleFinite
+  条件: [hM : 不可数 M] [模.有限 R M]
+  结论: 不可数 R
   证明: by
   by_contra!
 exact (uncountable_iff_not_countable _).mp hM Countable.of_moduleFinite (R := R)

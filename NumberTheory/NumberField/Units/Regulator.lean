@@ -61,7 +61,7 @@ definition equivFinRank
 
 中文:
 定义 equivFinRank
-  签名: : Fin (rank K) ≃ {w : InfinitePlace K // w != w₀}
+  签名: : 有限集 (rank K) ≃ {w : InfinitePlace K // w != w₀}
   定义体: Fintype.equivOfCardEq by
     rw [Fintype.card_subtype_compl]; rw [Fintype.card_ofSubsingleton]; rw [Fintype.card_fin]; rw [rank]
 
@@ -87,7 +87,7 @@ abbreviation IsMaxRank
 
 中文:
 缩写 IsMaxRank
-  签名: (u : Fin (rank K) -> (𝓞 K)ˣ)
+  签名: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
   定义体: LinearIndependent Real (fun i => logEmbedding K (Additive.ofMul (u i)))
 
 Depends on / 依赖: Additive, Additive.ofMul, LinearIndependent, logEmbedding
@@ -109,7 +109,7 @@ definition basisOfIsMaxRank
 
 中文:
 定义 basisOfIsMaxRank
-  签名: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
+  签名: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
   定义体: (basisOfPiSpaceOfLinearIndependent
     ((linearIndependent_equiv (equivFinRank K).symm).mpr hu)).reindex (equivFinRank K).symm
 
@@ -135,7 +135,7 @@ theorem basisOfIsMaxRank_apply
 
 中文:
 定理 basisOfIsMaxRank_apply
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K))
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : 有限集 (rank K))
   证明: by
   simp [basisOfIsMaxRank, Basis.coe_reindex, Equiv.symm_symm, Function.comp_apply,
     coe_basisOfPiSpaceOfLinearIndependent]
@@ -159,7 +159,7 @@ theorem span_basisOfIsMaxRank
 
 中文:
 定理 span_basisOfIsMaxRank
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
   证明: by
   rw [Subgroup.toAddSubgroup_closure]; rw [AddMonoidHom.map_closure]; rw [← span_int_eq_addSubgroupClosure]
   congr; ext; simp
@@ -187,7 +187,7 @@ theorem finiteIndex_iff_sup_torsion_finiteIndex
 
 中文:
 定理 finiteIndex_iff_sup_torsion_finiteIndex
-  条件: (s : Subgroup (𝓞 K)ˣ)
+  条件: (s : 子群 (𝓞 K)ˣ)
   证明: by
   refine ⟨fun h => Subgroup.finiteIndex_of_le le_sup_left, fun h => ?_⟩
   rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
@@ -222,7 +222,7 @@ theorem isMaxRank_iff_closure_finiteIndex
 
 中文:
 定理 isMaxRank_iff_closure_finiteIndex
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ}
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ}
   证明: by
   classical
   have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
@@ -268,7 +268,7 @@ definition regOfFamily
 
 中文:
 定义 regOfFamily
-  签名: (u : Fin (rank K) -> (𝓞 K)ˣ)
+  签名: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
   定义体: if hu : IsMaxRank u then
     ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu)))
   else 0
@@ -291,7 +291,7 @@ theorem regOfFamily_eq_zero
 
 中文:
 定理 regOfFamily_eq_zero
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u)
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u)
   证明: by
   rw [regOfFamily]; rw [dif_neg hu]
 
@@ -313,7 +313,7 @@ theorem regOfFamily_of_isMaxRank
 
 中文:
 定理 regOfFamily_of_isMaxRank
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
   证明: by
   rw [regOfFamily]; rw [dif_pos hu]
 
@@ -336,7 +336,7 @@ theorem regOfFamily_pos
 
 中文:
 定理 regOfFamily_pos
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
   证明: by
   classical
   rw [regOfFamily_of_isMaxRank hu]
@@ -360,7 +360,7 @@ theorem regOfFamily_ne_zero
 
 中文:
 定理 regOfFamily_ne_zero
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
   证明: (regOfFamily_pos hu).ne'
 
 Depends on / 依赖: regOfFamily_pos
@@ -378,7 +378,7 @@ theorem regOfFamily_ne_zero_iff
 
 中文:
 定理 regOfFamily_ne_zero_iff
-  条件: {u : Fin (rank K) -> (𝓞 K)ˣ}
+  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ}
   证明: ⟨by simpa using (fun hu => regOfFamily_eq_zero hu).mt, fun hu => regOfFamily_ne_zero hu⟩
 
 Depends on / 依赖: regOfFamily_eq_zero, regOfFamily_ne_zero
@@ -404,7 +404,7 @@ theorem regOfFamily_eq_det'
 
 中文:
 定理 regOfFamily_eq_det'
-  条件: (u : Fin (rank K) -> (𝓞 K)ˣ)
+  条件: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
   证明: by
   by_cases hu : IsMaxRank u
   · rw [regOfFamily_of_isMaxRank hu, ZLattice.covolume_eq_det _
@@ -442,7 +442,7 @@ theorem abs_det_eq_abs_det
 
 中文:
 定理 abs_det_eq_abs_det
-  结论: (u : Fin (rank K) -> (𝓞 K)ˣ)
+  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
   证明: by
   -- We construct an equiv `Fin (rank K + 1) ≃ InfinitePlace K` from `e₂.symm`
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
@@ -493,7 +493,7 @@ theorem regOfFamily_eq_det
 
 中文:
 定理 regOfFamily_eq_det
-  结论: (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
+  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
   证明: by
   simp [regOfFamily_eq_det', abs_det_eq_abs_det u e (equivFinRank K).symm, logEmbedding]
 
@@ -521,7 +521,7 @@ theorem finrank_mul_regOfFamily_eq_det
 
 中文:
 定理 finrank_mul_regOfFamily_eq_det
-  结论: (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
+  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
   证明: by
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
@@ -716,7 +716,7 @@ theorem regulator_eq_det
 
 中文:
 定理 regulator_eq_det
-  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K))
+  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ 有限集 (rank K))
   证明: by
   rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det]
 
@@ -740,7 +740,7 @@ theorem finrank_mul_regulator_eq_det
 
 中文:
 定理 finrank_mul_regulator_eq_det
-  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K))
+  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ 有限集 (rank K))
   证明: by
   rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det]
 
@@ -774,7 +774,7 @@ theorem regOfFamily_div_regOfFamily
 
 中文:
 定理 regOfFamily_div_regOfFamily
-  结论: {u v : Fin (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v)
+  结论: {u v : 有限集 (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v)
   证明: by
   classical
   by_cases hu : IsMaxRank u
@@ -814,7 +814,7 @@ theorem regOfFamily_div_regulator
 
 中文:
 定理 regOfFamily_div_regulator
-  条件: (u : Fin (rank K) -> (𝓞 K)ˣ)
+  条件: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
   证明: by
   rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_div_regOfFamily (isMaxRank_fundSystem K)
     (by simp only [closure_fundSystem_sup_torsion_eq_top]; rw [le_top]),

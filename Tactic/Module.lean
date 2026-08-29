@@ -95,7 +95,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: [Add M] [Zero M] [SMul R M] (l : NF R M)
+  签名: [加法 M] [零 M] [标量乘法 R M] (l : NF R M)
   定义体: (l.map (fun (⟨r, x⟩ : R × M) => r • x)).sum
 
 Depends on / 依赖: l.map
@@ -113,7 +113,7 @@ theorem eval_cons
 
 中文:
 定理 eval_cons
-  条件: [AddMonoid M] [SMul R M] (p : R × M) (l : NF R M)
+  条件: [加法幺半群 M] [标量乘法 R M] (p : R × M) (l : NF R M)
   证明: by
   rfl
 -/
@@ -132,7 +132,7 @@ theorem atom_eq_eval
 
 中文:
 定理 atom_eq_eval
-  条件: [AddMonoid M] (x : M)
+  条件: [加法幺半群 M] (x : M)
   结论: x = NF.eval [(1, x)]
   证明: by simp [eval]
 -/
@@ -150,7 +150,7 @@ theorem zero_eq_eval
 
 中文:
 定理 zero_eq_eval
-  条件: [AddMonoid M]
+  条件: [加法幺半群 M]
   结论: (0:M) = NF.eval (R := 自然数) (M := M) []
   证明: rfl
 -/
@@ -167,7 +167,7 @@ theorem add_eq_eval₁
 
 中文:
 定理 add_eq_eval₁
-  结论: [AddMonoid M] [SMul R M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
+  结论: [加法幺半群 M] [标量乘法 R M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
   证明: by
   simp only [eval_cons, ← h, add_assoc]
 
@@ -193,7 +193,7 @@ theorem add_eq_eval₂
 
 中文:
 定理 add_eq_eval₂
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] (r₁ r₂ : R) (x : M)
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] (r₁ r₂ : R) (x : M)
   证明: by
   simp only [← h, eval_cons, add_smul, add_assoc]
   congr! 1
@@ -227,7 +227,7 @@ theorem add_eq_eval₃
 
 中文:
 定理 add_eq_eval₃
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] {a₁ : R × M} (a₂ : R × M)
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] {a₁ : R × M} (a₂ : R × M)
   证明: by
   simp only [eval_cons, ← h]
   nth_rw 4 [add_comm]
@@ -257,7 +257,7 @@ theorem add_eq_eval
 
 中文:
 定理 add_eq_eval
-  结论: {R₁ R₂ : 类型} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
+  结论: {R₁ R₂ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₁]
   证明: by
   rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
 
@@ -281,7 +281,7 @@ theorem sub_eq_eval₁
 
 中文:
 定理 sub_eq_eval₁
-  结论: [SMul R M] [AddGroup M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
+  结论: [标量乘法 R M] [加法群 M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
   证明: by
   simp only [eval_cons, ← h, sub_eq_add_neg, add_assoc]
 
@@ -307,7 +307,7 @@ theorem sub_eq_eval₂
 
 中文:
 定理 sub_eq_eval₂
-  结论: [Ring R] [AddCommGroup M] [Module R M] (r₁ r₂ : R) (x : M) {l₁ l₂ l : NF R M}
+  结论: [环 R] [加法交换群 M] [模 R M] (r₁ r₂ : R) (x : M) {l₁ l₂ l : NF R M}
   证明: by
   simp only [← h, eval_cons, sub_eq_add_neg, neg_add, add_smul, neg_smul, add_assoc]
   congr! 1
@@ -339,7 +339,7 @@ theorem sub_eq_eval₃
 
 中文:
 定理 sub_eq_eval₃
-  结论: [Ring R] [AddCommGroup M] [Module R M] {a₁ : R × M} (a₂ : R × M)
+  结论: [环 R] [加法交换群 M] [模 R M] {a₁ : R × M} (a₂ : R × M)
   证明: by
   simp only [eval_cons, neg_smul, neg_add, sub_eq_add_neg, ← h, ← add_assoc]
   congr! 1
@@ -365,7 +365,7 @@ theorem sub_eq_eval
 
 中文:
 定理 sub_eq_eval
-  结论: {R₁ R₂ S₁ S₂ : 类型} [AddCommGroup M] [Ring R] [Module R M] [Semiring R₁]
+  结论: {R₁ R₂ S₁ S₂ : 类型} [加法交换群 M] [环 R] [模 R M] [半环 R₁]
   证明: by
   rw [hx₁]; rw [hx₂]; rw [← h₁']; rw [← h₂']; rw [← h₁]; rw [← h₂]; rw [h]
 -/
@@ -387,8 +387,8 @@ instance [Neg
   body: l.map fun (a, x) => (-a, x)
 
 中文:
-实例 [Neg
-  签名: R] : Neg (NF R M) where
+实例 [取负
+  签名: R] : 取负 (NF R M) where
   定义体: l.map fun (a, x) => (-a, x)
 
 Depends on / 依赖: l.map
@@ -412,7 +412,7 @@ theorem eval_neg
 
 中文:
 定理 eval_neg
-  条件: [AddCommGroup M] [Ring R] [Module R M] (l : NF R M)
+  条件: [加法交换群 M] [环 R] [模 R M] (l : NF R M)
   结论: (-l).eval = - l.eval
   证明: by
   simp +instances only [NF.eval, List.map_map, List.sum_neg, NF.instNeg]
@@ -439,7 +439,7 @@ theorem zero_sub_eq_eval
 
 中文:
 定理 zero_sub_eq_eval
-  条件: [AddCommGroup M] [Ring R] [Module R M] (l : NF R M)
+  条件: [加法交换群 M] [环 R] [模 R M] (l : NF R M)
   证明: by
   simp [eval_neg]
 
@@ -460,7 +460,7 @@ theorem neg_eq_eval
 
 中文:
 定理 neg_eq_eval
-  结论: [AddCommGroup M] [Semiring S] [Module S M] [Ring R] [Module R M] {l : NF R M}
+  结论: [加法交换群 M] [半环 S] [模 S M] [环 R] [模 R M] {l : NF R M}
   证明: by
   rw [h]; rw [← hl]; rw [eval_neg]
 
@@ -480,8 +480,8 @@ instance [Mul
   body: l.map fun (a, x) => (r * a, x)
 
 中文:
-实例 [Mul
-  签名: R] : SMul R (NF R M) where
+实例 [乘法
+  签名: R] : 标量乘法 R (NF R M) where
   定义体: l.map fun (a, x) => (r * a, x)
 
 Depends on / 依赖: l.map
@@ -500,7 +500,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [Mul R] (r : R) (l : NF R M)
+  条件: [乘法 R] (r : R) (l : NF R M)
   结论: r • l = l.map fun (a, x) => (r * a, x)
   证明: rfl
 -/
@@ -523,7 +523,7 @@ theorem eval_smul
 
 中文:
 定理 eval_smul
-  结论: [AddCommMonoid M] [Semiring R] [Module R M] {l : NF R M} {x : M} (h : x = l.eval)
+  结论: [加法交换幺半群 M] [半环 R] [模 R M] {l : NF R M} {x : M} (h : x = l.eval)
   证明: by
   unfold NF.eval at h ⊢
   simp only [h, smul_sum, map_map, NF.smul_apply]
@@ -553,7 +553,7 @@ theorem smul_eq_eval
 
 中文:
 定理 smul_eq_eval
-  结论: {R₀ : 类型} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₀]
+  结论: {R₀ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₀]
   证明: by
   rw [← hs]; rw [hx]; rw [← hl]; rw [eval_smul]
   rfl
@@ -578,7 +578,7 @@ theorem eq_cons_cons
 
 中文:
 定理 eq_cons_cons
-  结论: [AddMonoid M] [SMul R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M} (h1 : r₁ = r₂)
+  结论: [加法幺半群 M] [标量乘法 R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M} (h1 : r₁ = r₂)
   证明: by
   simp [h1, h2]
 -/
@@ -598,7 +598,7 @@ theorem eq_cons_const
 
 中文:
 定理 eq_cons_const
-  结论: [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
+  结论: [加法交换幺半群 M] [半环 R] [模 R M] {r : R} (m : M) {n : M}
   证明: by
   simp [h1, h2]
 -/
@@ -618,7 +618,7 @@ theorem eq_const_cons
 
 中文:
 定理 eq_const_cons
-  结论: [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
+  结论: [加法交换幺半群 M] [半环 R] [模 R M] {r : R} (m : M) {n : M}
   证明: by
   simp [← h1, h2]
 -/
@@ -638,7 +638,7 @@ theorem eq_of_eval_eq_eval
 
 中文:
 定理 eq_of_eval_eq_eval
-  结论: {R₁ R₂ : 类型} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
+  结论: {R₁ R₂ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₁]
   证明: by
   rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
 -/
@@ -661,7 +661,7 @@ definition algebraMap
 
 中文:
 定义 algebraMap
-  签名: [CommSemiring S] [Semiring R] [Algebra S R] (l : NF S M)
+  签名: [交换半环 S] [半环 R] [代数 S R] (l : NF S M)
   定义体: l.map (fun ⟨s, x⟩ => (Algebra.algebraMap S R s, x))
 
 Depends on / 依赖: Algebra, Algebra.algebraMap, algebraMap, l.map
@@ -684,7 +684,7 @@ theorem eval_algebraMap
 
 中文:
 定理 eval_algebraMap
-  结论: [CommSemiring S] [Semiring R] [Algebra S R] [AddMonoid M] [SMul S M]
+  结论: [交换半环 S] [半环 R] [代数 S R] [加法幺半群 M] [标量乘法 S M]
   证明: by
   simp only [NF.eval, algebraMap, map_map]
   congr
@@ -827,7 +827,7 @@ definition sub
 
 中文:
 定义 sub
-  签名: (iR : Q(Ring $R))
+  签名: (iR : Q(环 $R))
 -/
 def sub (iR : Q(Ring $R)) : qNF R M -> qNF R M -> qNF R M
   | [], l => l.onScalar q(Neg.neg)
@@ -858,7 +858,7 @@ definition mkSubProof
 
 中文:
 定义 mkSubProof
-  签名: (iR : Q(Ring $R)) (iM : Q(AddCommGroup $M)) (iRM : Q(Module $R $M))
+  签名: (iR : Q(环 $R)) (iM : Q(加法交换群 $M)) (iRM : Q(模 $R $M))
   定义体: match l₁, l₂ with
   | [], l => (q(NF.zero_sub_eq_eval $(l.toNF)):)
   | l, [] => (q(sub_zero (NF.eval $(l.toNF))):)
@@ -969,7 +969,7 @@ definition parse
 
 中文:
 定义 parse
-  签名: (iM : Q(AddCommMonoid $M)) (x : Q($M))
+  签名: (iM : Q(加法交换幺半群 $M)) (x : Q($M))
   定义体: do
   match x with
   /- parse an addition: `x₁ + x₂` -/
@@ -1057,7 +1057,7 @@ definition reduceCoefficientwise
 
 中文:
 定义 reduceCoefficientwise
-  签名: {R : Q(类型u)} {_ : Q(AddCommMonoid $M)} {_ : Q(Semiring $R)}
+  签名: {R : Q(类型u)} {_ : Q(加法交换幺半群 $M)} {_ : Q(半环 $R)}
   定义体: do
   match l₁, l₂ with
   /- if both empty, return a `rfl` proof that `(0:M) = 0` -/
@@ -1179,7 +1179,7 @@ definition algebraMapThms
 
 中文:
 定义 algebraMapThms
-  签名: : Array Name
+  签名: : 数组 Name
   定义体: #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
 
 Depends on / 依赖: eq_intCast, eq_natCast, eq_ratCast

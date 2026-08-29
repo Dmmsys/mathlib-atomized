@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalEpiCategory (PresheafOfModules.{v} R)
+  签名: 是正规满态射范畴 (预模层.{v} R)
   定义体: ⟨NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
     (evaluationJointlyReflectsColimits _ _ (fun _ =>
       Abelian.isColimitMapCoconeOfCokernelCoforkOfπ _ _))⟩
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalMonoCategory (PresheafOfModules.{v} R)
+  签名: 是正规单态射范畴 (预模层.{v} R)
   定义体: ⟨NormalMono.mk _ (cokernel.π i) (cokernel.condition _)
     (evaluationJointlyReflectsLimits _ _ (fun _ =>
       Abelian.isLimitMapConeOfKernelForkOfι _ _))⟩
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (PresheafOfModules.{v} R)
+  签名: 交换 (预模层.{v} R)
 -/
 noncomputable instance : Abelian (PresheafOfModules.{v} R) where
 

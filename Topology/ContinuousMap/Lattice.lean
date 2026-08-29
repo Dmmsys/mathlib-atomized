@@ -41,8 +41,8 @@ instance [PartialOrder
   body: mul_le_mul_left (hfg x) (c x)
 
 中文:
-实例 [PartialOrder
-  签名: β] [CommMonoid β] [IsOrderedMonoid β] [ContinuousMul β] :
+实例 [偏序
+  签名: β] [交换幺半群 β] [是Ordered幺半群 β] [连续乘法 β] :
   定义体: mul_le_mul_left (hfg x) (c x)
 
 Depends on / 依赖: mul_le_mul_left

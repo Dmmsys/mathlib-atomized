@@ -92,7 +92,7 @@ definition counitCoequalises
 
 中文:
 定义 counitCoequalises
-  签名: (h : 对任意 X : B, RegularEpi (adj₁.counit.app X)) (X : B)
+  签名: (h : 对任意 X : B, 正则满态射 (adj₁.counit.app X)) (X : B)
   定义体: Cofork.IsColimit.mk' _ fun s => by
 .epi have := fun Y => h Y
     refine ⟨((h X).desc' s.π ?_).1, ?_, ?_⟩
@@ -194,7 +194,7 @@ definition constructLeftAdjointEquiv
 
 中文:
 定义 constructLeftAdjointEquiv
-  签名: (h : 对任意 X : B, RegularEpi (adj₁.counit.app X)) (Y : A)
+  签名: (h : 对任意 X : B, 正则满态射 (adj₁.counit.app X)) (Y : A)
   定义体: calc
     (constructLeftAdjointObj _ _ adj₁ adj₂ X ⟶ Y) ≃
         { f : F'.obj (U.obj X) ⟶ Y //
@@ -246,7 +246,7 @@ definition constructLeftAdjoint
 
 中文:
 定义 constructLeftAdjoint
-  签名: (h : 对任意 X : B, RegularEpi (adj₁.counit.app X))
+  签名: (h : 对任意 X : B, 正则满态射 (adj₁.counit.app X))
   定义体: by
   refine Adjunction.leftAdjointOfEquiv (fun X Y => constructLeftAdjointEquiv R _ adj₁ adj₂ h Y X) ?_
   intro X Y Y' g h

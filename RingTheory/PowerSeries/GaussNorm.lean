@@ -255,7 +255,7 @@ lemma gaussNorm_add_le_max
 
 中文:
 引理 gaussNorm_add_le_max
-  结论: (g : PowerSeries R) (hc : 0 <= c)
+  结论: (g : 幂级数 R) (hc : 0 <= c)
   证明: MvPowerSeries.gaussNorm_add_le_max v (fun _ => c) f g (fun _ => by simp [hc]) vNonneg hv
     hbfd.hasMvGaussNorm hbgd.hasMvGaussNorm
 

@@ -54,7 +54,7 @@ definition nfpFamily
 
 中文:
 定义 nfpFamily
-  签名: (f : ι -> Ordinal.{u} -> Ordinal.{u}) (a : Ordinal.{u})
+  签名: (f : ι -> 序数.{u} -> 序数.{u}) (a : 序数.{u})
   定义体: ⨆ i, List.foldr f a i
 
 Depends on / 依赖: List.foldr
@@ -72,7 +72,7 @@ theorem foldr_le_nfpFamily
 
 中文:
 定理 foldr_le_nfpFamily
-  条件: [Small.{u} ι] (f : ι -> Ordinal.{u} -> Ordinal.{u}) (a l)
+  条件: [Small.{u} ι] (f : ι -> 序数.{u} -> 序数.{u}) (a l)
   证明: Ordinal.le_iSup _ _
 
 Depends on / 依赖: IsIsometricSMul, IsIsometricSMul.to_continuousConstSMul, Ordinal, Ordinal.le_iSup, PseudoEMetricSpace, le_iSup, to_continuousConstSMul
@@ -92,7 +92,7 @@ theorem le_nfpFamily
 
 中文:
 定理 le_nfpFamily
-  条件: [Small.{u} ι] (f : ι -> Ordinal.{u} -> Ordinal.{u}) (a)
+  条件: [Small.{u} ι] (f : ι -> 序数.{u} -> 序数.{u}) (a)
   结论: a <= nfpFamily f a
   证明: foldr_le_nfpFamily f a []
 
@@ -113,7 +113,7 @@ theorem lt_nfpFamily_iff
 中文:
 定理 lt_nfpFamily_iff
   条件: [Small.{u} ι] {a b}
-  结论: a < nfpFamily f b ↔ 存在 l, a < List.foldr f b l
+  结论: a < nfpFamily f b ↔ 存在 l, a < 列表.foldr f b l
   证明: Ordinal.lt_iSup_iff
 
 Depends on / 依赖: Ordinal, Ordinal.lt_iSup_iff, lt_iSup_iff
@@ -133,7 +133,7 @@ theorem nfpFamily_le_iff
 中文:
 定理 nfpFamily_le_iff
   条件: [Small.{u} ι] {a b}
-  结论: nfpFamily f a <= b ↔ 对任意 l, List.foldr f a l <= b
+  结论: nfpFamily f a <= b ↔ 对任意 l, 列表.foldr f a l <= b
   证明: Ordinal.iSup_le_iff
 
 Depends on / 依赖: Ordinal, Ordinal.iSup_le_iff, iSup_le_iff
@@ -153,7 +153,7 @@ theorem nfpFamily_le
 中文:
 定理 nfpFamily_le
   条件: {a b}
-  结论: (对任意 l, List.foldr f a l <= b) -> nfpFamily f a <= b
+  结论: (对任意 l, 列表.foldr f a l <= b) -> nfpFamily f a <= b
   证明: Ordinal.iSup_le
 
 Depends on / 依赖: Ordinal, Ordinal.iSup_le, iSup_le
@@ -172,8 +172,8 @@ theorem nfpFamily_monotone
 
 中文:
 定理 nfpFamily_monotone
-  条件: [Small.{u} ι] (hf : 对任意 i, Monotone (f i))
-  结论: Monotone (nfpFamily f)
+  条件: [Small.{u} ι] (hf : 对任意 i, 递增 (f i))
+  结论: 递增 (nfpFamily f)
   证明: fun _ _ h => nfpFamily_le fun l => (List.foldr_monotone hf l h).trans (foldr_le_nfpFamily _ _ l)
 
 Depends on / 依赖: List.foldr_monotone, foldr_le_nfpFamily, foldr_monotone, nfpFamily_le
@@ -192,7 +192,7 @@ theorem apply_lt_nfpFamily
 
 中文:
 定理 apply_lt_nfpFamily
-  结论: [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a b}
+  结论: [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a b}
   证明: let ⟨l, hl⟩ := lt_nfpFamily_iff.1 hb
   lt_nfpFamily_iff.2 ⟨i::l, (H i).strictMono hl⟩
 
@@ -216,7 +216,7 @@ exact lt_nfpFamily_iff.2 ⟨l, (H _).strictMono.le_apply.trans_lt hl⟩
 
 中文:
 定理 apply_lt_nfpFamily_iff
-  条件: [Nonempty ι] [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a b}
+  条件: [非空 ι] [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a b}
   证明: by
   refine ⟨fun h => ?_, apply_lt_nfpFamily H⟩
   let ⟨l, hl⟩ := lt_nfpFamily_iff.1 (h (Classical.arbitrary ι))
@@ -241,7 +241,7 @@ theorem nfpFamily_le_apply
 
 中文:
 定理 nfpFamily_le_apply
-  条件: [Nonempty ι] [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a b}
+  条件: [非空 ι] [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a b}
   证明: by
   contrapose!; exact apply_lt_nfpFamily_iff H
 
@@ -265,7 +265,7 @@ theorem nfpFamily_le_fp
 
 中文:
 定理 nfpFamily_le_fp
-  条件: (H : 对任意 i, Monotone (f i)) {a b} (ab : a <= b) (h : 对任意 i, f i b <= b)
+  条件: (H : 对任意 i, 递增 (f i)) {a b} (ab : a <= b) (h : 对任意 i, f i b <= b)
   证明: by
   apply Ordinal.iSup_le fun l => ?_
   induction l generalizing a with
@@ -295,7 +295,7 @@ theorem nfpFamily_fp
 
 中文:
 定理 nfpFamily_fp
-  条件: [Small.{u} ι] {i} (H : IsNormal (f i)) (a)
+  条件: [Small.{u} ι] {i} (H : 是正规 (f i)) (a)
   证明: by
   rw [nfpFamily]; rw [H.map_iSup bddAbove_of_small]
   apply le_antisymm <;> refine Ordinal.iSup_le fun l => ?_
@@ -326,7 +326,7 @@ theorem apply_le_nfpFamily
 
 中文:
 定理 apply_le_nfpFamily
-  条件: [Small.{u} ι] [hι : Nonempty ι] (H : 对任意 i, IsNormal (f i)) {a b}
+  条件: [Small.{u} ι] [hι : 非空 ι] (H : 对任意 i, 是正规 (f i)) {a b}
   证明: by
   refine ⟨fun h => ?_, fun h i => ?_⟩
   · obtain ⟨i⟩ := hι
@@ -387,7 +387,7 @@ theorem not_bddAbove_fp_family
 
 中文:
 定理 not_bddAbove_fp_family
-  条件: [Small.{u} ι] (H : 对任意 i, IsNormal (f i))
+  条件: [Small.{u} ι] (H : 对任意 i, 是正规 (f i))
   证明: by
   rw [not_bddAbove_iff]
   refine fun a => ⟨nfpFamily f (succ a), ?_, (lt_succ a).trans_le (le_nfpFamily f _)⟩
@@ -416,7 +416,7 @@ definition derivFamily
 
 中文:
 定义 derivFamily
-  签名: (f : ι -> Ordinal.{u} -> Ordinal.{u}) (o : Ordinal.{u})
+  签名: (f : ι -> 序数.{u} -> 序数.{u}) (o : 序数.{u})
   定义体: limitRecOn o (nfpFamily f 0) (fun _ IH => nfpFamily f (succ IH))
     fun a _ g => ⨆ b : Set.Iio a, g _ b.2
 
@@ -441,7 +441,7 @@ theorem derivFamily_zero
 
 中文:
 定理 derivFamily_zero
-  条件: (f : ι -> Ordinal -> Ordinal)
+  条件: (f : ι -> 序数 -> 序数)
   证明: limitRecOn_zero ..
 
 @[simp]
@@ -463,7 +463,7 @@ theorem derivFamily_add_one
 
 中文:
 定理 derivFamily_add_one
-  条件: (f : ι -> Ordinal -> Ordinal) (o)
+  条件: (f : ι -> 序数 -> 序数) (o)
   证明: limitRecOn_add_one ..
 
 Depends on / 依赖: limitRecOn_add_one
@@ -483,7 +483,7 @@ theorem derivFamily_succ
 
 中文:
 定理 derivFamily_succ
-  条件: (f : ι -> Ordinal -> Ordinal) (o)
+  条件: (f : ι -> 序数 -> 序数) (o)
   证明: derivFamily_add_one f o
 
 Depends on / 依赖: derivFamily_add_one
@@ -502,7 +502,7 @@ theorem derivFamily_limit
 
 中文:
 定理 derivFamily_limit
-  条件: (f : ι -> Ordinal -> Ordinal) {o}
+  条件: (f : ι -> 序数 -> 序数) {o}
   证明: limitRecOn_limit _ _ _ _
 
 Depends on / 依赖: limitRecOn_limit
@@ -527,7 +527,7 @@ theorem isNormal_derivFamily
 
 中文:
 定理 isNormal_derivFamily
-  条件: [Small.{u} ι] (f : ι -> Ordinal.{u} -> Ordinal.{u})
+  条件: [Small.{u} ι] (f : ι -> 序数.{u} -> 序数.{u})
   证明: by
   refine IsNormal.of_succ_lt (fun o => ?_) @fun o h => ?_
   · rw [derivFamily_succ, ← succ_le_iff]
@@ -557,7 +557,7 @@ theorem derivFamily_strictMono
 
 中文:
 定理 derivFamily_strictMono
-  条件: [Small.{u} ι] (f : ι -> Ordinal.{u} -> Ordinal.{u})
+  条件: [Small.{u} ι] (f : ι -> 序数.{u} -> 序数.{u})
   证明: (isNormal_derivFamily f).strictMono
 
 Depends on / 依赖: isNormal_derivFamily, strictMono
@@ -587,7 +587,7 @@ theorem derivFamily_fp
 
 中文:
 定理 derivFamily_fp
-  条件: [Small.{u} ι] {i} (H : IsNormal (f i)) (o : Ordinal)
+  条件: [Small.{u} ι] {i} (H : 是正规 (f i)) (o : 序数)
   证明: by
   induction o using limitRecOn with
   | zero =>
@@ -639,7 +639,7 @@ theorem le_iff_derivFamily
 
 中文:
 定理 le_iff_derivFamily
-  条件: [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a}
+  条件: [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a}
   证明: ⟨fun ha => by
     suffices forall (o), a <= derivFamily f o -> exists o, derivFamily f o = a from
       this a (isNormal_derivFamily _).strictMono.le_apply
@@ -692,7 +692,7 @@ theorem fp_iff_derivFamily
 
 中文:
 定理 fp_iff_derivFamily
-  条件: [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a}
+  条件: [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a}
   证明: Iff.trans ⟨fun h i => le_of_eq (h i), fun h i => (H i).strictMono.le_apply.ge_iff_eq'.1 (h i)⟩
     (le_iff_derivFamily H)
 
@@ -713,7 +713,7 @@ theorem mem_range_derivFamily
 
 中文:
 定理 mem_range_derivFamily
-  条件: [Small.{u} ι] (H : 对任意 i, IsNormal (f i)) {a}
+  条件: [Small.{u} ι] (H : 对任意 i, 是正规 (f i)) {a}
   证明: (fp_iff_derivFamily H).symm
 
 Depends on / 依赖: fp_iff_derivFamily
@@ -741,7 +741,7 @@ theorem derivFamily_eq_enumOrd
 
 中文:
 定理 derivFamily_eq_enumOrd
-  条件: [Small.{u} ι] (H : 对任意 i, IsNormal (f i))
+  条件: [Small.{u} ι] (H : 对任意 i, 是正规 (f i))
   证明: by
   rw [eq_comm]; rw [eq_enumOrd _ (not_bddAbove_fp_family H)]
   use (isNormal_derivFamily f).strictMono
@@ -785,7 +785,7 @@ definition nfp
 
 中文:
 定义 nfp
-  签名: (f : Ordinal -> Ordinal)
+  签名: (f : 序数 -> 序数)
   定义体: nfpFamily fun _ : Unit => f
 
 Depends on / 依赖: nfpFamily
@@ -804,8 +804,8 @@ theorem nfp_eq_nfpFamily
 
 中文:
 定理 nfp_eq_nfpFamily
-  条件: (f : Ordinal -> Ordinal)
-  结论: nfp f = nfpFamily fun _ : Unit => f
+  条件: (f : 序数 -> 序数)
+  结论: nfp f = nfpFamily fun _ : 单元 => f
   证明: rfl
 -/
 theorem nfp_eq_nfpFamily (f : Ordinal -> Ordinal) : nfp f = nfpFamily fun _ : Unit => f :=
@@ -830,7 +830,7 @@ theorem iSup_iterate_eq_nfp
 
 中文:
 定理 iSup_iterate_eq_nfp
-  条件: (f : Ordinal.{u} -> Ordinal.{u}) (a : Ordinal.{u})
+  条件: (f : 序数.{u} -> 序数.{u}) (a : 序数.{u})
   证明: by
   apply le_antisymm
   · rw [Ordinal.iSup_le_iff]
@@ -1013,8 +1013,8 @@ theorem nfp_monotone
 
 中文:
 定理 nfp_monotone
-  条件: (hf : Monotone f)
-  结论: Monotone (nfp f)
+  条件: (hf : 递增 f)
+  结论: 递增 (nfp f)
   证明: nfpFamily_monotone fun _ => hf
 
 Depends on / 依赖: nfpFamily_monotone
@@ -1036,7 +1036,7 @@ theorem iterate_lt_nfp
 
 中文:
 定理 iterate_lt_nfp
-  条件: (hf : StrictMono f) {a} (h : a < f a) (n : 自然数)
+  条件: (hf : 严格递增 f) {a} (h : a < f a) (n : 自然数)
   结论: f^[n] a < nfp f a
   证明: by
   apply (hf.iterate n h).trans_le
@@ -1064,7 +1064,7 @@ theorem apply_lt_nfp
 
 中文:
 定理 apply_lt_nfp
-  条件: (H : IsNormal f) {a b}
+  条件: (H : 是正规 f) {a b}
   结论: f b < nfp f a ↔ b < nfp f a
   证明: by
   unfold nfp
@@ -1089,7 +1089,7 @@ theorem nfp_le_apply
 
 中文:
 定理 nfp_le_apply
-  条件: (H : IsNormal f) {a b}
+  条件: (H : 是正规 f) {a b}
   结论: nfp f a <= f b ↔ nfp f a <= b
   证明: le_iff_le_iff_lt_iff_lt.2 (apply_lt_nfp H)
 
@@ -1109,7 +1109,7 @@ theorem nfp_le_fp
 
 中文:
 定理 nfp_le_fp
-  条件: (H : Monotone f) {a b} (ab : a <= b) (h : f b <= b)
+  条件: (H : 递增 f) {a b} (ab : a <= b) (h : f b <= b)
   结论: nfp f a <= b
   证明: nfpFamily_le_fp (fun _ => H) ab fun _ => h
 
@@ -1129,7 +1129,7 @@ theorem nfp_fp
 
 中文:
 定理 nfp_fp
-  条件: (H : IsNormal f)
+  条件: (H : 是正规 f)
   结论: 对任意 a, f (nfp f a) = nfp f a
   证明: @nfpFamily_fp Unit (fun _ => f) _ () H
 
@@ -1149,7 +1149,7 @@ theorem apply_le_nfp
 
 中文:
 定理 apply_le_nfp
-  条件: (H : IsNormal f) {a b}
+  条件: (H : 是正规 f) {a b}
   结论: f b <= nfp f a ↔ b <= nfp f a
   证明: ⟨H.strictMono.le_apply.trans, fun h => by simpa only [nfp_fp H] using H.monotone h⟩
 
@@ -1191,8 +1191,8 @@ theorem not_bddAbove_fp
 
 中文:
 定理 not_bddAbove_fp
-  条件: (H : IsNormal f)
-  结论: ¬ BddAbove (Function.fixedPoints f)
+  条件: (H : 是正规 f)
+  结论: ¬ BddAbove (函数.fixedPoints f)
   证明: by
   convert! not_bddAbove_fp_family fun _ : Unit => H
   exact (Set.iInter_const _).symm
@@ -1213,7 +1213,7 @@ definition deriv
 
 中文:
 定义 deriv
-  签名: (f : Ordinal -> Ordinal)
+  签名: (f : 序数 -> 序数)
   定义体: derivFamily fun _ : Unit => f
 
 Depends on / 依赖: derivFamily
@@ -1232,8 +1232,8 @@ theorem deriv_eq_derivFamily
 
 中文:
 定理 deriv_eq_derivFamily
-  条件: (f : Ordinal -> Ordinal)
-  结论: deriv f = derivFamily fun _ : Unit => f
+  条件: (f : 序数 -> 序数)
+  结论: deriv f = derivFamily fun _ : 单元 => f
   证明: rfl
 -/
 theorem deriv_eq_derivFamily (f : Ordinal -> Ordinal) : deriv f = derivFamily fun _ : Unit => f :=
@@ -1319,7 +1319,7 @@ theorem deriv_limit
 中文:
 定理 deriv_limit
   条件: (f) {o}
-  结论: IsSuccLimit o -> deriv f o = ⨆ a : {a // a < o}, deriv f a
+  结论: 是SuccLimit o -> deriv f o = ⨆ a : {a // a < o}, deriv f a
   证明: derivFamily_limit _
 
 Depends on / 依赖: derivFamily_limit
@@ -1339,7 +1339,7 @@ theorem isNormal_deriv
 中文:
 定理 isNormal_deriv
   条件: (f)
-  结论: IsNormal (deriv f)
+  结论: 是正规 (deriv f)
   证明: isNormal_derivFamily _
 
 Depends on / 依赖: isNormal_derivFamily
@@ -1361,7 +1361,7 @@ theorem deriv_strictMono
 中文:
 定理 deriv_strictMono
   条件: (f)
-  结论: StrictMono (deriv f)
+  结论: 严格递增 (deriv f)
   证明: derivFamily_strictMono _
 
 @[deprecated "do not depend on the junk values of `nfp`" (since := "2026-05-13")]
@@ -1403,7 +1403,7 @@ theorem deriv_fp
 
 中文:
 定理 deriv_fp
-  条件: (H : IsNormal f)
+  条件: (H : 是正规 f)
   结论: 对任意 o, f (deriv f o) = deriv f o
   证明: derivFamily_fp (i := ⟨⟩) H
 
@@ -1426,7 +1426,7 @@ theorem le_iff_deriv
 
 中文:
 定理 le_iff_deriv
-  条件: (H : IsNormal f) {a}
+  条件: (H : 是正规 f) {a}
   结论: f a <= a ↔ 存在 o, deriv f o = a
   证明: by
   unfold deriv
@@ -1452,8 +1452,8 @@ theorem mem_range_deriv
 
 中文:
 定理 mem_range_deriv
-  条件: (H : IsNormal f) {a}
-  结论: a in Set.range (deriv f) ↔ f a = a
+  条件: (H : 是正规 f) {a}
+  结论: a in 集合.range (deriv f) ↔ f a = a
   证明: by
   rw [Set.mem_range]; rw [← H.strictMono.le_apply.ge_iff_eq']; rw [le_iff_deriv H]
 
@@ -1477,8 +1477,8 @@ theorem deriv_eq_enumOrd
 
 中文:
 定理 deriv_eq_enumOrd
-  条件: (H : IsNormal f)
-  结论: deriv f = enumOrd (Function.fixedPoints f)
+  条件: (H : 是正规 f)
+  结论: deriv f = enumOrd (函数.fixedPoints f)
   证明: by
   convert! derivFamily_eq_enumOrd fun _ : Unit => H
   exact (Set.iInter_const _).symm
@@ -1687,7 +1687,7 @@ theorem add_eq_right_iff_mul_omega0_le
 
 中文:
 定理 add_eq_right_iff_mul_omega0_le
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a + b = b ↔ a * ω <= b
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -1724,7 +1724,7 @@ theorem add_le_right_iff_mul_omega0_le
 
 中文:
 定理 add_le_right_iff_mul_omega0_le
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a + b <= b ↔ a * ω <= b
   证明: by
   rw [← add_eq_right_iff_mul_omega0_le]
@@ -1754,7 +1754,7 @@ theorem deriv_add_eq_mul_omega0_add
 
 中文:
 定理 deriv_add_eq_mul_omega0_add
-  条件: (a b : Ordinal.{u})
+  条件: (a b : 序数.{u})
   结论: deriv (a + ·) b = a * ω + b
   证明: by
   revert b
@@ -1794,7 +1794,7 @@ theorem nfp_mul_one
 
 中文:
 定理 nfp_mul_one
-  条件: {a : Ordinal} (ha : 0 < a)
+  条件: {a : 序数} (ha : 0 < a)
   结论: nfp (a * ·) 1 = a ^ ω
   证明: by
   rw [← iSup_iterate_eq_nfp]; rw [← iSup_pow_natCast ha]
@@ -1822,7 +1822,7 @@ theorem nfp_mul_zero
 
 中文:
 定理 nfp_mul_zero
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: nfp (a * ·) 0 = 0
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [nfp_le_iff]
@@ -1852,7 +1852,7 @@ theorem nfp_mul_eq_opow_omega0
 
 中文:
 定理 nfp_mul_eq_opow_omega0
-  条件: {a b : Ordinal} (hb : 0 < b) (hba : b <= a ^ ω)
+  条件: {a b : 序数} (hb : 0 < b) (hba : b <= a ^ ω)
   证明: by
   rcases eq_zero_or_pos a with rfl | ha
   · rw [zero_opow omega0_ne_zero] at hba
@@ -1894,7 +1894,7 @@ theorem eq_zero_or_opow_omega0_le_of_mul_eq_right
 
 中文:
 定理 eq_zero_or_opow_omega0_le_of_mul_eq_right
-  条件: {a b : Ordinal} (hab : a * b = b)
+  条件: {a b : 序数} (hab : a * b = b)
   证明: by
   rcases eq_zero_or_pos a with ha | ha
   · rw [ha, zero_opow omega0_ne_zero]
@@ -1935,7 +1935,7 @@ theorem mul_eq_right_iff_opow_omega0_dvd
 
 中文:
 定理 mul_eq_right_iff_opow_omega0_dvd
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a * b = b ↔ a ^ ω ∣ b
   证明: by
   rcases eq_zero_or_pos a with ha | ha
@@ -1973,7 +1973,7 @@ theorem mul_le_right_iff_opow_omega0_dvd
 
 中文:
 定理 mul_le_right_iff_opow_omega0_dvd
-  条件: {a b : Ordinal} (ha : 0 < a)
+  条件: {a b : 序数} (ha : 0 < a)
   证明: by
   rw [← mul_eq_right_iff_opow_omega0_dvd]
   exact (isNormal_mul_right ha).strictMono.le_apply.ge_iff_eq'
@@ -2004,7 +2004,7 @@ theorem nfp_mul_opow_omega0_add
 
 中文:
 定理 nfp_mul_opow_omega0_add
-  结论: {a c : Ordinal} (b) (ha : 0 < a) (hc : 0 < c)
+  结论: {a c : 序数} (b) (ha : 0 < a) (hc : 0 < c)
   证明: by
   apply le_antisymm
   · apply nfp_le_fp (isNormal_mul_right ha).monotone
@@ -2051,7 +2051,7 @@ theorem deriv_mul_eq_opow_omega0_mul
 
 中文:
 定理 deriv_mul_eq_opow_omega0_mul
-  条件: {a : Ordinal.{u}} (ha : 0 < a) (b)
+  条件: {a : 序数.{u}} (ha : 0 < a) (b)
   证明: by
   revert b
   rw [← funext_iff]; rw [IsNormal.ext_iff (isNormal_deriv _) (isNormal_mul_right (opow_pos ω ha))]

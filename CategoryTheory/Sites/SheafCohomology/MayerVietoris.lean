@@ -280,7 +280,7 @@ abbreviation sequence
 
 中文:
 缩写 sequence
-  签名: : ComposableArrows AddCommGrpCat.{w} 5
+  签名: : ComposableArrows 加法交换群范畴.{w} 5
   定义体: mk₅ (S.toBiprod F n₀) (S.fromBiprod F n₀) (S.δ F n₀ n₁ h)
     (S.toBiprod F n₁) (S.fromBiprod F n₁)
 
@@ -342,7 +342,7 @@ lemma sequence_exact
 
 中文:
 引理 sequence_exact
-  结论: (S.sequence F n₀ n₁ h).Exact
+  结论: (S.sequence F n₀ n₁ h).正合
   证明: exact_of_iso (S.sequenceIso F n₀ n₁ h).symm (Ext.contravariantSequence_exact _ _ _ _ _)
 
 @[reassoc (attr := simp)]

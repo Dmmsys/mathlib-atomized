@@ -61,10 +61,10 @@ class IsGeometricallyReduced
     - isReduced_algebraicClosure_tensorProduct((p : Ideal R) [p.IsPrime]) : IsReduced (AlgebraicClosure p.ResidueField otimes[R] A)
 
 中文:
-类 IsGeometricallyReduced
-  参数: (R A : 类型) [CommRing R] [Ring A] [Algebra R A]
+类 是几何既约
+  参数: (R A : 类型) [交换环 R] [环 A] [代数 R A]
   公理与运算 (1 个):
-    - isReduced_algebraicClosure_tensorProduct((p : Ideal R) [p.IsPrime]) : IsReduced (AlgebraicClosure p.ResidueField otimes[R] A)
+    - isReduced_algebraicClosure_tensorProduct((p : 理想 R) [p.是素]) : 是既约 (代数闭包 p.ResidueField otimes[R] A)
 -/
 class IsGeometricallyReduced (R A : Type*) [CommRing R] [Ring A] [Algebra R A] : Prop where
   isReduced_algebraicClosure_tensorProduct (p : Ideal R) [p.IsPrime] :
@@ -89,7 +89,7 @@ lemma isGeometricallyReduced_field_iff
 
 中文:
 引理 isGeometricallyReduced_field_iff
-  条件: (k A : 类型) [Field k] [Ring A] [Algebra k A]
+  条件: (k A : 类型) [域 k] [环 A] [代数 k A]
   证明: by
   let e (p : Ideal k) [p.IsPrime] : AlgebraicClosure k ≃ₐ[k] AlgebraicClosure p.ResidueField :=
     have := p.algEquivResidueFieldOfField.isAlgebraic
@@ -127,8 +127,8 @@ lemma IsGeometricallyReduced.of_injective
     (Module.Flat.lTensor_preserves_injective_linearMap _ hf)
 
 中文:
-引理 IsGeometricallyReduced.of_injective
-  结论: {B : 类型} [Ring B] [Algebra k B] (f : A ->ₐ[k] B)
+引理 是几何既约.of_injective
+  结论: {B : 类型} [环 B] [代数 k B] (f : A ->ₐ[k] B)
   证明: by
   rw [isGeometricallyReduced_field_iff]
   exact isReduced_of_injective (Algebra.TensorProduct.map 1 f)
@@ -156,8 +156,8 @@ theorem isReduced_of_isGeometricallyReduced
 
 中文:
 定理 isReduced_of_isGeometricallyReduced
-  条件: [IsGeometricallyReduced k A]
-  结论: IsReduced A
+  条件: [是几何既约 k A]
+  结论: 是既约 A
   证明: isReduced_of_injective
     (Algebra.TensorProduct.includeRight : A ->ₐ[k] (AlgebraicClosure k) otimes[k] A)
     (Algebra.TensorProduct.includeRight_injective (RingHom.injective _))
@@ -182,7 +182,7 @@ theorem IsGeometricallyReduced.of_forall_fg
   exact IsReduced.tensorProduct_of_flat_of_forall_fg h
 
 中文:
-定理 IsGeometricallyReduced.of_forall_fg
+定理 是几何既约.of_对任意_fg
   证明: by
   simp_rw [isGeometricallyReduced_field_iff] at h ⊢
   exact IsReduced.tensorProduct_of_flat_of_forall_fg h

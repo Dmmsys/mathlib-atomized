@@ -54,8 +54,8 @@ definition Extension
   deriving Field, Finite, Algebra (ZMod p), FiniteDimensional (ZMod p)
 
 中文:
-定义 Extension
-  签名: : Type
+定义 扩张
+  签名: : 类型
   定义体: letI := ZMod.algebra k p
   GaloisField p (Module.finrank (ZMod p) k * n)
   deriving Field, Finite, Algebra (ZMod p), FiniteDimensional (ZMod p)
@@ -83,7 +83,7 @@ mul_ne_zero Module.finrank_pos.ne' NeZero.ne n
 
 中文:
 定理 finrank_zmod_extension
-  条件: [Algebra (ZMod p) k]
+  条件: [代数 (ZMod p) k]
   证明: by
   let := ZMod.algebra k p
   unfold Extension
@@ -113,7 +113,7 @@ theorem nonempty_algHom_extension
 
 中文:
 定理 nonempty_algHom_extension
-  条件: [Algebra (ZMod p) k]
+  条件: [代数 (ZMod p) k]
   证明: nonempty_algHom_of_finrank_dvd (finrank_zmod_extension k p n ▸ dvd_mul_right _ _)
 
 Depends on / 依赖: dvd_mul_right, finrank_zmod_extension, nonempty_algHom_of_finrank_dvd
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra k (Extension k p n)
+  签名: 代数 k (扩张 k p n)
   定义体: letI := ZMod.algebra k p
   (nonempty_algHom_extension k p n).some.toAlgebra
 
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite k (Extension k p n)
+  签名: 模.有限 k (扩张 k p n)
   定义体: .of_finite
 
 Depends on / 依赖: of_finite
@@ -171,8 +171,8 @@ instance [Algebra
 .of_algebraMap_eq' Subsingleton.elim _ _
 
 中文:
-实例 [Algebra
-  签名: (ZMod p) k] : IsScalarTower (ZMod p) k (Extension k p n)
+实例 [代数
+  签名: (ZMod p) k] : 标量塔 (ZMod p) k (扩张 k p n)
   定义体: -- there is at most one map from `𝔽_p` to any ring
 .of_algebraMap_eq' Subsingleton.elim _ _
 -/
@@ -192,7 +192,7 @@ theorem natCard_extension
 
 中文:
 定理 natCard_extension
-  结论: 自然数.card (Extension k p n) = 自然数.card k ^ n
+  结论: 自然数.card (扩张 k p n) = 自然数.card k ^ n
   证明: by
   let := ZMod.algebra k p
   rw [← pow_finrank_eq_natCard p]; rw [← pow_finrank_eq_natCard p]; rw [finrank_zmod_extension]; rw [pow_mul]
@@ -215,7 +215,7 @@ theorem finrank_extension
 
 中文:
 定理 finrank_extension
-  结论: Module.finrank k (Extension k p n) = n
+  结论: 模.finrank k (扩张 k p n) = n
   证明: by
   refine Nat.pow_right_injective (Finite.one_lt_card : 2 <= Nat.card k) ?_
   simp only [← Module.natCard_eq_pow_finrank, natCard_extension]
@@ -245,7 +245,7 @@ example : IsCyclic Gal(Extension k p n / k) :=
 
 中文:
 实例 :
-  签名: IsSplittingField k (Extension k p n) (X ^ 自然数.card k ^ n - X)
+  签名: 是分裂域 k (扩张 k p n) (X ^ 自然数.card k ^ n - X)
   定义体: by
   have := Fintype.ofFinite (Extension k p n)
   convert! FiniteField.isSplittingField_sub (Extension k p n) k
@@ -280,7 +280,7 @@ theorem natCard_algEquiv_extension
 
 中文:
 定理 natCard_algEquiv_extension
-  结论: 自然数.card Gal(Extension k p n / k) = n
+  结论: 自然数.card Gal(扩张 k p n / k) = n
   证明: (IsGalois.card_aut_eq_finrank _ _).trans finrank_extension k p n
 
 Depends on / 依赖: IsGalois, IsGalois.card_aut_eq_finrank, card_aut_eq_finrank, finrank_extension
@@ -298,7 +298,7 @@ theorem card_algEquiv_extension
 
 中文:
 定理 card_algEquiv_extension
-  结论: Fintype.card Gal(Extension k p n / k) = n
+  结论: 有限类型.card Gal(扩张 k p n / k) = n
   证明: Fintype.card_eq_nat_card.trans natCard_algEquiv_extension k p n
 
 Depends on / 依赖: Fintype, Fintype.card_eq_nat_card.trans, card_eq_nat_card, natCard_algEquiv_extension
@@ -316,7 +316,7 @@ definition Extension.frob
   FiniteField.frobeniusAlgEquivOfAlgebraic _ _
 
 中文:
-定义 Extension.frob
+定义 扩张.frob
   签名: :
   定义体: haveI := Fintype.ofFinite k
   FiniteField.frobeniusAlgEquivOfAlgebraic _ _
@@ -340,8 +340,8 @@ lemma Extension.frob_apply
 @[simp]
 
 中文:
-引理 Extension.frob_apply
-  条件: {x : Extension k p n}
+引理 扩张.frob_apply
+  条件: {x : 扩张 k p n}
   证明: by
   simp [frob, ← Nat.card_eq_fintype_card]
 
@@ -365,8 +365,8 @@ theorem Extension.frob_iterate_apply
       rw [pow_add]; rw [pow_one]; rw [AlgEquiv.mul_apply]; rw [ih]; rw [frob_apply]; rw [← pow_mul]; rw [← Nat.pow_add_one']
 
 中文:
-定理 Extension.frob_iterate_apply
-  条件: (i : 自然数) {x : Extension k p n}
+定理 扩张.frob_iterate_apply
+  条件: (i : 自然数) {x : 扩张 k p n}
   证明: by
   induction i generalizing x with
   | zero => simp
@@ -396,8 +396,8 @@ theorem Extension.exists_frob_pow_eq
   rwa [finrank_extension] at hi
 
 中文:
-定理 Extension.exists_frob_pow_eq
-  条件: (g : Gal(Extension k p n/k))
+定理 扩张.存在_frob_pow_eq
+  条件: (g : Gal(扩张 k p n/k))
   证明: by
   let := Fintype.ofFinite k
   obtain ⟨⟨i, hi⟩, rfl⟩ := (FiniteField.bijective_frobeniusAlgEquivOfAlgebraic_pow k
@@ -431,7 +431,7 @@ have : Module.Finite k l := Module.finite_of_finrank_pos h ▸ NeZero.pos n
 
 中文:
 定义 algEquivExtension
-  签名: (l : 类型) [Field l] [Algebra k l]
+  签名: (l : 类型) [域 l] [代数 k l]
   定义体: by
   refine Nonempty.some ?_
 have : Module.Finite k l := Module.finite_of_finrank_pos h ▸ NeZero.pos n
@@ -470,8 +470,8 @@ obtain ⟨i, _, hi⟩ := Extension.exists_frob_pow_eq k p n
   simpa using (AlgEquiv.congr_arg (f := (a
 
 中文:
-定理 exists_forall_apply_eq_pow
-  条件: (l : 类型) [Field l] [Algebra k l] [Finite l] (g : Gal(l/k))
+定理 存在_对任意_apply_eq_pow
+  条件: (l : 类型) [域 l] [代数 k l] [有限 l] (g : Gal(l/k))
   证明: by
   let n := Module.finrank k l
   have : NeZero n := NeZero.of_pos Module.finrank_pos

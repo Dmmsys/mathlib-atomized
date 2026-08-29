@@ -44,7 +44,7 @@ theorem norm_le_totalVariation
 
 中文:
 定理 norm_le_totalVariation
-  条件: (s : SignedMeasure X) (i : Set X)
+  条件: (s : 符号测度 X) (i : 集合 X)
   证明: by
   by_cases hi : MeasurableSet i
   · rw [s.apply_eq_posPart_real_sub_negPart_real hi, totalVariation, measureReal_add_apply]
@@ -74,7 +74,7 @@ theorem enorm_le_totalVariation
 
 中文:
 定理 enorm_le_totalVariation
-  条件: (s : SignedMeasure X) (i : Set X)
+  条件: (s : 符号测度 X) (i : 集合 X)
   证明: calc
   _ = ENNReal.ofReal ‖s i‖ := (ofReal_norm _).symm
   _ <= ENNReal.ofReal (s.totalVariation.real i) :=
@@ -101,7 +101,7 @@ lemma toMeasureOfZeroLE_apply_eq_enorm
 
 中文:
 引理 toMeasureOfZeroLE_apply_eq_enorm
-  结论: {i j : Set X} (him : MeasurableSet i) (hi : 0 <=[i] μ)
+  结论: {i j : 集合 X} (him : 可测集 i) (hi : 0 <=[i] μ)
   证明: by
   have : 0 <= μ (i inter j) :=
     μ.nonneg_of_zero_le_restrict (μ.zero_le_restrict_subset ‹_› Set.inter_subset_left ‹_›)
@@ -126,7 +126,7 @@ lemma toMeasureOfLEZero_apply_eq_enorm
 
 中文:
 引理 toMeasureOfLEZero_apply_eq_enorm
-  结论: {i j : Set X} (him : MeasurableSet i)
+  结论: {i j : 集合 X} (him : 可测集 i)
   证明: by
   have : μ (i inter j) <= 0 :=
     μ.nonpos_of_restrict_le_zero (μ.restrict_le_zero_subset ‹_› Set.inter_subset_left ‹_›)
@@ -156,7 +156,7 @@ theorem totalVariation_eq_variation
 
 中文:
 定理 totalVariation_eq_variation
-  条件: (μ : SignedMeasure X)
+  条件: (μ : 符号测度 X)
   结论: μ.totalVariation = μ.variation
   证明: by
   ext r hr

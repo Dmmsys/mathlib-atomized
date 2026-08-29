@@ -41,9 +41,9 @@ theorem Option.id_traverse
   cases x <;> rfl
 
 中文:
-定理 Option.id_traverse
-  条件: {α} (x : Option α)
-  结论: Option.traverse (pure : α -> Id α) x = pure x
+定理 选项类型.id_traverse
+  条件: {α} (x : 选项类型 α)
+  结论: 选项类型.traverse (pure : α -> Id α) x = pure x
   证明: by
   cases x <;> rfl
 -/
@@ -60,8 +60,8 @@ theorem Option.comp_traverse
   cases x <;> (simp [Option.traverse, Option.mapM, functor_norm] <;> rfl)
 
 中文:
-定理 Option.comp_traverse
-  条件: {α β γ} (f : β -> F γ) (g : α -> G β) (x : Option α)
+定理 选项类型.comp_traverse
+  条件: {α β γ} (f : β -> F γ) (g : α -> G β) (x : 选项类型 α)
   证明: by
   cases x <;> (simp [Option.traverse, Option.mapM, functor_norm] <;> rfl)
 
@@ -81,8 +81,8 @@ theorem Option.traverse_eq_map_id
   proof: by cases x <;> rfl
 
 中文:
-定理 Option.traverse_eq_map_id
-  条件: {α β} (f : α -> β) (x : Option α)
+定理 选项类型.traverse_eq_map_id
+  条件: {α β} (f : α -> β) (x : 选项类型 α)
   证明: by cases x <;> rfl
 -/
 theorem Option.traverse_eq_map_id {α β} (f : α -> β) (x : Option α) :
@@ -100,8 +100,8 @@ theorem Option.naturality
   rcases x with - | x <;> simp! [*, functor_norm, Option.traverse]
 
 中文:
-定理 Option.naturality
-  条件: [LawfulApplicative F] {α β} (f : α -> F β) (x : Option α)
+定理 选项类型.naturality
+  条件: [合法适用 F] {α β} (f : α -> F β) (x : 选项类型 α)
   证明: by
   rcases x with - | x <;> simp! [*, functor_norm, Option.traverse]
 
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable Option
+  签名: 合法可遍历 选项类型
   定义体: { show LawfulMonad Option from inferInstance with
     id_traverse := Option.id_traverse
     comp_traverse := Option.comp_traverse
@@ -166,8 +166,8 @@ theorem id_traverse
 
 中文:
 定理 id_traverse
-  条件: {α} (xs : List α)
-  结论: (List.traverse pure xs : Id _) = pure xs
+  条件: {α} (xs : 列表 α)
+  结论: (列表.traverse pure xs : Id _) = pure xs
   证明: by
   induction xs <;> simp! [*, List.traverse, functor_norm]
 -/
@@ -185,7 +185,7 @@ theorem comp_traverse
 
 中文:
 定理 comp_traverse
-  条件: {α β γ} (f : β -> F γ) (g : α -> G β) (x : List α)
+  条件: {α β γ} (f : β -> F γ) (g : α -> G β) (x : 列表 α)
   证明: by
   induction x <;> simp! [*, functor_norm] <;> rfl
 -/
@@ -205,7 +205,7 @@ theorem traverse_eq_map_id
 
 中文:
 定理 traverse_eq_map_id
-  条件: {α β} (f : α -> β) (x : List α)
+  条件: {α β} (f : α -> β) (x : 列表 α)
   证明: by
   induction x <;> simp! [*, functor_norm]
 -/
@@ -226,7 +226,7 @@ theorem naturality
 
 中文:
 定理 naturality
-  条件: {α β} (f : α -> F β) (x : List α)
+  条件: {α β} (f : α -> F β) (x : 列表 α)
   证明: by
   induction x <;> simp! [*, functor_norm]
 -/
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable.{u} List
+  签名: 合法可遍历.{u} 列表
   定义体: { show LawfulMonad List from inferInstance with
     id_traverse := List.id_traverse
     comp_traverse := List.comp_traverse
@@ -283,7 +283,7 @@ theorem traverse_nil
 
 中文:
 定理 traverse_nil
-  结论: traverse f ([] : List α') = (pure [] : F (List β'))
+  结论: traverse f ([] : 列表 α') = (pure [] : F (列表 β'))
   证明: rfl
 
 @[simp]
@@ -302,7 +302,7 @@ theorem traverse_cons
 
 中文:
 定理 traverse_cons
-  条件: (a : α') (l : List α')
+  条件: (a : α') (l : 列表 α')
   证明: rfl
 -/
 theorem traverse_cons (a : α') (l : List α') :
@@ -335,7 +335,7 @@ theorem mem_traverse
 
 中文:
 定理 mem_traverse
-  条件: {f : α' -> Set β'}
+  条件: {f : α' -> 集合 β'}
 -/
 theorem mem_traverse {f : α' -> Set β'} :
     forall (l : List α') (n : List β'), n in traverse f l ↔ Forall₂ (fun b a => b in f a) n l

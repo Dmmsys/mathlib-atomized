@@ -62,8 +62,8 @@ theorem setIntegral_compLp
   proof: setIntegral_congr_ae hs ((L.coeFn_compLp φ).mono fun _x hx _ => hx)
 
 中文:
-定理 setIntegral_compLp
-  条件: (L : E ->SL[σ] F) (φ : Lp E p μ) {s : Set X} (hs : MeasurableSet s)
+定理 set整数egral_compLp
+  条件: (L : E ->SL[σ] F) (φ : Lp E p μ) {s : 集合 X} (hs : 可测集 s)
   证明: setIntegral_congr_ae hs ((L.coeFn_compLp φ).mono fun _x hx _ => hx)
 
 Depends on / 依赖: L.coeFn_compLp, coeFn_compLp, setIntegral_congr_ae
@@ -108,7 +108,7 @@ theorem integral_comp_commSL
 
 中文:
 定理 integral_comp_commSL
-  结论: [CompleteSpace E] (hσ : 对任意 (r : 实数) (x : 𝕜), σ (r • x) = r • σ x)
+  结论: [完备空间 E] (hσ : 对任意 (r : 实数) (x : 𝕜), σ (r • x) = r • σ x)
   证明: by
   apply φ_int.induction (P := fun φ => ∫ x, L (φ x) ∂μ = L (∫ x, φ x ∂μ))
   · intro e s s_meas _
@@ -142,7 +142,7 @@ theorem integral_comp_comm
 
 中文:
 定理 integral_comp_comm
-  条件: [CompleteSpace E] (L : E ->L[𝕜] Fₗ) {φ : X -> E} (φ_int : 整数egrable φ μ)
+  条件: [完备空间 E] (L : E ->L[𝕜] Fₗ) {φ : X -> E} (φ_int : 可积 φ μ)
   证明: integral_comp_commSL (by simp) L φ_int
 
 Depends on / 依赖: integral_comp_commSL
@@ -166,7 +166,7 @@ theorem integral_apply
 
 中文:
 定理 integral_apply
-  结论: {H : 类型} [NormedAddCommGroup H] [NormedSpace 𝕜 H] {φ : X -> H ->L[𝕜] E}
+  结论: {H : 类型} [赋范交换加群 H] [赋范空间 𝕜 H] {φ : X -> H ->L[𝕜] E}
   证明: by
   by_cases hE : CompleteSpace E
   · exact ((ContinuousLinearMap.apply 𝕜 E v).integral_comp_comm φ_int).symm
@@ -201,8 +201,8 @@ theorem _root_.ContinuousMultilinearMap.integral_apply
         rwa [SeparatingDual.completeSpace_continuousMultilinearMap_iff _ _ h
 
 中文:
-定理 _root_.ContinuousMultilinearMap.integral_apply
-  结论: {ι : 类型} [Fintype ι] {M : ι -> 类型}
+定理 _root_.连续多重线性映射.integral_apply
+  结论: {ι : 类型} [有限类型 ι] {M : ι -> 类型}
   证明: by
   by_cases hE : CompleteSpace E
   · exact ((ContinuousMultilinearMap.apply 𝕜 M E m).integral_comp_comm φ_int).symm
@@ -367,8 +367,8 @@ lemma ContinuousMap.integral_apply
     _ = _ := rfl
 
 中文:
-引理 ContinuousMap.integral_apply
-  结论: [NormedSpace 实数 E] [CompleteSpace E] {f : X -> C(Y, E)}
+引理 连续映射.integral_apply
+  结论: [赋范空间 实数 E] [完备空间 E] {f : X -> C(Y, E)}
   证明: by
   calc (∫ x, f x ∂μ) y = ContinuousMap.evalCLM Real y (∫ x, f x ∂μ) := rfl
     _ = ∫ x, ContinuousMap.evalCLM Real y (f x) ∂μ :=
@@ -398,8 +398,8 @@ theorem ContinuousMapZero.integral_apply
     _ = _ := rfl
 
 中文:
-定理 ContinuousMapZero.integral_apply
-  结论: {R : 类型} [NormedCommRing R] [Zero Y]
+定理 余ntinuousMapZero.integral_apply
+  结论: {R : 类型} [NormedComm环 R] [零 Y]
   证明: by
   calc (∫ x, f x ∂μ) y = ContinuousMapZero.evalCLM Real y (∫ x, f x ∂μ) := rfl
     _ = ∫ x, ContinuousMapZero.evalCLM Real y (f x) ∂μ :=
@@ -432,7 +432,7 @@ theorem integral_ofReal
 @[norm_cast]
 
 中文:
-定理 integral_ofReal
+定理 integral_of实数
   条件: {f : X -> 实数}
   结论: ∫ x, (f x : 𝕜) ∂μ = ↑(∫ x, f x ∂μ)
   证明: (@RCLike.ofRealLI 𝕜 _).integral_comp_comm f
@@ -455,9 +455,9 @@ theorem integral_complex_ofReal
   proof: integral_ofReal
 
 中文:
-定理 integral_complex_ofReal
+定理 integral_complex_of实数
   条件: {f : X -> 实数}
-  结论: ∫ x, (f x : Complex) ∂μ = ∫ x, f x ∂μ
+  结论: ∫ x, (f x : 复形) ∂μ = ∫ x, f x ∂μ
   证明: integral_ofReal
 
 Depends on / 依赖: integral_ofReal
@@ -474,7 +474,7 @@ theorem integral_re
 
 中文:
 定理 integral_re
-  条件: {f : X -> 𝕜} (hf : 整数egrable f μ)
+  条件: {f : X -> 𝕜} (hf : 可积 f μ)
   证明: (@RCLike.reCLM 𝕜 _).integral_comp_comm hf
 
 Depends on / 依赖: RCLike, RCLike.reCLM, integral_comp_comm
@@ -493,7 +493,7 @@ theorem integral_im
 
 中文:
 定理 integral_im
-  条件: {f : X -> 𝕜} (hf : 整数egrable f μ)
+  条件: {f : X -> 𝕜} (hf : 可积 f μ)
   证明: (@RCLike.imCLM 𝕜 _).integral_comp_comm hf
 
 Depends on / 依赖: RCLike, RCLike.imCLM, integral_comp_comm
@@ -539,7 +539,7 @@ theorem integral_coe_re_add_coe_im
 
 中文:
 定理 integral_coe_re_add_coe_im
-  条件: {f : X -> 𝕜} (hf : 整数egrable f μ)
+  条件: {f : X -> 𝕜} (hf : 可积 f μ)
   证明: by
   rw [mul_comm]; rw [← smul_eq_mul]; rw [← integral_smul]; rw [← integral_add]
   · congr
@@ -570,7 +570,7 @@ theorem integral_re_add_im
 
 中文:
 定理 integral_re_add_im
-  条件: {f : X -> 𝕜} (hf : 整数egrable f μ)
+  条件: {f : X -> 𝕜} (hf : 可积 f μ)
   证明: by
   rw [← integral_ofReal]; rw [← integral_ofReal]; rw [integral_coe_re_add_coe_im hf]
 
@@ -590,8 +590,8 @@ theorem setIntegral_re_add_im
   proof: integral_re_add_im hf
 
 中文:
-定理 setIntegral_re_add_im
-  条件: {f : X -> 𝕜} {i : Set X} (hf : 整数egrableOn f i μ)
+定理 set整数egral_re_add_im
+  条件: {f : X -> 𝕜} {i : 集合 X} (hf : 整数egrableOn f i μ)
   证明: integral_re_add_im hf
 
 Depends on / 依赖: integral_re_add_im
@@ -637,7 +637,7 @@ theorem fst_integral
 
 中文:
 定理 fst_integral
-  条件: [CompleteSpace F] {f : X -> E × F} (hf : 整数egrable f μ)
+  条件: [完备空间 F] {f : X -> E × F} (hf : 可积 f μ)
   证明: by
   by_cases hE : CompleteSpace E
   · exact ((ContinuousLinearMap.fst Real E F).integral_comp_comm hf).symm
@@ -665,7 +665,7 @@ exact fst_integral hf.snd.prodMk hf.fst
 
 中文:
 定理 snd_integral
-  条件: [CompleteSpace E] {f : X -> E × F} (hf : 整数egrable f μ)
+  条件: [完备空间 E] {f : X -> E × F} (hf : 可积 f μ)
   证明: by
   rw [← Prod.fst_swap]; rw [swap_integral]
 exact fst_integral hf.snd.prodMk hf.fst
@@ -688,7 +688,7 @@ theorem integral_pair
 
 中文:
 定理 integral_pair
-  结论: [CompleteSpace E] [CompleteSpace F] {f : X -> E} {g : X -> F}
+  结论: [完备空间 E] [完备空间 F] {f : X -> E} {g : X -> F}
   证明: have := hf.prodMk hg
   Prod.ext (fst_integral this) (snd_integral this)
 
@@ -717,7 +717,7 @@ theorem integral_smul_const
 
 中文:
 定理 integral_smul_const
-  结论: {𝕜 : 类型} [RCLike 𝕜] [NormedSpace 𝕜 E] [CompleteSpace E]
+  结论: {𝕜 : 类型} [RCLike 𝕜] [赋范空间 𝕜 E] [完备空间 E]
   证明: by
   by_cases hf : Integrable f μ
   · exact ((1 : 𝕜 ->L[𝕜] 𝕜).smulRight c).integral_comp_comm hf
@@ -754,7 +754,7 @@ lemma integral_const_mul_of_integrable
 
 中文:
 引理 integral_const_mul_of_integrable
-  结论: {A : 类型} [NonUnitalNormedRing A] [NormedSpace 实数 A]
+  结论: {A : 类型} [非幺赋范环 A] [赋范空间 实数 A]
   证明: by
   by_cases hA : CompleteSpace A
   · change ∫ x, ContinuousLinearMap.mul Real _ c (f x) ∂μ = ContinuousLinearMap.mul Real _ c (∫ x, f x ∂μ)
@@ -786,7 +786,7 @@ lemma integral_mul_const_of_integrable
 
 中文:
 引理 integral_mul_const_of_integrable
-  结论: {A : 类型} [NonUnitalNormedRing A] [NormedSpace 实数 A]
+  结论: {A : 类型} [非幺赋范环 A] [赋范空间 实数 A]
   证明: by
   by_cases hA : CompleteSpace A
   · change ∫ x, (ContinuousLinearMap.mul Real _).flip c (f x) ∂μ
@@ -821,7 +821,7 @@ theorem integral_withDensity_eq_integral_smul
 
 中文:
 定理 integral_withDensity_eq_integral_smul
-  条件: {f : X -> 实数>=0} (f_meas : Measurable f) (g : X -> E)
+  条件: {f : X -> 实数>=0} (f_meas : 可测 f) (g : X -> E)
   证明: by
   by_cases hE : CompleteSpace E; swap; · simp [integral, hE]
   by_cases hg : Integrable g (μ.withDensity fun x => f x); swap
@@ -895,7 +895,7 @@ theorem integral_withDensity_eq_integral_smul₀
 
 中文:
 定理 integral_withDensity_eq_integral_smul₀
-  条件: {f : X -> 实数>=0} (hf : AEMeasurable f μ) (g : X -> E)
+  条件: {f : X -> 实数>=0} (hf : 几乎处处可测 f μ) (g : X -> E)
   证明: by
   let f' := hf.mk _
   calc
@@ -934,8 +934,8 @@ theorem integral_withDensity_eq_integral_toReal_smul₀
   rw [← integral_withDensity_eq_integral_smul₀ f_meas.ennreal_toNNReal]; rw [withDensity_congr_ae (coe_toNNReal_ae_eq hf_lt_top)]
 
 中文:
-定理 integral_withDensity_eq_integral_toReal_smul₀
-  结论: {f : X -> 实数>=0∞} (f_meas : AEMeasurable f μ)
+定理 integral_withDensity_eq_integral_to实数_smul₀
+  结论: {f : X -> 实数>=0∞} (f_meas : 几乎处处可测 f μ)
   证明: by
   dsimp only [ENNReal.toReal, ← NNReal.smul_def]
   rw [← integral_withDensity_eq_integral_smul₀ f_meas.ennreal_toNNReal]; rw [withDensity_congr_ae (coe_toNNReal_ae_eq hf_lt_top)]
@@ -957,8 +957,8 @@ theorem integral_withDensity_eq_integral_toReal_smul
   proof: integral_withDensity_eq_integral_toReal_smul₀ f_meas.aemeasurable hf_lt_top g
 
 中文:
-定理 integral_withDensity_eq_integral_toReal_smul
-  结论: {f : X -> 实数>=0∞} (f_meas : Measurable f)
+定理 integral_withDensity_eq_integral_to实数_smul
+  结论: {f : X -> 实数>=0∞} (f_meas : 可测 f)
   证明: integral_withDensity_eq_integral_toReal_smul₀ f_meas.aemeasurable hf_lt_top g
 
 Depends on / 依赖: aemeasurable, f_meas, f_meas.aemeasurable, hf_lt_top
@@ -978,8 +978,8 @@ theorem setIntegral_withDensity_eq_setIntegral_smul₀
   rw [restrict_withDensity hs]; rw [integral_withDensity_eq_integral_smul₀ hf]
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_smul₀
-  结论: {f : X -> 实数>=0} {s : Set X}
+定理 set整数egral_withDensity_eq_set整数egral_smul₀
+  结论: {f : X -> 实数>=0} {s : 集合 X}
   证明: by
   rw [restrict_withDensity hs]; rw [integral_withDensity_eq_integral_smul₀ hf]
 
@@ -1000,8 +1000,8 @@ theorem setIntegral_withDensity_eq_setIntegral_toReal_smul₀
   rw [restrict_withDensity hs]; rw [integral_withDensity_eq_integral_toReal_smul₀ hf hf_top]
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_toReal_smul₀
-  结论: {f : X -> 实数>=0∞} {s : Set X}
+定理 set整数egral_withDensity_eq_set整数egral_to实数_smul₀
+  结论: {f : X -> 实数>=0∞} {s : 集合 X}
   证明: by
   rw [restrict_withDensity hs]; rw [integral_withDensity_eq_integral_toReal_smul₀ hf hf_top]
 
@@ -1022,8 +1022,8 @@ theorem setIntegral_withDensity_eq_setIntegral_smul
   proof: setIntegral_withDensity_eq_setIntegral_smul₀ f_meas.aemeasurable _ hs
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_smul
-  结论: {f : X -> 实数>=0} (f_meas : Measurable f)
+定理 set整数egral_withDensity_eq_set整数egral_smul
+  结论: {f : X -> 实数>=0} (f_meas : 可测 f)
   证明: setIntegral_withDensity_eq_setIntegral_smul₀ f_meas.aemeasurable _ hs
 
 Depends on / 依赖: aemeasurable, f_meas, f_meas.aemeasurable
@@ -1042,8 +1042,8 @@ theorem setIntegral_withDensity_eq_setIntegral_toReal_smul
   proof: setIntegral_withDensity_eq_setIntegral_toReal_smul₀ hf.aemeasurable hf_top g hs
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_toReal_smul
-  结论: {f : X -> 实数>=0∞} {s : Set X}
+定理 set整数egral_withDensity_eq_set整数egral_to实数_smul
+  结论: {f : X -> 实数>=0∞} {s : 集合 X}
   证明: setIntegral_withDensity_eq_setIntegral_toReal_smul₀ hf.aemeasurable hf_top g hs
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hf_top
@@ -1063,8 +1063,8 @@ theorem setIntegral_withDensity_eq_setIntegral_smul₀'
   rw [restrict_withDensity' s]; rw [integral_withDensity_eq_integral_smul₀ hf]
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_smul₀'
-  结论: [SFinite μ] {f : X -> 实数>=0} (s : Set X)
+定理 set整数egral_withDensity_eq_set整数egral_smul₀'
+  结论: [SFinite μ] {f : X -> 实数>=0} (s : 集合 X)
   证明: by
   rw [restrict_withDensity' s]; rw [integral_withDensity_eq_integral_smul₀ hf]
 
@@ -1085,8 +1085,8 @@ theorem setIntegral_withDensity_eq_setIntegral_toReal_smul₀'
   rw [restrict_withDensity' s]; rw [integral_withDensity_eq_integral_toReal_smul₀ hf hf_top]
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_toReal_smul₀'
-  结论: [SFinite μ] {f : X -> 实数>=0∞} (s : Set X)
+定理 set整数egral_withDensity_eq_set整数egral_to实数_smul₀'
+  结论: [SFinite μ] {f : X -> 实数>=0∞} (s : 集合 X)
   证明: by
   rw [restrict_withDensity' s]; rw [integral_withDensity_eq_integral_toReal_smul₀ hf hf_top]
 
@@ -1106,8 +1106,8 @@ theorem setIntegral_withDensity_eq_setIntegral_toReal_smul'
   proof: setIntegral_withDensity_eq_setIntegral_toReal_smul₀' s hf.aemeasurable hf_top g
 
 中文:
-定理 setIntegral_withDensity_eq_setIntegral_toReal_smul'
-  结论: [SFinite μ] {f : X -> 实数>=0∞} (s : Set X)
+定理 set整数egral_withDensity_eq_set整数egral_to实数_smul'
+  结论: [SFinite μ] {f : X -> 实数>=0∞} (s : 集合 X)
   证明: setIntegral_withDensity_eq_setIntegral_toReal_smul₀' s hf.aemeasurable hf_top g
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hf_top

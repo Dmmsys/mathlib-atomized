@@ -132,7 +132,7 @@ theorem ghostComponent_zero_verschiebungFun
 
 中文:
 定理 ghostComponent_zero_verschiebungFun
-  条件: [hp : Fact p.Prime] (x : 𝕎 R)
+  条件: [hp : Fact p.素] (x : 𝕎 R)
   证明: by
   rw [ghostComponent_apply]; rw [aeval_wittPolynomial]; rw [Finset.range_one]; rw [Finset.sum_singleton]; rw [verschiebungFun_coeff_zero]; rw [pow_zero]; rw [pow_zero]; rw [pow_one]; rw [one_mul]
 
@@ -159,7 +159,7 @@ theorem ghostComponent_verschiebungFun
 
 中文:
 定理 ghostComponent_verschiebungFun
-  条件: [hp : Fact p.Prime] (x : 𝕎 R) (n : 自然数)
+  条件: [hp : Fact p.素] (x : 𝕎 R) (n : 自然数)
   证明: by
   simp only [ghostComponent_apply, aeval_wittPolynomial]
   rw [Finset.sum_range_succ']; rw [verschiebungFun_coeff]; rw [if_pos rfl]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]; rw [add_zero]; rw [Finset.mul_sum]; rw [Finset.sum_congr rfl]
@@ -256,7 +256,7 @@ instance verschiebungFun_isPoly
 
 中文:
 实例 verschiebungFun_isPoly
-  签名: : IsPoly p fun R _Rcr => @verschiebungFun p R _Rcr
+  签名: : 是Poly p fun R _Rcr => @verschiebungFun p R _Rcr
   定义体: by
   use verschiebungPoly
   simp only [aeval_verschiebung_poly', forall₃_true_iff]
@@ -324,7 +324,7 @@ theorem verschiebung_isPoly
 
 中文:
 定理 verschiebung_isPoly
-  结论: IsPoly p fun _ _ => verschiebung (p := p)
+  结论: 是Poly p fun _ _ => verschiebung (p := p)
   证明: verschiebungFun_isPoly p
 -/
 theorem verschiebung_isPoly : IsPoly p fun _ _ => verschiebung (p := p) :=
@@ -488,7 +488,7 @@ theorem verschiebung_injective
 
 中文:
 定理 verschiebung_injective
-  结论: Function.Injective (verschiebung : 𝕎 R -> 𝕎 R)
+  结论: 函数.单射 (verschiebung : 𝕎 R -> 𝕎 R)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro w h

@@ -35,7 +35,7 @@ theorem aemeasurable_withDensity_iff
 
 中文:
 定理 aemeasurable_withDensity_iff
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   constructor
   · rintro ⟨g', g'meas, hg'⟩

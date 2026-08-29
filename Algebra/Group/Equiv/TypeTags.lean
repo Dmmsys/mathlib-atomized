@@ -38,8 +38,8 @@ definition AddEquiv.toMultiplicative
     invFun := Ad
 
 中文:
-定义 AddEquiv.toMultiplicative
-  签名: [AddZeroClass G] [AddZeroClass H]
+定义 加法等价.toMultiplicative
+  签名: [加法零类 G] [加法零类 H]
   定义体: { toFun := AddMonoidHom.toMultiplicative f.toAddMonoidHom
     invFun := AddMonoidHom.toMultiplicative f.symm.toAddMonoidHom
     left_inv := f.left_inv
@@ -84,8 +84,8 @@ definition MulEquiv.toAdditive
     invFun := MonoidHom.toAdditive.symm f.symm
 
 中文:
-定义 MulEquiv.toAdditive
-  签名: [MulOneClass G] [MulOneClass H]
+定义 乘法等价.toAdditive
+  签名: [MulOne类 G] [MulOne类 H]
   定义体: { toFun := MonoidHom.toAdditive f.toMonoidHom
     invFun := MonoidHom.toAdditive f.symm.toMonoidHom
     left_inv := f.left_inv
@@ -131,8 +131,8 @@ definition AddEquiv.toMultiplicativeRight
     
 
 中文:
-定义 AddEquiv.toMultiplicativeRight
-  签名: [MulOneClass G] [AddZeroClass H]
+定义 加法等价.toMultiplicativeRight
+  签名: [MulOne类 G] [加法零类 H]
   定义体: { toFun := f.toAddMonoidHom.toMultiplicativeRight
     invFun := f.symm.toAddMonoidHom.toMultiplicativeLeft
     left_inv := f.left_inv
@@ -169,8 +169,8 @@ abbreviation MulEquiv.toAdditiveLeft
   body: AddEquiv.toMultiplicativeRight.symm
 
 中文:
-缩写 MulEquiv.toAdditiveLeft
-  签名: [MulOneClass G] [AddZeroClass H]
+缩写 乘法等价.toAdditiveLeft
+  签名: [MulOne类 G] [加法零类 H]
   定义体: AddEquiv.toMultiplicativeRight.symm
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicativeRight.symm, toMultiplicativeRight
@@ -198,8 +198,8 @@ definition AddEquiv.toMultiplicativeLeft
     
 
 中文:
-定义 AddEquiv.toMultiplicativeLeft
-  签名: [AddZeroClass G] [MulOneClass H]
+定义 加法等价.toMultiplicativeLeft
+  签名: [加法零类 G] [MulOne类 H]
   定义体: { toFun := f.toAddMonoidHom.toMultiplicativeLeft
     invFun := f.symm.toAddMonoidHom.toMultiplicativeRight
     left_inv := f.left_inv
@@ -236,8 +236,8 @@ abbreviation MulEquiv.toAdditiveRight
   body: AddEquiv.toMultiplicativeLeft.symm
 
 中文:
-缩写 MulEquiv.toAdditiveRight
-  签名: [AddZeroClass G] [MulOneClass H]
+缩写 乘法等价.toAdditiveRight
+  签名: [加法零类 G] [MulOne类 H]
   定义体: AddEquiv.toMultiplicativeLeft.symm
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicativeLeft.symm, toMultiplicativeLeft
@@ -257,8 +257,8 @@ definition MulEquiv.toMultiplicative_toAdditive
   body: AddEquiv.toMultiplicativeLeft MulEquiv.toAdditive (.refl _)
 
 中文:
-定义 MulEquiv.toMultiplicative_toAdditive
-  签名: [MulOneClass G]
+定义 乘法等价.toMultiplicative_toAdditive
+  签名: [MulOne类 G]
   定义体: AddEquiv.toMultiplicativeLeft MulEquiv.toAdditive (.refl _)
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicativeLeft, MulEquiv, MulEquiv.toAdditive, toAdditive, toMultiplicativeLeft
@@ -278,8 +278,8 @@ definition AddEquiv.toAdditive_toMultiplicative
   body: MulEquiv.toAdditiveLeft AddEquiv.toMultiplicative (.refl _)
 
 中文:
-定义 AddEquiv.toAdditive_toMultiplicative
-  签名: [AddZeroClass G]
+定义 加法等价.toAdditive_toMultiplicative
+  签名: [加法零类 G]
   定义体: MulEquiv.toAdditiveLeft AddEquiv.toMultiplicative (.refl _)
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicative, MulEquiv, MulEquiv.toAdditiveLeft, toAdditiveLeft, toMultiplicative
@@ -299,7 +299,7 @@ definition monoidEndToAdditive
 
 中文:
 定义 monoidEndToAdditive
-  签名: (M : 类型) [MulOneClass M]
+  签名: (M : 类型) [MulOne类 M]
   定义体: { MonoidHom.toAdditive with
     map_mul' := fun _ _ => rfl }
 -/
@@ -319,7 +319,7 @@ definition addMonoidEndToMultiplicative
 
 中文:
 定义 addMonoidEndToMultiplicative
-  签名: (A : 类型) [AddZeroClass A]
+  签名: (A : 类型) [加法零类 A]
   定义体: { AddMonoidHom.toMultiplicative with
     map_mul' := fun _ _ => rfl }
 -/
@@ -341,8 +341,8 @@ definition MulEquiv.piMultiplicative
   map_mul' _ _ := rfl
 
 中文:
-定义 MulEquiv.piMultiplicative
-  签名: (K : ι -> 类型) [对任意 i, Add (K i)]
+定义 乘法等价.piMultiplicative
+  签名: (K : ι -> 类型) [对任意 i, 加法 (K i)]
   定义体: fun i => Multiplicative.ofAdd x.toAdd i
   invFun x := Multiplicative.ofAdd fun i => (x i).toAdd
   map_mul' _ _ := rfl
@@ -365,8 +365,8 @@ abbreviation MulEquiv.funMultiplicative
   body: MulEquiv.piMultiplicative fun _ => G
 
 中文:
-缩写 MulEquiv.funMultiplicative
-  签名: [Add G]
+缩写 乘法等价.funMultiplicative
+  签名: [加法 G]
   定义体: MulEquiv.piMultiplicative fun _ => G
 
 Depends on / 依赖: MulEquiv, MulEquiv.piMultiplicative, piMultiplicative
@@ -388,8 +388,8 @@ definition AddEquiv.piAdditive
   map_add' _ _ := rfl
 
 中文:
-定义 AddEquiv.piAdditive
-  签名: (K : ι -> 类型) [对任意 i, Mul (K i)]
+定义 加法等价.piAdditive
+  签名: (K : ι -> 类型) [对任意 i, 乘法 (K i)]
   定义体: fun i => Additive.ofMul x.toMul i
   invFun x := Additive.ofMul fun i => (x i).toMul
   map_add' _ _ := rfl
@@ -412,8 +412,8 @@ abbreviation AddEquiv.funAdditive
   body: AddEquiv.piAdditive fun _ => G
 
 中文:
-缩写 AddEquiv.funAdditive
-  签名: [Mul G]
+缩写 加法等价.funAdditive
+  签名: [乘法 G]
   定义体: AddEquiv.piAdditive fun _ => G
 
 Depends on / 依赖: AddEquiv, AddEquiv.piAdditive, piAdditive
@@ -437,8 +437,8 @@ definition AddEquiv.additiveMultiplicative
   body: MulEquiv.toAdditiveLeft (MulEquiv.refl (Multiplicative G))
 
 中文:
-定义 AddEquiv.additiveMultiplicative
-  签名: [AddZeroClass G]
+定义 加法等价.additiveMultiplicative
+  签名: [加法零类 G]
   定义体: MulEquiv.toAdditiveLeft (MulEquiv.refl (Multiplicative G))
 
 Depends on / 依赖: MulEquiv, MulEquiv.refl, MulEquiv.toAdditiveLeft, Multiplicative, toAdditiveLeft
@@ -457,8 +457,8 @@ definition MulEquiv.multiplicativeAdditive
   body: AddEquiv.toMultiplicativeLeft (AddEquiv.refl (Additive H))
 
 中文:
-定义 MulEquiv.multiplicativeAdditive
-  签名: [MulOneClass H]
+定义 乘法等价.multiplicativeAdditive
+  签名: [MulOne类 H]
   定义体: AddEquiv.toMultiplicativeLeft (AddEquiv.refl (Additive H))
 
 Depends on / 依赖: AddEquiv, AddEquiv.refl, AddEquiv.toMultiplicativeLeft, Additive, toMultiplicativeLeft
@@ -480,8 +480,8 @@ definition MulEquiv.prodMultiplicative
   map_mul' _ _ := rfl
 
 中文:
-定义 MulEquiv.prodMultiplicative
-  签名: [Add G] [Add H]
+定义 乘法等价.prodMultiplicative
+  签名: [加法 G] [加法 H]
   定义体: (Multiplicative.ofAdd x.toAdd.1,
     Multiplicative.ofAdd x.toAdd.2)
   invFun := fun (x, y) => Multiplicative.ofAdd (x.toAdd, y.toAdd)
@@ -510,8 +510,8 @@ definition AddEquiv.prodAdditive
   map_add' _ _ := rfl
 
 中文:
-定义 AddEquiv.prodAdditive
-  签名: [Mul G] [Mul H]
+定义 加法等价.prodAdditive
+  签名: [乘法 G] [乘法 H]
   定义体: (Additive.ofMul x.toMul.1,
     Additive.ofMul x.toMul.2)
   invFun := fun (x, y) => Additive.ofMul (x.toMul, y.toMul)
@@ -544,8 +544,8 @@ definition MulEquiv.Monoid.End
   map_mul' := fun _ _ => rfl
 
 中文:
-定义 MulEquiv.Monoid.End
-  签名: [Monoid M]
+定义 乘法等价.幺半群.End
+  签名: [幺半群 M]
   定义体: MonoidHom.toAdditive
   map_mul' := fun _ _ => rfl
 
@@ -567,8 +567,8 @@ definition MulEquiv.AddMonoid.End
   map_mul' := fun _ _ => rfl
 
 中文:
-定义 MulEquiv.AddMonoid.End
-  签名: [AddMonoid M]
+定义 乘法等价.加法幺半群.End
+  签名: [加法幺半群 M]
   定义体: AddMonoidHom.toMultiplicative
   map_mul' := fun _ _ => rfl
 

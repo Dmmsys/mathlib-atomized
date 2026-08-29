@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: 对任意 {n : 自然数}, SuccOrder (Fin n)
+  签名: 对任意 {n : 自然数}, Succ序 (有限集 n)
 
 Depends on / 依赖: Fin.eq_castSucc_of_ne_last, eq_castSucc_of_ne_last
 -/
@@ -74,7 +74,7 @@ lemma orderSucc_apply
 
 中文:
 引理 orderSucc_apply
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -120,7 +120,7 @@ lemma orderSucc_castSucc
 
 中文:
 引理 orderSucc_castSucc
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   证明: by
   simp [orderSucc_apply]
 
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: 对任意 {n : 自然数}, PredOrder (Fin n)
+  签名: 对任意 {n : 自然数}, Pred序 (有限集 n)
 
 Depends on / 依赖: Fin.eq_succ_of_ne_zero, eq_succ_of_ne_zero
 -/
@@ -183,7 +183,7 @@ lemma orderPred_apply
 
 中文:
 引理 orderPred_apply
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -224,7 +224,7 @@ lemma orderPred_succ
 
 中文:
 引理 orderPred_succ
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   证明: rfl
 -/
 lemma orderPred_succ {n : Nat} (i : Fin n) :

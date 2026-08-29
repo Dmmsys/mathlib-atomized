@@ -57,7 +57,7 @@ definition sectionOfCone
 
 中文:
 定义 sectionOfCone
-  签名: (c : Cone F) (x : c.pt)
+  签名: (c : 锥 F) (x : c.pt)
   定义体: ⟨fun j => c.π.app j x, fun f => congr_hom (c.π.naturality f).symm x⟩
 
 Depends on / 依赖: congr_hom, naturality
@@ -81,7 +81,7 @@ theorem isLimit_iff
 
 中文:
 定理 isLimit_iff
-  条件: (c : Cone F)
+  条件: (c : 锥 F)
   证明: by
   refine ⟨fun ⟨t⟩ s hs => ?_, fun h => ⟨?_⟩⟩
   · let cs := coneOfSection hs
@@ -116,7 +116,7 @@ theorem isLimit_iff_bijective_sectionOfCone
 
 中文:
 定理 isLimit_iff_bijective_sectionOfCone
-  条件: (c : Cone F)
+  条件: (c : 锥 F)
   证明: by
   simp_rw [isLimit_iff, Function.bijective_iff_existsUnique, Subtype.forall, F.sections_ext_iff,
     sectionOfCone]
@@ -144,7 +144,7 @@ definition isLimitEquivSections
 
 中文:
 定义 isLimitEquivSections
-  签名: {c : Cone F} (t : IsLimit c)
+  签名: {c : 锥 F} (t : 是极限 c)
   定义体: sectionOfCone c
   invFun s := t.lift (coneOfSection s.2) ⟨⟩
   left_inv x := (congr_hom (t.uniq (coneOfSection _)
@@ -176,7 +176,7 @@ theorem isLimitEquivSections_apply
 
 中文:
 定理 isLimitEquivSections_apply
-  结论: {c : Cone F} (t : IsLimit c) (j : J)
+  结论: {c : 锥 F} (t : 是极限 c) (j : J)
   证明: rfl
 
 @[simp]
@@ -197,7 +197,7 @@ theorem isLimitEquivSections_symm_apply
 
 中文:
 定理 isLimitEquivSections_symm_apply
-  结论: {c : Cone F} (t : IsLimit c)
+  结论: {c : 锥 F} (t : 是极限 c)
   证明: by
   conv_rhs => rw [← (isLimitEquivSections t).right_inv x]
   rfl
@@ -252,7 +252,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: Shrink F.sections
   π :=
     { app j := ↾fun u => ((equivShrink F.sections).symm u).val j }
@@ -303,7 +303,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone.{v, u} F) where
+  签名: : 是极限 (limitCone.{v, u} F) where
   定义体: ↾fun v => equivShrink F.sections
     { val := fun j => s.π.app j v
       property := fun f => congr_hom (Cone.w s f) _ }
@@ -339,7 +339,7 @@ theorem hasLimit_iff_small_sections
 中文:
 定理 hasLimit_iff_small_sections
   条件: (F : J ⥤ 类型u)
-  结论: HasLimit F ↔ Small.{u} F.sections
+  结论: 有极限 F ↔ Small.{u} F.sections
   证明: ⟨fun _ => .mk ⟨_, ⟨(Equiv.ofBijective _
     ((isLimit_iff_bijective_sectionOfCone (limit.cone F)).mp ⟨limit.isLimit _⟩)).symm⟩⟩,
    fun _ => ⟨_, Small.limitConeIsLimit F⟩⟩
@@ -370,7 +370,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: (F : J ⥤ Type (max v u))
+  签名: (F : J ⥤ 类型 (最大值 v u))
   定义体: F.sections
   π := { app j := ↾fun u => u.val j }
 
@@ -399,7 +399,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: (F : J ⥤ Type (max v u))
+  签名: (F : J ⥤ 类型 (最大值 v u))
   定义体: ↾fun v =>
     { val := fun j => s.π.app j v
       property := fun f => congr_hom (Cone.w s f) _ }
@@ -548,7 +548,7 @@ definition limNatIsoSectionsFunctor
     fun f => by ext x; exact Subtype.ext (funext fun j => congr_hom (limMap_π f j) x)
 
 中文:
-定义 limNatIsoSectionsFunctor
+定义 lim自然数IsoSectionsFunctor
   签名: :
   定义体: NatIso.ofComponents (fun F => (limitEquivSections F).toIso)
     fun f => by ext x; exact Subtype.ext (funext fun j => congr_hom (limMap_π f j) x)
@@ -571,7 +571,7 @@ definition Limit.mk
 @[simp]
 
 中文:
-定义 Limit.mk
+定义 极限.mk
   签名: (x : 对任意 j, F.obj j) (h : 对任意 (j j') (f : j ⟶ j'), F.map f (x j) = x j')
   定义体: (limitEquivSections F).symm ⟨x, h _ _⟩
 
@@ -595,7 +595,7 @@ theorem Limit.π_mk
   simp
 
 中文:
-定理 Limit.π_mk
+定理 极限.π_mk
   条件: (x : 对任意 j, F.obj j) (h : 对任意 (j j') (f : j ⟶ j'), F.map f (x j) = x j') (j)
   证明: by
   dsimp [Limit.mk]
@@ -698,7 +698,7 @@ theorem Limit.w_apply
 @[deprecated limit.lift_π_apply (since := "2026-02-17")]
 
 中文:
-定理 Limit.w_apply
+定理 极限.w_apply
   条件: {j j' : J} {x : (limit F : 类型u)} (f : j ⟶ j')
   证明: limit.w_apply _ _ _
 
@@ -722,8 +722,8 @@ theorem Limit.lift_π_apply
 @[deprecated limMap_π_apply (since := "2026-02-17")]
 
 中文:
-定理 Limit.lift_π_apply
-  条件: (s : Cone F) (j : J) (x : s.pt)
+定理 极限.lift_π_apply
+  条件: (s : 锥 F) (j : J) (x : s.pt)
   证明: limit.lift_π_apply _ _ _
 
 @[deprecated limMap_π_apply (since := "2026-02-17")]
@@ -746,8 +746,8 @@ theorem Limit.map_π_apply
 @[deprecated limit.w_apply (since := "2026-02-17")]
 
 中文:
-定理 Limit.map_π_apply
-  结论: {F G : J ⥤ 类型u} [HasLimit F] [HasLimit G] (α : F ⟶ G) (j : J)
+定理 极限.map_π_apply
+  结论: {F G : J ⥤ 类型u} [有极限 F] [有极限 G] (α : F ⟶ G) (j : J)
   证明: limMap_π_apply _ _ _
 
 @[deprecated limit.w_apply (since := "2026-02-17")]
@@ -768,7 +768,7 @@ theorem Limit.w_apply'
 @[deprecated limit.lift_π_apply (since := "2026-02-17")]
 
 中文:
-定理 Limit.w_apply'
+定理 极限.w_apply'
   结论: {F' : J ⥤ 类型v} {j j' : J} {x : (limit F' : 类型v)}
   证明: limit.w_apply _ _ _
 
@@ -792,8 +792,8 @@ theorem Limit.lift_π_apply'
 @[deprecated limMap_π_apply (since := "2026-02-17")]
 
 中文:
-定理 Limit.lift_π_apply'
-  条件: (F' : J ⥤ 类型v) (s : Cone F') (j : J) (x : s.pt)
+定理 极限.lift_π_apply'
+  条件: (F' : J ⥤ 类型v) (s : 锥 F') (j : J) (x : s.pt)
   证明: limit.lift_π_apply _ _ _
 
 @[deprecated limMap_π_apply (since := "2026-02-17")]
@@ -814,7 +814,7 @@ theorem Limit.map_π_apply'
   proof: limMap_π_apply _ _ _
 
 中文:
-定理 Limit.map_π_apply'
+定理 极限.map_π_apply'
   结论: {F' G' : J ⥤ 类型v} (α : F' ⟶ G') (j : J)
   证明: limMap_π_apply _ _ _
 -/

@@ -79,8 +79,8 @@ structure IsTopologicalBasis
     - eq_generateFrom : t = generateFrom s
 
 中文:
-结构 IsTopologicalBasis
-  参数: (s : Set (Set α))
+结构 是TopologicalBasis
+  参数: (s : 集合 (集合 α))
   公理与运算 (3 个):
     - exists_subset_inter : 对任意 t₁ in s, 对任意 t₂ in s, 对任意 x in t₁ inter t₂, 存在 t₃ in s, x in t₃ ∧ t₃ subseteq t₁ inter t₂
     - sUnion_eq : ⋃₀ s = univ
@@ -109,7 +109,7 @@ refine ⟨?_, ?_, le_antisymm (le_generateFrom ?_) generateFrom_anti fun t ht =>
 
 中文:
 定理 isTopologicalBasis_of_subbasis
-  条件: {s : Set (Set α)} (hs : t = generateFrom s)
+  条件: {s : 集合 (集合 α)} (hs : t = generateFrom s)
   证明: by
   subst t; let := generateFrom s
 refine ⟨?_, ?_, le_antisymm (le_generateFrom ?_) generateFrom_anti fun t ht => ?_⟩
@@ -146,8 +146,8 @@ theorem isTopologicalBasis_of_subbasis_of_finiteInter
   exact hsi.finiteInter_mem g hgs
 
 中文:
-定理 isTopologicalBasis_of_subbasis_of_finiteInter
-  结论: {s : Set (Set α)} (hsg : t = generateFrom s)
+定理 isTopologicalBasis_of_subbasis_of_finite整数er
+  结论: {s : 集合 (集合 α)} (hsg : t = generateFrom s)
   证明: by
   convert! isTopologicalBasis_of_subbasis hsg
   refine le_antisymm (fun t ht => ⟨{t}, by simpa using ht⟩) ?_
@@ -175,7 +175,7 @@ theorem isTopologicalBasis_of_subbasis_of_inter
 
 中文:
 定理 isTopologicalBasis_of_subbasis_of_inter
-  结论: {r : Set (Set α)} (hsg : t = generateFrom r)
+  结论: {r : 集合 (集合 α)} (hsg : t = generateFrom r)
   证明: isTopologicalBasis_of_subbasis_of_finiteInter (by simpa using hsg) (FiniteInter.mk₂ hsi)
 
 Depends on / 依赖: FiniteInter, FiniteInter.mk, isTopologicalBasis_of_subbasis_of_finiteInter
@@ -198,8 +198,8 @@ theorem IsTopologicalBasis.of_hasBasis_nhds
     simpa only [nhds_generateFrom, and_comm] usi
 
 中文:
-定理 IsTopologicalBasis.of_hasBasis_nhds
-  结论: {s : Set (Set α)}
+定理 是TopologicalBasis.of_hasBasis_nhds
+  结论: {s : 集合 (集合 α)}
   证明: by
     simpa only [and_assoc, (h_nhds x).mem_iff]
       using! (inter_mem ((h_nhds _).mem_of_mem ⟨ht₁, hx.1⟩) ((h_nhds _).mem_of_mem ⟨ht₂, hx.2⟩))
@@ -230,7 +230,7 @@ theorem isTopologicalBasis_of_isOpen_of_nhds
 
 中文:
 定理 isTopologicalBasis_of_isOpen_of_nhds
-  结论: {s : Set (Set α)} (h_open : 对任意 u in s, IsOpen u)
+  结论: {s : 集合 (集合 α)} (h_open : 对任意 u in s, 是开集 u)
   证明: .of_hasBasis_nhds fun a =>
     (nhds_basis_opens a).to_hasBasis' (by simpa [and_assoc] using h_nhds a)
       fun _ ⟨hts, hat⟩ => (h_open _ hts).mem_nhds hat
@@ -259,8 +259,8 @@ theorem IsTopologicalBasis.mem_nhds_iff
     exact ⟨u, ⟨hu₂, hu₁⟩, le_p
 
 中文:
-定理 IsTopologicalBasis.mem_nhds_iff
-  结论: {a : α} {s : Set α} {b : Set (Set α)}
+定理 是TopologicalBasis.mem_nhds_iff
+  结论: {a : α} {s : 集合 α} {b : 集合 (集合 α)}
   证明: by
   change s in (𝓝 a).sets ↔ exists t in b, a in t ∧ t subseteq s
   rw [hb.eq_generateFrom]; rw [nhds_generateFrom]; rw [biInf_sets_eq]
@@ -292,8 +292,8 @@ theorem IsTopologicalBasis.isOpen_iff
   proof: by simp [isOpen_iff_mem_nhds, hb.mem_nhds_iff]
 
 中文:
-定理 IsTopologicalBasis.isOpen_iff
-  条件: {s : Set α} {b : Set (Set α)} (hb : IsTopologicalBasis b)
+定理 是TopologicalBasis.isOpen_iff
+  条件: {s : 集合 α} {b : 集合 (集合 α)} (hb : 是TopologicalBasis b)
   证明: by simp [isOpen_iff_mem_nhds, hb.mem_nhds_iff]
 
 Depends on / 依赖: hb.mem_nhds_iff, isOpen_iff_mem_nhds, mem_nhds_iff
@@ -311,8 +311,8 @@ theorem IsTopologicalBasis.of_isOpen_of_subset
     have ⟨t, hts, ht⟩ := hs.isOpen_iff.mp u_open a ha; ⟨t, hss' hts, ht⟩
 
 中文:
-定理 IsTopologicalBasis.of_isOpen_of_subset
-  结论: {s s' : Set (Set α)} (h_open : 对任意 u in s', IsOpen u)
+定理 是TopologicalBasis.of_isOpen_of_subset
+  结论: {s s' : 集合 (集合 α)} (h_open : 对任意 u in s', 是开集 u)
   证明: isTopologicalBasis_of_isOpen_of_nhds h_open fun a _ ha u_open =>
     have ⟨t, hts, ht⟩ := hs.isOpen_iff.mp u_open a ha; ⟨t, hss' hts, ht⟩
 
@@ -332,8 +332,8 @@ theorem IsTopologicalBasis.nhds_hasBasis
   proof: ⟨fun s => hb.mem_nhds_iff.trans by simp only [and_assoc]⟩
 
 中文:
-定理 IsTopologicalBasis.nhds_hasBasis
-  条件: {b : Set (Set α)} (hb : IsTopologicalBasis b) {a : α}
+定理 是TopologicalBasis.nhds_hasBasis
+  条件: {b : 集合 (集合 α)} (hb : 是TopologicalBasis b) {a : α}
   证明: ⟨fun s => hb.mem_nhds_iff.trans by simp only [and_assoc]⟩
 
 Depends on / 依赖: and_assoc, hb.mem_nhds_iff.trans, mem_nhds_iff
@@ -353,8 +353,8 @@ theorem IsTopologicalBasis.isOpen
   exact .basic s hs
 
 中文:
-定理 IsTopologicalBasis.isOpen
-  结论: {s : Set α} {b : Set (Set α)}
+定理 是TopologicalBasis.isOpen
+  结论: {s : 集合 α} {b : 集合 (集合 α)}
   证明: by
   rw [hb.eq_generateFrom]
   exact .basic s hs
@@ -374,8 +374,8 @@ theorem IsTopologicalBasis.insert_empty
     (subset_insert ..)
 
 中文:
-定理 IsTopologicalBasis.insert_empty
-  条件: {s : Set (Set α)} (h : IsTopologicalBasis s)
+定理 是TopologicalBasis.insert_empty
+  条件: {s : 集合 (集合 α)} (h : 是TopologicalBasis s)
   证明: h.of_isOpen_of_subset (by rintro _ (rfl | hu); exacts [isOpen_empty, h.isOpen hu])
     (subset_insert ..)
 
@@ -400,8 +400,8 @@ theorem IsTopologicalBasis.sdiff_empty
 alias IsTopologicalBasis.diff_empty := IsTopologicalBasis.sdiff_empty
 
 中文:
-定理 IsTopologicalBasis.sdiff_empty
-  条件: {s : Set (Set α)} (h : IsTopologicalBasis s)
+定理 是TopologicalBasis.sdiff_empty
+  条件: {s : 集合 (集合 α)} (h : 是TopologicalBasis s)
   证明: isTopologicalBasis_of_isOpen_of_nhds (fun _ hu => h.isOpen hu.1) fun a _ ha hu =>
     have ⟨t, hts, ht⟩ := h.isOpen_iff.mp hu a ha
 ⟨t, ⟨hts, ne_of_mem_of_not_mem' ht.1 notMem_empty _⟩, ht⟩
@@ -429,8 +429,8 @@ theorem IsTopologicalBasis.mem_nhds
   proof: (hb.isOpen hs).mem_nhds ha
 
 中文:
-定理 IsTopologicalBasis.mem_nhds
-  结论: {a : α} {s : Set α} {b : Set (Set α)}
+定理 是TopologicalBasis.mem_nhds
+  结论: {a : α} {s : 集合 α} {b : 集合 (集合 α)}
   证明: (hb.isOpen hs).mem_nhds ha
 -/
 protected theorem IsTopologicalBasis.mem_nhds {a : α} {s : Set α} {b : Set (Set α)}
@@ -446,8 +446,8 @@ theorem IsTopologicalBasis.exists_subset_of_mem_open
   proof: hb.mem_nhds_iff.1 IsOpen.mem_nhds ou au
 
 中文:
-定理 IsTopologicalBasis.exists_subset_of_mem_open
-  结论: {b : Set (Set α)} (hb : IsTopologicalBasis b)
+定理 是TopologicalBasis.存在_subset_of_mem_open
+  结论: {b : 集合 (集合 α)} (hb : 是TopologicalBasis b)
   证明: hb.mem_nhds_iff.1 IsOpen.mem_nhds ou au
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, hb.mem_nhds_iff, mem_nhds, mem_nhds_iff
@@ -469,8 +469,8 @@ theorem IsTopologicalBasis.isTopologicalBasis_of_exists_subset
   exact ⟨v, hvB', hxv, hvw.trans hwu⟩
 
 中文:
-定理 IsTopologicalBasis.isTopologicalBasis_of_exists_subset
-  结论: {B B' : Set (Set α)}
+定理 是TopologicalBasis.isTopologicalBasis_of_存在_subset
+  结论: {B B' : 集合 (集合 α)}
   证明: by
   refine isTopologicalBasis_of_isOpen_of_nhds h_open fun x u hx hu => ?_
   obtain ⟨w, hwB, hxw, hwu⟩ := hB.exists_subset_of_mem_open hx hu
@@ -500,8 +500,8 @@ theorem IsTopologicalBasis.open_eq_sUnion'
       fun ⟨_b, ⟨_, bu⟩, ab⟩ => bu ab⟩
 
 中文:
-定理 IsTopologicalBasis.open_eq_sUnion'
-  结论: {B : Set (Set α)} (hB : IsTopologicalBasis B) {u : Set α}
+定理 是TopologicalBasis.open_eq_sUnion'
+  结论: {B : 集合 (集合 α)} (hB : 是TopologicalBasis B) {u : 集合 α}
   证明: ext fun _a =>
     ⟨fun ha =>
       let ⟨b, hb, ab, bu⟩ := hB.exists_subset_of_mem_open ha ou
@@ -527,8 +527,8 @@ theorem IsTopologicalBasis.open_eq_sUnion
   proof: ⟨{ s in B | s subseteq u }, fun _ h => h.1, hB.open_eq_sUnion' ou⟩
 
 中文:
-定理 IsTopologicalBasis.open_eq_sUnion
-  结论: {B : Set (Set α)} (hB : IsTopologicalBasis B) {u : Set α}
+定理 是TopologicalBasis.open_eq_sUnion
+  结论: {B : 集合 (集合 α)} (hB : 是TopologicalBasis B) {u : 集合 α}
   证明: ⟨{ s in B | s subseteq u }, fun _ h => h.1, hB.open_eq_sUnion' ou⟩
 
 Depends on / 依赖: hB.open_eq_sUnion, open_eq_sUnion, subseteq
@@ -546,8 +546,8 @@ theorem IsTopologicalBasis.open_iff_eq_sUnion
   proof: ⟨hB.open_eq_sUnion, fun ⟨_S, hSB, hu⟩ => hu.symm ▸ isOpen_sUnion fun _s hs => hB.isOpen (hSB hs)⟩
 
 中文:
-定理 IsTopologicalBasis.open_iff_eq_sUnion
-  结论: {B : Set (Set α)} (hB : IsTopologicalBasis B)
+定理 是TopologicalBasis.open_iff_eq_sUnion
+  结论: {B : 集合 (集合 α)} (hB : 是TopologicalBasis B)
   证明: ⟨hB.open_eq_sUnion, fun ⟨_S, hSB, hu⟩ => hu.symm ▸ isOpen_sUnion fun _s hs => hB.isOpen (hSB hs)⟩
 
 Depends on / 依赖: hB.isOpen, hB.open_eq_sUnion, hu.symm, isOpen, isOpen_sUnion, open_eq_sUnion
@@ -569,8 +569,8 @@ theorem IsTopologicalBasis.open_eq_iUnion
 @[elab_as_elim]
 
 中文:
-定理 IsTopologicalBasis.open_eq_iUnion
-  结论: {B : Set (Set α)} (hB : IsTopologicalBasis B) {u : Set α}
+定理 是TopologicalBasis.open_eq_iUnion
+  结论: {B : 集合 (集合 α)} (hB : 是TopologicalBasis B) {u : 集合 α}
   证明: ⟨↥({ s in B | s subseteq u }), (↑), by
     rw [← sUnion_eq_iUnion]
     apply hB.open_eq_sUnion' ou, fun s => And.left s.2⟩
@@ -596,8 +596,8 @@ lemma IsTopologicalBasis.isOpen_induction
 obtain ⟨S, hS, rfl⟩ := hB.open_eq_sUnion hs; exact sUnion _ fun b hb => basis _ hS hb
 
 中文:
-引理 IsTopologicalBasis.isOpen_induction
-  结论: {P : Set α -> 命题} (hB : IsTopologicalBasis B)
+引理 是TopologicalBasis.isOpen_induction
+  结论: {P : 集合 α -> 命题} (hB : 是TopologicalBasis B)
   证明: by
 obtain ⟨S, hS, rfl⟩ := hB.open_eq_sUnion hs; exact sUnion _ fun b hb => basis _ hS hb
 
@@ -618,8 +618,8 @@ lemma IsTopologicalBasis.subset_of_forall_subset
   rw [hB.open_eq_sUnion' hs]; simpa [sUnion_subset_iff]
 
 中文:
-引理 IsTopologicalBasis.subset_of_forall_subset
-  结论: {t : Set α} (hB : IsTopologicalBasis B)
+引理 是TopologicalBasis.subset_of_对任意_subset
+  结论: {t : 集合 α} (hB : 是TopologicalBasis B)
   证明: by
   rw [hB.open_eq_sUnion' hs]; simpa [sUnion_subset_iff]
 
@@ -640,8 +640,8 @@ lemma IsTopologicalBasis.eq_of_forall_subset_iff
   exact congr_arg _ (Set.ext fun U => and_congr_right <| h _)
 
 中文:
-引理 IsTopologicalBasis.eq_of_forall_subset_iff
-  结论: {t : Set α} (hB : IsTopologicalBasis B)
+引理 是TopologicalBasis.eq_of_对任意_subset_iff
+  结论: {t : 集合 α} (hB : 是TopologicalBasis B)
   证明: by
   rw [hB.open_eq_sUnion' hs]; rw [hB.open_eq_sUnion' ht]
   exact congr_arg _ (Set.ext fun U => and_congr_right <| h _)
@@ -662,8 +662,8 @@ theorem IsTopologicalBasis.mem_closure_iff
   proof: (mem_closure_iff_nhds_basis' hb.nhds_hasBasis).trans by simp only [and_imp]
 
 中文:
-定理 IsTopologicalBasis.mem_closure_iff
-  结论: {b : Set (Set α)} (hb : IsTopologicalBasis b) {s : Set α}
+定理 是TopologicalBasis.mem_closure_iff
+  结论: {b : 集合 (集合 α)} (hb : 是TopologicalBasis b) {s : 集合 α}
   证明: (mem_closure_iff_nhds_basis' hb.nhds_hasBasis).trans by simp only [and_imp]
 
 Depends on / 依赖: and_imp, hb.nhds_hasBasis, mem_closure_iff_nhds_basis, nhds_hasBasis
@@ -683,8 +683,8 @@ theorem IsTopologicalBasis.dense_iff
   exact ⟨fun h o hb ⟨a, ha⟩ => h a o hb ha, fun h a o hb ha => h o hb ⟨a, ha⟩⟩
 
 中文:
-定理 IsTopologicalBasis.dense_iff
-  条件: {b : Set (Set α)} (hb : IsTopologicalBasis b) {s : Set α}
+定理 是TopologicalBasis.dense_iff
+  条件: {b : 集合 (集合 α)} (hb : 是TopologicalBasis b) {s : 集合 α}
   证明: by
   simp only [Dense, hb.mem_closure_iff]
   exact ⟨fun h o hb ⟨a, ha⟩ => h a o hb ha, fun h a o hb ha => h o hb ⟨a, ha⟩⟩
@@ -708,8 +708,8 @@ theorem IsTopologicalBasis.isOpenMap_iff
   exact isOpen_iUnion fun s => hf s s.2.1
 
 中文:
-定理 IsTopologicalBasis.isOpenMap_iff
-  结论: [TopologicalSpace β] {B : Set (Set α)}
+定理 是TopologicalBasis.isOpenMap_iff
+  结论: [拓扑空间 β] {B : 集合 (集合 α)}
   证明: by
   refine ⟨fun H o ho => H _ (hB.isOpen ho), fun hf o ho => ?_⟩
   rw [hB.open_eq_sUnion' ho]; rw [sUnion_eq_iUnion]; rw [image_iUnion]
@@ -734,8 +734,8 @@ theorem IsTopologicalBasis.exists_nonempty_subset
   ⟨v, vB, ⟨x, xv⟩, vu⟩
 
 中文:
-定理 IsTopologicalBasis.exists_nonempty_subset
-  结论: {B : Set (Set α)} (hb : IsTopologicalBasis B)
+定理 是TopologicalBasis.存在_nonempty_subset
+  结论: {B : 集合 (集合 α)} (hb : 是TopologicalBasis B)
   证明: let ⟨x, hx⟩ := hu
   let ⟨v, vB, xv, vu⟩ := hb.exists_subset_of_mem_open hx ou
   ⟨v, vB, ⟨x, xv⟩, vu⟩
@@ -758,7 +758,7 @@ theorem isTopologicalBasis_opens
 
 中文:
 定理 isTopologicalBasis_opens
-  结论: IsTopologicalBasis { U : Set α | IsOpen U }
+  结论: 是TopologicalBasis { U : 集合 α | 是开集 U }
   证明: isTopologicalBasis_of_isOpen_of_nhds (by tauto) (by tauto)
 
 Depends on / 依赖: isTopologicalBasis_of_isOpen_of_nhds
@@ -777,8 +777,8 @@ lemma IsTopologicalBasis.isInducing
     aesop
 
 中文:
-引理 IsTopologicalBasis.isInducing
-  结论: [TopologicalSpace β] {f : α -> β} {T : Set (Set β)}
+引理 是TopologicalBasis.isInducing
+  结论: [拓扑空间 β] {f : α -> β} {T : 集合 (集合 β)}
   证明: .of_hasBasis_nhds fun a => by
     convert! (hf.basis_nhds (h.nhds_hasBasis (a := f a))).to_image_id with s
     aesop
@@ -798,8 +798,8 @@ theorem IsTopologicalBasis.induced
   proof: h.isInducing (t := induced f s) (.induced f)
 
 中文:
-定理 IsTopologicalBasis.induced
-  结论: {α} [s : TopologicalSpace β] (f : α -> β)
+定理 是TopologicalBasis.induced
+  结论: {α} [s : 拓扑空间 β] (f : α -> β)
   证明: h.isInducing (t := induced f s) (.induced f)
 -/
 protected theorem IsTopologicalBasis.induced {α} [s : TopologicalSpace β] (f : α -> β)
@@ -820,8 +820,8 @@ theorem IsTopologicalBasis.inf
   aesop
 
 中文:
-定理 IsTopologicalBasis.inf
-  结论: {t₁ t₂ : TopologicalSpace β} {B₁ B₂ : Set (Set β)}
+定理 是TopologicalBasis.下确界
+  结论: {t₁ t₂ : 拓扑空间 β} {B₁ B₂ : 集合 (集合 β)}
   证明: by
   refine .of_hasBasis_nhds (t := ?_) fun a => ?_
   rw [nhds_inf (t₁ := t₁)]
@@ -846,8 +846,8 @@ theorem IsTopologicalBasis.inf_induced
   simpa only [image2_image_left, image2_image_right] using (h₁.induced f₁).inf (h₂.induced f₂)
 
 中文:
-定理 IsTopologicalBasis.inf_induced
-  结论: {γ} [s : TopologicalSpace β] {B₁ : Set (Set α)}
+定理 是TopologicalBasis.inf_induced
+  结论: {γ} [s : 拓扑空间 β] {B₁ : 集合 (集合 α)}
   证明: by
   simpa only [image2_image_left, image2_image_right] using (h₁.induced f₁).inf (h₂.induced f₂)
 
@@ -868,8 +868,8 @@ theorem IsTopologicalBasis.prod
   proof: h₁.inf_induced h₂ Prod.fst Prod.snd
 
 中文:
-定理 IsTopologicalBasis.prod
-  结论: [TopologicalSpace β] {B₁ : Set (Set α)}
+定理 是TopologicalBasis.乘积
+  结论: [拓扑空间 β] {B₁ : 集合 (集合 α)}
   证明: h₁.inf_induced h₂ Prod.fst Prod.snd
 -/
 protected theorem IsTopologicalBasis.prod [TopologicalSpace β] {B₁ : Set (Set α)}
@@ -894,7 +894,7 @@ theorem isTopologicalBasis_of_cover
 
 中文:
 定理 isTopologicalBasis_of_cover
-  结论: {ι} {U : ι -> Set α} (Uo : 对任意 i, IsOpen (U i))
+  结论: {ι} {U : ι -> 集合 α} (Uo : 对任意 i, 是开集 (U i))
   证明: by
   refine isTopologicalBasis_of_isOpen_of_nhds (fun u hu => ?_) ?_
   · simp only [mem_iUnion, mem_image] at hu
@@ -931,8 +931,8 @@ theorem IsTopologicalBasis.continuous_iff
   rw [hB.eq_generateFrom]; rw [continuous_generateFrom_iff]
 
 中文:
-定理 IsTopologicalBasis.continuous_iff
-  结论: [TopologicalSpace β]
+定理 是TopologicalBasis.continuous_iff
+  结论: [拓扑空间 β]
   证明: by
   rw [hB.eq_generateFrom]; rw [continuous_generateFrom_iff]
 -/
@@ -955,8 +955,8 @@ theorem IsTopologicalBasis.continuousOn_iff
   exact ⟨⋃ i, v i, isOpen_iUnion hv, by simp_all [iUnion_inter]⟩
 
 中文:
-定理 IsTopologicalBasis.continuousOn_iff
-  结论: [TopologicalSpace β]
+定理 是TopologicalBasis.continuousOn_iff
+  结论: [拓扑空间 β]
   证明: by
   rw [continuousOn_iff']
   refine ⟨fun h t ht => h t (hB.isOpen ht), fun h t ht => ?_⟩
@@ -988,7 +988,7 @@ lemma isTopologicalBasis_empty
 
 中文:
 引理 isTopologicalBasis_empty
-  结论: IsTopologicalBasis (∅ : Set (Set α)) ↔ IsEmpty α where
+  结论: 是TopologicalBasis (∅ : 集合 (集合 α)) ↔ 是空 α where
   证明: by simpa using h.sUnion_eq.symm
   mpr h := ⟨by simp, by simp [Set.univ_eq_empty_iff.2], Subsingleton.elim ..⟩
 
@@ -1010,7 +1010,7 @@ lemma isTopologicalBasis_singleton_empty
 
 中文:
 引理 isTopologicalBasis_singleton_empty
-  结论: IsTopologicalBasis {(∅ : Set α)} ↔ IsEmpty α where
+  结论: 是TopologicalBasis {(∅ : 集合 α)} ↔ 是空 α where
   证明: by simpa using h.sdiff_empty
   mpr h := ⟨by simp, by simp [Set.univ_eq_empty_iff.2], Subsingleton.elim ..⟩
 
@@ -1032,10 +1032,10 @@ class SeparableSpace
     - exists_countable_dense : exists s : Set α, s.Countable ∧ Dense s
 
 中文:
-类 SeparableSpace
+类 可分空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_countable_dense : 存在 s : Set α, s.Countable ∧ Dense s
+    - exists_countable_dense : 存在 s : 集合 α, s.可数 ∧ 稠密 s
 -/
 @[mk_iff] class SeparableSpace : Prop where
   /-- There exists a countable dense set. -/
@@ -1051,9 +1051,9 @@ theorem exists_countable_dense
   proof: SeparableSpace.exists_countable_dense
 
 中文:
-定理 exists_countable_dense
-  条件: [SeparableSpace α]
-  结论: 存在 s : Set α, s.Countable ∧ Dense s
+定理 存在_countable_dense
+  条件: [可分空间 α]
+  结论: 存在 s : 集合 α, s.可数 ∧ 稠密 s
   证明: SeparableSpace.exists_countable_dense
 
 Depends on / 依赖: SeparableSpace, SeparableSpace.exists_countable_dense, exists_countable_dense
@@ -1074,8 +1074,8 @@ theorem exists_dense_seq
   exact ⟨u, s_dense.mono hu⟩
 
 中文:
-定理 exists_dense_seq
-  条件: [SeparableSpace α] [Nonempty α]
+定理 存在_dense_seq
+  条件: [可分空间 α] [非空 α]
   结论: 存在 u : 自然数 -> α, DenseRange u
   证明: by
   obtain ⟨s : Set α, hs, s_dense⟩ := exists_countable_dense α
@@ -1099,7 +1099,7 @@ definition denseSeq
 
 中文:
 定义 denseSeq
-  签名: [SeparableSpace α] [Nonempty α]
+  签名: [可分空间 α] [非空 α]
   定义体: Classical.choose (exists_dense_seq α)
 
 Depends on / 依赖: Classical, Classical.choose, exists_dense_seq
@@ -1120,7 +1120,7 @@ theorem denseRange_denseSeq
 
 中文:
 定理 denseRange_denseSeq
-  条件: [SeparableSpace α] [Nonempty α]
+  条件: [可分空间 α] [非空 α]
   结论: DenseRange (denseSeq α)
   证明: Classical.choose_spec (exists_dense_seq α)
 
@@ -1145,8 +1145,8 @@ theorem SeparableSpace.of_denseRange
 alias _root_.DenseRange.separableSpace' := SeparableSpace.of_denseRange
 
 中文:
-定理 SeparableSpace.of_denseRange
-  条件: {ι : Sort _} [Countable ι] (u : ι -> α) (hu : DenseRange u)
+定理 可分空间.of_denseRange
+  条件: {ι : 类型层 _} [可数 ι] (u : ι -> α) (hu : DenseRange u)
   证明: ⟨⟨range u, countable_range u, hu⟩⟩
 
 alias _root_.DenseRange.separableSpace' := SeparableSpace.of_denseRange
@@ -1170,7 +1170,7 @@ theorem _root_.DenseRange.separableSpace
 
 中文:
 定理 _root_.DenseRange.separableSpace
-  结论: [SeparableSpace α] [TopologicalSpace β]
+  结论: [可分空间 α] [拓扑空间 β]
   证明: let ⟨s, s_cnt, s_dense⟩ := exists_countable_dense α
   ⟨⟨f '' s, Countable.image s_cnt f, h.dense_image h' s_dense⟩⟩
 -/
@@ -1188,8 +1188,8 @@ theorem _root_.Topology.IsQuotientMap.separableSpace
   proof: hf.surjective.denseRange.separableSpace hf.continuous
 
 中文:
-定理 _root_.Topology.IsQuotientMap.separableSpace
-  结论: [SeparableSpace α] [TopologicalSpace β]
+定理 _root_.拓扑.是商映射.separableSpace
+  结论: [可分空间 α] [拓扑空间 β]
   证明: hf.surjective.denseRange.separableSpace hf.continuous
 
 Depends on / 依赖: continuous, denseRange, hf.continuous, hf.surjective.denseRange.separableSpace, separableSpace, surjective
@@ -1215,8 +1215,8 @@ theorem _root_.IsOpenMap.separableSpace_of_isInducing
     s_dense.inter_open_nonempty (U inter range f
 
 中文:
-定理 _root_.IsOpenMap.separableSpace_of_isInducing
-  结论: [TopologicalSpace β] [SeparableSpace β]
+定理 _root_.是开映射.separableSpace_of_isInducing
+  结论: [拓扑空间 β] [可分空间 β]
   证明: by
   cases isEmpty_or_nonempty α
   · infer_instance
@@ -1252,8 +1252,8 @@ theorem _root_.IsOpenMap.separableSpace_of_injective
   ⟨f ⁻¹' s, s_cnt.preimage h', s_dense.preimage h⟩
 
 中文:
-定理 _root_.IsOpenMap.separableSpace_of_injective
-  结论: [TopologicalSpace β] [SeparableSpace β]
+定理 _root_.是开映射.separableSpace_of_injective
+  结论: [拓扑空间 β] [可分空间 β]
   证明: let ⟨s, s_cnt, s_dense⟩ := exists_countable_dense β
   ⟨f ⁻¹' s, s_cnt.preimage h', s_dense.preimage h⟩
 
@@ -1273,8 +1273,8 @@ theorem _root_.Topology.IsOpenEmbedding.separableSpace
   proof: h.isOpenMap.separableSpace_of_injective h.injective
 
 中文:
-定理 _root_.Topology.IsOpenEmbedding.separableSpace
-  结论: [TopologicalSpace β] [SeparableSpace β]
+定理 _root_.拓扑.是开嵌入.separableSpace
+  结论: [拓扑空间 β] [可分空间 β]
   证明: h.isOpenMap.separableSpace_of_injective h.injective
 
 Depends on / 依赖: h.injective, h.isOpenMap.separableSpace_of_injective, injective, isOpenMap, separableSpace_of_injective
@@ -1295,8 +1295,8 @@ instance [TopologicalSpace
   exact ⟨⟨s ×ˢ t, hsc.prod htc, hsd.prod htd⟩⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: β] [SeparableSpace α] [SeparableSpace β] : SeparableSpace (α × β)
+实例 [拓扑空间
+  签名: β] [可分空间 α] [可分空间 β] : 可分空间 (α × β)
   定义体: by
   rcases exists_countable_dense α with ⟨s, hsc, hsd⟩
   rcases exists_countable_dense β with ⟨t, htc, htd⟩
@@ -1337,7 +1337,7 @@ instance [SeparableSpace
   body: isQuotientMap_quot_mk.separableSpace
 
 中文:
-实例 [SeparableSpace
+实例 [可分空间
   签名: α] {r
   定义体: isQuotientMap_quot_mk.separableSpace
 
@@ -1355,7 +1355,7 @@ instance [SeparableSpace
   body: isQuotientMap_quot_mk.separableSpace
 
 中文:
-实例 [SeparableSpace
+实例 [可分空间
   签名: α] {s
   定义体: isQuotientMap_quot_mk.separableSpace
 
@@ -1378,8 +1378,8 @@ instance [TopologicalSpace
     hsd.closure_eq, IsClo
 
 中文:
-实例 [TopologicalSpace
-  签名: β] [SeparableSpace α] [SeparableSpace β] : SeparableSpace (α oplus β)
+实例 [拓扑空间
+  签名: β] [可分空间 α] [可分空间 β] : 可分空间 (α oplus β)
   定义体: by
   obtain ⟨s, hsc, hsd⟩ := exists_countable_dense α
   obtain ⟨t, htc, htd⟩ := exists_countable_dense β
@@ -1408,7 +1408,7 @@ theorem separableSpace_sum_iff
 
 中文:
 定理 separableSpace_sum_iff
-  条件: [TopologicalSpace β]
+  条件: [拓扑空间 β]
   证明: ⟨fun _ => ⟨(IsOpenEmbedding.inl (Y := β)).separableSpace,
     (IsOpenEmbedding.inr (X := α)).separableSpace⟩, fun ⟨_, _⟩ => inferInstance⟩
 
@@ -1431,8 +1431,8 @@ theorem separableSpace_iff_countable
 
 中文:
 定理 separableSpace_iff_countable
-  条件: [DiscreteTopology α]
-  结论: SeparableSpace α ↔ Countable α
+  条件: [离散拓扑 α]
+  结论: 可分空间 α ↔ 可数 α
   证明: by
   simp [separableSpace_iff, countable_univ_iff]
 
@@ -1456,8 +1456,8 @@ hd.eq not_disjoint_iff.2 ⟨f i, hfs i, hij.symm ▸ hfs j⟩
   exact (f_inj.codRestric
 
 中文:
-定理 _root_.Pairwise.countable_of_isOpen_disjoint
-  结论: [SeparableSpace α] {ι : 类型}
+定理 _root_.两两.countable_of_isOpen_disjoint
+  结论: [可分空间 α] {ι : 类型}
   证明: by
   rcases exists_countable_dense α with ⟨u, u_countable, u_dense⟩
   choose f hfu hfs using fun i => u_dense.exists_mem_open (ho i) (hne i)
@@ -1487,8 +1487,8 @@ theorem _root_.Set.PairwiseDisjoint.countable_of_isOpen
   proof: (h.subtype _ _).countable_of_isOpen_disjoint (Subtype.forall.2 ho) (Subtype.forall.2 hne)
 
 中文:
-定理 _root_.Set.PairwiseDisjoint.countable_of_isOpen
-  结论: [SeparableSpace α] {ι : 类型}
+定理 _root_.集合.PairwiseDisjoint.countable_of_isOpen
+  结论: [可分空间 α] {ι : 类型}
   证明: (h.subtype _ _).countable_of_isOpen_disjoint (Subtype.forall.2 ho) (Subtype.forall.2 hne)
 
 Depends on / 依赖: Subtype, Subtype.forall, countable_of_isOpen_disjoint, h.subtype, subtype
@@ -1507,8 +1507,8 @@ theorem _root_.Set.PairwiseDisjoint.countable_of_nonempty_interior
   proof: (h.mono fun _ => interior_subset).countable_of_isOpen (fun _ _ => isOpen_interior) ha
 
 中文:
-定理 _root_.Set.PairwiseDisjoint.countable_of_nonempty_interior
-  结论: [SeparableSpace α] {ι : 类型}
+定理 _root_.集合.PairwiseDisjoint.countable_of_nonempty_interior
+  结论: [可分空间 α] {ι : 类型}
   证明: (h.mono fun _ => interior_subset).countable_of_isOpen (fun _ _ => isOpen_interior) ha
 
 Depends on / 依赖: countable_of_isOpen, h.mono, interior_subset, isOpen_interior
@@ -1527,8 +1527,8 @@ definition IsSeparable
   body: exists c : Set α, c.Countable ∧ s subseteq closure c
 
 中文:
-定义 IsSeparable
-  签名: (s : Set α)
+定义 是可分
+  签名: (s : 集合 α)
   定义体: exists c : Set α, c.Countable ∧ s subseteq closure c
 
 Depends on / 依赖: Countable, c.Countable, closure, subseteq
@@ -1548,9 +1548,9 @@ theorem IsSeparable.mono
   exact ⟨c, c_count, hu.trans hs⟩
 
 中文:
-定理 IsSeparable.mono
-  条件: {s u : Set α} (hs : IsSeparable s) (hu : u subseteq s)
-  结论: IsSeparable u
+定理 是可分.mono
+  条件: {s u : 集合 α} (hs : 是可分 s) (hu : u subseteq s)
+  结论: 是可分 u
   证明: by
   rcases hs with ⟨c, c_count, hs⟩
   exact ⟨c, c_count, hu.trans hs⟩
@@ -1575,8 +1575,8 @@ theorem IsSeparable.iUnion
 @[simp]
 
 中文:
-定理 IsSeparable.iUnion
-  结论: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+定理 是可分.iUnion
+  结论: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: by
   choose c hc h'c using hs
   refine ⟨⋃ i, c i, countable_iUnion hc, iUnion_subset_iff.2 fun i => ?_⟩
@@ -1605,7 +1605,7 @@ theorem isSeparable_iUnion
 
 中文:
 定理 isSeparable_iUnion
-  条件: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+  条件: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: ⟨fun h i => h.mono subset_iUnion s i, .iUnion⟩
 
 @[simp]
@@ -1629,8 +1629,8 @@ theorem isSeparable_union
 
 中文:
 定理 isSeparable_union
-  条件: {s t : Set α}
-  结论: IsSeparable (s union t) ↔ IsSeparable s ∧ IsSeparable t
+  条件: {s t : 集合 α}
+  结论: 是可分 (s union t) ↔ 是可分 s ∧ 是可分 t
   证明: by
   simp [union_eq_iUnion, and_comm]
 
@@ -1650,8 +1650,8 @@ theorem IsSeparable.union
 @[simp]
 
 中文:
-定理 IsSeparable.union
-  条件: {s u : Set α} (hs : IsSeparable s) (hu : IsSeparable u)
+定理 是可分.union
+  条件: {s u : 集合 α} (hs : 是可分 s) (hu : 是可分 u)
   证明: isSeparable_union.2 ⟨hs, hu⟩
 
 @[simp]
@@ -1676,7 +1676,7 @@ protected alias ⟨_, IsSeparable.closure⟩ := isSeparable_closure
 
 中文:
 定理 isSeparable_closure
-  结论: IsSeparable (closure s) ↔ IsSeparable s
+  结论: 是可分 (closure s) ↔ 是可分 s
   证明: by
   simp only [IsSeparable, isClosed_closure.closure_subset_iff]
 
@@ -1699,9 +1699,9 @@ theorem _root_.Set.Countable.isSeparable
   proof: ⟨s, hs, subset_closure⟩
 
 中文:
-定理 _root_.Set.Countable.isSeparable
-  条件: {s : Set α} (hs : s.Countable)
-  结论: IsSeparable s
+定理 _root_.集合.可数.isSeparable
+  条件: {s : 集合 α} (hs : s.可数)
+  结论: 是可分 s
   证明: ⟨s, hs, subset_closure⟩
 
 Depends on / 依赖: subset_closure
@@ -1719,9 +1719,9 @@ theorem _root_.Set.Finite.isSeparable
   proof: hs.countable.isSeparable
 
 中文:
-定理 _root_.Set.Finite.isSeparable
-  条件: {s : Set α} (hs : s.Finite)
-  结论: IsSeparable s
+定理 _root_.集合.有限.isSeparable
+  条件: {s : 集合 α} (hs : s.有限)
+  结论: 是可分 s
   证明: hs.countable.isSeparable
 
 Depends on / 依赖: countable, hs.countable.isSeparable, isSeparable
@@ -1746,8 +1746,8 @@ theorem IsSeparable.univ_pi
       if hi : i 
 
 中文:
-定理 IsSeparable.univ_pi
-  结论: {ι : 类型} [Countable ι] {X : ι -> 类型} {s : 对任意 i, Set (X i)}
+定理 是可分.univ_pi
+  结论: {ι : 类型} [可数 ι] {X : ι -> 类型} {s : 对任意 i, 集合 (X i)}
   证明: by
   classical
   rcases eq_empty_or_nonempty (univ.pi s) with he | ⟨f₀, -⟩
@@ -1793,7 +1793,7 @@ lemma isSeparable_pi
 
 中文:
 引理 isSeparable_pi
-  结论: {ι : 类型} [Countable ι] {α : ι -> 类型} {s : 对任意 i, Set (α i)}
+  结论: {ι : 类型} [可数 ι] {α : ι -> 类型} {s : 对任意 i, 集合 (α i)}
   证明: by
   simpa only [← mem_univ_pi] using! IsSeparable.univ_pi h
 
@@ -1818,8 +1818,8 @@ lemma IsSeparable.prod
   gcongr
 
 中文:
-引理 IsSeparable.prod
-  结论: {β : 类型} [TopologicalSpace β]
+引理 是可分.乘积
+  结论: {β : 类型} [拓扑空间 β]
   证明: by
   rcases hs with ⟨cs, cs_count, hcs⟩
   rcases ht with ⟨ct, ct_count, hct⟩
@@ -1851,8 +1851,8 @@ theorem IsSeparable.image
   exact hc.trans (closure_subset_preimage_closure_image hf)
 
 中文:
-定理 IsSeparable.image
-  结论: {β : 类型} [TopologicalSpace β] {s : Set α} (hs : IsSeparable s)
+定理 是可分.像
+  结论: {β : 类型} [拓扑空间 β] {s : 集合 α} (hs : 是可分 s)
   证明: by
   rcases hs with ⟨c, c_count, hc⟩
   refine ⟨f '' c, c_count.image _, ?_⟩
@@ -1879,8 +1879,8 @@ theorem _root_.Dense.isSeparable_iff
     ← hs.closure_eq, isClosed_closure.closure_subset_iff]
 
 中文:
-定理 _root_.Dense.isSeparable_iff
-  条件: (hs : Dense s)
+定理 _root_.稠密.isSeparable_iff
+  条件: (hs : 稠密 s)
   证明: by
   simp_rw [IsSeparable, separableSpace_iff, dense_iff_closure_eq, ← univ_subset_iff,
     ← hs.closure_eq, isClosed_closure.closure_subset_iff]
@@ -1902,7 +1902,7 @@ theorem isSeparable_univ_iff
 
 中文:
 定理 isSeparable_univ_iff
-  结论: IsSeparable (univ : Set α) ↔ SeparableSpace α
+  结论: 是可分 (univ : 集合 α) ↔ 可分空间 α
   证明: dense_univ.isSeparable_iff
 
 Depends on / 依赖: dense_univ, dense_univ.isSeparable_iff, isSeparable_iff
@@ -1920,7 +1920,7 @@ theorem isSeparable_range
 
 中文:
 定理 isSeparable_range
-  条件: [TopologicalSpace β] [SeparableSpace α] {f : α -> β} (hf : Continuous f)
+  条件: [拓扑空间 β] [可分空间 α] {f : α -> β} (hf : 连续 f)
   证明: image_univ (f := f) ▸ (isSeparable_univ_iff.2 ‹_›).image hf
 
 Depends on / 依赖: image_univ, isSeparable_univ_iff
@@ -1940,9 +1940,9 @@ theorem IsSeparable.of_subtype
   simpa using isSeparable_range (continuous_subtype_val (p := (· in s)))
 
 中文:
-定理 IsSeparable.of_subtype
-  条件: (s : Set α) [SeparableSpace s]
-  结论: IsSeparable s
+定理 是可分.of_subtype
+  条件: (s : 集合 α) [可分空间 s]
+  结论: 是可分 s
   证明: by
   simpa using isSeparable_range (continuous_subtype_val (p := (· in s)))
 
@@ -1961,9 +1961,9 @@ theorem IsSeparable.of_separableSpace
   proof: IsSeparable.mono (isSeparable_univ_iff.2 h) (subset_univ _)
 
 中文:
-定理 IsSeparable.of_separableSpace
-  条件: [h : SeparableSpace α] (s : Set α)
-  结论: IsSeparable s
+定理 是可分.of_separableSpace
+  条件: [h : 可分空间 α] (s : 集合 α)
+  结论: 是可分 s
   证明: IsSeparable.mono (isSeparable_univ_iff.2 h) (subset_univ _)
 
 Depends on / 依赖: IsSeparable, IsSeparable.mono, isSeparable_univ_iff, subset_univ
@@ -1992,8 +1992,8 @@ theorem IsTopologicalBasis.iInf
 .mem_iff
 
 中文:
-定理 IsTopologicalBasis.iInf
-  结论: {β : 类型} {ι : 类型} {t : ι -> TopologicalSpace β}
+定理 是TopologicalBasis.iInf
+  结论: {β : 类型} {ι : 类型} {t : ι -> 拓扑空间 β}
   证明: by
   let _ := ⨅ i, t i
   refine isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
@@ -2036,7 +2036,7 @@ theorem IsTopologicalBasis.iInf_induced
     exact ⟨U', F, hU', hSU ▸ (.symm <| iInter₂_congr hUU'
 
 中文:
-定理 IsTopologicalBasis.iInf_induced
+定理 是TopologicalBasis.iInf_induced
   结论: {β : 类型} {ι : 类型} {X : ι -> 类型}
   证明: by
   convert! IsTopologicalBasis.iInf (fun i => (cond i).induced (f i)) with S
@@ -2070,7 +2070,7 @@ theorem isTopologicalBasis_pi
 
 中文:
 定理 isTopologicalBasis_pi
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: by
   simpa only [Set.pi_def] using! IsTopologicalBasis.iInf_induced cond eval
 
@@ -2093,7 +2093,7 @@ theorem isTopologicalBasis_singletons
 
 中文:
 定理 isTopologicalBasis_singletons
-  条件: (α : 类型) [TopologicalSpace α] [DiscreteTopology α]
+  条件: (α : 类型) [拓扑空间 α] [离散拓扑 α]
   证明: isTopologicalBasis_of_isOpen_of_nhds (fun _ _ => isOpen_discrete _) fun x _ hx _ =>
     ⟨{x}, ⟨x, rfl⟩, mem_singleton x, singleton_subset_iff.2 hx⟩
 
@@ -2145,7 +2145,7 @@ lemma isOpenMap_eval
 中文:
 引理 isOpenMap_eval
   条件: (i : ι)
-  结论: IsOpenMap (Function.eval i : (对任意 i, X i) -> X i)
+  结论: 是开映射 (函数.eval i : (对任意 i, X i) -> X i)
   证明: by
   classical
   refine (isTopologicalBasis_pi fun _ => isTopologicalBasis_opens).isOpenMap_iff.2 ?_
@@ -2184,8 +2184,8 @@ theorem Dense.exists_countable_dense_subset
     hs.denseRange_val.dense_image continuous_subtype_val htd⟩
 
 中文:
-定理 Dense.exists_countable_dense_subset
-  结论: {α : 类型} [TopologicalSpace α] {s : Set α}
+定理 稠密.存在_countable_dense_subset
+  结论: {α : 类型} [拓扑空间 α] {s : 集合 α}
   证明: let ⟨t, htc, htd⟩ := exists_countable_dense s
   ⟨(↑) '' t, Subtype.coe_image_subset s t, htc.image Subtype.val,
     hs.denseRange_val.dense_image continuous_subtype_val htd⟩
@@ -2212,8 +2212,8 @@ theorem Dense.exists_countable_dense_subset_bot_top
 htd.mono (subset_inter s
 
 中文:
-定理 Dense.exists_countable_dense_subset_bot_top
-  结论: {α : 类型} [TopologicalSpace α]
+定理 稠密.存在_countable_dense_subset_bot_top
+  结论: {α : 类型} [拓扑空间 α]
   证明: by
   rcases hs.exists_countable_dense_subset with ⟨t, hts, htc, htd⟩
   refine ⟨(t union ({ x | IsBot x } union { x | IsTop x })) inter s, ?_, ?_, ?_, ?_, ?_⟩
@@ -2244,7 +2244,7 @@ instance separableSpace_univ
 
 中文:
 实例 separableSpace_univ
-  签名: {α : 类型} [TopologicalSpace α] [SeparableSpace α]
+  签名: {α : 类型} [拓扑空间 α] [可分空间 α]
   定义体: (Equiv.Set.univ α).symm.surjective.denseRange.separableSpace (continuous_id.subtype_mk _)
 
 Depends on / 依赖: Equiv.Set.univ, continuous_id, continuous_id.subtype_mk, denseRange, separableSpace, subtype_mk, surjective, symm.surjective.denseRange.separableSpace
@@ -2263,8 +2263,8 @@ theorem exists_countable_dense_bot_top
   simpa using dense_univ.exists_countable_dense_subset_bot_top
 
 中文:
-定理 exists_countable_dense_bot_top
-  结论: (α : 类型) [TopologicalSpace α] [SeparableSpace α]
+定理 存在_countable_dense_bot_top
+  结论: (α : 类型) [拓扑空间 α] [可分空间 α]
   证明: by
   simpa using dense_univ.exists_countable_dense_subset_bot_top
 
@@ -2291,10 +2291,10 @@ class _root_.FirstCountableTopology
     - nhds_generated_countable : forall a : α, (𝓝 a).IsCountablyGenerated
 
 中文:
-类 _root_.FirstCountableTopology
+类 _root_.第一可数拓扑
   参数: : 命题 where
   公理与运算 (1 个):
-    - nhds_generated_countable : 对任意 a : α, (𝓝 a).IsCountablyGenerated
+    - nhds_generated_countable : 对任意 a : α, (𝓝 a).是余untablyGenerated
 -/
 class _root_.FirstCountableTopology : Prop where
   /-- The filter `𝓝 a` is countably generated for all points `a`. -/
@@ -2313,7 +2313,7 @@ theorem firstCountableTopology_induced
 
 中文:
 定理 firstCountableTopology_induced
-  结论: (α β : 类型) [t : TopologicalSpace β]
+  结论: (α β : 类型) [t : 拓扑空间 β]
   证明: let _ := t.induced f
   ⟨fun x => nhds_induced f x ▸ inferInstance⟩
 
@@ -2335,8 +2335,8 @@ instance Subtype.firstCountableTopology
   body: firstCountableTopology_induced s α (↑)
 
 中文:
-实例 Subtype.firstCountableTopology
-  签名: (s : Set α) [FirstCountableTopology α]
+实例 子类型.firstCountableTopology
+  签名: (s : 集合 α) [第一可数拓扑 α]
   定义体: firstCountableTopology_induced s α (↑)
 
 Depends on / 依赖: firstCountableTopology_induced
@@ -2356,7 +2356,7 @@ theorem _root_.Topology.IsInducing.firstCountableTopology
   exact firstCountableTopology_induced α β f
 
 中文:
-定理 _root_.Topology.IsInducing.firstCountableTopology
+定理 _root_.拓扑.是Inducing.firstCountableTopology
   结论: {β : 类型}
   证明: by
   rw [hf.1]
@@ -2377,7 +2377,7 @@ theorem _root_.Topology.IsEmbedding.firstCountableTopology
   proof: hf.1.firstCountableTopology
 
 中文:
-定理 _root_.Topology.IsEmbedding.firstCountableTopology
+定理 _root_.拓扑.是嵌入.firstCountableTopology
   结论: {β : 类型}
   证明: hf.1.firstCountableTopology
 -/
@@ -2402,8 +2402,8 @@ theorem _root_.ClusterPt.exists_seq_tendsto
   exact ⟨g, (tendsto_inf.1 hg).1, (tendsto_inf.1 hg).2⟩
 
 中文:
-定理 _root_.ClusterPt.exists_seq_tendsto
-  结论: {f : Filter α} [IsCountablyGenerated f]
+定理 _root_.ClusterPt.存在_seq_tendsto
+  结论: {f : 滤子 α} [是余untablyGenerated f]
   证明: by
   unfold ClusterPt at hx
   obtain ⟨g, hg⟩ := Filter.exists_seq_tendsto (𝓝 x ⊓ f)
@@ -2428,8 +2428,8 @@ theorem _root_.MapClusterPt.exists_seq_tendsto
   grind [exists_seq_comp_tendsto hx]
 
 中文:
-定理 _root_.MapClusterPt.exists_seq_tendsto
-  结论: {ι : 类型} {f : Filter ι} [IsCountablyGenerated f]
+定理 _root_.MapClusterPt.存在_seq_tendsto
+  结论: {ι : 类型} {f : 滤子 ι} [是余untablyGenerated f]
   证明: by
   grind [exists_seq_comp_tendsto hx]
 
@@ -2473,7 +2473,7 @@ theorem FirstCountableTopology.tendsto_subseq
   proof: subseq_tendsto_of_neBot hx
 
 中文:
-定理 FirstCountableTopology.tendsto_subseq
+定理 第一可数拓扑.tendsto_subseq
   结论: {u : 自然数 -> α} {x : α}
   证明: subseq_tendsto_of_neBot hx
 
@@ -2507,7 +2507,7 @@ instance isCountablyGenerated_nhdsWithin
 
 中文:
 实例 isCountablyGenerated_nhdsWithin
-  签名: (x : α) [IsCountablyGenerated (𝓝 x)] (s : Set α)
+  签名: (x : α) [是余untablyGenerated (𝓝 x)] (s : 集合 α)
   定义体: Inf.isCountablyGenerated _ _
 
 Depends on / 依赖: Inf.isCountablyGenerated, isCountablyGenerated
@@ -2527,10 +2527,10 @@ class _root_.SecondCountableTopology
     - is_open_generated_countable : exists b : Set (Set α), b.Countable ∧ t = TopologicalSpace.generateFrom b
 
 中文:
-类 _root_.SecondCountableTopology
+类 _root_.第二可数拓扑
   参数: : 命题 where
   公理与运算 (1 个):
-    - is_open_generated_countable : 存在 b : Set (Set α), b.Countable ∧ t = TopologicalSpace.generateFrom b
+    - is_open_generated_countable : 存在 b : 集合 (集合 α), b.可数 ∧ t = 拓扑空间.generateFrom b
 
 Depends on / 依赖: eq_generateFrom, hb.eq_generateFrom
 -/
@@ -2547,8 +2547,8 @@ theorem IsTopologicalBasis.secondCountableTopology
   proof: ⟨⟨b, hc, hb.eq_generateFrom⟩⟩
 
 中文:
-定理 IsTopologicalBasis.secondCountableTopology
-  结论: {b : Set (Set α)}
+定理 是TopologicalBasis.secondCountableTopology
+  结论: {b : 集合 (集合 α)}
   证明: ⟨⟨b, hc, hb.eq_generateFrom⟩⟩
 -/
 protected theorem IsTopologicalBasis.secondCountableTopology {b : Set (Set α)}
@@ -2564,8 +2564,8 @@ lemma SecondCountableTopology.mk'
   proof: @SecondCountableTopology.mk α (generateFrom b) ⟨b, hc, rfl⟩
 
 中文:
-引理 SecondCountableTopology.mk'
-  条件: {α} {b : Set (Set α)} (hc : b.Countable)
+引理 第二可数拓扑.mk'
+  条件: {α} {b : 集合 (集合 α)} (hc : b.可数)
   证明: @SecondCountableTopology.mk α (generateFrom b) ⟨b, hc, rfl⟩
 
 Depends on / 依赖: SecondCountableTopology, SecondCountableTopology.mk, generateFrom
@@ -2583,8 +2583,8 @@ instance _root_.Finite.toSecondCountableTopology
   body: ⟨_, {U | IsOpen U}.to_countable, TopologicalSpace.isTopologicalBasis_opens.eq_generateFrom⟩
 
 中文:
-实例 _root_.Finite.toSecondCountableTopology
-  签名: [Finite α]
+实例 _root_.有限.toSecondCountableTopology
+  签名: [有限 α]
   定义体: ⟨_, {U | IsOpen U}.to_countable, TopologicalSpace.isTopologicalBasis_opens.eq_generateFrom⟩
 
 Depends on / 依赖: IsOpen, TopologicalSpace, TopologicalSpace.isTopologicalBasis_opens.eq_generateFrom, eq_generateFrom, isTopologicalBasis_opens, to_countable
@@ -2607,8 +2607,8 @@ theorem exists_countable_basis
   exacts [((countable_ofPred_finite_subset hb₁).image _).mono sdiff_subset, rfl]
 
 中文:
-定理 exists_countable_basis
-  条件: [SecondCountableTopology α]
+定理 存在_countable_basis
+  条件: [第二可数拓扑 α]
   证明: by
   obtain ⟨b, hb₁, hb₂⟩ := @SecondCountableTopology.is_open_generated_countable α _ _
   refine ⟨_, ?_, notMem_sdiff_of_mem ?_, (isTopologicalBasis_of_subbasis hb₂).sdiff_empty⟩
@@ -2636,8 +2636,8 @@ theorem exists_seq_basis
   · exact ⟨fun n => ∅, by simp_all⟩
 
 中文:
-定理 exists_seq_basis
-  条件: [SecondCountableTopology α]
+定理 存在_seq_basis
+  条件: [第二可数拓扑 α]
   证明: by
   obtain ⟨t, ht⟩ := TopologicalSpace.exists_countable_basis α
   by_cases! hn : t.Nonempty
@@ -2665,7 +2665,7 @@ definition countableBasis
 
 中文:
 定义 countableBasis
-  签名: [SecondCountableTopology α]
+  签名: [第二可数拓扑 α]
   定义体: (exists_countable_basis α).choose
 
 Depends on / 依赖: exists_countable_basis
@@ -2684,8 +2684,8 @@ theorem countable_countableBasis
 
 中文:
 定理 countable_countableBasis
-  条件: [SecondCountableTopology α]
-  结论: (countableBasis α).Countable
+  条件: [第二可数拓扑 α]
+  结论: (countableBasis α).可数
   证明: (exists_countable_basis α).choose_spec.1
 
 Depends on / 依赖: choose_spec, exists_countable_basis
@@ -2703,7 +2703,7 @@ instance encodableCountableBasis
 
 中文:
 实例 encodableCountableBasis
-  签名: [SecondCountableTopology α]
+  签名: [第二可数拓扑 α]
   定义体: (countable_countableBasis α).toEncodable
 
 Depends on / 依赖: countable_countableBasis, toEncodable
@@ -2722,7 +2722,7 @@ theorem empty_notMem_countableBasis
 
 中文:
 定理 empty_notMem_countableBasis
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   结论: ∅ ∉ countableBasis α
   证明: (exists_countable_basis α).choose_spec.2.1
 
@@ -2741,7 +2741,7 @@ theorem isBasis_countableBasis
 
 中文:
 定理 isBasis_countableBasis
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   证明: (exists_countable_basis α).choose_spec.2.2
 
 Depends on / 依赖: choose_spec, exists_countable_basis
@@ -2760,7 +2760,7 @@ theorem eq_generateFrom_countableBasis
 
 中文:
 定理 eq_generateFrom_countableBasis
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   证明: (isBasis_countableBasis α).eq_generateFrom
 
 Depends on / 依赖: eq_generateFrom, isBasis_countableBasis
@@ -2781,7 +2781,7 @@ theorem isOpen_of_mem_countableBasis
 
 中文:
 定理 isOpen_of_mem_countableBasis
-  结论: [SecondCountableTopology α] {s : Set α}
+  结论: [第二可数拓扑 α] {s : 集合 α}
   证明: (isBasis_countableBasis α).isOpen hs
 
 Depends on / 依赖: isBasis_countableBasis, isOpen
@@ -2800,7 +2800,7 @@ theorem nonempty_of_mem_countableBasis
 
 中文:
 定理 nonempty_of_mem_countableBasis
-  结论: [SecondCountableTopology α] {s : Set α}
+  结论: [第二可数拓扑 α] {s : 集合 α}
   证明: nonempty_iff_ne_empty.2 ne_of_mem_of_not_mem hs empty_notMem_countableBasis α
 
 Depends on / 依赖: empty_notMem_countableBasis, ne_of_mem_of_not_mem, nonempty_iff_ne_empty
@@ -2850,7 +2850,7 @@ theorem secondCountableTopology_induced
 
 中文:
 定理 secondCountableTopology_induced
-  结论: (α β) [t : TopologicalSpace β] [SecondCountableTopology β]
+  结论: (α β) [t : 拓扑空间 β] [第二可数拓扑 β]
   证明: by
   rcases @SecondCountableTopology.is_open_generated_countable β _ _ with ⟨b, hb, eq⟩
   let := t.induced f
@@ -2877,8 +2877,8 @@ instance Subtype.secondCountableTopology
   body: secondCountableTopology_induced s α (↑)
 
 中文:
-实例 Subtype.secondCountableTopology
-  签名: (s : Set α) [SecondCountableTopology α]
+实例 子类型.secondCountableTopology
+  签名: (s : 集合 α) [第二可数拓扑 α]
   定义体: secondCountableTopology_induced s α (↑)
 
 Depends on / 依赖: secondCountableTopology_induced
@@ -2900,7 +2900,7 @@ exact SecondCountableTopology.mk'
 
 中文:
 引理 secondCountableTopology_iInf
-  结论: {α ι} [Countable ι] {t : ι -> TopologicalSpace α}
+  结论: {α ι} [可数 ι] {t : ι -> 拓扑空间 α}
   证明: by
   rw [funext fun i => @eq_generateFrom_countableBasis α (t i) (ht i)]; rw [← generateFrom_iUnion]
 exact SecondCountableTopology.mk'
@@ -2943,7 +2943,7 @@ theorem secondCountableTopology_of_countable_cover
 
 中文:
 定理 secondCountableTopology_of_countable_cover
-  结论: {ι} [Countable ι] {U : ι -> Set α}
+  结论: {ι} [可数 ι] {U : ι -> 集合 α}
   证明: haveI : IsTopologicalBasis (⋃ i, image ((↑) : U i -> α) '' countableBasis (U i)) :=
     isTopologicalBasis_of_cover Uo hc fun i => isBasis_countableBasis (U i)
   this.secondCountableTopology (countable_iUnion fun _ => (countable_countableBasis _).image _)
@@ -2972,7 +2972,7 @@ theorem isOpen_iUnion_countable
 
 中文:
 定理 isOpen_iUnion_countable
-  结论: [SecondCountableTopology α] {ι} (s : ι -> Set α)
+  结论: [第二可数拓扑 α] {ι} (s : ι -> 集合 α)
   证明: by
   let B := { b in countableBasis α | exists i, b subseteq s i }
   choose f hf using fun b : B => b.2.2
@@ -3005,7 +3005,7 @@ exact ⟨T, hTc.image _, hU.trans iUnion_subtype ..⟩
 
 中文:
 定理 isOpen_biUnion_countable
-  结论: [SecondCountableTopology α] {ι : 类型} (I : Set ι) (s : ι -> Set α)
+  结论: [第二可数拓扑 α] {ι : 类型} (I : 集合 ι) (s : ι -> 集合 α)
   证明: by
   simp_rw [← Subtype.exists_set_subtype, biUnion_image]
   rcases isOpen_iUnion_countable (fun i : I => s i) fun i => H i i.2 with ⟨T, hTc, hU⟩
@@ -3030,7 +3030,7 @@ theorem isOpen_sUnion_countable
 
 中文:
 定理 isOpen_sUnion_countable
-  结论: [SecondCountableTopology α] (S : Set (Set α))
+  结论: [第二可数拓扑 α] (S : 集合 (集合 α))
   证明: by
   simpa only [and_left_comm, sUnion_eq_biUnion] using! isOpen_biUnion_countable S id H
 
@@ -3056,7 +3056,7 @@ theorem countable_cover_nhds
 
 中文:
 定理 countable_cover_nhds
-  条件: [SecondCountableTopology α] {f : α -> Set α} (hf : 对任意 x, f x in 𝓝 x)
+  条件: [第二可数拓扑 α] {f : α -> 集合 α} (hf : 对任意 x, f x in 𝓝 x)
   证明: by
   rcases isOpen_iUnion_countable (fun x => interior (f x)) fun x => isOpen_interior with
     ⟨s, hsc, hsU⟩
@@ -3090,7 +3090,7 @@ theorem countable_cover_nhdsWithin
 
 中文:
 定理 countable_cover_nhdsWithin
-  结论: [SecondCountableTopology α] {f : α -> Set α} {s : Set α}
+  结论: [第二可数拓扑 α] {f : α -> 集合 α} {s : 集合 α}
   证明: by
   have : forall x : s, (↑) ⁻¹' f x in 𝓝 x := fun x => preimage_coe_mem_nhds_subtype.2 (hf x x.2)
   rcases countable_cover_nhds this with ⟨t, htc, htU⟩
@@ -3122,8 +3122,8 @@ lemma IsTopologicalBasis.exists_countable_biUnion_of_isOpen
     rintro ⟨x, hx
 
 中文:
-引理 IsTopologicalBasis.exists_countable_biUnion_of_isOpen
-  结论: [SecondCountableTopology α]
+引理 是TopologicalBasis.存在_countable_biUnion_of_isOpen
+  结论: [第二可数拓扑 α]
   证明: by
   have A : forall x in u, exists a in t, x in a ∧ a subseteq u :=
     fun x hx => ht.exists_subset_of_mem_open hx hu
@@ -3169,7 +3169,7 @@ lemma IsTopologicalBasis.exists_countable
     (countable
 
 中文:
-引理 IsTopologicalBasis.exists_countable
+引理 是TopologicalBasis.存在_countable
   证明: by
   have A : forall u in countableBasis α, exists s subseteq t, s.Countable ∧ u = ⋃ a in s, a :=
     fun u hu => ht.exists_countable_biUnion_of_isOpen ((isBasis_countableBasis α).isOpen hu)
@@ -3216,7 +3216,7 @@ lemma exists_countable_of_generateFrom
   have A 
 
 中文:
-引理 exists_countable_of_generateFrom
+引理 存在_countable_of_generateFrom
   证明: by
   let t' := (fun f => ⋂₀ f) '' { f : Set (Set α) | f.Finite ∧ f subseteq t }
   have : IsTopologicalBasis t' := TopologicalSpace.isTopologicalBasis_of_subbasis ht
@@ -3277,8 +3277,8 @@ theorem IsTopologicalBasis.sigma
   aesop
 
 中文:
-定理 IsTopologicalBasis.sigma
-  结论: {s : 对任意 i : ι, Set (Set (E i))}
+定理 是TopologicalBasis.sigma
+  结论: {s : 对任意 i : ι, 集合 (集合 (E i))}
   证明: by
   refine .of_hasBasis_nhds fun a => ?_
   rw [Sigma.nhds_eq]
@@ -3308,8 +3308,8 @@ instance [Countable
   exact A.secondCountabl
 
 中文:
-实例 [Countable
-  签名: ι] [对任意 i, SecondCountableTopology (E i)] :
+实例 [可数
+  签名: ι] [对任意 i, 第二可数拓扑 (E i)] :
   定义体: by
   let b := ⋃ i : ι, (fun u => (Sigma.mk i '' u : Set (Σ i, E i))) '' countableBasis (E i)
   have A : IsTopologicalBasis b := IsTopologicalBasis.sigma fun i => isBasis_countableBasis _
@@ -3346,8 +3346,8 @@ theorem IsTopologicalBasis.sum
     · obtain ⟨v, vs, xv, vu⟩ : exists v in s, x in v ∧ v su
 
 中文:
-定理 IsTopologicalBasis.sum
-  结论: {s : Set (Set α)} (hs : IsTopologicalBasis s) {t : Set (Set β)}
+定理 是TopologicalBasis.求和
+  结论: {s : 集合 (集合 α)} (hs : 是TopologicalBasis s) {t : 集合 (集合 β)}
   证明: by
   apply isTopologicalBasis_of_isOpen_of_nhds
   · rintro u (⟨w, hw, rfl⟩ | ⟨w, hw, rfl⟩)
@@ -3390,8 +3390,8 @@ instance [SecondCountableTopology
       (Cou
 
 中文:
-实例 [SecondCountableTopology
-  签名: α] [SecondCountableTopology β] :
+实例 [第二可数拓扑
+  签名: α] [第二可数拓扑 β] :
   定义体: by
   let b :=
     (fun u => Sum.inl '' u) '' countableBasis α union (fun u => Sum.inr '' u) '' countableBasis β
@@ -3436,8 +3436,8 @@ theorem IsTopologicalBasis.isQuotientMap
     ob
 
 中文:
-定理 IsTopologicalBasis.isQuotientMap
-  结论: {V : Set (Set X)} (hV : IsTopologicalBasis V)
+定理 是TopologicalBasis.isQuotientMap
+  结论: {V : 集合 (集合 X)} (hV : 是TopologicalBasis V)
   证明: by
   apply isTopologicalBasis_of_isOpen_of_nhds
   · rintro - ⟨U, U_in_V, rfl⟩
@@ -3477,8 +3477,8 @@ theorem _root_.Topology.IsQuotientMap.secondCountableTopology
       (V_generates.isQuotientMap h' h).eq_generateFrom⟩
 
 中文:
-定理 _root_.Topology.IsQuotientMap.secondCountableTopology
-  结论: [SecondCountableTopology X]
+定理 _root_.拓扑.是商映射.secondCountableTopology
+  结论: [第二可数拓扑 X]
   证明: by
     obtain ⟨V, V_countable, -, V_generates⟩ := exists_countable_basis X
     exact ⟨Set.image π '' V, V_countable.image (Set.image π),
@@ -3504,8 +3504,8 @@ theorem IsTopologicalBasis.quotient
   proof: hV.isQuotientMap isQuotientMap_quotient_mk' h
 
 中文:
-定理 IsTopologicalBasis.quotient
-  结论: {V : Set (Set X)} (hV : IsTopologicalBasis V)
+定理 是TopologicalBasis.quotient
+  结论: {V : 集合 (集合 X)} (hV : 是TopologicalBasis V)
   证明: hV.isQuotientMap isQuotientMap_quotient_mk' h
 
 Depends on / 依赖: hV.isQuotientMap, isQuotientMap, isQuotientMap_quotient_mk
@@ -3524,8 +3524,8 @@ theorem Quotient.secondCountableTopology
   proof: isQuotientMap_quotient_mk'.secondCountableTopology h
 
 中文:
-定理 Quotient.secondCountableTopology
-  结论: [SecondCountableTopology X]
+定理 商.secondCountableTopology
+  结论: [第二可数拓扑 X]
   证明: isQuotientMap_quotient_mk'.secondCountableTopology h
 
 Depends on / 依赖: isQuotientMap_quotient_mk, secondCountableTopology
@@ -3553,8 +3553,8 @@ theorem Topology.IsInducing.secondCountableTopology
   exact secondCountableTopology_induced α β f
 
 中文:
-定理 Topology.IsInducing.secondCountableTopology
-  结论: [TopologicalSpace β]
+定理 拓扑.是Inducing.secondCountableTopology
+  结论: [拓扑空间 β]
   证明: by
   rw [hf.1]
   exact secondCountableTopology_induced α β f
@@ -3572,7 +3572,7 @@ theorem Topology.IsEmbedding.secondCountableTopology
   proof: hf.1.secondCountableTopology
 
 中文:
-定理 Topology.IsEmbedding.secondCountableTopology
+定理 拓扑.是嵌入.secondCountableTopology
   证明: hf.1.secondCountableTopology
 -/
 protected theorem Topology.IsEmbedding.secondCountableTopology
@@ -3590,7 +3590,7 @@ theorem Topology.IsEmbedding.separableSpace
   exact SecondCountableTopology.to_separableSpace
 
 中文:
-定理 Topology.IsEmbedding.separableSpace
+定理 拓扑.是嵌入.separableSpace
   证明: by
   have := hf.secondCountableTopology
   exact SecondCountableTopology.to_separableSpace

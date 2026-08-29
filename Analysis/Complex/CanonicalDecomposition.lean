@@ -53,7 +53,7 @@ definition canonicalFactor
 
 中文:
 定义 canonicalFactor
-  签名: (R : 实数) (w : Complex)
+  签名: (R : 实数) (w : 复形)
   定义体: fun z => (R ^ 2 - (conj w) * z) / (R * (z - w))
 -/
 noncomputable def canonicalFactor (R : Real) (w : Complex) : Complex -> Complex :=
@@ -69,7 +69,7 @@ lemma canonicalFactor_def
 
 中文:
 引理 canonicalFactor_def
-  条件: (R : 实数) (w : Complex)
+  条件: (R : 实数) (w : 复形)
   证明: rfl
 -/
 lemma canonicalFactor_def (R : Real) (w : Complex) :
@@ -88,7 +88,7 @@ lemma canonicalFactor_apply
 
 中文:
 引理 canonicalFactor_apply
-  条件: (R : 实数) (w z : Complex)
+  条件: (R : 实数) (w z : 复形)
   证明: rfl
 
 @[simp]
@@ -109,7 +109,7 @@ lemma canonicalFactor_apply_self
 
 中文:
 引理 canonicalFactor_apply_self
-  条件: (R : 实数) (w : Complex)
+  条件: (R : 实数) (w : 复形)
   证明: by
   simp [canonicalFactor_apply]
 
@@ -137,7 +137,7 @@ theorem meromorphic_canonicalFactor
 
 中文:
 定理 meromorphic_canonicalFactor
-  结论: Meromorphic (canonicalFactor R w)
+  结论: 亚纯 (canonicalFactor R w)
   证明: by
   intro x
   unfold canonicalFactor
@@ -166,7 +166,7 @@ theorem analyticOnNhd_canonicalFactor
 
 中文:
 定理 analyticOnNhd_canonicalFactor
-  结论: AnalyticOnNhd Complex (canonicalFactor R w) {w}ᶜ
+  结论: AnalyticOnNhd 复形 (canonicalFactor R w) {w}ᶜ
   证明: by
   intro x hx
   rw [canonicalFactor_def]
@@ -282,7 +282,7 @@ theorem canonicalFactor_ne_zero
 
 中文:
 定理 canonicalFactor_ne_zero
-  结论: {z : Complex} (hw : w in ball 0 R) (h₁z : z in closedBall 0 R)
+  结论: {z : 复形} (hw : w in ball 0 R) (h₁z : z in closedBall 0 R)
   证明: by
   obtain ⟨hR, hzw⟩ : 0 < R ∧ z - w != 0 := by grind [mem_ball_zero_iff, norm_nonneg]
   simp only [mem_ball, dist_zero_right, mem_closedBall] at hw h₁z
@@ -319,7 +319,7 @@ theorem canonicalFactor_eq_zero_iff
 
 中文:
 定理 canonicalFactor_eq_zero_iff
-  条件: {z : Complex} (hw : w in ball 0 R) (hz : z in ball 0 R)
+  条件: {z : 复形} (hw : w in ball 0 R) (hz : z in ball 0 R)
   证明: by
   constructor
   · contrapose
@@ -351,7 +351,7 @@ theorem norm_canonicalFactor_eval_circle_eq_one
 
 中文:
 定理 norm_canonicalFactor_eval_circle_eq_one
-  条件: {z : Complex} (hw : w in ball 0 R) (hz : z in sphere 0 R)
+  条件: {z : 复形} (hw : w in ball 0 R) (hz : z in sphere 0 R)
   证明: by
   obtain ⟨hR, hzw⟩ : 0 < R ∧ z - w != 0 := by
     grind [mem_ball_zero_iff, norm_nonneg, mem_sphere_zero_iff_norm]
@@ -390,7 +390,7 @@ theorem meromorphicOrderAt_canonicalFactor_ne_top
 
 中文:
 定理 meromorphicOrderAt_canonicalFactor_ne_top
-  条件: {z : Complex} {R : 实数} (w : Complex) (hR : 0 < R)
+  条件: {z : 复形} {R : 实数} (w : 复形) (hR : 0 < R)
   证明: by
   apply (meromorphic_canonicalFactor R w).exists_meromorphicOrderAt_ne_top_iff_forall.1
   use 0
@@ -491,7 +491,7 @@ structure CanonicalDecomp
 
 中文:
 结构 CanonicalDecomp
-  参数: (f g : Complex -> E) (R : 实数)
+  参数: (f g : 复形 -> E) (R : 实数)
   公理与运算 (4 个):
     - meromorphicOn : MeromorphicOn f (closedBall 0 R)
     - meromorphicNFOn : MeromorphicNFOn g (closedBall 0 R)
@@ -531,7 +531,7 @@ lemma canonicalDecomposition_aux₁
 
 中文:
 引理 canonicalDecomposition_aux₁
-  条件: (F : locallyFinsuppWithin (ball (0 : Complex) R) 整数)
+  条件: (F : locallyFinsuppWithin (ball (0 : 复形) R) 整数)
   证明: by
   refine meromorphicNFOn_finprod (fun w => ?_) fun z hz a ha b hb => ?_
   · by_cases hw : w in ball 0 R
@@ -652,7 +652,7 @@ lemma canonicalDecomposition_aux₃
 
 中文:
 引理 canonicalDecomposition_aux₃
-  条件: {z : Complex} (hR : 0 < R)
+  条件: {z : 复形} (hR : 0 < R)
   证明: by
   apply meromorphicOrderAt_finprod_ne_top
     (fun _ => MeromorphicAt.zpow (meromorphic_canonicalFactor _ _ _) _)
@@ -687,7 +687,7 @@ theorem _root_.MeromorphicOn.exists_canonicalDecomp
       eventuallyEq :
 
 中文:
-定理 _root_.MeromorphicOn.exists_canonicalDecomp
+定理 _root_.MeromorphicOn.存在_canonicalDecomp
   证明: by
   -- Trivial case: If `R` is non-positive, then the ball is empty.
   by_cases hR : R <= 0
@@ -784,7 +784,7 @@ theorem CanonicalDecomp.divisor_eq_divisor
 
 中文:
 定理 CanonicalDecomp.divisor_eq_divisor
-  条件: {x : Complex} (D : CanonicalDecomp f g R) (hR : 0 < R)
+  条件: {x : 复形} (D : CanonicalDecomp f g R) (hR : 0 < R)
   证明: by
   rcases lt_trichotomy ‖x‖ R with h|h|h
   · -- The case where `x` is contained in `ball 0 R`. There, the divisor of `g` vanishes because `g`
@@ -859,10 +859,10 @@ structure ECanonicalDecomp
 
 中文:
 结构 ECanonicalDecomp
-  参数: (f g : Complex -> E) (R : 实数)
+  参数: (f g : 复形 -> E) (R : 实数)
   公理与运算 (4 个):
     - meromorphicOn : MeromorphicOn f (closedBall 0 R)
-    - analyticOnNhd : AnalyticOnNhd Complex g (closedBall 0 R)
+    - analyticOnNhd : AnalyticOnNhd 复形 g (closedBall 0 R)
     - ne_zero : 对任意 u in (closedBall 0 R), g u != 0
     - eventuallyEq : f =ᶠ[codiscreteWithin (closedBall 0 R)] ((∏ᶠ u, (canonicalFactor R u) ^ (-divisor f (ball 0 R) u)) * (∏ᶠ v, (· - v) ^ (divisor f (sphere 0 R)) v)) • g
 -/
@@ -900,7 +900,7 @@ theorem _root_.MeromorphicOn.exists_ecanonicalDecomp
         filter_upwards [Filter.self_mem_codiscreteWit
 
 中文:
-定理 _root_.MeromorphicOn.exists_ecanonicalDecomp
+定理 _root_.MeromorphicOn.存在_ecanonicalDecomp
   结论: (h₁f : MeromorphicOn f (closedBall 0 R))
   证明: by
   rcases gt_trichotomy 0 R with hR | hR | hR
@@ -975,7 +975,7 @@ lemma mulSupport_pow_subset_support
 
 中文:
 引理 mulSupport_pow_subset_support
-  结论: {α β : 类型} [DivInvMonoid α] (f : β -> α)
+  结论: {α β : 类型} [除逆幺半群 α] (f : β -> α)
   证明: by
   simp only [mulSupport_subset_iff, ne_eq, mem_support]
   intro

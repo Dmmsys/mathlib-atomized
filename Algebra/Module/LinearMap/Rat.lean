@@ -28,8 +28,8 @@ definition AddMonoidHom.toRatLinearMap
   body: { f with map_smul' := map_rat_smul f }
 
 中文:
-定义 AddMonoidHom.toRatLinearMap
-  签名: [AddCommGroup M] [Module Rat M] [AddCommGroup M₂] [Module Rat M₂]
+定义 加法幺半群态射.toRatLinearMap
+  签名: [加法交换群 M] [模 有理数 M] [加法交换群 M₂] [模 有理数 M₂]
   定义体: { f with map_smul' := map_rat_smul f }
 
 Depends on / 依赖: map_rat_smul, map_smul
@@ -52,8 +52,8 @@ theorem AddMonoidHom.toRatLinearMap_injective
 @[simp]
 
 中文:
-定理 AddMonoidHom.toRatLinearMap_injective
-  结论: [AddCommGroup M] [Module Rat M] [AddCommGroup M₂]
+定理 加法幺半群态射.toRatLinearMap_injective
+  结论: [加法交换群 M] [模 有理数 M] [加法交换群 M₂]
   证明: by
   intro f g h
   ext x
@@ -79,8 +79,8 @@ theorem AddMonoidHom.coe_toRatLinearMap
   proof: rfl
 
 中文:
-定理 AddMonoidHom.coe_toRatLinearMap
-  结论: [AddCommGroup M] [Module Rat M] [AddCommGroup M₂]
+定理 加法幺半群态射.coe_toRatLinearMap
+  结论: [加法交换群 M] [模 有理数 M] [加法交换群 M₂]
   证明: rfl
 -/
 theorem AddMonoidHom.coe_toRatLinearMap [AddCommGroup M] [Module Rat M] [AddCommGroup M₂]

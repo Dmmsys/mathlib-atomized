@@ -41,7 +41,7 @@ theorem LieAlgebra.commute_ad_of_commute
   rw [Commute]; rw [SemiconjBy]; rw [← sub_eq_zero]; rw [← Ring.lie_def]; rw [← (LieAlgebra.ad R A).map_lie]; rw [Ring.lie_def]; rw [sub_eq_zero.mpr h]; rw [map_zero]
 
 中文:
-定理 LieAlgebra.commute_ad_of_commute
+定理 Lie代数.commute_ad_of_commute
   条件: {a b : A} (h : Commute a b)
   证明: by
   rw [Commute]; rw [SemiconjBy]; rw [← sub_eq_zero]; rw [← Ring.lie_def]; rw [← (LieAlgebra.ad R A).map_lie]; rw [Ring.lie_def]; rw [sub_eq_zero.mpr h]; rw [map_zero]
@@ -65,8 +65,8 @@ theorem LieAlgebra.ad_nilpotent_of_nilpotent
   exact (LinearMap.commute_mulLeft_right a a).isNilpotent_
 
 中文:
-定理 LieAlgebra.ad_nilpotent_of_nilpotent
-  条件: {a : A} (h : IsNilpotent a)
+定理 Lie代数.ad_nilpotent_of_nilpotent
+  条件: {a : A} (h : 是幂零 a)
   证明: by
   rw [LieAlgebra.ad_eq_lmul_left_sub_lmul_right]
   have hl : IsNilpotent (LinearMap.mulLeft R a) := by rwa [LinearMap.isNilpotent_mulLeft_iff]
@@ -94,8 +94,8 @@ theorem LieSubalgebra.isNilpotent_ad_of_isNilpotent_ad
   exact Module.End.submodule_pow_eq_zero_of_pow_eq_zero (K.ad_comp_incl_eq x) hn
 
 中文:
-定理 LieSubalgebra.isNilpotent_ad_of_isNilpotent_ad
-  结论: {L : 类型} [LieRing L] [LieAlgebra R L]
+定理 Lie子代数.isNilpotent_ad_of_isNilpotent_ad
+  结论: {L : 类型} [Lie环 L] [Lie代数 R L]
   证明: by
   obtain ⟨n, hn⟩ := h
   use n
@@ -118,7 +118,7 @@ theorem LieAlgebra.isNilpotent_ad_of_isNilpotent
   proof: L.isNilpotent_ad_of_isNilpotent_ad LieAlgebra.ad_nilpotent_of_nilpotent h
 
 中文:
-定理 LieAlgebra.isNilpotent_ad_of_isNilpotent
+定理 Lie代数.isNilpotent_ad_of_isNilpotent
   证明: L.isNilpotent_ad_of_isNilpotent_ad LieAlgebra.ad_nilpotent_of_nilpotent h
 
 Depends on / 依赖: L.isNilpotent_ad_of_isNilpotent_ad, LieAlgebra, LieAlgebra.ad_nilpotent_of_nilpotent, ad_nilpotent_of_nilpotent, isNilpotent_ad_of_isNilpotent_ad
@@ -151,8 +151,8 @@ theorem LieAlgebra.ad_isSemisimple_of_isSemisimple
       rw [
 
 中文:
-定理 LieAlgebra.ad_isSemisimple_of_isSemisimple
-  条件: {a : Module.End K V} (ha : a.IsSemisimple)
+定理 Lie代数.ad_isSemisimple_of_isSemisimple
+  条件: {a : 模.End K V} (ha : a.是半单)
   证明: by
   rw [LieAlgebra.ad_eq_lmul_left_sub_lmul_right]
   have hl : Module.End.IsSemisimple (LinearMap.mulLeft K a) := by

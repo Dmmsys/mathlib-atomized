@@ -48,7 +48,7 @@ structure PseudoMetric
 
 中文:
 结构 PseudoMetric
-  参数: [Zero R] [Add R] [LE R]
+  参数: [零 R] [加法 R] [LE R]
   公理与运算 (4 个):
     - toFun : X -> X -> R
     - refl'(x) : toFun x x = 0
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (PseudoMetric X R) X (X -> R)
+  签名: 函数状 (PseudoMetric X R) X (X -> R)
   定义体: PseudoMetric.toFun
   coe_injective _ := by aesop
 
@@ -233,8 +233,8 @@ instance [Zero
   body: .lift _ DFunLike.coe_injective
 
 中文:
-实例 [Zero
-  签名: R] [Add R] [PartialOrder R] : PartialOrder (PseudoMetric X R)
+实例 [零
+  签名: R] [加法 R] [偏序 R] : 偏序 (PseudoMetric X R)
   定义体: .lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -256,8 +256,8 @@ instance [AddZeroClass
 @[simp, norm_cast]
 
 中文:
-实例 [AddZeroClass
-  签名: R] [Preorder R] : Bot (PseudoMetric X R) where
+实例 [加法零类
+  签名: R] [预序 R] : 底元素 (PseudoMetric X R) where
   定义体: 0
   bot.refl' _ := rfl
   bot.symm' _ _ := rfl
@@ -285,7 +285,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  条件: [AddZeroClass R] [Preorder R]
+  条件: [加法零类 R] [预序 R]
   结论: ⇑(⊥ : PseudoMetric X R) = 0
   证明: rfl
 
@@ -304,7 +304,7 @@ lemma bot_apply
 
 中文:
 引理 bot_apply
-  条件: [AddZeroClass R] [Preorder R] (x y : X)
+  条件: [加法零类 R] [预序 R] (x y : X)
   证明: rfl
 -/
 protected lemma bot_apply [AddZeroClass R] [Preorder R] (x y : X) :
@@ -331,7 +331,7 @@ instance [AddZeroClass
 @[simp, 
 
 中文:
-实例 [AddZeroClass
+实例 [加法零类
   签名: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
   定义体: {
     toFun := fun x y => (d x y) ⊔ (d' x y)
@@ -372,7 +372,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  结论: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
+  结论: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
   证明: rfl
 
 @[simp]
@@ -392,7 +392,7 @@ lemma sup_apply
 
 中文:
 引理 sup_apply
-  结论: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
+  结论: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
   证明: rfl
 -/
 protected lemma sup_apply [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
@@ -412,7 +412,7 @@ instance [AddZeroClass
   sup_le _ _ _ := fun h h' _ _ => sup_le (h _ _) (h' _ _)
 
 中文:
-实例 [AddZeroClass
+实例 [加法零类
   签名: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
   定义体: max
   le_sup_left := by simp [← PseudoMetric.coe_le_coe]
@@ -477,7 +477,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (PseudoMetric X R)
+  签名: 有底序 (PseudoMetric X R)
   定义体: f.nonneg _ _
 
 @[simp, push_cast]
@@ -499,7 +499,7 @@ lemma coe_finsetSup
 
 中文:
 引理 coe_finsetSup
-  结论: [IsOrderedAddMonoid R] {Y : 类型} {f : Y -> PseudoMetric X R} {s : Finset Y}
+  结论: [是OrderedAdd幺半群 R] {Y : 类型} {f : Y -> PseudoMetric X R} {s : 有限集 Y}
   证明: by
   simpa using (Finset.sup'_eq_sup hs (f ·)).symm
 
@@ -523,7 +523,7 @@ lemma finsetSup_apply
 
 中文:
 引理 finsetSup_apply
-  结论: [IsOrderedAddMonoid R] {Y : 类型} {f : Y -> PseudoMetric X R}
+  结论: [是OrderedAdd幺半群 R] {Y : 类型} {f : Y -> PseudoMetric X R}
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton i => simp
@@ -552,8 +552,8 @@ class IsUltra
     - le_sup' : forall x y z, d x z <= d x y ⊔ d y z
 
 中文:
-类 IsUltra
-  参数: [Zero R] [Add R] [LE R] [Max R] (d : PseudoMetric X R)
+类 是Ultra
+  参数: [零 R] [加法 R] [LE R] [最大值 R] (d : PseudoMetric X R)
   公理与运算 (1 个):
     - le_sup' : 对任意 x y z, d x z <= d x y ⊔ d y z
 -/
@@ -570,8 +570,8 @@ lemma IsUltra.le_sup
   proof: hd.le_sup' x y z
 
 中文:
-引理 IsUltra.le_sup
-  结论: [Zero R] [Add R] [LE R] [Max R] {d : PseudoMetric X R} [hd : IsUltra d]
+引理 是Ultra.le_sup
+  结论: [零 R] [加法 R] [LE R] [最大值 R] {d : PseudoMetric X R} [hd : 是Ultra d]
   证明: hd.le_sup' x y z
 
 Depends on / 依赖: hd.le_sup, le_sup
@@ -589,8 +589,8 @@ instance IsUltra.bot
   body: by simp
 
 中文:
-实例 IsUltra.bot
-  签名: [AddZeroClass R] [SemilatticeSup R]
+实例 是Ultra.bot
+  签名: [加法零类 R] [SemilatticeSup R]
   定义体: by simp
 -/
 instance IsUltra.bot [AddZeroClass R] [SemilatticeSup R] :
@@ -611,8 +611,8 @@ instance IsUltra.sup
   _ <= d x y ⊔ d' x y ⊔ (d y z ⊔ d' y z) := by simp [sup_comm, sup_left_comm]
 
 中文:
-实例 IsUltra.sup
-  签名: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
+实例 是Ultra.上确界
+  签名: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
   定义体: by
   constructor
   intro x y z
@@ -651,8 +651,8 @@ lemma IsUltra.finsetSup
   intro H <;
 
 中文:
-引理 IsUltra.finsetSup
-  结论: {Y : 类型} [AddCommMonoid R] [LinearOrder R] [AddLeftStrictMono R]
+引理 是Ultra.finsetSup
+  结论: {Y : 类型} [加法交换幺半群 R] [线性序 R] [AddLeftStrictMono R]
   证明: by
   constructor
   intro x y z
@@ -700,7 +700,7 @@ instance isSymm_ball
 
 中文:
 实例 isSymm_ball
-  签名: [Add R] [Zero R] [Preorder R] (d : PseudoMetric X R) {ε : R}
+  签名: [加法 R] [零 R] [预序 R] (d : PseudoMetric X R) {ε : R}
   定义体: by simp [d.symm]
 
 Depends on / 依赖: d.symm
@@ -719,7 +719,7 @@ instance isSymm_closedBall
 
 中文:
 实例 isSymm_closedBall
-  签名: [Add R] [Zero R] [LE R] (d : PseudoMetric X R) {ε : R}
+  签名: [加法 R] [零 R] [LE R] (d : PseudoMetric X R) {ε : R}
   定义体: by simp [d.symm]
 
 Depends on / 依赖: d.symm
@@ -737,8 +737,8 @@ instance IsUltra.isTrans_ball
   body: le_sup.trans_lt (max_lt hxy hyz)
 
 中文:
-实例 IsUltra.isTrans_ball
-  签名: [Add R] [Zero R] [LinearOrder R] (d : PseudoMetric X R)
+实例 是Ultra.isTrans_ball
+  签名: [加法 R] [零 R] [线性序 R] (d : PseudoMetric X R)
   定义体: le_sup.trans_lt (max_lt hxy hyz)
 
 Depends on / 依赖: le_sup, le_sup.trans_lt, max_lt, trans_lt
@@ -757,8 +757,8 @@ instance IsUltra.isTrans_closedBall
   body: le_sup.trans (sup_le hxy hyz)
 
 中文:
-实例 IsUltra.isTrans_closedBall
-  签名: [Add R] [Zero R] [SemilatticeSup R] (d : PseudoMetric X R)
+实例 是Ultra.isTrans_closedBall
+  签名: [加法 R] [零 R] [SemilatticeSup R] (d : PseudoMetric X R)
   定义体: le_sup.trans (sup_le hxy hyz)
 
 Depends on / 依赖: le_sup, le_sup.trans, sup_le

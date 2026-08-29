@@ -39,7 +39,7 @@ theorem extend_partialOrder
 
 中文:
 定理 extend_partialOrder
-  条件: {α : 类型u} (r : α -> α -> 命题) [IsPartialOrder α r]
+  条件: {α : 类型u} (r : α -> α -> 命题) [是偏序 α r]
   证明: by
   let S := { s | IsPartialOrder α s }
   have hS : forall c, c subseteq S -> IsChain (· <= ·) c -> forall y in c, exists ub in S, forall z in c, z <= ub := by
@@ -137,7 +137,7 @@ definition toLinearExtension
 
 中文:
 定义 toLinearExtension
-  签名: {α : 类型u} [PartialOrder α]
+  签名: {α : 类型u} [偏序 α]
   定义体: x
   monotone' := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.2
 -/

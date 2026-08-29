@@ -71,7 +71,7 @@ class GSMul
 
 中文:
 类 GSMul
-  参数: [VAdd ιA ιM]
+  参数: [向量加法 ιA ιM]
   公理与运算 (1 个):
     - smul({i j}) : A i -> M j -> M (i +ᵥ j)
 -/
@@ -89,7 +89,7 @@ instance GMul.toGSMul
 
 中文:
 实例 GMul.toGSMul
-  签名: [Add ιA] [GMul A]
+  签名: [加法 ιA] [GMul A]
   定义体: GMul.mul
 
 Depends on / 依赖: GMul.mul
@@ -106,7 +106,7 @@ instance GSMul.toSMul
 
 中文:
 实例 GSMul.toSMul
-  签名: [VAdd ιA ιM] [GSMul A M]
+  签名: [向量加法 ιA ιM] [GSMul A M]
   定义体: ⟨fun x y => ⟨_, GSMul.smul x.snd y.snd⟩⟩
 
 Depends on / 依赖: GSMul.smul, x.snd, y.snd
@@ -124,7 +124,7 @@ theorem mk_smul_mk
 
 中文:
 定理 mk_smul_mk
-  条件: [VAdd ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j)
+  条件: [向量加法 ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j)
   证明: rfl
 -/
 theorem mk_smul_mk [VAdd ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j) :
@@ -143,12 +143,12 @@ class GMulAction
     - mul_smul((a a' : GradedMonoid A) (b : GradedMonoid M)) : (a * a') • b = a • a' • b
 
 中文:
-类 GMulAction
-  参数: [AddMonoid ιA] [VAdd ιA ιM] [GMonoid A]
+类 GMul作用
+  参数: [加法幺半群 ιA] [向量加法 ιA ιM] [G幺半群 A]
   继承: GSMul A M
   公理与运算 (2 个):
-    - one_smul((b : GradedMonoid M)) : (1 : GradedMonoid A) • b = b
-    - mul_smul((a a' : GradedMonoid A) (b : GradedMonoid M)) : (a * a') • b = a • a' • b
+    - one_smul((b : 分次幺半群 M)) : (1 : 分次幺半群 A) • b = b
+    - mul_smul((a a' : 分次幺半群 A) (b : 分次幺半群 M)) : (a * a') • b = a • a' • b
 -/
 class GMulAction [AddMonoid ιA] [VAdd ιA ιM] [GMonoid A] extends GSMul A M where
   /-- One is the neutral element for `•` -/
@@ -167,8 +167,8 @@ instance GMonoid.toGMulAction
     mul_smul := GMonoid.mul_assoc }
 
 中文:
-实例 GMonoid.toGMulAction
-  签名: [AddMonoid ιA] [GMonoid A]
+实例 G幺半群.toGMulAction
+  签名: [加法幺半群 ιA] [G幺半群 A]
   定义体: { GMul.toGSMul _ with
     one_smul := GMonoid.one_mul
     mul_smul := GMonoid.mul_assoc }
@@ -190,8 +190,8 @@ instance GMulAction.toMulAction
   mul_smul := GMulAction.mul_smul
 
 中文:
-实例 GMulAction.toMulAction
-  签名: [AddMonoid ιA] [GMonoid A] [VAdd ιA ιM] [GMulAction A M]
+实例 GMul作用.toMulAction
+  签名: [加法幺半群 ιA] [G幺半群 A] [向量加法 ιA ιM] [GMul作用 A M]
   定义体: GMulAction.one_smul
   mul_smul := GMulAction.mul_smul
 
@@ -223,8 +223,8 @@ class SetLike.GradedSMul
     - smul_mem : forall ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai in A i -> bj in B j -> ai • bj in B (i +ᵥ j)
 
 中文:
-类 SetLike.GradedSMul
-  参数: {S R N M : 类型} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
+类 集合状.分次标量乘法
+  参数: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
   公理与运算 (1 个):
     - smul_mem : 对任意 ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai in A i -> bj in B j -> ai • bj in B (i +ᵥ j)
 -/
@@ -244,8 +244,8 @@ instance SetLike.toGSMul
 @[simp]
 
 中文:
-实例 SetLike.toGSMul
-  签名: {S R N M : 类型} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
+实例 集合状.toGSMul
+  签名: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
   定义体: ⟨a.1 • b.1, SetLike.GradedSMul.smul_mem a.2 b.2⟩
 
 @[simp]
@@ -267,8 +267,8 @@ theorem SetLike.coe_GSMul
   proof: rfl
 
 中文:
-定理 SetLike.coe_GSMul
-  结论: {S R N M : 类型} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
+定理 集合状.coe_GSMul
+  结论: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
   证明: rfl
 -/
 theorem SetLike.coe_GSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
@@ -285,8 +285,8 @@ instance SetLike.GradedMul.toGradedSMul
   body: SetLike.GradedMonoid.toGradedMul.mul_mem hi hj
 
 中文:
-实例 SetLike.GradedMul.toGradedSMul
-  签名: [AddMonoid ιA] [Monoid R] {S : 类型} [SetLike S R]
+实例 集合状.分次乘法.toGradedSMul
+  签名: [加法幺半群 ιA] [幺半群 R] {S : 类型} [集合状 S R]
   定义体: SetLike.GradedMonoid.toGradedMul.mul_mem hi hj
 
 Depends on / 依赖: GradedMonoid, SetLike, SetLike.GradedMonoid.toGradedMul.mul_mem, mul_mem, toGradedMul
@@ -309,8 +309,8 @@ theorem SetLike.IsHomogeneousElem.graded_smul
   statement: [VAdd ιA ιB] [SMul R M] {A : ιA -> S} {B : ιB -> N}
 
 中文:
-定理 SetLike.IsHomogeneousElem.graded_smul
-  结论: [VAdd ιA ιB] [SMul R M] {A : ιA -> S} {B : ιB -> N}
+定理 集合状.IsHomogeneousElem.graded_smul
+  结论: [向量加法 ιA ιB] [标量乘法 R M] {A : ιA -> S} {B : ιB -> N}
 -/
 theorem SetLike.IsHomogeneousElem.graded_smul [VAdd ιA ιB] [SMul R M] {A : ιA -> S} {B : ιB -> N}
     [SetLike.GradedSMul A B] {a : R} {b : M} :

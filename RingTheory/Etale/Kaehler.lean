@@ -51,7 +51,7 @@ definition KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale
 
 中文:
 定义 KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale
-  签名: [Algebra.FormallyEtale S T]
+  签名: [代数.形式平展 S T]
   定义体: by
   refine LinearEquiv.ofBijective (mapBaseChange R S T)
     ⟨?_, fun x => (KaehlerDifferential.exact_mapBaseChange_map R S T x).mp (Subsingleton.elim _ _)⟩
@@ -108,7 +108,7 @@ lemma KaehlerDifferential.isBaseChange_of_formallyEtale
 
 中文:
 引理 KaehlerDifferential.isBaseChange_of_formallyEtale
-  条件: [Algebra.FormallyEtale S T]
+  条件: [代数.形式平展 S T]
   证明: by
   change Function.Bijective _
   convert! (tensorKaehlerEquivOfFormallyEtale R S T).bijective using 1
@@ -141,7 +141,7 @@ instance KaehlerDifferential.isLocalizedModule_map
 
 中文:
 实例 KaehlerDifferential.isLocalizedModule_map
-  签名: (M : Submonoid S) [IsLocalization M T]
+  签名: (M : 子幺半群 S) [是Localization M T]
   定义体: have := Algebra.FormallyEtale.of_isLocalization (Rₘ := T) M
   (isLocalizedModule_iff_isBaseChange M T _).mpr (isBaseChange_of_formallyEtale R S T)
 
@@ -398,7 +398,7 @@ definition tensorCotangent
 
 中文:
 定义 tensorCotangent
-  签名: [alg : Algebra P.Ring Q.Ring] (halg : algebraMap P.Ring Q.Ring = f.toRingHom)
+  签名: [alg : 代数 P.环 Q.环] (halg : algebraMap P.环 Q.环 = f.toRingHom)
   定义体: { __ := (Cotangent.map f).liftBaseChange T
     invFun := tensorCotangentInvFun f halg H
     left_inv x := by
@@ -461,7 +461,7 @@ definition tensorH1CotangentOfFormallyEtale
 
 中文:
 定义 tensorH1CotangentOfFormallyEtale
-  签名: [alg : Algebra P.Ring Q.Ring]
+  签名: [alg : 代数 P.环 Q.环]
   定义体: by
   refine .ofBijective ((H1Cotangent.map f).liftBaseChange T) ?_
   constructor
@@ -533,7 +533,7 @@ definition tensorH1CotangentOfIsLocalization
 
 中文:
 定义 tensorH1CotangentOfIsLocalization
-  签名: (M : Submonoid S) [IsLocalization M T]
+  签名: (M : 子幺半群 S) [是Localization M T]
   定义体: by
   letI P : Extension R S := (Generators.self R S).toExtension
   letI M' := M.comap (algebraMap P.Ring S)
@@ -682,7 +682,7 @@ instance H1Cotangent.isLocalizedModule
 
 中文:
 实例 H1Cotangent.isLocalizedModule
-  签名: (M : Submonoid S) [IsLocalization M T]
+  签名: (M : 子幺半群 S) [是Localization M T]
   定义体: by
   rw [isLocalizedModule_iff_isBaseChange M T]
   change Function.Bijective ((Algebra.H1Cotangent.map R R S T).liftBaseChange T)

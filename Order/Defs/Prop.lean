@@ -26,7 +26,7 @@ instance Pi.hasLe
 @[to_dual self]
 
 中文:
-实例 Pi.hasLe
+实例 依赖函数类型.hasLe
   签名: {ι : 类型} {π : ι -> 类型} [对任意 i, LE (π i)]
   定义体: forall i, x i <= y i
 
@@ -45,7 +45,7 @@ theorem Pi.le_def
   proof: .rfl
 
 中文:
-定理 Pi.le_def
+定理 依赖函数类型.le_def
   条件: {ι : 类型} {π : ι -> 类型} [对任意 i, LE (π i)] {x y : 对任意 i, π i}
   证明: .rfl
 -/
@@ -64,7 +64,7 @@ instance Prop.le
 @[simp]
 
 中文:
-实例 Prop.le
+实例 命题.le
   签名: : LE 命题
   定义体: ⟨(· -> ·)⟩
 

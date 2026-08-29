@@ -49,7 +49,7 @@ theorem sup_orthogonal_inf_of_hasOrthogonalProjection
 
 中文:
 定理 sup_orthogonal_inf_of_hasOrthogonalProjection
-  结论: {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂)
+  结论: {K₁ K₂ : 子模 𝕜 E} (h : K₁ <= K₂)
   证明: by
   ext x
   rw [Submodule.mem_sup]
@@ -87,7 +87,7 @@ theorem sup_orthogonal_of_hasOrthogonalProjection
 
 中文:
 定理 sup_orthogonal_of_hasOrthogonalProjection
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   结论: K ⊔ Kᗮ = ⊤
   证明: by
   convert Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection (le_top : K <= ⊤)
@@ -123,7 +123,7 @@ theorem orthogonal_orthogonal
 
 中文:
 定理 orthogonal_orthogonal
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   结论: Kᗮᗮ = K
   证明: by
   ext v
@@ -162,7 +162,7 @@ lemma orthogonal_le_orthogonal_iff
 
 中文:
 引理 orthogonal_le_orthogonal_iff
-  结论: {K₀ K₁ : Submodule 𝕜 E} [K₀.HasOrthogonalProjection]
+  结论: {K₀ K₁ : 子模 𝕜 E} [K₀.有OrthogonalProjection]
   证明: ⟨fun h => by simpa using orthogonal_le h, orthogonal_le⟩
 
 Depends on / 依赖: orthogonal_le
@@ -182,7 +182,7 @@ lemma orthogonal_le_iff_orthogonal_le
 
 中文:
 引理 orthogonal_le_iff_orthogonal_le
-  结论: {K₀ K₁ : Submodule 𝕜 E} [K₀.HasOrthogonalProjection]
+  结论: {K₀ K₁ : 子模 𝕜 E} [K₀.有OrthogonalProjection]
   证明: by
   rw [← orthogonal_le_orthogonal_iff]; rw [orthogonal_orthogonal]
 
@@ -203,7 +203,7 @@ lemma le_orthogonal_iff_le_orthogonal
 
 中文:
 引理 le_orthogonal_iff_le_orthogonal
-  结论: {K₀ K₁ : Submodule 𝕜 E} [K₀.HasOrthogonalProjection]
+  结论: {K₀ K₁ : 子模 𝕜 E} [K₀.有OrthogonalProjection]
   证明: by
   rw [← orthogonal_le_orthogonal_iff]; rw [orthogonal_orthogonal]
 
@@ -227,7 +227,7 @@ theorem orthogonal_orthogonal_eq_closure
 
 中文:
 定理 orthogonal_orthogonal_eq_closure
-  条件: [CompleteSpace E]
+  条件: [完备空间 E]
   证明: by
   refine le_antisymm ?_ ?_
   · convert Submodule.orthogonal_orthogonal_monotone K.le_topologicalClosure
@@ -259,8 +259,8 @@ theorem isCompl_orthogonal_of_hasOrthogonalProjection
 
 中文:
 定理 isCompl_orthogonal_of_hasOrthogonalProjection
-  条件: [K.HasOrthogonalProjection]
-  结论: IsCompl K Kᗮ
+  条件: [K.有OrthogonalProjection]
+  结论: 是补集 K Kᗮ
   证明: K.isCompl_orthogonal
 
 @[simp]
@@ -284,7 +284,7 @@ theorem orthogonalComplement_eq_orthogonalComplement
 
 中文:
 定理 orthogonalComplement_eq_orthogonalComplement
-  结论: {L : Submodule 𝕜 E} [K.HasOrthogonalProjection]
+  结论: {L : 子模 𝕜 E} [K.有OrthogonalProjection]
   证明: ⟨fun h => by simpa using congr(Submodule.orthogonal $(h)),
     fun h => congr(Submodule.orthogonal $(h))⟩
 
@@ -313,7 +313,7 @@ theorem orthogonal_eq_bot_iff
 
 中文:
 定理 orthogonal_eq_bot_iff
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   结论: Kᗮ = ⊥ ↔ K = ⊤
   证明: by
   refine ⟨?_, fun h => by rw [h, Submodule.top_orthogonal_eq_bot]⟩
@@ -347,7 +347,7 @@ theorem starProjection_tendsto_closure_iSup
 
 中文:
 定理 starProjection_tendsto_closure_iSup
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: by
   refine .of_neBot_imp fun h => ?_
   cases atTop_neBot_iff.mp h
@@ -400,7 +400,7 @@ theorem starProjection_tendsto_self
 
 中文:
 定理 starProjection_tendsto_self
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: by
   have : (⨆ i, U i).topologicalClosure.HasOrthogonalProjection := by
     rw [top_unique hU']
@@ -454,7 +454,7 @@ theorem topologicalClosure_eq_top_iff
 
 中文:
 定理 topologicalClosure_eq_top_iff
-  条件: [CompleteSpace E]
+  条件: [完备空间 E]
   证明: by
   rw [← K.orthogonal_orthogonal_eq_closure]
   constructor <;> intro h
@@ -484,7 +484,7 @@ alias orthogonalProjection_apply_eq_linearProjOfIsCompl :=
 
 中文:
 定理 orthogonalProjectionOnto_apply_eq_projectionOnto
-  条件: [K.HasOrthogonalProjection] (x : E)
+  条件: [K.有OrthogonalProjection] (x : E)
   证明: rfl
 
 @[deprecated (since := "2026-05-05")]
@@ -512,7 +512,7 @@ alias toLinearMap_orthogonalProjection_eq_linearProjOfIsCompl :=
 
 中文:
 定理 toLinearMap_orthogonalProjectionOnto_eq_projectionOnto
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   证明: rfl
 
 @[deprecated (since := "2026-05-05")]
@@ -537,7 +537,7 @@ theorem toLinearMap_starProjection_eq_isComplProjection
 
 中文:
 定理 toLinearMap_starProjection_eq_isComplProjection
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   证明: rfl
 -/
 theorem toLinearMap_starProjection_eq_isComplProjection [K.HasOrthogonalProjection] :
@@ -554,7 +554,7 @@ theorem starProjection_apply_eq_isComplProjection
 
 中文:
 定理 starProjection_apply_eq_isComplProjection
-  条件: [K.HasOrthogonalProjection] (x : E)
+  条件: [K.有OrthogonalProjection] (x : E)
   证明: rfl
 -/
 theorem starProjection_apply_eq_isComplProjection [K.HasOrthogonalProjection] (x : E) :
@@ -579,7 +579,7 @@ theorem eq_zero_of_mem_orthogonal
 
 中文:
 定理 eq_zero_of_mem_orthogonal
-  条件: (hK : Dense (K : Set E)) (h : x in Kᗮ)
+  条件: (hK : 稠密 (K : 集合 E)) (h : x in Kᗮ)
   结论: x = 0
   证明: eq_zero_of_inner_left 𝕜 hK fun _ => (mem_orthogonal' _ _).1 h _
 
@@ -599,7 +599,7 @@ theorem eq_of_sub_mem_orthogonal
 
 中文:
 定理 eq_of_sub_mem_orthogonal
-  条件: (hK : Dense (K : Set E)) (h : x - y in Kᗮ)
+  条件: (hK : 稠密 (K : 集合 E)) (h : x - y in Kᗮ)
   结论: x = y
   证明: sub_eq_zero.1 eq_zero_of_mem_orthogonal hK h
 
@@ -623,7 +623,7 @@ theorem orthogonal_orthogonal_eq
 
 中文:
 定理 orthogonal_orthogonal_eq
-  条件: (K : ClosedSubmodule 𝕜 E) [K.HasOrthogonalProjection]
+  条件: (K : 闭子模 𝕜 E) [K.有OrthogonalProjection]
   证明: by ext x; simp
 -/
 theorem orthogonal_orthogonal_eq (K : ClosedSubmodule 𝕜 E) [K.HasOrthogonalProjection] :
@@ -639,7 +639,7 @@ theorem orthogonal_eq_orthogonal_iff
 
 中文:
 定理 orthogonal_eq_orthogonal_iff
-  结论: (K₁ K₂ : ClosedSubmodule 𝕜 E) [K₁.HasOrthogonalProjection]
+  结论: (K₁ K₂ : 闭子模 𝕜 E) [K₁.有OrthogonalProjection]
   证明: ⟨fun h => by simpa using congr($hᗮ), fun h => congr($hᗮ)⟩
 -/
 theorem orthogonal_eq_orthogonal_iff (K₁ K₂ : ClosedSubmodule 𝕜 E) [K₁.HasOrthogonalProjection]
@@ -656,7 +656,7 @@ theorem orthogonal_injective
 
 中文:
 定理 orthogonal_injective
-  条件: [CompleteSpace E]
+  条件: [完备空间 E]
   证明: (orthogonal_eq_orthogonal_iff · · |>.mp)
 
 Depends on / 依赖: orthogonal_eq_orthogonal_iff
@@ -676,7 +676,7 @@ theorem sup_orthogonal
 
 中文:
 定理 sup_orthogonal
-  条件: [CompleteSpace E] (K₁ K₂ : ClosedSubmodule 𝕜 E)
+  条件: [完备空间 E] (K₁ K₂ : 闭子模 𝕜 E)
   证明: by
   simpa using congr($(inf_orthogonal K₁ᗮ K₂ᗮ)ᗮ).symm
 

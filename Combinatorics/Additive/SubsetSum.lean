@@ -42,7 +42,7 @@ definition subsetSum
 
 中文:
 定义 subsetSum
-  签名: (A : Finset M)
+  签名: (A : 有限集 M)
   定义体: A.powerset.image fun B => B.sum id
 
 Depends on / 依赖: A.powerset.image, B.sum, powerset
@@ -98,7 +98,7 @@ lemma subsetSum_nonempty
 
 中文:
 引理 subsetSum_nonempty
-  结论: A.subsetSum.Nonempty
+  结论: A.subsetSum.非空
   证明: ⟨0, by simp⟩
 -/
 @[simp] lemma subsetSum_nonempty : A.subsetSum.Nonempty := ⟨0, by simp⟩
@@ -137,7 +137,7 @@ lemma subsetSum_mono
 
 中文:
 引理 subsetSum_mono
-  条件: {B : Finset M} (hAB : A subseteq B)
+  条件: {B : 有限集 M} (hAB : A subseteq B)
   结论: A.subsetSum subseteq B.subsetSum
   证明: image_mono _ powerset_mono.mpr hAB
 

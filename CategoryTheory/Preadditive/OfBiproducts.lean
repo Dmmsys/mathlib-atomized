@@ -109,7 +109,7 @@ theorem isUnital_leftAdd
 
 中文:
 定理 isUnital_leftAdd
-  结论: EckmannHilton.IsUnital (· +ₗ ·) 0
+  结论: EckmannHilton.是Unital (· +ₗ ·) 0
   证明: by
   have hr : forall f : X ⟶ Y, biprod.lift (0 : X ⟶ Y) f = f ≫ biprod.inr := by
     intro f
@@ -160,7 +160,7 @@ theorem isUnital_rightAdd
 
 中文:
 定理 isUnital_rightAdd
-  结论: EckmannHilton.IsUnital (· +ᵣ ·) 0
+  结论: EckmannHilton.是Unital (· +ᵣ ·) 0
   证明: by
   have h₂ : forall f : X ⟶ Y, biprod.desc (0 : X ⟶ Y) f = biprod.snd ≫ f := by
     intro f
@@ -244,7 +244,7 @@ definition addCommMonoidHomOfHasBinaryBiproducts
 
 中文:
 定义 addCommMonoidHomOfHasBinaryBiproducts
-  签名: : AddCommMonoid (X ⟶ Y) where
+  签名: : 加法交换幺半群 (X ⟶ Y) where
   定义体: (· +ᵣ ·)
   add_assoc :=
     (EckmannHilton.mul_assoc (isUnital_leftAdd X Y) (isUnital_rightAdd X Y) (distrib X Y)).assoc

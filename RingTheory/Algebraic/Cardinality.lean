@@ -145,7 +145,7 @@ theorem cardinalMk_le_max
 
 中文:
 定理 cardinalMk_le_max
-  结论: #L <= max #R ℵ₀
+  结论: #L <= 最大值 #R ℵ₀
   证明: by
   simpa only [lift_id] using lift_cardinalMk_le_max R L
 

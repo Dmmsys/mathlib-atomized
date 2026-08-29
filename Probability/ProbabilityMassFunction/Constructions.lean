@@ -264,7 +264,7 @@ theorem map_const
 
 中文:
 定理 map_const
-  结论: p.map (Function.const α b) = pure b
+  结论: p.map (函数.const α b) = pure b
   证明: by
   simp only [map, Function.comp_def, bind_const, Function.const]
 
@@ -318,7 +318,7 @@ theorem toMeasure_map_apply
 
 中文:
 定理 toMeasure_map_apply
-  结论: (hf : Measurable f)
+  结论: (hf : 可测 f)
   证明: by
   rw [toMeasure_apply_eq_toOuterMeasure_apply _ hs]; rw [toMeasure_apply_eq_toOuterMeasure_apply _ (measurableSet_preimage hf hs)]
   exact toOuterMeasure_map_apply f p s
@@ -345,7 +345,7 @@ lemma toMeasure_map
 
 中文:
 引理 toMeasure_map
-  条件: (p : PMF α) (hf : Measurable f)
+  条件: (p : PMF α) (hf : 可测 f)
   结论: p.toMeasure.map f = (p.map f).toMeasure
   证明: by
   ext s hs : 1; rw [PMF.toMeasure_map_apply _ _ _ hf hs, Measure.map_apply hf hs]
@@ -478,7 +478,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor PMF
+  签名: Lawful函子 PMF
   定义体: rfl
   id_map := bind_pure
   comp_map _ _ _ := (map_comp _ _ _).symm
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad PMF
+  签名: 合法单子 PMF
   定义体: LawfulMonad.mk'
   (bind_pure_comp := fun _ _ => rfl)
   (id_map := id_map)
@@ -529,7 +529,7 @@ instance :
 
 中文:
 实例 :
-  签名: ULiftable PMF.{u} PMF.{v}
+  签名: 可类型层提升 PMF.{u} PMF.{v}
   定义体: { toFun := map e, invFun := map e.symm
       left_inv := fun a => by simp [map_comp, map_id]
       right_inv := fun a => by simp [map_comp, map_id] }
@@ -554,7 +554,7 @@ definition ofFinset
 
 中文:
 定义 ofFinset
-  签名: (f : α -> 实数>=0∞) (s : Finset α) (h : ∑ a in s, f a = 1)
+  签名: (f : α -> 实数>=0∞) (s : 有限集 α) (h : ∑ a in s, f a = 1)
   定义体: ⟨f, h ▸ hasSum_sum_of_ne_finset_zero h'⟩
 
 Depends on / 依赖: hasSum_sum_of_ne_finset_zero
@@ -598,7 +598,7 @@ theorem support_ofFinset
 
 中文:
 定理 support_ofFinset
-  结论: (ofFinset f s h h').support = ↑s inter Function.support f
+  结论: (ofFinset f s h h').support = ↑s inter 函数.support f
   证明: Set.ext fun a => by simpa [mem_support_iff] using mt (h' a)
 
 Depends on / 依赖: Set.ext, mem_support_iff
@@ -681,7 +681,7 @@ theorem toMeasure_ofFinset_apply
 
 中文:
 定理 toMeasure_ofFinset_apply
-  条件: [MeasurableSpace α] (ht : MeasurableSet t)
+  条件: [可测空间 α] (ht : 可测集 t)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply _ ht).trans (toOuterMeasure_ofFinset_apply h h' t)
 
 Depends on / 依赖: toMeasure_apply_eq_toOuterMeasure_apply, toOuterMeasure_ofFinset_apply
@@ -706,7 +706,7 @@ definition ofFintype
 
 中文:
 定义 ofFintype
-  签名: [Fintype α] (f : α -> 实数>=0∞) (h : ∑ a, f a = 1)
+  签名: [有限类型 α] (f : α -> 实数>=0∞) (h : ∑ a, f a = 1)
   定义体: ofFinset f Finset.univ h fun a ha => absurd (Finset.mem_univ a) ha
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ, absurd, mem_univ, ofFinset
@@ -749,7 +749,7 @@ theorem support_ofFintype
 
 中文:
 定理 support_ofFintype
-  结论: (ofFintype f h).support = Function.support f
+  结论: (ofFintype f h).support = 函数.support f
   证明: rfl
 -/
 theorem support_ofFintype : (ofFintype f h).support = Function.support f := rfl
@@ -788,7 +788,7 @@ lemma map_ofFintype
 
 中文:
 引理 map_ofFintype
-  条件: [Fintype β] (f : α -> 实数>=0∞) (h : ∑ a, f a = 1) (g : α -> β)
+  条件: [有限类型 β] (f : α -> 实数>=0∞) (h : ∑ a, f a = 1) (g : α -> β)
   证明: by
   ext b : 1
   simp only [sum_filter, eq_comm, map_apply, ofFintype_apply]
@@ -841,7 +841,7 @@ theorem toMeasure_ofFintype_apply
 
 中文:
 定理 toMeasure_ofFintype_apply
-  条件: [MeasurableSpace α] (hs : MeasurableSet s)
+  条件: [可测空间 α] (hs : 可测集 s)
   证明: (toMeasure_apply_eq_toOuterMeasure_apply _ hs).trans (toOuterMeasure_ofFintype_apply h s)
 
 Depends on / 依赖: toMeasure_apply_eq_toOuterMeasure_apply, toOuterMeasure_ofFintype_apply
@@ -912,7 +912,7 @@ theorem support_normalize
 
 中文:
 定理 support_normalize
-  结论: (normalize f hf0 hf).support = Function.support f
+  结论: (normalize f hf0 hf).support = 函数.support f
   证明: Set.ext fun a => by simp [hf, mem_support_iff]
 
 Depends on / 依赖: Set.ext, isClosedEmbedding_subtypeVal, isClosedEmbedding_subtypeVal.quasiSober, isClosed_zeroLocus, mem_support_iff, quasiSober
@@ -951,7 +951,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (p : PMF α) (s : Set α) (h : 存在 a in s, a in p.support)
+  签名: (p : PMF α) (s : 集合 α) (h : 存在 a in s, a in p.support)
   定义体: PMF.normalize (s.indicator p) (by simpa using h) (p.tsum_coe_indicator_ne_top s)
 
 Depends on / 依赖: PMF.normalize, indicator, normalize, p.tsum_coe_indicator_ne_top, s.indicator, tsum_coe_indicator_ne_top

@@ -29,7 +29,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (Shrink.{v} α)
+  签名: 模 R (Shrink.{v} α)
   定义体: (equivShrink α).symm.module R
 
 Depends on / 依赖: equivShrink, module, symm.module

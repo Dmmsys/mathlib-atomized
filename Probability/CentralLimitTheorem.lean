@@ -133,7 +133,7 @@ theorem tendstoInDistribution_inv_sqrt_mul_sum
 
 中文:
 定理 tendstoInDistribution_inv_sqrt_mul_sum
-  结论: (hY : HasLaw Y (gaussian实数 0 1) P')
+  结论: (hY : 有Law Y (gaussian实数 0 1) P')
   证明: .const_mul (Finset.aemeasurable_fun_sum _ fun _ _ => (hident _).aemeasurable_fst) _
   tendsto := by
     refine ProbabilityMeasure.tendsto_iff_tendsto_charFun.2 fun t => ?_

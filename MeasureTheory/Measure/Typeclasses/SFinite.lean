@@ -40,9 +40,9 @@ class SFinite
 
 中文:
 类 SFinite
-  参数: (μ : Measure α)
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
-    - out' : 存在 m : 自然数 -> Measure α, (对任意 n, IsFiniteMeasure (m n)) ∧ μ = Measure.sum m
+    - out' : 存在 m : 自然数 -> 测度 α, (对任意 n, 是有限测度 (m n)) ∧ μ = 测度.求和 m
 -/
 class SFinite (μ : Measure α) : Prop where
   out' : exists m : Nat -> Measure α, (forall n, IsFiniteMeasure (m n)) ∧ μ = Measure.sum m
@@ -57,7 +57,7 @@ definition sfiniteSeq
 
 中文:
 定义 sfiniteSeq
-  签名: (μ : Measure α) [h : SFinite μ]
+  签名: (μ : 测度 α) [h : SFinite μ]
   定义体: h.1.choose
 -/
 noncomputable def sfiniteSeq (μ : Measure α) [h : SFinite μ] : Nat -> Measure α := h.1.choose
@@ -91,8 +91,8 @@ lemma sum_sfiniteSeq
 
 中文:
 引理 sum_sfiniteSeq
-  条件: (μ : Measure α) [h : SFinite μ]
-  结论: sum (sfiniteSeq μ) = μ
+  条件: (μ : 测度 α) [h : SFinite μ]
+  结论: 求和 (sfiniteSeq μ) = μ
   证明: h.1.choose_spec.2.symm
 
 Depends on / 依赖: choose_spec
@@ -111,7 +111,7 @@ lemma sfiniteSeq_le
 
 中文:
 引理 sfiniteSeq_le
-  条件: (μ : Measure α) [SFinite μ] (n : 自然数)
+  条件: (μ : 测度 α) [SFinite μ] (n : 自然数)
   结论: sfiniteSeq μ n <= μ
   证明: (le_sum _ n).trans (sum_sfiniteSeq μ).le
 
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: SFinite (0 : Measure α)
+  签名: SFinite (0 : 测度 α)
   定义体: ⟨fun _ => 0, inferInstance, by rw [Measure.sum_zero]⟩
 
 @[simp]
@@ -154,7 +154,7 @@ lemma sfiniteSeq_zero
 中文:
 引理 sfiniteSeq_zero
   条件: (n : 自然数)
-  结论: sfiniteSeq (0 : Measure α) n = 0
+  结论: sfiniteSeq (0 : 测度 α) n = 0
   证明: bot_unique sfiniteSeq_le _ _
 
 Depends on / 依赖: bot_unique, sfiniteSeq_le
@@ -178,7 +178,7 @@ lemma sfinite_sum_of_countable
 
 中文:
 引理 sfinite_sum_of_countable
-  结论: [Countable ι]
+  结论: [可数 ι]
   证明: by
   obtain ⟨f, hf⟩ : exists f : ι -> Nat, Function.Injective f := Countable.exists_injective_nat ι
   refine ⟨_, fun n => ?_, (sum_extend_zero hf m).symm⟩
@@ -211,7 +211,7 @@ instance [Countable
   apply sfinite_sum_of_countable
 
 中文:
-实例 [Countable
+实例 [可数
   签名: ι] (m
   定义体: by
   change SFinite (Measure.sum (fun i => m i))
@@ -284,7 +284,7 @@ theorem exists_isFiniteMeasure_absolutelyContinuous
     simp [(hc₀ _)
 
 中文:
-定理 exists_isFiniteMeasure_absolutelyContinuous
+定理 存在_isFiniteMeasure_absolutelyContinuous
   条件: [SFinite μ]
   证明: by
   rcases ENNReal.exists_pos_tsum_mul_lt_of_countable top_ne_zero (sfiniteSeq μ · univ)
@@ -317,10 +317,10 @@ class SigmaFinite
     - out' : Nonempty (μ.FiniteSpanningSetsIn univ)
 
 中文:
-类 SigmaFinite
-  参数: {m0 : MeasurableSpace α} (μ : Measure α)
+类 σ有限
+  参数: {m0 : 可测空间 α} (μ : 测度 α)
   公理与运算 (1 个):
-    - out' : Nonempty (μ.FiniteSpanningSetsIn univ)
+    - out' : 非空 (μ.FiniteSpanningSetsIn univ)
 -/
 class SigmaFinite {m0 : MeasurableSpace α} (μ : Measure α) : Prop where
   out' : Nonempty (μ.FiniteSpanningSetsIn univ)
@@ -335,7 +335,7 @@ theorem sigmaFinite_iff
 
 中文:
 定理 sigmaFinite_iff
-  结论: SigmaFinite μ ↔ Nonempty (μ.FiniteSpanningSetsIn univ)
+  结论: σ有限 μ ↔ 非空 (μ.FiniteSpanningSetsIn univ)
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem sigmaFinite_iff : SigmaFinite μ ↔ Nonempty (μ.FiniteSpanningSetsIn univ) :=
@@ -351,9 +351,9 @@ theorem SigmaFinite.out
   proof: h.1
 
 中文:
-定理 SigmaFinite.out
-  条件: (h : SigmaFinite μ)
-  结论: Nonempty (μ.FiniteSpanningSetsIn univ)
+定理 σ有限.out
+  条件: (h : σ有限 μ)
+  结论: 非空 (μ.FiniteSpanningSetsIn univ)
   证明: h.1
 -/
 theorem SigmaFinite.out (h : SigmaFinite μ) : Nonempty (μ.FiniteSpanningSetsIn univ) :=
@@ -375,8 +375,8 @@ definition Measure.toFiniteSpanningSetsIn
   spanning := eq_univ_of_subset (iUnion_mono fun _ => subset_toMeasurable _ _) h.out.some.spanning
 
 中文:
-定义 Measure.toFiniteSpanningSetsIn
-  签名: (μ : Measure α) [h : SigmaFinite μ]
+定义 测度.toFiniteSpanningSetsIn
+  签名: (μ : 测度 α) [h : σ有限 μ]
   定义体: toMeasurable μ (h.out.some.set n)
   set_mem _ := measurableSet_toMeasurable _ _
   finite n := by
@@ -407,7 +407,7 @@ definition spanningSets
 
 中文:
 定义 spanningSets
-  签名: (μ : Measure α) [SigmaFinite μ] (i : 自然数)
+  签名: (μ : 测度 α) [σ有限 μ] (i : 自然数)
   定义体: accumulate μ.toFiniteSpanningSetsIn.set i
 
 Depends on / 依赖: accumulate, toFiniteSpanningSetsIn, toFiniteSpanningSetsIn.set
@@ -428,8 +428,8 @@ theorem monotone_spanningSets
 
 中文:
 定理 monotone_spanningSets
-  条件: (μ : Measure α) [SigmaFinite μ]
-  结论: Monotone (spanningSets μ)
+  条件: (μ : 测度 α) [σ有限 μ]
+  结论: 递增 (spanningSets μ)
   证明: monotone_accumulate
 
 @[gcongr]
@@ -450,7 +450,7 @@ lemma spanningSets_mono
 
 中文:
 引理 spanningSets_mono
-  条件: [SigmaFinite μ] {m n : 自然数} (hmn : m <= n)
+  条件: [σ有限 μ] {m n : 自然数} (hmn : m <= n)
   证明: monotone_spanningSets _ hmn
 
 Depends on / 依赖: monotone_spanningSets
@@ -468,7 +468,7 @@ theorem measurableSet_spanningSets
 
 中文:
 定理 measurableSet_spanningSets
-  条件: (μ : Measure α) [SigmaFinite μ] (i : 自然数)
+  条件: (μ : 测度 α) [σ有限 μ] (i : 自然数)
   证明: MeasurableSet.iUnion fun j => MeasurableSet.iUnion fun _ => μ.toFiniteSpanningSetsIn.set_mem j
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, iUnion, set_mem, toFiniteSpanningSetsIn, toFiniteSpanningSetsIn.set_mem
@@ -489,7 +489,7 @@ theorem measure_spanningSets_lt_top
 
 中文:
 定理 measure_spanningSets_lt_top
-  条件: (μ : Measure α) [SigmaFinite μ] (i : 自然数)
+  条件: (μ : 测度 α) [σ有限 μ] (i : 自然数)
   证明: measure_biUnion_lt_top (finite_le_nat i) fun j _ => μ.toFiniteSpanningSetsIn.finite j
 
 @[simp]
@@ -513,7 +513,7 @@ theorem iUnion_spanningSets
 
 中文:
 定理 iUnion_spanningSets
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   结论: ⋃ i : 自然数, spanningSets μ i = univ
   证明: by
   simp_rw [spanningSets, iUnion_accumulate, μ.toFiniteSpanningSetsIn.spanning]
@@ -533,7 +533,7 @@ theorem isCountablySpanning_spanningSets
 
 中文:
 定理 isCountablySpanning_spanningSets
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   证明: ⟨spanningSets μ, mem_range_self, iUnion_spanningSets μ⟩
 
 Depends on / 依赖: iUnion_spanningSets, mem_range_self, spanningSets
@@ -553,7 +553,7 @@ definition spanningSetsIndex
 
 中文:
 定义 spanningSetsIndex
-  签名: (μ : Measure α) [SigmaFinite μ] (x : α)
+  签名: (μ : 测度 α) [σ有限 μ] (x : α)
   定义体: Nat.find iUnion_eq_univ_iff.1 (iUnion_spanningSets μ) x
 
 Depends on / 依赖: Nat.find, iUnion_eq_univ_iff, iUnion_spanningSets
@@ -573,7 +573,7 @@ exact measurable_find _ measurableSet_spanningSets μ
 
 中文:
 定理 measurableSet_spanningSetsIndex
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   证明: by
   classical
 exact measurable_find _ measurableSet_spanningSets μ
@@ -597,7 +597,7 @@ theorem preimage_spanningSetsIndex_singleton
 
 中文:
 定理 preimage_spanningSetsIndex_singleton
-  条件: (μ : Measure α) [SigmaFinite μ] (n : 自然数)
+  条件: (μ : 测度 α) [σ有限 μ] (n : 自然数)
   证明: by
   classical
   exact preimage_find_eq_disjointed _ _ _
@@ -620,7 +620,7 @@ theorem spanningSetsIndex_eq_iff
 
 中文:
 定理 spanningSetsIndex_eq_iff
-  条件: (μ : Measure α) [SigmaFinite μ] {x : α} {n : 自然数}
+  条件: (μ : 测度 α) [σ有限 μ] {x : α} {n : 自然数}
   证明: by
   convert! Set.ext_iff.1 (preimage_spanningSetsIndex_singleton μ n) x
 
@@ -640,7 +640,7 @@ theorem mem_disjointed_spanningSetsIndex
 
 中文:
 定理 mem_disjointed_spanningSetsIndex
-  条件: (μ : Measure α) [SigmaFinite μ] (x : α)
+  条件: (μ : 测度 α) [σ有限 μ] (x : α)
   证明: (spanningSetsIndex_eq_iff μ).1 rfl
 
 Depends on / 依赖: spanningSetsIndex_eq_iff
@@ -659,7 +659,7 @@ theorem mem_spanningSetsIndex
 
 中文:
 定理 mem_spanningSetsIndex
-  条件: (μ : Measure α) [SigmaFinite μ] (x : α)
+  条件: (μ : 测度 α) [σ有限 μ] (x : α)
   证明: disjointed_subset _ _ (mem_disjointed_spanningSetsIndex μ x)
 
 Depends on / 依赖: disjointed_subset, mem_disjointed_spanningSetsIndex
@@ -678,7 +678,7 @@ theorem mem_spanningSets_of_index_le
 
 中文:
 定理 mem_spanningSets_of_index_le
-  结论: (μ : Measure α) [SigmaFinite μ] (x : α) {n : 自然数}
+  结论: (μ : 测度 α) [σ有限 μ] (x : α) {n : 自然数}
   证明: monotone_spanningSets μ hn (mem_spanningSetsIndex μ x)
 
 Depends on / 依赖: mem_spanningSetsIndex, monotone_spanningSets
@@ -697,7 +697,7 @@ theorem eventually_mem_spanningSets
 
 中文:
 定理 eventually_mem_spanningSets
-  条件: (μ : Measure α) [SigmaFinite μ] (x : α)
+  条件: (μ : 测度 α) [σ有限 μ] (x : α)
   证明: eventually_atTop.2 ⟨spanningSetsIndex μ x, fun _ => mem_spanningSets_of_index_le μ x⟩
 
 Depends on / 依赖: eventually_atTop, mem_spanningSets_of_index_le, spanningSetsIndex
@@ -718,7 +718,7 @@ lemma measure_singleton_lt_top
 
 中文:
 引理 measure_singleton_lt_top
-  条件: [SigmaFinite μ]
+  条件: [σ有限 μ]
   结论: μ {a} < ∞
   证明: measure_lt_top_mono (singleton_subset_iff.2 <| mem_spanningSetsIndex ..)
     (measure_spanningSets_lt_top _ _)
@@ -741,7 +741,7 @@ theorem sum_restrict_disjointed_spanningSets
 
 中文:
 定理 sum_restrict_disjointed_spanningSets
-  条件: (μ ν : Measure α) [SigmaFinite ν]
+  条件: (μ ν : 测度 α) [σ有限 ν]
   证明: by
   rw [← restrict_iUnion (disjoint_disjointed _)
       (MeasurableSet.disjointed (measurableSet_spanningSets _))]; rw [iUnion_disjointed]; rw [iUnion_spanningSets]; rw [restrict_univ]
@@ -776,8 +776,8 @@ theorem forall_measure_inter_spanningSets_eq_zero
   rw [measure_iUnion_null_iff]
 
 中文:
-定理 forall_measure_inter_spanningSets_eq_zero
-  结论: [MeasurableSpace α] {μ : Measure α}
+定理 对任意_measure_inter_spanningSets_eq_zero
+  结论: [可测空间 α] {μ : 测度 α}
   证明: by
   nth_rw 2 [show s = ⋃ n, s inter spanningSets μ n by
       rw [← inter_iUnion]; rw [iUnion_spanningSets]; rw [inter_univ]]
@@ -804,8 +804,8 @@ theorem exists_measure_inter_spanningSets_pos
   simp
 
 中文:
-定理 exists_measure_inter_spanningSets_pos
-  结论: [MeasurableSpace α] {μ : Measure α} [SigmaFinite μ]
+定理 存在_measure_inter_spanningSets_pos
+  结论: [可测空间 α] {μ : 测度 α} [σ有限 μ]
   证明: by
   contrapose!
   rw [nonpos_iff_eq_zero]; rw [← forall_measure_inter_isCountablySpanning_eq_zero
@@ -833,7 +833,7 @@ theorem finite_const_le_meas_of_disjoint_iUnion₀
 
 中文:
 定理 finite_const_le_meas_of_disjoint_iUnion₀
-  结论: {ι : 类型} [MeasurableSpace α] (μ : Measure α)
+  结论: {ι : 类型} [可测空间 α] (μ : 测度 α)
   证明: ENNReal.finite_const_le_of_tsum_ne_top
     (ne_top_of_le_ne_top Union_As_finite (tsum_meas_le_meas_iUnion_of_disjoint₀ μ As_mble As_disj))
     ε_pos.ne'
@@ -859,7 +859,7 @@ theorem finite_const_le_meas_of_disjoint_iUnion
 
 中文:
 定理 finite_const_le_meas_of_disjoint_iUnion
-  结论: {ι : 类型} [MeasurableSpace α] (μ : Measure α)
+  结论: {ι : 类型} [可测空间 α] (μ : 测度 α)
   证明: finite_const_le_meas_of_disjoint_iUnion₀ μ ε_pos (fun i => (As_mble i).nullMeasurableSet)
     (fun _ _ h => Disjoint.aedisjoint (As_disj h)) Union_As_finite
 
@@ -887,8 +887,8 @@ theorem _root_.Set.Infinite.meas_eq_top
       (fun _ => Measurab
 
 中文:
-定理 _root_.Set.Infinite.meas_eq_top
-  结论: [MeasurableSingletonClass α]
+定理 _root_.集合.无限.meas_eq_top
+  结论: [MeasurableSingleton类 α]
   证明: top_unique
   let ⟨ε, hne, hε⟩ := h'; have := hs.to_subtype
   calc
@@ -925,7 +925,7 @@ theorem countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
 
 中文:
 定理 countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
-  结论: {ι : 类型} {_ : MeasurableSpace α}
+  结论: {ι : 类型} {_ : 可测空间 α}
   证明: by
   set posmeas := { i : ι | 0 < μ (As i) } with posmeas_def
   rcases exists_seq_strictAnti_tendsto' (zero_lt_one : (0 : Real>=0∞) < 1) with
@@ -965,7 +965,7 @@ theorem countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top
 
 中文:
 定理 countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top
-  结论: {ι : 类型} {_ : MeasurableSpace α}
+  结论: {ι : 类型} {_ : 可测空间 α}
   证明: countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀ μ (fun i => (As_mble i).nullMeasurableSet)
     ((fun _ _ h => Disjoint.aedisjoint (As_disj h))) Union_As_finite
 
@@ -995,7 +995,7 @@ theorem countable_meas_pos_of_disjoint_iUnion₀
 
 中文:
 定理 countable_meas_pos_of_disjoint_iUnion₀
-  结论: {ι : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+  结论: {ι : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: by
   rw [← sum_sfiniteSeq μ] at As_disj As_mble ⊢
   have obs : { i : ι | 0 < sum (sfiniteSeq μ) (As i) }
@@ -1039,7 +1039,7 @@ theorem countable_meas_pos_of_disjoint_iUnion
 
 中文:
 定理 countable_meas_pos_of_disjoint_iUnion
-  结论: {ι : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+  结论: {ι : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: countable_meas_pos_of_disjoint_iUnion₀ (fun i => (As_mble i).nullMeasurableSet)
     ((fun _ _ h => Disjoint.aedisjoint (As_disj h)))
 
@@ -1066,7 +1066,7 @@ theorem countable_meas_level_set_pos₀
 
 中文:
 定理 countable_meas_level_set_pos₀
-  结论: {α β : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+  结论: {α β : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: by
   have level_sets_disjoint : Pairwise (Disjoint on fun t : β => { a : α | g a = t }) :=
     fun s t hst => Disjoint.preimage g (disjoint_singleton.mpr hst)
@@ -1095,7 +1095,7 @@ theorem countable_meas_level_set_pos
 
 中文:
 定理 countable_meas_level_set_pos
-  结论: {α β : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+  结论: {α β : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: countable_meas_level_set_pos₀ g_mble.nullMeasurable
 
 Depends on / 依赖: g_mble, g_mble.nullMeasurable, nullMeasurable
@@ -1120,8 +1120,8 @@ lemma exists_ae_subset_biUnion_countable_of_isFiniteMeasure
  
 
 中文:
-引理 exists_ae_subset_biUnion_countable_of_isFiniteMeasure
-  结论: [IsFiniteMeasure μ]
+引理 存在_ae_subset_biUnion_countable_of_isFiniteMeasure
+  结论: [是有限测度 μ]
   证明: by
   let m := ⨆ D in {D : Set (Set α) | D subseteq C ∧ D.Countable}, μ (⋃₀ D)
   obtain ⟨D, D_mem, hD⟩ : exists D in {D : Set (Set α) | D subseteq C ∧ D.Countable}, μ (⋃₀ D) = m := by
@@ -1173,7 +1173,7 @@ lemma exists_ae_subset_biUnion_countable
   apply ae_su
 
 中文:
-引理 exists_ae_subset_biUnion_countable
+引理 存在_ae_subset_biUnion_countable
   结论: [SFinite μ]
   证明: by
   have A n : exists D subseteq C, D.Countable ∧ forall s in C, s <=ᵐ[sfiniteSeq μ n] (⋃₀ D) :=
@@ -1211,7 +1211,7 @@ theorem measure_toMeasurable_inter_of_sum
 
 中文:
 定理 measure_toMeasurable_inter_of_sum
-  结论: {s : Set α} (hs : MeasurableSet s) {t : Set α}
+  结论: {s : 集合 α} (hs : 可测集 s) {t : 集合 α}
   证明: by
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built for each measure `mₙ` using `toMeasurable`
@@ -1260,7 +1260,7 @@ theorem measure_toMeasurable_inter_of_cover
 
 中文:
 定理 measure_toMeasurable_inter_of_cover
-  结论: {s : Set α} (hs : MeasurableSet s) {t : Set α}
+  结论: {s : 集合 α} (hs : 可测集 s) {t : 集合 α}
   证明: by
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built on each member of a spanning family using `toMeasurable`
@@ -1342,7 +1342,7 @@ theorem restrict_toMeasurable_of_cover
 
 中文:
 定理 restrict_toMeasurable_of_cover
-  结论: {s : Set α} {v : 自然数 -> Set α} (hv : s subseteq ⋃ n, v n)
+  结论: {s : 集合 α} {v : 自然数 -> 集合 α} (hv : s subseteq ⋃ n, v n)
   证明: ext fun t ht => by
     simp only [restrict_apply ht, inter_comm t, measure_toMeasurable_inter_of_cover ht hv h'v]
 
@@ -1365,7 +1365,7 @@ theorem measure_toMeasurable_inter_of_sFinite
 
 中文:
 定理 measure_toMeasurable_inter_of_sFinite
-  结论: [SFinite μ] {s : Set α} (hs : MeasurableSet s)
+  结论: [SFinite μ] {s : 集合 α} (hs : 可测集 s)
   证明: measure_toMeasurable_inter_of_sum hs (fun _ => measure_ne_top _ t) (sum_sfiniteSeq μ).symm
 
 @[simp]
@@ -1388,7 +1388,7 @@ theorem restrict_toMeasurable_of_sFinite
 
 中文:
 定理 restrict_toMeasurable_of_sFinite
-  条件: [SFinite μ] (s : Set α)
+  条件: [SFinite μ] (s : 集合 α)
   证明: ext fun t ht => by
     rw [restrict_apply ht]; rw [inter_comm t]; rw [measure_toMeasurable_inter_of_sFinite ht]; rw [restrict_apply ht]; rw [inter_comm t]
 
@@ -1412,7 +1412,7 @@ theorem iSup_restrict_spanningSets_of_measurableSet
 
 中文:
 定理 iSup_restrict_spanningSets_of_measurableSet
-  条件: [SigmaFinite μ] (hs : MeasurableSet s)
+  条件: [σ有限 μ] (hs : 可测集 s)
   证明: calc
     ⨆ i, μ.restrict (spanningSets μ i) s = μ.restrict (⋃ i, spanningSets μ i) s :=
       (restrict_iUnion_apply_eq_iSup (monotone_spanningSets μ).directed_le hs).symm
@@ -1441,7 +1441,7 @@ theorem iSup_restrict_spanningSets
 
 中文:
 定理 iSup_restrict_spanningSets
-  条件: [SigmaFinite μ] (s : Set α)
+  条件: [σ有限 μ] (s : 集合 α)
   证明: by
   rw [← measure_toMeasurable s]; rw [← iSup_restrict_spanningSets_of_measurableSet (measurableSet_toMeasurable _ _)]
   simp_rw [restrict_apply' (measurableSet_spanningSets μ _), Set.inter_comm s,
@@ -1472,8 +1472,8 @@ theorem exists_subset_measure_lt_top
   exac
 
 中文:
-定理 exists_subset_measure_lt_top
-  结论: [SigmaFinite μ] {r : 实数>=0∞} (hs : MeasurableSet s)
+定理 存在_subset_measure_lt_top
+  结论: [σ有限 μ] {r : 实数>=0∞} (hs : 可测集 s)
   证明: by
   rw [← iSup_restrict_spanningSets]; rw [@lt_iSup_iff _ _ _ r fun i : Nat => μ.restrict (spanningSets μ i) s] at h's
   rcases h's with ⟨n, hn⟩
@@ -1542,7 +1542,7 @@ theorem sigmaFinite
 中文:
 定理 sigmaFinite
   条件: (h : μ.FiniteSpanningSetsIn C)
-  结论: SigmaFinite μ
+  结论: σ有限 μ
   证明: ⟨⟨h.mono subset_univ C⟩⟩
 -/
 protected theorem sigmaFinite (h : μ.FiniteSpanningSetsIn C) : SigmaFinite μ :=
@@ -1558,7 +1558,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {ν : Measure α} {C : Set (Set α)} (hA : ‹_› = generateFrom C)
+  结论: {ν : 测度 α} {C : 集合 (集合 α)} (hA : ‹_› = generateFrom C)
   证明: ext_of_generateFrom_of_iUnion C _ hA hC h.spanning h.set_mem (fun i => (h.finite i).ne) h_eq
 -/
 protected theorem ext {ν : Measure α} {C : Set (Set α)} (hA : ‹_› = generateFrom C)
@@ -1598,7 +1598,7 @@ theorem sigmaFinite_of_countable
 
 中文:
 定理 sigmaFinite_of_countable
-  结论: {S : Set (Set α)} (hc : S.Countable) (hμ : 对任意 s in S, μ s < ∞)
+  结论: {S : 集合 (集合 α)} (hc : S.可数) (hμ : 对任意 s in S, μ s < ∞)
   证明: by
   obtain ⟨s, hμ, hs⟩ : exists s : Nat -> Set α, (forall n, μ (s n) < ∞) ∧ ⋃ n, s n = univ :=
     (@exists_seq_cover_iff_countable _ (fun x => μ x < ∞) ⟨∅, by simp⟩).2 ⟨S, hc, hμ, hU⟩
@@ -1625,7 +1625,7 @@ definition FiniteSpanningSetsIn.ofLE
 
 中文:
 定义 FiniteSpanningSetsIn.ofLE
-  签名: (h : ν <= μ) {C : Set (Set α)} (S : μ.FiniteSpanningSetsIn C)
+  签名: (h : ν <= μ) {C : 集合 (集合 α)} (S : μ.FiniteSpanningSetsIn C)
   定义体: S.set
   set_mem := S.set_mem
   finite n := lt_of_le_of_lt (le_iff'.1 h _) (S.finite n)
@@ -1651,8 +1651,8 @@ theorem sigmaFinite_of_le
 
 中文:
 定理 sigmaFinite_of_le
-  条件: (μ : Measure α) [hs : SigmaFinite μ] (h : ν <= μ)
-  结论: SigmaFinite ν
+  条件: (μ : 测度 α) [hs : σ有限 μ] (h : ν <= μ)
+  结论: σ有限 ν
   证明: ⟨hs.out.map FiniteSpanningSetsIn.ofLE h⟩
 
 Depends on / 依赖: FiniteSpanningSetsIn, FiniteSpanningSetsIn.ofLE, hs.out.map
@@ -1678,7 +1678,7 @@ lemma add_right_inj
 
 中文:
 引理 add_right_inj
-  条件: (μ ν₁ ν₂ : Measure α) [SigmaFinite μ]
+  条件: (μ ν₁ ν₂ : 测度 α) [σ有限 μ]
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [h]⟩
   rw [ext_iff_of_iUnion_eq_univ (iUnion_spanningSets μ)]
@@ -1710,7 +1710,7 @@ lemma add_left_inj
 
 中文:
 引理 add_left_inj
-  条件: (μ ν₁ ν₂ : Measure α) [SigmaFinite μ]
+  条件: (μ ν₁ ν₂ : 测度 α) [σ有限 μ]
   证明: by rw [add_comm _ μ, add_comm _ μ, μ.add_right_inj]
 -/
 @[simp] lemma add_left_inj (μ ν₁ ν₂ : Measure α) [SigmaFinite μ] :
@@ -1738,8 +1738,8 @@ lemma Measure.sigmaFinite_iff_measure_singleton_lt_top
       exact ⟨⟨⟨fun n => {f n}, by simp, by simpa [hf.forall] using hμ, by simp [hf.range_eq]⟩⟩⟩
 
 中文:
-引理 Measure.sigmaFinite_iff_measure_singleton_lt_top
-  条件: [Countable α]
+引理 测度.sigmaFinite_iff_measure_singleton_lt_top
+  条件: [可数 α]
   证明: measure_singleton_lt_top
   mpr hμ := by
     cases isEmpty_or_nonempty α
@@ -1777,8 +1777,8 @@ theorem sigmaFinite_bot_iff
 
 中文:
 定理 sigmaFinite_bot_iff
-  条件: (μ : @Measure α ⊥)
-  结论: SigmaFinite μ ↔ IsFiniteMeasure μ
+  条件: (μ : @测度 α ⊥)
+  结论: σ有限 μ ↔ 是有限测度 μ
   证明: by
   refine ⟨fun h => ⟨?_⟩, fun h => by infer_instance⟩
   have : SigmaFinite μ := h
@@ -1820,7 +1820,7 @@ instance Restrict.sigmaFinite
 
 中文:
 实例 Restrict.sigmaFinite
-  签名: (μ : Measure α) [SigmaFinite μ] (s : Set α)
+  签名: (μ : 测度 α) [σ有限 μ] (s : 集合 α)
   定义体: by
   refine ⟨⟨⟨spanningSets μ, fun _ => trivial, fun i => ?_, iUnion_spanningSets μ⟩⟩⟩
   rw [Measure.restrict_apply (measurableSet_spanningSets μ i)]
@@ -1848,8 +1848,8 @@ instance sum.sigmaFinite
   · rw [sum_apply _ (this n), tsum_fint
 
 中文:
-实例 sum.sigmaFinite
-  签名: {ι} [Finite ι] (μ : ι -> Measure α) [对任意 i, SigmaFinite (μ i)]
+实例 求和.sigmaFinite
+  签名: {ι} [有限 ι] (μ : ι -> 测度 α) [对任意 i, σ有限 (μ i)]
   定义体: by
   cases nonempty_fintype ι
   have : forall n, MeasurableSet (⋂ i : ι, spanningSets (μ i) n) := fun n =>
@@ -1883,8 +1883,8 @@ instance Add.sigmaFinite
   refine @sum.sigmaFinite _ _ _ _ _ (Bool.rec ?_ ?_) <;> simpa
 
 中文:
-实例 Add.sigmaFinite
-  签名: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+实例 加法.sigmaFinite
+  签名: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   定义体: by
   rw [← sum_cond]
   refine @sum.sigmaFinite _ _ _ _ _ (Bool.rec ?_ ?_) <;> simpa
@@ -1911,8 +1911,8 @@ instance SMul.sigmaFinite
       spanning := iUnion_spanningSets μ }⟩
 
 中文:
-实例 SMul.sigmaFinite
-  签名: {μ : Measure α} [SigmaFinite μ] (c : 实数>=0)
+实例 标量乘法.sigmaFinite
+  签名: {μ : 测度 α} [σ有限 μ] (c : 实数>=0)
   定义体: ⟨{ set := spanningSets μ
       set_mem := fun _ => trivial
       finite := by
@@ -1943,8 +1943,8 @@ instance [SigmaFinite
   body: sigmaFinite_of_le _ (restrict_union_le _ _)
 
 中文:
-实例 [SigmaFinite
-  签名: (μ.restrict s)] [SigmaFinite (μ.restrict t)] :
+实例 [σ有限
+  签名: (μ.restrict s)] [σ有限 (μ.restrict t)] :
   定义体: sigmaFinite_of_le _ (restrict_union_le _ _)
 
 Depends on / 依赖: restrict_union_le, sigmaFinite_of_le
@@ -1961,8 +1961,8 @@ instance [SigmaFinite
   body: sigmaFinite_of_le (μ.restrict s) (restrict_mono_ae (ae_of_all _ Set.inter_subset_left))
 
 中文:
-实例 [SigmaFinite
-  签名: (μ.restrict s)] : SigmaFinite (μ.restrict (s inter t))
+实例 [σ有限
+  签名: (μ.restrict s)] : σ有限 (μ.restrict (s inter t))
   定义体: sigmaFinite_of_le (μ.restrict s) (restrict_mono_ae (ae_of_all _ Set.inter_subset_left))
 
 Depends on / 依赖: Set.inter_subset_left, ae_of_all, inter_subset_left, restrict, restrict_mono_ae, sigmaFinite_of_le
@@ -1979,8 +1979,8 @@ instance [SigmaFinite
   body: sigmaFinite_of_le (μ.restrict t) (restrict_mono_ae (ae_of_all _ Set.inter_subset_right))
 
 中文:
-实例 [SigmaFinite
-  签名: (μ.restrict t)] : SigmaFinite (μ.restrict (s inter t))
+实例 [σ有限
+  签名: (μ.restrict t)] : σ有限 (μ.restrict (s inter t))
   定义体: sigmaFinite_of_le (μ.restrict t) (restrict_mono_ae (ae_of_all _ Set.inter_subset_right))
 
 Depends on / 依赖: Set.inter_subset_right, ae_of_all, inter_subset_right, restrict, restrict_mono_ae, sigmaFinite_of_le
@@ -2000,8 +2000,8 @@ theorem SigmaFinite.of_map
         by rw [← preimage_iUnion, iUnion_spanningSets, preimage_univ]⟩⟩⟩
 
 中文:
-定理 SigmaFinite.of_map
-  结论: (μ : Measure α) {f : α -> β} (hf : AEMeasurable f μ)
+定理 σ有限.of_map
+  结论: (μ : 测度 α) {f : α -> β} (hf : 几乎处处可测 f μ)
   证明: ⟨⟨⟨fun n => f ⁻¹' spanningSets (μ.map f) n, fun _ => trivial, fun n => by
         simp only [← map_apply_of_aemeasurable hf, measurableSet_spanningSets,
           measure_spanningSets_lt_top],
@@ -2030,8 +2030,8 @@ lemma _root_.MeasurableEmbedding.sigmaFinite_map
     exact measure_spanningSets_l
 
 中文:
-引理 _root_.MeasurableEmbedding.sigmaFinite_map
-  结论: {f : α -> β} (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.sigmaFinite_map
+  结论: {f : α -> β} (hf : 可测嵌入 f)
   证明: by
   refine ⟨fun n => f '' (spanningSets μ n) union (Set.range f)ᶜ, by simp, fun n => ?_, ?_⟩
   · rw [hf.map_apply, Set.preimage_union]
@@ -2061,8 +2061,8 @@ theorem _root_.MeasurableEquiv.sigmaFinite_map
   proof: f.measurableEmbedding.sigmaFinite_map
 
 中文:
-定理 _root_.MeasurableEquiv.sigmaFinite_map
-  条件: (f : α ≃ᵐ β) [SigmaFinite μ]
+定理 _root_.可测等价.sigmaFinite_map
+  条件: (f : α ≃ᵐ β) [σ有限 μ]
   证明: f.measurableEmbedding.sigmaFinite_map
 
 Depends on / 依赖: f.measurableEmbedding.sigmaFinite_map, measurableEmbedding, sigmaFinite_map
@@ -2085,8 +2085,8 @@ theorem ae_of_forall_measure_lt_top_ae_restrict'
       ((self_le_add_left _ _).trans_lt (measure_span
 
 中文:
-定理 ae_of_forall_measure_lt_top_ae_restrict'
-  结论: {μ : Measure α} (ν : Measure α) [SigmaFinite μ]
+定理 ae_of_对任意_measure_lt_top_ae_restrict'
+  结论: {μ : 测度 α} (ν : 测度 α) [σ有限 μ]
   证明: by
   have : forall n, forallᵐ x ∂μ, x in spanningSets (μ + ν) n -> P x := by
     intro n
@@ -2118,8 +2118,8 @@ theorem ae_of_forall_measure_lt_top_ae_restrict
   proof: ae_of_forall_measure_lt_top_ae_restrict' μ P fun s hs h2s _ => h s hs h2s
 
 中文:
-定理 ae_of_forall_measure_lt_top_ae_restrict
-  结论: {μ : Measure α} [SigmaFinite μ] (P : α -> 命题)
+定理 ae_of_对任意_measure_lt_top_ae_restrict
+  结论: {μ : 测度 α} [σ有限 μ] (P : α -> 命题)
   证明: ae_of_forall_measure_lt_top_ae_restrict' μ P fun s hs h2s _ => h s hs h2s
 
 Depends on / 依赖: ae_of_forall_measure_lt_top_ae_restrict
@@ -2159,7 +2159,7 @@ definition FiniteSpanningSetsIn.disjointed
 
 中文:
 定义 FiniteSpanningSetsIn.disjointed
-  签名: {μ : Measure α}
+  签名: {μ : 测度 α}
   定义体: ⟨disjointed S.set, MeasurableSet.disjointed S.set_mem, fun n =>
     lt_of_le_of_lt (measure_mono (disjointed_subset S.set n)) (S.finite _),
     S.spanning ▸ iUnion_disjointed⟩
@@ -2181,7 +2181,7 @@ theorem FiniteSpanningSetsIn.disjointed_set_eq
 
 中文:
 定理 FiniteSpanningSetsIn.disjointed_set_eq
-  结论: {μ : Measure α}
+  结论: {μ : 测度 α}
   证明: rfl
 -/
 theorem FiniteSpanningSetsIn.disjointed_set_eq {μ : Measure α}
@@ -2199,8 +2199,8 @@ theorem exists_eq_disjoint_finiteSpanningSetsIn
     disjoint_disjointed _⟩
 
 中文:
-定理 exists_eq_disjoint_finiteSpanningSetsIn
-  条件: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+定理 存在_eq_disjoint_finiteSpanningSetsIn
+  条件: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: let S := (μ + ν).toFiniteSpanningSetsIn.disjointed
   ⟨S.ofLE (Measure.le_add_right le_rfl), S.ofLE (Measure.le_add_left le_rfl), rfl,
     disjoint_disjointed _⟩

@@ -82,8 +82,8 @@ structure StrictPseudofunctorPreCore
 
 中文:
 结构 StrictPseudofunctorPreCore
-  参数: extends PrelaxFunctor B C
-  继承: PrelaxFunctor B C
+  参数: extends 预松弛函子 B C
+  继承: 预松弛函子 B C
   公理与运算 (4 个):
     - map_id((X : B)) : map (𝟙 X) = 𝟙 (obj X)  [默认: by rfl_cat]
     - map_comp : 对任意 {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g  [默认: by rfl_cat]

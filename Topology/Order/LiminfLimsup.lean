@@ -45,8 +45,8 @@ class BoundedLENhdsClass
     - isBounded_le_nhds((a : α)) : (𝓝 a).IsBounded (· <= ·)
 
 中文:
-类 BoundedLENhdsClass
-  参数: (α : 类型) [Preorder α] [TopologicalSpace α]
+类 BoundedLENhds类
+  参数: (α : 类型) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
     - isBounded_le_nhds((a : α)) : (𝓝 a).IsBounded (· <= ·)
 -/
@@ -63,8 +63,8 @@ class BoundedGENhdsClass
     - isBounded_ge_nhds((a : α)) : (𝓝 a).IsBounded (· >= ·)
 
 中文:
-类 BoundedGENhdsClass
-  参数: (α : 类型) [Preorder α] [TopologicalSpace α]
+类 BoundedGENhds类
+  参数: (α : 类型) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
     - isBounded_ge_nhds((a : α)) : (𝓝 a).IsBounded (· >= ·)
 -/
@@ -107,8 +107,8 @@ theorem Filter.Tendsto.isBoundedUnder_le
   proof: (isBounded_le_nhds a).mono h
 
 中文:
-定理 Filter.Tendsto.isBoundedUnder_le
-  条件: (h : Tendsto u f (𝓝 a))
+定理 滤子.收敛.isBoundedUnder_le
+  条件: (h : 收敛 u f (𝓝 a))
   结论: f.IsBoundedUnder (· <= ·) u
   证明: (isBounded_le_nhds a).mono h
 
@@ -126,7 +126,7 @@ theorem Filter.Tendsto.bddAbove_range_of_cofinite
   proof: h.isBoundedUnder_le.bddAbove_range_of_cofinite
 
 中文:
-定理 Filter.Tendsto.bddAbove_range_of_cofinite
+定理 滤子.收敛.bddAbove_range_of_cofinite
   结论: [IsDirectedOrder α]
   证明: h.isBoundedUnder_le.bddAbove_range_of_cofinite
 
@@ -145,7 +145,7 @@ theorem Filter.Tendsto.bddAbove_range
   proof: h.isBoundedUnder_le.bddAbove_range
 
 中文:
-定理 Filter.Tendsto.bddAbove_range
+定理 滤子.收敛.bddAbove_range
   结论: [IsDirectedOrder α] {u : 自然数 -> α}
   证明: h.isBoundedUnder_le.bddAbove_range
 
@@ -184,8 +184,8 @@ theorem Filter.Tendsto.isCoboundedUnder_ge
   proof: h.isBoundedUnder_le.isCobounded_flip
 
 中文:
-定理 Filter.Tendsto.isCoboundedUnder_ge
-  条件: [NeBot f] (h : Tendsto u f (𝓝 a))
+定理 滤子.收敛.isCoboundedUnder_ge
+  条件: [NeBot f] (h : 收敛 u f (𝓝 a))
   证明: h.isBoundedUnder_le.isCobounded_flip
 
 Depends on / 依赖: h.isBoundedUnder_le.isCobounded_flip, isBoundedUnder_le, isCobounded_flip
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedGENhdsClass αᵒᵈ
+  签名: BoundedGENhds类 αᵒᵈ
   定义体: ⟨@isBounded_le_nhds α _ _ _⟩
 
 Depends on / 依赖: isBounded_le_nhds
@@ -225,8 +225,8 @@ instance Prod.instBoundedLENhdsClass
   exact ⟨(a, b), ha.prod_mk hb⟩
 
 中文:
-实例 Prod.instBoundedLENhdsClass
-  签名: : BoundedLENhdsClass (α × β)
+实例 积类型.instBoundedLENhdsClass
+  签名: : BoundedLENhds类 (α × β)
   定义体: by
   refine ⟨fun x => ?_⟩
   obtain ⟨a, ha⟩ := isBounded_le_nhds x.1
@@ -256,8 +256,8 @@ instance Pi.instBoundedLENhdsClass
   exact ⟨f, eventually_pi hf⟩
 
 中文:
-实例 Pi.instBoundedLENhdsClass
-  签名: [Finite ι] [对任意 i, Preorder (π i)] [对任意 i, TopologicalSpace (π i)]
+实例 依赖函数类型.instBoundedLENhdsClass
+  签名: [有限 ι] [对任意 i, 预序 (π i)] [对任意 i, 拓扑空间 (π i)]
   定义体: by
   refine ⟨fun x => ?_⟩
   rw [nhds_pi]
@@ -308,8 +308,8 @@ theorem Filter.Tendsto.isBoundedUnder_ge
   proof: (isBounded_ge_nhds a).mono h
 
 中文:
-定理 Filter.Tendsto.isBoundedUnder_ge
-  条件: (h : Tendsto u f (𝓝 a))
+定理 滤子.收敛.isBoundedUnder_ge
+  条件: (h : 收敛 u f (𝓝 a))
   结论: f.IsBoundedUnder (· >= ·) u
   证明: (isBounded_ge_nhds a).mono h
 
@@ -327,7 +327,7 @@ theorem Filter.Tendsto.bddBelow_range_of_cofinite
   proof: h.isBoundedUnder_ge.bddBelow_range_of_cofinite
 
 中文:
-定理 Filter.Tendsto.bddBelow_range_of_cofinite
+定理 滤子.收敛.bddBelow_range_of_cofinite
   结论: [IsCodirectedOrder α]
   证明: h.isBoundedUnder_ge.bddBelow_range_of_cofinite
 
@@ -346,7 +346,7 @@ theorem Filter.Tendsto.bddBelow_range
   proof: h.isBoundedUnder_ge.bddBelow_range
 
 中文:
-定理 Filter.Tendsto.bddBelow_range
+定理 滤子.收敛.bddBelow_range
   结论: [IsCodirectedOrder α] {u : 自然数 -> α}
   证明: h.isBoundedUnder_ge.bddBelow_range
 
@@ -385,8 +385,8 @@ theorem Filter.Tendsto.isCoboundedUnder_le
   proof: h.isBoundedUnder_ge.isCobounded_flip
 
 中文:
-定理 Filter.Tendsto.isCoboundedUnder_le
-  条件: [NeBot f] (h : Tendsto u f (𝓝 a))
+定理 滤子.收敛.isCoboundedUnder_le
+  条件: [NeBot f] (h : 收敛 u f (𝓝 a))
   证明: h.isBoundedUnder_ge.isCobounded_flip
 
 Depends on / 依赖: h.isBoundedUnder_ge.isCobounded_flip, isBoundedUnder_ge, isCobounded_flip
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedLENhdsClass αᵒᵈ
+  签名: BoundedLENhds类 αᵒᵈ
   定义体: ⟨@isBounded_ge_nhds α _ _ _⟩
 
 Depends on / 依赖: isBounded_ge_nhds
@@ -421,8 +421,8 @@ instance Prod.instBoundedGENhdsClass
   body: ⟨(Prod.instBoundedLENhdsClass (α := αᵒᵈ) (β := βᵒᵈ)).isBounded_le_nhds⟩
 
 中文:
-实例 Prod.instBoundedGENhdsClass
-  签名: : BoundedGENhdsClass (α × β)
+实例 积类型.instBoundedGENhdsClass
+  签名: : BoundedGENhds类 (α × β)
   定义体: ⟨(Prod.instBoundedLENhdsClass (α := αᵒᵈ) (β := βᵒᵈ)).isBounded_le_nhds⟩
 
 Depends on / 依赖: Prod.instBoundedLENhdsClass, instBoundedLENhdsClass, isBounded_le_nhds
@@ -439,8 +439,8 @@ instance Pi.instBoundedGENhdsClass
   body: ⟨(Pi.instBoundedLENhdsClass (π := fun i => (π i)ᵒᵈ)).isBounded_le_nhds⟩
 
 中文:
-实例 Pi.instBoundedGENhdsClass
-  签名: [Finite ι] [对任意 i, Preorder (π i)] [对任意 i, TopologicalSpace (π i)]
+实例 依赖函数类型.instBoundedGENhdsClass
+  签名: [有限 ι] [对任意 i, 预序 (π i)] [对任意 i, 拓扑空间 (π i)]
   定义体: ⟨(Pi.instBoundedLENhdsClass (π := fun i => (π i)ᵒᵈ)).isBounded_le_nhds⟩
 
 Depends on / 依赖: Pi.instBoundedLENhdsClass, instBoundedLENhdsClass, isBounded_le_nhds
@@ -489,7 +489,7 @@ fun _ hb => lt_mem_sets_of_limsSup_lt hl hs.symm ▸ hb⟩
 
 中文:
 定理 le_nhds_of_limsSup_eq_limsInf
-  结论: {f : Filter α} {a : α} (hl : f.IsBounded (· <= ·))
+  结论: {f : 滤子 α} {a : α} (hl : f.IsBounded (· <= ·))
   证明: tendsto_order.2 ⟨fun _ hb => gt_mem_sets_of_limsInf_gt hg hi.symm ▸ hb,
 fun _ hb => lt_mem_sets_of_limsSup_lt hl hs.symm ▸ hb⟩
 
@@ -572,7 +572,7 @@ theorem limsInf_eq_of_le_nhds
 
 中文:
 定理 limsInf_eq_of_le_nhds
-  条件: {f : Filter α} {a : α} [NeBot f] (h : f <= 𝓝 a)
+  条件: {f : 滤子 α} {a : α} [NeBot f] (h : f <= 𝓝 a)
   结论: f.limsInf = a
   证明: have hb_ge : IsBounded (· >= ·) f := (isBounded_ge_nhds a).mono h
   have hb_le : IsBounded (· <= ·) f := (isBounded_le_nhds a).mono h
@@ -607,7 +607,7 @@ theorem limsSup_eq_of_le_nhds
 
 中文:
 定理 limsSup_eq_of_le_nhds
-  条件: {f : Filter α} {a : α} [NeBot f] (h : f <= 𝓝 a)
+  条件: {f : 滤子 α} {a : α} [NeBot f] (h : f <= 𝓝 a)
   结论: f.limsSup = a
   证明: limsInf_eq_of_le_nhds (α := αᵒᵈ) h
 
@@ -625,8 +625,8 @@ theorem Filter.Tendsto.limsup_eq
   proof: limsSup_eq_of_le_nhds h
 
 中文:
-定理 Filter.Tendsto.limsup_eq
-  结论: {f : Filter β} {u : β -> α} {a : α} [NeBot f]
+定理 滤子.收敛.limsup_eq
+  结论: {f : 滤子 β} {u : β -> α} {a : α} [NeBot f]
   证明: limsSup_eq_of_le_nhds h
 
 Depends on / 依赖: limsSup_eq_of_le_nhds
@@ -644,8 +644,8 @@ theorem Filter.Tendsto.liminf_eq
   proof: limsInf_eq_of_le_nhds h
 
 中文:
-定理 Filter.Tendsto.liminf_eq
-  结论: {f : Filter β} {u : β -> α} {a : α} [NeBot f]
+定理 滤子.收敛.liminf_eq
+  结论: {f : 滤子 β} {u : β -> α} {a : α} [NeBot f]
   证明: limsInf_eq_of_le_nhds h
 
 Depends on / 依赖: limsInf_eq_of_le_nhds
@@ -670,7 +670,7 @@ theorem ClusterPt.limsSup
 
 中文:
 定理 ClusterPt.limsSup
-  结论: {f : Filter α} [NeBot f]
+  结论: {f : 滤子 α} [NeBot f]
   证明: by
   by_cases! hn : Nontrivial α
   · by_cases! htop : forall x, x <= f.limsSup
@@ -707,7 +707,7 @@ theorem ClusterPt.limsInf
 
 中文:
 定理 ClusterPt.limsInf
-  结论: {f : Filter α} [NeBot f]
+  结论: {f : 滤子 α} [NeBot f]
   证明: ClusterPt.limsSup (α := αᵒᵈ) hc hb
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsSup, IsBounded, f.IsBounded, f.limsInf, isBoundedDefault, limsInf, limsSup
@@ -731,7 +731,7 @@ theorem ClusterPt.le_limsSup
 
 中文:
 定理 ClusterPt.le_limsSup
-  结论: {f : Filter α} {x : α} (hx : ClusterPt x f)
+  结论: {f : 滤子 α} {x : α} (hx : ClusterPt x f)
   证明: by
   simp only [ClusterPt] at hx
   have : (𝓝 x ⊓ f).limsSup = x := limsSup_eq_of_le_nhds inf_le_left
@@ -758,7 +758,7 @@ theorem ClusterPt.limsInf_le
 
 中文:
 定理 ClusterPt.limsInf_le
-  结论: {f : Filter α} {x : α} (hx : ClusterPt x f)
+  结论: {f : 滤子 α} {x : α} (hx : ClusterPt x f)
   证明: hx.le_limsSup (α := αᵒᵈ)
 
 Depends on / 依赖: f.limsInf, hx.le_limsSup, isBoundedDefault, le_limsSup, limsInf
@@ -778,7 +778,7 @@ theorem isGreatest_clusterPt_limsSup
 
 中文:
 定理 isGreatest_clusterPt_limsSup
-  结论: {f : Filter α} [NeBot f]
+  结论: {f : 滤子 α} [NeBot f]
   证明: ⟨ClusterPt.limsSup, fun a ha => ha.le_limsSup⟩
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsSup, IsBounded, IsGreatest, f.IsBounded, f.limsSup, ha.le_limsSup, isBoundedDefault, le_limsSup, limsSup
@@ -800,7 +800,7 @@ theorem isLeast_clusterPt_limsInf
 
 中文:
 定理 isLeast_clusterPt_limsInf
-  结论: {f : Filter α} [NeBot f]
+  结论: {f : 滤子 α} [NeBot f]
   证明: isGreatest_clusterPt_limsSup (α := αᵒᵈ)
 
 Depends on / 依赖: ClusterPt, IsBounded, IsLeast, f.IsBounded, f.limsInf, isBoundedDefault, isGreatest_clusterPt_limsSup, limsInf
@@ -821,7 +821,7 @@ theorem MapClusterPt.limsup
 
 中文:
 定理 MapClusterPt.limsup
-  结论: {u : β -> α} {f : Filter β} [NeBot f]
+  结论: {u : β -> α} {f : 滤子 β} [NeBot f]
   证明: ClusterPt.limsSup
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsSup, IsBoundedUnder, MapClusterPt, f.limsup, isBoundedDefault, limsSup, limsup
@@ -842,7 +842,7 @@ theorem MapClusterPt.liminf
 
 中文:
 定理 MapClusterPt.liminf
-  结论: {u : β -> α} {f : Filter β} [NeBot f]
+  结论: {u : β -> α} {f : 滤子 β} [NeBot f]
   证明: ClusterPt.limsInf
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsInf, IsBoundedUnder, MapClusterPt, isBoundedDefault, liminf, limsInf
@@ -863,7 +863,7 @@ theorem MapClusterPt.le_limsup
 
 中文:
 定理 MapClusterPt.le_limsup
-  结论: {u : β -> α} {f : Filter β}
+  结论: {u : β -> α} {f : 滤子 β}
   证明: hx.le_limsSup
 
 Depends on / 依赖: f.limsup, hx.le_limsSup, isBoundedDefault, le_limsSup, limsup
@@ -883,7 +883,7 @@ theorem MapClusterPt.liminf_le
 
 中文:
 定理 MapClusterPt.liminf_le
-  结论: {u : β -> α} {f : Filter β}
+  结论: {u : β -> α} {f : 滤子 β}
   证明: hx.limsInf_le
 
 Depends on / 依赖: f.liminf, hx.limsInf_le, isBoundedDefault, liminf, limsInf_le
@@ -903,7 +903,7 @@ theorem isGreatest_mapClusterPt_limsup
 
 中文:
 定理 isGreatest_mapClusterPt_limsup
-  结论: {u : β -> α} {f : Filter β} [NeBot f]
+  结论: {u : β -> α} {f : 滤子 β} [NeBot f]
   证明: isGreatest_clusterPt_limsSup
 
 Depends on / 依赖: IsBoundedUnder, IsGreatest, MapClusterPt, isBoundedDefault, isGreatest_clusterPt_limsSup, limsup
@@ -924,7 +924,7 @@ theorem isLeast_mapClusterPt_liminf
 
 中文:
 定理 isLeast_mapClusterPt_liminf
-  结论: {u : β -> α} {f : Filter β} [NeBot f]
+  结论: {u : β -> α} {f : 滤子 β} [NeBot f]
   证明: isLeast_clusterPt_limsInf
 
 Depends on / 依赖: IsBoundedUnder, IsLeast, MapClusterPt, isBoundedDefault, isLeast_clusterPt_limsInf, liminf
@@ -945,7 +945,7 @@ theorem tendsto_of_liminf_eq_limsup
 
 中文:
 定理 tendsto_of_liminf_eq_limsup
-  结论: {f : Filter β} {u : β -> α} {a : α} (hinf : liminf u f = a)
+  结论: {f : 滤子 β} {u : β -> α} {a : α} (hinf : liminf u f = a)
   证明: le_nhds_of_limsSup_eq_limsInf h h' hsup hinf
 
 Depends on / 依赖: IsBoundedUnder, Tendsto, f.IsBoundedUnder, isBoundedDefault, le_nhds_of_limsSup_eq_limsInf
@@ -969,7 +969,7 @@ theorem tendsto_of_le_liminf_of_limsup_le
 
 中文:
 定理 tendsto_of_le_liminf_of_limsup_le
-  结论: {f : Filter β} {u : β -> α} {a : α} (hinf : a <= liminf u f)
+  结论: {f : 滤子 β} {u : β -> α} {a : α} (hinf : a <= liminf u f)
   证明: by
   rcases f.eq_or_neBot with rfl | _
   · exact tendsto_bot
@@ -1003,7 +1003,7 @@ theorem tendsto_of_no_upcrossings
 
 中文:
 定理 tendsto_of_no_upcrossings
-  结论: [DenselyOrdered α] {f : Filter β} {u : β -> α} {s : Set α}
+  结论: [稠密序 α] {f : 滤子 β} {u : β -> α} {s : 集合 α}
   证明: by
   rcases f.eq_or_neBot with rfl | hbot
   · exact ⟨sInf ∅, tendsto_bot⟩
@@ -1045,8 +1045,8 @@ theorem exists_seq_tendsto_limsSup
   proof: (ClusterPt.limsSup).exists_seq_tendsto
 
 中文:
-定理 exists_seq_tendsto_limsSup
-  结论: [NeBot f] [IsCountablyGenerated f]
+定理 存在_seq_tendsto_limsSup
+  结论: [NeBot f] [是余untablyGenerated f]
   证明: (ClusterPt.limsSup).exists_seq_tendsto
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsSup, IsBounded, Tendsto, exists_seq_tendsto, f.IsBounded, f.limsSup, isBoundedDefault, limsSup
@@ -1066,8 +1066,8 @@ theorem exists_seq_tendsto_limsInf
   proof: (ClusterPt.limsInf).exists_seq_tendsto
 
 中文:
-定理 exists_seq_tendsto_limsInf
-  结论: [NeBot f] [IsCountablyGenerated f]
+定理 存在_seq_tendsto_limsInf
+  结论: [NeBot f] [是余untablyGenerated f]
   证明: (ClusterPt.limsInf).exists_seq_tendsto
 
 Depends on / 依赖: ClusterPt, ClusterPt.limsInf, IsBounded, Tendsto, exists_seq_tendsto, f.IsBounded, f.limsInf, isBoundedDefault, limsInf
@@ -1089,8 +1089,8 @@ theorem exists_seq_tendsto_limsup
   proof: (MapClusterPt.limsup).exists_seq_tendsto
 
 中文:
-定理 exists_seq_tendsto_limsup
-  结论: [NeBot f] [IsCountablyGenerated f] {u : β -> α}
+定理 存在_seq_tendsto_limsup
+  结论: [NeBot f] [是余untablyGenerated f] {u : β -> α}
   证明: (MapClusterPt.limsup).exists_seq_tendsto
 
 Depends on / 依赖: IsBoundedUnder, MapClusterPt, MapClusterPt.limsup, Tendsto, exists_seq_tendsto, isBoundedDefault, limsup
@@ -1110,8 +1110,8 @@ theorem exists_seq_tendsto_liminf
   proof: (MapClusterPt.liminf).exists_seq_tendsto
 
 中文:
-定理 exists_seq_tendsto_liminf
-  结论: [NeBot f] {u : β -> α} [IsCountablyGenerated f]
+定理 存在_seq_tendsto_liminf
+  结论: [NeBot f] {u : β -> α} [是余untablyGenerated f]
   证明: (MapClusterPt.liminf).exists_seq_tendsto
 
 Depends on / 依赖: IsBoundedUnder, MapClusterPt, MapClusterPt.liminf, Tendsto, exists_seq_tendsto, isBoundedDefault, liminf
@@ -1248,7 +1248,7 @@ lemma tendsto_iSup_of_tendsto_limsup
 
 中文:
 引理 tendsto_iSup_of_tendsto_limsup
-  结论: {α β : 类型} [ConditionallyCompleteLattice α]
+  结论: {α β : 类型} [条件完备格 α]
   证明: by
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨n0⟩⟩
@@ -1343,8 +1343,8 @@ lemma Nat.tendsto_iSup_of_tendsto_limsup
   exact _root_.tendsto_iSup_of_tendsto_limsup h_all h_limsup h_anti
 
 中文:
-引理 Nat.tendsto_iSup_of_tendsto_limsup
-  结论: {α β : 类型} [ConditionallyCompleteLattice α]
+引理 自然数.tendsto_iSup_of_tendsto_limsup
+  结论: {α β : 类型} [条件完备格 α]
   证明: by
   rw [← cofinite_eq_atTop] at h_limsup
   exact _root_.tendsto_iSup_of_tendsto_limsup h_all h_limsup h_anti
@@ -1387,8 +1387,8 @@ theorem Antitone.map_limsSup_of_continuousAt
       exists_lt_of_lt_csSup (bdd_above.recOn fun x hx => ⟨f x, Set.mem_image_of
 
 中文:
-定理 Antitone.map_limsSup_of_continuousAt
-  结论: {F : Filter R} [NeBot F] {f : R -> S}
+定理 递减.map_limsSup_of_continuousAt
+  结论: {F : 滤子 R} [NeBot F] {f : R -> S}
   证明: by
   apply le_antisymm
   · rw [limsSup, f_decr.map_csInf_of_continuousAt f_cont bdd_above cobdd]
@@ -1456,8 +1456,8 @@ theorem Antitone.map_limsup_of_continuousAt
   proof: f_decr.map_limsSup_of_continuousAt f_cont bdd_above cobdd
 
 中文:
-定理 Antitone.map_limsup_of_continuousAt
-  结论: {f : R -> S} (f_decr : Antitone f) (a : ι -> R)
+定理 递减.map_limsup_of_continuousAt
+  结论: {f : R -> S} (f_decr : 递减 f) (a : ι -> R)
   证明: f_decr.map_limsSup_of_continuousAt f_cont bdd_above cobdd
 
 Depends on / 依赖: F.IsCoboundedUnder, F.liminf, F.limsup, IsCoboundedUnder, bdd_above, f_cont, f_decr, f_decr.map_limsSup_of_continuousAt, isBoundedDefault, liminf, limsup, map_limsSup_of_continuousAt
@@ -1479,8 +1479,8 @@ theorem Antitone.map_limsInf_of_continuousAt
   proof: Antitone.map_limsSup_of_continuousAt (R := Rᵒᵈ) (S := Sᵒᵈ) f_decr.dual f_cont bdd_below cobdd
 
 中文:
-定理 Antitone.map_limsInf_of_continuousAt
-  结论: {F : Filter R} [NeBot F] {f : R -> S}
+定理 递减.map_limsInf_of_continuousAt
+  结论: {F : 滤子 R} [NeBot F] {f : R -> S}
   证明: Antitone.map_limsSup_of_continuousAt (R := Rᵒᵈ) (S := Sᵒᵈ) f_decr.dual f_cont bdd_below cobdd
 
 Depends on / 依赖: Antitone, Antitone.map_limsSup_of_continuousAt, F.IsBounded, F.limsInf, F.limsup, IsBounded, bdd_below, f_cont, f_decr, f_decr.dual, isBoundedDefault, limsInf, limsup, map_limsSup_of_continuousAt
@@ -1500,8 +1500,8 @@ theorem Antitone.map_liminf_of_continuousAt
   proof: f_decr.map_limsInf_of_continuousAt f_cont cobdd bdd_below
 
 中文:
-定理 Antitone.map_liminf_of_continuousAt
-  结论: {f : R -> S} (f_decr : Antitone f) (a : ι -> R)
+定理 递减.map_liminf_of_continuousAt
+  结论: {f : R -> S} (f_decr : 递减 f) (a : ι -> R)
   证明: f_decr.map_limsInf_of_continuousAt f_cont cobdd bdd_below
 
 Depends on / 依赖: F.IsBoundedUnder, F.liminf, F.limsup, IsBoundedUnder, bdd_below, f_cont, f_decr, f_decr.map_limsInf_of_continuousAt, isBoundedDefault, liminf, limsup, map_limsInf_of_continuousAt
@@ -1522,8 +1522,8 @@ theorem Monotone.map_limsSup_of_continuousAt
   proof: Antitone.map_limsSup_of_continuousAt (S := Sᵒᵈ) f_incr f_cont bdd_above cobdd
 
 中文:
-定理 Monotone.map_limsSup_of_continuousAt
-  结论: {F : Filter R} [NeBot F] {f : R -> S}
+定理 递增.map_limsSup_of_continuousAt
+  结论: {F : 滤子 R} [NeBot F] {f : R -> S}
   证明: Antitone.map_limsSup_of_continuousAt (S := Sᵒᵈ) f_incr f_cont bdd_above cobdd
 
 Depends on / 依赖: Antitone, Antitone.map_limsSup_of_continuousAt, F.IsCobounded, F.limsSup, F.limsup, IsCobounded, bdd_above, f_cont, f_incr, isBoundedDefault, limsSup, limsup, map_limsSup_of_continuousAt
@@ -1543,8 +1543,8 @@ theorem Monotone.map_limsup_of_continuousAt
   proof: f_incr.map_limsSup_of_continuousAt f_cont bdd_above cobdd
 
 中文:
-定理 Monotone.map_limsup_of_continuousAt
-  结论: {f : R -> S} (f_incr : Monotone f) (a : ι -> R)
+定理 递增.map_limsup_of_continuousAt
+  结论: {f : R -> S} (f_incr : 递增 f) (a : ι -> R)
   证明: f_incr.map_limsSup_of_continuousAt f_cont bdd_above cobdd
 
 Depends on / 依赖: F.IsCoboundedUnder, F.limsup, IsCoboundedUnder, bdd_above, f_cont, f_incr, f_incr.map_limsSup_of_continuousAt, isBoundedDefault, limsup, map_limsSup_of_continuousAt
@@ -1566,8 +1566,8 @@ theorem Monotone.map_limsInf_of_continuousAt
   proof: Antitone.map_limsSup_of_continuousAt (R := Rᵒᵈ) f_incr.dual f_cont bdd_below cobdd
 
 中文:
-定理 Monotone.map_limsInf_of_continuousAt
-  结论: {F : Filter R} [NeBot F] {f : R -> S}
+定理 递增.map_limsInf_of_continuousAt
+  结论: {F : 滤子 R} [NeBot F] {f : R -> S}
   证明: Antitone.map_limsSup_of_continuousAt (R := Rᵒᵈ) f_incr.dual f_cont bdd_below cobdd
 
 Depends on / 依赖: Antitone, Antitone.map_limsSup_of_continuousAt, F.IsBounded, F.liminf, F.limsInf, IsBounded, bdd_below, f_cont, f_incr, f_incr.dual, isBoundedDefault, liminf, limsInf, map_limsSup_of_continuousAt
@@ -1587,8 +1587,8 @@ theorem Monotone.map_liminf_of_continuousAt
   proof: f_incr.map_limsInf_of_continuousAt f_cont cobdd bdd_below
 
 中文:
-定理 Monotone.map_liminf_of_continuousAt
-  结论: {f : R -> S} (f_incr : Monotone f) (a : ι -> R)
+定理 递增.map_liminf_of_continuousAt
+  结论: {f : R -> S} (f_incr : 递增 f) (a : ι -> R)
   证明: f_incr.map_limsInf_of_continuousAt f_cont cobdd bdd_below
 
 Depends on / 依赖: F.IsBoundedUnder, F.liminf, IsBoundedUnder, bdd_below, f_cont, f_incr, f_incr.map_limsInf_of_continuousAt, isBoundedDefault, liminf, map_limsInf_of_continuousAt
@@ -1621,8 +1621,8 @@ lemma Antitone.liminf_nhdsGT_eq_iSup₂_of_exists_gt
   exact ⟨b, hb.1, iInf₂_le b hb⟩
 
 中文:
-引理 Antitone.liminf_nhdsGT_eq_iSup₂_of_exists_gt
-  条件: (hf : Antitone f) (a : α) (hb : 存在 b, a < b)
+引理 递减.liminf_nhdsGT_eq_iSup₂_of_存在_gt
+  条件: (hf : 递减 f) (a : α) (hb : 存在 b, a < b)
   证明: by
   rw [(nhdsGT_basis_of_exists_gt hb).liminf_eq_iSup_iInf]
   refine le_antisymm (iSup₂_mono' fun r hr => ?_)
@@ -1649,8 +1649,8 @@ lemma Antitone.liminf_nhdsGT_eq_iSup₂
   proof: hf.liminf_nhdsGT_eq_iSup₂_of_exists_gt a (exists_gt a)
 
 中文:
-引理 Antitone.liminf_nhdsGT_eq_iSup₂
-  条件: [NoMaxOrder α] (hf : Antitone f) (a : α)
+引理 递减.liminf_nhdsGT_eq_iSup₂
+  条件: [NoMax序 α] (hf : 递减 f) (a : α)
   证明: hf.liminf_nhdsGT_eq_iSup₂_of_exists_gt a (exists_gt a)
 
 Depends on / 依赖: exists_gt, hf.liminf_nhdsGT_eq_iSup
@@ -1673,8 +1673,8 @@ lemma Monotone.liminf_nhdsLT_eq_iSup₂_of_exists_lt
   exact ⟨b, hb.2, iInf₂_le b hb⟩
 
 中文:
-引理 Monotone.liminf_nhdsLT_eq_iSup₂_of_exists_lt
-  条件: (hf : Monotone f) (a : α) (hb : 存在 b, b < a)
+引理 递增.liminf_nhdsLT_eq_iSup₂_of_存在_lt
+  条件: (hf : 递增 f) (a : α) (hb : 存在 b, b < a)
   证明: by
   rw [(nhdsLT_basis_of_exists_lt hb).liminf_eq_iSup_iInf]
   refine le_antisymm (iSup₂_mono' fun r hr => ?_)
@@ -1701,8 +1701,8 @@ lemma Monotone.liminf_nhdsLT_eq_iSup₂
   proof: hf.liminf_nhdsLT_eq_iSup₂_of_exists_lt a (exists_lt a)
 
 中文:
-引理 Monotone.liminf_nhdsLT_eq_iSup₂
-  条件: [NoMinOrder α] (hf : Monotone f) (a : α)
+引理 递增.liminf_nhdsLT_eq_iSup₂
+  条件: [NoMin序 α] (hf : 递增 f) (a : α)
   证明: hf.liminf_nhdsLT_eq_iSup₂_of_exists_lt a (exists_lt a)
 
 Depends on / 依赖: exists_lt, hf.liminf_nhdsLT_eq_iSup
@@ -1726,8 +1726,8 @@ lemma Monotone.limsup_nhdsGT_eq_iInf₂_of_exists_gt
   exact ⟨b, hb.1, le_iSup₂_of_le b hb le_rfl⟩
 
 中文:
-引理 Monotone.limsup_nhdsGT_eq_iInf₂_of_exists_gt
-  条件: (hf : Monotone f) (a : α) (hb : 存在 b, a < b)
+引理 递增.limsup_nhdsGT_eq_iInf₂_of_存在_gt
+  条件: (hf : 递增 f) (a : α) (hb : 存在 b, a < b)
   证明: by
   rw [(nhdsGT_basis_of_exists_gt hb).limsup_eq_iInf_iSup]
   refine le_antisymm
@@ -1756,8 +1756,8 @@ lemma Monotone.limsup_nhdsGT_eq_iInf₂
   proof: hf.limsup_nhdsGT_eq_iInf₂_of_exists_gt a (exists_gt a)
 
 中文:
-引理 Monotone.limsup_nhdsGT_eq_iInf₂
-  条件: [NoMaxOrder α] (hf : Monotone f) (a : α)
+引理 递增.limsup_nhdsGT_eq_iInf₂
+  条件: [NoMax序 α] (hf : 递增 f) (a : α)
   证明: hf.limsup_nhdsGT_eq_iInf₂_of_exists_gt a (exists_gt a)
 
 Depends on / 依赖: exists_gt, hf.limsup_nhdsGT_eq_iInf
@@ -1781,8 +1781,8 @@ lemma Antitone.limsup_nhdsLT_eq_iInf₂_of_exists_lt
   exact ⟨b, hb.2, le_iSup₂_of_le b hb le_rfl⟩
 
 中文:
-引理 Antitone.limsup_nhdsLT_eq_iInf₂_of_exists_lt
-  条件: (hf : Antitone f) (a : α) (hb : 存在 b, b < a)
+引理 递减.limsup_nhdsLT_eq_iInf₂_of_存在_lt
+  条件: (hf : 递减 f) (a : α) (hb : 存在 b, b < a)
   证明: by
   rw [(nhdsLT_basis_of_exists_lt hb).limsup_eq_iInf_iSup]
   refine le_antisymm
@@ -1811,8 +1811,8 @@ lemma Antitone.limsup_nhdsLT_eq_iInf₂
   proof: hf.limsup_nhdsLT_eq_iInf₂_of_exists_lt a (exists_lt a)
 
 中文:
-引理 Antitone.limsup_nhdsLT_eq_iInf₂
-  条件: [NoMinOrder α] (hf : Antitone f) (a : α)
+引理 递减.limsup_nhdsLT_eq_iInf₂
+  条件: [NoMin序 α] (hf : 递减 f) (a : α)
   证明: hf.limsup_nhdsLT_eq_iInf₂_of_exists_lt a (exists_lt a)
 
 Depends on / 依赖: exists_lt, hf.limsup_nhdsLT_eq_iInf

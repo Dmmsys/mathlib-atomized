@@ -30,8 +30,8 @@ instance Complex.measurableSpace
   body: borel Complex
 
 中文:
-实例 Complex.measurableSpace
-  签名: : MeasurableSpace Complex
+实例 复形.measurableSpace
+  签名: : 可测空间 复形
   定义体: borel Complex
 -/
 instance Complex.measurableSpace : MeasurableSpace Complex :=
@@ -46,8 +46,8 @@ instance Complex.borelSpace
   body: ⟨rfl⟩
 
 中文:
-实例 Complex.borelSpace
-  签名: : BorelSpace Complex
+实例 复形.borelSpace
+  签名: : Borel空间 复形
   定义体: ⟨rfl⟩
 -/
 instance Complex.borelSpace : BorelSpace Complex :=

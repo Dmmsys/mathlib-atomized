@@ -33,7 +33,7 @@ lemma ringChar_ne
 
 中文:
 引理 ringChar_ne
-  结论: ringChar Complex != ringChar F
+  结论: ringChar 复形 != ringChar F
   证明: by
   simpa only [ringChar.eq_zero] using (CharP.ringChar_ne_zero_of_finite F).symm
 

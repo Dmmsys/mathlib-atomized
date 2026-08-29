@@ -38,7 +38,7 @@ definition yonedaEquiv
 
 中文:
 定义 yonedaEquiv
-  签名: {X : C} {F : Sheaf J (类型v)}
+  签名: {X : C} {F : 层 J (类型v)}
   定义体: (fullyFaithfulSheafToPresheaf _ _).homEquiv.trans CategoryTheory.yonedaEquiv
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.yonedaEquiv, fullyFaithfulSheafToPresheaf, homEquiv, homEquiv.trans, yonedaEquiv
@@ -58,7 +58,7 @@ theorem yonedaEquiv_apply
 
 中文:
 定理 yonedaEquiv_apply
-  条件: {X : C} {F : Sheaf J (类型v)} (f : J.yoneda.obj X ⟶ F)
+  条件: {X : C} {F : 层 J (类型v)} (f : J.yoneda.obj X ⟶ F)
   证明: rfl
 
 @[simp]
@@ -78,7 +78,7 @@ theorem yonedaEquiv_symm_app_apply
 
 中文:
 定理 yonedaEquiv_symm_app_apply
-  结论: {X : C} {F : Sheaf J (类型v)} (x : F.obj.obj (op X))
+  结论: {X : C} {F : 层 J (类型v)} (x : F.obj.obj (op X))
   证明: rfl
 -/
 theorem yonedaEquiv_symm_app_apply {X : C} {F : Sheaf J (Type v)} (x : F.obj.obj (op X))
@@ -99,7 +99,7 @@ lemma yonedaEquiv_naturality
 
 中文:
 引理 yonedaEquiv_naturality
-  结论: {X Y : C} {F : Sheaf J (类型v)} (f : J.yoneda.obj X ⟶ F)
+  结论: {X Y : C} {F : 层 J (类型v)} (f : J.yoneda.obj X ⟶ F)
   证明: by
   simp [yonedaEquiv, CategoryTheory.yonedaEquiv_naturality]
   rfl
@@ -121,7 +121,7 @@ lemma yonedaEquiv_naturality'
 
 中文:
 引理 yonedaEquiv_naturality'
-  结论: {X Y : Cᵒᵖ} {F : Sheaf J (类型v)} (f : J.yoneda.obj (unop X) ⟶ F)
+  结论: {X Y : Cᵒᵖ} {F : 层 J (类型v)} (f : J.yoneda.obj (unop X) ⟶ F)
   证明: J.yonedaEquiv_naturality _ _
 
 Depends on / 依赖: J.yonedaEquiv_naturality, yonedaEquiv_naturality
@@ -140,7 +140,7 @@ lemma yonedaEquiv_comp
 
 中文:
 引理 yonedaEquiv_comp
-  条件: {X : C} {F G : Sheaf J (类型v)} (α : J.yoneda.obj X ⟶ F) (β : F ⟶ G)
+  条件: {X : C} {F G : 层 J (类型v)} (α : J.yoneda.obj X ⟶ F) (β : F ⟶ G)
   证明: rfl
 -/
 lemma yonedaEquiv_comp {X : C} {F G : Sheaf J (Type v)} (α : J.yoneda.obj X ⟶ F) (β : F ⟶ G) :
@@ -188,7 +188,7 @@ lemma yonedaEquiv_symm_naturality_left
 
 中文:
 引理 yonedaEquiv_symm_naturality_left
-  结论: {X X' : C} (f : X' ⟶ X) (F : Sheaf J (类型v))
+  结论: {X X' : C} (f : X' ⟶ X) (F : 层 J (类型v))
   证明: by
   apply J.yonedaEquiv.injective
   rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
@@ -217,7 +217,7 @@ lemma yonedaEquiv_symm_naturality_right
 
 中文:
 引理 yonedaEquiv_symm_naturality_right
-  结论: (X : C) {F F' : Sheaf J (类型v)} (f : F ⟶ F')
+  结论: (X : C) {F F' : 层 J (类型v)} (f : F ⟶ F')
   证明: by
   apply J.yonedaEquiv.injective
   simp [yonedaEquiv_comp]
@@ -240,7 +240,7 @@ lemma map_yonedaEquiv
 
 中文:
 引理 map_yonedaEquiv
-  结论: {X Y : C} {F : Sheaf J (类型v)} (f : J.yoneda.obj X ⟶ F)
+  结论: {X Y : C} {F : 层 J (类型v)} (f : J.yoneda.obj X ⟶ F)
   证明: by
   rw [yonedaEquiv_naturality]; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
 
@@ -261,7 +261,7 @@ lemma map_yonedaEquiv'
 
 中文:
 引理 map_yonedaEquiv'
-  结论: {X Y : Cᵒᵖ} {F : Sheaf J (类型v)} (f : J.yoneda.obj (unop X) ⟶ F)
+  结论: {X Y : Cᵒᵖ} {F : 层 J (类型v)} (f : J.yoneda.obj (unop X) ⟶ F)
   证明: by
   rw [yonedaEquiv_naturality']; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
 
@@ -283,7 +283,7 @@ lemma yonedaEquiv_symm_map
 
 中文:
 引理 yonedaEquiv_symm_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Sheaf J (类型v)} (t : F.obj.obj X)
+  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : 层 J (类型v)} (t : F.obj.obj X)
   证明: by
   obtain ⟨u, rfl⟩ := J.yonedaEquiv.surjective t
   rw [yonedaEquiv_naturality']; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]
@@ -310,7 +310,7 @@ lemma hom_ext_yoneda
 
 中文:
 引理 hom_ext_yoneda
-  结论: {P Q : Sheaf J (类型v)} {f g : P ⟶ Q}
+  结论: {P Q : 层 J (类型v)} {f g : P ⟶ Q}
   证明: by
   ext X x
   simpa only [yonedaEquiv_comp, Equiv.apply_symm_apply]
@@ -372,7 +372,7 @@ definition uliftYonedaEquiv
 
 中文:
 定义 uliftYonedaEquiv
-  签名: {X : C} {F : Sheaf J (Type (max v v'))}
+  签名: {X : C} {F : 层 J (类型 (最大值 v v'))}
   定义体: (fullyFaithfulSheafToPresheaf _ _).homEquiv.trans CategoryTheory.uliftYonedaEquiv
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftYonedaEquiv, fullyFaithfulSheafToPresheaf, homEquiv, homEquiv.trans, uliftYonedaEquiv
@@ -393,7 +393,7 @@ theorem uliftYonedaEquiv_apply
 
 中文:
 定理 uliftYonedaEquiv_apply
-  结论: {X : C} {F : Sheaf J (Type (max v v'))}
+  结论: {X : C} {F : 层 J (类型 (最大值 v v'))}
   证明: rfl
 
 @[simp]
@@ -413,7 +413,7 @@ theorem uliftYonedaEquiv_symm_app_apply
 
 中文:
 定理 uliftYonedaEquiv_symm_app_apply
-  结论: {X : C} {F : Sheaf J (Type (max v v'))}
+  结论: {X : C} {F : 层 J (类型 (最大值 v v'))}
   证明: rfl
 -/
 theorem uliftYonedaEquiv_symm_app_apply {X : C} {F : Sheaf J (Type (max v v'))}
@@ -436,7 +436,7 @@ lemma uliftYonedaEquiv_naturality
 
 中文:
 引理 uliftYonedaEquiv_naturality
-  结论: {X Y : C} {F : Sheaf J (Type (max v v'))}
+  结论: {X Y : C} {F : 层 J (类型 (最大值 v v'))}
   证明: by
   change (f.hom.app (op X) ≫ F.obj.map g.op) ⟨𝟙 X⟩ = f.hom.app (op Y) ⟨𝟙 Y ≫ g⟩
   rw [← f.hom.naturality]
@@ -461,7 +461,7 @@ lemma uliftYonedaEquiv_naturality'
 
 中文:
 引理 uliftYonedaEquiv_naturality'
-  结论: {X Y : Cᵒᵖ} {F : Sheaf J (Type (max v v'))}
+  结论: {X Y : Cᵒᵖ} {F : 层 J (类型 (最大值 v v'))}
   证明: J.uliftYonedaEquiv_naturality _ _
 
 Depends on / 依赖: J.uliftYonedaEquiv_naturality, uliftYonedaEquiv_naturality
@@ -481,7 +481,7 @@ lemma uliftYonedaEquiv_comp
 
 中文:
 引理 uliftYonedaEquiv_comp
-  结论: {X : C} {F G : Sheaf J (Type (max v v'))} (α : J.uliftYoneda.obj X ⟶ F)
+  结论: {X : C} {F G : 层 J (类型 (最大值 v v'))} (α : J.uliftYoneda.obj X ⟶ F)
   证明: rfl
 -/
 lemma uliftYonedaEquiv_comp {X : C} {F G : Sheaf J (Type (max v v'))} (α : J.uliftYoneda.obj X ⟶ F)
@@ -527,7 +527,7 @@ lemma uliftYonedaEquiv_symm_naturality_left
 
 中文:
 引理 uliftYonedaEquiv_symm_naturality_left
-  结论: {X X' : C} (f : X' ⟶ X) (F : Sheaf J (Type (max v v')))
+  结论: {X X' : C} (f : X' ⟶ X) (F : 层 J (类型 (最大值 v v')))
   证明: by
   apply J.uliftYonedaEquiv.injective
   simp only [uliftYonedaEquiv_comp, Equiv.apply_symm_apply]
@@ -557,7 +557,7 @@ lemma uliftYonedaEquiv_symm_naturality_right
 
 中文:
 引理 uliftYonedaEquiv_symm_naturality_right
-  结论: (X : C) {F F' : Sheaf J (Type (max v v'))}
+  结论: (X : C) {F F' : 层 J (类型 (最大值 v v'))}
   证明: by
   apply J.uliftYonedaEquiv.injective
   simp [uliftYonedaEquiv_comp]
@@ -581,7 +581,7 @@ lemma map_uliftYonedaEquiv
 
 中文:
 引理 map_uliftYonedaEquiv
-  结论: {X Y : C} {F : Sheaf J (Type (max v v'))}
+  结论: {X Y : C} {F : 层 J (类型 (最大值 v v'))}
   证明: by
   rw [uliftYonedaEquiv_naturality]; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_uliftYoneda_map]
 
@@ -603,7 +603,7 @@ lemma map_uliftYonedaEquiv'
 
 中文:
 引理 map_uliftYonedaEquiv'
-  结论: {X Y : Cᵒᵖ} {F : Sheaf J (Type (max v v'))}
+  结论: {X Y : Cᵒᵖ} {F : 层 J (类型 (最大值 v v'))}
   证明: by
   rw [uliftYonedaEquiv_naturality']; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_uliftYoneda_map]
 
@@ -626,7 +626,7 @@ lemma uliftYonedaEquiv_symm_map
 
 中文:
 引理 uliftYonedaEquiv_symm_map
-  结论: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Sheaf J (Type (max v v'))}
+  结论: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : 层 J (类型 (最大值 v v'))}
   证明: by
   obtain ⟨u, rfl⟩ := J.uliftYonedaEquiv.surjective t
   rw [uliftYonedaEquiv_naturality']; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]
@@ -654,7 +654,7 @@ lemma hom_ext_uliftYoneda
 
 中文:
 引理 hom_ext_uliftYoneda
-  结论: {P Q : Sheaf J (Type (max v v'))} {f g : P ⟶ Q}
+  结论: {P Q : 层 J (类型 (最大值 v v'))} {f g : P ⟶ Q}
   证明: by
   ext X x
   simpa only [uliftYonedaEquiv_comp, Equiv.apply_symm_apply]
@@ -723,7 +723,7 @@ lemma uliftYonedaOpCompCoyoneda_inv_app_app
 
 中文:
 引理 uliftYonedaOpCompCoyoneda_inv_app_app
-  结论: (X : Cᵒᵖ) (F : Sheaf J (Type max v v'))
+  结论: (X : Cᵒᵖ) (F : 层 J (类型 最大值 v v'))
   证明: rfl
 -/
 lemma uliftYonedaOpCompCoyoneda_inv_app_app (X : Cᵒᵖ) (F : Sheaf J (Type max v v'))
@@ -741,7 +741,7 @@ lemma uliftYonedaOpCompCoyoneda_app_app
 
 中文:
 引理 uliftYonedaOpCompCoyoneda_app_app
-  条件: (X : Cᵒᵖ) (F : Sheaf J (Type (max v v')))
+  条件: (X : Cᵒᵖ) (F : 层 J (类型 (最大值 v v')))
   证明: rfl
 -/
 lemma uliftYonedaOpCompCoyoneda_app_app (X : Cᵒᵖ) (F : Sheaf J (Type (max v v'))) :
@@ -764,7 +764,7 @@ inferInstanceAs PreservesLimitsOfShape I CategoryTheory.yoneda
 
 中文:
 实例 preservesLimitsOfSize_yoneda
-  签名: : PreservesLimitsOfSize J.yoneda
+  签名: : 保持LimitsOfSize J.yoneda
   定义体: by
   refine ⟨fun {I} _ => ?_⟩
   have : PreservesLimitsOfShape I (J.yoneda ⋙ sheafToPresheaf J _) :=
@@ -908,7 +908,7 @@ lemma subcanonical_of_full_of_faithful
 
 中文:
 引理 subcanonical_of_full_of_faithful
-  结论: [F.Full] [F.Faithful]
+  结论: [F.满] [F.忠实]
   证明: by
   refine .of_isSheaf_yoneda_obj _ fun Y => ?_
   suffices h : Presieve.IsSheaf J (CategoryTheory.uliftYoneda.{v'}.obj Y) by

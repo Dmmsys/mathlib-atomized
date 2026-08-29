@@ -46,8 +46,8 @@ abbreviation Ideal.Pure
   body: Module.Flat R (R ⧸ I)
 
 中文:
-缩写 Ideal.Pure
-  签名: (I : Ideal R)
+缩写 理想.Pure
+  签名: (I : 理想 R)
   定义体: Module.Flat R (R ⧸ I)
 
 Depends on / 依赖: Module, Module.Flat
@@ -72,7 +72,7 @@ Submodule.mapQ _ _ J.subtype by
 
 中文:
 引理 injective_lTensor_quotient_iff_inf_eq_mul
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: by
   let f : J ⧸ (I • ⊤ : Submodule R J) ->ₗ[R] R ⧸ I :=
 Submodule.mapQ _ _ J.subtype by
@@ -113,8 +113,8 @@ lemma Ideal.inf_eq_mul_of_pure
   exact J.injective_subtype
 
 中文:
-引理 Ideal.inf_eq_mul_of_pure
-  条件: (I J : Ideal R) [I.Pure]
+引理 理想.inf_eq_mul_of_pure
+  条件: (I J : 理想 R) [I.Pure]
   证明: by
   rw [← injective_lTensor_quotient_iff_inf_eq_mul]
   apply Module.Flat.lTensor_preserves_injective_linearMap
@@ -139,8 +139,8 @@ lemma Ideal.isIdempotentElem_of_pure
   simp [IsIdempotentElem, ← Ideal.inf_eq_mul_of_pure]
 
 中文:
-引理 Ideal.isIdempotentElem_of_pure
-  条件: (I : Ideal R) [I.Pure]
+引理 理想.isIdempotentElem_of_pure
+  条件: (I : 理想 R) [I.Pure]
   结论: IsIdempotentElem I
   证明: by
   simp [IsIdempotentElem, ← Ideal.inf_eq_mul_of_pure]
@@ -165,8 +165,8 @@ lemma Ideal.Pure.of_isIdempotentElem
   apply Module.Flat.of_retra
 
 中文:
-引理 Ideal.Pure.of_isIdempotentElem
-  条件: {I : Ideal R} (h : I.FG) (h' : IsIdempotentElem I)
+引理 理想.Pure.of_isIdempotentElem
+  条件: {I : 理想 R} (h : I.FG) (h' : IsIdempotentElem I)
   证明: by
   rw [Ideal.isIdempotentElem_iff_of_fg _ h] at h'
   obtain ⟨e, he, rfl⟩ := h'
@@ -203,8 +203,8 @@ lemma Ideal.Pure.of_inf_eq_mul
 @[stacks 04PS "(1) => (5)"]
 
 中文:
-引理 Ideal.Pure.of_inf_eq_mul
-  条件: (I : Ideal R) (H : 对任意 ⦃J : Ideal R⦄, J.FG -> I ⊓ J = I * J)
+引理 理想.Pure.of_inf_eq_mul
+  条件: (I : 理想 R) (H : 对任意 ⦃J : 理想 R⦄, J.FG -> I ⊓ J = I * J)
   证明: by
   rw [Pure]; rw [Module.Flat.iff_lTensor_injective]
   intro J hJ
@@ -239,8 +239,8 @@ lemma Ideal.exists_eq_mul_of_pure
 @[stacks 04PS "(5) => (7)"]
 
 中文:
-引理 Ideal.exists_eq_mul_of_pure
-  条件: {I : Ideal R} [I.Pure] {x : R} (hx : x in I)
+引理 理想.存在_eq_mul_of_pure
+  条件: {I : 理想 R} [I.Pure] {x : R} (hx : x in I)
   证明: by
   suffices h : x in I * Ideal.span {x} by
     rw [Ideal.mem_mul_span_singleton] at h
@@ -278,8 +278,8 @@ lemma Ideal.le_ker_atPrime_of_forall_exists_eq_mul
 
 
 中文:
-引理 Ideal.le_ker_atPrime_of_forall_exists_eq_mul
-  结论: {I : Ideal R}
+引理 理想.le_ker_atPrime_of_对任意_存在_eq_mul
+  结论: {I : 理想 R}
   证明: by
   intro x hx
   obtain ⟨y, hy, heq⟩ := h _ hx
@@ -323,8 +323,8 @@ lemma Ideal.ker_piRingHom_atPrime_eq_of_pure
     exact Ideal.le_ker_atP
 
 中文:
-引理 Ideal.ker_piRingHom_atPrime_eq_of_pure
-  条件: (I : Ideal R) [I.Pure]
+引理 理想.ker_piRingHom_atPrime_eq_of_pure
+  条件: (I : 理想 R) [I.Pure]
   证明: by
   refine le_antisymm ?_ fun x hx => ?_
   · rw [Pi.ker_ringHom]
@@ -369,8 +369,8 @@ lemma Ideal.zeroLocus_inj_of_pure
   rfl
 
 中文:
-引理 Ideal.zeroLocus_inj_of_pure
-  条件: {I J : Ideal R} [I.Pure] [J.Pure]
+引理 理想.zeroLocus_inj_of_pure
+  条件: {I J : 理想 R} [I.Pure] [J.Pure]
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ rfl⟩
   rw [← I.ker_piRingHom_atPrime_eq_of_pure]; rw [← J.ker_piRingHom_atPrime_eq_of_pure]

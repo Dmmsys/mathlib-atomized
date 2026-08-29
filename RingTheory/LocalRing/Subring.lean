@@ -37,7 +37,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: [IsLocalRing S] {f : R ->+* S} (hf : Function.Injective f)
+  结论: [是局部环 S] {f : R ->+* S} (hf : 函数.单射 f)
   证明: by
   have : Nontrivial R := f.domain_nontrivial
   refine .of_is_unit_or_is_unit_of_add_one fun {a b} hab =>
@@ -63,7 +63,7 @@ theorem of_subring
 
 中文:
 定理 of_subring
-  条件: [IsLocalRing S] {R : Subsemiring S} (h : 对任意 a, a in R⁰ -> IsUnit a)
+  条件: [是局部环 S] {R : 子半环 S} (h : 对任意 a, a in R⁰ -> 是单位 a)
   证明: of_injective R.subtype_injective h
 
 Depends on / 依赖: R.subtype_injective, of_injective, subtype_injective
@@ -82,7 +82,7 @@ theorem of_subring'
 
 中文:
 定理 of_subring'
-  结论: {R R' : Subsemiring S} [IsLocalRing R'] (inc : R <= R')
+  结论: {R R' : 子半环 S} [是局部环 R'] (inc : R <= R')
   证明: of_injective (Subsemiring.inclusion_injective inc) h
 
 Depends on / 依赖: Subsemiring, Subsemiring.inclusion_injective, inclusion_injective, of_injective

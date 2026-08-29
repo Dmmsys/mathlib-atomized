@@ -96,7 +96,7 @@ lemma IsConvexSet.iConvexComb_mem
 
 中文:
 引理 IsConvexSet.iConvexComb_mem
-  结论: (hs : IsConvexSet R s) {w : StdSimplex R ι} {f : ι -> X}
+  结论: (hs : IsConvexSet R s) {w : 标准单纯形 R ι} {f : ι -> X}
   证明: by
   classical
   refine hs ?_
@@ -152,7 +152,7 @@ lemma IsConvexSet.empty
 
 中文:
 引理 IsConvexSet.empty
-  结论: IsConvexSet R (∅ : Set X)
+  结论: IsConvexSet R (∅ : 集合 X)
   证明: by simp [IsConvexSet]
 -/
 @[simp] protected lemma IsConvexSet.empty : IsConvexSet R (∅ : Set X) := by simp [IsConvexSet]
@@ -166,7 +166,7 @@ lemma IsConvexSet.univ
 
 中文:
 引理 IsConvexSet.univ
-  结论: IsConvexSet R (.univ : Set X)
+  结论: IsConvexSet R (.univ : 集合 X)
   证明: by simp [IsConvexSet]
 -/
 @[simp] protected lemma IsConvexSet.univ : IsConvexSet R (.univ : Set X) := by simp [IsConvexSet]
@@ -201,7 +201,7 @@ lemma IsConvexSet.of_subsingleton
 
 中文:
 引理 IsConvexSet.of_subsingleton
-  条件: (hs : s.Subsingleton)
+  条件: (hs : s.子单例)
   结论: IsConvexSet R s
   证明: by
   obtain rfl | ⟨x, rfl⟩ := hs.eq_empty_or_singleton <;> simp
@@ -239,8 +239,8 @@ lemma IsConvexSet.sInter
   proof: by simp +contextual [IsConvexSet, (hS _ _).sConvexComb_mem]
 
 中文:
-引理 IsConvexSet.sInter
-  条件: {S : Set (Set X)} (hS : 对任意 s in S, IsConvexSet R s)
+引理 IsConvexSet.集合交集
+  条件: {S : 集合 (集合 X)} (hS : 对任意 s in S, IsConvexSet R s)
   证明: by simp +contextual [IsConvexSet, (hS _ _).sConvexComb_mem]
 -/
 protected lemma IsConvexSet.sInter {S : Set (Set X)} (hS : forall s in S, IsConvexSet R s) :
@@ -255,8 +255,8 @@ lemma IsConvexSet.iInter
   proof: by simp +contextual [IsConvexSet, (hs _).sConvexComb_mem]
 
 中文:
-引理 IsConvexSet.iInter
-  条件: {ι : Sort*} {s : ι -> Set X} (hs : 对任意 i, IsConvexSet R (s i))
+引理 IsConvexSet.i整数er
+  条件: {ι : 类型层*} {s : ι -> 集合 X} (hs : 对任意 i, IsConvexSet R (s i))
   证明: by simp +contextual [IsConvexSet, (hs _).sConvexComb_mem]
 -/
 protected lemma IsConvexSet.iInter {ι : Sort*} {s : ι -> Set X} (hs : forall i, IsConvexSet R (s i)) :
@@ -271,8 +271,8 @@ lemma IsConvexSet.iInter₂
   proof: .iInter fun i => .iInter h i
 
 中文:
-引理 IsConvexSet.iInter₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {s : 对任意 i, κ i -> Set X}
+引理 IsConvexSet.i整数er₂
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {s : 对任意 i, κ i -> 集合 X}
   证明: .iInter fun i => .iInter h i
 
 Depends on / 依赖: iInter
@@ -296,8 +296,8 @@ lemma IsConvexSet.sUnion
   exact mem_sUnion_of_mem (hS' s hsS hws) hsS
 
 中文:
-引理 IsConvexSet.sUnion
-  结论: {S : Set (Set X)} (hS : DirectedOn (· subseteq ·) S)
+引理 IsConvexSet.集合并集
+  结论: {S : 集合 (集合 X)} (hS : DirectedOn (· subseteq ·) S)
   证明: by
   obtain rfl | hS'' := S.eq_empty_or_nonempty
   · simp
@@ -325,7 +325,7 @@ lemma IsConvexSet.iUnion
 
 中文:
 引理 IsConvexSet.iUnion
-  结论: {ι : Sort*} {s : ι -> Set X} (hs : Directed (· subseteq ·) s)
+  结论: {ι : 类型层*} {s : ι -> 集合 X} (hs : Directed (· subseteq ·) s)
   证明: .sUnion hs.directedOn_range by simpa
 -/
 protected lemma IsConvexSet.iUnion {ι : Sort*} {s : ι -> Set X} (hs : Directed (· subseteq ·) s)
@@ -344,8 +344,8 @@ lemma IsConvexSet.preimage
 exact hs.iConvexComb_mem fun x hx => hw by simpa
 
 中文:
-引理 IsConvexSet.preimage
-  条件: {s : Set Y} (hf : IsAffineMap R f) (hs : IsConvexSet R s)
+引理 IsConvexSet.原像
+  条件: {s : 集合 Y} (hf : 是仿射映射 R f) (hs : IsConvexSet R s)
   证明: by
   rintro w hw
   simp only [mem_preimage, hf.map_sConvexComb, sConvexComb_map]
@@ -374,8 +374,8 @@ weights := .onFinset u (fun x => if x in u then w.weights (f x) else 0) by simp 
         sim
 
 中文:
-引理 IsConvexSet.image
-  条件: (hf : IsAffineMap R f) (hs : IsConvexSet R s)
+引理 IsConvexSet.像
+  条件: (hf : 是仿射映射 R f) (hs : IsConvexSet R s)
   证明: by
   classical
   rintro w hw
@@ -425,8 +425,8 @@ definition ConvexSpace.subtype
   (fun w => by ext; simp [iConvexComb_assoc])
 
 中文:
-定义 ConvexSpace.subtype
-  签名: (s : Set X) (hs : IsConvexSet R s)
+定义 凸空间.subtype
+  签名: (s : 集合 X) (hs : IsConvexSet R s)
   定义体: .mk
   (fun w => ⟨w.iConvexComb (↑), hs.iConvexComb_mem <| by simp⟩)
   (fun x => by simp)
@@ -452,7 +452,7 @@ lemma isAffineMap_subtypeVal
 
 中文:
 引理 isAffineMap_subtypeVal
-  条件: (s : Set X) (hs : IsConvexSet R s)
+  条件: (s : 集合 X) (hs : IsConvexSet R s)
   证明: .subtype s hs
     IsAffineMap R ((↑) : s -> X) :=
   letI : ConvexSpace R s := .subtype s hs
@@ -482,7 +482,7 @@ lemma subtypeVal_sConvexComb
 
 中文:
 引理 subtypeVal_sConvexComb
-  条件: (s : Set X) (hs : IsConvexSet R s) (w : StdSimplex R s)
+  条件: (s : 集合 X) (hs : IsConvexSet R s) (w : 标准单纯形 R s)
   证明: .subtype s hs
     (w.sConvexComb : X) = w.iConvexComb (↑) := rfl
 
@@ -510,7 +510,7 @@ lemma subtypeVal_iConvexComb
 
 中文:
 引理 subtypeVal_iConvexComb
-  条件: (s : Set X) (hs : IsConvexSet R s) (w : StdSimplex R I) (f : I -> s)
+  条件: (s : 集合 X) (hs : IsConvexSet R s) (w : 标准单纯形 R I) (f : I -> s)
   证明: .subtype s hs
     (↑(w.iConvexComb f) : X) = w.iConvexComb (fun i => (f i).val) :=
   letI : ConvexSpace R s := .subtype s hs
@@ -540,7 +540,7 @@ lemma subtypeVal_convexCombPair
 
 中文:
 引理 subtypeVal_convexCombPair
-  条件: (s : Set X) (hs : IsConvexSet R s) (a b : R) (ha hb hab) (x y : s)
+  条件: (s : 集合 X) (hs : IsConvexSet R s) (a b : R) (ha hb hab) (x y : s)
   证明: .subtype s hs
     (↑(convexCombPair a b ha hb hab x y) : X) = convexCombPair a b ha hb hab x.val y.val :=
   letI : ConvexSpace R s := .subtype s hs
@@ -568,8 +568,8 @@ lemma IsConvexSet.prod
   · grw [StdSimplex.weights_map, mapDomain_support, Finset.coe_image, hw, snd_image_prod_subset]
 
 中文:
-引理 IsConvexSet.prod
-  结论: {Y : 类型} [ConvexSpace R Y] {t : Set Y}
+引理 IsConvexSet.乘积
+  结论: {Y : 类型} [凸空间 R Y] {t : 集合 Y}
   证明: by
   classical
   rintro w hw
@@ -598,7 +598,7 @@ lemma IsConvexSet.pi
 
 中文:
 引理 IsConvexSet.pi
-  结论: {X : ι -> 类型} [对任意 i, ConvexSpace R (X i)] {s : Set ι}
+  结论: {X : ι -> 类型} [对任意 i, 凸空间 R (X i)] {s : 集合 ι}
   证明: by
   classical
   refine fun w hw i hi => ht i hi ?_

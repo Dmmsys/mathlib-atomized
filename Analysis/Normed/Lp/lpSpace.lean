@@ -109,7 +109,7 @@ theorem memℓp_zero_iff
 中文:
 定理 memℓp_zero_iff
   条件: {f : 对任意 i, E i}
-  结论: Memℓp f 0 ↔ Set.Finite { i | f i != 0 }
+  结论: Memℓp f 0 ↔ 集合.有限 { i | f i != 0 }
   证明: by
   dsimp [Memℓp]
   rw [if_pos rfl]
@@ -131,7 +131,7 @@ theorem memℓp_zero
 
 中文:
 定理 memℓp_zero
-  条件: {f : 对任意 i, E i} (hf : Set.Finite { i | f i != 0 })
+  条件: {f : 对任意 i, E i} (hf : 集合.有限 { i | f i != 0 })
   结论: Memℓp f 0
   证明: memℓp_zero_iff.2 hf
 -/
@@ -151,7 +151,7 @@ theorem memℓp_infty_iff
 中文:
 定理 memℓp_infty_iff
   条件: {f : 对任意 i, E i}
-  结论: Memℓp f ∞ ↔ BddAbove (Set.range fun i => ‖f i‖)
+  结论: Memℓp f ∞ ↔ BddAbove (集合.range fun i => ‖f i‖)
   证明: by
   simp [Memℓp]
 -/
@@ -169,7 +169,7 @@ theorem memℓp_infty
 
 中文:
 定理 memℓp_infty
-  条件: {f : 对任意 i, E i} (hf : BddAbove (Set.range fun i => ‖f i‖))
+  条件: {f : 对任意 i, E i} (hf : BddAbove (集合.range fun i => ‖f i‖))
   结论: Memℓp f ∞
   证明: memℓp_infty_iff.2 hf
 -/
@@ -261,7 +261,7 @@ theorem memℓp_gen'
 
 中文:
 定理 memℓp_gen'
-  条件: {C : 实数} {f : 对任意 i, E i} (hf : 对任意 s : Finset α, ∑ i in s, ‖f i‖ ^ p.to实数 <= C)
+  条件: {C : 实数} {f : 对任意 i, E i} (hf : 对任意 s : 有限集 α, ∑ i in s, ‖f i‖ ^ p.to实数 <= C)
   证明: by
   apply memℓp_gen
   use ⨆ s : Finset α, ∑ i in s, ‖f i‖ ^ p.toReal
@@ -356,7 +356,7 @@ theorem Memℓp.all
 
 中文:
 定理 Memℓp.all
-  条件: [Finite α] (f : 对任意 i, E i)
+  条件: [有限 α] (f : 对任意 i, E i)
   结论: Memℓp f p
   证明: by
   rcases p.trichotomy with (rfl | rfl | _h)
@@ -520,7 +520,7 @@ theorem mono'
 
 中文:
 定理 mono'
-  结论: {F : α -> 类型} [对任意 i, NormedAddCommGroup (F i)] {f : (i : α) -> E i}
+  结论: {F : α -> 类型} [对任意 i, 赋范交换加群 (F i)] {f : (i : α) -> E i}
   证明: hg.norm.mono hfg
 
 Depends on / 依赖: hg.norm.mono
@@ -542,7 +542,7 @@ theorem finite_dsupport
 中文:
 定理 finite_dsupport
   条件: {f : 对任意 i, E i} (hf : Memℓp f 0)
-  结论: Set.Finite { i | f i != 0 }
+  结论: 集合.有限 { i | f i != 0 }
   证明: memℓp_zero_iff.1 hf
 -/
 theorem finite_dsupport {f : forall i, E i} (hf : Memℓp f 0) : Set.Finite { i | f i != 0 } :=
@@ -560,7 +560,7 @@ theorem bddAbove
 中文:
 定理 bddAbove
   条件: {f : 对任意 i, E i} (hf : Memℓp f ∞)
-  结论: BddAbove (Set.range fun i => ‖f i‖)
+  结论: BddAbove (集合.range fun i => ‖f i‖)
   证明: memℓp_infty_iff.1 hf
 -/
 theorem bddAbove {f : forall i, E i} (hf : Memℓp f ∞) : BddAbove (Set.range fun i => ‖f i‖) :=
@@ -593,7 +593,7 @@ lemma summable_of_one
 
 中文:
 引理 summable_of_one
-  结论: {E : 类型} [NormedAddCommGroup E] [CompleteSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [完备空间 E]
   证明: .of_norm by simpa using hx.summable
 
 Depends on / 依赖: hx.summable, of_norm, summable
@@ -841,7 +841,7 @@ theorem finsetSum
 
 中文:
 定理 finsetSum
-  条件: {ι} (s : Finset ι) {f : ι -> 对任意 i, E i} (hf : 对任意 i in s, Memℓp (f i) p)
+  条件: {ι} (s : 有限集 ι) {f : ι -> 对任意 i, E i} (hf : 对任意 i in s, Memℓp (f i) p)
   证明: by
   have : DecidableEq ι := Classical.decEq _
   revert hf
@@ -973,7 +973,7 @@ definition PreLp
 
 中文:
 定义 PreLp
-  签名: (E : α -> 类型) [对任意 i, NormedAddCommGroup (E i)]
+  签名: (E : α -> 类型) [对任意 i, 赋范交换加群 (E i)]
   定义体: forall i, E i
 -/
 def PreLp (E : α -> Type*) [forall i, NormedAddCommGroup (E i)] : Type _ :=
@@ -1092,7 +1092,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: inferInstanceAs Unique (forall _, _)
 
 Depends on / 依赖: Unique
@@ -1117,7 +1117,7 @@ definition lp
 
 中文:
 定义 lp
-  签名: (E : α -> 类型) [对任意 i, NormedAddCommGroup (E i)] (p : 实数>=0∞)
+  签名: (E : α -> 类型) [对任意 i, 赋范交换加群 (E i)] (p : 实数>=0∞)
   定义体: { f | Memℓp f p }
   zero_mem' := zero_memℓp
   add_mem' := Memℓp.add
@@ -1201,7 +1201,7 @@ theorem eq_zero'
 
 中文:
 定理 eq_zero'
-  条件: [IsEmpty α] (f : lp E p)
+  条件: [是空 α] (f : lp E p)
   结论: f = 0
   证明: Subsingleton.elim f 0
 
@@ -1363,7 +1363,7 @@ theorem coeFn_sum
 
 中文:
 定理 coeFn_sum
-  条件: {ι : 类型} (f : ι -> lp E p) (s : Finset ι)
+  条件: {ι : 类型} (f : ι -> lp E p) (s : 有限集 ι)
   证明: (lp E p).val_finsetSum f s
 
 @[simp]
@@ -1406,7 +1406,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm (lp E p)
+  签名: 范数 (lp E p)
   定义体: if hp : p = 0 then by
       subst hp
       exact ((lp.memℓp f).finite_dsupport.toFinset.card : Real)
@@ -1471,8 +1471,8 @@ theorem isLUB_norm
 
 中文:
 定理 isLUB_norm
-  条件: [Nonempty α] (f : lp E ∞)
-  结论: IsLUB (Set.range fun i => ‖f i‖) ‖f‖
+  条件: [非空 α] (f : lp E ∞)
+  结论: IsLUB (集合.range fun i => ‖f i‖) ‖f‖
   证明: by
   rw [lp.norm_eq_ciSup]
   exact isLUB_ciSup (lp.memℓp f)
@@ -2030,7 +2030,7 @@ theorem sum_rpow_le_norm_rpow
 
 中文:
 定理 sum_rpow_le_norm_rpow
-  条件: (hp : 0 < p.to实数) (f : lp E p) (s : Finset α)
+  条件: (hp : 0 < p.to实数) (f : lp E p) (s : 有限集 α)
   证明: by
   rw [lp.norm_rpow_eq_tsum hp f]
   have : forall i, 0 <= ‖f i‖ ^ p.toReal := fun i => by positivity
@@ -2058,8 +2058,8 @@ theorem norm_le_of_forall_le'
   exact hCf i
 
 中文:
-定理 norm_le_of_forall_le'
-  条件: [Nonempty α] {f : lp E ∞} (C : 实数) (hCf : 对任意 i, ‖f i‖ <= C)
+定理 norm_le_of_对任意_le'
+  条件: [非空 α] {f : lp E ∞} (C : 实数) (hCf : 对任意 i, ‖f i‖ <= C)
   证明: by
   refine (isLUB_norm f).2 ?_
   rintro - ⟨i, rfl⟩
@@ -2085,7 +2085,7 @@ theorem norm_le_of_forall_le
   · exact norm_le_of_forall_le' C hCf
 
 中文:
-定理 norm_le_of_forall_le
+定理 norm_le_of_对任意_le
   条件: {f : lp E ∞} {C : 实数} (hC : 0 <= C) (hCf : 对任意 i, ‖f i‖ <= C)
   证明: by
   cases isEmpty_or_nonempty α
@@ -2133,7 +2133,7 @@ theorem norm_le_of_forall_sum_le
   proof: norm_le_of_tsum_le hp hC (((lp.memℓp f).summable hp).tsum_le_of_sum_le hf)
 
 中文:
-定理 norm_le_of_forall_sum_le
+定理 norm_le_of_对任意_sum_le
   结论: (hp : 0 < p.to实数) {C : 实数} (hC : 0 <= C) {f : lp E p}
   证明: norm_le_of_tsum_le hp hC (((lp.memℓp f).summable hp).tsum_le_of_sum_le hf)
 
@@ -2159,7 +2159,7 @@ lemma norm_mono
 
 中文:
 引理 norm_mono
-  结论: {F : α -> 类型} [对任意 i, NormedAddCommGroup (F i)]
+  结论: {F : α -> 类型} [对任意 i, 赋范交换加群 (F i)]
   证明: by
   obtain (rfl | rfl | hp) := p.trichotomy
 .elim · exact hp rfl
@@ -2198,7 +2198,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 𝕜 (PreLp E)
+  签名: 模 𝕜 (PreLp E)
   定义体: inferInstanceAs Module 𝕜 (forall i, E i)
 
 Depends on / 依赖: Module
@@ -2215,8 +2215,8 @@ instance [forall
   body: inferInstanceAs SMulCommClass 𝕜' 𝕜 (forall i, E i)
 
 中文:
-实例 [forall
-  签名: i, SMulCommClass 𝕜' 𝕜 (E i)] : SMulCommClass 𝕜' 𝕜 (PreLp E)
+实例 [对任意
+  签名: i, 标量交换类 𝕜' 𝕜 (E i)] : 标量交换类 𝕜' 𝕜 (PreLp E)
   定义体: inferInstanceAs SMulCommClass 𝕜' 𝕜 (forall i, E i)
 
 Depends on / 依赖: SMulCommClass
@@ -2233,8 +2233,8 @@ instance [SMul
   body: inferInstanceAs IsScalarTower 𝕜' 𝕜 (forall i, E i)
 
 中文:
-实例 [SMul
-  签名: 𝕜' 𝕜] [对任意 i, IsScalarTower 𝕜' 𝕜 (E i)] : IsScalarTower 𝕜' 𝕜 (PreLp E)
+实例 [标量乘法
+  签名: 𝕜' 𝕜] [对任意 i, 标量塔 𝕜' 𝕜 (E i)] : 标量塔 𝕜' 𝕜 (PreLp E)
   定义体: inferInstanceAs IsScalarTower 𝕜' 𝕜 (forall i, E i)
 
 Depends on / 依赖: IsScalarTower
@@ -2251,8 +2251,8 @@ instance [forall
   body: inferInstanceAs IsCentralScalar 𝕜 (forall i, E i)
 
 中文:
-实例 [forall
-  签名: i, Module 𝕜ᵐᵒᵖ (E i)] [对任意 i, IsCentralScalar 𝕜 (E i)] : IsCentralScalar 𝕜 (PreLp E)
+实例 [对任意
+  签名: i, 模 𝕜ᵐᵒᵖ (E i)] [对任意 i, 中心标量 𝕜 (E i)] : 中心标量 𝕜 (PreLp E)
   定义体: inferInstanceAs IsCentralScalar 𝕜 (forall i, E i)
 
 Depends on / 依赖: IsCentralScalar
@@ -2294,7 +2294,7 @@ definition _root_.lpSubmodule
 
 中文:
 定义 _root_.lpSubmodule
-  签名: : Submodule 𝕜 (PreLp E)
+  签名: : 子模 𝕜 (PreLp E)
   定义体: { lp E p with smul_mem' := fun c f hf => by simpa using mem_lp_const_smul c ⟨f, hf⟩ }
 
 Depends on / 依赖: mem_lp_const_smul, smul_mem
@@ -2332,7 +2332,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 𝕜 (lp E p)
+  签名: 模 𝕜 (lp E p)
   定义体: inferInstanceAs Module 𝕜 (lpSubmodule 𝕜 E p)
 
 @[simp]
@@ -2370,8 +2370,8 @@ instance [forall
   body: ⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
 
 中文:
-实例 [forall
-  签名: i, SMulCommClass 𝕜' 𝕜 (E i)] : SMulCommClass 𝕜' 𝕜 (lp E p)
+实例 [对任意
+  签名: i, 标量交换类 𝕜' 𝕜 (E i)] : 标量交换类 𝕜' 𝕜 (lp E p)
   定义体: ⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -2388,8 +2388,8 @@ instance [SMul
   body: ⟨fun _ _ _ => Subtype.ext smul_assoc _ _ _⟩
 
 中文:
-实例 [SMul
-  签名: 𝕜' 𝕜] [对任意 i, IsScalarTower 𝕜' 𝕜 (E i)] : IsScalarTower 𝕜' 𝕜 (lp E p)
+实例 [标量乘法
+  签名: 𝕜' 𝕜] [对任意 i, 标量塔 𝕜' 𝕜 (E i)] : 标量塔 𝕜' 𝕜 (lp E p)
   定义体: ⟨fun _ _ _ => Subtype.ext smul_assoc _ _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -2406,8 +2406,8 @@ instance [forall
   body: ⟨fun _ _ => Subtype.ext op_smul_eq_smul _ _⟩
 
 中文:
-实例 [forall
-  签名: i, Module 𝕜ᵐᵒᵖ (E i)] [对任意 i, IsCentralScalar 𝕜 (E i)] : IsCentralScalar 𝕜 (lp E p)
+实例 [对任意
+  签名: i, 模 𝕜ᵐᵒᵖ (E i)] [对任意 i, 中心标量 𝕜 (E i)] : 中心标量 𝕜 (lp E p)
   定义体: ⟨fun _ _ => Subtype.ext op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, op_smul_eq_smul
@@ -2483,7 +2483,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: (1 <= p)] : IsBoundedSMul 𝕜 (lp E p)
+  签名: (1 <= p)] : 是BoundedSMul 𝕜 (lp E p)
   定义体: IsBoundedSMul.of_norm_smul_le norm_const_smul_le (zero_lt_one.trans_le <| Fact.out).ne'
 
 Depends on / 依赖: Fact.out, IsBoundedSMul, IsBoundedSMul.of_norm_smul_le, norm_const_smul_le, of_norm_smul_le, trans_le, zero_lt_one, zero_lt_one.trans_le
@@ -2712,7 +2712,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (lp E p)
+  签名: 对合 (lp E p)
   定义体: ⟨(star f : forall i, E i), f.property.star_mem⟩
 
 @[simp]
@@ -2790,7 +2790,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: : StarAddMonoid (lp E p) where
+  签名: : StarAdd幺半群 (lp E p) where
   定义体: ext star_add (R := forall i, E i) _ _
 
 Depends on / 依赖: star_add
@@ -2814,7 +2814,7 @@ instance [hp
 
 中文:
 实例 [hp
-  签名: : Fact (1 <= p)] : NormedStarGroup (lp E p) where
+  签名: : Fact (1 <= p)] : NormedStar群 (lp E p) where
   定义体: le_of_eq by
     rcases p.trichotomy with (rfl | rfl | h)
     · exfalso
@@ -2847,7 +2847,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 𝕜 (lp E p)
+  签名: 对合模 𝕜 (lp E p)
   定义体: ext star_smul (R := 𝕜) (A := forall i, E i) _ _
 
 Depends on / 依赖: star_smul
@@ -2918,7 +2918,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (lp B ∞)
+  签名: 乘法 (lp B ∞)
   定义体: ⟨HMul.hMul (α := forall i, B i) _ _, f.property.infty_mul g.property⟩
 
 @[simp]
@@ -2959,7 +2959,7 @@ instance nonUnitalRing
 
 中文:
 实例 nonUnitalRing
-  签名: : NonUnitalRing (lp B ∞)
+  签名: : 非幺环 (lp B ∞)
   定义体: fast_instance%
   Function.Injective.nonUnitalRing lp.coeFun.coe Subtype.coe_injective (lp.coeFn_zero B ∞)
     lp.coeFn_add infty_coeFn_mul lp.coeFn_neg lp.coeFn_sub (fun _ _ => rfl) fun _ _ => rfl
@@ -2984,7 +2984,7 @@ instance nonUnitalNormedRing
 
 中文:
 实例 nonUnitalNormedRing
-  签名: : NonUnitalNormedRing (lp B ∞)
+  签名: : 非幺赋范环 (lp B ∞)
   定义体: { lp.nonUnitalRing, lp.normedAddCommGroup with
     norm_mul_le f g := lp.norm_le_of_forall_le (by positivity) fun i => calc
       ‖(f * g) i‖ <= ‖f i‖ * ‖g i‖ := norm_mul_le _ _
@@ -3010,7 +3010,7 @@ instance nonUnitalNormedCommRing
 
 中文:
 实例 nonUnitalNormedCommRing
-  签名: {B : I -> 类型} [对任意 i, NonUnitalNormedCommRing (B i)]
+  签名: {B : I -> 类型} [对任意 i, 非幺NormedComm环 (B i)]
   定义体: ext mul_comm ..
 
 Depends on / 依赖: mul_comm
@@ -3030,7 +3030,7 @@ instance infty_isScalarTower
 
 中文:
 实例 infty_isScalarTower
-  签名: {𝕜} [NormedRing 𝕜] [对任意 i, Module 𝕜 (B i)] [对任意 i, IsBoundedSMul 𝕜 (B i)]
+  签名: {𝕜} [赋范环 𝕜] [对任意 i, 模 𝕜 (B i)] [对任意 i, 是BoundedSMul 𝕜 (B i)]
   定义体: ⟨fun r f g => lp.ext smul_assoc (N := forall i, B i) (α := forall i, B i) r (⇑f) (⇑g)⟩
 
 Depends on / 依赖: lp.ext, smul_assoc
@@ -3049,7 +3049,7 @@ instance infty_smulCommClass
 
 中文:
 实例 infty_smulCommClass
-  签名: {𝕜} [NormedRing 𝕜] [对任意 i, Module 𝕜 (B i)] [对任意 i, IsBoundedSMul 𝕜 (B i)]
+  签名: {𝕜} [赋范环 𝕜] [对任意 i, 模 𝕜 (B i)] [对任意 i, 是BoundedSMul 𝕜 (B i)]
   定义体: ⟨fun r f g => lp.ext smul_comm (N := forall i, B i) (α := forall i, B i) r (⇑f) (⇑g)⟩
 
 Depends on / 依赖: lp.ext, smul_comm
@@ -3073,7 +3073,7 @@ star_mul := fun _f _g => ext star_mul (R := forall i, B i) _ _ }
 
 中文:
 实例 inftyStarRing
-  签名: : StarRing (lp B ∞)
+  签名: : 对合环 (lp B ∞)
   定义体: { lp.instStarAddMonoid with
 star_mul := fun _f _g => ext star_mul (R := forall i, B i) _ _ }
 
@@ -3097,7 +3097,7 @@ instance inftyCStarRing
 
 中文:
 实例 inftyCStarRing
-  签名: [对任意 i, CStarRing (B i)]
+  签名: [对任意 i, CStar环 (B i)]
   定义体: by
     rw [← sq]; rw [← Real.le_sqrt (norm_nonneg _) (norm_nonneg _)]
     refine lp.norm_le_of_forall_le ‖star f * f‖.sqrt_nonneg fun i => ?_
@@ -3131,7 +3131,7 @@ instance _root_.PreLp.ring
 
 中文:
 实例 _root_.PreLp.ring
-  签名: : Ring (PreLp B)
+  签名: : 环 (PreLp B)
   定义体: inferInstanceAs (Ring (forall i, B i))
 -/
 instance _root_.PreLp.ring : Ring (PreLp B) :=
@@ -3171,7 +3171,7 @@ definition _root_.lpInftySubring
 
 中文:
 定义 _root_.lpInftySubring
-  签名: : Subring (PreLp B)
+  签名: : 子环 (PreLp B)
   定义体: { lp B ∞ with
     carrier := { f | Memℓp f ∞ }
     one_mem' := one_memℓp_infty
@@ -3195,7 +3195,7 @@ instance inftyRing
 
 中文:
 实例 inftyRing
-  签名: : Ring (lp B ∞)
+  签名: : 环 (lp B ∞)
   定义体: inferInstanceAs Ring (lpInftySubring B)
 
 Depends on / 依赖: lpInftySubring
@@ -3362,8 +3362,8 @@ instance [Nonempty
   body: by simp_rw [lp.norm_eq_ciSup, infty_coeFn_one, Pi.one_apply, norm_one, ciSup_const]
 
 中文:
-实例 [Nonempty
-  签名: I] : NormOneClass (lp B ∞) where
+实例 [非空
+  签名: I] : NormOne类 (lp B ∞) where
   定义体: by simp_rw [lp.norm_eq_ciSup, infty_coeFn_one, Pi.one_apply, norm_one, ciSup_const]
 
 Depends on / 依赖: Pi.one_apply, ciSup_const, infty_coeFn_one, lp.norm_eq_ciSup, norm_eq_ciSup, norm_one, one_apply, simp_rw
@@ -3381,7 +3381,7 @@ instance inftyNormedRing
 
 中文:
 实例 inftyNormedRing
-  签名: : NormedRing (lp B ∞)
+  签名: : 赋范环 (lp B ∞)
   定义体: { lp.inftyRing, lp.nonUnitalNormedRing with }
 
 Depends on / 依赖: inftyRing, lp.inftyRing, lp.nonUnitalNormedRing, nonUnitalNormedRing
@@ -3405,7 +3405,7 @@ instance inftyNormedCommRing
 
 中文:
 实例 inftyNormedCommRing
-  签名: : NormedCommRing (lp B ∞) where
+  签名: : NormedComm环 (lp B ∞) where
   定义体: mul_comm
 
 Depends on / 依赖: mul_comm
@@ -3430,7 +3430,7 @@ instance _root_.PreLp.algebra
 
 中文:
 实例 _root_.PreLp.algebra
-  签名: : Algebra 𝕜 (PreLp B)
+  签名: : 代数 𝕜 (PreLp B)
   定义体: inferInstanceAs Algebra 𝕜 (forall i, B i)
 
 Depends on / 依赖: Algebra
@@ -3479,7 +3479,7 @@ definition _root_.lpInftySubalgebra
 
 中文:
 定义 _root_.lpInftySubalgebra
-  签名: : Subalgebra 𝕜 (PreLp B)
+  签名: : 子代数 𝕜 (PreLp B)
   定义体: { lpInftySubring B with
     carrier := { f | Memℓp f ∞ }
     algebraMap_mem' := algebraMap_memℓp_infty }
@@ -3503,7 +3503,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra 𝕜 (lp B ∞)
+  签名: 代数 𝕜 (lp B ∞)
   定义体: inferInstanceAs Algebra 𝕜 (lpInftySubalgebra 𝕜 B)
 
 Depends on / 依赖: Algebra, lpInftySubalgebra
@@ -3520,7 +3520,7 @@ instance inftyNormedAlgebra
 
 中文:
 实例 inftyNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (lp B ∞) where
+  签名: : 赋范代数 𝕜 (lp B ∞) where
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -3833,7 +3833,7 @@ definition zeroBasis
 
 中文:
 定义 zeroBasis
-  签名: : Module.Basis α 𝕜 ℓ⁰(α, 𝕜) where
+  签名: : 模.基 α 𝕜 ℓ⁰(α, 𝕜) where
   定义体: { toFun x := .ofSupportFinite ⇑x <| memℓp_zero_iff.mp x.2
       invFun x := ⟨⇑x, memℓp_zero_iff.mpr x.hasFiniteSupport⟩
       map_add' _ _ := Finsupp.ext fun _ => rfl
@@ -3890,7 +3890,7 @@ theorem norm_sum_single
 
 中文:
 定理 norm_sum_single
-  条件: (hp : 0 < p.to实数) (f : 对任意 i, E i) (s : Finset α)
+  条件: (hp : 0 < p.to实数) (f : 对任意 i, E i) (s : 有限集 α)
   证明: by
   refine (hasSum_norm hp (∑ i in s, lp.single p i (f i))).unique ?_
   simp only [lp.coeFn_single, coeFn_sum, Finset.sum_apply, Finset.sum_pi_single]
@@ -3975,7 +3975,7 @@ theorem isometry_single
 中文:
 定理 isometry_single
   条件: [Fact (1 <= p)] (i : α)
-  结论: Isometry (lp.single (E := E) p i)
+  结论: 等距 (lp.single (E := E) p i)
   证明: AddMonoidHomClass.isometry_of_norm (lp.singleAddMonoidHom (E := E) p i) fun _ =>
     lp.norm_single (zero_lt_one.trans_le Fact.out) _ _
 -/
@@ -4087,7 +4087,7 @@ theorem norm_sub_norm_compl_sub_single
 
 中文:
 定理 norm_sub_norm_compl_sub_single
-  条件: (hp : 0 < p.to实数) (f : lp E p) (s : Finset α)
+  条件: (hp : 0 < p.to实数) (f : lp E p) (s : 有限集 α)
   证明: by
   refine ((hasSum_norm hp f).sub (hasSum_norm hp (f - ∑ i in s, lp.single p i (f i)))).unique ?_
   let F : α -> Real := fun i => ‖f i‖ ^ p.toReal - ‖(f - ∑ i in s, lp.single p i (f i)) i‖ ^ p.toReal
@@ -4125,7 +4125,7 @@ theorem norm_compl_sum_single
 
 中文:
 定理 norm_compl_sum_single
-  条件: (hp : 0 < p.to实数) (f : lp E p) (s : Finset α)
+  条件: (hp : 0 < p.to实数) (f : lp E p) (s : 有限集 α)
   证明: by
   linarith [lp.norm_sub_norm_compl_sub_single hp f s]
 -/
@@ -4576,7 +4576,7 @@ theorem memℓp_of_tendsto
 
 中文:
 定理 memℓp_of_tendsto
-  结论: {F : ι -> lp E p} (hF : Bornology.IsBounded (Set.range F)) {f : 对任意 a, E a}
+  结论: {F : ι -> lp E p} (hF : 有界结构.IsBounded (集合.range F)) {f : 对任意 a, E a}
   证明: by
   obtain ⟨C, hCF⟩ : exists C, forall k, ‖F k‖ <= C := hF.exists_norm_le.imp fun _ => Set.forall_mem_range.1
   rcases eq_top_or_lt_top p with (rfl | hp)
@@ -4658,7 +4658,7 @@ instance completeSpace
 
 中文:
 实例 completeSpace
-  签名: : CompleteSpace (lp E p)
+  签名: : 完备空间 (lp E p)
   定义体: Metric.complete_of_cauchySeq_tendsto (by
     intro F hF
     -- A Cauchy sequence in `lp E p` is pointwise convergent; let `f` be the pointwise limit.
@@ -4708,7 +4708,7 @@ lemma LipschitzWith.uniformly_bounded
 
 中文:
 引理 LipschitzWith.uniformly_bounded
-  结论: [PseudoMetricSpace α] (g : α -> ι -> 实数) {K : 实数>=0}
+  结论: [伪度量空间 α] (g : α -> ι -> 实数) {K : 实数>=0}
   证明: by
   rcases hga₀b with ⟨M, hM⟩
   use ↑K * dist a a₀ + M
@@ -4756,7 +4756,7 @@ theorem LipschitzOnWith.coordinate
 
 中文:
 定理 LipschitzOnWith.coordinate
-  条件: [PseudoMetricSpace α] (f : α -> ℓ^∞(ι, 实数)) (s : Set α) (K : 实数>=0)
+  条件: [伪度量空间 α] (f : α -> ℓ^∞(ι, 实数)) (s : 集合 α) (K : 实数>=0)
   证明: by
   simp_rw [lipschitzOnWith_iff_dist_le_mul]
   constructor
@@ -4799,7 +4799,7 @@ theorem LipschitzWith.coordinate
 
 中文:
 定理 LipschitzWith.coordinate
-  条件: [PseudoMetricSpace α] {f : α -> ℓ^∞(ι, 实数)} (K : 实数>=0)
+  条件: [伪度量空间 α] {f : α -> ℓ^∞(ι, 实数)} (K : 实数>=0)
   证明: by
   simp_rw [← lipschitzOnWith_univ]
   apply LipschitzOnWith.coordinate

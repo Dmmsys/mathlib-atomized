@@ -80,7 +80,7 @@ mul_comm := fun x y => Subtype.ext hD hR x.2 y.2 }
 
 中文:
 定义 field
-  签名: (hD : InductionHyp D) {R : Subring D} (hR : R < ⊤)
+  签名: (hD : InductionHyp D) {R : 子环 D} (hR : R < ⊤)
   定义体: { show DivisionRing R from Fintype.divisionRingOfIsDomain R with
 mul_comm := fun x y => Subtype.ext hD hR x.2 y.2 }
 -/
@@ -110,8 +110,8 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: [Finite D] (hD : InductionHyp D)
-  结论: Subring.center D = ⊤
+  条件: [有限 D] (hD : InductionHyp D)
+  结论: 子环.center D = ⊤
   证明: by
   classical
   cases nonempty_fintype D
@@ -217,8 +217,8 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: [Finite D]
-  结论: Subring.center D = ⊤
+  条件: [有限 D]
+  结论: 子环.center D = ⊤
   证明: by
   classical
   cases nonempty_fintype D
@@ -271,9 +271,9 @@ theorem Finite.isDomain_to_isField
   exact Field.toIsField D
 
 中文:
-定理 Finite.isDomain_to_isField
-  条件: (D : 类型) [Finite D] [Ring D] [IsDomain D]
-  结论: IsField D
+定理 有限.isDomain_to_isField
+  条件: (D : 类型) [有限 D] [环 D] [是整环 D]
+  结论: 是域 D
   证明: by
   classical
   cases nonempty_fintype D

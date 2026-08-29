@@ -59,7 +59,7 @@ lemma transvection_mem_lineStab_sup
 
 中文:
 引理 transvection_mem_lineStab_sup
-  条件: (t : TransvectionStruct (Fin 2) F)
+  条件: (t : 平换结构 (有限集 2) F)
   证明: by
   obtain ⟨i, j, hij, c⟩ := t
   simp only [Fin.isValue, TransvectionStruct.toSpecialLinearGroup_mk]
@@ -187,7 +187,7 @@ abbreviation PSL2.Iwasawa
 
 中文:
 缩写 PSL2.Iwasawa
-  签名: : IwasawaStructure PSL(2, F) (ℙ F (Fin 2 -> F)) where
+  签名: : IwasawaStructure PSL(2, F) (ℙ F (有限集 2 -> F)) where
   定义体: PSL.iwasawaT
   is_comm p := by
     have hSL : IsMulCommutative (lineStab (F := F) (ι := Fin 2) p.submodule) := by
@@ -261,7 +261,7 @@ instance PSL_nontrivial
 
 中文:
 实例 PSL_nontrivial
-  签名: [Nontrivial ι]
+  签名: [非平凡 ι]
   定义体: by
   obtain ⟨i₁, i₂, hij⟩ := exists_pair_ne ι
   set g : Matrix.SpecialLinearGroup ι F := transvection hij 1
@@ -290,7 +290,7 @@ theorem Matrix.ProjectiveSpecialLinearGroup.rank_two_simple'
     (SL2Simple.PSL_commutator_eq_top hF) PSL2.Iwasawa inferInstance
 
 中文:
-定理 Matrix.ProjectiveSpecialLinearGroup.rank_two_simple'
+定理 矩阵.ProjectiveSpecialLinearGroup.rank_two_simple'
   证明: MulAction.IwasawaStructure.isSimpleGroup
     (SL2Simple.PSL_commutator_eq_top hF) PSL2.Iwasawa inferInstance
 
@@ -343,7 +343,7 @@ theorem Matrix.ProjectiveSpecialLinearGroup.rank_two_simple
   proof: Matrix.ProjectiveSpecialLinearGroup.rank_two_simple' (field_cond_of_four_le_card hF)
 
 中文:
-定理 Matrix.ProjectiveSpecialLinearGroup.rank_two_simple
+定理 矩阵.ProjectiveSpecialLinearGroup.rank_two_simple
   条件: (hF : 4 <= 自然数.card F)
   证明: Matrix.ProjectiveSpecialLinearGroup.rank_two_simple' (field_cond_of_four_le_card hF)
 

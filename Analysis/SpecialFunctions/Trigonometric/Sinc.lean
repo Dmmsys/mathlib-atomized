@@ -320,7 +320,7 @@ lemma continuous_sinc
 
 中文:
 引理 continuous_sinc
-  结论: Continuous sinc
+  结论: 连续 sinc
   证明: by
   refine continuous_iff_continuousAt.mpr fun x => ?_
   rw [sinc_eq_dslope]

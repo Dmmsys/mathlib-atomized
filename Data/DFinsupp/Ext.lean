@@ -81,7 +81,7 @@ theorem addHom_ext
 
 中文:
 定理 addHom_ext
-  条件: {γ : Type w} [AddZeroClass γ] ⦃f g
+  条件: {γ : 类型 w} [加法零类 γ] ⦃f g
   结论: (Π₀ i, β i) ->+ γ⦄
   证明: by
   refine AddMonoidHom.eq_of_eqOn_denseM add_closure_iUnion_range_single fun f hf => ?_
@@ -114,7 +114,7 @@ theorem addHom_ext'
 
 中文:
 定理 addHom_ext'
-  条件: {γ : Type w} [AddZeroClass γ] ⦃f g
+  条件: {γ : 类型 w} [加法零类 γ] ⦃f g
   结论: (Π₀ i, β i) ->+ γ⦄
   证明: addHom_ext fun x => DFunLike.congr_fun (H x)
 

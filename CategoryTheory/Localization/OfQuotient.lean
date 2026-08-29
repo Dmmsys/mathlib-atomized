@@ -66,7 +66,7 @@ definition strictUniversalPropertyFixedTarget
 
 中文:
 定义 strictUniversalPropertyFixedTarget
-  签名: (E : 类型) [Category* E]
+  签名: (E : 类型) [范畴* E]
   定义体: hW
   lift F hF := Quotient.lift r F (fun X Y f₀ f₁ hf => by
     obtain ⟨P, h, hπ⟩ := hr f₀ f₁ hf
@@ -111,7 +111,7 @@ lemma isLocalization_functor
 
 中文:
 引理 isLocalization_functor
-  结论: (functor r).IsLocalization W
+  结论: (functor r).是Localization W
   证明: by
   apply Functor.IsLocalization.mk'
   all_goals apply isLocalization_functor.strictUniversalPropertyFixedTarget hW hr
@@ -140,7 +140,7 @@ lemma isLocalization_of_essSurj_of_full_of_exists_cylinders
   exa
 
 中文:
-引理 isLocalization_of_essSurj_of_full_of_exists_cylinders
+引理 isLocalization_of_essSurj_of_full_of_存在_cylinders
   证明: by
   let F := Quotient.lift L.homRel L (by simp)
   have hW' : W.IsInvertedBy (Quotient.functor L.homRel) := fun _ _ f hf => by
@@ -177,7 +177,7 @@ lemma isLocalization_of_essSurj_of_full_of_exists_pathObjects
   exact ⟨P.op, h.op, hι⟩
 
 中文:
-引理 isLocalization_of_essSurj_of_full_of_exists_pathObjects
+引理 isLocalization_of_essSurj_of_full_of_存在_pathObjects
   证明: by
   rw [← Functor.IsLocalization.op_iff]
   refine isLocalization_of_essSurj_of_full_of_exists_cylinders L.op W.op hW.op
@@ -212,8 +212,8 @@ lemma Quotient.isLocalization_functor'
       exact hr _ _ hf)
 
 中文:
-引理 Quotient.isLocalization_functor'
-  结论: (r : HomRel C) [Congruence r] (W : Morphism命题erty C)
+引理 商.isLocalization_functor'
+  结论: (r : HomRel C) [余ngruence r] (W : MorphismProperty C)
   证明: (functor r).isLocalization_of_essSurj_of_full_of_exists_pathObjects W hW
     (fun X Y f₀ f₁ hf => by
       rw [functor_map_eq_iff] at hf

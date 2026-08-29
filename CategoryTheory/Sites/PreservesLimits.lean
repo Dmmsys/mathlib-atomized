@@ -44,7 +44,7 @@ instance [forall
   body: inferInstance
 
 中文:
-实例 [forall
+实例 [对任意
   签名: X
   定义体: inferInstance
 -/
@@ -71,7 +71,7 @@ instance [forall
   signature: X
 
 中文:
-实例 [forall
+实例 [对任意
   签名: X
 -/
 instance [forall X : Sheaf J (Type max v v'), PreservesLimitsOfShape Kᵒᵖ X.obj] :
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape K J.yoneda
+  签名: 保持形状极限 K J.yoneda
   定义体: by
     intro F
     have : PreservesLimitsOfShape K (J.yoneda ⋙ sheafToPresheaf J (Type v)) :=
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape K (uliftYoneda.{v'} J)
+  签名: 保持形状极限 K (uliftYoneda.{v'} J)
   定义体: by
     intro F
     have : PreservesLimitsOfShape K (uliftYoneda J ⋙ sheafToPresheaf J (Type max v v')) :=
@@ -153,7 +153,7 @@ instance [forall
   body: inferInstance
 
 中文:
-实例 [forall
+实例 [对任意
   签名: X
   定义体: inferInstance
 -/
@@ -170,7 +170,7 @@ instance [forall
   body: inferInstance
 
 中文:
-实例 [forall
+实例 [对任意
   签名: X
   定义体: inferInstance
 -/

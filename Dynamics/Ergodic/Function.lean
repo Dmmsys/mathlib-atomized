@@ -37,8 +37,8 @@ theorem QuasiErgodic.ae_eq_const_of_ae_eq_comp_of_ae_range₀
   rw [← preimage_comp]; rw [mem_preimage]; rw [mem_preimage]; rw [hx]
 
 中文:
-定理 QuasiErgodic.ae_eq_const_of_ae_eq_comp_of_ae_range₀
-  结论: [Nonempty X] [MeasurableSpace X]
+定理 拟遍历.ae_eq_const_of_ae_eq_comp_of_ae_range₀
+  结论: [非空 X] [可测空间 X]
   证明: by
   refine exists_eventuallyEq_const_of_eventually_mem_of_forall_separating MeasurableSet hs ?_
   refine fun U hU => h.ae_mem_or_ae_notMem₀ (s := g ⁻¹' U) (hgm hU) ?_b
@@ -72,8 +72,8 @@ theorem PreErgodic.ae_eq_const_of_ae_eq_comp
 h.ae_mem_or_ae_notMem (s := g ⁻¹' U) (hgm hU) by rw [← preimage_comp, hg_eq]
 
 中文:
-定理 PreErgodic.ae_eq_const_of_ae_eq_comp
-  结论: (h : PreErgodic f μ) (hgm : Measurable g)
+定理 预遍历.ae_eq_const_of_ae_eq_comp
+  结论: (h : 预遍历 f μ) (hgm : 可测 g)
   证明: exists_eventuallyEq_const_of_forall_separating MeasurableSet fun U hU =>
 h.ae_mem_or_ae_notMem (s := g ⁻¹' U) (hgm hU) by rw [← preimage_comp, hg_eq]
 
@@ -93,8 +93,8 @@ theorem QuasiErgodic.ae_eq_const_of_ae_eq_comp₀
   proof: h.ae_eq_const_of_ae_eq_comp_of_ae_range₀ (s := univ) univ_mem hgm hg_eq
 
 中文:
-定理 QuasiErgodic.ae_eq_const_of_ae_eq_comp₀
-  结论: (h : QuasiErgodic f μ) (hgm : NullMeasurable g μ)
+定理 拟遍历.ae_eq_const_of_ae_eq_comp₀
+  结论: (h : 拟遍历 f μ) (hgm : NullMeasurable g μ)
   证明: h.ae_eq_const_of_ae_eq_comp_of_ae_range₀ (s := univ) univ_mem hgm hg_eq
 
 Depends on / 依赖: h.ae_eq_const_of_ae_eq_comp_of_ae_range, hg_eq, univ_mem
@@ -112,8 +112,8 @@ theorem Ergodic.ae_eq_const_of_ae_eq_comp₀
   proof: h.quasiErgodic.ae_eq_const_of_ae_eq_comp₀ hgm hg_eq
 
 中文:
-定理 Ergodic.ae_eq_const_of_ae_eq_comp₀
-  结论: (h : Ergodic f μ) (hgm : NullMeasurable g μ)
+定理 遍历.ae_eq_const_of_ae_eq_comp₀
+  结论: (h : 遍历 f μ) (hgm : NullMeasurable g μ)
   证明: h.quasiErgodic.ae_eq_const_of_ae_eq_comp₀ hgm hg_eq
 
 Depends on / 依赖: h.quasiErgodic.ae_eq_const_of_ae_eq_comp, hg_eq, quasiErgodic
@@ -142,7 +142,7 @@ theorem ae_eq_const_of_ae_eq_comp_ae
 
 中文:
 定理 ae_eq_const_of_ae_eq_comp_ae
-  结论: {g : α -> X} (h : QuasiErgodic f μ)
+  结论: {g : α -> X} (h : 拟遍历 f μ)
   证明: by
   borelize X
   rcases hgm.isSeparable_ae_range with ⟨t, ht, hgt⟩
@@ -171,7 +171,7 @@ theorem eq_const_of_compQuasiMeasurePreserving_eq
 
 中文:
 定理 eq_const_of_compQuasiMeasurePreserving_eq
-  结论: (h : QuasiErgodic f μ) {g : α ->ₘ[μ] X}
+  结论: (h : 拟遍历 f μ) {g : α ->ₘ[μ] X}
   证明: have : g ∘ f =ᵐ[μ] g := (g.coeFn_compQuasiMeasurePreserving h.1).symm.trans
     (hg_eq.symm ▸ .refl _ _)
   let ⟨c, hc⟩ := h.ae_eq_const_of_ae_eq_comp_ae g.aestronglyMeasurable this
@@ -200,7 +200,7 @@ theorem ae_eq_const_of_ae_eq_comp_ae
 
 中文:
 定理 ae_eq_const_of_ae_eq_comp_ae
-  结论: {g : α -> X} (h : Ergodic f μ) (hgm : AEStronglyMeasurable g μ)
+  结论: {g : α -> X} (h : 遍历 f μ) (hgm : AEStronglyMeasurable g μ)
   证明: h.quasiErgodic.ae_eq_const_of_ae_eq_comp_ae hgm hg_eq
 
 Depends on / 依赖: ae_eq_const_of_ae_eq_comp_ae, h.quasiErgodic.ae_eq_const_of_ae_eq_comp_ae, hg_eq, quasiErgodic
@@ -219,7 +219,7 @@ theorem eq_const_of_compMeasurePreserving_eq
 
 中文:
 定理 eq_const_of_compMeasurePreserving_eq
-  结论: (h : Ergodic f μ) {g : α ->ₘ[μ] X}
+  结论: (h : 遍历 f μ) {g : α ->ₘ[μ] X}
   证明: h.quasiErgodic.eq_const_of_compQuasiMeasurePreserving_eq hg_eq
 
 Depends on / 依赖: eq_const_of_compQuasiMeasurePreserving_eq, h.quasiErgodic.eq_const_of_compQuasiMeasurePreserving_eq, hg_eq, quasiErgodic

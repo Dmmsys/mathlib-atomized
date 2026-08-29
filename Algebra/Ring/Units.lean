@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg αˣ
+  签名: 取负 αˣ
   定义体: ⟨fun u => ⟨-↑u, -↑u⁻¹, by simp, by simp⟩⟩
 -/
 instance : Neg αˣ :=
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg αˣ
+  签名: 有DistribNeg αˣ
   定义体: val_injective.hasDistribNeg _ Units.val_neg val_mul
 
 Depends on / 依赖: Units.val_neg, hasDistribNeg, val_injective, val_injective.hasDistribNeg, val_mul, val_neg
@@ -312,7 +312,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  结论: {F : 类型} [Ring β] [FunLike F α β] [RingHomClass F α β]
+  结论: {F : 类型} [环 β] [函数状 F α β] [环态射类 F α β]
   证明: ext (by simp only [coe_map, Units.val_neg, MonoidHom.coe_coe, map_neg])
 -/
 protected theorem map_neg {F : Type*} [Ring β] [FunLike F α β] [RingHomClass F α β]
@@ -330,7 +330,7 @@ theorem map_neg_one
 
 中文:
 定理 map_neg_one
-  结论: {F : 类型} [Ring β] [FunLike F α β] [RingHomClass F α β]
+  结论: {F : 类型} [环 β] [函数状 F α β] [环态射类 F α β]
   证明: by
   simp only [Units.map_neg, map_one]
 -/
@@ -351,9 +351,9 @@ theorem IsUnit.neg
   statement: IsUnit a -> IsUnit (-a)
 
 中文:
-定理 IsUnit.neg
-  条件: [Monoid α] [HasDistribNeg α] {a : α}
-  结论: IsUnit a -> IsUnit (-a)
+定理 是单位.neg
+  条件: [幺半群 α] [有DistribNeg α] {a : α}
+  结论: 是单位 a -> 是单位 (-a)
 -/
 theorem IsUnit.neg [Monoid α] [HasDistribNeg α] {a : α} : IsUnit a -> IsUnit (-a)
   | ⟨x, hx⟩ => hx ▸ (-x).isUnit
@@ -369,9 +369,9 @@ theorem IsUnit.neg_iff
   proof: ⟨fun h => neg_neg a ▸ h.neg, IsUnit.neg⟩
 
 中文:
-定理 IsUnit.neg_iff
-  条件: [Monoid α] [HasDistribNeg α] (a : α)
-  结论: IsUnit (-a) ↔ IsUnit a
+定理 是单位.neg_iff
+  条件: [幺半群 α] [有DistribNeg α] (a : α)
+  结论: 是单位 (-a) ↔ 是单位 a
   证明: ⟨fun h => neg_neg a ▸ h.neg, IsUnit.neg⟩
 
 Depends on / 依赖: IsUnit, IsUnit.neg, h.neg, neg_neg
@@ -390,8 +390,8 @@ theorem isUnit_neg_one
 
 中文:
 定理 isUnit_neg_one
-  条件: [Monoid α] [HasDistribNeg α]
-  结论: IsUnit (-1 : α)
+  条件: [幺半群 α] [有DistribNeg α]
+  结论: 是单位 (-1 : α)
   证明: isUnit_one.neg
 
 Depends on / 依赖: isUnit_one, isUnit_one.neg
@@ -408,9 +408,9 @@ theorem IsUnit.sub_iff
   proof: (IsUnit.neg_iff _).symm.trans neg_sub x y ▸ Iff.rfl
 
 中文:
-定理 IsUnit.sub_iff
-  条件: [Ring α] {x y : α}
-  结论: IsUnit (x - y) ↔ IsUnit (y - x)
+定理 是单位.sub_iff
+  条件: [环 α] {x y : α}
+  结论: 是单位 (x - y) ↔ 是单位 (y - x)
   证明: (IsUnit.neg_iff _).symm.trans neg_sub x y ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, IsUnit, IsUnit.neg_iff, neg_iff, neg_sub, symm.trans
@@ -434,7 +434,7 @@ theorem divp_add_divp
 
 中文:
 定理 divp_add_divp
-  条件: [CommSemiring α] (a b : α) (u₁ u₂ : αˣ)
+  条件: [交换半环 α] (a b : α) (u₁ u₂ : αˣ)
   证明: by
   simp only [divp, add_mul, mul_inv_rev, val_mul]
   rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
@@ -461,7 +461,7 @@ theorem divp_sub_divp
 
 中文:
 定理 divp_sub_divp
-  条件: [CommRing α] (a b : α) (u₁ u₂ : αˣ)
+  条件: [交换环 α] (a b : α) (u₁ u₂ : αˣ)
   证明: by
   simp only [sub_eq_add_neg, neg_divp, divp_add_divp, mul_neg]
 
@@ -483,7 +483,7 @@ theorem add_eq_mul_one_add_div
 
 中文:
 定理 add_eq_mul_one_add_div
-  条件: [Semiring R] {a : Rˣ} {b : R}
+  条件: [半环 R] {a : Rˣ} {b : R}
   结论: ↑a + b = a * (1 + ↑a⁻¹ * b)
   证明: by
   rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [Units.mul_inv]; rw [one_mul]
@@ -513,7 +513,7 @@ theorem isUnit_map
 中文:
 定理 isUnit_map
   条件: (f : α ->+* β) {a : α}
-  结论: IsUnit a -> IsUnit (f a)
+  结论: 是单位 a -> 是单位 (f a)
   证明: IsUnit.map f
 
 Depends on / 依赖: IsUnit, IsUnit.map

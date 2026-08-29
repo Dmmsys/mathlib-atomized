@@ -58,7 +58,7 @@ structure HomologyData
     - comm : left.π ≫ iso.hom ≫ right.ι = left.i ≫ right.p  [default: by cat_disch]
 
 中文:
-结构 HomologyData
+结构 同调数据
   参数: where
   公理与运算 (4 个):
     - left : S.LeftHomologyData
@@ -95,7 +95,7 @@ structure HomologyMapData
     - right : RightHomologyMapData φ h₁.right h₂.right
 
 中文:
-结构 HomologyMapData
+结构 同调映射数据
   参数: where
   公理与运算 (2 个):
     - left : LeftHomologyMapData φ h₁.left h₂.left
@@ -127,7 +127,7 @@ lemma comm
 
 中文:
 引理 comm
-  条件: (h : HomologyMapData φ h₁ h₂)
+  条件: (h : 同调映射数据 φ h₁ h₂)
   证明: by
   simp only [← cancel_epi h₁.left.π, ← cancel_mono h₂.right.ι, assoc,
     LeftHomologyMapData.commπ_assoc, HomologyData.comm, LeftHomologyMapData.commi_assoc,
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (HomologyMapData φ h₁ h₂)
+  签名: 子单例 (同调映射数据 φ h₁ h₂)
   定义体: ⟨by
   rintro ⟨left₁, right₁⟩ ⟨left₂, right₂⟩
   simp only [mk.injEq, eq_iff_true_of_subsingleton, and_self]⟩
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomologyMapData φ h₁ h₂)
+  签名: 可居 (同调映射数据 φ h₁ h₂)
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance : Inhabited (HomologyMapData φ h₁ h₂) :=
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (HomologyMapData φ h₁ h₂)
+  签名: 唯一 (同调映射数据 φ h₁ h₂)
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -209,7 +209,7 @@ definition homologyMapData
 
 中文:
 定义 homologyMapData
-  签名: : HomologyMapData φ h₁ h₂
+  签名: : 同调映射数据 φ h₁ h₂
   定义体: default
 -/
 def homologyMapData : HomologyMapData φ h₁ h₂ := default
@@ -226,7 +226,7 @@ lemma congr_left_φH
 
 中文:
 引理 congr_left_φH
-  条件: {γ₁ γ₂ : HomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂)
+  条件: {γ₁ γ₂ : 同调映射数据 φ h₁ h₂} (eq : γ₁ = γ₂)
   证明: by rw [eq]
 -/
 lemma congr_left_φH {γ₁ γ₂ : HomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂) :
@@ -252,7 +252,7 @@ definition ofIsLimitKernelFork
 
 中文:
 定义 ofIsLimitKernelFork
-  签名: (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c)
+  签名: (hf : S.f = 0) (c : 核叉 S.g) (hc : 是极限 c)
   定义体: LeftHomologyData.ofIsLimitKernelFork S hf c hc
   right := RightHomologyData.ofIsLimitKernelFork S hf c hc
   iso := Iso.refl _
@@ -310,7 +310,7 @@ definition ofIsColimitCokernelCofork
 
 中文:
 定义 ofIsColimitCokernelCofork
-  签名: (hg : S.g = 0) (c : CokernelCofork S.f) (hc : IsColimit c)
+  签名: (hg : S.g = 0) (c : 余核余叉 S.f) (hc : 是余极限 c)
   定义体: LeftHomologyData.ofIsColimitCokernelCofork S hg c hc
   right := RightHomologyData.ofIsColimitCokernelCofork S hg c hc
   iso := Iso.refl _
@@ -397,7 +397,7 @@ definition ofEpiOfIsIsoOfMono
 
 中文:
 定义 ofEpiOfIsIsoOfMono
-  签名: (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
+  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₁)
   定义体: LeftHomologyData.ofEpiOfIsIsoOfMono φ h.left
   right := RightHomologyData.ofEpiOfIsIsoOfMono φ h.right
   iso := h.iso
@@ -429,7 +429,7 @@ definition ofEpiOfIsIsoOfMono'
 
 中文:
 定义 ofEpiOfIsIsoOfMono'
-  签名: (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
+  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₂)
   定义体: LeftHomologyData.ofEpiOfIsIsoOfMono' φ h.left
   right := RightHomologyData.ofEpiOfIsIsoOfMono' φ h.right
   iso := h.iso
@@ -460,7 +460,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: (e : S₁ ≅ S₂) (h : HomologyData S₁)
+  签名: (e : S₁ ≅ S₂) (h : 同调数据 S₁)
   定义体: h.ofEpiOfIsIsoOfMono e.hom
 
 Depends on / 依赖: e.hom, h.ofEpiOfIsIsoOfMono, ofEpiOfIsIsoOfMono
@@ -486,7 +486,7 @@ definition op
 
 中文:
 定义 op
-  签名: (h : S.HomologyData)
+  签名: (h : S.同调数据)
   定义体: h.right.op
   right := h.left.op
   iso := h.iso.op
@@ -517,7 +517,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {S : ShortComplex Cᵒᵖ} (h : S.HomologyData)
+  签名: {S : 短复形 Cᵒᵖ} (h : S.同调数据)
   定义体: h.right.unop
   right := h.left.unop
   iso := h.iso.unop
@@ -543,10 +543,10 @@ class HasHomology
     - condition : Nonempty S.HomologyData
 
 中文:
-类 HasHomology
+类 有同调
   参数: : 命题 where
   公理与运算 (1 个):
-    - condition : Nonempty S.HomologyData
+    - condition : 非空 S.同调数据
 -/
 class HasHomology : Prop where
   /-- the condition that there exists a homology data -/
@@ -562,7 +562,7 @@ definition homologyData
 
 中文:
 定义 homologyData
-  签名: [HasHomology S]
+  签名: [有同调 S]
   定义体: HasHomology.condition.some
 
 Depends on / 依赖: HasHomology, HasHomology.condition.some, condition
@@ -581,9 +581,9 @@ lemma HasHomology.mk'
   proof: ⟨Nonempty.intro h⟩
 
 中文:
-引理 HasHomology.mk'
-  条件: (h : S.HomologyData)
-  结论: HasHomology S
+引理 有同调.mk'
+  条件: (h : S.同调数据)
+  结论: 有同调 S
   证明: ⟨Nonempty.intro h⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -600,8 +600,8 @@ instance [HasHomology
   body: HasHomology.mk' S.homologyData.op
 
 中文:
-实例 [HasHomology
-  签名: S] : HasHomology S.op
+实例 [有同调
+  签名: S] : 有同调 S.op
   定义体: HasHomology.mk' S.homologyData.op
 
 Depends on / 依赖: HasHomology, HasHomology.mk, S.homologyData.op, homologyData
@@ -622,7 +622,7 @@ instance hasLeftHomology_of_hasHomology
 
 中文:
 实例 hasLeftHomology_of_hasHomology
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: HasLeftHomology.mk' S.homologyData.left
 
 Depends on / 依赖: HasLeftHomology, HasLeftHomology.mk, S.homologyData.left, homologyData
@@ -640,7 +640,7 @@ instance hasRightHomology_of_hasHomology
 
 中文:
 实例 hasRightHomology_of_hasHomology
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: HasRightHomology.mk' S.homologyData.right
 
 Depends on / 依赖: HasRightHomology, HasRightHomology.mk, S.homologyData.right, homologyData
@@ -715,7 +715,7 @@ lemma hasHomology_of_epi_of_isIso_of_mono
 
 中文:
 引理 hasHomology_of_epi_of_isIso_of_mono
-  结论: (φ : S₁ ⟶ S₂) [HasHomology S₁]
+  结论: (φ : S₁ ⟶ S₂) [有同调 S₁]
   证明: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono φ S₁.homologyData)
 
 Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofEpiOfIsIsoOfMono, homologyData, ofEpiOfIsIsoOfMono
@@ -734,7 +734,7 @@ lemma hasHomology_of_epi_of_isIso_of_mono'
 
 中文:
 引理 hasHomology_of_epi_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) [HasHomology S₂]
+  结论: (φ : S₁ ⟶ S₂) [有同调 S₂]
   证明: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono' φ S₂.homologyData)
 
 Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofEpiOfIsIsoOfMono, homologyData, ofEpiOfIsIsoOfMono
@@ -754,8 +754,8 @@ lemma hasHomology_of_iso
 
 中文:
 引理 hasHomology_of_iso
-  条件: (e : S₁ ≅ S₂) [HasHomology S₁]
-  结论: HasHomology S₂
+  条件: (e : S₁ ≅ S₂) [有同调 S₁]
+  结论: 有同调 S₂
   证明: HasHomology.mk' (HomologyData.ofIso e S₁.homologyData)
 
 Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofIso, homologyData
@@ -778,7 +778,7 @@ definition id
 
 中文:
 定义 id
-  签名: (h : S.HomologyData)
+  签名: (h : S.同调数据)
   定义体: LeftHomologyMapData.id h.left
   right := RightHomologyMapData.id h.right
 
@@ -801,7 +801,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
+  签名: (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
   定义体: LeftHomologyMapData.zero h₁.left h₂.left
   right := RightHomologyMapData.zero h₁.right h₂.right
 
@@ -825,7 +825,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.HomologyData}
+  签名: {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.同调数据}
   定义体: ψ.left.comp ψ'.left
   right := ψ.right.comp ψ'.right
 
@@ -852,7 +852,7 @@ definition op
 
 中文:
 定义 op
-  签名: {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
+  签名: {φ : S₁ ⟶ S₂} {h₁ : S₁.同调数据} {h₂ : S₂.同调数据}
   定义体: ψ.right.op
   right := ψ.left.op
 
@@ -878,7 +878,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {S₁ S₂ : ShortComplex Cᵒᵖ} {φ : S₁ ⟶ S₂}
+  签名: {S₁ S₂ : 短复形 Cᵒᵖ} {φ : S₁ ⟶ S₂}
   定义体: ψ.right.unop
   right := ψ.left.unop
 
@@ -1043,7 +1043,7 @@ definition ofEpiOfIsIsoOfMono
 
 中文:
 定义 ofEpiOfIsIsoOfMono
-  签名: (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
+  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₁)
   定义体: LeftHomologyMapData.ofEpiOfIsIsoOfMono φ h.left
   right := RightHomologyMapData.ofEpiOfIsIsoOfMono φ h.right
 
@@ -1066,7 +1066,7 @@ definition ofEpiOfIsIsoOfMono'
 
 中文:
 定义 ofEpiOfIsIsoOfMono'
-  签名: (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
+  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₂)
   定义体: LeftHomologyMapData.ofEpiOfIsIsoOfMono' φ h.left
   right := RightHomologyMapData.ofEpiOfIsIsoOfMono' φ h.right
 
@@ -1092,7 +1092,7 @@ definition homology
 
 中文:
 定义 homology
-  签名: [HasHomology S]
+  签名: [有同调 S]
   定义体: S.homologyData.left.H
 
 Depends on / 依赖: S.homologyData.left.H, homologyData
@@ -1109,7 +1109,7 @@ definition leftHomologyIso
 
 中文:
 定义 leftHomologyIso
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: leftHomologyMapIso' (Iso.refl _) _ _
 
 Depends on / 依赖: Iso.refl, leftHomologyMapIso
@@ -1127,7 +1127,7 @@ definition rightHomologyIso
 
 中文:
 定义 rightHomologyIso
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: rightHomologyMapIso' (Iso.refl _) _ _ ≪≫ S.homologyData.iso.symm
 
 Depends on / 依赖: Iso.refl, S.homologyData.iso.symm, homologyData, rightHomologyMapIso
@@ -1147,7 +1147,7 @@ definition LeftHomologyData.homologyIso
 
 中文:
 定义 LeftHomologyData.homologyIso
-  签名: (h : S.LeftHomologyData) [S.HasHomology]
+  签名: (h : S.LeftHomologyData) [S.有同调]
   定义体: S.leftHomologyIso.symm ≪≫ h.leftHomologyIso
 
 Depends on / 依赖: S.leftHomologyIso.symm, h.leftHomologyIso, leftHomologyIso
@@ -1165,7 +1165,7 @@ definition RightHomologyData.homologyIso
 
 中文:
 定义 RightHomologyData.homologyIso
-  签名: (h : S.RightHomologyData) [S.HasHomology]
+  签名: (h : S.RightHomologyData) [S.有同调]
   定义体: S.rightHomologyIso.symm ≪≫ h.rightHomologyIso
 
 Depends on / 依赖: S.rightHomologyIso.symm, h.rightHomologyIso, rightHomologyIso
@@ -1191,7 +1191,7 @@ lemma LeftHomologyData.homologyIso_leftHomologyData
 
 中文:
 引理 LeftHomologyData.homologyIso_leftHomologyData
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   ext
   dsimp [homologyIso, leftHomologyIso, ShortComplex.leftHomologyIso]
@@ -1219,7 +1219,7 @@ lemma RightHomologyData.homologyIso_rightHomologyData
 
 中文:
 引理 RightHomologyData.homologyIso_rightHomologyData
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   ext
   simp [homologyIso, rightHomologyIso]
@@ -1243,7 +1243,7 @@ definition homologyMap'
 
 中文:
 定义 homologyMap'
-  签名: (φ : S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
+  签名: (φ : S₁ ⟶ S₂) (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
   定义体: leftHomologyMap' φ _ _
 
 Depends on / 依赖: IsJordan, Semigroup, Semigroup.isJordan, isJordan, leftHomologyMap
@@ -1261,7 +1261,7 @@ definition homologyMap
 
 中文:
 定义 homologyMap
-  签名: (φ : S₁ ⟶ S₂) [HasHomology S₁] [HasHomology S₂]
+  签名: (φ : S₁ ⟶ S₂) [有同调 S₁] [有同调 S₂]
   定义体: homologyMap' φ _ _
 
 Depends on / 依赖: CommSemigroup, CommSemigroup.isCommJordan, IsCommJordan, homologyMap, isCommJordan
@@ -1455,7 +1455,7 @@ lemma homologyMap'_id
 
 中文:
 引理 homologyMap'_id
-  条件: (h : S.HomologyData)
+  条件: (h : S.同调数据)
   证明: (HomologyMapData.id h).homologyMap'_eq
 -/
 lemma homologyMap'_id (h : S.HomologyData) :
@@ -1477,7 +1477,7 @@ lemma homologyMap_id
 
 中文:
 引理 homologyMap_id
-  条件: [HasHomology S]
+  条件: [有同调 S]
   证明: homologyMap'_id _
 
 @[simp]
@@ -1499,7 +1499,7 @@ lemma homologyMap'_zero
 
 中文:
 引理 homologyMap'_zero
-  条件: (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
+  条件: (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
   证明: (HomologyMapData.zero h₁ h₂).homologyMap'_eq
 -/
 lemma homologyMap'_zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
@@ -1519,7 +1519,7 @@ lemma homologyMap_zero
 
 中文:
 引理 homologyMap_zero
-  条件: [S₁.HasHomology] [S₂.HasHomology]
+  条件: [S₁.有同调] [S₂.有同调]
   证明: homologyMap'_zero _ _
 
 Depends on / 依赖: _zero, homologyMap
@@ -1564,7 +1564,7 @@ lemma homologyMap_comp
 
 中文:
 引理 homologyMap_comp
-  结论: [HasHomology S₁] [HasHomology S₂] [HasHomology S₃]
+  结论: [有同调 S₁] [有同调 S₂] [有同调 S₃]
   证明: homologyMap'_comp _ _ _ _ _
 
 Depends on / 依赖: _comp, homologyMap
@@ -1590,7 +1590,7 @@ definition homologyMapIso'
 
 中文:
 定义 homologyMapIso'
-  签名: (e : S₁ ≅ S₂) (h₁ : S₁.HomologyData)
+  签名: (e : S₁ ≅ S₂) (h₁ : S₁.同调数据)
   定义体: homologyMap' e.hom h₁ h₂
   inv := homologyMap' e.inv h₂ h₁
   hom_inv_id := by rw [← homologyMap'_comp, e.hom_inv_id, homologyMap'_id]
@@ -1615,7 +1615,7 @@ instance isIso_homologyMap'_of_isIso
 
 中文:
 实例 isIso_homologyMap'_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ]
   定义体: inferInstanceAs IsIso (homologyMapIso' (asIso φ) h₁ h₂).hom
 
 Depends on / 依赖: homologyMapIso
@@ -1641,7 +1641,7 @@ definition homologyMapIso
 
 中文:
 定义 homologyMapIso
-  签名: (e : S₁ ≅ S₂) [S₁.HasHomology]
+  签名: (e : S₁ ≅ S₂) [S₁.有同调]
   定义体: homologyMap e.hom
   inv := homologyMap e.inv
   hom_inv_id := by rw [← homologyMap_comp, e.hom_inv_id, homologyMap_id]
@@ -1666,7 +1666,7 @@ instance isIso_homologyMap_of_iso
 
 中文:
 实例 isIso_homologyMap_of_iso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ] [S₁.HasHomology]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ] [S₁.有同调]
   定义体: inferInstanceAs IsIso (homologyMapIso (asIso φ)).hom
 
 Depends on / 依赖: homologyMapIso
@@ -1789,7 +1789,7 @@ definition leftRightHomologyComparison
 
 中文:
 定义 leftRightHomologyComparison
-  签名: [S.HasLeftHomology] [S.HasRightHomology]
+  签名: [S.有LeftHomology] [S.有RightHomology]
   定义体: leftRightHomologyComparison' _ _
 
 @[reassoc (attr := simp)]
@@ -1813,7 +1813,7 @@ lemma π_leftRightHomologyComparison_ι
 
 中文:
 引理 π_leftRightHomologyComparison_ι
-  条件: [S.HasLeftHomology] [S.HasRightHomology]
+  条件: [S.有LeftHomology] [S.有RightHomology]
   证明: π_leftRightHomologyComparison'_ι _ _
 
 @[reassoc]
@@ -1889,7 +1889,7 @@ lemma leftRightHomologyComparison_eq
 
 中文:
 引理 leftRightHomologyComparison_eq
-  结论: [S.HasLeftHomology] [S.HasRightHomology]
+  结论: [S.有LeftHomology] [S.有RightHomology]
   证明: leftRightHomologyComparison'_compatibility _ _ _ _
 
 @[simp]
@@ -1914,8 +1914,8 @@ lemma HomologyData.leftRightHomologyComparison'_eq
     π_leftRightHomologyComparison'_ι, comm]
 
 中文:
-引理 HomologyData.leftRightHomologyComparison'_eq
-  条件: (h : S.HomologyData)
+引理 同调数据.leftRightHomologyComparison'_eq
+  条件: (h : S.同调数据)
   证明: by
   simp only [← cancel_epi h.left.π, ← cancel_mono h.right.ι, assoc,
     π_leftRightHomologyComparison'_ι, comm]
@@ -1939,7 +1939,7 @@ instance isIso_leftRightHomologyComparison'_of_homologyData
 
 中文:
 实例 isIso_leftRightHomologyComparison'_of_homologyData
-  签名: (h : S.HomologyData)
+  签名: (h : S.同调数据)
   定义体: by
     rw [h.leftRightHomologyComparison'_eq]
     infer_instance
@@ -1964,7 +1964,7 @@ instance isIso_leftRightHomologyComparison'
 
 中文:
 实例 isIso_leftRightHomologyComparison'
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: by
   rw [leftRightHomologyComparison'_compatibility h₁ S.homologyData.left h₂
     S.homologyData.right]
@@ -1990,7 +1990,7 @@ instance isIso_leftRightHomologyComparison
 
 中文:
 实例 isIso_leftRightHomologyComparison
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: by
   dsimp only [leftRightHomologyComparison]
   infer_instance
@@ -2107,7 +2107,7 @@ lemma leftRightHomologyComparison_fac
 
 中文:
 引理 leftRightHomologyComparison_fac
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: by
   simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv,
     RightHomologyData.homologyIso_rightHomologyData, Iso.symm_hom] using!
@@ -2137,7 +2137,7 @@ lemma HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso
   rw [← leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_eq]
 
 中文:
-引理 HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso
+引理 同调数据.right_homologyIso_eq_left_homologyIso_trans_iso
   证明: by
   suffices h.iso = h.left.homologyIso.symm ≪≫ h.right.homologyIso by
     rw [this]; rw [Iso.self_symm_id_assoc]
@@ -2166,7 +2166,7 @@ lemma HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm
   cat_disch
 
 中文:
-引理 HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm
+引理 同调数据.left_homologyIso_eq_right_homologyIso_trans_iso_symm
   证明: by
   rw [right_homologyIso_eq_left_homologyIso_trans_iso]
   cat_disch
@@ -2210,7 +2210,7 @@ lemma hasHomology_of_isIsoLeftRightHomologyComparison
 
 中文:
 引理 hasHomology_of_isIsoLeftRightHomologyComparison
-  结论: [S.HasLeftHomology]
+  结论: [S.有LeftHomology]
   证明: by
   have : IsIso (leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData) := h
   exact hasHomology_of_isIso_leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData
@@ -2458,10 +2458,10 @@ class _root_.CategoryTheory.CategoryWithHomology
     - hasHomology : forall (S : ShortComplex C), S.HasHomology
 
 中文:
-类 _root_.CategoryTheory.CategoryWithHomology
+类 _root_.范畴论.带同调范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasHomology : 对任意 (S : ShortComplex C), S.HasHomology
+    - hasHomology : 对任意 (S : 短复形 C), S.有同调
 -/
 class _root_.CategoryTheory.CategoryWithHomology : Prop where
   hasHomology : forall (S : ShortComplex C), S.HasHomology
@@ -2477,8 +2477,8 @@ instance [CategoryWithHomology
   body: ⟨fun S => HasHomology.mk' S.unop.homologyData.op⟩
 
 中文:
-实例 [CategoryWithHomology
-  签名: C] : CategoryWithHomology Cᵒᵖ
+实例 [带同调范畴
+  签名: C] : 带同调范畴 Cᵒᵖ
   定义体: ⟨fun S => HasHomology.mk' S.unop.homologyData.op⟩
 
 Depends on / 依赖: HasHomology, HasHomology.mk, S.unop.homologyData.op, homologyData
@@ -2499,7 +2499,7 @@ definition homologyFunctor
 
 中文:
 定义 homologyFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: S.homology
   map f := homologyMap f
 
@@ -2548,7 +2548,7 @@ lemma isIso_homologyMap_of_epi_of_isIso_of_mono'
 
 中文:
 引理 isIso_homologyMap_of_epi_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
+  结论: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
   证明: by
   dsimp only [homologyMap]
   infer_instance
@@ -2571,7 +2571,7 @@ instance isIso_homologyMap_of_epi_of_isIso_of_mono
 
 中文:
 实例 isIso_homologyMap_of_epi_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
+  签名: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
   定义体: isIso_homologyMap_of_epi_of_isIso_of_mono' φ inferInstance inferInstance inferInstance
 
 Depends on / 依赖: isIso_homologyMap_of_epi_of_isIso_of_mono
@@ -2591,7 +2591,7 @@ instance isIso_homologyFunctor_map_of_epi_of_isIso_of_mono
 
 中文:
 实例 isIso_homologyFunctor_map_of_epi_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂) [CategoryWithHomology C]
+  签名: (φ : S₁ ⟶ S₂) [带同调范畴 C]
   定义体: inferInstanceAs IsIso (homologyMap φ)
 
 Depends on / 依赖: homologyMap
@@ -2614,7 +2614,7 @@ instance isIso_homologyMap_of_isIso
 
 中文:
 实例 isIso_homologyMap_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] [IsIso φ]
+  签名: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调] [是同构 φ]
   定义体: by
   dsimp only [homologyMap, homologyMap']
   infer_instance
@@ -2830,7 +2830,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi S.homologyπ
+  签名: 满态射 S.homologyπ
   定义体: Limits.epi_of_isColimit_cofork (S.homologyIsCokernel)
 
 Depends on / 依赖: Limits, Limits.epi_of_isColimit_cofork, S.homologyIsCokernel, epi_of_isColimit_cofork, homologyIsCokernel
@@ -2848,7 +2848,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono S.homologyι
+  签名: 单态射 S.homologyι
   定义体: Limits.mono_of_isLimit_fork (S.homologyIsKernel)
 
 Depends on / 依赖: Limits, Limits.mono_of_isLimit_fork, S.homologyIsKernel, homologyIsKernel, mono_of_isLimit_fork
@@ -2962,7 +2962,7 @@ lemma homologyπ_naturality
 
 中文:
 引理 homologyπ_naturality
-  条件: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
+  条件: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
   证明: by
   simp only [← cancel_mono S₂.leftHomologyIso.inv, assoc, ← leftHomologyIso_inv_naturality φ,
     homologyπ_comp_leftHomologyIso_inv]
@@ -2994,7 +2994,7 @@ lemma homologyι_naturality
 
 中文:
 引理 homologyι_naturality
-  条件: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
+  条件: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
   证明: by
   simp only [← cancel_epi S₁.rightHomologyIso.hom, rightHomologyIso_hom_naturality_assoc φ,
     rightHomologyIso_hom_comp_homologyι, rightHomologyι_naturality]
@@ -3328,7 +3328,7 @@ lemma comp_homologyMap_comp
 
 中文:
 引理 comp_homologyMap_comp
-  结论: [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
+  结论: [S₁.有同调] [S₂.有同调] (φ : S₁ ⟶ S₂)
   证明: by
   dsimp only [LeftHomologyData.homologyIso, RightHomologyData.homologyIso,
     Iso.symm, Iso.trans, Iso.refl, leftHomologyIso, rightHomologyIso,
@@ -3364,7 +3364,7 @@ lemma π_homologyMap_ι
 
 中文:
 引理 π_homologyMap_ι
-  条件: [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
+  条件: [S₁.有同调] [S₂.有同调] (φ : S₁ ⟶ S₂)
   证明: by
   simp only [homologyι_naturality, homology_π_ι_assoc, p_opcyclesMap]
 
@@ -3388,7 +3388,7 @@ definition homologyOpIso
 
 中文:
 定义 homologyOpIso
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: S.op.leftHomologyIso.symm ≪≫ S.leftHomologyOpIso ≪≫ S.rightHomologyIso.symm.op
 
 Depends on / 依赖: S.leftHomologyOpIso, S.op.leftHomologyIso.symm, S.rightHomologyIso.symm.op, leftHomologyIso, leftHomologyOpIso, rightHomologyIso
@@ -3449,7 +3449,7 @@ lemma homologyMap_op
 
 中文:
 引理 homologyMap_op
-  条件: [HasHomology S₁] [HasHomology S₂]
+  条件: [有同调 S₁] [有同调 S₂]
   证明: by
   dsimp only [homologyMap, homologyOpIso]
   rw [homologyMap'_op]
@@ -3485,7 +3485,7 @@ lemma homologyOpIso_hom_naturality
 
 中文:
 引理 homologyOpIso_hom_naturality
-  条件: [S₁.HasHomology] [S₂.HasHomology]
+  条件: [S₁.有同调] [S₂.有同调]
   证明: by
   simp [homologyMap_op]
 
@@ -3510,7 +3510,7 @@ lemma homologyOpIso_inv_naturality
 
 中文:
 引理 homologyOpIso_inv_naturality
-  条件: [S₁.HasHomology] [S₂.HasHomology]
+  条件: [S₁.有同调] [S₂.有同调]
   证明: by
   simp [homologyMap_op]
 
@@ -3533,8 +3533,8 @@ definition homologyFunctorOpNatIso
     (fun _ => homologyOpIso_inv_naturality _)
 
 中文:
-定义 homologyFunctorOpNatIso
-  签名: [CategoryWithHomology C]
+定义 homologyFunctorOp自然数Iso
+  签名: [带同调范畴 C]
   定义体: NatIso.ofComponents (fun S => S.unop.homologyOpIso.symm)
     (fun _ => homologyOpIso_inv_naturality _)
 
@@ -3561,7 +3561,7 @@ lemma liftCycles_homologyπ_eq_zero_of_boundary
 
 中文:
 引理 liftCycles_homologyπ_eq_zero_of_boundary
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   dsimp only [homologyπ]
   rw [S.liftCycles_leftHomologyπ_eq_zero_of_boundary_assoc k x hx]; rw [zero_comp]
@@ -3589,7 +3589,7 @@ lemma homologyι_descOpcycles_eq_zero_of_boundary
 
 中文:
 引理 homologyι_descOpcycles_eq_zero_of_boundary
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   dsimp only [homologyι]
   rw [assoc]; rw [S.rightHomologyι_descOpcycles_π_eq_zero_of_boundary k x hx]; rw [comp_zero]
@@ -3697,7 +3697,7 @@ lemma isZero_homology_of_isZero_X₂
 
 中文:
 引理 isZero_homology_of_isZero_X₂
-  条件: (hS : IsZero S.X₂) [S.HasHomology]
+  条件: (hS : 是零 S.X₂) [S.有同调]
   证明: IsZero.of_iso hS (HomologyData.ofZeros S (hS.eq_of_tgt _ _)
     (hS.eq_of_src _ _)).left.homologyIso
 
@@ -3721,7 +3721,7 @@ lemma isIso_homologyπ
 
 中文:
 引理 isIso_homologyπ
-  条件: (hf : S.f = 0) [S.HasHomology]
+  条件: (hf : S.f = 0) [S.有同调]
   证明: by
   have := S.isIso_leftHomologyπ hf
   dsimp only [homologyπ]
@@ -3748,7 +3748,7 @@ lemma isIso_homologyι
 
 中文:
 引理 isIso_homologyι
-  条件: (hg : S.g = 0) [S.HasHomology]
+  条件: (hg : S.g = 0) [S.有同调]
   证明: by
   have := S.isIso_rightHomologyι hg
   dsimp only [homologyι]
@@ -3778,7 +3778,7 @@ definition asIsoHomologyπ
 
 中文:
 定义 asIsoHomologyπ
-  签名: (hf : S.f = 0) [S.HasHomology]
+  签名: (hf : S.f = 0) [S.有同调]
   定义体: by
   have := S.isIso_homologyπ hf
   exact asIso S.homologyπ
@@ -3805,7 +3805,7 @@ lemma asIsoHomologyπ_inv_comp_homologyπ
 
 中文:
 引理 asIsoHomologyπ_inv_comp_homologyπ
-  条件: (hf : S.f = 0) [S.HasHomology]
+  条件: (hf : S.f = 0) [S.有同调]
   证明: Iso.inv_hom_id _
 
 @[reassoc (attr := simp)]
@@ -3826,7 +3826,7 @@ lemma homologyπ_comp_asIsoHomologyπ_inv
 
 中文:
 引理 homologyπ_comp_asIsoHomologyπ_inv
-  条件: (hf : S.f = 0) [S.HasHomology]
+  条件: (hf : S.f = 0) [S.有同调]
   证明: (S.asIsoHomologyπ hf).hom_inv_id
 
 Depends on / 依赖: S.asIsoHomology, hom_inv_id
@@ -3850,7 +3850,7 @@ definition asIsoHomologyι
 
 中文:
 定义 asIsoHomologyι
-  签名: (hg : S.g = 0) [S.HasHomology]
+  签名: (hg : S.g = 0) [S.有同调]
   定义体: by
   have := S.isIso_homologyι hg
   exact asIso S.homologyι
@@ -3877,7 +3877,7 @@ lemma asIsoHomologyι_inv_comp_homologyι
 
 中文:
 引理 asIsoHomologyι_inv_comp_homologyι
-  条件: (hg : S.g = 0) [S.HasHomology]
+  条件: (hg : S.g = 0) [S.有同调]
   证明: Iso.inv_hom_id _
 
 @[reassoc (attr := simp)]
@@ -3898,7 +3898,7 @@ lemma homologyι_comp_asIsoHomologyι_inv
 
 中文:
 引理 homologyι_comp_asIsoHomologyι_inv
-  条件: (hg : S.g = 0) [S.HasHomology]
+  条件: (hg : S.g = 0) [S.有同调]
   证明: (S.asIsoHomologyι hg).hom_inv_id
 
 Depends on / 依赖: S.asIsoHomology, hom_inv_id
@@ -4021,7 +4021,7 @@ definition LeftHomologyData.canonical
 
 中文:
 定义 LeftHomologyData.canonical
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: S.cycles
   H := S.homology
   i := S.iCycles
@@ -4055,7 +4055,7 @@ lemma LeftHomologyData.canonical_f'
 
 中文:
 引理 LeftHomologyData.canonical_f'
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: rfl
 -/
 lemma LeftHomologyData.canonical_f' [S.HasHomology] :
@@ -4082,7 +4082,7 @@ definition RightHomologyData.canonical
 
 中文:
 定义 RightHomologyData.canonical
-  签名: [S.HasHomology]
+  签名: [S.有同调]
   定义体: S.opcycles
   H := S.homology
   p := S.pOpcycles
@@ -4116,7 +4116,7 @@ lemma RightHomologyData.canonical_g'
 
 中文:
 引理 RightHomologyData.canonical_g'
-  条件: [S.HasHomology]
+  条件: [S.有同调]
   证明: rfl
 -/
 lemma RightHomologyData.canonical_g' [S.HasHomology] :
@@ -4138,8 +4138,8 @@ definition HomologyData.canonical
   iso := Iso.refl _
 
 中文:
-定义 HomologyData.canonical
-  签名: [S.HasHomology]
+定义 同调数据.canonical
+  签名: [S.有同调]
   定义体: LeftHomologyData.canonical S
   right := RightHomologyData.canonical S
   iso := Iso.refl _

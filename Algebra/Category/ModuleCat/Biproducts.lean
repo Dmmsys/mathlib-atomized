@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasBinaryBiproducts (ModuleCat.{v} R)
+  签名: 有BinaryBiproducts (模范畴.{v} R)
   定义体: HasBinaryBiproducts.of_hasBinaryProducts
 
 Depends on / 依赖: HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryProducts, of_hasBinaryProducts
@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteBiproducts (ModuleCat.{v} R)
+  签名: 有FiniteBiproducts (模范畴.{v} R)
   定义体: HasFiniteBiproducts.of_hasFiniteProducts
 
 Depends on / 依赖: Finite, HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, Module, Module.Finite, ModuleCat, ModuleCat.homLinearEquiv.symm, homLinearEquiv, of_hasFiniteProducts
@@ -83,7 +83,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: (M N : ModuleCat.{v} R)
+  签名: (M N : 模范畴.{v} R)
   定义体: { pt := ModuleCat.of R (M × N)
       π :=
         { app := fun j =>
@@ -125,7 +125,7 @@ theorem binaryProductLimitCone_cone_π_app_left
 
 中文:
 定理 binaryProductLimitCone_cone_π_app_left
-  条件: (M N : ModuleCat.{v} R)
+  条件: (M N : 模范畴.{v} R)
   证明: rfl
 
 @[simp]
@@ -145,7 +145,7 @@ theorem binaryProductLimitCone_cone_π_app_right
 
 中文:
 定理 binaryProductLimitCone_cone_π_app_right
-  条件: (M N : ModuleCat.{v} R)
+  条件: (M N : 模范畴.{v} R)
   证明: rfl
 -/
 theorem binaryProductLimitCone_cone_π_app_right (M N : ModuleCat.{v} R) :
@@ -164,7 +164,7 @@ definition biprodIsoProd
 
 中文:
 定义 biprodIsoProd
-  签名: (M N : ModuleCat.{v} R)
+  签名: (M N : 模范畴.{v} R)
   定义体: IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit M N) (binaryProductLimitCone M N).isLimit
 
 @[simp, elementwise]
@@ -188,7 +188,7 @@ theorem biprodIsoProd_inv_comp_fst
 
 中文:
 定理 biprodIsoProd_inv_comp_fst
-  条件: (M N : ModuleCat.{v} R)
+  条件: (M N : 模范畴.{v} R)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.left)
 
 @[simp, elementwise]
@@ -210,7 +210,7 @@ theorem biprodIsoProd_inv_comp_snd
 
 中文:
 定理 biprodIsoProd_inv_comp_snd
-  条件: (M N : ModuleCat.{v} R)
+  条件: (M N : 模范畴.{v} R)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.right)
 
 Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingPair, WalkingPair.right, conePointUniqueUpToIso_inv_comp
@@ -287,7 +287,7 @@ definition productLimitCone
 
 中文:
 定义 productLimitCone
-  签名: : Limits.LimitCone (Discrete.functor f) where
+  签名: : Limits.极限锥 (离散.functor f) where
   定义体: { pt := ModuleCat.of R (forall j, f j)
       π := Discrete.natTrans fun j => ofHom (LinearMap.proj j.as : (forall j, f j) ->ₗ[R] f j.as) }
   isLimit :=
@@ -328,7 +328,7 @@ definition biproductIsoPi
 
 中文:
 定义 biproductIsoPi
-  签名: [Finite J] (f : J -> ModuleCat.{v} R)
+  签名: [有限 J] (f : J -> 模范畴.{v} R)
   定义体: IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (productLimitCone f).isLimit
 
 @[simp, elementwise]
@@ -350,7 +350,7 @@ theorem biproductIsoPi_inv_comp_π
 
 中文:
 定理 biproductIsoPi_inv_comp_π
-  条件: [Finite J] (f : J -> ModuleCat.{v} R) (j : J)
+  条件: [有限 J] (f : J -> 模范畴.{v} R) (j : J)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk j)
 
 Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
@@ -386,7 +386,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : Function.Injective j)
+  签名: def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : 函数.单射 j)
   定义体: ((ShortComplex.Splitting.ofExactOfSection _
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
     (ModuleCat.ofHom g) exac) (ofHom f) (hom_ext h)
@@ -416,7 +416,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : Function.Surjective g)
+  签名: def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : 函数.满射 g)
   定义体: ((ShortComplex.Splitting.ofExactOfRetraction _
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
     (ModuleCat.ofHom g) exac) (ModuleCat.ofHom f) (hom_ext h)
@@ -458,7 +458,7 @@ definition lequivProdOfRightSplitExact
 
 中文:
 定义 lequivProdOfRightSplitExact
-  签名: {f : B ->ₗ[R] M} (hj : Function.Injective j)
+  签名: {f : B ->ₗ[R] M} (hj : 函数.单射 j)
   定义体: have := lequivProdOfRightSplitExact'
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
@@ -495,7 +495,7 @@ definition lequivProdOfLeftSplitExact
 
 中文:
 定义 lequivProdOfLeftSplitExact
-  签名: {f : M ->ₗ[R] A} (hg : Function.Surjective g)
+  签名: {f : M ->ₗ[R] A} (hg : 函数.满射 g)
   定义体: have := lequivProdOfLeftSplitExact'
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)

@@ -153,7 +153,7 @@ theorem _root_.Disjoint.forall_ne_finset
   proof: disjoint_iff_ne.1 h _ ha _ hb
 
 中文:
-定理 _root_.Disjoint.forall_ne_finset
+定理 _root_.Disjoint.对任意_ne_finset
   条件: (h : Disjoint s t) (ha : a in s) (hb : b in t)
   结论: a != b
   证明: disjoint_iff_ne.1 h _ ha _ hb
@@ -242,7 +242,7 @@ theorem disjoint_empty_left
 
 中文:
 定理 disjoint_empty_left
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: Disjoint ∅ s
   证明: disjoint_bot_left
 
@@ -265,7 +265,7 @@ theorem disjoint_empty_right
 
 中文:
 定理 disjoint_empty_right
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: Disjoint s ∅
   证明: disjoint_bot_right
 
@@ -332,7 +332,7 @@ theorem disjoint_singleton
 
 中文:
 定理 disjoint_singleton
-  结论: Disjoint ({a} : Finset α) {b} ↔ a != b
+  结论: Disjoint ({a} : 有限集 α) {b} ↔ a != b
   证明: by
   rw [disjoint_singleton_left]; rw [mem_singleton]
 
@@ -354,7 +354,7 @@ theorem disjoint_self_iff_empty
 
 中文:
 定理 disjoint_self_iff_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: Disjoint s s ↔ s = ∅
   证明: disjoint_self
 
@@ -379,7 +379,7 @@ theorem disjoint_coe
 
 中文:
 定理 disjoint_coe
-  结论: Disjoint (s : Set α) t ↔ Disjoint s t
+  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
   证明: by
   simp only [Finset.disjoint_left, Set.disjoint_left, mem_coe]
 
@@ -401,7 +401,7 @@ theorem pairwiseDisjoint_coe
 
 中文:
 定理 pairwiseDisjoint_coe
-  条件: {ι : 类型} {s : Set ι} {f : ι -> Finset α}
+  条件: {ι : 类型} {s : 集合 ι} {f : ι -> 有限集 α}
   证明: forall₅_congr fun _ _ _ _ _ => disjoint_coe
 
 Depends on / 依赖: disjoint_coe
@@ -421,7 +421,7 @@ lemma pairwiseDisjoint_singleton_iff_injOn
 
 中文:
 引理 pairwiseDisjoint_singleton_iff_injOn
-  条件: {s : Set ι} {f : ι -> α}
+  条件: {s : 集合 ι} {f : ι -> α}
   证明: by
   simp [Set.PairwiseDisjoint, Set.Pairwise, not_imp_not, Set.InjOn]
 -/
@@ -441,7 +441,7 @@ instance decidableDisjoint
 
 中文:
 实例 decidableDisjoint
-  签名: (U V : Finset α)
+  签名: (U V : 有限集 α)
   定义体: decidable_of_iff _ disjoint_left.symm
 
 Depends on / 依赖: decidable_of_iff, disjoint_left, disjoint_left.symm
@@ -470,7 +470,7 @@ definition disjUnion
 
 中文:
 定义 disjUnion
-  签名: (s t : Finset α) (h : Disjoint s t)
+  签名: (s t : 有限集 α) (h : Disjoint s t)
   定义体: ⟨s.1 + t.1, Multiset.nodup_add.2 ⟨s.2, t.2, disjoint_val.2 h⟩⟩
 
 @[simp, grind =]
@@ -518,7 +518,7 @@ theorem coe_disjUnion
 
 中文:
 定理 coe_disjUnion
-  条件: {s t : Finset α} (h : Disjoint s t)
+  条件: {s t : 有限集 α} (h : Disjoint s t)
   证明: Set.ext by simp
 
 Depends on / 依赖: Set.ext
@@ -539,7 +539,7 @@ theorem disjUnion_comm
 
 中文:
 定理 disjUnion_comm
-  条件: (s t : Finset α) (h : Disjoint s t)
+  条件: (s t : 有限集 α) (h : Disjoint s t)
   证明: eq_of_veq Multiset.add_comm _ _
 
 @[simp]
@@ -564,7 +564,7 @@ theorem disjUnion_inj_left
 
 中文:
 定理 disjUnion_inj_left
-  条件: {s₁ s₂ t : Finset α} (h₁ : Disjoint s₁ t) (h₂ : Disjoint s₂ t)
+  条件: {s₁ s₂ t : 有限集 α} (h₁ : Disjoint s₁ t) (h₂ : Disjoint s₂ t)
   证明: by
   simp [← val_inj, Multiset.add_left_inj]
 
@@ -590,7 +590,7 @@ theorem disjUnion_inj_right
 
 中文:
 定理 disjUnion_inj_right
-  条件: {s t₁ t₂ : Finset α} (h₁ : Disjoint s t₁) (h₂ : Disjoint s t₂)
+  条件: {s t₁ t₂ : 有限集 α} (h₁ : Disjoint s t₁) (h₂ : Disjoint s t₂)
   证明: by
   simp [← val_inj, Multiset.add_right_inj]
 
@@ -615,7 +615,7 @@ theorem empty_disjUnion
 
 中文:
 定理 empty_disjUnion
-  条件: (t : Finset α) (h : Disjoint ∅ t := disjoint_bot_left)
+  条件: (t : 有限集 α) (h : Disjoint ∅ t := disjoint_bot_left)
   证明: eq_of_veq Multiset.zero_add _
 
 @[simp]
@@ -637,7 +637,7 @@ theorem disjUnion_empty
 
 中文:
 定理 disjUnion_empty
-  条件: (s : Finset α) (h : Disjoint s ∅ := disjoint_bot_right)
+  条件: (s : 有限集 α) (h : Disjoint s ∅ := disjoint_bot_right)
   证明: eq_of_veq Multiset.add_zero _
 
 Depends on / 依赖: disjoint_bot_right
@@ -656,7 +656,7 @@ theorem singleton_disjUnion
 
 中文:
 定理 singleton_disjUnion
-  条件: (a : α) (t : Finset α) (h : Disjoint {a} t)
+  条件: (a : α) (t : 有限集 α) (h : Disjoint {a} t)
   证明: eq_of_veq Multiset.singleton_add _ _
 
 Depends on / 依赖: Multiset, Multiset.singleton_add, eq_of_veq, singleton_add
@@ -676,7 +676,7 @@ theorem disjUnion_singleton
 
 中文:
 定理 disjUnion_singleton
-  条件: (s : Finset α) (a : α) (h : Disjoint s {a})
+  条件: (s : 有限集 α) (a : α) (h : Disjoint s {a})
   证明: by
   rw [disjUnion_comm]; rw [singleton_disjUnion]
 

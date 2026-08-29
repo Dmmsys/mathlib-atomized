@@ -37,7 +37,7 @@ definition WellFormedBasis
 
 中文:
 定义 WellFormedBasis
-  签名: (basis : Basis)
+  签名: (basis : 基)
   定义体: basis.Pairwise (fun x y => (Real.log ∘ y) =o[atTop] (Real.log ∘ x)) ∧
   forall f in basis, Tendsto f atTop atTop
 
@@ -78,7 +78,7 @@ theorem single
 
 中文:
 定理 single
-  条件: (f : 实数 -> 实数) (hf : Tendsto f atTop atTop)
+  条件: (f : 实数 -> 实数) (hf : 收敛 f atTop atTop)
   结论: WellFormedBasis [f]
   证明: by
   simpa [WellFormedBasis]
@@ -98,7 +98,7 @@ theorem of_sublist
 
 中文:
 定理 of_sublist
-  结论: {basis basis' : Basis} (h : List.Sublist basis basis')
+  结论: {basis basis' : 基} (h : 列表.子表 basis basis')
   证明: ⟨h_basis.left.sublist h, fun _ hf => h_basis.right _ (h.subset hf)⟩
 
 Depends on / 依赖: h.subset, h_basis, h_basis.left.sublist, h_basis.right, sublist, subset
@@ -117,7 +117,7 @@ theorem tail
 
 中文:
 定理 tail
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: h.of_sublist (by simp)
 
 Depends on / 依赖: h.of_sublist, of_sublist
@@ -136,7 +136,7 @@ theorem of_append_right
 
 中文:
 定理 of_append_right
-  条件: {left right : Basis} (h : WellFormedBasis (left ++ right))
+  条件: {left right : 基} (h : WellFormedBasis (left ++ right))
   证明: h.of_sublist (by simp)
 
 Depends on / 依赖: h.of_sublist, of_sublist
@@ -161,7 +161,7 @@ theorem compare_left_aux
 
 中文:
 定理 compare_left_aux
-  结论: {basis : Basis} {f : 实数 -> 实数} (h : WellFormedBasis basis)
+  结论: {basis : 基} {f : 实数 -> 实数} (h : WellFormedBasis basis)
   证明: by
   intro g hg
   rcases basis.eq_nil_or_concat with rfl | ⟨basis_begin, basis_end, rfl⟩
@@ -207,7 +207,7 @@ theorem compare_right_aux
 
 中文:
 定理 compare_right_aux
-  结论: {basis : Basis} {f : 实数 -> 实数} (h : WellFormedBasis basis)
+  结论: {basis : 基} {f : 实数 -> 实数} (h : WellFormedBasis basis)
   证明: by
   intro g hg
   cases basis with
@@ -250,7 +250,7 @@ theorem append
 
 中文:
 定理 append
-  结论: {left right : Basis}
+  结论: {left right : 基}
   证明: by
   simp only [WellFormedBasis] at *
   constructor
@@ -280,7 +280,7 @@ theorem cons
 
 中文:
 定理 cons
-  结论: {basis : Basis} {f : 实数 -> 实数} (h_basis : WellFormedBasis basis)
+  结论: {basis : 基} {f : 实数 -> 实数} (h_basis : WellFormedBasis basis)
   证明: by
   change WellFormedBasis ([f] ++ basis)
   exact append (by simpa [WellFormedBasis]) h_basis (by simpa)
@@ -309,7 +309,7 @@ theorem insert
 
 中文:
 定理 insert
-  结论: {left right : Basis} {f : 实数 -> 实数}
+  结论: {left right : 基} {f : 实数 -> 实数}
   证明: by
   have : WellFormedBasis (f :: right) := cons (h.of_sublist (by simp)) hf_tendsto
     (compare_right_aux (h.of_sublist (by simp)) hf_comp_right)
@@ -340,7 +340,7 @@ theorem push
 
 中文:
 定理 push
-  结论: {basis : Basis} {f : 实数 -> 实数} (h : WellFormedBasis basis)
+  结论: {basis : 基} {f : 实数 -> 实数} (h : WellFormedBasis basis)
   证明: insert (by simp [h]) hf_tendsto hf_comp (by simp)
 
 Depends on / 依赖: hf_comp, hf_tendsto, insert
@@ -361,7 +361,7 @@ theorem tendsto_atTop
 
 中文:
 定理 tendsto_atTop
-  结论: {basis : Basis} (h : WellFormedBasis basis) {f : 实数 -> 实数}
+  结论: {basis : 基} (h : WellFormedBasis basis) {f : 实数 -> 实数}
   证明: h.right f hf
 
 Depends on / 依赖: h.right
@@ -386,7 +386,7 @@ theorem eventually_pos
 
 中文:
 定理 eventually_pos
-  条件: {basis : Basis} (h : WellFormedBasis basis)
+  条件: {basis : 基} (h : WellFormedBasis basis)
   证明: by
   induction basis with
   | nil => simp
@@ -416,7 +416,7 @@ theorem head_eventually_pos
 
 中文:
 定理 head_eventually_pos
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: (forall_eventually_of_eventually_forall h.eventually_pos basis_hd).mono (by grind)
 
 Depends on / 依赖: basis_hd, eventually_pos, forall_eventually_of_eventually_forall, h.eventually_pos
@@ -437,7 +437,7 @@ theorem tail_isLittleO_head
 
 中文:
 定理 tail_isLittleO_head
-  结论: {hd : 实数 -> 实数} {tl : Basis}
+  结论: {hd : 实数 -> 实数} {tl : 基}
   证明: by
   rw [WellFormedBasis]; rw [List.pairwise_cons] at h
   exact h.left.left _ hf
@@ -465,7 +465,7 @@ Real.tendsto_log_atTop.comp h_basis.tendsto_atTop List.mem_of_getLast? hg
 
 中文:
 定理 push_log_last
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   apply h_basis.push
   · simp [Real.tendsto_log_atTop.comp, h_basis.right]
@@ -542,7 +542,7 @@ theorem tail_pow_majorized_head
 
 中文:
 定理 tail_pow_majorized_head
-  结论: {hd f : 实数 -> 实数} {tl : Basis}
+  结论: {hd f : 实数 -> 实数} {tl : 基}
   证明: by
   intro exp h_exp
   apply pow_isLittleO_pow_of_log
@@ -580,11 +580,11 @@ inductive BasisExtension
 
 中文:
 归纳类型 BasisExtension
-  参数: : Basis -> Type
+  参数: : 基 -> 类型
   构造子 (3 个):
     - nil: BasisExtension []
-    - keep: (basis_hd : 实数 -> 实数) {basis_tl : Basis} (ex : BasisExtension basis_tl) : BasisExtension (basis_hd :: basis_tl)
-    - insert: {basis : Basis} (f : 实数 -> 实数) (ex : BasisExtension basis) : BasisExtension basis
+    - keep: (basis_hd : 实数 -> 实数) {basis_tl : 基} (ex : BasisExtension basis_tl) : BasisExtension (basis_hd :: basis_tl)
+    - insert: {basis : 基} (f : 实数 -> 实数) (ex : BasisExtension basis) : BasisExtension basis
 -/
 inductive BasisExtension : Basis -> Type
 | nil : BasisExtension []
@@ -607,7 +607,7 @@ definition getBasis
 
 中文:
 定义 getBasis
-  签名: {basis : Basis} (ex : BasisExtension basis)
+  签名: {basis : 基} (ex : BasisExtension basis)
   定义体: match ex with
   | nil => []
   | keep basis_hd ex => basis_hd :: ex.getBasis
@@ -635,7 +635,7 @@ theorem sublist_getBasis
 
 中文:
 定理 sublist_getBasis
-  条件: {basis : Basis} {ex : BasisExtension basis}
+  条件: {basis : 基} {ex : BasisExtension basis}
   证明: by
   induction ex with
   | nil => simp
@@ -661,7 +661,7 @@ theorem insert_tail_wellFormedBasis
 
 中文:
 定理 insert_tail_wellFormedBasis
-  结论: {basis : Basis} {f : 实数 -> 实数}
+  结论: {basis : 基} {f : 实数 -> 实数}
   证明: h_basis.of_sublist (by simp [getBasis])
 
 Depends on / 依赖: getBasis, h_basis, h_basis.of_sublist, of_sublist

@@ -82,7 +82,7 @@ definition IsDynCoverOf
 
 中文:
 定义 IsDynCoverOf
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数) (s : Set X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数) (s : 集合 X)
   定义体: IsCover (dynEntourage T U n) F s
 
 Depends on / 依赖: IsCover, dynEntourage
@@ -177,7 +177,7 @@ lemma isDynCoverOf_zero
 
 中文:
 引理 isDynCoverOf_zero
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (h : s.Nonempty)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (h : s.非空)
   证明: by simp [IsDynCoverOf, h]
 
 Depends on / 依赖: IsDynCoverOf
@@ -195,7 +195,7 @@ lemma isDynCoverOf_univ
 
 中文:
 引理 isDynCoverOf_univ
-  条件: (T : X -> X) (F : Set X) (n : 自然数) (h : s.Nonempty)
+  条件: (T : X -> X) (F : 集合 X) (n : 自然数) (h : s.非空)
   证明: by simp [IsDynCoverOf, h]
 
 Depends on / 依赖: IsDynCoverOf
@@ -219,7 +219,7 @@ lemma IsDynCoverOf.nonempty_inter
 
 中文:
 引理 IsDynCoverOf.nonempty_inter
-  条件: [U.IsSymm] {s : Finset X} (h : IsDynCoverOf T F U n s)
+  条件: [U.是Symm] {s : 有限集 X} (h : IsDynCoverOf T F U n s)
   证明: by
   classical
   use {x in s | (ball x (dynEntourage T U n) inter F).Nonempty}
@@ -260,7 +260,7 @@ lemma IsDynCoverOf.iterate_le_pow
 
 中文:
 引理 IsDynCoverOf.iterate_le_pow
-  结论: (F_inv : MapsTo T F F) [U.IsSymm] (n : 自然数) {s : Finset X}
+  结论: (F_inv : 映射到 T F F) [U.是Symm] (n : 自然数) {s : 有限集 X}
   证明: by
   classical
   -- Deal with the edge cases: `F = ∅` or `m = 0`.
@@ -356,8 +356,8 @@ lemma exists_isDynCoverOf_of_isCompact_uniformContinuous
 exact ⟨s, .of_entourage
 
 中文:
-引理 exists_isDynCoverOf_of_isCompact_uniformContinuous
-  结论: [UniformSpace X]
+引理 存在_isDynCoverOf_of_isCompact_uniformContinuous
+  结论: [一致空间 X]
   证明: by
   obtain ⟨(V : SetRel X X), hV, hVsymm, hVU⟩ := symm_of_uniformity U_uni
   have uni_ite := dynEntourage_mem_uniformity h hV n
@@ -390,8 +390,8 @@ have : IsDynCoverOf T F V 1 s := .of_subset_iUnion_ball by simpa using s_cover
   obtain ⟨t, t_dyncover
 
 中文:
-引理 exists_isDynCoverOf_of_isCompact_invariant
-  结论: [UniformSpace X]
+引理 存在_isDynCoverOf_of_isCompact_invariant
+  结论: [一致空间 X]
   证明: by
   obtain ⟨(V : SetRel X X), V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
   obtain ⟨s, _, s_cover⟩ := F_comp.elim_nhds_subcover (ball · V)
@@ -424,7 +424,7 @@ definition coverMincard
 
 中文:
 定义 coverMincard
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   定义体: ⨅ (s : Finset X) (_ : IsDynCoverOf T F U n s), (s.card : Nat∞)
 
 Depends on / 依赖: Finset, IsDynCoverOf, s.card
@@ -442,7 +442,7 @@ lemma IsDynCoverOf.coverMincard_le_card
 
 中文:
 引理 IsDynCoverOf.coverMincard_le_card
-  条件: {s : Finset X} (h : IsDynCoverOf T F U n s)
+  条件: {s : 有限集 X} (h : IsDynCoverOf T F U n s)
   证明: iInf₂_le s h
 -/
 lemma IsDynCoverOf.coverMincard_le_card {s : Finset X} (h : IsDynCoverOf T F U n s) :
@@ -459,7 +459,7 @@ lemma coverMincard_monotone_time
 
 中文:
 引理 coverMincard_monotone_time
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   证明: fun _ _ m_n => biInf_mono fun _ h => h.of_le m_n
 
 Depends on / 依赖: biInf_mono, h.of_le, of_le
@@ -478,7 +478,7 @@ lemma coverMincard_antitone
 
 中文:
 引理 coverMincard_antitone
-  条件: (T : X -> X) (F : Set X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (n : 自然数)
   证明: fun _ _ U_V => biInf_mono fun _ h => h.of_entourage_subset U_V
 
 Depends on / 依赖: biInf_mono, h.of_entourage_subset, of_entourage_subset
@@ -504,7 +504,7 @@ lemma coverMincard_finite_iff
 
 中文:
 引理 coverMincard_finite_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   refine ⟨fun h_fin => ?_, fun ⟨s, _, s_coverMincard⟩ => s_coverMincard ▸ WithTop.coe_lt_top s.card⟩
   obtain ⟨k, k_min⟩ := ENat.ne_top_iff_exists.mp h_fin.ne
@@ -571,7 +571,7 @@ lemma coverMincard_eq_zero_iff
 
 中文:
 引理 coverMincard_eq_zero_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   simp [coverMincard, ENat.iInf_eq_zero]
 
@@ -593,7 +593,7 @@ lemma one_le_coverMincard_iff
 
 中文:
 引理 one_le_coverMincard_iff
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X) (n : 自然数)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X) (n : 自然数)
   证明: by
   rw [Order.one_le_iff_ne_zero]; rw [nonempty_iff_ne_empty]; rw [not_iff_not]
   exact coverMincard_eq_zero_iff T F U n
@@ -621,7 +621,7 @@ lemma coverMincard_zero
 
 中文:
 引理 coverMincard_zero
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   证明: by
   apply le_antisymm _ ((one_le_coverMincard_iff T F U 0).2 h)
   obtain ⟨x, _⟩ := h
@@ -658,7 +658,7 @@ lemma coverMincard_univ
 
 中文:
 引理 coverMincard_univ
-  条件: (T : X -> X) (h : F.Nonempty) (n : 自然数)
+  条件: (T : X -> X) (h : F.非空) (n : 自然数)
   结论: coverMincard T F univ n = 1
   证明: by
   apply le_antisymm _ ((one_le_coverMincard_iff T F univ n).2 h)
@@ -695,7 +695,7 @@ lemma coverMincard_mul_le_pow
 
 中文:
 引理 coverMincard_mul_le_pow
-  条件: (F_inv : MapsTo T F F) [U.IsSymm] (m n : 自然数)
+  条件: (F_inv : 映射到 T F F) [U.是Symm] (m n : 自然数)
   证明: by
   rcases F.eq_empty_or_nonempty with rfl | F_nonempty
   · simp
@@ -731,7 +731,7 @@ lemma coverMincard_le_pow
 
 中文:
 引理 coverMincard_le_pow
-  条件: (F_inv : MapsTo T F F) [U.IsSymm] (m_pos : 0 < m) (n : 自然数)
+  条件: (F_inv : 映射到 T F F) [U.是Symm] (m_pos : 0 < m) (n : 自然数)
   证明: (coverMincard_monotone_time T F (U ○ U) (Nat.lt_mul_div_succ n m_pos).le).trans
     (coverMincard_mul_le_pow F_inv m (n / m + 1))
 
@@ -754,7 +754,7 @@ lemma coverMincard_finite_of_isCompact_uniformContinuous
 
 中文:
 引理 coverMincard_finite_of_isCompact_uniformContinuous
-  结论: [UniformSpace X] (F_comp : IsCompact F)
+  结论: [一致空间 X] (F_comp : 是紧集 F)
   证明: by
   obtain ⟨s, s_cover⟩ := exists_isDynCoverOf_of_isCompact_uniformContinuous F_comp h U_uni n
   exact s_cover.coverMincard_le_card.trans_lt (WithTop.coe_lt_top s.card)
@@ -779,7 +779,7 @@ lemma coverMincard_finite_of_isCompact_invariant
 
 中文:
 引理 coverMincard_finite_of_isCompact_invariant
-  结论: [UniformSpace X] (F_comp : IsCompact F)
+  结论: [一致空间 X] (F_comp : 是紧集 F)
   证明: by
   obtain ⟨s, s_cover⟩ := exists_isDynCoverOf_of_isCompact_invariant F_comp F_inv U_uni n
   exact s_cover.coverMincard_le_card.trans_lt (WithTop.coe_lt_top s.card)
@@ -810,7 +810,7 @@ lemma nonempty_inter_of_coverMincard
 
 中文:
 引理 nonempty_inter_of_coverMincard
-  结论: [U.IsSymm] {s : Finset X} (h : IsDynCoverOf T F U n s)
+  结论: [U.是Symm] {s : 有限集 X} (h : IsDynCoverOf T F U n s)
   证明: by
   -- Otherwise, there is a ball which does not intersect `F`. Removing it yields a smaller cover.
   classical
@@ -857,7 +857,7 @@ definition coverEntropyEntourage
 
 中文:
 定义 coverEntropyEntourage
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   定义体: expGrowthSup fun n : Nat => coverMincard T F U n
 
 Depends on / 依赖: coverMincard, expGrowthSup, map_one, mul_one
@@ -875,7 +875,7 @@ definition coverEntropyInfEntourage
 
 中文:
 定义 coverEntropyInfEntourage
-  签名: (T : X -> X) (F : Set X) (U : SetRel X X)
+  签名: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   定义体: expGrowthInf fun n : Nat => coverMincard T F U n
 
 Depends on / 依赖: coverMincard, expGrowthInf, mul_comm, mul_inv_left, sec_spec
@@ -893,7 +893,7 @@ lemma coverEntropyInfEntourage_antitone
 
 中文:
 引理 coverEntropyInfEntourage_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ U_V => expGrowthInf_monotone fun n => ENat.toENNReal_mono (coverMincard_antitone T F n U_V)
 
 Depends on / 依赖: ENat.toENNReal_mono, _sec, coverMincard_antitone, expGrowthInf_monotone, f.mk, f.sec, toENNReal_mono
@@ -912,7 +912,7 @@ lemma coverEntropyEntourage_antitone
 
 中文:
 引理 coverEntropyEntourage_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ U_V => expGrowthSup_monotone fun n => ENat.toENNReal_mono (coverMincard_antitone T F n U_V)
 
 Depends on / 依赖: ENat.toENNReal_mono, coverMincard_antitone, expGrowthSup_monotone, mul_assoc, mul_comm, mul_inv_left, toENNReal_mono
@@ -933,7 +933,7 @@ lemma coverEntropyInfEntourage_le_coverEntropyEntourage
 
 中文:
 引理 coverEntropyInfEntourage_le_coverEntropyEntourage
-  条件: (T : X -> X) (F : Set X) (U : SetRel X X)
+  条件: (T : X -> X) (F : 集合 X) (U : SetRel X X)
   证明: expGrowthInf_le_expGrowthSup
 
 @[simp]
@@ -1007,7 +1007,7 @@ lemma coverEntropyInfEntourage_nonneg
 
 中文:
 引理 coverEntropyInfEntourage_nonneg
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   证明: by
   apply Monotone.expGrowthInf_nonneg
   · exact fun _ _ m_n => ENat.toENNReal_mono (coverMincard_monotone_time T F U m_n)
@@ -1038,7 +1038,7 @@ lemma coverEntropyEntourage_nonneg
 
 中文:
 引理 coverEntropyEntourage_nonneg
-  条件: (T : X -> X) (h : F.Nonempty) (U : SetRel X X)
+  条件: (T : X -> X) (h : F.非空) (U : SetRel X X)
   证明: (coverEntropyInfEntourage_nonneg T h U).trans
     (coverEntropyInfEntourage_le_coverEntropyEntourage T F U)
 
@@ -1061,7 +1061,7 @@ lemma coverEntropyEntourage_univ
 
 中文:
 引理 coverEntropyEntourage_univ
-  条件: (T : X -> X) (h : F.Nonempty)
+  条件: (T : X -> X) (h : F.非空)
   证明: by
   rw [← expGrowthSup_const one_ne_zero one_ne_top]; rw [coverEntropyEntourage]
   simp only [coverMincard_univ T h, ENat.toENNReal_one]
@@ -1085,7 +1085,7 @@ lemma coverEntropyInfEntourage_univ
 
 中文:
 引理 coverEntropyInfEntourage_univ
-  条件: (T : X -> X) (h : F.Nonempty)
+  条件: (T : X -> X) (h : F.非空)
   证明: by
   rw [← expGrowthInf_const one_ne_zero one_ne_top]; rw [coverEntropyInfEntourage]
   simp only [coverMincard_univ T h, ENat.toENNReal_one]
@@ -1111,7 +1111,7 @@ lemma coverEntropyEntourage_le_log_coverMincard_div
 
 中文:
 引理 coverEntropyEntourage_le_log_coverMincard_div
-  结论: (F_inv : MapsTo T F F) [U.IsSymm]
+  结论: (F_inv : 映射到 T F F) [U.是Symm]
   证明: by
   have cv_mono : Monotone fun m => (coverMincard T F (U ○ U) m).toENNReal :=
     fun _ _ k_m => ENat.toENNReal_mono (coverMincard_monotone_time T F (U ○ U) k_m)
@@ -1147,7 +1147,7 @@ lemma IsDynCoverOf.coverEntropyEntourage_le_log_card_div
 
 中文:
 引理 IsDynCoverOf.coverEntropyEntourage_le_log_card_div
-  结论: (F_inv : MapsTo T F F) [U.IsSymm]
+  结论: (F_inv : 映射到 T F F) [U.是Symm]
   证明: by
   apply (coverEntropyEntourage_le_log_coverMincard_div F_inv n_pos).trans
   apply monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone _)
@@ -1174,7 +1174,7 @@ lemma coverEntropyEntourage_le_coverEntropyInfEntourage
 
 中文:
 引理 coverEntropyEntourage_le_coverEntropyInfEntourage
-  条件: (F_inv : MapsTo T F F) [U.IsSymm]
+  条件: (F_inv : 映射到 T F F) [U.是Symm]
   证明: by
   refine (le_liminf_of_le) (eventually_atTop.2 ⟨1, fun m m_pos => ?_⟩)
   exact coverEntropyEntourage_le_log_coverMincard_div F_inv (Nat.one_le_iff_ne_zero.1 m_pos)
@@ -1200,7 +1200,7 @@ lemma coverEntropyEntourage_finite_of_isCompact_invariant
 
 中文:
 引理 coverEntropyEntourage_finite_of_isCompact_invariant
-  结论: [UniformSpace X]
+  结论: [一致空间 X]
   证明: by
   obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
   obtain ⟨s, s_cover⟩ := exists_isDynCoverOf_of_isCompact_invariant F_comp F_inv V_uni 1
@@ -1231,7 +1231,7 @@ definition coverEntropy
 
 中文:
 定义 coverEntropy
-  签名: [UniformSpace X] (T : X -> X) (F : Set X)
+  签名: [一致空间 X] (T : X -> X) (F : 集合 X)
   定义体: ⨆ U in 𝓤 X, coverEntropyEntourage T F U
 
 Depends on / 依赖: _eq_iff_eq, coverEntropyEntourage, eq_iff_exists, map_mul, map_units, mul_left_inj
@@ -1249,7 +1249,7 @@ definition coverEntropyInf
 
 中文:
 定义 coverEntropyInf
-  签名: [UniformSpace X] (T : X -> X) (F : Set X)
+  签名: [一致空间 X] (T : X -> X) (F : 集合 X)
   定义体: ⨆ U in 𝓤 X, coverEntropyInfEntourage T F U
 
 Depends on / 依赖: coverEntropyInfEntourage, mul_inv_left, mul_one
@@ -1267,7 +1267,7 @@ lemma coverEntropyInf_antitone
 
 中文:
 引理 coverEntropyInf_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ h => iSup₂_mono' fun U U_uni => ⟨U, (le_def.1 h) U U_uni, le_refl _⟩
 
 Depends on / 依赖: U_uni, _self, le_def, le_refl
@@ -1286,7 +1286,7 @@ lemma coverEntropy_antitone
 
 中文:
 引理 coverEntropy_antitone
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: fun _ _ h => iSup₂_mono' fun U U_uni => ⟨U, (le_def.1 h) U U_uni, le_refl _⟩
 
 Depends on / 依赖: U_uni, le_def, le_refl
@@ -1307,7 +1307,7 @@ lemma coverEntropyEntourage_le_coverEntropy
 
 中文:
 引理 coverEntropyEntourage_le_coverEntropy
-  结论: (T : X -> X) (F : Set X)
+  结论: (T : X -> X) (F : 集合 X)
   证明: le_iSup₂ (f := fun (U : SetRel X X) (_ : U in 𝓤 X) => coverEntropyEntourage T F U) U h
 
 Depends on / 依赖: SetRel, _eq_mk, _of_mul, coverEntropyEntourage, mul_comm, mul_mk
@@ -1327,7 +1327,7 @@ lemma coverEntropyInfEntourage_le_coverEntropyInf
 
 中文:
 引理 coverEntropyInfEntourage_le_coverEntropyInf
-  结论: (T : X -> X) (F : Set X)
+  结论: (T : X -> X) (F : 集合 X)
   证明: le_iSup₂ (f := fun (U : SetRel X X) (_ : U in 𝓤 X) => coverEntropyInfEntourage T F U) U h
 
 Depends on / 依赖: SetRel, _eq_mk, _of_mul, coverEntropyInfEntourage, mul_mk, mul_one
@@ -1352,7 +1352,7 @@ lemma coverEntropy_eq_iSup_basis
 
 中文:
 引理 coverEntropy_eq_iSup_basis
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> SetRel X X}
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> SetRel X X}
   证明: by
   refine (iSup₂_le fun U U_uni => ?_).antisymm
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
@@ -1386,7 +1386,7 @@ lemma coverEntropyInf_eq_iSup_basis
 
 中文:
 引理 coverEntropyInf_eq_iSup_basis
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> SetRel X X}
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> SetRel X X}
   证明: by
   refine (iSup₂_le fun U U_uni => ?_).antisymm
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
@@ -1418,7 +1418,7 @@ lemma coverEntropyInf_le_coverEntropy
 
 中文:
 引理 coverEntropyInf_le_coverEntropy
-  条件: (T : X -> X) (F : Set X)
+  条件: (T : X -> X) (F : 集合 X)
   证明: iSup₂_mono fun (U : SetRel X X) (_ : U in 𝓤 X) =>
     coverEntropyInfEntourage_le_coverEntropyEntourage T F U
 
@@ -1489,7 +1489,7 @@ lemma coverEntropyInf_nonneg
 
 中文:
 引理 coverEntropyInf_nonneg
-  条件: (T : X -> X) (h : F.Nonempty)
+  条件: (T : X -> X) (h : F.非空)
   结论: 0 <= coverEntropyInf T F
   证明: (coverEntropyInfEntourage_le_coverEntropyInf T F univ_mem).trans_eq'
     (coverEntropyInfEntourage_univ T h)
@@ -1511,7 +1511,7 @@ lemma coverEntropy_nonneg
 
 中文:
 引理 coverEntropy_nonneg
-  条件: (T : X -> X) (h : F.Nonempty)
+  条件: (T : X -> X) (h : F.非空)
   结论: 0 <= coverEntropy T F
   证明: (coverEntropyInf_nonneg T h).trans (coverEntropyInf_le_coverEntropy T F)
 
@@ -1534,7 +1534,7 @@ exact (coverEntropyEntourage_antitone T F V_U).trans le_iSup₂_of_le V V_uni
 
 中文:
 引理 coverEntropyInf_eq_coverEntropy
-  条件: (T : X -> X) (h : MapsTo T F F)
+  条件: (T : X -> X) (h : 映射到 T F F)
   证明: by
   refine le_antisymm (coverEntropyInf_le_coverEntropy T F) (iSup₂_le fun U U_uni => ?_)
   obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni

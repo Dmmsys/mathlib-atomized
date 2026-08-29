@@ -116,8 +116,8 @@ theorem IsIntegrallyClosed.eq_map_mul_C_of_dvd
     rw [hg']; rw [mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀ (leadingCoef
 
 中文:
-定理 IsIntegrallyClosed.eq_map_mul_C_of_dvd
-  结论: [Is整数egrallyClosed R] {f : R[X]} (hf : f.Monic)
+定理 是整闭.eq_map_mul_C_of_dvd
+  结论: [是整闭 R] {f : R[X]} (hf : f.Monic)
   证明: by
   have g_ne_0 : g != 0 := ne_zero_of_dvd_ne_zero (Monic.ne_zero <| hf.map (algebraMap R K)) hg
   suffices lem : exists g' : R[X], g'.map (algebraMap R K) = g * C g.leadingCoeff⁻¹ by
@@ -179,8 +179,8 @@ theorem IsPrimitive.isUnit_iff_isUnit_map_of_injective
   exact isUnit_C.mpr (isPrimitive_iff_isUnit_of_C_dvd.mp hf (f.coef
 
 中文:
-定理 IsPrimitive.isUnit_iff_isUnit_map_of_injective
-  结论: IsUnit f ↔ IsUnit (map φ f)
+定理 是Primitive.isUnit_iff_isUnit_map_of_injective
+  结论: 是单位 f ↔ 是单位 (map φ f)
   证明: by
   refine ⟨(mapRingHom φ).isUnit_map, fun h => ?_⟩
   rcases isUnit_iff.1 h with ⟨_, ⟨u, rfl⟩, hu⟩
@@ -213,8 +213,8 @@ theorem IsPrimitive.irreducible_of_irreducible_map_of_injective
   exacts [Dvd.intro _ h.symm, Dvd.intro_left _ h
 
 中文:
-定理 IsPrimitive.irreducible_of_irreducible_map_of_injective
-  条件: (h_irr : Irreducible (map φ f))
+定理 是Primitive.irreducible_of_irreducible_map_of_injective
+  条件: (h_irr : 不可约 (map φ f))
   证明: by
   refine
     ⟨fun h => h_irr.not_isUnit (IsUnit.map (mapRingHom φ) h), fun a b h =>
@@ -247,8 +247,8 @@ theorem IsPrimitive.isUnit_iff_isUnit_map
   proof: hp.isUnit_iff_isUnit_map_of_injective (IsFractionRing.injective _ _)
 
 中文:
-定理 IsPrimitive.isUnit_iff_isUnit_map
-  条件: {p : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.isUnit_iff_isUnit_map
+  条件: {p : R[X]} (hp : p.是Primitive)
   证明: hp.isUnit_iff_isUnit_map_of_injective (IsFractionRing.injective _ _)
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, hp.isUnit_iff_isUnit_map_of_injective, injective, isUnit_iff_isUnit_map_of_injective
@@ -278,7 +278,7 @@ theorem Monic.irreducible_iff_irreducible_map_fraction_map
 
 中文:
 定理 Monic.irreducible_iff_irreducible_map_fraction_map
-  结论: [Is整数egrallyClosed R] {p : R[X]}
+  结论: [是整闭 R] {p : R[X]}
   证明: by
   /- The ← direction follows from `IsPrimitive.irreducible_of_irreducible_map_of_injective`.
        For the → direction, it is enough to show that if `(p.map <| algebraMap R K) = a * b` and
@@ -337,8 +337,8 @@ RingHom.mem_range.mp minpoly.mem_range_of_degree_eq_one R x ?_
    
 
 中文:
-定理 isIntegrallyClosed_iff'
-  条件: [IsDomain R]
+定理 is整数egrallyClosed_iff'
+  条件: [是整环 R]
   证明: by
   constructor
   · intro hR p hp; exact Monic.irreducible_iff_irreducible_map_fraction_map hp
@@ -380,7 +380,7 @@ theorem Monic.dvd_of_fraction_map_dvd_fraction_map
 
 中文:
 定理 Monic.dvd_of_fraction_map_dvd_fraction_map
-  结论: [Is整数egrallyClosed R] {p q : R[X]}
+  结论: [是整闭 R] {p q : R[X]}
   证明: by
   obtain ⟨r, hr⟩ := h
   obtain ⟨d', hr'⟩ := IsIntegrallyClosed.eq_map_mul_C_of_dvd K hp (dvd_of_mul_left_eq _ hr.symm)
@@ -411,7 +411,7 @@ theorem Monic.dvd_iff_fraction_map_dvd_fraction_map
 
 中文:
 定理 Monic.dvd_iff_fraction_map_dvd_fraction_map
-  结论: [Is整数egrallyClosed R] {p q : R[X]}
+  结论: [是整闭 R] {p q : R[X]}
   证明: ⟨fun h => hp.dvd_of_fraction_map_dvd_fraction_map hq h, fun ⟨a, b⟩ =>
     ⟨a.map (algebraMap R K), b.symm ▸ Polynomial.map_mul (algebraMap R K)⟩⟩
 
@@ -445,7 +445,7 @@ theorem isUnit_or_eq_zero_of_isUnit_integerNormalization_primPart
 
 中文:
 定理 isUnit_or_eq_zero_of_isUnit_integerNormalization_primPart
-  结论: [NormalizedGCDMonoid R]
+  结论: [正规化最大公约数幺半群 R]
   证明: by
   rcases isUnit_iff.1 h with ⟨_, ⟨u, rfl⟩, hu⟩
   obtain ⟨c, c0, hc⟩ := integerNormalization_spec R⁰ p
@@ -488,8 +488,8 @@ lemma IsPrimitive.mul_map_mem_lifts_iff
     apply m
 
 中文:
-引理 IsPrimitive.mul_map_mem_lifts_iff
-  条件: {f : R[X]} (hf : IsPrimitive f) {g : K[X]}
+引理 是Primitive.mul_map_mem_lifts_iff
+  条件: {f : R[X]} (hf : 是Primitive f) {g : K[X]}
   证明: by
   let : NormalizedGCDMonoid R := Nonempty.some inferInstance
   refine ⟨fun ⟨k, (hk : k.map _ = _)⟩ => ?_, fun h => mul_mem h ⟨_, rfl⟩⟩
@@ -526,8 +526,8 @@ lemma IsPrimitive.map_mul_mem_lifts_iff
   rw [mul_comm]; rw [hf.mul_map_mem_lifts_iff]
 
 中文:
-引理 IsPrimitive.map_mul_mem_lifts_iff
-  条件: {f : R[X]} (hf : IsPrimitive f) {g : K[X]}
+引理 是Primitive.map_mul_mem_lifts_iff
+  条件: {f : R[X]} (hf : 是Primitive f) {g : K[X]}
   证明: by
   rw [mul_comm]; rw [hf.mul_map_mem_lifts_iff]
 
@@ -552,8 +552,8 @@ theorem IsPrimitive.irreducible_iff_irreducible_map_fraction_map
   
 
 中文:
-定理 IsPrimitive.irreducible_iff_irreducible_map_fraction_map
-  条件: {p : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.irreducible_iff_irreducible_map_fraction_map
+  条件: {p : R[X]} (hp : p.是Primitive)
   证明: by
   refine
     ⟨fun hi => ⟨fun h => hi.not_isUnit (hp.isUnit_iff_isUnit_map.2 h), fun a b hab => ?_⟩,
@@ -616,8 +616,8 @@ theorem IsPrimitive.dvd_of_fraction_map_dvd_fraction_map
     using hr
 
 中文:
-定理 IsPrimitive.dvd_of_fraction_map_dvd_fraction_map
-  结论: {p q : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.dvd_of_fraction_map_dvd_fraction_map
+  结论: {p q : R[X]} (hp : p.是Primitive)
   证明: by
   rcases h_dvd with ⟨r, hr⟩
   obtain ⟨r, rfl⟩ := (mul_map_mem_lifts_iff hp).mp ⟨q, mul_comm _ r ▸ hr⟩
@@ -647,8 +647,8 @@ theorem IsPrimitive.dvd_iff_fraction_map_dvd_fraction_map
     hp.dvd_of_fraction_map_dvd_fraction_map h⟩
 
 中文:
-定理 IsPrimitive.dvd_iff_fraction_map_dvd_fraction_map
-  条件: {p q : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.dvd_iff_fraction_map_dvd_fraction_map
+  条件: {p q : R[X]} (hp : p.是Primitive)
   证明: ⟨fun ⟨a, b⟩ => ⟨a.map (algebraMap R K), b.symm ▸ Polynomial.map_mul (algebraMap R K)⟩, fun h =>
     hp.dvd_of_fraction_map_dvd_fraction_map h⟩
 
@@ -672,8 +672,8 @@ theorem IsPrimitive.Int.irreducible_iff_irreducible_map_cast
   proof: hp.irreducible_iff_irreducible_map_fraction_map
 
 中文:
-定理 IsPrimitive.Int.irreducible_iff_irreducible_map_cast
-  条件: {p : 整数[X]} (hp : p.IsPrimitive)
+定理 是Primitive.整数.irreducible_iff_irreducible_map_cast
+  条件: {p : 整数[X]} (hp : p.是Primitive)
   证明: hp.irreducible_iff_irreducible_map_fraction_map
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, hp.irreducible_iff_irreducible_map_fraction_map, irreducible_iff_irreducible_map_fraction_map, smul_mem
@@ -691,8 +691,8 @@ theorem IsPrimitive.Int.dvd_iff_map_cast_dvd_map_cast
   proof: hp.dvd_iff_fraction_map_dvd_fraction_map Rat
 
 中文:
-定理 IsPrimitive.Int.dvd_iff_map_cast_dvd_map_cast
-  条件: (p q : 整数[X]) (hp : p.IsPrimitive)
+定理 是Primitive.整数.dvd_iff_map_cast_dvd_map_cast
+  条件: (p q : 整数[X]) (hp : p.是Primitive)
   证明: hp.dvd_iff_fraction_map_dvd_fraction_map Rat
 
 Depends on / 依赖: dvd_iff_fraction_map_dvd_fraction_map, hp.dvd_iff_fraction_map_dvd_fraction_map

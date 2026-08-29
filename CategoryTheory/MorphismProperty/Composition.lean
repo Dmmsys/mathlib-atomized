@@ -38,7 +38,7 @@ abbreviation identities
 
 中文:
 缩写 identities
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: .ofHoms fun X => 𝟙 X
 
 Depends on / 依赖: ofHoms
@@ -84,8 +84,8 @@ class ContainsIdentities
     - id_mem : forall (X : C), W (𝟙 X)
 
 中文:
-类 ContainsIdentities
-  参数: (W : Morphism命题erty C)
+类 余ntainsIdentities
+  参数: (W : MorphismProperty C)
   公理与运算 (1 个):
     - id_mem : 对任意 (X : C), W (𝟙 X)
 -/
@@ -103,7 +103,7 @@ lemma id_mem
 
 中文:
 引理 id_mem
-  条件: (W : Morphism命题erty C) [W.ContainsIdentities] (X : C)
+  条件: (W : MorphismProperty C) [W.余ntainsIdentities] (X : C)
   证明: ContainsIdentities.id_mem X
 
 Depends on / 依赖: ContainsIdentities, ContainsIdentities.id_mem, id_mem
@@ -123,7 +123,7 @@ instance op
 
 中文:
 实例 op
-  签名: (W : Morphism命题erty C) [W.ContainsIdentities]
+  签名: (W : MorphismProperty C) [W.余ntainsIdentities]
   定义体: ⟨fun X => W.id_mem X.unop⟩
 
 Depends on / 依赖: W.id_mem, X.unop, id_mem
@@ -141,7 +141,7 @@ instance unop
 
 中文:
 实例 unop
-  签名: (W : Morphism命题erty Cᵒᵖ) [W.ContainsIdentities]
+  签名: (W : MorphismProperty Cᵒᵖ) [W.余ntainsIdentities]
   定义体: ⟨fun X => W.id_mem (Opposite.op X)⟩
 
 Depends on / 依赖: Opposite, Opposite.op, W.id_mem, id_mem
@@ -159,7 +159,7 @@ lemma of_op
 
 中文:
 引理 of_op
-  条件: (W : Morphism命题erty C) [W.op.ContainsIdentities]
+  条件: (W : MorphismProperty C) [W.op.余ntainsIdentities]
   证明: (inferInstance : W.op.unop.ContainsIdentities)
 
 Depends on / 依赖: ContainsIdentities, W.op.unop.ContainsIdentities
@@ -177,7 +177,7 @@ lemma of_unop
 
 中文:
 引理 of_unop
-  条件: (W : Morphism命题erty Cᵒᵖ) [W.unop.ContainsIdentities]
+  条件: (W : MorphismProperty Cᵒᵖ) [W.unop.余ntainsIdentities]
   证明: (inferInstance : W.unop.op.ContainsIdentities)
 
 Depends on / 依赖: ContainsIdentities, W.unop.op.ContainsIdentities
@@ -198,7 +198,7 @@ lemma eqToHom
 
 中文:
 引理 eqToHom
-  条件: (W : Morphism命题erty C) [W.ContainsIdentities] {x y : C} (h : x = y)
+  条件: (W : MorphismProperty C) [W.余ntainsIdentities] {x y : C} (h : x = y)
   证明: by
   subst h
   rw [eqToHom_refl]
@@ -222,7 +222,7 @@ instance inverseImage
 
 中文:
 实例 inverseImage
-  签名: {P : Morphism命题erty D} [P.ContainsIdentities] (F : C ⥤ D)
+  签名: {P : MorphismProperty D} [P.余ntainsIdentities] (F : C ⥤ D)
   定义体: by simpa only [← F.map_id] using! P.id_mem (F.obj X)
 
 Depends on / 依赖: F.map_id, F.obj, P.id_mem, id_mem, map_id
@@ -240,8 +240,8 @@ instance inf
   body: ⟨P.id_mem X, Q.id_mem X⟩
 
 中文:
-实例 inf
-  签名: {P Q : Morphism命题erty C} [P.ContainsIdentities] [Q.ContainsIdentities]
+实例 下确界
+  签名: {P Q : MorphismProperty C} [P.余ntainsIdentities] [Q.余ntainsIdentities]
   定义体: ⟨P.id_mem X, Q.id_mem X⟩
 
 Depends on / 依赖: P.id_mem, Q.id_mem, id_mem
@@ -260,7 +260,7 @@ lemma sInf
 
 中文:
 引理 sInf
-  条件: {W : Set (Morphism命题erty C)} (h : 对任意 W' in W, W'.ContainsIdentities)
+  条件: {W : 集合 (MorphismProperty C)} (h : 对任意 W' in W, W'.余ntainsIdentities)
   证明: (sInf_iff _ _).2 fun _ hW' => (h _ hW').id_mem _
 
 Depends on / 依赖: id_mem, sInf_iff
@@ -281,7 +281,7 @@ instance iInf
 
 中文:
 实例 iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C}
+  签名: {ι : 类型} {W : ι -> MorphismProperty C}
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -303,7 +303,7 @@ lemma iff_identities_le
 
 中文:
 引理 iff_identities_le
-  条件: {W : Morphism命题erty C}
+  条件: {W : MorphismProperty C}
   证明: ⟨fun _ => by intro _ _ _ ⟨_⟩; exact id_mem _, fun h => ⟨fun _ => h _ ⟨_⟩⟩⟩
 
 Depends on / 依赖: id_mem
@@ -322,7 +322,7 @@ instance :
 
 中文:
 实例 :
-  签名: (identities C).ContainsIdentities
+  签名: (identities C).余ntainsIdentities
   定义体: iff_identities_le.2 (by rfl)
 
 Depends on / 依赖: iff_identities_le
@@ -341,8 +341,8 @@ instance Prod.containsIdentities
   body: ⟨fun _ => ⟨W₁.id_mem _, W₂.id_mem _⟩⟩
 
 中文:
-实例 Prod.containsIdentities
-  签名: {C₁ C₂ : 类型} [Category* C₁] [Category* C₂]
+实例 积类型.containsIdentities
+  签名: {C₁ C₂ : 类型} [范畴* C₁] [范畴* C₂]
   定义体: ⟨fun _ => ⟨W₁.id_mem _, W₂.id_mem _⟩⟩
 
 Depends on / 依赖: id_mem
@@ -361,8 +361,8 @@ instance Pi.containsIdentities
   body: ⟨fun _ _ => MorphismProperty.id_mem _ _⟩
 
 中文:
-实例 Pi.containsIdentities
-  签名: {J : Type w} {C : J -> 类型u}
+实例 依赖函数类型.containsIdentities
+  签名: {J : 类型 w} {C : J -> 类型u}
   定义体: ⟨fun _ _ => MorphismProperty.id_mem _ _⟩
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.id_mem, id_mem
@@ -382,7 +382,7 @@ lemma of_isIso
 
 中文:
 引理 of_isIso
-  结论: (P : Morphism命题erty C) [P.ContainsIdentities] [P.RespectsIso] {X Y : C} (f : X ⟶ Y)
+  结论: (P : MorphismProperty C) [P.余ntainsIdentities] [P.RespectsIso] {X Y : C} (f : X ⟶ Y)
   证明: Category.id_comp f ▸ RespectsIso.postcomp P f (𝟙 X) (P.id_mem X)
 
 Depends on / 依赖: Category, Category.id_comp, P.id_mem, RespectsIso, RespectsIso.postcomp, id_comp, id_mem, postcomp
@@ -401,7 +401,7 @@ lemma isomorphisms_le_of_containsIdentities
 
 中文:
 引理 isomorphisms_le_of_containsIdentities
-  结论: (P : Morphism命题erty C) [P.ContainsIdentities]
+  结论: (P : MorphismProperty C) [P.余ntainsIdentities]
   证明: fun _ _ f (_ : IsIso f) => P.of_isIso f
 
 Depends on / 依赖: P.of_isIso, of_isIso
@@ -420,8 +420,8 @@ class IsStableUnderComposition
     - comp_mem({X Y Z} (f : X ⟶ Y) (g : Y ⟶ Z)) : P f -> P g -> P (f ≫ g)
 
 中文:
-类 IsStableUnderComposition
-  参数: (P : Morphism命题erty C)
+类 是StableUnderComposition
+  参数: (P : MorphismProperty C)
   公理与运算 (1 个):
     - comp_mem({X Y Z} (f : X ⟶ Y) (g : Y ⟶ Z)) : P f -> P g -> P (f ≫ g)
 -/
@@ -438,7 +438,7 @@ lemma comp_mem
 
 中文:
 引理 comp_mem
-  结论: (W : Morphism命题erty C) [W.IsStableUnderComposition]
+  结论: (W : MorphismProperty C) [W.是StableUnderComposition]
   证明: IsStableUnderComposition.comp_mem f g hf hg
 
 Depends on / 依赖: IsStableUnderComposition, IsStableUnderComposition.comp_mem, comp_mem
@@ -461,8 +461,8 @@ instance IsStableUnderComposition.op
   body: P.comp_mem g.unop f.unop hg hf
 
 中文:
-实例 IsStableUnderComposition.op
-  签名: {P : Morphism命题erty C} [P.IsStableUnderComposition]
+实例 是StableUnderComposition.op
+  签名: {P : MorphismProperty C} [P.是StableUnderComposition]
   定义体: P.comp_mem g.unop f.unop hg hf
 
 Depends on / 依赖: P.comp_mem, comp_mem, f.unop, g.unop
@@ -480,8 +480,8 @@ instance IsStableUnderComposition.unop
   body: P.comp_mem g.op f.op hg hf
 
 中文:
-实例 IsStableUnderComposition.unop
-  签名: {P : Morphism命题erty Cᵒᵖ} [P.IsStableUnderComposition]
+实例 是StableUnderComposition.unop
+  签名: {P : MorphismProperty Cᵒᵖ} [P.是StableUnderComposition]
   定义体: P.comp_mem g.op f.op hg hf
 
 Depends on / 依赖: P.comp_mem, comp_mem, f.op, g.op
@@ -499,8 +499,8 @@ instance IsStableUnderComposition.inf
   body: ⟨P.comp_mem f g hf.left hg.left, Q.comp_mem f g hf.right hg.right⟩
 
 中文:
-实例 IsStableUnderComposition.inf
-  签名: {P Q : Morphism命题erty C} [P.IsStableUnderComposition]
+实例 是StableUnderComposition.下确界
+  签名: {P Q : MorphismProperty C} [P.是StableUnderComposition]
   定义体: ⟨P.comp_mem f g hf.left hg.left, Q.comp_mem f g hf.right hg.right⟩
 
 Depends on / 依赖: P.comp_mem, Q.comp_mem, comp_mem, hf.left, hf.right, hg.left, hg.right
@@ -521,8 +521,8 @@ lemma IsStableUnderComposition.sInf
     exact fun W' hW' => (h W' hW').comp_mem _ _ (hf _ hW') (hg _ hW')
 
 中文:
-引理 IsStableUnderComposition.sInf
-  结论: {W : Set (Morphism命题erty C)}
+引理 是StableUnderComposition.sInf
+  结论: {W : 集合 (MorphismProperty C)}
   证明: by
     rw [sInf_iff] at hf hg ⊢
     exact fun W' hW' => (h W' hW').comp_mem _ _ (hf _ hW') (hg _ hW')
@@ -546,8 +546,8 @@ instance IsStableUnderComposition.iInf
   exact sInf (by simpa)
 
 中文:
-实例 IsStableUnderComposition.iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C}
+实例 是StableUnderComposition.iInf
+  签名: {ι : 类型} {W : ι -> MorphismProperty C}
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -569,7 +569,7 @@ definition StableUnderInverse
 
 中文:
 定义 StableUnderInverse
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: forall ⦃X Y⦄ (e : X ≅ Y), P e.hom -> P e.inv
 
 Depends on / 依赖: e.hom, e.inv
@@ -587,7 +587,7 @@ theorem StableUnderInverse.op
 
 中文:
 定理 StableUnderInverse.op
-  条件: {P : Morphism命题erty C} (h : StableUnderInverse P)
+  条件: {P : MorphismProperty C} (h : StableUnderInverse P)
   证明: fun _ _ e he => h e.unop he
 
 Depends on / 依赖: e.unop
@@ -605,7 +605,7 @@ theorem StableUnderInverse.unop
 
 中文:
 定理 StableUnderInverse.unop
-  条件: {P : Morphism命题erty Cᵒᵖ} (h : StableUnderInverse P)
+  条件: {P : MorphismProperty Cᵒᵖ} (h : StableUnderInverse P)
   证明: fun _ _ e he => h e.op he
 
 Depends on / 依赖: e.op
@@ -625,7 +625,7 @@ theorem respectsIso_of_isStableUnderComposition
 
 中文:
 定理 respectsIso_of_isStableUnderComposition
-  结论: {P : Morphism命题erty C}
+  结论: {P : MorphismProperty C}
   证明: RespectsIso.mk _
   (fun _ _ hf => P.comp_mem _ _ (hP _ (isomorphisms.infer_property _)) hf)
     (fun _ _ hf => P.comp_mem _ _ hf (hP _ (isomorphisms.infer_property _)))
@@ -647,8 +647,8 @@ instance IsStableUnderComposition.inverseImage
   body: by simpa only [← F.map_comp] using! P.comp_mem _ _ hf hg
 
 中文:
-实例 IsStableUnderComposition.inverseImage
-  签名: {P : Morphism命题erty D} [P.IsStableUnderComposition]
+实例 是StableUnderComposition.inverseImage
+  签名: {P : MorphismProperty D} [P.是StableUnderComposition]
   定义体: by simpa only [← F.map_comp] using! P.comp_mem _ _ hf hg
 
 Depends on / 依赖: F.map_comp, P.comp_mem, comp_mem, map_comp
@@ -755,9 +755,9 @@ class IsMultiplicative
   (no additional axioms)
 
 中文:
-类 IsMultiplicative
-  参数: (W : Morphism命题erty C)
-  继承: W.ContainsIdentities, W.IsStableUnderComposition
+类 是Multiplicative
+  参数: (W : MorphismProperty C)
+  继承: W.余ntainsIdentities, W.是StableUnderComposition
   (无附加公理)
 
 Depends on / 依赖: triangleMorphismId
@@ -777,7 +777,7 @@ instance op
 
 中文:
 实例 op
-  签名: (W : Morphism命题erty C) [IsMultiplicative W]
+  签名: (W : MorphismProperty C) [是Multiplicative W]
   定义体: W.comp_mem g.unop f.unop hg hf
 
 Depends on / 依赖: W.comp_mem, comp_mem, f.unop, g.unop
@@ -796,7 +796,7 @@ instance unop
 
 中文:
 实例 unop
-  签名: (W : Morphism命题erty Cᵒᵖ) [IsMultiplicative W]
+  签名: (W : MorphismProperty Cᵒᵖ) [是Multiplicative W]
   定义体: W.id_mem _
   comp_mem f g hf hg := W.comp_mem g.op f.op hg hf
 
@@ -817,8 +817,8 @@ lemma of_op
 
 中文:
 引理 of_op
-  条件: (W : Morphism命题erty C) [IsMultiplicative W.op]
-  结论: IsMultiplicative W
+  条件: (W : MorphismProperty C) [是Multiplicative W.op]
+  结论: 是Multiplicative W
   证明: inferInstanceAs IsMultiplicative W.op.unop
 
 Depends on / 依赖: IsMultiplicative, W.op.unop
@@ -837,8 +837,8 @@ lemma of_unop
 
 中文:
 引理 of_unop
-  条件: (W : Morphism命题erty Cᵒᵖ) [IsMultiplicative W.unop]
-  结论: IsMultiplicative W
+  条件: (W : MorphismProperty Cᵒᵖ) [是Multiplicative W.unop]
+  结论: 是Multiplicative W
   证明: inferInstanceAs IsMultiplicative W.unop.op
 
 Depends on / 依赖: IsMultiplicative, W.unop.op
@@ -857,7 +857,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative (⊤ : Morphism命题erty C)
+  签名: MorphismProperty.是Multiplicative (⊤ : MorphismProperty C)
   定义体: trivial
   id_mem _ := trivial
 -/
@@ -878,7 +878,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isomorphisms C).IsMultiplicative
+  签名: (isomorphisms C).是Multiplicative
   定义体: isomorphisms.infer_property _
   comp_mem f g hf hg := by
     rw [isomorphisms.iff] at hf hg ⊢
@@ -905,7 +905,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monomorphisms C).IsMultiplicative
+  签名: (monomorphisms C).是Multiplicative
   定义体: monomorphisms.infer_property _
   comp_mem f g hf hg := by
     rw [monomorphisms.iff] at hf hg ⊢
@@ -932,7 +932,7 @@ instance :
 
 中文:
 实例 :
-  签名: (epimorphisms C).IsMultiplicative
+  签名: (epimorphisms C).是Multiplicative
   定义体: epimorphisms.infer_property _
   comp_mem f g hf hg := by
     rw [epimorphisms.iff] at hf hg ⊢
@@ -959,7 +959,7 @@ instance :
 
 中文:
 实例 :
-  签名: (identities C).IsMultiplicative
+  签名: (identities C).是Multiplicative
   定义体: by
     rintro _ _ _ _ _ ⟨_⟩ ⟨_⟩
     simp only [Category.comp_id]
@@ -984,8 +984,8 @@ instance inf
   signature: {P Q : MorphismProperty C} [P.IsMultiplicative] [Q.IsMultiplicative]
 
 中文:
-实例 inf
-  签名: {P Q : Morphism命题erty C} [P.IsMultiplicative] [Q.IsMultiplicative]
+实例 下确界
+  签名: {P Q : MorphismProperty C} [P.是Multiplicative] [Q.是Multiplicative]
 -/
 instance inf {P Q : MorphismProperty C} [P.IsMultiplicative] [Q.IsMultiplicative] :
     (P ⊓ Q).IsMultiplicative where
@@ -1003,7 +1003,7 @@ lemma sInf
 
 中文:
 引理 sInf
-  条件: {W : Set (Morphism命题erty C)} (h : 对任意 W' in W, W'.IsMultiplicative)
+  条件: {W : 集合 (MorphismProperty C)} (h : 对任意 W' in W, W'.是Multiplicative)
   证明: by
   have := ContainsIdentities.sInf (fun W' hW' => (h W' hW').toContainsIdentities)
   have := IsStableUnderComposition.sInf (fun W' hW' => (h W' hW').toIsStableUnderComposition)
@@ -1029,7 +1029,7 @@ instance iInf
 
 中文:
 实例 iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C}
+  签名: {ι : 类型} {W : ι -> MorphismProperty C}
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -1073,7 +1073,7 @@ inductive multiplicativeClosure
 
 中文:
 归纳类型 multiplicativeClosure
-  参数: (W : Morphism命题erty C)
+  参数: (W : MorphismProperty C)
   构造子 (3 个):
     - of: {x y : C} (f : x ⟶ y) (hf : W f) : multiplicativeClosure W f
     - id: (x : C) : multiplicativeClosure W (𝟙 x)
@@ -1098,7 +1098,7 @@ inductive multiplicativeClosure'
 
 中文:
 归纳类型 multiplicativeClosure'
-  参数: (W : Morphism命题erty C)
+  参数: (W : MorphismProperty C)
   构造子 (3 个):
     - of: {x y : C} (f : x ⟶ y) (hf : W f) : multiplicativeClosure' W f
     - id: (x : C) : multiplicativeClosure' W (𝟙 x)
@@ -1129,7 +1129,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative W.multiplicativeClosure
+  签名: 是Multiplicative W.multiplicativeClosure
   定义体: .id x
   comp_mem f g hf hg := by
     induction hg with
@@ -1166,7 +1166,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative W.multiplicativeClosure'
+  签名: 是Multiplicative W.multiplicativeClosure'
   定义体: .id x
   comp_mem f g hf hg := by
     induction hf with
@@ -1220,7 +1220,7 @@ apply le_antisymm _ le_multiplicativeClosure W
 
 中文:
 引理 multiplicativeClosure_eq_self
-  条件: [W.IsMultiplicative]
+  条件: [W.是Multiplicative]
   结论: W.multiplicativeClosure = W
   证明: by
 apply le_antisymm _ le_multiplicativeClosure W
@@ -1253,7 +1253,7 @@ lemma multiplicativeClosure_eq_self_iff
 
 中文:
 引理 multiplicativeClosure_eq_self_iff
-  结论: W.multiplicativeClosure = W ↔ W.IsMultiplicative where
+  结论: W.multiplicativeClosure = W ↔ W.是Multiplicative where
   证明: by
     rw [← h]
     infer_instance
@@ -1286,7 +1286,7 @@ lemma multiplicativeClosure_le_iff
 
 中文:
 引理 multiplicativeClosure_le_iff
-  条件: (W' : Morphism命题erty C) [W'.IsMultiplicative]
+  条件: (W' : MorphismProperty C) [W'.是Multiplicative]
   证明: le_multiplicativeClosure W
   mpr h := by
     intro _ _ _ hf
@@ -1403,8 +1403,8 @@ class HasOfPostcompProperty
     - of_postcomp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : W' g -> W (f ≫ g) -> W f
 
 中文:
-类 HasOfPostcompProperty
-  参数: (W W' : Morphism命题erty C)
+类 有OfPostcompProperty
+  参数: (W W' : MorphismProperty C)
   公理与运算 (1 个):
     - of_postcomp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : W' g -> W (f ≫ g) -> W f
 -/
@@ -1421,8 +1421,8 @@ class HasOfPrecompProperty
     - of_precomp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : W' f -> W (f ≫ g) -> W g
 
 中文:
-类 HasOfPrecompProperty
-  参数: (W W' : Morphism命题erty C)
+类 有OfPrecompProperty
+  参数: (W W' : MorphismProperty C)
   公理与运算 (1 个):
     - of_precomp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : W' f -> W (f ≫ g) -> W g
 -/
@@ -1439,9 +1439,9 @@ class HasTwoOutOfThreeProperty
   (no additional axioms)
 
 中文:
-类 HasTwoOutOfThreeProperty
-  参数: (W : Morphism命题erty C)
-  继承: W.IsStableUnderComposition, W.HasOfPostcompProperty W, W.HasOfPrecompProperty W
+类 有TwoOutOfThreeProperty
+  参数: (W : MorphismProperty C)
+  继承: W.是StableUnderComposition, W.有OfPostcompProperty W, W.有OfPrecompProperty W
   (无附加公理)
 -/
 class HasTwoOutOfThreeProperty (W : MorphismProperty C) : Prop
@@ -1461,7 +1461,7 @@ lemma of_postcomp
 
 中文:
 引理 of_postcomp
-  结论: [W.HasOfPostcomp命题erty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g)
+  结论: [W.有OfPostcompProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g)
   证明: HasOfPostcompProperty.of_postcomp f g hg hfg
 
 Depends on / 依赖: HasOfPostcompProperty, HasOfPostcompProperty.of_postcomp, of_postcomp
@@ -1480,7 +1480,7 @@ lemma of_precomp
 
 中文:
 引理 of_precomp
-  结论: [W.HasOfPrecomp命题erty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W' f)
+  结论: [W.有OfPrecompProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W' f)
   证明: HasOfPrecompProperty.of_precomp f g hf hfg
 
 Depends on / 依赖: HasOfPrecompProperty, HasOfPrecompProperty.of_precomp, of_precomp
@@ -1499,7 +1499,7 @@ lemma postcomp_iff
 
 中文:
 引理 postcomp_iff
-  结论: [W.RespectsRight W'] [W.HasOfPostcomp命题erty W']
+  结论: [W.RespectsRight W'] [W.有OfPostcompProperty W']
   证明: ⟨W.of_postcomp f g hg, fun hf => RespectsRight.postcomp _ hg _ hf⟩
 
 Depends on / 依赖: RespectsRight, RespectsRight.postcomp, W.of_postcomp, of_postcomp, postcomp
@@ -1518,7 +1518,7 @@ lemma precomp_iff
 
 中文:
 引理 precomp_iff
-  结论: [W.RespectsLeft W'] [W.HasOfPrecomp命题erty W']
+  结论: [W.RespectsLeft W'] [W.有OfPrecompProperty W']
   证明: ⟨W.of_precomp f g hf, fun hg => RespectsLeft.precomp _ hf _ hg⟩
 
 Depends on / 依赖: RespectsLeft, RespectsLeft.precomp, W.of_precomp, of_precomp, precomp
@@ -1537,8 +1537,8 @@ lemma HasOfPostcompProperty.of_le
   proof: W.of_postcomp (W' := Q) f g (hle _ hg) hfg
 
 中文:
-引理 HasOfPostcompProperty.of_le
-  结论: (Q : Morphism命题erty C) [W.HasOfPostcomp命题erty Q]
+引理 有OfPostcompProperty.of_le
+  结论: (Q : MorphismProperty C) [W.有OfPostcompProperty Q]
   证明: W.of_postcomp (W' := Q) f g (hle _ hg) hfg
 
 Depends on / 依赖: W.of_postcomp, of_postcomp
@@ -1556,8 +1556,8 @@ lemma HasOfPrecompProperty.of_le
   proof: W.of_precomp (W' := Q) f g (hle _ hg) hfg
 
 中文:
-引理 HasOfPrecompProperty.of_le
-  结论: (Q : Morphism命题erty C) [W.HasOfPrecomp命题erty Q]
+引理 有OfPrecompProperty.of_le
+  结论: (Q : MorphismProperty C) [W.有OfPrecompProperty Q]
   证明: W.of_precomp (W' := Q) f g (hle _ hg) hfg
 
 Depends on / 依赖: W.of_precomp, of_precomp
@@ -1575,8 +1575,8 @@ instance [W.HasOfPostcompProperty
   body: W.of_postcomp _ _ hf hfg
 
 中文:
-实例 [W.HasOfPostcompProperty
-  签名: W'] : W.op.HasOfPrecomp命题erty W'.op where
+实例 [W.有OfPostcompProperty
+  签名: W'] : W.op.有OfPrecompProperty W'.op where
   定义体: W.of_postcomp _ _ hf hfg
 
 Depends on / 依赖: W.of_postcomp, of_postcomp
@@ -1593,8 +1593,8 @@ instance [W.HasOfPrecompProperty
   body: W.of_precomp _ _ hg hfg
 
 中文:
-实例 [W.HasOfPrecompProperty
-  签名: W'] : W.op.HasOfPostcomp命题erty W'.op where
+实例 [W.有OfPrecompProperty
+  签名: W'] : W.op.有OfPostcompProperty W'.op where
   定义体: W.of_precomp _ _ hg hfg
 
 Depends on / 依赖: W.of_precomp, of_precomp
@@ -1610,8 +1610,8 @@ instance [W.HasTwoOutOfThreeProperty]
   signature: : W.op.HasTwoOutOfThreeProperty where
 
 中文:
-实例 [W.HasTwoOutOfThreeProperty]
-  签名: : W.op.HasTwoOutOfThree命题erty where
+实例 [W.有TwoOutOfThreeProperty]
+  签名: : W.op.有TwoOutOfThreeProperty where
 -/
 instance [W.HasTwoOutOfThreeProperty] : W.op.HasTwoOutOfThreeProperty where
 
@@ -1625,7 +1625,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Morphism命题erty C).HasOfPostcomp命题erty W
+  签名: (⊤ : MorphismProperty C).有OfPostcompProperty W
   定义体: trivial
 -/
 instance : (⊤ : MorphismProperty C).HasOfPostcompProperty W where
@@ -1641,7 +1641,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Morphism命题erty C).HasOfPrecomp命题erty W
+  签名: (⊤ : MorphismProperty C).有OfPrecompProperty W
   定义体: trivial
 -/
 instance : (⊤ : MorphismProperty C).HasOfPrecompProperty W where
@@ -1656,7 +1656,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Morphism命题erty C).HasTwoOutOfThree命题erty
+  签名: (⊤ : MorphismProperty C).有TwoOutOfThreeProperty
 -/
 instance : (⊤ : MorphismProperty C).HasTwoOutOfThreeProperty where
 
@@ -1671,8 +1671,8 @@ instance [P.HasOfPostcompProperty
   body: ⟨P.of_postcomp f g hg hfg.1, Q.of_postcomp f g hg hfg.2⟩
 
 中文:
-实例 [P.HasOfPostcompProperty
-  签名: W] [Q.HasOfPostcomp命题erty W] :
+实例 [P.有OfPostcompProperty
+  签名: W] [Q.有OfPostcompProperty W] :
   定义体: ⟨P.of_postcomp f g hg hfg.1, Q.of_postcomp f g hg hfg.2⟩
 
 Depends on / 依赖: P.of_postcomp, Q.of_postcomp, of_postcomp
@@ -1690,8 +1690,8 @@ instance [P.HasOfPrecompProperty
   body: ⟨P.of_precomp f g hg hfg.1, Q.of_precomp f g hg hfg.2⟩
 
 中文:
-实例 [P.HasOfPrecompProperty
-  签名: W] [Q.HasOfPrecomp命题erty W] :
+实例 [P.有OfPrecompProperty
+  签名: W] [Q.有OfPrecompProperty W] :
   定义体: ⟨P.of_precomp f g hg hfg.1, Q.of_precomp f g hg hfg.2⟩
 
 Depends on / 依赖: P.of_precomp, Q.of_precomp, of_precomp
@@ -1714,8 +1714,8 @@ instance [P.HasTwoOutOfThreeProperty]
   constructor
 
 中文:
-实例 [P.HasTwoOutOfThreeProperty]
-  签名: [Q.HasTwoOutOfThree命题erty]
+实例 [P.有TwoOutOfThreeProperty]
+  签名: [Q.有TwoOutOfThreeProperty]
   定义体: by
   have : P.HasOfPostcompProperty (P ⊓ Q) := .of_le _ _ inf_le_left
   have : P.HasOfPrecompProperty (P ⊓ Q) := .of_le _ _ inf_le_left
@@ -1748,8 +1748,8 @@ instance [W₁.HasOfPostcompProperty
   body: W₁.of_postcomp _ _ hf hfg
 
 中文:
-实例 [W₁.HasOfPostcompProperty
-  签名: W₂] : W₁.unop.HasOfPrecomp命题erty W₂.unop where
+实例 [W₁.有OfPostcompProperty
+  签名: W₂] : W₁.unop.有OfPrecompProperty W₂.unop where
   定义体: W₁.of_postcomp _ _ hf hfg
 
 Depends on / 依赖: of_postcomp
@@ -1766,8 +1766,8 @@ instance [W₁.HasOfPrecompProperty
   body: W₁.of_precomp _ _ hg hfg
 
 中文:
-实例 [W₁.HasOfPrecompProperty
-  签名: W₂] : W₁.unop.HasOfPostcomp命题erty W₂.unop where
+实例 [W₁.有OfPrecompProperty
+  签名: W₂] : W₁.unop.有OfPostcompProperty W₂.unop where
   定义体: W₁.of_precomp _ _ hg hfg
 
 Depends on / 依赖: of_precomp
@@ -1783,8 +1783,8 @@ instance [W₁.HasTwoOutOfThreeProperty]
   signature: : W₁.unop.HasTwoOutOfThreeProperty where
 
 中文:
-实例 [W₁.HasTwoOutOfThreeProperty]
-  签名: : W₁.unop.HasTwoOutOfThree命题erty where
+实例 [W₁.有TwoOutOfThreeProperty]
+  签名: : W₁.unop.有TwoOutOfThreeProperty where
 -/
 instance [W₁.HasTwoOutOfThreeProperty] : W₁.unop.HasTwoOutOfThreeProperty where
 
@@ -1803,7 +1803,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isomorphisms C).HasTwoOutOfThree命题erty
+  签名: (isomorphisms C).有TwoOutOfThreeProperty
   定义体: fun (hg : IsIso g) (hfg : IsIso (f ≫ g)) =>
     by simpa using (inferInstance : IsIso ((f ≫ g) ≫ inv g))
   of_precomp f g := fun (hf : IsIso f) (hfg : IsIso (f ≫ g)) =>
@@ -1830,7 +1830,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : W.HasOfPrecomp命题erty (isomorphisms C) where
+  签名: : W.有OfPrecompProperty (isomorphisms C) where
   定义体: (W.cancel_left_of_respectsIso _ _).mp
 
 Depends on / 依赖: W.cancel_left_of_respectsIso, cancel_left_of_respectsIso
@@ -1848,7 +1848,7 @@ instance [W.RespectsIso]
 
 中文:
 实例 [W.RespectsIso]
-  签名: : W.HasOfPostcomp命题erty (isomorphisms C) where
+  签名: : W.有OfPostcompProperty (isomorphisms C) where
   定义体: (W.cancel_right_of_respectsIso _ _).mp
 
 Depends on / 依赖: W.cancel_right_of_respectsIso, cancel_right_of_respectsIso

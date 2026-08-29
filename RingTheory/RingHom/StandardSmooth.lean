@@ -53,7 +53,7 @@ definition IsStandardSmooth
   body: @Algebra.IsStandardSmooth _ _ _ _ f.toAlgebra
 
 中文:
-定义 IsStandardSmooth
+定义 是StandardSmooth
   签名: (f : R ->+* S)
   定义体: @Algebra.IsStandardSmooth _ _ _ _ f.toAlgebra
 
@@ -73,7 +73,7 @@ lemma isStandardSmooth_algebraMap
 
 中文:
 引理 isStandardSmooth_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [RingHom.IsStandardSmooth]; rw [toAlgebra_algebraMap]
 
@@ -92,8 +92,8 @@ lemma IsStandardSmooth.toAlgebra
   proof: hf
 
 中文:
-引理 IsStandardSmooth.toAlgebra
-  条件: {f : R ->+* S} (hf : IsStandardSmooth f)
+引理 是StandardSmooth.toAlgebra
+  条件: {f : R ->+* S} (hf : 是StandardSmooth f)
   证明: hf
 -/
 lemma IsStandardSmooth.toAlgebra {f : R ->+* S} (hf : IsStandardSmooth f) :
@@ -111,7 +111,7 @@ definition IsStandardSmoothOfRelativeDimension
   body: @Algebra.IsStandardSmoothOfRelativeDimension n _ _ _ _ f.toAlgebra
 
 中文:
-定义 IsStandardSmoothOfRelativeDimension
+定义 是StandardSmoothOfRelativeDimension
   签名: (f : R ->+* S)
   定义体: @Algebra.IsStandardSmoothOfRelativeDimension n _ _ _ _ f.toAlgebra
 
@@ -131,7 +131,7 @@ lemma isStandardSmoothOfRelativeDimension_algebraMap
 
 中文:
 引理 isStandardSmoothOfRelativeDimension_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [RingHom.IsStandardSmoothOfRelativeDimension]; rw [toAlgebra_algebraMap]
 
@@ -151,7 +151,7 @@ lemma IsStandardSmoothOfRelativeDimension.toAlgebra
   proof: hf
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.toAlgebra
+引理 是StandardSmoothOfRelativeDimension.toAlgebra
   结论: {f : R ->+* S}
   证明: hf
 -/
@@ -170,7 +170,7 @@ lemma IsStandardSmoothOfRelativeDimension.isStandardSmooth
   exact Algebra.IsStandardSmoothOfRelativeDimension.isStandardSmooth n
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.isStandardSmooth
+引理 是StandardSmoothOfRelativeDimension.isStandardSmooth
   结论: (f : R ->+* S)
   证明: by
   algebraize [f]
@@ -195,7 +195,7 @@ lemma IsStandardSmoothOfRelativeDimension.id
   proof: Algebra.IsStandardSmoothOfRelativeDimension.id R
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.id
+引理 是StandardSmoothOfRelativeDimension.id
   证明: Algebra.IsStandardSmoothOfRelativeDimension.id R
 
 Depends on / 依赖: Algebra, Algebra.IsStandardSmoothOfRelativeDimension.id, IsStandardSmoothOfRelativeDimension
@@ -215,7 +215,7 @@ lemma IsStandardSmoothOfRelativeDimension.equiv
   exact Algebra.IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective e.bijective
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.equiv
+引理 是StandardSmoothOfRelativeDimension.equiv
   条件: (e : R ≃+* S)
   证明: by
   algebraize [e.toRingHom]
@@ -242,7 +242,7 @@ lemma IsStandardSmooth.comp
   exact Algebra.IsStandardSmooth.trans R S T
 
 中文:
-引理 IsStandardSmooth.comp
+引理 是StandardSmooth.comp
   结论: {g : S ->+* T} {f : R ->+* S}
   证明: by
   rw [IsStandardSmooth]
@@ -270,7 +270,7 @@ lemma IsStandardSmoothOfRelativeDimension.comp
   exact Algebra.IsStandardSmoothOfRelativeDimension.trans m n R S T
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.comp
+引理 是StandardSmoothOfRelativeDimension.comp
   结论: {g : S ->+* T} {f : R ->+* S}
   证明: by
   rw [IsStandardSmoothOfRelativeDimension]
@@ -317,7 +317,7 @@ lemma isStandardSmooth_respectsIso
 
 中文:
 引理 isStandardSmooth_respectsIso
-  结论: RespectsIso @IsStandardSmooth
+  结论: RespectsIso @是StandardSmooth
   证明: by
   apply isStandardSmooth_stableUnderComposition.respectsIso
   introv
@@ -457,8 +457,8 @@ lemma IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway
   exact Algebra.IsStandardSmoothOfRelativeDimension.localization_away r
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway
-  结论: {Rᵣ : 类型} [CommRing Rᵣ]
+引理 是StandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway
+  结论: {Rᵣ : 类型} [交换环 Rᵣ]
   证明: by
   have : (algebraMap R Rᵣ).toAlgebra = ‹Algebra R Rᵣ› := by
     ext
@@ -489,7 +489,7 @@ lemma isStandardSmooth_localizationPreserves
 
 中文:
 引理 isStandardSmooth_localizationPreserves
-  结论: LocalizationPreserves IsStandardSmooth
+  结论: LocalizationPreserves 是StandardSmooth
   证明: isStandardSmooth_isStableUnderBaseChange.localizationPreserves
 
 Depends on / 依赖: isStandardSmooth_isStableUnderBaseChange, isStandardSmooth_isStableUnderBaseChange.localizationPreserves, localizationPreserves
@@ -626,7 +626,7 @@ theorem _root_.Algebra.IsStandardSmoothOfRelativeDimension.exists_etale_mvPolyno
       (Finite.equivFinOfCardEq (by rw [Nat.card_coe_set_eq, Set.ncard_compl
 
 中文:
-定理 _root_.Algebra.IsStandardSmoothOfRelativeDimension.exists_etale_mvPolynomial
+定理 _root_.代数.是StandardSmoothOfRelativeDimension.存在_etale_mvPolynomial
   证明: by
   classical
   let := Fintype.ofFinite
@@ -698,7 +698,7 @@ theorem IsStandardSmoothOfRelativeDimension.exists_etale_mvPolynomial
   exact ⟨_, g.comp_algebraMap, hg⟩
 
 中文:
-定理 IsStandardSmoothOfRelativeDimension.exists_etale_mvPolynomial
+定理 是StandardSmoothOfRelativeDimension.存在_etale_mvPolynomial
   证明: by
   algebraize [f]
   obtain ⟨g, hg⟩ := Algebra.IsStandardSmoothOfRelativeDimension.exists_etale_mvPolynomial n R S
@@ -725,7 +725,7 @@ theorem IsStandardSmooth.exists_etale_mvPolynomial
     ⟨_, _, _, ‹_›, P, rfl⟩⟩
 
 中文:
-定理 IsStandardSmooth.exists_etale_mvPolynomial
+定理 是StandardSmooth.存在_etale_mvPolynomial
   证明: by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := hf
   let := f.toAlgebra

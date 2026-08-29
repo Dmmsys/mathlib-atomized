@@ -40,7 +40,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Setoid α) (fun _ => α -> α -> 命题)
+  签名: CoeFun (集合等价关系 α) (fun _ => α -> α -> 命题)
   定义体: @Setoid.r _
 
 Depends on / 依赖: Setoid, Setoid.r
@@ -61,8 +61,8 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {α : Sort*}
-  结论: 对任意 {s t : Setoid α}, (对任意 a b, s a b ↔ t a b) -> s = t
+  条件: {α : 类型层*}
+  结论: 对任意 {s t : 集合等价关系 α}, (对任意 a b, s a b ↔ t a b) -> s = t
   证明: funext fun a => funext fun b => propext Eq a b
      subst this
      rfl
@@ -95,7 +95,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {α : Sort*} {r : α -> α -> 命题} {β : Quot r -> 命题} (q : Quot r)
+  结论: {α : 类型层*} {r : α -> α -> 命题} {β : 商 r -> 命题} (q : 商 r)
   证明: ind h q
 -/
 protected theorem induction_on {α : Sort*} {r : α -> α -> Prop} {β : Quot r -> Prop} (q : Quot r)
@@ -114,8 +114,8 @@ instance Subsingleton
   body: ⟨fun x => Quot.induction_on x fun _ => Quot.ind fun _ => congr_arg _ (Subsingleton.elim _ _)⟩
 
 中文:
-实例 Subsingleton
-  签名: [Subsingleton α]
+实例 子单例
+  签名: [子单例 α]
   定义体: ⟨fun x => Quot.induction_on x fun _ => Quot.ind fun _ => congr_arg _ (Subsingleton.elim _ _)⟩
 -/
 protected instance Subsingleton [Subsingleton α] : Subsingleton (Quot ra) :=
@@ -130,8 +130,8 @@ instance [Unique
   body: Unique.mk' _
 
 中文:
-实例 [Unique
-  签名: α] : Unique (Quot ra)
+实例 [唯一
+  签名: α] : 唯一 (商 ra)
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -154,7 +154,7 @@ definition hrecOn₂
 
 中文:
 定义 hrecOn₂
-  签名: (qa : Quot ra) (qb : Quot rb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
+  签名: (qa : 商 ra) (qb : 商 rb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
   定义体: Quot.hrecOn (motive := fun qa => φ qa qb) qa
     (fun a => Quot.hrecOn qb (f a) (fun _ _ pb => cb pb))
     fun a₁ a₂ pa =>
@@ -353,7 +353,7 @@ definition liftOn₂
 
 中文:
 定义 liftOn₂
-  签名: (p : Quot r) (q : Quot s) (f : α -> β -> γ)
+  签名: (p : 商 r) (q : 商 s) (f : α -> β -> γ)
   定义体: Quot.lift₂ f hr hs p q
 
 @[simp]
@@ -442,7 +442,7 @@ definition recOnSubsingleton₂
 
 中文:
 定义 recOnSubsingleton₂
-  签名: {φ : Quot r -> Quot s -> Sort*}
+  签名: {φ : 商 r -> 商 s -> 类型层*}
   定义体: @Quot.recOnSubsingleton _ r (fun q => φ q q₂)
     (fun a => Quot.ind (β := fun b => Subsingleton (φ (mk r a) b)) (h a) q₂) q₁
     fun a => Quot.recOnSubsingleton q₂ fun b => f a b
@@ -469,7 +469,7 @@ theorem induction_on₂
 
 中文:
 定理 induction_on₂
-  结论: {δ : Quot r -> Quot s -> 命题} (q₁ : Quot r) (q₂ : Quot s)
+  结论: {δ : 商 r -> 商 s -> 命题} (q₁ : 商 r) (q₂ : 商 s)
   证明: Quot.ind (β := fun a => δ a q₂) (fun a₁ => Quot.ind (fun a₂ => h a₁ a₂) q₂) q₁
 
 @[elab_as_elim]
@@ -490,7 +490,7 @@ theorem induction_on₃
 
 中文:
 定理 induction_on₃
-  结论: {δ : Quot r -> Quot s -> Quot t -> 命题} (q₁ : Quot r)
+  结论: {δ : 商 r -> 商 s -> 商 t -> 命题} (q₁ : 商 r)
   证明: Quot.ind (β := fun a => δ a q₂ q₃) (fun a₁ => Quot.ind (β := fun b => δ _ b q₃)
     (fun a₂ => Quot.ind (fun a₃ => h a₁ a₂ a₃) q₃) q₂) q₁
 -/
@@ -577,7 +577,7 @@ instance instInhabitedQuotient
 
 中文:
 实例 instInhabitedQuotient
-  签名: (s : Setoid α) [Inhabited α]
+  签名: (s : 集合等价关系 α) [可居 α]
   定义体: ⟨⟦default⟧⟩
 -/
 instance instInhabitedQuotient (s : Setoid α) [Inhabited α] : Inhabited (Quotient s) :=
@@ -593,7 +593,7 @@ instance instSubsingletonQuotient
 
 中文:
 实例 instSubsingletonQuotient
-  签名: (s : Setoid α) [Subsingleton α]
+  签名: (s : 集合等价关系 α) [子单例 α]
   定义体: Quot.Subsingleton
 
 Depends on / 依赖: Quot.Subsingleton, Subsingleton
@@ -611,7 +611,7 @@ instance instUniqueQuotient
 
 中文:
 实例 instUniqueQuotient
-  签名: (s : Setoid α) [Unique α]
+  签名: (s : 集合等价关系 α) [唯一 α]
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -633,7 +633,7 @@ definition hrecOn₂
 
 中文:
 定义 hrecOn₂
-  签名: (qa : Quotient sa) (qb : Quotient sb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
+  签名: (qa : 商 sa) (qb : 商 sb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
   定义体: Quot.hrecOn₂ qa qb f (fun p => c _ _ _ _ p (Setoid.refl _)) fun p => c _ _ _ _ (Setoid.refl _) p
 -/
 protected def hrecOn₂ (qa : Quotient sa) (qb : Quotient sb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
@@ -776,7 +776,7 @@ theorem Quot.eq
   proof: ⟨Quot.eqvGen_exact, Quot.eqvGen_sound⟩
 
 中文:
-定理 Quot.eq
+定理 商.eq
   条件: {α : 类型} {r : α -> α -> 命题} {x y : α}
   证明: ⟨Quot.eqvGen_exact, Quot.eqvGen_sound⟩
 
@@ -799,9 +799,9 @@ theorem Quotient.eq
   proof: ⟨Quotient.exact, Quotient.sound⟩
 
 中文:
-定理 Quotient.eq
-  条件: {r : Setoid α} {x y : α}
-  结论: Quotient.mk r x = ⟦y⟧ ↔ r x y
+定理 商.eq
+  条件: {r : 集合等价关系 α} {x y : α}
+  结论: 商.mk r x = ⟦y⟧ ↔ r x y
   证明: ⟨Quotient.exact, Quotient.sound⟩
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.sound
@@ -819,9 +819,9 @@ theorem Quotient.eq_iff_equiv
   proof: Quotient.eq
 
 中文:
-定理 Quotient.eq_iff_equiv
-  条件: {r : Setoid α} {x y : α}
-  结论: Quotient.mk r x = ⟦y⟧ ↔ x ≈ y
+定理 商.eq_iff_equiv
+  条件: {r : 集合等价关系 α} {x y : α}
+  结论: 商.mk r x = ⟦y⟧ ↔ x ≈ y
   证明: Quotient.eq
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -838,8 +838,8 @@ theorem Quotient.forall
   proof: ⟨fun h _ => h _, fun h a => a.ind h⟩
 
 中文:
-定理 Quotient.forall
-  条件: {α : Sort*} {s : Setoid α} {p : Quotient s -> 命题}
+定理 商.对任意
+  条件: {α : 类型层*} {s : 集合等价关系 α} {p : 商 s -> 命题}
   证明: ⟨fun h _ => h _, fun h a => a.ind h⟩
 
 Depends on / 依赖: a.ind
@@ -859,8 +859,8 @@ theorem Quotient.exists
 @[simp]
 
 中文:
-定理 Quotient.exists
-  条件: {α : Sort*} {s : Setoid α} {p : Quotient s -> 命题}
+定理 商.存在
+  条件: {α : 类型层*} {s : 集合等价关系 α} {p : 商 s -> 命题}
   证明: ⟨fun ⟨q, hq⟩ => q.ind (motive := (p · -> _)) .intro hq, fun ⟨a, ha⟩ => ⟨⟦a⟧, ha⟩⟩
 
 @[simp]
@@ -883,8 +883,8 @@ theorem Quotient.lift_mk
 @[simp]
 
 中文:
-定理 Quotient.lift_mk
-  条件: {s : Setoid α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
+定理 商.lift_mk
+  条件: {s : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
   证明: rfl
 
 @[simp]
@@ -905,8 +905,8 @@ theorem Quotient.lift_comp_mk
 @[simp]
 
 中文:
-定理 Quotient.lift_comp_mk
-  条件: {_ : Setoid α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b)
+定理 商.lift_comp_mk
+  条件: {_ : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b)
   证明: rfl
 
 @[simp]
@@ -925,8 +925,8 @@ theorem Quotient.lift_surjective_iff
   proof: Quot.surjective_lift h
 
 中文:
-定理 Quotient.lift_surjective_iff
-  结论: {α β : Sort*} {s : Setoid α} (f : α -> β)
+定理 商.lift_surjective_iff
+  结论: {α β : 类型层*} {s : 集合等价关系 α} (f : α -> β)
   证明: Quot.surjective_lift h
 
 Depends on / 依赖: Quot.surjective_lift, surjective_lift
@@ -947,8 +947,8 @@ theorem Quotient.lift_surjective
 @[simp]
 
 中文:
-定理 Quotient.lift_surjective
-  结论: {α β : Sort*} {s : Setoid α} (f : α -> β)
+定理 商.lift_surjective
+  结论: {α β : 类型层*} {s : 集合等价关系 α} (f : α -> β)
   证明: (Quot.surjective_lift h).mpr hf
 
 @[simp]
@@ -970,8 +970,8 @@ theorem Quotient.lift₂_mk
   proof: rfl
 
 中文:
-定理 Quotient.lift₂_mk
-  结论: {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
+定理 商.lift₂_mk
+  结论: {α : 类型层*} {β : 类型层*} {γ : 类型层*} {_ : 集合等价关系 α} {_ : 集合等价关系 β}
   证明: rfl
 -/
 theorem Quotient.lift₂_mk {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
@@ -992,8 +992,8 @@ theorem Quotient.liftOn_mk
 @[simp]
 
 中文:
-定理 Quotient.liftOn_mk
-  条件: {s : Setoid α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
+定理 商.liftOn_mk
+  条件: {s : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
   证明: rfl
 
 @[simp]
@@ -1012,8 +1012,8 @@ theorem Quotient.liftOn₂_mk
   proof: rfl
 
 中文:
-定理 Quotient.liftOn₂_mk
-  结论: {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
+定理 商.liftOn₂_mk
+  结论: {α : 类型层*} {β : 类型层*} {γ : 类型层*} {_ : 集合等价关系 α} {_ : 集合等价关系 β}
   证明: rfl
 -/
 theorem Quotient.liftOn₂_mk {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
@@ -1033,9 +1033,9 @@ theorem Quot.mk_surjective
   proof: Quot.exists_rep
 
 中文:
-定理 Quot.mk_surjective
+定理 商.mk_surjective
   条件: {r : α -> α -> 命题}
-  结论: Function.Surjective (Quot.mk r)
+  结论: 函数.满射 (商.mk r)
   证明: Quot.exists_rep
 
 Depends on / 依赖: Quot.exists_rep, exists_rep
@@ -1052,8 +1052,8 @@ theorem Quotient.mk_surjective
   proof: Quot.mk_surjective
 
 中文:
-定理 Quotient.mk_surjective
-  条件: {s : Setoid α}
+定理 商.mk_surjective
+  条件: {s : 集合等价关系 α}
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -1071,8 +1071,8 @@ theorem Quotient.mk'_surjective
   proof: Quot.mk_surjective
 
 中文:
-定理 Quotient.mk'_surjective
-  条件: [s : Setoid α]
+定理 商.mk'_surjective
+  条件: [s : 集合等价关系 α]
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -1091,7 +1091,7 @@ theorem Quot.map_surjective
 .mpr .comp Quot.mk_surjective hf surjective_lift _
 
 中文:
-定理 Quot.map_surjective
+定理 商.map_surjective
   结论: {ra : α -> α -> 命题} {rb : β -> β -> 命题} {f : α -> β}
   证明: (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b)) (hf : f.Surjective) : Quot.map f h
 .mpr .comp Quot.mk_surjective hf surjective_lift _
@@ -1112,8 +1112,8 @@ theorem Quotient.map_surjective
 lift_surjective _ _ .comp Quot.mk_surjective hf
 
 中文:
-定理 Quotient.map_surjective
-  结论: {sa : Setoid α} {sb : Setoid β} {f : α -> β}
+定理 商.map_surjective
+  结论: {sa : 集合等价关系 α} {sb : 集合等价关系 β} {f : α -> β}
   证明: (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b) (hf : f.Surjective) : Quotient.map f h
 lift_surjective _ _ .comp Quot.mk_surjective hf
 
@@ -1132,8 +1132,8 @@ definition Quot.out
   body: Classical.choose (Quot.exists_rep q)
 
 中文:
-定义 Quot.out
-  签名: {r : α -> α -> 命题} (q : Quot r)
+定义 商.out
+  签名: {r : α -> α -> 命题} (q : 商 r)
   定义体: Classical.choose (Quot.exists_rep q)
 
 Depends on / 依赖: Classical, Classical.choose, Quot.exists_rep, exists_rep
@@ -1157,9 +1157,9 @@ theorem Quot.out_eq
   proof: Classical.choose_spec (Quot.exists_rep q)
 
 中文:
-定理 Quot.out_eq
-  条件: {r : α -> α -> 命题} (q : Quot r)
-  结论: Quot.mk r q.out = q
+定理 商.out_eq
+  条件: {r : α -> α -> 命题} (q : 商 r)
+  结论: 商.mk r q.out = q
   证明: Classical.choose_spec (Quot.exists_rep q)
 
 Depends on / 依赖: Classical, Classical.choose_spec, Quot.exists_rep, choose_spec, exists_rep
@@ -1178,8 +1178,8 @@ definition Quotient.out
 @[simp]
 
 中文:
-定义 Quotient.out
-  签名: {s : Setoid α}
+定义 商.out
+  签名: {s : 集合等价关系 α}
   定义体: Quot.out
 
 @[simp]
@@ -1200,8 +1200,8 @@ theorem Quotient.out_eq
   proof: Quot.out_eq q
 
 中文:
-定理 Quotient.out_eq
-  条件: {s : Setoid α} (q : Quotient s)
+定理 商.out_eq
+  条件: {s : 集合等价关系 α} (q : 商 s)
   结论: ⟦q.out⟧ = q
   证明: Quot.out_eq q
 
@@ -1220,9 +1220,9 @@ theorem Quotient.mk_out
   proof: Quotient.exact (Quotient.out_eq _)
 
 中文:
-定理 Quotient.mk_out
-  条件: {s : Setoid α} (a : α)
-  结论: s (⟦a⟧ : Quotient s).out a
+定理 商.mk_out
+  条件: {s : 集合等价关系 α} (a : α)
+  结论: s (⟦a⟧ : 商 s).out a
   证明: Quotient.exact (Quotient.out_eq _)
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.out_eq, out_eq
@@ -1241,8 +1241,8 @@ theorem Quotient.mk_eq_iff_out
   rw [Quotient.out_eq y]
 
 中文:
-定理 Quotient.mk_eq_iff_out
-  条件: {s : Setoid α} {x : α} {y : Quotient s}
+定理 商.mk_eq_iff_out
+  条件: {s : 集合等价关系 α} {x : α} {y : 商 s}
   证明: by
   refine Iff.trans ?_ Quotient.eq
   rw [Quotient.out_eq y]
@@ -1267,8 +1267,8 @@ theorem Quotient.eq_mk_iff_out
 @[simp]
 
 中文:
-定理 Quotient.eq_mk_iff_out
-  条件: {s : Setoid α} {x : Quotient s} {y : α}
+定理 商.eq_mk_iff_out
+  条件: {s : 集合等价关系 α} {x : 商 s} {y : α}
   证明: by
   refine Iff.trans ?_ Quotient.eq
   rw [Quotient.out_eq x]
@@ -1294,8 +1294,8 @@ theorem Quotient.out_equiv_out
   rw [← Quotient.eq_mk_iff_out]; rw [Quotient.out_eq]
 
 中文:
-定理 Quotient.out_equiv_out
-  条件: {s : Setoid α} {x y : Quotient s}
+定理 商.out_equiv_out
+  条件: {s : 集合等价关系 α} {x y : 商 s}
   结论: x.out ≈ y.out ↔ x = y
   证明: by
   rw [← Quotient.eq_mk_iff_out]; rw [Quotient.out_eq]
@@ -1317,9 +1317,9 @@ theorem Quotient.out_injective
 @[simp]
 
 中文:
-定理 Quotient.out_injective
-  条件: {s : Setoid α}
-  结论: Function.Injective (@Quotient.out α s)
+定理 商.out_injective
+  条件: {s : 集合等价关系 α}
+  结论: 函数.单射 (@商.out α s)
   证明: fun _ _ h => Quotient.out_equiv_out.1 h ▸ Setoid.refl _
 
 @[simp]
@@ -1340,8 +1340,8 @@ theorem Quotient.out_inj
   proof: ⟨fun h => Quotient.out_injective h, fun h => h ▸ rfl⟩
 
 中文:
-定理 Quotient.out_inj
-  条件: {s : Setoid α} {x y : Quotient s}
+定理 商.out_inj
+  条件: {s : 集合等价关系 α} {x y : 商 s}
   结论: x.out = y.out ↔ x = y
   证明: ⟨fun h => Quotient.out_injective h, fun h => h ▸ rfl⟩
 
@@ -1365,7 +1365,7 @@ instance piSetoid
 
 中文:
 实例 piSetoid
-  签名: {ι : Sort*} {α : ι -> Sort*} [对任意 i, Setoid (α i)]
+  签名: {ι : 类型层*} {α : ι -> 类型层*} [对任意 i, 集合等价关系 (α i)]
   定义体: forall i, a i ≈ b i
   iseqv := ⟨fun _ _ => Setoid.refl _,
             fun h _ => Setoid.symm (h _),
@@ -1388,8 +1388,8 @@ definition Quotient.eval
 @[simp]
 
 中文:
-定义 Quotient.eval
-  签名: {ι : 类型} {α : ι -> Sort*} {S : 对任意 i, Setoid (α i)}
+定义 商.eval
+  签名: {ι : 类型} {α : ι -> 类型层*} {S : 对任意 i, 集合等价关系 (α i)}
   定义体: q.map (· i) fun _ _ h => by exact h i
 
 @[simp]
@@ -1410,8 +1410,8 @@ theorem Quotient.eval_mk
   proof: rfl
 
 中文:
-定理 Quotient.eval_mk
-  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, Setoid (α i)} (f : 对任意 i, α i)
+定理 商.eval_mk
+  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)} (f : 对任意 i, α i)
   证明: rfl
 -/
 theorem Quotient.eval_mk {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} (f : forall i, α i) :
@@ -1429,8 +1429,8 @@ definition Quotient.choice
 @[simp]
 
 中文:
-定义 Quotient.choice
-  签名: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, Setoid (α i)}
+定义 商.choice
+  签名: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)}
   定义体: ⟦fun i => (f i).out⟧
 
 @[simp]
@@ -1452,8 +1452,8 @@ theorem Quotient.choice_eq
 @[elab_as_elim]
 
 中文:
-定理 Quotient.choice_eq
-  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, Setoid (α i)} (f : 对任意 i, α i)
+定理 商.choice_eq
+  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)} (f : 对任意 i, α i)
   证明: Quotient.sound fun _ => Quotient.mk_out _
 
 @[elab_as_elim]
@@ -1474,8 +1474,8 @@ theorem Quotient.induction_on_pi
   apply h
 
 中文:
-定理 Quotient.induction_on_pi
-  结论: {ι : 类型} {α : ι -> Sort*} {s : 对任意 i, Setoid (α i)}
+定理 商.induction_on_pi
+  结论: {ι : 类型} {α : ι -> 类型层*} {s : 对任意 i, 集合等价关系 (α i)}
   证明: by
   rw [← (funext fun i => Quotient.out_eq (f i) : (fun i => ⟦(f i).out⟧) = f)]
   apply h
@@ -1501,8 +1501,8 @@ theorem nonempty_quotient_iff
 
 中文:
 定理 nonempty_quotient_iff
-  条件: (s : Setoid α)
-  结论: Nonempty (Quotient s) ↔ Nonempty α
+  条件: (s : 集合等价关系 α)
+  结论: 非空 (商 s) ↔ 非空 α
   证明: ⟨fun ⟨a⟩ => Quotient.inductionOn a Nonempty.intro, fun ⟨a⟩ => ⟨⟦a⟧⟩⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro, Quotient, Quotient.inductionOn, inductionOn
@@ -1522,7 +1522,7 @@ theorem true_equivalence
 
 中文:
 定理 true_equivalence
-  结论: @Equivalence α fun _ _ => True
+  结论: @等价 α fun _ _ => 真
   证明: ⟨fun _ => trivial, fun _ => trivial, fun _ _ => trivial⟩
 -/
 theorem true_equivalence : @Equivalence α fun _ _ => True :=
@@ -1542,7 +1542,7 @@ definition trueSetoid
 
 中文:
 定义 trueSetoid
-  签名: : Setoid α
+  签名: : 集合等价关系 α
   定义体: ⟨_, true_equivalence⟩
 
 Depends on / 依赖: true_equivalence
@@ -1560,7 +1560,7 @@ definition Trunc.{u}
 
 中文:
 定义 Trunc.{u}
-  签名: (α : Sort u)
+  签名: (α : 类型层 u)
   定义体: @Quotient α trueSetoid
 
 Depends on / 依赖: Quotient, trueSetoid
@@ -1597,8 +1597,8 @@ instance [Inhabited
   body: ⟨mk default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Trunc α)
+实例 [可居
+  签名: α] : 可居 (Trunc α)
   定义体: ⟨mk default⟩
 -/
 instance [Inhabited α] : Inhabited (Trunc α) :=
@@ -1711,7 +1711,7 @@ theorem exists_rep
 @[elab_as_elim]
 
 中文:
-定理 exists_rep
+定理 存在_rep
   条件: (q : Trunc α)
   结论: 存在 a : α, mk a = q
   证明: Quot.exists_rep q
@@ -1769,7 +1769,7 @@ instance instSubsingletonTrunc
 
 中文:
 实例 instSubsingletonTrunc
-  签名: : Subsingleton (Trunc α)
+  签名: : 子单例 (Trunc α)
   定义体: ⟨Trunc.eq⟩
 
 Depends on / 依赖: Trunc.eq
@@ -1824,7 +1824,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad Trunc
+  签名: 单子 Trunc
   定义体: @Trunc.mk
   bind := @Trunc.bind
 
@@ -1852,7 +1852,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad Trunc
+  签名: 合法单子 Trunc
   定义体: Trunc.eq _ _
   pure_bind _ _ := rfl
   bind_assoc _ _ _ := Trunc.eq _ _
@@ -1929,7 +1929,7 @@ definition recOnSubsingleton
 
 中文:
 定义 recOnSubsingleton
-  签名: [对任意 a, Subsingleton (C (mk a))] (q : Trunc α) (f : 对任意 a, C (mk a))
+  签名: [对任意 a, 子单例 (C (mk a))] (q : Trunc α) (f : 对任意 a, C (mk a))
   定义体: Trunc.rec f (fun _ b => Subsingleton.elim _ (f b)) q
 -/
 protected def recOnSubsingleton [forall a, Subsingleton (C (mk a))] (q : Trunc α) (f : forall a, C (mk a)) :
@@ -1991,7 +1991,7 @@ theorem nonempty
 中文:
 定理 nonempty
   条件: (q : Trunc α)
-  结论: Nonempty α
+  结论: 非空 α
   证明: q.exists_rep.nonempty
 -/
 protected theorem nonempty (q : Trunc α) : Nonempty α :=
@@ -2038,7 +2038,7 @@ theorem mk''_surjective
 
 中文:
 定理 mk''_surjective
-  结论: Function.Surjective (Quotient.mk'' : α -> Quotient s₁)
+  结论: 函数.满射 (商.mk'' : α -> 商 s₁)
   证明: Quot.exists_rep
 
 Depends on / 依赖: Quot.exists_rep, exists_rep
@@ -2058,7 +2058,7 @@ definition liftOn'
 
 中文:
 定义 liftOn'
-  签名: (q : Quotient s₁) (f : α -> φ) (h : 对任意 a b, s₁ a b -> f a = f b)
+  签名: (q : 商 s₁) (f : α -> φ) (h : 对任意 a b, s₁ a b -> f a = f b)
   定义体: Quotient.liftOn q f h
 
 @[simp]
@@ -2114,7 +2114,7 @@ definition liftOn₂'
 
 中文:
 定义 liftOn₂'
-  签名: (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α -> β -> γ)
+  签名: (q₁ : 商 s₁) (q₂ : 商 s₂) (f : α -> β -> γ)
   定义体: Quotient.liftOn₂ q₁ q₂ f h
 
 @[simp]
@@ -2154,7 +2154,7 @@ theorem ind'
 
 中文:
 定理 ind'
-  条件: {p : Quotient s₁ -> 命题} (h : 对任意 a, p (Quotient.mk'' a)) (q : Quotient s₁)
+  条件: {p : 商 s₁ -> 命题} (h : 对任意 a, p (商.mk'' a)) (q : 商 s₁)
   证明: Quotient.ind h q
 -/
 protected theorem ind' {p : Quotient s₁ -> Prop} (h : forall a, p (Quotient.mk'' a)) (q : Quotient s₁) :
@@ -2174,7 +2174,7 @@ theorem ind₂'
 
 中文:
 定理 ind₂'
-  结论: {p : Quotient s₁ -> Quotient s₂ -> 命题}
+  结论: {p : 商 s₁ -> 商 s₂ -> 命题}
   证明: Quotient.ind₂ h q₁ q₂
 -/
 protected theorem ind₂' {p : Quotient s₁ -> Quotient s₂ -> Prop}
@@ -2195,7 +2195,7 @@ theorem inductionOn'
 
 中文:
 定理 inductionOn'
-  结论: {p : Quotient s₁ -> 命题} (q : Quotient s₁)
+  结论: {p : 商 s₁ -> 命题} (q : 商 s₁)
   证明: Quotient.inductionOn q h
 -/
 protected theorem inductionOn' {p : Quotient s₁ -> Prop} (q : Quotient s₁)
@@ -2215,7 +2215,7 @@ theorem inductionOn₂'
 
 中文:
 定理 inductionOn₂'
-  结论: {p : Quotient s₁ -> Quotient s₂ -> 命题} (q₁ : Quotient s₁)
+  结论: {p : 商 s₁ -> 商 s₂ -> 命题} (q₁ : 商 s₁)
   证明: Quotient.inductionOn₂ q₁ q₂ h
 -/
 protected theorem inductionOn₂' {p : Quotient s₁ -> Quotient s₂ -> Prop} (q₁ : Quotient s₁)
@@ -2236,7 +2236,7 @@ theorem inductionOn₃'
 
 中文:
 定理 inductionOn₃'
-  结论: {p : Quotient s₁ -> Quotient s₂ -> Quotient s₃ -> 命题}
+  结论: {p : 商 s₁ -> 商 s₂ -> 商 s₃ -> 命题}
   证明: Quotient.inductionOn₃ q₁ q₂ q₃ h
 -/
 protected theorem inductionOn₃' {p : Quotient s₁ -> Quotient s₂ -> Quotient s₃ -> Prop}
@@ -2258,7 +2258,7 @@ definition recOnSubsingleton'
 
 中文:
 定义 recOnSubsingleton'
-  签名: {φ : Quotient s₁ -> Sort*} [对任意 a, Subsingleton (φ ⟦a⟧)]
+  签名: {φ : 商 s₁ -> 类型层*} [对任意 a, 子单例 (φ ⟦a⟧)]
   定义体: Quotient.recOnSubsingleton q f
 -/
 protected def recOnSubsingleton' {φ : Quotient s₁ -> Sort*} [forall a, Subsingleton (φ ⟦a⟧)]
@@ -2279,7 +2279,7 @@ definition recOnSubsingleton₂'
 
 中文:
 定义 recOnSubsingleton₂'
-  签名: {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
+  签名: {φ : 商 s₁ -> 商 s₂ -> 类型层*}
   定义体: Quotient.recOnSubsingleton₂ q₁ q₂ f
 -/
 protected def recOnSubsingleton₂' {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
@@ -2300,7 +2300,7 @@ definition hrecOn'
 
 中文:
 定义 hrecOn'
-  签名: {φ : Quotient s₁ -> Sort*} (qa : Quotient s₁) (f : 对任意 a, φ (Quotient.mk'' a))
+  签名: {φ : 商 s₁ -> 类型层*} (qa : 商 s₁) (f : 对任意 a, φ (商.mk'' a))
   定义体: Quot.hrecOn qa f c
 
 @[simp]
@@ -2320,7 +2320,7 @@ theorem hrecOn'_mk''
 
 中文:
 定理 hrecOn'_mk''
-  结论: {φ : Quotient s₁ -> Sort*} (f : 对任意 a, φ (Quotient.mk'' a))
+  结论: {φ : 商 s₁ -> 类型层*} (f : 对任意 a, φ (商.mk'' a))
   证明: rfl
 -/
 theorem hrecOn'_mk'' {φ : Quotient s₁ -> Sort*} (f : forall a, φ (Quotient.mk'' a))
@@ -2340,7 +2340,7 @@ definition hrecOn₂'
 
 中文:
 定义 hrecOn₂'
-  签名: {φ : Quotient s₁ -> Quotient s₂ -> Sort*} (qa : Quotient s₁)
+  签名: {φ : 商 s₁ -> 商 s₂ -> 类型层*} (qa : 商 s₁)
   定义体: Quotient.hrecOn₂ qa qb f c
 
 @[simp]
@@ -2362,7 +2362,7 @@ theorem hrecOn₂'_mk''
 
 中文:
 定理 hrecOn₂'_mk''
-  结论: {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
+  结论: {φ : 商 s₁ -> 商 s₂ -> 类型层*}
   证明: rfl
 -/
 theorem hrecOn₂'_mk'' {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
@@ -2484,7 +2484,7 @@ theorem sound'
 中文:
 定理 sound'
   条件: {a b : α}
-  结论: s₁ a b -> @Quotient.mk'' α s₁ a = Quotient.mk'' b
+  结论: s₁ a b -> @商.mk'' α s₁ a = 商.mk'' b
   证明: Quotient.sound
 
 @[simp]
@@ -2505,7 +2505,7 @@ theorem eq'
 
 中文:
 定理 eq'
-  条件: {s₁ : Setoid α} {a b : α}
+  条件: {s₁ : 集合等价关系 α} {a b : α}
   证明: Quotient.eq
 -/
 protected theorem eq' {s₁ : Setoid α} {a b : α} :
@@ -2524,7 +2524,7 @@ theorem eq''
 中文:
 定理 eq''
   条件: {a b : α}
-  结论: @Quotient.mk'' α s₁ a = Quotient.mk'' b ↔ s₁ a b
+  结论: @商.mk'' α s₁ a = 商.mk'' b ↔ s₁ a b
   证明: Quotient.eq
 -/
 protected theorem eq'' {a b : α} : @Quotient.mk'' α s₁ a = Quotient.mk'' b ↔ s₁ a b :=
@@ -2541,8 +2541,8 @@ theorem out_eq'
 
 中文:
 定理 out_eq'
-  条件: (q : Quotient s₁)
-  结论: Quotient.mk'' q.out = q
+  条件: (q : 商 s₁)
+  结论: 商.mk'' q.out = q
   证明: q.out_eq
 
 Depends on / 依赖: out_eq, q.out_eq
@@ -2562,7 +2562,7 @@ theorem mk_out'
 中文:
 定理 mk_out'
   条件: (a : α)
-  结论: s₁ (Quotient.mk'' a : Quotient s₁).out a
+  结论: s₁ (商.mk'' a : 商 s₁).out a
   证明: Quotient.exact (Quotient.out_eq _)
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.out_eq, out_eq
@@ -2586,7 +2586,7 @@ theorem mk''_eq_mk
 
 中文:
 定理 mk''_eq_mk
-  结论: Quotient.mk'' = Quotient.mk s
+  结论: 商.mk'' = 商.mk s
   证明: rfl
 
 @[simp]
@@ -2609,7 +2609,7 @@ theorem liftOn'_mk
 中文:
 定理 liftOn'_mk
   条件: (x : α) (f : α -> β) (h)
-  结论: (Quotient.mk s x).liftOn' f h = f x
+  结论: (商.mk s x).liftOn' f h = f x
   证明: rfl
 
 @[simp]
@@ -2628,7 +2628,7 @@ theorem liftOn₂'_mk
 
 中文:
 定理 liftOn₂'_mk
-  条件: {t : Setoid β} (f : α -> β -> γ) (h) (a : α) (b : β)
+  条件: {t : 集合等价关系 β} (f : α -> β -> γ) (h) (a : α) (b : β)
   证明: rfl
 -/
 protected theorem liftOn₂'_mk {t : Setoid β} (f : α -> β -> γ) (h) (a : α) (b : β) :
@@ -2645,7 +2645,7 @@ theorem map'_mk
 
 中文:
 定理 map'_mk
-  条件: {t : Setoid β} (f : α -> β) (h) (x : α)
+  条件: {t : 集合等价关系 β} (f : α -> β) (h) (x : α)
   证明: rfl
 -/
 theorem map'_mk {t : Setoid β} (f : α -> β) (h) (x : α) :
@@ -2677,8 +2677,8 @@ lemma Equivalence.quot_mk_eq_iff
   proof: Quotient.eq (r := ⟨r, h⟩)
 
 中文:
-引理 Equivalence.quot_mk_eq_iff
-  条件: {α : 类型} {r : α -> α -> 命题} (h : Equivalence r) (x y : α)
+引理 等价.quot_mk_eq_iff
+  条件: {α : 类型} {r : α -> α -> 命题} (h : 等价 r) (x y : α)
   证明: Quotient.eq (r := ⟨r, h⟩)
 
 Depends on / 依赖: Quotient, Quotient.eq

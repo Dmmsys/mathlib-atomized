@@ -127,7 +127,7 @@ omit hp
 
 中文:
 定义 frobeniusPolyAux
-  签名: : 自然数 -> MvPolynomial 自然数 整数
+  签名: : 自然数 -> 多元多项式 自然数 整数
   定义体: i.is_lt
       ∑ j in range (p ^ (n - i)),
         (((X (i : Nat) ^ p) ^ (p ^ (n - (i : Nat)) - (j + 1)) : MvPolynomial Nat Int) *
@@ -435,7 +435,7 @@ instance frobeniusFun_isPoly
 
 中文:
 实例 frobeniusFun_isPoly
-  签名: : IsPoly p fun R _ Rcr => @frobeniusFun p R _ Rcr
+  签名: : 是Poly p fun R _ Rcr => @frobeniusFun p R _ Rcr
   定义体: ⟨⟨frobeniusPoly p, by intros; funext n; apply coeff_frobeniusFun⟩⟩
 
 @[ghost_simps]
@@ -571,7 +571,7 @@ instance frobenius_isPoly
 
 中文:
 实例 frobenius_isPoly
-  签名: : IsPoly p fun R _Rcr => @frobenius p R _ _Rcr
+  签名: : 是Poly p fun R _Rcr => @frobenius p R _ _Rcr
   定义体: frobeniusFun_isPoly _
 
 Depends on / 依赖: frobeniusFun_isPoly
@@ -703,7 +703,7 @@ definition frobeniusEquiv
 
 中文:
 定义 frobeniusEquiv
-  签名: [PerfectRing R p]
+  签名: [完美环 R p]
   定义体: { (WittVector.frobenius : WittVector p R ->+* WittVector p R) with
     toFun := WittVector.frobenius
     invFun := map (_root_.frobeniusEquiv R p).symm
@@ -735,7 +735,7 @@ theorem frobenius_bijective
 
 中文:
 定理 frobenius_bijective
-  条件: [PerfectRing R p]
+  条件: [完美环 R p]
   证明: (frobeniusEquiv p R).bijective
 
 Depends on / 依赖: bijective, frobeniusEquiv

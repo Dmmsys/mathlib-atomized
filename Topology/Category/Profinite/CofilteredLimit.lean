@@ -48,8 +48,8 @@ theorem exists_isClopen_of_cofiltered
       (Profinite.toTopC
 
 中文:
-定理 exists_isClopen_of_cofiltered
-  条件: {U : Set C.pt} (hC : IsLimit C) (hU : IsClopen U)
+定理 存在_isClopen_of_cofiltered
+  条件: {U : 集合 C.pt} (hC : 是极限 C) (hU : IsClopen U)
   证明: by
   -- First, we have the topological basis of the cofiltered limit obtained by pulling back
   -- clopen sets from the factors in the limit. By continuity, all such sets are again clopen.
@@ -140,8 +140,8 @@ theorem exists_locallyConstant_fin_two
   simp only [Fin.isValue, LocallyConst
 
 中文:
-定理 exists_locallyConstant_fin_two
-  条件: (hC : IsLimit C) (f : LocallyConstant C.pt (Fin 2))
+定理 存在_locallyConstant_fin_two
+  条件: (hC : 是极限 C) (f : 局部常数 C.pt (有限集 2))
   证明: by
   let U := f ⁻¹' {0}
   have hU : IsClopen U := f.isLocallyConstant.isClopen_fiber _
@@ -184,8 +184,8 @@ theorem exists_locallyConstant_finite_aux
   obtain ⟨j0, hj0⟩ := IsCofiltered.inf_objs
 
 中文:
-定理 exists_locallyConstant_finite_aux
-  结论: {α : 类型} [Finite α] (hC : IsLimit C)
+定理 存在_locallyConstant_finite_aux
+  结论: {α : 类型} [有限 α] (hC : 是极限 C)
   证明: by
   cases nonempty_fintype α
   let ι : α -> α -> Fin 2 := fun x y => if x = y then 0 else 1
@@ -246,8 +246,8 @@ theorem exists_locallyConstant_finite_nonempty
   simp only [Lo
 
 中文:
-定理 exists_locallyConstant_finite_nonempty
-  结论: {α : 类型} [Finite α] [Nonempty α]
+定理 存在_locallyConstant_finite_nonempty
+  结论: {α : 类型} [有限 α] [非空 α]
   证明: by
   inhabit α
   obtain ⟨j, gg, h⟩ := exists_locallyConstant_finite_aux _ hC f
@@ -313,8 +313,8 @@ theorem exists_locallyConstant
     
 
 中文:
-定理 exists_locallyConstant
-  条件: {α : 类型} (hC : IsLimit C) (f : LocallyConstant C.pt α)
+定理 存在_locallyConstant
+  条件: {α : 类型} (hC : 是极限 C) (f : 局部常数 C.pt α)
   证明: by
   let S := f.discreteQuotient
   let ff : S -> α := f.lift

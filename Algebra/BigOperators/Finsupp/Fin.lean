@@ -33,7 +33,7 @@ lemma sum_cons
 
 中文:
 引理 sum_cons
-  条件: [AddCommMonoid M] (n : 自然数) (σ : Fin n ->₀ M) (i : M)
+  条件: [加法交换幺半群 M] (n : 自然数) (σ : 有限集 n ->₀ M) (i : M)
   证明: by
   rw [sum_fintype _ _ (fun _ => rfl)]; rw [sum_fintype _ _ (fun _ => rfl)]
   exact Fin.sum_cons i σ
@@ -58,7 +58,7 @@ lemma sum_cons'
 
 中文:
 引理 sum_cons'
-  结论: [Zero M] [AddCommMonoid N] (n : 自然数) (σ : Fin n ->₀ M) (i : M)
+  结论: [零 M] [加法交换幺半群 N] (n : 自然数) (σ : 有限集 n ->₀ M) (i : M)
   证明: by
   rw [sum_fintype _ _ (fun _ => by apply h)]; rw [sum_fintype _ _ (fun _ => by apply h)]
   simp_rw [Fin.sum_univ_succ, cons_zero, cons_succ]
@@ -85,7 +85,7 @@ theorem ofSupportFinite_fin_two_eq
 
 中文:
 定理 ofSupportFinite_fin_two_eq
-  条件: (n : Fin 2 ->₀ 自然数)
+  条件: (n : 有限集 2 ->₀ 自然数)
   证明: by
   rw [Finsupp.ext_iff]; rw [Fin.forall_fin_two]
   exact ⟨rfl, rfl⟩
@@ -115,7 +115,7 @@ definition finTwoArrowEquiv'
 
 中文:
 定义 finTwoArrowEquiv'
-  签名: [Zero M]
+  签名: [零 M]
   定义体: Finsupp.equivFunOnFinite.trans (finTwoArrowEquiv M)
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.trans, equivFunOnFinite, finTwoArrowEquiv
@@ -135,7 +135,7 @@ theorem finTwoArrowEquiv'_sum_eq
 
 中文:
 定理 finTwoArrowEquiv'_sum_eq
-  条件: {d : M × M} [AddCommMonoid M]
+  条件: {d : M × M} [加法交换幺半群 M]
   证明: by
   apply (Finsupp.equivFunOnFinite_symm_sum _).trans
   simp

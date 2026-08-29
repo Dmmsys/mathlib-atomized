@@ -37,7 +37,7 @@ instance unop_epi_of_mono
 
 中文:
 实例 unop_epi_of_mono
-  签名: {A B : Cᵒᵖ} (f : A ⟶ B) [Mono f]
+  签名: {A B : Cᵒᵖ} (f : A ⟶ B) [单态射 f]
   定义体: ⟨fun _ _ eq => Quiver.Hom.op_inj ((cancel_mono f).1 (Quiver.Hom.unop_inj eq))⟩
 
 @[to_dual op_mono_of_epi]
@@ -60,7 +60,7 @@ instance op_epi_of_mono
 
 中文:
 实例 op_epi_of_mono
-  签名: {A B : C} (f : A ⟶ B) [Mono f]
+  签名: {A B : C} (f : A ⟶ B) [单态射 f]
   定义体: ⟨fun _ _ eq => Quiver.Hom.unop_inj ((cancel_mono f).1 (Quiver.Hom.op_inj eq))⟩
 
 @[to_dual (attr := simp)]
@@ -125,7 +125,7 @@ structure SplitMono
     - id : f ≫ retraction = 𝟙 X  [default: by cat_disch]
 
 中文:
-结构 SplitMono
+结构 分裂单态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (2 个):
     - retraction : Y ⟶ X
@@ -149,10 +149,10 @@ class IsSplitMono
     - exists_splitMono : Nonempty (SplitMono f)
 
 中文:
-类 IsSplitMono
+类 是分裂单态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - exists_splitMono : Nonempty (SplitMono f)
+    - exists_splitMono : 非空 (分裂单态射 f)
 -/
 class IsSplitMono {X Y : C} (f : X ⟶ Y) : Prop where
   /-- There is a splitting -/
@@ -176,7 +176,7 @@ structure SplitEpi
     - id : section_ ≫ f = 𝟙 Y  [default: by cat_disch]
 
 中文:
-结构 SplitEpi
+结构 分裂满态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (2 个):
     - section_ : Y ⟶ X
@@ -203,10 +203,10 @@ class IsSplitEpi
     - exists_splitEpi : Nonempty (SplitEpi f)
 
 中文:
-类 IsSplitEpi
+类 是分裂满态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - exists_splitEpi : Nonempty (SplitEpi f)
+    - exists_splitEpi : 非空 (分裂满态射 f)
 
 Depends on / 依赖: SplitEpi, SplitEpi.id, SplitMono, SplitMono.id
 -/
@@ -228,8 +228,8 @@ definition SplitEpi.comp
   body: seg.section_ ≫ sef.section_
 
 中文:
-定义 SplitEpi.comp
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} (sef : SplitEpi f) (seg : SplitEpi g)
+定义 分裂满态射.comp
+  签名: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} (sef : 分裂满态射 f) (seg : 分裂满态射 g)
   定义体: seg.section_ ≫ sef.section_
 -/
 def SplitEpi.comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} (sef : SplitEpi f) (seg : SplitEpi g) :
@@ -248,9 +248,9 @@ theorem IsSplitEpi.mk'
   proof: ⟨Nonempty.intro se⟩
 
 中文:
-定理 IsSplitEpi.mk'
-  条件: {X Y : C} {f : X ⟶ Y} (se : SplitEpi f)
-  结论: IsSplitEpi f
+定理 是分裂满态射.mk'
+  条件: {X Y : C} {f : X ⟶ Y} (se : 分裂满态射 f)
+  结论: 是分裂满态射 f
   证明: ⟨Nonempty.intro se⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -274,7 +274,7 @@ definition section_
 
 中文:
 定义 section_
-  签名: {X Y : C} (f : X ⟶ Y) [hf : IsSplitEpi f]
+  签名: {X Y : C} (f : X ⟶ Y) [hf : 是分裂满态射 f]
   定义体: hf.exists_splitEpi.some.section_
 
 @[to_dual (attr := reassoc (attr := simp))]
@@ -295,8 +295,8 @@ theorem IsSplitEpi.id
   proof: hf.exists_splitEpi.some.id
 
 中文:
-定理 IsSplitEpi.id
-  条件: {X Y : C} (f : X ⟶ Y) [hf : IsSplitEpi f]
+定理 是分裂满态射.id
+  条件: {X Y : C} (f : X ⟶ Y) [hf : 是分裂满态射 f]
   结论: section_ f ≫ f = 𝟙 Y
   证明: hf.exists_splitEpi.some.id
 
@@ -316,8 +316,8 @@ definition SplitEpi.splitMono
   body: f
 
 中文:
-定义 SplitEpi.splitMono
-  签名: {X Y : C} {f : X ⟶ Y} (se : SplitEpi f)
+定义 分裂满态射.splitMono
+  签名: {X Y : C} {f : X ⟶ Y} (se : 分裂满态射 f)
   定义体: f
 -/
 def SplitEpi.splitMono {X Y : C} {f : X ⟶ Y} (se : SplitEpi f) : SplitMono se.section_ where
@@ -336,7 +336,7 @@ instance section_isSplitMono
 
 中文:
 实例 section_isSplitMono
-  签名: {X Y : C} (f : X ⟶ Y) [IsSplitEpi f]
+  签名: {X Y : C} (f : X ⟶ Y) [是分裂满态射 f]
   定义体: IsSplitMono.mk' (SplitEpi.splitMono _)
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, SplitEpi, SplitEpi.splitMono, splitMono
@@ -357,8 +357,8 @@ theorem isIso_of_mono_of_isSplitEpi
 
 中文:
 定理 isIso_of_mono_of_isSplitEpi
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f] [IsSplitEpi f]
-  结论: IsIso f
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] [是分裂满态射 f]
+  结论: 是同构 f
   证明: ⟨⟨section_ f, ⟨by simp [← cancel_mono f], by simp⟩⟩⟩
 
 Depends on / 依赖: cancel_mono, section_
@@ -382,9 +382,9 @@ theorem SplitEpi.epi
   proof: { left_cancellation := fun g h w => by replace w := se.section_ ≫= w; simpa using w }
 
 中文:
-定理 SplitEpi.epi
-  条件: {X Y : C} {f : X ⟶ Y} (se : SplitEpi f)
-  结论: Epi f
+定理 分裂满态射.epi
+  条件: {X Y : C} {f : X ⟶ Y} (se : 分裂满态射 f)
+  结论: 满态射 f
   证明: { left_cancellation := fun g h w => by replace w := se.section_ ≫= w; simpa using w }
 
 Depends on / 依赖: left_cancellation, replace, se.section_, section_
@@ -412,8 +412,8 @@ theorem IsIso.of_epi_section'
   proof: ⟨⟨hf.section_, ⟨(cancel_epi_id <| hf.section_).mp (by simp), by simp⟩⟩⟩
 
 中文:
-定理 IsIso.of_epi_section'
-  条件: {X Y : C} {f : X ⟶ Y} (hf : SplitEpi f) [Epi <| hf.section_]
+定理 是同构.of_epi_section'
+  条件: {X Y : C} {f : X ⟶ Y} (hf : 分裂满态射 f) [满态射 <| hf.section_]
   证明: ⟨⟨hf.section_, ⟨(cancel_epi_id <| hf.section_).mp (by simp), by simp⟩⟩⟩
 
 Depends on / 依赖: cancel_epi_id, hf.section_, section_
@@ -433,8 +433,8 @@ theorem IsIso.of_epi_section
   proof: @IsIso.of_epi_section' _ _ _ _ _ hf.exists_splitEpi.some hf'
 
 中文:
-定理 IsIso.of_epi_section
-  条件: {X Y : C} (f : X ⟶ Y) [hf : IsSplitEpi f] [hf' : Epi <| section_ f]
+定理 是同构.of_epi_section
+  条件: {X Y : C} (f : X ⟶ Y) [hf : 是分裂满态射 f] [hf' : 满态射 <| section_ f]
   证明: @IsIso.of_epi_section' _ _ _ _ _ hf.exists_splitEpi.some hf'
 
 Depends on / 依赖: IsIso.of_epi_section, exists_splitEpi, hf.exists_splitEpi.some, of_epi_section
@@ -459,7 +459,7 @@ have ⟨b,_⟩ := Trunc.exists_rep all_split_mono retraction f
   apply IsIso.of_mono_retraction
 
 中文:
-定义 Groupoid.ofTruncSplitMono
+定义 群胚.ofTruncSplitMono
   定义体: by
   apply Groupoid.ofIsIso
   intro X Y f
@@ -491,10 +491,10 @@ class SplitMonoCategory
     - isSplitMono_of_mono : forall {X Y : C} (f : X ⟶ Y) [Mono f], IsSplitMono f
 
 中文:
-类 SplitMonoCategory
+类 分裂单态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - isSplitMono_of_mono : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f], IsSplitMono f
+    - isSplitMono_of_mono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 是分裂单态射 f
 -/
 class SplitMonoCategory : Prop where
   /-- All monos are split -/
@@ -512,10 +512,10 @@ class SplitEpiCategory
     - isSplitEpi_of_epi : forall {X Y : C} (f : X ⟶ Y) [Epi f], IsSplitEpi f
 
 中文:
-类 SplitEpiCategory
+类 分裂满态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - isSplitEpi_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [Epi f], IsSplitEpi f
+    - isSplitEpi_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 是分裂满态射 f
 -/
 class SplitEpiCategory : Prop where
   /-- All epis are split -/
@@ -539,8 +539,8 @@ theorem isSplitEpi_of_epi
 
 中文:
 定理 isSplitEpi_of_epi
-  条件: [SplitEpiCategory C] {X Y : C} (f : X ⟶ Y) [Epi f]
-  结论: IsSplitEpi f
+  条件: [分裂满态射范畴 C] {X Y : C} (f : X ⟶ Y) [满态射 f]
+  结论: 是分裂满态射 f
   证明: SplitEpiCategory.isSplitEpi_of_epi _
 
 Depends on / 依赖: SplitEpiCategory, SplitEpiCategory.isSplitEpi_of_epi, isSplitEpi_of_epi
@@ -566,8 +566,8 @@ definition SplitEpi.map
 @[to_dual]
 
 中文:
-定义 SplitEpi.map
-  签名: {X Y : C} {f : X ⟶ Y} (se : SplitEpi f) (F : C ⥤ D)
+定义 分裂满态射.map
+  签名: {X Y : C} {f : X ⟶ Y} (se : 分裂满态射 f) (F : C ⥤ D)
   定义体: F.map se.section_
   id := by rw [← Functor.map_comp, SplitEpi.id, Functor.map_id]
 
@@ -598,7 +598,7 @@ lemma epi_comp_iff_of_epi
 
 中文:
 引理 epi_comp_iff_of_epi
-  条件: {X Y Z : C} (f : X ⟶ Y) [Epi f] (g : Y ⟶ Z)
+  条件: {X Y Z : C} (f : X ⟶ Y) [满态射 f] (g : Y ⟶ Z)
   证明: ⟨fun _ => epi_of_epi f _, fun _ => inferInstance⟩
 
 Depends on / 依赖: epi_of_epi
@@ -622,7 +622,7 @@ lemma epi_comp_iff_of_isIso
 
 中文:
 引理 epi_comp_iff_of_isIso
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso g]
+  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 g]
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   simpa using (inferInstance : Epi ((f ≫ g) ≫ inv g))
@@ -652,8 +652,8 @@ definition SplitEpi.op
 @[to_dual]
 
 中文:
-定义 SplitEpi.op
-  签名: (h : SplitEpi f)
+定义 分裂满态射.op
+  签名: (h : 分裂满态射 f)
   定义体: h.section_.op
   id := Quiver.Hom.unop_inj (by simp)
 
@@ -675,8 +675,8 @@ instance [IsSplitMono
   body: .mk' IsSplitMono.exists_splitMono.some.op
 
 中文:
-实例 [IsSplitMono
-  签名: f] : IsSplitEpi f.op
+实例 [是分裂单态射
+  签名: f] : 是分裂满态射 f.op
   定义体: .mk' IsSplitMono.exists_splitMono.some.op
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.exists_splitMono.some.op, exists_splitMono
@@ -754,8 +754,8 @@ theorem CommSq.cube_lemma_of_epi
       f0x0 f0x1 f1x0 f1x1 fx00 fx01 fx10 fx11 h0xx.w h1xx.w hx0x.w hx1x.w hxx0.w⟩
 
 中文:
-定理 CommSq.cube_lemma_of_epi
-  结论: (h0xx : CommSq f0x0 f00x f01x f0x1)
+定理 交换Sq.cube_lemma_of_epi
+  结论: (h0xx : 交换Sq f0x0 f00x f01x f0x1)
   证明: ⟨CategoryTheory.cube_lemma_of_epi f00x f01x f10x f11x
       f0x0 f0x1 f1x0 f1x1 fx00 fx01 fx10 fx11 h0xx.w h1xx.w hx0x.w hx1x.w hxx0.w⟩
 
@@ -778,8 +778,8 @@ theorem CommSq.cube_lemma_of_mono
       f0x0 f0x1 f1x0 f1x1 fx00 fx01 fx10 fx11 h0xx.w h1xx.w hx0x.w hx1x.w hxx1.w⟩
 
 中文:
-定理 CommSq.cube_lemma_of_mono
-  结论: (h0xx : CommSq f0x0 f00x f01x f0x1)
+定理 交换Sq.cube_lemma_of_mono
+  结论: (h0xx : 交换Sq f0x0 f00x f01x f0x1)
   证明: ⟨CategoryTheory.cube_lemma_of_mono f00x f01x f10x f11x
       f0x0 f0x1 f1x0 f1x1 fx00 fx01 fx10 fx11 h0xx.w h1xx.w hx0x.w hx1x.w hxx1.w⟩
 

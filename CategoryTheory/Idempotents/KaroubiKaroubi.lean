@@ -111,8 +111,8 @@ instance [Preadditive
   signature: C] : Functor.Additive (inverse C) where
 
 中文:
-实例 [Preadditive
-  签名: C] : Functor.Additive (inverse C) where
+实例 [预加性
+  签名: C] : 函子.加性 (inverse C) where
 -/
 instance [Preadditive C] : Functor.Additive (inverse C) where
 
@@ -203,7 +203,7 @@ instance equivalence.additive_functor
 
 中文:
 实例 equivalence.additive_functor
-  签名: [Preadditive C]
+  签名: [预加性 C]
 -/
 instance equivalence.additive_functor [Preadditive C] :
     Functor.Additive (equivalence C).functor where
@@ -218,7 +218,7 @@ instance equivalence.additive_inverse
 
 中文:
 实例 equivalence.additive_inverse
-  签名: [Preadditive C]
+  签名: [预加性 C]
 -/
 instance equivalence.additive_inverse [Preadditive C] :
     Functor.Additive (equivalence C).inverse where

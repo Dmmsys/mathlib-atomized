@@ -48,7 +48,7 @@ definition commaMapEquivalenceFunctor
 
 中文:
 定义 commaMapEquivalenceFunctor
-  签名: [IsIso β] (X : Comma L' R')
+  签名: [是同构 β] (X : 交换a L' R')
   定义体: ⟨mk Y.hom.left, mk Y.hom.right,
     homMk Y.right.hom
       (by simpa only [Functor.const_obj_obj, map₂_obj_left, mk_left, map₂_obj_right, mk_right,
@@ -90,7 +90,7 @@ definition commaMapEquivalenceInverse
 
 中文:
 定义 commaMapEquivalenceInverse
-  签名: [IsIso β] (X : Comma L' R')
+  签名: [是同构 β] (X : 交换a L' R')
   定义体: mk (Y := ⟨Y.left.right, Y.right.right, Y.hom.right⟩)
     ⟨by exact Y.left.hom, by exact Y.right.hom, by
       simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
@@ -122,7 +122,7 @@ definition commaMapEquivalenceUnitIso
 
 中文:
 定义 commaMapEquivalenceUnitIso
-  签名: [IsIso β] (X : Comma L' R')
+  签名: [是同构 β] (X : 交换a L' R')
   定义体: NatIso.ofComponents (fun _ => isoMk (Iso.refl _))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -145,7 +145,7 @@ definition commaMapEquivalenceCounitIso
 
 中文:
 定义 commaMapEquivalenceCounitIso
-  签名: [IsIso β] (X : Comma L' R')
+  签名: [是同构 β] (X : 交换a L' R')
   定义体: NatIso.ofComponents (fun _ => Comma.isoMk (Iso.refl _) (Iso.refl _))
 
 Depends on / 依赖: Comma.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -170,7 +170,7 @@ definition commaMapEquivalence
 
 中文:
 定义 commaMapEquivalence
-  签名: [IsIso β] (X : Comma L' R')
+  签名: [是同构 β] (X : 交换a L' R')
   定义体: commaMapEquivalenceFunctor α β X
   inverse := commaMapEquivalenceInverse α β X
   unitIso := commaMapEquivalenceUnitIso α β X

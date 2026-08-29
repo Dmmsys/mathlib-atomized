@@ -846,7 +846,7 @@ theorem inv_add_inv_ennreal
 
 中文:
 定理 inv_add_inv_ennreal
-  结论: (ENN实数.of实数 p)⁻¹ + (ENN实数.of实数 q)⁻¹ = 1
+  结论: (广义非负实数.of实数 p)⁻¹ + (广义非负实数.of实数 q)⁻¹ = 1
   证明: by
   rw [← ENNReal.ofReal_one]; rw [← ENNReal.ofReal_inv_of_pos h.pos]; rw [← ENNReal.ofReal_inv_of_pos h.symm.pos]; rw [← ENNReal.ofReal_add h.inv_nonneg h.symm.inv_nonneg]; rw [h.inv_add_inv_eq_one]
 
@@ -872,7 +872,7 @@ lemma _root_.Real.holderConjugate_iff
 exact inv_pos.mp eq_sub_of_add_eq' h ▸ hp
 
 中文:
-引理 _root_.Real.holderConjugate_iff
+引理 _root_.实数.holderConjugate_iff
   结论: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
   证明: by
   refine ⟨fun h => ⟨h.lt, h.inv_add_inv_eq_one⟩, ?_⟩
@@ -1900,7 +1900,7 @@ lemma _root_.NNReal.holderConjugate_iff
   exact_mod_cast Iff.rfl
 
 中文:
-引理 _root_.NNReal.holderConjugate_iff
+引理 _root_.非负实数.holderConjugate_iff
   结论: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
   证明: by
   rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff]; rw [← coe_one]
@@ -2066,7 +2066,7 @@ lemma Real.HolderTriple.toNNReal
   simpa [← NNReal.holderTriple_coe_iff, h.nonneg, h.symm.nonneg, h.nonneg']
 
 中文:
-引理 Real.HolderTriple.toNNReal
+引理 实数.HolderTriple.toNN实数
   条件: {p q r : 实数} (h : p.HolderTriple q r)
   证明: by
   simpa [← NNReal.holderTriple_coe_iff, h.nonneg, h.symm.nonneg, h.nonneg']
@@ -2085,7 +2085,7 @@ lemma Real.HolderConjugate.toNNReal
   simpa using Real.HolderTriple.toNNReal h
 
 中文:
-引理 Real.HolderConjugate.toNNReal
+引理 实数.HolderConjugate.toNN实数
   条件: {p q : 实数} (h : p.HolderConjugate q)
   证明: by
   simpa using Real.HolderTriple.toNNReal h
@@ -2242,7 +2242,7 @@ lemma _root_.Real.HolderTriple.ennrealOfReal
 h.symm.nonneg] using congr(ENNReal.ofReal (h.inv_add_inv_eq_inv))
 
 中文:
-引理 _root_.Real.HolderTriple.ennrealOfReal
+引理 _root_.实数.HolderTriple.ennrealOf实数
   条件: {p q r : 实数} (h : p.HolderTriple q r)
   证明: by
   simpa [holderTriple_iff, ofReal_inv_of_pos, h.pos, h.symm.pos, h.pos', ofReal_add, h.nonneg,
@@ -2265,7 +2265,7 @@ lemma _root_.Real.HolderConjugate.ennrealOfReal
   simpa using Real.HolderTriple.ennrealOfReal h
 
 中文:
-引理 _root_.Real.HolderConjugate.ennrealOfReal
+引理 _root_.实数.HolderConjugate.ennrealOf实数
   条件: {p q : 实数} (h : p.HolderConjugate q)
   证明: by
   simpa using Real.HolderTriple.ennrealOfReal h
@@ -2291,7 +2291,7 @@ lemma of_toReal
   simpa [hp.2.ne, hq.2.ne, hr.2.ne] using h.ennrealOfReal
 
 中文:
-引理 of_toReal
+引理 of_to实数
   条件: (h : 实数.HolderTriple p.to实数 q.to实数 r.to实数)
   结论: HolderTriple p q r
   证明: by
@@ -2324,7 +2324,7 @@ lemma toReal_iff
     using congr(ENNReal.toReal $(h.inv_add_inv_eq_inv))
 
 中文:
-引理 toReal_iff
+引理 to实数_iff
   条件: (hp : 0 < p.to实数) (hq : 0 < q.to实数)
   证明: by
   refine ⟨of_toReal, fun h => ⟨?_, hp, hq⟩⟩
@@ -2351,7 +2351,7 @@ lemma toReal
   proof: .mpr ‹_› toReal_iff r hp hq
 
 中文:
-引理 toReal
+引理 to实数
   条件: (hp : 0 < p.to实数) (hq : 0 < q.to实数) [HolderTriple p q r]
   证明: .mpr ‹_› toReal_iff r hp hq
 
@@ -2370,8 +2370,8 @@ lemma of_toNNReal
   proof: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
 
 中文:
-引理 of_toNNReal
-  条件: (h : NN实数.HolderTriple p.toNN实数 q.toNN实数 r.toNN实数)
+引理 of_toNN实数
+  条件: (h : 非负实数.HolderTriple p.toNN实数 q.toNN实数 r.toNN实数)
   证明: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
 
 Depends on / 依赖: coe_toNNReal_eq_toReal, h.coe, of_toReal
@@ -2393,7 +2393,7 @@ lemma toNNReal_iff
   all_goals simpa [← coe_toNNReal_eq_toReal]
 
 中文:
-引理 toNNReal_iff
+引理 toNN实数_iff
   条件: (hp : 0 < p.toNN实数) (hq : 0 < q.toNN实数)
   证明: by
   simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
@@ -2418,7 +2418,7 @@ lemma toNNReal
   proof: .mpr ‹_› toNNReal_iff r hp hq
 
 中文:
-引理 toNNReal
+引理 toNN实数
   条件: (hp : 0 < p.toNN实数) (hq : 0 < q.toNN实数) [HolderTriple p q r]
   证明: .mpr ‹_› toNNReal_iff r hp hq
 
@@ -2444,7 +2444,7 @@ lemma of_toReal
   exact HolderTriple.of_toReal (toReal_one ▸ h)
 
 中文:
-引理 of_toReal
+引理 of_to实数
   条件: (h : p.to实数.HolderConjugate q.to实数)
   结论: p.HolderConjugate q
   证明: by
@@ -2473,7 +2473,7 @@ lemma toReal_iff
   simpa using HolderTriple.toReal 1 (zero_lt_one.trans hp) hq
 
 中文:
-引理 toReal_iff
+引理 to实数_iff
   条件: (hp : 1 < p.to实数)
   证明: by
   refine ⟨of_toReal, fun h => ?_⟩
@@ -2505,7 +2505,7 @@ lemma toReal
   proof: .mpr ‹_› toReal_iff hp
 
 中文:
-引理 toReal
+引理 to实数
   条件: (hp : 1 < p.to实数) [HolderConjugate p q]
   证明: .mpr ‹_› toReal_iff hp
 
@@ -2524,7 +2524,7 @@ lemma toReal_of_ne_top
   proof: toReal ((toReal_lt_toReal one_ne_top hp).mpr ((lt_top_iff_one_lt q p).mp hq.lt_top))
 
 中文:
-引理 toReal_of_ne_top
+引理 to实数_of_ne_top
   条件: (hp : p != ∞) (hq : q != ∞) [HolderConjugate p q]
   证明: toReal ((toReal_lt_toReal one_ne_top hp).mpr ((lt_top_iff_one_lt q p).mp hq.lt_top))
 
@@ -2543,8 +2543,8 @@ lemma of_toNNReal
   proof: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
 
 中文:
-引理 of_toNNReal
-  条件: (h : NN实数.HolderConjugate p.toNN实数 q.toNN实数)
+引理 of_toNN实数
+  条件: (h : 非负实数.HolderConjugate p.toNN实数 q.toNN实数)
   证明: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
 
 Depends on / 依赖: coe_toNNReal_eq_toReal, h.coe, of_toReal
@@ -2565,7 +2565,7 @@ lemma toNNReal_iff
   all_goals simpa [← coe_toNNReal_eq_toReal]
 
 中文:
-引理 toNNReal_iff
+引理 toNN实数_iff
   条件: (hp : 1 < p.toNN实数)
   证明: by
   simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
@@ -2589,7 +2589,7 @@ lemma toNNReal
   proof: .mpr ‹_› toNNReal_iff hp
 
 中文:
-引理 toNNReal
+引理 toNN实数
   条件: (hp : 1 < p.toNN实数) [HolderConjugate p q]
   证明: .mpr ‹_› toNNReal_iff hp
 

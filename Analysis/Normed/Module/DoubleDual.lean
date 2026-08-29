@@ -318,7 +318,7 @@ theorem isCompact_closure_of_isBounded
 
 中文:
 定理 isCompact_closure_of_isBounded
-  结论: (S : Set (WeakSpace 𝕜 X))
+  结论: (S : 集合 (WeakSpace 𝕜 X))
   证明: by
   rw [(isEmbedding_inclusionInDoubleDualWeak 𝕜 X).closure_eq_preimage_closure_image]
   apply (isEmbedding_inclusionInDoubleDualWeak 𝕜 X).isCompact_preimage' _ hrange

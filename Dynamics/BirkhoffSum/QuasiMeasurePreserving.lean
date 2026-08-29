@@ -43,7 +43,7 @@ theorem birkhoffSum_ae_eq_of_ae_eq
 
 中文:
 定理 birkhoffSum_ae_eq_of_ae_eq
-  条件: (hf : QuasiMeasurePreserving f μ μ) (hφ : φ =ᵐ[μ] ψ) n
+  条件: (hf : 拟保测 f μ μ) (hφ : φ =ᵐ[μ] ψ) n
   证明: by
   apply Eventually.mono _ (fun _ => Finset.sum_congr rfl)
   apply ae_all_iff.mpr (fun i => ?_)
@@ -67,7 +67,7 @@ theorem birkhoffAverage_ae_eq_of_ae_eq
 
 中文:
 定理 birkhoffAverage_ae_eq_of_ae_eq
-  结论: (R : 类型) [DivisionSemiring R] [Module R M]
+  结论: (R : 类型) [除半环 R] [模 R M]
   证明: EventuallyEq.const_smul (birkhoffSum_ae_eq_of_ae_eq hf hφ n) (n : R)⁻¹
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.const_smul, birkhoffSum_ae_eq_of_ae_eq, const_smul

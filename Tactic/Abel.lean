@@ -42,7 +42,7 @@ definition term
 
 中文:
 定义 term
-  签名: {α} [AddCommMonoid α] (n : 自然数) (x a : α)
+  签名: {α} [加法交换幺半群 α] (n : 自然数) (x a : α)
   定义体: n • x + a
 -/
 @[expose] def term {α} [AddCommMonoid α] (n : Nat) (x a : α) : α := n • x + a
@@ -56,7 +56,7 @@ definition termg
 
 中文:
 定义 termg
-  签名: {α} [AddCommGroup α] (n : 整数) (x a : α)
+  签名: {α} [加法交换群 α] (n : 整数) (x a : α)
   定义体: n • x + a
 -/
 @[expose] def termg {α} [AddCommGroup α] (n : Int) (x a : α) : α := n • x + a
@@ -71,7 +71,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: {α} [AddCommMonoid α] (n : 自然数) (x : α)
+  签名: {α} [加法交换幺半群 α] (n : 自然数) (x : α)
   定义体: n • x
 -/
 @[expose] def smul {α} [AddCommMonoid α] (n : Nat) (x : α) : α := n • x
@@ -87,7 +87,7 @@ meta section
 
 中文:
 定义 smulg
-  签名: {α} [AddCommGroup α] (n : 整数) (x : α)
+  签名: {α} [加法交换群 α] (n : 整数) (x : α)
   定义体: n • x
 
 meta section
@@ -138,13 +138,13 @@ structure Context
     - inst : Expr
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (5 个):
     - α : Expr
     - univ : Level
     - α0 : Expr
-    - isGroup : 布尔
+    - isGroup : 布尔值
     - inst : Expr
 -/
 structure Context where
@@ -225,8 +225,8 @@ definition Context.app
   body: mkAppN (((@Expr.const n [c.univ]).app c.α).app inst)
 
 中文:
-定义 Context.app
-  签名: (c : Context) (n : Name) (inst : Expr)
+定义 余ntext.app
+  签名: (c : 余ntext) (n : Name) (inst : Expr)
   定义体: mkAppN (((@Expr.const n [c.univ]).app c.α).app inst)
 
 Depends on / 依赖: Expr.const, c.univ, mkAppN
@@ -244,8 +244,8 @@ definition Context.mkApp
   return c.app n (← synthInstance ((Expr.const inst [c.univ]).app c.α)) l
 
 中文:
-定义 Context.mkApp
-  签名: (c : Context) (n inst : Name) (l : Array Expr)
+定义 余ntext.mkApp
+  签名: (c : 余ntext) (n inst : Name) (l : 数组 Expr)
   定义体: do
   return c.app n (← synthInstance ((Expr.const inst [c.univ]).app c.α)) l
 -/
@@ -279,7 +279,7 @@ definition iapp
 
 中文:
 定义 iapp
-  签名: (n : Name) (xs : Array Expr)
+  签名: (n : Name) (xs : 数组 Expr)
   定义体: do
   let c ← read
   return c.app (if c.isGroup then addG n else n) c.inst xs
@@ -333,7 +333,7 @@ inductive NormalExpr
 
 中文:
 归纳类型 NormalExpr
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - zero: (e : Expr) : NormalExpr
     - nterm: (e : Expr) (n : Expr × 整数) (x : 自然数 × Expr) (a : NormalExpr) : NormalExpr
@@ -423,7 +423,7 @@ theorem const_add_term
 
 中文:
 定理 const_add_term
-  条件: {α} [AddCommMonoid α] (k n x a a') (h : k + a = a')
+  条件: {α} [加法交换幺半群 α] (k n x a a') (h : k + a = a')
   证明: by
   simp [h.symm, term, add_comm, add_assoc]
 
@@ -444,7 +444,7 @@ theorem const_add_termg
 
 中文:
 定理 const_add_termg
-  条件: {α} [AddCommGroup α] (k n x a a') (h : k + a = a')
+  条件: {α} [加法交换群 α] (k n x a a') (h : k + a = a')
   证明: by
   simp [h.symm, termg, add_comm, add_assoc]
 
@@ -465,7 +465,7 @@ theorem term_add_const
 
 中文:
 定理 term_add_const
-  条件: {α} [AddCommMonoid α] (n x a k a') (h : a + k = a')
+  条件: {α} [加法交换幺半群 α] (n x a k a') (h : a + k = a')
   证明: by
   simp [h.symm, term, add_assoc]
 
@@ -486,7 +486,7 @@ theorem term_add_constg
 
 中文:
 定理 term_add_constg
-  条件: {α} [AddCommGroup α] (n x a k a') (h : a + k = a')
+  条件: {α} [加法交换群 α] (n x a k a') (h : a + k = a')
   证明: by
   simp [h.symm, termg, add_assoc]
 
@@ -507,7 +507,7 @@ theorem term_add_term
 
 中文:
 定理 term_add_term
-  结论: {α} [AddCommMonoid α] (n₁ x a₁ n₂ a₂ n' a') (h₁ : n₁ + n₂ = n')
+  结论: {α} [加法交换幺半群 α] (n₁ x a₁ n₂ a₂ n' a') (h₁ : n₁ + n₂ = n')
   证明: by
   simp [h₁.symm, h₂.symm, term, add_nsmul, add_assoc, add_left_comm]
 
@@ -529,7 +529,7 @@ theorem term_add_termg
 
 中文:
 定理 term_add_termg
-  结论: {α} [AddCommGroup α] (n₁ x a₁ n₂ a₂ n' a')
+  结论: {α} [加法交换群 α] (n₁ x a₁ n₂ a₂ n' a')
   证明: by
   simp only [termg, h₁.symm, add_zsmul, h₂.symm]
   exact add_add_add_comm (n₁ • x) a₁ (n₂ • x) a₂
@@ -554,7 +554,7 @@ theorem zero_term
 
 中文:
 定理 zero_term
-  条件: {α} [AddCommMonoid α] (x a)
+  条件: {α} [加法交换幺半群 α] (x a)
   结论: @term α _ 0 x a = a
   证明: by
   simp [term, zero_nsmul]
@@ -576,7 +576,7 @@ theorem zero_termg
 
 中文:
 定理 zero_termg
-  条件: {α} [AddCommGroup α] (x a)
+  条件: {α} [加法交换群 α] (x a)
   结论: @termg α _ 0 x a = a
   证明: by
   simp [termg, zero_zsmul]
@@ -649,7 +649,7 @@ theorem term_neg
 
 中文:
 定理 term_neg
-  结论: {α} [AddCommGroup α] (n x a n' a')
+  结论: {α} [加法交换群 α] (n x a n' a')
   证明: by
   simpa [h₂.symm, h₁.symm, termg] using add_comm _ _
 
@@ -694,7 +694,7 @@ theorem zero_smul
 
 中文:
 定理 zero_smul
-  条件: {α} [AddCommMonoid α] (c)
+  条件: {α} [加法交换幺半群 α] (c)
   结论: smul c (0 : α) = 0
   证明: by
   simp [smul, nsmul_zero]
@@ -716,7 +716,7 @@ theorem zero_smulg
 
 中文:
 定理 zero_smulg
-  条件: {α} [AddCommGroup α] (c)
+  条件: {α} [加法交换群 α] (c)
   结论: smulg c (0 : α) = 0
   证明: by
   simp [smulg, zsmul_zero]
@@ -737,7 +737,7 @@ theorem term_smul
 
 中文:
 定理 term_smul
-  结论: {α} [AddCommMonoid α] (c n x a n' a')
+  结论: {α} [加法交换幺半群 α] (c n x a n' a')
   证明: by
   simp [h₂.symm, h₁.symm, term, smul, nsmul_add, mul_nsmul']
 
@@ -759,7 +759,7 @@ theorem term_smulg
 
 中文:
 定理 term_smulg
-  结论: {α} [AddCommGroup α] (c n x a n' a')
+  结论: {α} [加法交换群 α] (c n x a n' a')
   证明: by
   simp [h₂.symm, h₁.symm, termg, smulg, zsmul_add, mul_zsmul]
 
@@ -802,7 +802,7 @@ theorem term_atom
 
 中文:
 定理 term_atom
-  条件: {α} [AddCommMonoid α] (x : α)
+  条件: {α} [加法交换幺半群 α] (x : α)
   结论: x = term 1 x 0
   证明: by simp [term, one_nsmul]
 
@@ -820,7 +820,7 @@ theorem term_atomg
 
 中文:
 定理 term_atomg
-  条件: {α} [AddCommGroup α] (x : α)
+  条件: {α} [加法交换群 α] (x : α)
   结论: x = termg 1 x 0
   证明: by simp [termg]
 -/
@@ -837,7 +837,7 @@ theorem term_atom_pf
 
 中文:
 定理 term_atom_pf
-  条件: {α} [AddCommMonoid α] (x x' : α) (h : x = x')
+  条件: {α} [加法交换幺半群 α] (x x' : α) (h : x = x')
   结论: x = term 1 x' 0
   证明: by
   simp [term, h, one_nsmul]
@@ -858,7 +858,7 @@ theorem term_atom_pfg
 
 中文:
 定理 term_atom_pfg
-  条件: {α} [AddCommGroup α] (x x' : α) (h : x = x')
+  条件: {α} [加法交换群 α] (x x' : α) (h : x = x')
   结论: x = termg 1 x' 0
   证明: by
   simp [termg, h]
@@ -915,7 +915,7 @@ theorem unfold_sub
 
 中文:
 定理 unfold_sub
-  条件: {α} [SubtractionMonoid α] (a b c : α) (h : a + -b = c)
+  条件: {α} [Subtraction幺半群 α] (a b c : α) (h : a + -b = c)
   结论: a - b = c
   证明: by
   rw [sub_eq_add_neg]; rw [h]
@@ -935,7 +935,7 @@ theorem unfold_smul
 
 中文:
 定理 unfold_smul
-  结论: {α} [AddCommMonoid α] (n) (x y : α)
+  结论: {α} [加法交换幺半群 α] (n) (x y : α)
   证明: h
 -/
 theorem unfold_smul {α} [AddCommMonoid α] (n) (x y : α)
@@ -951,7 +951,7 @@ theorem unfold_smulg
 
 中文:
 定理 unfold_smulg
-  结论: {α} [AddCommGroup α] (n : 自然数) (x y : α)
+  结论: {α} [加法交换群 α] (n : 自然数) (x y : α)
   证明: h
 -/
 theorem unfold_smulg {α} [AddCommGroup α] (n : Nat) (x y : α)
@@ -967,7 +967,7 @@ theorem unfold_zsmul
 
 中文:
 定理 unfold_zsmul
-  结论: {α} [AddCommGroup α] (n : 整数) (x y : α)
+  结论: {α} [加法交换群 α] (n : 整数) (x y : α)
   证明: h
 -/
 theorem unfold_zsmul {α} [AddCommGroup α] (n : Int) (x y : α)
@@ -983,7 +983,7 @@ lemma subst_into_smul
 
 中文:
 引理 subst_into_smul
-  结论: {α} [AddCommMonoid α]
+  结论: {α} [加法交换幺半群 α]
   证明: by simp [prl, prr, prt]
 
 Depends on / 依赖: PseudoMetrizableSpace, TopologicalSpace
@@ -1002,7 +1002,7 @@ lemma subst_into_smulg
 
 中文:
 引理 subst_into_smulg
-  结论: {α} [AddCommGroup α]
+  结论: {α} [加法交换群 α]
   证明: by simp [prl, prr, prt]
 -/
 lemma subst_into_smulg {α} [AddCommGroup α]
@@ -1020,7 +1020,7 @@ lemma subst_into_smul_upcast
 
 中文:
 引理 subst_into_smul_upcast
-  结论: {α} [AddCommGroup α]
+  结论: {α} [加法交换群 α]
   证明: by
   simp [← prt, prl₁, ← prl₂, prr, smul, smulg, natCast_zsmul]
 
@@ -1042,7 +1042,7 @@ lemma subst_into_add
 
 中文:
 引理 subst_into_add
-  结论: {α} [AddCommMonoid α] (l r tl tr t)
+  结论: {α} [加法交换幺半群 α] (l r tl tr t)
   证明: by
   rw [prl]; rw [prr]; rw [prt]
 -/
@@ -1061,7 +1061,7 @@ lemma subst_into_addg
 
 中文:
 引理 subst_into_addg
-  结论: {α} [AddCommGroup α] (l r tl tr t)
+  结论: {α} [加法交换群 α] (l r tl tr t)
   证明: by
   rw [prl]; rw [prr]; rw [prt]
 -/
@@ -1080,7 +1080,7 @@ lemma subst_into_negg
 
 中文:
 引理 subst_into_negg
-  结论: {α} [AddCommGroup α] (a ta t : α)
+  结论: {α} [加法交换群 α] (a ta t : α)
   证明: by
   simp [pra, prt]
 -/
@@ -1299,7 +1299,7 @@ theorem term_eq
 
 中文:
 定理 term_eq
-  条件: {α : 类型} [AddCommMonoid α] (n : 自然数) (x a : α)
+  条件: {α : 类型} [加法交换幺半群 α] (n : 自然数) (x a : α)
   结论: term n x a = n • x + a
   证明: (rfl)
 
@@ -1317,7 +1317,7 @@ theorem termg_eq
 
 中文:
 定理 termg_eq
-  条件: {α : 类型} [AddCommGroup α] (n : 整数) (x a : α)
+  条件: {α : 类型} [加法交换群 α] (n : 整数) (x a : α)
   结论: termg n x a = n • x + a
   证明: (rfl)
 -/
@@ -1332,7 +1332,7 @@ definition NormalExpr.isAtom
 
 中文:
 定义 NormalExpr.isAtom
-  签名: : NormalExpr -> 布尔
+  签名: : NormalExpr -> 布尔值
 -/
 def NormalExpr.isAtom : NormalExpr -> Bool
   | .nterm _ (_, 1) _ (.zero _) => true
@@ -1372,9 +1372,9 @@ structure AbelNF.Config
     - mode : = AbelMode.term
 
 中文:
-结构 AbelNF.Config
-  参数: extends AtomM.Recurse.Config
-  继承: AtomM.Recurse.Config
+结构 AbelNF.余nfig
+  参数: extends AtomM.Recurse.余nfig
+  继承: AtomM.Recurse.余nfig
   公理与运算 (1 个):
     - mode : = AbelMode.term
 
@@ -1404,7 +1404,7 @@ definition cleanup
 
 中文:
 定义 cleanup
-  签名: (cfg : AbelNF.Config) (r : Simp.Result)
+  签名: (cfg : AbelNF.余nfig) (r : Simp.Result)
   定义体: do
   match cfg.mode with
   | .raw => pure r

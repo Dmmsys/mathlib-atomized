@@ -34,7 +34,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] : LE (ULift.{v} α) where le x y
+  签名: α] : LE (类型层提升.{v} α) where le x y
   定义体: x.down <= y.down
 
 Depends on / 依赖: x.down, y.down
@@ -68,7 +68,7 @@ theorem down_le
 
 中文:
 定理 down_le
-  条件: [LE α] {a b : ULift α}
+  条件: [LE α] {a b : 类型层提升 α}
   结论: down a <= down b ↔ a <= b
   证明: Iff.rfl
 -/
@@ -84,7 +84,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: α] : LT (ULift.{v} α) where lt x y
+  签名: α] : LT (类型层提升.{v} α) where lt x y
   定义体: x.down < y.down
 
 Depends on / 依赖: x.down, y.down
@@ -118,7 +118,7 @@ theorem down_lt
 
 中文:
 定理 down_lt
-  条件: [LT α] {a b : ULift α}
+  条件: [LT α] {a b : 类型层提升 α}
   结论: down a < down b ↔ a < b
   证明: Iff.rfl
 -/
@@ -134,7 +134,7 @@ instance [BEq
 
 中文:
 实例 [BEq
-  签名: α] : BEq (ULift.{v} α) where beq x y
+  签名: α] : BEq (类型层提升.{v} α) where beq x y
   定义体: x.down == y.down
 
 Depends on / 依赖: x.down, y.down
@@ -168,7 +168,7 @@ theorem down_beq
 
 中文:
 定理 down_beq
-  条件: [BEq α] (a b : ULift α)
+  条件: [BEq α] (a b : 类型层提升 α)
   结论: (down a == down b) = (a == b)
   证明: rfl
 -/
@@ -183,8 +183,8 @@ instance [Ord
   body: compare x.down y.down
 
 中文:
-实例 [Ord
-  签名: α] : Ord (ULift.{v} α) where compare x y
+实例 [序
+  签名: α] : 序 (类型层提升.{v} α) where compare x y
   定义体: compare x.down y.down
 
 Depends on / 依赖: compare, x.down, y.down
@@ -202,7 +202,7 @@ theorem up_compare
 
 中文:
 定理 up_compare
-  条件: [Ord α] (a b : α)
+  条件: [序 α] (a b : α)
   结论: compare (up a) (up b) = compare a b
   证明: rfl
 -/
@@ -220,7 +220,7 @@ theorem down_compare
 
 中文:
 定理 down_compare
-  条件: [Ord α] (a b : ULift α)
+  条件: [序 α] (a b : 类型层提升 α)
   结论: compare (down a) (down b) = compare a b
   证明: rfl
 
@@ -241,8 +241,8 @@ instance [Max
 @[to_dual (attr := simp)]
 
 中文:
-实例 [Max
-  签名: α] : Max (ULift.{v} α) where max x y
+实例 [最大值
+  签名: α] : 最大值 (类型层提升.{v} α) where 最大值 x y
   定义体: up x.down ⊔ y.down
 
 @[to_dual (attr := simp)]
@@ -265,7 +265,7 @@ theorem up_sup
 
 中文:
 定理 up_sup
-  条件: [Max α] (a b : α)
+  条件: [最大值 α] (a b : α)
   结论: up (a ⊔ b) = up a ⊔ up b
   证明: rfl
 
@@ -285,7 +285,7 @@ theorem down_sup
 
 中文:
 定理 down_sup
-  条件: [Max α] (a b : ULift α)
+  条件: [最大值 α] (a b : 类型层提升 α)
   结论: down (a ⊔ b) = down a ⊔ down b
   证明: rfl
 -/
@@ -300,8 +300,8 @@ instance [SDiff
   body: up x.down \ y.down
 
 中文:
-实例 [SDiff
-  签名: α] : SDiff (ULift.{v} α) where sdiff x y
+实例 [对称差
+  签名: α] : 对称差 (类型层提升.{v} α) where sdiff x y
   定义体: up x.down \ y.down
 
 Depends on / 依赖: x.down, y.down
@@ -319,7 +319,7 @@ theorem up_sdiff
 
 中文:
 定理 up_sdiff
-  条件: [SDiff α] (a b : α)
+  条件: [对称差 α] (a b : α)
   结论: up (a \ b) = up a \ up b
   证明: rfl
 -/
@@ -335,7 +335,7 @@ theorem down_sdiff
 
 中文:
 定理 down_sdiff
-  条件: [SDiff α] (a b : ULift α)
+  条件: [对称差 α] (a b : 类型层提升 α)
   结论: down (a \ b) = down a \ down b
   证明: rfl
 -/
@@ -350,8 +350,8 @@ instance [Compl
   body: up x.downᶜ
 
 中文:
-实例 [Compl
-  签名: α] : Compl (ULift.{v} α) where compl x
+实例 [补集
+  签名: α] : 补集 (类型层提升.{v} α) where compl x
   定义体: up x.downᶜ
 
 Depends on / 依赖: x.down
@@ -369,7 +369,7 @@ theorem up_compl
 
 中文:
 定理 up_compl
-  条件: [Compl α] (a : α)
+  条件: [补集 α] (a : α)
   结论: up (aᶜ) = (up a)ᶜ
   证明: rfl
 -/
@@ -385,7 +385,7 @@ theorem down_compl
 
 中文:
 定理 down_compl
-  条件: [Compl α] (a : ULift α)
+  条件: [补集 α] (a : 类型层提升 α)
   结论: down aᶜ = (down a)ᶜ
   证明: rfl
 -/
@@ -400,7 +400,7 @@ instance [Ord
   body: inst.eq_swap
 
 中文:
-实例 [Ord
+实例 [序
   签名: α] [inst
   定义体: inst.eq_swap
 
@@ -418,7 +418,7 @@ instance [Ord
   body: inst.isLE_trans
 
 中文:
-实例 [Ord
+实例 [序
   签名: α] [inst
   定义体: inst.isLE_trans
 
@@ -437,7 +437,7 @@ instance [BEq
 
 中文:
 实例 [BEq
-  签名: α] [Ord α] [inst
+  签名: α] [序 α] [inst
   定义体: inst.compare_eq_iff_beq
 
 Depends on / 依赖: compare_eq_iff_beq, inst.compare_eq_iff_beq
@@ -455,7 +455,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: α] [Ord α] [inst
+  签名: α] [序 α] [inst
   定义体: inst.eq_lt_iff_lt
 
 Depends on / 依赖: eq_lt_iff_lt, inst.eq_lt_iff_lt
@@ -473,7 +473,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [Ord α] [inst
+  签名: α] [序 α] [inst
   定义体: inst.isLE_iff_le
 
 Depends on / 依赖: inst.isLE_iff_le, isLE_iff_le
@@ -492,7 +492,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [LT α] [BEq α] [Ord α] [inst
+  签名: α] [LT α] [BEq α] [序 α] [inst
   定义体: inst.eq_lt_iff_lt
   isLE_iff_le := inst.isLE_iff_le
 
@@ -512,8 +512,8 @@ instance [Preorder
   body: Preorder.lift ULift.down
 
 中文:
-实例 [Preorder
-  签名: α] : Preorder (ULift.{v} α)
+实例 [预序
+  签名: α] : 预序 (类型层提升.{v} α)
   定义体: Preorder.lift ULift.down
 -/
 instance [Preorder α] : Preorder (ULift.{v} α) :=
@@ -528,8 +528,8 @@ instance [PartialOrder
   body: PartialOrder.lift ULift.down ULift.down_injective
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (ULift.{v} α)
+实例 [偏序
+  签名: α] : 偏序 (类型层提升.{v} α)
   定义体: PartialOrder.lift ULift.down ULift.down_injective
 -/
 instance [PartialOrder α] : PartialOrder (ULift.{v} α) :=

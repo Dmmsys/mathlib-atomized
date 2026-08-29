@@ -44,8 +44,8 @@ lemma hasFiniteIntegral_of_bound
 .mpr bound_ge_x exact ContinuousMap.norm_le _ bound_nonneg_x
 
 中文:
-引理 hasFiniteIntegral_of_bound
-  结论: [CompactSpace Y] [Zero Y] (f : X -> C(Y, E)₀) (bound : X -> 实数)
+引理 hasFinite整数egral_of_bound
+  结论: [紧空间 Y] [零 Y] (f : X -> C(Y, E)₀) (bound : X -> 实数)
   证明: by
   have bound_nonneg : 0 <=ᵐ[μ] bound := by
     filter_upwards [bound_ge] with x bound_x using le_trans (norm_nonneg _) (bound_x 0)
@@ -77,8 +77,8 @@ lemma hasFiniteIntegral_mkD_of_bound
   simpa only [mkD_apply_of_continuous cont_x zero_x] using bound_ge_x
 
 中文:
-引理 hasFiniteIntegral_mkD_of_bound
-  结论: [CompactSpace Y] [Zero Y] (f : X -> Y -> E) (g : C(Y, E)₀)
+引理 hasFinite整数egral_mkD_of_bound
+  结论: [紧空间 Y] [零 Y] (f : X -> Y -> E) (g : C(Y, E)₀)
   证明: by
   refine hasFiniteIntegral_of_bound _ bound bound_int ?_
   filter_upwards [bound_ge, f_ae_cont, f_ae_zero] with x bound_ge_x cont_x zero_x
@@ -109,8 +109,8 @@ lemma hasFiniteIntegral_mkD_restrict_of_bound
   · simpa
 
 中文:
-引理 hasFiniteIntegral_mkD_restrict_of_bound
-  结论: {s : Set Y} [CompactSpace s] [Zero s]
+引理 hasFinite整数egral_mkD_restrict_of_bound
+  结论: {s : 集合 Y} [紧空间 s] [零 s]
   证明: by
   refine hasFiniteIntegral_mkD_of_bound _ _ ?_ f_ae_zero bound bound_int ?_
   · simpa [← continuousOn_iff_continuous_domRestrict]
@@ -145,7 +145,7 @@ lemma aeStronglyMeasurable_mkD_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_mkD_of_uncurry
-  结论: [CompactSpace Y] [Zero Y] [TopologicalSpace X]
+  结论: [紧空间 Y] [零 Y] [拓扑空间 X]
   证明: by
   rw [← ContinuousMapZero.isEmbedding_toContinuousMap.aestronglyMeasurable_comp_iff]
 .mp refine aestronglyMeasurable_congr ?_
@@ -182,7 +182,7 @@ lemma aeStronglyMeasurable_restrict_mkD_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_restrict_mkD_of_uncurry
-  结论: [CompactSpace Y] [Zero Y] {s : Set X}
+  结论: [紧空间 Y] [零 Y] {s : 集合 X}
   证明: by
   rw [← ContinuousMapZero.isEmbedding_toContinuousMap.aestronglyMeasurable_comp_iff]
 .mp refine aestronglyMeasurable_congr ?_
@@ -220,7 +220,7 @@ lemma aeStronglyMeasurable_mkD_restrict_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_mkD_restrict_of_uncurry
-  结论: {t : Set Y} [CompactSpace t] [Zero t]
+  结论: {t : 集合 Y} [紧空间 t] [零 t]
   证明: by
   rw [← ContinuousMapZero.isEmbedding_toContinuousMap.aestronglyMeasurable_comp_iff]
 .mp refine aestronglyMeasurable_congr ?_
@@ -257,7 +257,7 @@ lemma aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry
-  结论: {s : Set X} {t : Set Y}
+  结论: {s : 集合 X} {t : 集合 Y}
   证明: by
   rw [← ContinuousMapZero.isEmbedding_toContinuousMap.aestronglyMeasurable_comp_iff]
 .mp refine aestronglyMeasurable_congr ?_

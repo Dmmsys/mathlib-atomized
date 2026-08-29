@@ -170,7 +170,7 @@ definition mapConstructor
 
 中文:
 定义 mapConstructor
-  签名: (c n : Name) (f α β : Expr) (args₀ : List Expr)
+  签名: (c n : Name) (f α β : Expr) (args₀ : 列表 Expr)
   定义体: do
   let ad ← getAuxDefOfDeclName
   let g ← m.getType >>= instantiateMVars
@@ -203,7 +203,7 @@ definition mkCasesOnMatch
 
 中文:
 定义 mkCasesOnMatch
-  签名: (type : Name) (levels : List Level) (params : List Expr) (motive : Expr)
+  签名: (type : Name) (levels : 列表 Level) (params : 列表 Expr) (motive : Expr)
   定义体: do
   let matcherName ← getDeclName? >>= (fun n? => Lean.mkAuxDeclName (.mkStr (n?.getD type) "match"))
   let matchType ← generalizeTelescope (indices.concat val).toArray fun iargs =>
@@ -259,7 +259,7 @@ definition getFVarIdsNotImplementationDetails
 
 中文:
 定义 getFVarIdsNotImplementationDetails
-  签名: : MetaM (List FVarId)
+  签名: : MetaM (列表 FVarId)
   定义体: do
   let lctx ← getLCtx
   return lctx.decls.foldl (init := []) fun r decl? => match decl? with
@@ -282,7 +282,7 @@ definition getFVarsNotImplementationDetails
 
 中文:
 定义 getFVarsNotImplementationDetails
-  签名: : MetaM (List Expr)
+  签名: : MetaM (列表 Expr)
   定义体: List.map Expr.fvar < > getFVarIdsNotImplementationDetails
 
 Depends on / 依赖: Expr.fvar, List.map, getFVarIdsNotImplementationDetails
@@ -467,7 +467,7 @@ definition mkOneInstance
 
 中文:
 定义 mkOneInstance
-  签名: (n cls : Name) (tac : MVarId -> TermElabM Unit)
+  签名: (n cls : Name) (tac : MVarId -> TermElabM 单元)
   定义体: do
   let .inductInfo decl ← getConstInfo n |
     throwError m!"failed to derive '{cls}', '{n}' is not an inductive type"
@@ -542,7 +542,7 @@ liftTermElabM mkOneInstance n cls tac mkInst
 
 中文:
 定义 higherOrderDeriveHandler
-  签名: (cls : Name) (tac : MVarId -> TermElabM Unit)
+  签名: (cls : Name) (tac : MVarId -> TermElabM 单元)
   定义体: fun a => do
   let #[n] := a | return false -- mutually inductive types are not supported yet
   let ok ← deps.mapM fun f => f a
@@ -767,7 +767,7 @@ definition traverseConstructor
 
 中文:
 定义 traverseConstructor
-  签名: (c n : Name) (applInst f α β : Expr) (args₀ : List Expr)
+  签名: (c n : Name) (applInst f α β : Expr) (args₀ : 列表 Expr)
   定义体: do
   let ad ← getAuxDefOfDeclName
   let g ← m.getType >>= instantiateMVars
@@ -946,7 +946,7 @@ definition simpFunctorGoal
 
 中文:
 定义 simpFunctorGoal
-  签名: (m : MVarId) (s : Simp.Context) (simprocs : Simp.SimprocsArray := {})
+  签名: (m : MVarId) (s : Simp.余ntext) (simprocs : Simp.SimprocsArray := {})
   定义体: do
   let some e ← getSimpExtension? `functor_norm | failure
   let s' ← e.getTheorems
@@ -979,7 +979,7 @@ definition traversableLawStarter
 
 中文:
 定义 traversableLawStarter
-  签名: (m : MVarId) (n : Name) (s : MetaM Simp.Context)
+  签名: (m : MVarId) (n : Name) (s : MetaM Simp.余ntext)
   定义体: do
   let s' ← [``Traversable.traverse, ``Functor.map].foldlM
       (fun s n => s.addDeclToUnfold n) ({} : SimpTheorems)

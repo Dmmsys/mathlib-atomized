@@ -36,8 +36,8 @@ definition OrderTop.copy
   body: @OrderTop.mk α h { top := top } fun _ => by simp [eq_top, le_eq]
 
 中文:
-定义 OrderTop.copy
-  签名: {h : LE α} {h' : LE α} (c : @OrderTop α h')
+定义 有顶序.copy
+  签名: {h : LE α} {h' : LE α} (c : @有顶序 α h')
   定义体: @OrderTop.mk α h { top := top } fun _ => by simp [eq_top, le_eq]
 
 Depends on / 依赖: OrderTop, OrderTop.mk, eq_top, le_eq
@@ -59,8 +59,8 @@ definition OrderBot.copy
   body: @OrderBot.mk α h { bot := bot } fun _ => by simp [eq_bot, le_eq]
 
 中文:
-定义 OrderBot.copy
-  签名: {h : LE α} {h' : LE α} (c : @OrderBot α h')
+定义 有底序.copy
+  签名: {h : LE α} {h' : LE α} (c : @有底序 α h')
   定义体: @OrderBot.mk α h { bot := bot } fun _ => by simp [eq_bot, le_eq]
 
 Depends on / 依赖: OrderBot, OrderBot.mk, eq_bot, le_eq
@@ -83,8 +83,8 @@ definition BoundedOrder.copy
     (@OrderBot.mk α h { bot := bot } (fun _ => by simp [eq_bot, le_eq]))
 
 中文:
-定义 BoundedOrder.copy
-  签名: {h : LE α} {h' : LE α} (c : @BoundedOrder α h')
+定义 有界序.copy
+  签名: {h : LE α} {h' : LE α} (c : @有界序 α h')
   定义体: @BoundedOrder.mk α h (@OrderTop.mk α h { top := top } (fun _ => by simp [eq_top, le_eq]))
     (@OrderBot.mk α h { bot := bot } (fun _ => by simp [eq_bot, le_eq]))
 
@@ -116,8 +116,8 @@ definition Lattice.copy
   le_sup_left := b
 
 中文:
-定义 Lattice.copy
-  签名: (c : Lattice α)
+定义 格.copy
+  签名: (c : 格 α)
   定义体: le
   sup := sup
   inf := inf
@@ -158,8 +158,8 @@ definition DistribLattice.copy
   le_sup_inf := by intros; simp +instances [eq_le, eq_sup, eq_inf, le_sup_inf]
 
 中文:
-定义 DistribLattice.copy
-  签名: (c : DistribLattice α)
+定义 Distrib格.copy
+  签名: (c : Distrib格 α)
   定义体: Lattice.copy (@DistribLattice.toLattice α c) le eq_le sup eq_sup inf eq_inf
   le_sup_inf := by intros; simp +instances [eq_le, eq_sup, eq_inf, le_sup_inf]
 
@@ -188,8 +188,8 @@ definition GeneralizedHeytingAlgebra.copy
   le_himp_iff _ _ _ := by simp +instances [eq_le, eq_himp, eq_inf]
 
 中文:
-定义 GeneralizedHeytingAlgebra.copy
-  签名: (c : GeneralizedHeytingAlgebra α)
+定义 GeneralizedHeyting代数.copy
+  签名: (c : GeneralizedHeyting代数 α)
   定义体: Lattice.copy (@GeneralizedHeytingAlgebra.toLattice α c) le eq_le sup eq_sup inf eq_inf
   __ := OrderTop.copy (@GeneralizedHeytingAlgebra.toOrderTop α c) top eq_top
     (by rw [← eq_le]; exact fun _ _ => .rfl)
@@ -227,8 +227,8 @@ definition GeneralizedCoheytingAlgebra.copy
   sdiff_le_iff := by simp +instances [eq_le, eq_sdiff, eq_sup]
 
 中文:
-定义 GeneralizedCoheytingAlgebra.copy
-  签名: (c : GeneralizedCoheytingAlgebra α)
+定义 GeneralizedCoheyting代数.copy
+  签名: (c : GeneralizedCoheyting代数 α)
   定义体: Lattice.copy (@GeneralizedCoheytingAlgebra.toLattice α c) le eq_le sup eq_sup inf eq_inf
   __ := OrderBot.copy (@GeneralizedCoheytingAlgebra.toOrderBot α c) bot eq_bot
     (by rw [← eq_le]; exact fun _ _ => .rfl)
@@ -268,8 +268,8 @@ definition HeytingAlgebra.copy
   himp_bot := by simp +insta
 
 中文:
-定义 HeytingAlgebra.copy
-  签名: (c : HeytingAlgebra α)
+定义 Heyting代数.copy
+  签名: (c : Heyting代数 α)
   定义体: GeneralizedHeytingAlgebra.copy
     (@HeytingAlgebra.toGeneralizedHeytingAlgebra α c) le eq_le top eq_top sup eq_sup inf eq_inf himp
     eq_himp
@@ -315,8 +315,8 @@ definition CoheytingAlgebra.copy
   top_sdiff := by 
 
 中文:
-定义 CoheytingAlgebra.copy
-  签名: (c : CoheytingAlgebra α)
+定义 余heyting代数.copy
+  签名: (c : 余heyting代数 α)
   定义体: GeneralizedCoheytingAlgebra.copy
     (@CoheytingAlgebra.toGeneralizedCoheytingAlgebra α c) le eq_le bot eq_bot sup eq_sup inf eq_inf
       sdiff eq_sdiff
@@ -359,8 +359,8 @@ definition BiheytingAlgebra.copy
     eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_h
 
 中文:
-定义 BiheytingAlgebra.copy
-  签名: (c : BiheytingAlgebra α)
+定义 Biheyting代数.copy
+  签名: (c : Biheyting代数 α)
   定义体: HeytingAlgebra.copy (@BiheytingAlgebra.toHeytingAlgebra α c) le eq_le top
     eq_top bot eq_bot sup eq_sup inf eq_inf himp eq_himp compl eq_compl
   __ := CoheytingAlgebra.copy (@BiheytingAlgebra.toCoheytingAlgebra α c) le eq_le top eq_top bot
@@ -403,8 +403,8 @@ definition CompleteLattice.copy
   le_top := by intros; si
 
 中文:
-定义 CompleteLattice.copy
-  签名: (c : CompleteLattice α)
+定义 完备格.copy
+  签名: (c : 完备格 α)
   定义体: Lattice.copy (@CompleteLattice.toLattice α c) le eq_le sup eq_sup inf eq_inf
   top := top
   bot := bot
@@ -450,8 +450,8 @@ definition Frame.copy
     le eq_le top eq_top bot eq_bot sup eq_sup inf eq_inf himp eq_himp compl eq_compl
 
 中文:
-定义 Frame.copy
-  签名: (c : Frame α) (le : α -> α -> 命题) (eq_le : le = (by infer_instance : LE α).le)
+定义 框架.copy
+  签名: (c : 框架 α) (le : α -> α -> 命题) (eq_le : le = (by infer_instance : LE α).le)
   定义体: CompleteLattice.copy (@Frame.toCompleteLattice α c)
     le eq_le top eq_top bot eq_bot sup eq_sup inf eq_inf sSup eq_sSup sInf eq_sInf
   __ := HeytingAlgebra.copy (@Frame.toHeytingAlgebra α c)
@@ -488,8 +488,8 @@ definition Coframe.copy
     le eq_le top eq_top bot eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_hnot
 
 中文:
-定义 Coframe.copy
-  签名: (c : Coframe α) (le : α -> α -> 命题) (eq_le : le = (by infer_instance : LE α).le)
+定义 余frame.copy
+  签名: (c : 余frame α) (le : α -> α -> 命题) (eq_le : le = (by infer_instance : LE α).le)
   定义体: CompleteLattice.copy (@Coframe.toCompleteLattice α c)
     le eq_le top eq_top bot eq_bot sup eq_sup inf eq_inf sSup eq_sSup sInf eq_sInf
   __ := CoheytingAlgebra.copy (@Coframe.toCoheytingAlgebra α c)
@@ -526,8 +526,8 @@ definition CompleteDistribLattice.copy
     eq_sup inf eq_inf sdiff eq_sdiff hnot eq
 
 中文:
-定义 CompleteDistribLattice.copy
-  签名: (c : CompleteDistribLattice α)
+定义 完备分配格.copy
+  签名: (c : 完备分配格 α)
   定义体: Frame.copy (@CompleteDistribLattice.toFrame α c) le eq_le top eq_top bot eq_bot sup
     eq_sup inf eq_inf himp eq_himp compl eq_compl sSup eq_sSup sInf eq_sInf
   __ := Coframe.copy (@CompleteDistribLattice.toCoframe α c) le eq_le top eq_top bot eq_bot sup
@@ -570,8 +570,8 @@ definition ConditionallyCompleteLattice.copy
   isGLB_csInf := by subst_vars; exact c.isGLB_csInf
 
 中文:
-定义 ConditionallyCompleteLattice.copy
-  签名: (c : ConditionallyCompleteLattice α)
+定义 条件完备格.copy
+  签名: (c : 条件完备格 α)
   定义体: Lattice.copy (@ConditionallyCompleteLattice.toLattice α c)
     le eq_le sup eq_sup inf eq_inf
   sSup := sSup

@@ -33,8 +33,8 @@ lemma IsGroupLikeElem.one
   comul_eq_tmul_self := comul_one
 
 中文:
-引理 IsGroupLikeElem.one
-  结论: IsGroupLikeElem R (1 : A) where
+引理 是GroupLikeElem.one
+  结论: 是GroupLikeElem R (1 : A) where
   证明: counit_one
   comul_eq_tmul_self := comul_one
 
@@ -54,8 +54,8 @@ lemma IsGroupLikeElem.mul
   comul_eq_tmul_self := by simp [ha, hb]
 
 中文:
-引理 IsGroupLikeElem.mul
-  条件: (ha : IsGroupLikeElem R a) (hb : IsGroupLikeElem R b)
+引理 是GroupLikeElem.mul
+  条件: (ha : 是GroupLikeElem R a) (hb : 是GroupLikeElem R b)
   证明: by simp [ha, hb]
   comul_eq_tmul_self := by simp [ha, hb]
 
@@ -79,7 +79,7 @@ definition groupLikeSubmonoid
 
 中文:
 定义 groupLikeSubmonoid
-  签名: : Submonoid A where
+  签名: : 子幺半群 A where
   定义体: {a | IsGroupLikeElem R a}
   one_mem' := .one
   mul_mem' := .mul
@@ -101,9 +101,9 @@ lemma IsGroupLikeElem.pow
   proof: (groupLikeSubmonoid R A).pow_mem ha _
 
 中文:
-引理 IsGroupLikeElem.pow
-  条件: {n : 自然数} (ha : IsGroupLikeElem R a)
-  结论: IsGroupLikeElem R (a ^ n)
+引理 是GroupLikeElem.pow
+  条件: {n : 自然数} (ha : 是GroupLikeElem R a)
+  结论: 是GroupLikeElem R (a ^ n)
   证明: (groupLikeSubmonoid R A).pow_mem ha _
 
 Depends on / 依赖: groupLikeSubmonoid, pow_mem
@@ -122,8 +122,8 @@ lemma IsGroupLikeElem.of_mul_eq_one
     (by simp [ha, hab, Algebra.TensorProduct.one_def])
 
 中文:
-引理 IsGroupLikeElem.of_mul_eq_one
-  条件: (hab : a * b = 1) (hba : b * a = 1) (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.of_mul_eq_one
+  条件: (hab : a * b = 1) (hba : b * a = 1) (ha : 是GroupLikeElem R a)
   证明: left_inv_eq_right_inv (a := counit a) (by simp [← counit_mul, hba]) (by simp [ha])
   comul_eq_tmul_self := left_inv_eq_right_inv (a := comul a) (by simp [← comul_mul, hba])
     (by simp [ha, hab, Algebra.TensorProduct.one_def])
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (GroupLike R A)
+  签名: 幺 (群状 R A)
   定义体: ⟨1, .one⟩
 -/
 instance : One (GroupLike R A) where one := ⟨1, .one⟩
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (GroupLike R A)
+  签名: 乘法 (群状 R A)
   定义体: ⟨a * b, a.2.mul b.2⟩
 -/
 instance : Mul (GroupLike R A) where mul a b := ⟨a * b, a.2.mul b.2⟩
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (GroupLike R A) 自然数
+  签名: 幂 (群状 R A) 自然数
   定义体: ⟨a ^ n, a.2.pow⟩
 -/
 instance : Pow (GroupLike R A) Nat where pow a n := ⟨a ^ n, a.2.pow⟩
@@ -233,7 +233,7 @@ lemma val_one
 
 中文:
 引理 val_one
-  结论: (1 : GroupLike R A) = (1 : A)
+  结论: (1 : 群状 R A) = (1 : A)
   证明: rfl
 -/
 @[simp] lemma val_one : (1 : GroupLike R A) = (1 : A) := rfl
@@ -248,7 +248,7 @@ lemma val_mul
 
 中文:
 引理 val_mul
-  条件: (a b : GroupLike R A)
+  条件: (a b : 群状 R A)
   结论: ↑(a * b) = (a * b : A)
   证明: rfl
 -/
@@ -264,7 +264,7 @@ lemma val_pow
 
 中文:
 引理 val_pow
-  条件: (a : GroupLike R A) (n : 自然数)
+  条件: (a : 群状 R A) (n : 自然数)
   结论: ↑(a ^ n) = (a ^ n : A)
   证明: rfl
 -/
@@ -280,7 +280,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (GroupLike R A)
+  签名: 幺半群 (群状 R A)
   定义体: val_injective.monoid val val_one val_mul val_pow
 
 Depends on / 依赖: monoid, val_injective, val_injective.monoid, val_mul, val_one, val_pow
@@ -300,7 +300,7 @@ definition valMonoidHom
 
 中文:
 定义 valMonoidHom
-  签名: : GroupLike R A ->* A where
+  签名: : 群状 R A ->* A where
   定义体: val
   map_one' := val_one
   map_mul' := val_mul
@@ -324,8 +324,8 @@ instance GroupLike.instCommMonoid
   body: val_injective.commMonoid val val_one val_mul val_pow
 
 中文:
-实例 GroupLike.instCommMonoid
-  签名: : CommMonoid (GroupLike R A)
+实例 群状.instCommMonoid
+  签名: : 交换幺半群 (群状 R A)
   定义体: val_injective.commMonoid val val_one val_mul val_pow
 
 Depends on / 依赖: commMonoid, val_injective, val_injective.commMonoid, val_mul, val_one, val_pow

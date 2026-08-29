@@ -62,10 +62,10 @@ structure IsKolmogorovProcess
     - q_pos : 0 < q
 
 中文:
-结构 IsKolmogorovProcess
-  参数: (X : T -> Ω -> E) (P : Measure Ω) (p q : 实数) (M : 实数>=0)
+结构 是KolmogorovProcess
+  参数: (X : T -> Ω -> E) (P : 测度 Ω) (p q : 实数) (M : 实数>=0)
   公理与运算 (4 个):
-    - measurablePair : 对任意 s t : T, Measurable[_, borel (E × E)] fun ω => (X s ω, X t ω)
+    - measurablePair : 对任意 s t : T, 可测[_, borel (E × E)] fun ω => (X s ω, X t ω)
     - kolmogorovCondition : 对任意 s t : T, ∫⁻ ω, edist (X s ω) (X t ω) ^ p ∂P <= M * edist s t ^ q
     - p_pos : 0 < p
     - q_pos : 0 < q
@@ -86,7 +86,7 @@ definition IsAEKolmogorovProcess
 
 中文:
 定义 IsAEKolmogorovProcess
-  签名: (X : T -> Ω -> E) (P : Measure Ω) (p q : 实数) (M : 实数>=0)
+  签名: (X : T -> Ω -> E) (P : 测度 Ω) (p q : 实数) (M : 实数>=0)
   定义体: exists Y, IsKolmogorovProcess Y P p q M ∧ forall t, X t =ᵐ[P] Y t
 
 Depends on / 依赖: IsKolmogorovProcess
@@ -103,8 +103,8 @@ lemma IsKolmogorovProcess.IsAEKolmogorovProcess
   proof: ⟨X, hX, by simp⟩
 
 中文:
-引理 IsKolmogorovProcess.IsAEKolmogorovProcess
-  条件: (hX : IsKolmogorovProcess X P p q M)
+引理 是KolmogorovProcess.IsAEKolmogorovProcess
+  条件: (hX : 是KolmogorovProcess X P p q M)
   证明: ⟨X, hX, by simp⟩
 -/
 lemma IsKolmogorovProcess.IsAEKolmogorovProcess (hX : IsKolmogorovProcess X P p q M) :
@@ -277,7 +277,7 @@ lemma IsKolmogorovProcess.stronglyMeasurable_edist
   exact continuous_edist.stronglyMeasurable.comp_measurable (hX.measurablePair s t)
 
 中文:
-引理 IsKolmogorovProcess.stronglyMeasurable_edist
+引理 是KolmogorovProcess.stronglyMeasurable_edist
   证明: by
   borelize (E × E)
   exact continuous_edist.stronglyMeasurable.comp_measurable (hX.measurablePair s t)
@@ -325,8 +325,8 @@ lemma IsKolmogorovProcess.measurable_edist
   proof: hX.stronglyMeasurable_edist.measurable
 
 中文:
-引理 IsKolmogorovProcess.measurable_edist
-  条件: (hX : IsKolmogorovProcess X P p q M) {s t : T}
+引理 是KolmogorovProcess.measurable_edist
+  条件: (hX : 是KolmogorovProcess X P p q M) {s t : T}
   证明: hX.stronglyMeasurable_edist.measurable
 
 Depends on / 依赖: hX.stronglyMeasurable_edist.measurable, measurable, stronglyMeasurable_edist
@@ -363,8 +363,8 @@ lemma IsKolmogorovProcess.measurable
   proof: (measurable_fst.mono prod_le_borel_prod le_rfl).comp (hX.measurablePair s s)
 
 中文:
-引理 IsKolmogorovProcess.measurable
-  条件: (hX : IsKolmogorovProcess X P p q M) (s : T)
+引理 是KolmogorovProcess.measurable
+  条件: (hX : 是KolmogorovProcess X P p q M) (s : T)
   证明: (measurable_fst.mono prod_le_borel_prod le_rfl).comp (hX.measurablePair s s)
 
 Depends on / 依赖: hX.measurablePair, le_rfl, measurablePair, measurable_fst, measurable_fst.mono, prod_le_borel_prod
@@ -412,8 +412,8 @@ lemma IsKolmogorovProcess.mk_of_secondCountableTopology
   q_pos := hq
 
 中文:
-引理 IsKolmogorovProcess.mk_of_secondCountableTopology
-  结论: [SecondCountableTopology E]
+引理 是KolmogorovProcess.mk_of_secondCountableTopology
+  结论: [第二可数拓扑 E]
   证明: by
     suffices Measurable (fun ω => (X s ω, X t ω)) by
       rwa [Prod.borelSpace.measurable_eq] at this
@@ -488,8 +488,8 @@ lemma IsKolmogorovProcess.edist_eq_zero
   proof: hX.IsAEKolmogorovProcess.edist_eq_zero h
 
 中文:
-引理 IsKolmogorovProcess.edist_eq_zero
-  结论: (hX : IsKolmogorovProcess X P p q M)
+引理 是KolmogorovProcess.edist_eq_zero
+  结论: (hX : 是KolmogorovProcess X P p q M)
   证明: hX.IsAEKolmogorovProcess.edist_eq_zero h
 
 Depends on / 依赖: IsAEKolmogorovProcess, edist_eq_zero, hX.IsAEKolmogorovProcess.edist_eq_zero
@@ -546,8 +546,8 @@ lemma IsKolmogorovProcess.edist_eq_zero_of_const_eq_zero
   proof: hX.IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero s t
 
 中文:
-引理 IsKolmogorovProcess.edist_eq_zero_of_const_eq_zero
-  结论: (hX : IsKolmogorovProcess X P p q 0)
+引理 是KolmogorovProcess.edist_eq_zero_of_const_eq_zero
+  结论: (hX : 是KolmogorovProcess X P p q 0)
   证明: hX.IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero s t
 
 Depends on / 依赖: IsAEKolmogorovProcess, edist_eq_zero_of_const_eq_zero, hX.IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero

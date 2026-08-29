@@ -395,7 +395,7 @@ definition appendStream'
 
 中文:
 定义 appendStream'
-  签名: : List α -> Stream' α -> Stream' α
+  签名: : 列表 α -> Stream' α -> Stream' α
 -/
 def appendStream' : List α -> Stream' α -> Stream' α
   | [], s => s
@@ -412,7 +412,7 @@ definition take
 
 中文:
 定义 take
-  签名: : 自然数 -> Stream' α -> List α
+  签名: : 自然数 -> Stream' α -> 列表 α
 -/
 def take : Nat -> Stream' α -> List α
   | 0, _ => []
@@ -427,7 +427,7 @@ definition cycleF
 
 中文:
 定义 cycleF
-  签名: : α × List α × α × List α -> α
+  签名: : α × 列表 α × α × 列表 α -> α
 -/
 protected def cycleF : α × List α × α × List α -> α
   | (v, _, _, _) => v
@@ -441,7 +441,7 @@ definition cycleG
 
 中文:
 定义 cycleG
-  签名: : α × List α × α × List α -> α × List α × α × List α
+  签名: : α × 列表 α × α × 列表 α -> α × 列表 α × α × 列表 α
 -/
 protected def cycleG : α × List α × α × List α -> α × List α × α × List α
   | (_, [], v₀, l₀) => (v₀, l₀, v₀, l₀)
@@ -456,7 +456,7 @@ definition cycle
 
 中文:
 定义 cycle
-  签名: : 对任意 l : List α, l != [] -> Stream' α
+  签名: : 对任意 l : 列表 α, l != [] -> Stream' α
 -/
 def cycle : forall l : List α, l != [] -> Stream' α
   | [], h => absurd rfl h
@@ -490,7 +490,7 @@ definition initsCore
 
 中文:
 定义 initsCore
-  签名: (l : List α) (s : Stream' α)
+  签名: (l : 列表 α) (s : Stream' α)
   定义体: corecOn (l, s) (fun ⟨a, _⟩ => a) fun p =>
     match p with
     | (l', s') => (l' ++ [head s'], tail s')

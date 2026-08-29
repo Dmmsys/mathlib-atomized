@@ -48,8 +48,8 @@ lemma Meromorphic.Gamma
   proof: meromorphicOn_univ.mp MeromorphicNFOn.Gamma.meromorphicOn
 
 中文:
-引理 Meromorphic.Gamma
-  结论: Meromorphic Gamma
+引理 亚纯.Gamma
+  结论: 亚纯 Gamma
   证明: meromorphicOn_univ.mp MeromorphicNFOn.Gamma.meromorphicOn
 
 Depends on / 依赖: MeromorphicNFOn, MeromorphicNFOn.Gamma.meromorphicOn, meromorphicOn, meromorphicOn_univ, meromorphicOn_univ.mp

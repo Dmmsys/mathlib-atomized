@@ -48,7 +48,7 @@ theorem iInf_localization_eq_bot
 
 中文:
 定理 iInf_localization_eq_bot
-  结论: (⨅ v : MaximalSpectrum R,
+  结论: (⨅ v : 极大谱 R,
   证明: by
   ext x
   rw [Algebra.mem_bot]; rw [Algebra.mem_iInf]
@@ -96,7 +96,7 @@ theorem iInf_localization_eq_bot
 
 中文:
 定理 iInf_localization_eq_bot
-  结论: ⨅ v : PrimeSpectrum R,
+  结论: ⨅ v : 素谱 R,
   证明: by
   refine bot_unique (.trans (fun _ => ?_) (MaximalSpectrum.iInf_localization_eq_bot R K).le)
   simpa only [Algebra.mem_iInf] using fun hx ⟨v, hv⟩ => hx ⟨v, hv.isPrime⟩
@@ -122,7 +122,7 @@ abbreviation PiLocalization
 
 中文:
 缩写 PiLocalization
-  签名: : Type _
+  签名: : 类型 _
   定义体: Π I : MaximalSpectrum R, Localization.AtPrime I.1
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, MaximalSpectrum
@@ -161,7 +161,7 @@ theorem toPiLocalization_injective
 
 中文:
 定理 toPiLocalization_injective
-  结论: Function.Injective (toPiLocalization R)
+  结论: 函数.单射 (toPiLocalization R)
   证明: fun r r' eq => by
   rw [← one_mul r]; rw [← one_mul r']
   by_contra ne
@@ -260,7 +260,7 @@ theorem mapPiLocalization_id
 
 中文:
 定理 mapPiLocalization_id
-  结论: mapPiLocalization (.id R) Function.bijective_id = .id _
+  结论: mapPiLocalization (.id R) 函数.bijective_id = .id _
   证明: RingHom.ext fun _ => funext fun _ => congr($(Localization.localRingHom_id _) _)
 
 Depends on / 依赖: Localization, Localization.localRingHom_id, RingHom, RingHom.ext, localRingHom_id
@@ -304,7 +304,7 @@ theorem mapPiLocalization_bijective
 
 中文:
 定理 mapPiLocalization_bijective
-  结论: Function.Bijective (mapPiLocalization f hf)
+  结论: 函数.双射 (mapPiLocalization f hf)
   证明: by
   let f := RingEquiv.ofBijective f hf
   let e := RingEquiv.ofRingHom (mapPiLocalization f hf)
@@ -345,7 +345,7 @@ have : r = 0 := funext fun i => toPiLocalization_injective _ funext fun I => by
 
 中文:
 定理 toPiLocalization_not_surjective_of_infinite
-  条件: [Infinite ι]
+  条件: [无限 ι]
   证明: fun surj => by
   classical
   have ⟨J, max, notMem⟩ := PrimeSpectrum.exists_maximal_notMem_range_sigmaToPi_of_infinite R
@@ -442,7 +442,7 @@ abbreviation PiLocalization
 
 中文:
 缩写 PiLocalization
-  签名: : Type _
+  签名: : 类型 _
   定义体: Π p : PrimeSpectrum R, Localization p.asIdeal.primeCompl
 
 Depends on / 依赖: Localization, PrimeSpectrum, asIdeal, p.asIdeal.primeCompl, primeCompl
@@ -477,7 +477,7 @@ theorem toPiLocalization_injective
 
 中文:
 定理 toPiLocalization_injective
-  结论: Function.Injective (toPiLocalization R)
+  结论: 函数.单射 (toPiLocalization R)
   证明: fun _ _ eq => MaximalSpectrum.toPiLocalization_injective R
     funext fun I => congr_fun eq I.toPrimeSpectrum
 
@@ -497,7 +497,7 @@ definition piLocalizationToMaximal
 
 中文:
 定义 piLocalizationToMaximal
-  签名: : PiLocalization R ->ₐ[R] MaximalSpectrum.PiLocalization R
+  签名: : PiLocalization R ->ₐ[R] 极大谱.PiLocalization R
   定义体: AlgHom.pi fun I => Pi.evalAlgHom _ _ I.toPrimeSpectrum
 
 Depends on / 依赖: AlgHom, AlgHom.pi, I.toPrimeSpectrum, Pi.evalAlgHom, evalAlgHom, toPrimeSpectrum
@@ -517,7 +517,7 @@ theorem piLocalizationToMaximal_surjective
 
 中文:
 定理 piLocalizationToMaximal_surjective
-  结论: Function.Surjective (piLocalizationToMaximal R)
+  结论: 函数.满射 (piLocalizationToMaximal R)
   证明: by
   classical
   exact fun r => ⟨fun I => if h : I.1.IsMaximal then r ⟨_, h⟩ else 0, funext fun _ => dif_pos _⟩
@@ -541,7 +541,7 @@ definition piLocalizationToMaximalEquiv
 
 中文:
 定义 piLocalizationToMaximalEquiv
-  签名: (h : 对任意 I : Ideal R, I.IsPrime -> I.IsMaximal)
+  签名: (h : 对任意 I : 理想 R, I.是素 -> I.是极大)
   定义体: piLocalizationToMaximal R
   invFun := RingHom.pi fun I => Pi.evalRingHom _ (⟨_, h _ I.2⟩ : MaximalSpectrum R)
 
@@ -562,7 +562,7 @@ theorem piLocalizationToMaximal_bijective
 
 中文:
 定理 piLocalizationToMaximal_bijective
-  条件: (h : 对任意 I : Ideal R, I.IsPrime -> I.IsMaximal)
+  条件: (h : 对任意 I : 理想 R, I.是素 -> I.是极大)
   证明: (piLocalizationToMaximalEquiv h).bijective
 
 Depends on / 依赖: bijective, piLocalizationToMaximalEquiv
@@ -607,7 +607,7 @@ theorem isMaximal_of_toPiLocalization_surjective
 
 中文:
 定理 isMaximal_of_toPiLocalization_surjective
-  结论: (surj : Function.Surjective (toPiLocalization R))
+  结论: (surj : 函数.满射 (toPiLocalization R))
   证明: by
   classical
   have ⟨J, max, le⟩ := I.1.exists_le_maximal I.2.ne_top
@@ -739,7 +739,7 @@ theorem mapPiLocalization_bijective
 
 中文:
 定理 mapPiLocalization_bijective
-  条件: (hf : Function.Bijective f)
+  条件: (hf : 函数.双射 f)
   证明: by
   let f := RingEquiv.ofBijective f hf
   let e := RingEquiv.ofRingHom (mapPiLocalization (f : R ->+* S)) (mapPiLocalization f.symm) ?_ ?_
@@ -773,7 +773,7 @@ theorem toPiLocalization_not_surjective_of_infinite
 
 中文:
 定理 toPiLocalization_not_surjective_of_infinite
-  条件: [Infinite ι]
+  条件: [无限 ι]
   证明: fun surj => MaximalSpectrum.toPiLocalization_not_surjective_of_infinite R by
     rw [← AlgHom.coe_toRingHom]; rw [← piLocalizationToMaximal_comp_toPiLocalization]
     exact (piLocalizationToMaximal_surjective _).comp surj

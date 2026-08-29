@@ -65,7 +65,7 @@ definition hallMatchingsOn
 
 中文:
 定义 hallMatchingsOn
-  签名: {ι : 类型u} {α : 类型v} (t : ι -> Finset α) (ι' : Finset ι)
+  签名: {ι : 类型u} {α : 类型v} (t : ι -> 有限集 α) (ι' : 有限集 ι)
   定义体: { f : ι' -> α | Function.Injective f ∧ forall (x : {x // x in ι'}), f x in t x }
 
 Depends on / 依赖: Function, Function.Injective, Injective
@@ -88,7 +88,7 @@ definition hallMatchingsOn.restrict
 
 中文:
 定义 hallMatchingsOn.restrict
-  签名: {ι : 类型u} {α : 类型v} (t : ι -> Finset α) {ι' ι'' : Finset ι}
+  签名: {ι : 类型u} {α : 类型v} (t : ι -> 有限集 α) {ι' ι'' : 有限集 ι}
   定义体: by
   refine ⟨fun i => f.val ⟨i, h i.property⟩, ?_⟩
   obtain ⟨hinj, hc⟩ := f.property
@@ -123,7 +123,7 @@ theorem hallMatchingsOn.nonempty
 
 中文:
 定理 hallMatchingsOn.nonempty
-  结论: {ι : 类型u} {α : 类型v} [DecidableEq α] (t : ι -> Finset α)
+  结论: {ι : 类型u} {α : 类型v} [DecidableEq α] (t : ι -> 有限集 α)
   证明: by
   classical
     refine ⟨Classical.indefiniteDescription _ ?_⟩
@@ -157,7 +157,7 @@ definition hallMatchingsFunctor
 
 中文:
 定义 hallMatchingsFunctor
-  签名: {ι : 类型u} {α : 类型v} (t : ι -> Finset α)
+  签名: {ι : 类型u} {α : 类型v} (t : ι -> 有限集 α)
   定义体: hallMatchingsOn t ι'.unop
   map {_ _} g := ↾(hallMatchingsOn.restrict t (CategoryTheory.leOfHom g.unop))
 
@@ -190,7 +190,7 @@ instance hallMatchingsOn.finite
 
 中文:
 实例 hallMatchingsOn.finite
-  签名: {ι : 类型u} {α : 类型v} (t : ι -> Finset α) (ι' : Finset ι)
+  签名: {ι : 类型u} {α : 类型v} (t : ι -> 有限集 α) (ι' : 有限集 ι)
   定义体: by
   classical
     rw [hallMatchingsOn]
@@ -239,7 +239,7 @@ theorem Finset.all_card_le_biUnion_card_iff_exists_injective
         i
 
 中文:
-定理 Finset.all_card_le_biUnion_card_iff_exists_injective
+定理 有限集.all_card_le_biUnion_card_iff_存在_injective
   结论: {ι : 类型u} {α : 类型v}
   证明: by
   constructor
@@ -318,7 +318,7 @@ theorem Fintype.all_card_le_rel_image_card_iff_exists_injective
   have h' : forall (f : α -> β) (x), x ~[R] f x ↔ f x in r' x := by simp [r', Se
 
 中文:
-定理 Fintype.all_card_le_rel_image_card_iff_exists_injective
+定理 有限类型.all_card_le_rel_image_card_iff_存在_injective
   结论: {α : 类型u} {β : 类型v}
   证明: by
   let r' a := (R.image {a}).toFinset
@@ -365,8 +365,8 @@ theorem Fintype.all_card_le_filter_rel_iff_exists_injective
   apply 
 
 中文:
-定理 Fintype.all_card_le_filter_rel_iff_exists_injective
-  结论: {α : 类型u} {β : 类型v} [Fintype β]
+定理 有限类型.all_card_le_filter_rel_iff_存在_injective
+  结论: {α : 类型u} {β : 类型v} [有限类型 β]
   证明: by
   have := Classical.decEq β
   let r' a : Finset β := {b | r a b}

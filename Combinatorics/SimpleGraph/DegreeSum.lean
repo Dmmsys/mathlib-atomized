@@ -129,7 +129,7 @@ theorem dart_card_eq_sum_degrees
 
 中文:
 定理 dart_card_eq_sum_degrees
-  结论: Fintype.card G.Dart = ∑ v, G.degree v
+  结论: 有限类型.card G.Dart = ∑ v, G.degree v
   证明: by
   have := Classical.decEq V
   simp only [← card_univ, ← dart_fst_fiber_card_eq_degree]
@@ -216,7 +216,7 @@ theorem dart_card_eq_twice_card_edges
 
 中文:
 定理 dart_card_eq_twice_card_edges
-  结论: Fintype.card G.Dart = 2 * #G.edgeFinset
+  结论: 有限类型.card G.Dart = 2 * #G.edgeFinset
   证明: by
   classical
   rw [← card_univ]
@@ -270,7 +270,7 @@ lemma two_mul_card_edgeFinset
 
 中文:
 引理 two_mul_card_edgeFinset
-  结论: 2 * #G.edgeFinset = #(univ.filter fun (x, y) => G.Adj x y)
+  结论: 2 * #G.edgeFinset = #(univ.filter fun (x, y) => G.伴随 x y)
   证明: by
   rw [← dart_card_eq_twice_card_edges]; rw [← card_univ]
   refine card_bij' (fun d _ => (d.fst, d.snd)) (fun xy h => ⟨xy, (mem_filter.1 h).2⟩) ?_ ?_ ?_ ?_
@@ -337,7 +337,7 @@ theorem even_card_odd_degree_vertices
 
 中文:
 定理 even_card_odd_degree_vertices
-  条件: [Fintype V] [DecidableRel G.Adj]
+  条件: [有限类型 V] [DecidableRel G.伴随]
   证明: by
   have h := congr_arg (fun n => ↑n : Nat -> ZMod 2) G.sum_degrees_eq_twice_card_edges
   simp only [ZMod.natCast_self, zero_mul, Nat.cast_mul] at h
@@ -380,7 +380,7 @@ theorem odd_card_odd_degree_vertices_ne
 
 中文:
 定理 odd_card_odd_degree_vertices_ne
-  结论: [Fintype V] [DecidableEq V] [DecidableRel G.Adj] (v : V)
+  结论: [有限类型 V] [DecidableEq V] [DecidableRel G.伴随] (v : V)
   证明: by
   rcases G.even_card_odd_degree_vertices with ⟨k, hg⟩
   have hk : 0 < k := by
@@ -430,8 +430,8 @@ theorem exists_ne_odd_degree_of_exists_odd_degree
   exact ⟨w, hw⟩
 
 中文:
-定理 exists_ne_odd_degree_of_exists_odd_degree
-  结论: [Fintype V] [DecidableRel G.Adj] (v : V)
+定理 存在_ne_odd_degree_of_存在_odd_degree
+  结论: [有限类型 V] [DecidableRel G.伴随] (v : V)
   证明: by
   have := Classical.decEq V
   rcases G.odd_card_odd_degree_vertices_ne v h with ⟨k, hg⟩

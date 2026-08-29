@@ -49,10 +49,10 @@ structure SubmonoidFunctor
     - map({U V : C} (i : U ⟶ V)) : obj U <= (obj V).comap (M.map i).hom  [default: by cat_disch]
 
 中文:
-结构 SubmonoidFunctor
+结构 子幺半群函子
   参数: where
   公理与运算 (2 个):
-    - obj((U : C)) : Submonoid (M.obj U)
+    - obj((U : C)) : 子幺半群 (M.obj U)
     - map({U V : C} (i : U ⟶ V)) : obj U <= (obj V).comap (M.map i).hom  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
@@ -103,7 +103,7 @@ MonCat.ofHom ((M.map i).hom.submonoidComap (S.obj _)).comp Submonoid.inclusion (
 
 中文:
 定义 toFunctor
-  签名: : C ⥤ MonCat.{w} where
+  签名: : C ⥤ 幺半群范畴.{w} where
   定义体: MonCat.of (S.obj _)
   map i :=
 MonCat.ofHom ((M.map i).hom.submonoidComap (S.obj _)).comp Submonoid.inclusion (S.map i)
@@ -128,7 +128,7 @@ definition toSubfunctor
 
 中文:
 定义 toSubfunctor
-  签名: : Subfunctor (M ⋙ forget MonCat) where
+  签名: : 子函子 (M ⋙ forget 幺半群范畴) where
   定义体: (S.obj _).carrier
   map := S.map
 
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SubmonoidFunctor M)
+  签名: 偏序 (子幺半群函子 M)
   定义体: PartialOrder.lift SubmonoidFunctor.obj fun _ _ => SubmonoidFunctor.ext
 
 @[simps! top_obj bot_obj sup_obj inf_obj sInf_obj sSup_obj]
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (SubmonoidFunctor M)
+  签名: 完备格 (子幺半群函子 M)
   定义体: { obj _ := F.obj _ ⊔ G.obj _
       map i := by grw [F.map i, G.map i, (Submonoid.monotone_comap).le_map_sup] }
   le_sup_left _ _ _ := by simp
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono S.ι
+  签名: 单态射 S.ι
   定义体: by
   suffices forall (X : C), Mono (S.ι.app X) from NatTrans.mono_of_mono_app _
   intro X
@@ -289,8 +289,8 @@ definition image
     grw [S.map_le]
 
 中文:
-定义 image
-  签名: (S : SubmonoidFunctor M)
+定义 像
+  签名: (S : 子幺半群函子 M)
   定义体: Submonoid.map (MonCat.Hom.hom (p.app _)) (S.obj _)
   map i := by
     rw [← Submonoid.map_le_iff_le_comap]; rw [Submonoid.map_map]; rw [← MonCat.hom_comp]; rw [← p.naturality]; rw [MonCat.hom_comp]; rw [← Submonoid.map_map]
@@ -318,7 +318,7 @@ lemma image_id
 
 中文:
 引理 image_id
-  结论: image (𝟙 M) ⊤ = ⊤
+  结论: 像 (𝟙 M) ⊤ = ⊤
   证明: by aesop
 
 @[simp]
@@ -338,7 +338,7 @@ lemma image_comp
 中文:
 引理 image_comp
   条件: (p' : M' ⟶ M'')
-  结论: S.image (p ≫ p') = (S.image p).image p'
+  结论: S.像 (p ≫ p') = (S.像 p).像 p'
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -366,7 +366,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (S' : SubmonoidFunctor M')
+  签名: (S' : 子幺半群函子 M')
   定义体: Submonoid.comap (MonCat.Hom.hom (p.app _)) (S'.obj _)
   map _ _ h := by
     simp_rw [Submonoid.mem_comap, NatTrans.naturality_apply]
@@ -432,7 +432,7 @@ lemma image_comap_ι
 
 中文:
 引理 image_comap_ι
-  结论: image S.ι (comap S.ι S) = S
+  结论: 像 S.ι (comap S.ι S) = S
   证明: by aesop
 -/
 lemma image_comap_ι : image S.ι (comap S.ι S) = S := by aesop

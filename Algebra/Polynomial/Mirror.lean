@@ -337,7 +337,7 @@ theorem mirror_involutive
 
 中文:
 定理 mirror_involutive
-  结论: Function.Involutive (mirror : R[X] -> R[X])
+  结论: 函数.对合 (mirror : R[X] -> R[X])
   证明: mirror_mirror
 
 Depends on / 依赖: mirror_mirror
@@ -651,7 +651,7 @@ theorem irreducible_of_mirror
 
 中文:
 定理 irreducible_of_mirror
-  结论: (h1 : ¬IsUnit f)
+  结论: (h1 : ¬是单位 f)
   证明: by
   constructor
   · exact h1

@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasImages (C ⥤ 类型)
+  签名: 有Images (C ⥤ 类型)
   定义体: { exists_image := ⟨ { F := _, isImage := monoFactorisationIsImage f } ⟩ }
 
 Depends on / 依赖: exists_image, isImage, monoFactorisationIsImage
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasStrongEpiMonoFactorisations (C ⥤ 类型)
+  签名: 有StrongEpiMonoFactorisations (C ⥤ 类型)
   定义体: ⟨{ I := image f, m := image.ι f, e := factorThruImage f }⟩
 
 Depends on / 依赖: factorThruImage

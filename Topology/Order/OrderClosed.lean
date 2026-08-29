@@ -78,10 +78,10 @@ class ClosedIicTopology
     - isClosed_Iic((a : α)) : IsClosed (Iic a)
 
 中文:
-类 ClosedIicTopology
-  参数: (α : 类型) [TopologicalSpace α] [Preorder α]
+类 ClosedIic拓扑
+  参数: (α : 类型) [拓扑空间 α] [预序 α]
   公理与运算 (1 个):
-    - isClosed_Iic((a : α)) : IsClosed (Iic a)
+    - isClosed_Iic((a : α)) : 是闭集 (左无界右闭区间 a)
 -/
 class ClosedIicTopology (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where
   /-- For any `a`, the set `(-∞, a]` is closed. -/
@@ -100,10 +100,10 @@ class ClosedIciTopology
     - isClosed_Ici((a : α)) : IsClosed (Ici a)
 
 中文:
-类 ClosedIciTopology
-  参数: (α : 类型) [TopologicalSpace α] [Preorder α]
+类 ClosedIci拓扑
+  参数: (α : 类型) [拓扑空间 α] [预序 α]
   公理与运算 (1 个):
-    - isClosed_Ici((a : α)) : IsClosed (Ici a)
+    - isClosed_Ici((a : α)) : 是闭集 (左闭右无界区间 a)
 -/
 class ClosedIciTopology (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where
   /-- For any `a`, the set `[a, +∞)` is closed. -/
@@ -119,10 +119,10 @@ class OrderClosedTopology
     - isClosed_le' : IsClosed { p : α × α | p.1 <= p.2 }
 
 中文:
-类 OrderClosedTopology
-  参数: (α : 类型) [TopologicalSpace α] [Preorder α]
+类 OrderClosed拓扑
+  参数: (α : 类型) [拓扑空间 α] [预序 α]
   公理与运算 (1 个):
-    - isClosed_le' : IsClosed { p : α × α | p.1 <= p.2 }
+    - isClosed_le' : 是闭集 { p : α × α | p.1 <= p.2 }
 -/
 class OrderClosedTopology (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where
   /-- The set `{ (x, y) | x ≤ y }` is a closed set. -/
@@ -137,7 +137,7 @@ instance [TopologicalSpace
   body: h
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: α] [h
   定义体: h
 -/
@@ -151,7 +151,7 @@ instance [TopologicalSpace
   body: h
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: α] [h
   定义体: h
 -/
@@ -165,7 +165,7 @@ instance [TopologicalSpace
   body: h
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: α] [h
   定义体: h
 -/
@@ -180,8 +180,8 @@ theorem Dense.orderDual
   proof: hs
 
 中文:
-定理 Dense.orderDual
-  条件: [TopologicalSpace α] {s : Set α} (hs : Dense s)
+定理 稠密.orderDual
+  条件: [拓扑空间 α] {s : 集合 α} (hs : 稠密 s)
   证明: hs
 -/
 theorem Dense.orderDual [TopologicalSpace α] {s : Set α} (hs : Dense s) :
@@ -229,7 +229,7 @@ theorem isClosed_Iic
 
 中文:
 定理 isClosed_Iic
-  结论: IsClosed (Iic a)
+  结论: 是闭集 (左无界右闭区间 a)
   证明: ClosedIicTopology.isClosed_Iic a
 
 @[to_dual]
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: ClosedIciTopology αᵒᵈ
+  签名: ClosedIci拓扑 αᵒᵈ
   定义体: isClosed_Iic (α := α)
 
 @[to_dual (attr := simp, closedness =)]
@@ -277,7 +277,7 @@ theorem closure_Iic
 中文:
 定理 closure_Iic
   条件: (a : α)
-  结论: closure (Iic a) = Iic a
+  结论: closure (左无界右闭区间 a) = 左无界右闭区间 a
   证明: isClosed_Iic.closure_eq
 
 @[to_dual ge_of_tendsto_of_frequently]
@@ -300,7 +300,7 @@ theorem le_of_tendsto_of_frequently
 
 中文:
 定理 le_of_tendsto_of_frequently
-  结论: {x : Filter β} (lim : Tendsto f x (𝓝 a))
+  结论: {x : 滤子 β} (lim : 收敛 f x (𝓝 a))
   证明: isClosed_Iic.mem_of_frequently_of_tendsto h lim
 
 @[to_dual ge_of_tendsto]
@@ -324,7 +324,7 @@ theorem le_of_tendsto
 
 中文:
 定理 le_of_tendsto
-  结论: {x : Filter β} [hx : NeBot x] (lim : Tendsto f x (𝓝 a))
+  结论: {x : 滤子 β} [hx : NeBot x] (lim : 收敛 f x (𝓝 a))
   证明: isClosed_Iic.mem_of_tendsto lim h
 
 @[to_dual ge_of_tendsto']
@@ -348,7 +348,7 @@ theorem le_of_tendsto'
 
 中文:
 定理 le_of_tendsto'
-  结论: {x : Filter β} [hx : NeBot x] (lim : Tendsto f x (𝓝 a))
+  结论: {x : 滤子 β} [hx : NeBot x] (lim : 收敛 f x (𝓝 a))
   证明: le_of_tendsto lim (Eventually.of_forall h)
 
 @[to_dual (attr := simp)]
@@ -373,8 +373,8 @@ lemma upperBounds_closure
 
 中文:
 引理 upperBounds_closure
-  条件: (s : Set α)
-  结论: upperBounds (closure s : Set α) = upperBounds s
+  条件: (s : 集合 α)
+  结论: upperBounds (closure s : 集合 α) = upperBounds s
   证明: ext fun a => by simp_rw [mem_upperBounds_iff_subset_Iic, isClosed_Iic.closure_subset_iff]
 
 @[to_dual (attr := simp)]
@@ -471,7 +471,7 @@ theorem IsLUB.range_of_tendsto
 
 中文:
 定理 IsLUB.range_of_tendsto
-  结论: {F : Filter β} [F.NeBot] (hle : 对任意 i, f i <= a)
+  结论: {F : 滤子 β} [F.NeBot] (hle : 对任意 i, f i <= a)
   证明: ⟨forall_mem_range.mpr hle, fun _c hc => le_of_tendsto' hlim fun i => hc mem_range_self i⟩
 
 Depends on / 依赖: forall_mem_range, forall_mem_range.mpr, le_of_tendsto, mem_range_self
@@ -556,8 +556,8 @@ theorem not_tendsto_nhds_of_tendsto_atBot
 
 中文:
 定理 not_tendsto_nhds_of_tendsto_atBot
-  条件: (hf : Tendsto f l atBot) (a : α)
-  结论: ¬Tendsto f l (𝓝 a)
+  条件: (hf : 收敛 f l atBot) (a : α)
+  结论: ¬收敛 f l (𝓝 a)
   证明: hf.not_tendsto (disjoint_nhds_atBot a).symm
 
 @[to_dual]
@@ -579,8 +579,8 @@ theorem not_tendsto_atBot_of_tendsto_nhds
 
 中文:
 定理 not_tendsto_atBot_of_tendsto_nhds
-  条件: (hf : Tendsto f l (𝓝 a))
-  结论: ¬Tendsto f l atBot
+  条件: (hf : 收敛 f l (𝓝 a))
+  结论: ¬收敛 f l atBot
   证明: hf.not_tendsto (disjoint_nhds_atBot a)
 
 Depends on / 依赖: disjoint_nhds_atBot, hf.not_tendsto, not_tendsto
@@ -600,8 +600,8 @@ theorem iSup_eq_of_forall_le_of_tendsto
   (IsLUB.range_of_tendsto hle hlim).ciSup_eq
 
 中文:
-定理 iSup_eq_of_forall_le_of_tendsto
-  结论: {ι : 类型} {F : Filter ι} [Filter.NeBot F]
+定理 iSup_eq_of_对任意_le_of_tendsto
+  结论: {ι : 类型} {F : 滤子 ι} [滤子.NeBot F]
   证明: have := F.nonempty_of_neBot
   (IsLUB.range_of_tendsto hle hlim).ciSup_eq
 
@@ -629,7 +629,7 @@ theorem iUnion_Iic_eq_Iio_of_lt_of_tendsto
 
 中文:
 定理 iUnion_Iic_eq_Iio_of_lt_of_tendsto
-  结论: {ι : 类型} {F : Filter ι} [F.NeBot]
+  结论: {ι : 类型} {F : 滤子 ι} [F.NeBot]
   证明: by
   have obs : a ∉ range f := by
     rw [mem_range]
@@ -669,7 +669,7 @@ theorem isOpen_Ioi
 
 中文:
 定理 isOpen_Ioi
-  结论: IsOpen (Ioi a)
+  结论: 是开集 (左开右无界区间 a)
   证明: by
   rw [← compl_Iic]
   exact isClosed_Iic.isOpen_compl
@@ -695,7 +695,7 @@ theorem interior_Ioi
 
 中文:
 定理 interior_Ioi
-  结论: interior (Ioi a) = Ioi a
+  结论: interior (左开右无界区间 a) = 左开右无界区间 a
   证明: isOpen_Ioi.interior_eq
 
 @[to_dual]
@@ -720,7 +720,7 @@ theorem Ioi_mem_nhds
 中文:
 定理 Ioi_mem_nhds
   条件: (h : a < b)
-  结论: Ioi a in 𝓝 b
+  结论: 左开右无界区间 a in 𝓝 b
   证明: IsOpen.mem_nhds isOpen_Ioi h
 
 @[to_dual eventually_lt_nhds]
@@ -768,7 +768,7 @@ theorem Ici_mem_nhds
 中文:
 定理 Ici_mem_nhds
   条件: (h : a < b)
-  结论: Ici a in 𝓝 b
+  结论: 左闭右无界区间 a in 𝓝 b
   证明: mem_of_superset (Ioi_mem_nhds h) Ioi_subset_Ici_self
 
 @[to_dual eventually_le_nhds]
@@ -814,8 +814,8 @@ theorem Filter.Tendsto.eventually_const_lt
 @[to_dual eventually_le_const]
 
 中文:
-定理 Filter.Tendsto.eventually_const_lt
-  结论: {l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v)
+定理 滤子.收敛.eventually_const_lt
+  结论: {l : 滤子 γ} {f : γ -> α} {u v : α} (hv : u < v)
   证明: h.eventually eventually_gt_nhds hv
 
 @[to_dual eventually_le_const]
@@ -838,8 +838,8 @@ theorem Filter.Tendsto.eventually_const_le
 @[to_dual exists_lt]
 
 中文:
-定理 Filter.Tendsto.eventually_const_le
-  结论: {l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v)
+定理 滤子.收敛.eventually_const_le
+  结论: {l : 滤子 γ} {f : γ -> α} {u v : α} (hv : u < v)
   证明: h.eventually eventually_ge_nhds hv
 
 @[to_dual exists_lt]
@@ -862,8 +862,8 @@ theorem Dense.exists_gt
 @[to_dual exists_le]
 
 中文:
-定理 Dense.exists_gt
-  条件: [NoMaxOrder α] {s : Set α} (hs : Dense s) (x : α)
+定理 稠密.存在_gt
+  条件: [NoMax序 α] {s : 集合 α} (hs : 稠密 s) (x : α)
   证明: hs.exists_mem_open isOpen_Ioi (exists_gt x)
 
 @[to_dual exists_le]
@@ -884,8 +884,8 @@ theorem Dense.exists_ge
 @[to_dual exists_le']
 
 中文:
-定理 Dense.exists_ge
-  条件: [NoMaxOrder α] {s : Set α} (hs : Dense s) (x : α)
+定理 稠密.存在_ge
+  条件: [NoMax序 α] {s : 集合 α} (hs : 稠密 s) (x : α)
   证明: (hs.exists_gt x).imp fun _ h => ⟨h.1, h.2.le⟩
 
 @[to_dual exists_le']
@@ -909,8 +909,8 @@ theorem Dense.exists_ge'
     exact ⟨y, hys, hy.le⟩
 
 中文:
-定理 Dense.exists_ge'
-  条件: {s : Set α} (hs : Dense s) (htop : 对任意 x, IsTop x -> x in s) (x : α)
+定理 稠密.存在_ge'
+  条件: {s : 集合 α} (hs : 稠密 s) (htop : 对任意 x, IsTop x -> x in s) (x : α)
   证明: by
   by_cases hx : IsTop x
   · exact ⟨x, htop x hx, le_rfl⟩
@@ -957,7 +957,7 @@ theorem Ioo_mem_nhdsLT
 中文:
 定理 Ioo_mem_nhdsLT
   条件: (H : a < b)
-  结论: Ioo a b in 𝓝[<] b
+  结论: 开区间 a b in 𝓝[<] b
   证明: by
   simpa only [← Iio_inter_Ioi] using inter_mem_nhdsWithin _ (Ioi_mem_nhds H)
 
@@ -982,8 +982,8 @@ theorem Ioo_mem_nhdsLT_of_mem
 
 中文:
 定理 Ioo_mem_nhdsLT_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Ioo a c in 𝓝[<] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 开区间 a c in 𝓝[<] b
   证明: mem_of_superset (Ioo_mem_nhdsLT H.1) Ioo_subset_Ioo_right H.2
 
 @[to_dual]
@@ -1031,8 +1031,8 @@ theorem PredOrder.nhdsLT
 @[to_dual]
 
 中文:
-定理 PredOrder.nhdsLT
-  条件: [PredOrder α]
+定理 Pred序.nhdsLT
+  条件: [Pred序 α]
   结论: 𝓝[<] a = ⊥
   证明: by
   if h : IsMin a then simp [h.Iio_eq]
@@ -1058,8 +1058,8 @@ theorem PredOrder.nhdsGT_eq_nhdsNE
 @[to_dual]
 
 中文:
-定理 PredOrder.nhdsGT_eq_nhdsNE
-  条件: [PredOrder α] (a : α)
+定理 Pred序.nhdsGT_eq_nhdsNE
+  条件: [Pred序 α] (a : α)
   结论: 𝓝[>] a = 𝓝[!=] a
   证明: by
   rw [← nhdsLT_sup_nhdsGT]; rw [PredOrder.nhdsLT]; rw [bot_sup_eq]
@@ -1085,8 +1085,8 @@ theorem PredOrder.nhdsGE_eq_nhds
 @[to_dual]
 
 中文:
-定理 PredOrder.nhdsGE_eq_nhds
-  条件: [PredOrder α] (a : α)
+定理 Pred序.nhdsGE_eq_nhds
+  条件: [Pred序 α] (a : α)
   结论: 𝓝[>=] a = 𝓝 a
   证明: by
   rw [← nhdsLT_sup_nhdsGE]; rw [PredOrder.nhdsLT]; rw [bot_sup_eq]
@@ -1112,8 +1112,8 @@ theorem Ico_mem_nhdsLT_of_mem
 
 中文:
 定理 Ico_mem_nhdsLT_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Ico a c in 𝓝[<] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 左闭右开区间 a c in 𝓝[<] b
   证明: mem_of_superset (Ioo_mem_nhdsLT_of_mem H) Ioo_subset_Ico_self
 
 @[to_dual]
@@ -1138,7 +1138,7 @@ theorem Ico_mem_nhdsLT
 中文:
 定理 Ico_mem_nhdsLT
   条件: (H : a < b)
-  结论: Ico a b in 𝓝[<] b
+  结论: 左闭右开区间 a b in 𝓝[<] b
   证明: Ico_mem_nhdsLT_of_mem ⟨H, le_rfl⟩
 
 @[to_dual]
@@ -1161,8 +1161,8 @@ theorem Ioc_mem_nhdsLT_of_mem
 
 中文:
 定理 Ioc_mem_nhdsLT_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Ioc a c in 𝓝[<] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 左开右闭区间 a c in 𝓝[<] b
   证明: mem_of_superset (Ioo_mem_nhdsLT_of_mem H) Ioo_subset_Ioc_self
 
 @[to_dual]
@@ -1187,7 +1187,7 @@ theorem Ioc_mem_nhdsLT
 中文:
 定理 Ioc_mem_nhdsLT
   条件: (H : a < b)
-  结论: Ioc a b in 𝓝[<] b
+  结论: 左开右闭区间 a b in 𝓝[<] b
   证明: Ioc_mem_nhdsLT_of_mem ⟨H, le_rfl⟩
 
 @[to_dual]
@@ -1210,8 +1210,8 @@ theorem Icc_mem_nhdsLT_of_mem
 
 中文:
 定理 Icc_mem_nhdsLT_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Icc a c in 𝓝[<] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 闭区间 a c in 𝓝[<] b
   证明: mem_of_superset (Ioo_mem_nhdsLT_of_mem H) Ioo_subset_Icc_self
 
 @[to_dual]
@@ -1236,7 +1236,7 @@ theorem Icc_mem_nhdsLT
 中文:
 定理 Icc_mem_nhdsLT
   条件: (H : a < b)
-  结论: Icc a b in 𝓝[<] b
+  结论: 闭区间 a b in 𝓝[<] b
   证明: Icc_mem_nhdsLT_of_mem ⟨H, le_rfl⟩
 
 @[to_dual (attr := simp)]
@@ -1260,7 +1260,7 @@ theorem nhdsWithin_Ico_eq_nhdsLT
 中文:
 定理 nhdsWithin_Ico_eq_nhdsLT
   条件: (h : a < b)
-  结论: 𝓝[Ico a b] b = 𝓝[<] b
+  结论: 𝓝[左闭右开区间 a b] b = 𝓝[<] b
   证明: nhdsWithin_inter_of_mem nhdsWithin_le_nhds Ici_mem_nhds h
 
 @[to_dual (attr := simp)]
@@ -1285,7 +1285,7 @@ theorem nhdsWithin_Ioo_eq_nhdsLT
 中文:
 定理 nhdsWithin_Ioo_eq_nhdsLT
   条件: (h : a < b)
-  结论: 𝓝[Ioo a b] b = 𝓝[<] b
+  结论: 𝓝[开区间 a b] b = 𝓝[<] b
   证明: nhdsWithin_inter_of_mem nhdsWithin_le_nhds Ioi_mem_nhds h
 
 @[to_dual (attr := simp)]
@@ -1386,8 +1386,8 @@ theorem PredOrder.nhdsLE
 @[to_dual]
 
 中文:
-定理 PredOrder.nhdsLE
-  条件: [PredOrder α]
+定理 Pred序.nhdsLE
+  条件: [Pred序 α]
   结论: 𝓝[<=] b = pure b
   证明: by
   rw [← Iio_insert]; rw [nhdsWithin_insert]; rw [PredOrder.nhdsLT]; rw [sup_bot_eq]
@@ -1412,7 +1412,7 @@ theorem Ioc_mem_nhdsLE
 中文:
 定理 Ioc_mem_nhdsLE
   条件: (H : a < b)
-  结论: Ioc a b in 𝓝[<=] b
+  结论: 左开右闭区间 a b in 𝓝[<=] b
   证明: inter_mem (nhdsWithin_le_nhds <| Ioi_mem_nhds H) self_mem_nhdsWithin
 
 @[to_dual]
@@ -1436,8 +1436,8 @@ theorem Ioo_mem_nhdsLE_of_mem
 
 中文:
 定理 Ioo_mem_nhdsLE_of_mem
-  条件: (H : b in Ioo a c)
-  结论: Ioo a c in 𝓝[<=] b
+  条件: (H : b in 开区间 a c)
+  结论: 开区间 a c in 𝓝[<=] b
   证明: mem_of_superset (Ioc_mem_nhdsLE H.1) Ioc_subset_Ioo_right H.2
 
 @[to_dual]
@@ -1461,8 +1461,8 @@ theorem Ico_mem_nhdsLE_of_mem
 
 中文:
 定理 Ico_mem_nhdsLE_of_mem
-  条件: (H : b in Ioo a c)
-  结论: Ico a c in 𝓝[<=] b
+  条件: (H : b in 开区间 a c)
+  结论: 左闭右开区间 a c in 𝓝[<=] b
   证明: mem_of_superset (Ioo_mem_nhdsLE_of_mem H) Ioo_subset_Ico_self
 
 @[to_dual]
@@ -1486,8 +1486,8 @@ theorem Ioc_mem_nhdsLE_of_mem
 
 中文:
 定理 Ioc_mem_nhdsLE_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Ioc a c in 𝓝[<=] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 左开右闭区间 a c in 𝓝[<=] b
   证明: mem_of_superset (Ioc_mem_nhdsLE H.1) Ioc_subset_Ioc_right H.2
 
 @[to_dual]
@@ -1511,8 +1511,8 @@ theorem Icc_mem_nhdsLE_of_mem
 
 中文:
 定理 Icc_mem_nhdsLE_of_mem
-  条件: (H : b in Ioc a c)
-  结论: Icc a c in 𝓝[<=] b
+  条件: (H : b in 左开右闭区间 a c)
+  结论: 闭区间 a c in 𝓝[<=] b
   证明: mem_of_superset (Ioc_mem_nhdsLE_of_mem H) Ioc_subset_Icc_self
 
 @[to_dual]
@@ -1537,7 +1537,7 @@ theorem Icc_mem_nhdsLE
 中文:
 定理 Icc_mem_nhdsLE
   条件: (H : a < b)
-  结论: Icc a b in 𝓝[<=] b
+  结论: 闭区间 a b in 𝓝[<=] b
   证明: Icc_mem_nhdsLE_of_mem ⟨H, le_rfl⟩
 
 @[to_dual (attr := simp)]
@@ -1561,7 +1561,7 @@ theorem nhdsWithin_Icc_eq_nhdsLE
 中文:
 定理 nhdsWithin_Icc_eq_nhdsLE
   条件: (h : a < b)
-  结论: 𝓝[Icc a b] b = 𝓝[<=] b
+  结论: 𝓝[闭区间 a b] b = 𝓝[<=] b
   证明: nhdsWithin_inter_of_mem nhdsWithin_le_nhds Ici_mem_nhds h
 
 @[to_dual (attr := simp)]
@@ -1586,7 +1586,7 @@ theorem nhdsWithin_Ioc_eq_nhdsLE
 中文:
 定理 nhdsWithin_Ioc_eq_nhdsLE
   条件: (h : a < b)
-  结论: 𝓝[Ioc a b] b = 𝓝[<=] b
+  结论: 𝓝[左开右闭区间 a b] b = 𝓝[<=] b
   证明: nhdsWithin_inter_of_mem nhdsWithin_le_nhds Ioi_mem_nhds h
 
 @[to_dual (attr := simp)]
@@ -1664,8 +1664,8 @@ theorem iInf_eq_of_forall_le_of_tendsto
 @[to_dual existing]
 
 中文:
-定理 iInf_eq_of_forall_le_of_tendsto
-  结论: {ι : 类型} {F : Filter ι} [F.NeBot]
+定理 iInf_eq_of_对任意_le_of_tendsto
+  结论: {ι : 类型} {F : 滤子 ι} [F.NeBot]
   证明: iSup_eq_of_forall_le_of_tendsto (α := αᵒᵈ) hle hlim
 
 @[to_dual existing]
@@ -1689,7 +1689,7 @@ theorem iUnion_Ici_eq_Ioi_of_lt_of_tendsto
 
 中文:
 定理 iUnion_Ici_eq_Ioi_of_lt_of_tendsto
-  结论: {ι : 类型} {F : Filter ι} [F.NeBot]
+  结论: {ι : 类型} {F : 滤子 ι} [F.NeBot]
   证明: iUnion_Iic_eq_Iio_of_lt_of_tendsto (α := αᵒᵈ) hlt hlim
 
 Depends on / 依赖: iUnion_Iic_eq_Iio_of_lt_of_tendsto
@@ -1731,7 +1731,7 @@ theorem isClosed_le_prod
 
 中文:
 定理 isClosed_le_prod
-  结论: IsClosed { p : α × α | p.1 <= p.2 }
+  结论: 是闭集 { p : α × α | p.1 <= p.2 }
   证明: t.isClosed_le'
 
 @[to_dual existing isClosed_le_prod, closedness .]
@@ -1754,7 +1754,7 @@ theorem isClosed_le_prod'
 
 中文:
 定理 isClosed_le_prod'
-  结论: IsClosed { p : α × α | p.2 <= p.1 }
+  结论: 是闭集 { p : α × α | p.2 <= p.1 }
   证明: (isClosed_le_prod (α := α)).preimage continuous_swap
 
 @[to_dual self (reorder := f g, hf hg)]
@@ -1777,7 +1777,7 @@ theorem isClosed_le
 
 中文:
 定理 isClosed_le
-  条件: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f) (hg : Continuous g)
+  条件: [拓扑空间 β] {f g : β -> α} (hf : 连续 f) (hg : 连续 g)
   证明: continuous_iff_isClosed.mp (hf.prodMk hg) _ isClosed_le_prod
 
 @[to_dual]
@@ -1799,7 +1799,7 @@ instance :
 
 中文:
 实例 :
-  签名: ClosedIicTopology α
+  签名: ClosedIic拓扑 α
   定义体: isClosed_le continuous_id continuous_const
 
 Depends on / 依赖: continuous_const, continuous_id, isClosed_le
@@ -1819,7 +1819,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderClosedTopology αᵒᵈ
+  签名: OrderClosed拓扑 αᵒᵈ
   定义体: ⟨isClosed_le_prod' (α := α)⟩
 
 @[to_dual self, closedness .]
@@ -1844,7 +1844,7 @@ theorem isClosed_Icc
 中文:
 定理 isClosed_Icc
   条件: {a b : α}
-  结论: IsClosed (Icc a b)
+  结论: 是闭集 (闭区间 a b)
   证明: IsClosed.inter isClosed_Ici isClosed_Iic
 
 @[to_dual self, simp, closedness =]
@@ -1869,7 +1869,7 @@ theorem closure_Icc
 中文:
 定理 closure_Icc
   条件: (a b : α)
-  结论: closure (Icc a b) = Icc a b
+  结论: closure (闭区间 a b) = 闭区间 a b
   证明: isClosed_Icc.closure_eq
 
 @[to_dual self (reorder := f g, a₁ a₂, hf hg)]
@@ -1892,7 +1892,7 @@ theorem le_of_tendsto_of_tendsto_of_frequently
 
 中文:
 定理 le_of_tendsto_of_tendsto_of_frequently
-  结论: {f g : β -> α} {b : Filter β} {a₁ a₂ : α}
+  结论: {f g : β -> α} {b : 滤子 β} {a₁ a₂ : α}
   证明: t.isClosed_le'.mem_of_frequently_of_tendsto h (hf.prodMk_nhds hg)
 
 @[to_dual self (reorder := f g, a₁ a₂, hf hg)]
@@ -1919,7 +1919,7 @@ alias tendsto_le_of_eventuallyLE := le_of_tendsto_of_tendsto
 
 中文:
 定理 le_of_tendsto_of_tendsto
-  结论: {f g : β -> α} {b : Filter β} {a₁ a₂ : α} [hb : NeBot b]
+  结论: {f g : β -> α} {b : 滤子 β} {a₁ a₂ : α} [hb : NeBot b]
   证明: le_of_tendsto_of_tendsto_of_frequently hf hg Eventually.frequently h
 
 @[to_dual self (reorder := f g, a₁ a₂, hf hg)]
@@ -1949,7 +1949,7 @@ theorem le_of_tendsto_of_tendsto'
 
 中文:
 定理 le_of_tendsto_of_tendsto'
-  结论: {f g : β -> α} {b : Filter β} {a₁ a₂ : α} [hb : NeBot b]
+  结论: {f g : β -> α} {b : 滤子 β} {a₁ a₂ : α} [hb : NeBot b]
   证明: le_of_tendsto_of_tendsto hf hg (Eventually.of_forall h)
 
 @[to_dual self (reorder := f g, hf hg), simp]
@@ -1973,7 +1973,7 @@ theorem closure_le_eq
 
 中文:
 定理 closure_le_eq
-  条件: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f) (hg : Continuous g)
+  条件: [拓扑空间 β] {f g : β -> α} (hf : 连续 f) (hg : 连续 g)
   证明: (isClosed_le hf hg).closure_eq
 
 @[to_dual self (reorder := f g, hf hg)]
@@ -1997,7 +1997,7 @@ theorem closure_lt_subset_le
 
 中文:
 定理 closure_lt_subset_le
-  结论: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
+  结论: [拓扑空间 β] {f g : β -> α} (hf : 连续 f)
   证明: (closure_minimal fun _ => le_of_lt) isClosed_le hf hg
 
 @[to_dual self (reorder := f g, hf hg)]
@@ -2020,7 +2020,7 @@ theorem ContinuousWithinAt.closure_le
 
 中文:
 定理 ContinuousWithinAt.closure_le
-  结论: [TopologicalSpace β] {f g : β -> α} {s : Set β} {x : β}
+  结论: [拓扑空间 β] {f g : β -> α} {s : 集合 β} {x : β}
   证明: show (f x, g x) in { p : α × α | p.1 <= p.2 } from
     OrderClosedTopology.isClosed_le'.closure_subset ((hf.prodMk hg).mem_closure hx h)
 
@@ -2046,8 +2046,8 @@ theorem IsClosed.isClosed_le
 @[to_dual self (reorder := f g, hf hg)]
 
 中文:
-定理 IsClosed.isClosed_le
-  结论: [TopologicalSpace β] {f g : β -> α} {s : Set β} (hs : IsClosed s)
+定理 是闭集.isClosed_le
+  结论: [拓扑空间 β] {f g : β -> α} {s : 集合 β} (hs : 是闭集 s)
   证明: (hf.prodMk hg).preimage_isClosed_of_isClosed hs OrderClosedTopology.isClosed_le'
 
 @[to_dual self (reorder := f g, hf hg)]
@@ -2072,7 +2072,7 @@ theorem le_on_closure
 
 中文:
 定理 le_on_closure
-  结论: [TopologicalSpace β] {f g : β -> α} {s : Set β} (h : 对任意 x in s, f x <= g x)
+  结论: [拓扑空间 β] {f g : β -> α} {s : 集合 β} (h : 对任意 x in s, f x <= g x)
   证明: have : s subseteq { y in closure s | f y <= g y } := fun y hy => ⟨subset_closure hy, h y hy⟩
   (closure_minimal this (isClosed_closure.isClosed_le hf hg) hx).2
 
@@ -2096,8 +2096,8 @@ theorem IsClosed.epigraph
   proof: (hs.preimage continuous_fst).isClosed_le (hf.comp continuousOn_fst Subset.rfl) continuousOn_snd
 
 中文:
-定理 IsClosed.epigraph
-  结论: [TopologicalSpace β] {f : β -> α} {s : Set β} (hs : IsClosed s)
+定理 是闭集.epigraph
+  结论: [拓扑空间 β] {f : β -> α} {s : 集合 β} (hs : 是闭集 s)
   证明: (hs.preimage continuous_fst).isClosed_le (hf.comp continuousOn_fst Subset.rfl) continuousOn_snd
 
 Depends on / 依赖: Subset, Subset.rfl, continuousOn_fst, continuousOn_snd, continuous_fst, hf.comp, hs.preimage, isClosed_le, preimage
@@ -2143,7 +2143,7 @@ lemma monotone_of_frequently_monotone_of_tendsto
 
 中文:
 引理 monotone_of_frequently_monotone_of_tendsto
-  结论: (hF : 存在ᶠ i in l, Monotone (F i))
+  结论: (hF : 存在ᶠ i in l, 递增 (F i))
   证明: monotoneOn_univ.1 monotoneOn_of_frequently_monotoneOn_of_tendsto
     (hF.mono fun _ hi => hi.monotoneOn _) fun x _ => hlim x
 
@@ -2183,7 +2183,7 @@ lemma antitone_of_frequently_antitone_of_tendsto
 
 中文:
 引理 antitone_of_frequently_antitone_of_tendsto
-  结论: (hF : 存在ᶠ i in l, Antitone (F i))
+  结论: (hF : 存在ᶠ i in l, 递减 (F i))
   证明: monotone_of_frequently_monotone_of_tendsto (α := αᵒᵈ) hF hlim
 
 Depends on / 依赖: monotone_of_frequently_monotone_of_tendsto
@@ -2205,7 +2205,7 @@ theorem isClosed_monotoneOn
 
 中文:
 定理 isClosed_monotoneOn
-  结论: IsClosed {f : β -> α | MonotoneOn f s}
+  结论: 是闭集 {f : β -> α | MonotoneOn f s}
   证明: by
   simp only [isClosed_iff_clusterPt, clusterPt_principal_iff_frequently]
   exact fun g hg => monotoneOn_of_frequently_monotoneOn_of_tendsto hg
@@ -2230,7 +2230,7 @@ theorem isClosed_monotone
 
 中文:
 定理 isClosed_monotone
-  结论: IsClosed {f : β -> α | Monotone f}
+  结论: 是闭集 {f : β -> α | 递增 f}
   证明: by
   simp_rw [← monotoneOn_univ]
   exact isClosed_monotoneOn
@@ -2251,7 +2251,7 @@ theorem isClosed_antitoneOn
 
 中文:
 定理 isClosed_antitoneOn
-  结论: IsClosed {f : β -> α | AntitoneOn f s}
+  结论: 是闭集 {f : β -> α | AntitoneOn f s}
   证明: isClosed_monotoneOn (α := αᵒᵈ)
 
 Depends on / 依赖: isClosed_monotoneOn
@@ -2269,7 +2269,7 @@ theorem isClosed_antitone
 
 中文:
 定理 isClosed_antitone
-  结论: IsClosed {f : β -> α | Antitone f}
+  结论: 是闭集 {f : β -> α | 递减 f}
   证明: isClosed_monotone (α := αᵒᵈ)
 
 Depends on / 依赖: isClosed_monotone
@@ -2311,7 +2311,7 @@ theorem isOpen_lt
 
 中文:
 定理 isOpen_lt
-  条件: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f) (hg : Continuous g)
+  条件: [拓扑空间 β] {f g : β -> α} (hf : 连续 f) (hg : 连续 g)
   证明: by
   simpa only [lt_iff_not_ge] using! (isClosed_le hg hf).isOpen_compl
 
@@ -2334,7 +2334,7 @@ theorem isOpen_lt_prod
 
 中文:
 定理 isOpen_lt_prod
-  结论: IsOpen { p : α × α | p.1 < p.2 }
+  结论: 是开集 { p : α × α | p.1 < p.2 }
   证明: isOpen_lt continuous_fst continuous_snd
 
 Depends on / 依赖: continuous_fst, continuous_snd, isOpen_lt
@@ -2357,7 +2357,7 @@ theorem isOpen_Ioo
 
 中文:
 定理 isOpen_Ioo
-  结论: IsOpen (Ioo a b)
+  结论: 是开集 (开区间 a b)
   证明: IsOpen.inter isOpen_Ioi isOpen_Iio
 
 @[to_dual self, simp]
@@ -2380,7 +2380,7 @@ theorem interior_Ioo
 
 中文:
 定理 interior_Ioo
-  结论: interior (Ioo a b) = Ioo a b
+  结论: interior (开区间 a b) = 开区间 a b
   证明: isOpen_Ioo.interior_eq
 
 @[to_dual self]
@@ -2404,7 +2404,7 @@ theorem Ioo_subset_closure_interior
 
 中文:
 定理 Ioo_subset_closure_interior
-  结论: Ioo a b subseteq closure (interior (Ioo a b))
+  结论: 开区间 a b subseteq closure (interior (开区间 a b))
   证明: by
   simp only [interior_Ioo, subset_closure]
 
@@ -2430,7 +2430,7 @@ theorem Ioo_mem_nhds
 中文:
 定理 Ioo_mem_nhds
   条件: {a b x : α} (ha : a < x) (hb : x < b)
-  结论: Ioo a b in 𝓝 x
+  结论: 开区间 a b in 𝓝 x
   证明: IsOpen.mem_nhds isOpen_Ioo ⟨ha, hb⟩
 
 @[to_dual (reorder := ha hb)]
@@ -2455,7 +2455,7 @@ theorem Ioc_mem_nhds
 中文:
 定理 Ioc_mem_nhds
   条件: {a b x : α} (ha : a < x) (hb : x < b)
-  结论: Ioc a b in 𝓝 x
+  结论: 左开右闭区间 a b in 𝓝 x
   证明: mem_of_superset (Ioo_mem_nhds ha hb) Ioo_subset_Ioc_self
 
 @[to_dual self (reorder := a b, ha hb)]
@@ -2478,7 +2478,7 @@ theorem Icc_mem_nhds
 中文:
 定理 Icc_mem_nhds
   条件: {a b x : α} (ha : a < x) (hb : x < b)
-  结论: Icc a b in 𝓝 x
+  结论: 闭区间 a b in 𝓝 x
   证明: mem_of_superset (Ioo_mem_nhds ha hb) Ioo_subset_Icc_self
 
 Depends on / 依赖: Ioo_mem_nhds, Ioo_subset_Icc_self, mem_of_superset
@@ -2504,8 +2504,8 @@ theorem DiscreteTopology.of_predOrder_succOrder
   rw [← nhdsWithin_univ]; rw [← Iic_union_Ioi]; rw [nhdsWithin_union]; rw [PredOrder.nhdsLE]; rw [SuccOrder.nhdsGT]; rw [sup_bot_eq]
 
 中文:
-定理 DiscreteTopology.of_predOrder_succOrder
-  条件: [PredOrder α] [SuccOrder α]
+定理 离散拓扑.of_predOrder_succOrder
+  条件: [Pred序 α] [Succ序 α]
   证明: by
   refine discreteTopology_iff_nhds.mpr fun a => ?_
   rw [← nhdsWithin_univ]; rw [← Iic_union_Ioi]; rw [nhdsWithin_union]; rw [PredOrder.nhdsLE]; rw [SuccOrder.nhdsGT]; rw [sup_bot_eq]
@@ -2540,7 +2540,7 @@ theorem lt_subset_interior_le
 
 中文:
 定理 lt_subset_interior_le
-  条件: (hf : Continuous f) (hg : Continuous g)
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: (interior_maximal fun _ => le_of_lt) isOpen_lt hf hg
 
 @[to_dual (reorder := f g, hf hg) frontier_ge_subset_eq]
@@ -2568,7 +2568,7 @@ theorem frontier_le_subset_eq
 
 中文:
 定理 frontier_le_subset_eq
-  条件: (hf : Continuous f) (hg : Continuous g)
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: by
   rw [frontier_eq_closure_inter_closure]; rw [closure_le_eq hf hg]
   rintro b ⟨hb₁, hb₂⟩
@@ -2601,7 +2601,7 @@ theorem frontier_Iic_subset
 中文:
 定理 frontier_Iic_subset
   条件: (a : α)
-  结论: frontier (Iic a) subseteq {a}
+  结论: frontier (左无界右闭区间 a) subseteq {a}
   证明: frontier_le_subset_eq (@continuous_id α _) continuous_const
 
 @[to_dual (reorder := f g, hf hg) frontier_gt_subset_eq]
@@ -2625,7 +2625,7 @@ theorem frontier_lt_subset_eq
 
 中文:
 定理 frontier_lt_subset_eq
-  条件: (hf : Continuous f) (hg : Continuous g)
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: by
   simpa only [← not_lt, ← compl_ofPred, frontier_compl, eq_comm] using frontier_le_subset_eq hg hf
 
@@ -2654,7 +2654,7 @@ theorem continuous_if_le
 
 中文:
 定理 continuous_if_le
-  结论: [TopologicalSpace γ] [对任意 x, Decidable (f x <= g x)] {f' g' : β -> γ}
+  结论: [拓扑空间 γ] [对任意 x, 可判定 (f x <= g x)] {f' g' : β -> γ}
   证明: by
   refine continuous_if (fun a ha => hfg _ (frontier_le_subset_eq hf hg ha)) ?_ (hg'.mono ?_)
   · rwa [(isClosed_le hf hg).closure_eq]
@@ -2686,8 +2686,8 @@ theorem Continuous.if_le
 @[to_dual self (reorder := f g, y z, hf hg)]
 
 中文:
-定理 Continuous.if_le
-  结论: [TopologicalSpace γ] [对任意 x, Decidable (f x <= g x)] {f' g' : β -> γ}
+定理 连续.if_le
+  结论: [拓扑空间 γ] [对任意 x, 可判定 (f x <= g x)] {f' g' : β -> γ}
   证明: continuous_if_le hf hg hf'.continuousOn hg'.continuousOn hfg
 
 @[to_dual self (reorder := f g, y z, hf hg)]
@@ -2714,8 +2714,8 @@ theorem Filter.Tendsto.eventually_lt
 nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀) (hg : ContinuousAt g 
 
 中文:
-定理 Filter.Tendsto.eventually_lt
-  结论: {l : Filter γ} {f g : γ -> α} {y z : α} (hf : Tendsto f l (𝓝 y))
+定理 滤子.收敛.eventually_lt
+  结论: {l : 滤子 γ} {f g : γ -> α} {y z : α} (hf : 收敛 f l (𝓝 y))
   证明: let ⟨_a, ha, _b, hb, h⟩ := hyz.exists_disjoint_Iio_Ioi
 (hg.eventually (Ioi_mem_nhds hb)).mp (hf.eventually (Iio_mem_nhds ha)).mono fun _ h₁ h₂ =>
     h _ h₁ _ h₂
@@ -2748,8 +2748,8 @@ theorem Continuous.max
   exact hg.if_ge hf hg hf fun x => id
 
 中文:
-定理 Continuous.max
-  条件: (hf : Continuous f) (hg : Continuous g)
+定理 连续.最大值
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: by
   simp only [max_def]
   exact hg.if_ge hf hg hf fun x => id
@@ -2774,7 +2774,7 @@ theorem continuous_max
 
 中文:
 定理 continuous_max
-  结论: Continuous fun p : α × α => max p.1 p.2
+  结论: 连续 fun p : α × α => 最大值 p.1 p.2
   证明: continuous_fst.max continuous_snd
 
 @[to_dual]
@@ -2796,8 +2796,8 @@ theorem Filter.Tendsto.max
 @[to_dual]
 
 中文:
-定理 Filter.Tendsto.max
-  结论: {b : Filter β} {a₁ a₂ : α} (hf : Tendsto f b (𝓝 a₁))
+定理 滤子.收敛.最大值
+  结论: {b : 滤子 β} {a₁ a₂ : α} (hf : 收敛 f b (𝓝 a₁))
   证明: (continuous_max.tendsto (a₁, a₂)).comp (hf.prodMk_nhds hg)
 
 @[to_dual]
@@ -2819,8 +2819,8 @@ theorem Filter.Tendsto.max_right
 @[to_dual]
 
 中文:
-定理 Filter.Tendsto.max_right
-  条件: {l : Filter β} {a : α} (h : Tendsto f l (𝓝 a))
+定理 滤子.收敛.max_right
+  条件: {l : 滤子 β} {a : α} (h : 收敛 f l (𝓝 a))
   证明: by
   simpa only [sup_idem] using (tendsto_const_nhds (x := a)).max h
 
@@ -2844,8 +2844,8 @@ theorem Filter.Tendsto.max_left
 @[to_dual]
 
 中文:
-定理 Filter.Tendsto.max_left
-  条件: {l : Filter β} {a : α} (h : Tendsto f l (𝓝 a))
+定理 滤子.收敛.max_left
+  条件: {l : 滤子 β} {a : α} (h : 收敛 f l (𝓝 a))
   证明: by
   simp_rw [max_comm _ a]
   exact h.max_right
@@ -2871,8 +2871,8 @@ theorem Filter.tendsto_nhds_max_right
 @[to_dual]
 
 中文:
-定理 Filter.tendsto_nhds_max_right
-  条件: {l : Filter β} {a : α} (h : Tendsto f l (𝓝[>] a))
+定理 滤子.tendsto_nhds_max_right
+  条件: {l : 滤子 β} {a : α} (h : 收敛 f l (𝓝[>] a))
   证明: by
   obtain ⟨h₁, h₂⟩ := tendsto_nhdsWithin_iff.mp h
   exact tendsto_nhdsWithin_iff.mpr ⟨h₁.max_right, h₂.mono fun i hi => lt_max_of_lt_right hi⟩
@@ -2900,8 +2900,8 @@ theorem Filter.tendsto_nhds_max_left
 @[to_dual self]
 
 中文:
-定理 Filter.tendsto_nhds_max_left
-  条件: {l : Filter β} {a : α} (h : Tendsto f l (𝓝[>] a))
+定理 滤子.tendsto_nhds_max_left
+  条件: {l : 滤子 β} {a : α} (h : 收敛 f l (𝓝[>] a))
   证明: by
   simp_rw [max_comm _ a]
   exact Filter.tendsto_nhds_max_right h
@@ -2927,8 +2927,8 @@ theorem Dense.exists_between
 @[to_dual]
 
 中文:
-定理 Dense.exists_between
-  条件: [DenselyOrdered α] {s : Set α} (hs : Dense s) {x y : α} (h : x < y)
+定理 稠密.存在_between
+  条件: [稠密序 α] {s : 集合 α} (hs : 稠密 s) {x y : α} (h : x < y)
   证明: hs.exists_mem_open isOpen_Ioo (nonempty_Ioo.2 h)
 
 @[to_dual]
@@ -2952,8 +2952,8 @@ theorem Dense.Ioi_eq_biUnion
   exact mem_iUnion₂.2 ⟨y, ⟨hys, hy.1⟩, hy.2⟩
 
 中文:
-定理 Dense.Ioi_eq_biUnion
-  条件: [DenselyOrdered α] {s : Set α} (hs : Dense s) (x : α)
+定理 稠密.Ioi_eq_biUnion
+  条件: [稠密序 α] {s : 集合 α} (hs : 稠密 s) (x : α)
   证明: by
   refine Subset.antisymm (fun z hz => ?_) (iUnion₂_subset fun y hy => Ioi_subset_Ioi (le_of_lt hy.2))
   rcases hs.exists_between hz with ⟨y, hys, hy⟩
@@ -2981,8 +2981,8 @@ instance [Preorder
     (isClosed_le continuous_fst.snd continuous_snd.snd)⟩
 
 中文:
-实例 [Preorder
-  签名: α] [TopologicalSpace α] [OrderClosedTopology α] [Preorder β] [TopologicalSpace β]
+实例 [预序
+  签名: α] [拓扑空间 α] [OrderClosed拓扑 α] [预序 β] [拓扑空间 β]
   定义体: ⟨(isClosed_le continuous_fst.fst continuous_snd.fst).inter
     (isClosed_le continuous_fst.snd continuous_snd.snd)⟩
 
@@ -3008,8 +3008,8 @@ instance Pi.orderClosedTopology'
   body: inferInstance
 
 中文:
-实例 Pi.orderClosedTopology'
-  签名: [Preorder β] [TopologicalSpace β] [OrderClosedTopology β]
+实例 依赖函数类型.orderClosedTopology'
+  签名: [预序 β] [拓扑空间 β] [OrderClosed拓扑 β]
   定义体: inferInstance
 -/
 instance Pi.orderClosedTopology' [Preorder β] [TopologicalSpace β] [OrderClosedTopology β] :

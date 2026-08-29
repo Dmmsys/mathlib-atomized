@@ -62,9 +62,9 @@ class TietzeExtension
 
 中文:
 类 TietzeExtension
-  参数: (Y : 类型v) [TopologicalSpace Y]
+  参数: (Y : 类型v) [拓扑空间 Y]
   公理与运算 (1 个):
-    - exists_restrict_eq'({X : 类型u} [TopologicalSpace X] [NormalSpace X] (s : Set X) (hs : IsClosed s) (f : C(s, Y))) : 存在 (g : C(X, Y)), g.restrict s = f
+    - exists_restrict_eq'({X : 类型u} [拓扑空间 X] [正规空间 X] (s : 集合 X) (hs : 是闭集 s) (f : C(s, Y))) : 存在 (g : C(X, Y)), g.restrict s = f
 -/
 class TietzeExtension (Y : Type v) [TopologicalSpace Y] : Prop where
   exists_restrict_eq' {X : Type u} [TopologicalSpace X] [NormalSpace X] (s : Set X)
@@ -84,8 +84,8 @@ theorem ContinuousMap.exists_restrict_eq
   proof: TietzeExtension.exists_restrict_eq' s hs f
 
 中文:
-定理 ContinuousMap.exists_restrict_eq
-  条件: (hs : IsClosed s) (f : C(s, Y))
+定理 连续映射.存在_restrict_eq
+  条件: (hs : 是闭集 s) (f : C(s, Y))
   证明: TietzeExtension.exists_restrict_eq' s hs f
 
 Depends on / 依赖: TietzeExtension, TietzeExtension.exists_restrict_eq, exists_restrict_eq
@@ -107,8 +107,8 @@ theorem ContinuousMap.exists_extension
   exact ⟨g, by ext x; simpa using! congr($(hg) ⟨e' x, x, rfl⟩)⟩
 
 中文:
-定理 ContinuousMap.exists_extension
-  条件: (he : IsClosedEmbedding e) (f : C(X₁, Y))
+定理 连续映射.存在_extension
+  条件: (he : 是闭嵌入 e) (f : C(X₁, Y))
   证明: by
   let e' : X₁ ≃ₜ Set.range e := he.isEmbedding.toHomeomorph
   obtain ⟨g, hg⟩ := (f.comp e'.symm).exists_restrict_eq he.isClosed_range
@@ -131,8 +131,8 @@ theorem ContinuousMap.exists_extension'
   proof: .imp fun g hg => by ext x; congrm($(hg) x) f.exists_extension he
 
 中文:
-定理 ContinuousMap.exists_extension'
-  条件: (he : IsClosedEmbedding e) (f : C(X₁, Y))
+定理 连续映射.存在_extension'
+  条件: (he : 是闭嵌入 e) (f : C(X₁, Y))
   证明: .imp fun g hg => by ext x; congrm($(hg) x) f.exists_extension he
 
 Depends on / 依赖: congrm, exists_extension, f.exists_extension
@@ -152,8 +152,8 @@ theorem ContinuousMap.exists_forall_mem_restrict_eq
   exact ⟨comp ⟨Subtype.val, by fun_prop⟩ g, by simp, by ext x; congrm(($(hg) x : Y))⟩
 
 中文:
-定理 ContinuousMap.exists_forall_mem_restrict_eq
-  结论: (hs : IsClosed s)
+定理 连续映射.存在_对任意_mem_restrict_eq
+  结论: (hs : 是闭集 s)
   证明: by
 .exists_restrict_eq hs obtain ⟨g, hg⟩ := mk _ (map_continuous f |>.codRestrict hf)
   exact ⟨comp ⟨Subtype.val, by fun_prop⟩ g, by simp, by ext x; congrm(($(hg) x : Y))⟩
@@ -178,8 +178,8 @@ theorem ContinuousMap.exists_extension_forall_mem
   exact ⟨comp ⟨Subtype.val, by fun_prop⟩ g, by simp, by ext x; congrm(($(hg) x : Y))⟩
 
 中文:
-定理 ContinuousMap.exists_extension_forall_mem
-  结论: (he : IsClosedEmbedding e)
+定理 连续映射.存在_extension_对任意_mem
+  结论: (he : 是闭嵌入 e)
   证明: by
 .exists_extension he obtain ⟨g, hg⟩ := mk _ (map_continuous f |>.codRestrict hf)
   exact ⟨comp ⟨Subtype.val, by fun_prop⟩ g, by simp, by ext x; congrm(($(hg) x : Y))⟩
@@ -205,8 +205,8 @@ obtain ⟨g', hg'⟩ := Classical.skolem.mp fun i =>
     exact ⟨ContinuousMap.piEquiv _ _ g', by ext x i; congrm($(hg' i) x)⟩
 
 中文:
-实例 Pi.instTietzeExtension
-  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, TopologicalSpace (Y i)]
+实例 依赖函数类型.instTietzeExtension
+  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, 拓扑空间 (Y i)]
   定义体: by
 obtain ⟨g', hg'⟩ := Classical.skolem.mp fun i =>
       ContinuousMap.exists_restrict_eq hs (ContinuousMap.piEquiv _ _ |>.symm f i)
@@ -233,8 +233,8 @@ instance Prod.instTietzeExtension
     exact ⟨g₁.prodMk g₂, by ext1 x; congrm(($(hg₁) x), $(hg₂) x)⟩
 
 中文:
-实例 Prod.instTietzeExtension
-  签名: {Y : 类型v} {Z : Type w} [TopologicalSpace Y]
+实例 积类型.instTietzeExtension
+  签名: {Y : 类型v} {Z : 类型 w} [拓扑空间 Y]
   定义体: by
     obtain ⟨g₁, hg₁⟩ := (ContinuousMap.fst.comp f).exists_restrict_eq hs
     obtain ⟨g₂, hg₂⟩ := (ContinuousMap.snd.comp f).exists_restrict_eq hs
@@ -259,8 +259,8 @@ instance Unique.instTietzeExtension
   body: ‹Nonempty Y›.elim fun y => ⟨.const _ y, by ext; subsingleton⟩
 
 中文:
-实例 Unique.instTietzeExtension
-  签名: {Y : 类型v} [TopologicalSpace Y]
+实例 唯一.instTietzeExtension
+  签名: {Y : 类型v} [拓扑空间 Y]
   定义体: ‹Nonempty Y›.elim fun y => ⟨.const _ y, by ext; subsingleton⟩
 
 Depends on / 依赖: Nonempty, subsingleton
@@ -285,7 +285,7 @@ theorem TietzeExtension.of_retract
 
 中文:
 定理 TietzeExtension.of_retract
-  结论: {Y : 类型v} {Z : Type w} [TopologicalSpace Y]
+  结论: {Y : 类型v} {Z : 类型 w} [拓扑空间 Y]
   证明: by
     obtain ⟨g, hg⟩ := (ι.comp f).exists_restrict_eq hs
     use r.comp g
@@ -317,7 +317,7 @@ theorem TietzeExtension.of_homeo
 
 中文:
 定理 TietzeExtension.of_homeo
-  结论: {Y : 类型v} {Z : Type w} [TopologicalSpace Y]
+  结论: {Y : 类型v} {Z : 类型 w} [拓扑空间 Y]
   证明: .of_retract (e : C(Y, Z)) (e.symm : C(Z, Y)) by simp
 
 Depends on / 依赖: e.symm, of_retract
@@ -358,7 +358,7 @@ theorem tietze_extension_step
 
 中文:
 定理 tietze_extension_step
-  条件: (f : X ->ᵇ 实数) (e : C(X, Y)) (he : IsClosedEmbedding e)
+  条件: (f : X ->ᵇ 实数) (e : C(X, Y)) (he : 是闭嵌入 e)
   证明: by
   have h3 : (0 : Real) < 3 := by norm_num1
   have h23 : 0 < (2 / 3 : Real) := by norm_num1
@@ -426,7 +426,7 @@ theorem exists_extension_norm_eq_of_isClosedEmbedding'
   set g : Nat -> Y ->ᵇ Real := fun n => (fun g => g + F (f - g.com
 
 中文:
-定理 exists_extension_norm_eq_of_isClosedEmbedding'
+定理 存在_extension_norm_eq_of_isClosedEmbedding'
   结论: (f : X ->ᵇ 实数) (e : C(X, Y))
   证明: by
   /- For the proof, we iterate `tietze_extension_step`. Each time we apply it to the difference
@@ -490,7 +490,7 @@ theorem exists_extension_norm_eq_of_isClosedEmbedding
   exact ⟨g, hg, rfl⟩
 
 中文:
-定理 exists_extension_norm_eq_of_isClosedEmbedding
+定理 存在_extension_norm_eq_of_isClosedEmbedding
   结论: (f : X ->ᵇ 实数) {e : X -> Y}
   证明: by
   rcases exists_extension_norm_eq_of_isClosedEmbedding' f ⟨e, he.continuous⟩ he with ⟨g, hg, rfl⟩
@@ -516,8 +516,8 @@ theorem exists_norm_eq_domRestrict_eq_of_closed
 alias exists_norm_eq_restrict_eq_of_closed := exists_norm_eq_domRestrict_eq_of_closed
 
 中文:
-定理 exists_norm_eq_domRestrict_eq_of_closed
-  条件: {s : Set Y} (f : s ->ᵇ 实数) (hs : IsClosed s)
+定理 存在_norm_eq_domRestrict_eq_of_closed
+  条件: {s : 集合 Y} (f : s ->ᵇ 实数) (hs : 是闭集 s)
   证明: exists_extension_norm_eq_of_isClosedEmbedding' f ((ContinuousMap.id _).restrict s)
     hs.isClosedEmbedding_subtypeVal
 
@@ -549,7 +549,7 @@ theorem exists_extension_forall_mem_Icc_of_isClosedEmbedding
    
 
 中文:
-定理 exists_extension_forall_mem_Icc_of_isClosedEmbedding
+定理 存在_extension_对任意_mem_Icc_of_isClosedEmbedding
   结论: (f : X ->ᵇ 实数) {a b : 实数} {e : X -> Y}
   证明: by
   rcases exists_extension_norm_eq_of_isClosedEmbedding (f - const X ((a + b) / 2)) he with
@@ -591,8 +591,8 @@ theorem exists_extension_forall_exists_le_ge_of_isClosedEmbedding
   have hmem : for
 
 中文:
-定理 exists_extension_forall_exists_le_ge_of_isClosedEmbedding
-  结论: [Nonempty X] (f : X ->ᵇ 实数)
+定理 存在_extension_对任意_存在_le_ge_of_isClosedEmbedding
+  结论: [非空 X] (f : X ->ᵇ 实数)
   证明: by
   inhabit X
   -- Put `a = ⨅ x, f x` and `b = ⨆ x, f x`
@@ -724,8 +724,8 @@ theorem exists_extension_forall_mem_of_isClosedEmbedding
   exact hs.out (hf _)
 
 中文:
-定理 exists_extension_forall_mem_of_isClosedEmbedding
-  结论: (f : X ->ᵇ 实数) {t : Set 实数} {e : X -> Y}
+定理 存在_extension_对任意_mem_of_isClosedEmbedding
+  结论: (f : X ->ᵇ 实数) {t : 集合 实数} {e : X -> Y}
   证明: by
   cases isEmpty_or_nonempty X
   · rcases hne with ⟨c, hc⟩
@@ -763,8 +763,8 @@ theorem exists_forall_mem_domRestrict_eq_of_closed
 alias exists_forall_mem_restrict_eq_of_closed := exists_forall_mem_domRestrict_eq_of_closed
 
 中文:
-定理 exists_forall_mem_domRestrict_eq_of_closed
-  结论: {s : Set Y} (f : s ->ᵇ 实数) (hs : IsClosed s)
+定理 存在_对任意_mem_domRestrict_eq_of_closed
+  结论: {s : 集合 Y} (f : s ->ᵇ 实数) (hs : 是闭集 s)
   证明: by
   obtain ⟨g, hg, hgf⟩ :=
     exists_extension_forall_mem_of_isClosedEmbedding f hf hne hs.isClosedEmbedding_subtypeVal
@@ -805,8 +805,8 @@ theorem exists_extension_forall_mem_of_isClosedEmbedding
   let 
 
 中文:
-定理 exists_extension_forall_mem_of_isClosedEmbedding
-  结论: (f : C(X, 实数)) {t : Set 实数} {e : X -> Y}
+定理 存在_extension_对任意_mem_of_isClosedEmbedding
+  结论: (f : C(X, 实数)) {t : 集合 实数} {e : X -> Y}
   证明: by
   have h : Real ≃o Ioo (-1 : Real) 1 := orderIsoIooNegOneOne Real
   let F : X ->ᵇ Real :=
@@ -862,8 +862,8 @@ theorem exists_restrict_eq_forall_mem_of_closed
   ⟨g, hgt, coe_injective hgf⟩
 
 中文:
-定理 exists_restrict_eq_forall_mem_of_closed
-  结论: {s : Set Y} (f : C(s, 实数)) {t : Set 实数}
+定理 存在_restrict_eq_对任意_mem_of_closed
+  结论: {s : 集合 Y} (f : C(s, 实数)) {t : 集合 实数}
   证明: let ⟨g, hgt, hgf⟩ :=
     exists_extension_forall_mem_of_isClosedEmbedding f ht hne hs.isClosedEmbedding_subtypeVal
   ⟨g, hgt, coe_injective hgf⟩
@@ -889,7 +889,7 @@ instance Real.instTietzeExtension
       fun _ => (And.right ·)
 
 中文:
-实例 Real.instTietzeExtension
+实例 实数.instTietzeExtension
   签名: : TietzeExtension 实数 where
   定义体: .imp f.exists_restrict_eq_forall_mem_of_closed (fun _ => mem_univ _) univ_nonempty hs
       fun _ => (And.right ·)
@@ -913,7 +913,7 @@ instance NNReal.instTietzeExtension
     ext; simp
 
 中文:
-实例 NNReal.instTietzeExtension
+实例 非负实数.instTietzeExtension
   签名: : TietzeExtension 实数>=0
   定义体: .of_retract ⟨((↑) : Real>=0 -> Real), by fun_prop⟩ ⟨Real.toNNReal, continuous_real_toNNReal⟩ by
     ext; simp

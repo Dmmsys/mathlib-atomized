@@ -32,11 +32,11 @@ class IsIntegralClosure
     - isIntegral_iff : forall {x : B}, IsIntegral R x ↔ exists y, algebraMap A B y = x
 
 中文:
-类 IsIntegralClosure
-  参数: (A R B : 类型) [CommRing R] [CommSemiring A] [CommRing B] [Algebra R B]
+类 是整闭包
+  参数: (A R B : 类型) [交换环 R] [交换半环 A] [交换环 B] [代数 R B]
   公理与运算 (2 个):
-    - algebraMap_injective((A R B)) : Function.Injective (algebraMap A B)
-    - isIntegral_iff : 对任意 {x : B}, Is整数egral R x ↔ 存在 y, algebraMap A B y = x
+    - algebraMap_injective((A R B)) : 函数.单射 (algebraMap A B)
+    - isIntegral_iff : 对任意 {x : B}, 是整 R x ↔ 存在 y, algebraMap A B y = x
 -/
 class IsIntegralClosure (A R B : Type*) [CommRing R] [CommSemiring A] [CommRing B] [Algebra R B]
   [Algebra A B] : Prop where

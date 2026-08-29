@@ -58,7 +58,7 @@ have : Nonempty ι := Fintype.card_pos_iff.mp by lia
 
 中文:
 定义 onePointEquivSphereOfFinrankEq
-  签名: {ι V : 类型} [Fintype ι]
+  签名: {ι V : 类型} [有限类型 ι]
   定义体: by
   classical
 have : Nonempty ι := Fintype.card_pos_iff.mp by lia

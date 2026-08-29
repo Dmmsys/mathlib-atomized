@@ -56,7 +56,7 @@ theorem exists_prod_subset
   exact ⟨⟨U, (ContinuousMa
 
 中文:
-定理 exists_prod_subset
+定理 存在_prod_subset
   条件: (W : Clopens (X × Y)) {a : X × Y} (h : a in W)
   证明: by
   have hp : Continuous (fun y : Y => (a.1, y)) := .prodMk_right _
@@ -96,7 +96,7 @@ theorem exists_finset_eq_sup_prod
  
 
 中文:
-定理 exists_finset_eq_sup_prod
+定理 存在_finset_eq_sup_prod
   条件: (W : Clopens (X × Y))
   证明: by
   choose! U hxU V hxV hUV using fun x => W.exists_prod_subset (a := x)
@@ -149,7 +149,7 @@ instance countable_prod
 
 中文:
 实例 countable_prod
-  签名: [Countable (Clopens X)]
+  签名: [可数 (Clopens X)]
   定义体: surjective_finset_sup_prod.countable
 
 Depends on / 依赖: countable, surjective_finset_sup_prod, surjective_finset_sup_prod.countable
@@ -171,7 +171,7 @@ instance finite_prod
 
 中文:
 实例 finite_prod
-  签名: [Finite (Clopens X)] [Finite (Clopens Y)]
+  签名: [有限 (Clopens X)] [有限 (Clopens Y)]
   定义体: by
   cases nonempty_fintype (Clopens X)
   cases nonempty_fintype (Clopens Y)
@@ -201,7 +201,7 @@ lemma countable_iff_secondCountable
 
 中文:
 引理 countable_iff_secondCountable
-  结论: [T2Space X]
+  结论: [T2空间 X]
   证明: by
   refine ⟨fun h => ⟨{s : Set X | IsClopen s}, ?_, ?_⟩, fun h => ?_⟩
   · let f : {s : Set X | IsClopen s} -> Clopens X := fun s => ⟨s.1, s.2⟩

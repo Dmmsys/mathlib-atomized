@@ -100,7 +100,7 @@ theorem isAddFundamentalDomain_Ioc'
 
 中文:
 定理 isAddFundamentalDomain_Ioc'
-  条件: {T : 实数} (hT : 0 < T) (t : 实数) (μ : Measure 实数 := by volume_tac)
+  条件: {T : 实数} (hT : 0 < T) (t : 实数) (μ : 测度 实数 := by volume_tac)
   证明: by
   refine IsAddFundamentalDomain.mk' nullMeasurableSet_Ioc fun x => ?_
   have : Bijective (codRestrict (fun n : Int => n • T) (AddSubgroup.zmultiples T) _) :=
@@ -133,7 +133,7 @@ instance measureSpace
 
 中文:
 实例 measureSpace
-  签名: : MeasureSpace (AddCircle T)
+  签名: : 测度空间 (AddCircle T)
   定义体: { QuotientAddGroup.measurableSpace _ with volume := ENNReal.ofReal T • addHaarMeasure ⊤ }
 
 @[simp]
@@ -157,7 +157,7 @@ theorem measure_univ
 
 中文:
 定理 measure_univ
-  结论: volume (Set.univ : Set (AddCircle T)) = ENN实数.of实数 T
+  结论: volume (集合.univ : 集合 (AddCircle T)) = 广义非负实数.of实数 T
   证明: by
   dsimp [volume]
   rw [← PositiveCompacts.coe_top]
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddHaarMeasure (volume : Measure (AddCircle T))
+  签名: 是加法Haar测度 (volume : 测度 (AddCircle T))
   定义体: IsAddHaarMeasure.smul _ (by simp [hT.out]) ENNReal.ofReal_ne_top
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_ne_top, IsAddHaarMeasure, IsAddHaarMeasure.smul, hT.out, ofReal_ne_top
@@ -196,7 +196,7 @@ instance isFiniteMeasure
 
 中文:
 实例 isFiniteMeasure
-  签名: : IsFiniteMeasure (volume : Measure (AddCircle T)) where
+  签名: : 是有限测度 (volume : 测度 (AddCircle T)) where
   定义体: by simp
 -/
 instance isFiniteMeasure : IsFiniteMeasure (volume : Measure (AddCircle T)) where
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAddFundamentalDomain (AddSubgroup.op <| .zmultiples T) 实数
+  签名: 有加法FundamentalDomain (加法子群.op <| .zmultiples T) 实数
   定义体: ⟨Ioc 0 (0 + T), isAddFundamentalDomain_Ioc' Fact.out 0⟩
 
 Depends on / 依赖: Fact.out, isAddFundamentalDomain_Ioc
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddQuotientMeasureEqMeasurePreimage volume (volume : Measure (AddCircle T))
+  签名: 加法QuotientMeasureEqMeasurePreimage volume (volume : 测度 (AddCircle T))
   定义体: by
   apply MeasureTheory.leftInvariantIsAddQuotientMeasureEqMeasurePreimage
   simp [(isAddFundamentalDomain_Ioc' hT.out 0).covolume_eq_volume, AddCircle.measure_univ]
@@ -275,7 +275,7 @@ lemma add_projection_respects_measure
 
 中文:
 引理 add_projection_respects_measure
-  条件: (t : 实数) {U : Set (AddCircle T)} (meas_U : MeasurableSet U)
+  条件: (t : 实数) {U : 集合 (AddCircle T)} (meas_U : 可测集 U)
   证明: (isAddFundamentalDomain_Ioc' hT.out _).addProjection_respects_measure_apply
     (volume : Measure (AddCircle T)) meas_U
 
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUnifLocDoublingMeasure (volume : Measure (AddCircle T))
+  签名: 是UnifLocDoublingMeasure (volume : 测度 (AddCircle T))
   定义体: by
   refine ⟨⟨Real.toNNReal 2, Filter.Eventually.of_forall fun ε x => ?_⟩⟩
   rw [volume_closedBall]; rw [volume_closedBall]; rw [ENNReal.ofNNReal_toNNReal 2]; rw [← ENNReal.ofReal_mul zero_le_two]
@@ -560,7 +560,7 @@ theorem intervalIntegral_preimage
   linarith [hT.out]
 
 中文:
-定理 intervalIntegral_preimage
+定理 interval整数egral_preimage
   条件: (t : 实数) (f : AddCircle T -> E)
   证明: by
   rw [integral_of_le]; rw [AddCircle.integral_preimage T t f]
@@ -585,7 +585,7 @@ lemma integral_liftIoc_eq_intervalIntegral
   rw [liftIoc_coe_apply hx]
 
 中文:
-引理 integral_liftIoc_eq_intervalIntegral
+引理 integral_liftIoc_eq_interval整数egral
   条件: {t : 实数} {f : 实数 -> E}
   证明: by
   rw [← AddCircle.intervalIntegral_preimage T t]
@@ -619,8 +619,8 @@ lemma MeasureTheory.MemLp.memLp_liftIoc
   exact AddCircle.measurePreserving_equivIoc T
 
 中文:
-引理 MeasureTheory.MemLp.memLp_liftIoc
-  结论: {T : 实数} [hT : Fact (0 < T)] {t : 实数} {f : 实数 -> Complex} {p : 实数>=0∞}
+引理 测度论.MemLp.memLp_liftIoc
+  结论: {T : 实数} [hT : Fact (0 < T)] {t : 实数} {f : 实数 -> 复形} {p : 实数>=0∞}
   证明: by
   simp only [AddCircle.liftIoc, Set.domRestrict_def, Function.comp_def]
   apply hLp.comp_measurePreserving
@@ -649,7 +649,7 @@ theorem measure_univ
 
 中文:
 定理 measure_univ
-  结论: volume (Set.univ : Set UnitAddCircle) = 1
+  结论: volume (集合.univ : 集合 UnitAddCircle) = 1
   证明: by simp
 -/
 protected theorem measure_univ : volume (Set.univ : Set UnitAddCircle) = 1 := by simp
@@ -717,7 +717,7 @@ theorem intervalIntegral_preimage
   proof: AddCircle.intervalIntegral_preimage 1 t f
 
 中文:
-定理 intervalIntegral_preimage
+定理 interval整数egral_preimage
   条件: (t : 实数) (f : UnitAddCircle -> E)
   证明: AddCircle.intervalIntegral_preimage 1 t f
 -/
@@ -754,8 +754,8 @@ theorem intervalIntegrable
   -- Replace [a₁, a₂] by [t - n₁ * T, t + n₂ * T], where n₁ and n₂ are natur
 
 中文:
-定理 intervalIntegrable
-  结论: {t : 实数} (h₁f : Function.Periodic f T)
+定理 interval整数egrable
+  结论: {t : 实数} (h₁f : 函数.周期 f T)
   证明: by
   wlog hT : 0 < T
   · rcases (not_lt.1 hT).eq_or_lt with h | h
@@ -813,8 +813,8 @@ theorem intervalIntegrable_iff
   exact ⟨(hf.intervalIntegrable hT · t₂ (t₂ + T)), (hf.intervalIntegrable hT · t₁ (t₁ + T))⟩
 
 中文:
-定理 intervalIntegrable_iff
-  条件: {t₁ t₂ : 实数} (hf : Periodic f T)
+定理 interval整数egrable_iff
+  条件: {t₁ t₂ : 实数} (hf : 周期 f T)
   证明: by
   wlog hT : T != 0
   · simp_all
@@ -839,8 +839,8 @@ theorem intervalIntegrable₀
   simpa
 
 中文:
-定理 intervalIntegrable₀
-  结论: (h₁f : Function.Periodic f T) (hT : T != 0)
+定理 interval整数egrable₀
+  结论: (h₁f : 函数.周期 f T) (hT : T != 0)
   证明: by
   apply h₁f.intervalIntegrable hT (t := 0)
   simpa
@@ -875,8 +875,8 @@ theorem intervalIntegral_add_eq
   simp only [integral_of_le, hT.le, le_add_i
 
 中文:
-定理 intervalIntegral_add_eq
-  条件: (hf : Periodic f T) (t s : 实数)
+定理 interval整数egral_add_eq
+  条件: (hf : 周期 f T) (t s : 实数)
   证明: by
   wlog hT : 0 < T
   · rcases (not_lt.1 hT).eq_or_lt with hT | hT
@@ -912,8 +912,8 @@ theorem intervalIntegral_add_eq_add
   rw [hf.intervalIntegral_add_eq t s]; rw [integral_add_adjacent_intervals (h_int t s) (h_int s _)]
 
 中文:
-定理 intervalIntegral_add_eq_add
-  结论: (hf : Periodic f T) (t s : 实数)
+定理 interval整数egral_add_eq_add
+  结论: (hf : 周期 f T) (t s : 实数)
   证明: by
   rw [hf.intervalIntegral_add_eq t s]; rw [integral_add_adjacent_intervals (h_int t s) (h_int s _)]
 
@@ -939,8 +939,8 @@ theorem intervalIntegral_add_zsmul_eq
   have : forall m : Nat, (∫ x in 0..m • T, f x) = m 
 
 中文:
-定理 intervalIntegral_add_zsmul_eq
-  结论: (hf : Periodic f T) (n : 整数) (t : 实数)
+定理 interval整数egral_add_zsmul_eq
+  结论: (hf : 周期 f T) (n : 整数) (t : 实数)
   证明: by
   -- Reduce to the case `b = 0`
   suffices (∫ x in 0..(n • T), f x) = n • ∫ x in 0..T, f x by
@@ -994,7 +994,7 @@ theorem sInf_add_zsmul_le_integral_of_pos
 
 中文:
 定理 sInf_add_zsmul_le_integral_of_pos
-  结论: (h_int : 整数erval整数egrable g MeasureSpace.volume 0 T)
+  结论: (h_int : 整数erval整数egrable g 测度空间.volume 0 T)
   证明: by
   let h'_int := hg.intervalIntegrable₀ hT.ne' h_int
   let ε := Int.fract (t / T) * T
@@ -1032,7 +1032,7 @@ theorem integral_le_sSup_add_zsmul_of_pos
 
 中文:
 定理 integral_le_sSup_add_zsmul_of_pos
-  结论: (h_int : 整数erval整数egrable g MeasureSpace.volume 0 T)
+  结论: (h_int : 整数erval整数egrable g 测度空间.volume 0 T)
   证明: by
   let h'_int := hg.intervalIntegrable₀ hT.ne' h_int
   let ε := Int.fract (t / T) * T
@@ -1070,7 +1070,7 @@ theorem tendsto_atTop_intervalIntegral_of_pos
   exact tendsto_floor_atTop.com
 
 中文:
-定理 tendsto_atTop_intervalIntegral_of_pos
+定理 tendsto_atTop_interval整数egral_of_pos
   条件: (h₀ : 0 < ∫ x in 0..T, g x) (hT : 0 < T)
   证明: by
   have h_int := intervalIntegrable_of_integral_ne_zero h₀.ne'
@@ -1103,7 +1103,7 @@ theorem tendsto_atBot_intervalIntegral_of_pos
   exact tendsto_floor_atBot.com
 
 中文:
-定理 tendsto_atBot_intervalIntegral_of_pos
+定理 tendsto_atBot_interval整数egral_of_pos
   条件: (h₀ : 0 < ∫ x in 0..T, g x) (hT : 0 < T)
   证明: by
   have h_int := intervalIntegrable_of_integral_ne_zero h₀.ne'
@@ -1130,7 +1130,7 @@ theorem tendsto_atTop_intervalIntegral_of_pos'
   proof: hg.tendsto_atTop_intervalIntegral_of_pos (intervalIntegral_pos_of_pos h_int h₀ hT) hT
 
 中文:
-定理 tendsto_atTop_intervalIntegral_of_pos'
+定理 tendsto_atTop_interval整数egral_of_pos'
   证明: hg.tendsto_atTop_intervalIntegral_of_pos (intervalIntegral_pos_of_pos h_int h₀ hT) hT
 
 Depends on / 依赖: h_int, hg.tendsto_atTop_intervalIntegral_of_pos, intervalIntegral_pos_of_pos, tendsto_atTop_intervalIntegral_of_pos
@@ -1149,7 +1149,7 @@ theorem tendsto_atBot_intervalIntegral_of_pos'
   exact hg.tendsto_atBot_intervalIntegral_of_pos (intervalIntegral_pos_of_pos h_int h₀ hT) hT
 
 中文:
-定理 tendsto_atBot_intervalIntegral_of_pos'
+定理 tendsto_atBot_interval整数egral_of_pos'
   证明: by
   exact hg.tendsto_atBot_intervalIntegral_of_pos (intervalIntegral_pos_of_pos h_int h₀ hT) hT
 

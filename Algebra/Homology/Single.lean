@@ -271,7 +271,7 @@ lemma isZero_single_comp_eval
 中文:
 引理 isZero_single_comp_eval
   条件: (j i : ι) (hi : i != j)
-  结论: IsZero (single V c j ⋙ eval V c i)
+  结论: 是零 (single V c j ⋙ eval V c i)
   证明: Functor.isZero _ (fun _ => isZero_single_obj_X c _ _ _ hi)
 
 Depends on / 依赖: Functor, Functor.isZero, isZero, isZero_single_obj_X
@@ -299,7 +299,7 @@ lemma from_single_hom_ext
 
 中文:
 引理 from_single_hom_ext
-  结论: {K : HomologicalComplex V c} {j : ι} {A : V}
+  结论: {K : 同调复形 V c} {j : ι} {A : V}
   证明: by
   ext i
   by_cases h : i = j
@@ -335,7 +335,7 @@ lemma to_single_hom_ext
 
 中文:
 引理 to_single_hom_ext
-  结论: {K : HomologicalComplex V c} {j : ι} {A : V}
+  结论: {K : 同调复形 V c} {j : ι} {A : V}
   证明: by
   ext i
   by_cases h : i = j
@@ -382,7 +382,7 @@ definition mkHomToSingle
 
 中文:
 定义 mkHomToSingle
-  签名: {K : HomologicalComplex V c} {j : ι} {A : V} (φ : K.X j ⟶ A)
+  签名: {K : 同调复形 V c} {j : ι} {A : V} (φ : K.X j ⟶ A)
   定义体: if hi : i = j
       then (K.XIsoOfEq hi).hom ≫ φ ≫ (singleObjXIsoOfEq c j A i hi).inv
       else 0
@@ -426,7 +426,7 @@ lemma mkHomToSingle_f
 
 中文:
 引理 mkHomToSingle_f
-  结论: {K : HomologicalComplex V c} {j : ι} {A : V} (φ : K.X j ⟶ A)
+  结论: {K : 同调复形 V c} {j : ι} {A : V} (φ : K.X j ⟶ A)
   证明: by
   dsimp [mkHomToSingle]
   rw [dif_pos rfl]; rw [id_comp]
@@ -460,7 +460,7 @@ definition mkHomFromSingle
 
 中文:
 定义 mkHomFromSingle
-  签名: {K : HomologicalComplex V c} {j : ι} {A : V} (φ : A ⟶ K.X j)
+  签名: {K : 同调复形 V c} {j : ι} {A : V} (φ : A ⟶ K.X j)
   定义体: if hi : i = j
       then (singleObjXIsoOfEq c j A i hi).hom ≫ φ ≫ (K.XIsoOfEq hi).inv
       else 0
@@ -504,7 +504,7 @@ lemma mkHomFromSingle_f
 
 中文:
 引理 mkHomFromSingle_f
-  结论: {K : HomologicalComplex V c} {j : ι} {A : V} (φ : A ⟶ K.X j)
+  结论: {K : 同调复形 V c} {j : ι} {A : V} (φ : A ⟶ K.X j)
   证明: by
   dsimp [mkHomFromSingle]
   rw [dif_pos rfl]; rw [comp_id]
@@ -535,7 +535,7 @@ abbreviation single₀
 
 中文:
 缩写 single₀
-  签名: : V ⥤ ChainComplex V 自然数
+  签名: : V ⥤ 链复形 V 自然数
   定义体: HomologicalComplex.single V (ComplexShape.down Nat) 0
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex, HomologicalComplex.single, single
@@ -637,7 +637,7 @@ definition toSingle₀Equiv
 
 中文:
 定义 toSingle₀Equiv
-  签名: (C : ChainComplex V 自然数) (X : V)
+  签名: (C : 链复形 V 自然数) (X : V)
   定义体: ⟨φ.f 0, by rw [← φ.comm 1 0, HomologicalComplex.single_obj_d, comp_zero]⟩
   invFun f := HomologicalComplex.mkHomToSingle f.1 (fun i hi => by
     obtain rfl : i = 1 := by simpa using hi.symm
@@ -669,7 +669,7 @@ lemma toSingle₀Equiv_symm_apply_f_zero
 
 中文:
 引理 toSingle₀Equiv_symm_apply_f_zero
-  结论: {C : ChainComplex V 自然数} {X : V}
+  结论: {C : 链复形 V 自然数} {X : V}
   证明: by
   simp [toSingle₀Equiv]
 -/
@@ -696,7 +696,7 @@ definition fromSingle₀Equiv
 
 中文:
 定义 fromSingle₀Equiv
-  签名: (C : ChainComplex V 自然数) (X : V)
+  签名: (C : 链复形 V 自然数) (X : V)
   定义体: f.f 0
   invFun f := HomologicalComplex.mkHomFromSingle f (fun i hi => by simp at hi)
   left_inv := by cat_disch
@@ -763,7 +763,7 @@ abbreviation single₀
 
 中文:
 缩写 single₀
-  签名: : V ⥤ CochainComplex V 自然数
+  签名: : V ⥤ 上链复形 V 自然数
   定义体: HomologicalComplex.single V (ComplexShape.up Nat) 0
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.single, single
@@ -861,7 +861,7 @@ definition fromSingle₀Equiv
 
 中文:
 定义 fromSingle₀Equiv
-  签名: (C : CochainComplex V 自然数) (X : V)
+  签名: (C : 上链复形 V 自然数) (X : V)
   定义体: ⟨φ.f 0, by rw [φ.comm 0 1, HomologicalComplex.single_obj_d, zero_comp]⟩
   invFun f := HomologicalComplex.mkHomFromSingle f.1 (fun i hi => by
     obtain rfl : i = 1 := by simpa using hi.symm
@@ -893,7 +893,7 @@ lemma fromSingle₀Equiv_symm_apply_f_zero
 
 中文:
 引理 fromSingle₀Equiv_symm_apply_f_zero
-  结论: {C : CochainComplex V 自然数} {X : V}
+  结论: {C : 上链复形 V 自然数} {X : V}
   证明: by
   simp [fromSingle₀Equiv]
 -/
@@ -920,7 +920,7 @@ definition toSingle₀Equiv
 
 中文:
 定义 toSingle₀Equiv
-  签名: (C : CochainComplex V 自然数) (X : V)
+  签名: (C : 上链复形 V 自然数) (X : V)
   定义体: f.f 0
   invFun f := HomologicalComplex.mkHomToSingle f (fun i hi => by simp at hi)
   left_inv := by cat_disch

@@ -39,7 +39,7 @@ definition permanent
 
 中文:
 定义 permanent
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: ∑ σ : Perm n, ∏ i, M (σ i) i
 
 @[simp]
@@ -96,8 +96,8 @@ theorem permanent_zero
 
 中文:
 定理 permanent_zero
-  条件: [Nonempty n]
-  结论: permanent (0 : Matrix n n R) = 0
+  条件: [非空 n]
+  结论: permanent (0 : 矩阵 n n R) = 0
   证明: by simp [permanent]
 
 @[simp]
@@ -118,7 +118,7 @@ theorem permanent_one
 
 中文:
 定理 permanent_one
-  结论: permanent (1 : Matrix n n R) = 1
+  结论: permanent (1 : 矩阵 n n R) = 1
   证明: by
   rw [← diagonal_one]; simp [-diagonal_one]
 
@@ -138,7 +138,7 @@ theorem permanent_isEmpty
 
 中文:
 定理 permanent_isEmpty
-  条件: [IsEmpty n] {A : Matrix n n R}
+  条件: [是空 n] {A : 矩阵 n n R}
   结论: permanent A = 1
   证明: by simp [permanent]
 
@@ -158,7 +158,7 @@ theorem permanent_eq_one_of_card_eq_zero
 
 中文:
 定理 permanent_eq_one_of_card_eq_zero
-  条件: {A : Matrix n n R} (h : card n = 0)
+  条件: {A : 矩阵 n n R} (h : card n = 0)
   结论: permanent A = 1
   证明: haveI : IsEmpty n := card_eq_zero_iff.mp h
   permanent_isEmpty
@@ -183,7 +183,7 @@ theorem permanent_unique
 
 中文:
 定理 permanent_unique
-  条件: {n : 类型} [Unique n] [DecidableEq n] [Fintype n] (A : Matrix n n R)
+  条件: {n : 类型} [唯一 n] [DecidableEq n] [有限类型 n] (A : 矩阵 n n R)
   证明: by simp [permanent, univ_unique]
 
 Depends on / 依赖: permanent, univ_unique
@@ -203,7 +203,7 @@ theorem permanent_eq_elem_of_subsingleton
 
 中文:
 定理 permanent_eq_elem_of_subsingleton
-  条件: [Subsingleton n] (A : Matrix n n R) (k : n)
+  条件: [子单例 n] (A : 矩阵 n n R) (k : n)
   证明: by
   have := uniqueOfSubsingleton k
   convert! permanent_unique A
@@ -226,7 +226,7 @@ theorem permanent_eq_elem_of_card_eq_one
 
 中文:
 定理 permanent_eq_elem_of_card_eq_one
-  条件: {A : Matrix n n R} (h : card n = 1) (k : n)
+  条件: {A : 矩阵 n n R} (h : card n = 1) (k : n)
   证明: haveI : Subsingleton n := card_le_one_iff_subsingleton.mp h.le
   permanent_eq_elem_of_subsingleton _ _
 
@@ -254,7 +254,7 @@ theorem permanent_transpose
 
 中文:
 定理 permanent_transpose
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: Mᵀ.permanent = M.permanent
   证明: by
   refine sum_bijective _ inv_involutive.bijective _ _ ?_
@@ -280,7 +280,7 @@ theorem permanent_permute_cols
 
 中文:
 定理 permanent_permute_cols
-  条件: (σ : Perm n) (M : Matrix n n R)
+  条件: (σ : 置换 n) (M : 矩阵 n n R)
   证明: (Group.mulLeft_bijective σ).sum_comp fun τ => ∏ i : n, M (τ i) i
 
 Depends on / 依赖: Group.mulLeft_bijective, mulLeft_bijective, sum_comp
@@ -302,7 +302,7 @@ theorem permanent_permute_rows
 
 中文:
 定理 permanent_permute_rows
-  条件: (σ : Perm n) (M : Matrix n n R)
+  条件: (σ : 置换 n) (M : 矩阵 n n R)
   证明: by
   rw [← permanent_transpose]; rw [transpose_submatrix]; rw [permanent_permute_cols]; rw [permanent_transpose]
 
@@ -333,7 +333,7 @@ theorem permanent_smul
 
 中文:
 定理 permanent_smul
-  条件: (M : Matrix n n R) (c : R)
+  条件: (M : 矩阵 n n R) (c : R)
   证明: by
   simp only [permanent, smul_apply, smul_eq_mul, Finset.mul_sum]
   congr
@@ -373,7 +373,7 @@ theorem permanent_updateCol_smul
 
 中文:
 定理 permanent_updateCol_smul
-  条件: (M : Matrix n n R) (j : n) (c : R) (u : n -> R)
+  条件: (M : 矩阵 n n R) (j : n) (c : R) (u : n -> R)
   证明: by
   simp only [permanent, ← mul_prod_erase _ _ (mem_univ j), updateCol_self, Pi.smul_apply,
     smul_eq_mul, mul_sum, ← mul_assoc]
@@ -405,7 +405,7 @@ theorem permanent_updateRow_smul
 
 中文:
 定理 permanent_updateRow_smul
-  条件: (M : Matrix n n R) (j : n) (c : R) (u : n -> R)
+  条件: (M : 矩阵 n n R) (j : n) (c : R) (u : n -> R)
   证明: by
   rw [← permanent_transpose]; rw [← updateCol_transpose]; rw [permanent_updateCol_smul]; rw [updateCol_transpose]; rw [permanent_transpose]
 

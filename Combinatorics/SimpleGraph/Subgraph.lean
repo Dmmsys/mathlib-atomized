@@ -74,14 +74,14 @@ structure Subgraph
     - symm : Std.Symm Adj  [default: by aesop_graph]
 
 中文:
-结构 Subgraph
-  参数: {V : 类型u} (G : SimpleGraph V)
+结构 子图
+  参数: {V : 类型u} (G : 简单图 V)
   公理与运算 (5 个):
-    - verts : Set V
+    - verts : 集合 V
     - Adj : V -> V -> 命题
-    - adj_sub : 对任意 {v w : V}, Adj v w -> G.Adj v w
-    - edge_vert : 对任意 {v w : V}, Adj v w -> v in verts
-    - symm : Std.Symm Adj  [默认: by aesop_graph]
+    - adj_sub : 对任意 {v w : V}, 伴随 v w -> G.伴随 v w
+    - edge_vert : 对任意 {v w : V}, 伴随 v w -> v in verts
+    - symm : Std.Symm 伴随  [默认: by aesop_graph]
 
 Depends on / 依赖: aesop_graph
 -/
@@ -113,7 +113,7 @@ definition singletonSubgraph
 
 中文:
 定义 singletonSubgraph
-  签名: (G : SimpleGraph V) (v : V)
+  签名: (G : 简单图 V) (v : V)
   定义体: {v}
   Adj := ⊥
   adj_sub := False.elim
@@ -145,7 +145,7 @@ definition subgraphOfAdj
 
 中文:
 定义 subgraphOfAdj
-  签名: (G : SimpleGraph V) {v w : V} (hvw : G.Adj v w)
+  签名: (G : 简单图 V) {v w : V} (hvw : G.伴随 v w)
   定义体: {v, w}
   Adj a b := s(v, w) = s(a, b)
   adj_sub h := by
@@ -182,8 +182,8 @@ theorem loopless
 
 中文:
 定理 loopless
-  条件: (G' : Subgraph G)
-  结论: Std.Irrefl G'.Adj where
+  条件: (G' : 子图 G)
+  结论: Std.Irrefl G'.伴随 where
   证明: G.irrefl G'.adj_sub hadj
 -/
 protected theorem loopless (G' : Subgraph G) : Std.Irrefl G'.Adj where
@@ -202,8 +202,8 @@ theorem adj_comm
 
 中文:
 定理 adj_comm
-  条件: (G' : Subgraph G) (v w : V)
-  结论: G'.Adj v w ↔ G'.Adj w v
+  条件: (G' : 子图 G) (v w : V)
+  结论: G'.伴随 v w ↔ G'.伴随 w v
   证明: G'.symm.iff v w
 
 @[symm]
@@ -225,8 +225,8 @@ theorem adj_symm
 
 中文:
 定理 adj_symm
-  条件: (G' : Subgraph G) {u v : V} (h : G'.Adj u v)
-  结论: G'.Adj v u
+  条件: (G' : 子图 G) {u v : V} (h : G'.伴随 u v)
+  结论: G'.伴随 v u
   证明: G'.symm.symm u v h
 
 Depends on / 依赖: symm.symm
@@ -246,9 +246,9 @@ theorem Adj.symm
 @[grind ->]
 
 中文:
-定理 Adj.symm
-  条件: {G' : Subgraph G} {u v : V} (h : G'.Adj u v)
-  结论: G'.Adj v u
+定理 伴随.symm
+  条件: {G' : 子图 G} {u v : V} (h : G'.伴随 u v)
+  结论: G'.伴随 v u
   证明: G'.adj_symm h
 
 @[grind ->]
@@ -267,9 +267,9 @@ theorem Adj.adj_sub
   proof: H.adj_sub h
 
 中文:
-定理 Adj.adj_sub
-  条件: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  结论: G.Adj u v
+定理 伴随.adj_sub
+  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
+  结论: G.伴随 u v
   证明: H.adj_sub h
 -/
 protected theorem Adj.adj_sub {H : G.Subgraph} {u v : V} (h : H.Adj u v) : G.Adj u v :=
@@ -285,8 +285,8 @@ theorem Adj.fst_mem
   proof: H.edge_vert h
 
 中文:
-定理 Adj.fst_mem
-  条件: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
+定理 伴随.fst_mem
+  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
   结论: u in H.verts
   证明: H.edge_vert h
 -/
@@ -303,8 +303,8 @@ theorem Adj.snd_mem
   proof: h.symm.fst_mem
 
 中文:
-定理 Adj.snd_mem
-  条件: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
+定理 伴随.snd_mem
+  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
   结论: v in H.verts
   证明: h.symm.fst_mem
 -/
@@ -321,8 +321,8 @@ theorem Adj.ne
   proof: h.adj_sub.ne
 
 中文:
-定理 Adj.ne
-  条件: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
+定理 伴随.ne
+  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
   结论: u != v
   证明: h.adj_sub.ne
 -/
@@ -343,7 +343,7 @@ theorem adj_congr_of_sym2
 
 中文:
 定理 adj_congr_of_sym2
-  条件: {H : G.Subgraph} {u v w x : V} (h2 : s(u, v) = s(w, x))
+  条件: {H : G.子图} {u v w x : V} (h2 : s(u, v) = s(w, x))
   证明: by
   simp only [Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk] at h2
   rcases h2 with hl | hr
@@ -375,7 +375,7 @@ definition coe
 
 中文:
 定义 coe
-  签名: (G' : Subgraph G)
+  签名: (G' : 子图 G)
   定义体: G'.Adj v w
   symm := G'.symm.comap Subtype.val
   loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
@@ -398,9 +398,9 @@ theorem Adj.adj_sub'
   proof: G'.adj_sub h
 
 中文:
-定理 Adj.adj_sub'
-  条件: (G' : Subgraph G) (u v : G'.verts) (h : G'.Adj u v)
-  结论: G.Adj u v
+定理 伴随.adj_sub'
+  条件: (G' : 子图 G) (u v : G'.verts) (h : G'.伴随 u v)
+  结论: G.伴随 u v
   证明: G'.adj_sub h
 
 Depends on / 依赖: adj_sub
@@ -419,8 +419,8 @@ theorem coe_adj_sub
 
 中文:
 定理 coe_adj_sub
-  条件: (G' : Subgraph G) (u v : G'.verts) (h : G'.coe.Adj u v)
-  结论: G.Adj u v
+  条件: (G' : 子图 G) (u v : G'.verts) (h : G'.coe.伴随 u v)
+  结论: G.伴随 u v
   证明: G'.adj_sub h
 
 Depends on / 依赖: adj_sub
@@ -438,8 +438,8 @@ theorem Adj.coe
   proof: h
 
 中文:
-定理 Adj.coe
-  条件: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
+定理 伴随.coe
+  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
   证明: h
 -/
 protected theorem Adj.coe {H : G.Subgraph} {u v : V} (h : H.Adj u v) :
@@ -458,7 +458,7 @@ definition IsSpanning
 
 中文:
 定义 IsSpanning
-  签名: (G' : Subgraph G)
+  签名: (G' : 子图 G)
   定义体: forall v : V, v in G'.verts
 -/
 def IsSpanning (G' : Subgraph G) : Prop :=
@@ -477,8 +477,8 @@ protected alias ⟨IsSpanning.verts_eq_univ, _⟩ := isSpanning_iff
 
 中文:
 定理 isSpanning_iff
-  条件: {G' : Subgraph G}
-  结论: G'.IsSpanning ↔ G'.verts = Set.univ
+  条件: {G' : 子图 G}
+  结论: G'.IsSpanning ↔ G'.verts = 集合.univ
   证明: Set.eq_univ_iff_forall.symm
 
 protected alias ⟨IsSpanning.verts_eq_univ, _⟩ := isSpanning_iff
@@ -506,7 +506,7 @@ definition spanningCoe
 
 中文:
 定义 spanningCoe
-  签名: (G' : Subgraph G)
+  签名: (G' : 子图 G)
   定义体: G'.Adj
   symm := G'.symm
   loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
@@ -533,7 +533,7 @@ lemma spanningCoe_coe
 
 中文:
 引理 spanningCoe_coe
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   结论: G'.coe.spanningCoe = G'.spanningCoe
   证明: by
   ext
@@ -556,8 +556,8 @@ theorem Adj.of_spanningCoe
   proof: G'.adj_sub h
 
 中文:
-定理 Adj.of_spanningCoe
-  条件: {G' : Subgraph G} {u v : G'.verts} (h : G'.spanningCoe.Adj u v)
+定理 伴随.of_spanningCoe
+  条件: {G' : 子图 G} {u v : G'.verts} (h : G'.spanningCoe.伴随 u v)
   证明: G'.adj_sub h
 
 Depends on / 依赖: adj_sub
@@ -577,7 +577,7 @@ lemma spanningCoe_le
 
 中文:
 引理 spanningCoe_le
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   结论: G'.spanningCoe <= G
   证明: fun _ _ => G'.3
 -/
@@ -594,7 +594,7 @@ theorem spanningCoe_inj
 
 中文:
 定理 spanningCoe_inj
-  结论: G₁.spanningCoe = G₂.spanningCoe ↔ G₁.Adj = G₂.Adj
+  结论: G₁.spanningCoe = G₂.spanningCoe ↔ G₁.伴随 = G₂.伴随
   证明: by
   simp [Subgraph.spanningCoe]
 
@@ -615,7 +615,7 @@ lemma mem_of_adj_spanningCoe
 
 中文:
 引理 mem_of_adj_spanningCoe
-  结论: {v w : V} {s : Set V} (G : SimpleGraph s)
+  结论: {v w : V} {s : 集合 V} (G : 简单图 s)
   证明: by aesop
 
 @[simp]
@@ -636,7 +636,7 @@ lemma spanningCoe_subgraphOfAdj
 
 中文:
 引理 spanningCoe_subgraphOfAdj
-  条件: {v w : V} (hadj : G.Adj v w)
+  条件: {v w : V} (hadj : G.伴随 v w)
   证明: by
   ext v w
   aesop
@@ -660,7 +660,7 @@ definition coeEmbeddingSpanningCoe
 
 中文:
 定义 coeEmbeddingSpanningCoe
-  签名: (G' : Subgraph G)
+  签名: (G' : 子图 G)
   定义体: Subtype.val
   inj' := Subtype.val_injective
   map_rel_iff' := .rfl
@@ -686,7 +686,7 @@ definition spanningCoeEquivCoeOfSpanning
 
 中文:
 定义 spanningCoeEquivCoeOfSpanning
-  签名: (G' : Subgraph G) (h : G'.IsSpanning)
+  签名: (G' : 子图 G) (h : G'.IsSpanning)
   定义体: ⟨v, h v⟩
   invFun v := v
   map_rel_iff' := Iff.rfl
@@ -706,8 +706,8 @@ definition IsInduced
   body: forall ⦃v⦄, v in G'.verts -> forall ⦃w⦄, w in G'.verts -> G.Adj v w -> G'.Adj v w
 
 中文:
-定义 IsInduced
-  签名: (G' : Subgraph G)
+定义 是Induced
+  签名: (G' : 子图 G)
   定义体: forall ⦃v⦄, v in G'.verts -> forall ⦃w⦄, w in G'.verts -> G.Adj v w -> G'.Adj v w
 
 Depends on / 依赖: G.Adj
@@ -724,8 +724,8 @@ lemma IsInduced.adj
   proof: ⟨coe_adj_sub _ _ _, hG' a.2 b.2⟩
 
 中文:
-引理 IsInduced.adj
-  条件: {G' : G.Subgraph} (hG' : G'.IsInduced) {a b : G'.verts}
+引理 是Induced.adj
+  条件: {G' : G.子图} (hG' : G'.是Induced) {a b : G'.verts}
   证明: ⟨coe_adj_sub _ _ _, hG' a.2 b.2⟩
 -/
 @[simp] protected lemma IsInduced.adj {G' : G.Subgraph} (hG' : G'.IsInduced) {a b : G'.verts} :
@@ -742,7 +742,7 @@ definition support
 
 中文:
 定义 support
-  签名: (H : Subgraph G)
+  签名: (H : 子图 G)
   定义体: SetRel.dom {(v, w) | H.Adj v w}
 
 Depends on / 依赖: H.Adj, SetRel, SetRel.dom
@@ -760,8 +760,8 @@ theorem mem_support
 
 中文:
 定理 mem_support
-  条件: (H : Subgraph G) {v : V}
-  结论: v in H.support ↔ 存在 w, H.Adj v w
+  条件: (H : 子图 G) {v : V}
+  结论: v in H.support ↔ 存在 w, H.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -779,7 +779,7 @@ theorem support_subset_verts
 
 中文:
 定理 support_subset_verts
-  条件: (H : Subgraph G)
+  条件: (H : 子图 G)
   结论: H.support subseteq H.verts
   证明: fun _ ⟨_, h⟩ => H.edge_vert h
 
@@ -798,7 +798,7 @@ definition neighborSet
 
 中文:
 定义 neighborSet
-  签名: (G' : Subgraph G) (v : V)
+  签名: (G' : 子图 G) (v : V)
   定义体: {w | G'.Adj v w}
 -/
 def neighborSet (G' : Subgraph G) (v : V) : Set V := {w | G'.Adj v w}
@@ -814,7 +814,7 @@ theorem neighborSet_subset
 
 中文:
 定理 neighborSet_subset
-  条件: (G' : Subgraph G) (v : V)
+  条件: (G' : 子图 G) (v : V)
   结论: G'.neighborSet v subseteq G.neighborSet v
   证明: fun _ => G'.adj_sub
 
@@ -836,7 +836,7 @@ theorem neighborSet_subset_verts
 
 中文:
 定理 neighborSet_subset_verts
-  条件: (G' : Subgraph G) (v : V)
+  条件: (G' : 子图 G) (v : V)
   结论: G'.neighborSet v subseteq G'.verts
   证明: fun _ h => G'.edge_vert (adj_symm G' h)
 
@@ -859,8 +859,8 @@ theorem mem_neighborSet
 
 中文:
 定理 mem_neighborSet
-  条件: (G' : Subgraph G) (v w : V)
-  结论: w in G'.neighborSet v ↔ G'.Adj v w
+  条件: (G' : 子图 G) (v w : V)
+  结论: w in G'.neighborSet v ↔ G'.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -878,7 +878,7 @@ definition coeNeighborSetEquiv
 
 中文:
 定义 coeNeighborSetEquiv
-  签名: {G' : Subgraph G} (v : G'.verts)
+  签名: {G' : 子图 G} (v : G'.verts)
   定义体: ⟨w, w.2⟩
   invFun w := ⟨⟨w, G'.edge_vert (G'.adj_symm w.2)⟩, w.2⟩
 -/
@@ -897,7 +897,7 @@ definition edgeSet
 
 中文:
 定义 edgeSet
-  签名: (G' : Subgraph G)
+  签名: (G' : 子图 G)
   定义体: Sym2.fromRel G'.symm
 
 Depends on / 依赖: Sym2.fromRel, fromRel
@@ -917,7 +917,7 @@ theorem edgeSet_subset
 
 中文:
 定理 edgeSet_subset
-  条件: (G' : Subgraph G)
+  条件: (G' : 子图 G)
   结论: G'.edgeSet subseteq G.edgeSet
   证明: Sym2.ind (fun _ _ => G'.adj_sub)
 
@@ -940,8 +940,8 @@ lemma mem_edgeSet
 
 中文:
 引理 mem_edgeSet
-  条件: {G' : Subgraph G} {v w : V}
-  结论: s(v, w) in G'.edgeSet ↔ G'.Adj v w
+  条件: {G' : 子图 G} {v w : V}
+  结论: s(v, w) in G'.edgeSet ↔ G'.伴随 v w
   证明: .rfl
 -/
 protected lemma mem_edgeSet {G' : Subgraph G} {v w : V} : s(v, w) in G'.edgeSet ↔ G'.Adj v w := .rfl
@@ -958,7 +958,7 @@ lemma edgeSet_coe
 
 中文:
 引理 edgeSet_coe
-  条件: {G' : G.Subgraph}
+  条件: {G' : G.子图}
   结论: G'.coe.edgeSet = Sym2.map (↑) ⁻¹' G'.edgeSet
   证明: by
   ext e; induction e using Sym2.ind; simp
@@ -984,7 +984,7 @@ lemma image_coe_edgeSet_coe
 
 中文:
 引理 image_coe_edgeSet_coe
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   结论: Sym2.map (↑) '' G'.coe.edgeSet = G'.edgeSet
   证明: by
   rw [edgeSet_coe]; rw [Set.image_preimage_eq_iff]
@@ -1017,7 +1017,7 @@ lemma edgeSet_spanningCoe
 
 中文:
 引理 edgeSet_spanningCoe
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   结论: G'.spanningCoe.edgeSet = G'.edgeSet
   证明: by
   rfl
@@ -1039,7 +1039,7 @@ theorem mem_verts_of_mem_edge
 
 中文:
 定理 mem_verts_of_mem_edge
-  结论: {G' : Subgraph G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet)
+  结论: {G' : 子图 G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet)
   证明: by
   induction e
   rcases Sym2.mem_iff.mp hv with (rfl | rfl)
@@ -1065,7 +1065,7 @@ definition incidenceSet
 
 中文:
 定义 incidenceSet
-  签名: (G' : Subgraph G) (v : V)
+  签名: (G' : 子图 G) (v : V)
   定义体: {e in G'.edgeSet | v in e}
 
 Depends on / 依赖: edgeSet
@@ -1082,7 +1082,7 @@ theorem incidenceSet_subset_incidenceSet
 
 中文:
 定理 incidenceSet_subset_incidenceSet
-  条件: (G' : Subgraph G) (v : V)
+  条件: (G' : 子图 G) (v : V)
   证明: fun _ h => ⟨G'.edgeSet_subset h.1, h.2⟩
 
 Depends on / 依赖: edgeSet_subset
@@ -1102,7 +1102,7 @@ theorem incidenceSet_subset
 
 中文:
 定理 incidenceSet_subset
-  条件: (G' : Subgraph G) (v : V)
+  条件: (G' : 子图 G) (v : V)
   结论: G'.incidenceSet v subseteq G'.edgeSet
   证明: fun _ h => h.1
 -/
@@ -1119,7 +1119,7 @@ abbreviation vert
 
 中文:
 缩写 vert
-  签名: (G' : Subgraph G) (v : V) (h : v in G'.verts)
+  签名: (G' : 子图 G) (v : V) (h : v in G'.verts)
   定义体: ⟨v, h⟩
 -/
 abbrev vert (G' : Subgraph G) (v : V) (h : v in G'.verts) : G'.verts := ⟨v, h⟩
@@ -1138,7 +1138,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
+  签名: (G' : 子图 G) (V'' : 集合 V) (hV : V'' = G'.verts)
   定义体: V''
   Adj := adj'
   adj_sub := hadj.symm ▸ G'.adj_sub
@@ -1163,7 +1163,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  结论: (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
+  结论: (G' : 子图 G) (V'' : 集合 V) (hV : V'' = G'.verts)
   证明: Subgraph.ext hV hadj
 
 Depends on / 依赖: Subgraph, Subgraph.ext
@@ -1186,7 +1186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max G.Subgraph
+  签名: 最大值 G.子图
   定义体: { verts := G₁.verts union G₂.verts
       Adj := G₁.Adj ⊔ G₂.Adj
       adj_sub := fun hab => Or.elim hab (fun h => G₁.adj_sub h) fun h => G₂.adj_sub h
@@ -1217,7 +1217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min G.Subgraph
+  签名: 最小值 G.子图
   定义体: { verts := G₁.verts inter G₂.verts
       Adj := G₁.Adj ⊓ G₂.Adj
       adj_sub := fun hab => G₁.adj_sub hab.1
@@ -1248,7 +1248,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top G.Subgraph
+  签名: 顶元素 G.子图
   定义体: Set.univ
   top.Adj := G.Adj
   top.adj_sub := id
@@ -1277,7 +1277,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot G.Subgraph
+  签名: 底元素 G.子图
   定义体: ∅
   bot.Adj := ⊥
   bot.adj_sub := False.elim
@@ -1307,7 +1307,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet G.Subgraph
+  签名: 上确界集 G.子图
   定义体: { verts := ⋃ G' in s, verts G'
       Adj := fun a b => exists G' in s, Adj G' a b
       adj_sub := by
@@ -1348,7 +1348,7 @@ edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.
 
 中文:
 实例 :
-  签名: InfSet G.Subgraph
+  签名: 下确界集 G.子图
   定义体: { verts := ⋂ G' in s, verts G'
       Adj := fun a b => (forall ⦃G'⦄, G' in s -> Adj G' a b) ∧ G.Adj a b
       adj_sub := And.right
@@ -1380,7 +1380,7 @@ theorem sup_adj
 
 中文:
 定理 sup_adj
-  结论: (G₁ ⊔ G₂).Adj a b ↔ G₁.Adj a b ∨ G₂.Adj a b
+  结论: (G₁ ⊔ G₂).伴随 a b ↔ G₁.伴随 a b ∨ G₂.伴随 a b
   证明: Iff.rfl
 
 @[simp]
@@ -1403,7 +1403,7 @@ theorem inf_adj
 
 中文:
 定理 inf_adj
-  结论: (G₁ ⊓ G₂).Adj a b ↔ G₁.Adj a b ∧ G₂.Adj a b
+  结论: (G₁ ⊓ G₂).伴随 a b ↔ G₁.伴随 a b ∧ G₂.伴随 a b
   证明: Iff.rfl
 
 @[simp]
@@ -1426,7 +1426,7 @@ theorem top_adj
 
 中文:
 定理 top_adj
-  结论: (⊤ : Subgraph G).Adj a b ↔ G.Adj a b
+  结论: (⊤ : 子图 G).伴随 a b ↔ G.伴随 a b
   证明: Iff.rfl
 
 @[simp]
@@ -1449,7 +1449,7 @@ theorem not_bot_adj
 
 中文:
 定理 not_bot_adj
-  结论: ¬ (⊥ : Subgraph G).Adj a b
+  结论: ¬ (⊥ : 子图 G).伴随 a b
   证明: not_false
 
 @[simp]
@@ -1473,7 +1473,7 @@ theorem verts_sup
 
 中文:
 定理 verts_sup
-  条件: (G₁ G₂ : G.Subgraph)
+  条件: (G₁ G₂ : G.子图)
   结论: (G₁ ⊔ G₂).verts = G₁.verts union G₂.verts
   证明: rfl
 
@@ -1496,7 +1496,7 @@ theorem verts_inf
 
 中文:
 定理 verts_inf
-  条件: (G₁ G₂ : G.Subgraph)
+  条件: (G₁ G₂ : G.子图)
   结论: (G₁ ⊓ G₂).verts = G₁.verts inter G₂.verts
   证明: rfl
 
@@ -1518,7 +1518,7 @@ theorem verts_top
 
 中文:
 定理 verts_top
-  结论: (⊤ : G.Subgraph).verts = Set.univ
+  结论: (⊤ : G.子图).verts = 集合.univ
   证明: rfl
 
 @[simp]
@@ -1537,7 +1537,7 @@ theorem verts_bot
 
 中文:
 定理 verts_bot
-  结论: (⊥ : G.Subgraph).verts = ∅
+  结论: (⊥ : G.子图).verts = ∅
   证明: rfl
 -/
 theorem verts_bot : (⊥ : G.Subgraph).verts = ∅ :=
@@ -1555,7 +1555,7 @@ theorem eq_bot_iff_verts_eq_empty
 
 中文:
 定理 eq_bot_iff_verts_eq_empty
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   结论: G' = ⊥ ↔ G'.verts = ∅
   证明: ⟨(· ▸ verts_bot), fun h => Subgraph.ext (h ▸ verts_bot (G := G))
     funext₂ fun _ _ => propext ⟨fun h' => (h ▸ h'.fst_mem :), False.elim⟩⟩
@@ -1579,8 +1579,8 @@ theorem ne_bot_iff_nonempty_verts
 
 中文:
 定理 ne_bot_iff_nonempty_verts
-  条件: (G' : G.Subgraph)
-  结论: G' != ⊥ ↔ G'.verts.Nonempty
+  条件: (G' : G.子图)
+  结论: G' != ⊥ ↔ G'.verts.非空
   证明: G'.eq_bot_iff_verts_eq_empty.not.trans Set.nonempty_iff_ne_empty.symm
 
 @[simp]
@@ -1604,8 +1604,8 @@ theorem sSup_adj
 
 中文:
 定理 sSup_adj
-  条件: {s : Set G.Subgraph}
-  结论: (sSup s).Adj a b ↔ 存在 G in s, Adj G a b
+  条件: {s : 集合 G.子图}
+  结论: (sSup s).伴随 a b ↔ 存在 G in s, 伴随 G a b
   证明: Iff.rfl
 
 @[simp]
@@ -1629,8 +1629,8 @@ theorem sInf_adj
 
 中文:
 定理 sInf_adj
-  条件: {s : Set G.Subgraph}
-  结论: (sInf s).Adj a b ↔ (对任意 G' in s, Adj G' a b) ∧ G.Adj a b
+  条件: {s : 集合 G.子图}
+  结论: (sInf s).伴随 a b ↔ (对任意 G' in s, 伴随 G' a b) ∧ G.伴随 a b
   证明: Iff.rfl
 
 @[simp]
@@ -1655,8 +1655,8 @@ theorem iSup_adj
 
 中文:
 定理 iSup_adj
-  条件: {f : ι -> G.Subgraph}
-  结论: (⨆ i, f i).Adj a b ↔ 存在 i, (f i).Adj a b
+  条件: {f : ι -> G.子图}
+  结论: (⨆ i, f i).伴随 a b ↔ 存在 i, (f i).伴随 a b
   证明: by
   simp [iSup]
 
@@ -1678,8 +1678,8 @@ theorem iInf_adj
 
 中文:
 定理 iInf_adj
-  条件: {f : ι -> G.Subgraph}
-  结论: (⨅ i, f i).Adj a b ↔ (对任意 i, (f i).Adj a b) ∧ G.Adj a b
+  条件: {f : ι -> G.子图}
+  结论: (⨅ i, f i).伴随 a b ↔ (对任意 i, (f i).伴随 a b) ∧ G.伴随 a b
   证明: by
   simp [iInf]
 
@@ -1701,7 +1701,7 @@ and_iff_left_of_imp by
 
 中文:
 定理 sInf_adj_of_nonempty
-  条件: {s : Set G.Subgraph} (hs : s.Nonempty)
+  条件: {s : 集合 G.子图} (hs : s.非空)
   证明: sInf_adj.trans
 and_iff_left_of_imp by
       obtain ⟨G', hG'⟩ := hs
@@ -1730,7 +1730,7 @@ theorem iInf_adj_of_nonempty
 
 中文:
 定理 iInf_adj_of_nonempty
-  条件: [Nonempty ι] {f : ι -> G.Subgraph}
+  条件: [非空 ι] {f : ι -> G.子图}
   证明: by
   rw [iInf]; rw [sInf_adj_of_nonempty (Set.range_nonempty _)]
   simp
@@ -1758,7 +1758,7 @@ theorem verts_sSup
 
 中文:
 定理 verts_sSup
-  条件: (s : Set G.Subgraph)
+  条件: (s : 集合 G.子图)
   结论: (sSup s).verts = ⋃ G' in s, verts G'
   证明: rfl
 
@@ -1781,7 +1781,7 @@ theorem verts_sInf
 
 中文:
 定理 verts_sInf
-  条件: (s : Set G.Subgraph)
+  条件: (s : 集合 G.子图)
   结论: (sInf s).verts = ⋂ G' in s, verts G'
   证明: rfl
 
@@ -1806,7 +1806,7 @@ theorem verts_iSup
 
 中文:
 定理 verts_iSup
-  条件: {f : ι -> G.Subgraph}
+  条件: {f : ι -> G.子图}
   结论: (⨆ i, f i).verts = ⋃ i, (f i).verts
   证明: by simp [iSup]
 
@@ -1826,7 +1826,7 @@ theorem verts_iInf
 
 中文:
 定理 verts_iInf
-  条件: {f : ι -> G.Subgraph}
+  条件: {f : ι -> G.子图}
   结论: (⨅ i, f i).verts = ⋂ i, (f i).verts
   证明: by simp [iInf]
 
@@ -1844,7 +1844,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (⊥ : G.Subgraph).coe = ⊥
+  结论: (⊥ : G.子图).coe = ⊥
   证明: rfl
 -/
 @[simp] lemma coe_bot : (⊥ : G.Subgraph).coe = ⊥ := rfl
@@ -1858,8 +1858,8 @@ lemma IsInduced.top
   proof: fun _ _ _ _ => id
 
 中文:
-引理 IsInduced.top
-  结论: (⊤ : G.Subgraph).IsInduced
+引理 是Induced.top
+  结论: (⊤ : G.子图).是Induced
   证明: fun _ _ _ _ => id
 
 Depends on / 依赖: _mem
@@ -1879,7 +1879,7 @@ definition topIso
 
 中文:
 定义 topIso
-  签名: : (⊤ : G.Subgraph).coe ≃g G where
+  签名: : (⊤ : G.子图).coe ≃g G where
   定义体: (↑)
   invFun a := ⟨a, Set.mem_univ _⟩
   left_inv _ := Subtype.eta ..
@@ -1927,7 +1927,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder G.Subgraph
+  签名: 偏序 G.子图
   定义体: PartialOrder.lift _ verts_spanningCoe_injective
   le x y := x.verts subseteq y.verts ∧ forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 
@@ -1947,7 +1947,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: : DistribLattice G.Subgraph
+  签名: : Distrib格 G.子图
   定义体: verts_spanningCoe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: distribLattice, verts_spanningCoe_injective, verts_spanningCoe_injective.distribLattice
@@ -1966,7 +1966,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (Subgraph G)
+  签名: 有界序 (子图 G)
   定义体: ⟨Set.subset_univ _, fun _ _ => x.adj_sub⟩
   bot_le _ := ⟨Set.empty_subset _, fun _ _ => False.elim⟩
 
@@ -1992,7 +1992,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subgraph G)
+  签名: 完备格 (子图 G)
   定义体: ⟨fun G' hG' => ⟨Set.subset_biUnion_of_mem hG', fun _ _ hab => ⟨G', hG', hab⟩⟩,
       fun G' hG' =>
         ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
@@ -2025,7 +2025,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompletelyDistribLattice G.Subgraph
+  签名: 余mpletelyDistrib格 G.子图
   定义体: fast_instance% .ofMinimalAxioms {
     iInf_iSup_eq f := Subgraph.ext (by simpa using! iInf_iSup_eq)
       (by ext; simp [Classical.skolem]) }
@@ -2048,7 +2048,7 @@ lemma verts_mono
 
 中文:
 引理 verts_mono
-  条件: {H H' : G.Subgraph} (h : H <= H')
+  条件: {H H' : G.子图} (h : H <= H')
   结论: H.verts subseteq H'.verts
   证明: h.1
 
@@ -2067,7 +2067,7 @@ lemma verts_monotone
 
 中文:
 引理 verts_monotone
-  结论: Monotone (verts : G.Subgraph -> Set V)
+  结论: 递增 (verts : G.子图 -> 集合 V)
   证明: fun _ _ h => h.1
 
 @[simps]
@@ -2089,7 +2089,7 @@ instance subgraphInhabited
 
 中文:
 实例 subgraphInhabited
-  签名: : Inhabited (Subgraph G)
+  签名: : 可居 (子图 G)
   定义体: ⟨⊥⟩
 
 @[simp]
@@ -2111,7 +2111,7 @@ theorem neighborSet_sup
 
 中文:
 定理 neighborSet_sup
-  条件: {H H' : G.Subgraph} (v : V)
+  条件: {H H' : G.子图} (v : V)
   证明: rfl
 
 @[simp]
@@ -2134,7 +2134,7 @@ theorem neighborSet_inf
 
 中文:
 定理 neighborSet_inf
-  条件: {H H' : G.Subgraph} (v : V)
+  条件: {H H' : G.子图} (v : V)
   证明: rfl
 
 @[simp]
@@ -2159,7 +2159,7 @@ theorem neighborSet_top
 中文:
 定理 neighborSet_top
   条件: (v : V)
-  结论: (⊤ : G.Subgraph).neighborSet v = G.neighborSet v
+  结论: (⊤ : G.子图).neighborSet v = G.neighborSet v
   证明: rfl
 
 @[simp]
@@ -2183,7 +2183,7 @@ theorem neighborSet_bot
 中文:
 定理 neighborSet_bot
   条件: (v : V)
-  结论: (⊥ : G.Subgraph).neighborSet v = ∅
+  结论: (⊥ : G.子图).neighborSet v = ∅
   证明: rfl
 
 @[simp]
@@ -2207,7 +2207,7 @@ theorem neighborSet_sSup
 
 中文:
 定理 neighborSet_sSup
-  条件: (s : Set G.Subgraph) (v : V)
+  条件: (s : 集合 G.子图) (v : V)
   证明: by
   ext
   simp
@@ -2234,7 +2234,7 @@ theorem neighborSet_sInf
 
 中文:
 定理 neighborSet_sInf
-  条件: (s : Set G.Subgraph) (v : V)
+  条件: (s : 集合 G.子图) (v : V)
   证明: by
   ext
   simp
@@ -2259,7 +2259,7 @@ theorem neighborSet_iSup
 
 中文:
 定理 neighborSet_iSup
-  条件: (f : ι -> G.Subgraph) (v : V)
+  条件: (f : ι -> G.子图) (v : V)
   证明: by simp [iSup]
 
 @[simp]
@@ -2280,7 +2280,7 @@ theorem neighborSet_iInf
 
 中文:
 定理 neighborSet_iInf
-  条件: (f : ι -> G.Subgraph) (v : V)
+  条件: (f : ι -> G.子图) (v : V)
   证明: by simp [iInf]
 
 @[simp]
@@ -2301,7 +2301,7 @@ theorem edgeSet_top
 
 中文:
 定理 edgeSet_top
-  结论: (⊤ : Subgraph G).edgeSet = G.edgeSet
+  结论: (⊤ : 子图 G).edgeSet = G.edgeSet
   证明: rfl
 
 @[simp]
@@ -2321,7 +2321,7 @@ theorem edgeSet_bot
 
 中文:
 定理 edgeSet_bot
-  结论: (⊥ : Subgraph G).edgeSet = ∅
+  结论: (⊥ : 子图 G).edgeSet = ∅
   证明: Set.ext Sym2.ind (by simp)
 
 @[simp]
@@ -2345,7 +2345,7 @@ theorem edgeSet_inf
 
 中文:
 定理 edgeSet_inf
-  条件: {H₁ H₂ : Subgraph G}
+  条件: {H₁ H₂ : 子图 G}
   结论: (H₁ ⊓ H₂).edgeSet = H₁.edgeSet inter H₂.edgeSet
   证明: Set.ext Sym2.ind (by simp)
 
@@ -2370,7 +2370,7 @@ theorem edgeSet_sup
 
 中文:
 定理 edgeSet_sup
-  条件: {H₁ H₂ : Subgraph G}
+  条件: {H₁ H₂ : 子图 G}
   结论: (H₁ ⊔ H₂).edgeSet = H₁.edgeSet union H₂.edgeSet
   证明: Set.ext Sym2.ind (by simp)
 
@@ -2398,7 +2398,7 @@ theorem edgeSet_sSup
 
 中文:
 定理 edgeSet_sSup
-  条件: (s : Set G.Subgraph)
+  条件: (s : 集合 G.子图)
   结论: (sSup s).edgeSet = ⋃ G' in s, edgeSet G'
   证明: by
   ext e
@@ -2430,7 +2430,7 @@ theorem edgeSet_sInf
 
 中文:
 定理 edgeSet_sInf
-  条件: (s : Set G.Subgraph)
+  条件: (s : 集合 G.子图)
   证明: by
   ext e
   induction e
@@ -2459,7 +2459,7 @@ theorem edgeSet_iSup
 
 中文:
 定理 edgeSet_iSup
-  条件: (f : ι -> G.Subgraph)
+  条件: (f : ι -> G.子图)
   证明: by simp [iSup]
 
 @[simp]
@@ -2481,7 +2481,7 @@ theorem edgeSet_iInf
 
 中文:
 定理 edgeSet_iInf
-  条件: (f : ι -> G.Subgraph)
+  条件: (f : ι -> G.子图)
   证明: by
   simp [iInf]
 
@@ -2504,7 +2504,7 @@ theorem spanningCoe_top
 
 中文:
 定理 spanningCoe_top
-  结论: (⊤ : Subgraph G).spanningCoe = G
+  结论: (⊤ : 子图 G).spanningCoe = G
   证明: rfl
 
 @[simp]
@@ -2522,7 +2522,7 @@ theorem spanningCoe_bot
 
 中文:
 定理 spanningCoe_bot
-  结论: (⊥ : Subgraph G).spanningCoe = ⊥
+  结论: (⊥ : 子图 G).spanningCoe = ⊥
   证明: rfl
 
 Depends on / 依赖: _of_mem_erase_max, lt_max
@@ -2544,8 +2544,8 @@ definition _root_.SimpleGraph.toSubgraph
   symm := H.symm
 
 中文:
-定义 _root_.SimpleGraph.toSubgraph
-  签名: (H : SimpleGraph V) (h : H <= G)
+定义 _root_.简单图.toSubgraph
+  签名: (H : 简单图 V) (h : H <= G)
   定义体: Set.univ
   Adj := H.Adj
   adj_sub e := h e
@@ -2572,7 +2572,7 @@ theorem support_mono
 
 中文:
 定理 support_mono
-  条件: {H H' : Subgraph G} (h : H <= H')
+  条件: {H H' : 子图 G} (h : H <= H')
   结论: H.support subseteq H'.support
   证明: SetRel.dom_mono fun _ hvw => h.2 hvw
 
@@ -2590,8 +2590,8 @@ theorem _root_.SimpleGraph.toSubgraph.isSpanning
   proof: Set.mem_univ
 
 中文:
-定理 _root_.SimpleGraph.toSubgraph.isSpanning
-  条件: (H : SimpleGraph V) (h : H <= G)
+定理 _root_.简单图.toSubgraph.isSpanning
+  条件: (H : 简单图 V) (h : H <= G)
   证明: Set.mem_univ
 
 Depends on / 依赖: Set.mem_univ, _comp, _eq_inf, _image, apply_inf, hf.map_min, map_min, mem_univ
@@ -2613,7 +2613,7 @@ theorem spanningCoe_le_of_le
 
 中文:
 定理 spanningCoe_le_of_le
-  条件: {H H' : Subgraph G} (h : H <= H')
+  条件: {H H' : 子图 G} (h : H <= H')
   结论: H.spanningCoe <= H'.spanningCoe
   证明: h.2
 
@@ -2633,7 +2633,7 @@ lemma sup_spanningCoe
 
 中文:
 引理 sup_spanningCoe
-  条件: (H H' : Subgraph G)
+  条件: (H H' : 子图 G)
   证明: rfl
 -/
 lemma sup_spanningCoe (H H' : Subgraph G) :
@@ -2653,7 +2653,7 @@ definition botIso
 
 中文:
 定义 botIso
-  签名: : (⊥ : Subgraph G).coe ≃g emptyGraph Empty where
+  签名: : (⊥ : 子图 G).coe ≃g emptyGraph 空 where
   定义体: v.property.elim
   invFun v := v.elim
   left_inv := fun ⟨_, h⟩ => h.elim
@@ -2680,7 +2680,7 @@ theorem edgeSet_mono
 
 中文:
 定理 edgeSet_mono
-  条件: {H₁ H₂ : Subgraph G} (h : H₁ <= H₂)
+  条件: {H₁ H₂ : 子图 G} (h : H₁ <= H₂)
   结论: H₁.edgeSet <= H₂.edgeSet
   证明: Sym2.ind h.2
 
@@ -2699,7 +2699,7 @@ theorem edgeSet_monotone
 
 中文:
 定理 edgeSet_monotone
-  结论: Monotone (edgeSet (G := G))
+  结论: 递增 (edgeSet (G := G))
   证明: fun _ _ => edgeSet_mono
 -/
 theorem edgeSet_monotone : Monotone (edgeSet (G := G)) :=
@@ -2717,7 +2717,7 @@ theorem _root_.Disjoint.edgeSet
 
 中文:
 定理 _root_.Disjoint.edgeSet
-  条件: {H₁ H₂ : Subgraph G} (h : Disjoint H₁ H₂)
+  条件: {H₁ H₂ : 子图 G} (h : Disjoint H₁ H₂)
   证明: disjoint_iff_inf_le.mpr by simpa using edgeSet_mono h.le_bot
 
 @[simp]
@@ -2747,7 +2747,7 @@ lemma disjoint_verts_iff_disjoint
 
 中文:
 引理 disjoint_verts_iff_disjoint
-  条件: {H H' : Subgraph G}
+  条件: {H H' : 子图 G}
   证明: by
   constructor
   · rintro hdisj M' ⟨hsub₀, _⟩ ⟨hsub₁, _⟩
@@ -2798,7 +2798,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : G ->g G') (H : G.Subgraph)
+  签名: (f : G ->g G') (H : G.子图)
   定义体: f '' H.verts
   Adj := Relation.Map H.Adj f f
   adj_sub := by
@@ -2837,8 +2837,8 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (H : G.Subgraph)
-  结论: H.map Hom.id = H
+  条件: (H : G.子图)
+  结论: H.map 态射.id = H
   证明: by ext <;> simp
 
 Depends on / 依赖: _mem, ne_of_mem_erase
@@ -2855,7 +2855,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {U : 类型} {G'' : SimpleGraph U} (H : G.Subgraph) (f : G ->g G') (g : G' ->g G'')
+  条件: {U : 类型} {G'' : 简单图 U} (H : G.子图) (f : G ->g G') (g : G' ->g G'')
   证明: by ext <;> simp [Subgraph.map]
 
 Depends on / 依赖: Subgraph, Subgraph.map
@@ -2881,7 +2881,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  条件: {H₁ H₂ : G.Subgraph} (hH : H₁ <= H₂)
+  条件: {H₁ H₂ : G.子图} (hH : H₁ <= H₂)
   结论: H₁.map f <= H₂.map f
   证明: by
   constructor
@@ -2911,7 +2911,7 @@ lemma map_monotone
 
 中文:
 引理 map_monotone
-  结论: Monotone (Subgraph.map f)
+  结论: 递增 (子图.map f)
   证明: fun _ _ => map_mono
 
 Depends on / 依赖: map_mono
@@ -2930,7 +2930,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (f : G ->g G') (H₁ H₂ : G.Subgraph)
+  条件: (f : G ->g G') (H₁ H₂ : G.子图)
   结论: (H₁ ⊔ H₂).map f = H₁.map f ⊔ H₂.map f
   证明: by
   ext <;> simp [Set.image_union, map_adj, sup_adj, Relation.Map, or_and_right, exists_or]
@@ -2952,8 +2952,8 @@ lemma map_iso_top
 
 中文:
 引理 map_iso_top
-  条件: {H : SimpleGraph W} (e : G ≃g H)
-  结论: Subgraph.map e.toHom ⊤ = ⊤
+  条件: {H : 简单图 W} (e : G ≃g H)
+  结论: 子图.map e.toHom ⊤ = ⊤
   证明: by
   ext <;> simp [Relation.Map, ← e.eq_symm_apply, ← e.map_rel_iff]
 -/
@@ -2970,7 +2970,7 @@ lemma edgeSet_map
 
 中文:
 引理 edgeSet_map
-  条件: (f : G ->g G') (H : G.Subgraph)
+  条件: (f : G ->g G') (H : G.子图)
   证明: Sym2.fromRel_relationMap ..
 -/
 @[simp] lemma edgeSet_map (f : G ->g G') (H : G.Subgraph) :
@@ -2994,7 +2994,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {G' : SimpleGraph W} (f : G ->g G') (H : G'.Subgraph)
+  签名: {G' : 简单图 W} (f : G ->g G') (H : G'.子图)
   定义体: f ⁻¹' H.verts
   Adj u v := G.Adj u v ∧ H.Adj (f u) (f v)
   adj_sub h := h.1
@@ -3028,8 +3028,8 @@ theorem comap_monotone
 
 中文:
 定理 comap_monotone
-  条件: {G' : SimpleGraph W} (f : G ->g G')
-  结论: Monotone (Subgraph.comap f)
+  条件: {G' : 简单图 W} (f : G ->g G')
+  结论: 递增 (子图.comap f)
   证明: by
   intro H H' h
   constructor
@@ -3066,8 +3066,8 @@ lemma comap_equiv_top
 
 中文:
 引理 comap_equiv_top
-  条件: {H : SimpleGraph W} (f : G ->g H)
-  结论: Subgraph.comap f ⊤ = ⊤
+  条件: {H : 简单图 W} (f : G ->g H)
+  结论: 子图.comap f ⊤ = ⊤
   证明: by
   ext <;> simp +contextual [f.map_adj]
 -/
@@ -3090,7 +3090,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {G' : SimpleGraph W} (f : G ->g G') (H : G.Subgraph) (H' : G'.Subgraph)
+  条件: {G' : 简单图 W} (f : G ->g G') (H : G.子图) (H' : G'.子图)
   证明: by
   refine ⟨fun h => ⟨fun v hv => ?_, fun v w hvw => ?_⟩, fun h => ⟨fun v => ?_, fun v w => ?_⟩⟩
   · simp only [comap_verts, Set.mem_preimage]
@@ -3131,7 +3131,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: V] [Fintype V] [DecidableRel G.Adj] : Fintype G.Subgraph
+  签名: V] [有限类型 V] [DecidableRel G.伴随] : 有限类型 G.子图
   定义体: by
   refine .ofBijective
     (α := {H : Finset V × (V -> V -> Bool) //
@@ -3163,8 +3163,8 @@ instance [Finite
   body: by classical cases nonempty_fintype V; infer_instance
 
 中文:
-实例 [Finite
-  签名: V] : Finite G.Subgraph
+实例 [有限
+  签名: V] : 有限 G.子图
   定义体: by classical cases nonempty_fintype V; infer_instance
 
 Depends on / 依赖: classical, infer_instance, nonempty_fintype
@@ -3185,7 +3185,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {x y : Subgraph G} (h : x <= y)
+  签名: {x y : 子图 G} (h : x <= y)
   定义体: ⟨↑v, And.left h v.property⟩
   map_rel' hvw := h.2 hvw
 
@@ -3206,8 +3206,8 @@ theorem inclusion.injective
 
 中文:
 定理 inclusion.injective
-  条件: {x y : Subgraph G} (h : x <= y)
-  结论: Function.Injective (inclusion h)
+  条件: {x y : 子图 G} (h : x <= y)
+  结论: 函数.单射 (inclusion h)
   证明: fun _ _ h => Subtype.ext congr(Subtype.val $h)
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val
@@ -3228,7 +3228,7 @@ definition hom
 
 中文:
 定义 hom
-  签名: (x : Subgraph G)
+  签名: (x : 子图 G)
   定义体: v
   map_rel' := x.adj_sub
 -/
@@ -3246,7 +3246,7 @@ lemma coe_hom
 
 中文:
 引理 coe_hom
-  条件: (x : Subgraph G)
+  条件: (x : 子图 G)
   证明: rfl
 -/
 @[simp] lemma coe_hom (x : Subgraph G) :
@@ -3263,8 +3263,8 @@ theorem hom_injective
 
 中文:
 定理 hom_injective
-  条件: {x : Subgraph G}
-  结论: Function.Injective x.hom
+  条件: {x : 子图 G}
+  结论: 函数.单射 x.hom
   证明: fun _ _ => Subtype.ext
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -3284,8 +3284,8 @@ lemma map_hom_top
 
 中文:
 引理 map_hom_top
-  条件: (G' : G.Subgraph)
-  结论: Subgraph.map G'.hom ⊤ = G'
+  条件: (G' : G.子图)
+  结论: 子图.map G'.hom ⊤ = G'
   证明: by
   aesop (add unfold safe Relation.Map, unsafe G'.edge_vert, unsafe Adj.symm)
 -/
@@ -3306,7 +3306,7 @@ definition spanningHom
 
 中文:
 定义 spanningHom
-  签名: (x : Subgraph G)
+  签名: (x : 子图 G)
   定义体: id
   map_rel' := x.adj_sub
 -/
@@ -3325,8 +3325,8 @@ theorem spanningHom_injective
 
 中文:
 定理 spanningHom_injective
-  条件: {x : Subgraph G}
-  结论: Function.Injective x.spanningHom
+  条件: {x : 子图 G}
+  结论: 函数.单射 x.spanningHom
   证明: fun _ _ => id
 -/
 theorem spanningHom_injective {x : Subgraph G} : Function.Injective x.spanningHom :=
@@ -3342,7 +3342,7 @@ theorem neighborSet_subset_of_subgraph
 
 中文:
 定理 neighborSet_subset_of_subgraph
-  条件: {x y : Subgraph G} (h : x <= y) (v : V)
+  条件: {x y : 子图 G} (h : x <= y) (v : V)
   证明: fun _ h' => h.2 h'
 -/
 theorem neighborSet_subset_of_subgraph {x y : Subgraph G} (h : x <= y) (v : V) :
@@ -3359,7 +3359,7 @@ instance neighborSet.decidablePred
 
 中文:
 实例 neighborSet.decidablePred
-  签名: (G' : Subgraph G) [h : DecidableRel G'.Adj] (v : V)
+  签名: (G' : 子图 G) [h : DecidableRel G'.伴随] (v : V)
   定义体: h v
 -/
 instance neighborSet.decidablePred (G' : Subgraph G) [h : DecidableRel G'.Adj] (v : V) :
@@ -3376,7 +3376,7 @@ instance finiteAt
 
 中文:
 实例 finiteAt
-  签名: {G' : Subgraph G} (v : G'.verts) [DecidableRel G'.Adj]
+  签名: {G' : 子图 G} (v : G'.verts) [DecidableRel G'.伴随]
   定义体: Set.fintypeSubset (G.neighborSet v) (G'.neighborSet_subset v)
 
 Depends on / 依赖: G.neighborSet, Set.fintypeSubset, fintypeSubset, neighborSet, neighborSet_subset
@@ -3399,7 +3399,7 @@ definition finiteAtOfSubgraph
 
 中文:
 定义 finiteAtOfSubgraph
-  签名: {G' G'' : Subgraph G} [DecidableRel G'.Adj] (h : G' <= G'') (v : G'.verts)
+  签名: {G' G'' : 子图 G} [DecidableRel G'.伴随] (h : G' <= G'') (v : G'.verts)
   定义体: Set.fintypeSubset (G''.neighborSet v) (neighborSet_subset_of_subgraph h v)
 
 Depends on / 依赖: Set.fintypeSubset, fintypeSubset, neighborSet, neighborSet_subset_of_subgraph
@@ -3422,7 +3422,7 @@ instance coeFiniteAt
 
 中文:
 实例 coeFiniteAt
-  签名: {G' : Subgraph G} (v : G'.verts) [Fintype (G'.neighborSet v)]
+  签名: {G' : 子图 G} (v : G'.verts) [有限类型 (G'.neighborSet v)]
   定义体: Fintype.ofEquiv _ (coeNeighborSetEquiv v).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, coeNeighborSetEquiv, ofEquiv
@@ -3443,7 +3443,7 @@ theorem IsSpanning.card_verts
 
 中文:
 定理 IsSpanning.card_verts
-  条件: [Fintype V] {G' : Subgraph G} [Fintype G'.verts] (h : G'.IsSpanning)
+  条件: [有限类型 V] {G' : 子图 G} [有限类型 G'.verts] (h : G'.IsSpanning)
   证明: by
   simp only [isSpanning_iff.1 h, Set.toFinset_univ]
   congr
@@ -3465,7 +3465,7 @@ definition degree
 
 中文:
 定义 degree
-  签名: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
+  签名: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
   定义体: Fintype.card (G'.neighborSet v)
 
 Depends on / 依赖: Fintype, Fintype.card, neighborSet
@@ -3484,7 +3484,7 @@ theorem finset_card_neighborSet_eq_degree
 
 中文:
 定理 finset_card_neighborSet_eq_degree
-  条件: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
+  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
   证明: by
   rw [degree]; rw [Set.toFinset_card]
 
@@ -3508,7 +3508,7 @@ theorem degree_of_notMem_verts
 
 中文:
 定理 degree_of_notMem_verts
-  结论: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
+  结论: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
   证明: by
   rw [degree]; rw [Fintype.card_eq_zero_iff]; rw [isEmpty_subtype]
   intro w
@@ -3536,7 +3536,7 @@ theorem degree_le
 
 中文:
 定理 degree_le
-  结论: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
+  结论: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
   证明: by
   rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card (G'.neighborSet_subset v)
@@ -3560,7 +3560,7 @@ theorem degree_le'
 
 中文:
 定理 degree_le'
-  结论: (G' G'' : Subgraph G) (h : G' <= G'') (v : V) [Fintype (G'.neighborSet v)]
+  结论: (G' G'' : 子图 G) (h : G' <= G'') (v : V) [有限类型 (G'.neighborSet v)]
   证明: Set.card_le_card (neighborSet_subset_of_subgraph h v)
 
 @[simp]
@@ -3586,7 +3586,7 @@ theorem coe_degree
 
 中文:
 定理 coe_degree
-  结论: (G' : Subgraph G) (v : G'.verts) [Fintype (G'.coe.neighborSet v)]
+  结论: (G' : 子图 G) (v : G'.verts) [有限类型 (G'.coe.neighborSet v)]
   证明: by
   rw [← card_neighborSet_eq_degree]
   exact Fintype.card_congr (coeNeighborSetEquiv v)
@@ -3613,7 +3613,7 @@ theorem degree_spanningCoe
 
 中文:
 定理 degree_spanningCoe
-  结论: {G' : G.Subgraph} (v : V) [Fintype (G'.neighborSet v)]
+  结论: {G' : G.子图} (v : V) [有限类型 (G'.neighborSet v)]
   证明: by
   rw [← card_neighborSet_eq_degree]; rw [Subgraph.degree]
   congr!
@@ -3635,8 +3635,8 @@ theorem degree_pos_iff_exists_adj
   simp only [degree, Fintype.card_pos_iff, nonempty_subtype, mem_neighborSet]
 
 中文:
-定理 degree_pos_iff_exists_adj
-  条件: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
+定理 degree_pos_iff_存在_adj
+  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
   证明: by
   simp only [degree, Fintype.card_pos_iff, nonempty_subtype, mem_neighborSet]
 
@@ -3661,7 +3661,7 @@ theorem degree_eq_zero_of_subsingleton
 
 中文:
 定理 degree_eq_zero_of_subsingleton
-  结论: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
+  结论: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
   证明: by
   by_cases hv : v in G'.verts
   · rw [← G'.coe_degree ⟨v, hv⟩]
@@ -3690,8 +3690,8 @@ theorem degree_eq_one_iff_existsUnique_adj
   simp only [Set.mem_toFinset, mem_neighborSet]
 
 中文:
-定理 degree_eq_one_iff_existsUnique_adj
-  条件: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
+定理 degree_eq_one_iff_存在Unique_adj
+  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
   证明: by
   rw [← finset_card_neighborSet_eq_degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
   simp only [Set.mem_toFinset, mem_neighborSet]
@@ -3715,7 +3715,7 @@ theorem nontrivial_verts_of_degree_ne_zero
 
 中文:
 定理 nontrivial_verts_of_degree_ne_zero
-  结论: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
+  结论: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
   证明: by
   by_contra
   simp_all [G'.degree_eq_zero_of_subsingleton v]
@@ -3742,7 +3742,7 @@ refine congrArg _ Finset.eq_of_subset_of_card_le ?_ (Finset.card_eq_of_equiv h).
 
 中文:
 引理 neighborSet_eq_of_equiv
-  结论: {v : V} {H : Subgraph G}
+  结论: {v : V} {H : 子图 G}
   证明: by
   lift H.neighborSet v to Finset V using h.set_finite_iff.mp hfin with s hs
   lift G.neighborSet v to Finset V using hfin with t ht
@@ -3771,7 +3771,7 @@ lemma adj_iff_of_neighborSet_equiv
 
 中文:
 引理 adj_iff_of_neighborSet_equiv
-  结论: {v : V} {H : Subgraph G}
+  结论: {v : V} {H : 子图 G}
   证明: Set.ext_iff.mp (neighborSet_eq_of_equiv h hfin) _
 
 Depends on / 依赖: Set.ext_iff.mp, ext_iff, neighborSet_eq_of_equiv
@@ -3798,7 +3798,7 @@ theorem card_neighborSet_toSubgraph
 
 中文:
 定理 card_neighborSet_toSubgraph
-  结论: (G H : SimpleGraph V) (h : H <= G)
+  结论: (G H : 简单图 V) (h : H <= G)
   证明: by
   refine (Finset.card_eq_of_equiv_fintype ?_).symm
   simp only [mem_neighborFinset]
@@ -3827,7 +3827,7 @@ lemma degree_toSubgraph
 
 中文:
 引理 degree_toSubgraph
-  结论: (G H : SimpleGraph V) (h : H <= G) {v : V}
+  结论: (G H : 简单图 V) (h : H <= G) {v : V}
   证明: by
   simp [Subgraph.degree, card_neighborSet_toSubgraph]
 
@@ -3866,7 +3866,7 @@ theorem singletonSubgraph_le_iff
 
 中文:
 定理 singletonSubgraph_le_iff
-  条件: (v : V) (H : G.Subgraph)
+  条件: (v : V) (H : G.子图)
   证明: by
   refine ⟨fun h => h.1 (Set.mem_singleton v), ?_⟩
   intro h
@@ -3983,7 +3983,7 @@ theorem eq_singletonSubgraph_iff_verts_eq
 
 中文:
 定理 eq_singletonSubgraph_iff_verts_eq
-  条件: (H : G.Subgraph) {v : V}
+  条件: (H : G.子图) {v : V}
   证明: by
   refine ⟨fun h => by rw [h, singletonSubgraph_verts], fun h => ?_⟩
   ext
@@ -4019,7 +4019,7 @@ instance nonempty_subgraphOfAdj_verts
 
 中文:
 实例 nonempty_subgraphOfAdj_verts
-  签名: {v w : V} (hvw : G.Adj v w)
+  签名: {v w : V} (hvw : G.伴随 v w)
   定义体: ⟨⟨v, by simp⟩⟩
 -/
 instance nonempty_subgraphOfAdj_verts {v w : V} (hvw : G.Adj v w) :
@@ -4039,8 +4039,8 @@ theorem subgraphOfAdj_adj_self
 
 中文:
 定理 subgraphOfAdj_adj_self
-  条件: {u v : V} (h : G.Adj u v)
-  结论: (G.subgraphOfAdj h).Adj u v
+  条件: {u v : V} (h : G.伴随 u v)
+  结论: (G.subgraphOfAdj h).伴随 u v
   证明: rfl
 
 @[simp]
@@ -4063,7 +4063,7 @@ theorem edgeSet_subgraphOfAdj
 
 中文:
 定理 edgeSet_subgraphOfAdj
-  条件: {v w : V} (hvw : G.Adj v w)
+  条件: {v w : V} (hvw : G.伴随 v w)
   证明: by
   ext e
   refine e.ind ?_
@@ -4094,7 +4094,7 @@ lemma subgraphOfAdj_le_of_adj
 
 中文:
 引理 subgraphOfAdj_le_of_adj
-  条件: {v w : V} (H : G.Subgraph) (h : H.Adj v w)
+  条件: {v w : V} (H : G.子图) (h : H.伴随 v w)
   证明: by
   constructor
   · grind [subgraphOfAdj_verts, h.fst_mem, h.snd_mem]
@@ -4121,7 +4121,7 @@ theorem subgraphOfAdj_le_iff
 
 中文:
 定理 subgraphOfAdj_le_iff
-  条件: {u v : V} (h : G.Adj u v) (H : G.Subgraph)
+  条件: {u v : V} (h : G.伴随 u v) (H : G.子图)
   证明: ⟨fun hle => hle.right subgraphOfAdj_adj_self h, subgraphOfAdj_le_of_adj H⟩
 
 Depends on / 依赖: hle.right, subgraphOfAdj_adj_self, subgraphOfAdj_le_of_adj
@@ -4143,7 +4143,7 @@ theorem subgraphOfAdj_symm
 
 中文:
 定理 subgraphOfAdj_symm
-  条件: {v w : V} (hvw : G.Adj v w)
+  条件: {v w : V} (hvw : G.伴随 v w)
   证明: by
   ext <;> simp [or_comm, and_comm]
 
@@ -4168,7 +4168,7 @@ theorem map_subgraphOfAdj
 
 中文:
 定理 map_subgraphOfAdj
-  条件: (f : G ->g G') {v w : V} (hvw : G.Adj v w)
+  条件: (f : G ->g G') {v w : V} (hvw : G.伴随 v w)
   证明: by
   ext <;> grind [Subgraph.map_verts, subgraphOfAdj_verts, Relation.Map, Subgraph.map_adj,
     subgraphOfAdj_adj]
@@ -4192,7 +4192,7 @@ theorem neighborSet_subgraphOfAdj_subset
 
 中文:
 定理 neighborSet_subgraphOfAdj_subset
-  条件: {u v w : V} (hvw : G.Adj v w)
+  条件: {u v w : V} (hvw : G.伴随 v w)
   证明: (G.subgraphOfAdj hvw).neighborSet_subset_verts _
 
 @[simp]
@@ -4219,7 +4219,7 @@ theorem neighborSet_fst_subgraphOfAdj
 
 中文:
 定理 neighborSet_fst_subgraphOfAdj
-  条件: {v w : V} (hvw : G.Adj v w)
+  条件: {v w : V} (hvw : G.伴随 v w)
   证明: by
   ext u
   suffices w = u ↔ u = w by simpa [hvw.ne.symm] using this
@@ -4250,7 +4250,7 @@ theorem neighborSet_snd_subgraphOfAdj
 
 中文:
 定理 neighborSet_snd_subgraphOfAdj
-  条件: {v w : V} (hvw : G.Adj v w)
+  条件: {v w : V} (hvw : G.伴随 v w)
   证明: by
   rw [subgraphOfAdj_symm hvw.symm]
   exact neighborSet_fst_subgraphOfAdj hvw.symm
@@ -4277,7 +4277,7 @@ theorem neighborSet_subgraphOfAdj_of_ne_of_ne
 
 中文:
 定理 neighborSet_subgraphOfAdj_of_ne_of_ne
-  结论: {u v w : V} (hvw : G.Adj v w) (hv : u != v)
+  结论: {u v w : V} (hvw : G.伴随 v w) (hv : u != v)
   证明: by
   ext
   simp [hv.symm, hw.symm]
@@ -4300,7 +4300,7 @@ theorem neighborSet_subgraphOfAdj
 
 中文:
 定理 neighborSet_subgraphOfAdj
-  条件: [DecidableEq V] {u v w : V} (hvw : G.Adj v w)
+  条件: [DecidableEq V] {u v w : V} (hvw : G.伴随 v w)
   证明: by
   split_ifs <;> subst_vars <;> simp [*]
 
@@ -4322,7 +4322,7 @@ theorem singletonSubgraph_fst_le_subgraphOfAdj
 
 中文:
 定理 singletonSubgraph_fst_le_subgraphOfAdj
-  条件: {u v : V} {h : G.Adj u v}
+  条件: {u v : V} {h : G.伴随 u v}
   证明: by
   simp
 -/
@@ -4343,7 +4343,7 @@ theorem singletonSubgraph_snd_le_subgraphOfAdj
 
 中文:
 定理 singletonSubgraph_snd_le_subgraphOfAdj
-  条件: {u v : V} {h : G.Adj u v}
+  条件: {u v : V} {h : G.伴随 u v}
   证明: by
   simp
 
@@ -4370,7 +4370,7 @@ lemma support_subgraphOfAdj
 
 中文:
 引理 support_subgraphOfAdj
-  条件: {u v : V} (h : G.Adj u v)
+  条件: {u v : V} (h : G.伴随 u v)
   证明: by
   ext
   rw [Subgraph.mem_support]
@@ -4409,7 +4409,7 @@ abbreviation coeSubgraph
 
 中文:
 缩写 coeSubgraph
-  签名: {G' : G.Subgraph}
+  签名: {G' : G.子图}
   定义体: Subgraph.map G'.hom
 -/
 protected abbrev coeSubgraph {G' : G.Subgraph} : G'.coe.Subgraph -> G.Subgraph :=
@@ -4427,7 +4427,7 @@ abbreviation restrict
 
 中文:
 缩写 restrict
-  签名: {G' : G.Subgraph}
+  签名: {G' : G.子图}
   定义体: Subgraph.comap G'.hom
 
 @[simp]
@@ -4446,7 +4446,7 @@ lemma verts_coeSubgraph
 
 中文:
 引理 verts_coeSubgraph
-  条件: {G' : Subgraph G} (G'' : Subgraph G'.coe)
+  条件: {G' : 子图 G} (G'' : 子图 G'.coe)
   证明: rfl
 -/
 lemma verts_coeSubgraph {G' : Subgraph G} (G'' : Subgraph G'.coe) :
@@ -4463,7 +4463,7 @@ lemma coeSubgraph_adj
 
 中文:
 引理 coeSubgraph_adj
-  条件: {G' : G.Subgraph} (G'' : G'.coe.Subgraph) (v w : V)
+  条件: {G' : G.子图} (G'' : G'.coe.子图) (v w : V)
   证明: by
   simp [Relation.Map]
 
@@ -4484,7 +4484,7 @@ lemma restrict_adj
 
 中文:
 引理 restrict_adj
-  条件: {G' G'' : G.Subgraph} (v w : G'.verts)
+  条件: {G' G'' : G.子图} (v w : G'.verts)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4506,7 +4506,7 @@ theorem restrict_coeSubgraph
 
 中文:
 定理 restrict_coeSubgraph
-  条件: {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
+  条件: {G' : G.子图} (G'' : G'.coe.子图)
   证明: by
   ext
   · simp
@@ -4532,7 +4532,7 @@ theorem coeSubgraph_injective
 
 中文:
 定理 coeSubgraph_injective
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   证明: Function.LeftInverse.injective restrict_coeSubgraph
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, restrict_coeSubgraph
@@ -4555,7 +4555,7 @@ lemma coeSubgraph_le
 
 中文:
 引理 coeSubgraph_le
-  条件: {H : G.Subgraph} (H' : H.coe.Subgraph)
+  条件: {H : G.子图} (H' : H.coe.子图)
   证明: by
   constructor
   · simp
@@ -4587,7 +4587,7 @@ lemma coeSubgraph_restrict_eq
 
 中文:
 引理 coeSubgraph_restrict_eq
-  条件: {H : G.Subgraph} (H' : G.Subgraph)
+  条件: {H : G.子图} (H' : G.子图)
   证明: by
   ext
   · simp
@@ -4624,7 +4624,7 @@ definition deleteEdges
 
 中文:
 定义 deleteEdges
-  签名: (G' : G.Subgraph) (s : Set (Sym2 V))
+  签名: (G' : G.子图) (s : 集合 (Sym2 V))
   定义体: G'.verts
   Adj := G'.Adj \ Sym2.ToRel s
   adj_sub h' := G'.adj_sub h'.1
@@ -4678,7 +4678,7 @@ theorem deleteEdges_adj
 中文:
 定理 deleteEdges_adj
   条件: (v w : V)
-  结论: (G'.deleteEdges s).Adj v w ↔ G'.Adj v w ∧ s(v, w) ∉ s
+  结论: (G'.deleteEdges s).伴随 v w ↔ G'.伴随 v w ∧ s(v, w) ∉ s
   证明: Iff.rfl
 
 @[simp]
@@ -4702,7 +4702,7 @@ theorem deleteEdges_deleteEdges
 
 中文:
 定理 deleteEdges_deleteEdges
-  条件: (s s' : Set (Sym2 V))
+  条件: (s s' : 集合 (Sym2 V))
   证明: by
   ext <;> simp [and_assoc, not_or]
 
@@ -4780,7 +4780,7 @@ theorem deleteEdges_coe_eq
 
 中文:
 定理 deleteEdges_coe_eq
-  条件: (s : Set (Sym2 G'.verts))
+  条件: (s : 集合 (Sym2 G'.verts))
   证明: by
   ext ⟨v, hv⟩ ⟨w, hw⟩
   simp only [SimpleGraph.deleteEdges_adj, coe_adj, deleteEdges_adj, Set.mem_image, not_exists,
@@ -4825,7 +4825,7 @@ theorem coe_deleteEdges_eq
 
 中文:
 定理 coe_deleteEdges_eq
-  条件: (s : Set (Sym2 V))
+  条件: (s : 集合 (Sym2 V))
   证明: by
   ext ⟨v, hv⟩ ⟨w, hw⟩
   simp
@@ -4870,7 +4870,7 @@ theorem deleteEdges_le_of_le
 
 中文:
 定理 deleteEdges_le_of_le
-  条件: {s s' : Set (Sym2 V)} (h : s subseteq s')
+  条件: {s s' : 集合 (Sym2 V)} (h : s subseteq s')
   证明: by
   constructor <;> simp +contextual only [deleteEdges_verts, deleteEdges_adj,
     true_and, and_imp, subset_rfl]
@@ -4943,7 +4943,7 @@ theorem coe_deleteEdges_le
 
 中文:
 定理 coe_deleteEdges_le
-  结论: (G'.deleteEdges s).coe <= (G'.coe : SimpleGraph G'.verts)
+  结论: (G'.deleteEdges s).coe <= (G'.coe : 简单图 G'.verts)
   证明: by
   intro v w
   simp +contextual
@@ -4964,7 +4964,7 @@ theorem spanningCoe_deleteEdges_le
 
 中文:
 定理 spanningCoe_deleteEdges_le
-  条件: (G' : G.Subgraph) (s : Set (Sym2 V))
+  条件: (G' : G.子图) (s : 集合 (Sym2 V))
   证明: spanningCoe_le_of_le (deleteEdges_le s)
 
 Depends on / 依赖: deleteEdges_le, spanningCoe_le_of_le
@@ -4999,7 +4999,7 @@ definition induce
 
 中文:
 定义 induce
-  签名: (G' : G.Subgraph) (s : Set V)
+  签名: (G' : G.子图) (s : 集合 V)
   定义体: s
   Adj u v := u in s ∧ v in s ∧ G'.Adj u v
   adj_sub h := G'.adj_sub h.2.2
@@ -5025,8 +5025,8 @@ theorem _root_.SimpleGraph.induce_eq_coe_induce_top
   simp
 
 中文:
-定理 _root_.SimpleGraph.induce_eq_coe_induce_top
-  条件: (s : Set V)
+定理 _root_.简单图.induce_eq_coe_induce_top
+  条件: (s : 集合 V)
   证明: by
   ext
   simp
@@ -5049,8 +5049,8 @@ lemma _root_.SimpleGraph.spanningCoe_induce_top
   canonicalizer; a minimization w
 
 中文:
-引理 _root_.SimpleGraph.spanningCoe_induce_top
-  条件: (s : Set V)
+引理 _root_.简单图.spanningCoe_induce_top
+  条件: (s : 集合 V)
   证明: by
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
@@ -5085,8 +5085,8 @@ theorem IsInduced.induce_top_verts
     ⟨fun ⟨hu, hv, h'⟩ => h hu hv h', fun h => ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
 
 中文:
-定理 IsInduced.induce_top_verts
-  条件: (h : G'.IsInduced)
+定理 是Induced.induce_top_verts
+  条件: (h : G'.是Induced)
   结论: induce ⊤ G'.verts = G'
   证明: Subgraph.ext rfl funext₂ fun _ _ => propext
     ⟨fun ⟨hu, hv, h'⟩ => h hu hv h', fun h => ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
@@ -5111,8 +5111,8 @@ theorem isInduced_iff_exists_eq_induce_top
 @[gcongr]
 
 中文:
-定理 isInduced_iff_exists_eq_induce_top
-  条件: (G' : G.Subgraph)
+定理 isInduced_iff_存在_eq_induce_top
+  条件: (G' : G.子图)
   证明: by
   refine ⟨fun h => ⟨G'.verts, h.induce_top_verts.symm⟩, fun ⟨s, h⟩ _ hu _ hv hadj => ?_⟩
   rw [h]; rw [(h ▸ rfl : s = G'.verts)]
@@ -5284,7 +5284,7 @@ lemma le_induce_top_verts
 
 中文:
 引理 le_induce_top_verts
-  结论: G' <= (⊤ : G.Subgraph).induce G'.verts
+  结论: G' <= (⊤ : G.子图).induce G'.verts
   证明: calc G' = G'.induce G'.verts := Subgraph.induce_self_verts.symm
        _ <= (⊤ : G.Subgraph).induce G'.verts := Subgraph.induce_mono_left le_top
 
@@ -5403,7 +5403,7 @@ theorem subgraphOfAdj_eq_induce
 
 中文:
 定理 subgraphOfAdj_eq_induce
-  条件: {v w : V} (hvw : G.Adj v w)
+  条件: {v w : V} (hvw : G.伴随 v w)
   证明: by
   ext
   · simp
@@ -5439,7 +5439,7 @@ instance instDecidableRel_induce_adj
 
 中文:
 实例 instDecidableRel_induce_adj
-  签名: (s : Set V) [对任意 a, Decidable (a in s)] [DecidableRel G'.Adj]
+  签名: (s : 集合 V) [对任意 a, 可判定 (a in s)] [DecidableRel G'.伴随]
   定义体: fun _ _ => instDecidableAnd
 
 Depends on / 依赖: instDecidableAnd
@@ -5461,7 +5461,7 @@ definition coeInduceIso
 
 中文:
 定义 coeInduceIso
-  签名: (s : Set V) (h : s subseteq G'.verts)
+  签名: (s : 集合 V) (h : s subseteq G'.verts)
   定义体: fun ⟨v, hv⟩ => ⟨⟨v, h hv⟩, by simp at hv; aesop⟩
   invFun := fun ⟨v, hv⟩ => ⟨v, hv⟩
   map_rel_iff' := by simp
@@ -5484,7 +5484,7 @@ abbreviation deleteVerts
 
 中文:
 缩写 deleteVerts
-  签名: (G' : G.Subgraph) (s : Set V)
+  签名: (G' : G.子图) (s : 集合 V)
   定义体: G'.induce (G'.verts \ s)
 
 Depends on / 依赖: induce
@@ -5551,7 +5551,7 @@ theorem deleteVerts_deleteVerts
 
 中文:
 定理 deleteVerts_deleteVerts
-  条件: (s s' : Set V)
+  条件: (s s' : 集合 V)
   证明: by
   ext <;> simp +contextual [not_or, and_assoc]
 
@@ -5617,7 +5617,7 @@ theorem deleteVerts_mono
 
 中文:
 定理 deleteVerts_mono
-  条件: {G' G'' : G.Subgraph} (h : G' <= G'')
+  条件: {G' G'' : G.子图} (h : G' <= G'')
   证明: induce_mono h (Set.sdiff_subset_sdiff_left h.1)
 
 Depends on / 依赖: Set.sdiff_subset_sdiff_left, induce_mono, sdiff_subset_sdiff_left
@@ -5642,7 +5642,7 @@ lemma deleteVerts_mono'
 
 中文:
 引理 deleteVerts_mono'
-  条件: {G' : SimpleGraph V} (u : Set V) (h : G <= G')
+  条件: {G' : 简单图 V} (u : 集合 V) (h : G <= G')
   证明: by
   intro v w hvw
   aesop
@@ -5668,7 +5668,7 @@ theorem deleteVerts_anti
 
 中文:
 定理 deleteVerts_anti
-  条件: {s s' : Set V} (h : s subseteq s')
+  条件: {s s' : 集合 V} (h : s subseteq s')
   结论: G'.deleteVerts s' <= G'.deleteVerts s
   证明: induce_mono (le_refl _) (Set.sdiff_subset_sdiff_right h)
 
@@ -5740,7 +5740,7 @@ instance instDecidableRel_deleteVerts_adj
 
 中文:
 实例 instDecidableRel_deleteVerts_adj
-  签名: (u : Set V) [r : DecidableRel G.Adj]
+  签名: (u : 集合 V) [r : DecidableRel G.伴随]
   定义体: fun x y =>
     if h : G.Adj x y
     then
@@ -5774,7 +5774,7 @@ definition coeDeleteVertsIso
 
 中文:
 定义 coeDeleteVertsIso
-  签名: (s : Set V)
+  签名: (s : 集合 V)
   定义体: fun ⟨v, hv⟩ => ⟨⟨v, Set.mem_of_mem_inter_left hv⟩, by aesop⟩
   invFun := fun ⟨v, hv⟩ => ⟨v, by simp_all⟩
   map_rel_iff' := by simp

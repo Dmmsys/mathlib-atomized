@@ -88,7 +88,7 @@ theorem subset_seqClosure
 
 中文:
 定理 subset_seqClosure
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: s subseteq seqClosure s
   证明: fun p hp =>
   ⟨const Nat p, fun _ => hp, tendsto_const_nhds⟩
@@ -108,7 +108,7 @@ theorem seqClosure_subset_closure
 
 中文:
 定理 seqClosure_subset_closure
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: seqClosure s subseteq closure s
   证明: fun _p ⟨_x, xM, xp⟩ =>
   mem_closure_of_tendsto xp (univ_mem' xM)
@@ -127,7 +127,7 @@ theorem IsSeqClosed.seqClosure_eq
 
 中文:
 定理 IsSeqClosed.seqClosure_eq
-  条件: {s : Set X} (hs : IsSeqClosed s)
+  条件: {s : 集合 X} (hs : IsSeqClosed s)
   结论: seqClosure s = s
   证明: Subset.antisymm (fun _p ⟨_x, hx, hp⟩ => hs hx hp) subset_seqClosure
 
@@ -147,7 +147,7 @@ theorem isSeqClosed_of_seqClosure_eq
 
 中文:
 定理 isSeqClosed_of_seqClosure_eq
-  条件: {s : Set X} (hs : seqClosure s = s)
+  条件: {s : 集合 X} (hs : seqClosure s = s)
   结论: IsSeqClosed s
   证明: fun x _p hxs hxp => hs ▸ ⟨x, hxs, hxp⟩
 -/
@@ -165,7 +165,7 @@ theorem isSeqClosed_iff
 
 中文:
 定理 isSeqClosed_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: IsSeqClosed s ↔ seqClosure s = s
   证明: ⟨IsSeqClosed.seqClosure_eq, isSeqClosed_of_seqClosure_eq⟩
 
@@ -184,8 +184,8 @@ theorem IsClosed.isSeqClosed
   proof: fun _u _x hu hx => hc.mem_of_tendsto hx (Eventually.of_forall hu)
 
 中文:
-定理 IsClosed.isSeqClosed
-  条件: {s : Set X} (hc : IsClosed s)
+定理 是闭集.isSeqClosed
+  条件: {s : 集合 X} (hc : 是闭集 s)
   结论: IsSeqClosed s
   证明: fun _u _x hu hx => hc.mem_of_tendsto hx (Eventually.of_forall hu)
 -/
@@ -203,7 +203,7 @@ theorem seqClosure_eq_closure
 
 中文:
 定理 seqClosure_eq_closure
-  条件: [FrechetUrysohnSpace X] (s : Set X)
+  条件: [FrechetUrysohn空间 X] (s : 集合 X)
   结论: seqClosure s = closure s
   证明: seqClosure_subset_closure.antisymm FrechetUrysohnSpace.closure_subset_seqClosure s
 
@@ -224,7 +224,7 @@ theorem mem_closure_iff_seq_limit
 
 中文:
 定理 mem_closure_iff_seq_limit
-  条件: [FrechetUrysohnSpace X] {s : Set X} {a : X}
+  条件: [FrechetUrysohn空间 X] {s : 集合 X} {a : X}
   证明: by
   rw [← seqClosure_eq_closure]
   rfl
@@ -253,7 +253,7 @@ theorem tendsto_nhds_iff_seq_tendsto
 
 中文:
 定理 tendsto_nhds_iff_seq_tendsto
-  条件: [FrechetUrysohnSpace X] {f : X -> Y} {a : X} {b : Y}
+  条件: [FrechetUrysohn空间 X] {f : X -> Y} {a : X} {b : Y}
   证明: by
   refine
     ⟨fun hf u hu => hf.comp hu, fun h =>
@@ -290,7 +290,7 @@ theorem FrechetUrysohnSpace.of_seq_tendsto_imp_tendsto
         ← me
 
 中文:
-定理 FrechetUrysohnSpace.of_seq_tendsto_imp_tendsto
+定理 FrechetUrysohn空间.of_seq_tendsto_imp_tendsto
   证明: by
   refine ⟨fun s x hcx => ?_⟩
   by_cases hx : x in s
@@ -342,8 +342,8 @@ theorem Topology.IsInducing.frechetUrysohnSpace
   simpa only [hf.tendsto_nhds_iff, Function.comp_def, hvu]
 
 中文:
-定理 Topology.IsInducing.frechetUrysohnSpace
-  结论: [FrechetUrysohnSpace Y] {f : X -> Y}
+定理 拓扑.是Inducing.frechetUrysohnSpace
+  结论: [FrechetUrysohn空间 Y] {f : X -> Y}
   证明: by
   refine ⟨fun s x hx => ?_⟩
   rw [hf.closure_eq_preimage_closure_image]; rw [mem_preimage]; rw [mem_closure_iff_seq_limit] at hx
@@ -372,8 +372,8 @@ instance Subtype.instFrechetUrysohnSpace
   body: IsInducing.subtypeVal.frechetUrysohnSpace
 
 中文:
-实例 Subtype.instFrechetUrysohnSpace
-  签名: [FrechetUrysohnSpace X] {p : X -> 命题}
+实例 子类型.instFrechetUrysohnSpace
+  签名: [FrechetUrysohn空间 X] {p : X -> 命题}
   定义体: IsInducing.subtypeVal.frechetUrysohnSpace
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.frechetUrysohnSpace, frechetUrysohnSpace, subtypeVal
@@ -393,8 +393,8 @@ theorem isSeqClosed_iff_isClosed
 
 中文:
 定理 isSeqClosed_iff_isClosed
-  条件: [SequentialSpace X] {M : Set X}
-  结论: IsSeqClosed M ↔ IsClosed M
+  条件: [Sequential空间 X] {M : 集合 X}
+  结论: IsSeqClosed M ↔ 是闭集 M
   证明: ⟨IsSeqClosed.isClosed, IsClosed.isSeqClosed⟩
 
 Depends on / 依赖: IsClosed, IsClosed.isSeqClosed, IsSeqClosed, IsSeqClosed.isClosed, isClosed, isSeqClosed
@@ -417,7 +417,7 @@ lemma isClosed_iUnion_closure_singleton_of_not_tendsto
 
 中文:
 引理 isClosed_iUnion_closure_singleton_of_not_tendsto
-  结论: {x : 自然数 -> X} [SequentialSpace X]
+  结论: {x : 自然数 -> X} [Sequential空间 X]
   证明: by
   refine IsSeqClosed.isClosed fun y l hy hy' => ?_
   by_cases! hm : exists m, existsᶠ n in atTop, y n in closure {x m}
@@ -460,7 +460,7 @@ lemma isClosed_range_of_not_tendsto
 
 中文:
 引理 isClosed_range_of_not_tendsto
-  结论: {x : 自然数 -> X} [SequentialSpace X] [T1Space X]
+  结论: {x : 自然数 -> X} [Sequential空间 X] [T1空间 X]
   证明: by
   simpa using isClosed_iUnion_closure_singleton_of_not_tendsto hx
 
@@ -480,8 +480,8 @@ theorem IsSeqClosed.preimage
   proof: fun _x _p hx hp => hs hx (hf hp)
 
 中文:
-定理 IsSeqClosed.preimage
-  条件: {f : X -> Y} {s : Set Y} (hs : IsSeqClosed s) (hf : SeqContinuous f)
+定理 IsSeqClosed.原像
+  条件: {f : X -> Y} {s : 集合 Y} (hs : IsSeqClosed s) (hf : SeqContinuous f)
   证明: fun _x _p hx hp => hs hx (hf hp)
 -/
 theorem IsSeqClosed.preimage {f : X -> Y} {s : Set Y} (hs : IsSeqClosed s) (hf : SeqContinuous f) :
@@ -498,8 +498,8 @@ theorem Continuous.seqContinuous
   proof: fun _x p hx => (hf.tendsto p).comp hx
 
 中文:
-定理 Continuous.seqContinuous
-  条件: {f : X -> Y} (hf : Continuous f)
+定理 连续.seqContinuous
+  条件: {f : X -> Y} (hf : 连续 f)
   结论: SeqContinuous f
   证明: fun _x p hx => (hf.tendsto p).comp hx
 -/
@@ -516,7 +516,7 @@ theorem SeqContinuous.continuous
 
 中文:
 定理 SeqContinuous.continuous
-  条件: [SequentialSpace X] {f : X -> Y} (hf : SeqContinuous f)
+  条件: [Sequential空间 X] {f : X -> Y} (hf : SeqContinuous f)
   证明: continuous_iff_isClosed.mpr fun _s hs => (hs.isSeqClosed.preimage hf).isClosed
 -/
 protected theorem SeqContinuous.continuous [SequentialSpace X] {f : X -> Y} (hf : SeqContinuous f) :
@@ -533,7 +533,7 @@ theorem continuous_iff_seqContinuous
 
 中文:
 定理 continuous_iff_seqContinuous
-  条件: [SequentialSpace X] {f : X -> Y}
+  条件: [Sequential空间 X] {f : X -> Y}
   证明: ⟨Continuous.seqContinuous, SeqContinuous.continuous⟩
 
 Depends on / 依赖: Continuous, Continuous.seqContinuous, SeqContinuous, SeqContinuous.continuous, continuous, seqContinuous
@@ -552,8 +552,8 @@ theorem SequentialSpace.coinduced
   ⟨fun _ hs => isClosed_coinduced.2 (hs.preimage continuous_coinduced_rng.seqContinuous).isClosed⟩
 
 中文:
-定理 SequentialSpace.coinduced
-  条件: [SequentialSpace X] {Y} (f : X -> Y)
+定理 Sequential空间.coinduced
+  条件: [Sequential空间 X] {Y} (f : X -> Y)
   证明: letI : TopologicalSpace Y := .coinduced f ‹_›
   ⟨fun _ hs => isClosed_coinduced.2 (hs.preimage continuous_coinduced_rng.seqContinuous).isClosed⟩
 
@@ -577,8 +577,8 @@ theorem SequentialSpace.iSup
 exact IsSeqClosed.isClosed fun u x hus hux => hs hus hux.mono_right nhds_mono le_iSup _ _
 
 中文:
-定理 SequentialSpace.iSup
-  结论: {X} {ι : Sort*} {t : ι -> TopologicalSpace X}
+定理 Sequential空间.iSup
+  结论: {X} {ι : 类型层*} {t : ι -> 拓扑空间 X}
   证明: by
   let : TopologicalSpace X := ⨆ i, t i
   refine ⟨fun s hs => isClosed_iSup_iff.2 fun i => ?_⟩
@@ -603,8 +603,8 @@ theorem SequentialSpace.sup
 exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
 
 中文:
-定理 SequentialSpace.sup
-  结论: {X} {t₁ t₂ : TopologicalSpace X}
+定理 Sequential空间.上确界
+  结论: {X} {t₁ t₂ : 拓扑空间 X}
   证明: by
   rw [sup_eq_iSup]
 exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
@@ -624,8 +624,8 @@ lemma Topology.IsQuotientMap.sequentialSpace
   proof: hf.isCoinducing.eq_coinduced.symm ▸ .coinduced f
 
 中文:
-引理 Topology.IsQuotientMap.sequentialSpace
-  结论: [SequentialSpace X] {f : X -> Y}
+引理 拓扑.是商映射.sequentialSpace
+  结论: [Sequential空间 X] {f : X -> Y}
   证明: hf.isCoinducing.eq_coinduced.symm ▸ .coinduced f
 
 Depends on / 依赖: coinduced, eq_coinduced, hf.isCoinducing.eq_coinduced.symm, isCoinducing
@@ -642,8 +642,8 @@ instance Quotient.instSequentialSpace
   body: isQuotientMap_quot_mk.sequentialSpace
 
 中文:
-实例 Quotient.instSequentialSpace
-  签名: [SequentialSpace X] {s : Setoid X}
+实例 商.instSequentialSpace
+  签名: [Sequential空间 X] {s : 集合等价关系 X}
   定义体: isQuotientMap_quot_mk.sequentialSpace
 
 Depends on / 依赖: isQuotientMap_quot_mk, isQuotientMap_quot_mk.sequentialSpace, sequentialSpace
@@ -661,8 +661,8 @@ instance Sum.instSequentialSpace
   body: .sup (.coinduced Sum.inl) (.coinduced Sum.inr)
 
 中文:
-实例 Sum.instSequentialSpace
-  签名: [SequentialSpace X] [SequentialSpace Y]
+实例 和.instSequentialSpace
+  签名: [Sequential空间 X] [Sequential空间 Y]
   定义体: .sup (.coinduced Sum.inl) (.coinduced Sum.inr)
 
 Depends on / 依赖: Sum.inl, Sum.inr, coinduced
@@ -680,7 +680,7 @@ instance Sigma.instSequentialSpace
   body: .iSup fun _ => .coinduced _
 
 中文:
-实例 Sigma.instSequentialSpace
+实例 依赖和类型.instSequentialSpace
   签名: {ι : 类型} {X : ι -> 类型}
   定义体: .iSup fun _ => .coinduced _
 
@@ -710,7 +710,7 @@ theorem IsSeqCompact.subseq_of_frequently_in
 
 中文:
 定理 IsSeqCompact.subseq_of_frequently_in
-  结论: {s : Set X} (hs : IsSeqCompact s) {x : 自然数 -> X}
+  结论: {s : 集合 X} (hs : IsSeqCompact s) {x : 自然数 -> X}
   证明: let ⟨ψ, hψ, huψ⟩ := extraction_of_frequently_atTop hx
   let ⟨a, a_in, φ, hφ, h⟩ := hs huψ
   ⟨a, a_in, ψ ∘ φ, hψ.comp hφ, h⟩
@@ -734,8 +734,8 @@ theorem SeqCompactSpace.tendsto_subseq
   ⟨a, φ, mono, h⟩
 
 中文:
-定理 SeqCompactSpace.tendsto_subseq
-  条件: [SeqCompactSpace X] (x : 自然数 -> X)
+定理 SeqCompact空间.tendsto_subseq
+  条件: [SeqCompact空间 X] (x : 自然数 -> X)
   证明: let ⟨a, _, φ, mono, h⟩ := isSeqCompact_univ fun n => mem_univ (x n)
   ⟨a, φ, mono, h⟩
 
@@ -764,8 +764,8 @@ theorem IsCompact.isSeqCompact
   ⟨a, a_in, MapClusterPt.tendsto_subseq ha⟩
 
 中文:
-定理 IsCompact.isSeqCompact
-  条件: {s : Set X} (hs : IsCompact s)
+定理 是紧集.isSeqCompact
+  条件: {s : 集合 X} (hs : 是紧集 s)
   结论: IsSeqCompact s
   证明: fun _x x_in =>
   let ⟨a, a_in, ha⟩ := hs (tendsto_principal.mpr (Eventually.of_forall x_in))
@@ -785,8 +785,8 @@ theorem IsCompact.tendsto_subseq'
   proof: hs.isSeqCompact.subseq_of_frequently_in hx
 
 中文:
-定理 IsCompact.tendsto_subseq'
-  结论: {s : Set X} {x : 自然数 -> X} (hs : IsCompact s)
+定理 是紧集.tendsto_subseq'
+  结论: {s : 集合 X} {x : 自然数 -> X} (hs : 是紧集 s)
   证明: hs.isSeqCompact.subseq_of_frequently_in hx
 
 Depends on / 依赖: hs.isSeqCompact.subseq_of_frequently_in, isSeqCompact, subseq_of_frequently_in
@@ -805,8 +805,8 @@ theorem IsCompact.tendsto_subseq
   proof: hs.isSeqCompact hx
 
 中文:
-定理 IsCompact.tendsto_subseq
-  条件: {s : Set X} {x : 自然数 -> X} (hs : IsCompact s) (hx : 对任意 n, x n in s)
+定理 是紧集.tendsto_subseq
+  条件: {s : 集合 X} {x : 自然数 -> X} (hs : 是紧集 s) (hx : 对任意 n, x n in s)
   证明: hs.isSeqCompact hx
 
 Depends on / 依赖: hs.isSeqCompact, isSeqCompact
@@ -829,8 +829,8 @@ theorem CompactSpace.tendsto_subseq
   proof: SeqCompactSpace.tendsto_subseq x
 
 中文:
-定理 CompactSpace.tendsto_subseq
-  条件: [CompactSpace X] (x : 自然数 -> X)
+定理 紧空间.tendsto_subseq
+  条件: [紧空间 X] (x : 自然数 -> X)
   证明: SeqCompactSpace.tendsto_subseq x
 
 Depends on / 依赖: SeqCompactSpace, SeqCompactSpace.tendsto_subseq, tendsto_subseq
@@ -859,8 +859,8 @@ theorem IsSeqCompact.image
   exact (f_cont xs_phi_lim).congr fun x => fxs_eq_ys (phi x)
 
 中文:
-定理 IsSeqCompact.image
-  条件: (f_cont : SeqContinuous f) {K : Set X} (K_cpt : IsSeqCompact K)
+定理 IsSeqCompact.像
+  条件: (f_cont : SeqContinuous f) {K : 集合 X} (K_cpt : IsSeqCompact K)
   证明: by
   intro ys ys_in_fK
   choose xs xs_in_K fxs_eq_ys using ys_in_fK
@@ -889,7 +889,7 @@ theorem IsSeqCompact.range
 
 中文:
 定理 IsSeqCompact.range
-  条件: [SeqCompactSpace X] (f_cont : SeqContinuous f)
+  条件: [SeqCompact空间 X] (f_cont : SeqContinuous f)
   证明: by
   simpa using isSeqCompact_univ.image f_cont
 
@@ -921,7 +921,7 @@ theorem IsSeqCompact.exists_tendsto_of_frequently_mem
   ⟨x, hxs, tendsto_nhds_of_cauchySeq_of_subseq huc φ_mono.tendsto_atTop hx⟩
 
 中文:
-定理 IsSeqCompact.exists_tendsto_of_frequently_mem
+定理 IsSeqCompact.存在_tendsto_of_frequently_mem
   结论: (hs : IsSeqCompact s) {u : 自然数 -> X}
   证明: let ⟨x, hxs, _φ, φ_mono, hx⟩ := hs.subseq_of_frequently_in hu
   ⟨x, hxs, tendsto_nhds_of_cauchySeq_of_subseq huc φ_mono.tendsto_atTop hx⟩
@@ -942,7 +942,7 @@ theorem IsSeqCompact.exists_tendsto
   proof: hs.exists_tendsto_of_frequently_mem (Frequently.of_forall hu) huc
 
 中文:
-定理 IsSeqCompact.exists_tendsto
+定理 IsSeqCompact.存在_tendsto
   结论: (hs : IsSeqCompact s) {u : 自然数 -> X} (hu : 对任意 n, u n in s)
   证明: hs.exists_tendsto_of_frequently_mem (Frequently.of_forall hu) huc
 
@@ -970,7 +970,7 @@ theorem IsSeqCompact.totallyBounded
 中文:
 定理 IsSeqCompact.totallyBounded
   条件: (h : IsSeqCompact s)
-  结论: TotallyBounded s
+  结论: 全有界 s
   证明: by
   intro V V_in
   unfold IsSeqCompact at h
@@ -1011,7 +1011,7 @@ theorem IsSeqCompact.isComplete
 中文:
 定理 IsSeqCompact.isComplete
   条件: (hs : IsSeqCompact s)
-  结论: IsComplete s
+  结论: 是完备 s
   证明: fun l hl hls => by
   have := hl.1
   rcases exists_antitone_basis (𝓤 X) with ⟨V, hV⟩
@@ -1069,7 +1069,7 @@ theorem IsSeqCompact.isCompact
 中文:
 定理 IsSeqCompact.isCompact
   条件: (hs : IsSeqCompact s)
-  结论: IsCompact s
+  结论: 是紧集 s
   证明: letI := pseudoMetrizableSpaceUniformity X
   haveI := pseudoMetrizableSpaceUniformity_countably_generated X
   isCompact_iff_totallyBounded_isComplete.2 ⟨hs.totallyBounded, hs.isComplete⟩
@@ -1089,7 +1089,7 @@ theorem isCompact_iff_isSeqCompact
 
 中文:
 定理 isCompact_iff_isSeqCompact
-  结论: IsCompact s ↔ IsSeqCompact s
+  结论: 是紧集 s ↔ IsSeqCompact s
   证明: ⟨fun H => H.isSeqCompact, fun H => H.isCompact⟩
 
 Depends on / 依赖: H.isCompact, H.isSeqCompact, isCompact, isSeqCompact
@@ -1108,7 +1108,7 @@ theorem compactSpace_iff_seqCompactSpace
 
 中文:
 定理 compactSpace_iff_seqCompactSpace
-  结论: CompactSpace X ↔ SeqCompactSpace X
+  结论: 紧空间 X ↔ SeqCompact空间 X
   证明: by
   simp only [← isCompact_univ_iff, seqCompactSpace_iff, isCompact_iff_isSeqCompact]
 

@@ -79,7 +79,7 @@ scoped[CantorBendixson] notation:max s "ᵈ[" a "]" => iteratedDerivedSet s a
 
 中文:
 定义 iteratedDerivedSet
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: gfpApprox relDerivedSet s
 
 @[inherit_doc CantorBendixson.iteratedDerivedSet]
@@ -153,7 +153,7 @@ theorem iteratedDerivedSet_limit
 
 中文:
 定理 iteratedDerivedSet_limit
-  条件: (ha : Order.IsSuccLimit a)
+  条件: (ha : Order.是SuccLimit a)
   证明: by
   simpa [iteratedDerivedSet] using gfpApprox_of_isSuccLimit relDerivedSet ha
 
@@ -203,7 +203,7 @@ theorem isClosed_iteratedDerivedSet
 
 中文:
 定理 isClosed_iteratedDerivedSet
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: by
   intro a
   induction a using Ordinal.limitRecOn with
@@ -237,7 +237,7 @@ theorem iteratedDerivedSet_antitone
 
 中文:
 定理 iteratedDerivedSet_antitone
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: gfpApprox_anti_right relDerivedSet
 
 Depends on / 依赖: gfpApprox_anti_right, relDerivedSet
@@ -298,7 +298,7 @@ theorem iteratedDerivedSet_mem_fixedPoints
 
 中文:
 定理 iteratedDerivedSet_mem_fixedPoints
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   refine ⟨(Order.succ #(Set X)).ord,
     gfpApprox_ord_mem_fixedPoint relDerivedSet relDerivedSet_subset⟩
@@ -320,7 +320,7 @@ definition perfectKernel
 
 中文:
 定义 perfectKernel
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: ⋂ a : Ordinal, sᵈ[a]
 
 Depends on / 依赖: Ordinal
@@ -338,7 +338,7 @@ theorem perfectKernel_subset_iteratedDerivedSet
 
 中文:
 定理 perfectKernel_subset_iteratedDerivedSet
-  条件: (s : Set X) (a : Ordinal)
+  条件: (s : 集合 X) (a : 序数)
   证明: Set.iInter_subset _ a
 
 Depends on / 依赖: Set.iInter_subset, iInter_subset
@@ -358,7 +358,7 @@ theorem perfectKernel_subset
 
 中文:
 定理 perfectKernel_subset
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   simpa [iteratedDerivedSet_zero] using perfectKernel_subset_iteratedDerivedSet s 0
 
@@ -401,7 +401,7 @@ theorem isClosed_perfectKernel
 
 中文:
 定理 isClosed_perfectKernel
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: isClosed_iInter (isClosed_iteratedDerivedSet hs)
 
 @[simp]
@@ -475,7 +475,7 @@ theorem _root_.Perfect.subset_perfectKernel
     iteratedDerivedSet_mono hPs i
 
 中文:
-定理 _root_.Perfect.subset_perfectKernel
+定理 _root_.完美.subset_perfectKernel
   证明: by
   refine Set.subset_iInter fun i => ?_
   simpa [iteratedDerivedSet_constant_iff_preperfect.mp hP.acc i] using
@@ -505,7 +505,7 @@ theorem perfect_perfectKernel
 
 中文:
 定理 perfect_perfectKernel
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: by
   obtain ⟨a, ha⟩ := iteratedDerivedSet_mem_fixedPoints s
   rw [perfectKernel_eq_iteratedDerivedSet_of_mem_fixedPoints ha]
@@ -534,7 +534,7 @@ theorem perfectKernel_idem
 
 中文:
 定理 perfectKernel_idem
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   证明: subset_antisymm (perfectKernel_subset _)
     (perfect_perfectKernel hs).subset_perfectKernel Subset.rfl
 

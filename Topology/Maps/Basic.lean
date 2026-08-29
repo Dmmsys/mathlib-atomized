@@ -69,9 +69,9 @@ lemma IsInducing.induced
   proof: @IsInducing.mk _ _ (TopologicalSpace.induced f ‹_›) _ _ rfl
 
 中文:
-引理 IsInducing.induced
+引理 是Inducing.induced
   条件: (f : X -> Y)
-  结论: @IsInducing X Y (induced f ‹_›) _ f
+  结论: @是Inducing X Y (induced f ‹_›) _ f
   证明: @IsInducing.mk _ _ (TopologicalSpace.induced f ‹_›) _ _ rfl
 -/
 protected lemma IsInducing.induced (f : X -> Y) : @IsInducing X Y (induced f ‹_›) _ f :=
@@ -89,8 +89,8 @@ lemma IsInducing.id
   proof: ⟨induced_id.symm⟩
 
 中文:
-引理 IsInducing.id
-  结论: IsInducing (@id X)
+引理 是Inducing.id
+  结论: 是Inducing (@id X)
   证明: ⟨induced_id.symm⟩
 -/
 protected lemma IsInducing.id : IsInducing (@id X) := ⟨induced_id.symm⟩
@@ -107,8 +107,8 @@ lemma IsInducing.comp
   proof: ⟨by rw [hf.eq_induced, hg.eq_induced, induced_compose]⟩
 
 中文:
-引理 IsInducing.comp
-  条件: (hg : IsInducing g) (hf : IsInducing f)
+引理 是Inducing.comp
+  条件: (hg : 是Inducing g) (hf : 是Inducing f)
   证明: ⟨by rw [hf.eq_induced, hg.eq_induced, induced_compose]⟩
 -/
 protected lemma IsInducing.comp (hg : IsInducing g) (hf : IsInducing f) :
@@ -127,9 +127,9 @@ lemma IsInducing.of_comp_iff
   rw [isInducing_iff]; rw [hg.eq_induced]; rw [induced_compose]; rw [h.eq_induced]
 
 中文:
-引理 IsInducing.of_comp_iff
-  条件: (hg : IsInducing g)
-  结论: IsInducing (g ∘ f) ↔ IsInducing f
+引理 是Inducing.of_comp_iff
+  条件: (hg : 是Inducing g)
+  结论: 是Inducing (g ∘ f) ↔ 是Inducing f
   证明: by
   refine ⟨fun h => ?_, hg.comp⟩
   rw [isInducing_iff]; rw [hg.eq_induced]; rw [induced_compose]; rw [h.eq_induced]
@@ -149,8 +149,8 @@ lemma IsInducing.of_comp
   proof: ⟨le_antisymm hf.le_induced (by grw [hgf.eq_induced, ← induced_compose, ← hg.le_induced])⟩
 
 中文:
-引理 IsInducing.of_comp
-  条件: (hf : Continuous f) (hg : Continuous g) (hgf : IsInducing (g ∘ f))
+引理 是Inducing.of_comp
+  条件: (hf : 连续 f) (hg : 连续 g) (hgf : 是Inducing (g ∘ f))
   证明: ⟨le_antisymm hf.le_induced (by grw [hgf.eq_induced, ← induced_compose, ← hg.le_induced])⟩
 
 Depends on / 依赖: eq_induced, hf.le_induced, hg.le_induced, hgf.eq_induced, induced_compose, le_antisymm, le_induced
@@ -169,7 +169,7 @@ lemma isInducing_iff_nhds
 
 中文:
 引理 isInducing_iff_nhds
-  结论: IsInducing f ↔ 对任意 x, 𝓝 x = comap f (𝓝 (f x))
+  结论: 是Inducing f ↔ 对任意 x, 𝓝 x = comap f (𝓝 (f x))
   证明: (isInducing_iff _).trans (induced_iff_nhds_eq f)
 
 Depends on / 依赖: induced_iff_nhds_eq, isInducing_iff
@@ -190,7 +190,7 @@ lemma nhds_eq_comap
 
 中文:
 引理 nhds_eq_comap
-  条件: (hf : IsInducing f)
+  条件: (hf : 是Inducing f)
   结论: 对任意 x : X, 𝓝 x = comap f (𝓝 <| f x)
   证明: isInducing_iff_nhds.1 hf
 
@@ -209,7 +209,7 @@ lemma basis_nhds
 
 中文:
 引理 basis_nhds
-  结论: {p : ι -> 命题} {s : ι -> Set Y} (hf : IsInducing f) {x : X}
+  结论: {p : ι -> 命题} {s : ι -> 集合 Y} (hf : 是Inducing f) {x : X}
   证明: hf.nhds_eq_comap x ▸ h_basis.comap f
 
 Depends on / 依赖: h_basis, h_basis.comap, hf.nhds_eq_comap, nhds_eq_comap
@@ -229,7 +229,7 @@ lemma nhdsSet_eq_comap
 
 中文:
 引理 nhdsSet_eq_comap
-  条件: (hf : IsInducing f) (s : Set X)
+  条件: (hf : 是Inducing f) (s : 集合 X)
   证明: by
   simp only [nhdsSet, sSup_image, comap_iSup, hf.nhds_eq_comap, iSup_image]
 
@@ -250,7 +250,7 @@ lemma map_nhds_eq
 
 中文:
 引理 map_nhds_eq
-  条件: (hf : IsInducing f) (x : X)
+  条件: (hf : 是Inducing f) (x : X)
   结论: (𝓝 x).map f = 𝓝[range f] f x
   证明: hf.eq_induced ▸ map_nhds_induced_eq x
 
@@ -269,7 +269,7 @@ lemma map_nhds_of_mem
 
 中文:
 引理 map_nhds_of_mem
-  条件: (hf : IsInducing f) (x : X) (h : range f in 𝓝 (f x))
+  条件: (hf : 是Inducing f) (x : X) (h : range f in 𝓝 (f x))
   证明: hf.eq_induced ▸ map_nhds_induced_of_mem h
 
 Depends on / 依赖: eq_induced, hf.eq_induced, map_nhds_induced_of_mem
@@ -289,7 +289,7 @@ lemma mapClusterPt_iff
 
 中文:
 引理 mapClusterPt_iff
-  条件: (hf : IsInducing f) {x : X} {l : Filter X}
+  条件: (hf : 是Inducing f) {x : X} {l : 滤子 X}
   证明: by
   delta MapClusterPt ClusterPt
   rw [← Filter.push_pull']; rw [← hf.nhds_eq_comap]; rw [map_neBot_iff]
@@ -311,7 +311,7 @@ lemma image_mem_nhdsWithin
 
 中文:
 引理 image_mem_nhdsWithin
-  条件: (hf : IsInducing f) {x : X} {s : Set X} (hs : s in 𝓝 x)
+  条件: (hf : 是Inducing f) {x : X} {s : 集合 X} (hs : s in 𝓝 x)
   证明: hf.map_nhds_eq x ▸ image_mem_map hs
 
 Depends on / 依赖: hf.map_nhds_eq, image_mem_map, map_nhds_eq
@@ -331,7 +331,7 @@ lemma tendsto_nhds_iff
 
 中文:
 引理 tendsto_nhds_iff
-  条件: {f : ι -> Y} {l : Filter ι} {y : Y} (hg : IsInducing g)
+  条件: {f : ι -> Y} {l : 滤子 ι} {y : Y} (hg : 是Inducing g)
   证明: by
   rw [hg.nhds_eq_comap]; rw [tendsto_comap_iff]
 
@@ -351,7 +351,7 @@ lemma continuousAt_iff
 
 中文:
 引理 continuousAt_iff
-  条件: (hg : IsInducing g) {x : X}
+  条件: (hg : 是Inducing g) {x : X}
   证明: hg.tendsto_nhds_iff
 
 Depends on / 依赖: hg.tendsto_nhds_iff, tendsto_nhds_iff
@@ -371,7 +371,7 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: (hg : IsInducing g)
+  条件: (hg : 是Inducing g)
   证明: by
   simp_rw [continuous_iff_continuousAt, hg.continuousAt_iff]
 
@@ -394,7 +394,7 @@ lemma continuousAt_iff'
 
 中文:
 引理 continuousAt_iff'
-  条件: (hf : IsInducing f) {x : X} (h : range f in 𝓝 (f x))
+  条件: (hf : 是Inducing f) {x : X} (h : range f in 𝓝 (f x))
   证明: by
   simp_rw [ContinuousAt, Filter.Tendsto, ← hf.map_nhds_of_mem _ h, Filter.map_map, comp]
 
@@ -418,8 +418,8 @@ lemma continuous
 
 中文:
 引理 continuous
-  条件: (hf : IsInducing f)
-  结论: Continuous f
+  条件: (hf : 是Inducing f)
+  结论: 连续 f
   证明: hf.continuous_iff.mp continuous_id
 -/
 protected lemma continuous (hf : IsInducing f) : Continuous f :=
@@ -437,7 +437,7 @@ lemma closure_eq_preimage_closure_image
 
 中文:
 引理 closure_eq_preimage_closure_image
-  条件: (hf : IsInducing f) (s : Set X)
+  条件: (hf : 是Inducing f) (s : 集合 X)
   证明: by
   ext x
   rw [Set.mem_preimage]; rw [← closure_induced]; rw [hf.eq_induced]
@@ -459,7 +459,7 @@ theorem isClosed_iff
 
 中文:
 定理 isClosed_iff
-  条件: (hf : IsInducing f) {s : Set X}
+  条件: (hf : 是Inducing f) {s : 集合 X}
   证明: by rw [hf.eq_induced, isClosed_induced_iff]
 
 Depends on / 依赖: eq_induced, hf.eq_induced, isClosed_induced_iff
@@ -479,7 +479,7 @@ theorem image_eq_isClosed_inter_range
 
 中文:
 定理 image_eq_isClosed_inter_range
-  条件: (hf : IsInducing f) {s : Set X} (hs : IsClosed s)
+  条件: (hf : 是Inducing f) {s : 集合 X} (hs : 是闭集 s)
   证明: by
   obtain ⟨c, hc, rfl⟩ := hf.isClosed_iff.1 hs
   exact ⟨c, hc, image_preimage_eq_inter_range⟩
@@ -501,7 +501,7 @@ theorem isClosed_iff'
 
 中文:
 定理 isClosed_iff'
-  条件: (hf : IsInducing f) {s : Set X}
+  条件: (hf : 是Inducing f) {s : 集合 X}
   证明: by rw [hf.eq_induced, isClosed_induced_iff']
 
 Depends on / 依赖: eq_induced, hf.eq_induced, isClosed_induced_iff
@@ -519,7 +519,7 @@ theorem isClosed_preimage
 
 中文:
 定理 isClosed_preimage
-  条件: (h : IsInducing f) (s : Set Y) (hs : IsClosed s)
+  条件: (h : 是Inducing f) (s : 集合 Y) (hs : 是闭集 s)
   证明: (isClosed_iff h).mpr ⟨s, hs, rfl⟩
 
 Depends on / 依赖: isClosed_iff
@@ -538,7 +538,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (hf : IsInducing f) {s : Set X}
+  条件: (hf : 是Inducing f) {s : 集合 X}
   证明: by rw [hf.eq_induced, isOpen_induced_iff]
 
 Depends on / 依赖: eq_induced, hf.eq_induced, isOpen_induced_iff
@@ -558,7 +558,7 @@ theorem image_eq_isOpen_inter_range
 
 中文:
 定理 image_eq_isOpen_inter_range
-  条件: (hf : IsInducing f) {s : Set X} (hs : IsOpen s)
+  条件: (hf : 是Inducing f) {s : 集合 X} (hs : 是开集 s)
   证明: by
   obtain ⟨c, hc, rfl⟩ := hf.isOpen_iff.1 hs
   exact ⟨c, hc, image_preimage_eq_inter_range⟩
@@ -582,7 +582,7 @@ theorem setOfPred_isOpen
 
 中文:
 定理 setOfPred_isOpen
-  条件: (hf : IsInducing f)
+  条件: (hf : 是Inducing f)
   证明: Set.ext fun _ => hf.isOpen_iff
 
 @[deprecated (since := "2026-07-09")] alias setOf_isOpen := setOfPred_isOpen
@@ -606,7 +606,7 @@ theorem dense_iff
 
 中文:
 定理 dense_iff
-  条件: (hf : IsInducing f) {s : Set X}
+  条件: (hf : 是Inducing f) {s : 集合 X}
   证明: by
   simp only [Dense, hf.closure_eq_preimage_closure_image, mem_preimage]
 
@@ -627,8 +627,8 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton X] (f : X -> Y)
-  结论: IsInducing f
+  条件: [子单例 X] (f : X -> Y)
+  结论: 是Inducing f
   证明: ⟨Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -649,7 +649,7 @@ theorem indiscreteTopology
 
 中文:
 定理 indiscreteTopology
-  条件: [IndiscreteTopology Y] {f : X -> Y} (hf : IsInducing f)
+  条件: [Indiscrete拓扑 Y] {f : X -> Y} (hf : 是Inducing f)
   证明: by
     cases IndiscreteTopology.eq_top Y
     let : TopologicalSpace Y := ⊤
@@ -675,7 +675,7 @@ theorem nontrivialTopology
 
 中文:
 定理 nontrivialTopology
-  条件: [NontrivialTopology X] {f : X -> Y} (hf : IsInducing f)
+  条件: [非平凡拓扑 X] {f : X -> Y} (hf : 是Inducing f)
   证明: not_imp_not.1
     (by simpa using (fun _ : IndiscreteTopology Y => hf.indiscreteTopology)) ‹NontrivialTopology X›
 
@@ -702,7 +702,7 @@ alias _root_.Function.Injective.isEmbedding_induced := IsEmbedding.induced
 
 中文:
 引理 induced
-  条件: [t : TopologicalSpace Y] (hf : Injective f)
+  条件: [t : 拓扑空间 Y] (hf : 单射 f)
   证明: @IsEmbedding.mk X Y (t.induced f) t _ (.induced f) hf
 
 alias _root_.Function.Injective.isEmbedding_induced := IsEmbedding.induced
@@ -729,8 +729,8 @@ lemma isInducing
 
 中文:
 引理 isInducing
-  条件: (hf : IsEmbedding f)
-  结论: IsInducing f
+  条件: (hf : 是嵌入 f)
+  结论: 是Inducing f
   证明: hf.toIsInducing
 
 Depends on / 依赖: hf.toIsInducing, toIsInducing
@@ -749,7 +749,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: (f : X -> Y) (inj : Injective f) (induced : 对任意 x, comap f (𝓝 (f x)) = 𝓝 x)
+  条件: (f : X -> Y) (inj : 单射 f) (induced : 对任意 x, comap f (𝓝 (f x)) = 𝓝 x)
   证明: ⟨isInducing_iff_nhds.2 fun x => (induced x).symm, inj⟩
 
 @[fun_prop]
@@ -773,7 +773,7 @@ lemma id
 
 中文:
 引理 id
-  结论: IsEmbedding (@id X)
+  结论: 是嵌入 (@id X)
   证明: ⟨.id, fun _ _ h => h⟩
 
 @[fun_prop]
@@ -792,8 +792,8 @@ lemma comp
 
 中文:
 引理 comp
-  条件: (hg : IsEmbedding g) (hf : IsEmbedding f)
-  结论: IsEmbedding (g ∘ f)
+  条件: (hg : 是嵌入 g) (hf : 是嵌入 f)
+  结论: 是嵌入 (g ∘ f)
   证明: { hg.isInducing.comp hf.isInducing with injective := fun _ _ h => hf.injective <| hg.injective h }
 -/
 protected lemma comp (hg : IsEmbedding g) (hf : IsEmbedding f) : IsEmbedding (g ∘ f) :=
@@ -811,8 +811,8 @@ lemma of_comp_iff
 
 中文:
 引理 of_comp_iff
-  条件: (hg : IsEmbedding g)
-  结论: IsEmbedding (g ∘ f) ↔ IsEmbedding f
+  条件: (hg : 是嵌入 g)
+  结论: 是嵌入 (g ∘ f) ↔ 是嵌入 f
   证明: by
   simp_rw [isEmbedding_iff, hg.isInducing.of_comp_iff, hg.injective.of_comp_iff f]
 
@@ -832,7 +832,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (hf : Continuous f) (hg : Continuous g) (hgf : IsEmbedding (g ∘ f))
+  条件: (hf : 连续 f) (hg : 连续 g) (hgf : 是嵌入 (g ∘ f))
   证明: hgf.isInducing.of_comp hf hg
   injective := hgf.injective.of_comp
 -/
@@ -853,7 +853,7 @@ alias _root_.Function.LeftInverse.isEmbedding := of_leftInverse
 
 中文:
 引理 of_leftInverse
-  结论: {f : X -> Y} {g : Y -> X} (h : LeftInverse f g) (hf : Continuous f)
+  结论: {f : X -> Y} {g : Y -> X} (h : 左逆 f g) (hf : 连续 f)
   证明: .of_comp hg hf h.comp_eq_id.symm ▸ .id
 
 alias _root_.Function.LeftInverse.isEmbedding := of_leftInverse
@@ -876,7 +876,7 @@ lemma map_nhds_eq
 
 中文:
 引理 map_nhds_eq
-  条件: (hf : IsEmbedding f) (x : X)
+  条件: (hf : 是嵌入 f) (x : X)
   结论: (𝓝 x).map f = 𝓝[range f] f x
   证明: hf.1.map_nhds_eq x
 
@@ -895,7 +895,7 @@ lemma map_nhds_of_mem
 
 中文:
 引理 map_nhds_of_mem
-  条件: (hf : IsEmbedding f) (x : X) (h : range f in 𝓝 (f x))
+  条件: (hf : 是嵌入 f) (x : X) (h : range f in 𝓝 (f x))
   证明: hf.1.map_nhds_of_mem x h
 
 Depends on / 依赖: map_nhds_of_mem
@@ -914,7 +914,7 @@ lemma tendsto_nhds_iff
 
 中文:
 引理 tendsto_nhds_iff
-  条件: {f : ι -> Y} {l : Filter ι} {y : Y} (hg : IsEmbedding g)
+  条件: {f : ι -> Y} {l : 滤子 ι} {y : Y} (hg : 是嵌入 g)
   证明: hg.isInducing.tendsto_nhds_iff
 
 Depends on / 依赖: hg.isInducing.tendsto_nhds_iff, isInducing, tendsto_nhds_iff
@@ -935,8 +935,8 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: (hg : IsEmbedding g)
-  结论: Continuous f ↔ Continuous (g ∘ f)
+  条件: (hg : 是嵌入 g)
+  结论: 连续 f ↔ 连续 (g ∘ f)
   证明: hg.isInducing.continuous_iff
 
 @[fun_prop]
@@ -958,8 +958,8 @@ lemma continuous
 
 中文:
 引理 continuous
-  条件: (hf : IsEmbedding f)
-  结论: Continuous f
+  条件: (hf : 是嵌入 f)
+  结论: 连续 f
   证明: hf.isInducing.continuous
 
 Depends on / 依赖: continuous, hf.isInducing.continuous, isInducing
@@ -976,7 +976,7 @@ lemma closure_eq_preimage_closure_image
 
 中文:
 引理 closure_eq_preimage_closure_image
-  条件: (hf : IsEmbedding f) (s : Set X)
+  条件: (hf : 是嵌入 f) (s : 集合 X)
   证明: hf.1.closure_eq_preimage_closure_image s
 
 Depends on / 依赖: closure_eq_preimage_closure_image
@@ -996,8 +996,8 @@ lemma discreteTopology
 
 中文:
 引理 discreteTopology
-  条件: [DiscreteTopology Y] (hf : IsEmbedding f)
-  结论: DiscreteTopology X
+  条件: [离散拓扑 Y] (hf : 是嵌入 f)
+  结论: 离散拓扑 X
   证明: .of_continuous_injective hf.continuous hf.injective
 
 Depends on / 依赖: continuous, hf.continuous, hf.injective, injective, of_continuous_injective
@@ -1016,8 +1016,8 @@ lemma of_subsingleton
 
 中文:
 引理 of_subsingleton
-  条件: [Subsingleton X] (f : X -> Y)
-  结论: IsEmbedding f
+  条件: [子单例 X] (f : X -> Y)
+  结论: 是嵌入 f
   证明: ⟨.of_subsingleton f, f.injective_of_subsingleton⟩
 
 Depends on / 依赖: f.injective_of_subsingleton, injective_of_subsingleton, of_subsingleton
@@ -1041,7 +1041,7 @@ lemma isCoinducing_iff
 
 中文:
 引理 isCoinducing_iff
-  结论: IsCoinducing f ↔ 对任意 s : Set Y, IsOpen (f ⁻¹' s) ↔ IsOpen s
+  结论: 是余inducing f ↔ 对任意 s : 集合 Y, 是开集 (f ⁻¹' s) ↔ 是开集 s
   证明: (isCoinducing_iff' _).trans eq_comm.trans TopologicalSpace.ext_iff
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext_iff, eq_comm, eq_comm.trans, ext_iff, isCoinducing_iff
@@ -1078,7 +1078,7 @@ lemma isOpen_preimage
 
 中文:
 引理 isOpen_preimage
-  条件: (hf : IsCoinducing f) {s : Set Y}
+  条件: (hf : 是余inducing f) {s : 集合 Y}
   证明: isCoinducing_iff.mp hf _
 -/
 protected lemma isOpen_preimage (hf : IsCoinducing f) {s : Set Y} :
@@ -1099,7 +1099,7 @@ alias ⟨_, of_isClosed_preimage_iff_isClosed⟩ := isCoinducing_iff_isClosed
 
 中文:
 引理 isClosed_preimage
-  条件: (hf : IsCoinducing f) {s : Set Y}
+  条件: (hf : 是余inducing f) {s : 集合 Y}
   证明: isCoinducing_iff_isClosed.mp hf _
 
 alias ⟨_, of_isOpen_preimage_iff_isOpen⟩ := isCoinducing_iff
@@ -1125,8 +1125,8 @@ lemma continuous
 
 中文:
 引理 continuous
-  条件: (hf : IsCoinducing f)
-  结论: Continuous f where
+  条件: (hf : 是余inducing f)
+  结论: 连续 f where
   证明: by rwa [hf.isOpen_preimage]
 -/
 protected lemma continuous (hf : IsCoinducing f) : Continuous f where
@@ -1146,7 +1146,7 @@ lemma id
 
 中文:
 引理 id
-  结论: IsCoinducing (id (α := X)) where
+  结论: 是余inducing (id (α := X)) where
   证明: coinduced_id.symm
 
 @[fun_prop]
@@ -1166,8 +1166,8 @@ lemma comp
 
 中文:
 引理 comp
-  条件: (hg : IsCoinducing g) (hf : IsCoinducing f)
-  结论: IsCoinducing (g.comp f) where
+  条件: (hg : 是余inducing g) (hf : 是余inducing f)
+  结论: 是余inducing (g.comp f) where
   证明: by rw [hg.eq_coinduced, hf.eq_coinduced, coinduced_compose]
 -/
 protected lemma comp (hg : IsCoinducing g) (hf : IsCoinducing f) : IsCoinducing (g.comp f) where
@@ -1185,7 +1185,7 @@ lemma of_comp_iff
 
 中文:
 引理 of_comp_iff
-  条件: (hf : IsCoinducing f)
+  条件: (hf : 是余inducing f)
   证明: by
   refine ⟨fun hgf => .of_isOpen_preimage_iff_isOpen fun s => ?_, fun hg => hg.comp hf⟩
   rw [← hgf.isOpen_preimage]; rw [Set.preimage_comp]; rw [hf.isOpen_preimage]
@@ -1205,7 +1205,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (hf : Continuous f) (hg : Continuous g) (hgf : IsCoinducing (g ∘ f))
+  条件: (hf : 连续 f) (hg : 连续 g) (hgf : 是余inducing (g ∘ f))
   证明: ⟨le_antisymm (by grw [hgf.eq_coinduced, ← coinduced_compose, hf.coinduced_le]) hg.coinduced_le⟩
 -/
 protected lemma of_comp (hf : Continuous f) (hg : Continuous g) (hgf : IsCoinducing (g ∘ f)) :
@@ -1225,8 +1225,8 @@ lemma isOpenMap_of_injective
 
 中文:
 引理 isOpenMap_of_injective
-  条件: (hf : IsCoinducing f) (hf' : Injective f)
-  结论: IsOpenMap f
+  条件: (hf : 是余inducing f) (hf' : 单射 f)
+  结论: 是开映射 f
   证明: by
   intro s hs
   rwa [← hf.isOpen_preimage, preimage_image_eq _ hf']
@@ -1279,7 +1279,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsQuotientMap (@id X)
+  结论: 是商映射 (@id X)
   证明: ⟨.id _, fun x => ⟨x, rfl⟩⟩
 
 @[fun_prop]
@@ -1299,8 +1299,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : IsQuotientMap g) (hf : IsQuotientMap f)
-  结论: IsQuotientMap (g ∘ f)
+  条件: (hg : 是商映射 g) (hf : 是商映射 f)
+  结论: 是商映射 (g ∘ f)
   证明: ⟨.comp hg.1 hf.1, hg.surjective.comp hf.surjective, ⟩
 -/
 protected theorem comp (hg : IsQuotientMap g) (hf : IsQuotientMap f) : IsQuotientMap (g ∘ f) :=
@@ -1316,7 +1316,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: (hf : Continuous f) (hg : Continuous g)
+  结论: (hf : 连续 f) (hg : 连续 g)
   证明: ⟨.of_comp hf hg hgf.1, hgf.2.of_comp⟩
 -/
 protected theorem of_comp (hf : Continuous f) (hg : Continuous g)
@@ -1336,7 +1336,7 @@ alias of_comp_of_eq_coinduced := of_comp_of_isCoinducing
 
 中文:
 定理 of_comp_of_isCoinducing
-  条件: (hgf : IsQuotientMap (g ∘ f)) (hf : IsCoinducing f)
+  条件: (hgf : 是商映射 (g ∘ f)) (hf : 是余inducing f)
   证明: ⟨hf.of_comp_iff.mp hgf.1, hgf.2.of_comp⟩
 
 @[deprecated (since := "2026-03-21")]
@@ -1362,7 +1362,7 @@ theorem of_comp_iff
 
 中文:
 定理 of_comp_iff
-  条件: (hf : IsQuotientMap f)
+  条件: (hf : 是商映射 f)
   证明: by
   rw [isQuotientMap_iff]; rw [isQuotientMap_iff]; rw [hf.isCoinducing.of_comp_iff]; rw [hf.surjective.of_comp_iff]
 -/
@@ -1380,7 +1380,7 @@ theorem of_comp_isQuotientMap
 
 中文:
 定理 of_comp_isQuotientMap
-  条件: (hf : IsQuotientMap f) (hgf : IsQuotientMap (g ∘ f))
+  条件: (hf : 是商映射 f) (hgf : 是商映射 (g ∘ f))
   证明: of_comp_of_isCoinducing hgf hf.isCoinducing
 
 Depends on / 依赖: hf.isCoinducing, isCoinducing, of_comp_of_isCoinducing
@@ -1398,7 +1398,7 @@ theorem of_inverse
 
 中文:
 定理 of_inverse
-  条件: {g : Y -> X} (hf : Continuous f) (hg : Continuous g) (h : LeftInverse g f)
+  条件: {g : Y -> X} (hf : 连续 f) (hg : 连续 g) (h : 左逆 g f)
   证明: .of_comp hf hg h.comp_eq_id.symm ▸ IsQuotientMap.id
 
 Depends on / 依赖: IsQuotientMap, IsQuotientMap.id, comp_eq_id, h.comp_eq_id.symm, of_comp
@@ -1420,8 +1420,8 @@ theorem continuous_iff
 
 中文:
 定理 continuous_iff
-  条件: (hf : IsQuotientMap f)
-  结论: Continuous g ↔ Continuous (g ∘ f)
+  条件: (hf : 是商映射 f)
+  结论: 连续 g ↔ 连续 (g ∘ f)
   证明: by
   rw [continuous_iff_coinduced_le]; rw [continuous_iff_coinduced_le]; rw [hf.eq_coinduced]; rw [coinduced_compose]
 
@@ -1442,8 +1442,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (hf : IsQuotientMap f)
-  结论: Continuous f
+  条件: (hf : 是商映射 f)
+  结论: 连续 f
   证明: hf.continuous_iff.mp continuous_id
 -/
 protected theorem continuous (hf : IsQuotientMap f) : Continuous f :=
@@ -1468,7 +1468,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsOpenMap (@id X)
+  结论: 是开映射 (@id X)
   证明: fun s hs => by rwa [image_id]
 -/
 protected theorem id : IsOpenMap (@id X) := fun s hs => by rwa [image_id]
@@ -1483,7 +1483,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : IsOpenMap g) (hf : IsOpenMap f)
+  条件: (hg : 是开映射 g) (hf : 是开映射 f)
   证明: fun s hs => by rw [image_comp]; exact hg _ (hf _ hs)
 -/
 protected theorem comp (hg : IsOpenMap g) (hf : IsOpenMap f) :
@@ -1501,7 +1501,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  条件: (hf : Continuous f) (f_surj : Surjective f) (h : IsOpenMap (g ∘ f))
+  条件: (hf : 连续 f) (f_surj : 满射 f) (h : 是开映射 (g ∘ f))
   证明: fun s hs => by
   rw [← f_surj.image_preimage s]; rw [← image_comp]
   exact h _ (hs.preimage hf)
@@ -1526,8 +1526,8 @@ theorem isOpen_range
 
 中文:
 定理 isOpen_range
-  条件: (hf : IsOpenMap f)
-  结论: IsOpen (range f)
+  条件: (hf : 是开映射 f)
+  结论: 是开集 (range f)
   证明: by
   rw [← image_univ]
   exact hf _ isOpen_univ
@@ -1550,7 +1550,7 @@ theorem image_mem_nhds
 
 中文:
 定理 image_mem_nhds
-  条件: (hf : IsOpenMap f) {x : X} {s : Set X} (hx : s in 𝓝 x)
+  条件: (hf : 是开映射 f) {x : X} {s : 集合 X} (hx : s in 𝓝 x)
   结论: f '' s in 𝓝 (f x)
   证明: let ⟨t, hts, ht, hxt⟩ := mem_nhds_iff.1 hx
   mem_of_superset (IsOpen.mem_nhds (hf t ht) (mem_image_of_mem _ hxt)) (image_mono hts)
@@ -1572,7 +1572,7 @@ theorem range_mem_nhds
 
 中文:
 定理 range_mem_nhds
-  条件: (hf : IsOpenMap f) (x : X)
+  条件: (hf : 是开映射 f) (x : X)
   结论: range f in 𝓝 (f x)
   证明: hf.isOpen_range.mem_nhds mem_range_self _
 
@@ -1592,7 +1592,7 @@ theorem mapsTo_interior
 
 中文:
 定理 mapsTo_interior
-  条件: (hf : IsOpenMap f) {s : Set X} {t : Set Y} (h : MapsTo f s t)
+  条件: (hf : 是开映射 f) {s : 集合 X} {t : 集合 Y} (h : 映射到 f s t)
   证明: mapsTo_iff_image_subset.2
     interior_maximal (h.mono interior_subset Subset.rfl).image_subset (hf _ isOpen_interior)
 
@@ -1613,7 +1613,7 @@ theorem image_interior_subset
 
 中文:
 定理 image_interior_subset
-  条件: (hf : IsOpenMap f) (s : Set X)
+  条件: (hf : 是开映射 f) (s : 集合 X)
   证明: (hf.mapsTo_interior (mapsTo_image f s)).image_subset
 
 Depends on / 依赖: hf.mapsTo_interior, image_subset, mapsTo_image, mapsTo_interior
@@ -1633,7 +1633,7 @@ theorem nhds_le
 
 中文:
 定理 nhds_le
-  条件: (hf : IsOpenMap f) (x : X)
+  条件: (hf : 是开映射 f) (x : X)
   结论: 𝓝 (f x) <= map f (𝓝 x)
   证明: le_map fun _ => hf.image_mem_nhds
 
@@ -1653,7 +1653,7 @@ theorem map_nhds_eq
 
 中文:
 定理 map_nhds_eq
-  条件: (hf : IsOpenMap f) {x : X} (hf' : ContinuousAt f x)
+  条件: (hf : 是开映射 f) {x : X} (hf' : ContinuousAt f x)
   结论: map f (𝓝 x) = 𝓝 (f x)
   证明: le_antisymm hf' (hf.nhds_le x)
 
@@ -1675,7 +1675,7 @@ theorem map_nhdsSet_eq
 
 中文:
 定理 map_nhdsSet_eq
-  条件: (hf : IsOpenMap f) (hf' : Continuous f) (s : Set X)
+  条件: (hf : 是开映射 f) (hf' : 连续 f) (s : 集合 X)
   证明: by
   rw [← biUnion_of_singleton s]
   simp_rw [image_iUnion, nhdsSet_iUnion, map_iSup, image_singleton, nhdsSet_singleton,
@@ -1702,7 +1702,7 @@ theorem of_nhds_le
 中文:
 定理 of_nhds_le
   条件: (hf : 对任意 x, 𝓝 (f x) <= map f (𝓝 x))
-  结论: IsOpenMap f
+  结论: 是开映射 f
   证明: fun _s hs =>
   isOpen_iff_mem_nhds.2 fun _y ⟨_x, hxs, hxy⟩ => hxy ▸ hf _ (image_mem_map <| hs.mem_nhds hxs)
 -/
@@ -1751,7 +1751,7 @@ theorem of_inverse
 
 中文:
 定理 of_inverse
-  结论: {f' : Y -> X} (h : Continuous f') (l_inv : LeftInverse f f')
+  结论: {f' : Y -> X} (h : 连续 f') (l_inv : 左逆 f f')
   证明: of_sections fun _ => ⟨f', h.continuousAt, r_inv _, l_inv⟩
 
 Depends on / 依赖: continuousAt, h.continuousAt, l_inv, of_sections, r_inv
@@ -1773,7 +1773,7 @@ theorem isQuotientMap
 
 中文:
 定理 isQuotientMap
-  条件: (open_map : IsOpenMap f) (cont : Continuous f) (surj : Surjective f)
+  条件: (open_map : 是开映射 f) (cont : 连续 f) (surj : 满射 f)
   证明: by
   rw [isQuotientMap_iff]
   refine ⟨.of_isOpen_preimage_iff_isOpen fun s => ?_, surj⟩
@@ -1797,7 +1797,7 @@ theorem interior_preimage_subset_preimage_interior
 
 中文:
 定理 interior_preimage_subset_preimage_interior
-  条件: (hf : IsOpenMap f) {s : Set Y}
+  条件: (hf : 是开映射 f) {s : 集合 Y}
   证明: hf.mapsTo_interior (mapsTo_preimage _ _)
 
 Depends on / 依赖: hf.mapsTo_interior, mapsTo_interior, mapsTo_preimage
@@ -1817,7 +1817,7 @@ theorem preimage_interior_eq_interior_preimage
 
 中文:
 定理 preimage_interior_eq_interior_preimage
-  结论: (hf₁ : IsOpenMap f) (hf₂ : Continuous f)
+  结论: (hf₁ : 是开映射 f) (hf₂ : 连续 f)
   证明: Subset.antisymm (preimage_interior_subset_interior_preimage hf₂)
     (interior_preimage_subset_preimage_interior hf₁)
 
@@ -1840,7 +1840,7 @@ theorem preimage_closure_subset_closure_preimage
 
 中文:
 定理 preimage_closure_subset_closure_preimage
-  条件: (hf : IsOpenMap f) {s : Set Y}
+  条件: (hf : 是开映射 f) {s : 集合 Y}
   证明: by
   rw [← compl_subset_compl]
   simp only [← interior_compl, ← preimage_compl, hf.interior_preimage_subset_preimage_interior]
@@ -1862,7 +1862,7 @@ theorem preimage_closure_eq_closure_preimage
 
 中文:
 定理 preimage_closure_eq_closure_preimage
-  条件: (hf : IsOpenMap f) (hfc : Continuous f) (s : Set Y)
+  条件: (hf : 是开映射 f) (hfc : 连续 f) (s : 集合 Y)
   证明: hf.preimage_closure_subset_closure_preimage.antisymm (hfc.closure_preimage_subset s)
 
 Depends on / 依赖: antisymm, closure_preimage_subset, hf.preimage_closure_subset_closure_preimage.antisymm, hfc.closure_preimage_subset, preimage_closure_subset_closure_preimage
@@ -1882,7 +1882,7 @@ lemma preimage_closure_image
 
 中文:
 引理 preimage_closure_image
-  结论: (h₁ : IsOpenMap f) (h₂ : Function.Injective f)
+  结论: (h₁ : 是开映射 f) (h₂ : 函数.单射 f)
   证明: by
   rw [h₁.preimage_closure_eq_closure_preimage h₃]; rw [Set.preimage_image_eq _ h₂]; rw [hs'.closure_eq]
 
@@ -1905,7 +1905,7 @@ theorem preimage_frontier_subset_frontier_preimage
 
 中文:
 定理 preimage_frontier_subset_frontier_preimage
-  条件: (hf : IsOpenMap f) {s : Set Y}
+  条件: (hf : 是开映射 f) {s : 集合 Y}
   证明: by
   simpa only [frontier_eq_closure_inter_closure, preimage_inter] using!
     inter_subset_inter hf.preimage_closure_subset_closure_preimage
@@ -1931,7 +1931,7 @@ theorem preimage_frontier_eq_frontier_preimage
 
 中文:
 定理 preimage_frontier_eq_frontier_preimage
-  条件: (hf : IsOpenMap f) (hfc : Continuous f) (s : Set Y)
+  条件: (hf : 是开映射 f) (hfc : 连续 f) (s : 集合 Y)
   证明: by
   simp only [frontier_eq_closure_inter_closure, preimage_inter, preimage_compl,
     hf.preimage_closure_eq_closure_preimage hfc]
@@ -1954,8 +1954,8 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [h : IsEmpty X] (f : X -> Y)
-  结论: IsOpenMap f
+  条件: [h : 是空 X] (f : X -> Y)
+  结论: 是开映射 f
   证明: of_nhds_le h.elim
 
 Depends on / 依赖: h.elim, of_nhds_le
@@ -1974,7 +1974,7 @@ exact h.neBot.mono inf_le_inf_right _ hf.nhds_le _
 
 中文:
 定理 clusterPt_comap
-  条件: (hf : IsOpenMap f) {x : X} {l : Filter Y} (h : ClusterPt (f x) l)
+  条件: (hf : 是开映射 f) {x : X} {l : 滤子 Y} (h : ClusterPt (f x) l)
   证明: by
   rw [ClusterPt]; rw [← map_neBot_iff]; rw [Filter.push_pull]
 exact h.neBot.mono inf_le_inf_right _ hf.nhds_le _
@@ -2000,7 +2000,7 @@ theorem accPt_comap
 
 中文:
 定理 accPt_comap
-  条件: (hf : IsOpenMap f) {x : X} {l : Filter Y} (h : AccPt (f x) l)
+  条件: (hf : 是开映射 f) {x : X} {l : 滤子 Y} (h : 聚点 (f x) l)
   证明: by
   rw [accPt_iff_clusterPt] at h ⊢
   apply (hf.clusterPt_comap h).mono
@@ -2026,7 +2026,7 @@ theorem clusterPt_comap_iff
 
 中文:
 定理 clusterPt_comap_iff
-  条件: (hf : IsOpenMap f) (hfc : Continuous f) {x : X} {l : Filter Y}
+  条件: (hf : 是开映射 f) (hfc : 连续 f) {x : X} {l : 滤子 Y}
   证明: ⟨fun h => h.map hfc.continuousAt tendsto_comap, hf.clusterPt_comap⟩
 
 Depends on / 依赖: clusterPt_comap, continuousAt, h.map, hf.clusterPt_comap, hfc.continuousAt, tendsto_comap
@@ -2069,7 +2069,7 @@ theorem isOpenMap_iff_nhds_le
 
 中文:
 定理 isOpenMap_iff_nhds_le
-  结论: IsOpenMap f ↔ 对任意 x : X, 𝓝 (f x) <= (𝓝 x).map f
+  结论: 是开映射 f ↔ 对任意 x : X, 𝓝 (f x) <= (𝓝 x).map f
   证明: ⟨fun hf => hf.nhds_le, IsOpenMap.of_nhds_le⟩
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.of_nhds_le, hf.nhds_le, nhds_le, of_nhds_le
@@ -2122,7 +2122,7 @@ subset_interior_iff_isOpen.mp by simpa only [hu.interior_eq] using hs u⟩
 
 中文:
 定理 isOpenMap_iff_image_interior
-  结论: IsOpenMap f ↔ 对任意 s, f '' interior s subseteq interior (f '' s)
+  结论: 是开映射 f ↔ 对任意 s, f '' interior s subseteq interior (f '' s)
   证明: ⟨IsOpenMap.image_interior_subset, fun hs u hu =>
 subset_interior_iff_isOpen.mp by simpa only [hu.interior_eq] using hs u⟩
 
@@ -2163,8 +2163,8 @@ lemma Topology.IsInducing.isOpenMap
   proof: IsOpenMap.of_nhds_le fun _ => (hi.map_nhds_of_mem _ <| IsOpen.mem_nhds ho <| mem_range_self _).ge
 
 中文:
-引理 Topology.IsInducing.isOpenMap
-  条件: (hi : IsInducing f) (ho : IsOpen (range f))
+引理 拓扑.是Inducing.isOpenMap
+  条件: (hi : 是Inducing f) (ho : 是开集 (range f))
   证明: IsOpenMap.of_nhds_le fun _ => (hi.map_nhds_of_mem _ <| IsOpen.mem_nhds ho <| mem_range_self _).ge
 -/
 protected lemma Topology.IsInducing.isOpenMap (hi : IsInducing f) (ho : IsOpen (range f)) :
@@ -2181,8 +2181,8 @@ theorem Dense.preimage
 hf.preimage_closure_subset_closure_preimage hs (f x)
 
 中文:
-定理 Dense.preimage
-  条件: {s : Set Y} (hs : Dense s) (hf : IsOpenMap f)
+定理 稠密.原像
+  条件: {s : 集合 Y} (hs : 稠密 s) (hf : 是开映射 f)
   证明: fun x =>
 hf.preimage_closure_subset_closure_preimage hs (f x)
 -/
@@ -2209,7 +2209,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsClosedMap (@id X)
+  结论: 是闭映射 (@id X)
   证明: fun s hs => by rwa [image_id]
 -/
 protected theorem id : IsClosedMap (@id X) := fun s hs => by rwa [image_id]
@@ -2228,8 +2228,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : IsClosedMap g) (hf : IsClosedMap f)
-  结论: IsClosedMap (g ∘ f)
+  条件: (hg : 是闭映射 g) (hf : 是闭映射 f)
+  结论: 是闭映射 (g ∘ f)
   证明: by
   intro s hs
   rw [image_comp]
@@ -2253,7 +2253,7 @@ theorem of_comp_surjective
 
 中文:
 定理 of_comp_surjective
-  结论: (hf : Surjective f) (hf' : Continuous f)
+  结论: (hf : 满射 f) (hf' : 连续 f)
   证明: by
   intro K hK
   rw [← image_preimage_eq K hf]; rw [← image_comp]
@@ -2275,7 +2275,7 @@ theorem closure_image_subset
 
 中文:
 定理 closure_image_subset
-  条件: (hf : IsClosedMap f) (s : Set X)
+  条件: (hf : 是闭映射 f) (s : 集合 X)
   证明: closure_minimal (image_mono subset_closure) (hf _ isClosed_closure)
 
 Depends on / 依赖: closure_minimal, image_mono, isClosed_closure, subset_closure
@@ -2296,7 +2296,7 @@ theorem of_inverse
 
 中文:
 定理 of_inverse
-  结论: {f' : Y -> X} (h : Continuous f') (l_inv : LeftInverse f f')
+  结论: {f' : Y -> X} (h : 连续 f') (l_inv : 左逆 f f')
   证明: fun s hs => by
   rw [image_eq_preimage_of_inverse r_inv l_inv]
   exact hs.preimage h
@@ -2321,7 +2321,7 @@ theorem of_nonempty
 
 中文:
 定理 of_nonempty
-  条件: (h : 对任意 s, IsClosed s -> s.Nonempty -> IsClosed (f '' s))
+  条件: (h : 对任意 s, 是闭集 s -> s.非空 -> 是闭集 (f '' s))
   证明: by
   intro s hs; rcases eq_empty_or_nonempty s with h2s | h2s
   · simp_rw [h2s, image_empty, isClosed_empty]
@@ -2346,8 +2346,8 @@ theorem isClosed_range
 
 中文:
 定理 isClosed_range
-  条件: (hf : IsClosedMap f)
-  结论: IsClosed (range f)
+  条件: (hf : 是闭映射 f)
+  结论: 是闭集 (range f)
   证明: @image_univ _ _ f ▸ hf _ isClosed_univ
 
 Depends on / 依赖: image_univ, isClosed_univ
@@ -2367,7 +2367,7 @@ theorem isQuotientMap
 
 中文:
 定理 isQuotientMap
-  结论: (hcl : IsClosedMap f) (hcont : Continuous f)
+  结论: (hcl : 是闭映射 f) (hcont : 连续 f)
   证明: isQuotientMap_iff_isClosed.2 ⟨hsurj, fun s =>
     ⟨fun hs => hs.preimage hcont, fun hs => hsurj.image_preimage s ▸ hcl _ hs⟩⟩
 
@@ -2415,8 +2415,8 @@ lemma Topology.IsInducing.isClosedMap
   exact ht.inter h
 
 中文:
-引理 Topology.IsInducing.isClosedMap
-  条件: (hf : IsInducing f) (h : IsClosed (range f))
+引理 拓扑.是Inducing.isClosedMap
+  条件: (hf : 是Inducing f) (h : 是闭集 (range f))
   证明: by
   intro s hs
   rcases hf.isClosed_iff.1 hs with ⟨t, ht, rfl⟩
@@ -2591,8 +2591,8 @@ theorem IsClosedMap.comap_nhds_eq
     (nhdsSet_le.mpr fun x hx => hx ▸ (hf'.tendsto x).le_comap)
 
 中文:
-定理 IsClosedMap.comap_nhds_eq
-  条件: (hf : IsClosedMap f) (hf' : Continuous f) (y : Y)
+定理 是闭映射.comap_nhds_eq
+  条件: (hf : 是闭映射 f) (hf' : 连续 f) (y : Y)
   证明: le_antisymm (isClosedMap_iff_comap_nhds_le.mp hf)
   -- Note: below should be an application of `Continuous.tendsto_nhdsSet_nhds`, but this is only
   -- proven later...
@@ -2619,8 +2619,8 @@ theorem IsClosedMap.comap_nhdsSet_eq
     (nhdsSet_le.mpr fun x hx => (hf'.tendsto x).le_comap.trans (comap_mono (nhds_le_nhdsSet hx)))
 
 中文:
-定理 IsClosedMap.comap_nhdsSet_eq
-  条件: (hf : IsClosedMap f) (hf' : Continuous f) (s : Set Y)
+定理 是闭映射.comap_nhdsSet_eq
+  条件: (hf : 是闭映射 f) (hf' : 连续 f) (s : 集合 Y)
   证明: le_antisymm (isClosedMap_iff_comap_nhdsSet_le.mp hf)
   -- Note: below should be an application of `Continuous.tendsto_nhdsSet_nhdsSet`, but this is only
   -- proven later...
@@ -2647,8 +2647,8 @@ theorem IsClosedMap.eventually_nhds_fiber
   rwa [eventually_comap] at H
 
 中文:
-定理 IsClosedMap.eventually_nhds_fiber
-  结论: (hf : IsClosedMap f) {p : X -> 命题} (y₀ : Y)
+定理 是闭映射.eventually_nhds_fiber
+  结论: (hf : 是闭映射 f) {p : X -> 命题} (y₀ : Y)
   证明: by
   rw [← eventually_nhdsSet_iff_forall] at H
   replace H := H.filter_mono hf.comap_nhds_le
@@ -2680,8 +2680,8 @@ theorem IsClosedMap.frequently_nhds_fiber
   exact hf.eventuall
 
 中文:
-定理 IsClosedMap.frequently_nhds_fiber
-  结论: (hf : IsClosedMap f) {p : X -> 命题} (y₀ : Y)
+定理 是闭映射.frequently_nhds_fiber
+  结论: (hf : 是闭映射 f) {p : X -> 命题} (y₀ : Y)
   证明: by
   /-
   Note: this result could also be seen as a reformulation of `isClosedMap_iff_clusterPt`.
@@ -2712,7 +2712,7 @@ theorem IsClosedMap.closure_image_eq_of_continuous
   proof: subset_antisymm (f_closed.closure_image_subset s) (image_closure_subset_closure_image f_cont)
 
 中文:
-定理 IsClosedMap.closure_image_eq_of_continuous
+定理 是闭映射.closure_image_eq_of_continuous
   证明: subset_antisymm (f_closed.closure_image_subset s) (image_closure_subset_closure_image f_cont)
 
 Depends on / 依赖: closure_image_subset, f_closed, f_closed.closure_image_subset, f_cont, image_closure_subset_closure_image, subset_antisymm
@@ -2734,7 +2734,7 @@ theorem IsClosedMap.lift'_closure_map_eq
   exact f_closed.closure_image_eq_of_continuous f_cont s
 
 中文:
-定理 IsClosedMap.lift'_closure_map_eq
+定理 是闭映射.lift'_closure_map_eq
   证明: by
   rw [map_lift'_eq2 (monotone_closure Y)]; rw [map_lift'_eq (monotone_closure X)]
   congr 1
@@ -2760,7 +2760,7 @@ theorem IsClosedMap.mapClusterPt_iff_lift'_closure
   rw [MapClusterPt]; rw [clusterPt_iff_lift'_closure']; rw [f_closed.lift'_closure_map_eq f_cont]; rw [← comap_principal]; rw [← map_neBot_iff f]; rw [Filter.push_pull]; rw [principal_singleton]
 
 中文:
-定理 IsClosedMap.mapClusterPt_iff_lift'_closure
+定理 是闭映射.mapClusterPt_iff_lift'_closure
   证明: by
   rw [MapClusterPt]; rw [clusterPt_iff_lift'_closure']; rw [f_closed.lift'_closure_map_eq f_cont]; rw [← comap_principal]; rw [← map_neBot_iff f]; rw [Filter.push_pull]; rw [principal_singleton]
 
@@ -2789,9 +2789,9 @@ lemma IsOpenEmbedding.isEmbedding
   proof: hf.toIsEmbedding
 
 中文:
-引理 IsOpenEmbedding.isEmbedding
-  条件: (hf : IsOpenEmbedding f)
-  结论: IsEmbedding f
+引理 是开嵌入.isEmbedding
+  条件: (hf : 是开嵌入 f)
+  结论: 是嵌入 f
   证明: hf.toIsEmbedding
 
 Depends on / 依赖: hf.toIsEmbedding, toIsEmbedding
@@ -2808,9 +2808,9 @@ lemma IsOpenEmbedding.isInducing
   proof: hf.isEmbedding.isInducing
 
 中文:
-引理 IsOpenEmbedding.isInducing
-  条件: (hf : IsOpenEmbedding f)
-  结论: IsInducing f
+引理 是开嵌入.isInducing
+  条件: (hf : 是开嵌入 f)
+  结论: 是Inducing f
   证明: hf.isEmbedding.isInducing
 
 Depends on / 依赖: hf.isEmbedding.isInducing, isEmbedding, isInducing
@@ -2828,9 +2828,9 @@ lemma IsOpenEmbedding.isOpenMap
   proof: hf.isEmbedding.isInducing.isOpenMap hf.isOpen_range
 
 中文:
-引理 IsOpenEmbedding.isOpenMap
-  条件: (hf : IsOpenEmbedding f)
-  结论: IsOpenMap f
+引理 是开嵌入.isOpenMap
+  条件: (hf : 是开嵌入 f)
+  结论: 是开映射 f
   证明: hf.isEmbedding.isInducing.isOpenMap hf.isOpen_range
 
 Depends on / 依赖: hf.isEmbedding.isInducing.isOpenMap, hf.isOpen_range, isEmbedding, isInducing, isOpenMap, isOpen_range
@@ -2847,8 +2847,8 @@ theorem IsOpenEmbedding.map_nhds_eq
   proof: hf.isEmbedding.map_nhds_of_mem _ hf.isOpen_range.mem_nhds mem_range_self _
 
 中文:
-定理 IsOpenEmbedding.map_nhds_eq
-  条件: (hf : IsOpenEmbedding f) (x : X)
+定理 是开嵌入.map_nhds_eq
+  条件: (hf : 是开嵌入 f) (x : X)
   证明: hf.isEmbedding.map_nhds_of_mem _ hf.isOpen_range.mem_nhds mem_range_self _
 
 Depends on / 依赖: hf.isEmbedding.map_nhds_of_mem, hf.isOpen_range.mem_nhds, isEmbedding, isOpen_range, map_nhds_of_mem, mem_nhds, mem_range_self
@@ -2869,8 +2869,8 @@ lemma IsOpenEmbedding.isOpen_iff_image_isOpen
     apply preimage_image_eq _ hf.injective
 
 中文:
-引理 IsOpenEmbedding.isOpen_iff_image_isOpen
-  条件: (hf : IsOpenEmbedding f) {s : Set X}
+引理 是开嵌入.isOpen_iff_image_isOpen
+  条件: (hf : 是开嵌入 f) {s : 集合 X}
   证明: hf.isOpenMap s
   mpr h := by
     convert! ← h.preimage hf.isEmbedding.continuous
@@ -2894,8 +2894,8 @@ theorem IsOpenEmbedding.tendsto_nhds_iff
   proof: hg.isEmbedding.tendsto_nhds_iff
 
 中文:
-定理 IsOpenEmbedding.tendsto_nhds_iff
-  结论: [TopologicalSpace Z] {f : ι -> Y} {l : Filter ι} {y : Y}
+定理 是开嵌入.tendsto_nhds_iff
+  结论: [拓扑空间 Z] {f : ι -> Y} {l : 滤子 ι} {y : Y}
   证明: hg.isEmbedding.tendsto_nhds_iff
 
 Depends on / 依赖: hg.isEmbedding.tendsto_nhds_iff, isEmbedding, tendsto_nhds_iff
@@ -2914,8 +2914,8 @@ theorem IsOpenEmbedding.tendsto_nhds_iff'
   rw [Tendsto]; rw [← map_map]; rw [hf.map_nhds_eq]; rfl
 
 中文:
-定理 IsOpenEmbedding.tendsto_nhds_iff'
-  条件: (hf : IsOpenEmbedding f) {l : Filter Z} {x : X}
+定理 是开嵌入.tendsto_nhds_iff'
+  条件: (hf : 是开嵌入 f) {l : 滤子 Z} {x : X}
   证明: by
   rw [Tendsto]; rw [← map_map]; rw [hf.map_nhds_eq]; rfl
 
@@ -2936,8 +2936,8 @@ theorem IsOpenEmbedding.continuousAt_iff
 @[fun_prop]
 
 中文:
-定理 IsOpenEmbedding.continuousAt_iff
-  条件: [TopologicalSpace Z] (hf : IsOpenEmbedding f) {x : X}
+定理 是开嵌入.continuousAt_iff
+  条件: [拓扑空间 Z] (hf : 是开嵌入 f) {x : X}
   证明: hf.tendsto_nhds_iff'
 
 @[fun_prop]
@@ -2959,9 +2959,9 @@ theorem IsOpenEmbedding.continuous
   proof: hf.isEmbedding.continuous
 
 中文:
-定理 IsOpenEmbedding.continuous
-  条件: (hf : IsOpenEmbedding f)
-  结论: Continuous f
+定理 是开嵌入.continuous
+  条件: (hf : 是开嵌入 f)
+  结论: 连续 f
   证明: hf.isEmbedding.continuous
 
 Depends on / 依赖: continuous, hf.isEmbedding.continuous, isEmbedding
@@ -2981,8 +2981,8 @@ lemma IsOpenEmbedding.isOpen_iff_preimage_isOpen
 @[fun_prop]
 
 中文:
-引理 IsOpenEmbedding.isOpen_iff_preimage_isOpen
-  结论: (hf : IsOpenEmbedding f) {s : Set Y}
+引理 是开嵌入.isOpen_iff_preimage_isOpen
+  结论: (hf : 是开嵌入 f) {s : 集合 Y}
   证明: by
   rw [hf.isOpen_iff_image_isOpen]; rw [image_preimage_eq_inter_range]; rw [inter_eq_self_of_subset_left hs]
 
@@ -3004,8 +3004,8 @@ lemma IsOpenEmbedding.of_isEmbedding_isOpenMap
   proof: ⟨h₁, h₂.isOpen_range⟩
 
 中文:
-引理 IsOpenEmbedding.of_isEmbedding_isOpenMap
-  条件: (h₁ : IsEmbedding f) (h₂ : IsOpenMap f)
+引理 是开嵌入.of_isEmbedding_isOpenMap
+  条件: (h₁ : 是嵌入 f) (h₂ : 是开映射 f)
   证明: ⟨h₁, h₂.isOpen_range⟩
 
 Depends on / 依赖: isOpen_range
@@ -3025,8 +3025,8 @@ lemma IsEmbedding.isOpenEmbedding_of_surjective
 alias IsOpenEmbedding.of_isEmbedding := IsEmbedding.isOpenEmbedding_of_surjective
 
 中文:
-引理 IsEmbedding.isOpenEmbedding_of_surjective
-  条件: (hf : IsEmbedding f) (hsurj : f.Surjective)
+引理 是嵌入.isOpenEmbedding_of_surjective
+  条件: (hf : 是嵌入 f) (hsurj : f.满射)
   证明: ⟨hf, hsurj.range_eq ▸ isOpen_univ⟩
 
 alias IsOpenEmbedding.of_isEmbedding := IsEmbedding.isOpenEmbedding_of_surjective
@@ -3049,7 +3049,7 @@ lemma isOpenEmbedding_iff_isEmbedding_isOpenMap
 
 中文:
 引理 isOpenEmbedding_iff_isEmbedding_isOpenMap
-  结论: IsOpenEmbedding f ↔ IsEmbedding f ∧ IsOpenMap f
+  结论: 是开嵌入 f ↔ 是嵌入 f ∧ 是开映射 f
   证明: ⟨fun h => ⟨h.1, h.isOpenMap⟩, fun h => .of_isEmbedding_isOpenMap h.1 h.2⟩
 
 Depends on / 依赖: h.isOpenMap, isOpenMap, of_isEmbedding_isOpenMap
@@ -3069,7 +3069,7 @@ theorem IsOpenEmbedding.of_continuous_injective_isOpenMap
     le_antisymm (h₁.tendsto _).le_comap (@comap_map _ _ (𝓝 x) _ h₂ ▸ comap_mono (h₃.nhds_le _))
 
 中文:
-定理 IsOpenEmbedding.of_continuous_injective_isOpenMap
+定理 是开嵌入.of_continuous_injective_isOpenMap
   证明: by
   simp only [isOpenEmbedding_iff_isEmbedding_isOpenMap, isEmbedding_iff, isInducing_iff_nhds, *,
     and_true]
@@ -3121,7 +3121,7 @@ lemma id
 
 中文:
 引理 id
-  结论: IsOpenEmbedding (@id X)
+  结论: 是开嵌入 (@id X)
   证明: ⟨.id, IsOpenMap.id.isOpen_range⟩
 
 @[fun_prop]
@@ -3139,7 +3139,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: (hg : IsOpenEmbedding g)
+  结论: (hg : 是开嵌入 g)
   证明: ⟨hg.1.comp hf.1, (hg.isOpenMap.comp hf.isOpenMap).isOpen_range⟩
 -/
 protected lemma comp (hg : IsOpenEmbedding g)
@@ -3157,7 +3157,7 @@ theorem isOpenMap_iff
 
 中文:
 定理 isOpenMap_iff
-  条件: (hg : IsOpenEmbedding g)
+  条件: (hg : 是开嵌入 g)
   证明: by
   simp_rw [isOpenMap_iff_nhds_le, ← map_map, comp, ← hg.map_nhds_eq, map_le_map_iff hg.injective]
 
@@ -3179,7 +3179,7 @@ theorem of_comp_iff
 
 中文:
 定理 of_comp_iff
-  条件: (f : X -> Y) (hg : IsOpenEmbedding g)
+  条件: (f : X -> Y) (hg : 是开嵌入 g)
   证明: by
   simp only [isOpenEmbedding_iff_continuous_injective_isOpenMap, ← hg.isOpenMap_iff, ←
     hg.1.continuous_iff, hg.injective.of_comp_iff]
@@ -3201,7 +3201,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (f : X -> Y) (hg : IsOpenEmbedding g) (h : IsOpenEmbedding (g ∘ f))
+  条件: (f : X -> Y) (hg : 是开嵌入 g) (h : 是开嵌入 (g ∘ f))
   证明: (IsOpenEmbedding.of_comp_iff f hg).1 h
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.of_comp_iff, of_comp_iff
@@ -3220,8 +3220,8 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [IsEmpty X] (f : X -> Y)
-  结论: IsOpenEmbedding f
+  条件: [是空 X] (f : X -> Y)
+  结论: 是开嵌入 f
   证明: of_isEmbedding_isOpenMap (.of_subsingleton f) (.of_isEmpty f)
 
 Depends on / 依赖: of_isEmbedding_isOpenMap, of_isEmpty, of_subsingleton
@@ -3240,7 +3240,7 @@ theorem image_mem_nhds
 
 中文:
 定理 image_mem_nhds
-  条件: {f : X -> Y} (hf : IsOpenEmbedding f) {s : Set X} {x : X}
+  条件: {f : X -> Y} (hf : 是开嵌入 f) {s : 集合 X} {x : X}
   证明: by
   rw [← hf.map_nhds_eq]; rw [mem_map]; rw [preimage_image_eq _ hf.injective]
 
@@ -3293,8 +3293,8 @@ lemma isEmbedding
 
 中文:
 引理 isEmbedding
-  条件: (hf : IsClosedEmbedding f)
-  结论: IsEmbedding f
+  条件: (hf : 是闭嵌入 f)
+  结论: 是嵌入 f
   证明: hf.toIsEmbedding
 @[fun_prop]
 
@@ -3314,8 +3314,8 @@ lemma isInducing
 
 中文:
 引理 isInducing
-  条件: (hf : IsClosedEmbedding f)
-  结论: IsInducing f
+  条件: (hf : 是闭嵌入 f)
+  结论: 是Inducing f
   证明: hf.isEmbedding.isInducing
 @[fun_prop]
 
@@ -3334,8 +3334,8 @@ lemma continuous
 
 中文:
 引理 continuous
-  条件: (hf : IsClosedEmbedding f)
-  结论: Continuous f
+  条件: (hf : 是闭嵌入 f)
+  结论: 连续 f
   证明: hf.isEmbedding.continuous
 
 Depends on / 依赖: continuous, hf.isEmbedding.continuous, isEmbedding
@@ -3352,7 +3352,7 @@ lemma tendsto_nhds_iff
 
 中文:
 引理 tendsto_nhds_iff
-  条件: {g : ι -> X} {l : Filter ι} {x : X} (hf : IsClosedEmbedding f)
+  条件: {g : ι -> X} {l : 滤子 ι} {x : X} (hf : 是闭嵌入 f)
   证明: hf.isEmbedding.tendsto_nhds_iff
 
 Depends on / 依赖: hf.isEmbedding.tendsto_nhds_iff, isEmbedding, tendsto_nhds_iff
@@ -3371,8 +3371,8 @@ lemma isClosedMap
 
 中文:
 引理 isClosedMap
-  条件: (hf : IsClosedEmbedding f)
-  结论: IsClosedMap f
+  条件: (hf : 是闭嵌入 f)
+  结论: 是闭映射 f
   证明: hf.isEmbedding.isInducing.isClosedMap hf.isClosed_range
 
 Depends on / 依赖: hf.isClosed_range, hf.isEmbedding.isInducing.isClosedMap, isClosedMap, isClosed_range, isEmbedding, isInducing
@@ -3392,7 +3392,7 @@ lemma isClosed_iff_image_isClosed
 
 中文:
 引理 isClosed_iff_image_isClosed
-  条件: (hf : IsClosedEmbedding f) {s : Set X}
+  条件: (hf : 是闭嵌入 f) {s : 集合 X}
   证明: ⟨hf.isClosedMap s, fun h => by
     rw [← preimage_image_eq s hf.injective]
     exact h.preimage hf.continuous⟩
@@ -3416,7 +3416,7 @@ lemma isClosed_iff_preimage_isClosed
 
 中文:
 引理 isClosed_iff_preimage_isClosed
-  结论: (hf : IsClosedEmbedding f) {s : Set Y}
+  结论: (hf : 是闭嵌入 f) {s : 集合 Y}
   证明: by
   rw [hf.isClosed_iff_image_isClosed]; rw [image_preimage_eq_of_subset hs]
 
@@ -3436,7 +3436,7 @@ lemma of_isEmbedding_isClosedMap
 
 中文:
 引理 of_isEmbedding_isClosedMap
-  条件: (h₁ : IsEmbedding f) (h₂ : IsClosedMap f)
+  条件: (h₁ : 是嵌入 f) (h₂ : 是闭映射 f)
   证明: ⟨h₁, image_univ (f := f) ▸ h₂ univ isClosed_univ⟩
 
 Depends on / 依赖: image_univ, isClosed_univ
@@ -3459,7 +3459,7 @@ lemma of_continuous_injective_isClosedMap
 
 中文:
 引理 of_continuous_injective_isClosedMap
-  结论: (h₁ : Continuous f) (h₂ : Injective f)
+  结论: (h₁ : 连续 f) (h₂ : 单射 f)
   证明: by
   refine .of_isEmbedding_isClosedMap ⟨⟨?_⟩, h₂⟩ h₃
   refine h₁.le_induced.antisymm fun s hs => ?_
@@ -3514,7 +3514,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsClosedEmbedding (@id X)
+  结论: 是闭嵌入 (@id X)
   证明: ⟨.id, IsClosedMap.id.isClosed_range⟩
 
 @[fun_prop]
@@ -3532,7 +3532,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : IsClosedEmbedding g) (hf : IsClosedEmbedding f)
+  条件: (hg : 是闭嵌入 g) (hf : 是闭嵌入 f)
   证明: ⟨hg.isEmbedding.comp hf.isEmbedding, (hg.isClosedMap.comp hf.isClosedMap).isClosed_range⟩
 
 Depends on / 依赖: hf.isClosedMap, hf.isEmbedding, hg.isClosedMap.comp, hg.isEmbedding.comp, isClosedMap, isClosed_range, isEmbedding
@@ -3554,8 +3554,8 @@ lemma of_comp_iff
 
 中文:
 引理 of_comp_iff
-  条件: (hg : IsClosedEmbedding g)
-  结论: IsClosedEmbedding (g ∘ f) ↔ IsClosedEmbedding f
+  条件: (hg : 是闭嵌入 g)
+  结论: 是闭嵌入 (g ∘ f) ↔ 是闭嵌入 f
   证明: by
   simp_rw [isClosedEmbedding_iff, hg.isEmbedding.of_comp_iff, Set.range_comp,
     ← hg.isClosed_iff_image_isClosed]
@@ -3579,7 +3579,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (hg : IsEmbedding g) (hgf : IsClosedEmbedding (g ∘ f))
+  条件: (hg : 是嵌入 g) (hgf : 是闭嵌入 (g ∘ f))
   证明: hg.of_comp_iff.mp hgf.isEmbedding
   isClosed_range := by
     convert! hg.isClosed_preimage _ hgf.isClosed_range
@@ -3602,7 +3602,7 @@ theorem closure_image_eq
 
 中文:
 定理 closure_image_eq
-  条件: (hf : IsClosedEmbedding f) (s : Set X)
+  条件: (hf : 是闭嵌入 f) (s : 集合 X)
   证明: hf.isClosedMap.closure_image_eq_of_continuous hf.continuous s
 
 Depends on / 依赖: closure_image_eq_of_continuous, continuous, hf.continuous, hf.isClosedMap.closure_image_eq_of_continuous, isClosedMap

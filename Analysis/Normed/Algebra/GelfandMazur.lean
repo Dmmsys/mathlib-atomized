@@ -136,8 +136,8 @@ refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonemp
   filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
 
 中文:
-引理 norm_eq_of_isMinOn_of_forall_le
-  结论: {X E : 类型} [TopologicalSpace X]
+引理 norm_eq_of_isMinOn_of_对任意_le
+  结论: {X E : 类型} [拓扑空间 X]
   证明: by
   suffices {y | ‖f y‖ = M} = univ by simpa only [← this, hx] using! mem_univ y
 refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonempty_of_mem hx
@@ -179,8 +179,8 @@ lemma exists_isMinOn_norm_sub_smul
   
 
 中文:
-引理 exists_isMinOn_norm_sub_smul
-  结论: (𝕜 : 类型) {F : 类型} [NormedField 𝕜] [命题erSpace 𝕜]
+引理 存在_isMinOn_norm_sub_smul
+  结论: (𝕜 : 类型) {F : 类型} [赋范域 𝕜] [真空间 𝕜]
   证明: by
   have : Tendsto (‖x - algebraMap 𝕜 F ·‖) (cobounded 𝕜) atTop := by
 .comp .comp by simp tendsto_const_sub_cobounded x exact tendsto_norm_cobounded_atTop
@@ -264,7 +264,7 @@ lemma norm_sub_eq_norm_sub_of_isMinOn
 
 中文:
 引理 norm_sub_eq_norm_sub_of_isMinOn
-  结论: {x : F} {z : Complex}
+  结论: {x : F} {z : 复形}
   证明: by
   set M := ‖x - algebraMap Complex F z‖ with hMdef
   have hM₀ : 0 < M := by have := H z; positivity
@@ -313,7 +313,7 @@ lemma exists_norm_sub_smul_one_eq_zero
   -- otherwi
 
 中文:
-引理 exists_norm_sub_smul_one_eq_zero
+引理 存在_norm_sub_smul_one_eq_zero
   条件: (x : F)
   证明: by
   -- there is a minimizing `z : ℂ`; get it.
@@ -365,7 +365,7 @@ definition algEquivOfNormMul
 
 中文:
 定义 algEquivOfNormMul
-  签名: : Complex ≃ₐ[Complex] F
+  签名: : 复形 ≃ₐ[复形] F
   定义体: .ofBijective (ofId Complex F) by
     refine ⟨FaithfulSMul.algebraMap_injective Complex F, fun x => ?_⟩
     obtain ⟨z, hz⟩ := exists_norm_sub_smul_one_eq_zero x
@@ -391,7 +391,7 @@ theorem nonempty_algEquiv
 
 中文:
 定理 nonempty_algEquiv
-  结论: Nonempty (Complex ≃ₐ[Complex] F)
+  结论: 非空 (复形 ≃ₐ[复形] F)
   证明: ⟨algEquivOfNormMul F⟩
 
 Depends on / 依赖: algEquivOfNormMul
@@ -436,7 +436,7 @@ lemma continuous_φ
 中文:
 引理 continuous_φ
   条件: (x : F)
-  结论: Continuous (φ x)
+  结论: 连续 (φ x)
   证明: by fun_prop
 -/
 private lemma continuous_φ (x : F) : Continuous (φ x) := by fun_prop
@@ -518,7 +518,7 @@ lemma norm_φ_eq_norm_φ_of_isMinOn
 
 中文:
 引理 norm_φ_eq_norm_φ_of_isMinOn
-  结论: {x : F} {z : 实数 × 实数} (h : IsMinOn (‖φ x ·‖) Set.univ z)
+  结论: {x : F} {z : 实数 × 实数} (h : IsMinOn (‖φ x ·‖) 集合.univ z)
   证明: by
   set M : Real := ‖φ x z‖ with hM
   have hM₀ : 0 < M := by positivity
@@ -639,7 +639,7 @@ lemma exists_isMinOn_norm_φ
     exact ⟨
 
 中文:
-引理 exists_isMinOn_norm_φ
+引理 存在_isMinOn_norm_φ
   条件: (x : F)
   结论: 存在 z : 实数 × 实数, IsMinOn (‖φ x ·‖) univ z
   证明: by
@@ -680,7 +680,7 @@ lemma exists_isMonicOfDegree_two_and_aeval_eq_zero
   -- use that `‖φ x ·‖` is constant *and* is un
 
 中文:
-引理 exists_isMonicOfDegree_two_and_aeval_eq_zero
+引理 存在_isMonicOfDegree_two_and_aeval_eq_zero
   条件: (x : F)
   证明: by
   -- take the minimizer of `‖φ x ·‖` ...
@@ -723,7 +723,7 @@ theorem nonempty_algEquiv_or
 
 中文:
 定理 nonempty_algEquiv_or
-  条件: (F : 类型) [NormedField F] [NormedAlgebra 实数 F]
+  条件: (F : 类型) [赋范域 F] [赋范代数 实数 F]
   证明: by
   have : Algebra.IsAlgebraic Real F := by
     refine ⟨fun x => ?_⟩

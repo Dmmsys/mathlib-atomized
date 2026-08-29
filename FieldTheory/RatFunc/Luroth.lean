@@ -119,7 +119,7 @@ lemma φ_natDegree
 中文:
 引理 φ_natDegree
   条件: (h : E != ⊥)
-  结论: (φ E).natDegree = Module.finrank E K⟮X⟯
+  结论: (φ E).natDegree = 模.finrank E K⟮X⟯
   证明: by
   rw [← (IntermediateField.adjoinXEquiv E).toLinearEquiv.finrank_eq]; rw [adjoin.finrank (IntermediateField.isAlgebraic_X h).isIntegral]
 
@@ -144,7 +144,7 @@ lemma exists_φ_coeff_not_mem
   · simpa using congr(aeval (X : K⟮X⟯) $(hf))
 
 中文:
-引理 exists_φ_coeff_not_mem
+引理 存在_φ_coeff_not_mem
   条件: (h : E != ⊥)
   证明: by
   rw [← notMem_map_range]
@@ -858,7 +858,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra K⟮generator E⟯ E
+  签名: 代数 K⟮generator E⟯ E
   定义体: (IntermediateField.inclusion adjoin_generator_le).toAlgebra
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, adjoin_generator_le, inclusion, toAlgebra
@@ -1322,7 +1322,7 @@ lemma Q₂_map
 中文:
 引理 Q₂_map
   条件: (h : E != ⊥)
-  结论: (Q₂ h).map Polynomial.C = Q₁ h
+  结论: (Q₂ h).map 多项式.C = Q₁ h
   证明: by
   have := eq_C_of_natDegree_eq_zero (swap_Q₁_natDegree h)
   apply_fun Bivariate.swap at this
@@ -1378,7 +1378,7 @@ lemma Q₂_mul_Φ
 中文:
 引理 Q₂_mul_Φ
   条件: (h : E != ⊥)
-  结论: (Q₂ h).map Polynomial.C * Φ E = θ E
+  结论: (Q₂ h).map 多项式.C * Φ E = θ E
   证明: by
   rw [Q₂_map h]; rw [Q₁_mul_Φ h]
 -/
@@ -1481,7 +1481,7 @@ lemma Q₃_map
 中文:
 引理 Q₃_map
   条件: (h : E != ⊥)
-  结论: Polynomial.C (Q₃ h) = Q₂ h
+  结论: 多项式.C (Q₃ h) = Q₂ h
   证明: (eq_C_of_natDegree_eq_zero (Q₂_natDegree h)).symm
 
 Depends on / 依赖: eq_C_of_natDegree_eq_zero
@@ -1502,7 +1502,7 @@ lemma Q₃_mul_Φ
 中文:
 引理 Q₃_mul_Φ
   条件: (h : E != ⊥)
-  结论: (Polynomial.C (Q₃ h)).map Polynomial.C * Φ E = θ E
+  结论: (多项式.C (Q₃ h)).map 多项式.C * Φ E = θ E
   证明: by
   rw [Q₃_map h]; rw [Q₂_mul_Φ h]
 -/

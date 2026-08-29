@@ -71,7 +71,7 @@ theorem coe_mulIndicator
 
 中文:
 定理 coe_mulIndicator
-  条件: {α} (s : Set α) (f : α -> 实数>=0) (a : α)
+  条件: {α} (s : 集合 α) (f : α -> 实数>=0) (a : α)
   证明: map_mulIndicator toRealHom _ _ _
 
 @[simp, norm_cast]
@@ -95,7 +95,7 @@ theorem coe_indicator
 
 中文:
 定理 coe_indicator
-  条件: {α} (s : Set α) (f : α -> 实数>=0) (a : α)
+  条件: {α} (s : 集合 α) (f : α -> 实数>=0) (a : α)
   证明: map_indicator toRealHom _ _ _
 
 @[simp, norm_cast]
@@ -172,8 +172,8 @@ theorem coe_list_sum
 
 中文:
 定理 coe_list_sum
-  条件: (l : List 实数>=0)
-  结论: ((l.sum : 实数>=0) : 实数) = (l.map (↑)).sum
+  条件: (l : 列表 实数>=0)
+  结论: ((l.求和 : 实数>=0) : 实数) = (l.map (↑)).求和
   证明: map_list_sum toRealHom l
 
 @[norm_cast]
@@ -197,8 +197,8 @@ theorem coe_list_prod
 
 中文:
 定理 coe_list_prod
-  条件: (l : List 实数>=0)
-  结论: ((l.prod : 实数>=0) : 实数) = (l.map (↑)).prod
+  条件: (l : 列表 实数>=0)
+  结论: ((l.乘积 : 实数>=0) : 实数) = (l.map (↑)).乘积
   证明: map_list_prod toRealHom l
 
 @[norm_cast]
@@ -223,7 +223,7 @@ theorem coe_multiset_sum
 中文:
 定理 coe_multiset_sum
   条件: (s : Multiset 实数>=0)
-  结论: ((s.sum : 实数>=0) : 实数) = (s.map (↑)).sum
+  结论: ((s.求和 : 实数>=0) : 实数) = (s.map (↑)).求和
   证明: map_multiset_sum toRealHom s
 
 @[norm_cast]
@@ -246,7 +246,7 @@ theorem coe_multiset_prod
 中文:
 定理 coe_multiset_prod
   条件: (s : Multiset 实数>=0)
-  结论: ((s.prod : 实数>=0) : 实数) = (s.map (↑)).prod
+  结论: ((s.乘积 : 实数>=0) : 实数) = (s.map (↑)).乘积
   证明: map_multiset_prod toRealHom s
 
 Depends on / 依赖: map_multiset_prod, toRealHom
@@ -270,7 +270,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: (s : Finset ι) (f : ι -> 实数>=0)
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
   结论: ∑ i in s, f i = ∑ i in s, (f i : 实数)
   证明: map_sum toRealHom _ _
 
@@ -293,7 +293,7 @@ lemma toReal_finsuppSum
 @[simp, norm_cast]
 
 中文:
-引理 toReal_finsuppSum
+引理 to实数_finsuppSum
   条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
   证明: map_finsuppSum toRealHom ..
 
@@ -316,7 +316,7 @@ lemma toReal_finsuppProd
 @[simp, norm_cast]
 
 中文:
-引理 toReal_finsuppProd
+引理 to实数_finsuppProd
   条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
   证明: map_finsuppProd toRealHom ..
 
@@ -339,7 +339,7 @@ lemma coe_expect
 
 中文:
 引理 coe_expect
-  条件: (s : Finset ι) (f : ι -> 实数>=0)
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
   结论: 𝔼 i in s, f i = 𝔼 i in s, (f i : 实数)
   证明: map_expect toRealHom ..
 
@@ -361,7 +361,7 @@ theorem _root_.Real.toNNReal_sum_of_nonneg
 @[simp, norm_cast]
 
 中文:
-定理 _root_.Real.toNNReal_sum_of_nonneg
+定理 _root_.实数.toNN实数_sum_of_nonneg
   条件: (hf : 对任意 i in s, 0 <= f i)
   证明: by
   rw [← coe_inj]; rw [NNReal.coe_sum]; rw [Real.coe_toNNReal _ (Finset.sum_nonneg hf)]
@@ -388,7 +388,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (s : Finset ι) (f : ι -> 实数>=0)
+  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
   结论: ↑(∏ a in s, f a) = ∏ a in s, (f a : 实数)
   证明: map_prod toRealHom _ _
 
@@ -408,7 +408,7 @@ theorem _root_.Real.toNNReal_prod_of_nonneg
   exact Finset.prod_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
 
 中文:
-定理 _root_.Real.toNNReal_prod_of_nonneg
+定理 _root_.实数.toNN实数_prod_of_nonneg
   条件: (hf : 对任意 a, a in s -> 0 <= f a)
   证明: by
   rw [← coe_inj]; rw [NNReal.coe_prod]; rw [Real.coe_toNNReal _ (Finset.prod_nonneg hf)]
@@ -433,7 +433,7 @@ theorem le_iInf_add_iInf
 
 中文:
 定理 le_iInf_add_iInf
-  结论: {ι ι' : Sort*} [Nonempty ι] [Nonempty ι'] {f : ι -> 实数>=0} {g : ι' -> 实数>=0}
+  结论: {ι ι' : 类型层*} [非空 ι] [非空 ι'] {f : ι -> 实数>=0} {g : ι' -> 实数>=0}
   证明: by
   rw [← NNReal.coe_le_coe]; rw [NNReal.coe_add]; rw [coe_iInf]; rw [coe_iInf]
   exact le_ciInf_add_ciInf h
@@ -455,7 +455,7 @@ theorem mul_finset_sup
 
 中文:
 定理 mul_finset_sup
-  条件: {α} (r : 实数>=0) (s : Finset α) (f : α -> 实数>=0)
+  条件: {α} (r : 实数>=0) (s : 有限集 α) (f : α -> 实数>=0)
   证明: Finset.apply_sup_eq_sup_comp _ (NNReal.mul_sup r) (mul_zero r)
 
 Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp, NNReal, NNReal.mul_sup, apply_sup_eq_sup_comp, mul_sup, mul_zero
@@ -474,7 +474,7 @@ theorem finset_sup_mul
 
 中文:
 定理 finset_sup_mul
-  条件: {α} (s : Finset α) (f : α -> 实数>=0) (r : 实数>=0)
+  条件: {α} (s : 有限集 α) (f : α -> 实数>=0) (r : 实数>=0)
   证明: Finset.apply_sup_eq_sup_comp (· * r) (fun x y => NNReal.sup_mul x y r) (zero_mul r)
 
 Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp, NNReal, NNReal.sup_mul, apply_sup_eq_sup_comp, sup_mul, zero_mul
@@ -493,7 +493,7 @@ theorem finset_sup_div
 
 中文:
 定理 finset_sup_div
-  条件: {α} {f : α -> 实数>=0} {s : Finset α} (r : 实数>=0)
+  条件: {α} {f : α -> 实数>=0} {s : 有限集 α} (r : 实数>=0)
   证明: by simp only [div_eq_inv_mul, mul_finset_sup]
 
 Depends on / 依赖: div_eq_inv_mul, mul_finset_sup
@@ -514,8 +514,8 @@ lemma bddAbove_natCast_image_iff
 
 中文:
 引理 bddAbove_natCast_image_iff
-  条件: {s : Set 自然数}
-  结论: BddAbove ((↑) '' s : Set 实数>=0) ↔ BddAbove s
+  条件: {s : 集合 自然数}
+  结论: BddAbove ((↑) '' s : 集合 实数>=0) ↔ BddAbove s
   证明: ⟨.imp' Nat.floor (by simp [upperBounds, Nat.le_floor_iff]), .imp' (↑) (by simp [upperBounds])⟩
 -/
 @[simp] lemma bddAbove_natCast_image_iff {s : Set Nat} : BddAbove ((↑) '' s : Set Real>=0) ↔ BddAbove s :=
@@ -533,7 +533,7 @@ lemma bddAbove_range_natCast_iff
 
 中文:
 引理 bddAbove_range_natCast_iff
-  条件: {ι : Sort*} (f : ι -> 自然数)
+  条件: {ι : 类型层*} (f : ι -> 自然数)
   证明: by
   rw [← bddAbove_natCast_image_iff]; rw [← Set.range_comp]
   rfl
@@ -870,7 +870,7 @@ lemma natCast_iSup
 
 中文:
 引理 natCast_iSup
-  条件: {ι : Sort*} (f : ι -> 自然数)
+  条件: {ι : 类型层*} (f : ι -> 自然数)
   证明: by
   by_cases h : BddAbove (Set.range f)
   · apply eq_of_forall_ge_iff
@@ -898,7 +898,7 @@ lemma natCast_iInf
 
 中文:
 引理 natCast_iInf
-  条件: {ι : Sort*} (f : ι -> 自然数)
+  条件: {ι : 类型层*} (f : ι -> 自然数)
   证明: by
   obtain hι | hι := isEmpty_or_nonempty ι
   · simp [iInf_empty]
@@ -926,7 +926,7 @@ lemma toReal_eq
   proof: by simp
 
 中文:
-引理 toReal_eq
+引理 to实数_eq
   条件: (a b : 实数>=0)
   结论: a = b ↔ (a : 实数) = (b : 实数)
   证明: by simp
@@ -943,7 +943,7 @@ lemma toReal_le
   proof: by simp
 
 中文:
-引理 toReal_le
+引理 to实数_le
   条件: (a b : 实数>=0)
   结论: a <= b ↔ (a : 实数) <= (b : 实数)
   证明: by simp
@@ -960,7 +960,7 @@ lemma toReal_lt
   proof: by simp
 
 中文:
-引理 toReal_lt
+引理 to实数_lt
   条件: (a b : 实数>=0)
   结论: a < b ↔ (a : 实数) < (b : 实数)
   证明: by simp
@@ -977,7 +977,7 @@ lemma toReal_ne
   proof: by simp
 
 中文:
-引理 toReal_ne
+引理 to实数_ne
   条件: (a b : 实数>=0)
   结论: a != b ↔ (a : 实数) != (b : 实数)
   证明: by simp
@@ -999,7 +999,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  结论: range to实数 = Ici 0
+  结论: range to实数 = 左闭右无界区间 0
   证明: Subtype.range_coe
 
 @[simp]
@@ -1023,7 +1023,7 @@ theorem image_coe_Ici
 中文:
 定理 image_coe_Ici
   条件: (x : 实数>=0)
-  结论: to实数 '' Ici x = Ici ↑x
+  结论: to实数 '' 左闭右无界区间 x = 左闭右无界区间 ↑x
   证明: image_subtype_val_Ici_Ici ..
 
 @[simp]
@@ -1047,7 +1047,7 @@ theorem image_coe_Iic
 中文:
 定理 image_coe_Iic
   条件: (x : 实数>=0)
-  结论: to实数 '' Iic x = Icc 0 ↑x
+  结论: to实数 '' 左无界右闭区间 x = 闭区间 0 ↑x
   证明: image_subtype_val_Ici_Iic ..
 
 @[simp]
@@ -1071,7 +1071,7 @@ theorem image_coe_Ioi
 中文:
 定理 image_coe_Ioi
   条件: (x : 实数>=0)
-  结论: to实数 '' Ioi x = Ioi ↑x
+  结论: to实数 '' 左开右无界区间 x = 左开右无界区间 ↑x
   证明: image_subtype_val_Ici_Ioi ..
 
 @[simp]
@@ -1095,7 +1095,7 @@ theorem image_coe_Iio
 中文:
 定理 image_coe_Iio
   条件: (x : 实数>=0)
-  结论: to实数 '' Iio x = Ico 0 ↑x
+  结论: to实数 '' 左无界右开区间 x = 左闭右开区间 0 ↑x
   证明: image_subtype_val_Ici_Iio ..
 
 @[simp]
@@ -1119,7 +1119,7 @@ theorem image_coe_Icc
 中文:
 定理 image_coe_Icc
   条件: (x y : 实数>=0)
-  结论: to实数 '' Icc x y = Icc ↑x ↑y
+  结论: to实数 '' 闭区间 x y = 闭区间 ↑x ↑y
   证明: image_subtype_val_Icc (s := Ici 0) ..
 
 @[simp]
@@ -1144,7 +1144,7 @@ theorem image_coe_Ioc
 中文:
 定理 image_coe_Ioc
   条件: (x y : 实数>=0)
-  结论: to实数 '' Ioc x y = Ioc ↑x ↑y
+  结论: to实数 '' 左开右闭区间 x y = 左开右闭区间 ↑x ↑y
   证明: image_subtype_val_Ioc (s := Ici 0) ..
 
 @[simp]
@@ -1169,7 +1169,7 @@ theorem image_coe_Ico
 中文:
 定理 image_coe_Ico
   条件: (x y : 实数>=0)
-  结论: to实数 '' Ico x y = Ico ↑x ↑y
+  结论: to实数 '' 左闭右开区间 x y = 左闭右开区间 ↑x ↑y
   证明: image_subtype_val_Ico (s := Ici 0) ..
 
 @[simp]
@@ -1194,7 +1194,7 @@ theorem image_coe_Ioo
 中文:
 定理 image_coe_Ioo
   条件: (x y : 实数>=0)
-  结论: to实数 '' Ioo x y = Ioo ↑x ↑y
+  结论: to实数 '' 开区间 x y = 开区间 ↑x ↑y
   证明: image_subtype_val_Ioo (s := Ici 0) ..
 
 @[simp]

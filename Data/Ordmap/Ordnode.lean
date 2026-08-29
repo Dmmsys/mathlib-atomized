@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Ordnode α)
+  签名: 可居 (Ordnode α)
   定义体: ⟨nil⟩
 -/
 instance : Inhabited (Ordnode α) :=
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton α (Ordnode α)
+  签名: 单例 α (Ordnode α)
   定义体: ⟨Ordnode.singleton⟩
 
 Depends on / 依赖: Ordnode, Ordnode.singleton, singleton
@@ -288,7 +288,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : Ordnode α -> 布尔
+  签名: : Ordnode α -> 布尔值
 -/
 def empty : Ordnode α -> Bool
   | nil => true
@@ -832,7 +832,7 @@ definition findMin
 
 中文:
 定义 findMin
-  签名: : Ordnode α -> Option α
+  签名: : Ordnode α -> 选项类型 α
 -/
 def findMin : Ordnode α -> Option α
   | nil => none
@@ -862,7 +862,7 @@ definition findMax
 
 中文:
 定义 findMax
-  签名: : Ordnode α -> Option α
+  签名: : Ordnode α -> 选项类型 α
 -/
 def findMax : Ordnode α -> Option α
   | nil => none
@@ -932,7 +932,7 @@ definition splitMin
 
 中文:
 定义 splitMin
-  签名: : Ordnode α -> Option (α × Ordnode α)
+  签名: : Ordnode α -> 选项类型 (α × Ordnode α)
 -/
 def splitMin : Ordnode α -> Option (α × Ordnode α)
   | nil => none
@@ -970,7 +970,7 @@ definition splitMax
 
 中文:
 定义 splitMax
-  签名: : Ordnode α -> Option (Ordnode α × α)
+  签名: : Ordnode α -> 选项类型 (Ordnode α × α)
 -/
 def splitMax : Ordnode α -> Option (Ordnode α × α)
   | nil => none
@@ -1303,7 +1303,7 @@ definition Equiv
   body: t₁.size = t₂.size ∧ t₁.toList = t₂.toList
 
 中文:
-定义 Equiv
+定义 等价
   签名: (t₁ t₂ : Ordnode α)
   定义体: t₁.size = t₂.size ∧ t₁.toList = t₂.toList
 
@@ -1323,7 +1323,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : DecidableRel (@Equiv α)
+  签名: α] : DecidableRel (@等价 α)
   定义体: fun x y =>
   inferInstanceAs (Decidable (x.size = y.size ∧ x.toList = y.toList))
 -/
@@ -1357,7 +1357,7 @@ definition prod
   body: fold nil (fun s₁ a s₂ => merge s₁ <| merge (map (Prod.mk a) t₂) s₂) t₁
 
 中文:
-定义 prod
+定义 乘积
   签名: {β} (t₁ : Ordnode α) (t₂ : Ordnode β)
   定义体: fold nil (fun s₁ a s₂ => merge s₁ <| merge (map (Prod.mk a) t₂) s₂) t₁
 -/
@@ -1422,7 +1422,7 @@ definition nth
 
 中文:
 定义 nth
-  签名: : Ordnode α -> 自然数 -> Option α
+  签名: : Ordnode α -> 自然数 -> 选项类型 α
 -/
 def nth : Ordnode α -> Nat -> Option α
   | nil, _ => none
@@ -1660,7 +1660,7 @@ definition ofAscListAux₁
 
 中文:
 定义 ofAscListAux₁
-  签名: : 对任意 l : List α, 自然数 -> Ordnode α × { l' : List α // l'.length <= l.length }
+  签名: : 对任意 l : 列表 α, 自然数 -> Ordnode α × { l' : 列表 α // l'.length <= l.length }
   定义体: Nat.le_succ_of_le h
         let (r, ⟨zs, h'⟩) := ofAscListAux₁ ys (s <<< 1)
         (link l y r, ⟨zs, le_trans h' (le_of_lt this)⟩)
@@ -1693,7 +1693,7 @@ definition ofAscListAux₂
 
 中文:
 定义 ofAscListAux₂
-  签名: : List α -> Ordnode α -> 自然数 -> Ordnode α
+  签名: : 列表 α -> Ordnode α -> 自然数 -> Ordnode α
   定义体: Nat.lt_succ_of_le h
       ofAscListAux₂ ys (link l x r) (s <<< 1)
       termination_by l => l.length
@@ -1718,7 +1718,7 @@ definition ofAscList
 
 中文:
 定义 ofAscList
-  签名: : List α -> Ordnode α
+  签名: : 列表 α -> Ordnode α
 -/
 def ofAscList : List α -> Ordnode α
   | [] => nil
@@ -1849,7 +1849,7 @@ definition updateWith
 
 中文:
 定义 updateWith
-  签名: (f : α -> Option α) (x : α)
+  签名: (f : α -> 选项类型 α) (x : α)
 -/
 def updateWith (f : α -> Option α) (x : α) : Ordnode α -> Ordnode α
   | nil => nil
@@ -1871,7 +1871,7 @@ definition alter
 
 中文:
 定义 alter
-  签名: (f : Option α -> Option α) (x : α)
+  签名: (f : 选项类型 α -> 选项类型 α) (x : α)
 -/
 def alter (f : Option α -> Option α) (x : α) : Ordnode α -> Ordnode α
   | nil => Option.recOn (f none) nil Ordnode.singleton
@@ -2215,7 +2215,7 @@ definition isSubsetAux
 
 中文:
 定义 isSubsetAux
-  签名: : Ordnode α -> Ordnode α -> 布尔
+  签名: : Ordnode α -> Ordnode α -> 布尔值
   定义体: split3 x t
     found.isSome && isSubsetAux l lt && isSubsetAux r gt
 
@@ -2257,7 +2257,7 @@ definition disjoint
 
 中文:
 定义 disjoint
-  签名: : Ordnode α -> Ordnode α -> 布尔
+  签名: : Ordnode α -> Ordnode α -> 布尔值
   定义体: split3 x t
     found.isNone && disjoint l lt && disjoint r gt
 
@@ -2364,7 +2364,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: l.foldr insert nil
 
 Depends on / 依赖: insert, l.foldr
@@ -2381,7 +2381,7 @@ definition ofList'
 
 中文:
 定义 ofList'
-  签名: : List α -> Ordnode α
+  签名: : 列表 α -> Ordnode α
 -/
 def ofList' : List α -> Ordnode α
   | [] => nil
@@ -2396,7 +2396,7 @@ definition image
   body: ofList (t.toList.map f)
 
 中文:
-定义 image
+定义 像
   签名: {α β} [LE β] [DecidableLE β] (f : α -> β) (t : Ordnode α)
   定义体: ofList (t.toList.map f)
 

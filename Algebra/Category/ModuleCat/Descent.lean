@@ -45,8 +45,8 @@ change PreservesFiniteLimits tensorLeft (ModuleCat.of A B)
   infer_instance
 
 中文:
-引理 ModuleCat.preservesFiniteLimits_tensorLeft_of_ringHomFlat
-  条件: (hf : f.Flat)
+引理 模范畴.preservesFiniteLimits_tensorLeft_of_ringHomFlat
+  条件: (hf : f.平坦)
   证明: by
   algebraize [f]
 change PreservesFiniteLimits tensorLeft (ModuleCat.of A B)
@@ -72,8 +72,8 @@ lemma ModuleCat.preservesFiniteLimits_extendScalars_of_flat
   exact preservesFiniteLimits_of_reflects_of_preserves (extendScalars f) (restrictScalars f)
 
 中文:
-引理 ModuleCat.preservesFiniteLimits_extendScalars_of_flat
-  条件: (hf : f.Flat)
+引理 模范畴.preservesFiniteLimits_extendScalars_of_flat
+  条件: (hf : f.平坦)
   证明: by
   have : PreservesFiniteLimits (extendScalars.{_, _, u} f ⋙ restrictScalars.{_, _, u} f) :=
     ModuleCat.preservesFiniteLimits_tensorLeft_of_ringHomFlat hf
@@ -100,7 +100,7 @@ lemma ModuleCat.reflectsIsomorphisms_extendScalars_of_faithfullyFlat
   rwa [Module.FaithfullyFlat.lTensor_bijective_iff_bijective] at h
 
 中文:
-引理 ModuleCat.reflectsIsomorphisms_extendScalars_of_faithfullyFlat
+引理 模范畴.reflectsIsomorphisms_extendScalars_of_faithfullyFlat
   证明: by
   refine ⟨fun {M N} g h => ?_⟩
   algebraize [f]
@@ -137,7 +137,7 @@ definition comonadicExtendScalars
 
 中文:
 定义 comonadicExtendScalars
-  签名: (hf : f.FaithfullyFlat)
+  签名: (hf : f.忠实平坦)
   定义体: by
   have := preservesFiniteLimits_extendScalars_of_flat hf.flat
   have := reflectsIsomorphisms_extendScalars_of_faithfullyFlat hf

@@ -661,7 +661,7 @@ definition gluing
 
 中文:
 定义 gluing
-  签名: : Scheme.GlueData.{u} where
+  签名: : 概形.粘合数据.{u} where
   定义体: 𝒰.I₀
   U i := pullback (𝒰.f i ≫ f) g
   V := fun ⟨i, j⟩ => v 𝒰 f g i j
@@ -1291,7 +1291,7 @@ apply Cover.hom_ext 𝒰.pullback₁ s.fst
 
 中文:
 定义 gluedIsLimit
-  签名: : IsLimit (PullbackCone.mk _ _ (p_comm 𝒰 f g))
+  签名: : 是极限 (PullbackCone.mk _ _ (p_comm 𝒰 f g))
   定义体: by
   apply PullbackCone.isLimitAux'
   intro s
@@ -1360,7 +1360,7 @@ instance affine_hasPullback
 
 中文:
 实例 affine_hasPullback
-  签名: {A B C : CommRingCat}
+  签名: {A B C : 交换环范畴}
   定义体: by
   rw [← Scheme.Spec.map_preimage f]; rw [← Scheme.Spec.map_preimage g]
   exact ⟨⟨⟨_, isLimitOfHasPullbackOfPreservesLimit
@@ -1386,7 +1386,7 @@ theorem affine_affine_hasPullback
 
 中文:
 定理 affine_affine_hasPullback
-  结论: {B C : CommRingCat} {X : Scheme}
+  结论: {B C : 交换环范畴} {X : 概形}
   证明: hasPullback_of_cover X.affineCover f g
 
 Depends on / 依赖: X.affineCover, affineCover, hasPullback_of_cover
@@ -1408,7 +1408,7 @@ instance base_affine_hasPullback
 
 中文:
 实例 base_affine_hasPullback
-  签名: {C : CommRingCat} {X Y : Scheme} (f : X ⟶ Spec C)
+  签名: {C : 交换环范畴} {X Y : 概形} (f : X ⟶ Spec C)
   定义体: @hasPullback_symmetry _ _ _ _ _ _ _
     (@hasPullback_of_cover _ _ _ Y.affineCover g f fun _ =>
 @hasPullback_symmetry _ _ _ _ _ _ _ affine_affine_hasPullback _ _)
@@ -1435,7 +1435,7 @@ instance left_affine_comp_pullback_hasPullback
 
 中文:
 实例 left_affine_comp_pullback_hasPullback
-  签名: {X Y Z : Scheme} (f : X ⟶ Z) (g : Y ⟶ Z)
+  签名: {X Y Z : 概形} (f : X ⟶ Z) (g : Y ⟶ Z)
   定义体: by
   simpa [pullback.condition] using
     hasPullback_assoc_symm f (Z.affineCover.f i) (Z.affineCover.f i) g
@@ -1461,7 +1461,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasPullbacks Scheme
+  签名: 有Pullbacks 概形
   定义体: hasPullbacks_of_hasLimit_cospan _
 
 Depends on / 依赖: hasPullbacks_of_hasLimit_cospan
@@ -1484,7 +1484,7 @@ instance isAffine_of_isAffine_isAffine_isAffine
 
 中文:
 实例 isAffine_of_isAffine_isAffine_isAffine
-  签名: {X Y Z : Scheme}
+  签名: {X Y Z : 概形}
   定义体: .of_isIso
     (pullback.map f g (Spec.map (Γ.map f.op)) (Spec.map (Γ.map g.op))
         X.toSpecΓ Y.toSpecΓ Z.toSpecΓ
@@ -1511,7 +1511,7 @@ theorem _root_.AlgebraicGeometry.Scheme.isEmpty_pullback
   proof: isEmpty_of_commSq (IsPullback.of_hasPullback f g).toCommSq H
 
 中文:
-定理 _root_.AlgebraicGeometry.Scheme.isEmpty_pullback
+定理 _root_.AlgebraicGeometry.概形.isEmpty_pullback
   证明: isEmpty_of_commSq (IsPullback.of_hasPullback f g).toCommSq H
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, isEmpty_of_commSq, of_hasPullback, toCommSq
@@ -1787,7 +1787,7 @@ lemma _root_.AlgebraicGeometry.Scheme.isPullback_of_openCover
   have H₁ (i : _) : IsIso ((openCoverOfLeft 𝒰 fXZ fYZ).pullbackHom (lift fWX fWY 
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.isPullback_of_openCover
+引理 _root_.AlgebraicGeometry.概形.isPullback_of_openCover
   证明: by
   have h : fWX ≫ fXZ = fWY ≫ fYZ :=
     Scheme.Cover.hom_ext (𝒰.pullback₁ fWX) _ _ fun i => by simpa using (H i).w
@@ -1973,8 +1973,8 @@ instance Scheme.pullback_map_isOpenImmersion
   infer_instance
 
 中文:
-实例 Scheme.pullback_map_isOpenImmersion
-  签名: {X Y S X' Y' S' : Scheme}
+实例 概形.pullback_map_isOpenImmersion
+  签名: {X Y S X' Y' S' : 概形}
   定义体: by
   rw [pullback_map_eq_pullbackFstFstIso_inv]
   infer_instance
@@ -2002,7 +2002,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory (Over S)
+  签名: CartesianMonoidal范畴 (Over S)
   定义体: Over.cartesianMonoidalCategory _
 
 Depends on / 依赖: Over.cartesianMonoidalCategory, cartesianMonoidalCategory
@@ -2018,7 +2018,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (Over S)
+  签名: 辫范畴 (Over S)
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -2242,7 +2242,7 @@ lemma isPullback_SpecMap_of_isPushout
 
 中文:
 引理 isPullback_SpecMap_of_isPushout
-  结论: {A B C P : CommRingCat} (f : A ⟶ B) (g : A ⟶ C)
+  结论: {A B C P : 交换环范畴} (f : A ⟶ B) (g : A ⟶ C)
   证明: IsPullback.map Scheme.Spec h.op.flip
 
 Depends on / 依赖: IsPullback, IsPullback.map, Scheme, Scheme.Spec, h.op.flip
@@ -2264,7 +2264,7 @@ lemma isPullback_SpecMap_pushout
 
 中文:
 引理 isPullback_SpecMap_pushout
-  条件: {A B C : CommRingCat} (f : A ⟶ B) (g : A ⟶ C)
+  条件: {A B C : 交换环范畴} (f : A ⟶ B) (g : A ⟶ C)
   证明: by
   apply isPullback_SpecMap_of_isPushout
   exact IsPushout.of_hasPushout f g
@@ -2367,7 +2367,7 @@ instance isCommMonObj_asOver_pullback
 
 中文:
 实例 isCommMonObj_asOver_pullback
-  签名: [MonObj (asOver M S)] [IsCommMonObj (asOver M S)]
+  签名: [MonObj (asOver M S)] [是交换MonObj (asOver M S)]
   定义体: by
   unfold asOver OverClass.asOver at *; exact Over.isCommMonObj_mk_pullbackSnd
 
@@ -2407,7 +2407,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pullback.fst (M ↘ S) (𝟙 S)).IsOver S
+  签名: (pullback.fst (M ↘ S) (𝟙 S)).是Over S
   定义体: ⟨pullback.condition.trans (by simp)⟩
 
 Depends on / 依赖: condition, pullback, pullback.condition.trans

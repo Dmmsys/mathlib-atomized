@@ -215,7 +215,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {M} [AddCommMonoid M] [Module R M] ⦃f g
+  条件: {M} [加法交换幺半群 M] [模 R M] ⦃f g
   结论: 𝒜 ᵍotimes[R] ℬ ->ₗ[R] M⦄
   证明: h
 -/
@@ -396,7 +396,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (𝒜 ᵍotimes[R] ℬ)
+  签名: 乘法 (𝒜 ᵍotimes[R] ℬ)
   定义体: mulHom 𝒜 ℬ x y
 
 Depends on / 依赖: mulHom
@@ -455,7 +455,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (𝒜 ᵍotimes[R] ℬ) where
+  签名: : 幺半群 (𝒜 ᵍotimes[R] ℬ) where
   定义体: by
     rw [mul_def]; rw [mulHom_apply]; rw [auxEquiv_one]; rw [gradedMul_one]; rw [LinearEquiv.symm_apply_apply]
   one_mul x := by
@@ -487,7 +487,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (𝒜 ᵍotimes[R] ℬ) where
+  签名: : 环 (𝒜 ᵍotimes[R] ℬ) where
   定义体: by simp_rw [mul_def, LinearMap.map_add₂]
   left_distrib x y z := by simp_rw [mul_def, map_add]
   mul_zero x := by simp_rw [mul_def, map_zero]
@@ -735,7 +735,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R (𝒜 ᵍotimes[R] ℬ) where
+  签名: : 代数 R (𝒜 ᵍotimes[R] ℬ) where
   定义体: (includeLeftRingHom 𝒜 ℬ).comp (algebraMap R A)
   commutes' r x := by
     dsimp [mul_def, mulHom_apply, auxEquiv_tmul]

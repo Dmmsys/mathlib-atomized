@@ -64,8 +64,8 @@ exact isClosed_biInter fun x hx => isClosed_Ici.preimage hp _
 
 中文:
 引理 isClosed_dual
-  条件: (hp : 对任意 x, Continuous (p x))
-  结论: IsClosed (dual p s : Set N)
+  条件: (hp : 对任意 x, 连续 (p x))
+  结论: 是闭集 (dual p s : 集合 N)
   证明: by
   rw [← s.biUnion_of_singleton]
   simp_rw [dual_iUnion, Submodule.coe_iInf, dual_singleton]
@@ -99,7 +99,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: PointedCone.dual p s
   isClosed' := PointedCone.isClosed_dual fun _ => p.continuous_of_isContPerfPair
 
@@ -168,7 +168,7 @@ exact (hy <| mem_univ x).antisymm' by simpa using hy mem_univ (-x)
 
 中文:
 引理 dual_univ
-  条件: [IsTopologicalRing R] [T1Space N]
+  条件: [是拓扑环 R] [T1空间 N]
   结论: dual p univ = ⊥
   证明: by
   refine le_antisymm (fun y hy => (_root_.map_eq_zero_iff _ p.flip.toContPerfPair.injective).1 ?_)
@@ -209,7 +209,7 @@ lemma dual_singleton
 
 中文:
 引理 dual_singleton
-  条件: [IsTopologicalRing R] [OrderClosedTopology R] (x : M)
+  条件: [是拓扑环 R] [OrderClosed拓扑 R] (x : M)
   证明: by ext; simp
 -/
 lemma dual_singleton [IsTopologicalRing R] [OrderClosedTopology R] (x : M) :
@@ -226,7 +226,7 @@ lemma dual_union
 
 中文:
 引理 dual_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: dual p (s union t) = dual p s ⊓ dual p t
   证明: by aesop
 -/
@@ -244,7 +244,7 @@ lemma dual_insert
 
 中文:
 引理 dual_insert
-  条件: (x : M) (s : Set M)
+  条件: (x : M) (s : 集合 M)
   结论: dual p (insert x s) = dual p {x} ⊓ dual p s
   证明: by
   rw [insert_eq]; rw [dual_union]
@@ -266,7 +266,7 @@ lemma dual_iUnion
 
 中文:
 引理 dual_iUnion
-  条件: {ι : Sort*} (f : ι -> Set M)
+  条件: {ι : 类型层*} (f : ι -> 集合 M)
   结论: dual p (⋃ i, f i) = ⨅ i, dual p (f i)
   证明: by
   ext; simp [forall_comm (α := M)]
@@ -288,7 +288,7 @@ lemma dual_sUnion
 
 中文:
 引理 dual_sUnion
-  条件: (S : Set (Set M))
+  条件: (S : 集合 (集合 M))
   结论: dual p (⋃₀ S) = sInf (dual p '' S)
   证明: by
   ext; simp [forall_comm (α := M)]
@@ -339,7 +339,7 @@ refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_l
 
 中文:
 定理 hyperplane_separation
-  结论: (C : 命题erCone 实数 E) (hKconv : Convex 实数 K) (hKcomp : IsCompact K)
+  结论: (C : ProperCone 实数 E) (hKconv : 凸 实数 K) (hKcomp : 是紧集 K)
   证明: by
   obtain rfl | ⟨x₀, hx₀⟩ := K.eq_empty_or_nonempty
   · exact ⟨0, by simp⟩
@@ -373,7 +373,7 @@ theorem hyperplane_separation_point
 
 中文:
 定理 hyperplane_separation_point
-  条件: (C : 命题erCone 实数 E) (hx₀ : x₀ ∉ C)
+  条件: (C : ProperCone 实数 E) (hx₀ : x₀ ∉ C)
   证明: by
   simpa [*] using C.hyperplane_separation (convex_singleton x₀)
 
@@ -397,7 +397,7 @@ theorem dual_flip_dual
 
 中文:
 定理 dual_flip_dual
-  条件: (p : E ->ₗ[实数] F ->ₗ[实数] 实数) [p.IsContPerfPair] (C : 命题erCone 实数 E)
+  条件: (p : E ->ₗ[实数] F ->ₗ[实数] 实数) [p.是余ntPerfPair] (C : ProperCone 实数 E)
   证明: by
   refine le_antisymm (fun x => ?_) subset_dual_dual
   simp only [mem_dual, SetLike.mem_coe]
@@ -421,7 +421,7 @@ theorem dual_dual_flip
 
 中文:
 定理 dual_dual_flip
-  条件: (p : F ->ₗ[实数] E ->ₗ[实数] 实数) [p.IsContPerfPair] (C : 命题erCone 实数 E)
+  条件: (p : F ->ₗ[实数] E ->ₗ[实数] 实数) [p.是余ntPerfPair] (C : ProperCone 实数 E)
   证明: C.dual_flip_dual p.flip
 -/
 @[simp] theorem dual_dual_flip (p : F ->ₗ[Real] E ->ₗ[Real] Real) [p.IsContPerfPair] (C : ProperCone Real E) :

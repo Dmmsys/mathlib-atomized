@@ -42,8 +42,8 @@ instance Discrete.monoidal
   rightUnitor X := Dis
 
 中文:
-实例 Discrete.monoidal
-  签名: : MonoidalCategory (Discrete M) where
+实例 离散.monoidal
+  签名: : 幺半群范畴 (离散 M) where
   定义体: Discrete.mk 1
   tensorObj X Y := Discrete.mk (X.as * Y.as)
   whiskerLeft X _ _ f := eqToHom (by rw [eq_of_hom f])
@@ -74,8 +74,8 @@ lemma Discrete.monoidal_tensorUnit_as
   proof: rfl
 
 中文:
-引理 Discrete.monoidal_tensorUnit_as
-  结论: (𝟙_ (Discrete M)).as = 1
+引理 离散.monoidal_tensorUnit_as
+  结论: (𝟙_ (离散 M)).as = 1
   证明: rfl
 -/
 lemma Discrete.monoidal_tensorUnit_as : (𝟙_ (Discrete M)).as = 1 := rfl
@@ -99,7 +99,7 @@ definition Discrete.monoidalFunctor
 @[to_additive (attr := simp) Discrete.addMonoidalFunctor_obj]
 
 中文:
-定义 Discrete.monoidalFunctor
+定义 离散.monoidalFunctor
   签名: (F : M ->* N)
   定义体: Discrete.functor (fun X => Discrete.mk (F X))
 
@@ -122,7 +122,7 @@ lemma Discrete.monoidalFunctor_obj
 @[to_additive Discrete.addMonoidalFunctorMonoidal]
 
 中文:
-引理 Discrete.monoidalFunctor_obj
+引理 离散.monoidalFunctor_obj
   条件: (F : M ->* N) (m : M)
   证明: rfl
 
@@ -143,7 +143,7 @@ instance Discrete.monoidalFunctorMonoidal
         μIso := fun m₁ m₂ => Discrete.eqToIso (F.map_mul _ _).symm }
 
 中文:
-实例 Discrete.monoidalFunctorMonoidal
+实例 离散.monoidalFunctorMonoidal
   签名: (F : M ->* N)
   定义体: Functor.CoreMonoidal.toMonoidal
       { εIso := Discrete.eqToIso F.map_one.symm
@@ -171,7 +171,7 @@ lemma Discrete.monoidalFunctor_ε
 @[to_additive Discrete.addMonoidalFunctor_η]
 
 中文:
-引理 Discrete.monoidalFunctor_ε
+引理 离散.monoidalFunctor_ε
   条件: (F : M ->* N)
   证明: rfl
 
@@ -192,7 +192,7 @@ lemma Discrete.monoidalFunctor_η
 @[to_additive Discrete.addMonoidalFunctor_μ]
 
 中文:
-引理 Discrete.monoidalFunctor_η
+引理 离散.monoidalFunctor_η
   条件: (F : M ->* N)
   证明: rfl
 
@@ -213,8 +213,8 @@ lemma Discrete.monoidalFunctor_μ
 @[to_additive Discrete.addMonoidalFunctor_δ]
 
 中文:
-引理 Discrete.monoidalFunctor_μ
-  条件: (F : M ->* N) (m₁ m₂ : Discrete M)
+引理 离散.monoidalFunctor_μ
+  条件: (F : M ->* N) (m₁ m₂ : 离散 M)
   证明: rfl
 
 @[to_additive Discrete.addMonoidalFunctor_δ]
@@ -232,8 +232,8 @@ lemma Discrete.monoidalFunctor_δ
   proof: rfl
 
 中文:
-引理 Discrete.monoidalFunctor_δ
-  条件: (F : M ->* N) (m₁ m₂ : Discrete M)
+引理 离散.monoidalFunctor_δ
+  条件: (F : M ->* N) (m₁ m₂ : 离散 M)
   证明: rfl
 -/
 lemma Discrete.monoidalFunctor_δ (F : M ->* N) (m₁ m₂ : Discrete M) :
@@ -255,7 +255,7 @@ definition Discrete.monoidalFunctorComp
   body: Iso.refl _
 
 中文:
-定义 Discrete.monoidalFunctorComp
+定义 离散.monoidalFunctorComp
   签名: (F : M ->* N) (G : N ->* K)
   定义体: Iso.refl _
 
@@ -281,7 +281,7 @@ instance Discrete.monoidalFunctorComp_isMonoidal
     simp [eqToHom_map]
 
 中文:
-实例 Discrete.monoidalFunctorComp_isMonoidal
+实例 离散.monoidalFunctorComp_isMonoidal
   签名: (F : M ->* N) (G : N ->* K)
   定义体: by
     dsimp only [comp_ε, monoidalFunctorComp, Iso.refl, Discrete.monoidalFunctor_ε]

@@ -111,7 +111,7 @@ instance ae_isMeasurablyGenerated
 
 中文:
 实例 ae_isMeasurablyGenerated
-  签名: : IsMeasurablyGenerated (ae μ)
+  签名: : 是MeasurablyGenerated (ae μ)
   定义体: ⟨fun _s hs =>
     let ⟨t, hst, htm, htμ⟩ := exists_measurable_superset_of_null hs
     ⟨tᶜ, compl_mem_ae_iff.2 htμ, htm.compl, compl_subset_comm.1 hst⟩⟩
@@ -134,7 +134,7 @@ theorem ae_uIoc_iff
 
 中文:
 定理 ae_uIoc_iff
-  条件: [LinearOrder α] {a b : α} {P : α -> 命题}
+  条件: [线性序 α] {a b : α} {P : α -> 命题}
   证明: by
   simp only [uIoc_eq_union, mem_union, or_imp, eventually_and]
 
@@ -155,7 +155,7 @@ theorem measure_union
 
 中文:
 定理 measure_union
-  条件: (hd : Disjoint s₁ s₂) (h : MeasurableSet s₂)
+  条件: (hd : Disjoint s₁ s₂) (h : 可测集 s₂)
   结论: μ (s₁ union s₂) = μ s₁ + μ s₂
   证明: measure_union₀ h.nullMeasurableSet hd.aedisjoint
 
@@ -175,7 +175,7 @@ theorem measure_union'
 
 中文:
 定理 measure_union'
-  条件: (hd : Disjoint s₁ s₂) (h : MeasurableSet s₁)
+  条件: (hd : Disjoint s₁ s₂) (h : 可测集 s₁)
   结论: μ (s₁ union s₂) = μ s₁ + μ s₂
   证明: measure_union₀' h.nullMeasurableSet hd.aedisjoint
 
@@ -197,7 +197,7 @@ theorem measure_inter_add_sdiff
 
 中文:
 定理 measure_inter_add_sdiff
-  条件: (s : Set α) (ht : MeasurableSet t)
+  条件: (s : 集合 α) (ht : 可测集 t)
   结论: μ (s inter t) + μ (s \ t) = μ s
   证明: measure_inter_add_sdiff₀ _ ht.nullMeasurableSet
 
@@ -223,7 +223,7 @@ theorem measure_sdiff_add_inter
 
 中文:
 定理 measure_sdiff_add_inter
-  条件: (s : Set α) (ht : MeasurableSet t)
+  条件: (s : 集合 α) (ht : 可测集 t)
   结论: μ (s \ t) + μ (s inter t) = μ s
   证明: (add_comm _ _).trans (measure_inter_add_sdiff s ht)
 
@@ -283,7 +283,7 @@ theorem measure_union_add_inter
 
 中文:
 定理 measure_union_add_inter
-  条件: (s : Set α) (ht : MeasurableSet t)
+  条件: (s : 集合 α) (ht : 可测集 t)
   证明: by
   rw [← measure_inter_add_sdiff (s union t) ht]; rw [Set.union_inter_cancel_right]; rw [union_sdiff_right]; rw [←
     measure_inter_add_sdiff s ht]
@@ -308,7 +308,7 @@ theorem measure_union_add_inter'
 
 中文:
 定理 measure_union_add_inter'
-  条件: (hs : MeasurableSet s) (t : Set α)
+  条件: (hs : 可测集 s) (t : 集合 α)
   证明: by
   rw [union_comm]; rw [inter_comm]; rw [measure_union_add_inter t hs]; rw [add_comm]
 
@@ -352,7 +352,7 @@ lemma measure_symmDiff_le
 
 中文:
 引理 measure_symmDiff_le
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   证明: le_trans (μ.mono <| symmDiff_triangle s t u) (measure_union_le (s ∆ t) (t ∆ u))
 
 Depends on / 依赖: le_trans, measure_union_le, symmDiff_triangle
@@ -392,7 +392,7 @@ theorem measure_add_measure_compl
 
 中文:
 定理 measure_add_measure_compl
-  条件: (h : MeasurableSet s)
+  条件: (h : 可测集 s)
   结论: μ s + μ sᶜ = μ univ
   证明: measure_add_measure_compl₀ h.nullMeasurableSet
 
@@ -414,7 +414,7 @@ theorem measure_biUnion₀
 
 中文:
 定理 measure_biUnion₀
-  结论: {s : Set β} {f : β -> Set α} (hs : s.Countable)
+  结论: {s : 集合 β} {f : β -> 集合 α} (hs : s.可数)
   证明: by
   have := hs.toEncodable
   rw [biUnion_eq_iUnion]
@@ -439,7 +439,7 @@ theorem measure_biUnion
 
 中文:
 定理 measure_biUnion
-  结论: {s : Set β} {f : β -> Set α} (hs : s.Countable) (hd : s.PairwiseDisjoint f)
+  结论: {s : 集合 β} {f : β -> 集合 α} (hs : s.可数) (hd : s.PairwiseDisjoint f)
   证明: measure_biUnion₀ hs hd.aedisjoint fun b hb => (h b hb).nullMeasurableSet
 
 Depends on / 依赖: aedisjoint, hd.aedisjoint, nullMeasurableSet
@@ -459,7 +459,7 @@ theorem measure_sUnion₀
 
 中文:
 定理 measure_sUnion₀
-  结论: {S : Set (Set α)} (hs : S.Countable) (hd : S.Pairwise (AEDisjoint μ))
+  结论: {S : 集合 (集合 α)} (hs : S.可数) (hd : S.两两 (AEDisjoint μ))
   证明: by
   rw [sUnion_eq_biUnion]; rw [measure_biUnion₀ hs hd h]
 
@@ -480,7 +480,7 @@ theorem measure_sUnion
 
 中文:
 定理 measure_sUnion
-  结论: {S : Set (Set α)} (hs : S.Countable) (hd : S.Pairwise Disjoint)
+  结论: {S : 集合 (集合 α)} (hs : S.可数) (hd : S.两两 Disjoint)
   证明: by
   rw [sUnion_eq_biUnion]; rw [measure_biUnion hs hd h]
 
@@ -502,7 +502,7 @@ theorem measure_biUnion_finset₀
 
 中文:
 定理 measure_biUnion_finset₀
-  结论: {s : Finset ι} {f : ι -> Set α}
+  结论: {s : 有限集 ι} {f : ι -> 集合 α}
   证明: by
   rw [← Finset.sum_attach]; rw [Finset.attach_eq_univ]; rw [← tsum_fintype (L := .unconditional s)]
   exact measure_biUnion₀ s.countable_toSet hd hm
@@ -525,7 +525,7 @@ theorem measure_biUnion_finset
 
 中文:
 定理 measure_biUnion_finset
-  结论: {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f)
+  结论: {s : 有限集 ι} {f : ι -> 集合 α} (hd : PairwiseDisjoint (↑s) f)
   证明: measure_biUnion_finset₀ hd.aedisjoint fun b hb => (hm b hb).nullMeasurableSet
 
 Depends on / 依赖: aedisjoint, hd.aedisjoint, nullMeasurableSet
@@ -549,7 +549,7 @@ theorem tsum_meas_le_meas_iUnion_of_disjoint₀
 
 中文:
 定理 tsum_meas_le_meas_iUnion_of_disjoint₀
-  结论: {ι : 类型} {_ : MeasurableSpace α} (μ : Measure α)
+  结论: {ι : 类型} {_ : 可测空间 α} (μ : 测度 α)
   证明: by
   rw [ENNReal.tsum_eq_iSup_sum]; rw [iSup_le_iff]
   intro s
@@ -579,7 +579,7 @@ theorem tsum_meas_le_meas_iUnion_of_disjoint
 
 中文:
 定理 tsum_meas_le_meas_iUnion_of_disjoint
-  结论: {ι : 类型} {_ : MeasurableSpace α} (μ : Measure α)
+  结论: {ι : 类型} {_ : 可测空间 α} (μ : 测度 α)
   证明: tsum_meas_le_meas_iUnion_of_disjoint₀ μ (fun i => (As_mble i).nullMeasurableSet)
     (fun _ _ h => Disjoint.aedisjoint (As_disj h))
 
@@ -602,7 +602,7 @@ theorem tsum_measure_preimage_singleton
 
 中文:
 定理 tsum_measure_preimage_singleton
-  结论: {s : Set β} (hs : s.Countable) {f : α -> β}
+  结论: {s : 集合 β} (hs : s.可数) {f : α -> β}
   证明: by
   rw [← Set.biUnion_preimage_singleton]; rw [measure_biUnion hs (pairwiseDisjoint_fiber f s) hf]
 
@@ -623,7 +623,7 @@ lemma measure_preimage_eq_zero_iff_of_countable
 
 中文:
 引理 measure_preimage_eq_zero_iff_of_countable
-  条件: {s : Set β} {f : α -> β} (hs : s.Countable)
+  条件: {s : 集合 β} {f : α -> β} (hs : s.可数)
   证明: by
   rw [← biUnion_preimage_singleton]; rw [measure_biUnion_null_iff hs]
 
@@ -645,7 +645,7 @@ theorem sum_measure_preimage_singleton
 
 中文:
 定理 sum_measure_preimage_singleton
-  结论: (s : Finset β) {f : α -> β}
+  结论: (s : 有限集 β) {f : α -> β}
   证明: by
   simp only [← measure_biUnion_finset (pairwiseDisjoint_fiber f s) hf,
     Finset.set_biUnion_preimage_singleton]
@@ -672,7 +672,7 @@ lemma sum_measure_singleton
 
 中文:
 引理 sum_measure_singleton
-  条件: {s : Finset α} [MeasurableSingletonClass α]
+  条件: {s : 有限集 α} [MeasurableSingleton类 α]
   证明: by
   trans ∑ x in s, μ (id ⁻¹' {x})
   · simp
@@ -727,7 +727,7 @@ theorem measure_add_sdiff
 
 中文:
 定理 measure_add_sdiff
-  条件: (hs : NullMeasurableSet s μ) (t : Set α)
+  条件: (hs : NullMeasurableSet s μ) (t : 集合 α)
   证明: by
   rw [← measure_union₀' hs disjoint_sdiff_right.aedisjoint]; rw [union_sdiff_self]
 
@@ -753,7 +753,7 @@ theorem measure_sdiff'
 
 中文:
 定理 measure_sdiff'
-  条件: (s : Set α) (hm : NullMeasurableSet t μ) (h_fin : μ t != ∞)
+  条件: (s : 集合 α) (hm : NullMeasurableSet t μ) (h_fin : μ t != ∞)
   证明: ENNReal.eq_sub_of_add_eq h_fin by rw [add_comm, measure_add_sdiff hm, union_comm]
 
 @[deprecated (since := "2026-06-03")] alias measure_diff' := measure_sdiff'
@@ -976,7 +976,7 @@ alias measure_eq_measure_of_null_diff := measure_eq_measure_of_null_sdiff
 
 中文:
 定理 measure_eq_measure_of_null_sdiff
-  条件: {s t : Set α} (hst : s subseteq t) (h_nullsdiff : μ (t \ s) = 0)
+  条件: {s t : 集合 α} (hst : s subseteq t) (h_nullsdiff : μ (t \ s) = 0)
   证明: measure_congr
       EventuallyLE.antisymm (LE.le.eventuallyLE hst) (ae_le_set.mpr h_nullsdiff)
 
@@ -1009,7 +1009,7 @@ theorem measure_eq_measure_of_between_null_sdiff
 
 中文:
 定理 measure_eq_measure_of_between_null_sdiff
-  结论: {s₁ s₂ s₃ : Set α} (h12 : s₁ subseteq s₂) (h23 : s₂ subseteq s₃)
+  结论: {s₁ s₂ s₃ : 集合 α} (h12 : s₁ subseteq s₂) (h23 : s₂ subseteq s₃)
   证明: by
   have le12 : μ s₁ <= μ s₂ := measure_mono h12
   have le23 : μ s₂ <= μ s₃ := measure_mono h23
@@ -1049,7 +1049,7 @@ alias measure_eq_measure_smaller_of_between_null_diff :=
 
 中文:
 定理 measure_eq_measure_smaller_of_between_null_sdiff
-  结论: {s₁ s₂ s₃ : Set α} (h12 : s₁ subseteq s₂)
+  结论: {s₁ s₂ s₃ : 集合 α} (h12 : s₁ subseteq s₂)
   证明: (measure_eq_measure_of_between_null_sdiff h12 h23 h_nullsdiff).1
 
 @[deprecated (since := "2026-06-03")]
@@ -1080,7 +1080,7 @@ alias measure_eq_measure_larger_of_between_null_diff :=
 
 中文:
 定理 measure_eq_measure_larger_of_between_null_sdiff
-  结论: {s₁ s₂ s₃ : Set α} (h12 : s₁ subseteq s₂)
+  结论: {s₁ s₂ s₃ : 集合 α} (h12 : s₁ subseteq s₂)
   证明: (measure_eq_measure_of_between_null_sdiff h12 h23 h_nullsdiff).2
 
 @[deprecated (since := "2026-06-03")]
@@ -1129,7 +1129,7 @@ theorem measure_compl
 
 中文:
 定理 measure_compl
-  条件: (h₁ : MeasurableSet s) (h_fin : μ s != ∞)
+  条件: (h₁ : 可测集 s) (h_fin : μ s != ∞)
   结论: μ sᶜ = μ univ - μ s
   证明: measure_compl₀ h₁.nullMeasurableSet h_fin
 
@@ -1205,7 +1205,7 @@ theorem union_ae_eq_left_iff_ae_subset
 
 中文:
 定理 union_ae_eq_left_iff_ae_subset
-  结论: (s union t : Set α) =ᵐ[μ] s ↔ t <=ᵐ[μ] s
+  结论: (s union t : 集合 α) =ᵐ[μ] s ↔ t <=ᵐ[μ] s
   证明: by
   rw [ae_le_set]
   refine
@@ -1238,7 +1238,7 @@ theorem union_ae_eq_right_iff_ae_subset
 
 中文:
 定理 union_ae_eq_right_iff_ae_subset
-  结论: (s union t : Set α) =ᵐ[μ] t ↔ s <=ᵐ[μ] t
+  结论: (s union t : 集合 α) =ᵐ[μ] t ↔ s <=ᵐ[μ] t
   证明: by
   rw [union_comm]; rw [union_ae_eq_left_iff_ae_subset]
 
@@ -1315,7 +1315,7 @@ _ <= μ (⋃ i, s i) := measure_mono subset_iUnion _ _
 
 中文:
 定理 measure_iUnion_congr_of_subset
-  结论: {ι : Sort*} [Countable ι] {s : ι -> Set α} {t : ι -> Set α}
+  结论: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α} {t : ι -> 集合 α}
   证明: by
   refine le_antisymm (by gcongr; apply hsub) ?_
   by_cases! htop : exists i, μ (t i) = ∞
@@ -1372,7 +1372,7 @@ theorem measure_union_congr_of_subset
 
 中文:
 定理 measure_union_congr_of_subset
-  结论: {t₁ t₂ : Set α} (hs : s₁ subseteq s₂) (hsμ : μ s₂ <= μ s₁)
+  结论: {t₁ t₂ : 集合 α} (hs : s₁ subseteq s₂) (hsμ : μ s₂ <= μ s₁)
   证明: by
   rw [union_eq_iUnion]; rw [union_eq_iUnion]
   exact measure_iUnion_congr_of_subset (Bool.forall_bool.2 ⟨ht, hs⟩) (Bool.forall_bool.2 ⟨htμ, hsμ⟩)
@@ -1398,7 +1398,7 @@ theorem measure_iUnion_toMeasurable
 
 中文:
 定理 measure_iUnion_toMeasurable
-  条件: {ι : Sort*} [Countable ι] (s : ι -> Set α)
+  条件: {ι : 类型层*} [可数 ι] (s : ι -> 集合 α)
   证明: Eq.symm measure_iUnion_congr_of_subset (fun _i => subset_toMeasurable _ _) fun _i =>
     (measure_toMeasurable _).le
 
@@ -1423,7 +1423,7 @@ theorem measure_biUnion_toMeasurable
 
 中文:
 定理 measure_biUnion_toMeasurable
-  条件: {I : Set β} (hc : I.Countable) (s : β -> Set α)
+  条件: {I : 集合 β} (hc : I.可数) (s : β -> 集合 α)
   证明: by
   have := hc.toEncodable
   simp only [biUnion_eq_iUnion, measure_iUnion_toMeasurable]
@@ -1503,7 +1503,7 @@ theorem sum_measure_le_measure_univ
 
 中文:
 定理 sum_measure_le_measure_univ
-  结论: {s : Finset ι} {t : ι -> Set α}
+  结论: {s : 有限集 ι} {t : ι -> 集合 α}
   证明: by
   rw [← measure_biUnion_finset₀ H h]
   exact measure_mono (subset_univ _)
@@ -1529,7 +1529,7 @@ theorem tsum_measure_le_measure_univ
 
 中文:
 定理 tsum_measure_le_measure_univ
-  结论: {s : ι -> Set α} (hs : 对任意 i, NullMeasurableSet (s i) μ)
+  结论: {s : ι -> 集合 α} (hs : 对任意 i, NullMeasurableSet (s i) μ)
   证明: by
   rw [ENNReal.tsum_eq_iSup_sum]
   exact iSup_le fun s =>
@@ -1556,8 +1556,8 @@ theorem exists_nonempty_inter_of_measure_univ_lt_tsum_measure
   exact (disjoint_iff_inter_eq_empty.mpr (H i j hij)).aedisjoint
 
 中文:
-定理 exists_nonempty_inter_of_measure_univ_lt_tsum_measure
-  结论: {m : MeasurableSpace α}
+定理 存在_nonempty_inter_of_measure_univ_lt_tsum_measure
+  结论: {m : 可测空间 α}
   证明: by
   contrapose! H
   apply tsum_measure_le_measure_univ hs
@@ -1587,8 +1587,8 @@ theorem exists_nonempty_inter_of_measure_univ_lt_sum_measure
   exact (disjoint_iff_inter_eq_empty.mpr (H i hi j hj hij)).aedisjoint
 
 中文:
-定理 exists_nonempty_inter_of_measure_univ_lt_sum_measure
-  结论: {m : MeasurableSpace α} (μ : Measure α)
+定理 存在_nonempty_inter_of_measure_univ_lt_sum_measure
+  结论: {m : 可测空间 α} (μ : 测度 α)
   证明: by
   contrapose! H
   apply sum_measure_le_measure_univ h
@@ -1621,7 +1621,7 @@ theorem nonempty_inter_of_measure_lt_add
 
 中文:
 定理 nonempty_inter_of_measure_lt_add
-  结论: {m : MeasurableSpace α} (μ : Measure α) {s t u : Set α}
+  结论: {m : 可测空间 α} (μ : 测度 α) {s t u : 集合 α}
   证明: by
   rw [← Set.not_disjoint_iff_nonempty_inter]
   contrapose! h
@@ -1653,7 +1653,7 @@ theorem nonempty_inter_of_measure_lt_add'
 
 中文:
 定理 nonempty_inter_of_measure_lt_add'
-  结论: {m : MeasurableSpace α} (μ : Measure α) {s t u : Set α}
+  结论: {m : 可测空间 α} (μ : 测度 α) {s t u : 集合 α}
   证明: by
   rw [add_comm] at h
   rw [inter_comm]
@@ -1684,7 +1684,7 @@ theorem _root_.Directed.measure_iUnion
 
 中文:
 定理 _root_.Directed.measure_iUnion
-  条件: [Countable ι] {s : ι -> Set α} (hd : Directed (· subseteq ·) s)
+  条件: [可数 ι] {s : ι -> 集合 α} (hd : Directed (· subseteq ·) s)
   证明: by
   -- WLOG, `ι = ℕ`
   rcases Countable.exists_injective_nat ι with ⟨e, he⟩
@@ -1739,8 +1739,8 @@ theorem _root_.Monotone.measure_iUnion
     exacts [(hs.comp hxm).directed_le.measure_iUnion, fun _ _ h => meas
 
 中文:
-定理 _root_.Monotone.measure_iUnion
-  结论: [Preorder ι] [IsDirectedOrder ι]
+定理 _root_.递增.measure_iUnion
+  结论: [预序 ι] [IsDirectedOrder ι]
   证明: by
   cases isEmpty_or_nonempty ι with
   | inl _ => simp
@@ -1770,8 +1770,8 @@ theorem _root_.Antitone.measure_iUnion
   proof: hs.dual_left.measure_iUnion
 
 中文:
-定理 _root_.Antitone.measure_iUnion
-  结论: [Preorder ι] [IsCodirectedOrder ι]
+定理 _root_.递减.measure_iUnion
+  结论: [预序 ι] [IsCodirectedOrder ι]
   证明: hs.dual_left.measure_iUnion
 
 Depends on / 依赖: dual_left, hs.dual_left.measure_iUnion, measure_iUnion
@@ -1793,7 +1793,7 @@ theorem measure_iUnion_eq_iSup_accumulate
 
 中文:
 定理 measure_iUnion_eq_iSup_accumulate
-  结论: [Preorder ι] [IsDirectedOrder ι]
+  结论: [预序 ι] [IsDirectedOrder ι]
   证明: by
   rw [← iUnion_accumulate]
   exact monotone_accumulate.measure_iUnion
@@ -1818,7 +1818,7 @@ theorem measure_biUnion_eq_iSup
 
 中文:
 定理 measure_biUnion_eq_iSup
-  结论: {s : ι -> Set α} {t : Set ι} (ht : t.Countable)
+  结论: {s : ι -> 集合 α} {t : 集合 ι} (ht : t.可数)
   证明: by
   have := ht.to_subtype
   rw [biUnion_eq_iUnion]; rw [hd.directed_val.measure_iUnion]; rw [← iSup_subtype'']
@@ -1844,8 +1844,8 @@ theorem _root_.Directed.measure_iInter
     
 
 中文:
-定理 _root_.Directed.measure_iInter
-  结论: [Countable ι] {s : ι -> Set α}
+定理 _root_.Directed.measure_i整数er
+  结论: [可数 ι] {s : ι -> 集合 α}
   证明: by
   rcases hfin with ⟨k, hk⟩
   have : forall t subseteq s k, μ t != ∞ := fun t ht => ne_top_of_le_ne_top hk (measure_mono ht)
@@ -1887,8 +1887,8 @@ theorem _root_.Monotone.measure_iInter
 refine .symm (hs.comp_anti
 
 中文:
-定理 _root_.Monotone.measure_iInter
-  结论: [Preorder ι] [IsCodirectedOrder ι]
+定理 _root_.递增.measure_i整数er
+  结论: [预序 ι] [IsCodirectedOrder ι]
   证明: by
   refine le_antisymm (le_iInf fun i => measure_mono <| iInter_subset _ _) ?_
   have := hfin.nonempty
@@ -1936,8 +1936,8 @@ theorem measure_iInter_of_ae_monotone
   have hMono : Mon
 
 中文:
-定理 measure_iInter_of_ae_monotone
-  结论: [Preorder ι] [IsCodirectedOrder ι]
+定理 measure_i整数er_of_ae_monotone
+  结论: [预序 ι] [IsCodirectedOrder ι]
   证明: by
   obtain ⟨i, hi⟩ := hfin
   have : Nonempty ι := ⟨i⟩
@@ -1976,8 +1976,8 @@ theorem _root_.Antitone.measure_iInter
   proof: hs.dual_left.measure_iInter hsm hfin
 
 中文:
-定理 _root_.Antitone.measure_iInter
-  结论: [Preorder ι] [IsDirectedOrder ι]
+定理 _root_.递减.measure_i整数er
+  结论: [预序 ι] [IsDirectedOrder ι]
   证明: hs.dual_left.measure_iInter hsm hfin
 
 Depends on / 依赖: dual_left, hs.dual_left.measure_iInter, measure_iInter
@@ -1999,8 +1999,8 @@ lemma measure_iInter_of_ae_antitone
   filter_upwards [hs] with ω hω using hω.dual_left
 
 中文:
-引理 measure_iInter_of_ae_antitone
-  结论: [Preorder ι] [IsDirectedOrder ι]
+引理 measure_i整数er_of_ae_antitone
+  结论: [预序 ι] [IsDirectedOrder ι]
   证明: by
   refine measure_iInter_of_ae_monotone (ι := ιᵒᵈ) ?_ hsm hfin
   filter_upwards [hs] with ω hω using hω.dual_left
@@ -2029,8 +2029,8 @@ exact congrArg μ iInter_congr fun i => (biInf_const nonempty_Ici).symm
 · refine hfin.imp fun k hk =>
 
 中文:
-定理 measure_iInter_eq_iInf_measure_iInter_le
-  结论: {α ι : 类型} {_ : MeasurableSpace α}
+定理 measure_i整数er_eq_iInf_measure_i整数er_le
+  结论: {α ι : 类型} {_ : 可测空间 α}
   证明: by
   rw [← Antitone.measure_iInter]
   · rw [iInter_comm]
@@ -2067,7 +2067,7 @@ exact tendsto_atTop_iSup fun n m hnm => measure_mono hm hnm
 
 中文:
 定理 tendsto_measure_iUnion_atTop
-  结论: [Preorder ι] [IsCountablyGenerated (atTop : Filter ι)]
+  结论: [预序 ι] [是余untablyGenerated (atTop : 滤子 ι)]
   证明: by
   refine .of_neBot_imp fun h => ?_
   have := (atTop_neBot_iff.1 h).2
@@ -2093,7 +2093,7 @@ theorem tendsto_measure_iUnion_atBot
 
 中文:
 定理 tendsto_measure_iUnion_atBot
-  结论: [Preorder ι] [IsCountablyGenerated (atBot : Filter ι)]
+  结论: [预序 ι] [是余untablyGenerated (atBot : 滤子 ι)]
   证明: tendsto_measure_iUnion_atTop (ι := ιᵒᵈ) hm.dual_left
 
 Depends on / 依赖: dual_left, hm.dual_left, tendsto_measure_iUnion_atTop
@@ -2147,8 +2147,8 @@ theorem tendsto_measure_iInter_atTop
 exact tendsto_atTop_iInf fun n m hnm => measure_mono hm hnm
 
 中文:
-定理 tendsto_measure_iInter_atTop
-  结论: [Preorder ι]
+定理 tendsto_measure_i整数er_atTop
+  结论: [预序 ι]
   证明: by
   refine .of_neBot_imp fun h => ?_
   have := (atTop_neBot_iff.1 h).2
@@ -2175,8 +2175,8 @@ theorem tendsto_measure_iInter_atBot
   proof: tendsto_measure_iInter_atTop (ι := ιᵒᵈ) hs hm.dual_left hf
 
 中文:
-定理 tendsto_measure_iInter_atBot
-  结论: [Preorder ι] [IsCountablyGenerated (atBot : Filter ι)]
+定理 tendsto_measure_i整数er_atBot
+  结论: [预序 ι] [是余untablyGenerated (atBot : 滤子 ι)]
   证明: tendsto_measure_iInter_atTop (ι := ιᵒᵈ) hs hm.dual_left hf
 
 Depends on / 依赖: dual_left, hm.dual_left, tendsto_measure_iInter_atTop
@@ -2200,8 +2200,8 @@ theorem tendsto_measure_iInter_le
 fun i j hij => measure_mono biInter_subset_biInter_left fun k hki => le_trans hki hij
 
 中文:
-定理 tendsto_measure_iInter_le
-  结论: {α ι : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+定理 tendsto_measure_i整数er_le
+  结论: {α ι : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: by
   refine .of_neBot_imp fun hne => ?_
   cases atTop_neBot_iff.mp hne
@@ -2236,8 +2236,8 @@ theorem exists_measure_iInter_lt
     rw [ENNReal.tendsto_atTop_zero_iff_lt_of_antitone hFAnti] at 
 
 中文:
-定理 exists_measure_iInter_lt
-  结论: {α ι : 类型} {_ : MeasurableSpace α} {μ : Measure α}
+定理 存在_measure_i整数er_lt
+  结论: {α ι : 类型} {_ : 可测空间 α} {μ : 测度 α}
   证明: by
   let F m := μ (⋂ n <= m, f n)
   have hFAnti : Antitone F :=
@@ -2280,8 +2280,8 @@ theorem tendsto_measure_biInter_gt
     · rwa
 
 中文:
-定理 tendsto_measure_biInter_gt
-  结论: {ι : 类型} [LinearOrder ι] [TopologicalSpace ι]
+定理 tendsto_measure_bi整数er_gt
+  结论: {ι : 类型} [线性序 ι] [拓扑空间 ι]
   证明: by
   by_cases ha : Order.IsPredPrelimit a
   · have : (atBot : Filter (Ioi a)).IsCountablyGenerated := by
@@ -2320,7 +2320,7 @@ theorem measure_if
 
 中文:
 定理 measure_if
-  条件: {x : β} {t : Set β} {s : Set α} [Decidable (x in t)]
+  条件: {x : β} {t : 集合 β} {s : 集合 α} [可判定 (x in t)]
   证明: by split_ifs with h <;> simp [h]
 
 Depends on / 依赖: split_ifs
@@ -2348,7 +2348,7 @@ lemma ext_of_measurableAtoms
 
 中文:
 引理 ext_of_measurableAtoms
-  结论: [Countable α] {μ ν : Measure α}
+  结论: [可数 α] {μ ν : 测度 α}
   证明: by
   ext s hs
   have h1 : s = ⋃ x in s, measurableAtom x := by
@@ -2409,8 +2409,8 @@ definition OuterMeasure.toMeasure
     m.iUnion_eq_of_caratheodory (fun i => h _ (hf i)) hd
 
 中文:
-定义 OuterMeasure.toMeasure
-  签名: (m : OuterMeasure α) (h : ms <= m.caratheodory)
+定义 外测度.toMeasure
+  签名: (m : 外测度 α) (h : ms <= m.caratheodory)
   定义体: Measure.ofMeasurable (fun s _ => m s) m.empty fun _f hf hd =>
     m.iUnion_eq_of_caratheodory (fun i => h _ (hf i)) hd
 
@@ -2433,7 +2433,7 @@ theorem le_toOuterMeasure_caratheodory
 
 中文:
 定理 le_toOuterMeasure_caratheodory
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: ms <= μ.toOuterMeasure.caratheodory
   证明: fun _s hs _t => (measure_inter_add_sdiff _ hs).symm
 
@@ -2457,7 +2457,7 @@ theorem toMeasure_toOuterMeasure
 
 中文:
 定理 toMeasure_toOuterMeasure
-  条件: (m : OuterMeasure α) (h : ms <= m.caratheodory)
+  条件: (m : 外测度 α) (h : ms <= m.caratheodory)
   证明: rfl
 
 @[simp]
@@ -2477,7 +2477,7 @@ theorem toMeasure_apply
 
 中文:
 定理 toMeasure_apply
-  结论: (m : OuterMeasure α) (h : ms <= m.caratheodory) {s : Set α}
+  结论: (m : 外测度 α) (h : ms <= m.caratheodory) {s : 集合 α}
   证明: m.trim_eq hs
 
 Depends on / 依赖: m.trim_eq, trim_eq
@@ -2496,7 +2496,7 @@ theorem le_toMeasure_apply
 
 中文:
 定理 le_toMeasure_apply
-  条件: (m : OuterMeasure α) (h : ms <= m.caratheodory) (s : Set α)
+  条件: (m : 外测度 α) (h : ms <= m.caratheodory) (s : 集合 α)
   证明: m.le_trim s
 
 Depends on / 依赖: le_trim, m.le_trim
@@ -2523,7 +2523,7 @@ theorem toMeasure_apply₀
 
 中文:
 定理 toMeasure_apply₀
-  结论: (m : OuterMeasure α) (h : ms <= m.caratheodory) {s : Set α}
+  结论: (m : 外测度 α) (h : ms <= m.caratheodory) {s : 集合 α}
   证明: by
   refine le_antisymm ?_ (le_toMeasure_apply _ _ _)
   rcases hs.exists_measurable_subset_ae_eq with ⟨t, hts, htm, heq⟩
@@ -2558,7 +2558,7 @@ theorem toOuterMeasure_toMeasure
 
 中文:
 定理 toOuterMeasure_toMeasure
-  条件: {μ : Measure α}
+  条件: {μ : 测度 α}
   证明: Measure.ext fun _s => μ.toOuterMeasure.trim_eq
 
 @[simp]
@@ -2581,8 +2581,8 @@ theorem boundedBy_measure
 
 中文:
 定理 boundedBy_measure
-  条件: (μ : Measure α)
-  结论: OuterMeasure.boundedBy μ = μ.toOuterMeasure
+  条件: (μ : 测度 α)
+  结论: 外测度.boundedBy μ = μ.toOuterMeasure
   证明: μ.toOuterMeasure.boundedBy_eq_self
 
 Depends on / 依赖: boundedBy_eq_self, toOuterMeasure, toOuterMeasure.boundedBy_eq_self
@@ -2615,7 +2615,7 @@ theorem measure_inter_eq_of_measure_eq
 
 中文:
 定理 measure_inter_eq_of_measure_eq
-  结论: {s t u : Set α} (hs : MeasurableSet s) (h : μ t = μ u)
+  结论: {s t u : 集合 α} (hs : 可测集 s) (h : μ t = μ u)
   证明: by
   rw [h] at ht_ne_top
   refine le_antisymm (by gcongr) ?_
@@ -2653,7 +2653,7 @@ lemma measure_inter_eq_of_ae
 
 中文:
 引理 measure_inter_eq_of_ae
-  条件: {s t : Set α} (h : 对任意ᵐ a ∂μ, a in t)
+  条件: {s t : 集合 α} (h : 对任意ᵐ a ∂μ, a in t)
   证明: by
   refine le_antisymm (measure_mono inter_subset_right) ?_
   apply EventuallyLE.measure_le
@@ -2678,7 +2678,7 @@ theorem measure_toMeasurable_inter
 
 中文:
 定理 measure_toMeasurable_inter
-  条件: {s t : Set α} (hs : MeasurableSet s) (ht : μ t != ∞)
+  条件: {s t : 集合 α} (hs : 可测集 s) (ht : μ t != ∞)
   证明: (measure_inter_eq_of_measure_eq hs (measure_toMeasurable t).symm (subset_toMeasurable μ t)
       ht).symm
 
@@ -2704,7 +2704,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: ⟨{ toOuterMeasure := 0
       m_iUnion := fun _f _hf _hd => tsum_zero.symm
       trim_le := OuterMeasure.trim_zero.le }⟩
@@ -2732,8 +2732,8 @@ theorem zero_toOuterMeasure
 
 中文:
 定理 zero_toOuterMeasure
-  条件: {_m : MeasurableSpace α}
-  结论: (0 : Measure α).toOuterMeasure = 0
+  条件: {_m : 可测空间 α}
+  结论: (0 : 测度 α).toOuterMeasure = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -2753,8 +2753,8 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  条件: {_m : MeasurableSpace α}
-  结论: ⇑(0 : Measure α) = 0
+  条件: {_m : 可测空间 α}
+  结论: ⇑(0 : 测度 α) = 0
   证明: rfl
 -/
 theorem coe_zero {_m : MeasurableSpace α} : ⇑(0 : Measure α) = 0 :=
@@ -2770,7 +2770,7 @@ lemma _root_.MeasureTheory.OuterMeasure.toMeasure_zero
   simp [hs]
 
 中文:
-引理 _root_.MeasureTheory.OuterMeasure.toMeasure_zero
+引理 _root_.测度论.外测度.toMeasure_zero
   证明: by
   ext s hs
   simp [hs]
@@ -2793,8 +2793,8 @@ lemma _root_.MeasureTheory.OuterMeasure.toMeasure_eq_zero
 @[nontriviality]
 
 中文:
-引理 _root_.MeasureTheory.OuterMeasure.toMeasure_eq_zero
-  结论: {ms : MeasurableSpace α}
+引理 _root_.测度论.外测度.toMeasure_eq_zero
+  结论: {ms : 可测空间 α}
   证明: by ext s; exact le_bot_iff.1 (le_toMeasure_apply _ _ _).trans_eq congr($hμ s)
   mpr := by rintro rfl; simp
 
@@ -2817,7 +2817,7 @@ lemma apply_eq_zero_of_isEmpty
 
 中文:
 引理 apply_eq_zero_of_isEmpty
-  条件: [IsEmpty α] {_ : MeasurableSpace α} (μ : Measure α) (s : Set α)
+  条件: [是空 α] {_ : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   证明: by
   rw [eq_empty_of_isEmpty s]; rw [measure_empty]
 
@@ -2837,7 +2837,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: [IsEmpty α] {m : MeasurableSpace α}
+  签名: [是空 α] {m : 可测空间 α}
   定义体: ⟨fun μ ν => by ext1 s _; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
 
 Depends on / 依赖: apply_eq_zero_of_isEmpty
@@ -2858,7 +2858,7 @@ theorem eq_zero_of_isEmpty
 
 中文:
 定理 eq_zero_of_isEmpty
-  条件: [IsEmpty α] {_m : MeasurableSpace α} (μ : Measure α)
+  条件: [是空 α] {_m : 可测空间 α} (μ : 测度 α)
   结论: μ = 0
   证明: Subsingleton.elim μ 0
 
@@ -2903,7 +2903,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: ⟨0⟩
 -/
 instance instInhabited {_ : MeasurableSpace α} : Inhabited (Measure α) :=
@@ -2924,7 +2924,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: ⟨fun μ₁ μ₂ =>
     { toOuterMeasure := μ₁.toOuterMeasure + μ₂.toOuterMeasure
       m_iUnion := fun s hs hd =>
@@ -2955,7 +2955,7 @@ theorem add_toOuterMeasure
 
 中文:
 定理 add_toOuterMeasure
-  条件: {_m : MeasurableSpace α} (μ₁ μ₂ : Measure α)
+  条件: {_m : 可测空间 α} (μ₁ μ₂ : 测度 α)
   证明: rfl
 
 @[simp, norm_cast]
@@ -2976,7 +2976,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: {_m : MeasurableSpace α} (μ₁ μ₂ : Measure α)
+  条件: {_m : 可测空间 α} (μ₁ μ₂ : 测度 α)
   结论: ⇑(μ₁ + μ₂) = μ₁ + μ₂
   证明: rfl
 -/
@@ -2993,7 +2993,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: {_m : MeasurableSpace α} (μ₁ μ₂ : Measure α) (s : Set α)
+  条件: {_m : 可测空间 α} (μ₁ μ₂ : 测度 α) (s : 集合 α)
   证明: rfl
 -/
 theorem add_apply {_m : MeasurableSpace α} (μ₁ μ₂ : Measure α) (s : Set α) :
@@ -3022,7 +3022,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: ⟨fun c μ =>
     { toOuterMeasure := c • μ.toOuterMeasure
       m_iUnion := fun s hs hd => by
@@ -3055,7 +3055,7 @@ theorem smul_toOuterMeasure
 
 中文:
 定理 smul_toOuterMeasure
-  条件: {_m : MeasurableSpace α} (c : R) (μ : Measure α)
+  条件: {_m : 可测空间 α} (c : R) (μ : 测度 α)
   证明: rfl
 
 @[simp, norm_cast]
@@ -3078,7 +3078,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: {_m : MeasurableSpace α} (c : R) (μ : Measure α)
+  条件: {_m : 可测空间 α} (c : R) (μ : 测度 α)
   结论: ⇑(c • μ) = c • ⇑μ
   证明: rfl
 
@@ -3101,7 +3101,7 @@ lemma coe_nnreal_smul
 
 中文:
 引理 coe_nnreal_smul
-  条件: (c : 实数>=0) (μ : Measure α)
+  条件: (c : 实数>=0) (μ : 测度 α)
   结论: (c : 实数>=0∞) • μ = c • μ
   证明: rfl
 
@@ -3120,7 +3120,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: {_m : MeasurableSpace α} (c : R) (μ : Measure α) (s : Set α)
+  条件: {_m : 可测空间 α} (c : R) (μ : 测度 α) (s : 集合 α)
   证明: rfl
 -/
 theorem smul_apply {_m : MeasurableSpace α} (c : R) (μ : Measure α) (s : Set α) :
@@ -3137,7 +3137,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass R R' 实数>=0∞] {_ : MeasurableSpace α}
+  签名: [标量交换类 R R' 实数>=0∞] {_ : 可测空间 α}
   定义体: ⟨fun _ _ _ => ext fun _ _ => smul_comm _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -3156,7 +3156,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul R R'] [IsScalarTower R R' 实数>=0∞] {_ : MeasurableSpace α}
+  签名: [标量乘法 R R'] [标量塔 R R' 实数>=0∞] {_ : 可测空间 α}
   定义体: ⟨fun _ _ _ => ext fun _ _ => smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc
@@ -3175,7 +3175,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul Rᵐᵒᵖ 实数>=0∞] [IsCentralScalar R 实数>=0∞] {_ : MeasurableSpace α}
+  签名: [标量乘法 Rᵐᵒᵖ 实数>=0∞] [中心标量 R 实数>=0∞] {_ : 可测空间 α}
   定义体: ⟨fun _ _ => ext fun _ _ => op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: op_smul_eq_smul
@@ -3196,7 +3196,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid R] [MulAction R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: [幺半群 R] [乘法作用 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: Injective.mulAction _ toOuterMeasure_injective smul_toOuterMeasure
 
 Depends on / 依赖: Injective, Injective.mulAction, mulAction, smul_toOuterMeasure, toOuterMeasure_injective
@@ -3216,7 +3216,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: toOuterMeasure_injective.addCommMonoid toOuterMeasure zero_toOuterMeasure add_toOuterMeasure
     fun _ _ => smul_toOuterMeasure _ _
 
@@ -3240,7 +3240,7 @@ definition coeAddHom
 
 中文:
 定义 coeAddHom
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: (⇑)
   map_zero' := coe_zero
   map_add' := coe_add
@@ -3266,7 +3266,7 @@ theorem coeAddHom_apply
 
 中文:
 定理 coeAddHom_apply
-  条件: {_ : MeasurableSpace α} (μ : Measure α)
+  条件: {_ : 可测空间 α} (μ : 测度 α)
   结论: coeAddHom μ = ⇑μ
   证明: rfl
 
@@ -3287,7 +3287,7 @@ theorem coe_finsetSum
 
 中文:
 定理 coe_finsetSum
-  条件: {_m : MeasurableSpace α} (I : Finset ι) (μ : ι -> Measure α)
+  条件: {_m : 可测空间 α} (I : 有限集 ι) (μ : ι -> 测度 α)
   证明: map_sum coeAddHom μ I
 
 @[deprecated (since := "2026-04-08")] alias coe_finset_sum := coe_finsetSum
@@ -3311,7 +3311,7 @@ theorem finsetSum_apply
 
 中文:
 定理 finsetSum_apply
-  条件: {m : MeasurableSpace α} (I : Finset ι) (μ : ι -> Measure α) (s : Set α)
+  条件: {m : 可测空间 α} (I : 有限集 ι) (μ : ι -> 测度 α) (s : 集合 α)
   证明: by rw [coe_finsetSum, Finset.sum_apply]
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply := finsetSum_apply
@@ -3334,7 +3334,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid R] [DistribMulAction R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: [幺半群 R] [分配乘法作用 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: Injective.distribMulAction ⟨⟨toOuterMeasure, zero_toOuterMeasure⟩, add_toOuterMeasure⟩
     toOuterMeasure_injective smul_toOuterMeasure
 
@@ -3356,7 +3356,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [Module R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: [半环 R] [模 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: Injective.module R ⟨⟨toOuterMeasure, zero_toOuterMeasure⟩, add_toOuterMeasure⟩
     toOuterMeasure_injective smul_toOuterMeasure
 
@@ -3377,7 +3377,7 @@ instance instModuleIsTorsionFree
 
 中文:
 实例 instModuleIsTorsionFree
-  签名: [Semiring R] [Module R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  签名: [半环 R] [模 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   定义体: DFunLike.coe_injective.moduleIsTorsionFree _ (by simp)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.moduleIsTorsionFree, coe_injective, moduleIsTorsionFree
@@ -3400,7 +3400,7 @@ lemma ennreal_smul_eq_zero
 
 中文:
 引理 ennreal_smul_eq_zero
-  条件: {c : 实数>=0∞} {μ : Measure α}
+  条件: {c : 实数>=0∞} {μ : 测度 α}
   结论: c • μ = 0 ↔ c = 0 ∨ μ = 0
   证明: by
   simp [Measure.ext_iff', forall_or_left]
@@ -3423,7 +3423,7 @@ theorem coe_nnreal_smul_apply
 
 中文:
 定理 coe_nnreal_smul_apply
-  条件: {_m : MeasurableSpace α} (c : 实数>=0) (μ : Measure α) (s : Set α)
+  条件: {_m : 可测空间 α} (c : 实数>=0) (μ : 测度 α) (s : 集合 α)
   证明: rfl
 
 @[simp]
@@ -3443,7 +3443,7 @@ theorem nnreal_smul_coe_apply
 
 中文:
 定理 nnreal_smul_coe_apply
-  条件: {_m : MeasurableSpace α} (c : 实数>=0) (μ : Measure α) (s : Set α)
+  条件: {_m : 可测空间 α} (c : 实数>=0) (μ : 测度 α) (s : 集合 α)
   证明: rfl
 -/
 theorem nnreal_smul_coe_apply {_m : MeasurableSpace α} (c : Real>=0) (μ : Measure α) (s : Set α) :
@@ -3460,7 +3460,7 @@ theorem ae_smul_measure
 
 中文:
 定理 ae_smul_measure
-  结论: {p : α -> 命题} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {p : α -> 命题} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ae_iff.2 by rw [smul_apply, ae_iff.1 h, ← smul_one_smul Real>=0∞, smul_zero]
 
 Depends on / 依赖: ae_iff, smul_apply, smul_one_smul, smul_zero
@@ -3479,7 +3479,7 @@ theorem ae_smul_measure_le
 
 中文:
 定理 ae_smul_measure_le
-  条件: [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (c : R)
+  条件: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R)
   证明: fun _ h => ae_smul_measure h c
 
 Depends on / 依赖: ae_smul_measure
@@ -3504,7 +3504,7 @@ lemma ae_smul_measure_iff
 
 中文:
 引理 ae_smul_measure_iff
-  条件: (hc : c != 0) {μ : Measure α}
+  条件: (hc : c != 0) {μ : 测度 α}
   结论: (对任意ᵐ x ∂c • μ, p x) ↔ 对任意ᵐ x ∂μ, p x
   证明: by
   simp [ae_iff, hc]
@@ -3526,7 +3526,7 @@ lemma ae_smul_measure_eq
 
 中文:
 引理 ae_smul_measure_eq
-  条件: (hc : c != 0) (μ : Measure α)
+  条件: (hc : c != 0) (μ : 测度 α)
   结论: ae (c • μ) = ae μ
   证明: by
   ext; exact ae_smul_measure_iff hc
@@ -3548,7 +3548,7 @@ lemma ae_ennreal_smul_measure_iff
 
 中文:
 引理 ae_ennreal_smul_measure_iff
-  条件: {c : 实数>=0∞} {p : α -> 命题} (hc : c != 0) {μ : Measure α}
+  条件: {c : 实数>=0∞} {p : α -> 命题} (hc : c != 0) {μ : 测度 α}
   证明: by simp [ae_iff, hc]
 
 Depends on / 依赖: ae_iff
@@ -3566,7 +3566,7 @@ lemma ae_ennreal_smul_measure_eq
 
 中文:
 引理 ae_ennreal_smul_measure_eq
-  条件: {c : 实数>=0∞} (hc : c != 0) (μ : Measure α)
+  条件: {c : 实数>=0∞} (hc : c != 0) (μ : 测度 α)
   证明: by ext; exact ae_ennreal_smul_measure_iff hc
 -/
 @[simp] lemma ae_ennreal_smul_measure_eq {c : Real>=0∞} (hc : c != 0) (μ : Measure α) :
@@ -3589,7 +3589,7 @@ theorem measure_eq_left_of_subset_of_measure_add_eq
 
 中文:
 定理 measure_eq_left_of_subset_of_measure_add_eq
-  结论: {s t : Set α} (h : (μ + ν) t != ∞) (h' : s subseteq t)
+  结论: {s t : 集合 α} (h : (μ + ν) t != ∞) (h' : s subseteq t)
   证明: by
   refine le_antisymm (measure_mono h') ?_
   have : μ t + ν t <= μ s + ν t :=
@@ -3623,7 +3623,7 @@ theorem measure_eq_right_of_subset_of_measure_add_eq
 
 中文:
 定理 measure_eq_right_of_subset_of_measure_add_eq
-  结论: {s t : Set α} (h : (μ + ν) t != ∞) (h' : s subseteq t)
+  结论: {s t : 集合 α} (h : (μ + ν) t != ∞) (h' : s subseteq t)
   证明: by
   rw [add_comm] at h'' h
   exact measure_eq_left_of_subset_of_measure_add_eq h h' h''
@@ -3651,7 +3651,7 @@ theorem measure_toMeasurable_add_inter_left
 
 中文:
 定理 measure_toMeasurable_add_inter_left
-  结论: {s t : Set α} (hs : MeasurableSet s)
+  结论: {s t : 集合 α} (hs : 可测集 s)
   证明: by
   refine (measure_inter_eq_of_measure_eq hs ?_ (subset_toMeasurable _ _) ?_).symm
   · refine
@@ -3684,7 +3684,7 @@ theorem measure_toMeasurable_add_inter_right
 
 中文:
 定理 measure_toMeasurable_add_inter_right
-  结论: {s t : Set α} (hs : MeasurableSet s)
+  结论: {s t : 集合 α} (hs : 可测集 s)
   证明: by
   rw [add_comm] at ht ⊢
   exact measure_toMeasurable_add_inter_left hs ht
@@ -3712,7 +3712,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: forall s, m₁ s <= m₂ s
   le_refl _ _ := le_rfl
   le_trans _ _ _ h₁ h₂ s := le_trans (h₁ s) (h₂ s)
@@ -3749,7 +3749,7 @@ theorem le_iff
 
 中文:
 定理 le_iff
-  结论: μ₁ <= μ₂ ↔ 对任意 s, MeasurableSet s -> μ₁ s <= μ₂ s
+  结论: μ₁ <= μ₂ ↔ 对任意 s, 可测集 s -> μ₁ s <= μ₂ s
   证明: outerMeasure_le_iff
 
 Depends on / 依赖: outerMeasure_le_iff
@@ -3767,7 +3767,7 @@ theorem le_intro
 
 中文:
 定理 le_intro
-  条件: (h : 对任意 s, MeasurableSet s -> s.Nonempty -> μ₁ s <= μ₂ s)
+  条件: (h : 对任意 s, 可测集 s -> s.非空 -> μ₁ s <= μ₂ s)
   结论: μ₁ <= μ₂
   证明: le_iff.2 fun s hs => s.eq_empty_or_nonempty.elim (by rintro rfl; simp) (h s hs)
 
@@ -3804,7 +3804,7 @@ theorem measure_mono_left
 
 中文:
 定理 measure_mono_left
-  条件: (h : μ <= ν) (s : Set α)
+  条件: (h : μ <= ν) (s : 集合 α)
   结论: μ s <= ν s
   证明: h s
 
@@ -3844,7 +3844,7 @@ and_congr Iff.rfl by simp only [le_iff, not_forall, not_le, exists_prop]
 
 中文:
 定理 lt_iff
-  结论: μ < ν ↔ μ <= ν ∧ 存在 s, MeasurableSet s ∧ μ s < ν s
+  结论: μ < ν ↔ μ <= ν ∧ 存在 s, 可测集 s ∧ μ s < ν s
   证明: lt_iff_le_not_ge.trans
 and_congr Iff.rfl by simp only [le_iff, not_forall, not_le, exists_prop]
 
@@ -3882,7 +3882,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: add_le_add_left (h s) _
 
 Depends on / 依赖: add_le_add_left
@@ -3935,8 +3935,8 @@ instance [SMul
     gcongr
 
 中文:
-实例 [SMul
-  签名: R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] [CovariantClass R 实数>=0∞ (· • ·) (· <= ·)] :
+实例 [标量乘法
+  签名: R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] [协变类 R 实数>=0∞ (· • ·) (· <= ·)] :
   定义体: by
     simp only [smul_apply]
     gcongr
@@ -3961,8 +3961,8 @@ instance [SMul
     gcongr
 
 中文:
-实例 [SMul
-  签名: R 实数>=0∞] [LE R] [IsScalarTower R 实数>=0∞ 实数>=0∞] [IsOrderedSMul R 实数>=0∞] :
+实例 [标量乘法
+  签名: R 实数>=0∞] [LE R] [标量塔 R 实数>=0∞ 实数>=0∞] [是OrderedSMul R 实数>=0∞] :
   定义体: by gcongr
   smul_le_smul_right a b hab μ s := by
     simp only [smul_apply]
@@ -3997,7 +3997,7 @@ theorem sInf_caratheodory
 
 中文:
 定理 sInf_caratheodory
-  条件: (s : Set α) (hs : MeasurableSet s)
+  条件: (s : 集合 α) (hs : 可测集 s)
   证明: by
   rw [OuterMeasure.sInf_eq_boundedBy_sInfGen]
   refine OuterMeasure.boundedBy_caratheodory fun t => ?_
@@ -4036,7 +4036,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: sInf m s = sInf (toOuterMeasure '' m) s
   证明: toMeasure_apply _ _ hs
 
@@ -4100,7 +4100,7 @@ instance instCompleteSemilatticeInf
 
 中文:
 实例 instCompleteSemilatticeInf
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: private ⟨fun _ => measure_sInf_le, fun _ => measure_le_sInf⟩
 
 Depends on / 依赖: measure_le_sInf, measure_sInf_le, private
@@ -4127,7 +4127,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: { completeLatticeOfCompleteSemilatticeInf (Measure α) with
     top :=
       { toOuterMeasure := ⊤,
@@ -4173,7 +4173,7 @@ lemma inf_apply
 
 中文:
 引理 inf_apply
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   -- `(μ ⊓ ν) s` is defined as `⊓ (t : ℕ → Set α) (ht : s ⊆ ⋃ n, t n), ∑' n, μ (t n) ⊓ ν (t n)`
   rw [← sInf_pair]; rw [Measure.sInf_apply hs]; rw [OuterMeasure.sInf_apply
@@ -4254,7 +4254,7 @@ theorem _root_.MeasureTheory.OuterMeasure.toMeasure_top
 @[simp]
 
 中文:
-定理 _root_.MeasureTheory.OuterMeasure.toMeasure_top
+定理 _root_.测度论.外测度.toMeasure_top
   证明: toOuterMeasure_toMeasure (μ := ⊤)
 
 @[simp]
@@ -4279,7 +4279,7 @@ theorem toOuterMeasure_top
 
 中文:
 定理 toOuterMeasure_top
-  条件: {_ : MeasurableSpace α}
+  条件: {_ : 可测空间 α}
   证明: rfl
 
 @[simp]
@@ -4341,7 +4341,7 @@ theorem zero_le
 
 中文:
 定理 zero_le
-  条件: {_m0 : MeasurableSpace α} (μ : Measure α)
+  条件: {_m0 : 可测空间 α} (μ : 测度 α)
   结论: 0 <= μ
   证明: bot_le
 -/
@@ -4462,8 +4462,8 @@ lemma nonempty_of_neZero
 
 中文:
 引理 nonempty_of_neZero
-  条件: (μ : Measure α) [NeZero μ]
-  结论: Nonempty α
+  条件: (μ : 测度 α) [NeZero μ]
+  结论: 非空 α
   证明: (isEmpty_or_nonempty α).resolve_left fun h => by
     simpa [eq_empty_of_isEmpty] using NeZero.ne (μ univ)
 
@@ -4484,7 +4484,7 @@ theorem measure_support_eq_zero_iff
 
 中文:
 定理 measure_support_eq_zero_iff
-  结论: {E : 类型} [Zero E] (μ : Measure α := by volume_tac)
+  结论: {E : 类型} [零 E] (μ : 测度 α := by volume_tac)
   证明: by
   rfl
 
@@ -4508,8 +4508,8 @@ definition sum
       (OuterMeasure.le_sum_caratheodory _)
 
 中文:
-定义 sum
-  签名: (f : ι -> Measure α)
+定义 求和
+  签名: (f : ι -> 测度 α)
   定义体: (OuterMeasure.sum fun i => (f i).toOuterMeasure).toMeasure
     le_trans (le_iInf fun _ => le_toOuterMeasure_caratheodory _)
       (OuterMeasure.le_sum_caratheodory _)
@@ -4534,8 +4534,8 @@ theorem le_sum_apply
 
 中文:
 定理 le_sum_apply
-  条件: (f : ι -> Measure α) (s : Set α)
-  结论: ∑' i, f i s <= sum f s
+  条件: (f : ι -> 测度 α) (s : 集合 α)
+  结论: ∑' i, f i s <= 求和 f s
   证明: le_toMeasure_apply _ _ _
 
 @[simp]
@@ -4556,7 +4556,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: (f : ι -> Measure α) {s : Set α} (hs : MeasurableSet s)
+  条件: (f : ι -> 测度 α) {s : 集合 α} (hs : 可测集 s)
   证明: toMeasure_apply _ _ hs
 
 Depends on / 依赖: toMeasure_apply
@@ -4581,7 +4581,7 @@ theorem sum_apply₀
 
 中文:
 定理 sum_apply₀
-  条件: (f : ι -> Measure α) {s : Set α} (hs : NullMeasurableSet s (sum f))
+  条件: (f : ι -> 测度 α) {s : 集合 α} (hs : NullMeasurableSet s (求和 f))
   证明: by
   apply le_antisymm ?_ (le_sum_apply _ _)
   rcases hs.exists_measurable_subset_ae_eq with ⟨t, ts, t_meas, ht⟩
@@ -4617,7 +4617,7 @@ theorem sum_apply_of_countable
 
 中文:
 定理 sum_apply_of_countable
-  条件: [Countable ι] (f : ι -> Measure α) (s : Set α)
+  条件: [可数 ι] (f : ι -> 测度 α) (s : 集合 α)
   证明: by
   apply le_antisymm ?_ (le_sum_apply _ _)
   rcases exists_measurable_superset_forall_eq f s with ⟨t, hst, htm, ht⟩
@@ -4650,8 +4650,8 @@ theorem le_sum
 
 中文:
 定理 le_sum
-  条件: (μ : ι -> Measure α) (i : ι)
-  结论: μ i <= sum μ
+  条件: (μ : ι -> 测度 α) (i : ι)
+  结论: μ i <= 求和 μ
   证明: le_iff.2 fun s hs => by simpa only [sum_apply μ hs] using ENNReal.le_tsum i
 
 @[simp]
@@ -4673,7 +4673,7 @@ theorem sum_apply_eq_zero
 
 中文:
 定理 sum_apply_eq_zero
-  条件: [Countable ι] {μ : ι -> Measure α} {s : Set α}
+  条件: [可数 ι] {μ : ι -> 测度 α} {s : 集合 α}
   证明: by
   simp [sum_apply_of_countable]
 
@@ -4693,7 +4693,7 @@ theorem sum_apply_eq_zero'
 
 中文:
 定理 sum_apply_eq_zero'
-  条件: {μ : ι -> Measure α} {s : Set α} (hs : MeasurableSet s)
+  条件: {μ : ι -> 测度 α} {s : 集合 α} (hs : 可测集 s)
   证明: by simp [hs]
 -/
 theorem sum_apply_eq_zero' {μ : ι -> Measure α} {s : Set α} (hs : MeasurableSet s) :
@@ -4712,7 +4712,7 @@ lemma sum_eq_zero
 
 中文:
 引理 sum_eq_zero
-  结论: sum f = 0 ↔ 对任意 i, f i = 0
+  结论: 求和 f = 0 ↔ 对任意 i, f i = 0
   证明: by
   simp +contextual [Measure.ext_iff, forall_comm (α := ι)]
 
@@ -4734,7 +4734,7 @@ lemma sum_zero
 
 中文:
 引理 sum_zero
-  结论: Measure.sum (fun (_ : ι) => (0 : Measure α)) = 0
+  结论: 测度.求和 (fun (_ : ι) => (0 : 测度 α)) = 0
   证明: by
   ext s hs
   simp [Measure.sum_apply _ hs]
@@ -4757,7 +4757,7 @@ theorem sum_sum
 
 中文:
 定理 sum_sum
-  条件: {ι' : 类型} (μ : ι -> ι' -> Measure α)
+  条件: {ι' : 类型} (μ : ι -> ι' -> 测度 α)
   证明: by
   ext1 s hs
   simp [sum_apply _ hs, ENNReal.tsum_prod']
@@ -4782,7 +4782,7 @@ theorem sum_comm
 
 中文:
 定理 sum_comm
-  条件: {ι' : 类型} (μ : ι -> ι' -> Measure α)
+  条件: {ι' : 类型} (μ : ι -> ι' -> 测度 α)
   证明: by
   ext1 s hs
   simp_rw [sum_apply _ hs]
@@ -4806,7 +4806,7 @@ theorem ae_sum_iff
 
 中文:
 定理 ae_sum_iff
-  条件: [Countable ι] {μ : ι -> Measure α} {p : α -> 命题}
+  条件: [可数 ι] {μ : ι -> 测度 α} {p : α -> 命题}
   证明: sum_apply_eq_zero
 
 Depends on / 依赖: sum_apply_eq_zero
@@ -4827,7 +4827,7 @@ theorem ae_sum_iff'
 
 中文:
 定理 ae_sum_iff'
-  条件: {μ : ι -> Measure α} {p : α -> 命题} (h : MeasurableSet { x | p x })
+  条件: {μ : ι -> 测度 α} {p : α -> 命题} (h : 可测集 { x | p x })
   证明: sum_apply_eq_zero' h.compl
 
 @[simp]
@@ -4852,8 +4852,8 @@ theorem sum_fintype
 
 中文:
 定理 sum_fintype
-  条件: [Fintype ι] (μ : ι -> Measure α)
-  结论: sum μ = ∑ i, μ i
+  条件: [有限类型 ι] (μ : ι -> 测度 α)
+  结论: 求和 μ = ∑ i, μ i
   证明: by
   ext1 s hs
   simp only [sum_apply, finsetSum_apply, hs, tsum_fintype]
@@ -4876,7 +4876,7 @@ theorem sum_coe_finset
 
 中文:
 定理 sum_coe_finset
-  条件: (s : Finset ι) (μ : ι -> Measure α)
+  条件: (s : 有限集 ι) (μ : ι -> 测度 α)
   证明: by rw [sum_fintype, Finset.sum_coe_sort s μ]
 
 @[simp]
@@ -4898,8 +4898,8 @@ theorem ae_sum_eq
 
 中文:
 定理 ae_sum_eq
-  条件: [Countable ι] (μ : ι -> Measure α)
-  结论: ae (sum μ) = ⨆ i, ae (μ i)
+  条件: [可数 ι] (μ : ι -> 测度 α)
+  结论: ae (求和 μ) = ⨆ i, ae (μ i)
   证明: Filter.ext fun _ => ae_sum_iff.trans mem_iSup.symm
 
 Depends on / 依赖: Filter, Filter.ext, ae_sum_iff, ae_sum_iff.trans, mem_iSup, mem_iSup.symm
@@ -4919,8 +4919,8 @@ theorem sum_bool
 
 中文:
 定理 sum_bool
-  条件: (f : 布尔 -> Measure α)
-  结论: sum f = f true + f false
+  条件: (f : 布尔值 -> 测度 α)
+  结论: 求和 f = f true + f false
   证明: by
   rw [sum_fintype]; rw [Fintype.sum_bool]
 
@@ -4942,8 +4942,8 @@ theorem sum_cond
 
 中文:
 定理 sum_cond
-  条件: (μ ν : Measure α)
-  结论: (sum fun b => cond b μ ν) = μ + ν
+  条件: (μ ν : 测度 α)
+  结论: (求和 fun b => cond b μ ν) = μ + ν
   证明: sum_bool _
 
 @[simp]
@@ -4966,8 +4966,8 @@ theorem sum_of_isEmpty
 
 中文:
 定理 sum_of_isEmpty
-  条件: [IsEmpty ι] (μ : ι -> Measure α)
-  结论: sum μ = 0
+  条件: [是空 ι] (μ : ι -> 测度 α)
+  结论: 求和 μ = 0
   证明: by
   rw [← measure_univ_eq_zero]; rw [sum_apply _ MeasurableSet.univ]; rw [tsum_empty]
 
@@ -4989,7 +4989,7 @@ theorem sum_add_sum_compl
 
 中文:
 定理 sum_add_sum_compl
-  条件: (s : Set ι) (μ : ι -> Measure α)
+  条件: (s : 集合 ι) (μ : ι -> 测度 α)
   证明: by
   ext1 t ht
   simp only [add_apply, sum_apply _ ht]
@@ -5014,8 +5014,8 @@ theorem sum_congr
 
 中文:
 定理 sum_congr
-  条件: {μ ν : 自然数 -> Measure α} (h : 对任意 n, μ n = ν n)
-  结论: sum μ = sum ν
+  条件: {μ ν : 自然数 -> 测度 α} (h : 对任意 n, μ n = ν n)
+  结论: 求和 μ = 求和 ν
   证明: congr_arg sum (funext h)
 
 Depends on / 依赖: congr_arg
@@ -5037,8 +5037,8 @@ theorem sum_add_sum
 
 中文:
 定理 sum_add_sum
-  条件: {ι : 类型} (μ ν : ι -> Measure α)
-  结论: sum μ + sum ν = sum fun n => μ n + ν n
+  条件: {ι : 类型} (μ ν : ι -> 测度 α)
+  结论: 求和 μ + 求和 ν = 求和 fun n => μ n + ν n
   证明: by
   ext1 s hs
   simp only [add_apply, sum_apply _ hs,
@@ -5063,7 +5063,7 @@ lemma sum_comp_equiv
 
 中文:
 引理 sum_comp_equiv
-  条件: {ι ι' : 类型} (e : ι' ≃ ι) (m : ι -> Measure α)
+  条件: {ι ι' : 类型} (e : ι' ≃ ι) (m : ι -> 测度 α)
   证明: by
   ext s hs
   simpa [hs, sum_apply] using e.tsum_eq (fun n => m n s)
@@ -5087,7 +5087,7 @@ lemma sum_extend_zero
 
 中文:
 引理 sum_extend_zero
-  条件: {ι ι' : 类型} {f : ι -> ι'} (hf : Injective f) (m : ι -> Measure α)
+  条件: {ι ι' : 类型} {f : ι -> ι'} (hf : 单射 f) (m : ι -> 测度 α)
   证明: by
   ext s hs
   simp [*, Function.apply_extend (fun μ : Measure α => μ s)]
@@ -5113,7 +5113,7 @@ definition cofinite
 
 中文:
 定义 cofinite
-  签名: {m0 : MeasurableSpace α} (μ : Measure α)
+  签名: {m0 : 可测空间 α} (μ : 测度 α)
   定义体: comk (μ · < ∞) (by simp) (fun _ ht _ hs => (measure_mono hs).trans_lt ht) fun s hs t ht =>
 (measure_union_le s t).trans_lt ENNReal.add_lt_top.2 ⟨hs, ht⟩
 
@@ -5192,7 +5192,7 @@ instance cofinite.instIsMeasurablyGenerated
 
 中文:
 实例 cofinite.instIsMeasurablyGenerated
-  签名: : IsMeasurablyGenerated μ.cofinite where
+  签名: : 是MeasurablyGenerated μ.cofinite where
   定义体: by
     refine ⟨(toMeasurable μ sᶜ)ᶜ, ?_, (measurableSet_toMeasurable _ _).compl, ?_⟩
     · rwa [compl_mem_cofinite, measure_toMeasurable]
@@ -5246,8 +5246,8 @@ theorem _root_.AEMeasurable.nullMeasurable
   proof: let ⟨_g, hgm, hg⟩ := h; hgm.nullMeasurable.congr hg.symm
 
 中文:
-定理 _root_.AEMeasurable.nullMeasurable
-  条件: {f : α -> β} (h : AEMeasurable f μ)
+定理 _root_.几乎处处可测.nullMeasurable
+  条件: {f : α -> β} (h : 几乎处处可测 f μ)
   证明: let ⟨_g, hgm, hg⟩ := h; hgm.nullMeasurable.congr hg.symm
 -/
 protected theorem _root_.AEMeasurable.nullMeasurable {f : α -> β} (h : AEMeasurable f μ) :
@@ -5265,8 +5265,8 @@ lemma _root_.AEMeasurable.nullMeasurableSet_preimage
 @[simp]
 
 中文:
-引理 _root_.AEMeasurable.nullMeasurableSet_preimage
-  结论: {f : α -> β} {s : Set β}
+引理 _root_.几乎处处可测.nullMeasurableSet_preimage
+  结论: {f : α -> β} {s : 集合 β}
   证明: hf.nullMeasurable hs
 
 @[simp]
@@ -5332,7 +5332,7 @@ instance Measure.ae.neBot
 @[simp]
 
 中文:
-实例 Measure.ae.neBot
+实例 测度.ae.neBot
   签名: [NeZero μ]
   定义体: ae_neBot.2 NeZero.ne μ
 
@@ -5354,8 +5354,8 @@ theorem ae_zero
 
 中文:
 定理 ae_zero
-  条件: {_m0 : MeasurableSpace α}
-  结论: ae (0 : Measure α) = ⊥
+  条件: {_m0 : 可测空间 α}
+  结论: ae (0 : 测度 α) = ⊥
   证明: ae_eq_bot.2 rfl
 
 Depends on / 依赖: ae_eq_bot
@@ -5380,7 +5380,7 @@ theorem biSup_measure_Iic
 
 中文:
 定理 biSup_measure_Iic
-  结论: [Preorder α] {s : Set α} (hsc : s.Countable)
+  结论: [预序 α] {s : 集合 α} (hsc : s.可数)
   证明: by
   rw [← measure_biUnion_eq_iSup hsc]
   · congr
@@ -5411,7 +5411,7 @@ theorem tendsto_measure_Ico_atTop
 
 中文:
 定理 tendsto_measure_Ico_atTop
-  结论: [Preorder α] [NoMaxOrder α]
+  结论: [预序 α] [NoMax序 α]
   证明: by
   rw [← iUnion_Ico_right]
   exact tendsto_measure_iUnion_atTop (antitone_const.Ico monotone_id)
@@ -5436,7 +5436,7 @@ theorem tendsto_measure_Ioc_atBot
 
 中文:
 定理 tendsto_measure_Ioc_atBot
-  结论: [Preorder α] [NoMinOrder α]
+  结论: [预序 α] [NoMin序 α]
   证明: by
   rw [← iUnion_Ioc_left]
   exact tendsto_measure_iUnion_atBot (monotone_id.Ioc antitone_const)
@@ -5461,7 +5461,7 @@ theorem tendsto_measure_Iic_atTop
 
 中文:
 定理 tendsto_measure_Iic_atTop
-  结论: [Preorder α] [(atTop : Filter α).IsCountablyGenerated]
+  结论: [预序 α] [(atTop : 滤子 α).是余untablyGenerated]
   证明: by
   rw [← iUnion_Iic]
   exact tendsto_measure_iUnion_atTop monotone_Iic
@@ -5483,7 +5483,7 @@ theorem tendsto_measure_Ici_atBot
 
 中文:
 定理 tendsto_measure_Ici_atBot
-  结论: [Preorder α] [(atBot : Filter α).IsCountablyGenerated]
+  结论: [预序 α] [(atBot : 滤子 α).是余untablyGenerated]
   证明: tendsto_measure_Iic_atTop (α := αᵒᵈ) μ
 
 Depends on / 依赖: tendsto_measure_Iic_atTop
@@ -5507,7 +5507,7 @@ theorem Iio_ae_eq_Iic'
 中文:
 定理 Iio_ae_eq_Iic'
   条件: (ha : μ {a} = 0)
-  结论: Iio a =ᵐ[μ] Iic a
+  结论: 左无界右开区间 a =ᵐ[μ] 左无界右闭区间 a
   证明: by
   rw [← Iic_sdiff_right]; rw [sdiff_ae_eq_self]; rw [measure_mono_null Set.inter_subset_right ha]
 
@@ -5528,7 +5528,7 @@ theorem Ioi_ae_eq_Ici'
 中文:
 定理 Ioi_ae_eq_Ici'
   条件: (ha : μ {a} = 0)
-  结论: Ioi a =ᵐ[μ] Ici a
+  结论: 左开右无界区间 a =ᵐ[μ] 左闭右无界区间 a
   证明: Iio_ae_eq_Iic' (α := αᵒᵈ) ha
 
 Depends on / 依赖: Iio_ae_eq_Iic
@@ -5548,7 +5548,7 @@ theorem Ioo_ae_eq_Ioc'
 中文:
 定理 Ioo_ae_eq_Ioc'
   条件: (hb : μ {b} = 0)
-  结论: Ioo a b =ᵐ[μ] Ioc a b
+  结论: 开区间 a b =ᵐ[μ] 左开右闭区间 a b
   证明: (ae_eq_refl _).inter (Iio_ae_eq_Iic' hb)
 
 Depends on / 依赖: Iio_ae_eq_Iic, ae_eq_refl
@@ -5568,7 +5568,7 @@ theorem Ioc_ae_eq_Icc'
 中文:
 定理 Ioc_ae_eq_Icc'
   条件: (ha : μ {a} = 0)
-  结论: Ioc a b =ᵐ[μ] Icc a b
+  结论: 左开右闭区间 a b =ᵐ[μ] 闭区间 a b
   证明: (Ioi_ae_eq_Ici' ha).inter (ae_eq_refl _)
 
 Depends on / 依赖: Ioi_ae_eq_Ici, ae_eq_refl
@@ -5588,7 +5588,7 @@ theorem Ioo_ae_eq_Ico'
 中文:
 定理 Ioo_ae_eq_Ico'
   条件: (ha : μ {a} = 0)
-  结论: Ioo a b =ᵐ[μ] Ico a b
+  结论: 开区间 a b =ᵐ[μ] 左闭右开区间 a b
   证明: (Ioi_ae_eq_Ici' ha).inter (ae_eq_refl _)
 
 Depends on / 依赖: Ioi_ae_eq_Ici, ae_eq_refl
@@ -5608,7 +5608,7 @@ theorem Ioo_ae_eq_Icc'
 中文:
 定理 Ioo_ae_eq_Icc'
   条件: (ha : μ {a} = 0) (hb : μ {b} = 0)
-  结论: Ioo a b =ᵐ[μ] Icc a b
+  结论: 开区间 a b =ᵐ[μ] 闭区间 a b
   证明: (Ioi_ae_eq_Ici' ha).inter (Iio_ae_eq_Iic' hb)
 
 Depends on / 依赖: Iio_ae_eq_Iic, Ioi_ae_eq_Ici
@@ -5628,7 +5628,7 @@ theorem Ico_ae_eq_Icc'
 中文:
 定理 Ico_ae_eq_Icc'
   条件: (hb : μ {b} = 0)
-  结论: Ico a b =ᵐ[μ] Icc a b
+  结论: 左闭右开区间 a b =ᵐ[μ] 闭区间 a b
   证明: (ae_eq_refl _).inter (Iio_ae_eq_Iic' hb)
 
 Depends on / 依赖: Iio_ae_eq_Iic, ae_eq_refl
@@ -5648,7 +5648,7 @@ theorem Ico_ae_eq_Ioc'
 中文:
 定理 Ico_ae_eq_Ioc'
   条件: (ha : μ {a} = 0) (hb : μ {b} = 0)
-  结论: Ico a b =ᵐ[μ] Ioc a b
+  结论: 左闭右开区间 a b =ᵐ[μ] 左开右闭区间 a b
   证明: (Ioo_ae_eq_Ico' ha).symm.trans (Ioo_ae_eq_Ioc' hb)
 
 Depends on / 依赖: Ioo_ae_eq_Ico, Ioo_ae_eq_Ioc, symm.trans

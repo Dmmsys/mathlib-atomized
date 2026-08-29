@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (WithAbs v)
+  签名: 域 (WithAbs v)
   定义体: fast_instance% (equiv v).field
 
 Depends on / 依赖: fast_instance
@@ -62,7 +62,7 @@ instance normedField
 
 中文:
 实例 normedField
-  签名: (v : AbsoluteValue R 实数)
+  签名: (v : 绝对值 R 实数)
   定义体: letI := v.toNormedField
   fast_instance% (equiv v).normedField
 
@@ -81,8 +81,8 @@ instance [Module
   body: Module.Finite.of_restrictScalars_finite R (WithAbs v) T
 
 中文:
-实例 [Module
-  签名: R T] [FiniteDimensional R T] :
+实例 [模
+  签名: R T] [有限维 R T] :
   定义体: Module.Finite.of_restrictScalars_finite R (WithAbs v) T
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_restrictScalars_finite, WithAbs, of_restrictScalars_finite
@@ -100,8 +100,8 @@ instance [Module
   body: Module.Finite.equiv (linearEquiv T v).symm
 
 中文:
-实例 [Module
-  签名: T R] [FiniteDimensional T R] :
+实例 [模
+  签名: T R] [有限维 T R] :
   定义体: Module.Finite.equiv (linearEquiv T v).symm
 
 Depends on / 依赖: Finite, Module, Module.Finite.equiv, linearEquiv
@@ -119,8 +119,8 @@ instance [Algebra
   body: .of_equiv_equiv (equiv v).symm (.refl T) (by ext; simp [algebraMap_left_apply])
 
 中文:
-实例 [Algebra
-  签名: R T] [Algebra.IsSeparable R T] :
+实例 [代数
+  签名: R T] [代数.是可分 R T] :
   定义体: .of_equiv_equiv (equiv v).symm (.refl T) (by ext; simp [algebraMap_left_apply])
 
 Depends on / 依赖: algebraMap_left_apply, of_equiv_equiv
@@ -138,8 +138,8 @@ instance [Algebra
   body: AlgEquiv.Algebra.isSeparable (algEquiv T v).symm
 
 中文:
-实例 [Algebra
-  签名: T R] [Algebra.IsSeparable T R] :
+实例 [代数
+  签名: T R] [代数.是可分 T R] :
   定义体: AlgEquiv.Algebra.isSeparable (algEquiv T v).symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.Algebra.isSeparable, Algebra, algEquiv, isSeparable
@@ -226,7 +226,7 @@ theorem tendsto_one_div_one_add_pow_nhds_one
 
 中文:
 定理 tendsto_one_div_one_add_pow_nhds_one
-  条件: {v : AbsoluteValue R 实数} {a : R} (ha : v a < 1)
+  条件: {v : 绝对值 R 实数} {a : R} (ha : v a < 1)
   证明: by
   simpa using! inv_one (G := WithAbs v) ▸ (tendsto_inv_iff₀ one_ne_zero).2
     (tendsto_iff_norm_sub_tendsto_zero.2 <| by simpa using! ha)
@@ -256,7 +256,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformContinuousConstSMul R (WithAbs w)
+  签名: 一致连续常数标量乘法 R (WithAbs w)
   定义体: by
     simp_rw [Algebra.smul_def]
     exact (Ring.uniformContinuousConstSMul _).uniformContinuous_const_smul _
@@ -293,7 +293,7 @@ abbreviation Completion
   body: UniformSpace.Completion (WithAbs v)
 
 中文:
-缩写 Completion
+缩写 完备化
   定义体: UniformSpace.Completion (WithAbs v)
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion, WithAbs
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe K v.Completion
+  签名: Coe K v.完备化
   定义体: ↑(toAbs v k)
 -/
 noncomputable instance : Coe K v.Completion where
@@ -330,7 +330,7 @@ theorem locallyCompactSpace
 
 中文:
 定理 locallyCompactSpace
-  条件: [LocallyCompactSpace L] (h : Isometry f)
+  条件: [局部紧空间 L] (h : 等距 f)
   证明: h.completion_extension.isClosedEmbedding.locallyCompactSpace
 
 Depends on / 依赖: completion_extension, h.completion_extension.isClosedEmbedding.locallyCompactSpace, isClosedEmbedding, locallyCompactSpace

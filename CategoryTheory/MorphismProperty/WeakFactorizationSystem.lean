@@ -41,12 +41,12 @@ class IsWeakFactorizationSystem
     - hasFactorization : HasFactorization W₁ W₂  [default: by infer_instance]
 
 中文:
-类 IsWeakFactorizationSystem
+类 是WeakFactorizationSystem
   参数: : 命题 where
   公理与运算 (3 个):
     - rlp : W₁.rlp = W₂
     - llp : W₂.llp = W₁
-    - hasFactorization : HasFactorization W₁ W₂  [默认: by infer_instance]
+    - hasFactorization : 有分解 W₁ W₂  [默认: by infer_instance]
 
 Depends on / 依赖: WithBotTop, WithBotTop.rec, infer_instance, isGE_of_isZero
 -/
@@ -72,7 +72,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  结论: [HasFactorization W₁ W₂]
+  结论: [有分解 W₁ W₂]
   证明: rlp_eq_of_le_rlp_of_hasFactorization_of_isStableUnderRetracts
     (fun _ _ _ hp _ _ _ hi => h _ _ hi hp)
   llp := llp_eq_of_le_llp_of_hasFactorization_of_isStableUnderRetracts

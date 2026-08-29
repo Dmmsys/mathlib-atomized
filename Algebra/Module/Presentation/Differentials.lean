@@ -62,7 +62,7 @@ definition differentialsRelations
 
 中文:
 定义 differentialsRelations
-  签名: : Module.Relations S where
+  签名: : 模.关系 S where
   定义体: ι
   R := σ
   relation r :=
@@ -121,7 +121,7 @@ definition hom₁
 
 中文:
 定义 hom₁
-  签名: : (σ ->₀ S) ->ₗ[S] pres.toExtension.Cotangent
+  签名: : (σ ->₀ S) ->ₗ[S] pres.toExtension.余切
   定义体: Finsupp.linearCombination S (fun r => Extension.Cotangent.mk ⟨pres.relation r, by simp⟩)
 
 Depends on / 依赖: Cotangent, Extension, Extension.Cotangent.mk, Finsupp, Finsupp.linearCombination, linearCombination, pres.relation, relation
@@ -170,7 +170,7 @@ lemma surjective_hom₁
 
 中文:
 引理 surjective_hom₁
-  结论: Function.Surjective (hom₁ pres)
+  结论: 函数.满射 (hom₁ pres)
   证明: by
   let φ : (σ ->₀ S) ->ₗ[pres.Ring] pres.toExtension.Cotangent :=
     { toFun := hom₁ pres
@@ -380,7 +380,7 @@ definition differentials
 
 中文:
 定义 differentials
-  签名: : Module.Presentation S Ω[S⁄R] where
+  签名: : 模.呈现 S Ω[S⁄R] where
   定义体: ι
   R := σ
   relation := _

@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAtomic (Filter α)
+  签名: 是原子的 (滤子 α)
   定义体: IsAtomic.of_isChain_bounded fun c hc hne hb =>
     ⟨sInf c, (sInf_neBot_of_directed' hne (show IsChain (· >= ·) c from hc.symm).directedOn hb).ne,
       fun _ hx => sInf_le hx⟩
@@ -68,10 +68,10 @@ structure Ultrafilter
 中文:
 结构 Ultrafilter
   参数: (α : 类型)
-  继承: Filter α
+  继承: 滤子 α
   公理与运算 (2 个):
     - neBot' : NeBot toFilter
-    - le_of_le : 对任意 g, Filter.NeBot g -> g <= toFilter -> toFilter <= g
+    - le_of_le : 对任意 g, 滤子.NeBot g -> g <= toFilter -> toFilter <= g
 -/
 structure Ultrafilter (α : Type*) extends Filter α where
   /-- An ultrafilter is nontrivial. -/
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC (Ultrafilter α) (Filter α)
+  签名: CoeTC (Ultrafilter α) (滤子 α)
   定义体: ⟨Ultrafilter.toFilter⟩
 
 Depends on / 依赖: Ultrafilter, Ultrafilter.toFilter, toFilter
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Set α) (Ultrafilter α)
+  签名: Membership (集合 α) (Ultrafilter α)
   定义体: ⟨fun f s => s in (f : Filter α)⟩
 
 Depends on / 依赖: Filter
@@ -132,7 +132,7 @@ theorem unique
 
 中文:
 定理 unique
-  条件: (f : Ultrafilter α) {g : Filter α} (h : g <= f) (hne : NeBot g := by infer_instance)
+  条件: (f : Ultrafilter α) {g : 滤子 α} (h : g <= f) (hne : NeBot g := by infer_instance)
   证明: le_antisymm h f.le_of_le g hne h
 
 Depends on / 依赖: f.le_of_le, infer_instance, le_antisymm, le_of_le
@@ -173,7 +173,7 @@ theorem isAtom
 中文:
 定理 isAtom
   条件: (f : Ultrafilter α)
-  结论: IsAtom (f : Filter α)
+  结论: IsAtom (f : 滤子 α)
   证明: ⟨f.neBot.ne, fun _ hgf => by_contra fun hg => hgf.ne f.unique hgf.le ⟨hg⟩⟩
 
 @[simp, norm_cast]
@@ -192,7 +192,7 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  结论: s in (f : Filter α) ↔ s in f
+  结论: s in (f : 滤子 α) ↔ s in f
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -209,7 +209,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Ultrafilter α -> Filter α)
+  结论: 单射 ((↑) : Ultrafilter α -> 滤子 α)
 -/
 theorem coe_injective : Injective ((↑) : Ultrafilter α -> Filter α)
   | ⟨f, h₁, h₂⟩, ⟨g, _, _⟩, _ => by congr
@@ -227,7 +227,7 @@ theorem eq_of_le
 
 中文:
 定理 eq_of_le
-  条件: {f g : Ultrafilter α} (h : (f : Filter α) <= g)
+  条件: {f g : Ultrafilter α} (h : (f : 滤子 α) <= g)
   结论: f = g
   证明: coe_injective (g.unique h)
 
@@ -253,7 +253,7 @@ theorem coe_le_coe
 中文:
 定理 coe_le_coe
   条件: {f g : Ultrafilter α}
-  结论: (f : Filter α) <= g ↔ f = g
+  结论: (f : 滤子 α) <= g ↔ f = g
   证明: ⟨fun h => eq_of_le h, fun h => h ▸ le_rfl⟩
 
 @[simp, norm_cast]
@@ -276,7 +276,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  结论: (f : Filter α) = g ↔ f = g
+  结论: (f : 滤子 α) = g ↔ f = g
   证明: coe_injective.eq_iff
 
 @[ext]
@@ -318,7 +318,7 @@ theorem le_of_inf_neBot
 
 中文:
 定理 le_of_inf_neBot
-  条件: (f : Ultrafilter α) {g : Filter α} (hg : NeBot (↑f ⊓ g))
+  条件: (f : Ultrafilter α) {g : 滤子 α} (hg : NeBot (↑f ⊓ g))
   结论: ↑f <= g
   证明: le_of_inf_eq (f.unique inf_le_left hg)
 
@@ -338,7 +338,7 @@ theorem le_of_inf_neBot'
 
 中文:
 定理 le_of_inf_neBot'
-  条件: (f : Ultrafilter α) {g : Filter α} (hg : NeBot (g ⊓ f))
+  条件: (f : Ultrafilter α) {g : 滤子 α} (hg : NeBot (g ⊓ f))
   结论: ↑f <= g
   证明: f.le_of_inf_neBot by rwa [inf_comm]
 
@@ -358,7 +358,7 @@ theorem inf_neBot_iff
 
 中文:
 定理 inf_neBot_iff
-  条件: {f : Ultrafilter α} {g : Filter α}
+  条件: {f : Ultrafilter α} {g : 滤子 α}
   结论: NeBot (↑f ⊓ g) ↔ ↑f <= g
   证明: ⟨le_of_inf_neBot f, fun h => (inf_of_le_left h).symm ▸ f.neBot⟩
 
@@ -381,7 +381,7 @@ theorem disjoint_iff_not_le
 
 中文:
 定理 disjoint_iff_not_le
-  条件: {f : Ultrafilter α} {g : Filter α}
+  条件: {f : Ultrafilter α} {g : 滤子 α}
   结论: Disjoint (↑f) g ↔ ¬↑f <= g
   证明: by
   rw [← inf_neBot_iff]; rw [neBot_iff]; rw [Ne]; rw [not_not]; rw [disjoint_iff]
@@ -505,7 +505,7 @@ definition ofComplNotMemIff
 
 中文:
 定义 ofComplNotMemIff
-  签名: (f : Filter α) (h : 对任意 s, sᶜ ∉ f ↔ s in f)
+  签名: (f : 滤子 α) (h : 对任意 s, sᶜ ∉ f ↔ s in f)
   定义体: f
   neBot' := ⟨fun hf => by simp [hf] at h⟩
   le_of_le _ _ hgf s hs := (h s).1 fun hsc => compl_notMem hs (hgf hsc)
@@ -527,7 +527,7 @@ definition ofAtom
 
 中文:
 定义 ofAtom
-  签名: (f : Filter α) (hf : IsAtom f)
+  签名: (f : 滤子 α) (hf : IsAtom f)
   定义体: f
   neBot' := ⟨hf.1⟩
   le_of_le g hg := (isAtom_iff_le_of_ge.1 hf).2 g hg.ne
@@ -549,7 +549,7 @@ theorem nonempty_of_mem
 中文:
 定理 nonempty_of_mem
   条件: (hs : s in f)
-  结论: s.Nonempty
+  结论: s.非空
   证明: Filter.nonempty_of_mem hs
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, nonempty_of_mem
@@ -618,7 +618,7 @@ theorem le_sup_iff
 
 中文:
 定理 le_sup_iff
-  条件: {u : Ultrafilter α} {f g : Filter α}
+  条件: {u : Ultrafilter α} {f g : 滤子 α}
   结论: ↑u <= f ⊔ g ↔ ↑u <= f ∨ ↑u <= g
   证明: not_iff_not.1 by simp only [← disjoint_iff_not_le, not_or, disjoint_sup_right]
 
@@ -661,7 +661,7 @@ theorem mem_or_compl_mem
 
 中文:
 定理 mem_or_compl_mem
-  条件: (f : Ultrafilter α) (s : Set α)
+  条件: (f : Ultrafilter α) (s : 集合 α)
   结论: s in f ∨ sᶜ in f
   证明: or_iff_not_imp_left.2 compl_mem_iff_notMem.2
 
@@ -768,7 +768,7 @@ theorem coe_map
 中文:
 定理 coe_map
   条件: (m : α -> β) (f : Ultrafilter α)
-  结论: (map m f : Filter β) = Filter.map m ↑f
+  结论: (map m f : 滤子 β) = 滤子.map m ↑f
   证明: rfl
 
 @[simp]
@@ -794,7 +794,7 @@ nonrec theorem map_id (f : Ultrafilter α) : f.map id = f :=
 
 中文:
 定理 mem_map
-  条件: {m : α -> β} {f : Ultrafilter α} {s : Set β}
+  条件: {m : α -> β} {f : Ultrafilter α} {s : 集合 β}
   结论: s in map m f ↔ m ⁻¹' s in f
   证明: Iff.rfl
 
@@ -871,7 +871,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  结论: {m : α -> β} (u : Ultrafilter β) (inj : Injective m) (large : Set.range m in u)
+  结论: {m : α -> β} (u : Ultrafilter β) (inj : 单射 m) (large : 集合.range m in u)
   证明: mem_comap_iff inj large
 
 @[simp, norm_cast]
@@ -902,7 +902,7 @@ nonrec theorem comap_comap (f : Ultrafilter γ) {m : α -> β} {n : β -> γ}
 
 中文:
 定理 coe_comap
-  条件: {m : α -> β} (u : Ultrafilter β) (inj : Injective m) (large : Set.range m in u)
+  条件: {m : α -> β} (u : Ultrafilter β) (inj : 单射 m) (large : 集合.range m in u)
   证明: rfl
 
 @[simp]
@@ -969,7 +969,7 @@ theorem mem_pure
 
 中文:
 定理 mem_pure
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: s in (pure a : Ultrafilter α) ↔ a in s
   证明: Iff.rfl
 
@@ -995,7 +995,7 @@ theorem coe_pure
 中文:
 定理 coe_pure
   条件: (a : α)
-  结论: ↑(pure a : Ultrafilter α) = (pure a : Filter α)
+  结论: ↑(pure a : Ultrafilter α) = (pure a : 滤子 α)
   证明: rfl
 
 @[simp]
@@ -1039,7 +1039,7 @@ Filter.comap_pure.trans by
 
 中文:
 定理 comap_pure
-  条件: {m : α -> β} (a : α) (inj : Injective m) (large)
+  条件: {m : α -> β} (a : α) (inj : 单射 m) (large)
   证明: coe_injective
 Filter.comap_pure.trans by
       rw [coe_pure]; rw [← principal_singleton]; rw [← image_singleton]; rw [preimage_image_eq _ inj]
@@ -1063,7 +1063,7 @@ theorem pure_injective
 
 中文:
 定理 pure_injective
-  结论: Injective (pure : α -> Ultrafilter α)
+  结论: 单射 (pure : α -> Ultrafilter α)
   证明: fun _ _ h =>
   Filter.pure_injective (congr_arg Ultrafilter.toFilter h :)
 -/
@@ -1079,8 +1079,8 @@ instance [Inhabited
   body: ⟨pure default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Ultrafilter α)
+实例 [可居
+  签名: α] : 可居 (Ultrafilter α)
   定义体: ⟨pure default⟩
 -/
 instance [Inhabited α] : Inhabited (Ultrafilter α) :=
@@ -1095,8 +1095,8 @@ instance [Nonempty
   body: Nonempty.map pure inferInstance
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (Ultrafilter α)
+实例 [非空
+  签名: α] : 非空 (Ultrafilter α)
   定义体: Nonempty.map pure inferInstance
 
 Depends on / 依赖: Nonempty, Nonempty.map
@@ -1153,7 +1153,7 @@ instance functor
 
 中文:
 实例 functor
-  签名: : Functor Ultrafilter where map
+  签名: : 函子 Ultrafilter where map
   定义体: @Ultrafilter.map
 
 Depends on / 依赖: Ultrafilter, Ultrafilter.map
@@ -1170,7 +1170,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad Ultrafilter where map
+  签名: : 单子 Ultrafilter where map
   定义体: @Ultrafilter.map
 
 Depends on / 依赖: Ultrafilter, Ultrafilter.map
@@ -1198,7 +1198,7 @@ instance lawfulMonad
 
 中文:
 实例 lawfulMonad
-  签名: : LawfulMonad Ultrafilter where
+  签名: : 合法单子 Ultrafilter where
   定义体: coe_injective (id_map f.toFilter)
   pure_bind a f := coe_injective (Filter.pure_bind a ((Ultrafilter.toFilter) ∘ f))
   bind_assoc _ _ _ := coe_injective (filter_eq rfl)
@@ -1236,8 +1236,8 @@ theorem exists_le
 alias _root_.Filter.exists_ultrafilter_le := exists_le
 
 中文:
-定理 exists_le
-  条件: (f : Filter α) [h : NeBot f]
+定理 存在_le
+  条件: (f : 滤子 α) [h : NeBot f]
   结论: 存在 u : Ultrafilter α, ↑u <= f
   证明: let ⟨u, hu, huf⟩ := (eq_bot_or_exists_atom_le f).resolve_left h.ne
   ⟨ofAtom u hu, huf⟩
@@ -1262,7 +1262,7 @@ definition of
 
 中文:
 定义 of
-  签名: (f : Filter α) [NeBot f]
+  签名: (f : 滤子 α) [NeBot f]
   定义体: Classical.choose (exists_le f)
 
 Depends on / 依赖: Classical, Classical.choose, exists_le
@@ -1281,7 +1281,7 @@ theorem of_le
 
 中文:
 定理 of_le
-  条件: (f : Filter α) [NeBot f]
+  条件: (f : 滤子 α) [NeBot f]
   结论: ↑(of f) <= f
   证明: Classical.choose_spec (exists_le f)
 
@@ -1328,7 +1328,7 @@ theorem isAtom_pure
 
 中文:
 定理 isAtom_pure
-  结论: IsAtom (pure a : Filter α)
+  结论: IsAtom (pure a : 滤子 α)
   证明: (pure a : Ultrafilter α).isAtom
 
 Depends on / 依赖: Ultrafilter, isAtom
@@ -1431,7 +1431,7 @@ theorem Iic_pure
 中文:
 定理 Iic_pure
   条件: (a : α)
-  结论: Iic (pure a : Filter α) = {⊥, pure a}
+  结论: 左无界右闭区间 (pure a : 滤子 α) = {⊥, pure a}
   证明: isAtom_pure.Iic_eq
 
 Depends on / 依赖: Iic_eq, isAtom_pure, isAtom_pure.Iic_eq
@@ -1479,7 +1479,7 @@ theorem le_iff_ultrafilter
 
 中文:
 定理 le_iff_ultrafilter
-  条件: {f₁ f₂ : Filter α}
+  条件: {f₁ f₂ : 滤子 α}
   结论: f₁ <= f₂ ↔ 对任意 g : Ultrafilter α, ↑g <= f₁ -> ↑g <= f₂
   证明: ⟨fun h _ h₁ => h₁.trans h, fun h _ hs => mem_iff_ultrafilter.2 fun g hg => h g hg hs⟩
 
@@ -1498,7 +1498,7 @@ theorem iSup_ultrafilter_le_eq
 
 中文:
 定理 iSup_ultrafilter_le_eq
-  条件: (f : Filter α)
+  条件: (f : 滤子 α)
   证明: eq_of_forall_ge_iff fun f' => by simp only [iSup_le_iff, ← le_iff_ultrafilter]
 
 Depends on / 依赖: eq_of_forall_ge_iff, iSup_le_iff, le_iff_ultrafilter
@@ -1517,8 +1517,8 @@ theorem exists_ultrafilter_iff
   proof: ⟨fun ⟨_, uf⟩ => neBot_of_le uf, fun h => @exists_ultrafilter_le _ _ h⟩
 
 中文:
-定理 exists_ultrafilter_iff
-  条件: {f : Filter α}
+定理 存在_ultrafilter_iff
+  条件: {f : 滤子 α}
   结论: (存在 u : Ultrafilter α, ↑u <= f) ↔ NeBot f
   证明: ⟨fun ⟨_, uf⟩ => neBot_of_le uf, fun h => @exists_ultrafilter_le _ _ h⟩
 
@@ -1539,8 +1539,8 @@ theorem forall_neBot_le_iff
   exact hp (of_le f) (H _ ((of_le f).trans hfg))
 
 中文:
-定理 forall_neBot_le_iff
-  条件: {g : Filter α} {p : Filter α -> 命题} (hp : Monotone p)
+定理 对任意_neBot_le_iff
+  条件: {g : 滤子 α} {p : 滤子 α -> 命题} (hp : 递增 p)
   证明: by
   refine ⟨fun H f hf => H f f.neBot hf, ?_⟩
   intro H f hf hfg
@@ -1572,7 +1572,7 @@ theorem comap_inf_principal_neBot_of_image_mem
 中文:
 定理 comap_inf_principal_neBot_of_image_mem
   条件: (h : m '' s in g)
-  结论: (Filter.comap m g ⊓ 𝓟 s).NeBot
+  结论: (滤子.comap m g ⊓ 𝓟 s).NeBot
   证明: Filter.comap_inf_principal_neBot_of_image_mem g.neBot h
 
 Depends on / 依赖: Filter, Filter.comap_inf_principal_neBot_of_image_mem, comap_inf_principal_neBot_of_image_mem, g.neBot
@@ -1681,7 +1681,7 @@ theorem eq_of_le_pure
 
 中文:
 定理 eq_of_le_pure
-  结论: {X : Type _} {α : Filter X} (hα : α.NeBot) {x y : X}
+  结论: {X : 类型 _} {α : 滤子 X} (hα : α.NeBot) {x y : X}
   证明: Filter.pure_injective (hα.le_pure_iff.mp hx ▸ hα.le_pure_iff.mp hy)
 
 Depends on / 依赖: Filter, Filter.pure_injective, le_pure_iff, le_pure_iff.mp, pure_injective

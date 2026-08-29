@@ -53,7 +53,7 @@ definition jacobiSum
 
 中文:
 定义 jacobiSum
-  签名: (χ ψ : MulChar R R')
+  签名: (χ ψ : 乘法特征 R R')
   定义体: ∑ x : R, χ x * ψ (1 - x)
 -/
 def jacobiSum (χ ψ : MulChar R R') : R' :=
@@ -73,7 +73,7 @@ lemma jacobiSum_comm
 
 中文:
 引理 jacobiSum_comm
-  条件: (χ ψ : MulChar R R')
+  条件: (χ ψ : 乘法特征 R R')
   结论: jacobiSum χ ψ = jacobiSum ψ χ
   证明: by
   simp only [jacobiSum, mul_comm (χ _)]
@@ -99,7 +99,7 @@ lemma jacobiSum_ringHomComp
 
 中文:
 引理 jacobiSum_ringHomComp
-  条件: {R'' : 类型} [CommRing R''] (χ ψ : MulChar R R') (f : R' ->+* R'')
+  条件: {R'' : 类型} [交换环 R''] (χ ψ : 乘法特征 R R') (f : R' ->+* R'')
   证明: by
   simp only [jacobiSum, MulChar.ringHomComp, MulChar.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
     map_sum, map_mul]
@@ -136,7 +136,7 @@ lemma jacobiSum_eq_sum_sdiff
 
 中文:
 引理 jacobiSum_eq_sum_sdiff
-  条件: (χ ψ : MulChar F R)
+  条件: (χ ψ : 乘法特征 F R)
   证明: by
   simp only [jacobiSum, subset_univ, sum_sdiff_eq_sub, sub_eq_add_neg, left_eq_add,
     neg_eq_zero]
@@ -171,7 +171,7 @@ lemma jacobiSum_eq_aux
 
 中文:
 引理 jacobiSum_eq_aux
-  条件: (χ ψ : MulChar F R)
+  条件: (χ ψ : 乘法特征 F R)
   证明: by
   rw [jacobiSum]
   conv =>
@@ -250,7 +250,7 @@ theorem jacobiSum_one_one
 
 中文:
 定理 jacobiSum_one_one
-  结论: jacobiSum (1 : MulChar F R) 1 = Fintype.card F - 2
+  结论: jacobiSum (1 : 乘法特征 F R) 1 = 有限类型.card F - 2
   证明: jacobiSum_trivial_trivial
 
 Depends on / 依赖: jacobiSum_trivial_trivial
@@ -277,7 +277,7 @@ theorem jacobiSum_one_nontrivial
 
 中文:
 定理 jacobiSum_one_nontrivial
-  条件: {χ : MulChar F R} (hχ : χ != 1)
+  条件: {χ : 乘法特征 F R} (hχ : χ != 1)
   结论: jacobiSum 1 χ = -1
   证明: by
   classical
@@ -316,7 +316,7 @@ theorem jacobiSum_nontrivial_inv
 
 中文:
 定理 jacobiSum_nontrivial_inv
-  条件: {χ : MulChar F R} (hχ : χ != 1)
+  条件: {χ : 乘法特征 F R} (hχ : χ != 1)
   结论: jacobiSum χ χ⁻¹ = -χ (-1)
   证明: by
   classical
@@ -366,7 +366,7 @@ theorem jacobiSum_mul_nontrivial
 
 中文:
 定理 jacobiSum_mul_nontrivial
-  条件: {χ φ : MulChar F R} (h : χ * φ != 1) (ψ : AddChar F R)
+  条件: {χ φ : 乘法特征 F R} (h : χ * φ != 1) (ψ : 加法特征 F R)
   证明: by
   classical
   rw [gaussSum_mul _ _ ψ]; rw [sum_eq_sum_sdiff_singleton_add (mem_univ (0 : F))]
@@ -413,7 +413,7 @@ theorem jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum
 
 中文:
 定理 jacobiSum_eq_gaussSum_mul_gaussSum_div_gaussSum
-  结论: (h : (Fintype.card F : F') != 0)
+  结论: (h : (有限类型.card F : F') != 0)
   证明: by
   rw [eq_div_iff <| gaussSum_ne_zero_of_nontrivial h hχφ hψ]; rw [mul_comm]
   exact jacobiSum_mul_nontrivial hχφ ψ
@@ -444,7 +444,7 @@ lemma jacobiSum_mul_jacobiSum_inv
 
 中文:
 引理 jacobiSum_mul_jacobiSum_inv
-  结论: (h : ringChar F' != ringChar F) {χ φ : MulChar F F'} (hχ : χ != 1)
+  结论: (h : ringChar F' != ringChar F) {χ φ : 乘法特征 F F'} (hχ : χ != 1)
   证明: by
   obtain ⟨n, hp, hc⟩ := FiniteField.card F (ringChar F)
   -- Obtain primitive additive character `ψ : F → FF'`.
@@ -514,8 +514,8 @@ lemma MulChar.exists_apply_sub_one_eq_mul_sub_one
 private
 
 中文:
-引理 MulChar.exists_apply_sub_one_eq_mul_sub_one
-  结论: {n : 自然数} [NeZero n] {χ : MulChar F R} {μ : R}
+引理 乘法特征.存在_apply_sub_one_eq_mul_sub_one
+  结论: {n : 自然数} [NeZero n] {χ : 乘法特征 F R} {μ : R}
   证明: by
   obtain ⟨k, _, hk⟩ := exists_apply_eq_pow hχ hμ hx
   refine hk ▸ ⟨(Finset.range k).sum (μ ^ ·), ?_, (geom_sum_mul μ k).symm⟩
@@ -547,8 +547,8 @@ lemma MulChar.exists_apply_sub_one_mul_apply_sub_one
   obtain ⟨z₁, hz₁, Hz₁⟩ := MulChar.exists
 
 中文:
-引理 MulChar.exists_apply_sub_one_mul_apply_sub_one
-  结论: {n : 自然数} [NeZero n] {χ ψ : MulChar F R}
+引理 乘法特征.存在_apply_sub_one_mul_apply_sub_one
+  结论: {n : 自然数} [NeZero n] {χ ψ : 乘法特征 F R}
   证明: by
   rcases eq_or_ne x 0 with rfl | hx₀
   · exact ⟨0, Subalgebra.zero_mem _, by rw [sub_zero, ψ.map_one, sub_self, mul_zero, zero_mul]⟩
@@ -587,7 +587,7 @@ lemma jacobiSum_mem_algebraAdjoin_of_pow_eq_one
 
 中文:
 引理 jacobiSum_mem_algebraAdjoin_of_pow_eq_one
-  结论: {n : 自然数} [NeZero n] {χ φ : MulChar F R}
+  结论: {n : 自然数} [NeZero n] {χ φ : 乘法特征 F R}
   证明: Subalgebra.sum_mem _ fun _ _ => Subalgebra.mul_mem _
     (MulChar.apply_mem_algebraAdjoin_of_pow_eq_one hχ hμ _)
     (MulChar.apply_mem_algebraAdjoin_of_pow_eq_one hφ hμ _)
@@ -617,8 +617,8 @@ lemma exists_jacobiSum_eq_neg_one_add
 
 
 中文:
-引理 exists_jacobiSum_eq_neg_one_add
-  结论: {n : 自然数} (hn : 2 < n) {χ ψ : MulChar F R}
+引理 存在_jacobiSum_eq_neg_one_add
+  结论: {n : 自然数} (hn : 2 < n) {χ ψ : 乘法特征 F R}
   证明: by
   obtain ⟨q, hq⟩ := hn'
   rw [Nat.sub_eq_iff_eq_add NeZero.one_le] at hq
@@ -681,7 +681,7 @@ specialize ih lt_trans (Nat.lt_succ_self n) hn₂
 
 中文:
 引理 gaussSum_pow_eq_prod_jacobiSum_aux
-  结论: (χ : MulChar F R) (ψ : AddChar F R) {n : 自然数}
+  结论: (χ : 乘法特征 F R) (ψ : 加法特征 F R) {n : 自然数}
   证明: by
   induction n, hn₁ using Nat.le_induction with
   | base => simp only [pow_one, le_refl, Ico_eq_empty_of_le, prod_empty, mul_one]
@@ -723,7 +723,7 @@ theorem gaussSum_pow_eq_prod_jacobiSum
 
 中文:
 定理 gaussSum_pow_eq_prod_jacobiSum
-  结论: {χ : MulChar F R} {ψ : AddChar F R} (hχ : 2 <= orderOf χ)
+  结论: {χ : 乘法特征 F R} {ψ : 加法特征 F R} (hχ : 2 <= orderOf χ)
   证明: by
   have := gaussSum_pow_eq_prod_jacobiSum_aux χ ψ (n := orderOf χ - 1) (by lia) (by lia)
   apply_fun (gaussSum χ ψ * ·) at this

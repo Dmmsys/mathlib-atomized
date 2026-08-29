@@ -43,10 +43,10 @@ class IsZeroOneMeasure
     - zero_one₀ : forall ⦃s⦄, MeasurableSet s -> μ s = 0 ∨ μ s = 1
 
 中文:
-类 IsZeroOneMeasure
-  参数: (μ : Measure α)
+类 是ZeroOneMeasure
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
-    - zero_one₀ : 对任意 ⦃s⦄, MeasurableSet s -> μ s = 0 ∨ μ s = 1
+    - zero_one₀ : 对任意 ⦃s⦄, 可测集 s -> μ s = 0 ∨ μ s = 1
 -/
 class IsZeroOneMeasure (μ : Measure α) : Prop where
   zero_one₀ : forall ⦃s⦄, MeasurableSet s -> μ s = 0 ∨ μ s = 1
@@ -66,8 +66,8 @@ lemma Measure.zero_one
     exact IsZeroOneMeasure.zero_one₀ mt
 
 中文:
-引理 Measure.zero_one
-  条件: (μ : Measure α) [IsZeroOneMeasure μ]
+引理 测度.zero_one
+  条件: (μ : 测度 α) [是ZeroOneMeasure μ]
   证明: by
   intro s
   by_cases hs : MeasurableSet s
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroOrProbabilityMeasure μ
+  签名: 是ZeroOrProbabilityMeasure μ
   定义体: μ.zero_one univ
 
 Depends on / 依赖: zero_one
@@ -127,7 +127,7 @@ lemma exists_measure_eq_one_iff_measure_univ_eq_one
     exact ⟨univ, h⟩
 
 中文:
-引理 exists_measure_eq_one_iff_measure_univ_eq_one
+引理 存在_measure_eq_one_iff_measure_univ_eq_one
   结论: (存在 s, μ s = 1) ↔ μ univ = 1
   证明: by
   constructor
@@ -164,7 +164,7 @@ lemma measure_univ
 
 中文:
 引理 measure_univ
-  条件: {s : Set α} (hμs : μ s = 1)
+  条件: {s : 集合 α} (hμs : μ s = 1)
   结论: μ univ = 1
   证明: (exists_measure_eq_one_iff_measure_univ_eq_one).mp ⟨s, hμs⟩
 
@@ -189,7 +189,7 @@ lemma measure_inter_eq_one
 
 中文:
 引理 measure_inter_eq_one
-  结论: {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t)
+  结论: {s t : 集合 α} (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   have : μ (s inter t) <= μ s := measure_mono inter_subset_left
   have : μ (s inter t) <= μ t := measure_mono inter_subset_right
@@ -232,7 +232,7 @@ lemma measure_inter_eq_prod
 
 中文:
 引理 measure_inter_eq_prod
-  条件: {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: {s t : 集合 α} (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   have : μ (s inter t) <= μ s := measure_mono inter_subset_left
   have : μ (s inter t) <= μ t := measure_mono inter_subset_right
@@ -265,9 +265,9 @@ theorem exists_eq_dirac
   have mBn :
 
 中文:
-定理 exists_eq_dirac
-  条件: [StandardBorelSpace α] [NeZero μ]
-  结论: 存在 x₀, μ = Measure.dirac x₀
+定理 存在_eq_dirac
+  条件: [StandardBorel空间 α] [NeZero μ]
+  结论: 存在 x₀, μ = 测度.dirac x₀
   证明: by
   have : IsProbabilityMeasure μ := by
     rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with (h | h)

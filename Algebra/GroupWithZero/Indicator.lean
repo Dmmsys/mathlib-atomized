@@ -41,7 +41,7 @@ lemma indicator_mul
 
 中文:
 引理 indicator_mul
-  条件: (s : Set ι) (f g : ι -> M₀)
+  条件: (s : 集合 ι) (f g : ι -> M₀)
   证明: by
   funext
   simp only [indicator]
@@ -73,7 +73,7 @@ lemma indicator_mul_left
 
 中文:
 引理 indicator_mul_left
-  条件: (s : Set ι) (f g : ι -> M₀)
+  条件: (s : 集合 ι) (f g : ι -> M₀)
   证明: by
   simp only [indicator]
   split_ifs
@@ -103,7 +103,7 @@ lemma indicator_mul_right
 
 中文:
 引理 indicator_mul_right
-  条件: (s : Set ι) (f g : ι -> M₀)
+  条件: (s : 集合 ι) (f g : ι -> M₀)
   证明: by
   simp only [indicator]
   split_ifs
@@ -129,7 +129,7 @@ lemma indicator_mul_const
 
 中文:
 引理 indicator_mul_const
-  条件: (s : Set ι) (f : ι -> M₀) (a : M₀) (i : ι)
+  条件: (s : 集合 ι) (f : ι -> M₀) (a : M₀) (i : ι)
   证明: by rw [indicator_mul_left]
 
 Depends on / 依赖: indicator_mul_left
@@ -147,7 +147,7 @@ lemma indicator_const_mul
 
 中文:
 引理 indicator_const_mul
-  条件: (s : Set ι) (f : ι -> M₀) (a : M₀) (i : ι)
+  条件: (s : 集合 ι) (f : ι -> M₀) (a : M₀) (i : ι)
   证明: by rw [indicator_mul_right]
 
 Depends on / 依赖: indicator_mul_right
@@ -218,7 +218,7 @@ lemma indicator_prod_one
 
 中文:
 引理 indicator_prod_one
-  条件: {t : Set κ} {j : κ}
+  条件: {t : 集合 κ} {j : κ}
   证明: by
   simp_rw [indicator, mem_prod_eq]
   split_ifs with h₀ <;> simp only [Pi.one_apply, mul_one, mul_zero] <;> tauto
@@ -589,7 +589,7 @@ lemma mulSupport_one_add
 
 中文:
 引理 mulSupport_one_add
-  条件: [AddLeftCancelMonoid R] (f : ι -> R)
+  条件: [加法左消去幺半群 R] (f : ι -> R)
   证明: Set.ext fun _ => not_congr add_eq_left
 
 Depends on / 依赖: Set.ext, add_eq_left, infer_instance, not_congr
@@ -609,7 +609,7 @@ lemma mulSupport_one_add'
 
 中文:
 引理 mulSupport_one_add'
-  条件: [AddLeftCancelMonoid R] (f : ι -> R)
+  条件: [加法左消去幺半群 R] (f : ι -> R)
   结论: mulSupport (1 + f) = support f
   证明: mulSupport_one_add f
 
@@ -628,7 +628,7 @@ lemma mulSupport_add_one
 
 中文:
 引理 mulSupport_add_one
-  条件: [AddRightCancelMonoid R] (f : ι -> R)
+  条件: [加法右消去幺半群 R] (f : ι -> R)
   证明: Set.ext fun _ => not_congr add_eq_right
 
 Depends on / 依赖: Set.ext, add_eq_right, diagramIsoPair, hasColimit_of_iso, not_congr
@@ -647,7 +647,7 @@ lemma mulSupport_add_one'
 
 中文:
 引理 mulSupport_add_one'
-  条件: [AddRightCancelMonoid R] (f : ι -> R)
+  条件: [加法右消去幺半群 R] (f : ι -> R)
   结论: mulSupport (f + 1) = support f
   证明: mulSupport_add_one f
 
@@ -668,7 +668,7 @@ lemma mulSupport_one_sub'
 
 中文:
 引理 mulSupport_one_sub'
-  条件: [AddGroup R] (f : ι -> R)
+  条件: [加法群 R] (f : ι -> R)
   结论: mulSupport (1 - f) = support f
   证明: by
   rw [sub_eq_add_neg]; rw [mulSupport_one_add']; rw [support_neg]
@@ -688,7 +688,7 @@ lemma mulSupport_one_sub
 
 中文:
 引理 mulSupport_one_sub
-  条件: [AddGroup R] (f : ι -> R)
+  条件: [加法群 R] (f : ι -> R)
   证明: mulSupport_one_sub' f
 
 Depends on / 依赖: mulSupport_one_sub

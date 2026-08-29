@@ -70,8 +70,8 @@ structure IsSubgraph
     - isLink_mono : forall ⦃e x y⦄, H.IsLink e x y -> G.IsLink e x y  [default: by aesop]
 
 中文:
-结构 IsSubgraph
-  参数: (H G : Graph α β)
+结构 是子图
+  参数: (H G : 图 α β)
   公理与运算 (2 个):
     - vertexSet_mono : V(H) subseteq V(G)  [默认: by aesop]
     - isLink_mono : 对任意 ⦃e x y⦄, H.IsLink e x y -> G.IsLink e x y  [默认: by aesop]
@@ -94,9 +94,9 @@ lemma IsSubgraph.trans
   proof: ⟨h₁.1.trans h₂.1, fun _ _ _ h => h₂.2 (h₁.2 h)⟩
 
 中文:
-引理 IsSubgraph.trans
-  条件: (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph G₁)
-  结论: H.IsSubgraph G₁
+引理 是子图.trans
+  条件: (h₁ : H.是子图 G) (h₂ : G.是子图 G₁)
+  结论: H.是子图 G₁
   证明: ⟨h₁.1.trans h₂.1, fun _ _ _ h => h₂.2 (h₁.2 h)⟩
 -/
 lemma IsSubgraph.trans (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph G₁) : H.IsSubgraph G₁ :=
@@ -112,8 +112,8 @@ lemma IsSubgraph.antisymm
   proof: Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ => ⟨(h₁.2 ·), (h₂.2 ·)⟩
 
 中文:
-引理 IsSubgraph.antisymm
-  条件: (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph H)
+引理 是子图.antisymm
+  条件: (h₁ : H.是子图 G) (h₂ : G.是子图 H)
   结论: H = G
   证明: Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ => ⟨(h₁.2 ·), (h₂.2 ·)⟩
 
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Graph α β)
+  签名: 偏序 (图 α β)
   定义体: IsSubgraph
   le_refl _ := ⟨le_rfl, fun _ _ _ h => h⟩
   le_trans _ _ _ h₁ h₂ := h₁.trans h₂
@@ -166,7 +166,7 @@ lemma isSubgraph_iff_le
 
 中文:
 引理 isSubgraph_iff_le
-  结论: H.IsSubgraph G ↔ H <= G
+  结论: H.是子图 G ↔ H <= G
   证明: .rfl
 
 @[gcongr]
@@ -209,7 +209,7 @@ lemma IsSubgraph.edgeSet_mono
   exact (h'.mono h).edge_mem
 
 中文:
-引理 IsSubgraph.edgeSet_mono
+引理 是子图.edgeSet_mono
   条件: (h : H <= G)
   结论: E(H) subseteq E(G)
   证明: by
@@ -262,7 +262,7 @@ lemma IsSubgraph.isLink_iff
   proof: ⟨fun h => h.mono hHG, fun h => h.anti_of_mem hHG he⟩
 
 中文:
-引理 IsSubgraph.isLink_iff
+引理 是子图.isLink_iff
   条件: (hHG : H <= G) (he : e in E(H))
   结论: H.IsLink e x y ↔ G.IsLink e x y
   证明: ⟨fun h => h.mono hHG, fun h => h.anti_of_mem hHG he⟩
@@ -285,7 +285,7 @@ lemma IsSubgraph.isLink_eqOn
   exact isLink_iff hHG he
 
 中文:
-引理 IsSubgraph.isLink_eqOn
+引理 是子图.isLink_eqOn
   条件: (hHG : H <= G)
   结论: EqOn H.IsLink G.IsLink E(H)
   证明: by
@@ -310,9 +310,9 @@ lemma Compatible.of_le_le
   proof: .trans (hH₂G.isLink_iff he₂).symm fun _ he₁ he₂ _ _ => hH₁G.isLink_iff he₁
 
 中文:
-引理 Compatible.of_le_le
+引理 余mpatible.of_le_le
   条件: (hH₁G : H₁ <= G) (hH₂G : H₂ <= G)
-  结论: H₁.Compatible H₂
+  结论: H₁.余mpatible H₂
   证明: .trans (hH₂G.isLink_iff he₂).symm fun _ he₁ he₂ _ _ => hH₁G.isLink_iff he₁
 
 Depends on / 依赖: G.isLink_iff, isLink_iff
@@ -330,9 +330,9 @@ lemma Compatible.of_le
   proof: .of_le_le hHG le_rfl
 
 中文:
-引理 Compatible.of_le
+引理 余mpatible.of_le
   条件: (hHG : H <= G)
-  结论: H.Compatible G
+  结论: H.余mpatible G
   证明: .of_le_le hHG le_rfl
 
 Depends on / 依赖: le_rfl, of_le_le
@@ -351,9 +351,9 @@ alias IsSubgraph.compatible := Compatible.of_le
 alias IsSubgraph.compatible' := Compatible.of_ge
 
 中文:
-引理 Compatible.of_ge
+引理 余mpatible.of_ge
   条件: (hHG : G <= H)
-  结论: H.Compatible G
+  结论: H.余mpatible G
   证明: .of_le_le le_rfl hHG
 
 alias IsSubgraph.compatible := Compatible.of_le
@@ -376,9 +376,9 @@ lemma Compatible.anti_left
   proof: .trans h (hG₁G.edgeSet_mono he₁) he₂ .. fun _ he₁ he₂ _ _ => hG₁G.isLink_iff he₁
 
 中文:
-引理 Compatible.anti_left
-  条件: (hG₁G : G₁ <= G) (h : Compatible G H)
-  结论: Compatible G₁ H
+引理 余mpatible.anti_left
+  条件: (hG₁G : G₁ <= G) (h : 余mpatible G H)
+  结论: 余mpatible G₁ H
   证明: .trans h (hG₁G.edgeSet_mono he₁) he₂ .. fun _ he₁ he₂ _ _ => hG₁G.isLink_iff he₁
 
 Depends on / 依赖: G.edgeSet_mono, G.isLink_iff, edgeSet_mono, isLink_iff
@@ -396,9 +396,9 @@ lemma Compatible.anti_right
   proof: (h.symm.anti_left hH₁H).symm
 
 中文:
-引理 Compatible.anti_right
-  条件: (hH₁H : H₁ <= H) (h : Compatible G H)
-  结论: Compatible G H₁
+引理 余mpatible.anti_right
+  条件: (hH₁H : H₁ <= H) (h : 余mpatible G H)
+  结论: 余mpatible G H₁
   证明: (h.symm.anti_left hH₁H).symm
 
 Depends on / 依赖: anti_left, h.symm.anti_left
@@ -418,9 +418,9 @@ lemma Compatible.anti
 @[gcongr]
 
 中文:
-引理 Compatible.anti
-  条件: (hG₁G : G₁ <= G) (hH₁H : H₁ <= H) (h : G.Compatible H)
-  结论: G₁.Compatible H₁
+引理 余mpatible.anti
+  条件: (hG₁G : G₁ <= G) (hH₁H : H₁ <= H) (h : G.余mpatible H)
+  结论: G₁.余mpatible H₁
   证明: (h.anti_left hG₁G).anti_right hH₁H
 
 @[gcongr]
@@ -462,7 +462,7 @@ lemma IsSubgraph.inc_congr
   simp_rw [Graph.Inc, hHG.isLink_iff he]
 
 中文:
-引理 IsSubgraph.inc_congr
+引理 是子图.inc_congr
   条件: (hHG : H <= G) (he : e in E(H))
   结论: H.Inc e x ↔ G.Inc e x
   证明: by
@@ -486,7 +486,7 @@ lemma IsSubgraph.inc_eqOn
   exact hHG.inc_congr he
 
 中文:
-引理 IsSubgraph.inc_eqOn
+引理 是子图.inc_eqOn
   条件: (hHG : H <= G)
   结论: EqOn H.Inc G.Inc E(H)
   证明: by
@@ -532,7 +532,7 @@ lemma IsSubgraph.isLoopAt_congr
   rw [hHG.isLink_iff he]
 
 中文:
-引理 IsSubgraph.isLoopAt_congr
+引理 是子图.isLoopAt_congr
   条件: (hHG : H <= G) (he : e in E(H))
   证明: by
   unfold Graph.IsLoopAt
@@ -558,7 +558,7 @@ lemma IsSubgraph.isLoopAt_eqOn
   exact hHG.isLoopAt_congr he
 
 中文:
-引理 IsSubgraph.isLoopAt_eqOn
+引理 是子图.isLoopAt_eqOn
   条件: (hHG : H <= G)
   结论: EqOn H.IsLoopAt G.IsLoopAt E(H)
   证明: by
@@ -608,7 +608,7 @@ lemma IsSubgraph.isNonloopAt_congr
   simp_rw [Graph.IsNonloopAt, hHG.isLink_iff he]
 
 中文:
-引理 IsSubgraph.isNonloopAt_congr
+引理 是子图.isNonloopAt_congr
   条件: (hHG : H <= G) (he : e in E(H))
   证明: by
   simp_rw [Graph.IsNonloopAt, hHG.isLink_iff he]
@@ -634,7 +634,7 @@ lemma IsSubgraph.isNonloopAt_eqOn
 @[gcongr]
 
 中文:
-引理 IsSubgraph.isNonloopAt_eqOn
+引理 是子图.isNonloopAt_eqOn
   条件: (hHG : H <= G)
   结论: EqOn H.IsNonloopAt G.IsNonloopAt E(H)
   证明: by
@@ -662,9 +662,9 @@ lemma Adj.mono
   proof: (h.choose_spec.mono hHG).adj
 
 中文:
-引理 Adj.mono
-  条件: (hHG : H <= G) (h : H.Adj x y)
-  结论: G.Adj x y
+引理 伴随.mono
+  条件: (hHG : H <= G) (h : H.伴随 x y)
+  结论: G.伴随 x y
   证明: (h.choose_spec.mono hHG).adj
 
 Depends on / 依赖: choose_spec, h.choose_spec.mono
@@ -683,7 +683,7 @@ lemma le_iff_compatible_subset_subset
 
 中文:
 引理 le_iff_compatible_subset_subset
-  结论: G <= H ↔ Compatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H)
+  结论: G <= H ↔ 余mpatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H)
   证明: ⟨fun h => ⟨.of_le h, h.1, h.edgeSet_mono⟩, fun ⟨h, hV, hE⟩ =>
 .mp hxy⟩⟩ ⟨hV, fun _ _ _ hxy => h hxy.edge_mem (hE hxy.edge_mem) ..
 
@@ -703,8 +703,8 @@ lemma Compatible.le_iff
   proof: le_iff_compatible_subset_subset.trans (by tauto)
 
 中文:
-引理 Compatible.le_iff
-  条件: (hH : Compatible H₁ H₂)
+引理 余mpatible.le_iff
+  条件: (hH : 余mpatible H₁ H₂)
   结论: H₁ <= H₂ ↔ V(H₁) subseteq V(H₂) ∧ E(H₁) subseteq E(H₂)
   证明: le_iff_compatible_subset_subset.trans (by tauto)
 
@@ -723,8 +723,8 @@ lemma Compatible.ext
   proof: (h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
 
 中文:
-引理 Compatible.ext
-  条件: (hV : V(H₁) = V(H₂)) (hE : E(H₁) = E(H₂)) (h : Compatible H₁ H₂)
+引理 余mpatible.ext
+  条件: (hV : V(H₁) = V(H₂)) (hE : E(H₁) = E(H₂)) (h : 余mpatible H₁ H₂)
   结论: H₁ = H₂
   证明: (h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
 
@@ -831,8 +831,8 @@ structure IsSpanningSubgraph
     - vertexSet_eq : V(H) = V(G)
 
 中文:
-结构 IsSpanningSubgraph
-  参数: (H G : Graph α β)
+结构 是SpanningSubgraph
+  参数: (H G : 图 α β)
   继承: le : H <= G
   公理与运算 (1 个):
     - vertexSet_eq : V(H) = V(G)
@@ -875,7 +875,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPartialOrder (Graph α β) (· <=s ·)
+  签名: 是偏序 (图 α β) (· <=s ·)
   定义体: ⟨le_refl G, rfl⟩
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
@@ -1009,8 +1009,8 @@ structure IsInducedSubgraph
     - isLink_of_mem_mem : forall ⦃e x y⦄, G.IsLink e x y -> x in V(H) -> y in V(H) -> H.IsLink e x y
 
 中文:
-结构 IsInducedSubgraph
-  参数: (H G : Graph α β)
+结构 是InducedSubgraph
+  参数: (H G : 图 α β)
   继承: le : H <= G
   公理与运算 (1 个):
     - isLink_of_mem_mem : 对任意 ⦃e x y⦄, G.IsLink e x y -> x in V(H) -> y in V(H) -> H.IsLink e x y
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPartialOrder (Graph α β) (· <=i ·)
+  签名: 是偏序 (图 α β) (· <=i ·)
   定义体: ⟨le_refl G, by tauto⟩
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
@@ -1114,7 +1114,7 @@ lemma adj_congr
 中文:
 引理 adj_congr
   条件: (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G)
-  结论: H.Adj x y ↔ G.Adj x y
+  结论: H.伴随 x y ↔ G.伴随 x y
   证明: ⟨(·.mono h.le), fun ⟨_, hxy⟩ => (h.isLink_of_mem_mem hxy hx hy).adj⟩
 
 Depends on / 依赖: h.isLink_of_mem_mem, h.le, isLink_of_mem_mem
@@ -1211,7 +1211,7 @@ lemma IsSubgraph.not_isInducedSubgraph_iff
 .edge_mem⟩ fun hind _ _ _ hexy hx hy => hind.isLink_of_mem_mem hexy hx hy
 
 中文:
-引理 IsSubgraph.not_isInducedSubgraph_iff
+引理 是子图.not_isInducedSubgraph_iff
   条件: (hHG : H <= G)
   证明: by
   contrapose!; symm
@@ -1244,8 +1244,8 @@ structure IsClosedSubgraph
     - closed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)
 
 中文:
-结构 IsClosedSubgraph
-  参数: (H G : Graph α β)
+结构 是ClosedSubgraph
+  参数: (H G : 图 α β)
   公理与运算 (1 个):
     - closed : 对任意 ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)
 -/
@@ -1315,7 +1315,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPartialOrder (Graph α β) (· <=c ·)
+  签名: 是偏序 (图 α β) (· <=c ·)
   定义体: mk' le_rfl fun _ _ h _ => h.edge_mem
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.le.antisymm h₂.le
@@ -1452,7 +1452,7 @@ lemma adj_congr
 中文:
 引理 adj_congr
   条件: (hx : x in V(H)) (hHG : H <=c G)
-  结论: H.Adj x y ↔ G.Adj x y
+  结论: H.伴随 x y ↔ G.伴随 x y
   证明: ⟨(·.mono hHG.le), fun ⟨_, hxy⟩ => (hHG.isLink_congr hx |>.mpr hxy).adj⟩
 
 Depends on / 依赖: hHG.isLink_congr, hHG.le, isLink_congr
@@ -1471,7 +1471,7 @@ lemma mem_iff_of_adj
 
 中文:
 引理 mem_iff_of_adj
-  条件: (hxy : G.Adj x y) (hHG : H <=c G)
+  条件: (hxy : G.伴随 x y) (hHG : H <=c G)
   结论: x in V(H) ↔ y in V(H)
   证明: hHG.mem_iff_of_isLink hxy.choose_spec
 
@@ -1515,7 +1515,7 @@ lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj
     fun hcl _ _ hexy => (hcl.mem_iff_of_adj hexy).mp⟩
 
 中文:
-引理 IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj
+引理 是InducedSubgraph.not_isClosedSubgraph_iff_存在_adj
   条件: (hHG : H <=i G)
   证明: by
   contrapose!; symm
@@ -1544,7 +1544,7 @@ lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink
   tauto
 
 中文:
-引理 IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink
+引理 是InducedSubgraph.not_isClosedSubgraph_iff_存在_isLink
   条件: (hHG : H <=i G)
   证明: by
   rw [hHG.not_isClosedSubgraph_iff_exists_adj]
@@ -1574,7 +1574,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Graph α β)
+  签名: 有底序 (图 α β)
   定义体: noEdge ∅ β
   bot_le G := by constructor <;> simp
 
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Graph α β)
+  签名: 可居 (图 α β)
   定义体: ⊥
 -/
 instance : Inhabited (Graph α β) where
@@ -1610,7 +1610,7 @@ lemma noEdge_empty
 
 中文:
 引理 noEdge_empty
-  结论: Graph.noEdge (∅ : Set α) β = ⊥
+  结论: 图.noEdge (∅ : 集合 α) β = ⊥
   证明: rfl
 -/
 @[simp, grind =] lemma noEdge_empty : Graph.noEdge (∅ : Set α) β = ⊥ := rfl
@@ -1625,7 +1625,7 @@ lemma vertexSet_bot
 
 中文:
 引理 vertexSet_bot
-  结论: V((⊥ : Graph α β)) = ∅
+  结论: V((⊥ : 图 α β)) = ∅
   证明: rfl
 -/
 @[simp] lemma vertexSet_bot : V((⊥ : Graph α β)) = ∅ := rfl
@@ -1640,7 +1640,7 @@ lemma edgeSet_bot
 
 中文:
 引理 edgeSet_bot
-  结论: E((⊥ : Graph α β)) = ∅
+  结论: E((⊥ : 图 α β)) = ∅
   证明: rfl
 -/
 @[simp] lemma edgeSet_bot : E((⊥ : Graph α β)) = ∅ := rfl
@@ -1656,7 +1656,7 @@ lemma bot_isClosedSubgraph
 
 中文:
 引理 bot_isClosedSubgraph
-  条件: (G : Graph α β)
+  条件: (G : 图 α β)
   结论: ⊥ <=c G
   证明: IsClosedSubgraph.mk' bot_le (by simp)
 -/
@@ -1678,8 +1678,8 @@ lemma eq_bot_or_vertexSet_nonempty
 
 中文:
 引理 eq_bot_or_vertexSet_nonempty
-  条件: (G : Graph α β)
-  结论: G = ⊥ ∨ V(G).Nonempty
+  条件: (G : 图 α β)
+  结论: G = ⊥ ∨ V(G).非空
   证明: by
   refine (em (V(G) = ∅)).elim (fun he => .inl (Graph.ext he fun e x y => ?_)) (Or.inr ∘
     nonempty_iff_ne_empty.mpr)
@@ -1736,7 +1736,7 @@ lemma ne_bot_iff
 
 中文:
 引理 ne_bot_iff
-  结论: G != ⊥ ↔ V(G).Nonempty
+  结论: G != ⊥ ↔ V(G).非空
   证明: not_iff_not.mp by simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
 
 @[push, simp]
@@ -1758,7 +1758,7 @@ lemma vertexSet_not_nonempty_iff
 
 中文:
 引理 vertexSet_not_nonempty_iff
-  结论: ¬ V(G).Nonempty ↔ G = ⊥
+  结论: ¬ V(G).非空 ↔ G = ⊥
   证明: by
   simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
 

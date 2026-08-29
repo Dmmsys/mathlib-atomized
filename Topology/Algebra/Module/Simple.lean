@@ -39,7 +39,7 @@ theorem LinearMap.isClosed_or_dense_ker
     exact isClosed_univ
 
 中文:
-定理 LinearMap.isClosed_or_dense_ker
+定理 线性映射.isClosed_or_dense_ker
   条件: (l : M ->ₗ[R] N)
   证明: by
   rcases l.surjective_or_eq_zero with (hl | rfl)

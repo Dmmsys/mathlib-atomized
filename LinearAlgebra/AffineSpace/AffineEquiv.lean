@@ -51,8 +51,8 @@ structure AffineEquiv
     - map_vadd' : forall (p : P₁) (v : V₁), toEquiv (v +ᵥ p) = linear v +ᵥ toEquiv p
 
 中文:
-结构 AffineEquiv
-  参数: (k P₁ P₂ : 类型) {V₁ V₂ : 类型} [Ring k] [AddCommGroup V₁] [AddCommGroup V₂]
+结构 仿射等价
+  参数: (k P₁ P₂ : 类型) {V₁ V₂ : 类型} [环 k] [加法交换群 V₁] [加法交换群 V₂]
   继承: P₁ ≃ P₂
   公理与运算 (2 个):
     - linear : V₁ ≃ₗ[k] V₂
@@ -151,7 +151,7 @@ theorem toAffineMap_injective
 
 中文:
 定理 toAffineMap_injective
-  结论: Injective (toAffineMap : (P₁ ≃ᵃ[k] P₂) -> P₁ ->ᵃ[k] P₂)
+  结论: 单射 (toAffineMap : (P₁ ≃ᵃ[k] P₂) -> P₁ ->ᵃ[k] P₂)
   证明: by
   rintro ⟨e, el, h⟩ ⟨e', el', h'⟩ H
   simp_all
@@ -197,7 +197,7 @@ instance equivLike
 
 中文:
 实例 equivLike
-  签名: : EquivLike (P₁ ≃ᵃ[k] P₂) P₁ P₂ where
+  签名: : 等价状 (P₁ ≃ᵃ[k] P₂) P₁ P₂ where
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -403,7 +403,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Injective (P₁ ≃ᵃ[k] P₂) (P₁ -> P₂) (⇑)
+  结论: @单射 (P₁ ≃ᵃ[k] P₂) (P₁ -> P₂) (⇑)
   证明: DFunLike.coe_injective
 
 @[norm_cast]
@@ -444,7 +444,7 @@ ext Equiv.ext_iff.1 H
 
 中文:
 定理 toEquiv_injective
-  结论: Injective (toEquiv : (P₁ ≃ᵃ[k] P₂) -> P₁ ≃ P₂)
+  结论: 单射 (toEquiv : (P₁ ≃ᵃ[k] P₂) -> P₁ ≃ P₂)
   证明: fun _ _ H =>
 ext Equiv.ext_iff.1 H
 
@@ -730,7 +730,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : P₁ ≃ᵃ[k] P₂)
-  结论: Bijective e
+  结论: 双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective (e : P₁ ≃ᵃ[k] P₂) : Bijective e :=
@@ -748,7 +748,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : P₁ ≃ᵃ[k] P₂)
-  结论: Surjective e
+  结论: 满射 e
   证明: e.toEquiv.surjective
 -/
 protected theorem surjective (e : P₁ ≃ᵃ[k] P₂) : Surjective e :=
@@ -766,7 +766,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : P₁ ≃ᵃ[k] P₂)
-  结论: Injective e
+  结论: 单射 e
   证明: e.toEquiv.injective
 -/
 protected theorem injective (e : P₁ ≃ᵃ[k] P₂) : Injective e :=
@@ -786,7 +786,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Bijective φ)
+  签名: {φ : P₁ ->ᵃ[k] P₂} (hφ : 函数.双射 φ)
   定义体: { Equiv.ofBijective _ hφ with
     linear := LinearEquiv.ofBijective φ.linear (φ.linear_bijective_iff.mpr hφ)
     map_vadd' := φ.map_vadd }
@@ -808,7 +808,7 @@ theorem ofBijective.symm_eq
 
 中文:
 定理 ofBijective.symm_eq
-  条件: {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Bijective φ)
+  条件: {φ : P₁ ->ᵃ[k] P₂} (hφ : 函数.双射 φ)
   证明: rfl
 -/
 theorem ofBijective.symm_eq {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Bijective φ) :
@@ -984,7 +984,7 @@ theorem image_symm
 
 中文:
 定理 image_symm
-  条件: (f : P₁ ≃ᵃ[k] P₂) (s : Set P₂)
+  条件: (f : P₁ ≃ᵃ[k] P₂) (s : 集合 P₂)
   结论: f.symm '' s = f ⁻¹' s
   证明: f.symm.toEquiv.image_eq_preimage_symm _
 
@@ -1007,7 +1007,7 @@ theorem preimage_symm
 
 中文:
 定理 preimage_symm
-  条件: (f : P₁ ≃ᵃ[k] P₂) (s : Set P₁)
+  条件: (f : P₁ ≃ᵃ[k] P₂) (s : 集合 P₁)
   结论: f.symm ⁻¹' s = f '' s
   证明: (f.symm.image_symm _).symm
 
@@ -1082,7 +1082,7 @@ theorem coe_refl_to_affineMap
 
 中文:
 定理 coe_refl_to_affineMap
-  结论: ↑(refl k P₁) = AffineMap.id k P₁
+  结论: ↑(refl k P₁) = 仿射映射.id k P₁
   证明: rfl
 
 @[simp]
@@ -1128,7 +1128,7 @@ theorem toEquiv_refl
 
 中文:
 定理 toEquiv_refl
-  结论: (refl k P₁).toEquiv = Equiv.refl P₁
+  结论: (refl k P₁).toEquiv = 等价.refl P₁
   证明: rfl
 
 @[simp]
@@ -1151,7 +1151,7 @@ theorem linear_refl
 
 中文:
 定理 linear_refl
-  结论: (refl k P₁).linear = LinearEquiv.refl k V₁
+  结论: (refl k P₁).linear = 线性等价.refl k V₁
   证明: rfl
 
 @[simp]
@@ -1431,7 +1431,7 @@ instance group
 
 中文:
 实例 group
-  签名: : Group (P₁ ≃ᵃ[k] P₁) where
+  签名: : 群 (P₁ ≃ᵃ[k] P₁) where
   定义体: refl k P₁
   mul e e' := e'.trans e
   inv := symm
@@ -1947,7 +1947,7 @@ theorem constVAdd_zero
 
 中文:
 定理 constVAdd_zero
-  结论: constVAdd k P₁ 0 = AffineEquiv.refl _ _
+  结论: constVAdd k P₁ 0 = 仿射等价.refl _ _
   证明: ext zero_vadd _
 
 @[simp]
@@ -2199,7 +2199,7 @@ alias pointReflection_apply_eq_equivPointReflection_apply := coe_pointReflection
 中文:
 引理 coe_pointReflection
   条件: (x y : P₁)
-  结论: pointReflection k x y = Equiv.pointReflection x y
+  结论: pointReflection k x y = 等价.pointReflection x y
   证明: rfl
 
 @[deprecated (since := "2026-06-22")]
@@ -2308,7 +2308,7 @@ theorem pointReflection_involutive
 中文:
 定理 pointReflection_involutive
   条件: (x : P₁)
-  结论: Involutive (pointReflection k x : P₁ -> P₁)
+  结论: 对合 (pointReflection k x : P₁ -> P₁)
   证明: Equiv.pointReflection_involutive x
 
 Depends on / 依赖: Equiv.pointReflection_involutive, pointReflection_involutive
@@ -2366,7 +2366,7 @@ theorem injective_pointReflection_left_of_module
 
 中文:
 定理 injective_pointReflection_left_of_module
-  条件: [Invertible (2 : k)]
+  条件: [可逆 (2 : k)]
   证明: injective_pointReflection_left_of_injective_two_nsmul k fun x y h => by
     dsimp at h
     rwa [two_nsmul, two_nsmul, ← two_smul k x, ← two_smul k y,
@@ -2391,7 +2391,7 @@ theorem pointReflection_fixed_iff_of_module
 
 中文:
 定理 pointReflection_fixed_iff_of_module
-  条件: [Invertible (2 : k)] {x y : P₁}
+  条件: [可逆 (2 : k)] {x y : P₁}
   证明: ((injective_pointReflection_left_of_module k y).eq_iff' (pointReflection_self k y)).trans eq_comm
 
 Depends on / 依赖: eq_comm, eq_iff, injective_pointReflection_left_of_module, pointReflection_self

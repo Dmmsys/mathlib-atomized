@@ -170,7 +170,7 @@ theorem le_eqLocus
 
 中文:
 定理 le_eqLocus
-  条件: {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M}
+  条件: {f g : M ->ₛₗ[τ₁₂] M₂} {S : 子模 R M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -213,7 +213,7 @@ include τ₁₂ in
 
 中文:
 定理 eqOn_sup
-  结论: {f g : F} {S T : Submodule R M}
+  结论: {f g : F} {S T : 子模 R M}
   证明: by
   rw [← LinearMap.coe_coe (f := f)]; rw [← LinearMap.coe_coe (f := g)]; rw [← le_eqLocus] at hS hT ⊢
   exact sup_le hS hT
@@ -239,7 +239,7 @@ theorem ext_on_codisjoint
 
 中文:
 定理 ext_on_codisjoint
-  结论: {f g : F} {S T : Submodule R M} (hST : Codisjoint S T)
+  结论: {f g : F} {S T : 子模 R M} (hST : Codisjoint S T)
   证明: DFunLike.ext _ _ fun _ => eqOn_sup hS hT hST.eq_top.symm ▸ trivial
 
 Depends on / 依赖: DFunLike, DFunLike.ext, eqOn_sup, eq_top, hST.eq_top.symm

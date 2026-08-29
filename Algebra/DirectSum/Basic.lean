@@ -45,8 +45,8 @@ definition DirectSum
   body: Π₀ i, β i
 
 中文:
-定义 DirectSum
-  签名: [对任意 i, AddCommMonoid (β i)]
+定义 直和
+  签名: [对任意 i, 加法交换幺半群 (β i)]
   定义体: Π₀ i, β i
 -/
 def DirectSum [forall i, AddCommMonoid (β i)] : Type _ :=
@@ -90,7 +90,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: ι] [对任意 i, AddCommMonoid (β i)] [对任意 i, DecidableEq (β i)] :
+  签名: ι] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, DecidableEq (β i)] :
   定义体: inferInstanceAs DecidableEq (Π₀ i, β i)
 
 Depends on / 依赖: DecidableEq
@@ -113,7 +113,7 @@ definition coeFnAddMonoidHom
 
 中文:
 定义 coeFnAddMonoidHom
-  签名: [对任意 i, AddCommMonoid (β i)]
+  签名: [对任意 i, 加法交换幺半群 (β i)]
   定义体: x
   __ := DFinsupp.coeFnAddMonoidHom
 
@@ -134,7 +134,7 @@ lemma coeFnAddMonoidHom_apply
 
 中文:
 引理 coeFnAddMonoidHom_apply
-  条件: [对任意 i, AddCommMonoid (β i)] (v : ⨁ i, β i)
+  条件: [对任意 i, 加法交换幺半群 (β i)] (v : ⨁ i, β i)
   证明: rfl
 -/
 lemma coeFnAddMonoidHom_apply [forall i, AddCommMonoid (β i)] (v : ⨁ i, β i) :
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (DirectSum ι β)
+  签名: 加法交换群 (直和 ι β)
   定义体: inferInstanceAs (AddCommGroup (Π₀ i, β i))
 
 @[simp]
@@ -203,7 +203,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {x y : DirectSum ι β} (w : 对任意 i, x i = y i)
+  条件: {x y : 直和 ι β} (w : 对任意 i, x i = y i)
   结论: x = y
   证明: DFunLike.ext _ _ w
 
@@ -269,7 +269,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: {α} (s : Finset α) (g : α -> ⨁ i, β i) (i : ι)
+  条件: {α} (s : 有限集 α) (g : α -> ⨁ i, β i) (i : ι)
   证明: DFinsupp.finsetSum_apply s g i
 
 Depends on / 依赖: DFinsupp, DFinsupp.finsetSum_apply, finsetSum_apply
@@ -296,7 +296,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (s : Finset ι)
+  签名: (s : 有限集 ι)
   定义体: DFinsupp.mk s
   map_add' _ _ := DFinsupp.mk_add
   map_zero' := DFinsupp.mk_zero
@@ -381,7 +381,7 @@ lemma of_apply
 中文:
 引理 of_apply
   条件: {i : ι} (j : ι) (x : β i)
-  结论: of β i x j = if h : i = j then Eq.recOn h x else 0
+  结论: of β i x j = if h : i = j then 相等.recOn h x else 0
   证明: DFinsupp.single_apply
 
 Depends on / 依赖: DFinsupp, DFinsupp.single_apply, single_apply
@@ -399,7 +399,7 @@ theorem mk_apply_of_mem
 
 中文:
 定理 mk_apply_of_mem
-  条件: {s : Finset ι} {f : 对任意 i : (↑s : Set ι), β i.val} {n : ι} (hn : n in s)
+  条件: {s : 有限集 ι} {f : 对任意 i : (↑s : 集合 ι), β i.val} {n : ι} (hn : n in s)
   证明: DFinsupp.mk_of_mem hn
 
 Depends on / 依赖: DFinsupp, DFinsupp.mk_of_mem, mk_of_mem
@@ -420,7 +420,7 @@ theorem mk_apply_of_notMem
 
 中文:
 定理 mk_apply_of_notMem
-  条件: {s : Finset ι} {f : 对任意 i : (↑s : Set ι), β i.val} {n : ι} (hn : n ∉ s)
+  条件: {s : 有限集 ι} {f : 对任意 i : (↑s : 集合 ι), β i.val} {n : ι} (hn : n ∉ s)
   证明: DFinsupp.mk_of_notMem hn
 
 @[simp]
@@ -445,7 +445,7 @@ theorem support_zero
 
 中文:
 定理 support_zero
-  条件: [对任意 (i : ι) (x : β i), Decidable (x != 0)]
+  条件: [对任意 (i : ι) (x : β i), 可判定 (x != 0)]
   结论: (0 : ⨁ i, β i).support = ∅
   证明: DFinsupp.support_zero
 
@@ -467,7 +467,7 @@ theorem support_of
 
 中文:
 定理 support_of
-  条件: [对任意 (i : ι) (x : β i), Decidable (x != 0)] (i : ι) (x : β i) (h : x != 0)
+  条件: [对任意 (i : ι) (x : β i), 可判定 (x != 0)] (i : ι) (x : β i) (h : x != 0)
   证明: DFinsupp.support_single h
 
 Depends on / 依赖: DFinsupp, DFinsupp.support_single, support_single
@@ -486,7 +486,7 @@ theorem support_of_subset
 
 中文:
 定理 support_of_subset
-  条件: [对任意 (i : ι) (x : β i), Decidable (x != 0)] {i : ι} {b : β i}
+  条件: [对任意 (i : ι) (x : β i), 可判定 (x != 0)] {i : ι} {b : β i}
   证明: DFinsupp.support_single_subset
 
 Depends on / 依赖: DFinsupp, DFinsupp.support_single_subset, support_single_subset
@@ -505,7 +505,7 @@ theorem sum_support_of
 
 中文:
 定理 sum_support_of
-  条件: [对任意 (i : ι) (x : β i), Decidable (x != 0)] (x : ⨁ i, β i)
+  条件: [对任意 (i : ι) (x : β i), 可判定 (x != 0)] (x : ⨁ i, β i)
   证明: DFinsupp.sum_single
 
 Depends on / 依赖: DFinsupp, DFinsupp.sum_single, sum_single
@@ -526,7 +526,7 @@ theorem sum_univ_of
 
 中文:
 定理 sum_univ_of
-  条件: [Fintype ι] (x : ⨁ i, β i)
+  条件: [有限类型 ι] (x : ⨁ i, β i)
   证明: by
   ext i
   simp [of_apply]
@@ -549,8 +549,8 @@ theorem mk_injective
 
 中文:
 定理 mk_injective
-  条件: (s : Finset ι)
-  结论: Function.Injective (mk β s)
+  条件: (s : 有限集 ι)
+  结论: 函数.单射 (mk β s)
   证明: DFinsupp.mk_injective s
 
 Depends on / 依赖: DFinsupp, DFinsupp.mk_injective, mk_injective
@@ -572,7 +572,7 @@ theorem of_injective
 中文:
 定理 of_injective
   条件: (i : ι)
-  结论: Function.Injective (of β i)
+  结论: 函数.单射 (of β i)
   证明: DFinsupp.single_injective
 
 @[elab_as_elim]
@@ -640,7 +640,7 @@ theorem addHom_ext
 
 中文:
 定理 addHom_ext
-  条件: {γ : 类型} [AddZeroClass γ] ⦃f g
+  条件: {γ : 类型} [加法零类 γ] ⦃f g
   结论: (⨁ i, β i) ->+ γ⦄
   证明: DFinsupp.addHom_ext H
 
@@ -666,7 +666,7 @@ theorem addHom_ext'
 
 中文:
 定理 addHom_ext'
-  条件: {γ : 类型} [AddZeroClass γ] ⦃f g
+  条件: {γ : 类型} [加法零类 γ] ⦃f g
   结论: (⨁ i, β i) ->+ γ⦄
   证明: addHom_ext fun i => DFunLike.congr_fun H i
 
@@ -773,7 +773,7 @@ lemma toAddMonoid_injective
 
 中文:
 引理 toAddMonoid_injective
-  结论: Injective (toAddMonoid : (对任意 i, β i ->+ γ) -> (⨁ i, β i) ->+ γ)
+  结论: 单射 (toAddMonoid : (对任意 i, β i ->+ γ) -> (⨁ i, β i) ->+ γ)
   证明: DFinsupp.liftAddHom.injective
 
 Depends on / 依赖: DFinsupp, DFinsupp.liftAddHom.injective, injective, liftAddHom
@@ -887,7 +887,7 @@ definition setToSet
 
 中文:
 定义 setToSet
-  签名: (S T : Set ι) (H : S subseteq T)
+  签名: (S T : 集合 ι) (H : S subseteq T)
   定义体: toAddMonoid fun i => of (fun i : T => β i) ⟨↑i, H i.2⟩
 
 Depends on / 依赖: toAddMonoid
@@ -907,7 +907,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [对任意 i, Subsingleton (β i)]
+  签名: [对任意 i, 子单例 (β i)]
   定义体: DFinsupp.unique
 
 Depends on / 依赖: DFinsupp, DFinsupp.unique, unique
@@ -925,7 +925,7 @@ instance uniqueOfIsEmpty
 
 中文:
 实例 uniqueOfIsEmpty
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: DFinsupp.uniqueOfIsEmpty
 
 Depends on / 依赖: DFinsupp, DFinsupp.uniqueOfIsEmpty, uniqueOfIsEmpty
@@ -949,7 +949,7 @@ definition id
 
 中文:
 定义 id
-  签名: (M : 类型v) (ι : 类型 := PUnit) [AddCommMonoid M] [Unique ι]
+  签名: (M : 类型v) (ι : 类型 := 命题单元) [加法交换幺半群 M] [唯一 ι]
   定义体: { DirectSum.toAddMonoid fun _ => AddMonoidHom.id M with
     toFun := DirectSum.toAddMonoid fun _ => AddMonoidHom.id M
     invFun := of (fun _ => M) default
@@ -980,7 +980,7 @@ lemma id_symm_apply
 
 中文:
 引理 id_symm_apply
-  条件: {M : 类型v} {ι : 类型} [AddCommMonoid M] [Unique ι] (x : M)
+  条件: {M : 类型v} {ι : 类型} [加法交换幺半群 M] [唯一 ι] (x : M)
   证明: rfl
 -/
 @[simp] lemma id_symm_apply {M : Type v} {ι : Type*} [AddCommMonoid M] [Unique ι] (x : M) :
@@ -999,7 +999,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: {M : 类型v} {ι : 类型} [AddCommMonoid M] [Unique ι] (x : ⨁ _ : ι, M)
+  条件: {M : 类型v} {ι : 类型} [加法交换幺半群 M] [唯一 ι] (x : ⨁ _ : ι, M)
   证明: by
   rw [← AddEquiv.eq_symm_apply]; rw [id_symm_apply]; rw [eq_comm]
   induction x using DirectSum.induction_on <;> simp [Unique.eq_default, *]
@@ -1367,7 +1367,7 @@ definition coeAddMonoidHom
 
 中文:
 定义 coeAddMonoidHom
-  签名: {M S : 类型} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+  签名: {M S : 类型} [DecidableEq ι] [加法交换幺半群 M] [集合状 S M]
   定义体: toAddMonoid fun i => AddSubmonoidClass.subtype (A i)
 -/
 protected def coeAddMonoidHom {M S : Type*} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
@@ -1415,7 +1415,7 @@ theorem coeAddMonoidHom_of
 
 中文:
 定理 coeAddMonoidHom_of
-  结论: {M S : 类型} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+  结论: {M S : 类型} [DecidableEq ι] [加法交换幺半群 M] [集合状 S M]
   证明: toAddMonoid_of _ _ _
 
 Depends on / 依赖: toAddMonoid_of
@@ -1438,7 +1438,7 @@ theorem coe_of_apply
 
 中文:
 定理 coe_of_apply
-  结论: {M S : 类型} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+  结论: {M S : 类型} [DecidableEq ι] [加法交换幺半群 M] [集合状 S M]
   证明: by
   obtain rfl | h := Decidable.eq_or_ne j i
   · rw [DirectSum.of_eq_same, if_pos rfl]
@@ -1462,8 +1462,8 @@ definition IsInternal
   body: Function.Bijective (DirectSum.coeAddMonoidHom A)
 
 中文:
-定义 IsInternal
-  签名: {M S : 类型} [DecidableEq ι] [AddCommMonoid M] [SetLike S M]
+定义 Is整数ernal
+  签名: {M S : 类型} [DecidableEq ι] [加法交换幺半群 M] [集合状 S M]
   定义体: Function.Bijective (DirectSum.coeAddMonoidHom A)
 
 Depends on / 依赖: Bijective, DirectSum, DirectSum.coeAddMonoidHom, Function, Function.Bijective, coeAddMonoidHom
@@ -1483,8 +1483,8 @@ theorem IsInternal.addSubmonoid_iSup_eq_top
   exact Function.Bijective.surjective h
 
 中文:
-定理 IsInternal.addSubmonoid_iSup_eq_top
-  结论: {M : 类型} [DecidableEq ι] [AddCommMonoid M]
+定理 Is整数ernal.addSubmonoid_iSup_eq_top
+  结论: {M : 类型} [DecidableEq ι] [加法交换幺半群 M]
   证明: by
   rw [AddSubmonoid.iSup_eq_mrange_dfinsuppSumAddHom]; rw [AddMonoidHom.mrange_eq_top]
   exact Function.Bijective.surjective h
@@ -1512,7 +1512,7 @@ theorem support_subset
 
 中文:
 定理 support_subset
-  条件: [DecidableEq ι] [DecidableEq M] (A : ι -> S) (x : DirectSum ι fun i => A i)
+  条件: [DecidableEq ι] [DecidableEq M] (A : ι -> S) (x : 直和 ι fun i => A i)
   证明: by
   intro m
   simp only [Function.mem_support, Finset.mem_coe, DFinsupp.mem_support_toFun, not_imp_not,
@@ -1540,7 +1540,7 @@ theorem hasFiniteSupport
 
 中文:
 定理 hasFiniteSupport
-  条件: (A : ι -> S) (x : DirectSum ι fun i => A i)
+  条件: (A : ι -> S) (x : 直和 ι fun i => A i)
   证明: by
   classical
   exact (DFinsupp.support x).finite_toSet.subset (DirectSum.support_subset _ x)
@@ -1639,7 +1639,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  结论: {γ : ι -> 类型} [对任意 i, AddCommMonoid (γ i)]
+  结论: {γ : ι -> 类型} [对任意 i, 加法交换幺半群 (γ i)]
   证明: DFinsupp.mapRange.addMonoidHom_comp _ _
 -/
 @[simp] lemma map_comp {γ : ι -> Type*} [forall i, AddCommMonoid (γ i)]
@@ -1658,7 +1658,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  结论: Function.Injective (map f) ↔ 对任意 i, Function.Injective (f i)
+  结论: 函数.单射 (map f) ↔ 对任意 i, 函数.单射 (f i)
   证明: by
   exact DFinsupp.mapRange_injective (hf := fun _ => map_zero _)
 
@@ -1678,7 +1678,7 @@ lemma map_surjective
 
 中文:
 引理 map_surjective
-  结论: Function.Surjective (map f) ↔ (对任意 i, Function.Surjective (f i))
+  结论: 函数.满射 (map f) ↔ (对任意 i, 函数.满射 (f i))
   证明: by
   exact DFinsupp.mapRange_surjective (hf := fun _ => map_zero _)
 
@@ -1724,8 +1724,8 @@ definition DirectSum.addEquivProd
       ← DFinsupp.add_apply, Pi.add_apply]⟩
 
 中文:
-定义 DirectSum.addEquivProd
-  签名: {ι : 类型} [Fintype ι] (G : ι -> 类型) [(i : ι) -> AddCommMonoid (G i)]
+定义 直和.addEquivProd
+  签名: {ι : 类型} [有限类型 ι] (G : ι -> 类型) [(i : ι) -> 加法交换幺半群 (G i)]
   定义体: ⟨DFinsupp.equivFunOnFintype, fun g h => funext fun _ => by
     simp only [DFinsupp.equivFunOnFintype, Equiv.toFun_as_coe, Equiv.coe_fn_mk,
       ← DFinsupp.add_apply, Pi.add_apply]⟩

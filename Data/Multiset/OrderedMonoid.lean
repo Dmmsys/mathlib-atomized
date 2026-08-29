@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedCancelAddMonoid (Multiset α)
+  签名: 是OrderedCancelAdd幺半群 (Multiset α)
   定义体: fun _ _ => add_le_add_left
   le_of_add_le_add_left := fun _ _ _ => le_of_add_le_add_left
 
@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd (Multiset α)
+  签名: 典范有序加法 (Multiset α)
   定义体: le_add_left
   le_self_add := le_add_right
   exists_add_of_le h := exists_add_of_le h

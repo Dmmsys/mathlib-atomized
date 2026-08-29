@@ -86,8 +86,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {l : List K}
-  结论: (对任意 x in l, x in s) -> l.prod in s
+  条件: {l : 列表 K}
+  结论: (对任意 x in l, x in s) -> l.乘积 in s
   证明: list_prod_mem
 -/
 protected theorem list_prod_mem {l : List K} : (forall x in l, x in s) -> l.prod in s :=
@@ -104,8 +104,8 @@ theorem list_sum_mem
 
 中文:
 定理 list_sum_mem
-  条件: {l : List K}
-  结论: (对任意 x in l, x in s) -> l.sum in s
+  条件: {l : 列表 K}
+  结论: (对任意 x in l, x in s) -> l.求和 in s
   证明: list_sum_mem
 -/
 protected theorem list_sum_mem {l : List K} : (forall x in l, x in s) -> l.sum in s :=
@@ -123,7 +123,7 @@ theorem multiset_sum_mem
 中文:
 定理 multiset_sum_mem
   条件: (m : Multiset K)
-  结论: (对任意 a in m, a in s) -> m.sum in s
+  结论: (对任意 a in m, a in s) -> m.求和 in s
   证明: multiset_sum_mem m
 -/
 protected theorem multiset_sum_mem (m : Multiset K) : (forall a in m, a in s) -> m.sum in s :=
@@ -139,7 +139,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  条件: {ι : 类型} {t : Finset ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
+  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
   证明: sum_mem h
 -/
 protected theorem sum_mem {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s) :
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Subfield K)
+  签名: 顶元素 (子域 K)
   定义体: ⟨{ (⊤ : Subring K) with inv_mem' := fun x _ => Subring.mem_top x }⟩
 
 Depends on / 依赖: Subring, Subring.mem_top, inv_mem, mem_top
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subfield K)
+  签名: 可居 (子域 K)
   定义体: ⟨⊤⟩
 
 @[simp]
@@ -204,7 +204,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : K)
-  结论: x in (⊤ : Subfield K)
+  结论: x in (⊤ : 子域 K)
   证明: Set.mem_univ x
 
 @[simp, norm_cast]
@@ -225,7 +225,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Subfield K) : Set K) = Set.univ
+  结论: ((⊤ : 子域 K) : 集合 K) = 集合.univ
   证明: rfl
 -/
 theorem coe_top : ((⊤ : Subfield K) : Set K) = Set.univ :=
@@ -241,7 +241,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Subfield K) ≃+* K
+  签名: : (⊤ : 子域 K) ≃+* K
   定义体: Subsemiring.topEquiv
 
 Depends on / 依赖: Subsemiring, Subsemiring.topEquiv, topEquiv
@@ -270,7 +270,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (s : Subfield L)
+  签名: (s : 子域 L)
   定义体: { s.toSubring.comap f with
     inv_mem' := fun x hx =>
       show f x⁻¹ in s by
@@ -302,8 +302,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (s : Subfield L)
-  结论: (s.comap f : Set K) = f ⁻¹' s
+  条件: (s : 子域 L)
+  结论: (s.comap f : 集合 K) = f ⁻¹' s
   证明: rfl
 
 @[simp]
@@ -325,7 +325,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {s : Subfield L} {f : K ->+* L} {x : K}
+  条件: {s : 子域 L} {f : K ->+* L} {x : K}
   结论: x in s.comap f ↔ f x in s
   证明: Iff.rfl
 
@@ -344,7 +344,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (s : Subfield M) (g : L ->+* M) (f : K ->+* L)
+  条件: (s : 子域 M) (g : L ->+* M) (f : K ->+* L)
   证明: rfl
 -/
 theorem comap_comap (s : Subfield M) (g : L ->+* M) (f : K ->+* L) :
@@ -369,7 +369,7 @@ definition map
 
 中文:
 定义 map
-  签名: (s : Subfield K)
+  签名: (s : 子域 K)
   定义体: { s.toSubring.map f with
     inv_mem' := by
       rintro _ ⟨x, hx, rfl⟩
@@ -398,7 +398,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  结论: (s.map f : Set L) = f '' s
+  结论: (s.map f : 集合 L) = f '' s
   证明: rfl
 
 @[simp]
@@ -420,7 +420,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : K ->+* L} {s : Subfield K} {y : L}
+  条件: {f : K ->+* L} {s : 子域 K} {y : L}
   结论: y in s.map f ↔ 存在 x in s, f x = y
   证明: by
   unfold map
@@ -447,7 +447,7 @@ theorem map_mem_map
 
 中文:
 定理 map_mem_map
-  条件: (f : K ->+* L) {s : Subfield K} {x : K}
+  条件: (f : K ->+* L) {s : 子域 K} {x : K}
   结论: f x in s.map f ↔ x in s
   证明: calc
     _ ↔ f x in (s.map f : Set L) := Iff.rfl
@@ -490,7 +490,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : K ->+* L} {s : Subfield K} {t : Subfield L}
+  条件: {f : K ->+* L} {s : 子域 K} {t : 子域 L}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -540,7 +540,7 @@ definition fieldRange
 
 中文:
 定义 fieldRange
-  签名: : Subfield L
+  签名: : 子域 L
   定义体: ((⊤ : Subfield K).map f).copy (Set.range f) Set.image_univ.symm
 
 @[simp, norm_cast]
@@ -563,7 +563,7 @@ theorem coe_fieldRange
 
 中文:
 定理 coe_fieldRange
-  结论: (f.fieldRange : Set L) = Set.range f
+  结论: (f.fieldRange : 集合 L) = 集合.range f
   证明: rfl
 
 @[simp]
@@ -604,7 +604,7 @@ theorem fieldRange_eq_map
 
 中文:
 定理 fieldRange_eq_map
-  结论: f.fieldRange = Subfield.map f ⊤
+  结论: f.fieldRange = 子域.map f ⊤
   证明: by
   ext
   simp
@@ -682,7 +682,7 @@ instance fintypeFieldRange
 
 中文:
 实例 fintypeFieldRange
-  签名: [Fintype K] [DecidableEq L] (f : K ->+* L)
+  签名: [有限类型 K] [DecidableEq L] (f : K ->+* L)
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -713,7 +713,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Subfield K)
+  签名: 最小值 (子域 K)
   定义体: ⟨fun s t =>
     { s.toSubring ⊓ t.toSubring with
       inv_mem' := fun _ hx =>
@@ -745,8 +745,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : Subfield K)
-  结论: ((p ⊓ p' : Subfield K) : Set K) = p.carrier inter p'.carrier
+  条件: (p p' : 子域 K)
+  结论: ((p ⊓ p' : 子域 K) : 集合 K) = p.carrier inter p'.carrier
   证明: rfl
 
 @[simp]
@@ -766,7 +766,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : Subfield K} {x : K}
+  条件: {p p' : 子域 K} {x : K}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Subfield K)
+  签名: 下确界集 (子域 K)
   定义体: ⟨fun S =>
     { sInf (Subfield.toSubring '' S) with
       inv_mem' := by
@@ -829,8 +829,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Subfield K))
-  结论: ((sInf S : Subfield K) : Set K) = ⋂ s in S, ↑s
+  条件: (S : 集合 (子域 K))
+  结论: ((sInf S : 子域 K) : 集合 K) = ⋂ s in S, ↑s
   证明: show ((sInf (Subfield.toSubring '' S) : Subring K) : Set K) = ⋂ s in S, ↑s by simp
 
 @[simp]
@@ -855,7 +855,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Subfield K)} {x : K}
+  条件: {S : 集合 (子域 K)} {x : K}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simpa only [Set.mem_iInter] using! Set.ext_iff.1 (coe_sInf S) x
@@ -882,8 +882,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Subfield K}
-  结论: (↑(⨅ i, S i) : Set K) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子域 K}
+  结论: (↑(⨅ i, S i) : 集合 K) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -909,7 +909,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Subfield K} {x : K}
+  条件: {ι : 类型层*} {S : ι -> 子域 K} {x : K}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -934,7 +934,7 @@ theorem sInf_toSubring
 
 中文:
 定理 sInf_toSubring
-  条件: (s : Set (Subfield K))
+  条件: (s : 集合 (子域 K))
   证明: by
   ext x
   simp [mem_sInf]
@@ -961,7 +961,7 @@ theorem isGLB_sInf
 
 中文:
 定理 isGLB_sInf
-  条件: (S : Set (Subfield K))
+  条件: (S : 集合 (子域 K))
   结论: IsGLB S (sInf S)
   证明: by
   have : forall {s t : Subfield K}, (s : Set K) <= t ↔ s <= t := by simp [SetLike.coe_subset_coe]
@@ -993,7 +993,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subfield K)
+  签名: 完备格 (子域 K)
   定义体: { completeLatticeOfInf (Subfield K) isGLB_sInf with
     top := ⊤
     le_top := fun _ _ _ => trivial
@@ -1025,7 +1025,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set K)
+  签名: (s : 集合 K)
   定义体: sInf {S | s subseteq S}
 
 Depends on / 依赖: Field.toGrindField, Lean.Grind.Field, subseteq, toGrindField
@@ -1043,8 +1043,8 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {x : K} {s : Set K}
-  结论: x in closure s ↔ 对任意 S : Subfield K, s subseteq S -> x in S
+  条件: {x : K} {s : 集合 K}
+  结论: x in closure s ↔ 对任意 S : 子域 K, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -1067,7 +1067,7 @@ theorem subset_closure
 
 中文:
 定理 subset_closure
-  条件: {s : Set K}
+  条件: {s : 集合 K}
   结论: s subseteq closure s
   证明: fun _ hx => mem_closure.2 fun _ hS => hS hx
 
@@ -1089,7 +1089,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set K} {x : K} (hx : x in s)
+  条件: {s : 集合 K} {x : K} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -1108,8 +1108,8 @@ theorem subring_closure_le
 
 中文:
 定理 subring_closure_le
-  条件: (s : Set K)
-  结论: Subring.closure s <= (closure s).toSubring
+  条件: (s : 集合 K)
+  结论: 子环.closure s <= (closure s).toSubring
   证明: Subring.closure_le.mpr subset_closure
 
 Depends on / 依赖: Subring, Subring.closure_le.mpr, closure_le, subset_closure
@@ -1129,7 +1129,7 @@ theorem notMem_of_notMem_closure
 
 中文:
 定理 notMem_of_notMem_closure
-  条件: {s : Set K} {P : K} (hP : P ∉ closure s)
+  条件: {s : 集合 K} {P : K} (hP : P ∉ closure s)
   结论: P ∉ s
   证明: fun h =>
   hP (subset_closure h)
@@ -1152,7 +1152,7 @@ theorem closure_le
 
 中文:
 定理 closure_le
-  条件: {s : Set K} {t : Subfield K}
+  条件: {s : 集合 K} {t : 子域 K}
   结论: closure s <= t ↔ s subseteq t
   证明: ⟨Set.Subset.trans subset_closure, fun h _ hx => mem_closure.mp hx t h⟩
 
@@ -1176,7 +1176,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set K⦄ (h : s subseteq t) : closure s <= closure t
+  结论: 集合 K⦄ (h : s subseteq t) : closure s <= closure t
   证明: closure_le.2 Set.Subset.trans h subset_closure
 
 Depends on / 依赖: Set.Subset.trans, Subset, closure_le, subset_closure
@@ -1194,7 +1194,7 @@ theorem closure_eq_of_le
 
 中文:
 定理 closure_eq_of_le
-  条件: {s : Set K} {t : Subfield K} (h₁ : s subseteq t) (h₂ : t <= closure s)
+  条件: {s : 集合 K} {t : 子域 K} (h₁ : s subseteq t) (h₂ : t <= closure s)
   证明: le_antisymm (closure_le.2 h₁) h₂
 
 Depends on / 依赖: closure_le, le_antisymm
@@ -1223,7 +1223,7 @@ theorem closure_induction
 
 中文:
 定理 closure_induction
-  结论: {s : Set K} {p : 对任意 x in closure s, 命题}
+  结论: {s : 集合 K} {p : 对任意 x in closure s, 命题}
   证明: letI : Subfield K :=
     { carrier := {x | exists hx, p x hx}
       mul_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, mul _ _ _ _ hx hy⟩
@@ -1265,7 +1265,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure K _) (↑) where
+  签名: : Galois嵌入 (@closure K _) (↑) where
   定义体: closure s
   gc _ _ := closure_le
   le_l_u _ := subset_closure
@@ -1292,8 +1292,8 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  条件: (s : Subfield K)
-  结论: closure (s : Set K) = s
+  条件: (s : 子域 K)
+  结论: closure (s : 集合 K) = s
   证明: (Subfield.gi K).l_u_eq s
 
 @[simp]
@@ -1316,7 +1316,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set K) = ⊥
+  结论: closure (∅ : 集合 K) = ⊥
   证明: (Subfield.gi K).gc.l_bot
 
 @[simp]
@@ -1337,7 +1337,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (Set.univ : Set K) = ⊤
+  结论: closure (集合.univ : 集合 K) = ⊤
   证明: @coe_top K _ ▸ closure_eq ⊤
 
 Depends on / 依赖: closure_eq, coe_top
@@ -1356,7 +1356,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set K)
+  条件: (s t : 集合 K)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (Subfield.gi K).gc.l_sup
 
@@ -1376,7 +1376,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set K)
+  条件: {ι} (s : ι -> 集合 K)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (Subfield.gi K).gc.l_iSup
 
@@ -1396,7 +1396,7 @@ theorem closure_sUnion
 
 中文:
 定理 closure_sUnion
-  条件: (s : Set (Set K))
+  条件: (s : 集合 (集合 K))
   结论: closure (⋃₀ s) = ⨆ t in s, closure t
   证明: (Subfield.gi K).gc.l_sSup
 
@@ -1416,7 +1416,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (s t : Subfield K) (f : K ->+* L)
+  条件: (s t : 子域 K) (f : K ->+* L)
   结论: (s ⊔ t).map f = s.map f ⊔ t.map f
   证明: (gc_map_comap f).l_sup
 
@@ -1435,7 +1435,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield K)
+  条件: {ι : 类型层*} (f : K ->+* L) (s : ι -> 子域 K)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -1455,7 +1455,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (s t : Subfield K) (f : K ->+* L)
+  条件: (s t : 子域 K) (f : K ->+* L)
   结论: (s ⊓ t).map f = s.map f ⊓ t.map f
   证明: SetLike.coe_injective (Set.image_inter f.injective)
 
@@ -1476,7 +1476,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  条件: {ι : Sort*} [Nonempty ι] (f : K ->+* L) (s : ι -> Subfield K)
+  条件: {ι : 类型层*} [非空 ι] (f : K ->+* L) (s : ι -> 子域 K)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective f.injective).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -1499,7 +1499,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (s t : Subfield L) (f : K ->+* L)
+  条件: (s t : 子域 L) (f : K ->+* L)
   结论: (s ⊓ t).comap f = s.comap f ⊓ t.comap f
   证明: (gc_map_comap f).u_inf
 
@@ -1520,7 +1520,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield L)
+  条件: {ι : 类型层*} (f : K ->+* L) (s : ι -> 子域 L)
   证明: (gc_map_comap f).u_iInf
 
 @[simp]
@@ -1546,7 +1546,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : K ->+* L)
-  结论: (⊥ : Subfield K).map f = ⊥
+  结论: (⊥ : 子域 K).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[simp]
@@ -1569,7 +1569,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : K ->+* L)
-  结论: (⊤ : Subfield L).comap f = ⊤
+  结论: (⊤ : 子域 L).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 Depends on / 依赖: Field.toSemifield, Semifield, gc_map_comap, toSemifield, u_top
@@ -1593,7 +1593,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  结论: {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S)
+  结论: {ι} [hι : 非空 ι] {S : ι -> 子域 K} (hS : Directed (· <= ·) S)
   证明: by
   let s : Subfield K :=
     { __ := Subring.copy _ _ (Subring.coe_iSup_of_directed hS).symm
@@ -1624,7 +1624,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  条件: {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S)
+  条件: {ι} [hι : 非空 ι] {S : ι -> 子域 K} (hS : Directed (· <= ·) S)
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 Depends on / 依赖: Set.ext, mem_iSup_of_directed
@@ -1645,7 +1645,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· <= ·) S)
+  结论: {S : 集合 (子域 K)} (Sne : S.非空) (hS : DirectedOn (· <= ·) S)
   证明: by
   have : Nonempty S := Sne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, Subtype.exists, exists_prop]
@@ -1667,7 +1667,7 @@ theorem coe_sSup_of_directedOn
 
 中文:
 定理 coe_sSup_of_directedOn
-  结论: {S : Set (Subfield K)} (Sne : S.Nonempty)
+  结论: {S : 集合 (子域 K)} (Sne : S.非空)
   证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 Depends on / 依赖: Set.ext, mem_sSup_of_directedOn
@@ -1691,10 +1691,10 @@ class Field.FG
     - finitely_generated : exists S : Finset L, Subfield.closure (S : Set L) = ⊤
 
 中文:
-类 Field.FG
+类 域.FG
   参数: : 命题 where
   公理与运算 (1 个):
-    - finitely_generated : 存在 S : Finset L, Subfield.closure (S : Set L) = ⊤
+    - finitely_generated : 存在 S : 有限集 L, 子域.closure (S : 集合 L) = ⊤
 -/
 protected class Field.FG : Prop where
   finitely_generated : exists S : Finset L, Subfield.closure (S : Set L) = ⊤
@@ -1758,7 +1758,7 @@ theorem rangeRestrictField_bijective
 中文:
 定理 rangeRestrictField_bijective
   条件: (f : K ->+* L)
-  结论: Function.Bijective (rangeRestrictField f)
+  结论: 函数.双射 (rangeRestrictField f)
   证明: (Equiv.ofInjective f f.injective).bijective
 
 Depends on / 依赖: Equiv.ofInjective, bijective, f.injective, injective, ofInjective
@@ -1876,7 +1876,7 @@ theorem eqOn_field_closure
 
 中文:
 定理 eqOn_field_closure
-  条件: {f g : K ->+* L} {s : Set K} (h : Set.EqOn f g s)
+  条件: {f g : K ->+* L} {s : 集合 K} (h : 集合.EqOn f g s)
   证明: show closure s <= f.eqLocusField g from closure_le.2 h
 
 Depends on / 依赖: closure, closure_le, eqLocusField, f.eqLocusField
@@ -1896,7 +1896,7 @@ theorem eq_of_eqOn_subfield_top
 
 中文:
 定理 eq_of_eqOn_subfield_top
-  条件: {f g : K ->+* L} (h : Set.EqOn f g (⊤ : Subfield K))
+  条件: {f g : K ->+* L} (h : 集合.EqOn f g (⊤ : 子域 K))
   结论: f = g
   证明: ext fun _ => h trivial
 -/
@@ -1913,7 +1913,7 @@ theorem eq_of_eqOn_of_field_closure_eq_top
 
 中文:
 定理 eq_of_eqOn_of_field_closure_eq_top
-  结论: {s : Set K} (hs : closure s = ⊤) {f g : K ->+* L}
+  结论: {s : 集合 K} (hs : closure s = ⊤) {f g : K ->+* L}
   证明: eq_of_eqOn_subfield_top hs ▸ eqOn_field_closure h
 
 Depends on / 依赖: eqOn_field_closure, eq_of_eqOn_subfield_top
@@ -1934,7 +1934,7 @@ theorem field_closure_preimage_le
 
 中文:
 定理 field_closure_preimage_le
-  条件: (f : K ->+* L) (s : Set L)
+  条件: (f : K ->+* L) (s : 集合 L)
   证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, closure_le, mem_coe, mem_comap, subset_closure
@@ -1955,7 +1955,7 @@ theorem map_field_closure
 
 中文:
 定理 map_field_closure
-  条件: (f : K ->+* L) (s : Set K)
+  条件: (f : K ->+* L) (s : 集合 K)
   结论: (closure s).map f = closure (f '' s)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subfield.gi L).gc (Subfield.gi K).gc
     fun _ => rfl
@@ -1984,7 +1984,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : Subfield K} (h : S <= T)
+  签名: {S T : 子域 K} (h : S <= T)
   定义体: S.subtype.codRestrict _ fun x => h x.2
 
 @[simp]
@@ -2006,7 +2006,7 @@ theorem fieldRange_subtype
 
 中文:
 定理 fieldRange_subtype
-  条件: (s : Subfield K)
+  条件: (s : 子域 K)
   结论: s.subtype.fieldRange = s
   证明: SetLike.ext' (coe_rangeS _).trans Subtype.range_coe
 
@@ -2062,7 +2062,7 @@ theorem closure_preimage_le
 
 中文:
 定理 closure_preimage_le
-  条件: (f : K ->+* L) (s : Set L)
+  条件: (f : K ->+* L) (s : 集合 L)
   结论: closure (f ⁻¹' s) <= (closure s).comap f
   证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
@@ -2087,7 +2087,7 @@ theorem multiset_prod_mem
 中文:
 定理 multiset_prod_mem
   条件: (m : Multiset K)
-  结论: (对任意 a in m, a in s) -> m.prod in s
+  结论: (对任意 a in m, a in s) -> m.乘积 in s
   证明: multiset_prod_mem m
 -/
 protected theorem multiset_prod_mem (m : Multiset K) : (forall a in m, a in s) -> m.prod in s :=
@@ -2103,7 +2103,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  条件: {ι : 类型} {t : Finset ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
+  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
   证明: prod_mem h
 -/
 protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s) :
@@ -2120,7 +2120,7 @@ instance toAlgebra
 
 中文:
 实例 toAlgebra
-  签名: : Algebra s K
+  签名: : 代数 s K
   定义体: inferInstance
 -/
 instance toAlgebra : Algebra s K :=
@@ -2157,7 +2157,7 @@ definition commClosure
 
 中文:
 定义 commClosure
-  签名: (s : Set K)
+  签名: (s : 集合 K)
   定义体: {z : K | exists x in Subring.closure s, exists y in Subring.closure s, x / y = z}
   zero_mem' := ⟨0, Subring.zero_mem _, 1, Subring.one_mem _, div_one _⟩
   one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
@@ -2200,7 +2200,7 @@ theorem commClosure_eq_closure
 
 中文:
 定理 commClosure_eq_closure
-  条件: {s : Set K}
+  条件: {s : 集合 K}
   结论: commClosure s = closure s
   证明: le_antisymm
     (fun _ ⟨_, hy, _, hz, eq⟩ => eq ▸ div_mem (subring_closure_le s hy) (subring_closure_le s hz))
@@ -2222,7 +2222,7 @@ theorem mem_closure_iff
 
 中文:
 定理 mem_closure_iff
-  条件: {s : Set K} {x}
+  条件: {s : 集合 K} {x}
   证明: by
   rw [← commClosure_eq_closure]; rfl
 
@@ -2249,7 +2249,7 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (f : K ->+* L) (s : Subfield L)
+  条件: (f : K ->+* L) (s : 子域 L)
   结论: (s.comap f).map f = s ⊓ f.fieldRange
   证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
 
@@ -2305,7 +2305,7 @@ theorem comap_map
 
 中文:
 定理 comap_map
-  条件: (f : K ->+* L) (s : Subfield K)
+  条件: (f : K ->+* L) (s : 子域 K)
   结论: (s.map f).comap f = s
   证明: SetLike.coe_injective (Set.preimage_image_eq _ f.injective)
 
@@ -2336,7 +2336,7 @@ instance [SMul
   body: inferInstanceAs (SMul F.toSubsemiring X)
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: K X] (F
   定义体: inferInstanceAs (SMul F.toSubsemiring X)
 
@@ -2356,7 +2356,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [SMul K X] {F : Subfield K} (g : F) (m : X)
+  条件: [标量乘法 K X] {F : 子域 K} (g : F) (m : X)
   结论: g • m = (g : K) • m
   证明: rfl
 -/
@@ -2373,7 +2373,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMul K Y] [SMul X Y] [SMulCommClass K X Y] (F : Subfield K)
+  签名: [标量乘法 K Y] [标量乘法 X Y] [标量交换类 K X Y] (F : 子域 K)
   定义体: inferInstanceAs (SMulCommClass F.toSubsemiring X Y)
 
 Depends on / 依赖: F.toSubsemiring, SMulCommClass, toSubsemiring
@@ -2392,7 +2392,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul X Y] [SMul K Y] [SMulCommClass X K Y] (F : Subfield K)
+  签名: [标量乘法 X Y] [标量乘法 K Y] [标量交换类 X K Y] (F : 子域 K)
   定义体: inferInstanceAs (SMulCommClass X F.toSubsemiring Y)
 
 Depends on / 依赖: F.toSubsemiring, SMulCommClass, toSubsemiring
@@ -2410,8 +2410,8 @@ instance [SMul
   body: inferInstanceAs (IsScalarTower F.toSubsemiring X Y)
 
 中文:
-实例 [SMul
-  签名: X Y] [SMul K X] [SMul K Y] [IsScalarTower K X Y] (F
+实例 [标量乘法
+  签名: X Y] [标量乘法 K X] [标量乘法 K Y] [标量塔 K X Y] (F
   定义体: inferInstanceAs (IsScalarTower F.toSubsemiring X Y)
 
 Depends on / 依赖: F.toSubsemiring, IsScalarTower, toSubsemiring
@@ -2429,8 +2429,8 @@ instance [SMul
   body: inferInstanceAs (FaithfulSMul F.toSubsemiring X)
 
 中文:
-实例 [SMul
-  签名: K X] [FaithfulSMul K X] (F
+实例 [标量乘法
+  签名: K X] [忠实标量乘法 K X] (F
   定义体: inferInstanceAs (FaithfulSMul F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, FaithfulSMul, toSubsemiring
@@ -2447,7 +2447,7 @@ instance [MulAction
   body: inferInstanceAs (MulAction F.toSubsemiring X)
 
 中文:
-实例 [MulAction
+实例 [乘法作用
   签名: K X] (F
   定义体: inferInstanceAs (MulAction F.toSubsemiring X)
 
@@ -2465,8 +2465,8 @@ instance [AddMonoid
   body: inferInstanceAs (DistribMulAction F.toSubsemiring X)
 
 中文:
-实例 [AddMonoid
-  签名: X] [DistribMulAction K X] (F
+实例 [加法幺半群
+  签名: X] [分配乘法作用 K X] (F
   定义体: inferInstanceAs (DistribMulAction F.toSubsemiring X)
 
 Depends on / 依赖: DistribMulAction, F.toSubsemiring, toSubsemiring
@@ -2483,8 +2483,8 @@ instance [Monoid
   body: inferInstanceAs (MulDistribMulAction F.toSubsemiring X)
 
 中文:
-实例 [Monoid
-  签名: X] [MulDistribMulAction K X] (F
+实例 [幺半群
+  签名: X] [MulDistribMul作用 K X] (F
   定义体: inferInstanceAs (MulDistribMulAction F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, MulDistribMulAction, toSubsemiring
@@ -2501,8 +2501,8 @@ instance [Zero
   body: inferInstanceAs (SMulWithZero F.toSubsemiring X)
 
 中文:
-实例 [Zero
-  签名: X] [SMulWithZero K X] (F
+实例 [零
+  签名: X] [带零标量乘法 K X] (F
   定义体: inferInstanceAs (SMulWithZero F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, SMulWithZero, toSubsemiring
@@ -2519,8 +2519,8 @@ instance [Zero
   body: inferInstanceAs (MulActionWithZero F.toSubsemiring X)
 
 中文:
-实例 [Zero
-  签名: X] [MulActionWithZero K X] (F
+实例 [零
+  签名: X] [带零乘法作用 K X] (F
   定义体: inferInstanceAs (MulActionWithZero F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, MulActionWithZero, toSubsemiring
@@ -2537,8 +2537,8 @@ instance [AddCommMonoid
   body: inferInstanceAs (Module F.toSubsemiring X)
 
 中文:
-实例 [AddCommMonoid
-  签名: X] [Module K X] (F
+实例 [加法交换幺半群
+  签名: X] [模 K X] (F
   定义体: inferInstanceAs (Module F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, Module, toSubsemiring
@@ -2555,8 +2555,8 @@ instance [Semiring
   body: inferInstanceAs (MulSemiringAction F.toSubsemiring X)
 
 中文:
-实例 [Semiring
-  签名: X] [MulSemiringAction K X] (F
+实例 [半环
+  签名: X] [MulSemiring作用 K X] (F
   定义体: inferInstanceAs (MulSemiringAction F.toSubsemiring X)
 
 Depends on / 依赖: F.toSubsemiring, MulSemiringAction, toSubsemiring

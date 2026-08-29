@@ -59,7 +59,7 @@ theorem card_eq_sum_card_group_div_card_stabilizer'
 
 中文:
 定理 card_eq_sum_card_group_div_card_stabilizer'
-  结论: [Fintype α] [Fintype β] [Fintype Ω]
+  结论: [有限类型 α] [有限类型 β] [有限类型 Ω]
   证明: by
   classical
     have : forall ω : Ω, Fintype.card α / Fintype.card (stabilizer α (φ ω)) =
@@ -93,7 +93,7 @@ theorem card_eq_sum_card_group_div_card_stabilizer
 
 中文:
 定理 card_eq_sum_card_group_div_card_stabilizer
-  结论: [Fintype α] [Fintype β] [Fintype Ω]
+  结论: [有限类型 α] [有限类型 β] [有限类型 Ω]
   证明: card_eq_sum_card_group_div_card_stabilizer' α β Quotient.out_eq'
 
 Depends on / 依赖: Quotient, Quotient.out_eq, card_eq_sum_card_group_div_card_stabilizer, out_eq
@@ -116,7 +116,7 @@ instance instInfiniteProdSubtypeCommute
 
 中文:
 实例 instInfiniteProdSubtypeCommute
-  签名: [Mul α] [Infinite α]
+  签名: [乘法 α] [无限 α]
   定义体: Infinite.of_injective (fun a => ⟨⟨a, a⟩, rfl⟩) (by intro; simp)
 
 Depends on / 依赖: Infinite, Infinite.of_injective, of_injective
@@ -144,7 +144,7 @@ theorem card_comm_eq_card_conjClasses_mul_card
 
 中文:
 定理 card_comm_eq_card_conjClasses_mul_card
-  条件: (G : 类型) [Group G]
+  条件: (G : 类型) [群 G]
   证明: by
   classical
   rcases fintypeOrInfinite G; swap

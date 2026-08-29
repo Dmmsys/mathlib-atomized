@@ -248,7 +248,7 @@ definition genWeightSpaceOf
 
 中文:
 定义 genWeightSpaceOf
-  签名: [LieRing.IsNilpotent L] (χ : R) (x : L)
+  签名: [Lie环.是幂零 L] (χ : R) (x : L)
   定义体: { 𝕎(M, χ, x) with
     lie_mem := by
       intro y m hm
@@ -442,7 +442,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Weight R L M) L R where
+  签名: : 函数状 (Weight R L M) L R where
   定义体: χ.1
   coe_injective χ₁ χ₂ h := by cases χ₁; cases χ₂; simp_all
 
@@ -536,7 +536,7 @@ lemma exists_ne_zero
   simpa [LieSubmodule.eq_bot_iff] using χ.genWeightSpace_ne_bot
 
 中文:
-引理 exists_ne_zero
+引理 存在_ne_zero
   条件: (χ : Weight R L M)
   证明: by
   simpa [LieSubmodule.eq_bot_iff] using χ.genWeightSpace_ne_bot
@@ -556,8 +556,8 @@ instance [Subsingleton
   body: ⟨fun h => h.2 (Subsingleton.elim _ _)⟩
 
 中文:
-实例 [Subsingleton
-  签名: M] : IsEmpty (Weight R L M)
+实例 [子单例
+  签名: M] : 是空 (Weight R L M)
   定义体: ⟨fun h => h.2 (Subsingleton.elim _ _)⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -574,8 +574,8 @@ instance [Nontrivial
   body: ⟨0, fun e => not_nontrivial (⊥ : LieSubmodule R L M) (e ▸ ‹_›)⟩
 
 中文:
-实例 [Nontrivial
-  签名: (genWeightSpace M (0 : L -> R))] : Zero (Weight R L M)
+实例 [非平凡
+  签名: (genWeightSpace M (0 : L -> R))] : 零 (Weight R L M)
   定义体: ⟨0, fun e => not_nontrivial (⊥ : LieSubmodule R L M) (e ▸ ‹_›)⟩
 
 Depends on / 依赖: LieSubmodule, _eq_span, localized, map_coe, map_span, not_nontrivial, span_span_of_tower
@@ -596,8 +596,8 @@ instance [Nontrivial
 @[deprecated (since := "2026-07-27")] protected alias zero_apply := zero_apply
 
 中文:
-实例 [Nontrivial
-  签名: (genWeightSpace M (0 : L -> R))] : IsZeroApply (Weight R L M) L R where
+实例 [非平凡
+  签名: (genWeightSpace M (0 : L -> R))] : 是ZeroApply (Weight R L M) L R where
   定义体: rfl
 
 @[deprecated (since := "2026-07-27")] alias coe_zero := FunLike.coe_zero
@@ -620,7 +620,7 @@ definition IsZero
   body: (χ : L -> R) = 0
 
 中文:
-定义 IsZero
+定义 是零
   签名: (χ : Weight R L M)
   定义体: (χ : L -> R) = 0
 
@@ -638,8 +638,8 @@ lemma IsZero.eq
   proof: hχ
 
 中文:
-引理 IsZero.eq
-  条件: {χ : Weight R L M} (hχ : χ.IsZero)
+引理 是零.eq
+  条件: {χ : Weight R L M} (hχ : χ.是零)
   结论: (χ : L -> R) = 0
   证明: hχ
 
@@ -659,7 +659,7 @@ lemma coe_eq_zero_iff
 中文:
 引理 coe_eq_zero_iff
   条件: (χ : Weight R L M)
-  结论: (χ : L -> R) = 0 ↔ χ.IsZero
+  结论: (χ : L -> R) = 0 ↔ χ.是零
   证明: Iff.rfl
 -/
 @[simp] lemma coe_eq_zero_iff (χ : Weight R L M) : (χ : L -> R) = 0 ↔ χ.IsZero := Iff.rfl
@@ -674,7 +674,7 @@ lemma isZero_iff_eq_zero
 
 中文:
 引理 isZero_iff_eq_zero
-  条件: [Nontrivial (genWeightSpace M (0 : L -> R))] {χ : Weight R L M}
+  条件: [非平凡 (genWeightSpace M (0 : L -> R))] {χ : Weight R L M}
   证明: Weight.ext_iff' (χ₂ := 0)
 
 Depends on / 依赖: Weight, Weight.ext_iff, ext_iff
@@ -693,8 +693,8 @@ lemma isZero_zero
 
 中文:
 引理 isZero_zero
-  条件: [Nontrivial (genWeightSpace M (0 : L -> R))]
-  结论: IsZero (0 : Weight R L M)
+  条件: [非平凡 (genWeightSpace M (0 : L -> R))]
+  结论: 是零 (0 : Weight R L M)
   证明: rfl
 -/
 lemma isZero_zero [Nontrivial (genWeightSpace M (0 : L -> R))] : IsZero (0 : Weight R L M) := rfl
@@ -726,7 +726,7 @@ lemma isNonZero_iff_ne_zero
 
 中文:
 引理 isNonZero_iff_ne_zero
-  条件: [Nontrivial (genWeightSpace M (0 : L -> R))] {χ : Weight R L M}
+  条件: [非平凡 (genWeightSpace M (0 : L -> R))] {χ : Weight R L M}
   证明: isZero_iff_eq_zero.not
 
 Depends on / 依赖: isZero_iff_eq_zero, isZero_iff_eq_zero.not
@@ -850,7 +850,7 @@ lemma apply_eq_zero_of_isNilpotent
 
 中文:
 引理 apply_eq_zero_of_isNilpotent
-  结论: [IsDomain R] [Module.IsTorsionFree R M] [IsReduced R]
+  结论: [是整环 R] [模.是无挠 R M] [是既约 R]
   证明: ((χ.hasEigenvalueAt x).isNilpotent_of_isNilpotent h).eq_zero
 
 Depends on / 依赖: eq_zero, hasEigenvalueAt, isNilpotent_of_isNilpotent
@@ -875,7 +875,7 @@ theorem zero_genWeightSpace_eq_top_of_nilpotent'
 
 中文:
 定理 zero_genWeightSpace_eq_top_of_nilpotent'
-  条件: [IsNilpotent L M]
+  条件: [是幂零 L M]
   证明: by
   simp [genWeightSpace, genWeightSpaceOf]
 
@@ -931,7 +931,7 @@ theorem zero_genWeightSpace_eq_top_of_nilpotent
 
 中文:
 定理 zero_genWeightSpace_eq_top_of_nilpotent
-  条件: [IsNilpotent L M]
+  条件: [是幂零 L M]
   证明: by
   simp_all
 
@@ -955,8 +955,8 @@ theorem exists_genWeightSpace_le_ker_of_isNoetherian
   rwa [Module.End.maxGenEigenspace_eq, Module.End.genEigenspace_nat] at hm
 
 中文:
-定理 exists_genWeightSpace_le_ker_of_isNoetherian
-  条件: [IsNoetherian R M] (χ : L -> R) (x : L)
+定理 存在_genWeightSpace_le_ker_of_isNoetherian
+  条件: [是Noether R M] (χ : L -> R) (x : L)
   证明: by
   use (toEnd R L M x).maxGenEigenspaceIndex (χ x)
   intro m hm
@@ -985,7 +985,7 @@ theorem exists_genWeightSpace_zero_le_ker_of_isNoetherian
   simpa using exists_genWeightSpace_le_ker_of_isNoetherian M (0 : L -> R) x
 
 中文:
-定理 exists_genWeightSpace_zero_le_ker_of_isNoetherian
+定理 存在_genWeightSpace_zero_le_ker_of_isNoetherian
   证明: by
   simpa using exists_genWeightSpace_le_ker_of_isNoetherian M (0 : L -> R) x
 
@@ -1012,7 +1012,7 @@ lemma isNilpotent_toEnd_sub_algebraMap
 
 中文:
 引理 isNilpotent_toEnd_sub_algebraMap
-  条件: [IsNoetherian R M] (χ : L -> R) (x : L)
+  条件: [是Noether R M] (χ : L -> R) (x : L)
   证明: by
   have : toEnd R L (genWeightSpace M χ) x - algebraMap R _ (χ x) =
       (toEnd R L M x - algebraMap R _ (χ x)).restrict
@@ -1047,7 +1047,7 @@ theorem isNilpotent_toEnd_genWeightSpace_zero
 
 中文:
 定理 isNilpotent_toEnd_genWeightSpace_zero
-  条件: [IsNoetherian R M] (x : L)
+  条件: [是Noether R M] (x : L)
   证明: by
   simpa using isNilpotent_toEnd_sub_algebraMap M (0 : L -> R) x
 
@@ -1066,7 +1066,7 @@ instance [IsNoetherian
   body: isNilpotent_iff_forall'.mpr isNilpotent_toEnd_genWeightSpace_zero M
 
 中文:
-实例 [IsNoetherian
+实例 [是Noether
   签名: R M] :
   定义体: isNilpotent_iff_forall'.mpr isNilpotent_toEnd_genWeightSpace_zero M
 
@@ -1155,7 +1155,7 @@ lemma iSup_ucs_eq_genWeightSpace_zero
 
 中文:
 引理 iSup_ucs_eq_genWeightSpace_zero
-  条件: [IsNoetherian R M]
+  条件: [是Noether R M]
   证明: by
   obtain ⟨k, hk⟩ := (LieSubmodule.isNilpotent_iff_exists_self_le_ucs
  genWeightSpace M (0 : L -> R)).mp inferInstance
@@ -1321,7 +1321,7 @@ definition posFittingComp
 
 中文:
 定义 posFittingComp
-  签名: : LieSubmodule R L M
+  签名: : Lie子模 R L M
   定义体: ⨆ x, posFittingCompOf R M x
 
 Depends on / 依赖: posFittingCompOf
@@ -1565,7 +1565,7 @@ lemma comap_genWeightSpace_eq_of_injective
 
 中文:
 引理 comap_genWeightSpace_eq_of_injective
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   证明: by
   refine le_antisymm (fun m hm => ?_) ?_
   · simp only [LieSubmodule.mem_comap, mem_genWeightSpace] at hm
@@ -1609,7 +1609,7 @@ lemma map_genWeightSpace_eq_of_injective
 
 中文:
 引理 map_genWeightSpace_eq_of_injective
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   证明: by
   refine le_antisymm (le_inf_iff.mpr ⟨map_genWeightSpace_le f, LieSubmodule.map_le_range f⟩) ?_
   rintro - ⟨hm, ⟨m, rfl⟩⟩
@@ -1706,7 +1706,7 @@ obtain ⟨l, hl⟩ := Filter.eventually_atTop.mp
 
 中文:
 引理 posFittingComp_map_incl_sup_of_codisjoint
-  结论: [IsNoetherian R M] [IsArtinian R M]
+  结论: [是Noether R M] [是Artin R M]
   证明: by
 obtain ⟨l, hl⟩ := Filter.eventually_atTop.mp
 (eventually_iInf_lowerCentralSeries_eq R L N₁).and
@@ -2058,7 +2058,7 @@ lemma finite_genWeightSpaceOf_ne_bot
 
 中文:
 引理 finite_genWeightSpaceOf_ne_bot
-  条件: [IsNoetherian R M] (x : L)
+  条件: [是Noether R M] (x : L)
   证明: WellFoundedGT.finite_ne_bot_of_iSupIndep (iSupIndep_genWeightSpaceOf R L M x)
 
 Depends on / 依赖: WellFoundedGT, WellFoundedGT.finite_ne_bot_of_iSupIndep, finite_ne_bot_of_iSupIndep, iSupIndep_genWeightSpaceOf
@@ -2077,7 +2077,7 @@ lemma finite_genWeightSpace_ne_bot
 
 中文:
 引理 finite_genWeightSpace_ne_bot
-  条件: [IsNoetherian R M]
+  条件: [是Noether R M]
   证明: WellFoundedGT.finite_ne_bot_of_iSupIndep (iSupIndep_genWeightSpace R L M)
 
 Depends on / 依赖: WellFoundedGT, WellFoundedGT.finite_ne_bot_of_iSupIndep, finite_ne_bot_of_iSupIndep, iSupIndep_genWeightSpace
@@ -2098,7 +2098,7 @@ instance Weight.instFinite
 
 中文:
 实例 Weight.instFinite
-  签名: [IsNoetherian R M]
+  签名: [是Noether R M]
   定义体: by
   have : Finite {χ : L -> R | genWeightSpace M χ != ⊥} := finite_genWeightSpace_ne_bot R L M
   exact Finite.of_injective (equivSetOfPred R L M) (equivSetOfPred R L M).injective
@@ -2119,7 +2119,7 @@ instance Weight.instFintype
 
 中文:
 实例 Weight.instFintype
-  签名: [IsNoetherian R M]
+  签名: [是Noether R M]
   定义体: .ofFinite _
 
 Depends on / 依赖: ofFinite
@@ -2138,7 +2138,7 @@ class IsTriangularizable
     - maxGenEigenspace_eq_top : forall x, ⨆ φ, (toEnd R L M x).maxGenEigenspace φ = ⊤
 
 中文:
-类 IsTriangularizable
+类 是Triangularizable
   参数: : 命题 where
   公理与运算 (1 个):
     - maxGenEigenspace_eq_top : 对任意 x, ⨆ φ, (toEnd R L M x).maxGenEigenspace φ = ⊤
@@ -2167,8 +2167,8 @@ instance [IsTriangularizable
 omit [LieRing.IsNilpotent L] in
 
 中文:
-实例 [IsTriangularizable
-  签名: R L M] : IsTriangularizable R (LieModule.toEnd R L M).range M where
+实例 [是Triangularizable
+  签名: R L M] : 是Triangularizable R (Lie模.toEnd R L M).range M where
   定义体: by
     rintro ⟨-, x, rfl⟩
     exact IsTriangularizable.maxGenEigenspace_eq_top x
@@ -2200,8 +2200,8 @@ lemma IsTriangularizable.exists_hasEigenvalue
 @[simp]
 
 中文:
-引理 IsTriangularizable.exists_hasEigenvalue
-  条件: [Nontrivial M] [IsTriangularizable R L M] (x : L)
+引理 是Triangularizable.存在_hasEigenvalue
+  条件: [非平凡 M] [是Triangularizable R L M] (x : L)
   证明: by
   suffices exists φ, (toEnd R L M x).maxGenEigenspace φ != ⊥ by
     obtain ⟨φ, hφ⟩ := this
@@ -2237,7 +2237,7 @@ lemma iSup_genWeightSpaceOf_eq_top
 
 中文:
 引理 iSup_genWeightSpaceOf_eq_top
-  条件: [IsTriangularizable R L M] (x : L)
+  条件: [是Triangularizable R L M] (x : L)
   证明: by
   rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.iSup_toSubmodule]; rw [LieSubmodule.top_toSubmodule]
   dsimp [genWeightSpaceOf]
@@ -2268,7 +2268,7 @@ lemma trace_toEnd_genWeightSpace
 
 中文:
 引理 trace_toEnd_genWeightSpace
-  结论: [IsDomain R] [IsPrincipalIdealRing R]
+  结论: [是整环 R] [是主理想环 R]
   证明: by
   suffices _root_.IsNilpotent ((toEnd R L (genWeightSpace M χ) x) - χ x • LinearMap.id) by
     replace this := (isNilpotent_trace_of_isNilpotent this).eq_zero
@@ -2305,7 +2305,7 @@ instance instIsTriangularizableOfIsAlgClosed
 
 中文:
 实例 instIsTriangularizableOfIsAlgClosed
-  签名: [IsAlgClosed K]
+  签名: [是代数闭 K]
   定义体: ⟨fun _ => Module.End.iSup_maxGenEigenspace_eq_top _⟩
 
 Depends on / 依赖: Module, Module.End.iSup_maxGenEigenspace_eq_top, iSup_maxGenEigenspace_eq_top
@@ -2332,7 +2332,7 @@ lemma iSup_genWeightSpace_eq_top
 
 中文:
 引理 iSup_genWeightSpace_eq_top
-  条件: [IsTriangularizable K L M]
+  条件: [是Triangularizable K L M]
   证明: by
   simp only [← LieSubmodule.toSubmodule_inj, LieSubmodule.iSup_toSubmodule,
     LieSubmodule.iInf_toSubmodule, LieSubmodule.top_toSubmodule, genWeightSpace]
@@ -2362,7 +2362,7 @@ lemma iSup_genWeightSpace_eq_top'
 
 中文:
 引理 iSup_genWeightSpace_eq_top'
-  条件: [IsTriangularizable K L M]
+  条件: [是Triangularizable K L M]
   证明: by
   have := iSup_genWeightSpace_eq_top K L M
   erw [← iSup_ne_bot_subtype, ← (Weight.equivSetOfPred K L M).iSup_comp] at this
@@ -2391,7 +2391,7 @@ exact (le_inf hN
 
 中文:
 引理 eq_iSup_inf_genWeightSpace
-  条件: [IsTriangularizable K L M] (N : LieSubmodule K L M)
+  条件: [是Triangularizable K L M] (N : Lie子模 K L M)
   证明: by
   refine le_antisymm ?_ (iSup_le fun χ => inf_le_left)
   conv_lhs => rw [← N.map_incl_top, ← iSup_genWeightSpace_eq_top' K L N, LieSubmodule.map_iSup]

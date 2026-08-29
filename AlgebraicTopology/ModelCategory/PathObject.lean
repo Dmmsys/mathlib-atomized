@@ -186,7 +186,7 @@ lemma p_fst
 
 中文:
 引理 p_fst
-  结论: P.p ≫ prod.fst = P.p₀
+  结论: P.p ≫ 乘积.fst = P.p₀
   证明: by simp [p]
 -/
 lemma p_fst : P.p ≫ prod.fst = P.p₀ := by simp [p]
@@ -203,7 +203,7 @@ lemma p_snd
 
 中文:
 引理 p_snd
-  结论: P.p ≫ prod.snd = P.p₁
+  结论: P.p ≫ 乘积.snd = P.p₁
   证明: by simp [p]
 -/
 lemma p_snd : P.p ≫ prod.snd = P.p₁ := by simp [p]
@@ -245,7 +245,7 @@ definition toFullSubcategory
 
 中文:
 定义 toFullSubcategory
-  签名: {P : Object命题erty C} {X : P.FullSubcategory} (Q : PrepathObject X.obj)
+  签名: {P : ObjectProperty C} {X : P.满子范畴} (Q : PrepathObject X.obj)
   定义体: ⟨Q.P, hQ⟩
   p₀ := P.homMk Q.p₀
   p₁ := P.homMk Q.p₁
@@ -276,7 +276,7 @@ definition map
 
 中文:
 定义 map
-  签名: {X : C} (P : PrepathObject X) {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: {X : C} (P : PrepathObject X) {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: F.obj P.P
   p₀ := F.map P.p₀
   p₁ := F.map P.p₁
@@ -309,10 +309,10 @@ structure PathObject
 
 中文:
 结构 PathObject
-  参数: [CategoryWithWeakEquivalences C] (A : C)
+  参数: [带弱等价范畴 C] (A : C)
   继承: PrepathObject A
   公理与运算 (1 个):
-    - weakEquivalence_ι : WeakEquivalence ι  [默认: by infer_instance]
+    - weakEquivalence_ι : 弱等价 ι  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence P.p₀
+  签名: 弱等价 P.p₀
   定义体: weakEquivalence_of_precomp_of_fac P.ι_p₀
 
 Depends on / 依赖: weakEquivalence_of_precomp_of_fac
@@ -408,7 +408,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence P.p₁
+  签名: 弱等价 P.p₁
   定义体: weakEquivalence_of_precomp_of_fac P.ι_p₁
 
 Depends on / 依赖: weakEquivalence_of_precomp_of_fac
@@ -428,10 +428,10 @@ class IsGood
     - fibration_p : Fibration P.p  [default: by infer_instance]
 
 中文:
-类 IsGood
-  参数: [HasBinaryProduct A A] [CategoryWithFibrations C]
+类 是Good
+  参数: [HasBinaryProduct A A] [带纤维化范畴 C]
   公理与运算 (1 个):
-    - fibration_p : Fibration P.p  [默认: by infer_instance]
+    - fibration_p : 纤维化 P.p  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -449,11 +449,11 @@ class IsVeryGood
     - cofibration_ι : Cofibration P.ι  [default: by infer_instance]
 
 中文:
-类 IsVeryGood
-  参数: [HasBinaryProduct A A] [CategoryWithFibrations C]
-  继承: P.IsGood
+类 是VeryGood
+  参数: [HasBinaryProduct A A] [带纤维化范畴 C]
+  继承: P.是Good
   公理与运算 (1 个):
-    - cofibration_ι : Cofibration P.ι  [默认: by infer_instance]
+    - cofibration_ι : 余纤维化 P.ι  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -482,7 +482,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fibration P.p₀
+  签名: 纤维化 P.p₀
   定义体: by
   rw [← P.p_fst]
   infer_instance
@@ -505,7 +505,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fibration P.p₁
+  签名: 纤维化 P.p₁
   定义体: by
   rw [← P.p_snd]
   infer_instance
@@ -551,7 +551,7 @@ instance [HasBinaryProducts
 
 中文:
 实例 [HasBinaryProducts
-  签名: C] [CategoryWithFibrations C] [P.IsGood]
+  签名: C] [带纤维化范畴 C] [P.是Good]
   定义体: by
     have hp : fibrations C P.p := by rw [← fibration_iff]; infer_instance
     rw [P.symm_p]; rw [fibration_iff]
@@ -583,7 +583,7 @@ instance [HasBinaryProduct
 
 中文:
 实例 [HasBinaryProduct
-  签名: A A] [HasInitial C] [IsCofibrant A] [P.IsVeryGood] : IsCofibrant P.P
+  签名: A A] [HasInitial C] [IsCofibrant A] [P.是VeryGood] : IsCofibrant P.P
   定义体: isCofibrant_of_cofibration P.ι
 
 Depends on / 依赖: isCofibrant_of_cofibration
@@ -602,7 +602,7 @@ instance [(fibrations
 
 中文:
 实例 [(fibrations
-  签名: C).RespectsIso] [HasBinaryProducts C] [P.IsVeryGood] :
+  签名: C).RespectsIso] [HasBinaryProducts C] [P.是VeryGood] :
   定义体: by dsimp; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -685,7 +685,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofFactorizationData h).IsVeryGood
+  签名: (ofFactorizationData h).是VeryGood
   定义体: by simpa using inferInstanceAs (Fibration h.p)
   cofibration_ι := by dsimp; infer_instance
 
@@ -705,7 +705,7 @@ instance [HasInitial
 
 中文:
 实例 [HasInitial
-  签名: C] [IsCofibrant A] [(cofibrations C).IsStableUnderComposition] :
+  签名: C] [IsCofibrant A] [(cofibrations C).是StableUnderComposition] :
   定义体: isCofibrant_of_cofibration (ofFactorizationData h).ι
 
 Depends on / 依赖: isCofibrant_of_cofibration, ofFactorizationData
@@ -726,7 +726,7 @@ lemma exists_very_good
     inferInstance⟩
 
 中文:
-引理 exists_very_good
+引理 存在_very_good
   证明: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
     inferInstance⟩
 
@@ -747,7 +747,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (PathObject A)
+  签名: 非空 (PathObject A)
   定义体: ⟨(exists_very_good A).choose⟩
 
 Depends on / 依赖: exists_very_good
@@ -774,7 +774,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: [IsFibrant A] (P P' : PathObject A) [P'.IsGood]
+  签名: [IsFibrant A] (P P' : PathObject A) [P'.是Good]
   定义体: P.toPrepathObject.trans P'.toPrepathObject
   weakEquivalence_ι := by
     have : WeakEquivalence (pullback.lift P.ι P'.ι (by simp) ≫

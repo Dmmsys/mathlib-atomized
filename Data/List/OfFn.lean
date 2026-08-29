@@ -46,8 +46,8 @@ theorem get_ofFn
 
 中文:
 定理 get_ofFn
-  条件: {n} (f : Fin n -> α) (i)
-  结论: get (ofFn f) i = f (Fin.cast (by simp) i)
+  条件: {n} (f : 有限集 n -> α) (i)
+  结论: get (ofFn f) i = f (有限集.cast (by simp) i)
   证明: by
   simp; congr
 -/
@@ -66,7 +66,7 @@ theorem ofFn_comp'
 
 中文:
 定理 ofFn_comp'
-  条件: {β : 类型} {n : 自然数} (f : Fin n -> α) (g : α -> β)
+  条件: {β : 类型} {n : 自然数} (f : 有限集 n -> α) (g : α -> β)
   证明: map_ofFn.symm
 
 @[congr]
@@ -90,7 +90,7 @@ theorem ofFn_congr
 
 中文:
 定理 ofFn_congr
-  条件: {m n : 自然数} (h : m = n) (f : Fin m -> α)
+  条件: {m n : 自然数} (h : m = n) (f : 有限集 m -> α)
   证明: by
   subst h
   simp_rw [Fin.cast_refl, id]
@@ -119,7 +119,7 @@ theorem ofFn_succ'
 
 中文:
 定理 ofFn_succ'
-  条件: {n} (f : Fin (succ n) -> α)
+  条件: {n} (f : 有限集 (succ n) -> α)
   证明: by
   induction n with
   | zero => rw [ofFn_zero, concat_nil, ofFn_succ, ofFn_zero, Fin.last_zero]
@@ -152,7 +152,7 @@ theorem ofFn_fin_append
 
 中文:
 定理 ofFn_fin_append
-  条件: {m n} (a : Fin m -> α) (b : Fin n -> α)
+  条件: {m n} (a : 有限集 m -> α) (b : 有限集 n -> α)
   证明: by
   simp_rw [ofFn_add]
   simp [Fin.append_left', Fin.append_right]
@@ -180,7 +180,7 @@ theorem ofFn_mul
 
 中文:
 定理 ofFn_mul
-  条件: {m n} (f : Fin (m * n) -> α)
+  条件: {m n} (f : 有限集 (m * n) -> α)
   证明: by
   induction m with
   | zero => simp [ofFn_zero, Nat.zero_mul, ofFn_zero]
@@ -216,7 +216,7 @@ theorem ofFn_mul'
 
 中文:
 定理 ofFn_mul'
-  条件: {m n} (f : Fin (m * n) -> α)
+  条件: {m n} (f : 有限集 (m * n) -> α)
   证明: by simp_rw [m.mul_comm, ofFn_mul, Fin.cast_mk]
 
 @[simp]
@@ -240,7 +240,7 @@ theorem ofFn_get
 
 中文:
 定理 ofFn_get
-  结论: 对任意 l : List α, (ofFn (get l)) = l
+  结论: 对任意 l : 列表 α, (ofFn (get l)) = l
 -/
 theorem ofFn_get : forall l : List α, (ofFn (get l)) = l
   | [] => by rw [ofFn_zero]
@@ -261,7 +261,7 @@ theorem ofFn_getElem_eq_map
 
 中文:
 定理 ofFn_getElem_eq_map
-  条件: {β : 类型} (l : List α) (f : α -> β)
+  条件: {β : 类型} (l : 列表 α) (f : α -> β)
   证明: by
   rw [← Function.comp_def]; rw [← map_ofFn]; rw [ofFn_getElem]
 
@@ -284,8 +284,8 @@ theorem mem_ofFn'
 
 中文:
 定理 mem_ofFn'
-  条件: {n} (f : Fin n -> α) (a : α)
-  结论: a in ofFn f ↔ a in Set.range f
+  条件: {n} (f : 有限集 n -> α) (a : α)
+  结论: a in ofFn f ↔ a in 集合.range f
   证明: by grind
 -/
 theorem mem_ofFn' {n} (f : Fin n -> α) (a : α) : a in ofFn f ↔ a in Set.range f := by grind
@@ -301,8 +301,8 @@ theorem forall_mem_ofFn_iff
 @[simp]
 
 中文:
-定理 forall_mem_ofFn_iff
-  条件: {n : 自然数} {f : Fin n -> α} {P : α -> 命题}
+定理 对任意_mem_ofFn_iff
+  条件: {n : 自然数} {f : 有限集 n -> α} {P : α -> 命题}
   证明: by simp
 
 @[simp]
@@ -320,7 +320,7 @@ theorem ofFn_const
 
 中文:
 定理 ofFn_const
-  结论: 对任意 (n : 自然数) (c : α), (ofFn fun _ : Fin n => c) = replicate n c
+  结论: 对任意 (n : 自然数) (c : α), (ofFn fun _ : 有限集 n => c) = replicate n c
 -/
 theorem ofFn_const : forall (n : Nat) (c : α), (ofFn fun _ : Fin n => c) = replicate n c
   | 0, c => by rw [ofFn_zero, replicate_zero]
@@ -341,7 +341,7 @@ theorem ofFn_fin_repeat
 
 中文:
 定理 ofFn_fin_repeat
-  条件: {m} (a : Fin m -> α) (n : 自然数)
+  条件: {m} (a : 有限集 m -> α) (n : 自然数)
   证明: by
   simp_rw [ofFn_mul, ← ofFn_const, Fin.repeat, Fin.modNat, Nat.add_comm,
     Nat.add_mul_mod_self_right, Nat.mod_eq_of_lt (Fin.is_lt _)]
@@ -369,7 +369,7 @@ theorem pairwise_ofFn
 
 中文:
 定理 pairwise_ofFn
-  条件: {R : α -> α -> 命题} {n} {f : Fin n -> α}
+  条件: {R : α -> α -> 命题} {n} {f : 有限集 n -> α}
   证明: by
   simp only [pairwise_iff_getElem, length_ofFn, List.getElem_ofFn,
     Fin.forall_iff,
@@ -393,7 +393,7 @@ lemma getLast_ofFn_succ
 
 中文:
 引理 getLast_ofFn_succ
-  条件: {n : 自然数} (f : Fin n.succ -> α)
+  条件: {n : 自然数} (f : 有限集 n.succ -> α)
   证明: getLast_ofFn _
 
 Depends on / 依赖: getLast_ofFn
@@ -415,8 +415,8 @@ lemma ofFn_cons
 
 中文:
 引理 ofFn_cons
-  条件: {n} (a : α) (f : Fin n -> α)
-  结论: ofFn (Fin.cons a f) = a :: ofFn f
+  条件: {n} (a : α) (f : 有限集 n -> α)
+  结论: ofFn (有限集.cons a f) = a :: ofFn f
   证明: by
   rw [ofFn_succ]
   rfl
@@ -444,7 +444,7 @@ lemma find?_ofFn_eq_some
 
 中文:
 引理 find?_ofFn_eq_some
-  条件: {n} {f : Fin n -> α} {p : α -> 布尔} {b : α}
+  条件: {n} {f : 有限集 n -> α} {p : α -> 布尔值} {b : α}
   证明: by
   rw [find?_eq_some_iff_getElem]
   exact ⟨fun ⟨hpb, i, hi, hfb, h⟩ =>
@@ -475,7 +475,7 @@ lemma find?_ofFn_eq_some_of_injective
 
 中文:
 引理 find?_ofFn_eq_some_of_injective
-  结论: {n} {f : Fin n -> α} {p : α -> 布尔} {i : Fin n}
+  结论: {n} {f : 有限集 n -> α} {p : α -> 布尔值} {i : 有限集 n}
   证明: by
   simp only [find?_ofFn_eq_some, h.eq_iff, Bool.not_eq_true, exists_eq_left]
 -/
@@ -500,7 +500,7 @@ Fin.sigma_eq_of_eq_comp_cast length_ofFn funext fun i => get_ofFn f i
 
 中文:
 定义 equivSigmaTuple
-  签名: : List α ≃ Σ n, Fin n -> α where
+  签名: : 列表 α ≃ Σ n, 有限集 n -> α where
   定义体: ⟨l.length, l.get⟩
   invFun f := List.ofFn f.2
   left_inv := List.ofFn_get
@@ -533,7 +533,7 @@ definition ofFnRec
 
 中文:
 定义 ofFnRec
-  签名: {C : List α -> Sort*} (h : 对任意 (n) (f : Fin n -> α), C (List.ofFn f)) (l : List α)
+  签名: {C : 列表 α -> 类型层*} (h : 对任意 (n) (f : 有限集 n -> α), C (列表.ofFn f)) (l : 列表 α)
   定义体: cast (congr_arg C l.ofFn_get)
     h l.length l.get
 
@@ -556,7 +556,7 @@ theorem ofFnRec_ofFn
 
 中文:
 定理 ofFnRec_ofFn
-  结论: {C : List α -> Sort*} (h : 对任意 (n) (f : Fin n -> α), C (List.ofFn f)) {n : 自然数}
+  结论: {C : 列表 α -> 类型层*} (h : 对任意 (n) (f : 有限集 n -> α), C (列表.ofFn f)) {n : 自然数}
   证明: equivSigmaTuple.rightInverse_symm.cast_eq (fun s => h s.1 s.2) ⟨n, f⟩
 
 Depends on / 依赖: cast_eq, equivSigmaTuple, equivSigmaTuple.rightInverse_symm.cast_eq, rightInverse_symm
@@ -574,8 +574,8 @@ theorem exists_iff_exists_tuple
   proof: equivSigmaTuple.symm.surjective.exists.trans Sigma.exists
 
 中文:
-定理 exists_iff_exists_tuple
-  条件: {P : List α -> 命题}
+定理 存在_iff_存在_tuple
+  条件: {P : 列表 α -> 命题}
   证明: equivSigmaTuple.symm.surjective.exists.trans Sigma.exists
 
 Depends on / 依赖: Sigma.exists, equivSigmaTuple, equivSigmaTuple.symm.surjective.exists.trans, surjective
@@ -593,8 +593,8 @@ theorem forall_iff_forall_tuple
   proof: equivSigmaTuple.symm.surjective.forall.trans Sigma.forall
 
 中文:
-定理 forall_iff_forall_tuple
-  条件: {P : List α -> 命题}
+定理 对任意_iff_对任意_tuple
+  条件: {P : 列表 α -> 命题}
   证明: equivSigmaTuple.symm.surjective.forall.trans Sigma.forall
 
 Depends on / 依赖: Sigma.forall, equivSigmaTuple, equivSigmaTuple.symm.surjective.forall.trans, surjective
@@ -613,7 +613,7 @@ theorem ofFn_inj'
 
 中文:
 定理 ofFn_inj'
-  条件: {m n : 自然数} {f : Fin m -> α} {g : Fin n -> α}
+  条件: {m n : 自然数} {f : 有限集 m -> α} {g : 有限集 n -> α}
   证明: Iff.symm equivSigmaTuple.symm.injective.eq_iff.symm
 
 Depends on / 依赖: Iff.symm, eq_iff, equivSigmaTuple, equivSigmaTuple.symm.injective.eq_iff.symm, injective
@@ -635,7 +635,7 @@ eq_of_heq by rw [ofFn_inj'] at h; cases h; rfl
 中文:
 定理 ofFn_injective
   条件: {n : 自然数}
-  结论: Function.Injective (ofFn : (Fin n -> α) -> List α)
+  结论: 函数.单射 (ofFn : (有限集 n -> α) -> 列表 α)
   证明: fun f g h =>
 eq_of_heq by rw [ofFn_inj'] at h; cases h; rfl
 -/
@@ -655,7 +655,7 @@ theorem ofFn_inj
 
 中文:
 定理 ofFn_inj
-  条件: {n : 自然数} {f g : Fin n -> α}
+  条件: {n : 自然数} {f g : 有限集 n -> α}
   结论: ofFn f = ofFn g ↔ f = g
   证明: ofFn_injective.eq_iff
 

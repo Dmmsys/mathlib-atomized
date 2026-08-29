@@ -63,10 +63,10 @@ class IsIrreducible
     - irreducible(⦃A⦄ (hA : MeasurableSet A) (hφA : φ A > 0) a) : exists (n : Nat), (κ ^ n) a A > 0
 
 中文:
-类 IsIrreducible
-  参数: (φ : Measure α) (κ : Kernel α α)
+类 是不可约
+  参数: (φ : 测度 α) (κ : 核 α α)
   公理与运算 (1 个):
-    - irreducible(⦃A⦄ (hA : MeasurableSet A) (hφA : φ A > 0) a) : 存在 (n : 自然数), (κ ^ n) a A > 0
+    - irreducible(⦃A⦄ (hA : 可测集 A) (hφA : φ A > 0) a) : 存在 (n : 自然数), (κ ^ n) a A > 0
 -/
 class IsIrreducible (φ : Measure α) (κ : Kernel α α) : Prop where
   irreducible ⦃A⦄ (hA : MeasurableSet A) (hφA : φ A > 0) a :
@@ -97,7 +97,7 @@ simpa using hκ.irreducible hs Std.lt_of_lt_of_le hsp (hφ s)
 
 中文:
 引理 isIrreducible_of_le_measure
-  结论: {φ₁ φ₂ : Measure α} (hφ : φ₁ <= φ₂)
+  结论: {φ₁ φ₂ : 测度 α} (hφ : φ₁ <= φ₂)
   证明: by
 simpa using hκ.irreducible hs Std.lt_of_lt_of_le hsp (hφ s)
 

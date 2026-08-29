@@ -57,7 +57,7 @@ definition Function.leftLim
   exact if 𝓝[<] a = ⊥ ∨ ¬exists y, Tendsto f (𝓝[<] a) (𝓝 y) then f a else limUnder (𝓝[<] a) f
 
 中文:
-定义 Function.leftLim
+定义 函数.leftLim
   签名: (f : α -> β) (a : α)
   定义体: by
   classical
@@ -82,7 +82,7 @@ definition Function.rightLim
   body: @Function.leftLim αᵒᵈ β _ _ f a
 
 中文:
-定义 Function.rightLim
+定义 函数.rightLim
   签名: (f : α -> β) (a : α)
   定义体: @Function.leftLim αᵒᵈ β _ _ f a
 
@@ -107,7 +107,7 @@ theorem leftLim_eq_of_tendsto
 
 中文:
 定理 leftLim_eq_of_tendsto
-  结论: [hα : TopologicalSpace α] [h'α : OrderTopology α] [T2Space β]
+  结论: [hα : 拓扑空间 α] [h'α : Order拓扑 α] [T2空间 β]
   证明: by
   have h'' : exists y, Tendsto f (𝓝[<] a) (𝓝 y) := ⟨y, h'⟩
   rw [h'α.topology_eq_generate_intervals] at h h' h''
@@ -134,7 +134,7 @@ theorem rightLim_eq_of_tendsto
 
 中文:
 定理 rightLim_eq_of_tendsto
-  结论: [TopologicalSpace α] [OrderTopology α] [T2Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T2空间 β]
   证明: leftLim_eq_of_tendsto (α := αᵒᵈ) (h := h) h'
 
 Depends on / 依赖: leftLim_eq_of_tendsto
@@ -156,7 +156,7 @@ theorem leftLim_eq_of_eq_bot
 
 中文:
 定理 leftLim_eq_of_eq_bot
-  结论: [hα : TopologicalSpace α] [h'α : OrderTopology α] (f : α -> β) {a : α}
+  结论: [hα : 拓扑空间 α] [h'α : Order拓扑 α] (f : α -> β) {a : α}
   证明: by
   rw [h'α.topology_eq_generate_intervals] at h
   simp [leftLim, h]
@@ -178,7 +178,7 @@ theorem rightLim_eq_of_eq_bot
 
 中文:
 定理 rightLim_eq_of_eq_bot
-  结论: [TopologicalSpace α] [OrderTopology α] (f : α -> β) {a : α}
+  结论: [拓扑空间 α] [Order拓扑 α] (f : α -> β) {a : α}
   证明: leftLim_eq_of_eq_bot (α := αᵒᵈ) f h
 
 Depends on / 依赖: leftLim_eq_of_eq_bot
@@ -294,7 +294,7 @@ theorem ContinuousWithinAt.leftLim_eq
 
 中文:
 定理 ContinuousWithinAt.leftLim_eq
-  结论: [TopologicalSpace α] [OrderTopology α] [T2Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T2空间 β]
   证明: by
   rcases eq_or_neBot (𝓝[<] a) with h' | h'
   · simp [leftLim_eq_of_eq_bot f h']
@@ -320,7 +320,7 @@ theorem ContinuousWithinAt.rightLim_eq
 
 中文:
 定理 ContinuousWithinAt.rightLim_eq
-  结论: [TopologicalSpace α] [OrderTopology α] [T2Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T2空间 β]
   证明: ContinuousWithinAt.leftLim_eq (α := αᵒᵈ) hf
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.leftLim_eq, leftLim_eq
@@ -344,7 +344,7 @@ theorem tendsto_leftLim_of_tendsto
 
 中文:
 定理 tendsto_leftLim_of_tendsto
-  结论: [TopologicalSpace α] [h'α : OrderTopology α]
+  结论: [拓扑空间 α] [h'α : Order拓扑 α]
   证明: by
   rcases eq_or_neBot (𝓝[<] a) with h' | h'
   · simp [h']
@@ -373,7 +373,7 @@ theorem tendsto_rightLim_of_tendsto
 
 中文:
 定理 tendsto_rightLim_of_tendsto
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: tendsto_leftLim_of_tendsto (α := αᵒᵈ) h
 
 Depends on / 依赖: tendsto_leftLim_of_tendsto
@@ -400,7 +400,7 @@ theorem mapClusterPt_leftLim
 
 中文:
 定理 mapClusterPt_leftLim
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: by
   have A : (𝓝 (f a) ⊓ map f (𝓝[<=] a)).NeBot := by
     refine inf_neBot_iff.mpr (fun s hs s' hs' => ?_)
@@ -436,7 +436,7 @@ theorem mapClusterPt_rightLim
 
 中文:
 定理 mapClusterPt_rightLim
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: mapClusterPt_leftLim (α := αᵒᵈ) _ _
 
 Depends on / 依赖: mapClusterPt_leftLim
@@ -462,7 +462,7 @@ theorem continuousWithinAt_leftLim_Iic
 
 中文:
 定理 continuousWithinAt_leftLim_Iic
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: by
   have : 𝓝[<=] a = 𝓝[<] a ⊔ pure a := by
     rw [← Iio_union_Icc_eq_Iic le_rfl]; rw [nhdsWithin_union]
@@ -508,7 +508,7 @@ theorem leftLim_leftLim
 
 中文:
 定理 leftLim_leftLim
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: (continuousWithinAt_leftLim_Iic h).leftLim_eq
 
 Depends on / 依赖: continuousWithinAt_leftLim_Iic, leftLim_eq
@@ -528,7 +528,7 @@ theorem continuousWithinAt_rightLim_Ici
 
 中文:
 定理 continuousWithinAt_rightLim_Ici
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: continuousWithinAt_leftLim_Iic (α := αᵒᵈ) h
 
 Depends on / 依赖: continuousWithinAt_leftLim_Iic
@@ -548,7 +548,7 @@ theorem rightLim_rightLim
 
 中文:
 定理 rightLim_rightLim
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: leftLim_leftLim (α := αᵒᵈ) h
 
 Depends on / 依赖: leftLim_leftLim
@@ -574,7 +574,7 @@ theorem leftLim_rightLim
 
 中文:
 定理 leftLim_rightLim
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: by
   obtain ⟨b, hb⟩ : (Iio a).Nonempty := Filter.nonempty_of_mem (self_mem_nhdsWithin (a := a))
   apply leftLim_eq_of_tendsto
@@ -613,7 +613,7 @@ theorem rightLim_leftLim
 
 中文:
 定理 rightLim_leftLim
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: leftLim_rightLim (α := αᵒᵈ) h (h' := h')
 
 Depends on / 依赖: leftLim_rightLim
@@ -721,7 +721,7 @@ theorem tendsto_rightLim_atTop_of_tendsto
 
 中文:
 定理 tendsto_rightLim_atTop_of_tendsto
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: by
   cases topOrderOrNoTopOrder α
   · simp only [OrderTop.atTop_eq α] at h ⊢
@@ -772,7 +772,7 @@ theorem tendsto_leftLim_atBot_of_tendsto
 
 中文:
 定理 tendsto_leftLim_atBot_of_tendsto
-  结论: [TopologicalSpace α] [OrderTopology α] [T3Space β]
+  结论: [拓扑空间 α] [Order拓扑 α] [T3空间 β]
   证明: tendsto_rightLim_atTop_of_tendsto (α := αᵒᵈ) h
 
 Depends on / 依赖: tendsto_rightLim_atTop_of_tendsto
@@ -802,7 +802,7 @@ theorem leftLim_eq_sSup
 
 中文:
 定理 leftLim_eq_sSup
-  条件: [TopologicalSpace α] [OrderTopology α] [(𝓝[<] x).NeBot]
+  条件: [拓扑空间 α] [Order拓扑 α] [(𝓝[<] x).NeBot]
   证明: leftLim_eq_of_tendsto (hf.tendsto_nhdsLT x)
 
 Depends on / 依赖: hf.tendsto_nhdsLT, leftLim_eq_of_tendsto, tendsto_nhdsLT
@@ -821,7 +821,7 @@ theorem rightLim_eq_sInf
 
 中文:
 定理 rightLim_eq_sInf
-  条件: [TopologicalSpace α] [OrderTopology α] [(𝓝[>] x).NeBot]
+  条件: [拓扑空间 α] [Order拓扑 α] [(𝓝[>] x).NeBot]
   证明: rightLim_eq_of_tendsto (hf.tendsto_nhdsGT x)
 
 Depends on / 依赖: hf.tendsto_nhdsGT, rightLim_eq_of_tendsto, tendsto_nhdsGT
@@ -937,7 +937,7 @@ theorem leftLim
 
 中文:
 定理 leftLim
-  结论: Monotone (leftLim f)
+  结论: 递增 (leftLim f)
   证明: by
   intro x y h
   rcases eq_or_lt_of_le h with (rfl | hxy)
@@ -1005,7 +1005,7 @@ theorem rightLim
 
 中文:
 定理 rightLim
-  结论: Monotone (rightLim f)
+  结论: 递增 (rightLim f)
   证明: fun _ _ h => hf.dual.leftLim h
 -/
 protected theorem rightLim : Monotone (rightLim f) := fun _ _ h => hf.dual.leftLim h
@@ -1085,7 +1085,7 @@ theorem tendsto_leftLim
 中文:
 定理 tendsto_leftLim
   条件: (x : α)
-  结论: Tendsto f (𝓝[<] x) (𝓝 (leftLim f x))
+  结论: 收敛 f (𝓝[<] x) (𝓝 (leftLim f x))
   证明: tendsto_leftLim_of_tendsto ⟨_, hf.tendsto_nhdsLT x⟩
 
 Depends on / 依赖: hf.tendsto_nhdsLT, tendsto_leftLim_of_tendsto, tendsto_nhdsLT
@@ -1107,7 +1107,7 @@ theorem tendsto_leftLim_within
 中文:
 定理 tendsto_leftLim_within
   条件: (x : α)
-  结论: Tendsto f (𝓝[<] x) (𝓝[<=] leftLim f x)
+  结论: 收敛 f (𝓝[<] x) (𝓝[<=] leftLim f x)
   证明: by
   apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within f (hf.tendsto_leftLim x)
   filter_upwards [@self_mem_nhdsWithin _ _ x (Iio x)] with y hy using hf.le_leftLim hy
@@ -1130,7 +1130,7 @@ theorem tendsto_rightLim
 中文:
 定理 tendsto_rightLim
   条件: (x : α)
-  结论: Tendsto f (𝓝[>] x) (𝓝 (rightLim f x))
+  结论: 收敛 f (𝓝[>] x) (𝓝 (rightLim f x))
   证明: hf.dual.tendsto_leftLim x
 
 Depends on / 依赖: hf.dual.tendsto_leftLim, tendsto_leftLim
@@ -1150,7 +1150,7 @@ theorem tendsto_rightLim_within
 中文:
 定理 tendsto_rightLim_within
   条件: (x : α)
-  结论: Tendsto f (𝓝[>] x) (𝓝[>=] rightLim f x)
+  结论: 收敛 f (𝓝[>] x) (𝓝[>=] rightLim f x)
   证明: hf.dual.tendsto_leftLim_within x
 
 Depends on / 依赖: hf.dual.tendsto_leftLim_within, tendsto_leftLim_within
@@ -1314,7 +1314,7 @@ theorem leftLim
 
 中文:
 定理 leftLim
-  结论: Antitone (leftLim f)
+  结论: 递减 (leftLim f)
   证明: hf.dual_right.leftLim
 -/
 protected theorem leftLim : Antitone (leftLim f) :=
@@ -1375,7 +1375,7 @@ theorem rightLim
 
 中文:
 定理 rightLim
-  结论: Antitone (rightLim f)
+  结论: 递减 (rightLim f)
   证明: hf.dual_right.rightLim
 -/
 protected theorem rightLim : Antitone (rightLim f) :=
@@ -1435,7 +1435,7 @@ theorem tendsto_leftLim
 中文:
 定理 tendsto_leftLim
   条件: (x : α)
-  结论: Tendsto f (𝓝[<] x) (𝓝 (leftLim f x))
+  结论: 收敛 f (𝓝[<] x) (𝓝 (leftLim f x))
   证明: hf.dual_right.tendsto_leftLim x
 
 Depends on / 依赖: dual_right, hf.dual_right.tendsto_leftLim, tendsto_leftLim
@@ -1455,7 +1455,7 @@ theorem tendsto_leftLim_within
 中文:
 定理 tendsto_leftLim_within
   条件: (x : α)
-  结论: Tendsto f (𝓝[<] x) (𝓝[>=] leftLim f x)
+  结论: 收敛 f (𝓝[<] x) (𝓝[>=] leftLim f x)
   证明: hf.dual_right.tendsto_leftLim_within x
 
 Depends on / 依赖: dual_right, hf.dual_right.tendsto_leftLim_within, tendsto_leftLim_within
@@ -1475,7 +1475,7 @@ theorem tendsto_rightLim
 中文:
 定理 tendsto_rightLim
   条件: (x : α)
-  结论: Tendsto f (𝓝[>] x) (𝓝 (rightLim f x))
+  结论: 收敛 f (𝓝[>] x) (𝓝 (rightLim f x))
   证明: hf.dual_right.tendsto_rightLim x
 
 Depends on / 依赖: dual_right, hf.dual_right.tendsto_rightLim, tendsto_rightLim
@@ -1495,7 +1495,7 @@ theorem tendsto_rightLim_within
 中文:
 定理 tendsto_rightLim_within
   条件: (x : α)
-  结论: Tendsto f (𝓝[>] x) (𝓝[<=] rightLim f x)
+  结论: 收敛 f (𝓝[>] x) (𝓝[<=] rightLim f x)
   证明: hf.dual_right.tendsto_rightLim_within x
 
 Depends on / 依赖: dual_right, hf.dual_right.tendsto_rightLim_within, tendsto_rightLim_within

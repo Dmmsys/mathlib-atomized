@@ -273,7 +273,7 @@ lemma rec_zero
 
 中文:
 引理 rec_zero
-  条件: {C : 自然数 -> Sort*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1))
+  条件: {C : 自然数 -> 类型层*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1))
   结论: 自然数.rec h0 h 0 = h0
   证明: rfl
 -/
@@ -290,7 +290,7 @@ lemma rec_add_one
 
 中文:
 引理 rec_add_one
-  条件: {C : 自然数 -> Sort*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1)) (n : 自然数)
+  条件: {C : 自然数 -> 类型层*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1)) (n : 自然数)
   证明: rfl
 -/
 lemma rec_add_one {C : Nat -> Sort*} (h0 : C 0) (h : forall n, C n -> C (n + 1)) (n : Nat) :
@@ -306,7 +306,7 @@ lemma rec_one
 
 中文:
 引理 rec_one
-  条件: {C : 自然数 -> Sort*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1))
+  条件: {C : 自然数 -> 类型层*} (h0 : C 0) (h : 对任意 n, C n -> C (n + 1))
   证明: rfl
 -/
 @[simp] lemma rec_one {C : Nat -> Sort*} (h0 : C 0) (h : forall n, C n -> C (n + 1)) :
@@ -333,7 +333,7 @@ definition leRec
 
 中文:
 定义 leRec
-  签名: {n} {motive : (m : 自然数) -> n <= m -> Sort*}
+  签名: {n} {motive : (m : 自然数) -> n <= m -> 类型层*}
 -/
 def leRec {n} {motive : (m : Nat) -> n <= m -> Sort*}
     (refl : motive n (Nat.le_refl _))
@@ -380,7 +380,7 @@ lemma leRec_self
 
 中文:
 引理 leRec_self
-  结论: {n} {motive : (m : 自然数) -> n <= m -> Sort*}
+  结论: {n} {motive : (m : 自然数) -> n <= m -> 类型层*}
   证明: by
   cases n <;> simp [leRec, Or.by_cases, dif_neg]
 
@@ -409,7 +409,7 @@ lemma leRec_succ
 
 中文:
 引理 leRec_succ
-  结论: {n} {motive : (m : 自然数) -> n <= m -> Sort*}
+  结论: {n} {motive : (m : 自然数) -> n <= m -> 类型层*}
   证明: by
   conv =>
     lhs
@@ -438,7 +438,7 @@ lemma leRec_succ'
 
 中文:
 引理 leRec_succ'
-  条件: {n} {motive : (m : 自然数) -> n <= m -> Sort*} (refl le_succ_of_le)
+  条件: {n} {motive : (m : 自然数) -> n <= m -> 类型层*} (refl le_succ_of_le)
   证明: by
   rw [leRec_succ]; rw [leRec_self]
 
@@ -461,7 +461,7 @@ lemma leRec_trans
 
 中文:
 引理 leRec_trans
-  结论: {n m k} {motive : (m : 自然数) -> n <= m -> Sort*} (refl le_succ_of_le)
+  结论: {n m k} {motive : (m : 自然数) -> n <= m -> 类型层*} (refl le_succ_of_le)
   证明: by
   induction hmk with
   | refl => rw [leRec_self]
@@ -490,7 +490,7 @@ lemma leRec_succ_left
 
 中文:
 引理 leRec_succ_left
-  结论: {motive : (m : 自然数) -> n <= m -> Sort*}
+  结论: {motive : (m : 自然数) -> n <= m -> 类型层*}
   证明: by
   rw [leRec_trans _ _ (le_succ n) h2]; rw [leRec_succ']
 
@@ -518,7 +518,7 @@ definition leRecOn
 
 中文:
 定义 leRecOn
-  签名: {C : 自然数 -> Sort*} {n : 自然数}
+  签名: {C : 自然数 -> 类型层*} {n : 自然数}
   定义体: fun h of_succ self => Nat.leRec self (fun _ _ => @of_succ _) h
 
 Depends on / 依赖: Nat.leRec, of_succ
@@ -536,7 +536,7 @@ lemma leRecOn_self
 
 中文:
 引理 leRecOn_self
-  条件: {C : 自然数 -> Sort*} {n} {next : 对任意 {k}, C k -> C (k + 1)} (x : C n)
+  条件: {C : 自然数 -> 类型层*} {n} {next : 对任意 {k}, C k -> C (k + 1)} (x : C n)
   证明: leRec_self _ _
 
 Depends on / 依赖: leRec_self
@@ -555,7 +555,7 @@ lemma leRecOn_succ
 
 中文:
 引理 leRecOn_succ
-  条件: {C : 自然数 -> Sort*} {n m} (h1 : n <= m) {h2 : n <= m + 1} {next} (x : C n)
+  条件: {C : 自然数 -> 类型层*} {n m} (h1 : n <= m) {h2 : n <= m + 1} {next} (x : C n)
   证明: leRec_succ _ _ _
 
 Depends on / 依赖: leRec_succ
@@ -574,7 +574,7 @@ lemma leRecOn_succ'
 
 中文:
 引理 leRecOn_succ'
-  条件: {C : 自然数 -> Sort*} {n} {h : n <= n + 1} {next : 对任意 {k}, C k -> C (k + 1)} (x : C n)
+  条件: {C : 自然数 -> 类型层*} {n} {h : n <= n + 1} {next : 对任意 {k}, C k -> C (k + 1)} (x : C n)
   证明: leRec_succ' _ _
 
 Depends on / 依赖: leRec_succ
@@ -593,7 +593,7 @@ lemma leRecOn_trans
 
 中文:
 引理 leRecOn_trans
-  条件: {C : 自然数 -> Sort*} {n m k} (hnm : n <= m) (hmk : m <= k) {next} (x : C n)
+  条件: {C : 自然数 -> 类型层*} {n m k} (hnm : n <= m) (hmk : m <= k) {next} (x : C n)
   证明: leRec_trans _ _ _ _
 
 Depends on / 依赖: leRec_trans
@@ -618,7 +618,7 @@ lemma leRecOn_succ_left
 
 中文:
 引理 leRecOn_succ_left
-  结论: {C : 自然数 -> Sort*} {n m}
+  结论: {C : 自然数 -> 类型层*} {n m}
   证明: leRec_succ_left (motive := fun n _ => C n) _ (fun _ _ => @next _) _ _
 
 @[deprecated (since := "2026-03-05")] alias strongRec' := Nat.strongRec
@@ -674,7 +674,7 @@ definition twoStepInduction
 
 中文:
 定义 twoStepInduction
-  签名: {motive : 自然数 -> Sort*} (zero : motive 0) (one : motive 1)
+  签名: {motive : 自然数 -> 类型层*} (zero : motive 0) (one : motive 1)
 -/
 def twoStepInduction {motive : Nat -> Sort*} (zero : motive 0) (one : motive 1)
     (more : forall n, motive n -> motive (n + 1) -> motive (n + 2)) : forall a, motive a
@@ -702,7 +702,7 @@ definition stepInduction
 
 中文:
 定义 stepInduction
-  签名: {motive : 自然数 -> Sort*} (k : 自然数) (base : 对任意 i < k, motive i)
+  签名: {motive : 自然数 -> 类型层*} (k : 自然数) (base : 对任意 i < k, motive i)
   定义体: if h : a < k then base _ h else
   (show a - k + k = a by lia) ▸ step (a - k) fun _ _ => stepInduction k base step _
 
@@ -772,7 +772,7 @@ definition decreasingInduction
 
 中文:
 定义 decreasingInduction
-  签名: {n} {motive : (m : 自然数) -> m <= n -> Sort*}
+  签名: {n} {motive : (m : 自然数) -> m <= n -> 类型层*}
   定义体: by
   induction mn using leRec with
   | refl => exact self
@@ -804,7 +804,7 @@ lemma decreasingInduction_self
 
 中文:
 引理 decreasingInduction_self
-  条件: {n} {motive : (m : 自然数) -> m <= n -> Sort*} (of_succ self)
+  条件: {n} {motive : (m : 自然数) -> m <= n -> 类型层*} (of_succ self)
   证明: by
   dsimp only [decreasingInduction]
   rw [leRec_self]
@@ -829,7 +829,7 @@ lemma decreasingInduction_succ
 
 中文:
 引理 decreasingInduction_succ
-  结论: {n} {motive : (m : 自然数) -> m <= n + 1 -> Sort*} (of_succ self)
+  结论: {n} {motive : (m : 自然数) -> m <= n + 1 -> 类型层*} (of_succ self)
   证明: by
   dsimp only [decreasingInduction]; rw [leRec_succ]
 
@@ -856,7 +856,7 @@ lemma decreasingInduction_succ'
 
 中文:
 引理 decreasingInduction_succ'
-  条件: {n} {motive : (m : 自然数) -> m <= n + 1 -> Sort*} (of_succ self)
+  条件: {n} {motive : (m : 自然数) -> m <= n + 1 -> 类型层*} (of_succ self)
   证明: by
   dsimp only [decreasingInduction]; rw [leRec_succ']
 
@@ -880,7 +880,7 @@ lemma decreasingInduction_trans
 
 中文:
 引理 decreasingInduction_trans
-  结论: {motive : (m : 自然数) -> m <= k -> Sort*} (hmn : m <= n) (hnk : n <= k)
+  结论: {motive : (m : 自然数) -> m <= k -> 类型层*} (hmn : m <= n) (hnk : n <= k)
   证明: by
   induction hnk with
   | refl => rw [decreasingInduction_self]
@@ -909,7 +909,7 @@ lemma decreasingInduction_succ_left
 
 中文:
 引理 decreasingInduction_succ_left
-  结论: {motive : (m : 自然数) -> m <= n -> Sort*} (of_succ self)
+  结论: {motive : (m : 自然数) -> m <= n -> 类型层*} (of_succ self)
   证明: by
   rw [Subsingleton.elim mn (Nat.le_trans (le_succ m) smn)]; rw [decreasingInduction_trans (n := m + 1) (Nat.le_succ m)]; rw [decreasingInduction_succ']
 
@@ -935,7 +935,7 @@ definition strongSubRecursion
 
 中文:
 定义 strongSubRecursion
-  签名: {P : 自然数 -> 自然数 -> Sort*} (H : 对任意 m n, (对任意 x y, x < m -> y < n -> P x y) -> P m n)
+  签名: {P : 自然数 -> 自然数 -> 类型层*} (H : 对任意 m n, (对任意 x y, x < m -> y < n -> P x y) -> P m n)
 -/
 def strongSubRecursion {P : Nat -> Nat -> Sort*} (H : forall m n, (forall x y, x < m -> y < n -> P x y) -> P m n) :
     forall n m : Nat, P n m
@@ -957,7 +957,7 @@ definition pincerRecursion
 
 中文:
 定义 pincerRecursion
-  签名: {P : 自然数 -> 自然数 -> Sort*} (Ha0 : 对任意 m : 自然数, P m 0) (H0b : 对任意 n : 自然数, P 0 n)
+  签名: {P : 自然数 -> 自然数 -> 类型层*} (Ha0 : 对任意 m : 自然数, P m 0) (H0b : 对任意 n : 自然数, P 0 n)
 -/
 def pincerRecursion {P : Nat -> Nat -> Sort*} (Ha0 : forall m : Nat, P m 0) (H0b : forall n : Nat, P 0 n)
     (H : forall x y : Nat, P x y.succ -> P x.succ y -> P x.succ y.succ) : forall n m : Nat, P n m
@@ -985,7 +985,7 @@ definition decreasingInduction'
 
 中文:
 定义 decreasingInduction'
-  签名: {P : 自然数 -> Sort*} (h : 对任意 k < n, m <= k -> P (k + 1) -> P k)
+  签名: {P : 自然数 -> 类型层*} (h : 对任意 k < n, m <= k -> P (k + 1) -> P k)
   定义体: by
   induction mn using decreasingInduction with
   | self => exact hP

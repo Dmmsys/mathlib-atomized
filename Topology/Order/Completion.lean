@@ -56,7 +56,7 @@ theorem DedekindCut.continuous_principal
 
 中文:
 定理 DedekindCut.continuous_principal
-  结论: [TopologicalSpace α] [OrderTopology α]
+  结论: [拓扑空间 α] [Order拓扑 α]
   证明: by
   rw [OrderTopology.continuous_iff]
   refine fun c => ⟨?_, ?_⟩
@@ -98,7 +98,7 @@ abbreviation Fill
 
 中文:
 缩写 Fill
-  签名: (α : 类型) [LinearOrder α]
+  签名: (α : 类型) [线性序 α]
   定义体: {x : α ×ₗ Rat //
     (IsSuccPrelimit (ofLex x).1 -> 0 <= (ofLex x).2) ∧
     (IsPredPrelimit (ofLex x).1 -> (ofLex x).2 <= 0) }
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Fill α)
+  签名: 拓扑空间 (Fill α)
   定义体: Preorder.topology _
 
 Depends on / 依赖: Preorder, Preorder.topology, topology
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology (Fill α)
+  签名: Order拓扑 (Fill α)
   定义体: ⟨rfl⟩
 -/
 instance : OrderTopology (Fill α) := ⟨rfl⟩
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: DenselyOrdered (Fill α)
+  签名: 稠密序 (Fill α)
   定义体: by
     simp only [ofLex_toLex, Subtype.forall, Prod.Lex.lt_iff, Subtype.mk_lt_mk,
       Lex.forall, Prod.forall]
@@ -235,8 +235,8 @@ theorem continuous_some
 
 中文:
 定理 continuous_some
-  条件: [TopologicalSpace α] [OrderTopology α]
-  结论: Continuous (X := α) some
+  条件: [拓扑空间 α] [Order拓扑 α]
+  结论: 连续 (X := α) some
   证明: by
   simp only [OrderTopology.continuous_iff, ofLex_toLex, Subtype.forall, Lex.forall, Prod.forall]
   refine fun x q ⟨hx₁, hx₂⟩ => ⟨?_, ?_⟩
@@ -284,7 +284,7 @@ theorem exists_dense_continuous_completion
     DedekindCut.continuous_principal.comp Fill.continuous_
 
 中文:
-定理 exists_dense_continuous_completion
+定理 存在_dense_continuous_completion
   证明: let : TopologicalSpace (DedekindCut (Fill α)) := Preorder.topology _
   have : OrderTopology (DedekindCut (Fill α)) := ⟨rfl⟩
   ⟨_, inferInstance, inferInstance, inferInstance, inferInstance,

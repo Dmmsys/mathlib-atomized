@@ -42,7 +42,7 @@ definition goursatFst
 
 中文:
 定义 goursatFst
-  签名: : Submodule R M
+  签名: : 子模 R M
   定义体: (LinearMap.ker <| (LinearMap.snd R M N).comp L.subtype).map ((LinearMap.fst R M N).comp L.subtype)
 
 Depends on / 依赖: L.subtype, LinearMap, LinearMap.fst, LinearMap.ker, LinearMap.snd, subtype
@@ -62,7 +62,7 @@ definition goursatSnd
 
 中文:
 定义 goursatSnd
-  签名: : Submodule R N
+  签名: : 子模 R N
   定义体: (LinearMap.ker <| (LinearMap.fst R M N).comp L.subtype).map ((LinearMap.snd R M N).comp L.subtype)
 
 Depends on / 依赖: L.subtype, LinearMap, LinearMap.fst, LinearMap.ker, LinearMap.snd, subtype
@@ -127,7 +127,7 @@ lemma goursatFst_prod_goursatSnd_le
 
 中文:
 引理 goursatFst_prod_goursatSnd_le
-  结论: L.goursatFst.prod L.goursatSnd <= L
+  结论: L.goursatFst.乘积 L.goursatSnd <= L
   证明: by
   simpa only [← toAddSubgroup_le, goursatFst_toAddSubgroup, goursatSnd_toAddSubgroup]
     using! L.toAddSubgroup.goursatFst_prod_goursatSnd_le
@@ -206,7 +206,7 @@ lemma goursat
 
 中文:
 引理 goursat
-  结论: 存在 (M' : Submodule R M) (N' : Submodule R N) (M'' : Submodule R M')
+  结论: 存在 (M' : 子模 R M) (N' : 子模 R N) (M'' : 子模 R M')
   证明: by
   let M' := L.map (LinearMap.fst ..)
   let N' := L.map (LinearMap.snd ..)

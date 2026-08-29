@@ -59,7 +59,7 @@ scoped[MatrixOrder] attribute [instance] Matrix.instPreOrder
 
 中文:
 缩写 instPreOrder
-  签名: : Preorder (Matrix n n 𝕜) where
+  签名: : 预序 (矩阵 n n 𝕜) where
   定义体: (B - A).PosSemidef
   le_refl A := sub_self A ▸ PosSemidef.zero
   le_trans A B C h₁ h₂ := sub_add_sub_cancel C B A ▸ h₂.add h₁
@@ -88,7 +88,7 @@ lemma le_iff
 
 中文:
 引理 le_iff
-  条件: {A B : Matrix n n 𝕜}
+  条件: {A B : 矩阵 n n 𝕜}
   结论: A <= B ↔ (B - A).PosSemidef
   证明: Iff.rfl
 
@@ -109,7 +109,7 @@ protected alias ⟨LE.le.posSemidef, PosSemidef.nonneg⟩ := nonneg_iff_posSemid
 
 中文:
 引理 nonneg_iff_posSemidef
-  条件: {A : Matrix n n 𝕜}
+  条件: {A : 矩阵 n n 𝕜}
   结论: 0 <= A ↔ A.PosSemidef
   证明: by rw [le_iff, sub_zero]
 
@@ -141,7 +141,7 @@ lemma le_antisymm_aux
 
 中文:
 引理 le_antisymm_aux
-  条件: {A : Matrix n n 𝕜} (h₁ : A.PosSemidef) (h₂ : (-A).PosSemidef)
+  条件: {A : 矩阵 n n 𝕜} (h₁ : A.PosSemidef) (h₂ : (-A).PosSemidef)
   证明: by
   classical
   ext i j
@@ -178,7 +178,7 @@ scoped[MatrixOrder] attribute [instance] Matrix.instPartialOrder
 
 中文:
 缩写 instPartialOrder
-  签名: : PartialOrder (Matrix n n 𝕜) where
+  签名: : 偏序 (矩阵 n n 𝕜) where
   定义体: by
     simpa [sub_eq_zero, eq_comm] using le_antisymm_aux h₁
      (by simpa only [← neg_sub B, le_iff] using h₂)
@@ -206,7 +206,7 @@ scoped[MatrixOrder] attribute [instance] Matrix.instIsOrderedAddMonoid
 
 中文:
 引理 instIsOrderedAddMonoid
-  结论: IsOrderedAddMonoid (Matrix n n 𝕜) where
+  结论: 是OrderedAdd幺半群 (矩阵 n n 𝕜) where
   证明: by rwa [le_iff, add_sub_add_right_eq_sub]
 
 scoped[MatrixOrder] attribute [instance] Matrix.instIsOrderedAddMonoid
@@ -237,7 +237,7 @@ lemma instNonnegSpectrumClass
 
 中文:
 引理 instNonnegSpectrumClass
-  结论: NonnegSpectrumClass 实数 (Matrix n n 𝕜) where
+  结论: NonnegSpectrum类 实数 (矩阵 n n 𝕜) where
   证明: by
     classical
     simp only [quasispectrum_eq_spectrum_union_zero Real A, Set.union_singleton, Set.mem_insert_iff,
@@ -277,7 +277,7 @@ lemma instStarOrderedRing
 
 中文:
 引理 instStarOrderedRing
-  结论: StarOrderedRing (Matrix n n 𝕜)
+  结论: StarOrdered环 (矩阵 n n 𝕜)
   证明: .of_nonneg_iff' add_le_add_right fun A =>
     ⟨fun hA => by
       classical
@@ -351,7 +351,7 @@ theorem dotProduct_mulVec_zero_iff
 
 中文:
 定理 dotProduct_mulVec_zero_iff
-  条件: {A : Matrix n n 𝕜} (hA : PosSemidef A) (x : n -> 𝕜)
+  条件: {A : 矩阵 n n 𝕜} (hA : PosSemidef A) (x : n -> 𝕜)
   证明: by
   classical
   refine ⟨fun h => ?_, fun h => h ▸ dotProduct_zero _⟩
@@ -406,7 +406,7 @@ theorem det_sqrt
 
 中文:
 定理 det_sqrt
-  条件: [DecidableEq n] {A : Matrix n n 𝕜} (hA : A.PosSemidef)
+  条件: [DecidableEq n] {A : 矩阵 n n 𝕜} (hA : A.PosSemidef)
   证明: by
   rw [CFC.sqrt_eq_cfc]; rw [cfc_nnreal_eq_real _ A]; rw [hA.1.cfc_eq]; rw [RCLike.sqrt_of_nonneg hA.det_nonneg]
   simp only [IsHermitian.cfc, Real.coe_sqrt, Real.coe_toNNReal', det_map, det_diagonal,
@@ -437,7 +437,7 @@ theorem IsHermitian.det_abs
 
 中文:
 定理 IsHermitian.det_abs
-  条件: [DecidableEq n] {A : Matrix n n 𝕜} (hA : A.IsHermitian)
+  条件: [DecidableEq n] {A : 矩阵 n n 𝕜} (hA : A.IsHermitian)
   证明: by
   rw [CFC.abs_eq_cfc_norm A]; rw [hA.cfc_eq]
   simp [IsHermitian.cfc, -Unitary.conjStarAlgAut_apply, hA.det_eq_prod_eigenvalues]
@@ -465,7 +465,7 @@ theorem posSemidef_iff_isHermitian_and_spectrum_nonneg
 
 中文:
 定理 posSemidef_iff_isHermitian_and_spectrum_nonneg
-  条件: [DecidableEq n] {A : Matrix n n 𝕜}
+  条件: [DecidableEq n] {A : 矩阵 n n 𝕜}
   证明: by
   refine ⟨fun h => ⟨h.isHermitian, fun a => ?_⟩, fun ⟨h1, h2⟩ => ?_⟩
   · simp only [h.isHermitian.spectrum_eq_image_range, Set.mem_image, Set.mem_range,
@@ -503,7 +503,7 @@ theorem PosSemidef.posDef_iff_isUnit
 
 中文:
 定理 PosSemidef.posDef_iff_isUnit
-  结论: [DecidableEq n] {x : Matrix n n 𝕜}
+  结论: [DecidableEq n] {x : 矩阵 n n 𝕜}
   证明: by
   refine ⟨fun h => h.isUnit, fun h => .of_dotProduct_mulVec_pos hx.1 fun v hv => ?_⟩
   obtain ⟨y, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hx.nonneg
@@ -534,7 +534,7 @@ alias ⟨IsStrictlyPositive.posDef, PosDef.isStrictlyPositive⟩ := isStrictlyPo
 
 中文:
 定理 isStrictlyPositive_iff_posDef
-  条件: [DecidableEq n] {x : Matrix n n 𝕜}
+  条件: [DecidableEq n] {x : 矩阵 n n 𝕜}
   证明: ⟨fun h => h.nonneg.posSemidef.posDef_iff_isUnit.mpr h.isUnit,
   fun h => h.isUnit.isStrictlyPositive h.posSemidef.nonneg⟩
 
@@ -562,7 +562,7 @@ lemma PosSemidef.posDef_iff_det_ne_zero
 
 中文:
 引理 PosSemidef.posDef_iff_det_ne_zero
-  条件: [DecidableEq n] {A : Matrix n n 𝕜} (hA : A.PosSemidef)
+  条件: [DecidableEq n] {A : 矩阵 n n 𝕜} (hA : A.PosSemidef)
   证明: by
   simp [hA.posDef_iff_isUnit, isUnit_iff_isUnit_det]
 
@@ -595,7 +595,7 @@ theorem PosSemidef.kronecker
 
 中文:
 定理 PosSemidef.kronecker
-  结论: {x : Matrix n n 𝕜} {y : Matrix m m 𝕜}
+  结论: {x : 矩阵 n n 𝕜} {y : 矩阵 m m 𝕜}
   证明: by
   classical
   have := Fintype.ofFinite n; have := Fintype.ofFinite m
@@ -629,7 +629,7 @@ theorem PosDef.kronecker
 
 中文:
 定理 PosDef.kronecker
-  结论: {x : Matrix n n 𝕜} {y : Matrix m m 𝕜}
+  结论: {x : 矩阵 n n 𝕜} {y : 矩阵 m m 𝕜}
   证明: by
   classical
   have := Fintype.ofFinite n; have := Fintype.ofFinite m
@@ -667,7 +667,7 @@ theorem PosSemidef.hadamard
 
 中文:
 定理 PosSemidef.hadamard
-  结论: {A B : Matrix ι ι 𝕜}
+  结论: {A B : 矩阵 ι ι 𝕜}
   证明: by
   classical
   refine ⟨hA.isHermitian.hadamard hB.isHermitian, fun x => ?_⟩
@@ -708,7 +708,7 @@ theorem PosDef.hadamard
 
 中文:
 定理 PosDef.hadamard
-  结论: {A B : Matrix ι ι 𝕜}
+  结论: {A B : 矩阵 ι ι 𝕜}
   证明: by
   classical
   refine ⟨hA.isHermitian.hadamard hB.isHermitian, fun x hx => ?_⟩
@@ -753,7 +753,7 @@ definition tracePositiveLinearMap
 
 中文:
 定义 tracePositiveLinearMap
-  签名: : Matrix n n 𝕜 ->ₚ[α] 𝕜
+  签名: : 矩阵 n n 𝕜 ->ₚ[α] 𝕜
   定义体: .mk₀ (traceLinearMap n α 𝕜) fun _ h => h.posSemidef.trace_nonneg
 
 Depends on / 依赖: h.posSemidef.trace_nonneg, posSemidef, traceLinearMap, trace_nonneg
@@ -810,7 +810,7 @@ abbreviation PosSemidef.matrixPreInnerProductSpace
 
 中文:
 缩写 PosSemidef.matrixPreInnerProductSpace
-  签名: {M : Matrix n n 𝕜} (hM : M.PosSemidef)
+  签名: {M : 矩阵 n n 𝕜} (hM : M.PosSemidef)
   定义体: (y * M * xᴴ).trace
   conj_inner_symm _ _ := by
     simp only [mul_assoc, starRingEnd_apply, ← trace_conjTranspose, conjTranspose_mul,
@@ -843,7 +843,7 @@ definition toMatrixSeminormedAddCommGroup
 
 中文:
 定义 toMatrixSeminormedAddCommGroup
-  签名: (M : Matrix n n 𝕜) (hM : M.PosSemidef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosSemidef)
   定义体: @InnerProductSpace.Core.toSeminormedAddCommGroup _ _ _ _ _ hM.matrixPreInnerProductSpace
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toSeminormedAddCommGroup, hM.matrixPreInnerProductSpace, matrixPreInnerProductSpace, toSeminormedAddCommGroup
@@ -874,7 +874,7 @@ definition toMatrixNormedAddCommGroup
 
 中文:
 定义 toMatrixNormedAddCommGroup
-  签名: (M : Matrix n n 𝕜) (hM : M.PosDef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosDef)
   定义体: letI : InnerProductSpace.Core 𝕜 (Matrix n n 𝕜) :=
   { __ := hM.posSemidef.matrixPreInnerProductSpace
     definite x hx := by
@@ -915,7 +915,7 @@ definition toMatrixInnerProductSpace
 
 中文:
 定义 toMatrixInnerProductSpace
-  签名: (M : Matrix n n 𝕜) (hM : M.PosSemidef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosSemidef)
   定义体: M.toMatrixSeminormedAddCommGroup hM
     InnerProductSpace 𝕜 (Matrix n n 𝕜) :=
   InnerProductSpace.ofCore _

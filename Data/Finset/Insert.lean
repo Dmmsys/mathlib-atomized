@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton α (Finset α)
+  签名: 单例 α (有限集 α)
   定义体: ⟨fun a => ⟨{a}, nodup_singleton a⟩⟩
 
 @[simp]
@@ -96,7 +96,7 @@ theorem singleton_val
 中文:
 定理 singleton_val
   条件: (a : α)
-  结论: ({a} : Finset α).1 = {a}
+  结论: ({a} : 有限集 α).1 = {a}
   证明: rfl
 
 @[simp, grind =]
@@ -117,7 +117,7 @@ theorem mem_singleton
 中文:
 定理 mem_singleton
   条件: {a b : α}
-  结论: b in ({a} : Finset α) ↔ b = a
+  结论: b in ({a} : 有限集 α) ↔ b = a
   证明: Multiset.mem_singleton
 
 Depends on / 依赖: Multiset, Multiset.mem_singleton, mem_singleton
@@ -136,7 +136,7 @@ theorem eq_of_mem_singleton
 
 中文:
 定理 eq_of_mem_singleton
-  条件: {x y : α} (h : x in ({y} : Finset α))
+  条件: {x y : α} (h : x in ({y} : 有限集 α))
   结论: x = y
   证明: mem_singleton.1 h
 
@@ -157,7 +157,7 @@ theorem notMem_singleton
 中文:
 定理 notMem_singleton
   条件: {a b : α}
-  结论: a ∉ ({b} : Finset α) ↔ a != b
+  结论: a ∉ ({b} : 有限集 α) ↔ a != b
   证明: not_congr mem_singleton
 
 Depends on / 依赖: mem_singleton, not_congr
@@ -179,7 +179,7 @@ theorem mem_singleton_self
 中文:
 定理 mem_singleton_self
   条件: (a : α)
-  结论: a in ({a} : Finset α)
+  结论: a in ({a} : 有限集 α)
   证明: mem_singleton.mpr rfl
 
 @[simp]
@@ -203,7 +203,7 @@ theorem val_eq_singleton_iff
 
 中文:
 定理 val_eq_singleton_iff
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: s.val = {a} ↔ s = {a}
   证明: by
   rw [← val_inj]
@@ -228,7 +228,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Injective (singleton : α -> Finset α)
+  结论: 单射 (singleton : α -> 有限集 α)
   证明: fun _a _b h =>
   mem_singleton.1 (h ▸ mem_singleton_self _)
 
@@ -250,7 +250,7 @@ theorem singleton_inj
 
 中文:
 定理 singleton_inj
-  结论: ({a} : Finset α) = {b} ↔ a = b
+  结论: ({a} : 有限集 α) = {b} ↔ a = b
   证明: singleton_injective.eq_iff
 
 @[simp, aesop safe apply (rule_sets := [finsetNonempty])]
@@ -275,7 +275,7 @@ theorem singleton_nonempty
 中文:
 定理 singleton_nonempty
   条件: (a : α)
-  结论: ({a} : Finset α).Nonempty
+  结论: ({a} : 有限集 α).非空
   证明: ⟨a, mem_singleton_self a⟩
 
 @[simp]
@@ -300,7 +300,7 @@ theorem singleton_ne_empty
 中文:
 定理 singleton_ne_empty
   条件: (a : α)
-  结论: ({a} : Finset α) != ∅
+  结论: ({a} : 有限集 α) != ∅
   证明: (singleton_nonempty a).ne_empty
 
 @[simp]
@@ -323,7 +323,7 @@ theorem empty_ne_singleton
 中文:
 定理 empty_ne_singleton
   条件: (a : α)
-  结论: ∅ != ({a} : Finset α)
+  结论: ∅ != ({a} : 有限集 α)
   证明: (singleton_ne_empty a).symm
 
 Depends on / 依赖: singleton_ne_empty
@@ -343,7 +343,7 @@ theorem empty_ssubset_singleton
 
 中文:
 定理 empty_ssubset_singleton
-  结论: (∅ : Finset α) ⊂ {a}
+  结论: (∅ : 有限集 α) ⊂ {a}
   证明: (singleton_nonempty _).empty_ssubset
 
 @[simp, norm_cast]
@@ -368,7 +368,7 @@ theorem coe_singleton
 中文:
 定理 coe_singleton
   条件: (a : α)
-  结论: (({a} : Finset α) : Set α) = {a}
+  结论: (({a} : 有限集 α) : 集合 α) = {a}
   证明: by grind
 
 @[simp, norm_cast]
@@ -389,8 +389,8 @@ theorem coe_eq_singleton
 
 中文:
 定理 coe_eq_singleton
-  条件: {s : Finset α} {a : α}
-  结论: (s : Set α) = {a} ↔ s = {a}
+  条件: {s : 有限集 α} {a : α}
+  结论: (s : 集合 α) = {a} ↔ s = {a}
   证明: by grind
 
 @[norm_cast]
@@ -410,7 +410,7 @@ lemma coe_subset_singleton
 
 中文:
 引理 coe_subset_singleton
-  结论: (s : Set α) subseteq {a} ↔ s subseteq {a}
+  结论: (s : 集合 α) subseteq {a} ↔ s subseteq {a}
   证明: by grind
 
 @[norm_cast]
@@ -428,7 +428,7 @@ lemma singleton_subset_coe
 
 中文:
 引理 singleton_subset_coe
-  结论: {a} subseteq (s : Set α) ↔ {a} subseteq s
+  结论: {a} subseteq (s : 集合 α) ↔ {a} subseteq s
   证明: by grind
 -/
 lemma singleton_subset_coe : {a} subseteq (s : Set α) ↔ {a} subseteq s := by grind
@@ -445,7 +445,7 @@ theorem eq_singleton_iff_unique_mem
 
 中文:
 定理 eq_singleton_iff_unique_mem
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: s = {a} ↔ a in s ∧ 对任意 x in s, x = a
   证明: by
   grind
@@ -464,7 +464,7 @@ theorem eq_singleton_iff_nonempty_unique_mem
 
 中文:
 定理 eq_singleton_iff_nonempty_unique_mem
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   证明: by
   grind [singleton_nonempty]
 
@@ -487,7 +487,7 @@ alias ⟨Nonempty.eq_singleton_default, _⟩ := nonempty_iff_eq_singleton_defaul
 
 中文:
 定理 nonempty_iff_eq_singleton_default
-  条件: [Unique α] {s : Finset α}
+  条件: [唯一 α] {s : 有限集 α}
   证明: by
   simp [eq_singleton_iff_nonempty_unique_mem, eq_iff_true_of_subsingleton]
 
@@ -513,7 +513,7 @@ theorem singleton_iff_unique_mem
 
 中文:
 定理 singleton_iff_unique_mem
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (存在 a, s = {a}) ↔ 存在! a, a in s
   证明: by
   simp only [eq_singleton_iff_unique_mem, ExistsUnique]
@@ -537,8 +537,8 @@ theorem singleton_subset_set_iff
 
 中文:
 定理 singleton_subset_set_iff
-  条件: {s : Set α} {a : α}
-  结论: ↑({a} : Finset α) subseteq s ↔ a in s
+  条件: {s : 集合 α} {a : α}
+  结论: ↑({a} : 有限集 α) subseteq s ↔ a in s
   证明: by
   grind
 
@@ -561,7 +561,7 @@ theorem singleton_subset_iff
 
 中文:
 定理 singleton_subset_iff
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: {a} subseteq s ↔ a in s
   证明: singleton_subset_set_iff
 
@@ -585,7 +585,7 @@ theorem subset_singleton_iff
 
 中文:
 定理 subset_singleton_iff
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: s subseteq {a} ↔ s = ∅ ∨ s = {a}
   证明: by
   grind
@@ -603,7 +603,7 @@ theorem singleton_subset_singleton
 
 中文:
 定理 singleton_subset_singleton
-  结论: ({a} : Finset α) subseteq {b} ↔ a = b
+  结论: ({a} : 有限集 α) subseteq {b} ↔ a = b
   证明: by simp
 -/
 theorem singleton_subset_singleton : ({a} : Finset α) subseteq {b} ↔ a = b := by simp
@@ -617,8 +617,8 @@ theorem Nonempty.subset_singleton_iff
   proof: subset_singleton_iff.trans or_iff_right h.ne_empty
 
 中文:
-定理 Nonempty.subset_singleton_iff
-  条件: {s : Finset α} {a : α} (h : s.Nonempty)
+定理 非空.subset_singleton_iff
+  条件: {s : 有限集 α} {a : α} (h : s.非空)
   证明: subset_singleton_iff.trans or_iff_right h.ne_empty
 -/
 protected theorem Nonempty.subset_singleton_iff {s : Finset α} {a : α} (h : s.Nonempty) :
@@ -638,7 +638,7 @@ theorem subset_singleton_iff'
 
 中文:
 定理 subset_singleton_iff'
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: s subseteq {a} ↔ 对任意 b in s, b = a
   证明: forall₂_congr fun _ _ => mem_singleton
 
@@ -661,7 +661,7 @@ theorem ssubset_singleton_iff
 
 中文:
 定理 ssubset_singleton_iff
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: s ⊂ {a} ↔ s = ∅
   证明: by grind
 -/
@@ -678,7 +678,7 @@ theorem eq_empty_of_ssubset_singleton
 
 中文:
 定理 eq_empty_of_ssubset_singleton
-  条件: {s : Finset α} {x : α} (hs : s ⊂ {x})
+  条件: {s : 有限集 α} {x : α} (hs : s ⊂ {x})
   结论: s = ∅
   证明: ssubset_singleton_iff.1 hs
 
@@ -698,8 +698,8 @@ abbreviation Nontrivial
 @[grind =]
 
 中文:
-缩写 Nontrivial
-  签名: (s : Finset α)
+缩写 非平凡
+  签名: (s : 有限集 α)
   定义体: (s : Set α).Nontrivial
 
 @[grind =]
@@ -722,8 +722,8 @@ nonrec lemma Nontrivial.nonempty (hs : s.Nontrivial) : s.Nonempty := hs.nonempty
 
 中文:
 定理 nontrivial_def
-  条件: {s : Finset α}
-  结论: s.Nontrivial ↔ 存在 a, a in s ∧ 存在 b, b in s ∧ a != b
+  条件: {s : 有限集 α}
+  结论: s.非平凡 ↔ 存在 a, a in s ∧ 存在 b, b in s ∧ a != b
   证明: Iff.rfl
 
 nonrec lemma Nontrivial.nonempty (hs : s.Nontrivial) : s.Nonempty := hs.nonempty
@@ -749,7 +749,7 @@ theorem not_nontrivial_empty
 
 中文:
 定理 not_nontrivial_empty
-  结论: ¬(∅ : Finset α).Nontrivial
+  结论: ¬(∅ : 有限集 α).非平凡
   证明: by simp [Finset.Nontrivial]
 
 @[simp]
@@ -769,7 +769,7 @@ theorem not_nontrivial_singleton
 
 中文:
 定理 not_nontrivial_singleton
-  结论: ¬({a} : Finset α).Nontrivial
+  结论: ¬({a} : 有限集 α).非平凡
   证明: by simp [Finset.Nontrivial]
 
 Depends on / 依赖: Finset, Finset.Nontrivial, Nontrivial
@@ -789,8 +789,8 @@ theorem Nontrivial.ne_singleton
 nonrec lemma Nontrivial.exists_ne (hs : s.Nontrivial) (a : α) : exists b in s, b != a := hs.exists_ne _
 
 中文:
-定理 Nontrivial.ne_singleton
-  条件: (hs : s.Nontrivial)
+定理 非平凡.ne_singleton
+  条件: (hs : s.非平凡)
   结论: s != {a}
   证明: by
   rintro rfl; exact not_nontrivial_singleton hs
@@ -817,7 +817,7 @@ theorem eq_singleton_or_nontrivial
 中文:
 定理 eq_singleton_or_nontrivial
   条件: (ha : a in s)
-  结论: s = {a} ∨ s.Nontrivial
+  结论: s = {a} ∨ s.非平凡
   证明: by
   rw [← coe_eq_singleton]; exact Set.eq_singleton_or_nontrivial ha
 
@@ -838,7 +838,7 @@ theorem nontrivial_iff_ne_singleton
 中文:
 定理 nontrivial_iff_ne_singleton
   条件: (ha : a in s)
-  结论: s.Nontrivial ↔ s != {a}
+  结论: s.非平凡 ↔ s != {a}
   证明: ⟨Nontrivial.ne_singleton, (eq_singleton_or_nontrivial ha).resolve_left⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.ne_singleton, eq_singleton_or_nontrivial, ne_singleton, resolve_left
@@ -855,8 +855,8 @@ theorem Nonempty.exists_eq_singleton_or_nontrivial
   proof: fun ⟨a, ha⟩ => (eq_singleton_or_nontrivial ha).imp_left Exists.intro a
 
 中文:
-定理 Nonempty.exists_eq_singleton_or_nontrivial
-  结论: s.Nonempty -> (存在 a, s = {a}) ∨ s.Nontrivial
+定理 非空.存在_eq_singleton_or_nontrivial
+  结论: s.非空 -> (存在 a, s = {a}) ∨ s.非平凡
   证明: fun ⟨a, ha⟩ => (eq_singleton_or_nontrivial ha).imp_left Exists.intro a
 
 Depends on / 依赖: Exists, Exists.intro, eq_singleton_or_nontrivial, imp_left
@@ -876,7 +876,7 @@ alias ⟨Nontrivial.of_coe, Nontrivial.coe⟩ := nontrivial_coe
 
 中文:
 引理 nontrivial_coe
-  结论: (s : Set α).Nontrivial ↔ s.Nontrivial
+  结论: (s : 集合 α).非平凡 ↔ s.非平凡
   证明: .rfl
 
 alias ⟨Nontrivial.of_coe, Nontrivial.coe⟩ := nontrivial_coe
@@ -895,8 +895,8 @@ lemma Nontrivial.not_subset_singleton
   proof: mod_cast hs.coe.not_subset_singleton
 
 中文:
-引理 Nontrivial.not_subset_singleton
-  条件: (hs : s.Nontrivial)
+引理 非平凡.not_subset_singleton
+  条件: (hs : s.非平凡)
   结论: ¬s subseteq {a}
   证明: mod_cast hs.coe.not_subset_singleton
 
@@ -915,7 +915,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: ‹Nonempty α›.elim fun a => ⟨⟨{a}, ∅, singleton_ne_empty _⟩⟩
 
 Depends on / 依赖: Nonempty, singleton_ne_empty
@@ -933,8 +933,8 @@ instance [IsEmpty
   uniq _ := eq_empty_of_forall_notMem isEmptyElim
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (Finset α) where
+实例 [是空
+  签名: α] : 唯一 (有限集 α) where
   定义体: ∅
   uniq _ := eq_empty_of_forall_notMem isEmptyElim
 -/
@@ -959,7 +959,7 @@ lemma default_singleton
 中文:
 引理 default_singleton
   条件: (i : α)
-  结论: ((default : ({i} : Finset α)) : α) = i
+  结论: ((default : ({i} : 有限集 α)) : α) = i
   证明: rfl
 -/
 lemma default_singleton (i : α) : ((default : ({i} : Finset α)) : α) = i := rfl
@@ -981,8 +981,8 @@ instance Nontrivial.instDecidablePred
       | [] => 
 
 中文:
-实例 Nontrivial.instDecidablePred
-  签名: : DecidablePred (Finset.Nontrivial (α := α))
+实例 非平凡.instDecidablePred
+  签名: : DecidablePred (有限集.非平凡 (α := α))
   定义体: fun s =>
   /-
   We don't use `Finset.one_lt_card_iff_nontrivial`
@@ -1027,7 +1027,7 @@ definition cons
 
 中文:
 定义 cons
-  签名: (a : α) (s : Finset α) (h : a ∉ s)
+  签名: (a : α) (s : 有限集 α) (h : a ∉ s)
   定义体: ⟨a ::ₘ s.1, nodup_cons.2 ⟨h, s.2⟩⟩
 
 @[simp, grind =]
@@ -1069,7 +1069,7 @@ theorem mem_cons_of_mem
 
 中文:
 定理 mem_cons_of_mem
-  条件: {a b : α} {s : Finset α} {hb : b ∉ s} (ha : a in s)
+  条件: {a b : α} {s : 有限集 α} {hb : b ∉ s} (ha : a in s)
   结论: a in cons b s hb
   证明: Multiset.mem_cons_of_mem ha
 
@@ -1091,7 +1091,7 @@ theorem mem_cons_self
 
 中文:
 定理 mem_cons_self
-  条件: (a : α) (s : Finset α) {h}
+  条件: (a : α) (s : 有限集 α) {h}
   结论: a in cons a s h
   证明: Multiset.mem_cons_self _ _
 
@@ -1151,7 +1151,7 @@ theorem mem_of_mem_cons_of_ne
 
 中文:
 定理 mem_of_mem_cons_of_ne
-  结论: {s : Finset α} {a : α} {has} {i : α}
+  结论: {s : 有限集 α} {a : α} {has} {i : α}
   证明: (mem_cons.1 hi).resolve_left hia
 
 Depends on / 依赖: mem_cons, resolve_left
@@ -1170,7 +1170,7 @@ theorem forall_mem_cons
   grind
 
 中文:
-定理 forall_mem_cons
+定理 对任意_mem_cons
   条件: (h : a ∉ s) (p : α -> 命题)
   证明: by
   grind
@@ -1190,7 +1190,7 @@ theorem forall_of_forall_cons
 @[simp]
 
 中文:
-定理 forall_of_forall_cons
+定理 对任意_of_对任意_cons
   结论: {p : α -> 命题} {h : a ∉ s} (H : 对任意 x, x in cons a s h -> p x) (x)
   证明: H _ mem_cons.2 Or.inr h
 
@@ -1259,7 +1259,7 @@ theorem cons_nonempty
 中文:
 定理 cons_nonempty
   条件: (h : a ∉ s)
-  结论: (cons a s h).Nonempty
+  结论: (cons a s h).非空
   证明: ⟨a, mem_cons.2 Or.inl rfl⟩
 
 Depends on / 依赖: Or.inl, mem_cons
@@ -1301,7 +1301,7 @@ theorem nonempty_mk
 中文:
 定理 nonempty_mk
   条件: {m : Multiset α} {hm}
-  结论: (⟨m, hm⟩ : Finset α).Nonempty ↔ m != 0
+  结论: (⟨m, hm⟩ : 有限集 α).非空 ↔ m != 0
   证明: by
   induction m using Multiset.induction_on <;> simp
 
@@ -1327,7 +1327,7 @@ theorem coe_cons
 中文:
 定理 coe_cons
   条件: {a s h}
-  结论: (@cons α a s h : Set α) = insert a (s : Set α)
+  结论: (@cons α a s h : 集合 α) = insert a (s : 集合 α)
   证明: by
   ext
   simp
@@ -1433,7 +1433,7 @@ theorem ssubset_iff_exists_cons_subset
   grind
 
 中文:
-定理 ssubset_iff_exists_cons_subset
+定理 ssubset_iff_存在_cons_subset
   结论: s ⊂ t ↔ 存在 (a : _) (h : a ∉ s), s.cons a h subseteq t
   证明: by
   grind
@@ -1518,7 +1518,7 @@ definition consPiProdEquiv
 
 中文:
 定义 consPiProdEquiv
-  签名: [DecidableEq α] {s : Finset α} (f : α -> 类型) {a : α} (has : a ∉ s)
+  签名: [DecidableEq α] {s : 有限集 α} (f : α -> 类型) {a : α} (has : a ∉ s)
   定义体: consPiProd f has
   invFun := prodPiCons f has
   left_inv _ := by grind [prodPiCons, consPiProd]
@@ -1555,7 +1555,7 @@ instance :
 
 中文:
 实例 :
-  签名: Insert α (Finset α)
+  签名: Insert α (有限集 α)
   定义体: ⟨fun a s => ⟨_, s.2.ndinsert a⟩⟩
 
 Depends on / 依赖: ndinsert
@@ -1576,7 +1576,7 @@ theorem insert_def
 
 中文:
 定理 insert_def
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: insert a s = ⟨_, s.2.ndinsert a⟩
   证明: rfl
 
@@ -1597,7 +1597,7 @@ theorem insert_val
 
 中文:
 定理 insert_val
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (insert a s).1 = ndinsert a s.1
   证明: rfl
 -/
@@ -1616,7 +1616,7 @@ theorem insert_val'
 
 中文:
 定理 insert_val'
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (insert a s).1 = dedup (a ::ₘ s.1)
   证明: by
   rw [dedup_cons]; rw [dedup_eq_self]; rfl
@@ -1640,7 +1640,7 @@ theorem insert_val_of_notMem
 
 中文:
 定理 insert_val_of_notMem
-  条件: {a : α} {s : Finset α} (h : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
   结论: (insert a s).1 = a ::ₘ s.1
   证明: by
   rw [insert_val]; rw [ndinsert_of_notMem h]
@@ -1682,7 +1682,7 @@ theorem mem_insert_self
 
 中文:
 定理 mem_insert_self
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: a in insert a s
   证明: mem_ndinsert_self a s.1
 
@@ -1763,7 +1763,7 @@ lemma insert_empty
 
 中文:
 引理 insert_empty
-  结论: insert a (∅ : Finset α) = {a}
+  结论: insert a (∅ : 有限集 α) = {a}
   证明: rfl
 
 @[simp, grind =]
@@ -1805,8 +1805,8 @@ theorem coe_insert
 
 中文:
 定理 coe_insert
-  条件: (a : α) (s : Finset α)
-  结论: ↑(insert a s) = (insert a s : Set α)
+  条件: (a : α) (s : 有限集 α)
+  结论: ↑(insert a s) = (insert a s : 集合 α)
   证明: by grind
 -/
 theorem coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (insert a s : Set α) := by grind
@@ -1823,8 +1823,8 @@ theorem mem_insert_coe
 
 中文:
 定理 mem_insert_coe
-  条件: {s : Finset α} {x y : α}
-  结论: x in insert y s ↔ x in insert y (s : Set α)
+  条件: {s : 有限集 α} {x y : α}
+  结论: x in insert y s ↔ x in insert y (s : 集合 α)
   证明: by
   simp
 -/
@@ -1843,7 +1843,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulSingleton α (Finset α)
+  签名: LawfulSingleton α (有限集 α)
   定义体: ⟨fun a => by simp⟩
 
 @[simp, grind =]
@@ -1922,7 +1922,7 @@ theorem pair_eq_singleton
 中文:
 定理 pair_eq_singleton
   条件: (a : α)
-  结论: ({a, a} : Finset α) = {a}
+  结论: ({a, a} : 有限集 α) = {a}
   证明: insert_eq_of_mem mem_singleton_self _
 
 Depends on / 依赖: insert_eq_of_mem, mem_singleton_self
@@ -1944,7 +1944,7 @@ theorem insert_comm
 
 中文:
 定理 insert_comm
-  条件: (a b : α) (s : Finset α)
+  条件: (a b : α) (s : 有限集 α)
   结论: insert a (insert b s) = insert b (insert a s)
   证明: by
   grind
@@ -1969,7 +1969,7 @@ theorem coe_pair
 中文:
 定理 coe_pair
   条件: {a b : α}
-  结论: (({a, b} : Finset α) : Set α) = {a, b}
+  结论: (({a, b} : 有限集 α) : 集合 α) = {a, b}
   证明: by grind
 
 @[simp, norm_cast]
@@ -1989,8 +1989,8 @@ theorem coe_eq_pair
 
 中文:
 定理 coe_eq_pair
-  条件: {s : Finset α} {a b : α}
-  结论: (s : Set α) = {a, b} ↔ s = {a, b}
+  条件: {s : 有限集 α} {a b : α}
+  结论: (s : 集合 α) = {a, b} ↔ s = {a, b}
   证明: by
   rw [← coe_pair]; rw [coe_inj]
 
@@ -2011,7 +2011,7 @@ theorem pair_comm
 中文:
 定理 pair_comm
   条件: (a b : α)
-  结论: ({a, b} : Finset α) = {b, a}
+  结论: ({a, b} : 有限集 α) = {b, a}
   证明: insert_comm a b ∅
 
 Depends on / 依赖: insert_comm
@@ -2032,7 +2032,7 @@ theorem insert_idem
 
 中文:
 定理 insert_idem
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: insert a (insert a s) = insert a s
   证明: by grind
 
@@ -2054,8 +2054,8 @@ theorem insert_nonempty
 
 中文:
 定理 insert_nonempty
-  条件: (a : α) (s : Finset α)
-  结论: (insert a s).Nonempty
+  条件: (a : α) (s : 有限集 α)
+  结论: (insert a s).非空
   证明: ⟨a, mem_insert_self a s⟩
 
 @[simp]
@@ -2077,7 +2077,7 @@ theorem insert_ne_empty
 
 中文:
 定理 insert_ne_empty
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: insert a s != ∅
   证明: (insert_nonempty a s).ne_empty
 
@@ -2102,7 +2102,7 @@ theorem ne_insert_of_notMem
 
 中文:
 定理 ne_insert_of_notMem
-  条件: (s t : Finset α) {a : α} (h : a ∉ s)
+  条件: (s t : 有限集 α) {a : α} (h : a ∉ s)
   结论: s != insert a t
   证明: by
   contrapose h
@@ -2162,7 +2162,7 @@ theorem subset_insert
 
 中文:
 定理 subset_insert
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: s subseteq insert a s
   证明: fun _b => mem_insert_of_mem
 
@@ -2183,7 +2183,7 @@ theorem insert_subset_insert
 
 中文:
 定理 insert_subset_insert
-  条件: (a : α) {s t : Finset α} (h : s subseteq t)
+  条件: (a : α) {s t : 有限集 α} (h : s subseteq t)
   结论: insert a s subseteq insert a t
   证明: by
   grind
@@ -2243,8 +2243,8 @@ theorem insert_inj_on
 
 中文:
 定理 insert_inj_on
-  条件: (s : Finset α)
-  结论: Set.InjOn (fun a => insert a s) sᶜ
+  条件: (s : 有限集 α)
+  结论: 集合.单射限制 (fun a => insert a s) sᶜ
   证明: fun _ h _ _ =>
   (insert_inj h).1
 -/
@@ -2302,7 +2302,7 @@ theorem cons_induction
 
 中文:
 定理 cons_induction
-  结论: {α : 类型} {motive : Finset α -> 命题} (empty : motive ∅)
+  结论: {α : 类型} {motive : 有限集 α -> 命题} (empty : motive ∅)
 -/
 theorem cons_induction {α : Type*} {motive : Finset α -> Prop} (empty : motive ∅)
     (cons : forall (a : α) (s : Finset α) (h : a ∉ s), motive s -> motive (cons a s h)) : forall s, motive s
@@ -2326,7 +2326,7 @@ theorem cons_induction_on
 
 中文:
 定理 cons_induction_on
-  结论: {α : 类型} {motive : Finset α -> 命题} (s : Finset α) (empty : motive ∅)
+  结论: {α : 类型} {motive : 有限集 α -> 命题} (s : 有限集 α) (empty : motive ∅)
   证明: cons_induction empty cons s
 
 @[elab_as_elim]
@@ -2348,7 +2348,7 @@ theorem induction
 
 中文:
 定理 induction
-  结论: {α : 类型} {motive : Finset α -> 命题} [DecidableEq α]
+  结论: {α : 类型} {motive : 有限集 α -> 命题} [DecidableEq α]
   证明: cons_induction empty fun a s ha => (s.cons_eq_insert a ha).symm ▸ insert a s ha
 -/
 protected theorem induction {α : Type*} {motive : Finset α -> Prop} [DecidableEq α]
@@ -2372,7 +2372,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {α : 类型} {motive : Finset α -> 命题} [DecidableEq α] (s : Finset α)
+  结论: {α : 类型} {motive : 有限集 α -> 命题} [DecidableEq α] (s : 有限集 α)
   证明: Finset.induction empty insert s
 -/
 protected theorem induction_on {α : Type*} {motive : Finset α -> Prop} [DecidableEq α] (s : Finset α)
@@ -2400,7 +2400,7 @@ theorem induction_on'
 
 中文:
 定理 induction_on'
-  结论: {α : 类型} {motive : Finset α -> 命题} [DecidableEq α] (S : Finset α)
+  结论: {α : 类型} {motive : 有限集 α -> 命题} [DecidableEq α] (S : 有限集 α)
   证明: @Finset.induction_on α (fun T => T subseteq S -> motive T) _ S (fun _ => empty)
     (fun a s has hqs hs =>
       let ⟨hS, sS⟩ := Finset.insert_subset_iff.1 hs
@@ -2437,8 +2437,8 @@ theorem Nonempty.cons_induction
     · exact cons a t ha ht (h ht)
 
 中文:
-定理 Nonempty.cons_induction
-  结论: {α : 类型} {motive : 对任意 s : Finset α, s.Nonempty -> 命题}
+定理 非空.cons_induction
+  结论: {α : 类型} {motive : 对任意 s : 有限集 α, s.非空 -> 命题}
   证明: by
   induction s using Finset.cons_induction with
   | empty => exact (not_nonempty_empty hs).elim
@@ -2471,8 +2471,8 @@ lemma Nonempty.exists_cons_eq
   proof: hs.cons_induction (fun a => ⟨∅, a, _, cons_empty _⟩) fun _ _ _ _ _ => ⟨_, _, _, rfl⟩
 
 中文:
-引理 Nonempty.exists_cons_eq
-  条件: {α} {s : Finset α} (hs : s.Nonempty)
+引理 非空.存在_cons_eq
+  条件: {α} {s : 有限集 α} (hs : s.非空)
   结论: 存在 t a ha, cons a t ha = s
   证明: hs.cons_induction (fun a => ⟨∅, a, _, cons_empty _⟩) fun _ _ _ _ _ => ⟨_, _, _, rfl⟩
 
@@ -2494,7 +2494,7 @@ definition subtypeInsertEquivOption
 
 中文:
 定义 subtypeInsertEquivOption
-  签名: {t : Finset α} {x : α} (h : x ∉ t)
+  签名: {t : 有限集 α} {x : α} (h : x ∉ t)
   定义体: if h : ↑y = x then none else some ⟨y, (mem_insert.mp y.2).resolve_left h⟩
   invFun y := (y.elim ⟨x, mem_insert_self _ _⟩) fun z => ⟨z, mem_insert_of_mem z.2⟩
   left_inv y := by grind
@@ -2563,7 +2563,7 @@ definition insertPiProdEquiv
 
 中文:
 定义 insertPiProdEquiv
-  签名: {s : Finset α} (f : α -> 类型) {a : α} (has : a ∉ s)
+  签名: {s : 有限集 α} (f : α -> 类型) {a : α} (has : a ∉ s)
   定义体: insertPiProd f
   invFun := prodPiInsert f
   left_inv _ := by grind [prodPiInsert, insertPiProd]
@@ -2588,8 +2588,8 @@ theorem exists_mem_insert
   proof: by grind
 
 中文:
-定理 exists_mem_insert
-  条件: (a : α) (s : Finset α) (p : α -> 命题)
+定理 存在_mem_insert
+  条件: (a : α) (s : 有限集 α) (p : α -> 命题)
   证明: by grind
 -/
 theorem exists_mem_insert (a : α) (s : Finset α) (p : α -> Prop) :
@@ -2604,8 +2604,8 @@ theorem forall_mem_insert
   proof: by grind
 
 中文:
-定理 forall_mem_insert
-  条件: (a : α) (s : Finset α) (p : α -> 命题)
+定理 对任意_mem_insert
+  条件: (a : α) (s : 有限集 α) (p : α -> 命题)
   证明: by grind
 -/
 theorem forall_mem_insert (a : α) (s : Finset α) (p : α -> Prop) :
@@ -2620,8 +2620,8 @@ theorem forall_of_forall_insert
   proof: H _ mem_insert_of_mem h
 
 中文:
-定理 forall_of_forall_insert
-  结论: {p : α -> 命题} {a : α} {s : Finset α}
+定理 对任意_of_对任意_insert
+  结论: {p : α -> 命题} {a : α} {s : 有限集 α}
   证明: H _ mem_insert_of_mem h
 
 Depends on / 依赖: mem_insert_of_mem
@@ -2796,7 +2796,7 @@ theorem toFinset_eq_empty_iff
 
 中文:
 定理 toFinset_eq_empty_iff
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l.toFinset = ∅ ↔ l = nil
   证明: by
   cases l <;> simp
@@ -2819,8 +2819,8 @@ theorem toFinset_nonempty_iff
 
 中文:
 定理 toFinset_nonempty_iff
-  条件: (l : List α)
-  结论: l.toFinset.Nonempty ↔ l != []
+  条件: (l : 列表 α)
+  结论: l.toFinset.非空 ↔ l != []
   证明: by
   simp [Finset.nonempty_iff_ne_empty]
 
@@ -2850,7 +2850,7 @@ theorem toList_eq_singleton_iff
 
 中文:
 定理 toList_eq_singleton_iff
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: s.toList = [a] ↔ s = {a}
   证明: by
   rw [toList]; rw [Multiset.toList_eq_singleton_iff]; rw [val_eq_singleton_iff]
@@ -2873,7 +2873,7 @@ theorem toList_singleton
 
 中文:
 定理 toList_singleton
-  结论: 对任意 a, ({a} : Finset α).toList = [a]
+  结论: 对任意 a, ({a} : 有限集 α).toList = [a]
   证明: Multiset.toList_singleton
 
 Depends on / 依赖: Multiset, Multiset.toList_singleton, toList_singleton
@@ -2894,7 +2894,7 @@ theorem toList_cons
 
 中文:
 定理 toList_cons
-  条件: {a : α} {s : Finset α} (h : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
   结论: (cons a s h).toList ~ a :: s.toList
   证明: (List.perm_ext_iff_of_nodup (nodup_toList _) (by simp [h, nodup_toList s])).2 fun x => by
     simp only [List.mem_cons, Finset.mem_toList, Finset.mem_cons]
@@ -2916,7 +2916,7 @@ theorem toList_insert
 
 中文:
 定理 toList_insert
-  条件: [DecidableEq α] {a : α} {s : Finset α} (h : a ∉ s)
+  条件: [DecidableEq α] {a : α} {s : 有限集 α} (h : a ∉ s)
   证明: cons_eq_insert _ _ h ▸ toList_cons _
 
 Depends on / 依赖: cons_eq_insert, toList_cons

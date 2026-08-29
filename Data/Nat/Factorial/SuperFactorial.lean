@@ -133,7 +133,7 @@ theorem prod_Icc_factorial
 
 中文:
 定理 prod_Icc_factorial
-  结论: 对任意 n : 自然数, ∏ x in Icc 1 n, x ! = sf n
+  结论: 对任意 n : 自然数, ∏ x in 闭区间 1 n, x ! = sf n
 -/
 theorem prod_Icc_factorial : forall n : Nat, ∏ x in Icc 1 n, x ! = sf n
   | 0 => rfl

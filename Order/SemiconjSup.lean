@@ -51,7 +51,7 @@ definition IsOrderRightAdjoint
 
 中文:
 定义 IsOrderRightAdjoint
-  签名: [Preorder α] [Preorder β] (f : α -> β) (g : β -> α)
+  签名: [预序 α] [预序 β] (f : α -> β) (g : β -> α)
   定义体: forall y, IsLUB { x | f x <= y } (g y)
 -/
 def IsOrderRightAdjoint [Preorder α] [Preorder β] (f : α -> β) (g : β -> α) :=
@@ -67,7 +67,7 @@ theorem isOrderRightAdjoint_sSup
 
 中文:
 定理 isOrderRightAdjoint_sSup
-  条件: [CompleteSemilatticeSup α] [Preorder β] (f : α -> β)
+  条件: [余mpleteSemilatticeSup α] [预序 β] (f : α -> β)
   证明: fun _ => isLUB_sSup _
 
 Depends on / 依赖: isLUB_sSup
@@ -85,7 +85,7 @@ theorem isOrderRightAdjoint_csSup
 
 中文:
 定理 isOrderRightAdjoint_csSup
-  结论: [ConditionallyCompleteLattice α] [Preorder β] (f : α -> β)
+  结论: [条件完备格 α] [预序 β] (f : α -> β)
   证明: fun y => isLUB_csSup (hne y) (hbdd y)
 
 Depends on / 依赖: isLUB_csSup
@@ -106,7 +106,7 @@ theorem unique
 
 中文:
 定理 unique
-  结论: [PartialOrder α] [Preorder β] {f : α -> β} {g₁ g₂ : β -> α}
+  结论: [偏序 α] [预序 β] {f : α -> β} {g₁ g₂ : β -> α}
   证明: funext fun y => (h₁ y).unique (h₂ y)
 -/
 protected theorem unique [PartialOrder α] [Preorder β] {f : α -> β} {g₁ g₂ : β -> α}
@@ -123,7 +123,7 @@ theorem right_mono
 
 中文:
 定理 right_mono
-  条件: [Preorder α] [Preorder β] {f : α -> β} {g : β -> α} (h : IsOrderRightAdjoint f g)
+  条件: [预序 α] [预序 β] {f : α -> β} {g : β -> α} (h : IsOrderRightAdjoint f g)
   证明: fun y₁ y₂ hy => ((h y₁).mono (h y₂)) fun _ hx => le_trans hx hy
 
 Depends on / 依赖: le_trans
@@ -141,7 +141,7 @@ theorem orderIso_comp
 
 中文:
 定理 orderIso_comp
-  结论: [Preorder α] [Preorder β] [Preorder γ] {f : α -> β} {g : β -> α}
+  结论: [预序 α] [预序 β] [预序 γ] {f : α -> β} {g : β -> α}
   证明: fun y => by simpa [e.le_symm_apply] using h (e.symm y)
 
 Depends on / 依赖: e.le_symm_apply, e.symm, le_symm_apply
@@ -164,7 +164,7 @@ theorem comp_orderIso
 
 中文:
 定理 comp_orderIso
-  结论: [Preorder α] [Preorder β] [Preorder γ] {f : α -> β} {g : β -> α}
+  结论: [预序 α] [预序 β] [预序 γ] {f : α -> β} {g : β -> α}
   证明: by
   intro y
   change IsLUB (e ⁻¹' { x | f x <= y }) (e.symm (g y))
@@ -197,7 +197,7 @@ theorem Semiconj.symm_adjoint
 
 中文:
 定理 Semiconj.symm_adjoint
-  结论: [PartialOrder α] [Preorder β] {fa : α ≃o α} {fb : β ↪o β} {g : α -> β}
+  结论: [偏序 α] [预序 β] {fa : α ≃o α} {fb : β ↪o β} {g : α -> β}
   证明: by
   refine fun y => (hg' _).unique ?_
   rw [← fa.surjective.image_preimage { x | g x <= fb y }]; rw [preimage_ofPred_eq]
@@ -228,7 +228,7 @@ theorem semiconj_of_isLUB
 
 中文:
 定理 semiconj_of_isLUB
-  结论: [PartialOrder α] [Group G] (f₁ f₂ : G ->* α ≃o α) {h : α -> α}
+  结论: [偏序 α] [群 G] (f₁ f₂ : G ->* α ≃o α) {h : α -> α}
   证明: by
   refine fun y => (H _).unique ?_
   have := (f₁ g).isLUB_image'.mpr (H y)
@@ -255,7 +255,7 @@ theorem sSup_div_semiconj
 
 中文:
 定理 sSup_div_semiconj
-  条件: [CompleteLattice α] [Group G] (f₁ f₂ : G ->* α ≃o α) (g : G)
+  条件: [完备格 α] [群 G] (f₁ f₂ : G ->* α ≃o α) (g : G)
   证明: semiconj_of_isLUB f₁ f₂ (fun _ => isLUB_iSup) _
 
 Depends on / 依赖: isLUB_iSup, semiconj_of_isLUB
@@ -274,7 +274,7 @@ theorem csSup_div_semiconj
 
 中文:
 定理 csSup_div_semiconj
-  结论: [ConditionallyCompleteLattice α] [Group G] (f₁ f₂ : G ->* α ≃o α)
+  结论: [条件完备格 α] [群 G] (f₁ f₂ : G ->* α ≃o α)
   证明: semiconj_of_isLUB f₁ f₂ (fun x => isLUB_csSup (range_nonempty _) (hbdd x)) _
 
 Depends on / 依赖: isLUB_csSup, range_nonempty, semiconj_of_isLUB

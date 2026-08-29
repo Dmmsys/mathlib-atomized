@@ -52,7 +52,7 @@ definition mkFinCons
 
 中文:
 定义 mkFinCons
-  签名: {n : 自然数} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
+  签名: {n : 自然数} {N : 子模 R M} (y : M) (b : 基 (有限集 n) R N)
   定义体: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.cons y (N.subtype ∘ b))
@@ -87,7 +87,7 @@ theorem coe_mkFinCons
 
 中文:
 定理 coe_mkFinCons
-  结论: {n : 自然数} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
+  结论: {n : 自然数} {N : 子模 R M} (y : M) (b : 基 (有限集 n) R N)
   证明: by
   unfold mkFinCons
   exact coe_mk (v := Fin.cons y (N.subtype ∘ b)) _ _
@@ -114,7 +114,7 @@ definition mkFinConsOfLE
 
 中文:
 定义 mkFinConsOfLE
-  签名: {n : 自然数} {N O : Submodule R M} (y : M) (yO : y in O)
+  签名: {n : 自然数} {N O : 子模 R M} (y : M) (yO : y in O)
   定义体: mkFinCons ⟨y, yO⟩ (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm)
     (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
     fun z => hsp z z.2
@@ -141,7 +141,7 @@ theorem coe_mkFinConsOfLE
 
 中文:
 定理 coe_mkFinConsOfLE
-  结论: {n : 自然数} {N O : Submodule R M} (y : M) (yO : y in O) (b : Basis (Fin n) R N)
+  结论: {n : 自然数} {N O : 子模 R M} (y : M) (yO : y in O) (b : 基 (有限集 n) R N)
   证明: coe_mkFinCons _ _ _ _
 
 Depends on / 依赖: coe_mkFinCons
@@ -167,7 +167,7 @@ definition mkFinSnoc
 
 中文:
 定义 mkFinSnoc
-  签名: {n : 自然数} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
+  签名: {n : 自然数} {N : 子模 R M} (b : 基 (有限集 n) R N) (y : M)
   定义体: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
@@ -202,7 +202,7 @@ theorem coe_mkFinSnoc
 
 中文:
 定理 coe_mkFinSnoc
-  结论: {n : 自然数} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
+  结论: {n : 自然数} {N : 子模 R M} (b : 基 (有限集 n) R N) (y : M)
   证明: by
   unfold mkFinSnoc
   exact coe_mk (v := Fin.snoc (N.subtype ∘ b) y) _ _
@@ -229,7 +229,7 @@ definition mkFinSnocOfLE
 
 中文:
 定义 mkFinSnocOfLE
-  签名: {n : 自然数} {N O : Submodule R M} (b : Basis (Fin n) R N)
+  签名: {n : 自然数} {N O : 子模 R M} (b : 基 (有限集 n) R N)
   定义体: mkFinSnoc (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm) ⟨y, yO⟩
     (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
     fun z => hsp z z.2
@@ -256,7 +256,7 @@ theorem coe_mkFinSnocOfLE
 
 中文:
 定理 coe_mkFinSnocOfLE
-  结论: {n : 自然数} {N O : Submodule R M} (b : Basis (Fin n) R N)
+  结论: {n : 自然数} {N O : 子模 R M} (b : 基 (有限集 n) R N)
   证明: coe_mkFinSnoc _ _ _ _
 
 Depends on / 依赖: coe_mkFinSnoc
@@ -278,7 +278,7 @@ definition finTwoProd
 
 中文:
 定义 finTwoProd
-  签名: (R : 类型) [Semiring R]
+  签名: (R : 类型) [半环 R]
   定义体: Basis.ofEquivFun (LinearEquiv.finTwoArrow R R).symm
 -/
 protected def finTwoProd (R : Type*) [Semiring R] : Basis (Fin 2) R (R × R) :=
@@ -298,8 +298,8 @@ theorem finTwoProd_zero
 
 中文:
 定理 finTwoProd_zero
-  条件: (R : 类型) [Semiring R]
-  结论: Basis.finTwoProd R 0 = (1, 0)
+  条件: (R : 类型) [半环 R]
+  结论: 基.finTwoProd R 0 = (1, 0)
   证明: by
   simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
 
@@ -324,8 +324,8 @@ theorem finTwoProd_one
 
 中文:
 定理 finTwoProd_one
-  条件: (R : 类型) [Semiring R]
-  结论: Basis.finTwoProd R 1 = (0, 1)
+  条件: (R : 类型) [半环 R]
+  结论: 基.finTwoProd R 1 = (0, 1)
   证明: by
   simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
 
@@ -347,7 +347,7 @@ theorem coe_finTwoProd_repr
 
 中文:
 定理 coe_finTwoProd_repr
-  条件: {R : 类型} [Semiring R] (x : R × R)
+  条件: {R : 类型} [半环 R] (x : R × R)
   证明: rfl
 -/
 theorem coe_finTwoProd_repr {R : Type*} [Semiring R] (x : R × R) :

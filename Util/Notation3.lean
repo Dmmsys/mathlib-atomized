@@ -120,8 +120,8 @@ structure MatchState
   参数: where
   公理与运算 (3 个):
     - vars : Std.HashMap Name (SubExpr × LocalContext × LocalInstances)
-    - scopeState : Option (Array (TSyntax ``extBinderParenthesized))
-    - foldState : Std.HashMap Name (Array Term)
+    - scopeState : 选项类型 (数组 (TSyntax ``extBinderParenthesized))
+    - foldState : Std.HashMap Name (数组 项)
 -/
 structure MatchState where
   /-- This stores the assignments of variables to subexpressions (and their contexts)
@@ -185,7 +185,7 @@ withLCtx lctx linsts withTheReader SubExpr (fun _ => se) m
 
 中文:
 定义 MatchState.withVar
-  签名: {α : Type} (s : MatchState) (name : Name)
+  签名: {α : 类型} (s : MatchState) (name : Name)
   定义体: do
   let some (se, lctx, linsts) := s.vars[name]? | failure
 withLCtx lctx linsts withTheReader SubExpr (fun _ => se) m
@@ -208,7 +208,7 @@ guard checkNot != (← getExpr)
 
 中文:
 定义 MatchState.delabVar
-  签名: (s : MatchState) (name : Name) (checkNot? : Option Expr := none)
+  签名: (s : MatchState) (name : Name) (checkNot? : 选项类型 Expr := none)
   定义体: s.withVar name do
     if let some checkNot := checkNot? then
 guard checkNot != (← getExpr)
@@ -286,7 +286,7 @@ definition MatchState.pushFold
 
 中文:
 定义 MatchState.pushFold
-  签名: (s : MatchState) (name : Name) (t : Term)
+  签名: (s : MatchState) (name : Name) (t : 项)
   定义体: let ts := (s.getFoldArray name).push t
   {s with foldState := s.foldState.insert name ts}
 
@@ -338,7 +338,7 @@ guard p (← getExpr)
 
 中文:
 定义 matchExpr
-  签名: (p : Expr -> 布尔)
+  签名: (p : Expr -> 布尔值)
   定义体: fun s => do
 guard p (← getExpr)
   return s
@@ -508,7 +508,7 @@ definition setupLCtx
 
 中文:
 定义 setupLCtx
-  签名: (lctx : LocalContext) (boundNames : Array Name)
+  签名: (lctx : LocalContext) (boundNames : 数组 Name)
   定义体: do
   let mut lctx := lctx
   let mut boundFVars := {}
@@ -537,7 +537,7 @@ definition isType'
 
 中文:
 定义 isType'
-  签名: : Expr -> 布尔
+  签名: : Expr -> 布尔值
 -/
 def isType' : Expr -> Bool
   | .sort u => u.dec.isSome
@@ -557,7 +557,7 @@ inductive DelabKey
 归纳类型 DelabKey
   参数: where
   构造子 (2 个):
-    - app: (const : Option Name) (arity : 自然数)
+    - app: (const : 选项类型 Name) (arity : 自然数)
     - other: (key : Name)
 -/
 inductive DelabKey where
@@ -714,7 +714,7 @@ definition mkExprMatcher
 
 中文:
 定义 mkExprMatcher
-  签名: (stx : Term) (boundNames : Array Name)
+  签名: (stx : 项) (boundNames : 数组 Name)
   定义体: do
   let (lctx, boundFVars) ← setupLCtx (← getLCtx) boundNames
   withLCtx lctx (← getLocalInstances) do
@@ -818,7 +818,7 @@ definition mkScopedMatcher
 
 中文:
 定义 mkScopedMatcher
-  签名: (lit scopeId : Name) (scopedTerm : Term) (boundNames : Array Name)
+  签名: (lit scopeId : Name) (scopedTerm : 项) (boundNames : 数组 Name)
   定义体: do
   -- Build the matcher for `scopedTerm` with `scopeId` as an additional variable
   let (keys, smatcher) ← mkExprMatcher scopedTerm (boundNames.push scopeId)
@@ -890,7 +890,7 @@ definition mkFoldlMatcher
 
 中文:
 定义 mkFoldlMatcher
-  签名: (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name)
+  签名: (lit x y : Name) (scopedTerm init : 项) (boundNames : 数组 Name)
   定义体: do
   -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
 .push y .push x let boundNames' := boundNames
@@ -921,7 +921,7 @@ definition mkFoldrMatcher
 
 中文:
 定义 mkFoldrMatcher
-  签名: (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name)
+  签名: (lit x y : Name) (scopedTerm init : 项) (boundNames : 数组 Name)
   定义体: do
   -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
 .push y .push x let boundNames' := boundNames
@@ -984,7 +984,7 @@ definition getPrettyPrintOpt
 
 中文:
 定义 getPrettyPrintOpt
-  签名: (opt? : Option (TSyntax ``prettyPrintOpt))
+  签名: (opt? : 选项类型 (TSyntax ``prettyPrintOpt))
   定义体: if let some opt := opt? then
     match opt with
     | `(prettyPrintOpt| (prettyPrint := false)) => false

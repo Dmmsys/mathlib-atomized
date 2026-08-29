@@ -152,7 +152,7 @@ theorem Subperm.append
 
 中文:
 定理 Subperm.append
-  条件: {l₁ l₂ r₁ r₂ : List α}
+  条件: {l₁ l₂ r₁ r₂ : 列表 α}
 -/
 theorem Subperm.append {l₁ l₂ r₁ r₂ : List α} :
     l₁ <+~ l₂ -> r₁ <+~ r₂ -> (l₁ ++ r₁) <+~ (l₂ ++ r₂)
@@ -179,7 +179,7 @@ theorem map_subperm_map_iff
 
 中文:
 定理 map_subperm_map_iff
-  条件: {α β} {l₁ l₂ : List α} {f : α -> β} (hf : Function.Injective f)
+  条件: {α β} {l₁ l₂ : 列表 α} {f : α -> β} (hf : 函数.单射 f)
   证明: by
     obtain ⟨l, hl_perm, hl_sub⟩ := a
     exact ⟨l.map f, hl_perm.map f, hl_sub.map f⟩

@@ -39,8 +39,8 @@ instance ModuleCat.finite_ext
     exact Module
 
 中文:
-实例 ModuleCat.finite_ext
-  签名: [Small.{v} R] [IsNoetherianRing R] (N M : ModuleCat.{v} R)
+实例 模范畴.finite_ext
+  签名: [Small.{v} R] [是Noether环 R] (N M : 模范畴.{v} R)
   定义体: by
   induction i generalizing N with
   | zero => exact Module.Finite.equiv (Ext.linearEquiv₀.trans ModuleCat.homLinearEquiv).symm

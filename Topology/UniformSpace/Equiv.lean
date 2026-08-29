@@ -44,11 +44,11 @@ structure UniformEquiv
     - uniformContinuous_invFun : UniformContinuous invFun
 
 中文:
-结构 UniformEquiv
-  参数: (α : 类型) (β : 类型) [UniformSpace α] [UniformSpace β]
+结构 一致等价
+  参数: (α : 类型) (β : 类型) [一致空间 α] [一致空间 β]
   公理与运算 (2 个):
-    - uniformContinuous_toFun : UniformContinuous toFun
-    - uniformContinuous_invFun : UniformContinuous invFun
+    - uniformContinuous_toFun : 一致连续 toFun
+    - uniformContinuous_invFun : 一致连续 invFun
 -/
 structure UniformEquiv (α : Type*) (β : Type*) [UniformSpace α] [UniformSpace β] extends
   α ≃ β where
@@ -73,7 +73,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Function.Injective (toEquiv : α ≃ᵤ β -> α ≃ β)
+  结论: 函数.单射 (toEquiv : α ≃ᵤ β -> α ≃ β)
 -/
 theorem toEquiv_injective : Function.Injective (toEquiv : α ≃ᵤ β -> α ≃ β)
   | ⟨e, h₁, h₂⟩, ⟨e', h₁', h₂'⟩, h => by simpa only [mk.injEq]
@@ -94,7 +94,7 @@ coe_injective' _ _ H _ := toEquiv_injective DFunLike.ext' H
 
 中文:
 实例 :
-  签名: EquivLike (α ≃ᵤ β) α β
+  签名: 等价状 (α ≃ᵤ β) α β
   定义体: h.toEquiv
   inv h := h.toEquiv.symm
   left_inv h := h.left_inv
@@ -124,8 +124,8 @@ theorem uniformEquiv_mk_coe
 
 中文:
 定理 uniformEquiv_mk_coe
-  条件: (a : Equiv α β) (b c)
-  结论: (UniformEquiv.mk a b c : α -> β) = a
+  条件: (a : 等价 α β) (b c)
+  结论: (一致等价.mk a b c : α -> β) = a
   证明: rfl
 -/
 theorem uniformEquiv_mk_coe (a : Equiv α β) (b c) : (UniformEquiv.mk a b c : α -> β) = a :=
@@ -276,7 +276,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (α : 类型) [UniformSpace α]
+  签名: (α : 类型) [一致空间 α]
   定义体: uniformContinuous_id
   uniformContinuous_invFun := uniformContinuous_id
   toEquiv := Equiv.refl α
@@ -348,7 +348,7 @@ theorem uniformEquiv_mk_coe_symm
 
 中文:
 定理 uniformEquiv_mk_coe_symm
-  条件: (a : Equiv α β) (b c)
+  条件: (a : 等价 α β) (b c)
   证明: rfl
 
 @[simp]
@@ -368,7 +368,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (UniformEquiv.refl α).symm = UniformEquiv.refl α
+  结论: (一致等价.refl α).symm = 一致等价.refl α
   证明: rfl
 -/
 theorem refl_symm : (UniformEquiv.refl α).symm = UniformEquiv.refl α :=
@@ -388,7 +388,7 @@ theorem uniformContinuous
 中文:
 定理 uniformContinuous
   条件: (h : α ≃ᵤ β)
-  结论: UniformContinuous h
+  结论: 一致连续 h
   证明: h.uniformContinuous_toFun
 
 @[continuity]
@@ -409,7 +409,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (h : α ≃ᵤ β)
-  结论: Continuous h
+  结论: 连续 h
   证明: h.uniformContinuous.continuous
 -/
 protected theorem continuous (h : α ≃ᵤ β) : Continuous h :=
@@ -427,7 +427,7 @@ theorem uniformContinuous_symm
 中文:
 定理 uniformContinuous_symm
   条件: (h : α ≃ᵤ β)
-  结论: UniformContinuous h.symm
+  结论: 一致连续 h.symm
   证明: h.uniformContinuous_invFun
 -/
 protected theorem uniformContinuous_symm (h : α ≃ᵤ β) : UniformContinuous h.symm :=
@@ -447,7 +447,7 @@ theorem continuous_symm
 中文:
 定理 continuous_symm
   条件: (h : α ≃ᵤ β)
-  结论: Continuous h.symm
+  结论: 连续 h.symm
   证明: h.uniformContinuous_symm.continuous
 -/
 protected theorem continuous_symm (h : α ≃ᵤ β) : Continuous h.symm :=
@@ -571,7 +571,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (h : α ≃ᵤ β)
-  结论: Function.Bijective h
+  结论: 函数.双射 h
   证明: h.toEquiv.bijective
 -/
 protected theorem bijective (h : α ≃ᵤ β) : Function.Bijective h :=
@@ -589,7 +589,7 @@ theorem injective
 中文:
 定理 injective
   条件: (h : α ≃ᵤ β)
-  结论: Function.Injective h
+  结论: 函数.单射 h
   证明: h.toEquiv.injective
 -/
 protected theorem injective (h : α ≃ᵤ β) : Function.Injective h :=
@@ -607,7 +607,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (h : α ≃ᵤ β)
-  结论: Function.Surjective h
+  结论: 函数.满射 h
   证明: h.toEquiv.surjective
 -/
 protected theorem surjective (h : α ≃ᵤ β) : Function.Surjective h :=
@@ -631,7 +631,7 @@ definition changeInv
 
 中文:
 定义 changeInv
-  签名: (f : α ≃ᵤ β) (g : β -> α) (hg : Function.RightInverse g f)
+  签名: (f : α ≃ᵤ β) (g : β -> α) (hg : 函数.右逆 g f)
   定义体: have : g = f.symm :=
     funext fun x => calc
       g x = f.symm (f (g x)) := (f.left_inv (g x)).symm
@@ -731,7 +731,7 @@ theorem image_symm
 中文:
 定理 image_symm
   条件: (h : α ≃ᵤ β)
-  结论: image h.symm = preimage h
+  结论: 像 h.symm = 原像 h
   证明: funext h.symm.toEquiv.image_eq_preimage_symm
 
 Depends on / 依赖: h.symm.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -753,7 +753,7 @@ theorem preimage_symm
 中文:
 定理 preimage_symm
   条件: (h : α ≃ᵤ β)
-  结论: preimage h.symm = image h
+  结论: 原像 h.symm = 像 h
   证明: (funext h.toEquiv.image_eq_preimage_symm).symm
 
 @[simp]
@@ -777,7 +777,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  条件: (h : α ≃ᵤ β) (s : Set β)
+  条件: (h : α ≃ᵤ β) (s : 集合 β)
   结论: h '' h ⁻¹' s = s
   证明: h.toEquiv.image_preimage s
 
@@ -800,7 +800,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: (h : α ≃ᵤ β) (s : Set α)
+  条件: (h : α ≃ᵤ β) (s : 集合 α)
   结论: h ⁻¹' h '' s = s
   证明: h.toEquiv.preimage_image s
 
@@ -822,7 +822,7 @@ theorem isUniformInducing
 中文:
 定理 isUniformInducing
   条件: (h : α ≃ᵤ β)
-  结论: IsUniformInducing h
+  结论: 是UniformInducing h
   证明: IsUniformInducing.of_comp h.uniformContinuous h.symm.uniformContinuous by
     simp only [symm_comp_self, IsUniformInducing.id]
 
@@ -844,7 +844,7 @@ theorem comap_eq
 中文:
 定理 comap_eq
   条件: (h : α ≃ᵤ β)
-  结论: UniformSpace.comap h ‹_› = ‹_›
+  结论: 一致空间.comap h ‹_› = ‹_›
   证明: h.isUniformInducing.comap_uniformSpace
 
 Depends on / 依赖: comap_uniformSpace, h.isUniformInducing.comap_uniformSpace, isUniformInducing
@@ -864,7 +864,7 @@ lemma isUniformEmbedding
 中文:
 引理 isUniformEmbedding
   条件: (h : α ≃ᵤ β)
-  结论: IsUniformEmbedding h
+  结论: 是一致嵌入 h
   证明: ⟨h.isUniformInducing, h.injective⟩
 
 Depends on / 依赖: h.injective, h.isUniformInducing, injective, isUniformInducing
@@ -883,7 +883,7 @@ theorem completeSpace_iff
 中文:
 定理 completeSpace_iff
   条件: (h : α ≃ᵤ β)
-  结论: CompleteSpace α ↔ CompleteSpace β
+  结论: 完备空间 α ↔ 完备空间 β
   证明: completeSpace_congr h.isUniformEmbedding
 
 Depends on / 依赖: completeSpace_congr, h.isUniformEmbedding, isUniformEmbedding
@@ -905,7 +905,7 @@ definition ofIsUniformEmbedding
 
 中文:
 定义 ofIsUniformEmbedding
-  签名: (f : α -> β) (hf : IsUniformEmbedding f)
+  签名: (f : α -> β) (hf : 是一致嵌入 f)
   定义体: hf.isUniformInducing.uniformContinuous.subtype_mk _
   uniformContinuous_invFun := by
     rw [hf.isUniformInducing.uniformContinuous_iff]; rw [Equiv.invFun_as_coe]; rw [Equiv.self_comp_ofInjective_symm]
@@ -934,7 +934,7 @@ definition setCongr
 
 中文:
 定义 setCongr
-  签名: {s t : Set α} (h : s = t)
+  签名: {s t : 集合 α} (h : s = t)
   定义体: uniformContinuous_subtype_val.subtype_mk _
   uniformContinuous_invFun := uniformContinuous_subtype_val.subtype_mk _
   toEquiv := Equiv.setCongr h
@@ -1015,7 +1015,7 @@ theorem coe_prodCongr
 中文:
 定理 coe_prodCongr
   条件: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  结论: ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂
+  结论: ⇑(h₁.prodCongr h₂) = 积类型.map h₁ h₂
   证明: rfl
 -/
 theorem coe_prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂ :=
@@ -1085,7 +1085,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm α β) = Prod.swap
+  结论: ⇑(prodComm α β) = 积类型.swap
   证明: rfl
 -/
 theorem coe_prodComm : ⇑(prodComm α β) = Prod.swap :=
@@ -1139,7 +1139,7 @@ definition prodPUnit
 
 中文:
 定义 prodPUnit
-  签名: : α × PUnit ≃ᵤ α where
+  签名: : α × 命题单元 ≃ᵤ α where
   定义体: Equiv.prodPUnit α
   uniformContinuous_toFun := uniformContinuous_fst
   uniformContinuous_invFun := uniformContinuous_id.prodMk uniformContinuous_const
@@ -1167,7 +1167,7 @@ definition punitProd
 
 中文:
 定义 punitProd
-  签名: : PUnit × α ≃ᵤ α
+  签名: : 命题单元 × α ≃ᵤ α
   定义体: (prodComm _ _).trans (prodPUnit _)
 
 @[simp]
@@ -1188,7 +1188,7 @@ theorem coe_punitProd
 
 中文:
 定理 coe_punitProd
-  结论: ⇑(punitProd α) = Prod.snd
+  结论: ⇑(punitProd α) = 积类型.snd
   证明: rfl
 -/
 theorem coe_punitProd : ⇑(punitProd α) = Prod.snd :=
@@ -1213,7 +1213,7 @@ definition piCongrLeft
 
 中文:
 定义 piCongrLeft
-  签名: {ι ι' : 类型} {β : ι' -> 类型} [对任意 j, UniformSpace (β j)]
+  签名: {ι ι' : 类型} {β : ι' -> 类型} [对任意 j, 一致空间 (β j)]
   定义体: uniformContinuous_pi.mpr e.forall_congr_right.mp fun i => by
     simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using
       Pi.uniformContinuous_proj _ i
@@ -1245,7 +1245,7 @@ lemma piCongrLeft_refl
 
 中文:
 引理 piCongrLeft_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, UniformSpace (X i)]
+  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 一致空间 (X i)]
   证明: rfl
 
 @[simp]
@@ -1267,7 +1267,7 @@ lemma piCongrLeft_symm_apply
 
 中文:
 引理 piCongrLeft_symm_apply
-  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, UniformSpace (X j)]
+  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, 一致空间 (X j)]
   证明: rfl
 
 @[simp]
@@ -1287,7 +1287,7 @@ lemma piCongrLeft_apply_apply
 
 中文:
 引理 piCongrLeft_apply_apply
-  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, UniformSpace (X j)]
+  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, 一致空间 (X j)]
   证明: Equiv.piCongrLeft_apply_apply ..
 
 Depends on / 依赖: Equiv.piCongrLeft_apply_apply, piCongrLeft_apply_apply
@@ -1313,7 +1313,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, UniformSpace (β₁ i)]
+  签名: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, 一致空间 (β₁ i)]
   定义体: Pi.uniformContinuous_postcomp' _ fun i => (F i).uniformContinuous
   uniformContinuous_invFun := Pi.uniformContinuous_postcomp' _ fun i => (F i).symm.uniformContinuous
   toEquiv := Equiv.piCongrRight fun i => (F i).toEquiv
@@ -1341,7 +1341,7 @@ theorem piCongrRight_symm
 
 中文:
 定理 piCongrRight_symm
-  结论: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, UniformSpace (β₁ i)]
+  结论: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, 一致空间 (β₁ i)]
   证明: rfl
 
 @[simp]
@@ -1362,7 +1362,7 @@ theorem piCongrRight_refl
 
 中文:
 定理 piCongrRight_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, UniformSpace (X i)]
+  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 一致空间 (X i)]
   证明: rfl
 -/
 theorem piCongrRight_refl {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i)] :
@@ -1408,7 +1408,7 @@ definition ulift
 
 中文:
 定义 ulift
-  签名: : ULift.{v, u} α ≃ᵤ α
+  签名: : 类型层提升.{v, u} α ≃ᵤ α
   定义体: { Equiv.ulift with
     uniformContinuous_toFun := uniformContinuous_comap
     uniformContinuous_invFun := by
@@ -1442,7 +1442,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (ι α : 类型) [Unique ι] [UniformSpace α]
+  签名: (ι α : 类型) [唯一 ι] [一致空间 α]
   定义体: Equiv.funUnique ι α
   uniformContinuous_toFun := Pi.uniformContinuous_proj _ _
   uniformContinuous_invFun := uniformContinuous_pi.mpr fun _ => uniformContinuous_id
@@ -1469,7 +1469,7 @@ uniformContinuous_pi.mpr Fin.forall_fin_two.2 ⟨uniformContinuous_fst, uniformC
 
 中文:
 定义 piFinTwo
-  签名: (α : Fin 2 -> 类型u) [对任意 i, UniformSpace (α i)]
+  签名: (α : 有限集 2 -> 类型u) [对任意 i, 一致空间 (α i)]
   定义体: piFinTwoEquiv α
   uniformContinuous_toFun := (Pi.uniformContinuous_proj _ 0).prodMk (Pi.uniformContinuous_proj _ 1)
   uniformContinuous_invFun :=
@@ -1495,7 +1495,7 @@ definition finTwoArrow
 
 中文:
 定义 finTwoArrow
-  签名: (α : 类型) [UniformSpace α]
+  签名: (α : 类型) [一致空间 α]
   定义体: { piFinTwo fun _ => α with toEquiv := finTwoArrowEquiv α }
 
 Depends on / 依赖: finTwoArrowEquiv, piFinTwo, toEquiv
@@ -1515,8 +1515,8 @@ definition image
   toEquiv := e.toEquiv.image s
 
 中文:
-定义 image
-  签名: (e : α ≃ᵤ β) (s : Set α)
+定义 像
+  签名: (e : α ≃ᵤ β) (s : 集合 α)
   定义体: (e.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
   uniformContinuous_invFun :=
     (e.symm.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
@@ -1577,8 +1577,8 @@ definition Equiv.toUniformEquivOfIsUniformInducing
 uniformContinuous_invFun := hf.uniformContinuous_iff.2 by simpa using uniformContinuous_id }
 
 中文:
-定义 Equiv.toUniformEquivOfIsUniformInducing
-  签名: [UniformSpace α] [UniformSpace β] (f : α ≃ β)
+定义 等价.toUniformEquivOfIsUniformInducing
+  签名: [一致空间 α] [一致空间 β] (f : α ≃ β)
   定义体: { f with
     uniformContinuous_toFun := hf.uniformContinuous
 uniformContinuous_invFun := hf.uniformContinuous_iff.2 by simpa using uniformContinuous_id }

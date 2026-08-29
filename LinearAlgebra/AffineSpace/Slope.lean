@@ -292,8 +292,8 @@ theorem AffineMap.slope_comp
   simp only [slope, (· ∘ ·), f.linear.map_smul, f.linearMap_vsub]
 
 中文:
-定理 AffineMap.slope_comp
-  结论: {F PF : 类型} [AddCommGroup F] [Module k F] [AddTorsor F PF]
+定理 仿射映射.slope_comp
+  结论: {F PF : 类型} [加法交换群 F] [模 k F] [加法Torsor F PF]
   证明: by
   simp only [slope, (· ∘ ·), f.linear.map_smul, f.linearMap_vsub]
 
@@ -312,8 +312,8 @@ theorem LinearMap.slope_comp
   proof: f.toAffineMap.slope_comp g a b
 
 中文:
-定理 LinearMap.slope_comp
-  结论: {F : 类型} [AddCommGroup F] [Module k F] (f : E ->ₗ[k] F) (g : k -> E)
+定理 线性映射.slope_comp
+  结论: {F : 类型} [加法交换群 F] [模 k F] (f : E ->ₗ[k] F) (g : k -> E)
   证明: f.toAffineMap.slope_comp g a b
 
 Depends on / 依赖: f.toAffineMap.slope_comp, slope_comp, toAffineMap
@@ -577,7 +577,7 @@ lemma MonotoneOn.slope_nonneg
 
 中文:
 引理 MonotoneOn.slope_nonneg
-  条件: {s : Set k} (hf : MonotoneOn f s) (hx : x in s) (hy : y in s)
+  条件: {s : 集合 k} (hf : MonotoneOn f s) (hx : x in s) (hy : y in s)
   证明: by
   rcases le_total x y with hxy | hxy
   · exact (slope_nonneg_iff_of_le hxy).mpr (hf hx hy hxy)
@@ -624,7 +624,7 @@ lemma AntitoneOn.slope_nonpos
 
 中文:
 引理 AntitoneOn.slope_nonpos
-  条件: {s : Set k} (hf : AntitoneOn f s) (hx : x in s) (hy : y in s)
+  条件: {s : 集合 k} (hf : AntitoneOn f s) (hx : x in s) (hy : y in s)
   证明: by
   simpa using hf.neg.slope_nonneg hx hy
 
@@ -669,7 +669,7 @@ lemma StrictMonoOn.slope_pos
 
 中文:
 引理 StrictMonoOn.slope_pos
-  结论: {s : Set k} (hf : StrictMonoOn f s) (hx : x in s) (hy : y in s)
+  结论: {s : 集合 k} (hf : StrictMonoOn f s) (hx : x in s) (hy : y in s)
   证明: by
   rcases lt_or_gt_of_ne hxy with hxy | hxy
   · exact (slope_pos_iff_of_le hxy.le).mpr (hf hx hy hxy)
@@ -716,7 +716,7 @@ lemma StrictAntiOn.slope_neg
 
 中文:
 引理 StrictAntiOn.slope_neg
-  结论: {s : Set k} (hf : StrictAntiOn f s) (hx : x in s) (hy : y in s)
+  结论: {s : 集合 k} (hf : StrictAntiOn f s) (hx : x in s) (hy : y in s)
   证明: by
   simpa using hf.neg.slope_pos hx hy hxy
 

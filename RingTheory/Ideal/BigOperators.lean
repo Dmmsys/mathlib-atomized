@@ -36,7 +36,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  条件: (I : Ideal α) {ι : 类型} {t : Finset ι} {f : ι -> α}
+  条件: (I : 理想 α) {ι : 类型} {t : 有限集 ι} {f : ι -> α}
   证明: Submodule.sum_mem I
 
 Depends on / 依赖: Submodule, Submodule.sum_mem, sum_mem

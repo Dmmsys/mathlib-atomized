@@ -63,7 +63,7 @@ theorem convolution_eq_right
 
 中文:
 定理 convolution_eq_right
-  条件: [HasContDiffBump G] {x₀ : G} (hg : 对任意 x in ball x₀ φ.rOut, g x = g x₀)
+  条件: [有余ntDiffBump G] {x₀ : G} (hg : 对任意 x in ball x₀ φ.rOut, g x = g x₀)
   证明: by
   simp_rw [convolution_eq_right' _ φ.support_eq.subset hg, lsmul_apply, integral_smul_const]
 
@@ -87,7 +87,7 @@ theorem normed_convolution_eq_right
 
 中文:
 定理 normed_convolution_eq_right
-  结论: [IsLocallyFiniteMeasure μ] [μ.IsOpenPosMeasure] {x₀ : G}
+  结论: [是局部有限测度 μ] [μ.是OpenPosMeasure] {x₀ : G}
   证明: by
   rw [convolution_eq_right' _ φ.support_normed_eq.subset hg]
   exact integral_normed_smul φ μ (g x₀)
@@ -151,7 +151,7 @@ theorem convolution_tendsto_right_of_continuous
 
 中文:
 定理 convolution_tendsto_right_of_continuous
-  结论: {ι} {φ : ι -> ContDiffBump (0 : G)} {l : Filter ι}
+  结论: {ι} {φ : ι -> 余ntDiffBump (0 : G)} {l : 滤子 ι}
   证明: convolution_tendsto_right hφ (Eventually.of_forall fun _ => hg.aestronglyMeasurable)
     ((hg.tendsto x₀).comp tendsto_snd) tendsto_const_nhds
 
@@ -175,7 +175,7 @@ theorem ae_convolution_tendsto_right_of_locallyIntegrable
   filter_upwards [(Besicovitch.vitaliFamily μ).ae_tendsto_ave
 
 中文:
-定理 ae_convolution_tendsto_right_of_locallyIntegrable
+定理 ae_convolution_tendsto_right_of_locally整数egrable
   证明: by
   -- By Lebesgue differentiation theorem, the average of `g` on a small ball converges
   -- almost everywhere to the value of `g` as the radius shrinks to zero.

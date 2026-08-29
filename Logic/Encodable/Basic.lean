@@ -58,11 +58,11 @@ class Encodable
     - encodek : forall a, decode (encode a) = some a
 
 中文:
-类 Encodable
+类 可编码
   参数: (α : 类型)
   公理与运算 (3 个):
     - encode : α -> 自然数
-    - decode : 自然数 -> Option α
+    - decode : 自然数 -> 选项类型 α
     - encodek : 对任意 a, decode (encode a) = some a
 -/
 class Encodable (α : Type*) where
@@ -91,8 +91,8 @@ theorem encode_injective
 
 中文:
 定理 encode_injective
-  条件: [Encodable α]
-  结论: Function.Injective (@encode α _)
+  条件: [可编码 α]
+  结论: 函数.单射 (@encode α _)
 -/
 theorem encode_injective [Encodable α] : Function.Injective (@encode α _)
 | x, y, e => Option.some.inj by rw [← encodek, e, encodek]
@@ -109,7 +109,7 @@ theorem encode_inj
 
 中文:
 定理 encode_inj
-  条件: [Encodable α] {a b : α}
+  条件: [可编码 α] {a b : α}
   结论: encode a = encode b ↔ a = b
   证明: encode_injective.eq_iff
 
@@ -136,7 +136,7 @@ theorem surjective_decode_getD
 
 中文:
 定理 surjective_decode_getD
-  条件: (α : 类型) [Encodable α] (d : α)
+  条件: (α : 类型) [可编码 α] (d : α)
   证明: fun x =>
   ⟨Encodable.encode x, by simp_rw [Encodable.encodek]; rfl⟩
 
@@ -157,7 +157,7 @@ theorem surjective_decode_iget
 
 中文:
 定理 surjective_decode_iget
-  条件: (α : 类型) [Encodable α] [Inhabited α]
+  条件: (α : 类型) [可编码 α] [可居 α]
   证明: surjective_decode_getD α default
 
 Depends on / 依赖: surjective_decode_getD
@@ -178,7 +178,7 @@ definition decidableEqOfEncodable
 
 中文:
 定义 decidableEqOfEncodable
-  签名: (α) [Encodable α]
+  签名: (α) [可编码 α]
 -/
 def decidableEqOfEncodable (α) [Encodable α] : DecidableEq α
   | _, _ => decidable_of_iff _ encode_inj
@@ -196,7 +196,7 @@ definition ofLeftInjection
 
 中文:
 定义 ofLeftInjection
-  签名: [Encodable α] (f : β -> α) (finv : α -> Option β)
+  签名: [可编码 α] (f : β -> α) (finv : α -> 选项类型 β)
   定义体: ⟨fun b => encode (f b), fun n => (decode n).bind finv, fun b => by
     simp [Encodable.encodek, linv]⟩
 
@@ -219,7 +219,7 @@ definition ofLeftInverse
 
 中文:
 定义 ofLeftInverse
-  签名: [Encodable α] (f : β -> α) (finv : α -> β) (linv : 对任意 b, finv (f b) = b)
+  签名: [可编码 α] (f : β -> α) (finv : α -> β) (linv : 对任意 b, finv (f b) = b)
   定义体: ofLeftInjection f (some ∘ finv) fun b => congr_arg some (linv b)
 
 Depends on / 依赖: congr_arg, ofLeftInjection
@@ -240,7 +240,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: (α) [Encodable α] (e : β ≃ α)
+  签名: (α) [可编码 α] (e : β ≃ α)
   定义体: ofLeftInverse e e.symm e.left_inv
 
 Depends on / 依赖: e.left_inv, e.symm, left_inv, ofLeftInverse
@@ -258,7 +258,7 @@ theorem encode_ofEquiv
 
 中文:
 定理 encode_ofEquiv
-  条件: {α β} [Encodable α] (e : β ≃ α) (b : β)
+  条件: {α β} [可编码 α] (e : β ≃ α) (b : β)
   证明: rfl
 -/
 theorem encode_ofEquiv {α β} [Encodable α] (e : β ≃ α) (b : β) :
@@ -276,7 +276,7 @@ theorem decode_ofEquiv
 
 中文:
 定理 decode_ofEquiv
-  条件: {α β} [Encodable α] (e : β ≃ α) (n : 自然数)
+  条件: {α β} [可编码 α] (e : β ≃ α) (n : 自然数)
   证明: show Option.bind _ _ = Option.map _ _
   by rw [Option.map_eq_bind]
 
@@ -298,8 +298,8 @@ instance _root_.Nat.encodable
 @[simp]
 
 中文:
-实例 _root_.Nat.encodable
-  签名: : Encodable 自然数
+实例 _root_.自然数.encodable
+  签名: : 可编码 自然数
   定义体: ⟨id, some, fun _ => rfl⟩
 
 @[simp]
@@ -363,8 +363,8 @@ instance _root_.PUnit.encodable
 @[simp]
 
 中文:
-实例 _root_.PUnit.encodable
-  签名: : Encodable PUnit
+实例 _root_.命题单元.encodable
+  签名: : 可编码 命题单元
   定义体: ⟨fun _ => 0, fun n => Nat.casesOn n (some PUnit.unit) fun _ => none, fun _ => by simp⟩
 
 @[simp]
@@ -387,7 +387,7 @@ theorem encode_star
 
 中文:
 定理 encode_star
-  结论: encode PUnit.unit = 0
+  结论: encode 命题单元.unit = 0
   证明: rfl
 
 @[simp]
@@ -408,7 +408,7 @@ theorem decode_unit_zero
 
 中文:
 定理 decode_unit_zero
-  结论: decode 0 = some PUnit.unit
+  结论: decode 0 = some 命题单元.unit
   证明: rfl
 
 @[simp]
@@ -429,7 +429,7 @@ theorem decode_unit_succ
 中文:
 定理 decode_unit_succ
   条件: (n)
-  结论: decode (succ n) = (none : Option PUnit)
+  结论: decode (succ n) = (none : 选项类型 命题单元)
   证明: rfl
 -/
 theorem decode_unit_succ (n) : decode (succ n) = (none : Option PUnit) :=
@@ -448,8 +448,8 @@ instance _root_.Option.encodable
 @[simp]
 
 中文:
-实例 _root_.Option.encodable
-  签名: {α : 类型} [h : Encodable α]
+实例 _root_.选项类型.encodable
+  签名: {α : 类型} [h : 可编码 α]
   定义体: ⟨fun o => Option.casesOn o Nat.zero fun a => succ (encode a), fun n =>
     Nat.casesOn n (some none) fun m => (decode m).map some, fun o => by
     cases o <;> simp [encodek]⟩
@@ -477,7 +477,7 @@ theorem encode_none
 
 中文:
 定理 encode_none
-  条件: [Encodable α]
+  条件: [可编码 α]
   结论: encode (@none α) = 0
   证明: rfl
 
@@ -500,7 +500,7 @@ theorem encode_some
 
 中文:
 定理 encode_some
-  条件: [Encodable α] (a : α)
+  条件: [可编码 α] (a : α)
   结论: encode (some a) = succ (encode a)
   证明: rfl
 
@@ -525,8 +525,8 @@ theorem decode_option_zero
 
 中文:
 定理 decode_option_zero
-  条件: [Encodable α]
-  结论: (decode 0 : Option (Option α)) = some none
+  条件: [可编码 α]
+  结论: (decode 0 : 选项类型 (选项类型 α)) = some none
   证明: rfl
 
 @[simp]
@@ -545,7 +545,7 @@ theorem decode_option_succ
 
 中文:
 定理 decode_option_succ
-  条件: [Encodable α] (n)
+  条件: [可编码 α] (n)
   证明: rfl
 
 Depends on / 依赖: Constants, Constants.term, oneFunc
@@ -564,7 +564,7 @@ definition decode₂
 
 中文:
 定义 decode₂
-  签名: (α) [Encodable α] (n : 自然数)
+  签名: (α) [可编码 α] (n : 自然数)
   定义体: (decode n).bind (Option.guard fun a => encode a = n)
 
 Depends on / 依赖: Option.guard, decode, encode
@@ -583,7 +583,7 @@ theorem mem_decode₂'
 
 中文:
 定理 mem_decode₂'
-  条件: [Encodable α] {n : 自然数} {a : α}
+  条件: [可编码 α] {n : 自然数} {a : α}
   证明: by
   simp [decode₂, Option.bind_eq_some_iff]
 
@@ -604,7 +604,7 @@ theorem mem_decode₂
 
 中文:
 定理 mem_decode₂
-  条件: [Encodable α] {n : 自然数} {a : α}
+  条件: [可编码 α] {n : 自然数} {a : α}
   结论: a in decode₂ α n ↔ encode a = n
   证明: mem_decode₂'.trans (and_iff_right_of_imp fun e => e ▸ encodek _)
 
@@ -626,7 +626,7 @@ theorem decode₂_eq_some
 
 中文:
 定理 decode₂_eq_some
-  条件: [Encodable α] {n : 自然数} {a : α}
+  条件: [可编码 α] {n : 自然数} {a : α}
   结论: decode₂ α n = some a ↔ encode a = n
   证明: mem_decode₂
 
@@ -650,7 +650,7 @@ theorem decode₂_encode
 
 中文:
 定理 decode₂_encode
-  条件: [Encodable α] (a : α)
+  条件: [可编码 α] (a : α)
   结论: decode₂ α (encode a) = some a
   证明: by
   simp [decode₂_eq_some]
@@ -670,7 +670,7 @@ theorem decode₂_ne_none_iff
 
 中文:
 定理 decode₂_ne_none_iff
-  条件: [Encodable α] {n : 自然数}
+  条件: [可编码 α] {n : 自然数}
   证明: by
   simp_rw [Set.range, Set.mem_ofPred_eq, Ne, Option.eq_none_iff_forall_not_mem,
     Encodable.mem_decode₂, not_forall, not_not]
@@ -696,7 +696,7 @@ theorem decode₂_isPartialInv
 
 中文:
 定理 decode₂_isPartialInv
-  条件: [Encodable α]
+  条件: [可编码 α]
   结论: IsPartialInv encode (decode₂ α)
   证明: fun _ _ =>
   mem_decode₂
@@ -718,7 +718,7 @@ theorem decode₂_inj
 
 中文:
 定理 decode₂_inj
-  结论: [Encodable α] {n : 自然数} {a₁ a₂ : α} (h₁ : a₁ in decode₂ α n)
+  结论: [可编码 α] {n : 自然数} {a₁ a₂ : α} (h₁ : a₁ in decode₂ α n)
   证明: encode_injective (mem_decode₂.1 h₁).trans (mem_decode₂.1 h₂).symm
 
 Depends on / 依赖: encode_injective
@@ -738,7 +738,7 @@ theorem encodek₂
 
 中文:
 定理 encodek₂
-  条件: [Encodable α] (a : α)
+  条件: [可编码 α] (a : α)
   结论: decode₂ α (encode a) = some a
   证明: mem_decode₂.2 rfl
 -/
@@ -760,7 +760,7 @@ definition decidableRangeEncode
 
 中文:
 定义 decidableRangeEncode
-  签名: (α : 类型) [Encodable α]
+  签名: (α : 类型) [可编码 α]
   定义体: fun x =>
   decidable_of_iff (Option.isSome (decode₂ α x))
     ⟨fun h => ⟨Option.get _ h, by rw [← decode₂_isPartialInv (Option.get _ h), Option.some_get]⟩,
@@ -789,7 +789,7 @@ right_inv _ := Subtype.ext decode₂_isPartialInv.get_eq _ _
 
 中文:
 定义 equivRangeEncode
-  签名: (α : 类型) [Encodable α]
+  签名: (α : 类型) [可编码 α]
   定义体: ⟨encode a, Set.mem_range_self _⟩
   invFun n :=
     Option.get _
@@ -818,8 +818,8 @@ definition _root_.Unique.encodable
   body: ⟨fun _ => 0, fun _ => some default, Unique.forall_iff.2 rfl⟩
 
 中文:
-定义 _root_.Unique.encodable
-  签名: [Unique α]
+定义 _root_.唯一.encodable
+  签名: [唯一 α]
   定义体: ⟨fun _ => 0, fun _ => some default, Unique.forall_iff.2 rfl⟩
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_iff
@@ -881,8 +881,8 @@ instance _root_.Sum.encodable
 @[simp]
 
 中文:
-实例 _root_.Sum.encodable
-  签名: : Encodable (α oplus β)
+实例 _root_.和.encodable
+  签名: : 可编码 (α oplus β)
   定义体: ⟨encodeSum, decodeSum, fun s => by cases s <;> simp [encodeSum, div2_val, decodeSum, encodek]⟩
 
 @[simp]
@@ -907,7 +907,7 @@ theorem encode_inl
 中文:
 定理 encode_inl
   条件: (a : α)
-  结论: @encode (α oplus β) _ (Sum.inl a) = 2 * (encode a)
+  结论: @encode (α oplus β) _ (和.inl a) = 2 * (encode a)
   证明: rfl
 
 @[simp]
@@ -930,7 +930,7 @@ theorem encode_inr
 中文:
 定理 encode_inr
   条件: (b : β)
-  结论: @encode (α oplus β) _ (Sum.inr b) = 2 * (encode b) + 1
+  结论: @encode (α oplus β) _ (和.inr b) = 2 * (encode b) + 1
   证明: rfl
 
 @[simp]
@@ -951,7 +951,7 @@ theorem decode_sum_val
 中文:
 定理 decode_sum_val
   条件: (n : 自然数)
-  结论: (decode n : Option (α oplus β)) = decodeSum n
+  结论: (decode n : 选项类型 (α oplus β)) = decodeSum n
   证明: rfl
 -/
 theorem decode_sum_val (n : Nat) : (decode n : Option (α oplus β)) = decodeSum n :=
@@ -970,8 +970,8 @@ instance _root_.Bool.encodable
 @[simp]
 
 中文:
-实例 _root_.Bool.encodable
-  签名: : Encodable 布尔
+实例 _root_.布尔值.encodable
+  签名: : 可编码 布尔值
   定义体: ofEquiv (Unit oplus Unit) Equiv.boolEquivPUnitSumPUnit
 
 @[simp]
@@ -1036,7 +1036,7 @@ theorem decode_zero
 
 中文:
 定理 decode_zero
-  结论: (decode 0 : Option 布尔) = some false
+  结论: (decode 0 : 选项类型 布尔值) = some false
   证明: rfl
 
 @[simp]
@@ -1055,7 +1055,7 @@ theorem decode_one
 
 中文:
 定理 decode_one
-  结论: (decode 1 : Option 布尔) = some true
+  结论: (decode 1 : 选项类型 布尔值) = some true
   证明: rfl
 -/
 theorem decode_one : (decode 1 : Option Bool) = some true :=
@@ -1082,7 +1082,7 @@ theorem decode_ge_two
 中文:
 定理 decode_ge_two
   条件: (n) (h : 2 <= n)
-  结论: (decode n : Option 布尔) = none
+  结论: (decode n : 选项类型 布尔值) = none
   证明: by
   suffices decodeSum n = none by
     change (decodeSum n).bind _ = none
@@ -1116,8 +1116,8 @@ instance _root_.Prop.encodable
   body: ofEquiv Bool Equiv.propEquivBool
 
 中文:
-实例 _root_.Prop.encodable
-  签名: : Encodable 命题
+实例 _root_.命题.encodable
+  签名: : 可编码 命题
   定义体: ofEquiv Bool Equiv.propEquivBool
 
 Depends on / 依赖: Equiv.propEquivBool, ofEquiv, propEquivBool
@@ -1138,7 +1138,7 @@ definition encodeSigma
 
 中文:
 定义 encodeSigma
-  签名: : Sigma γ -> 自然数
+  签名: : 依赖和类型 γ -> 自然数
 -/
 def encodeSigma : Sigma γ -> Nat
   | ⟨a, b⟩ => pair (encode a) (encode b)
@@ -1176,8 +1176,8 @@ instance _root_.Sigma.encodable
 @[simp]
 
 中文:
-实例 _root_.Sigma.encodable
-  签名: : Encodable (Sigma γ)
+实例 _root_.依赖和类型.encodable
+  签名: : 可编码 (依赖和类型 γ)
   定义体: ⟨encodeSigma, decodeSigma, fun ⟨a, b⟩ => by
     simp [encodeSigma, decodeSigma, unpair_pair, encodek]⟩
 
@@ -1225,7 +1225,7 @@ theorem encode_sigma_val
 中文:
 定理 encode_sigma_val
   条件: (a b)
-  结论: @encode (Sigma γ) _ ⟨a, b⟩ = pair (encode a) (encode b)
+  结论: @encode (依赖和类型 γ) _ ⟨a, b⟩ = pair (encode a) (encode b)
   证明: rfl
 -/
 theorem encode_sigma_val (a b) : @encode (Sigma γ) _ ⟨a, b⟩ = pair (encode a) (encode b) :=
@@ -1248,8 +1248,8 @@ instance Prod.encodable
 @[simp]
 
 中文:
-实例 Prod.encodable
-  签名: : Encodable (α × β)
+实例 积类型.encodable
+  签名: : 可编码 (α × β)
   定义体: ofEquiv _ (Equiv.sigmaEquivProd α β).symm
 
 @[simp]
@@ -1360,8 +1360,8 @@ instance _root_.Subtype.encodable
   body: ⟨encodeSubtype, decodeSubtype, fun ⟨v, h⟩ => by simp [encodeSubtype, decodeSubtype, encodek, h]⟩
 
 中文:
-实例 _root_.Subtype.encodable
-  签名: : Encodable { a : α // P a }
+实例 _root_.子类型.encodable
+  签名: : 可编码 { a : α // P a }
   定义体: ⟨encodeSubtype, decodeSubtype, fun ⟨v, h⟩ => by simp [encodeSubtype, decodeSubtype, encodek, h]⟩
 
 Depends on / 依赖: decodeSubtype, encodeSubtype, encodek
@@ -1379,8 +1379,8 @@ theorem Subtype.encode_eq
   proof: by cases a; rfl
 
 中文:
-定理 Subtype.encode_eq
-  条件: (a : Subtype P)
+定理 子类型.encode_eq
+  条件: (a : 子类型 P)
   结论: encode a = encode a.val
   证明: by cases a; rfl
 -/
@@ -1397,7 +1397,7 @@ instance _root_.Fin.encodable
   body: ofEquiv _ Fin.equivSubtype
 
 中文:
-实例 _root_.Fin.encodable
+实例 _root_.有限集.encodable
   签名: (n)
   定义体: ofEquiv _ Fin.equivSubtype
 
@@ -1415,8 +1415,8 @@ instance _root_.Int.encodable
   body: ofEquiv _ Equiv.intEquivNat
 
 中文:
-实例 _root_.Int.encodable
-  签名: : Encodable 整数
+实例 _root_.整数.encodable
+  签名: : 可编码 整数
   定义体: ofEquiv _ Equiv.intEquivNat
 
 Depends on / 依赖: Equiv.intEquivNat, intEquivNat, ofEquiv
@@ -1433,8 +1433,8 @@ instance _root_.PNat.encodable
   body: ofEquiv _ Equiv.pnatEquivNat
 
 中文:
-实例 _root_.PNat.encodable
-  签名: : Encodable 自然数+
+实例 _root_.正自然数.encodable
+  签名: : 可编码 自然数+
   定义体: ofEquiv _ Equiv.pnatEquivNat
 
 Depends on / 依赖: Equiv.pnatEquivNat, ofEquiv, pnatEquivNat
@@ -1451,8 +1451,8 @@ instance _root_.ULift.encodable
   body: ofEquiv _ Equiv.ulift
 
 中文:
-实例 _root_.ULift.encodable
-  签名: [Encodable α]
+实例 _root_.类型层提升.encodable
+  签名: [可编码 α]
   定义体: ofEquiv _ Equiv.ulift
 
 Depends on / 依赖: Equiv.ulift, ofEquiv
@@ -1469,8 +1469,8 @@ instance _root_.PLift.encodable
   body: ofEquiv _ Equiv.plift
 
 中文:
-实例 _root_.PLift.encodable
-  签名: [Encodable α]
+实例 _root_.命题层提升.encodable
+  签名: [可编码 α]
   定义体: ofEquiv _ Equiv.plift
 
 Depends on / 依赖: Equiv.plift, ofEquiv
@@ -1490,7 +1490,7 @@ definition ofInj
 
 中文:
 定义 ofInj
-  签名: [Encodable β] (f : α -> β) (hf : Injective f)
+  签名: [可编码 β] (f : α -> β) (hf : 单射 f)
   定义体: ofLeftInjection f (partialInv f) hf.isPartialInv.eq
 
 Depends on / 依赖: hf.isPartialInv.eq, isPartialInv, ofLeftInjection, partialInv
@@ -1514,7 +1514,7 @@ definition ofCountable
 
 中文:
 定义 ofCountable
-  签名: (α : 类型) [Countable α]
+  签名: (α : 类型) [可数 α]
   定义体: Nonempty.some
     let ⟨f, hf⟩ := exists_injective_nat α
     ⟨ofInj f hf⟩
@@ -1539,7 +1539,7 @@ theorem nonempty_encodable
 
 中文:
 定理 nonempty_encodable
-  结论: Nonempty (Encodable α) ↔ Countable α
+  结论: 非空 (可编码 α) ↔ 可数 α
   证明: ⟨fun ⟨h⟩ => @Encodable.countable α h, fun h => ⟨@ofCountable _ h⟩⟩
 
 Depends on / 依赖: Encodable, Encodable.countable, countable, ofCountable
@@ -1560,8 +1560,8 @@ theorem nonempty_encodable
 
 中文:
 定理 nonempty_encodable
-  条件: (α : 类型) [Countable α]
-  结论: Nonempty (Encodable α)
+  条件: (α : 类型) [可数 α]
+  结论: 非空 (可编码 α)
   证明: ⟨Encodable.ofCountable _⟩
 
 Depends on / 依赖: Encodable, Encodable.ofCountable, ofCountable
@@ -1579,7 +1579,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable 自然数+
+  签名: 可数 自然数+
   定义体: by delta PNat; infer_instance
 -/
 instance : Countable Nat+ := by delta PNat; infer_instance
@@ -1599,7 +1599,7 @@ definition ULower
 
 中文:
 定义 ULower
-  签名: (α : 类型) [Encodable α]
+  签名: (α : 类型) [可编码 α]
   定义体: Set.range (Encodable.encode : α -> Nat)
 
 Depends on / 依赖: Encodable, Encodable.encode, Set.range, encode
@@ -1664,8 +1664,8 @@ instance [Inhabited
   body: ⟨down default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (ULower α)
+实例 [可居
+  签名: α] : 可居 (ULower α)
   定义体: ⟨down default⟩
 -/
 instance [Inhabited α] : Inhabited (ULower α) :=
@@ -1838,7 +1838,7 @@ definition good
 
 中文:
 定义 good
-  签名: : Option α -> 命题
+  签名: : 选项类型 α -> 命题
 -/
 private def good : Option α -> Prop
   | some a => p a
@@ -1935,7 +1935,7 @@ theorem axiom_of_choice
 
 中文:
 定理 axiom_of_choice
-  结论: {α : 类型} {β : α -> 类型} {R : 对任意 x, β x -> 命题} [对任意 a, Encodable (β a)]
+  结论: {α : 类型} {β : α -> 类型} {R : 对任意 x, β x -> 命题} [对任意 a, 可编码 (β a)]
   证明: ⟨fun x => choose (H x), fun x => choose_spec (H x)⟩
 
 Depends on / 依赖: choose_spec
@@ -1954,7 +1954,7 @@ theorem skolem
 
 中文:
 定理 skolem
-  结论: {α : 类型} {β : α -> 类型} {P : 对任意 x, β x -> 命题} [对任意 a, Encodable (β a)]
+  结论: {α : 类型} {β : α -> 类型} {P : 对任意 x, β x -> 命题} [对任意 a, 可编码 (β a)]
   证明: ⟨axiom_of_choice, fun ⟨_, H⟩ x => ⟨_, H x⟩⟩
 
 Depends on / 依赖: axiom_of_choice
@@ -1976,7 +1976,7 @@ definition encode'
 
 中文:
 定义 encode'
-  签名: (α) [Encodable α]
+  签名: (α) [可编码 α]
   定义体: ⟨Encodable.encode, Encodable.encode_injective⟩
 
 Depends on / 依赖: Encodable, Encodable.encode, Encodable.encode_injective, encode, encode_injective
@@ -2098,7 +2098,7 @@ theorem sequence_mono
 
 中文:
 定理 sequence_mono
-  结论: Monotone (f ∘ hf.sequence f)
+  结论: 递增 (f ∘ hf.sequence f)
   证明: monotone_nat_of_le_succ hf.sequence_mono_nat
 
 Depends on / 依赖: hf.sequence_mono_nat, monotone_nat_of_le_succ, sequence_mono_nat
@@ -2142,7 +2142,7 @@ theorem sequence_anti
 
 中文:
 定理 sequence_anti
-  结论: Antitone (f ∘ hf.sequence f)
+  结论: 递减 (f ∘ hf.sequence f)
   证明: antitone_nat_of_succ_le hf.sequence_mono_nat
 
 Depends on / 依赖: antitone_nat_of_succ_le, hf.sequence_mono_nat, sequence_mono_nat
@@ -2162,7 +2162,7 @@ theorem sequence_le
 中文:
 定理 sequence_le
   条件: (a : α)
-  结论: f (hf.sequence f (Encodable.encode a + 1)) <= f a
+  结论: f (hf.sequence f (可编码.encode a + 1)) <= f a
   证明: hf.rel_sequence a
 
 Depends on / 依赖: hf.rel_sequence, rel_sequence
@@ -2189,8 +2189,8 @@ definition Quotient.rep
   body: choose (exists_rep q)
 
 中文:
-定义 Quotient.rep
-  签名: (q : Quotient s)
+定义 商.rep
+  签名: (q : 商 s)
   定义体: choose (exists_rep q)
 
 Depends on / 依赖: exists_rep
@@ -2208,8 +2208,8 @@ theorem Quotient.rep_spec
   proof: choose_spec (exists_rep q)
 
 中文:
-定理 Quotient.rep_spec
-  条件: (q : Quotient s)
+定理 商.rep_spec
+  条件: (q : 商 s)
   结论: ⟦q.rep⟧ = q
   证明: choose_spec (exists_rep q)
 
@@ -2231,7 +2231,7 @@ definition encodableQuotient
 
 中文:
 定义 encodableQuotient
-  签名: : Encodable (Quotient s)
+  签名: : 可编码 (商 s)
   定义体: ⟨fun q => encode q.rep, fun n => Quotient.mk'' < > decode n, by
     rintro ⟨l⟩; dsimp; rw [encodek]; exact congr_arg some ⟦l⟧.rep_spec⟩
 

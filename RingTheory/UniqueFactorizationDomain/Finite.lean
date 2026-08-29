@@ -44,7 +44,7 @@ definition fintypeSubtypeDvd
 
 中文:
 定义 fintypeSubtypeDvd
-  签名: {M : 类型} [CommMonoidWithZero M]
+  签名: {M : 类型} [带零交换幺半群 M]
   定义体: by
   haveI : Nontrivial M := ⟨⟨y, 0, hy⟩⟩
   haveI : StrongNormalizationMonoid M := UniqueFactorizationMonoid.strongNormalizationMonoid

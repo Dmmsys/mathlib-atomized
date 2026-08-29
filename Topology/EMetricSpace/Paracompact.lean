@@ -174,8 +174,8 @@ theorem t4Space
 
 中文:
 定理 t4Space
-  条件: [EMetricSpace α]
-  结论: T4Space α
+  条件: [广义度量空间 α]
+  结论: T4空间 α
   证明: inferInstance
 -/
 theorem t4Space [EMetricSpace α] : T4Space α := inferInstance

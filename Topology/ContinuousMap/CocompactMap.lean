@@ -35,11 +35,11 @@ structure CocompactMap
     - cocompact_tendsto' : Tendsto toFun (cocompact α) (cocompact β)
 
 中文:
-结构 CocompactMap
-  参数: (α : 类型u) (β : 类型v) [TopologicalSpace α] [TopologicalSpace β]
-  继承: ContinuousMap α β
+结构 余compact映射
+  参数: (α : 类型u) (β : 类型v) [拓扑空间 α] [拓扑空间 β]
+  继承: 连续映射 α β
   公理与运算 (1 个):
-    - cocompact_tendsto' : Tendsto toFun (cocompact α) (cocompact β)
+    - cocompact_tendsto' : 收敛 toFun (cocompact α) (cocompact β)
 -/
 structure CocompactMap (α : Type u) (β : Type v) [TopologicalSpace α] [TopologicalSpace β] :
     Type max u v
@@ -60,11 +60,11 @@ class CocompactMapClass
     - cocompact_tendsto((f : F)) : Tendsto f (cocompact α) (cocompact β)
 
 中文:
-类 CocompactMapClass
-  参数: (F : 类型) (α β : outParam 类型) [TopologicalSpace α]
-  继承: ContinuousMapClass F α β
+类 余compact映射类
+  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
-    - cocompact_tendsto((f : F)) : Tendsto f (cocompact α) (cocompact β)
+    - cocompact_tendsto((f : F)) : 收敛 f (cocompact α) (cocompact β)
 -/
 class CocompactMapClass (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
   [TopologicalSpace β] [FunLike F α β] : Prop extends ContinuousMapClass F α β where
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC F (CocompactMap α β)
+  签名: CoeTC F (余compact映射 α β)
   定义体: ⟨toCocompactMap⟩
 
 Depends on / 依赖: toCocompactMap
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CocompactMap α β) α β
+  签名: 函数状 (余compact映射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: CocompactMapClass (CocompactMap α β) α β
+  签名: 余compact映射类 (余compact映射 α β) α β
   定义体: f.continuous_toFun
   cocompact_tendsto f := f.cocompact_tendsto'
 
@@ -200,7 +200,7 @@ theorem coe_toContinuousMap
 
 中文:
 定理 coe_toContinuousMap
-  条件: {f : CocompactMap α β}
+  条件: {f : 余compact映射 α β}
   结论: (f.toContinuousMap : α -> β) = f
   证明: rfl
 
@@ -221,7 +221,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : CocompactMap α β} (h : 对任意 x, f x = g x)
+  条件: {f g : 余compact映射 α β} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext _ _ h
 
@@ -248,7 +248,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   continuous_toFun := by
     rw [h]
@@ -280,7 +280,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -300,7 +300,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -322,7 +322,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f : C(α, β)) (h : Tendsto f (cocompact α) (cocompact β))
+  条件: (f : C(α, β)) (h : 收敛 f (cocompact α) (cocompact β))
   证明: rfl
 -/
 theorem coe_mk (f : C(α, β)) (h : Tendsto f (cocompact α) (cocompact β)) :
@@ -345,7 +345,7 @@ definition id
 
 中文:
 定义 id
-  签名: : CocompactMap α α
+  签名: : 余compact映射 α α
   定义体: ⟨ContinuousMap.id _, tendsto_id⟩
 
 @[simp, norm_cast]
@@ -364,7 +364,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(CocompactMap.id α) = id
+  结论: ⇑(余compact映射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(CocompactMap.id α) = id :=
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CocompactMap α α)
+  签名: 可居 (余compact映射 α α)
   定义体: ⟨CocompactMap.id α⟩
 
 Depends on / 依赖: CocompactMap, CocompactMap.id
@@ -402,7 +402,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : CocompactMap β γ) (g : CocompactMap α β)
+  签名: (f : 余compact映射 β γ) (g : 余compact映射 α β)
   定义体: ⟨f.toContinuousMap.comp g, (cocompact_tendsto f).comp (cocompact_tendsto g)⟩
 
 @[simp]
@@ -426,7 +426,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : CocompactMap β γ) (g : CocompactMap α β)
+  条件: (f : 余compact映射 β γ) (g : 余compact映射 α β)
   结论: ⇑(comp f g) = f ∘ g
   证明: rfl
 
@@ -449,7 +449,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : CocompactMap β γ) (g : CocompactMap α β) (a : α)
+  条件: (f : 余compact映射 β γ) (g : 余compact映射 α β) (a : α)
   结论: comp f g a = f (g a)
   证明: rfl
 
@@ -471,7 +471,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : CocompactMap γ δ) (g : CocompactMap β γ) (h : CocompactMap α β)
+  条件: (f : 余compact映射 γ δ) (g : 余compact映射 β γ) (h : 余compact映射 α β)
   证明: rfl
 
 @[simp]
@@ -494,8 +494,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : CocompactMap α β)
-  结论: (CocompactMap.id _).comp f = f
+  条件: (f : 余compact映射 α β)
+  结论: (余compact映射.id _).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -515,8 +515,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : CocompactMap α β)
-  结论: f.comp (CocompactMap.id _) = f
+  条件: (f : 余compact映射 α β)
+  结论: f.comp (余compact映射.id _) = f
   证明: ext fun _ => rfl
 -/
 theorem comp_id (f : CocompactMap α β) : f.comp (CocompactMap.id _) = f :=
@@ -534,8 +534,8 @@ theorem tendsto_of_forall_preimage
     mem_map.mpr (mem_cocompact.mpr ⟨f ⁻¹' t, h t ht, by simpa using preimage_mono hts⟩)
 
 中文:
-定理 tendsto_of_forall_preimage
-  条件: {f : α -> β} (h : 对任意 s, IsCompact s -> IsCompact (f ⁻¹' s))
+定理 tendsto_of_对任意_preimage
+  条件: {f : α -> β} (h : 对任意 s, 是紧集 s -> 是紧集 (f ⁻¹' s))
   证明: fun s hs =>
   match mem_cocompact.mp hs with
   | ⟨t, ht, hts⟩ =>
@@ -566,7 +566,7 @@ theorem isCompact_preimage_of_isClosed
 
 中文:
 定理 isCompact_preimage_of_isClosed
-  结论: (f : CocompactMap α β)
+  结论: (f : 余compact映射 α β)
   证明: by
   obtain ⟨t, ht, hts⟩ :=
     mem_cocompact'.mp
@@ -604,8 +604,8 @@ theorem isCompact_preimage
 
 中文:
 定理 isCompact_preimage
-  条件: [T2Space β] (f : CocompactMap α β) ⦃s
-  结论: Set β⦄ (hs : IsCompact s) :
+  条件: [T2空间 β] (f : 余compact映射 α β) ⦃s
+  结论: 集合 β⦄ (hs : 是紧集 s) :
   证明: isCompact_preimage_of_isClosed f hs hs.isClosed
 
 Depends on / 依赖: hs.isClosed, isClosed, isCompact_preimage_of_isClosed
@@ -636,8 +636,8 @@ definition Homeomorph.toCocompactMap
     exact hK.image f.symm.continuous
 
 中文:
-定义 Homeomorph.toCocompactMap
-  签名: {α β : 类型} [TopologicalSpace α] [TopologicalSpace β]
+定义 同胚.toCocompactMap
+  签名: {α β : 类型} [拓扑空间 α] [拓扑空间 β]
   定义体: f
   continuous_toFun := f.continuous
   cocompact_tendsto' := by

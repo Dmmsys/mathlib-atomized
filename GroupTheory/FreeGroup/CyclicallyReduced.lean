@@ -49,7 +49,7 @@ definition IsCyclicallyReduced
 
 中文:
 定义 IsCyclicallyReduced
-  签名: (L : List (α × 布尔))
+  签名: (L : 列表 (α × 布尔值))
   定义体: IsReduced L ∧ forall a in L.getLast?, forall b in L.head?, a.1 = b.1 -> a.2 = b.2
 
 @[to_additive]
@@ -94,7 +94,7 @@ theorem isCyclicallyReduced_cons_append_iff
 
 中文:
 定理 isCyclicallyReduced_cons_append_iff
-  条件: {a b : α × 布尔}
+  条件: {a b : α × 布尔值}
   证明: by
   rw [isCyclicallyReduced_iff]; rw [List.getLast?_concat]
   simp
@@ -123,7 +123,7 @@ theorem nil
 
 中文:
 定理 nil
-  结论: IsCyclicallyReduced ([] : List (α × 布尔))
+  结论: IsCyclicallyReduced ([] : 列表 (α × 布尔值))
   证明: by
   simp [IsCyclicallyReduced]
 
@@ -148,7 +148,7 @@ theorem singleton
 
 中文:
 定理 singleton
-  条件: {x : (α × 布尔)}
+  条件: {x : (α × 布尔值)}
   结论: IsCyclicallyReduced [x]
   证明: by
   simp [IsCyclicallyReduced]
@@ -175,7 +175,7 @@ theorem isReduced
 中文:
 定理 isReduced
   条件: (h : IsCyclicallyReduced L)
-  结论: IsReduced L
+  结论: 是既约 L
   证明: h.1
 
 @[to_additive]
@@ -244,7 +244,7 @@ theorem IsReduced.append_flatten_replicate_append
       refine IsReduced.append_ove
 
 中文:
-定理 IsReduced.append_flatten_replicate_append
+定理 是既约.append_flatten_replicate_append
   结论: (h₁ : IsCyclicallyReduced L₂)
   证明: by
   match n with
@@ -324,7 +324,7 @@ theorem nil
 
 中文:
 定理 nil
-  结论: reduceCyclically ([] : List (α × 布尔)) = []
+  结论: reduceCyclically ([] : 列表 (α × 布尔值)) = []
   证明: by simp [reduceCyclically]
 
 @[to_additive (attr := simp)]
@@ -346,7 +346,7 @@ theorem singleton
 
 中文:
 定理 singleton
-  条件: {a : α × 布尔}
+  条件: {a : α × 布尔值}
   结论: reduceCyclically [a] = [a]
   证明: by
   simp [reduceCyclically]
@@ -371,7 +371,7 @@ theorem cons_append
 
 中文:
 定理 cons_append
-  条件: {a b : α × 布尔} (L : List (α × 布尔))
+  条件: {a b : α × 布尔值} (L : 列表 (α × 布尔值))
   证明: by
   simp [reduceCyclically]
 
@@ -406,7 +406,7 @@ theorem isCyclicallyReduced
 
 中文:
 定理 isCyclicallyReduced
-  条件: (h : IsReduced L)
+  条件: (h : 是既约 L)
   结论: IsCyclicallyReduced (reduceCyclically L)
   证明: by
   induction L using List.bidirectionalRec
@@ -453,7 +453,7 @@ definition conjugator
 
 中文:
 定义 conjugator
-  签名: : List (α × 布尔) -> List (α × 布尔)
+  签名: : 列表 (α × 布尔值) -> 列表 (α × 布尔值)
   定义体: List.bidirectionalRec
     (nil := [])
     (singleton := fun _ => [])
@@ -482,7 +482,7 @@ theorem conjugator.nil
 
 中文:
 定理 conjugator.nil
-  结论: conjugator ([] : List (α × 布尔)) = []
+  结论: conjugator ([] : 列表 (α × 布尔值)) = []
   证明: by simp [conjugator]
 
 @[to_additive (attr := simp)]
@@ -503,7 +503,7 @@ theorem conjugator.singleton
 
 中文:
 定理 conjugator.singleton
-  条件: {a : α × 布尔}
+  条件: {a : α × 布尔值}
   结论: conjugator [a] = []
   证明: by simp [conjugator]
 
@@ -525,7 +525,7 @@ theorem conjugator.cons_append
 
 中文:
 定理 conjugator.cons_append
-  条件: {a b : α × 布尔} (L : List (α × 布尔))
+  条件: {a b : α × 布尔值} (L : 列表 (α × 布尔值))
   证明: by
   simp [conjugator]
 
@@ -556,7 +556,7 @@ theorem conj_conjugator_reduceCyclically
 
 中文:
 定理 conj_conjugator_reduceCyclically
-  条件: (L : List (α × 布尔))
+  条件: (L : 列表 (α × 布尔值))
   证明: by
   induction L using List.bidirectionalRec
   case nil => simp
@@ -601,7 +601,7 @@ theorem reduce_flatten_replicate_succ
 
 中文:
 定理 reduce_flatten_replicate_succ
-  条件: (h : IsReduced L) (n : 自然数)
+  条件: (h : 是既约 L) (n : 自然数)
   证明: by
   induction n
   case zero =>
@@ -645,7 +645,7 @@ theorem reduce_flatten_replicate
 
 中文:
 定理 reduce_flatten_replicate
-  条件: (h : IsReduced L) (n : 自然数)
+  条件: (h : 是既约 L) (n : 自然数)
   证明: match n with
   | 0 => by simp
   | n + 1 => reduce_flatten_replicate_succ h n
@@ -688,7 +688,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulTorsionFree (FreeGroup α)
+  签名: 是MulTorsionFree (自由群 α)
   定义体: by
     classical
     let f (a : FreeGroup α) (n : Nat) : Nat :=

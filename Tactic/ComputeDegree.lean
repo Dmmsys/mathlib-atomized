@@ -572,7 +572,7 @@ definition getCongrLemma
 
 中文:
 定义 getCongrLemma
-  签名: (twoH : Name × Name × List 布尔) (debug : 布尔 := false)
+  签名: (twoH : Name × Name × 列表 布尔值) (debug : 布尔值 := false)
   定义体: let nam := match twoH with
     | (_, ``LE.le, [rhs]) => if rhs then ``id else ``le_trans
     | (_, ``LT.lt, [rhs]) => if rhs then ``id else ``lt_of_le_of_lt
@@ -693,7 +693,7 @@ let tried_rfl ← noMV.mapM fun g => g.applyConst ``rfl > return [g]
 
 中文:
 定义 tryRfl
-  签名: (mvs : List MVarId)
+  签名: (mvs : 列表 MVarId)
   定义体: do
   let (yesMV, noMV) ← mvs.partitionM fun mv =>
                           return hasExprMVar (← instantiateMVars (← mv.getDecl).type)
@@ -736,7 +736,7 @@ mv.applyConst lem
 
 中文:
 定义 splitApply
-  签名: (mvs static : List MVarId)
+  签名: (mvs static : 列表 MVarId)
   定义体: do
   let (can_progress, curr_static) ← mvs.partitionM fun mv => do
     return dispatchLemma (twoHeadsArgs (← mv.getType'')) != ``id

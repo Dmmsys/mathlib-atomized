@@ -44,7 +44,7 @@ lemma MonotoneOn.exists_tendsto_deriv_liminf_lintegral_enorm_le
   `∫⁻ (x : ℝ) in Icc
 
 中文:
-引理 MonotoneOn.exists_tendsto_deriv_liminf_lintegral_enorm_le
+引理 MonotoneOn.存在_tendsto_deriv_liminf_lintegral_enorm_le
   证明: by
   /- Proof Sketch: Extend `f` on `[a, b]` to a function `g` on `ℝ` by defining `g x = f a` for
   `x < a` and `g x = f b` for `x > b`. `g` is globally monotone and `g'` agrees with `f'` on
@@ -113,7 +113,7 @@ theorem MonotoneOn.intervalIntegrable_deriv
 .
 
 中文:
-定理 MonotoneOn.intervalIntegrable_deriv
+定理 MonotoneOn.interval整数egrable_deriv
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: by
   wlog hab : a <= b generalizing a b with h
@@ -153,7 +153,7 @@ theorem MonotoneOn.intervalIntegral_deriv_mem_uIcc
 
 
 中文:
-定理 MonotoneOn.intervalIntegral_deriv_mem_uIcc
+定理 MonotoneOn.interval整数egral_deriv_mem_uIcc
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: by
   wlog hab : a <= b generalizing a b with h
@@ -216,7 +216,7 @@ theorem BoundedVariationOn.intervalIntegrable_deriv
   rw [Filter.EventuallyEq]; rw [MeasureTheory.ae_
 
 中文:
-定理 BoundedVariationOn.intervalIntegrable_deriv
+定理 BoundedVariationOn.interval整数egrable_deriv
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: by
   obtain ⟨p, q, hp, hq, rfl⟩ := hf.locallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn
@@ -251,7 +251,7 @@ theorem AbsolutelyContinuousOnInterval.intervalIntegrable_deriv
   proof: hf.boundedVariationOn.intervalIntegrable_deriv
 
 中文:
-定理 AbsolutelyContinuousOnInterval.intervalIntegrable_deriv
+定理 AbsolutelyContinuousOn整数erval.interval整数egrable_deriv
   结论: {f : 实数 -> 实数} {a b : 实数}
   证明: hf.boundedVariationOn.intervalIntegrable_deriv
 

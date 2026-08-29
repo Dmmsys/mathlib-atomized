@@ -98,7 +98,7 @@ theorem mem_spectrum_of_isRoot_charpoly
 
 中文:
 定理 mem_spectrum_of_isRoot_charpoly
-  条件: [Nontrivial R] {r : R} (hr : IsRoot B.charpoly r)
+  条件: [非平凡 R] {r : R} (hr : IsRoot B.charpoly r)
   证明: by
   simp [mem_spectrum_iff_not_isUnit_eval_charpoly, hr.eq_zero]
 
@@ -141,7 +141,7 @@ theorem det_eq_prod_roots_charpoly_of_splits
 
 中文:
 定理 det_eq_prod_roots_charpoly_of_splits
-  条件: [IsDomain R] (hAps : B.charpoly.Splits)
+  条件: [是整环 R] (hAps : B.charpoly.Splits)
   证明: by
   rw [det_eq_sign_charpoly_coeff]; rw [← charpoly_natDegree_eq_dim B]; rw [hAps.coeff_zero_eq_prod_roots_of_monic B.charpoly_monic]; rw [← mul_assoc]; rw [← pow_two]; rw [pow_right_comm]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]
 
@@ -165,7 +165,7 @@ theorem trace_eq_sum_roots_charpoly_of_splits
 
 中文:
 定理 trace_eq_sum_roots_charpoly_of_splits
-  条件: [IsDomain R] (hAps : B.charpoly.Splits)
+  条件: [是整环 R] (hAps : B.charpoly.Splits)
   证明: by
   rcases isEmpty_or_nonempty n with h | _
   · simp
@@ -194,8 +194,8 @@ theorem det_eq_prod_roots_charpoly
 
 中文:
 定理 det_eq_prod_roots_charpoly
-  条件: [IsAlgClosed K]
-  结论: A.det = (Matrix.charpoly A).roots.prod
+  条件: [是代数闭 K]
+  结论: A.det = (矩阵.charpoly A).roots.乘积
   证明: det_eq_prod_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
 
 Depends on / 依赖: A.charpoly, IsAlgClosed, IsAlgClosed.splits, charpoly, det_eq_prod_roots_charpoly_of_splits, splits
@@ -214,8 +214,8 @@ theorem trace_eq_sum_roots_charpoly
 
 中文:
 定理 trace_eq_sum_roots_charpoly
-  条件: [IsAlgClosed K]
-  结论: A.trace = (Matrix.charpoly A).roots.sum
+  条件: [是代数闭 K]
+  结论: A.trace = (矩阵.charpoly A).roots.求和
   证明: trace_eq_sum_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
 
 Depends on / 依赖: A.charpoly, IsAlgClosed, IsAlgClosed.splits, charpoly, splits, trace_eq_sum_roots_charpoly_of_splits

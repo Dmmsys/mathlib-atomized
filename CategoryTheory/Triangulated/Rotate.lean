@@ -278,7 +278,7 @@ definition triangleRotation
 
 中文:
 定义 triangleRotation
-  签名: : Equivalence (Triangle C) (Triangle C) where
+  签名: : 等价 (Triangle C) (Triangle C) where
   定义体: rotate C
   inverse := invRotate C
   unitIso := rotCompInvRot
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: (rotate C).IsEquivalence
+  签名: (rotate C).是等价
   定义体: by
   change (triangleRotation C).functor.IsEquivalence
   infer_instance
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invRotate C).IsEquivalence
+  签名: (invRotate C).是等价
   定义体: by
   change (triangleRotation C).inverse.IsEquivalence
   infer_instance

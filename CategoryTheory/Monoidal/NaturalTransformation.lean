@@ -52,7 +52,7 @@ class IsMonoidal
     - tensor((X Y : C)) : μ F₁ _ _ ≫ τ.app (X otimes Y) = (τ.app X otimesₘ τ.app Y) ≫ μ F₂ _ _  [default: by cat_disch]
 
 中文:
-类 IsMonoidal
+类 是幺半群
   参数: : 命题 where
   公理与运算 (2 个):
     - unit : ε F₁ ≫ τ.app (𝟙_ C) = ε F₂  [默认: by cat_disch]
@@ -77,7 +77,7 @@ instance id
 
 中文:
 实例 id
-  签名: : IsMonoidal (𝟙 F₁) where
+  签名: : 是幺半群 (𝟙 F₁) where
 -/
 instance id : IsMonoidal (𝟙 F₁) where
 
@@ -90,7 +90,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: (τ' : F₂ ⟶ F₃) [IsMonoidal τ] [IsMonoidal τ']
+  签名: (τ' : F₂ ⟶ F₃) [是幺半群 τ] [是幺半群 τ']
 -/
 instance comp (τ' : F₂ ⟶ F₃) [IsMonoidal τ] [IsMonoidal τ'] :
     IsMonoidal (τ ≫ τ') where
@@ -111,7 +111,7 @@ instance hcomp
 
 中文:
 实例 hcomp
-  签名: {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' : G₁ ⟶ G₂)
+  签名: {G₁ G₂ : D ⥤ E} [G₁.松弛幺半群] [G₂.松弛幺半群] (τ' : G₁ ⟶ G₂)
   定义体: by
     simp only [comp_obj, comp_ε, hcomp_app, assoc, naturality_assoc, unit_assoc, ← map_comp, unit]
   tensor X Y := by
@@ -142,7 +142,7 @@ instance whiskerRight
 
 中文:
 实例 whiskerRight
-  签名: {G₁ : D ⥤ E} [G₁.LaxMonoidal] [IsMonoidal τ]
+  签名: {G₁ : D ⥤ E} [G₁.松弛幺半群] [是幺半群 τ]
   定义体: by
   rw [← Functor.hcomp_id]
   infer_instance
@@ -166,7 +166,7 @@ instance whiskerLeft
 
 中文:
 实例 whiskerLeft
-  签名: {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal]
+  签名: {G₁ G₂ : D ⥤ E} [G₁.松弛幺半群] [G₂.松弛幺半群]
   定义体: by
   rw [← Functor.id_hcomp]
   infer_instance
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal e.inv
+  签名: 自然变换.是幺半群 e.inv
   定义体: by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
   tensor X Y := by
     rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [in
@@ -273,7 +273,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal adj.unit
+  签名: 自然变换.是幺半群 adj.unit
   定义体: by
     dsimp
     rw [id_comp]; rw [← unit_app_unit_comp_map_η adj]; rw [assoc]; rw [Monoidal.map_η_ε]
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal adj.counit
+  签名: 自然变换.是幺半群 adj.counit
   定义体: by
     dsimp
     rw [assoc]; rw [map_ε_comp_counit_app_unit adj]; rw [ε_η]
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal e.unit
+  签名: 自然变换.是幺半群 e.unit
   定义体: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.unit)
 
 Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, e.toAdjunction.unit, toAdjunction
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal e.counit
+  签名: 自然变换.是幺半群 e.counit
   定义体: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.counit)
 
 Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, counit, e.toAdjunction.counit, toAdjunction
@@ -387,11 +387,11 @@ structure Hom
     - isMonoidal : NatTrans.IsMonoidal hom  [default: by infer_instance]
 
 中文:
-结构 Hom
-  参数: (F G : LaxMonoidalFunctor C D)
+结构 态射
+  参数: (F G : 松弛幺半群函子 C D)
   公理与运算 (2 个):
     - hom : F.toFunctor ⟶ G.toFunctor
-    - isMonoidal : 自然数Trans.IsMonoidal hom  [默认: by infer_instance]
+    - isMonoidal : 自然变换.是幺半群 hom  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (LaxMonoidalFunctor C D)
+  签名: 范畴 (松弛幺半群函子 C D)
   定义体: Hom
   comp α β := ⟨α.1 ≫ β.1, by have := α.2; have := β.2; infer_instance⟩
   id _ := ⟨𝟙 _, inferInstance⟩
@@ -442,8 +442,8 @@ lemma id_hom
 
 中文:
 引理 id_hom
-  条件: (F : LaxMonoidalFunctor C D)
-  结论: Hom.hom (𝟙 F) = 𝟙 _
+  条件: (F : 松弛幺半群函子 C D)
+  结论: 态射.hom (𝟙 F) = 𝟙 _
   证明: rfl
 
 @[reassoc, simp]
@@ -463,7 +463,7 @@ lemma comp_hom
 
 中文:
 引理 comp_hom
-  条件: {F G H : LaxMonoidalFunctor C D} (α : F ⟶ G) (β : G ⟶ H)
+  条件: {F G H : 松弛幺半群函子 C D} (α : F ⟶ G) (β : G ⟶ H)
   证明: rfl
 
 @[ext]
@@ -484,7 +484,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {F G : LaxMonoidalFunctor C D} {α β : F ⟶ G} (h : α.hom = β.hom)
+  条件: {F G : 松弛幺半群函子 C D} {α β : F ⟶ G} (h : α.hom = β.hom)
   结论: α = β
   证明: by
   cases α; cases β; subst h; rfl
@@ -506,7 +506,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {F G : LaxMonoidalFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [自然数Trans.IsMonoidal f]
+  签名: {F G : 松弛幺半群函子 C D} (f : F.toFunctor ⟶ G.toFunctor) [自然变换.是幺半群 f]
   定义体: ⟨f, inferInstance⟩
 -/
 def homMk {F G : LaxMonoidalFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [NatTrans.IsMonoidal f] :
@@ -525,7 +525,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {F G : LaxMonoidalFunctor C D} (e : F.toFunctor ≅ G.toFunctor)
+  签名: {F G : 松弛幺半群函子 C D} (e : F.toFunctor ≅ G.toFunctor)
   定义体: homMk e.hom
   inv := homMk e.inv
 
@@ -551,7 +551,7 @@ definition isoOfComponents
 
 中文:
 定义 isoOfComponents
-  签名: {F G : LaxMonoidalFunctor C D} (e : 对任意 X, F.obj X ≅ G.obj X)
+  签名: {F G : 松弛幺半群函子 C D} (e : 对任意 X, F.obj X ≅ G.obj X)
   定义体: @isoMk _ _ _ _ _ _ _ _ (NatIso.ofComponents e naturality) (by constructor <;> assumption)
 
 Depends on / 依赖: F.toFunctor, G.toFunctor, NatIso, NatIso.ofComponents, cat_disch, naturality, ofComponents, otimes, tensor, toFunctor
@@ -583,7 +583,7 @@ lemma natTransIsMonoidal_of_transport
 
 中文:
 引理 natTransIsMonoidal_of_transport
-  条件: {F G : C ⥤ D} [F.Monoidal] (e : F ≅ G)
+  条件: {F G : C ⥤ D} [F.幺半群] (e : F ≅ G)
   证明: transport e
     e.hom.IsMonoidal := by
   let : G.Monoidal := transport e

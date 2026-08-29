@@ -55,7 +55,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Preorder α] {a : α}
+  签名: [预序 α] {a : α}
   定义体: ⟨⟨a, le_rfl⟩⟩
 
 Depends on / 依赖: le_rfl
@@ -75,7 +75,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: [Zero α] [Preorder α]
+  签名: [零 α] [预序 α]
   定义体: ⟨⟨0, le_rfl⟩⟩
 
 @[simp, norm_cast]
@@ -99,7 +99,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  条件: [Zero α] [Preorder α]
+  条件: [零 α] [预序 α]
   结论: ((0 : { x : α // 0 <= x }) : α) = 0
   证明: rfl
 
@@ -119,7 +119,7 @@ theorem mk_eq_zero
 
 中文:
 定理 mk_eq_zero
-  条件: [Zero α] [Preorder α] {x : α} (hx : 0 <= x)
+  条件: [零 α] [预序 α] {x : α} (hx : 0 <= x)
   证明: Subtype.ext_iff
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
@@ -140,7 +140,7 @@ instance add
 
 中文:
 实例 add
-  签名: [AddZeroClass α] [Preorder α] [AddLeftMono α]
+  签名: [加法零类 α] [预序 α] [AddLeftMono α]
   定义体: ⟨fun x y => ⟨x + y, add_nonneg x.2 y.2⟩⟩
 
 @[simp]
@@ -163,7 +163,7 @@ theorem mk_add_mk
 
 中文:
 定理 mk_add_mk
-  结论: [AddZeroClass α] [Preorder α] [AddLeftMono α] {x y : α}
+  结论: [加法零类 α] [预序 α] [AddLeftMono α] {x y : α}
   证明: rfl
 
 @[simp, norm_cast]
@@ -184,7 +184,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  结论: [AddZeroClass α] [Preorder α] [AddLeftMono α]
+  结论: [加法零类 α] [预序 α] [AddLeftMono α]
   证明: rfl
 -/
 protected theorem coe_add [AddZeroClass α] [Preorder α] [AddLeftMono α]
@@ -200,8 +200,8 @@ instance [AddZeroClass
   body: Subtype.ext (add_left_cancel congr($eq))
 
 中文:
-实例 [AddZeroClass
-  签名: α] [Preorder α] [AddLeftMono α] [IsLeftCancelAdd α] :
+实例 [加法零类
+  签名: α] [预序 α] [AddLeftMono α] [是左消去加法 α] :
   定义体: Subtype.ext (add_left_cancel congr($eq))
 
 Depends on / 依赖: Subtype, Subtype.ext, add_left_cancel
@@ -219,8 +219,8 @@ instance [AddZeroClass
   body: Subtype.ext (add_right_cancel congr($eq))
 
 中文:
-实例 [AddZeroClass
-  签名: α] [Preorder α] [AddLeftMono α] [IsRightCancelAdd α] :
+实例 [加法零类
+  签名: α] [预序 α] [AddLeftMono α] [是右消去加法 α] :
   定义体: Subtype.ext (add_right_cancel congr($eq))
 
 Depends on / 依赖: Subtype, Subtype.ext, add_right_cancel
@@ -237,8 +237,8 @@ instance [AddZeroClass
   signature: α] [Preorder α] [AddLeftMono α] [IsCancelAdd α] :
 
 中文:
-实例 [AddZeroClass
-  签名: α] [Preorder α] [AddLeftMono α] [IsCancelAdd α] :
+实例 [加法零类
+  签名: α] [预序 α] [AddLeftMono α] [是消去加法 α] :
 -/
 instance [AddZeroClass α] [Preorder α] [AddLeftMono α] [IsCancelAdd α] :
     IsCancelAdd { x : α // 0 <= x } where
@@ -255,7 +255,7 @@ instance nsmul
 
 中文:
 实例 nsmul
-  签名: [AddMonoid α] [Preorder α] [AddLeftMono α]
+  签名: [加法幺半群 α] [预序 α] [AddLeftMono α]
   定义体: ⟨fun n x => ⟨n • (x : α), nsmul_nonneg x.prop n⟩⟩
 
 @[simp]
@@ -278,7 +278,7 @@ theorem nsmul_mk
 
 中文:
 定理 nsmul_mk
-  结论: [AddMonoid α] [Preorder α] [AddLeftMono α] (n : 自然数) {x : α}
+  结论: [加法幺半群 α] [预序 α] [AddLeftMono α] (n : 自然数) {x : α}
   证明: rfl
 
 @[simp, norm_cast]
@@ -298,7 +298,7 @@ theorem coe_nsmul
 
 中文:
 定理 coe_nsmul
-  结论: [AddMonoid α] [Preorder α] [AddLeftMono α]
+  结论: [加法幺半群 α] [预序 α] [AddLeftMono α]
   证明: rfl
 -/
 protected theorem coe_nsmul [AddMonoid α] [Preorder α] [AddLeftMono α]
@@ -321,7 +321,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One { x : α // 0 <= x } where
+  签名: : 幺 { x : α // 0 <= x } where
   定义体: ⟨1, zero_le_one⟩
 
 @[simp, norm_cast]
@@ -390,7 +390,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul { x : α // 0 <= x } where
+  签名: : 乘法 { x : α // 0 <= x } where
   定义体: ⟨x * y, mul_nonneg x.2 y.2⟩
 
 @[simp, norm_cast]
@@ -456,7 +456,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid { x : α // 0 <= x }
+  签名: : 加法幺半群 { x : α // 0 <= x }
   定义体: fast_instance% Subtype.coe_injective.addMonoid _ Nonneg.coe_zero (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Nonneg, Nonneg.coe_zero, Subtype, Subtype.coe_injective.addMonoid, addMonoid, coe_injective, coe_zero, fast_instance
@@ -531,7 +531,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid { x : α // 0 <= x }
+  签名: : 加法交换幺半群 { x : α // 0 <= x }
   定义体: fast_instance%
     Subtype.coe_injective.addCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -557,7 +557,7 @@ instance addCancelCommMonoid
 
 中文:
 实例 addCancelCommMonoid
-  签名: : AddCancelCommMonoid {x : α // 0 <= x}
+  签名: : 加法消去交换幺半群 {x : α // 0 <= x}
   定义体: fast_instance%
     Subtype.coe_injective.addCancelCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -585,7 +585,7 @@ instance natCast
 
 中文:
 实例 natCast
-  签名: : 自然数Cast { x : α // 0 <= x }
+  签名: : 自然数嵌入 { x : α // 0 <= x }
   定义体: ⟨fun n => ⟨n, Nat.cast_nonneg' n⟩⟩
 
 @[simp, norm_cast]
@@ -650,7 +650,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne { x : α // 0 <= x }
+  签名: : 加法带幺幺半群 { x : α // 0 <= x }
   定义体: { Nonneg.one (α := α) with
     toNatCast := Nonneg.natCast
     natCast_zero := by ext; simp
@@ -682,7 +682,7 @@ instance pow
 
 中文:
 实例 pow
-  签名: : Pow { x : α // 0 <= x } 自然数 where
+  签名: : 幂 { x : α // 0 <= x } 自然数 where
   定义体: ⟨(x : α) ^ n, pow_nonneg x.2 n⟩
 
 @[simp, norm_cast]
@@ -751,7 +751,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring { x : α // 0 <= x }
+  签名: : 半环 { x : α // 0 <= x }
   定义体: fast_instance% Subtype.coe_injective.semiring _ Nonneg.coe_zero Nonneg.coe_one
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
@@ -773,7 +773,7 @@ instance monoidWithZero
 
 中文:
 实例 monoidWithZero
-  签名: : MonoidWithZero { x : α // 0 <= x }
+  签名: : 带零幺半群 { x : α // 0 <= x }
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -829,7 +829,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring { x : α // 0 <= x }
+  签名: : 交换半环 { x : α // 0 <= x }
   定义体: fast_instance% Subtype.coe_injective.commSemiring _ Nonneg.coe_zero Nonneg.coe_one
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
@@ -851,7 +851,7 @@ instance commMonoidWithZero
 
 中文:
 实例 commMonoidWithZero
-  签名: : CommMonoidWithZero { x : α // 0 <= x }
+  签名: : 带零交换幺半群 { x : α // 0 <= x }
   定义体: inferInstance
 -/
 instance commMonoidWithZero : CommMonoidWithZero { x : α // 0 <= x } := inferInstance
@@ -898,7 +898,7 @@ theorem coe_toNonneg
 中文:
 定理 coe_toNonneg
   条件: {a : α}
-  结论: (toNonneg a : α) = max a 0
+  结论: (toNonneg a : α) = 最大值 a 0
   证明: rfl
 
 @[simp]
@@ -993,7 +993,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: [Sub α]
+  签名: [减法 α]
   定义体: ⟨fun x y => toNonneg (x - y)⟩
 
 @[simp]
@@ -1014,7 +1014,7 @@ theorem mk_sub_mk
 
 中文:
 定理 mk_sub_mk
-  条件: [Sub α] {x y : α} (hx : 0 <= x) (hy : 0 <= y)
+  条件: [减法 α] {x y : α} (hx : 0 <= x) (hy : 0 <= y)
   证明: rfl
 -/
 theorem mk_sub_mk [Sub α] {x y : α} (hx : 0 <= x) (hy : 0 <= y) :

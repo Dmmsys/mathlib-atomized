@@ -550,7 +550,7 @@ lemma ContMDiffWithinAt.sum_section
 
 中文:
 引理 ContMDiffWithinAt.sum_section
-  结论: {s : Finset ι}
+  结论: {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -587,7 +587,7 @@ lemma ContMDiffAt.sum_section
 
 中文:
 引理 ContMDiffAt.sum_section
-  结论: {s : Finset ι}
+  结论: {s : 有限集 ι}
   证明: by
   simp_rw [← contMDiffWithinAt_univ] at hs ⊢
   exact .sum_section hs
@@ -610,7 +610,7 @@ lemma ContMDiffOn.sum_section
 
 中文:
 引理 ContMDiffOn.sum_section
-  结论: {s : Finset ι}
+  结论: {s : 有限集 ι}
   证明: fun x₀ hx₀ => .sum_section fun i hi => hs i hi x₀ hx₀
 
 Depends on / 依赖: sum_section
@@ -630,7 +630,7 @@ lemma ContMDiff.sum_section
 
 中文:
 引理 ContMDiff.sum_section
-  条件: {s : Finset ι} (hs : 对任意 i in s, CMDiff n (T% (t i ·)))
+  条件: {s : 有限集 ι} (hs : 对任意 i in s, CMDiff n (T% (t i ·)))
   证明: fun x₀ => .sum_section fun i hi => (hs i hi) x₀
 
 Depends on / 依赖: sum_section
@@ -743,7 +743,7 @@ lemma ContMDiffAt.sum_section_of_locallyFinite
 
 中文:
 引理 ContMDiffAt.sum_section_of_locallyFinite
-  结论: (ht : LocallyFinite fun i => {x : M | t i x != 0})
+  结论: (ht : 局部有限 fun i => {x : M | t i x != 0})
   证明: by
   simp_rw [← contMDiffWithinAt_univ] at ht' ⊢
   exact .sum_section_of_locallyFinite ht ht'
@@ -766,7 +766,7 @@ lemma ContMDiffOn.sum_section_of_locallyFinite
 
 中文:
 引理 ContMDiffOn.sum_section_of_locallyFinite
-  结论: (ht : LocallyFinite fun i => {x : M | t i x != 0})
+  结论: (ht : 局部有限 fun i => {x : M | t i x != 0})
   证明: fun x hx => .sum_section_of_locallyFinite ht (ht' · x hx)
 
 Depends on / 依赖: Aux_single, Matrix, Matrix.toLinearMap, sum_section_of_locallyFinite
@@ -786,7 +786,7 @@ lemma ContMDiff.sum_section_of_locallyFinite
 
 中文:
 引理 ContMDiff.sum_section_of_locallyFinite
-  结论: (ht : LocallyFinite fun i => {x : M | t i x != 0})
+  结论: (ht : 局部有限 fun i => {x : M | t i x != 0})
   证明: fun x => .sum_section_of_locallyFinite ht fun i => ht' i x
 
 Depends on / 依赖: sum_section_of_locallyFinite
@@ -889,7 +889,7 @@ lemma ContMDiff.finsum_section_of_locallyFinite
 
 中文:
 引理 ContMDiff.finsum_section_of_locallyFinite
-  结论: (ht : LocallyFinite fun i => {x : M | t i x != 0})
+  结论: (ht : 局部有限 fun i => {x : M | t i x != 0})
   证明: fun x => .finsum_section_of_locallyFinite ht fun i => ht' i x
 
 Depends on / 依赖: BilinForm, BilinForm.toMatrix, finsum_section_of_locallyFinite, toMatrix
@@ -912,7 +912,7 @@ structure ContMDiffSection
     - contMDiff_toFun : CMDiff n (T% toFun)
 
 中文:
-结构 ContMDiffSection
+结构 余ntMDiffSection
   参数: where
   公理与运算 (2 个):
     - toFun : 对任意 x, V x
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: DFunLike Cₛ^n⟮I; F, V⟯ M V
+  签名: 依赖函数状 Cₛ^n⟮I; F, V⟯ M V
   定义体: ContMDiffSection.toFun
   coe_injective := by rintro ⟨⟩ ⟨⟩ h; congr
 
@@ -1025,7 +1025,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Cₛ^n⟮I; F, V⟯ -> 对任意 x, V x)
+  结论: 单射 ((↑) : Cₛ^n⟮I; F, V⟯ -> 对任意 x, V x)
   证明: coe_inj
 
 @[ext]
@@ -1070,7 +1070,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add Cₛ^n⟮I; F, V⟯
+  签名: : 加法 Cₛ^n⟮I; F, V⟯
   定义体: ⟨fun s t => ⟨s + t, s.contMDiff.add_section t.contMDiff⟩⟩
 
 @[simp]
@@ -1113,7 +1113,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub Cₛ^n⟮I; F, V⟯
+  签名: : 减法 Cₛ^n⟮I; F, V⟯
   定义体: ⟨fun s t => ⟨s - t, s.contMDiff.sub_section t.contMDiff⟩⟩
 
 @[simp]
@@ -1154,7 +1154,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero Cₛ^n⟮I; F, V⟯
+  签名: : 零 Cₛ^n⟮I; F, V⟯
   定义体: ⟨⟨fun _ => 0, (contMDiff_zeroSection 𝕜 V).of_le le_top⟩⟩
 
 Depends on / 依赖: B.toMatrix, contMDiff_zeroSection, le_top, of_le
@@ -1174,7 +1174,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited Cₛ^n⟮I; F, V⟯
+  签名: : 可居 Cₛ^n⟮I; F, V⟯
   定义体: ⟨0⟩
 
 @[simp]
@@ -1213,7 +1213,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg Cₛ^n⟮I; F, V⟯
+  签名: : 取负 Cₛ^n⟮I; F, V⟯
   定义体: ⟨fun s => ⟨-s, s.contMDiff.neg_section⟩⟩
 
 @[simp]
@@ -1256,7 +1256,7 @@ instance instNSMul
 
 中文:
 实例 instNSMul
-  签名: : SMul 自然数 Cₛ^n⟮I; F, V⟯
+  签名: : 标量乘法 自然数 Cₛ^n⟮I; F, V⟯
   定义体: ⟨nsmulRec⟩
 
 @[simp]
@@ -1307,7 +1307,7 @@ instance instZSMul
 
 中文:
 实例 instZSMul
-  签名: : SMul 整数 Cₛ^n⟮I; F, V⟯
+  签名: : 标量乘法 整数 Cₛ^n⟮I; F, V⟯
   定义体: ⟨zsmulRec⟩
 
 @[simp]
@@ -1362,7 +1362,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup Cₛ^n⟮I; F, V⟯
+  签名: : 加法交换群 Cₛ^n⟮I; F, V⟯
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub coe_nsmul coe_zsmul
 
 Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_nsmul, coe_sub, coe_zero, coe_zsmul
@@ -1382,7 +1382,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul 𝕜 Cₛ^n⟮I; F, V⟯
+  签名: : 标量乘法 𝕜 Cₛ^n⟮I; F, V⟯
   定义体: ⟨fun c s => ⟨c • ⇑s, s.contMDiff.const_smul_section⟩⟩
 
 @[simp]
@@ -1466,7 +1466,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 Cₛ^n⟮I; F, V⟯
+  签名: : 模 𝕜 Cₛ^n⟮I; F, V⟯
   定义体: coe_injective.module 𝕜 (coeAddHom I F n V) coe_smul
 
 Depends on / 依赖: coeAddHom, coe_injective, coe_injective.module, coe_smul, module

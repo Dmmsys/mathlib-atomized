@@ -1745,7 +1745,7 @@ lemma abs_oangle_toReal_lt_pi_div_two_of_angle_eq_pi_div_two
   exact angle_lt_pi_div_two_of_angle_eq_pi_div_two h (Ne.symm hp₂)
 
 中文:
-引理 abs_oangle_toReal_lt_pi_div_two_of_angle_eq_pi_div_two
+引理 abs_oangle_to实数_lt_pi_div_two_of_angle_eq_pi_div_two
   结论: {p₁ p₂ p₃ : P}
   证明: by
   by_cases hp₂ : p₂ = p₃

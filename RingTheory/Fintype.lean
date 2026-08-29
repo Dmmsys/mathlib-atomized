@@ -35,8 +35,8 @@ lemma Finset.univ_of_card_le_two
     simp
 
 中文:
-引理 Finset.univ_of_card_le_two
-  条件: (h : Fintype.card R <= 2)
+引理 有限集.univ_of_card_le_two
+  条件: (h : 有限类型.card R <= 2)
   证明: by
   rcases subsingleton_or_nontrivial R
   · exact le_antisymm (fun a _ => by simp [Subsingleton.elim a 0]) (Finset.subset_univ _)
@@ -73,8 +73,8 @@ lemma Finset.univ_of_card_le_three
     
 
 中文:
-引理 Finset.univ_of_card_le_three
-  条件: (h : Fintype.card R <= 3)
+引理 有限集.univ_of_card_le_three
+  条件: (h : 有限类型.card R <= 3)
   证明: by
   refine (eq_of_subset_of_card_le (subset_univ _) ?_).symm
   rcases lt_or_eq_of_le h with h | h
@@ -129,8 +129,8 @@ theorem card_units_lt
 
 中文:
 定理 card_units_lt
-  条件: [Fintype M₀]
-  结论: Fintype.card M₀ˣ < Fintype.card M₀
+  条件: [有限类型 M₀]
+  结论: 有限类型.card M₀ˣ < 有限类型.card M₀
   证明: Fintype.card_lt_of_injective_of_notMem Units.val Units.val_injective not_isUnit_zero
 
 Depends on / 依赖: Fintype, Fintype.card_lt_of_injective_of_notMem, Units.val, Units.val_injective, card_lt_of_injective_of_notMem, not_isUnit_zero, val_injective
@@ -151,7 +151,7 @@ lemma natCard_units_lt
 
 中文:
 引理 natCard_units_lt
-  条件: [Finite M₀]
+  条件: [有限 M₀]
   结论: 自然数.card M₀ˣ < 自然数.card M₀
   证明: by
   have : Fintype M₀ := Fintype.ofFinite M₀
@@ -181,7 +181,7 @@ exact orderOf_le_card.trans_lt natCard_units_lt M₀
 
 中文:
 引理 orderOf_lt_card
-  条件: [Finite M₀] (a : M₀)
+  条件: [有限 M₀] (a : M₀)
   结论: orderOf a < 自然数.card M₀
   证明: by
   by_cases h : IsUnit a

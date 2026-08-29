@@ -41,7 +41,7 @@ structure PartOrdEmb
   公理与运算 (3 个):
     - of : :
     - (carrier : 类型)
-    - [str : PartialOrder carrier]
+    - [str : 偏序 carrier]
 -/
 structure PartOrdEmb where
   /-- Construct a bundled `PartOrdEmb` from the underlying type and typeclass. -/
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort PartOrdEmb (Type _)
+  签名: CoeSort PartOrdEmb (类型 _)
   定义体: ⟨PartOrdEmb.carrier⟩
 
 Depends on / 依赖: PartOrdEmb, PartOrdEmb.carrier, carrier
@@ -89,7 +89,7 @@ structure Hom
     - hom' : X ↪o Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : PartOrdEmb.{u})
   公理与运算 (2 个):
     - private(mk) : :
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category PartOrdEmb.{u}
+  签名: 范畴 PartOrdEmb.{u}
   定义体: Hom X Y
   id _ := ⟨RelEmbedding.refl _⟩
   comp f g := ⟨f.hom'.trans g.hom'⟩
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory PartOrdEmb (· ↪o ·)
+  签名: 余ncrete范畴 PartOrdEmb (· ↪o ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -156,8 +156,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := PartOrdEmb) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : PartOrdEmb.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : PartOrdEmb.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := PartOrdEmb) f
 -/
 abbrev Hom.hom {X Y : PartOrdEmb.{u}} (f : Hom X Y) :=
@@ -173,7 +173,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ↪o Y)
+  签名: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ↪o Y)
   定义体: ConcreteCategory.ofHom (C := PartOrdEmb) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, PartOrdEmb
@@ -193,8 +193,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : PartOrdEmb.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : PartOrdEmb.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -306,7 +306,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [PartialOrder X]
+  条件: (X : 类型u) [偏序 X]
   结论: (PartOrdEmb.of X : 类型u) = X
   证明: rfl
 -/
@@ -324,7 +324,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {X : PartOrdEmb}
-  结论: (𝟙 X : X ⟶ X).hom = RelEmbedding.refl _
+  结论: (𝟙 X : X ⟶ X).hom = 关系嵌入.refl _
   证明: rfl
 -/
 lemma hom_id {X : PartOrdEmb} : (𝟙 X : X ⟶ X).hom = RelEmbedding.refl _ := rfl
@@ -392,9 +392,9 @@ lemma Hom.injective
   proof: f.hom'.injective
 
 中文:
-引理 Hom.injective
+引理 态射.injective
   条件: {X Y : PartOrdEmb.{u}} (f : X ⟶ Y)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: f.hom'.injective
 -/
 lemma Hom.injective {X Y : PartOrdEmb.{u}} (f : X ⟶ Y) : Function.Injective f :=
@@ -411,7 +411,7 @@ lemma Hom.le_iff_le
 @[ext]
 
 中文:
-引理 Hom.le_iff_le
+引理 态射.le_iff_le
   条件: {X Y : PartOrdEmb.{u}} (f : X ⟶ Y) (x₁ x₂ : X)
   证明: f.hom'.le_iff_le
 
@@ -459,7 +459,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ↪o Y)
+  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ↪o Y)
   证明: rfl
 
 @[simp]
@@ -483,7 +483,7 @@ lemma ofHom_hom
 中文:
 引理 ofHom_hom
   条件: {X Y : PartOrdEmb} (f : X ⟶ Y)
-  结论: ofHom (Hom.hom f) = f
+  结论: ofHom (态射.hom f) = f
   证明: rfl
 
 @[simp]
@@ -504,8 +504,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [PartialOrder X]
-  结论: ofHom (RelEmbedding.refl _) = 𝟙 (of X)
+  条件: {X : 类型u} [偏序 X]
+  结论: ofHom (关系嵌入.refl _) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -523,7 +523,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
+  结论: {X Y Z : 类型u} [偏序 X] [偏序 Y] [偏序 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
@@ -541,7 +541,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [PartialOrder X] [PartialOrder Y] (f : X ↪o Y) (x : X)
+  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ↪o Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ↪o Y) (x : X) :
@@ -598,7 +598,7 @@ instance hasForgetToPartOrd
 
 中文:
 实例 hasForgetToPartOrd
-  签名: : HasForget₂ PartOrdEmb PartOrd where
+  签名: : 有Forget₂ PartOrdEmb 偏序 where
   定义体: .of X
   forget₂.map f := PartOrd.ofHom f.hom
 -/
@@ -618,7 +618,7 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : PartOrdEmb.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
@@ -699,7 +699,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget PartOrdEmb.{u}).ReflectsIsomorphisms
+  签名: (forget PartOrdEmb.{u}).反映同构
   定义体: by
     rw [CategoryTheory.isIso_iff_bijective] at hf
     let e : α ≃o β :=
@@ -804,7 +804,7 @@ definition CoconePt
 
 中文:
 定义 CoconePt
-  签名: (_ : IsColimit c)
+  签名: (_ : 是余极限 c)
   定义体: c.pt
 
 Depends on / 依赖: c.pt
@@ -829,7 +829,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (CoconePt hc)
+  签名: 偏序 (CoconePt hc)
   定义体: exists (j : J) (x' y' : F.obj j) (hx : c.ι.app j x' = x)
       (hy : c.ι.app j y' = y), x' <= y'
   le_refl x := by
@@ -899,7 +899,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: .of (CoconePt hc)
   ι.app j := ofHom
     { toFun := c.ι.app j
@@ -951,7 +951,7 @@ definition CoconePt.desc
 
 中文:
 定义 CoconePt.desc
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
   定义体: hc.desc ((forget _).mapCocone s)
   inj' x y h := by
     obtain ⟨j, x', y', rfl, rfl⟩ :=
@@ -1000,7 +1000,7 @@ lemma CoconePt.fac_apply
 
 中文:
 引理 CoconePt.fac_apply
-  条件: (s : Cocone F) (j : J) (x : F.obj j)
+  条件: (s : 余锥 F) (j : J) (x : F.obj j)
   证明: ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, forget, hc.fac, mapCocone
@@ -1026,7 +1026,7 @@ definition isColimitCocone
 
 中文:
 定义 isColimitCocone
-  签名: : IsColimit (cocone hc) where
+  签名: : 是余极限 (cocone hc) where
   定义体: ofHom (CoconePt.desc hc s)
   fac s j := by
     ext x
@@ -1058,7 +1058,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: ⟨_, isColimitCocone (colimit.isColimit (F ⋙ forget _))⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, forget, isColimit, isColimitCocone
@@ -1078,7 +1078,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F (forget _)
+  签名: 保持余极限 F (forget _)
   定义体: preservesColimit_of_preserves_colimit_cocone
     (isColimitCocone (colimit.isColimit (F ⋙ forget _)))
     (colimit.isColimit (F ⋙ forget _))
@@ -1099,7 +1099,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfShape J PartOrdEmb.{u}
+  签名: 有形状余极限 J PartOrdEmb.{u}
 -/
 instance : HasColimitsOfShape J PartOrdEmb.{u} where
 
@@ -1112,7 +1112,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (forget PartOrdEmb.{u})
+  签名: 保持形状余极限 J (forget PartOrdEmb.{u})
 -/
 instance : PreservesColimitsOfShape J (forget PartOrdEmb.{u}) where
 
@@ -1126,7 +1126,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsColimitsOfShape J (forget PartOrdEmb.{u})
+  签名: 反映形状余极限 J (forget PartOrdEmb.{u})
   定义体: reflectsColimitsOfShape_of_reflectsIsomorphisms
 
 Depends on / 依赖: reflectsColimitsOfShape_of_reflectsIsomorphisms
@@ -1144,7 +1144,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFilteredColimitsOfSize.{u, u} PartOrdEmb.{u}
+  签名: 有FilteredColimitsOfSize.{u, u} PartOrdEmb.{u}
   定义体: inferInstance
 -/
 instance : HasFilteredColimitsOfSize.{u, u} PartOrdEmb.{u} where
@@ -1160,7 +1160,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFilteredColimitsOfSize.{u, u} (forget PartOrdEmb.{u})
+  签名: 保持FilteredColimitsOfSize.{u, u} (forget PartOrdEmb.{u})
   定义体: inferInstance
 -/
 instance : PreservesFilteredColimitsOfSize.{u, u} (forget PartOrdEmb.{u}) where
@@ -1189,7 +1189,7 @@ definition functorOfPredicateSet
 
 中文:
 定义 functorOfPredicateSet
-  签名: : Subtype P ⥤ PartOrdEmb.{u} where
+  签名: : 子类型 P ⥤ PartOrdEmb.{u} where
   定义体: .of J.val
   map f :=
     ofHom {
@@ -1222,7 +1222,7 @@ definition coconeOfPredicateSet
 
 中文:
 定义 coconeOfPredicateSet
-  签名: : Cocone (functorOfPredicateSet P) where
+  签名: : 余锥 (functorOfPredicateSet P) where
   定义体: α
   ι.app J := ofHom (OrderEmbedding.subtype _)
 -/

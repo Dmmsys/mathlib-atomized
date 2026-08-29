@@ -203,7 +203,7 @@ definition RelevantArg.min
   signature: : RelevantArg -> RelevantArg -> RelevantArg
 
 中文:
-定义 RelevantArg.min
+定义 RelevantArg.最小值
   签名: : RelevantArg -> RelevantArg -> RelevantArg
 -/
 private def RelevantArg.min : RelevantArg -> RelevantArg -> RelevantArg
@@ -272,15 +272,15 @@ structure TranslateData
 
 中文:
 结构 TranslateData
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (8 个):
-    - ignoreArgsAttr : NameMapExtension (List 自然数)
-    - doTranslateAttr : NameMapExtension 布尔
-    - unfoldBoundaries? : Option UnfoldBoundary.UnfoldBoundaryExt  [默认: none]
+    - ignoreArgsAttr : NameMapExtension (列表 自然数)
+    - doTranslateAttr : NameMapExtension 布尔值
+    - unfoldBoundaries? : 选项类型 UnfoldBoundary.UnfoldBoundaryExt  [默认: none]
     - translations : NameMapExtension TranslationInfo
     - attrName : Name
-    - changeNumeral : 布尔
-    - isDual : 布尔
+    - changeNumeral : 布尔值
+    - isDual : 布尔值
     - guessNameExt : GuessName.GuessNameExt
 -/
 structure TranslateData : Type where
@@ -518,21 +518,21 @@ structure Config
     - rename : NameMap Name  [default: {}]
 
 中文:
-结构 Config
-  参数: : Type where
+结构 余nfig
+  参数: : 类型 where
   公理与运算 (13 个):
-    - trace : 布尔  [默认: false]
+    - trace : 布尔值  [默认: false]
     - target : Name  [默认: Name.anonymous]
-    - doc : Option (TSyntax ``Lean.Parser.Command.docComment)  [默认: .none]
-    - allowAutoName : 布尔  [默认: false]
-    - reorder? : Option ArgReorder  [默认: .none]
-    - relevantArg? : Option RelevantArg  [默认: .none]
-    - attrs : Array Syntax  [默认: #[]]
-    - dontTranslate : List 自然数  [默认: []]
+    - doc : 选项类型 (TSyntax ``Lean.Parser.Command.docComment)  [默认: .none]
+    - allowAutoName : 布尔值  [默认: false]
+    - reorder? : 选项类型 ArgReorder  [默认: .none]
+    - relevantArg? : 选项类型 RelevantArg  [默认: .none]
+    - attrs : 数组 Syntax  [默认: #[]]
+    - dontTranslate : 列表 自然数  [默认: []]
     - ref : Syntax
-    - existing : 布尔  [默认: false]
-    - self : 布尔  [默认: false]
-    - none : 布尔  [默认: false]
+    - existing : 布尔值  [默认: false]
+    - self : 布尔值  [默认: false]
+    - none : 布尔值  [默认: false]
     - rename : NameMap Name  [默认: {}]
 -/
 structure Config : Type where
@@ -629,7 +629,7 @@ definition ReplacementM.run
 
 中文:
 定义 ReplacementM.run
-  签名: {α} (dontTranslate allFVars : Array FVarId) (x : ReplacementM α)
+  签名: {α} (dontTranslate allFVars : 数组 FVarId) (x : ReplacementM α)
   定义体: do
 .run {} .run let (a, relevantFVars) ← x dontTranslate
   return (a, allFVars.findIdx? relevantFVars.contains)
@@ -892,7 +892,7 @@ definition applyReplacementForall
 
 中文:
 定义 applyReplacementForall
-  签名: (t : TranslateData) (dontTranslate : List 自然数) (e : Expr)
+  签名: (t : TranslateData) (dontTranslate : 列表 自然数) (e : Expr)
   定义体: withTraceNode `translate_detail (fun _ =>
     return m!"translating the type {e}") do
   forallTelescope e fun xs e => do
@@ -940,7 +940,7 @@ definition applyReplacementLambda
 
 中文:
 定义 applyReplacementLambda
-  签名: (t : TranslateData) (dontTranslate : List 自然数) (e : Expr)
+  签名: (t : TranslateData) (dontTranslate : 列表 自然数) (e : Expr)
   定义体: withTraceNode `translate_detail (fun _ =>
     return m!"translating the value {e}") do
   lambdaTelescope e fun xs e => do
@@ -1203,7 +1203,7 @@ definition getRelevantArg
 
 中文:
 定义 getRelevantArg
-  签名: (t : TranslateData) (cfg : Config) (relevantArg? : Option RelevantArg)
+  签名: (t : TranslateData) (cfg : 余nfig) (relevantArg? : 选项类型 RelevantArg)
   定义体: do
   let relevantArg := relevantArg?.getD (.arg 0)
   if let some relevantArg' := cfg.relevantArg? then
@@ -1246,7 +1246,7 @@ definition transformDeclRec
 
 中文:
 定义 transformDeclRec
-  签名: (t : TranslateData) (cfg : Config) (rootSrc rootTgt src : Name)
+  签名: (t : TranslateData) (cfg : 余nfig) (rootSrc rootTgt src : Name)
   定义体: do
   let env ← getEnv
   trace[translate_detail] "visiting {src}"
@@ -1442,7 +1442,7 @@ Linter.logLintIf linter.existingAttributeWarning stx
 
 中文:
 定义 warnAttrCore
-  签名: (stx : Syntax) (f : Environment -> Name -> 布尔)
+  签名: (stx : Syntax) (f : Environment -> Name -> 布尔值)
   定义体: do
   if f (← getEnv) src then
 Linter.logLintIf linter.existingAttributeWarning stx
@@ -1473,7 +1473,7 @@ definition warnAttr
 
 中文:
 定义 warnAttr
-  签名: {α β : Type} [Inhabited β] (stx : Syntax) (attr : SimpleScopedEnvExtension α β)
+  签名: {α β : 类型} [可居 β] (stx : Syntax) (attr : SimpleScopedEnvExtension α β)
   定义体: warnAttrCore stx (f <| attr.getState ·) thisAttr attrName src tgt
 
 Depends on / 依赖: attr.getState, attrName, getState, thisAttr, warnAttrCore
@@ -1492,7 +1492,7 @@ definition warnParametricAttr
 
 中文:
 定义 warnParametricAttr
-  签名: {β : Type} [Inhabited β] (stx : Syntax) (attr : ParametricAttribute β)
+  签名: {β : 类型} [可居 β] (stx : Syntax) (attr : ParametricAttribute β)
   定义体: warnAttrCore stx (attr.getParam? · · |>.isSome) thisAttr attrName src tgt
 
 Depends on / 依赖: attr.getParam, attrName, getParam, isSome, thisAttr, warnAttrCore
@@ -1519,7 +1519,7 @@ definition targetName
 
 中文:
 定义 targetName
-  签名: (t : TranslateData) (cfg : Config) (src : Name)
+  签名: (t : TranslateData) (cfg : 余nfig) (src : Name)
   定义体: do
   if cfg.self then
     if cfg.target != .anonymous then
@@ -1589,7 +1589,7 @@ definition checkExistingType
 
 中文:
 定义 checkExistingType
-  签名: (t : TranslateData) (src tgt : Name) (cfg : Config) (lint := true)
+  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig) (lint := true)
   定义体: withoutExporting do
   withTraceNode `translate_detail (fun _ =>
     return m!"checking translation `{.ofConstName src}` -> `{.ofConstName tgt}`") do
@@ -1676,7 +1676,7 @@ definition insertTranslationChecked
 
 中文:
 定义 insertTranslationChecked
-  签名: (t : TranslateData) (src tgt : Name) (cfg : Config)
+  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
   定义体: do
   let (reorder, relevantArg) ←
     try
@@ -1714,7 +1714,7 @@ definition translateLemmas
 
 中文:
 定义 translateLemmas
-  签名: (t : TranslateData) (names : Array Name)
+  签名: (t : TranslateData) (names : 数组 Name)
   定义体: do
   let auxLemmas ← names.mapM runAttr
   let nLemmas := auxLemmas[0]!.size
@@ -1754,7 +1754,7 @@ definition proceedFieldsAux
 
 中文:
 定义 proceedFieldsAux
-  签名: (t : TranslateData) (src tgt : Name) (cfg : Config)
+  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
   定义体: do
   let srcFields := f src
   let tgtFields := f tgt
@@ -1792,7 +1792,7 @@ definition proceedFields
 
 中文:
 定义 proceedFields
-  签名: (t : TranslateData) (src tgt : Name) (cfg : Config)
+  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
   定义体: do
   let env ← getEnv
   let aux := proceedFieldsAux t src tgt cfg
@@ -1835,7 +1835,7 @@ definition elabRename
 
 中文:
 定义 elabRename
-  签名: (stx : Array (TSyntax ``renameRule)) (declName : Name) (argNames : Array Name)
+  签名: (stx : 数组 (TSyntax ``renameRule)) (declName : Name) (argNames : 数组 Name)
   定义体: stx.foldlM elabRule {}
 
 Depends on / 依赖: elabRule, foldlM, stx.foldlM
@@ -1955,7 +1955,7 @@ definition applyAttributes
 
 中文:
 定义 applyAttributes
-  签名: (t : TranslateData) (cfg : Config) (src tgt : Name)
+  签名: (t : TranslateData) (cfg : 余nfig) (src tgt : Name)
   定义体: do
   if !cfg.existing && !cfg.none then
     -- Copy the `instance` attribute, since it is nice to directly tag `instance` declarations.
@@ -2045,7 +2045,7 @@ definition copyMetaData
 
 中文:
 定义 copyMetaData
-  签名: (t : TranslateData) (cfg : Config) (src tgt : Name)
+  签名: (t : TranslateData) (cfg : 余nfig) (src tgt : Name)
   定义体: do
   -- The equation lemmas can only be related if the value of `tgt` is the translated value of `src`.
   unless cfg.existing do
@@ -2087,7 +2087,7 @@ definition addTranslationAttr
 
 中文:
 定义 addTranslationAttr
-  签名: (t : TranslateData) (src : Name) (cfg : Config)
+  签名: (t : TranslateData) (src : Name) (cfg : 余nfig)
   定义体: do
   if (kind != AttributeKind.global) then
     throwError "`{t.attrName}` can only be used as a global attribute"

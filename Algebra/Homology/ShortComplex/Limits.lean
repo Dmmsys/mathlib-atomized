@@ -48,7 +48,7 @@ definition isLimitOfIsLimitπ
 
 中文:
 定义 isLimitOfIsLimitπ
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: { τ₁ := h₁.lift (π₁.mapCone s)
       τ₂ := h₂.lift (π₂.mapCone s)
       τ₃ := h₃.lift (π₃.mapCone s)
@@ -110,7 +110,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: Cone.mk (ShortComplex.mk (limMap (whiskerLeft F π₁Toπ₂)) (limMap (whiskerLeft F π₂Toπ₃))
       (by cat_disch))
     { app := fun j => Hom.mk (limit.π _ _) (limit.π _ _) (limit.π _ _)
@@ -139,7 +139,7 @@ definition isLimitπ₁MapConeLimitCone
 
 中文:
 定义 isLimitπ₁MapConeLimitCone
-  签名: : IsLimit (π₁.mapCone (limitCone F))
+  签名: : 是极限 (π₁.mapCone (limitCone F))
   定义体: (IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext (Iso.refl _) (by cat_disch)))
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, cat_disch, isLimit, limit.isLimit, ofIsoLimit
@@ -158,7 +158,7 @@ definition isLimitπ₂MapConeLimitCone
 
 中文:
 定义 isLimitπ₂MapConeLimitCone
-  签名: : IsLimit (π₂.mapCone (limitCone F))
+  签名: : 是极限 (π₂.mapCone (limitCone F))
   定义体: (IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext (Iso.refl _) (by cat_disch)))
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, cat_disch, isLimit, limit.isLimit, ofIsoLimit
@@ -177,7 +177,7 @@ definition isLimitπ₃MapConeLimitCone
 
 中文:
 定义 isLimitπ₃MapConeLimitCone
-  签名: : IsLimit (π₃.mapCone (limitCone F))
+  签名: : 是极限 (π₃.mapCone (limitCone F))
   定义体: (IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext (Iso.refl _) (by cat_disch)))
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, cat_disch, isLimit, limit.isLimit, ofIsoLimit
@@ -196,7 +196,7 @@ definition isLimitLimitCone
 
 中文:
 定义 isLimitLimitCone
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: isLimitOfIsLimitπ _ (isLimitπ₁MapConeLimitCone F)
     (isLimitπ₂MapConeLimitCone F) (isLimitπ₃MapConeLimitCone F)
 -/
@@ -214,7 +214,7 @@ instance hasLimit_of_hasLimitπ
 
 中文:
 实例 hasLimit_of_hasLimitπ
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: ⟨⟨⟨_, isLimitLimitCone _⟩⟩⟩
 
 Depends on / 依赖: isLimitLimitCone
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit F π₁
+  签名: 保持极限 F π₁
   定义体: preservesLimit_of_preserves_limit_cone (isLimitLimitCone F) (isLimitπ₁MapConeLimitCone F)
 
 Depends on / 依赖: isLimitLimitCone, preservesLimit_of_preserves_limit_cone
@@ -249,7 +249,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit F π₂
+  签名: 保持极限 F π₂
   定义体: preservesLimit_of_preserves_limit_cone (isLimitLimitCone F) (isLimitπ₂MapConeLimitCone F)
 
 Depends on / 依赖: isLimitLimitCone, preservesLimit_of_preserves_limit_cone
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit F π₃
+  签名: 保持极限 F π₃
   定义体: preservesLimit_of_preserves_limit_cone (isLimitLimitCone F) (isLimitπ₃MapConeLimitCone F)
 
 Depends on / 依赖: isLimitLimitCone, preservesLimit_of_preserves_limit_cone
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (π₁ : _ ⥤ C)
+  签名: 保持形状极限 J (π₁ : _ ⥤ C)
 -/
 noncomputable instance : PreservesLimitsOfShape J (π₁ : _ ⥤ C) where
 
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (π₂ : _ ⥤ C)
+  签名: 保持形状极限 J (π₂ : _ ⥤ C)
 -/
 noncomputable instance : PreservesLimitsOfShape J (π₂ : _ ⥤ C) where
 
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (π₃ : _ ⥤ C)
+  签名: 保持形状极限 J (π₃ : _ ⥤ C)
 -/
 noncomputable instance : PreservesLimitsOfShape J (π₃ : _ ⥤ C) where
 
@@ -352,7 +352,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: : HasFiniteLimits (ShortComplex C)
+  签名: : 有有限极限 (短复形 C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 instance hasFiniteLimits : HasFiniteLimits (ShortComplex C) :=
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (π₁ : _ ⥤ C)
+  签名: 保持FiniteLimits (π₁ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteLimits (π₁ : _ ⥤ C) :=
@@ -384,7 +384,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (π₂ : _ ⥤ C)
+  签名: 保持FiniteLimits (π₂ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteLimits (π₂ : _ ⥤ C) :=
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (π₃ : _ ⥤ C)
+  签名: 保持FiniteLimits (π₃ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteLimits (π₃ : _ ⥤ C) :=
@@ -490,7 +490,7 @@ definition isColimitOfIsColimitπ
 
 中文:
 定义 isColimitOfIsColimitπ
-  签名: (c : Cocone F)
+  签名: (c : 余锥 F)
   定义体: { τ₁ := h₁.desc (π₁.mapCocone s)
       τ₂ := h₂.desc (π₂.mapCocone s)
       τ₃ := h₃.desc (π₃.mapCocone s)
@@ -557,7 +557,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F
+  签名: : 余锥 F
   定义体: Cocone.mk (ShortComplex.mk (colimMap (whiskerLeft F π₁Toπ₂)) (colimMap (whiskerLeft F π₂Toπ₃))
       (by cat_disch))
     { app := fun j => Hom.mk (colimit.ι (F ⋙ π₁) _) (colimit.ι (F ⋙ π₂) _)
@@ -650,7 +650,7 @@ definition isColimitColimitCocone
 
 中文:
 定义 isColimitColimitCocone
-  签名: : IsColimit (colimitCocone F)
+  签名: : 是余极限 (colimitCocone F)
   定义体: isColimitOfIsColimitπ _ (isColimitπ₁MapCoconeColimitCocone F)
     (isColimitπ₂MapCoconeColimitCocone F) (isColimitπ₃MapCoconeColimitCocone F)
 -/
@@ -668,7 +668,7 @@ instance hasColimit_of_hasColimitπ
 
 中文:
 实例 hasColimit_of_hasColimitπ
-  签名: : HasColimit F
+  签名: : 有余极限 F
   定义体: ⟨⟨⟨_, isColimitColimitCocone _⟩⟩⟩
 
 Depends on / 依赖: isColimitColimitCocone
@@ -686,7 +686,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F π₁
+  签名: 保持余极限 F π₁
   定义体: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F)
     (isColimitπ₁MapCoconeColimitCocone F)
 
@@ -707,7 +707,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F π₂
+  签名: 保持余极限 F π₂
   定义体: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F)
     (isColimitπ₂MapCoconeColimitCocone F)
 
@@ -728,7 +728,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F π₃
+  签名: 保持余极限 F π₃
   定义体: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F)
     (isColimitπ₃MapCoconeColimitCocone F)
 
@@ -767,7 +767,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (π₁ : _ ⥤ C)
+  签名: 保持形状余极限 J (π₁ : _ ⥤ C)
 -/
 noncomputable instance : PreservesColimitsOfShape J (π₁ : _ ⥤ C) where
 
@@ -780,7 +780,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (π₂ : _ ⥤ C)
+  签名: 保持形状余极限 J (π₂ : _ ⥤ C)
 -/
 noncomputable instance : PreservesColimitsOfShape J (π₂ : _ ⥤ C) where
 
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (π₃ : _ ⥤ C)
+  签名: 保持形状余极限 J (π₃ : _ ⥤ C)
 -/
 noncomputable instance : PreservesColimitsOfShape J (π₃ : _ ⥤ C) where
 
@@ -813,7 +813,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: : HasFiniteColimits (ShortComplex C)
+  签名: : 有有限余极限 (短复形 C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 instance hasFiniteColimits : HasFiniteColimits (ShortComplex C) :=
@@ -829,7 +829,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (π₁ : _ ⥤ C)
+  签名: 保持FiniteColimits (π₁ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteColimits (π₁ : _ ⥤ C) :=
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (π₂ : _ ⥤ C)
+  签名: 保持FiniteColimits (π₂ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteColimits (π₂ : _ ⥤ C) :=
@@ -861,7 +861,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (π₃ : _ ⥤ C)
+  签名: 保持FiniteColimits (π₃ : _ ⥤ C)
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
 noncomputable instance : PreservesFiniteColimits (π₃ : _ ⥤ C) :=

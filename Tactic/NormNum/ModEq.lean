@@ -36,7 +36,7 @@ definition evalNatModEq
   | _, _, _ => failure
 
 中文:
-定义 evalNatModEq
+定义 eval自然数ModEq
   签名: : NormNumExt where eval {u αP} e
   定义体: do
   match u, αP, e with
@@ -68,7 +68,7 @@ definition evalIntModEq
   | _, _, _ => failure
 
 中文:
-定义 evalIntModEq
+定义 eval整数ModEq
   签名: : NormNumExt where eval {u αP} e
   定义体: do
   match u, αP, e with

@@ -40,7 +40,7 @@ abbreviation AddEquiv.lieRing
   leibniz_lie _ _ _ := by simp
 
 中文:
-缩写 AddEquiv.lieRing
+缩写 加法等价.lieRing
   签名: (e : M ≃+ L)
   定义体: e.symm ⁅e x, e y⁆
   add_lie _ _ _ := by simp
@@ -65,7 +65,7 @@ lemma AddEquiv.bracket_def
     ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
 
 中文:
-引理 AddEquiv.bracket_def
+引理 加法等价.bracket_def
   条件: (e : M ≃+ L) (x y : M)
   证明: e.lieRing
     ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
@@ -88,7 +88,7 @@ abbreviation LinearEquiv.lieAlgebra
   { lie_smul _ _ _ := by simp [AddEquiv.bracket_def] }
 
 中文:
-缩写 LinearEquiv.lieAlgebra
+缩写 线性等价.lieAlgebra
   签名: (e : M ≃ₗ[R] L)
   定义体: e.toAddEquiv.lieRing
     LieAlgebra R M :=
@@ -118,7 +118,7 @@ definition LinearEquiv.lieEquiv
 @[simp]
 
 中文:
-定义 LinearEquiv.lieEquiv
+定义 线性等价.lieEquiv
   签名: (e : M ≃ₗ[R] L)
   定义体: e.toAddEquiv.lieRing
     letI := e.lieAlgebra
@@ -151,7 +151,7 @@ lemma LinearEquiv.lieEquiv_apply
 @[simp]
 
 中文:
-引理 LinearEquiv.lieEquiv_apply
+引理 线性等价.lieEquiv_apply
   条件: (e : M ≃ₗ[R] L) (a : M)
   证明: rfl
 
@@ -172,7 +172,7 @@ lemma LinearEquiv.lieEquiv_symm_apply
     (e.lieEquiv R).symm b = e.symm b := rfl
 
 中文:
-引理 LinearEquiv.lieEquiv_symm_apply
+引理 线性等价.lieEquiv_symm_apply
   条件: (e : M ≃ₗ[R] L) (b : L)
   证明: e.toAddEquiv.lieRing
     letI := e.lieAlgebra
@@ -202,7 +202,7 @@ abbreviation lieRing
 
 中文:
 缩写 lieRing
-  签名: : LieRing L'
+  签名: : Lie环 L'
   定义体: letI := e.addCommGroup
   e.addEquiv.lieRing
 -/

@@ -42,7 +42,7 @@ theorem dvd_or_dvd_of_dvd_lcm
 
 中文:
 定理 dvd_or_dvd_of_dvd_lcm
-  条件: (h : p ∣ lcm a b)
+  条件: (h : p ∣ 最小公倍数 a b)
   结论: p ∣ a ∨ p ∣ b
   证明: dvd_or_dvd hp (h.trans (lcm_dvd_mul a b))
 
@@ -61,7 +61,7 @@ theorem dvd_lcm
 
 中文:
 定理 dvd_lcm
-  结论: p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b
+  结论: p ∣ 最小公倍数 a b ↔ p ∣ a ∨ p ∣ b
   证明: ⟨hp.dvd_or_dvd_of_dvd_lcm, (Or.elim · (dvd_lcm_of_dvd_left · _) (dvd_lcm_of_dvd_right · _))⟩
 
 Depends on / 依赖: Or.elim, dvd_lcm_of_dvd_left, dvd_lcm_of_dvd_right, dvd_or_dvd_of_dvd_lcm, hp.dvd_or_dvd_of_dvd_lcm
@@ -81,7 +81,7 @@ theorem not_dvd_lcm
 中文:
 定理 not_dvd_lcm
   条件: (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  结论: ¬ p ∣ lcm a b
+  结论: ¬ p ∣ 最小公倍数 a b
   证明: hp.dvd_lcm.not.mpr not_or.mpr ⟨ha, hb⟩
 
 Depends on / 依赖: dvd_lcm, hp.dvd_lcm.not.mpr, not_or, not_or.mpr

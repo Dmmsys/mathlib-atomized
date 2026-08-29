@@ -64,12 +64,12 @@ class CopyDiscardCategory
     - discard_unit : ε[𝟙_ C] = 𝟙 (𝟙_ C)  [default: by cat_disch]
 
 中文:
-类 CopyDiscardCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
-  继承: SymmetricCategory C
+类 余pyDiscard范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
+  继承: 对称范畴 C
   公理与运算 (6 个):
-    - [comonObj : (X : C) -> ComonObj X]
-    - [isCommComonObj : (X : C) -> IsCommComonObj X]
+    - [comonObj : (X : C) -> 余monObj X]
+    - [isCommComonObj : (X : C) -> 是交换余monObj X]
     - copy_tensor((X Y : C)) : Δ[X otimes Y] = (Δ[X] otimesₘ Δ[Y]) ≫ tensorμ X X Y Y  [默认: by cat_disch]
     - discard_tensor((X Y : C)) : ε[X otimes Y] = (ε[X] otimesₘ ε[Y]) ≫ (fun_ (𝟙_ C)).hom  [默认: by cat_disch]
     - copy_unit : Δ[𝟙_ C] = (fun_ (𝟙_ C)).inv  [默认: by cat_disch]

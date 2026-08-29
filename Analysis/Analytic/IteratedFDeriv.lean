@@ -102,7 +102,7 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin
     apply (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k 
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.iteratedFDerivWithin
+定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin
   证明: by
   induction k with
   | zero =>
@@ -187,7 +187,7 @@ lemma HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_zero
   rw [this]; rw [p.iteratedFDerivSeries_eq_zero (p.congr_zero (Nat.zero_add n).symm hn)]; rw [zero_apply]
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_zero
+引理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_zero
   证明: by
   have : iteratedFDerivWithin 𝕜 n f s x = p.iteratedFDerivSeries n 0 (fun _ => 0) :=
     ((h.iteratedFDerivWithin h' n hu hx).coeff_zero _).symm
@@ -216,7 +216,7 @@ lemma ContinuousMultilinearMap.iteratedFDeriv_comp_diagonal
   simp only
 
 中文:
-引理 ContinuousMultilinearMap.iteratedFDeriv_comp_diagonal
+引理 连续多重线性映射.iteratedFDeriv_comp_diagonal
   证明: by
   rw [← sum_comp (Equiv.inv (Perm (Fin n)))]
   let g : E ->L[𝕜] (Fin n -> E) := ContinuousLinearMap.pi (fun i => ContinuousLinearMap.id 𝕜 E)
@@ -259,7 +259,7 @@ lemma HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
   have gcont : ContDif
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
+引理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
   证明: by
   have I : insert x s inter Metric.eball x r = s := by
     rw [Set.insert_eq_of_mem hx]
@@ -331,7 +331,7 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
   · exact
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
+定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
   证明: by
   have : iteratedFDerivWithin 𝕜 n f s x
       = iteratedFDerivWithin 𝕜 n f (s inter Metric.eball x r) x :=
@@ -367,7 +367,7 @@ theorem HasFPowerSeriesOnBall.iteratedFDeriv_eq_sum
   exact h.iteratedFDerivWithin_eq_sum h' uniqueDiffOn_univ (mem_univ x) v
 
 中文:
-定理 HasFPowerSeriesOnBall.iteratedFDeriv_eq_sum
+定理 有FPowerSeriesOnBall.iteratedFDeriv_eq_sum
   证明: by
   simp only [← iteratedFDerivWithin_univ, ← hasFPowerSeriesWithinOnBall_univ] at h ⊢
   exact h.iteratedFDerivWithin_eq_sum h' uniqueDiffOn_univ (mem_univ x) v
@@ -395,8 +395,8 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
   · exact
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
+  结论: [完备空间 F]
   证明: by
   have : iteratedFDerivWithin 𝕜 n f s x
       = iteratedFDerivWithin 𝕜 n f (s inter Metric.eball x r) x :=
@@ -434,8 +434,8 @@ theorem HasFPowerSeriesOnBall.iteratedFDeriv_eq_sum_of_completeSpace
   exact h.iteratedFDerivWithin_eq_sum_of_completeSpace uniqueDiffOn_univ (mem_univ _) v
 
 中文:
-定理 HasFPowerSeriesOnBall.iteratedFDeriv_eq_sum_of_completeSpace
-  结论: [CompleteSpace F]
+定理 有FPowerSeriesOnBall.iteratedFDeriv_eq_sum_of_completeSpace
+  结论: [完备空间 F]
   证明: by
   simp only [← iteratedFDerivWithin_univ, ← hasFPowerSeriesWithinOnBall_univ] at h ⊢
   exact h.iteratedFDerivWithin_eq_sum_of_completeSpace uniqueDiffOn_univ (mem_univ _) v
@@ -596,7 +596,7 @@ theorem AnalyticOn.domDomCongr_iteratedFDeriv
 
 中文:
 定理 AnalyticOn.domDomCongr_iteratedFDeriv
-  条件: (h : AnalyticOn 𝕜 f univ) {n : 自然数} (σ : Perm (Fin n))
+  条件: (h : AnalyticOn 𝕜 f univ) {n : 自然数} (σ : 置换 (有限集 n))
   证明: by
   rw [← iteratedFDerivWithin_univ]
   exact h.domDomCongr_iteratedFDerivWithin uniqueDiffOn_univ (mem_univ x) _
@@ -643,7 +643,7 @@ theorem ContDiffAt.domDomCongr_iteratedFDeriv
 
 中文:
 定理 ContDiffAt.domDomCongr_iteratedFDeriv
-  条件: (h : ContDiffAt 𝕜 ω f x) {n : 自然数} (σ : Perm (Fin n))
+  条件: (h : ContDiffAt 𝕜 ω f x) {n : 自然数} (σ : 置换 (有限集 n))
   证明: by
   rw [← iteratedFDerivWithin_univ]
   exact h.domDomCongr_iteratedFDerivWithin uniqueDiffOn_univ (mem_univ x) _

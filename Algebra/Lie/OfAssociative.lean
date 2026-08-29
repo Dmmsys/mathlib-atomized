@@ -61,7 +61,7 @@ definition ofAssociativeRing
 
 中文:
 定义 ofAssociativeRing
-  签名: : LieRing A where
+  签名: : Lie环 A where
   定义体: by simp only [Ring.lie_def, right_distrib, left_distrib]; abel
   lie_add _ _ _ := by simp only [Ring.lie_def, right_distrib, left_distrib]; abel
   lie_self := by simp only [Ring.lie_def, forall_const, sub_self]
@@ -139,8 +139,8 @@ abbreviation LieRingModule.ofAssociativeModule
   leibniz_lie := by simp [LieRing.of_associative_ring_bracket, sub_smul, mul_smul, sub_add_cancel]
 
 中文:
-缩写 LieRingModule.ofAssociativeModule
-  签名: : LieRingModule A M where
+缩写 Lie环模.ofAssociativeModule
+  签名: : Lie环模 A M where
   定义体: (· • ·)
   add_lie := add_smul
   lie_add := smul_add
@@ -201,8 +201,8 @@ theorem LieModule.ofAssociativeModule
   lie_smul := smul_algebra_smul_comm
 
 中文:
-定理 LieModule.ofAssociativeModule
-  结论: LieModule R A M where
+定理 Lie模.ofAssociativeModule
+  结论: Lie模 R A M where
   证明: smul_assoc
   lie_smul := smul_algebra_smul_comm
 
@@ -221,8 +221,8 @@ instance Module.End.instLieRingModule
   body: LieRingModule.ofAssociativeModule
 
 中文:
-实例 Module.End.instLieRingModule
-  签名: : LieRingModule (Module.End R M) M
+实例 模.End.instLieRingModule
+  签名: : Lie环模 (模.End R M) M
   定义体: LieRingModule.ofAssociativeModule
 
 Depends on / 依赖: LieRingModule, LieRingModule.ofAssociativeModule, ofAssociativeModule
@@ -239,8 +239,8 @@ instance Module.End.instLieModule
   body: LieModule.ofAssociativeModule
 
 中文:
-实例 Module.End.instLieModule
-  签名: : LieModule R (Module.End R M) M
+实例 模.End.instLieModule
+  签名: : Lie模 R (模.End R M) M
   定义体: LieModule.ofAssociativeModule
 
 Depends on / 依赖: LieModule, LieModule.ofAssociativeModule, ofAssociativeModule
@@ -258,8 +258,8 @@ lemma Module.End.lie_apply
   proof: rfl
 
 中文:
-引理 Module.End.lie_apply
-  条件: (f : Module.End R M) (m : M)
+引理 模.End.lie_apply
+  条件: (f : 模.End R M) (m : M)
   结论: ⁅f, m⁆ = f m
   证明: rfl
 -/
@@ -274,7 +274,7 @@ theorem Module.End.instLieRingModule_eq
   proof: rfl
 
 中文:
-定理 Module.End.instLieRingModule_eq
+定理 模.End.instLieRingModule_eq
   证明: rfl
 
 Depends on / 依赖: Module, Module.End, lieRingSelfModule
@@ -386,7 +386,7 @@ theorem toLieHom_id
 
 中文:
 定理 toLieHom_id
-  结论: (AlgHom.id R A : A ->ₗ⁅R⁆ A) = LieHom.id
+  结论: (代数态射.id R A : A ->ₗ⁅R⁆ A) = Lie态射.id
   证明: rfl
 
 @[simp]
@@ -465,8 +465,8 @@ definition LieModule.toEnd
   map_lie' {x y} := by ext m; apply lie_lie
 
 中文:
-定义 LieModule.toEnd
-  签名: : L ->ₗ⁅R⁆ Module.End R M where
+定义 Lie模.toEnd
+  签名: : L ->ₗ⁅R⁆ 模.End R M where
   定义体: { toFun := fun m => ⁅x, m⁆
       map_add' := lie_add x
       map_smul' := fun t => lie_smul t x }
@@ -496,8 +496,8 @@ definition LieAlgebra.ad
 @[simp]
 
 中文:
-定义 LieAlgebra.ad
-  签名: : L ->ₗ⁅R⁆ Module.End R L
+定义 Lie代数.ad
+  签名: : L ->ₗ⁅R⁆ 模.End R L
   定义体: LieModule.toEnd R L L
 
 @[simp]
@@ -520,9 +520,9 @@ theorem LieAlgebra.ad_apply
 @[simp]
 
 中文:
-定理 LieAlgebra.ad_apply
+定理 Lie代数.ad_apply
   条件: (x y : L)
-  结论: LieAlgebra.ad R L x y = ⁅x, y⁆
+  结论: Lie代数.ad R L x y = ⁅x, y⁆
   证明: rfl
 
 @[simp]
@@ -539,7 +539,7 @@ theorem LieModule.toEnd_module_end
   proof: by ext g m; simp [lie_eq_smul]
 
 中文:
-定理 LieModule.toEnd_module_end
+定理 Lie模.toEnd_module_end
   证明: by ext g m; simp [lie_eq_smul]
 
 Depends on / 依赖: lie_eq_smul
@@ -558,8 +558,8 @@ theorem LieSubalgebra.toEnd_eq
 @[simp]
 
 中文:
-定理 LieSubalgebra.toEnd_eq
-  条件: (K : LieSubalgebra R L) {x : K}
+定理 Lie子代数.toEnd_eq
+  条件: (K : Lie子代数 R L) {x : K}
   证明: rfl
 
 @[simp]
@@ -578,8 +578,8 @@ theorem LieSubalgebra.toEnd_mk
   proof: rfl
 
 中文:
-定理 LieSubalgebra.toEnd_mk
-  条件: (K : LieSubalgebra R L) {x : L} (hx : x in K)
+定理 Lie子代数.toEnd_mk
+  条件: (K : Lie子代数 R L) {x : L} (hx : x in K)
   证明: rfl
 -/
 theorem LieSubalgebra.toEnd_mk (K : LieSubalgebra R L) {x : L} (hx : x in K) :
@@ -605,10 +605,10 @@ class IsFaithful
     - @[simp]
 
 中文:
-类 IsFaithful
+类 是忠实
   参数: : 命题 where
   公理与运算 (2 个):
-    - injective_toEnd : Injective toEnd R L M
+    - injective_toEnd : 单射 toEnd R L M
     - @[simp]
 -/
 class IsFaithful : Prop where
@@ -625,7 +625,7 @@ lemma toEnd_eq_iff
 
 中文:
 引理 toEnd_eq_iff
-  条件: [IsFaithful R L M] {x y : L}
+  条件: [是忠实 R L M] {x y : L}
   证明: IsFaithful.injective_toEnd.eq_iff
 
 Depends on / 依赖: IsFaithful, IsFaithful.injective_toEnd.eq_iff, eq_iff, injective_toEnd
@@ -645,7 +645,7 @@ lemma ext_of_isFaithful
 
 中文:
 引理 ext_of_isFaithful
-  条件: [IsFaithful R L M] {x y : L} (h : 对任意 m : M, ⁅x, m⁆ = ⁅y, m⁆)
+  条件: [是忠实 R L M] {x y : L} (h : 对任意 m : M, ⁅x, m⁆ = ⁅y, m⁆)
   证明: (toEnd_eq_iff R L M).mp LinearMap.ext h
 
 Depends on / 依赖: LinearMap, LinearMap.ext, toEnd_eq_iff
@@ -668,7 +668,7 @@ lemma toEnd_eq_zero_iff
 
 中文:
 引理 toEnd_eq_zero_iff
-  条件: [IsFaithful R L M] {x : L}
+  条件: [是忠实 R L M] {x : L}
   证明: by
   rw [← (toEnd R L M).toLinearMap.map_zero]
   exact toEnd_eq_iff R L M
@@ -696,7 +696,7 @@ lemma isFaithful_iff'
 
 中文:
 引理 isFaithful_iff'
-  结论: IsFaithful R L M ↔ 对任意 x : L, (对任意 m : M, ⁅x, m⁆ = 0) -> x = 0
+  结论: 是忠实 R L M ↔ 对任意 x : L, (对任意 m : M, ⁅x, m⁆ = 0) -> x = 0
   证明: by
   refine ⟨fun h x hx => ?_, fun h => ⟨fun x y hxy => ?_⟩⟩
   · replace hx : toEnd R L M x = 0 := by ext m; simpa using hx m
@@ -726,7 +726,7 @@ instance [IsFaithful
   exact IsFaithful.injective_toEnd.comp Subtype.val_injective
 
 中文:
-实例 [IsFaithful
+实例 [是忠实
   签名: R L M] {L'
   定义体: by
   refine ⟨(?_ : Injective (toEnd R L M ∘ ((↑) : L' -> L)))⟩
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFaithful R (Module.End R M) M
+  签名: 是忠实 R (模.End R M) M
   定义体: by simpa using injective_id
 
 Depends on / 依赖: injective_id
@@ -775,8 +775,8 @@ lemma LieSubmodule.coe_toEnd
   proof: rfl
 
 中文:
-引理 LieSubmodule.coe_toEnd
-  条件: (N : LieSubmodule R L M) (x : L) (y : N)
+引理 Lie子模.coe_toEnd
+  条件: (N : Lie子模 R L M) (x : L) (y : N)
   证明: rfl
 -/
 lemma LieSubmodule.coe_toEnd (N : LieSubmodule R L M) (x : L) (y : N) :
@@ -794,8 +794,8 @@ lemma LieSubmodule.coe_toEnd_pow
   | succ n ih => simp only [pow_succ', Module.End.mul_apply, ih, LieSubmodule.coe_toEnd]
 
 中文:
-引理 LieSubmodule.coe_toEnd_pow
-  条件: (N : LieSubmodule R L M) (x : L) (y : N) (n : 自然数)
+引理 Lie子模.coe_toEnd_pow
+  条件: (N : Lie子模 R L M) (x : L) (y : N) (n : 自然数)
   证明: by
   induction n generalizing y with
   | zero => rfl
@@ -818,8 +818,8 @@ lemma LieSubalgebra.coe_ad
   proof: rfl
 
 中文:
-引理 LieSubalgebra.coe_ad
-  条件: (H : LieSubalgebra R L) (x y : H)
+引理 Lie子代数.coe_ad
+  条件: (H : Lie子代数 R L) (x y : H)
   证明: rfl
 -/
 lemma LieSubalgebra.coe_ad (H : LieSubalgebra R L) (x y : H) :
@@ -834,8 +834,8 @@ lemma LieSubalgebra.coe_ad_pow
   proof: LieSubmodule.coe_toEnd_pow R H L H.toLieSubmodule x y n
 
 中文:
-引理 LieSubalgebra.coe_ad_pow
-  条件: (H : LieSubalgebra R L) (x y : H) (n : 自然数)
+引理 Lie子代数.coe_ad_pow
+  条件: (H : Lie子代数 R L) (x y : H) (n : 自然数)
   证明: LieSubmodule.coe_toEnd_pow R H L H.toLieSubmodule x y n
 
 Depends on / 依赖: H.toLieSubmodule, LieSubmodule, LieSubmodule.coe_toEnd_pow, coe_toEnd_pow, toLieSubmodule
@@ -858,7 +858,7 @@ lemma LieModule.toEnd_lie
   simp
 
 中文:
-引理 LieModule.toEnd_lie
+引理 Lie模.toEnd_lie
   条件: (x y : L) (z : M)
   证明: by
   simp
@@ -876,7 +876,7 @@ lemma LieAlgebra.ad_lie
   proof: toEnd_lie _ x y z
 
 中文:
-引理 LieAlgebra.ad_lie
+引理 Lie代数.ad_lie
   条件: (x y z : L)
   证明: toEnd_lie _ x y z
 
@@ -904,7 +904,7 @@ lemma LieModule.toEnd_pow_lie
     rw [add_co
 
 中文:
-引理 LieModule.toEnd_pow_lie
+引理 Lie模.toEnd_pow_lie
   条件: (x y : L) (z : M) (n : 自然数)
   证明: by
   induction n with
@@ -943,7 +943,7 @@ lemma LieAlgebra.ad_pow_lie
   proof: toEnd_pow_lie _ x y z n
 
 中文:
-引理 LieAlgebra.ad_pow_lie
+引理 Lie代数.ad_pow_lie
   条件: (x y z : L) (n : 自然数)
   证明: toEnd_pow_lie _ x y z n
 
@@ -1052,7 +1052,7 @@ theorem toEnd_comp_subtype_mem
 
 中文:
 定理 toEnd_comp_subtype_mem
-  条件: (m : M) (hm : m in (N : Submodule R M))
+  条件: (m : M) (hm : m in (N : 子模 R M))
   证明: by
   simpa using N.lie_mem hm
 
@@ -1125,8 +1125,8 @@ theorem LieAlgebra.ad_eq_lmul_left_sub_lmul_right
   ext a b; simp [LieRing.of_associative_ring_bracket]
 
 中文:
-定理 LieAlgebra.ad_eq_lmul_left_sub_lmul_right
-  条件: (A : 类型v) [Ring A] [Algebra R A]
+定理 Lie代数.ad_eq_lmul_left_sub_lmul_right
+  条件: (A : 类型v) [环 A] [代数 R A]
   证明: by
   ext a b; simp [LieRing.of_associative_ring_bracket]
 
@@ -1148,8 +1148,8 @@ theorem LieSubalgebra.ad_comp_incl_eq
     LieSubalgebra.coe_bracket, Function.comp_apply]
 
 中文:
-定理 LieSubalgebra.ad_comp_incl_eq
-  条件: (K : LieSubalgebra R L) (x : K)
+定理 Lie子代数.ad_comp_incl_eq
+  条件: (K : Lie子代数 R L) (x : K)
   证明: by
   ext y
   simp only [ad_apply, LieHom.coe_toLinearMap, LieSubalgebra.coe_incl, LinearMap.coe_comp,
@@ -1182,7 +1182,7 @@ definition lieSubalgebraOfSubalgebra
 
 中文:
 定义 lieSubalgebraOfSubalgebra
-  签名: (R : 类型u) [CommRing R] (A : 类型v) [Ring A] [Algebra R A]
+  签名: (R : 类型u) [交换环 R] (A : 类型v) [环 A] [代数 R A]
   定义体: { Subalgebra.toSubmodule A' with
     lie_mem' := fun {x y} hx hy => by
       change ⁅x, y⁆ in A'; change x in A' at hx; change y in A' at hy
@@ -1225,7 +1225,7 @@ definition lieConj
 
 中文:
 定义 lieConj
-  签名: : Module.End R M₁ ≃ₗ⁅R⁆ Module.End R M₂
+  签名: : 模.End R M₁ ≃ₗ⁅R⁆ 模.End R M₂
   定义体: { e.conj with
     map_lie' := fun {f g} =>
       show e.conj ⁅f, g⁆ = ⁅e.conj f, e.conj g⁆ by
@@ -1257,7 +1257,7 @@ theorem lieConj_apply
 
 中文:
 定理 lieConj_apply
-  条件: (f : Module.End R M₁)
+  条件: (f : 模.End R M₁)
   结论: e.lieConj f = e.conj f
   证明: rfl
 

@@ -88,7 +88,7 @@ structure PushoutObjObj
     - pt : C₃
     - inl : (F.obj Y₁).obj X₂ ⟶ pt
     - inr : (F.obj X₁).obj Y₂ ⟶ pt
-    - isPushout : IsPushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂) inl inr
+    - isPushout : 是推出 ((F.map f₁).app X₂) ((F.obj X₁).map f₂) inl inr
     - ι : pt ⟶ (F.obj Y₁).obj Y₂  [默认: isPushout.desc ((F.obj Y₁).map f₂) ((F.map f₁).app Y₂) (by s]
     - inl_ι : inl ≫ ι = (F.obj Y₁).map f₂  [默认: by cat_disch]
     - inr_ι : inr ≫ ι = (F.map f₁).app Y₂  [默认: by cat_disch]
@@ -233,7 +233,7 @@ definition ofNatIso
   ι := sq.ι ≫ (e.hom.app _).app _
 
 中文:
-定义 ofNatIso
+定义 of自然数Iso
   签名: : F'.PushoutObjObj f₁ f₂ where
   定义体: sq.pt
   inl := (e.inv.app Y₁).app X₂ ≫ sq.inl
@@ -452,7 +452,7 @@ lemma mapArrowLeft_comp
 
 中文:
 引理 mapArrowLeft_comp
-  结论: {f₁'' : Arrow C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom)
+  结论: {f₁'' : 箭头 C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -572,7 +572,7 @@ lemma mapArrowRight_comp
 
 中文:
 引理 mapArrowRight_comp
-  结论: {f₂'' : Arrow C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom)
+  结论: {f₂'' : 箭头 C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -647,7 +647,7 @@ definition leibnizPushout
 
 中文:
 定义 leibnizPushout
-  签名: [HasPushouts C₃]
+  签名: [有Pushouts C₃]
   定义体: { obj f₂ := Arrow.mk (PushoutObjObj.ofHasPushout F f₁.hom f₂.hom).ι
       map sq :=
         PushoutObjObj.mapArrowRight
@@ -699,7 +699,7 @@ structure PullbackObjObj
     - pt : C₂
     - fst : pt ⟶ (G.obj (op X₁)).obj X₃
     - snd : pt ⟶ (G.obj (op Y₁)).obj Y₃
-    - isPullback : IsPullback fst snd ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
+    - isPullback : 是拉回 fst snd ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
     - π : (G.obj (op Y₁)).obj X₃ ⟶ pt  [默认: isPullback.lift ((G.map f₁.op).app X₃) ((G.obj (op Y₁)).map ]
     - π_fst : π ≫ fst = (G.map f₁.op).app X₃  [默认: by cat_disch]
     - π_snd : π ≫ snd = (G.obj (op Y₁)).map f₃  [默认: by cat_disch]
@@ -974,7 +974,7 @@ lemma mapArrowLeft_comp
 
 中文:
 引理 mapArrowLeft_comp
-  结论: {f₁'' : Arrow C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom)
+  结论: {f₁'' : 箭头 C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -1093,7 +1093,7 @@ lemma mapArrowRight_comp
 
 中文:
 引理 mapArrowRight_comp
-  结论: {f₃'' : Arrow C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom)
+  结论: {f₃'' : 箭头 C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -1169,7 +1169,7 @@ definition leibnizPullback
 
 中文:
 定义 leibnizPullback
-  签名: [HasPullbacks C₂]
+  签名: [有Pullbacks C₂]
   定义体: { obj f₃ := Arrow.mk (PullbackObjObj.ofHasPullback G f₁.unop.hom f₃.hom).π
       map sq :=
         PullbackObjObj.mapArrowRight
@@ -1223,7 +1223,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: (adj₂ : F ⊣₂ G) (X₁ : Arrow C₁) [HasPullbacks C₂] [HasPushouts C₃]
+  签名: (adj₂ : F ⊣₂ G) (X₁ : 箭头 C₁) [有Pullbacks C₂] [有Pushouts C₃]
   定义体: Arrow.homMk (adj₂.homEquiv (pushout.inl ..))
     (pullback.lift (adj₂.homEquiv (pushout.inr ..)) (adj₂.homEquiv (𝟙 _))
       (by simp [← homEquiv_naturality_one, ← homEquiv_naturality_three])) (by
@@ -1287,7 +1287,7 @@ definition leibnizAdjunction
 
 中文:
 定义 leibnizAdjunction
-  签名: (adj₂ : F ⊣₂ G) [HasPullbacks C₂] [HasPushouts C₃]
+  签名: (adj₂ : F ⊣₂ G) [有Pullbacks C₂] [有Pushouts C₃]
   定义体: LeibnizAdjunction.adj F G adj₂ X₁
   unit_whiskerRight_map _ := by
     ext

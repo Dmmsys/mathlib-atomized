@@ -33,7 +33,7 @@ instance properlyDiscontinuousSL2ZRange
 
 中文:
 实例 properlyDiscontinuousSL2ZRange
-  签名: : 命题erlyDiscontinuousSMul 𝒮ℒ ℍ
+  签名: : ProperlyDiscontinuousSMul 𝒮ℒ ℍ
   定义体: by
   let 𝒮ℒ' : Subgroup SL(2, Real) := (SpecialLinearGroup.map (Int.castRingHom Real)).range
   have : ProperlyDiscontinuousSMul 𝒮ℒ' ℍ := inferInstance
@@ -61,8 +61,8 @@ instance Subgroup.IsArithmetic.properlyDiscontinuous
   infer_instance
 
 中文:
-实例 Subgroup.IsArithmetic.properlyDiscontinuous
-  签名: {𝒢 : Subgroup (GL (Fin 2) 实数)}
+实例 子群.是Arithmetic.properlyDiscontinuous
+  签名: {𝒢 : 子群 (GL (有限集 2) 实数)}
   定义体: by
   rw [is_commensurable.properlyDiscontinuousSMul_iff]
   infer_instance

@@ -31,8 +31,8 @@ definition Subsingleton
   body: exists s in l, Set.Subsingleton s
 
 中文:
-定义 Subsingleton
-  签名: (l : Filter α)
+定义 子单例
+  签名: (l : 滤子 α)
   定义体: exists s in l, Set.Subsingleton s
 -/
 protected def Subsingleton (l : Filter α) : Prop := exists s in l, Set.Subsingleton s
@@ -46,8 +46,8 @@ theorem HasBasis.subsingleton_iff
   proof: h.exists_iff fun _ _ hsub h => h.anti hsub
 
 中文:
-定理 HasBasis.subsingleton_iff
-  条件: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set α} (h : l.HasBasis p s)
+定理 有基.subsingleton_iff
+  条件: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α} (h : l.有基 p s)
   证明: h.exists_iff fun _ _ hsub h => h.anti hsub
 
 Depends on / 依赖: exists_iff, h.anti, h.exists_iff
@@ -68,9 +68,9 @@ theorem Subsingleton.anti
 @[nontriviality]
 
 中文:
-定理 Subsingleton.anti
-  条件: {l'} (hl : l.Subsingleton) (hl' : l' <= l)
-  结论: l'.Subsingleton
+定理 子单例.anti
+  条件: {l'} (hl : l.子单例) (hl' : l' <= l)
+  结论: l'.子单例
   证明: let ⟨s, hsl, hs⟩ := hl; ⟨s, hl' hsl, hs⟩
 
 @[nontriviality]
@@ -89,9 +89,9 @@ theorem Subsingleton.of_subsingleton
   proof: ⟨univ, univ_mem, subsingleton_univ⟩
 
 中文:
-定理 Subsingleton.of_subsingleton
-  条件: [Subsingleton α]
-  结论: l.Subsingleton
+定理 子单例.of_subsingleton
+  条件: [子单例 α]
+  结论: l.子单例
   证明: ⟨univ, univ_mem, subsingleton_univ⟩
 
 Depends on / 依赖: subsingleton_univ, univ_mem
@@ -109,9 +109,9 @@ theorem Subsingleton.map
   proof: let ⟨s, hsl, hs⟩ := hl; ⟨f '' s, image_mem_map hsl, hs.image f⟩
 
 中文:
-定理 Subsingleton.map
-  条件: (hl : l.Subsingleton) (f : α -> β)
-  结论: (map f l).Subsingleton
+定理 子单例.map
+  条件: (hl : l.子单例) (f : α -> β)
+  结论: (map f l).子单例
   证明: let ⟨s, hsl, hs⟩ := hl; ⟨f '' s, image_mem_map hsl, hs.image f⟩
 
 Depends on / 依赖: hs.image, image_mem_map
@@ -130,8 +130,8 @@ theorem Subsingleton.prod
 @[simp]
 
 中文:
-定理 Subsingleton.prod
-  条件: (hl : l.Subsingleton) {l' : Filter β} (hl' : l'.Subsingleton)
+定理 子单例.乘积
+  条件: (hl : l.子单例) {l' : 滤子 β} (hl' : l'.子单例)
   证明: let ⟨s, hsl, hs⟩ := hl; let ⟨t, htl', ht⟩ := hl'; ⟨s ×ˢ t, prod_mem_prod hsl htl', hs.prod ht⟩
 
 @[simp]
@@ -155,7 +155,7 @@ theorem subsingleton_pure
 中文:
 定理 subsingleton_pure
   条件: {a : α}
-  结论: Filter.Subsingleton (pure a)
+  结论: 滤子.子单例 (pure a)
   证明: ⟨{a}, rfl, subsingleton_singleton⟩
 
 @[simp]
@@ -176,7 +176,7 @@ theorem subsingleton_bot
 
 中文:
 定理 subsingleton_bot
-  结论: Filter.Subsingleton (⊥ : Filter α)
+  结论: 滤子.子单例 (⊥ : 滤子 α)
   证明: ⟨∅, trivial, subsingleton_empty⟩
 
 Depends on / 依赖: subsingleton_empty
@@ -198,8 +198,8 @@ theorem Subsingleton.exists_eq_pure
   rwa [le_pure_iff]
 
 中文:
-定理 Subsingleton.exists_eq_pure
-  条件: [l.NeBot] (hl : l.Subsingleton)
+定理 子单例.存在_eq_pure
+  条件: [l.NeBot] (hl : l.子单例)
   结论: 存在 a, l = pure a
   证明: by
   rcases hl with ⟨s, hsl, hs⟩
@@ -228,7 +228,7 @@ theorem subsingleton_iff_bot_or_pure
 
 中文:
 定理 subsingleton_iff_bot_or_pure
-  结论: l.Subsingleton ↔ l = ⊥ ∨ 存在 a, l = pure a
+  结论: l.子单例 ↔ l = ⊥ ∨ 存在 a, l = pure a
   证明: by
   refine ⟨fun hl => ?_, ?_⟩
   · exact (eq_or_neBot l).imp_right (@Subsingleton.exists_eq_pure _ _ · hl)
@@ -254,9 +254,9 @@ theorem subsingleton_iff_exists_le_pure
   · simp [subsingleton_iff_bot_or_pure, ← hbot.le_pure_iff, hbot.ne]
 
 中文:
-定理 subsingleton_iff_exists_le_pure
-  条件: [Nonempty α]
-  结论: l.Subsingleton ↔ 存在 a, l <= pure a
+定理 subsingleton_iff_存在_le_pure
+  条件: [非空 α]
+  结论: l.子单例 ↔ 存在 a, l <= pure a
   证明: by
   rcases eq_or_neBot l with rfl | hbot
   · simp
@@ -280,9 +280,9 @@ theorem subsingleton_iff_exists_singleton_mem
   simp only [subsingleton_iff_exists_le_pure, le_pure_iff]
 
 中文:
-定理 subsingleton_iff_exists_singleton_mem
-  条件: [Nonempty α]
-  结论: l.Subsingleton ↔ 存在 a, {a} in l
+定理 subsingleton_iff_存在_singleton_mem
+  条件: [非空 α]
+  结论: l.子单例 ↔ 存在 a, {a} in l
   证明: by
   simp only [subsingleton_iff_exists_le_pure, le_pure_iff]
 
@@ -307,9 +307,9 @@ lemma Subsingleton.isCountablyGenerated
   · exact isCountablyGenerated_pure x
 
 中文:
-引理 Subsingleton.isCountablyGenerated
-  条件: (hl : l.Subsingleton)
-  结论: IsCountablyGenerated l
+引理 子单例.isCountablyGenerated
+  条件: (hl : l.子单例)
+  结论: 是余untablyGenerated l
   证明: by
   rcases subsingleton_iff_bot_or_pure.1 hl with rfl | ⟨x, rfl⟩
   · exact isCountablyGenerated_bot

@@ -65,7 +65,7 @@ structure ConnectData
     - d₀_comp : d₀ ≫ L.d 0 1 = 0
 
 中文:
-结构 ConnectData
+结构 余nnectData
   参数: where
   公理与运算 (3 个):
     - d₀ : K.X 0 ⟶ L.X 0
@@ -114,7 +114,7 @@ lemma X_ofNat
   proof: rfl
 
 中文:
-引理 X_ofNat
+引理 X_of自然数
   条件: (n : 自然数)
   结论: X K L n = L.X n
   证明: rfl
@@ -197,7 +197,7 @@ lemma d_ofNat
   proof: rfl
 
 中文:
-引理 d_ofNat
+引理 d_of自然数
   条件: (n m : 自然数)
   结论: h.d n m = L.d n m
   证明: rfl
@@ -382,7 +382,7 @@ definition cochainComplex
 
 中文:
 定义 cochainComplex
-  签名: : CochainComplex C 整数 where
+  签名: : 上链复形 C 整数 where
   定义体: X K L
   d := h.d
   shape := h.shape

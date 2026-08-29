@@ -39,7 +39,7 @@ abbreviation semigroupWithZero
 
 中文:
 缩写 semigroupWithZero
-  签名: [SemigroupWithZero β]
+  签名: [带零半群 β]
   定义体: by
   let mul := e.mul
   let zero := e.zero
@@ -63,7 +63,7 @@ abbreviation mulZeroClass
 
 中文:
 缩写 mulZeroClass
-  签名: [MulZeroClass β]
+  签名: [乘零类 β]
   定义体: by
   let zero := e.zero
   let mul := e.mul
@@ -88,7 +88,7 @@ abbreviation mulZeroOneClass
 
 中文:
 缩写 mulZeroOneClass
-  签名: [MulZeroOneClass β]
+  签名: [乘零幺类 β]
   定义体: by
   let zero := e.zero
   let one := e.one
@@ -116,7 +116,7 @@ abbreviation monoidWithZero
 
 中文:
 缩写 monoidWithZero
-  签名: [MonoidWithZero β]
+  签名: [带零幺半群 β]
   定义体: by
   let _ := e.mulZeroOneClass
   let _ := e.pow Nat
@@ -139,7 +139,7 @@ abbreviation commMonoidWithZero
 
 中文:
 缩写 commMonoidWithZero
-  签名: [CommMonoidWithZero β]
+  签名: [带零交换幺半群 β]
   定义体: by
   let _ := e.monoidWithZero
   apply e.injective.commMonoidWithZero _ <;> intros <;> exact e.apply_symm_apply _

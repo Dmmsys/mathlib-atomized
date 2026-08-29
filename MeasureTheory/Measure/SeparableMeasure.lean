@@ -89,11 +89,11 @@ structure Measure.MeasureDense
     - approx : forall s, MeasurableSet s -> μ s != ∞ -> forall ε : Real, 0 < ε -> exists t in 𝒜, μ (s ∆ t) < ENNReal.ofReal ε
 
 中文:
-结构 Measure.MeasureDense
-  参数: (μ : Measure X) (𝒜 : Set (Set X))
+结构 测度.测度稠密
+  参数: (μ : 测度 X) (𝒜 : 集合 (集合 X))
   公理与运算 (2 个):
-    - measurable : 对任意 s in 𝒜, MeasurableSet s
-    - approx : 对任意 s, MeasurableSet s -> μ s != ∞ -> 对任意 ε : 实数, 0 < ε -> 存在 t in 𝒜, μ (s ∆ t) < ENN实数.of实数 ε
+    - measurable : 对任意 s in 𝒜, 可测集 s
+    - approx : 对任意 s, 可测集 s -> μ s != ∞ -> 对任意 ε : 实数, 0 < ε -> 存在 t in 𝒜, μ (s ∆ t) < 广义非负实数.of实数 ε
 -/
 structure Measure.MeasureDense (μ : Measure X) (𝒜 : Set (Set X)) : Prop where
   /-- Each set has to be measurable. -/
@@ -113,9 +113,9 @@ theorem Measure.MeasureDense.nonempty
   exact ⟨t, ht⟩
 
 中文:
-定理 Measure.MeasureDense.nonempty
-  条件: (h𝒜 : μ.MeasureDense 𝒜)
-  结论: 𝒜.Nonempty
+定理 测度.测度稠密.nonempty
+  条件: (h𝒜 : μ.测度稠密 𝒜)
+  结论: 𝒜.非空
   证明: by
   rcases h𝒜.approx ∅ MeasurableSet.empty (by simp) 1 (by simp) with ⟨t, ht, -⟩
   exact ⟨t, ht⟩
@@ -139,8 +139,8 @@ theorem Measure.MeasureDense.nonempty'
   rw [← bot_eq_empty]; rw [bot_symmDiff]
 
 中文:
-定理 Measure.MeasureDense.nonempty'
-  条件: (h𝒜 : μ.MeasureDense 𝒜)
+定理 测度.测度稠密.nonempty'
+  条件: (h𝒜 : μ.测度稠密 𝒜)
   证明: by
   rcases h𝒜.approx ∅ MeasurableSet.empty (by simp) 1 (by simp) with ⟨t, ht, hμt⟩
   refine ⟨t, ht, ?_⟩
@@ -167,7 +167,7 @@ theorem measureDense_measurableSet
 
 中文:
 定理 measureDense_measurableSet
-  结论: μ.MeasureDense {s | MeasurableSet s} where
+  结论: μ.测度稠密 {s | 可测集 s} where
   证明: h
   approx s hs _ ε ε_pos := ⟨s, hs, by simpa⟩
 -/
@@ -193,9 +193,9 @@ theorem Measure.MeasureDense.completion
 exact measure_congr ae_eq_set_symmDiff 
 
 中文:
-定理 Measure.MeasureDense.completion
-  条件: (h𝒜 : μ.MeasureDense 𝒜)
-  结论: μ.completion.MeasureDense 𝒜 where
+定理 测度.测度稠密.completion
+  条件: (h𝒜 : μ.测度稠密 𝒜)
+  结论: μ.completion.测度稠密 𝒜 where
   证明: (h𝒜.measurable s hs).nullMeasurableSet
   approx s hs hμs ε ε_pos := by
     obtain ⟨t, ht, hμst⟩ :=
@@ -229,8 +229,8 @@ lemma Measure.MeasureDense.fin_meas_approx
   exact ⟨t, t_mem, (measure_ne_top_iff_of_symmDiff <| ne_top_of_lt ht).1 hμs, ht⟩
 
 中文:
-引理 Measure.MeasureDense.fin_meas_approx
-  结论: (h𝒜 : μ.MeasureDense 𝒜) {s : Set X}
+引理 测度.测度稠密.fin_meas_approx
+  结论: (h𝒜 : μ.测度稠密 𝒜) {s : 集合 X}
   证明: by
   rcases h𝒜.approx s ms hμs ε ε_pos with ⟨t, t_mem, ht⟩
   exact ⟨t, t_mem, (measure_ne_top_iff_of_symmDiff <| ne_top_of_lt ht).1 hμs, ht⟩
@@ -262,8 +262,8 @@ theorem Measure.MeasureDense.indicatorConstLp_subset_closure
     rintro - ⟨s, 
 
 中文:
-定理 Measure.MeasureDense.indicatorConstLp_subset_closure
-  条件: (h𝒜 : μ.MeasureDense 𝒜) (c : E)
+定理 测度.测度稠密.indicatorConstLp_subset_closure
+  条件: (h𝒜 : μ.测度稠密 𝒜) (c : E)
   证明: by
   obtain rfl | hc := eq_or_ne c 0
   · refine Subset.trans ?_ subset_closure
@@ -318,8 +318,8 @@ theorem Measure.MeasureDense.fin_meas
     exact ⟨t, ⟨t_mem, hμt⟩, hμst⟩
 
 中文:
-定理 Measure.MeasureDense.fin_meas
-  条件: (h𝒜 : μ.MeasureDense 𝒜)
+定理 测度.测度稠密.fin_meas
+  条件: (h𝒜 : μ.测度稠密 𝒜)
   证明: h𝒜.measurable s h.1
   approx s ms hμs ε ε_pos := by
     rcases Measure.MeasureDense.fin_meas_approx h𝒜 ms hμs ε ε_pos with ⟨t, t_mem, hμt, hμst⟩
@@ -349,8 +349,8 @@ theorem Measure.MeasureDense.of_generateFrom_isSetAlgebra_finite
 
 
 中文:
-定理 Measure.MeasureDense.of_generateFrom_isSetAlgebra_finite
-  结论: [IsFiniteMeasure μ]
+定理 测度.测度稠密.of_generateFrom_isSetAlgebra_finite
+  结论: [是有限测度 μ]
   证明: hgen ▸ measurableSet_generateFrom hs
   approx s ms := by
     -- We want to show that any measurable set can be approximated by sets in `𝒜`. To do so, it is
@@ -462,8 +462,8 @@ theorem Measure.MeasureDense.of_generateFrom_isSetAlgebra_sigmaFinite
     have
 
 中文:
-定理 Measure.MeasureDense.of_generateFrom_isSetAlgebra_sigmaFinite
-  结论: (h𝒜 : IsSetAlgebra 𝒜)
+定理 测度.测度稠密.of_generateFrom_isSetAlgebra_sigmaFinite
+  结论: (h𝒜 : 是集合代数 𝒜)
   证明: hgen ▸ measurableSet_generateFrom hs
   approx s ms hμs ε ε_pos := by
     -- We use partial unions of (Sₙ) to get a monotone family spanning `X`.
@@ -548,10 +548,10 @@ class IsSeparable
     - exists_countable_measureDense : exists 𝒜, 𝒜.Countable ∧ μ.MeasureDense 𝒜
 
 中文:
-类 IsSeparable
-  参数: (μ : Measure X)
+类 是可分
+  参数: (μ : 测度 X)
   公理与运算 (1 个):
-    - exists_countable_measureDense : 存在 𝒜, 𝒜.Countable ∧ μ.MeasureDense 𝒜
+    - exists_countable_measureDense : 存在 𝒜, 𝒜.可数 ∧ μ.测度稠密 𝒜
 -/
 class IsSeparable (μ : Measure X) : Prop where
   exists_countable_measureDense : exists 𝒜, 𝒜.Countable ∧ μ.MeasureDense 𝒜
@@ -567,8 +567,8 @@ theorem exists_countable_measureDense
   proof: IsSeparable.exists_countable_measureDense
 
 中文:
-定理 exists_countable_measureDense
-  条件: [IsSeparable μ]
+定理 存在_countable_measureDense
+  条件: [是可分 μ]
   证明: IsSeparable.exists_countable_measureDense
 
 Depends on / 依赖: IsSeparable, IsSeparable.exists_countable_measureDense, exists_countable_measureDense
@@ -592,7 +592,7 @@ theorem isSeparable_of_sigmaFinite
 
 中文:
 定理 isSeparable_of_sigmaFinite
-  条件: [CountablyGenerated X] [SigmaFinite μ]
+  条件: [余untablyGenerated X] [σ有限 μ]
   证明: by
     have h := countable_countableGeneratingSet (α := X)
     have hgen := generateFrom_countableGeneratingSet (α := X)
@@ -644,8 +644,8 @@ instance [CountablyGenerated
     · rintro
 
 中文:
-实例 [CountablyGenerated
-  签名: X] [SFinite μ] : IsSeparable μ where
+实例 [余untablyGenerated
+  签名: X] [SFinite μ] : 是可分 μ where
   定义体: by
     have := isSeparable_of_sigmaFinite (μ.restrict μ.sigmaFiniteSet)
     rcases exists_countable_measureDense (μ.restrict μ.sigmaFiniteSet) with ⟨𝒜, count_𝒜, h𝒜⟩
@@ -698,7 +698,7 @@ instance [hμ
 
 中文:
 实例 [hμ
-  签名: : IsSeparable μ] : IsSeparable μ.completion
+  签名: : 是可分 μ] : 是可分 μ.completion
   定义体: by
   obtain ⟨𝒜, count_𝒜, h𝒜⟩ := exists_countable_measureDense μ
   exact ⟨𝒜, count_𝒜, h𝒜.completion⟩
@@ -728,8 +728,8 @@ instance Lp.SecondCountableTopology
   -- measure while preserving the two pro
 
 中文:
-实例 Lp.SecondCountableTopology
-  签名: [IsSeparable μ] [TopologicalSpace.SeparableSpace E]
+实例 Lp.第二可数拓扑
+  签名: [是可分 μ] [拓扑空间.可分空间 E]
   定义体: by
   -- It is enough to show that the space is separable, i.e. admits a countable and dense subset.
   refine @UniformSpace.secondCountable_of_separable _ _ _ ?_

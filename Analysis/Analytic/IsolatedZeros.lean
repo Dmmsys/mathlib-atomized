@@ -88,7 +88,7 @@ theorem exists_hasSum_smul_of_apply_eq_zero
   · refine ⟨(z ^ n)⁻¹ • s, by match_scalars; field, ?_
 
 中文:
-定理 exists_hasSum_smul_of_apply_eq_zero
+定理 存在_hasSum_smul_of_apply_eq_zero
   结论: (hs : HasSum (fun m => z ^ m • a m) s)
   证明: by
   obtain rfl | hn := n.eq_zero_or_pos
@@ -489,7 +489,7 @@ theorem exists_eventuallyEq_pow_smul_nonzero_iff
     filter_upwards [hg_eq, hg_ne] wi
 
 中文:
-定理 exists_eventuallyEq_pow_smul_nonzero_iff
+定理 存在_eventuallyEq_pow_smul_nonzero_iff
   条件: (hf : AnalyticAt 𝕜 f z₀)
   证明: by
   constructor
@@ -595,7 +595,7 @@ theorem eqOn_zero_of_preconnected_of_mem_closure
 
 中文:
 定理 eqOn_zero_of_preconnected_of_mem_closure
-  结论: (hf : AnalyticOnNhd 𝕜 f U) (hU : IsPreconnected U)
+  结论: (hf : AnalyticOnNhd 𝕜 f U) (hU : 是预连通 U)
   证明: hf.eqOn_zero_of_preconnected_of_frequently_eq_zero hU h₀
     (mem_closure_ne_iff_frequently_within.mp hfz₀)
 
@@ -692,7 +692,7 @@ theorem eq_of_frequently_eq
 
 中文:
 定理 eq_of_frequently_eq
-  结论: [ConnectedSpace 𝕜] (hf : AnalyticOnNhd 𝕜 f univ)
+  结论: [连通空间 𝕜] (hf : AnalyticOnNhd 𝕜 f univ)
   证明: funext fun x =>
     eqOn_of_preconnected_of_frequently_eq hf hg isPreconnected_univ (mem_univ z₀) hfg (mem_univ x)
 
@@ -727,7 +727,7 @@ lemma eq_zero_or_eq_zero_of_smul_eq_zero
 
 中文:
 引理 eq_zero_or_eq_zero_of_smul_eq_zero
-  结论: [IsTorsionFree A B]
+  结论: [是无挠 A B]
   证明: by
   -- We want to apply `IsPreconnected.preperfect_of_nontrivial` which requires `U` to have at least
   -- two elements. So we need to dispose of the cases `#U = 0` and `#U = 1` first.
@@ -804,7 +804,7 @@ theorem AnalyticAt.preimage_of_nhdsNE
 
 中文:
 定理 AnalyticAt.preimage_of_nhdsNE
-  结论: {x : 𝕜} {f : 𝕜 -> E} {s : Set E} (hfx : AnalyticAt 𝕜 f x)
+  结论: {x : 𝕜} {f : 𝕜 -> E} {s : 集合 E} (hfx : AnalyticAt 𝕜 f x)
   证明: by
   have : forallᶠ (z : 𝕜) in 𝓝 x, f z in insert (f x) s := by
     filter_upwards [hfx.continuousAt.preimage_mem_nhds (insert_mem_nhds_iff.2 hs)]
@@ -865,7 +865,7 @@ theorem AnalyticOnNhd.preimage_mem_codiscreteWithin
 
 中文:
 定理 AnalyticOnNhd.preimage_mem_codiscreteWithin
-  结论: {U : Set 𝕜} {s : Set E} {f : 𝕜 -> E}
+  结论: {U : 集合 𝕜} {s : 集合 E} {f : 𝕜 -> E}
   证明: by
   simp_rw [mem_codiscreteWithin, disjoint_principal_right, Set.compl_sdiff] at *
   intro x hx
@@ -893,7 +893,7 @@ theorem AnalyticOnNhd.map_codiscreteWithin
 
 中文:
 定理 AnalyticOnNhd.map_codiscreteWithin
-  结论: {U : Set 𝕜} {f : 𝕜 -> E}
+  结论: {U : 集合 𝕜} {f : 𝕜 -> E}
   证明: fun _ hs => mem_map.1 (preimage_mem_codiscreteWithin hfU h₂f hs)
 
 Depends on / 依赖: mem_map, preimage_mem_codiscreteWithin

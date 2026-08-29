@@ -119,7 +119,7 @@ lemma nondegenerate_zero
 
 中文:
 引理 nondegenerate_zero
-  结论: X.nonDegenerate 0 = Set.univ
+  结论: X.nonDegenerate 0 = 集合.univ
   证明: by
   simp [nonDegenerate]
 
@@ -179,7 +179,7 @@ lemma σ_mem_degenerate
 
 中文:
 引理 σ_mem_degenerate
-  条件: (i : Fin (n + 1)) (x : X _⦋n⦌)
+  条件: (i : 有限集 (n + 1)) (x : X _⦋n⦌)
   证明: ⟨n, by lia, SimplexCategory.σ i, Set.mem_range_self x⟩
 
 Depends on / 依赖: Set.mem_range_self, SimplexCategory, mem_range_self
@@ -359,7 +359,7 @@ lemma exists_nonDegenerate
           degenerat
 
 中文:
-引理 exists_nonDegenerate
+引理 存在_nonDegenerate
   条件: (x : X _⦋n⦌)
   证明: by
   induction n with
@@ -551,7 +551,7 @@ lemma mono_g
 
 中文:
 引理 mono_g
-  结论: Mono (g hf₁ f₂)
+  结论: 单态射 (g hf₁ f₂)
   证明: by
   have := isIso_factorThruImage_g hf₁ hy₁ hy₂
   rw [← image.fac (g hf₁ f₂)]
@@ -829,7 +829,7 @@ lemma le_iff_contains_nonDegenerate
 
 中文:
 引理 le_iff_contains_nonDegenerate
-  条件: (B : X.Subcomplex)
+  条件: (B : X.子复形)
   证明: by
   constructor
   · aesop
@@ -1040,7 +1040,7 @@ lemma degenerate_iff_of_isIso
 
 中文:
 引理 degenerate_iff_of_isIso
-  条件: (f : X ⟶ Y) [IsIso f] {n : 自然数} (x : X _⦋n⦌)
+  条件: (f : X ⟶ Y) [是同构 f] {n : 自然数} (x : X _⦋n⦌)
   证明: by
   constructor
   · intro hy
@@ -1068,7 +1068,7 @@ lemma nonDegenerate_iff_of_isIso
 
 中文:
 引理 nonDegenerate_iff_of_isIso
-  条件: (f : X ⟶ Y) [IsIso f] {n : 自然数} (x : X _⦋n⦌)
+  条件: (f : X ⟶ Y) [是同构 f] {n : 自然数} (x : X _⦋n⦌)
   证明: by
   simp [mem_nonDegenerate_iff_notMem_degenerate,
     degenerate_iff_of_isIso]
@@ -1128,7 +1128,7 @@ lemma degenerate_iff_of_mono
 
 中文:
 引理 degenerate_iff_of_mono
-  条件: {Y : SSet.{u}} (f : X ⟶ Y) [Mono f] (x : X _⦋n⦌)
+  条件: {Y : SSet.{u}} (f : X ⟶ Y) [单态射 f] (x : X _⦋n⦌)
   证明: by
   rw [← degenerate_iff_of_isIso (Subcomplex.toRange f) x]; rw [Subcomplex.mem_degenerate_iff]
   simp
@@ -1152,7 +1152,7 @@ lemma nonDegenerate_iff_of_mono
 
 中文:
 引理 nonDegenerate_iff_of_mono
-  条件: {Y : SSet.{u}} (f : X ⟶ Y) [Mono f] (x : X _⦋n⦌)
+  条件: {Y : SSet.{u}} (f : X ⟶ Y) [单态射 f] (x : X _⦋n⦌)
   证明: by
   simp [mem_nonDegenerate_iff_notMem_degenerate, degenerate_iff_of_mono]
 

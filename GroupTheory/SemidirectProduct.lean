@@ -54,7 +54,7 @@ structure SemidirectProduct
     - right : G
 
 中文:
-结构 SemidirectProduct
+结构 半直积
   参数: (φ : G ->* MulAut N)
   公理与运算 (2 个):
     - left : N
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (SemidirectProduct N G φ)
+  签名: 乘法 (半直积 N G φ)
   定义体: ⟨a.1 * φ a.2 b.1, a.2 * b.2⟩
 -/
 instance : Mul (SemidirectProduct N G φ) where
@@ -106,7 +106,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  条件: (a b : SemidirectProduct N G φ)
+  条件: (a b : 半直积 N G φ)
   结论: a * b = ⟨a.1 * φ a.2 b.1, a.2 * b.2⟩
   证明: rfl
 
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (SemidirectProduct N G φ)
+  签名: 幺 (半直积 N G φ)
   定义体: ⟨1, 1⟩
 
 @[simp]
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (SemidirectProduct N G φ)
+  签名: 取逆 (半直积 N G φ)
   定义体: ⟨φ x.2⁻¹ x.1⁻¹, x.2⁻¹⟩
 
 @[simp]
@@ -282,7 +282,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (N ⋊[φ] G)
+  签名: 群 (N ⋊[φ] G)
   定义体: SemidirectProduct.ext (by simp [mul_assoc]) (by simp [mul_assoc])
   one_mul a := SemidirectProduct.ext (by simp) (one_mul a.2)
   mul_one a := SemidirectProduct.ext (by simp) (mul_one _)
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (N ⋊[φ] G)
+  签名: 可居 (N ⋊[φ] G)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (N ⋊[φ] G) := ⟨1⟩
@@ -392,7 +392,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Function.Injective (inl : N -> N ⋊[φ] G)
+  结论: 函数.单射 (inl : N -> N ⋊[φ] G)
   证明: Function.injective_iff_hasLeftInverse.2 ⟨left, left_inl⟩
 
 @[simp]
@@ -501,7 +501,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Function.Injective (inr : G -> N ⋊[φ] G)
+  结论: 函数.单射 (inr : G -> N ⋊[φ] G)
   证明: Function.injective_iff_hasLeftInverse.2 ⟨right, right_inr⟩
 
 @[simp]
@@ -702,7 +702,7 @@ theorem rightHom_comp_inr
 
 中文:
 定理 rightHom_comp_inr
-  结论: (rightHom : N ⋊[φ] G ->* G).comp inr = MonoidHom.id _
+  结论: (rightHom : N ⋊[φ] G ->* G).comp inr = 幺半群态射.id _
   证明: by
   ext; simp [rightHom]
 
@@ -767,7 +767,7 @@ theorem rightHom_surjective
 
 中文:
 定理 rightHom_surjective
-  结论: Function.Surjective (rightHom : N ⋊[φ] G -> G)
+  结论: 函数.满射 (rightHom : N ⋊[φ] G -> G)
   证明: Function.surjective_iff_hasRightInverse.2 ⟨inr, rightHom_inr⟩
 
 Depends on / 依赖: Function, Function.surjective_iff_hasRightInverse, rightHom_inr, surjective_iff_hasRightInverse
@@ -1025,7 +1025,7 @@ definition monoidHomSubgroup
 
 中文:
 定义 monoidHomSubgroup
-  签名: {H K : Subgroup G} (h : K <= normalizer H)
+  签名: {H K : 子群 G} (h : K <= normalizer H)
   定义体: lift H.subtype K.subtype (by simp [DFunLike.ext_iff])
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, H.subtype, K.subtype, ext_iff, subtype
@@ -1046,7 +1046,7 @@ definition mulEquivSubgroup
 
 中文:
 定义 mulEquivSubgroup
-  签名: {H K : Subgroup G} [H.Normal] (h : H.IsComplement' K)
+  签名: {H K : 子群 G} [H.正规] (h : H.IsComplement' K)
   定义体: MulEquiv.ofBijective (monoidHomSubgroup _) ((equivProd.bijective_comp _).mpr h)
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofBijective, bijective_comp, equivProd, equivProd.bijective_comp, monoidHomSubgroup, ofBijective

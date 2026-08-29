@@ -52,7 +52,7 @@ definition invOfMemRange
 
 中文:
 定义 invOfMemRange
-  签名: : Set.range f -> α
+  签名: : 集合.range f -> α
   定义体: fun b =>
   Finset.choose (fun a => f a = b) Finset.univ
     ((existsUnique_congr (by simp)).mp (hf.existsUnique_of_mem_range b.property))
@@ -74,7 +74,7 @@ theorem left_inv_of_invOfMemRange
 
 中文:
 定理 left_inv_of_invOfMemRange
-  条件: (b : Set.range f)
+  条件: (b : 集合.range f)
   结论: f (hf.invOfMemRange b) = b
   证明: (Finset.choose_spec (fun a => f a = b) _ _).right
 
@@ -98,7 +98,7 @@ theorem right_inv_of_invOfMemRange
 中文:
 定理 right_inv_of_invOfMemRange
   条件: (a : α)
-  结论: hf.invOfMemRange ⟨f a, Set.mem_range_self a⟩ = a
+  结论: hf.invOfMemRange ⟨f a, 集合.mem_range_self a⟩ = a
   证明: hf (Finset.choose_spec (fun a' => f a' = f a) _ _).right
 
 Depends on / 依赖: Finset, Finset.choose_spec, choose_spec
@@ -120,8 +120,8 @@ theorem invFun_restrict
 
 中文:
 定理 invFun_restrict
-  条件: [Nonempty α]
-  结论: (Set.range f).domRestrict (invFun f) = hf.invOfMemRange
+  条件: [非空 α]
+  结论: (集合.range f).domRestrict (invFun f) = hf.invOfMemRange
   证明: by
   ext ⟨b, h⟩
   apply hf
@@ -145,7 +145,7 @@ theorem invOfMemRange_surjective
 
 中文:
 定理 invOfMemRange_surjective
-  结论: Function.Surjective hf.invOfMemRange
+  结论: 函数.满射 hf.invOfMemRange
   证明: fun a =>
   ⟨⟨f a, Set.mem_range_self a⟩, by simp⟩
 -/
@@ -216,7 +216,7 @@ theorem right_inv_of_invOfMemRange
 中文:
 定理 right_inv_of_invOfMemRange
   条件: (a : α)
-  结论: f.invOfMemRange ⟨f a, Set.mem_range_self a⟩ = a
+  结论: f.invOfMemRange ⟨f a, 集合.mem_range_self a⟩ = a
   证明: f.injective.right_inv_of_invOfMemRange a
 
 Depends on / 依赖: f.injective.right_inv_of_invOfMemRange, injective, right_inv_of_invOfMemRange
@@ -238,8 +238,8 @@ theorem invFun_restrict
 
 中文:
 定理 invFun_restrict
-  条件: [Nonempty α]
-  结论: (Set.range f).domRestrict (invFun f) = f.invOfMemRange
+  条件: [非空 α]
+  结论: (集合.range f).domRestrict (invFun f) = f.invOfMemRange
   证明: by
   ext ⟨b, h⟩
   apply f.injective
@@ -263,7 +263,7 @@ theorem invOfMemRange_surjective
 
 中文:
 定理 invOfMemRange_surjective
-  结论: Function.Surjective f.invOfMemRange
+  结论: 函数.满射 f.invOfMemRange
   证明: fun a =>
   ⟨⟨f a, Set.mem_range_self a⟩, by simp⟩
 -/
@@ -353,7 +353,7 @@ theorem choose_subtype_eq
 
 中文:
 定理 choose_subtype_eq
-  结论: {α : 类型} (p : α -> 命题) [Fintype { a : α // p a }] [DecidableEq α]
+  结论: {α : 类型} (p : α -> 命题) [有限类型 { a : α // p a }] [DecidableEq α]
   证明: by
   rw [Subtype.ext_iff]; rw [Fintype.choose_spec (fun y : { a : α // p a } => (y : α) = x) _]
 
@@ -382,7 +382,7 @@ definition bijInv
 
 中文:
 定义 bijInv
-  签名: (f_bij : Bijective f) (b : β)
+  签名: (f_bij : 双射 f) (b : β)
   定义体: Fintype.choose (fun a => f a = b) (f_bij.existsUnique b)
 
 Depends on / 依赖: Fintype, Fintype.choose, existsUnique, f_bij, f_bij.existsUnique
@@ -402,8 +402,8 @@ theorem leftInverse_bijInv
 
 中文:
 定理 leftInverse_bijInv
-  条件: (f_bij : Bijective f)
-  结论: LeftInverse (bijInv f_bij) f
+  条件: (f_bij : 双射 f)
+  结论: 左逆 (bijInv f_bij) f
   证明: fun a =>
   f_bij.left (choose_spec (fun a' => f a' = f a) _)
 -/
@@ -422,8 +422,8 @@ theorem rightInverse_bijInv
 
 中文:
 定理 rightInverse_bijInv
-  条件: (f_bij : Bijective f)
-  结论: RightInverse (bijInv f_bij) f
+  条件: (f_bij : 双射 f)
+  结论: 右逆 (bijInv f_bij) f
   证明: fun b =>
   choose_spec (fun a' => f a' = b) _
 -/
@@ -441,8 +441,8 @@ theorem bijective_bijInv
 
 中文:
 定理 bijective_bijInv
-  条件: (f_bij : Bijective f)
-  结论: Bijective (bijInv f_bij)
+  条件: (f_bij : 双射 f)
+  结论: 双射 (bijInv f_bij)
   证明: ⟨(rightInverse_bijInv _).injective, (leftInverse_bijInv _).surjective⟩
 
 Depends on / 依赖: injective, leftInverse_bijInv, rightInverse_bijInv, surjective

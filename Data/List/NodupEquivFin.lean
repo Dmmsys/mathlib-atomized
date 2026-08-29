@@ -53,7 +53,7 @@ definition getBijectionOfForallMemList
 
 中文:
 定义 getBijectionOfForallMemList
-  签名: (l : List α) (nd : l.Nodup) (h : 对任意 x : α, x in l)
+  签名: (l : 列表 α) (nd : l.Nodup) (h : 对任意 x : α, x in l)
   定义体: ⟨fun i => l.get i, fun _ _ h => nd.get_inj_iff.1 h,
    fun x =>
     let ⟨i, hl⟩ := List.mem_iff_get.1 (h x)
@@ -86,7 +86,7 @@ definition getEquiv
 
 中文:
 定义 getEquiv
-  签名: (l : List α) (H : Nodup l)
+  签名: (l : 列表 α) (H : Nodup l)
   定义体: ⟨get l i, get_mem _ _⟩
   invFun x := ⟨idxOf (↑x) l, idxOf_lt_length_iff.2 x.2⟩
   left_inv i := by simp only [List.get_idxOf, Fin.eta, H]
@@ -118,7 +118,7 @@ definition getEquivOfForallMemList
 
 中文:
 定义 getEquivOfForallMemList
-  签名: (l : List α) (nd : l.Nodup) (h : 对任意 x : α, x in l)
+  签名: (l : 列表 α) (nd : l.Nodup) (h : 对任意 x : α, x in l)
   定义体: l.get i
   invFun a := ⟨_, idxOf_lt_length_iff.2 (h a)⟩
   left_inv i := by simp [nd]
@@ -150,7 +150,7 @@ fun _ => List.count_pos_iff.mp h _ ▸ Nat.one_pos
 
 中文:
 定义 getEquivOfForallCountEqOne
-  签名: [DecidableEq α] (l : List α) (h : 对任意 x, l.count x = 1)
+  签名: [DecidableEq α] (l : 列表 α) (h : 对任意 x, l.count x = 1)
   定义体: Nodup.getEquivOfForallMemList _ (List.nodup_iff_count_eq_one.mpr fun _ _ => h _)
 fun _ => List.count_pos_iff.mp h _ ▸ Nat.one_pos
 
@@ -176,7 +176,7 @@ definition SortedLT.getIso
 
 中文:
 定义 SortedLT.getIso
-  签名: (l : List α) (H : SortedLT l)
+  签名: (l : 列表 α) (H : SortedLT l)
   定义体: H.pairwise.nodup.getEquiv l
   map_rel_iff' := H.strictMono_get.le_iff_le
 
@@ -248,7 +248,7 @@ theorem sublist_of_orderEmbedding_getElem?_eq
 
 中文:
 定理 sublist_of_orderEmbedding_getElem?_eq
-  结论: {l l' : List α} (f : 自然数 ↪o 自然数)
+  结论: {l l' : 列表 α} (f : 自然数 ↪o 自然数)
   证明: by
   induction l generalizing l' f with
   | nil => simp
@@ -307,8 +307,8 @@ theorem sublist_iff_exists_orderEmbedding_getElem?_eq
         ⟨Orde
 
 中文:
-定理 sublist_iff_exists_orderEmbedding_getElem?_eq
-  条件: {l l' : List α}
+定理 sublist_iff_存在_orderEmbedding_getElem?_eq
+  条件: {l l' : 列表 α}
   证明: by
   constructor
   · intro H
@@ -363,8 +363,8 @@ theorem sublist_iff_exists_fin_orderEmbedding_get_eq
       obtain ⟨h, -⟩ :=
 
 中文:
-定理 sublist_iff_exists_fin_orderEmbedding_get_eq
-  条件: {l l' : List α}
+定理 sublist_iff_存在_fin_orderEmbedding_get_eq
+  条件: {l l' : 列表 α}
   证明: by
   rw [sublist_iff_exists_orderEmbedding_getElem?_eq]
   constructor
@@ -426,8 +426,8 @@ theorem duplicate_iff_exists_distinct_get
     · rintro ⟨n
 
 中文:
-定理 duplicate_iff_exists_distinct_get
-  条件: {l : List α} {x : α}
+定理 duplicate_iff_存在_distinct_get
+  条件: {l : 列表 α} {x : α}
   证明: by
   classical
     rw [duplicate_iff_two_le_count]; rw [← replicate_sublist_iff]; rw [sublist_iff_exists_fin_orderEmbedding_get_eq]

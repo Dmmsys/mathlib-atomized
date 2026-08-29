@@ -67,8 +67,8 @@ definition Functor.leftDerivedToHomotopyCategory
   body: projectiveResolutions C ⋙ F.mapHomotopyCategory _
 
 中文:
-定义 Functor.leftDerivedToHomotopyCategory
-  签名: (F : C ⥤ D) [F.Additive]
+定义 函子.leftDerivedToHomotopyCategory
+  签名: (F : C ⥤ D) [F.加性]
   定义体: projectiveResolutions C ⋙ F.mapHomotopyCategory _
 
 Depends on / 依赖: F.mapHomotopyCategory, mapHomotopyCategory, projectiveResolutions
@@ -87,7 +87,7 @@ definition ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj
     (F.mapHomotopyCategoryFactors _).app P.complex
 
 中文:
-定义 ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj
+定义 投射消解.isoLeftDerivedToHomotopyCategoryObj
   签名: {X : C}
   定义体: (F.mapHomotopyCategory _).mapIso P.iso ≪≫
     (F.mapHomotopyCategoryFactors _).app P.complex
@@ -118,7 +118,7 @@ lemma ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_inv_naturality
 @[reassoc]
 
 中文:
-引理 ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_inv_naturality
+引理 投射消解.isoLeftDerivedToHomotopyCategoryObj_inv_naturality
   证明: by
   dsimp [Functor.leftDerivedToHomotopyCategory, isoLeftDerivedToHomotopyCategoryObj]
   rw [assoc]; rw [← Functor.map_comp]; rw [iso_inv_naturality f P Q φ comm]; rw [Functor.map_comp]
@@ -152,7 +152,7 @@ lemma ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality
     rw [← cancel_epi (P.isoLeftDerivedToHomotopyCategoryObj F).inv]; rw [Iso.inv_hom_id_assoc]; rw [isoLeftDerivedToHomotopyCategoryObj_inv_naturality_assoc f P Q φ comm F]; rw [Iso.inv_hom_id]; rw [comp_id]
 
 中文:
-引理 ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality
+引理 投射消解.isoLeftDerivedToHomotopyCategoryObj_hom_naturality
   证明: by
     dsimp
     rw [← cancel_epi (P.isoLeftDerivedToHomotopyCategoryObj F).inv]; rw [Iso.inv_hom_id_assoc]; rw [isoLeftDerivedToHomotopyCategoryObj_inv_naturality_assoc f P Q φ comm F]; rw [Iso.inv_hom_id]; rw [comp_id]
@@ -178,8 +178,8 @@ definition Functor.leftDerived
   body: F.leftDerivedToHomotopyCategory ⋙ HomotopyCategory.homologyFunctor D _ n
 
 中文:
-定义 Functor.leftDerived
-  签名: (F : C ⥤ D) [F.Additive] (n : 自然数)
+定义 函子.leftDerived
+  签名: (F : C ⥤ D) [F.加性] (n : 自然数)
   定义体: F.leftDerivedToHomotopyCategory ⋙ HomotopyCategory.homologyFunctor D _ n
 
 Depends on / 依赖: F.leftDerivedToHomotopyCategory, HomotopyCategory, HomotopyCategory.homologyFunctor, homologyFunctor, leftDerivedToHomotopyCategory
@@ -198,8 +198,8 @@ definition ProjectiveResolution.isoLeftDerivedObj
     (HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).app _
 
 中文:
-定义 ProjectiveResolution.isoLeftDerivedObj
-  签名: {X : C} (P : ProjectiveResolution X)
+定义 投射消解.isoLeftDerivedObj
+  签名: {X : C} (P : 投射消解 X)
   定义体: (HomotopyCategory.homologyFunctor D _ n).mapIso
     (P.isoLeftDerivedToHomotopyCategoryObj F) ≪≫
     (HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).app _
@@ -229,7 +229,7 @@ lemma ProjectiveResolution.isoLeftDerivedObj_hom_naturality
   erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n)
 
 中文:
-引理 ProjectiveResolution.isoLeftDerivedObj_hom_naturality
+引理 投射消解.isoLeftDerivedObj_hom_naturality
   证明: by
   dsimp [isoLeftDerivedObj, Functor.leftDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality f P Q φ comm F]; rw [Functor.map_comp]; rw [assoc]
@@ -259,7 +259,7 @@ lemma ProjectiveResolution.isoLeftDerivedObj_inv_naturality
   rw [← cancel_mono (Q.isoLeftDerivedObj F n).hom]; rw [assoc]; rw [assoc]; rw [ProjectiveResolution.isoLeftDerivedObj_hom_naturality f P Q φ comm F n]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
 
 中文:
-引理 ProjectiveResolution.isoLeftDerivedObj_inv_naturality
+引理 投射消解.isoLeftDerivedObj_inv_naturality
   证明: by
   rw [← cancel_mono (Q.isoLeftDerivedObj F n).hom]; rw [assoc]; rw [assoc]; rw [ProjectiveResolution.isoLeftDerivedObj_hom_naturality f P Q φ comm F n]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
 
@@ -285,7 +285,7 @@ lemma Functor.isZero_leftDerived_obj_projective_succ
   exact ShortComplex.exact_of_isZero_X₂ _ (F.map_isZero (by apply isZero_zero))
 
 中文:
-引理 Functor.isZero_leftDerived_obj_projective_succ
+引理 函子.isZero_leftDerived_obj_projective_succ
   证明: by
   refine IsZero.of_iso ?_ ((ProjectiveResolution.self X).isoLeftDerivedObj F (n + 1))
   erw [← HomologicalComplex.exactAt_iff_isZero_homology]
@@ -312,8 +312,8 @@ theorem Functor.leftDerived_map_eq
   rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [ChainComplex.single₀_map_f_zero]
 
 中文:
-定理 Functor.leftDerived_map_eq
-  结论: (F : C ⥤ D) [F.Additive] (n : 自然数) {X Y : C} (f : X ⟶ Y)
+定理 函子.leftDerived_map_eq
+  结论: (F : C ⥤ D) [F.加性] (n : 自然数) {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← cancel_mono (Q.isoLeftDerivedObj F n).hom]; rw [ProjectiveResolution.isoLeftDerivedObj_hom_naturality f P Q g _ F n]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
   rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [ChainComplex.single₀_map_f_zero]
@@ -338,7 +338,7 @@ definition NatTrans.leftDerivedToHomotopyCategory
   body: Functor.whiskerLeft _ (NatTrans.mapHomotopyCategory α (ComplexShape.down Nat))
 
 中文:
-定义 NatTrans.leftDerivedToHomotopyCategory
+定义 自然变换.leftDerivedToHomotopyCategory
   定义体: Functor.whiskerLeft _ (NatTrans.mapHomotopyCategory α (ComplexShape.down Nat))
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, Functor, Functor.whiskerLeft, NatTrans, NatTrans.mapHomotopyCategory, mapHomotopyCategory, whiskerLeft
@@ -364,7 +364,7 @@ lemma ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq
   obtai
 
 中文:
-引理 ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq
+引理 投射消解.leftDerivedToHomotopyCategory_app_eq
   证明: by
   rw [← cancel_mono (P.isoLeftDerivedToHomotopyCategoryObj G).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
   dsimp [isoLeftDerivedToHomotopyCategoryObj, Functor.mapHomotopyCategoryFactors,
@@ -405,8 +405,8 @@ lemma NatTrans.leftDerivedToHomotopyCategory_id
 @[simp, reassoc]
 
 中文:
-引理 NatTrans.leftDerivedToHomotopyCategory_id
-  条件: (F : C ⥤ D) [F.Additive]
+引理 自然变换.leftDerivedToHomotopyCategory_id
+  条件: (F : C ⥤ D) [F.加性]
   证明: rfl
 
 @[simp, reassoc]
@@ -424,7 +424,7 @@ lemma NatTrans.leftDerivedToHomotopyCategory_comp
   proof: rfl
 
 中文:
-引理 NatTrans.leftDerivedToHomotopyCategory_comp
+引理 自然变换.leftDerivedToHomotopyCategory_comp
   结论: {F G H : C ⥤ D} (α : F ⟶ G) (β : G ⟶ H)
   证明: rfl
 -/
@@ -444,7 +444,7 @@ definition NatTrans.leftDerived
 @[simp]
 
 中文:
-定义 NatTrans.leftDerived
+定义 自然变换.leftDerived
   定义体: Functor.whiskerRight (NatTrans.leftDerivedToHomotopyCategory α) _
 
 @[simp]
@@ -469,8 +469,8 @@ theorem NatTrans.leftDerived_id
   rfl
 
 中文:
-定理 NatTrans.leftDerived_id
-  条件: (F : C ⥤ D) [F.Additive] (n : 自然数)
+定理 自然变换.leftDerived_id
+  条件: (F : C ⥤ D) [F.加性] (n : 自然数)
   证明: by
   dsimp only [leftDerived]
   simp only [leftDerivedToHomotopyCategory_id, Functor.whiskerRight_id']
@@ -496,8 +496,8 @@ theorem NatTrans.leftDerived_comp
   simp [NatTrans.leftDerived]
 
 中文:
-定理 NatTrans.leftDerived_comp
-  结论: {F G H : C ⥤ D} [F.Additive] [G.Additive] [H.Additive]
+定理 自然变换.leftDerived_comp
+  结论: {F G H : C ⥤ D} [F.加性] [G.加性] [H.加性]
   证明: by
   simp [NatTrans.leftDerived]
 
@@ -587,7 +587,7 @@ lemma pOpcycles_comp_fromLeftDerivedZero'
 
 中文:
 引理 pOpcycles_comp_fromLeftDerivedZero'
-  结论: {C} [Category* C] [Abelian C] {X : C}
+  结论: {C} [范畴* C] [交换 C] {X : C}
   证明: by
   simp [fromLeftDerivedZero']
 
@@ -613,7 +613,7 @@ lemma fromLeftDerivedZero'_naturality
 
 中文:
 引理 fromLeftDerivedZero'_naturality
-  结论: {C} [Category* C] [Abelian C] {X Y : C} (f : X ⟶ Y)
+  结论: {C} [范畴* C] [交换 C] {X Y : C} (f : X ⟶ Y)
   证明: by
   simp only [← cancel_epi (HomologicalComplex.pOpcycles _ _), ← F.map_comp, comm,
     HomologicalComplex.p_opcyclesMap_assoc, Functor.mapHomologicalComplex_map_f,
@@ -658,8 +658,8 @@ definition Functor.fromLeftDerivedZero
     rw [assoc]; rw [assoc]; rw [← ProjectiveResolution.fromLeftDerivedZero'_
 
 中文:
-定义 Functor.fromLeftDerivedZero
-  签名: (F : C ⥤ D) [F.Additive]
+定义 函子.fromLeftDerivedZero
+  签名: (F : C ⥤ D) [F.加性]
   定义体: (HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) 0).hom.app _ ≫
       (ChainComplex.isoHomologyι₀ _).hom ≫ (projectiveResolution X).fromLeftDerivedZero' F
   naturality {X Y} f := by
@@ -695,7 +695,7 @@ lemma ProjectiveResolution.fromLeftDerivedZero_eq
     (F.mapHomologicalComplex _ ⋙ HomotopyCategor
 
 中文:
-引理 ProjectiveResolution.fromLeftDerivedZero_eq
+引理 投射消解.fromLeftDerivedZero_eq
   证明: by
   dsimp [Functor.fromLeftDerivedZero, isoLeftDerivedObj]
   have h₁ := ProjectiveResolution.fromLeftDerivedZero'_naturality
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso F.fromLeftDerivedZero
+  签名: 是同构 F.fromLeftDerivedZero
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app

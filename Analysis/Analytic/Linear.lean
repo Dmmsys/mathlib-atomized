@@ -174,7 +174,7 @@ theorem cpolynomialOn
 
 中文:
 定理 cpolynomialOn
-  条件: (f : E ->L[𝕜] F) (s : Set E)
+  条件: (f : E ->L[𝕜] F) (s : 集合 E)
   结论: CPolynomialOn 𝕜 f s
   证明: fun x _ => f.cpolynomialAt x
 -/
@@ -192,7 +192,7 @@ theorem analyticOnNhd
 
 中文:
 定理 analyticOnNhd
-  条件: (f : E ->L[𝕜] F) (s : Set E)
+  条件: (f : E ->L[𝕜] F) (s : 集合 E)
   结论: AnalyticOnNhd 𝕜 f s
   证明: fun x _ => f.analyticAt x
 -/
@@ -210,7 +210,7 @@ theorem analyticWithinAt
 
 中文:
 定理 analyticWithinAt
-  条件: (f : E ->L[𝕜] F) (s : Set E) (x : E)
+  条件: (f : E ->L[𝕜] F) (s : 集合 E) (x : E)
   结论: AnalyticWithinAt 𝕜 f s x
   证明: (f.analyticAt x).analyticWithinAt
 -/
@@ -228,7 +228,7 @@ theorem analyticOn
 
 中文:
 定理 analyticOn
-  条件: (f : E ->L[𝕜] F) (s : Set E)
+  条件: (f : E ->L[𝕜] F) (s : 集合 E)
   结论: AnalyticOn 𝕜 f s
   证明: fun x _ => f.analyticWithinAt _ x
 -/
@@ -274,7 +274,7 @@ theorem uncurryBilinear_apply
 
 中文:
 定理 uncurryBilinear_apply
-  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (m : Fin 2 -> E × F)
+  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (m : 有限集 2 -> E × F)
   证明: rfl
 -/
 theorem uncurryBilinear_apply (f : E ->L[𝕜] F ->L[𝕜] G) (m : Fin 2 -> E × F) :
@@ -482,7 +482,7 @@ theorem analyticWithinAt_bilinear
 
 中文:
 定理 analyticWithinAt_bilinear
-  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F)) (x : E × F)
+  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : 集合 (E × F)) (x : E × F)
   证明: (f.analyticAt_bilinear x).analyticWithinAt
 -/
 protected theorem analyticWithinAt_bilinear (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F)) (x : E × F) :
@@ -499,7 +499,7 @@ theorem analyticOnNhd_bilinear
 
 中文:
 定理 analyticOnNhd_bilinear
-  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F))
+  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : 集合 (E × F))
   证明: fun x _ => f.analyticAt_bilinear x
 -/
 protected theorem analyticOnNhd_bilinear (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F)) :
@@ -516,7 +516,7 @@ theorem analyticOn_bilinear
 
 中文:
 定理 analyticOn_bilinear
-  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F))
+  条件: (f : E ->L[𝕜] F ->L[𝕜] G) (s : 集合 (E × F))
   证明: (f.analyticOnNhd_bilinear s).analyticOn
 -/
 protected theorem analyticOn_bilinear (f : E ->L[𝕜] F ->L[𝕜] G) (s : Set (E × F)) :

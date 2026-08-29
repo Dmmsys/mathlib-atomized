@@ -41,7 +41,7 @@ definition riemannZetaZeros
 
 中文:
 定义 riemannZetaZeros
-  签名: : Set Complex
+  签名: : 集合 复形
   定义体: riemannZeta ⁻¹' {0}
 
 Depends on / 依赖: riemannZeta
@@ -58,7 +58,7 @@ lemma mem_riemannZetaZeros
 
 中文:
 引理 mem_riemannZetaZeros
-  条件: {z : Complex}
+  条件: {z : 复形}
   证明: .rfl
 -/
 lemma mem_riemannZetaZeros {z : Complex} :
@@ -132,7 +132,7 @@ lemma isClosed_riemannZetaZeros
 
 中文:
 引理 isClosed_riemannZetaZeros
-  结论: IsClosed riemannZetaZeros
+  结论: 是闭集 riemannZetaZeros
   证明: by
   simpa using (mem_codiscrete'.mp compl_riemannZetaZeros_mem_codiscrete).1
 
@@ -152,7 +152,7 @@ lemma isDiscrete_riemannZetaZeros
 
 中文:
 引理 isDiscrete_riemannZetaZeros
-  结论: IsDiscrete riemannZetaZeros
+  结论: 是离散 riemannZetaZeros
   证明: by
   simpa using (mem_codiscrete'.mp compl_riemannZetaZeros_mem_codiscrete).2
 
@@ -172,8 +172,8 @@ lemma IsCompact.inter_riemannZetaZeros_finite
   exact isDiscrete_riemannZetaZeros.mono Set.inter_subset_right
 
 中文:
-引理 IsCompact.inter_riemannZetaZeros_finite
-  条件: {S : Set Complex} (hS : IsCompact S)
+引理 是紧集.inter_riemannZetaZeros_finite
+  条件: {S : 集合 复形} (hS : 是紧集 S)
   证明: by
   apply (hS.inter_right isClosed_riemannZetaZeros).finite
   exact isDiscrete_riemannZetaZeros.mono Set.inter_subset_right

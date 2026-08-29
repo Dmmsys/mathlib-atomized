@@ -1149,7 +1149,7 @@ lemma signedInfDist_reindex
 
 中文:
 引理 signedInfDist_reindex
-  结论: {m : 自然数} [NeZero m] (e : Fin (n + 1) ≃ Fin (m + 1))
+  结论: {m : 自然数} [NeZero m] (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   simp_rw [signedInfDist, reindex_points, Set.image_comp, Set.image_compl_eq e.symm.bijective,
     Set.image_singleton, Function.comp_apply]
@@ -1188,7 +1188,7 @@ lemma signedInfDist_apply_of_ne
 
 中文:
 引理 signedInfDist_apply_of_ne
-  条件: {j : Fin (n + 1)} (h : j != i)
+  条件: {j : 有限集 (n + 1)} (h : j != i)
   证明: AffineSubspace.signedInfDist_apply_of_mem _ (s.mem_affineSpan_image_iff.2 h)
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.signedInfDist_apply_of_mem, mem_affineSpan_image_iff, s.mem_affineSpan_image_iff, signedInfDist_apply_of_mem
@@ -1212,7 +1212,7 @@ lemma signedInfDist_affineCombination
 
 中文:
 引理 signedInfDist_affineCombination
-  条件: {w : Fin (n + 1) -> 实数} (h : ∑ i, w i = 1)
+  条件: {w : 有限集 (n + 1) -> 实数} (h : ∑ i, w i = 1)
   证明: by
   rw [← ContinuousAffineMap.coe_toAffineMap]; rw [Finset.map_affineCombination _ _ _ h]; rw [Finset.univ.affineCombination_apply_eq_lineMap_sum w
       ((s.signedInfDist i).toAffineMap ∘ s.points) 0

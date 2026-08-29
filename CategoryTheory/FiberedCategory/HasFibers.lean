@@ -73,14 +73,14 @@ class HasFibers
     - equiv((S : 𝒮)) : Functor.IsEquivalence (inducedFunctor (comp_const S))  [default: by infer_instance]
 
 中文:
-类 HasFibers
+类 有Fibers
   参数: (p : 𝒳 ⥤ 𝒮)
   公理与运算 (5 个):
     - Fib((S : 𝒮)) : 类型u₃
-    - category((S : 𝒮)) : Category.{v₃} (Fib S)  [默认: by infer_instance]
+    - category((S : 𝒮)) : 范畴.{v₃} (Fib S)  [默认: by infer_instance]
     - ι((S : 𝒮)) : Fib S ⥤ 𝒳
     - comp_const((S : 𝒮)) : ι S ⋙ p = (const (Fib S)).obj S
-    - equiv((S : 𝒮)) : Functor.IsEquivalence (inducedFunctor (comp_const S))  [默认: by infer_instance]
+    - equiv((S : 𝒮)) : 函子.是等价 (inducedFunctor (comp_const S))  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.IsEquivalence (inducedFunctor p S)
+  签名: 函子.是等价 (inducedFunctor p S)
   定义体: equiv S
 -/
 instance : Functor.IsEquivalence (inducedFunctor p S) := equiv S
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Faithful (ι (p := p) S)
+  签名: 函子.忠实 (ι (p := p) S)
   定义体: Functor.Faithful.of_iso (inducedFunctor.natIso p S).symm
 -/
 instance : Functor.Faithful (ι (p := p) S) :=
@@ -498,7 +498,7 @@ instance pullbackMap.isCartesian
 
 中文:
 实例 pullbackMap.isCartesian
-  签名: : IsCartesian p f (pullbackMap f ha)
+  签名: : 是Cartesian p f (pullbackMap f ha)
   定义体: by
   conv in f => rw [← id_comp f]
   simp only [id_comp, pullbackMap]

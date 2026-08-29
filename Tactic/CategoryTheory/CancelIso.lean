@@ -52,7 +52,7 @@ lemma hom_inv_id_of_eq
 
 中文:
 引理 hom_inv_id_of_eq
-  结论: {C : 类型} [Category* C] {x y : C}
+  结论: {C : 类型} [范畴* C] {x y : C}
   证明: by
   rw [← h]
   exact IsIso.hom_inv_id f
@@ -78,7 +78,7 @@ lemma hom_inv_id_of_eq_assoc
 
 中文:
 引理 hom_inv_id_of_eq_assoc
-  结论: {C : 类型} [Category* C] {x y : C}
+  结论: {C : 类型} [范畴* C] {x y : C}
   证明: by
   rw [← h]
   exact IsIso.hom_inv_id_assoc f k

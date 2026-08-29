@@ -168,8 +168,8 @@ theorem IsUpperSet.null_frontier
       indicator_of_m
 
 中文:
-定理 IsUpperSet.null_frontier
-  条件: (hs : IsUpperSet s)
+定理 是上集.null_frontier
+  条件: (hs : 是上集 s)
   结论: volume (frontier s) = 0
   证明: by
   refine measure_mono_null (fun x hx => ?_)
@@ -208,8 +208,8 @@ theorem IsLowerSet.null_frontier
       indicator_of_m
 
 中文:
-定理 IsLowerSet.null_frontier
-  条件: (hs : IsLowerSet s)
+定理 是下集.null_frontier
+  条件: (hs : 是下集 s)
   结论: volume (frontier s) = 0
   证明: by
   refine measure_mono_null (fun x hx => ?_)
@@ -246,8 +246,8 @@ exact measure_mono_null (frontier_inter_subset _ _) measure_union_null
     (measure_inter_null_of_null_right _ (LowerSet.lower _).null_frontier)
 
 中文:
-定理 Set.OrdConnected.null_frontier
-  条件: (hs : s.OrdConnected)
+定理 集合.序连通.null_frontier
+  条件: (hs : s.序连通)
   结论: volume (frontier s) = 0
   证明: by
   rw [← hs.upperClosure_inter_lowerClosure]
@@ -273,8 +273,8 @@ theorem Set.OrdConnected.nullMeasurableSet
   proof: nullMeasurableSet_of_null_frontier hs.null_frontier
 
 中文:
-定理 Set.OrdConnected.nullMeasurableSet
-  条件: (hs : s.OrdConnected)
+定理 集合.序连通.nullMeasurableSet
+  条件: (hs : s.序连通)
   结论: NullMeasurableSet s
   证明: nullMeasurableSet_of_null_frontier hs.null_frontier
 -/
@@ -295,7 +295,7 @@ theorem IsAntichain.volume_eq_zero
 
 中文:
 定理 IsAntichain.volume_eq_zero
-  条件: [Nonempty ι] (hs : IsAntichain (· <= ·) s)
+  条件: [非空 ι] (hs : IsAntichain (· <= ·) s)
   结论: volume s = 0
   证明: by
   refine measure_mono_null ?_ hs.ordConnected.null_frontier

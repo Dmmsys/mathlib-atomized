@@ -42,8 +42,8 @@ theorem Subgroup.smul_algebraMap
   proof: smul_algebraMap (⟨g, hg⟩ : H) x
 
 中文:
-定理 Subgroup.smul_algebraMap
-  结论: {H : Subgroup G} [SMulCommClass H C B] {g : G}
+定理 子群.smul_algebraMap
+  结论: {H : 子群 G} [标量交换类 H C B] {g : G}
   证明: smul_algebraMap (⟨g, hg⟩ : H) x
 -/
 protected theorem Subgroup.smul_algebraMap {H : Subgroup G} [SMulCommClass H C B] {g : G}
@@ -66,8 +66,8 @@ theorem IsGaloisGroup.smul_mem_of_normal
 @[deprecated (since := "2026-05-28")] alias smul_eq_self := Subgroup.smul_algebraM
 
 中文:
-定理 IsGaloisGroup.smul_mem_of_normal
-  结论: (N : Subgroup G) [hN : N.Normal]
+定理 是Galois群.smul_mem_of_normal
+  结论: (N : 子群 G) [hN : N.正规]
   证明: by
   apply hC.isInvariant.isInvariant (g • algebraMap C B x)
   intro n
@@ -111,8 +111,8 @@ instance [IsGaloisGroup
     exact ⟨⟨algebraMap A B a, ⟨a, rfl⟩⟩, ha⟩⟩
 
 中文:
-实例 [IsGaloisGroup
-  签名: G A B] : IsGaloisGroup G (algebraMap A B).range B where
+实例 [是Galois群
+  签名: G A B] : 是Galois群 G (algebraMap A B).range B where
   定义体: IsGaloisGroup.faithful A
   commutes := ⟨fun g ⟨a', ⟨a, ha⟩⟩ b => by simp [Subring.smul_def, ← ha]⟩
   isInvariant := ⟨fun b hb => by
@@ -139,7 +139,7 @@ theorem IsGaloisGroup.to_isFractionRing_of_isIntegral
   isInvariant := IsFractionRing.isInvariant_of_isIntegral G A B K L
 
 中文:
-定理 IsGaloisGroup.to_isFractionRing_of_isIntegral
+定理 是Galois群.to_isFractionRing_of_is整数egral
   证明: have := hGAB.faithful
     IsFractionRing.faithfulSMul G B L
   commutes := IsFractionRing.smulCommClass G A B K L
@@ -166,8 +166,8 @@ theorem IsGaloisGroup.to_isFractionRing
   IsGaloisGroup.to_isFractionRing_of_isIntegral G A B K L
 
 中文:
-定理 IsGaloisGroup.to_isFractionRing
-  条件: [Finite G] [hGAB : IsGaloisGroup G A B]
+定理 是Galois群.to_isFractionRing
+  条件: [有限 G] [hGAB : 是Galois群 G A B]
   证明: have := hGAB.isInvariant.isIntegral
   IsGaloisGroup.to_isFractionRing_of_isIntegral G A B K L
 
@@ -192,8 +192,8 @@ theorem IsGaloisGroup.of_isFractionRing
     refine eq_of_smul_eq_smul fun 
 
 中文:
-定理 IsGaloisGroup.of_isFractionRing
-  结论: [hGKL : IsGaloisGroup G K L]
+定理 是Galois群.of_isFractionRing
+  结论: [hGKL : 是Galois群 G K L]
   证明: by
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
     simp_rw [← IsScalarTower.algebraMap_apply]
@@ -233,8 +233,8 @@ theorem IsGaloisGroup.iff_isFractionRing
   IsFractionRing.mulSemiringAction
 
 中文:
-定理 IsGaloisGroup.iff_isFractionRing
-  条件: [Finite G] [Is整数egrallyClosed A]
+定理 是Galois群.iff_isFractionRing
+  条件: [有限 G] [是整闭 A]
   证明: ⟨fun h => ⟨h.isInvariant.isIntegral, h.to_isFractionRing G A B K L⟩,
     fun ⟨_, h⟩ => h.of_isFractionRing G A B K L⟩
 
@@ -263,8 +263,8 @@ instance IsGaloisGroup.toFractionRing
   apply IsGaloisGroup.to_isFractionRing G A B _ _
 
 中文:
-实例 IsGaloisGroup.toFractionRing
-  签名: [IsDomain A] [IsDomain B] [Finite G]
+实例 是Galois群.toFractionRing
+  签名: [是整环 A] [是整环 B] [有限 G]
   定义体: IsFractionRing.mulSemiringAction G B (FractionRing B)
     IsGaloisGroup G (FractionRing A) (FractionRing B) := by
   let := IsFractionRing.mulSemiringAction G B (FractionRing B)
@@ -358,7 +358,7 @@ definition smulOfNormal
 
 中文:
 定义 smulOfNormal
-  签名: [N.Normal] [IsGaloisGroup N B C]
+  签名: [N.正规] [是Galois群 N B C]
   定义体: (smul_mem_of_normal G C N g x).choose
 
 @[simp]
@@ -381,7 +381,7 @@ theorem algebraMap_smulOfNormal
 
 中文:
 定理 algebraMap_smulOfNormal
-  条件: [N.Normal] [IsGaloisGroup N B C] (g : G) (x : B)
+  条件: [N.正规] [是Galois群 N B C] (g : G) (x : B)
   证明: smulOfNormal G B C
     algebraMap B C (g • x) = g • algebraMap B C x :=
   (smul_mem_of_normal G C N g x).choose_spec
@@ -406,7 +406,7 @@ instance smulDistribClass_smulOfNormal
 
 中文:
 实例 smulDistribClass_smulOfNormal
-  签名: [N.Normal] [IsGaloisGroup N B C]
+  签名: [N.正规] [是Galois群 N B C]
   定义体: smulOfNormal G B C
     SMulDistribClass G B C :=
   let := smulOfNormal G B C
@@ -438,7 +438,7 @@ definition mulSemiringActionOfNormal
 
 中文:
 定义 mulSemiringActionOfNormal
-  签名: [IsGaloisGroup N B C] [N.Normal]
+  签名: [是Galois群 N B C] [N.正规]
   定义体: by
   let : SMul G B := smulOfNormal G B C N
   have : SMulDistribClass G B C := smulDistribClass_smulOfNormal G B C N
@@ -469,7 +469,7 @@ definition mulSemiringActionQuotient
 
 中文:
 定义 mulSemiringActionQuotient
-  签名: [IsGaloisGroup N B C] [N.Normal]
+  签名: [是Galois群 N B C] [N.正规]
   定义体: letI := mulSemiringActionOfNormal G B C N
   { smul q x :=
       Quotient.liftOn' q (· • x) fun g₁ g₂ h => by
@@ -506,7 +506,7 @@ theorem mulSemiringActionQuotient_smul_def
 
 中文:
 定理 mulSemiringActionQuotient_smul_def
-  结论: [MulSemiringAction G B] [SMulDistribClass G B C]
+  结论: [MulSemiring作用 G B] [SMulDistrib类 G B C]
   证明: mulSemiringActionQuotient G B C N
     (g : G ⧸ N) • b = g • b := by
   let := mulSemiringActionOfNormal G B C N
@@ -537,7 +537,7 @@ instance isScalarTower_mulSemiringActionQuotient
 
 中文:
 实例 isScalarTower_mulSemiringActionQuotient
-  签名: [MulSemiringAction G B] [SMulDistribClass G B C]
+  签名: [MulSemiring作用 G B] [SMulDistrib类 G B C]
   定义体: mulSemiringActionQuotient G B C N
     IsScalarTower G (G ⧸ N) B :=
   let := mulSemiringActionQuotient G B C N
@@ -566,7 +566,7 @@ theorem smulCommClassQuotient
 
 中文:
 定理 smulCommClassQuotient
-  结论: [N.Normal] [Algebra A B] [IsScalarTower A B C] [SMulCommClass G A C]
+  结论: [N.正规] [代数 A B] [标量塔 A B C] [标量交换类 G A C]
   证明: ⟨fun g k x => Quotient.inductionOn' g fun g =>
     FaithfulSMul.algebraMap_injective B C (by
       simp [algebraMap.smul, algebraMap.smul', smul_comm])⟩
@@ -600,7 +600,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulSemiringAction (G ⧸ N) F
+  签名: MulSemiring作用 (G ⧸ N) F
   定义体: letI := smulOfNormal G F L N
   haveI := smulDistribClass_smulOfNormal G F L N
   letI := mulSemiringActionOfSmulDistribClass F L G
@@ -623,8 +623,8 @@ instance [SMulCommClass
   body: smulCommClassQuotient G K F L N
 
 中文:
-实例 [SMulCommClass
-  签名: G K L] [MulSemiringAction G F] [SMulDistribClass G F L]
+实例 [标量交换类
+  签名: G K L] [MulSemiring作用 G F] [SMulDistrib类 G F L]
   定义体: smulCommClassQuotient G K F L N
 
 Depends on / 依赖: smulCommClassQuotient

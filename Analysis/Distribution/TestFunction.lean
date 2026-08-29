@@ -76,11 +76,11 @@ structure TestFunction
     - tsupport_subset' : tsupport toFun subseteq Ω
 
 中文:
-结构 TestFunction
-  参数: : Type _ where
+结构 测试函数
+  参数: : 类型 _ where
   公理与运算 (4 个):
     - toFun : E -> F
-    - contDiff' : ContDiff 实数 n toFun
+    - contDiff' : 连续可微 实数 n toFun
     - hasCompactSupport' : HasCompactSupport toFun
     - tsupport_subset' : tsupport toFun subseteq Ω
 -/
@@ -114,11 +114,11 @@ class TestFunctionClass
     - tsupport_map_subset((f : B)) : tsupport f subseteq Ω
 
 中文:
-类 TestFunctionClass
+类 测试函数类
   参数: (B : 类型)
-  继承: FunLike B E F
+  继承: 函数状 B E F
   公理与运算 (3 个):
-    - map_contDiff((f : B)) : ContDiff 实数 n f
+    - map_contDiff((f : B)) : 连续可微 实数 n f
     - map_hasCompactSupport((f : B)) : HasCompactSupport f
     - tsupport_map_subset((f : B)) : tsupport f subseteq Ω
 -/
@@ -168,7 +168,7 @@ instance toTestFunctionClass
 
 中文:
 实例 toTestFunctionClass
-  签名: : TestFunctionClass 𝓓^{n}(Ω, F) Ω F n where
+  签名: : 测试函数类 𝓓^{n}(Ω, F) Ω F n where
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; congr
   map_contDiff f := f.contDiff'
@@ -196,7 +196,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: (f : 𝓓^{n}(Ω, F))
-  结论: ContDiff 实数 n f
+  结论: 连续可微 实数 n f
   证明: map_contDiff f
 -/
 protected theorem contDiff (f : 𝓓^{n}(Ω, F)) : ContDiff Real n f := map_contDiff f
@@ -253,7 +253,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : 𝓓^{n}(Ω, F))
-  结论: Continuous f
+  结论: 连续 f
   证明: f.contDiff.continuous
 
 @[simp]
@@ -430,7 +430,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  结论: {f : E -> F} {contDiff : ContDiff 实数 n f} {hasCompactSupport : HasCompactSupport f}
+  结论: {f : E -> F} {contDiff : 连续可微 实数 n f} {hasCompactSupport : HasCompactSupport f}
   证明: rfl
 -/
 theorem coe_mk {f : E -> F} {contDiff : ContDiff Real n f} {hasCompactSupport : HasCompactSupport f}
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 𝓓^{n}(Ω, F)
+  签名: 零 𝓓^{n}(Ω, F)
   定义体: ⟨0, contDiff_zero_fun, .zero, by simp only [tsupport_zero, empty_subset]⟩
 
 Depends on / 依赖: contDiff_zero_fun, empty_subset, tsupport_zero
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply 𝓓^{n}(Ω, F) E F
+  签名: 是ZeroApply 𝓓^{n}(Ω, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_zero := FunLike.coe_zero
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add 𝓓^{n}(Ω, F)
+  签名: 加法 𝓓^{n}(Ω, F)
   定义体: ⟨f + g, f.contDiff.add g.contDiff, f.hasCompactSupport.add g.hasCompactSupport,
 .trans union_subset f.tsupport_subset g.tsupport_subset⟩ tsupport_add f g
 
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply 𝓓^{n}(Ω, F) E F
+  签名: 是加法Apply 𝓓^{n}(Ω, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_add := FunLike.coe_add
@@ -533,7 +533,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg 𝓓^{n}(Ω, F)
+  签名: 取负 𝓓^{n}(Ω, F)
   定义体: ⟨-f, f.contDiff.neg, f.hasCompactSupport.neg, tsupport_neg f ▸ f.tsupport_subset⟩
 
 Depends on / 依赖: contDiff, f.contDiff.neg, f.hasCompactSupport.neg, f.tsupport_subset, hasCompactSupport, tsupport_neg, tsupport_subset
@@ -553,7 +553,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply 𝓓^{n}(Ω, F) E F
+  签名: 是NegApply 𝓓^{n}(Ω, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_neg := FunLike.coe_neg
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub 𝓓^{n}(Ω, F)
+  签名: 减法 𝓓^{n}(Ω, F)
   定义体: ⟨f - g, f.contDiff.sub g.contDiff, f.hasCompactSupport.sub g.hasCompactSupport,
 .trans union_subset f.tsupport_subset g.tsupport_subset⟩ tsupport_sub f g
 
@@ -596,7 +596,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply 𝓓^{n}(Ω, F) E F
+  签名: 是SubApply 𝓓^{n}(Ω, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-15")] alias coe_sub := FunLike.coe_sub
@@ -631,7 +631,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup 𝓓^{n}(Ω, F)
+  签名: 加法交换群 𝓓^{n}(Ω, F)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-06-15")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
@@ -674,7 +674,7 @@ definition ofSupportedIn
 
 中文:
 定义 ofSupportedIn
-  签名: {K : Compacts E} (K_sub_Ω : (K : Set E) subseteq Ω) (f : 𝓓^{n}_{K}(E, F))
+  签名: {K : 余mpacts E} (K_sub_Ω : (K : 集合 E) subseteq Ω) (f : 𝓓^{n}_{K}(E, F))
   定义体: ⟨f, f.contDiff, f.compact_supp, f.tsupport_subset.trans K_sub_Ω⟩
 
 Depends on / 依赖: compact_supp, contDiff, f.compact_supp, f.contDiff, f.tsupport_subset.trans, tsupport_subset
@@ -708,7 +708,7 @@ definition originalTop
 
 中文:
 定义 originalTop
-  签名: : TopologicalSpace 𝓓^{n}(Ω, F)
+  签名: : 拓扑空间 𝓓^{n}(Ω, F)
   定义体: ⨆ (K : Compacts E) (K_sub_Ω : (K : Set E) subseteq Ω),
     coinduced (ofSupportedIn K_sub_Ω) ContDiffMapSupportedIn.topologicalSpace
 
@@ -732,7 +732,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: : TopologicalSpace 𝓓^{n}(Ω, F)
+  签名: : 拓扑空间 𝓓^{n}(Ω, F)
   定义体: sInf {t : TopologicalSpace 𝓓^{n}(Ω, F) | originalTop Ω F n <= t ∧
     @IsTopologicalAddGroup 𝓓^{n}(Ω, F) t _ ∧
     @ContinuousSMul Real 𝓓^{n}(Ω, F) _ _ t ∧
@@ -756,7 +756,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalAddGroup 𝓓^{n}(Ω, F)
+  签名: 是拓扑加群 𝓓^{n}(Ω, F)
   定义体: topologicalAddGroup_sInf fun _ ⟨_, ht, _, _⟩ => ht
 
 Depends on / 依赖: topologicalAddGroup_sInf
@@ -774,7 +774,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace 𝓓^{n}(Ω, F)
+  签名: : 一致空间 𝓓^{n}(Ω, F)
   定义体: IsTopologicalAddGroup.rightUniformSpace 𝓓^{n}(Ω, F)
 
 Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, rightUniformSpace
@@ -792,7 +792,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformAddGroup 𝓓^{n}(Ω, F)
+  签名: 是UniformAdd群 𝓓^{n}(Ω, F)
   定义体: isUniformAddGroup_of_addCommGroup
 
 Depends on / 依赖: isUniformAddGroup_of_addCommGroup
@@ -811,7 +811,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul 实数 𝓓^{n}(Ω, F)
+  签名: 连续标量乘法 实数 𝓓^{n}(Ω, F)
   定义体: continuousSMul_sInf fun _ ⟨_, _, ht, _⟩ => ht
 
 Depends on / 依赖: continuousSMul_sInf
@@ -829,7 +829,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyConvexSpace 实数 𝓓^{n}(Ω, F)
+  签名: LocallyConvex空间 实数 𝓓^{n}(Ω, F)
   定义体: .sInf fun _ ⟨_, _, _, ht⟩ => ht
 -/
 noncomputable instance : LocallyConvexSpace Real 𝓓^{n}(Ω, F) :=
@@ -863,7 +863,7 @@ theorem topologicalSpace_le_iff
 
 中文:
 定理 topologicalSpace_le_iff
-  结论: {t : TopologicalSpace 𝓓^{n}(Ω, F)}
+  结论: {t : 拓扑空间 𝓓^{n}(Ω, F)}
   证明: ⟨le_trans originalTop_le, fun H => sInf_le ⟨H, inferInstance, inferInstance, inferInstance⟩⟩
 
 Depends on / 依赖: le_trans, map_add, originalTop_le, sInf_le
@@ -889,7 +889,7 @@ theorem continuous_ofSupportedIn
 
 中文:
 定理 continuous_ofSupportedIn
-  条件: {K : Compacts E} (K_sub_Ω : (K : Set E) subseteq Ω)
+  条件: {K : 余mpacts E} (K_sub_Ω : (K : 集合 E) subseteq Ω)
   证明: by
   rw [continuous_iff_coinduced_le]
   exact le_trans (le_iSup₂_of_le K K_sub_Ω le_rfl) originalTop_le
@@ -914,7 +914,7 @@ definition ofSupportedInCLM
 
 中文:
 定义 ofSupportedInCLM
-  签名: [SMulCommClass 实数 𝕜 F] {K : Compacts E}
+  签名: [标量交换类 实数 𝕜 F] {K : 余mpacts E}
   定义体: ofSupportedIn K_sub_Ω f
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -938,7 +938,7 @@ theorem coe_ofSupportedInCLM
 
 中文:
 定理 coe_ofSupportedInCLM
-  结论: [SMulCommClass 实数 𝕜 F] {K : Compacts E}
+  结论: [标量交换类 实数 𝕜 F] {K : 余mpacts E}
   证明: rfl
 
 Depends on / 依赖: f.hom
@@ -964,7 +964,7 @@ theorem continuous_iff_continuous_comp
 
 中文:
 定理 continuous_iff_continuous_comp
-  结论: [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F]
+  结论: [代数 实数 𝕜] [标量塔 实数 𝕜 F]
   证明: by
   simp_rw [← f.coe_restrictScalars Real]
   rw [continuous_iff_le_induced]
@@ -1005,7 +1005,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def mkCLM [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F] [Module 𝕜 V]
+  签名: def mkCLM [代数 实数 𝕜] [标量塔 实数 𝕜 F] [模 𝕜 V]
   定义体: letI Φ : 𝓓^{n}(Ω, F) ->ₗ[𝕜] V := ⟨⟨toFun, map_add⟩, map_smul⟩
   { toLinearMap := Φ
     cont := show Continuous Φ by rwa [TestFunction.continuous_iff_continuous_comp] }
@@ -1040,7 +1040,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def limitCLM [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F] [Module 𝕜 V]
+  签名: def limitCLM [代数 实数 𝕜] [标量塔 实数 𝕜 F] [模 𝕜 V]
   定义体: haveI toFun_add (f g : 𝓓^{n}(Ω, F)) : toFun (f + g) = toFun f + toFun g := by
     set K : Compacts E := ⟨tsupport f union tsupport g, .union f.hasCompactSupport g.hasCompactSupport⟩
     have K_sub_Ω : (K : Set E) subseteq Ω := union_subset f.tsupport_subset g.tsupport_subset
@@ -1090,7 +1090,7 @@ definition toBoundedContinuousFunctionCLM
 
 中文:
 定义 toBoundedContinuousFunctionCLM
-  签名: [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F]
+  签名: [代数 实数 𝕜] [标量塔 实数 𝕜 F]
   定义体: TestFunction.mkCLM 𝕜 (↑) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => (ContDiffMapSupportedIn.toBoundedContinuousFunctionCLM 𝕜).continuous)
 
@@ -1111,7 +1111,7 @@ lemma toBoundedContinuousFunctionCLM_eq_of_scalars
 
 中文:
 引理 toBoundedContinuousFunctionCLM_eq_of_scalars
-  结论: [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F] (𝕜' : 类型)
+  结论: [代数 实数 𝕜] [标量塔 实数 𝕜 F] (𝕜' : 类型)
   证明: rfl
 -/
 lemma toBoundedContinuousFunctionCLM_eq_of_scalars [Algebra Real 𝕜] [IsScalarTower Real 𝕜 F] (𝕜' : Type*)
@@ -1131,7 +1131,7 @@ theorem injective_toBoundedContinuousFunctionCLM
 
 中文:
 定理 injective_toBoundedContinuousFunctionCLM
-  条件: [Algebra 实数 𝕜] [IsScalarTower 实数 𝕜 F]
+  条件: [代数 实数 𝕜] [标量塔 实数 𝕜 F]
   证明: fun f g => by simp [toBoundedContinuousFunctionCLM]
 
 Depends on / 依赖: toBoundedContinuousFunctionCLM
@@ -1151,7 +1151,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEval 𝓓^{n}(Ω, F) E F
+  签名: 余ntinuousEval 𝓓^{n}(Ω, F) E F
   定义体: ContinuousEval.of_continuous_forget
     (toBoundedContinuousFunctionCLM Real).continuous
 
@@ -1173,7 +1173,7 @@ instance :
 
 中文:
 实例 :
-  签名: T3Space 𝓓^{n}(Ω, F)
+  签名: T3空间 𝓓^{n}(Ω, F)
   定义体: suffices T2Space 𝓓^{n}(Ω, F) from inferInstance
   .of_injective_continuous (injective_toBoundedContinuousFunctionCLM Real)
     (ContinuousLinearMap.continuous _)
@@ -1487,7 +1487,7 @@ lemma fderivCLM_ofSupportedIn
 
 中文:
 引理 fderivCLM_ofSupportedIn
-  结论: {K : Compacts E}
+  结论: {K : 余mpacts E}
   证明: by
   ext
   simp
@@ -1831,7 +1831,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousLineDeriv E 𝓓(Ω, F) 𝓓(Ω, F)
+  签名: 余ntinuousLineDeriv E 𝓓(Ω, F) 𝓓(Ω, F)
   定义体: (lineDerivCLM Real v).continuous
 
 Depends on / 依赖: continuous, lineDerivCLM
@@ -1902,7 +1902,7 @@ theorem aestronglyMeasurable
 
 中文:
 定理 aestronglyMeasurable
-  条件: {μ : Measure E} (f : 𝓓^{n}(Ω, F))
+  条件: {μ : 测度 E} (f : 𝓓^{n}(Ω, F))
   证明: f.stronglyMeasurable.aestronglyMeasurable
 -/
 protected theorem aestronglyMeasurable {μ : Measure E} (f : 𝓓^{n}(Ω, F)) :
@@ -1919,7 +1919,7 @@ theorem memLp_top
 
 中文:
 定理 memLp_top
-  条件: {μ : Measure E} (f : 𝓓^{n}(Ω, F))
+  条件: {μ : 测度 E} (f : 𝓓^{n}(Ω, F))
   证明: f.continuous.memLp_top_of_hasCompactSupport f.hasCompactSupport μ
 -/
 protected theorem memLp_top {μ : Measure E} (f : 𝓓^{n}(Ω, F)) :
@@ -1941,7 +1941,7 @@ theorem integrable_bilin
 
 中文:
 定理 integrable_bilin
-  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : Measure E} {φ : E -> F₂}
+  结论: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : 测度 E} {φ : E -> F₂}
   证明: by
   suffices IntegrableOn (fun x => B (f x) (φ x)) (tsupport f) μ by
     rwa [integrableOn_iff_integrable_of_support_subset] at this
@@ -1975,7 +1975,7 @@ theorem integrable
 
 中文:
 定理 integrable
-  结论: {μ : Measure E}
+  结论: {μ : 测度 E}
   证明: by
   rw [← integrableOn_iff_integrable_of_support_subset (subset_tsupport f)]
   replace H := H.integrableOn_compact_subset f.tsupport_subset f.hasCompactSupport
@@ -2013,7 +2013,7 @@ definition integralAgainstBilinCLM
 
 中文:
 定义 integralAgainstBilinCLM
-  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : Measure E) (φ : E -> F₂)
+  签名: (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) (μ : 测度 E) (φ : E -> F₂)
   定义体: open scoped Classical in
   TestFunction.limitCLM 𝕜
     (fun f => if LocallyIntegrableOn φ Ω μ then ∫ x, B (f x) (φ x) ∂μ else 0)
@@ -2051,7 +2051,7 @@ lemma integralAgainstBilinCLM_apply
 
 中文:
 引理 integralAgainstBilinCLM_apply
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: rfl
 -/
 lemma integralAgainstBilinCLM_apply {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
@@ -2071,7 +2071,7 @@ lemma integralAgainstBilinCLM_eq_integral
 
 中文:
 引理 integralAgainstBilinCLM_eq_integral
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   simp [hφ]
 -/
@@ -2092,7 +2092,7 @@ lemma integralAgainstBilinCLM_eq_zero
 
 中文:
 引理 integralAgainstBilinCLM_eq_zero
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   ext
   simp [hφ]
@@ -2115,7 +2115,7 @@ lemma integralAgainstBilinCLM_ofSupportedIn
 
 中文:
 引理 integralAgainstBilinCLM_ofSupportedIn
-  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : Measure E} {φ : E -> F₂}
+  结论: {B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃} {μ : 测度 E} {φ : E -> F₂}
   证明: by
   have hφ' := hφ.integrableOn_compact_subset K_sub_Ω K.isCompact
   simp [hφ, hφ']

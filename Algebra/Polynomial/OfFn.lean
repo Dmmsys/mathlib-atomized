@@ -132,7 +132,7 @@ theorem ofFn_zero
 中文:
 定理 ofFn_zero
   条件: (n : 自然数)
-  结论: ofFn n (0 : Fin n -> R) = 0
+  结论: ofFn n (0 : 有限集 n -> R) = 0
   证明: by simp
 
 @[simp]
@@ -151,7 +151,7 @@ theorem ofFn_zero'
 
 中文:
 定理 ofFn_zero'
-  条件: (v : Fin 0 -> R)
+  条件: (v : 有限集 0 -> R)
   结论: ofFn 0 v = 0
   证明: rfl
 -/
@@ -171,7 +171,7 @@ lemma ne_zero_of_ofFn_ne_zero
 
 中文:
 引理 ne_zero_of_ofFn_ne_zero
-  条件: {n : 自然数} {v : Fin n -> R} (h : ofFn n v != 0)
+  条件: {n : 自然数} {v : 有限集 n -> R} (h : ofFn n v != 0)
   结论: n != 0
   证明: by
   contrapose h
@@ -199,7 +199,7 @@ theorem ofFn_coeff_eq_val_of_lt
 
 中文:
 定理 ofFn_coeff_eq_val_of_lt
-  条件: {n i : 自然数} (v : Fin n -> R) (hi : i < n)
+  条件: {n i : 自然数} (v : 有限集 n -> R) (hi : i < n)
   证明: by
   simp [ofFn, hi]
 -/
@@ -221,7 +221,7 @@ theorem ofFn_coeff_eq_zero_of_ge
 
 中文:
 定理 ofFn_coeff_eq_zero_of_ge
-  条件: {n i : 自然数} (v : Fin n -> R) (hi : n <= i)
+  条件: {n i : 自然数} (v : 有限集 n -> R) (hi : n <= i)
   证明: by
   simp [ofFn, Nat.not_lt_of_ge hi]
 
@@ -244,7 +244,7 @@ exact fun _ h => ofFn_coeff_eq_zero_of_ge _ Nat.le_of_pred_lt h
 
 中文:
 定理 ofFn_natDegree_lt
-  条件: {n : 自然数} (h : 1 <= n) (v : Fin n -> R)
+  条件: {n : 自然数} (h : 1 <= n) (v : 有限集 n -> R)
   结论: (ofFn n v).natDegree < n
   证明: by
   rw [Nat.lt_iff_le_pred h]; rw [natDegree_le_iff_coeff_eq_zero]
@@ -272,7 +272,7 @@ theorem ofFn_degree_lt
 
 中文:
 定理 ofFn_degree_lt
-  条件: {n : 自然数} (v : Fin n -> R)
+  条件: {n : 自然数} (v : 有限集 n -> R)
   结论: (ofFn n v).degree < n
   证明: by
   by_cases h : ofFn n v = 0
@@ -306,7 +306,7 @@ theorem ofFn_eq_sum_monomial
 
 中文:
 定理 ofFn_eq_sum_monomial
-  条件: {n : 自然数} (v : Fin n -> R)
+  条件: {n : 自然数} (v : 有限集 n -> R)
   结论: ofFn n v =
   证明: by
   by_cases h : n = 0
@@ -338,7 +338,7 @@ theorem toFn_comp_ofFn_eq_id
 
 中文:
 定理 toFn_comp_ofFn_eq_id
-  条件: (n : 自然数) (v : Fin n -> R)
+  条件: (n : 自然数) (v : 有限集 n -> R)
   结论: toFn n (ofFn n v) = v
   证明: by
   simp [toFn, ofFn, LinearMap.pi]
@@ -362,7 +362,7 @@ omit [DecidableEq R] in
 中文:
 定理 injective_ofFn
   条件: (n : 自然数)
-  结论: Function.Injective (ofFn (R := R) n)
+  结论: 函数.单射 (ofFn (R := R) n)
   证明: Function.LeftInverse.injective toFn_comp_ofFn_eq_id n
 
 omit [DecidableEq R] in
@@ -384,7 +384,7 @@ Function.RightInverse.surjective toFn_comp_ofFn_eq_id n
 中文:
 定理 surjective_toFn
   条件: (n : 自然数)
-  结论: Function.Surjective (toFn (R := R) n)
+  结论: 函数.满射 (toFn (R := R) n)
   证明: open scoped Classical in
 Function.RightInverse.surjective toFn_comp_ofFn_eq_id n
 -/

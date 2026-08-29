@@ -78,7 +78,7 @@ instance Ultrafilter.topologicalSpace
 
 中文:
 实例 Ultrafilter.topologicalSpace
-  签名: : TopologicalSpace (Ultrafilter α)
+  签名: : 拓扑空间 (Ultrafilter α)
   定义体: TopologicalSpace.generateFrom (ultrafilterBasis α)
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.generateFrom, generateFrom, ultrafilterBasis
@@ -101,7 +101,7 @@ eq_univ_of_univ_subset subset_sUnion_of_mem ⟨univ, eq_univ_of_forall fun _ => 
 
 中文:
 定理 ultrafilterBasis_is_basis
-  结论: TopologicalSpace.IsTopologicalBasis (ultrafilterBasis α)
+  结论: 拓扑空间.是TopologicalBasis (ultrafilterBasis α)
   证明: ⟨by
     rintro _ ⟨a, rfl⟩ _ ⟨b, rfl⟩ u ⟨ua, ub⟩
     refine ⟨_, ⟨a inter b, rfl⟩, inter_mem ua ub, fun v hv => ⟨?_, ?_⟩⟩ <;> apply mem_of_superset hv <;>
@@ -130,8 +130,8 @@ theorem ultrafilter_isOpen_basic
 
 中文:
 定理 ultrafilter_isOpen_basic
-  条件: (s : Set α)
-  结论: IsOpen { u : Ultrafilter α | s in u }
+  条件: (s : 集合 α)
+  结论: 是开集 { u : Ultrafilter α | s in u }
   证明: ultrafilterBasis_is_basis.isOpen ⟨s, rfl⟩
 
 Depends on / 依赖: isOpen, ultrafilterBasis_is_basis, ultrafilterBasis_is_basis.isOpen
@@ -154,8 +154,8 @@ theorem ultrafilter_isClosed_basic
 
 中文:
 定理 ultrafilter_isClosed_basic
-  条件: (s : Set α)
-  结论: IsClosed { u : Ultrafilter α | s in u }
+  条件: (s : 集合 α)
+  结论: 是闭集 { u : Ultrafilter α | s in u }
   证明: by
   rw [← isOpen_compl_iff]
   convert! ultrafilter_isOpen_basic sᶜ using 1
@@ -224,7 +224,7 @@ instance ultrafilter_compact
 
 中文:
 实例 ultrafilter_compact
-  签名: : CompactSpace (Ultrafilter α)
+  签名: : 紧空间 (Ultrafilter α)
   定义体: ⟨isCompact_iff_ultrafilter_le_nhds.mpr fun f _ =>
       ⟨joinM f, trivial, ultrafilter_converges_iff.mpr rfl⟩⟩
 
@@ -247,7 +247,7 @@ instance Ultrafilter.t2Space
 
 中文:
 实例 Ultrafilter.t2Space
-  签名: : T2Space (Ultrafilter α)
+  签名: : T2空间 (Ultrafilter α)
   定义体: t2_iff_ultrafilter.mpr fun {x y} f fx fy =>
     have hx : x = joinM f := ultrafilter_converges_iff.mp fx
     have hy : y = joinM f := ultrafilter_converges_iff.mp fy
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: TotallyDisconnectedSpace (Ultrafilter α)
+  签名: 全不连通空间 (Ultrafilter α)
   定义体: by
   rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
   intro A
@@ -320,7 +320,7 @@ theorem Ultrafilter.tendsto_pure_self
 中文:
 定理 Ultrafilter.tendsto_pure_self
   条件: (b : Ultrafilter α)
-  结论: Tendsto pure b (𝓝 b)
+  结论: 收敛 pure b (𝓝 b)
   证明: by
   rw [Tendsto]; rw [← coe_map]; rw [ultrafilter_converges_iff]
   ext s
@@ -437,7 +437,7 @@ theorem isDenseInducing_pure
 
 中文:
 定理 isDenseInducing_pure
-  结论: @IsDenseInducing _ _ ⊥ _ (pure : α -> Ultrafilter α)
+  结论: @是DenseInducing _ _ ⊥ _ (pure : α -> Ultrafilter α)
   证明: letI : TopologicalSpace α := ⊥
   ⟨⟨induced_topology_pure.symm⟩, denseRange_pure⟩
 
@@ -459,7 +459,7 @@ theorem isDenseEmbedding_pure
 
 中文:
 定理 isDenseEmbedding_pure
-  结论: @IsDenseEmbedding _ _ ⊥ _ (pure : α -> Ultrafilter α)
+  结论: @是稠密嵌入 _ _ ⊥ _ (pure : α -> Ultrafilter α)
   证明: letI : TopologicalSpace α := ⊥
   { isDenseInducing_pure with injective := Ultrafilter.pure_injective }
 
@@ -576,7 +576,7 @@ theorem continuous_ultrafilter_extend
 中文:
 定理 continuous_ultrafilter_extend
   条件: (f : α -> γ)
-  结论: Continuous (Ultrafilter.extend f)
+  结论: 连续 (Ultrafilter.extend f)
   证明: by
   have h (b : Ultrafilter α) : exists c, Tendsto f (comap pure (𝓝 b)) (𝓝 c) :=
     -- b.map f is an ultrafilter on γ, which is compact, so it converges to some c in γ.
@@ -674,7 +674,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (PreStoneCech α)
+  签名: 拓扑空间 (PreStoneCech α)
   定义体: inferInstanceAs (TopologicalSpace <| Quot _)
 
 Depends on / 依赖: TopologicalSpace
@@ -692,7 +692,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (PreStoneCech α)
+  签名: 紧空间 (PreStoneCech α)
   定义体: Quot.compactSpace
 
 Depends on / 依赖: Quot.compactSpace, compactSpace
@@ -709,8 +709,8 @@ instance [Inhabited
   body: inferInstanceAs (Inhabited <| Quot _)
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (PreStoneCech α)
+实例 [可居
+  签名: α] : 可居 (PreStoneCech α)
   定义体: inferInstanceAs (Inhabited <| Quot _)
 
 Depends on / 依赖: Inhabited
@@ -752,7 +752,7 @@ theorem continuous_preStoneCechUnit
 
 中文:
 定理 continuous_preStoneCechUnit
-  结论: Continuous (preStoneCechUnit : α -> PreStoneCech α)
+  结论: 连续 (preStoneCechUnit : α -> PreStoneCech α)
   证明: continuous_iff_ultrafilter.mpr fun x g gx => by
     have : (g.map pure).toFilter <= 𝓝 g := by
       rw [ultrafilter_converges_iff]; rw [← bind_pure g]
@@ -807,7 +807,7 @@ theorem preStoneCech_hom_ext
 
 中文:
 定理 preStoneCech_hom_ext
-  结论: {g₁ g₂ : PreStoneCech α -> β} (h₁ : Continuous g₁) (h₂ : Continuous g₂)
+  结论: {g₁ g₂ : PreStoneCech α -> β} (h₁ : 连续 g₁) (h₂ : 连续 g₂)
   证明: by
   apply Continuous.ext_on denseRange_preStoneCechUnit h₁ h₂
   rintro x ⟨x, rfl⟩
@@ -971,7 +971,7 @@ theorem continuous_preStoneCechExtend
 
 中文:
 定理 continuous_preStoneCechExtend
-  结论: Continuous (preStoneCechExtend hg)
+  结论: 连续 (preStoneCechExtend hg)
   证明: continuous_quot_lift _ (continuous_ultrafilter_extend g)
 
 Depends on / 依赖: continuous_quot_lift, continuous_ultrafilter_extend
@@ -1017,7 +1017,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (StoneCech α)
+  签名: 拓扑空间 (StoneCech α)
   定义体: inferInstanceAs TopologicalSpace T2Quotient _
 
 Depends on / 依赖: T2Quotient, TopologicalSpace
@@ -1035,7 +1035,7 @@ instance :
 
 中文:
 实例 :
-  签名: T2Space (StoneCech α)
+  签名: T2空间 (StoneCech α)
   定义体: inferInstanceAs T2Space T2Quotient _
 
 Depends on / 依赖: T2Quotient, T2Space
@@ -1053,7 +1053,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (StoneCech α)
+  签名: 紧空间 (StoneCech α)
   定义体: Quot.compactSpace
 
 Depends on / 依赖: Quot.compactSpace, compactSpace
@@ -1070,8 +1070,8 @@ instance [Inhabited
   body: inferInstanceAs Inhabited Quotient _
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (StoneCech α)
+实例 [可居
+  签名: α] : 可居 (StoneCech α)
   定义体: inferInstanceAs Inhabited Quotient _
 
 Depends on / 依赖: Inhabited, Quotient
@@ -1107,7 +1107,7 @@ theorem continuous_stoneCechUnit
 
 中文:
 定理 continuous_stoneCechUnit
-  结论: Continuous (stoneCechUnit : α -> StoneCech α)
+  结论: 连续 (stoneCechUnit : α -> StoneCech α)
   证明: (T2Quotient.continuous_mk _).comp continuous_preStoneCechUnit
 
 Depends on / 依赖: T2Quotient, T2Quotient.continuous_mk, continuous_mk, continuous_preStoneCechUnit
@@ -1162,7 +1162,7 @@ theorem stoneCech_hom_ext
 
 中文:
 定理 stoneCech_hom_ext
-  结论: {g₁ g₂ : StoneCech α -> β} (h₁ : Continuous g₁) (h₂ : Continuous g₂)
+  结论: {g₁ g₂ : StoneCech α -> β} (h₁ : 连续 g₁) (h₂ : 连续 g₂)
   证明: by
   apply h₁.ext_on denseRange_stoneCechUnit h₂
   rintro _ ⟨x, rfl⟩
@@ -1259,7 +1259,7 @@ theorem continuous_stoneCechExtend
 
 中文:
 定理 continuous_stoneCechExtend
-  结论: Continuous (stoneCechExtend hg)
+  结论: 连续 (stoneCechExtend hg)
   证明: continuous_coinduced_dom.mpr (continuous_preStoneCechExtend hg)
 
 Depends on / 依赖: continuous_coinduced_dom, continuous_coinduced_dom.mpr, continuous_preStoneCechExtend
@@ -1279,7 +1279,7 @@ lemma eq_if_stoneCechUnit_eq
 
 中文:
 引理 eq_if_stoneCechUnit_eq
-  结论: {a b : α} {f : α -> β} (hcf : Continuous f)
+  结论: {a b : α} {f : α -> β} (hcf : 连续 f)
   证明: by
   rw [← congrFun (stoneCechExtend_extends hcf)]; rw [← congrFun (stoneCechExtend_extends hcf)]
   exact congrArg (stoneCechExtend hcf) h

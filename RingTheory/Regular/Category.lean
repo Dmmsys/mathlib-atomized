@@ -34,8 +34,8 @@ lemma LinearMap.exact_lsmul_mkQ_smul_top
 alias LinearMap.exact_smul_id_smul_top_mkQ := LinearMap.exact_lsmul_mkQ_smul_top
 
 中文:
-引理 LinearMap.exact_lsmul_mkQ_smul_top
-  条件: (M : 类型v) [AddCommGroup M] [Module R M] (r : R)
+引理 线性映射.exact_lsmul_mkQ_smul_top
+  条件: (M : 类型v) [加法交换群 M] [模 R M] (r : R)
   证明: by
   intro x
   simp [Submodule.mem_smul_pointwise_iff_exists, Submodule.mem_smul_pointwise_iff_exists]
@@ -112,7 +112,7 @@ lemma smulShortComplex_exact
 中文:
 引理 smulShortComplex_exact
   条件: (r : R)
-  结论: (smulShortComplex M r).Exact
+  结论: (smulShortComplex M r).正合
   证明: ModuleCat.shortComplex_exact _ (LinearMap.exact_lsmul_mkQ_smul_top M r)
 
 Depends on / 依赖: LinearMap, LinearMap.exact_lsmul_mkQ_smul_top, ModuleCat, ModuleCat.shortComplex_exact, exact_lsmul_mkQ_smul_top, shortComplex_exact

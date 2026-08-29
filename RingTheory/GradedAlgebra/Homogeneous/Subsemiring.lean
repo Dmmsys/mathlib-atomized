@@ -39,7 +39,7 @@ theorem DirectSum.SetLike.IsHomogeneous.mem_iff
   proof: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hR
 
 中文:
-定理 DirectSum.SetLike.IsHomogeneous.mem_iff
+定理 直和.集合状.IsHomogeneous.mem_iff
   条件: (hR : IsHomogeneous 𝒜 R) {a}
   证明: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hR
 
@@ -60,9 +60,9 @@ structure HomogeneousSubsemiring
     - is_homogeneous' : IsHomogeneous 𝒜 toSubsemiring
 
 中文:
-结构 HomogeneousSubsemiring
-  参数: extends Subsemiring A
-  继承: Subsemiring A
+结构 齐次子半环
+  参数: extends 子半环 A
+  继承: 子半环 A
   公理与运算 (1 个):
     - is_homogeneous' : IsHomogeneous 𝒜 toSubsemiring
 -/
@@ -99,7 +99,7 @@ coe_injective _ _ h := toSubsemiring_injective SetLike.coe_injective h
 
 中文:
 实例 setLike
-  签名: : SetLike (HomogeneousSubsemiring 𝒜) A where
+  签名: : 集合状 (齐次子半环 𝒜) A where
   定义体: x.carrier
 coe_injective _ _ h := toSubsemiring_injective SetLike.coe_injective h
 
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (HomogeneousSubsemiring 𝒜)
+  签名: 偏序 (齐次子半环 𝒜)
   定义体: .ofSetLike (HomogeneousSubsemiring 𝒜) A
 
 Depends on / 依赖: HomogeneousSubsemiring, ofSetLike
@@ -136,7 +136,7 @@ theorem isHomogeneous
 
 中文:
 定理 isHomogeneous
-  条件: (R : HomogeneousSubsemiring 𝒜)
+  条件: (R : 齐次子半环 𝒜)
   证明: R.is_homogeneous'
 
 Depends on / 依赖: R.is_homogeneous, is_homogeneous
@@ -159,7 +159,7 @@ instance subsemiringClass
 
 中文:
 实例 subsemiringClass
-  签名: : SubsemiringClass (HomogeneousSubsemiring 𝒜) A where
+  签名: : 子半环类 (齐次子半环 𝒜) A where
   定义体: a.toSubsemiring.mul_mem
   one_mem {a} := a.toSubsemiring.one_mem
   add_mem {a} := a.toSubsemiring.add_mem
@@ -186,7 +186,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {R S : HomogeneousSubsemiring 𝒜}
+  结论: {R S : 齐次子半环 𝒜}
   证明: HomogeneousSubsemiring.toSubsemiring_injective h
 
 Depends on / 依赖: HomogeneousSubsemiring, HomogeneousSubsemiring.toSubsemiring_injective, toSubsemiring_injective
@@ -207,7 +207,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: {R S : HomogeneousSubsemiring 𝒜}
+  结论: {R S : 齐次子半环 𝒜}
   证明: AddSubmonoidClass.IsHomogeneous.ext R.2 S.2 h
 
 @[simp high]
@@ -229,7 +229,7 @@ theorem mem_iff
 
 中文:
 定理 mem_iff
-  条件: {R : HomogeneousSubsemiring 𝒜} {a}
+  条件: {R : 齐次子半环 𝒜} {a}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -258,7 +258,7 @@ theorem IsHomogeneous.subsemiringClosure
 
 中文:
 定理 IsHomogeneous.subsemiringClosure
-  结论: {s : Set A}
+  结论: {s : 集合 A}
   证明: fun i x hx => by
   induction hx using Subsemiring.closure_induction generalizing i with
 | mem _ hx => exact Subsemiring.subset_closure h i hx
@@ -305,7 +305,7 @@ theorem IsHomogeneous.subsemiringClosure_of_isHomogeneousElem
 
 中文:
 定理 IsHomogeneous.subsemiringClosure_of_isHomogeneousElem
-  结论: {s : Set A}
+  结论: {s : 集合 A}
   证明: by
   rw [← Subsemiring.closure_insert_zero s]
   refine IsHomogeneous.subsemiringClosure fun i x hx => ?_
@@ -341,8 +341,8 @@ definition Subsemiring.homogeneousCore
     rintro ⟨x, _, rfl⟩; exact x.2
 
 中文:
-定义 Subsemiring.homogeneousCore
-  签名: : HomogeneousSubsemiring 𝒜 where
+定义 子半环.homogeneousCore
+  签名: : 齐次子半环 𝒜 where
   定义体: Subsemiring.closure ((↑) '' (((↑) : Subtype (IsHomogeneousElem 𝒜) -> A) ⁻¹' R))
   is_homogeneous' := IsHomogeneous.subsemiringClosure_of_isHomogeneousElem fun x => by
     rintro ⟨x, _, rfl⟩; exact x.2
@@ -363,8 +363,8 @@ theorem Subsemiring.homogeneousCore_mono
   proof: fun _ _ h => Subsemiring.closure_mono Set.image_mono fun _ => @h _
 
 中文:
-定理 Subsemiring.homogeneousCore_mono
-  结论: Monotone (Subsemiring.homogeneousCore 𝒜)
+定理 子半环.homogeneousCore_mono
+  结论: 递增 (子半环.homogeneousCore 𝒜)
   证明: fun _ _ h => Subsemiring.closure_mono Set.image_mono fun _ => @h _
 
 Depends on / 依赖: CharZero, Set.image_mono, Subsemiring, Subsemiring.closure_mono, closure_mono, image_mono, return, toOption, trySynthInstanceQ, with_reducible
@@ -381,7 +381,7 @@ theorem Subsemiring.toSubsemiring_homogeneousCore_le
   proof: Subsemiring.closure_le.2 image_preimage_subset _ _
 
 中文:
-定理 Subsemiring.toSubsemiring_homogeneousCore_le
+定理 子半环.toSubsemiring_homogeneousCore_le
   结论: (R.homogeneousCore 𝒜).toSubsemiring <= R
   证明: Subsemiring.closure_le.2 image_preimage_subset _ _
 
@@ -402,7 +402,7 @@ theorem Subsemiring.isHomogeneous_iff_forall_subset
   proof: Iff.rfl
 
 中文:
-定理 Subsemiring.isHomogeneous_iff_forall_subset
+定理 子半环.isHomogeneous_iff_对任意_subset
   证明: Iff.rfl
 
 Depends on / 依赖: CharZero, Iff.rfl, return, toOption, trySynthInstanceQ, with_reducible
@@ -419,7 +419,7 @@ theorem Subsemiring.isHomogeneous_iff_subset_iInter
   proof: subset_iInter_iff.symm
 
 中文:
-定理 Subsemiring.isHomogeneous_iff_subset_iInter
+定理 子半环.isHomogeneous_iff_subset_i整数er
   证明: subset_iInter_iff.symm
 
 Depends on / 依赖: subset_iInter_iff, subset_iInter_iff.symm

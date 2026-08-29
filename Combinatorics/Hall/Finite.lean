@@ -119,7 +119,7 @@ theorem hall_hard_inductive_step_A
 
 中文:
 定理 hall_hard_inductive_step_A
-  结论: {n : 自然数} (hn : Fintype.card ι = n + 1)
+  结论: {n : 自然数} (hn : 有限类型.card ι = n + 1)
   证明: by
   have : Nonempty ι := Fintype.card_pos_iff.mp (hn.symm ▸ Nat.succ_pos _)
   have := Classical.decEq ι
@@ -193,7 +193,7 @@ theorem hall_cond_of_restrict
 
 中文:
 定理 hall_cond_of_restrict
-  结论: {ι : 类型u} {t : ι -> Finset α} {s : Finset ι}
+  结论: {ι : 类型u} {t : ι -> 有限集 α} {s : 有限集 ι}
   证明: by
   classical
     rw [← card_image_of_injective s' Subtype.coe_injective]
@@ -232,7 +232,7 @@ theorem hall_cond_of_compl
 
 中文:
 定理 hall_cond_of_compl
-  结论: {ι : 类型u} {t : ι -> Finset α} {s : Finset ι}
+  结论: {ι : 类型u} {t : ι -> 有限集 α} {s : 有限集 ι}
   证明: by
   have := Classical.decEq ι
   have disj : Disjoint s (s'.image fun z => z.1) := by
@@ -289,7 +289,7 @@ theorem hall_hard_inductive_step_B
 
 中文:
 定理 hall_hard_inductive_step_B
-  结论: {n : 自然数} (hn : Fintype.card ι = n + 1)
+  结论: {n : 自然数} (hn : 有限类型.card ι = n + 1)
   证明: by
   have := Classical.decEq ι
   -- Restrict to `s`
@@ -369,7 +369,7 @@ theorem hall_hard_inductive
 
 中文:
 定理 hall_hard_inductive
-  条件: (ht : 对任意 s : Finset ι, #s <= #(s.biUnion t))
+  条件: (ht : 对任意 s : 有限集 ι, #s <= #(s.biUnion t))
   证明: by
   cases nonempty_fintype ι
   generalize hn : Fintype.card ι = m
@@ -420,8 +420,8 @@ theorem Finset.all_card_le_biUnion_card_iff_existsInjective'
     exact ⟨x, hx, hf₂ x⟩
 
 中文:
-定理 Finset.all_card_le_biUnion_card_iff_existsInjective'
-  结论: {ι α : 类型} [Finite ι]
+定理 有限集.all_card_le_biUnion_card_iff_存在Injective'
+  结论: {ι α : 类型} [有限 ι]
   证明: by
   constructor
   · exact HallMarriageTheorem.hall_hard_inductive

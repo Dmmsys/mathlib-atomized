@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited AndKind
+  签名: 可居 AndKind
   定义体: ⟨AndKind.and⟩
 
 Depends on / 依赖: AndKind, AndKind.and
@@ -136,14 +136,14 @@ inductive IProp
 
 中文:
 归纳类型 IProp
-  参数: : Type
+  参数: : 类型
   构造子 (6 个):
-    - var: 自然数 -> I命题 -- propositional atoms P_i
-    - true: I命题 -- ⊤
-    - false: I命题 -- ⊥
-    - and': AndKind -> I命题 -> I命题 -> I命题 -- p ∧ q, p ↔ q, p = q
-    - or: I命题 -> I命题 -> I命题 -- p ∨ q
-    - imp: I命题 -> I命题 -> I命题 -- p → q
+    - var: 自然数 -> IProp -- propositional atoms P_i
+    - true: IProp -- ⊤
+    - false: IProp -- ⊥
+    - and': AndKind -> IProp -> IProp -> IProp -- p ∧ q, p ↔ q, p = q
+    - or: IProp -> IProp -> IProp -- p ∨ q
+    - imp: IProp -> IProp -> IProp -- p → q
 -/
 inductive IProp : Type
   | var : Nat -> IProp -- propositional atoms P_i
@@ -164,7 +164,7 @@ definition IProp.and
 
 中文:
 定义 IProp.and
-  签名: : I命题 -> I命题 -> I命题
+  签名: : IProp -> IProp -> IProp
   定义体: .and' .and
 -/
 @[match_pattern, expose] def IProp.and : IProp -> IProp -> IProp := .and' .and
@@ -179,7 +179,7 @@ definition IProp.iff
 
 中文:
 定义 IProp.iff
-  签名: : I命题 -> I命题 -> I命题
+  签名: : IProp -> IProp -> IProp
   定义体: .and' .iff
 -/
 @[match_pattern, expose] def IProp.iff : IProp -> IProp -> IProp := .and' .iff
@@ -194,7 +194,7 @@ definition IProp.eq
 
 中文:
 定义 IProp.eq
-  签名: : I命题 -> I命题 -> I命题
+  签名: : IProp -> IProp -> IProp
   定义体: .and' .eq
 -/
 @[match_pattern, expose] def IProp.eq : IProp -> IProp -> IProp := .and' .eq
@@ -209,7 +209,7 @@ definition IProp.not
 
 中文:
 定义 IProp.not
-  签名: (a : I命题)
+  签名: (a : IProp)
   定义体: a.imp .false
 -/
 @[match_pattern, expose] def IProp.not (a : IProp) : IProp := a.imp .false
@@ -224,7 +224,7 @@ definition IProp.xor
 
 中文:
 定义 IProp.xor
-  签名: (a b : I命题)
+  签名: (a b : IProp)
   定义体: (a.and b.not).or (b.and a.not)
 -/
 @[match_pattern, expose] def IProp.xor (a b : IProp) : IProp := (a.and b.not).or (b.and a.not)
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited I命题
+  签名: 可居 IProp
   定义体: ⟨IProp.true⟩
 
 Depends on / 依赖: IProp.true
@@ -255,7 +255,7 @@ definition AndKind.sides
 
 中文:
 定义 AndKind.sides
-  签名: : AndKind -> I命题 -> I命题 -> I命题 × I命题
+  签名: : AndKind -> IProp -> IProp -> IProp × IProp
 -/
 def AndKind.sides : AndKind -> IProp -> IProp -> IProp × IProp
   | .and, A, B => (A, B)
@@ -270,7 +270,7 @@ definition IProp.format
 
 中文:
 定义 IProp.format
-  签名: : I命题 -> Std.Format
+  签名: : IProp -> Std.Format
 -/
 def IProp.format : IProp -> Std.Format
   | .var i => f!"v{i}"
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.ToFormat I命题
+  签名: Std.ToFormat IProp
   定义体: ⟨IProp.format⟩
 
 Depends on / 依赖: IProp.format, format
@@ -339,7 +339,7 @@ case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q�
 
 中文:
 定义 IProp.cmp
-  签名: (p q : I命题)
+  签名: (p q : IProp)
   定义体: by
   cases p <;> cases q
   case var.var p q => exact compare p q
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: LT I命题
+  签名: LT IProp
   定义体: ⟨fun p q => p.cmp q = .lt⟩
 
 Depends on / 依赖: p.cmp
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableLT I命题
+  签名: DecidableLT IProp
   定义体: fun _ _ => inferInstanceAs (Decidable (_ = _))
 
 Depends on / 依赖: Decidable
@@ -429,27 +429,27 @@ inductive Proof
     - impImpSimp: (x : Name) (p : Proof) : Proof
 
 中文:
-归纳类型 Proof
+归纳类型 证明
   构造子 (19 个):
-    - sorry: Proof
-    - hyp: (n : Name) : Proof
-    - triv: Proof
-    - exfalso': (p : Proof) : Proof
-    - intro: (x : Name) (p : Proof) : Proof
-    - andLeft: (ak : AndKind) (p : Proof) : Proof
-    - andRight: (ak : AndKind) (p : Proof) : Proof
-    - andIntro: (ak : AndKind) (p₁ p₂ : Proof) : Proof
-    - curry: (ak : AndKind) (p : Proof) : Proof
-    - curry₂: (ak : AndKind) (p q : Proof) : Proof
-    - app': Proof -> Proof -> Proof
-    - orImpL: (p : Proof) : Proof
-    - orImpR: (p : Proof) : Proof
-    - orInL: (p : Proof) : Proof
-    - orInR: (p : Proof) : Proof
-    - orElim': (p₁ : Proof) (x : Name) (p₂ p₃ : Proof) : Proof
-    - decidableElim: (classical : 布尔) (p₁ x : Name) (p₂ p₃ : Proof) : Proof
-    - em: (classical : 布尔) (p : Name) : Proof
-    - impImpSimp: (x : Name) (p : Proof) : Proof
+    - sorry: 证明
+    - hyp: (n : Name) : 证明
+    - triv: 证明
+    - exfalso': (p : 证明) : 证明
+    - intro: (x : Name) (p : 证明) : 证明
+    - andLeft: (ak : AndKind) (p : 证明) : 证明
+    - andRight: (ak : AndKind) (p : 证明) : 证明
+    - andIntro: (ak : AndKind) (p₁ p₂ : 证明) : 证明
+    - curry: (ak : AndKind) (p : 证明) : 证明
+    - curry₂: (ak : AndKind) (p q : 证明) : 证明
+    - app': 证明 -> 证明 -> 证明
+    - orImpL: (p : 证明) : 证明
+    - orImpR: (p : 证明) : 证明
+    - orInL: (p : 证明) : 证明
+    - orInR: (p : 证明) : 证明
+    - orElim': (p₁ : 证明) (x : Name) (p₂ p₃ : 证明) : 证明
+    - decidableElim: (classical : 布尔值) (p₁ x : Name) (p₂ p₃ : 证明) : 证明
+    - em: (classical : 布尔值) (p : Name) : 证明
+    - impImpSimp: (x : Name) (p : 证明) : 证明
 -/
 inductive Proof
   /-- `⊢ A`, causes failure during reconstruction -/
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Proof
+  签名: 可居 证明
   定义体: ⟨Proof.triv⟩
 
 Depends on / 依赖: Proof.triv
@@ -542,8 +542,8 @@ definition Proof.format
   signature: : Proof -> Std.Format
 
 中文:
-定义 Proof.format
-  签名: : Proof -> Std.Format
+定义 证明.format
+  签名: : 证明 -> Std.Format
 -/
 def Proof.format : Proof -> Std.Format
   | .sorry => "sorry"
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.ToFormat Proof
+  签名: Std.ToFormat 证明
   定义体: ⟨Proof.format⟩
 
 Depends on / 依赖: Proof.format, format
@@ -592,8 +592,8 @@ definition Proof.exfalso
   signature: : IProp -> Proof -> Proof
 
 中文:
-定义 Proof.exfalso
-  签名: : I命题 -> Proof -> Proof
+定义 证明.exfalso
+  签名: : IProp -> 证明 -> 证明
 -/
 def Proof.exfalso : IProp -> Proof -> Proof
   | .false, p => p
@@ -607,8 +607,8 @@ definition Proof.orElim
   signature: : Proof -> Name -> Proof -> Proof -> Proof
 
 中文:
-定义 Proof.orElim
-  签名: : Proof -> Name -> Proof -> Proof -> Proof
+定义 证明.orElim
+  签名: : 证明 -> Name -> 证明 -> 证明 -> 证明
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, ContinuousMap
 -/
@@ -624,8 +624,8 @@ definition Proof.app
   signature: : Proof -> Proof -> Proof
 
 中文:
-定义 Proof.app
-  签名: : Proof -> Proof -> Proof
+定义 证明.app
+  签名: : 证明 -> 证明 -> 证明
 -/
 def Proof.app : Proof -> Proof -> Proof
   | .curry ak p, q => .curry₂ ak p q
@@ -655,8 +655,8 @@ definition Proof.check
     let .imp A B ← p.check Γ | 
 
 中文:
-定义 Proof.check
-  签名: : Lean.NameMap I命题 -> Proof -> Option I命题
+定义 证明.check
+  签名: : Lean.NameMap IProp -> 证明 -> 选项类型 IProp
   定义体: ak.sides A B
     guard (ak = ak') *> pure (A'.imp $ B'.imp C)
   | Γ, .curry₂ ak p q => do
@@ -746,7 +746,7 @@ abbreviation Context
   body: TreeMap IProp Proof IProp.cmp
 
 中文:
-缩写 Context
+缩写 余ntext
   定义体: TreeMap IProp Proof IProp.cmp
 
 Depends on / 依赖: IProp.cmp, TreeMap
@@ -762,8 +762,8 @@ definition Context.format
   body: Γ.foldl (init := "") fun f P p => P.format ++ " := " ++ p.format ++ ",\n" ++ f
 
 中文:
-定义 Context.format
-  签名: (Γ : Context)
+定义 余ntext.format
+  签名: (Γ : 余ntext)
   定义体: Γ.foldl (init := "") fun f P p => P.format ++ " := " ++ p.format ++ ",\n" ++ f
 
 Depends on / 依赖: P.format, format, p.format
@@ -781,7 +781,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.ToFormat Context
+  签名: Std.ToFormat 余ntext
   定义体: ⟨Context.format⟩
 
 Depends on / 依赖: Context, Context.format, format
@@ -806,8 +806,8 @@ definition Context.add
   
 
 中文:
-定义 Context.add
-  签名: : I命题 -> Proof -> Context -> Except (I命题 -> Proof) Context
+定义 余ntext.add
+  签名: : IProp -> 证明 -> 余ntext -> Except (IProp -> 证明) 余ntext
   定义体: ak.sides A B
     let Γ ← Γ.add A (p.andLeft ak)
     Γ.add B (p.andRight ak)
@@ -848,8 +848,8 @@ definition Context.withAdd
   | .error p => pure (true, p B)
 
 中文:
-定义 Context.withAdd
-  签名: (Γ : Context) (A : I命题) (p : Proof) (B : I命题)
+定义 余ntext.withAdd
+  签名: (Γ : 余ntext) (A : IProp) (p : 证明) (B : IProp)
   定义体: match Γ.add A p with
   | .ok Γ_A => f Γ_A B
   | .error p => pure (true, p B)
@@ -869,7 +869,7 @@ definition mapProof
 
 中文:
 定义 mapProof
-  签名: (f : Proof -> Proof)
+  签名: (f : 证明 -> 证明)
 -/
 def mapProof (f : Proof -> Proof) : Bool × Proof -> Bool × Proof
   | (b, p) => (b, f p)
@@ -883,7 +883,7 @@ definition isOk
 
 中文:
 定义 isOk
-  签名: : (布尔 × Proof) × 自然数 -> Option (Proof × 自然数)
+  签名: : (布尔值 × 证明) × 自然数 -> 选项类型 (证明 × 自然数)
 
 Depends on / 依赖: toOrderHomClass
 -/
@@ -900,7 +900,7 @@ definition whenOk
 
 中文:
 定义 whenOk
-  签名: : 布尔 -> I命题 -> StateM 自然数 (布尔 × Proof) -> StateM 自然数 (布尔 × Proof)
+  签名: : 布尔值 -> IProp -> StateM 自然数 (布尔值 × 证明) -> StateM 自然数 (布尔值 × 证明)
 -/
 def whenOk : Bool -> IProp -> StateM Nat (Bool × Proof) -> StateM Nat (Bool × Proof)
   | false, _, _ => pure (false, .sorry)
@@ -927,7 +927,7 @@ isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
 
 中文:
 定义 search
-  签名: (Γ : Context) (B : I命题)
+  签名: (Γ : 余ntext) (B : IProp)
   定义体: do
   if let some p := Γ[B]? then return (true, p)
   fun n =>
@@ -983,7 +983,7 @@ mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
 
 中文:
 定义 prove
-  签名: (Γ : Context) (B : I命题)
+  签名: (Γ : 余ntext) (B : IProp)
   定义体: match B with
   | .true => pure (true, .triv)
   | .imp A B => do
@@ -1084,7 +1084,7 @@ definition applyProof
 
 中文:
 定义 applyProof
-  签名: (g : MVarId) (Γ : NameMap Expr) (p : Proof)
+  签名: (g : MVarId) (Γ : NameMap Expr) (p : 证明)
   定义体: match p with
   | .sorry => throwError "itauto failed\n{g}"
   | .hyp n => do g.assignIfDefEq (← liftOption (Γ.find? n))

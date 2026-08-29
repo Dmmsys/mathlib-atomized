@@ -66,7 +66,7 @@ lemma zero_mem_smul_iff
 
 中文:
 引理 zero_mem_smul_iff
-  结论: (0 : M) in s • t ↔ 0 in s ∧ t.Nonempty ∨ 0 in t ∧ s.Nonempty
+  结论: (0 : M) in s • t ↔ 0 in s ∧ t.非空 ∨ 0 in t ∧ s.非空
   证明: by
   rw [← mem_coe]; rw [coe_smul]; rw [Set.zero_mem_smul_iff]; rfl
 

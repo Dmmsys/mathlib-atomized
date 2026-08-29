@@ -127,7 +127,7 @@ theorem strictConcaveOn_log_Ioi
 
 中文:
 定理 strictConcaveOn_log_Ioi
-  结论: StrictConcaveOn 实数 (Ioi 0) log
+  结论: StrictConcaveOn 实数 (左开右无界区间 0) log
   证明: by
   apply strictConcaveOn_of_slope_strict_anti_adjacent (convex_Ioi (0 : Real))
   intro x y z (hx : 0 < x) (hz : 0 < z) hxy hyz
@@ -372,7 +372,7 @@ theorem strictConvexOn_rpow
 中文:
 定理 strictConvexOn_rpow
   条件: {p : 实数} (hp : 1 < p)
-  结论: StrictConvexOn 实数 (Ici 0) fun x : 实数 => x ^ p
+  结论: StrictConvexOn 实数 (左闭右无界区间 0) fun x : 实数 => x ^ p
   证明: by
   apply strictConvexOn_of_slope_strict_mono_adjacent (convex_Ici (0 : Real))
   intro x y z (hx : 0 <= x) (hz : 0 <= z) hxy hyz
@@ -420,7 +420,7 @@ theorem convexOn_rpow
 中文:
 定理 convexOn_rpow
   条件: {p : 实数} (hp : 1 <= p)
-  结论: ConvexOn 实数 (Ici 0) fun x : 实数 => x ^ p
+  结论: ConvexOn 实数 (左闭右无界区间 0) fun x : 实数 => x ^ p
   证明: by
   rcases eq_or_lt_of_le hp with (rfl | hp)
   · simpa using! convexOn_id (convex_Ici _)
@@ -448,7 +448,7 @@ theorem convexOn_rpow_left
 中文:
 定理 convexOn_rpow_left
   条件: {b : 实数} (hb : 0 < b)
-  结论: ConvexOn 实数 Set.univ (fun (x : 实数) => b ^ x)
+  结论: ConvexOn 实数 集合.univ (fun (x : 实数) => b ^ x)
   证明: by
   convert! convexOn_exp.comp_linearMap (LinearMap.mul Real Real (Real.log b)) using 1
   ext x
@@ -478,7 +478,7 @@ theorem strictConcaveOn_log_Iio
 
 中文:
 定理 strictConcaveOn_log_Iio
-  结论: StrictConcaveOn 实数 (Iio 0) log
+  结论: StrictConcaveOn 实数 (左无界右开区间 0) log
   证明: by
   refine ⟨convex_Iio _, ?_⟩
   intro x (hx : x < 0) y (hy : y < 0) hxy a b ha hb hab

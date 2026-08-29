@@ -31,7 +31,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  结论: center (M × N) = prod (center M) (center N)
+  结论: center (M × N) = 乘积 (center M) (center N)
   证明: SetLike.coe_injective Set.center_prod
 
 Depends on / 依赖: Equiv.swap_injective_of_left, Function, Function.Injective.nontrivial, Injective, Nontrivial, Nontrivial.to_nonempty, classical, nontrivial, swap_injective_of_left, to_nonempty

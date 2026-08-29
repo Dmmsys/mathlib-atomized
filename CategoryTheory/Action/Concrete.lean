@@ -128,7 +128,7 @@ definition ofMulAction
 
 中文:
 定义 ofMulAction
-  签名: (G : 类型) (H : 类型u) [Monoid G] [MulAction G H]
+  签名: (G : 类型) (H : 类型u) [幺半群 G] [乘法作用 G H]
   定义体: H
   ρ := (TypeCat.endEquiv _).toMonoidHom.comp (@MulAction.toEndHom _ _ _ (by assumption))
 
@@ -150,7 +150,7 @@ theorem ofMulAction_apply
 
 中文:
 定理 ofMulAction_apply
-  条件: {G : 类型} {H : 类型} [Monoid G] [MulAction G H] (g : G) (x : H)
+  条件: {G : 类型} {H : 类型} [幺半群 G] [乘法作用 G H] (g : G) (x : H)
   证明: rfl
 -/
 theorem ofMulAction_apply {G : Type*} {H : Type*} [Monoid G] [MulAction G H] (g : G) (x : H) :
@@ -176,7 +176,7 @@ definition ofMulActionLimitCone
 
 中文:
 定义 ofMulActionLimitCone
-  签名: {ι : 类型v} (G : Type max v u) [Monoid G] (F : ι -> Type max v u)
+  签名: {ι : 类型v} (G : 类型 最大值 v u) [幺半群 G] (F : ι -> 类型 最大值 v u)
   定义体: { pt := Action.ofMulAction G (forall i : ι, F i)
       π := Discrete.natTrans (fun i => ⟨↾fun x => x i.as, fun _ => rfl⟩) }
   isLimit :=
@@ -220,7 +220,7 @@ abbreviation leftRegular
 
 中文:
 缩写 leftRegular
-  签名: (G : 类型u) [Monoid G]
+  签名: (G : 类型u) [幺半群 G]
   定义体: Action.ofMulAction G G
 
 Depends on / 依赖: Action, Action.ofMulAction, ofMulAction
@@ -238,7 +238,7 @@ abbreviation diagonal
 
 中文:
 缩写 diagonal
-  签名: (G : 类型u) [Monoid G] (n : 自然数)
+  签名: (G : 类型u) [幺半群 G] (n : 自然数)
   定义体: Action.ofMulAction G (Fin n -> G)
 
 Depends on / 依赖: Action, Action.ofMulAction, ofMulAction
@@ -256,7 +256,7 @@ definition diagonalOneIsoLeftRegular
 
 中文:
 定义 diagonalOneIsoLeftRegular
-  签名: (G : 类型) [Monoid G]
+  签名: (G : 类型) [幺半群 G]
   定义体: Action.mkIso (Equiv.funUnique _ _).toIso fun _ => rfl
 
 Depends on / 依赖: Action, Action.mkIso, Equiv.funUnique, funUnique
@@ -286,7 +286,7 @@ definition ofMulAction
 
 中文:
 定义 ofMulAction
-  签名: (G : 类型) (H : FintypeCat.{u}) [Monoid G] [MulAction G H]
+  签名: (G : 类型) (H : FintypeCat.{u}) [幺半群 G] [乘法作用 G H]
   定义体: H
 ρ := InducedCategory.endEquiv.symm.toMonoidHom.comp (TypeCat.endEquiv _).toMonoidHom.comp
     MulAction.toEndHom
@@ -310,7 +310,7 @@ theorem ofMulAction_apply
 
 中文:
 定理 ofMulAction_apply
-  结论: {G : 类型} {H : FintypeCat.{u}} [Monoid G] [MulAction G H]
+  结论: {G : 类型} {H : FintypeCat.{u}} [幺半群 G] [乘法作用 G H]
   证明: rfl
 -/
 theorem ofMulAction_apply {G : Type*} {H : FintypeCat.{u}} [Monoid G] [MulAction G H]
@@ -339,7 +339,7 @@ definition toEndHom
 
 中文:
 定义 toEndHom
-  签名: [N.Normal]
+  签名: [N.正规]
   定义体: { hom := FintypeCat.homMk (Quotient.lift (fun σ => ⟦σ * v⁻¹⟧) <| fun a b h => Quotient.sound <| by
       apply (QuotientGroup.leftRel_apply).mpr
       -- We avoid `group` here to minimize imports while low in the hierarchy;
@@ -387,7 +387,7 @@ lemma toEndHom_apply
 
 中文:
 引理 toEndHom_apply
-  条件: [N.Normal] (g h : G)
+  条件: [N.正规] (g h : G)
   结论: (toEndHom N g).hom ⟦h⟧ = ⟦h * g⁻¹⟧
   证明: rfl
 -/
@@ -410,7 +410,7 @@ lemma toEndHom_trivial_of_mem
 
 中文:
 引理 toEndHom_trivial_of_mem
-  条件: [N.Normal] {n : G} (hn : n in N)
+  条件: [N.正规] {n : G} (hn : n in N)
   结论: toEndHom N n = 𝟙 (G ⧸ₐ N)
   证明: by
   apply Action.hom_ext
@@ -437,7 +437,7 @@ definition quotientToEndHom
 
 中文:
 定义 quotientToEndHom
-  签名: [N.Normal]
+  签名: [N.正规]
   定义体: QuotientGroup.lift (Subgroup.subgroupOf N H) ((toEndHom N).comp H.subtype) fun _ uinU' =>
     toEndHom_trivial_of_mem uinU'
 
@@ -459,7 +459,7 @@ lemma quotientToEndHom_mk
 
 中文:
 引理 quotientToEndHom_mk
-  条件: [N.Normal] (x : H) (g : G)
+  条件: [N.正规] (x : H) (g : G)
   证明: rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, Functor, Functor.mono_of_mono_map, Subtype, Subtype.val_injective, forget, mono_of_injective, mono_of_mono_map, val_injective
@@ -485,7 +485,7 @@ definition quotientToQuotientOfLE
 
 中文:
 定义 quotientToQuotientOfLE
-  签名: [Fintype (G ⧸ H)] (h : N <= H)
+  签名: [有限类型 (G ⧸ H)] (h : N <= H)
   定义体: FintypeCat.homMk (Quotient.lift _ <| fun _ _ hab => Quotient.sound <|
     (QuotientGroup.leftRel_apply).mpr (h <| (QuotientGroup.leftRel_apply).mp hab))
   comm g := by
@@ -516,7 +516,7 @@ lemma quotientToQuotientOfLE_hom_mk
 
 中文:
 引理 quotientToQuotientOfLE_hom_mk
-  条件: [Fintype (G ⧸ H)] (h : N <= H) (x : G)
+  条件: [有限类型 (G ⧸ H)] (h : N <= H) (x : G)
   证明: rfl
 -/
 lemma quotientToQuotientOfLE_hom_mk [Fintype (G ⧸ H)] (h : N <= H) (x : G) :
@@ -549,7 +549,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: {G : 类型} [Monoid G] (X : Action V G)
+  签名: {G : 类型} [幺半群 G] (X : 作用 V G)
   定义体: ConcreteCategory.hom (X.ρ g) x
   one_smul x := by
     change ConcreteCategory.hom (X.ρ 1) x = x

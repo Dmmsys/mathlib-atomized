@@ -194,7 +194,7 @@ theorem integral_eq
 
 中文:
 定理 integral_eq
-  条件: [hE : CompleteSpace E] (f : α -> E) (hf : 整数egrable f μ)
+  条件: [hE : 完备空间 E] (f : α -> E) (hf : 可积 f μ)
   证明: by
   simp [integral, hE, hf]
 
@@ -246,7 +246,7 @@ theorem L1.integral_eq_integral
 
 中文:
 定理 L1.integral_eq_integral
-  条件: [CompleteSpace E] (f : α ->₁[μ] E)
+  条件: [完备空间 E] (f : α ->₁[μ] E)
   证明: by
   simp only [integral, L1.integral, integral_eq_setToFun]
   exact (L1.setToFun_eq_setToL1 (dominatedFinMeasAdditive_weightedSMul μ) f).symm
@@ -271,7 +271,7 @@ theorem integral_undef
 
 中文:
 定理 integral_undef
-  条件: {f : α -> G} (h : ¬整数egrable f μ)
+  条件: {f : α -> G} (h : ¬可积 f μ)
   结论: ∫ a, f a ∂μ = 0
   证明: by
   simp only [integral_eq_setToFun]
@@ -293,9 +293,9 @@ theorem Integrable.of_integral_ne_zero
   proof: Not.imp_symm integral_undef h
 
 中文:
-定理 Integrable.of_integral_ne_zero
+定理 可积.of_integral_ne_zero
   条件: {f : α -> G} (h : ∫ a, f a ∂μ != 0)
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: Not.imp_symm integral_undef h
 
 Depends on / 依赖: Not.imp_symm, imp_symm, integral_undef
@@ -333,7 +333,7 @@ theorem integral_of_not_completeSpace
 
 中文:
 定理 integral_of_not_completeSpace
-  条件: {f : α -> G} (hG : ¬CompleteSpace G)
+  条件: {f : α -> G} (hG : ¬完备空间 G)
   证明: by
   simp [integral, hG]
 
@@ -403,7 +403,7 @@ lemma integral_indicator₂
 
 中文:
 引理 integral_indicator₂
-  条件: {β : 类型} (f : β -> α -> G) (s : Set β) (b : β)
+  条件: {β : 类型} (f : β -> α -> G) (s : 集合 β) (b : β)
   证明: by
   by_cases hb : b in s <;> simp [hb]
 -/
@@ -425,7 +425,7 @@ theorem integrable_of_integral_eq_one
 中文:
 定理 integrable_of_integral_eq_one
   条件: {f : α -> 实数} (h : ∫ x, f x ∂μ = 1)
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: .of_integral_ne_zero h ▸ one_ne_zero
 
 Depends on / 依赖: of_integral_ne_zero, one_ne_zero
@@ -445,7 +445,7 @@ theorem integral_add
 
 中文:
 定理 integral_add
-  条件: {f g : α -> G} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α -> G} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_add (dominatedFinMeasAdditive_weightedSMul μ) hf hg
@@ -467,7 +467,7 @@ theorem integral_add'
 
 中文:
 定理 integral_add'
-  条件: {f g : α -> G} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α -> G} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: integral_add hf hg
 
 Depends on / 依赖: integral_add
@@ -492,7 +492,7 @@ theorem integral_finsetSum
 
 中文:
 定理 integral_finsetSum
-  条件: {ι} (s : Finset ι) {f : ι -> α -> G} (hf : 对任意 i in s, 整数egrable (f i) μ)
+  条件: {ι} (s : 有限集 ι) {f : ι -> α -> G} (hf : 对任意 i in s, 可积 (f i) μ)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_finsetSum (dominatedFinMeasAdditive_weightedSMul _) s hf
@@ -568,7 +568,7 @@ theorem integral_sub
 
 中文:
 定理 integral_sub
-  条件: {f g : α -> G} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α -> G} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_sub (dominatedFinMeasAdditive_weightedSMul μ) hf hg
@@ -590,7 +590,7 @@ theorem integral_sub'
 
 中文:
 定理 integral_sub'
-  条件: {f g : α -> G} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α -> G} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: integral_sub hf hg
 
 Depends on / 依赖: integral_sub
@@ -616,7 +616,7 @@ theorem integral_smul
 
 中文:
 定理 integral_smul
-  条件: [Module 𝕜 G] [NormSMulClass 𝕜 G] [SMulCommClass 实数 𝕜 G] (c : 𝕜) (f : α -> G)
+  条件: [模 𝕜 G] [NormSMul类 𝕜 G] [标量交换类 实数 𝕜 G] (c : 𝕜) (f : α -> G)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_smul (dominatedFinMeasAdditive_weightedSMul μ) weightedSMul_smul c f
@@ -640,8 +640,8 @@ theorem Integrable.integral_smul
   · simp [integral, hG]
 
 中文:
-定理 Integrable.integral_smul
-  结论: {R : 类型} [NormedRing R] [Module R G] [IsBoundedSMul R G]
+定理 可积.integral_smul
+  结论: {R : 类型} [赋范环 R] [模 R G] [是BoundedSMul R G]
   证明: by
   by_cases hG : CompleteSpace G
   · simpa only [integral, hG, hf, hf.fun_smul c] using! L1.integral_smul c (toL1 f hf)
@@ -756,7 +756,7 @@ lemma integral_congr_ae₂
 
 中文:
 引理 integral_congr_ae₂
-  结论: {β : 类型} {_ : MeasurableSpace β} {ν : Measure β} {f g : α -> β -> G}
+  结论: {β : 类型} {_ : 可测空间 β} {ν : 测度 β} {f g : α -> β -> G}
   证明: by
   apply integral_congr_ae
   filter_upwards [h] with _ ha
@@ -788,7 +788,7 @@ theorem L1.integral_of_fun_eq_integral'
 
 中文:
 定理 L1.integral_of_fun_eq_integral'
-  条件: {f : α -> G} (hf : 整数egrable f μ)
+  条件: {f : α -> G} (hf : 可积 f μ)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_toL1 (dominatedFinMeasAdditive_weightedSMul μ) hf
@@ -813,7 +813,7 @@ theorem L1.integral_of_fun_eq_integral
 
 中文:
 定理 L1.integral_of_fun_eq_integral
-  条件: {f : α -> G} (hf : 整数egrable f μ)
+  条件: {f : α -> G} (hf : 可积 f μ)
   证明: by
   simp [hf]
 
@@ -836,7 +836,7 @@ theorem continuous_integral
 
 中文:
 定理 continuous_integral
-  结论: Continuous fun f : α ->₁[μ] G => ∫ a, f a ∂μ
+  结论: 连续 fun f : α ->₁[μ] G => ∫ a, f a ∂μ
   证明: by
   simp only [integral_eq_setToFun]
   exact continuous_setToFun (dominatedFinMeasAdditive_weightedSMul μ)
@@ -992,7 +992,7 @@ theorem exists_ne_zero_of_integral_ne_zero
   proof: (frequently_ae_ne_zero_of_integral_ne_zero h).exists
 
 中文:
-定理 exists_ne_zero_of_integral_ne_zero
+定理 存在_ne_zero_of_integral_ne_zero
   结论: {f : α -> G}
   证明: (frequently_ae_ne_zero_of_integral_ne_zero h).exists
 
@@ -1017,7 +1017,7 @@ theorem HasFiniteIntegral.tendsto_setIntegral_nhds_zero
     fun i
 
 中文:
-定理 HasFiniteIntegral.tendsto_setIntegral_nhds_zero
+定理 HasFinite整数egral.tendsto_set整数egral_nhds_zero
   结论: {ι} {f : α -> G}
   证明: by
   rw [tendsto_zero_iff_norm_tendsto_zero]
@@ -1048,8 +1048,8 @@ theorem Integrable.tendsto_setIntegral_nhds_zero
   proof: hf.2.tendsto_setIntegral_nhds_zero hs
 
 中文:
-定理 Integrable.tendsto_setIntegral_nhds_zero
-  结论: {ι} {f : α -> G} (hf : 整数egrable f μ)
+定理 可积.tendsto_set整数egral_nhds_zero
+  结论: {ι} {f : α -> G} (hf : 可积 f μ)
   证明: hf.2.tendsto_setIntegral_nhds_zero hs
 
 Depends on / 依赖: tendsto_setIntegral_nhds_zero
@@ -1128,7 +1128,7 @@ lemma tendsto_setIntegral_of_L1
       (fun _ => eLpNorm_mono_measure _ Meas
 
 中文:
-引理 tendsto_setIntegral_of_L1
+引理 tendsto_set整数egral_of_L1
   结论: {ι} (f : α -> G) (hfi : AEStronglyMeasurable f μ) {F : ι -> α -> G}
   证明: by
   refine tendsto_integral_of_L1 f hfi.restrict ?_ ?_
@@ -1162,7 +1162,7 @@ lemma tendsto_setIntegral_of_L1'
   exact hF
 
 中文:
-引理 tendsto_setIntegral_of_L1'
+引理 tendsto_set整数egral_of_L1'
   结论: {ι} (f : α -> G) (hfi : AEStronglyMeasurable f μ) {F : ι -> α -> G}
   证明: by
   refine tendsto_setIntegral_of_L1 f hfi hFi ?_ s
@@ -1194,7 +1194,7 @@ theorem continuousWithinAt_of_dominated
 
 中文:
 定理 continuousWithinAt_of_dominated
-  结论: {F : X -> α -> G} {x₀ : X} {bound : α -> 实数} {s : Set X}
+  结论: {F : X -> α -> G} {x₀ : X} {bound : α -> 实数} {s : 集合 X}
   证明: by
   simp only [integral_eq_setToFun]
   exact continuousWithinAt_setToFun_of_dominated (dominatedFinMeasAdditive_weightedSMul μ)
@@ -1254,7 +1254,7 @@ theorem continuousOn_of_dominated
 
 中文:
 定理 continuousOn_of_dominated
-  结论: {F : X -> α -> G} {bound : α -> 实数} {s : Set X}
+  结论: {F : X -> α -> G} {bound : α -> 实数} {s : 集合 X}
   证明: by
   simp only [integral_eq_setToFun]
   exact continuousOn_setToFun_of_dominated (dominatedFinMeasAdditive_weightedSMul μ)
@@ -1318,7 +1318,7 @@ theorem integral_eq_lintegral_pos_part_sub_lintegral_neg_part
 
 中文:
 定理 integral_eq_lintegral_pos_part_sub_lintegral_neg_part
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   let f₁ := hf.toL1 f
   -- Go to the `L¹` space
@@ -1426,7 +1426,7 @@ theorem integral_norm_eq_lintegral_enorm
 
 中文:
 定理 integral_norm_eq_lintegral_enorm
-  结论: {P : 类型} [NormedAddCommGroup P] {f : α -> P}
+  结论: {P : 类型} [赋范交换加群 P] {f : α -> P}
   证明: by
   rw [integral_eq_lintegral_of_nonneg_ae _ hf.norm]
   · simp_rw [ofReal_norm]
@@ -1451,8 +1451,8 @@ theorem ofReal_integral_norm_eq_lintegral_enorm
   exact lt_top_iff_ne_top.mp (hasFiniteIntegral_iff_enorm.mpr hf.2)
 
 中文:
-定理 ofReal_integral_norm_eq_lintegral_enorm
-  结论: {P : 类型} [NormedAddCommGroup P] {f : α -> P}
+定理 of实数_integral_norm_eq_lintegral_enorm
+  结论: {P : 类型} [赋范交换加群 P] {f : α -> P}
   证明: by
   rw [integral_norm_eq_lintegral_enorm hf.aestronglyMeasurable]; rw [ENNReal.ofReal_toReal]
   exact lt_top_iff_ne_top.mp (hasFiniteIntegral_iff_enorm.mpr hf.2)
@@ -1476,7 +1476,7 @@ theorem SimpleFunc.integral_eq_integral
 
 中文:
 定理 SimpleFunc.integral_eq_integral
-  条件: [CompleteSpace E] (f : α ->ₛ E) (hfi : 整数egrable f μ)
+  条件: [完备空间 E] (f : α ->ₛ E) (hfi : 可积 f μ)
   证明: by
   rw [MeasureTheory.integral_eq f hfi]; rw [← L1.SimpleFunc.toLp_one_eq_toL1]; rw [L1.SimpleFunc.integral_L1_eq_integral]; rw [L1.SimpleFunc.integral_eq_integral]
   exact SimpleFunc.integral_congr hfi (Lp.simpleFunc.toSimpleFunc_toLp _ _).symm
@@ -1499,7 +1499,7 @@ theorem SimpleFunc.integral_eq_sum
 
 中文:
 定理 SimpleFunc.integral_eq_sum
-  条件: [CompleteSpace E] (f : α ->ₛ E) (hfi : 整数egrable f μ)
+  条件: [完备空间 E] (f : α ->ₛ E) (hfi : 可积 f μ)
   证明: by
   rw [← f.integral_eq_integral hfi]; rw [SimpleFunc.integral]; rw [← SimpleFunc.integral_eq]; rfl
 
@@ -1523,7 +1523,7 @@ theorem tendsto_integral_approxOn_of_measurable
 
 中文:
 定理 tendsto_integral_approxOn_of_measurable
-  结论: [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+  结论: [完备空间 E] [可测空间 E] [Borel空间 E]
   证明: by
   have hfi' := SimpleFunc.integrable_approxOn hfm hfi h₀ h₀i
   simp only [SimpleFunc.integral_eq_integral _ (hfi' _), integral, L1.integral]
@@ -1620,7 +1620,7 @@ theorem integral_eq_integral_pos_part_sub_integral_neg_part
 
 中文:
 定理 integral_eq_integral_pos_part_sub_integral_neg_part
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   rw [← integral_sub hf.real_toNNReal]
   · simp
@@ -1647,7 +1647,7 @@ theorem integral_abs_eq_two_mul_integral_posPart_sub_integral
 
 中文:
 定理 integral_abs_eq_two_mul_integral_posPart_sub_integral
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   simp only [PosPart.posPart]
   have h_eq : forall x, |f x| = 2 * max (f x) 0 - f x := by grind
@@ -1674,7 +1674,7 @@ theorem integral_abs_eq_two_mul_integral_negPart_add_integral
 
 中文:
 定理 integral_abs_eq_two_mul_integral_negPart_add_integral
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   simp only [NegPart.negPart]
   have h_eq : forall x, |f x| = 2 * max (-f x) 0 + f x := by grind
@@ -1712,7 +1712,7 @@ lemma integral_mono_measure
 
 中文:
 引理 integral_mono_measure
-  结论: [OrderClosedTopology E] {f : α -> E} {ν : Measure α} (hle : μ <= ν)
+  结论: [OrderClosed拓扑 E] {f : α -> E} {ν : 测度 α} (hle : μ <= ν)
   证明: by
   by_cases hE : CompleteSpace E
   swap; · simp [integral, hE]
@@ -1850,7 +1850,7 @@ lemma integral_mono_ae
 
 中文:
 引理 integral_mono_ae
-  结论: {f g : α -> E} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  结论: {f g : α -> E} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   rw [← sub_nonneg]; rw [← integral_sub hg hf]
   refine integral_nonneg_of_ae ?_
@@ -1879,7 +1879,7 @@ lemma integral_mono
 
 中文:
 引理 integral_mono
-  结论: {f g : α -> E} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  结论: {f g : α -> E} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: integral_mono_ae hf hg (ae_of_all _ h)
 
 Depends on / 依赖: ae_of_all, integral_mono_ae
@@ -1901,7 +1901,7 @@ lemma integral_mono_of_nonneg
 
 中文:
 引理 integral_mono_of_nonneg
-  结论: {f g : α -> E} (hf : 0 <=ᵐ[μ] f) (hgi : 整数egrable g μ)
+  结论: {f g : α -> E} (hf : 0 <=ᵐ[μ] f) (hgi : 可积 g μ)
   证明: by
   by_cases hfi : Integrable f μ
   · exact integral_mono_ae hfi hgi h
@@ -1929,7 +1929,7 @@ lemma integral_monotoneOn_of_integrand_ae
 
 中文:
 引理 integral_monotoneOn_of_integrand_ae
-  结论: {β : 类型} [Preorder β] {f : α -> β -> E}
+  结论: {β : 类型} [预序 β] {f : α -> β -> E}
   证明: by
   intro a ha b hb hab
   refine integral_mono_ae (hf_int a ha) (hf_int b hb) ?_
@@ -1960,7 +1960,7 @@ lemma integral_antitoneOn_of_integrand_ae
 
 中文:
 引理 integral_antitoneOn_of_integrand_ae
-  结论: {β : 类型} [Preorder β] {f : α -> β -> E}
+  结论: {β : 类型} [预序 β] {f : α -> β -> E}
   证明: by
   intro a ha b hb hab
   refine integral_mono_ae (hf_int b hb) (hf_int a ha) ?_
@@ -1994,7 +1994,7 @@ lemma integral_convexOn_of_integrand_ae
 
 中文:
 引理 integral_convexOn_of_integrand_ae
-  结论: {β : 类型} [AddCommMonoid β]
+  结论: {β : 类型} [加法交换幺半群 β]
   证明: by
   refine ⟨hs, ?_⟩
   intro a ha b hb p q hp hq hpq
@@ -2040,7 +2040,7 @@ lemma integral_concaveOn_of_integrand_ae
 
 中文:
 引理 integral_concaveOn_of_integrand_ae
-  结论: {β : 类型} [AddCommMonoid β]
+  结论: {β : 类型} [加法交换幺半群 β]
   证明: by
   simp_rw [← neg_convexOn_iff] at hf_conc ⊢
   simpa only [Pi.neg_apply, integral_neg] using!
@@ -2075,7 +2075,7 @@ theorem lintegral_coe_eq_integral
 
 中文:
 定理 lintegral_coe_eq_integral
-  条件: (f : α -> 实数>=0) (hfi : 整数egrable (fun x => (f x : 实数)) μ)
+  条件: (f : α -> 实数>=0) (hfi : 可积 (fun x => (f x : 实数)) μ)
   证明: by
   simp_rw [integral_eq_lintegral_of_nonneg_ae (Eventually.of_forall fun x => (f x).coe_nonneg)
       hfi.aestronglyMeasurable, ← ENNReal.coe_nnreal_eq]
@@ -2106,8 +2106,8 @@ theorem ofReal_integral_eq_lintegral_ofReal
   exact lintegral_congr_ae (this.symm.fun_comp ENNReal.ofReal)
 
 中文:
-定理 ofReal_integral_eq_lintegral_ofReal
-  条件: {f : α -> 实数} (hfi : 整数egrable f μ) (f_nn : 0 <=ᵐ[μ] f)
+定理 of实数_integral_eq_lintegral_of实数
+  条件: {f : α -> 实数} (hfi : 可积 f μ) (f_nn : 0 <=ᵐ[μ] f)
   证明: by
   have : f =ᵐ[μ] (‖f ·‖) := f_nn.mono fun _x hx => (abs_of_nonneg hx).symm
   simp_rw [integral_congr_ae this, ofReal_integral_norm_eq_lintegral_enorm hfi,
@@ -2134,8 +2134,8 @@ theorem integral_toReal
   exact Eventually.of_forall fun x => ENNReal.toReal_nonneg
 
 中文:
-定理 integral_toReal
-  条件: {f : α -> 实数>=0∞} (hfm : AEMeasurable f μ) (hf : 对任意ᵐ x ∂μ, f x < ∞)
+定理 integral_to实数
+  条件: {f : α -> 实数>=0∞} (hfm : 几乎处处可测 f μ) (hf : 对任意ᵐ x ∂μ, f x < ∞)
   证明: by
   rw [integral_eq_lintegral_of_nonneg_ae _ hfm.ennreal_toReal.aestronglyMeasurable]; rw [lintegral_congr_ae (ofReal_toReal_ae_eq hf)]
   exact Eventually.of_forall fun x => ENNReal.toReal_nonneg
@@ -2158,7 +2158,7 @@ theorem lintegral_coe_le_coe_iff_integral_le
 
 中文:
 定理 lintegral_coe_le_coe_iff_integral_le
-  结论: {f : α -> 实数>=0} (hfi : 整数egrable (fun x => (f x : 实数)) μ)
+  结论: {f : α -> 实数>=0} (hfi : 可积 (fun x => (f x : 实数)) μ)
   证明: by
   rw [lintegral_coe_eq_integral f hfi]; rw [ENNReal.ofReal]; rw [ENNReal.coe_le_coe]; rw [Real.toNNReal_le_iff_le_coe]
 
@@ -2210,7 +2210,7 @@ theorem integral_eq_zero_iff_of_nonneg_ae
 
 中文:
 定理 integral_eq_zero_iff_of_nonneg_ae
-  条件: {f : α -> 实数} (hf : 0 <=ᵐ[μ] f) (hfi : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 0 <=ᵐ[μ] f) (hfi : 可积 f μ)
   证明: by
   simp_rw [integral_eq_lintegral_of_nonneg_ae hf hfi.1, ENNReal.toReal_eq_zero_iff,
     ← ENNReal.not_lt_top, ← hasFiniteIntegral_iff_ofReal hf, hfi.2, not_true_eq_false, or_false]
@@ -2239,7 +2239,7 @@ theorem integral_eq_zero_iff_of_nonneg
 
 中文:
 定理 integral_eq_zero_iff_of_nonneg
-  条件: {f : α -> 实数} (hf : 0 <= f) (hfi : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 0 <= f) (hfi : 可积 f μ)
   证明: integral_eq_zero_iff_of_nonneg_ae (Eventually.of_forall hf) hfi
 
 Depends on / 依赖: Eventually, Eventually.of_forall, integral_eq_zero_iff_of_nonneg_ae, of_forall
@@ -2289,7 +2289,7 @@ theorem integral_pos_iff_support_of_nonneg_ae
 
 中文:
 定理 integral_pos_iff_support_of_nonneg_ae
-  条件: {f : α -> 实数} (hf : 0 <=ᵐ[μ] f) (hfi : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 0 <=ᵐ[μ] f) (hfi : 可积 f μ)
   证明: by
   simp_rw [(integral_nonneg_of_ae hf).lt_iff_ne, pos_iff_ne_zero, Ne, @eq_comm Real 0,
     integral_eq_zero_iff_of_nonneg_ae hf hfi, Filter.EventuallyEq, ae_iff, Pi.zero_apply,
@@ -2313,7 +2313,7 @@ theorem integral_pos_iff_support_of_nonneg
 
 中文:
 定理 integral_pos_iff_support_of_nonneg
-  条件: {f : α -> 实数} (hf : 0 <= f) (hfi : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 0 <= f) (hfi : 可积 f μ)
   证明: integral_pos_iff_support_of_nonneg_ae (Eventually.of_forall hf) hfi
 
 Depends on / 依赖: Eventually, Eventually.of_forall, integral_pos_iff_support_of_nonneg_ae, of_forall
@@ -2336,7 +2336,7 @@ lemma integral_exp_pos
 
 中文:
 引理 integral_exp_pos
-  结论: {μ : Measure α} {f : α -> 实数} [hμ : NeZero μ]
+  结论: {μ : 测度 α} {f : α -> 实数} [hμ : NeZero μ]
   证明: by
   rw [integral_pos_iff_support_of_nonneg (fun x => (Real.exp_pos _).le) hf]
   suffices (Function.support fun x => Real.exp (f x)) = Set.univ by simp [this, hμ.out]
@@ -2370,7 +2370,7 @@ lemma integral_tendsto_of_tendsto_of_monotone
 
 中文:
 引理 integral_tendsto_of_tendsto_of_monotone
-  结论: {μ : Measure α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
+  结论: {μ : 测度 α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
   证明: by
   -- switch from the Bochner to the Lebesgue integral
   let f' := fun n x => f n x - f 0 x
@@ -2433,7 +2433,7 @@ lemma integral_tendsto_of_tendsto_of_antitone
 
 中文:
 引理 integral_tendsto_of_tendsto_of_antitone
-  结论: {μ : Measure α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
+  结论: {μ : 测度 α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
   证明: by
   suffices Tendsto (fun n => ∫ x, -f n x ∂μ) atTop (𝓝 (∫ x, -F x ∂μ)) by
     suffices Tendsto (fun n => ∫ x, - -f n x ∂μ) atTop (𝓝 (∫ x, - -F x ∂μ)) by
@@ -2471,7 +2471,7 @@ lemma tendsto_of_integral_tendsto_of_monotone
 
 中文:
 引理 tendsto_of_integral_tendsto_of_monotone
-  结论: {μ : Measure α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
+  结论: {μ : 测度 α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
   证明: by
   -- reduce to the `ℝ≥0∞` case
   let f' : Nat -> α -> Real>=0∞ := fun n a => ENNReal.ofReal (f n a - f 0 a)
@@ -2553,7 +2553,7 @@ lemma tendsto_of_integral_tendsto_of_antitone
 
 中文:
 引理 tendsto_of_integral_tendsto_of_antitone
-  结论: {μ : Measure α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
+  结论: {μ : 测度 α} {f : 自然数 -> α -> 实数} {F : α -> 实数}
   证明: by
   let f' : Nat -> α -> Real := fun i a => - f i a
   let F' : α -> Real := fun a => - F a
@@ -2663,7 +2663,7 @@ exact integral_congr_ae hf.coeFn_toL1.fun_comp _
 
 中文:
 定理 L1.norm_of_fun_eq_integral_norm
-  条件: {f : α -> H} (hf : 整数egrable f μ)
+  条件: {f : α -> H} (hf : 可积 f μ)
   证明: by
   rw [L1.norm_eq_integral_norm]
 exact integral_congr_ae hf.coeFn_toL1.fun_comp _
@@ -2785,7 +2785,7 @@ theorem norm_integral_le_of_norm_le
 
 中文:
 定理 norm_integral_le_of_norm_le
-  结论: {f : α -> G} {g : α -> 实数} (hg : 整数egrable g μ)
+  结论: {f : α -> G} {g : α -> 实数} (hg : 可积 g μ)
   证明: calc
     ‖∫ x, f x ∂μ‖ <= ∫ x, ‖f x‖ ∂μ := norm_integral_le_integral_norm f
     _ <= ∫ x, g x ∂μ := integral_mono_of_nonneg (Eventually.of_forall fun _ => norm_nonneg _) hg h
@@ -2851,7 +2851,7 @@ lemma integral_eq_const
 
 中文:
 引理 integral_eq_const
-  条件: [IsProbabilityMeasure μ] {f : α -> E} {c : E} (hf : 对任意ᵐ x ∂μ, f x = c)
+  条件: [是概率测度 μ] {f : α -> E} {c : E} (hf : 对任意ᵐ x ∂μ, f x = c)
   证明: by simp [integral_congr_ae hf]
 
 Depends on / 依赖: integral_congr_ae
@@ -2871,7 +2871,7 @@ theorem norm_integral_le_of_norm_le_const
 
 中文:
 定理 norm_integral_le_of_norm_le_const
-  结论: [IsFiniteMeasure μ] {f : α -> G} {C : 实数}
+  结论: [是有限测度 μ] {f : α -> G} {C : 实数}
   证明: calc
     ‖∫ x, f x ∂μ‖ <= ∫ _, C ∂μ := norm_integral_le_of_norm_le (integrable_const C) h
     _ = C * μ.real univ := by rw [integral_const, smul_eq_mul, mul_comm]
@@ -2902,7 +2902,7 @@ theorem integral_add_measure
 
 中文:
 定理 integral_add_measure
-  条件: {f : α -> G} (hμ : 整数egrable f μ) (hν : 整数egrable f ν)
+  条件: {f : α -> G} (hμ : 可积 f μ) (hν : 可积 f ν)
   证明: by
   simp only [integral_eq_setToFun]
   apply setToFun_add_left'' (fun s hs h's => ?_) hμ hν le_rfl zero_le_one zero_le_one zero_le_one
@@ -2935,7 +2935,7 @@ theorem integral_zero_measure
 
 中文:
 定理 integral_zero_measure
-  条件: {m : MeasurableSpace α} (f : α -> G)
+  条件: {m : 可测空间 α} (f : α -> G)
   证明: by
   simp only [integral_eq_setToFun]
   exact setToFun_measure_zero (dominatedFinMeasAdditive_weightedSMul _) rfl
@@ -2959,8 +2959,8 @@ theorem setIntegral_measure_zero
   proof: Measure.restrict_eq_zero.mpr hs ▸ integral_zero_measure f
 
 中文:
-定理 setIntegral_measure_zero
-  条件: (f : α -> G) {μ : Measure α} {s : Set α} (hs : μ s = 0)
+定理 set整数egral_measure_zero
+  条件: (f : α -> G) {μ : 测度 α} {s : 集合 α} (hs : μ s = 0)
   证明: Measure.restrict_eq_zero.mpr hs ▸ integral_zero_measure f
 
 Depends on / 依赖: Measure, Measure.restrict_eq_zero.mpr, integral_zero_measure, restrict_eq_zero
@@ -2979,7 +2979,7 @@ lemma integral_of_isEmpty
 
 中文:
 引理 integral_of_isEmpty
-  条件: [IsEmpty α] {f : α -> G}
+  条件: [是空 α] {f : α -> G}
   结论: ∫ x, f x ∂μ = 0
   证明: μ.eq_zero_of_isEmpty ▸ integral_zero_measure _
 
@@ -3006,7 +3006,7 @@ theorem integral_finsetSum_measure
 
 中文:
 定理 integral_finsetSum_measure
-  结论: {ι} {m : MeasurableSpace α} {f : α -> G} {μ : ι -> Measure α}
+  结论: {ι} {m : 可测空间 α} {f : α -> G} {μ : ι -> 测度 α}
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -3134,7 +3134,7 @@ theorem integral_map_of_stronglyMeasurable
 
 中文:
 定理 integral_map_of_stronglyMeasurable
-  结论: {β} [MeasurableSpace β] {φ : α -> β} (hφ : Measurable φ)
+  结论: {β} [可测空间 β] {φ : α -> β} (hφ : 可测 φ)
   证明: by
   by_cases hfi : Integrable f (Measure.map φ μ); swap
   · rw [integral_undef hfi, integral_undef]
@@ -3171,7 +3171,7 @@ theorem integral_map
 
 中文:
 定理 integral_map
-  结论: {β} [MeasurableSpace β] {φ : α -> β} (hφ : AEMeasurable φ μ) {f : β -> G}
+  结论: {β} [可测空间 β] {φ : α -> β} (hφ : 几乎处处可测 φ μ) {f : β -> G}
   证明: let g := hfm.mk f
   calc
     ∫ y, f y ∂Measure.map φ μ = ∫ y, g y ∂Measure.map φ μ := integral_congr_ae hfm.ae_eq_mk
@@ -3206,8 +3206,8 @@ theorem _root_.MeasurableEmbedding.integral_map
     exact fun hgf => hgm (hf.aestronglyMeasurable_map_iff.2 hgf)
 
 中文:
-定理 _root_.MeasurableEmbedding.integral_map
-  结论: {β} {_ : MeasurableSpace β} {f : α -> β}
+定理 _root_.可测嵌入.integral_map
+  结论: {β} {_ : 可测空间 β} {f : α -> β}
   证明: by
   by_cases hgm : AEStronglyMeasurable g (Measure.map f μ)
   · exact MeasureTheory.integral_map hf.measurable.aemeasurable hgm
@@ -3232,8 +3232,8 @@ theorem _root_.Topology.IsClosedEmbedding.integral_map
   proof: hφ.measurableEmbedding.integral_map _
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.integral_map
-  结论: {β} [TopologicalSpace α] [BorelSpace α]
+定理 _root_.拓扑.是闭嵌入.integral_map
+  结论: {β} [拓扑空间 α] [Borel空间 α]
   证明: hφ.measurableEmbedding.integral_map _
 
 Depends on / 依赖: integral_map, measurableEmbedding, measurableEmbedding.integral_map
@@ -3255,7 +3255,7 @@ omit hE in
 
 中文:
 定理 integral_map_equiv
-  条件: {β} [MeasurableSpace β] (e : α ≃ᵐ β) (f : β -> G)
+  条件: {β} [可测空间 β] (e : α ≃ᵐ β) (f : β -> G)
   证明: e.measurableEmbedding.integral_map f
 
 omit hE in
@@ -3277,7 +3277,7 @@ lemma integral_domSMul
 
 中文:
 引理 integral_domSMul
-  结论: {G A : 类型} [Group G] [AddCommGroup A] [DistribMulAction G A]
+  结论: {G A : 类型} [群 G] [加法交换群 A] [分配乘法作用 G A]
   证明: integral_map_equiv (MeasurableEquiv.smul ((DomMulAct.mk.symm g : G)⁻¹)) f
 
 Depends on / 依赖: DomMulAct, DomMulAct.mk.symm, MeasurableEquiv, MeasurableEquiv.smul, integral_map_equiv
@@ -3296,8 +3296,8 @@ theorem MeasurePreserving.integral_comp
   proof: h₁.map_eq ▸ (h₂.integral_map g).symm
 
 中文:
-定理 MeasurePreserving.integral_comp
-  结论: {β} {_ : MeasurableSpace β} {f : α -> β} {ν}
+定理 保测.integral_comp
+  结论: {β} {_ : 可测空间 β} {f : α -> β} {ν}
   证明: h₁.map_eq ▸ (h₂.integral_map g).symm
 
 Depends on / 依赖: integral_map, map_eq
@@ -3316,8 +3316,8 @@ theorem MeasurePreserving.integral_comp'
   proof: MeasurePreserving.integral_comp h f.measurableEmbedding _
 
 中文:
-定理 MeasurePreserving.integral_comp'
-  结论: {β} [MeasurableSpace β] {ν} {f : α ≃ᵐ β}
+定理 保测.integral_comp'
+  结论: {β} [可测空间 β] {ν} {f : α ≃ᵐ β}
   证明: MeasurePreserving.integral_comp h f.measurableEmbedding _
 
 Depends on / 依赖: MeasurePreserving, MeasurePreserving.integral_comp, f.measurableEmbedding, integral_comp, measurableEmbedding
@@ -3338,7 +3338,7 @@ theorem integral_subtype_comap
 
 中文:
 定理 integral_subtype_comap
-  结论: {α} [MeasurableSpace α] {μ : Measure α} {s : Set α}
+  结论: {α} [可测空间 α] {μ : 测度 α} {s : 集合 α}
   证明: by
   rw [← map_comap_subtype_coe hs]
   exact ((MeasurableEmbedding.subtype_coe hs).integral_map _).symm
@@ -3364,7 +3364,7 @@ theorem integral_subtype
 
 中文:
 定理 integral_subtype
-  条件: {α} [MeasureSpace α] {s : Set α} (hs : MeasurableSet s) (f : α -> G)
+  条件: {α} [测度空间 α] {s : 集合 α} (hs : 可测集 s) (f : α -> G)
   证明: integral_subtype_comap hs f
 
 @[simp]
@@ -3392,7 +3392,7 @@ integral_congr_ae ae_eq_dirac' hfm.measurable
 
 中文:
 定理 integral_dirac'
-  条件: [MeasurableSpace α] (f : α -> E) (a : α) (hfm : StronglyMeasurable f)
+  条件: [可测空间 α] (f : α -> E) (a : α) (hfm : StronglyMeasurable f)
   证明: by
   borelize E
   calc
@@ -3425,7 +3425,7 @@ theorem integral_dirac
 
 中文:
 定理 integral_dirac
-  条件: [MeasurableSpace α] [MeasurableSingletonClass α] (f : α -> E) (a : α)
+  条件: [可测空间 α] [MeasurableSingleton类 α] (f : α -> E) (a : α)
   证明: calc
 ∫ x, f x ∂Measure.dirac a = ∫ _, f a ∂Measure.dirac a := integral_congr_ae ae_eq_dirac f
     _ = f a := by simp
@@ -3451,8 +3451,8 @@ theorem setIntegral_dirac'
   · exact integral_zero_measure _
 
 中文:
-定理 setIntegral_dirac'
-  结论: {mα : MeasurableSpace α} {f : α -> E} (hf : StronglyMeasurable f) (a : α)
+定理 set整数egral_dirac'
+  结论: {mα : 可测空间 α} {f : α -> E} (hf : StronglyMeasurable f) (a : α)
   证明: by
   rw [restrict_dirac' hs]
   split_ifs
@@ -3482,8 +3482,8 @@ theorem setIntegral_dirac
   · exact integral_zero_measure _
 
 中文:
-定理 setIntegral_dirac
-  结论: [MeasurableSpace α] [MeasurableSingletonClass α] (f : α -> E) (a : α)
+定理 set整数egral_dirac
+  结论: [可测空间 α] [MeasurableSingleton类 α] (f : α -> E) (a : α)
   证明: by
   rw [restrict_dirac]
   split_ifs
@@ -3556,7 +3556,7 @@ theorem integral_mul_norm_le_Lp_mul_Lq
 
 中文:
 定理 integral_mul_norm_le_Lp_mul_Lq
-  结论: {E} [NormedAddCommGroup E] {f g : α -> E} {p q : 实数}
+  结论: {E} [赋范交换加群 E] {f g : α -> E} {p q : 实数}
   证明: by
   -- translate the Bochner integrals into Lebesgue integrals.
   rw [integral_eq_lintegral_of_nonneg_ae]; rw [integral_eq_lintegral_of_nonneg_ae]; rw [integral_eq_lintegral_of_nonneg_ae]
@@ -3665,7 +3665,7 @@ theorem integral_singleton'
 
 中文:
 定理 integral_singleton'
-  条件: {μ : Measure α} {f : α -> E} (hf : StronglyMeasurable f) (a : α)
+  条件: {μ : 测度 α} {f : α -> E} (hf : StronglyMeasurable f) (a : α)
   证明: by
   simp only [Measure.restrict_singleton, integral_smul_measure, integral_dirac' f a hf,
     measureReal_def]
@@ -3688,7 +3688,7 @@ theorem integral_singleton
 
 中文:
 定理 integral_singleton
-  条件: [MeasurableSingletonClass α] {μ : Measure α} (f : α -> E) (a : α)
+  条件: [MeasurableSingleton类 α] {μ : 测度 α} (f : α -> E) (a : α)
   证明: by
   simp only [Measure.restrict_singleton, integral_smul_measure, integral_dirac, measureReal_def]
 
@@ -3711,7 +3711,7 @@ theorem integral_unique
 
 中文:
 定理 integral_unique
-  条件: [Unique α] (f : α -> E)
+  条件: [唯一 α] (f : α -> E)
   结论: ∫ x, f x ∂μ = μ.real univ • f default
   证明: calc
     ∫ x, f x ∂μ = ∫ _, f default ∂μ := by congr with x; congr; exact Unique.uniq _ x
@@ -3735,7 +3735,7 @@ theorem integral_pos_of_integrable_nonneg_nonzero
 
 中文:
 定理 integral_pos_of_integrable_nonneg_nonzero
-  结论: [TopologicalSpace α] [Measure.IsOpenPosMeasure μ]
+  结论: [拓扑空间 α] [测度.是OpenPosMeasure μ]
   证明: (integral_pos_iff_support_of_nonneg f_nonneg f_int).2
     (IsOpen.measure_pos μ f_cont.isOpen_support ⟨x, f_x⟩)
 
@@ -3835,7 +3835,7 @@ theorem integral_trim_simpleFunc
 
 中文:
 定理 integral_trim_simpleFunc
-  条件: (hm : m <= m0) (f : @SimpleFunc β m F) (hf_int : 整数egrable f μ)
+  条件: (hm : m <= m0) (f : @SimpleFunc β m F) (hf_int : 可积 f μ)
   证明: by
   have hf : StronglyMeasurable[m] f := @SimpleFunc.stronglyMeasurable β F m _ f
   have hf_int_m := hf_int.trim hm hf
@@ -3967,7 +3967,7 @@ theorem eLpNorm_one_le_of_le
 
 中文:
 定理 eLpNorm_one_le_of_le
-  结论: {r : 实数>=0} (hfint : 整数egrable f μ) (hfint' : 0 <= ∫ x, f x ∂μ)
+  结论: {r : 实数>=0} (hfint : 可积 f μ) (hfint' : 0 <= ∫ x, f x ∂μ)
   证明: by
   by_cases hr : r = 0
   · suffices f =ᵐ[μ] 0 by
@@ -4034,7 +4034,7 @@ theorem eLpNorm_one_le_of_le'
 
 中文:
 定理 eLpNorm_one_le_of_le'
-  结论: {r : 实数} (hfint : 整数egrable f μ) (hfint' : 0 <= ∫ x, f x ∂μ)
+  结论: {r : 实数} (hfint : 可积 f μ) (hfint' : 0 <= ∫ x, f x ∂μ)
   证明: by
   refine eLpNorm_one_le_of_le hfint hfint' ?_
   simp only [Real.coe_toNNReal', le_max_iff]

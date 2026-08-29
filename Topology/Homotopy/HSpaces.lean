@@ -73,14 +73,14 @@ class HSpace
     - hmulE : (hmul.comp <| (ContinuousMap.id X).prodMk <| const X e).HomotopyRel (ContinuousMap.id X) {e}
 
 中文:
-类 HSpace
-  参数: (X : 类型u) [TopologicalSpace X]
+类 H空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (5 个):
     - hmul : C(X × X, X)
     - e : X
     - hmul_e_e : hmul (e, e) = e
-    - eHmul : (hmul.comp <| (const X e).prodMk <| ContinuousMap.id X).HomotopyRel (ContinuousMap.id X) {e}
-    - hmulE : (hmul.comp <| (ContinuousMap.id X).prodMk <| const X e).HomotopyRel (ContinuousMap.id X) {e}
+    - eHmul : (hmul.comp <| (const X e).prodMk <| 连续映射.id X).HomotopyRel (连续映射.id X) {e}
+    - hmulE : (hmul.comp <| (连续映射.id X).prodMk <| const X e).HomotopyRel (连续映射.id X) {e}
 -/
 class HSpace (X : Type u) [TopologicalSpace X] where
   hmul : C(X × X, X)
@@ -111,8 +111,8 @@ instance HSpace.prod
     let G : I × X × Y -> X × Y := fun p => (HSpace.eHmul (p.1, p.2.1), HSpace.eHmul (p.1, p
 
 中文:
-实例 HSpace.prod
-  签名: (X : 类型u) (Y : 类型v) [TopologicalSpace X] [TopologicalSpace Y] [HSpace X]
+实例 H空间.乘积
+  签名: (X : 类型u) (Y : 类型v) [拓扑空间 X] [拓扑空间 Y] [H空间 X]
   定义体: ⟨fun p => (p.1.1 ⋀ p.2.1, p.1.2 ⋀ p.2.2), by fun_prop⟩
   e := (HSpace.e, HSpace.e)
   hmul_e_e := by
@@ -181,7 +181,7 @@ definition toHSpace
 
 中文:
 定义 toHSpace
-  签名: (M : 类型u) [MulOneClass M] [TopologicalSpace M] [ContinuousMul M]
+  签名: (M : 类型u) [MulOne类 M] [拓扑空间 M] [连续乘法 M]
   定义体: ⟨Function.uncurry Mul.mul, continuous_mul⟩
   e := 1
   hmul_e_e := one_mul 1
@@ -214,7 +214,7 @@ theorem one_eq_hSpace_e
 
 中文:
 定理 one_eq_hSpace_e
-  条件: {G : 类型u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+  条件: {G : 类型u} [拓扑空间 G] [群 G] [是拓扑群 G]
   证明: rfl
 -/
 theorem one_eq_hSpace_e {G : Type u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] :
@@ -267,7 +267,7 @@ theorem continuous_qRight
 
 中文:
 定理 continuous_qRight
-  结论: Continuous qRight
+  结论: 连续 qRight
   证明: continuous_projIcc.comp
     Continuous.div (by fun_prop) (by fun_prop) fun _ => (add_pos zero_lt_one).ne'
 
@@ -417,7 +417,7 @@ definition delayReflRight
 
 中文:
 定义 delayReflRight
-  签名: (θ : I) (γ : Path x y)
+  签名: (θ : I) (γ : 道路 x y)
   定义体: γ (qRight (t, θ))
   continuous_toFun := by fun_prop
   source' := by
@@ -447,7 +447,7 @@ continuous_qRight.comp continuous_snd.prodMk continuous_fst.comp continuous_fst
 
 中文:
 定理 continuous_delayReflRight
-  结论: Continuous fun p : I × Path x y => delayReflRight p.1 p.2
+  结论: 连续 fun p : I × 道路 x y => delayReflRight p.1 p.2
   证明: continuous_uncurry_iff.mp
 (continuous_snd.comp continuous_fst).eval
 continuous_qRight.comp continuous_snd.prodMk continuous_fst.comp continuous_fst
@@ -477,8 +477,8 @@ theorem delayReflRight_zero
 
 中文:
 定理 delayReflRight_zero
-  条件: (γ : Path x y)
-  结论: delayReflRight 0 γ = γ.trans (Path.refl y)
+  条件: (γ : 道路 x y)
+  结论: delayReflRight 0 γ = γ.trans (道路.refl y)
   证明: by
   ext t
   simp only [delayReflRight, trans_apply, Path.coe_mk_mk,
@@ -512,7 +512,7 @@ theorem delayReflRight_one
 
 中文:
 定理 delayReflRight_one
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: delayReflRight 1 γ = γ
   证明: by
   ext t
@@ -534,7 +534,7 @@ definition delayReflLeft
 
 中文:
 定义 delayReflLeft
-  签名: (θ : I) (γ : Path x y)
+  签名: (θ : I) (γ : 道路 x y)
   定义体: (delayReflRight θ γ.symm).symm
 
 Depends on / 依赖: delayReflRight
@@ -554,7 +554,7 @@ continuous_fst.prodMk Path.continuous_symm.comp continuous_snd
 
 中文:
 定理 continuous_delayReflLeft
-  结论: Continuous fun p : I × Path x y => delayReflLeft p.1 p.2
+  结论: 连续 fun p : I × 道路 x y => delayReflLeft p.1 p.2
   证明: Path.continuous_symm.comp
 continuous_delayReflRight.comp
 continuous_fst.prodMk Path.continuous_symm.comp continuous_snd
@@ -578,8 +578,8 @@ theorem delayReflLeft_zero
 
 中文:
 定理 delayReflLeft_zero
-  条件: (γ : Path x y)
-  结论: delayReflLeft 0 γ = (Path.refl x).trans γ
+  条件: (γ : 道路 x y)
+  结论: delayReflLeft 0 γ = (道路.refl x).trans γ
   证明: by
   simp only [delayReflLeft, delayReflRight_zero, trans_symm, refl_symm, Path.symm_symm]
 
@@ -600,7 +600,7 @@ theorem delayReflLeft_one
 
 中文:
 定理 delayReflLeft_one
-  条件: (γ : Path x y)
+  条件: (γ : 道路 x y)
   结论: delayReflLeft 1 γ = γ
   证明: by
   simp only [delayReflLeft, delayReflRight_one, Path.symm_symm]

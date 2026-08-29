@@ -43,7 +43,7 @@ lemma AddDissociated.randomisation
 
 中文:
 引理 AddDissociated.randomisation
-  结论: (c : AddChar G Complex -> 实数) (d : AddChar G Complex -> Complex)
+  结论: (c : 加法特征 G 复形 -> 实数) (d : 加法特征 G 复形 -> 复形)
   证明: by
   refine Complex.ofReal_injective ?_
   push_cast

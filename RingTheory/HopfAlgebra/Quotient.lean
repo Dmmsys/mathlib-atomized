@@ -47,7 +47,7 @@ lemma _root_.LinearMap.algHom_comp_convOne
   ext a; simp
 
 中文:
-引理 _root_.LinearMap.algHom_comp_convOne
+引理 _root_.线性映射.algHom_comp_convOne
   条件: (g : A ->ₐ[R] B)
   证明: by
   ext a; simp
@@ -66,7 +66,7 @@ lemma _root_.LinearMap.convOne_comp_coalgHom
   ext a; simp
 
 中文:
-引理 _root_.LinearMap.convOne_comp_coalgHom
+引理 _root_.线性映射.convOne_comp_coalgHom
   条件: (g : A ->ₗc[R] B)
   证明: by
   ext a; simp
@@ -90,7 +90,7 @@ abbreviation ofSurjective
 
 中文:
 缩写 ofSurjective
-  签名: (f : A ->ₐc[R] B) (hf : Function.Surjective f)
+  签名: (f : A ->ₐc[R] B) (hf : 函数.满射 f)
   定义体: by
   refine .ofConvInverse (antipode R) (ofConv_injective ?_) (ofConv_injective ?_) <;>
     rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
@@ -148,9 +148,9 @@ class Ideal.IsHopfIdeal
     - antipode_mem : forall ⦃x : A⦄, x in I -> antipode R x in I
 
 中文:
-类 Ideal.IsHopfIdeal
-  参数: (I : Ideal A)
-  继承: (I.restrictScalars R).IsCoideal
+类 理想.是Hopf理想
+  参数: (I : 理想 A)
+  继承: (I.restrictScalars R).是余ideal
   公理与运算 (1 个):
     - antipode_mem : 对任意 ⦃x : A⦄, x in I -> antipode R x in I
 -/
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: HopfAlgebra R (A ⧸ I)
+  签名: Hopf代数 R (A ⧸ I)
   定义体: .ofSurjective (mkBialgHom I) mk_surjective (antipode_comp_mkₐ I)
 
 Depends on / 依赖: mkBialgHom, mk_surjective, ofSurjective

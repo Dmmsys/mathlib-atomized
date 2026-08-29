@@ -41,8 +41,8 @@ class DilationEquivClass
     - edist_eq' : forall f : F, exists r : Real>=0, r != 0 ∧ forall x y : X, edist (f x) (f y) = r * edist x y
 
 中文:
-类 DilationEquivClass
-  参数: [EquivLike F X Y]
+类 Dilation等价类
+  参数: [等价状 F X Y]
   公理与运算 (1 个):
     - edist_eq' : 对任意 f : F, 存在 r : 实数>=0, r != 0 ∧ 对任意 x y : X, edist (f x) (f y) = r * edist x y
 -/
@@ -64,8 +64,8 @@ structure DilationEquiv
   (no additional axioms)
 
 中文:
-结构 DilationEquiv
-  参数: (X Y : 类型) [PseudoEMetricSpace X] [PseudoEMetricSpace Y]
+结构 Dilation等价
+  参数: (X Y : 类型) [PseudoEMetric空间 X] [PseudoEMetric空间 Y]
   继承: X ≃ Y, Dilation X Y
   (无附加公理)
 -/
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (X ≃ᵈ Y) X Y
+  签名: 等价状 (X ≃ᵈ Y) X Y
   定义体: f.1
   inv f := f.1.symm
   left_inv f := f.left_inv'
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: DilationEquivClass (X ≃ᵈ Y) X Y
+  签名: Dilation等价类 (X ≃ᵈ Y) X Y
   定义体: f.edist_eq'
 
 Depends on / 依赖: edist_eq, f.edist_eq
@@ -221,7 +221,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (DilationEquiv.symm : (X ≃ᵈ Y) -> Y ≃ᵈ X)
+  结论: 函数.双射 (Dilation等价.symm : (X ≃ᵈ Y) -> Y ≃ᵈ X)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -353,7 +353,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (X : 类型) [PseudoEMetricSpace X]
+  签名: (X : 类型) [PseudoEMetric空间 X]
   定义体: .refl X
   edist_eq' := ⟨1, one_ne_zero, fun _ _ => by simp⟩
 -/
@@ -492,7 +492,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : X ≃ᵈ Y)
-  结论: Surjective e
+  结论: 满射 e
   证明: e.1.surjective
 -/
 protected theorem surjective (e : X ≃ᵈ Y) : Surjective e := e.1.surjective
@@ -508,7 +508,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : X ≃ᵈ Y)
-  结论: Bijective e
+  结论: 双射 e
   证明: e.1.bijective
 -/
 protected theorem bijective (e : X ≃ᵈ Y) : Bijective e := e.1.bijective
@@ -526,7 +526,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : X ≃ᵈ Y)
-  结论: Injective e
+  结论: 单射 e
   证明: e.1.injective
 
 @[simp]
@@ -602,7 +602,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (X ≃ᵈ X)
+  签名: 群 (X ≃ᵈ X)
   定义体: e'.trans e
   mul_assoc _ _ _ := rfl
   one := refl _
@@ -828,7 +828,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : (X ≃ᵈ X) ->* Equiv.Perm X where
+  签名: : (X ≃ᵈ X) ->* 等价.置换 X where
   定义体: e.1
   map_mul' _ _ := rfl
   map_one' := rfl
@@ -877,7 +877,7 @@ definition _root_.IsometryEquiv.toDilationEquiv
 @[simp]
 
 中文:
-定义 _root_.IsometryEquiv.toDilationEquiv
+定义 _root_.等距等价.toDilationEquiv
   签名: (e : X ≃ᵢ Y)
   定义体: ⟨1, one_ne_zero, by simpa using! e.isometry⟩
   __ := e.toEquiv
@@ -902,7 +902,7 @@ lemma _root_.IsometryEquiv.toDilationEquiv_apply
 @[simp]
 
 中文:
-引理 _root_.IsometryEquiv.toDilationEquiv_apply
+引理 _root_.等距等价.toDilationEquiv_apply
   条件: (e : X ≃ᵢ Y) (x : X)
   证明: rfl
 
@@ -924,7 +924,7 @@ lemma _root_.IsometryEquiv.toDilationEquiv_symm
 @[simp]
 
 中文:
-引理 _root_.IsometryEquiv.toDilationEquiv_symm
+引理 _root_.等距等价.toDilationEquiv_symm
   条件: (e : X ≃ᵢ Y)
   证明: rfl
 
@@ -947,7 +947,7 @@ lemma _root_.IsometryEquiv.coe_toDilationEquiv
 @[simp]
 
 中文:
-引理 _root_.IsometryEquiv.coe_toDilationEquiv
+引理 _root_.等距等价.coe_toDilationEquiv
   条件: (e : X ≃ᵢ Y)
   结论: ⇑e.toDilationEquiv = e
   证明: rfl
@@ -969,7 +969,7 @@ lemma _root_.IsometryEquiv.coe_symm_toDilationEquiv
 @[simp]
 
 中文:
-引理 _root_.IsometryEquiv.coe_symm_toDilationEquiv
+引理 _root_.等距等价.coe_symm_toDilationEquiv
   条件: (e : X ≃ᵢ Y)
   证明: rfl
 
@@ -991,7 +991,7 @@ lemma _root_.IsometryEquiv.toDilationEquiv_toDilation
 @[simp]
 
 中文:
-引理 _root_.IsometryEquiv.toDilationEquiv_toDilation
+引理 _root_.等距等价.toDilationEquiv_toDilation
   条件: (e : X ≃ᵢ Y)
   证明: rfl
 
@@ -1013,7 +1013,7 @@ lemma _root_.IsometryEquiv.toDilationEquiv_ratio
   rw [← ratio_toDilation]; rw [IsometryEquiv.toDilationEquiv_toDilation]; rw [Isometry.toDilation_ratio]
 
 中文:
-引理 _root_.IsometryEquiv.toDilationEquiv_ratio
+引理 _root_.等距等价.toDilationEquiv_ratio
   条件: (e : X ≃ᵢ Y)
   结论: ratio e.toDilationEquiv = 1
   证明: by

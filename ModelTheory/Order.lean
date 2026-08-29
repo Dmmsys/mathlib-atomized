@@ -76,7 +76,7 @@ inductive orderRel
 
 中文:
 归纳类型 orderRel
-  参数: : 自然数 -> Type
+  参数: : 自然数 -> 类型
   构造子 (1 个):
     - le: orderRel 2
 
@@ -118,8 +118,8 @@ lemma forall_relations
       | 2, .le => h⟩
 
 中文:
-引理 forall_relations
-  条件: {P : 对任意 (n) (_ : Language.order.Relations n), 命题}
+引理 对任意_relations
+  条件: {P : 对任意 (n) (_ : Language.order.关系 n), 命题}
   证明: ⟨fun h => h _, fun h n R =>
       match n, R with
       | 2, .le => h⟩
@@ -139,7 +139,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: : Subsingleton (Language.order.Relations n)
+  签名: : 子单例 (Language.order.关系 n)
   定义体: ⟨by rintro ⟨⟩ ⟨⟩; rfl⟩
 -/
 instance instSubsingleton : Subsingleton (Language.order.Relations n) :=
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (Language.order.Relations 0)
+  签名: 是空 (Language.order.关系 0)
   定义体: ⟨fun x => by cases x⟩
 -/
 instance : IsEmpty (Language.order.Relations 0) := ⟨fun x => by cases x⟩
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Σ n, Language.order.Relations n)
+  签名: 唯一 (Σ n, Language.order.关系 n)
   定义体: ⟨⟨⟨2, .le⟩⟩, fun ⟨n, R⟩ =>
       match n, R with
       | 2, .le => rfl⟩
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique Language.order.Symbols
+  签名: 唯一 Language.order.Symbols
   定义体: ⟨⟨Sum.inr default⟩, by
   have : IsEmpty (Σ n, Language.order.Functions n) := isEmpty_sigma.2 inferInstance
   simp only [Symbols, Sum.forall, reduceCtorEq, Sum.inr.injEq, IsEmpty.forall_iff, true_and]
@@ -240,10 +240,10 @@ class IsOrdered
     - leSymb : L.Relations 2
 
 中文:
-类 IsOrdered
+类 是Ordered
   参数: (L : Language.{u, v})
   公理与运算 (1 个):
-    - leSymb : L.Relations 2
+    - leSymb : L.关系 2
 -/
 class IsOrdered (L : Language.{u, v}) where
   /-- The relation symbol representing `≤`. -/
@@ -261,7 +261,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrdered Language.order
+  签名: 是Ordered Language.order
   定义体: ⟨.le⟩
 -/
 instance : IsOrdered Language.order :=
@@ -276,7 +276,7 @@ lemma order.relation_eq_leSymb
 
 中文:
 引理 order.relation_eq_leSymb
-  结论: (R : Language.order.Relations 2) -> R = leSymb
+  结论: (R : Language.order.关系 2) -> R = leSymb
 -/
 lemma order.relation_eq_leSymb : (R : Language.order.Relations 2) -> R = leSymb
   | .le => rfl
@@ -294,8 +294,8 @@ definition Term.le
   body: leSymb.boundedFormula₂ t₁ t₂
 
 中文:
-定义 Term.le
-  签名: (t₁ t₂ : L.Term (α oplus (Fin n)))
+定义 项.le
+  签名: (t₁ t₂ : L.项 (α oplus (有限集 n)))
   定义体: leSymb.boundedFormula₂ t₁ t₂
 
 Depends on / 依赖: leSymb, leSymb.boundedFormula
@@ -312,8 +312,8 @@ definition Term.lt
   body: t₁.le t₂ ⊓ ∼(t₂.le t₁)
 
 中文:
-定义 Term.lt
-  签名: (t₁ t₂ : L.Term (α oplus (Fin n)))
+定义 项.lt
+  签名: (t₁ t₂ : L.项 (α oplus (有限集 n)))
   定义体: t₁.le t₂ ⊓ ∼(t₂.le t₁)
 -/
 def Term.lt (t₁ t₂ : L.Term (α oplus (Fin n))) : L.BoundedFormula α n :=
@@ -366,7 +366,7 @@ theorem orderLHom_order
 
 中文:
 定理 orderLHom_order
-  结论: orderLHom Language.order = LHom.id Language.order
+  结论: orderLHom Language.order = L态射.id Language.order
   证明: LHom.funext (Subsingleton.elim _ _) (Subsingleton.elim _ _)
 
 Depends on / 依赖: LHom.funext, Subsingleton, Subsingleton.elim
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: Theory.IsUniversal L.preorderTheory
+  签名: Theory.是泛 L.preorderTheory
   定义体: ⟨by
   simp only [preorderTheory, Set.mem_insert_iff, Set.mem_singleton_iff, forall_eq_or_imp, forall_eq]
   exact ⟨leSymb.isUniversal_reflexive, leSymb.isUniversal_transitive⟩⟩
@@ -443,7 +443,7 @@ instance :
 
 中文:
 实例 :
-  签名: Theory.IsUniversal L.partialOrderTheory
+  签名: Theory.是泛 L.partialOrderTheory
   定义体: Theory.IsUniversal.insert leSymb.isUniversal_antisymmetric
 
 Depends on / 依赖: IsUniversal, Theory, Theory.IsUniversal.insert, insert, isUniversal_antisymmetric, leSymb, leSymb.isUniversal_antisymmetric
@@ -482,7 +482,7 @@ example [L.Structure M] [M ⊨ L.linearOrderTheory] (S : L.Substructure M) :
 
 中文:
 实例 :
-  签名: Theory.IsUniversal L.linearOrderTheory
+  签名: Theory.是泛 L.linearOrderTheory
   定义体: Theory.IsUniversal.insert leSymb.isUniversal_total
 
 example [L.Structure M] [M ⊨ L.linearOrderTheory] (S : L.Substructure M) :
@@ -626,8 +626,8 @@ instance sum.instIsOrdered
   body: ⟨Sum.inr IsOrdered.leSymb⟩
 
 中文:
-实例 sum.instIsOrdered
-  签名: : IsOrdered (L.sum Language.order)
+实例 求和.instIsOrdered
+  签名: : 是Ordered (L.求和 Language.order)
   定义体: ⟨Sum.inr IsOrdered.leSymb⟩
 
 Depends on / 依赖: IsOrdered, IsOrdered.leSymb, Sum.inr, leSymb
@@ -665,9 +665,9 @@ class OrderedStructure
 
 中文:
 类 OrderedStructure
-  参数: [L.IsOrdered] [LE M] [L.Structure M]
+  参数: [L.是Ordered] [LE M] [L.结构 M]
   公理与运算 (1 个):
-    - relMap_leSymb : 对任意 (x : Fin 2 -> M), RelMap (leSymb : L.Relations 2) x ↔ (x 0 <= x 1)
+    - relMap_leSymb : 对任意 (x : 有限集 2 -> M), RelMap (leSymb : L.关系 2) x ↔ (x 0 <= x 1)
 -/
 class OrderedStructure [L.IsOrdered] [LE M] [L.Structure M] : Prop where
   relMap_leSymb : forall (x : Fin 2 -> M), RelMap (leSymb : L.Relations 2) x ↔ (x 0 <= x 1)
@@ -696,7 +696,7 @@ instance [Language.order.Structure
     rw [← orderLHom_leSymb L]; rw [LHom.IsExpansionOn.map_onRelation]; rw [relMap_leSymb]
 
 中文:
-实例 [Language.order.Structure
+实例 [Language.order.结构
   签名: M] [Language.order.OrderedStructure M]
   定义体: by
     rw [← orderLHom_leSymb L]; rw [LHom.IsExpansionOn.map_onRelation]; rw [relMap_leSymb]
@@ -720,7 +720,7 @@ instance [Language.order.Structure
   body: by simp [order.relation_eq_leSymb]
 
 中文:
-实例 [Language.order.Structure
+实例 [Language.order.结构
   签名: M] [Language.order.OrderedStructure M] :
   定义体: by simp [order.relation_eq_leSymb]
 
@@ -743,8 +743,8 @@ theorem Term.realize_le
   simp [Term.le]
 
 中文:
-定理 Term.realize_le
-  结论: {t₁ t₂ : L.Term (α oplus (Fin n))} {v : α -> M}
+定理 项.realize_le
+  结论: {t₁ t₂ : L.项 (α oplus (有限集 n))} {v : α -> M}
   证明: by
   simp [Term.le]
 
@@ -770,7 +770,7 @@ theorem realize_noTopOrder_iff
 
 中文:
 定理 realize_noTopOrder_iff
-  结论: M ⊨ L.noTopOrderSentence ↔ NoTopOrder M
+  结论: M ⊨ L.noTopOrderSentence ↔ 无顶序 M
   证明: by
   simp only [noTopOrderSentence, Sentence.Realize, Formula.Realize, BoundedFormula.realize_all,
     BoundedFormula.realize_ex, BoundedFormula.realize_not, Term.realize_le]
@@ -802,7 +802,7 @@ theorem realize_noBotOrder_iff
 
 中文:
 定理 realize_noBotOrder_iff
-  结论: M ⊨ L.noBotOrderSentence ↔ NoBotOrder M
+  结论: M ⊨ L.noBotOrderSentence ↔ 无底序 M
   证明: by
   simp only [noBotOrderSentence, Sentence.Realize, Formula.Realize, BoundedFormula.realize_all,
     BoundedFormula.realize_ex, BoundedFormula.realize_not, Term.realize_le]
@@ -835,7 +835,7 @@ theorem realize_noTopOrder
 
 中文:
 定理 realize_noTopOrder
-  条件: [h : NoTopOrder M]
+  条件: [h : 无顶序 M]
   结论: M ⊨ L.noTopOrderSentence
   证明: realize_noTopOrder_iff.2 h
 
@@ -858,7 +858,7 @@ theorem realize_noBotOrder
 
 中文:
 定理 realize_noBotOrder
-  条件: [h : NoBotOrder M]
+  条件: [h : 无底序 M]
   结论: M ⊨ L.noBotOrderSentence
   证明: realize_noBotOrder_iff.2 h
 
@@ -880,7 +880,7 @@ theorem noTopOrder_of_dlo
 中文:
 定理 noTopOrder_of_dlo
   条件: [M ⊨ L.dlo]
-  结论: NoTopOrder M
+  结论: 无顶序 M
   证明: realize_noTopOrder_iff.1 (L.dlo.realize_sentence_of_mem (by
     simp only [dlo, Set.union_insert, Set.union_singleton, Set.mem_insert_iff, true_or]))
 
@@ -903,7 +903,7 @@ theorem noBotOrder_of_dlo
 中文:
 定理 noBotOrder_of_dlo
   条件: [M ⊨ L.dlo]
-  结论: NoBotOrder M
+  结论: 无底序 M
   证明: realize_noBotOrder_iff.1 (L.dlo.realize_sentence_of_mem (by
     simp only [dlo, Set.union_insert, Set.union_singleton, Set.mem_insert_iff, true_or, or_true]))
 
@@ -980,8 +980,8 @@ theorem Term.realize_lt
   simp [Term.lt, lt_iff_le_not_ge]
 
 中文:
-定理 Term.realize_lt
-  结论: {t₁ t₂ : L.Term (α oplus (Fin n))}
+定理 项.realize_lt
+  结论: {t₁ t₂ : L.项 (α oplus (有限集 n))}
   证明: by
   simp [Term.lt, lt_iff_le_not_ge]
 
@@ -1037,7 +1037,7 @@ theorem realize_denselyOrdered
 
 中文:
 定理 realize_denselyOrdered
-  条件: [h : DenselyOrdered M]
+  条件: [h : 稠密序 M]
   证明: realize_denselyOrdered_iff.2 h
 
 Depends on / 依赖: realize_denselyOrdered_iff
@@ -1061,7 +1061,7 @@ theorem denselyOrdered_of_dlo
 中文:
 定理 denselyOrdered_of_dlo
   条件: [M ⊨ L.dlo]
-  结论: DenselyOrdered M
+  结论: 稠密序 M
   证明: realize_denselyOrdered_iff.1 (L.dlo.realize_sentence_of_mem (by
     simp only [dlo, Set.union_insert, Set.union_singleton, Set.mem_insert_iff, true_or, or_true]))
 
@@ -1087,7 +1087,7 @@ instance model_partialOrder
 
 中文:
 实例 model_partialOrder
-  签名: [PartialOrder M] [L.OrderedStructure M]
+  签名: [偏序 M] [L.OrderedStructure M]
   定义体: by
   simp only [partialOrderTheory, Theory.model_insert_iff, Relations.realize_antisymmetric,
     relMap_leSymb, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
@@ -1147,7 +1147,7 @@ instance model_dlo
 
 中文:
 实例 model_dlo
-  签名: [DenselyOrdered M] [NoTopOrder M] [NoBotOrder M]
+  签名: [稠密序 M] [无顶序 M] [无底序 M]
   定义体: by
   simp [dlo, model_linearOrder, Theory.model_insert_iff]
 
@@ -1351,8 +1351,8 @@ instance [FunLike
     exact fun φ x => map_rel φ⟩
 
 中文:
-实例 [FunLike
-  签名: F M N] [OrderHomClass F M N] : Language.order.HomClass F M N
+实例 [函数状
+  签名: F M N] [序态射类 F M N] : Language.order.态射类 F M N
   定义体: ⟨fun _ => isEmptyElim, by
     simp only [forall_relations, relation_eq_leSymb, relMap_leSymb, Fin.isValue,
       Function.comp_apply]
@@ -1380,7 +1380,7 @@ instance :
 
 中文:
 实例 :
-  签名: Language.order.StrongHomClass (M ↪o N) M N
+  签名: Language.order.Strong态射类 (M ↪o N) M N
   定义体: ⟨fun _ => isEmptyElim,
     by simp only [order.forall_relations, order.relation_eq_leSymb, relMap_leSymb, Fin.isValue,
     Function.comp_apply, RelEmbedding.map_rel_iff, implies_true]⟩
@@ -1404,8 +1404,8 @@ instance [EquivLike
       Function.comp_apply, map_le_map_iff, implies_true]⟩
 
 中文:
-实例 [EquivLike
-  签名: F M N] [OrderIsoClass F M N] : Language.order.StrongHomClass F M N
+实例 [等价状
+  签名: F M N] [OrderIso类 F M N] : Language.order.Strong态射类 F M N
   定义体: ⟨fun _ => isEmptyElim,
     by simp only [order.forall_relations, order.relation_eq_leSymb, relMap_leSymb, Fin.isValue,
       Function.comp_apply, map_le_map_iff, implies_true]⟩
@@ -1438,7 +1438,7 @@ lemma monotone
 
 中文:
 引理 monotone
-  条件: [Preorder M] [L.OrderedStructure M] [Preorder N] [L.OrderedStructure N] (f : F)
+  条件: [预序 M] [L.OrderedStructure M] [预序 N] [L.OrderedStructure N] (f : F)
   证明: fun a b => by
   have h := HomClass.map_rel f leSymb ![a, b]
   simp only [relMap_leSymb, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
@@ -1464,7 +1464,7 @@ lemma strictMono
 
 中文:
 引理 strictMono
-  结论: [EmbeddingLike F M N] [PartialOrder M] [L.OrderedStructure M]
+  结论: [EmbeddingLike F M N] [偏序 M] [L.OrderedStructure M]
   证明: (HomClass.monotone f).strictMono_of_injective (EmbeddingLike.injective f)
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, HomClass, HomClass.monotone, injective, monotone, strictMono_of_injective
@@ -1488,7 +1488,7 @@ lemma StrongHomClass.toOrderIsoClass
     exact h
 
 中文:
-引理 StrongHomClass.toOrderIsoClass
+引理 Strong态射类.toOrderIsoClass
   证明: by
     have h := StrongHomClass.map_rel f leSymb ![a, b]
     simp only [relMap_leSymb, Fin.isValue, Function.comp_apply, Matrix.cons_val_zero,
@@ -1598,7 +1598,7 @@ lemma dlo_age
 
 中文:
 引理 dlo_age
-  条件: [Language.order.Structure M] [Mdlo : M ⊨ Language.order.dlo] [Nonempty M]
+  条件: [Language.order.结构 M] [Mdlo : M ⊨ Language.order.dlo] [非空 M]
   证明: by
   classical
   rw [age]
@@ -1633,7 +1633,7 @@ theorem isFraisseLimit_of_countable_nonempty_dlo
 
 中文:
 定理 isFraisseLimit_of_countable_nonempty_dlo
-  结论: (M : Type w)
+  结论: (M : 类型 w)
   证明: ⟨(isUltrahomogeneous_iff_IsExtensionPair cg_of_countable).2 (dlo_isExtensionPair M M), dlo_age M⟩
 
 Depends on / 依赖: cg_of_countable, dlo_age, dlo_isExtensionPair, isUltrahomogeneous_iff_IsExtensionPair
@@ -1714,7 +1714,7 @@ theorem dlo_isComplete
 
 中文:
 定理 dlo_isComplete
-  结论: Language.order.dlo.IsComplete
+  结论: Language.order.dlo.是完备
   证明: aleph0_categorical_dlo.{0}.isComplete ℵ₀ _ le_rfl (by simp [one_le_aleph0])
     ⟨by
       letI : Language.order.Structure Rat := orderStructure Rat

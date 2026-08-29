@@ -57,7 +57,7 @@ theorem map₂Left'_nil_right
 
 中文:
 定理 map₂Left'_nil_right
-  条件: (f : α -> Option β -> γ) (as)
+  条件: (f : α -> 选项类型 β -> γ) (as)
   证明: by cases as <;> rfl
 -/
 theorem map₂Left'_nil_right (f : α -> Option β -> γ) (as) :
@@ -169,7 +169,7 @@ theorem nil_zipWith
 
 中文:
 定理 nil_zipWith
-  条件: (f : α -> β -> γ) (l : List β)
+  条件: (f : α -> β -> γ) (l : 列表 β)
   结论: zipWith f [] l = []
   证明: by cases l <;> rfl
 -/
@@ -188,7 +188,7 @@ theorem zipWith_nil
 
 中文:
 定理 zipWith_nil
-  条件: (f : α -> β -> γ) (l : List α)
+  条件: (f : α -> β -> γ) (l : 列表 α)
   结论: zipWith f l [] = []
   证明: by cases l <;> rfl
 
@@ -239,7 +239,7 @@ theorem zipLeft'_nil_right
 
 中文:
 定理 zipLeft'_nil_right
-  结论: zipLeft' as ([] : List β) = (as.map fun a => (a, none), [])
+  结论: zipLeft' as ([] : 列表 β) = (as.map fun a => (a, none), [])
   证明: by
   cases as <;> rfl
 
@@ -261,7 +261,7 @@ theorem zipLeft'_nil_left
 
 中文:
 定理 zipLeft'_nil_left
-  结论: zipLeft' ([] : List α) bs = ([], bs)
+  结论: zipLeft' ([] : 列表 α) bs = ([], bs)
   证明: rfl
 
 @[simp]
@@ -333,7 +333,7 @@ theorem zipRight'_nil_left
 
 中文:
 定理 zipRight'_nil_left
-  结论: zipRight' ([] : List α) bs = (bs.map fun b => (none, b), [])
+  结论: zipRight' ([] : 列表 α) bs = (bs.map fun b => (none, b), [])
   证明: by
   cases bs <;> rfl
 
@@ -355,7 +355,7 @@ theorem zipRight'_nil_right
 
 中文:
 定理 zipRight'_nil_right
-  结论: zipRight' as ([] : List β) = ([], as)
+  结论: zipRight' as ([] : 列表 β) = ([], as)
   证明: rfl
 
 @[simp]
@@ -616,7 +616,7 @@ theorem zipLeft_nil_right
 
 中文:
 定理 zipLeft_nil_right
-  结论: zipLeft as ([] : List β) = as.map fun a => (a, none)
+  结论: zipLeft as ([] : 列表 β) = as.map fun a => (a, none)
   证明: by
   cases as <;> rfl
 
@@ -638,7 +638,7 @@ theorem zipLeft_nil_left
 
 中文:
 定理 zipLeft_nil_left
-  结论: zipLeft ([] : List α) bs = []
+  结论: zipLeft ([] : 列表 α) bs = []
   证明: rfl
 
 @[simp]
@@ -703,7 +703,7 @@ theorem zipLeft_eq_zipLeft'
 
 中文:
 定理 zipLeft_eq_zipLeft'
-  条件: (as : List α) (bs : List β)
+  条件: (as : 列表 α) (bs : 列表 β)
   结论: zipLeft as bs = (zipLeft' as bs).fst
   证明: by
   rw [zipLeft]; rw [zipLeft']
@@ -751,7 +751,7 @@ theorem zipRight_nil_left
 
 中文:
 定理 zipRight_nil_left
-  结论: zipRight ([] : List α) bs = bs.map fun b => (none, b)
+  结论: zipRight ([] : 列表 α) bs = bs.map fun b => (none, b)
   证明: by
   cases bs <;> rfl
 
@@ -773,7 +773,7 @@ theorem zipRight_nil_right
 
 中文:
 定理 zipRight_nil_right
-  结论: zipRight as ([] : List β) = []
+  结论: zipRight as ([] : 列表 β) = []
   证明: rfl
 
 @[simp]

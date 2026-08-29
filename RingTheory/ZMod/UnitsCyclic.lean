@@ -135,7 +135,7 @@ theorem isCyclic_units_prime
 
 中文:
 定理 isCyclic_units_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   证明: have : Fact (p.Prime) := ⟨hp⟩
   inferInstance
 
@@ -194,7 +194,7 @@ lemma exists_one_add_mul_pow_prime_eq
    
 
 中文:
-引理 exists_one_add_mul_pow_prime_eq
+引理 存在_one_add_mul_pow_prime_eq
   证明: by
   rw [add_comm]; rw [add_pow]
   rw [← Finset.add_sum_erase (a := 0) _ _ (by simp)]
@@ -262,7 +262,7 @@ lemma exists_one_add_mul_pow_prime_pow_eq
   
 
 中文:
-引理 exists_one_add_mul_pow_prime_pow_eq
+引理 存在_one_add_mul_pow_prime_pow_eq
   结论: {u v : R}
   证明: match m with
   | 0 => ⟨0, by simp⟩
@@ -324,7 +324,7 @@ theorem orderOf_one_add_mul_prime_pow
 
 中文:
 定理 orderOf_one_add_mul_prime_pow
-  结论: {p : 自然数} (hp : p.Prime) (m : 自然数) (hm0 : m != 0)
+  结论: {p : 自然数} (hp : p.素) (m : 自然数) (hm0 : m != 0)
   证明: by
   match n with
   | 0 => rw [← Nat.cast_pow, zero_add m, ZMod.natCast_self]; simp
@@ -371,7 +371,7 @@ theorem orderOf_one_add_mul_prime
 
 中文:
 定理 orderOf_one_add_mul_prime
-  结论: {p : 自然数} (hp : p.Prime) (hp2 : p != 2) (a : 整数)
+  结论: {p : 自然数} (hp : p.素) (hp2 : p != 2) (a : 整数)
   证明: by
   convert! orderOf_one_add_mul_prime_pow hp 1 one_ne_zero _ a ha n using 1
   · rw [pow_one]
@@ -401,7 +401,7 @@ theorem orderOf_one_add_prime
 
 中文:
 定理 orderOf_one_add_prime
-  条件: {p : 自然数} (hp : p.Prime) (hp2 : p != 2) (n : 自然数)
+  条件: {p : 自然数} (hp : p.素) (hp2 : p != 2) (n : 自然数)
   证明: by
   convert! orderOf_one_add_mul_prime hp hp2 1 _ n
   · simp
@@ -436,7 +436,7 @@ theorem isCyclic_units_of_prime_pow
 
 中文:
 定理 isCyclic_units_of_prime_pow
-  条件: (p : 自然数) (hp : p.Prime) (hp2 : p != 2) (n : 自然数)
+  条件: (p : 自然数) (hp : p.素) (hp2 : p != 2) (n : 自然数)
   证明: by
   have := Fact.mk hp
   rcases n with _ | n

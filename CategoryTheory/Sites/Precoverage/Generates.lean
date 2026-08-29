@@ -50,10 +50,10 @@ structure Generates
 
 中文:
 结构 Generates
-  参数: (K : Precoverage C) (J : GrothendieckTopology C)
+  参数: (K : Precoverage C) (J : Grothendieck拓扑 C)
   公理与运算 (2 个):
     - le_toPrecoverage : K <= J.toPrecoverage
-    - isSheaf_of_forall_max((F : Cᵒᵖ ⥤ Type (max u v)) (H : 对任意 ⦃X : C⦄, 对任意 R in K X, R.IsSheafFor F)) : Presieve.IsSheaf J F
+    - isSheaf_of_forall_max((F : Cᵒᵖ ⥤ 类型 (最大值 u v)) (H : 对任意 ⦃X : C⦄, 对任意 R in K X, R.IsSheafFor F)) : Presieve.是层 J F
 -/
 structure Generates (K : Precoverage C) (J : GrothendieckTopology C) : Prop where
   le_toPrecoverage : K <= J.toPrecoverage
@@ -97,8 +97,8 @@ lemma Generates.isSheaf_of_forall_aux
   rw [Presieve.isSheafFor_iff_of_
 
 中文:
-引理 Generates.isSheaf_of_forall_aux
-  结论: (h : K.Generates J) (F : Cᵒᵖ ⥤ Type w)
+引理 Generates.isSheaf_of_对任意_aux
+  结论: (h : K.Generates J) (F : Cᵒᵖ ⥤ 类型 w)
   证明: by
   intro X S hS
   let F' : Cᵒᵖ ⥤ Type max u v := FunctorToTypes.shrink F
@@ -136,8 +136,8 @@ lemma Generates.isSheaf_of_forall
   We explain existence below, uniquenes
 
 中文:
-引理 Generates.isSheaf_of_forall
-  结论: (h : K.Generates J) (F : Cᵒᵖ ⥤ Type w)
+引理 Generates.isSheaf_of_对任意
+  结论: (h : K.Generates J) (F : Cᵒᵖ ⥤ 类型 w)
   证明: by
   /- By assumption, the statement holds for `w = max u v`. The idea of the proof is
   to construct a suitable `Type max u v` valued subsheaf of `F` for each covering sieve `S` in
@@ -199,7 +199,7 @@ lemma Generates.isSheaf_type_iff
 
 中文:
 引理 Generates.isSheaf_type_iff
-  条件: (H : K.Generates J) {F : Cᵒᵖ ⥤ Type w}
+  条件: (H : K.Generates J) {F : Cᵒᵖ ⥤ 类型 w}
   证明: by
   refine ⟨fun h X R hR => ?_, fun h => H.isSheaf_of_forall _ h⟩
   rw [Presieve.isSheafFor_iff_generate]
@@ -292,8 +292,8 @@ lemma Coverage.generates_toGrothendieck
   isSheaf_of_forall_max F h := by rwa [Presieve.isSheaf_coverage]
 
 中文:
-引理 Coverage.generates_toGrothendieck
-  条件: (K : Coverage C)
+引理 余verage.generates_toGrothendieck
+  条件: (K : 余verage C)
   结论: K.Generates K.toGrothendieck where
   证明: by
     rw [← Precoverage.toGrothendieck_le_iff_le_toPrecoverage]; rw [← toGrothendieck_toPrecoverage]
@@ -321,8 +321,8 @@ lemma Coverage.generates_iff
     exact Coverage.generates_toGrothendieck _
 
 中文:
-引理 Coverage.generates_iff
-  条件: {K : Coverage C}
+引理 余verage.generates_iff
+  条件: {K : 余verage C}
   结论: K.Generates J ↔ K.toGrothendieck = J
   证明: by
   refine ⟨fun h => ?_, ?_⟩

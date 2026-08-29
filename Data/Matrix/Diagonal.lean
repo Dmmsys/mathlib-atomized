@@ -48,7 +48,7 @@ definition diagonal
 
 中文:
 定义 diagonal
-  签名: [Zero α] (d : n -> α)
+  签名: [零 α] (d : n -> α)
   定义体: of fun i j => if i = j then d i else 0
 -/
 def diagonal [Zero α] (d : n -> α) : Matrix n n α :=
@@ -68,7 +68,7 @@ theorem diagonal_apply
 
 中文:
 定理 diagonal_apply
-  条件: [Zero α] (d : n -> α) (i j)
+  条件: [零 α] (d : n -> α) (i j)
   结论: diagonal d i j = if i = j then d i else 0
   证明: rfl
 
@@ -92,7 +92,7 @@ theorem diagonal_apply_eq
 
 中文:
 定理 diagonal_apply_eq
-  条件: [Zero α] (d : n -> α) (i : n)
+  条件: [零 α] (d : n -> α) (i : n)
   结论: (diagonal d) i i = d i
   证明: by
   simp [diagonal]
@@ -117,7 +117,7 @@ theorem diagonal_apply_ne
 
 中文:
 定理 diagonal_apply_ne
-  条件: [Zero α] (d : n -> α) {i j : n} (h : i != j)
+  条件: [零 α] (d : n -> α) {i j : n} (h : i != j)
   结论: (diagonal d) i j = 0
   证明: by
   simp [diagonal, h]
@@ -140,7 +140,7 @@ theorem diagonal_apply_ne'
 
 中文:
 定理 diagonal_apply_ne'
-  条件: [Zero α] (d : n -> α) {i j : n} (h : j != i)
+  条件: [零 α] (d : n -> α) {i j : n} (h : j != i)
   结论: (diagonal d) i j = 0
   证明: diagonal_apply_ne d h.symm
 
@@ -163,7 +163,7 @@ theorem diagonal_eq_diagonal_iff
 
 中文:
 定理 diagonal_eq_diagonal_iff
-  条件: [Zero α] {d₁ d₂ : n -> α}
+  条件: [零 α] {d₁ d₂ : n -> α}
   证明: ⟨fun h i => by simpa using congr_arg (fun m : Matrix n n α => m i i) h, fun h => by
     rw [show d₁ = d₂ from funext h]⟩
 
@@ -187,8 +187,8 @@ theorem diagonal_injective
 
 中文:
 定理 diagonal_injective
-  条件: [Zero α]
-  结论: Function.Injective (diagonal : (n -> α) -> Matrix n n α)
+  条件: [零 α]
+  结论: 函数.单射 (diagonal : (n -> α) -> 矩阵 n n α)
   证明: fun d₁ d₂ h => funext fun i => by simpa using Matrix.ext_iff.mpr h i i
 
 @[simp]
@@ -214,8 +214,8 @@ theorem diagonal_zero
 
 中文:
 定理 diagonal_zero
-  条件: [Zero α]
-  结论: (diagonal fun _ => 0 : Matrix n n α) = 0
+  条件: [零 α]
+  结论: (diagonal fun _ => 0 : 矩阵 n n α) = 0
   证明: by
   ext
   simp [diagonal]
@@ -242,8 +242,8 @@ theorem diagonal_zero'
 
 中文:
 定理 diagonal_zero'
-  条件: [Zero α]
-  结论: (diagonal 0 : Matrix n n α) = 0
+  条件: [零 α]
+  结论: (diagonal 0 : 矩阵 n n α) = 0
   证明: diagonal_zero
 
 @[simp]
@@ -266,7 +266,7 @@ theorem diagonal_eq_zero
 
 中文:
 定理 diagonal_eq_zero
-  条件: [Zero α] {d : n -> α}
+  条件: [零 α] {d : n -> α}
   结论: diagonal d = 0 ↔ d = 0
   证明: diagonal_injective.eq_iff' diagonal_zero
 
@@ -293,7 +293,7 @@ theorem diagonal_transpose
 
 中文:
 定理 diagonal_transpose
-  条件: [Zero α] (v : n -> α)
+  条件: [零 α] (v : n -> α)
   结论: (diagonal v)ᵀ = diagonal v
   证明: by
   ext i j
@@ -323,7 +323,7 @@ theorem diagonal_add
 
 中文:
 定理 diagonal_add
-  条件: [AddZeroClass α] (d₁ d₂ : n -> α)
+  条件: [加法零类 α] (d₁ d₂ : n -> α)
   证明: by
   ext i j
   by_cases h : i = j <;>
@@ -352,7 +352,7 @@ theorem diagonal_smul
 
 中文:
 定理 diagonal_smul
-  条件: [Zero α] [SMulZeroClass R α] (r : R) (d : n -> α)
+  条件: [零 α] [SMulZero类 R α] (r : R) (d : n -> α)
   证明: by
   ext i j
   by_cases h : i = j <;> simp [h]
@@ -380,7 +380,7 @@ theorem diagonal_neg
 
 中文:
 定理 diagonal_neg
-  条件: [NegZeroClass α] (d : n -> α)
+  条件: [NegZero类 α] (d : n -> α)
   证明: by
   ext i j
   by_cases h : i = j <;>
@@ -408,7 +408,7 @@ theorem diagonal_sub
 
 中文:
 定理 diagonal_sub
-  条件: [SubNegZeroMonoid α] (d₁ d₂ : n -> α)
+  条件: [SubNegZero幺半群 α] (d₁ d₂ : n -> α)
   证明: by
   ext i j
   by_cases h : i = j <;>
@@ -433,7 +433,7 @@ theorem diagonal_mem_matrix_iff
 
 中文:
 定理 diagonal_mem_matrix_iff
-  条件: [Zero α] {S : Set α} (hS : 0 in S) {d : n -> α}
+  条件: [零 α] {S : 集合 α} (hS : 0 in S) {d : n -> α}
   证明: by
   simp only [Set.mem_matrix, diagonal, of_apply]
   conv_lhs => intro _ _; rw [ite_mem]
@@ -458,8 +458,8 @@ instance [Zero
 @[norm_cast]
 
 中文:
-实例 [Zero
-  签名: α] [自然数Cast α] : 自然数Cast (Matrix n n α) where
+实例 [零
+  签名: α] [自然数嵌入 α] : 自然数嵌入 (矩阵 n n α) where
   定义体: diagonal fun _ => m
 
 @[norm_cast]
@@ -483,7 +483,7 @@ theorem diagonal_natCast
 
 中文:
 定理 diagonal_natCast
-  条件: [Zero α] [自然数Cast α] (m : 自然数)
+  条件: [零 α] [自然数嵌入 α] (m : 自然数)
   结论: diagonal (fun _ : n => (m : α)) = m
   证明: rfl
 
@@ -505,7 +505,7 @@ theorem diagonal_natCast'
 
 中文:
 定理 diagonal_natCast'
-  条件: [Zero α] [自然数Cast α] (m : 自然数)
+  条件: [零 α] [自然数嵌入 α] (m : 自然数)
   结论: diagonal ((m : n -> α)) = m
   证明: rfl
 
@@ -524,7 +524,7 @@ theorem diagonal_eq_natCast
 
 中文:
 定理 diagonal_eq_natCast
-  条件: [Zero α] [自然数Cast α] {d : n -> α} {m : 自然数}
+  条件: [零 α] [自然数嵌入 α] {d : n -> α} {m : 自然数}
   证明: diagonal_injective.eq_iff' diagonal_natCast' _
 
 Depends on / 依赖: diagonal_injective, diagonal_injective.eq_iff, diagonal_natCast, eq_iff
@@ -542,8 +542,8 @@ theorem diagonal_ofNat
   proof: rfl
 
 中文:
-定理 diagonal_ofNat
-  条件: [Zero α] [自然数Cast α] (m : 自然数) [m.AtLeastTwo]
+定理 diagonal_of自然数
+  条件: [零 α] [自然数嵌入 α] (m : 自然数) [m.AtLeastTwo]
   证明: rfl
 -/
 theorem diagonal_ofNat [Zero α] [NatCast α] (m : Nat) [m.AtLeastTwo] :
@@ -560,8 +560,8 @@ theorem diagonal_ofNat'
 @[simp]
 
 中文:
-定理 diagonal_ofNat'
-  条件: [Zero α] [自然数Cast α] (m : 自然数) [m.AtLeastTwo]
+定理 diagonal_of自然数'
+  条件: [零 α] [自然数嵌入 α] (m : 自然数) [m.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -579,8 +579,8 @@ theorem diagonal_eq_ofNat
   proof: diagonal_injective.eq_iff' diagonal_ofNat' _
 
 中文:
-定理 diagonal_eq_ofNat
-  条件: [Zero α] [自然数Cast α] {d : n -> α} {m : 自然数} [m.AtLeastTwo]
+定理 diagonal_eq_of自然数
+  条件: [零 α] [自然数嵌入 α] {d : n -> α} {m : 自然数} [m.AtLeastTwo]
   证明: diagonal_injective.eq_iff' diagonal_ofNat' _
 
 Depends on / 依赖: Lex.left, Lex.right, diagonal_injective, diagonal_injective.eq_iff, diagonal_ofNat, eq_iff
@@ -600,8 +600,8 @@ instance [Zero
 @[norm_cast]
 
 中文:
-实例 [Zero
-  签名: α] [整数Cast α] : 整数Cast (Matrix n n α) where
+实例 [零
+  签名: α] [整数嵌入 α] : 整数嵌入 (矩阵 n n α) where
   定义体: diagonal fun _ => m
 
 @[norm_cast]
@@ -625,7 +625,7 @@ theorem diagonal_intCast
 
 中文:
 定理 diagonal_intCast
-  条件: [Zero α] [整数Cast α] (m : 整数)
+  条件: [零 α] [整数嵌入 α] (m : 整数)
   结论: diagonal (fun _ : n => (m : α)) = m
   证明: rfl
 
@@ -649,7 +649,7 @@ theorem diagonal_intCast'
 
 中文:
 定理 diagonal_intCast'
-  条件: [Zero α] [整数Cast α] (m : 整数)
+  条件: [零 α] [整数嵌入 α] (m : 整数)
   结论: diagonal ((m : n -> α)) = m
   证明: rfl
 
@@ -670,7 +670,7 @@ theorem diagonal_eq_intCast
 
 中文:
 定理 diagonal_eq_intCast
-  条件: [Zero α] [整数Cast α] {d : n -> α} {m : 整数}
+  条件: [零 α] [整数嵌入 α] {d : n -> α} {m : 整数}
   证明: diagonal_injective.eq_iff' diagonal_intCast' _
 
 @[simp]
@@ -695,7 +695,7 @@ theorem diagonal_map
 
 中文:
 定理 diagonal_map
-  条件: [Zero α] [Zero β] {f : α -> β} (h : f 0 = 0) {d : n -> α}
+  条件: [零 α] [零 β] {f : α -> β} (h : f 0 = 0) {d : n -> α}
   证明: by
   ext
   simp only [diagonal_apply, map_apply]
@@ -719,7 +719,7 @@ theorem map_natCast
 
 中文:
 定理 map_natCast
-  结论: [AddMonoidWithOne α] [Zero β]
+  结论: [加法带幺幺半群 α] [零 β]
   证明: diagonal_map h
 -/
 protected theorem map_natCast [AddMonoidWithOne α] [Zero β]
@@ -736,8 +736,8 @@ theorem map_ofNat
   proof: diagonal_map h
 
 中文:
-定理 map_ofNat
-  结论: [AddMonoidWithOne α] [Zero β]
+定理 map_of自然数
+  结论: [加法带幺幺半群 α] [零 β]
   证明: diagonal_map h
 -/
 protected theorem map_ofNat [AddMonoidWithOne α] [Zero β]
@@ -756,7 +756,7 @@ theorem natCast_apply
 
 中文:
 定理 natCast_apply
-  条件: [AddMonoidWithOne α] {i j} {d : 自然数}
+  条件: [加法带幺幺半群 α] {i j} {d : 自然数}
   证明: by
   rw [Nat.cast_ite]; rw [Nat.cast_zero]; rw [← diagonal_natCast]; rw [diagonal_apply]
 
@@ -775,8 +775,8 @@ theorem ofNat_apply
   proof: natCast_apply
 
 中文:
-定理 ofNat_apply
-  条件: [AddMonoidWithOne α] {i j} {d : 自然数} [d.AtLeastTwo]
+定理 of自然数_apply
+  条件: [加法带幺幺半群 α] {i j} {d : 自然数} [d.AtLeastTwo]
   证明: natCast_apply
 
 Depends on / 依赖: natCast_apply
@@ -795,7 +795,7 @@ theorem map_intCast
 
 中文:
 定理 map_intCast
-  结论: [AddGroupWithOne α] [Zero β]
+  结论: [加法带幺群 α] [零 β]
   证明: diagonal_map h
 -/
 protected theorem map_intCast [AddGroupWithOne α] [Zero β]
@@ -814,7 +814,7 @@ theorem intCast_apply
 
 中文:
 定理 intCast_apply
-  条件: [AddGroupWithOne α] {i j} {d : 整数}
+  条件: [加法带幺群 α] {i j} {d : 整数}
   证明: by
   rw [Int.cast_ite]; rw [Int.cast_zero]; rw [← diagonal_intCast]; rw [diagonal_apply]
 
@@ -838,7 +838,7 @@ theorem diagonal_unique
 
 中文:
 定理 diagonal_unique
-  条件: [Unique m] [DecidableEq m] [Zero α] (d : m -> α)
+  条件: [唯一 m] [DecidableEq m] [零 α] (d : m -> α)
   证明: by
   ext i j
   rw [Subsingleton.elim i default]; rw [Subsingleton.elim j default]; rw [diagonal_apply_eq _ _]; rw [of_apply]
@@ -868,8 +868,8 @@ theorem col_diagonal
 
 中文:
 定理 col_diagonal
-  条件: [Zero α] (d : n -> α) (i)
-  结论: (diagonal d).col i = Pi.single i (d i)
+  条件: [零 α] (d : n -> α) (i)
+  结论: (diagonal d).col i = 依赖函数类型.single i (d i)
   证明: by
   ext
   simp +contextual [diagonal, Pi.single_apply]
@@ -896,8 +896,8 @@ theorem row_diagonal
 
 中文:
 定理 row_diagonal
-  条件: [Zero α] (d : n -> α) (j)
-  结论: (diagonal d).row j = Pi.single j (d j)
+  条件: [零 α] (d : n -> α) (j)
+  结论: (diagonal d).row j = 依赖函数类型.single j (d j)
   证明: by
   ext
   simp +contextual [diagonal, eq_comm, Pi.single_apply]
@@ -924,7 +924,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (Matrix n n α)
+  签名: : 幺 (矩阵 n n α)
   定义体: ⟨diagonal fun _ => 1⟩
 
 @[simp]
@@ -947,7 +947,7 @@ theorem diagonal_one
 
 中文:
 定理 diagonal_one
-  结论: (diagonal fun _ => 1 : Matrix n n α) = 1
+  结论: (diagonal fun _ => 1 : 矩阵 n n α) = 1
   证明: rfl
 
 @[simp]
@@ -968,7 +968,7 @@ theorem diagonal_one'
 
 中文:
 定理 diagonal_one'
-  结论: (diagonal 1 : Matrix n n α) = 1
+  结论: (diagonal 1 : 矩阵 n n α) = 1
   证明: rfl
 
 @[simp]
@@ -1011,7 +1011,7 @@ theorem one_apply
 中文:
 定理 one_apply
   条件: {i j}
-  结论: (1 : Matrix n n α) i j = if i = j then 1 else 0
+  结论: (1 : 矩阵 n n α) i j = if i = j then 1 else 0
   证明: rfl
 
 @[simp]
@@ -1034,7 +1034,7 @@ theorem one_apply_eq
 中文:
 定理 one_apply_eq
   条件: (i)
-  结论: (1 : Matrix n n α) i i = 1
+  结论: (1 : 矩阵 n n α) i i = 1
   证明: diagonal_apply_eq _ i
 
 @[simp]
@@ -1057,7 +1057,7 @@ theorem one_apply_ne
 中文:
 定理 one_apply_ne
   条件: {i j}
-  结论: i != j -> (1 : Matrix n n α) i j = 0
+  结论: i != j -> (1 : 矩阵 n n α) i j = 0
   证明: diagonal_apply_ne _
 
 Depends on / 依赖: diagonal_apply_ne
@@ -1079,7 +1079,7 @@ theorem one_apply_ne'
 中文:
 定理 one_apply_ne'
   条件: {i j}
-  结论: j != i -> (1 : Matrix n n α) i j = 0
+  结论: j != i -> (1 : 矩阵 n n α) i j = 0
   证明: diagonal_apply_ne' _
 
 @[simp]
@@ -1103,7 +1103,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: [Zero β] [One β] (f : α -> β) (h₀ : f 0 = 0) (h₁ : f 1 = 1)
+  条件: [零 β] [幺 β] (f : α -> β) (h₀ : f 0 = 0) (h₁ : f 1 = 1)
   证明: by
   ext
   simp only [one_apply, map_apply]
@@ -1128,7 +1128,7 @@ theorem one_eq_pi_single
 中文:
 定理 one_eq_pi_single
   条件: {i j}
-  结论: (1 : Matrix n n α) i j = Pi.single (M := fun _ => α) i 1 j
+  结论: (1 : 矩阵 n n α) i j = 依赖函数类型.single (M := fun _ => α) i 1 j
   证明: by
   simp only [one_apply, Pi.single_apply, eq_comm]
 
@@ -1152,7 +1152,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne α]
+  签名: [加法带幺幺半群 α]
   定义体: show diagonal _ = _ by
     rw [Nat.cast_zero]; rw [diagonal_zero]
   natCast_succ n := show diagonal _ = diagonal _ + _ by
@@ -1181,7 +1181,7 @@ instance instAddGroupWithOne
 
 中文:
 实例 instAddGroupWithOne
-  签名: [AddGroupWithOne α]
+  签名: [加法带幺群 α]
   定义体: show diagonal _ = diagonal _ by
     rw [Int.cast_natCast]
   intCast_negSucc n := show diagonal _ = -(diagonal _) by
@@ -1210,7 +1210,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: [AddCommMonoidWithOne α]
+  签名: [加法交换带幺幺半群 α]
   定义体: addCommMonoid
   __ := instAddMonoidWithOne
 
@@ -1232,7 +1232,7 @@ instance instAddCommGroupWithOne
 
 中文:
 实例 instAddCommGroupWithOne
-  签名: [AddCommGroupWithOne α]
+  签名: [加法交换带幺群 α]
   定义体: addCommGroup
   __ := instAddGroupWithOne
 
@@ -1259,7 +1259,7 @@ definition diag
 
 中文:
 定义 diag
-  签名: (A : Matrix n n α) (i : n)
+  签名: (A : 矩阵 n n α) (i : n)
   定义体: A i i
 
 @[simp]
@@ -1281,7 +1281,7 @@ theorem diag_apply
 
 中文:
 定理 diag_apply
-  条件: (A : Matrix n n α) (i)
+  条件: (A : 矩阵 n n α) (i)
   结论: diag A i = A i i
   证明: rfl
 
@@ -1304,7 +1304,7 @@ theorem diag_diagonal
 
 中文:
 定理 diag_diagonal
-  条件: [DecidableEq n] [Zero α] (a : n -> α)
+  条件: [DecidableEq n] [零 α] (a : n -> α)
   结论: diag (diagonal a) = a
   证明: funext @diagonal_apply_eq _ _ _ _ a
 
@@ -1329,7 +1329,7 @@ theorem diag_transpose
 
 中文:
 定理 diag_transpose
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   结论: diag Aᵀ = diag A
   证明: rfl
 
@@ -1352,8 +1352,8 @@ theorem diag_zero
 
 中文:
 定理 diag_zero
-  条件: [Zero α]
-  结论: diag (0 : Matrix n n α) = 0
+  条件: [零 α]
+  结论: diag (0 : 矩阵 n n α) = 0
   证明: rfl
 
 @[simp]
@@ -1375,7 +1375,7 @@ theorem diag_add
 
 中文:
 定理 diag_add
-  条件: [Add α] (A B : Matrix n n α)
+  条件: [加法 α] (A B : 矩阵 n n α)
   结论: diag (A + B) = diag A + diag B
   证明: rfl
 
@@ -1398,7 +1398,7 @@ theorem diag_sub
 
 中文:
 定理 diag_sub
-  条件: [Sub α] (A B : Matrix n n α)
+  条件: [减法 α] (A B : 矩阵 n n α)
   结论: diag (A - B) = diag A - diag B
   证明: rfl
 
@@ -1421,7 +1421,7 @@ theorem diag_neg
 
 中文:
 定理 diag_neg
-  条件: [Neg α] (A : Matrix n n α)
+  条件: [取负 α] (A : 矩阵 n n α)
   结论: diag (-A) = -diag A
   证明: rfl
 
@@ -1444,7 +1444,7 @@ theorem diag_smul
 
 中文:
 定理 diag_smul
-  条件: [SMul R α] (r : R) (A : Matrix n n α)
+  条件: [标量乘法 R α] (r : R) (A : 矩阵 n n α)
   结论: diag (r • A) = r • diag A
   证明: rfl
 
@@ -1465,8 +1465,8 @@ theorem diag_one
 
 中文:
 定理 diag_one
-  条件: [DecidableEq n] [Zero α] [One α]
-  结论: diag (1 : Matrix n n α) = 1
+  条件: [DecidableEq n] [零 α] [幺 α]
+  结论: diag (1 : 矩阵 n n α) = 1
   证明: diag_diagonal _
 
 Depends on / 依赖: diag_diagonal
@@ -1485,7 +1485,7 @@ theorem diag_map
 
 中文:
 定理 diag_map
-  条件: {f : α -> β} {A : Matrix n n α}
+  条件: {f : α -> β} {A : 矩阵 n n α}
   结论: diag (A.map f) = f ∘ diag A
   证明: rfl
 -/
@@ -1516,7 +1516,7 @@ theorem transpose_eq_diagonal
 
 中文:
 定理 transpose_eq_diagonal
-  条件: [DecidableEq n] [Zero α] {M : Matrix n n α} {v : n -> α}
+  条件: [DecidableEq n] [零 α] {M : 矩阵 n n α} {v : n -> α}
   证明: (Function.Involutive.eq_iff transpose_transpose).trans
     by rw [diagonal_transpose]
 
@@ -1543,8 +1543,8 @@ theorem transpose_one
 
 中文:
 定理 transpose_one
-  条件: [DecidableEq n] [Zero α] [One α]
-  结论: (1 : Matrix n n α)ᵀ = 1
+  条件: [DecidableEq n] [零 α] [幺 α]
+  结论: (1 : 矩阵 n n α)ᵀ = 1
   证明: diagonal_transpose _
 
 @[simp]
@@ -1568,7 +1568,7 @@ theorem transpose_eq_one
 
 中文:
 定理 transpose_eq_one
-  条件: [DecidableEq n] [Zero α] [One α] {M : Matrix n n α}
+  条件: [DecidableEq n] [零 α] [幺 α] {M : 矩阵 n n α}
   结论: Mᵀ = 1 ↔ M = 1
   证明: transpose_eq_diagonal
 
@@ -1592,7 +1592,7 @@ theorem transpose_natCast
 
 中文:
 定理 transpose_natCast
-  条件: [DecidableEq n] [AddMonoidWithOne α] (d : 自然数)
+  条件: [DecidableEq n] [加法带幺幺半群 α] (d : 自然数)
   证明: diagonal_transpose _
 
 @[simp]
@@ -1616,7 +1616,7 @@ theorem transpose_eq_natCast
 
 中文:
 定理 transpose_eq_natCast
-  条件: [DecidableEq n] [AddMonoidWithOne α] {M : Matrix n n α} {d : 自然数}
+  条件: [DecidableEq n] [加法带幺幺半群 α] {M : 矩阵 n n α} {d : 自然数}
   证明: transpose_eq_diagonal
 
 @[simp]
@@ -1639,8 +1639,8 @@ theorem transpose_ofNat
 @[simp]
 
 中文:
-定理 transpose_ofNat
-  条件: [DecidableEq n] [AddMonoidWithOne α] (d : 自然数) [d.AtLeastTwo]
+定理 transpose_of自然数
+  条件: [DecidableEq n] [加法带幺幺半群 α] (d : 自然数) [d.AtLeastTwo]
   证明: transpose_natCast _
 
 @[simp]
@@ -1663,8 +1663,8 @@ theorem transpose_eq_ofNat
 @[simp]
 
 中文:
-定理 transpose_eq_ofNat
-  结论: [DecidableEq n] [AddMonoidWithOne α]
+定理 transpose_eq_of自然数
+  结论: [DecidableEq n] [加法带幺幺半群 α]
   证明: transpose_eq_diagonal
 
 @[simp]
@@ -1689,7 +1689,7 @@ theorem transpose_intCast
 
 中文:
 定理 transpose_intCast
-  条件: [DecidableEq n] [AddGroupWithOne α] (d : 整数)
+  条件: [DecidableEq n] [加法带幺群 α] (d : 整数)
   证明: diagonal_transpose _
 
 @[simp]
@@ -1711,7 +1711,7 @@ theorem transpose_eq_intCast
 
 中文:
 定理 transpose_eq_intCast
-  结论: [DecidableEq n] [AddGroupWithOne α]
+  结论: [DecidableEq n] [加法带幺群 α]
   证明: transpose_eq_diagonal
 
 Depends on / 依赖: transpose_eq_diagonal
@@ -1737,7 +1737,7 @@ theorem submatrix_diagonal
 
 中文:
 定理 submatrix_diagonal
-  结论: [Zero α] [DecidableEq m] [DecidableEq l] (d : m -> α) (e : l -> m)
+  结论: [零 α] [DecidableEq m] [DecidableEq l] (d : m -> α) (e : l -> m)
   证明: ext fun i j => by
     rw [submatrix_apply]
     by_cases h : i = j
@@ -1764,7 +1764,7 @@ theorem submatrix_one
 
 中文:
 定理 submatrix_one
-  结论: [Zero α] [One α] [DecidableEq m] [DecidableEq l] (e : l -> m)
+  结论: [零 α] [幺 α] [DecidableEq m] [DecidableEq l] (e : l -> m)
   证明: submatrix_diagonal _ e he
 
 Depends on / 依赖: submatrix_diagonal
@@ -1784,7 +1784,7 @@ theorem diag_submatrix
 
 中文:
 定理 diag_submatrix
-  条件: (A : Matrix m m α) (e : l -> m)
+  条件: (A : 矩阵 m m α) (e : l -> m)
   结论: diag (A.submatrix e e) = A.diag ∘ e
   证明: rfl
 -/
@@ -1808,7 +1808,7 @@ theorem submatrix_diagonal_embedding
 
 中文:
 定理 submatrix_diagonal_embedding
-  结论: [Zero α] [DecidableEq m] [DecidableEq l] (d : m -> α)
+  结论: [零 α] [DecidableEq m] [DecidableEq l] (d : m -> α)
   证明: submatrix_diagonal d e e.injective
 
 @[simp]
@@ -1832,7 +1832,7 @@ theorem submatrix_diagonal_equiv
 
 中文:
 定理 submatrix_diagonal_equiv
-  条件: [Zero α] [DecidableEq m] [DecidableEq l] (d : m -> α) (e : l ≃ m)
+  条件: [零 α] [DecidableEq m] [DecidableEq l] (d : m -> α) (e : l ≃ m)
   证明: submatrix_diagonal d e e.injective
 
 @[simp]
@@ -1856,7 +1856,7 @@ theorem submatrix_one_embedding
 
 中文:
 定理 submatrix_one_embedding
-  条件: [Zero α] [One α] [DecidableEq m] [DecidableEq l] (e : l ↪ m)
+  条件: [零 α] [幺 α] [DecidableEq m] [DecidableEq l] (e : l ↪ m)
   证明: submatrix_one e e.injective
 
 @[simp]
@@ -1878,7 +1878,7 @@ theorem submatrix_one_equiv
 
 中文:
 定理 submatrix_one_equiv
-  条件: [Zero α] [One α] [DecidableEq m] [DecidableEq l] (e : l ≃ m)
+  条件: [零 α] [幺 α] [DecidableEq m] [DecidableEq l] (e : l ≃ m)
   证明: submatrix_one e e.injective
 
 Depends on / 依赖: e.injective, injective, submatrix_one

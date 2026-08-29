@@ -62,11 +62,11 @@ class AddTorsor
     - vadd_vsub' : forall (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
 
 中文:
-类 AddTorsor
-  参数: (G : outParam 类型) (P : 类型) [AddGroup G]
-  继承: AddAction G P, 
+类 加法Torsor
+  参数: (G : outParam 类型) (P : 类型) [加法群 G]
+  继承: 加法作用 G P, 
   公理与运算 (3 个):
-    - [nonempty : Nonempty P]
+    - [nonempty : 非空 P]
     - vsub_vadd' : 对任意 p₁ p₂ : P, (p₁ -ᵥ p₂ : G) +ᵥ p₂ = p₁
     - vadd_vsub' : 对任意 (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
 -/
@@ -97,10 +97,10 @@ class Torsor
 
 中文:
 类 Torsor
-  参数: (G : outParam 类型) (P : 类型) [Group G]
-  继承: MulAction G P, SDiv G P
+  参数: (G : outParam 类型) (P : 类型) [群 G]
+  继承: 乘法作用 G P, SDiv G P
   公理与运算 (3 个):
-    - [nonempty : Nonempty P]
+    - [nonempty : 非空 P]
     - sdiv_smul' : 对任意 p₁ p₂ : P, (p₁ /ₛ p₂ : G) • p₂ = p₁
     - smul_sdiv' : 对任意 (g : G) (p : P), (g • p) /ₛ p = g
 -/
@@ -132,8 +132,8 @@ instance Group.instTorsor
 @[deprecated (since := "2026-05-04")] alias addGroupIsAddTorsor := AddGroup.instAddTorsor
 
 中文:
-实例 Group.instTorsor
-  签名: (G : 类型) [Group G]
+实例 群.instTorsor
+  签名: (G : 类型) [群 G]
   定义体: Div.div
   sdiv_smul' := div_mul_cancel
   smul_sdiv' := mul_div_cancel_right
@@ -163,7 +163,7 @@ theorem sdiv_eq_div
 
 中文:
 定理 sdiv_eq_div
-  条件: {G : 类型} [Group G] (g₁ g₂ : G)
+  条件: {G : 类型} [群 G] (g₁ g₂ : G)
   结论: g₁ /ₛ g₂ = g₁ / g₂
   证明: rfl
 
@@ -290,7 +290,7 @@ theorem smul_right_injective'
 中文:
 定理 smul_right_injective'
   条件: (p : P)
-  结论: Function.Injective ((· • p) : G -> P)
+  结论: 函数.单射 ((· • p) : G -> P)
   证明: fun _ _ =>
   smul_right_cancel p
 -/
@@ -991,7 +991,7 @@ theorem pointReflection_involutive
 中文:
 定理 pointReflection_involutive
   条件: (x : P)
-  结论: Involutive (pointReflection x : P -> P)
+  结论: 对合 (pointReflection x : P -> P)
   证明: fun y =>
 (Equiv.eq_symm_apply _).1 by rw [pointReflection_symm]
 
@@ -1015,7 +1015,7 @@ theorem Torsor.subsingleton_iff
 
 中文:
 定理 Torsor.subsingleton_iff
-  条件: (G P : 类型) [Group G] [Torsor G P]
+  条件: (G P : 类型) [群 G] [Torsor G P]
   证明: by
   inhabit P
   exact (Equiv.smulConst default).subsingleton_congr

@@ -56,11 +56,11 @@ class CompletableTopField
     - nice : forall F : Filter K, Cauchy F -> 𝓝 0 ⊓ F = ⊥ -> Cauchy (map (fun x => x⁻¹) F)
 
 中文:
-类 CompletableTopField
-  参数: : 命题 extends T0Space K where
-  继承: T0Space K
+类 余mpletableTopField
+  参数: : 命题 extends T0空间 K where
+  继承: T0空间 K
   公理与运算 (1 个):
-    - nice : 对任意 F : Filter K, Cauchy F -> 𝓝 0 ⊓ F = ⊥ -> Cauchy (map (fun x => x⁻¹) F)
+    - nice : 对任意 F : 滤子 K, Cauchy F -> 𝓝 0 ⊓ F = ⊥ -> Cauchy (map (fun x => x⁻¹) F)
 -/
 class CompletableTopField : Prop extends T0Space K where
   nice : forall F : Filter K, Cauchy F -> 𝓝 0 ⊓ F = ⊥ -> Cauchy (map (fun x => x⁻¹) F)
@@ -114,7 +114,7 @@ theorem continuous_hatInv
 
 中文:
 定理 continuous_hatInv
-  条件: [CompletableTopField K] {x : hat K} (h : x != 0)
+  条件: [余mpletableTopField K] {x : hat K} (h : x != 0)
   证明: by
   refine isDenseInducing_coe.continuousAt_extend ?_
   apply mem_of_superset (compl_singleton_mem_nhds h)
@@ -161,7 +161,7 @@ instance instInvCompletion
 
 中文:
 实例 instInvCompletion
-  签名: : Inv (hat K)
+  签名: : 取逆 (hat K)
   定义体: ⟨fun x => if x = 0 then 0 else hatInv x⟩
 
 Depends on / 依赖: hatInv
@@ -315,7 +315,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field (hat K) where
+  签名: : 域 (hat K) where
   定义体: fun x x_ne => by simp only [Inv.inv, if_neg x_ne, mul_hatInv_cancel x_ne]
   inv_zero := by simp only [Inv.inv, ite_true]
   -- TODO: use a better defeq
@@ -353,7 +353,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalDivisionRing (hat K)
+  签名: 是TopologicalDivision环 (hat K)
   定义体: { Completion.topologicalRing with
     continuousAt_inv₀ := by
       intro x x_ne
@@ -400,8 +400,8 @@ instance Subfield.completableTopField
     rw [← Filter.
 
 中文:
-实例 Subfield.completableTopField
-  签名: (K : Subfield L)
+实例 子域.completableTopField
+  签名: (K : 子域 L)
   定义体: by
     let i : K ->+* L := K.subtype
     have hi : IsUniformInducing i := isUniformEmbedding_subtype_val.isUniformInducing
@@ -452,7 +452,7 @@ theorem IsUniformInducing.completableTopField
   apply CompletableTopField.nice _ F_cau
 
 中文:
-定理 IsUniformInducing.completableTopField
+定理 是UniformInducing.completableTopField
   证明: by
   refine CompletableTopField.mk (fun F F_cau inf_F => ?_)
   rw [← IsUniformInducing.cauchy_map_iff hf] at F_cau ⊢

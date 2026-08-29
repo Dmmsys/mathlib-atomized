@@ -36,7 +36,7 @@ definition equivSubtype
 
 中文:
 定义 equivSubtype
-  签名: : MaximalSpectrum R ≃ {I : Ideal R // I.IsMaximal} where
+  签名: : 极大谱 R ≃ {I : 理想 R // I.是极大} where
   定义体: ⟨I.asIdeal, I.2⟩
   invFun I := ⟨I, I.2⟩
 
@@ -58,7 +58,7 @@ theorem range_asIdeal
 
 中文:
 定理 range_asIdeal
-  结论: Set.range MaximalSpectrum.asIdeal = {J : Ideal R | J.IsMaximal}
+  结论: 集合.range 极大谱.asIdeal = {J : 理想 R | J.是极大}
   证明: Set.ext fun J =>
 ⟨fun hJ => let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr hj ▸ j.isMaximal,
       fun hJ => Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
@@ -82,8 +82,8 @@ instance [Nontrivial
   ⟨⟨I, hI⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nonempty MaximalSpectrum R
+实例 [非平凡
+  签名: R] : 非空 极大谱 R
   定义体: let ⟨I, hI⟩ := Ideal.exists_maximal R
   ⟨⟨I, hI⟩⟩
 
@@ -103,7 +103,7 @@ definition toPrimeSpectrum
 
 中文:
 定义 toPrimeSpectrum
-  签名: (x : MaximalSpectrum R)
+  签名: (x : 极大谱 R)
   定义体: ⟨x.asIdeal, x.isMaximal.isPrime⟩
 
 Depends on / 依赖: asIdeal, isMaximal, isPrime, x.asIdeal, x.isMaximal.isPrime
@@ -122,7 +122,7 @@ theorem toPrimeSpectrum_injective
 
 中文:
 定理 toPrimeSpectrum_injective
-  结论: (@toPrimeSpectrum R _).Injective
+  结论: (@toPrimeSpectrum R _).单射
   证明: fun ⟨_, _⟩ ⟨_, _⟩ h => by
   simpa only [MaximalSpectrum.mk.injEq] using! PrimeSpectrum.ext_iff.mp h
 
@@ -142,7 +142,7 @@ theorem isCoprime_of_ne
 
 中文:
 定理 isCoprime_of_ne
-  条件: {I J : MaximalSpectrum R} (h : I != J)
+  条件: {I J : 极大谱 R} (h : I != J)
   结论: IsCoprime I.1 J.1
   证明: Ideal.isCoprime_iff_sup_eq.mpr I.2.coprime_of_ne J.2 mt MaximalSpectrum.ext h
 

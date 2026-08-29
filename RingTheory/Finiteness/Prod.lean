@@ -38,8 +38,8 @@ theorem FG.prod
       by rw [LinearMap.span_inl_union_inr, htb.2, htc.2]⟩
 
 中文:
-定理 FG.prod
-  条件: {sb : Submodule R M} {sc : Submodule R P} (hsb : sb.FG) (hsc : sc.FG)
+定理 FG.乘积
+  条件: {sb : 子模 R M} {sc : 子模 R P} (hsb : sb.FG) (hsc : sc.FG)
   证明: let ⟨tb, htb⟩ := fg_def.1 hsb
   let ⟨tc, htc⟩ := fg_def.1 hsc
   fg_def.2
@@ -74,8 +74,8 @@ instance prod
     exact hM.1.prod hN.1⟩
 
 中文:
-实例 prod
-  签名: [hM : Module.Finite R M] [hN : Module.Finite R N]
+实例 乘积
+  签名: [hM : 模.有限 R M] [hN : 模.有限 R N]
   定义体: ⟨by
     rw [← Submodule.prod_top]
     exact hM.1.prod hN.1⟩

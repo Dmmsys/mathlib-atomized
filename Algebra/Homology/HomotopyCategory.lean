@@ -39,7 +39,7 @@ definition homotopic
 
 中文:
 定义 homotopic
-  签名: : HomRel (HomologicalComplex V c)
+  签名: : HomRel (同调复形 V c)
   定义体: fun _ _ f g => Nonempty (Homotopy f g)
 
 Depends on / 依赖: Homotopy, Nonempty
@@ -60,7 +60,7 @@ instance homotopy_congruence
 
 中文:
 实例 homotopy_congruence
-  签名: : Congruence (homotopic V c) where
+  签名: : 余ngruence (homotopic V c) where
   定义体: { refl := fun C => ⟨Homotopy.refl C⟩
       symm := fun ⟨w⟩ => ⟨w.symm⟩
       trans := fun ⟨w₁⟩ ⟨w₂⟩ => ⟨w₁.trans w₂⟩ }
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (HomotopyCategory V c)
+  签名: 范畴 (HomotopyCategory V c)
   定义体: inferInstanceAs Category (CategoryTheory.Quotient (homotopic V c))
 
 Depends on / 依赖: Category, CategoryTheory, CategoryTheory.Quotient, Quotient, homotopic
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (CategoryTheory.Quotient (homotopic V c))
+  签名: 预加性 (范畴论.商 (homotopic V c))
   定义体: Quotient.preadditive _ (by
     rintro _ _ _ _ _ _ ⟨h⟩ ⟨h'⟩
     exact ⟨Homotopy.add h h'⟩)
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (HomotopyCategory V c)
+  签名: 预加性 (HomotopyCategory V c)
   定义体: inferInstanceAs Preadditive (CategoryTheory.Quotient (homotopic V c))
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient, Preadditive, Quotient, homotopic
@@ -165,7 +165,7 @@ definition quotient
 
 中文:
 定义 quotient
-  签名: : HomologicalComplex V c ⥤ HomotopyCategory V c
+  签名: : 同调复形 V c ⥤ HomotopyCategory V c
   定义体: CategoryTheory.Quotient.functor _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.functor, Quotient, functor
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V c).Full
+  签名: (quotient V c).满
   定义体: Quotient.full_functor _
 
 Depends on / 依赖: Quotient, Quotient.full_functor, full_functor
@@ -200,7 +200,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V c).EssSurj
+  签名: (quotient V c).本质满射
   定义体: Quotient.essSurj_functor _
 
 Depends on / 依赖: Quotient, Quotient.essSurj_functor, essSurj_functor
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V c).Additive
+  签名: (quotient V c).加性
 -/
 instance : (quotient V c).Additive where
 
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Additive (Quotient.functor (homotopic V c))
+  签名: 函子.加性 (商.functor (homotopic V c))
 -/
 instance : Functor.Additive (Quotient.functor (homotopic V c)) where
 
@@ -242,8 +242,8 @@ instance [Linear
   body: Quotient.linear R (homotopic V c) (fun _ _ _ _ _ h => ⟨h.some.smul _⟩)
 
 中文:
-实例 [Linear
-  签名: R V] : Linear R (HomotopyCategory V c)
+实例 [线性
+  签名: R V] : 线性 R (HomotopyCategory V c)
   定义体: Quotient.linear R (homotopic V c) (fun _ _ _ _ _ h => ⟨h.some.smul _⟩)
 
 Depends on / 依赖: Quotient, Quotient.linear, h.some.smul, homotopic, linear
@@ -260,8 +260,8 @@ instance [Linear
   body: Quotient.linear_functor _ (homotopic V c) _
 
 中文:
-实例 [Linear
-  签名: R V] : Functor.Linear R (quotient V c)
+实例 [线性
+  签名: R V] : 函子.线性 R (quotient V c)
   定义体: Quotient.linear_functor _ (homotopic V c) _
 
 Depends on / 依赖: Quotient, Quotient.linear_functor, homotopic, linear_functor
@@ -280,8 +280,8 @@ instance [HasZeroObject
   body: ⟨(quotient V c).obj 0⟩
 
 中文:
-实例 [HasZeroObject
-  签名: V] : Inhabited (HomotopyCategory V c)
+实例 [有ZeroObject
+  签名: V] : 可居 (HomotopyCategory V c)
   定义体: ⟨(quotient V c).obj 0⟩
 
 Depends on / 依赖: quotient
@@ -299,8 +299,8 @@ instance [HasZeroObject
     rw [IsZero.iff_id_eq_zero]; rw [← (quotient V c).map_id]; rw [id_zero]; rw [Functor.map_zero]⟩
 
 中文:
-实例 [HasZeroObject
-  签名: V] : HasZeroObject (HomotopyCategory V c)
+实例 [有ZeroObject
+  签名: V] : 有ZeroObject (HomotopyCategory V c)
   定义体: ⟨(quotient V c).obj 0, by
     rw [IsZero.iff_id_eq_zero]; rw [← (quotient V c).map_id]; rw [id_zero]; rw [Functor.map_zero]⟩
 
@@ -349,7 +349,7 @@ theorem quotient_obj_as
 
 中文:
 定理 quotient_obj_as
-  条件: (C : HomologicalComplex V c)
+  条件: (C : 同调复形 V c)
   结论: ((quotient V c).obj C).as = C
   证明: rfl
 
@@ -389,7 +389,7 @@ theorem quot_mk_eq_quotient_map
 
 中文:
 定理 quot_mk_eq_quotient_map
-  条件: {C D : HomologicalComplex V c} (f : C ⟶ D)
+  条件: {C D : 同调复形 V c} (f : C ⟶ D)
   证明: rfl
 -/
 theorem quot_mk_eq_quotient_map {C D : HomologicalComplex V c} (f : C ⟶ D) :
@@ -405,7 +405,7 @@ theorem eq_of_homotopy
 
 中文:
 定理 eq_of_homotopy
-  条件: {C D : HomologicalComplex V c} (f g : C ⟶ D) (h : Homotopy f g)
+  条件: {C D : 同调复形 V c} (f g : C ⟶ D) (h : 同伦 f g)
   证明: CategoryTheory.Quotient.sound _ ⟨h⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, Quotient
@@ -424,7 +424,7 @@ definition homotopyOfEq
 
 中文:
 定义 homotopyOfEq
-  签名: {C D : HomologicalComplex V c} (f g : C ⟶ D)
+  签名: {C D : 同调复形 V c} (f g : C ⟶ D)
   定义体: ((Quotient.functor_map_eq_iff _ _ _).mp w).some
 
 Depends on / 依赖: Quotient, Quotient.functor_map_eq_iff, functor_map_eq_iff
@@ -444,7 +444,7 @@ lemma quotient_map_eq_zero_iff
 
 中文:
 引理 quotient_map_eq_zero_iff
-  条件: {C D : HomologicalComplex V c} (f : C ⟶ D)
+  条件: {C D : 同调复形 V c} (f : C ⟶ D)
   证明: ⟨fun h => ⟨homotopyOfEq _ _ (by simpa using h)⟩,
     fun ⟨h⟩ => by simpa using eq_of_homotopy _ _ h⟩
 
@@ -468,7 +468,7 @@ definition homotopyOutMap
 
 中文:
 定义 homotopyOutMap
-  签名: {C D : HomologicalComplex V c} (f : C ⟶ D)
+  签名: {C D : 同调复形 V c} (f : C ⟶ D)
   定义体: by
   apply homotopyOfEq
   simp
@@ -516,7 +516,7 @@ definition isoOfHomotopyEquiv
 
 中文:
 定义 isoOfHomotopyEquiv
-  签名: {C D : HomologicalComplex V c} (f : HomotopyEquiv C D)
+  签名: {C D : 同调复形 V c} (f : 同伦等价 C D)
   定义体: (quotient V c).map f.hom
   inv := (quotient V c).map f.inv
   hom_inv_id := by
@@ -557,7 +557,7 @@ definition homotopyEquivOfIso
 
 中文:
 定义 homotopyEquivOfIso
-  签名: {C D : HomologicalComplex V c}
+  签名: {C D : 同调复形 V c}
   定义体: Quot.out i.hom
   inv := Quot.out i.inv
   homotopyHomInvId :=
@@ -665,7 +665,7 @@ lemma isZero_quotient_obj_iff
 
 中文:
 引理 isZero_quotient_obj_iff
-  条件: (C : HomologicalComplex V c)
+  条件: (C : 同调复形 V c)
   证明: by
   rw [IsZero.iff_id_eq_zero]
   constructor
@@ -764,8 +764,8 @@ definition Functor.mapHomotopyCategory
 @[simp]
 
 中文:
-定义 Functor.mapHomotopyCategory
-  签名: (F : V ⥤ W) [F.Additive] (c : ComplexShape ι)
+定义 函子.mapHomotopyCategory
+  签名: (F : V ⥤ W) [F.加性] (c : 余mplexShape ι)
   定义体: CategoryTheory.Quotient.lift _ (F.mapHomologicalComplex c ⋙ HomotopyCategory.quotient W c)
     (fun _ _ _ _ ⟨h⟩ => HomotopyCategory.eq_of_homotopy _ _ (F.mapHomotopy h))
 
@@ -788,8 +788,8 @@ lemma Functor.mapHomotopyCategory_map
   proof: rfl
 
 中文:
-引理 Functor.mapHomotopyCategory_map
-  结论: (F : V ⥤ W) [F.Additive] {c : ComplexShape ι}
+引理 函子.mapHomotopyCategory_map
+  结论: (F : V ⥤ W) [F.加性] {c : 余mplexShape ι}
   证明: rfl
 -/
 lemma Functor.mapHomotopyCategory_map (F : V ⥤ W) [F.Additive] {c : ComplexShape ι}
@@ -807,8 +807,8 @@ definition Functor.mapHomotopyCategoryFactors
   body: CategoryTheory.Quotient.lift.isLift _ _ _
 
 中文:
-定义 Functor.mapHomotopyCategoryFactors
-  签名: (F : V ⥤ W) [F.Additive] (c : ComplexShape ι)
+定义 函子.mapHomotopyCategoryFactors
+  签名: (F : V ⥤ W) [F.加性] (c : 余mplexShape ι)
   定义体: CategoryTheory.Quotient.lift.isLift _ _ _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.lift.isLift, Quotient, isLift
@@ -839,8 +839,8 @@ definition NatTrans.mapHomotopyCategory
 @[simp]
 
 中文:
-定义 NatTrans.mapHomotopyCategory
-  签名: {F G : V ⥤ W} [F.Additive] [G.Additive] (α : F ⟶ G)
+定义 自然变换.mapHomotopyCategory
+  签名: {F G : V ⥤ W} [F.加性] [G.加性] (α : F ⟶ G)
   定义体: (HomotopyCategory.quotient W c).map ((NatTrans.mapHomologicalComplex α c).app C.as)
   naturality := by
     rintro ⟨C⟩ ⟨D⟩ ⟨f : C ⟶ D⟩
@@ -871,8 +871,8 @@ theorem NatTrans.mapHomotopyCategory_id
 @[simp]
 
 中文:
-定理 NatTrans.mapHomotopyCategory_id
-  条件: (c : ComplexShape ι) (F : V ⥤ W) [F.Additive]
+定理 自然变换.mapHomotopyCategory_id
+  条件: (c : 余mplexShape ι) (F : V ⥤ W) [F.加性]
   证明: by cat_disch
 
 @[simp]
@@ -892,8 +892,8 @@ theorem NatTrans.mapHomotopyCategory_comp
   proof: by cat_disch
 
 中文:
-定理 NatTrans.mapHomotopyCategory_comp
-  结论: (c : ComplexShape ι) {F G H : V ⥤ W} [F.Additive]
+定理 自然变换.mapHomotopyCategory_comp
+  结论: (c : 余mplexShape ι) {F G H : V ⥤ W} [F.加性]
   证明: by cat_disch
 
 Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.smul_, cat_disch, leftHomologyMap
@@ -923,8 +923,8 @@ definition Functor.mapHomotopyCategoryCompIso
     (HomotopyCategory.quotient W' c))
 
 中文:
-定义 Functor.mapHomotopyCategoryCompIso
-  签名: {W' : 类型} [Category W'] [Preadditive W']
+定义 函子.mapHomotopyCategoryCompIso
+  签名: {W' : 类型} [范畴 W'] [预加性 W']
   定义体: Quotient.natIsoLift _ (isoWhiskerRight (Functor.mapHomologicalComplexCompIso e c)
     (HomotopyCategory.quotient W' c))
 
@@ -950,7 +950,7 @@ definition Functor.preimageHomotopy
   comm i := F.map_injective (by simp [dsimp% H.comm i, dNext, prevD])
 
 中文:
-定义 Functor.preimageHomotopy
+定义 函子.preimageHomotopy
   定义体: F.preimage (H.hom i j)
   zero i j hij := F.map_injective (by simp only [map_preimage, Functor.map_zero, H.zero i j hij])
   comm i := F.map_injective (by simp [dsimp% H.comm i, dNext, prevD])

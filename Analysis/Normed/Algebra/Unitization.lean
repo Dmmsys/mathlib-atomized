@@ -168,7 +168,7 @@ theorem splitMul_injective
 
 中文:
 定理 splitMul_injective
-  结论: Function.Injective (splitMul 𝕜 A)
+  结论: 函数.单射 (splitMul 𝕜 A)
   证明: splitMul_injective_of_clm_mul_injective (isometry_mul 𝕜 A).injective
 
 Depends on / 依赖: injective, isometry_mul, splitMul_injective_of_clm_mul_injective
@@ -190,7 +190,7 @@ abbreviation normedRingAux
 
 中文:
 缩写 normedRingAux
-  签名: : NormedRing (Unitization 𝕜 A)
+  签名: : 赋范环 (Unitization 𝕜 A)
   定义体: NormedRing.induced (Unitization 𝕜 A) (𝕜 × (A ->L[𝕜] A)) (splitMul 𝕜 A) (splitMul_injective 𝕜 A)
 
 Depends on / 依赖: NormedRing, NormedRing.induced, Unitization, induced, splitMul, splitMul_injective
@@ -210,7 +210,7 @@ abbreviation normedAlgebraAux
 
 中文:
 缩写 normedAlgebraAux
-  签名: : NormedAlgebra 𝕜 (Unitization 𝕜 A)
+  签名: : 赋范代数 𝕜 (Unitization 𝕜 A)
   定义体: NormedAlgebra.induced 𝕜 (Unitization 𝕜 A) (𝕜 × (A ->L[𝕜] A)) (splitMul 𝕜 A)
 
 Depends on / 依赖: NormedAlgebra, NormedAlgebra.induced, Unitization, induced, splitMul
@@ -440,7 +440,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (Unitization 𝕜 A)
+  签名: : 一致空间 (Unitization 𝕜 A)
   定义体: instUniformSpaceProd.comap (addEquiv 𝕜 A)
 
 Depends on / 依赖: addEquiv, instUniformSpaceProd, instUniformSpaceProd.comap
@@ -476,7 +476,7 @@ instance instBornology
 
 中文:
 实例 instBornology
-  签名: : Bornology (Unitization 𝕜 A)
+  签名: : 有界结构 (Unitization 𝕜 A)
   定义体: Bornology.induced addEquiv 𝕜 A
 
 Depends on / 依赖: Bornology, Bornology.induced, addEquiv, induced
@@ -514,7 +514,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace 𝕜] [CompleteSpace A]
+  签名: [完备空间 𝕜] [完备空间 A]
   定义体: uniformEquivProd.completeSpace_iff.2 .prod
 
 Depends on / 依赖: completeSpace_iff, uniformEquivProd, uniformEquivProd.completeSpace_iff
@@ -533,7 +533,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: : T2Space (Unitization 𝕜 A)
+  签名: : T2空间 (Unitization 𝕜 A)
   定义体: Unitization.uniformEquivProd.symm.toHomeomorph.t2Space
 
 Depends on / 依赖: Unitization, Unitization.uniformEquivProd.symm.toHomeomorph.t2Space, t2Space, toHomeomorph, uniformEquivProd
@@ -552,7 +552,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: : MetricSpace (Unitization 𝕜 A)
+  签名: : 度量空间 (Unitization 𝕜 A)
   定义体: (normedRingAux.toMetricSpace.replaceUniformity uniformity_eq_aux).replaceBornology
     fun s => Filter.ext_iff.1 cobounded_eq_aux (sᶜ)
 
@@ -574,7 +574,7 @@ instance instNormedRing
 
 中文:
 实例 instNormedRing
-  签名: : NormedRing (Unitization 𝕜 A) where
+  签名: : 赋范环 (Unitization 𝕜 A) where
   定义体: normedRingAux.dist_eq
   norm_mul_le := normedRingAux.norm_mul_le
   norm := normedRingAux.norm
@@ -596,7 +596,7 @@ instance instNormedAlgebra
 
 中文:
 实例 instNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (Unitization 𝕜 A) where
+  签名: : 赋范代数 𝕜 (Unitization 𝕜 A) where
   定义体: by rw [norm_def, map_smul, norm_smul, ← norm_def]
 
 Depends on / 依赖: map_smul, norm_def, norm_smul
@@ -615,7 +615,7 @@ instance instNormOneClass
 
 中文:
 实例 instNormOneClass
-  签名: : NormOneClass (Unitization 𝕜 A) where
+  签名: : NormOne类 (Unitization 𝕜 A) where
   定义体: by simpa only [norm_eq_sup, fst_one, norm_one, snd_one, map_one, map_zero,
       add_zero, sup_eq_left] using opNorm_le_bound _ zero_le_one fun x => by simp
 
@@ -679,7 +679,7 @@ lemma isometry_inr
 
 中文:
 引理 isometry_inr
-  结论: Isometry ((↑) : A -> Unitization 𝕜 A)
+  结论: 等距 ((↑) : A -> Unitization 𝕜 A)
   证明: AddMonoidHomClass.isometry_of_norm (inrNonUnitalAlgHom 𝕜 A) norm_inr
 
 @[fun_prop]
@@ -700,7 +700,7 @@ theorem continuous_inr
 
 中文:
 定理 continuous_inr
-  结论: Continuous (inr : A -> Unitization 𝕜 A)
+  结论: 连续 (inr : A -> Unitization 𝕜 A)
   证明: isometry_inr.continuous
 
 Depends on / 依赖: continuous, isometry_inr, isometry_inr.continuous
@@ -768,7 +768,7 @@ theorem uniformContinuous_fst
 
 中文:
 定理 uniformContinuous_fst
-  结论: UniformContinuous (fun x : Unitization 𝕜 A => x.fst)
+  结论: 一致连续 (fun x : Unitization 𝕜 A => x.fst)
   证明: uniformContinuous_fst.comp Unitization.uniformEquivProd.uniformContinuous
 -/
 protected theorem uniformContinuous_fst : UniformContinuous (fun x : Unitization 𝕜 A => x.fst) :=
@@ -786,7 +786,7 @@ theorem uniformContinuous_snd
 
 中文:
 定理 uniformContinuous_snd
-  结论: UniformContinuous (fun x : Unitization 𝕜 A => x.snd)
+  结论: 一致连续 (fun x : Unitization 𝕜 A => x.snd)
   证明: uniformContinuous_snd.comp Unitization.uniformEquivProd.uniformContinuous
 
 @[fun_prop]
@@ -807,7 +807,7 @@ theorem continuous_fst
 
 中文:
 定理 continuous_fst
-  结论: Continuous (fun x : Unitization 𝕜 A => x.fst)
+  结论: 连续 (fun x : Unitization 𝕜 A => x.fst)
   证明: Unitization.uniformContinuous_fst.continuous
 
 @[fun_prop]
@@ -826,7 +826,7 @@ theorem continuous_snd
 
 中文:
 定理 continuous_snd
-  结论: Continuous (fun x : Unitization 𝕜 A => x.snd)
+  结论: 连续 (fun x : Unitization 𝕜 A => x.snd)
   证明: Unitization.uniformContinuous_snd.continuous
 -/
 protected theorem continuous_snd : Continuous (fun x : Unitization 𝕜 A => x.snd) :=

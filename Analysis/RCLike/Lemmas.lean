@@ -29,7 +29,7 @@ lemma convex_RCLike_iff_convex_real
 
 中文:
 引理 convex_RCLike_iff_convex_real
-  结论: [AddCommMonoid E] [Module K E] [Module 实数 E]
+  结论: [加法交换幺半群 E] [模 K E] [模 实数 E]
   证明: ⟨Convex.lift Real,
   fun hs => convex_of_nonneg_surjective_algebraMap _ (fun _ => nonneg_iff_exists_ofReal.mp) hs⟩
 
@@ -52,7 +52,7 @@ theorem ofReal_eval
   proof: (@aeval_algebraMap_apply_eq_algebraMap_eval Real K _ _ _ x p).symm
 
 中文:
-定理 ofReal_eval
+定理 of实数_eval
   条件: (p : 实数[X]) (x : 实数)
   结论: (↑(p.eval x) : K) = aeval (↑x) p
   证明: (@aeval_algebraMap_apply_eq_algebraMap_eval Real K _ _ _ x p).symm
@@ -78,7 +78,7 @@ lemma RCLike.span_one_I
 
 中文:
 引理 RCLike.span_one_I
-  结论: Submodule.span 实数 (M := K) {1, I} = ⊤
+  结论: 子模.span 实数 (M := K) {1, I} = ⊤
   证明: by
   suffices forall x : K, exists a b : Real, a • 1 + b • I = x by
     simpa [Submodule.eq_top_iff', Submodule.mem_span_pair]
@@ -107,7 +107,7 @@ lemma RCLike.rank_le_two
 
 中文:
 引理 RCLike.rank_le_two
-  结论: Module.rank 实数 K <= 2
+  结论: 模.rank 实数 K <= 2
   证明: calc
     _ = Module.rank Real ↥(Submodule.span Real ({1, I} : Set K)) := by rw [span_one_I]; simp
     _ <= #({1, I} : Finset K) := by
@@ -139,7 +139,7 @@ lemma RCLike.finrank_le_two
 
 中文:
 引理 RCLike.finrank_le_two
-  结论: Module.finrank 实数 K <= 2
+  结论: 模.finrank 实数 K <= 2
   证明: Module.finrank_le_of_rank_le rank_le_two _
 
 Depends on / 依赖: Module, Module.finrank_le_of_rank_le, finrank_le_of_rank_le, rank_le_two
@@ -165,7 +165,7 @@ instance rclike_to_real
 
 中文:
 实例 rclike_to_real
-  签名: : FiniteDimensional 实数 K
+  签名: : 有限维 实数 K
   定义体: ⟨{1, I}, by simp [span_one_I]⟩
 
 Depends on / 依赖: span_one_I
@@ -190,8 +190,8 @@ theorem proper_rclike
 
 中文:
 定理 proper_rclike
-  条件: [FiniteDimensional K E]
-  结论: 命题erSpace E
+  条件: [有限维 K E]
+  结论: 真空间 E
   证明: by
   -- Using `have` not `let` since it is only existence of `NormedSpace` structure that we need.
   have : NormedSpace Real E := .restrictScalars Real K E
@@ -216,7 +216,7 @@ instance RCLike.properSpace_submodule
 
 中文:
 实例 RCLike.properSpace_submodule
-  签名: (S : Submodule K E) [FiniteDimensional K S]
+  签名: (S : 子模 K E) [有限维 K S]
   定义体: proper_rclike K S
 
 Depends on / 依赖: proper_rclike
@@ -293,7 +293,7 @@ theorem ofRealCLM_norm
   proof: LinearIsometry.norm_toContinuousLinearMap _
 
 中文:
-定理 ofRealCLM_norm
+定理 of实数CLM_norm
   结论: ‖(of实数CLM : 实数 ->L[实数] K)‖ = 1
   证明: LinearIsometry.norm_toContinuousLinearMap _
 
@@ -337,7 +337,7 @@ lemma aeval_ofReal
   proof: aeval_algHom_apply RCLike.ofRealAm x p
 
 中文:
-引理 aeval_ofReal
+引理 aeval_of实数
   条件: (p : 实数[X]) (x : 实数)
   结论: aeval (RCLike.of实数 x : K) p = eval x p
   证明: aeval_algHom_apply RCLike.ofRealAm x p

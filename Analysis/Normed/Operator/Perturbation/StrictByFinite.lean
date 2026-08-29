@@ -94,7 +94,7 @@ have : FiniteDimensional 𝕜 S := .of_fg A_cofg.fg_of_isCompl S_compl_A.symm
 
 中文:
 定理 step1
-  结论: (u : E ->L[𝕜] F) (A : Submodule 𝕜 E)
+  结论: (u : E ->L[𝕜] F) (A : 子模 𝕜 E)
   证明: by
   -- Fix `S` an algebraic complement of `A` containing `u.ker`. It has finite dimension.
   rcases h_ker.exists_isCompl with ⟨S, ker_le_S, S_compl_A⟩
@@ -164,7 +164,7 @@ theorem step2
 
 中文:
 定理 step2
-  结论: (u : E ->L[𝕜] F) (A : Submodule 𝕜 E)
+  结论: (u : E ->L[𝕜] F) (A : 子模 𝕜 E)
   证明: by
   -- To reduce to step 1, it suffices to show that `IsStrictMap u → IsClosed (map u A)`.
   suffices IsStrictMap u -> IsClosed ((u.domRestrict A).range : Set F) by grind only [step1]
@@ -205,7 +205,7 @@ theorem step3
 
 中文:
 定理 step3
-  结论: (u : E ->L[𝕜] F) (A : Submodule 𝕜 E)
+  结论: (u : E ->L[𝕜] F) (A : 子模 𝕜 E)
   证明: by
   -- Let `F' := u.range` and `i : F' →L[𝕜] F` be the inclusion map. By assumption,
   -- `i` is a closed embedding.
@@ -251,7 +251,7 @@ theorem step4
 
 中文:
 定理 step4
-  结论: (u : E ->L[𝕜] F) (A : Submodule 𝕜 E) (A_closed : IsClosed (A : Set E))
+  结论: (u : E ->L[𝕜] F) (A : 子模 𝕜 E) (A_closed : 是闭集 (A : 集合 E))
   证明: by
   -- To reduce to step 3, it suffices to show that, if `u.domRestrict A` has closed range,
   -- then so does `u`.

@@ -37,8 +37,8 @@ instance Module.Free.directSum
   body: Module.Free.dfinsupp R M
 
 中文:
-实例 Module.Free.directSum
-  签名: [对任意 i : ι, Module.Free R (M i)]
+实例 模.自由.directSum
+  签名: [对任意 i : ι, 模.自由 R (M i)]
   定义体: Module.Free.dfinsupp R M
 
 Depends on / 依赖: Module, Module.Free.dfinsupp, dfinsupp

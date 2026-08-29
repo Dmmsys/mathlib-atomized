@@ -55,7 +55,7 @@ definition interedges
 
 中文:
 定义 interedges
-  签名: (s : Finset α) (t : Finset β)
+  签名: (s : 有限集 α) (t : 有限集 β)
   定义体: {e in s ×ˢ t | r e.1 e.2}
 -/
 def interedges (s : Finset α) (t : Finset β) : Finset (α × β) := {e in s ×ˢ t | r e.1 e.2}
@@ -70,7 +70,7 @@ definition edgeDensity
 
 中文:
 定义 edgeDensity
-  签名: (s : Finset α) (t : Finset β)
+  签名: (s : 有限集 α) (t : 有限集 β)
   定义体: #(interedges r s t) / (#s * #t)
 
 Depends on / 依赖: interedges
@@ -136,7 +136,7 @@ theorem interedges_empty_left
 
 中文:
 定理 interedges_empty_left
-  条件: (t : Finset β)
+  条件: (t : 有限集 β)
   结论: interedges r ∅ t = ∅
   证明: by
   rw [interedges]; rw [Finset.empty_product]; rw [filter_empty]
@@ -187,7 +187,7 @@ theorem card_interedges_add_card_interedges_compl
 
 中文:
 定理 card_interedges_add_card_interedges_compl
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   证明: by
   classical
   rw [← card_product]; rw [interedges]; rw [interedges]; rw [← card_union_of_disjoint]; rw [filter_union_filter_not_eq]
@@ -215,7 +215,7 @@ theorem interedges_disjoint_left
 
 中文:
 定理 interedges_disjoint_left
-  条件: {s s' : Finset α} (hs : Disjoint s s') (t : Finset β)
+  条件: {s s' : 有限集 α} (hs : Disjoint s s') (t : 有限集 β)
   证明: by
   rw [Finset.disjoint_left] at hs ⊢
   intro _ hx hy
@@ -245,7 +245,7 @@ theorem interedges_disjoint_right
 
 中文:
 定理 interedges_disjoint_right
-  条件: (s : Finset α) {t t' : Finset β} (ht : Disjoint t t')
+  条件: (s : 有限集 α) {t t' : 有限集 β} (ht : Disjoint t t')
   证明: by
   rw [Finset.disjoint_left] at ht ⊢
   intro _ hx hy
@@ -297,7 +297,7 @@ theorem interedges_biUnion_left
 
 中文:
 定理 interedges_biUnion_left
-  条件: (s : Finset ι) (t : Finset β) (f : ι -> Finset α)
+  条件: (s : 有限集 ι) (t : 有限集 β) (f : ι -> 有限集 α)
   证明: by
   ext
   simp only [mem_biUnion, mem_interedges_iff, exists_and_right, ← and_assoc]
@@ -323,7 +323,7 @@ theorem interedges_biUnion_right
 
 中文:
 定理 interedges_biUnion_right
-  条件: (s : Finset α) (t : Finset ι) (f : ι -> Finset β)
+  条件: (s : 有限集 α) (t : 有限集 ι) (f : ι -> 有限集 β)
   证明: by
   ext a
   simp only [mem_interedges_iff, mem_biUnion]
@@ -350,7 +350,7 @@ theorem interedges_biUnion
 
 中文:
 定理 interedges_biUnion
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> Finset α) (g : κ -> Finset β)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> 有限集 α) (g : κ -> 有限集 β)
   证明: by
   simp_rw [product_biUnion, interedges_biUnion_left, interedges_biUnion_right]
 
@@ -373,7 +373,7 @@ theorem card_interedges_le_mul
 
 中文:
 定理 card_interedges_le_mul
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   证明: (card_filter_le _ _).trans (card_product _ _).le
 
 Depends on / 依赖: card_filter_le, card_product
@@ -394,7 +394,7 @@ theorem edgeDensity_nonneg
 
 中文:
 定理 edgeDensity_nonneg
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: 0 <= edgeDensity r s t
   证明: by
   apply div_nonneg <;> exact mod_cast Nat.zero_le _
@@ -418,7 +418,7 @@ theorem edgeDensity_le_one
 
 中文:
 定理 edgeDensity_le_one
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: edgeDensity r s t <= 1
   证明: by
   apply div_le_one_of_le₀
@@ -447,7 +447,7 @@ theorem edgeDensity_add_edgeDensity_compl
 
 中文:
 定理 edgeDensity_add_edgeDensity_compl
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   rw [edgeDensity]; rw [edgeDensity]; rw [← add_div]; rw [div_eq_one_iff_eq]
   · exact mod_cast card_interedges_add_card_interedges_compl r s t
@@ -478,7 +478,7 @@ theorem edgeDensity_empty_left
 
 中文:
 定理 edgeDensity_empty_left
-  条件: (t : Finset β)
+  条件: (t : 有限集 β)
   结论: edgeDensity r ∅ t = 0
   证明: by
   rw [edgeDensity]; rw [Finset.card_empty]; rw [Nat.cast_zero]; rw [zero_mul]; rw [div_zero]
@@ -503,7 +503,7 @@ theorem edgeDensity_empty_right
 
 中文:
 定理 edgeDensity_empty_right
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: edgeDensity r s ∅ = 0
   证明: by
   rw [edgeDensity]; rw [Finset.card_empty]; rw [Nat.cast_zero]; rw [mul_zero]; rw [div_zero]
@@ -527,7 +527,7 @@ theorem card_interedges_finpartition_left
 
 中文:
 定理 card_interedges_finpartition_left
-  条件: [DecidableEq α] (P : Finpartition s) (t : Finset β)
+  条件: [DecidableEq α] (P : 有限分拆 s) (t : 有限集 β)
   证明: by
   classical
   simp_rw [← P.biUnion_parts, interedges_biUnion_left, id]
@@ -557,7 +557,7 @@ theorem card_interedges_finpartition_right
 
 中文:
 定理 card_interedges_finpartition_right
-  条件: [DecidableEq β] (s : Finset α) (P : Finpartition t)
+  条件: [DecidableEq β] (s : 有限集 α) (P : 有限分拆 t)
   证明: by
   classical
   simp_rw [← P.biUnion_parts, interedges_biUnion_right, id]
@@ -586,7 +586,7 @@ theorem card_interedges_finpartition
 
 中文:
 定理 card_interedges_finpartition
-  结论: [DecidableEq α] [DecidableEq β] (P : Finpartition s)
+  结论: [DecidableEq α] [DecidableEq β] (P : 有限分拆 s)
   证明: by
   rw [card_interedges_finpartition_left _ P]; rw [sum_product]
   congr; ext
@@ -615,7 +615,7 @@ theorem mul_edgeDensity_le_edgeDensity
 
 中文:
 定理 mul_edgeDensity_le_edgeDensity
-  结论: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁) (hs₂ : s₂.Nonempty)
+  结论: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁) (hs₂ : s₂.非空)
   证明: by
   have hst : (#s₂ : Rat) * #t₂ != 0 := by simp [hs₂.ne_empty, ht₂.ne_empty]
   rw [edgeDensity]; rw [edgeDensity]; rw [div_mul_div_comm]; rw [mul_comm]; rw [div_mul_div_cancel₀ hst]
@@ -647,7 +647,7 @@ theorem edgeDensity_sub_edgeDensity_le_one_sub_mul
 
 中文:
 定理 edgeDensity_sub_edgeDensity_le_one_sub_mul
-  结论: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁) (hs₂ : s₂.Nonempty)
+  结论: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁) (hs₂ : s₂.非空)
   证明: by
   refine (sub_le_sub_left (mul_edgeDensity_le_edgeDensity r hs ht hs₂ ht₂) _).trans ?_
   refine le_trans ?_ (mul_le_of_le_one_right ?_ (edgeDensity_le_one r s₂ t₂))
@@ -857,7 +857,7 @@ theorem card_interedges_comm
 
 中文:
 定理 card_interedges_comm
-  条件: [Std.Symm r] (s t : Finset α)
+  条件: [Std.Symm r] (s t : 有限集 α)
   证明: Finset.card_bij (fun (x : α × α) _ => x.swap) (fun _ => swap_mem_interedges_iff.mpr)
     (fun _ _ _ _ h => Prod.swap_injective h) fun x h =>
     ⟨x.swap, swap_mem_interedges_iff.mpr h, x.swap_swap⟩
@@ -881,7 +881,7 @@ theorem edgeDensity_comm
 
 中文:
 定理 edgeDensity_comm
-  条件: [Std.Symm r] (s t : Finset α)
+  条件: [Std.Symm r] (s t : 有限集 α)
   证明: by
   rw [edgeDensity]; rw [mul_comm]; rw [card_interedges_comm]; rw [edgeDensity]
 
@@ -914,7 +914,7 @@ definition interedges
 
 中文:
 定义 interedges
-  签名: (s t : Finset α)
+  签名: (s t : 有限集 α)
   定义体: Rel.interedges G.Adj s t
 
 Depends on / 依赖: G.Adj, Rel.interedges, interedges
@@ -932,7 +932,7 @@ definition edgeDensity
 
 中文:
 定义 edgeDensity
-  签名: : Finset α -> Finset α -> Rat
+  签名: : 有限集 α -> 有限集 α -> 有理数
   定义体: Rel.edgeDensity G.Adj
 
 Depends on / 依赖: G.Adj, Rel.edgeDensity, edgeDensity
@@ -951,8 +951,8 @@ lemma interedges_def
 
 中文:
 引理 interedges_def
-  条件: (s t : Finset α)
-  结论: G.interedges s t = {e in s ×ˢ t | G.Adj e.1 e.2}
+  条件: (s t : 有限集 α)
+  结论: G.interedges s t = {e in s ×ˢ t | G.伴随 e.1 e.2}
   证明: rfl
 -/
 lemma interedges_def (s t : Finset α) : G.interedges s t = {e in s ×ˢ t | G.Adj e.1 e.2} := rfl
@@ -968,7 +968,7 @@ lemma edgeDensity_def
 
 中文:
 引理 edgeDensity_def
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: G.edgeDensity s t = #(G.interedges s t) / (#s * #t)
   证明: rfl
 -/
@@ -984,7 +984,7 @@ theorem card_interedges_div_card
 
 中文:
 定理 card_interedges_div_card
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: rfl
 -/
 theorem card_interedges_div_card (s t : Finset α) :
@@ -1003,7 +1003,7 @@ theorem mem_interedges_iff
 中文:
 定理 mem_interedges_iff
   条件: {x : α × α}
-  结论: x in G.interedges s t ↔ x.1 in s ∧ x.2 in t ∧ G.Adj x.1 x.2
+  结论: x in G.interedges s t ↔ x.1 in s ∧ x.2 in t ∧ G.伴随 x.1 x.2
   证明: Rel.mem_interedges_iff
 
 Depends on / 依赖: Rel.mem_interedges_iff, mem_interedges_iff
@@ -1023,7 +1023,7 @@ theorem mk_mem_interedges_iff
 
 中文:
 定理 mk_mem_interedges_iff
-  结论: (a, b) in G.interedges s t ↔ a in s ∧ b in t ∧ G.Adj a b
+  结论: (a, b) in G.interedges s t ↔ a in s ∧ b in t ∧ G.伴随 a b
   证明: Rel.mk_mem_interedges_iff
 
 @[simp]
@@ -1045,7 +1045,7 @@ theorem interedges_empty_left
 
 中文:
 定理 interedges_empty_left
-  条件: (t : Finset α)
+  条件: (t : 有限集 α)
   结论: G.interedges ∅ t = ∅
   证明: Rel.interedges_empty_left _
 
@@ -1082,7 +1082,7 @@ theorem interedges_disjoint_left
 
 中文:
 定理 interedges_disjoint_left
-  条件: (hs : Disjoint s₁ s₂) (t : Finset α)
+  条件: (hs : Disjoint s₁ s₂) (t : 有限集 α)
   证明: Rel.interedges_disjoint_left _ hs _
 
 Depends on / 依赖: Rel.interedges_disjoint_left, interedges_disjoint_left
@@ -1101,7 +1101,7 @@ theorem interedges_disjoint_right
 
 中文:
 定理 interedges_disjoint_right
-  条件: (s : Finset α) (ht : Disjoint t₁ t₂)
+  条件: (s : 有限集 α) (ht : Disjoint t₁ t₂)
   证明: Rel.interedges_disjoint_right _ _ ht
 
 Depends on / 依赖: Rel.interedges_disjoint_right, interedges_disjoint_right
@@ -1124,7 +1124,7 @@ theorem interedges_biUnion_left
 
 中文:
 定理 interedges_biUnion_left
-  条件: (s : Finset ι) (t : Finset α) (f : ι -> Finset α)
+  条件: (s : 有限集 ι) (t : 有限集 α) (f : ι -> 有限集 α)
   证明: Rel.interedges_biUnion_left _ _ _ _
 
 Depends on / 依赖: Rel.interedges_biUnion_left, interedges_biUnion_left
@@ -1143,7 +1143,7 @@ theorem interedges_biUnion_right
 
 中文:
 定理 interedges_biUnion_right
-  条件: (s : Finset α) (t : Finset ι) (f : ι -> Finset α)
+  条件: (s : 有限集 α) (t : 有限集 ι) (f : ι -> 有限集 α)
   证明: Rel.interedges_biUnion_right _ _ _ _
 
 Depends on / 依赖: Rel.interedges_biUnion_right, interedges_biUnion_right
@@ -1162,7 +1162,7 @@ theorem interedges_biUnion
 
 中文:
 定理 interedges_biUnion
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> Finset α) (g : κ -> Finset α)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> 有限集 α) (g : κ -> 有限集 α)
   证明: Rel.interedges_biUnion _ _ _ _ _
 
 Depends on / 依赖: Rel.interedges_biUnion, interedges_biUnion
@@ -1222,7 +1222,7 @@ theorem edgeDensity_add_edgeDensity_compl
 
 中文:
 定理 edgeDensity_add_edgeDensity_compl
-  条件: (hs : s.Nonempty) (ht : t.Nonempty) (h : Disjoint s t)
+  条件: (hs : s.非空) (ht : t.非空) (h : Disjoint s t)
   证明: by
   rw [edgeDensity_def]; rw [edgeDensity_def]; rw [← add_div]; rw [div_eq_one_iff_eq]
   · exact mod_cast card_interedges_add_card_interedges_compl _ h
@@ -1249,7 +1249,7 @@ theorem card_interedges_le_mul
 
 中文:
 定理 card_interedges_le_mul
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: #(G.interedges s t) <= #s * #t
   证明: Rel.card_interedges_le_mul _ _ _
 
@@ -1269,7 +1269,7 @@ theorem edgeDensity_nonneg
 
 中文:
 定理 edgeDensity_nonneg
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: 0 <= G.edgeDensity s t
   证明: Rel.edgeDensity_nonneg _ _ _
 
@@ -1291,7 +1291,7 @@ theorem edgeDensity_le_one
 
 中文:
 定理 edgeDensity_le_one
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: G.edgeDensity s t <= 1
   证明: Rel.edgeDensity_le_one _ _ _
 
@@ -1316,7 +1316,7 @@ theorem edgeDensity_empty_left
 
 中文:
 定理 edgeDensity_empty_left
-  条件: (t : Finset α)
+  条件: (t : 有限集 α)
   结论: G.edgeDensity ∅ t = 0
   证明: Rel.edgeDensity_empty_left _ _
 
@@ -1341,7 +1341,7 @@ theorem edgeDensity_empty_right
 
 中文:
 定理 edgeDensity_empty_right
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: G.edgeDensity s ∅ = 0
   证明: Rel.edgeDensity_empty_right _ _
 
@@ -1409,7 +1409,7 @@ theorem edgeDensity_comm
 
 中文:
 定理 edgeDensity_comm
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: G.edgeDensity s t = G.edgeDensity t s
   证明: have := G.symm
   Rel.edgeDensity_comm s t

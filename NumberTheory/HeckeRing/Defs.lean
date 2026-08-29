@@ -80,8 +80,8 @@ class IsHeckeTriple
     - le_commensurator_right : Δ <= (commensurator H₂).toSubmonoid
 
 中文:
-类 IsHeckeTriple
-  参数: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
+类 是HeckeTriple
+  参数: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
   公理与运算 (4 个):
     - left_le : H₁.toSubmonoid <= Δ
     - right_le : H₂.toSubmonoid <= Δ
@@ -113,7 +113,7 @@ theorem of_diagonal
 
 中文:
 定理 of_diagonal
-  结论: {H : Subgroup G} (h : H.toSubmonoid <= Δ)
+  结论: {H : 子群 G} (h : H.toSubmonoid <= Δ)
   证明: ⟨h, h, .refl H, hc⟩
 -/
 theorem of_diagonal {H : Subgroup G} (h : H.toSubmonoid <= Δ)
@@ -131,7 +131,7 @@ theorem mem_of_mem_left
 
 中文:
 定理 mem_of_mem_left
-  条件: (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₁)
+  条件: (H₂ : 子群 G) [是HeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₁)
   结论: x in Δ
   证明: left_le H₂ hx
 
@@ -151,7 +151,7 @@ theorem mem_of_mem_right
 
 中文:
 定理 mem_of_mem_right
-  条件: (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₂)
+  条件: (H₁ : 子群 G) [是HeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₂)
   结论: x in Δ
   证明: right_le H₁ hx
 
@@ -172,7 +172,7 @@ theorem le_commensurator_left
 
 中文:
 定理 le_commensurator_left
-  条件: (H₂ : Subgroup G) [h : IsHeckeTriple Δ H₁ H₂]
+  条件: (H₂ : 子群 G) [h : 是HeckeTriple Δ H₁ H₂]
   证明: by
   rw [h.commensurable.eq]
   exact h.le_commensurator_right
@@ -194,7 +194,7 @@ theorem mem_commensurator_right
 
 中文:
 定理 mem_commensurator_right
-  条件: (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ)
+  条件: (H₁ : 子群 G) [是HeckeTriple Δ H₁ H₂] (g : Δ)
   证明: le_commensurator_right H₁ g.2
 
 Depends on / 依赖: le_commensurator_right
@@ -213,7 +213,7 @@ theorem mem_commensurator_left
 
 中文:
 定理 mem_commensurator_left
-  条件: (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ)
+  条件: (H₂ : 子群 G) [是HeckeTriple Δ H₁ H₂] (g : Δ)
   证明: le_commensurator_left H₂ g.2
 
 Depends on / 依赖: le_commensurator_left
@@ -234,7 +234,7 @@ theorem commensurable_conjAct_right
 
 中文:
 定理 commensurable_conjAct_right
-  条件: [IsHeckeTriple Δ H₁ H₂] (g : Δ)
+  条件: [是HeckeTriple Δ H₁ H₂] (g : Δ)
   证明: by
   have hg : Commensurable (ConjAct.toConjAct (g : G) • H₂) H₂ := mem_commensurator_right H₁ g
   exact hg.trans (commensurable (Δ := Δ)).symm
@@ -259,7 +259,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: [IsHeckeTriple Δ H₁ H₂] [IsHeckeTriple Δ H₂ H₃]
+  条件: [是HeckeTriple Δ H₁ H₂] [是HeckeTriple Δ H₂ H₃]
   证明: ⟨left_le H₂, right_le H₂,
     (commensurable (Δ := Δ) (H₁ := H₁) (H₂ := H₂)).trans
       (commensurable (Δ := Δ) (H₁ := H₂) (H₂ := H₃)),
@@ -285,8 +285,8 @@ theorem diag_left
 
 中文:
 定理 diag_left
-  条件: [IsHeckeTriple Δ H₁ H₂]
-  结论: IsHeckeTriple Δ H₁ H₁
+  条件: [是HeckeTriple Δ H₁ H₂]
+  结论: 是HeckeTriple Δ H₁ H₁
   证明: ⟨left_le H₂, left_le H₂, .refl H₁, le_commensurator_left H₂⟩
 
 Depends on / 依赖: le_commensurator_left, left_le
@@ -305,8 +305,8 @@ theorem diag_right
 
 中文:
 定理 diag_right
-  条件: [IsHeckeTriple Δ H₁ H₂]
-  结论: IsHeckeTriple Δ H₂ H₂
+  条件: [是HeckeTriple Δ H₁ H₂]
+  结论: 是HeckeTriple Δ H₂ H₂
   证明: ⟨right_le H₁, right_le H₁, .refl H₂, le_commensurator_right H₁⟩
 
 Depends on / 依赖: le_commensurator_right, right_le
@@ -326,7 +326,7 @@ abbreviation HeckeCoset.setoid
 
 中文:
 缩写 HeckeCoset.setoid
-  签名: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
+  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
   定义体: (DoubleCoset.setoid (H₁ : Set G) H₂).comap Subtype.val
 
 Depends on / 依赖: DoubleCoset, DoubleCoset.setoid, Subtype, Subtype.val, setoid
@@ -344,7 +344,7 @@ definition HeckeCoset
 
 中文:
 定义 HeckeCoset
-  签名: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
+  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
   定义体: Quotient (HeckeCoset.setoid Δ H₁ H₂)
 
 Depends on / 依赖: HeckeCoset, HeckeCoset.setoid, Quotient, setoid
@@ -365,7 +365,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (H₁ H₂ : Subgroup G) (g : Δ)
+  签名: (H₁ H₂ : 子群 G) (g : Δ)
   定义体: Quotient.mk (setoid Δ H₁ H₂) g
 
 Depends on / 依赖: Quotient, Quotient.mk, setoid
@@ -391,7 +391,7 @@ lemma one_def
 
 中文:
 引理 one_def
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: (1 : HeckeCoset Δ H H) = mk H H ⟨1, Δ.one_mem⟩
   证明: rfl
 -/
@@ -409,7 +409,7 @@ definition HeckeCosetModule
 
 中文:
 定义 HeckeCosetModule
-  签名: (Δ : Submonoid G) (H₁ H₂ : Subgroup G) (Z : 类型) [Zero Z]
+  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G) (Z : 类型) [零 Z]
   定义体: HeckeCoset Δ H₁ H₂ ->₀ Z
 
 Depends on / 依赖: HeckeCoset
@@ -430,7 +430,7 @@ scoped[HeckeCosetModule] notation "𝕋" => HeckeRing
 
 中文:
 缩写 HeckeRing
-  签名: (Δ : Submonoid G) (H : Subgroup G) (Z : 类型) [Zero Z]
+  签名: (Δ : 子幺半群 G) (H : 子群 G) (Z : 类型) [零 Z]
   定义体: HeckeCosetModule Δ H H Z
 
 @[inherit_doc]
@@ -457,8 +457,8 @@ instance [Zero
   body: inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ ->₀ Z) (HeckeCoset Δ H₁ H₂) Z)
 
 中文:
-实例 [Zero
-  签名: Z] : FunLike (HeckeCosetModule Δ H₁ H₂ Z) (HeckeCoset Δ H₁ H₂) Z
+实例 [零
+  签名: Z] : 函数状 (HeckeCosetModule Δ H₁ H₂ Z) (HeckeCoset Δ H₁ H₂) Z
   定义体: inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ ->₀ Z) (HeckeCoset Δ H₁ H₂) Z)
 
 Depends on / 依赖: FunLike, HeckeCoset
@@ -475,8 +475,8 @@ instance [AddCommMonoid
   body: inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ ->₀ Z))
 
 中文:
-实例 [AddCommMonoid
-  签名: Z] : AddCommMonoid (HeckeCosetModule Δ H₁ H₂ Z)
+实例 [加法交换幺半群
+  签名: Z] : 加法交换幺半群 (HeckeCosetModule Δ H₁ H₂ Z)
   定义体: inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ ->₀ Z))
 
 Depends on / 依赖: AddCommMonoid, HeckeCoset
@@ -493,8 +493,8 @@ instance [AddCommGroup
   body: inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ ->₀ Z))
 
 中文:
-实例 [AddCommGroup
-  签名: Z] : AddCommGroup (HeckeCosetModule Δ H₁ H₂ Z)
+实例 [加法交换群
+  签名: Z] : 加法交换群 (HeckeCosetModule Δ H₁ H₂ Z)
   定义体: inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ ->₀ Z))
 
 Depends on / 依赖: AddCommGroup, HeckeCoset
@@ -514,7 +514,7 @@ definition of
 
 中文:
 定义 of
-  签名: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : 类型} [Zero Z]
+  签名: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
   定义体: Equiv.refl _
 
 @[simp]
@@ -538,7 +538,7 @@ lemma of_apply
 
 中文:
 引理 of_apply
-  结论: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : 类型} [Zero Z]
+  结论: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
   证明: rfl
 
 @[ext]
@@ -558,7 +558,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : 类型} [Zero Z]
+  结论: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
   证明: Finsupp.ext h
 
 Depends on / 依赖: Finsupp, Finsupp.ext

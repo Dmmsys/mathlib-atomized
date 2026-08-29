@@ -320,7 +320,7 @@ structure Hom
     - comm({i j k : ι} (f : i ⟶ j) (g : j ⟶ k)) : X.δ f g ≫ (hom.app (mk₁ f))⟦(1 : Int)⟧' = hom.app (mk₁ g) ≫ Y.δ f g  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (Y : SpectralObject C ι)
   公理与运算 (2 个):
     - hom : X.ω₁ ⟶ Y.ω₁
@@ -349,7 +349,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SpectralObject C ι)
+  签名: 范畴 (SpectralObject C ι)
   定义体: Hom
   id X := { hom := 𝟙 _ }
   comp f g :=
@@ -399,7 +399,7 @@ lemma id_hom
 
 中文:
 引理 id_hom
-  结论: Hom.hom (𝟙 X) = 𝟙 _
+  结论: 态射.hom (𝟙 X) = 𝟙 _
   证明: rfl
 
 @[simp, reassoc]
@@ -450,7 +450,7 @@ definition mapTriangulatedSpectralObject
 
 中文:
 定义 mapTriangulatedSpectralObject
-  签名: (F : C ⥤ D) [F.CommShift 整数] [F.IsTriangulated]
+  签名: (F : C ⥤ D) [F.交换Shift 整数] [F.是三角]
   定义体: X.mapTriangulatedFunctor F
   map α :=
     { hom := Functor.whiskerRight α.hom _

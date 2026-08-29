@@ -49,7 +49,7 @@ invFun := fun x => .mk fun i => (x i).val
 
 中文:
 定义 PreQuasiregular.toPi
-  签名: [对任意 i, NonUnitalSemiring (κ i)]
+  签名: [对任意 i, 非幺半环 (κ i)]
   定义体: fun x i => .mk x.val i
 invFun := fun x => .mk fun i => (x i).val
   map_mul' _ _ := rfl
@@ -75,7 +75,7 @@ definition PreQuasiregular.toProd
 
 中文:
 定义 PreQuasiregular.toProd
-  签名: [NonUnitalSemiring A] [NonUnitalSemiring B]
+  签名: [非幺半环 A] [非幺半环 B]
   定义体: fun p => ⟨.mk p.val.1, .mk p.val.2⟩
   invFun := fun ⟨a, b⟩ => .mk ⟨a.val, b.val⟩
   map_mul' _ _ := rfl
@@ -100,7 +100,7 @@ lemma isQuasiregular_pi_iff
 
 中文:
 引理 isQuasiregular_pi_iff
-  条件: [对任意 i, NonUnitalSemiring (κ i)] (x : 对任意 i, κ i)
+  条件: [对任意 i, 非幺半环 (κ i)] (x : 对任意 i, κ i)
   证明: by
   simp only [isQuasiregular_iff', ← isUnit_map_iff (PreQuasiregular.toPi κ), Pi.isUnit_iff]
   congr!
@@ -124,7 +124,7 @@ lemma isQuasiregular_prod_iff
 
 中文:
 引理 isQuasiregular_prod_iff
-  条件: [NonUnitalSemiring A] [NonUnitalSemiring B] (a : A) (b : B)
+  条件: [非幺半环 A] [非幺半环 B] (a : A) (b : B)
   证明: by
   simp only [isQuasiregular_iff', ← isUnit_map_iff (PreQuasiregular.toProd A B), Prod.isUnit_iff]
   congr!
@@ -146,7 +146,7 @@ lemma quasispectrum.mem_iff_of_isUnit
 
 中文:
 引理 quasispectrum.mem_iff_of_isUnit
-  结论: [CommSemiring R] [NonUnitalRing A]
+  结论: [交换半环 R] [非幺环 A]
   证明: ⟨fun h => h hr, fun h _ => h⟩
 -/
 lemma quasispectrum.mem_iff_of_isUnit [CommSemiring R] [NonUnitalRing A]
@@ -170,8 +170,8 @@ lemma Pi.spectrum_eq
     Pi.isUnit_iff, sub_apply, algebraMap_apply]
 
 中文:
-引理 Pi.spectrum_eq
-  结论: [CommSemiring R] [对任意 i, Ring (κ i)] [对任意 i, Algebra R (κ i)]
+引理 依赖函数类型.spectrum_eq
+  结论: [交换半环 R] [对任意 i, 环 (κ i)] [对任意 i, 代数 R (κ i)]
   证明: by
   apply compl_injective
   simp_rw [spectrum, Set.compl_iUnion, compl_compl, resolventSet, Set.iInter_ofPred,
@@ -197,8 +197,8 @@ lemma Prod.spectrum_eq
     Prod.isUnit_iff, algebraMap_apply, mk_sub_mk]
 
 中文:
-引理 Prod.spectrum_eq
-  结论: [CommSemiring R] [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+引理 积类型.spectrum_eq
+  结论: [交换半环 R] [环 A] [环 B] [代数 R A] [代数 R B]
   证明: by
   apply compl_injective
   simp_rw [spectrum, Set.compl_union, compl_compl, resolventSet, ← Set.ofPred_and,
@@ -227,8 +227,8 @@ lemma Pi.quasispectrum_eq
   · simp [hr]
 
 中文:
-引理 Pi.quasispectrum_eq
-  结论: [Nonempty ι] [CommSemiring R] [对任意 i, NonUnitalRing (κ i)]
+引理 依赖函数类型.quasispectrum_eq
+  结论: [非空 ι] [交换半环 R] [对任意 i, 非幺环 (κ i)]
   证明: by
   ext r
   simp only [quasispectrum, Set.mem_ofPred_eq, Set.mem_iUnion]
@@ -266,8 +266,8 @@ lemma Prod.quasispectrum_eq
   · simp [hr]
 
 中文:
-引理 Prod.quasispectrum_eq
-  结论: [CommSemiring R] [NonUnitalRing A] [NonUnitalRing B]
+引理 积类型.quasispectrum_eq
+  结论: [交换半环 R] [非幺环 A] [非幺环 B]
   证明: by
   apply compl_injective
   ext r

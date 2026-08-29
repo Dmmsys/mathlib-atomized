@@ -61,7 +61,7 @@ lemma surjective_localRingHom_iff
 
 中文:
 引理 surjective_localRingHom_iff
-  条件: (P : Ideal S) [P.IsPrime]
+  条件: (P : 理想 S) [P.是素]
   证明: by
   constructor
   · intro H y
@@ -107,7 +107,7 @@ lemma surjectiveOnStalks_iff_forall_ideal
   exact ⟨x, r, c, fun h => hc (hIM h), fun h => hr (hIM h), e⟩
 
 中文:
-引理 surjectiveOnStalks_iff_forall_ideal
+引理 surjectiveOnStalks_iff_对任意_ideal
   证明: by
   simp_rw [SurjectiveOnStalks, surjective_localRingHom_iff]
   refine ⟨fun H I hI s => ?_, fun H I hI => H I hI.ne_top⟩
@@ -140,7 +140,7 @@ lemma surjectiveOnStalks_iff_forall_maximal
   exact ⟨x, r, c, fun h => hc (hIM h), fun h => hr (hIM h), e⟩
 
 中文:
-引理 surjectiveOnStalks_iff_forall_maximal
+引理 surjectiveOnStalks_iff_对任意_maximal
   证明: by
   refine ⟨fun H I hI => H I hI.isPrime, fun H I hI => ?_⟩
   simp_rw [surjective_localRingHom_iff] at H ⊢
@@ -170,7 +170,7 @@ lemma surjectiveOnStalks_iff_forall_maximal'
   simp only [surjectiveOnStalks_iff_forall_maximal, surjective_localRingHom_iff]
 
 中文:
-引理 surjectiveOnStalks_iff_forall_maximal'
+引理 surjectiveOnStalks_iff_对任意_maximal'
   证明: by
   simp only [surjectiveOnStalks_iff_forall_maximal, surjective_localRingHom_iff]
 
@@ -192,8 +192,8 @@ lemma surjectiveOnStalks_of_exists_div
     ⟨r, s, 1, by simpa [← Ideal.eq_top_iff_one], fun h => hI (I.eq_top_of_isUnit_mem h hr), by simpa⟩
 
 中文:
-引理 surjectiveOnStalks_of_exists_div
-  条件: (h : 对任意 x : S, 存在 r s : R, IsUnit (f s) ∧ f s * x = f r)
+引理 surjectiveOnStalks_of_存在_div
+  条件: (h : 对任意 x : S, 存在 r s : R, 是单位 (f s) ∧ f s * x = f r)
   证明: surjectiveOnStalks_iff_forall_ideal.mpr fun I hI x =>
     let ⟨r, s, hr, hr'⟩ := h x
     ⟨r, s, 1, by simpa [← Ideal.eq_top_iff_one], fun h => hI (I.eq_top_of_isUnit_mem h hr), by simpa⟩
@@ -218,7 +218,7 @@ lemma surjectiveOnStalks_of_surjective
 
 中文:
 引理 surjectiveOnStalks_of_surjective
-  条件: (h : Function.Surjective f)
+  条件: (h : 函数.满射 f)
   证明: surjectiveOnStalks_iff_forall_ideal.mpr fun _ _ s =>
     let ⟨r, hr⟩ := h s
     ⟨r, 1, 1, by simpa [← Ideal.eq_top_iff_one], by simpa [← Ideal.eq_top_iff_one], by simp [hr]⟩
@@ -240,7 +240,7 @@ lemma _root_.RingEquiv.surjectiveOnStalks
   proof: RingHom.surjectiveOnStalks_of_surjective e.surjective
 
 中文:
-引理 _root_.RingEquiv.surjectiveOnStalks
+引理 _root_.环等价.surjectiveOnStalks
   条件: (e : R ≃+* S)
   证明: RingHom.surjectiveOnStalks_of_surjective e.surjective
 
@@ -344,7 +344,7 @@ lemma SurjectiveOnStalks.exists_mul_eq_tmul
     refine ⟨c, s, 
 
 中文:
-引理 SurjectiveOnStalks.exists_mul_eq_tmul
+引理 SurjectiveOnStalks.存在_mul_eq_tmul
   证明: by
   induction x with
   | zero =>
@@ -469,7 +469,7 @@ lemma SurjectiveOnStalks.baseChange'
 
 中文:
 引理 SurjectiveOnStalks.baseChange'
-  结论: [Algebra R T] [Algebra R S]
+  结论: [代数 R T] [代数 R S]
   证明: by
   convert!
     (surjectiveOnStalks_of_surjective (Algebra.TensorProduct.comm R T S).surjective).comp
@@ -577,7 +577,7 @@ lemma surjectiveOnStalks_iff_of_isLocalHom
 
 中文:
 引理 surjectiveOnStalks_iff_of_isLocalHom
-  条件: [IsLocalRing S] [IsLocalHom f]
+  条件: [是局部环 S] [是Local态射 f]
   证明: by
   refine ⟨fun H x => ?_, fun h => surjectiveOnStalks_of_surjective h⟩
   obtain ⟨y, r, c, hc, hr, e⟩ :=

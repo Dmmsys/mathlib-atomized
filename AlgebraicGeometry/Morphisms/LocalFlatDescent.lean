@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: DescendsAlong @LocallyOfFiniteType (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
+  签名: DescendsAlong @局部有限型 (@满射 ⊓ @平坦 ⊓ @拟紧)
   定义体: HasRingHomProperty.descendsAlong_flat RingHom.FiniteType.codescendsAlong_faithfullyFlat
 
 Depends on / 依赖: FiniteType, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FiniteType.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: DescendsAlong @LocallyOfFinitePresentation (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
+  签名: DescendsAlong @局部有限呈现 (@满射 ⊓ @平坦 ⊓ @拟紧)
   定义体: HasRingHomProperty.descendsAlong_flat RingHom.FinitePresentation.codescendsAlong_faithfullyFlat
 
 Depends on / 依赖: FinitePresentation, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FinitePresentation.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: DescendsAlong @Smooth (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
+  签名: DescendsAlong @光滑 (@满射 ⊓ @平坦 ⊓ @拟紧)
   定义体: HasRingHomProperty.descendsAlong_flat RingHom.Smooth.codescendsAlong_faithfullyFlat
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.Smooth.codescendsAlong_faithfullyFlat, Smooth, codescendsAlong_faithfullyFlat, descendsAlong_flat
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: DescendsAlong @FormallyUnramified (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
+  签名: DescendsAlong @形式非分歧 (@满射 ⊓ @平坦 ⊓ @拟紧)
   定义体: HasRingHomProperty.descendsAlong_flat RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat
 
 Depends on / 依赖: FormallyUnramified, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: DescendsAlong @Etale (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
+  签名: DescendsAlong @平展 (@满射 ⊓ @平坦 ⊓ @拟紧)
   定义体: HasRingHomProperty.descendsAlong_flat RingHom.Etale.codescendsAlong_faithfullyFlat
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.Etale.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat

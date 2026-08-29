@@ -59,7 +59,7 @@ lemma exists_perm_eq_zero_implies_eq_zero
     have h₁ : ∑ i in A, ∑ j in f i, M i j
 
 中文:
-引理 exists_perm_eq_zero_implies_eq_zero
+引理 存在_perm_eq_zero_implies_eq_zero
   结论: {s : R} (hs : 0 < s)
   证明: by
   rw [exists_mem_doublyStochastic_eq_smul_iff hs.le] at hM
@@ -117,7 +117,7 @@ lemma doublyStochastic_sum_perm_aux
 
 中文:
 引理 doublyStochastic_sum_perm_aux
-  结论: (M : Matrix n n R)
+  结论: (M : 矩阵 n n R)
   证明: by
   rcases isEmpty_or_nonempty n
   case inl => exact ⟨1, by simp, Subsingleton.elim _ _⟩
@@ -196,7 +196,7 @@ lemma exists_eq_sum_perm_of_mem_doublyStochastic
   have : ∑ j, ∑ σ : Equiv.Perm n, w σ • σ.permMatrix R default j =
 
 中文:
-引理 exists_eq_sum_perm_of_mem_doublyStochastic
+引理 存在_eq_sum_perm_of_mem_doublyStochastic
   条件: (hM : M in doublyStochastic R n)
   证明: by
   rcases isEmpty_or_nonempty n
@@ -321,8 +321,8 @@ theorem Matrix.l2_opNorm_le_one_of_mem_doublyStochastic
   exact hσ.trans (permMatrix_l2_opNorm_le _)
 
 中文:
-定理 Matrix.l2_opNorm_le_one_of_mem_doublyStochastic
-  结论: {M : Matrix n n 实数}
+定理 矩阵.l2_opNorm_le_one_of_mem_doublyStochastic
+  结论: {M : 矩阵 n n 实数}
   证明: by
   rw [← SetLike.mem_coe]; rw [doublyStochastic_eq_convexHull_permMatrix] at hM
   have ⟨_, ⟨σ, rfl⟩, hσ⟩ := convexOn_univ_norm.exists_ge_of_mem_convexHull (by simp) hM

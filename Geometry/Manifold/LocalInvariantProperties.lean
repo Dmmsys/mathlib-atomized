@@ -74,9 +74,9 @@ structure LocalInvariantProp
 
 中文:
 结构 LocalInvariantProp
-  参数: (P : (H -> H') -> Set H -> H -> 命题)
+  参数: (P : (H -> H') -> 集合 H -> H -> 命题)
   公理与运算 (4 个):
-    - is_local : 对任意 {s x u} {f : H -> H'}, IsOpen u -> x in u -> (P f s x ↔ P f (s inter u) x)
+    - is_local : 对任意 {s x u} {f : H -> H'}, 是开集 u -> x in u -> (P f s x ↔ P f (s inter u) x)
     - right_invariance' : 对任意 {s x f} {e : OpenPartialHomeomorph H H}, e in G -> x in e.source -> P f s x -> P (f ∘ e.symm) (e.symm ⁻¹' s) (e x)
     - congr_of_forall : 对任意 {s x} {f g : H -> H'}, (对任意 y in s, f y = g y) -> f x = g x -> P f s x -> P g s x
     - left_invariance' : 对任意 {s x f} {e' : OpenPartialHomeomorph H' H'}, e' in G' -> s subseteq f ⁻¹' e'.source -> f x in e'.source -> P f s x -> P (e' ∘ f) s x
@@ -109,7 +109,7 @@ theorem congr_set
 
 中文:
 定理 congr_set
-  条件: {s t : Set H} {x : H} {f : H -> H'} (hu : s =ᶠ[𝓝 x] t)
+  条件: {s t : 集合 H} {x : H} {f : H -> H'} (hu : s =ᶠ[𝓝 x] t)
   结论: P f s x ↔ P f t x
   证明: by
   obtain ⟨o, host, ho, hxo⟩ := mem_nhds_iff.mp hu.mem_iff
@@ -133,7 +133,7 @@ theorem is_local_nhds
 
 中文:
 定理 is_local_nhds
-  条件: {s u : Set H} {x : H} {f : H -> H'} (hu : u in 𝓝[s] x)
+  条件: {s u : 集合 H} {x : H} {f : H -> H'} (hu : u in 𝓝[s] x)
   证明: hG.congr_set mem_nhdsWithin_iff_eventuallyEq.mp hu
 
 Depends on / 依赖: congr_set, hG.congr_set, mem_nhdsWithin_iff_eventuallyEq, mem_nhdsWithin_iff_eventuallyEq.mp
@@ -154,7 +154,7 @@ theorem congr_iff_nhdsWithin
 
 中文:
 定理 congr_iff_nhdsWithin
-  结论: {s : Set H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g)
+  结论: {s : 集合 H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g)
   证明: by
   simp_rw [hG.is_local_nhds h1]
   exact ⟨hG.congr_of_forall (fun y hy => hy.2) h2, hG.congr_of_forall (fun y hy => hy.2.symm) h2.symm⟩
@@ -176,7 +176,7 @@ theorem congr_nhdsWithin
 
 中文:
 定理 congr_nhdsWithin
-  结论: {s : Set H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g) (h2 : f x = g x)
+  结论: {s : 集合 H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g) (h2 : f x = g x)
   证明: (hG.congr_iff_nhdsWithin h1 h2).mp hP
 
 Depends on / 依赖: congr_iff_nhdsWithin, hG.congr_iff_nhdsWithin
@@ -195,7 +195,7 @@ theorem congr_nhdsWithin'
 
 中文:
 定理 congr_nhdsWithin'
-  结论: {s : Set H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g) (h2 : f x = g x)
+  结论: {s : 集合 H} {x : H} {f g : H -> H'} (h1 : f =ᶠ[𝓝[s] x] g) (h2 : f x = g x)
   证明: (hG.congr_iff_nhdsWithin h1 h2).mpr hP
 
 Depends on / 依赖: congr_iff_nhdsWithin, hG.congr_iff_nhdsWithin
@@ -215,7 +215,7 @@ theorem congr_iff
 
 中文:
 定理 congr_iff
-  条件: {s : Set H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g)
+  条件: {s : 集合 H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g)
   结论: P f s x ↔ P g s x
   证明: hG.congr_iff_nhdsWithin (mem_nhdsWithin_of_mem_nhds h) (mem_of_mem_nhds h :)
 
@@ -235,7 +235,7 @@ theorem congr
 
 中文:
 定理 congr
-  条件: {s : Set H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g) (hP : P f s x)
+  条件: {s : 集合 H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g) (hP : P f s x)
   结论: P g s x
   证明: (hG.congr_iff h).mp hP
 
@@ -255,7 +255,7 @@ theorem congr'
 
 中文:
 定理 congr'
-  条件: {s : Set H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g) (hP : P g s x)
+  条件: {s : 集合 H} {x : H} {f g : H -> H'} (h : f =ᶠ[𝓝 x] g) (hP : P g s x)
   结论: P f s x
   证明: hG.congr h.symm hP
 
@@ -275,7 +275,7 @@ theorem congr_set_fun
 
 中文:
 定理 congr_set_fun
-  条件: {s t : Set H} {x : H} {f g : H -> H'} (hu : s =ᶠ[𝓝 x] t) (h : f =ᶠ[𝓝 x] g)
+  条件: {s t : 集合 H} {x : H} {f g : H -> H'} (hu : s =ᶠ[𝓝 x] t) (h : f =ᶠ[𝓝 x] g)
   证明: by
   rw [hG.congr_iff h]; rw [hG.congr_set hu]
 
@@ -303,7 +303,7 @@ e'.symm.open_source.mem_nhds e'.mapsTo hxe'
 
 中文:
 定理 left_invariance
-  结论: {s : Set H} {x : H} {f : H -> H'} {e' : OpenPartialHomeomorph H' H'}
+  结论: {s : 集合 H} {x : H} {f : H -> H'} {e' : OpenPartialHomeomorph H' H'}
   证明: by
   have h2f := hfs.preimage_mem_nhdsWithin (e'.open_source.mem_nhds hxe')
   have h3f :=
@@ -349,7 +349,7 @@ theorem right_invariance
 
 中文:
 定理 right_invariance
-  结论: {s : Set H} {x : H} {f : H -> H'} {e : OpenPartialHomeomorph H H}
+  结论: {s : 集合 H} {x : H} {f : H -> H'} {e : OpenPartialHomeomorph H H}
   证明: by
   refine ⟨fun h => ?_, hG.right_invariance' he hxe⟩
   have := hG.right_invariance' (G.symm he) (e.mapsTo hxe) h
@@ -397,7 +397,7 @@ structure LiftPropWithinAt
 
 中文:
 结构 LiftPropWithinAt
-  参数: (P : (H -> H') -> Set H -> H -> 命题) (f : M -> M') (s : Set M) (x : M)
+  参数: (P : (H -> H') -> 集合 H -> H -> 命题) (f : M -> M') (s : 集合 M) (x : M)
   公理与运算 (2 个):
     - continuousWithinAt : ContinuousWithinAt f s x
     - prop : P (chartAt H' (f x) ∘ f ∘ (chartAt H x).symm) ((chartAt H x).symm ⁻¹' s) (chartAt H x x)
@@ -417,7 +417,7 @@ definition LiftPropOn
 
 中文:
 定义 LiftPropOn
-  签名: (P : (H -> H') -> Set H -> H -> 命题) (f : M -> M') (s : Set M)
+  签名: (P : (H -> H') -> 集合 H -> H -> 命题) (f : M -> M') (s : 集合 M)
   定义体: forall x in s, LiftPropWithinAt P f s x
 
 Depends on / 依赖: LiftPropWithinAt
@@ -435,7 +435,7 @@ definition LiftPropAt
 
 中文:
 定义 LiftPropAt
-  签名: (P : (H -> H') -> Set H -> H -> 命题) (f : M -> M') (x : M)
+  签名: (P : (H -> H') -> 集合 H -> H -> 命题) (f : M -> M') (x : M)
   定义体: LiftPropWithinAt P f univ x
 
 Depends on / 依赖: LiftPropWithinAt
@@ -454,7 +454,7 @@ theorem liftPropAt_iff
 
 中文:
 定理 liftPropAt_iff
-  条件: {P : (H -> H') -> Set H -> H -> 命题} {f : M -> M'} {x : M}
+  条件: {P : (H -> H') -> 集合 H -> H -> 命题} {f : M -> M'} {x : M}
   证明: by
   rw [LiftPropAt]; rw [liftPropWithinAt_iff']; rw [continuousWithinAt_univ]; rw [preimage_univ]
 
@@ -475,7 +475,7 @@ definition LiftProp
 
 中文:
 定义 LiftProp
-  签名: (P : (H -> H') -> Set H -> H -> 命题) (f : M -> M')
+  签名: (P : (H -> H') -> 集合 H -> H -> 命题) (f : M -> M')
   定义体: forall x, LiftPropAt P f x
 
 Depends on / 依赖: LiftPropAt
@@ -496,7 +496,7 @@ theorem liftProp_iff
 
 中文:
 定理 liftProp_iff
-  条件: {P : (H -> H') -> Set H -> H -> 命题} {f : M -> M'}
+  条件: {P : (H -> H') -> 集合 H -> H -> 命题} {f : M -> M'}
   证明: by
   simp_rw [LiftProp, liftPropAt_iff, forall_and, continuous_iff_continuousAt]
 
@@ -524,7 +524,7 @@ lemma liftPropWithinAt_subtypeVal_comp_iff
 
 中文:
 引理 liftPropWithinAt_subtypeVal_comp_iff
-  结论: {P : (H -> H') -> Set H -> H -> 命题}
+  结论: {P : (H -> H') -> 集合 H -> H -> 命题}
   证明: by
   simp only [ChartedSpace.liftPropWithinAt_iff']
   congrm ?_ ∧ ?_
@@ -561,7 +561,7 @@ theorem liftPropWithinAt_univ
 
 中文:
 定理 liftPropWithinAt_univ
-  结论: Lift命题WithinAt P g univ x ↔ Lift命题At P g x
+  结论: LiftPropWithinAt P g univ x ↔ LiftPropAt P g x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -579,7 +579,7 @@ theorem liftPropOn_univ
 
 中文:
 定理 liftPropOn_univ
-  结论: Lift命题On P g univ ↔ Lift命题 P g
+  结论: LiftPropOn P g univ ↔ LiftProp P g
   证明: by
   simp [LiftPropOn, LiftProp, LiftPropAt]
 
@@ -598,7 +598,7 @@ theorem liftPropWithinAt_self
 
 中文:
 定理 liftPropWithinAt_self
-  条件: {f : H -> H'} {s : Set H} {x : H}
+  条件: {f : H -> H'} {s : 集合 H} {x : H}
   证明: liftPropWithinAt_iff' ..
 
 Depends on / 依赖: liftPropWithinAt_iff
@@ -617,7 +617,7 @@ theorem liftPropWithinAt_self_source
 
 中文:
 定理 liftPropWithinAt_self_source
-  条件: {f : H -> M'} {s : Set H} {x : H}
+  条件: {f : H -> M'} {s : 集合 H} {x : H}
   证明: liftPropWithinAt_iff' ..
 
 Depends on / 依赖: liftPropWithinAt_iff
@@ -744,7 +744,7 @@ theorem liftPropWithinAt_indep_chart_target_aux2
 
 中文:
 定理 liftPropWithinAt_indep_chart_target_aux2
-  结论: (g : H -> M') {x : H} {s : Set H}
+  结论: (g : H -> M') {x : H} {s : 集合 H}
   证明: by
   have hcont : ContinuousWithinAt ((chartAt H' (g x)) ∘ g) s x :=
     ((chartAt H' (g x)).continuousAt (by simp)).comp_continuousWithinAt hgs
@@ -1078,7 +1078,7 @@ theorem liftPropAt_of_liftPropWithinAt
 
 中文:
 定理 liftPropAt_of_liftPropWithinAt
-  条件: (h : Lift命题WithinAt P g s x) (hs : s in 𝓝 x)
+  条件: (h : LiftPropWithinAt P g s x) (hs : s in 𝓝 x)
   证明: by
   rwa [← univ_inter s, hG.liftPropWithinAt_inter hs] at h
 
@@ -1099,7 +1099,7 @@ theorem liftPropWithinAt_of_liftPropAt_of_mem_nhds
 
 中文:
 定理 liftPropWithinAt_of_liftPropAt_of_mem_nhds
-  条件: (h : Lift命题At P g x) (hs : s in 𝓝 x)
+  条件: (h : LiftPropAt P g x) (hs : s in 𝓝 x)
   证明: by
   rwa [← univ_inter s, hG.liftPropWithinAt_inter hs]
 
@@ -1153,7 +1153,7 @@ theorem liftProp_of_locally_liftPropOn
 
 中文:
 定理 liftProp_of_locally_liftPropOn
-  条件: (h : 对任意 x, 存在 u, IsOpen u ∧ x in u ∧ Lift命题On P g u)
+  条件: (h : 对任意 x, 存在 u, 是开集 u ∧ x in u ∧ LiftPropOn P g u)
   证明: by
   rw [← liftPropOn_univ]
   refine hG.liftPropOn_of_locally_liftPropOn fun x _ => ?_
@@ -1183,7 +1183,7 @@ theorem liftPropWithinAt_congr_of_eventuallyEq
 
 中文:
 定理 liftPropWithinAt_congr_of_eventuallyEq
-  结论: (h : Lift命题WithinAt P g s x) (h₁ : g' =ᶠ[𝓝[s] x] g)
+  结论: (h : LiftPropWithinAt P g s x) (h₁ : g' =ᶠ[𝓝[s] x] g)
   证明: by
   refine ⟨h.1.congr_of_eventuallyEq h₁ hx, ?_⟩
   refine hG.congr_nhdsWithin' ?_
@@ -1214,7 +1214,7 @@ theorem liftPropWithinAt_congr_of_eventuallyEq_of_mem
 
 中文:
 定理 liftPropWithinAt_congr_of_eventuallyEq_of_mem
-  结论: (h : Lift命题WithinAt P g s x)
+  结论: (h : LiftPropWithinAt P g s x)
   证明: liftPropWithinAt_congr_of_eventuallyEq hG h h₁ (mem_of_mem_nhdsWithin h₂ h₁ :)
 
 Depends on / 依赖: liftPropWithinAt_congr_of_eventuallyEq, mem_of_mem_nhdsWithin
@@ -1293,7 +1293,7 @@ theorem liftPropWithinAt_congr
 
 中文:
 定理 liftPropWithinAt_congr
-  结论: (h : Lift命题WithinAt P g s x) (h₁ : 对任意 y in s, g' y = g y)
+  结论: (h : LiftPropWithinAt P g s x) (h₁ : 对任意 y in s, g' y = g y)
   证明: (hG.liftPropWithinAt_congr_iff h₁ hx).mpr h
 
 Depends on / 依赖: hG.liftPropWithinAt_congr_iff, liftPropWithinAt_congr_iff
@@ -1312,7 +1312,7 @@ theorem liftPropWithinAt_congr_of_mem
 
 中文:
 定理 liftPropWithinAt_congr_of_mem
-  结论: (h : Lift命题WithinAt P g s x) (h₁ : 对任意 y in s, g' y = g y)
+  结论: (h : LiftPropWithinAt P g s x) (h₁ : 对任意 y in s, g' y = g y)
   证明: (hG.liftPropWithinAt_congr_iff h₁ (h₁ _ hx)).mpr h
 
 Depends on / 依赖: hG.liftPropWithinAt_congr_iff, liftPropWithinAt_congr_iff
@@ -1350,7 +1350,7 @@ theorem liftPropAt_congr_of_eventuallyEq
 
 中文:
 定理 liftPropAt_congr_of_eventuallyEq
-  条件: (h : Lift命题At P g x) (h₁ : g' =ᶠ[𝓝 x] g)
+  条件: (h : LiftPropAt P g x) (h₁ : g' =ᶠ[𝓝 x] g)
   证明: (hG.liftPropAt_congr_iff_of_eventuallyEq h₁).mpr h
 
 Depends on / 依赖: hG.liftPropAt_congr_iff_of_eventuallyEq, liftPropAt_congr_iff_of_eventuallyEq
@@ -1370,8 +1370,8 @@ theorem liftPropOn_congr
 
 中文:
 定理 liftPropOn_congr
-  条件: (h : Lift命题On P g s) (h₁ : 对任意 y in s, g' y = g y)
-  结论: Lift命题On P g' s
+  条件: (h : LiftPropOn P g s) (h₁ : 对任意 y in s, g' y = g y)
+  结论: LiftPropOn P g' s
   证明: fun x hx => hG.liftPropWithinAt_congr (h x hx) h₁ (h₁ x hx)
 
 Depends on / 依赖: hG.liftPropWithinAt_congr, liftPropWithinAt_congr
@@ -1391,7 +1391,7 @@ theorem liftPropOn_congr_iff
 中文:
 定理 liftPropOn_congr_iff
   条件: (h₁ : 对任意 y in s, g' y = g y)
-  结论: Lift命题On P g' s ↔ Lift命题On P g s
+  结论: LiftPropOn P g' s ↔ LiftPropOn P g s
   证明: ⟨fun h => hG.liftPropOn_congr h fun y hy => (h₁ y hy).symm, fun h => hG.liftPropOn_congr h h₁⟩
 
 Depends on / 依赖: hG.liftPropOn_congr, liftPropOn_congr
@@ -1537,7 +1537,7 @@ theorem liftPropAt_of_mem_maximalAtlas
 
 中文:
 定理 liftPropAt_of_mem_maximalAtlas
-  结论: (hG : G.LocalInvariant命题 G Q)
+  结论: (hG : G.LocalInvariantProp G Q)
   证明: by
   simp_rw [LiftPropAt, hG.liftPropWithinAt_indep_chart he hx G.id_mem_maximalAtlas (mem_univ _),
     (e.continuousAt hx).continuousWithinAt, true_and]
@@ -1564,7 +1564,7 @@ theorem liftPropOn_of_mem_maximalAtlas
 
 中文:
 定理 liftPropOn_of_mem_maximalAtlas
-  结论: (hG : G.LocalInvariant命题 G Q)
+  结论: (hG : G.LocalInvariantProp G Q)
   证明: by
   intro x hx
   apply hG.liftPropWithinAt_of_liftPropAt_of_mem_nhds (hG.liftPropAt_of_mem_maximalAtlas hQ he hx)
@@ -1629,7 +1629,7 @@ theorem liftPropOn_symm_of_mem_maximalAtlas
 
 中文:
 定理 liftPropOn_symm_of_mem_maximalAtlas
-  结论: (hG : G.LocalInvariant命题 G Q)
+  结论: (hG : G.LocalInvariantProp G Q)
   证明: by
   intro x hx
   apply hG.liftPropWithinAt_of_liftPropAt_of_mem_nhds
@@ -1655,7 +1655,7 @@ theorem liftPropAt_chart
 
 中文:
 定理 liftPropAt_chart
-  条件: [HasGroupoid M G] (hG : G.LocalInvariant命题 G Q) (hQ : 对任意 y, Q id univ y)
+  条件: [有群胚 M G] (hG : G.LocalInvariantProp G Q) (hQ : 对任意 y, Q id univ y)
   证明: hG.liftPropAt_of_mem_maximalAtlas hQ (chart_mem_maximalAtlas G x) (mem_chart_source H x)
 -/
 theorem liftPropAt_chart [HasGroupoid M G] (hG : G.LocalInvariantProp G Q) (hQ : forall y, Q id univ y) :
@@ -1672,7 +1672,7 @@ theorem liftPropOn_chart
 
 中文:
 定理 liftPropOn_chart
-  条件: [HasGroupoid M G] (hG : G.LocalInvariant命题 G Q) (hQ : 对任意 y, Q id univ y)
+  条件: [有群胚 M G] (hG : G.LocalInvariantProp G Q) (hQ : 对任意 y, Q id univ y)
   证明: hG.liftPropOn_of_mem_maximalAtlas hQ (chart_mem_maximalAtlas G x)
 
 Depends on / 依赖: chartAt, source
@@ -1691,7 +1691,7 @@ theorem liftPropAt_chart_symm
 
 中文:
 定理 liftPropAt_chart_symm
-  结论: [HasGroupoid M G] (hG : G.LocalInvariant命题 G Q)
+  结论: [有群胚 M G] (hG : G.LocalInvariantProp G Q)
   证明: hG.liftPropAt_symm_of_mem_maximalAtlas hQ (chart_mem_maximalAtlas G x) (by simp)
 
 Depends on / 依赖: chartAt
@@ -1710,7 +1710,7 @@ theorem liftPropOn_chart_symm
 
 中文:
 定理 liftPropOn_chart_symm
-  结论: [HasGroupoid M G] (hG : G.LocalInvariant命题 G Q)
+  结论: [有群胚 M G] (hG : G.LocalInvariantProp G Q)
   证明: hG.liftPropOn_symm_of_mem_maximalAtlas hQ (chart_mem_maximalAtlas G x)
 
 Depends on / 依赖: chartAt, target
@@ -1729,7 +1729,7 @@ theorem liftPropAt_of_mem_groupoid
 
 中文:
 定理 liftPropAt_of_mem_groupoid
-  结论: (hG : G.LocalInvariant命题 G Q) (hQ : 对任意 y, Q id univ y)
+  结论: (hG : G.LocalInvariantProp G Q) (hQ : 对任意 y, Q id univ y)
   证明: liftPropAt_of_mem_maximalAtlas hG hQ (G.mem_maximalAtlas_of_mem_groupoid hf) hx
 
 Depends on / 依赖: G.mem_maximalAtlas_of_mem_groupoid, liftPropAt_of_mem_maximalAtlas, mem_maximalAtlas_of_mem_groupoid
@@ -1748,7 +1748,7 @@ theorem liftPropOn_of_mem_groupoid
 
 中文:
 定理 liftPropOn_of_mem_groupoid
-  结论: (hG : G.LocalInvariant命题 G Q) (hQ : 对任意 y, Q id univ y)
+  结论: (hG : G.LocalInvariantProp G Q) (hQ : 对任意 y, Q id univ y)
   证明: liftPropOn_of_mem_maximalAtlas hG hQ (G.mem_maximalAtlas_of_mem_groupoid hf)
 
 Depends on / 依赖: G.mem_maximalAtlas_of_mem_groupoid, liftPropOn_of_mem_maximalAtlas, mem_maximalAtlas_of_mem_groupoid
@@ -1769,7 +1769,7 @@ theorem liftProp_id
 
 中文:
 定理 liftProp_id
-  条件: (hG : G.LocalInvariant命题 G Q) (hQ : 对任意 y, Q id univ y)
+  条件: (hG : G.LocalInvariantProp G Q) (hQ : 对任意 y, Q id univ y)
   证明: by
   simp_rw [liftProp_iff, continuous_id, true_and]
   exact fun x => hG.congr' ((chartAt H x).eventually_right_inverse <| mem_chart_target H x) (hQ _)
@@ -1796,7 +1796,7 @@ theorem liftPropAt_iff_comp_subtype_val
 
 中文:
 定理 liftPropAt_iff_comp_subtype_val
-  结论: (hG : LocalInvariant命题 G G' P) {U : Opens M}
+  结论: (hG : LocalInvariantProp G G' P) {U : Opens M}
   证明: by
   simp only [LiftPropAt, liftPropWithinAt_iff']
   congrm ?_ ∧ ?_
@@ -1832,7 +1832,7 @@ theorem liftPropAt_iff_comp_inclusion
 
 中文:
 定理 liftPropAt_iff_comp_inclusion
-  结论: (hG : LocalInvariant命题 G G' P) {U V : Opens M} (hUV : U <= V)
+  结论: (hG : LocalInvariantProp G G' P) {U V : Opens M} (hUV : U <= V)
   证明: by
   simp only [LiftPropAt, liftPropWithinAt_iff']
   congrm ?_ ∧ ?_
@@ -1869,7 +1869,7 @@ theorem liftProp_subtype_val
 
 中文:
 定理 liftProp_subtype_val
-  结论: {Q : (H -> H) -> Set H -> H -> 命题} (hG : LocalInvariant命题 G G Q)
+  结论: {Q : (H -> H) -> 集合 H -> H -> 命题} (hG : LocalInvariantProp G G Q)
   证明: by
   intro x
   change LiftPropAt Q (id ∘ Subtype.val) x
@@ -1900,7 +1900,7 @@ theorem liftProp_inclusion
 
 中文:
 定理 liftProp_inclusion
-  结论: {Q : (H -> H) -> Set H -> H -> 命题} (hG : LocalInvariant命题 G G Q)
+  结论: {Q : (H -> H) -> 集合 H -> H -> 命题} (hG : LocalInvariantProp G G Q)
   证明: by
   intro x
   change LiftPropAt Q (id ∘ Opens.inclusion hUV) x
@@ -1935,7 +1935,7 @@ definition IsLocalStructomorphWithinAt
 
 中文:
 定义 IsLocalStructomorphWithinAt
-  签名: (f : H -> H) (s : Set H) (x : H)
+  签名: (f : H -> H) (s : 集合 H) (x : H)
   定义体: x in s -> exists e : OpenPartialHomeomorph H H, e in G ∧ EqOn f e.toFun (s inter e.source) ∧ x in e.source
 
 Depends on / 依赖: OpenPartialHomeomorph, e.source, e.toFun, source
@@ -2141,7 +2141,7 @@ theorem HasGroupoid.comp
       have hxs' : 
 
 中文:
-定理 HasGroupoid.comp
+定理 有群胚.comp
   证明: let _ := ChartedSpace.comp H₁ H₂ H₃
   { compatible := by
       rintro _ _ ⟨e, he, f, hf, rfl⟩ ⟨e', he', f', hf', rfl⟩

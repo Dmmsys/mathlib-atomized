@@ -38,9 +38,9 @@ structure SubStarSemigroup
     - star_mem' : forall {a : M} (_ha : a in carrier), star a in carrier
 
 中文:
-结构 SubStarSemigroup
-  参数: (M : 类型v) [Mul M] [Star M]
-  继承: Subsemigroup M
+结构 SubStar半群
+  参数: (M : 类型v) [乘法 M] [对合 M]
+  继承: 子半群 M
   公理与运算 (1 个):
     - star_mem' : 对任意 {a : M} (_ha : a in carrier), star a in carrier
 
@@ -65,9 +65,9 @@ structure NonUnitalStarSubsemiring
     - star_mem' : forall {a : R} (_ha : a in carrier), star a in carrier
 
 中文:
-结构 NonUnitalStarSubsemiring
-  参数: (R : 类型v) [NonUnitalNonAssocSemiring R] [Star R]
-  继承: NonUnitalSubsemiring R
+结构 非幺对合子半环
+  参数: (R : 类型v) [非幺非结合半环 R] [对合 R]
+  继承: NonUnital子半环 R
   公理与运算 (1 个):
     - star_mem' : 对任意 {a : R} (_ha : a in carrier), star a in carrier
 -/
@@ -96,7 +96,7 @@ initialize_simps_projections NonUnitalStarSubsemiring (carrier -> coe, as_prefix
 
 中文:
 实例 instSetLike
-  签名: {R : 类型v} [NonUnitalNonAssocSemiring R] [Star R]
+  签名: {R : 类型v} [非幺非结合半环 R] [对合 R]
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -130,7 +130,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R : 类型} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike S R]
+  签名: {S R : 类型} [非幺非结合半环 R] [对合环 R] [集合状 S R]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -192,7 +192,7 @@ instance instStarMemClass
 
 中文:
 实例 instStarMemClass
-  签名: : StarMemClass (NonUnitalStarSubsemiring R) R where
+  签名: : StarMem类 (非幺对合子半环 R) R where
   定义体: s.star_mem'
 
 Depends on / 依赖: s.star_mem, star_mem
@@ -211,7 +211,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : NonUnitalStarSubsemiring R} {x : R}
+  条件: {s : 非幺对合子半环 R} {x : R}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -236,7 +236,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
+  签名: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
   定义体: { S.toNonUnitalSubsemiring.copy s hs with
     star_mem' := fun {x} (hx : x in s) => by
       change star x in s
@@ -264,7 +264,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
   证明: rfl
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Equation, Equation.map, convert, f.toRingHom, map_baseChange, toRingHom, toRingHom_eq_coe
@@ -284,7 +284,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -308,7 +308,7 @@ definition center
 
 中文:
 定义 center
-  签名: (R) [NonUnitalNonAssocSemiring R] [StarRing R]
+  签名: (R) [非幺非结合半环 R] [对合环 R]
   定义体: NonUnitalSubsemiring.center R
   star_mem' := Set.star_mem_center
 

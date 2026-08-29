@@ -149,7 +149,7 @@ theorem sumZeroes_sum
 
 中文:
 定理 sumZeroes_sum
-  条件: (n : 自然数) {ι : 类型} (s : Finset ι) (P : ι -> 实数[X])
+  条件: (n : 自然数) {ι : 类型} (s : 有限集 ι) (P : ι -> 实数[X])
   证明: by
   simp_rw [sumZeroes, eval_finsetSum]
   rw [sum_comm]; rw [mul_sum]

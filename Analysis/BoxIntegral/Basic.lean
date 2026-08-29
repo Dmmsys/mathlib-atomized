@@ -86,7 +86,7 @@ definition integralSum
 
 中文:
 定义 integralSum
-  签名: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : TaggedPrepartition I)
+  签名: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 标记预分拆 I)
   定义体: ∑ J in π.boxes, vol J (f (π.tag J))
 -/
 def integralSum (f : Realⁿ -> E) (vol : ι ->ᵇᵃ E ->L[Real] F) (π : TaggedPrepartition I) : F :=
@@ -138,7 +138,7 @@ refine (π.sum_biUnion_boxes _ _).trans sum_congr rfl fun J hJ => sum_congr rfl 
 
 中文:
 定理 integralSum_biUnionTagged
-  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : Prepartition I)
+  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 预分拆 I)
   证明: by
 refine (π.sum_biUnion_boxes _ _).trans sum_congr rfl fun J hJ => sum_congr rfl fun J' hJ' => ?_
   rw [π.tag_biUnionTagged hJ hJ']
@@ -198,7 +198,7 @@ theorem integralSum_inf_partition
 
 中文:
 定理 integralSum_inf_partition
-  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : TaggedPrepartition I)
+  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 标记预分拆 I)
   证明: integralSum_biUnion_partition f vol π _ fun _J hJ => h.restrict (Prepartition.le_of_mem _ hJ)
 
 Depends on / 依赖: Prepartition, Prepartition.le_of_mem, h.restrict, integralSum_biUnion_partition, le_of_mem, restrict
@@ -278,7 +278,7 @@ theorem integralSum_disjUnion
 
 中文:
 定理 integralSum_disjUnion
-  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) {π₁ π₂ : TaggedPrepartition I}
+  结论: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) {π₁ π₂ : 标记预分拆 I}
   证明: by
   refine (Prepartition.sum_disj_union_boxes h _).trans
       (congr_arg₂ (· + ·) (sum_congr rfl fun J hJ => ?_) (sum_congr rfl fun J hJ => ?_))
@@ -311,7 +311,7 @@ theorem integralSum_add
 
 中文:
 定理 integralSum_add
-  条件: (f g : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : TaggedPrepartition I)
+  条件: (f g : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 标记预分拆 I)
   证明: by
   simp only [integralSum, Pi.add_apply, (vol _).map_add, Finset.sum_add_distrib]
 
@@ -337,7 +337,7 @@ theorem integralSum_neg
 
 中文:
 定理 integralSum_neg
-  条件: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : TaggedPrepartition I)
+  条件: (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 标记预分拆 I)
   证明: by
   simp only [integralSum, Pi.neg_apply, (vol _).map_neg, Finset.sum_neg_distrib]
 
@@ -361,7 +361,7 @@ theorem integralSum_smul
 
 中文:
 定理 integralSum_smul
-  条件: (c : 实数) (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : TaggedPrepartition I)
+  条件: (c : 实数) (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (π : 标记预分拆 I)
   证明: by
   simp only [integralSum, Finset.smul_sum, Pi.smul_apply, map_smul]
 
@@ -386,7 +386,7 @@ definition HasIntegral
   body: Tendsto (integralSum f vol) (l.toFilteriUnion I ⊤) (𝓝 y)
 
 中文:
-定义 HasIntegral
+定义 Has整数egral
   签名: (I : Box ι) (l : 整数egrationParams) (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F) (y : F)
   定义体: Tendsto (integralSum f vol) (l.toFilteriUnion I ⊤) (𝓝 y)
 
@@ -405,7 +405,7 @@ definition Integrable
   body: exists y, HasIntegral I l f vol y
 
 中文:
-定义 Integrable
+定义 可积
   签名: (I : Box ι) (l : 整数egrationParams) (f : 实数ⁿ -> E) (vol : ι ->ᵇᵃ E ->L[实数] F)
   定义体: exists y, HasIntegral I l f vol y
 
@@ -446,7 +446,7 @@ theorem hasIntegral_congr
   simp [π.le_of_mem' J hJ]
 
 中文:
-定理 hasIntegral_congr
+定理 has整数egral_congr
   结论: (I : Box ι) (l : 整数egrationParams) {f₁ f₂ : 实数ⁿ -> E}
   证明: by
   unfold HasIntegral
@@ -479,7 +479,7 @@ theorem HasIntegral.tendsto
   proof: h
 
 中文:
-定理 HasIntegral.tendsto
+定理 Has整数egral.tendsto
   条件: (h : Has整数egral I l f vol y)
   证明: h
 -/
@@ -497,7 +497,7 @@ theorem hasIntegral_iff
     simp [@forall_comm Real>=0 (TaggedPrepartition I)]
 
 中文:
-定理 hasIntegral_iff
+定理 has整数egral_iff
   结论: Has整数egral I l f vol y ↔
   证明: ((l.hasBasis_toFilteriUnion_top I).tendsto_iff nhds_basis_closedBall).trans by
     simp [@forall_comm Real>=0 (TaggedPrepartition I)]
@@ -523,7 +523,7 @@ theorem HasIntegral.of_mul
   exact ⟨r, hr, fun c π hπ hπp => (H c π hπ hπp).trans ha.le⟩
 
 中文:
-定理 HasIntegral.of_mul
+定理 Has整数egral.of_mul
   结论: (a : 实数)
   证明: by
   refine hasIntegral_iff.2 fun ε hε => ?_
@@ -552,7 +552,7 @@ theorem integrable_iff_cauchy
 
 中文:
 定理 integrable_iff_cauchy
-  条件: [CompleteSpace F]
+  条件: [完备空间 F]
   证明: cauchy_map_iff_exists_tendsto.symm
 
 Depends on / 依赖: cauchy_map_iff_exists_tendsto, cauchy_map_iff_exists_tendsto.symm
@@ -577,8 +577,8 @@ theorem integrable_iff_cauchy_basis
 
 中文:
 定理 integrable_iff_cauchy_basis
-  条件: [CompleteSpace F]
-  结论: 整数egrable I l f vol ↔
+  条件: [完备空间 F]
+  结论: 可积 I l f vol ↔
   证明: by
   rw [integrable_iff_cauchy]; rw [cauchy_map_iff']; rw [(l.hasBasis_toFilteriUnion_top _).prod_self.tendsto_iff uniformity_basis_dist_le]
   refine forall₂_congr fun ε _ => exists_congr fun r => ?_
@@ -609,7 +609,7 @@ theorem HasIntegral.mono
   proof: h.mono_left IntegrationParams.toFilteriUnion_mono _ hl _
 
 中文:
-定理 HasIntegral.mono
+定理 Has整数egral.mono
   条件: {l₁ l₂ : 整数egrationParams} (h : Has整数egral I l₁ f vol y) (hl : l₂ <= l₁)
   证明: h.mono_left IntegrationParams.toFilteriUnion_mono _ hl _
 
@@ -630,8 +630,8 @@ theorem Integrable.hasIntegral
   exact Classical.choose_spec h
 
 中文:
-定理 Integrable.hasIntegral
-  条件: (h : 整数egrable I l f vol)
+定理 可积.has整数egral
+  条件: (h : 可积 I l f vol)
   证明: by
   rw [integral]; rw [dif_pos h]
   exact Classical.choose_spec h
@@ -651,9 +651,9 @@ theorem Integrable.mono
   proof: ⟨_, h.hasIntegral.mono hle⟩
 
 中文:
-定理 Integrable.mono
-  条件: {l'} (h : 整数egrable I l f vol) (hle : l' <= l)
-  结论: 整数egrable I l' f vol
+定理 可积.mono
+  条件: {l'} (h : 可积 I l f vol) (hle : l' <= l)
+  结论: 可积 I l' f vol
   证明: ⟨_, h.hasIntegral.mono hle⟩
 
 Depends on / 依赖: h.hasIntegral.mono, hasIntegral
@@ -671,7 +671,7 @@ theorem HasIntegral.unique
   proof: tendsto_nhds_unique h h'
 
 中文:
-定理 HasIntegral.unique
+定理 Has整数egral.unique
   条件: (h : Has整数egral I l f vol y) (h' : Has整数egral I l f vol y')
   结论: y = y'
   证明: tendsto_nhds_unique h h'
@@ -691,9 +691,9 @@ theorem HasIntegral.integrable
   proof: ⟨_, h⟩
 
 中文:
-定理 HasIntegral.integrable
+定理 Has整数egral.integrable
   条件: (h : Has整数egral I l f vol y)
-  结论: 整数egrable I l f vol
+  结论: 可积 I l f vol
   证明: ⟨_, h⟩
 -/
 theorem HasIntegral.integrable (h : HasIntegral I l f vol y) : Integrable I l f vol :=
@@ -713,7 +713,7 @@ nonrec theorem HasIntegral.add (h : HasIntegral I l f vol y) (h' : HasIntegral I
   simpa only [HasIntegral, ← integralSum_add] using h.add h'
 
 中文:
-定理 HasIntegral.integral_eq
+定理 Has整数egral.integral_eq
   条件: (h : Has整数egral I l f vol y)
   结论: integral I l f vol = y
   证明: h.integrable.hasIntegral.unique h
@@ -740,8 +740,8 @@ theorem Integrable.add
   proof: (hf.hasIntegral.add hg.hasIntegral).integrable
 
 中文:
-定理 Integrable.add
-  条件: (hf : 整数egrable I l f vol) (hg : 整数egrable I l g vol)
+定理 可积.add
+  条件: (hf : 可积 I l f vol) (hg : 可积 I l g vol)
   证明: (hf.hasIntegral.add hg.hasIntegral).integrable
 
 Depends on / 依赖: hasIntegral, hf.hasIntegral.add, hg.hasIntegral, integrable
@@ -763,7 +763,7 @@ nonrec theorem HasIntegral.neg (hf : HasIntegral I l f vol y) : HasIntegral I l 
 
 中文:
 定理 integral_add
-  条件: (hf : 整数egrable I l f vol) (hg : 整数egrable I l g vol)
+  条件: (hf : 可积 I l f vol) (hg : 可积 I l g vol)
   证明: (hf.hasIntegral.add hg.hasIntegral).integral_eq
 
 nonrec theorem HasIntegral.neg (hf : HasIntegral I l f vol y) : HasIntegral I l (-f) vol (-y) := by
@@ -788,9 +788,9 @@ theorem Integrable.neg
   proof: hf.hasIntegral.neg.integrable
 
 中文:
-定理 Integrable.neg
-  条件: (hf : 整数egrable I l f vol)
-  结论: 整数egrable I l (-f) vol
+定理 可积.neg
+  条件: (hf : 可积 I l f vol)
+  结论: 可积 I l (-f) vol
   证明: hf.hasIntegral.neg.integrable
 
 Depends on / 依赖: hasIntegral, hf.hasIntegral.neg.integrable, integrable
@@ -810,9 +810,9 @@ theorem Integrable.of_neg
 @[simp]
 
 中文:
-定理 Integrable.of_neg
-  条件: (hf : 整数egrable I l (-f) vol)
-  结论: 整数egrable I l f vol
+定理 可积.of_neg
+  条件: (hf : 可积 I l (-f) vol)
+  结论: 可积 I l f vol
   证明: neg_neg f ▸ hf.neg
 
 @[simp]
@@ -835,7 +835,7 @@ theorem integrable_neg
 
 中文:
 定理 integrable_neg
-  结论: 整数egrable I l (-f) vol ↔ 整数egrable I l f vol
+  结论: 可积 I l (-f) vol ↔ 可积 I l f vol
   证明: ⟨fun h => h.of_neg, fun h => h.neg⟩
 
 @[simp]
@@ -881,7 +881,7 @@ theorem HasIntegral.sub
   proof: by simpa only [sub_eq_add_neg] using h.add h'.neg
 
 中文:
-定理 HasIntegral.sub
+定理 Has整数egral.sub
   条件: (h : Has整数egral I l f vol y) (h' : Has整数egral I l g vol y')
   证明: by simpa only [sub_eq_add_neg] using h.add h'.neg
 
@@ -899,8 +899,8 @@ theorem Integrable.sub
   proof: (hf.hasIntegral.sub hg.hasIntegral).integrable
 
 中文:
-定理 Integrable.sub
-  条件: (hf : 整数egrable I l f vol) (hg : 整数egrable I l g vol)
+定理 可积.sub
+  条件: (hf : 可积 I l f vol) (hg : 可积 I l g vol)
   证明: (hf.hasIntegral.sub hg.hasIntegral).integrable
 
 Depends on / 依赖: hasIntegral, hf.hasIntegral.sub, hg.hasIntegral, integrable
@@ -919,7 +919,7 @@ theorem integral_sub
 
 中文:
 定理 integral_sub
-  条件: (hf : 整数egrable I l f vol) (hg : 整数egrable I l g vol)
+  条件: (hf : 可积 I l f vol) (hg : 可积 I l g vol)
   证明: (hf.hasIntegral.sub hg.hasIntegral).integral_eq
 
 Depends on / 依赖: hasIntegral, hf.hasIntegral.sub, hg.hasIntegral, integral_eq
@@ -941,7 +941,7 @@ theorem hasIntegral_const
 @[simp]
 
 中文:
-定理 hasIntegral_const
+定理 has整数egral_const
   条件: (c : E)
   结论: Has整数egral I l (fun _ => c) vol (vol I c)
   证明: tendsto_const_nhds.congr' (l.eventually_isPartition I).mono fun _π hπ => Eq.symm
@@ -988,7 +988,7 @@ theorem integrable_const
 中文:
 定理 integrable_const
   条件: (c : E)
-  结论: 整数egrable I l (fun _ => c) vol
+  结论: 可积 I l (fun _ => c) vol
   证明: ⟨_, hasIntegral_const c⟩
 
 Depends on / 依赖: hasIntegral_const
@@ -1006,7 +1006,7 @@ theorem hasIntegral_zero
   simpa only [← (vol I).map_zero] using hasIntegral_const (0 : E)
 
 中文:
-定理 hasIntegral_zero
+定理 has整数egral_zero
   结论: Has整数egral I l (fun _ => (0 : E)) vol 0
   证明: by
   simpa only [← (vol I).map_zero] using hasIntegral_const (0 : E)
@@ -1026,7 +1026,7 @@ theorem integrable_zero
 
 中文:
 定理 integrable_zero
-  结论: 整数egrable I l (fun _ => (0 : E)) vol
+  结论: 可积 I l (fun _ => (0 : E)) vol
   证明: ⟨0, hasIntegral_zero⟩
 
 Depends on / 依赖: hasIntegral_zero
@@ -1067,8 +1067,8 @@ theorem HasIntegral.sum
     exact h.1.add (ihs h.2)
 
 中文:
-定理 HasIntegral.sum
-  结论: {α : 类型} {s : Finset α} {f : α -> 实数ⁿ -> E} {g : α -> F}
+定理 Has整数egral.求和
+  结论: {α : 类型} {s : 有限集 α} {f : α -> 实数ⁿ -> E} {g : α -> F}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1100,7 +1100,7 @@ theorem HasIntegral.smul
     (tendsto_const_nhds : Tendsto _ _ (𝓝 c)).smul hf
 
 中文:
-定理 HasIntegral.smul
+定理 Has整数egral.smul
   条件: (hf : Has整数egral I l f vol y) (c : 实数)
   证明: by
   simpa only [HasIntegral, ← integralSum_smul] using
@@ -1123,9 +1123,9 @@ theorem Integrable.smul
   proof: (hf.hasIntegral.smul c).integrable
 
 中文:
-定理 Integrable.smul
-  条件: (hf : 整数egrable I l f vol) (c : 实数)
-  结论: 整数egrable I l (c • f) vol
+定理 可积.smul
+  条件: (hf : 可积 I l f vol) (c : 实数)
+  结论: 可积 I l (c • f) vol
   证明: (hf.hasIntegral.smul c).integrable
 
 Depends on / 依赖: hasIntegral, hf.hasIntegral.smul, integrable
@@ -1145,8 +1145,8 @@ theorem Integrable.of_smul
 @[simp]
 
 中文:
-定理 Integrable.of_smul
-  条件: {c : 实数} (hf : 整数egrable I l (c • f) vol) (hc : c != 0)
+定理 可积.of_smul
+  条件: {c : 实数} (hf : 可积 I l (c • f) vol) (hc : c != 0)
   证明: by
   simpa [inv_smul_smul₀ hc] using hf.smul c⁻¹
 
@@ -1209,7 +1209,7 @@ theorem integral_nonneg
 
 中文:
 定理 integral_nonneg
-  结论: {g : 实数ⁿ -> 实数} (hg : 对任意 x in Box.Icc I, 0 <= g x) (μ : Measure 实数ⁿ)
+  结论: {g : 实数ⁿ -> 实数} (hg : 对任意 x in Box.闭区间 I, 0 <= g x) (μ : 测度 实数ⁿ)
   证明: by
   by_cases hgi : Integrable I l g μ.toBoxAdditive.toSMul
   · refine ge_of_tendsto' hgi.hasIntegral fun π => sum_nonneg fun J _ => ?_
@@ -1240,7 +1240,7 @@ theorem norm_integral_le_of_norm_le
 
 中文:
 定理 norm_integral_le_of_norm_le
-  结论: {g : 实数ⁿ -> 实数} (hle : 对任意 x in Box.Icc I, ‖f x‖ <= g x)
+  结论: {g : 实数ⁿ -> 实数} (hle : 对任意 x in Box.闭区间 I, ‖f x‖ <= g x)
   证明: by
   by_cases hfi : Integrable.{u, v, v} I l f μ.toBoxAdditive.toSMul
   · refine le_of_tendsto_of_tendsto' hfi.hasIntegral.norm hg.hasIntegral fun π => ?_
@@ -1325,7 +1325,7 @@ definition convergenceR
 
 中文:
 定义 convergenceR
-  签名: (h : 整数egrable I l f vol) (ε : 实数)
+  签名: (h : 可积 I l f vol) (ε : 实数)
   定义体: if hε : 0 < ε then (hasIntegral_iff.1 h.hasIntegral ε hε).choose
   else fun _ _ => ⟨1, Set.mem_Ioi.2 zero_lt_one⟩
 
@@ -1349,7 +1349,7 @@ theorem convergenceR_cond
 
 中文:
 定理 convergenceR_cond
-  条件: (h : 整数egrable I l f vol) (ε : 实数) (c : 实数>=0)
+  条件: (h : 可积 I l f vol) (ε : 实数) (c : 实数>=0)
   证明: by
   rw [convergenceR]; split_ifs with h₀
   exacts [(hasIntegral_iff.1 h.hasIntegral ε h₀).choose_spec.1 _, fun _ x => rfl]
@@ -1373,7 +1373,7 @@ theorem dist_integralSum_integral_le_of_memBaseSet
 
 中文:
 定理 dist_integralSum_integral_le_of_memBaseSet
-  结论: (h : 整数egrable I l f vol) (h₀ : 0 < ε)
+  结论: (h : 可积 I l f vol) (h₀ : 0 < ε)
   证明: by
   rw [convergenceR]; rw [dif_pos h₀] at hπ
   exact (hasIntegral_iff.1 h.hasIntegral ε h₀).choose_spec.2 c _ hπ hπp
@@ -1401,7 +1401,7 @@ theorem dist_integralSum_le_of_memBaseSet
 
 中文:
 定理 dist_integralSum_le_of_memBaseSet
-  结论: (h : 整数egrable I l f vol) (hpos₁ : 0 < ε₁)
+  结论: (h : 可积 I l f vol) (hpos₁ : 0 < ε₁)
   证明: by
   rcases h₁.exists_common_compl h₂ HU with ⟨π, hπU, hπc₁, hπc₂⟩
   set r : Realⁿ -> Ioi (0 : Real) := fun x => min (h.convergenceR ε₁ c₁ x) (h.convergenceR ε₂ c₂ x)
@@ -1447,7 +1447,7 @@ theorem tendsto_integralSum_toFilter_prod_self_inf_iUnion_eq_uniformity
 
 中文:
 定理 tendsto_integralSum_toFilter_prod_self_inf_iUnion_eq_uniformity
-  条件: (h : 整数egrable I l f vol)
+  条件: (h : 可积 I l f vol)
   证明: by
   refine (((l.hasBasis_toFilter I).prod_self.inf_principal _).tendsto_iff
     uniformity_basis_dist_le).2 fun ε ε0 => ?_
@@ -1483,7 +1483,7 @@ theorem cauchy_map_integralSum_toFilteriUnion
 
 中文:
 定理 cauchy_map_integralSum_toFilteriUnion
-  条件: (h : 整数egrable I l f vol) (π₀ : Prepartition I)
+  条件: (h : 可积 I l f vol) (π₀ : 预分拆 I)
   证明: by
   refine ⟨inferInstance, ?_⟩
   rw [prod_map_map_eq]; rw [← toFilter_inf_iUnion_eq]; rw [← prod_inf_prod]; rw [prod_principal_principal]
@@ -1517,7 +1517,7 @@ theorem to_subbox_aux
 
 中文:
 定理 to_subbox_aux
-  条件: (h : 整数egrable I l f vol) (hJ : J <= I)
+  条件: (h : 可积 I l f vol) (hJ : J <= I)
   证明: by
   refine (cauchy_map_iff_exists_tendsto.1
     (h.cauchy_map_integralSum_toFilteriUnion (.single I J hJ))).imp fun y hy => ⟨?_, hy⟩
@@ -1549,8 +1549,8 @@ theorem to_subbox
 
 中文:
 定理 to_subbox
-  条件: (h : 整数egrable I l f vol) (hJ : J <= I)
-  结论: 整数egrable J l f vol
+  条件: (h : 可积 I l f vol) (hJ : J <= I)
+  结论: 可积 J l f vol
   证明: (h.to_subbox_aux hJ).imp fun _ => And.left
 
 Depends on / 依赖: And.left, h.to_subbox_aux, to_subbox_aux
@@ -1569,7 +1569,7 @@ theorem tendsto_integralSum_toFilteriUnion_single
 
 中文:
 定理 tendsto_integralSum_toFilteriUnion_single
-  条件: (h : 整数egrable I l f vol) (hJ : J <= I)
+  条件: (h : 可积 I l f vol) (hJ : J <= I)
   证明: let ⟨_y, h₁, h₂⟩ := h.to_subbox_aux hJ
   h₁.integral_eq.symm ▸ h₂
 
@@ -1597,7 +1597,7 @@ theorem dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
 
 中文:
 定理 dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
-  结论: (h : 整数egrable I l f vol)
+  结论: (h : 可积 I l f vol)
   证明: by
   -- Let us prove that the distance is less than or equal to `ε + δ` for all positive `δ`.
   refine le_of_forall_pos_le_add fun δ δ0 => ?_
@@ -1661,7 +1661,7 @@ theorem dist_integralSum_sum_integral_le_of_memBaseSet
 
 中文:
 定理 dist_integralSum_sum_integral_le_of_memBaseSet
-  结论: (h : 整数egrable I l f vol) (h0 : 0 < ε)
+  结论: (h : 可积 I l f vol) (h0 : 0 < ε)
   证明: h.dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq h0 hπ rfl
 
 Depends on / 依赖: dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq, h.dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
@@ -1686,7 +1686,7 @@ theorem tendsto_integralSum_sum_integral
 
 中文:
 定理 tendsto_integralSum_sum_integral
-  条件: (h : 整数egrable I l f vol) (π₀ : Prepartition I)
+  条件: (h : 可积 I l f vol) (π₀ : 预分拆 I)
   证明: by
   refine ((l.hasBasis_toFilteriUnion I π₀).tendsto_iff nhds_basis_closedBall).2 fun ε ε0 => ?_
   refine ⟨h.convergenceR ε, h.convergenceR_cond ε, ?_⟩
@@ -1718,7 +1718,7 @@ theorem sum_integral_congr
 
 中文:
 定理 sum_integral_congr
-  结论: (h : 整数egrable I l f vol) {π₁ π₂ : Prepartition I}
+  结论: (h : 可积 I l f vol) {π₁ π₂ : 预分拆 I}
   证明: by
   refine tendsto_nhds_unique (h.tendsto_integralSum_sum_integral π₁) ?_
   rw [l.toFilteriUnion_congr _ hU]
@@ -1752,7 +1752,7 @@ definition toBoxAdditive
 
 中文:
 定义 toBoxAdditive
-  签名: (h : 整数egrable I l f vol)
+  签名: (h : 可积 I l f vol)
   定义体: integral J l f vol
   sum_partition_boxes' J hJ π hπ := by
     replace hπ := hπ.iUnion_eq; rw [← Prepartition.iUnion_top] at hπ
@@ -1794,7 +1794,7 @@ theorem integrable_of_bounded_and_ae_continuousWithinAt
 
 中文:
 定理 integrable_of_bounded_and_ae_continuousWithinAt
-  结论: [CompleteSpace E] {I : Box ι} {f : 实数ⁿ -> E}
+  结论: [完备空间 E] {I : Box ι} {f : 实数ⁿ -> E}
   证明: by
   /- We prove that f is integrable by proving that we can ensure that the integrals over any
      two tagged prepartitions π₁ and π₂ can be made ε-close by making the partitions
@@ -1918,7 +1918,7 @@ theorem integrable_of_bounded_and_ae_continuous
 
 中文:
 定理 integrable_of_bounded_and_ae_continuous
-  结论: [CompleteSpace E] {I : Box ι} {f : 实数ⁿ -> E}
+  结论: [完备空间 E] {I : Box ι} {f : 实数ⁿ -> E}
   证明: integrable_of_bounded_and_ae_continuousWithinAt l hb μ
     Eventually.filter_mono (ae_mono μ.restrict_le_self) (hc.mono fun _ h => h.continuousWithinAt)
 
@@ -1946,7 +1946,7 @@ theorem integrable_of_continuousOn
 
 中文:
 定理 integrable_of_continuousOn
-  结论: [CompleteSpace E] {I : Box ι} {f : 实数ⁿ -> E}
+  结论: [完备空间 E] {I : Box ι} {f : 实数ⁿ -> E}
   证明: by
   apply integrable_of_bounded_and_ae_continuousWithinAt
   · obtain ⟨C, hC⟩ := (NormedSpace.isBounded_iff_subset_smul_closedBall Real).1
@@ -1983,7 +1983,7 @@ theorem HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO
     that the sum of these distances ove
 
 中文:
-定理 HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO
+定理 Has整数egral.of_bRiemann_eq_false_of_对任意_isLittleO
   结论: (hl : l.bRiemann = false)
   证明: by
   /- We choose `r x` differently for `x ∈ s` and `x ∉ s`.
@@ -2076,7 +2076,7 @@ theorem HasIntegral.of_le_Henstock_of_forall_isLittleO
 (fun _ => A) H₁ by simpa only [A, true_imp_iff] using H₂
 
 中文:
-定理 HasIntegral.of_le_Henstock_of_forall_isLittleO
+定理 Has整数egral.of_le_Henstock_of_对任意_isLittleO
   结论: (hl : l <= Henstock) (B : ι ->ᵇᵃ[I] 实数)
   证明: have A : l.bHenstock := Bool.eq_true_of_true_le hl.2.1
   HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO (Bool.eq_false_of_le_false hl.1) B hB0 _ s hs
@@ -2108,7 +2108,7 @@ theorem HasIntegral.mcShane_of_forall_isLittleO
     simpa only [McShane, Bool.coe_sort_false, false_imp_iff, true_imp_iff, sdiff_empty] using H
 
 中文:
-定理 HasIntegral.mcShane_of_forall_isLittleO
+定理 Has整数egral.mcShane_of_对任意_isLittleO
   结论: (B : ι ->ᵇᵃ[I] 实数) (hB0 : 对任意 J, 0 <= B J)
   证明: (HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO (l := McShane) rfl B hB0 g ∅ countable_empty
       (fun ⟨_x, hx⟩ => hx.elim) fun _ _ hx => hx.2.elim) <| by

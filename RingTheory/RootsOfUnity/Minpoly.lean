@@ -52,9 +52,9 @@ theorem isIntegral
       sub_self]
 
 中文:
-定理 isIntegral
+定理 is整数egral
   条件: (hpos : 0 < n)
-  结论: Is整数egral 整数 μ
+  结论: 是整 整数 μ
   证明: by
   use X ^ n - 1
   constructor
@@ -121,7 +121,7 @@ theorem separable_minpoly_mod
 
 中文:
 定理 separable_minpoly_mod
-  条件: {p : 自然数} [Fact p.Prime] (hdiv : ¬p ∣ n)
+  条件: {p : 自然数} [Fact p.素] (hdiv : ¬p ∣ n)
   证明: by
   have hdvd : map (Int.castRingHom (ZMod p)) (minpoly Int μ) ∣ X ^ n - 1 := by
     convert! _root_.map_dvd (mapRingHom (Int.castRingHom (ZMod p))) (minpoly_dvd_x_pow_sub_one h)
@@ -149,7 +149,7 @@ theorem squarefree_minpoly_mod
 
 中文:
 定理 squarefree_minpoly_mod
-  条件: {p : 自然数} [Fact p.Prime] (hdiv : ¬p ∣ n)
+  条件: {p : 自然数} [Fact p.素] (hdiv : ¬p ∣ n)
   证明: (separable_minpoly_mod h hdiv).squarefree
 
 Depends on / 依赖: separable_minpoly_mod, squarefree
@@ -209,7 +209,7 @@ theorem minpoly_dvd_pow_mod
 
 中文:
 定理 minpoly_dvd_pow_mod
-  条件: {p : 自然数} [hprime : Fact p.Prime] (hdiv : ¬p ∣ n)
+  条件: {p : 自然数} [hprime : Fact p.素] (hdiv : ¬p ∣ n)
   证明: by
   set Q := minpoly Int (μ ^ p)
   have hfrob :
@@ -242,7 +242,7 @@ theorem minpoly_dvd_mod_p
 
 中文:
 定理 minpoly_dvd_mod_p
-  条件: {p : 自然数} [Fact p.Prime] (hdiv : ¬p ∣ n)
+  条件: {p : 自然数} [Fact p.素] (hdiv : ¬p ∣ n)
   证明: (squarefree_minpoly_mod h hdiv).isRadical _ _ (minpoly_dvd_pow_mod h hdiv)
 
 Depends on / 依赖: isRadical, minpoly_dvd_pow_mod, squarefree_minpoly_mod
@@ -271,7 +271,7 @@ theorem minpoly_eq_pow
 
 中文:
 定理 minpoly_eq_pow
-  条件: {p : 自然数} [hprime : Fact p.Prime] (hdiv : ¬p ∣ n)
+  条件: {p : 自然数} [hprime : Fact p.素] (hdiv : ¬p ∣ n)
   证明: by
   by_cases hn : n = 0
   · simp_all

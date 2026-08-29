@@ -35,8 +35,8 @@ theorem IsComplete.isClosed
     rwa [(tendsto_nhds_unique' ha inf_le_left fy : a = y)]
 
 中文:
-定理 IsComplete.isClosed
-  条件: [UniformSpace α] [T0Space α] {s : Set α} (h : IsComplete s)
+定理 是完备.isClosed
+  条件: [一致空间 α] [T0空间 α] {s : 集合 α} (h : 是完备 s)
   证明: isClosed_iff_clusterPt.2 fun a ha => by
     let f := 𝓝[s] a
     have : Cauchy f := cauchy_nhds.mono' ha inf_le_left
@@ -62,8 +62,8 @@ theorem IsUniformEmbedding.isClosedEmbedding
   proof: ⟨hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed⟩
 
 中文:
-定理 IsUniformEmbedding.isClosedEmbedding
-  结论: [UniformSpace α] [UniformSpace β] [CompleteSpace α]
+定理 是一致嵌入.isClosedEmbedding
+  结论: [一致空间 α] [一致空间 β] [完备空间 α]
   证明: ⟨hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed⟩
 
 Depends on / 依赖: hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed, isClosed, isComplete_range, isEmbedding, isUniformInducing
@@ -90,7 +90,7 @@ theorem continuous_extend_of_cauchy
 
 中文:
 定理 continuous_extend_of_cauchy
-  结论: {e : α -> β} {f : α -> γ} (de : IsDenseInducing e)
+  结论: {e : α -> β} {f : α -> γ} (de : 是DenseInducing e)
   证明: de.continuous_extend fun b => CompleteSpace.complete (h b)
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, complete, continuous_extend, de.continuous_extend

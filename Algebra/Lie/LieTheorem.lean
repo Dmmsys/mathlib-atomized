@@ -233,8 +233,8 @@ theorem exists_nontrivial_weightSpace_of_lieIdeal
   let π
 
 中文:
-定理 exists_nontrivial_weightSpace_of_lieIdeal
-  结论: [LieModule.IsTriangularizable k L V]
+定理 存在_nontrivial_weightSpace_of_lieIdeal
+  结论: [Lie模.是Triangularizable k L V]
   证明: by
   obtain ⟨z, -, hz⟩ := SetLike.exists_of_lt (hA.lt_top)
   let e : (k ∙ z) ≃ₗ[k] k := (LinearEquiv.toSpanNonzeroSingleton k L z <| by aesop).symm
@@ -300,7 +300,7 @@ lemma exists_forall_lie_eq_smul_of_isSolvable_of_finite
       exact
 
 中文:
-引理 exists_forall_lie_eq_smul_of_isSolvable_of_finite
+引理 存在_对任意_lie_eq_smul_of_isSolvable_of_finite
   证明: by
   obtain H | ⟨A, hA, hAL⟩ := eq_top_or_exists_le_coatom (derivedSeries k L 1).toSubmodule
   · obtain _ | _ := subsingleton_or_nontrivial L
@@ -346,7 +346,7 @@ theorem exists_nontrivial_weightSpace_of_isSolvable
   use χ.comp toEn
 
 中文:
-定理 exists_nontrivial_weightSpace_of_isSolvable
+定理 存在_nontrivial_weightSpace_of_isSolvable
   证明: by
   let imL := (toEnd k L V).range
   let toEndo : L ->ₗ[k] imL := LinearMap.codRestrict imL.toSubmodule (toEnd k L V)

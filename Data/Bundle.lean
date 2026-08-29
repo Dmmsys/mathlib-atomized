@@ -65,7 +65,7 @@ structure TotalSpace
     - snd : E proj
 
 中文:
-结构 TotalSpace
+结构 全空间
   参数: (F : 类型) (E : B -> 类型)
   公理与运算 (2 个):
     - proj : B
@@ -86,8 +86,8 @@ instance [Inhabited
   body: ⟨⟨default, default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: B] [Inhabited (E default)] : Inhabited (TotalSpace F E)
+实例 [可居
+  签名: B] [可居 (E default)] : 可居 (全空间 F E)
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance [Inhabited B] [Inhabited (E default)] : Inhabited (TotalSpace F E) :=
@@ -107,7 +107,7 @@ abbreviation TotalSpace.mk'
   body: ⟨x, y⟩
 
 中文:
-缩写 TotalSpace.mk'
+缩写 全空间.mk'
   签名: (F : 类型) (x : B) (y : E x)
   定义体: ⟨x, y⟩
 -/
@@ -124,7 +124,7 @@ theorem TotalSpace.mk_cast
 @[simp 1001, mfld_simps 1001]
 
 中文:
-定理 TotalSpace.mk_cast
+定理 全空间.mk_cast
   条件: {x x' : B} (h : x = x') (b : E x)
   证明: by subst h; rfl
 
@@ -145,7 +145,7 @@ theorem TotalSpace.mk_inj
   simp [TotalSpace.ext_iff]
 
 中文:
-定理 TotalSpace.mk_inj
+定理 全空间.mk_inj
   条件: {b : B} {y y' : E b}
   结论: mk' F b y = mk' F b y' ↔ y = y'
   证明: by
@@ -167,9 +167,9 @@ theorem TotalSpace.mk_injective
   mk_inj.1
 
 中文:
-定理 TotalSpace.mk_injective
+定理 全空间.mk_injective
   条件: (b : B)
-  结论: Injective (mk b : E b -> TotalSpace F E)
+  结论: 单射 (mk b : E b -> 全空间 F E)
   证明: fun _ _ =>
   mk_inj.1
 -/
@@ -191,9 +191,9 @@ theorem TotalSpace.eta
 @[simp]
 
 中文:
-定理 TotalSpace.eta
-  条件: (z : TotalSpace F E)
-  结论: TotalSpace.mk z.proj z.2 = z
+定理 全空间.eta
+  条件: (z : 全空间 F E)
+  结论: 全空间.mk z.proj z.2 = z
   证明: rfl
 
 @[simp]
@@ -213,8 +213,8 @@ theorem TotalSpace.exists
 @[simp]
 
 中文:
-定理 TotalSpace.exists
-  条件: {p : TotalSpace F E -> 命题}
+定理 全空间.存在
+  条件: {p : 全空间 F E -> 命题}
   结论: (存在 x, p x) ↔ 存在 b y, p ⟨b, y⟩
   证明: ⟨fun ⟨x, hx⟩ => ⟨x.1, x.2, hx⟩, fun ⟨b, y, h⟩ => ⟨⟨b, y⟩, h⟩⟩
 
@@ -239,9 +239,9 @@ theorem TotalSpace.range_mk
     exact ⟨x, rfl⟩
 
 中文:
-定理 TotalSpace.range_mk
+定理 全空间.range_mk
   条件: (b : B)
-  结论: range ((↑) : E b -> TotalSpace F E) = π F E ⁻¹' {b}
+  结论: range ((↑) : E b -> 全空间 F E) = π F E ⁻¹' {b}
   证明: by
   apply Subset.antisymm
   · rintro _ ⟨x, rfl⟩
@@ -272,7 +272,7 @@ definition Trivial
   body: fun _ => F
 
 中文:
-定义 Trivial
+定义 平凡
   签名: (B : 类型) (F : 类型)
   定义体: fun _ => F
 -/
@@ -287,7 +287,7 @@ definition TotalSpace.trivialSnd
   body: TotalSpace.snd
 
 中文:
-定义 TotalSpace.trivialSnd
+定义 全空间.trivialSnd
   签名: (B : 类型) (F : 类型)
   定义体: TotalSpace.snd
 
@@ -308,7 +308,7 @@ definition TotalSpace.toProd
   invFun x := ⟨x.1, x.2⟩
 
 中文:
-定义 TotalSpace.toProd
+定义 全空间.toProd
   签名: (B F : 类型)
   定义体: (x.1, x.2)
   invFun x := ⟨x.1, x.2⟩
@@ -333,7 +333,7 @@ definition Pullback
 notation f " *ᵖ " E:arg => Pullback f E
 
 中文:
-定义 Pullback
+定义 拉回
   签名: (f : B' -> B) (E : B -> 类型)
   定义体: fun x => E (f x)
 
@@ -381,7 +381,7 @@ definition Pullback.lift
 @[simp, mfld_simps]
 
 中文:
-定义 Pullback.lift
+定义 拉回.lift
   签名: (f : B' -> B)
   定义体: fun z => ⟨f z.proj, z.2⟩
 
@@ -401,7 +401,7 @@ theorem Pullback.lift_mk
   proof: rfl
 
 中文:
-定理 Pullback.lift_mk
+定理 拉回.lift_mk
   条件: (f : B' -> B) (x : B') (y : E (f x))
   证明: rfl
 -/

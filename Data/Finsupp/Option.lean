@@ -62,7 +62,7 @@ definition some
 
 中文:
 定义 some
-  签名: (f : Option α ->₀ M)
+  签名: (f : 选项类型 α ->₀ M)
   定义体: f.comapDomain Option.some fun _ => by simp
 
 @[simp]
@@ -86,8 +86,8 @@ theorem some_apply
 
 中文:
 定理 some_apply
-  条件: (f : Option α ->₀ M) (a : α)
-  结论: f.some a = f (Option.some a)
+  条件: (f : 选项类型 α ->₀ M) (a : α)
+  结论: f.some a = f (选项类型.some a)
   证明: rfl
 
 @[simp]
@@ -108,7 +108,7 @@ theorem some_zero
 
 中文:
 定理 some_zero
-  结论: (0 : Option α ->₀ M).some = 0
+  结论: (0 : 选项类型 α ->₀ M).some = 0
   证明: by
   ext
   simp
@@ -133,7 +133,7 @@ theorem some_add
 
 中文:
 定理 some_add
-  条件: [AddZeroClass M] (f g : Option α ->₀ M)
+  条件: [加法零类 M] (f g : 选项类型 α ->₀ M)
   结论: (f + g).some = f.some + g.some
   证明: by
   ext
@@ -164,7 +164,7 @@ theorem some_single_none
 中文:
 定理 some_single_none
   条件: (m : M)
-  结论: (single none m : Option α ->₀ M).some = 0
+  结论: (single none m : 选项类型 α ->₀ M).some = 0
   证明: by
   ext
   simp
@@ -285,7 +285,7 @@ theorem some_update_none
 
 中文:
 定理 some_update_none
-  条件: (f : Option α ->₀ M) (a : M)
+  条件: (f : 选项类型 α ->₀ M) (a : M)
   证明: by
   ext
   simp [Finsupp.update]
@@ -314,7 +314,7 @@ definition optionEquiv
 
 中文:
 定义 optionEquiv
-  签名: : (Option α ->₀ M) ≃ M × (α ->₀ M) where
+  签名: : (选项类型 α ->₀ M) ≃ M × (α ->₀ M) where
   定义体: (P none, P.some)
   invFun P := (P.2.embDomain .some).update none P.1
   left_inv P := by ext (_ | a) <;> simp [Finsupp.update]
@@ -413,7 +413,7 @@ lemma optionElim_apply_eq_elim
 
 中文:
 引理 optionElim_apply_eq_elim
-  条件: (y : M) (f : α ->₀ M) (a : Option α)
+  条件: (y : M) (f : α ->₀ M) (a : 选项类型 α)
   证明: by
   cases a with
   | none => exact optionElim_apply_none y f
@@ -440,7 +440,7 @@ lemma optionElim_eq_elim'
 
 中文:
 引理 optionElim_eq_elim'
-  条件: (y : M) (f : α ->₀ M) (a : Option α)
+  条件: (y : M) (f : α ->₀ M) (a : 选项类型 α)
   证明: by
   rw [optionElim_apply_eq_elim]; rw [Option.elim'_eq_elim]
 
@@ -498,7 +498,7 @@ lemma optionElim_some
 
 中文:
 引理 optionElim_some
-  条件: (f : Option α ->₀ M)
+  条件: (f : 选项类型 α ->₀ M)
   结论: f.some.optionElim (f none) = f
   证明: by
   ext a
@@ -672,7 +672,7 @@ theorem eq_option_embedding_update_none_iff
 
 中文:
 定理 eq_option_embedding_update_none_iff
-  条件: {n : Option α ->₀ M} {m : α ->₀ M} {i : M}
+  条件: {n : 选项类型 α ->₀ M} {m : α ->₀ M} {i : M}
   证明: (optionEquiv.eq_symm_apply (x := (_, _))).trans Prod.ext_iff
 
 Depends on / 依赖: Prod.ext_iff, eq_symm_apply, ext_iff, optionEquiv, optionEquiv.eq_symm_apply
@@ -701,7 +701,7 @@ theorem prod_option_index
 
 中文:
 定理 prod_option_index
-  结论: [AddZeroClass M] [CommMonoid N] (f : Option α ->₀ M)
+  结论: [加法零类 M] [交换幺半群 N] (f : 选项类型 α ->₀ M)
   证明: by
   classical
     induction f using induction_linear with
@@ -739,7 +739,7 @@ theorem sum_option_index_smul
 
 中文:
 定理 sum_option_index_smul
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] (f : Option α ->₀ R)
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] (f : 选项类型 α ->₀ R)
   证明: f.sum_option_index _ (fun _ => zero_smul _ _) fun _ _ _ => add_smul _ _ _
 
 @[simp]
@@ -763,7 +763,7 @@ lemma optionElim_add
 
 中文:
 引理 optionElim_add
-  条件: [AddZeroClass M] (a b : α ->₀ M) (i j : M)
+  条件: [加法零类 M] (a b : α ->₀ M) (i j : M)
   证明: by
   ext x; cases x <;> simp
 -/

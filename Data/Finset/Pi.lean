@@ -44,8 +44,8 @@ definition Pi.empty
 universe u v
 
 中文:
-定义 Pi.empty
-  签名: (β : α -> Sort*) (a : α) (h : a in (∅ : Finset α))
+定义 依赖函数类型.empty
+  签名: (β : α -> 类型层*) (a : α) (h : a in (∅ : 有限集 α))
   定义体: Multiset.Pi.empty β a h
 
 universe u v
@@ -73,7 +73,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (s : Finset α) (t : 对任意 a, Finset (β a))
+  签名: (s : 有限集 α) (t : 对任意 a, 有限集 (β a))
   定义体: ⟨s.1.pi fun a => (t a).1, s.nodup.pi fun a _ => (t a).nodup⟩
 
 @[simp]
@@ -97,7 +97,7 @@ theorem pi_val
 
 中文:
 定理 pi_val
-  条件: (s : Finset α) (t : 对任意 a, Finset (β a))
+  条件: (s : 有限集 α) (t : 对任意 a, 有限集 (β a))
   结论: (s.pi t).1 = s.1.pi fun a => (t a).1
   证明: rfl
 
@@ -117,7 +117,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: {s : Finset α} {t : 对任意 a, Finset (β a)} {f : 对任意 a in s, β a}
+  条件: {s : 有限集 α} {t : 对任意 a, 有限集 (β a)} {f : 对任意 a in s, β a}
   证明: Multiset.mem_pi _ _ _
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, Multiset, Multiset.mem_pi, compHom, fast_instance, mem_pi, toMonoidHom, toRealHom, toRealHom.toMonoidHom
@@ -137,8 +137,8 @@ definition Pi.cons
 @[simp]
 
 中文:
-定义 Pi.cons
-  签名: (s : Finset α) (a : α) (b : δ a) (f : 对任意 a, a in s -> δ a) (a' : α) (h : a' in insert a s)
+定义 依赖函数类型.cons
+  签名: (s : 有限集 α) (a : α) (b : δ a) (f : 对任意 a, a in s -> δ a) (a' : α) (h : a' in insert a s)
   定义体: Multiset.Pi.cons s.1 a b f _ (Multiset.mem_cons.2 <| mem_insert.symm.2 h)
 
 @[simp]
@@ -159,8 +159,8 @@ theorem Pi.cons_same
   proof: Multiset.Pi.cons_same _
 
 中文:
-定理 Pi.cons_same
-  条件: (s : Finset α) (a : α) (b : δ a) (f : 对任意 a, a in s -> δ a) (h : a in insert a s)
+定理 依赖函数类型.cons_same
+  条件: (s : 有限集 α) (a : α) (b : δ a) (f : 对任意 a, a in s -> δ a) (h : a in insert a s)
   证明: Multiset.Pi.cons_same _
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, Multiset, Multiset.Pi.cons_same, algebraMap, commutes, cons_same, smul_def, toRealHom
@@ -178,8 +178,8 @@ theorem Pi.cons_ne
   proof: Multiset.Pi.cons_ne _ (Ne.symm ha)
 
 中文:
-定理 Pi.cons_ne
-  结论: {s : Finset α} {a a' : α} {b : δ a} {f : 对任意 a, a in s -> δ a} {h : a' in insert a s}
+定理 依赖函数类型.cons_ne
+  结论: {s : 有限集 α} {a a' : α} {b : δ a} {f : 对任意 a, a in s -> δ a} {h : a' in insert a s}
   证明: Multiset.Pi.cons_ne _ (Ne.symm ha)
 
 Depends on / 依赖: Multiset, Multiset.Pi.cons_ne, Ne.symm, cons_ne
@@ -203,8 +203,8 @@ theorem Pi.cons_injective
             Pi.cons s a b e₂ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) :=
 
 中文:
-定理 Pi.cons_injective
-  条件: {a : α} {b : δ a} {s : Finset α} (hs : a ∉ s)
+定理 依赖函数类型.cons_injective
+  条件: {a : α} {b : δ a} {s : 有限集 α} (hs : a ∉ s)
   证明: fun e₁ e₂ eq =>
 @Multiset.Pi.cons_injective α _ δ a b s.1 hs _ _
     funext fun e =>
@@ -238,8 +238,8 @@ theorem pi_empty
 
 中文:
 定理 pi_empty
-  条件: {t : 对任意 a : α, Finset (β a)}
-  结论: pi (∅ : Finset α) t = singleton (Pi.empty β)
+  条件: {t : 对任意 a : α, 有限集 (β a)}
+  结论: pi (∅ : 有限集 α) t = singleton (依赖函数类型.empty β)
   证明: rfl
 
 @[simp]
@@ -264,7 +264,7 @@ alias ⟨_, pi_nonempty_of_forall_nonempty⟩ := pi_nonempty
 
 中文:
 引理 pi_nonempty
-  结论: (s.pi t).Nonempty ↔ 对任意 a in s, (t a).Nonempty
+  结论: (s.pi t).非空 ↔ 对任意 a in s, (t a).非空
   证明: by
   simp [Finset.Nonempty, Classical.skolem]
 
@@ -327,7 +327,7 @@ dedup
 
 中文:
 定理 pi_insert
-  结论: [对任意 a, DecidableEq (β a)] {s : Finset α} {t : 对任意 a : α, Finset (β a)} {a : α}
+  结论: [对任意 a, DecidableEq (β a)] {s : 有限集 α} {t : 对任意 a : α, 有限集 (β a)} {a : α}
   证明: by
   apply eq_of_veq
   rw [← (pi (insert a s) t).2.dedup]
@@ -370,7 +370,7 @@ theorem pi_singletons
 
 中文:
 定理 pi_singletons
-  条件: {β : 类型} (s : Finset α) (f : α -> β)
+  条件: {β : 类型} (s : 有限集 α) (f : α -> β)
   证明: by grind
 -/
 theorem pi_singletons {β : Type*} (s : Finset α) (f : α -> β) :
@@ -386,7 +386,7 @@ theorem pi_const_singleton
 
 中文:
 定理 pi_const_singleton
-  条件: {β : 类型} (s : Finset α) (i : β)
+  条件: {β : 类型} (s : 有限集 α) (i : β)
   证明: pi_singletons s fun _ => i
 
 Depends on / 依赖: pi_singletons
@@ -405,7 +405,7 @@ theorem pi_subset
 
 中文:
 定理 pi_subset
-  条件: {s : Finset α} (t₁ t₂ : 对任意 a, Finset (β a)) (h : 对任意 a in s, t₁ a subseteq t₂ a)
+  条件: {s : 有限集 α} (t₁ t₂ : 对任意 a, 有限集 (β a)) (h : 对任意 a in s, t₁ a subseteq t₂ a)
   证明: fun _ hg => mem_pi.2 fun a ha => h a ha (mem_pi.mp hg a ha)
 
 Depends on / 依赖: mem_pi, mem_pi.mp
@@ -425,7 +425,7 @@ disjoint_iff_ne.1 h (f₁ a ha) (mem_pi.mp hf₁ a ha) (f₂ a ha) (mem_pi.mp hf
 
 中文:
 定理 pi_disjoint_of_disjoint
-  结论: {δ : α -> 类型} {s : Finset α} (t₁ t₂ : 对任意 a, Finset (δ a)) {a : α}
+  结论: {δ : α -> 类型} {s : 有限集 α} (t₁ t₂ : 对任意 a, 有限集 (δ a)) {a : α}
   证明: disjoint_iff_ne.2 fun f₁ hf₁ f₂ hf₂ eq₁₂ =>
 disjoint_iff_ne.1 h (f₁ a ha) (mem_pi.mp hf₁ a ha) (f₂ a ha) (mem_pi.mp hf₂ a ha)
       congr_fun (congr_fun eq₁₂ a) ha
@@ -454,7 +454,7 @@ definition piDiag
 
 中文:
 定义 piDiag
-  签名: (s : Finset α) (ι : 类型) [DecidableEq (ι -> α)]
+  签名: (s : 有限集 α) (ι : 类型) [DecidableEq (ι -> α)]
   定义体: s.image (const ι)
 
 Depends on / 依赖: s.image
@@ -486,7 +486,7 @@ lemma card_piDiag
 
 中文:
 引理 card_piDiag
-  条件: (s : Finset α) (ι : 类型) [DecidableEq (ι -> α)] [Nonempty ι]
+  条件: (s : 有限集 α) (ι : 类型) [DecidableEq (ι -> α)] [非空 ι]
   证明: by rw [piDiag, card_image_of_injective _ const_injective]
 -/
 @[simp] lemma card_piDiag (s : Finset α) (ι : Type*) [DecidableEq (ι -> α)] [Nonempty ι] :
@@ -508,7 +508,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (s : Finset ι) (f : (i : ι) -> π i)
+  签名: (s : 有限集 ι) (f : (i : ι) -> π i)
   定义体: fun x => f x
 -/
 def restrict (s : Finset ι) (f : (i : ι) -> π i) : (i : s) -> π i := fun x => f x
@@ -524,7 +524,7 @@ theorem restrict_def
 
 中文:
 定理 restrict_def
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: s.restrict (π := π) = fun f x => f x
   证明: rfl
 -/
@@ -543,7 +543,7 @@ theorem _root_.Set.piCongrLeft_comp_domRestrict
 alias _root_.Set.piCongrLeft_comp_restrict := _root_.Set.piCongrLeft_comp_domRestrict
 
 中文:
-定理 _root_.Set.piCongrLeft_comp_domRestrict
+定理 _root_.集合.piCongrLeft_comp_domRestrict
   证明: rfl
 
 @[deprecated (since := "2026-07-19")]
@@ -651,7 +651,7 @@ lemma dependsOn_restrict
 
 中文:
 引理 dependsOn_restrict
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: DependsOn (s.restrict (π := π)) s
   证明: (s : Set ι).dependsOn_domRestrict
 -/
@@ -670,7 +670,7 @@ lemma restrict_preimage_univ
 
 中文:
 引理 restrict_preimage_univ
-  条件: [DecidablePred (· in s)] (t : (i : s) -> Set (π i))
+  条件: [DecidablePred (· in s)] (t : (i : s) -> 集合 (π i))
   证明: by
   ext
   simp_all
@@ -694,7 +694,7 @@ lemma domRestrict_preimage
 
 中文:
 引理 domRestrict_preimage
-  结论: [DecidableEq ι] {I : Set ι}
+  结论: [DecidableEq ι] {I : 集合 ι}
   证明: by
   grind
 
@@ -719,7 +719,7 @@ lemma restrict₂_preimage
 
 中文:
 引理 restrict₂_preimage
-  条件: [DecidablePred (· in s)] (hst : s subseteq t) (u : (i : s) -> Set (π i))
+  条件: [DecidablePred (· in s)] (hst : s subseteq t) (u : (i : s) -> 集合 (π i))
   证明: by
   grind [restrict₂]
 -/

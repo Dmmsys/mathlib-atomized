@@ -31,7 +31,7 @@ abbreviation Nonempty
   body: _root_.Nonempty (X _⦋0⦌)
 
 中文:
-缩写 Nonempty
+缩写 非空
   签名: : 命题
   定义体: _root_.Nonempty (X _⦋0⦌)
 -/
@@ -49,8 +49,8 @@ instance [X.Nonempty]
   body: ⟨N.mk (n := 0) (Classical.arbitrary _) (by simp)⟩
 
 中文:
-实例 [X.Nonempty]
-  签名: : Nonempty X.N
+实例 [X.非空]
+  签名: : 非空 X.N
   定义体: ⟨N.mk (n := 0) (Classical.arbitrary _) (by simp)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, N.mk, arbitrary
@@ -66,8 +66,8 @@ instance [X.Nonempty]
   body: ⟨S.mk (dim := 0) (Classical.arbitrary _)⟩
 
 中文:
-实例 [X.Nonempty]
-  签名: : Nonempty X.S
+实例 [X.非空]
+  签名: : 非空 X.S
   定义体: ⟨S.mk (dim := 0) (Classical.arbitrary _)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, S.mk, arbitrary
@@ -92,8 +92,8 @@ lemma nonempty_of_hom
 
 中文:
 引理 nonempty_of_hom
-  条件: {Y : SSet.{u}} (f : Y ⟶ X) [Y.Nonempty]
-  结论: X.Nonempty
+  条件: {Y : SSet.{u}} (f : Y ⟶ X) [Y.非空]
+  结论: X.非空
   证明: ⟨f.app _ (Classical.arbitrary _)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, f.app
@@ -150,7 +150,7 @@ definition isInitialOfNotNonempty
 
 中文:
 定义 isInitialOfNotNonempty
-  签名: (hX : ¬ X.Nonempty)
+  签名: (hX : ¬ X.非空)
   定义体: by
   simp only [not_nonempty_iff] at hX
   have (n : SimplexCategoryᵒᵖ) : IsEmpty (X.obj n) :=

@@ -60,7 +60,7 @@ definition abelianImageToKernel
 
 中文:
 定义 abelianImageToKernel
-  签名: : Abelian.image S.f ⟶ kernel S.g
+  签名: : 交换.像 S.f ⟶ kernel S.g
   定义体: kernel.lift S.g (Abelian.image.ι S.f)
     (by simp only [← cancel_epi (Abelian.factorThruImage S.f),
       kernel.lift_ι_assoc, zero, comp_zero])
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono S.abelianImageToKernel
+  签名: 单态射 S.abelianImageToKernel
   定义体: mono_of_mono_fac S.abelianImageToKernel_comp_kernel_ι
 
 @[reassoc]
@@ -249,7 +249,7 @@ definition cokernelToAbelianCoimage
 
 中文:
 定义 cokernelToAbelianCoimage
-  签名: : cokernel S.f ⟶ Abelian.coimage S.g
+  签名: : cokernel S.f ⟶ 交换.coimage S.g
   定义体: cokernel.desc S.f (Abelian.coimage.π S.g) (by
     simp only [← cancel_mono (Abelian.factorThruCoimage S.g), assoc,
       cokernel.π_desc, zero, zero_comp])
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi S.cokernelToAbelianCoimage
+  签名: 满态射 S.cokernelToAbelianCoimage
   定义体: epi_of_epi_fac S.cokernel_π_comp_cokernelToAbelianCoimage
 
 Depends on / 依赖: S.cokernel_, epi_of_epi_fac
@@ -423,8 +423,8 @@ definition HomologyData.ofAbelian
   iso := Abelian.coimageIsoImage (kernel.ι S.g ≫ cokernel.π S.f)
 
 中文:
-定义 HomologyData.ofAbelian
-  签名: : S.HomologyData where
+定义 同调数据.ofAbelian
+  签名: : S.同调数据 where
   定义体: LeftHomologyData.ofAbelian S
   right := RightHomologyData.ofAbelian S
   iso := Abelian.coimageIsoImage (kernel.ι S.g ≫ cokernel.π S.f)
@@ -445,7 +445,7 @@ instance _root_.CategoryTheory.categoryWithHomology_of_abelian
   body: HasHomology.mk' (HomologyData.ofAbelian S)
 
 中文:
-实例 _root_.CategoryTheory.categoryWithHomology_of_abelian
+实例 _root_.范畴论.categoryWithHomology_of_abelian
   签名: :
   定义体: HasHomology.mk' (HomologyData.ofAbelian S)
 
@@ -468,7 +468,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalMonoCategory (ShortComplex C)
+  签名: 是正规单态射范畴 (短复形 C)
   定义体: ⟨fun i _ => ⟨by
   refine NormalMono.mk _ (cokernel.π i) (cokernel.condition _)
     (isLimitOfIsLimitπ _ ?_ ?_ ?_)
@@ -494,7 +494,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNormalEpiCategory (ShortComplex C)
+  签名: 是正规满态射范畴 (短复形 C)
   定义体: ⟨fun p _ => ⟨by
   refine NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
     (isColimitOfIsColimitπ _ ?_ ?_ ?_)
@@ -516,7 +516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (ShortComplex C)
+  签名: 交换 (短复形 C)
 -/
 noncomputable instance : Abelian (ShortComplex C) where
 
@@ -590,7 +590,7 @@ definition isoImage
 
 中文:
 定义 isoImage
-  签名: : H ≅ image (S.iCycles ≫ S.pOpcycles)
+  签名: : H ≅ 像 (S.iCycles ≫ S.pOpcycles)
   定义体: by
   have : ((S.isoCyclesOfIsLimit hkf).inv ≫ π) ≫ ι ≫
     (S.isoOpcyclesOfIsColimit hcc).hom = S.iCycles ≫ S.pOpcycles := by
@@ -748,7 +748,7 @@ lemma g'_eq
 
 中文:
 引理 g'_eq
-  结论: hcc.desc (CokernelCofork.ofπ S.g S.zero) =
+  结论: hcc.desc (余核余叉.ofπ S.g S.zero) =
   证明: by
   have := Cofork.IsColimit.epi hcc
   simp [← cancel_epi cc.π]
@@ -937,7 +937,7 @@ definition ofEpiMonoFactorisation
 
 中文:
 定义 ofEpiMonoFactorisation
-  签名: {kf : KernelFork S.g} {cc : CokernelCofork S.f}
+  签名: {kf : 核叉 S.g} {cc : 余核余叉 S.f}
   定义体: ofEpiMonoFactorisation.leftHomologyData S hkf hcc fac
   right := ofEpiMonoFactorisation.rightHomologyData S hkf hcc fac
   iso := Iso.refl _

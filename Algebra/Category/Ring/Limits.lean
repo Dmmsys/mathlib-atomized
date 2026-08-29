@@ -70,7 +70,7 @@ definition sectionsSubsemiring
 
 中文:
 定义 sectionsSubsemiring
-  签名: : Subsemiring (对任意 j, F.obj j)
+  签名: : 子半环 (对任意 j, F.obj j)
   定义体: { (MonCat.sectionsSubmonoid (J := J) (F ⋙ forget₂ SemiRingCat.{u} MonCat.{u})),
     (AddMonCat.sectionsAddSubmonoid (J := J) (F ⋙ forget₂ SemiRingCat.{u} AddCommMonCat.{u} ⋙
       forget₂ AddCommMonCat AddMonCat)) with
@@ -94,7 +94,7 @@ instance sectionsSemiring
 
 中文:
 实例 sectionsSemiring
-  签名: : Semiring (F ⋙ forget SemiRingCat.{u}).sections
+  签名: : 半环 (F ⋙ forget Semi环范畴.{u}).sections
   定义体: (sectionsSubsemiring F).toSemiring
 
 Depends on / 依赖: sectionsSubsemiring, toSemiring
@@ -181,7 +181,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: SemiRingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
   π :=
     { app := fun j => SemiRingCat.ofHom <| limitπRingHom.{v, u} F j
@@ -221,7 +221,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: by
   refine IsLimit.ofFaithful (forget SemiRingCat.{u}) (Types.Small.limitConeIsLimit.{v, u} _)
     (fun s => ofHom { toFun := _, map_one' := ?_, map_mul' := ?_, map_zero' := ?_, map_add' := ?_ })
@@ -265,7 +265,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: ⟨limitCone.{v, u} F, limitConeIsLimit.{v, u} F⟩
 
 Depends on / 依赖: limitCone, limitConeIsLimit
@@ -311,7 +311,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits SemiRingCat.{u}
+  签名: : 有极限 Semi环范畴.{u}
   定义体: SemiRingCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: SemiRingCat, SemiRingCat.hasLimitsOfSize, hasLimitsOfSize
@@ -454,7 +454,7 @@ instance forget₂Mon_preservesLimits
 
 中文:
 实例 forget₂Mon_preservesLimits
-  签名: : PreservesLimits (forget₂ SemiRingCat MonCat.{u})
+  签名: : PreservesLimits (forget₂ Semi环范畴 幺半群范畴.{u})
   定义体: SemiRingCat.forget₂Mon_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: SemiRingCat, SemiRingCat.forget
@@ -498,7 +498,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget SemiRingCat.{u})
+  签名: : PreservesLimits (forget Semi环范畴.{u})
   定义体: SemiRingCat.forget_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: SemiRingCat, SemiRingCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize
@@ -615,7 +615,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat.{u}) ⋙ forget _)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   liftLimit (limit.isLimit (F ⋙ forget₂ CommSemiRingCat.{u} SemiRingCat.{u}))
@@ -637,7 +637,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: liftedLimitIsLimit
@@ -655,7 +655,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: ⟨limitCone.{v, u} F, limitConeIsLimit.{v, u} F⟩
 
 Depends on / 依赖: limitCone, limitConeIsLimit
@@ -698,7 +698,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits CommSemiRingCat.{u}
+  签名: : 有极限 交换Semi环范畴.{u}
   定义体: CommSemiRingCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.hasLimitsOfSize, hasLimitsOfSize
@@ -787,7 +787,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget CommSemiRingCat.{u})
+  签名: : PreservesLimits (forget 交换Semi环范畴.{u})
   定义体: CommSemiRingCat.forget_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize
@@ -835,7 +835,7 @@ definition sectionsSubring
 
 中文:
 定义 sectionsSubring
-  签名: : Subring (对任意 j, F.obj j)
+  签名: : 子环 (对任意 j, F.obj j)
   定义体: let f : J ⥤ AddGrpCat.{u} :=
     F ⋙ forget₂ RingCat.{u} AddCommGrpCat.{u} ⋙
     forget₂ AddCommGrpCat.{u} AddGrpCat.{u}
@@ -868,7 +868,7 @@ inferInstanceAs Ring (Shrink _)
 
 中文:
 实例 limitRing
-  签名: : Ring.{u} (Types.Small.limitCone.{v, u} (F ⋙ forget RingCat.{u})).pt
+  签名: : 环.{u} (Types.Small.limitCone.{v, u} (F ⋙ forget 环范畴.{u})).pt
   定义体: let _ : Ring (F ⋙ forget RingCat.{u}).sections := (sectionsSubring F).toRing
 inferInstanceAs Ring (Shrink _)
 
@@ -893,7 +893,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 实例 :
-  签名: CreatesLimit F (forget₂ RingCat.{u} SemiRingCat.{u})
+  签名: 创造极限 F (forget₂ 环范畴.{u} Semi环范畴.{u})
   定义体: have : (forget₂ RingCat SemiRingCat).ReflectsIsomorphisms :=
     CategoryTheory.reflectsIsomorphisms_forget₂ _ _
   have : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
@@ -934,7 +934,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   liftLimit (limit.isLimit (F ⋙ forget₂ RingCat.{u} SemiRingCat.{u}))
@@ -956,7 +956,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: liftedLimitIsLimit
@@ -976,7 +976,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   hasLimit_of_created F (forget₂ RingCat.{u} SemiRingCat.{u})
@@ -1024,7 +1024,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits RingCat.{u}
+  签名: : 有极限 环范畴.{u}
   定义体: RingCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: RingCat, RingCat.hasLimitsOfSize, hasLimitsOfSize
@@ -1068,7 +1068,7 @@ instance forget₂SemiRing_preservesLimits
 
 中文:
 实例 forget₂SemiRing_preservesLimits
-  签名: : PreservesLimits (forget₂ RingCat SemiRingCat.{u})
+  签名: : PreservesLimits (forget₂ 环范畴 Semi环范畴.{u})
   定义体: RingCat.forget₂SemiRing_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: RingCat, RingCat.forget
@@ -1184,7 +1184,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget RingCat.{u})
+  签名: : PreservesLimits (forget 环范畴.{u})
   定义体: RingCat.forget_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: RingCat, RingCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize
@@ -1261,7 +1261,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimit F (forget₂ CommRingCat.{u} RingCat.{u})
+  签名: 创造极限 F (forget₂ 交换环范畴.{u} 环范畴.{u})
   定义体: /-
     A terse solution here would be
     ```
@@ -1318,7 +1318,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ CommRingCat RingCat) ⋙ forget RingCat)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   liftLimit (limit.isLimit (F ⋙ forget₂ CommRingCat.{u} RingCat.{u}))
@@ -1340,7 +1340,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone.{v, u} F)
+  签名: : 是极限 (limitCone.{v, u} F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: liftedLimitIsLimit
@@ -1360,7 +1360,7 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ CommRingCat RingCat) ⋙ forget RingCat)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   hasLimit_of_created F (forget₂ CommRingCat.{u} RingCat.{u})
@@ -1408,7 +1408,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits CommRingCat.{u}
+  签名: : 有极限 交换环范畴.{u}
   定义体: CommRingCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommRingCat, CommRingCat.hasLimitsOfSize, hasLimitsOfSize
@@ -1452,7 +1452,7 @@ instance forget₂Ring_preservesLimits
 
 中文:
 实例 forget₂Ring_preservesLimits
-  签名: : PreservesLimits (forget₂ CommRingCat RingCat.{u})
+  签名: : PreservesLimits (forget₂ 交换环范畴 环范畴.{u})
   定义体: CommRingCat.forget₂Ring_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommMonCat, CommRingCat, CommRingCat.forget, ConcreteCategory, ConcreteCategory.hom
@@ -1568,7 +1568,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget CommRingCat.{u})
+  签名: : PreservesLimits (forget 交换环范畴.{u})
   定义体: CommRingCat.forget_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommRingCat, CommRingCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize

@@ -86,7 +86,7 @@ theorem apply_eq_dlookup
 
 中文:
 定理 apply_eq_dlookup
-  条件: (m : List (Σ _ : α, β)) (y : β) (x : α)
+  条件: (m : 列表 (Σ _ : α, β)) (y : β) (x : α)
   证明: by
   dsimp only [apply]
   congr 1
@@ -143,7 +143,7 @@ definition zeroDefaultSupp
 
 中文:
 定义 zeroDefaultSupp
-  签名: : TotalFunction α β -> Finset α
+  签名: : TotalFunction α β -> 有限集 α
 -/
 def zeroDefaultSupp : TotalFunction α β -> Finset α
   | .withDefault A _ =>
@@ -218,7 +218,7 @@ instance Finsupp.sampleableExt
   shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
 
 中文:
-实例 Finsupp.sampleableExt
+实例 有限支撑.sampleableExt
   签名: : SampleableExt (α ->₀ β) where
   定义体: TotalFunction α (SampleableExt.proxy β)
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp
@@ -249,7 +249,7 @@ instance DFinsupp.sampleableExt
   shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.
 
 中文:
-实例 DFinsupp.sampleableExt
+实例 直和有限支撑.sampleableExt
   签名: : SampleableExt (Π₀ _ : α, β) where
   定义体: TotalFunction α (SampleableExt.proxy β)
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
@@ -284,7 +284,7 @@ inductive InjectiveFunction
 归纳类型 InjectiveFunction
   参数: (α : 类型u)
   构造子 (1 个):
-    - mapToSelf: (xs : List (Σ _ : α, α)) : xs.map Sigma.fst ~ xs.map Sigma.snd -> List.Nodup (xs.map Sigma.snd) -> InjectiveFunction α
+    - mapToSelf: (xs : 列表 (Σ _ : α, α)) : xs.map 依赖和类型.fst ~ xs.map 依赖和类型.snd -> 列表.Nodup (xs.map 依赖和类型.snd) -> InjectiveFunction α
 -/
 inductive InjectiveFunction (α : Type u) : Type u
   | mapToSelf (xs : List (Σ _ : α, α)) :
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (InjectiveFunction α)
+  签名: 可居 (InjectiveFunction α)
   定义体: ⟨⟨[], List.Perm.nil, List.nodup_nil⟩⟩
 
 Depends on / 依赖: List.Perm.nil, List.nodup_nil, nodup_nil
@@ -352,8 +352,8 @@ definition List.applyId
 @[simp]
 
 中文:
-定义 List.applyId
-  签名: [DecidableEq α] (xs : List (α × α)) (x : α)
+定义 列表.applyId
+  签名: [DecidableEq α] (xs : 列表 (α × α)) (x : α)
   定义体: ((xs.map Prod.toSigma).dlookup x).getD x
 
 @[simp]
@@ -375,8 +375,8 @@ theorem List.applyId_cons
   split_ifs <;> rfl
 
 中文:
-定理 List.applyId_cons
-  条件: [DecidableEq α] (xs : List (α × α)) (x y z : α)
+定理 列表.applyId_cons
+  条件: [DecidableEq α] (xs : 列表 (α × α)) (x y z : α)
   证明: by
   simp only [List.applyId, List.dlookup, eq_rec_constant, Prod.toSigma, List.map]
   split_ifs <;> rfl
@@ -408,8 +408,8 @@ theorem List.applyId_zip_eq
       · cas
 
 中文:
-定理 List.applyId_zip_eq
-  结论: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs)
+定理 列表.applyId_zip_eq
+  结论: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs)
   证明: by
   induction xs generalizing ys i with
   | nil => cases h₂
@@ -464,7 +464,7 @@ theorem applyId_mem_iff
 
 中文:
 定理 applyId_mem_iff
-  结论: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys)
+  结论: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs) (h₁ : xs ~ ys)
   证明: by
   simp only [List.applyId]
   cases h₃ : List.dlookup x (List.map Prod.toSigma (xs.zip ys)) with
@@ -531,8 +531,8 @@ theorem List.applyId_eq_self
   exact h (List.of_mem_zip hy).1
 
 中文:
-定理 List.applyId_eq_self
-  条件: [DecidableEq α] {xs ys : List α} (x : α)
+定理 列表.applyId_eq_self
+  条件: [DecidableEq α] {xs ys : 列表 α} (x : α)
   证明: by
   intro h
   dsimp [List.applyId]
@@ -575,7 +575,7 @@ theorem applyId_injective
 
 中文:
 定理 applyId_injective
-  条件: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys)
+  条件: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs) (h₁ : xs ~ ys)
   证明: by
   intro x y h
   by_cases hx : x in xs <;> by_cases hy : y in xs
@@ -630,7 +630,7 @@ definition Perm.slice
     ⟨xs', ys.inter xs', h₀, h'.inter _⟩
 
 中文:
-定义 Perm.slice
+定义 置换.slice
   签名: [DecidableEq α] (n m : 自然数)
   定义体: List.dropSlice n m xs
     have h₀ : xs' ~ ys.inter xs' := List.Perm.dropSlice_inter _ _ h h'
@@ -684,7 +684,7 @@ pure Perm.slice (i * n) n xs
 
 中文:
 定义 shrinkPerm
-  签名: {α : Type} [DecidableEq α]
+  签名: {α : 类型} [DecidableEq α]
   定义体: xs.1.length
     let n ← (sliceSizes k).force
 let i ← List.finRange k / n
@@ -715,7 +715,7 @@ definition shrink
 
 中文:
 定义 shrink
-  签名: {α : Type} [DecidableEq α]
+  签名: {α : 类型} [DecidableEq α]
   定义体: le_of_eq (List.Perm.length_eq h₀)
     have h₄ : ys'.length <= xs'.length := le_of_eq (List.Perm.length_eq h₀.symm)
     pure
@@ -752,7 +752,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (xs ys : List α) (h : xs ~ ys) (h' : ys.Nodup)
+  签名: (xs ys : 列表 α) (h : xs ~ ys) (h' : ys.Nodup)
   定义体: have h₀ : xs.length <= ys.length := le_of_eq h.length_eq
   have h₁ : ys.length <= xs.length := le_of_eq h.length_eq.symm
   InjectiveFunction.mapToSelf (List.toFinmap' (xs.zip ys))
@@ -788,7 +788,7 @@ theorem injective
 中文:
 定理 injective
   条件: [DecidableEq α] (f : InjectiveFunction α)
-  结论: Injective (apply f)
+  结论: 单射 (apply f)
   证明: by
   obtain ⟨xs, hperm, hnodup⟩ := f
   generalize h₀ : List.map Sigma.fst xs = xs₀
@@ -866,7 +866,7 @@ instance PiInjective.sampleableExt
 
 中文:
 实例 PiInjective.sampleableExt
-  签名: : SampleableExt { f : 整数 -> 整数 // Function.Injective f } where
+  签名: : SampleableExt { f : 整数 -> 整数 // 函数.单射 f } where
   定义体: InjectiveFunction Int
   interp f := ⟨apply f, f.injective⟩
   shrink := { shrink := @InjectiveFunction.shrink Int _ }
@@ -891,7 +891,7 @@ instance Injective.testable
   body: I
 
 中文:
-实例 Injective.testable
+实例 单射.testable
   签名: (f : α -> β)
   定义体: I
 -/
@@ -910,8 +910,8 @@ instance Monotone.testable
   body: I
 
 中文:
-实例 Monotone.testable
-  签名: [Preorder α] [Preorder β] (f : α -> β)
+实例 递增.testable
+  签名: [预序 α] [预序 β] (f : α -> β)
   定义体: I
 -/
 instance Monotone.testable [Preorder α] [Preorder β] (f : α -> β)
@@ -929,8 +929,8 @@ instance Antitone.testable
   body: I
 
 中文:
-实例 Antitone.testable
-  签名: [Preorder α] [Preorder β] (f : α -> β)
+实例 递减.testable
+  签名: [预序 α] [预序 β] (f : α -> β)
   定义体: I
 -/
 instance Antitone.testable [Preorder α] [Preorder β] (f : α -> β)

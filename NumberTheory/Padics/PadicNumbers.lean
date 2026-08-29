@@ -88,8 +88,8 @@ definition Rat.padicValuation
     exact 
 
 中文:
-定义 Rat.padicValuation
-  签名: (p : 自然数) [Fact p.Prime]
+定义 有理数.padicValuation
+  签名: (p : 自然数) [Fact p.素]
   定义体: if x = 0 then 0 else exp (-padicValRat p x)
   map_zero' := by simp
   map_one' := by simp
@@ -130,8 +130,8 @@ definition Int.padicValuation
   body: (Rat.padicValuation p).comap (Int.castRingHom Rat)
 
 中文:
-定义 Int.padicValuation
-  签名: (p : 自然数) [Fact p.Prime]
+定义 整数.padicValuation
+  签名: (p : 自然数) [Fact p.素]
   定义体: (Rat.padicValuation p).comap (Int.castRingHom Rat)
 
 Depends on / 依赖: Int.castRingHom, Rat.padicValuation, castRingHom, padicValuation
@@ -148,8 +148,8 @@ lemma Rat.padicValuation_cast
   proof: rfl
 
 中文:
-引理 Rat.padicValuation_cast
-  条件: (p : 自然数) [Fact p.Prime] (x : 整数)
+引理 有理数.padicValuation_cast
+  条件: (p : 自然数) [Fact p.素] (x : 整数)
   证明: rfl
 -/
 lemma Rat.padicValuation_cast (p : Nat) [Fact p.Prime] (x : Int) :
@@ -168,8 +168,8 @@ lemma Rat.padicValuation_eq_zero_iff
 @[simp]
 
 中文:
-引理 Rat.padicValuation_eq_zero_iff
-  条件: {p : 自然数} [Fact p.Prime] {x : Rat}
+引理 有理数.padicValuation_eq_zero_iff
+  条件: {p : 自然数} [Fact p.素] {x : 有理数}
   证明: by
   simp
 
@@ -192,8 +192,8 @@ lemma Int.padicValuation_eq_zero_iff
 @[simp]
 
 中文:
-引理 Int.padicValuation_eq_zero_iff
-  条件: {p : 自然数} [Fact p.Prime] {x : 整数}
+引理 整数.padicValuation_eq_zero_iff
+  条件: {p : 自然数} [Fact p.素] {x : 整数}
   证明: by
   simp [← Rat.padicValuation_cast]
 
@@ -218,8 +218,8 @@ lemma Rat.padicValuation_self
 @[simp]
 
 中文:
-引理 Rat.padicValuation_self
-  条件: (p : 自然数) [Fact p.Prime]
+引理 有理数.padicValuation_self
+  条件: (p : 自然数) [Fact p.素]
   证明: by
   simp [Rat.padicValuation, Nat.Prime.ne_zero Fact.out]
 
@@ -242,8 +242,8 @@ lemma Int.padicValuation_self
   simp [← Rat.padicValuation_cast]
 
 中文:
-引理 Int.padicValuation_self
-  条件: (p : 自然数) [Fact p.Prime]
+引理 整数.padicValuation_self
+  条件: (p : 自然数) [Fact p.素]
   证明: by
   simp [← Rat.padicValuation_cast]
 
@@ -268,8 +268,8 @@ lemma Int.padicValuation_le_one
     simp_all
 
 中文:
-引理 Int.padicValuation_le_one
-  条件: (p : 自然数) [Fact p.Prime] (x : 整数)
+引理 整数.padicValuation_le_one
+  条件: (p : 自然数) [Fact p.素] (x : 整数)
   证明: by
   simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
     MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
@@ -304,8 +304,8 @@ lemma Int.padicValuation_eq_one_iff
     simp_all [Nat.Prime.ne_one Fact.out]
 
 中文:
-引理 Int.padicValuation_eq_one_iff
-  条件: {p : 自然数} [Fact p.Prime] {x : 整数}
+引理 整数.padicValuation_eq_one_iff
+  条件: {p : 自然数} [Fact p.素] {x : 整数}
   证明: by
   simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
     MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
@@ -335,8 +335,8 @@ lemma Int.padicValuation_lt_one_iff
   simp [lt_iff_le_and_ne, padicValuation_eq_one_iff, Int.padicValuation_le_one]
 
 中文:
-引理 Int.padicValuation_lt_one_iff
-  条件: {p : 自然数} [Fact p.Prime] {x : 整数}
+引理 整数.padicValuation_lt_one_iff
+  条件: {p : 自然数} [Fact p.素] {x : 整数}
   证明: by
   simp [lt_iff_le_and_ne, padicValuation_eq_one_iff, Int.padicValuation_le_one]
 
@@ -360,8 +360,8 @@ lemma Rat.padicValuation_le_one_iff
   
 
 中文:
-引理 Rat.padicValuation_le_one_iff
-  条件: {p : 自然数} [Fact p.Prime] {x : Rat}
+引理 有理数.padicValuation_le_one_iff
+  条件: {p : 自然数} [Fact p.素] {x : 有理数}
   证明: by
   nth_rw 1 [← x.num_div_den, map_div₀, ← Int.natCast_dvd_natCast, ← Int.padicValuation_eq_one_iff,
     Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
@@ -405,8 +405,8 @@ theorem Rat.surjective_padicValuation
     · exact ⟨p ^
 
 中文:
-定理 Rat.surjective_padicValuation
-  条件: (p : 自然数) [hp : Fact (p.Prime)]
+定理 有理数.surjective_padicValuation
+  条件: (p : 自然数) [hp : Fact (p.素)]
   证明: by
   intro x
   induction x with
@@ -475,7 +475,7 @@ CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
 
 中文:
 定理 stationary
-  条件: {f : CauSeq Rat (padicNorm p)} (hf : ¬f ≈ 0)
+  条件: {f : CauSeq 有理数 (padicNorm p)} (hf : ¬f ≈ 0)
   证明: have : exists ε > 0, exists N1, forall j >= N1, ε <= padicNorm p (f j) :=
 CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
   let ⟨ε, hε, N1, hN1⟩ := this
@@ -705,7 +705,7 @@ theorem not_limZero_const_of_nonzero
 
 中文:
 定理 not_limZero_const_of_nonzero
-  条件: {q : Rat} (hq : q != 0)
+  条件: {q : 有理数} (hq : q != 0)
   结论: ¬LimZero (const (padicNorm p) q)
   证明: fun h' => hq const_limZero.1 h'
 
@@ -726,7 +726,7 @@ not_limZero_const_of_nonzero (p := p) hq by simpa using h
 
 中文:
 定理 not_equiv_zero_const_of_nonzero
-  条件: {q : Rat} (hq : q != 0)
+  条件: {q : 有理数} (hq : q != 0)
   结论: ¬const (padicNorm p) q ≈ 0
   证明: fun h : LimZero (const (padicNorm p) q - 0) =>
 not_limZero_const_of_nonzero (p := p) hq by simpa using h
@@ -1101,7 +1101,7 @@ theorem norm_const
 
 中文:
 定理 norm_const
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: norm (const (padicNorm p) q) = padicNorm p q
   证明: by
   obtain rfl | hq := eq_or_ne q 0
@@ -1129,7 +1129,7 @@ theorem norm_values_discrete
 中文:
 定理 norm_values_discrete
   条件: (a : PadicSeq p) (ha : ¬a ≈ 0)
-  结论: 存在 z : 整数, a.norm = (p : Rat) ^ (-z)
+  结论: 存在 z : 整数, a.norm = (p : 有理数) ^ (-z)
   证明: by
   let ⟨k, hk, hk'⟩ := norm_eq_norm_app_of_nonzero ha
   simpa [hk] using padicNorm.values_discrete hk'
@@ -1338,7 +1338,7 @@ theorem norm_nonarchimedean
 中文:
 定理 norm_nonarchimedean
   条件: (f g : PadicSeq p)
-  结论: (f + g).norm <= max f.norm g.norm
+  结论: (f + g).norm <= 最大值 f.norm g.norm
   证明: by
   classical
   exact if hfg : f + g ≈ 0 then by
@@ -1551,7 +1551,7 @@ deriving Zero, One, Add, Neg, Sub, Mul, Div, AddCommGroup, Ring, CommRing, Field
 
 中文:
 定义 Padic
-  签名: (p : 自然数) [Fact p.Prime]
+  签名: (p : 自然数) [Fact p.素]
   定义体: CauSeq.Completion.Cauchy (padicNorm p)
 deriving Zero, One, Add, Neg, Sub, Mul, Div, AddCommGroup, Ring, CommRing, Field, Inhabited
 
@@ -1639,7 +1639,7 @@ theorem const_equiv
 
 中文:
 定理 const_equiv
-  条件: {q r : Rat}
+  条件: {q r : 有理数}
   结论: const (padicNorm p) q ≈ const (padicNorm p) r ↔ q = r
   证明: ⟨fun heq => eq_of_sub_eq_zero const_limZero.1 heq, fun heq => by
     rw [heq]⟩
@@ -1664,7 +1664,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {q r : Rat}
+  条件: {q r : 有理数}
   结论: (↑q : Rat_[p]) = ↑r ↔ q = r
   证明: ⟨(const_equiv p).1 ∘ Quotient.eq'.1, fun h => by rw [h]⟩
 
@@ -1688,7 +1688,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero Rat_[p]
+  签名: 特征零 Rat_[p]
   定义体: ⟨fun m n => by
     rw [← Rat.cast_natCast]
     norm_cast
@@ -1717,7 +1717,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  结论: 对任意 {x y : Rat}, (↑(x + y) : Rat_[p]) = ↑x + ↑y
+  结论: 对任意 {x y : 有理数}, (↑(x + y) : Rat_[p]) = ↑x + ↑y
   证明: Rat.cast_add _ _
 
 @[norm_cast]
@@ -1740,7 +1740,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  结论: 对任意 {x : Rat}, (↑(-x) : Rat_[p]) = -↑x
+  结论: 对任意 {x : 有理数}, (↑(-x) : Rat_[p]) = -↑x
   证明: Rat.cast_neg _
 
 @[norm_cast]
@@ -1763,7 +1763,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: 对任意 {x y : Rat}, (↑(x * y) : Rat_[p]) = ↑x * ↑y
+  结论: 对任意 {x y : 有理数}, (↑(x * y) : Rat_[p]) = ↑x * ↑y
   证明: Rat.cast_mul _ _
 
 @[norm_cast]
@@ -1786,7 +1786,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  结论: 对任意 {x y : Rat}, (↑(x - y) : Rat_[p]) = ↑x - ↑y
+  结论: 对任意 {x y : 有理数}, (↑(x - y) : Rat_[p]) = ↑x - ↑y
   证明: Rat.cast_sub _ _
 
 @[norm_cast]
@@ -1809,7 +1809,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  结论: 对任意 {x y : Rat}, (↑(x / y) : Rat_[p]) = ↑x / ↑y
+  结论: 对任意 {x y : 有理数}, (↑(x / y) : Rat_[p]) = ↑x / ↑y
   证明: Rat.cast_div _ _
 
 @[norm_cast]
@@ -1832,7 +1832,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: (↑(1 : Rat) : Rat_[p]) = 1
+  结论: (↑(1 : 有理数) : Rat_[p]) = 1
   证明: rfl
 
 @[norm_cast]
@@ -1850,7 +1850,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: (↑(0 : Rat) : Rat_[p]) = 0
+  结论: (↑(0 : 有理数) : Rat_[p]) = 0
   证明: rfl
 -/
 theorem coe_zero : (↑(0 : Rat) : Rat_[p]) = 0 := rfl
@@ -1874,7 +1874,7 @@ nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
 
 中文:
 定义 padicNormE
-  签名: {p : 自然数} [hp : Fact p.Prime]
+  签名: {p : 自然数} [hp : Fact p.素]
   定义体: Quotient.lift PadicSeq.norm @PadicSeq.norm_equiv _ _
 map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
 nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
@@ -1925,7 +1925,7 @@ theorem defn
 
 中文:
 定理 defn
-  条件: (f : PadicSeq p) {ε : Rat} (hε : 0 < ε)
+  条件: (f : PadicSeq p) {ε : 有理数} (hε : 0 < ε)
   证明: by
   dsimp [padicNormE]
   -- `change ∃ N, ∀ i ≥ N, (f - const _ (f i)).norm < ε` also works, but is very slow
@@ -2012,7 +2012,7 @@ theorem eq_padic_norm'
 
 中文:
 定理 eq_padic_norm'
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: padicNormE (q : Rat_[p]) = padicNorm p q
   证明: norm_const _
 
@@ -2033,9 +2033,9 @@ theorem image'
     norm_values_discrete f this
 
 中文:
-定理 image'
+定理 像'
   条件: {q : Rat_[p]}
-  结论: q != 0 -> 存在 n : 整数, padicNormE q = (p : Rat) ^ (-n)
+  结论: q != 0 -> 存在 n : 整数, padicNormE q = (p : 有理数) ^ (-n)
   证明: Quotient.inductionOn q fun f hf =>
     have : ¬f ≈ 0 := (ne_zero_iff_nequiv_zero f).1 hf
     norm_values_discrete f this
@@ -2075,8 +2075,8 @@ theorem rat_dense'
 
 中文:
 定理 rat_dense'
-  条件: (q : Rat_[p]) {ε : Rat} (hε : 0 < ε)
-  结论: 存在 r : Rat, padicNormE (q - r : Rat_[p]) < ε
+  条件: (q : Rat_[p]) {ε : 有理数} (hε : 0 < ε)
+  结论: 存在 r : 有理数, padicNormE (q - r : Rat_[p]) < ε
   证明: Quotient.inductionOn q fun q' =>
     have : exists N, forall m >= N, forall n >= N, padicNorm p (q' m - q' n) < ε := cauchy₂ _ hε
     let ⟨N, hN⟩ := this
@@ -2119,7 +2119,7 @@ theorem div_nat_pos
 中文:
 定理 div_nat_pos
   条件: (n : 自然数)
-  结论: 0 < 1 / (n + 1 : Rat)
+  结论: 0 < 1 / (n + 1 : 有理数)
   证明: div_pos zero_lt_one (mod_cast succ_pos _)
 -/
 private theorem div_nat_pos (n : Nat) : 0 < 1 / (n + 1 : Rat) :=
@@ -2137,7 +2137,7 @@ definition limSeq
 
 中文:
 定义 limSeq
-  签名: : 自然数 -> Rat
+  签名: : 自然数 -> 有理数
   定义体: fun n => Classical.choose (rat_dense' (f n) (div_nat_pos n))
 
 Depends on / 依赖: Classical, Classical.choose, div_nat_pos, rat_dense
@@ -2161,7 +2161,7 @@ theorem exi_rat_seq_conv
 
 中文:
 定理 exi_rat_seq_conv
-  条件: {ε : Rat} (hε : 0 < ε)
+  条件: {ε : 有理数} (hε : 0 < ε)
   证明: by
   refine (exists_nat_gt (1 / ε)).imp fun N hN i hi => ?_
   have h := Classical.choose_spec (rat_dense' (f i) (div_nat_pos i))
@@ -2383,7 +2383,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUltrametricDist Rat_[p]
+  签名: 是UltrametricDist Rat_[p]
   定义体: ⟨fun x y z => by simpa [dist] using padicNormE.nonarchimedean' (x - y) (y - z)⟩
 
 Depends on / 依赖: nonarchimedean, padicNormE, padicNormE.nonarchimedean
@@ -2410,7 +2410,7 @@ instance metricSpace
 
 中文:
 实例 metricSpace
-  签名: : MetricSpace Rat_[p] where
+  签名: : 度量空间 Rat_[p] where
   定义体: by simp [dist]
   dist := dist
   dist_comm x y := by simp [dist, ← padicNormE.map_neg (x - y : Rat_[p])]
@@ -2447,7 +2447,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm Rat_[p]
+  签名: 范数 Rat_[p]
   定义体: ⟨fun x => padicNormE x⟩
 
 Depends on / 依赖: padicNormE
@@ -2471,7 +2471,7 @@ instance normedField
 
 中文:
 实例 normedField
-  签名: : NormedField Rat_[p] where
+  签名: : 赋范域 Rat_[p] where
   定义体: by
     rw [add_comm]; rw [← sub_eq_add_neg]
     change ‖x - y‖ = ‖y - x‖
@@ -2504,7 +2504,7 @@ instance isAbsoluteValue
 
 中文:
 实例 isAbsoluteValue
-  签名: : IsAbsoluteValue fun a : Rat_[p] => ‖a‖ where
+  签名: : 是绝对值 fun a : Rat_[p] => ‖a‖ where
   定义体: norm_nonneg
   abv_eq_zero' := norm_eq_zero
   abv_add' := norm_add_le
@@ -2532,7 +2532,7 @@ theorem rat_dense
 中文:
 定理 rat_dense
   条件: (q : Rat_[p]) {ε : 实数} (hε : 0 < ε)
-  结论: 存在 r : Rat, ‖q - r‖ < ε
+  结论: 存在 r : 有理数, ‖q - r‖ < ε
   证明: let ⟨ε', hε'l, hε'r⟩ := exists_rat_btwn hε
   let ⟨r, hr⟩ := rat_dense' q (ε := ε') (by simpa using hε'l)
   ⟨r, lt_trans (by simpa [Norm.norm] using hr) hε'r⟩
@@ -2557,7 +2557,7 @@ lemma denseRange_ratCast
 
 中文:
 引理 denseRange_ratCast
-  结论: DenseRange ((↑) : Rat -> Rat_[p])
+  结论: DenseRange ((↑) : 有理数 -> Rat_[p])
   证明: by
   intro x
   rw [Metric.mem_closure_range_iff]
@@ -2628,7 +2628,7 @@ theorem nonarchimedean
 中文:
 定理 nonarchimedean
   条件: (q r : Rat_[p])
-  结论: ‖q + r‖ <= max ‖q‖ ‖r‖
+  结论: ‖q + r‖ <= 最大值 ‖q‖ ‖r‖
   证明: by
   dsimp [norm]
   exact mod_cast padicNormE.nonarchimedean' _ _
@@ -2656,7 +2656,7 @@ theorem add_eq_max_of_ne
 中文:
 定理 add_eq_max_of_ne
   条件: {q r : Rat_[p]} (h : ‖q‖ != ‖r‖)
-  结论: ‖q + r‖ = max ‖q‖ ‖r‖
+  结论: ‖q + r‖ = 最大值 ‖q‖ ‖r‖
   证明: by
   dsimp [norm] at h ⊢
   have : padicNormE q != padicNormE r := mod_cast h
@@ -2687,7 +2687,7 @@ theorem eq_padicNorm
 
 中文:
 定理 eq_padicNorm
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ‖(q : Rat_[p])‖ = padicNorm p q
   证明: by
   dsimp [norm]
@@ -2851,9 +2851,9 @@ theorem padicNormE.image
     ⟨n, by rw [← hn]; rfl⟩
 
 中文:
-定理 padicNormE.image
+定理 padicNormE.像
   条件: {q : Rat_[p]}
-  结论: q != 0 -> 存在 n : 整数, ‖q‖ = ↑((p : Rat) ^ (-n))
+  结论: q != 0 -> 存在 n : 整数, ‖q‖ = ↑((p : 有理数) ^ (-n))
   证明: Quotient.inductionOn q fun f hf =>
     have : ¬f ≈ 0 := (PadicSeq.ne_zero_iff_nequiv_zero f).1 hf
     let ⟨n, hn⟩ := PadicSeq.norm_values_discrete f this
@@ -2882,7 +2882,7 @@ theorem padicNormE.is_rat
 中文:
 定理 padicNormE.is_rat
   条件: (q : Rat_[p])
-  结论: 存在 q' : Rat, ‖q‖ = q'
+  结论: 存在 q' : 有理数, ‖q‖ = q'
   证明: by
   classical
   exact if h : q = 0 then ⟨0, by simp [h]⟩
@@ -2952,7 +2952,7 @@ theorem norm_rat_le_one
 
 中文:
 定理 norm_rat_le_one
-  结论: 对任意 {q : Rat} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1
+  结论: 对任意 {q : 有理数} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1
   证明: Rat.zero_iff_num_zero.mpr hnz
       norm_num [this]
     else by
@@ -3329,7 +3329,7 @@ instance complete
 
 中文:
 实例 complete
-  签名: : CauSeq.IsComplete Rat_[p] norm where
+  签名: : CauSeq.是完备 Rat_[p] norm where
   定义体: by
     have cau_seq_norm_e : IsCauSeq padicNormE f := fun ε hε => by
       have h := isCauSeq f ε (mod_cast hε)
@@ -3415,7 +3415,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace Rat_[p]
+  签名: 完备空间 Rat_[p]
   定义体: by
   apply complete_of_cauchySeq_tendsto
   intro u hu
@@ -3557,7 +3557,7 @@ lemma valuation_ratCast
 
 中文:
 引理 valuation_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: valuation (q : Rat_[p]) = padicValRat p q
   证明: by
   rcases eq_or_ne q 0 with rfl | hq
@@ -3642,7 +3642,7 @@ lemma valuation_ofNat
 @[simp]
 
 中文:
-引理 valuation_ofNat
+引理 valuation_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: valuation_natCast n
 
@@ -4041,7 +4041,7 @@ definition mulValuation
 
 中文:
 定义 mulValuation
-  签名: : Valuation Rat_[p] 整数ᵐ⁰ where
+  签名: : 赋值 Rat_[p] 整数ᵐ⁰ where
   定义体: if x = 0 then 0 else exp (-x.valuation)
   map_zero' := by simp
   map_one' := by simp

@@ -100,8 +100,8 @@ structure IsLittleOTVS
     - exists_eventuallyLE_mul : forall U in 𝓝 (0 : E), exists V in 𝓝 (0 : F), forall ε != (0 : Real>=0), (fun x => egauge 𝕜 U (f x)) <=ᶠ[l] (fun x => ε * egauge 𝕜 V (g x))
 
 中文:
-结构 IsLittleOTVS
-  参数: (l : Filter α) (f : α -> E) (g : α -> F)
+结构 是LittleOTVS
+  参数: (l : 滤子 α) (f : α -> E) (g : α -> F)
   公理与运算 (1 个):
     - exists_eventuallyLE_mul : 对任意 U in 𝓝 (0 : E), 存在 V in 𝓝 (0 : F), 对任意 ε != (0 : 实数>=0), (fun x => egauge 𝕜 U (f x)) <=ᶠ[l] (fun x => ε * egauge 𝕜 V (g x))
 -/
@@ -133,8 +133,8 @@ structure IsBigOTVS
     - exists_eventuallyLE : forall U in 𝓝 (0 : E), exists V in 𝓝 (0 : F), (egauge 𝕜 U <| f ·) <=ᶠ[l] (egauge 𝕜 V <| g ·)
 
 中文:
-结构 IsBigOTVS
-  参数: (l : Filter α) (f : α -> E) (g : α -> F)
+结构 是BigOTVS
+  参数: (l : 滤子 α) (f : α -> E) (g : α -> F)
   公理与运算 (1 个):
     - exists_eventuallyLE : 对任意 U in 𝓝 (0 : E), 存在 V in 𝓝 (0 : F), (egauge 𝕜 U <| f ·) <=ᶠ[l] (egauge 𝕜 V <| g ·)
 -/
@@ -158,7 +158,7 @@ notation:100 f " =Θ[" 𝕜 "; " l "] " g:100 => IsThetaTVS 𝕜 l f g
 
 中文:
 定义 IsThetaTVS
-  签名: (l : Filter α) (f : α -> E) (g : α -> F)
+  签名: (l : 滤子 α) (f : α -> E) (g : α -> F)
   定义体: (f =O[𝕜; l] g) ∧ (g =O[𝕜; l] f)
 
 @[inherit_doc]
@@ -231,8 +231,8 @@ theorem IsLittleOTVS.exists_eventuallyLE_mul_ennreal
   | coe ε => exact hV ε (mod_cast hε)
 
 中文:
-定理 IsLittleOTVS.exists_eventuallyLE_mul_ennreal
-  条件: (h : f =o[𝕜; l] g) {U : Set E} (hU : U in 𝓝 0)
+定理 是LittleOTVS.存在_eventuallyLE_mul_ennreal
+  条件: (h : f =o[𝕜; l] g) {U : 集合 E} (hU : U in 𝓝 0)
   证明: by
   obtain ⟨V, hV₀, hV⟩ := h.exists_eventuallyLE_mul U hU
   refine ⟨V, hV₀, fun ε hε => ?_⟩
@@ -286,7 +286,7 @@ theorem IsLittleOTVS.congr'
   proof: (isLittleOTVS_congr hf hg).mp h
 
 中文:
-定理 IsLittleOTVS.congr'
+定理 是LittleOTVS.congr'
   条件: (h : f₁ =o[𝕜; l] g₁) (hf : f₁ =ᶠ[l] f₂) (hg : g₁ =ᶠ[l] g₂)
   证明: (isLittleOTVS_congr hf hg).mp h
 
@@ -305,7 +305,7 @@ theorem IsLittleOTVS.congr
   proof: h.congr' (univ_mem' hf) (univ_mem' hg)
 
 中文:
-定理 IsLittleOTVS.congr
+定理 是LittleOTVS.congr
   条件: (h : f₁ =o[𝕜; l] g₁) (hf : 对任意 x, f₁ x = f₂ x) (hg : 对任意 x, g₁ x = g₂ x)
   证明: h.congr' (univ_mem' hf) (univ_mem' hg)
 
@@ -325,7 +325,7 @@ theorem IsLittleOTVS.congr_left
   proof: h.congr hf fun _ => rfl
 
 中文:
-定理 IsLittleOTVS.congr_left
+定理 是LittleOTVS.congr_left
   条件: (h : f₁ =o[𝕜; l] g) (hf : 对任意 x, f₁ x = f₂ x)
   结论: f₂ =o[𝕜; l] g
   证明: h.congr hf fun _ => rfl
@@ -345,7 +345,7 @@ theorem IsLittleOTVS.congr_right
   proof: h.congr (fun _ => rfl) hg
 
 中文:
-定理 IsLittleOTVS.congr_right
+定理 是LittleOTVS.congr_right
   条件: (h : f =o[𝕜; l] g₁) (hg : 对任意 x, g₁ x = g₂ x)
   结论: f =o[𝕜; l] g₂
   证明: h.congr (fun _ => rfl) hg
@@ -391,7 +391,7 @@ theorem IsBigOTVS.congr'
   proof: (isBigOTVS_congr hf hg).mp h
 
 中文:
-定理 IsBigOTVS.congr'
+定理 是BigOTVS.congr'
   条件: (h : f₁ =O[𝕜; l] g₁) (hf : f₁ =ᶠ[l] f₂) (hg : g₁ =ᶠ[l] g₂)
   证明: (isBigOTVS_congr hf hg).mp h
 
@@ -410,7 +410,7 @@ theorem IsBigOTVS.congr
   proof: h.congr' (univ_mem' hf) (univ_mem' hg)
 
 中文:
-定理 IsBigOTVS.congr
+定理 是BigOTVS.congr
   条件: (h : f₁ =O[𝕜; l] g₁) (hf : 对任意 x, f₁ x = f₂ x) (hg : 对任意 x, g₁ x = g₂ x)
   证明: h.congr' (univ_mem' hf) (univ_mem' hg)
 
@@ -430,7 +430,7 @@ theorem IsBigOTVS.congr_left
   proof: h.congr hf fun _ => rfl
 
 中文:
-定理 IsBigOTVS.congr_left
+定理 是BigOTVS.congr_left
   条件: (h : f₁ =O[𝕜; l] g) (hf : 对任意 x, f₁ x = f₂ x)
   结论: f₂ =O[𝕜; l] g
   证明: h.congr hf fun _ => rfl
@@ -450,7 +450,7 @@ theorem IsBigOTVS.congr_right
   proof: h.congr (fun _ => rfl) hg
 
 中文:
-定理 IsBigOTVS.congr_right
+定理 是BigOTVS.congr_right
   条件: (h : f =O[𝕜; l] g₁) (hg : 对任意 x, g₁ x = g₂ x)
   结论: f =O[𝕜; l] g₂
   证明: h.congr (fun _ => rfl) hg
@@ -476,8 +476,8 @@ theorem IsBigOTVS.refl
   exact fun U hU => ⟨U, hU, EventuallyLE.rfl⟩
 
 中文:
-定理 IsBigOTVS.refl
-  条件: (f : α -> E) (l : Filter α)
+定理 是BigOTVS.refl
+  条件: (f : α -> E) (l : 滤子 α)
   结论: f =O[𝕜; l] f
   证明: by
   rw [isBigOTVS_iff]
@@ -496,7 +496,7 @@ theorem IsBigOTVS.rfl
   proof: .refl f l
 
 中文:
-定理 IsBigOTVS.rfl
+定理 是BigOTVS.rfl
   结论: f =O[𝕜; l] f
   证明: .refl f l
 -/
@@ -513,7 +513,7 @@ theorem IsThetaTVS.refl
 
 中文:
 定理 IsThetaTVS.refl
-  条件: (f : α -> E) (l : Filter α)
+  条件: (f : α -> E) (l : 滤子 α)
   结论: f =Θ[𝕜; l] f
   证明: ⟨.rfl, .rfl⟩
 -/
@@ -549,7 +549,7 @@ theorem IsLittleOTVS.isBigOTVS
   simpa using hV 1 one_ne_zero
 
 中文:
-定理 IsLittleOTVS.isBigOTVS
+定理 是LittleOTVS.isBigOTVS
   条件: (h : f =o[𝕜; l] g)
   结论: f =O[𝕜; l] g
   证明: by
@@ -650,7 +650,7 @@ theorem IsBigOTVS.trans
   filter_upwards [hV, hW] with x hx₁ hx₂ using hx₁.trans hx₂
 
 中文:
-定理 IsBigOTVS.trans
+定理 是BigOTVS.trans
   条件: (hfg : f =O[𝕜; l] g) (hgk : g =O[𝕜; l] k)
   结论: f =O[𝕜; l] k
   证明: by
@@ -697,7 +697,7 @@ theorem IsBigOTVS.trans_isThetaTVS
   proof: hfg.trans hgk.isBigOTVS
 
 中文:
-定理 IsBigOTVS.trans_isThetaTVS
+定理 是BigOTVS.trans_isThetaTVS
   条件: (hfg : f =O[𝕜; l] g) (hgk : g =Θ[𝕜; l] k)
   证明: hfg.trans hgk.isBigOTVS
 
@@ -820,7 +820,7 @@ theorem IsLittleOTVS.trans_isBigOTVS
 filter_upwards [hV ε hε, hW] with x hx₁ hx₂ using hx₁.trans by gcongr
 
 中文:
-定理 IsLittleOTVS.trans_isBigOTVS
+定理 是LittleOTVS.trans_isBigOTVS
   条件: (hfg : f =o[𝕜; l] g) (hgk : g =O[𝕜; l] k)
   证明: by
   refine ⟨fun U hU₀ => ?_⟩
@@ -867,7 +867,7 @@ theorem IsLittleOTVS.trans_isThetaTVS
   proof: hfg.trans_isBigOTVS hgk.isBigOTVS
 
 中文:
-定理 IsLittleOTVS.trans_isThetaTVS
+定理 是LittleOTVS.trans_isThetaTVS
   条件: (hfg : f =o[𝕜; l] g) (hgk : g =Θ[𝕜; l] k)
   证明: hfg.trans_isBigOTVS hgk.isBigOTVS
 
@@ -910,7 +910,7 @@ theorem IsBigOTVS.trans_isLittleOTVS
   filter_upwards [hV, hW ε hε] with x hx₁ hx₂ using hx₁.trans hx₂
 
 中文:
-定理 IsBigOTVS.trans_isLittleOTVS
+定理 是BigOTVS.trans_isLittleOTVS
   条件: (hfg : f =O[𝕜; l] g) (hgk : g =o[𝕜; l] k)
   证明: by
   refine ⟨fun U hU₀ => ?_⟩
@@ -1001,7 +1001,7 @@ theorem IsLittleOTVS.trans
   proof: hfg.trans_isBigOTVS hgk.isBigOTVS
 
 中文:
-定理 IsLittleOTVS.trans
+定理 是LittleOTVS.trans
   条件: (hfg : f =o[𝕜; l] g) (hgk : g =o[𝕜; l] k)
   结论: f =o[𝕜; l] k
   证明: hfg.trans_isBigOTVS hgk.isBigOTVS
@@ -1046,7 +1046,7 @@ exact ⟨V, hV₀, fun ε hε => (hV ε hε).mono fun x => le_trans egauge_anti 
     simp onl
 
 中文:
-定理 _root_.Filter.HasBasis.isLittleOTVS_iff
+定理 _root_.滤子.有基.isLittleOTVS_iff
   证明: by
   rw [isLittleOTVS_iff]
 refine (hE.forall_iff ?_).trans forall₂_congr fun _ _ => hF.exists_iff ?_
@@ -1082,7 +1082,7 @@ exact ⟨V, hV₀, hV.mono fun x => le_trans egauge_anti _ hsub _⟩
 · exact fun s t hsub h => h.mono fun x hx => hx.trans egauge_anti 𝕜 hsub (g x)
 
 中文:
-定理 _root_.Filter.HasBasis.isBigOTVS_iff
+定理 _root_.滤子.有基.isBigOTVS_iff
   证明: by
   rw [isBigOTVS_iff]
 refine (hE.forall_iff ?_).trans forall₂_congr fun _ _ => hF.exists_iff ?_
@@ -1118,8 +1118,8 @@ theorem IsBigOTVS.of_egauge_le_mul
 refine hV.trans .of_fora
 
 中文:
-定理 IsBigOTVS.of_egauge_le_mul
-  结论: [ContinuousConstSMul 𝕜 F] {ι} {p : ι -> 命题} {U : ι -> Set E}
+定理 是BigOTVS.of_egauge_le_mul
+  结论: [连续常数标量乘法 𝕜 F] {ι} {p : ι -> 命题} {U : ι -> 集合 E}
   证明: by
   rw [hb.isBigOTVS_iff (basis_sets _)]
   intro i hi
@@ -1219,7 +1219,7 @@ theorem isLittleOTVS_map
 
 中文:
 定理 isLittleOTVS_map
-  条件: {k : β -> α} {l : Filter β}
+  条件: {k : β -> α} {l : 滤子 β}
   证明: by
   simp [isLittleOTVS_iff, EventuallyLE]
 
@@ -1243,7 +1243,7 @@ theorem isBigOTVS_map
 
 中文:
 定理 isBigOTVS_map
-  条件: {k : β -> α} {l : Filter β}
+  条件: {k : β -> α} {l : 滤子 β}
   证明: by
   simp [isBigOTVS_iff, EventuallyLE]
 
@@ -1263,7 +1263,7 @@ lemma IsLittleOTVS.mono
   proof: ⟨fun U hU => let ⟨V, hV0, hV⟩ := hf.1 U hU; ⟨V, hV0, fun ε hε => (hV ε hε).filter_mono h⟩⟩
 
 中文:
-引理 IsLittleOTVS.mono
+引理 是LittleOTVS.mono
   条件: (hf : f =o[𝕜; l₁] g) (h : l₂ <= l₁)
   结论: f =o[𝕜; l₂] g
   证明: ⟨fun U hU => let ⟨V, hV0, hV⟩ := hf.1 U hU; ⟨V, hV0, fun ε hε => (hV ε hε).filter_mono h⟩⟩
@@ -1283,7 +1283,7 @@ lemma IsBigOTVS.mono
   proof: ⟨fun U hU => let ⟨V, hV0, hV⟩ := hf.1 U hU; ⟨V, hV0, hV.filter_mono h⟩⟩
 
 中文:
-引理 IsBigOTVS.mono
+引理 是BigOTVS.mono
   条件: (hf : f =O[𝕜; l₁] g) (h : l₂ <= l₁)
   结论: f =O[𝕜; l₂] g
   证明: ⟨fun U hU => let ⟨V, hV0, hV⟩ := hf.1 U hU; ⟨V, hV0, hV.filter_mono h⟩⟩
@@ -1302,8 +1302,8 @@ lemma IsLittleOTVS.comp_tendsto
   proof: isLittleOTVS_map.mp (h.mono hk)
 
 中文:
-引理 IsLittleOTVS.comp_tendsto
-  结论: {k : β -> α} {lb : Filter β} (h : f =o[𝕜; l] g)
+引理 是LittleOTVS.comp_tendsto
+  结论: {k : β -> α} {lb : 滤子 β} (h : f =o[𝕜; l] g)
   证明: isLittleOTVS_map.mp (h.mono hk)
 
 Depends on / 依赖: h.mono, isLittleOTVS_map, isLittleOTVS_map.mp
@@ -1321,8 +1321,8 @@ lemma IsBigOTVS.comp_tendsto
   proof: isBigOTVS_map.mp (h.mono hk)
 
 中文:
-引理 IsBigOTVS.comp_tendsto
-  结论: {k : β -> α} {lb : Filter β} (h : f =O[𝕜; l] g)
+引理 是BigOTVS.comp_tendsto
+  结论: {k : β -> α} {lb : 滤子 β} (h : f =O[𝕜; l] g)
   证明: isBigOTVS_map.mp (h.mono hk)
 
 Depends on / 依赖: h.mono, isBigOTVS_map, isBigOTVS_map.mp
@@ -1361,7 +1361,7 @@ lemma IsLittleOTVS.sup
   proof: isLittleOTVS_sup.mpr ⟨hf₁, hf₂⟩
 
 中文:
-引理 IsLittleOTVS.sup
+引理 是LittleOTVS.上确界
   条件: (hf₁ : f =o[𝕜; l₁] g) (hf₂ : f =o[𝕜; l₂] g)
   结论: f =o[𝕜; l₁ ⊔ l₂] g
   证明: isLittleOTVS_sup.mpr ⟨hf₁, hf₂⟩
@@ -1382,8 +1382,8 @@ lemma _root_.ContinuousLinearMap.isBigOTVS_id
     (mapsTo_preimage f U).egauge_le 𝕜 f⟩⟩
 
 中文:
-引理 _root_.ContinuousLinearMap.isBigOTVS_id
-  条件: {l : Filter E} (f : E ->L[𝕜] F)
+引理 _root_.连续线性映射.isBigOTVS_id
+  条件: {l : 滤子 E} (f : E ->L[𝕜] F)
   结论: f =O[𝕜; l] id
   证明: ⟨fun U hU => ⟨f ⁻¹' U, (map_continuous f).tendsto' 0 0 (map_zero f) hU, .of_forall
     (mapsTo_preimage f U).egauge_le 𝕜 f⟩⟩
@@ -1404,7 +1404,7 @@ lemma _root_.ContinuousLinearMap.isBigOTVS_comp
   proof: g.isBigOTVS_id.comp_tendsto tendsto_top
 
 中文:
-引理 _root_.ContinuousLinearMap.isBigOTVS_comp
+引理 _root_.连续线性映射.isBigOTVS_comp
   条件: (g : E ->L[𝕜] F)
   结论: (g ∘ f) =O[𝕜; l] f
   证明: g.isBigOTVS_id.comp_tendsto tendsto_top
@@ -1424,7 +1424,7 @@ lemma _root_.ContinuousLinearMap.isBigOTVS_fun_comp
   proof: g.isBigOTVS_comp
 
 中文:
-引理 _root_.ContinuousLinearMap.isBigOTVS_fun_comp
+引理 _root_.连续线性映射.isBigOTVS_fun_comp
   条件: (g : E ->L[𝕜] F)
   结论: (g <| f ·) =O[𝕜; l] f
   证明: g.isBigOTVS_comp
@@ -1452,7 +1452,7 @@ lemma _root_.LinearMap.isBigOTVS_rev_comp
   exact hc
 
 中文:
-引理 _root_.LinearMap.isBigOTVS_rev_comp
+引理 _root_.线性映射.isBigOTVS_rev_comp
   条件: (g : E ->ₗ[𝕜] F) (hg : comap g (𝓝 0) <= 𝓝 0)
   证明: by
   constructor
@@ -1490,8 +1490,8 @@ lemma _root_.ContinuousLinearMap.isThetaTVS_comp
 @[simp]
 
 中文:
-引理 _root_.ContinuousLinearMap.isThetaTVS_comp
-  条件: (g : E ->L[𝕜] F) (hg : Topology.IsInducing g)
+引理 _root_.连续线性映射.isThetaTVS_comp
+  条件: (g : E ->L[𝕜] F) (hg : 拓扑.是Inducing g)
   证明: ⟨g.isBigOTVS_comp, g.isBigOTVS_rev_comp by simp [hg.nhds_eq_comap]⟩
 
 @[simp]
@@ -1516,8 +1516,8 @@ lemma IsLittleOTVS.zero
   simp [egauge_zero_right _ (Filter.nonempty_of_mem hU), EventuallyLE]
 
 中文:
-引理 IsLittleOTVS.zero
-  条件: (g : α -> F) (l : Filter α)
+引理 是LittleOTVS.zero
+  条件: (g : α -> F) (l : 滤子 α)
   结论: (0 : α -> E) =o[𝕜; l] g
   证明: by
   refine ⟨fun U hU => ?_⟩
@@ -1543,7 +1543,7 @@ lemma isLittleOTVS_insert
 
 中文:
 引理 isLittleOTVS_insert
-  条件: [TopologicalSpace α] {x : α} {s : Set α} (h : f x = 0)
+  条件: [拓扑空间 α] {x : α} {s : 集合 α} (h : f x = 0)
   证明: by
   rw [nhdsWithin_insert]; rw [isLittleOTVS_sup]; rw [and_iff_right]
   exact .congr' (.zero g _) h.symm .rfl
@@ -1566,8 +1566,8 @@ lemma IsLittleOTVS.insert
 @[simp]
 
 中文:
-引理 IsLittleOTVS.insert
-  结论: [TopologicalSpace α] {x : α} {s : Set α}
+引理 是LittleOTVS.insert
+  结论: [拓扑空间 α] {x : α} {s : 集合 α}
   证明: (isLittleOTVS_insert hf).2 h
 
 @[simp]
@@ -1589,7 +1589,7 @@ lemma IsLittleOTVS.bot
   proof: ⟨fun u hU => ⟨univ, by simp [EventuallyLE]⟩⟩
 
 中文:
-引理 IsLittleOTVS.bot
+引理 是LittleOTVS.bot
   结论: f =o[𝕜; ⊥] g
   证明: ⟨fun u hU => ⟨univ, by simp [EventuallyLE]⟩⟩
 
@@ -1613,8 +1613,8 @@ theorem IsLittleOTVS.prodMk
   refine ⟨W, hW, fun ε hε
 
 中文:
-定理 IsLittleOTVS.prodMk
-  结论: [ContinuousSMul 𝕜 E] [ContinuousSMul 𝕜 F] {k : α -> G}
+定理 是LittleOTVS.prodMk
+  结论: [连续标量乘法 𝕜 E] [连续标量乘法 𝕜 F] {k : α -> G}
   证明: by
   rw [((nhds_basis_balanced 𝕜 E).prod_nhds (nhds_basis_balanced 𝕜 F)).isLittleOTVS_iff
     (basis_sets _)]
@@ -1645,7 +1645,7 @@ theorem IsLittleOTVS.fst
   proof: .trans_isLittleOTVS h .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E F
 
 中文:
-定理 IsLittleOTVS.fst
+定理 是LittleOTVS.fst
   条件: {f : α -> E × F} {g : α -> G} (h : f =o[𝕜; l] g)
   证明: .trans_isLittleOTVS h .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E F
 -/
@@ -1664,7 +1664,7 @@ theorem IsLittleOTVS.snd
 @[simp]
 
 中文:
-定理 IsLittleOTVS.snd
+定理 是LittleOTVS.snd
   条件: {f : α -> E × F} {g : α -> G} (h : f =o[𝕜; l] g)
   证明: .trans_isLittleOTVS h .isBigOTVS_comp ContinuousLinearMap.snd 𝕜 E F
 
@@ -1685,7 +1685,7 @@ theorem isLittleOTVS_prodMk_left
 
 中文:
 定理 isLittleOTVS_prodMk_left
-  条件: [ContinuousSMul 𝕜 E] [ContinuousSMul 𝕜 F] {k : α -> G}
+  条件: [连续标量乘法 𝕜 E] [连续标量乘法 𝕜 F] {k : α -> G}
   证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.elim .prodMk⟩
 
 Depends on / 依赖: h.elim, h.fst, h.snd, prodMk
@@ -1709,8 +1709,8 @@ theorem IsBigOTVS.prodMk
   filter_up
 
 中文:
-定理 IsBigOTVS.prodMk
-  结论: [ContinuousSMul 𝕜 E] [ContinuousSMul 𝕜 F] {k : α -> G}
+定理 是BigOTVS.prodMk
+  结论: [连续标量乘法 𝕜 E] [连续标量乘法 𝕜 F] {k : α -> G}
   证明: by
   rw [((nhds_basis_balanced 𝕜 E).prod_nhds (nhds_basis_balanced 𝕜 F)).isBigOTVS_iff (basis_sets _)]
   rintro ⟨U, V⟩ ⟨⟨hU, hUb⟩, hV, hVb⟩
@@ -1740,7 +1740,7 @@ theorem IsBigOTVS.fst
   proof: .trans h .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E F
 
 中文:
-定理 IsBigOTVS.fst
+定理 是BigOTVS.fst
   条件: {f : α -> E × F} {g : α -> G} (h : f =O[𝕜; l] g)
   证明: .trans h .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E F
 -/
@@ -1759,7 +1759,7 @@ theorem IsBigOTVS.snd
 @[simp]
 
 中文:
-定理 IsBigOTVS.snd
+定理 是BigOTVS.snd
   条件: {f : α -> E × F} {g : α -> G} (h : f =O[𝕜; l] g)
   证明: .trans h .isBigOTVS_comp ContinuousLinearMap.snd 𝕜 E F
 
@@ -1782,7 +1782,7 @@ theorem isBigOTVS_prodMk_left
 
 中文:
 定理 isBigOTVS_prodMk_left
-  条件: [ContinuousSMul 𝕜 E] [ContinuousSMul 𝕜 F] {k : α -> G}
+  条件: [连续标量乘法 𝕜 E] [连续标量乘法 𝕜 F] {k : α -> G}
   证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.elim .prodMk⟩
 
 @[to_fun]
@@ -1806,8 +1806,8 @@ theorem IsLittleOTVS.add
 @[to_fun]
 
 中文:
-定理 IsLittleOTVS.add
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E]
+定理 是LittleOTVS.add
+  结论: [连续加法 E] [连续标量乘法 𝕜 E]
   证明: .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E E + ContinuousLinearMap.snd 𝕜 E E
 .trans_isLittleOTVS h₁.prodMk h₂
 
@@ -1832,8 +1832,8 @@ theorem IsBigOTVS.add
 .trans h₁.prodMk h₂
 
 中文:
-定理 IsBigOTVS.add
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E]
+定理 是BigOTVS.add
+  结论: [连续加法 E] [连续标量乘法 𝕜 E]
   证明: .isBigOTVS_comp ContinuousLinearMap.fst 𝕜 E E + ContinuousLinearMap.snd 𝕜 E E
 .trans h₁.prodMk h₂
 
@@ -1855,8 +1855,8 @@ theorem IsLittleOTVS.triangle
   simpa using h₁.add h₂
 
 中文:
-定理 IsLittleOTVS.triangle
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E]
+定理 是LittleOTVS.triangle
+  结论: [连续加法 E] [连续标量乘法 𝕜 E]
   证明: by
   simpa using h₁.add h₂
 -/
@@ -1875,8 +1875,8 @@ theorem IsBigOTVS.triangle
   simpa using h₁.add h₂
 
 中文:
-定理 IsBigOTVS.triangle
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E]
+定理 是BigOTVS.triangle
+  结论: [连续加法 E] [连续标量乘法 𝕜 E]
   证明: by
   simpa using h₁.add h₂
 -/
@@ -1901,7 +1901,7 @@ theorem IsBigOTVS.neg_left
 @[simp]
 
 中文:
-定理 IsBigOTVS.neg_left
+定理 是BigOTVS.neg_left
   条件: (h : f =O[𝕜; l] g)
   结论: (-f) =O[𝕜; l] g
   证明: .trans ((ContinuousLinearMap.mk (-.id (R := 𝕜)) continuous_neg).isBigOTVS_comp) h
@@ -1967,7 +1967,7 @@ theorem IsLittleOTVS.neg_left
 @[simp]
 
 中文:
-定理 IsLittleOTVS.neg_left
+定理 是LittleOTVS.neg_left
   条件: (h : f =o[𝕜; l] g)
   结论: (-f) =o[𝕜; l] g
   证明: IsBigOTVS.rfl.neg_left.trans_isLittleOTVS h
@@ -2036,7 +2036,7 @@ theorem IsLittleOTVS.symm
   simpa using h.neg_left
 
 中文:
-定理 IsLittleOTVS.symm
+定理 是LittleOTVS.symm
   条件: {f₁ f₂ : α -> E} (h : (f₁ - f₂) =o[𝕜; l] g)
   证明: by
   simpa using h.neg_left
@@ -2096,7 +2096,7 @@ theorem IsBigOTVS.symm
   simpa using h.neg_left
 
 中文:
-定理 IsBigOTVS.symm
+定理 是BigOTVS.symm
   条件: {f₁ f₂ : α -> E} (h : (f₁ - f₂) =O[𝕜; l] g)
   证明: by
   simpa using h.neg_left
@@ -2159,7 +2159,7 @@ theorem IsBigOTVS.neg_right
 @[simp]
 
 中文:
-定理 IsBigOTVS.neg_right
+定理 是BigOTVS.neg_right
   条件: (h : f =O[𝕜; l] g)
   结论: f =O[𝕜; l] (-g)
   证明: h.trans by simpa using (IsBigOTVS.refl (-g) l).neg_left
@@ -2225,7 +2225,7 @@ theorem IsLittleOTVS.neg_right
 @[simp]
 
 中文:
-定理 IsLittleOTVS.neg_right
+定理 是LittleOTVS.neg_right
   条件: (h : f =o[𝕜; l] g)
   结论: f =o[𝕜; l] (-g)
   证明: h.trans_isBigOTVS (.neg_right .rfl)
@@ -2296,8 +2296,8 @@ theorem IsLittleOTVS.pi
   rcases (hIf.eventua
 
 中文:
-定理 IsLittleOTVS.pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+定理 是LittleOTVS.pi
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: by
   have := hasBasis_pi fun i => nhds_basis_balanced 𝕜 (E i)
   rw [← nhds_pi]; rw [← Pi.zero_def] at this
@@ -2328,8 +2328,8 @@ theorem IsLittleOTVS.proj
   proof: .trans_isLittleOTVS h .isBigOTVS_fun_comp ContinuousLinearMap.proj i
 
 中文:
-定理 IsLittleOTVS.proj
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+定理 是LittleOTVS.proj
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: .trans_isLittleOTVS h .isBigOTVS_fun_comp ContinuousLinearMap.proj i
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.proj, isBigOTVS_fun_comp, trans_isLittleOTVS
@@ -2349,7 +2349,7 @@ theorem isLittleOTVS_pi
 
 中文:
 定理 isLittleOTVS_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: ⟨.proj, .pi⟩
 -/
 theorem isLittleOTVS_pi {ι : Type*} {E : ι -> Type*} [forall i, AddCommGroup (E i)]
@@ -2372,8 +2372,8 @@ theorem IsBigOTVS.pi
   rcases (hIf.eventually
 
 中文:
-定理 IsBigOTVS.pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+定理 是BigOTVS.pi
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: by
   have := hasBasis_pi fun i => nhds_basis_balanced 𝕜 (E i)
   rw [← nhds_pi]; rw [← Pi.zero_def] at this
@@ -2404,8 +2404,8 @@ theorem IsBigOTVS.proj
   proof: .trans h .isBigOTVS_fun_comp ContinuousLinearMap.proj i
 
 中文:
-定理 IsBigOTVS.proj
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+定理 是BigOTVS.proj
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: .trans h .isBigOTVS_fun_comp ContinuousLinearMap.proj i
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.proj, isBigOTVS_fun_comp
@@ -2425,7 +2425,7 @@ theorem isBigOTVS_pi
 
 中文:
 定理 isBigOTVS_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommGroup (E i)]
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换群 (E i)]
   证明: ⟨.proj, .pi⟩
 -/
 theorem isBigOTVS_pi {ι : Type*} {E : ι -> Type*} [forall i, AddCommGroup (E i)]
@@ -2448,7 +2448,7 @@ lemma IsLittleOTVS.smul_left
   all_goals exact fun _ => Filter.nonempty_of_mem ‹_›
 
 中文:
-引理 IsLittleOTVS.smul_left
+引理 是LittleOTVS.smul_left
   条件: (h : f =o[𝕜; l] g) (c : α -> 𝕜)
   证明: by
   simp only [isLittleOTVS_iff] at *
@@ -2487,8 +2487,8 @@ lemma isLittleOTVS_one
 
 中文:
 引理 isLittleOTVS_one
-  条件: [ContinuousSMul 𝕜 E]
-  结论: f =o[𝕜; l] (1 : α -> 𝕜) ↔ Tendsto f l (𝓝 0)
+  条件: [连续标量乘法 𝕜 E]
+  结论: f =o[𝕜; l] (1 : α -> 𝕜) ↔ 收敛 f l (𝓝 0)
   证明: by
   constructor
   · intro hf
@@ -2551,8 +2551,8 @@ lemma IsLittleOTVS.tendsto_inv_smul
   by_cases hx₀ : f x = 0 <;> simp [hx₀, egauge_zero_right _ (Filter.nonempty_of_mem hV₀)]
 
 中文:
-引理 IsLittleOTVS.tendsto_inv_smul
-  结论: [ContinuousSMul 𝕜 E] {f : α -> 𝕜} {g : α -> E}
+引理 是LittleOTVS.tendsto_inv_smul
+  结论: [连续标量乘法 𝕜 E] {f : α -> 𝕜} {g : α -> E}
   证明: by
   rw [← isLittleOTVS_one (𝕜 := 𝕜)]; rw [isLittleOTVS_iff]
   intro U hU
@@ -2583,7 +2583,7 @@ lemma isLittleOTVS_iff_tendsto_inv_smul
 
 中文:
 引理 isLittleOTVS_iff_tendsto_inv_smul
-  结论: [ContinuousSMul 𝕜 E] {f : α -> 𝕜} {g : α -> E} {l : Filter α}
+  结论: [连续标量乘法 𝕜 E] {f : α -> 𝕜} {g : α -> E} {l : 滤子 α}
   证明: by
   refine ⟨IsLittleOTVS.tendsto_inv_smul, fun h => ?_⟩
   refine (((isLittleOTVS_one (𝕜 := 𝕜)).mpr h).smul_left f).congr' (h₀.mono fun x hx => ?_) (by simp)
@@ -2613,8 +2613,8 @@ lemma Filter.Tendsto.isBigOTVS_one
   obtain ⟨r, hr₀, hr₁, hr⟩ : exists r : Real>=0, 0 < r ∧ r <= 1 ∧ (r : Real>=0∞) <= (eg
 
 中文:
-引理 Filter.Tendsto.isBigOTVS_one
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E] {x : E}
+引理 滤子.收敛.isBigOTVS_one
+  结论: [连续加法 E] [连续标量乘法 𝕜 E] {x : E}
   证明: by
   replace h : Tendsto (f · - x) l (𝓝 0) := by
     simpa [sub_eq_add_neg] using h.add (tendsto_const_nhds (x := -x))

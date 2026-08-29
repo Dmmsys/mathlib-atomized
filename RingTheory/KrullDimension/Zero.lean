@@ -32,8 +32,8 @@ lemma Ring.KrullDimLE.mem_minimalPrimes_iff
   proof: ⟨fun H => H.1, fun H => ⟨H, fun _ h e => (h.1.isMaximal'.eq_of_le H.1.ne_top e).ge⟩⟩
 
 中文:
-引理 Ring.KrullDimLE.mem_minimalPrimes_iff
-  条件: {I J : Ideal R}
+引理 环.Krull维数不超过.mem_minimalPrimes_iff
+  条件: {I J : 理想 R}
   证明: ⟨fun H => H.1, fun H => ⟨H, fun _ h e => (h.1.isMaximal'.eq_of_le H.1.ne_top e).ge⟩⟩
 
 Depends on / 依赖: eq_of_le, isMaximal, ne_top
@@ -52,8 +52,8 @@ lemma Ring.KrullDimLE.mem_minimalPrimes_iff_le_of_isPrime
   rwa [mem_minimalPrimes_iff, and_iff_right]
 
 中文:
-引理 Ring.KrullDimLE.mem_minimalPrimes_iff_le_of_isPrime
-  条件: {I J : Ideal R} [I.IsPrime]
+引理 环.Krull维数不超过.mem_minimalPrimes_iff_le_of_isPrime
+  条件: {I J : 理想 R} [I.是素]
   证明: by
   rwa [mem_minimalPrimes_iff, and_iff_right]
 
@@ -78,7 +78,7 @@ alias Ring.KrullDimLE.minimalPrimes_eq_setOf_isPrime :=
   Ring.KrullDimLE.minimalPrimes_eq_setOfPred_isPrime
 
 中文:
-引理 Ring.KrullDimLE.minimalPrimes_eq_setOfPred_isPrime
+引理 环.Krull维数不超过.minimalPrimes_eq_setOfPred_isPrime
   证明: by
   ext
   exact Ideal.mem_minimalPrimes_iff_isPrime
@@ -112,7 +112,7 @@ alias Ring.KrullDimLE.minimalPrimes_eq_setOf_isMaximal :=
   Ring.KrullDimLE.minimalPrimes_eq_setOfPred_isMaximal
 
 中文:
-引理 Ring.KrullDimLE.minimalPrimes_eq_setOfPred_isMaximal
+引理 环.Krull维数不超过.minimalPrimes_eq_setOfPred_isMaximal
   证明: by
   ext; simp [minimalPrimes_eq_setOfPred_isPrime, Ideal.isMaximal_iff_isPrime]
 
@@ -148,9 +148,9 @@ lemma Ring.KrullDimLE.isField_of_isDomain
 omit [Ring.KrullDimLE 0 R] in
 
 中文:
-引理 Ring.KrullDimLE.isField_of_isDomain
-  条件: [IsDomain R]
-  结论: IsField R
+引理 环.Krull维数不超过.isField_of_isDomain
+  条件: [是整环 R]
+  结论: 是域 R
   证明: by
   by_contra h
   obtain ⟨p, hp, h⟩ := Ring.not_isField_iff_exists_prime.mp h
@@ -178,7 +178,7 @@ lemma ringKrullDimZero_iff_ringKrullDim_eq_zero
 
 中文:
 引理 ringKrullDimZero_iff_ringKrullDim_eq_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [le_antisymm_iff]; rw [← ringKrullDim]; rw [Nat.cast_zero]; rw [iff_self_and]
   exact fun _ => ringKrullDim_nonneg_of_nontrivial
@@ -202,7 +202,7 @@ theorem Ideal.krullDimLE_zero_quotient_iff_forall_minimalPrimes_isMaximal
   · have := map_eq_top_or_isMaximal_o
 
 中文:
-定理 Ideal.krullDimLE_zero_quotient_iff_forall_minimalPrimes_isMaximal
+定理 理想.krullDimLE_zero_quotient_iff_对任意_minimalPrimes_isMaximal
   证明: by
   rw [Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal]; rw [minimalPrimes_eq_comap]; rw [Set.forall_mem_image]
   refine forall₂_congr fun J hJ => ⟨fun h => ?_, fun h => ?_⟩
@@ -240,7 +240,7 @@ lemma Ring.krullDimLE_zero_and_isLocalRing_tfae
     refine fun H => ⟨fun e => ?_, fun I hI => ?
 
 中文:
-引理 Ring.krullDimLE_zero_and_isLocalRing_tfae
+引理 环.krullDimLE_zero_and_isLocalRing_tfae
   证明: by
   tfae_have 1 -> 3 := by
     intro ⟨h₁, h₂⟩ x
@@ -292,7 +292,7 @@ lemma le_isUnit_iff_zero_notMem
 
 中文:
 引理 le_isUnit_iff_zero_notMem
-  结论: [IsLocalRing R]
+  结论: [是局部环 R]
   证明: by
   have := ((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 2 rfl rfl).mp ⟨‹_›, ‹_›⟩
   exact ⟨fun h₁ h₂ => not_isUnit_zero (h₁ h₂),
@@ -316,8 +316,8 @@ theorem Ring.KrullDimLE.existsUnique_isPrime
   proof: ((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 1 rfl rfl).mp ⟨‹_›, ‹_›⟩
 
 中文:
-定理 Ring.KrullDimLE.existsUnique_isPrime
-  条件: [IsLocalRing R]
+定理 环.Krull维数不超过.存在Unique_isPrime
+  条件: [是局部环 R]
   证明: ((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 1 rfl rfl).mp ⟨‹_›, ‹_›⟩
 
 Depends on / 依赖: Ring.krullDimLE_zero_and_isLocalRing_tfae, krullDimLE_zero_and_isLocalRing_tfae
@@ -336,8 +336,8 @@ theorem Ring.KrullDimLE.eq_maximalIdeal_of_isPrime
     ‹_› inferInstance
 
 中文:
-定理 Ring.KrullDimLE.eq_maximalIdeal_of_isPrime
-  条件: [IsLocalRing R] (J : Ideal R) [J.IsPrime]
+定理 环.Krull维数不超过.eq_maximalIdeal_of_isPrime
+  条件: [是局部环 R] (J : 理想 R) [J.是素]
   证明: (((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 1 rfl rfl).mp ⟨‹_›, ‹_›⟩).unique
     ‹_› inferInstance
 
@@ -362,8 +362,8 @@ lemma Ring.KrullDimLE.radical_eq_maximalIdeal
     exact (Ring.KrullDimLE.eq_maximalIdeal_of_isPrime J).ge
 
 中文:
-引理 Ring.KrullDimLE.radical_eq_maximalIdeal
-  条件: [IsLocalRing R] (I : Ideal R) (hI : I != ⊤)
+引理 环.Krull维数不超过.radical_eq_maximalIdeal
+  条件: [是局部环 R] (I : 理想 R) (hI : I != ⊤)
   证明: by
   rw [Ideal.radical_eq_sInf]
   refine (sInf_le ?_).antisymm (le_sInf ?_)
@@ -392,8 +392,8 @@ theorem Ring.KrullDimLE.subsingleton_primeSpectrum
     (eq_maximalIdeal_of_isPrime x.1).trans (eq_maximalIdeal_of_isPrime y.1).symm⟩
 
 中文:
-定理 Ring.KrullDimLE.subsingleton_primeSpectrum
-  条件: [IsLocalRing R]
+定理 环.Krull维数不超过.subsingleton_primeSpectrum
+  条件: [是局部环 R]
   证明: ⟨fun x y => PrimeSpectrum.ext
     (eq_maximalIdeal_of_isPrime x.1).trans (eq_maximalIdeal_of_isPrime y.1).symm⟩
 
@@ -413,8 +413,8 @@ theorem Ring.KrullDimLE.isNilpotent_iff_mem_maximalIdeal
   proof: ((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 2 rfl rfl).mp ⟨‹_›, ‹_›⟩ x
 
 中文:
-定理 Ring.KrullDimLE.isNilpotent_iff_mem_maximalIdeal
-  条件: [IsLocalRing R] {x}
+定理 环.Krull维数不超过.isNilpotent_iff_mem_maximalIdeal
+  条件: [是局部环 R] {x}
   证明: ((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 2 rfl rfl).mp ⟨‹_›, ‹_›⟩ x
 
 Depends on / 依赖: Ring.krullDimLE_zero_and_isLocalRing_tfae, krullDimLE_zero_and_isLocalRing_tfae
@@ -432,8 +432,8 @@ theorem Ring.KrullDimLE.isNilpotent_iff_mem_nonunits
   proof: isNilpotent_iff_mem_maximalIdeal
 
 中文:
-定理 Ring.KrullDimLE.isNilpotent_iff_mem_nonunits
-  条件: [IsLocalRing R] {x}
+定理 环.Krull维数不超过.isNilpotent_iff_mem_nonunits
+  条件: [是局部环 R] {x}
   证明: isNilpotent_iff_mem_maximalIdeal
 
 Depends on / 依赖: isNilpotent_iff_mem_maximalIdeal
@@ -454,8 +454,8 @@ theorem Ring.KrullDimLE.nilradical_eq_maximalIdeal
 omit [Ring.KrullDimLE 0 R] in
 
 中文:
-定理 Ring.KrullDimLE.nilradical_eq_maximalIdeal
-  条件: [IsLocalRing R]
+定理 环.Krull维数不超过.nilradical_eq_maximalIdeal
+  条件: [是局部环 R]
   证明: Ideal.ext fun _ => isNilpotent_iff_mem_maximalIdeal
 
 omit [Ring.KrullDimLE 0 R] in
@@ -479,8 +479,8 @@ theorem IsLocalRing.of_isMaximal_nilradical
 omit [Ring.KrullDimLE 0 R] in
 
 中文:
-定理 IsLocalRing.of_isMaximal_nilradical
-  条件: [(nilradical R).IsMaximal]
+定理 是局部环.of_isMaximal_nilradical
+  条件: [(nilradical R).是极大]
   证明: (((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 3 0 rfl rfl).mp ‹_›).2
 
 omit [Ring.KrullDimLE 0 R] in
@@ -504,8 +504,8 @@ theorem Ring.KrullDimLE.of_isMaximal_nilradical
 omit [Ring.KrullDimLE 0 R] in
 
 中文:
-定理 Ring.KrullDimLE.of_isMaximal_nilradical
-  条件: [(nilradical R).IsMaximal]
+定理 环.Krull维数不超过.of_isMaximal_nilradical
+  条件: [(nilradical R).是极大]
   证明: (((Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 3 0 rfl rfl).mp ‹_›).1
 
 omit [Ring.KrullDimLE 0 R] in
@@ -527,8 +527,8 @@ lemma Ring.KrullDimLE.of_isLocalization
   ⟨Order.krullDim_nonpos_of_subsingleton⟩
 
 中文:
-引理 Ring.KrullDimLE.of_isLocalization
-  结论: (p : Ideal R) (hp : p in minimalPrimes R)
+引理 环.Krull维数不超过.of_isLocalization
+  结论: (p : 理想 R) (hp : p in minimalPrimes R)
   证明: have := IsLocalization.subsingleton_primeSpectrum_of_mem_minimalPrimes p hp S
   ⟨Order.krullDim_nonpos_of_subsingleton⟩
 
@@ -551,9 +551,9 @@ lemma Ring.KrullDimLE.isField_of_isReduced
   rw [IsLocalRing.isField_iff_maximalIdeal_eq]; rw [← nilradical_eq_maximalIdeal]; rw [nilradical_eq_zero]; rw [Ideal.zero_eq_bot]
 
 中文:
-引理 Ring.KrullDimLE.isField_of_isReduced
-  条件: [IsReduced R] [IsLocalRing R]
-  结论: IsField R
+引理 环.Krull维数不超过.isField_of_isReduced
+  条件: [是既约 R] [是局部环 R]
+  结论: 是域 R
   证明: by
   rw [IsLocalRing.isField_iff_maximalIdeal_eq]; rw [← nilradical_eq_maximalIdeal]; rw [nilradical_eq_zero]; rw [Ideal.zero_eq_bot]
 
@@ -572,8 +572,8 @@ instance PrimeSpectrum.unique_of_ringKrullDimLE_zero
     fun _ => PrimeSpectrum.ext (Ring.KrullDimLE.eq_maximalIdeal_of_isPrime _)⟩
 
 中文:
-实例 PrimeSpectrum.unique_of_ringKrullDimLE_zero
-  签名: [IsLocalRing R]
+实例 素谱.unique_of_ringKrullDimLE_zero
+  签名: [是局部环 R]
   定义体: ⟨⟨IsLocalRing.closedPoint _⟩,
     fun _ => PrimeSpectrum.ext (Ring.KrullDimLE.eq_maximalIdeal_of_isPrime _)⟩
 
@@ -595,7 +595,7 @@ lemma PrimeSpectrum.subsingleton_iff_isField_of_isReduced
   exact Ring.KrullDimLE.isField_of_isReduced
 
 中文:
-引理 PrimeSpectrum.subsingleton_iff_isField_of_isReduced
+引理 素谱.subsingleton_iff_isField_of_isReduced
   证明: by
   refine ⟨fun H => ?_, fun H => letI := H.toField; inferInstance⟩
   have : Subsingleton (MaximalSpectrum R) := MaximalSpectrum.toPrimeSpectrum_injective.subsingleton
@@ -631,8 +631,8 @@ lemma Ideal.jacobson_eq_radical
   simp [jacobson, radical_eq_sInf, Ideal.isMaximal_iff_isPrime]
 
 中文:
-引理 Ideal.jacobson_eq_radical
-  条件: [Ring.KrullDimLE 0 R]
+引理 理想.jacobson_eq_radical
+  条件: [环.Krull维数不超过 0 R]
   结论: I.jacobson = I.radical
   证明: by
   simp [jacobson, radical_eq_sInf, Ideal.isMaximal_iff_isPrime]

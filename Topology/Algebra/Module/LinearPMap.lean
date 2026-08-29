@@ -68,7 +68,7 @@ definition IsClosed
   body: _root_.IsClosed (f.graph : Set (E × F))
 
 中文:
-定义 IsClosed
+定义 是闭集
   签名: (f : E ->ₗ.[R] F)
   定义体: _root_.IsClosed (f.graph : Set (E × F))
 
@@ -108,8 +108,8 @@ theorem IsClosed.isClosable
   proof: ⟨f, hf.submodule_topologicalClosure_eq⟩
 
 中文:
-定理 IsClosed.isClosable
-  条件: {f : E ->ₗ.[R] F} (hf : f.IsClosed)
+定理 是闭集.isClosable
+  条件: {f : E ->ₗ.[R] F} (hf : f.是闭集)
   结论: f.IsClosable
   证明: ⟨f, hf.submodule_topologicalClosure_eq⟩
 
@@ -168,7 +168,7 @@ theorem IsClosable.existsUnique
   rw [← hy₁]; rw [← hy₂]
 
 中文:
-定理 IsClosable.existsUnique
+定理 IsClosable.存在Unique
   条件: {f : E ->ₗ.[R] F} (hf : f.IsClosable)
   证明: by
   refine existsUnique_of_exists_of_unique hf fun _ _ hy₁ hy₂ => eq_of_eq_graph ?_
@@ -343,7 +343,7 @@ theorem IsClosable.closure_isClosed
 中文:
 定理 IsClosable.closure_isClosed
   条件: {f : E ->ₗ.[R] F} (hf : f.IsClosable)
-  结论: f.closure.IsClosed
+  结论: f.closure.是闭集
   证明: by
   rw [IsClosed]; rw [← hf.graph_closure_eq_closure_graph]
   exact f.graph.isClosed_topologicalClosure
@@ -384,7 +384,7 @@ theorem isClosable_iff_exists_closed_extension
     hg.isClosable.leIsClosable h⟩
 
 中文:
-定理 isClosable_iff_exists_closed_extension
+定理 isClosable_iff_存在_closed_extension
   条件: {f : E ->ₗ.[R] F}
   证明: ⟨fun h => ⟨f.closure, h.closure_isClosed, f.le_closure⟩, fun ⟨_, hg, h⟩ =>
     hg.isClosable.leIsClosable h⟩
@@ -410,8 +410,8 @@ structure HasCore
     - closure_eq : (f.domRestrict S).closure = f
 
 中文:
-结构 HasCore
-  参数: (f : E ->ₗ.[R] F) (S : Submodule R E)
+结构 有核
+  参数: (f : E ->ₗ.[R] F) (S : 子模 R E)
   公理与运算 (2 个):
     - le_domain : S <= f.domain
     - closure_eq : (f.domRestrict S).closure = f
@@ -430,7 +430,7 @@ theorem hasCore_def
 
 中文:
 定理 hasCore_def
-  条件: {f : E ->ₗ.[R] F} {S : Submodule R E} (h : f.HasCore S)
+  条件: {f : E ->ₗ.[R] F} {S : 子模 R E} (h : f.有核 S)
   证明: h.2
 -/
 theorem hasCore_def {f : E ->ₗ.[R] F} {S : Submodule R E} (h : f.HasCore S) :
@@ -459,7 +459,7 @@ theorem closureHasCore
 中文:
 定理 closureHasCore
   条件: (f : E ->ₗ.[R] F)
-  结论: f.closure.HasCore f.domain
+  结论: f.closure.有核 f.domain
   证明: by
   refine ⟨f.le_closure.1, ?_⟩
   congr
@@ -507,8 +507,8 @@ theorem inverse_closed_iff
 
 中文:
 定理 inverse_closed_iff
-  条件: (hf : LinearMap.ker f.toFun = ⊥)
-  结论: f.inverse.IsClosed ↔ f.IsClosed
+  条件: (hf : 线性映射.ker f.toFun = ⊥)
+  结论: f.inverse.是闭集 ↔ f.是闭集
   证明: by
   rw [IsClosed]; rw [inverse_graph hf]
   exact (ContinuousLinearEquiv.prodComm R E F).isClosed_image
@@ -538,7 +538,7 @@ theorem closure_inverse_graph
 
 中文:
 定理 closure_inverse_graph
-  结论: (hf : LinearMap.ker f.toFun = ⊥) (hf' : f.IsClosable)
+  结论: (hf : 线性映射.ker f.toFun = ⊥) (hf' : f.IsClosable)
   证明: by
   rw [inverse_graph hf]; rw [inverse_graph hcf]; rw [← hf'.graph_closure_eq_closure_graph]
   apply SetLike.ext'
@@ -581,7 +581,7 @@ theorem inverse_isClosable_iff
 
 中文:
 定理 inverse_isClosable_iff
-  条件: (hf : LinearMap.ker f.toFun = ⊥) (hf' : f.IsClosable)
+  条件: (hf : 线性映射.ker f.toFun = ⊥) (hf' : f.IsClosable)
   证明: by
   constructor
   · intro ⟨f', h⟩
@@ -626,7 +626,7 @@ theorem inverse_closure
 
 中文:
 定理 inverse_closure
-  结论: (hf : LinearMap.ker f.toFun = ⊥) (hf' : f.IsClosable)
+  结论: (hf : 线性映射.ker f.toFun = ⊥) (hf' : f.IsClosable)
   证明: by
   apply eq_of_eq_graph
   rw [closure_inverse_graph hf hf' hcf]; rw [((inverse_isClosable_iff hf hf').mpr hcf).graph_closure_eq_closure_graph]

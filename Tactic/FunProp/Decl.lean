@@ -36,7 +36,7 @@ structure FunPropDecl
   参数: where
   公理与运算 (3 个):
     - funPropName : Name
-    - path : Array DiscrTree.Key
+    - path : 数组 DiscrTree.Key
     - funArgId : 自然数
 -/
 structure FunPropDecl where
@@ -62,7 +62,7 @@ structure FunPropDecls
 结构 FunPropDecls
   参数: where
   公理与运算 (1 个):
-    - decls : DiscrTree Fun命题Decl  [默认: {}]
+    - decls : DiscrTree FunPropDecl  [默认: {}]
 -/
 structure FunPropDecls where
   /-- Discrimination tree for function properties. -/

@@ -35,7 +35,7 @@ theorem intervalIntegrable_pow
   proof: (continuous_pow n).intervalIntegrable a b
 
 中文:
-定理 intervalIntegrable_pow
+定理 interval整数egrable_pow
   结论: 整数erval整数egrable (fun x => x ^ n) μ a b
   证明: (continuous_pow n).intervalIntegrable a b
 
@@ -53,7 +53,7 @@ theorem intervalIntegrable_zpow
   proof: (continuousOn_id.zpow₀ n fun _ hx => h.symm.imp (ne_of_mem_of_not_mem hx) id).intervalIntegrable
 
 中文:
-定理 intervalIntegrable_zpow
+定理 interval整数egrable_zpow
   条件: {n : 整数} (h : 0 <= n ∨ (0 : 实数) ∉ [[a, b]])
   证明: (continuousOn_id.zpow₀ n fun _ hx => h.symm.imp (ne_of_mem_of_not_mem hx) id).intervalIntegrable
 
@@ -73,7 +73,7 @@ theorem intervalIntegrable_rpow
     h.symm.imp (ne_of_mem_of_not_mem hx) id).intervalIntegrable
 
 中文:
-定理 intervalIntegrable_rpow
+定理 interval整数egrable_rpow
   条件: {r : 实数} (h : 0 <= r ∨ (0 : 实数) ∉ [[a, b]])
   证明: (continuousOn_id.rpow_const fun _ hx =>
     h.symm.imp (ne_of_mem_of_not_mem hx) id).intervalIntegrable
@@ -100,7 +100,7 @@ theorem intervalIntegrable_rpow'
     h
 
 中文:
-定理 intervalIntegrable_rpow'
+定理 interval整数egrable_rpow'
   条件: {r : 实数} (h : -1 < r)
   证明: by
   suffices forall c : Real, IntervalIntegrable (fun x => x ^ r) volume 0 c by
@@ -202,8 +202,8 @@ theorem intervalIntegrable_cpow
   rw [eq_false h2]; rw [or_false]
 
 中文:
-定理 intervalIntegrable_cpow
-  条件: {r : Complex} (h : 0 <= r.re ∨ (0 : 实数) ∉ [[a, b]])
+定理 interval整数egrable_cpow
+  条件: {r : 复形} (h : 0 <= r.re ∨ (0 : 实数) ∉ [[a, b]])
   证明: by
   by_cases h2 : (0 : Real) ∉ [[a, b]]
   · -- Easy case #1: 0 ∉ [a, b] -- use continuity.
@@ -267,8 +267,8 @@ theorem intervalIntegrable_cpow'
     rw [← IntervalIntegrable.inte
 
 中文:
-定理 intervalIntegrable_cpow'
-  条件: {r : Complex} (h : -1 < r.re)
+定理 interval整数egrable_cpow'
+  条件: {r : 复形} (h : -1 < r.re)
   证明: by
   suffices forall c : Real, IntervalIntegrable (fun x => (x : Complex) ^ r) volume 0 c by
     exact IntervalIntegrable.trans (this a).symm (this b)
@@ -331,7 +331,7 @@ theorem integrableOn_Ioo_cpow_iff
 
 中文:
 定理 integrableOn_Ioo_cpow_iff
-  条件: {s : Complex} {t : 实数} (ht : 0 < t)
+  条件: {s : 复形} {t : 实数} (ht : 0 < t)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   swap
@@ -365,7 +365,7 @@ theorem intervalIntegrable_id
   proof: continuous_id.intervalIntegrable a b
 
 中文:
-定理 intervalIntegrable_id
+定理 interval整数egrable_id
   结论: 整数erval整数egrable (fun x => x) μ a b
   证明: continuous_id.intervalIntegrable a b
 
@@ -385,7 +385,7 @@ theorem intervalIntegrable_one_div
 @[simp]
 
 中文:
-定理 intervalIntegrable_one_div
+定理 interval整数egrable_one_div
   结论: (h : 对任意 x : 实数, x in [[a, b]] -> f x != 0)
   证明: (continuousOn_const.div hf h).intervalIntegrable
 
@@ -410,7 +410,7 @@ theorem intervalIntegrable_inv
 @[simp]
 
 中文:
-定理 intervalIntegrable_inv
+定理 interval整数egrable_inv
   结论: (h : 对任意 x : 实数, x in [[a, b]] -> f x != 0)
   证明: by
   simpa only [one_div] using intervalIntegrable_one_div h hf
@@ -435,7 +435,7 @@ theorem intervalIntegrable_sin
 @[simp]
 
 中文:
-定理 intervalIntegrable_sin
+定理 interval整数egrable_sin
   结论: 整数erval整数egrable sin μ a b
   证明: continuous_sin.intervalIntegrable a b
 
@@ -458,7 +458,7 @@ theorem intervalIntegrable_cos
 @[simp]
 
 中文:
-定理 intervalIntegrable_cos
+定理 interval整数egrable_cos
   结论: 整数erval整数egrable cos μ a b
   证明: continuous_cos.intervalIntegrable a b
 
@@ -481,7 +481,7 @@ theorem intervalIntegrable_exp
 @[simp]
 
 中文:
-定理 intervalIntegrable_exp
+定理 interval整数egrable_exp
   结论: 整数erval整数egrable exp μ a b
   证明: continuous_exp.intervalIntegrable a b
 
@@ -502,7 +502,7 @@ theorem _root_.IntervalIntegrable.log
   proof: (ContinuousOn.log hf h).intervalIntegrable
 
 中文:
-定理 _root_.IntervalIntegrable.log
+定理 _root_.整数erval整数egrable.log
   结论: (hf : ContinuousOn f [[a, b]])
   证明: (ContinuousOn.log hf h).intervalIntegrable
 
@@ -529,7 +529,7 @@ theorem intervalIntegrable_log
   proof: IntervalIntegrable.log continuousOn_id fun _ hx => ne_of_mem_of_not_mem hx h
 
 中文:
-定理 intervalIntegrable_log
+定理 interval整数egrable_log
   条件: (h : (0 : 实数) ∉ [[a, b]])
   结论: 整数erval整数egrable log μ a b
   证明: IntervalIntegrable.log continuousOn_id fun _ hx => ne_of_mem_of_not_mem hx h
@@ -561,7 +561,7 @@ theorem intervalIntegrable_log'
     rw [← neg_ne
 
 中文:
-定理 intervalIntegrable_log'
+定理 interval整数egrable_log'
   结论: 整数erval整数egrable log volume a b
   证明: by
   -- Log is even, so it suffices to consider the case 0 < a and b = 0
@@ -606,7 +606,7 @@ theorem intervalIntegrable_one_div_one_add_sq
 @[simp]
 
 中文:
-定理 intervalIntegrable_one_div_one_add_sq
+定理 interval整数egrable_one_div_one_add_sq
   证明: by
   apply Continuous.intervalIntegrable
   fun_prop (discharger := intro; nlinarith)
@@ -630,7 +630,7 @@ theorem intervalIntegrable_inv_one_add_sq
   simp [← one_div, intervalIntegrable_one_div_one_add_sq]
 
 中文:
-定理 intervalIntegrable_inv_one_add_sq
+定理 interval整数egrable_inv_one_add_sq
   证明: by
   simp [← one_div, intervalIntegrable_one_div_one_add_sq]
 

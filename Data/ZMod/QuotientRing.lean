@@ -45,8 +45,8 @@ RingHom.quotientKerEquivOfRightInverse
       show Function.RightInverse ZMod.cast (Int.castRingHom (ZMod n)) from intCast_zmod_cast
 
 中文:
-定义 quotientSpanNatEquivZMod
-  签名: : 整数 ⧸ Ideal.span {(n : 整数)} ≃+* ZMod n
+定义 quotientSpan自然数EquivZMod
+  签名: : 整数 ⧸ 理想.span {(n : 整数)} ≃+* ZMod n
   定义体: (Ideal.quotEquivOfEq (ZMod.ker_intCastRingHom _)).symm.trans
 RingHom.quotientKerEquivOfRightInverse
       show Function.RightInverse ZMod.cast (Int.castRingHom (ZMod n)) from intCast_zmod_cast
@@ -92,7 +92,7 @@ theorem quotientSpanNatEquivZMod_comp_Quotient_mk
 @[simp]
 
 中文:
-定理 quotientSpanNatEquivZMod_comp_Quotient_mk
+定理 quotientSpan自然数EquivZMod_comp_Quotient_mk
   条件: (n : 自然数)
   证明: rfl
 
@@ -114,7 +114,7 @@ theorem quotientSpanNatEquivZMod_comp_castRingHom
 @[simp]
 
 中文:
-定理 quotientSpanNatEquivZMod_comp_castRingHom
+定理 quotientSpan自然数EquivZMod_comp_castRingHom
   条件: (n : 自然数)
   证明: by ext; simp
 
@@ -187,7 +187,7 @@ definition ZMod.prodEquivPi
 
 中文:
 定义 ZMod.prodEquivPi
-  签名: {ι : 类型} [Fintype ι] (a : ι -> 自然数)
+  签名: {ι : 类型} [有限类型 ι] (a : ι -> 自然数)
   定义体: have : Pairwise fun i j => IsCoprime (span {(a i : Int)}) (span {(a j : Int)}) :=
     fun _i _j h => (isCoprime_span_singleton_iff _ _).mpr ((coprime h).cast (R := Int))
 .symm.trans Int.quotientSpanNatEquivZMod _
@@ -218,7 +218,7 @@ theorem ZMod.prodEquivPi_apply
 
 中文:
 定理 ZMod.prodEquivPi_apply
-  结论: {ι : 类型} [Fintype ι] (a : ι -> 自然数)
+  结论: {ι : 类型} [有限类型 ι] (a : ι -> 自然数)
   证明: RingHom.congr_fun (Subsingleton.elim ((Pi.evalRingHom (fun _ => ZMod _) i).comp
     (prodEquivPi a coprime).toRingHom) _) b
 

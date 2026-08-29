@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Hopf C)
+  签名: 范畴 (Hopf C)
   定义体: inferInstanceAs Category (InducedCategory (Bimon C) Hopf.toBimon)
 
 Depends on / 依赖: Category, Hopf.toBimon, InducedCategory, toBimon
@@ -157,7 +157,7 @@ theorem hom_antipode
 
 中文:
 定理 hom_antipode
-  条件: {A B : C} [HopfObj A] [HopfObj B] (f : A ⟶ B) [IsBimonHom f]
+  条件: {A B : C} [HopfObj A] [HopfObj B] (f : A ⟶ B) [是Bimon态射 f]
   证明: by
   -- We show these elements are equal by exhibiting an element in the convolution algebra
   -- between `A` (as a comonoid) and `B` (as a monoid),

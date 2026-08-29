@@ -49,12 +49,12 @@ structure CSA
 
 中文:
 结构 CSA
-  参数: (K : 类型u) [Field K]
-  继承: AlgCat.{v} K
+  参数: (K : 类型u) [域 K]
+  继承: Alg范畴.{v} K
   公理与运算 (3 个):
-    - [isCentral : Algebra.IsCentral K carrier]
-    - [isSimple : IsSimpleRing carrier]
-    - [fin_dim : FiniteDimensional K carrier]
+    - [isCentral : 代数.是中心 K carrier]
+    - [isSimple : 是单环 carrier]
+    - [fin_dim : 有限维 K carrier]
 -/
 structure CSA (K : Type u) [Field K] extends AlgCat.{v} K where
   /-- Any member of `CSA` is central. -/
@@ -205,7 +205,7 @@ lemma is_eqv
 
 中文:
 引理 is_eqv
-  结论: Equivalence (IsBrauerEquivalent (K := K)) where
+  结论: 等价 (IsBrauerEquivalent (K := K)) where
   证明: refl
   symm := symm
   trans := trans
@@ -232,7 +232,7 @@ definition Brauer.CSA_Setoid
 
 中文:
 定义 Brauer.CSA_Setoid
-  签名: : Setoid (CSA K) where
+  签名: : 集合等价关系 (CSA K) where
   定义体: IsBrauerEquivalent
   iseqv := IsBrauerEquivalent.is_eqv
 

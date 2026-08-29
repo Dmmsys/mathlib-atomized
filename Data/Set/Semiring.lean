@@ -55,8 +55,8 @@ definition Set.up
   body: Equiv.refl _
 
 中文:
-定义 Set.up
-  签名: : Set α ≃ SetSemiring α
+定义 集合.up
+  签名: : 集合 α ≃ SetSemiring α
   定义体: Equiv.refl _
 -/
 protected def Set.up : Set α ≃ SetSemiring α :=
@@ -74,7 +74,7 @@ definition down
 
 中文:
 定义 down
-  签名: : SetSemiring α ≃ Set α
+  签名: : SetSemiring α ≃ 集合 α
   定义体: Equiv.refl _
 -/
 protected def down : SetSemiring α ≃ Set α :=
@@ -97,7 +97,7 @@ theorem down_up
 
 中文:
 定理 down_up
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s.up.down = s
   证明: rfl
 
@@ -137,7 +137,7 @@ theorem up_le_up
 
 中文:
 定理 up_le_up
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s.up <= t.up ↔ s subseteq t
   证明: Iff.rfl
 
@@ -159,7 +159,7 @@ theorem up_lt_up
 
 中文:
 定理 up_lt_up
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s.up < t.up ↔ s ⊂ t
   证明: Iff.rfl
 
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (SetSemiring α)
+  签名: 零 (SetSemiring α)
   定义体: (∅ : Set α).up
 -/
 instance : Zero (SetSemiring α) where zero := (∅ : Set α).up
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (SetSemiring α)
+  签名: 加法 (SetSemiring α)
   定义体: (s.down union t.down).up
 
 Depends on / 依赖: s.down, t.down
@@ -262,7 +262,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (SetSemiring α)
+  签名: 加法交换幺半群 (SetSemiring α)
   定义体: union_assoc
   zero_add := empty_union
   add_zero := union_empty
@@ -290,7 +290,7 @@ theorem zero_def
 
 中文:
 定理 zero_def
-  结论: (0 : SetSemiring α) = Set.up ∅
+  结论: (0 : SetSemiring α) = 集合.up ∅
   证明: rfl
 
 @[simp]
@@ -329,8 +329,8 @@ theorem _root_.Set.up_empty
   proof: rfl
 
 中文:
-定理 _root_.Set.up_empty
-  结论: (∅ : Set α).up = 0
+定理 _root_.集合.up_empty
+  结论: (∅ : 集合 α).up = 0
   证明: rfl
 -/
 theorem _root_.Set.up_empty : (∅ : Set α).up = 0 :=
@@ -394,8 +394,8 @@ theorem _root_.Set.up_union
   proof: rfl
 
 中文:
-定理 _root_.Set.up_union
-  条件: (s t : Set α)
+定理 _root_.集合.up_union
+  条件: (s t : 集合 α)
   结论: (s union t).up = s.up + t.up
   证明: rfl
 -/
@@ -438,7 +438,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalNonAssocSemiring (SetSemiring α)
+  签名: 非幺非结合半环 (SetSemiring α)
   定义体: fun s t => (image2 (· * ·) s.down t.down).up
   zero_mul := fun _ => empty_mul
   mul_zero := fun _ => mul_empty
@@ -510,8 +510,8 @@ theorem _root_.Set.up_mul
   proof: rfl
 
 中文:
-定理 _root_.Set.up_mul
-  条件: (s t : Set α)
+定理 _root_.集合.up_mul
+  条件: (s t : 集合 α)
   结论: (s * t).up = s.up * t.up
   证明: rfl
 -/
@@ -531,7 +531,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors (SetSemiring α)
+  签名: 无零因子 (SetSemiring α)
   定义体: ⟨fun {a b} ab =>
     a.eq_empty_or_nonempty.imp_right fun ha =>
       b.eq_empty_or_nonempty.resolve_right fun hb =>
@@ -598,7 +598,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (SetSemiring α)
+  签名: 幺 (SetSemiring α)
   定义体: (1 : Set α).up
 -/
 instance : One (SetSemiring α) where one := (1 : Set α).up
@@ -615,7 +615,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : SetSemiring α) = Set.up 1
+  结论: (1 : SetSemiring α) = 集合.up 1
   证明: rfl
 
 @[simp]
@@ -654,8 +654,8 @@ theorem _root_.Set.up_one
   proof: rfl
 
 中文:
-定理 _root_.Set.up_one
-  结论: (1 : Set α).up = 1
+定理 _root_.集合.up_one
+  结论: (1 : 集合 α).up = 1
   证明: rfl
 
 Depends on / 依赖: CharZero, DivisionRing, divisibleByIntOfCharZero
@@ -674,8 +674,8 @@ instance [MulOneClass
   body: inferInstanceAs MulOneClass (Set α)
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass (SetSemiring α)
+实例 [MulOne类
+  签名: α] : MulOne类 (SetSemiring α)
   定义体: inferInstanceAs MulOneClass (Set α)
 
 Depends on / 依赖: MulOneClass
@@ -691,8 +691,8 @@ instance [MulOneClass
   signature: α] : NonAssocSemiring (SetSemiring α) where
 
 中文:
-实例 [MulOneClass
-  签名: α] : NonAssocSemiring (SetSemiring α) where
+实例 [MulOne类
+  签名: α] : 非结合半环 (SetSemiring α) where
 -/
 noncomputable instance [MulOneClass α] : NonAssocSemiring (SetSemiring α) where
 
@@ -705,8 +705,8 @@ instance [Semigroup
   body: inferInstanceAs Semigroup (Set α)
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup (SetSemiring α)
+实例 [半群
+  签名: α] : 半群 (SetSemiring α)
   定义体: inferInstanceAs Semigroup (Set α)
 
 Depends on / 依赖: Semigroup
@@ -722,8 +722,8 @@ instance [Semigroup
   signature: α] : NonUnitalSemiring (SetSemiring α) where
 
 中文:
-实例 [Semigroup
-  签名: α] : NonUnitalSemiring (SetSemiring α) where
+实例 [半群
+  签名: α] : 非幺半环 (SetSemiring α) where
 -/
 instance [Semigroup α] : NonUnitalSemiring (SetSemiring α) where
 
@@ -737,7 +737,7 @@ instance :
 
 中文:
 实例 :
-  签名: Complete布尔eanAlgebra (SetSemiring α)
+  签名: 完备布尔代数 (SetSemiring α)
   定义体: inferInstanceAs CompleteBooleanAlgebra (Set α)
 
 Depends on / 依赖: CompleteBooleanAlgebra
@@ -756,7 +756,7 @@ instance [Monoid
     (inferInstance : CompleteBooleanAlgebra (SetSemiring α)) with }
 
 中文:
-实例 [Monoid
+实例 [幺半群
   签名: α] : IdemSemiring (SetSemiring α)
   定义体: { (inferInstance : NonAssocSemiring (SetSemiring α)),
     (inferInstance : NonUnitalSemiring (SetSemiring α)),
@@ -778,8 +778,8 @@ instance [CommSemigroup
   body: inferInstanceAs CommSemigroup (Set α)
 
 中文:
-实例 [CommSemigroup
-  签名: α] : CommSemigroup (SetSemiring α)
+实例 [交换半群
+  签名: α] : 交换半群 (SetSemiring α)
   定义体: inferInstanceAs CommSemigroup (Set α)
 
 Depends on / 依赖: CommSemigroup
@@ -795,8 +795,8 @@ instance [CommSemigroup
   signature: α] : NonUnitalCommSemiring (SetSemiring α) where
 
 中文:
-实例 [CommSemigroup
-  签名: α] : NonUnitalCommSemiring (SetSemiring α) where
+实例 [交换半群
+  签名: α] : 非幺交换半环 (SetSemiring α) where
 -/
 instance [CommSemigroup α] : NonUnitalCommSemiring (SetSemiring α) where
 
@@ -809,8 +809,8 @@ instance [CommMonoid
   body: inferInstanceAs CommMonoid (Set α)
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid (SetSemiring α)
+实例 [交换幺半群
+  签名: α] : 交换幺半群 (SetSemiring α)
   定义体: inferInstanceAs CommMonoid (Set α)
 
 Depends on / 依赖: CommMonoid
@@ -826,7 +826,7 @@ instance [CommMonoid
   signature: α] : IdemCommSemiring (SetSemiring α) where
 
 中文:
-实例 [CommMonoid
+实例 [交换幺半群
   签名: α] : IdemCommSemiring (SetSemiring α) where
 -/
 noncomputable instance [CommMonoid α] : IdemCommSemiring (SetSemiring α) where
@@ -843,7 +843,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd (SetSemiring α)
+  签名: 典范有序加法 (SetSemiring α)
   定义体: ⟨b, (union_eq_right.2 ab).symm⟩
   le_add_self _ _ := subset_union_right
   le_self_add _ _ := subset_union_left
@@ -864,8 +864,8 @@ instance [CommMonoid
   body: CanonicallyOrderedAdd.toIsOrderedRing
 
 中文:
-实例 [CommMonoid
-  签名: α] : IsOrderedRing (SetSemiring α)
+实例 [交换幺半群
+  签名: α] : 是Ordered环 (SetSemiring α)
   定义体: CanonicallyOrderedAdd.toIsOrderedRing
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toIsOrderedRing, toIsOrderedRing
@@ -885,7 +885,7 @@ definition singletonMonoidHom
 
 中文:
 定义 singletonMonoidHom
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: up {a}
   map_one' := rfl
   map_mul' _ _ := image2_singleton.symm
@@ -910,7 +910,7 @@ definition imageHom
 
 中文:
 定义 imageHom
-  签名: [MulOneClass α] [MulOneClass β] (f : α ->* β)
+  签名: [MulOne类 α] [MulOne类 β] (f : α ->* β)
   定义体: (image f s.down).up
   map_zero' := image_empty _
   map_one' := by
@@ -941,7 +941,7 @@ lemma imageHom_def
 
 中文:
 引理 imageHom_def
-  条件: [MulOneClass α] [MulOneClass β] (f : α ->* β) (s : SetSemiring α)
+  条件: [MulOne类 α] [MulOne类 β] (f : α ->* β) (s : SetSemiring α)
   证明: rfl
 
 @[simp]
@@ -963,7 +963,7 @@ lemma down_imageHom
 
 中文:
 引理 down_imageHom
-  条件: [MulOneClass α] [MulOneClass β] (f : α ->* β) (s : SetSemiring α)
+  条件: [MulOne类 α] [MulOne类 β] (f : α ->* β) (s : SetSemiring α)
   证明: rfl
 
 @[simp]
@@ -982,8 +982,8 @@ lemma _root_.Set.up_image
   proof: rfl
 
 中文:
-引理 _root_.Set.up_image
-  条件: [MulOneClass α] [MulOneClass β] (f : α ->* β) (s : Set α)
+引理 _root_.集合.up_image
+  条件: [MulOne类 α] [MulOne类 β] (f : α ->* β) (s : 集合 α)
   证明: rfl
 -/
 lemma _root_.Set.up_image [MulOneClass α] [MulOneClass β] (f : α ->* β) (s : Set α) :

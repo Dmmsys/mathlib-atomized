@@ -383,7 +383,7 @@ instance colimitLimitToLimitColimit_isIso
 
 中文:
 实例 colimitLimitToLimitColimit_isIso
-  签名: : IsIso (colimitLimitToLimitColimit F)
+  签名: : 是同构 (colimitLimitToLimitColimit F)
   定义体: (isIso_iff_bijective _).mpr
     ⟨colimitLimitToLimitColimit_injective F, colimitLimitToLimitColimit_surjective F⟩
 
@@ -519,8 +519,8 @@ instance [PreservesFiniteLimits
   infer_instance
 
 中文:
-实例 [PreservesFiniteLimits
-  签名: (forget C)] [PreservesColimitsOfShape K (forget C)]
+实例 [保持FiniteLimits
+  签名: (forget C)] [保持形状余极限 K (forget C)]
   定义体: by
   apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{v}
   intro J _ _

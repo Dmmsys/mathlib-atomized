@@ -33,7 +33,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: : MulOneClass 自然数 where
+  签名: : MulOne类 自然数 where
   定义体: Nat.one_mul
   mul_one := Nat.mul_one
 
@@ -62,7 +62,7 @@ instance instAddCancelCommMonoid
 
 中文:
 实例 instAddCancelCommMonoid
-  签名: : AddCancelCommMonoid 自然数 where
+  签名: : 加法消去交换幺半群 自然数 where
   定义体: Nat.add
   add_assoc := Nat.add_assoc
   zero := Nat.zero
@@ -106,7 +106,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid 自然数 where
+  签名: : 交换幺半群 自然数 where
   定义体: Nat.mul
   mul_assoc := Nat.mul_assoc
   one := Nat.succ Nat.zero
@@ -144,7 +144,7 @@ instance instIsMulTorsionFree
 
 中文:
 实例 instIsMulTorsionFree
-  签名: : IsMulTorsionFree 自然数 where
+  签名: : 是MulTorsionFree 自然数 where
   定义体: (Nat.pow_left_inj h).mp
 
 Depends on / 依赖: Nat.pow_left_inj, pow_left_inj
@@ -162,7 +162,7 @@ instance instIsAddTorsionFree
 
 中文:
 实例 instIsAddTorsionFree
-  签名: : IsAddTorsionFree 自然数 where
+  签名: : 是加法无挠 自然数 where
   定义体: Nat.mul_left_cancel (Nat.pos_of_ne_zero hn) hxy
 
 Depends on / 依赖: Nat.mul_left_cancel, Nat.pos_of_ne_zero, mul_left_cancel, pos_of_ne_zero
@@ -188,7 +188,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid 自然数
+  签名: : 加法交换幺半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -204,7 +204,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid 自然数
+  签名: : 加法幺半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -220,7 +220,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid 自然数
+  签名: : 幺半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -236,7 +236,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: : CommSemigroup 自然数
+  签名: : 交换半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -252,7 +252,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: : Semigroup 自然数
+  签名: : 半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -268,7 +268,7 @@ instance instAddCommSemigroup
 
 中文:
 实例 instAddCommSemigroup
-  签名: : AddCommSemigroup 自然数
+  签名: : 加法交换半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -284,7 +284,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: : AddSemigroup 自然数
+  签名: : 加法半群 自然数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -300,7 +300,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One 自然数
+  签名: : 幺 自然数
   定义体: inferInstance
 -/
 instance instOne : One Nat := inferInstance

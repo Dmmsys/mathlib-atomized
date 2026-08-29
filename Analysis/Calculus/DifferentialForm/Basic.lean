@@ -68,7 +68,7 @@ definition extDeriv
 
 中文:
 定义 extDeriv
-  签名: (ω : E -> E [⋀^Fin n]->L[𝕜] F) (x : E)
+  签名: (ω : E -> E [⋀^有限集 n]->L[𝕜] F) (x : E)
   定义体: .alternatizeUncurryFin (fderiv 𝕜 ω x)
 
 Depends on / 依赖: alternatizeUncurryFin, fderiv
@@ -88,7 +88,7 @@ definition extDerivWithin
 
 中文:
 定义 extDerivWithin
-  签名: (ω : E -> E [⋀^Fin n]->L[𝕜] F) (s : Set E) (x : E)
+  签名: (ω : E -> E [⋀^有限集 n]->L[𝕜] F) (s : 集合 E) (x : E)
   定义体: .alternatizeUncurryFin (fderivWithin 𝕜 ω s x)
 
 @[simp]
@@ -112,7 +112,7 @@ theorem extDerivWithin_univ
 
 中文:
 定理 extDerivWithin_univ
-  条件: (ω : E -> E [⋀^Fin n]->L[𝕜] F)
+  条件: (ω : E -> E [⋀^有限集 n]->L[𝕜] F)
   证明: by
   ext1 x
   rw [extDerivWithin]; rw [extDeriv]; rw [fderivWithin_univ]
@@ -217,7 +217,7 @@ theorem extDerivWithin_smul
 
 中文:
 定理 extDerivWithin_smul
-  条件: (c : 𝕜) (ω : E -> E [⋀^Fin n]->L[𝕜] F) (hsx : UniqueDiffWithinAt 𝕜 s x)
+  条件: (c : 𝕜) (ω : E -> E [⋀^有限集 n]->L[𝕜] F) (hsx : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   simp [extDerivWithin, fderivWithin_const_smul_field, hsx, alternatizeUncurryFin_smul]
 
@@ -237,7 +237,7 @@ theorem extDerivWithin_fun_smul
 
 中文:
 定理 extDerivWithin_fun_smul
-  结论: (c : 𝕜) (ω : E -> E [⋀^Fin n]->L[𝕜] F)
+  结论: (c : 𝕜) (ω : E -> E [⋀^有限集 n]->L[𝕜] F)
   证明: extDerivWithin_smul c ω hsx
 
 Depends on / 依赖: extDerivWithin_smul
@@ -258,7 +258,7 @@ theorem extDeriv_smul
 
 中文:
 定理 extDeriv_smul
-  条件: (c : 𝕜) (ω : E -> E [⋀^Fin n]->L[𝕜] F)
+  条件: (c : 𝕜) (ω : E -> E [⋀^有限集 n]->L[𝕜] F)
   证明: by
   simp [← extDerivWithin_univ, extDerivWithin_smul]
 
@@ -278,7 +278,7 @@ theorem extDeriv_fun_smul
 
 中文:
 定理 extDeriv_fun_smul
-  条件: (c : 𝕜) (ω : E -> E [⋀^Fin n]->L[𝕜] F)
+  条件: (c : 𝕜) (ω : E -> E [⋀^有限集 n]->L[𝕜] F)
   证明: extDeriv_smul c ω
 
 Depends on / 依赖: extDeriv_smul
@@ -347,7 +347,7 @@ theorem Filter.EventuallyEq.extDerivWithin_eq
   simp only [extDerivWithin, alternatizeUncurryFin, hs.fderivWithin_eq hx]
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin_eq
+定理 滤子.EventuallyEq.extDerivWithin_eq
   条件: (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (hx : ω₁ x = ω₂ x)
   证明: by
   simp only [extDerivWithin, alternatizeUncurryFin, hs.fderivWithin_eq hx]
@@ -367,7 +367,7 @@ theorem Filter.EventuallyEq.extDerivWithin_eq_of_mem
   proof: hs.extDerivWithin_eq (mem_of_mem_nhdsWithin hx hs :)
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin_eq_of_mem
+定理 滤子.EventuallyEq.extDerivWithin_eq_of_mem
   条件: (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (hx : x in s)
   证明: hs.extDerivWithin_eq (mem_of_mem_nhdsWithin hx hs :)
 
@@ -388,7 +388,7 @@ theorem Filter.EventuallyEq.extDerivWithin_eq_of_insert
   exact (mem_of_mem_nhdsWithin (mem_insert x s) hs :)
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin_eq_of_insert
+定理 滤子.EventuallyEq.extDerivWithin_eq_of_insert
   条件: (hs : ω₁ =ᶠ[𝓝[insert x s] x] ω₂)
   证明: by
   apply Filter.EventuallyEq.extDerivWithin_eq (nhdsWithin_mono _ (subset_insert x s) hs)
@@ -412,7 +412,7 @@ theorem Filter.EventuallyEq.extDerivWithin'
         (hs.self_of_nhdsWithin hys)
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin'
+定理 滤子.EventuallyEq.extDerivWithin'
   条件: (hs : ω₁ =ᶠ[𝓝[s] x] ω₂) (ht : t subseteq s)
   证明: (eventually_eventually_nhdsWithin.2 hs).mp eventually_mem_nhdsWithin.mono fun _y hys hs =>
     EventuallyEq.extDerivWithin_eq (hs.filter_mono <| nhdsWithin_mono _ ht)
@@ -435,7 +435,7 @@ theorem Filter.EventuallyEq.extDerivWithin
   proof: hs.extDerivWithin' .rfl
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin
+定理 滤子.EventuallyEq.extDerivWithin
   条件: (hs : ω₁ =ᶠ[𝓝[s] x] ω₂)
   证明: hs.extDerivWithin' .rfl
 -/
@@ -452,7 +452,7 @@ theorem Filter.EventuallyEq.extDerivWithin_eq_nhds
   proof: (h.filter_mono nhdsWithin_le_nhds).extDerivWithin_eq h.self_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.extDerivWithin_eq_nhds
+定理 滤子.EventuallyEq.extDerivWithin_eq_nhds
   条件: (h : ω₁ =ᶠ[𝓝 x] ω₂)
   证明: (h.filter_mono nhdsWithin_le_nhds).extDerivWithin_eq h.self_of_nhds
 
@@ -511,7 +511,7 @@ theorem Filter.EventuallyEq.extDeriv
   exact h.extDerivWithin
 
 中文:
-定理 Filter.EventuallyEq.extDeriv
+定理 滤子.EventuallyEq.extDeriv
   条件: (h : ω₁ =ᶠ[𝓝 x] ω₂)
   证明: by
   simp only [← nhdsWithin_univ, ← extDerivWithin_univ] at *
@@ -532,7 +532,7 @@ theorem Filter.EventuallyEq.extDeriv_eq
   proof: h.extDeriv.self_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.extDeriv_eq
+定理 滤子.EventuallyEq.extDeriv_eq
   条件: (h : ω₁ =ᶠ[𝓝 x] ω₂)
   结论: extDeriv ω₁ x = extDeriv ω₂ x
   证明: h.extDeriv.self_of_nhds
@@ -579,7 +579,7 @@ theorem extDeriv_apply
 
 中文:
 定理 extDeriv_apply
-  条件: (h : DifferentiableAt 𝕜 ω x) (v : Fin (n + 1) -> E)
+  条件: (h : DifferentiableAt 𝕜 ω x) (v : 有限集 (n + 1) -> E)
   证明: by
   simp [← extDerivWithin_univ, extDerivWithin_apply h.differentiableWithinAt]
 
@@ -692,7 +692,7 @@ theorem extDeriv_extDeriv
 
 中文:
 定理 extDeriv_extDeriv
-  条件: (h : ContDiff 𝕜 r ω) (hr : minSmoothness 𝕜 2 <= r)
+  条件: (h : 连续可微 𝕜 r ω) (hr : minSmoothness 𝕜 2 <= r)
   证明: funext fun _ => extDeriv_extDeriv_apply h.contDiffAt hr
 
 Depends on / 依赖: contDiffAt, extDeriv_extDeriv_apply, h.contDiffAt
@@ -716,7 +716,7 @@ hf.differentiableWithinAt (two_pos.trans_le <| le_minSmoothness.trans hr).ne'
 
 中文:
 定理 extDerivWithin_pullback
-  结论: {ω : F -> F [⋀^Fin n]->L[𝕜] G} {f : E -> F} {t : Set F}
+  结论: {ω : F -> F [⋀^有限集 n]->L[𝕜] G} {f : E -> F} {t : 集合 F}
   证明: by
   have hdf : DifferentiableWithinAt 𝕜 f s x :=
 hf.differentiableWithinAt (two_pos.trans_le <| le_minSmoothness.trans hr).ne'
@@ -755,7 +755,7 @@ theorem extDeriv_pullback
 
 中文:
 定理 extDeriv_pullback
-  结论: {ω : F -> F [⋀^Fin n]->L[𝕜] G} {f : E -> F}
+  结论: {ω : F -> F [⋀^有限集 n]->L[𝕜] G} {f : E -> F}
   证明: by
   simp only [← differentiableWithinAt_univ, ← extDerivWithin_univ, ← contDiffWithinAt_univ,
     ← fderivWithin_univ] at *

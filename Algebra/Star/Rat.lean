@@ -25,8 +25,8 @@ instance Rat.instStarRing
   body: starRingOfComm
 
 中文:
-实例 Rat.instStarRing
-  签名: : StarRing Rat
+实例 有理数.instStarRing
+  签名: : 对合环 有理数
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm
@@ -42,7 +42,7 @@ instance NNRat.instStarRing
 
 中文:
 实例 NNRat.instStarRing
-  签名: : StarRing Rat>=0
+  签名: : 对合环 有理数>=0
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm
@@ -57,8 +57,8 @@ instance Rat.instTrivialStar
   body: ⟨fun _ => rfl⟩
 
 中文:
-实例 Rat.instTrivialStar
-  签名: : TrivialStar Rat
+实例 有理数.instTrivialStar
+  签名: : TrivialStar 有理数
   定义体: ⟨fun _ => rfl⟩
 -/
 instance Rat.instTrivialStar : TrivialStar Rat := ⟨fun _ => rfl⟩
@@ -72,7 +72,7 @@ instance NNRat.instTrivialStar
 
 中文:
 实例 NNRat.instTrivialStar
-  签名: : TrivialStar Rat>=0
+  签名: : TrivialStar 有理数>=0
   定义体: ⟨fun _ => rfl⟩
 -/
 instance NNRat.instTrivialStar : TrivialStar Rat>=0 := ⟨fun _ => rfl⟩
@@ -95,7 +95,7 @@ lemma star_nnratCast
 
 中文:
 引理 star_nnratCast
-  条件: [DivisionSemiring R] [StarRing R] (q : Rat>=0)
+  条件: [除半环 R] [对合环 R] (q : 有理数>=0)
   结论: star (q : R) = q
   证明: (congr_arg unop <| map_nnratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) q).trans (unop_nnratCast _)
 
@@ -118,7 +118,7 @@ theorem star_ratCast
 
 中文:
 定理 star_ratCast
-  条件: [DivisionRing R] [StarRing R] (r : Rat)
+  条件: [除环 R] [对合环 R] (r : 有理数)
   结论: star (r : R) = r
   证明: (congr_arg unop <| map_ratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) r).trans (unop_ratCast _)
 

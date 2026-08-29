@@ -510,7 +510,7 @@ lemma commShiftIso_map₂CochainComplex_hom_app
 
 中文:
 引理 commShiftIso_map₂CochainComplex_hom_app
-  结论: (K₁ : CochainComplex C₁ 整数)
+  结论: (K₁ : 上链复形 C₁ 整数)
   证明: rfl
 -/
 lemma commShiftIso_map₂CochainComplex_hom_app (K₁ : CochainComplex C₁ Int)
@@ -528,7 +528,7 @@ lemma commShiftIso_map₂CochainComplex_inv_app
 
 中文:
 引理 commShiftIso_map₂CochainComplex_inv_app
-  结论: (K₁ : CochainComplex C₁ 整数)
+  结论: (K₁ : 上链复形 C₁ 整数)
   证明: rfl
 -/
 lemma commShiftIso_map₂CochainComplex_inv_app (K₁ : CochainComplex C₁ Int)
@@ -582,7 +582,7 @@ lemma commShiftIso_map₂CochainComplex_flip_hom_app
 
 中文:
 引理 commShiftIso_map₂CochainComplex_flip_hom_app
-  结论: (K₁ : CochainComplex C₁ 整数)
+  结论: (K₁ : 上链复形 C₁ 整数)
   证明: rfl
 -/
 lemma commShiftIso_map₂CochainComplex_flip_hom_app (K₁ : CochainComplex C₁ Int)
@@ -600,7 +600,7 @@ lemma commShiftIso_map₂CochainComplex_flip_inv_app
 
 中文:
 引理 commShiftIso_map₂CochainComplex_flip_inv_app
-  结论: (K₁ : CochainComplex C₁ 整数)
+  结论: (K₁ : 上链复形 C₁ 整数)
   证明: rfl
 -/
 lemma commShiftIso_map₂CochainComplex_flip_inv_app (K₁ : CochainComplex C₁ Int)

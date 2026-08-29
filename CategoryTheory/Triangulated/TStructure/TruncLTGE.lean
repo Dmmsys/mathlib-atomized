@@ -410,7 +410,7 @@ definition triangleFunctorNatTransOfLE
 @[simp]
 
 中文:
-定义 triangleFunctorNatTransOfLE
+定义 triangleFunctor自然数TransOfLE
   签名: (a b : 整数) (h : a <= b)
   定义体: triangleMapOfLE t X a b h
   naturality _ _ _ :=
@@ -440,7 +440,7 @@ lemma triangleFunctorNatTransOfLE_app_hom₂
   proof: rfl
 
 中文:
-引理 triangleFunctorNatTransOfLE_app_hom₂
+引理 triangleFunctor自然数TransOfLE_app_hom₂
   条件: (a b : 整数) (h : a <= b) (X : C)
   证明: rfl
 -/
@@ -462,7 +462,7 @@ lemma triangleFunctorNatTransOfLE_trans
     (triangleFunctor_obj_distinguished _ _ _) (a - 1) c inferInstance inferInstance (by simp)
 
 中文:
-引理 triangleFunctorNatTransOfLE_trans
+引理 triangleFunctor自然数TransOfLE_trans
   条件: (a b c : 整数) (hab : a <= b) (hbc : b <= c)
   证明: by
   apply NatTrans.ext
@@ -494,7 +494,7 @@ lemma triangleFunctorNatTransOfLE_refl
     (triangleFunctor_obj_distinguished _ _ _) (a - 1) a inferInstance inferInstance (by simp)
 
 中文:
-引理 triangleFunctorNatTransOfLE_refl
+引理 triangleFunctor自然数TransOfLE_refl
   条件: (a : 整数)
   证明: by
   apply NatTrans.ext
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: (triangleFunctor t n).Additive
+  签名: (triangleFunctor t n).加性
 -/
 instance : (triangleFunctor t n).Additive where
 
@@ -1374,8 +1374,8 @@ lemma isLE_of_isZero
 
 中文:
 引理 isLE_of_isZero
-  条件: {X : C} (hX : IsZero X) (n : 整数)
-  结论: t.IsLE X n
+  条件: {X : C} (hX : 是零 X) (n : 整数)
+  结论: t.是LE X n
   证明: t.isLE_of_iso (((t.truncLT (n + 1)).map_isZero hX).isoZero ≪≫ hX.isoZero.symm) n
 
 Depends on / 依赖: hX.isoZero.symm, isLE_of_iso, isoZero, map_isZero, t.isLE_of_iso, t.truncLT, truncLT
@@ -1394,8 +1394,8 @@ lemma isGE_of_isZero
 
 中文:
 引理 isGE_of_isZero
-  条件: {X : C} (hX : IsZero X) (n : 整数)
-  结论: t.IsGE X n
+  条件: {X : C} (hX : 是零 X) (n : 整数)
+  结论: t.是GE X n
   证明: t.isGE_of_iso (((t.truncGE n).map_isZero hX).isoZero ≪≫ hX.isoZero.symm) n
 
 Depends on / 依赖: hX.isoZero.symm, isGE_of_iso, isoZero, map_isZero, t.isGE_of_iso, t.truncGE, truncGE
@@ -1570,7 +1570,7 @@ lemma isZero_truncLT_obj_of_isGE
 
 中文:
 引理 isZero_truncLT_obj_of_isGE
-  条件: (n : 整数) (X : C) [t.IsGE X n]
+  条件: (n : 整数) (X : C) [t.是GE X n]
   证明: by
   rw [← isGE_iff_isZero_truncLT_obj]
   infer_instance
@@ -1594,7 +1594,7 @@ lemma isZero_truncGE_obj_of_isLE
 
 中文:
 引理 isZero_truncGE_obj_of_isLE
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C) [t.IsLE X n₀]
+  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C) [t.是LE X n₀]
   证明: by
   rw [← t.isLE_iff_isZero_truncGE_obj _ _ h X]
   infer_instance
@@ -1772,7 +1772,7 @@ definition liftTruncLT
 
 中文:
 定义 liftTruncLT
-  签名: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) [t.IsLE X n₀]
+  签名: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) [t.是LE X n₀]
   定义体: (t.liftTruncLT_aux f n₀ n₁ h).choose
 
 @[reassoc (attr := simp)]
@@ -1794,7 +1794,7 @@ lemma liftTruncLT_ι
 
 中文:
 引理 liftTruncLT_ι
-  条件: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) [t.IsLE X n₀]
+  条件: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) [t.是LE X n₀]
   证明: (t.liftTruncLT_aux f n₀ n₁ h).choose_spec.symm
 
 Depends on / 依赖: choose_spec, choose_spec.symm, liftTruncLT_aux, t.liftTruncLT_aux
@@ -1864,7 +1864,7 @@ lemma π_descTruncGE
 
 中文:
 引理 π_descTruncGE
-  条件: {X Y : C} (f : X ⟶ Y) (n : 整数) [t.IsGE Y n]
+  条件: {X Y : C} (f : X ⟶ Y) (n : 整数) [t.是GE Y n]
   证明: (t.descTruncGE_aux f n).choose_spec.symm
 
 Depends on / 依赖: choose_spec, choose_spec.symm, descTruncGE_aux, t.descTruncGE_aux
@@ -1944,7 +1944,7 @@ lemma isLE₂
 
 中文:
 引理 isLE₂
-  结论: (T : Triangle C) (hT : T in distTriang C) (n : 整数) (h₁ : t.IsLE T.obj₁ n)
+  结论: (T : Triangle C) (hT : T in distTriang C) (n : 整数) (h₁ : t.是LE T.obj₁ n)
   证明: by
   rw [t.isLE_iff_orthogonal n (n + 1) rfl]
   intro Y f hY
@@ -1976,7 +1976,7 @@ lemma isGE₂
 
 中文:
 引理 isGE₂
-  结论: (T : Triangle C) (hT : T in distTriang C) (n : 整数) (h₁ : t.IsGE T.obj₁ n)
+  结论: (T : Triangle C) (hT : T in distTriang C) (n : 整数) (h₁ : t.是GE T.obj₁ n)
   证明: by
   rw [t.isGE_iff_orthogonal (n-1) n (by lia)]
   intro Y f hY
@@ -2006,7 +2006,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.minus.IsTriangulated
+  签名: t.minus.是三角
   定义体: ⟨0, isZero_zero C, 0, inferInstance⟩
   toIsTriangulatedClosed₂ := .mk' (fun T hT => by
     rintro ⟨i₁, hi₁⟩ ⟨i₃, hi₃⟩
@@ -2036,7 +2036,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.plus.IsTriangulated
+  签名: t.plus.是三角
   定义体: ⟨0, isZero_zero C, 0, inferInstance⟩
   toIsTriangulatedClosed₂ := .mk' (fun T hT => by
     rintro ⟨i₁, hi₁⟩ ⟨i₃, hi₃⟩
@@ -2064,7 +2064,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.bounded.IsTriangulated
+  签名: t.bounded.是三角
   定义体: by
   dsimp [bounded]
   infer_instance

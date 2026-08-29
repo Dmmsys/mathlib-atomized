@@ -259,7 +259,7 @@ definition addProperties
 
 中文:
 定义 addProperties
-  签名: (t : Array Expr)
+  签名: (t : 数组 Expr)
   定义体: withMainContext do
   let ctx ← getLCtx
   ctx.forM fun decl => do
@@ -337,10 +337,10 @@ structure Config
     - properties : Bool  [default: true]
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (1 个):
-    - properties : 布尔  [默认: true]
+    - properties : 布尔值  [默认: true]
 -/
 structure Config where
   /-- If true (default), the tactic will search the local context for `RingHom` properties

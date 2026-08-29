@@ -45,8 +45,8 @@ definition GammaReal
   body: π ^ (-s / 2) * Gamma (s / 2)
 
 中文:
-定义 GammaReal
-  签名: (s : Complex)
+定义 Gamma实数
+  签名: (s : 复形)
   定义体: π ^ (-s / 2) * Gamma (s / 2)
 -/
 noncomputable def GammaReal (s : Complex) := π ^ (-s / 2) * Gamma (s / 2)
@@ -61,8 +61,8 @@ lemma GammaReal_def
   proof: rfl
 
 中文:
-引理 GammaReal_def
-  条件: (s : Complex)
+引理 Gamma实数_def
+  条件: (s : 复形)
   结论: Gamma实数 s = π ^ (-s / 2) * Gamma (s / 2)
   证明: rfl
 -/
@@ -78,7 +78,7 @@ definition GammaComplex
 
 中文:
 定义 GammaComplex
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: 2 * (2 * π) ^ (-s) * Gamma s
 -/
 noncomputable def GammaComplex (s : Complex) := 2 * (2 * π) ^ (-s) * Gamma s
@@ -94,7 +94,7 @@ lemma GammaComplex_def
 
 中文:
 引理 GammaComplex_def
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: GammaComplex s = 2 * (2 * π) ^ (-s) * Gamma s
   证明: rfl
 -/
@@ -112,8 +112,8 @@ lemma GammaReal_add_two
   field_simp
 
 中文:
-引理 GammaReal_add_two
-  条件: {s : Complex} (hs : s != 0)
+引理 Gamma实数_add_two
+  条件: {s : 复形} (hs : s != 0)
   结论: Gamma实数 (s + 2) = Gamma实数 s * s / 2 / π
   证明: by
   rw [GammaReal_def]; rw [GammaReal_def]; rw [neg_div]; rw [add_div]; rw [neg_add]; rw [div_self two_ne_zero]; rw [Gamma_add_one _ (div_ne_zero hs two_ne_zero)]; rw [cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [cpow_neg_one]
@@ -138,7 +138,7 @@ lemma GammaComplex_add_one
 
 中文:
 引理 GammaComplex_add_one
-  条件: {s : Complex} (hs : s != 0)
+  条件: {s : 复形} (hs : s != 0)
   结论: GammaComplex (s + 1) = GammaComplex s * s / 2 / π
   证明: by
   rw [GammaComplex_def]; rw [GammaComplex_def]; rw [Gamma_add_one _ hs]; rw [neg_add]; rw [cpow_add _ _ (mul_ne_zero two_ne_zero (ofReal_ne_zero.mpr pi_ne_zero))]; rw [cpow_neg_one]
@@ -165,8 +165,8 @@ lemma GammaReal_ne_zero_of_re_pos
     exact div_pos hs two_pos
 
 中文:
-引理 GammaReal_ne_zero_of_re_pos
-  条件: {s : Complex} (hs : 0 < re s)
+引理 Gamma实数_ne_zero_of_re_pos
+  条件: {s : 复形} (hs : 0 < re s)
   结论: Gamma实数 s != 0
   证明: by
   apply mul_ne_zero
@@ -197,8 +197,8 @@ lemma GammaReal_eq_zero_iff
 @[simp]
 
 中文:
-引理 GammaReal_eq_zero_iff
-  条件: {s : Complex}
+引理 Gamma实数_eq_zero_iff
+  条件: {s : 复形}
   结论: Gamma实数 s = 0 ↔ 存在 n : 自然数, s = -(2 * n)
   证明: by
   simp [GammaReal_def, Complex.Gamma_eq_zero_iff, pi_ne_zero, div_eq_iff (two_ne_zero' Complex), mul_comm]
@@ -224,7 +224,7 @@ lemma GammaReal_one
 @[simp]
 
 中文:
-引理 GammaReal_one
+引理 Gamma实数_one
   结论: Gamma实数 1 = 1
   证明: by
   rw [GammaReal_def]; rw [Complex.Gamma_one_half_eq]
@@ -279,8 +279,8 @@ lemma differentiable_GammaReal_inv
   · exact differentiable_one_div_Gamma.comp (differentiable_id.
 
 中文:
-引理 differentiable_GammaReal_inv
-  结论: Differentiable Complex (fun s => (Gamma实数 s)⁻¹)
+引理 differentiable_Gamma实数_inv
+  结论: 可微 复形 (fun s => (Gamma实数 s)⁻¹)
   证明: by
   conv => enter [2, s]; rw [GammaReal, mul_inv]
   refine Differentiable.mul (fun s => .inv ?_ (by simp)) ?_
@@ -311,7 +311,7 @@ lemma differentiable_GammaComplex_inv
 
 中文:
 引理 differentiable_GammaComplex_inv
-  结论: Differentiable Complex (fun s => (GammaComplex s)⁻¹)
+  结论: 可微 复形 (fun s => (GammaComplex s)⁻¹)
   证明: by
   conv => enter [2, s]; rw [GammaComplex, mul_inv]
   refine (Differentiable.inv ?_ (by simp)).mul differentiable_one_div_Gamma
@@ -338,8 +338,8 @@ lemma GammaReal_residue_zero
       eventually_
 
 中文:
-引理 GammaReal_residue_zero
-  结论: Tendsto (fun s => s * Gamma实数 s) (𝓝[!=] 0) (𝓝 2)
+引理 Gamma实数_residue_zero
+  结论: 收敛 (fun s => s * Gamma实数 s) (𝓝[!=] 0) (𝓝 2)
   证明: by
   have h : Tendsto (fun z : Complex => z / 2 * Gamma (z / 2)) (𝓝[!=] 0) (𝓝 1) := by
     refine tendsto_self_mul_Gamma_nhds_zero.comp ?_
@@ -383,8 +383,8 @@ lemma GammaReal_mul_GammaReal_add_one
     rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [Comple
 
 中文:
-引理 GammaReal_mul_GammaReal_add_one
-  条件: (s : Complex)
+引理 Gamma实数_mul_Gamma实数_add_one
+  条件: (s : 复形)
   结论: Gamma实数 s * Gamma实数 (s + 1) = GammaComplex s
   证明: by
   simp only [GammaReal_def, GammaComplex_def]
@@ -423,8 +423,8 @@ lemma GammaReal_one_sub_mul_GammaReal_one_add
     r
 
 中文:
-引理 GammaReal_one_sub_mul_GammaReal_one_add
-  条件: (s : Complex)
+引理 Gamma实数_one_sub_mul_Gamma实数_one_add
+  条件: (s : 复形)
   证明: calc GammaReal (1 - s) * GammaReal (1 + s)
   _ = (π ^ ((s - 1) / 2) * π ^ ((-1 - s) / 2)) *
         (Gamma ((1 - s) / 2) * Gamma (1 - (1 - s) / 2)) := by
@@ -466,8 +466,8 @@ lemma GammaReal_div_GammaReal_one_sub
     rw [add_comm 1 s]; 
 
 中文:
-引理 GammaReal_div_GammaReal_one_sub
-  条件: {s : Complex} (hs : 对任意 (n : 自然数), s != -(2 * n + 1))
+引理 Gamma实数_div_Gamma实数_one_sub
+  条件: {s : 复形} (hs : 对任意 (n : 自然数), s != -(2 * n + 1))
   证明: by
   have : GammaReal (s + 1) != 0 := by
     simpa only [Ne, GammaReal_eq_zero_iff, not_exists, ← eq_sub_iff_add_eq,
@@ -509,8 +509,8 @@ lemma inv_GammaReal_one_sub
   rw [← GammaReal_div_GammaReal_one_sub 
 
 中文:
-引理 inv_GammaReal_one_sub
-  条件: {s : Complex} (hs : 对任意 (n : 自然数), s != -n)
+引理 inv_Gamma实数_one_sub
+  条件: {s : 复形} (hs : 对任意 (n : 自然数), s != -n)
   证明: by
   have h1 : GammaReal s != 0 := by
     rw [Ne]; rw [GammaReal_eq_zero_iff]; rw [not_exists]
@@ -552,8 +552,8 @@ lemma inv_GammaReal_two_sub
     div_mul_cancel₀ _ (ofReal_ne_ze
 
 中文:
-引理 inv_GammaReal_two_sub
-  条件: {s : Complex} (hs : 对任意 (n : 自然数), s != -n)
+引理 inv_Gamma实数_two_sub
+  条件: {s : 复形} (hs : 对任意 (n : 自然数), s != -n)
   证明: by
   by_cases h : s = 1
   · rw [h, (by ring : 2 - 1 = (1 : Complex)), GammaReal_one, GammaReal,

@@ -174,7 +174,7 @@ theorem signVariations_eq_eraseLead_add_ite
 
 中文:
 定理 signVariations_eq_eraseLead_add_ite
-  条件: {P : Polynomial R} (h : P != 0)
+  条件: {P : 多项式 R} (h : P != 0)
   证明: by
   by_cases hpz : P = 0
   · simp_all
@@ -343,7 +343,7 @@ theorem signVariations_C_mul
 
 中文:
 定理 signVariations_C_mul
-  条件: (P : Polynomial R) (hx : η != 0)
+  条件: (P : 多项式 R) (hx : η != 0)
   证明: by
   wlog! hx2 : 0 < η
   · simpa [lt_of_le_of_ne hx2, hx] using this (η := -η) (P := -P)
@@ -489,7 +489,7 @@ lemma exists_cons_of_leadingCoeff_pos
 
 
 中文:
-引理 exists_cons_of_leadingCoeff_pos
+引理 存在_cons_of_leadingCoeff_pos
   条件: (η) (h₁ : 0 < leadingCoeff P) (h₂ : P.nextCoeff != 0)
   证明: by
   have h₃ := leadingCoeff_ne_zero.mp h₁.ne'

@@ -66,7 +66,7 @@ theorem limsup_trim
 
 中文:
 定理 limsup_trim
-  条件: (hm : m <= m0) {f : α -> 实数>=0∞} (hf : Measurable[m] f)
+  条件: (hm : m <= m0) {f : α -> 实数>=0∞} (hf : 可测[m] f)
   证明: by
   simp_rw [limsup_eq]
   suffices h_set_eq : { a : Real>=0∞ | forallᵐ n ∂μ.trim hm, f n <= a } = { a : Real>=0∞ | forallᵐ n ∂μ, f n <= a } by
@@ -101,7 +101,7 @@ theorem essSup_trim
 
 中文:
 定理 essSup_trim
-  条件: (hm : m <= m0) {f : α -> 实数>=0∞} (hf : Measurable[m] f)
+  条件: (hm : m <= m0) {f : α -> 实数>=0∞} (hf : 可测[m] f)
   证明: by
   simp_rw [essSup]
   exact limsup_trim hm hf

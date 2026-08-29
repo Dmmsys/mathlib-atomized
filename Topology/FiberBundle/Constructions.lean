@@ -50,7 +50,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: [t₁ : TopologicalSpace B]
+  签名: [t₁ : 拓扑空间 B]
   定义体: induced TotalSpace.proj t₁ ⊓ induced (TotalSpace.trivialSnd B F) t₂
 
 Depends on / 依赖: TotalSpace, TotalSpace.proj, TotalSpace.trivialSnd, induced, trivialSnd
@@ -71,7 +71,7 @@ theorem isInducing_toProd
 
 中文:
 定理 isInducing_toProd
-  结论: IsInducing (TotalSpace.toProd B F)
+  结论: 是Inducing (全空间.toProd B F)
   证明: ⟨by simp only [instTopologicalSpaceProd, induced_inf, induced_compose]; rfl⟩
 
 Depends on / 依赖: induced_compose, induced_inf, instTopologicalSpaceProd
@@ -91,7 +91,7 @@ definition homeomorphProd
 
 中文:
 定义 homeomorphProd
-  签名: : TotalSpace F (Trivial B F) ≃ₜ B × F
+  签名: : 全空间 F (平凡 B F) ≃ₜ B × F
   定义体: (TotalSpace.toProd _ _).toHomeomorphOfIsInducing (isInducing_toProd B F)
 
 Depends on / 依赖: TotalSpace, TotalSpace.toProd, isInducing_toProd, toHomeomorphOfIsInducing, toProd
@@ -116,7 +116,7 @@ definition trivialization
 
 中文:
 定义 trivialization
-  签名: : Trivialization F (π F (Bundle.Trivial B F)) where
+  签名: : Trivialization F (π F (Bundle.平凡 B F)) where
   定义体: (homeomorphProd B F).toOpenPartialHomeomorph
   baseSet := univ
   open_baseSet := isOpen_univ
@@ -148,7 +148,7 @@ lemma trivialization_symm_apply
 
 中文:
 引理 trivialization_symm_apply
-  条件: [Zero F] (b : B) (f : F)
+  条件: [零 F] (b : B) (f : F)
   证明: by
   simp [trivialization, homeomorphProd, TotalSpace.toProd, Trivialization.symm,
     Pretrivialization.symm, Trivialization.toPretrivialization]
@@ -189,7 +189,7 @@ instance fiberBundle
 
 中文:
 实例 fiberBundle
-  签名: : FiberBundle F (Bundle.Trivial B F) where
+  签名: : 纤维丛 F (Bundle.平凡 B F) where
   定义体: {trivialization B F}
   trivializationAt' _ := trivialization B F
   mem_baseSet_trivializationAt' := mem_univ
@@ -215,7 +215,7 @@ theorem eq_trivialization
 
 中文:
 定理 eq_trivialization
-  结论: (e : Trivialization F (π F (Bundle.Trivial B F)))
+  结论: (e : Trivialization F (π F (Bundle.平凡 B F)))
   证明: i.out
 
 Depends on / 依赖: i.out
@@ -250,8 +250,8 @@ instance FiberBundle.Prod.topologicalSpace
     inferInstance
 
 中文:
-实例 FiberBundle.Prod.topologicalSpace
-  签名: : TopologicalSpace (TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂))
+实例 纤维丛.积类型.topologicalSpace
+  签名: : 拓扑空间 (全空间 (F₁ × F₂) (E₁ ×ᵇ E₂))
   定义体: TopologicalSpace.induced
     (fun p => ((⟨p.1, p.2.1⟩ : TotalSpace F₁ E₁), (⟨p.1, p.2.2⟩ : TotalSpace F₂ E₂)))
     inferInstance
@@ -271,7 +271,7 @@ theorem FiberBundle.Prod.isInducing_diag
   proof: ⟨rfl⟩
 
 中文:
-定理 FiberBundle.Prod.isInducing_diag
+定理 纤维丛.积类型.isInducing_diag
   证明: ⟨rfl⟩
 -/
 theorem FiberBundle.Prod.isInducing_diag :
@@ -301,8 +301,8 @@ definition Prod.toFun'
   body: fun p => ⟨p.1, (e₁ ⟨p.1, p.2.1⟩).2, (e₂ ⟨p.1, p.2.2⟩).2⟩
 
 中文:
-定义 Prod.toFun'
-  签名: : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂) -> B × F₁ × F₂
+定义 积类型.toFun'
+  签名: : 全空间 (F₁ × F₂) (E₁ ×ᵇ E₂) -> B × F₁ × F₂
   定义体: fun p => ⟨p.1, (e₁ ⟨p.1, p.2.1⟩).2, (e₂ ⟨p.1, p.2.2⟩).2⟩
 -/
 def Prod.toFun' : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂) -> B × F₁ × F₂ :=
@@ -323,8 +323,8 @@ theorem Prod.continuous_to_fun
   let f₃ : (B × F₁) × B × F₂ ->
 
 中文:
-定理 Prod.continuous_to_fun
-  结论: ContinuousOn (Prod.toFun' e₁ e₂)
+定理 积类型.continuous_to_fun
+  结论: ContinuousOn (积类型.toFun' e₁ e₂)
   证明: by
   let f₁ : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂) -> TotalSpace F₁ E₁ × TotalSpace F₂ E₂ :=
     fun p => ((⟨p.1, p.2.1⟩ : TotalSpace F₁ E₁), (⟨p.1, p.2.2⟩ : TotalSpace F₂ E₂))
@@ -363,7 +363,7 @@ definition Prod.invFun'
   body: ⟨p.1, e₁.symm p.1 p.2.1, e₂.symm p.1 p.2.2⟩
 
 中文:
-定义 Prod.invFun'
+定义 积类型.invFun'
   签名: (p : B × F₁ × F₂)
   定义体: ⟨p.1, e₁.symm p.1 p.2.1, e₂.symm p.1 p.2.2⟩
 -/
@@ -384,8 +384,8 @@ theorem Prod.left_inv
   simp [Prod.toFun', Prod.invFun', h₁, h₂]
 
 中文:
-定理 Prod.left_inv
-  结论: {x : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂)}
+定理 积类型.left_inv
+  结论: {x : 全空间 (F₁ × F₂) (E₁ ×ᵇ E₂)}
   证明: by
   obtain ⟨x, v₁, v₂⟩ := x
   obtain ⟨h₁ : x in e₁.baseSet, h₂ : x in e₂.baseSet⟩ := h
@@ -412,7 +412,7 @@ theorem Prod.right_inv
   simp [Prod.toFun', Prod.invFun', h₁, h₂]
 
 中文:
-定理 Prod.right_inv
+定理 积类型.right_inv
   结论: {x : B × F₁ × F₂}
   证明: by
   obtain ⟨x, w₁, w₂⟩ := x
@@ -440,7 +440,7 @@ theorem Prod.continuous_inv_fun
   exact fun x h => ⟨⟨h.1.1, mem_univ _⟩, ⟨h.1.2, mem_univ _⟩⟩
 
 中文:
-定理 Prod.continuous_inv_fun
+定理 积类型.continuous_inv_fun
   证明: by
   rw [(Prod.isInducing_diag F₁ E₁ F₂ E₂).continuousOn_iff]
   have H₁ : Continuous fun p : B × F₁ × F₂ => ((p.1, p.2.1), (p.1, p.2.2)) := by fun_prop
@@ -478,7 +478,7 @@ definition prod
   right_inv' _ := Prod.right_in
 
 中文:
-定义 prod
+定义 乘积
   签名: : Trivialization (F₁ × F₂) (π (F₁ × F₂) (E₁ ×ᵇ E₂)) where
   定义体: Prod.toFun' e₁ e₂
   invFun := Prod.invFun' e₁ e₂
@@ -552,8 +552,8 @@ instance FiberBundle.prod
       (_ : MemTrivializationAtlas e₁) (_
 
 中文:
-实例 FiberBundle.prod
-  签名: : FiberBundle (F₁ × F₂) (E₁ ×ᵇ E₂) where
+实例 纤维丛.乘积
+  签名: : 纤维丛 (F₁ × F₂) (E₁ ×ᵇ E₂) where
   定义体: by
     rw [← (Prod.isInducing_diag F₁ E₁ F₂ E₂).of_comp_iff]
     exact (totalSpaceMk_isInducing F₁ E₁ b).prodMap (totalSpaceMk_isInducing F₂ E₂ b)
@@ -601,7 +601,7 @@ instance [forall
   body: inferInstanceAs (forall x, TopologicalSpace (E (f x)))
 
 中文:
-实例 [forall
+实例 [对任意
   签名: x
   定义体: inferInstanceAs (forall x, TopologicalSpace (E (f x)))
 
@@ -628,8 +628,8 @@ instance Pullback.TotalSpace.topologicalSpace
   body: pullbackTopology F E f
 
 中文:
-实例 Pullback.TotalSpace.topologicalSpace
-  签名: : TopologicalSpace (TotalSpace F (f *ᵖ E))
+实例 拉回.全空间.topologicalSpace
+  签名: : 拓扑空间 (全空间 F (f *ᵖ E))
   定义体: pullbackTopology F E f
 
 Depends on / 依赖: pullbackTopology
@@ -649,9 +649,9 @@ theorem Pullback.continuous_proj
   exact inf_le_left
 
 中文:
-定理 Pullback.continuous_proj
+定理 拉回.continuous_proj
   条件: (f : B' -> B)
-  结论: Continuous (π F (f *ᵖ E))
+  结论: 连续 (π F (f *ᵖ E))
   证明: by
   rw [continuous_iff_le_induced]; rw [Pullback.TotalSpace.topologicalSpace]; rw [pullbackTopology_def]
   exact inf_le_left
@@ -674,9 +674,9 @@ theorem Pullback.continuous_lift
   exact inf_le_right
 
 中文:
-定理 Pullback.continuous_lift
+定理 拉回.continuous_lift
   条件: (f : B' -> B)
-  结论: Continuous (@Pullback.lift B F E B' f)
+  结论: 连续 (@拉回.lift B F E B' f)
   证明: by
   rw [continuous_iff_le_induced]; rw [Pullback.TotalSpace.topologicalSpace]; rw [pullbackTopology_def]
   exact inf_le_right
@@ -733,8 +733,8 @@ theorem Pullback.continuous_totalSpaceMk
   exact (FiberBundle.totalSpaceMk_isInducing F E (f x)).eq_induced.le
 
 中文:
-定理 Pullback.continuous_totalSpaceMk
-  结论: [对任意 x, TopologicalSpace (E x)] [FiberBundle F E]
+定理 拉回.continuous_totalSpaceMk
+  结论: [对任意 x, 拓扑空间 (E x)] [纤维丛 F E]
   证明: by
   simp only [continuous_iff_le_induced, Pullback.TotalSpace.topologicalSpace, induced_compose,
     induced_inf, Function.comp_def, induced_const, top_inf_eq, pullbackTopology_def]
@@ -836,8 +836,8 @@ instance FiberBundle.pullback
   trivializationAt' x := (trivializationAt F E (f x
 
 中文:
-实例 FiberBundle.pullback
-  签名: [对任意 x, TopologicalSpace (E x)] [FiberBundle F E]
+实例 纤维丛.pullback
+  签名: [对任意 x, 拓扑空间 (E x)] [纤维丛 F E]
   定义体: (totalSpaceMk_isInducing F E (f x)).of_comp (Pullback.continuous_totalSpaceMk F E)
       (Pullback.continuous_lift F E f)
   trivializationAtlas' :=

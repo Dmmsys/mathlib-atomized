@@ -44,7 +44,7 @@ definition truncLE'
 
 中文:
 定义 truncLE'
-  签名: : HomologicalComplex C c
+  签名: : 同调复形 C c
   定义体: (K.op.truncGE' e.op).unop
 
 Depends on / 依赖: K.op.truncGE, e.op, truncGE
@@ -98,7 +98,7 @@ lemma truncLE'_d_eq
 
 中文:
 引理 truncLE'_d_eq
-  结论: {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
+  结论: {i j : ι} (hij : c.关系 i j) {i' j' : ι'}
   证明: Quiver.Hom.op_inj (by simpa using! K.op.truncGE'_d_eq e.op hij hj' hi' (by simpa))
 -/
 lemma truncLE'_d_eq {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
@@ -120,7 +120,7 @@ lemma truncLE'_d_eq_toCycles
 
 中文:
 引理 truncLE'_d_eq_toCycles
-  结论: {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
+  结论: {i j : ι} (hij : c.关系 i j) {i' j' : ι'}
   证明: Quiver.Hom.op_inj (by
     simpa [truncLE', truncLE'XIso, truncLE'XIsoCycles]
       using! K.op.truncGE'_d_eq_fromOpcycles e.op hij hj' hi' (by simpa))
@@ -147,7 +147,7 @@ definition truncLE
 
 中文:
 定义 truncLE
-  签名: : HomologicalComplex C c'
+  签名: : 同调复形 C c'
   定义体: (K.op.truncGE e.op).unop
 
 Depends on / 依赖: K.op.truncGE, e.op, truncGE
@@ -471,7 +471,7 @@ instance [K.IsStrictlySupported
   body: inferInstanceAs (IsIso ((K.op.restrictionToTruncGE' e.op).f i).unop)
 
 中文:
-实例 [K.IsStrictlySupported
+实例 [K.是StrictlySupported
   签名: e] (i
   定义体: inferInstanceAs (IsIso ((K.op.restrictionToTruncGE' e.op).f i).unop)
 
@@ -516,7 +516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (K.ιTruncLE e)
+  签名: 单态射 (K.ιTruncLE e)
   定义体: mono_of_mono_f _ (fun _ => inferInstance)
 
 Depends on / 依赖: mono_of_mono_f
@@ -535,7 +535,7 @@ instance :
 
 中文:
 实例 :
-  签名: (K.truncLE e).IsStrictlySupported e
+  签名: (K.truncLE e).是StrictlySupported e
   定义体: by
   rw [← isStrictlySupported_op_iff]
   exact inferInstanceAs ((K.op.truncGE e.op).IsStrictlySupported e.op)
@@ -582,8 +582,8 @@ instance [K.IsStrictlySupported
   body: inferInstanceAs (IsIso ((unopFunctor C c'.symm).map (K.op.πTruncGE e.op).op))
 
 中文:
-实例 [K.IsStrictlySupported
-  签名: e] : IsIso (K.ιTruncLE e)
+实例 [K.是StrictlySupported
+  签名: e] : 是同构 (K.ιTruncLE e)
   定义体: inferInstanceAs (IsIso ((unopFunctor C c'.symm).map (K.op.πTruncGE e.op).op))
 
 Depends on / 依赖: K.op, e.op, unopFunctor
@@ -602,7 +602,7 @@ lemma isIso_ιTruncLE_iff
 
 中文:
 引理 isIso_ιTruncLE_iff
-  结论: IsIso (K.ιTruncLE e) ↔ K.IsStrictlySupported e
+  结论: 是同构 (K.ιTruncLE e) ↔ K.是StrictlySupported e
   证明: ⟨fun _ => isStrictlySupported_of_iso (asIso (K.ιTruncLE e)) e,
     fun _ => inferInstance⟩
 
@@ -635,7 +635,7 @@ definition truncLE'Functor
   map φ := HomologicalComplex.truncLE'Map φ e
 
 中文:
-定义 truncLE'Functor
+定义 truncLE'函子
   签名: :
   定义体: K.truncLE' e
   map φ := HomologicalComplex.truncLE'Map φ e
@@ -659,7 +659,7 @@ definition truncLE'ToRestrictionNatTrans
   body: K.truncLE'ToRestriction e
 
 中文:
-定义 truncLE'ToRestrictionNatTrans
+定义 truncLE'ToRestriction自然数Trans
   签名: :
   定义体: K.truncLE'ToRestriction e
 -/
@@ -705,7 +705,7 @@ definition ιTruncLENatTrans
   body: K.ιTruncLE e
 
 中文:
-定义 ιTruncLENatTrans
+定义 ιTruncLE自然数Trans
   签名: : e.truncLEFunctor C ⟶ 𝟭 _ where
   定义体: K.ιTruncLE e
 -/

@@ -66,7 +66,7 @@ abbreviation PowerSeries
   body: MvPowerSeries Unit R
 
 中文:
-缩写 PowerSeries
+缩写 幂级数
   签名: (R : 类型)
   定义体: MvPowerSeries Unit R
 
@@ -140,7 +140,7 @@ theorem coeff_def
 
 中文:
 定理 coeff_def
-  条件: {s : Unit ->₀ 自然数} {n : 自然数} (h : s () = n)
+  条件: {s : 单元 ->₀ 自然数} {n : 自然数} (h : s () = n)
   证明: by
   rw [coeff]; rw [← h]; rw [← Finsupp.unique_single s]
 
@@ -215,7 +215,7 @@ theorem forall_coeff_eq_zero
   proof: ⟨fun h => ext h, fun h => by simp [h]⟩
 
 中文:
-定理 forall_coeff_eq_zero
+定理 对任意_coeff_eq_zero
   条件: (φ : R⟦X⟧)
   结论: (对任意 n, coeff n φ = 0) ↔ φ = 0
   证明: ⟨fun h => ext h, fun h => by simp [h]⟩
@@ -237,8 +237,8 @@ instance [Subsingleton
   subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton R⟦X⟧
+实例 [子单例
+  签名: R] : 子单例 R⟦X⟧
   定义体: by
   simp only [subsingleton_iff, PowerSeries.ext_iff]
   subsingleton
@@ -377,7 +377,7 @@ theorem coeff_comp_monomial
 中文:
 定理 coeff_comp_monomial
   条件: (n : 自然数)
-  结论: (coeff (R := R) n).comp (monomial n) = LinearMap.id
+  结论: (coeff (R := R) n).comp (monomial n) = 线性映射.id
   证明: LinearMap.ext coeff_monomial_same n
 
 Depends on / 依赖: LinearMap, LinearMap.id, monomial
@@ -489,7 +489,7 @@ lemma algebraMap_eq
 
 中文:
 引理 algebraMap_eq
-  条件: {R : 类型} [CommSemiring R]
+  条件: {R : 类型} [交换半环 R]
   结论: algebraMap R R⟦X⟧ = C
   证明: rfl
 -/
@@ -823,7 +823,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Function.Injective (C (R := R))
+  结论: 函数.单射 (C (R := R))
   证明: MvPowerSeries.C_injective
 
 Depends on / 依赖: C_injective, MvPowerSeries, MvPowerSeries.C_injective
@@ -843,7 +843,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton R⟦X⟧ ↔ Subsingleton R
+  结论: 子单例 R⟦X⟧ ↔ 子单例 R
   证明: by
   refine ⟨fun h => ?_, fun _ => inferInstance⟩
   rw [subsingleton_iff] at h ⊢
@@ -956,7 +956,7 @@ theorem X_ne_zero
 
 中文:
 定理 X_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (X : R⟦X⟧) != 0
   证明: fun H => by
   simpa only [coeff_one_X, one_ne_zero, map_zero] using congr_arg (coeff 1) H
@@ -1171,7 +1171,7 @@ theorem coeff_smul
 
 中文:
 定理 coeff_smul
-  条件: {S : 类型} [Semiring S] [Module R S] (n : 自然数) (φ : PowerSeries S) (a : R)
+  条件: {S : 类型} [半环 S] [模 R S] (n : 自然数) (φ : 幂级数 S) (a : R)
   证明: rfl
 
 @[simp]
@@ -1191,7 +1191,7 @@ theorem constantCoeff_smul
 
 中文:
 定理 constantCoeff_smul
-  条件: {S : 类型} [Semiring S] [Module R S] (φ : PowerSeries S) (a : R)
+  条件: {S : 类型} [半环 S] [模 R S] (φ : 幂级数 S) (a : R)
   证明: rfl
 -/
 theorem constantCoeff_smul {S : Type*} [Semiring S] [Module R S] (φ : PowerSeries S) (a : R) :
@@ -1325,7 +1325,7 @@ theorem mul_X_injective
 
 中文:
 定理 mul_X_injective
-  结论: Function.Injective (· * X : R⟦X⟧ -> R⟦X⟧)
+  结论: 函数.单射 (· * X : R⟦X⟧ -> R⟦X⟧)
   证明: fun _ _ => mul_X_cancel
 
 Depends on / 依赖: mul_X_cancel
@@ -1391,7 +1391,7 @@ theorem X_mul_injective
 
 中文:
 定理 X_mul_injective
-  结论: Function.Injective (X * · : R⟦X⟧ -> R⟦X⟧)
+  结论: 函数.单射 (X * · : R⟦X⟧ -> R⟦X⟧)
   证明: fun _ _ => X_mul_cancel
 
 Depends on / 依赖: X_mul_cancel
@@ -1459,7 +1459,7 @@ theorem constantCoeff_comp_C
 
 中文:
 定理 constantCoeff_comp_C
-  结论: constantCoeff.comp C = RingHom.id R
+  结论: constantCoeff.comp C = 环态射.id R
   证明: rfl
 
 @[simp]
@@ -1592,7 +1592,7 @@ theorem constantCoeff_surj
 
 中文:
 定理 constantCoeff_surj
-  结论: Function.Surjective (constantCoeff (R := R))
+  结论: 函数.满射 (constantCoeff (R := R))
   证明: fun r => ⟨C r, constantCoeff_C r⟩
 -/
 theorem constantCoeff_surj : Function.Surjective (constantCoeff (R := R)) :=
@@ -1757,7 +1757,7 @@ theorem mul_X_pow_injective
 中文:
 定理 mul_X_pow_injective
   条件: {k : 自然数}
-  结论: Function.Injective (· * X ^ k : R⟦X⟧ -> R⟦X⟧)
+  结论: 函数.单射 (· * X ^ k : R⟦X⟧ -> R⟦X⟧)
   证明: fun _ _ => mul_X_pow_cancel
 
 Depends on / 依赖: mul_X_pow_cancel
@@ -1823,7 +1823,7 @@ theorem X_pow_mul_injective
 中文:
 定理 X_pow_mul_injective
   条件: {k : 自然数}
-  结论: Function.Injective (X ^ k * · : R⟦X⟧ -> R⟦X⟧)
+  结论: 函数.单射 (X ^ k * · : R⟦X⟧ -> R⟦X⟧)
   证明: fun _ _ => X_pow_mul_cancel
 
 Depends on / 依赖: X_pow_mul_cancel
@@ -1938,8 +1938,8 @@ theorem isUnit_constantCoeff
 
 中文:
 定理 isUnit_constantCoeff
-  条件: (φ : R⟦X⟧) (h : IsUnit φ)
-  结论: IsUnit (constantCoeff φ)
+  条件: (φ : R⟦X⟧) (h : 是单位 φ)
+  结论: 是单位 (constantCoeff φ)
   证明: MvPowerSeries.isUnit_constantCoeff φ h
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.isUnit_constantCoeff, isUnit_constantCoeff
@@ -2045,7 +2045,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: (map (RingHom.id R) : R⟦X⟧ -> R⟦X⟧) = id
+  结论: (map (环态射.id R) : R⟦X⟧ -> R⟦X⟧) = id
   证明: rfl
 -/
 theorem map_id : (map (RingHom.id R) : R⟦X⟧ -> R⟦X⟧) = id :=
@@ -2163,7 +2163,7 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (f : S ->+* T) (hf : Function.Surjective f)
+  条件: (f : S ->+* T) (hf : 函数.满射 f)
   证明: by
   intro g
   use PowerSeries.mk fun k => Function.surjInv hf (PowerSeries.coeff k g)
@@ -2195,7 +2195,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (f : S ->+* T) (hf : Function.Injective ⇑f)
+  条件: (f : S ->+* T) (hf : 函数.单射 ⇑f)
   证明: by
   intro u v huv
   ext k
@@ -2224,7 +2224,7 @@ theorem map_eq_zero
 
 中文:
 定理 map_eq_zero
-  结论: {R S : 类型} [DivisionSemiring R] [Semiring S] [Nontrivial S] (φ : R⟦X⟧)
+  结论: {R S : 类型} [除半环 R] [半环 S] [非平凡 S] (φ : R⟦X⟧)
   证明: MvPowerSeries.map_eq_zero _ _
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.map_eq_zero, map_eq_zero
@@ -2321,7 +2321,7 @@ definition toSubring
 
 中文:
 定义 toSubring
-  签名: : PowerSeries T
+  签名: : 幂级数 T
   定义体: mk fun n => ⟨p.coeff n, hp n⟩
 
 @[simp]
@@ -2550,7 +2550,7 @@ theorem rescale_one
 
 中文:
 定理 rescale_one
-  结论: rescale 1 = RingHom.id R⟦X⟧
+  结论: rescale 1 = 环态射.id R⟦X⟧
   证明: by
   ext
   simp [coeff_rescale]
@@ -2650,7 +2650,7 @@ theorem rescale_map
 
 中文:
 定理 rescale_map
-  条件: {S : 类型} [CommSemiring S] (φ : R ->+* S) (r : R) (f : R⟦X⟧)
+  条件: {S : 类型} [交换半环 S] (φ : R ->+* S) (r : R) (f : R⟦X⟧)
   证明: by
   ext n
   simp [coeff_rescale, coeff_map, map_mul, map_pow]
@@ -2674,7 +2674,7 @@ theorem rescale_algebraMap_map
 
 中文:
 定理 rescale_algebraMap_map
-  结论: {A S : 类型} [CommSemiring A] [Algebra A R] [CommSemiring S]
+  结论: {A S : 类型} [交换半环 A] [代数 A R] [交换半环 S]
   证明: by
   convert! rescale_map (φ : R ->+* S) _ _
   simp
@@ -2708,7 +2708,7 @@ theorem coeff_prod
 
 中文:
 定理 coeff_prod
-  条件: [DecidableEq ι] (f : ι -> PowerSeries R) (d : 自然数) (s : Finset ι)
+  条件: [DecidableEq ι] (f : ι -> 幂级数 R) (d : 自然数) (s : 有限集 ι)
   证明: by
   simp only [coeff]
   rw [MvPowerSeries.coeff_prod]; rw [← Finsupp.uniqueAddEquiv_symm_apply _ d]; rw [← mapRange_finsuppAntidiag_eq]; rw [sum_map]
@@ -2734,7 +2734,7 @@ theorem prod_monomial
 
 中文:
 定理 prod_monomial
-  条件: (f : ι -> 自然数) (g : ι -> R) (s : Finset ι)
+  条件: (f : ι -> 自然数) (g : ι -> R) (s : 有限集 ι)
   证明: by
   simpa [monomial, Finsupp.single_finsetSum] using
     MvPowerSeries.prod_monomial (fun i => Finsupp.single () (f i)) g s
@@ -2915,7 +2915,7 @@ theorem not_isField
 
 中文:
 定理 not_isField
-  结论: ¬IsField A⟦X⟧
+  结论: ¬是域 A⟦X⟧
   证明: by
   by_cases hA : Subsingleton A
   · exact not_isField_of_subsingleton _
@@ -3085,8 +3085,8 @@ instance [Nontrivial
   body: { (inferInstance : Nontrivial <| Subalgebra R <| MvPowerSeries Unit R) with }
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (Subalgebra R R⟦X⟧)
+实例 [非平凡
+  签名: R] : 非平凡 (子代数 R R⟦X⟧)
   定义体: { (inferInstance : Nontrivial <| Subalgebra R <| MvPowerSeries Unit R) with }
 
 Depends on / 依赖: MvPowerSeries, Nontrivial, Subalgebra
@@ -3156,7 +3156,7 @@ definition toPowerSeries
 
 中文:
 定义 toPowerSeries
-  签名: : R[X] -> PowerSeries R
+  签名: : R[X] -> 幂级数 R
   定义体: fun φ =>
   PowerSeries.mk fun n => coeff φ n
 -/
@@ -3173,7 +3173,7 @@ instance coeToPowerSeries
 
 中文:
 实例 coeToPowerSeries
-  签名: : Coe R[X] (PowerSeries R)
+  签名: : Coe R[X] (幂级数 R)
   定义体: ⟨toPowerSeries⟩
 
 Depends on / 依赖: toPowerSeries
@@ -3193,7 +3193,7 @@ theorem coe_def
 
 中文:
 定理 coe_def
-  结论: (φ : PowerSeries R) = PowerSeries.mk (coeff φ)
+  结论: (φ : 幂级数 R) = 幂级数.mk (coeff φ)
   证明: rfl
 
 @[simp, norm_cast]
@@ -3216,7 +3216,7 @@ theorem coeff_coe
 中文:
 定理 coeff_coe
   条件: (n)
-  结论: PowerSeries.coeff n φ = coeff φ n
+  结论: 幂级数.coeff n φ = coeff φ n
   证明: congr_arg (coeff φ) Finsupp.single_eq_same
 
 @[simp, norm_cast]
@@ -3268,7 +3268,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ((0 : R[X]) : PowerSeries R) = 0
+  结论: ((0 : R[X]) : 幂级数 R) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -3291,7 +3291,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : R[X]) : PowerSeries R) = 1
+  结论: ((1 : R[X]) : 幂级数 R) = 1
   证明: by
   have := coe_monomial 0 (1 : R)
   rwa [PowerSeries.monomial_zero_eq_C_apply] at this
@@ -3319,7 +3319,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  结论: ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ
+  结论: ((φ + ψ : R[X]) : 幂级数 R) = φ + ψ
   证明: by
   ext
   simp
@@ -3343,7 +3343,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
+  结论: ((φ * ψ : R[X]) : 幂级数 R) = φ * ψ
   证明: PowerSeries.ext fun n => by simp only [coeff_coe, PowerSeries.coeff_mul, coeff_mul]
 
 @[simp, norm_cast]
@@ -3391,7 +3391,7 @@ theorem coe_C
 中文:
 定理 coe_C
   条件: (a : R)
-  结论: ((C a : R[X]) : PowerSeries R) = PowerSeries.C a
+  结论: ((C a : R[X]) : 幂级数 R) = 幂级数.C a
   证明: by
   have := coe_monomial 0 a
   rwa [PowerSeries.monomial_zero_eq_C_apply] at this
@@ -3417,7 +3417,7 @@ theorem coe_X
 
 中文:
 定理 coe_X
-  结论: ((X : R[X]) : PowerSeries R) = PowerSeries.X
+  结论: ((X : R[X]) : 幂级数 R) = 幂级数.X
   证明: coe_monomial _ _
 
 @[simp]
@@ -3442,7 +3442,7 @@ lemma polynomial_map_coe
 
 中文:
 引理 polynomial_map_coe
-  结论: {U V : 类型} [CommSemiring U] [CommSemiring V] {φ : U ->+* V}
+  结论: {U V : 类型} [交换半环 U] [交换半环 V] {φ : U ->+* V}
   证明: by
   ext
   simp
@@ -3465,7 +3465,7 @@ theorem constantCoeff_coe
 
 中文:
 定理 constantCoeff_coe
-  结论: PowerSeries.constantCoeff φ = φ.coeff 0
+  结论: 幂级数.constantCoeff φ = φ.coeff 0
   证明: rfl
 -/
 theorem constantCoeff_coe : PowerSeries.constantCoeff φ = φ.coeff 0 :=
@@ -3485,7 +3485,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : R[X] -> PowerSeries R)
+  结论: 函数.单射 ((↑) : R[X] -> 幂级数 R)
   证明: fun x y h => by
   ext
   simp_rw [← coeff_coe, h]
@@ -3511,7 +3511,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  结论: (φ : PowerSeries R) = ψ ↔ φ = ψ
+  结论: (φ : 幂级数 R) = ψ ↔ φ = ψ
   证明: (coe_injective R).eq_iff
 
 @[simp]
@@ -3534,7 +3534,7 @@ theorem coe_eq_zero_iff
 
 中文:
 定理 coe_eq_zero_iff
-  结论: (φ : PowerSeries R) = 0 ↔ φ = 0
+  结论: (φ : 幂级数 R) = 0 ↔ φ = 0
   证明: by rw [← coe_zero, coe_inj]
 
 @[simp]
@@ -3554,7 +3554,7 @@ theorem coe_eq_one_iff
 
 中文:
 定理 coe_eq_one_iff
-  结论: (φ : PowerSeries R) = 1 ↔ φ = 1
+  结论: (φ : 幂级数 R) = 1 ↔ φ = 1
   证明: by rw [← coe_one, coe_inj]
 
 Depends on / 依赖: coe_inj, coe_one
@@ -3577,7 +3577,7 @@ definition coeToPowerSeries.ringHom
 
 中文:
 定义 coeToPowerSeries.ringHom
-  签名: : R[X] ->+* PowerSeries R where
+  签名: : R[X] ->+* 幂级数 R where
   定义体: (↑)
   map_zero' := coe_zero
   map_one' := coe_one
@@ -3627,7 +3627,7 @@ theorem coe_pow
 中文:
 定理 coe_pow
   条件: (n : 自然数)
-  结论: ((φ ^ n : R[X]) : PowerSeries R) = (φ : PowerSeries R) ^ n
+  结论: ((φ ^ n : R[X]) : 幂级数 R) = (φ : 幂级数 R) ^ n
   证明: coeToPowerSeries.ringHom.map_pow _ _
 
 Depends on / 依赖: coeToPowerSeries, coeToPowerSeries.ringHom.map_pow, map_pow, ringHom
@@ -3650,7 +3650,7 @@ theorem eval₂_C_X_eq_coe
 
 中文:
 定理 eval₂_C_X_eq_coe
-  结论: φ.eval₂ PowerSeries.C PowerSeries.X = ↑φ
+  结论: φ.eval₂ 幂级数.C 幂级数.X = ↑φ
   证明: by
   nth_rw 2 [← eval₂_C_X (p := φ)]
   rw [← coeToPowerSeries.ringHom_apply]; rw [eval₂_eq_sum_range]; rw [eval₂_eq_sum_range]; rw [map_sum]
@@ -3688,8 +3688,8 @@ theorem _root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv
     simp only [MvPolynomial.coe_monomial, MvPolynomial.uniq
 
 中文:
-定理 _root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv
-  条件: {f : MvPolynomial PUnit R}
+定理 _root_.多元多项式.toMvPowerSeries_pUnitAlgEquiv
+  条件: {f : 多元多项式 命题单元 R}
   证明: by
   induction f using MvPolynomial.induction_on' with
   | monomial d r =>
@@ -3725,7 +3725,7 @@ theorem pUnitAlgEquiv_symm_toPowerSeries
 
 中文:
 定理 pUnitAlgEquiv_symm_toPowerSeries
-  条件: {f : Polynomial R}
+  条件: {f : 多项式 R}
   证明: by
   set g := (MvPolynomial.uniqueAlgEquiv R PUnit).symm f
   have : f = MvPolynomial.uniqueAlgEquiv R PUnit g := by simp only [g, AlgEquiv.apply_symm_apply]
@@ -3755,7 +3755,7 @@ definition coeToPowerSeries.algHom
 
 中文:
 定义 coeToPowerSeries.algHom
-  签名: : R[X] ->ₐ[R] PowerSeries A
+  签名: : R[X] ->ₐ[R] 幂级数 A
   定义体: { (PowerSeries.map (algebraMap R A)).comp coeToPowerSeries.ringHom with
     commutes' := fun r => by simp [PowerSeries.algebraMap_apply] }
 
@@ -3803,7 +3803,7 @@ lemma coe_neg
 中文:
 引理 coe_neg
   条件: (p : R[X])
-  结论: ((-p : R[X]) : PowerSeries R) = -p
+  结论: ((-p : R[X]) : 幂级数 R) = -p
   证明: coeToPowerSeries.ringHom.map_neg p
 
 @[simp, norm_cast]
@@ -3826,7 +3826,7 @@ lemma coe_sub
 中文:
 引理 coe_sub
   条件: (p q : R[X])
-  结论: ((p - q : R[X]) : PowerSeries R) = p - q
+  结论: ((p - q : R[X]) : 幂级数 R) = p - q
   证明: coeToPowerSeries.ringHom.map_sub p q
 
 Depends on / 依赖: coeToPowerSeries, coeToPowerSeries.ringHom.map_sub, map_sub, ringHom
@@ -3856,7 +3856,7 @@ instance algebraPolynomial
 
 中文:
 实例 algebraPolynomial
-  签名: : Algebra R[X] A⟦X⟧
+  签名: : 代数 R[X] A⟦X⟧
   定义体: RingHom.toAlgebra (Polynomial.coeToPowerSeries.algHom A).toRingHom
 
 Depends on / 依赖: Polynomial, Polynomial.coeToPowerSeries.algHom, RingHom, RingHom.toAlgebra, algHom, coeToPowerSeries, toAlgebra, toRingHom
@@ -3874,7 +3874,7 @@ instance algebraPowerSeries
 
 中文:
 实例 algebraPowerSeries
-  签名: : Algebra R⟦X⟧ A⟦X⟧
+  签名: : 代数 R⟦X⟧ A⟦X⟧
   定义体: (map (algebraMap R A)).toAlgebra
 
 Depends on / 依赖: algebraMap, toAlgebra

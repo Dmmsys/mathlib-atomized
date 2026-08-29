@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module Rat>=0 (DivisibleHull M)
+  签名: 模 有理数>=0 (DivisibleHull M)
   定义体: LocalizedModule.moduleOfIsLocalization ..
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.moduleOfIsLocalization, moduleOfIsLocalization
@@ -448,7 +448,7 @@ theorem nnqsmul_mk
 
 中文:
 定理 nnqsmul_mk
-  条件: (a : Rat>=0) (m : M) (s : 自然数+)
+  条件: (a : 有理数>=0) (m : M) (s : 自然数+)
   证明: by
   convert! LocalizedModule.mk'_smul_mk Rat>=0 a.num m ⟨a.den, by simp⟩ (↑ⁿ s)
   simp [IsLocalization.eq_mk'_iff_mul_eq]
@@ -499,7 +499,7 @@ theorem mk_left_injective
 中文:
 定理 mk_left_injective
   条件: (s : 自然数+)
-  结论: Function.Injective (fun (m : M) => mk m s)
+  结论: 函数.单射 (fun (m : M) => mk m s)
   证明: by
   intro m n h
   simp_rw [mk_eq_mk_iff_smul_eq_smul] at h
@@ -524,7 +524,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : M -> DivisibleHull M)
+  结论: 函数.单射 ((↑) : M -> DivisibleHull M)
   证明: mk_left_injective 1
 
 @[simp, norm_cast]
@@ -595,7 +595,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Rat (DivisibleHull M)
+  签名: 标量乘法 有理数 (DivisibleHull M)
   定义体: (SignType.sign a : Int) • (show Rat>=0 from ⟨|a|, abs_nonneg _⟩) • x
 
 Depends on / 依赖: SignType, SignType.sign, abs_nonneg
@@ -613,7 +613,7 @@ theorem qsmul_def
 
 中文:
 定理 qsmul_def
-  条件: (a : Rat) (x : DivisibleHull M)
+  条件: (a : 有理数) (x : DivisibleHull M)
   证明: rfl
 -/
 theorem qsmul_def (a : Rat) (x : DivisibleHull M) :
@@ -633,7 +633,7 @@ theorem zero_qsmul
 中文:
 定理 zero_qsmul
   条件: (x : DivisibleHull M)
-  结论: (0 : Rat) • x = 0
+  结论: (0 : 有理数) • x = 0
   证明: by
   simp [qsmul_def]
 
@@ -655,7 +655,7 @@ theorem qsmul_of_nonneg
 
 中文:
 定理 qsmul_of_nonneg
-  条件: {a : Rat} (h : 0 <= a) (x : DivisibleHull M)
+  条件: {a : 有理数} (h : 0 <= a) (x : DivisibleHull M)
   证明: by
   have := h.eq_or_lt
   aesop (add simp [qsmul_def, abs_of_pos])
@@ -680,7 +680,7 @@ theorem qsmul_of_nonpos
 
 中文:
 定理 qsmul_of_nonpos
-  条件: {a : Rat} (h : a <= 0) (x : DivisibleHull M)
+  条件: {a : 有理数} (h : a <= 0) (x : DivisibleHull M)
   证明: by
   have := h.eq_or_lt
   aesop (add simp [qsmul_def, abs_of_neg])
@@ -713,7 +713,7 @@ theorem qsmul_mk
 
 中文:
 定理 qsmul_mk
-  条件: (a : Rat) (m : M) (s : 自然数+)
+  条件: (a : 有理数) (m : M) (s : 自然数+)
   证明: by
   obtain h | h := le_total 0 a
   · rw [qsmul_of_nonneg h, nnqsmul_mk, ← natCast_zsmul]
@@ -762,7 +762,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module Rat (DivisibleHull M)
+  签名: 模 有理数 (DivisibleHull M)
   定义体: by
     induction x with | mk m s
     simp [qsmul_of_nonneg zero_le_one, nnqsmul_mk]
@@ -927,7 +927,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (DivisibleHull M)
+  签名: 线性序 (DivisibleHull M)
   定义体: by
     induction a with | mk m s
     simp
@@ -1008,7 +1008,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedCancelAddMonoid (DivisibleHull M)
+  签名: 是OrderedCancelAdd幺半群 (DivisibleHull M)
   定义体: .of_add_lt_add_left (fun a b c h => by
     induction a with | mk ma sa
     induction b with | mk mb sb
@@ -1049,7 +1049,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictOrderedModule Rat>=0 (DivisibleHull M)
+  签名: 是StrictOrdered模 有理数>=0 (DivisibleHull M)
   定义体: by
     induction b with | mk mb sb
     induction c with | mk mc sc
@@ -1099,7 +1099,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictOrderedModule Rat (DivisibleHull M)
+  签名: 是StrictOrdered模 有理数 (DivisibleHull M)
   定义体: by
     simp_rw [qsmul_of_nonneg ha.le]
     apply smul_lt_smul_of_pos_left h (by simpa using! ha)

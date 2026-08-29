@@ -41,8 +41,8 @@ theorem biInter_mem
 @[simp]
 
 中文:
-定理 biInter_mem
-  条件: {β : 类型v} {s : β -> Set α} {is : Set β} (hf : is.Finite)
+定理 bi整数er_mem
+  条件: {β : 类型v} {s : β -> 集合 α} {is : 集合 β} (hf : is.有限)
   证明: by
   induction is, hf using Set.Finite.induction_on with
   | empty => simp
@@ -72,8 +72,8 @@ protected alias _root_.Finset.iInter_mem_sets := biInter_finset_mem
 @[simp]
 
 中文:
-定理 biInter_finset_mem
-  条件: {β : 类型v} {s : β -> Set α} (is : Finset β)
+定理 bi整数er_finset_mem
+  条件: {β : 类型v} {s : β -> 集合 α} (is : 有限集 β)
   证明: biInter_mem is.finite_toSet
 
 protected alias _root_.Finset.iInter_mem_sets := biInter_finset_mem
@@ -102,8 +102,8 @@ theorem sInter_mem
 @[simp]
 
 中文:
-定理 sInter_mem
-  条件: {s : Set (Set α)} (hfin : s.Finite)
+定理 s整数er_mem
+  条件: {s : 集合 (集合 α)} (hfin : s.有限)
   结论: ⋂₀ s in f ↔ 对任意 U in s, U in f
   证明: by
   rw [sInter_eq_biInter]; rw [biInter_mem hfin]
@@ -126,8 +126,8 @@ theorem iInter_mem
   proof: (sInter_mem (finite_range _)).trans forall_mem_range
 
 中文:
-定理 iInter_mem
-  条件: {β : Sort v} {s : β -> Set α} [Finite β]
+定理 i整数er_mem
+  条件: {β : 类型层 v} {s : β -> 集合 α} [有限 β]
   结论: (⋂ i, s i) in f ↔ 对任意 i, s i in f
   证明: (sInter_mem (finite_range _)).trans forall_mem_range
 
@@ -164,7 +164,7 @@ theorem mem_generate_iff
 
 中文:
 定理 mem_generate_iff
-  条件: {s : Set <| Set α} {U : Set α}
+  条件: {s : 集合 <| 集合 α} {U : 集合 α}
   证明: by
   constructor <;> intro h
   · induction h with
@@ -206,8 +206,8 @@ theorem mem_iInf_of_iInter
   exact mem_iInf_of_mem (i : ι) (hV _)
 
 中文:
-定理 mem_iInf_of_iInter
-  结论: {ι} {s : ι -> Filter α} {U : Set α} {I : Set ι} (I_fin : I.Finite)
+定理 mem_iInf_of_i整数er
+  结论: {ι} {s : ι -> 滤子 α} {U : 集合 α} {I : 集合 ι} (I_fin : I.有限)
   证明: by
   have := I_fin.fintype
   refine mem_of_superset (iInter_mem.2 fun i => ?_) hU
@@ -239,7 +239,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι} {s : ι -> Filter α} {U : Set α}
+  条件: {ι} {s : ι -> 滤子 α} {U : 集合 α}
   证明: by
   constructor
   · rw [iInf_eq_generate, mem_generate_iff]
@@ -288,7 +288,7 @@ theorem mem_iInf'
 
 中文:
 定理 mem_iInf'
-  条件: {ι} {s : ι -> Filter α} {U : Set α}
+  条件: {ι} {s : ι -> 滤子 α} {U : 集合 α}
   证明: by
   classical
   simp only [mem_iInf, biInter_eq_iInter]
@@ -329,8 +329,8 @@ theorem exists_iInter_of_mem_iInf
   rw [hVU']; rw [← rangeFactorization_surjective.iInter_comp]; rw [comp_def]
 
 中文:
-定理 exists_iInter_of_mem_iInf
-  结论: {ι : Sort*} {α : 类型} {f : ι -> Filter α} {s}
+定理 存在_i整数er_of_mem_iInf
+  结论: {ι : 类型层*} {α : 类型} {f : ι -> 滤子 α} {s}
   证明: by
   rw [← iInf_range' (g := (·))] at hs
   let ⟨_, _, V, hVs, _, _, hVU'⟩ := mem_iInf'.1 hs
@@ -359,7 +359,7 @@ theorem mem_iInf_of_finite
 
 中文:
 定理 mem_iInf_of_finite
-  条件: {ι : Sort*} [Finite ι] {α : 类型} {f : ι -> Filter α} (s)
+  条件: {ι : 类型层*} [有限 ι] {α : 类型} {f : ι -> 滤子 α} (s)
   证明: by
   refine ⟨exists_iInter_of_mem_iInf, ?_⟩
   rintro ⟨t, ht, rfl⟩
@@ -390,7 +390,7 @@ theorem mem_biInf_principal
 
 中文:
 定理 mem_biInf_principal
-  条件: {ι : 类型} {p : ι -> 命题} {s : ι -> Set α} {t : Set α}
+  条件: {ι : 类型} {p : ι -> 命题} {s : ι -> 集合 α} {t : 集合 α}
   证明: by
   constructor
   · simp only [mem_iInf (ι := ι), mem_iInf_of_finite, mem_principal]
@@ -431,8 +431,8 @@ theorem _root_.Pairwise.exists_mem_filter_of_disjoint
   refine ⟨fun i => ⋂ j, @s i j inter @t j i, fun i => ?_, fun i
 
 中文:
-定理 _root_.Pairwise.exists_mem_filter_of_disjoint
-  结论: {ι : 类型} [Finite ι] {l : ι -> Filter α}
+定理 _root_.两两.存在_mem_filter_of_disjoint
+  结论: {ι : 类型} [有限 ι] {l : ι -> 滤子 α}
   证明: by
   have : Pairwise fun i j => exists (s : {s // s in l i}) (t : {t // t in l j}), Disjoint s.1 t.1 := by
     simpa only [Pairwise, Function.onFun, Filter.disjoint_iff, exists_prop, Subtype.exists] using hd
@@ -466,8 +466,8 @@ theorem _root_.Set.PairwiseDisjoint.exists_mem_filter
   exact ⟨fun i => s i, fun i => (s i).2, hsd.set_of_subtype 
 
 中文:
-定理 _root_.Set.PairwiseDisjoint.exists_mem_filter
-  结论: {ι : 类型} {l : ι -> Filter α} {t : Set ι}
+定理 _root_.集合.PairwiseDisjoint.存在_mem_filter
+  结论: {ι : 类型} {l : ι -> 滤子 α} {t : 集合 ι}
   证明: by
   have := ht.to_subtype
   rcases (hd.subtype _ _).exists_mem_filter_of_disjoint with ⟨s, hsl, hsd⟩
@@ -499,7 +499,7 @@ theorem iInf_sets_eq_finite
 
 中文:
 定理 iInf_sets_eq_finite
-  条件: {ι : 类型} (f : ι -> Filter α)
+  条件: {ι : 类型} (f : ι -> 滤子 α)
   证明: by
   rw [iInf_eq_iInf_finset]; rw [iInf_sets_eq]
   exact directed_of_isDirected_le fun _ _ => biInf_mono
@@ -522,7 +522,7 @@ theorem iInf_sets_eq_finite'
 
 中文:
 定理 iInf_sets_eq_finite'
-  条件: (f : ι -> Filter α)
+  条件: (f : ι -> 滤子 α)
   证明: by
   rw [← iInf_sets_eq_finite]; rw [← Equiv.plift.surjective.iInf_comp]; rw [Equiv.plift_apply]
 
@@ -542,7 +542,7 @@ theorem mem_iInf_finite
 
 中文:
 定理 mem_iInf_finite
-  条件: {ι : 类型} {f : ι -> Filter α} (s)
+  条件: {ι : 类型} {f : ι -> 滤子 α} (s)
   证明: (Set.ext_iff.1 (iInf_sets_eq_finite f) s).trans mem_iUnion
 
 Depends on / 依赖: Set.ext_iff, ext_iff, iInf_sets_eq_finite, mem_iUnion
@@ -561,7 +561,7 @@ theorem mem_iInf_finite'
 
 中文:
 定理 mem_iInf_finite'
-  条件: {f : ι -> Filter α} (s)
+  条件: {f : ι -> 滤子 α} (s)
   证明: (Set.ext_iff.1 (iInf_sets_eq_finite' f) s).trans mem_iUnion
 
 Depends on / 依赖: Set.ext_iff, ext_iff, iInf_sets_eq_finite, mem_iUnion
@@ -587,7 +587,7 @@ theorem mem_iInf_finset
 
 中文:
 定理 mem_iInf_finset
-  条件: {s : Finset α} {f : α -> Filter β} {t : Set β}
+  条件: {s : 有限集 α} {f : α -> 滤子 β} {t : 集合 β}
   证明: by
   classical
   simp only [← Finset.set_biInter_coe, biInter_eq_iInter, iInf_subtype']
@@ -630,7 +630,7 @@ theorem iInf_principal_finset
 
 中文:
 定理 iInf_principal_finset
-  条件: {ι : Type w} (s : Finset ι) (f : ι -> Set α)
+  条件: {ι : 类型 w} (s : 有限集 ι) (f : ι -> 集合 α)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -660,7 +660,7 @@ theorem iInf_principal
 
 中文:
 定理 iInf_principal
-  条件: {ι : Sort w} [Finite ι] (f : ι -> Set α)
+  条件: {ι : 类型层 w} [有限 ι] (f : ι -> 集合 α)
   结论: ⨅ i, 𝓟 (f i) = 𝓟 (⋂ i, f i)
   证明: by
   cases nonempty_fintype (PLift ι)
@@ -687,7 +687,7 @@ theorem iInf_principal'
 
 中文:
 定理 iInf_principal'
-  条件: {ι : Type w} [Finite ι] (f : ι -> Set α)
+  条件: {ι : 类型 w} [有限 ι] (f : ι -> 集合 α)
   结论: ⨅ i, 𝓟 (f i) = 𝓟 (⋂ i, f i)
   证明: iInf_principal _
 
@@ -708,7 +708,7 @@ theorem iInf_principal_finite
 
 中文:
 定理 iInf_principal_finite
-  条件: {ι : Type w} {s : Set ι} (hs : s.Finite) (f : ι -> Set α)
+  条件: {ι : 类型 w} {s : 集合 ι} (hs : s.有限) (f : ι -> 集合 α)
   证明: by
   lift s to Finset ι using hs
   exact mod_cast iInf_principal_finset s f
@@ -733,7 +733,7 @@ theorem eq_principal_of_finite_sets
 
 中文:
 定理 eq_principal_of_finite_sets
-  条件: (hf : f.sets.Finite)
+  条件: (hf : f.sets.有限)
   结论: 存在 s, f = 𝓟 s
   证明: by
   use ⋂₀ f.sets
@@ -756,7 +756,7 @@ theorem eq_principal_of_finite
 
 中文:
 定理 eq_principal_of_finite
-  条件: [Finite α] (f : Filter α)
+  条件: [有限 α] (f : 滤子 α)
   结论: 存在 s, f = 𝓟 s
   证明: eq_principal_of_finite_sets (finite_univ.powerset.subset (by simp))
 
@@ -776,8 +776,8 @@ theorem principal_surjective
 
 中文:
 定理 principal_surjective
-  条件: [Finite α]
-  结论: Surjective (𝓟 : Set α -> Filter α)
+  条件: [有限 α]
+  结论: 满射 (𝓟 : 集合 α -> 滤子 α)
   证明: fun f => (eq_principal_of_finite f).imp fun _ => .symm
 
 Depends on / 依赖: eq_principal_of_finite
@@ -803,7 +803,7 @@ theorem eventually_all
 
 中文:
 定理 eventually_all
-  条件: {ι : Sort*} [Finite ι] {l} {p : ι -> α -> 命题}
+  条件: {ι : 类型层*} [有限 ι] {l} {p : ι -> α -> 命题}
   证明: by
   simpa only [Filter.Eventually, ofPred_forall] using iInter_mem
 
@@ -829,7 +829,7 @@ protected alias _root_.Set.Finite.eventually_all := eventually_all_finite
 
 中文:
 定理 eventually_all_finite
-  条件: {ι} {I : Set ι} (hI : I.Finite) {l} {p : ι -> α -> 命题}
+  条件: {ι} {I : 集合 ι} (hI : I.有限) {l} {p : ι -> α -> 命题}
   证明: by
   simpa only [Filter.Eventually, ofPred_forall] using biInter_mem hI
 
@@ -857,7 +857,7 @@ protected alias _root_.Finset.eventually_all := eventually_all_finset
 
 中文:
 定理 eventually_all_finset
-  条件: {ι} (I : Finset ι) {l} {p : ι -> α -> 命题}
+  条件: {ι} (I : 有限集 ι) {l} {p : ι -> α -> 命题}
   证明: I.finite_toSet.eventually_all
 
 protected alias _root_.Finset.eventually_all := eventually_all_finset
@@ -884,8 +884,8 @@ theorem frequently_exists
 @[simp]
 
 中文:
-定理 frequently_exists
-  条件: {ι : Sort*} [Finite ι] {l} {p : ι -> α -> 命题}
+定理 frequently_存在
+  条件: {ι : 类型层*} [有限 ι] {l} {p : ι -> α -> 命题}
   证明: by
   rw [← not_iff_not]
   simp
@@ -913,8 +913,8 @@ theorem frequently_exists_finite
 protected alias _root_.Set.Finite.frequently_exists := frequently_exists_finite
 
 中文:
-定理 frequently_exists_finite
-  条件: {ι} {I : Set ι} (hI : I.Finite) {l} {p : ι -> α -> 命题}
+定理 frequently_存在_finite
+  条件: {ι} {I : 集合 ι} (hI : I.有限) {l} {p : ι -> α -> 命题}
   证明: by
   rw [← not_iff_not]
   simp [hI]
@@ -941,8 +941,8 @@ theorem frequently_exists_finset
 protected alias _root_.Finset.frequently_exists := frequently_exists_finset
 
 中文:
-定理 frequently_exists_finset
-  条件: {ι} (I : Finset ι) {l} {p : ι -> α -> 命题}
+定理 frequently_存在_finset
+  条件: {ι} (I : 有限集 ι) {l} {p : ι -> α -> 命题}
   证明: I.finite_toSet.frequently_exists
 
 protected alias _root_.Finset.frequently_exists := frequently_exists_finset
@@ -964,7 +964,7 @@ lemma eventually_subset_of_finite
 
 中文:
 引理 eventually_subset_of_finite
-  结论: {ι : 类型} {f : Filter ι} {s : ι -> Set α} {t : Set α}
+  结论: {ι : 类型} {f : 滤子 ι} {s : ι -> 集合 α} {t : 集合 α}
   证明: by
   simpa [Set.subset_def, eventually_all_finite ht] using hs
 
@@ -994,7 +994,7 @@ lemma EventuallyLE.iUnion
 
 中文:
 引理 EventuallyLE.iUnion
-  结论: [Finite ι] {s t : ι -> Set α}
+  结论: [有限 ι] {s t : ι -> 集合 α}
   证明: (eventually_all.2 h).mono fun _x hx hx' =>
     let ⟨i, hi⟩ := mem_iUnion.1 hx'; mem_iUnion.2 ⟨i, hx i hi⟩
 -/
@@ -1013,7 +1013,7 @@ lemma EventuallyEq.iUnion
 
 中文:
 引理 EventuallyEq.iUnion
-  结论: [Finite ι] {s t : ι -> Set α}
+  结论: [有限 ι] {s t : ι -> 集合 α}
   证明: (EventuallyLE.iUnion fun i => (h i).le).antisymm .iUnion fun i => (h i).symm.le
 -/
 protected lemma EventuallyEq.iUnion [Finite ι] {s t : ι -> Set α}
@@ -1029,8 +1029,8 @@ lemma EventuallyLE.iInter
   proof: (eventually_all.2 h).mono fun _x hx hx' => mem_iInter.2 fun i => hx i (mem_iInter.1 hx' i)
 
 中文:
-引理 EventuallyLE.iInter
-  结论: [Finite ι] {s t : ι -> Set α}
+引理 EventuallyLE.i整数er
+  结论: [有限 ι] {s t : ι -> 集合 α}
   证明: (eventually_all.2 h).mono fun _x hx hx' => mem_iInter.2 fun i => hx i (mem_iInter.1 hx' i)
 -/
 protected lemma EventuallyLE.iInter [Finite ι] {s t : ι -> Set α}
@@ -1046,8 +1046,8 @@ lemma EventuallyEq.iInter
   proof: (EventuallyLE.iInter fun i => (h i).le).antisymm .iInter fun i => (h i).symm.le
 
 中文:
-引理 EventuallyEq.iInter
-  结论: [Finite ι] {s t : ι -> Set α}
+引理 EventuallyEq.i整数er
+  结论: [有限 ι] {s t : ι -> 集合 α}
   证明: (EventuallyLE.iInter fun i => (h i).le).antisymm .iInter fun i => (h i).symm.le
 -/
 protected lemma EventuallyEq.iInter [Finite ι] {s t : ι -> Set α}
@@ -1068,8 +1068,8 @@ lemma _root_.Set.Finite.eventuallyLE_iUnion
 alias EventuallyLE.biUnion := Set.Finite.eventuallyLE_iUnion
 
 中文:
-引理 _root_.Set.Finite.eventuallyLE_iUnion
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite)
+引理 _root_.集合.有限.eventuallyLE_iUnion
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限)
   证明: by
   have := hs.to_subtype
   rw [biUnion_eq_iUnion]; rw [biUnion_eq_iUnion]
@@ -1099,8 +1099,8 @@ lemma _root_.Set.Finite.eventuallyEq_iUnion
 alias EventuallyEq.biUnion := Set.Finite.eventuallyEq_iUnion
 
 中文:
-引理 _root_.Set.Finite.eventuallyEq_iUnion
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite)
+引理 _root_.集合.有限.eventuallyEq_iUnion
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限)
   证明: (EventuallyLE.biUnion hs fun i hi => (heq i hi).le).antisymm
     .biUnion hs fun i hi => (heq i hi).symm.le
 
@@ -1129,8 +1129,8 @@ lemma _root_.Set.Finite.eventuallyLE_iInter
 alias EventuallyLE.biInter := Set.Finite.eventuallyLE_iInter
 
 中文:
-引理 _root_.Set.Finite.eventuallyLE_iInter
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite)
+引理 _root_.集合.有限.eventuallyLE_i整数er
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限)
   证明: by
   have := hs.to_subtype
   rw [biInter_eq_iInter]; rw [biInter_eq_iInter]
@@ -1160,8 +1160,8 @@ lemma _root_.Set.Finite.eventuallyEq_iInter
 alias EventuallyEq.biInter := Set.Finite.eventuallyEq_iInter
 
 中文:
-引理 _root_.Set.Finite.eventuallyEq_iInter
-  结论: {ι : 类型} {s : Set ι} (hs : s.Finite)
+引理 _root_.集合.有限.eventuallyEq_i整数er
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.有限)
   证明: (EventuallyLE.biInter hs fun i hi => (heq i hi).le).antisymm
     .biInter hs fun i hi => (heq i hi).symm.le
 
@@ -1185,8 +1185,8 @@ lemma _root_.Finset.eventuallyLE_iUnion
   proof: .biUnion s.finite_toSet hle
 
 中文:
-引理 _root_.Finset.eventuallyLE_iUnion
-  结论: {ι : 类型} (s : Finset ι) {f g : ι -> Set α}
+引理 _root_.有限集.eventuallyLE_iUnion
+  结论: {ι : 类型} (s : 有限集 ι) {f g : ι -> 集合 α}
   证明: .biUnion s.finite_toSet hle
 
 Depends on / 依赖: biUnion, finite_toSet, s.finite_toSet
@@ -1204,8 +1204,8 @@ lemma _root_.Finset.eventuallyEq_iUnion
   proof: .biUnion s.finite_toSet heq
 
 中文:
-引理 _root_.Finset.eventuallyEq_iUnion
-  结论: {ι : 类型} (s : Finset ι) {f g : ι -> Set α}
+引理 _root_.有限集.eventuallyEq_iUnion
+  结论: {ι : 类型} (s : 有限集 ι) {f g : ι -> 集合 α}
   证明: .biUnion s.finite_toSet heq
 
 Depends on / 依赖: biUnion, finite_toSet, s.finite_toSet
@@ -1223,8 +1223,8 @@ lemma _root_.Finset.eventuallyLE_iInter
   proof: .biInter s.finite_toSet hle
 
 中文:
-引理 _root_.Finset.eventuallyLE_iInter
-  结论: {ι : 类型} (s : Finset ι) {f g : ι -> Set α}
+引理 _root_.有限集.eventuallyLE_i整数er
+  结论: {ι : 类型} (s : 有限集 ι) {f g : ι -> 集合 α}
   证明: .biInter s.finite_toSet hle
 
 Depends on / 依赖: biInter, finite_toSet, s.finite_toSet
@@ -1242,8 +1242,8 @@ lemma _root_.Finset.eventuallyEq_iInter
   proof: .biInter s.finite_toSet heq
 
 中文:
-引理 _root_.Finset.eventuallyEq_iInter
-  结论: {ι : 类型} (s : Finset ι) {f g : ι -> Set α}
+引理 _root_.有限集.eventuallyEq_i整数er
+  结论: {ι : 类型} (s : 有限集 ι) {f g : ι -> 集合 α}
   证明: .biInter s.finite_toSet heq
 
 Depends on / 依赖: biInter, finite_toSet, s.finite_toSet

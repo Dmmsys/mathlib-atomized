@@ -44,7 +44,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def herglotzLog整数egrand (w ρ : Complex)
+  签名: def herglotzLog整数egrand (w ρ : 复形)
   定义体: (Complex.re ∘ herglotzRieszKernel 0 w) • (Real.log ‖· - ρ‖)
 -/
 private noncomputable def herglotzLogIntegrand (w ρ : Complex) : Complex -> Real :=
@@ -64,8 +64,8 @@ lemma continuousAt_herglotzLogIntegrand
   fun_prop (disch := grind)
 
 中文:
-引理 continuousAt_herglotzLogIntegrand
-  条件: {w ρ z : Complex} (hz_w : z != w) (hz_ρ : z != ρ)
+引理 continuousAt_herglotzLog整数egrand
+  条件: {w ρ z : 复形} (hz_w : z != w) (hz_ρ : z != ρ)
   证明: by
   have : ‖z - ρ‖ != 0 := by simp_all [sub_eq_zero]
   simp only [herglotzLogIntegrand, herglotzRieszKernel_fun_def, sub_zero, smul_eq_mul]
@@ -94,8 +94,8 @@ lemma continuous_herglotzLogIntegrand_circle
     grind [norm_circleMap_zero, lt_of_le_of_lt (Complex.norm_nonneg w) hwr]
 
 中文:
-引理 continuous_herglotzLogIntegrand_circle
-  结论: {w ρ : Complex} {R r : 实数} (hρ : ‖ρ‖ = R)
+引理 continuous_herglotzLog整数egrand_circle
+  结论: {w ρ : 复形} {R r : 实数} (hρ : ‖ρ‖ = R)
   证明: by
   rw [continuous_iff_continuousAt]
   intro θ
@@ -132,7 +132,7 @@ lemma const_mul_norm_sub_circleMap_le_norm_sub_circleMap
 
 中文:
 引理 const_mul_norm_sub_circleMap_le_norm_sub_circleMap
-  结论: {r₀ r R : 实数} {ρ : Complex} (hρ : ‖ρ‖ = R)
+  结论: {r₀ r R : 实数} {ρ : 复形} (hρ : ‖ρ‖ = R)
   证明: by
   have h_cos_law (r₁ : Real) :
       ‖circleMap 0 r₁ θ - ρ‖ ^ 2 = r₁ ^ 2 + R ^ 2 - 2 * r₁ * R * Real.cos (θ - Complex.arg ρ) := by
@@ -172,8 +172,8 @@ lemma norm_herglotzLogIntegrand_circleMap_le
   have h_norm_sub₂ : 0 < ‖circleMap 0 r
 
 中文:
-引理 norm_herglotzLogIntegrand_circleMap_le
-  结论: {w ρ : Complex} {R r₀ r : 实数} (hR : 0 < R)
+引理 norm_herglotzLog整数egrand_circleMap_le
+  结论: {w ρ : 复形} {R r₀ r : 实数} (hR : 0 < R)
   证明: by
   simp only [herglotzLogIntegrand, Pi.smul_apply', Function.comp_apply, smul_eq_mul, norm_mul,
     norm_eq_abs]
@@ -230,8 +230,8 @@ theorem herglotzLogIntegrand_circleAverage_tendsto
   apply intervalIntegral.tendsto_integral_filter_of_dom
 
 中文:
-定理 herglotzLogIntegrand_circleAverage_tendsto
-  结论: {ρ w : Complex} {R : 实数} (hR : 0 < R)
+定理 herglotzLog整数egrand_circleAverage_tendsto
+  结论: {ρ w : 复形} {R : 实数} (hR : 0 < R)
   证明: by
   -- Apply the dominated convergence theorem.
   let bound := fun θ => ((R + ‖w‖) / ((R + ‖w‖) / 2 - ‖w‖)) * (|log (2 * R)|
@@ -293,7 +293,7 @@ theorem circleAverage_re_herglotzRieszKernel_mul_log₀
 
 中文:
 定理 circleAverage_re_herglotzRieszKernel_mul_log₀
-  结论: {w ρ : Complex} {R : 实数} (hρ : ρ in sphere 0 R)
+  结论: {w ρ : 复形} {R : 实数} (hρ : ρ in sphere 0 R)
   证明: by
   have hR : 0 < R := pos_of_mem_ball hw
   rw [mem_sphere_iff_norm]; rw [sub_zero] at hρ
@@ -359,7 +359,7 @@ theorem circleAverage_re_herglotzRieszKernel_mul_log
 
 中文:
 定理 circleAverage_re_herglotzRieszKernel_mul_log
-  结论: {w ρ c : Complex} {R : 实数} (hρ : ρ in sphere c R)
+  结论: {w ρ c : 复形} {R : 实数} (hρ : ρ in sphere c R)
   证明: by
   simp only [← circleAverage_map_add_const, Pi.mul_apply, Function.comp_apply, add_zero]
   conv =>
@@ -413,7 +413,7 @@ lemma circleAverage_log_norm_factorizedRational
 
 中文:
 引理 circleAverage_log_norm_factorizedRational
-  结论: {R : 实数} {c : Complex}
+  结论: {R : 实数} {c : 复形}
   证明: by
   have h := D.finiteSupport (isCompact_closedBall c |R|)
   calc circleAverage (∑ᶠ u, (D u * log ‖· - u‖)) c R
@@ -470,7 +470,7 @@ lemma AnalyticOnNhd.circleAverage_log_norm_of_ne_zero
 
 中文:
 引理 AnalyticOnNhd.circleAverage_log_norm_of_ne_zero
-  结论: {R : 实数} {c : Complex} {g : Complex -> Complex}
+  结论: {R : 实数} {c : 复形} {g : 复形 -> 复形}
   证明: InnerProductSpace.HarmonicOnNhd.circleAverage_eq
     (fun x hx => (h₁g x hx).harmonicAt_log_norm (h₂g x hx))
 
@@ -498,7 +498,7 @@ lemma countingFunction_finsum_eq_finsum_add
 
 中文:
 引理 countingFunction_finsum_eq_finsum_add
-  结论: {c : Complex} {R : 实数} {D : Complex -> 整数} (hR : R != 0)
+  结论: {c : 复形} {R : 实数} {D : 复形 -> 整数} (hR : R != 0)
   证明: by
   by_cases h : c in D.support
   · have {g : Complex -> Real} : (fun u => D u * g u).support subseteq hD.toFinset :=
@@ -548,7 +548,7 @@ theorem MeromorphicOn.circleAverage_log_norm
 
 中文:
 定理 MeromorphicOn.circleAverage_log_norm
-  结论: {c : Complex} {R : 实数} {f : Complex -> Complex} (hR : R != 0)
+  结论: {c : 复形} {R : 实数} {f : 复形 -> 复形} (hR : R != 0)
   证明: by
   -- Shorthand notation to keep line size in check
   let CB := closedBall c |R|
@@ -636,7 +636,7 @@ theorem AnalyticOnNhd.circleAverage_log_norm
 
 中文:
 定理 AnalyticOnNhd.circleAverage_log_norm
-  结论: {c : Complex} {R : 实数} {f : Complex -> Complex} (hR : R != 0)
+  结论: {c : 复形} {R : 实数} {f : 复形 -> 复形} (hR : R != 0)
   证明: by
   rw [h₁f.meromorphicOn.circleAverage_log_norm hR]; rw [h₁f.divisor_apply (by simp)]; rw [(h₁f c (by simp)).analyticOrderAt_eq_zero.mpr h₂f]; rw [(h₁f c (by simp)).meromorphicTrailingCoeffAt_of_ne_zero h₂f]
   simp
@@ -667,7 +667,7 @@ theorem AnalyticOnNhd.sum_divisor_le
 
 中文:
 定理 AnalyticOnNhd.sum_divisor_le
-  结论: {c : Complex} {r R M : 实数} {f : Complex -> Complex} (r_pos : 0 < |r|)
+  结论: {c : 复形} {r R M : 实数} {f : 复形 -> 复形} (r_pos : 0 < |r|)
   证明: by
   -- Push the coerssion inside the sum
   trans ∑ᶠ u, (divisor f (closedBall c |r|) u : Real)

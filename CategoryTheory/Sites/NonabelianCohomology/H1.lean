@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (ZeroCochain G U)
+  签名: 群 (ZeroCochain G U)
   定义体: Pi.group
 
 Depends on / 依赖: Pi.group
@@ -172,7 +172,7 @@ structure OneCochain
 结构 OneCochain
   参数: where
   公理与运算 (2 个):
-    - ev((i j : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) : G.obj (Opposite.op T)
+    - ev((i j : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) : G.obj (对偶.op T)
     - ev_precomp((i j : I) ⦃T T') : C⦄ (φ : T ⟶ T') (a : T' ⟶ U i) (b : T' ⟶ U j) : G.map φ.op (ev i j a b) = ev i j (φ ≫ a) (φ ≫ b)  [默认: by aesop]
 -/
 structure OneCochain where
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (OneCochain G U)
+  签名: 幺 (OneCochain G U)
   定义体: { ev := fun _ _ _ _ _ => 1 }
 
 @[simp]
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (OneCochain G U)
+  签名: 乘法 (OneCochain G U)
   定义体: { ev := fun i j _ a b => γ₁.ev i j a b * γ₂.ev i j a b }
 
 @[simp]
@@ -273,7 +273,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (OneCochain G U)
+  签名: 取逆 (OneCochain G U)
   定义体: { ev := fun i j _ a b => (γ.ev i j a b)⁻¹ }
 
 @[simp]
@@ -311,7 +311,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (OneCochain G U)
+  签名: 群 (OneCochain G U)
   定义体: by ext; apply mul_assoc
   one_mul _ := by ext; apply one_mul
   mul_one _ := by ext; apply mul_one
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (OneCocycle G U)
+  签名: 幺 (OneCocycle G U)
   定义体: OneCocycle.mk 1
 
 @[simp]
@@ -631,7 +631,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (H1 G U)
+  签名: 幺 (H1 G U)
   定义体: OneCocycle.class 1
 
 Depends on / 依赖: OneCocycle, OneCocycle.class

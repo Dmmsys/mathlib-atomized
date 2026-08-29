@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 实数 Complex
+  签名: 对合模 实数 复形
   定义体: ⟨fun r x => by simp only [star_def, star_trivial, real_smul, map_mul, conj_ofReal]⟩
 
 @[simp]
@@ -145,7 +145,7 @@ example : Module.restrictScalars Real C
 
 中文:
 定理 coe_algebraMap
-  结论: (algebraMap 实数 Complex : 实数 -> Complex) = ((↑) : 实数 -> Complex)
+  结论: (algebraMap 实数 复形 : 实数 -> 复形) = ((↑) : 实数 -> 复形)
   证明: rfl
 
 example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfReal := by
@@ -185,8 +185,8 @@ theorem _root_.AlgHom.map_coe_real_complex
   proof: f.commutes x
 
 中文:
-定理 _root_.AlgHom.map_coe_real_complex
-  条件: (f : Complex ->ₐ[实数] A) (x : 实数)
+定理 _root_.代数态射.map_coe_real_complex
+  条件: (f : 复形 ->ₐ[实数] A) (x : 实数)
   结论: f x = algebraMap 实数 A x
   证明: f.commutes x
 
@@ -211,7 +211,7 @@ theorem algHom_ext
 中文:
 定理 algHom_ext
   条件: ⦃f g
-  结论: Complex ->ₐ[实数] A⦄ (h : f I = g I) : f = g
+  结论: 复形 ->ₐ[实数] A⦄ (h : f I = g I) : f = g
   证明: by
   ext ⟨x, y⟩
   simp only [mk_eq_add_mul_I, map_add, AlgHom.map_coe_real_complex, map_mul, h]
@@ -246,7 +246,7 @@ definition basisOneI
 
 中文:
 定义 basisOneI
-  签名: : Basis (Fin 2) 实数 Complex
+  签名: : 基 (有限集 2) 实数 复形
   定义体: .ofEquivFun
     { toFun := fun z => ![z.re, z.im]
       invFun := fun c => c 0 + c 1 • I
@@ -286,7 +286,7 @@ theorem coe_basisOneI_repr
 
 中文:
 定理 coe_basisOneI_repr
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ⇑(basisOneI.repr z) = ![z.re, z.im]
   证明: rfl
 
@@ -361,8 +361,8 @@ theorem Complex.coe_smul
   proof: rfl
 
 中文:
-定理 Complex.coe_smul
-  条件: {E : 类型} [AddCommGroup E] [Module Complex E] (x : 实数) (y : E)
+定理 复形.coe_smul
+  条件: {E : 类型} [加法交换群 E] [模 复形 E] (x : 实数) (y : E)
   证明: rfl
 -/
 theorem Complex.coe_smul {E : Type*} [AddCommGroup E] [Module Complex E] (x : Real) (y : E) :
@@ -384,8 +384,8 @@ instance IsScalarTower.complexToReal
   body: smul_assoc (r : Complex) _ _
 
 中文:
-实例 IsScalarTower.complexToReal
-  签名: {M E : 类型} [AddCommGroup M] [Module Complex M] [AddCommGroup E]
+实例 标量塔.complexTo实数
+  签名: {M E : 类型} [加法交换群 M] [模 复形 M] [加法交换群 E]
   定义体: smul_assoc (r : Complex) _ _
 
 Depends on / 依赖: smul_assoc
@@ -419,7 +419,7 @@ definition reLm
 
 中文:
 定义 reLm
-  签名: : Complex ->ₗ[实数] 实数 where
+  签名: : 复形 ->ₗ[实数] 实数 where
   定义体: x.re
   map_add' := add_re
   map_smul' := by simp
@@ -464,7 +464,7 @@ definition imLm
 
 中文:
 定义 imLm
-  签名: : Complex ->ₗ[实数] 实数 where
+  签名: : 复形 ->ₗ[实数] 实数 where
   定义体: x.im
   map_add' := add_im
   map_smul' := by simp
@@ -506,8 +506,8 @@ definition ofRealAm
 @[simp]
 
 中文:
-定义 ofRealAm
-  签名: : 实数 ->ₐ[实数] Complex
+定义 of实数Am
+  签名: : 实数 ->ₐ[实数] 复形
   定义体: Algebra.ofId Real Complex
 
 @[simp]
@@ -527,8 +527,8 @@ theorem ofRealAm_coe
   proof: rfl
 
 中文:
-定理 ofRealAm_coe
-  结论: ⇑of实数Am = ((↑) : 实数 -> Complex)
+定理 of实数Am_coe
+  结论: ⇑of实数Am = ((↑) : 实数 -> 复形)
   证明: rfl
 -/
 theorem ofRealAm_coe : ⇑ofRealAm = ((↑) : Real -> Complex) :=
@@ -550,7 +550,7 @@ definition conjAe
 
 中文:
 定义 conjAe
-  签名: : Complex ≃ₐ[实数] Complex
+  签名: : 复形 ≃ₐ[实数] 复形
   定义体: { conj with
     invFun := conj
     left_inv := star_star
@@ -624,8 +624,8 @@ theorem real_algHom_eq_id_or_conj
 
 中文:
 定理 real_algHom_eq_id_or_conj
-  条件: (f : Complex ->ₐ[实数] Complex)
-  结论: f = AlgHom.id 实数 Complex ∨ f = conjAe
+  条件: (f : 复形 ->ₐ[实数] 复形)
+  结论: f = 代数态射.id 实数 复形 ∨ f = conjAe
   证明: by
   refine
       (eq_or_eq_neg_of_sq_eq_sq (f I) I <| by rw [← map_pow, I_sq, map_neg, map_one]).imp ?_ ?_ <;>
@@ -652,8 +652,8 @@ definition equivRealProdLm
     map_smul' := fun r c => by simp }
 
 中文:
-定义 equivRealProdLm
-  签名: : Complex ≃ₗ[实数] 实数 × 实数
+定义 equiv实数ProdLm
+  签名: : 复形 ≃ₗ[实数] 实数 × 实数
   定义体: { equivRealProdAddHom with
     map_smul' := fun r c => by simp }
 
@@ -672,7 +672,7 @@ theorem equivRealProdLm_symm_apply
   proof: Complex.equivRealProd_symm_apply p
 
 中文:
-定理 equivRealProdLm_symm_apply
+定理 equiv实数ProdLm_symm_apply
   条件: (p : 实数 × 实数)
   证明: Complex.equivRealProd_symm_apply p
 
@@ -736,7 +736,7 @@ theorem liftAux_apply
 
 中文:
 定理 liftAux_apply
-  条件: (I' : A) (hI') (z : Complex)
+  条件: (I' : A) (hI') (z : 复形)
   结论: liftAux I' hI' z = algebraMap 实数 A z.re + z.im • I'
   证明: rfl
 -/
@@ -838,7 +838,7 @@ right_inv _ := algHom_ext liftAux_apply_I _ _
 
 中文:
 定义 lift
-  签名: : { I' : A // I' * I' = -1 } ≃ (Complex ->ₐ[实数] A) where
+  签名: : { I' : A // I' * I' = -1 } ≃ (复形 ->ₐ[实数] A) where
   定义体: liftAux I' I'.prop
   invFun F := ⟨F I, by rw [← map_mul, I_mul_I, map_neg, map_one]⟩
 left_inv I' := Subtype.ext liftAux_apply_I (I' : A) I'.prop
@@ -864,7 +864,7 @@ theorem liftAux_I
 
 中文:
 定理 liftAux_I
-  结论: liftAux I I_mul_I = AlgHom.id 实数 Complex
+  结论: liftAux I I_mul_I = 代数态射.id 实数 复形
   证明: algHom_ext liftAux_apply_I _ _
 
 Depends on / 依赖: algHom_ext, liftAux_apply_I
@@ -915,8 +915,8 @@ lemma Complex.I_mem_skewAdjoint
   proof: by simp [skewAdjoint.mem_iff]
 
 中文:
-引理 Complex.I_mem_skewAdjoint
-  结论: I in skewAdjoint Complex
+引理 复形.I_mem_skewAdjoint
+  结论: I in skewAdjoint 复形
   证明: by simp [skewAdjoint.mem_iff]
 
 Depends on / 依赖: mem_iff, skewAdjoint, skewAdjoint.mem_iff
@@ -933,7 +933,7 @@ lemma Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint
   simp [skewAdjoint.mem_iff, IsSelfAdjoint, smul_right_inj]
 
 中文:
-引理 Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint
+引理 复形.I_smul_mem_skewAdjoint_iff_isSelfAdjoint
   条件: {a : A}
   证明: by
   simp [skewAdjoint.mem_iff, IsSelfAdjoint, smul_right_inj]
@@ -952,7 +952,7 @@ lemma Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint
   simp [← I_smul_mem_skewAdjoint_iff_isSelfAdjoint, smul_smul]
 
 中文:
-引理 Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint
+引理 复形.isSelfAdjoint_I_smul_iff_mem_skewAdjoint
   条件: {a : A}
   证明: by
   simp [← I_smul_mem_skewAdjoint_iff_isSelfAdjoint, smul_smul]
@@ -1202,7 +1202,7 @@ theorem realPart_smul
 
 中文:
 定理 realPart_smul
-  条件: (z : Complex) (a : A)
+  条件: (z : 复形) (a : A)
   结论: ℜ (z • a) = z.re • ℜ a - z.im • ℑ a
   证明: by
   have := by congrm (ℜ ($((re_add_im z).symm) • a))
@@ -1227,7 +1227,7 @@ theorem imaginaryPart_smul
 
 中文:
 定理 imaginaryPart_smul
-  条件: (z : Complex) (a : A)
+  条件: (z : 复形) (a : A)
   结论: ℑ (z • a) = z.re • ℑ a + z.im • ℜ a
   证明: by
   have := by congrm (ℑ ($((re_add_im z).symm) • a))
@@ -1485,7 +1485,7 @@ lemma realPart_surjective
 
 中文:
 引理 realPart_surjective
-  结论: Function.Surjective (realPart (A := A))
+  结论: 函数.满射 (realPart (A := A))
   证明: fun x => ⟨(x : A), Subtype.ext x.property.coe_realPart⟩
 -/
 lemma realPart_surjective : Function.Surjective (realPart (A := A)) :=
@@ -1502,7 +1502,7 @@ lemma imaginaryPart_surjective
 
 中文:
 引理 imaginaryPart_surjective
-  结论: Function.Surjective (imaginaryPart (A := A))
+  结论: 函数.满射 (imaginaryPart (A := A))
   证明: fun x =>
 ⟨I • (x : A), Subtype.ext by simp only [imaginaryPart_I_smul, x.property.coe_realPart]⟩
 -/
@@ -1675,7 +1675,7 @@ SMulMemClass.smul_mem _ subset_span (ℑ x).property
 
 中文:
 引理 span_selfAdjoint
-  结论: span Complex (selfAdjoint A : Set A) = ⊤
+  结论: span 复形 (selfAdjoint A : 集合 A) = ⊤
   证明: by
   refine eq_top_iff'.mpr fun x => ?_
   rw [← realPart_add_I_smul_imaginaryPart x]
@@ -1709,8 +1709,8 @@ left_inv := fun z => Subtype.ext conj_eq_iff_re.mp z.property.star_eq
   map_smul' := by simp
 
 中文:
-定义 Complex.selfAdjointEquiv
-  签名: : selfAdjoint Complex ≃ₗ[实数] 实数 where
+定义 复形.selfAdjointEquiv
+  签名: : selfAdjoint 复形 ≃ₗ[实数] 实数 where
   定义体: fun z => (z : Complex).re
   invFun := fun x => ⟨x, conj_ofReal x⟩
 left_inv := fun z => Subtype.ext conj_eq_iff_re.mp z.property.star_eq
@@ -1737,8 +1737,8 @@ lemma Complex.coe_selfAdjointEquiv
 @[simp]
 
 中文:
-引理 Complex.coe_selfAdjointEquiv
-  条件: (z : selfAdjoint Complex)
+引理 复形.coe_selfAdjointEquiv
+  条件: (z : selfAdjoint 复形)
   证明: by
   simpa [selfAdjointEquiv_symm_apply]
     using (congr_arg Subtype.val <| Complex.selfAdjointEquiv.left_inv z)
@@ -1767,9 +1767,9 @@ lemma realPart_ofReal
 @[simp]
 
 中文:
-引理 realPart_ofReal
+引理 realPart_of实数
   条件: (r : 实数)
-  结论: (ℜ (r : Complex) : Complex) = r
+  结论: (ℜ (r : 复形) : 复形) = r
   证明: by
   rw [realPart_apply_coe]; rw [star_def]; rw [conj_ofReal]; rw [← two_smul Real (r : Complex)]
   simp
@@ -1794,9 +1794,9 @@ lemma imaginaryPart_ofReal
   ext1; simp [imaginaryPart_apply_coe, conj_ofReal]
 
 中文:
-引理 imaginaryPart_ofReal
+引理 imaginaryPart_of实数
   条件: (r : 实数)
-  结论: ℑ (r : Complex) = 0
+  结论: ℑ (r : 复形) = 0
   证明: by
   ext1; simp [imaginaryPart_apply_coe, conj_ofReal]
 
@@ -1817,9 +1817,9 @@ lemma Complex.coe_realPart
   simp [-re_add_im, realPart_I_smul, mul_comm _ I, ← smul_eq_mul]
 
 中文:
-引理 Complex.coe_realPart
-  条件: (z : Complex)
-  结论: (ℜ z : Complex) = z.re
+引理 复形.coe_realPart
+  条件: (z : 复形)
+  结论: (ℜ z : 复形) = z.re
   证明: by
   conv_lhs => rw [← re_add_im z]
   simp [-re_add_im, realPart_I_smul, mul_comm _ I, ← smul_eq_mul]
@@ -1943,7 +1943,7 @@ lemma Commute.realPart_imaginaryPart
 
 中文:
 引理 Commute.realPart_imaginaryPart
-  条件: (x : A) [IsStarNormal x]
+  条件: (x : A) [是StarNormal x]
   证明: isStarNormal_iff_commute_realPart_imaginaryPart.mp inferInstance
 
 Depends on / 依赖: isStarNormal_iff_commute_realPart_imaginaryPart, isStarNormal_iff_commute_realPart_imaginaryPart.mp
@@ -1967,7 +1967,7 @@ lemma star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
 
 中文:
 引理 star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
-  条件: (x : A) [hx : IsStarNormal x]
+  条件: (x : A) [hx : 是StarNormal x]
   证明: calc
   star x * x = ℜ x * ℜ x + ℑ x * ℑ x + Complex.I • (ℜ x * ℑ x - ℑ x * ℜ x) := by
     conv_lhs => rw [← realPart_add_I_smul_imaginaryPart x]
@@ -2154,7 +2154,7 @@ lemma realPart_one
 
 中文:
 引理 realPart_one
-  条件: [Ring A] [StarRing A] [Module Complex A] [StarModule Complex A]
+  条件: [环 A] [对合环 A] [模 复形 A] [对合模 复形 A]
   证明: by
   ext; simp [realPart_apply_coe, ← two_smul Real]
 
@@ -2179,7 +2179,7 @@ lemma mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
 
 中文:
 引理 mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
-  结论: [Ring A]
+  结论: [环 A]
   证明: by
   rw [Unitary.mem_iff]
   refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩

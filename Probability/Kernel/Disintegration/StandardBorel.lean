@@ -93,7 +93,7 @@ lemma isRatCondKernelCDFAux_density_Iic
 
 中文:
 引理 isRatCondKernelCDFAux_density_Iic
-  条件: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+  条件: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   证明: measurable_pi_iff.mpr fun _ => measurable_density κ (fst κ) measurableSet_Iic
   mono' a q r hqr :=
     ae_of_all _ fun c => density_mono_set le_rfl a c (Iic_subset_Iic.mpr (by exact_mod_cast hqr))
@@ -147,7 +147,7 @@ lemma isRatCondKernelCDF_density_Iic
 
 中文:
 引理 isRatCondKernelCDF_density_Iic
-  条件: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+  条件: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   证明: (isRatCondKernelCDFAux_density_Iic κ).isRatCondKernelCDF
 
 Depends on / 依赖: isRatCondKernelCDF, isRatCondKernelCDFAux_density_Iic
@@ -170,7 +170,7 @@ definition condKernelCDF
 
 中文:
 定义 condKernelCDF
-  签名: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+  签名: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   定义体: stieltjesOfMeasurableRat (fun (p : α × γ) q => density κ (fst κ) p.1 p.2 (Iic q))
     (isRatCondKernelCDF_density_Iic κ).measurable
 
@@ -190,7 +190,7 @@ lemma isCondKernelCDF_condKernelCDF
 
 中文:
 引理 isCondKernelCDF_condKernelCDF
-  条件: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+  条件: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   证明: isCondKernelCDF_stieltjesOfMeasurableRat (isRatCondKernelCDF_density_Iic κ)
 
 Depends on / 依赖: isCondKernelCDF_stieltjesOfMeasurableRat, isRatCondKernelCDF_density_Iic
@@ -211,8 +211,8 @@ definition condKernelReal
   body: (isCondKernelCDF_condKernelCDF κ).toKernel
 
 中文:
-定义 condKernelReal
-  签名: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+定义 condKernel实数
+  签名: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   定义体: (isCondKernelCDF_condKernelCDF κ).toKernel
 
 Depends on / 依赖: isCondKernelCDF_condKernelCDF, toKernel
@@ -231,8 +231,8 @@ instance instIsMarkovKernelCondKernelReal
   infer_instance
 
 中文:
-实例 instIsMarkovKernelCondKernelReal
-  签名: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+实例 instIsMarkovKernelCondKernel实数
+  签名: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   定义体: by
   rw [condKernelReal]
   infer_instance
@@ -254,8 +254,8 @@ lemma compProd_fst_condKernelReal
   rw [condKernelReal]; rw [compProd_toKernel]
 
 中文:
-引理 compProd_fst_condKernelReal
-  条件: (κ : Kernel α (γ × 实数)) [IsFiniteKernel κ]
+引理 compProd_fst_condKernel实数
+  条件: (κ : 核 α (γ × 实数)) [是FiniteKernel κ]
   证明: by
   rw [condKernelReal]; rw [compProd_toKernel]
 
@@ -278,8 +278,8 @@ definition condKernelUnitReal
   body: (isCondKernelCDF_condCDF (κ ())).toKernel
 
 中文:
-定义 condKernelUnitReal
-  签名: (κ : Kernel Unit (α × 实数)) [IsFiniteKernel κ]
+定义 condKernelUnit实数
+  签名: (κ : 核 单元 (α × 实数)) [是FiniteKernel κ]
   定义体: (isCondKernelCDF_condCDF (κ ())).toKernel
 
 Depends on / 依赖: isCondKernelCDF_condCDF, toKernel
@@ -298,8 +298,8 @@ instance instIsMarkovKernelCondKernelUnitReal
   infer_instance
 
 中文:
-实例 instIsMarkovKernelCondKernelUnitReal
-  签名: (κ : Kernel Unit (α × 实数)) [IsFiniteKernel κ]
+实例 instIsMarkovKernelCondKernelUnit实数
+  签名: (κ : 核 单元 (α × 实数)) [是FiniteKernel κ]
   定义体: by
   rw [condKernelUnitReal]
   infer_instance
@@ -321,8 +321,8 @@ instance condKernelUnitReal.instIsCondKernel
   body: by rw [condKernelUnitReal, compProd_toKernel]; ext; simp
 
 中文:
-实例 condKernelUnitReal.instIsCondKernel
-  签名: (κ : Kernel Unit (α × 实数)) [IsFiniteKernel κ]
+实例 condKernelUnit实数.instIsCondKernel
+  签名: (κ : 核 单元 (α × 实数)) [是FiniteKernel κ]
   定义体: by rw [condKernelUnitReal, compProd_toKernel]; ext; simp
 
 Depends on / 依赖: compProd_toKernel, condKernelUnitReal
@@ -364,8 +364,8 @@ definition borelMarkovFromReal
       η (deterministi
 
 中文:
-定义 borelMarkovFromReal
-  签名: (Ω : 类型) [Nonempty Ω] [MeasurableSpace Ω] [StandardBorelSpace Ω]
+定义 borelMarkovFrom实数
+  签名: (Ω : 类型) [非空 Ω] [可测空间 Ω] [StandardBorel空间 Ω]
   定义体: have he := measurableEmbedding_embeddingReal Ω
   let x₀ := (range_nonempty (embeddingReal Ω)).choose
   comapRight
@@ -398,8 +398,8 @@ lemma borelMarkovFromReal_apply
   split_ifs <;> rfl
 
 中文:
-引理 borelMarkovFromReal_apply
-  结论: (Ω : 类型) [Nonempty Ω] [MeasurableSpace Ω] [StandardBorelSpace Ω]
+引理 borelMarkovFrom实数_apply
+  结论: (Ω : 类型) [非空 Ω] [可测空间 Ω] [StandardBorel空间 Ω]
   证明: by
   classical
   rw [borelMarkovFromReal]; rw [comapRight_apply]; rw [piecewise_apply]; rw [deterministic_apply]
@@ -432,8 +432,8 @@ lemma borelMarkovFromReal_apply'
   · rw [Measure.comap_apply _ he.injective he.measurableSet_image' _ hs, Measure.dirac_apply]
 
 中文:
-引理 borelMarkovFromReal_apply'
-  结论: (Ω : 类型) [Nonempty Ω] [MeasurableSpace Ω] [StandardBorelSpace Ω]
+引理 borelMarkovFrom实数_apply'
+  结论: (Ω : 类型) [非空 Ω] [可测空间 Ω] [StandardBorel空间 Ω]
   证明: by
   have he := measurableEmbedding_embeddingReal Ω
   rw [borelMarkovFromReal_apply]
@@ -463,8 +463,8 @@ instance instIsSFiniteKernelBorelMarkovFromReal
   body: IsSFiniteKernel.comapRight _ (measurableEmbedding_embeddingReal Ω)
 
 中文:
-实例 instIsSFiniteKernelBorelMarkovFromReal
-  签名: (η : Kernel α 实数) [IsSFiniteKernel η]
+实例 instIsSFiniteKernelBorelMarkovFrom实数
+  签名: (η : 核 α 实数) [是SFiniteKernel η]
   定义体: IsSFiniteKernel.comapRight _ (measurableEmbedding_embeddingReal Ω)
 
 Depends on / 依赖: IsSFiniteKernel, IsSFiniteKernel.comapRight, comapRight, measurableEmbedding_embeddingReal
@@ -482,8 +482,8 @@ instance instIsFiniteKernelBorelMarkovFromReal
   body: IsFiniteKernel.comapRight _ (measurableEmbedding_embeddingReal Ω)
 
 中文:
-实例 instIsFiniteKernelBorelMarkovFromReal
-  签名: (η : Kernel α 实数) [IsFiniteKernel η]
+实例 instIsFiniteKernelBorelMarkovFrom实数
+  签名: (η : 核 α 实数) [是FiniteKernel η]
   定义体: IsFiniteKernel.comapRight _ (measurableEmbedding_embeddingReal Ω)
 
 Depends on / 依赖: IsFiniteKernel, IsFiniteKernel.comapRight, comapRight, measurableEmbedding_embeddingReal
@@ -508,8 +508,8 @@ instance instIsMarkovKernelBorelMarkovFromReal
     simp [(range_nonempty (embed
 
 中文:
-实例 instIsMarkovKernelBorelMarkovFromReal
-  签名: (η : Kernel α 实数) [IsMarkovKernel η]
+实例 instIsMarkovKernelBorelMarkovFrom实数
+  签名: (η : 核 α 实数) [是MarkovKernel η]
   定义体: by
   refine IsMarkovKernel.comapRight _ (measurableEmbedding_embeddingReal Ω) (fun a => ?_)
   classical
@@ -546,7 +546,7 @@ lemma compProd_fst_borelMarkovFromReal_eq_comapRight_compProd
   change fst κ otimesₖ bor
 
 中文:
-引理 compProd_fst_borelMarkovFromReal_eq_comapRight_compProd
+引理 compProd_fst_borelMarkovFrom实数_eq_comapRight_compProd
   证明: by
   let e := embeddingReal Ω
   let he := measurableEmbedding_embeddingReal Ω
@@ -620,8 +620,8 @@ lemma compProd_fst_borelMarkovFromReal
   have : κ = comapRight κ'
 
 中文:
-引理 compProd_fst_borelMarkovFromReal
-  结论: (κ : Kernel α (β × Ω)) [IsSFiniteKernel κ]
+引理 compProd_fst_borelMarkovFrom实数
+  结论: (κ : 核 α (β × Ω)) [是SFiniteKernel κ]
   证明: by
   let e := embeddingReal Ω
   let he := measurableEmbedding_embeddingReal Ω
@@ -672,7 +672,7 @@ definition condKernelBorel
 
 中文:
 定义 condKernelBorel
-  签名: (κ : Kernel α (γ × Ω)) [IsFiniteKernel κ]
+  签名: (κ : 核 α (γ × Ω)) [是FiniteKernel κ]
   定义体: let κ' := map κ (Prod.map (id : γ -> γ) (embeddingReal Ω))
   borelMarkovFromReal Ω (condKernelReal κ')
 
@@ -694,7 +694,7 @@ instance instIsMarkovKernelCondKernelBorel
 
 中文:
 实例 instIsMarkovKernelCondKernelBorel
-  签名: (κ : Kernel α (γ × Ω)) [IsFiniteKernel κ]
+  签名: (κ : 核 α (γ × Ω)) [是FiniteKernel κ]
   定义体: by
   rw [condKernelBorel]
   infer_instance
@@ -717,7 +717,7 @@ instance condKernelBorel.instIsCondKernel
 
 中文:
 实例 condKernelBorel.instIsCondKernel
-  签名: (κ : Kernel α (γ × Ω)) [IsFiniteKernel κ]
+  签名: (κ : 核 α (γ × Ω)) [是FiniteKernel κ]
   定义体: by
     rw [condKernelBorel]; rw [compProd_fst_borelMarkovFromReal _ _ (compProd_fst_condKernelReal _)]
 
@@ -748,7 +748,7 @@ definition condKernelUnitBorel
 
 中文:
 定义 condKernelUnitBorel
-  签名: : Kernel (Unit × α) Ω
+  签名: : 核 (单元 × α) Ω
   定义体: let κ' := map κ (Prod.map (id : α -> α) (embeddingReal Ω))
   borelMarkovFromReal Ω (condKernelUnitReal κ')
 
@@ -770,7 +770,7 @@ instance instIsMarkovKernelCondKernelUnitBorel
 
 中文:
 实例 instIsMarkovKernelCondKernelUnitBorel
-  签名: : IsMarkovKernel κ.condKernelUnitBorel
+  签名: : 是MarkovKernel κ.condKernelUnitBorel
   定义体: by
   rw [condKernelUnitBorel]
   infer_instance
@@ -792,7 +792,7 @@ instance condKernelUnitBorel.instIsCondKernel
 
 中文:
 实例 condKernelUnitBorel.instIsCondKernel
-  签名: : κ.IsCondKernel κ.condKernelUnitBorel where
+  签名: : κ.是余ndKernel κ.condKernelUnitBorel where
   定义体: by
     rw [condKernelUnitBorel]; rw [compProd_fst_borelMarkovFromReal _ _ (disintegrate _ _)]
 
@@ -825,8 +825,8 @@ lemma _root_.MeasureTheory.Measure.condKernel_apply
   rw [Measure.condKernel]; rfl
 
 中文:
-引理 _root_.MeasureTheory.Measure.condKernel_apply
-  结论: (ρ : Measure (α × Ω)) [IsFiniteMeasure ρ]
+引理 _root_.测度论.测度.condKernel_apply
+  结论: (ρ : 测度 (α × Ω)) [是有限测度 ρ]
   证明: by
   rw [Measure.condKernel]; rfl
 
@@ -852,8 +852,8 @@ instance _root_.MeasureTheory.Measure.condKernel.instIsCondKernel
       simp only [prodMkLeft_apply, Measure.condKernel_apply
 
 中文:
-实例 _root_.MeasureTheory.Measure.condKernel.instIsCondKernel
-  签名: (ρ : Measure (α × Ω))
+实例 _root_.测度论.测度.condKernel.instIsCondKernel
+  签名: (ρ : 测度 (α × Ω))
   定义体: by
     have h1 : const Unit (Measure.fst ρ) = fst (const Unit ρ) := by
       ext
@@ -886,7 +886,7 @@ instance _root_.MeasureTheory.Measure.instIsMarkovKernelCondKernel
   infer_instance
 
 中文:
-实例 _root_.MeasureTheory.Measure.instIsMarkovKernelCondKernel
+实例 _root_.测度论.测度.instIsMarkovKernelCondKernel
   定义体: by
   rw [Measure.condKernel]
   infer_instance
@@ -907,8 +907,8 @@ lemma _root_.MeasureTheory.Measure.condKernel_apply_of_ne_zero
   proof: Measure.IsCondKernel.apply_of_ne_zero _ _ hx _
 
 中文:
-引理 _root_.MeasureTheory.Measure.condKernel_apply_of_ne_zero
-  结论: [MeasurableSingletonClass α]
+引理 _root_.测度论.测度.condKernel_apply_of_ne_zero
+  结论: [MeasurableSingleton类 α]
   证明: Measure.IsCondKernel.apply_of_ne_zero _ _ hx _
 
 Depends on / 依赖: IsCondKernel, Measure, Measure.IsCondKernel.apply_of_ne_zero, apply_of_ne_zero
@@ -947,7 +947,7 @@ instance instIsMarkovKernelCondKernel
 
 中文:
 实例 instIsMarkovKernelCondKernel
-  签名: : IsMarkovKernel (condKernel κ)
+  签名: : 是MarkovKernel (condKernel κ)
   定义体: by
   rw [condKernel_def]
   split_ifs <;> infer_instance
@@ -968,7 +968,7 @@ instance condKernel.instIsCondKernel
 
 中文:
 实例 condKernel.instIsCondKernel
-  签名: : κ.IsCondKernel κ.condKernel where
+  签名: : κ.是余ndKernel κ.condKernel where
   定义体: by rw [condKernel_def]; split_ifs with hα <;> exact disintegrate _ _
 
 Depends on / 依赖: condKernel_def, disintegrate, split_ifs

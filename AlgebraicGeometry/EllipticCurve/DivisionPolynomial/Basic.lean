@@ -197,7 +197,7 @@ lemma Affine.CoordinateRing.mk_ψ₂_sq
   simp [C_Ψ₂Sq]
 
 中文:
-引理 Affine.CoordinateRing.mk_ψ₂_sq
+引理 仿射.CoordinateRing.mk_ψ₂_sq
   结论: mk W W.ψ₂ ^ 2 = mk W (C W.Ψ₂Sq)
   证明: by
   simp [C_Ψ₂Sq]
@@ -471,7 +471,7 @@ lemma preΨ_ofNat
 @[simp]
 
 中文:
-引理 preΨ_ofNat
+引理 preΨ_of自然数
   条件: (n : 自然数)
   结论: W.preΨ n = W.preΨ' n
   证明: preNormEDS_ofNat ..
@@ -705,7 +705,7 @@ lemma ΨSq_ofNat
 @[simp]
 
 中文:
-引理 ΨSq_ofNat
+引理 ΨSq_of自然数
   条件: (n : 自然数)
   结论: W.ΨSq n = W.preΨ' n ^ 2 * if Even n then W.Ψ₂Sq else 1
   证明: by
@@ -938,7 +938,7 @@ lemma Ψ_ofNat
 @[simp]
 
 中文:
-引理 Ψ_ofNat
+引理 Ψ_of自然数
   条件: (n : 自然数)
   结论: W.Ψ n = C (W.preΨ' n) * if Even n then W.ψ₂ else 1
   证明: by
@@ -1164,7 +1164,7 @@ lemma Affine.CoordinateRing.mk_Ψ_sq
     one_pow, map_pow]
 
 中文:
-引理 Affine.CoordinateRing.mk_Ψ_sq
+引理 仿射.CoordinateRing.mk_Ψ_sq
   条件: (n : 整数)
   结论: mk W (W.Ψ n) ^ 2 = mk W (C <| W.ΨSq n)
   证明: by
@@ -1217,7 +1217,7 @@ lemma Φ_ofNat
 @[simp]
 
 中文:
-引理 Φ_ofNat
+引理 Φ_of自然数
   条件: (n : 自然数)
   结论: W.Φ (n + 1) =
   证明: by
@@ -1601,7 +1601,7 @@ lemma Affine.CoordinateRing.mk_ψ
   simp_rw [ψ, normEDS, Ψ, preΨ, map_mul, map_preNormEDS, map_pow, ← mk_ψ₂_sq, ← pow_mul]
 
 中文:
-引理 Affine.CoordinateRing.mk_ψ
+引理 仿射.CoordinateRing.mk_ψ
   条件: (n : 整数)
   结论: mk W (W.ψ n) = mk W (W.Ψ n)
   证明: by
@@ -1800,7 +1800,7 @@ mul_mul_mul_comm _ mk W ite .., Int.even_add_one, Int.even_sub_one, ite_not, ←
 apply_ite C, apply_ite mk W, ite_pow, map_one, one_pow, mk_ψ₂_sq]
 
 中文:
-引理 Affine.CoordinateRing.mk_φ
+引理 仿射.CoordinateRing.mk_φ
   条件: (n : 整数)
   结论: mk W (W.φ n) = mk W (C <| W.Φ n)
   证明: by

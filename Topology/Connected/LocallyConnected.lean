@@ -38,10 +38,10 @@ class LocallyConnectedSpace
     - open_connected_basis : forall x, (𝓝 x).HasBasis (fun s : Set α => IsOpen s ∧ x in s ∧ IsConnected s) id
 
 中文:
-类 LocallyConnectedSpace
-  参数: (α : 类型) [TopologicalSpace α]
+类 局部连通空间
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (1 个):
-    - open_connected_basis : 对任意 x, (𝓝 x).HasBasis (fun s : Set α => IsOpen s ∧ x in s ∧ IsConnected s) id
+    - open_connected_basis : 对任意 x, (𝓝 x).有基 (fun s : 集合 α => 是开集 s ∧ x in s ∧ 是连通 s) id
 -/
 class LocallyConnectedSpace (α : Type*) [TopologicalSpace α] : Prop where
   /-- Open connected neighborhoods form a basis of the neighborhoods filter. -/
@@ -129,7 +129,7 @@ theorem connectedComponentIn_mem_nhds
 
 中文:
 定理 connectedComponentIn_mem_nhds
-  条件: [LocallyConnectedSpace α] {F : Set α} {x : α} (h : F in 𝓝 x)
+  条件: [局部连通空间 α] {F : 集合 α} {x : α} (h : F in 𝓝 x)
   证明: by
   rw [(LocallyConnectedSpace.open_connected_basis x).mem_iff] at h
   rcases h with ⟨s, ⟨h1s, hxs, h2s⟩, hsF⟩
@@ -156,8 +156,8 @@ theorem IsOpen.connectedComponentIn
   exact connectedComponentIn_mem_nhds (hF.mem_nhds <| connectedComponentIn_subset F x hy)
 
 中文:
-定理 IsOpen.connectedComponentIn
-  结论: [LocallyConnectedSpace α] {F : Set α} {x : α}
+定理 是开集.connectedComponentIn
+  结论: [局部连通空间 α] {F : 集合 α} {x : α}
   证明: by
   rw [isOpen_iff_mem_nhds]
   intro y hy
@@ -183,7 +183,7 @@ theorem isOpen_connectedComponent
 
 中文:
 定理 isOpen_connectedComponent
-  条件: [LocallyConnectedSpace α] {x : α}
+  条件: [局部连通空间 α] {x : α}
   证明: by
   rw [← connectedComponentIn_univ]
   exact isOpen_univ.connectedComponentIn
@@ -205,7 +205,7 @@ theorem isClopen_connectedComponent
 
 中文:
 定理 isClopen_connectedComponent
-  条件: [LocallyConnectedSpace α] {x : α}
+  条件: [局部连通空间 α] {x : α}
   证明: ⟨isClosed_connectedComponent, isOpen_connectedComponent⟩
 
 Depends on / 依赖: isClosed_connectedComponent, isOpen_connectedComponent
@@ -335,7 +335,7 @@ theorem locallyConnectedSpace_of_connected_bases
 
 中文:
 定理 locallyConnectedSpace_of_connected_bases
-  结论: {ι : 类型} (b : α -> ι -> Set α) (p : α -> ι -> 命题)
+  结论: {ι : 类型} (b : α -> ι -> 集合 α) (p : α -> ι -> 命题)
   证明: by
   rw [locallyConnectedSpace_iff_connected_basis]
   exact fun x =>
@@ -366,8 +366,8 @@ theorem TopologicalSpace.IsTopologicalBasis.isOpen_isPreconnected
       (fun _ _ => rfl)
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.isOpen_isPreconnected
-  条件: [LocallyConnectedSpace α]
+定理 拓扑空间.是TopologicalBasis.isOpen_isPreconnected
+  条件: [局部连通空间 α]
   证明: .of_hasBasis_nhds fun x =>
     (LocallyConnectedSpace.open_connected_basis x).congr
       (by grind [IsConnected, Set.Nonempty])
@@ -417,8 +417,8 @@ lemma Topology.IsOpenEmbedding.locallyConnectedSpace
 .restrict_subse
 
 中文:
-引理 Topology.IsOpenEmbedding.locallyConnectedSpace
-  结论: [LocallyConnectedSpace α] [TopologicalSpace β]
+引理 拓扑.是开嵌入.locallyConnectedSpace
+  结论: [局部连通空间 α] [拓扑空间 β]
   证明: by
   refine locallyConnectedSpace_of_connected_bases (fun _ s => f ⁻¹' s)
     (fun x s => (IsOpen s ∧ f x in s ∧ IsConnected s) ∧ s subseteq range f) (fun x => ?_)
@@ -446,8 +446,8 @@ theorem IsOpen.locallyConnectedSpace
   proof: hU.isOpenEmbedding_subtypeVal.locallyConnectedSpace
 
 中文:
-定理 IsOpen.locallyConnectedSpace
-  条件: [LocallyConnectedSpace α] {U : Set α} (hU : IsOpen U)
+定理 是开集.locallyConnectedSpace
+  条件: [局部连通空间 α] {U : 集合 α} (hU : 是开集 U)
   证明: hU.isOpenEmbedding_subtypeVal.locallyConnectedSpace
 
 Depends on / 依赖: hU.isOpenEmbedding_subtypeVal.locallyConnectedSpace, isOpenEmbedding_subtypeVal, locallyConnectedSpace
@@ -468,8 +468,8 @@ theorem Topology.IsCoinducing.locallyConnectedSpace
   exact isOpen_biUnion fun x _ => (hF.preimage hf.continuous).connectedComponentIn
 
 中文:
-定理 Topology.IsCoinducing.locallyConnectedSpace
-  结论: [LocallyConnectedSpace α]
+定理 拓扑.是余inducing.locallyConnectedSpace
+  结论: [局部连通空间 α]
   证明: by
   refine locallyConnectedSpace_iff_connectedComponentIn_open.2 fun F hF y _ => ?_
   rw [← hf.isOpen_preimage]; rw [hf.continuous.continuousOn.preimage_connectedComponentIn]
@@ -496,8 +496,8 @@ instance [LocallyConnectedSpace
     connectedComponents_preimage_singleton, isOpen_connectedComponent]
 
 中文:
-实例 [LocallyConnectedSpace
-  签名: α] : DiscreteTopology ConnectedComponents α
+实例 [局部连通空间
+  签名: α] : 离散拓扑 ConnectedComponents α
   定义体: by
   refine discreteTopology_iff_isOpen_singleton.mpr fun c => ?_
   obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe c
@@ -521,8 +521,8 @@ instance [LocallyConnectedSpace
   body: finite_of_compact_of_discrete
 
 中文:
-实例 [LocallyConnectedSpace
-  签名: α] [CompactSpace α] : Finite ConnectedComponents α
+实例 [局部连通空间
+  签名: α] [紧空间 α] : 有限 ConnectedComponents α
   定义体: finite_of_compact_of_discrete
 
 Depends on / 依赖: finite_of_compact_of_discrete
@@ -545,8 +545,8 @@ instance Prod.locallyConnectedSpace
     isPreconnecte
 
 中文:
-实例 Prod.locallyConnectedSpace
-  签名: [TopologicalSpace β] [LocallyConnectedSpace α]
+实例 积类型.locallyConnectedSpace
+  签名: [拓扑空间 β] [局部连通空间 α]
   定义体: by
   rw [locallyConnectedSpace_iff_connected_subsets]
   rintro ⟨x, y⟩ U hU
@@ -582,8 +582,8 @@ theorem Pi.locallyConnectedSpace_of_finite_not_preconnectedSpace
     set_pi_mem_nhds (hJ.union hfinite) fu
 
 中文:
-定理 Pi.locallyConnectedSpace_of_finite_not_preconnectedSpace
-  结论: [对任意 i, TopologicalSpace (X i)]
+定理 依赖函数类型.locallyConnectedSpace_of_finite_not_preconnectedSpace
+  结论: [对任意 i, 拓扑空间 (X i)]
   证明: by
   refine locallyConnectedSpace_iff_connected_subsets.2 fun x U hU => ?_
   rw [nhds_pi]; rw [Filter.mem_pi] at hU
@@ -623,8 +623,8 @@ instance Pi.locallyConnectedSpace_of_finite
   body: locallyConnectedSpace_of_finite_not_preconnectedSpace (toFinite _)
 
 中文:
-实例 Pi.locallyConnectedSpace_of_finite
-  签名: [Finite ι] [对任意 i, TopologicalSpace (X i)]
+实例 依赖函数类型.locallyConnectedSpace_of_finite
+  签名: [有限 ι] [对任意 i, 拓扑空间 (X i)]
   定义体: locallyConnectedSpace_of_finite_not_preconnectedSpace (toFinite _)
 
 Depends on / 依赖: locallyConnectedSpace_of_finite_not_preconnectedSpace, toFinite
@@ -643,8 +643,8 @@ instance Pi.locallyConnectedSpace
     (finite_empty.subset fun _ hi => hi inferInstance)
 
 中文:
-实例 Pi.locallyConnectedSpace
-  签名: [对任意 i, TopologicalSpace (X i)]
+实例 依赖函数类型.locallyConnectedSpace
+  签名: [对任意 i, 拓扑空间 (X i)]
   定义体: locallyConnectedSpace_of_finite_not_preconnectedSpace
     (finite_empty.subset fun _ hi => hi inferInstance)
 
@@ -673,8 +673,8 @@ theorem Pi.locallyConnectedSpace_iff
     
 
 中文:
-定理 Pi.locallyConnectedSpace_iff
-  条件: [对任意 i, TopologicalSpace (X i)]
+定理 依赖函数类型.locallyConnectedSpace_iff
+  条件: [对任意 i, 拓扑空间 (X i)]
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · rcases isEmpty_or_nonempty (forall i, X i) with he | hne

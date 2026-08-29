@@ -43,8 +43,8 @@ theorem Submodule.natAbs_det_equiv
   let a :=
 
 中文:
-定理 Submodule.natAbs_det_equiv
-  结论: (N : Submodule 整数 M) {E : 类型} [EquivLike E M N]
+定理 子模.natAbs_det_equiv
+  结论: (N : 子模 整数 M) {E : 类型} [等价状 E M N]
   证明: by
   let b := Module.Free.chooseBasis Int M
   -- Since `e : M ≃ₗ[ℤ] N`, the submodule `N` has full rank.
@@ -115,8 +115,8 @@ theorem Submodule.natAbs_det_basis_change
     _ = _ := natAbs_det_equiv N e
 
 中文:
-定理 Submodule.natAbs_det_basis_change
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (b : Basis ι 整数 M)
+定理 子模.natAbs_det_basis_change
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (b : 基 ι 整数 M)
   证明: by
   let e := b.equiv bN (Equiv.refl _)
   calc
@@ -150,8 +150,8 @@ theorem AddSubgroup.index_eq_natAbs_det
   (Submodule.natAbs_det_basis_change bE N.toIntSubmodule bN).symm
 
 中文:
-定理 AddSubgroup.index_eq_natAbs_det
-  结论: {E : 类型} [AddCommGroup E] {ι : 类型}
+定理 加法子群.index_eq_natAbs_det
+  结论: {E : 类型} [加法交换群 E] {ι : 类型}
   证明: have : Module.Free Int E := Module.Free.of_basis bE
   have : Module.Finite Int E := Module.Finite.of_basis bE
   (Submodule.natAbs_det_basis_change bE N.toIntSubmodule bN).symm
@@ -177,8 +177,8 @@ theorem AddSubgroup.relIndex_eq_natAbs_det
   rfl
 
 中文:
-定理 AddSubgroup.relIndex_eq_natAbs_det
-  结论: {E : 类型} [AddCommGroup E]
+定理 加法子群.relIndex_eq_natAbs_det
+  结论: {E : 类型} [加法交换群 E]
   证明: by
   rw [relIndex]; rw [index_eq_natAbs_det b₂ _ (b₁.map (addSubgroupOfEquivOfLe H).toIntLinearEquiv.symm)]
   rfl
@@ -208,8 +208,8 @@ theorem AddSubgroup.relIndex_eq_abs_det
   simp [Basis.toMatrix
 
 中文:
-定理 AddSubgroup.relIndex_eq_abs_det
-  结论: {E : 类型} [AddCommGroup E] [Module Rat E]
+定理 加法子群.relIndex_eq_abs_det
+  结论: {E : 类型} [加法交换群 E] [模 有理数 E]
   证明: by
   rw [AddSubgroup.relIndex_eq_natAbs_det L₁ L₂ H (b₁.addSubgroupOfClosure L₁ h₁)
     (b₂.addSubgroupOfClosure L₂ h₂)]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]

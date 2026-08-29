@@ -51,7 +51,7 @@ definition nullSubgroup
 
 中文:
 定义 nullSubgroup
-  签名: : Subgroup M where
+  签名: : 子群 M where
   定义体: {x : M | ‖x‖ = 0}
   mul_mem' {x y} (hx : ‖x‖ = 0) (hy : ‖y‖ = 0) := by
     apply le_antisymm _ (norm_nonneg' _)
@@ -83,7 +83,7 @@ lemma isClosed_nullSubgroup
 
 中文:
 引理 isClosed_nullSubgroup
-  结论: IsClosed (nullSubgroup M : Set M)
+  结论: 是闭集 (nullSubgroup M : 集合 M)
   证明: by
   apply isClosed_singleton.preimage continuous_norm'
 
@@ -132,7 +132,7 @@ definition nullSubmodule
 
 中文:
 定义 nullSubmodule
-  签名: : Submodule 𝕜 E where
+  签名: : 子模 𝕜 E where
   定义体: nullAddSubgroup E
   smul_mem' c x (hx : ‖x‖ = 0) := by
     apply le_antisymm _ (norm_nonneg _)
@@ -160,7 +160,7 @@ lemma isClosed_nullSubmodule
 
 中文:
 引理 isClosed_nullSubmodule
-  结论: IsClosed (nullSubmodule 𝕜 E : Set E)
+  结论: 是闭集 (nullSubmodule 𝕜 E : 集合 E)
   证明: isClosed_nullAddSubgroup
 
 @[simp]

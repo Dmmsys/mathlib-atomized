@@ -53,7 +53,7 @@ definition geometrically
 
 中文:
 定义 geometrically
-  签名: (P : Object命题erty Scheme.{u})
+  签名: (P : ObjectProperty 概形.{u})
   定义体: fun X Y f => forall ⦃K : Type u⦄ [Field K] (y : Spec (.of K) ⟶ Y)
     ⦃Z : Scheme.{u}⦄ (fst : Z ⟶ X) (snd : Z ⟶ Spec (.of K)),
     IsPullback fst snd f y -> P Z
@@ -81,7 +81,7 @@ lemma geometrically_eq_universally
 
 中文:
 引理 geometrically_eq_universally
-  条件: (P : Object命题erty Scheme.{u})
+  条件: (P : ObjectProperty 概形.{u})
   证明: by
   ext X Y f
   refine ⟨fun hf Z W snd q fst h _ _ => ?_, fun hf aK y Z W fst snd h => ?_⟩
@@ -115,7 +115,7 @@ lemma geometrically_inf
 
 中文:
 引理 geometrically_inf
-  条件: (P Q : Object命题erty Scheme.{u})
+  条件: (P Q : ObjectProperty 概形.{u})
   证明: by
   simp only [geometrically_eq_universally, ← MorphismProperty.universally_inf]
   congr with X Y f
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (geometrically P).IsStableUnderBaseChange
+  签名: (geometrically P).是StableUnderBaseChange
   定义体: by
   rw [geometrically_eq_universally]
   infer_instance
@@ -170,7 +170,7 @@ instance [P.IsClosedUnderIsomorphisms]
   let e : ↑(U i) ≅ Y :
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
+实例 [P.在同构下封闭]
   签名: : IsZariskiLocalAtTarget (geometrically P)
   定义体: by
   rw [geometrically_eq_universally]
@@ -206,7 +206,7 @@ lemma pullback_of_geometrically
 
 中文:
 引理 pullback_of_geometrically
-  结论: (hf : geometrically P f) (K : 类型u) [Field K]
+  结论: (hf : geometrically P f) (K : 类型u) [域 K]
   证明: hf _ _ _ (.of_hasPullback _ _)
 
 Depends on / 依赖: of_hasPullback
@@ -225,7 +225,7 @@ lemma pullback_of_geometrically'
 
 中文:
 引理 pullback_of_geometrically'
-  结论: (hf : geometrically P f) (K : 类型u) [Field K]
+  结论: (hf : geometrically P f) (K : 类型u) [域 K]
   证明: hf _ _ _ (.flip <| .of_hasPullback _ _)
 
 Depends on / 依赖: of_hasPullback
@@ -246,7 +246,7 @@ lemma geometrically_iff_of_isClosedUnderIsomorphisms
 
 中文:
 引理 geometrically_iff_of_isClosedUnderIsomorphisms
-  条件: [P.IsClosedUnderIsomorphisms]
+  条件: [P.在同构下封闭]
   证明: by
   refine ⟨fun h K _ _ => pullback_of_geometrically h _ _, fun H K _ _ Y fst snd h => ?_⟩
   exact P.prop_of_iso h.isoPullback.symm (H _ _)
@@ -294,7 +294,7 @@ lemma geometrically_iff_forall_fiberToSpecResidueField
   apply H 
 
 中文:
-引理 geometrically_iff_forall_fiberToSpecResidueField
+引理 geometrically_iff_对任意_fiberToSpecResidueField
   证明: by
   refine ⟨fun hf y => (geometrically P).pullback_snd _ _ hf, fun H => ?_⟩
   intro K _ y Z fst snd h
@@ -330,8 +330,8 @@ lemma self_of_isIntegral_of_geometrically
   exact MorphismProperty.universally_le _ _ hf ‹_› ‹_›
 
 中文:
-引理 self_of_isIntegral_of_geometrically
-  条件: [Is整数egral Y] [Subsingleton Y] (hf : geometrically P f)
+引理 self_of_is整数egral_of_geometrically
+  条件: [是整 Y] [子单例 Y] (hf : geometrically P f)
   证明: by
   rw [geometrically_eq_universally] at hf
   exact MorphismProperty.universally_le _ _ hf ‹_› ‹_›
@@ -391,7 +391,7 @@ lemma geometrically_iff_of_commRing_of_isClosedUnderIsomorphisms
 
 中文:
 引理 geometrically_iff_of_commRing_of_isClosedUnderIsomorphisms
-  条件: [P.IsClosedUnderIsomorphisms]
+  条件: [P.在同构下封闭]
   证明: by
   refine ⟨fun hf K _ _ => pullback_of_geometrically hf _ _, fun H => ?_⟩
   rw [geometrically_iff_of_isClosedUnderIsomorphisms]

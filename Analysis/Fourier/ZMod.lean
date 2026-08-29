@@ -103,7 +103,7 @@ lemma auxDFT_auxDFT
 中文:
 引理 auxDFT_auxDFT
   条件: (Φ : ZMod N -> E)
-  结论: auxDFT (auxDFT Φ) = fun j => (N : Complex) • Φ (-j)
+  结论: auxDFT (auxDFT Φ) = fun j => (N : 复形) • Φ (-j)
   证明: by
   ext1 j
   simp only [auxDFT, mul_comm _ j, smul_sum, ← smul_assoc, smul_eq_mul, ← map_add_eq_mul, ←
@@ -140,7 +140,7 @@ lemma auxDFT_smul
 
 中文:
 引理 auxDFT_smul
-  条件: (c : Complex) (Φ : ZMod N -> E)
+  条件: (c : 复形) (Φ : ZMod N -> E)
   证明: by
   ext; simp only [Pi.smul_def, auxDFT, smul_sum, smul_comm c]
 -/
@@ -171,7 +171,7 @@ definition dft
 
 中文:
 定义 dft
-  签名: : (ZMod N -> E) ≃ₗ[Complex] (ZMod N -> E) where
+  签名: : (ZMod N -> E) ≃ₗ[复形] (ZMod N -> E) where
   定义体: auxDFT
   map_add' Φ₁ Φ₂ := by
     ext; simp only [auxDFT, Pi.add_def, smul_add, sum_add_distrib]
@@ -288,7 +288,7 @@ lemma invDFT_apply'
 中文:
 引理 invDFT_apply'
   条件: (Ψ : ZMod N -> E) (k : ZMod N)
-  结论: 𝓕⁻ Ψ k = (N : Complex)⁻¹ • 𝓕 Ψ (-k)
+  结论: 𝓕⁻ Ψ k = (N : 复形)⁻¹ • 𝓕 Ψ (-k)
   证明: rfl
 -/
 lemma invDFT_apply' (Ψ : ZMod N -> E) (k : ZMod N) : 𝓕⁻ Ψ k = (N : Complex)⁻¹ • 𝓕 Ψ (-k) :=
@@ -306,7 +306,7 @@ lemma invDFT_def'
 中文:
 引理 invDFT_def'
   条件: (Ψ : ZMod N -> E)
-  结论: 𝓕⁻ Ψ = fun k => (N : Complex)⁻¹ • 𝓕 Ψ (-k)
+  结论: 𝓕⁻ Ψ = fun k => (N : 复形)⁻¹ • 𝓕 Ψ (-k)
   证明: rfl
 -/
 lemma invDFT_def' (Ψ : ZMod N -> E) : 𝓕⁻ Ψ = fun k => (N : Complex)⁻¹ • 𝓕 Ψ (-k) :=
@@ -346,7 +346,7 @@ integral_countable .of_finite .., count_real_singleton, one_smul, tsum_fintype]
 
 中文:
 引理 dft_eq_fourier
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace Complex E] [CompleteSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 复形 E] [完备空间 E]
   证明: by
   simp only [dft_apply, stdAddChar_apply, Fourier.fourierIntegral_def, Circle.smul_def,
 integral_countable .of_finite .., count_real_singleton, one_smul, tsum_fintype]
@@ -374,7 +374,7 @@ lemma dft_const_smul
 
 中文:
 引理 dft_const_smul
-  条件: {R : 类型} [DistribSMul R E] [SMulCommClass R Complex E] (r : R) (Φ : ZMod N -> E)
+  条件: {R : 类型} [分配标量乘法 R E] [标量交换类 R 复形 E] (r : R) (Φ : ZMod N -> E)
   证明: by
   simp only [Pi.smul_def, dft_def, smul_sum, smul_comm]
 
@@ -395,7 +395,7 @@ lemma dft_smul_const
 
 中文:
 引理 dft_smul_const
-  结论: {R : 类型} [Ring R] [Module Complex R] [Module R E] [IsScalarTower Complex R E]
+  结论: {R : 类型} [环 R] [模 复形 R] [模 R E] [标量塔 复形 R E]
   证明: by
   simp only [dft_def, sum_smul, smul_assoc]
 
@@ -416,7 +416,7 @@ lemma dft_const_mul
 
 中文:
 引理 dft_const_mul
-  条件: {R : 类型} [Ring R] [Algebra Complex R] (r : R) (Φ : ZMod N -> R)
+  条件: {R : 类型} [环 R] [代数 复形 R] (r : R) (Φ : ZMod N -> R)
   证明: dft_const_smul r Φ
 
 Depends on / 依赖: dft_const_smul
@@ -435,7 +435,7 @@ lemma dft_mul_const
 
 中文:
 引理 dft_mul_const
-  条件: {R : 类型} [Ring R] [Algebra Complex R] (Φ : ZMod N -> R) (r : R)
+  条件: {R : 类型} [环 R] [代数 复形 R] (Φ : ZMod N -> R) (r : R)
   证明: dft_smul_const Φ r
 
 Depends on / 依赖: dft_smul_const
@@ -480,7 +480,7 @@ lemma dft_dft
 中文:
 引理 dft_dft
   条件: (Φ : ZMod N -> E)
-  结论: 𝓕 (𝓕 Φ) = fun j => (N : Complex) • Φ (-j)
+  结论: 𝓕 (𝓕 Φ) = fun j => (N : 复形) • Φ (-j)
   证明: auxDFT_auxDFT ..
 
 Depends on / 依赖: auxDFT_auxDFT
@@ -531,7 +531,7 @@ lemma dft_even_iff
 
 中文:
 引理 dft_even_iff
-  条件: {Φ : ZMod N -> Complex}
+  条件: {Φ : ZMod N -> 复形}
   结论: (𝓕 Φ).Even ↔ Φ.Even
   证明: by
   have h {f : ZMod N -> Complex} (hf : f.Even) : (𝓕 f).Even := by
@@ -563,7 +563,7 @@ lemma dft_odd_iff
 
 中文:
 引理 dft_odd_iff
-  条件: {Φ : ZMod N -> Complex}
+  条件: {Φ : ZMod N -> 复形}
   结论: (𝓕 Φ).Odd ↔ Φ.Odd
   证明: by
   have h {f : ZMod N -> Complex} (hf : f.Odd) : (𝓕 f).Odd := by
@@ -602,7 +602,7 @@ lemma fourierTransform_eq_gaussSum_mulShift
 
 中文:
 引理 fourierTransform_eq_gaussSum_mulShift
-  条件: (χ : DirichletCharacter Complex N) (k : ZMod N)
+  条件: (χ : DirichletCharacter 复形 N) (k : ZMod N)
   证明: by
   simp only [dft_apply, smul_eq_mul]
   congr 1 with j
@@ -626,8 +626,8 @@ lemma IsPrimitive.fourierTransform_eq_inv_mul_gaussSum
   rw [fourierTransform_eq_gaussSum_mulShift]; rw [gaussSum_mulShift_of_isPrimitive _ hχ]
 
 中文:
-引理 IsPrimitive.fourierTransform_eq_inv_mul_gaussSum
-  结论: {χ : DirichletCharacter Complex N}
+引理 是Primitive.fourierTransform_eq_inv_mul_gaussSum
+  结论: {χ : DirichletCharacter 复形 N}
   证明: by
   rw [fourierTransform_eq_gaussSum_mulShift]; rw [gaussSum_mulShift_of_isPrimitive _ hχ]
 

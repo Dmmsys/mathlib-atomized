@@ -68,8 +68,8 @@ exact num_nonneg.mp Int.natCast_nonneg _
 
 中文:
 定理 ofScientific_nonneg
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
-  结论: 0 <= Rat.ofScientific m s e
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
+  结论: 0 <= 有理数.ofScientific m s e
   证明: by
   rw [Rat.ofScientific]
   cases s
@@ -95,8 +95,8 @@ instance _root_.NNRatCast.toOfScientific
   body: NNRat.cast ⟨Rat.ofScientific m b d, ofScientific_nonneg m b d⟩
 
 中文:
-实例 _root_.NNRatCast.toOfScientific
-  签名: {K} [NNRatCast K]
+实例 _root_.非负有理数嵌入.toOfScientific
+  签名: {K} [非负有理数嵌入 K]
   定义体: NNRat.cast ⟨Rat.ofScientific m b d, ofScientific_nonneg m b d⟩
 
 Depends on / 依赖: NNRat.cast, Rat.ofScientific, ofScientific, ofScientific_nonneg
@@ -114,8 +114,8 @@ theorem _root_.NNRatCast.toOfScientific_def
   proof: rfl
 
 中文:
-定理 _root_.NNRatCast.toOfScientific_def
-  条件: {K} [NNRatCast K] (m : 自然数) (b : 布尔) (d : 自然数)
+定理 _root_.非负有理数嵌入.toOfScientific_def
+  条件: {K} [非负有理数嵌入 K] (m : 自然数) (b : 布尔值) (d : 自然数)
   证明: rfl
 -/
 theorem _root_.NNRatCast.toOfScientific_def {K} [NNRatCast K] (m : Nat) (b : Bool) (d : Nat) :
@@ -135,7 +135,7 @@ theorem _root_.NNRat.cast_ofScientific
 
 中文:
 定理 _root_.NNRat.cast_ofScientific
-  条件: {K} [NNRatCast K] (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: {K} [非负有理数嵌入 K] (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 -/
 theorem _root_.NNRat.cast_ofScientific {K} [NNRatCast K] (m : Nat) (s : Bool) (e : Nat) :
@@ -153,7 +153,7 @@ lemma divInt_le_divInt
   simp [sub_eq_add_neg, ne_of_gt b0, ne_of_gt d0, Int.mul_pos d0 b0]
 
 中文:
-引理 divInt_le_divInt
+引理 div整数_le_div整数
   条件: {a b c d : 整数} (b0 : 0 < b) (d0 : 0 < d)
   证明: by
   rw [Rat.le_iff_sub_nonneg]; rw [← Int.sub_nonneg]
@@ -175,7 +175,7 @@ lemma lt_iff_le_not_ge
 
 中文:
 引理 lt_iff_le_not_ge
-  条件: (a b : Rat)
+  条件: (a b : 有理数)
   结论: a < b ↔ a <= b ∧ ¬b <= a
   证明: Std.LawfulOrderLT.lt_iff a b
 -/
@@ -199,7 +199,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder Rat where
+  签名: : 线性序 有理数 where
   定义体: Rat.le_refl
   le_trans _ _ _ := Rat.le_trans
   le_antisymm _ _ := Rat.le_antisymm
@@ -386,7 +386,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: : DistribLattice Rat
+  签名: : Distrib格 有理数
   定义体: inferInstance
 -/
 instance instDistribLattice : DistribLattice Rat := inferInstance
@@ -400,7 +400,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice Rat
+  签名: : 格 有理数
   定义体: inferInstance
 -/
 instance instLattice : Lattice Rat := inferInstance
@@ -414,7 +414,7 @@ instance instSemilatticeInf
 
 中文:
 实例 instSemilatticeInf
-  签名: : SemilatticeInf Rat
+  签名: : SemilatticeInf 有理数
   定义体: inferInstance
 -/
 instance instSemilatticeInf : SemilatticeInf Rat := inferInstance
@@ -428,7 +428,7 @@ instance instSemilatticeSup
 
 中文:
 实例 instSemilatticeSup
-  签名: : SemilatticeSup Rat
+  签名: : SemilatticeSup 有理数
   定义体: inferInstance
 -/
 instance instSemilatticeSup : SemilatticeSup Rat := inferInstance
@@ -442,7 +442,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min Rat
+  签名: : 最小值 有理数
   定义体: inferInstance
 -/
 instance instInf : Min Rat := inferInstance
@@ -456,7 +456,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max Rat
+  签名: : 最大值 有理数
   定义体: inferInstance
 -/
 instance instSup : Max Rat := inferInstance
@@ -470,7 +470,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder Rat
+  签名: : 偏序 有理数
   定义体: inferInstance
 -/
 instance instPartialOrder : PartialOrder Rat := inferInstance
@@ -484,7 +484,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder Rat
+  签名: : 预序 有理数
   定义体: inferInstance
 -/
 instance instPreorder : Preorder Rat := inferInstance
@@ -500,7 +500,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddLeftMono Rat
+  签名: AddLeftMono 有理数
   定义体: fun _ _ _ h => Rat.add_le_add_left.2 h
 
 Depends on / 依赖: Rat.add_le_add_left, add_le_add_left
@@ -520,7 +520,7 @@ lemma num_nonpos
 
 中文:
 引理 num_nonpos
-  条件: {a : Rat}
+  条件: {a : 有理数}
   结论: a.num <= 0 ↔ a <= 0
   证明: by
   simp +instances [Int.le_iff_lt_or_eq, instLE, Rat.blt]
@@ -538,7 +538,7 @@ lemma num_pos
 
 中文:
 引理 num_pos
-  条件: {a : Rat}
+  条件: {a : 有理数}
   结论: 0 < a.num ↔ 0 < a
   证明: lt_iff_lt_of_le_iff_le num_nonpos
 -/
@@ -554,7 +554,7 @@ lemma num_neg
 
 中文:
 引理 num_neg
-  条件: {a : Rat}
+  条件: {a : 有理数}
   结论: a.num < 0 ↔ a < 0
   证明: lt_iff_lt_of_le_iff_le num_nonneg
 -/
@@ -598,7 +598,7 @@ theorem num_le_denom_iff
 
 中文:
 定理 num_le_denom_iff
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: q.num <= q.den ↔ q <= 1
   证明: by simp [Rat.le_iff]
 
@@ -619,7 +619,7 @@ theorem num_lt_denom_iff
 
 中文:
 定理 num_lt_denom_iff
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: q.num < q.den ↔ q < 1
   证明: by simp [Rat.lt_iff]
 
@@ -643,7 +643,7 @@ theorem abs_def
 
 中文:
 定理 abs_def
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: |q| = q.num.natAbs /. q.den
   证明: by
   grind [abs_of_nonpos, neg_def, Rat.num_nonneg, abs_of_nonneg, num_divInt_den]
@@ -668,7 +668,7 @@ theorem abs_def'
 
 中文:
 定理 abs_def'
-  条件: (q : Rat)
+  条件: (q : 有理数)
   证明: by
   refine ext ?_ ?_ <;>
     simp [Int.abs_eq_natAbs, abs_def,
@@ -699,7 +699,7 @@ theorem num_abs_eq_abs_num
 
 中文:
 定理 num_abs_eq_abs_num
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: |q|.num = |q.num|
   证明: by
   rw [abs_def']
@@ -724,7 +724,7 @@ theorem den_abs_eq_den
 
 中文:
 定理 den_abs_eq_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: |q|.den = q.den
   证明: by
   rw [abs_def']

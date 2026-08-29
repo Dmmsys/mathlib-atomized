@@ -1295,7 +1295,7 @@ lemma resultant_dvd_leadingCoeff_pow
 
 中文:
 引理 resultant_dvd_leadingCoeff_pow
-  条件: [IsDomain R] (f g : R[X]) (H : IsCoprime f g)
+  条件: [是整环 R] (f g : R[X]) (H : IsCoprime f g)
   证明: by
   obtain rfl | hf := eq_or_ne f 0
   · simp only [isCoprime_zero_left, isUnit_iff] at H
@@ -1350,7 +1350,7 @@ lemma resultant_ne_zero
 
 中文:
 引理 resultant_ne_zero
-  条件: [IsDomain R] (f g : R[X]) (H : IsCoprime f g)
+  条件: [是整环 R] (f g : R[X]) (H : IsCoprime f g)
   证明: by
   obtain rfl | hf := eq_or_ne f 0
   · simp only [isCoprime_zero_left, isUnit_iff] at H
@@ -1388,7 +1388,7 @@ lemma resultant_prod_left
 
 中文:
 引理 resultant_prod_left
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> R[X]) (g : R[X])
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> R[X]) (g : R[X])
   证明: by
   classical
   induction s using Finset.induction with
@@ -1427,7 +1427,7 @@ lemma resultant_prod_right
 
 中文:
 引理 resultant_prod_right
-  结论: {ι : 类型} (s : Finset ι) (f : R[X]) (g : ι -> R[X])
+  结论: {ι : 类型} (s : 有限集 ι) (f : R[X]) (g : ι -> R[X])
   证明: by
   simp_rw [resultant_comm f]
   rw [resultant_prod_left _ _ _ _ hg hm]; rw [Finset.prod_mul_distrib]; rw [Finset.prod_pow_eq_pow_sum]; rw [← Finset.mul_sum]; rw [natDegree_prod' _ _ hg]
@@ -1953,7 +1953,7 @@ lemma exists_mul_add_mul_eq_C_resultant
   refine ⟨X.2, X.1, by simpa [-Se
 
 中文:
-引理 exists_mul_add_mul_eq_C_resultant
+引理 存在_mul_add_mul_eq_C_resultant
   证明: by
   nontriviality R
   let X := adjSylvester f g ⟨1, by simpa [Polynomial.mem_degreeLT,
@@ -2039,7 +2039,7 @@ lemma resultant_eq_zero_iff
 
 中文:
 引理 resultant_eq_zero_iff
-  条件: {K : 类型} [Field K] {f g : K[X]}
+  条件: {K : 类型} [域 K] {f g : K[X]}
   证明: by
   obtain rfl | hf := eq_or_ne f 0
   · obtain rfl | hg := eq_or_ne g 0; · simp

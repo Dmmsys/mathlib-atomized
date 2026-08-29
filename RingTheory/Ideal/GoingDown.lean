@@ -51,10 +51,10 @@ class Algebra.HasGoingDown
     - exists_ideal_le_liesOver_of_lt({p : Ideal R} [p.IsPrime] (Q : Ideal S) [Q.IsPrime]) : p < Q.under R -> exists P <= Q, P.IsPrime ∧ P.LiesOver p
 
 中文:
-类 Algebra.HasGoingDown
-  参数: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+类 代数.有GoingDown
+  参数: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   公理与运算 (1 个):
-    - exists_ideal_le_liesOver_of_lt({p : Ideal R} [p.IsPrime] (Q : Ideal S) [Q.IsPrime]) : p < Q.under R -> 存在 P <= Q, P.IsPrime ∧ P.LiesOver p
+    - exists_ideal_le_liesOver_of_lt({p : 理想 R} [p.是素] (Q : 理想 S) [Q.是素]) : p < Q.under R -> 存在 P <= Q, P.是素 ∧ P.LiesOver p
 -/
 class Algebra.HasGoingDown (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] : Prop where
   exists_ideal_le_liesOver_of_lt {p : Ideal R} [p.IsPrime] (Q : Ideal S) [Q.IsPrime] :
@@ -77,8 +77,8 @@ lemma Ideal.exists_ideal_le_liesOver_of_le
     exact Algebra.HasGoingDown.exists_ideal_le_liesOver_of_lt Q (lt_of_le_of_ne hle h)
 
 中文:
-引理 Ideal.exists_ideal_le_liesOver_of_le
-  结论: [Algebra.HasGoingDown R S]
+引理 理想.存在_ideal_le_liesOver_of_le
+  结论: [代数.有GoingDown R S]
   证明: by
   by_cases h : p = q
   · subst h
@@ -115,8 +115,8 @@ lemma Ideal.exists_ideal_lt_liesOver_of_lt
   simp [P.over_def p, P.over_def q] at hpq
 
 中文:
-引理 Ideal.exists_ideal_lt_liesOver_of_lt
-  结论: [Algebra.HasGoingDown R S]
+引理 理想.存在_ideal_lt_liesOver_of_lt
+  结论: [代数.有GoingDown R S]
   证明: by
   obtain ⟨P, hPQ, _, _⟩ := Q.exists_ideal_le_liesOver_of_le (p := p) (q := q) hpq.le
   refine ⟨P, ?_, inferInstance, inferInstance⟩
@@ -152,8 +152,8 @@ lemma Ideal.exists_ltSeries_of_hasGoingDown
       List.map_cons, List.map_nil, List.cons.injEq, and_true, true_and
 
 中文:
-引理 Ideal.exists_ltSeries_of_hasGoingDown
-  结论: [Algebra.HasGoingDown R S]
+引理 理想.存在_ltSeries_of_hasGoingDown
+  结论: [代数.有GoingDown R S]
   证明: by
   induction l using RelSeries.inductionOn generalizing P with
   | singleton q =>
@@ -256,7 +256,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: (T : 类型) [CommRing T] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
+  结论: (T : 类型) [交换环 T] [代数 R T] [代数 S T] [标量塔 R S T]
   证明: by
   rw [iff_generalizingMap_primeSpectrumComap]; rw [IsScalarTower.algebraMap_eq R S T]
   simp only [PrimeSpectrum.comap_comp]
@@ -333,7 +333,7 @@ instance of_flat
 
 中文:
 实例 of_flat
-  签名: [Module.Flat R S]
+  签名: [模.平坦 R S]
   定义体: by
   apply of_comap_localRingHom_surjective
   intro P hP

@@ -142,7 +142,7 @@ lemma trace_toEnd_eq_zero
 
 中文:
 引理 trace_toEnd_eq_zero
-  结论: {s : Set L} (hs : 对任意 x in s, LinearMap.trace R _ (toEnd R _ M x) = 0)
+  结论: {s : 集合 L} (hs : 对任意 x in s, 线性映射.trace R _ (toEnd R _ M x) = 0)
   证明: by
   induction hx using LieSubalgebra.lieSpan_induction with
   | mem u hu => simpa using hs u hu

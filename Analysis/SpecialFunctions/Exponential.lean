@@ -308,7 +308,7 @@ theorem hasFDerivAt_exp_zero
 
 中文:
 定理 hasFDerivAt_exp_zero
-  结论: HasFDerivAt exp (1 : 𝔸 ->L[𝕂] 𝔸) 0
+  结论: 在点处Fréchet可导 exp (1 : 𝔸 ->L[𝕂] 𝔸) 0
   证明: hasStrictFDerivAt_exp_zero.hasFDerivAt
 
 Depends on / 依赖: hasFDerivAt, hasStrictFDerivAt_exp_zero, hasStrictFDerivAt_exp_zero.hasFDerivAt
@@ -354,7 +354,7 @@ theorem hasFDerivAt_exp
 中文:
 定理 hasFDerivAt_exp
   条件: {x : 𝔸}
-  结论: HasFDerivAt exp (exp x • (1 : 𝔸 ->L[𝕂] 𝔸)) x
+  结论: 在点处Fréchet可导 exp (exp x • (1 : 𝔸 ->L[𝕂] 𝔸)) x
   证明: hasStrictFDerivAt_exp.hasFDerivAt
 
 Depends on / 依赖: hasFDerivAt, hasStrictFDerivAt_exp, hasStrictFDerivAt_exp.hasFDerivAt
@@ -400,7 +400,7 @@ theorem hasDerivAt_exp
 中文:
 定理 hasDerivAt_exp
   条件: {x : 𝕂}
-  结论: HasDerivAt exp (exp x) x
+  结论: 在点处可导 exp (exp x) x
   证明: hasStrictDerivAt_exp.hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_exp, hasStrictDerivAt_exp.hasDerivAt
@@ -436,7 +436,7 @@ theorem hasDerivAt_exp_zero
 
 中文:
 定理 hasDerivAt_exp_zero
-  结论: HasDerivAt exp (1 : 𝕂) 0
+  结论: 在点处可导 exp (1 : 𝕂) 0
   证明: hasStrictDerivAt_exp_zero.hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_exp_zero, hasStrictDerivAt_exp_zero.hasDerivAt
@@ -458,8 +458,8 @@ theorem Complex.exp_eq_exp_Complex
   exact tendsto_nhds_unique x.exp'.tendsto_limit (expSeries_div_summable x).hasSum.tendsto_sum_nat
 
 中文:
-定理 Complex.exp_eq_exp_Complex
-  结论: Complex.exp = NormedSpace.exp
+定理 复形.exp_eq_exp_Complex
+  结论: 复形.exp = 赋范空间.exp
   证明: by
   refine funext fun x => ?_
   rw [Complex.exp]; rw [exp_eq_tsum_div]
@@ -482,8 +482,8 @@ theorem Real.exp_eq_exp_Real
   ext x; exact mod_cast congr_fun Complex.exp_eq_exp_Complex x
 
 中文:
-定理 Real.exp_eq_exp_Real
-  结论: 实数.exp = NormedSpace.exp
+定理 实数.exp_eq_exp_实数
+  结论: 实数.exp = 赋范空间.exp
   证明: by
   ext x; exact mod_cast congr_fun Complex.exp_eq_exp_Complex x
 

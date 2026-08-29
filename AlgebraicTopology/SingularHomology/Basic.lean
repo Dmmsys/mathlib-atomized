@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: (singularChainComplexFunctor C).Additive
+  签名: (singularChainComplexFunctor C).加性
   定义体: by
   delta singularChainComplexFunctor
   infer_instance
@@ -89,7 +89,7 @@ instance [Limits.HasPullbacks
     infer_instance
 
 中文:
-实例 [Limits.HasPullbacks
+实例 [Limits.有Pullbacks
   签名: C] {X
   定义体: by
     dsimp [singularChainComplexFunctor, SSet.chainComplexFunctor]
@@ -120,7 +120,7 @@ definition singularHomologyFunctor
 
 中文:
 定义 singularHomologyFunctor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: singularChainComplexFunctor C ⋙
     (Functor.whiskeringRight _ _ _).obj (HomologicalComplex.homologyFunctor _ _ n)
 
@@ -147,7 +147,7 @@ definition singularChainComplexFunctorAdjunction
 
 中文:
 定义 singularChainComplexFunctorAdjunction
-  签名: : (Functor.postcompose₂.obj (eval _ _ n)).obj
+  签名: : (函子.postcompose₂.obj (eval _ _ n)).obj
   定义体: ((SSet.chainComplexFunctorAdjunction C n).comp (sSetTopAdj.whiskerLeft _)).ofNatIsoRight
     ((evaluation TopCat C).mapIso (SSet.toTopSimplex.app _))
 
@@ -215,7 +215,7 @@ lemma ι_singularChainComplexFunctorAdjunction_counit_app_app
 
 中文:
 引理 ι_singularChainComplexFunctorAdjunction_counit_app_app
-  条件: (F : TopCat ⥤ C) (X : TopCat) (i)
+  条件: (F : 顶元素范畴 ⥤ C) (X : 顶元素范畴) (i)
   证明: by
   trans F.map (SSet.toTopSimplex.inv.app ⦋n⦌ ≫ SSet.toTop.map (SSet.yonedaEquiv.symm i) ≫
       sSetTopAdj.counit.app X)
@@ -347,7 +347,7 @@ definition singularHomologyFunctorZeroOfTotallyDisconnectedSpace
 
 中文:
 定义 singularHomologyFunctorZeroOfTotallyDisconnectedSpace
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: have : HasZeroObject C :=
     have := hasCoproducts_shrink.{0, w} (C := C)
     ⟨_, initialIsInitial.isZero⟩

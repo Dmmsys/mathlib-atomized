@@ -157,7 +157,7 @@ definition adjToMonadIso
 
 中文:
 定义 adjToMonadIso
-  签名: (T : Monad C)
+  签名: (T : 单子 C)
   定义体: MonadIso.mk (NatIso.ofComponents fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, MonadIso, MonadIso.mk, NatIso, NatIso.ofComponents, ofComponents
@@ -179,7 +179,7 @@ definition adjToComonadIso
 
 中文:
 定义 adjToComonadIso
-  签名: (G : Comonad C)
+  签名: (G : 余单子 C)
   定义体: ComonadIso.mk (NatIso.ofComponents fun _ => Iso.refl _)
 
 Depends on / 依赖: ComonadIso, ComonadIso.mk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -244,7 +244,7 @@ lemma isIso_unit_of_iso
 中文:
 引理 isIso_unit_of_iso
   条件: (adj : L ⊣ R) (i : L ⋙ R ≅ 𝟭 C)
-  结论: IsIso adj.unit
+  结论: 是同构 adj.unit
   证明: (inferInstanceAs (IsIso (unitAsIsoOfIso adj i).hom))
 
 Depends on / 依赖: unitAsIsoOfIso
@@ -327,7 +327,7 @@ lemma isIso_counit_of_iso
 中文:
 引理 isIso_counit_of_iso
   条件: (adj : L ⊣ R) (j : R ⋙ L ≅ 𝟭 D)
-  结论: IsIso adj.counit
+  结论: 是同构 adj.counit
   证明: inferInstanceAs (IsIso (counitAsIsoOfIso adj j).hom)
 
 Depends on / 依赖: counitAsIsoOfIso
@@ -384,7 +384,7 @@ definition Monad.comparison
         rw [← R.map_comp]; rw [Adjunction.counit_naturality]; rw [R.map_comp] }
 
 中文:
-定义 Monad.comparison
+定义 单子.comparison
   签名: (h : L ⊣ R)
   定义体: { A := R.obj X
       a := R.map (h.counit.app X)
@@ -426,7 +426,7 @@ definition Monad.comparisonForget
   inv := { app := fun _ => 𝟙 _ }
 
 中文:
-定义 Monad.comparisonForget
+定义 单子.comparisonForget
   签名: (h : L ⊣ R)
   定义体: { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
@@ -445,9 +445,9 @@ theorem Monad.left_comparison
   proof: rfl
 
 中文:
-定理 Monad.left_comparison
+定理 单子.left_comparison
   条件: (h : L ⊣ R)
-  结论: L ⋙ Monad.comparison h = h.toMonad.free
+  结论: L ⋙ 单子.comparison h = h.toMonad.free
   证明: rfl
 -/
 theorem Monad.left_comparison (h : L ⊣ R) : L ⋙ Monad.comparison h = h.toMonad.free :=
@@ -462,7 +462,7 @@ instance [R.Faithful]
   body: R.map_injective (congr_arg Monad.Algebra.Hom.f w :)
 
 中文:
-实例 [R.Faithful]
+实例 [R.忠实]
   签名: (h : L ⊣ R)
   定义体: R.map_injective (congr_arg Monad.Algebra.Hom.f w :)
 
@@ -510,7 +510,7 @@ definition Comonad.comparison
         simp }
 
 中文:
-定义 Comonad.comparison
+定义 余单子.comparison
   签名: (h : L ⊣ R)
   定义体: { A := L.obj X
       a := L.map (h.unit.app X)
@@ -554,7 +554,7 @@ definition Comonad.comparisonForget
   inv := { app := fun _ => 𝟙 _ }
 
 中文:
-定义 Comonad.comparisonForget
+定义 余单子.comparisonForget
   签名: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
   定义体: { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
@@ -574,9 +574,9 @@ theorem Comonad.left_comparison
   proof: rfl
 
 中文:
-定理 Comonad.left_comparison
+定理 余单子.left_comparison
   条件: (h : L ⊣ R)
-  结论: R ⋙ Comonad.comparison h = h.toComonad.cofree
+  结论: R ⋙ 余单子.comparison h = h.toComonad.cofree
   证明: rfl
 -/
 theorem Comonad.left_comparison (h : L ⊣ R) : R ⋙ Comonad.comparison h = h.toComonad.cofree :=
@@ -591,8 +591,8 @@ instance Comonad.comparison_faithful_of_faithful
   body: L.map_injective (congr_arg Comonad.Coalgebra.Hom.f w :)
 
 中文:
-实例 Comonad.comparison_faithful_of_faithful
-  签名: [L.Faithful] (h : L ⊣ R)
+实例 余单子.comparison_faithful_of_faithful
+  签名: [L.忠实] (h : L ⊣ R)
   定义体: L.map_injective (congr_arg Comonad.Coalgebra.Hom.f w :)
 
 Depends on / 依赖: Coalgebra, Comonad, Comonad.Coalgebra.Hom.f, L.map_injective, congr_arg, map_injective
@@ -631,7 +631,7 @@ class MonadicRightAdjoint
   公理与运算 (3 个):
     - L : C ⥤ D
     - adj : L ⊣ R
-    - eqv : (Monad.comparison adj).IsEquivalence
+    - eqv : (单子.comparison adj).是等价
 -/
 class MonadicRightAdjoint (R : D ⥤ C) where
   /-- a choice of left adjoint for `R` -/
@@ -701,12 +701,12 @@ class ComonadicLeftAdjoint
     - eqv : (Comonad.comparison adj).IsEquivalence
 
 中文:
-类 ComonadicLeftAdjoint
+类 余monadicLeftAdjoint
   参数: (L : C ⥤ D)
   公理与运算 (3 个):
     - R : D ⥤ C
     - adj : L ⊣ R
-    - eqv : (Comonad.comparison adj).IsEquivalence
+    - eqv : (余单子.comparison adj).是等价
 -/
 class ComonadicLeftAdjoint (L : C ⥤ D) where
   /-- a choice of right adjoint for `L` -/
@@ -725,7 +725,7 @@ definition comonadicRightAdjoint
 
 中文:
 定义 comonadicRightAdjoint
-  签名: (L : C ⥤ D) [ComonadicLeftAdjoint L]
+  签名: (L : C ⥤ D) [余monadicLeftAdjoint L]
   定义体: ComonadicLeftAdjoint.R (L := L)
 
 Depends on / 依赖: ComonadicLeftAdjoint, ComonadicLeftAdjoint.R
@@ -743,7 +743,7 @@ definition comonadicAdjunction
 
 中文:
 定义 comonadicAdjunction
-  签名: (L : C ⥤ D) [ComonadicLeftAdjoint L]
+  签名: (L : C ⥤ D) [余monadicLeftAdjoint L]
   定义体: ComonadicLeftAdjoint.adj
 
 Depends on / 依赖: ComonadicLeftAdjoint, ComonadicLeftAdjoint.adj
@@ -778,7 +778,7 @@ instance μ_iso_of_reflective
 
 中文:
 实例 μ_iso_of_reflective
-  签名: [Reflective R]
+  签名: [反射 R]
   定义体: by
   dsimp
   infer_instance
@@ -802,7 +802,7 @@ instance δ_iso_of_coreflective
 
 中文:
 实例 δ_iso_of_coreflective
-  签名: [Coreflective R]
+  签名: [余反射 R]
   定义体: by
   dsimp
   infer_instance
@@ -836,7 +836,7 @@ instance [Reflective
         simpa u
 
 中文:
-实例 [Reflective
+实例 [反射
   签名: R] (X
   定义体: ⟨⟨X.a,
       ⟨X.unit, by
@@ -879,7 +879,7 @@ instance comparison_essSurj
 
 中文:
 实例 comparison_essSurj
-  签名: [Reflective R]
+  签名: [反射 R]
   定义体: by
   refine ⟨fun X => ⟨(reflector R).obj X.A, ⟨?_⟩⟩⟩
   symm
@@ -915,7 +915,7 @@ lemma comparison_full
 
 中文:
 引理 comparison_full
-  条件: [R.Full] {L : C ⥤ D} (adj : L ⊣ R)
+  条件: [R.满] {L : C ⥤ D} (adj : L ⊣ R)
   证明: ⟨R.preimage f.f, by cat_disch⟩
 
 Depends on / 依赖: R.preimage, cat_disch, preimage
@@ -945,7 +945,7 @@ instance [Coreflective
         simpa using congrArg (fun t =>
 
 中文:
-实例 [Coreflective
+实例 [余反射
   签名: R] (X
   定义体: ⟨⟨X.a,
       ⟨by
@@ -986,7 +986,7 @@ instance comparison_essSurj
 
 中文:
 实例 comparison_essSurj
-  签名: [Coreflective R]
+  签名: [余反射 R]
   定义体: by
   refine ⟨fun X => ⟨(coreflector R).obj X.A, ⟨?_⟩⟩⟩
   refine Comonad.Coalgebra.isoMk ?_ ?_
@@ -1019,7 +1019,7 @@ lemma comparison_full
 
 中文:
 引理 comparison_full
-  条件: [R.Full] {L : C ⥤ D} (adj : R ⊣ L)
+  条件: [R.满] {L : C ⥤ D} (adj : R ⊣ L)
   证明: ⟨R.preimage f.f, by cat_disch⟩
 
 Depends on / 依赖: R.preimage, cat_disch, preimage

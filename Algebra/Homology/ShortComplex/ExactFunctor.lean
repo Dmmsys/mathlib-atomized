@@ -174,7 +174,7 @@ lemma preservesFiniteLimits_tfae
 
 中文:
 引理 preservesFiniteLimits_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 2
   | hF, S, ⟨hS, hf⟩ => by
@@ -230,7 +230,7 @@ lemma preservesFiniteLimits_iff_forall_exact_map_and_mono
   proof: (Functor.preservesFiniteLimits_tfae F).out 3 0
 
 中文:
-引理 preservesFiniteLimits_iff_forall_exact_map_and_mono
+引理 preservesFiniteLimits_iff_对任意_exact_map_and_mono
   证明: (Functor.preservesFiniteLimits_tfae F).out 3 0
 
 Depends on / 依赖: Functor, Functor.preservesFiniteLimits_tfae, map_comp, preservesFiniteLimits_tfae
@@ -276,7 +276,7 @@ lemma preservesFiniteColimits_tfae
 
 中文:
 引理 preservesFiniteColimits_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 2
   | hF, S, ⟨hS, hf⟩ => by
@@ -341,7 +341,7 @@ lemma exact_tfae
 
 中文:
 引理 exact_tfae
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 3
   | hF => by
@@ -391,7 +391,7 @@ lemma preservesFiniteColimits_iff_forall_exact_map_and_epi
   proof: (Functor.preservesFiniteColimits_tfae F).out 3 0
 
 中文:
-引理 preservesFiniteColimits_iff_forall_exact_map_and_epi
+引理 preservesFiniteColimits_iff_对任意_exact_map_and_epi
   证明: (Functor.preservesFiniteColimits_tfae F).out 3 0
 
 Depends on / 依赖: Functor, Functor.preservesFiniteColimits_tfae, hom_inv_id, preservesFiniteColimits_tfae

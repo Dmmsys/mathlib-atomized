@@ -76,7 +76,7 @@ definition equivOfPiLEquivPi
 
 中文:
 定义 equivOfPiLEquivPi
-  签名: {R : 类型} [Finite m] [Finite n] [CommRing R] [Nontrivial R]
+  签名: {R : 类型} [有限 m] [有限 n] [交换环 R] [非平凡 R]
   定义体: Basis.indexEquiv (Basis.ofEquivFun e.symm) (Pi.basisFun _ _)
 
 Depends on / 依赖: Basis.indexEquiv, Basis.ofEquivFun, Pi.basisFun, basisFun, e.symm, indexEquiv, ofEquivFun
@@ -99,7 +99,7 @@ definition indexEquivOfInv
 
 中文:
 定义 indexEquivOfInv
-  签名: [Nontrivial A] [DecidableEq m] [DecidableEq n] {M : Matrix m n A}
+  签名: [非平凡 A] [DecidableEq m] [DecidableEq n] {M : 矩阵 m n A}
   定义体: equivOfPiLEquivPi (toLin'OfInv hMM' hM'M)
 
 Depends on / 依赖: equivOfPiLEquivPi
@@ -120,7 +120,7 @@ theorem det_comm
 
 中文:
 定理 det_comm
-  条件: [DecidableEq n] (M N : Matrix n n A)
+  条件: [DecidableEq n] (M N : 矩阵 n n A)
   结论: det (M * N) = det (N * M)
   证明: by
   rw [det_mul]; rw [det_mul]; rw [mul_comm]
@@ -145,7 +145,7 @@ theorem det_comm'
 
 中文:
 定理 det_comm'
-  结论: [DecidableEq m] [DecidableEq n] {M : Matrix n m A} {N : Matrix m n A}
+  结论: [DecidableEq m] [DecidableEq n] {M : 矩阵 n m A} {N : 矩阵 m n A}
   证明: by
   nontriviality A
   -- Although `m` and `n` are different a priori, we will show they have the same cardinality.
@@ -174,7 +174,7 @@ theorem det_conj_of_mul_eq_one
 
 中文:
 定理 det_conj_of_mul_eq_one
-  结论: [DecidableEq m] [DecidableEq n] {M : Matrix m n A}
+  结论: [DecidableEq m] [DecidableEq n] {M : 矩阵 m n A}
   证明: by
   rw [← det_comm' hM'M hMM']; rw [← Matrix.mul_assoc]; rw [hM'M]; rw [Matrix.one_mul]
 
@@ -209,7 +209,7 @@ theorem det_toMatrix_eq_det_toMatrix
 
 中文:
 定理 det_toMatrix_eq_det_toMatrix
-  结论: [DecidableEq κ] (b : Basis ι A M) (c : Basis κ A M)
+  结论: [DecidableEq κ] (b : 基 ι A M) (c : 基 κ A M)
   证明: by
   rw [← linearMap_toMatrix_mul_basis_toMatrix c b c]; rw [← basis_toMatrix_mul_linearMap_toMatrix b c b]; rw [Matrix.det_conj_of_mul_eq_one] <;>
     rw [Basis.toMatrix_mul_toMatrix]; rw [Basis.toMatrix_self]
@@ -250,7 +250,7 @@ theorem detAux_def'
 
 中文:
 定理 detAux_def'
-  条件: (b : Basis ι A M) (f : M ->ₗ[A] M)
+  条件: (b : 基 ι A M) (f : M ->ₗ[A] M)
   证明: by
   #adaptation_note /-- Proof repaired after leanprover/lean4#13492.
   The first line below was previously just `rw [detAux]`.
@@ -284,7 +284,7 @@ theorem detAux_def''
 
 中文:
 定理 detAux_def''
-  结论: {ι' : 类型} [Fintype ι'] [DecidableEq ι'] (tb : Trunc <| Basis ι A M)
+  结论: {ι' : 类型} [有限类型 ι'] [DecidableEq ι'] (tb : Trunc <| 基 ι A M)
   证明: by
   induction tb using Trunc.induction_on with
   | h b => rw [detAux_def', det_toMatrix_eq_det_toMatrix b b']
@@ -313,8 +313,8 @@ theorem detAux_id
 
 中文:
 定理 detAux_id
-  条件: (b : Trunc <| Basis ι A M)
-  结论: LinearMap.detAux b LinearMap.id = 1
+  条件: (b : Trunc <| 基 ι A M)
+  结论: 线性映射.detAux b 线性映射.id = 1
   证明: (LinearMap.detAux b).map_one
 
 @[simp]
@@ -335,7 +335,7 @@ theorem detAux_comp
 
 中文:
 定理 detAux_comp
-  条件: (b : Trunc <| Basis ι A M) (f g : M ->ₗ[A] M)
+  条件: (b : Trunc <| 基 ι A M) (f g : M ->ₗ[A] M)
   证明: (LinearMap.detAux b).map_mul f g
 
 Depends on / 依赖: LinearMap, LinearMap.detAux, detAux, map_mul
@@ -407,7 +407,7 @@ theorem _root_.Module.Free.of_det_ne_one
   · classical simp [LinearMap.coe_det, H] at hf
 
 中文:
-定理 _root_.Module.Free.of_det_ne_one
+定理 _root_.模.自由.of_det_ne_one
   条件: {f : M ->ₗ[R] M} (hf : f.det != 1)
   证明: by
   by_cases H : exists s : Finset M, Nonempty (Module.Basis s R M)
@@ -442,7 +442,7 @@ theorem det_eq_det_toMatrix_of_finset
 
 中文:
 定理 det_eq_det_toMatrix_of_finset
-  结论: [DecidableEq M] {s : Finset M} (b : Basis s A M)
+  结论: [DecidableEq M] {s : 有限集 M} (b : 基 s A M)
   证明: by
   have : exists s : Finset M, Nonempty (Basis s A M) := ⟨s, ⟨b⟩⟩
   rw [LinearMap.coe_det]; rw [dif_pos this]; rw [detAux_def'' _ b]
@@ -471,7 +471,7 @@ theorem det_toMatrix
 
 中文:
 定理 det_toMatrix
-  条件: (b : Basis ι A M) (f : M ->ₗ[A] M)
+  条件: (b : 基 ι A M) (f : M ->ₗ[A] M)
   证明: by
   have := Classical.decEq M
   rw [det_eq_det_toMatrix_of_finset b.reindexFinsetRange]; rw [det_toMatrix_eq_det_toMatrix b b.reindexFinsetRange]
@@ -498,7 +498,7 @@ theorem det_toMatrix'
 
 中文:
 定理 det_toMatrix'
-  条件: {ι : 类型} [Fintype ι] [DecidableEq ι] (f : (ι -> A) ->ₗ[A] ι -> A)
+  条件: {ι : 类型} [有限类型 ι] [DecidableEq ι] (f : (ι -> A) ->ₗ[A] ι -> A)
   证明: by simp [← toMatrix_eq_toMatrix']
 
 @[simp]
@@ -522,7 +522,7 @@ theorem det_toLin
 
 中文:
 定理 det_toLin
-  条件: (b : Basis ι R M) (f : Matrix ι ι R)
+  条件: (b : 基 ι R M) (f : 矩阵 ι ι R)
   证明: by
   rw [← LinearMap.det_toMatrix b]; rw [LinearMap.toMatrix_toLin]
 
@@ -547,8 +547,8 @@ theorem det_toLin'
 
 中文:
 定理 det_toLin'
-  条件: (f : Matrix ι ι R)
-  结论: LinearMap.det (Matrix.toLin' f) = Matrix.det f
+  条件: (f : 矩阵 ι ι R)
+  结论: 线性映射.det (矩阵.toLin' f) = 矩阵.det f
   证明: by
   simp only [← toLin_eq_toLin', det_toLin]
 
@@ -636,7 +636,7 @@ theorem det_id
 
 中文:
 定理 det_id
-  结论: LinearMap.det (LinearMap.id : M ->ₗ[A] M) = 1
+  结论: 线性映射.det (线性映射.id : M ->ₗ[A] M) = 1
   证明: LinearMap.det.map_one
 
 Depends on / 依赖: LinearMap, LinearMap.det.map_one, map_one
@@ -665,7 +665,7 @@ theorem det_smul
 
 中文:
 定理 det_smul
-  条件: [Module.Free A M] (c : A) (f : M ->ₗ[A] M)
+  条件: [模.自由 A M] (c : A) (f : M ->ₗ[A] M)
   证明: by
   nontriviality A
   by_cases H : exists s : Finset M, Nonempty (Basis s A M)
@@ -703,7 +703,7 @@ theorem det_zero'
 
 中文:
 定理 det_zero'
-  条件: {ι : 类型} [Finite ι] [Nonempty ι] (b : Basis ι A M)
+  条件: {ι : 类型} [有限 ι] [非空 ι] (b : 基 ι A M)
   证明: by
   have := Classical.decEq ι
   cases nonempty_fintype ι
@@ -732,7 +732,7 @@ theorem det_zero
 
 中文:
 定理 det_zero
-  条件: [Module.Free A M]
+  条件: [模.自由 A M]
   证明: by
   simp only [← zero_smul A (1 : M ->ₗ[A] M), det_smul, mul_one, map_one]
 
@@ -757,7 +757,7 @@ theorem det_eq_one_of_not_module_finite
 
 中文:
 定理 det_eq_one_of_not_module_finite
-  条件: (h : ¬Module.Finite R M) (f : M ->ₗ[R] M)
+  条件: (h : ¬模.有限 R M) (f : M ->ₗ[R] M)
   结论: f.det = 1
   证明: by
   rw [LinearMap.det]; rw [dif_neg]; rw [MonoidHom.one_apply]
@@ -785,7 +785,7 @@ theorem det_eq_one_of_subsingleton
 
 中文:
 定理 det_eq_one_of_subsingleton
-  条件: [Subsingleton M] (f : M ->ₗ[R] M)
+  条件: [子单例 M] (f : M ->ₗ[R] M)
   证明: by
   have b : Basis (Fin 0) R M := Basis.empty M
   rw [← f.det_toMatrix b]
@@ -816,7 +816,7 @@ theorem det_eq_one_of_finrank_eq_zero
 
 中文:
 定理 det_eq_one_of_finrank_eq_zero
-  结论: {𝕜 : 类型} [Field 𝕜] {M : 类型} [AddCommGroup M]
+  结论: {𝕜 : 类型} [域 𝕜] {M : 类型} [加法交换群 M]
   证明: by
   classical
     refine @LinearMap.det_cases M _ 𝕜 _ _ _ (fun t => t = 1) f ?_ rfl
@@ -855,7 +855,7 @@ theorem det_conj
 
 中文:
 定理 det_conj
-  条件: {N : 类型} [AddCommGroup N] [Module A N] (f : M ->ₗ[A] M) (e : M ≃ₗ[A] N)
+  条件: {N : 类型} [加法交换群 N] [模 A N] (f : M ->ₗ[A] M) (e : M ≃ₗ[A] N)
   证明: by
   classical
     by_cases H : exists s : Finset M, Nonempty (Basis s A M)
@@ -890,7 +890,7 @@ theorem isUnit_det
 
 中文:
 定理 isUnit_det
-  条件: {A : 类型} [CommRing A] [Module A M] (f : M ->ₗ[A] M) (hf : IsUnit f)
+  条件: {A : 类型} [交换环 A] [模 A M] (f : M ->ₗ[A] M) (hf : 是单位 f)
   证明: IsUnit.map LinearMap.det hf
 
 Depends on / 依赖: IsUnit, IsUnit.map, LinearMap, LinearMap.det
@@ -910,7 +910,7 @@ lemma isUnit_iff_isUnit_det
 
 中文:
 引理 isUnit_iff_isUnit_det
-  条件: [Module.Finite R M] [Module.Free R M] (f : M ->ₗ[R] M)
+  条件: [模.有限 R M] [模.自由 R M] (f : M ->ₗ[R] M)
   证明: by
   let b := Module.Free.chooseBasis R M
   rw [← isUnit_toMatrix_iff b]; rw [← det_toMatrix b]; rw [Matrix.isUnit_iff_isUnit_det (toMatrix b b f)]
@@ -938,7 +938,7 @@ theorem free_of_det_ne_one
 中文:
 定理 free_of_det_ne_one
   条件: {f : M ->ₗ[R] M} (hf : f.det != 1)
-  结论: Module.Free R M
+  结论: 模.自由 R M
   证明: by
   by_cases H : exists s : Finset M, Nonempty (Basis s R M)
   · rcases H with ⟨s, ⟨hs⟩⟩
@@ -969,7 +969,7 @@ theorem finite_of_det_ne_one
 中文:
 定理 finite_of_det_ne_one
   条件: {f : M ->ₗ[R] M} (hf : f.det != 1)
-  结论: Module.Finite R M
+  结论: 模.有限 R M
   证明: by
   by_cases H : exists s : Finset M, Nonempty (Basis s R M)
   · rcases H with ⟨s, ⟨hs⟩⟩
@@ -1000,7 +1000,7 @@ theorem bot_lt_ker_of_det_eq_zero
 
 中文:
 定理 bot_lt_ker_of_det_eq_zero
-  条件: [IsDomain R] [Free R M] {f : M ->ₗ[R] M} (hf : f.det = 0)
+  条件: [是整环 R] [自由 R M] {f : M ->ₗ[R] M} (hf : f.det = 0)
   证明: by
   have : Module.Finite R M := by simp [finite_of_det_ne_one (f := f), hf]
   let b := Module.finBasis R M
@@ -1036,7 +1036,7 @@ theorem det_eq_zero_iff_ker_ne_bot
 
 中文:
 定理 det_eq_zero_iff_ker_ne_bot
-  条件: [IsDomain R] [Free R M] [Module.Finite R M] {f : M ->ₗ[R] M}
+  条件: [是整环 R] [自由 R M] [模.有限 R M] {f : M ->ₗ[R] M}
   证明: by
   constructor <;> intro h
   · exact bot_lt_iff_ne_bot.mp (bot_lt_ker_of_det_eq_zero h)
@@ -1070,7 +1070,7 @@ theorem range_lt_top_of_det_eq_zero
 
 中文:
 定理 range_lt_top_of_det_eq_zero
-  结论: [IsDomain R] [Free R M] {f : M ->ₗ[R] M}
+  结论: [是整环 R] [自由 R M] {f : M ->ₗ[R] M}
   证明: by
   rw [lt_top_iff_ne_top]
   intro h
@@ -1154,7 +1154,7 @@ omit [DecidableEq ι] in
 
 中文:
 定理 det_prodMap
-  结论: [Module.Free R M] [Module.Free R M'] [Module.Finite R M] [Module.Finite R M']
+  结论: [模.自由 R M] [模.自由 R M'] [模.有限 R M] [模.有限 R M']
   证明: by
   let b := Module.Free.chooseBasis R M
   let b' := Module.Free.chooseBasis R M'
@@ -1188,7 +1188,7 @@ let B := (Pi.basis (fun _ : ι => b)).reindex
 
 中文:
 定理 det_pi
-  条件: [Module.Free R M] [Module.Finite R M] (f : ι -> M ->ₗ[R] M)
+  条件: [模.自由 R M] [模.有限 R M] (f : ι -> M ->ₗ[R] M)
   证明: by
   classical
   let b := Module.Free.chooseBasis R M
@@ -1239,7 +1239,7 @@ lemma det_lsmul
 中文:
 引理 det_lsmul
   条件: (x : R)
-  结论: LinearMap.det (lsmul R R S x) = x ^ finrank R S
+  结论: 线性映射.det (lsmul R R S x) = x ^ finrank R S
   证明: by
   rw [lsmul_eq_smul_one]; rw [LinearMap.det_smul]; rw [map_one]; rw [mul_one]
 
@@ -1290,7 +1290,7 @@ theorem coe_det
 中文:
 定理 coe_det
   条件: (f : M ≃ₗ[R] M)
-  结论: ↑(LinearEquiv.det f) = LinearMap.det (f : M ->ₗ[R] M)
+  结论: ↑(线性等价.det f) = 线性映射.det (f : M ->ₗ[R] M)
   证明: rfl
 
 @[simp]
@@ -1313,7 +1313,7 @@ theorem coe_inv_det
 中文:
 定理 coe_inv_det
   条件: (f : M ≃ₗ[R] M)
-  结论: ↑(LinearEquiv.det f)⁻¹ = LinearMap.det (f.symm : M ->ₗ[R] M)
+  结论: ↑(线性等价.det f)⁻¹ = 线性映射.det (f.symm : M ->ₗ[R] M)
   证明: rfl
 
 @[simp]
@@ -1334,7 +1334,7 @@ theorem det_refl
 
 中文:
 定理 det_refl
-  结论: LinearEquiv.det (LinearEquiv.refl R M) = 1
+  结论: 线性等价.det (线性等价.refl R M) = 1
   证明: Units.ext LinearMap.det_id
 
 @[simp]
@@ -1381,7 +1381,7 @@ theorem det_symm
 中文:
 定理 det_symm
   条件: (f : M ≃ₗ[R] M)
-  结论: LinearEquiv.det f.symm = LinearEquiv.det f⁻¹
+  结论: 线性等价.det f.symm = 线性等价.det f⁻¹
   证明: map_inv _ f
 
 Depends on / 依赖: map_inv
@@ -1426,8 +1426,8 @@ theorem LinearMap.det_map
   (by simpa using congr($h x)) ▸ det_conj _ _
 
 中文:
-定理 LinearMap.det_map
-  结论: {K V W : 类型} [Field K] [AddCommGroup V] [Module K V]
+定理 线性映射.det_map
+  结论: {K V W : 类型} [域 K] [加法交换群 V] [模 K V]
   证明: have ⟨_, h⟩ := (AlgEquivClass.toAlgEquiv f).eq_linearEquivConjAlgEquiv
   (by simpa using congr($h x)) ▸ det_conj _ _
 -/
@@ -1449,8 +1449,8 @@ theorem Matrix.det_map
       (AlgEquivClass.toAlgEquiv f)).trans Matrix.toLinAlgEquiv') x.toLin'
 
 中文:
-定理 Matrix.det_map
-  结论: {K m n : 类型} [Field K] [Fintype m] [Fintype n]
+定理 矩阵.det_map
+  结论: {K m n : 类型} [域 K] [有限类型 m] [有限类型 n]
   证明: by
   simpa [toMatrixAlgEquiv', Matrix.toLinAlgEquiv'] using
     LinearMap.det_map ((Matrix.toLinAlgEquiv'.symm.trans
@@ -1475,8 +1475,8 @@ theorem Matrix.det_map'
   · simp
 
 中文:
-定理 Matrix.det_map'
-  结论: {K m F : 类型} [Field K] [Fintype m] [DecidableEq m]
+定理 矩阵.det_map'
+  结论: {K m F : 类型} [域 K] [有限类型 m] [DecidableEq m]
   证明: by
   by_cases! Nonempty m
   · exact det_map (AlgEquiv.ofBijective _ (AlgHomClass.toAlgHom f).bijective) x
@@ -1501,8 +1501,8 @@ theorem LinearEquiv.det_mul_det_symm
   simp [← LinearMap.det_comp]
 
 中文:
-定理 LinearEquiv.det_mul_det_symm
-  条件: {A : 类型} [CommRing A] [Module A M] (f : M ≃ₗ[A] M)
+定理 线性等价.det_mul_det_symm
+  条件: {A : 类型} [交换环 A] [模 A M] (f : M ≃ₗ[A] M)
   证明: by
   simp [← LinearMap.det_comp]
 
@@ -1524,8 +1524,8 @@ theorem LinearEquiv.det_symm_mul_det
   simp [← LinearMap.det_comp]
 
 中文:
-定理 LinearEquiv.det_symm_mul_det
-  条件: {A : 类型} [CommRing A] [Module A M] (f : M ≃ₗ[A] M)
+定理 线性等价.det_symm_mul_det
+  条件: {A : 类型} [交换环 A] [模 A M] (f : M ≃ₗ[A] M)
   证明: by
   simp [← LinearMap.det_comp]
 
@@ -1547,8 +1547,8 @@ theorem LinearEquiv.isUnit_det
   simpa using (LinearMap.toMatrix_comp v v' v f.symm f).symm
 
 中文:
-定理 LinearEquiv.isUnit_det
-  条件: (f : M ≃ₗ[R] M') (v : Basis ι R M) (v' : Basis ι R M')
+定理 线性等价.isUnit_det
+  条件: (f : M ≃ₗ[R] M') (v : 基 ι R M) (v' : 基 ι R M')
   证明: by
   apply isUnit_det_of_left_inverse
   simpa using (LinearMap.toMatrix_comp v v' v f.symm f).symm
@@ -1569,8 +1569,8 @@ theorem LinearEquiv.isUnit_det'
   proof: .of_mul_eq_one _ f.det_mul_det_symm
 
 中文:
-定理 LinearEquiv.isUnit_det'
-  条件: {A : 类型} [CommRing A] [Module A M] (f : M ≃ₗ[A] M)
+定理 线性等价.isUnit_det'
+  条件: {A : 类型} [交换环 A] [模 A M] (f : M ≃ₗ[A] M)
   证明: .of_mul_eq_one _ f.det_mul_det_symm
 
 Depends on / 依赖: det_mul_det_symm, f.det_mul_det_symm, of_mul_eq_one
@@ -1591,8 +1591,8 @@ theorem LinearEquiv.det_coe_symm
   simp [field, IsUnit.ne_zero f.isUnit_det']
 
 中文:
-定理 LinearEquiv.det_coe_symm
-  条件: {𝕜 : 类型} [Field 𝕜] [Module 𝕜 M] (f : M ≃ₗ[𝕜] M)
+定理 线性等价.det_coe_symm
+  条件: {𝕜 : 类型} [域 𝕜] [模 𝕜 M] (f : M ≃ₗ[𝕜] M)
   证明: by
   simp [field, IsUnit.ne_zero f.isUnit_det']
 
@@ -1620,8 +1620,8 @@ definition LinearEquiv.ofIsUnitDet
         rw [toLin_mul v v' v]; rw [toLin_toMatrix]; rw [LinearMap.comp_appl
 
 中文:
-定义 LinearEquiv.ofIsUnitDet
-  签名: {f : M ->ₗ[R] M'} {v : Basis ι R M} {v' : Basis ι R M'}
+定义 线性等价.ofIsUnitDet
+  签名: {f : M ->ₗ[R] M'} {v : 基 ι R M} {v' : 基 ι R M'}
   定义体: f
   map_add' := f.map_add
   map_smul' := f.map_smul
@@ -1660,8 +1660,8 @@ theorem LinearEquiv.coe_ofIsUnitDet
   rfl
 
 中文:
-定理 LinearEquiv.coe_ofIsUnitDet
-  结论: {f : M ->ₗ[R] M'} {v : Basis ι R M} {v' : Basis ι R M'}
+定理 线性等价.coe_ofIsUnitDet
+  结论: {f : M ->ₗ[R] M'} {v : 基 ι R M} {v' : 基 ι R M'}
   证明: by
   ext x
   rfl
@@ -1686,7 +1686,7 @@ definition LinearMap.equivOfIsUnitDet
     exact LinearEquiv.ofIsUnitDet (v := b) (v' := b) (f := f) (
 
 中文:
-定义 LinearMap.equivOfIsUnitDet
+定义 线性映射.equivOfIsUnitDet
   定义体: by
   by_cases hR : Nontrivial R
   · let ⟨ι, b⟩ := (Module.Free.exists_basis R M).some
@@ -1722,7 +1722,7 @@ theorem LinearMap.equivOfIsUnitDet_apply
 @[simp]
 
 中文:
-定理 LinearMap.equivOfIsUnitDet_apply
+定理 线性映射.equivOfIsUnitDet_apply
   证明: by
   nontriviality M
   simp [equivOfIsUnitDet, dif_pos (Module.nontrivial R M)]
@@ -1749,7 +1749,7 @@ theorem LinearMap.coe_equivOfIsUnitDet
   apply LinearMap.equivOfIsUnitDet_apply
 
 中文:
-定理 LinearMap.coe_equivOfIsUnitDet
+定理 线性映射.coe_equivOfIsUnitDet
   证明: by
   ext
   apply LinearMap.equivOfIsUnitDet_apply
@@ -1776,8 +1776,8 @@ abbreviation LinearMap.equivOfDetNeZero
   LinearEquiv.ofIsUnitDet this
 
 中文:
-缩写 LinearMap.equivOfDetNeZero
-  签名: {𝕜 : 类型} [Field 𝕜] {M : 类型} [AddCommGroup M] [Module 𝕜 M]
+缩写 线性映射.equivOfDetNeZero
+  签名: {𝕜 : 类型} [域 𝕜] {M : 类型} [加法交换群 M] [模 𝕜 M]
   定义体: have : IsUnit (LinearMap.toMatrix (Module.finBasis 𝕜 M)
       (Module.finBasis 𝕜 M) f).det := by
     rw [LinearMap.det_toMatrix]
@@ -1809,7 +1809,7 @@ theorem LinearMap.associated_det_of_eq_comp
   exact Associated.mul_left _ (associated_one_iff_isUnit.mpr e.isUnit_det')
 
 中文:
-定理 LinearMap.associated_det_of_eq_comp
+定理 线性映射.associated_det_of_eq_comp
   结论: (e : M ≃ₗ[R] M) (f f' : M ->ₗ[R] M)
   证明: by
   suffices Associated (LinearMap.det (f' ∘ₗ ↑e)) (LinearMap.det f') by
@@ -1843,8 +1843,8 @@ theorem LinearMap.associated_det_comp_equiv
     LinearEquiv.apply_symm_apply]
 
 中文:
-定理 LinearMap.associated_det_comp_equiv
-  结论: {N : 类型} [AddCommGroup N] [Module R N]
+定理 线性映射.associated_det_comp_equiv
+  结论: {N : 类型} [加法交换群 N] [模 R N]
   证明: by
   refine LinearMap.associated_det_of_eq_comp (e.trans e'.symm) _ _ ?_
   intro x
@@ -1894,7 +1894,7 @@ theorem det_apply
 中文:
 定理 det_apply
   条件: (v : ι -> M)
-  结论: e.det v = Matrix.det (e.toMatrix v)
+  结论: e.det v = 矩阵.det (e.toMatrix v)
   证明: rfl
 -/
 theorem det_apply (v : ι -> M) : e.det v = Matrix.det (e.toMatrix v) :=
@@ -1935,8 +1935,8 @@ theorem det_isEmpty
 
 中文:
 定理 det_isEmpty
-  条件: [IsEmpty ι]
-  结论: e.det = AlternatingMap.constOfIsEmpty R M ι 1
+  条件: [是空 ι]
+  结论: e.det = 交错映射.constOfIsEmpty R M ι 1
   证明: by
   ext v
   exact Matrix.det_isEmpty
@@ -1958,7 +1958,7 @@ theorem det_ne_zero
 
 中文:
 定理 det_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: e.det != 0
   证明: fun h => by simpa [h] using e.det_self
 
@@ -1977,7 +1977,7 @@ theorem smul_det
 
 中文:
 定理 smul_det
-  结论: {G} [Group G] [DistribMulAction G M] [SMulCommClass G R M]
+  结论: {G} [群 G] [分配乘法作用 G M] [标量交换类 G R M]
   证明: by
   simp_rw [det_apply, toMatrix_smul_left]
 
@@ -2052,8 +2052,8 @@ theorem isUnit_det
 
 中文:
 定理 isUnit_det
-  条件: (e' : Basis ι R M)
-  结论: IsUnit (e.det e')
+  条件: (e' : 基 ι R M)
+  结论: 是单位 (e.det e')
   证明: (is_basis_iff_det e).mp ⟨e'.linearIndependent, e'.span_eq⟩
 
 Depends on / 依赖: is_basis_iff_det, linearIndependent, span_eq
@@ -2079,7 +2079,7 @@ theorem AlternatingMap.eq_smul_basis_det
 @[simp]
 
 中文:
-定理 AlternatingMap.eq_smul_basis_det
+定理 交错映射.eq_smul_basis_det
   条件: (f : M [⋀^ι]->ₗ[R] R)
   结论: f = f e • e.det
   证明: by
@@ -2112,8 +2112,8 @@ theorem AlternatingMap.map_basis_eq_zero_iff
    fun h => h.symm ▸ AlternatingMap.zero_apply _⟩
 
 中文:
-定理 AlternatingMap.map_basis_eq_zero_iff
-  结论: {ι : 类型} [Finite ι] (e : Basis ι R M)
+定理 交错映射.map_basis_eq_zero_iff
+  结论: {ι : 类型} [有限 ι] (e : 基 ι R M)
   证明: ⟨fun h => by
     cases nonempty_fintype ι
     let := Classical.decEq ι
@@ -2139,8 +2139,8 @@ theorem AlternatingMap.map_basis_ne_zero_iff
   proof: not_congr f.map_basis_eq_zero_iff e
 
 中文:
-定理 AlternatingMap.map_basis_ne_zero_iff
-  结论: {ι : 类型} [Finite ι] (e : Basis ι R M)
+定理 交错映射.map_basis_ne_zero_iff
+  结论: {ι : 类型} [有限 ι] (e : 基 ι R M)
   证明: not_congr f.map_basis_eq_zero_iff e
 
 Depends on / 依赖: f.map_basis_eq_zero_iff, map_basis_eq_zero_iff, not_congr
@@ -2167,7 +2167,7 @@ theorem det_comp
 
 中文:
 定理 det_comp
-  条件: (e : Basis ι A M) (f : M ->ₗ[A] M) (v : ι -> M)
+  条件: (e : 基 ι A M) (f : M ->ₗ[A] M) (v : ι -> M)
   证明: by
   rw [det_apply]; rw [det_apply]; rw [← f.det_toMatrix e]; rw [← Matrix.det_mul]; rw [e.toMatrix_eq_toMatrix_constr (f ∘ v)]; rw [e.toMatrix_eq_toMatrix_constr v]; rw [← toMatrix_comp]; rw [e.constr_comp]
 
@@ -2195,7 +2195,7 @@ theorem det_comp_basis
 
 中文:
 定理 det_comp_basis
-  条件: [Module A M'] (b : Basis ι A M) (b' : Basis ι A M') (f : M ->ₗ[A] M')
+  条件: [模 A M'] (b : 基 ι A M) (b' : 基 ι A M') (f : M ->ₗ[A] M')
   证明: by
   rw [det_apply]; rw [← LinearMap.det_toMatrix b']; rw [LinearMap.toMatrix_comp _ b]; rw [Matrix.det_mul]; rw [LinearMap.toMatrix_basis_equiv]; rw [Matrix.det_one]; rw [mul_one]
   congr 1; ext i j
@@ -2222,7 +2222,7 @@ theorem det_basis
 
 中文:
 定理 det_basis
-  条件: (b : Basis ι A M) (b' : Basis ι A M)
+  条件: (b : 基 ι A M) (b' : 基 ι A M)
   证明: (b.det_comp_basis b' (LinearMap.id)).symm
 
 Depends on / 依赖: LinearMap, LinearMap.id, b.det_comp_basis, det_comp_basis
@@ -2245,7 +2245,7 @@ theorem det_mul_det
 
 中文:
 定理 det_mul_det
-  条件: (b b' b'' : Basis ι A M)
+  条件: (b b' b'' : 基 ι A M)
   证明: by
   have : b'' = (b'.equiv b'' (Equiv.refl ι)).toLinearMap ∘ b' := by
     ext; simp
@@ -2273,7 +2273,7 @@ theorem det_inv
 
 中文:
 定理 det_inv
-  条件: (b : Basis ι A M) (b' : Basis ι A M)
+  条件: (b : 基 ι A M) (b' : 基 ι A M)
   证明: by
   rw [← Units.mul_eq_one_iff_inv_eq]; rw [IsUnit.unit_spec]; rw [← det_basis]; rw [← det_basis]
   exact LinearEquiv.det_mul_det_symm _
@@ -2296,7 +2296,7 @@ theorem det_reindex
 
 中文:
 定理 det_reindex
-  结论: {ι' : 类型} [Fintype ι'] [DecidableEq ι'] (b : Basis ι R M) (v : ι' -> M)
+  结论: {ι' : 类型} [有限类型 ι'] [DecidableEq ι'] (b : 基 ι R M) (v : ι' -> M)
   证明: by
   rw [det_apply]; rw [toMatrix_reindex']; rw [det_reindexAlgEquiv]; rw [det_apply]
 
@@ -2316,7 +2316,7 @@ theorem det_reindex'
 
 中文:
 定理 det_reindex'
-  结论: {ι' : 类型} [Fintype ι'] [DecidableEq ι'] (b : Basis ι R M)
+  结论: {ι' : 类型} [有限类型 ι'] [DecidableEq ι'] (b : 基 ι R M)
   证明: AlternatingMap.ext fun _ => det_reindex _ _ _
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.ext, det_reindex
@@ -2338,7 +2338,7 @@ theorem det_reindex_symm
 
 中文:
 定理 det_reindex_symm
-  结论: {ι' : 类型} [Fintype ι'] [DecidableEq ι'] (b : Basis ι R M)
+  结论: {ι' : 类型} [有限类型 ι'] [DecidableEq ι'] (b : 基 ι R M)
   证明: by
   rw [det_reindex]; rw [Function.comp_assoc]; rw [e.self_comp_symm]; rw [Function.comp_id]
 
@@ -2362,7 +2362,7 @@ theorem det_map
 
 中文:
 定理 det_map
-  条件: (b : Basis ι R M) (f : M ≃ₗ[R] M') (v : ι -> M')
+  条件: (b : 基 ι R M) (f : M ≃ₗ[R] M') (v : ι -> M')
   证明: by
   rw [det_apply]; rw [toMatrix_map]; rw [det_apply]
 
@@ -2382,7 +2382,7 @@ theorem det_map'
 
 中文:
 定理 det_map'
-  条件: (b : Basis ι R M) (f : M ≃ₗ[R] M')
+  条件: (b : 基 ι R M) (f : M ≃ₗ[R] M')
   证明: AlternatingMap.ext b.det_map f
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.ext, b.det_map, det_map
@@ -2406,8 +2406,8 @@ theorem Pi.basisFun_det
   rw [Basis.det_apply]; rw [Basis.coePiBasisFun.toMatrix_eq_transpose]; rw [det_transpose]; rw [det]
 
 中文:
-定理 Pi.basisFun_det
-  结论: (Pi.basisFun R ι).det = Matrix.detRowAlternating
+定理 依赖函数类型.basisFun_det
+  结论: (依赖函数类型.basisFun R ι).det = 矩阵.detRowAlternating
   证明: by
   ext M
   rw [Basis.det_apply]; rw [Basis.coePiBasisFun.toMatrix_eq_transpose]; rw [det_transpose]; rw [det]
@@ -2429,7 +2429,7 @@ theorem Pi.basisFun_det_apply
   rfl
 
 中文:
-定理 Pi.basisFun_det_apply
+定理 依赖函数类型.basisFun_det_apply
   条件: (v : ι -> ι -> R)
   证明: by
   rw [Pi.basisFun_det]
@@ -2507,7 +2507,7 @@ theorem det_unitsSMul
 
 中文:
 定理 det_unitsSMul
-  条件: (e : Basis ι R M) (w : ι -> Rˣ)
+  条件: (e : 基 ι R M) (w : ι -> Rˣ)
   证明: by
   ext f
   change
@@ -2565,7 +2565,7 @@ theorem det_isUnitSMul
 
 中文:
 定理 det_isUnitSMul
-  条件: {w : ι -> R} (hw : 对任意 i, IsUnit (w i))
+  条件: {w : ι -> R} (hw : 对任意 i, 是单位 (w i))
   证明: e.det_unitsSMul_self _
 
 Depends on / 依赖: det_unitsSMul_self, e.det_unitsSMul_self
@@ -2591,7 +2591,7 @@ theorem _root_.LinearMap.det_dualMap
   simp [LinearMap.dualMap_def, LinearMap.toMatrix_transpose]
 
 中文:
-定理 _root_.LinearMap.det_dualMap
+定理 _root_.线性映射.det_dualMap
   证明: by
   set b := Module.Free.chooseBasis R M
   have : Fintype (Module.Free.ChooseBasisIndex R M) :=
@@ -2634,7 +2634,7 @@ theorem LinearMap.det_eq_det_mul_det
   let A : Matrix m m R := LinearMap.toMatrix bW bW (e.rest
 
 中文:
-定理 LinearMap.det_eq_det_mul_det
+定理 线性映射.det_eq_det_mul_det
   条件: (e : V ->ₗ[R] V) (he : W <= W.comap e)
   证明: by
   let m := Module.Free.ChooseBasisIndex R W

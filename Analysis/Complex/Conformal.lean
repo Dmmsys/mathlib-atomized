@@ -71,7 +71,7 @@ theorem isConformalMap_conj
 
 中文:
 定理 isConformalMap_conj
-  结论: IsConformalMap (conjLIE : Complex ->L[实数] Complex)
+  结论: IsConformalMap (conjLIE : 复形 ->L[实数] 复形)
   证明: conjLIE.toLinearIsometry.isConformalMap
 
 Depends on / 依赖: conjLIE, conjLIE.toLinearIsometry.isConformalMap, isConformalMap, toLinearIsometry
@@ -99,7 +99,7 @@ theorem isConformalMap_complex_linear
 
 中文:
 定理 isConformalMap_complex_linear
-  条件: {map : Complex ->L[Complex] E} (nonzero : map != 0)
+  条件: {map : 复形 ->L[复形] E} (nonzero : map != 0)
   证明: by
   have minor₁ : ‖map 1‖ != 0 := by
     simpa only [ContinuousLinearMap.ext_ring_iff, Ne, norm_eq_zero] using! nonzero
@@ -135,7 +135,7 @@ theorem isConformalMap_complex_linear_conj
 
 中文:
 定理 isConformalMap_complex_linear_conj
-  条件: {map : Complex ->L[Complex] E} (nonzero : map != 0)
+  条件: {map : 复形 ->L[复形] E} (nonzero : map != 0)
   证明: (isConformalMap_complex_linear nonzero).comp isConformalMap_conj
 
 Depends on / 依赖: isConformalMap_complex_linear, isConformalMap_conj, nonzero
@@ -261,7 +261,7 @@ theorem DifferentiableAt.conformalAt
 
 中文:
 定理 DifferentiableAt.conformalAt
-  条件: (h : DifferentiableAt Complex f z) (hf' : deriv f z != 0)
+  条件: (h : DifferentiableAt 复形 f z) (hf' : deriv f z != 0)
   证明: by
   rw [conformalAt_iff_isConformalMap_fderiv]; rw [(h.hasFDerivAt.restrictScalars Real).fderiv]
   apply isConformalMap_complex_linear
@@ -293,7 +293,7 @@ theorem conformalAt_iff_differentiableAt_or_differentiableAt_comp_conj
 
 中文:
 定理 conformalAt_iff_differentiableAt_or_differentiableAt_comp_conj
-  条件: {f : Complex -> Complex} {z : Complex}
+  条件: {f : 复形 -> 复形} {z : 复形}
   证明: by
   rw [conformalAt_iff_isConformalMap_fderiv]
   rw [isConformalMap_iff_is_complex_or_conj_linear]
@@ -350,7 +350,7 @@ lemma real_linearMap_map_smul_complex
 
 中文:
 引理 real_linearMap_map_smul_complex
-  条件: {ℓ : Complex ->ₗ[实数] E} (h : ℓ I = I • ℓ 1) (a b : Complex)
+  条件: {ℓ : 复形 ->ₗ[实数] E} (h : ℓ I = I • ℓ 1) (a b : 复形)
   证明: by
   rw [← re_add_im a]; rw [← re_add_im b]; rw [← smul_eq_mul _ I]; rw [← smul_eq_mul _ I]
   have t₀ : ((a.im : Complex) • I) • (b.re : Complex) = (↑(a.im * b.re) : Complex) • I := by
@@ -386,8 +386,8 @@ definition LinearMap.complexOfReal
 @[simp]
 
 中文:
-定义 LinearMap.complexOfReal
-  签名: (ℓ : Complex ->ₗ[实数] E) (h : ℓ I = I • ℓ 1)
+定义 线性映射.complexOf实数
+  签名: (ℓ : 复形 ->ₗ[实数] E) (h : ℓ I = I • ℓ 1)
   定义体: ℓ
   map_smul' := real_linearMap_map_smul_complex h
 
@@ -408,9 +408,9 @@ lemma LinearMap.coe_complexOfReal
   proof: rfl
 
 中文:
-引理 LinearMap.coe_complexOfReal
-  条件: {ℓ : Complex ->ₗ[实数] E} (h)
-  结论: ℓ.complexOf实数 h = (ℓ : Complex -> E)
+引理 线性映射.coe_complexOf实数
+  条件: {ℓ : 复形 ->ₗ[实数] E} (h)
+  结论: ℓ.complexOf实数 h = (ℓ : 复形 -> E)
   证明: rfl
 -/
 lemma LinearMap.coe_complexOfReal {ℓ : Complex ->ₗ[Real] E} (h) : ℓ.complexOfReal h = (ℓ : Complex -> E) := rfl
@@ -427,8 +427,8 @@ definition ContinuousLinearMap.complexOfReal
 @[simp]
 
 中文:
-定义 ContinuousLinearMap.complexOfReal
-  签名: (ℓ : Complex ->L[实数] E) (h : ℓ I = I • ℓ 1)
+定义 连续线性映射.complexOf实数
+  签名: (ℓ : 复形 ->L[实数] E) (h : ℓ I = I • ℓ 1)
   定义体: ℓ
   map_smul' := real_linearMap_map_smul_complex h
 
@@ -449,9 +449,9 @@ lemma ContinuousLinearMap.coe_complexOfReal
   proof: rfl
 
 中文:
-引理 ContinuousLinearMap.coe_complexOfReal
-  条件: {ℓ : Complex ->L[实数] E} (h)
-  结论: ℓ.complexOf实数 h = (ℓ : Complex -> E)
+引理 连续线性映射.coe_complexOf实数
+  条件: {ℓ : 复形 ->L[实数] E} (h)
+  结论: ℓ.complexOf实数 h = (ℓ : 复形 -> E)
   证明: rfl
 -/
 lemma ContinuousLinearMap.coe_complexOfReal {ℓ : Complex ->L[Real] E} (h) : ℓ.complexOfReal h = (ℓ : Complex -> E) :=
@@ -501,8 +501,8 @@ theorem HasFDerivWithinAt.complexOfReal
   proof: .of_restrictScalars Real h₁ rfl
 
 中文:
-定理 HasFDerivWithinAt.complexOfReal
-  结论: {f' : Complex ->L[实数] E} (h₁ : HasFDerivWithinAt f f' s x)
+定理 HasFDerivWithinAt.complexOf实数
+  结论: {f' : 复形 ->L[实数] E} (h₁ : HasFDerivWithinAt f f' s x)
   证明: .of_restrictScalars Real h₁ rfl
 -/
 protected theorem HasFDerivWithinAt.complexOfReal {f' : Complex ->L[Real] E} (h₁ : HasFDerivWithinAt f f' s x)
@@ -522,7 +522,7 @@ theorem complexOfReal_fderivWithin
   simpa [DFunLike.ext_iff]
 
 中文:
-定理 complexOfReal_fderivWithin
+定理 complexOf实数_fderivWithin
   结论: (h₁ : DifferentiableWithinAt 实数 f s x)
   证明: by
   have := ((differentiableWithinAt_complex_iff_differentiableWithinAt_real hs).2
@@ -549,7 +549,7 @@ theorem complexOfReal_hasDerivWithinAt
   exact h₁.hasFDerivWithinAt.complexOfReal h₂
 
 中文:
-定理 complexOfReal_hasDerivWithinAt
+定理 complexOf实数_hasDerivWithinAt
   结论: (h₁ : DifferentiableWithinAt 实数 f s x)
   证明: by
   rw [hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [toSpanSingleton_apply_map_one]
@@ -572,7 +572,7 @@ theorem complexOfReal_derivWithin
   proof: HasDerivWithinAt.derivWithin (complexOfReal_hasDerivWithinAt h₁ h₂) hs
 
 中文:
-定理 complexOfReal_derivWithin
+定理 complexOf实数_derivWithin
   结论: (h₁ : DifferentiableWithinAt 实数 f s x)
   证明: HasDerivWithinAt.derivWithin (complexOfReal_hasDerivWithinAt h₁ h₂) hs
 
@@ -616,8 +616,8 @@ theorem HasFDerivAt.complexOfReal_hasFDerivAt
   proof: hasFDerivAt_of_restrictScalars Real h₁ rfl
 
 中文:
-定理 HasFDerivAt.complexOfReal_hasFDerivAt
-  结论: {f' : Complex ->L[实数] E}
+定理 在点处Fréchet可导.complexOf实数_hasFDerivAt
+  结论: {f' : 复形 ->L[实数] E}
   证明: hasFDerivAt_of_restrictScalars Real h₁ rfl
 -/
 protected theorem HasFDerivAt.complexOfReal_hasFDerivAt {f' : Complex ->L[Real] E}
@@ -636,7 +636,7 @@ theorem complexOfReal_hasDerivAt
   exact hasFDerivAt_of_restrictScalars Real h₁.hasFDerivAt rfl
 
 中文:
-定理 complexOfReal_hasDerivAt
+定理 complexOf实数_hasDerivAt
   结论: (h₁ : DifferentiableAt 实数 f x)
   证明: by
   rw [hasDerivAt_iff_hasFDerivAt]; rw [toSpanSingleton_apply_map_one]
@@ -659,7 +659,7 @@ theorem complexOfReal_deriv
   proof: HasDerivAt.deriv (complexOfReal_hasDerivAt h₁ h₂)
 
 中文:
-定理 complexOfReal_deriv
+定理 complexOf实数_deriv
   结论: (h₁ : DifferentiableAt 实数 f x)
   证明: HasDerivAt.deriv (complexOfReal_hasDerivAt h₁ h₂)
 
@@ -679,7 +679,7 @@ theorem complexOfReal_fderiv
   proof: (h₁.hasFDerivAt.complexOfReal_hasFDerivAt h₂).fderiv.symm
 
 中文:
-定理 complexOfReal_fderiv
+定理 complexOf实数_fderiv
   结论: (h₁ : DifferentiableAt 实数 f x)
   证明: (h₁.hasFDerivAt.complexOfReal_hasFDerivAt h₂).fderiv.symm
 

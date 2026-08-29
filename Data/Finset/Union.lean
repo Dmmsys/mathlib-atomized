@@ -50,7 +50,7 @@ definition disjiUnion
 
 中文:
 定义 disjiUnion
-  签名: (s : Finset α) (t : α -> Finset β) (hf : (s : Set α).PairwiseDisjoint t)
+  签名: (s : 有限集 α) (t : α -> 有限集 β) (hf : (s : 集合 α).PairwiseDisjoint t)
   定义体: ⟨s.val.bind (Finset.val ∘ t), Multiset.nodup_bind.2
 ⟨fun a _ => (t a).nodup, s.nodup.pairwise fun _ ha _ hb hab => disjoint_val.2 hf ha hb hab⟩⟩
 
@@ -73,7 +73,7 @@ lemma disjiUnion_val
 
 中文:
 引理 disjiUnion_val
-  条件: (s : Finset α) (t : α -> Finset β) (h)
+  条件: (s : 有限集 α) (t : α -> 有限集 β) (h)
   证明: rfl
 -/
 lemma disjiUnion_val (s : Finset α) (t : α -> Finset β) (h) :
@@ -90,7 +90,7 @@ lemma disjiUnion_empty
 
 中文:
 引理 disjiUnion_empty
-  条件: (t : α -> Finset β)
+  条件: (t : α -> 有限集 β)
   结论: disjiUnion ∅ t (by simp) = ∅
   证明: rfl
 -/
@@ -134,7 +134,7 @@ lemma coe_disjiUnion
 中文:
 引理 coe_disjiUnion
   条件: {h}
-  结论: (s.disjiUnion t h : Set β) = ⋃ x in (s : Set α), t x
+  结论: (s.disjiUnion t h : 集合 β) = ⋃ x in (s : 集合 α), t x
   证明: by
   simp [Set.ext_iff, mem_disjiUnion, Set.mem_iUnion]
 
@@ -153,7 +153,7 @@ lemma disjiUnion_cons
 
 中文:
 引理 disjiUnion_cons
-  条件: (a : α) (s : Finset α) (ha : a ∉ s) (f : α -> Finset β) (H)
+  条件: (a : α) (s : 有限集 α) (ha : a ∉ s) (f : α -> 有限集 β) (H)
   证明: eq_of_veq Multiset.cons_bind _ _ _
 -/
 @[simp] lemma disjiUnion_cons (a : α) (s : Finset α) (ha : a ∉ s) (f : α -> Finset β) (H) :
@@ -177,7 +177,7 @@ lemma singleton_disjiUnion
 中文:
 引理 singleton_disjiUnion
   条件: (a : α) {h}
-  结论: Finset.disjiUnion {a} t h = t a
+  结论: 有限集.disjiUnion {a} t h = t a
   证明: eq_of_veq Multiset.singleton_bind _ _
 -/
 @[simp] lemma singleton_disjiUnion (a : α) {h} : Finset.disjiUnion {a} t h = t a :=
@@ -199,7 +199,7 @@ lemma disjiUnion_disjiUnion
 
 中文:
 引理 disjiUnion_disjiUnion
-  条件: (s : Finset α) (f : α -> Finset β) (g : β -> Finset γ) (h1 h2)
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (g : β -> 有限集 γ) (h1 h2)
   证明: mem_disjiUnion.mp hxa
           obtain ⟨xb, hfb, hgb⟩ := mem_disjiUnion.mp hxb
           refine disjoint_left.mp
@@ -239,7 +239,7 @@ lemma sUnion_disjiUnion
 
 中文:
 引理 sUnion_disjiUnion
-  结论: {f : α -> Finset (Set β)} (I : Finset α)
+  结论: {f : α -> 有限集 (集合 β)} (I : 有限集 α)
   证明: by
   ext
   simp only [coe_disjiUnion, Set.mem_sUnion, Set.mem_iUnion, mem_coe, exists_prop]
@@ -270,7 +270,7 @@ lemma pairwiseDisjoint_fibers
 
 中文:
 引理 pairwiseDisjoint_fibers
-  结论: Set.PairwiseDisjoint ↑t fun a => s.filter (f · = a)
+  结论: 集合.PairwiseDisjoint ↑t fun a => s.filter (f · = a)
   证明: fun x' hx y' hy hne => by
     simp_rw [disjoint_left, mem_filter]; rintro i ⟨_, rfl⟩ ⟨_, rfl⟩; exact hne rfl
 -/
@@ -290,7 +290,7 @@ lemma disjiUnion_filter_eq
 
 中文:
 引理 disjiUnion_filter_eq
-  条件: (s : Finset α) (t : Finset β) (f : α -> β)
+  条件: (s : 有限集 α) (t : 有限集 β) (f : α -> β)
   证明: ext fun b => by simpa using and_comm
 -/
 @[simp] lemma disjiUnion_filter_eq (s : Finset α) (t : Finset β) (f : α -> β) :
@@ -333,7 +333,7 @@ theorem map_disjiUnion
 
 中文:
 定理 map_disjiUnion
-  条件: {f : α ↪ β} {s : Finset α} {t : β -> Finset γ} {h}
+  条件: {f : α ↪ β} {s : 有限集 α} {t : β -> 有限集 γ} {h}
   证明: eq_of_veq Multiset.bind_map _ _ _
 
 Depends on / 依赖: Multiset, Multiset.bind_map, bind_map, eq_of_veq
@@ -356,7 +356,7 @@ theorem disjiUnion_map
 
 中文:
 定理 disjiUnion_map
-  条件: {s : Finset α} {t : α -> Finset β} {f : β ↪ γ} {h}
+  条件: {s : 有限集 α} {t : α -> 有限集 β} {f : β ↪ γ} {h}
   证明: eq_of_veq Multiset.map_bind _ _ _
 
 @[simp]
@@ -380,7 +380,7 @@ theorem disjiUnion_singleton_eq_self
 
 中文:
 定理 disjiUnion_singleton_eq_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   grind
 -/
@@ -400,7 +400,7 @@ theorem fold_disjiUnion
 
 中文:
 定理 fold_disjiUnion
-  条件: {ι : 类型} {s : Finset ι} {t : ι -> Finset α} {b : ι -> β} {b₀ : β} (h)
+  条件: {ι : 类型} {s : 有限集 ι} {t : ι -> 有限集 α} {b : ι -> β} {b₀ : β} (h)
   证明: (congr_arg _ <| Multiset.map_bind _ _ _).trans (Multiset.fold_bind _ _ _ _ _)
 
 Depends on / 依赖: Multiset, Multiset.fold_bind, Multiset.map_bind, congr_arg, fold_bind, map_bind
@@ -419,7 +419,7 @@ lemma pairwiseDisjoint_filter
 
 中文:
 引理 pairwiseDisjoint_filter
-  结论: {f : α -> Finset β} (h : Set.PairwiseDisjoint ↑s f)
+  结论: {f : α -> 有限集 β} (h : 集合.PairwiseDisjoint ↑s f)
   证明: fun _ h₁ _ h₂ hne => Finset.disjoint_filter_filter (h h₁ h₂ hne)
 
 Depends on / 依赖: Finset, Finset.disjoint_filter_filter, disjoint_filter_filter
@@ -438,7 +438,7 @@ theorem filter_disjiUnion
 
 中文:
 定理 filter_disjiUnion
-  条件: (s : Finset α) (f : α -> Finset β) (h) (p : β -> 命题) [DecidablePred p]
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (h) (p : β -> 命题) [DecidablePred p]
   证明: by grind
 -/
 theorem filter_disjiUnion (s : Finset α) (f : α -> Finset β) (h) (p : β -> Prop) [DecidablePred p] :
@@ -457,7 +457,7 @@ theorem disjiUnion_singleton
 
 中文:
 定理 disjiUnion_singleton
-  条件: {f : α -> β} (hf : f.Injective)
+  条件: {f : α -> β} (hf : f.单射)
   证明: by
   ext; simp [eq_comm]
 
@@ -521,7 +521,7 @@ theorem pairwiseDisjoint_disjUnion
 
 中文:
 定理 pairwiseDisjoint_disjUnion
-  结论: {f g : α -> Finset β}
+  结论: {f g : α -> 有限集 β}
   证明: by
   intros i hi j hj hij
   simp [hf hi hj hij, hg hi hj hij, hfg' hi hj hij, (hfg' hj hi hij.symm).symm]
@@ -547,7 +547,7 @@ theorem disjiUnion_disjUnion
 
 中文:
 定理 disjiUnion_disjUnion
-  结论: {f g : α -> Finset β} (hfg : 对任意 a, Disjoint (f a) (g a))
+  结论: {f g : α -> 有限集 β} (hfg : 对任意 a, Disjoint (f a) (g a))
   证明: by
   grind
 -/
@@ -578,7 +578,7 @@ definition biUnion
 
 中文:
 定义 biUnion
-  签名: (s : Finset α) (t : α -> Finset β)
+  签名: (s : 有限集 α) (t : α -> 有限集 β)
   定义体: (s.1.bind fun a => (t a).1).toFinset
 
 Depends on / 依赖: wRec_eq
@@ -596,7 +596,7 @@ lemma biUnion_val
 
 中文:
 引理 biUnion_val
-  条件: (s : Finset α) (t : α -> Finset β)
+  条件: (s : 有限集 α) (t : α -> 有限集 β)
   证明: rfl
 
 Depends on / 依赖: _wMk, split_dropFun_lastFun
@@ -614,7 +614,7 @@ lemma biUnion_empty
 
 中文:
 引理 biUnion_empty
-  结论: Finset.biUnion ∅ t = ∅
+  结论: 有限集.biUnion ∅ t = ∅
   证明: rfl
 -/
 @[simp] lemma biUnion_empty : Finset.biUnion ∅ t = ∅ := rfl
@@ -657,7 +657,7 @@ lemma coe_biUnion
 
 中文:
 引理 coe_biUnion
-  结论: (s.biUnion t : Set β) = ⋃ x in (s : Set α), t x
+  结论: (s.biUnion t : 集合 β) = ⋃ x in (s : 集合 α), t x
   证明: by
   simp [Set.ext_iff, mem_biUnion, Set.mem_iUnion]
 
@@ -723,7 +723,7 @@ lemma disjiUnion_eq_biUnion
 
 中文:
 引理 disjiUnion_eq_biUnion
-  条件: (s : Finset α) (f : α -> Finset β) (hf)
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (hf)
   证明: eq_of_veq (s.disjiUnion f hf).nodup.dedup.symm
 
 Depends on / 依赖: disjiUnion, eq_of_veq, nodup.dedup.symm, s.disjiUnion
@@ -744,7 +744,7 @@ lemma biUnion_subset
 
 中文:
 引理 biUnion_subset
-  条件: {s' : Finset β}
+  条件: {s' : 有限集 β}
   结论: s.biUnion t subseteq s' ↔ 对任意 x in s, t x subseteq s'
   证明: by grind
 
@@ -765,7 +765,7 @@ lemma singleton_biUnion
 中文:
 引理 singleton_biUnion
   条件: {a : α}
-  结论: Finset.biUnion {a} t = t a
+  结论: 有限集.biUnion {a} t = t a
   证明: by grind
 -/
 lemma singleton_biUnion {a : α} : Finset.biUnion {a} t = t a := by grind
@@ -780,7 +780,7 @@ lemma biUnion_inter
 
 中文:
 引理 biUnion_inter
-  条件: (s : Finset α) (f : α -> Finset β) (t : Finset β)
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (t : 有限集 β)
   证明: by grind
 -/
 lemma biUnion_inter (s : Finset α) (f : α -> Finset β) (t : Finset β) :
@@ -796,7 +796,7 @@ lemma inter_biUnion
 
 中文:
 引理 inter_biUnion
-  条件: (t : Finset β) (s : Finset α) (f : α -> Finset β)
+  条件: (t : 有限集 β) (s : 有限集 α) (f : α -> 有限集 β)
   证明: by grind
 -/
 lemma inter_biUnion (t : Finset β) (s : Finset α) (f : α -> Finset β) :
@@ -812,7 +812,7 @@ lemma biUnion_biUnion
 
 中文:
 引理 biUnion_biUnion
-  条件: [DecidableEq γ] (s : Finset α) (f : α -> Finset β) (g : β -> Finset γ)
+  条件: [DecidableEq γ] (s : 有限集 α) (f : α -> 有限集 β) (g : β -> 有限集 γ)
   证明: by grind
 -/
 lemma biUnion_biUnion [DecidableEq γ] (s : Finset α) (f : α -> Finset β) (g : β -> Finset γ) :
@@ -869,7 +869,7 @@ lemma biUnion_subset_biUnion_of_subset_left
 
 中文:
 引理 biUnion_subset_biUnion_of_subset_left
-  条件: (t : α -> Finset β) (h : s₁ subseteq s₂)
+  条件: (t : α -> 有限集 β) (h : s₁ subseteq s₂)
   证明: by grind
 -/
 lemma biUnion_subset_biUnion_of_subset_left (t : α -> Finset β) (h : s₁ subseteq s₂) :
@@ -888,7 +888,7 @@ lemma subset_biUnion_of_mem
 
 中文:
 引理 subset_biUnion_of_mem
-  条件: (u : α -> Finset β) {x : α} (xs : x in s)
+  条件: (u : α -> 有限集 β) {x : α} (xs : x in s)
   结论: u x subseteq s.biUnion u
   证明: by grind
 
@@ -908,8 +908,8 @@ lemma biUnion_subset_iff_forall_subset
 @[simp]
 
 中文:
-引理 biUnion_subset_iff_forall_subset
-  结论: {α β : 类型} [DecidableEq β] {s : Finset α}
+引理 biUnion_subset_iff_对任意_subset
+  结论: {α β : 类型} [DecidableEq β] {s : 有限集 α}
   证明: by grind
 
 @[simp]
@@ -931,7 +931,7 @@ lemma biUnion_singleton_eq_self
 中文:
 引理 biUnion_singleton_eq_self
   条件: [DecidableEq α]
-  结论: s.biUnion (singleton : α -> Finset α) = s
+  结论: s.biUnion (singleton : α -> 有限集 α) = s
   证明: by
   grind
 -/
@@ -948,7 +948,7 @@ lemma filter_biUnion
 
 中文:
 引理 filter_biUnion
-  条件: (s : Finset α) (f : α -> Finset β) (p : β -> 命题) [DecidablePred p]
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (p : β -> 命题) [DecidablePred p]
   证明: by grind
 
 Depends on / 依赖: Sigma.fst
@@ -966,7 +966,7 @@ lemma biUnion_filter_eq_of_maps_to
 
 中文:
 引理 biUnion_filter_eq_of_maps_to
-  结论: [DecidableEq α] {s : Finset α} {t : Finset β} {f : α -> β}
+  结论: [DecidableEq α] {s : 有限集 α} {t : 有限集 β} {f : α -> β}
   证明: by grind
 -/
 lemma biUnion_filter_eq_of_maps_to [DecidableEq α] {s : Finset α} {t : Finset β} {f : α -> β}
@@ -984,7 +984,7 @@ lemma erase_biUnion
 
 中文:
 引理 erase_biUnion
-  条件: (f : α -> Finset β) (s : Finset α) (b : β)
+  条件: (f : α -> 有限集 β) (s : 有限集 α) (b : β)
   证明: by grind
 
 @[simp]
@@ -1006,7 +1006,7 @@ lemma biUnion_nonempty
 
 中文:
 引理 biUnion_nonempty
-  结论: (s.biUnion t).Nonempty ↔ 存在 x in s, (t x).Nonempty
+  结论: (s.biUnion t).非空 ↔ 存在 x in s, (t x).非空
   证明: by
   simp only [Finset.Nonempty, mem_biUnion]
   rw [exists_comm]
@@ -1028,8 +1028,8 @@ lemma Nonempty.biUnion
   proof: biUnion_nonempty.2 hs.imp fun x hx => ⟨hx, ht x hx⟩
 
 中文:
-引理 Nonempty.biUnion
-  条件: (hs : s.Nonempty) (ht : 对任意 x in s, (t x).Nonempty)
+引理 非空.biUnion
+  条件: (hs : s.非空) (ht : 对任意 x in s, (t x).非空)
   证明: biUnion_nonempty.2 hs.imp fun x hx => ⟨hx, ht x hx⟩
 
 Depends on / 依赖: biUnion_nonempty, hs.imp
@@ -1052,7 +1052,7 @@ lemma disjoint_biUnion_left
 
 中文:
 引理 disjoint_biUnion_left
-  条件: (s : Finset α) (f : α -> Finset β) (t : Finset β)
+  条件: (s : 有限集 α) (f : α -> 有限集 β) (t : 有限集 β)
   证明: by
   classical
   refine s.induction ?_ ?_
@@ -1081,7 +1081,7 @@ lemma disjoint_biUnion_right
 
 中文:
 引理 disjoint_biUnion_right
-  条件: (s : Finset β) (t : Finset α) (f : α -> Finset β)
+  条件: (s : 有限集 β) (t : 有限集 α) (f : α -> 有限集 β)
   证明: by
   simpa only [_root_.disjoint_comm] using disjoint_biUnion_left t f s
 
@@ -1102,7 +1102,7 @@ theorem image_biUnion
 
 中文:
 定理 image_biUnion
-  条件: [DecidableEq γ] {f : α -> β} {s : Finset α} {t : β -> Finset γ}
+  条件: [DecidableEq γ] {f : α -> β} {s : 有限集 α} {t : β -> 有限集 γ}
   证明: haveI := Classical.decEq α
   Finset.induction_on s rfl fun a s _ ih => by simp only [image_insert, biUnion_insert, ih]
 
@@ -1124,7 +1124,7 @@ theorem biUnion_image
 
 中文:
 定理 biUnion_image
-  条件: [DecidableEq γ] {s : Finset α} {t : α -> Finset β} {f : β -> γ}
+  条件: [DecidableEq γ] {s : 有限集 α} {t : α -> 有限集 β} {f : β -> γ}
   证明: haveI := Classical.decEq α
   Finset.induction_on s rfl fun a s _ ih => by simp only [biUnion_insert, image_union, ih]
 
@@ -1145,7 +1145,7 @@ theorem image_biUnion_filter_eq
 
 中文:
 定理 image_biUnion_filter_eq
-  条件: [DecidableEq α] (s : Finset β) (g : β -> α)
+  条件: [DecidableEq α] (s : 有限集 β) (g : β -> α)
   证明: biUnion_filter_eq_of_maps_to fun _ => mem_image_of_mem g
 
 Depends on / 依赖: biUnion_filter_eq_of_maps_to, mem_image_of_mem
@@ -1201,7 +1201,7 @@ theorem biUnion_singleton
 中文:
 定理 biUnion_singleton
   条件: {f : α -> β}
-  结论: (s.biUnion fun a => {f a}) = s.image f
+  结论: (s.biUnion fun a => {f a}) = s.像 f
   证明: by grind
 -/
 theorem biUnion_singleton {f : α -> β} : (s.biUnion fun a => {f a}) = s.image f := by grind
@@ -1217,7 +1217,7 @@ lemma attach_biUnion
 
 中文:
 引理 attach_biUnion
-  条件: {f : α -> Finset β}
+  条件: {f : α -> 有限集 β}
   结论: s.attach.biUnion (f ·) = s.biUnion f
   证明: by aesop
 -/
@@ -1233,7 +1233,7 @@ lemma attach_biUnion'
 
 中文:
 引理 attach_biUnion'
-  条件: [DecidableEq α] {f : s -> Finset β}
+  条件: [DecidableEq α] {f : s -> 有限集 β}
   证明: by aesop
 -/
 lemma attach_biUnion' [DecidableEq α] {f : s -> Finset β} :

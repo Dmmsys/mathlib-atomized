@@ -67,9 +67,9 @@ class GrothendieckTopology.IsLocalSite
     - eq_top_of_mem : forall S in J (⊤_ C), S = ⊤
 
 中文:
-类 GrothendieckTopology.IsLocalSite
-  参数: extends HasTerminal C
-  继承: HasTerminal C
+类 Grothendieck拓扑.是LocalSite
+  参数: extends 有终止 C
+  继承: 有终止 C
   公理与运算 (1 个):
     - eq_top_of_mem : 对任意 S in J (⊤_ C), S = ⊤
 -/
@@ -89,7 +89,7 @@ lemma from_terminal_mem_of_mem
 
 中文:
 引理 from_terminal_mem_of_mem
-  结论: [J.IsLocalSite] {X : C} (f : ⊤_ C ⟶ X) {S : Sieve X}
+  结论: [J.是LocalSite] {X : C} (f : ⊤_ C ⟶ X) {S : 筛 X}
   证明: (S.mem_iff_pullback_eq_top f).mpr eq_top_of_mem _ J.pullback_stable f hS
 
 Depends on / 依赖: J.pullback_stable, S.mem_iff_pullback_eq_top, eq_top_of_mem, mem_iff_pullback_eq_top, pullback_stable
@@ -118,7 +118,7 @@ definition point
 
 中文:
 定义 point
-  签名: [LocallySmall.{w} C] [J.IsLocalSite]
+  签名: [LocallySmall.{w} C] [J.是LocalSite]
   定义体: shrinkCoyoneda.obj (op (⊤_ C))
   jointly_surjective R hR x :=
     ⟨(⊤_ C), shrinkCoyonedaObjObjEquiv x,
@@ -249,7 +249,7 @@ definition pointPresheafFiberNatIso
   body: NatIso.ofComponents (pointPresheafFiberIso J) fun F => pointPresheafFiberIso_naturality J F
 
 中文:
-定义 pointPresheafFiberNatIso
+定义 pointPresheafFiber自然数Iso
   签名: :
   定义体: NatIso.ofComponents (pointPresheafFiberIso J) fun F => pointPresheafFiberIso_naturality J F
 
@@ -309,7 +309,7 @@ lemma Γ_isLeftAdjoint
 
 中文:
 引理 Γ_isLeftAdjoint
-  结论: (Γ J A).IsLeftAdjoint
+  结论: (Γ J A).是左伴随
   证明: ⟨coconstantSheaf.{w} J A, ⟨ΓCoconstantSheafAdj J A⟩⟩
 
 Depends on / 依赖: coconstantSheaf
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coconstantSheaf.{w} J A).IsRightAdjoint
+  签名: (coconstantSheaf.{w} J A).是右伴随
   定义体: ⟨Γ J A, ⟨ΓCoconstantSheafAdj J A⟩⟩
 -/
 instance : (coconstantSheaf.{w} J A).IsRightAdjoint :=
@@ -354,7 +354,7 @@ definition coconstantSheafΓNatIsoId
     NatIso.ofComponents (fun X => productUniqueIso _) (by simp [IsLocalSite.coconstantSheaf])
 
 中文:
-定义 coconstantSheafΓNatIsoId
+定义 coconstantSheafΓ自然数IsoId
   签名: :
   定义体: letI : Unique (unop ((IsLocalSite.point J).fiber.op.obj (op (⊤_ C)))) :=
     (equivShrink (⊤_ C ⟶ ⊤_ C)).symm.unique
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coconstantSheaf.{w} J A).Full
+  签名: (coconstantSheaf.{w} J A).满
   定义体: (fullyFaithfulCoconstantSheaf J A).full
 
 Depends on / 依赖: fullyFaithfulCoconstantSheaf
@@ -417,7 +417,7 @@ instance :
 
 中文:
 实例 :
-  签名: (coconstantSheaf.{w} J A).Faithful
+  签名: (coconstantSheaf.{w} J A).忠实
   定义体: (fullyFaithfulCoconstantSheaf J A).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulCoconstantSheaf
@@ -456,7 +456,7 @@ definition fullyFaithfulConstantSheaf
 
 中文:
 定义 fullyFaithfulConstantSheaf
-  签名: : (constantSheaf J A).FullyFaithful
+  签名: : (constantSheaf J A).满忠实
   定义体: (constantΓCoconstantTriple J A).fullyFaithfulEquiv.symm
     fullyFaithfulCoconstantSheaf.{w} J A
 
@@ -476,7 +476,7 @@ lemma full_constantSheaf
 
 中文:
 引理 full_constantSheaf
-  结论: (constantSheaf J A).Full
+  结论: (constantSheaf J A).满
   证明: (fullyFaithfulConstantSheaf.{w} J A).full
 
 Depends on / 依赖: fullyFaithfulConstantSheaf
@@ -494,7 +494,7 @@ lemma faithful_constantSheaf
 
 中文:
 引理 faithful_constantSheaf
-  结论: (constantSheaf J A).Faithful
+  结论: (constantSheaf J A).忠实
   证明: (fullyFaithfulConstantSheaf.{w} J A).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulConstantSheaf

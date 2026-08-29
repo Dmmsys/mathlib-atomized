@@ -39,7 +39,7 @@ theorem exists_prime_gt_modEq_one
     ha
 
 中文:
-定理 exists_prime_gt_modEq_one
+定理 存在_prime_gt_modEq_one
   条件: {k : 自然数} (n : 自然数) (hk0 : k != 0)
   证明: by
   rcases (one_le_iff_ne_zero.2 hk0).eq_or_lt with (rfl | hk1)

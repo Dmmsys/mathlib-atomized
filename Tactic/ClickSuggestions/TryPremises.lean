@@ -33,10 +33,10 @@ inductive Candidates
 归纳类型 Candidates
   参数: where
   构造子 (4 个):
-    - rw: (i : RwInfo) (arr : Array RwLemma)
-    - grw: (i : GrwInfo) (arr : Array GrwLemma)
-    - app: (arr : Array ApplyLemma)
-    - appAt: (arr : Array ApplyAtLemma)
+    - rw: (i : RwInfo) (arr : 数组 RwLemma)
+    - grw: (i : GrwInfo) (arr : 数组 GrwLemma)
+    - app: (arr : 数组 ApplyLemma)
+    - appAt: (arr : 数组 ApplyAtLemma)
 
 Depends on / 依赖: mergeWith
 -/
@@ -74,7 +74,7 @@ definition getCandidatesAux
 
 中文:
 定义 getCandidatesAux
-  签名: (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
+  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos) (rwKind : RwKind)
   定义体: do
   let mut cands : Std.TreeMap Nat (Array Candidates) := {}
   /- The order in which we show the suggestions for the same pattern for different tactics
@@ -133,7 +133,7 @@ definition getImportCandidates
 
 中文:
 定义 getImportCandidates
-  签名: (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
+  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos) (rwKind : RwKind)
   定义体: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? reportProgress
     (getImportMatches rwRef) (getImportMatches grwRef)
     (getImportMatches appRef) (getImportMatches appAtRef)
@@ -159,7 +159,7 @@ definition getCandidates
 
 中文:
 定义 getCandidates
-  签名: (rootExpr subExpr : Expr) (gpos : Array GrwPos)
+  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos)
   定义体: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? (fun _ => pure ())
     (getMatches pres.rw.toRefinedDiscrTree) (getMatches pres.grw.toRefinedDiscrTree)
     (getMatches pres.app.toRefinedDiscrTree) (getMatches pres.appAt.toRefinedDiscrTree)
@@ -195,7 +195,7 @@ definition foldTasksM
 
 中文:
 定义 foldTasksM
-  签名: {α β} (tasks : Array (Task β)) (init : α) (f : α -> β -> MetaM α)
+  签名: {α β} (tasks : 数组 (Task β)) (init : α) (f : α -> β -> MetaM α)
   定义体: do
   if tasks.isEmpty then return init
   Core.checkInterrupted

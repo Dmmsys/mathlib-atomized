@@ -105,7 +105,7 @@ lemma mgraph_eq_mrange_prod
 中文:
 引理 mgraph_eq_mrange_prod
   条件: (f : G ->* H)
-  结论: f.mgraph = mrange ((id _).prod f)
+  结论: f.mgraph = mrange ((id _).乘积 f)
   证明: by aesop
 -/
 lemma mgraph_eq_mrange_prod (f : G ->* H) : f.mgraph = mrange ((id _).prod f) := by aesop
@@ -138,8 +138,8 @@ lemma exists_mrange_eq_mgraph
       exact (hf
 
 中文:
-引理 exists_mrange_eq_mgraph
-  结论: {f : G ->* H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_mrange_eq_mgraph
+  结论: {f : G ->* H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   obtain ⟨f', hf'⟩ := exists_range_eq_graphOn_univ hf₁ hf
   simp only [Set.ext_iff, Set.mem_range, mem_graphOn, mem_univ, true_and, Prod.forall] at hf'
@@ -194,8 +194,8 @@ obtain ⟨e₂, he₂⟩ := (MulEquiv.prodComm.toMonoidHom.comp f).exists_mrange
     aesop (add simp [Prod.swap_e
 
 中文:
-引理 exists_mulEquiv_mrange_eq_mgraph
-  结论: {f : G ->* H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_mulEquiv_mrange_eq_mgraph
+  结论: {f : G ->* H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   obtain ⟨e₁, he₁⟩ := f.exists_mrange_eq_mgraph hf₁ fun _ _ => (hf _ _).1
 obtain ⟨e₂, he₂⟩ := (MulEquiv.prodComm.toMonoidHom.comp f).exists_mrange_eq_mgraph (by simpa)
@@ -244,8 +244,8 @@ lemma Submonoid.exists_eq_mgraph
     fun a b h => congr_arg (Prod.snd ∘ G.subtype) (hG₁.injective h)
 
 中文:
-引理 Submonoid.exists_eq_mgraph
-  条件: {G : Submonoid (H × I)} (hG₁ : Bijective (Prod.fst ∘ G.subtype))
+引理 子幺半群.存在_eq_mgraph
+  条件: {G : 子幺半群 (H × I)} (hG₁ : 双射 (积类型.fst ∘ G.subtype))
   证明: by
   simpa using MonoidHom.exists_mrange_eq_mgraph hG₁.surjective
     fun a b h => congr_arg (Prod.snd ∘ G.subtype) (hG₁.injective h)
@@ -276,8 +276,8 @@ lemma Submonoid.exists_mulEquiv_eq_mgraph
     fun _ _ => hG₁.injective.eq_iff.trans hG₂.injective.eq_iff.symm
 
 中文:
-引理 Submonoid.exists_mulEquiv_eq_mgraph
-  结论: {G : Submonoid (H × I)}
+引理 子幺半群.存在_mulEquiv_eq_mgraph
+  结论: {G : 子幺半群 (H × I)}
   证明: by
   simpa using MonoidHom.exists_mulEquiv_mrange_eq_mgraph hG₁.surjective hG₂.surjective
     fun _ _ => hG₁.injective.eq_iff.trans hG₂.injective.eq_iff.symm
@@ -365,7 +365,7 @@ lemma graph_eq_range_prod
 中文:
 引理 graph_eq_range_prod
   条件: (f : G ->* H)
-  结论: f.graph = range ((id _).prod f)
+  结论: f.graph = range ((id _).乘积 f)
   证明: by aesop
 -/
 lemma graph_eq_range_prod (f : G ->* H) : f.graph = range ((id _).prod f) := by aesop
@@ -390,8 +390,8 @@ lemma exists_range_eq_graph
   simpa [SetLike.ext_iff] using! exists_mrange_eq_mgraph hf₁ hf
 
 中文:
-引理 exists_range_eq_graph
-  结论: {f : G ->* H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_range_eq_graph
+  结论: {f : G ->* H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   simpa [SetLike.ext_iff] using! exists_mrange_eq_mgraph hf₁ hf
 
@@ -424,8 +424,8 @@ lemma exists_mulEquiv_range_eq_graph
   simpa [SetLike.ext_iff] using! exists_mulEquiv_mrange_eq_mgraph hf₁ hf₂ hf
 
 中文:
-引理 exists_mulEquiv_range_eq_graph
-  结论: {f : G ->* H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 存在_mulEquiv_range_eq_graph
+  结论: {f : G ->* H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   simpa [SetLike.ext_iff] using! exists_mulEquiv_mrange_eq_mgraph hf₁ hf₂ hf
 
@@ -457,8 +457,8 @@ lemma Subgroup.exists_eq_graph
   simpa [SetLike.ext_iff] using! Submonoid.exists_eq_mgraph hG₁
 
 中文:
-引理 Subgroup.exists_eq_graph
-  条件: {G : Subgroup (H × I)} (hG₁ : Bijective (Prod.fst ∘ G.subtype))
+引理 子群.存在_eq_graph
+  条件: {G : 子群 (H × I)} (hG₁ : 双射 (积类型.fst ∘ G.subtype))
   证明: by
   simpa [SetLike.ext_iff] using! Submonoid.exists_eq_mgraph hG₁
 
@@ -486,8 +486,8 @@ lemma Subgroup.exists_mulEquiv_eq_graph
   simpa [SetLike.ext_iff] using! Submonoid.exists_mulEquiv_eq_mgraph hG₁ hG₂
 
 中文:
-引理 Subgroup.exists_mulEquiv_eq_graph
-  结论: {G : Subgroup (H × I)}
+引理 子群.存在_mulEquiv_eq_graph
+  结论: {G : 子群 (H × I)}
   证明: by
   simpa [SetLike.ext_iff] using! Submonoid.exists_mulEquiv_eq_mgraph hG₁ hG₂
 

@@ -116,7 +116,7 @@ theorem extend_eq
 
 中文:
 定理 extend_eq
-  条件: (h_dense : DenseRange e) (h_e : IsUniformInducing e) (x : E)
+  条件: (h_dense : DenseRange e) (h_e : 是UniformInducing e) (x : E)
   证明: by
   simp only [extend, h_dense, h_e, and_self, ↓reduceDIte, coe_mk', LinearMap.coe_mk, AddHom.coe_mk]
   exact IsDenseInducing.extend_eq (h_e.isDenseInducing h_dense) f.cont _
@@ -143,7 +143,7 @@ exact ContinuousLinearMap.coeFn_injective
 
 中文:
 定理 extend_unique
-  结论: (h_dense : DenseRange e) (h_e : IsUniformInducing e) (g : Eₗ ->SL[σ₁₂] F)
+  结论: (h_dense : DenseRange e) (h_e : 是UniformInducing e) (g : Eₗ ->SL[σ₁₂] F)
   证明: by
   simp only [extend, h_dense, h_e, and_self, ↓reduceDIte]
 exact ContinuousLinearMap.coeFn_injective
@@ -170,7 +170,7 @@ theorem extend_zero
 
 中文:
 定理 extend_zero
-  条件: (h_dense : DenseRange e) (h_e : IsUniformInducing e)
+  条件: (h_dense : DenseRange e) (h_e : 是UniformInducing e)
   证明: extend_unique _ h_dense h_e _ (zero_comp _)
 
 Depends on / 依赖: extend_unique, h_dense, zero_comp

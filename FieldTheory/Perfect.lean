@@ -47,10 +47,10 @@ class PerfectRing
     - bijective_frobenius : Bijective fun x : R => x ^ p
 
 中文:
-类 PerfectRing
-  参数: (R : 类型) (p : 自然数) [Pow R 自然数]
+类 完美环
+  参数: (R : 类型) (p : 自然数) [幂 R 自然数]
   公理与运算 (1 个):
-    - bijective_frobenius : Bijective fun x : R => x ^ p
+    - bijective_frobenius : 双射 fun x : R => x ^ p
 -/
 class PerfectRing (R : Type*) (p : Nat) [Pow R Nat] : Prop where
   /-- A ring is perfect if the Frobenius map is bijective. -/
@@ -73,7 +73,7 @@ instance one
 
 中文:
 实例 one
-  签名: : PerfectRing M 1
+  签名: : 完美环 M 1
   定义体: ⟨by simpa using! bijective_id⟩
 
 Depends on / 依赖: bijective_id
@@ -91,7 +91,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : PerfectRing M (p * q)
+  签名: : 完美环 M (p * q)
   定义体: ⟨by simp_rw [pow_mul]; exact PerfectRing.bijective_frobenius.comp PerfectRing.bijective_frobenius⟩
 
 Depends on / 依赖: PerfectRing, PerfectRing.bijective_frobenius, PerfectRing.bijective_frobenius.comp, bijective_frobenius, pow_mul, simp_rw
@@ -259,8 +259,8 @@ lemma PerfectRing.ofSurjective
   proof: ⟨frobenius_inj R p, h⟩
 
 中文:
-引理 PerfectRing.ofSurjective
-  结论: (R : 类型) (p : 自然数) [CommRing R] [ExpChar R p]
+引理 完美环.ofSurjective
+  结论: (R : 类型) (p : 自然数) [交换环 R] [ExpChar R p]
   证明: ⟨frobenius_inj R p, h⟩
 
 Depends on / 依赖: frobenius_inj
@@ -278,8 +278,8 @@ instance PerfectRing.ofFiniteOfIsReduced
   body: ofSurjective _ _ Finite.surjective_of_injective (frobenius_inj R p)
 
 中文:
-实例 PerfectRing.ofFiniteOfIsReduced
-  签名: (R : 类型) [CommRing R] [ExpChar R p]
+实例 完美环.ofFiniteOfIsReduced
+  签名: (R : 类型) [交换环 R] [ExpChar R p]
   定义体: ofSurjective _ _ Finite.surjective_of_injective (frobenius_inj R p)
 
 Depends on / 依赖: Finite, Finite.surjective_of_injective, frobenius_inj, ofSurjective, surjective_of_injective
@@ -301,7 +301,7 @@ theorem bijective_frobenius
 
 中文:
 定理 bijective_frobenius
-  结论: Bijective (frobenius R p)
+  结论: 双射 (frobenius R p)
   证明: PerfectRing.bijective_frobenius
 
 Depends on / 依赖: PerfectRing, PerfectRing.bijective_frobenius, bijective_frobenius
@@ -320,7 +320,7 @@ theorem bijective_iterateFrobenius
 
 中文:
 定理 bijective_iterateFrobenius
-  结论: Bijective (iterateFrobenius R p n)
+  结论: 双射 (iterateFrobenius R p n)
   证明: PerfectRing.bijective_frobenius
 
 @[simp]
@@ -343,7 +343,7 @@ theorem injective_frobenius
 
 中文:
 定理 injective_frobenius
-  结论: Injective (frobenius R p)
+  结论: 单射 (frobenius R p)
   证明: (bijective_frobenius R p).1
 
 @[simp]
@@ -363,7 +363,7 @@ theorem surjective_frobenius
 
 中文:
 定理 surjective_frobenius
-  结论: Surjective (frobenius R p)
+  结论: 满射 (frobenius R p)
   证明: (bijective_frobenius R p).2
 
 Depends on / 依赖: bijective_frobenius
@@ -642,7 +642,7 @@ theorem iterateFrobeniusEquiv_zero
 
 中文:
 定理 iterateFrobeniusEquiv_zero
-  结论: iterateFrobeniusEquiv R p 0 = RingEquiv.refl R
+  结论: iterateFrobeniusEquiv R p 0 = 环等价.refl R
   证明: RingEquiv.ext (iterateFrobeniusEquiv_zero_apply R p)
 
 @[simp]
@@ -946,7 +946,7 @@ theorem MonoidHom.map_frobeniusEquiv_symm
   simp [← MonoidHom.map_frobenius]
 
 中文:
-定理 MonoidHom.map_frobeniusEquiv_symm
+定理 幺半群态射.map_frobeniusEquiv_symm
   条件: (f : R ->* S) (x : R)
   证明: by
   apply_fun (frobeniusEquiv S p)
@@ -970,7 +970,7 @@ theorem RingHom.map_frobeniusEquiv_symm
   simp [← RingHom.map_frobenius]
 
 中文:
-定理 RingHom.map_frobeniusEquiv_symm
+定理 环态射.map_frobeniusEquiv_symm
   条件: (f : R ->+* S) (x : R)
   证明: by
   apply_fun (frobeniusEquiv S p)
@@ -997,7 +997,7 @@ theorem MonoidHom.map_iterate_frobeniusEquiv_symm
           ← Function.Commute.comp_iterate, ← Function.Commute.comp_iterate
 
 中文:
-定理 MonoidHom.map_iterate_frobeniusEquiv_symm
+定理 幺半群态射.map_iterate_frobeniusEquiv_symm
   条件: (f : R ->* S) (n : 自然数) (x : R)
   证明: by
   apply_fun (frobeniusEquiv S p)^[n]
@@ -1029,7 +1029,7 @@ theorem RingHom.map_iterate_frobeniusEquiv_symm
   proof: MonoidHom.map_iterate_frobeniusEquiv_symm p (f.toMonoidHom) n x
 
 中文:
-定理 RingHom.map_iterate_frobeniusEquiv_symm
+定理 环态射.map_iterate_frobeniusEquiv_symm
   条件: (f : R ->+* S) (n : 自然数) (x : R)
   证明: MonoidHom.map_iterate_frobeniusEquiv_symm p (f.toMonoidHom) n x
 
@@ -1098,7 +1098,7 @@ theorem not_irreducible_expand
 
 中文:
 定理 not_irreducible_expand
-  结论: (R p) [CommSemiring R] [Fact p.Prime] [CharP R p] [PerfectRing R p]
+  结论: (R p) [交换半环 R] [Fact p.素] [特征p R p] [完美环 R p]
   证明: by
   rw [polynomial_expand_eq]
   exact not_irreducible_pow (Fact.out : p.Prime).ne_one
@@ -1120,7 +1120,7 @@ instance instPerfectRingProd
 
 中文:
 实例 instPerfectRingProd
-  签名: (S : 类型) [CommSemiring S] [ExpChar S p] [PerfectRing S p]
+  签名: (S : 类型) [交换半环 S] [ExpChar S p] [完美环 S p]
   定义体: (bijective_frobenius R p).prodMap (bijective_frobenius S p)
 
 Depends on / 依赖: bijective_frobenius, prodMap
@@ -1143,10 +1143,10 @@ class PerfectField
     - separable_of_irreducible : forall {f : K[X]}, Irreducible f -> f.Separable
 
 中文:
-类 PerfectField
-  参数: (K : 类型) [Field K]
+类 完美域
+  参数: (K : 类型) [域 K]
   公理与运算 (1 个):
-    - separable_of_irreducible : 对任意 {f : K[X]}, Irreducible f -> f.Separable
+    - separable_of_irreducible : 对任意 {f : K[X]}, 不可约 f -> f.可分
 -/
 class PerfectField (K : Type*) [Field K] : Prop where
   /-- A field is perfect if every irreducible polynomial is separable. -/
@@ -1167,7 +1167,7 @@ lemma PerfectRing.toPerfectField
   · exfalso; revert hf; have := Fact.mk hp; simp
 
 中文:
-引理 PerfectRing.toPerfectField
+引理 完美环.toPerfectField
   结论: (K : 类型) (p : 自然数)
   证明: by
   obtain hp | ⟨hp⟩ := ‹ExpChar K p›
@@ -1202,7 +1202,7 @@ instance ofCharZero
 
 中文:
 实例 ofCharZero
-  签名: [CharZero K]
+  签名: [特征零 K]
   定义体: ⟨Irreducible.separable⟩
 
 Depends on / 依赖: Irreducible, Irreducible.separable, separable
@@ -1222,7 +1222,7 @@ instance ofFinite
 
 中文:
 实例 ofFinite
-  签名: [Finite K]
+  签名: [有限 K]
   定义体: by
   obtain ⟨p, _instP⟩ := CharP.exists K
   have : Fact p.Prime := ⟨CharP.char_is_prime K p⟩
@@ -1296,7 +1296,7 @@ theorem separable_iff_squarefree
 中文:
 定理 separable_iff_squarefree
   条件: {g : K[X]}
-  结论: g.Separable ↔ Squarefree g
+  结论: g.可分 ↔ Squarefree g
   证明: by
   refine ⟨Separable.squarefree, fun sqf => isCoprime_of_irreducible_dvd (sqf.ne_zero ·.1) ?_⟩
   rintro p (h : Irreducible p) ⟨q, rfl⟩ (dvd : p ∣ derivative (p * q))
@@ -1326,8 +1326,8 @@ instance Algebra.IsAlgebraic.isSeparable_of_perfectField
     minpoly.irreducible (Algebra.IsIntegral.isIntegral x)⟩
 
 中文:
-实例 Algebra.IsAlgebraic.isSeparable_of_perfectField
-  签名: {K L : 类型} [Field K] [Field L]
+实例 代数.是代数.isSeparable_of_perfectField
+  签名: {K L : 类型} [域 K] [域 L]
   定义体: ⟨fun x => PerfectField.separable_of_irreducible
     minpoly.irreducible (Algebra.IsIntegral.isIntegral x)⟩
 
@@ -1349,8 +1349,8 @@ theorem Algebra.IsAlgebraic.perfectField
 .of_dvd h⟩ exact (PerfectField.separable_of_irreducible hi).map
 
 中文:
-定理 Algebra.IsAlgebraic.perfectField
-  结论: (K : 类型) {L : 类型} [Field K] [Field L] [Algebra K L]
+定理 代数.是代数.perfectField
+  结论: (K : 类型) {L : 类型} [域 K] [域 L] [代数 K L]
   证明: ⟨fun {f} hf => by
   obtain ⟨_, _, hi, h⟩ := hf.exists_dvd_monic_irreducible_of_isIntegral (K := K)
 .of_dvd h⟩ exact (PerfectField.separable_of_irreducible hi).map
@@ -1372,8 +1372,8 @@ theorem PerfectField.of_ringEquiv
   Algebra.IsAlgebraic.perfectField K
 
 中文:
-定理 PerfectField.of_ringEquiv
-  条件: {K L : 类型} [Field K] [Field L] (h : K ≃+* L) [PerfectField K]
+定理 完美域.of_ringEquiv
+  条件: {K L : 类型} [域 K] [域 L] (h : K ≃+* L) [完美域 K]
   证明: let := h.toRingHom.toAlgebra
   Algebra.IsAlgebraic.perfectField K
 

@@ -85,7 +85,7 @@ theorem coeff_smul
 
 中文:
 定理 coeff_smul
-  条件: [SMulZeroClass S R] (r : S) (p : R[X]) (n : 自然数)
+  条件: [SMulZero类 S R] (r : S) (p : R[X]) (n : 自然数)
   证明: by
   rfl
 -/
@@ -107,7 +107,7 @@ theorem support_smul
 
 中文:
 定理 support_smul
-  条件: [SMulZeroClass S R] (r : S) (p : R[X])
+  条件: [SMulZero类 S R] (r : S) (p : R[X])
   证明: by
   intro i hi
   rw [mem_support_iff] at hi ⊢
@@ -173,7 +173,7 @@ definition lsum
 
 中文:
 定义 lsum
-  签名: {R A M : 类型} [Semiring R] [Semiring A] [AddCommMonoid M] [Module R A] [Module R M]
+  签名: {R A M : 类型} [半环 R] [半环 A] [加法交换幺半群 M] [模 R A] [模 R M]
   定义体: p.sum (f · ·)
   map_add' p q := sum_add_index p q _ (fun n => (f n).map_zero) fun n _ _ => (f n).map_add _ _
   map_smul' c p := by
@@ -253,7 +253,7 @@ theorem finsetSum_coeff
 
 中文:
 定理 finsetSum_coeff
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> R[X]) (n : 自然数)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R[X]) (n : 自然数)
   证明: map_sum (lcoeff R n) _ _
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_coeff := finsetSum_coeff
@@ -276,7 +276,7 @@ lemma coeff_list_sum
 
 中文:
 引理 coeff_list_sum
-  条件: (l : List R[X]) (n : 自然数)
+  条件: (l : 列表 R[X]) (n : 自然数)
   证明: map_list_sum (lcoeff R n) _
 
 Depends on / 依赖: lcoeff, map_list_sum
@@ -298,7 +298,7 @@ lemma coeff_list_sum_map
 
 中文:
 引理 coeff_list_sum_map
-  条件: {ι : 类型} (l : List ι) (f : ι -> R[X]) (n : 自然数)
+  条件: {ι : 类型} (l : 列表 ι) (f : ι -> R[X]) (n : 自然数)
   证明: by
   simp_rw [coeff_list_sum, List.map_map, Function.comp_def, lcoeff_apply]
 
@@ -322,7 +322,7 @@ theorem coeff_sum
 
 中文:
 定理 coeff_sum
-  条件: [Semiring S] (n : 自然数) (f : 自然数 -> R -> S[X])
+  条件: [半环 S] (n : 自然数) (f : 自然数 -> R -> S[X])
   证明: by
   simp [Polynomial.sum]
 
@@ -449,7 +449,7 @@ lemma constantCoeff_surjective
 
 中文:
 引理 constantCoeff_surjective
-  结论: Function.Surjective (constantCoeff (R := R))
+  结论: 函数.满射 (constantCoeff (R := R))
   证明: fun x => ⟨C x, by simp⟩
 -/
 lemma constantCoeff_surjective : Function.Surjective (constantCoeff (R := R)) :=
@@ -467,7 +467,7 @@ theorem isUnit_C
 中文:
 定理 isUnit_C
   条件: {x : R}
-  结论: IsUnit (C x) ↔ IsUnit x
+  结论: 是单位 (C x) ↔ 是单位 x
   证明: ⟨fun h => (congr_arg IsUnit coeff_C_zero).mp (h.map <| @constantCoeff R _), fun h => h.map C⟩
 
 Depends on / 依赖: IsUnit, coeff_C_zero, congr_arg, constantCoeff, h.map
@@ -687,7 +687,7 @@ lemma coeff_mul_ofNat
   proof: coeff_mul_C _ _ _
 
 中文:
-引理 coeff_mul_ofNat
+引理 coeff_mul_of自然数
   条件: {a k : 自然数} [自然数.AtLeastTwo a]
   证明: coeff_mul_C _ _ _
 -/
@@ -703,7 +703,7 @@ lemma coeff_ofNat_mul
   proof: coeff_C_mul _
 
 中文:
-引理 coeff_ofNat_mul
+引理 coeff_of自然数_mul
   条件: {a k : 自然数} [自然数.AtLeastTwo a]
   证明: coeff_C_mul _
 -/
@@ -720,7 +720,7 @@ lemma coeff_mul_intCast
 
 中文:
 引理 coeff_mul_intCast
-  条件: [Ring S] {p : S[X]} {a : 整数} {k : 自然数}
+  条件: [环 S] {p : S[X]} {a : 整数} {k : 自然数}
   证明: coeff_mul_C _ _ _
 -/
 @[simp] lemma coeff_mul_intCast [Ring S] {p : S[X]} {a : Int} {k : Nat} :
@@ -738,7 +738,7 @@ lemma coeff_intCast_mul
 
 中文:
 引理 coeff_intCast_mul
-  条件: [Ring S] {p : S[X]} {a : 整数} {k : 自然数}
+  条件: [环 S] {p : S[X]} {a : 整数} {k : 自然数}
   证明: coeff_C_mul _
 
 @[simp, grind =]
@@ -1186,7 +1186,7 @@ theorem isRegular_X_pow
 中文:
 定理 isRegular_X_pow
   条件: (n : 自然数)
-  结论: IsRegular (X ^ n : R[X])
+  结论: 是正则 (X ^ n : R[X])
   证明: by
   suffices IsLeftRegular (X ^ n : R[X]) from
     ⟨this, this.right_of_commute (fun p => commute_X_pow p n)⟩
@@ -1213,7 +1213,7 @@ theorem isRegular_X
 
 中文:
 定理 isRegular_X
-  结论: IsRegular (X : R[X])
+  结论: 是正则 (X : R[X])
   证明: pow_one (X : R[X]) ▸ isRegular_X_pow 1
 -/
 @[simp] theorem isRegular_X : IsRegular (X : R[X]) := pow_one (X : R[X]) ▸ isRegular_X_pow 1
@@ -1266,7 +1266,7 @@ theorem coeff_X_add_one_pow
 
 中文:
 定理 coeff_X_add_one_pow
-  条件: (R : 类型) [Semiring R] (n k : 自然数)
+  条件: (R : 类型) [半环 R] (n k : 自然数)
   证明: by rw [← C_1, coeff_X_add_C_pow, one_pow, one_mul]
 
 Depends on / 依赖: coeff_X_add_C_pow, one_mul, one_pow
@@ -1284,7 +1284,7 @@ theorem coeff_one_add_X_pow
 
 中文:
 定理 coeff_one_add_X_pow
-  条件: (R : 类型) [Semiring R] (n k : 自然数)
+  条件: (R : 类型) [半环 R] (n k : 自然数)
   证明: by rw [add_comm _ X, coeff_X_add_one_pow]
 
 Depends on / 依赖: add_comm, coeff_X_add_one_pow
@@ -1305,7 +1305,7 @@ theorem one_add_X_pow_sub_X_pow
 
 中文:
 定理 one_add_X_pow_sub_X_pow
-  条件: {S : 类型} [CommRing S] (d : 自然数)
+  条件: {S : 类型} [交换环 S] (d : 自然数)
   证明: by
   ext i
   simp [Polynomial.coeff_one_add_X_pow]
@@ -1411,7 +1411,7 @@ theorem update_eq_add_sub_coeff
 
 中文:
 定理 update_eq_add_sub_coeff
-  条件: {R : 类型} [Ring R] (p : R[X]) (n : 自然数) (a : R)
+  条件: {R : 类型} [环 R] (p : R[X]) (n : 自然数) (a : R)
   证明: by
   ext
   rw [coeff_update_apply]; rw [coeff_add]; rw [coeff_C_mul_X_pow]
@@ -1443,7 +1443,7 @@ theorem natCast_coeff_zero
 
 中文:
 定理 natCast_coeff_zero
-  条件: {n : 自然数} {R : 类型} [Semiring R]
+  条件: {n : 自然数} {R : 类型} [半环 R]
   结论: (n : R[X]).coeff 0 = n
   证明: by
   simp only [coeff_natCast_ite, ite_true]
@@ -1474,7 +1474,7 @@ theorem natCast_inj
 
 中文:
 定理 natCast_inj
-  条件: {m n : 自然数} {R : 类型} [Semiring R] [CharZero R]
+  条件: {m n : 自然数} {R : 类型} [半环 R] [特征零 R]
   证明: by
   constructor
   · intro h
@@ -1511,7 +1511,7 @@ theorem intCast_coeff_zero
 
 中文:
 定理 intCast_coeff_zero
-  条件: {i : 整数} {R : 类型} [Ring R]
+  条件: {i : 整数} {R : 类型} [环 R]
   结论: (i : R[X]).coeff 0 = i
   证明: by
   cases i <;> simp
@@ -1539,7 +1539,7 @@ theorem intCast_inj
 
 中文:
 定理 intCast_inj
-  条件: {m n : 整数} {R : 类型} [Ring R] [CharZero R]
+  条件: {m n : 整数} {R : 类型} [环 R] [特征零 R]
   结论: (↑m : R[X]) = ↑n ↔ m = n
   证明: by
   constructor
@@ -1571,7 +1571,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: natCast_inj.mp
 
 Depends on / 依赖: natCast_inj, natCast_inj.mp
@@ -1589,7 +1589,7 @@ instance charP
 
 中文:
 实例 charP
-  签名: {p : 自然数} [CharP R p]
+  签名: {p : 自然数} [特征p R p]
   定义体: by
     rw [← CharP.cast_eq_zero_iff R]; rw [← C_inj (R := R)]; rw [map_natCast]; rw [C_0]
 

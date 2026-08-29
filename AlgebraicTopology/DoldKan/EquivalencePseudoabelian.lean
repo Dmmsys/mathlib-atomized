@@ -67,7 +67,7 @@ definition N
 
 中文:
 定义 N
-  签名: [IsIdempotentComplete C] [HasFiniteCoproducts C]
+  签名: [是IdempotentComplete C] [有FiniteCoproducts C]
   定义体: N₁ ⋙ (toKaroubiEquivalence _).inverse
 
 Depends on / 依赖: inverse, toKaroubiEquivalence
@@ -87,7 +87,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: [IsIdempotentComplete C] [HasFiniteCoproducts C]
+  签名: [是IdempotentComplete C] [有FiniteCoproducts C]
   定义体: Γ₀
 -/
 def Γ [IsIdempotentComplete C] [HasFiniteCoproducts C] : ChainComplex C Nat ⥤ SimplicialObject C :=
@@ -168,7 +168,7 @@ lemma N₂_map_isoΓ₀_hom_app_f
 
 中文:
 引理 N₂_map_isoΓ₀_hom_app_f
-  条件: (X : ChainComplex C 自然数)
+  条件: (X : 链复形 C 自然数)
   证明: by
   ext
   apply comp_id
@@ -190,7 +190,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: : SimplicialObject C ≌ ChainComplex C 自然数
+  签名: : SimplicialObject C ≌ 链复形 C 自然数
   定义体: Compatibility.equivalence isoN₁ isoΓ₀
 
 Depends on / 依赖: Compatibility, Compatibility.equivalence, equivalence
@@ -279,7 +279,7 @@ definition η
 
 中文:
 定义 η
-  签名: : Γ ⋙ N ≅ 𝟭 (ChainComplex C 自然数)
+  签名: : Γ ⋙ N ≅ 𝟭 (链复形 C 自然数)
   定义体: Compatibility.equivalenceCounitIso
     (N₁Γ₀ : (Γ : ChainComplex C Nat ⥤ _) ⋙ N₁ ≅ (toKaroubiEquivalence _).functor)
 

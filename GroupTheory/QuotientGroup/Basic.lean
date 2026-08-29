@@ -63,7 +63,7 @@ theorem sound
 
 中文:
 定理 sound
-  条件: (U : Set (G ⧸ N)) (g : N.op)
+  条件: (U : 集合 (G ⧸ N)) (g : N.op)
   证明: by
   ext x
   simp only [Set.mem_preimage, Set.mem_smul_set_iff_inv_smul_mem]
@@ -96,7 +96,7 @@ theorem mk_prod
 
 中文:
 定理 mk_prod
-  条件: {G ι : 类型} [CommGroup G] (N : Subgroup G) (s : Finset ι) {f : ι -> G}
+  条件: {G ι : 类型} [交换群 G] (N : 子群 G) (s : 有限集 ι) {f : ι -> G}
   证明: map_prod (QuotientGroup.mk' N) _ _
 
 @[to_additive QuotientAddGroup.strictMono_comap_prod_map]
@@ -143,7 +143,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (A : Subgroup G) (B : Subgroup H)
+  签名: (A : 子群 G) (B : 子群 H)
   定义体: q.liftOn' (fun (g, h) => (g, h))
       (by simp [QuotientGroup.leftRel_apply, Subgroup.mem_prod, QuotientGroup.eq])
   invFun q := q.1.liftOn₂' q.2 (fun g h => (g, h))
@@ -175,7 +175,7 @@ definition prodMulEquiv
 
 中文:
 定义 prodMulEquiv
-  签名: (A : Subgroup G) (B : Subgroup H) [A.Normal] [B.Normal]
+  签名: (A : 子群 G) (B : 子群 H) [A.正规] [B.正规]
   定义体: prodEquiv A B
   map_mul' q₁ q₂ := Quotient.inductionOn₂' q₁ q₂ (fun _ _ => rfl)
 
@@ -250,7 +250,7 @@ Quotient.sound' by rw [leftRel_apply, mem_ker, φ.map_mul, ← h, φ.map_inv, in
 
 中文:
 定理 kerLift_injective
-  结论: Injective (kerLift φ)
+  结论: 单射 (kerLift φ)
   证明: fun a b =>
   Quotient.inductionOn₂' a b fun a b (h : φ a = φ b) =>
 Quotient.sound' by rw [leftRel_apply, mem_ker, φ.map_mul, ← h, φ.map_inv, inv_mul_cancel]
@@ -301,7 +301,7 @@ Quotient.sound' by
 
 中文:
 定理 rangeKerLift_injective
-  结论: Injective (rangeKerLift φ)
+  结论: 单射 (rangeKerLift φ)
   证明: fun a b =>
   Quotient.inductionOn₂' a b fun a b (h : φ.rangeRestrict a = φ.rangeRestrict b) =>
 Quotient.sound' by
@@ -328,7 +328,7 @@ theorem rangeKerLift_surjective
 
 中文:
 定理 rangeKerLift_surjective
-  结论: Surjective (rangeKerLift φ)
+  结论: 满射 (rangeKerLift φ)
   证明: by
   rintro ⟨_, g, rfl⟩
   use mk g
@@ -379,7 +379,7 @@ definition quotientKerEquivOfRightInverse
 
 中文:
 定义 quotientKerEquivOfRightInverse
-  签名: (ψ : H -> G) (hφ : RightInverse ψ φ)
+  签名: (ψ : H -> G) (hφ : 右逆 ψ φ)
   定义体: { kerLift φ with
     toFun := kerLift φ
     invFun := mk ∘ ψ
@@ -407,7 +407,7 @@ definition quotientBot
 
 中文:
 定义 quotientBot
-  签名: : G ⧸ (⊥ : Subgroup G) ≃* G
+  签名: : G ⧸ (⊥ : 子群 G) ≃* G
   定义体: quotientKerEquivOfRightInverse (MonoidHom.id G) id fun _x => rfl
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, quotientKerEquivOfRightInverse
@@ -431,7 +431,7 @@ definition quotientKerEquivOfSurjective
 
 中文:
 定义 quotientKerEquivOfSurjective
-  签名: (hφ : Surjective φ)
+  签名: (hφ : 满射 φ)
   定义体: quotientKerEquivOfRightInverse φ _ hφ.hasRightInverse.choose_spec
 
 Depends on / 依赖: choose_spec, hasRightInverse, hasRightInverse.choose_spec, quotientKerEquivOfRightInverse
@@ -456,7 +456,7 @@ definition quotientMulEquivOfEq
 
 中文:
 定义 quotientMulEquivOfEq
-  签名: {M N : Subgroup G} [M.Normal] [N.Normal] (h : M = N)
+  签名: {M N : 子群 G} [M.正规] [N.正规] (h : M = N)
   定义体: { Subgroup.quotientEquivOfEq h with
     map_mul' := fun q r => Quotient.inductionOn₂' q r fun _g _h => rfl }
 
@@ -479,7 +479,7 @@ theorem quotientMulEquivOfEq_mk
 
 中文:
 定理 quotientMulEquivOfEq_mk
-  条件: {M N : Subgroup G} [M.Normal] [N.Normal] (h : M = N) (x : G)
+  条件: {M N : 子群 G} [M.正规] [N.正规] (h : M = N) (x : G)
   证明: rfl
 -/
 theorem quotientMulEquivOfEq_mk {M N : Subgroup G} [M.Normal] [N.Normal] (h : M = N) (x : G) :
@@ -502,7 +502,7 @@ definition quotientMapSubgroupOfOfLe
 
 中文:
 定义 quotientMapSubgroupOfOfLe
-  签名: {A' A B' B : Subgroup G} [_hAN : (A'.subgroupOf A).Normal]
+  签名: {A' A B' B : 子群 G} [_hAN : (A'.subgroupOf A).正规]
   定义体: map _ _ (Subgroup.inclusion h) Subgroup.comap_mono h'
 
 @[to_additive (attr := simp)]
@@ -525,7 +525,7 @@ theorem quotientMapSubgroupOfOfLe_mk
 
 中文:
 定理 quotientMapSubgroupOfOfLe_mk
-  结论: {A' A B' B : Subgroup G} [_hAN : (A'.subgroupOf A).Normal]
+  结论: {A' A B' B : 子群 G} [_hAN : (A'.subgroupOf A).正规]
   证明: rfl
 -/
 theorem quotientMapSubgroupOfOfLe_mk {A' A B' B : Subgroup G} [_hAN : (A'.subgroupOf A).Normal]
@@ -555,7 +555,7 @@ definition equivQuotientSubgroupOfOfEq
 
 中文:
 定义 equivQuotientSubgroupOfOfEq
-  签名: {A' A B' B : Subgroup G} [hAN : (A'.subgroupOf A).Normal]
+  签名: {A' A B' B : 子群 G} [hAN : (A'.subgroupOf A).正规]
   定义体: (quotientMapSubgroupOfOfLe h'.le h.le).toMulEquiv (quotientMapSubgroupOfOfLe h'.ge h.ge)
     (by ext ⟨x, hx⟩; rfl)
     (by ext ⟨x, hx⟩; rfl)
@@ -619,7 +619,7 @@ theorem homQuotientZPowOfHom_id
 
 中文:
 定理 homQuotientZPowOfHom_id
-  结论: homQuotientZPowOfHom (MonoidHom.id A) n = MonoidHom.id _
+  结论: homQuotientZPowOfHom (幺半群态射.id A) n = 幺半群态射.id _
   证明: monoidHom_ext _ rfl
 
 @[to_additive (attr := simp)]
@@ -663,7 +663,7 @@ theorem homQuotientZPowOfHom_comp_of_rightInverse
 
 中文:
 定理 homQuotientZPowOfHom_comp_of_rightInverse
-  条件: (i : Function.RightInverse g f)
+  条件: (i : 函数.右逆 g f)
   证明: monoidHom_ext _ MonoidHom.ext fun x => congrArg _ i x
 
 Depends on / 依赖: MonoidHom, MonoidHom.ext, monoidHom_ext
@@ -811,7 +811,7 @@ definition quotientInfEquivProdNormalizerQuotient
 
 中文:
 定义 quotientInfEquivProdNormalizerQuotient
-  签名: (H N : Subgroup G)
+  签名: (H N : 子群 G)
   定义体: Subgroup.normal_subgroupOf_of_le_normalizer hLE
     letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer hLE
     H ⧸ N.subgroupOf H ≃* (H ⊔ N : Subgroup G) ⧸ N.subgroupOf (H ⊔ N) :=
@@ -857,7 +857,7 @@ definition quotientInfEquivProdNormalQuotient
 
 中文:
 定义 quotientInfEquivProdNormalQuotient
-  签名: (H N : Subgroup G) [hN : N.Normal]
+  签名: (H N : 子群 G) [hN : N.正规]
   定义体: quotientInfEquivProdNormalizerQuotient H N le_normalizer_of_normal
 
 Depends on / 依赖: le_normalizer_of_normal, quotientInfEquivProdNormalizerQuotient
@@ -883,7 +883,7 @@ instance map_normal
 
 中文:
 实例 map_normal
-  签名: : (M.map (QuotientGroup.mk' N)).Normal
+  签名: : (M.map (商群.mk' N)).正规
   定义体: nM.map _ mk_surjective
 
 Depends on / 依赖: mk_surjective, nM.map
@@ -992,7 +992,7 @@ definition quotientQuotientEquivQuotient
 
 中文:
 定义 quotientQuotientEquivQuotient
-  签名: : (G ⧸ N) ⧸ M.map (QuotientGroup.mk' N) ≃* G ⧸ M
+  签名: : (G ⧸ N) ⧸ M.map (商群.mk' N) ≃* G ⧸ M
   定义体: MonoidHom.toMulEquiv (quotientQuotientEquivQuotientAux N M h)
     (QuotientGroup.map _ _ (QuotientGroup.mk' N) (Subgroup.le_comap_map _ _))
     (by ext; simp)
@@ -1027,7 +1027,7 @@ theorem le_comap_mk'
 
 中文:
 定理 le_comap_mk'
-  条件: (N : Subgroup G) [N.Normal] (H : Subgroup (G ⧸ N))
+  条件: (N : 子群 G) [N.正规] (H : 子群 (G ⧸ N))
   证明: by
   simpa using Subgroup.comap_mono (f := mk' N) bot_le
 
@@ -1051,7 +1051,7 @@ theorem comap_map_mk'
 
 中文:
 定理 comap_map_mk'
-  条件: (N H : Subgroup G) [N.Normal]
+  条件: (N H : 子群 G) [N.正规]
   证明: by
   simp [Subgroup.comap_map_eq, sup_comm]
 
@@ -1079,7 +1079,7 @@ map_rel_iff' := Subgroup.comap_le_comap_of_surjective mk'_surjective _
 
 中文:
 定义 comapMk'OrderIso
-  签名: (N : Subgroup G) [hn : N.Normal]
+  签名: (N : 子群 G) [hn : N.正规]
   定义体: ⟨Subgroup.comap (mk' N) H', le_comap_mk' N _⟩
   invFun H := Subgroup.map (mk' N) H
 left_inv H' := Subgroup.map_comap_eq_self by simp
@@ -1112,7 +1112,7 @@ theorem subsingleton_quotient_top
 
 中文:
 定理 subsingleton_quotient_top
-  结论: Subsingleton (G ⧸ (⊤ : Subgroup G))
+  结论: 子单例 (G ⧸ (⊤ : 子群 G))
   证明: by
   simp
 -/
@@ -1135,7 +1135,7 @@ theorem subgroup_eq_top_of_subsingleton
 
 中文:
 定理 subgroup_eq_top_of_subsingleton
-  条件: (H : Subgroup G) (h : Subsingleton (G ⧸ H))
+  条件: (H : 子群 G) (h : 子单例 (G ⧸ H))
   结论: H = ⊤
   证明: top_unique fun x _ => by
     have : 1⁻¹ * x in H := QuotientGroup.eq.1 (Subsingleton.elim _ _)
@@ -1164,7 +1164,7 @@ theorem comap_comap_center
 
 中文:
 定理 comap_comap_center
-  条件: {H₁ : Subgroup G} [H₁.Normal] {H₂ : Subgroup (G ⧸ H₁)} [H₂.Normal]
+  条件: {H₁ : 子群 G} [H₁.正规] {H₂ : 子群 (G ⧸ H₁)} [H₂.正规]
   证明: by
   ext x
   simp only [mk'_apply, Subgroup.mem_comap, Subgroup.mem_center_iff, forall_mk, ← mk_mul,
@@ -1191,8 +1191,8 @@ theorem _root_.Subgroup.Characteristic.comap_quotient_mk
     (characteristic_iff_comap_eq.mp hK (congr H H φ (characteristic_iff_map_eq.mp hH φ)))
 
 中文:
-定理 _root_.Subgroup.Characteristic.comap_quotient_mk
-  结论: {H : Subgroup G} [hH : H.Characteristic]
+定理 _root_.子群.特征.comap_quotient_mk
+  结论: {H : 子群 G} [hH : H.特征]
   证明: characteristic_iff_comap_eq.mpr fun φ => congr_arg (comap (mk' H))
     (characteristic_iff_comap_eq.mp hK (congr H H φ (characteristic_iff_map_eq.mp hH φ)))
 
@@ -1229,8 +1229,8 @@ invFun f := ⟨f.comp (QuotientGroup.mk' H), domRestrict_eq_one_iff.mpr le_comap
 @[s
 
 中文:
-定义 _root_.MonoidHom.domRestrictHomKerEquiv
-  签名: (A : 类型) [CommGroup A] (H : Subgroup G) [H.Normal]
+定义 _root_.幺半群态射.domRestrictHomKerEquiv
+  签名: (A : 类型) [交换群 A] (H : 子群 G) [H.正规]
   定义体: fun ⟨f, hf⟩ => QuotientGroup.lift _ f
     (by simpa [mem_ker, domRestrictHom_apply, domRestrict_eq_one_iff] using! hf)
 invFun f := ⟨f.comp (QuotientGroup.mk' H), domRestrict_eq_one_iff.mpr le_comap_mk' H f.ker⟩
@@ -1263,8 +1263,8 @@ theorem _root_.MonoidHom.domRestrictHomKerEquiv_apply_coe
 @[simp]
 
 中文:
-定理 _root_.MonoidHom.domRestrictHomKerEquiv_apply_coe
-  结论: (A : 类型) [CommGroup A] (H : Subgroup G)
+定理 _root_.幺半群态射.domRestrictHomKerEquiv_apply_coe
+  结论: (A : 类型) [交换群 A] (H : 子群 G)
   证明: rfl
 
 @[simp]
@@ -1289,8 +1289,8 @@ alias _root_.AddMonoidHom.restrictHomKerEquiv := _root_.AddMonoidHom.domRestrict
 @[deprecated (since := "2026-07-19")] ali
 
 中文:
-定理 _root_.MonoidHom.domRestrictHomKerEquiv_symm_coe_apply
-  结论: (A : 类型) [CommGroup A]
+定理 _root_.幺半群态射.domRestrictHomKerEquiv_symm_coe_apply
+  结论: (A : 类型) [交换群 A]
   证明: rfl
 
 @[deprecated (since := "2026-07-19")]

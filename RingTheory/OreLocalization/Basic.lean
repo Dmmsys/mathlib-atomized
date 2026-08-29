@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero R[S⁻¹]
+  签名: 带零幺半群 R[S⁻¹]
   定义体: by
     induction x using OreLocalization.ind with | _ r s
     rw [OreLocalization.zero_def]; rw [oreDiv_mul_char 0 r 1 s 0 1 (by simp)]; rw [zero_mul]; rw [one_mul]
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoidWithZero R[S⁻¹]
+  签名: 带零交换幺半群 R[S⁻¹]
   定义体: (inferInstance : MonoidWithZero R[S⁻¹])
   __ := (inferInstance : CommMonoid R[S⁻¹])
 
@@ -350,7 +350,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add X[S⁻¹]
+  签名: 加法 X[S⁻¹]
   定义体: ⟨add⟩
 -/
 instance : Add X[S⁻¹] :=
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid X[S⁻¹]
+  签名: 加法幺半群 X[S⁻¹]
   定义体: OreLocalization.add_assoc
     zero_add := OreLocalization.zero_add
     add_zero := OreLocalization.add_zero
@@ -700,7 +700,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction R[S⁻¹] X[S⁻¹]
+  签名: 分配乘法作用 R[S⁻¹] X[S⁻¹]
   定义体: OreLocalization.smul_zero
   smul_add := OreLocalization.smul_add
 
@@ -765,7 +765,7 @@ instance instAddCommMonoidOreLocalization
 
 中文:
 实例 instAddCommMonoidOreLocalization
-  签名: : AddCommMonoid X[S⁻¹] where
+  签名: : 加法交换幺半群 X[S⁻¹] where
   定义体: OreLocalization.add_comm
 
 Depends on / 依赖: OreLocalization, OreLocalization.add_comm, add_comm
@@ -813,7 +813,7 @@ instance instNegOreLocalization
 
 中文:
 实例 instNegOreLocalization
-  签名: : Neg X[S⁻¹]
+  签名: : 取负 X[S⁻¹]
   定义体: ⟨OreLocalization.neg⟩
 
 @[simp]
@@ -897,7 +897,7 @@ instance instAddGroupOreLocalization
 
 中文:
 实例 instAddGroupOreLocalization
-  签名: : AddGroup X[S⁻¹] where
+  签名: : 加法群 X[S⁻¹] where
   定义体: OreLocalization.neg_add_cancel
   zsmul := OreLocalization.zsmul
 
@@ -925,7 +925,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup X[S⁻¹]
+  签名: 加法交换群 X[S⁻¹]
   定义体: (inferInstance : AddGroup X[S⁻¹])
   __ := (inferInstance : AddCommMonoid X[S⁻¹])
 

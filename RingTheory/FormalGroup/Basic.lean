@@ -67,10 +67,10 @@ structure FormalGroup
     - assoc : toPowerSeries.subst ![toPowerSeries.subst ![Y₀, Y₁], Y₂] = toPowerSeries.subst ![Y₀, toPowerSeries.subst ![Y₁, Y₂]] (S := R)
 
 中文:
-结构 FormalGroup
+结构 Formal群
   参数: where
   公理与运算 (5 个):
-    - toPowerSeries : MvPowerSeries (Fin 2) R
+    - toPowerSeries : MvPowerSeries (有限集 2) R
     - zero_constantCoeff : toPowerSeries.constantCoeff = 0
     - lin_coeff_X : toPowerSeries.coeff (single 0 1) = 1
     - lin_coeff_Y : toPowerSeries.coeff (single 1 1) = 1
@@ -98,8 +98,8 @@ instance FormalGroup.coeToPowerSeries
   body: ⟨toPowerSeries⟩
 
 中文:
-实例 FormalGroup.coeToPowerSeries
-  签名: : Coe (FormalGroup R) (MvPowerSeries (Fin 2) R)
+实例 Formal群.coeToPowerSeries
+  签名: : Coe (Formal群 R) (MvPowerSeries (有限集 2) R)
   定义体: ⟨toPowerSeries⟩
 
 Depends on / 依赖: toPowerSeries
@@ -117,10 +117,10 @@ class FormalGroup.IsComm
     - comm : F = (F : MvPowerSeries (Fin 2) R).subst ![X₁, X₀]
 
 中文:
-类 FormalGroup.IsComm
-  参数: (F : FormalGroup R)
+类 Formal群.是余mm
+  参数: (F : Formal群 R)
   公理与运算 (1 个):
-    - comm : F = (F : MvPowerSeries (Fin 2) R).subst ![X₁, X₀]
+    - comm : F = (F : MvPowerSeries (有限集 2) R).subst ![X₁, X₀]
 -/
 class FormalGroup.IsComm (F : FormalGroup R) : Prop where
   comm : F = (F : MvPowerSeries (Fin 2) R).subst ![X₁, X₀]
@@ -140,8 +140,8 @@ lemma FormalGroup.assoc'
     _ = (F.t
 
 中文:
-引理 FormalGroup.assoc'
-  结论: (F : FormalGroup R) {f₀ f₁ f₂ : MvPowerSeries σ R}
+引理 Formal群.assoc'
+  结论: (F : Formal群 R) {f₀ f₁ f₂ : MvPowerSeries σ R}
   证明: by
   obtain aux₁ := HasSubst.cons_subst_zero_left (0 : Fin 3) 1 2 F.zero_constantCoeff
   obtain aux₂ := HasSubst.cons_subst_zero_right (0 : Fin 3) 1 2 F.zero_constantCoeff
@@ -193,8 +193,8 @@ lemma FormalGroup.comm'
   fin_cases s <;> simp [subst]
 
 中文:
-引理 FormalGroup.comm'
-  结论: (F : FormalGroup R) [F.IsComm] {f g : MvPowerSeries σ R}
+引理 Formal群.comm'
+  结论: (F : Formal群 R) [F.是余mm] {f g : MvPowerSeries σ R}
   证明: by
   nth_rw 1 [IsComm.comm]
   rw [subst_comp_subst_apply HasSubst.X_X <| hasSubst_of_constantCoeff_nilpotent (by simp [hf]; rw [hg])]
@@ -234,7 +234,7 @@ definition Point
 
 中文:
 定义 Point
-  签名: (F : FormalGroup R) (σ : 类型)
+  签名: (F : Formal群 R) (σ : 类型)
   定义体: {f : MvPowerSeries σ R // PowerSeries.HasSubst f}
 
 Depends on / 依赖: HasSubst, MvPowerSeries, PowerSeries, PowerSeries.HasSubst
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (F.Point σ)
+  签名: 加法 (F.Point σ)
   定义体: ⟨F.toPowerSeries.subst ![x.val, y.val],
     IsNilpotent_subst (by simp [hasSubst_of_constantCoeff_nilpotent, x.prop, y.prop])
       (F.zero_constantCoeff ▸ IsNilpotent.zero)⟩
@@ -302,7 +302,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (F.Point σ)
+  签名: 零 (F.Point σ)
   定义体: ⟨0, PowerSeries.HasSubst.zero⟩
 
 @[simp]
@@ -346,7 +346,7 @@ definition 𝔾ₐ
 
 中文:
 定义 𝔾ₐ
-  签名: : FormalGroup R where
+  签名: : Formal群 R where
   定义体: X₀ + X₁
   zero_constantCoeff := by simp
   lin_coeff_X := by simp [coeff_index_single_X]
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝔾ₐ (R := R)).IsComm
+  签名: (𝔾ₐ (R := R)).是余mm
   定义体: by simp [subst_add .X_X, subst_X .X_X, add_comm]
 
 Depends on / 依赖: IsComm
@@ -402,7 +402,7 @@ definition 𝔾ₘ
 
 中文:
 定义 𝔾ₘ
-  签名: : FormalGroup R where
+  签名: : Formal群 R where
   定义体: X₀ + X₁ + X₀ * X₁
   zero_constantCoeff := by simp
   lin_coeff_X := by
@@ -437,7 +437,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝔾ₘ (R := R)).IsComm
+  签名: (𝔾ₘ (R := R)).是余mm
   定义体: by simp [subst_add .X_X, subst_mul .X_X, subst_X .X_X, add_comm, mul_comm]
 
 Depends on / 依赖: IsComm
@@ -506,7 +506,7 @@ abbreviation Xzero
 
 中文:
 缩写 Xzero
-  签名: : PowerSeries R
+  签名: : 幂级数 R
   定义体: subst ![PowerSeries.X, 0] F.toPowerSeries
 
 Depends on / 依赖: F.toPowerSeries, PowerSeries, PowerSeries.X, toPowerSeries
@@ -650,7 +650,7 @@ PowerSeries.HasSubst.of_constantCoeff_zero' constantCoeff_Xzero F
 
 中文:
 引理 Xzero_eq_X
-  结论: F.Xzero = PowerSeries.X
+  结论: F.Xzero = 幂级数.X
   证明: by
   have : Invertible (F.Xzero.coeff 1) := (coeff_one_Xzero F) ▸ invertibleOne
   calc
@@ -682,7 +682,7 @@ abbreviation zeroX
 
 中文:
 缩写 zeroX
-  签名: : PowerSeries R
+  签名: : 幂级数 R
   定义体: subst ![0, PowerSeries.X] F.toPowerSeries
 
 Depends on / 依赖: F.toPowerSeries, PowerSeries, PowerSeries.X, toPowerSeries
@@ -825,7 +825,7 @@ PowerSeries.HasSubst.of_constantCoeff_zero' F.constantCoeff_zeroX
 
 中文:
 引理 zeroX_eq_X
-  结论: F.zeroX = PowerSeries.X
+  结论: F.zeroX = 幂级数.X
   证明: by
   have : Invertible (F.zeroX.coeff 1) := (coeff_one_zeroX F) ▸ invertibleOne
   calc
@@ -865,7 +865,7 @@ theorem add_zero
 
 中文:
 定理 add_zero
-  条件: {f : MvPowerSeries σ R} (hf : PowerSeries.HasSubst f)
+  条件: {f : MvPowerSeries σ R} (hf : 幂级数.有Subst f)
   证明: by
   calc
     _ = PowerSeries.subst f (F.toPowerSeries.subst ![PowerSeries.X (R := R), 0]) := by
@@ -909,7 +909,7 @@ theorem zero_add
 
 中文:
 定理 zero_add
-  条件: {f : MvPowerSeries σ R} (hf : PowerSeries.HasSubst f)
+  条件: {f : MvPowerSeries σ R} (hf : 幂级数.有Subst f)
   证明: by
   calc
     _ = PowerSeries.subst f (F.toPowerSeries.subst ![0, PowerSeries.X (R := R)]) := by
@@ -948,7 +948,7 @@ add_assoc x y z := Subtype.ext F.assoc' x.prop y.prop z.prop
 
 中文:
 实例 :
-  签名: AddMonoid (F.Point σ)
+  签名: 加法幺半群 (F.Point σ)
   定义体: Subtype.ext (zero_add F x.prop)
   add_zero x := Subtype.ext (add_zero F x.prop)
   nsmul := nsmulRec
@@ -971,8 +971,8 @@ instance [F.IsComm]
   body: Subtype.ext F.comm' x.prop y.prop
 
 中文:
-实例 [F.IsComm]
-  签名: : AddCommMonoid (F.Point σ) where
+实例 [F.是余mm]
+  签名: : 加法交换幺半群 (F.Point σ) where
   定义体: Subtype.ext F.comm' x.prop y.prop
 
 Depends on / 依赖: F.comm, Subtype, Subtype.ext, x.prop, y.prop

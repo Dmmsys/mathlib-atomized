@@ -101,8 +101,8 @@ definition Measure.aeEqSetoid
     fun {_ _ _} => ae_eq_trans⟩
 
 中文:
-定义 Measure.aeEqSetoid
-  签名: (μ : Measure α)
+定义 测度.aeEqSetoid
+  签名: (μ : 测度 α)
   定义体: ⟨fun f g => (f : α -> β) =ᵐ[μ] g, fun {f} => ae_eq_refl f.val, fun {_ _} => ae_eq_symm,
     fun {_ _ _} => ae_eq_trans⟩
 
@@ -124,7 +124,7 @@ definition AEEqFun
 
 中文:
 定义 AEEqFun
-  签名: (μ : Measure α)
+  签名: (μ : 测度 α)
   定义体: Quotient (μ.aeEqSetoid β)
 
 Depends on / 依赖: Quotient, aeEqSetoid
@@ -156,7 +156,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {β : 类型} [TopologicalSpace β] (f : α -> β) (hf : AEStronglyMeasurable f μ)
+  签名: {β : 类型} [拓扑空间 β] (f : α -> β) (hf : AEStronglyMeasurable f μ)
   定义体: Quotient.mk'' ⟨f, hf⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -282,7 +282,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
   证明: f.stronglyMeasurable.measurable
 
 @[fun_prop]
@@ -304,7 +304,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
   证明: f.measurable.aemeasurable
 
 @[simp]
@@ -489,7 +489,7 @@ theorem induction_on₂
 
 中文:
 定理 induction_on₂
-  结论: {α' β' : 类型} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
+  结论: {α' β' : 类型} [可测空间 α'] [拓扑空间 β'] {μ' : 测度 α'}
   证明: induction_on f fun f hf => induction_on f' H f hf
 
 @[elab_as_elim]
@@ -512,7 +512,7 @@ theorem induction_on₃
 
 中文:
 定理 induction_on₃
-  结论: {α' β' : 类型} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
+  结论: {α' β' : 类型} [可测空间 α'] [拓扑空间 β'] {μ' : 测度 α'}
   证明: induction_on f fun f hf => induction_on₂ f' f'' H f hf
 
 Depends on / 依赖: induction_on
@@ -549,7 +549,7 @@ mk_eq_mk.2 h.comp_tendsto hf.tendsto_ae
 
 中文:
 定义 compQuasiMeasurePreserving
-  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : QuasiMeasurePreserving f μ ν)
+  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : 拟保测 f μ ν)
   定义体: Quotient.liftOn' g (fun g => mk (g ∘ f) <| g.2.comp_quasiMeasurePreserving hf) fun _ _ h =>
 mk_eq_mk.2 h.comp_tendsto hf.tendsto_ae
 
@@ -592,7 +592,7 @@ theorem compQuasiMeasurePreserving_eq_mk
 
 中文:
 定理 compQuasiMeasurePreserving_eq_mk
-  条件: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
+  条件: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
   证明: by
   rw [← compQuasiMeasurePreserving_mk g.aestronglyMeasurable hf]; rw [mk_coeFn]
 
@@ -615,7 +615,7 @@ theorem coeFn_compQuasiMeasurePreserving
 
 中文:
 定理 coeFn_compQuasiMeasurePreserving
-  条件: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
+  条件: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
   证明: by
   rw [compQuasiMeasurePreserving_eq_mk]
   apply coeFn_mk
@@ -641,7 +641,7 @@ theorem compQuasiMeasurePreserving_congr
 
 中文:
 定理 compQuasiMeasurePreserving_congr
-  结论: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
+  结论: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
   证明: by
   ext
   grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving, h]
@@ -694,7 +694,7 @@ theorem compQuasiMeasurePreserving_comp
 
 中文:
 定理 compQuasiMeasurePreserving_comp
-  结论: {γ : 类型} {mγ : MeasurableSpace γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ}
   证明: by
   ext
   grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving,
@@ -765,7 +765,7 @@ definition compMeasurePreserving
 
 中文:
 定义 compMeasurePreserving
-  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : MeasurePreserving f μ ν)
+  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : 保测 f μ ν)
   定义体: g.compQuasiMeasurePreserving f hf.quasiMeasurePreserving
 
 @[simp]
@@ -786,7 +786,7 @@ theorem compMeasurePreserving_mk
 
 中文:
 定理 compMeasurePreserving_mk
-  条件: (hg : AEStronglyMeasurable g ν) (hf : MeasurePreserving f μ ν)
+  条件: (hg : AEStronglyMeasurable g ν) (hf : 保测 f μ ν)
   证明: rfl
 -/
 theorem compMeasurePreserving_mk (hg : AEStronglyMeasurable g ν) (hf : MeasurePreserving f μ ν) :
@@ -804,7 +804,7 @@ theorem compMeasurePreserving_eq_mk
 
 中文:
 定理 compMeasurePreserving_eq_mk
-  条件: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
+  条件: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
   证明: g.compQuasiMeasurePreserving_eq_mk _
 
 Depends on / 依赖: compQuasiMeasurePreserving_eq_mk, g.compQuasiMeasurePreserving_eq_mk
@@ -824,7 +824,7 @@ theorem coeFn_compMeasurePreserving
 
 中文:
 定理 coeFn_compMeasurePreserving
-  条件: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
+  条件: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
   证明: g.coeFn_compQuasiMeasurePreserving _
 
 Depends on / 依赖: coeFn_compQuasiMeasurePreserving, g.coeFn_compQuasiMeasurePreserving
@@ -845,7 +845,7 @@ theorem compMeasurePreserving_congr
 
 中文:
 定理 compMeasurePreserving_congr
-  结论: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
+  结论: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
   证明: compQuasiMeasurePreserving_congr _ _ hf' h
 
 @[simp]
@@ -887,7 +887,7 @@ theorem compMeasurePreserving_comp
 
 中文:
 定理 compMeasurePreserving_comp
-  结论: {γ : 类型} {mγ : MeasurableSpace γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ}
   证明: compQuasiMeasurePreserving_comp _ _ _
 
 Depends on / 依赖: compQuasiMeasurePreserving_comp
@@ -936,7 +936,7 @@ fun _ _ H => mk_eq_mk.2 H.fun_comp g
 
 中文:
 定义 comp
-  签名: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
+  签名: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
   定义体: Quotient.liftOn' f (fun f => mk (g ∘ (f : α -> β)) (hg.comp_aestronglyMeasurable f.2))
 fun _ _ H => mk_eq_mk.2 H.fun_comp g
 
@@ -961,7 +961,7 @@ theorem comp_mk
 
 中文:
 定理 comp_mk
-  条件: (g : β -> γ) (hg : Continuous g) (f : α -> β) (hf)
+  条件: (g : β -> γ) (hg : 连续 g) (f : α -> β) (hf)
   证明: rfl
 
 @[simp]
@@ -1007,7 +1007,7 @@ theorem comp_comp
 
 中文:
 定理 comp_comp
-  结论: (g : γ -> δ) (g' : β -> γ) (hg : Continuous g) (hg' : Continuous g')
+  结论: (g : γ -> δ) (g' : β -> γ) (hg : 连续 g) (hg' : 连续 g')
   证明: by
   rcases f; rfl
 -/
@@ -1026,7 +1026,7 @@ theorem comp_eq_mk
 
 中文:
 定理 comp_eq_mk
-  条件: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
+  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
   证明: by
   rw [← comp_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
 
@@ -1049,7 +1049,7 @@ theorem coeFn_comp
 
 中文:
 定理 coeFn_comp
-  条件: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
+  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
   结论: comp g hg f =ᵐ[μ] g ∘ f
   证明: by
   rw [comp_eq_mk]
@@ -1100,7 +1100,7 @@ fun _ _ H => mk_eq_mk.2 H.fun_comp g
 
 中文:
 定义 compMeasurable
-  签名: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
+  签名: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
   定义体: Quotient.liftOn' f
     (fun f' => mk (g ∘ (f' : α -> β)) (hg.comp_aemeasurable f'.2.aemeasurable).aestronglyMeasurable)
 fun _ _ H => mk_eq_mk.2 H.fun_comp g
@@ -1125,7 +1125,7 @@ theorem compMeasurable_mk
 
 中文:
 定理 compMeasurable_mk
-  结论: (g : β -> γ) (hg : Measurable g) (f : α -> β)
+  结论: (g : β -> γ) (hg : 可测 g) (f : α -> β)
   证明: rfl
 -/
 theorem compMeasurable_mk (g : β -> γ) (hg : Measurable g) (f : α -> β)
@@ -1145,7 +1145,7 @@ theorem compMeasurable_eq_mk
 
 中文:
 定理 compMeasurable_eq_mk
-  条件: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
+  条件: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
   证明: by
   rw [← compMeasurable_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
 
@@ -1168,7 +1168,7 @@ theorem coeFn_compMeasurable
 
 中文:
 定理 coeFn_compMeasurable
-  条件: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
+  条件: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
   证明: by
   rw [compMeasurable_eq_mk]
   apply coeFn_mk
@@ -1284,7 +1284,7 @@ definition comp₂
 
 中文:
 定义 comp₂
-  签名: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ)
+  签名: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ)
   定义体: comp _ hg (f₁.pair f₂)
 
 @[simp]
@@ -1304,7 +1304,7 @@ theorem comp₂_mk_mk
 
 中文:
 定理 comp₂_mk_mk
-  结论: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
+  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
   证明: rfl
 -/
 theorem comp₂_mk_mk (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
@@ -1323,7 +1323,7 @@ theorem comp₂_eq_pair
 
 中文:
 定理 comp₂_eq_pair
-  结论: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: rfl
 -/
 theorem comp₂_eq_pair (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
@@ -1341,7 +1341,7 @@ theorem comp₂_eq_mk
 
 中文:
 定理 comp₂_eq_mk
-  结论: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: by
   rw [comp₂_eq_pair]; rw [pair_eq_mk]; rw [comp_mk]; rfl
 
@@ -1364,7 +1364,7 @@ theorem coeFn_comp₂
 
 中文:
 定理 coeFn_comp₂
-  结论: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: by
   rw [comp₂_eq_mk]
   apply coeFn_mk
@@ -1394,7 +1394,7 @@ definition comp₂Measurable
 
 中文:
 定义 comp₂Measurable
-  签名: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  签名: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   定义体: compMeasurable _ hg (f₁.pair f₂)
 
 @[simp]
@@ -1416,7 +1416,7 @@ theorem comp₂Measurable_mk_mk
 
 中文:
 定理 comp₂Measurable_mk_mk
-  结论: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α -> β)
+  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α -> β)
   证明: rfl
 -/
 theorem comp₂Measurable_mk_mk (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α -> β)
@@ -1436,7 +1436,7 @@ theorem comp₂Measurable_eq_pair
 
 中文:
 定理 comp₂Measurable_eq_pair
-  结论: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: rfl
 -/
 theorem comp₂Measurable_eq_pair (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
@@ -1454,7 +1454,7 @@ theorem comp₂Measurable_eq_mk
 
 中文:
 定理 comp₂Measurable_eq_mk
-  结论: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: by
   rw [comp₂Measurable_eq_pair]; rw [pair_eq_mk]; rw [compMeasurable_mk]; rfl
 
@@ -1479,7 +1479,7 @@ theorem coeFn_comp₂Measurable
 
 中文:
 定理 coeFn_comp₂Measurable
-  结论: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: by
   rw [comp₂Measurable_eq_mk]
   apply coeFn_mk
@@ -1569,7 +1569,7 @@ ext Germ.coe_eq.1 by rwa [← toGerm_eq, ← toGerm_eq]
 
 中文:
 定理 toGerm_injective
-  结论: Injective (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β)
+  结论: 单射 (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β)
   证明: fun f g H =>
 ext Germ.coe_eq.1 by rwa [← toGerm_eq, ← toGerm_eq]
 
@@ -1592,7 +1592,7 @@ theorem compQuasiMeasurePreserving_toGerm
 
 中文:
 定理 compQuasiMeasurePreserving_toGerm
-  结论: {β : 类型} [MeasurableSpace β] {f : α -> β} {ν}
+  结论: {β : 类型} [可测空间 β] {f : α -> β} {ν}
   证明: by
   rcases g; rfl
 
@@ -1614,7 +1614,7 @@ theorem compMeasurePreserving_toGerm
 
 中文:
 定理 compMeasurePreserving_toGerm
-  结论: {β : 类型} [MeasurableSpace β] {f : α -> β} {ν}
+  结论: {β : 类型} [可测空间 β] {f : α -> β} {ν}
   证明: compQuasiMeasurePreserving_toGerm _ _
 
 Depends on / 依赖: compQuasiMeasurePreserving_toGerm
@@ -1635,7 +1635,7 @@ theorem comp_toGerm
 
 中文:
 定理 comp_toGerm
-  条件: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
+  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
   证明: induction_on f fun f _ => by simp
 
 Depends on / 依赖: induction_on
@@ -1654,7 +1654,7 @@ theorem compMeasurable_toGerm
 
 中文:
 定理 compMeasurable_toGerm
-  结论: [MeasurableSpace β] [BorelSpace β] [PseudoMetrizableSpace β]
+  结论: [可测空间 β] [Borel空间 β] [PseudoMetrizable空间 β]
   证明: induction_on f fun f _ => by simp
 
 Depends on / 依赖: induction_on
@@ -1676,7 +1676,7 @@ theorem comp₂_toGerm
 
 中文:
 定理 comp₂_toGerm
-  结论: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
+  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
   证明: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
 -/
 theorem comp₂_toGerm (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
@@ -1694,7 +1694,7 @@ theorem comp₂Measurable_toGerm
 
 中文:
 定理 comp₂Measurable_toGerm
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
   证明: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
 -/
 theorem comp₂Measurable_toGerm [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
@@ -1795,7 +1795,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: [Preorder β]
+  签名: [预序 β]
   定义体: Preorder.lift toGerm
 
 @[simp]
@@ -1819,7 +1819,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: [Preorder β] {f g : α -> β} (hf hg)
+  条件: [预序 β] {f g : α -> β} (hf hg)
   结论: (mk f hf : α ->ₘ[μ] β) <= mk g hg ↔ f <=ᵐ[μ] g
   证明: Iff.rfl
 
@@ -1842,7 +1842,7 @@ theorem coeFn_le
 
 中文:
 定理 coeFn_le
-  条件: [Preorder β] {f g : α ->ₘ[μ] β}
+  条件: [预序 β] {f g : α ->ₘ[μ] β}
   结论: (f : α -> β) <=ᵐ[μ] g ↔ f <= g
   证明: liftRel_iff_coeFn.symm
 
@@ -1861,7 +1861,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: [PartialOrder β]
+  签名: [偏序 β]
   定义体: PartialOrder.lift toGerm toGerm_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, toGerm, toGerm_injective
@@ -1885,7 +1885,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (α ->ₘ[μ] β) where max f g
+  签名: : 最大值 (α ->ₘ[μ] β) where 最大值 f g
   定义体: AEEqFun.comp₂ (· ⊔ ·) continuous_sup f g
 
 Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_sup
@@ -2013,7 +2013,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (α ->ₘ[μ] β) where min f g
+  签名: : 最小值 (α ->ₘ[μ] β) where 最小值 f g
   定义体: AEEqFun.comp₂ (· ⊓ ·) continuous_inf f g
 
 Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_inf
@@ -2145,7 +2145,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [Lattice β] [TopologicalLattice β]
+  签名: [格 β] [拓扑格 β]
   定义体: { AEEqFun.instPartialOrder with
     sup := max
     le_sup_left := AEEqFun.le_sup_left
@@ -2205,7 +2205,7 @@ theorem coeFn_const
 中文:
 定理 coeFn_const
   条件: (b : β)
-  结论: (const α b : α ->ₘ[μ] β) =ᵐ[μ] Function.const α b
+  结论: (const α b : α ->ₘ[μ] β) =ᵐ[μ] 函数.const α b
   证明: coeFn_mk _ _
 
 Depends on / 依赖: coeFn_mk
@@ -2301,7 +2301,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited β]
+  签名: [可居 β]
   定义体: ⟨const α default⟩
 
 @[to_additive]
@@ -2322,7 +2322,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One β]
+  签名: [幺 β]
   定义体: ⟨const α 1⟩
 
 @[to_additive]
@@ -2344,7 +2344,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  条件: [One β]
+  条件: [幺 β]
   结论: (1 : α ->ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasurable_const
   证明: rfl
 
@@ -2367,7 +2367,7 @@ theorem coeFn_one
 
 中文:
 定理 coeFn_one
-  条件: [One β]
+  条件: [幺 β]
   结论: ⇑(1 : α ->ₘ[μ] β) =ᵐ[μ] 1
   证明: coeFn_const ..
 
@@ -2392,7 +2392,7 @@ theorem coeFn_one_eq
 
 中文:
 定理 coeFn_one_eq
-  条件: [NeZero μ] [One β] {x : α}
+  条件: [NeZero μ] [幺 β] {x : α}
   结论: (1 : α ->ₘ[μ] β) x = 1
   证明: coeFn_const_eq ..
 
@@ -2415,7 +2415,7 @@ theorem one_toGerm
 
 中文:
 定理 one_toGerm
-  条件: [One β]
+  条件: [幺 β]
   结论: (1 : α ->ₘ[μ] β).toGerm = 1
   证明: rfl
 -/
@@ -2442,7 +2442,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul 𝕜 (α ->ₘ[μ] γ)
+  签名: : 标量乘法 𝕜 (α ->ₘ[μ] γ)
   定义体: ⟨fun c f => comp (c • ·) (continuous_id.const_smul c) f⟩
 
 @[simp]
@@ -2520,7 +2520,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass 𝕜 𝕜' γ]
+  签名: [标量交换类 𝕜 𝕜' γ]
   定义体: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_comm]⟩
 
 Depends on / 依赖: induction_on, simp_rw, smul_comm, smul_mk
@@ -2538,7 +2538,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' γ]
+  签名: [标量乘法 𝕜 𝕜'] [标量塔 𝕜 𝕜' γ]
   定义体: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_assoc]⟩
 
 Depends on / 依赖: induction_on, simp_rw, smul_assoc, smul_mk
@@ -2556,7 +2556,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul 𝕜ᵐᵒᵖ γ] [IsCentralScalar 𝕜 γ]
+  签名: [标量乘法 𝕜ᵐᵒᵖ γ] [中心标量 𝕜 γ]
   定义体: ⟨fun a f => induction_on f fun f hf => by simp_rw [smul_mk, op_smul_eq_smul]⟩
 
 Depends on / 依赖: induction_on, op_smul_eq_smul, simp_rw, smul_mk
@@ -2583,7 +2583,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (α ->ₘ[μ] γ)
+  签名: : 乘法 (α ->ₘ[μ] γ)
   定义体: ⟨comp₂ (· * ·) continuous_mul⟩
 
 @[to_additive (attr := simp)]
@@ -2669,7 +2669,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid γ] [ContinuousAdd γ]
+  签名: [加法幺半群 γ] [连续加法 γ]
   定义体: toGerm_injective.addMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
 
 Depends on / 依赖: addMonoid, add_toGerm, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.addMonoid, zero_toGerm
@@ -2687,7 +2687,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid γ] [ContinuousAdd γ]
+  签名: [加法交换幺半群 γ] [连续加法 γ]
   定义体: toGerm_injective.addCommMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
 
 Depends on / 依赖: addCommMonoid, add_toGerm, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.addCommMonoid, zero_toGerm
@@ -2710,8 +2710,8 @@ instance instPowNat
 @[simp]
 
 中文:
-实例 instPowNat
-  签名: : Pow (α ->ₘ[μ] γ) 自然数
+实例 instPow自然数
+  签名: : 幂 (α ->ₘ[μ] γ) 自然数
   定义体: ⟨fun f n => comp _ (continuous_pow n) f⟩
 
 @[simp]
@@ -2800,7 +2800,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (α ->ₘ[μ] γ)
+  签名: : 幺半群 (α ->ₘ[μ] γ)
   定义体: toGerm_injective.monoid toGerm one_toGerm mul_toGerm pow_toGerm
 
 Depends on / 依赖: monoid, mul_toGerm, one_toGerm, pow_toGerm, toGerm, toGerm_injective, toGerm_injective.monoid
@@ -2849,7 +2849,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid γ] [ContinuousMul γ]
+  签名: [交换幺半群 γ] [连续乘法 γ]
   定义体: toGerm_injective.commMonoid toGerm one_toGerm mul_toGerm pow_toGerm
 
 @[to_additive]
@@ -2878,7 +2878,7 @@ theorem coeFn_finsetProd
 
 中文:
 定理 coeFn_finsetProd
-  结论: [CommMonoid γ] [ContinuousMul γ]
+  结论: [交换幺半群 γ] [连续乘法 γ]
   证明: by
   classical
   induction s using Finset.induction with
@@ -2914,7 +2914,7 @@ theorem coeFn_fun_finsetProd
 
 中文:
 定理 coeFn_fun_finsetProd
-  结论: [CommMonoid γ] [ContinuousMul γ]
+  结论: [交换幺半群 γ] [连续乘法 γ]
   证明: by
   grw [coeFn_finsetProd]
   filter_upwards with x using by simp
@@ -2946,7 +2946,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (α ->ₘ[μ] γ)
+  签名: : 取逆 (α ->ₘ[μ] γ)
   定义体: ⟨comp Inv.inv continuous_inv⟩
 
 @[to_additive (attr := simp)]
@@ -3042,7 +3042,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: : Div (α ->ₘ[μ] γ)
+  签名: : 除法 (α ->ₘ[μ] γ)
   定义体: ⟨comp₂ Div.div continuous_div'⟩
 
 @[to_additive (attr := simp)]
@@ -3131,8 +3131,8 @@ instance instPowInt
 @[simp]
 
 中文:
-实例 instPowInt
-  签名: : Pow (α ->ₘ[μ] γ) 整数
+实例 instPow整数
+  签名: : 幂 (α ->ₘ[μ] γ) 整数
   定义体: ⟨fun f n => comp _ (continuous_zpow n) f⟩
 
 @[simp]
@@ -3220,7 +3220,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: [AddGroup γ] [IsTopologicalAddGroup γ]
+  签名: [加法群 γ] [是拓扑加群 γ]
   定义体: toGerm_injective.addGroup toGerm zero_toGerm add_toGerm neg_toGerm sub_toGerm
     (fun _ _ => smul_toGerm _ _) fun _ _ => smul_toGerm _ _
 
@@ -3242,7 +3242,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup γ] [IsTopologicalAddGroup γ]
+  签名: [加法交换群 γ] [是拓扑加群 γ]
   定义体: { add_comm := add_comm }
 
 @[to_additive existing]
@@ -3265,7 +3265,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group γ] [IsTopologicalGroup γ]
+  签名: [群 γ] [是拓扑群 γ]
   定义体: toGerm_injective.group _ one_toGerm mul_toGerm inv_toGerm div_toGerm pow_toGerm zpow_toGerm
 
 @[to_additive existing]
@@ -3286,7 +3286,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup γ] [IsTopologicalGroup γ]
+  签名: [交换群 γ] [是拓扑群 γ]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -3308,7 +3308,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid 𝕜] [MulAction 𝕜 γ] [ContinuousConstSMul 𝕜 γ]
+  签名: [幺半群 𝕜] [乘法作用 𝕜 γ] [连续常数标量乘法 𝕜 γ]
   定义体: toGerm_injective.mulAction toGerm smul_toGerm
 
 Depends on / 依赖: mulAction, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.mulAction
@@ -3328,7 +3328,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid 𝕜] [AddMonoid γ] [ContinuousAdd γ] [DistribMulAction 𝕜 γ]
+  签名: [幺半群 𝕜] [加法幺半群 γ] [连续加法 γ] [分配乘法作用 𝕜 γ]
   定义体: toGerm_injective.distribMulAction (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) fun c : 𝕜 =>
     smul_toGerm c
 
@@ -3349,7 +3349,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring 𝕜] [AddCommMonoid γ] [ContinuousAdd γ] [Module 𝕜 γ]
+  签名: [半环 𝕜] [加法交换幺半群 γ] [连续加法 γ] [模 𝕜 γ]
   定义体: toGerm_injective.module 𝕜 (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) smul_toGerm
 
 Depends on / 依赖: module, smul_toGerm, toGermAddMonoidHom, toGerm_injective, toGerm_injective.module
@@ -3517,7 +3517,7 @@ theorem coeFn_abs
 
 中文:
 定理 coeFn_abs
-  结论: {β} [TopologicalSpace β] [Lattice β] [TopologicalLattice β] [AddGroup β]
+  结论: {β} [拓扑空间 β] [格 β] [拓扑格 β] [加法群 β]
   证明: by
   simp_rw [abs]
   filter_upwards [AEEqFun.coeFn_sup f (-f), AEEqFun.coeFn_neg f] with x hx_sup hx_neg
@@ -3546,8 +3546,8 @@ instance [Star
   body: (AEEqFun.comp _ continuous_star f)
 
 中文:
-实例 [Star
-  签名: R] [ContinuousStar R] : Star (α ->ₘ[μ] R) where
+实例 [对合
+  签名: R] [余ntinuousStar R] : 对合 (α ->ₘ[μ] R) where
   定义体: (AEEqFun.comp _ continuous_star f)
 
 Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_star
@@ -3566,7 +3566,7 @@ lemma coeFn_star
 
 中文:
 引理 coeFn_star
-  条件: [Star R] [ContinuousStar R] (f : α ->ₘ[μ] R)
+  条件: [对合 R] [余ntinuousStar R] (f : α ->ₘ[μ] R)
   结论: ↑(star f) =ᵐ[μ] (star f : α -> R)
   证明: coeFn_comp _ (continuous_star) f
 
@@ -3585,7 +3585,7 @@ instance [InvolutiveStar
 
 中文:
 实例 [InvolutiveStar
-  签名: R] [ContinuousStar R] : InvolutiveStar (α ->ₘ[μ] R) where
+  签名: R] [余ntinuousStar R] : InvolutiveStar (α ->ₘ[μ] R) where
   定义体: comp_comp _ _ _ _ f
 
 Depends on / 依赖: comp_comp
@@ -3602,8 +3602,8 @@ instance [Star
   body: show comp _ _ f = f by simp [funext star_trivial, ← Function.id_def]
 
 中文:
-实例 [Star
-  签名: R] [TrivialStar R] [ContinuousStar R] : TrivialStar (α ->ₘ[μ] R) where
+实例 [对合
+  签名: R] [TrivialStar R] [余ntinuousStar R] : TrivialStar (α ->ₘ[μ] R) where
   定义体: show comp _ _ f = f by simp [funext star_trivial, ← Function.id_def]
 
 Depends on / 依赖: Function, Function.id_def, id_def, star_trivial
@@ -3669,7 +3669,7 @@ theorem coeFn_posPart
 中文:
 定理 coeFn_posPart
   条件: (f : α ->ₘ[μ] γ)
-  结论: ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0
+  结论: ⇑(posPart f) =ᵐ[μ] fun a => 最大值 (f a) 0
   证明: coeFn_comp _ _ _
 
 Depends on / 依赖: coeFn_comp
@@ -3692,7 +3692,7 @@ theorem tendsto_ae_unique
 
 中文:
 定理 tendsto_ae_unique
-  结论: {ι : 类型} [T2Space β]
+  结论: {ι : 类型} [T2空间 β]
   证明: by
   filter_upwards [hg, hh] with ω hg1 hh1 using tendsto_nhds_unique hg1 hh1
 

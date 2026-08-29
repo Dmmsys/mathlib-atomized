@@ -68,8 +68,8 @@ abbreviation Dual
   body: M ->ₗ[R] R
 
 中文:
-缩写 Dual
-  签名: (R M : 类型) [Semiring R] [AddCommMonoid M] [Module R M]
+缩写 对偶
+  签名: (R M : 类型) [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: M ->ₗ[R] R
 -/
 abbrev Dual (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] :=
@@ -89,7 +89,7 @@ definition dualPairing
 
 中文:
 定义 dualPairing
-  签名: (R M) [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: (R M) [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: LinearMap.id
 
 @[deprecated "`Module.dualPairing` has been deprecated" (since := "2026-04-02")]
@@ -136,7 +136,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: : M ->ₗ[R] Dual R (Dual R M)
+  签名: : M ->ₗ[R] 对偶 R (对偶 R M)
   定义体: LinearMap.flip LinearMap.id
 
 @[simp]
@@ -158,7 +158,7 @@ theorem eval_apply
 
 中文:
 定理 eval_apply
-  条件: (v : M) (a : Dual R M)
+  条件: (v : M) (a : 对偶 R M)
   结论: eval R M v a = a v
   证明: rfl
 -/
@@ -178,7 +178,7 @@ definition transpose
 
 中文:
 定义 transpose
-  签名: : (M ->ₗ[R] M') ->ₗ[R] Dual R M' ->ₗ[R] Dual R M
+  签名: : (M ->ₗ[R] M') ->ₗ[R] 对偶 R M' ->ₗ[R] 对偶 R M
   定义体: (LinearMap.llcomp R M M' R).flip
 
 Depends on / 依赖: LinearMap, LinearMap.llcomp, llcomp
@@ -197,7 +197,7 @@ theorem transpose_apply
 
 中文:
 定理 transpose_apply
-  条件: (u : M ->ₗ[R] M') (l : Dual R M')
+  条件: (u : M ->ₗ[R] M') (l : 对偶 R M')
   结论: transpose u l = l.comp u
   证明: rfl
 -/
@@ -243,7 +243,7 @@ definition LinearMap.dualMap
   body: Module.Dual.transpose f
 
 中文:
-定义 LinearMap.dualMap
+定义 线性映射.dualMap
   签名: (f : M₁ ->ₗ[R] M₂)
   定义体: Module.Dual.transpose f
 
@@ -262,7 +262,7 @@ lemma LinearMap.dualMap_eq_lcomp
   proof: rfl
 
 中文:
-引理 LinearMap.dualMap_eq_lcomp
+引理 线性映射.dualMap_eq_lcomp
   条件: (f : M₁ ->ₗ[R] M₂)
   结论: f.dualMap = f.lcomp R R
   证明: rfl
@@ -279,9 +279,9 @@ theorem LinearMap.dualMap_def
   proof: rfl
 
 中文:
-定理 LinearMap.dualMap_def
+定理 线性映射.dualMap_def
   条件: (f : M₁ ->ₗ[R] M₂)
-  结论: f.dualMap = Module.Dual.transpose f
+  结论: f.dualMap = 模.对偶.transpose f
   证明: rfl
 -/
 theorem LinearMap.dualMap_def (f : M₁ ->ₗ[R] M₂) : f.dualMap = Module.Dual.transpose f :=
@@ -299,8 +299,8 @@ theorem LinearMap.dualMap_apply'
 @[simp]
 
 中文:
-定理 LinearMap.dualMap_apply'
-  条件: (f : M₁ ->ₗ[R] M₂) (g : Dual R M₂)
+定理 线性映射.dualMap_apply'
+  条件: (f : M₁ ->ₗ[R] M₂) (g : 对偶 R M₂)
   结论: f.dualMap g = g.comp f
   证明: rfl
 
@@ -321,8 +321,8 @@ theorem LinearMap.dualMap_apply
 @[simp]
 
 中文:
-定理 LinearMap.dualMap_apply
-  条件: (f : M₁ ->ₗ[R] M₂) (g : Dual R M₂) (x : M₁)
+定理 线性映射.dualMap_apply
+  条件: (f : M₁ ->ₗ[R] M₂) (g : 对偶 R M₂) (x : M₁)
   证明: rfl
 
 @[simp]
@@ -343,8 +343,8 @@ theorem LinearMap.dualMap_id
   rfl
 
 中文:
-定理 LinearMap.dualMap_id
-  结论: (LinearMap.id : M₁ ->ₗ[R] M₁).dualMap = LinearMap.id
+定理 线性映射.dualMap_id
+  结论: (线性映射.id : M₁ ->ₗ[R] M₁).dualMap = 线性映射.id
   证明: by
   ext
   rfl
@@ -362,8 +362,8 @@ theorem LinearMap.dualMap_comp_dualMap
   proof: rfl
 
 中文:
-定理 LinearMap.dualMap_comp_dualMap
-  结论: {M₃ : 类型} [AddCommMonoid M₃] [Module R M₃]
+定理 线性映射.dualMap_comp_dualMap
+  结论: {M₃ : 类型} [加法交换幺半群 M₃] [模 R M₃]
   证明: rfl
 -/
 theorem LinearMap.dualMap_comp_dualMap {M₃ : Type*} [AddCommMonoid M₃] [Module R M₃]
@@ -383,8 +383,8 @@ theorem LinearMap.dualMap_injective_of_surjective
   exact congr_arg (fun g : Module.Dual R M₁ => g y) h
 
 中文:
-定理 LinearMap.dualMap_injective_of_surjective
-  条件: {f : M₁ ->ₗ[R] M₂} (hf : Function.Surjective f)
+定理 线性映射.dualMap_injective_of_surjective
+  条件: {f : M₁ ->ₗ[R] M₂} (hf : 函数.满射 f)
   证明: by
   intro φ ψ h
   ext x
@@ -414,7 +414,7 @@ definition LinearEquiv.dualMap
 @[simp]
 
 中文:
-定义 LinearEquiv.dualMap
+定义 线性等价.dualMap
   签名: (f : M₁ ≃ₗ[R] M₂)
   定义体: f.toLinearMap.dualMap
   invFun := f.symm.toLinearMap.dualMap
@@ -443,8 +443,8 @@ theorem LinearEquiv.dualMap_apply
 @[simp]
 
 中文:
-定理 LinearEquiv.dualMap_apply
-  条件: (f : M₁ ≃ₗ[R] M₂) (g : Dual R M₂) (x : M₁)
+定理 线性等价.dualMap_apply
+  条件: (f : M₁ ≃ₗ[R] M₂) (g : 对偶 R M₂) (x : M₁)
   证明: rfl
 
 @[simp]
@@ -466,7 +466,7 @@ theorem LinearEquiv.dualMap_refl
 @[simp]
 
 中文:
-定理 LinearEquiv.dualMap_refl
+定理 线性等价.dualMap_refl
   证明: by
   ext
   rfl
@@ -488,7 +488,7 @@ theorem LinearEquiv.dualMap_symm
   proof: rfl
 
 中文:
-定理 LinearEquiv.dualMap_symm
+定理 线性等价.dualMap_symm
   条件: {f : M₁ ≃ₗ[R] M₂}
   证明: rfl
 -/
@@ -505,8 +505,8 @@ theorem LinearEquiv.dualMap_trans
   proof: rfl
 
 中文:
-定理 LinearEquiv.dualMap_trans
-  结论: {M₃ : 类型} [AddCommMonoid M₃] [Module R M₃] (f : M₁ ≃ₗ[R] M₂)
+定理 线性等价.dualMap_trans
+  结论: {M₃ : 类型} [加法交换幺半群 M₃] [模 R M₃] (f : M₁ ≃ₗ[R] M₂)
   证明: rfl
 -/
 theorem LinearEquiv.dualMap_trans {M₃ : Type*} [AddCommMonoid M₃] [Module R M₃] (f : M₁ ≃ₗ[R] M₂)
@@ -525,7 +525,7 @@ theorem Module.Dual.eval_naturality
 @[simp]
 
 中文:
-定理 Module.Dual.eval_naturality
+定理 模.对偶.eval_naturality
   条件: (f : M₁ ->ₗ[R] M₂)
   证明: by
   rfl
@@ -550,8 +550,8 @@ lemma Dual.apply_one_mul_eq
 @[simp]
 
 中文:
-引理 Dual.apply_one_mul_eq
-  条件: (f : Dual R R) (r : R)
+引理 对偶.apply_one_mul_eq
+  条件: (f : 对偶 R R) (r : R)
   证明: by
   conv_rhs => rw [← mul_one r, ← smul_eq_mul]
   rw [map_smul]; rw [smul_eq_mul]; rw [mul_comm]
@@ -580,8 +580,8 @@ lemma LinearMap.range_dualMap_dual_eq_span_singleton
   · ext; simp [dualMap_apply', ← hr]
 
 中文:
-引理 LinearMap.range_dualMap_dual_eq_span_singleton
-  条件: (f : Dual R M₁)
+引理 线性映射.range_dualMap_dual_eq_span_singleton
+  条件: (f : 对偶 R M₁)
   证明: by
   ext m
   rw [Submodule.mem_span_singleton]
@@ -625,10 +625,10 @@ class IsReflexive
     - bijective_dual_eval' : Bijective (Dual.eval R M)
 
 中文:
-类 IsReflexive
+类 是自反
   参数: : 命题 where
   公理与运算 (1 个):
-    - bijective_dual_eval' : Bijective (Dual.eval R M)
+    - bijective_dual_eval' : 双射 (对偶.eval R M)
 -/
 class IsReflexive : Prop where
   /-- A reflexive module is one for which the natural map to its double dual is a bijection. -/
@@ -645,8 +645,8 @@ lemma bijective_dual_eval
 
 中文:
 引理 bijective_dual_eval
-  条件: [IsReflexive R M]
-  结论: Bijective (Dual.eval R M)
+  条件: [是自反 R M]
+  结论: 双射 (对偶.eval R M)
   证明: IsReflexive.bijective_dual_eval'
 
 Depends on / 依赖: IsReflexive, IsReflexive.bijective_dual_eval, bijective_dual_eval
@@ -666,7 +666,7 @@ theorem erange_coe
 
 中文:
 定理 erange_coe
-  结论: LinearMap.range (eval R M) = ⊤
+  结论: 线性映射.range (eval R M) = ⊤
   证明: range_eq_top.mpr (bijective_dual_eval _ _).2
 
 Depends on / 依赖: bijective_dual_eval, range_eq_top, range_eq_top.mpr
@@ -684,7 +684,7 @@ definition evalEquiv
 
 中文:
 定义 evalEquiv
-  签名: : M ≃ₗ[R] Dual R (Dual R M)
+  签名: : M ≃ₗ[R] 对偶 R (对偶 R M)
   定义体: LinearEquiv.ofBijective _ (bijective_dual_eval R M)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, bijective_dual_eval, ofBijective
@@ -702,7 +702,7 @@ lemma evalEquiv_toLinearMap
 
 中文:
 引理 evalEquiv_toLinearMap
-  结论: evalEquiv R M = Dual.eval R M
+  结论: evalEquiv R M = 对偶.eval R M
   证明: rfl
 -/
 @[simp] lemma evalEquiv_toLinearMap : evalEquiv R M = Dual.eval R M := rfl
@@ -719,7 +719,7 @@ lemma evalEquiv_apply
 中文:
 引理 evalEquiv_apply
   条件: (m : M)
-  结论: evalEquiv R M m = Dual.eval R M m
+  结论: evalEquiv R M m = 对偶.eval R M m
   证明: rfl
 -/
 @[simp] lemma evalEquiv_apply (m : M) : evalEquiv R M m = Dual.eval R M m := rfl
@@ -736,7 +736,7 @@ lemma apply_evalEquiv_symm_apply
 
 中文:
 引理 apply_evalEquiv_symm_apply
-  条件: (f : Dual R M) (g : Dual R (Dual R M))
+  条件: (f : 对偶 R M) (g : 对偶 R (对偶 R M))
   证明: by
   set m := (evalEquiv R M).symm g
   rw [← (evalEquiv R M).apply_symm_apply g]; rw [evalEquiv_apply]; rw [Dual.eval_apply]
@@ -772,7 +772,7 @@ lemma Dual.eval_comp_comp_evalEquiv_eq
   rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [evalEquiv_toLinearMap]; rw [eval_naturality]
 
 中文:
-引理 Dual.eval_comp_comp_evalEquiv_eq
+引理 对偶.eval_comp_comp_evalEquiv_eq
   证明: by
   rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [evalEquiv_toLinearMap]; rw [eval_naturality]
 -/
@@ -839,8 +839,8 @@ instance Dual.instIsReflecive
   body: ⟨by simpa only [← symm_dualMap_evalEquiv] using! (evalEquiv R M).dualMap.symm.bijective⟩
 
 中文:
-实例 Dual.instIsReflecive
-  签名: : IsReflexive R (Dual R M)
+实例 对偶.instIsReflecive
+  签名: : 是自反 R (对偶 R M)
   定义体: ⟨by simpa only [← symm_dualMap_evalEquiv] using! (evalEquiv R M).dualMap.symm.bijective⟩
 
 Depends on / 依赖: bijective, dualMap, dualMap.symm.bijective, evalEquiv, symm_dualMap_evalEquiv
@@ -861,7 +861,7 @@ lemma IsReflexive.of_split
       congr_arg (dualMap ∘ dualMap) H).comp (bijective_dual_eval R M).2⟩
 
 中文:
-引理 IsReflexive.of_split
+引理 是自反.of_split
   条件: (i : N ->ₗ[R] M) (s : M ->ₗ[R] N) (H : s ∘ₗ i = .id)
   证明: ⟨.of_comp (f := i.dualMap.dualMap)
       (bijective_dual_eval R M).1.comp (injective_of_comp_eq_id i _ H),
@@ -890,7 +890,7 @@ definition mapEvalEquiv
 
 中文:
 定义 mapEvalEquiv
-  签名: : Submodule R M ≃o Submodule R (Dual R (Dual R M))
+  签名: : 子模 R M ≃o 子模 R (对偶 R (对偶 R M))
   定义体: Submodule.orderIsoMapComap (evalEquiv R M)
 
 @[simp]
@@ -913,7 +913,7 @@ theorem mapEvalEquiv_apply
 
 中文:
 定理 mapEvalEquiv_apply
-  条件: (W : Submodule R M)
+  条件: (W : 子模 R M)
   证明: rfl
 
 @[simp]
@@ -933,7 +933,7 @@ theorem mapEvalEquiv_symm_apply
 
 中文:
 定理 mapEvalEquiv_symm_apply
-  条件: (W'' : Submodule R (Dual R (Dual R M)))
+  条件: (W'' : 子模 R (对偶 R (对偶 R M)))
   证明: rfl
 -/
 theorem mapEvalEquiv_symm_apply (W'' : Submodule R (Dual R (Dual R M))) :
@@ -959,7 +959,7 @@ lemma equiv
 中文:
 引理 equiv
   条件: (e : M ≃ₗ[R] N)
-  结论: IsReflexive R N where
+  结论: 是自反 R N where
   证明: by
     let ed : Dual R (Dual R N) ≃ₗ[R] Dual R (Dual R M) := e.symm.dualMap.dualMap
     have : Dual.eval R N = ed.symm.comp ((Dual.eval R M).comp e.symm.toLinearMap) := by
@@ -990,7 +990,7 @@ instance _root_.MulOpposite.instModuleIsReflexive
 
 中文:
 实例 _root_.MulOpposite.instModuleIsReflexive
-  签名: : IsReflexive R (MulOpposite M)
+  签名: : 是自反 R (MulOpposite M)
   定义体: equiv MulOpposite.opLinearEquiv _
 
 Depends on / 依赖: MulOpposite, MulOpposite.opLinearEquiv, opLinearEquiv
@@ -1022,7 +1022,7 @@ definition dualRestrict
 
 中文:
 定义 dualRestrict
-  签名: (W : Submodule R M)
+  签名: (W : 子模 R M)
   定义体: LinearMap.domRestrict' W
 
 Depends on / 依赖: LinearMap, LinearMap.domRestrict, domRestrict
@@ -1043,7 +1043,7 @@ theorem dualRestrict_def
 
 中文:
 定理 dualRestrict_def
-  条件: (W : Submodule R M)
+  条件: (W : 子模 R M)
   结论: W.dualRestrict = W.subtype.dualMap
   证明: rfl
 
@@ -1063,7 +1063,7 @@ theorem dualRestrict_apply
 
 中文:
 定理 dualRestrict_apply
-  条件: (W : Submodule R M) (φ : Module.Dual R M) (x : W)
+  条件: (W : 子模 R M) (φ : 模.对偶 R M) (x : W)
   证明: rfl
 -/
 theorem dualRestrict_apply (W : Submodule R M) (φ : Module.Dual R M) (x : W) :
@@ -1082,7 +1082,7 @@ definition dualAnnihilator
 
 中文:
 定义 dualAnnihilator
-  签名: {R M : 类型} [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: {R M : 类型} [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: LinearMap.ker W.dualRestrict
 
 @[simp]
@@ -1107,7 +1107,7 @@ theorem mem_dualAnnihilator
 
 中文:
 定理 mem_dualAnnihilator
-  条件: (φ : Module.Dual R M)
+  条件: (φ : 模.对偶 R M)
   结论: φ in W.dualAnnihilator ↔ 对任意 w in W, φ w = 0
   证明: by
   simp_rw [dualAnnihilator, LinearMap.mem_ker, LinearMap.ext_iff, dualRestrict_apply,
@@ -1129,7 +1129,7 @@ theorem dualRestrict_ker_eq_dualAnnihilator
 
 中文:
 定理 dualRestrict_ker_eq_dualAnnihilator
-  条件: (W : Submodule R M)
+  条件: (W : 子模 R M)
   证明: rfl
 -/
 theorem dualRestrict_ker_eq_dualAnnihilator (W : Submodule R M) :
@@ -1148,7 +1148,7 @@ definition dualCoannihilator
 
 中文:
 定义 dualCoannihilator
-  签名: (Φ : Submodule R (Module.Dual R M))
+  签名: (Φ : 子模 R (模.对偶 R M))
   定义体: Φ.dualAnnihilator.comap (Module.Dual.eval R M)
 
 @[simp]
@@ -1170,7 +1170,7 @@ theorem mem_dualCoannihilator
 
 中文:
 定理 mem_dualCoannihilator
-  条件: {Φ : Submodule R (Module.Dual R M)} (x : M)
+  条件: {Φ : 子模 R (模.对偶 R M)} (x : M)
   证明: by
   simp_rw [dualCoannihilator, mem_comap, mem_dualAnnihilator, Module.Dual.eval_apply]
 
@@ -1191,7 +1191,7 @@ lemma dualAnnihilator_map_dualMap_le
 
 中文:
 引理 dualAnnihilator_map_dualMap_le
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: by
   intro; aesop
 -/
@@ -1210,7 +1210,7 @@ theorem comap_dualAnnihilator
 
 中文:
 定理 comap_dualAnnihilator
-  条件: (Φ : Submodule R (Module.Dual R M))
+  条件: (Φ : 子模 R (模.对偶 R M))
   证明: rfl
 -/
 theorem comap_dualAnnihilator (Φ : Submodule R (Module.Dual R M)) :
@@ -1226,7 +1226,7 @@ theorem map_dualCoannihilator_le
 
 中文:
 定理 map_dualCoannihilator_le
-  条件: (Φ : Submodule R (Module.Dual R M))
+  条件: (Φ : 子模 R (模.对偶 R M))
   证明: map_le_iff_le_comap.mpr (comap_dualAnnihilator Φ).le
 
 Depends on / 依赖: comap_dualAnnihilator, map_le_iff_le_comap, map_le_iff_le_comap.mpr
@@ -1281,7 +1281,7 @@ theorem le_dualAnnihilator_iff_le_dualCoannihilator
 
 中文:
 定理 le_dualAnnihilator_iff_le_dualCoannihilator
-  结论: {U : Submodule R (Module.Dual R M)}
+  结论: {U : 子模 R (模.对偶 R M)}
   证明: (dualAnnihilator_gc R M).le_iff_le
 
 @[simp]
@@ -1305,7 +1305,7 @@ theorem dualAnnihilator_bot
 
 中文:
 定理 dualAnnihilator_bot
-  结论: (⊥ : Submodule R M).dualAnnihilator = ⊤
+  结论: (⊥ : 子模 R M).dualAnnihilator = ⊤
   证明: (dualAnnihilator_gc R M).l_bot
 
 @[simp]
@@ -1329,7 +1329,7 @@ theorem dualAnnihilator_top
 
 中文:
 定理 dualAnnihilator_top
-  结论: (⊤ : Submodule R M).dualAnnihilator = ⊥
+  结论: (⊤ : 子模 R M).dualAnnihilator = ⊥
   证明: by
   simp [eq_bot_iff, SetLike.le_def, LinearMap.ext_iff]
 
@@ -1353,7 +1353,7 @@ theorem dualCoannihilator_bot
 
 中文:
 定理 dualCoannihilator_bot
-  结论: (⊥ : Submodule R (Module.Dual R M)).dualCoannihilator = ⊤
+  结论: (⊥ : 子模 R (模.对偶 R M)).dualCoannihilator = ⊤
   证明: (dualAnnihilator_gc R M).u_top
 
 @[gcongr, mono]
@@ -1376,7 +1376,7 @@ theorem dualAnnihilator_anti
 
 中文:
 定理 dualAnnihilator_anti
-  条件: {U V : Submodule R M} (hUV : U <= V)
+  条件: {U V : 子模 R M} (hUV : U <= V)
   证明: (dualAnnihilator_gc R M).monotone_l hUV
 
 @[gcongr, mono]
@@ -1398,7 +1398,7 @@ theorem dualCoannihilator_anti
 
 中文:
 定理 dualCoannihilator_anti
-  条件: {U V : Submodule R (Module.Dual R M)} (hUV : U <= V)
+  条件: {U V : 子模 R (模.对偶 R M)} (hUV : U <= V)
   证明: (dualAnnihilator_gc R M).monotone_u hUV
 
 Depends on / 依赖: dualAnnihilator_gc, monotone_u
@@ -1417,7 +1417,7 @@ theorem le_dualAnnihilator_dualCoannihilator
 
 中文:
 定理 le_dualAnnihilator_dualCoannihilator
-  条件: (U : Submodule R M)
+  条件: (U : 子模 R M)
   证明: (dualAnnihilator_gc R M).le_u_l U
 
 Depends on / 依赖: dualAnnihilator_gc, le_u_l
@@ -1436,7 +1436,7 @@ theorem le_dualCoannihilator_dualAnnihilator
 
 中文:
 定理 le_dualCoannihilator_dualAnnihilator
-  条件: (U : Submodule R (Module.Dual R M))
+  条件: (U : 子模 R (模.对偶 R M))
   证明: (dualAnnihilator_gc R M).l_u_le U
 
 Depends on / 依赖: dualAnnihilator_gc, l_u_le
@@ -1455,7 +1455,7 @@ theorem dualAnnihilator_dualCoannihilator_dualAnnihilator
 
 中文:
 定理 dualAnnihilator_dualCoannihilator_dualAnnihilator
-  条件: (U : Submodule R M)
+  条件: (U : 子模 R M)
   证明: (dualAnnihilator_gc R M).l_u_l_eq_l U
 
 Depends on / 依赖: dualAnnihilator_gc, l_u_l_eq_l
@@ -1474,7 +1474,7 @@ theorem dualCoannihilator_dualAnnihilator_dualCoannihilator
 
 中文:
 定理 dualCoannihilator_dualAnnihilator_dualCoannihilator
-  条件: (U : Submodule R (Module.Dual R M))
+  条件: (U : 子模 R (模.对偶 R M))
   证明: (dualAnnihilator_gc R M).u_l_u_eq_u U
 
 Depends on / 依赖: dualAnnihilator_gc, u_l_u_eq_u
@@ -1493,7 +1493,7 @@ theorem dualAnnihilator_sup_eq
 
 中文:
 定理 dualAnnihilator_sup_eq
-  条件: (U V : Submodule R M)
+  条件: (U V : 子模 R M)
   证明: (dualAnnihilator_gc R M).l_sup
 
 Depends on / 依赖: dualAnnihilator_gc, l_sup
@@ -1512,7 +1512,7 @@ theorem dualCoannihilator_sup_eq
 
 中文:
 定理 dualCoannihilator_sup_eq
-  条件: (U V : Submodule R (Module.Dual R M))
+  条件: (U V : 子模 R (模.对偶 R M))
   证明: (dualAnnihilator_gc R M).u_inf
 
 Depends on / 依赖: dualAnnihilator_gc, u_inf
@@ -1531,7 +1531,7 @@ theorem dualAnnihilator_iSup_eq
 
 中文:
 定理 dualAnnihilator_iSup_eq
-  条件: {ι : Sort*} (U : ι -> Submodule R M)
+  条件: {ι : 类型层*} (U : ι -> 子模 R M)
   证明: (dualAnnihilator_gc R M).l_iSup
 
 Depends on / 依赖: dualAnnihilator_gc, l_iSup
@@ -1550,7 +1550,7 @@ theorem dualCoannihilator_iSup_eq
 
 中文:
 定理 dualCoannihilator_iSup_eq
-  条件: {ι : Sort*} (U : ι -> Submodule R (Module.Dual R M))
+  条件: {ι : 类型层*} (U : ι -> 子模 R (模.对偶 R M))
   证明: (dualAnnihilator_gc R M).u_iInf
 
 Depends on / 依赖: dualAnnihilator_gc, u_iInf
@@ -1571,7 +1571,7 @@ theorem sup_dualAnnihilator_le_inf
 
 中文:
 定理 sup_dualAnnihilator_le_inf
-  条件: (U V : Submodule R M)
+  条件: (U V : 子模 R M)
   证明: by
   rw [le_dualAnnihilator_iff_le_dualCoannihilator]; rw [dualCoannihilator_sup_eq]
   apply inf_le_inf <;> exact le_dualAnnihilator_dualCoannihilator _
@@ -1598,7 +1598,7 @@ theorem iSup_dualAnnihilator_le_iInf
 
 中文:
 定理 iSup_dualAnnihilator_le_iInf
-  条件: {ι : Sort*} (U : ι -> Submodule R M)
+  条件: {ι : 类型层*} (U : ι -> 子模 R M)
   证明: by
   rw [le_dualAnnihilator_iff_le_dualCoannihilator]; rw [dualCoannihilator_iSup_eq]
   apply iInf_mono
@@ -1630,7 +1630,7 @@ lemma coe_dualAnnihilator_span
 
 中文:
 引理 coe_dualAnnihilator_span
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   ext f
   simp only [SetLike.mem_coe, mem_dualAnnihilator, Set.mem_ofPred_eq, ← LinearMap.mem_ker]
@@ -1661,7 +1661,7 @@ lemma coe_dualCoannihilator_span
 
 中文:
 引理 coe_dualCoannihilator_span
-  条件: (s : Set (Module.Dual R M))
+  条件: (s : 集合 (模.对偶 R M))
   证明: by
   ext x
   have (φ : _) : x in LinearMap.ker φ ↔ φ in LinearMap.ker (Module.Dual.eval R M x) := by simp

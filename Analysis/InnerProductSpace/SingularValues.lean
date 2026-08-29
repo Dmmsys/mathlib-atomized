@@ -165,7 +165,7 @@ theorem singularValues_fin
 
 中文:
 定理 singularValues_fin
-  条件: {n : 自然数} (hn : finrank 𝕜 E = n) (i : Fin n)
+  条件: {n : 自然数} (hn : finrank 𝕜 E = n) (i : 有限集 n)
   证明: by
   subst hn
   exact Finsupp.embDomain_apply_self _ _ i
@@ -232,7 +232,7 @@ theorem sq_singularValues_fin
 
 中文:
 定理 sq_singularValues_fin
-  条件: {n : 自然数} (hn : finrank 𝕜 E = n) (i : Fin n)
+  条件: {n : 自然数} (hn : finrank 𝕜 E = n) (i : 有限集 n)
   证明: by
   simp [T.singularValues_fin hn, T.isPositive_adjoint_comp_self.nonneg_eigenvalues hn i]
 
@@ -300,7 +300,7 @@ theorem singularValues_antitone
 
 中文:
 定理 singularValues_antitone
-  结论: Antitone T.singularValues
+  结论: 递减 T.singularValues
   证明: by
   intro i j hij
   by_cases! hj : finrank 𝕜 E <= j
@@ -333,7 +333,7 @@ theorem injective_iff_forall_lt_finrank_singularValues_pos
     obtain ⟨i, hi⟩ := T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq rfl 
 
 中文:
-定理 injective_iff_forall_lt_finrank_singularValues_pos
+定理 injective_iff_对任意_lt_finrank_singularValues_pos
   证明: by
   have := (adjoint T ∘ₗ T).not_hasEigenvalue_zero_tfae.out 4 0
   rw [← adjoint_comp_self_injective_iff]; rw [← coe_comp]; rw [← ker_eq_bot]; rw [← not_iff_not]; rw [this.not_left]
@@ -407,7 +407,7 @@ theorem isLowerSet_support_singularValues
 
 中文:
 定理 isLowerSet_support_singularValues
-  结论: IsLowerSet (T.singularValues.support : Set 自然数)
+  结论: 是下集 (T.singularValues.support : 集合 自然数)
   证明: by
   intro a b hl ha
   rw [Finset.mem_coe]; rw [Finsupp.mem_support_iff]; rw [← singularValues_pos_iff_ne_zero] at ⊢ ha
@@ -437,7 +437,7 @@ theorem support_singularValues
 
 中文:
 定理 support_singularValues
-  结论: T.singularValues.support = Finset.range (finrank 𝕜 T.range)
+  结论: T.singularValues.support = 有限集.range (finrank 𝕜 T.range)
   证明: by
   obtain ⟨n, hn⟩ := T.isLowerSet_support_singularValues.eq_univ_or_Iio.resolve_left
     (fun h => Set.infinite_univ.not_finite (h ▸ Finset.finite_toSet _))

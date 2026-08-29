@@ -32,8 +32,8 @@ lemma IsRightCancelMulZero.faithfulSMul
   proof: inferInstance
 
 中文:
-引理 IsRightCancelMulZero.faithfulSMul
-  条件: [MonoidWithZero α] [IsRightCancelMulZero α]
+引理 是右消去MulZero.faithfulSMul
+  条件: [带零幺半群 α] [是右消去MulZero α]
   证明: inferInstance
 -/
 lemma IsRightCancelMulZero.faithfulSMul [MonoidWithZero α] [IsRightCancelMulZero α] :

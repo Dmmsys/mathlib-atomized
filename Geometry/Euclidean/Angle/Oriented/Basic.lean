@@ -1893,8 +1893,8 @@ theorem _root_.Complex.oangle
   simp [oangle, mul_comm z]
 
 中文:
-定理 _root_.Complex.oangle
-  条件: (w z : Complex)
+定理 _root_.复形.oangle
+  条件: (w z : 复形)
   证明: by
   simp [oangle, mul_comm z]
 -/
@@ -1914,7 +1914,7 @@ theorem oangle_map_complex
 
 中文:
 定理 oangle_map_complex
-  结论: (f : V ≃ₗᵢ[实数] Complex)
+  结论: (f : V ≃ₗᵢ[实数] 复形)
   证明: by
   rw [← Complex.oangle]; rw [← hf]; rw [o.oangle_map]
   iterate 2 rw [LinearIsometryEquiv.symm_apply_apply]
@@ -2065,7 +2065,7 @@ theorem angle_eq_abs_oangle_toReal
   · rw [h, eq_comm, Real.Angle.abs_toReal_neg_coe_eq_s
 
 中文:
-定理 angle_eq_abs_oangle_toReal
+定理 angle_eq_abs_oangle_to实数
   条件: {x y : V} (hx : x != 0) (hy : y != 0)
   证明: by
   have h0 := InnerProductGeometry.angle_nonneg x y
@@ -3167,7 +3167,7 @@ theorem abs_oangle_sub_left_toReal_lt_pi_div_two
   rw [Real.Angle.sign_tw
 
 中文:
-定理 abs_oangle_sub_left_toReal_lt_pi_div_two
+定理 abs_oangle_sub_left_to实数_lt_pi_div_two
   条件: {x y : V} (h : ‖x‖ = ‖y‖)
   证明: by
   by_cases hn : x = y; · simp [hn, Real.pi_pos]
@@ -3207,7 +3207,7 @@ theorem abs_oangle_sub_right_toReal_lt_pi_div_two
   proof: (o.oangle_sub_eq_oangle_sub_rev_of_norm_eq h).symm ▸ o.abs_oangle_sub_left_toReal_lt_pi_div_two h
 
 中文:
-定理 abs_oangle_sub_right_toReal_lt_pi_div_two
+定理 abs_oangle_sub_right_to实数_lt_pi_div_two
   条件: {x y : V} (h : ‖x‖ = ‖y‖)
   证明: (o.oangle_sub_eq_oangle_sub_rev_of_norm_eq h).symm ▸ o.abs_oangle_sub_left_toReal_lt_pi_div_two h
 

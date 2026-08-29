@@ -79,11 +79,11 @@ structure Measure
     - trim_le : toOuterMeasure.trim <= toOuterMeasure
 
 中文:
-结构 Measure
-  参数: (α : 类型) [MeasurableSpace α]
-  继承: OuterMeasure α
+结构 测度
+  参数: (α : 类型) [可测空间 α]
+  继承: 外测度 α
   公理与运算 (2 个):
-    - m_iUnion(⦃f) : 自然数 -> Set α⦄ : (对任意 i, MeasurableSet (f i)) -> Pairwise (Disjoint on f) -> toOuterMeasure (⋃ i, f i) = ∑' i, toOuterMeasure (f i)
+    - m_iUnion(⦃f) : 自然数 -> 集合 α⦄ : (对任意 i, 可测集 (f i)) -> 两两 (Disjoint on f) -> toOuterMeasure (⋃ i, f i) = ∑' i, toOuterMeasure (f i)
     - trim_le : toOuterMeasure.trim <= toOuterMeasure
 -/
 structure Measure (α : Type*) [MeasurableSpace α] extends OuterMeasure α where
@@ -102,8 +102,8 @@ theorem Measure.toOuterMeasure_injective
   given: [MeasurableSpace α]
 
 中文:
-定理 Measure.toOuterMeasure_injective
-  条件: [MeasurableSpace α]
+定理 测度.toOuterMeasure_injective
+  条件: [可测空间 α]
 -/
 theorem Measure.toOuterMeasure_injective [MeasurableSpace α] :
     Injective (toOuterMeasure : Measure α -> OuterMeasure α)
@@ -119,8 +119,8 @@ instance Measure.instFunLike
 coe_injective | ⟨_, _, _⟩, ⟨_, _, _⟩, h => toOuterMeasure_injective DFunLike.coe_injective h
 
 中文:
-实例 Measure.instFunLike
-  签名: [MeasurableSpace α]
+实例 测度.instFunLike
+  签名: [可测空间 α]
   定义体: μ.toOuterMeasure
 coe_injective | ⟨_, _, _⟩, ⟨_, _, _⟩, h => toOuterMeasure_injective DFunLike.coe_injective h
 
@@ -142,8 +142,8 @@ instance Measure.instOuterMeasureClass
   measure_mono m := m.mono
 
 中文:
-实例 Measure.instOuterMeasureClass
-  签名: [MeasurableSpace α]
+实例 测度.instOuterMeasureClass
+  签名: [可测空间 α]
   定义体: measure_empty (μ := m.toOuterMeasure)
   measure_iUnion_nat_le m := m.iUnion_nat
   measure_mono m := m.mono
@@ -164,8 +164,8 @@ definition Measure.real
   body: (μ s).toReal
 
 中文:
-定义 Measure.real
-  签名: {α : 类型} {m : MeasurableSpace α} (μ : Measure α) (s : Set α)
+定义 测度.real
+  签名: {α : 类型} {m : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   定义体: (μ s).toReal
 -/
 protected def Measure.real {α : Type*} {m : MeasurableSpace α} (μ : Measure α) (s : Set α) : Real :=
@@ -182,8 +182,8 @@ theorem measureReal_def
 alias Measure.real_def := measureReal_def
 
 中文:
-定理 measureReal_def
-  条件: {α : 类型} {m : MeasurableSpace α} (μ : Measure α) (s : Set α)
+定理 measure实数_def
+  条件: {α : 类型} {m : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   证明: rfl
 
 alias Measure.real_def := measureReal_def
@@ -210,7 +210,7 @@ theorem trimmed
 
 中文:
 定理 trimmed
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: μ.toOuterMeasure.trim = μ.toOuterMeasure
   证明: le_antisymm μ.trim_le μ.1.le_trim
 
@@ -235,7 +235,7 @@ definition ofMeasurable
 
 中文:
 定义 ofMeasurable
-  签名: (m : 对任意 s : Set α, MeasurableSet s -> 实数>=0∞) (m0 : m ∅ MeasurableSet.empty = 0)
+  签名: (m : 对任意 s : 集合 α, 可测集 s -> 实数>=0∞) (m0 : m ∅ 可测集.empty = 0)
   定义体: { toOuterMeasure := inducedOuterMeasure m _ m0
     m_iUnion := fun f hf hd =>
       show inducedOuterMeasure m _ m0 (iUnion f) = ∑' i, inducedOuterMeasure m _ m0 (f i) by
@@ -269,7 +269,7 @@ theorem ofMeasurable_apply
 
 中文:
 定理 ofMeasurable_apply
-  结论: {m : 对任意 s : Set α, MeasurableSet s -> 实数>=0∞}
+  结论: {m : 对任意 s : 集合 α, 可测集 s -> 实数>=0∞}
   证明: inducedOuterMeasure_eq m0 mU hs
 
 @[ext]
@@ -297,7 +297,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (h : 对任意 s, MeasurableSet s -> μ₁ s = μ₂ s)
+  条件: (h : 对任意 s, 可测集 s -> μ₁ s = μ₂ s)
   结论: μ₁ = μ₂
   证明: toOuterMeasure_injective by
   rw [← trimmed]; rw [OuterMeasure.trim_congr (h _)]; rw [trimmed]
@@ -338,8 +338,8 @@ theorem outerMeasure_le_iff
 
 中文:
 定理 outerMeasure_le_iff
-  条件: {m : OuterMeasure α}
-  结论: m <= μ.1 ↔ 对任意 s, MeasurableSet s -> m s <= μ s
+  条件: {m : 外测度 α}
+  结论: m <= μ.1 ↔ 对任意 s, 可测集 s -> m s <= μ s
   证明: by
   simpa only [μ.trimmed] using! OuterMeasure.le_trim_iff (m₂ := μ.1)
 
@@ -360,7 +360,7 @@ lemma mono_null
 中文:
 引理 mono_null
   条件: ⦃s t
-  结论: Set α⦄ (h : s subseteq t) (ht : μ t = 0) : μ s = 0
+  结论: 集合 α⦄ (h : s subseteq t) (ht : μ t = 0) : μ s = 0
   证明: measure_mono_null h ht
 
 Depends on / 依赖: measure_mono_null
@@ -379,8 +379,8 @@ theorem Measure.coe_toOuterMeasure
   proof: rfl
 
 中文:
-定理 Measure.coe_toOuterMeasure
-  条件: (μ : Measure α)
+定理 测度.coe_toOuterMeasure
+  条件: (μ : 测度 α)
   结论: ⇑μ.toOuterMeasure = μ
   证明: rfl
 -/
@@ -395,8 +395,8 @@ theorem Measure.toOuterMeasure_apply
   proof: rfl
 
 中文:
-定理 Measure.toOuterMeasure_apply
-  条件: (μ : Measure α) (s : Set α)
+定理 测度.toOuterMeasure_apply
+  条件: (μ : 测度 α) (s : 集合 α)
   证明: rfl
 -/
 theorem Measure.toOuterMeasure_apply (μ : Measure α) (s : Set α) :
@@ -415,7 +415,7 @@ theorem measure_eq_trim
 
 中文:
 定理 measure_eq_trim
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: μ s = μ.toOuterMeasure.trim s
   证明: by
   rw [μ.trimmed]; rw [μ.coe_toOuterMeasure]
@@ -437,8 +437,8 @@ theorem measure_eq_iInf
 
 中文:
 定理 measure_eq_iInf
-  条件: (s : Set α)
-  结论: μ s = ⨅ (t) (_ : s subseteq t) (_ : MeasurableSet t), μ t
+  条件: (s : 集合 α)
+  结论: μ s = ⨅ (t) (_ : s subseteq t) (_ : 可测集 t), μ t
   证明: by
   rw [measure_eq_trim]; rw [OuterMeasure.trim_eq_iInf]; rw [μ.coe_toOuterMeasure]
 
@@ -458,7 +458,7 @@ theorem measure_eq_iInf'
 
 中文:
 定理 measure_eq_iInf'
-  条件: (μ : Measure α) (s : Set α)
+  条件: (μ : 测度 α) (s : 集合 α)
   证明: by
   simp_rw [iInf_subtype, iInf_and, ← measure_eq_iInf]
 
@@ -514,7 +514,7 @@ theorem measure_eq_extend
 
 中文:
 定理 measure_eq_extend
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [extend_eq]
   exact hs
@@ -538,7 +538,7 @@ theorem nonempty_of_measure_ne_zero
 中文:
 定理 nonempty_of_measure_ne_zero
   条件: (h : μ s != 0)
-  结论: s.Nonempty
+  结论: s.非空
   证明: nonempty_iff_ne_empty.2 fun h' => h h'.symm ▸ measure_empty
 
 Depends on / 依赖: measure_empty, nonempty_iff_ne_empty
@@ -620,8 +620,8 @@ theorem exists_measurable_superset
   simpa only [← measure_eq_trim] using! μ.toOuterMeasure.exists_measurable_superset_eq_trim s
 
 中文:
-定理 exists_measurable_superset
-  条件: (μ : Measure α) (s : Set α)
+定理 存在_measurable_superset
+  条件: (μ : 测度 α) (s : 集合 α)
   证明: by
   simpa only [← measure_eq_trim] using! μ.toOuterMeasure.exists_measurable_superset_eq_trim s
 
@@ -642,8 +642,8 @@ theorem exists_measurable_superset_forall_eq
     OuterMeasure.exists_measurable_superset_forall_eq_trim (fun i => (μ i).toOuterMeasure) s
 
 中文:
-定理 exists_measurable_superset_forall_eq
-  条件: [Countable ι] (μ : ι -> Measure α) (s : Set α)
+定理 存在_measurable_superset_对任意_eq
+  条件: [可数 ι] (μ : ι -> 测度 α) (s : 集合 α)
   证明: by
   simpa only [← measure_eq_trim] using!
     OuterMeasure.exists_measurable_superset_forall_eq_trim (fun i => (μ i).toOuterMeasure) s
@@ -666,8 +666,8 @@ theorem exists_measurable_superset₂
     exists_measurable_superset_forall_eq (fun b => cond b μ ν) s
 
 中文:
-定理 exists_measurable_superset₂
-  条件: (μ ν : Measure α) (s : Set α)
+定理 存在_measurable_superset₂
+  条件: (μ ν : 测度 α) (s : 集合 α)
   证明: by
   simpa only [Bool.forall_bool.trans and_comm] using!
     exists_measurable_superset_forall_eq (fun b => cond b μ ν) s
@@ -689,9 +689,9 @@ theorem exists_measurable_superset_of_null
   proof: h ▸ exists_measurable_superset μ s
 
 中文:
-定理 exists_measurable_superset_of_null
+定理 存在_measurable_superset_of_null
   条件: (h : μ s = 0)
-  结论: 存在 t, s subseteq t ∧ MeasurableSet t ∧ μ t = 0
+  结论: 存在 t, s subseteq t ∧ 可测集 t ∧ μ t = 0
   证明: h ▸ exists_measurable_superset μ s
 
 Depends on / 依赖: exists_measurable_superset
@@ -707,7 +707,7 @@ theorem exists_measurable_superset_iff_measure_eq_zero
   proof: ⟨fun ⟨_t, hst, _, ht⟩ => measure_mono_null hst ht, exists_measurable_superset_of_null⟩
 
 中文:
-定理 exists_measurable_superset_iff_measure_eq_zero
+定理 存在_measurable_superset_iff_measure_eq_zero
   证明: ⟨fun ⟨_t, hst, _, ht⟩ => measure_mono_null hst ht, exists_measurable_superset_of_null⟩
 
 Depends on / 依赖: exists_measurable_superset_of_null, measure_mono_null
@@ -732,7 +732,7 @@ theorem measure_biUnion_lt_top
 
 中文:
 定理 measure_biUnion_lt_top
-  结论: {s : Set β} {f : β -> Set α} (hs : s.Finite)
+  结论: {s : 集合 β} {f : β -> 集合 α} (hs : s.有限)
   证明: by
   convert! (measure_biUnion_finset_le (μ := μ) hs.toFinset f).trans_lt _ using 3
   · ext
@@ -761,7 +761,7 @@ theorem measure_biUnion_ne_top
 
 中文:
 定理 measure_biUnion_ne_top
-  结论: {s : Set β} {f : β -> Set α} (hs : s.Finite)
+  结论: {s : 集合 β} {f : β -> 集合 α} (hs : s.有限)
   证明: (measure_biUnion_lt_top hs (fun i hi => Ne.lt_top (hfin i hi ·))).ne
 
 Depends on / 依赖: Ne.lt_top, lt_top, measure_biUnion_lt_top
@@ -902,8 +902,8 @@ theorem exists_measure_pos_of_not_measure_iUnion_null
   exact measure_iUnion_null fun n => nonpos_iff_eq_zero.1 (hs n)
 
 中文:
-定理 exists_measure_pos_of_not_measure_iUnion_null
-  结论: [Countable ι] {s : ι -> Set α}
+定理 存在_measure_pos_of_not_measure_iUnion_null
+  结论: [可数 ι] {s : ι -> 集合 α}
   证明: by
   contrapose! hs
   exact measure_iUnion_null fun n => nonpos_iff_eq_zero.1 (hs n)
@@ -1060,7 +1060,7 @@ theorem measure_inter_null_of_null_right
 
 中文:
 定理 measure_inter_null_of_null_right
-  条件: (S : Set α) {T : Set α} (h : μ T = 0)
+  条件: (S : 集合 α) {T : 集合 α} (h : μ T = 0)
   结论: μ (S inter T) = 0
   证明: measure_mono_null inter_subset_right h
 
@@ -1080,7 +1080,7 @@ theorem measure_inter_null_of_null_left
 
 中文:
 定理 measure_inter_null_of_null_left
-  条件: {S : Set α} (T : Set α) (h : μ S = 0)
+  条件: {S : 集合 α} (T : 集合 α) (h : μ S = 0)
   结论: μ (S inter T) = 0
   证明: measure_mono_null inter_subset_left h
 
@@ -1103,7 +1103,7 @@ theorem _root_.MeasurableSpace.ae_induction_on_inter
       h_eq h_inter hx_empty hx_basic hx_compl hx_union
 
 中文:
-定理 _root_.MeasurableSpace.ae_induction_on_inter
+定理 _root_.可测空间.ae_induction_on_inter
   证明: by
   filter_upwards [h_empty, h_basic, h_compl, h_union] with x hx_empty hx_basic hx_compl hx_union
     using MeasurableSpace.induction_on_inter (C := fun t _ => C x t)
@@ -1153,7 +1153,7 @@ theorem subset_toMeasurable
 
 中文:
 定理 subset_toMeasurable
-  条件: (μ : Measure α) (s : Set α)
+  条件: (μ : 测度 α) (s : 集合 α)
   结论: s subseteq toMeasurable μ s
   证明: by
   rw [toMeasurable_def]; split_ifs with hs h's
@@ -1203,7 +1203,7 @@ theorem measurableSet_toMeasurable
 
 中文:
 定理 measurableSet_toMeasurable
-  条件: (μ : Measure α) (s : Set α)
+  条件: (μ : 测度 α) (s : 集合 α)
   证明: by
   rw [toMeasurable_def]; split_ifs with hs h's
   exacts [hs.choose_spec.2.1, h's.choose_spec.2.1,
@@ -1235,7 +1235,7 @@ theorem measure_toMeasurable
 
 中文:
 定理 measure_toMeasurable
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: μ (toMeasurable μ s) = μ s
   证明: by
   rw [toMeasurable_def]; split_ifs with hs h's
@@ -1262,11 +1262,11 @@ class MeasureSpace
     - volume : Measure α
 
 中文:
-类 MeasureSpace
+类 测度空间
   参数: (α : 类型)
-  继承: MeasurableSpace α
+  继承: 可测空间 α
   公理与运算 (1 个):
-    - volume : Measure α
+    - volume : 测度 α
 -/
 class MeasureSpace (α : Type*) extends MeasurableSpace α where
   volume : Measure α
@@ -1331,8 +1331,8 @@ definition AEMeasurable
   body: exists g : α -> β, Measurable g ∧ f =ᵐ[μ] g
 
 中文:
-定义 AEMeasurable
-  签名: {_m : MeasurableSpace α} (f : α -> β) (μ : Measure α := by volume_tac)
+定义 几乎处处可测
+  签名: {_m : 可测空间 α} (f : α -> β) (μ : 测度 α := by volume_tac)
   定义体: exists g : α -> β, Measurable g ∧ f =ᵐ[μ] g
 
 Depends on / 依赖: Measurable, volume_tac
@@ -1360,9 +1360,9 @@ theorem Measurable.aemeasurable
   proof: ⟨f, h, ae_eq_refl f⟩
 
 中文:
-定理 Measurable.aemeasurable
-  条件: (h : Measurable f)
-  结论: AEMeasurable f μ
+定理 可测.aemeasurable
+  条件: (h : 可测 f)
+  结论: 几乎处处可测 f μ
   证明: ⟨f, h, ae_eq_refl f⟩
 
 Depends on / 依赖: ae_eq_refl
@@ -1384,8 +1384,8 @@ lemma of_discrete
 
 中文:
 引理 of_discrete
-  条件: [DiscreteMeasurableSpace α]
-  结论: AEMeasurable f μ
+  条件: [DiscreteMeasurable空间 α]
+  结论: 几乎处处可测 f μ
   证明: Measurable.of_discrete.aemeasurable
 
 Depends on / 依赖: Measurable, Measurable.of_discrete.aemeasurable, aemeasurable, of_discrete
@@ -1405,7 +1405,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (f : α -> β) (h : AEMeasurable f μ)
+  签名: (f : α -> β) (h : 几乎处处可测 f μ)
   定义体: Classical.choose h
 
 @[fun_prop]
@@ -1427,8 +1427,8 @@ theorem measurable_mk
 
 中文:
 定理 measurable_mk
-  条件: (h : AEMeasurable f μ)
-  结论: Measurable (h.mk f)
+  条件: (h : 几乎处处可测 f μ)
+  结论: 可测 (h.mk f)
   证明: (Classical.choose_spec h).1
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
@@ -1447,7 +1447,7 @@ theorem ae_eq_mk
 
 中文:
 定理 ae_eq_mk
-  条件: (h : AEMeasurable f μ)
+  条件: (h : 几乎处处可测 f μ)
   结论: f =ᵐ[μ] h.mk f
   证明: (Classical.choose_spec h).2
 
@@ -1467,8 +1467,8 @@ theorem congr
 
 中文:
 定理 congr
-  条件: (hf : AEMeasurable f μ) (h : f =ᵐ[μ] g)
-  结论: AEMeasurable g μ
+  条件: (hf : 几乎处处可测 f μ) (h : f =ᵐ[μ] g)
+  结论: 几乎处处可测 g μ
   证明: ⟨hf.mk f, hf.measurable_mk, h.symm.trans hf.ae_eq_mk⟩
 
 Depends on / 依赖: ae_eq_mk, h.symm.trans, hf.ae_eq_mk, hf.measurable_mk, hf.mk, measurable_mk
@@ -1492,7 +1492,7 @@ theorem aemeasurable_congr
 中文:
 定理 aemeasurable_congr
   条件: (h : f =ᵐ[μ] g)
-  结论: AEMeasurable f μ ↔ AEMeasurable g μ
+  结论: 几乎处处可测 f μ ↔ 几乎处处可测 g μ
   证明: ⟨fun hf => AEMeasurable.congr hf h, fun hg => AEMeasurable.congr hg h.symm⟩
 
 @[simp, fun_prop]
@@ -1517,7 +1517,7 @@ theorem aemeasurable_const
 中文:
 定理 aemeasurable_const
   条件: {b : β}
-  结论: AEMeasurable (fun _a : α => b) μ
+  结论: 几乎处处可测 (fun _a : α => b) μ
   证明: measurable_const.aemeasurable
 
 @[fun_prop]
@@ -1540,7 +1540,7 @@ theorem aemeasurable_id
 
 中文:
 定理 aemeasurable_id
-  结论: AEMeasurable id μ
+  结论: 几乎处处可测 id μ
   证明: measurable_id.aemeasurable
 
 @[fun_prop]
@@ -1561,7 +1561,7 @@ theorem aemeasurable_id'
 
 中文:
 定理 aemeasurable_id'
-  结论: AEMeasurable (fun x => x) μ
+  结论: 几乎处处可测 (fun x => x) μ
   证明: measurable_id.aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_id, measurable_id.aemeasurable
@@ -1580,8 +1580,8 @@ theorem Measurable.comp_aemeasurable
 @[fun_prop]
 
 中文:
-定理 Measurable.comp_aemeasurable
-  结论: [MeasurableSpace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g)
+定理 可测.comp_aemeasurable
+  结论: [可测空间 δ] {f : α -> δ} {g : δ -> β} (hg : 可测 g)
   证明: ⟨g ∘ hf.mk f, hg.comp hf.measurable_mk, EventuallyEq.fun_comp hf.ae_eq_mk _⟩
 
 @[fun_prop]
@@ -1602,8 +1602,8 @@ theorem Measurable.comp_aemeasurable'
   proof: Measurable.comp_aemeasurable hg hf
 
 中文:
-定理 Measurable.comp_aemeasurable'
-  结论: [MeasurableSpace δ] {f : α -> δ} {g : δ -> β}
+定理 可测.comp_aemeasurable'
+  结论: [可测空间 δ] {f : α -> δ} {g : δ -> β}
   证明: Measurable.comp_aemeasurable hg hf
 
 Depends on / 依赖: Measurable, Measurable.comp_aemeasurable, comp_aemeasurable
@@ -1625,8 +1625,8 @@ theorem AEMeasurable.eval
   exact hg.ae_eq_mk.mono fun _ h => congrFun h _
 
 中文:
-定理 AEMeasurable.eval
-  条件: {g : α -> Π a, X a} (hg : AEMeasurable g μ) (a : δ)
+定理 几乎处处可测.eval
+  条件: {g : α -> Π a, X a} (hg : 几乎处处可测 g μ) (a : δ)
   证明: by
   use fun x => hg.mk g x a, hg.measurable_mk.eval
   exact hg.ae_eq_mk.mono fun _ h => congrFun h _
@@ -1686,7 +1686,7 @@ theorem aemeasurable_pi_lambda
 
 中文:
 定理 aemeasurable_pi_lambda
-  条件: (f : α -> Π a, X a) (hf : 对任意 a, AEMeasurable (fun c => f c a) μ)
+  条件: (f : α -> Π a, X a) (hf : 对任意 a, 几乎处处可测 (fun c => f c a) μ)
   证明: aemeasurable_pi_iff.mpr hf
 
 Depends on / 依赖: aemeasurable_pi_iff, aemeasurable_pi_iff.mpr

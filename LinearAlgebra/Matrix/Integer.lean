@@ -43,7 +43,7 @@ lemma map_mul_natCast
 
 中文:
 引理 map_mul_natCast
-  条件: {α : 类型} [NonAssocSemiring α] (A B : Matrix n n 自然数)
+  条件: {α : 类型} [非结合半环 α] (A B : 矩阵 n n 自然数)
   证明: Matrix.map_mul (f := Nat.castRingHom α)
 
 Depends on / 依赖: Matrix, Matrix.map_mul, Nat.castRingHom, castRingHom, map_mul
@@ -62,7 +62,7 @@ lemma map_mul_intCast
 
 中文:
 引理 map_mul_intCast
-  条件: {α : 类型} [NonAssocRing α] (A B : Matrix n n 整数)
+  条件: {α : 类型} [非结合环 α] (A B : 矩阵 n n 整数)
   证明: Matrix.map_mul (f := Int.castRingHom α)
 
 Depends on / 依赖: Int.castRingHom, Matrix, Matrix.map_mul, castRingHom, map_mul
@@ -81,7 +81,7 @@ lemma map_mul_ratCast
 
 中文:
 引理 map_mul_ratCast
-  条件: {α : 类型} [DivisionRing α] [CharZero α] (A B : Matrix n n Rat)
+  条件: {α : 类型} [除环 α] [特征零 α] (A B : 矩阵 n n 有理数)
   证明: Matrix.map_mul (f := Rat.castHom α)
 
 Depends on / 依赖: Matrix, Matrix.map_mul, Rat.castHom, castHom, map_mul
@@ -104,7 +104,7 @@ definition den
 
 中文:
 定义 den
-  签名: (A : Matrix m n Rat)
+  签名: (A : 矩阵 m n 有理数)
   定义体: Finset.univ.lcm (fun P : m × n => (A P.1 P.2).den)
 -/
 protected def den (A : Matrix m n Rat) : Nat := Finset.univ.lcm (fun P : m × n => (A P.1 P.2).den)
@@ -119,7 +119,7 @@ definition num
 
 中文:
 定义 num
-  签名: (A : Matrix m n Rat)
+  签名: (A : 矩阵 m n 有理数)
   定义体: ((A.den : Rat) • A).map Rat.num
 -/
 protected def num (A : Matrix m n Rat) : Matrix m n Int := ((A.den : Rat) • A).map Rat.num
@@ -136,7 +136,7 @@ lemma den_ne_zero
 
 中文:
 引理 den_ne_zero
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: A.den != 0
   证明: by
   simp [Matrix.den, Finset.lcm_eq_zero_iff]
@@ -158,7 +158,7 @@ lemma num_eq_zero_iff
 
 中文:
 引理 num_eq_zero_iff
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: A.num = 0 ↔ A = 0
   证明: by
   simp [Matrix.num, ← ext_iff, A.den_ne_zero]
@@ -179,7 +179,7 @@ lemma den_dvd_iff
 
 中文:
 引理 den_dvd_iff
-  条件: {A : Matrix m n Rat} {r : 自然数}
+  条件: {A : 矩阵 m n 有理数} {r : 自然数}
   证明: by
   simp [Matrix.den]
 
@@ -201,7 +201,7 @@ lemma num_div_den
 
 中文:
 引理 num_div_den
-  条件: (A : Matrix m n Rat) (i : m) (j : n)
+  条件: (A : 矩阵 m n 有理数) (i : m) (j : n)
   证明: by
   obtain ⟨k, hk⟩ := den_dvd_iff.mp (dvd_refl A.den) i j
   rw [Matrix.num]; rw [map_apply]; rw [smul_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [div_eq_iff Nat.cast_ne_zero.mpr A.den_ne_zero]; rw [hk]; rw [Nat.cast_mul]; rw [← mul_assoc]; rw [Rat.mul_den_eq_num]; rw [← Int.cast_natCast k]; rw [← 
@@ -227,7 +227,7 @@ lemma inv_denom_smul_num
 
 中文:
 引理 inv_denom_smul_num
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   证明: by
   ext
   simp [← Matrix.num_div_den A, div_eq_inv_mul]
@@ -255,7 +255,7 @@ lemma den_neg
 
 中文:
 引理 den_neg
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: (-A).den = A.den
   证明: eq_of_forall_dvd by simp [den_dvd_iff]
 
@@ -280,7 +280,7 @@ lemma num_neg
 
 中文:
 引理 num_neg
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: (-A).num = -A.num
   证明: by
   ext
@@ -303,7 +303,7 @@ lemma den_transpose
 
 中文:
 引理 den_transpose
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: (Aᵀ).den = A.den
   证明: eq_of_forall_dvd fun _ => by simpa [den_dvd_iff] using forall_comm
 -/
@@ -322,7 +322,7 @@ lemma num_transpose
 
 中文:
 引理 num_transpose
-  条件: (A : Matrix m n Rat)
+  条件: (A : 矩阵 m n 有理数)
   结论: (Aᵀ).num = (A.num)ᵀ
   证明: by
   ext; simp [Matrix.num]
@@ -349,7 +349,7 @@ lemma den_map_intCast
 
 中文:
 引理 den_map_intCast
-  条件: (A : Matrix m n 整数)
+  条件: (A : 矩阵 m n 整数)
   结论: (A.map (↑)).den = 1
   证明: by
   simp [← Nat.dvd_one, Matrix.den_dvd_iff]
@@ -376,7 +376,7 @@ lemma num_map_intCast
 
 中文:
 引理 num_map_intCast
-  条件: (A : Matrix m n 整数)
+  条件: (A : 矩阵 m n 整数)
   结论: (A.map (↑)).num = A
   证明: by
   simp [Matrix.num, Function.comp_def]
@@ -403,7 +403,7 @@ lemma den_map_natCast
 
 中文:
 引理 den_map_natCast
-  条件: (A : Matrix m n 自然数)
+  条件: (A : 矩阵 m n 自然数)
   结论: (A.map (↑)).den = 1
   证明: by
   simp [← Nat.dvd_one, Matrix.den_dvd_iff]
@@ -428,7 +428,7 @@ lemma num_map_natCast
 
 中文:
 引理 num_map_natCast
-  条件: (A : Matrix m n 自然数)
+  条件: (A : 矩阵 m n 自然数)
   结论: (A.map (↑)).num = A.map (↑)
   证明: by
   simp [Matrix.num, Function.comp_def]
@@ -458,7 +458,7 @@ lemma den_natCast
 中文:
 引理 den_natCast
   条件: [DecidableEq m] (a : 自然数)
-  结论: (a : Matrix m m Rat).den = 1
+  结论: (a : 矩阵 m m 有理数).den = 1
   证明: by
   simpa [← diagonal_natCast] using den_map_natCast (a : Matrix m m Nat)
 
@@ -485,7 +485,7 @@ lemma num_natCast
 中文:
 引理 num_natCast
   条件: [DecidableEq m] (a : 自然数)
-  结论: (a : Matrix m m Rat).num = a
+  结论: (a : 矩阵 m m 有理数).num = a
   证明: by
   simpa [← diagonal_natCast] using num_map_natCast (a : Matrix m m Nat)
 
@@ -508,7 +508,7 @@ lemma den_ofNat
 @[simp]
 
 中文:
-引理 den_ofNat
+引理 den_of自然数
   条件: [DecidableEq m] (a : 自然数) [a.AtLeastTwo]
   证明: den_natCast a
 
@@ -532,7 +532,7 @@ lemma num_ofNat
 @[simp]
 
 中文:
-引理 num_ofNat
+引理 num_of自然数
   条件: [DecidableEq m] (a : 自然数) [a.AtLeastTwo]
   证明: num_natCast a
 
@@ -560,7 +560,7 @@ lemma den_intCast
 中文:
 引理 den_intCast
   条件: [DecidableEq m] (a : 整数)
-  结论: (a : Matrix m m Rat).den = 1
+  结论: (a : 矩阵 m m 有理数).den = 1
   证明: by
   simpa [← diagonal_intCast] using den_map_intCast (a : Matrix m m Int)
 
@@ -587,7 +587,7 @@ lemma num_intCast
 中文:
 引理 num_intCast
   条件: [DecidableEq m] (a : 整数)
-  结论: (a : Matrix m m Rat).num = a
+  结论: (a : 矩阵 m m 有理数).num = a
   证明: by
   simpa [← diagonal_intCast] using num_map_intCast (a : Matrix m m Int)
 
@@ -611,7 +611,7 @@ lemma den_zero
 
 中文:
 引理 den_zero
-  结论: (0 : Matrix m n Rat).den = 1
+  结论: (0 : 矩阵 m n 有理数).den = 1
   证明: den_map_natCast 0
 
 @[simp]
@@ -634,7 +634,7 @@ lemma num_zero
 
 中文:
 引理 num_zero
-  结论: (0 : Matrix m n Rat).num = 0
+  结论: (0 : 矩阵 m n 有理数).num = 0
   证明: num_map_natCast 0
 
 @[simp]
@@ -659,7 +659,7 @@ lemma den_one
 中文:
 引理 den_one
   条件: [DecidableEq m]
-  结论: (1 : Matrix m m Rat).den = 1
+  结论: (1 : 矩阵 m m 有理数).den = 1
   证明: den_natCast 1
 
 @[simp]
@@ -682,7 +682,7 @@ lemma num_one
 中文:
 引理 num_one
   条件: [DecidableEq m]
-  结论: (1 : Matrix m m Rat).num = 1
+  结论: (1 : 矩阵 m m 有理数).num = 1
   证明: num_natCast 1
 
 Depends on / 依赖: num_natCast

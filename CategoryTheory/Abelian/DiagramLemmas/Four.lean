@@ -122,7 +122,7 @@ theorem mono_of_epi_of_mono_of_mono
 
 中文:
 定理 mono_of_epi_of_mono_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact)
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合)
   证明: mono_of_epi_of_mono_of_mono' φ
     (by simpa only [R₁.map'_comp 0 1 2] using hR₁.toIsComplex.zero 0)
     (hR₁.exact 1).exact_toComposableArrows (hR₂.exact 0).exact_toComposableArrows h₀ h₁ h₃
@@ -200,7 +200,7 @@ theorem epi_of_epi_of_epi_of_mono
 
 中文:
 定理 epi_of_epi_of_epi_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact)
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合)
   证明: epi_of_epi_of_epi_of_mono' φ (hR₁.exact 1).exact_toComposableArrows
     (hR₂.exact 0).exact_toComposableArrows
     (by simpa only [R₂.map'_comp 1 2 3] using hR₂.toIsComplex.zero 1) h₀ h₂ h₃
@@ -238,7 +238,7 @@ theorem isIso_of_epi_of_isIso_of_isIso_of_mono
 
 中文:
 定理 isIso_of_epi_of_isIso_of_isIso_of_mono
-  结论: (h₀ : Epi (app' φ 0)) (h₁ : IsIso (app' φ 1))
+  结论: (h₀ : 满态射 (app' φ 0)) (h₁ : 是同构 (app' φ 1))
   证明: by
   dsimp at h₀ h₁ h₃ h₄
   have : Mono (app' φ 2) := by
@@ -420,7 +420,7 @@ theorem mono_of_epi_of_epi_mono'
 
 中文:
 定理 mono_of_epi_of_epi_mono'
-  结论: (hR₁ : R₁.map' 0 2 = 0) (hR₁' : Epi (R₁.map' 1 2))
+  结论: (hR₁ : R₁.map' 0 2 = 0) (hR₁' : 满态射 (R₁.map' 1 2))
   证明: by
   let ψ : mk₃ (R₁.map' 0 1) (R₁.map' 1 2) (0 : _ ⟶ R₁.obj' 0) ⟶
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
@@ -455,7 +455,7 @@ theorem mono_of_epi_of_epi_of_mono
 
 中文:
 定理 mono_of_epi_of_epi_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact)
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合)
   证明: mono_of_epi_of_epi_mono' φ (by simpa only [map'_comp R₁ 0 1 2] using hR₁.toIsComplex.zero 0)
     hR₁' hR₂ h₀ h₁
 
@@ -483,7 +483,7 @@ theorem epi_of_mono_of_epi_of_mono'
 
 中文:
 定理 epi_of_mono_of_epi_of_mono'
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.map' 0 2 = 0)
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.map' 0 2 = 0)
   证明: by
   let ψ : mk₃ (0 : R₁.obj' 0 ⟶ _) (R₁.map' 0 1) (R₁.map' 1 2) ⟶
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
@@ -517,7 +517,7 @@ theorem epi_of_mono_of_epi_of_mono
 
 中文:
 定理 epi_of_mono_of_epi_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact)
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合)
   证明: epi_of_mono_of_epi_of_mono' φ hR₁
     (by simpa only [map'_comp R₂ 0 1 2] using hR₂.toIsComplex.zero 0) hR₂' h₀ h₁
 
@@ -545,7 +545,7 @@ theorem mono_of_mono_of_mono_of_mono
 
 中文:
 定理 mono_of_mono_of_mono_of_mono
-  结论: (hR₁ : R₁.Exact)
+  结论: (hR₁ : R₁.正合)
   证明: by
   let ψ : mk₃ (0 : R₁.obj' 0 ⟶ _) (R₁.map' 0 1) (R₁.map' 1 2) ⟶
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
@@ -585,7 +585,7 @@ theorem epi_of_epi_of_epi_of_epi
 
 中文:
 定理 epi_of_epi_of_epi_of_epi
-  结论: (hR₂ : R₂.Exact) (hR₁' : Epi (R₁.map' 1 2))
+  结论: (hR₂ : R₂.正合) (hR₁' : 满态射 (R₁.map' 1 2))
   证明: by
   let ψ : mk₃ (R₁.map' 0 1) (R₁.map' 1 2) (0 : _ ⟶ R₁.obj' 0) ⟶
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
@@ -625,7 +625,7 @@ lemma isIso_of_epi_of_isIso
 
 中文:
 引理 isIso_of_epi_of_isIso
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact) (hR₁' : Epi (R₁.map' 1 2))
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合) (hR₁' : 满态射 (R₁.map' 1 2))
   证明: by
   let ψ : mk₄ (R₁.map' 0 1) (R₁.map' 1 2) (0 : _ ⟶ (0 : C)) (0 : _ ⟶ (0 : C)) ⟶
       mk₄ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ (0 : C)) (0 : _ ⟶ (0 : C)) :=
@@ -672,7 +672,7 @@ lemma isIso_of_isIso_of_mono
 
 中文:
 引理 isIso_of_isIso_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂ : R₂.Exact) (hR₁' : Mono (R₁.map' 0 1))
+  结论: (hR₁ : R₁.正合) (hR₂ : R₂.正合) (hR₁' : 单态射 (R₁.map' 0 1))
   证明: by
   let ψ : mk₄ (0 : (0 : C) ⟶ (0 : C)) (0 : _ ⟶ _) (R₁.map' 0 1) (R₁.map' 1 2) ⟶
       mk₄ (0 : (0 : C) ⟶ (0 : C)) (0 : _ ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) :=
@@ -725,7 +725,7 @@ theorem mono_of_epi_of_epi_of_mono
 
 中文:
 定理 mono_of_epi_of_epi_of_mono
-  结论: (hR₂ : R₂.Exact) (hR₁' : Epi R₁.g)
+  结论: (hR₂ : R₂.正合) (hR₁' : 满态射 R₁.g)
   证明: Abelian.mono_of_epi_of_epi_mono' (ShortComplex.mapToComposableArrows φ)
     (by simp) hR₁' hR₂.exact_toComposableArrows h₀ h₁
 
@@ -748,7 +748,7 @@ theorem epi_of_mono_of_epi_of_mono
 
 中文:
 定理 epi_of_mono_of_epi_of_mono
-  结论: (hR₁ : R₁.Exact)
+  结论: (hR₁ : R₁.正合)
   证明: Abelian.epi_of_mono_of_epi_of_mono' (ShortComplex.mapToComposableArrows φ)
     hR₁.exact_toComposableArrows (by simp) hR₂' h₀ h₁
 
@@ -770,7 +770,7 @@ theorem mono_of_mono_of_mono_of_mono
 
 中文:
 定理 mono_of_mono_of_mono_of_mono
-  结论: (hR₁ : R₁.Exact) (hR₂' : Mono R₂.f) (h₀ : Mono φ.τ₁)
+  结论: (hR₁ : R₁.正合) (hR₂' : 单态射 R₂.f) (h₀ : 单态射 φ.τ₁)
   证明: Abelian.mono_of_mono_of_mono_of_mono (ShortComplex.mapToComposableArrows φ)
     hR₁.exact_toComposableArrows hR₂' h₀ h₁
 
@@ -792,7 +792,7 @@ theorem epi_of_epi_of_epi_of_epi
 
 中文:
 定理 epi_of_epi_of_epi_of_epi
-  结论: (hR₂ : R₂.Exact) (hR₁' : Epi R₁.g) (h₀ : Epi φ.τ₁)
+  结论: (hR₂ : R₂.正合) (hR₁' : 满态射 R₁.g) (h₀ : 满态射 φ.τ₁)
   证明: Abelian.epi_of_epi_of_epi_of_epi (ShortComplex.mapToComposableArrows φ)
     hR₂.exact_toComposableArrows hR₁' h₀ h₁
 

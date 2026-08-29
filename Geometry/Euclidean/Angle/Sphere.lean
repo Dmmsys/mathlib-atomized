@@ -147,7 +147,7 @@ theorem angle_eq_pi_div_two_iff_mem_sphere_of_isDiameter
 
 中文:
 定理 angle_eq_pi_div_two_iff_mem_sphere_of_isDiameter
-  结论: {p₁ p₂ p₃ : P} {s : Sphere P}
+  结论: {p₁ p₂ p₃ : P} {s : 球面 P}
   证明: by
   rw [mem_sphere']; rw [EuclideanGeometry.angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   let o := s.center
@@ -210,7 +210,7 @@ theorem isDiameter_of_angle_eq_pi_div_two
 
 中文:
 定理 isDiameter_of_angle_eq_pi_div_two
-  结论: {p₁ p₂ p₃ : P} {s : Sphere P}
+  结论: {p₁ p₂ p₃ : P} {s : 球面 P}
   证明: by
   have : FiniteDimensional Real V := .of_finrank_eq_succ (Fact.out : finrank Real V = 2)
   have hne₁₃ : p₁ != p₃ := fun h => by
@@ -250,7 +250,7 @@ theorem angle_center_eq_pi_iff_isDiameter
 
 中文:
 定理 angle_center_eq_pi_iff_isDiameter
-  结论: {s : Sphere P} {p₁ p₂ : P}
+  结论: {s : 球面 P} {p₁ p₂ : P}
   证明: by
   rw [angle_eq_pi_iff_sbtw]
   exact ⟨fun h => isDiameter_iff_mem_and_mem_and_wbtw.2 ⟨hp₁, hp₂, h.wbtw⟩, fun h => h.sbtw hr⟩
@@ -279,7 +279,7 @@ theorem angle_center_eq_zero_iff_eq
 
 中文:
 定理 angle_center_eq_zero_iff_eq
-  结论: {s : Sphere P} {p₁ p₂ : P}
+  结论: {s : 球面 P} {p₁ p₂ : P}
   证明: by
   constructor
   · intro h
@@ -313,8 +313,8 @@ theorem IsTangentAt.angle_eq_pi_div_two
   linarith
 
 中文:
-定理 IsTangentAt.angle_eq_pi_div_two
-  结论: {s : Sphere P} {p q : P} {as : AffineSubspace 实数 P}
+定理 是TangentAt.angle_eq_pi_div_two
+  结论: {s : 球面 P} {p q : P} {as : 仿射子空间 实数 P}
   证明: by
   have h1 := IsTangentAt.inner_left_eq_zero_of_mem h hq_mem
   rw [inner_eq_zero_iff_angle_eq_pi_div_two] at h1
@@ -347,7 +347,7 @@ theorem IsTangentAt_of_angle_eq_pi_div_two
 
 中文:
 定理 IsTangentAt_of_angle_eq_pi_div_two
-  结论: {s : Sphere P} {p q : P} (h : ∠ q p s.center = π / 2)
+  结论: {s : 球面 P} {p q : P} (h : ∠ q p s.center = π / 2)
   证明: by
   have hp_mem := left_mem_affineSpan_pair Real p q
   refine ⟨hp, hp_mem, ?_⟩
@@ -386,7 +386,7 @@ theorem IsTangentAt_iff_angle_eq_pi_div_two
 
 中文:
 定理 IsTangentAt_iff_angle_eq_pi_div_two
-  条件: {s : Sphere P} {p q : P} (hp : p in s)
+  条件: {s : 球面 P} {p q : P} (hp : p in s)
   证明: by
   exact ⟨fun h => IsTangentAt.angle_eq_pi_div_two h (right_mem_affineSpan_pair Real p q),
     fun h => IsTangentAt_of_angle_eq_pi_div_two h hp⟩
@@ -420,7 +420,7 @@ theorem oangle_center_eq_two_zsmul_oangle
 
 中文:
 定理 oangle_center_eq_two_zsmul_oangle
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
   证明: by
   rw [mem_sphere]; rw [@dist_eq_norm_vsub V] at hp₁ hp₂ hp₃
   rw [oangle]; rw [oangle]; rw [o.oangle_eq_two_zsmul_oangle_sub_of_norm_eq_real _ _ hp₂ hp₁ hp₃] <;>
@@ -449,7 +449,7 @@ theorem two_zsmul_oangle_eq
 
 中文:
 定理 two_zsmul_oangle_eq
-  结论: {s : Sphere P} {p₁ p₂ p₃ p₄ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
+  结论: {s : 球面 P} {p₁ p₂ p₃ p₄ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
   证明: by
   rw [mem_sphere]; rw [@dist_eq_norm_vsub V] at hp₁ hp₂ hp₃ hp₄
   rw [oangle]; rw [oangle]; rw [← vsub_sub_vsub_cancel_right p₁ p₂ s.center]; rw [←
@@ -510,7 +510,7 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_center_left
 
 中文:
 定理 oangle_eq_pi_sub_two_zsmul_oangle_center_left
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   rw [oangle_eq_pi_sub_two_zsmul_oangle_of_dist_eq h.symm
       (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)]
@@ -533,7 +533,7 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_center_right
 
 中文:
 定理 oangle_eq_pi_sub_two_zsmul_oangle_center_right
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   rw [oangle_eq_pi_sub_two_zsmul_oangle_center_left hp₁ hp₂ h]; rw [oangle_eq_oangle_of_dist_eq (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)]
 
@@ -554,7 +554,7 @@ theorem two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi
 
 中文:
 定理 two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P}
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P}
   证明: by
   rw [← oangle_center_eq_two_zsmul_oangle hp₁ hp₂ hp₃ hp₂p₁ hp₂p₃]; rw [oangle_eq_pi_sub_two_zsmul_oangle_center_right hp₁ hp₃ hp₁p₃]; rw [add_sub_cancel]
 
@@ -575,8 +575,8 @@ theorem abs_oangle_center_left_toReal_lt_pi_div_two
     (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)
 
 中文:
-定理 abs_oangle_center_left_toReal_lt_pi_div_two
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+定理 abs_oangle_center_left_to实数_lt_pi_div_two
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: abs_oangle_right_toReal_lt_pi_div_two_of_dist_eq
     (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)
 
@@ -597,8 +597,8 @@ theorem abs_oangle_center_right_toReal_lt_pi_div_two
     (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)
 
 中文:
-定理 abs_oangle_center_right_toReal_lt_pi_div_two
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+定理 abs_oangle_center_right_to实数_lt_pi_div_two
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: abs_oangle_left_toReal_lt_pi_div_two_of_dist_eq
     (dist_center_eq_dist_center_of_mem_sphere' hp₂ hp₁)
 
@@ -624,7 +624,7 @@ theorem tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
 
 中文:
 定理 tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
-  结论: {s : Sphere P} {p₁ p₂ : P}
+  结论: {s : 球面 P} {p₁ p₂ : P}
   证明: by
   obtain ⟨r, hr⟩ := (dist_eq_iff_eq_smul_rotation_pi_div_two_vadd_midpoint h).1
     (dist_center_eq_dist_center_of_mem_sphere hp₁ hp₂)
@@ -658,7 +658,7 @@ theorem inv_tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
 
 中文:
 定理 inv_tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
-  结论: {s : Sphere P}
+  结论: {s : 球面 P}
   证明: by
   convert! tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center hp₁ hp₃ hp₁p₃
   convert! (Real.Angle.tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi _).symm
@@ -688,7 +688,7 @@ theorem dist_div_cos_oangle_center_div_two_eq_radius
 
 中文:
 定理 dist_div_cos_oangle_center_div_two_eq_radius
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   rw [div_right_comm]; rw [div_eq_mul_inv _ (2 : Real)]; rw [mul_comm]; rw [show (2 : Real)⁻¹ * dist p₁ p₂ = dist p₁ (midpoint Real p₁ p₂) by simp]; rw [← mem_sphere.1 hp₁]; rw [←
     tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center hp₁ hp₂ h]; rw [←
@@ -720,7 +720,7 @@ theorem dist_div_cos_oangle_center_eq_two_mul_radius
 
 中文:
 定理 dist_div_cos_oangle_center_eq_two_mul_radius
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   rw [← dist_div_cos_oangle_center_div_two_eq_radius hp₁ hp₂ h]; rw [mul_div_cancel₀ _ (two_ne_zero' Real)]
 
@@ -744,7 +744,7 @@ theorem dist_div_sin_oangle_div_two_eq_radius
 
 中文:
 定理 dist_div_sin_oangle_div_two_eq_radius
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
   证明: by
   convert! dist_div_cos_oangle_center_div_two_eq_radius hp₁ hp₃ hp₁p₃
   rw [← Real.Angle.abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi
@@ -771,7 +771,7 @@ theorem dist_div_sin_oangle_eq_two_mul_radius
 
 中文:
 定理 dist_div_sin_oangle_eq_two_mul_radius
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P} (hp₁ : p₁ in s)
   证明: by
   rw [← dist_div_sin_oangle_div_two_eq_radius hp₁ hp₂ hp₃ hp₁p₂ hp₁p₃ hp₂p₃]; rw [mul_div_cancel₀ _ (two_ne_zero' Real)]
 
@@ -841,7 +841,7 @@ theorem dist_div_sin_oangle_div_two_eq_circumradius
 
 中文:
 定理 dist_div_sin_oangle_div_two_eq_circumradius
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3}
   证明: Sphere.dist_div_sin_oangle_div_two_eq_radius (t.mem_circumsphere _) (t.mem_circumsphere _)
     (t.mem_circumsphere _) (t.independent.injective.ne h₁₂) (t.independent.injective.ne h₁₃)
     (t.independent.injective.ne h₂₃)
@@ -867,7 +867,7 @@ theorem dist_div_sin_oangle_eq_two_mul_circumradius
 
 中文:
 定理 dist_div_sin_oangle_eq_two_mul_circumradius
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3}
   证明: Sphere.dist_div_sin_oangle_eq_two_mul_radius (t.mem_circumsphere _) (t.mem_circumsphere _)
     (t.mem_circumsphere _) (t.independent.injective.ne h₁₂) (t.independent.injective.ne h₁₃)
     (t.independent.injective.ne h₂₃)
@@ -893,7 +893,7 @@ theorem circumsphere_eq_of_dist_of_oangle
 
 中文:
 定理 circumsphere_eq_of_dist_of_oangle
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: t.circumsphere.ext
     (t.inv_tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_circumcenter h₁₂ h₁₃ h₂₃).symm
     (t.dist_div_sin_oangle_div_two_eq_circumradius h₁₂ h₁₃ h₂₃).symm
@@ -951,7 +951,7 @@ theorem mem_circumsphere_of_two_zsmul_oangle_eq
 
 中文:
 定理 mem_circumsphere_of_two_zsmul_oangle_eq
-  结论: {t : Triangle 实数 P} {p : P} {i₁ i₂ i₃ : Fin 3}
+  结论: {t : Triangle 实数 P} {p : P} {i₁ i₂ i₃ : 有限集 3}
   证明: by
   let t'p : Fin 3 -> P := Function.update t.points i₂ p
   have h₁ : t'p i₁ = t.points i₁ := by simp [t'p, h₁₂]
@@ -1002,7 +1002,7 @@ theorem dist_div_sin_angle_div_two_eq_circumradius
 
 中文:
 定理 dist_div_sin_angle_div_two_eq_circumradius
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3}
   证明: by
   set S : AffineSubspace Real P := affineSpan Real (Set.range t.points) with hS
   let t' : Triangle Real S := t.restrict S le_rfl
@@ -1044,7 +1044,7 @@ theorem dist_div_sin_angle_eq_two_mul_circumradius
 
 中文:
 定理 dist_div_sin_angle_eq_two_mul_circumradius
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3}
   证明: by
   rw [← t.dist_div_sin_angle_div_two_eq_circumradius h₁₂ h₁₃ h₂₃]
   ring

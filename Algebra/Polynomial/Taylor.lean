@@ -180,7 +180,7 @@ theorem taylor_zero'
 
 中文:
 定理 taylor_zero'
-  结论: taylor (0 : R) = LinearMap.id
+  结论: taylor (0 : R) = 线性映射.id
   证明: LinearMap.ext taylor_zero
 
 @[simp]
@@ -506,7 +506,7 @@ lemma map_taylor
 
 中文:
 引理 map_taylor
-  条件: {R S : 类型} [Semiring R] [Semiring S] (p : R[X]) (r : R) (f : R ->+* S)
+  条件: {R S : 类型} [半环 R] [半环 S] (p : R[X]) (r : R) (f : R ->+* S)
   证明: by
   simp [taylor_apply, Polynomial.map_comp]
 -/
@@ -532,7 +532,7 @@ theorem taylor_injective
 中文:
 定理 taylor_injective
   条件: (r : R)
-  结论: Function.Injective (taylor r)
+  结论: 函数.单射 (taylor r)
   证明: (injective_iff_map_eq_zero' _).2 (taylor_eq_zero r)
 
 Depends on / 依赖: injective_iff_map_eq_zero, taylor_eq_zero
@@ -701,7 +701,7 @@ theorem exists_mul_sq_add_linear_part_eq_eval_add
   rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; r
 
 中文:
-定理 exists_mul_sq_add_linear_part_eq_eval_add
+定理 存在_mul_sq_add_linear_part_eq_eval_add
   条件: (p : R[X]) (x y : R)
   证明: by
   have this t :
@@ -757,7 +757,7 @@ theorem aeval_add_of_sq_eq_zero
 
 中文:
 定理 aeval_add_of_sq_eq_zero
-  结论: {S : 类型} [CommRing S] [Algebra R S]
+  结论: {S : 类型} [交换环 S] [代数 R S]
   证明: by
   simp only [← eval_map_algebraMap, Polynomial.eval_add_of_sq_eq_zero _ _ _ hy, derivative_map]
 

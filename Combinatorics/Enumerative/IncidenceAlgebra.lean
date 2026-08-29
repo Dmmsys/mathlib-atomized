@@ -86,8 +86,8 @@ structure IncidenceAlgebra
     - eq_zero_of_not_le'(⦃a b) : α⦄ : ¬a <= b -> toFun a b = 0
 
 中文:
-结构 IncidenceAlgebra
-  参数: (𝕜 α : 类型) [Zero 𝕜] [LE α]
+结构 Incidence代数
+  参数: (𝕜 α : 类型) [零 𝕜] [LE α]
   公理与运算 (2 个):
     - toFun : α -> α -> 𝕜
     - eq_zero_of_not_le'(⦃a b) : α⦄ : ¬a <= b -> toFun a b = 0
@@ -115,7 +115,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (IncidenceAlgebra 𝕜 α) α (α -> 𝕜) where
+  签名: : 函数状 (Incidence代数 𝕜 α) α (α -> 𝕜) where
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -134,7 +134,7 @@ lemma apply_eq_zero_of_not_le
 
 中文:
 引理 apply_eq_zero_of_not_le
-  条件: (h : ¬a <= b) (f : IncidenceAlgebra 𝕜 α)
+  条件: (h : ¬a <= b) (f : Incidence代数 𝕜 α)
   结论: f a b = 0
   证明: eq_zero_of_not_le' _ h
 
@@ -154,7 +154,7 @@ lemma le_of_ne_zero
 
 中文:
 引理 le_of_ne_zero
-  条件: {f : IncidenceAlgebra 𝕜 α}
+  条件: {f : Incidence代数 𝕜 α}
   结论: f a b != 0 -> a <= b
   证明: not_imp_comm.1 fun h => apply_eq_zero_of_not_le h _
 
@@ -179,7 +179,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (f : IncidenceAlgebra 𝕜 α)
+  条件: (f : Incidence代数 𝕜 α)
   结论: f.toFun = f
   证明: rfl
 -/
@@ -214,7 +214,7 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  条件: {f g : IncidenceAlgebra 𝕜 α}
+  条件: {f g : Incidence代数 𝕜 α}
   结论: (f : α -> α -> 𝕜) = g ↔ f = g
   证明: DFunLike.coe_injective.eq_iff
 
@@ -242,7 +242,7 @@ lemma ext
 中文:
 引理 ext
   条件: ⦃f g
-  结论: IncidenceAlgebra 𝕜 α⦄ (h : 对任意 a b, a <= b -> f a b = g a b) : f = g
+  结论: Incidence代数 𝕜 α⦄ (h : 对任意 a b, a <= b -> f a b = g a b) : f = g
   证明: by
   refine DFunLike.coe_injective (funext₂ fun a b => ?_)
   by_cases hab : a <= b
@@ -268,7 +268,7 @@ lemma mk_coe
 
 中文:
 引理 mk_coe
-  条件: (f : IncidenceAlgebra 𝕜 α) (h)
+  条件: (f : Incidence代数 𝕜 α) (h)
   结论: mk f h = f
   证明: rfl
 -/
@@ -287,7 +287,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (IncidenceAlgebra 𝕜 α)
+  签名: : 零 (Incidence代数 𝕜 α)
   定义体: ⟨⟨fun _ _ => 0, fun _ _ _ => rfl⟩⟩
 -/
 instance instZero : Zero (IncidenceAlgebra 𝕜 α) := ⟨⟨fun _ _ => 0, fun _ _ _ => rfl⟩⟩
@@ -301,7 +301,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (IncidenceAlgebra 𝕜 α)
+  签名: : 可居 (Incidence代数 𝕜 α)
   定义体: ⟨0⟩
 -/
 instance instInhabited : Inhabited (IncidenceAlgebra 𝕜 α) := ⟨0⟩
@@ -316,7 +316,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ⇑(0 : IncidenceAlgebra 𝕜 α) = 0
+  结论: ⇑(0 : Incidence代数 𝕜 α) = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zero : ⇑(0 : IncidenceAlgebra 𝕜 α) = 0 := rfl
@@ -332,7 +332,7 @@ lemma zero_apply
 中文:
 引理 zero_apply
   条件: (a b : α)
-  结论: (0 : IncidenceAlgebra 𝕜 α) a b = 0
+  结论: (0 : Incidence代数 𝕜 α) a b = 0
   证明: rfl
 -/
 lemma zero_apply (a b : α) : (0 : IncidenceAlgebra 𝕜 α) a b = 0 := rfl
@@ -352,7 +352,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (IncidenceAlgebra 𝕜 α) where
+  签名: : 加法 (Incidence代数 𝕜 α) where
   定义体: ⟨f + g, fun a b h => by simp_rw [Pi.add_apply, apply_eq_zero_of_not_le h, zero_add]⟩
 
 Depends on / 依赖: Pi.add_apply, add_apply, apply_eq_zero_of_not_le, simp_rw, zero_add
@@ -371,7 +371,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: (f g : IncidenceAlgebra 𝕜 α)
+  条件: (f g : Incidence代数 𝕜 α)
   结论: ⇑(f + g) = f + g
   证明: rfl
 -/
@@ -387,7 +387,7 @@ lemma add_apply
 
 中文:
 引理 add_apply
-  条件: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
+  条件: (f g : Incidence代数 𝕜 α) (a b : α)
   结论: (f + g) a b = f a b + g a b
   证明: rfl
 -/
@@ -409,7 +409,7 @@ instance instSmulZeroClassRight
 
 中文:
 实例 instSmulZeroClassRight
-  签名: : SMulZeroClass M (IncidenceAlgebra 𝕜 α) where
+  签名: : SMulZero类 M (Incidence代数 𝕜 α) where
   定义体: ⟨c • ⇑f, fun a b hab => by simp_rw [Pi.smul_apply, apply_eq_zero_of_not_le hab, smul_zero]⟩
   smul_zero c := by ext; exact smul_zero _
 
@@ -431,7 +431,7 @@ lemma coe_constSMul
 
 中文:
 引理 coe_constSMul
-  条件: (c : M) (f : IncidenceAlgebra 𝕜 α)
+  条件: (c : M) (f : Incidence代数 𝕜 α)
   结论: ⇑(c • f) = c • ⇑f
   证明: rfl
 -/
@@ -448,7 +448,7 @@ lemma constSMul_apply
 
 中文:
 引理 constSMul_apply
-  条件: (c : M) (f : IncidenceAlgebra 𝕜 α) (a b : α)
+  条件: (c : M) (f : Incidence代数 𝕜 α) (a b : α)
   结论: (c • f) a b = c • f a b
   证明: rfl
 -/
@@ -466,7 +466,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid 𝕜] [LE α]
+  签名: [加法幺半群 𝕜] [LE α]
   定义体: DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addMonoid, addMonoid, coe_add, coe_injective, coe_zero
@@ -484,7 +484,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid 𝕜] [LE α]
+  签名: [加法交换幺半群 𝕜] [LE α]
   定义体: DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_zero
@@ -505,7 +505,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (IncidenceAlgebra 𝕜 α) where
+  签名: : 取负 (Incidence代数 𝕜 α) where
   定义体: ⟨-f, fun a b h => by simp_rw [Pi.neg_apply, apply_eq_zero_of_not_le h, neg_zero]⟩
 
 Depends on / 依赖: Pi.neg_apply, apply_eq_zero_of_not_le, neg_apply, neg_zero, simp_rw
@@ -523,7 +523,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (IncidenceAlgebra 𝕜 α) where
+  签名: : 减法 (Incidence代数 𝕜 α) where
   定义体: ⟨f - g, fun a b h => by simp_rw [Pi.sub_apply, apply_eq_zero_of_not_le h, sub_zero]⟩
 
 Depends on / 依赖: Pi.sub_apply, apply_eq_zero_of_not_le, simp_rw, sub_apply, sub_zero
@@ -542,7 +542,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: (f : IncidenceAlgebra 𝕜 α)
+  条件: (f : Incidence代数 𝕜 α)
   结论: ⇑(-f) = -f
   证明: rfl
 -/
@@ -558,7 +558,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: (f g : IncidenceAlgebra 𝕜 α)
+  条件: (f g : Incidence代数 𝕜 α)
   结论: ⇑(f - g) = f - g
   证明: rfl
 -/
@@ -574,7 +574,7 @@ lemma neg_apply
 
 中文:
 引理 neg_apply
-  条件: (f : IncidenceAlgebra 𝕜 α) (a b : α)
+  条件: (f : Incidence代数 𝕜 α) (a b : α)
   结论: (-f) a b = -f a b
   证明: rfl
 -/
@@ -590,7 +590,7 @@ lemma sub_apply
 
 中文:
 引理 sub_apply
-  条件: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
+  条件: (f g : Incidence代数 𝕜 α) (a b : α)
   结论: (f - g) a b = f a b - g a b
   证明: rfl
 -/
@@ -606,7 +606,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: : AddGroup (IncidenceAlgebra 𝕜 α)
+  签名: : 加法群 (Incidence代数 𝕜 α)
   定义体: DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addGroup, addGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero
@@ -627,7 +627,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup 𝕜] [LE α]
+  签名: [加法交换群 𝕜] [LE α]
   定义体: DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
 
@@ -650,7 +650,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (IncidenceAlgebra 𝕜 α)
+  签名: : 幺 (Incidence代数 𝕜 α)
   定义体: ⟨⟨fun a b => if a = b then 1 else 0, fun _a _b h => ite_eq_right_iff.2 fun H => (h H.le).elim⟩⟩
 
 Depends on / 依赖: H.le, ite_eq_right_iff
@@ -670,7 +670,7 @@ lemma one_apply
 中文:
 引理 one_apply
   条件: (a b : α)
-  结论: (1 : IncidenceAlgebra 𝕜 α) a b = if a = b then 1 else 0
+  结论: (1 : Incidence代数 𝕜 α) a b = if a = b then 1 else 0
   证明: rfl
 -/
 @[simp] lemma one_apply (a b : α) : (1 : IncidenceAlgebra 𝕜 α) a b = if a = b then 1 else 0 := rfl
@@ -690,7 +690,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (IncidenceAlgebra 𝕜 α) where
+  签名: : 乘法 (Incidence代数 𝕜 α) where
   定义体: ⟨fun a b => ∑ x in Icc a b, f a x * g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩
 
 Depends on / 依赖: Icc_eq_empty, sum_empty
@@ -709,7 +709,7 @@ lemma mul_apply
 
 中文:
 引理 mul_apply
-  条件: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
+  条件: (f g : Incidence代数 𝕜 α) (a b : α)
   证明: rfl
 -/
 @[simp] lemma mul_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) :
@@ -732,7 +732,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [Preorder α] [LocallyFiniteOrder α]
+  签名: [预序 α] [局部有限序 α]
   定义体: instAddCommMonoid
   zero_mul := fun f => by ext; exact sum_eq_zero fun x _ => zero_mul _
   mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
@@ -764,7 +764,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α]
+  签名: [预序 α] [局部有限序 α] [DecidableEq α]
   定义体: instNonUnitalNonAssocSemiring
   one_mul := fun f => by ext; simp [*]
   mul_one := fun f => by ext; simp [*]
@@ -792,7 +792,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜]
+  签名: [预序 α] [局部有限序 α] [DecidableEq α] [半环 𝕜]
   定义体: instNonAssocSemiring
   mul_assoc f g h := by
     ext a b
@@ -822,7 +822,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Ring 𝕜]
+  签名: [预序 α] [局部有限序 α] [DecidableEq α] [环 𝕜]
   定义体: instSemiring
   __ := instAddGroup
 
@@ -851,7 +851,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul (IncidenceAlgebra 𝕜 α) (IncidenceAlgebra 𝕝 α)
+  签名: : 标量乘法 (Incidence代数 𝕜 α) (Incidence代数 𝕝 α)
   定义体: ⟨fun f g =>
     ⟨fun a b => ∑ x in Icc a b, f a x • g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩⟩
 
@@ -874,7 +874,7 @@ lemma smul_apply
 
 中文:
 引理 smul_apply
-  条件: (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlgebra 𝕝 α) (a b : α)
+  条件: (f : Incidence代数 𝕜 α) (g : Incidence代数 𝕝 α) (a b : α)
   证明: rfl
 -/
 lemma smul_apply (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlgebra 𝕝 α) (a b : α) :
@@ -896,7 +896,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [Monoid 𝕜]
+  签名: [预序 α] [局部有限序 α] [加法交换幺半群 𝕜] [幺半群 𝕜]
   定义体: by
     ext a b
     simp only [smul_apply, sum_smul, smul_sum, sum_sigma']
@@ -926,8 +926,8 @@ instance [Preorder
   zero_smul f := by ext; exact sum_e
 
 中文:
-实例 [Preorder
-  签名: α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜] [Semiring 𝕝]
+实例 [预序
+  签名: α] [局部有限序 α] [DecidableEq α] [半环 𝕜] [半环 𝕝]
   定义体: by ext a b hab; simp [ite_smul, hab]
   mul_smul := smul_assoc
   smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
@@ -956,7 +956,7 @@ instance smulWithZeroRight
 
 中文:
 实例 smulWithZeroRight
-  签名: [Zero 𝕜] [Zero 𝕝] [SMulWithZero 𝕜 𝕝] [LE α]
+  签名: [零 𝕜] [零 𝕝] [带零标量乘法 𝕜 𝕝] [LE α]
   定义体: DFunLike.coe_injective.smulWithZero ⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩
     coe_constSMul
 
@@ -978,7 +978,7 @@ instance moduleRight
 
 中文:
 实例 moduleRight
-  签名: [Preorder α] [Semiring 𝕜] [AddCommMonoid 𝕝] [Module 𝕜 𝕝]
+  签名: [预序 α] [半环 𝕜] [加法交换幺半群 𝕝] [模 𝕜 𝕝]
   定义体: DFunLike.coe_injective.module _ ⟨⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩, coe_add⟩
     coe_constSMul
 
@@ -1005,7 +1005,7 @@ instance algebraRight
 
 中文:
 实例 algebraRight
-  签名: [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α] [CommSemiring 𝕜]
+  签名: [偏序 α] [局部有限序 α] [DecidableEq α] [交换半环 𝕜]
   定义体: { toFun c := algebraMap 𝕜 𝕝 c • (1 : IncidenceAlgebra 𝕝 α)
     map_one' := by
       ext; simp only [mul_boole, one_apply, smul_eq_mul, constSMul_apply, map_one]
@@ -1055,7 +1055,7 @@ definition lambda
 
 中文:
 定义 lambda
-  签名: : IncidenceAlgebra 𝕜 α
+  签名: : Incidence代数 𝕜 α
   定义体: ⟨fun a b => if a ⩿ b then 1 else 0, fun _a _b h => if_neg fun hh => h hh.le⟩
 
 Depends on / 依赖: hh.le, if_neg
@@ -1080,7 +1080,7 @@ definition zeta
 
 中文:
 定义 zeta
-  签名: : IncidenceAlgebra 𝕜 α
+  签名: : Incidence代数 𝕜 α
   定义体: ⟨fun a b => if a <= b then 1 else 0, fun _a _b h => if_neg h⟩
 
 Depends on / 依赖: if_neg
@@ -1141,7 +1141,7 @@ lemma zeta_mul_zeta
 
 中文:
 引理 zeta_mul_zeta
-  结论: [NonAssocSemiring 𝕜] [Preorder α] [LocallyFiniteOrder α] [DecidableLE α]
+  结论: [非结合半环 𝕜] [预序 α] [局部有限序 α] [DecidableLE α]
   证明: by
   rw [mul_apply]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]
   refine sum_congr rfl fun x hx => ?_
@@ -1227,7 +1227,7 @@ definition mu
 
 中文:
 定义 mu
-  签名: : IncidenceAlgebra 𝕜 α
+  签名: : Incidence代数 𝕜 α
   定义体: ⟨muFun 𝕜, fun a b => not_imp_comm.1 fun h => by
     rw [muFun_apply] at h
     split_ifs at h with hab
@@ -1262,7 +1262,7 @@ lemma mu_apply
 中文:
 引理 mu_apply
   条件: (a b : α)
-  结论: mu 𝕜 a b = if a = b then 1 else -∑ x in Ico a b, mu 𝕜 a x
+  结论: mu 𝕜 a b = if a = b then 1 else -∑ x in 左闭右开区间 a b, mu 𝕜 a x
   证明: by
   rw [mu]; rw [coe_mk]; rw [muFun_apply]; rw [sum_attach]
 
@@ -1317,7 +1317,7 @@ definition eulerChar
 
 中文:
 定义 eulerChar
-  签名: [BoundedOrder α]
+  签名: [有界序 α]
   定义体: mu 𝕜 (⊥ : α) ⊤
 -/
 def eulerChar [BoundedOrder α] : 𝕜 := mu 𝕜 (⊥ : α) ⊤
@@ -1345,7 +1345,7 @@ lemma sum_Icc_mu_right
 中文:
 引理 sum_Icc_mu_right
   条件: (a b : α)
-  结论: ∑ x in Icc a b, mu 𝕜 a x = if a = b then 1 else 0
+  结论: ∑ x in 闭区间 a b, mu 𝕜 a x = if a = b then 1 else 0
   证明: by
   split_ifs with hab
   · simp [hab]
@@ -1437,7 +1437,7 @@ definition mu'
 
 中文:
 定义 mu'
-  签名: : IncidenceAlgebra 𝕜 α
+  签名: : Incidence代数 𝕜 α
   定义体: ⟨fun a b => muFun' 𝕜 b a, fun a b =>
     not_imp_comm.1 fun h => by
       rw [muFun'_apply] at h
@@ -1472,7 +1472,7 @@ lemma mu'_apply
 中文:
 引理 mu'_apply
   条件: (a b : α)
-  结论: mu' 𝕜 a b = if a = b then 1 else -∑ x in Ioc a b, mu' 𝕜 x b
+  结论: mu' 𝕜 a b = if a = b then 1 else -∑ x in 左开右闭区间 a b, mu' 𝕜 x b
   证明: by
   rw [mu']; rw [coe_mk]; rw [muFun'_apply]; rw [sum_attach]
 -/
@@ -1509,7 +1509,7 @@ lemma mu'_eq_sum_Ioc_of_ne
 中文:
 引理 mu'_eq_sum_Ioc_of_ne
   条件: (h : a != b)
-  结论: mu' 𝕜 a b = -∑ x in Ioc a b, mu' 𝕜 x b
+  结论: mu' 𝕜 a b = -∑ x in 左开右闭区间 a b, mu' 𝕜 x b
   证明: by
   rw [mu'_apply]; rw [if_neg h]
 -/
@@ -1539,7 +1539,7 @@ lemma sum_Icc_mu'_left
 中文:
 引理 sum_Icc_mu'_left
   条件: (a b : α)
-  结论: ∑ x in Icc a b, mu' 𝕜 x b = if a = b then 1 else 0
+  结论: ∑ x in 闭区间 a b, mu' 𝕜 x b = if a = b then 1 else 0
   证明: by
   split_ifs with hab
   · simp [hab]
@@ -1576,7 +1576,7 @@ lemma mu_mul_zeta
 
 中文:
 引理 mu_mul_zeta
-  结论: (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+  结论: (mu 𝕜 * zeta 𝕜 : Incidence代数 𝕜 α) = 1
   证明: by
   ext a b
   calc
@@ -1605,7 +1605,7 @@ lemma zeta_mul_mu'
 
 中文:
 引理 zeta_mul_mu'
-  结论: (zeta 𝕜 * mu' 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+  结论: (zeta 𝕜 * mu' 𝕜 : Incidence代数 𝕜 α) = 1
   证明: by
   ext a b
   calc
@@ -1635,7 +1635,7 @@ lemma mu_eq_mu'
 
 中文:
 引理 mu_eq_mu'
-  结论: (mu 𝕜 : IncidenceAlgebra 𝕜 α) = mu' 𝕜
+  结论: (mu 𝕜 : Incidence代数 𝕜 α) = mu' 𝕜
   证明: by
   classical
   exact left_inv_eq_right_inv (mu_mul_zeta _ _) (zeta_mul_mu' _ _)
@@ -1657,7 +1657,7 @@ lemma mu_eq_neg_sum_Ioc_of_ne
 中文:
 引理 mu_eq_neg_sum_Ioc_of_ne
   条件: (hab : a != b)
-  结论: mu 𝕜 a b = -∑ x in Ioc a b, mu 𝕜 x b
+  结论: mu 𝕜 a b = -∑ x in 左开右闭区间 a b, mu 𝕜 x b
   证明: by
   rw [mu_eq_mu']; rw [mu'_eq_sum_Ioc_of_ne hab]
 
@@ -1679,7 +1679,7 @@ lemma zeta_mul_mu
 中文:
 引理 zeta_mul_mu
   条件: [DecidableLE α]
-  结论: (zeta 𝕜 * mu 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+  结论: (zeta 𝕜 * mu 𝕜 : Incidence代数 𝕜 α) = 1
   证明: by
   rw [mu_eq_mu']; rw [zeta_mul_mu']
 
@@ -1701,7 +1701,7 @@ lemma sum_Icc_mu_left
 中文:
 引理 sum_Icc_mu_left
   条件: (a b : α)
-  结论: ∑ x in Icc a b, mu 𝕜 x b = if a = b then 1 else 0
+  结论: ∑ x in 闭区间 a b, mu 𝕜 x b = if a = b then 1 else 0
   证明: by
   rw [mu_eq_mu']; rw [sum_Icc_mu'_left]
 
@@ -1800,7 +1800,7 @@ lemma eulerChar_orderDual
 
 中文:
 引理 eulerChar_orderDual
-  条件: [BoundedOrder α]
+  条件: [有界序 α]
   结论: eulerChar 𝕜 αᵒᵈ = eulerChar 𝕜 α
   证明: by
   simp [eulerChar, ← mu_toDual 𝕜 (α := α)]
@@ -1833,7 +1833,7 @@ lemma moebius_inversion_top
 
 中文:
 引理 moebius_inversion_top
-  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in Ici x, f y) (x : α)
+  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in 左闭右无界区间 x, f y) (x : α)
   证明: by
   let : DecidableLE α := Classical.decRel _
   symm
@@ -1892,7 +1892,7 @@ lemma moebius_inversion_bot
 
 中文:
 引理 moebius_inversion_bot
-  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in Iic x, f y) (x : α)
+  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in 左无界右闭区间 x, f y) (x : α)
   证明: by
   convert! moebius_inversion_top (α := αᵒᵈ) f g h x using 3
   rw [← mu_toDual]; rfl
@@ -1972,8 +1972,8 @@ definition prod
     obtain hxy | hxy := hxy <;> simp [apply_eq_zero_of_not_le hxy]
 
 中文:
-定义 prod
-  签名: : IncidenceAlgebra 𝕜 (α × β) where
+定义 乘积
+  签名: : Incidence代数 𝕜 (α × β) where
   定义体: f x.1 y.1 * g x.2 y.2
   eq_zero_of_not_le' x y hxy := by
     rw [Prod.le_def]; rw [not_and_or] at hxy
@@ -1997,7 +1997,7 @@ lemma prod_mk
 中文:
 引理 prod_mk
   条件: (a₁ a₂ : α) (b₁ b₂ : β)
-  结论: f.prod g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂
+  结论: f.乘积 g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂
   证明: rfl
 -/
 lemma prod_mk (a₁ a₂ : α) (b₁ b₂ : β) : f.prod g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂ := rfl
@@ -2013,7 +2013,7 @@ lemma prod_apply
 中文:
 引理 prod_apply
   条件: (x y : α × β)
-  结论: f.prod g x y = f x.1 y.1 * g x.2 y.2
+  结论: f.乘积 g x y = f x.1 y.1 * g x.2 y.2
   证明: rfl
 -/
 @[simp] lemma prod_apply (x y : α × β) : f.prod g x y = f x.1 y.1 * g x.2 y.2 := rfl
@@ -2031,7 +2031,7 @@ lemma prod_mul_prod'
 
 中文:
 引理 prod_mul_prod'
-  结论: [LocallyFiniteOrder α] [LocallyFiniteOrder β] [DecidableLE (α × β)]
+  结论: [局部有限序 α] [局部有限序 β] [DecidableLE (α × β)]
   证明: by
   ext x y; simp [Icc_prod_def, sum_mul_sum, h, sum_product]
 
@@ -2108,7 +2108,7 @@ lemma prod_mul_prod
 
 中文:
 引理 prod_mul_prod
-  结论: f₁.prod g₁ * f₂.prod g₂ = (f₁ * f₂).prod (g₁ * g₂)
+  结论: f₁.乘积 g₁ * f₂.乘积 g₂ = (f₁ * f₂).乘积 (g₁ * g₂)
   证明: prod_mul_prod' _ _ _ _ fun _ _ _ _ _ _ => mul_mul_mul_comm ..
 
 Depends on / 依赖: mul_mul_mul_comm, prod_mul_prod
@@ -2141,7 +2141,7 @@ lemma mu_prod_mu
 
 中文:
 引理 mu_prod_mu
-  结论: (mu 𝕜).prod (mu 𝕜) = (mu 𝕜 : IncidenceAlgebra 𝕜 (α × β))
+  结论: (mu 𝕜).乘积 (mu 𝕜) = (mu 𝕜 : Incidence代数 𝕜 (α × β))
   证明: by
   refine left_inv_eq_right_inv ?_ zeta_mul_mu
   rw [← zeta_prod_zeta]; rw [prod_mul_prod']; rw [mu_mul_zeta]; rw [mu_mul_zeta]; rw [one_prod_one]
@@ -2167,7 +2167,7 @@ lemma eulerChar_prod
 
 中文:
 引理 eulerChar_prod
-  条件: [BoundedOrder α] [BoundedOrder β]
+  条件: [有界序 α] [有界序 β]
   证明: by simp [eulerChar, ← mu_prod_mu]
 
 Depends on / 依赖: eulerChar, mu_prod_mu

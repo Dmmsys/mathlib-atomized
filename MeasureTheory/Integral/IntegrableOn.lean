@@ -48,7 +48,7 @@ definition StronglyMeasurableAtFilter
 
 中文:
 定义 StronglyMeasurableAtFilter
-  签名: (f : α -> β) (l : Filter α) (μ : Measure α := by volume_tac)
+  签名: (f : α -> β) (l : 滤子 α) (μ : 测度 α := by volume_tac)
   定义体: exists s in l, AEStronglyMeasurable f (μ.restrict s)
 
 @[simp]
@@ -124,7 +124,7 @@ theorem MeasureTheory.AEStronglyMeasurable.stronglyMeasurableAtFilter
   proof: ⟨univ, univ_mem, by rwa [Measure.restrict_univ]⟩
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.stronglyMeasurableAtFilter
+定理 测度论.AEStronglyMeasurable.stronglyMeasurableAtFilter
   证明: ⟨univ, univ_mem, by rwa [Measure.restrict_univ]⟩
 -/
 protected theorem MeasureTheory.AEStronglyMeasurable.stronglyMeasurableAtFilter
@@ -156,7 +156,7 @@ theorem MeasureTheory.StronglyMeasurable.stronglyMeasurableAtFilter
   proof: h.aestronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.stronglyMeasurableAtFilter
+定理 测度论.StronglyMeasurable.stronglyMeasurableAtFilter
   证明: h.aestronglyMeasurable.stronglyMeasurableAtFilter
 -/
 protected theorem MeasureTheory.StronglyMeasurable.stronglyMeasurableAtFilter
@@ -179,8 +179,8 @@ theorem HasFiniteIntegral.restrict_of_bounded
   .of_bounded hf
 
 中文:
-定理 HasFiniteIntegral.restrict_of_bounded
-  结论: [NormedAddCommGroup E] {f : α -> E} {s : Set α}
+定理 HasFinite整数egral.restrict_of_bounded
+  结论: [赋范交换加群 E] {f : α -> E} {s : 集合 α}
   证明: haveI : IsFiniteMeasure (μ.restrict s) := ⟨by rwa [Measure.restrict_apply_univ]⟩
   .of_bounded hf
 
@@ -205,7 +205,7 @@ theorem HasFiniteIntegral.restrict_of_bounded_enorm
   .of_bounded_enorm hC hf
 
 中文:
-定理 HasFiniteIntegral.restrict_of_bounded_enorm
+定理 HasFinite整数egral.restrict_of_bounded_enorm
   结论: {C : 实数>=0∞} (hC : ‖C‖ₑ != ∞ := by finiteness)
   证明: haveI : IsFiniteMeasure (μ.restrict s) := ⟨by rw [Measure.restrict_apply_univ]; exact hs.lt_top⟩
   .of_bounded_enorm hC hf
@@ -227,8 +227,8 @@ definition IntegrableOn
   body: Integrable f (μ.restrict s)
 
 中文:
-定义 IntegrableOn
-  签名: (f : α -> ε) (s : Set α) (μ : Measure α := by volume_tac)
+定义 整数egrableOn
+  签名: (f : α -> ε) (s : 集合 α) (μ : 测度 α := by volume_tac)
   定义体: Integrable f (μ.restrict s)
 
 Depends on / 依赖: Integrable, restrict, volume_tac
@@ -246,9 +246,9 @@ theorem IntegrableOn.integrable
   proof: h
 
 中文:
-定理 IntegrableOn.integrable
+定理 整数egrableOn.integrable
   条件: (h : 整数egrableOn f s μ)
-  结论: 整数egrable f (μ.restrict s)
+  结论: 可积 f (μ.restrict s)
   证明: h
 -/
 theorem IntegrableOn.integrable (h : IntegrableOn f s μ) : Integrable f (μ.restrict s) :=
@@ -293,7 +293,7 @@ theorem integrableOn_univ
 
 中文:
 定理 integrableOn_univ
-  结论: 整数egrableOn f univ μ ↔ 整数egrable f μ
+  结论: 整数egrableOn f univ μ ↔ 可积 f μ
   证明: by
   rw [IntegrableOn]; rw [Measure.restrict_univ]
 
@@ -333,7 +333,7 @@ theorem IntegrableOn.of_measure_zero
 @[simp]
 
 中文:
-定理 IntegrableOn.of_measure_zero
+定理 整数egrableOn.of_measure_zero
   条件: (hs : μ s = 0)
   结论: 整数egrableOn f s μ
   证明: by
@@ -404,7 +404,7 @@ theorem IntegrableOn.mono
 @[gcongr]
 
 中文:
-定理 IntegrableOn.mono
+定理 整数egrableOn.mono
   条件: (h : 整数egrableOn f t ν) (hs : s subseteq t) (hμ : μ <= ν)
   结论: 整数egrableOn f s μ
   证明: h.mono_measure Measure.restrict_mono hs hμ
@@ -427,7 +427,7 @@ theorem IntegrableOn.mono_set
   proof: h.mono hst le_rfl
 
 中文:
-定理 IntegrableOn.mono_set
+定理 整数egrableOn.mono_set
   条件: (h : 整数egrableOn f t μ) (hst : s subseteq t)
   结论: 整数egrableOn f s μ
   证明: h.mono hst le_rfl
@@ -447,7 +447,7 @@ theorem IntegrableOn.mono_measure
   proof: h.mono (Subset.refl _) hμ
 
 中文:
-定理 IntegrableOn.mono_measure
+定理 整数egrableOn.mono_measure
   条件: (h : 整数egrableOn f s ν) (hμ : μ <= ν)
   结论: 整数egrableOn f s μ
   证明: h.mono (Subset.refl _) hμ
@@ -466,7 +466,7 @@ theorem IntegrableOn.mono_measure'
   proof: Integrable.mono_measure h hμ
 
 中文:
-定理 IntegrableOn.mono_measure'
+定理 整数egrableOn.mono_measure'
   条件: (h : 整数egrableOn f s ν) (hμ : μ.restrict s <= ν.restrict s)
   证明: Integrable.mono_measure h hμ
 
@@ -486,7 +486,7 @@ theorem IntegrableOn.mono_set_ae
   proof: h.integrable.mono_measure Measure.restrict_mono_ae hst
 
 中文:
-定理 IntegrableOn.mono_set_ae
+定理 整数egrableOn.mono_set_ae
   条件: (h : 整数egrableOn f t μ) (hst : s <=ᵐ[μ] t)
   结论: 整数egrableOn f s μ
   证明: h.integrable.mono_measure Measure.restrict_mono_ae hst
@@ -506,7 +506,7 @@ theorem IntegrableOn.congr_set_ae
   proof: h.mono_set_ae hst.le
 
 中文:
-定理 IntegrableOn.congr_set_ae
+定理 整数egrableOn.congr_set_ae
   条件: (h : 整数egrableOn f t μ) (hst : s =ᵐ[μ] t)
   结论: 整数egrableOn f s μ
   证明: h.mono_set_ae hst.le
@@ -547,7 +547,7 @@ theorem IntegrableOn.congr_fun_ae
 @[gcongr]
 
 中文:
-定理 IntegrableOn.congr_fun_ae
+定理 整数egrableOn.congr_fun_ae
   条件: (h : 整数egrableOn f s μ) (hst : f =ᵐ[μ.restrict s] g)
   证明: Integrable.congr h hst
 
@@ -588,8 +588,8 @@ theorem IntegrableOn.congr_fun
   proof: h.congr_fun_ae ((ae_restrict_iff' hs).2 (Eventually.of_forall hst))
 
 中文:
-定理 IntegrableOn.congr_fun
-  条件: (h : 整数egrableOn f s μ) (hst : EqOn f g s) (hs : MeasurableSet s)
+定理 整数egrableOn.congr_fun
+  条件: (h : 整数egrableOn f s μ) (hst : EqOn f g s) (hs : 可测集 s)
   证明: h.congr_fun_ae ((ae_restrict_iff' hs).2 (Eventually.of_forall hst))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, ae_restrict_iff, congr_fun_ae, h.congr_fun_ae, of_forall
@@ -608,7 +608,7 @@ theorem integrableOn_congr_fun
 
 中文:
 定理 integrableOn_congr_fun
-  条件: (hst : EqOn f g s) (hs : MeasurableSet s)
+  条件: (hst : EqOn f g s) (hs : 可测集 s)
   证明: ⟨fun h => h.congr_fun hst hs, fun h => h.congr_fun hst.symm hs⟩
 
 Depends on / 依赖: congr_fun, h.congr_fun, hst.symm
@@ -629,8 +629,8 @@ theorem Integrable.integrableOn
 @[simp]
 
 中文:
-定理 Integrable.integrableOn
-  条件: (h : 整数egrable f μ)
+定理 可积.integrableOn
+  条件: (h : 可积 f μ)
   结论: 整数egrableOn f s μ
   证明: h.restrict
 
@@ -650,8 +650,8 @@ lemma IntegrableOn.of_subsingleton_codomain
   proof: Integrable.of_subsingleton_codomain
 
 中文:
-引理 IntegrableOn.of_subsingleton_codomain
-  条件: [Subsingleton ε'] {f : α -> ε'}
+引理 整数egrableOn.of_subsingleton_codomain
+  条件: [子单例 ε'] {f : α -> ε'}
   证明: Integrable.of_subsingleton_codomain
 
 Depends on / 依赖: Integrable, Integrable.of_subsingleton_codomain, of_subsingleton_codomain
@@ -669,8 +669,8 @@ lemma Integrable.of_bound
   proof: ⟨hf, .of_bounded hfC⟩
 
 中文:
-引理 Integrable.of_bound
-  结论: [IsFiniteMeasure μ] {f : α -> E} (hf : AEStronglyMeasurable f μ) (C : 实数)
+引理 可积.of_bound
+  结论: [是有限测度 μ] {f : α -> E} (hf : AEStronglyMeasurable f μ) (C : 实数)
   证明: ⟨hf, .of_bounded hfC⟩
 
 Depends on / 依赖: of_bounded
@@ -687,7 +687,7 @@ lemma IntegrableOn.of_bound
   proof: ⟨hf, .restrict_of_bounded C hs hfC⟩
 
 中文:
-引理 IntegrableOn.of_bound
+引理 整数egrableOn.of_bound
   结论: (hs : μ s < ∞) {f : α -> E} (hf : AEStronglyMeasurable f (μ.restrict s))
   证明: ⟨hf, .restrict_of_bounded C hs hfC⟩
 
@@ -709,7 +709,7 @@ theorem IntegrableOn.restrict
 exact h.mono_measure Measure.restrict_mono_measure Measure.restrict_le_self _
 
 中文:
-定理 IntegrableOn.restrict
+定理 整数egrableOn.restrict
   条件: (h : 整数egrableOn f s μ)
   结论: 整数egrableOn f s (μ.restrict t)
   证明: by
@@ -733,7 +733,7 @@ theorem IntegrableOn.inter_of_restrict
   rwa [IntegrableOn, μ.restrict_restrict_of_subset inter_subset_right] at this
 
 中文:
-定理 IntegrableOn.inter_of_restrict
+定理 整数egrableOn.inter_of_restrict
   条件: (h : 整数egrableOn f s (μ.restrict t))
   证明: by
   have := h.mono_set (inter_subset_left (t := t))
@@ -758,7 +758,7 @@ lemma Integrable.piecewise
   exact MemLp.piecewise hs hf hg
 
 中文:
-引理 Integrable.piecewise
+引理 可积.piecewise
   结论: {f g : α -> ε'} [DecidablePred (· in s)]
   证明: by
   rw [IntegrableOn] at hf hg
@@ -784,7 +784,7 @@ theorem IntegrableOn.left_of_union
   proof: h.mono_set subset_union_left
 
 中文:
-定理 IntegrableOn.left_of_union
+定理 整数egrableOn.left_of_union
   条件: (h : 整数egrableOn f (s union t) μ)
   结论: 整数egrableOn f s μ
   证明: h.mono_set subset_union_left
@@ -804,7 +804,7 @@ theorem IntegrableOn.right_of_union
   proof: h.mono_set subset_union_right
 
 中文:
-定理 IntegrableOn.right_of_union
+定理 整数egrableOn.right_of_union
   条件: (h : 整数egrableOn f (s union t) μ)
   结论: 整数egrableOn f t μ
   证明: h.mono_set subset_union_right
@@ -825,8 +825,8 @@ theorem IntegrableOn.union
 @[simp]
 
 中文:
-定理 IntegrableOn.union
-  结论: [PseudoMetrizableSpace ε]
+定理 整数egrableOn.union
+  结论: [PseudoMetrizable空间 ε]
   证明: (hs.add_measure ht).mono_measure Measure.restrict_union_le _ _
 
 @[simp]
@@ -851,7 +851,7 @@ theorem integrableOn_union
 
 中文:
 定理 integrableOn_union
-  条件: [PseudoMetrizableSpace ε]
+  条件: [PseudoMetrizable空间 ε]
   证明: ⟨fun h => ⟨h.left_of_union, h.right_of_union⟩, fun h => h.1.union h.2⟩
 
 @[simp]
@@ -907,7 +907,7 @@ theorem integrableOn_singleton
 
 中文:
 定理 integrableOn_singleton
-  结论: {f : α -> ε'} {x : α} [MeasurableSingletonClass α]
+  结论: {f : α -> ε'} {x : α} [MeasurableSingleton类 α]
   证明: (integrableOn_singleton_iff hfx).mpr (Or.inr hx)
 
 @[simp]
@@ -934,7 +934,7 @@ theorem integrableOn_finite_biUnion
 
 中文:
 定理 integrableOn_finite_biUnion
-  结论: [PseudoMetrizableSpace ε]
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   induction s, hs using Set.Finite.induction_on with
   | empty => simp
@@ -964,7 +964,7 @@ theorem integrableOn_finset_iUnion
 
 中文:
 定理 integrableOn_finset_iUnion
-  条件: [PseudoMetrizableSpace ε] {s : Finset β} {t : β -> Set α}
+  条件: [PseudoMetrizable空间 ε] {s : 有限集 β} {t : β -> 集合 α}
   证明: integrableOn_finite_biUnion s.finite_toSet
 
 @[simp]
@@ -988,7 +988,7 @@ theorem integrableOn_finite_iUnion
 
 中文:
 定理 integrableOn_finite_iUnion
-  条件: [PseudoMetrizableSpace ε] [Finite β] {t : β -> Set α}
+  条件: [PseudoMetrizable空间 ε] [有限 β] {t : β -> 集合 α}
   证明: by
   cases nonempty_fintype β
   simpa using integrableOn_finset_iUnion (f := f) (μ := μ) (s := Finset.univ) (t := t)
@@ -1013,8 +1013,8 @@ lemma IntegrableOn.finset
   simp [integrableOn_finset_iUnion, measure_lt_top]
 
 中文:
-引理 IntegrableOn.finset
-  结论: [MeasurableSingletonClass α] {μ : Measure α} [IsFiniteMeasure μ]
+引理 整数egrableOn.finset
+  结论: [MeasurableSingleton类 α] {μ : 测度 α} [是有限测度 μ]
   证明: by
   rw [← (s : Set α).biUnion_of_singleton]
   simp [integrableOn_finset_iUnion, measure_lt_top]
@@ -1036,8 +1036,8 @@ lemma IntegrableOn.of_finite
   simpa using IntegrableOn.finset (s := hs.toFinset)
 
 中文:
-引理 IntegrableOn.of_finite
-  结论: [MeasurableSingletonClass α] {μ : Measure α} [IsFiniteMeasure μ]
+引理 整数egrableOn.of_finite
+  结论: [MeasurableSingleton类 α] {μ : 测度 α} [是有限测度 μ]
   证明: by
   simpa using IntegrableOn.finset (s := hs.toFinset)
 
@@ -1056,8 +1056,8 @@ lemma IntegrableOn.of_subsingleton
   proof: .of_finite hs.finite
 
 中文:
-引理 IntegrableOn.of_subsingleton
-  结论: [MeasurableSingletonClass α] {μ : Measure α} [IsFiniteMeasure μ]
+引理 整数egrableOn.of_subsingleton
+  结论: [MeasurableSingleton类 α] {μ : 测度 α} [是有限测度 μ]
   证明: .of_finite hs.finite
 
 Depends on / 依赖: finite, hs.finite, of_finite
@@ -1079,8 +1079,8 @@ theorem IntegrableOn.add_measure
 @[to_fun]
 
 中文:
-定理 IntegrableOn.add_measure
-  结论: [PseudoMetrizableSpace ε]
+定理 整数egrableOn.add_measure
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   delta IntegrableOn; rw [Measure.restrict_add]; exact hμ.integrable.add_measure hν
 
@@ -1105,8 +1105,8 @@ theorem IntegrableOn.add
 @[to_fun]
 
 中文:
-定理 IntegrableOn.add
-  结论: [ContinuousAdd ε'] {f g : α -> ε'}
+定理 整数egrableOn.add
+  结论: [连续加法 ε'] {f g : α -> ε'}
   证明: Integrable.add hf hg
 
 @[to_fun]
@@ -1129,7 +1129,7 @@ theorem IntegrableOn.sub
 @[to_fun]
 
 中文:
-定理 IntegrableOn.sub
+定理 整数egrableOn.sub
   结论: {f g : α -> E}
   证明: Integrable.sub hf hg
 
@@ -1154,7 +1154,7 @@ theorem IntegrableOn.neg
 @[simp]
 
 中文:
-定理 IntegrableOn.neg
+定理 整数egrableOn.neg
   条件: {f : α -> E} (hf : 整数egrableOn f s μ)
   结论: 整数egrableOn (-f) s μ
   证明: Integrable.neg hf
@@ -1228,7 +1228,7 @@ theorem integrableOn_add_measure
 
 中文:
 定理 integrableOn_add_measure
-  条件: [PseudoMetrizableSpace ε]
+  条件: [PseudoMetrizable空间 ε]
   证明: ⟨fun h =>
     ⟨h.mono_measure (Measure.le_add_right le_rfl), h.mono_measure (Measure.le_add_left le_rfl)⟩,
     fun h => h.1.add_measure h.2⟩
@@ -1251,8 +1251,8 @@ theorem _root_.MeasurableEmbedding.integrableOn_map_iff
   simp_rw [IntegrableOn, he.restrict_map, he.integrable_map_iff]
 
 中文:
-定理 _root_.MeasurableEmbedding.integrableOn_map_iff
-  结论: [MeasurableSpace β] {e : α -> β}
+定理 _root_.可测嵌入.integrableOn_map_iff
+  结论: [可测空间 β] {e : α -> β}
   证明: by
   simp_rw [IntegrableOn, he.restrict_map, he.integrable_map_iff]
 
@@ -1274,8 +1274,8 @@ theorem _root_.MeasurableEmbedding.integrableOn_iff_comap
     Measure.restrict_restrict_of_subset hs]
 
 中文:
-定理 _root_.MeasurableEmbedding.integrableOn_iff_comap
-  结论: [MeasurableSpace β] {e : α -> β}
+定理 _root_.可测嵌入.integrableOn_iff_comap
+  结论: [可测空间 β] {e : α -> β}
   证明: by
   simp_rw [← he.integrableOn_map_iff, he.map_comap, IntegrableOn,
     Measure.restrict_restrict_of_subset hs]
@@ -1298,8 +1298,8 @@ theorem _root_.MeasurableEmbedding.integrableOn_range_iff_comap
   rw [he.integrableOn_iff_comap .rfl]; rw [preimage_range]; rw [integrableOn_univ]
 
 中文:
-定理 _root_.MeasurableEmbedding.integrableOn_range_iff_comap
-  结论: [MeasurableSpace β] {e : α -> β}
+定理 _root_.可测嵌入.integrableOn_range_iff_comap
+  结论: [可测空间 β] {e : α -> β}
   证明: by
   rw [he.integrableOn_iff_comap .rfl]; rw [preimage_range]; rw [integrableOn_univ]
 
@@ -1321,7 +1321,7 @@ theorem integrableOn_iff_comap_subtypeVal
 
 中文:
 定理 integrableOn_iff_comap_subtypeVal
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   rw [← (MeasurableEmbedding.subtype_coe hs).integrableOn_range_iff_comap]; rw [Subtype.range_val]
 
@@ -1342,7 +1342,7 @@ theorem integrableOn_map_equiv
 
 中文:
 定理 integrableOn_map_equiv
-  结论: [MeasurableSpace β] (e : α ≃ᵐ β) {f : β -> ε} {μ : Measure α}
+  结论: [可测空间 β] (e : α ≃ᵐ β) {f : β -> ε} {μ : 测度 α}
   证明: by
   simp only [IntegrableOn, e.restrict_map, integrable_map_equiv e]
 
@@ -1361,8 +1361,8 @@ theorem MeasurePreserving.integrableOn_comp_preimage
   proof: (h₁.restrict_preimage_emb h₂ s).integrable_comp_emb h₂
 
 中文:
-定理 MeasurePreserving.integrableOn_comp_preimage
-  结论: [MeasurableSpace β] {e : α -> β} {ν}
+定理 保测.integrableOn_comp_preimage
+  结论: [可测空间 β] {e : α -> β} {ν}
   证明: (h₁.restrict_preimage_emb h₂ s).integrable_comp_emb h₂
 
 Depends on / 依赖: integrable_comp_emb, restrict_preimage_emb
@@ -1381,8 +1381,8 @@ theorem MeasurePreserving.integrableOn_image
   proof: ((h₁.restrict_image_emb h₂ s).integrable_comp_emb h₂).symm
 
 中文:
-定理 MeasurePreserving.integrableOn_image
-  结论: [MeasurableSpace β] {e : α -> β} {ν}
+定理 保测.integrableOn_image
+  结论: [可测空间 β] {e : α -> β} {ν}
   证明: ((h₁.restrict_image_emb h₂ s).integrable_comp_emb h₂).symm
 
 Depends on / 依赖: integrable_comp_emb, restrict_image_emb
@@ -1410,7 +1410,7 @@ theorem integrable_indicator_iff
 
 中文:
 定理 integrable_indicator_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   simp_rw [IntegrableOn, Integrable, hasFiniteIntegral_iff_enorm,
     enorm_indicator_eq_indicator_enorm, lintegral_indicator hs,
@@ -1433,8 +1433,8 @@ theorem IntegrableOn.integrable_indicator
   proof: (integrable_indicator_iff hs).2 h
 
 中文:
-定理 IntegrableOn.integrable_indicator
-  条件: (h : 整数egrableOn f s μ) (hs : MeasurableSet s)
+定理 整数egrableOn.integrable_indicator
+  条件: (h : 整数egrableOn f s μ) (hs : 可测集 s)
   证明: (integrable_indicator_iff hs).2 h
 
 Depends on / 依赖: integrable_indicator_iff
@@ -1456,7 +1456,7 @@ theorem IntegrableOn.integrable_indicator₀
 @[fun_prop]
 
 中文:
-定理 IntegrableOn.integrable_indicator₀
+定理 整数egrableOn.integrable_indicator₀
   条件: (h : 整数egrableOn f s μ) (hs : NullMeasurableSet s μ)
   证明: (h.congr_set_ae hs.toMeasurable_ae_eq).integrable_indicator
 .congr (measurableSet_toMeasurable μ s)
@@ -1484,8 +1484,8 @@ theorem Integrable.indicator
 @[fun_prop]
 
 中文:
-定理 Integrable.indicator
-  条件: (h : 整数egrable f μ) (hs : MeasurableSet s)
+定理 可积.indicator
+  条件: (h : 可积 f μ) (hs : 可测集 s)
   证明: h.integrableOn.integrable_indicator hs
 
 @[fun_prop]
@@ -1506,8 +1506,8 @@ theorem Integrable.indicator₀
   proof: h.integrableOn.integrable_indicator₀ hs
 
 中文:
-定理 Integrable.indicator₀
-  条件: (h : 整数egrable f μ) (hs : NullMeasurableSet s μ)
+定理 可积.indicator₀
+  条件: (h : 可积 f μ) (hs : NullMeasurableSet s μ)
   证明: h.integrableOn.integrable_indicator₀ hs
 
 Depends on / 依赖: h.integrableOn.integrable_indicator, integrableOn
@@ -1525,8 +1525,8 @@ theorem IntegrableOn.indicator
   proof: Integrable.indicator h ht
 
 中文:
-定理 IntegrableOn.indicator
-  条件: (h : 整数egrableOn f s μ) (ht : MeasurableSet t)
+定理 整数egrableOn.indicator
+  条件: (h : 整数egrableOn f s μ) (ht : 可测集 t)
   证明: Integrable.indicator h ht
 
 Depends on / 依赖: Integrable, Integrable.indicator, indicator
@@ -1547,7 +1547,7 @@ theorem integrable_indicatorConstLp
 
 中文:
 定理 integrable_indicatorConstLp
-  结论: {E} [NormedAddCommGroup E] {p : 实数>=0∞} {s : Set α}
+  结论: {E} [赋范交换加群 E] {p : 实数>=0∞} {s : 集合 α}
   证明: by
   rw [integrable_congr indicatorConstLp_coeFn]; rw [integrable_indicator_iff hs]; rw [IntegrableOn]; rw [integrable_const_iff]; rw [isFiniteMeasure_restrict]
   exact .inr hμs
@@ -1571,7 +1571,7 @@ theorem integrableOn_indicator_iff
 
 中文:
 定理 integrableOn_indicator_iff
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   simp_rw [IntegrableOn, integrable_indicator_iff hs, IntegrableOn, Measure.restrict_restrict hs]
 
@@ -1597,7 +1597,7 @@ theorem IntegrableOn.restrict_toMeasurable
     rw [inter_comm]; rw [← Measure.restrict_apply (measurableSet_toMeasurable _ _)]; rw 
 
 中文:
-定理 IntegrableOn.restrict_toMeasurable
+定理 整数egrableOn.restrict_toMeasurable
   结论: {f : α -> ε'}
   证明: by
   rcases exists_seq_strictAnti_tendsto' ENNReal.zero_lt_top with ⟨u, _, u_pos, u_lim⟩
@@ -1647,7 +1647,7 @@ theorem IntegrableOn.of_ae_sdiff_eq_zero
   have B : IntegrableOn f (t \ v) 
 
 中文:
-定理 IntegrableOn.of_ae_sdiff_eq_zero
+定理 整数egrableOn.of_ae_sdiff_eq_zero
   结论: {f : α -> ε'}
   证明: by
   let u := { x in s | f x != 0 }
@@ -1698,7 +1698,7 @@ theorem IntegrableOn.of_forall_sdiff_eq_zero
 alias IntegrableOn.of_forall_diff_eq_zero := IntegrableOn.of_forall_sdiff_eq_zero
 
 中文:
-定理 IntegrableOn.of_forall_sdiff_eq_zero
+定理 整数egrableOn.of_对任意_sdiff_eq_zero
   结论: {f : α -> ε'}
   证明: hf.of_ae_sdiff_eq_zero ht.nullMeasurableSet (Eventually.of_forall h't)
 
@@ -1726,7 +1726,7 @@ theorem IntegrableOn.integrable_of_ae_notMem_eq_zero
   filter_upwards [h't] with x hx h'x using hx h'x.2
 
 中文:
-定理 IntegrableOn.integrable_of_ae_notMem_eq_zero
+定理 整数egrableOn.integrable_of_ae_notMem_eq_zero
   证明: by
   rw [← integrableOn_univ]
   apply hf.of_ae_sdiff_eq_zero nullMeasurableSet_univ
@@ -1748,7 +1748,7 @@ theorem IntegrableOn.integrable_of_forall_notMem_eq_zero
   proof: hf.integrable_of_ae_notMem_eq_zero (Eventually.of_forall fun x hx => h't x hx)
 
 中文:
-定理 IntegrableOn.integrable_of_forall_notMem_eq_zero
+定理 整数egrableOn.integrable_of_对任意_notMem_eq_zero
   证明: hf.integrable_of_ae_notMem_eq_zero (Eventually.of_forall fun x hx => h't x hx)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, hf.integrable_of_ae_notMem_eq_zero, integrable_of_ae_notMem_eq_zero, of_forall
@@ -1767,7 +1767,7 @@ theorem IntegrableOn.of_inter_support
   simpa using hf.of_forall_sdiff_eq_zero hs
 
 中文:
-定理 IntegrableOn.of_inter_support
+定理 整数egrableOn.of_inter_support
   结论: {f : α -> ε'}
   证明: by
   simpa using hf.of_forall_sdiff_eq_zero hs
@@ -1824,7 +1824,7 @@ theorem integrableOn_Lp_of_measure_ne_top
 
 中文:
 定理 integrableOn_Lp_of_measure_ne_top
-  结论: {E} [NormedAddCommGroup E] {p : 实数>=0∞} {s : Set α}
+  结论: {E} [赋范交换加群 E] {p : 实数>=0∞} {s : 集合 α}
   证明: by
   refine memLp_one_iff_integrable.mp ?_
   have hμ_restrict_univ : (μ.restrict s) Set.univ < ∞ := by
@@ -1853,8 +1853,8 @@ theorem Integrable.lintegral_lt_top
     _ < ∞ := hf.2
 
 中文:
-定理 Integrable.lintegral_lt_top
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+定理 可积.lintegral_lt_top
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: calc
     (∫⁻ x, ENNReal.ofReal (f x) ∂μ) <= ∫⁻ x, ↑‖f x‖₊ ∂μ := lintegral_ofReal_le_lintegral_enorm f
     _ < ∞ := hf.2
@@ -1876,8 +1876,8 @@ theorem IntegrableOn.setLIntegral_lt_top
   proof: Integrable.lintegral_lt_top hf
 
 中文:
-定理 IntegrableOn.setLIntegral_lt_top
-  条件: {f : α -> 实数} {s : Set α} (hf : 整数egrableOn f s μ)
+定理 整数egrableOn.setL整数egral_lt_top
+  条件: {f : α -> 实数} {s : 集合 α} (hf : 整数egrableOn f s μ)
   证明: Integrable.lintegral_lt_top hf
 
 Depends on / 依赖: Integrable, Integrable.lintegral_lt_top, lintegral_lt_top
@@ -1895,7 +1895,7 @@ theorem _root_.ContinuousLinearMap.integrableOn_comp
   proof: L.integrable_comp hf
 
 中文:
-定理 _root_.ContinuousLinearMap.integrableOn_comp
+定理 _root_.连续线性映射.integrableOn_comp
   结论: {E H 𝕜 𝕜' : 类型}
   证明: L.integrable_comp hf
 
@@ -1917,8 +1917,8 @@ definition IntegrableAtFilter
   body: exists s in l, IntegrableOn f s μ
 
 中文:
-定义 IntegrableAtFilter
-  签名: (f : α -> ε) (l : Filter α) (μ : Measure α := by volume_tac)
+定义 整数egrableAtFilter
+  签名: (f : α -> ε) (l : 滤子 α) (μ : 测度 α := by volume_tac)
   定义体: exists s in l, IntegrableOn f s μ
 
 Depends on / 依赖: IntegrableOn, volume_tac
@@ -1941,8 +1941,8 @@ theorem _root_.MeasurableEmbedding.integrableAtFilter_map_iff
   · exact ⟨e '' s, by rwa [mem_map, he.injective.preimage_image]⟩
 
 中文:
-定理 _root_.MeasurableEmbedding.integrableAtFilter_map_iff
-  结论: [MeasurableSpace β] {e : α -> β}
+定理 _root_.可测嵌入.integrableAtFilter_map_iff
+  结论: [可测空间 β] {e : α -> β}
   证明: by
   simp_rw [IntegrableAtFilter, he.integrableOn_map_iff]
   constructor <;> rintro ⟨s, hs⟩
@@ -1972,8 +1972,8 @@ theorem _root_.MeasurableEmbedding.integrableAtFilter_iff_comap
   · exact ⟨_, inter_mem hs range_mem_map, int.inter_of_restrict⟩
 
 中文:
-定理 _root_.MeasurableEmbedding.integrableAtFilter_iff_comap
-  结论: [MeasurableSpace β] {e : α -> β}
+定理 _root_.可测嵌入.integrableAtFilter_iff_comap
+  结论: [可测空间 β] {e : α -> β}
   证明: by
   simp_rw [← he.integrableAtFilter_map_iff, IntegrableAtFilter, he.map_comap]
   constructor <;> rintro ⟨s, hs, int⟩
@@ -1999,8 +1999,8 @@ theorem Integrable.integrableAtFilter
   proof: ⟨univ, Filter.univ_mem, integrableOn_univ.2 h⟩
 
 中文:
-定理 Integrable.integrableAtFilter
-  条件: (h : 整数egrable f μ) (l : Filter α)
+定理 可积.integrableAtFilter
+  条件: (h : 可积 f μ) (l : 滤子 α)
   证明: ⟨univ, Filter.univ_mem, integrableOn_univ.2 h⟩
 
 Depends on / 依赖: Filter, Filter.univ_mem, integrableOn_univ, univ_mem
@@ -2018,7 +2018,7 @@ theorem IntegrableAtFilter.eventually
   proof: Iff.mpr (eventually_smallSets' fun _s _t hst ht => ht.mono_set hst) h
 
 中文:
-定理 IntegrableAtFilter.eventually
+定理 整数egrableAtFilter.eventually
   条件: (h : 整数egrableAtFilter f l μ)
   证明: Iff.mpr (eventually_smallSets' fun _s _t hst ht => ht.mono_set hst) h
 -/
@@ -2039,7 +2039,7 @@ theorem integrableAtFilter_atBot_iff
 
 中文:
 定理 integrableAtFilter_atBot_iff
-  条件: [Preorder α] [IsCodirectedOrder α] [Nonempty α]
+  条件: [预序 α] [IsCodirectedOrder α] [非空 α]
   证明: by
   refine ⟨fun ⟨s, hs, hi⟩ => ?_, fun ⟨a, ha⟩ => ⟨Iic a, Iic_mem_atBot a, ha⟩⟩
   obtain ⟨t, ht⟩ := mem_atBot_sets.mp hs
@@ -2065,7 +2065,7 @@ theorem integrableAtFilter_atTop_iff
 
 中文:
 定理 integrableAtFilter_atTop_iff
-  条件: [Preorder α] [IsDirectedOrder α] [Nonempty α]
+  条件: [预序 α] [IsDirectedOrder α] [非空 α]
   证明: integrableAtFilter_atBot_iff (α := αᵒᵈ)
 
 @[gcongr]
@@ -2088,7 +2088,7 @@ lemma IntegrableAtFilter.mono_measure
 @[gcongr]
 
 中文:
-引理 IntegrableAtFilter.mono_measure
+引理 整数egrableAtFilter.mono_measure
   条件: (hf : 整数egrableAtFilter f l μ) (h : ν <= μ)
   证明: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, hf.mono_measure h⟩
 
@@ -2110,7 +2110,7 @@ lemma IntegrableAtFilter.congr
   proof: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, hf.congr h.restrict⟩
 
 中文:
-引理 IntegrableAtFilter.congr
+引理 整数egrableAtFilter.congr
   条件: (hf : 整数egrableAtFilter f l μ) (h : f =ᵐ[μ] g)
   证明: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, hf.congr h.restrict⟩
 
@@ -2150,8 +2150,8 @@ lemma IntegrableAtFilter.congr'_enorm
 @[simp]
 
 中文:
-引理 IntegrableAtFilter.congr'_enorm
-  结论: {ε'' : 类型} [TopologicalSpace ε''] [ContinuousENorm ε'']
+引理 整数egrableAtFilter.congr'_enorm
+  结论: {ε'' : 类型} [拓扑空间 ε''] [余ntinuousE范数 ε'']
   证明: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, hf.congr'_enorm hg.restrict (ae_restrict_le h)⟩
 
 @[simp]
@@ -2196,8 +2196,8 @@ theorem IntegrableAtFilter.add
   exact (hs.mono_set inter_subset_left).add (ht.mono_set inter_subset_right)
 
 中文:
-定理 IntegrableAtFilter.add
-  结论: [ContinuousAdd ε'] {f g : α -> ε'}
+定理 整数egrableAtFilter.add
+  结论: [连续加法 ε'] {f g : α -> ε'}
   证明: by
   rcases hf with ⟨s, sl, hs⟩
   rcases hg with ⟨t, tl, ht⟩
@@ -2225,7 +2225,7 @@ theorem IntegrableAtFilter.neg
 @[simp]
 
 中文:
-定理 IntegrableAtFilter.neg
+定理 整数egrableAtFilter.neg
   条件: {f : α -> E} (hf : 整数egrableAtFilter f l μ)
   证明: by
   rcases hf with ⟨s, sl, hs⟩
@@ -2272,7 +2272,7 @@ theorem IntegrableAtFilter.sub
   exact hf.add hg.neg
 
 中文:
-定理 IntegrableAtFilter.sub
+定理 整数egrableAtFilter.sub
   结论: {f g : α -> E}
   证明: by
   rw [sub_eq_add_neg]
@@ -2295,8 +2295,8 @@ theorem IntegrableAtFilter.smul
   exact ⟨s, sl, hs.smul c⟩
 
 中文:
-定理 IntegrableAtFilter.smul
-  结论: {𝕜 : 类型} [NormedAddCommGroup 𝕜] [SMulZeroClass 𝕜 E]
+定理 整数egrableAtFilter.smul
+  结论: {𝕜 : 类型} [赋范交换加群 𝕜] [SMulZero类 𝕜 E]
   证明: by
   rcases hf with ⟨s, sl, hs⟩
   exact ⟨s, sl, hs.smul c⟩
@@ -2321,7 +2321,7 @@ theorem integrableAtFilter_smul_iff'
 
 中文:
 定理 integrableAtFilter_smul_iff'
-  结论: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+  结论: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   证明: by
   refine ⟨fun hf => ?_, fun h => h.smul c⟩
   convert! hf.smul c⁻¹
@@ -2347,7 +2347,7 @@ theorem integrableAtFilter_smul_iff
 
 中文:
 定理 integrableAtFilter_smul_iff
-  结论: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+  结论: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   证明: by
   by_cases hc : c = 0
   · simp [hc]
@@ -2371,7 +2371,7 @@ theorem IntegrableAtFilter.enorm
   proof: Exists.casesOn hf fun s hs => ⟨s, hs.1, hs.2.enorm⟩
 
 中文:
-定理 IntegrableAtFilter.enorm
+定理 整数egrableAtFilter.enorm
   条件: (hf : 整数egrableAtFilter f l μ)
   证明: Exists.casesOn hf fun s hs => ⟨s, hs.1, hs.2.enorm⟩
 -/
@@ -2388,7 +2388,7 @@ theorem IntegrableAtFilter.norm
   proof: Exists.casesOn hf fun s hs => ⟨s, hs.1, hs.2.norm⟩
 
 中文:
-定理 IntegrableAtFilter.norm
+定理 整数egrableAtFilter.norm
   条件: {f : α -> E} (hf : 整数egrableAtFilter f l μ)
   证明: Exists.casesOn hf fun s hs => ⟨s, hs.1, hs.2.norm⟩
 -/
@@ -2406,7 +2406,7 @@ theorem IntegrableAtFilter.filter_mono
   ⟨s, hl hs, hsf⟩
 
 中文:
-定理 IntegrableAtFilter.filter_mono
+定理 整数egrableAtFilter.filter_mono
   条件: (hl : l <= l') (hl' : 整数egrableAtFilter f l' μ)
   证明: let ⟨s, hs, hsf⟩ := hl'
   ⟨s, hl hs, hsf⟩
@@ -2425,7 +2425,7 @@ theorem IntegrableAtFilter.inf_of_left
   proof: hl.filter_mono inf_le_left
 
 中文:
-定理 IntegrableAtFilter.inf_of_left
+定理 整数egrableAtFilter.inf_of_left
   条件: (hl : 整数egrableAtFilter f l μ)
   证明: hl.filter_mono inf_le_left
 
@@ -2446,7 +2446,7 @@ theorem IntegrableAtFilter.inf_of_right
 @[simp]
 
 中文:
-定理 IntegrableAtFilter.inf_of_right
+定理 整数egrableAtFilter.inf_of_right
   条件: (hl : 整数egrableAtFilter f l μ)
   证明: hl.filter_mono inf_le_right
 
@@ -2474,8 +2474,8 @@ refine ⟨t, ht, hf.congr_set_ae eventuallyEq_set.2 ?_⟩
 alias ⟨IntegrableAtFilter.of_inf_ae, _⟩ := IntegrableAtFilter.inf_ae_iff
 
 中文:
-定理 IntegrableAtFilter.inf_ae_iff
-  条件: {l : Filter α}
+定理 整数egrableAtFilter.inf_ae_iff
+  条件: {l : 滤子 α}
   证明: by
   refine ⟨?_, fun h => h.filter_mono inf_le_left⟩
   rintro ⟨s, ⟨t, ht, u, hu, rfl⟩, hf⟩
@@ -2510,7 +2510,7 @@ theorem integrableAtFilter_top
 
 中文:
 定理 integrableAtFilter_top
-  条件: [PseudoMetrizableSpace ε'] {f : α -> ε'}
+  条件: [PseudoMetrizable空间 ε'] {f : α -> ε'}
   证明: by
   refine ⟨fun h => ?_, fun h => h.integrableAtFilter ⊤⟩
   obtain ⟨s, hsf, hs⟩ := h
@@ -2536,8 +2536,8 @@ theorem IntegrableAtFilter.sup_iff
   · exact fun ⟨⟨s, hsl, hs⟩, ⟨t, htl, ht⟩⟩ => ⟨s union t, union_mem_sup hsl htl, hs.union ht⟩
 
 中文:
-定理 IntegrableAtFilter.sup_iff
-  条件: [PseudoMetrizableSpace ε'] {f : α -> ε'} {l l' : Filter α}
+定理 整数egrableAtFilter.sup_iff
+  条件: [PseudoMetrizable空间 ε'] {f : α -> ε'} {l l' : 滤子 α}
   证明: by
   constructor
   · exact fun h => ⟨h.filter_mono le_sup_left, h.filter_mono le_sup_right⟩
@@ -2560,7 +2560,7 @@ theorem _root_.ContinuousLinearMap.integrableAtFilter_comp
   proof: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, L.integrableOn_comp hf⟩
 
 中文:
-定理 _root_.ContinuousLinearMap.integrableAtFilter_comp
+定理 _root_.连续线性映射.integrableAtFilter_comp
   结论: {E H 𝕜 𝕜' : 类型}
   证明: let ⟨s, hs, hf⟩ := hf; ⟨s, hs, L.integrableOn_comp hf⟩
 
@@ -2587,8 +2587,8 @@ theorem Measure.FiniteAtFilter.integrableAtFilter
   refine ⟨s, hsl, ⟨hfm
 
 中文:
-定理 Measure.FiniteAtFilter.integrableAtFilter
-  结论: {f : α -> E} {l : Filter α}
+定理 测度.FiniteAtFilter.integrableAtFilter
+  结论: {f : α -> E} {l : 滤子 α}
   证明: by
   obtain ⟨C, hC⟩ : exists C, forallᶠ s in l.smallSets, forall x in s, ‖f x‖ <= C :=
     hf.imp fun C hC => eventually_smallSets.2 ⟨_, hC, fun t => id⟩
@@ -2622,8 +2622,8 @@ alias _root_.Filter.Tendsto.integrableAtFilter_ae :=
   Measure.FiniteAtFilter.integrableAtFilter_of_tendsto_ae
 
 中文:
-定理 Measure.FiniteAtFilter.integrableAtFilter_of_tendsto_ae
-  结论: {f : α -> E} {l : Filter α}
+定理 测度.FiniteAtFilter.integrableAtFilter_of_tendsto_ae
+  结论: {f : α -> E} {l : 滤子 α}
   证明: (hμ.inf_of_left.integrableAtFilter (hfm.filter_mono inf_le_left)
       hf.norm.isBoundedUnder_le).of_inf_ae
 
@@ -2653,8 +2653,8 @@ alias _root_.Filter.Tendsto.integrableAtFilter :=
   Measure.FiniteAtFilter.integrableAtFilter_of_tendsto
 
 中文:
-定理 Measure.FiniteAtFilter.integrableAtFilter_of_tendsto
-  结论: {f : α -> E} {l : Filter α}
+定理 测度.FiniteAtFilter.integrableAtFilter_of_tendsto
+  结论: {f : α -> E} {l : 滤子 α}
   证明: hμ.integrableAtFilter hfm hf.norm.isBoundedUnder_le
 
 alias _root_.Filter.Tendsto.integrableAtFilter :=
@@ -2679,7 +2679,7 @@ lemma Measure.integrableOn_of_bounded
   proof: ⟨f_mble.restrict, .restrict_of_bounded (C := M) s_finite.lt_top f_bdd⟩
 
 中文:
-引理 Measure.integrableOn_of_bounded
+引理 测度.integrableOn_of_bounded
   结论: {f : α -> E} (s_finite : μ s != ∞)
   证明: ⟨f_mble.restrict, .restrict_of_bounded (C := M) s_finite.lt_top f_bdd⟩
 
@@ -2733,7 +2733,7 @@ lemma IntegrableAtFilter.eq_zero_of_tendsto
   have vl : v in l := inter_mem ul ((tendsto_order.1 hf.n
 
 中文:
-引理 IntegrableAtFilter.eq_zero_of_tendsto
+引理 整数egrableAtFilter.eq_zero_of_tendsto
   结论: {f : α -> E}
   证明: by
   by_contra H
@@ -2784,7 +2784,7 @@ theorem ContinuousOn.aemeasurable
 
 中文:
 定理 ContinuousOn.aemeasurable
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α] [MeasurableSpace β]
+  结论: [拓扑空间 α] [OpensMeasurable空间 α] [可测空间 β]
   证明: by
   classical
   nontriviality α; inhabit α
@@ -2823,7 +2823,7 @@ theorem ContinuousOn.aemeasurable₀
 
 中文:
 定理 ContinuousOn.aemeasurable₀
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α] [MeasurableSpace β]
+  结论: [拓扑空间 α] [OpensMeasurable空间 α] [可测空间 β]
   证明: by
   rcases hs.exists_measurable_subset_ae_eq with ⟨t, ts, ht, t_eq_s⟩
   rw [← Measure.restrict_congr_set t_eq_s]
@@ -2853,7 +2853,7 @@ theorem ContinuousOn.aestronglyMeasurable_of_isSeparable
 
 中文:
 定理 ContinuousOn.aestronglyMeasurable_of_isSeparable
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   let := pseudoMetrizableSpacePseudoMetric α
   borelize β
@@ -2892,7 +2892,7 @@ exact isSeparable_range continuousOn_iff_continuous_domRestrict.1
 
 中文:
 定理 ContinuousOn.aestronglyMeasurable
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   borelize β
   refine
@@ -2963,7 +2963,7 @@ theorem ContinuousOn.aestronglyMeasurable_of_isCompact
 
 中文:
 定理 ContinuousOn.aestronglyMeasurable_of_isCompact
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: hf.aestronglyMeasurable_of_subset_isCompact hs h's Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, aestronglyMeasurable_of_subset_isCompact, hf.aestronglyMeasurable_of_subset_isCompact
@@ -2984,8 +2984,8 @@ lemma Continuous.aestronglyMeasurable_of_compactSpace
   simpa using hf.continuousOn.aestronglyMeasurable_of_isCompact isCompact_univ .univ
 
 中文:
-引理 Continuous.aestronglyMeasurable_of_compactSpace
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+引理 连续.aestronglyMeasurable_of_compactSpace
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: by
   simpa using hf.continuousOn.aestronglyMeasurable_of_isCompact isCompact_univ .univ
 
@@ -3009,7 +3009,7 @@ theorem ContinuousOn.integrableAt_nhdsWithin_of_isSeparable
 
 中文:
 定理 ContinuousOn.integrableAt_nhdsWithin_of_isSeparable
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: haveI : (𝓝[t] a).IsMeasurablyGenerated := ht.nhdsWithin_isMeasurablyGenerated _
   (hft a ha).integrableAtFilter
     ⟨_, self_mem_nhdsWithin, hft.aestronglyMeasurable_of_isSeparable ht h't⟩
@@ -3038,7 +3038,7 @@ theorem ContinuousOn.integrableAt_nhdsWithin
 
 中文:
 定理 ContinuousOn.integrableAt_nhdsWithin
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: haveI : (𝓝[t] a).IsMeasurablyGenerated := ht.nhdsWithin_isMeasurablyGenerated _
   (hft a ha).integrableAtFilter ⟨_, self_mem_nhdsWithin, hft.aestronglyMeasurable ht⟩
     (μ.finiteAt_nhdsWithin _ _)
@@ -3064,8 +3064,8 @@ theorem Continuous.integrableAt_nhds
   exact hf.continuousOn.integrableAt_nhdsWithin MeasurableSet.univ (mem_univ a)
 
 中文:
-定理 Continuous.integrableAt_nhds
-  结论: [TopologicalSpace α] [SecondCountableTopologyEither α E]
+定理 连续.integrableAt_nhds
+  结论: [拓扑空间 α] [SecondCountableTopologyEither α E]
   证明: by
   rw [← nhdsWithin_univ]
   exact hf.continuousOn.integrableAt_nhdsWithin MeasurableSet.univ (mem_univ a)
@@ -3089,7 +3089,7 @@ theorem ContinuousOn.stronglyMeasurableAtFilter
 
 中文:
 定理 ContinuousOn.stronglyMeasurableAtFilter
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: fun _x hx =>
   ⟨s, IsOpen.mem_nhds hs hx, hf.aestronglyMeasurable hs.measurableSet⟩
 -/
@@ -3109,7 +3109,7 @@ theorem ContinuousAt.stronglyMeasurableAtFilter
 
 中文:
 定理 ContinuousAt.stronglyMeasurableAtFilter
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: ContinuousOn.stronglyMeasurableAtFilter hs continuousOn_of_forall_continuousAt hf
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.stronglyMeasurableAtFilter, continuousOn_of_forall_continuousAt, stronglyMeasurableAtFilter
@@ -3128,8 +3128,8 @@ theorem Continuous.stronglyMeasurableAtFilter
   proof: hf.stronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 Continuous.stronglyMeasurableAtFilter
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+定理 连续.stronglyMeasurableAtFilter
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: hf.stronglyMeasurable.stronglyMeasurableAtFilter
 
 Depends on / 依赖: hf.stronglyMeasurable.stronglyMeasurableAtFilter, stronglyMeasurable, stronglyMeasurableAtFilter
@@ -3149,7 +3149,7 @@ theorem ContinuousOn.stronglyMeasurableAtFilter_nhdsWithin
 
 中文:
 定理 ContinuousOn.stronglyMeasurableAtFilter_nhdsWithin
-  结论: {α β : 类型} [MeasurableSpace α]
+  结论: {α β : 类型} [可测空间 α]
   证明: ⟨s, self_mem_nhdsWithin, hf.aestronglyMeasurable hs⟩
 
 Depends on / 依赖: aestronglyMeasurable, hf.aestronglyMeasurable, self_mem_nhdsWithin

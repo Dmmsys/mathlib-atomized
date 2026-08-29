@@ -69,7 +69,7 @@ lemma filter_coe
 
 中文:
 引理 filter_coe
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: filter p l = l.filter p
   证明: rfl
 
@@ -228,7 +228,7 @@ theorem monotone_filter_left
 
 中文:
 定理 monotone_filter_left
-  结论: Monotone (filter p)
+  结论: 递增 (filter p)
   证明: fun _s _t => filter_le_filter p
 
 Depends on / 依赖: filter_le_filter
@@ -468,7 +468,7 @@ lemma filter_true
 中文:
 引理 filter_true
   条件: (s : Multiset α)
-  结论: s.filter (fun _ => True) = s
+  结论: s.filter (fun _ => 真) = s
   证明: by simp
 
 @[simp]
@@ -488,7 +488,7 @@ lemma filter_false
 中文:
 引理 filter_false
   条件: (s : Multiset α)
-  结论: s.filter (fun _ => False) = 0
+  结论: s.filter (fun _ => 假) = 0
   证明: by simp
 -/
 lemma filter_false (s : Multiset α) : s.filter (fun _ => False) = 0 := by simp
@@ -686,7 +686,7 @@ lemma map_filter'
 
 中文:
 引理 map_filter'
-  结论: {f : α -> β} (hf : Injective f) (s : Multiset α)
+  结论: {f : α -> β} (hf : 单射 f) (s : Multiset α)
   证明: by
   simp [filter_map, hf.eq_iff]
 
@@ -752,7 +752,7 @@ fun _l₁ _l₂ h => Quot.sound h.filterMap f
 
 中文:
 定义 filterMap
-  签名: (f : α -> Option β) (s : Multiset α)
+  签名: (f : α -> 选项类型 β) (s : Multiset α)
   定义体: Quot.liftOn s (fun l => (List.filterMap f l : Multiset β))
 fun _l₁ _l₂ h => Quot.sound h.filterMap f
 
@@ -778,7 +778,7 @@ lemma filterMap_coe
 
 中文:
 引理 filterMap_coe
-  条件: (f : α -> Option β) (l : List α)
+  条件: (f : α -> 选项类型 β) (l : 列表 α)
   结论: filterMap f l = l.filterMap f
   证明: rfl
 
@@ -800,7 +800,7 @@ theorem filterMap_zero
 
 中文:
 定理 filterMap_zero
-  条件: (f : α -> Option β)
+  条件: (f : α -> 选项类型 β)
   结论: filterMap f 0 = 0
   证明: rfl
 
@@ -822,7 +822,7 @@ theorem filterMap_cons_none
 
 中文:
 定理 filterMap_cons_none
-  条件: {f : α -> Option β} (a : α) (s : Multiset α) (h : f a = none)
+  条件: {f : α -> 选项类型 β} (a : α) (s : Multiset α) (h : f a = none)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.filterMap_cons_none h
 
 @[simp]
@@ -844,7 +844,7 @@ theorem filterMap_cons_some
 
 中文:
 定理 filterMap_cons_some
-  结论: (f : α -> Option β) (a : α) (s : Multiset α) {b : β}
+  结论: (f : α -> 选项类型 β) (a : α) (s : Multiset α) {b : β}
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.filterMap_cons_some h
 
 Depends on / 依赖: List.filterMap_cons_some, Quot.inductionOn, congr_arg, filterMap_cons_some, inductionOn, ofList
@@ -868,7 +868,7 @@ theorem filterMap_cons
 
 中文:
 定理 filterMap_cons
-  条件: (f : α -> Option β) (a : α) (s : Multiset α)
+  条件: (f : α -> 选项类型 β) (a : α) (s : Multiset α)
   证明: by
   cases h : f a with
   | none => simp [filterMap_cons_none a s h]
@@ -895,7 +895,7 @@ theorem filterMap_add
 
 中文:
 定理 filterMap_add
-  条件: (f : α -> Option β) (s t : Multiset α)
+  条件: (f : α -> 选项类型 β) (s t : Multiset α)
   证明: Quotient.inductionOn₂ s t fun _l₁ _l₂ => congr_arg ofList filterMap_append
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, congr_arg, filterMap_append, ofList
@@ -939,7 +939,7 @@ Quot.inductionOn s fun l => congr_arg ofList by
 
 中文:
 定理 filterMap_eq_filter
-  结论: filterMap (Option.guard p) = filter p
+  结论: filterMap (选项类型.guard p) = filter p
   证明: funext fun s =>
 Quot.inductionOn s fun l => congr_arg ofList by
       rw [← List.filterMap_eq_filter]
@@ -961,7 +961,7 @@ theorem filterMap_filterMap
 
 中文:
 定理 filterMap_filterMap
-  条件: (f : α -> Option β) (g : β -> Option γ) (s : Multiset α)
+  条件: (f : α -> 选项类型 β) (g : β -> 选项类型 γ) (s : Multiset α)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.filterMap_filterMap
 
 Depends on / 依赖: List.filterMap_filterMap, Quot.inductionOn, congr_arg, filterMap_filterMap, inductionOn, ofList
@@ -980,7 +980,7 @@ theorem map_filterMap
 
 中文:
 定理 map_filterMap
-  条件: (f : α -> Option β) (g : β -> γ) (s : Multiset α)
+  条件: (f : α -> 选项类型 β) (g : β -> γ) (s : Multiset α)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.map_filterMap
 
 Depends on / 依赖: List.map_filterMap, Quot.inductionOn, congr_arg, inductionOn, map_filterMap, ofList
@@ -999,7 +999,7 @@ theorem filterMap_map
 
 中文:
 定理 filterMap_map
-  条件: (f : α -> β) (g : β -> Option γ) (s : Multiset α)
+  条件: (f : α -> β) (g : β -> 选项类型 γ) (s : Multiset α)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.filterMap_map
 
 Depends on / 依赖: List.filterMap_map, Quot.inductionOn, congr_arg, filterMap_map, inductionOn, ofList
@@ -1018,7 +1018,7 @@ theorem filter_filterMap
 
 中文:
 定理 filter_filterMap
-  条件: (f : α -> Option β) (p : β -> 命题) [DecidablePred p] (s : Multiset α)
+  条件: (f : α -> 选项类型 β) (p : β -> 命题) [DecidablePred p] (s : Multiset α)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.filter_filterMap
 
 Depends on / 依赖: List.filter_filterMap, Quot.inductionOn, congr_arg, filter_filterMap, inductionOn, ofList
@@ -1040,7 +1040,7 @@ theorem filterMap_filter
 
 中文:
 定理 filterMap_filter
-  条件: (f : α -> Option β) (s : Multiset α)
+  条件: (f : α -> 选项类型 β) (s : Multiset α)
   证明: Quot.inductionOn s fun l => congr_arg ofList by
     simpa using List.filterMap_filter (f := f) (p := p)
 
@@ -1089,7 +1089,7 @@ theorem mem_filterMap
 
 中文:
 定理 mem_filterMap
-  条件: (f : α -> Option β) (s : Multiset α) {b : β}
+  条件: (f : α -> 选项类型 β) (s : Multiset α) {b : β}
   证明: Quot.inductionOn s fun _ => List.mem_filterMap
 
 Depends on / 依赖: List.mem_filterMap, Quot.inductionOn, inductionOn, mem_filterMap
@@ -1110,7 +1110,7 @@ theorem map_filterMap_of_inv
 
 中文:
 定理 map_filterMap_of_inv
-  结论: (f : α -> Option β) (g : β -> α) (H : 对任意 x : α, (f x).map g = some x)
+  结论: (f : α -> 选项类型 β) (g : β -> α) (H : 对任意 x : α, (f x).map g = some x)
   证明: Quot.inductionOn s fun _ => congr_arg ofList List.map_filterMap_of_inv H
 
 @[gcongr]
@@ -1132,7 +1132,7 @@ theorem filterMap_le_filterMap
 
 中文:
 定理 filterMap_le_filterMap
-  条件: (f : α -> Option β) {s t : Multiset α} (h : s <= t)
+  条件: (f : α -> 选项类型 β) {s t : Multiset α} (h : s <= t)
   证明: leInductionOn h fun h => (h.filterMap _).subperm
 
 Depends on / 依赖: filterMap, h.filterMap, leInductionOn, subperm
@@ -1450,7 +1450,7 @@ theorem count_map_eq_count'
 
 中文:
 定理 count_map_eq_count'
-  结论: [DecidableEq β] (f : α -> β) (s : Multiset α) (hf : Function.Injective f)
+  结论: [DecidableEq β] (f : α -> β) (s : Multiset α) (hf : 函数.单射 f)
   证明: by
   by_cases H : x in s
   · exact count_map_eq_count f _ hf.injOn _ H
@@ -1509,7 +1509,7 @@ theorem filter_eq
 中文:
 定理 filter_eq
   条件: (s : Multiset α) (b : α)
-  结论: s.filter (Eq b) = replicate (count b s) b
+  结论: s.filter (相等 b) = replicate (count b s) b
   证明: by
   simp_rw [← filter_eq', eq_comm]
 
@@ -1609,7 +1609,7 @@ theorem map_le_map_iff
 
 中文:
 定理 map_le_map_iff
-  条件: {f : α -> β} (hf : Function.Injective f) {s t : Multiset α}
+  条件: {f : α -> β} (hf : 函数.单射 f) {s t : Multiset α}
   证明: by
   classical
     refine ⟨fun h => le_iff_count.mpr fun a => ?_, map_le_map⟩
@@ -1788,7 +1788,7 @@ theorem Nodup.filterMap
 
 中文:
 定理 Nodup.filterMap
-  条件: (f : α -> Option β) (H : 对任意 a a' b, b in f a -> b in f a' -> a = a')
+  条件: (f : α -> 选项类型 β) (H : 对任意 a a' b, b in f a -> b in f a' -> a = a')
   证明: Quot.induction_on s fun _ => List.Nodup.filterMap H
 -/
 protected theorem Nodup.filterMap (f : α -> Option β) (H : forall a a' b, b in f a -> b in f a' -> a = a') :

@@ -85,8 +85,8 @@ theorem Fintype.linearIndependent_iff'ₛ
   simp [Fintype.linearIndependent_iffₛ, Injective, funext_iff]
 
 中文:
-定理 Fintype.linearIndependent_iff'ₛ
-  条件: [Fintype ι] [DecidableEq ι]
+定理 有限类型.linearIndependent_iff'ₛ
+  条件: [有限类型 ι] [DecidableEq ι]
   证明: by
   simp [Fintype.linearIndependent_iffₛ, Injective, funext_iff]
 
@@ -205,7 +205,7 @@ theorem linearIndepOn_iUnion_of_directed
 
 中文:
 定理 linearIndepOn_iUnion_of_directed
-  结论: {η : 类型} {s : η -> Set ι} (hs : Directed (· subseteq ·) s)
+  结论: {η : 类型} {s : η -> 集合 ι} (hs : Directed (· subseteq ·) s)
   证明: by
   by_cases hη : Nonempty η
   · refine linearIndepOn_of_finite (⋃ i, s i) fun t ht ft => ?_
@@ -239,7 +239,7 @@ theorem linearIndepOn_sUnion_of_directed
 
 中文:
 定理 linearIndepOn_sUnion_of_directed
-  结论: {s : Set (Set ι)} (hs : DirectedOn (· subseteq ·) s)
+  结论: {s : 集合 (集合 ι)} (hs : DirectedOn (· subseteq ·) s)
   证明: by
   rw [sUnion_eq_iUnion]
   exact linearIndepOn_iUnion_of_directed hs.directed_val (by simpa using h)
@@ -263,7 +263,7 @@ theorem linearIndepOn_biUnion_of_directed
 
 中文:
 定理 linearIndepOn_biUnion_of_directed
-  结论: {η} {s : Set η} {t : η -> Set ι}
+  结论: {η} {s : 集合 η} {t : η -> 集合 ι}
   证明: by
   rw [biUnion_eq_iUnion]
   exact linearIndepOn_iUnion_of_directed (directed_comp.2 <| hs.directed_val) (by simpa using h)
@@ -333,8 +333,8 @@ theorem LinearMap.iSupIndep_map
   simpa [← inj eq]
 
 中文:
-定理 LinearMap.iSupIndep_map
-  结论: (f : M ->ₗ[R] M') (inj : Injective f) {m : ι -> Submodule R M}
+定理 线性映射.iSupIndep_map
+  结论: (f : M ->ₗ[R] M') (inj : 单射 f) {m : ι -> 子模 R M}
   证明: by
   simp_rw [iSupIndep, disjoint_iff_inf_le] at ind ⊢
   rintro i _ ⟨⟨x, hxi, rfl⟩, hx⟩
@@ -435,7 +435,7 @@ theorem LinearIndependent.inl_union_inr
 
 中文:
 定理 LinearIndependent.inl_union_inr
-  结论: {s : Set M} {t : Set M'}
+  结论: {s : 集合 M} {t : 集合 M'}
   证明: by
   nontriviality R
   let e : s oplus t ≃ ↥(inl R M M' '' s union inr R M M' '' t) :=
@@ -481,7 +481,7 @@ theorem exists_maximal_linearIndepOn'
     rw [linearIndepOn_iffₛ
 
 中文:
-定理 exists_maximal_linearIndepOn'
+定理 存在_maximal_linearIndepOn'
   条件: (v : ι -> M)
   证明: by
   let indep : Set ι -> Prop := fun s => LinearIndepOn R v s
@@ -533,8 +533,8 @@ lemma Submodule.codisjoint_span_image_of_codisjoint
   rwa [← LinearMap.range_eq_top, Finsupp.range_linearCombination]
 
 中文:
-引理 Submodule.codisjoint_span_image_of_codisjoint
-  结论: (hv : Submodule.span R (Set.range v) = ⊤)
+引理 子模.codisjoint_span_image_of_codisjoint
+  结论: (hv : 子模.span R (集合.range v) = ⊤)
   证明: by
   rw [Finsupp.span_image_eq_map_linearCombination]; rw [Finsupp.span_image_eq_map_linearCombination]
   refine Submodule.codisjoint_map ?_ (Finsupp.codisjoint_supported_supported hst)
@@ -587,8 +587,8 @@ theorem Fintype.linearIndependent_iff'
   simp [Fintype.linearIndependent_iff, LinearMap.ker_eq_bot', funext_iff]
 
 中文:
-定理 Fintype.linearIndependent_iff'
-  条件: [Fintype ι] [DecidableEq ι]
+定理 有限类型.linearIndependent_iff'
+  条件: [有限类型 ι] [DecidableEq ι]
   证明: by
   simp [Fintype.linearIndependent_iff, LinearMap.ker_eq_bot', funext_iff]
 -/
@@ -753,7 +753,7 @@ lemma LinearIndependent.pair_smul_smul_iff
 
 中文:
 引理 LinearIndependent.pair_smul_smul_iff
-  条件: {u v : R} (hu : IsUnit u) (hv : IsUnit v)
+  条件: {u v : R} (hu : 是单位 u) (hv : 是单位 v)
   证明: by
   simp only [LinearIndependent.pair_iff]
   refine ⟨fun h s t hst => ?_, fun h s t hst => ?_⟩
@@ -881,7 +881,7 @@ lemma LinearIndependent.pair_add_smul_add_smul_iff
 
 中文:
 引理 LinearIndependent.pair_add_smul_add_smul_iff
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   rcases eq_or_ne (a * d) (b * c) with h | h
   · suffices ¬ LinearIndependent R ![a • x + b • y, c • x + d • y] by simpa [h]
@@ -1039,7 +1039,7 @@ theorem linearIndepOn_id_iUnion_finite
 
 中文:
 定理 linearIndepOn_id_iUnion_finite
-  结论: {f : ι -> Set M} (hl : 对任意 i, LinearIndepOn R id (f i))
+  结论: {f : ι -> 集合 M} (hl : 对任意 i, LinearIndepOn R id (f i))
   证明: by
   classical
   rw [iUnion_eq_iUnion_finset f]
@@ -1149,7 +1149,7 @@ theorem exists_maximal_linearIndepOn
     have hiJ : i in J := 
 
 中文:
-定理 exists_maximal_linearIndepOn
+定理 存在_maximal_linearIndepOn
   条件: (v : ι -> M)
   证明: by
   classical
@@ -1234,7 +1234,7 @@ lemma linearIndependent_algHom_toLinearMap'
 
 中文:
 引理 linearIndependent_algHom_toLinearMap'
-  结论: (K M L) [CommRing K] [IsDomain K]
+  结论: (K M L) [交换环 K] [是整环 K]
   证明: (linearIndependent_algHom_toLinearMap K M L).restrict_scalars' K
 
 Depends on / 依赖: linearIndependent_algHom_toLinearMap, restrict_scalars
@@ -1260,8 +1260,8 @@ lemma LinearMap.injective_of_linearIndependent
   
 
 中文:
-引理 LinearMap.injective_of_linearIndependent
-  结论: {N : 类型} [AddCommGroup N] [Module R N]
+引理 线性映射.injective_of_linearIndependent
+  结论: {N : 类型} [加法交换群 N] [模 R N]
   证明: by
   refine (injective_iff_map_eq_zero _).mpr fun x hx => ?_
   have : x in Submodule.span R (.range v) := by rw [hv]; exact mem_top
@@ -1295,8 +1295,8 @@ lemma LinearMap.bijective_of_linearIndependent_of_span_eq_top
   rwa [← range_eq_top]
 
 中文:
-引理 LinearMap.bijective_of_linearIndependent_of_span_eq_top
-  结论: {N : 类型} [AddCommGroup N]
+引理 线性映射.bijective_of_linearIndependent_of_span_eq_top
+  结论: {N : 类型} [加法交换群 N]
   证明: by
   refine ⟨LinearMap.injective_of_linearIndependent hv hli, ?_⟩
   rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hv]; rw [Submodule.map_top] at hsp
@@ -1325,7 +1325,7 @@ lemma LinearIndepOn.insert'
 
 中文:
 引理 LinearIndepOn.insert'
-  结论: {s : Set ι} {i : ι} (hs : LinearIndepOn R v s)
+  结论: {s : 集合 ι} {i : ι} (hs : LinearIndepOn R v s)
   证明: by
   rw [← Set.union_singleton]
   refine hs.union (.singleton' fun r hr => hx _ <| by simp [hr]) ?_
@@ -1350,7 +1350,7 @@ lemma LinearIndepOn.id_insert'
 
 中文:
 引理 LinearIndepOn.id_insert'
-  结论: {s : Set M} {x : M} (hs : LinearIndepOn R id s)
+  结论: {s : 集合 M} {x : M} (hs : LinearIndepOn R id s)
   证明: hs.insert' by simpa
 
 Depends on / 依赖: hs.insert, insert
@@ -1372,7 +1372,7 @@ theorem LinearIndependent.of_pairwise_dual_eq_zero_one
 
 中文:
 定理 LinearIndependent.of_pairwise_dual_eq_zero_one
-  结论: (v : ι -> M) (f : ι -> Dual R M)
+  结论: (v : ι -> M) (f : ι -> 对偶 R M)
   证明: by
   refine linearIndependent_iff'.mpr fun s g hrel i hi => ?_
   have aux (j : ι) (hjs : j in s) (hji : j != i) : g j * (f i) (v j) = 0 := by simp [h1 hji.symm]
@@ -1408,7 +1408,7 @@ lemma LinearIndependent.update
 
 中文:
 引理 LinearIndependent.update
-  结论: [DecidableEq ι] [CommRing R] [AddCommGroup M] [Module R M]
+  结论: [DecidableEq ι] [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   rw [linearIndependent_iff] at hf ⊢
   obtain ⟨r, hr, l, hl, hg⟩ := hg
@@ -1503,7 +1503,7 @@ theorem LinearIndepOn.insert
 
 中文:
 定理 LinearIndepOn.insert
-  结论: {s : Set ι} {x : ι} (hs : LinearIndepOn K v s)
+  结论: {s : 集合 ι} {x : ι} (hs : LinearIndepOn K v s)
   证明: by
   rw [← union_singleton]
   have x0 : v x != 0 := fun h => hx (h ▸ zero_mem _)
@@ -1593,7 +1593,7 @@ theorem linearIndependent_option
 
 中文:
 定理 linearIndependent_option
-  条件: {v : Option ι -> V}
+  条件: {v : 选项类型 ι -> V}
   结论: LinearIndependent K v ↔
   证明: by
   simp only [← linearIndependent_option', Option.casesOn'_none_coe]
@@ -1621,7 +1621,7 @@ theorem linearIndepOn_insert
 
 中文:
 定理 linearIndepOn_insert
-  条件: {s : Set ι} {a : ι} {f : ι -> V} (has : a ∉ s)
+  条件: {s : 集合 ι} {a : ι} {f : ι -> V} (has : a ∉ s)
   证明: by
   classical
   rw [LinearIndepOn]; rw [LinearIndepOn]; rw [← linearIndependent_equiv
@@ -1673,7 +1673,7 @@ theorem linearIndepOn_insert_iff
 
 中文:
 定理 linearIndepOn_insert_iff
-  条件: {s : Set ι} {a : ι} {f : ι -> V}
+  条件: {s : 集合 ι} {a : ι} {f : ι -> V}
   证明: by
   by_cases has : a in s
   · simp [insert_eq_of_mem has, has]
@@ -1698,7 +1698,7 @@ theorem linearIndepOn_id_insert_iff
 
 中文:
 定理 linearIndepOn_id_insert_iff
-  条件: {a : V} {s : Set V}
+  条件: {a : V} {s : 集合 V}
   证明: by
   simpa using linearIndepOn_insert_iff (a := a) (f := id)
 
@@ -1721,7 +1721,7 @@ theorem LinearIndepOn.mem_span_iff
 
 中文:
 定理 LinearIndepOn.mem_span_iff
-  条件: {s : Set ι} {a : ι} {f : ι -> V} (h : LinearIndepOn K f s)
+  条件: {s : 集合 ι} {a : ι} {f : ι -> V} (h : LinearIndepOn K f s)
   证明: by
   by_cases has : a in s
   · exact iff_of_true (subset_span <| mem_image_of_mem f has) fun _ => has
@@ -1746,7 +1746,7 @@ theorem LinearIndepOn.notMem_span_iff
 
 中文:
 定理 LinearIndepOn.notMem_span_iff
-  条件: {s : Set ι} {a : ι} {f : ι -> V} (h : LinearIndepOn K f s)
+  条件: {s : 集合 ι} {a : ι} {f : ι -> V} (h : LinearIndepOn K f s)
   证明: by
   rw [h.mem_span_iff]; rw [Classical.not_imp]
 
@@ -1767,7 +1767,7 @@ theorem LinearIndepOn.mem_span_iff_id
 
 中文:
 定理 LinearIndepOn.mem_span_iff_id
-  条件: {s : Set V} {a : V} (h : LinearIndepOn K id s)
+  条件: {s : 集合 V} {a : V} (h : LinearIndepOn K id s)
   证明: by
   simpa using h.mem_span_iff (a := a)
 
@@ -1788,7 +1788,7 @@ theorem LinearIndepOn.notMem_span_iff_id
 
 中文:
 定理 LinearIndepOn.notMem_span_iff_id
-  条件: {s : Set V} {a : V} (h : LinearIndepOn K id s)
+  条件: {s : 集合 V} {a : V} (h : LinearIndepOn K id s)
   证明: by
   rw [h.mem_span_iff_id]; rw [Classical.not_imp]
 
@@ -1885,7 +1885,7 @@ alias linearIndependent_fin_cons := linearIndependent_finCons
 
 中文:
 定理 linearIndependent_finCons
-  条件: {n} {v : Fin n -> V}
+  条件: {n} {v : 有限集 n -> V}
   证明: by
   rw [← linearIndependent_equiv (finSuccEquiv n).symm]; rw [linearIndependent_option]
   rfl
@@ -1918,7 +1918,7 @@ alias linearIndependent_fin_snoc := linearIndependent_finSnoc
 
 中文:
 定理 linearIndependent_finSnoc
-  条件: {n} {v : Fin n -> V}
+  条件: {n} {v : 有限集 n -> V}
   证明: by
   rw [Fin.snoc_eq_cons_rotate]; rw [← Function.comp_def]; rw [linearIndependent_equiv]; rw [linearIndependent_finCons]
 
@@ -1948,7 +1948,7 @@ alias LinearIndependent.fin_cons := LinearIndependent.finCons
 
 中文:
 定理 LinearIndependent.finCons
-  结论: {n} {v : Fin n -> V} (hv : LinearIndependent K v)
+  结论: {n} {v : 有限集 n -> V} (hv : LinearIndependent K v)
   证明: linearIndependent_finCons.2 ⟨hv, hx⟩
 
 @[deprecated (since := "2026-04-07")]
@@ -1973,7 +1973,7 @@ lemma LinearIndependent.finSnoc
 
 中文:
 引理 LinearIndependent.finSnoc
-  结论: {n} {v : Fin n -> V} (hv : LinearIndependent K v)
+  结论: {n} {v : 有限集 n -> V} (hv : LinearIndependent K v)
   证明: linearIndependent_finSnoc.2 ⟨hv, hx⟩
 
 Depends on / 依赖: linearIndependent_finSnoc
@@ -2044,7 +2044,7 @@ alias linearIndependent_fin_succ := linearIndependent_finSucc
 
 中文:
 定理 linearIndependent_finSucc
-  条件: {n} {v : Fin (n + 1) -> V}
+  条件: {n} {v : 有限集 (n + 1) -> V}
   证明: by
   rw [← linearIndependent_finCons]; rw [Fin.cons_self_tail]
 
@@ -2076,7 +2076,7 @@ alias linearIndependent_fin_succ' := linearIndependent_finSucc'
 
 中文:
 定理 linearIndependent_finSucc'
-  条件: {n} {v : Fin (n + 1) -> V}
+  条件: {n} {v : 有限集 (n + 1) -> V}
   结论: LinearIndependent K v ↔
   证明: by
   rw [← linearIndependent_finSnoc]; rw [Fin.snoc_init_self]
@@ -2140,7 +2140,7 @@ theorem linearIndependent_fin2
 
 中文:
 定理 linearIndependent_fin2
-  条件: {f : Fin 2 -> V}
+  条件: {f : 有限集 2 -> V}
   证明: by
   rw [linearIndependent_finSucc]; rw [linearIndependent_unique_iff]; rw [range_unique]; rw [mem_span_singleton]; rw [not_exists]; rw [show Fin.tail f default = f 1 by rw [← Fin.succ_zero_eq_one]; rfl]
 
@@ -2164,8 +2164,8 @@ theorem exists_linearIndepOn_extension
       · exact linearIndepOn_sUnion_of_directed cc.directedOn fun x xc 
 
 中文:
-定理 exists_linearIndepOn_extension
-  条件: {s t : Set ι} (hs : LinearIndepOn K v s) (hst : s subseteq t)
+定理 存在_linearIndepOn_extension
+  条件: {s t : 集合 ι} (hs : LinearIndepOn K v s) (hst : s subseteq t)
   证明: by
   obtain ⟨b, sb, h⟩ := by
     refine zorn_subset_nonempty { b | b subseteq t ∧ LinearIndepOn K v b} ?_ _ ⟨hst, hs⟩
@@ -2198,7 +2198,7 @@ theorem exists_linearIndepOn_id_extension
   convert! exists_linearIndepOn_extension hs hst <;> simp
 
 中文:
-定理 exists_linearIndepOn_id_extension
+定理 存在_linearIndepOn_id_extension
   条件: (hs : LinearIndepOn K id s) (hst : s subseteq t)
   证明: by
   convert! exists_linearIndepOn_extension hs hst <;> simp
@@ -2222,7 +2222,7 @@ theorem exists_linearIndependent
   exact ⟨b, hb₁, (span_eq_of_le _ hb₂ (Submodule.span_mono hb₁)).symm, hb₃⟩
 
 中文:
-定理 exists_linearIndependent
+定理 存在_linearIndependent
   证明: by
   obtain ⟨b, hb₁, -, hb₂, hb₃⟩ :=
     exists_linearIndepOn_id_extension (linearIndependent_empty K V) (Set.empty_subset t)
@@ -2251,7 +2251,7 @@ lemma exists_linearIndependent'
   refine ⟨s, Su
 
 中文:
-引理 exists_linearIndependent'
+引理 存在_linearIndependent'
   条件: (v : ι -> V)
   证明: by
   obtain ⟨t, ht, hsp, hli⟩ := exists_linearIndependent K (Set.range v)
@@ -2378,7 +2378,7 @@ theorem LinearIndepOn.subset_span_extend
 
 中文:
 定理 LinearIndepOn.subset_span_extend
-  条件: {s t : Set V} (hs : LinearIndepOn K id s) (hst : s subseteq t)
+  条件: {s t : 集合 V} (hs : LinearIndepOn K id s) (hst : s subseteq t)
   证明: by
   convert! hs.image_subset_span_image_extend hst <;> simp
 
@@ -2420,7 +2420,7 @@ theorem LinearIndepOn.span_extend_eq_span
 
 中文:
 定理 LinearIndepOn.span_extend_eq_span
-  条件: {s t : Set V} (hs : LinearIndepOn K id s) (hst : s subseteq t)
+  条件: {s t : 集合 V} (hs : LinearIndepOn K id s) (hst : s subseteq t)
   证明: le_antisymm (span_mono (hs.extend_subset hst)) (span_le.2 (hs.subset_span_extend hst))
 
 Depends on / 依赖: extend_subset, hs.extend_subset, hs.subset_span_extend, le_antisymm, span_le, span_mono, subset_span_extend
@@ -2469,8 +2469,8 @@ theorem exists_of_linearIndepOn_of_finite_span
               exists t' : Finset V, ↑t' subseteq s union ↑t ∧ s subseteq ↑t' ∧ t'.card = (s' union t).ca
 
 中文:
-定理 exists_of_linearIndepOn_of_finite_span
-  结论: {s : Set V} {t : Finset V}
+定理 存在_of_linearIndepOn_of_finite_span
+  结论: {s : 集合 V} {t : 有限集 V}
   证明: by
   classical
   have :
@@ -2557,8 +2557,8 @@ theorem exists_finite_card_le_of_finite_of_linearIndependent_of_span
 ⟨this, by rw [← Eq]; exact Finset.card_le_card Finset.coe_subset.mp by simp [hsu]⟩
 
 中文:
-定理 exists_finite_card_le_of_finite_of_linearIndependent_of_span
-  结论: {s t : Set V} (ht : t.Finite)
+定理 存在_finite_card_le_of_finite_of_linearIndependent_of_span
+  结论: {s t : 集合 V} (ht : t.有限)
   证明: have : s subseteq (span K ↑ht.toFinset : Submodule K V) := by simpa
   let ⟨u, _hust, hsu, Eq⟩ := exists_of_linearIndepOn_of_finite_span hs this
   have : s.Finite := u.finite_toSet.subset hsu

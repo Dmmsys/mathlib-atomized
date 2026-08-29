@@ -63,7 +63,7 @@ definition IsSeq
 
 中文:
 定义 IsSeq
-  签名: {α : 类型u} (s : Stream' (Option α))
+  签名: {α : 类型u} (s : Stream' (选项类型 α))
   定义体: forall {n : Nat}, s n = none -> s (n + 1) = none
 -/
 def IsSeq {α : Type u} (s : Stream' (Option α)) : Prop :=
@@ -78,7 +78,7 @@ definition Seq
   body: { f : Stream' (Option α) // f.IsSeq }
 
 中文:
-定义 Seq
+定义 序列
   签名: (α : 类型u)
   定义体: { f : Stream' (Option α) // f.IsSeq }
 
@@ -119,7 +119,7 @@ definition get?
 
 中文:
 定义 get?
-  签名: : Seq α -> 自然数 -> Option α
+  签名: : 序列 α -> 自然数 -> 选项类型 α
   定义体: Subtype.val
 
 @[simp]
@@ -141,7 +141,7 @@ theorem val_eq_get
 
 中文:
 定理 val_eq_get
-  条件: (s : Seq α) (n : 自然数)
+  条件: (s : 序列 α) (n : 自然数)
   结论: s.val n = s.get? n
   证明: rfl
 
@@ -182,7 +182,7 @@ theorem le_stable
 
 中文:
 定理 le_stable
-  条件: (s : Seq α) {m n} (h : m <= n)
+  条件: (s : 序列 α) {m n} (h : m <= n)
   结论: s.get? m = none -> s.get? n = none
   证明: by
   obtain ⟨f, al⟩ := s
@@ -206,7 +206,7 @@ theorem ge_stable
 
 中文:
 定理 ge_stable
-  结论: (s : Seq α) {aₙ : α} {n m : 自然数} (m_le_n : m <= n)
+  结论: (s : 序列 α) {aₙ : α} {n m : 自然数} (m_le_n : m <= n)
   证明: have : s.get? n != none := by simp [s_nth_eq_some]
   have : s.get? m != none := mt (s.le_stable m_le_n) this
   Option.ne_none_iff_exists'.mp this
@@ -233,7 +233,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : Seq α} (h : 对任意 n : 自然数, s.get? n = t.get? n)
+  条件: {s t : 序列 α} (h : 对任意 n : 自然数, s.get? n = t.get? n)
   结论: s = t
   证明: Subtype.ext funext h
 -/
@@ -254,7 +254,7 @@ definition nil
 
 中文:
 定义 nil
-  签名: : Seq α
+  签名: : 序列 α
   定义体: ⟨Stream'.const none, fun {_} _ => rfl⟩
 
 Depends on / 依赖: Stream
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Seq α)
+  签名: 可居 (序列 α)
   定义体: ⟨nil⟩
 -/
 instance : Inhabited (Seq α) :=
@@ -293,7 +293,7 @@ definition cons
 
 中文:
 定义 cons
-  签名: (a : α) (s : Seq α)
+  签名: (a : α) (s : 序列 α)
   定义体: ⟨some a::s.1, by
     rintro (n | _) h
     · contradiction
@@ -321,7 +321,7 @@ theorem val_cons
 
 中文:
 定理 val_cons
-  条件: (s : Seq α) (x : α)
+  条件: (s : 序列 α) (x : α)
   结论: (cons x s).val = some x::s.val
   证明: rfl
 
@@ -370,7 +370,7 @@ theorem get?_zero_eq_none
 
 中文:
 定理 get?_zero_eq_none
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: s.get? 0 = none ↔ s = nil
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ rfl⟩
@@ -398,7 +398,7 @@ theorem get?_cons_zero
 
 中文:
 定理 get?_cons_zero
-  条件: (a : α) (s : Seq α)
+  条件: (a : α) (s : 序列 α)
   结论: (cons a s).get? 0 = some a
   证明: rfl
 
@@ -421,7 +421,7 @@ theorem get?_cons_succ
 
 中文:
 定理 get?_cons_succ
-  条件: (a : α) (s : Seq α) (n : 自然数)
+  条件: (a : α) (s : 序列 α) (n : 自然数)
   结论: (cons a s).get? (n + 1) = s.get? n
   证明: rfl
 
@@ -446,7 +446,7 @@ theorem cons_ne_nil
 
 中文:
 定理 cons_ne_nil
-  条件: {x : α} {s : Seq α}
+  条件: {x : α} {s : 序列 α}
   结论: (cons x s) != .nil
   证明: by
   intro h
@@ -470,7 +470,7 @@ theorem nil_ne_cons
 
 中文:
 定理 nil_ne_cons
-  条件: {x : α} {s : Seq α}
+  条件: {x : α} {s : 序列 α}
   结论: .nil != (cons x s)
   证明: cons_ne_nil.symm
 
@@ -490,7 +490,7 @@ theorem cons_injective2
 
 中文:
 定理 cons_injective2
-  结论: Function.Injective2 (cons : α -> Seq α -> Seq α)
+  结论: 函数.Injective2 (cons : α -> 序列 α -> 序列 α)
   证明: fun x y s t h =>
   ⟨by rw [← Option.some_inj, ← get?_cons_zero, h, get?_cons_zero],
     Seq.ext fun n => by simp_rw [← get?_cons_succ x s n, h, get?_cons_succ]⟩
@@ -510,8 +510,8 @@ theorem cons_left_injective
 
 中文:
 定理 cons_left_injective
-  条件: (s : Seq α)
-  结论: Function.Injective fun x => cons x s
+  条件: (s : 序列 α)
+  结论: 函数.单射 fun x => cons x s
   证明: cons_injective2.left _
 
 Depends on / 依赖: cons_injective2, cons_injective2.left
@@ -533,7 +533,7 @@ theorem cons_right_injective
 中文:
 定理 cons_right_injective
   条件: (x : α)
-  结论: Function.Injective (cons x)
+  结论: 函数.单射 (cons x)
   证明: cons_injective2.right _
 
 @[simp]
@@ -558,7 +558,7 @@ theorem cons_eq_cons
 
 中文:
 定理 cons_eq_cons
-  条件: {x x' : α} {s s' : Seq α}
+  条件: {x x' : α} {s s' : 序列 α}
   证明: by
   constructor
   · apply cons_injective2
@@ -588,7 +588,7 @@ definition head
 
 中文:
 定义 head
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: get? s 0
 -/
 def head (s : Seq α) : Option α :=
@@ -606,7 +606,7 @@ definition tail
 
 中文:
 定义 tail
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: ⟨s.1.tail, fun n' => by
     obtain ⟨f, al⟩ := s
     exact al n'⟩
@@ -626,7 +626,7 @@ definition destruct
 
 中文:
 定义 destruct
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: (fun a' => (a', s.tail)) < > get? s 0
 
 Depends on / 依赖: s.tail
@@ -649,8 +649,8 @@ theorem head_eq_destruct
 
 中文:
 定理 head_eq_destruct
-  条件: (s : Seq α)
-  结论: head s = Prod.fst < > destruct.{u} s
+  条件: (s : 序列 α)
+  结论: head s = 积类型.fst < > destruct.{u} s
   证明: by
   unfold destruct head; cases get? s 0 <;> rfl
 
@@ -675,7 +675,7 @@ theorem get?_tail
 
 中文:
 定理 get?_tail
-  条件: (s : Seq α) (n)
+  条件: (s : 序列 α) (n)
   结论: get? (tail s) n = get? s (n + 1)
   证明: rfl
 
@@ -697,7 +697,7 @@ theorem destruct_nil
 
 中文:
 定理 destruct_nil
-  结论: destruct (nil : Seq α) = none
+  结论: destruct (nil : 序列 α) = none
   证明: rfl
 
 @[simp]
@@ -740,7 +740,7 @@ theorem destruct_eq_none
 
 中文:
 定理 destruct_eq_none
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: destruct s = none -> s = nil
   证明: by
   dsimp [destruct]
@@ -780,7 +780,7 @@ theorem destruct_eq_cons
 
 中文:
 定理 destruct_eq_cons
-  条件: {s : Seq α} {a s'}
+  条件: {s : 序列 α} {a s'}
   结论: destruct s = some (a, s') -> s = cons a s'
   证明: by
   dsimp [destruct]
@@ -825,7 +825,7 @@ theorem head_nil
 
 中文:
 定理 head_nil
-  结论: head (nil : Seq α) = none
+  结论: head (nil : 序列 α) = none
   证明: rfl
 
 @[simp]
@@ -873,7 +873,7 @@ theorem tail_nil
 
 中文:
 定理 tail_nil
-  结论: tail (nil : Seq α) = nil
+  结论: tail (nil : 序列 α) = nil
   证明: rfl
 
 @[simp]
@@ -912,7 +912,7 @@ theorem head_eq_some
 
 中文:
 定理 head_eq_some
-  条件: {s : Seq α} {x : α} (h : s.head = some x)
+  条件: {s : 序列 α} {x : α} (h : s.head = some x)
   证明: by
   ext1 n
   cases n <;> simp only [get?_cons_zero, get?_cons_succ, get?_tail]
@@ -939,7 +939,7 @@ theorem head_eq_none
 
 中文:
 定理 head_eq_none
-  条件: {s : Seq α} (h : s.head = none)
+  条件: {s : 序列 α} (h : s.head = none)
   结论: s = nil
   证明: get?_zero_eq_none.mp h
 
@@ -966,7 +966,7 @@ theorem head_eq_none_iff
 
 中文:
 定理 head_eq_none_iff
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: s.head = none ↔ s = nil
   证明: by
   constructor
@@ -1004,7 +1004,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {motive : Seq α -> Sort v} (s : Seq α) (nil : motive nil)
+  签名: {motive : 序列 α -> 类型层 v} (s : 序列 α) (nil : motive nil)
   定义体: by
   rcases H : destruct s with - | v
   · rw [destruct_eq_none H]
@@ -1051,7 +1051,7 @@ definition Corec.f
 
 中文:
 定义 Corec.f
-  签名: (f : β -> Option (α × β))
+  签名: (f : β -> 选项类型 (α × β))
 -/
 def Corec.f (f : β -> Option (α × β)) : Option β -> Option α × Option β
   | none => (none, none)
@@ -1077,7 +1077,7 @@ definition corec
 
 中文:
 定义 corec
-  签名: (f : β -> Option (α × β)) (b : β)
+  签名: (f : β -> 选项类型 (α × β)) (b : β)
   定义体: by
   refine ⟨Stream'.corec' (Corec.f f) (some b), fun {n} h => ?_⟩
   rw [Stream'.corec'_eq]
@@ -1130,7 +1130,7 @@ theorem corec_eq
 
 中文:
 定理 corec_eq
-  条件: (f : β -> Option (α × β)) (b : β)
+  条件: (f : β -> 选项类型 (α × β)) (b : β)
   证明: by
   dsimp [corec, destruct, get]
   rw [show Stream'.corec' (Corec.f f) (some b) 0 = (Corec.f f (some b)).1 from rfl]
@@ -1170,7 +1170,7 @@ theorem corec_nil
 
 中文:
 定理 corec_nil
-  结论: (f : β -> Option (α × β)) (b : β)
+  结论: (f : β -> 选项类型 (α × β)) (b : β)
   证明: by
   apply destruct_eq_none
   simp [h]
@@ -1195,7 +1195,7 @@ theorem corec_cons
 
 中文:
 定理 corec_cons
-  结论: {f : β -> Option (α × β)} {b : β} {x : α} {s : β}
+  结论: {f : β -> 选项类型 (α × β)} {b : β} {x : α} {s : β}
   证明: by
   apply destruct_eq_cons
   simp [h]
@@ -1226,7 +1226,7 @@ definition BisimO
 
 中文:
 定义 BisimO
-  签名: : Option (Seq1 α) -> Option (Seq1 α) -> 命题
+  签名: : 选项类型 (Seq1 α) -> 选项类型 (Seq1 α) -> 命题
 -/
 def BisimO : Option (Seq1 α) -> Option (Seq1 α) -> Prop
   | none, none => True
@@ -1244,7 +1244,7 @@ definition IsBisimulation
   body: forall ⦃s₁ s₂⦄, s₁ ~ s₂ -> BisimO R (destruct s₁) (destruct s₂)
 
 中文:
-定义 IsBisimulation
+定义 是Bisimulation
   定义体: forall ⦃s₁ s₂⦄, s₁ ~ s₂ -> BisimO R (destruct s₁) (destruct s₂)
 
 Depends on / 依赖: BisimO, destruct
@@ -1272,7 +1272,7 @@ theorem eq_of_bisim
 
 中文:
 定理 eq_of_bisim
-  条件: (bisim : IsBisimulation R) {s₁ s₂} (r : s₁ ~ s₂)
+  条件: (bisim : 是Bisimulation R) {s₁ s₂} (r : s₁ ~ s₂)
   结论: s₁ = s₂
   证明: by
   apply Subtype.ext
@@ -1328,7 +1328,7 @@ theorem eq_of_bisim'
 
 中文:
 定理 eq_of_bisim'
-  结论: {s₁ s₂ : Seq α}
+  结论: {s₁ s₂ : 序列 α}
   证明: by
   apply eq_of_bisim motive _ base
   intro s₁ s₂ h
@@ -1370,7 +1370,7 @@ theorem eq_of_bisim_strong
 
 中文:
 定理 eq_of_bisim_strong
-  结论: {s₁ s₂ : Seq α}
+  结论: {s₁ s₂ : 序列 α}
   证明: by
   let motive' : Seq α -> Seq α -> Prop := fun s₁ s₂ => s₁ = s₂ ∨ motive s₁ s₂
   apply eq_of_bisim' motive' (by grind)
@@ -1431,7 +1431,7 @@ theorem coinduction2
 
 中文:
 定理 coinduction2
-  结论: (s) (f g : Seq α -> Seq β)
+  结论: (s) (f g : 序列 α -> 序列 β)
   证明: by
   refine eq_of_bisim (fun s1 s2 => exists s, s1 = f s ∧ s2 = g s) ?_ ⟨s, rfl, rfl⟩
   intro s1 s2 h; rcases h with ⟨s, h1, h2⟩
@@ -1463,7 +1463,7 @@ definition TerminatedAt
 
 中文:
 定义 TerminatedAt
-  签名: (s : Seq α) (n : 自然数)
+  签名: (s : 序列 α) (n : 自然数)
   定义体: s.get? n = none
 
 Depends on / 依赖: s.get
@@ -1481,7 +1481,7 @@ instance terminatedAtDecidable
 
 中文:
 实例 terminatedAtDecidable
-  签名: (s : Seq α) (n : 自然数)
+  签名: (s : 序列 α) (n : 自然数)
   定义体: decidable_of_iff' (s.get? n).isNone by unfold TerminatedAt; cases s.get? n <;> simp
 
 Depends on / 依赖: TerminatedAt, decidable_of_iff, isNone, s.get
@@ -1499,7 +1499,7 @@ definition Terminates
 
 中文:
 定义 Terminates
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: exists n : Nat, s.TerminatedAt n
 
 Depends on / 依赖: TerminatedAt, s.TerminatedAt
@@ -1517,7 +1517,7 @@ definition length
 
 中文:
 定义 length
-  签名: (s : Seq α) (h : s.Terminates)
+  签名: (s : 序列 α) (h : s.Terminates)
   定义体: Nat.find h
 
 Depends on / 依赖: Nat.find
@@ -1536,7 +1536,7 @@ definition length'
 
 中文:
 定义 length'
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: if h : s.Terminates then s.length h else ⊤
 -/
 noncomputable def length' (s : Seq α) : Nat∞ :=
@@ -1552,7 +1552,7 @@ theorem terminated_stable
 
 中文:
 定理 terminated_stable
-  结论: 对任意 (s : Seq α) {m n : 自然数}, m <= n -> s.TerminatedAt m -> s.TerminatedAt n
+  结论: 对任意 (s : 序列 α) {m n : 自然数}, m <= n -> s.TerminatedAt m -> s.TerminatedAt n
   证明: le_stable
 
 Depends on / 依赖: le_stable
@@ -1572,7 +1572,7 @@ theorem not_terminates_iff
 
 中文:
 定理 not_terminates_iff
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: ¬s.Terminates ↔ 对任意 n, (s.get? n).isSome
   证明: by
   simp only [Terminates, TerminatedAt, ← Ne.eq_def, Option.ne_none_iff_isSome, not_exists, iff_self]
@@ -1596,7 +1596,7 @@ theorem terminatedAt_nil
 中文:
 定理 terminatedAt_nil
   条件: {n : 自然数}
-  结论: TerminatedAt (nil : Seq α) n
+  结论: TerminatedAt (nil : 序列 α) n
   证明: rfl
 
 @[simp]
@@ -1617,7 +1617,7 @@ theorem cons_not_terminatedAt_zero
 
 中文:
 定理 cons_not_terminatedAt_zero
-  条件: {x : α} {s : Seq α}
+  条件: {x : α} {s : 序列 α}
   证明: by
   simp [TerminatedAt]
 
@@ -1643,7 +1643,7 @@ theorem cons_terminatedAt_succ_iff
 
 中文:
 定理 cons_terminatedAt_succ_iff
-  条件: {x : α} {s : Seq α} {n : 自然数}
+  条件: {x : α} {s : 序列 α} {n : 自然数}
   证明: by
   simp [TerminatedAt]
 
@@ -1668,7 +1668,7 @@ theorem terminates_nil
 
 中文:
 定理 terminates_nil
-  结论: Terminates (nil : Seq α)
+  结论: Terminates (nil : 序列 α)
   证明: ⟨0, rfl⟩
 
 @[simp]
@@ -1689,7 +1689,7 @@ theorem terminates_cons_iff
 
 中文:
 定理 terminates_cons_iff
-  条件: {x : α} {s : Seq α}
+  条件: {x : α} {s : 序列 α}
   证明: by
   constructor <;> intro ⟨n, h⟩
   · exact ⟨n, cons_terminatedAt_succ_iff.mp (terminated_stable _ (Nat.le_succ _) h)⟩
@@ -1721,7 +1721,7 @@ theorem terminatedAt_zero_iff
 
 中文:
 定理 terminatedAt_zero_iff
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: s.TerminatedAt 0 ↔ s = nil
   证明: by
   refine ⟨?_, ?_⟩
@@ -1757,7 +1757,7 @@ definition Mem
 
 中文:
 定义 Mem
-  签名: (s : Seq α) (a : α)
+  签名: (s : 序列 α) (a : α)
   定义体: some a in s.1
 -/
 protected def Mem (s : Seq α) (a : α) :=
@@ -1773,7 +1773,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (Seq α)
+  签名: Membership α (序列 α)
   定义体: ⟨Seq.Mem⟩
 
 Depends on / 依赖: Seq.Mem
@@ -1793,7 +1793,7 @@ theorem get?_mem
 
 中文:
 定理 get?_mem
-  条件: {s : Seq α} {n : 自然数} {x : α} (h : s.get? n = .some x)
+  条件: {s : 序列 α} {n : 自然数} {x : α} (h : s.get? n = .some x)
   结论: x in s
   证明: ⟨n, h.symm⟩
 -/
@@ -1814,8 +1814,8 @@ theorem mem_iff_exists_get?
 @[simp]
 
 中文:
-定理 mem_iff_exists_get?
-  条件: {s : Seq α} {x : α}
+定理 mem_iff_存在_get?
+  条件: {s : 序列 α} {x : α}
   结论: x in s ↔ 存在 i, some x = s.get? i where
   证明: by
     change (some x in s.1) at h
@@ -1863,7 +1863,7 @@ theorem mem_cons
 中文:
 定理 mem_cons
   条件: (a : α)
-  结论: 对任意 s : Seq α, a in cons a s
+  结论: 对任意 s : 序列 α, a in cons a s
 -/
 theorem mem_cons (a : α) : forall s : Seq α, a in cons a s
   | ⟨_, _⟩ => Stream'.mem_cons (some a) _
@@ -1879,7 +1879,7 @@ theorem mem_cons_of_mem
 中文:
 定理 mem_cons_of_mem
   条件: (y : α) {a : α}
-  结论: 对任意 {s : Seq α}, a in s -> a in cons y s
+  结论: 对任意 {s : 序列 α}, a in s -> a in cons y s
 -/
 theorem mem_cons_of_mem (y : α) {a : α} : forall {s : Seq α}, a in s -> a in cons y s
   | ⟨_, _⟩ => Stream'.mem_cons_of_mem (some y)
@@ -1895,7 +1895,7 @@ theorem eq_or_mem_of_mem_cons
 中文:
 定理 eq_or_mem_of_mem_cons
   条件: {a b : α}
-  结论: 对任意 {s : Seq α}, a in cons b s -> a = b ∨ a in s
+  结论: 对任意 {s : 序列 α}, a in cons b s -> a = b ∨ a in s
 -/
 theorem eq_or_mem_of_mem_cons {a b : α} : forall {s : Seq α}, a in cons b s -> a = b ∨ a in s
   | ⟨_, _⟩, h => (Stream'.eq_or_mem_of_mem_cons h).imp_left fun h => by injection h
@@ -1912,7 +1912,7 @@ theorem mem_cons_iff
 
 中文:
 定理 mem_cons_iff
-  条件: {a b : α} {s : Seq α}
+  条件: {a b : α} {s : 序列 α}
   结论: a in cons b s ↔ a = b ∨ a in s
   证明: ⟨eq_or_mem_of_mem_cons, by rintro (rfl | m) <;> [apply mem_cons; exact mem_cons_of_mem _ m]⟩
 
@@ -1943,7 +1943,7 @@ theorem mem_rec_on
 
 中文:
 定理 mem_rec_on
-  结论: {C : Seq α -> 命题} {a s} (M : a in s)
+  结论: {C : 序列 α -> 命题} {a s} (M : a in s)
   证明: by
   obtain ⟨k, e⟩ := M; unfold Stream'.get at e
   induction k generalizing s with
@@ -1998,7 +1998,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: ⟨(l[·]?), fun {n} h => by
     rw [List.getElem?_eq_none_iff] at h ⊢
     exact Nat.le_succ_of_le h⟩
@@ -2022,7 +2022,7 @@ instance coeList
 
 中文:
 实例 coeList
-  签名: : Coe (List α) (Seq α)
+  签名: : Coe (列表 α) (序列 α)
   定义体: ⟨ofList⟩
 
 @[simp]
@@ -2045,7 +2045,7 @@ theorem ofList_nil
 
 中文:
 定理 ofList_nil
-  结论: ofList [] = (nil : Seq α)
+  结论: ofList [] = (nil : 序列 α)
   证明: rfl
 
 @[simp]
@@ -2067,7 +2067,7 @@ theorem ofList_get?
 
 中文:
 定理 ofList_get?
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: (ofList l).get? n = l[n]?
   证明: rfl
 
@@ -2089,7 +2089,7 @@ theorem ofList_cons
 
 中文:
 定理 ofList_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: ofList (a::l) = cons a (ofList l)
   证明: by
   ext1 (_ | n) <;> simp
@@ -2107,7 +2107,7 @@ theorem ofList_injective
 
 中文:
 定理 ofList_injective
-  结论: Function.Injective (ofList : List α -> _)
+  结论: 函数.单射 (ofList : 列表 α -> _)
   证明: fun _ _ h => List.ext_getElem? fun _ => congr_fun (Subtype.ext_iff.1 h) _
 
 Depends on / 依赖: List.ext_getElem, Subtype, Subtype.ext_iff, congr_fun, ext_getElem, ext_iff
@@ -2145,7 +2145,7 @@ instance coeStream
 
 中文:
 实例 coeStream
-  签名: : Coe (Stream' α) (Seq α)
+  签名: : Coe (Stream' α) (序列 α)
   定义体: ⟨ofStream⟩
 
 Depends on / 依赖: ofStream
@@ -2168,7 +2168,7 @@ definition ofMLList
 
 中文:
 定义 ofMLList
-  签名: : MLList Id α -> Seq α
+  签名: : MLList Id α -> 序列 α
   定义体: corec fun l =>
     match l.uncons with
     | .none => none
@@ -2192,7 +2192,7 @@ instance coeMLList
 
 中文:
 实例 coeMLList
-  签名: : Coe (MLList Id α) (Seq α)
+  签名: : Coe (MLList Id α) (序列 α)
   定义体: ⟨ofMLList⟩
 
 Depends on / 依赖: ofMLList
@@ -2223,7 +2223,7 @@ definition take
 
 中文:
 定义 take
-  签名: : 自然数 -> Seq α -> List α
+  签名: : 自然数 -> 序列 α -> 列表 α
 -/
 def take : Nat -> Seq α -> List α
   | 0, _ => []
@@ -2242,7 +2242,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: (s : Seq α) (h : s.Terminates)
+  签名: (s : 序列 α) (h : s.Terminates)
   定义体: take (length s h) s
 
 Depends on / 依赖: length
@@ -2261,7 +2261,7 @@ Option.get _ not_terminates_iff.1 h n
 
 中文:
 定义 toStream
-  签名: (s : Seq α) (h : ¬s.Terminates)
+  签名: (s : 序列 α) (h : ¬s.Terminates)
   定义体: fun n =>
 Option.get _ not_terminates_iff.1 h n
 -/
@@ -2278,7 +2278,7 @@ definition toListOrStream
 
 中文:
 定义 toListOrStream
-  签名: (s : Seq α) [Decidable s.Terminates]
+  签名: (s : 序列 α) [可判定 s.Terminates]
   定义体: if h : s.Terminates then Sum.inl (toList s h) else Sum.inr (toStream s h)
 
 Depends on / 依赖: Sum.inl, Sum.inr, Terminates, s.Terminates, toList, toStream
@@ -2301,7 +2301,7 @@ definition toList'
 
 中文:
 定义 toList'
-  签名: {α} (s : Seq α)
+  签名: {α} (s : 序列 α)
   定义体: @Computation.corec (List α) (List α × Seq α)
     (fun ⟨l, s⟩ =>
       match destruct s with
@@ -2338,7 +2338,7 @@ definition append
 
 中文:
 定义 append
-  签名: (s₁ s₂ : Seq α)
+  签名: (s₁ s₂ : 序列 α)
   定义体: @corec α (Seq α × Seq α)
     (fun ⟨s₁, s₂⟩ =>
       match destruct s₁ with
@@ -2396,7 +2396,7 @@ definition join
 
 中文:
 定义 join
-  签名: : Seq (Seq1 α) -> Seq α
+  签名: : 序列 (Seq1 α) -> 序列 α
   定义体: corec fun S =>
     match destruct S with
     | none => none
@@ -2429,7 +2429,7 @@ definition drop
 
 中文:
 定义 drop
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
 -/
 def drop (s : Seq α) : Nat -> Seq α
   | 0 => s
@@ -2446,7 +2446,7 @@ definition splitAt
 
 中文:
 定义 splitAt
-  签名: : 自然数 -> Seq α -> List α × Seq α
+  签名: : 自然数 -> 序列 α -> 列表 α × 序列 α
   定义体: splitAt n s'
       (List.cons x l, r)
 
@@ -2472,7 +2472,7 @@ Option.map₂_eq_none_iff.2 (Option.map₂_eq_none_iff.1 hn).imp s₁.2 s₂.2�
 
 中文:
 定义 zipWith
-  签名: (f : α -> β -> γ) (s₁ : Seq α) (s₂ : Seq β)
+  签名: (f : α -> β -> γ) (s₁ : 序列 α) (s₂ : 序列 β)
   定义体: ⟨fun n => Option.map₂ f (s₁.get? n) (s₂.get? n), fun {_} hn =>
 Option.map₂_eq_none_iff.2 (Option.map₂_eq_none_iff.1 hn).imp s₁.2 s₂.2⟩
 
@@ -2492,7 +2492,7 @@ definition zip
 
 中文:
 定义 zip
-  签名: : Seq α -> Seq β -> Seq (α × β)
+  签名: : 序列 α -> 序列 β -> 序列 (α × β)
   定义体: zipWith Prod.mk
 
 Depends on / 依赖: Prod.mk, zipWith
@@ -2510,7 +2510,7 @@ definition unzip
 
 中文:
 定义 unzip
-  签名: (s : Seq (α × β))
+  签名: (s : 序列 (α × β))
   定义体: (map Prod.fst s, map Prod.snd s)
 
 Depends on / 依赖: Prod.fst, Prod.snd
@@ -2528,7 +2528,7 @@ definition nats
 
 中文:
 定义 nats
-  签名: : Seq 自然数
+  签名: : 序列 自然数
   定义体: Stream'.nats
 
 Depends on / 依赖: Stream
@@ -2546,7 +2546,7 @@ definition enum
 
 中文:
 定义 enum
-  签名: (s : Seq α)
+  签名: (s : 序列 α)
   定义体: Seq.zip nats s
 
 Depends on / 依赖: Seq.zip
@@ -2568,7 +2568,7 @@ cons init corec f (init, s)
 
 中文:
 定义 fold
-  签名: (s : Seq α) (init : β) (f : β -> α -> β)
+  签名: (s : 序列 α) (init : β) (f : β -> α -> β)
   定义体: let f : β × Seq α -> Option (β × (β × Seq α)) := fun (acc, x) =>
     match destruct x with
     | none => .none
@@ -2599,7 +2599,7 @@ definition update
 
 中文:
 定义 update
-  签名: (s : Seq α) (n : 自然数) (f : α -> α)
+  签名: (s : 序列 α) (n : 自然数) (f : α -> α)
   定义体: Function.update s.val n ((s.val n).map f)
   property := by
     have (i : Nat) : Function.update s.val n ((s.get? n).map f) i = none ↔ s.get? i = none := by
@@ -2627,7 +2627,7 @@ definition set
 
 中文:
 定义 set
-  签名: (s : Seq α) (n : 自然数) (a : α)
+  签名: (s : 序列 α) (n : 自然数) (a : α)
   定义体: update s n fun _ => a
 
 Depends on / 依赖: update
@@ -2644,8 +2644,8 @@ definition Pairwise
   body: forall i j, i < j -> forall x in s.get? i, forall y in s.get? j, R x y
 
 中文:
-定义 Pairwise
-  签名: (R : α -> α -> 命题) (s : Seq α)
+定义 两两
+  签名: (R : α -> α -> 命题) (s : 序列 α)
   定义体: forall i j, i < j -> forall x in s.get? i, forall y in s.get? j, R x y
 
 Depends on / 依赖: s.get

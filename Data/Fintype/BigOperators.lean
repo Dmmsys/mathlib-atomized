@@ -51,7 +51,7 @@ theorem prod_bool
 
 中文:
 定理 prod_bool
-  条件: [CommMonoid α] (f : 布尔 -> α)
+  条件: [交换幺半群 α] (f : 布尔值 -> α)
   结论: ∏ b, f b = f true * f false
   证明: by simp
 -/
@@ -68,8 +68,8 @@ theorem card_eq_sum_ones
 
 中文:
 定理 card_eq_sum_ones
-  条件: {α} [Fintype α]
-  结论: Fintype.card α = ∑ _a : α, 1
+  条件: {α} [有限类型 α]
+  结论: 有限类型.card α = ∑ _a : α, 1
   证明: Finset.card_eq_sum_ones _
 
 Depends on / 依赖: Finset, Finset.card_eq_sum_ones, card_eq_sum_ones
@@ -95,7 +95,7 @@ theorem prod_extend_by_one
 
 中文:
 定理 prod_extend_by_one
-  条件: [CommMonoid α] (s : Finset ι) (f : ι -> α)
+  条件: [交换幺半群 α] (s : 有限集 ι) (f : ι -> α)
   证明: by
   rw [← prod_filter]; rw [filter_mem_eq_inter]; rw [univ_inter]
 
@@ -225,7 +225,7 @@ theorem eq_of_subsingleton_of_prod_eq
 
 中文:
 定理 eq_of_subsingleton_of_prod_eq
-  结论: {ι : 类型} [Subsingleton ι] {s : Finset ι} {f : ι -> M}
+  结论: {ι : 类型} [子单例 ι] {s : 有限集 ι} {f : ι -> M}
   证明: Finset.eq_of_card_le_one_of_prod_eq (Finset.card_le_one_of_subsingleton s) h
 
 Depends on / 依赖: Finset, Finset.card_le_one_of_subsingleton, Finset.eq_of_card_le_one_of_prod_eq, card_le_one_of_subsingleton, eq_of_card_le_one_of_prod_eq
@@ -257,8 +257,8 @@ theorem Fintype.prod_option
 @[to_additive]
 
 中文:
-定理 Fintype.prod_option
-  条件: (f : Option α -> M)
+定理 有限类型.prod_option
+  条件: (f : 选项类型 α -> M)
   结论: ∏ i, f i = f none * ∏ i, f (some i)
   证明: Finset.prod_insertNone f univ
 
@@ -281,7 +281,7 @@ theorem Fintype.prod_eq_mul_prod_subtype_ne
     Equiv.optionSubtypeNe_some]
 
 中文:
-定理 Fintype.prod_eq_mul_prod_subtype_ne
+定理 有限类型.prod_eq_mul_prod_subtype_ne
   条件: [DecidableEq α] (f : α -> M) (a : α)
   证明: by
   simp_rw [← (Equiv.optionSubtypeNe a).prod_comp, prod_option, Equiv.optionSubtypeNe_none,
@@ -308,8 +308,8 @@ lemma Finset.card_pi
   proof: Multiset.card_pi _ _
 
 中文:
-引理 Finset.card_pi
-  条件: (s : Finset ι) (t : 对任意 i, Finset (α i))
+引理 有限集.card_pi
+  条件: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: Multiset.card_pi _ _
 -/
 @[simp] lemma Finset.card_pi (s : Finset ι) (t : forall i, Finset (α i)) :
@@ -329,7 +329,7 @@ lemma card_piFinset
 
 中文:
 引理 card_piFinset
-  条件: (s : 对任意 i, Finset (α i))
+  条件: (s : 对任意 i, 有限集 (α i))
   证明: by simp [piFinset, card_map]
 -/
 @[simp] lemma card_piFinset (s : forall i, Finset (α i)) :
@@ -345,7 +345,7 @@ lemma card_piFinset_const
 
 中文:
 引理 card_piFinset_const
-  条件: {α : 类型} (s : Finset α) (n : 自然数)
+  条件: {α : 类型} (s : 有限集 α) (n : 自然数)
   证明: by simp
 -/
 lemma card_piFinset_const {α : Type*} (s : Finset α) (n : Nat) :
@@ -362,7 +362,7 @@ lemma card_pi
 
 中文:
 引理 card_pi
-  条件: [对任意 i, Fintype (α i)]
+  条件: [对任意 i, 有限类型 (α i)]
   结论: card (对任意 i, α i) = ∏ i, card (α i)
   证明: card_piFinset _
 -/
@@ -380,8 +380,8 @@ lemma card_pi_const
 
 中文:
 引理 card_pi_const
-  条件: (α : 类型) [Fintype α] (n : 自然数)
-  结论: card (Fin n -> α) = card α ^ n
+  条件: (α : 类型) [有限类型 α] (n : 自然数)
+  结论: card (有限集 n -> α) = card α ^ n
   证明: card_piFinset_const _ _
 
 Depends on / 依赖: card_piFinset_const
@@ -406,7 +406,7 @@ theorem prod_sigma
 
 中文:
 定理 prod_sigma
-  结论: {ι} {α : ι -> 类型} {M : 类型} [Fintype ι] [对任意 i, Fintype (α i)] [CommMonoid M]
+  结论: {ι} {α : ι -> 类型} {M : 类型} [有限类型 ι] [对任意 i, 有限类型 (α i)] [交换幺半群 M]
   证明: Finset.prod_sigma ..
 
 Depends on / 依赖: Finset, Finset.prod_sigma, prod_sigma
@@ -432,7 +432,7 @@ theorem prod_sigma'
 
 中文:
 定理 prod_sigma'
-  结论: {ι} {α : ι -> 类型} {M : 类型} [Fintype ι] [对任意 i, Fintype (α i)] [CommMonoid M]
+  结论: {ι} {α : ι -> 类型} {M : 类型} [有限类型 ι] [对任意 i, 有限类型 (α i)] [交换幺半群 M]
   证明: prod_sigma ..
 
 @[simp] nonrec lemma card_sigma {ι} {α : ι -> Type*} [Fintype ι] [forall i, Fintype (α i)] :
@@ -495,7 +495,7 @@ lemma card_filter_piFinset_const_eq_of_mem
 
 中文:
 引理 card_filter_piFinset_const_eq_of_mem
-  条件: (s : Finset κ) (i : ι) {x : κ} (hx : x in s)
+  条件: (s : 有限集 κ) (i : ι) {x : κ} (hx : x in s)
   证明: (card_filter_piFinset_eq_of_mem _ _ hx).trans by
     rw [prod_const #s]; rw [card_erase_of_mem (mem_univ _)]; rw [card_univ]
 
@@ -519,7 +519,7 @@ lemma card_filter_piFinset_eq
 
 中文:
 引理 card_filter_piFinset_eq
-  条件: [对任意 i, DecidableEq (α i)] (s : 对任意 i, Finset (α i)) (i : ι) (a : α i)
+  条件: [对任意 i, DecidableEq (α i)] (s : 对任意 i, 有限集 (α i)) (i : ι) (a : α i)
   证明: by
   split_ifs with h
   · rw [card_filter_piFinset_eq_of_mem _ _ h]
@@ -544,7 +544,7 @@ lemma card_filter_piFinset_const
 
 中文:
 引理 card_filter_piFinset_const
-  条件: (s : Finset κ) (i : ι) (j : κ)
+  条件: (s : 有限集 κ) (i : ι) (j : κ)
   证明: (card_filter_piFinset_eq _ _ _).trans by
     rw [prod_const #s]; rw [card_erase_of_mem (mem_univ _)]; rw [card_univ]
 
@@ -572,8 +572,8 @@ theorem Fintype.card_fun
 @[simp]
 
 中文:
-定理 Fintype.card_fun
-  条件: [DecidableEq α] [Fintype α] [Fintype β]
+定理 有限类型.card_fun
+  条件: [DecidableEq α] [有限类型 α] [有限类型 β]
   证明: by
   simp
 
@@ -595,7 +595,7 @@ theorem card_vector
 
 中文:
 定理 card_vector
-  条件: [Fintype α] (n : 自然数)
+  条件: [有限类型 α] (n : 自然数)
   证明: by
   rw [Fintype.ofEquiv_card]; simp
 
@@ -623,8 +623,8 @@ lemma Finset.card_filter_length_eq_le
               by simp,
 
 中文:
-引理 Finset.card_filter_length_eq_le
-  条件: [Fintype α] {T : Finset (List α)} {s : 自然数}
+引理 有限集.card_filter_length_eq_le
+  条件: [有限类型 α] {T : 有限集 (列表 α)} {s : 自然数}
   证明: by
   classical
   calc
@@ -669,8 +669,8 @@ theorem Fin.prod_univ_eq_prod_range
 @[to_additive]
 
 中文:
-定理 Fin.prod_univ_eq_prod_range
-  条件: [CommMonoid α] (f : 自然数 -> α) (n : 自然数)
+定理 有限集.prod_univ_eq_prod_range
+  条件: [交换幺半群 α] (f : 自然数 -> α) (n : 自然数)
   证明: calc
     ∏ i : Fin n, f i = ∏ i : { x // x in range n }, f i :=
       Fintype.prod_equiv (Fin.equivSubtype.trans (Equiv.subtypeEquivRight (by simp))) _ _ (by simp)
@@ -702,8 +702,8 @@ theorem Finset.prod_fin_eq_prod_range
 @[to_additive]
 
 中文:
-定理 Finset.prod_fin_eq_prod_range
-  条件: [CommMonoid β] {n : 自然数} (c : Fin n -> β)
+定理 有限集.prod_fin_eq_prod_range
+  条件: [交换幺半群 β] {n : 自然数} (c : 有限集 n -> β)
   证明: by
   rw [← Fin.prod_univ_eq_prod_range]; rw [Finset.prod_congr rfl]
   rintro ⟨i, hi⟩ _
@@ -736,8 +736,8 @@ nonrec theorem Fintype.prod_dite [Fintype α] {p : α -> Prop} [DecidablePred p]
     (∏ a : { a // p a }, f a a.2) * ∏ a
 
 中文:
-定理 Finset.prod_toFinset_eq_subtype
-  结论: {M : 类型} [CommMonoid M] [Fintype α] (p : α -> 命题)
+定理 有限集.prod_toFinset_eq_subtype
+  结论: {M : 类型} [交换幺半群 M] [有限类型 α] (p : α -> 命题)
   证明: by
   rw [← Finset.prod_subtype]
   simp_rw [Set.mem_toFinset]; intro; rfl
@@ -779,7 +779,7 @@ theorem Fintype.prod_sumElim
 @[to_additive (attr := simp)]
 
 中文:
-定理 Fintype.prod_sumElim
+定理 有限类型.prod_sumElim
   条件: (f : α₁ -> M) (g : α₂ -> M)
   证明: prod_disjSum _ _ _
 
@@ -801,7 +801,7 @@ theorem Fintype.prod_sum_type
   proof: prod_disjSum _ _ _
 
 中文:
-定理 Fintype.prod_sum_type
+定理 有限类型.prod_sum_type
   条件: (f : α₁ oplus α₂ -> M)
   证明: prod_disjSum _ _ _
 
@@ -824,8 +824,8 @@ theorem Fintype.prod_prod_type
   proof: Finset.prod_product ..
 
 中文:
-定理 Fintype.prod_prod_type
-  条件: [CommMonoid γ] (f : α₁ × α₂ -> γ)
+定理 有限类型.prod_prod_type
+  条件: [交换幺半群 γ] (f : α₁ × α₂ -> γ)
   证明: Finset.prod_product ..
 
 Depends on / 依赖: Finset, Finset.prod_product, prod_product
@@ -849,8 +849,8 @@ theorem Fintype.prod_prod_type'
 @[to_additive Fintype.sum_prod_type_right]
 
 中文:
-定理 Fintype.prod_prod_type'
-  条件: [CommMonoid γ] (f : α₁ -> α₂ -> γ)
+定理 有限类型.prod_prod_type'
+  条件: [交换幺半群 γ] (f : α₁ -> α₂ -> γ)
   证明: Finset.prod_product' ..
 
 @[to_additive Fintype.sum_prod_type_right]
@@ -871,8 +871,8 @@ theorem Fintype.prod_prod_type_right
   proof: Finset.prod_product_right ..
 
 中文:
-定理 Fintype.prod_prod_type_right
-  条件: [CommMonoid γ] (f : α₁ × α₂ -> γ)
+定理 有限类型.prod_prod_type_right
+  条件: [交换幺半群 γ] (f : α₁ × α₂ -> γ)
   证明: Finset.prod_product_right ..
 
 Depends on / 依赖: Finset, Finset.prod_product_right, prod_product_right
@@ -893,8 +893,8 @@ theorem Fintype.prod_prod_type_right'
   proof: Finset.prod_product_right' ..
 
 中文:
-定理 Fintype.prod_prod_type_right'
-  条件: [CommMonoid γ] (f : α₁ -> α₂ -> γ)
+定理 有限类型.prod_prod_type_right'
+  条件: [交换幺半群 γ] (f : α₁ -> α₂ -> γ)
   证明: Finset.prod_product_right' ..
 
 Depends on / 依赖: Finset, Finset.prod_product_right, prod_product_right

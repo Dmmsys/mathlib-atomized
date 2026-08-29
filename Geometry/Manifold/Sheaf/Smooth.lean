@@ -100,7 +100,7 @@ definition smoothSheaf
 
 中文:
 定义 smoothSheaf
-  签名: : TopCat.Sheaf (类型u) (TopCat.of M)
+  签名: : 顶元素范畴.层 (类型u) (顶元素范畴.of M)
   定义体: (contDiffWithinAt_localInvariantProp (I := IM) (I' := I) ∞).sheaf M N
 
 Depends on / 依赖: contDiffWithinAt_localInvariantProp
@@ -120,7 +120,7 @@ instance smoothSheaf.coeFun
 
 中文:
 实例 smoothSheaf.coeFun
-  签名: (U : (Opens (TopCat.of M))ᵒᵖ)
+  签名: (U : (Opens (顶元素范畴.of M))ᵒᵖ)
   定义体: a.1
 -/
 instance smoothSheaf.coeFun (U : (Opens (TopCat.of M))ᵒᵖ) :
@@ -138,7 +138,7 @@ lemma smoothSheaf.obj_eq
 
 中文:
 引理 smoothSheaf.obj_eq
-  条件: (U : (Opens (TopCat.of M))ᵒᵖ)
+  条件: (U : (Opens (顶元素范畴.of M))ᵒᵖ)
   证明: rfl
 -/
 lemma smoothSheaf.obj_eq (U : (Opens (TopCat.of M))ᵒᵖ) :
@@ -172,7 +172,7 @@ definition smoothSheaf.evalHom
 
 中文:
 定义 smoothSheaf.evalHom
-  签名: (x : TopCat.of M)
+  签名: (x : 顶元素范畴.of M)
   定义体: TopCat.stalkToFiber (StructureGroupoid.LocalInvariantProp.localPredicate M N _) x
 
 Depends on / 依赖: LocalInvariantProp, StructureGroupoid, StructureGroupoid.LocalInvariantProp.localPredicate, TopCat, TopCat.stalkToFiber, localPredicate, stalkToFiber
@@ -195,7 +195,7 @@ definition smoothSheaf.evalAt
 
 中文:
 定义 smoothSheaf.evalAt
-  签名: (x : TopCat.of M) (U : OpenNhds x)
+  签名: (x : 顶元素范畴.of M) (U : OpenNhds x)
   定义体: i.1 ⟨x, U.2⟩
 
 #adaptation_note
@@ -217,7 +217,7 @@ lemma smoothSheaf.ι_evalHom
 
 中文:
 引理 smoothSheaf.ι_evalHom
-  条件: (x : TopCat.of M) (U)
+  条件: (x : 顶元素范畴.of M) (U)
   证明: colimit.ι_desc _ _
 -/
 @[simp, reassoc, elementwise] lemma smoothSheaf.ι_evalHom (x : TopCat.of M) (U) :
@@ -241,7 +241,7 @@ lemma smoothSheaf.eval_surjective
 中文:
 引理 smoothSheaf.eval_surjective
   条件: (x : M)
-  结论: Function.Surjective (smoothSheaf.eval IM I N x)
+  结论: 函数.满射 (smoothSheaf.eval IM I N x)
   证明: by
   apply TopCat.stalkToFiber_surjective
   intro n
@@ -263,7 +263,7 @@ instance [Nontrivial
   body: (smoothSheaf.eval_surjective IM I N x).nontrivial
 
 中文:
-实例 [Nontrivial
+实例 [非平凡
   签名: N] (x
   定义体: (smoothSheaf.eval_surjective IM I N x).nontrivial
 
@@ -302,7 +302,7 @@ lemma smoothSheaf.contMDiff_section
 
 中文:
 引理 smoothSheaf.contMDiff_section
-  结论: {U : (Opens (TopCat.of M))ᵒᵖ}
+  结论: {U : (Opens (顶元素范畴.of M))ᵒᵖ}
   证明: (contDiffWithinAt_localInvariantProp ∞).section_spec _ _ _ _
 
 Depends on / 依赖: contDiffWithinAt_localInvariantProp, section_spec
@@ -383,7 +383,7 @@ ContMDiffMap.restrictMonoidHom IM I G CategoryTheory.leOfHom h.unop
 
 中文:
 定义 smoothPresheafGroup
-  签名: : TopCat.Presheaf GrpCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.预层 群范畴.{u} (顶元素范畴.of M)
   定义体: { obj := fun U => GrpCat.of ((smoothSheaf IM I M G).presheaf.obj U)
 map := fun h => GrpCat.ofHom
 ContMDiffMap.restrictMonoidHom IM I G CategoryTheory.leOfHom h.unop
@@ -416,7 +416,7 @@ definition smoothSheafGroup
 
 中文:
 定义 smoothSheafGroup
-  签名: : TopCat.Sheaf GrpCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.层 群范畴.{u} (顶元素范畴.of M)
   定义体: { obj := smoothPresheafGroup IM I M G
     property := by
       rw [CategoryTheory.Presheaf.isSheaf_iff_isSheaf_forget _ _ (CategoryTheory.forget GrpCat)]
@@ -458,7 +458,7 @@ ContMDiffMap.restrictMonoidHom IM I A CategoryTheory.leOfHom h.unop
 
 中文:
 定义 smoothPresheafCommGroup
-  签名: : TopCat.Presheaf CommGrpCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.预层 交换群范畴.{u} (顶元素范畴.of M)
   定义体: { obj := fun U => CommGrpCat.of ((smoothSheaf IM I M A).presheaf.obj U)
 map := fun h => CommGrpCat.ofHom
 ContMDiffMap.restrictMonoidHom IM I A CategoryTheory.leOfHom h.unop
@@ -492,7 +492,7 @@ definition smoothSheafCommGroup
 
 中文:
 定义 smoothSheafCommGroup
-  签名: : TopCat.Sheaf CommGrpCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.层 交换群范畴.{u} (顶元素范畴.of M)
   定义体: { obj := smoothPresheafCommGroup IM I M A
     property := by
       rw [CategoryTheory.Presheaf.isSheaf_iff_isSheaf_forget _ _
@@ -563,7 +563,7 @@ ContMDiffMap.restrictRingHom IM I R CategoryTheory.leOfHom h.unop
 
 中文:
 定义 smoothPresheafRing
-  签名: : TopCat.Presheaf RingCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.预层 环范畴.{u} (顶元素范畴.of M)
   定义体: { obj := fun U => RingCat.of ((smoothSheaf IM I M R).presheaf.obj U)
 map := fun h => RingCat.ofHom
 ContMDiffMap.restrictRingHom IM I R CategoryTheory.leOfHom h.unop
@@ -592,7 +592,7 @@ definition smoothSheafRing
 
 中文:
 定义 smoothSheafRing
-  签名: : TopCat.Sheaf RingCat.{u} (TopCat.of M) where
+  签名: : 顶元素范畴.层 环范畴.{u} (顶元素范畴.of M) where
   定义体: smoothPresheafRing IM I M R
   property := by
     rw [CategoryTheory.Presheaf.isSheaf_iff_isSheaf_forget _ _ (CategoryTheory.forget RingCat)]
@@ -629,7 +629,7 @@ ContMDiffMap.restrictRingHom IM I R CategoryTheory.leOfHom h.unop
 
 中文:
 定义 smoothPresheafCommRing
-  签名: : TopCat.Presheaf CommRingCat.{u} (TopCat.of M)
+  签名: : 顶元素范畴.预层 交换环范畴.{u} (顶元素范畴.of M)
   定义体: { obj := fun U => CommRingCat.of ((smoothSheaf IM I M R).presheaf.obj U)
 map := fun h => CommRingCat.ofHom
 ContMDiffMap.restrictRingHom IM I R CategoryTheory.leOfHom h.unop
@@ -662,7 +662,7 @@ definition smoothSheafCommRing
 
 中文:
 定义 smoothSheafCommRing
-  签名: : TopCat.Sheaf CommRingCat.{u} (TopCat.of M) where
+  签名: : 顶元素范畴.层 交换环范畴.{u} (顶元素范畴.of M) where
   定义体: smoothPresheafCommRing IM I M R
   property := by
     rw [CategoryTheory.Presheaf.isSheaf_iff_isSheaf_forget _ _
@@ -693,7 +693,7 @@ instance smoothSheafCommRing.coeFun
 
 中文:
 实例 smoothSheafCommRing.coeFun
-  签名: (U : (Opens (TopCat.of M))ᵒᵖ)
+  签名: (U : (Opens (顶元素范畴.of M))ᵒᵖ)
   定义体: a.1
 -/
 instance smoothSheafCommRing.coeFun (U : (Opens (TopCat.of M))ᵒᵖ) :
@@ -712,7 +712,7 @@ definition smoothSheafCommRing.forgetStalk
 
 中文:
 定义 smoothSheafCommRing.forgetStalk
-  签名: (x : TopCat.of M)
+  签名: (x : 顶元素范畴.of M)
   定义体: preservesColimitIso (forget CommRingCat) _
 
 Depends on / 依赖: CommRingCat, forget, preservesColimitIso
@@ -733,7 +733,7 @@ lemma smoothSheafCommRing.ι_forgetStalk_hom
 
 中文:
 引理 smoothSheafCommRing.ι_forgetStalk_hom
-  条件: (x : TopCat.of M) (U)
+  条件: (x : 顶元素范畴.of M) (U)
   证明: ι_preservesColimitIso_hom (forget CommRingCat) _ _
 -/
 @[simp, reassoc, elementwise] lemma smoothSheafCommRing.ι_forgetStalk_hom (x : TopCat.of M) (U) :
@@ -756,7 +756,7 @@ lemma smoothSheafCommRing.ι_forgetStalk_inv
 
 中文:
 引理 smoothSheafCommRing.ι_forgetStalk_inv
-  条件: (x : TopCat.of M) (U)
+  条件: (x : 顶元素范畴.of M) (U)
   证明: by
   dsimp
   rw [Iso.comp_inv_eq]; rw [← smoothSheafCommRing.ι_forgetStalk_hom]
@@ -781,7 +781,7 @@ definition smoothSheafCommRing.evalAt
 
 中文:
 定义 smoothSheafCommRing.evalAt
-  签名: (x : TopCat.of M) (U : OpenNhds x)
+  签名: (x : 顶元素范畴.of M) (U : OpenNhds x)
   定义体: CommRingCat.ofHom (ContMDiffMap.evalRingHom ⟨x, U.2⟩)
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, ContMDiffMap, ContMDiffMap.evalRingHom, evalRingHom
@@ -803,7 +803,7 @@ definition smoothSheafCommRing.evalHom
 
 中文:
 定义 smoothSheafCommRing.evalHom
-  签名: (x : TopCat.of M)
+  签名: (x : 顶元素范畴.of M)
   定义体: by
   refine CategoryTheory.Limits.colimit.desc _ ⟨_, ⟨fun U => ?_, ?_⟩⟩
   · apply smoothSheafCommRing.evalAt
@@ -852,7 +852,7 @@ lemma smoothSheafCommRing.ι_evalHom
 
 中文:
 引理 smoothSheafCommRing.ι_evalHom
-  条件: (x : TopCat.of M) (U)
+  条件: (x : 顶元素范畴.of M) (U)
   证明: colimit.ι_desc _ _
 -/
 @[simp, reassoc, elementwise] lemma smoothSheafCommRing.ι_evalHom (x : TopCat.of M) (U) :
@@ -870,7 +870,7 @@ lemma smoothSheafCommRing.evalHom_germ
 
 中文:
 引理 smoothSheafCommRing.evalHom_germ
-  结论: (U : Opens (TopCat.of M)) (x : M) (hx : x in U)
+  结论: (U : Opens (顶元素范畴.of M)) (x : M) (hx : x in U)
   证明: congr_arg (fun a => a f) smoothSheafCommRing.ι_evalHom IM I M R x ⟨U, hx⟩
 -/
 @[simp] lemma smoothSheafCommRing.evalHom_germ (U : Opens (TopCat.of M)) (x : M) (hx : x in U)
@@ -977,7 +977,7 @@ instance [Nontrivial
   body: (smoothSheafCommRing.eval_surjective IM I M R x).nontrivial
 
 中文:
-实例 [Nontrivial
+实例 [非平凡
   签名: R] (x
   定义体: (smoothSheafCommRing.eval_surjective IM I M R x).nontrivial
 

@@ -65,7 +65,7 @@ lemma length_eq_list_length
 
 中文:
 引理 length_eq_list_length
-  条件: (l : List Char)
+  条件: (l : 列表 Char)
   结论: (String.ofList l).length = l.length
   证明: by
   simp

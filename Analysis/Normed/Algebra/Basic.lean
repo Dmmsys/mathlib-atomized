@@ -89,8 +89,8 @@ instance [ProperSpace
   exact (isCompact_closedBall 0 _).of_isClosed_su
 
 中文:
-实例 [ProperSpace
-  签名: 𝕜] : CompactSpace (characterSpace 𝕜 A)
+实例 [真空间
+  签名: 𝕜] : 紧空间 (characterSpace 𝕜 A)
   定义体: by
   rw [← isCompact_iff_compactSpace]
   have h : characterSpace 𝕜 A subseteq toStrongDual ⁻¹' Metric.closedBall 0 ‖(1 : A)‖ := by

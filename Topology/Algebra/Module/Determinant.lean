@@ -28,7 +28,7 @@ abbreviation det
 
 中文:
 缩写 det
-  签名: {R : 类型} [CommRing R] {M : 类型} [TopologicalSpace M] [AddCommGroup M]
+  签名: {R : 类型} [交换环 R] {M : 类型} [拓扑空间 M] [加法交换群 M]
   定义体: LinearMap.det (A : M ->ₗ[R] M)
 
 Depends on / 依赖: LinearMap, LinearMap.det
@@ -47,7 +47,7 @@ theorem det_pi
 
 中文:
 定理 det_pi
-  结论: {ι R M : 类型} [Fintype ι] [CommRing R] [AddCommGroup M]
+  结论: {ι R M : 类型} [有限类型 ι] [交换环 R] [加法交换群 M]
   证明: LinearMap.det_pi _
 
 Depends on / 依赖: LinearMap, LinearMap.det_pi, det_pi
@@ -68,7 +68,7 @@ theorem det_smulRight
 
 中文:
 定理 det_smulRight
-  结论: {𝕜 : 类型} [CommRing 𝕜] [TopologicalSpace 𝕜] [ContinuousMul 𝕜]
+  结论: {𝕜 : 类型} [交换环 𝕜] [拓扑空间 𝕜] [连续乘法 𝕜]
   证明: by simp
 -/
 theorem det_smulRight {𝕜 : Type*} [CommRing 𝕜] [TopologicalSpace 𝕜] [ContinuousMul 𝕜]
@@ -84,7 +84,7 @@ theorem det_toSpanSingleton
 
 中文:
 定理 det_toSpanSingleton
-  结论: {𝕜 : 类型} [CommRing 𝕜] [TopologicalSpace 𝕜] [ContinuousMul 𝕜]
+  结论: {𝕜 : 类型} [交换环 𝕜] [拓扑空间 𝕜] [连续乘法 𝕜]
   证明: by rw [← smulRight_id, det_smulRight]; simp
 
 Depends on / 依赖: det_smulRight, smulRight_id
@@ -107,7 +107,7 @@ theorem det_coe_symm
 
 中文:
 定理 det_coe_symm
-  结论: {R : 类型} [Field R] {M : 类型} [TopologicalSpace M] [AddCommGroup M]
+  结论: {R : 类型} [域 R] {M : 类型} [拓扑空间 M] [加法交换群 M]
   证明: LinearEquiv.det_coe_symm A.toLinearEquiv
 
 Depends on / 依赖: A.toLinearEquiv, LinearEquiv, LinearEquiv.det_coe_symm, det_coe_symm, toLinearEquiv

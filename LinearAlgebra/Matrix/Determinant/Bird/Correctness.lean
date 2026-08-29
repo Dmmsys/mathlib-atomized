@@ -86,7 +86,7 @@ theorem sumFrom_fin_tail
 
 中文:
 定理 sumFrom_fin_tail
-  条件: (i : Fin n) (f : 自然数 -> R)
+  条件: (i : 有限集 n) (f : 自然数 -> R)
   证明: calc
   _ = ∑ k in Finset.Ico (i.val + 1) n, f k := by rw [sumFrom_eq_sum_Ico]
   _ = ∑ k in (Finset.range n).filter (i.val < ·), f k := by congr; ext; aesop
@@ -117,7 +117,7 @@ theorem iterate_stepEntry_get_eq_spec
 
 中文:
 定理 iterate_stepEntry_get_eq_spec
-  条件: (A : Array R) (hA : A.size = n * n) (t : 自然数) (i j : Fin n)
+  条件: (A : 数组 R) (hA : A.size = n * n) (t : 自然数) (i j : 有限集 n)
   证明: by
   rw [Matrix.ofArray_eq_of_getD]
   induction t generalizing i j with
@@ -151,7 +151,7 @@ theorem birdDet_eq_birdDetSpec
 
 中文:
 定理 birdDet_eq_birdDetSpec
-  条件: (A : Array R) (hA : A.size = n * n)
+  条件: (A : 数组 R) (hA : A.size = n * n)
   证明: by
   cases n with
   | zero => rw [birdDet_zero, Spec.birdDetSpec_zero]
@@ -177,7 +177,7 @@ abbreviation bminor
 
 中文:
 缩写 bminor
-  签名: (i j : Fin n) (α : Fin p -> Fin n)
+  签名: (i j : 有限集 n) (α : 有限集 p -> 有限集 n)
   定义体: (A.submatrix (Fin.cons i α) (Fin.cons j α)).det
 
 Depends on / 依赖: A.submatrix, Fin.cons, submatrix
@@ -195,7 +195,7 @@ abbreviation pminor
 
 中文:
 缩写 pminor
-  签名: (α : Fin p -> Fin n)
+  签名: (α : 有限集 p -> 有限集 n)
   定义体: (A.submatrix α α).det
 
 Depends on / 依赖: A.submatrix, submatrix
@@ -260,7 +260,7 @@ theorem det_bordered_expand
 
 中文:
 定理 det_bordered_expand
-  条件: (α : Fin (p + 1) -> Fin n) (i j : Fin n)
+  条件: (α : 有限集 (p + 1) -> 有限集 n) (i j : 有限集 n)
   证明: calc
   _ = A i j * pminor A α +
         ∑ s : Fin (p + 1), (-1 : R) ^ (s.val + 1) * A (α s) j *
@@ -323,7 +323,7 @@ definition S
 
 中文:
 定义 S
-  签名: (p : 自然数) (i : Fin n)
+  签名: (p : 自然数) (i : 有限集 n)
   定义体: {α : Fin p -> Fin n | StrictMono (Fin.cons i α)}
 
 Depends on / 依赖: Fin.cons, StrictMono
@@ -341,7 +341,7 @@ theorem mem_S_iff
 
 中文:
 定理 mem_S_iff
-  条件: {p : 自然数} {i : Fin n} {α : Fin p -> Fin n}
+  条件: {p : 自然数} {i : 有限集 n} {α : 有限集 p -> 有限集 n}
   证明: Finset.mem_filter_univ α
 
 Depends on / 依赖: Finset, Finset.mem_filter_univ, mem_filter_univ
@@ -362,7 +362,7 @@ theorem S_zero
 
 中文:
 定理 S_zero
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: S 0 i = {![]}
   证明: by
   ext; simp [mem_S_iff, Fin.strictMono_iff_lt_succ, eq_iff_true_of_subsingleton]
@@ -385,7 +385,7 @@ lemma S_zero_eq_singleton
 中文:
 引理 S_zero_eq_singleton
   条件: {p : 自然数}
-  结论: S p 0 = {Fin.succ}
+  结论: S p 0 = {有限集.succ}
   证明: by
   ext; simp [mem_S_iff]
 -/
@@ -411,7 +411,7 @@ theorem S_succ_eq_biUnion
 
 中文:
 定理 S_succ_eq_biUnion
-  条件: {p : 自然数} (i : Fin n)
+  条件: {p : 自然数} (i : 有限集 n)
   证明: by
   ext α
   simp only [Finset.mem_biUnion, Finset.mem_image, Finset.mem_Ioi, mem_S_iff]
@@ -448,8 +448,8 @@ lemma exists_insertNth_mem_S
       le_iInf_iff, forall_exists_index, 
 
 中文:
-引理 exists_insertNth_mem_S
-  结论: {p : 自然数} {i : Fin n} {α : Fin p -> Fin n} {k : Fin n}
+引理 存在_insertNth_mem_S
+  结论: {p : 自然数} {i : 有限集 n} {α : 有限集 p -> 有限集 n} {k : 有限集 n}
   证明: by
   set t := ⨅ j in {j | k < α j}, j.castSucc with t_eq
   use t
@@ -517,7 +517,7 @@ theorem paper_eq2
 
 中文:
 定理 paper_eq2
-  条件: (i : Fin n) (hEq1 : Eq1 A p)
+  条件: (i : 有限集 n) (hEq1 : Eq1 A p)
   证明: by
   calc
     (-∑ k in Finset.Ioi i, (Spec.stepEntry A)^[p] A k k) =
@@ -557,7 +557,7 @@ theorem paper_eq3
 
 中文:
 定理 paper_eq3
-  条件: (i j : Fin n) (hEq1 : Eq1 A p)
+  条件: (i j : 有限集 n) (hEq1 : Eq1 A p)
   证明: by
   simp_rw [iterate_succ_apply', Spec.stepEntry_eq, Matrix.of_apply, paper_eq2 _ _ hEq1, hEq1,
     Matrix.of_apply, mul_assoc, Finset.sum_mul, ← Finset.mul_sum]
@@ -590,7 +590,7 @@ exact Finset.sum_congr rfl by simp [det_bordered_expand]
 
 中文:
 定理 paper_eq5
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: calc
   _ = ∑ α in S (p + 1) i, (pminor A α * A i j -
         ∑ t : Fin (p + 1), bminor A i (α t) (t.removeNth α) * A (α t) j) := by
@@ -628,7 +628,7 @@ theorem paper_eq3_eq5_off_diag
 
 中文:
 定理 paper_eq3_eq5_off_diag
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: by
   rw [Finset.sum_comm]; rw [← Finset.sum_product']; rw [← Finset.sum_product']
   -- The right-hand summand is the left-hand summand composed with the deletion map
@@ -738,7 +738,7 @@ theorem birdDetSpec_eq_det
 
 中文:
 定理 birdDetSpec_eq_det
-  条件: (A : Matrix (Fin n) (Fin n) R)
+  条件: (A : 矩阵 (有限集 n) (有限集 n) R)
   证明: by
   cases n with
   | zero => simp

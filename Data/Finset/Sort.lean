@@ -38,7 +38,7 @@ definition sort
 
 中文:
 定义 sort
-  签名: (s : Finset α) (r : α -> α -> 命题 := by exact fun a b => a <= b)
+  签名: (s : 有限集 α) (r : α -> α -> 命题 := by exact fun a b => a <= b)
   定义体: Multiset.sort s.1 r
 
 Depends on / 依赖: Antisymm, DecidableRel, IsTrans, Multiset, Multiset.sort, Std.Antisymm, Std.Total
@@ -87,7 +87,7 @@ theorem pairwise_sort
 
 中文:
 定理 pairwise_sort
-  结论: List.Pairwise r (sort s r)
+  结论: 列表.两两 r (sort s r)
   证明: Multiset.pairwise_sort _ _
 
 @[simp]
@@ -242,7 +242,7 @@ theorem _root_.StrictMonoOn.map_finsetSort
 
 中文:
 定理 _root_.StrictMonoOn.map_finsetSort
-  结论: [LinearOrder α] [LinearOrder β]
+  结论: [线性序 α] [线性序 β]
   证明: Finset.map_sort _ _ _ _ fun _a ha _b hb => (hf.le_iff_le ha hb).symm
 
 @[simp]
@@ -267,7 +267,7 @@ theorem sort_range
 中文:
 定理 sort_range
   条件: (n : 自然数)
-  结论: sort (range n) = List.range n
+  结论: sort (range n) = 列表.range n
   证明: Multiset.sort_range n
 
 Depends on / 依赖: Multiset, Multiset.sort_range, sort_range
@@ -313,8 +313,8 @@ theorem _root_.List.toFinset_sort
   exact pairwise_sort _ r
 
 中文:
-定理 _root_.List.toFinset_sort
-  条件: [DecidableEq α] {l : List α} (hl : l.Nodup)
+定理 _root_.列表.toFinset_sort
+  条件: [DecidableEq α] {l : 列表 α} (hl : l.Nodup)
   证明: by
   refine ⟨?_, ((sort_perm_toList _ r).trans (List.toFinset_toList hl)).eq_of_pairwise'
     (pairwise_sort _ _)⟩
@@ -466,7 +466,7 @@ theorem sortedLT_sort
 
 中文:
 定理 sortedLT_sort
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (sort s).SortedLT
   证明: (pairwise_sort _ _).sortedLE.sortedLT_of_nodup (sort_nodup _ _)
 
@@ -486,7 +486,7 @@ theorem sortedGT_sort
 
 中文:
 定理 sortedGT_sort
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (sort s (· >= ·)).SortedGT
   证明: (pairwise_sort _ _).sortedGE.sortedGT_of_nodup (sort_nodup _ _)
 
@@ -512,7 +512,7 @@ theorem sorted_zero_eq_min'_aux
 
 中文:
 定理 sorted_zero_eq_min'_aux
-  条件: (s : Finset α) (h : 0 < s.sort.length) (H : s.Nonempty)
+  条件: (s : 有限集 α) (h : 0 < s.sort.length) (H : s.非空)
   证明: by
   let l := s.sort
   apply le_antisymm
@@ -545,7 +545,7 @@ theorem sorted_zero_eq_min'
 
 中文:
 定理 sorted_zero_eq_min'
-  条件: {s : Finset α} {h : 0 < s.sort.length}
+  条件: {s : 有限集 α} {h : 0 < s.sort.length}
   证明: sorted_zero_eq_min'_aux _ _ _
 -/
 theorem sorted_zero_eq_min' {s : Finset α} {h : 0 < s.sort.length} :
@@ -561,8 +561,8 @@ theorem min'_eq_sorted_zero
   proof: (sorted_zero_eq_min'_aux _ _ _).symm
 
 中文:
-定理 min'_eq_sorted_zero
-  条件: {s : Finset α} {h : s.Nonempty}
+定理 最小值'_eq_sorted_zero
+  条件: {s : 有限集 α} {h : s.非空}
   证明: (sorted_zero_eq_min'_aux _ _ _).symm
 -/
 theorem min'_eq_sorted_zero {s : Finset α} {h : s.Nonempty} :
@@ -586,7 +586,7 @@ theorem sorted_last_eq_max'_aux
 
 中文:
 定理 sorted_last_eq_max'_aux
-  结论: (s : Finset α)
+  结论: (s : 有限集 α)
   证明: by
   let l := s.sort
   apply le_antisymm
@@ -621,7 +621,7 @@ theorem sorted_last_eq_max'
 
 中文:
 定理 sorted_last_eq_max'
-  结论: {s : Finset α}
+  结论: {s : 有限集 α}
   证明: sorted_last_eq_max'_aux _ h _
 -/
 theorem sorted_last_eq_max' {s : Finset α}
@@ -639,8 +639,8 @@ theorem max'_eq_sorted_last
   proof: (sorted_last_eq_max'_aux _ (by simpa using Nat.sub_lt (card_pos.mpr h) Nat.zero_lt_one) _).symm
 
 中文:
-定理 max'_eq_sorted_last
-  条件: {s : Finset α} {h : s.Nonempty}
+定理 最大值'_eq_sorted_last
+  条件: {s : 有限集 α} {h : s.非空}
   证明: (sorted_last_eq_max'_aux _ (by simpa using Nat.sub_lt (card_pos.mpr h) Nat.zero_lt_one) _).symm
 -/
 theorem max'_eq_sorted_last {s : Finset α} {h : s.Nonempty} :
@@ -660,7 +660,7 @@ definition orderIsoOfFin
 
 中文:
 定义 orderIsoOfFin
-  签名: (s : Finset α) {k : 自然数} (h : s.card = k)
+  签名: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   定义体: OrderIso.trans (Fin.castOrderIso ((s.length_sort (· <= ·)).trans h).symm)
 (s.sortedLT_sort.getIso _).trans OrderIso.setCongr {x | x in s.sort (· <= ·)} _ by simp
 
@@ -682,7 +682,7 @@ definition orderEmbOfFin
 
 中文:
 定义 orderEmbOfFin
-  签名: (s : Finset α) {k : 自然数} (h : s.card = k)
+  签名: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   定义体: (orderIsoOfFin s h).toOrderEmbedding.trans (OrderEmbedding.subtype _)
 
 @[simp]
@@ -703,7 +703,7 @@ theorem coe_orderIsoOfFin_apply
 
 中文:
 定理 coe_orderIsoOfFin_apply
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k) (i : Fin k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k) (i : 有限集 k)
   证明: rfl
 -/
 theorem coe_orderIsoOfFin_apply (s : Finset α) {k : Nat} (h : s.card = k) (i : Fin k) :
@@ -720,7 +720,7 @@ theorem orderIsoOfFin_symm_apply
 
 中文:
 定理 orderIsoOfFin_symm_apply
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k) (x : s)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k) (x : s)
   证明: rfl
 -/
 theorem orderIsoOfFin_symm_apply (s : Finset α) {k : Nat} (h : s.card = k) (x : s) :
@@ -739,7 +739,7 @@ theorem orderEmbOfFin_apply
 
 中文:
 定理 orderEmbOfFin_apply
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k) (i : Fin k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k) (i : 有限集 k)
   证明: rfl
 
 @[simp]
@@ -761,7 +761,7 @@ theorem orderEmbOfFin_mem
 
 中文:
 定理 orderEmbOfFin_mem
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k) (i : Fin k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k) (i : 有限集 k)
   证明: (s.orderIsoOfFin h i).2
 
 @[simp]
@@ -789,7 +789,7 @@ theorem range_orderEmbOfFin
 
 中文:
 定理 range_orderEmbOfFin
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   证明: by
   simp only [orderEmbOfFin, Set.range_comp ((↑) : _ -> α) (s.orderIsoOfFin h),
   RelEmbedding.coe_trans, Set.image_univ, Finset.orderEmbOfFin, RelIso.range_eq,
@@ -822,7 +822,7 @@ theorem image_orderEmbOfFin_univ
 
 中文:
 定理 image_orderEmbOfFin_univ
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   证明: by
   apply Finset.coe_injective
   simp
@@ -850,7 +850,7 @@ theorem map_orderEmbOfFin_univ
 
 中文:
 定理 map_orderEmbOfFin_univ
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   证明: by
   simp [map_eq_image]
 
@@ -875,7 +875,7 @@ theorem listMap_orderEmbOfFin_finRange
 
 中文:
 定理 listMap_orderEmbOfFin_finRange
-  条件: (s : Finset α) {k : 自然数} (h : s.card = k)
+  条件: (s : 有限集 α) {k : 自然数} (h : s.card = k)
   证明: by
   obtain rfl : k = s.sort.length := by simp [h]
   exact List.map_getElem_finRange s.sort
@@ -898,7 +898,7 @@ theorem orderEmbOfFin_zero
 
 中文:
 定理 orderEmbOfFin_zero
-  条件: {s : Finset α} {k : 自然数} (h : s.card = k) (hz : 0 < k)
+  条件: {s : 有限集 α} {k : 自然数} (h : s.card = k) (hz : 0 < k)
   证明: by
   simp only [orderEmbOfFin_apply, Fin.getElem_fin, sorted_zero_eq_min']
 
@@ -919,7 +919,7 @@ theorem orderEmbOfFin_last
 
 中文:
 定理 orderEmbOfFin_last
-  条件: {s : Finset α} {k : 自然数} (h : s.card = k) (hz : 0 < k)
+  条件: {s : 有限集 α} {k : 自然数} (h : s.card = k) (hz : 0 < k)
   证明: by
   simp [orderEmbOfFin_apply, max'_eq_sorted_last, h]
 
@@ -943,7 +943,7 @@ theorem orderEmbOfFin_singleton
 
 中文:
 定理 orderEmbOfFin_singleton
-  条件: (a : α) (i : Fin 1)
+  条件: (a : α) (i : 有限集 1)
   证明: by
   rw [Subsingleton.elim i ⟨0]; rw [Nat.zero_lt_one⟩]; rw [orderEmbOfFin_zero _ Nat.zero_lt_one]; rw [min'_singleton]
 
@@ -968,7 +968,7 @@ theorem orderEmbOfFin_unique
 
 中文:
 定理 orderEmbOfFin_unique
-  结论: {s : Finset α} {k : 自然数} (h : s.card = k) {f : Fin k -> α}
+  结论: {s : 有限集 α} {k : 自然数} (h : s.card = k) {f : 有限集 k -> α}
   证明: by
   rw [← hmono.range_inj (s.orderEmbOfFin h).strictMono]; rw [range_orderEmbOfFin]; rw [← Set.image_univ]; rw [← coe_univ]; rw [← coe_image]; rw [coe_inj]
   refine eq_of_subset_of_card_le (fun x hx => ?_) ?_
@@ -996,7 +996,7 @@ theorem orderEmbOfFin_unique'
 
 中文:
 定理 orderEmbOfFin_unique'
-  结论: {s : Finset α} {k : 自然数} (h : s.card = k) {f : Fin k ↪o α}
+  结论: {s : 有限集 α} {k : 自然数} (h : s.card = k) {f : 有限集 k ↪o α}
   证明: RelEmbedding.ext funext_iff.1 orderEmbOfFin_unique h hfs f.strictMono
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.ext, f.strictMono, funext_iff, orderEmbOfFin_unique, strictMono
@@ -1021,7 +1021,7 @@ theorem orderEmbOfFin_eq_orderEmbOfFin_iff
 
 中文:
 定理 orderEmbOfFin_eq_orderEmbOfFin_iff
-  结论: {k l : 自然数} {s : Finset α} {i : Fin k} {j : Fin l}
+  结论: {k l : 自然数} {s : 有限集 α} {i : 有限集 k} {j : 有限集 l}
   证明: by
   subst k l
   exact (s.orderEmbOfFin rfl).eq_iff_eq.trans Fin.ext_iff
@@ -1044,7 +1044,7 @@ definition orderEmbOfCardLe
 
 中文:
 定义 orderEmbOfCardLe
-  签名: (s : Finset α) {k : 自然数} (h : k <= s.card)
+  签名: (s : 有限集 α) {k : 自然数} (h : k <= s.card)
   定义体: (Fin.castLEOrderEmb h).trans (s.orderEmbOfFin rfl)
 
 Depends on / 依赖: Fin.castLEOrderEmb, castLEOrderEmb, orderEmbOfFin, s.orderEmbOfFin
@@ -1064,7 +1064,7 @@ theorem orderEmbOfCardLe_mem
 
 中文:
 定理 orderEmbOfCardLe_mem
-  条件: (s : Finset α) {k : 自然数} (h : k <= s.card) (a)
+  条件: (s : 有限集 α) {k : 自然数} (h : k <= s.card) (a)
   证明: by
   simp only [orderEmbOfCardLe, RelEmbedding.coe_trans, Finset.orderEmbOfFin_mem,
     Function.comp_apply]
@@ -1094,7 +1094,7 @@ lemma orderEmbOfFin_compl_singleton
 
 中文:
 引理 orderEmbOfFin_compl_singleton
-  结论: {n : 自然数} {i : Fin (n + 1)} {k : 自然数}
+  结论: {n : 自然数} {i : 有限集 (n + 1)} {k : 自然数}
   证明: by
   apply DFunLike.coe_injective
   rw [eq_comm]
@@ -1130,7 +1130,7 @@ lemma orderEmbOfFin_compl_singleton_eq_succAboveOrderEmb
 
 中文:
 引理 orderEmbOfFin_compl_singleton_eq_succAboveOrderEmb
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: orderEmbOfFin_compl_singleton _
 
 Depends on / 依赖: orderEmbOfFin_compl_singleton
@@ -1151,7 +1151,7 @@ lemma orderEmbOfFin_compl_singleton_apply
 
 中文:
 引理 orderEmbOfFin_compl_singleton_apply
-  结论: {n : 自然数} {i : Fin (n + 1)} {k : 自然数}
+  结论: {n : 自然数} {i : 有限集 (n + 1)} {k : 自然数}
   证明: by
   rw [orderEmbOfFin_compl_singleton]
   simp
@@ -1187,7 +1187,7 @@ theorem sort_univ
 中文:
 定理 sort_univ
   条件: (n : 自然数)
-  结论: Finset.univ.sort (fun x y : Fin n => x <= y) = List.finRange n
+  结论: 有限集.univ.sort (fun x y : 有限集 n => x <= y) = 列表.finRange n
   证明: Finset.univ.sortedLT_sort.eq_of_mem_iff (List.sortedLT_finRange n) (by simp)
 
 Depends on / 依赖: Finset, Finset.univ.sortedLT_sort.eq_of_mem_iff, List.sortedLT_finRange, eq_of_mem_iff, sortedLT_finRange, sortedLT_sort
@@ -1206,7 +1206,7 @@ definition Fintype.orderIsoFinOfCardEq
     ((OrderIso.setCongr _ _ Finset.coe_univ).trans OrderIso.Set.univ)
 
 中文:
-定义 Fintype.orderIsoFinOfCardEq
+定义 有限类型.orderIsoFinOfCardEq
   定义体: (Finset.univ.orderIsoOfFin h).trans
     ((OrderIso.setCongr _ _ Finset.coe_univ).trans OrderIso.Set.univ)
 

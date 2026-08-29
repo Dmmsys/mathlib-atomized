@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasWeakKernels C
+  签名: 有WeakKernels C
   定义体: ⟨by
     obtain ⟨K, i, p, h⟩ := distinguished_cocone_triangle₁ f
     exact ⟨_, isWeakLimitKernelForkOfDistTriangle _ h⟩⟩

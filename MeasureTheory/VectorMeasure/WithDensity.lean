@@ -55,8 +55,8 @@ definition Measure.withDensityᵥ
         · rw [
 
 中文:
-定义 Measure.withDensityᵥ
-  签名: {m : MeasurableSpace α} (μ : Measure α) (f : α -> E)
+定义 测度.withDensityᵥ
+  签名: {m : 可测空间 α} (μ : 测度 α) (f : α -> E)
   定义体: if hf : Integrable f μ then
     { measureOf' := fun s => if MeasurableSet s then ∫ x in s, f x ∂μ else 0
       empty' := by simp
@@ -94,7 +94,7 @@ theorem withDensityᵥ_apply
 
 中文:
 定理 withDensityᵥ_apply
-  条件: (hf : 整数egrable f μ) {s : Set α} (hs : MeasurableSet s)
+  条件: (hf : 可积 f μ) {s : 集合 α} (hs : 可测集 s)
   证明: by rw [withDensityᵥ, dif_pos hf]; exact dif_pos hs
 
 @[simp]
@@ -208,7 +208,7 @@ theorem withDensityᵥ_add
 
 中文:
 定理 withDensityᵥ_add
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   ext1 i hi
   rw [withDensityᵥ_apply (hf.add hg) hi]; rw [_root_.add_apply]; rw [withDensityᵥ_apply hf hi]; rw [withDensityᵥ_apply hg hi]
@@ -240,7 +240,7 @@ theorem withDensityᵥ_add'
 
 中文:
 定理 withDensityᵥ_add'
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: withDensityᵥ_add hf hg
 
 @[simp]
@@ -261,7 +261,7 @@ theorem withDensityᵥ_sub
 
 中文:
 定理 withDensityᵥ_sub
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [withDensityᵥ_add hf hg.neg]; rw [withDensityᵥ_neg]
 
@@ -283,7 +283,7 @@ theorem withDensityᵥ_sub'
 
 中文:
 定理 withDensityᵥ_sub'
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: withDensityᵥ_sub hf hg
 
 @[simp]
@@ -311,7 +311,7 @@ theorem withDensityᵥ_smul
 
 中文:
 定理 withDensityᵥ_smul
-  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
+  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [赋范空间 𝕜 E]
   证明: by
   by_cases hf : Integrable f μ
   · ext1 i hi
@@ -346,7 +346,7 @@ theorem withDensityᵥ_smul'
 
 中文:
 定理 withDensityᵥ_smul'
-  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
+  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [赋范空间 𝕜 E]
   证明: withDensityᵥ_smul f r
 -/
 theorem withDensityᵥ_smul' {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
@@ -429,8 +429,8 @@ theorem Measure.withDensityᵥ_absolutelyContinuous
     
 
 中文:
-定理 Measure.withDensityᵥ_absolutelyContinuous
-  条件: (μ : Measure α) (f : α -> 实数)
+定理 测度.withDensityᵥ_absolutelyContinuous
+  条件: (μ : 测度 α) (f : α -> 实数)
   证明: by
   by_cases hf : Integrable f μ
   · refine VectorMeasure.AbsolutelyContinuous.mk fun i hi₁ hi₂ => ?_
@@ -461,8 +461,8 @@ theorem Integrable.ae_eq_of_withDensityᵥ_eq
   rw [← withDensityᵥ_apply hf hi]; rw [hfg]; rw [withDensityᵥ_apply hg hi]
 
 中文:
-定理 Integrable.ae_eq_of_withDensityᵥ_eq
-  结论: [CompleteSpace E] {f g : α -> E} (hf : 整数egrable f μ)
+定理 可积.ae_eq_of_withDensityᵥ_eq
+  结论: [完备空间 E] {f g : α -> E} (hf : 可积 f μ)
   证明: by
   refine hf.ae_eq_of_forall_setIntegral_eq f g hg fun i hi _ => ?_
   rw [← withDensityᵥ_apply hf hi]; rw [hfg]; rw [withDensityᵥ_apply hg hi]
@@ -519,8 +519,8 @@ theorem Integrable.withDensityᵥ_eq_iff
   proof: ⟨fun hfg => hf.ae_eq_of_withDensityᵥ_eq hg hfg, fun h => WithDensityᵥEq.congr_ae h⟩
 
 中文:
-定理 Integrable.withDensityᵥ_eq_iff
-  结论: [CompleteSpace E]
+定理 可积.withDensityᵥ_eq_iff
+  结论: [完备空间 E]
   证明: ⟨fun hfg => hf.ae_eq_of_withDensityᵥ_eq hg hfg, fun h => WithDensityᵥEq.congr_ae h⟩
 
 Depends on / 依赖: Eq.congr_ae, congr_ae, hf.ae_eq_of_withDensity
@@ -546,8 +546,8 @@ theorem withDensityᵥ_toReal
   refine ae_lt_top' hfm.r
 
 中文:
-定理 withDensityᵥ_toReal
-  条件: {f : α -> 实数>=0∞} (hfm : AEMeasurable f μ) (hf : (∫⁻ x, f x ∂μ) != ∞)
+定理 withDensityᵥ_to实数
+  条件: {f : α -> 实数>=0∞} (hfm : 几乎处处可测 f μ) (hf : (∫⁻ x, f x ∂μ) != ∞)
   证明: by
   have hfi := integrable_toReal_of_lintegral_ne_top hfm hf
   have := isFiniteMeasure_withDensity hf
@@ -613,8 +613,8 @@ theorem Integrable.withDensityᵥ_trim_eq_integral
   rw [VectorMeasure.trim_measurableSet_eq hm hi]; rw [withDensityᵥ_apply hf (hm _ hi)]
 
 中文:
-定理 Integrable.withDensityᵥ_trim_eq_integral
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α}
+定理 可积.withDensityᵥ_trim_eq_integral
+  结论: {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   rw [VectorMeasure.trim_measurableSet_eq hm hi]; rw [withDensityᵥ_apply hf (hm _ hi)]
 
@@ -638,8 +638,8 @@ theorem Integrable.withDensityᵥ_trim_absolutelyContinuous
   simp only [Measure.restrict_eq_zero.m
 
 中文:
-定理 Integrable.withDensityᵥ_trim_absolutelyContinuous
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α}
+定理 可积.withDensityᵥ_trim_absolutelyContinuous
+  结论: {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   refine VectorMeasure.AbsolutelyContinuous.mk fun j hj₁ hj₂ => ?_
   rw [Measure.toENNRealVectorMeasure_apply_measurable hj₁]; rw [trim_measurableSet_eq hm hj₁] at hj₂

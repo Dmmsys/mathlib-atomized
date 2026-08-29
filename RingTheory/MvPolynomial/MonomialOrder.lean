@@ -120,7 +120,7 @@ definition degree
 
 中文:
 定义 degree
-  签名: (f : MvPolynomial σ R)
+  签名: (f : 多元多项式 σ R)
   定义体: m.toSyn.symm (f.support.sup m.toSyn)
 
 Depends on / 依赖: f.support.sup, m.toSyn, m.toSyn.symm, support
@@ -139,7 +139,7 @@ definition leadingCoeff
 
 中文:
 定义 leadingCoeff
-  签名: (f : MvPolynomial σ R)
+  签名: (f : 多元多项式 σ R)
   定义体: f.coeff (m.degree f)
 
 Depends on / 依赖: degree, f.coeff, m.degree
@@ -158,7 +158,7 @@ definition Monic
 
 中文:
 定义 Monic
-  签名: (f : MvPolynomial σ R)
+  签名: (f : 多元多项式 σ R)
   定义体: m.leadingCoeff f = 1
 
 Depends on / 依赖: leadingCoeff, m.leadingCoeff
@@ -179,7 +179,7 @@ definition leadingTerm
 
 中文:
 定义 leadingTerm
-  签名: (f : MvPolynomial σ R)
+  签名: (f : 多元多项式 σ R)
   定义体: monomial (m.degree f) (m.leadingCoeff f)
 
 @[simp]
@@ -201,7 +201,7 @@ lemma C_mul_leadingCoeff_monomial_degree
 
 中文:
 引理 C_mul_leadingCoeff_monomial_degree
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   rw [MvPolynomial.C_mul_monomial]; rw [mul_one]; rw [leadingTerm]
 
@@ -222,7 +222,7 @@ theorem Monic.of_subsingleton
 
 中文:
 定理 Monic.of_subsingleton
-  条件: [Subsingleton R] {f : MvPolynomial σ R}
+  条件: [子单例 R] {f : 多元多项式 σ R}
   证明: Subsingleton.eq_one (m.leadingCoeff f)
 -/
 @[nontriviality] theorem Monic.of_subsingleton [Subsingleton R] {f : MvPolynomial σ R} :
@@ -241,7 +241,7 @@ instance Monic.decidable
 
 中文:
 实例 Monic.decidable
-  签名: [DecidableEq R] (f : MvPolynomial σ R)
+  签名: [DecidableEq R] (f : 多元多项式 σ R)
   定义体: inferInstanceAs Decidable (m.leadingCoeff f = 1)
 
 @[simp]
@@ -262,7 +262,7 @@ theorem Monic.leadingCoeff_eq_one
 
 中文:
 定理 Monic.leadingCoeff_eq_one
-  条件: {f : MvPolynomial σ R} (hf : m.Monic f)
+  条件: {f : 多元多项式 σ R} (hf : m.Monic f)
   结论: m.leadingCoeff f = 1
   证明: hf
 -/
@@ -282,7 +282,7 @@ theorem Monic.coeff_degree
 
 中文:
 定理 Monic.coeff_degree
-  条件: {f : MvPolynomial σ R} (hf : m.Monic f)
+  条件: {f : 多元多项式 σ R} (hf : m.Monic f)
   结论: f.coeff (m.degree f) = 1
   证明: hf
 
@@ -303,7 +303,7 @@ theorem degree_zero
 
 中文:
 定理 degree_zero
-  结论: m.degree (0 : MvPolynomial σ R) = 0
+  结论: m.degree (0 : 多元多项式 σ R) = 0
   证明: by
   simp [degree]
 
@@ -327,7 +327,7 @@ theorem ne_zero_of_degree_ne_zero
 
 中文:
 定理 ne_zero_of_degree_ne_zero
-  条件: {f : MvPolynomial σ R} (h : m.degree f != 0)
+  条件: {f : 多元多项式 σ R} (h : m.degree f != 0)
   结论: f != 0
   证明: by
   rintro rfl
@@ -355,7 +355,7 @@ theorem degree_subsingleton
 
 中文:
 定理 degree_subsingleton
-  条件: [Subsingleton R] {f : MvPolynomial σ R}
+  条件: [子单例 R] {f : 多元多项式 σ R}
   证明: by
   rw [Subsingleton.eq_zero f]; rw [degree_zero]
 
@@ -379,7 +379,7 @@ theorem leadingCoeff_zero
 
 中文:
 定理 leadingCoeff_zero
-  结论: m.leadingCoeff (0 : MvPolynomial σ R) = 0
+  结论: m.leadingCoeff (0 : 多元多项式 σ R) = 0
   证明: by
   simp [degree, leadingCoeff]
 
@@ -400,7 +400,7 @@ theorem Monic.ne_zero
 
 中文:
 定理 Monic.ne_zero
-  条件: [Nontrivial R] {f : MvPolynomial σ R} (hf : m.Monic f)
+  条件: [非平凡 R] {f : 多元多项式 σ R} (hf : m.Monic f)
   证明: by
   rintro rfl
   simp [Monic, leadingCoeff_zero] at hf
@@ -451,7 +451,7 @@ theorem degree_monomial
 
 中文:
 定理 degree_monomial
-  条件: {d : σ ->₀ 自然数} (c : R) [Decidable (c = 0)]
+  条件: {d : σ ->₀ 自然数} (c : R) [可判定 (c = 0)]
   证明: by
   simp only [degree, support_monomial]
   split_ifs with hc <;> simp
@@ -475,7 +475,7 @@ theorem degree_X_le_single
 中文:
 定理 degree_X_le_single
   条件: {s : σ}
-  结论: m.degree (X s : MvPolynomial σ R) ≼[m] Finsupp.single s 1
+  结论: m.degree (X s : 多元多项式 σ R) ≼[m] 有限支撑.single s 1
   证明: degree_monomial_le 1
 
 Depends on / 依赖: degree_monomial_le, topologicalGroup_of_discreteTopology
@@ -496,7 +496,7 @@ theorem degree_X
 
 中文:
 定理 degree_X
-  条件: [Nontrivial R] {s : σ}
+  条件: [非平凡 R] {s : σ}
   证明: by
   classical
   change m.degree (monomial (Finsupp.single s 1) (1 : R)) = _
@@ -525,7 +525,7 @@ theorem degree_one
 
 中文:
 定理 degree_one
-  结论: m.degree (1 : MvPolynomial σ R) = 0
+  结论: m.degree (1 : 多元多项式 σ R) = 0
   证明: by
   nontriviality R
   classical rw [MvPolynomial.one_def, degree_monomial]
@@ -650,7 +650,7 @@ theorem leadingCoeff_one
 
 中文:
 定理 leadingCoeff_one
-  结论: m.leadingCoeff (1 : MvPolynomial σ R) = 1
+  结论: m.leadingCoeff (1 : 多元多项式 σ R) = 1
   证明: m.leadingCoeff_monomial 1
 
 Depends on / 依赖: leadingCoeff_monomial, m.leadingCoeff_monomial
@@ -670,7 +670,7 @@ theorem monic_C_one
 
 中文:
 定理 monic_C_one
-  结论: m.Monic (C 1 : MvPolynomial σ R)
+  结论: m.Monic (C 1 : 多元多项式 σ R)
   证明: monic_monomial_one
 
 @[simp]
@@ -691,7 +691,7 @@ lemma monic_one
 
 中文:
 引理 monic_one
-  结论: m.Monic (1 : MvPolynomial σ R)
+  结论: m.Monic (1 : 多元多项式 σ R)
   证明: monic_monomial_one
 
 Depends on / 依赖: monic_monomial_one
@@ -710,7 +710,7 @@ theorem degree_le_iff
 
 中文:
 定理 degree_le_iff
-  条件: {f : MvPolynomial σ R} {d : σ ->₀ 自然数}
+  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数}
   证明: by
   unfold degree
   simp only [AddEquiv.apply_symm_apply, Finset.sup_le_iff, mem_support_iff, ne_eq]
@@ -736,7 +736,7 @@ theorem degree_lt_iff
 
 中文:
 定理 degree_lt_iff
-  条件: {f : MvPolynomial σ R} {d : σ ->₀ 自然数} (hd : 0 ≺[m] d)
+  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : 0 ≺[m] d)
   证明: by
   simp only [map_zero] at hd
   unfold degree
@@ -764,7 +764,7 @@ theorem le_degree
 
 中文:
 定理 le_degree
-  条件: {f : MvPolynomial σ R} {d : σ ->₀ 自然数} (hd : d in f.support)
+  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : d in f.support)
   证明: by
   unfold degree
   simp only [AddEquiv.apply_symm_apply, Finset.le_sup hd]
@@ -789,7 +789,7 @@ theorem coeff_eq_zero_of_lt
 
 中文:
 定理 coeff_eq_zero_of_lt
-  条件: {f : MvPolynomial σ R} {d : σ ->₀ 自然数} (hd : m.degree f ≺[m] d)
+  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : m.degree f ≺[m] d)
   证明: by
   rw [← not_le] at hd
   by_contra hf
@@ -823,7 +823,7 @@ theorem leadingCoeff_ne_zero_iff
 
 中文:
 定理 leadingCoeff_ne_zero_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   constructor
   · rw [not_imp_not]
@@ -865,7 +865,7 @@ theorem leadingCoeff_eq_zero_iff
 
 中文:
 定理 leadingCoeff_eq_zero_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   simp only [← not_iff_not, leadingCoeff_ne_zero_iff]
 
@@ -885,7 +885,7 @@ theorem coeff_degree_ne_zero_iff
 
 中文:
 定理 coeff_degree_ne_zero_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: m.leadingCoeff_ne_zero_iff
 
 Depends on / 依赖: leadingCoeff_ne_zero_iff, m.leadingCoeff_ne_zero_iff
@@ -907,7 +907,7 @@ theorem degree_mem_support_iff
 
 中文:
 定理 degree_mem_support_iff
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   结论: m.degree f in f.support ↔ f != 0
   证明: mem_support_iff.trans coeff_degree_ne_zero_iff
 
@@ -929,7 +929,7 @@ theorem coeff_degree_eq_zero_iff
 
 中文:
 定理 coeff_degree_eq_zero_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: m.leadingCoeff_eq_zero_iff
 
 Depends on / 依赖: leadingCoeff_eq_zero_iff, m.leadingCoeff_eq_zero_iff
@@ -949,7 +949,7 @@ lemma degree_mem_support
 
 中文:
 引理 degree_mem_support
-  条件: {p : MvPolynomial σ R} (hp : p != 0)
+  条件: {p : 多元多项式 σ R} (hp : p != 0)
   证明: by
   rwa [MvPolynomial.mem_support_iff, coeff_degree_ne_zero_iff]
 
@@ -977,7 +977,7 @@ theorem degree_eq_zero_iff_totalDegree_eq_zero
 
 中文:
 定理 degree_eq_zero_iff_totalDegree_eq_zero
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   rw [← m.toSyn.injective.eq_iff]
   rw [map_zero]; rw [← m.bot_eq_zero]; rw [eq_bot_iff]; rw [m.bot_eq_zero]; rw [← m.toSyn.map_zero]
@@ -1071,7 +1071,7 @@ theorem eq_C_of_degree_eq_zero
 
 中文:
 定理 eq_C_of_degree_eq_zero
-  条件: {f : MvPolynomial σ R} (hf : m.degree f = 0)
+  条件: {f : 多元多项式 σ R} (hf : m.degree f = 0)
   证明: by
   ext d
   simp only [leadingCoeff, hf]
@@ -1107,7 +1107,7 @@ theorem degree_eq_zero_iff
 
 中文:
 定理 degree_eq_zero_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: ⟨MonomialOrder.eq_C_of_degree_eq_zero, fun h => by rw [h, MonomialOrder.degree_C]⟩
 
 Depends on / 依赖: MonomialOrder, MonomialOrder.degree_C, MonomialOrder.eq_C_of_degree_eq_zero, degree_C, eq_C_of_degree_eq_zero
@@ -1137,7 +1137,7 @@ theorem degree_add_le
 
 中文:
 定理 degree_add_le
-  条件: {f g : MvPolynomial σ R}
+  条件: {f g : 多元多项式 σ R}
   证明: by
   conv_rhs => rw [← m.toSyn.apply_symm_apply (_ ⊔ _)]
   rw [degree_le_iff]
@@ -1182,7 +1182,7 @@ theorem degree_sum_le
 
 中文:
 定理 degree_sum_le
-  条件: {α : 类型} {s : Finset α} {f : α -> MvPolynomial σ R}
+  条件: {α : 类型} {s : 有限集 α} {f : α -> 多元多项式 σ R}
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -1217,7 +1217,7 @@ theorem degree_add_of_lt
 
 中文:
 定理 degree_add_of_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
   证明: by
   apply m.toSyn.injective
   apply le_antisymm
@@ -1255,7 +1255,7 @@ theorem degree_add_eq_right_of_lt
 
 中文:
 定理 degree_add_eq_right_of_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g)
+  条件: {f g : 多元多项式 σ R} (h : m.degree f ≺[m] m.degree g)
   证明: by
   rw [add_comm]
   exact degree_add_of_lt h
@@ -1278,7 +1278,7 @@ theorem leadingCoeff_add_of_lt
 
 中文:
 定理 leadingCoeff_add_of_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
   证明: by
   simp only [leadingCoeff, m.degree_add_of_lt h, coeff_add, coeff_eq_zero_of_lt h, add_zero]
 
@@ -1299,7 +1299,7 @@ theorem Monic.add_of_lt
 
 中文:
 定理 Monic.add_of_lt
-  条件: {f g : MvPolynomial σ R} (hf : m.Monic f) (h : m.degree g ≺[m] m.degree f)
+  条件: {f g : 多元多项式 σ R} (hf : m.Monic f) (h : m.degree g ≺[m] m.degree f)
   证明: by
   simp only [Monic, leadingCoeff_add_of_lt h, hf.leadingCoeff_eq_one]
 
@@ -1324,7 +1324,7 @@ theorem degree_add_of_ne
 
 中文:
 定理 degree_add_of_ne
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   by_cases h' : m.degree g ≺[m] m.degree f
   · simp [degree_add_of_lt h', le_of_lt h']
@@ -1365,7 +1365,7 @@ theorem degree_mul_le
 
 中文:
 定理 degree_mul_le
-  条件: {f g : MvPolynomial σ R}
+  条件: {f g : 多元多项式 σ R}
   证明: by
   classical
   rw [degree_le_iff]
@@ -1421,7 +1421,7 @@ theorem coeff_mul_of_add_of_degree_le
 
 中文:
 定理 coeff_mul_of_add_of_degree_le
-  结论: {f g : MvPolynomial σ R} {a b : σ ->₀ 自然数}
+  结论: {f g : 多元多项式 σ R} {a b : σ ->₀ 自然数}
   证明: by
   classical
   rw [coeff_mul]; rw [Finset.sum_eq_single (a]; rw [b)]
@@ -1469,7 +1469,7 @@ theorem coeff_mul_of_degree_add
 
 中文:
 定理 coeff_mul_of_degree_add
-  条件: {f g : MvPolynomial σ R}
+  条件: {f g : 多元多项式 σ R}
   证明: coeff_mul_of_add_of_degree_le (le_of_eq rfl) (le_of_eq rfl)
 
 Depends on / 依赖: coeff_mul_of_add_of_degree_le, le_of_eq
@@ -1493,7 +1493,7 @@ theorem degree_mul_of_mul_leadingCoeff_ne_zero
 
 中文:
 定理 degree_mul_of_mul_leadingCoeff_ne_zero
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   apply m.toSyn.injective
   apply le_antisymm degree_mul_le
@@ -1523,7 +1523,7 @@ theorem leadingCoeff_mul_of_mul_leadingCoeff_ne_zero
 
 中文:
 定理 leadingCoeff_mul_of_mul_leadingCoeff_ne_zero
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   rw [leadingCoeff]; rw [← coeff_mul_of_degree_add]; rw [degree_mul_of_mul_leadingCoeff_ne_zero hfg]
 
@@ -1547,7 +1547,7 @@ theorem degree_mul_of_left_mem_nonZeroDivisors
 
 中文:
 定理 degree_mul_of_left_mem_nonZeroDivisors
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   apply not_imp_not.mpr (mem_nonZeroDivisors_iff.mp hf |>.1 _)
@@ -1572,7 +1572,7 @@ theorem degree_mul_of_right_mem_nonZeroDivisors
 
 中文:
 定理 degree_mul_of_right_mem_nonZeroDivisors
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: add_comm (m.degree f) (m.degree g) ▸ mul_comm f g ▸ degree_mul_of_left_mem_nonZeroDivisors hg hf
 
 Depends on / 依赖: add_comm, degree, degree_mul_of_left_mem_nonZeroDivisors, m.degree, mul_comm
@@ -1595,7 +1595,7 @@ theorem leadingCoeff_mul_of_left_mem_nonZeroDivisors
 
 中文:
 定理 leadingCoeff_mul_of_left_mem_nonZeroDivisors
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   by_cases hg : g = 0
   · simp [hg]
@@ -1623,7 +1623,7 @@ theorem leadingCoeff_mul_of_right_mem_nonZeroDivisors
 
 中文:
 定理 leadingCoeff_mul_of_right_mem_nonZeroDivisors
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   by_cases hf : f = 0
   · simp [hf]
@@ -1652,7 +1652,7 @@ theorem degree_mul_of_isRegular_left
 
 中文:
 定理 degree_mul_of_isRegular_left
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   simp only [ne_eq, hf, IsRegular.left, IsLeftRegular.mul_left_eq_zero_iff,
@@ -1682,7 +1682,7 @@ theorem leadingCoeff_mul_of_isRegular_left
 
 中文:
 定理 leadingCoeff_mul_of_isRegular_left
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   by_cases hg : g = 0
   · simp [hg]
@@ -1708,7 +1708,7 @@ theorem degree_mul_of_isRegular_right
 
 中文:
 定理 degree_mul_of_isRegular_right
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   rw [mul_comm]; rw [m.degree_mul_of_isRegular_left hg hf]; rw [add_comm]
 
@@ -1732,7 +1732,7 @@ theorem leadingCoeff_mul_of_isRegular_right
 
 中文:
 定理 leadingCoeff_mul_of_isRegular_right
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   by_cases hf : f = 0
   · simp [hf]
@@ -1763,7 +1763,7 @@ theorem Monic.mul
 
 中文:
 定理 Monic.mul
-  条件: {f g : MvPolynomial σ R} (hf : m.Monic f) (hg : m.Monic g)
+  条件: {f g : 多元多项式 σ R} (hf : m.Monic f) (hg : m.Monic g)
   证明: by
   nontriviality R
   suffices m.leadingCoeff f * m.leadingCoeff g = 1 by
@@ -1794,7 +1794,7 @@ theorem degree_mul
 
 中文:
 定理 degree_mul
-  条件: [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f != 0) (hg : g != 0)
+  条件: [无零因子 R] {f g : 多元多项式 σ R} (hf : f != 0) (hg : g != 0)
   证明: by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   simp only [ne_eq, mul_eq_zero, leadingCoeff_eq_zero_iff, not_or]
@@ -1822,7 +1822,7 @@ theorem leadingCoeff_mul
 
 中文:
 定理 leadingCoeff_mul
-  条件: [NoZeroDivisors R] {f g : MvPolynomial σ R}
+  条件: [无零因子 R] {f g : 多元多项式 σ R}
   证明: by
   by_cases! +distrib h : f = 0 ∨ g = 0
   · cases h <;> simp [*]
@@ -1853,7 +1853,7 @@ theorem degree_pow_le
 
 中文:
 定理 degree_pow_le
-  条件: {f : MvPolynomial σ R} (n : 自然数)
+  条件: {f : 多元多项式 σ R} (n : 自然数)
   证明: by
   induction n with
   | zero => simp [m.degree_one]
@@ -1890,7 +1890,7 @@ theorem coeff_pow_nsmul_degree
 
 中文:
 定理 coeff_pow_nsmul_degree
-  条件: (f : MvPolynomial σ R) (n : 自然数)
+  条件: (f : 多元多项式 σ R) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -1923,7 +1923,7 @@ theorem degree_pow_of_pow_leadingCoeff_ne_zero
 
 中文:
 定理 degree_pow_of_pow_leadingCoeff_ne_zero
-  结论: {f : MvPolynomial σ R} {n : 自然数}
+  结论: {f : 多元多项式 σ R} {n : 自然数}
   证明: by
   apply m.toSyn.injective
   apply le_antisymm (m.degree_pow_le n)
@@ -1953,7 +1953,7 @@ theorem leadingCoeff_pow_of_pow_leadingCoeff_ne_zero
 
 中文:
 定理 leadingCoeff_pow_of_pow_leadingCoeff_ne_zero
-  结论: {f : MvPolynomial σ R} {n : 自然数}
+  结论: {f : 多元多项式 σ R} {n : 自然数}
   证明: by
   rw [leadingCoeff]; rw [degree_pow_of_pow_leadingCoeff_ne_zero hf]; rw [coeff_pow_nsmul_degree]
 
@@ -1978,7 +1978,7 @@ theorem Monic.pow
 
 中文:
 定理 Monic.pow
-  条件: {f : MvPolynomial σ R} {n : 自然数} (hf : m.Monic f)
+  条件: {f : 多元多项式 σ R} {n : 自然数} (hf : m.Monic f)
   证明: by
   nontriviality R
   rw [Monic]; rw [leadingCoeff_pow_of_pow_leadingCoeff_ne_zero]; rw [hf.leadingCoeff_eq_one]; rw [one_pow]
@@ -2011,7 +2011,7 @@ theorem degree_pow
 
 中文:
 定理 degree_pow
-  条件: [IsReduced R] (f : MvPolynomial σ R) (n : 自然数)
+  条件: [是既约 R] (f : 多元多项式 σ R) (n : 自然数)
   证明: by
   by_cases hf : f = 0
   · rw [hf, degree_zero, smul_zero]
@@ -2048,7 +2048,7 @@ theorem leadingCoeff_pow
 
 中文:
 定理 leadingCoeff_pow
-  条件: [IsReduced R] (f : MvPolynomial σ R) (n : 自然数)
+  条件: [是既约 R] (f : 多元多项式 σ R) (n : 自然数)
   证明: by
   rw [leadingCoeff]; rw [degree_pow]; rw [coeff_pow_nsmul_degree]
 
@@ -2071,7 +2071,7 @@ theorem degree_smul_le
 
 中文:
 定理 degree_smul_le
-  条件: {r : R} {f : MvPolynomial σ R}
+  条件: {r : R} {f : 多元多项式 σ R}
   证明: by
   rw [smul_eq_C_mul]
   apply le_of_le_of_eq degree_mul_le
@@ -2138,7 +2138,7 @@ theorem degree_smul_of_isRegular
 
 中文:
 定理 degree_smul_of_isRegular
-  条件: {r : R} (hr : IsRegular r) {f : MvPolynomial σ R}
+  条件: {r : R} (hr : 是正则 r) {f : 多元多项式 σ R}
   证明: m.degree_smul_of_mem_nonZeroDivisors hr.mem_nonZeroDivisors
 
 Depends on / 依赖: degree_smul_of_mem_nonZeroDivisors, hr.mem_nonZeroDivisors, m.degree_smul_of_mem_nonZeroDivisors, mem_nonZeroDivisors
@@ -2166,7 +2166,7 @@ theorem degree_prod_le
 
 中文:
 定理 degree_prod_le
-  条件: {ι : 类型} {P : ι -> MvPolynomial σ R} {s : Finset ι}
+  条件: {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -2209,7 +2209,7 @@ theorem coeff_prod_sum_degree
 
 中文:
 定理 coeff_prod_sum_degree
-  条件: {ι : 类型} (P : ι -> MvPolynomial σ R) (s : Finset ι)
+  条件: {ι : 类型} (P : ι -> 多元多项式 σ R) (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -2329,7 +2329,7 @@ theorem degree_prod
 
 中文:
 定理 degree_prod
-  结论: [NoZeroDivisors R] {ι : 类型} {P : ι -> MvPolynomial σ R} {s : Finset ι}
+  结论: [无零因子 R] {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
   证明: by
   cases subsingleton_or_nontrivial R with
   | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
@@ -2362,7 +2362,7 @@ lemma degree_mul'
 
 中文:
 引理 degree_mul'
-  条件: [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f * g != 0)
+  条件: [无零因子 R] {f g : 多元多项式 σ R} (hf : f * g != 0)
   证明: by
   apply ne_zero_and_ne_zero_of_mul at hf
   exact m.degree_mul hf.1 hf.2
@@ -2385,7 +2385,7 @@ lemma notMem_support_of_degree_lt
 
 中文:
 引理 notMem_support_of_degree_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g)
+  条件: {f g : 多元多项式 σ R} (h : m.degree f ≺[m] m.degree g)
   证明: by
   simp [coeff_eq_zero_of_lt h]
 
@@ -2455,8 +2455,8 @@ theorem Monic.prod
     exact isRegular_one
 
 中文:
-定理 Monic.prod
-  结论: {ι : 类型} {P : ι -> MvPolynomial σ R} {s : Finset ι}
+定理 Monic.乘积
+  结论: {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
   证明: by
   rw [Monic]; rw [leadingCoeff_prod_of_regular]
   · exact Finset.prod_eq_one H
@@ -2489,7 +2489,7 @@ lemma leadingTerm_eq_zero_iff
 
 中文:
 引理 leadingTerm_eq_zero_iff
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: m.leadingTerm p = 0 ↔ p = 0
   证明: by
   simp only [leadingTerm, monomial_eq_zero, leadingCoeff_eq_zero_iff]
@@ -2512,7 +2512,7 @@ lemma leadingTerm_zero
 
 中文:
 引理 leadingTerm_zero
-  结论: m.leadingTerm (0 : MvPolynomial σ R) = 0
+  结论: m.leadingTerm (0 : 多元多项式 σ R) = 0
   证明: by
   rw [leadingTerm_eq_zero_iff]
 
@@ -2532,7 +2532,7 @@ lemma image_leadingTerm_sdiff_singleton_zero
 
 中文:
 引理 image_leadingTerm_sdiff_singleton_zero
-  条件: (B : Set (MvPolynomial σ R))
+  条件: (B : 集合 (多元多项式 σ R))
   证明: by
   aesop
 -/
@@ -2551,7 +2551,7 @@ lemma image_leadingTerm_insert_zero
 
 中文:
 引理 image_leadingTerm_insert_zero
-  条件: (B : Set (MvPolynomial σ R))
+  条件: (B : 集合 (多元多项式 σ R))
   证明: by
   aesop
 -/
@@ -2576,7 +2576,7 @@ lemma degree_leadingTerm
 
 中文:
 引理 degree_leadingTerm
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   classical
   simp only [leadingTerm, degree_monomial, leadingCoeff_eq_zero_iff, ite_eq_right_iff]
@@ -2606,7 +2606,7 @@ lemma leadingCoeff_leadingTerm
 
 中文:
 引理 leadingCoeff_leadingTerm
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   simp [leadingTerm, leadingCoeff_monomial]
 
@@ -2633,7 +2633,7 @@ lemma leadingTerm_leadingTerm
 
 中文:
 引理 leadingTerm_leadingTerm
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   classical
   by_cases h : f = 0 <;> simp [leadingTerm, h, degree_monomial]
@@ -2720,7 +2720,7 @@ lemma degree_leadingTerm_mul
 
 中文:
 引理 degree_leadingTerm_mul
-  条件: [NoZeroDivisors R] (p q : MvPolynomial σ R)
+  条件: [无零因子 R] (p q : 多元多项式 σ R)
   证明: by
   wlog! +distrib h : p != 0 ∧ q != 0
   · obtain rfl | rfl := h <;> simp
@@ -2749,7 +2749,7 @@ lemma degree_mul_leadingTerm
 
 中文:
 引理 degree_mul_leadingTerm
-  条件: [NoZeroDivisors R] (p q : MvPolynomial σ R)
+  条件: [无零因子 R] (p q : 多元多项式 σ R)
   证明: mul_comm _ p ▸ mul_comm _ p ▸ m.degree_leadingTerm_mul q p
 
 Depends on / 依赖: degree_leadingTerm_mul, m.degree_leadingTerm_mul, mul_comm
@@ -2772,7 +2772,7 @@ lemma degree_lt_of_left_ne_zero_of_degree_mul_lt
 
 中文:
 引理 degree_lt_of_left_ne_zero_of_degree_mul_lt
-  结论: [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
+  结论: [无零因子 R] {p p' q : 多元多项式 σ R}
   证明: by
   wlog! hq : q != 0
   · simp [hq] at h
@@ -2804,7 +2804,7 @@ lemma degree_mul_lt_iff_left_lt_of_ne_zero
 
 中文:
 引理 degree_mul_lt_iff_left_lt_of_ne_zero
-  结论: [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
+  结论: [无零因子 R] {p p' q : 多元多项式 σ R}
   证明: by
   refine ⟨m.degree_lt_of_left_ne_zero_of_degree_mul_lt hp, ?_⟩
   intro h
@@ -2832,7 +2832,7 @@ lemma monic_leadingTerm
 
 中文:
 引理 monic_leadingTerm
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by simp [leadingTerm, Monic]
 
 Depends on / 依赖: leadingTerm
@@ -2852,7 +2852,7 @@ lemma support_leadingTerm
 
 中文:
 引理 support_leadingTerm
-  条件: (p : MvPolynomial σ R) [Decidable (p = 0)]
+  条件: (p : 多元多项式 σ R) [可判定 (p = 0)]
   证明: by
   classical
   simp [leadingTerm, support_monomial]
@@ -2876,7 +2876,7 @@ lemma support_leadingTerm'
 
 中文:
 引理 support_leadingTerm'
-  条件: {p : MvPolynomial σ R} (hp : p != 0)
+  条件: {p : 多元多项式 σ R} (hp : p != 0)
   证明: by
   classical
   simp [leadingTerm, support_monomial, hp]
@@ -2899,7 +2899,7 @@ lemma le_degree_of_mem_support
 
 中文:
 引理 le_degree_of_mem_support
-  结论: {p : MvPolynomial σ R} {a : σ ->₀ 自然数}
+  结论: {p : 多元多项式 σ R} {a : σ ->₀ 自然数}
   证明: by
   simp [degree, Finset.le_sup ha]
 
@@ -2923,7 +2923,7 @@ lemma leadingTerm_eq_leadingTerm_iff
 
 中文:
 引理 leadingTerm_eq_leadingTerm_iff
-  条件: {p q : MvPolynomial σ R}
+  条件: {p q : 多元多项式 σ R}
   证明: by
   rw [leadingTerm]; rw [leadingTerm]; rw [monomial_eq_monomial_iff]
   aesop
@@ -2954,7 +2954,7 @@ theorem leadingTerm_mul
 
 中文:
 定理 leadingTerm_mul
-  条件: [NoZeroDivisors R] (p q : MvPolynomial σ R)
+  条件: [无零因子 R] (p q : 多元多项式 σ R)
   证明: by
   by_cases! h0 : p * q = 0
   · simp [h0, zero_eq_mul.mp]
@@ -2982,7 +2982,7 @@ lemma monic_of_subsingleton
 
 中文:
 引理 monic_of_subsingleton
-  条件: [Subsingleton R] (p : MvPolynomial σ R)
+  条件: [子单例 R] (p : 多元多项式 σ R)
   证明: by
   simp [Subsingleton.eq_one (α := MvPolynomial σ R)]
 
@@ -3004,7 +3004,7 @@ lemma degree_le_degree_of_support_subset
 
 中文:
 引理 degree_le_degree_of_support_subset
-  条件: {p q : MvPolynomial σ R} (h : p.support subseteq q.support)
+  条件: {p q : 多元多项式 σ R} (h : p.support subseteq q.support)
   证明: by
   simp_rw [degree, m.toSyn.apply_symm_apply]
   exact Finset.sup_mono h
@@ -3026,7 +3026,7 @@ theorem toSyn_degree_mul_le
 
 中文:
 定理 toSyn_degree_mul_le
-  条件: {f g : MvPolynomial σ R}
+  条件: {f g : 多元多项式 σ R}
   证明: map_add m.toSyn _ _ ▸ degree_mul_le
 
 Depends on / 依赖: degree_mul_le, m.toSyn, map_add
@@ -3102,7 +3102,7 @@ lemma withBotDegree_eq
 
 中文:
 引理 withBotDegree_eq
-  条件: [Decidable (f = 0)]
+  条件: [可判定 (f = 0)]
   证明: by
   simp [withBotDegree, degree]
   by_cases hf : f = 0
@@ -3227,7 +3227,7 @@ lemma withBotDegree_monomial
 
 中文:
 引理 withBotDegree_monomial
-  条件: (d) (c) [Decidable (c = 0)]
+  条件: (d) (c) [可判定 (c = 0)]
   证明: by
   classical
   split_ifs <;> simp [withBotDegree_eq, *, m.degree_monomial]
@@ -3252,7 +3252,7 @@ lemma withBotDegree_C
 
 中文:
 引理 withBotDegree_C
-  条件: (c) [Decidable (c = 0)]
+  条件: (c) [可判定 (c = 0)]
   证明: by
   simp [← monomial_zero', withBotDegree_monomial]
 
@@ -3306,7 +3306,7 @@ lemma withBotDegree_one
 
 中文:
 引理 withBotDegree_one
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: m.withBotDegree (R := R) 1 = 0
   证明: by
   classical
@@ -3400,7 +3400,7 @@ lemma withBotDegree_mul
 
 中文:
 引理 withBotDegree_mul
-  条件: [NoZeroDivisors R]
+  条件: [无零因子 R]
   证明: by
   nontriviality R using Subsingleton.eq_zero (α := MvPolynomial σ R)
   by_cases! hf : f = 0
@@ -3741,7 +3741,7 @@ lemma withBotDegree_sum_le
 
 中文:
 引理 withBotDegree_sum_le
-  条件: {α : 类型} {s : Finset α} {f : α -> MvPolynomial σ R}
+  条件: {α : 类型} {s : 有限集 α} {f : α -> 多元多项式 σ R}
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -3835,7 +3835,7 @@ definition sPolynomial
 
 中文:
 定义 sPolynomial
-  签名: (f g : MvPolynomial σ R)
+  签名: (f g : 多元多项式 σ R)
   定义体: monomial (m.degree g - m.degree f) (m.leadingCoeff g) * f -
   monomial (m.degree f - m.degree g) (m.leadingCoeff f) * g
 
@@ -3860,7 +3860,7 @@ lemma sPolynomial_def
 
 中文:
 引理 sPolynomial_def
-  条件: (f g : MvPolynomial σ R)
+  条件: (f g : 多元多项式 σ R)
   证明: by
   suffices forall f g, m.degree g - m.degree f = m.degree f ⊔ m.degree g - m.degree f by
     rw [sPolynomial]; rw [this]; rw [this]; rw [sup_comm]
@@ -3894,7 +3894,7 @@ lemma degree_ne_zero_of_sub_leadingTerm_ne_zero
 
 中文:
 引理 degree_ne_zero_of_sub_leadingTerm_ne_zero
-  结论: {f : MvPolynomial σ R}
+  结论: {f : 多元多项式 σ R}
   证明: by
   contrapose h
   rw [m.degree_eq_zero_iff.mp h]; rw [leadingTerm_C]; rw [sub_eq_zero]
@@ -3923,7 +3923,7 @@ theorem degree_neg
 
 中文:
 定理 degree_neg
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   unfold degree
   rw [support_neg]
@@ -3949,7 +3949,7 @@ theorem leadingCoeff_neg
 
 中文:
 定理 leadingCoeff_neg
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   simp only [leadingCoeff, degree_neg, coeff_neg]
 
@@ -3972,7 +3972,7 @@ theorem degree_sub_le
 
 中文:
 定理 degree_sub_le
-  条件: {f g : MvPolynomial σ R}
+  条件: {f g : 多元多项式 σ R}
   证明: by
   rw [sub_eq_add_neg]
   apply le_of_le_of_eq m.degree_add_le
@@ -3999,7 +3999,7 @@ theorem degree_sub_of_lt
 
 中文:
 定理 degree_sub_of_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
   证明: by
   rw [sub_eq_add_neg]
   apply degree_add_of_lt
@@ -4026,7 +4026,7 @@ theorem leadingCoeff_sub_of_lt
 
 中文:
 定理 leadingCoeff_sub_of_lt
-  条件: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
   证明: by
   rw [sub_eq_add_neg]
   apply leadingCoeff_add_of_lt
@@ -4052,7 +4052,7 @@ theorem degree_sub_leadingTerm_le
 
 中文:
 定理 degree_sub_leadingTerm_le
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   apply le_trans degree_sub_le
   simp [degree_leadingTerm]
@@ -4083,7 +4083,7 @@ theorem degree_sub_leadingTerm_lt_degree
 
 中文:
 定理 degree_sub_leadingTerm_lt_degree
-  条件: {f : MvPolynomial σ R} (h : m.degree f != 0)
+  条件: {f : 多元多项式 σ R} (h : m.degree f != 0)
   证明: by
   classical
   by_cases hl : f - m.leadingTerm f = 0
@@ -4123,7 +4123,7 @@ theorem degree_sub_leadingTerm_lt_iff
 
 中文:
 定理 degree_sub_leadingTerm_lt_iff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   refine ⟨?_, degree_sub_leadingTerm_lt_degree⟩
   intro h h'
@@ -4151,7 +4151,7 @@ lemma sPolynomial_antisymm
 
 中文:
 引理 sPolynomial_antisymm
-  条件: (f g : MvPolynomial σ R)
+  条件: (f g : 多元多项式 σ R)
   证明: (neg_sub (_ * g) (_ * f)).symm
 
 @[simp]
@@ -4176,7 +4176,7 @@ lemma sPolynomial_left_zero
 
 中文:
 引理 sPolynomial_left_zero
-  条件: (g : MvPolynomial σ R)
+  条件: (g : 多元多项式 σ R)
   证明: by
   simp [sPolynomial]
 
@@ -4202,7 +4202,7 @@ lemma sPolynomial_right_zero
 
 中文:
 引理 sPolynomial_right_zero
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   rw [sPolynomial_antisymm]; rw [sPolynomial_left_zero]; rw [neg_zero]
 
@@ -4226,7 +4226,7 @@ lemma sPolynomial_self
 
 中文:
 引理 sPolynomial_self
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   结论: m.sPolynomial f f = 0
   证明: sub_self _
 
@@ -4251,7 +4251,7 @@ lemma degree_sPolynomial_le
 
 中文:
 引理 degree_sPolynomial_le
-  条件: (f g : MvPolynomial σ R)
+  条件: (f g : 多元多项式 σ R)
   证明: by
   classical
   wlog! +distrib h0 : f != 0 ∧ g != 0
@@ -4288,7 +4288,7 @@ lemma coeff_sPolynomial_sup_eq_zero
 
 中文:
 引理 coeff_sPolynomial_sup_eq_zero
-  条件: (f g : MvPolynomial σ R)
+  条件: (f g : 多元多项式 σ R)
   证明: by
   rw [sPolynomial_def]; rw [coeff_sub]
   nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_left, coeff_monomial_mul]
@@ -4324,7 +4324,7 @@ lemma degree_sPolynomial
 
 中文:
 引理 degree_sPolynomial
-  条件: (f g : MvPolynomial σ R)
+  条件: (f g : 多元多项式 σ R)
   证明: by
   by_cases hf : m.degree f = 0 ∧ m.degree g = 0
   · rcases hf with ⟨h₁, h₂⟩
@@ -4363,7 +4363,7 @@ lemma degree_sPolynomial_lt_sup_degree
 
 中文:
 引理 degree_sPolynomial_lt_sup_degree
-  条件: {f g : MvPolynomial σ R} (h : m.sPolynomial f g != 0)
+  条件: {f g : 多元多项式 σ R} (h : m.sPolynomial f g != 0)
   证明: (or_iff_left h).mp m.degree_sPolynomial f g
 
 Depends on / 依赖: degree_sPolynomial, m.degree_sPolynomial, or_iff_left
@@ -4383,7 +4383,7 @@ lemma sPolynomial_lt_of_degree_ne_zero_of_degree_eq
 
 中文:
 引理 sPolynomial_lt_of_degree_ne_zero_of_degree_eq
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   simpa [h] using m.degree_sPolynomial_lt_sup_degree hs
 
@@ -4412,7 +4412,7 @@ lemma sPolynomial_monomial_mul
 
 中文:
 引理 sPolynomial_monomial_mul
-  结论: [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ 自然数)
+  结论: [无零因子 R] (p₁ p₂ : 多元多项式 σ R) (d₁ d₂ : σ ->₀ 自然数)
   证明: by
   classical
   simp only [sPolynomial_def]
@@ -4457,7 +4457,7 @@ lemma sPolynomial_monomial_mul'
 
 中文:
 引理 sPolynomial_monomial_mul'
-  结论: [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ 自然数)
+  结论: [无零因子 R] (p₁ p₂ : 多元多项式 σ R) (d₁ d₂ : σ ->₀ 自然数)
   证明: by
   classical
   wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
@@ -4488,7 +4488,7 @@ lemma sPolynomial_leadingTerm_mul
 
 中文:
 引理 sPolynomial_leadingTerm_mul
-  条件: [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R)
+  条件: [无零因子 R] (p₁ p₂ q₁ q₂ : 多元多项式 σ R)
   证明: by
   simp [sPolynomial_monomial_mul, leadingTerm]
 
@@ -4515,7 +4515,7 @@ lemma sPolynomial_leadingTerm_mul'
 
 中文:
 引理 sPolynomial_leadingTerm_mul'
-  条件: [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R)
+  条件: [无零因子 R] (p₁ p₂ q₁ q₂ : 多元多项式 σ R)
   证明: by
   wlog! +distrib H : p₁ != 0 ∧ p₂ != 0 ∧ q₁ != 0 ∧ q₂ != 0
   · (obtain rfl | rfl | rfl | rfl := H) <;> simp
@@ -4619,7 +4619,7 @@ lemma withBotDegree_neg
 
 中文:
 引理 withBotDegree_neg
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   classical
   simp [m.withBotDegree_eq]
@@ -4648,7 +4648,7 @@ theorem isUnit_leadingCoeff
 
 中文:
 定理 isUnit_leadingCoeff
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: by
   simp only [isUnit_iff_ne_zero, ne_eq, leadingCoeff_eq_zero_iff]
 
@@ -4708,7 +4708,7 @@ lemma degree_X_add_C
 
 中文:
 引理 degree_X_add_C
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [degree_add_of_lt]; rw [degree_X]
   simp only [degree_C, map_zero, degree_X]
@@ -4736,7 +4736,7 @@ lemma degree_X_sub_C
 
 中文:
 引理 degree_X_sub_C
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [sub_eq_add_neg]; rw [← map_neg]; rw [degree_X_add_C]
 
@@ -4760,7 +4760,7 @@ lemma monic_X_add_C
 
 中文:
 引理 monic_X_add_C
-  条件: {ι : 类型} (m : MonomialOrder ι) (i : ι) (r : R)
+  条件: {ι : 类型} (m : 单项式序 ι) (i : ι) (r : R)
   证明: by
   nontriviality R
   apply monic_X.add_of_lt
@@ -4786,7 +4786,7 @@ lemma monic_X_sub_C
 
 中文:
 引理 monic_X_sub_C
-  条件: {ι : 类型} (m : MonomialOrder ι) (i : ι) (r : R)
+  条件: {ι : 类型} (m : 单项式序 ι) (i : ι) (r : R)
   证明: by
   rw [sub_eq_add_neg]; rw [← map_neg]
   apply monic_X_add_C

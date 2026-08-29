@@ -43,8 +43,8 @@ definition TopCat.Homotopy.toSSet
   rel := by ext _ ⟨⟨_, ⟨⟩⟩, _⟩
 
 中文:
-定义 TopCat.Homotopy.toSSet
-  签名: {X Y : TopCat.{u}} {f g : X ⟶ Y} (h : Homotopy f g)
+定义 顶元素范畴.同伦.toSSet
+  签名: {X Y : 顶元素范畴.{u}} {f g : X ⟶ Y} (h : 同伦 f g)
   定义体: _ ◁ SSet.stdSimplex.toSSetObjI ≫ μ TopCat.toSSet _ _ ≫ TopCat.toSSet.map h.h
   h₀ := by simp [← Functor.map_comp]
   h₁ := by simp [← Functor.map_comp]

@@ -111,7 +111,7 @@ theorem rename_X
 中文:
 定理 rename_X
   条件: (f : σ -> τ) (i : σ)
-  结论: rename f (X i : MvPolynomial σ R) = X (f i)
+  结论: rename f (X i : 多元多项式 σ R) = X (f i)
   证明: by
   simp [MvPolynomial, rename, X, monomial]
 
@@ -135,7 +135,7 @@ lemma rename_zero
 中文:
 引理 rename_zero
   条件: (f : σ -> τ)
-  结论: (0 : MvPolynomial σ R).rename f = 0
+  结论: (0 : 多元多项式 σ R).rename f = 0
   证明: rfl
 -/
 lemma rename_zero (f : σ -> τ) : (0 : MvPolynomial σ R).rename f = 0 := rfl
@@ -154,7 +154,7 @@ theorem map_rename
 
 中文:
 定理 map_rename
-  条件: (f : R ->+* S) (g : σ -> τ) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S) (g : σ -> τ) (p : 多元多项式 σ R)
   证明: by
   apply MvPolynomial.induction_on p
     (fun a => by simp only [map_C, rename_C])
@@ -205,7 +205,7 @@ theorem rename_rename
 
 中文:
 定理 rename_rename
-  条件: (f : σ -> τ) (g : τ -> α) (p : MvPolynomial σ R)
+  条件: (f : σ -> τ) (g : τ -> α) (p : 多元多项式 σ R)
   证明: by
   simp [MvPolynomial, rename, mapDomain.addMonoidHom_comp]
 
@@ -247,7 +247,7 @@ theorem rename_id
 
 中文:
 定理 rename_id
-  结论: rename id = AlgHom.id R (MvPolynomial σ R)
+  结论: rename id = 代数态射.id R (多元多项式 σ R)
   证明: by simp [MvPolynomial, rename]
 
 Depends on / 依赖: MvPolynomial
@@ -266,7 +266,7 @@ lemma rename_id_apply
 
 中文:
 引理 rename_id_apply
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: rename id p = p
   证明: by
   simp
@@ -330,7 +330,7 @@ theorem rename_injective
 
 中文:
 定理 rename_injective
-  条件: (f : σ -> τ) (hf : Function.Injective f)
+  条件: (f : σ -> τ) (hf : 函数.单射 f)
   证明: AddMonoidAlgebra.mapDomain_injective (Finsupp.mapDomain_injective hf)
 
 @[simp]
@@ -353,7 +353,7 @@ lemma rename_eq_zero_iff_of_injective
 
 中文:
 引理 rename_eq_zero_iff_of_injective
-  结论: (p : MvPolynomial σ R) {f : σ -> τ}
+  结论: (p : 多元多项式 σ R) {f : σ -> τ}
   证明: by
   rw [← rename_zero f]; rw [(MvPolynomial.rename_injective _ hf).eq_iff]
 
@@ -375,7 +375,7 @@ theorem rename_leftInverse
 
 中文:
 定理 rename_leftInverse
-  条件: {f : σ -> τ} {g : τ -> σ} (hf : Function.LeftInverse f g)
+  条件: {f : σ -> τ} {g : τ -> σ} (hf : 函数.左逆 f g)
   证明: by
   intro x
   simp [hf.comp_eq_id]
@@ -397,7 +397,7 @@ theorem rename_rightInverse
 
 中文:
 定理 rename_rightInverse
-  条件: {f : σ -> τ} {g : τ -> σ} (hf : Function.RightInverse f g)
+  条件: {f : σ -> τ} {g : τ -> σ} (hf : 函数.右逆 f g)
   证明: rename_leftInverse hf
 
 Depends on / 依赖: rename_leftInverse
@@ -416,7 +416,7 @@ theorem rename_surjective
 
 中文:
 定理 rename_surjective
-  条件: (f : σ -> τ) (hf : Function.Surjective f)
+  条件: (f : σ -> τ) (hf : 函数.满射 f)
   证明: .surjective let ⟨_, hf⟩ := hf.hasRightInverse; rename_rightInverse hf
 
 Depends on / 依赖: hasRightInverse, hf.hasRightInverse, rename_rightInverse, surjective
@@ -440,7 +440,7 @@ definition killCompl
 
 中文:
 定义 killCompl
-  签名: : MvPolynomial τ R ->ₐ[R] MvPolynomial σ R
+  签名: : 多元多项式 τ R ->ₐ[R] 多元多项式 σ R
   定义体: aeval fun i => if h : i in Set.range f then X (Equiv.ofInjective f hf).symm ⟨i, h⟩ else 0
 
 Depends on / 依赖: Equiv.ofInjective, Set.range, ofInjective
@@ -481,7 +481,7 @@ theorem killCompl_comp_rename
 
 中文:
 定理 killCompl_comp_rename
-  结论: (killCompl hf).comp (rename f) = AlgHom.id R _
+  结论: (killCompl hf).comp (rename f) = 代数态射.id R _
   证明: algHom_ext fun i => by
     dsimp
     rw [rename_X]; rw [killCompl]; rw [aeval_X]; rw [dif_pos ⟨i]; rw [rfl⟩]; rw [Equiv.ofInjective_symm_apply]
@@ -507,7 +507,7 @@ theorem killCompl_rename_app
 
 中文:
 定理 killCompl_rename_app
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: killCompl hf (rename f p) = p
   证明: AlgHom.congr_fun (killCompl_comp_rename hf) p
 
@@ -533,7 +533,7 @@ lemma killCompl_map
 
 中文:
 引理 killCompl_map
-  条件: (φ : R ->+* S) (p : MvPolynomial τ R)
+  条件: (φ : R ->+* S) (p : 多元多项式 τ R)
   证明: by
   simp only [← AlgHom.coe_toRingHom, ← RingHom.comp_apply]
   congr
@@ -663,7 +663,7 @@ lemma killCompl_monomial
 
 中文:
 引理 killCompl_monomial
-  条件: {s} {c : R} [Decidable (↑s.support subseteq Set.range f)]
+  条件: {s} {c : R} [可判定 (↑s.support subseteq 集合.range f)]
   证明: by
   split_ifs with h
   · exact killCompl_monomial_eq_monomial_comapDomain_of_subset hf c h
@@ -734,7 +734,7 @@ lemma support_killCompl
 
 中文:
 引理 support_killCompl
-  条件: {p : MvPolynomial τ R}
+  条件: {p : 多元多项式 τ R}
   证明: by
   ext x
   simp [coeff_killCompl]
@@ -802,7 +802,7 @@ theorem renameEquiv_refl
 
 中文:
 定理 renameEquiv_refl
-  结论: renameEquiv R (Equiv.refl σ) = AlgEquiv.refl
+  结论: renameEquiv R (等价.refl σ) = 代数等价.refl
   证明: AlgEquiv.ext (by simp)
 
 @[simp]
@@ -898,7 +898,7 @@ theorem eval_rename
 
 中文:
 定理 eval_rename
-  条件: (g : τ -> R) (p : MvPolynomial σ R)
+  条件: (g : τ -> R) (p : 多元多项式 σ R)
   结论: eval g (rename k p) = eval (g ∘ k) p
   证明: eval₂_rename _ _ _ _
 -/
@@ -932,7 +932,7 @@ theorem aeval_rename
 
 中文:
 定理 aeval_rename
-  条件: [Algebra R S]
+  条件: [代数 R S]
   结论: aeval g (rename k p) = aeval (g ∘ k) p
   证明: eval₂Hom_rename _ _ _ _
 -/
@@ -949,7 +949,7 @@ lemma aeval_comp_rename
 
 中文:
 引理 aeval_comp_rename
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: AlgHom.ext fun p => aeval_rename k g p
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.aeval
@@ -971,7 +971,7 @@ theorem rename_eval₂
 
 中文:
 定理 rename_eval₂
-  条件: (g : τ -> MvPolynomial σ R)
+  条件: (g : τ -> 多元多项式 σ R)
   证明: by
   apply MvPolynomial.induction_on p <;>
     · intros
@@ -998,7 +998,7 @@ theorem rename_prod_mk_eval₂
 
 中文:
 定理 rename_prod_mk_eval₂
-  条件: (j : τ) (g : σ -> MvPolynomial σ R)
+  条件: (j : τ) (g : σ -> 多元多项式 σ R)
   证明: by
   apply MvPolynomial.induction_on p <;>
     · intros
@@ -1025,7 +1025,7 @@ theorem eval₂_rename_prod_mk
 
 中文:
 定理 eval₂_rename_prod_mk
-  条件: (g : σ × τ -> S) (i : σ) (p : MvPolynomial τ R)
+  条件: (g : σ × τ -> S) (i : σ) (p : 多元多项式 τ R)
   证明: by
   apply MvPolynomial.induction_on p <;>
     · intros
@@ -1049,7 +1049,7 @@ theorem eval_rename_prod_mk
 
 中文:
 定理 eval_rename_prod_mk
-  条件: (g : σ × τ -> R) (i : σ) (p : MvPolynomial τ R)
+  条件: (g : σ × τ -> R) (i : σ) (p : 多元多项式 τ R)
   证明: eval₂_rename_prod_mk (RingHom.id _) _ _ _
 
 Depends on / 依赖: RingHom, RingHom.id
@@ -1078,8 +1078,8 @@ theorem exists_finset_rename
           F
 
 中文:
-定理 exists_finset_rename
-  条件: (p : MvPolynomial σ R)
+定理 存在_finset_rename
+  条件: (p : 多元多项式 σ R)
   证明: by
   classical
   apply induction_on p
@@ -1129,8 +1129,8 @@ theorem exists_finset_rename₂
     constructor <;> simp [Function.com
 
 中文:
-定理 exists_finset_rename₂
-  条件: (p₁ p₂ : MvPolynomial σ R)
+定理 存在_finset_rename₂
+  条件: (p₁ p₂ : 多元多项式 σ R)
   证明: by
   obtain ⟨s₁, q₁, rfl⟩ := exists_finset_rename p₁
   obtain ⟨s₂, q₂, rfl⟩ := exists_finset_rename p₂
@@ -1167,8 +1167,8 @@ theorem exists_fin_rename
   simp only [Function.comp_def, E
 
 中文:
-定理 exists_fin_rename
-  条件: (p : MvPolynomial σ R)
+定理 存在_fin_rename
+  条件: (p : 多元多项式 σ R)
   证明: by
   obtain ⟨s, q, rfl⟩ := exists_finset_rename p
   let n := Fintype.card { x // x in s }
@@ -1200,7 +1200,7 @@ theorem eval₂_cast_comp
 
 中文:
 定理 eval₂_cast_comp
-  条件: (f : σ -> τ) (c : 整数 ->+* R) (g : τ -> R) (p : MvPolynomial σ 整数)
+  条件: (f : σ -> τ) (c : 整数 ->+* R) (g : τ -> R) (p : 多元多项式 σ 整数)
   证明: (eval₂_rename c f g p).symm
 -/
 theorem eval₂_cast_comp (f : σ -> τ) (c : Int ->+* R) (g : τ -> R) (p : MvPolynomial σ Int) :
@@ -1228,7 +1228,7 @@ theorem coeff_rename_mapDomain
 
 中文:
 定理 coeff_rename_mapDomain
-  条件: (f : σ -> τ) (hf : Injective f) (φ : MvPolynomial σ R) (d : σ ->₀ 自然数)
+  条件: (f : σ -> τ) (hf : 单射 f) (φ : 多元多项式 σ R) (d : σ ->₀ 自然数)
   证明: by
   classical
   induction φ using MvPolynomial.induction_on' with
@@ -1264,7 +1264,7 @@ theorem coeff_rename_embDomain
 
 中文:
 定理 coeff_rename_embDomain
-  条件: (f : σ ↪ τ) (φ : MvPolynomial σ R) (d : σ ->₀ 自然数)
+  条件: (f : σ ↪ τ) (φ : 多元多项式 σ R) (d : σ ->₀ 自然数)
   证明: by
   rw [Finsupp.embDomain_eq_mapDomain f]; rw [coeff_rename_mapDomain f f.injective]
 
@@ -1294,7 +1294,7 @@ theorem coeff_rename_eq_zero
 
 中文:
 定理 coeff_rename_eq_zero
-  结论: (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ 自然数)
+  结论: (f : σ -> τ) (φ : 多元多项式 σ R) (d : τ ->₀ 自然数)
   证明: by
   classical
   rw [← notMem_support_iff]
@@ -1334,7 +1334,7 @@ theorem coeff_rename_ne_zero
 
 中文:
 定理 coeff_rename_ne_zero
-  结论: (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ 自然数)
+  结论: (f : σ -> τ) (φ : 多元多项式 σ R) (d : τ ->₀ 自然数)
   证明: by
   contrapose! h
   apply coeff_rename_eq_zero _ _ _ h
@@ -1366,7 +1366,7 @@ theorem constantCoeff_rename
 
 中文:
 定理 constantCoeff_rename
-  条件: {τ : 类型} (f : σ -> τ) (φ : MvPolynomial σ R)
+  条件: {τ : 类型} (f : σ -> τ) (φ : 多元多项式 σ R)
   证明: by
   apply φ.induction_on
   · intro a
@@ -1402,7 +1402,7 @@ theorem support_rename_of_injective
 
 中文:
 定理 support_rename_of_injective
-  结论: {p : MvPolynomial σ R} {f : σ -> τ} [DecidableEq τ]
+  结论: {p : 多元多项式 σ R} {f : σ -> τ} [DecidableEq τ]
   证明: Finsupp.mapDomain_support_of_injective (Finsupp.mapDomain_injective h) _
 
 Depends on / 依赖: Finsupp, Finsupp.mapDomain_injective, Finsupp.mapDomain_support_of_injective, mapDomain_injective, mapDomain_support_of_injective
@@ -1425,7 +1425,7 @@ lemma support_rename_killCompl_subset
 
 中文:
 引理 support_rename_killCompl_subset
-  条件: {p : MvPolynomial τ R} {f : σ -> τ} (hf : f.Injective)
+  条件: {p : 多元多项式 τ R} {f : σ -> τ} (hf : f.单射)
   证明: by
   classical
   rw [MvPolynomial.support_rename_of_injective hf]; rw [support_killCompl]; rw [Finset.image_preimage]

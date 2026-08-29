@@ -97,7 +97,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  结论: Subsingleton (G ⧸ N) ↔ N = ⊤
+  结论: 子单例 (G ⧸ N) ↔ N = ⊤
   证明: by
   simp [HasQuotient.Quotient]
 -/
@@ -115,7 +115,7 @@ lemma nontrivial_iff
 
 中文:
 引理 nontrivial_iff
-  结论: Nontrivial (G ⧸ N) ↔ N != ⊤
+  结论: 非平凡 (G ⧸ N) ↔ N != ⊤
   证明: by
   simp [← not_subsingleton_iff_nontrivial]
 -/
@@ -177,8 +177,8 @@ instance Quotient.group
   body: inferInstanceAs Group (delta% QuotientGroup.con N).Quotient
 
 中文:
-实例 Quotient.group
-  签名: : Group (G ⧸ N)
+实例 商.group
+  签名: : 群 (G ⧸ N)
   定义体: inferInstanceAs Group (delta% QuotientGroup.con N).Quotient
 
 Depends on / 依赖: Quotient, QuotientGroup, QuotientGroup.con
@@ -207,7 +207,7 @@ theorem con_ker_eq_conKer
 中文:
 定理 con_ker_eq_conKer
   条件: (f : G ->* M)
-  结论: QuotientGroup.con f.ker = Con.ker f
+  结论: 商群.con f.ker = Con.ker f
   证明: by
   ext
   rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [Setoid.comm']; rw [leftRel_apply]; rw [Con.ker_rel]; rw [MonoidHom.eq_iff]
@@ -299,7 +299,7 @@ theorem mk'_surjective
 
 中文:
 定理 mk'_surjective
-  结论: Surjective mk' N
+  结论: 满射 mk' N
   证明: @mk_surjective _ _ N
 
 @[to_additive]
@@ -377,7 +377,7 @@ theorem eq_one_iff
 
 中文:
 定理 eq_one_iff
-  条件: {N : Subgroup G} [N.Normal] (x : G)
+  条件: {N : 子群 G} [N.正规] (x : G)
   结论: (x : G ⧸ N) = 1 ↔ x in N
   证明: by
   refine QuotientGroup.eq.trans ?_
@@ -423,7 +423,7 @@ theorem range_mk'
 
 中文:
 定理 range_mk'
-  结论: (QuotientGroup.mk' N).range = ⊤
+  结论: (商群.mk' N).range = ⊤
   证明: MonoidHom.range_eq_top.mpr (mk'_surjective N)
 
 @[to_additive]
@@ -447,7 +447,7 @@ fun h x hx => (eq_one_iff _).mp by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
 
 中文:
 定理 ker_le_range_iff
-  条件: [MulOneClass I] (f : G ->* H) [f.range.Normal] (g : H ->* I)
+  条件: [MulOne类 I] (f : G ->* H) [f.range.正规] (g : H ->* I)
   证明: ⟨fun h => MonoidHom.ext fun ⟨_, hx⟩ => (eq_one_iff _).mpr h hx,
 fun h x hx => (eq_one_iff _).mp by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
 
@@ -473,7 +473,7 @@ theorem ker_mk'
 
 中文:
 定理 ker_mk'
-  结论: MonoidHom.ker (QuotientGroup.mk' N : G ->* G ⧸ N) = N
+  结论: 幺半群态射.ker (商群.mk' N : G ->* G ⧸ N) = N
   证明: Subgroup.ext eq_one_iff
 
 @[to_additive]
@@ -496,7 +496,7 @@ theorem eq_iff_div_mem
 
 中文:
 定理 eq_iff_div_mem
-  条件: {N : Subgroup G} [nN : N.Normal] {x y : G}
+  条件: {N : 子群 G} [nN : N.正规] {x y : G}
   证明: by
   refine eq_comm.trans (QuotientGroup.eq.trans ?_)
   rw [nN.mem_comm_iff]; rw [div_eq_mul_inv]
@@ -523,8 +523,8 @@ local notation " Q" => G ⧸ N
 @[to_additive (attr := simp)]
 
 中文:
-实例 Quotient.commGroup
-  签名: {G : 类型} [CommGroup G] (N : Subgroup G)
+实例 商.commGroup
+  签名: {G : 类型} [交换群 G] (N : 子群 G)
   定义体: fun a b => Quotient.inductionOn₂' a b fun a b => congr_arg mk (mul_comm a b)
 
 local notation " Q" => G ⧸ N
@@ -762,7 +762,7 @@ theorem _root_.Con.subgroup_quotientGroupCon
 
 中文:
 定理 _root_.Con.subgroup_quotientGroupCon
-  条件: (H : Subgroup G) [H.Normal]
+  条件: (H : 子群 G) [H.正规]
   证明: by
   ext
   simp [QuotientGroup.con, leftRel_apply]
@@ -826,7 +826,7 @@ definition _root_.Subgroup.orderIsoCon
     simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le
 
 中文:
-定义 _root_.Subgroup.orderIsoCon
+定义 _root_.子群.orderIsoCon
   签名: :
   定义体: letI : N.val.Normal := N.prop; QuotientGroup.con N
   invFun c := ⟨c.subgroup, inferInstance⟩
@@ -862,7 +862,7 @@ lemma con_le_iff
 
 中文:
 引理 con_le_iff
-  条件: {N M : Subgroup G} [N.Normal] [M.Normal]
+  条件: {N M : 子群 G} [N.正规] [M.正规]
   证明: (Subgroup.orderIsoCon.map_rel_iff (a := ⟨N, inferInstance⟩) (b := ⟨M, inferInstance⟩))
 
 @[to_additive (attr := gcongr)]
@@ -884,7 +884,7 @@ lemma con_mono
 
 中文:
 引理 con_mono
-  条件: {N M : Subgroup G} [hN : N.Normal] [hM : M.Normal] (h : N <= M)
+  条件: {N M : 子群 G} [hN : N.正规] [hM : M.正规] (h : N <= M)
   证明: con_le_iff.mpr h
 
 Depends on / 依赖: con_le_iff, con_le_iff.mpr
@@ -1019,7 +1019,7 @@ theorem lift_surjective_of_surjective
 
 中文:
 定理 lift_surjective_of_surjective
-  条件: (φ : G ->* M) (hφ : Function.Surjective φ) (HN : N <= φ.ker)
+  条件: (φ : G ->* M) (hφ : 函数.满射 φ) (HN : N <= φ.ker)
   证明: Quotient.lift_surjective _ _ hφ
 
 @[to_additive]
@@ -1099,7 +1099,7 @@ definition liftEquiv
 
 中文:
 定义 liftEquiv
-  签名: {φ : G ->* H} (hφ : Function.Surjective φ)
+  签名: {φ : G ->* H} (hφ : 函数.满射 φ)
   定义体: MulEquiv.ofBijective (QuotientGroup.lift N φ HN.le)
     ⟨by rw [← MonoidHom.ker_eq_bot_iff, ker_lift, ← HN, QuotientGroup.map_mk'_self],
       lift_surjective_of_surjective N φ hφ HN.le⟩
@@ -1127,7 +1127,7 @@ theorem liftEquiv_coe
 
 中文:
 定理 liftEquiv_coe
-  条件: {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G)
+  条件: {φ : G ->* H} (hφ : 函数.满射 φ) (HN : N = φ.ker) (g : G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1146,7 +1146,7 @@ theorem liftEquiv_mk
 
 中文:
 定理 liftEquiv_mk
-  条件: {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G)
+  条件: {φ : G ->* H} (hφ : 函数.满射 φ) (HN : N = φ.ker) (g : G)
   证明: rfl
 -/
 theorem liftEquiv_mk {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G) :
@@ -1172,7 +1172,7 @@ definition map
 
 中文:
 定义 map
-  签名: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f)
+  签名: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f)
   定义体: by
   refine QuotientGroup.lift N ((mk' M).comp f) ?_
   intro x hx
@@ -1204,7 +1204,7 @@ theorem map_mk
 
 中文:
 定理 map_mk
-  条件: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G)
+  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f) (x : G)
   证明: rfl
 
 @[to_additive]
@@ -1226,7 +1226,7 @@ theorem map_mk'
 
 中文:
 定理 map_mk'
-  条件: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G)
+  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f) (x : G)
   证明: rfl
 
 @[to_additive]
@@ -1248,7 +1248,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  结论: (M : Subgroup H) [M.Normal] (f : G ->* H)
+  结论: (M : 子群 H) [M.正规] (f : G ->* H)
   证明: lift_surjective_of_surjective _ _ hf _
 
 @[to_additive]
@@ -1275,7 +1275,7 @@ theorem ker_map
 
 中文:
 定理 ker_map
-  条件: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= Subgroup.comap f M)
+  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= 子群.comap f M)
   证明: by
   simp_rw [← ker_mk' M, MonoidHom.comap_ker]
   exact QuotientGroup.ker_lift _ _ _
@@ -1302,7 +1302,7 @@ theorem map_id_apply
 
 中文:
 定理 map_id_apply
-  条件: (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) (x)
+  条件: (h : N <= 子群.comap (幺半群态射.id _) N := (子群.comap_id N).le) (x)
   证明: induction_on x fun _x => rfl
 
 @[to_additive (attr := simp)]
@@ -1326,7 +1326,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le)
+  条件: (h : N <= 子群.comap (幺半群态射.id _) N := (子群.comap_id N).le)
   证明: MonoidHom.ext (map_id_apply N h)
 
 @[to_additive (attr := simp)]
@@ -1352,7 +1352,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {I : 类型} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
+  结论: {I : 类型} [群 I] (M : 子群 H) (O : 子群 I) [M.正规] [O.正规]
   证明: by
   refine induction_on x fun x => ?_
   simp only [map_mk, MonoidHom.comp_apply]
@@ -1380,7 +1380,7 @@ theorem map_comp_map
 
 中文:
 定理 map_comp_map
-  结论: {I : 类型} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
+  结论: {I : 类型} [群 I] (M : 子群 H) (O : 子群 I) [M.正规] [O.正规]
   证明: MonoidHom.ext (map_map N M O f g hf hg hgf)
 
 Depends on / 依赖: MonoidHom, MonoidHom.ext, Subgroup, Subgroup.comap_comap, Subgroup.comap_mono, comap_comap, comap_mono, g.comp, hf.trans, map_map, trans_eq
@@ -1435,7 +1435,7 @@ lemma preimage_image_coe
 
 中文:
 引理 preimage_image_coe
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: ((↑) : G -> Q) ⁻¹' ((↑) '' s) = N * s
   证明: by
   ext a
@@ -1473,7 +1473,7 @@ lemma image_coe_inj
 
 中文:
 引理 image_coe_inj
-  条件: {s t : Set G}
+  条件: {s t : 集合 G}
   结论: ((↑) : G -> Q) '' s = ((↑) : G -> Q) '' t ↔ ↑N * s = N * t
   证明: by
   simp_rw [← preimage_image_coe]
@@ -1612,7 +1612,7 @@ theorem congr_refl
 
 中文:
 定理 congr_refl
-  条件: (he : G'.map (MulEquiv.refl G : G ->* G) = G' := Subgroup.map_id G')
+  条件: (he : G'.map (乘法等价.refl G : G ->* G) = G' := 子群.map_id G')
   证明: by
   ext ⟨x⟩
   rfl

@@ -54,7 +54,7 @@ theorem rexp_neg_image_aux
 
 中文:
 定理 rexp_neg_image_aux
-  结论: rexp ∘ Neg.neg '' univ = Ioi 0
+  结论: rexp ∘ 取负.neg '' univ = 左开右无界区间 0
   证明: by
   rw [Set.image_comp]; rw [Set.image_univ_of_surjective neg_surjective]; rw [Set.image_univ]; rw [Real.range_exp]
 -/
@@ -71,7 +71,7 @@ theorem rexp_neg_injOn_aux
 
 中文:
 定理 rexp_neg_injOn_aux
-  结论: univ.InjOn (rexp ∘ Neg.neg)
+  结论: univ.单射限制 (rexp ∘ 取负.neg)
   证明: Real.exp_injective.injOn.comp neg_injective.injOn (univ.mapsTo_univ _)
 -/
 private theorem rexp_neg_injOn_aux : univ.InjOn (rexp ∘ Neg.neg) :=
@@ -92,7 +92,7 @@ theorem rexp_cexp_aux
 
 中文:
 定理 rexp_cexp_aux
-  条件: (x : 实数) (s : Complex) (f : E)
+  条件: (x : 实数) (s : 复形) (f : E)
   证明: by
   change (rexp (-x) : Complex) • _ = _ • f
   rw [← smul_assoc]; rw [smul_eq_mul]
@@ -125,7 +125,7 @@ theorem mellin_eq_fourier
 
 中文:
 定理 mellin_eq_fourier
-  条件: (f : 实数 -> E) {s : Complex}
+  条件: (f : 实数 -> E) {s : 复形}
   证明: calc
     mellin f s
       = ∫ (u : Real), Complex.exp (-s * u) • f (Real.exp (-u)) := by
@@ -174,7 +174,7 @@ theorem mellinInv_eq_fourierInv
 
 中文:
 定理 mellinInv_eq_fourierInv
-  条件: (σ : 实数) (f : Complex -> E) {x : 实数} (hx : 0 < x)
+  条件: (σ : 实数) (f : 复形 -> E) {x : 实数} (hx : 0 < x)
   证明: calc
   mellinInv σ f x
     = (x : Complex) ^ (-σ : Complex) •

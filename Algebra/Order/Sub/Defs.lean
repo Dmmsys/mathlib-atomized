@@ -58,7 +58,7 @@ class OrderedSub
 
 中文:
 类 OrderedSub
-  参数: (α : 类型) [LE α] [Add α] [Sub α]
+  参数: (α : 类型) [LE α] [加法 α] [减法 α]
   公理与运算 (1 个):
     - tsub_le_iff_right : 对任意 a b c : α, a - b <= c ↔ a <= c + b
 -/
@@ -79,7 +79,7 @@ theorem tsub_le_iff_right
 
 中文:
 定理 tsub_le_iff_right
-  条件: [LE α] [Add α] [Sub α] [OrderedSub α] {a b c : α}
+  条件: [LE α] [加法 α] [减法 α] [OrderedSub α] {a b c : α}
   证明: OrderedSub.tsub_le_iff_right a b c
 
 Depends on / 依赖: OrderedSub, OrderedSub.tsub_le_iff_right, tsub_le_iff_right
@@ -305,7 +305,7 @@ theorem antitone_const_tsub
 
 中文:
 定理 antitone_const_tsub
-  结论: Antitone fun x => c - x
+  结论: 递减 fun x => c - x
   证明: fun _ _ hxy => tsub_le_tsub rfl.le hxy
 
 Depends on / 依赖: rfl.le, tsub_le_tsub

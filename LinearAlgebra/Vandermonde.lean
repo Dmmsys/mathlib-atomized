@@ -99,7 +99,7 @@ definition projVandermonde
 
 中文:
 定义 projVandermonde
-  签名: (v w : Fin n -> R)
+  签名: (v w : 有限集 n -> R)
   定义体: rectVandermonde v w n
 
 Depends on / 依赖: rectVandermonde
@@ -117,7 +117,7 @@ definition vandermonde
 
 中文:
 定义 vandermonde
-  签名: (v : Fin n -> R)
+  签名: (v : 有限集 n -> R)
   定义体: .of fun i j => (v i) ^ j.1
 -/
 def vandermonde (v : Fin n -> R) : Matrix (Fin n) (Fin n) R := .of fun i j => (v i) ^ j.1
@@ -134,7 +134,7 @@ lemma vandermonde_eq_projVandermonde
 
 中文:
 引理 vandermonde_eq_projVandermonde
-  条件: (v : Fin n -> R)
+  条件: (v : 有限集 n -> R)
   结论: vandermonde v = projVandermonde v 1
   证明: by
   simp [projVandermonde, rectVandermonde, vandermonde]
@@ -154,7 +154,7 @@ theorem projVandermonde_apply
 
 中文:
 定理 projVandermonde_apply
-  条件: {v w : Fin n -> R} {i j : Fin n}
+  条件: {v w : 有限集 n -> R} {i j : 有限集 n}
   证明: rfl
 -/
 theorem projVandermonde_apply {v w : Fin n -> R} {i j : Fin n} :
@@ -172,7 +172,7 @@ theorem rectVandermonde_apply
 
 中文:
 定理 rectVandermonde_apply
-  条件: {α : 类型} {v w : α -> R} {i : α} {j : Fin n}
+  条件: {α : 类型} {v w : α -> R} {i : α} {j : 有限集 n}
   证明: rfl
 
 @[simp]
@@ -194,7 +194,7 @@ theorem vandermonde_apply
 
 中文:
 定理 vandermonde_apply
-  条件: (v : Fin n -> R) (i j)
+  条件: (v : 有限集 n -> R) (i j)
   结论: vandermonde v i j = v i ^ (j : 自然数)
   证明: rfl
 
@@ -217,7 +217,7 @@ theorem vandermonde_cons
 
 中文:
 定理 vandermonde_cons
-  条件: (v0 : R) (v : Fin n -> R)
+  条件: (v0 : R) (v : 有限集 n -> R)
   证明: by
   ext i j
   refine Fin.cases (by simp) (fun i => ?_) i
@@ -247,7 +247,7 @@ theorem vandermonde_succ
 
 中文:
 定理 vandermonde_succ
-  条件: (v : Fin n.succ -> R)
+  条件: (v : 有限集 n.succ -> R)
   证明: by
   conv_lhs => rw [← Fin.cons_self_tail v, vandermonde_cons]
   rfl
@@ -272,7 +272,7 @@ theorem vandermonde_mul_vandermonde_transpose
 
 中文:
 定理 vandermonde_mul_vandermonde_transpose
-  条件: (v w : Fin n -> R) (i j)
+  条件: (v w : 有限集 n -> R) (i j)
   证明: by
   simp only [vandermonde_apply, Matrix.mul_apply, Matrix.transpose_apply, mul_pow]
 
@@ -293,7 +293,7 @@ theorem vandermonde_transpose_mul_vandermonde
 
 中文:
 定理 vandermonde_transpose_mul_vandermonde
-  条件: (v : Fin n -> R) (i j)
+  条件: (v : 有限集 n -> R) (i j)
   证明: by
   simp only [vandermonde_apply, Matrix.mul_apply, Matrix.transpose_apply, pow_add]
 
@@ -371,7 +371,7 @@ theorem projVandermonde_apply_zero_right
 
 中文:
 定理 projVandermonde_apply_zero_right
-  条件: {v w : Fin (n + 1) -> R} {i : Fin (n + 1)} (hw : w i = 0)
+  条件: {v w : 有限集 (n + 1) -> R} {i : 有限集 (n + 1)} (hw : w i = 0)
   证明: by
   ext j
   obtain rfl | hlt := j.le_last.eq_or_lt
@@ -399,7 +399,7 @@ theorem projVandermonde_comp
 
 中文:
 定理 projVandermonde_comp
-  条件: {v w : Fin n -> R} (f : Fin n -> Fin n)
+  条件: {v w : 有限集 n -> R} (f : 有限集 n -> 有限集 n)
   证明: rfl
 -/
 theorem projVandermonde_comp {v w : Fin n -> R} (f : Fin n -> Fin n) :
@@ -417,7 +417,7 @@ theorem projVandermonde_map
 
 中文:
 定理 projVandermonde_map
-  条件: {R' : 类型} [CommRing R'] (φ : R ->+* R') (v w : Fin n -> R)
+  条件: {R' : 类型} [交换环 R'] (φ : R ->+* R') (v w : 有限集 n -> R)
   证明: by
   ext i j
   simp [projVandermonde_apply]
@@ -446,7 +446,7 @@ theorem det_projVandermonde_of_field
 
 中文:
 定理 det_projVandermonde_of_field
-  条件: (v w : Fin n -> K)
+  条件: (v w : 有限集 n -> K)
   证明: by
   induction n with
   | zero => simp
@@ -523,7 +523,7 @@ theorem det_projVandermonde
 
 中文:
 定理 det_projVandermonde
-  条件: (v w : Fin n -> R)
+  条件: (v w : 有限集 n -> R)
   结论: (projVandermonde v w).det =
   证明: by
   let u (b : Bool) (i : Fin n) := (algebraMap (MvPolynomial (Fin n × Bool) Int)
@@ -559,7 +559,7 @@ theorem det_vandermonde
 
 中文:
 定理 det_vandermonde
-  条件: (v : Fin n -> R)
+  条件: (v : 有限集 n -> R)
   证明: by
   simp [vandermonde_eq_projVandermonde, det_projVandermonde]
 
@@ -585,7 +585,7 @@ theorem det_vandermonde_eq_zero_iff
 
 中文:
 定理 det_vandermonde_eq_zero_iff
-  条件: [IsDomain R] {v : Fin n -> R}
+  条件: [是整环 R] {v : 有限集 n -> R}
   证明: by
   constructor
   · simp only [det_vandermonde v, Finset.prod_eq_zero_iff, sub_eq_zero, forall_exists_index]
@@ -620,7 +620,7 @@ theorem det_vandermonde_ne_zero_iff
 
 中文:
 定理 det_vandermonde_ne_zero_iff
-  条件: [IsDomain R] {v : Fin n -> R}
+  条件: [是整环 R] {v : 有限集 n -> R}
   证明: by
   unfold Function.Injective
   simp only [det_vandermonde_eq_zero_iff, Ne, not_exists, not_and, Classical.not_not]
@@ -648,7 +648,7 @@ theorem det_vandermonde_add
 
 中文:
 定理 det_vandermonde_add
-  条件: (v : Fin n -> R) (a : R)
+  条件: (v : 有限集 n -> R) (a : R)
   证明: by
   simp [Matrix.det_vandermonde]
 
@@ -673,7 +673,7 @@ theorem det_vandermonde_sub
 
 中文:
 定理 det_vandermonde_sub
-  条件: (v : Fin n -> R) (a : R)
+  条件: (v : 有限集 n -> R) (a : R)
   证明: by
   rw [← det_vandermonde_add v (-a)]
   simp only [← sub_eq_add_neg]
@@ -694,8 +694,8 @@ theorem eq_zero_of_forall_index_sum_pow_mul_eq_zero
   proof: eq_zero_of_mulVec_eq_zero (det_vandermonde_ne_zero_iff.mpr hf) (funext hfv)
 
 中文:
-定理 eq_zero_of_forall_index_sum_pow_mul_eq_zero
-  结论: [IsDomain R] {f v : Fin n -> R}
+定理 eq_zero_of_对任意_index_sum_pow_mul_eq_zero
+  结论: [是整环 R] {f v : 有限集 n -> R}
   证明: eq_zero_of_mulVec_eq_zero (det_vandermonde_ne_zero_iff.mpr hf) (funext hfv)
 
 Depends on / 依赖: det_vandermonde_ne_zero_iff, det_vandermonde_ne_zero_iff.mpr, eq_zero_of_mulVec_eq_zero
@@ -716,8 +716,8 @@ theorem eq_zero_of_forall_index_sum_mul_pow_eq_zero
   exact hfv
 
 中文:
-定理 eq_zero_of_forall_index_sum_mul_pow_eq_zero
-  结论: [IsDomain R] {f v : Fin n -> R}
+定理 eq_zero_of_对任意_index_sum_mul_pow_eq_zero
+  结论: [是整环 R] {f v : 有限集 n -> R}
   证明: by
   apply eq_zero_of_forall_index_sum_pow_mul_eq_zero hf
   simp_rw [mul_comm]
@@ -740,8 +740,8 @@ theorem eq_zero_of_forall_pow_sum_mul_pow_eq_zero
   proof: eq_zero_of_vecMul_eq_zero (det_vandermonde_ne_zero_iff.mpr hf) (funext hfv)
 
 中文:
-定理 eq_zero_of_forall_pow_sum_mul_pow_eq_zero
-  结论: [IsDomain R] {f v : Fin n -> R}
+定理 eq_zero_of_对任意_pow_sum_mul_pow_eq_zero
+  结论: [是整环 R] {f v : 有限集 n -> R}
   证明: eq_zero_of_vecMul_eq_zero (det_vandermonde_ne_zero_iff.mpr hf) (funext hfv)
 
 Depends on / 依赖: det_vandermonde_ne_zero_iff, det_vandermonde_ne_zero_iff.mpr, eq_zero_of_vecMul_eq_zero
@@ -768,7 +768,7 @@ have : (p j).support subseteq range n := supp_subset_range Nat.lt_of_le_of_lt (h
 
 中文:
 定理 eval_matrixOfPolynomials_eq_vandermonde_mul_matrixOfPolynomials
-  结论: (v : Fin n -> R)
+  结论: (v : 有限集 n -> R)
   证明: by
   ext i j
   simp_rw [Matrix.mul_apply, eval, Matrix.of_apply, eval₂_eq_sum]
@@ -803,7 +803,7 @@ theorem det_eval_matrixOfPolynomials_eq_det_vandermonde
 
 中文:
 定理 det_eval_matrixOfPolynomials_eq_det_vandermonde
-  结论: (v : Fin n -> R) (p : Fin n -> R[X])
+  结论: (v : 有限集 n -> R) (p : 有限集 n -> R[X])
   证明: by
   rw [Matrix.eval_matrixOfPolynomials_eq_vandermonde_mul_matrixOfPolynomials v p (fun i =>
       Nat.le_of_eq (h_deg i))]; rw [Matrix.det_mul]; rw [Matrix.det_matrixOfPolynomials p h_deg h_monic]; rw [mul_one]
@@ -878,7 +878,7 @@ lemma of_eval_descPochhammer_eq_mul_of_choose
 
 中文:
 引理 of_eval_descPochhammer_eq_mul_of_choose
-  条件: {n : 自然数} (v : Fin n -> 自然数)
+  条件: {n : 自然数} (v : 有限集 n -> 自然数)
   证明: by
   convert! det_mul_row (fun (i : Fin n) => ((Nat.factorial (i : Nat)) : Int)) _
   · rw [of_apply, descPochhammer_eval_eq_descFactorial Int _ _]
@@ -912,7 +912,7 @@ lemma superFactorial_dvd_vandermonde_det
 
 中文:
 引理 superFactorial_dvd_vandermonde_det
-  条件: {n : 自然数} (v : Fin (n + 1) -> 整数)
+  条件: {n : 自然数} (v : 有限集 (n + 1) -> 整数)
   证明: by
   let m := inf' univ ⟨0, mem_univ _⟩ v
   let w' := fun i => (v i - m).toNat

@@ -58,7 +58,7 @@ class QuotientAction
     - inv_mul_mem : forall (b : X) {a a' : G}, a⁻¹ * a' in H -> (b • a)⁻¹ * b • a' in H
 
 中文:
-类 QuotientAction
+类 商作用
   参数: : 命题 where
   公理与运算 (1 个):
     - inv_mul_mem : 对任意 (b : X) {a a' : G}, a⁻¹ * a' in H -> (b • a)⁻¹ * b • a' in H
@@ -78,8 +78,8 @@ class _root_.AddAction.QuotientAction
     - inv_mul_mem : forall (x : X) {g g' : G}, -g + g' in H -> -(x +ᵥ g) + (x +ᵥ g') in H
 
 中文:
-类 _root_.AddAction.QuotientAction
-  参数: {G : 类型u} (X : 类型v) [AddGroup G] [AddMonoid X]
+类 _root_.加法作用.商作用
+  参数: {G : 类型u} (X : 类型v) [加法群 G] [加法幺半群 X]
   公理与运算 (1 个):
     - inv_mul_mem : 对任意 (x : X) {g g' : G}, -g + g' in H -> -(x +ᵥ g) + (x +ᵥ g') in H
 -/
@@ -104,7 +104,7 @@ instance left_quotientAction
 
 中文:
 实例 left_quotientAction
-  签名: : QuotientAction G H
+  签名: : 商作用 G H
   定义体: ⟨fun _ _ _ _ => by rwa [smul_eq_mul, smul_eq_mul, mul_inv_rev, mul_assoc, inv_mul_cancel_left]⟩
 
 @[to_additive]
@@ -129,7 +129,7 @@ instance right_quotientAction
 
 中文:
 实例 right_quotientAction
-  签名: : QuotientAction (normalizer H : Subgroup G).op H
+  签名: : 商作用 (normalizer H : 子群 G).op H
   定义体: ⟨fun b c _ _ => by
     rwa [smul_def, smul_def, smul_eq_mul_unop, smul_eq_mul_unop, mul_inv_rev, ← mul_assoc,
       mem_normalizer_iff'.mp b.prop, mul_assoc, mul_inv_cancel_left]⟩
@@ -158,7 +158,7 @@ instance right_quotientAction'
 
 中文:
 实例 right_quotientAction'
-  签名: [hH : H.Normal]
+  签名: [hH : H.正规]
   定义体: ⟨fun _ _ _ _ => by
     rwa [smul_eq_mul_unop, smul_eq_mul_unop, mul_inv_rev, mul_assoc, hH.mem_comm_iff, mul_assoc,
       mul_inv_cancel_right]⟩
@@ -186,7 +186,7 @@ leftRel_apply.mpr QuotientAction.inv_mul_mem b leftRel_apply.mp h
 
 中文:
 实例 quotient
-  签名: [QuotientAction X H]
+  签名: [商作用 X H]
   定义体: Quotient.map' (b • ·) fun _ _ h =>
 leftRel_apply.mpr QuotientAction.inv_mul_mem b leftRel_apply.mp h
   one_smul q := Quotient.inductionOn' q fun a => congr_arg Quotient.mk'' (one_smul X a)
@@ -215,8 +215,8 @@ theorem Quotient.smul_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 Quotient.smul_mk
-  条件: [QuotientAction X H] (b : X) (g : G)
+定理 商.smul_mk
+  条件: [商作用 X H] (b : X) (g : G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -237,8 +237,8 @@ theorem Quotient.smul_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 Quotient.smul_coe
-  条件: [QuotientAction X H] (b : X) (g : G)
+定理 商.smul_coe
+  条件: [商作用 X H] (b : X) (g : G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -259,8 +259,8 @@ theorem Quotient.mk_smul_out
 @[to_additive]
 
 中文:
-定理 Quotient.mk_smul_out
-  条件: [QuotientAction X H] (b : X) (q : G ⧸ H)
+定理 商.mk_smul_out
+  条件: [商作用 X H] (b : X) (q : G ⧸ H)
   证明: by rw [← Quotient.smul_mk, QuotientGroup.out_eq']
 
 @[to_additive]
@@ -282,8 +282,8 @@ theorem Quotient.coe_smul_out
   simp
 
 中文:
-定理 Quotient.coe_smul_out
-  条件: [QuotientAction X H] (b : X) (q : G ⧸ H)
+定理 商.coe_smul_out
+  条件: [商作用 X H] (b : X) (q : G ⧸ H)
   结论: ↑(b • q.out) = b • q
   证明: by
   simp
@@ -301,7 +301,7 @@ theorem _root_.QuotientGroup.out_conj_pow_minimalPeriod_mem
   rw [mul_assoc]; rw [← QuotientGroup.eq]; rw [QuotientGroup.out_eq']; rw [← smul_eq_mul]; rw [Quotient.mk_smul_out]; rw [eq_comm]; rw [pow_smul_eq_iff_minimalPeriod_dvd]
 
 中文:
-定理 _root_.QuotientGroup.out_conj_pow_minimalPeriod_mem
+定理 _root_.商群.out_conj_pow_minimalPeriod_mem
   条件: (g : G) (q : G ⧸ H)
   证明: by
   rw [mul_assoc]; rw [← QuotientGroup.eq]; rw [QuotientGroup.out_eq']; rw [← smul_eq_mul]; rw [Quotient.mk_smul_out]; rw [eq_comm]; rw [pow_smul_eq_iff_minimalPeriod_dvd]
@@ -327,8 +327,8 @@ definition _root_.MulActionHom.toQuotient
 @[simp]
 
 中文:
-定义 _root_.MulActionHom.toQuotient
-  签名: (H : Subgroup G)
+定义 _root_.乘法作用态射.toQuotient
+  签名: (H : 子群 G)
   定义体: (↑); map_smul' := Quotient.smul_coe H
 
 @[simp]
@@ -350,8 +350,8 @@ theorem _root_.MulActionHom.toQuotient_apply
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.MulActionHom.toQuotient_apply
-  条件: (H : Subgroup G) (g : G)
+定理 _root_.乘法作用态射.toQuotient_apply
+  条件: (H : 子群 G) (g : G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -374,7 +374,7 @@ theorem coe_quotient_smul
 
 中文:
 定理 coe_quotient_smul
-  结论: {H : Subgroup G} [H.Normal] [SMul G X]
+  结论: {H : 子群 G} [H.正规] [标量乘法 G X]
   证明: by
   rw [← smul_one_smul (G ⧸ H) g x]; rw [← QuotientGroup.mk_one]; rw [Quotient.smul_coe]; rw [smul_eq_mul]; rw [mul_one]
 
@@ -398,7 +398,7 @@ instance mulLeftCosetsCompSubtypeVal
 
 中文:
 实例 mulLeftCosetsCompSubtypeVal
-  签名: (H I : Subgroup G)
+  签名: (H I : 子群 G)
   定义体: MulAction.compHom (G ⧸ H) (Subgroup.subtype I)
 
 Depends on / 依赖: MulAction, MulAction.compHom, Subgroup, Subgroup.subtype, compHom, subtype
@@ -426,7 +426,7 @@ definition ofQuotientStabilizer
 
 中文:
 定义 ofQuotientStabilizer
-  签名: (g : G ⧸ MulAction.stabilizer G x)
+  签名: (g : G ⧸ 乘法作用.stabilizer G x)
   定义体: Quotient.liftOn' g (· • x) fun g1 g2 H =>
     calc
       g1 • x = g1 • (g1⁻¹ * g2) • x := congr_arg _ (leftRel_apply.mp H).symm
@@ -457,7 +457,7 @@ theorem ofQuotientStabilizer_mk
 中文:
 定理 ofQuotientStabilizer_mk
   条件: (g : G)
-  结论: ofQuotientStabilizer G x (QuotientGroup.mk g) = g • x
+  结论: ofQuotientStabilizer G x (商群.mk g) = g • x
   证明: rfl
 
 @[to_additive]
@@ -503,7 +503,7 @@ theorem ofQuotientStabilizer_smul
 
 中文:
 定理 ofQuotientStabilizer_smul
-  条件: (g : G) (g' : G ⧸ MulAction.stabilizer G x)
+  条件: (g : G) (g' : G ⧸ 乘法作用.stabilizer G x)
   证明: Quotient.inductionOn' g' fun _ => mul_smul _ _ _
 
 @[to_additive]
@@ -530,7 +530,7 @@ Quotient.sound' by
 
 中文:
 定理 injective_ofQuotientStabilizer
-  结论: Function.Injective (ofQuotientStabilizer G x)
+  结论: 函数.单射 (ofQuotientStabilizer G x)
   证明: fun y₁ y₂ =>
   Quotient.inductionOn₂' y₁ y₂ fun g₁ g₂ (H : g₁ • x = g₂ • x) =>
 Quotient.sound' by
@@ -616,7 +616,7 @@ theorem card_orbit_mul_card_stabilizer_eq_card_group
 
 中文:
 定理 card_orbit_mul_card_stabilizer_eq_card_group
-  结论: (b : X) [Fintype G] [Fintype <| orbit G b]
+  结论: (b : X) [有限类型 G] [有限类型 <| orbit G b]
   证明: by
   rw [← Fintype.card_prod]; rw [Fintype.card_congr (orbitProdStabilizerEquivGroup G b)]
 
@@ -664,7 +664,7 @@ theorem stabilizer_quotient
 
 中文:
 定理 stabilizer_quotient
-  条件: {G} [Group G] (H : Subgroup G)
+  条件: {G} [群 G] (H : 子群 G)
   证明: by
   ext
   simp [QuotientGroup.eq]
@@ -821,7 +821,7 @@ theorem sum_card_fixedBy_eq_card_orbits_mul_card_group
 
 中文:
 定理 sum_card_fixedBy_eq_card_orbits_mul_card_group
-  结论: [Fintype G] [对任意 g : G, Fintype <| fixedBy X g]
+  结论: [有限类型 G] [对任意 g : G, 有限类型 <| fixedBy X g]
   证明: by
   rw [← Fintype.card_prod]; rw [← Fintype.card_sigma]; rw [Fintype.card_congr (sigmaFixedByEquivOrbitsProdGroup G X)]
 
@@ -847,7 +847,7 @@ instance isPretransitive_quotient
 
 中文:
 实例 isPretransitive_quotient
-  签名: (G) [Group G] (H : Subgroup G)
+  签名: (G) [群 G] (H : 子群 G)
   定义体: by
     { rintro ⟨x⟩ ⟨y⟩
       refine ⟨y * x⁻¹, QuotientGroup.eq.mpr ?_⟩
@@ -880,7 +880,7 @@ instance finite_quotient_of_pretransitive_of_finite_quotient
 
 中文:
 实例 finite_quotient_of_pretransitive_of_finite_quotient
-  签名: [IsPretransitive G X] {H : Subgroup G}
+  签名: [是Pretransitive G X] {H : 子群 G}
   定义体: by
   rcases isEmpty_or_nonempty X with he | ⟨⟨b⟩⟩
   · exact Quotient.finite _
@@ -926,7 +926,7 @@ definition equivSubgroupOrbitsSetoidComap
 
 中文:
 定义 equivSubgroupOrbitsSetoidComap
-  签名: (H : Subgroup G) (ω : Ω)
+  签名: (H : 子群 G) (ω : Ω)
   定义体: fun q => q.liftOn' (fun x => ⟦⟨↑x, by
     simp only [Set.mem_preimage, Set.mem_singleton_iff]
     have hx := x.property
@@ -979,7 +979,7 @@ definition equivSubgroupOrbits
 
 中文:
 定义 equivSubgroupOrbits
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: (Setoid.sigmaQuotientEquivOfLe (orbitRel_subgroup_le H)).symm.trans
     (Equiv.sigmaCongrRight fun ω => (equivSubgroupOrbitsSetoidComap H ω).symm)
 
@@ -1005,7 +1005,7 @@ instance finite_quotient_of_finite_quotient_of_finite_quotient
 
 中文:
 实例 finite_quotient_of_finite_quotient_of_finite_quotient
-  签名: {H : Subgroup G}
+  签名: {H : 子群 G}
   定义体: by
   rw [(equivSubgroupOrbits X H).finite_iff]
   infer_instance
@@ -1040,7 +1040,7 @@ definition equivSubgroupOrbitsQuotientGroup
 
 中文:
 定义 equivSubgroupOrbitsQuotientGroup
-  签名: [IsPretransitive G X]
+  签名: [是Pretransitive G X]
   定义体: fun q => q.liftOn' (fun y => (exists_smul_eq G y x).choose) (by
     intro y₁ y₂ h
     rw [orbitRel_apply] at h
@@ -1135,7 +1135,7 @@ definition selfEquivOrbitsQuotientProd
 
 中文:
 定义 selfEquivOrbitsQuotientProd
-  签名: (h : 对任意 b : X, MulAction.stabilizer G b = ⊥)
+  签名: (h : 对任意 b : X, 乘法作用.stabilizer G b = ⊥)
   定义体: MulAction.selfEquivOrbitsQuotientProd' Quotient.out_eq' h
 
 Depends on / 依赖: MulAction, MulAction.selfEquivOrbitsQuotientProd, Quotient, Quotient.out_eq, out_eq, selfEquivOrbitsQuotientProd
@@ -1161,7 +1161,7 @@ theorem ConjClasses.card_carrier
 
 中文:
 定理 ConjClasses.card_carrier
-  结论: {G : 类型} [Group G] [Fintype G] (g : G)
+  结论: {G : 类型} [群 G] [有限类型 G] (g : G)
   证明: by
   classical
   rw [Fintype.card_congr <| ConjAct.toConjAct (G := G) |>.toEquiv]
@@ -1202,7 +1202,7 @@ theorem normalCore_eq_ker
 
 中文:
 定理 normalCore_eq_ker
-  结论: H.normalCore = (MulAction.toPermHom G (G ⧸ H)).ker
+  结论: H.normalCore = (乘法作用.toPermHom G (G ⧸ H)).ker
   证明: by
   apply le_antisymm
   · intro g hg
@@ -1294,7 +1294,7 @@ definition quotientCenterEmbedding
 
 中文:
 定义 quotientCenterEmbedding
-  签名: {S : Set G} (hS : closure S = ⊤)
+  签名: {S : 集合 G} (hS : closure S = ⊤)
   定义体: (quotientEquivOfEq (center_eq_infi' hS)).toEmbedding.trans
     ((quotientiInfEmbedding _).trans
       (Function.Embedding.piCongrRight fun g => quotientCentralizerEmbedding (g : G)))
@@ -1317,7 +1317,7 @@ theorem quotientCenterEmbedding_apply
 
 中文:
 定理 quotientCenterEmbedding_apply
-  条件: {S : Set G} (hS : closure S = ⊤) (g : G) (s : S)
+  条件: {S : 集合 G} (hS : closure S = ⊤) (g : G) (s : S)
   证明: rfl
 -/
 theorem quotientCenterEmbedding_apply {S : Set G} (hS : closure S = ⊤) (g : G) (s : S) :

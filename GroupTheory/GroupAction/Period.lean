@@ -315,7 +315,7 @@ theorem period_dvd_exponent
 中文:
 定理 period_dvd_exponent
   条件: (m : M) (a : α)
-  结论: period m a ∣ Monoid.exponent M
+  结论: period m a ∣ 幺半群.exponent M
   证明: by
   rw [← pow_smul_eq_iff_period_dvd]; rw [Monoid.pow_exponent_eq_one]; rw [one_smul]
 
@@ -339,7 +339,7 @@ theorem period_pos_of_exponent_pos
 
 中文:
 定理 period_pos_of_exponent_pos
-  条件: (exp_pos : 0 < Monoid.exponent M) (m : M) (a : α)
+  条件: (exp_pos : 0 < 幺半群.exponent M) (m : M) (a : α)
   证明: Nat.pos_of_dvd_of_pos (period_dvd_exponent m a) exp_pos
 
 @[to_additive]
@@ -361,7 +361,7 @@ theorem period_le_exponent
 
 中文:
 定理 period_le_exponent
-  条件: (exp_pos : 0 < Monoid.exponent M) (m : M) (a : α)
+  条件: (exp_pos : 0 < 幺半群.exponent M) (m : M) (a : α)
   证明: Nat.le_of_dvd exp_pos (period_dvd_exponent m a)
 
 Depends on / 依赖: Nat.le_of_dvd, exp_pos, le_of_dvd, period_dvd_exponent
@@ -385,7 +385,7 @@ theorem period_bounded_of_exponent_pos
 
 中文:
 定理 period_bounded_of_exponent_pos
-  条件: (exp_pos : 0 < Monoid.exponent M) (m : M)
+  条件: (exp_pos : 0 < 幺半群.exponent M) (m : M)
   证明: by
   use Monoid.exponent M
   simpa [upperBounds] using period_le_exponent exp_pos _

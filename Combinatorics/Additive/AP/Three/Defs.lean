@@ -96,7 +96,7 @@ instance ThreeGPFree.instDecidable
 
 中文:
 实例 ThreeGPFree.instDecidable
-  签名: [DecidableEq α] {s : Finset α}
+  签名: [DecidableEq α] {s : 有限集 α}
   定义体: decidable_of_iff (forall a in s, forall b in s, forall c in s, a * c = b * b -> a = b) Iff.rfl
 
 Depends on / 依赖: Iff.rfl, decidable_of_iff
@@ -143,7 +143,7 @@ theorem threeGPFree_empty
 
 中文:
 定理 threeGPFree_empty
-  结论: ThreeGPFree (∅ : Set α)
+  结论: ThreeGPFree (∅ : 集合 α)
   证明: fun _ _ _ ha => ha.elim
 
 @[to_additive]
@@ -165,8 +165,8 @@ theorem Set.Subsingleton.threeGPFree
 @[to_additive (attr := simp)]
 
 中文:
-定理 Set.Subsingleton.threeGPFree
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.threeGPFree
+  条件: (hs : s.子单例)
   结论: ThreeGPFree s
   证明: fun _ ha _ hb _ _ _ => hs ha hb
 
@@ -190,7 +190,7 @@ theorem threeGPFree_singleton
 中文:
 定理 threeGPFree_singleton
   条件: (a : α)
-  结论: ThreeGPFree ({a} : Set α)
+  结论: ThreeGPFree ({a} : 集合 α)
   证明: subsingleton_singleton.threeGPFree
 
 @[to_additive ThreeAPFree.prod]
@@ -213,8 +213,8 @@ theorem ThreeGPFree.prod
 @[to_additive]
 
 中文:
-定理 ThreeGPFree.prod
-  条件: {t : Set β} (hs : ThreeGPFree s) (ht : ThreeGPFree t)
+定理 ThreeGPFree.乘积
+  条件: {t : 集合 β} (hs : ThreeGPFree s) (ht : ThreeGPFree t)
   证明: fun _ ha _ hb _ hc h =>
   Prod.ext (hs ha.1 hb.1 hc.1 (Prod.ext_iff.1 h).1) (ht ha.2 hb.2 hc.2 (Prod.ext_iff.1 h).2)
 
@@ -236,7 +236,7 @@ funext fun i => hs i (ha i trivial) (hb i trivial) (hc i trivial) congr_fun h i
 
 中文:
 定理 threeGPFree_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, Monoid (α i)] {s : 对任意 i, Set (α i)}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 幺半群 (α i)] {s : 对任意 i, 集合 (α i)}
   证明: fun _ ha _ hb _ hc h =>
 funext fun i => hs i (ha i trivial) (hb i trivial) (hc i trivial) congr_fun h i
 
@@ -267,7 +267,7 @@ lemma ThreeGPFree.of_image
 
 中文:
 引理 ThreeGPFree.of_image
-  结论: (hf : IsMulFreimanHom 2 s t f) (hf' : s.InjOn f) (hAs : A subseteq s)
+  结论: (hf : 是MulFreiman态射 2 s t f) (hf' : s.单射限制 f) (hAs : A subseteq s)
   证明: fun _ ha _ hb _ hc habc => hf' (hAs ha) (hAs hb) hA (mem_image_of_mem _ ha)
 (mem_image_of_mem _ hb) (mem_image_of_mem _ hc)
     hf.mul_eq_mul (hAs ha) (hAs hc) (hAs hb) (hAs hb) habc
@@ -300,7 +300,7 @@ lemma threeGPFree_image
 
 中文:
 引理 threeGPFree_image
-  条件: (hf : IsMulFreimanIso 2 s t f) (hAs : A subseteq s)
+  条件: (hf : 是MulFreimanIso 2 s t f) (hAs : A subseteq s)
   证明: by
   rw [ThreeGPFree]; rw [ThreeGPFree]
   have := (hf.bijOn.injOn.mono hAs).bijOn_image (f := f)
@@ -334,8 +334,8 @@ lemma IsMulFreimanHom.threeGPFree
   proof: (ht.mono hf.mapsTo.image_subset).of_image hf hf' subset_rfl
 
 中文:
-引理 IsMulFreimanHom.threeGPFree
-  结论: (hf : IsMulFreimanHom 2 s t f) (hf' : s.InjOn f)
+引理 是MulFreiman态射.threeGPFree
+  结论: (hf : 是MulFreiman态射 2 s t f) (hf' : s.单射限制 f)
   证明: (ht.mono hf.mapsTo.image_subset).of_image hf hf' subset_rfl
 
 Depends on / 依赖: hf.mapsTo.image_subset, ht.mono, image_subset, mapsTo, of_image, subset_rfl
@@ -357,8 +357,8 @@ lemma IsMulFreimanIso.threeGPFree_congr
   rw [← threeGPFree_image hf subset_rfl]; rw [hf.bijOn.image_eq]
 
 中文:
-引理 IsMulFreimanIso.threeGPFree_congr
-  条件: (hf : IsMulFreimanIso 2 s t f)
+引理 是MulFreimanIso.threeGPFree_congr
+  条件: (hf : 是MulFreimanIso 2 s t f)
   证明: by
   rw [← threeGPFree_image hf subset_rfl]; rw [hf.bijOn.image_eq]
 
@@ -382,8 +382,8 @@ theorem ThreeGPFree.image'
   rw [h ha hb hc (hf (mul_mem_mul ha hc) (mul_mem_mul hb hb) <| by rwa [map_mul]; rw [map_mul])]
 
 中文:
-定理 ThreeGPFree.image'
-  结论: [FunLike F α β] [MulHomClass F α β] (f : F) (hf : (s * s).InjOn f)
+定理 ThreeGPFree.像'
+  结论: [函数状 F α β] [乘法态射类 F α β] (f : F) (hf : (s * s).单射限制 f)
   证明: by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ _ ⟨c, hc, rfl⟩ habc
   rw [h ha hb hc (hf (mul_mem_mul ha hc) (mul_mem_mul hb hb) <| by rwa [map_mul]; rw [map_mul])]
@@ -638,7 +638,7 @@ theorem threeAPFree_iff_eq_right
 
 中文:
 定理 threeAPFree_iff_eq_right
-  条件: {s : Set 自然数}
+  条件: {s : 集合 自然数}
   证明: by
   refine forall₄_congr fun a _ha b hb => forall₃_congr fun c hc habc => ⟨?_, ?_⟩
   · rintro rfl
@@ -692,7 +692,7 @@ definition mulRothNumber
 
 中文:
 定义 mulRothNumber
-  签名: : Finset α ->o 自然数
+  签名: : 有限集 α ->o 自然数
   定义体: ⟨fun s => Nat.findGreatest (fun m => exists t subseteq s, #t = m ∧ ThreeGPFree (t : Set α)) #s, by
     rintro t u htu
     refine Nat.findGreatest_mono (fun m => ?_) (card_le_card htu)
@@ -768,7 +768,7 @@ theorem ThreeGPFree.le_mulRothNumber
 
 中文:
 定理 ThreeGPFree.le_mulRothNumber
-  条件: (hs : ThreeGPFree (s : Set α)) (h : s subseteq t)
+  条件: (hs : ThreeGPFree (s : 集合 α)) (h : s subseteq t)
   证明: Nat.le_findGreatest (card_le_card h) ⟨s, h, rfl, hs⟩
 
 @[to_additive]
@@ -792,7 +792,7 @@ theorem ThreeGPFree.mulRothNumber_eq
 
 中文:
 定理 ThreeGPFree.mulRothNumber_eq
-  条件: (hs : ThreeGPFree (s : Set α))
+  条件: (hs : ThreeGPFree (s : 集合 α))
   证明: (mulRothNumber_le _).antisymm hs.le_mulRothNumber Subset.refl _
 
 @[to_additive (attr := simp)]
@@ -816,7 +816,7 @@ theorem mulRothNumber_empty
 
 中文:
 定理 mulRothNumber_empty
-  结论: mulRothNumber (∅ : Finset α) = 0
+  结论: mulRothNumber (∅ : 有限集 α) = 0
   证明: Nat.eq_zero_of_le_zero (mulRothNumber_le _).trans card_empty.le
 
 @[to_additive (attr := simp)]
@@ -844,7 +844,7 @@ theorem mulRothNumber_singleton
 中文:
 定理 mulRothNumber_singleton
   条件: (a : α)
-  结论: mulRothNumber ({a} : Finset α) = 1
+  结论: mulRothNumber ({a} : 有限集 α) = 1
   证明: by
   refine ThreeGPFree.mulRothNumber_eq ?_
   rw [coe_singleton]
@@ -875,7 +875,7 @@ theorem mulRothNumber_union_le
 
 中文:
 定理 mulRothNumber_union_le
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: let ⟨u, hus, hcard, hu⟩ := mulRothNumber_spec (s union t)
   calc
     mulRothNumber (s union t) = #u := hcard.symm
@@ -915,7 +915,7 @@ theorem le_mulRothNumber_product
 
 中文:
 定理 le_mulRothNumber_product
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   证明: by
   obtain ⟨u, hus, hucard, hu⟩ := mulRothNumber_spec s
   obtain ⟨v, hvt, hvcard, hv⟩ := mulRothNumber_spec t
@@ -951,7 +951,7 @@ theorem mulRothNumber_lt_of_forall_not_threeGPFree
   exact h _ (mem_powersetCard.2 ⟨hut.trans hts, rfl⟩) (ht.mono hut)
 
 中文:
-定理 mulRothNumber_lt_of_forall_not_threeGPFree
+定理 mulRothNumber_lt_of_对任意_not_threeGPFree
   证明: by
   obtain ⟨t, hts, hcard, ht⟩ := mulRothNumber_spec s
   rw [← hcard]; rw [← not_le]
@@ -991,8 +991,8 @@ lemma IsMulFreimanHom.mulRothNumber_mono
   rw [← hcard]; rw [← s.card_image_of_
 
 中文:
-引理 IsMulFreimanHom.mulRothNumber_mono
-  条件: (hf : IsMulFreimanHom 2 A B f) (hf' : Set.BijOn f A B)
+引理 是MulFreiman态射.mulRothNumber_mono
+  条件: (hf : 是MulFreiman态射 2 A B f) (hf' : 集合.双射限制 f A B)
   证明: by
   obtain ⟨s, hsB, hcard, hs⟩ := mulRothNumber_spec B
   have hsA : invFunOn f A '' s subseteq A :=
@@ -1030,8 +1030,8 @@ lemma IsMulFreimanIso.mulRothNumber_congr
   rw [← coe_image] at thi
 
 中文:
-引理 IsMulFreimanIso.mulRothNumber_congr
-  条件: (hf : IsMulFreimanIso 2 A B f)
+引理 是MulFreimanIso.mulRothNumber_congr
+  条件: (hf : 是MulFreimanIso 2 A B f)
   证明: by
   refine le_antisymm ?_ (hf.isMulFreimanHom.mulRothNumber_mono hf.bijOn)
   obtain ⟨s, hsA, hcard, hs⟩ := mulRothNumber_spec A
@@ -1142,7 +1142,7 @@ definition rothNumberNat
   body: ⟨fun n => addRothNumber (range n), addRothNumber.mono.comp range_mono⟩
 
 中文:
-定义 rothNumberNat
+定义 rothNumber自然数
   签名: : 自然数 ->o 自然数
   定义体: ⟨fun n => addRothNumber (range n), addRothNumber.mono.comp range_mono⟩
 
@@ -1161,7 +1161,7 @@ theorem rothNumberNat_def
   proof: rfl
 
 中文:
-定理 rothNumberNat_def
+定理 rothNumber自然数_def
   条件: (n : 自然数)
   结论: rothNumber自然数 n = addRothNumber (range n)
   证明: rfl
@@ -1179,7 +1179,7 @@ theorem rothNumberNat_le
   proof: (addRothNumber_le _).trans (card_range _).le
 
 中文:
-定理 rothNumberNat_le
+定理 rothNumber自然数_le
   条件: (N : 自然数)
   结论: rothNumber自然数 N <= N
   证明: (addRothNumber_le _).trans (card_range _).le
@@ -1198,7 +1198,7 @@ theorem rothNumberNat_spec
   proof: addRothNumber_spec _
 
 中文:
-定理 rothNumberNat_spec
+定理 rothNumber自然数_spec
   条件: (n : 自然数)
   证明: addRothNumber_spec _
 
@@ -1217,8 +1217,8 @@ theorem ThreeAPFree.le_rothNumberNat
   proof: hsk.ge.trans hs.le_addRothNumber fun x hx => mem_range.2 hsn x hx
 
 中文:
-定理 ThreeAPFree.le_rothNumberNat
-  结论: (s : Finset 自然数) (hs : ThreeAPFree (s : Set 自然数))
+定理 ThreeAPFree.le_rothNumber自然数
+  结论: (s : 有限集 自然数) (hs : ThreeAPFree (s : 集合 自然数))
   证明: hsk.ge.trans hs.le_addRothNumber fun x hx => mem_range.2 hsn x hx
 
 Depends on / 依赖: hs.le_addRothNumber, hsk.ge.trans, le_addRothNumber, mem_range
@@ -1241,7 +1241,7 @@ theorem rothNumberNat_add_le
 @[simp]
 
 中文:
-定理 rothNumberNat_add_le
+定理 rothNumber自然数_add_le
   条件: (M N : 自然数)
   证明: by
   simp_rw [rothNumberNat_def]
@@ -1268,7 +1268,7 @@ theorem rothNumberNat_zero
   proof: rfl
 
 中文:
-定理 rothNumberNat_zero
+定理 rothNumber自然数_zero
   结论: rothNumber自然数 0 = 0
   证明: rfl
 -/
@@ -1293,7 +1293,7 @@ theorem addRothNumber_Ico
 中文:
 定理 addRothNumber_Ico
   条件: (a b : 自然数)
-  结论: addRothNumber (Ico a b) = rothNumber自然数 (b - a)
+  结论: addRothNumber (左闭右开区间 a b) = rothNumber自然数 (b - a)
   证明: by
   obtain h | h := le_total b a
   · rw [Nat.sub_eq_zero_of_le h, Ico_eq_empty_of_le h, rothNumberNat_zero, addRothNumber_empty]
@@ -1321,8 +1321,8 @@ lemma Fin.addRothNumber_eq_rothNumberNat
   proof: IsAddFreimanIso.addRothNumber_congr mod_cast isAddFreimanIso_Iio two_ne_zero hkn
 
 中文:
-引理 Fin.addRothNumber_eq_rothNumberNat
-  条件: {k : Fin (n + 1)} (hkn : 2 * k <= n)
+引理 有限集.addRothNumber_eq_rothNumber自然数
+  条件: {k : 有限集 (n + 1)} (hkn : 2 * k <= n)
   证明: IsAddFreimanIso.addRothNumber_congr mod_cast isAddFreimanIso_Iio two_ne_zero hkn
 
 Depends on / 依赖: IsAddFreimanIso, IsAddFreimanIso.addRothNumber_congr, addRothNumber_congr, isAddFreimanIso_Iio, mod_cast, two_ne_zero
@@ -1344,8 +1344,8 @@ lemma Fin.addRothNumber_le_rothNumberNat
   refine ⟨?_, (Char
 
 中文:
-引理 Fin.addRothNumber_le_rothNumberNat
-  条件: {n : 自然数} (k : Fin (n + 1))
+引理 有限集.addRothNumber_le_rothNumber自然数
+  条件: {n : 自然数} (k : 有限集 (n + 1))
   证明: by
   open Fin.CommRing in -- TODO: should this be refactored to avoid needing the coercion?
   suffices h : Set.BijOn (Nat.cast : Nat -> Fin n.succ) (range k) (Iio k : Finset (Fin n.succ)) by

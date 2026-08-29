@@ -44,7 +44,7 @@ lemma nonempty_orderIso_withZeroMul_int_iff
 
 中文:
 引理 nonempty_orderIso_withZeroMul_int_iff
-  条件: [Semiring R] [ValuativeRel R]
+  条件: [半环 R] [ValuativeRel R]
   证明: by
   constructor
   · rintro ⟨e⟩
@@ -96,8 +96,8 @@ lemma IsDiscrete.of_compatible_withZeroMulInt
         (ValueGroupWithZero.orderMonoidIso v).toMonoidWithZeroHom).not_subs
 
 中文:
-引理 IsDiscrete.of_compatible_withZeroMulInt
-  结论: [Ring R] [ValuativeRel R]
+引理 是离散.of_compatible_withZeroMul整数
+  结论: [环 R] [ValuativeRel R]
   证明: by
   have : IsRankLeOne R := .of_compatible_mulArchimedean v
   by_cases h : IsNontrivial R

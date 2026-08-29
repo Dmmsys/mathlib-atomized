@@ -122,8 +122,8 @@ exact (isBoundedBilinearMap_smul.hasFDerivAt (𝕜 := 𝕜) (c x, f x)).comp x h
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.smul
-  条件: (hc : HasFDerivAt c c' x) (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.smul
+  条件: (hc : 在点处Fréchet可导 c c' x) (hf : 在点处Fréchet可导 f f' x)
   证明: by
   -- `by exact` to solve unification issues.
 exact (isBoundedBilinearMap_smul.hasFDerivAt (𝕜 := 𝕜) (c x, f x)).comp x hc.prodMk hf
@@ -214,8 +214,8 @@ theorem Differentiable.smul
   proof: fun x => (hc x).smul (hf x)
 
 中文:
-定理 Differentiable.smul
-  条件: (hc : Differentiable 𝕜 c) (hf : Differentiable 𝕜 f)
+定理 可微.smul
+  条件: (hc : 可微 𝕜 c) (hf : 可微 𝕜 f)
   证明: fun x => (hc x).smul (hf x)
 -/
 theorem Differentiable.smul (hc : Differentiable 𝕜 c) (hf : Differentiable 𝕜 f) :
@@ -370,8 +370,8 @@ theorem HasFDerivAt.smul_const
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.smul_const
-  条件: (hc : HasFDerivAt c c' x) (f : F)
+定理 在点处Fréchet可导.smul_const
+  条件: (hc : 在点处Fréchet可导 c c' x) (f : F)
   证明: by
   simpa only [smul_zero, zero_add] using! hc.smul (hasFDerivAt_const f x)
 
@@ -464,8 +464,8 @@ theorem Differentiable.smul_const
   proof: fun x => (hc x).smul_const f
 
 中文:
-定理 Differentiable.smul_const
-  条件: (hc : Differentiable 𝕜 c) (f : F)
+定理 可微.smul_const
+  条件: (hc : 可微 𝕜 c) (f : F)
   证明: fun x => (hc x).smul_const f
 
 Depends on / 依赖: smul_const
@@ -661,8 +661,8 @@ theorem HasFDerivAt.mul'
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.mul'
-  条件: (ha : HasFDerivAt a a' x) (hb : HasFDerivAt b b' x)
+定理 在点处Fréchet可导.mul'
+  条件: (ha : 在点处Fréchet可导 a a' x) (hb : 在点处Fréchet可导 b b' x)
   证明: by
   -- `by exact` to solve unification issues.
   exact ((ContinuousLinearMap.mul 𝕜 𝔸).isBoundedBilinearMap.hasFDerivAt
@@ -691,8 +691,8 @@ theorem HasFDerivAt.mul
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.mul
-  条件: (hc : HasFDerivAt c c' x) (hd : HasFDerivAt d d' x)
+定理 在点处Fréchet可导.mul
+  条件: (hc : 在点处Fréchet可导 c c' x) (hd : 在点处Fréchet可导 d d' x)
   证明: by
   convert! hc.mul' hd
   ext z
@@ -787,8 +787,8 @@ theorem Differentiable.mul
   proof: fun x => (ha x).mul (hb x)
 
 中文:
-定理 Differentiable.mul
-  条件: (ha : Differentiable 𝕜 a) (hb : Differentiable 𝕜 b)
+定理 可微.mul
+  条件: (ha : 可微 𝕜 a) (hb : 可微 𝕜 b)
   证明: fun x => (ha x).mul (hb x)
 -/
 theorem Differentiable.mul (ha : Differentiable 𝕜 a) (hb : Differentiable 𝕜 b) :
@@ -1082,8 +1082,8 @@ theorem HasFDerivAt.mul_const'
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.mul_const'
-  条件: (ha : HasFDerivAt a a' x) (b : 𝔸)
+定理 在点处Fréchet可导.mul_const'
+  条件: (ha : 在点处Fréchet可导 a a' x) (b : 𝔸)
   证明: ((ContinuousLinearMap.mul 𝕜 𝔸).flip b).hasFDerivAt.comp x ha
 
 @[fun_prop]
@@ -1109,8 +1109,8 @@ theorem HasFDerivAt.mul_const
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.mul_const
-  条件: (hc : HasFDerivAt c c' x) (d : 𝔸')
+定理 在点处Fréchet可导.mul_const
+  条件: (hc : 在点处Fréchet可导 c c' x) (d : 𝔸')
   证明: by
   convert! hc.mul_const' d
   ext z
@@ -1207,8 +1207,8 @@ theorem Differentiable.mul_const
   proof: fun x => (ha x).mul_const b
 
 中文:
-定理 Differentiable.mul_const
-  条件: (ha : Differentiable 𝕜 a) (b : 𝔸)
+定理 可微.mul_const
+  条件: (ha : 可微 𝕜 a) (b : 𝔸)
   证明: fun x => (ha x).mul_const b
 
 Depends on / 依赖: mul_const
@@ -1358,8 +1358,8 @@ theorem HasFDerivAt.const_mul
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.const_mul
-  条件: (ha : HasFDerivAt a a' x) (b : 𝔸)
+定理 在点处Fréchet可导.const_mul
+  条件: (ha : 在点处Fréchet可导 a a' x) (b : 𝔸)
   证明: ((ContinuousLinearMap.mul 𝕜 𝔸) b).hasFDerivAt.comp x ha
 
 @[fun_prop]
@@ -1451,8 +1451,8 @@ theorem Differentiable.const_mul
   proof: fun x => (ha x).const_mul b
 
 中文:
-定理 Differentiable.const_mul
-  条件: (ha : Differentiable 𝕜 a) (b : 𝔸)
+定理 可微.const_mul
+  条件: (ha : 可微 𝕜 a) (b : 𝔸)
   证明: fun x => (ha x).const_mul b
 
 Depends on / 依赖: const_mul
@@ -1528,7 +1528,7 @@ theorem hasStrictFDerivAt_list_prod'
 
 中文:
 定理 hasStrictFDerivAt_list_prod'
-  条件: [Finite ι] {l : List ι} {x : ι -> 𝔸}
+  条件: [有限 ι] {l : 列表 ι} {x : ι -> 𝔸}
   证明: by
   have := Fintype.ofFinite ι
   induction l with
@@ -1566,7 +1566,7 @@ theorem hasStrictFDerivAt_list_prod_finRange'
 
 中文:
 定理 hasStrictFDerivAt_list_prod_finRange'
-  条件: {n : 自然数} {x : Fin n -> 𝔸}
+  条件: {n : 自然数} {x : 有限集 n -> 𝔸}
   证明: hasStrictFDerivAt_list_prod'.congr_fderiv
     Finset.sum_equiv (finCongr List.length_finRange) (by simp) (by simp)
 
@@ -1596,7 +1596,7 @@ classical exact hasStrictFDerivAt_list_prod'.congr_fderiv Eq.symm
 
 中文:
 定理 hasStrictFDerivAt_list_prod_attach'
-  条件: {l : List ι} {x : {i // i in l} -> 𝔸}
+  条件: {l : 列表 ι} {x : {i // i in l} -> 𝔸}
   证明: by
 classical exact hasStrictFDerivAt_list_prod'.congr_fderiv Eq.symm
     Finset.sum_equiv (finCongr List.length_attach.symm) (by simp) (by simp)
@@ -1627,7 +1627,7 @@ theorem hasFDerivAt_list_prod'
 
 中文:
 定理 hasFDerivAt_list_prod'
-  条件: [Finite ι] {l : List ι} {x : ι -> 𝔸'}
+  条件: [有限 ι] {l : 列表 ι} {x : ι -> 𝔸'}
   证明: have := Fintype.ofFinite ι
   hasStrictFDerivAt_list_prod'.hasFDerivAt
 
@@ -1655,7 +1655,7 @@ theorem hasFDerivAt_list_prod_finRange'
 
 中文:
 定理 hasFDerivAt_list_prod_finRange'
-  条件: {n : 自然数} {x : Fin n -> 𝔸}
+  条件: {n : 自然数} {x : 有限集 n -> 𝔸}
   证明: hasStrictFDerivAt_list_prod_finRange'.hasFDerivAt
 
 @[fun_prop]
@@ -1680,7 +1680,7 @@ theorem hasFDerivAt_list_prod_attach'
 
 中文:
 定理 hasFDerivAt_list_prod_attach'
-  条件: {l : List ι} {x : {i // i in l} -> 𝔸}
+  条件: {l : 列表 ι} {x : {i // i in l} -> 𝔸}
   证明: by
   exact hasStrictFDerivAt_list_prod_attach'.hasFDerivAt
 
@@ -1714,7 +1714,7 @@ theorem hasStrictFDerivAt_list_prod
 
 中文:
 定理 hasStrictFDerivAt_list_prod
-  条件: [DecidableEq ι] [Finite ι] {l : List ι} {x : ι -> 𝔸'}
+  条件: [DecidableEq ι] [有限 ι] {l : 列表 ι} {x : ι -> 𝔸'}
   证明: by
   have := Fintype.ofFinite ι
   refine hasStrictFDerivAt_list_prod'.congr_fderiv ?_
@@ -1750,7 +1750,7 @@ theorem hasStrictFDerivAt_multiset_prod
 
 中文:
 定理 hasStrictFDerivAt_multiset_prod
-  条件: [DecidableEq ι] [Finite ι] {u : Multiset ι} {x : ι -> 𝔸'}
+  条件: [DecidableEq ι] [有限 ι] {u : Multiset ι} {x : ι -> 𝔸'}
   证明: have := Fintype.ofFinite ι
   u.inductionOn fun l => by simpa using hasStrictFDerivAt_list_prod
 
@@ -1776,7 +1776,7 @@ theorem hasFDerivAt_multiset_prod
 
 中文:
 定理 hasFDerivAt_multiset_prod
-  条件: [DecidableEq ι] [Finite ι] {u : Multiset ι} {x : ι -> 𝔸'}
+  条件: [DecidableEq ι] [有限 ι] {u : Multiset ι} {x : ι -> 𝔸'}
   证明: have := Fintype.ofFinite ι
   hasStrictFDerivAt_multiset_prod.hasFDerivAt
 
@@ -1803,7 +1803,7 @@ alias hasStrictFDerivAt_finset_prod := hasStrictFDerivAt_finsetProd
 
 中文:
 定理 hasStrictFDerivAt_finsetProd
-  条件: [DecidableEq ι] [Finite ι] {x : ι -> 𝔸'}
+  条件: [DecidableEq ι] [有限 ι] {x : ι -> 𝔸'}
   证明: by
   simp only [Finset.sum_eq_multiset_sum, Finset.prod_eq_multiset_prod]
   exact hasStrictFDerivAt_multiset_prod
@@ -1834,7 +1834,7 @@ theorem hasFDerivAt_finsetProd
 
 中文:
 定理 hasFDerivAt_finsetProd
-  条件: [DecidableEq ι] [Finite ι] {x : ι -> 𝔸'}
+  条件: [DecidableEq ι] [有限 ι] {x : ι -> 𝔸'}
   证明: have := Fintype.ofFinite ι
   hasStrictFDerivAt_finsetProd.hasFDerivAt
 
@@ -1866,7 +1866,7 @@ theorem HasStrictFDerivAt.list_prod'
 
 中文:
 定理 HasStrictFDerivAt.list_prod'
-  结论: {l : List ι} {x : E}
+  结论: {l : 列表 ι} {x : E}
   证明: by
   simp_rw [Fin.getElem_fin, ← l.get_eq_getElem, ← List.map_get_finRange l, List.map_map]
   -- After https://github.com/leanprover-community/mathlib4/issues/19108, we have to be optimistic with `:)`s; otherwise Lean decides it need to find
@@ -1907,8 +1907,8 @@ theorem HasFDerivAt.list_prod'
   simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_
 
 中文:
-定理 HasFDerivAt.list_prod'
-  结论: {l : List ι} {x : E}
+定理 在点处Fréchet可导.list_prod'
+  结论: {l : 列表 ι} {x : E}
   证明: by
   simp_rw [Fin.getElem_fin, ← l.get_eq_getElem, ← List.map_get_finRange l, List.map_map]
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp x
@@ -1946,7 +1946,7 @@ theorem HasFDerivWithinAt.list_prod'
 
 中文:
 定理 HasFDerivWithinAt.list_prod'
-  结论: {l : List ι} {x : E}
+  结论: {l : 列表 ι} {x : E}
   证明: by
   simp_rw [Fin.getElem_fin, ← l.get_eq_getElem, ← List.map_get_finRange l, List.map_map]
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp_hasFDerivWithinAt x
@@ -1978,7 +1978,7 @@ theorem fderiv_list_prod'
 
 中文:
 定理 fderiv_list_prod'
-  结论: {l : List ι} {x : E}
+  结论: {l : 列表 ι} {x : E}
   证明: (HasFDerivAt.list_prod' fun i hi => (h i hi).hasFDerivAt).fderiv
 
 Depends on / 依赖: HasFDerivAt, HasFDerivAt.list_prod, fderiv, hasFDerivAt, list_prod
@@ -2002,7 +2002,7 @@ theorem fderivWithin_list_prod'
 
 中文:
 定理 fderivWithin_list_prod'
-  结论: {l : List ι} {x : E}
+  结论: {l : 列表 ι} {x : E}
   证明: (HasFDerivWithinAt.list_prod' fun i hi => (h i hi).hasFDerivWithinAt).fderivWithin hxs
 
 @[fun_prop]
@@ -2071,7 +2071,7 @@ theorem HasFDerivAt.multiset_prod
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.multiset_prod
+定理 在点处Fréchet可导.multiset_prod
   结论: [DecidableEq ι] {u : Multiset ι} {x : E}
   证明: by
   simp only [← Multiset.attach_map_val u, Multiset.map_map]
@@ -2221,7 +2221,7 @@ theorem HasFDerivAt.finsetProd
 @[deprecated (since := "2026-04-08")] alias HasFDerivAt.finset_prod := HasFDer
 
 中文:
-定理 HasFDerivAt.finsetProd
+定理 在点处Fréchet可导.finsetProd
   结论: [DecidableEq ι] {x : E}
   证明: by
   simpa [← Finset.prod_attach u] using .congr_fderiv
@@ -2393,7 +2393,7 @@ theorem differentiableAt_inverse
 
 中文:
 定理 differentiableAt_inverse
-  条件: {x : R} (hx : IsUnit x)
+  条件: {x : R} (hx : 是单位 x)
   证明: let ⟨u, hu⟩ := hx; hu ▸ (hasFDerivAt_ringInverse u).differentiableAt
 
 @[fun_prop]
@@ -2417,7 +2417,7 @@ theorem differentiableWithinAt_inverse
 
 中文:
 定理 differentiableWithinAt_inverse
-  条件: {x : R} (hx : IsUnit x) (s : Set R)
+  条件: {x : R} (hx : 是单位 x) (s : 集合 R)
   证明: (differentiableAt_inverse hx).differentiableWithinAt
 
 @[fun_prop]
@@ -2439,7 +2439,7 @@ theorem differentiableOn_inverse
 
 中文:
 定理 differentiableOn_inverse
-  结论: DifferentiableOn 𝕜 (@Ring.inverse R _) {x | IsUnit x}
+  结论: DifferentiableOn 𝕜 (@环.inverse R _) {x | 是单位 x}
   证明: fun _x hx => differentiableWithinAt_inverse hx _
 
 Depends on / 依赖: differentiableWithinAt_inverse
@@ -2459,7 +2459,7 @@ theorem fderiv_inverse
 中文:
 定理 fderiv_inverse
   条件: (x : Rˣ)
-  结论: fderiv 𝕜 (@Ring.inverse R _) x = -mulLeftRight 𝕜 R ↑x⁻¹ ↑x⁻¹
+  结论: fderiv 𝕜 (@环.inverse R _) x = -mulLeftRight 𝕜 R ↑x⁻¹ ↑x⁻¹
   证明: (hasFDerivAt_ringInverse x).fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt_ringInverse
@@ -2506,7 +2506,7 @@ theorem DifferentiableWithinAt.inverse
 
 中文:
 定理 DifferentiableWithinAt.inverse
-  条件: (hf : DifferentiableWithinAt 𝕜 h S z) (hz : IsUnit (h z))
+  条件: (hf : DifferentiableWithinAt 𝕜 h S z) (hz : 是单位 (h z))
   证明: (differentiableAt_inverse hz).comp_differentiableWithinAt z hf
 
 @[simp, fun_prop]
@@ -2530,7 +2530,7 @@ theorem DifferentiableAt.inverse
 
 中文:
 定理 DifferentiableAt.inverse
-  条件: (hf : DifferentiableAt 𝕜 h z) (hz : IsUnit (h z))
+  条件: (hf : DifferentiableAt 𝕜 h z) (hz : 是单位 (h z))
   证明: (differentiableAt_inverse hz).comp z hf
 
 @[fun_prop]
@@ -2554,7 +2554,7 @@ theorem DifferentiableOn.inverse
 
 中文:
 定理 DifferentiableOn.inverse
-  条件: (hf : DifferentiableOn 𝕜 h S) (hz : 对任意 x in S, IsUnit (h x))
+  条件: (hf : DifferentiableOn 𝕜 h S) (hz : 对任意 x in S, 是单位 (h x))
   证明: fun x h => (hf x h).inverse (hz x h)
 
 @[simp, fun_prop]
@@ -2574,8 +2574,8 @@ theorem Differentiable.inverse
   proof: fun x => (hf x).inverse (hz x)
 
 中文:
-定理 Differentiable.inverse
-  条件: (hf : Differentiable 𝕜 h) (hz : 对任意 x, IsUnit (h x))
+定理 可微.inverse
+  条件: (hf : 可微 𝕜 h) (hz : 对任意 x, 是单位 (h x))
   证明: fun x => (hf x).inverse (hz x)
 
 Depends on / 依赖: inverse
@@ -2663,7 +2663,7 @@ theorem differentiableAt_inv
 中文:
 定理 differentiableAt_inv
   条件: {x : R} (hx : x != 0)
-  结论: DifferentiableAt 𝕜 Inv.inv x
+  结论: DifferentiableAt 𝕜 取逆.inv x
   证明: (hasFDerivAt_inv' hx).differentiableAt
 
 @[fun_prop]
@@ -2686,7 +2686,7 @@ theorem differentiableWithinAt_inv
 
 中文:
 定理 differentiableWithinAt_inv
-  条件: {x : R} (hx : x != 0) (s : Set R)
+  条件: {x : R} (hx : x != 0) (s : 集合 R)
   证明: (differentiableAt_inv hx).differentiableWithinAt
 
 @[fun_prop]
@@ -2728,7 +2728,7 @@ theorem fderiv_inv'
 中文:
 定理 fderiv_inv'
   条件: {x : R} (hx : x != 0)
-  结论: fderiv 𝕜 Inv.inv x = -mulLeftRight 𝕜 R x⁻¹ x⁻¹
+  结论: fderiv 𝕜 取逆.inv x = -mulLeftRight 𝕜 R x⁻¹ x⁻¹
   证明: (hasFDerivAt_inv' hx).fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt_inv
@@ -2748,7 +2748,7 @@ theorem fderivWithin_inv'
 
 中文:
 定理 fderivWithin_inv'
-  条件: {s : Set R} {x : R} (hx : x != 0) (hxs : UniqueDiffWithinAt 𝕜 s x)
+  条件: {s : 集合 R} {x : R} (hx : x != 0) (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   rw [DifferentiableAt.fderivWithin (differentiableAt_inv hx) hxs]
   exact fderiv_inv' hx
@@ -2841,8 +2841,8 @@ theorem Differentiable.inv
   proof: fun x => (hf x).inv (hz x)
 
 中文:
-定理 Differentiable.inv
-  条件: (hf : Differentiable 𝕜 h) (hz : 对任意 x, h x != 0)
+定理 可微.inv
+  条件: (hf : 可微 𝕜 h) (hz : 对任意 x, h x != 0)
   证明: fun x => (hf x).inv (hz x)
 -/
 theorem Differentiable.inv (hf : Differentiable 𝕜 h) (hz : forall x, h x != 0) :

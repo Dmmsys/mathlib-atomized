@@ -55,7 +55,7 @@ lemma isGroupLikeElem_single_one
 中文:
 引理 isGroupLikeElem_single_one
   条件: (g : G)
-  结论: IsGroupLikeElem R (single g 1 : A[G]) where
+  结论: 是GroupLikeElem R (single g 1 : A[G]) where
   证明: by simp
   comul_eq_tmul_self := by simp [Algebra.TensorProduct.one_def]
 
@@ -80,7 +80,7 @@ lemma span_isGroupLikeElem
 
 中文:
 引理 span_isGroupLikeElem
-  结论: Submodule.span A {a : A[G] | IsGroupLikeElem R a} = ⊤
+  结论: 子模.span A {a : A[G] | 是GroupLikeElem R a} = ⊤
   证明: eq_top_mono (Submodule.span_mono <| Set.range_subset_iff.2 isGroupLikeElem_single_one) by
     rw [← Finsupp.range_linearCombination]
     exact LinearMap.range_eq_top_of_surjective _ fun x =>
@@ -115,7 +115,7 @@ instance instBialgebra
 
 中文:
 实例 instBialgebra
-  签名: : Bialgebra R A[M] where
+  签名: : 双代数 R A[M] where
   定义体: by simp only [one_def, counit_single, Bialgebra.counit_one]
   mul_compr₂_counit := by ext; simp
   comul_one := by
@@ -397,7 +397,7 @@ definition bialgEquivOfSubsingleton
 
 中文:
 定义 bialgEquivOfSubsingleton
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: counitBialgHom ..
   invFun := algebraMap _ _
   left_inv r := by
@@ -431,7 +431,7 @@ lemma isGroupLikeElem_of
 中文:
 引理 isGroupLikeElem_of
   条件: (m : M)
-  结论: IsGroupLikeElem R (of A M m)
+  结论: 是GroupLikeElem R (of A M m)
   证明: isGroupLikeElem_single_one ..
 
 Depends on / 依赖: isGroupLikeElem_single_one
@@ -451,7 +451,7 @@ definition liftGroupLikeBialgHom
 
 中文:
 定义 liftGroupLikeBialgHom
-  签名: : R[GroupLike R A] ->ₐc[R] A
+  签名: : R[群状 R A] ->ₐc[R] A
   定义体: .ofAlgHom (lift R A (GroupLike R A) { toFun g := g.1, map_one' := by simp, map_mul' := by simp })
     (by ext; simp) (by ext; simp)
 
@@ -481,7 +481,7 @@ definition toAdditiveBialgEquiv
 
 中文:
 定义 toAdditiveBialgEquiv
-  签名: : A[M] ≃ₐc[R] AddMonoidAlgebra A (Additive M)
+  签名: : A[M] ≃ₐc[R] 加法幺半群代数 A (加性 M)
   定义体: .ofAlgEquiv (toAdditiveAlgEquiv R A M) (by ext <;> simp) by
     ext a
     · simp
@@ -590,7 +590,7 @@ lemma convMul_bialgHom_single_one
 
 中文:
 引理 convMul_bialgHom_single_one
-  条件: [CommMonoid M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M)
+  条件: [交换幺半群 M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M)
   证明: by
   simp only [BialgHom.convMul_def, BialgHom.coe_comp, Function.comp_apply]
   change mulBialgHom R A (Bialgebra.TensorProduct.map f.ofConv g.ofConv (comul (single x 1))) = _
@@ -725,7 +725,7 @@ lemma isGroupLikeElem_iff_mem_range_of
 
 中文:
 引理 isGroupLikeElem_iff_mem_range_of
-  结论: IsGroupLikeElem R x ↔ x in Set.range (of R M)
+  结论: 是GroupLikeElem R x ↔ x in 集合.range (of R M)
   证明: isGroupLikeElem_iff_mem_range_single_one
 
 Depends on / 依赖: isGroupLikeElem_iff_mem_range_single_one
@@ -1067,7 +1067,7 @@ lemma isGroupLikeElem_of
 中文:
 引理 isGroupLikeElem_of
   条件: (m : M)
-  结论: IsGroupLikeElem R (of A M m)
+  结论: 是GroupLikeElem R (of A M m)
   证明: isGroupLikeElem_single_one ..
 
 Depends on / 依赖: isGroupLikeElem_single_one
@@ -1094,7 +1094,7 @@ definition toMultiplicativeBialgEquiv
 
 中文:
 定义 toMultiplicativeBialgEquiv
-  签名: : A[M] ≃ₐc[R] MonoidAlgebra A (Multiplicative M)
+  签名: : A[M] ≃ₐc[R] 幺半群代数 A (Multiplicative M)
   定义体: .ofAlgEquiv (toMultiplicativeAlgEquiv R A M) (by ext <;> simp) by
     ext a
     · simp
@@ -1219,7 +1219,7 @@ lemma isGroupLikeElem_iff_mem_range_of
 
 中文:
 引理 isGroupLikeElem_iff_mem_range_of
-  结论: IsGroupLikeElem R x ↔ x in Set.range (of R M)
+  结论: 是GroupLikeElem R x ↔ x in 集合.range (of R M)
   证明: isGroupLikeElem_iff_mem_range_single_one
 
 Depends on / 依赖: isGroupLikeElem_iff_mem_range_single_one
@@ -1243,7 +1243,7 @@ definition mapDomainBialgHomAddEquiv
 
 中文:
 定义 mapDomainBialgHomAddEquiv
-  签名: : (G ->+ H) ≃+ Additive (WithConv <| R[G] ->ₐc[R] R[H]) where
+  签名: : (G ->+ H) ≃+ 加性 (WithConv <| R[G] ->ₐc[R] R[H]) where
   定义体: mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm.trans Additive.ofMul
   map_add' f g := by simp
 
@@ -1275,7 +1275,7 @@ instance instBialgebra
 
 中文:
 实例 instBialgebra
-  签名: : Bialgebra R A[T;T⁻¹]
+  签名: : 双代数 R A[T;T⁻¹]
   定义体: inferInstanceAs Bialgebra R A[Int]
 
 @[simp]

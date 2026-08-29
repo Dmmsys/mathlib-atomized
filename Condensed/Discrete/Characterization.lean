@@ -50,7 +50,7 @@ abbreviation IsDiscrete
   body: X.IsConstant (coherentTopology CompHaus)
 
 中文:
-缩写 IsDiscrete
+缩写 是离散
   签名: (X : Condensed.{u} C)
   定义体: X.IsConstant (coherentTopology CompHaus)
 
@@ -108,7 +108,7 @@ abbreviation LocallyConstant.adjunction
   body: CompHausLike.LocallyConstant.adjunction _ _
 
 中文:
-缩写 LocallyConstant.adjunction
+缩写 局部常数.adjunction
   签名: :
   定义体: CompHausLike.LocallyConstant.adjunction _ _
 
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfSize.{u, u + 1} (ModuleCat.{u + 1} R)
+  签名: 有LimitsOfSize.{u, u + 1} (模范畴.{u + 1} R)
   定义体: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u + 1} _
 
 Depends on / 依赖: hasLimitsOfSizeShrink
@@ -308,7 +308,7 @@ abbreviation IsDiscrete
   body: X.IsConstant (coherentTopology LightProfinite)
 
 中文:
-缩写 IsDiscrete
+缩写 是离散
   签名: (X : LightCondensed.{u} C)
   定义体: X.IsConstant (coherentTopology LightProfinite)
 
@@ -358,7 +358,7 @@ abbreviation LocallyConstant.adjunction
   body: CompHausLike.LocallyConstant.adjunction _ _
 
 中文:
-缩写 LocallyConstant.adjunction
+缩写 局部常数.adjunction
   签名: :
   定义体: CompHausLike.LocallyConstant.adjunction _ _
 -/

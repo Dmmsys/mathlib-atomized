@@ -39,7 +39,7 @@ theorem num_continuous
 
 中文:
 定理 num_continuous
-  结论: Continuous ↿num
+  结论: 连续 ↿num
   证明: by unfold num; fun_prop
 
 @[fun_prop]
@@ -59,7 +59,7 @@ theorem denom_continuous
 
 中文:
 定理 denom_continuous
-  结论: Continuous ↿denom
+  结论: 连续 ↿denom
   证明: by unfold denom; fun_prop
 
 Depends on / 依赖: fun_prop
@@ -80,7 +80,7 @@ lemma continuous_toSL2R
 
 中文:
 引理 continuous_toSL2R
-  结论: Continuous toSL2R
+  结论: 连续 toSL2R
   证明: by
   apply continuous_induced_rng.mpr
   simp only [Function.comp_def, coe_toSL2R]
@@ -109,7 +109,7 @@ instance instContinuousSMulSL2R
 
 中文:
 实例 instContinuousSMulSL2R
-  签名: : ContinuousSMul SL(2, 实数) ℍ where
+  签名: : 连续标量乘法 SL(2, 实数) ℍ where
   定义体: by
     suffices forall (g : SL(2, Real)) (τ : ℍ),
         ContinuousAt (fun ⟨h, z⟩ => (h 0 0 * (z : Complex) + h 0 1) / (h 1 0 * z + h 1 1)) (g, τ) by
@@ -147,7 +147,7 @@ lemma σ_eventuallyEq
 
 中文:
 引理 σ_eventuallyEq
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: σ =ᶠ[𝓝 g] fun _ => σ g
   证明: by
   by_cases hg : 0 < g.det.val
@@ -185,7 +185,7 @@ instance instContinuousSMulGL2R
 
 中文:
 实例 instContinuousSMulGL2R
-  签名: : ContinuousSMul (GL (Fin 2) 实数) ℍ
+  签名: : 连续标量乘法 (GL (有限集 2) 实数) ℍ
   定义体: by
   constructor
   simp only [continuous_induced_rng, Function.comp_def, coe_smul, continuous_iff_continuousAt,
@@ -222,7 +222,7 @@ lemma cdsq_le
 
 中文:
 引理 cdsq_le
-  条件: {K : Set ℍ} (hK : IsCompact K)
+  条件: {K : 集合 ℍ} (hK : 是紧集 K)
   证明: by
   rcases K.eq_empty_or_nonempty with rfl | hKne; · simp
   obtain ⟨δ, hδ, hδK⟩ : exists δ > 0, forall z in K, δ <= z.im :=
@@ -258,7 +258,7 @@ lemma absq_le
 
 中文:
 引理 absq_le
-  条件: {K : Set ℍ} (hK : IsCompact K)
+  条件: {K : 集合 ℍ} (hK : 是紧集 K)
   证明: by
   let S : SL(2, Real) := ⟨!![0, -1; 1, 0], by simp⟩
   obtain ⟨A, hA⟩ := cdsq_le (K := S • K) (hK.image <| continuous_const_smul S)
@@ -291,7 +291,7 @@ lemma isProperMap_smul_I
 
 中文:
 引理 isProperMap_smul_I
-  结论: Is命题erMap fun g : SL(2, 实数) => g • I
+  结论: 是真映射 fun g : SL(2, 实数) => g • I
   证明: by
   refine isProperMap_iff_isCompact_preimage.mpr ⟨by fun_prop, fun K hK => ?_⟩
   obtain ⟨A, hA⟩ := absq_le hK
@@ -336,7 +336,7 @@ instance instProperSMul
 
 中文:
 实例 instProperSMul
-  签名: : 命题erSMul SL(2, 实数) ℍ
+  签名: : 真标量乘法 SL(2, 实数) ℍ
   定义体: MulAction.properSMul_of_proper_orbitMap isProperMap_smul_I
 
 Depends on / 依赖: MulAction, MulAction.properSMul_of_proper_orbitMap, isProperMap_smul_I, properSMul_of_proper_orbitMap
@@ -359,7 +359,7 @@ instance instProperlyDiscontinuousSL2RSubgroup
 
 中文:
 实例 instProperlyDiscontinuousSL2RSubgroup
-  签名: (𝒢 : Subgroup SL(2, 实数)) [DiscreteTopology 𝒢]
+  签名: (𝒢 : 子群 SL(2, 实数)) [离散拓扑 𝒢]
   定义体: by
   have : IsClosed (𝒢 : Set SL(2, Real)) := Subgroup.isClosed_of_discrete
   rw [properlyDiscontinuousSMul_iff_properSMul]

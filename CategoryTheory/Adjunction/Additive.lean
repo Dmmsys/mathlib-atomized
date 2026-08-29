@@ -46,8 +46,8 @@ lemma right_adjoint_additive
 
 中文:
 引理 right_adjoint_additive
-  条件: [F.Additive]
-  结论: G.Additive where
+  条件: [F.加性]
+  结论: G.加性 where
   证明: (adj.homEquiv _ _).symm.injective (by simp [homEquiv_counit])
 
 Depends on / 依赖: adj.homEquiv, homEquiv, homEquiv_counit, injective, symm.injective
@@ -67,8 +67,8 @@ lemma left_adjoint_additive
 
 中文:
 引理 left_adjoint_additive
-  条件: [G.Additive]
-  结论: F.Additive where
+  条件: [G.加性]
+  结论: F.加性 where
   证明: (adj.homEquiv _ _).injective (by simp [homEquiv_unit])
 
 Depends on / 依赖: adj.homEquiv, homEquiv, homEquiv_unit, injective

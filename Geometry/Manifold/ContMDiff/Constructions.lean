@@ -216,7 +216,7 @@ theorem contMDiffWithinAt_fst
 
 中文:
 定理 contMDiffWithinAt_fst
-  条件: {s : Set (M × N)} {p : M × N}
+  条件: {s : 集合 (M × N)} {p : M × N}
   证明: by
   /- porting note: `simp` fails to apply lemmas to `ModelProd`. Was
   rw [contMDiffWithinAt_iff']
@@ -253,7 +253,7 @@ theorem ContMDiffWithinAt.fst
 
 中文:
 定理 ContMDiffWithinAt.fst
-  结论: {f : N -> M × M'} {s : Set N} {x : N}
+  结论: {f : N -> M × M'} {s : 集合 N} {x : N}
   证明: contMDiffWithinAt_fst.comp x hf (mapsTo_image f s)
 
 Depends on / 依赖: contMDiffWithinAt_fst, contMDiffWithinAt_fst.comp, mapsTo_image
@@ -275,7 +275,7 @@ theorem contMDiffAt_fst
 中文:
 定理 contMDiffAt_fst
   条件: {p : M × N}
-  结论: ContMDiffAt (I.prod J) I n Prod.fst p
+  结论: ContMDiffAt (I.乘积 J) I n 积类型.fst p
   证明: contMDiffWithinAt_fst
 
 Depends on / 依赖: contMDiffWithinAt_fst
@@ -295,8 +295,8 @@ theorem contMDiffOn_fst
 
 中文:
 定理 contMDiffOn_fst
-  条件: {s : Set (M × N)}
-  结论: ContMDiffOn (I.prod J) I n Prod.fst s
+  条件: {s : 集合 (M × N)}
+  结论: ContMDiffOn (I.乘积 J) I n 积类型.fst s
   证明: fun _ _ =>
   contMDiffWithinAt_fst
 -/
@@ -313,7 +313,7 @@ theorem contMDiff_fst
 
 中文:
 定理 contMDiff_fst
-  结论: ContMDiff (I.prod J) I n (@Prod.fst M N)
+  结论: ContMDiff (I.乘积 J) I n (@积类型.fst M N)
   证明: fun _ => contMDiffAt_fst
 
 Depends on / 依赖: contMDiffAt_fst
@@ -330,7 +330,7 @@ theorem ContMDiffAt.fst
 
 中文:
 定理 ContMDiffAt.fst
-  条件: {f : N -> M × M'} {x : N} (hf : ContMDiffAt J (I.prod I') n f x)
+  条件: {f : N -> M × M'} {x : N} (hf : ContMDiffAt J (I.乘积 I') n f x)
   证明: contMDiffAt_fst.comp x hf
 
 Depends on / 依赖: contMDiffAt_fst, contMDiffAt_fst.comp
@@ -349,7 +349,7 @@ theorem ContMDiff.fst
 
 中文:
 定理 ContMDiff.fst
-  条件: {f : N -> M × M'} (hf : ContMDiff J (I.prod I') n f)
+  条件: {f : N -> M × M'} (hf : ContMDiff J (I.乘积 I') n f)
   证明: contMDiff_fst.comp hf
 
 Depends on / 依赖: contMDiff_fst, contMDiff_fst.comp
@@ -377,7 +377,7 @@ theorem contMDiffWithinAt_snd
 
 中文:
 定理 contMDiffWithinAt_snd
-  条件: {s : Set (M × N)} {p : M × N}
+  条件: {s : 集合 (M × N)} {p : M × N}
   证明: by
   /- porting note: `simp` fails to apply lemmas to `ModelProd`. Was
   rw [contMDiffWithinAt_iff']
@@ -414,7 +414,7 @@ theorem ContMDiffWithinAt.snd
 
 中文:
 定理 ContMDiffWithinAt.snd
-  结论: {f : N -> M × M'} {s : Set N} {x : N}
+  结论: {f : N -> M × M'} {s : 集合 N} {x : N}
   证明: contMDiffWithinAt_snd.comp x hf (mapsTo_image f s)
 
 Depends on / 依赖: contMDiffWithinAt_snd, contMDiffWithinAt_snd.comp, mapsTo_image
@@ -436,7 +436,7 @@ theorem contMDiffAt_snd
 中文:
 定理 contMDiffAt_snd
   条件: {p : M × N}
-  结论: ContMDiffAt (I.prod J) J n Prod.snd p
+  结论: ContMDiffAt (I.乘积 J) J n 积类型.snd p
   证明: contMDiffWithinAt_snd
 
 Depends on / 依赖: contMDiffWithinAt_snd
@@ -456,8 +456,8 @@ theorem contMDiffOn_snd
 
 中文:
 定理 contMDiffOn_snd
-  条件: {s : Set (M × N)}
-  结论: ContMDiffOn (I.prod J) J n Prod.snd s
+  条件: {s : 集合 (M × N)}
+  结论: ContMDiffOn (I.乘积 J) J n 积类型.snd s
   证明: fun _ _ =>
   contMDiffWithinAt_snd
 -/
@@ -474,7 +474,7 @@ theorem contMDiff_snd
 
 中文:
 定理 contMDiff_snd
-  结论: ContMDiff (I.prod J) J n (@Prod.snd M N)
+  结论: ContMDiff (I.乘积 J) J n (@积类型.snd M N)
   证明: fun _ => contMDiffAt_snd
 
 Depends on / 依赖: contMDiffAt_snd
@@ -491,7 +491,7 @@ theorem ContMDiffAt.snd
 
 中文:
 定理 ContMDiffAt.snd
-  条件: {f : N -> M × M'} {x : N} (hf : ContMDiffAt J (I.prod I') n f x)
+  条件: {f : N -> M × M'} {x : N} (hf : ContMDiffAt J (I.乘积 I') n f x)
   证明: contMDiffAt_snd.comp x hf
 
 Depends on / 依赖: contMDiffAt_snd, contMDiffAt_snd.comp
@@ -510,7 +510,7 @@ theorem ContMDiff.snd
 
 中文:
 定理 ContMDiff.snd
-  条件: {f : N -> M × M'} (hf : ContMDiff J (I.prod I') n f)
+  条件: {f : N -> M × M'} (hf : ContMDiff J (I.乘积 I') n f)
   证明: contMDiff_snd.comp hf
 
 Depends on / 依赖: contMDiff_snd, contMDiff_snd.comp
@@ -834,7 +834,7 @@ alias ContMDiffWithinAt.along_fst := ContMDiffWithinAt.curry_left
 
 中文:
 定理 ContMDiffWithinAt.curry_left
-  结论: {f : M -> M' -> N} {x : M} {y : M'} {s : Set (M × M')}
+  结论: {f : M -> M' -> N} {x : M} {y : M'} {s : 集合 (M × M')}
   证明: fa.comp₂ contMDiffWithinAt_id contMDiffWithinAt_const (fun _ h => h)
 alias ContMDiffWithinAt.along_fst := ContMDiffWithinAt.curry_left
 
@@ -857,7 +857,7 @@ alias ContMDiffWithinAt.along_snd := ContMDiffWithinAt.curry_right
 
 中文:
 定理 ContMDiffWithinAt.curry_right
-  结论: {f : M -> M' -> N} {x : M} {y : M'} {s : Set (M × M')}
+  结论: {f : M -> M' -> N} {x : M} {y : M'} {s : 集合 (M × M')}
   证明: fa.comp₂ contMDiffWithinAt_const contMDiffWithinAt_id (fun _ h => h)
 alias ContMDiffWithinAt.along_snd := ContMDiffWithinAt.curry_right
 
@@ -926,7 +926,7 @@ alias ContMDiffOn.along_fst := ContMDiffOn.curry_left
 
 中文:
 定理 ContMDiffOn.curry_left
-  结论: {f : M -> M' -> N} {s : Set (M × M')}
+  结论: {f : M -> M' -> N} {s : 集合 (M × M')}
   证明: fun x m => (fa (x, y) m).along_fst
 alias ContMDiffOn.along_fst := ContMDiffOn.curry_left
 
@@ -949,7 +949,7 @@ alias ContMDiffOn.along_snd := ContMDiffOn.curry_right
 
 中文:
 定理 ContMDiffOn.curry_right
-  结论: {f : M -> M' -> N} {x : M} {s : Set (M × M')}
+  结论: {f : M -> M' -> N} {x : M} {s : 集合 (M × M')}
   证明: fun y m => (fa (x, y) m).along_snd
 alias ContMDiffOn.along_snd := ContMDiffOn.curry_right
 
@@ -1260,7 +1260,7 @@ lemma ContMDiff.inl
 
 中文:
 引理 ContMDiff.inl
-  结论: ContMDiff I I n (@Sum.inl M M')
+  结论: ContMDiff I I n (@和.inl M M')
   证明: by
   intro x
   rw [contMDiffAt_iff]
@@ -1305,7 +1305,7 @@ lemma ContMDiff.inr
 
 中文:
 引理 ContMDiff.inr
-  结论: ContMDiff I I n (@Sum.inr M M')
+  结论: ContMDiff I I n (@和.inr M M')
   证明: by
   intro x
   rw [contMDiffAt_iff]
@@ -1575,7 +1575,7 @@ lemma ContMDiff.swap
 
 中文:
 引理 ContMDiff.swap
-  结论: ContMDiff I I n (@Sum.swap M M')
+  结论: ContMDiff I I n (@和.swap M M')
   证明: ContMDiff.sumElim inr inl
 
 Depends on / 依赖: ContMDiff, ContMDiff.sumElim, sumElim

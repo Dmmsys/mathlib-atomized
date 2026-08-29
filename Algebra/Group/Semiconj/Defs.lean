@@ -46,7 +46,7 @@ definition SemiconjBy
 
 中文:
 定义 SemiconjBy
-  签名: [Mul M] (a x y : M)
+  签名: [乘法 M] (a x y : M)
   定义体: a * x = y * a
 -/
 def SemiconjBy [Mul M] (a x y : M) : Prop :=
@@ -67,7 +67,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: [Mul S] {a x y : S} (h : SemiconjBy a x y)
+  条件: [乘法 S] {a x y : S} (h : SemiconjBy a x y)
   结论: a * x = y * a
   证明: h
 -/
@@ -157,7 +157,7 @@ protected alias transitive := SemiconjBy.isTrans
 
 中文:
 定理 isTrans
-  结论: IsTrans S fun a b => 存在 c, SemiconjBy c a b
+  结论: 是Trans S fun a b => 存在 c, SemiconjBy c a b
   证明: ⟨fun _ _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨y * x, hy.mul_left hx⟩⟩
 
 @[deprecated (since := "2026-02-20")]
@@ -376,7 +376,7 @@ theorem semiconjBy_iff_eq
 
 中文:
 定理 semiconjBy_iff_eq
-  条件: [CancelCommMonoid M] {a x y : M}
+  条件: [消去交换幺半群 M] {a x y : M}
   结论: SemiconjBy a x y ↔ x = y
   证明: ⟨fun h => mul_left_cancel (h.trans (mul_comm _ _)), fun h => by rw [h, SemiconjBy, mul_comm]⟩
 

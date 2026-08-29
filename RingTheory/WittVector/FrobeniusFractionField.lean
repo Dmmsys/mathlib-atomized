@@ -83,7 +83,7 @@ definition succNthDefiningPoly
 
 中文:
 定义 succNthDefiningPoly
-  签名: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k)
+  签名: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k)
   定义体: X ^ p * C (a₁.coeff 0 ^ p ^ (n + 1)) - X * C (a₂.coeff 0 ^ p ^ (n + 1)) +
     C
       (a₁.coeff (n + 1) * (bs 0 ^ p) ^ p ^ (n + 1) +
@@ -118,7 +118,7 @@ theorem succNthDefiningPoly_degree
 
 中文:
 定理 succNthDefiningPoly_degree
-  结论: [IsDomain k] (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k)
+  结论: [是整环 k] (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k)
   证明: by
   have : (X ^ p * C (a₁.coeff 0 ^ p ^ (n + 1))).degree = (p : WithBot Nat) := by
     rw [degree_mul]; rw [degree_C]
@@ -165,8 +165,8 @@ theorem root_exists
       hp.out.ne_zero, not_false_eq_true]
 
 中文:
-定理 root_exists
-  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
+定理 root_存在
+  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
   证明: IsAlgClosed.exists_root _ by
     simp only [succNthDefiningPoly_degree p n a₁ a₂ bs ha₁ ha₂, ne_eq, Nat.cast_eq_zero,
       hp.out.ne_zero, not_false_eq_true]
@@ -189,7 +189,7 @@ definition succNthVal
 
 中文:
 定义 succNthVal
-  签名: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
+  签名: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
   定义体: Classical.choose (root_exists p n a₁ a₂ bs ha₁ ha₂)
 
 Depends on / 依赖: Classical, Classical.choose, root_exists
@@ -208,7 +208,7 @@ theorem succNthVal_spec
 
 中文:
 定理 succNthVal_spec
-  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
+  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
   证明: Classical.choose_spec (root_exists p n a₁ a₂ bs ha₁ ha₂)
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, root_exists
@@ -236,7 +236,7 @@ theorem succNthVal_spec'
 
 中文:
 定理 succNthVal_spec'
-  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : Fin (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
+  结论: (n : 自然数) (a₁ a₂ : 𝕎 k) (bs : 有限集 (n + 1) -> k) (ha₁ : a₁.coeff 0 != 0)
   证明: by
   rw [← sub_eq_zero]
   have := succNthVal_spec p n a₁ a₂ bs ha₁ ha₂
@@ -532,7 +532,7 @@ theorem exists_frobenius_solution_fractionRing_aux
         algebraMap
 
 中文:
-定理 exists_frobenius_solution_fractionRing_aux
+定理 存在_frobenius_solution_fractionRing_aux
   结论: (m n : 自然数) (r' q' : 𝕎 k) (hr' : r'.coeff 0 != 0)
   证明: frobeniusRotation p hr' hq'
     IsFractionRing.ringEquivOfRingEquiv (frobeniusEquiv p k)
@@ -580,7 +580,7 @@ theorem exists_frobenius_solution_fractionRing
   obtain ⟨n, q', hq', rfl⟩ := exists_eq_pow_p_mul q hq0
 
 中文:
-定理 exists_frobenius_solution_fractionRing
+定理 存在_frobenius_solution_fractionRing
   条件: {a : FractionRing (𝕎 k)} (ha : a != 0)
   证明: by
   revert ha

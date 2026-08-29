@@ -47,10 +47,10 @@ class IsPerfect
     - commutator_eq_top : commutator G = (⊤ : Subgroup G)
 
 中文:
-类 IsPerfect
+类 是完美
   参数: where
   公理与运算 (1 个):
-    - commutator_eq_top : commutator G = (⊤ : Subgroup G)
+    - commutator_eq_top : commutator G = (⊤ : 子群 G)
 -/
 class IsPerfect where
   /-- The commutator of the group `G` with itself is the whole group `G`. -/
@@ -68,7 +68,7 @@ lemma isPerfect_def
 
 中文:
 引理 isPerfect_def
-  结论: IsPerfect G ↔ commutator G = ⊤
+  结论: 是完美 G ↔ commutator G = ⊤
   证明: ⟨fun h => h.commutator_eq_top, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: commutator_eq_top, h.commutator_eq_top
@@ -86,8 +86,8 @@ lemma _root_.Subgroup.isPerfect_iff
   rw [Group.isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]
 
 中文:
-引理 _root_.Subgroup.isPerfect_iff
-  结论: IsPerfect H ↔ ⁅H, H⁆ = H
+引理 _root_.子群.isPerfect_iff
+  结论: 是完美 H ↔ ⁅H, H⁆ = H
   证明: by
   rw [Group.isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]
 
@@ -106,8 +106,8 @@ lemma _root_.Subgroup.commutator_eq_self
   proof: isPerfect_iff.mp hH
 
 中文:
-引理 _root_.Subgroup.commutator_eq_self
-  条件: [hH : IsPerfect H]
+引理 _root_.子群.commutator_eq_self
+  条件: [hH : 是完美 H]
   结论: ⁅H, H⁆ = H
   证明: isPerfect_iff.mp hH
 
@@ -130,7 +130,7 @@ lemma mem_commutator
 
 中文:
 引理 mem_commutator
-  条件: [hP : IsPerfect G] {g : G}
+  条件: [hP : 是完美 G] {g : G}
   结论: g in commutator G
   证明: by
   simp
@@ -147,8 +147,8 @@ instance [Subsingleton
   body: Subsingleton.elim _ _
 
 中文:
-实例 [Subsingleton
-  签名: G] : IsPerfect G where
+实例 [子单例
+  签名: G] : 是完美 G where
   定义体: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -167,7 +167,7 @@ theorem top_iff
 
 中文:
 定理 top_iff
-  结论: IsPerfect (⊤ : Subgroup G) ↔ IsPerfect G
+  结论: 是完美 (⊤ : 子群 G) ↔ 是完美 G
   证明: by
   rw [isPerfect_def]; rw [isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [subtype_range]; rw [commutator_def]
 
@@ -185,8 +185,8 @@ instance [IsPerfect
   body: top_iff.mpr inferInstance
 
 中文:
-实例 [IsPerfect
-  签名: G] : IsPerfect (⊤
+实例 [是完美
+  签名: G] : 是完美 (⊤
   定义体: top_iff.mpr inferInstance
 
 Depends on / 依赖: top_iff, top_iff.mpr
@@ -208,8 +208,8 @@ lemma not_isSolvable
 
 中文:
 引理 not_isSolvable
-  条件: [Nontrivial G] [IsPerfect G]
-  结论: ¬ IsSolvable G
+  条件: [非平凡 G] [是完美 G]
+  结论: ¬ 是可解 G
   证明: by
   intro h
   exact (h.commutator_lt_top_of_nontrivial G).ne commutator_eq_top
@@ -232,8 +232,8 @@ lemma not_isNilpotent
 
 中文:
 引理 not_isNilpotent
-  条件: [Nontrivial G] [IsPerfect G]
-  结论: ¬ IsNilpotent G
+  条件: [非平凡 G] [是完美 G]
+  结论: ¬ 是幂零 G
   证明: fun _ => (not_isSolvable G) IsNilpotent.to_isSolvable
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.to_isSolvable, not_isSolvable, to_isSolvable
@@ -254,8 +254,8 @@ lemma not_isMulCommutative
 
 中文:
 引理 not_isMulCommutative
-  条件: [Nontrivial G] [IsPerfect G]
-  结论: ¬ IsMulCommutative G
+  条件: [非平凡 G] [是完美 G]
+  结论: ¬ 是MulCommutative G
   证明: fun _ => (not_isSolvable G) inferInstance
 
 Depends on / 依赖: not_isSolvable
@@ -297,8 +297,8 @@ lemma map
 
 中文:
 引理 map
-  条件: [IsPerfect H]
-  结论: IsPerfect (H.map f)
+  条件: [是完美 H]
+  结论: 是完美 (H.map f)
   证明: by
   rw [isPerfect_iff]; rw [← map_commutator]; rw [commutator_eq_self]
 -/
@@ -318,8 +318,8 @@ lemma range
 
 中文:
 引理 range
-  条件: [IsPerfect G]
-  结论: IsPerfect f.range
+  条件: [是完美 G]
+  结论: 是完美 f.range
   证明: by
   rw [MonoidHom.range_eq_map]
   exact IsPerfect.map _
@@ -342,8 +342,8 @@ lemma ofSurjective
 
 中文:
 引理 ofSurjective
-  条件: [IsPerfect G] (hf : Function.Surjective f)
-  结论: IsPerfect G'
+  条件: [是完美 G] (hf : 函数.满射 f)
+  结论: 是完美 G'
   证明: by
   rw [← top_iff]; rw [← MonoidHom.range_eq_top_of_surjective f hf]
   exact IsPerfect.range f
@@ -364,7 +364,7 @@ instance instQuotientSubgroup
 
 中文:
 实例 instQuotientSubgroup
-  签名: [H.Normal] [IsPerfect G]
+  签名: [H.正规] [是完美 G]
   定义体: ofSurjective (QuotientGroup.mk'_surjective H)
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, _surjective, ofSurjective
@@ -391,7 +391,7 @@ theorem derivedSeries_eq_top
 
 中文:
 定理 derivedSeries_eq_top
-  条件: [IsPerfect G] (n : 自然数)
+  条件: [是完美 G] (n : 自然数)
   结论: derivedSeries G n = ⊤
   证明: by
   match n with
@@ -424,7 +424,7 @@ theorem lowerCentralSeries_eq_top
 
 中文:
 定理 lowerCentralSeries_eq_top
-  条件: (H : Subgroup G) [IsPerfect H] (n : 自然数)
+  条件: (H : 子群 G) [是完美 H] (n : 自然数)
   证明: by
   match n with
   | 0 => simp
@@ -456,7 +456,7 @@ apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
 
 中文:
 定理 upperCentralSeries_eq_center
-  条件: [IsPerfect G] {n : 自然数} (hn : n != 0)
+  条件: [是完美 G] {n : 自然数} (hn : n != 0)
   证明: by
   rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
 apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
@@ -489,7 +489,7 @@ theorem center_quotient_center_eq_bot
 
 中文:
 定理 center_quotient_center_eq_bot
-  条件: [IsPerfect G]
+  条件: [是完美 G]
   结论: center (G ⧸ center G) = ⊥
   证明: by
   rw [← Subgroup.upperCentralSeries_one (G ⧸ center G)]; rw [← comap_eq_ker_of_surjective QuotientGroup.mk'_surjective _]; rw [QuotientGroup.ker_mk']; rw [Subgroup.comap_upperCentralSeries_quotient_center]; rw [upperCentralSeries_eq_center G by lia]

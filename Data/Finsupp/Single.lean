@@ -95,7 +95,7 @@ theorem single_apply
 
 中文:
 定理 single_apply
-  条件: [Decidable (a = a')]
+  条件: [可判定 (a = a')]
   结论: single a b a' = if a = a' then b else 0
   证明: by
   classical
@@ -117,7 +117,7 @@ theorem single_apply_left
 
 中文:
 定理 single_apply_left
-  条件: {f : α -> β} (hf : Function.Injective f) (x z : α) (y : M)
+  条件: {f : α -> β} (hf : 函数.单射 f) (x z : α) (y : M)
   证明: by classical simp only [single_apply, hf.eq_iff]
 
 Depends on / 依赖: classical, eq_iff, hf.eq_iff, mk_eq_normalize, mul_def, single_apply
@@ -138,7 +138,7 @@ theorem single_eq_pi_single
 中文:
 定理 single_eq_pi_single
   条件: [DecidableEq α] (a : α) (b : M)
-  结论: ⇑(single a b) = Pi.single a b
+  结论: ⇑(single a b) = 依赖函数类型.single a b
   证明: by
   ext; simp [single_apply, Pi.single_apply, eq_comm]
 
@@ -185,7 +185,7 @@ theorem single_eq_set_indicator
 
 中文:
 定理 single_eq_set_indicator
-  结论: ⇑(single a b) = Set.indicator {a} fun _ => b
+  结论: ⇑(single a b) = 集合.indicator {a} fun _ => b
   证明: (set_indicator_singleton a (fun _ => b)).symm
 
 @[simp]
@@ -402,7 +402,7 @@ theorem single_apply_mem
 中文:
 定理 single_apply_mem
   条件: (x)
-  结论: single a b x in ({0, b} : Set M)
+  结论: single a b x in ({0, b} : 集合 M)
   证明: by
   classical
   grind
@@ -423,7 +423,7 @@ theorem range_single_subset
 
 中文:
 定理 range_single_subset
-  结论: Set.range (single a b) subseteq {0, b}
+  结论: 集合.range (single a b) subseteq {0, b}
   证明: Set.range_subset_iff.2 single_apply_mem
 
 Depends on / 依赖: Set.range_subset_iff, range_subset_iff, single_apply_mem
@@ -445,7 +445,7 @@ theorem single_injective
 中文:
 定理 single_injective
   条件: (a : α)
-  结论: Function.Injective (single a : M -> α ->₀ M)
+  结论: 函数.单射 (single a : M -> α ->₀ M)
   证明: fun b₁ b₂ eq => by
   have : (single a b₁ : α ->₀ M) a = (single a b₂ : α ->₀ M) a := by rw [eq]
   rwa [single_eq_same, single_eq_same] at this
@@ -619,7 +619,7 @@ theorem single_left_injective
 中文:
 定理 single_left_injective
   条件: (h : b != 0)
-  结论: Function.Injective fun a : α => single a b
+  结论: 函数.单射 fun a : α => single a b
   证明: fun _a _a' H => (((single_eq_single_iff _ _ _ _).mp H).resolve_right fun hb => h hb.1).left
 
 Depends on / 依赖: resolve_right, single_eq_single_iff
@@ -659,7 +659,7 @@ lemma apply_surjective
 中文:
 引理 apply_surjective
   条件: (a : α)
-  结论: Surjective fun f : α ->₀ M => f a
+  结论: 满射 fun f : α ->₀ M => f a
   证明: RightInverse.surjective fun _ => single_eq_same
 
 Depends on / 依赖: RightInverse, RightInverse.surjective, single_eq_same, surjective
@@ -788,7 +788,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nonempty α] [Nontrivial M]
+  签名: [非空 α] [非平凡 M]
   定义体: by
   inhabit α
   rcases exists_ne (0 : M) with ⟨x, hx⟩
@@ -815,7 +815,7 @@ lemma nontrivial_iff
 
 中文:
 引理 nontrivial_iff
-  结论: Nontrivial (α ->₀ M) ↔ Nonempty α ∧ Nontrivial M where
+  结论: 非平凡 (α ->₀ M) ↔ 非空 α ∧ 非平凡 M where
   证明: by
     rintro ⟨f, g, hfg⟩
     obtain ⟨a, ha⟩ := ne_iff.mp hfg
@@ -844,7 +844,7 @@ theorem unique_single
 
 中文:
 定理 unique_single
-  条件: [Unique α] (x : α ->₀ M)
+  条件: [唯一 α] (x : α ->₀ M)
   结论: x = single default (x default)
   证明: ext Unique.forall_iff.2 single_eq_same.symm
 
@@ -868,7 +868,7 @@ theorem unique_single_eq_iff
 
 中文:
 定理 unique_single_eq_iff
-  条件: [Unique α] {b' : M}
+  条件: [唯一 α] {b' : M}
   结论: single a b = single a' b' ↔ b = b'
   证明: by
   rw [Finsupp.unique_ext_iff]; rw [Unique.eq_default a]; rw [Unique.eq_default a']; rw [single_eq_same]; rw [single_eq_same]
@@ -890,7 +890,7 @@ lemma apply_single'
 
 中文:
 引理 apply_single'
-  条件: [Zero N] [Zero P] (e : N -> P) (he : e 0 = 0) (a : α) (n : N) (b : α)
+  条件: [零 N] [零 P] (e : N -> P) (he : e 0 = 0) (a : α) (n : N) (b : α)
   证明: by
   classical
   grind
@@ -1054,7 +1054,7 @@ theorem card_support_le_one
 
 中文:
 定理 card_support_le_one
-  条件: [Nonempty α] {f : α ->₀ M}
+  条件: [非空 α] {f : α ->₀ M}
   证明: by
   simp only [card_le_one_iff_subset_singleton, support_subset_singleton]
 
@@ -1075,7 +1075,7 @@ theorem card_support_le_one'
 
 中文:
 定理 card_support_le_one'
-  条件: [Nonempty α] {f : α ->₀ M}
+  条件: [非空 α] {f : α ->₀ M}
   证明: by
   simp only [card_le_one_iff_subset_singleton, support_subset_singleton']
 
@@ -1101,7 +1101,7 @@ definition uniqueEquiv
 
 中文:
 定义 uniqueEquiv
-  签名: (a : α) [Subsingleton α]
+  签名: (a : α) [子单例 α]
   定义体: f a
   invFun := single a
   left_inv f := by ext b; simp [Subsingleton.elim b a]
@@ -1124,7 +1124,7 @@ lemma uniqueEquiv_symm_apply_apply
 
 中文:
 引理 uniqueEquiv_symm_apply_apply
-  条件: (a : α) [Subsingleton α] (m : M) (b : α)
+  条件: (a : α) [子单例 α] (m : M) (b : α)
   证明: by simp [Subsingleton.elim b a]
 -/
 @[simp↓ high] lemma uniqueEquiv_symm_apply_apply (a : α) [Subsingleton α] (m : M) (b : α) :
@@ -1145,8 +1145,8 @@ definition _root_.Equiv.finsuppUnique
 @[simp]
 
 中文:
-定义 _root_.Equiv.finsuppUnique
-  签名: {ι : 类型} [Unique ι]
+定义 _root_.等价.finsuppUnique
+  签名: {ι : 类型} [唯一 ι]
   定义体: Finsupp.equivFunOnFinite.trans (Equiv.funUnique ι M)
 
 @[simp]
@@ -1170,7 +1170,7 @@ theorem equivFunOnFinite_single
 
 中文:
 定理 equivFunOnFinite_single
-  条件: [DecidableEq α] [Finite α] (x : α) (m : M)
+  条件: [DecidableEq α] [有限 α] (x : α) (m : M)
   证明: by
   simp [Finsupp.single_eq_pi_single, equivFunOnFinite]
 
@@ -1194,7 +1194,7 @@ theorem equivFunOnFinite_symm_single
 
 中文:
 定理 equivFunOnFinite_symm_single
-  条件: [DecidableEq α] [Finite α] (x : α) (m : M)
+  条件: [DecidableEq α] [有限 α] (x : α) (m : M)
   证明: by
   rw [← equivFunOnFinite_single]; rw [Equiv.symm_apply_apply]
 
@@ -1305,7 +1305,7 @@ theorem coe_update
 中文:
 定理 coe_update
   条件: [DecidableEq α]
-  结论: (f.update a b : α -> M) = Function.update f a b
+  结论: (f.update a b : α -> M) = 函数.update f a b
   证明: by
   grind
 

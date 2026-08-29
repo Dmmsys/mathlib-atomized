@@ -70,7 +70,7 @@ theorem lift_range_le
 
 中文:
 定理 lift_range_le
-  条件: {f : A ->ₙₐ[R] C} {S : Subalgebra R C}
+  条件: {f : A ->ₙₐ[R] C} {S : 子代数 R C}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rintro - ⟨x, rfl⟩
@@ -170,7 +170,7 @@ theorem unitization_range
 
 中文:
 定理 unitization_range
-  结论: (unitization s).range = Algebra.adjoin R (s : Set A)
+  结论: (unitization s).range = 代数.adjoin R (s : 集合 A)
   证明: by
   rw [unitization]; rw [Unitization.lift_range]
   simp
@@ -201,8 +201,8 @@ theorem _root_.AlgHomClass.unitization_injective'
       · simpa [hr]
 
 中文:
-定理 _root_.AlgHomClass.unitization_injective'
-  结论: {F R S A : 类型} [CommRing R] [Ring A]
+定理 _root_.代数态射类.unitization_injective'
+  结论: {F R S A : 类型} [交换环 R] [环 A]
   证明: by
   refine (injective_iff_map_eq_zero f).mpr fun x hx => ?_
   induction x with
@@ -244,8 +244,8 @@ theorem _root_.AlgHomClass.unitization_injective
 exact h1 inv_smul_smul₀ hr (1 : A) ▸ SMulMemClass.smul_mem r⁻¹ hr'
 
 中文:
-定理 _root_.AlgHomClass.unitization_injective
-  结论: {F R S A : 类型} [Field R] [Ring A]
+定理 _root_.代数态射类.unitization_injective
+  结论: {F R S A : 类型} [域 R] [环 A]
   证明: by
   refine AlgHomClass.unitization_injective' s (fun r hr hr' => ?_) f hf
   rw [Algebra.algebraMap_eq_smul_one] at hr'
@@ -278,7 +278,7 @@ theorem unitization_injective
 中文:
 定理 unitization_injective
   条件: (h1 : (1 : A) ∉ s)
-  结论: Function.Injective (unitization s)
+  结论: 函数.单射 (unitization s)
   证明: AlgHomClass.unitization_injective s h1 (unitization s) fun _ => by simp
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.unitization_injective, unitization, unitization_injective
@@ -609,7 +609,7 @@ theorem unitization_range
 
 中文:
 定理 unitization_range
-  结论: (unitization s).range = StarAlgebra.adjoin R s
+  结论: (unitization s).range = 对合代数.adjoin R s
   证明: by
   rw [unitization]; rw [Unitization.starLift_range]
   simp only [NonUnitalStarAlgHom.coe_range, NonUnitalStarSubalgebraClass.coe_subtype,
@@ -644,7 +644,7 @@ theorem unitization_injective
 中文:
 定理 unitization_injective
   条件: (h1 : (1 : A) ∉ s)
-  结论: Function.Injective (unitization s)
+  结论: 函数.单射 (unitization s)
   证明: AlgHomClass.unitization_injective s h1 (unitization s) fun _ => by simp
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.unitization_injective, unitization, unitization_injective

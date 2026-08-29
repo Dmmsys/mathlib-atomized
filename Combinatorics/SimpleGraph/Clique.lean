@@ -54,7 +54,7 @@ abbreviation IsClique
 
 中文:
 缩写 IsClique
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: s.Pairwise G.Adj
 
 Depends on / 依赖: G.Adj, Pairwise, s.Pairwise
@@ -72,7 +72,7 @@ theorem isClique_iff
 
 中文:
 定理 isClique_iff
-  结论: G.IsClique s ↔ s.Pairwise G.Adj
+  结论: G.IsClique s ↔ s.两两 G.伴随
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -91,7 +91,7 @@ lemma not_isClique_iff
 
 中文:
 引理 not_isClique_iff
-  结论: ¬ G.IsClique s ↔ 存在 (v w : s), v != w ∧ ¬ G.Adj v w
+  结论: ¬ G.IsClique s ↔ 存在 (v w : s), v != w ∧ ¬ G.伴随 v w
   证明: by
   aesop (add simp [isClique_iff, Set.Pairwise])
 
@@ -165,7 +165,7 @@ theorem isClique_iff_isChain_adj
 
 中文:
 定理 isClique_iff_isChain_adj
-  结论: G.IsClique s ↔ IsChain G.Adj s
+  结论: G.IsClique s ↔ IsChain G.伴随 s
   证明: by
   simp [IsChain, G.symm.iff]
 
@@ -184,7 +184,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [DecidableRel G.Adj] {s
+  签名: α] [DecidableRel G.伴随] {s
   定义体: decidable_of_iff' _ G.isClique_iff
 
 Depends on / 依赖: G.isClique_iff, decidable_of_iff, isClique_iff
@@ -237,7 +237,7 @@ theorem IsClique.of_subsingleton
 
 中文:
 定理 IsClique.of_subsingleton
-  条件: {G : SimpleGraph α} (hs : s.Subsingleton)
+  条件: {G : 简单图 α} (hs : s.子单例)
   结论: G.IsClique s
   证明: hs.pairwise G.Adj
 
@@ -259,7 +259,7 @@ lemma isClique_pair
 
 中文:
 引理 isClique_pair
-  结论: G.IsClique {a, b} ↔ a != b -> G.Adj a b
+  结论: G.IsClique {a, b} ↔ a != b -> G.伴随 a b
   证明: have := G.symm
   Set.pairwise_pair_of_symm
 
@@ -283,7 +283,7 @@ lemma isClique_insert
 
 中文:
 引理 isClique_insert
-  结论: G.IsClique (insert a s) ↔ G.IsClique s ∧ 对任意 b in s, a != b -> G.Adj a b
+  结论: G.IsClique (insert a s) ↔ G.IsClique s ∧ 对任意 b in s, a != b -> G.伴随 a b
   证明: have := G.symm
   Set.pairwise_insert_of_symm
 
@@ -328,7 +328,7 @@ lemma IsClique.insert
 
 中文:
 引理 IsClique.insert
-  条件: (hs : G.IsClique s) (h : 对任意 b in s, a != b -> G.Adj a b)
+  条件: (hs : G.IsClique s) (h : 对任意 b in s, a != b -> G.伴随 a b)
   证明: have := G.symm
   hs.insert_of_symm h
 
@@ -399,7 +399,7 @@ theorem IsClique.top
 
 中文:
 定理 IsClique.top
-  结论: (⊤ : SimpleGraph α).IsClique s
+  结论: (⊤ : 简单图 α).IsClique s
   证明: fun _ _ _ _ => id
 
 @[simp]
@@ -422,7 +422,7 @@ alias ⟨IsClique.subsingleton, _⟩ := isClique_bot_iff
 
 中文:
 定理 isClique_bot_iff
-  结论: (⊥ : SimpleGraph α).IsClique s ↔ (s : Set α).Subsingleton
+  结论: (⊥ : 简单图 α).IsClique s ↔ (s : 集合 α).子单例
   证明: Set.pairwise_bot_iff
 
 alias ⟨IsClique.subsingleton, _⟩ := isClique_bot_iff
@@ -489,7 +489,7 @@ theorem IsClique.inter_left
 
 中文:
 定理 IsClique.inter_left
-  条件: {s : Set α} (hs : G.IsClique s) (t : Set α)
+  条件: {s : 集合 α} (hs : G.IsClique s) (t : 集合 α)
   结论: G.IsClique s inter t
   证明: Set.Pairwise.inter_left hs t
 
@@ -509,7 +509,7 @@ theorem IsClique.inter_right
 
 中文:
 定理 IsClique.inter_right
-  条件: {s : Set α} (hs : G.IsClique s) (t : Set α)
+  条件: {s : 集合 α} (hs : G.IsClique s) (t : 集合 α)
   结论: G.IsClique t inter s
   证明: Set.Pairwise.inter_right hs t
 
@@ -528,7 +528,7 @@ theorem isClique_sUnion
 
 中文:
 定理 isClique_sUnion
-  条件: {S : Set (Set α)} (hd : DirectedOn (· subseteq ·) S)
+  条件: {S : 集合 (集合 α)} (hd : DirectedOn (· subseteq ·) S)
   证明: Set.pairwise_sUnion hd
 
 Depends on / 依赖: Set.pairwise_sUnion, pairwise_sUnion
@@ -547,7 +547,7 @@ theorem isClique_iUnion
 
 中文:
 定理 isClique_iUnion
-  条件: {ι : 类型} {s : ι -> Set α} (hd : Directed (· subseteq ·) s)
+  条件: {ι : 类型} {s : ι -> 集合 α} (hd : Directed (· subseteq ·) s)
   证明: Set.pairwise_iUnion hd
 
 Depends on / 依赖: Set.pairwise_iUnion, pairwise_iUnion
@@ -573,7 +573,7 @@ theorem isClique_map_iff_of_nontrivial
 
 中文:
 定理 isClique_map_iff_of_nontrivial
-  条件: {f : α ↪ β} {t : Set β} (ht : t.Nontrivial)
+  条件: {f : α ↪ β} {t : 集合 β} (ht : t.非平凡)
   证明: by
   refine ⟨fun h => ⟨f ⁻¹' t, ?_, ?_⟩, by rintro ⟨x, hs, rfl⟩; exact hs.map⟩
   · rintro x (hx : f x in t) y (hy : f y in t) hne
@@ -611,7 +611,7 @@ theorem isClique_map_iff
 
 中文:
 定理 isClique_map_iff
-  条件: {f : α ↪ β} {t : Set β}
+  条件: {f : α ↪ β} {t : 集合 β}
   证明: by
   obtain (ht | ht) := t.subsingleton_or_nontrivial
   · simp [IsClique.of_subsingleton, ht]
@@ -664,7 +664,7 @@ theorem isClique_induce_iff
 
 中文:
 定理 isClique_induce_iff
-  条件: {s : Set α} {t : Set s}
+  条件: {s : 集合 α} {t : 集合 s}
   证明: by
   simp [Set.Pairwise]
 
@@ -694,7 +694,7 @@ obtain ⟨s, rfl⟩ := Set.Finite.exists_finset_coe
 
 中文:
 定理 isClique_map_finset_iff_of_nontrivial
-  条件: (ht : t.Nontrivial)
+  条件: (ht : t.非平凡)
   证明: by
   constructor
   · rw [isClique_map_iff_of_nontrivial (by simpa)]
@@ -763,7 +763,7 @@ theorem IsClique.finsetMap
 
 中文:
 定理 IsClique.finsetMap
-  条件: {f : α ↪ β} {s : Finset α} (h : G.IsClique s)
+  条件: {f : α ↪ β} {s : 有限集 α} (h : G.IsClique s)
   证明: by
   simpa
 -/
@@ -784,7 +784,7 @@ theorem IsClique.of_induce
 
 中文:
 定理 IsClique.of_induce
-  结论: {S : Subgraph G} {F : Set α} {A : Set F}
+  结论: {S : 子图 G} {F : 集合 α} {A : 集合 F}
   证明: by
   simp only [Set.Pairwise, Set.mem_image, Subtype.exists, exists_and_right, exists_eq_right]
   intro _ ⟨_, ainA⟩ _ ⟨_, binA⟩ anb
@@ -811,7 +811,7 @@ lemma IsClique.sdiff_of_sup_edge
 
 中文:
 引理 IsClique.sdiff_of_sup_edge
-  条件: {v w : α} {s : Set α} (hc : (G ⊔ edge v w).IsClique s)
+  条件: {v w : α} {s : 集合 α} (hc : (G ⊔ edge v w).IsClique s)
   证明: by
   intro _ hx _ hy hxy
   have := hc hx.1 hy.1 hxy
@@ -841,7 +841,7 @@ lemma isClique_sup_edge_of_ne_sdiff
 
 中文:
 引理 isClique_sup_edge_of_ne_sdiff
-  结论: {v w : α} {s : Set α} (h : v != w) (hv : G.IsClique (s \ {v}))
+  结论: {v w : α} {s : 集合 α} (h : v != w) (hv : G.IsClique (s \ {v}))
   证明: by
   intro x hx y hy hxy
   by_cases h' : x in s \ {v} ∧ y in s \ {v} ∨ x in s \ {w} ∧ y in s \ {w}
@@ -872,7 +872,7 @@ lemma isClique_sup_edge_of_ne_iff
 
 中文:
 引理 isClique_sup_edge_of_ne_iff
-  条件: {v w : α} {s : Set α} (h : v != w)
+  条件: {v w : α} {s : 集合 α} (h : v != w)
   证明: ⟨fun h' => ⟨h'.sdiff_of_sup_edge, (edge_comm .. ▸ h').sdiff_of_sup_edge⟩,
     fun h' => isClique_sup_edge_of_ne_sdiff h h'.1 h'.2⟩
 
@@ -897,7 +897,7 @@ theorem isClique_range_copy_top
 
 中文:
 定理 isClique_range_copy_top
-  条件: (f : Copy (⊤ : SimpleGraph β) G)
+  条件: (f : 余py (⊤ : 简单图 β) G)
   证明: by
   intro _ ⟨_, h⟩ _ ⟨_, h'⟩ nh
   rw [← h]; rw [← Copy.topEmbedding_apply]; rw [← h']; rw [← Copy.topEmbedding_apply] at nh ⊢
@@ -933,8 +933,8 @@ structure IsNClique
     - card_eq : #s = n
 
 中文:
-结构 IsNClique
-  参数: (n : 自然数) (s : Finset α)
+结构 是NClique
+  参数: (n : 自然数) (s : 有限集 α)
   公理与运算 (2 个):
     - isClique : G.IsClique s
     - card_eq : #s = n
@@ -953,7 +953,7 @@ theorem isNClique_iff
 
 中文:
 定理 isNClique_iff
-  结论: G.IsNClique n s ↔ G.IsClique s ∧ #s = n
+  结论: G.是NClique n s ↔ G.IsClique s ∧ #s = n
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isNClique_iff : G.IsNClique n s ↔ G.IsClique s ∧ #s = n :=
@@ -969,7 +969,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [DecidableRel G.Adj] {n
+  签名: α] [DecidableRel G.伴随] {n
   定义体: decidable_of_iff' _ G.isNClique_iff
 
 Depends on / 依赖: G.isNClique_iff, decidable_of_iff, isNClique_iff
@@ -992,7 +992,7 @@ lemma isNClique_empty
 
 中文:
 引理 isNClique_empty
-  结论: G.IsNClique n ∅ ↔ n = 0
+  结论: G.是NClique n ∅ ↔ n = 0
   证明: by simp [isNClique_iff, eq_comm]
 
 @[simp]
@@ -1010,7 +1010,7 @@ lemma isNClique_singleton
 
 中文:
 引理 isNClique_singleton
-  结论: G.IsNClique n {a} ↔ n = 1
+  结论: G.是NClique n {a} ↔ n = 1
   证明: by simp [isNClique_iff, eq_comm]
 
 Depends on / 依赖: eq_comm, isNClique_iff
@@ -1029,9 +1029,9 @@ theorem IsNClique.mono
   exact And.imp_left (IsClique.mono h)
 
 中文:
-定理 IsNClique.mono
+定理 是NClique.mono
   条件: (h : G <= H)
-  结论: G.IsNClique n s -> H.IsNClique n s
+  结论: G.是NClique n s -> H.是NClique n s
   证明: by
   simp_rw [isNClique_iff]
   exact And.imp_left (IsClique.mono h)
@@ -1051,8 +1051,8 @@ theorem IsNClique.map
   proof: ⟨by rw [coe_map]; exact h.1.map, (card_map _).trans h.2⟩
 
 中文:
-定理 IsNClique.map
-  条件: (h : G.IsNClique n s) {f : α ↪ β}
+定理 是NClique.map
+  条件: (h : G.是NClique n s) {f : α ↪ β}
   证明: ⟨by rw [coe_map]; exact h.1.map, (card_map _).trans h.2⟩
 -/
 protected theorem IsNClique.map (h : G.IsNClique n s) {f : α ↪ β} :
@@ -1077,7 +1077,7 @@ theorem isNClique_map_iff
 
 中文:
 定理 isNClique_map_iff
-  条件: (hn : 1 < n) {t : Finset β} {f : α ↪ β}
+  条件: (hn : 1 < n) {t : 有限集 β} {f : α ↪ β}
   证明: by
   rw [isNClique_iff]; rw [isClique_map_finset_iff]; rw [or_and_right]; rw [or_iff_right (by rintro ⟨h']; rw [rfl⟩; exact h'.not_gt hn)]
   constructor
@@ -1116,7 +1116,7 @@ theorem isNClique_bot_iff
 
 中文:
 定理 isNClique_bot_iff
-  结论: (⊥ : SimpleGraph α).IsNClique n s ↔ n <= 1 ∧ #s = n
+  结论: (⊥ : 简单图 α).是NClique n s ↔ n <= 1 ∧ #s = n
   证明: by
   rw [isNClique_iff]; rw [isClique_bot_iff]
   refine and_congr_left ?_
@@ -1147,7 +1147,7 @@ theorem isNClique_zero
 
 中文:
 定理 isNClique_zero
-  结论: G.IsNClique 0 s ↔ s = ∅
+  结论: G.是NClique 0 s ↔ s = ∅
   证明: by
   simp only [isNClique_iff, Finset.card_eq_zero, and_iff_right_iff_imp]; rintro rfl; simp
 
@@ -1170,7 +1170,7 @@ theorem isNClique_one
 
 中文:
 定理 isNClique_one
-  结论: G.IsNClique 1 s ↔ 存在 a, s = {a}
+  结论: G.是NClique 1 s ↔ 存在 a, s = {a}
   证明: by
   simp only [isNClique_iff, card_eq_one, and_iff_right_iff_imp]; rintro ⟨a, rfl⟩; simp
 
@@ -1196,8 +1196,8 @@ theorem IsNClique.insert
   · rw [card_insert_of_notMem fun ha => (h _ ha).ne rfl, hs.2]
 
 中文:
-定理 IsNClique.insert
-  条件: (hs : G.IsNClique n s) (h : 对任意 b in s, G.Adj a b)
+定理 是NClique.insert
+  条件: (hs : G.是NClique n s) (h : 对任意 b in s, G.伴随 a b)
   证明: by
   constructor
   · push_cast
@@ -1221,8 +1221,8 @@ lemma IsNClique.erase_of_mem
   card_eq := by rw [card_erase_of_mem ha, hs.2]
 
 中文:
-引理 IsNClique.erase_of_mem
-  条件: (hs : G.IsNClique n s) (ha : a in s)
+引理 是NClique.erase_of_mem
+  条件: (hs : G.是NClique n s) (ha : a in s)
   证明: hs.isClique.subset by simp
   card_eq := by rw [card_erase_of_mem ha, hs.2]
 
@@ -1244,7 +1244,7 @@ lemma IsNClique.insert_erase
   | succ _ => exact (hs.erase_of_mem hb).insert fun w h => by aesop
 
 中文:
-引理 IsNClique.insert_erase
+引理 是NClique.insert_erase
   证明: by
   cases n with
 | zero => exact False.elim notMem_empty _ (isNClique_zero.1 hs ▸ hb)
@@ -1269,7 +1269,7 @@ theorem is3Clique_triple_iff
 
 中文:
 定理 is3Clique_triple_iff
-  结论: G.IsNClique 3 {a, b, c} ↔ G.Adj a b ∧ G.Adj a c ∧ G.Adj b c
+  结论: G.是NClique 3 {a, b, c} ↔ G.伴随 a b ∧ G.伴随 a c ∧ G.伴随 b c
   证明: by
   by_cases hab : a = b <;> by_cases hbc : b = c <;> by_cases hac : a = c <;>
     simp [isNClique_iff, and_rotate, *]
@@ -1329,7 +1329,7 @@ theorem is3Clique_iff_exists_cycle_length_three
     (fun ⟨_, .cons hab (.cons hbc (.cons hca nil)), _, _⟩ => ⟨_, _, _, _, hab, hca.symm, hbc, rfl⟩)⟩
 
 中文:
-定理 is3Clique_iff_exists_cycle_length_three
+定理 is3Clique_iff_存在_cycle_length_three
   证明: by
   classical
   simp_rw [is3Clique_iff, isCycle_def]
@@ -1360,8 +1360,8 @@ theorem IsNClique.of_induce
   exact ⟨cc.left.of_induce, cc.right⟩
 
 中文:
-定理 IsNClique.of_induce
-  结论: {S : Subgraph G} {F : Set α} {s : Finset { x // x in F }} {n : 自然数}
+定理 是NClique.of_induce
+  结论: {S : 子图 G} {F : 集合 α} {s : 有限集 { x // x in F }} {n : 自然数}
   证明: by
   rw [isNClique_iff] at cc ⊢
   simp only [coe_map, card_map]
@@ -1387,8 +1387,8 @@ lemma IsNClique.erase_of_sup_edge_of_mem
   card_eq := by rw [card_erase_of_mem hx, hc.2]
 
 中文:
-引理 IsNClique.erase_of_sup_edge_of_mem
-  结论: [DecidableEq α] {v w : α} {s : Finset α} {n : 自然数}
+引理 是NClique.erase_of_sup_edge_of_mem
+  结论: [DecidableEq α] {v w : α} {s : 有限集 α} {n : 自然数}
   证明: coe_erase v _ ▸ hc.1.sdiff_of_sup_edge
   card_eq := by rw [card_erase_of_mem hx, hc.2]
 
@@ -1411,7 +1411,7 @@ theorem isNClique_map_copy_top
 
 中文:
 定理 isNClique_map_copy_top
-  条件: [Fintype β] (f : Copy (⊤ : SimpleGraph β) G)
+  条件: [有限类型 β] (f : 余py (⊤ : 简单图 β) G)
   证明: by
   rw [isNClique_iff]; rw [card_map]; rw [card_univ]; rw [coe_map]; rw [coe_univ]; rw [Set.image_univ]
   exact ⟨isClique_range_copy_top f, rfl⟩
@@ -1434,7 +1434,7 @@ theorem isNClique_induce_iff
 
 中文:
 定理 isNClique_induce_iff
-  条件: (s : Set α) (t : Finset s) (n : 自然数)
+  条件: (s : 集合 α) (t : 有限集 s) (n : 自然数)
   证明: by
   simp [isNClique_iff, isClique_induce_iff]
 
@@ -1483,8 +1483,8 @@ theorem IsNClique.not_cliqueFree
   proof: fun h => h _ hG
 
 中文:
-定理 IsNClique.not_cliqueFree
-  条件: (hG : G.IsNClique n s)
+定理 是NClique.not_cliqueFree
+  条件: (hG : G.是NClique n s)
   结论: ¬G.CliqueFree n
   证明: fun h => h _ hG
 -/
@@ -1508,7 +1508,7 @@ alias not_cliqueFree_of_top_embedding := IsContained.not_cliqueFree
 
 中文:
 定理 IsContained.not_cliqueFree
-  条件: {n : 自然数} (h : completeGraph (Fin n) ⊑ G)
+  条件: {n : 自然数} (h : completeGraph (有限集 n) ⊑ G)
   结论: ¬G.CliqueFree n
   证明: by
   have := isNClique_map_copy_top h.some
@@ -1575,7 +1575,7 @@ theorem not_cliqueFree_iff_top_isContained
 中文:
 定理 not_cliqueFree_iff_top_isContained
   条件: (n : 自然数)
-  结论: ¬G.CliqueFree n ↔ completeGraph (Fin n) ⊑ G
+  结论: ¬G.CliqueFree n ↔ completeGraph (有限集 n) ⊑ G
   证明: ⟨(topEmbeddingOfNotCliqueFree · |>.isContained), IsContained.not_cliqueFree⟩
 
 @[deprecated (since := "2026-03-23")] alias not_cliqueFree_iff := not_cliqueFree_iff_top_isContained
@@ -1601,7 +1601,7 @@ theorem cliqueFree_iff
 中文:
 定理 cliqueFree_iff
   条件: {n : 自然数}
-  结论: G.CliqueFree n ↔ IsEmpty (Copy (completeGraph <| Fin n) G)
+  结论: G.CliqueFree n ↔ 是空 (余py (completeGraph <| 有限集 n) G)
   证明: by
   contrapose!
   exact not_cliqueFree_iff_top_isContained n
@@ -1623,7 +1623,7 @@ theorem cliqueFree_iff_top_free
 
 中文:
 定理 cliqueFree_iff_top_free
-  条件: {β : 类型} [Fintype β]
+  条件: {β : 类型} [有限类型 β]
   证明: by
   rw [← not_iff_not]; rw [not_free]; rw [not_cliqueFree_iff_top_isContained]; rw [isContained_congr (Iso.completeGraph (equivFin β)) Iso.refl]
 
@@ -1648,7 +1648,7 @@ alias not_cliqueFree_card_of_top_embedding := IsContained.not_cliqueFree_card
 
 中文:
 定理 IsContained.not_cliqueFree_card
-  条件: [Fintype α] (f : completeGraph α ⊑ G)
+  条件: [有限类型 α] (f : completeGraph α ⊑ G)
   证明: by
   rw [not_cliqueFree_iff_top_isContained]
   exact (Iso.completeGraph <| equivFin α).isContained'.trans f
@@ -1704,7 +1704,7 @@ theorem cliqueFree_bot
 中文:
 定理 cliqueFree_bot
   条件: (h : 2 <= n)
-  结论: (⊥ : SimpleGraph α).CliqueFree n
+  结论: (⊥ : 简单图 α).CliqueFree n
   证明: by
   intro t ht
   have := le_trans h (isNClique_bot_iff.1 ht).1
@@ -1788,7 +1788,7 @@ theorem CliqueFree.comap
 
 中文:
 定理 CliqueFree.comap
-  条件: {H : SimpleGraph β} (hle : H ⊑ G) (h : G.CliqueFree n)
+  条件: {H : 简单图 β} (hle : H ⊑ G) (h : G.CliqueFree n)
   证明: by
   contrapose h
   rw [not_cliqueFree_iff_top_isContained] at h ⊢
@@ -1817,7 +1817,7 @@ theorem cliqueFree_map_iff
 
 中文:
 定理 cliqueFree_map_iff
-  条件: {f : α ↪ β} [Nonempty α]
+  条件: {f : α ↪ β} [非空 α]
   证明: by
   obtain (hle | hlt) := le_or_gt n 1
   · obtain (rfl | rfl) := Nat.le_one_iff_eq_zero_or_eq_one.1 hle
@@ -1847,7 +1847,7 @@ theorem cliqueFree_of_card_lt
 
 中文:
 定理 cliqueFree_of_card_lt
-  条件: [Fintype α] (hc : card α < n)
+  条件: [有限类型 α] (hc : card α < n)
   结论: G.CliqueFree n
   证明: by
   rw [cliqueFree_iff]
@@ -1876,7 +1876,7 @@ theorem cliqueFree_completeMultipartiteGraph
 
 中文:
 定理 cliqueFree_completeMultipartiteGraph
-  结论: {ι : 类型} [Fintype ι] (V : ι -> 类型)
+  结论: {ι : 类型} [有限类型 ι] (V : ι -> 类型)
   证明: by
   rw [cliqueFree_iff]; rw [isEmpty_iff]
   intro f
@@ -1935,7 +1935,7 @@ theorem not_cliqueFree_of_le_card
 
 中文:
 定理 not_cliqueFree_of_le_card
-  条件: [Fintype ι] (f : 对任意 (i : ι), V i) (hc : n <= card ι)
+  条件: [有限类型 ι] (f : 对任意 (i : ι), V i) (hc : n <= card ι)
   证明: fun hf => (cliqueFree_iff.1 <| hf.mono hc).elim'
 .toCopy.comp (Iso.completeGraph (equivFin ι).symm).toCopy topEmbedding V f
 
@@ -1957,7 +1957,7 @@ theorem not_cliqueFree_of_infinite
 
 中文:
 定理 not_cliqueFree_of_infinite
-  条件: [Infinite ι] (f : 对任意 (i : ι), V i)
+  条件: [无限 ι] (f : 对任意 (i : ι), V i)
   证明: (topEmbedding V f |>.comp <| .completeGraph <| Fin.valEmbedding.trans <| Infinite.natEmbedding ι)
 .isContained.not_cliqueFree
 
@@ -2070,7 +2070,7 @@ lemma cliqueFree_one
 
 中文:
 引理 cliqueFree_one
-  结论: G.CliqueFree 1 ↔ IsEmpty α
+  结论: G.CliqueFree 1 ↔ 是空 α
   证明: by
   simp [CliqueFree, isEmpty_iff]
 
@@ -2130,7 +2130,7 @@ have ht : (t : Set α) \ {x} = t := sdiff_eq_left.mpr Set.disjoint_singleton_rig
 
 中文:
 引理 CliqueFree.mem_of_sup_edge_isNClique
-  结论: {x y : α} {t : Finset α} {n : 自然数} (h : G.CliqueFree n)
+  结论: {x y : α} {t : 有限集 α} {n : 自然数} (h : G.CliqueFree n)
   证明: by
   by_contra hf
 have ht : (t : Set α) \ {x} = t := sdiff_eq_left.mpr Set.disjoint_singleton_right.mpr hf
@@ -2181,8 +2181,8 @@ lemma IsNClique.exists_not_adj_of_cliqueFree_succ
   exact (hc.insert hf).not_cliqueFree h
 
 中文:
-引理 IsNClique.exists_not_adj_of_cliqueFree_succ
-  结论: (hc : G.IsNClique n s)
+引理 是NClique.存在_not_adj_of_cliqueFree_succ
+  结论: (hc : G.是NClique n s)
   证明: by
   classical
   by_contra! hf
@@ -2210,7 +2210,7 @@ obtain ⟨t, hc⟩ := not_forall_not.1 h.not_prop_of_gt G.lt_sup_edge _ _ hne hn
   rw [insert_erase 
 
 中文:
-引理 exists_of_maximal_cliqueFree_not_adj
+引理 存在_of_maximal_cliqueFree_not_adj
   结论: [DecidableEq α]
   证明: by
 obtain ⟨t, hc⟩ := not_forall_not.1 h.not_prop_of_gt G.lt_sup_edge _ _ hne hn
@@ -2246,7 +2246,7 @@ definition CliqueFreeOn
 
 中文:
 定义 CliqueFreeOn
-  签名: (G : SimpleGraph α) (s : Set α) (n : 自然数)
+  签名: (G : 简单图 α) (s : 集合 α) (n : 自然数)
   定义体: forall ⦃t⦄, ↑t subseteq s -> ¬G.IsNClique n t
 
 Depends on / 依赖: G.IsNClique, IsNClique, subseteq
@@ -2391,7 +2391,7 @@ theorem cliqueFreeOn_univ
 
 中文:
 定理 cliqueFreeOn_univ
-  结论: G.CliqueFreeOn Set.univ n ↔ G.CliqueFree n
+  结论: G.CliqueFreeOn 集合.univ n ↔ G.CliqueFree n
   证明: by
   simp [CliqueFree, CliqueFreeOn]
 
@@ -2429,7 +2429,7 @@ theorem cliqueFreeOn_of_card_lt
 
 中文:
 定理 cliqueFreeOn_of_card_lt
-  条件: {s : Finset α} (h : #s < n)
+  条件: {s : 有限集 α} (h : #s < n)
   结论: G.CliqueFreeOn s n
   证明: fun _t hts ht => h.not_ge ht.2.symm.trans_le card_mono hts
 
@@ -2457,7 +2457,7 @@ theorem cliqueFreeOn_two
 
 中文:
 定理 cliqueFreeOn_two
-  结论: G.CliqueFreeOn s 2 ↔ s.Pairwise (G.Adjᶜ)
+  结论: G.CliqueFreeOn s 2 ↔ s.两两 (G.Adjᶜ)
   证明: by
   classical
   refine ⟨fun h a ha b hb _ hab => h ?_ ⟨by simpa [hab.ne], card_pair hab.ne⟩, ?_⟩
@@ -2524,7 +2524,7 @@ have := h t.subtype _
 
 中文:
 定理 cliqueFree_induce_iff
-  条件: (s : Set α) (n : 自然数)
+  条件: (s : 集合 α) (n : 自然数)
   证明: by
   classical
   simp only [CliqueFree, isNClique_induce_iff]
@@ -2584,7 +2584,7 @@ theorem mem_cliqueSet_iff
 
 中文:
 定理 mem_cliqueSet_iff
-  结论: s in G.cliqueSet n ↔ G.IsNClique n s
+  结论: s in G.cliqueSet n ↔ G.是NClique n s
   证明: Iff.rfl
 
 @[simp]
@@ -2684,7 +2684,7 @@ theorem cliqueSet_zero
 
 中文:
 定理 cliqueSet_zero
-  条件: (G : SimpleGraph α)
+  条件: (G : 简单图 α)
   结论: G.cliqueSet 0 = {∅}
   证明: Set.ext fun s => by simp
 
@@ -2708,8 +2708,8 @@ theorem cliqueSet_one
 
 中文:
 定理 cliqueSet_one
-  条件: (G : SimpleGraph α)
-  结论: G.cliqueSet 1 = Set.range singleton
+  条件: (G : 简单图 α)
+  结论: G.cliqueSet 1 = 集合.range singleton
   证明: Set.ext fun s => by simp [eq_comm]
 
 @[simp]
@@ -2734,7 +2734,7 @@ theorem cliqueSet_bot
 中文:
 定理 cliqueSet_bot
   条件: (hn : 1 < n)
-  结论: (⊥ : SimpleGraph α).cliqueSet n = ∅
+  结论: (⊥ : 简单图 α).cliqueSet n = ∅
   证明: (cliqueFree_bot hn).cliqueSet
 
 @[simp]
@@ -2763,7 +2763,7 @@ theorem cliqueSet_map
 
 中文:
 定理 cliqueSet_map
-  条件: (hn : n != 1) (G : SimpleGraph α) (f : α ↪ β)
+  条件: (hn : n != 1) (G : 简单图 α) (f : α ↪ β)
   证明: by
   ext s
   constructor
@@ -2809,7 +2809,7 @@ theorem cliqueSet_map_of_equiv
 
 中文:
 定理 cliqueSet_map_of_equiv
-  条件: (G : SimpleGraph α) (e : α ≃ β) (n : 自然数)
+  条件: (G : 简单图 α) (e : α ≃ β) (n : 自然数)
   证明: by
   obtain rfl | hn := eq_or_ne n 1
   · ext
@@ -2844,7 +2844,7 @@ definition cliqueNum
 
 中文:
 定义 cliqueNum
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: sSup {n | exists s, G.IsNClique n s}
 
 Depends on / 依赖: G.IsNClique, IsNClique
@@ -2868,8 +2868,8 @@ lemma finite_cliqueNum_bddAbove
 
 中文:
 引理 finite_cliqueNum_bddAbove
-  条件: [Finite α]
-  结论: BddAbove {n | 存在 s, G.IsNClique n s}
+  条件: [有限 α]
+  结论: BddAbove {n | 存在 s, G.是NClique n s}
   证明: by
   have := ofFinite α
   use card α
@@ -2897,7 +2897,7 @@ lemma IsClique.card_le_cliqueNum
 
 中文:
 引理 IsClique.card_le_cliqueNum
-  条件: [Finite α] {t : Finset α} {tc : G.IsClique t}
+  条件: [有限 α] {t : 有限集 α} {tc : G.IsClique t}
   证明: by
   exact le_csSup G.finite_cliqueNum_bddAbove (Exists.intro t ⟨tc, rfl⟩)
 
@@ -2919,8 +2919,8 @@ lemma exists_isNClique_cliqueNum
   · simp [cliqueNum, h]
 
 中文:
-引理 exists_isNClique_cliqueNum
-  结论: 存在 s, G.IsNClique G.cliqueNum s
+引理 存在_isNClique_cliqueNum
+  结论: 存在 s, G.是NClique G.cliqueNum s
   证明: by
   by_cases h : BddAbove {n | exists s, G.IsNClique n s}
   · exact Nat.sSup_mem ⟨0, by simp⟩ h
@@ -2946,7 +2946,7 @@ theorem cliqueNum_induce_le
 
 中文:
 定理 cliqueNum_induce_le
-  条件: [Finite α] (s : Set α)
+  条件: [有限 α] (s : 集合 α)
   证明: by
   have ⟨t', tc⟩ := (G.induce s).exists_isNClique_cliqueNum
   rw [isNClique_induce_iff] at tc
@@ -2972,11 +2972,11 @@ structure IsMaximumClique
     - maximum : forall t : Finset α, G.IsClique t -> #t <= #s
 
 中文:
-结构 IsMaximumClique
-  参数: [Finite α] (G : SimpleGraph α) (s : Finset α)
+结构 是MaximumClique
+  参数: [有限 α] (G : 简单图 α) (s : 有限集 α)
   公理与运算 (2 个):
     - isClique : G.IsClique s
-    - maximum : 对任意 t : Finset α, G.IsClique t -> #t <= #s
+    - maximum : 对任意 t : 有限集 α, G.IsClique t -> #t <= #s
 -/
 structure IsMaximumClique [Finite α] (G : SimpleGraph α) (s : Finset α) : Prop where
   isClique : G.IsClique s
@@ -2992,7 +2992,7 @@ theorem isMaximumClique_iff
 
 中文:
 定理 isMaximumClique_iff
-  条件: [Finite α] {s : Finset α}
+  条件: [有限 α] {s : 有限集 α}
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isMaximumClique_iff [Finite α] {s : Finset α} :
@@ -3009,7 +3009,7 @@ theorem isMaximalClique_iff
 
 中文:
 定理 isMaximalClique_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3033,8 +3033,8 @@ lemma IsMaximumClique.isMaximalClique
       have hlt : #s
 
 中文:
-引理 IsMaximumClique.isMaximalClique
-  条件: [Finite α] (s : Finset α) (M : G.IsMaximumClique s)
+引理 是MaximumClique.isMaximalClique
+  条件: [有限 α] (s : 有限集 α) (M : G.是MaximumClique s)
   证明: ⟨ M.isClique,
     fun t ht hsub => by
       by_contra hc
@@ -3070,7 +3070,7 @@ lemma maximumClique_card_eq_cliqueNum
 
 中文:
 引理 maximumClique_card_eq_cliqueNum
-  条件: [Finite α] (s : Finset α) (sm : G.IsMaximumClique s)
+  条件: [有限 α] (s : 有限集 α) (sm : G.是MaximumClique s)
   证明: by
   obtain ⟨sc, sm⟩ := sm
   obtain ⟨t, tc, tcard⟩ := G.exists_isNClique_cliqueNum
@@ -3096,9 +3096,9 @@ lemma maximumClique_exists
   exact ⟨s, ⟨snc.isClique, fun t ht => snc.card_eq.symm ▸ ht.card_le_cliqueNum⟩⟩
 
 中文:
-引理 maximumClique_exists
-  条件: [Finite α]
-  结论: 存在 (s : Finset α), G.IsMaximumClique s
+引理 maximumClique_存在
+  条件: [有限 α]
+  结论: 存在 (s : 有限集 α), G.是MaximumClique s
   证明: by
   obtain ⟨s, snc⟩ := G.exists_isNClique_cliqueNum
   exact ⟨s, ⟨snc.isClique, fun t ht => snc.card_eq.symm ▸ ht.card_le_cliqueNum⟩⟩
@@ -3149,7 +3149,7 @@ theorem mem_cliqueFinset_iff
 
 中文:
 定理 mem_cliqueFinset_iff
-  结论: s in G.cliqueFinset n ↔ G.IsNClique n s
+  结论: s in G.cliqueFinset n ↔ G.是NClique n s
   证明: mem_filter.trans and_iff_right mem_univ _
 
 @[simp, norm_cast]
@@ -3172,7 +3172,7 @@ theorem coe_cliqueFinset
 中文:
 定理 coe_cliqueFinset
   条件: (n : 自然数)
-  结论: (G.cliqueFinset n : Set (Finset α)) = G.cliqueSet n
+  结论: (G.cliqueFinset n : 集合 (有限集 α)) = G.cliqueSet n
   证明: Set.ext fun _ => mem_cliqueFinset_iff
 
 Depends on / 依赖: Set.ext, mem_cliqueFinset_iff
@@ -3329,7 +3329,7 @@ abbreviation IsIndepSet
 
 中文:
 缩写 IsIndepSet
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: s.Pairwise (fun v w => ¬G.Adj v w)
 
 Depends on / 依赖: G.Adj, Pairwise, s.Pairwise
@@ -3347,7 +3347,7 @@ theorem isIndepSet_iff
 
 中文:
 定理 isIndepSet_iff
-  结论: G.IsIndepSet s ↔ s.Pairwise (fun v w => ¬G.Adj v w)
+  结论: G.IsIndepSet s ↔ s.两两 (fun v w => ¬G.伴随 v w)
   证明: .rfl
 -/
 theorem isIndepSet_iff : G.IsIndepSet s ↔ s.Pairwise (fun v w => ¬G.Adj v w) :=
@@ -3363,7 +3363,7 @@ theorem isIndepSet_iff_isAntichain_adj
 
 中文:
 定理 isIndepSet_iff_isAntichain_adj
-  结论: G.IsIndepSet s ↔ IsAntichain G.Adj s
+  结论: G.IsIndepSet s ↔ IsAntichain G.伴随 s
   证明: .rfl
 -/
 theorem isIndepSet_iff_isAntichain_adj : G.IsIndepSet s ↔ IsAntichain G.Adj s :=
@@ -3421,7 +3421,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [DecidableRel G.Adj] {s
+  签名: α] [DecidableRel G.伴随] {s
   定义体: decidable_of_iff' _ G.isIndepSet_iff
 
 Depends on / 依赖: G.isIndepSet_iff, decidable_of_iff, isIndepSet_iff
@@ -3444,7 +3444,7 @@ lemma IsIndepSet.nonempty_mem_compl_mem_edge
 
 中文:
 引理 IsIndepSet.nonempty_mem_compl_mem_edge
-  结论: {s : Set α} (indA : G.IsIndepSet s) {e}
+  结论: {s : 集合 α} (indA : G.IsIndepSet s) {e}
   证明: by
   obtain ⟨v, w⟩ := e
   by_contra! c
@@ -3514,7 +3514,7 @@ theorem isIndepSet_induce
 
 中文:
 定理 isIndepSet_induce
-  条件: {F : Set α} {s : Set F}
+  条件: {F : 集合 α} {s : 集合 F}
   证明: by
   simp [Set.Pairwise]
 
@@ -3546,8 +3546,8 @@ structure IsNIndepSet
     - card_eq : s.card = n
 
 中文:
-结构 IsNIndepSet
-  参数: (n : 自然数) (s : Finset α)
+结构 是NIndepSet
+  参数: (n : 自然数) (s : 有限集 α)
   公理与运算 (2 个):
     - isIndepSet : G.IsIndepSet s
     - card_eq : s.card = n
@@ -3568,7 +3568,7 @@ theorem isNClique_compl
 
 中文:
 定理 isNClique_compl
-  结论: Gᶜ.IsNClique n s ↔ G.IsNIndepSet n s
+  结论: Gᶜ.是NClique n s ↔ G.是NIndepSet n s
   证明: by
   rw [isNIndepSet_iff]
   simp [isNClique_iff]
@@ -3589,7 +3589,7 @@ theorem isNIndepSet_compl
 
 中文:
 定理 isNIndepSet_compl
-  结论: Gᶜ.IsNIndepSet n s ↔ G.IsNClique n s
+  结论: Gᶜ.是NIndepSet n s ↔ G.是NClique n s
   证明: by
   rw [isNClique_iff]
   simp [isNIndepSet_iff]
@@ -3608,7 +3608,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] [DecidableRel G.Adj] {n
+  签名: α] [DecidableRel G.伴随] {n
   定义体: decidable_of_iff' _ (G.isNIndepSet_iff n s)
 
 Depends on / 依赖: G.isNIndepSet_iff, decidable_of_iff, isNIndepSet_iff
@@ -3629,7 +3629,7 @@ theorem isNIndepSet_induce
 
 中文:
 定理 isNIndepSet_induce
-  条件: {F : Set α} {s : Finset { x // x in F }} {n : 自然数}
+  条件: {F : 集合 α} {s : 有限集 { x // x in F }} {n : 自然数}
   证明: by
   simp [isNIndepSet_iff, (isIndepSet_induce)]
 
@@ -3713,7 +3713,7 @@ definition IndepSetFreeOn
 
 中文:
 定义 IndepSetFreeOn
-  签名: (G : SimpleGraph α) (s : Set α) (n : 自然数)
+  签名: (G : 简单图 α) (s : 集合 α) (n : 自然数)
   定义体: forall ⦃t⦄, ↑t subseteq s -> ¬G.IsNIndepSet n t
 
 Depends on / 依赖: G.IsNIndepSet, IsNIndepSet, subseteq
@@ -3761,7 +3761,7 @@ theorem mem_indepSetSet_iff
 
 中文:
 定理 mem_indepSetSet_iff
-  结论: s in G.indepSetSet n ↔ G.IsNIndepSet n s
+  结论: s in G.indepSetSet n ↔ G.是NIndepSet n s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3788,7 +3788,7 @@ definition indepNum
 
 中文:
 定义 indepNum
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: sSup {n | exists s, G.IsNIndepSet n s}
 
 Depends on / 依赖: G.IsNIndepSet, IsNIndepSet
@@ -3867,8 +3867,8 @@ lemma exists_isNIndepSet_indepNum
   exact exists_isNClique_cliqueNum
 
 中文:
-引理 exists_isNIndepSet_indepNum
-  结论: 存在 s, G.IsNIndepSet G.indepNum s
+引理 存在_isNIndepSet_indepNum
+  结论: 存在 s, G.是NIndepSet G.indepNum s
   证明: by
   simp_rw [indepNum, ← isNClique_compl]
   exact exists_isNClique_cliqueNum
@@ -3893,11 +3893,11 @@ structure IsMaximumIndepSet
     - maximum : forall t : Finset α, G.IsIndepSet t -> #t <= #s
 
 中文:
-结构 IsMaximumIndepSet
-  参数: [Finite α] (G : SimpleGraph α) (s : Finset α)
+结构 是MaximumIndepSet
+  参数: [有限 α] (G : 简单图 α) (s : 有限集 α)
   公理与运算 (2 个):
     - isIndepSet : G.IsIndepSet s
-    - maximum : 对任意 t : Finset α, G.IsIndepSet t -> #t <= #s
+    - maximum : 对任意 t : 有限集 α, G.IsIndepSet t -> #t <= #s
 -/
 structure IsMaximumIndepSet [Finite α] (G : SimpleGraph α) (s : Finset α) : Prop where
   isIndepSet : G.IsIndepSet s
@@ -3914,7 +3914,7 @@ lemma isMaximumClique_compl
 
 中文:
 引理 isMaximumClique_compl
-  条件: [Finite α] (s : Finset α)
+  条件: [有限 α] (s : 有限集 α)
   证明: by
   simp [isMaximumIndepSet_iff, isMaximumClique_iff]
 -/
@@ -3933,7 +3933,7 @@ lemma isMaximumIndepSet_compl
 
 中文:
 引理 isMaximumIndepSet_compl
-  条件: [Finite α] (s : Finset α)
+  条件: [有限 α] (s : 有限集 α)
   证明: by
   simp [isMaximumIndepSet_iff, isMaximumClique_iff]
 -/
@@ -3951,7 +3951,7 @@ theorem isMaximalIndepSet_iff
 
 中文:
 定理 isMaximalIndepSet_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3971,7 +3971,7 @@ lemma isMaximalClique_compl
 
 中文:
 引理 isMaximalClique_compl
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   simp [isMaximalIndepSet_iff, isMaximalClique_iff]
 -/
@@ -3990,7 +3990,7 @@ lemma isMaximalIndepSet_compl
 
 中文:
 引理 isMaximalIndepSet_compl
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   simp [isMaximalIndepSet_iff, isMaximalClique_iff]
 -/
@@ -4009,7 +4009,7 @@ lemma IsMaximumIndepSet.isMaximalIndepSet
   exact IsMaximumClique.isMaximalClique s M
 
 中文:
-引理 IsMaximumIndepSet.isMaximalIndepSet
+引理 是MaximumIndepSet.isMaximalIndepSet
   证明: by
   rw [← isMaximalClique_compl]
   rw [← isMaximumClique_compl] at M
@@ -4059,9 +4059,9 @@ lemma maximumIndepSet_exists
   simp [← isMaximumClique_compl, maximumClique_exists]
 
 中文:
-引理 maximumIndepSet_exists
-  条件: [Finite α]
-  结论: 存在 (s : Finset α), G.IsMaximumIndepSet s
+引理 maximumIndepSet_存在
+  条件: [有限 α]
+  结论: 存在 (s : 有限集 α), G.是MaximumIndepSet s
   证明: by
   simp [← isMaximumClique_compl, maximumClique_exists]
 
@@ -4108,7 +4108,7 @@ theorem mem_indepSetFinset_iff
 
 中文:
 定理 mem_indepSetFinset_iff
-  结论: s in G.indepSetFinset n ↔ G.IsNIndepSet n s
+  结论: s in G.indepSetFinset n ↔ G.是NIndepSet n s
   证明: mem_filter.trans and_iff_right mem_univ _
 
 Depends on / 依赖: and_iff_right, mem_filter, mem_filter.trans, mem_univ

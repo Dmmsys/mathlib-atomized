@@ -50,7 +50,7 @@ definition successIfFailWithMessage
 
 中文:
 定义 successIfFailWithMessage
-  签名: {s α : Type} {m : Type -> Type} [Monad m] [MonadLiftT BaseIO m]
+  签名: {s α : 类型} {m : 类型 -> 类型} [单子 m] [MonadLiftT BaseIO m]
   定义体: do
   let s ← saveState
   let err ←

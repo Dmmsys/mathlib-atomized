@@ -49,7 +49,7 @@ definition bodd
 
 中文:
 定义 bodd
-  签名: : 整数 -> 布尔
+  签名: : 整数 -> 布尔值
 -/
 def bodd : Int -> Bool
   | (n : Nat) => n.bodd
@@ -65,7 +65,7 @@ definition bit
 
 中文:
 定义 bit
-  签名: (b : 布尔)
+  签名: (b : 布尔值)
   定义体: cond b (2 * · + 1) (2 * ·)
 -/
 def bit (b : Bool) : Int -> Int :=
@@ -81,7 +81,7 @@ definition natBitwise
 
 中文:
 定义 natBitwise
-  签名: (f : 布尔 -> 布尔 -> 布尔) (m n : 自然数)
+  签名: (f : 布尔值 -> 布尔值 -> 布尔值) (m n : 自然数)
   定义体: cond (f false false) -[Nat.bitwise (fun x y => not (f x y)) m n+1] (Nat.bitwise f m n)
 
 Depends on / 依赖: Nat.bitwise, bitwise
@@ -98,7 +98,7 @@ definition bitwise
 
 中文:
 定义 bitwise
-  签名: (f : 布尔 -> 布尔 -> 布尔)
+  签名: (f : 布尔值 -> 布尔值 -> 布尔值)
 -/
 def bitwise (f : Bool -> Bool -> Bool) : Int -> Int -> Int
   | (m : Nat), (n : Nat) => natBitwise f m n
@@ -323,7 +323,7 @@ theorem bodd_subNatNat
 @[simp]
 
 中文:
-定理 bodd_subNatNat
+定理 bodd_sub自然数自然数
   条件: (m n : 自然数)
   结论: bodd (sub自然数自然数 m n) = xor m.bodd n.bodd
   证明: by
@@ -357,7 +357,7 @@ theorem bodd_negOfNat
 @[simp]
 
 中文:
-定理 bodd_negOfNat
+定理 bodd_negOf自然数
   条件: (n : 自然数)
   结论: bodd (negOf自然数 n) = n.bodd
   证明: by
@@ -568,7 +568,7 @@ definition bitCasesOn.{u}
 
 中文:
 定义 bitCasesOn.{u}
-  签名: {C : 整数 -> Sort u} (n) (h : 对任意 b n, C (bit b n))
+  签名: {C : 整数 -> 类型层 u} (n) (h : 对任意 b n, C (bit b n))
   定义体: by
   rw [← bit_decomp n]
   apply h
@@ -937,7 +937,7 @@ theorem bitwise_bit
 
 中文:
 定理 bitwise_bit
-  条件: (f : 布尔 -> 布尔 -> 布尔) (a m b n)
+  条件: (f : 布尔值 -> 布尔值 -> 布尔值) (a m b n)
   证明: by
   rcases m with m | m <;> rcases n with n | n <;>
   simp [bitwise, ofNat_eq_natCast, bit_coe_nat, natBitwise, Bool.not_false,
@@ -1103,7 +1103,7 @@ theorem testBit_bitwise
 
 中文:
 定理 testBit_bitwise
-  条件: (f : 布尔 -> 布尔 -> 布尔) (m n k)
+  条件: (f : 布尔值 -> 布尔值 -> 布尔值) (m n k)
   证明: by
   cases m <;> cases n <;> simp only [testBit, bitwise, natBitwise]
   · by_cases h : f false false <;> simp [h]

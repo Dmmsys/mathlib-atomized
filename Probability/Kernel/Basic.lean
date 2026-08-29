@@ -68,7 +68,7 @@ definition deterministic
 
 中文:
 定义 deterministic
-  签名: (f : α -> β) (hf : Measurable f)
+  签名: (f : α -> β) (hf : 可测 f)
   定义体: Measure.dirac (f a)
   measurable' := by
     refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
@@ -94,7 +94,7 @@ theorem deterministic_apply
 
 中文:
 定理 deterministic_apply
-  条件: {f : α -> β} (hf : Measurable f) (a : α)
+  条件: {f : α -> β} (hf : 可测 f) (a : α)
   证明: rfl
 -/
 theorem deterministic_apply {f : α -> β} (hf : Measurable f) (a : α) :
@@ -114,7 +114,7 @@ theorem deterministic_apply'
 
 中文:
 定理 deterministic_apply'
-  结论: {f : α -> β} (hf : Measurable f) (a : α) {s : Set β}
+  结论: {f : α -> β} (hf : 可测 f) (a : α) {s : 集合 β}
   证明: by
   rw [deterministic]
   change Measure.dirac (f a) s = s.indicator 1 (f a)
@@ -139,7 +139,7 @@ theorem deterministic_congr
 
 中文:
 定理 deterministic_congr
-  条件: {f g : α -> β} {hf : Measurable f} (h : f = g)
+  条件: {f g : α -> β} {hf : 可测 f} (h : f = g)
   证明: by
   grind
 -/
@@ -157,7 +157,7 @@ instance isMarkovKernel_deterministic
 
 中文:
 实例 isMarkovKernel_deterministic
-  签名: {f : α -> β} (hf : Measurable f)
+  签名: {f : α -> β} (hf : 可测 f)
   定义体: ⟨fun a => by rw [deterministic_apply hf]; infer_instance⟩
 
 Depends on / 依赖: deterministic_apply, infer_instance
@@ -179,7 +179,7 @@ theorem lintegral_deterministic'
 
 中文:
 定理 lintegral_deterministic'
-  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : Measurable g)
+  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [lintegral_dirac' _ hf]
 
@@ -203,7 +203,7 @@ theorem lintegral_deterministic
 
 中文:
 定理 lintegral_deterministic
-  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : Measurable g)
+  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [lintegral_dirac (g a) f]
 
@@ -225,8 +225,8 @@ theorem setLIntegral_deterministic'
 @[simp]
 
 中文:
-定理 setLIntegral_deterministic'
-  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : Measurable g)
+定理 setL整数egral_deterministic'
+  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [setLIntegral_dirac' hf hs]
 
@@ -250,8 +250,8 @@ theorem setLIntegral_deterministic
   rw [deterministic_apply]; rw [setLIntegral_dirac f s]
 
 中文:
-定理 setLIntegral_deterministic
-  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : Measurable g)
+定理 setL整数egral_deterministic
+  结论: {f : β -> 实数>=0∞} {g : α -> β} {a : α} (hg : 可测 g)
   证明: by
   rw [deterministic_apply]; rw [setLIntegral_dirac f s]
 
@@ -278,7 +278,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Kernel α α
+  签名: : 核 α α
   定义体: Kernel.deterministic id measurable_id
 
 Depends on / 依赖: Kernel, Kernel.deterministic, deterministic, measurable_id
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel (Kernel.id : Kernel α α)
+  签名: 是MarkovKernel (核.id : 核 α α)
   定义体: by rw [Kernel.id]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.id, infer_instance
@@ -315,7 +315,7 @@ lemma id_apply
 中文:
 引理 id_apply
   条件: (a : α)
-  结论: Kernel.id a = Measure.dirac a
+  结论: 核.id a = 测度.dirac a
   证明: by
   rw [Kernel.id]; rw [deterministic_apply]; rw [id_def]
 
@@ -335,7 +335,7 @@ lemma lintegral_id'
 
 中文:
 引理 lintegral_id'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (a : α)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (a : α)
   证明: by
   rw [id_apply]; rw [lintegral_dirac' _ hf]
 
@@ -356,7 +356,7 @@ lemma lintegral_id
 
 中文:
 引理 lintegral_id
-  条件: [MeasurableSingletonClass α] {f : α -> 实数>=0∞} (a : α)
+  条件: [MeasurableSingleton类 α] {f : α -> 实数>=0∞} (a : α)
   证明: by
   rw [id_apply]; rw [lintegral_dirac]
 
@@ -382,7 +382,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (α : 类型) [MeasurableSpace α]
+  签名: (α : 类型) [可测空间 α]
   定义体: Kernel.deterministic Function.diag (measurable_id.prod measurable_id)
 
 Depends on / 依赖: Function, Function.diag, Kernel, Kernel.deterministic, deterministic, measurable_id, measurable_id.prod
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel (copy α)
+  签名: 是MarkovKernel (copy α)
   定义体: by rw [copy]; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -419,7 +419,7 @@ lemma copy_apply
 中文:
 引理 copy_apply
   条件: (a : α)
-  结论: copy α a = Measure.dirac (a, a)
+  结论: copy α a = 测度.dirac (a, a)
   证明: by simp [copy, deterministic_apply]
 
 Depends on / 依赖: deterministic_apply
@@ -442,7 +442,7 @@ definition discard
 
 中文:
 定义 discard
-  签名: (α : 类型) [MeasurableSpace α]
+  签名: (α : 类型) [可测空间 α]
   定义体: Kernel.deterministic (fun _ => PUnit.unit) measurable_const
 
 Depends on / 依赖: Kernel, Kernel.deterministic, PUnit.unit, deterministic, measurable_const
@@ -462,7 +462,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel (discard α)
+  签名: 是MarkovKernel (discard α)
   定义体: by rw [discard]; infer_instance
 
 @[simp]
@@ -484,7 +484,7 @@ lemma discard_apply
 中文:
 引理 discard_apply
   条件: (a : α)
-  结论: discard α a = Measure.dirac PUnit.unit
+  结论: discard α a = 测度.dirac 命题单元.unit
   证明: deterministic_apply _ _
 
 Depends on / 依赖: deterministic_apply
@@ -507,7 +507,7 @@ definition swap
 
 中文:
 定义 swap
-  签名: (α β : 类型) [MeasurableSpace α] [MeasurableSpace β]
+  签名: (α β : 类型) [可测空间 α] [可测空间 β]
   定义体: Kernel.deterministic Prod.swap measurable_swap
 
 Depends on / 依赖: Kernel, Kernel.deterministic, Prod.swap, deterministic, measurable_swap
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel (swap α β)
+  签名: 是MarkovKernel (swap α β)
   定义体: by rw [swap]; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -545,7 +545,7 @@ lemma swap_apply
 中文:
 引理 swap_apply
   条件: (ab : α × β)
-  结论: swap α β ab = Measure.dirac ab.swap
+  结论: swap α β ab = 测度.dirac ab.swap
   证明: by
   rw [swap]; rw [deterministic_apply]
 
@@ -565,7 +565,7 @@ lemma swap_apply'
 
 中文:
 引理 swap_apply'
-  条件: (ab : α × β) {s : Set (β × α)} (hs : MeasurableSet s)
+  条件: (ab : α × β) {s : 集合 (β × α)} (hs : 可测集 s)
   证明: by
   rw [swap_apply]; rw [Measure.dirac_apply' _ hs]
 
@@ -592,7 +592,7 @@ definition const
 
 中文:
 定义 const
-  签名: (α : 类型) {β : 类型} [MeasurableSpace α] {_ : MeasurableSpace β} (μβ : Measure β)
+  签名: (α : 类型) {β : 类型} [可测空间 α] {_ : 可测空间 β} (μβ : 测度 β)
   定义体: μβ
   measurable' := measurable_const
 
@@ -617,7 +617,7 @@ theorem const_apply
 
 中文:
 定理 const_apply
-  条件: (μβ : Measure β) (a : α)
+  条件: (μβ : 测度 β) (a : α)
   结论: const α μβ a = μβ
   证明: rfl
 
@@ -638,7 +638,7 @@ lemma const_zero
 
 中文:
 引理 const_zero
-  结论: const α (0 : Measure β) = 0
+  结论: const α (0 : 测度 β) = 0
   证明: by
   ext x s _; simp [const_apply]
 
@@ -657,7 +657,7 @@ lemma const_add
 
 中文:
 引理 const_add
-  条件: (β : 类型) [MeasurableSpace β] (μ ν : Measure α)
+  条件: (β : 类型) [可测空间 β] (μ ν : 测度 α)
   证明: by ext; simp
 -/
 lemma const_add (β : Type*) [MeasurableSpace β] (μ ν : Measure α) :
@@ -673,7 +673,7 @@ lemma sum_const
 
 中文:
 引理 sum_const
-  条件: [Countable ι] (μ : ι -> Measure β)
+  条件: [可数 ι] (μ : ι -> 测度 β)
   证明: rfl
 -/
 lemma sum_const [Countable ι] (μ : ι -> Measure β) :
@@ -689,7 +689,7 @@ instance const.instIsFiniteKernel
 
 中文:
 实例 const.instIsFiniteKernel
-  签名: {μβ : Measure β} [IsFiniteMeasure μβ]
+  签名: {μβ : 测度 β} [是有限测度 μβ]
   定义体: ⟨⟨μβ Set.univ, measure_lt_top _ _, fun _ => le_rfl⟩⟩
 
 Depends on / 依赖: Set.univ, le_rfl, measure_lt_top
@@ -708,7 +708,7 @@ instance const.instIsSFiniteKernel
 
 中文:
 实例 const.instIsSFiniteKernel
-  签名: {μβ : Measure β} [SFinite μβ]
+  签名: {μβ : 测度 β} [SFinite μβ]
   定义体: ⟨fun n => const α (sfiniteSeq μβ n), fun n => inferInstance, by rw [sum_const, sum_sfiniteSeq]⟩
 
 Depends on / 依赖: sfiniteSeq, sum_const, sum_sfiniteSeq
@@ -727,7 +727,7 @@ instance const.instIsMarkovKernel
 
 中文:
 实例 const.instIsMarkovKernel
-  签名: {μβ : Measure β} [hμβ : IsProbabilityMeasure μβ]
+  签名: {μβ : 测度 β} [hμβ : 是概率测度 μβ]
   定义体: ⟨fun _ => hμβ⟩
 -/
 instance const.instIsMarkovKernel {μβ : Measure β} [hμβ : IsProbabilityMeasure μβ] :
@@ -748,7 +748,7 @@ instance const.instIsZeroOrMarkovKernel
 
 中文:
 实例 const.instIsZeroOrMarkovKernel
-  签名: {μβ : Measure β} [hμβ : IsZeroOrProbabilityMeasure μβ]
+  签名: {μβ : 测度 β} [hμβ : 是ZeroOrProbabilityMeasure μβ]
   定义体: by
   rcases eq_zero_or_isProbabilityMeasure μβ with rfl | h
   · simp only [const_zero]
@@ -774,7 +774,7 @@ lemma isSFiniteKernel_const
 
 中文:
 引理 isSFiniteKernel_const
-  条件: [Nonempty α] {μβ : Measure β}
+  条件: [非空 α] {μβ : 测度 β}
   证明: ⟨fun h => h.sFinite (Classical.arbitrary α), fun _ => inferInstance⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, h.sFinite, sFinite
@@ -794,8 +794,8 @@ instance [Nonempty
 @[simp]
 
 中文:
-实例 [Nonempty
-  签名: β] : Nonempty {κ
+实例 [非空
+  签名: β] : 非空 {κ
   定义体: nonempty_subtype.2 ⟨Kernel.const _ (Measure.dirac Classical.ofNonempty), inferInstance⟩
 
 @[simp]
@@ -818,7 +818,7 @@ theorem lintegral_const
 
 中文:
 定理 lintegral_const
-  条件: {f : β -> 实数>=0∞} {μ : Measure β} {a : α}
+  条件: {f : β -> 实数>=0∞} {μ : 测度 β} {a : α}
   证明: by rw [const_apply]
 
 @[simp]
@@ -838,8 +838,8 @@ theorem setLIntegral_const
   proof: by rw [const_apply]
 
 中文:
-定理 setLIntegral_const
-  条件: {f : β -> 实数>=0∞} {μ : Measure β} {a : α} {s : Set β}
+定理 setL整数egral_const
+  条件: {f : β -> 实数>=0∞} {μ : 测度 β} {a : α} {s : 集合 β}
   证明: by rw [const_apply]
 
 Depends on / 依赖: const_apply
@@ -857,7 +857,7 @@ lemma discard_eq_const
 
 中文:
 引理 discard_eq_const
-  结论: discard α = const α (Measure.dirac PUnit.unit)
+  结论: discard α = const α (测度.dirac 命题单元.unit)
   证明: rfl
 -/
 lemma discard_eq_const : discard α = const α (Measure.dirac PUnit.unit) := rfl
@@ -875,7 +875,7 @@ definition ofFunOfCountable
 
 中文:
 定义 ofFunOfCountable
-  签名: [MeasurableSpace α] {_ : MeasurableSpace β} [Countable α]
+  签名: [可测空间 α] {_ : 可测空间 β} [可数 α]
   定义体: f
   measurable' := measurable_of_countable f
 -/
@@ -902,7 +902,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def restrict (κ : Kernel α β) (hs : MeasurableSet s)
+  签名: def restrict (κ : 核 α β) (hs : 可测集 s)
   定义体: (κ a).restrict s
   measurable' := by
     refine Measure.measurable_of_measurable_coe _ fun t ht => ?_
@@ -926,7 +926,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (κ : Kernel α β) (hs : MeasurableSet s) (a : α)
+  条件: (κ : 核 α β) (hs : 可测集 s) (a : α)
   证明: rfl
 -/
 theorem restrict_apply (κ : Kernel α β) (hs : MeasurableSet s) (a : α) :
@@ -944,7 +944,7 @@ theorem restrict_apply'
 
 中文:
 定理 restrict_apply'
-  条件: (κ : Kernel α β) (hs : MeasurableSet s) (a : α) (ht : MeasurableSet t)
+  条件: (κ : 核 α β) (hs : 可测集 s) (a : α) (ht : 可测集 t)
   证明: by
   rw [restrict_apply κ hs a]; rw [Measure.restrict_apply ht]
 
@@ -968,7 +968,7 @@ theorem restrict_const
 
 中文:
 定理 restrict_const
-  条件: {μ : Measure β} (hs : MeasurableSet s)
+  条件: {μ : 测度 β} (hs : 可测集 s)
   证明: by
   ext a
   simp [Kernel.restrict_apply, Kernel.const_apply]
@@ -997,7 +997,7 @@ theorem restrict_univ
 
 中文:
 定理 restrict_univ
-  结论: κ.restrict MeasurableSet.univ = κ
+  结论: κ.restrict 可测集.univ = κ
   证明: by
   ext1 a
   rw [Kernel.restrict_apply]; rw [Measure.restrict_univ]
@@ -1023,7 +1023,7 @@ theorem lintegral_restrict
 
 中文:
 定理 lintegral_restrict
-  条件: (κ : Kernel α β) (hs : MeasurableSet s) (a : α) (f : β -> 实数>=0∞)
+  条件: (κ : 核 α β) (hs : 可测集 s) (a : α) (f : β -> 实数>=0∞)
   证明: by rw [restrict_apply]
 
 @[simp]
@@ -1044,8 +1044,8 @@ theorem setLIntegral_restrict
   rw [restrict_apply]; rw [Measure.restrict_restrict' hs]
 
 中文:
-定理 setLIntegral_restrict
-  结论: (κ : Kernel α β) (hs : MeasurableSet s) (a : α) (f : β -> 实数>=0∞)
+定理 setL整数egral_restrict
+  结论: (κ : 核 α β) (hs : 可测集 s) (a : α) (f : β -> 实数>=0∞)
   证明: by
   rw [restrict_apply]; rw [Measure.restrict_restrict' hs]
 
@@ -1068,8 +1068,8 @@ instance IsFiniteKernel.restrict
   exact measure_le_bound κ a _
 
 中文:
-实例 IsFiniteKernel.restrict
-  签名: (κ : Kernel α β) [IsFiniteKernel κ] (hs : MeasurableSet s)
+实例 是FiniteKernel.restrict
+  签名: (κ : 核 α β) [是FiniteKernel κ] (hs : 可测集 s)
   定义体: by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   rw [restrict_apply' κ hs a MeasurableSet.univ]
@@ -1095,8 +1095,8 @@ instance IsSFiniteKernel.restrict
   simp_rw [sum_apply, restrict_apply, ← Measure.restrict_sum _ hs, ← sum_apply, kernel_sum_seq]
 
 中文:
-实例 IsSFiniteKernel.restrict
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ] (hs : MeasurableSet s)
+实例 是SFiniteKernel.restrict
+  签名: (κ : 核 α β) [是SFiniteKernel κ] (hs : 可测集 s)
   定义体: by
   refine ⟨⟨fun n => Kernel.restrict (seq κ n) hs, inferInstance, ?_⟩⟩
   ext1 a
@@ -1133,7 +1133,7 @@ definition comapRight
 
 中文:
 定义 comapRight
-  签名: (κ : Kernel α β) (hf : MeasurableEmbedding f)
+  签名: (κ : 核 α β) (hf : 可测嵌入 f)
   定义体: (κ a).comap f
   measurable' := by
     refine Measure.measurable_measure.mpr fun t ht => ?_
@@ -1164,7 +1164,7 @@ theorem comapRight_apply
 
 中文:
 定理 comapRight_apply
-  条件: (κ : Kernel α β) (hf : MeasurableEmbedding f) (a : α)
+  条件: (κ : 核 α β) (hf : 可测嵌入 f) (a : α)
   证明: rfl
 -/
 theorem comapRight_apply (κ : Kernel α β) (hf : MeasurableEmbedding f) (a : α) :
@@ -1184,7 +1184,7 @@ theorem comapRight_apply'
 
 中文:
 定理 comapRight_apply'
-  结论: (κ : Kernel α β) (hf : MeasurableEmbedding f) (a : α) {t : Set γ}
+  结论: (κ : 核 α β) (hf : 可测嵌入 f) (a : α) {t : 集合 γ}
   证明: by
   rw [comapRight_apply]; rw [Measure.comap_apply _ hf.injective (fun s => hf.measurableSet_image.mpr) _ ht]
 
@@ -1209,8 +1209,8 @@ lemma comapRight_id
 
 中文:
 引理 comapRight_id
-  条件: (κ : Kernel α β)
-  结论: comapRight κ MeasurableEmbedding.id = κ
+  条件: (κ : 核 α β)
+  结论: comapRight κ 可测嵌入.id = κ
   证明: by
   ext _ _ hs; rw [comapRight_apply' _ _ _ hs]; simp
 
@@ -1232,8 +1232,8 @@ theorem IsMarkovKernel.comapRight
   exact hκ a
 
 中文:
-定理 IsMarkovKernel.comapRight
-  结论: (κ : Kernel α β) (hf : MeasurableEmbedding f)
+定理 是MarkovKernel.comapRight
+  结论: (κ : 核 α β) (hf : 可测嵌入 f)
   证明: by
   refine ⟨fun a => ⟨?_⟩⟩
   rw [comapRight_apply' κ hf a MeasurableSet.univ]
@@ -1261,8 +1261,8 @@ instance IsFiniteKernel.comapRight
   exact measure_le_bound κ a _
 
 中文:
-实例 IsFiniteKernel.comapRight
-  签名: (κ : Kernel α β) [IsFiniteKernel κ]
+实例 是FiniteKernel.comapRight
+  签名: (κ : 核 α β) [是FiniteKernel κ]
   定义体: by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   rw [comapRight_apply' κ hf a .univ]
@@ -1294,8 +1294,8 @@ instance IsSFiniteKernel.comapRight
     rw [Measure.comap_apply _ h
 
 中文:
-实例 IsSFiniteKernel.comapRight
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.comapRight
+  签名: (κ : 核 α β) [是SFiniteKernel κ]
   定义体: by
   refine ⟨⟨fun n => comapRight (seq κ n) hf, inferInstance, ?_⟩⟩
   ext1 a
@@ -1339,7 +1339,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: (hs : MeasurableSet s) (κ η : Kernel α β)
+  签名: (hs : 可测集 s) (κ η : 核 α β)
   定义体: if a in s then κ a else η a
   measurable' := κ.measurable.piecewise hs η.measurable
 -/
@@ -1376,7 +1376,7 @@ theorem piecewise_apply'
 
 中文:
 定理 piecewise_apply'
-  条件: (a : α) (t : Set β)
+  条件: (a : α) (t : 集合 β)
   证明: by
   rw [piecewise_apply]; split_ifs <;> rfl
 
@@ -1397,8 +1397,8 @@ instance IsMarkovKernel.piecewise
   rw [piecewise_apply']; rw [measure_univ]; rw [measure_univ]; rw [ite_self]
 
 中文:
-实例 IsMarkovKernel.piecewise
-  签名: [IsMarkovKernel κ] [IsMarkovKernel η]
+实例 是MarkovKernel.piecewise
+  签名: [是MarkovKernel κ] [是MarkovKernel η]
   定义体: by
   refine ⟨fun a => ⟨?_⟩⟩
   rw [piecewise_apply']; rw [measure_univ]; rw [measure_univ]; rw [ite_self]
@@ -1422,8 +1422,8 @@ instance IsFiniteKernel.piecewise
   exact (ite_le_sup _ _ _).trans (sup_le_sup (measure_le_bound _ _ _) (measure_le_bound _ _ _))
 
 中文:
-实例 IsFiniteKernel.piecewise
-  签名: [IsFiniteKernel κ] [IsFiniteKernel η]
+实例 是FiniteKernel.piecewise
+  签名: [是FiniteKernel κ] [是FiniteKernel η]
   定义体: by
   refine ⟨⟨max κ.bound η.bound, max_lt κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
   rw [piecewise_apply']
@@ -1450,8 +1450,8 @@ instance IsSFiniteKernel.piecewise
   split_ifs <;> exact (measure_sum_seq _ a).symm
 
 中文:
-实例 IsSFiniteKernel.piecewise
-  签名: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+实例 是SFiniteKernel.piecewise
+  签名: [是SFiniteKernel κ] [是SFiniteKernel η]
   定义体: by
   refine ⟨⟨fun n => piecewise hs (seq κ n) (seq η n), inferInstance, ?_⟩⟩
   ext1 a
@@ -1496,8 +1496,8 @@ theorem setLIntegral_piecewise
   simp_rw [piecewise_apply]; split_ifs <;> rfl
 
 中文:
-定理 setLIntegral_piecewise
-  条件: (a : α) (g : β -> 实数>=0∞) (t : Set β)
+定理 setL整数egral_piecewise
+  条件: (a : α) (g : β -> 实数>=0∞) (t : 集合 β)
   证明: by
   simp_rw [piecewise_apply]; split_ifs <;> rfl
 
@@ -1526,8 +1526,8 @@ lemma exists_ae_eq_isMarkovKernel
  
 
 中文:
-引理 exists_ae_eq_isMarkovKernel
-  结论: {μ : Measure α}
+引理 存在_ae_eq_isMarkovKernel
+  结论: {μ : 测度 α}
   证明: by
   classical
   obtain ⟨s, s_meas, μs, hs⟩ : exists s, MeasurableSet s ∧ μ s = 0
@@ -1575,7 +1575,7 @@ definition boolKernel
 
 中文:
 定义 boolKernel
-  签名: (μ ν : Measure α)
+  签名: (μ ν : 测度 α)
   定义体: fun b => if b then ν else μ
   measurable' := .of_discrete
 -/
@@ -1624,7 +1624,7 @@ lemma boolKernel_apply
 
 中文:
 引理 boolKernel_apply
-  条件: (b : 布尔)
+  条件: (b : 布尔值)
   结论: boolKernel μ ν b = if b then ν else μ
   证明: rfl
 -/
@@ -1640,8 +1640,8 @@ instance [IsFiniteMeasure
     fun b => by cases b <;> simp⟩
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ] [IsFiniteMeasure ν] : IsFiniteKernel (boolKernel μ ν)
+实例 [是有限测度
+  签名: μ] [是有限测度 ν] : 是FiniteKernel (boolKernel μ ν)
   定义体: ⟨max (μ .univ) (ν .univ), max_lt (measure_lt_top _ _) (measure_lt_top _ _),
     fun b => by cases b <;> simp⟩
 
@@ -1663,8 +1663,8 @@ instance [IsProbabilityMeasure
       <;> infer_instance
 
 中文:
-实例 [IsProbabilityMeasure
-  签名: μ] [IsProbabilityMeasure ν] : IsMarkovKernel (boolKernel μ ν) where
+实例 [是概率测度
+  签名: μ] [是概率测度 ν] : 是MarkovKernel (boolKernel μ ν) where
   定义体: by
     cases b
       <;> simp only [boolKernel_apply, Bool.false_eq_true, ↓reduceIte]
@@ -1692,7 +1692,7 @@ instance [SFinite
 
 中文:
 实例 [SFinite
-  签名: μ] [SFinite ν] : IsSFiniteKernel (boolKernel μ ν) where
+  签名: μ] [SFinite ν] : 是SFiniteKernel (boolKernel μ ν) where
   定义体: by
     refine ⟨fun n => boolKernel (sfiniteSeq μ n) (sfiniteSeq ν n), fun n => inferInstance, ?_⟩
     ext b
@@ -1720,7 +1720,7 @@ lemma eq_boolKernel
 
 中文:
 引理 eq_boolKernel
-  条件: (κ : Kernel 布尔 α)
+  条件: (κ : 核 布尔值 α)
   结论: κ = boolKernel (κ false) (κ true)
   证明: by
   ext (_ | _) <;> simp

@@ -48,7 +48,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] [IsNoetherianRing R] (S
+  签名: R] [是Noether环 R] (S
   定义体: by
     let _ : Small.{v, u} (Localization S) := small_of_surjective Localization.mkHom_surjective
     rw [← Module.injective_iff_injective_object] at inj ⊢
@@ -81,7 +81,7 @@ lemma localizedModule_hasInjectiveDimensionLE
 
 中文:
 引理 localizedModule_hasInjectiveDimensionLE
-  结论: [Small.{v, u} R] [IsNoetherianRing R] (n : 自然数)
+  结论: [Small.{v, u} R] [是Noether环 R] (n : 自然数)
   证明: by
   have : Small.{v} (Localization S) := small_of_surjective Localization.mkHom_surjective
   induction n generalizing M with
@@ -185,8 +185,8 @@ lemma hasInjectiveDimensionLE_iff_forall_maximalSpectrum
  
 
 中文:
-引理 hasInjectiveDimensionLE_iff_forall_maximalSpectrum
-  结论: [Small.{v, u} R] [IsNoetherianRing R]
+引理 hasInjectiveDimensionLE_iff_对任意_maximalSpectrum
+  结论: [Small.{v, u} R] [是Noether环 R]
   证明: by
   induction n generalizing M with
   | zero =>
@@ -247,8 +247,8 @@ lemma hasInjectiveDimensionLE_iff_forall_primeSpectrum
     fun m => h ⟨m.1, Ideal.IsMaximal.isPrime' m.1⟩⟩
 
 中文:
-引理 hasInjectiveDimensionLE_iff_forall_primeSpectrum
-  结论: [Small.{v, u} R] [IsNoetherianRing R]
+引理 hasInjectiveDimensionLE_iff_对任意_primeSpectrum
+  结论: [Small.{v, u} R] [是Noether环 R]
   证明: ⟨fun _ p => M.localizedModule_hasInjectiveDimensionLE n p.1.primeCompl,
     fun h => (M.hasInjectiveDimensionLE_iff_forall_maximalSpectrum n).mpr
     fun m => h ⟨m.1, Ideal.IsMaximal.isPrime' m.1⟩⟩
@@ -277,7 +277,7 @@ lemma injectiveDimension_eq_iSup_localizedModule_prime
 
 中文:
 引理 injectiveDimension_eq_iSup_localizedModule_prime
-  结论: [Small.{v, u} R] [IsNoetherianRing R]
+  结论: [Small.{v, u} R] [是Noether环 R]
   证明: by
   have aux (n : Nat) : injectiveDimension M <= n ↔ ⨆ (p : PrimeSpectrum R), injectiveDimension
     (M.localizedModule p.1.primeCompl) <= n := by
@@ -324,7 +324,7 @@ lemma injectiveDimension_eq_iSup_localizedModule_maximal
 
 中文:
 引理 injectiveDimension_eq_iSup_localizedModule_maximal
-  结论: [Small.{v, u} R] [IsNoetherianRing R]
+  结论: [Small.{v, u} R] [是Noether环 R]
   证明: by
   have aux (n : Nat) : injectiveDimension M <= n ↔ ⨆ (m : MaximalSpectrum R), injectiveDimension
     (M.localizedModule m.1.primeCompl) <= n := by

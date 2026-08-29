@@ -60,7 +60,7 @@ dense_domain := (f.domain.ι ''ᵁ f.hom ⁻¹ᵁ g.domain).2.dense by
 
 中文:
 定义 comp
-  签名: (f : X.PartialMap Y) [IsDominant f.hom] (g : Y.PartialMap Z)
+  签名: (f : X.Partial映射 Y) [是Dominant f.hom] (g : Y.Partial映射 Z)
   定义体: f.domain.ι ''ᵁ f.hom ⁻¹ᵁ g.domain
 dense_domain := (f.domain.ι ''ᵁ f.hom ⁻¹ᵁ g.domain).2.dense by
     simpa [← Set.nonempty_preimage_iff] using
@@ -92,7 +92,7 @@ lemma comp_restrict_left
 
 中文:
 引理 comp_restrict_left
-  结论: (f : X.PartialMap Y) [IsDominant f.hom] (U : X.Opens)
+  结论: (f : X.Partial映射 Y) [是Dominant f.hom] (U : X.Opens)
   证明: by
   ext
   · simp [ι_image_homOfLE_eq_ι_image_inf]
@@ -124,7 +124,7 @@ lemma comp_restrict_right
 
 中文:
 引理 comp_restrict_right
-  结论: (f : X.PartialMap Y) [IsDominant f.hom] (g : Y.PartialMap Z)
+  结论: (f : X.Partial映射 Y) [是Dominant f.hom] (g : Y.Partial映射 Z)
   证明: by
   ext
   · simp
@@ -162,7 +162,7 @@ lemma comp_equiv_of_equiv_left
 
 中文:
 引理 comp_equiv_of_equiv_left
-  结论: {f₁ f₂ : X.PartialMap Y} [IsDominant f₁.hom] [IsDominant f₂.hom]
+  结论: {f₁ f₂ : X.Partial映射 Y} [是Dominant f₁.hom] [是Dominant f₂.hom]
   证明: by
   obtain ⟨W, hW, hW₁, hW₂, e⟩ := h
   replace e : f₁.restrict W hW hW₁ = f₂.restrict W hW hW₂ :=
@@ -200,7 +200,7 @@ lemma comp_equiv_of_equiv_right
 
 中文:
 引理 comp_equiv_of_equiv_right
-  结论: (f : X.PartialMap Y) [IsDominant f.hom] {g₁ g₂ : Y.PartialMap Z}
+  结论: (f : X.Partial映射 Y) [是Dominant f.hom] {g₁ g₂ : Y.Partial映射 Z}
   证明: by
   obtain ⟨W, hW, hW₁, hW₂, e⟩ := h
   replace e : g₁.restrict W hW hW₁ = g₂.restrict W hW hW₂ :=
@@ -230,7 +230,7 @@ lemma comp_equiv_of_equiv
 
 中文:
 引理 comp_equiv_of_equiv
-  结论: (f₁ f₂ : X.PartialMap Y) [IsDominant f₁.hom] [IsDominant f₂.hom]
+  结论: (f₁ f₂ : X.Partial映射 Y) [是Dominant f₁.hom] [是Dominant f₂.hom]
   证明: equivalence_rel.trans (comp_equiv_of_equiv_left hf _) (comp_equiv_of_equiv_right _ hg)
 
 Depends on / 依赖: comp_equiv_of_equiv_left, comp_equiv_of_equiv_right, equivalence_rel, equivalence_rel.trans
@@ -254,7 +254,7 @@ instance isDominant_comp_hom
 
 中文:
 实例 isDominant_comp_hom
-  签名: (f : X.PartialMap Y) [IsDominant f.hom] (g : Y.PartialMap Z)
+  签名: (f : X.Partial映射 Y) [是Dominant f.hom] (g : Y.Partial映射 Z)
   定义体: by
   dsimp only [comp_domain, comp_hom]
   have := IsZariskiLocalAtTarget.restrict ‹IsDominant f.hom› g.domain
@@ -287,7 +287,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {X₁ X₂ X₃ Y : Scheme.{u}} [PreirreducibleSpace X₁] [IrreducibleSpace X₂]
+  结论: {X₁ X₂ X₃ Y : 概形.{u}} [Preirreducible空间 X₁] [不可约空间 X₂]
   证明: by
   ext
   · simp_rw [comp_domain, comp_hom, ← Category.assoc, Hom.comp_preimage, Hom.inv_preimage,
@@ -330,7 +330,7 @@ lemma comp_toPartialMap
 
 中文:
 引理 comp_toPartialMap
-  条件: (f : X.PartialMap Y) [IsDominant f.hom] (g : Y ⟶ Z)
+  条件: (f : X.Partial映射 Y) [是Dominant f.hom] (g : Y ⟶ Z)
   证明: by
   ext1
   · simp
@@ -358,8 +358,8 @@ lemma comp_id
 
 中文:
 引理 comp_id
-  条件: (f : X.PartialMap Y) [IsDominant f.hom]
-  结论: f.comp (PartialMap.id Y) = f
+  条件: (f : X.Partial映射 Y) [是Dominant f.hom]
+  结论: f.comp (Partial映射.id Y) = f
   证明: by simp
 -/
 lemma comp_id (f : X.PartialMap Y) [IsDominant f.hom] : f.comp (PartialMap.id Y) = f := by simp
@@ -382,7 +382,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : X ⤏ Y) [f.IsDominant] (g : Y ⤏ Z)
+  签名: (f : X ⤏ Y) [f.是Dominant] (g : Y ⤏ Z)
   定义体: Quotient.liftOn g (PartialMap.toRationalMap ∘ f.representative.comp) fun _ _ h => by
     rw [Function.comp_apply]; rw [Function.comp_apply]; rw [PartialMap.toRationalMap_eq_iff]
     exact PartialMap.comp_equiv_of_equiv_right _ h
@@ -404,7 +404,7 @@ lemma comp_def
 
 中文:
 引理 comp_def
-  条件: (f : X ⤏ Y) [f.IsDominant] (g : Y.PartialMap Z)
+  条件: (f : X ⤏ Y) [f.是Dominant] (g : Y.Partial映射 Z)
   证明: rfl
 -/
 lemma comp_def (f : X ⤏ Y) [f.IsDominant] (g : Y.PartialMap Z) :
@@ -425,7 +425,7 @@ lemma toRationalMap_comp
 
 中文:
 引理 toRationalMap_comp
-  条件: (f : X.PartialMap Y) [IsDominant f.hom] (g : Y.PartialMap Z)
+  条件: (f : X.Partial映射 Y) [是Dominant f.hom] (g : Y.Partial映射 Z)
   证明: by
   rw [RationalMap.comp_def]; rw [PartialMap.toRationalMap_eq_iff]
   exact PartialMap.comp_equiv_of_equiv_left f.representative_toRationalMap_equiv _
@@ -452,7 +452,7 @@ lemma comp_id
 
 中文:
 引理 comp_id
-  条件: (f : X ⤏ Y) [f.IsDominant]
+  条件: (f : X ⤏ Y) [f.是Dominant]
   结论: f.comp (RationalMap.id Y) = f
   证明: by
   simp [RationalMap.comp_def]
@@ -479,7 +479,7 @@ lemma comp_toRationalMap
 
 中文:
 引理 comp_toRationalMap
-  条件: (f : X ⤏ Y) [f.IsDominant] (h : Y ⟶ Z)
+  条件: (f : X ⤏ Y) [f.是Dominant] (h : Y ⟶ Z)
   证明: by
   simp [comp_def, PartialMap.comp_toPartialMap]
 
@@ -507,7 +507,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {X₁ X₂ X₃ Y : Scheme.{u}} [PreirreducibleSpace X₁] [IrreducibleSpace X₂]
+  结论: {X₁ X₂ X₃ Y : 概形.{u}} [Preirreducible空间 X₁] [不可约空间 X₂]
   证明: by
   rw [← f₃.toRationalMap_representative]
   simp_rw [comp_def, ← PartialMap.comp_assoc, PartialMap.toRationalMap_eq_iff]
@@ -539,7 +539,7 @@ instance isOver_comp
 
 中文:
 实例 isOver_comp
-  签名: {S : Scheme.{u}} [IrreducibleSpace Y] [Nonempty Z] [X.Over S] [Y.Over S]
+  签名: {S : 概形.{u}} [不可约空间 Y] [非空 Z] [X.Over S] [Y.Over S]
   定义体: by
   rw [isOver_iff]; rw [← comp_toRationalMap]; rw [comp_assoc]; rw [comp_toRationalMap]; rw [isOver_iff.mp ‹g.IsOver S›]; rw [comp_toRationalMap]; rw [RationalMap.isOver_iff.mp ‹f.IsOver S›]
 
@@ -570,8 +570,8 @@ lemma PartialMap.id_comp
       morphismRestr
 
 中文:
-引理 PartialMap.id_comp
-  条件: {X Y : Scheme.{u}} [IrreducibleSpace X] (f : X.PartialMap Y)
+引理 Partial映射.id_comp
+  条件: {X Y : 概形.{u}} [不可约空间 X] (f : X.Partial映射 Y)
   证明: by
   ext1
   · simp_rw [comp_domain, Hom.toPartialMap_domain, Hom.toPartialMap_hom, Category.comp_id,
@@ -604,7 +604,7 @@ lemma RationalMap.id_comp
 
 中文:
 引理 RationalMap.id_comp
-  条件: {X Y : Scheme.{u}} [IrreducibleSpace X] (f : X ⤏ Y)
+  条件: {X Y : 概形.{u}} [不可约空间 X] (f : X ⤏ Y)
   证明: by
   rw [← f.toRationalMap_representative]; rw [toRationalMap_comp]; rw [PartialMap.id_comp]
 

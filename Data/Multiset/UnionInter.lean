@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union (Multiset α)
+  签名: 并集 (Multiset α)
   定义体: ⟨union⟩
 
 Depends on / 依赖: Computation, Computation.LiftRel.refl, LiftRel
@@ -230,7 +230,7 @@ lemma map_union
 
 中文:
 引理 map_union
-  条件: [DecidableEq β] {f : α -> β} (finj : Function.Injective f) {s t : Multiset α}
+  条件: [DecidableEq β] {f : α -> β} (finj : 函数.单射 f) {s t : Multiset α}
   证明: Quotient.inductionOn₂ s t fun l₁ l₂ =>
     congr_arg ofList (by rw [List.map_append, List.map_diff finj])
 
@@ -288,7 +288,7 @@ lemma count_union
 中文:
 引理 count_union
   条件: (a : α) (s t : Multiset α)
-  结论: count a (s union t) = max (count a s) (count a t)
+  结论: count a (s union t) = 最大值 (count a s) (count a t)
   证明: by
   simp [(· union ·), union, Nat.sub_add_eq_max]
 
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数er (Multiset α)
+  签名: 交集 (Multiset α)
   定义体: ⟨inter⟩
 -/
 instance : Inter (Multiset α) := ⟨inter⟩
@@ -569,7 +569,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice (Multiset α) where
+  签名: : 格 (Multiset α) where
   定义体: (· union ·)
   sup_le _ _ _ := union_le
   le_sup_left _ _ := le_union_left
@@ -1016,7 +1016,7 @@ lemma count_inter
 中文:
 引理 count_inter
   条件: (a : α) (s t : Multiset α)
-  结论: count a (s inter t) = min (count a s) (count a t)
+  结论: count a (s inter t) = 最小值 (count a s) (count a t)
   证明: by
   apply @Nat.add_left_cancel (count a (s - t))
   rw [← count_add]; rw [sub_add_inter]; rw [count_sub]; rw [Nat.sub_add_min_cancel]
@@ -1041,8 +1041,8 @@ lemma coe_inter
 
 中文:
 引理 coe_inter
-  条件: (s t : List α)
-  结论: (s inter t : Multiset α) = (s.bag整数er t : List α)
+  条件: (s t : 列表 α)
+  结论: (s inter t : Multiset α) = (s.bag整数er t : 列表 α)
   证明: by ext; simp
 -/
 lemma coe_inter (s t : List α) : (s inter t : Multiset α) = (s.bagInter t : List α) := by ext; simp
@@ -1059,7 +1059,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: : DistribLattice (Multiset α) where
+  签名: : Distrib格 (Multiset α) where
   定义体: ge_of_eq ext.2 fun a => by
     simp only [max_min_distrib_left, Multiset.count_inter, Multiset.sup_eq_union,
       Multiset.count_union, Multiset.inf_eq_inter]
@@ -1246,7 +1246,7 @@ theorem coe_disjoint
 
 中文:
 定理 coe_disjoint
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   结论: Disjoint (l₁ : Multiset α) l₂ ↔ l₁.Disjoint l₂
   证明: disjoint_left
 

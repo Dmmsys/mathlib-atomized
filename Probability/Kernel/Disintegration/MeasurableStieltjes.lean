@@ -61,8 +61,8 @@ lemma StieltjesFunction.measurable_measure
     simp_rw [forall_mem_range, StieltjesFunction.measure_Iic (f _) (hf_bot _), sub_ze
 
 中文:
-引理 StieltjesFunction.measurable_measure
-  结论: {α : 类型} {_ : MeasurableSpace α}
+引理 Stieltjes函数.measurable_measure
+  结论: {α : 类型} {_ : 可测空间 α}
   证明: have : forall a, IsProbabilityMeasure (f a).measure :=
     fun a => (f a).isProbabilityMeasure (hf_bot a) (hf_top a)
 .measure_of_isPiSystem_of_isProbabilityMeasure (borel_eq_generateFrom_Iic Real) isPiSystem_Iic by
@@ -102,13 +102,13 @@ structure IsRatStieltjesPoint
     - iInf_rat_gt_eq : forall t : Rat, ⨅ r : Ioi t, f a r = f a t
 
 中文:
-结构 IsRatStieltjesPoint
-  参数: (f : α -> Rat -> 实数) (a : α)
+结构 是RatStieltjesPoint
+  参数: (f : α -> 有理数 -> 实数) (a : α)
   公理与运算 (4 个):
-    - mono : Monotone (f a)
-    - tendsto_atTop_one : Tendsto (f a) atTop (𝓝 1)
-    - tendsto_atBot_zero : Tendsto (f a) atBot (𝓝 0)
-    - iInf_rat_gt_eq : 对任意 t : Rat, ⨅ r : Ioi t, f a r = f a t
+    - mono : 递增 (f a)
+    - tendsto_atTop_one : 收敛 (f a) atTop (𝓝 1)
+    - tendsto_atBot_zero : 收敛 (f a) atBot (𝓝 0)
+    - iInf_rat_gt_eq : 对任意 t : 有理数, ⨅ r : 左开右无界区间 t, f a r = f a t
 -/
 structure IsRatStieltjesPoint (f : α -> Rat -> Real) (a : α) : Prop where
   mono : Monotone (f a)
@@ -128,7 +128,7 @@ lemma isRatStieltjesPoint_unit_prod_iff
 
 中文:
 引理 isRatStieltjesPoint_unit_prod_iff
-  条件: (f : α -> Rat -> 实数) (a : α)
+  条件: (f : α -> 有理数 -> 实数) (a : α)
   证明: by
   constructor <;>
     exact fun h => ⟨h.mono, h.tendsto_atTop_one, h.tendsto_atBot_zero, h.iInf_rat_gt_eq⟩
@@ -158,7 +158,7 @@ lemma measurableSet_isRatStieltjesPoint
 
 中文:
 引理 measurableSet_isRatStieltjesPoint
-  条件: [MeasurableSpace α] (hf : Measurable f)
+  条件: [可测空间 α] (hf : 可测 f)
   证明: by
   have h1 : MeasurableSet {a | Monotone (f a)} := by
     change MeasurableSet {a | forall q r (_ : q <= r), f a q <= f a r}
@@ -212,8 +212,8 @@ lemma IsRatStieltjesPoint.ite
   iInf_rat_gt_eq := by spl
 
 中文:
-引理 IsRatStieltjesPoint.ite
-  结论: {f g : α -> Rat -> 实数} {a : α} (p : α -> 命题) [DecidablePred p]
+引理 是RatStieltjesPoint.ite
+  结论: {f g : α -> 有理数 -> 实数} {a : α} (p : α -> 命题) [DecidablePred p]
   证明: by split_ifs with h; exacts [(hf h).mono, (hg h).mono]
   tendsto_atTop_one := by
     split_ifs with h; exacts [(hf h).tendsto_atTop_one, (hg h).tendsto_atTop_one]
@@ -246,11 +246,11 @@ structure IsMeasurableRatCDF
     - measurable : Measurable f
 
 中文:
-结构 IsMeasurableRatCDF
-  参数: (f : α -> Rat -> 实数)
+结构 是MeasurableRatCDF
+  参数: (f : α -> 有理数 -> 实数)
   公理与运算 (2 个):
-    - isRatStieltjesPoint : 对任意 a, IsRatStieltjesPoint f a
-    - measurable : Measurable f
+    - isRatStieltjesPoint : 对任意 a, 是RatStieltjesPoint f a
+    - measurable : 可测 f
 -/
 structure IsMeasurableRatCDF (f : α -> Rat -> Real) : Prop where
   isRatStieltjesPoint : forall a, IsRatStieltjesPoint f a
@@ -266,8 +266,8 @@ lemma IsMeasurableRatCDF.nonneg
     (hf.isRatStieltjesPoint a).tendsto_atBot_zero q
 
 中文:
-引理 IsMeasurableRatCDF.nonneg
-  条件: {f : α -> Rat -> 实数} (hf : IsMeasurableRatCDF f) (a : α) (q : Rat)
+引理 是MeasurableRatCDF.nonneg
+  条件: {f : α -> 有理数 -> 实数} (hf : 是MeasurableRatCDF f) (a : α) (q : 有理数)
   证明: Monotone.le_of_tendsto (hf.isRatStieltjesPoint a).mono
     (hf.isRatStieltjesPoint a).tendsto_atBot_zero q
 
@@ -288,8 +288,8 @@ lemma IsMeasurableRatCDF.le_one
     (hf.isRatStieltjesPoint a).tendsto_atTop_one q
 
 中文:
-引理 IsMeasurableRatCDF.le_one
-  条件: {f : α -> Rat -> 实数} (hf : IsMeasurableRatCDF f) (a : α) (q : Rat)
+引理 是MeasurableRatCDF.le_one
+  条件: {f : α -> 有理数 -> 实数} (hf : 是MeasurableRatCDF f) (a : α) (q : 有理数)
   证明: Monotone.ge_of_tendsto (hf.isRatStieltjesPoint a).mono
     (hf.isRatStieltjesPoint a).tendsto_atTop_one q
 
@@ -309,8 +309,8 @@ lemma IsMeasurableRatCDF.tendsto_atTop_one
   proof: (hf.isRatStieltjesPoint a).tendsto_atTop_one
 
 中文:
-引理 IsMeasurableRatCDF.tendsto_atTop_one
-  条件: {f : α -> Rat -> 实数} (hf : IsMeasurableRatCDF f) (a : α)
+引理 是MeasurableRatCDF.tendsto_atTop_one
+  条件: {f : α -> 有理数 -> 实数} (hf : 是MeasurableRatCDF f) (a : α)
   证明: (hf.isRatStieltjesPoint a).tendsto_atTop_one
 
 Depends on / 依赖: hf.isRatStieltjesPoint, isRatStieltjesPoint, tendsto_atTop_one
@@ -327,8 +327,8 @@ lemma IsMeasurableRatCDF.tendsto_atBot_zero
   proof: (hf.isRatStieltjesPoint a).tendsto_atBot_zero
 
 中文:
-引理 IsMeasurableRatCDF.tendsto_atBot_zero
-  条件: {f : α -> Rat -> 实数} (hf : IsMeasurableRatCDF f) (a : α)
+引理 是MeasurableRatCDF.tendsto_atBot_zero
+  条件: {f : α -> 有理数 -> 实数} (hf : 是MeasurableRatCDF f) (a : α)
   证明: (hf.isRatStieltjesPoint a).tendsto_atBot_zero
 
 Depends on / 依赖: hf.isRatStieltjesPoint, isRatStieltjesPoint, tendsto_atBot_zero
@@ -345,8 +345,8 @@ lemma IsMeasurableRatCDF.iInf_rat_gt_eq
   proof: (hf.isRatStieltjesPoint a).iInf_rat_gt_eq q
 
 中文:
-引理 IsMeasurableRatCDF.iInf_rat_gt_eq
-  结论: {f : α -> Rat -> 实数} (hf : IsMeasurableRatCDF f) (a : α)
+引理 是MeasurableRatCDF.iInf_rat_gt_eq
+  结论: {f : α -> 有理数 -> 实数} (hf : 是MeasurableRatCDF f) (a : α)
   证明: (hf.isRatStieltjesPoint a).iInf_rat_gt_eq q
 
 Depends on / 依赖: hf.isRatStieltjesPoint, iInf_rat_gt_eq, isRatStieltjesPoint
@@ -369,7 +369,7 @@ definition defaultRatCDF
 
 中文:
 定义 defaultRatCDF
-  签名: (q : Rat)
+  签名: (q : 有理数)
   定义体: if q < 0 then (0 : Real) else 1
 -/
 def defaultRatCDF (q : Rat) := if q < 0 then (0 : Real) else 1
@@ -389,7 +389,7 @@ lemma monotone_defaultRatCDF
 
 中文:
 引理 monotone_defaultRatCDF
-  结论: Monotone defaultRatCDF
+  结论: 递增 defaultRatCDF
   证明: by
   unfold defaultRatCDF
   intro x y hxy
@@ -420,7 +420,7 @@ lemma defaultRatCDF_nonneg
 
 中文:
 引理 defaultRatCDF_nonneg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: 0 <= defaultRatCDF q
   证明: by
   unfold defaultRatCDF
@@ -447,7 +447,7 @@ lemma defaultRatCDF_le_one
 
 中文:
 引理 defaultRatCDF_le_one
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: defaultRatCDF q <= 1
   证明: by
   unfold defaultRatCDF
@@ -472,7 +472,7 @@ lemma tendsto_defaultRatCDF_atTop
 
 中文:
 引理 tendsto_defaultRatCDF_atTop
-  结论: Tendsto defaultRatCDF atTop (𝓝 1)
+  结论: 收敛 defaultRatCDF atTop (𝓝 1)
   证明: by
   refine (tendsto_congr' ?_).mp tendsto_const_nhds
   rw [EventuallyEq]; rw [eventually_atTop]
@@ -499,7 +499,7 @@ lemma tendsto_defaultRatCDF_atBot
 
 中文:
 引理 tendsto_defaultRatCDF_atBot
-  结论: Tendsto defaultRatCDF atBot (𝓝 0)
+  结论: 收敛 defaultRatCDF atBot (𝓝 0)
   证明: by
   refine (tendsto_congr' ?_).mp tendsto_const_nhds
   rw [EventuallyEq]; rw [eventually_atBot]
@@ -534,7 +534,7 @@ lemma iInf_rat_gt_defaultRatCDF
 
 中文:
 引理 iInf_rat_gt_defaultRatCDF
-  条件: (t : Rat)
+  条件: (t : 有理数)
   证明: by
   simp only [defaultRatCDF]
   have h_bdd : BddBelow (range fun r : ↥(Ioi t) => ite ((r : Rat) < 0) (0 : Real) 1) := by
@@ -613,7 +613,7 @@ lemma IsMeasurableRatCDF_defaultRatCDF
 
 中文:
 引理 IsMeasurableRatCDF_defaultRatCDF
-  条件: (α : 类型) [MeasurableSpace α]
+  条件: (α : 类型) [可测空间 α]
   证明: isRatStieltjesPoint_defaultRatCDF
   measurable := measurable_const
 
@@ -648,7 +648,7 @@ definition toRatCDF
 
 中文:
 定义 toRatCDF
-  签名: (f : α -> Rat -> 实数)
+  签名: (f : α -> 有理数 -> 实数)
   定义体: fun a =>
   if IsRatStieltjesPoint f a then f a else defaultRatCDF
 -/
@@ -666,7 +666,7 @@ lemma toRatCDF_of_isRatStieltjesPoint
 
 中文:
 引理 toRatCDF_of_isRatStieltjesPoint
-  条件: {a : α} (h : IsRatStieltjesPoint f a) (q : Rat)
+  条件: {a : α} (h : 是RatStieltjesPoint f a) (q : 有理数)
   证明: by
   rw [toRatCDF]; rw [if_pos h]
 
@@ -713,8 +713,8 @@ lemma measurable_toRatCDF
 
 中文:
 引理 measurable_toRatCDF
-  条件: (hf : Measurable f)
-  结论: Measurable (toRatCDF f)
+  条件: (hf : 可测 f)
+  结论: 可测 (toRatCDF f)
   证明: Measurable.ite (measurableSet_isRatStieltjesPoint hf) hf measurable_const
 
 Depends on / 依赖: Measurable, Measurable.ite, measurableSet_isRatStieltjesPoint, measurable_const
@@ -736,7 +736,7 @@ lemma isMeasurableRatCDF_toRatCDF
 
 中文:
 引理 isMeasurableRatCDF_toRatCDF
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   证明: by
     classical
     exact IsRatStieltjesPoint.ite (IsRatStieltjesPoint f) id
@@ -773,8 +773,8 @@ lemma IsMeasurableRatCDF.stieltjesFunctionAux_def'
   ext t; exact IsMeasurableRatCDF.stieltjesFunctionAux_def f a t
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunctionAux_def'
-  条件: (f : α -> Rat -> 实数) (a : α)
+引理 是MeasurableRatCDF.stieltjesFunctionAux_def'
+  条件: (f : α -> 有理数 -> 实数) (a : α)
   证明: by
   ext t; exact IsMeasurableRatCDF.stieltjesFunctionAux_def f a t
 
@@ -795,8 +795,8 @@ lemma IsMeasurableRatCDF.stieltjesFunctionAux_unit_prod
   simp_rw [IsMeasurableRatCDF.stieltjesFunctionAux_def']
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunctionAux_unit_prod
-  条件: {f : α -> Rat -> 实数} (a : α)
+引理 是MeasurableRatCDF.stieltjesFunctionAux_unit_prod
+  条件: {f : α -> 有理数 -> 实数} (a : α)
   证明: by
   simp_rw [IsMeasurableRatCDF.stieltjesFunctionAux_def']
 
@@ -827,8 +827,8 @@ lemma IsMeasurableRatCDF.stieltjesFunctionAux_eq
         right_inv := fun 
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunctionAux_eq
-  条件: (a : α) (r : Rat)
+引理 是MeasurableRatCDF.stieltjesFunctionAux_eq
+  条件: (a : α) (r : 有理数)
   证明: by
   rw [← hf.iInf_rat_gt_eq a r]; rw [IsMeasurableRatCDF.stieltjesFunctionAux]
   refine Equiv.iInf_congr ?_ ?_
@@ -866,7 +866,7 @@ lemma IsMeasurableRatCDF.stieltjesFunctionAux_nonneg
   exact le_ciInf fun r' => hf.nonneg a _
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunctionAux_nonneg
+引理 是MeasurableRatCDF.stieltjesFunctionAux_nonneg
   条件: (a : α) (r : 实数)
   证明: by
   have : Nonempty { r' : Rat // r < ↑r' } := by
@@ -901,7 +901,7 @@ lemma IsMeasurableRatCDF.monotone_stieltjesFunctionAux
   · refine ⟨0, fun z => ?_⟩; rintro ⟨u, rfl⟩; exact hf.nonneg
 
 中文:
-引理 IsMeasurableRatCDF.monotone_stieltjesFunctionAux
+引理 是MeasurableRatCDF.monotone_stieltjesFunctionAux
   条件: (a : α)
   证明: by
   intro x y hxy
@@ -941,7 +941,7 @@ lemma IsMeasurableRatCDF.continuousWithinAt_stieltjesFunctionAux_Ici
     refine Real.iInf_Ioi_eq_iInf_rat_gt x
 
 中文:
-引理 IsMeasurableRatCDF.continuousWithinAt_stieltjesFunctionAux_Ici
+引理 是MeasurableRatCDF.continuousWithinAt_stieltjesFunctionAux_Ici
   条件: (a : α) (x : 实数)
   证明: by
   rw [← continuousWithinAt_Ioi_iff_Ici]
@@ -984,7 +984,7 @@ definition IsMeasurableRatCDF.stieltjesFunction
   right_continuous' x := continuousWithinAt_stieltjesFunctionAux_Ici hf a x
 
 中文:
-定义 IsMeasurableRatCDF.stieltjesFunction
+定义 是MeasurableRatCDF.stieltjesFunction
   签名: (a : α)
   定义体: stieltjesFunctionAux f a
   mono' := monotone_stieltjesFunctionAux hf a
@@ -1007,8 +1007,8 @@ lemma IsMeasurableRatCDF.stieltjesFunction_eq
   proof: stieltjesFunctionAux_eq hf a r
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunction_eq
-  条件: (a : α) (r : Rat)
+引理 是MeasurableRatCDF.stieltjesFunction_eq
+  条件: (a : α) (r : 有理数)
   结论: hf.stieltjesFunction a r = f a r
   证明: stieltjesFunctionAux_eq hf a r
 
@@ -1027,7 +1027,7 @@ lemma IsMeasurableRatCDF.stieltjesFunction_nonneg
   proof: stieltjesFunctionAux_nonneg hf a r
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunction_nonneg
+引理 是MeasurableRatCDF.stieltjesFunction_nonneg
   条件: (a : α) (r : 实数)
   结论: 0 <= hf.stieltjesFunction a r
   证明: stieltjesFunctionAux_nonneg hf a r
@@ -1052,7 +1052,7 @@ lemma IsMeasurableRatCDF.stieltjesFunction_le_one
   · exact ⟨r, hrx⟩
 
 中文:
-引理 IsMeasurableRatCDF.stieltjesFunction_le_one
+引理 是MeasurableRatCDF.stieltjesFunction_le_one
   条件: (a : α) (x : 实数)
   证明: by
   obtain ⟨r, hrx⟩ := exists_rat_gt x
@@ -1088,7 +1088,7 @@ lemma IsMeasurableRatCDF.tendsto_stieltjesFunction_atBot
     ha
 
 中文:
-引理 IsMeasurableRatCDF.tendsto_stieltjesFunction_atBot
+引理 是MeasurableRatCDF.tendsto_stieltjesFunction_atBot
   条件: (a : α)
   证明: by
   have h_exists : forall x : Real, exists q : Rat, x < q ∧ ↑q < x + 1 := fun x => exists_rat_btwn (lt_add_one x)
@@ -1131,7 +1131,7 @@ lemma IsMeasurableRatCDF.tendsto_stieltjesFunction_atTop
     ha
 
 中文:
-引理 IsMeasurableRatCDF.tendsto_stieltjesFunction_atTop
+引理 是MeasurableRatCDF.tendsto_stieltjesFunction_atTop
   条件: (a : α)
   证明: by
   have h_exists : forall x : Real, exists q : Rat, x - 1 < q ∧ ↑q < x := fun x => exists_rat_btwn (sub_one_lt x)
@@ -1175,7 +1175,7 @@ lemma IsMeasurableRatCDF.measurable_stieltjesFunction
   exact .iInf (fun q => hf.measurable.eval)
 
 中文:
-引理 IsMeasurableRatCDF.measurable_stieltjesFunction
+引理 是MeasurableRatCDF.measurable_stieltjesFunction
   条件: (x : 实数)
   证明: by
   have : (fun a => hf.stieltjesFunction a x) = fun a => ⨅ r : { r' : Rat // x < r' }, f a ↑r := by
@@ -1207,7 +1207,7 @@ lemma IsMeasurableRatCDF.stronglyMeasurable_stieltjesFunction
   proof: (measurable_stieltjesFunction hf x).stronglyMeasurable
 
 中文:
-引理 IsMeasurableRatCDF.stronglyMeasurable_stieltjesFunction
+引理 是MeasurableRatCDF.stronglyMeasurable_stieltjesFunction
   条件: (x : 实数)
   证明: (measurable_stieltjesFunction hf x).stronglyMeasurable
 
@@ -1230,7 +1230,7 @@ lemma IsMeasurableRatCDF.measure_stieltjesFunction_Iic
   exact (hf.stieltjesFunction a).measure_Iic (tendsto_stieltjesFunction_atBot hf a) _
 
 中文:
-引理 IsMeasurableRatCDF.measure_stieltjesFunction_Iic
+引理 是MeasurableRatCDF.measure_stieltjesFunction_Iic
   条件: (a : α) (x : 实数)
   证明: by
   rw [← sub_zero (hf.stieltjesFunction a x)]
@@ -1255,7 +1255,7 @@ lemma IsMeasurableRatCDF.measure_stieltjesFunction_univ
     (tendsto_stieltjesFunction_atTop hf a)
 
 中文:
-引理 IsMeasurableRatCDF.measure_stieltjesFunction_univ
+引理 是MeasurableRatCDF.measure_stieltjesFunction_univ
   条件: (a : α)
   证明: by
   rw [← ENNReal.ofReal_one]; rw [← sub_zero (1 : Real)]
@@ -1279,7 +1279,7 @@ instance IsMeasurableRatCDF.instIsProbabilityMeasure_stieltjesFunction
   body: ⟨measure_stieltjesFunction_univ hf a⟩
 
 中文:
-实例 IsMeasurableRatCDF.instIsProbabilityMeasure_stieltjesFunction
+实例 是MeasurableRatCDF.instIsProbabilityMeasure_stieltjesFunction
   签名: (a : α)
   定义体: ⟨measure_stieltjesFunction_univ hf a⟩
 
@@ -1299,7 +1299,7 @@ lemma IsMeasurableRatCDF.measurable_measure_stieltjesFunction
     tendsto_stieltjesFunction_atBot, tendsto_stieltjesFunction_atTop]
 
 中文:
-引理 IsMeasurableRatCDF.measurable_measure_stieltjesFunction
+引理 是MeasurableRatCDF.measurable_measure_stieltjesFunction
   证明: by
   apply_rules [StieltjesFunction.measurable_measure, measurable_stieltjesFunction,
     tendsto_stieltjesFunction_atBot, tendsto_stieltjesFunction_atTop]
@@ -1332,7 +1332,7 @@ definition stieltjesOfMeasurableRat
 
 中文:
 定义 stieltjesOfMeasurableRat
-  签名: (f : α -> Rat -> 实数) (hf : Measurable f)
+  签名: (f : α -> 有理数 -> 实数) (hf : 可测 f)
   定义体: (isMeasurableRatCDF_toRatCDF hf).stieltjesFunction
 
 Depends on / 依赖: isMeasurableRatCDF_toRatCDF, stieltjesFunction
@@ -1350,7 +1350,7 @@ lemma stieltjesOfMeasurableRat_eq
 
 中文:
 引理 stieltjesOfMeasurableRat_eq
-  条件: (hf : Measurable f) (a : α) (r : Rat)
+  条件: (hf : 可测 f) (a : α) (r : 有理数)
   证明: IsMeasurableRatCDF.stieltjesFunction_eq _ a r
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.stieltjesFunction_eq, stieltjesFunction_eq
@@ -1375,7 +1375,7 @@ lemma stieltjesOfMeasurableRat_unit_prod
 
 中文:
 引理 stieltjesOfMeasurableRat_unit_prod
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   证明: by
   simp_rw [stieltjesOfMeasurableRat, IsMeasurableRatCDF.stieltjesFunction,
     ← IsMeasurableRatCDF.stieltjesFunctionAux_unit_prod a]
@@ -1406,7 +1406,7 @@ lemma stieltjesOfMeasurableRat_nonneg
 
 中文:
 引理 stieltjesOfMeasurableRat_nonneg
-  条件: (hf : Measurable f) (a : α) (r : 实数)
+  条件: (hf : 可测 f) (a : α) (r : 实数)
   证明: IsMeasurableRatCDF.stieltjesFunction_nonneg _ a r
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.stieltjesFunction_nonneg, stieltjesFunction_nonneg
@@ -1424,7 +1424,7 @@ lemma stieltjesOfMeasurableRat_le_one
 
 中文:
 引理 stieltjesOfMeasurableRat_le_one
-  条件: (hf : Measurable f) (a : α) (x : 实数)
+  条件: (hf : 可测 f) (a : α) (x : 实数)
   证明: IsMeasurableRatCDF.stieltjesFunction_le_one _ a x
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.stieltjesFunction_le_one, stieltjesFunction_le_one
@@ -1442,7 +1442,7 @@ lemma tendsto_stieltjesOfMeasurableRat_atBot
 
 中文:
 引理 tendsto_stieltjesOfMeasurableRat_atBot
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   证明: IsMeasurableRatCDF.tendsto_stieltjesFunction_atBot _ a
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.tendsto_stieltjesFunction_atBot, tendsto_stieltjesFunction_atBot
@@ -1461,7 +1461,7 @@ lemma tendsto_stieltjesOfMeasurableRat_atTop
 
 中文:
 引理 tendsto_stieltjesOfMeasurableRat_atTop
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   证明: IsMeasurableRatCDF.tendsto_stieltjesFunction_atTop _ a
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.tendsto_stieltjesFunction_atTop, tendsto_stieltjesFunction_atTop
@@ -1480,7 +1480,7 @@ lemma measurable_stieltjesOfMeasurableRat
 
 中文:
 引理 measurable_stieltjesOfMeasurableRat
-  条件: (hf : Measurable f) (x : 实数)
+  条件: (hf : 可测 f) (x : 实数)
   证明: IsMeasurableRatCDF.measurable_stieltjesFunction _ x
 
 Depends on / 依赖: AtPrime, IsDedekindDomain, IsField, IsField.toField, IsLocalization, IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain, IsMeasurableRatCDF, IsMeasurableRatCDF.measurable_stieltjesFunction, IsRegularRing, Localization, Localization.AtPrime, Localization.AtPrime.map_eq_maximalIdeal, infer_instance, isDiscreteValuationRing_of_dedekind_domain, isField_iff_maximalIdeal_eq, isRegularRing_iff, map_eq_maximalIdeal, measurable_stieltjesFunction, toField
@@ -1499,7 +1499,7 @@ lemma stronglyMeasurable_stieltjesOfMeasurableRat
 
 中文:
 引理 stronglyMeasurable_stieltjesOfMeasurableRat
-  条件: (hf : Measurable f) (x : 实数)
+  条件: (hf : 可测 f) (x : 实数)
   证明: IsMeasurableRatCDF.stronglyMeasurable_stieltjesFunction _ x
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.stronglyMeasurable_stieltjesFunction, stronglyMeasurable_stieltjesFunction
@@ -1520,7 +1520,7 @@ lemma measure_stieltjesOfMeasurableRat_Iic
 
 中文:
 引理 measure_stieltjesOfMeasurableRat_Iic
-  条件: (hf : Measurable f) (a : α) (x : 实数)
+  条件: (hf : 可测 f) (a : α) (x : 实数)
   证明: IsMeasurableRatCDF.measure_stieltjesFunction_Iic _ _ _
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.measure_stieltjesFunction_Iic, measure_stieltjesFunction_Iic
@@ -1540,7 +1540,7 @@ lemma measure_stieltjesOfMeasurableRat_univ
 
 中文:
 引理 measure_stieltjesOfMeasurableRat_univ
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   证明: IsMeasurableRatCDF.measure_stieltjesFunction_univ _ _
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.measure_stieltjesFunction_univ, measure_stieltjesFunction_univ
@@ -1577,7 +1577,7 @@ lemma measurable_measure_stieltjesOfMeasurableRat
 
 中文:
 引理 measurable_measure_stieltjesOfMeasurableRat
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   证明: IsMeasurableRatCDF.measurable_measure_stieltjesFunction _
 
 Depends on / 依赖: IsMeasurableRatCDF, IsMeasurableRatCDF.measurable_measure_stieltjesFunction, measurable_measure_stieltjesFunction

@@ -71,11 +71,11 @@ structure IndObjectPresentation
   参数: (A : Cᵒᵖ ⥤ 类型v)
   公理与运算 (6 个):
     - I : 类型v
-    - [ℐ : SmallCategory I]
-    - [hI : IsFiltered I]
+    - [ℐ : 小范畴 I]
+    - [hI : 是Filtered I]
     - F : I ⥤ C
-    - ι : F ⋙ yoneda ⟶ (Functor.const I).obj A
-    - isColimit : IsColimit (Cocone.mk A ι)
+    - ι : F ⋙ yoneda ⟶ (函子.const I).obj A
+    - isColimit : 是余极限 (余锥.mk A ι)
 -/
 structure IndObjectPresentation (A : Cᵒᵖ ⥤ Type v) where
   /-- The indexing category of the filtered colimit presentation -/
@@ -108,7 +108,7 @@ definition ofCocone
 
 中文:
 定义 ofCocone
-  签名: {I : 类型v} [SmallCategory I] [IsFiltered I] {F : I ⥤ C}
+  签名: {I : 类型v} [小范畴 I] [是Filtered I] {F : I ⥤ C}
   定义体: I
   F := F
   ι := c.ι
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory P.I
+  签名: 小范畴 P.I
   定义体: P.ℐ
 -/
 instance : SmallCategory P.I := P.ℐ
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiltered P.I
+  签名: 是Filtered P.I
   定义体: P.hI
 
 Depends on / 依赖: P.hI
@@ -167,7 +167,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone (P.F ⋙ yoneda) where
+  签名: : 余锥 (P.F ⋙ yoneda) where
   定义体: A
   ι := P.ι
 -/
@@ -185,7 +185,7 @@ definition coconeIsColimit
 
 中文:
 定义 coconeIsColimit
-  签名: : IsColimit P.cocone
+  签名: : 是余极限 P.cocone
   定义体: P.isColimit
 
 Depends on / 依赖: P.isColimit, isColimit
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.toCostructuredArrow.Final
+  签名: P.toCostructuredArrow.终
   定义体: Presheaf.final_toCostructuredArrow_comp_pre _ P.coconeIsColimit
 
 Depends on / 依赖: P.coconeIsColimit, Presheaf, Presheaf.final_toCostructuredArrow_comp_pre, coconeIsColimit, final_toCostructuredArrow_comp_pre
@@ -310,10 +310,10 @@ structure IsIndObject
     - mk' : : nonempty_presentation : Nonempty (IndObjectPresentation A)
 
 中文:
-结构 IsIndObject
+结构 是IndObject
   参数: (A : Cᵒᵖ ⥤ 类型v)
   公理与运算 (1 个):
-    - mk' : : nonempty_presentation : Nonempty (IndObjectPresentation A)
+    - mk' : : nonempty_presentation : 非空 (IndObjectPresentation A)
 -/
 structure IsIndObject (A : Cᵒᵖ ⥤ Type v) : Prop where
   mk' :: nonempty_presentation : Nonempty (IndObjectPresentation A)
@@ -328,9 +328,9 @@ theorem IsIndObject.mk
   proof: ⟨⟨P⟩⟩
 
 中文:
-定理 IsIndObject.mk
+定理 是IndObject.mk
   条件: {A : Cᵒᵖ ⥤ 类型v} (P : IndObjectPresentation A)
-  结论: IsIndObject A
+  结论: 是IndObject A
   证明: ⟨⟨P⟩⟩
 -/
 theorem IsIndObject.mk {A : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A) : IsIndObject A :=
@@ -348,7 +348,7 @@ theorem isIndObject_yoneda
 中文:
 定理 isIndObject_yoneda
   条件: (X : C)
-  结论: IsIndObject (yoneda.obj X)
+  结论: 是IndObject (yoneda.obj X)
   证明: .mk IndObjectPresentation.yoneda X
 
 Depends on / 依赖: IndObjectPresentation, IndObjectPresentation.yoneda, yoneda
@@ -370,8 +370,8 @@ theorem map
 
 中文:
 定理 map
-  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [IsIso η]
-  结论: IsIndObject A -> IsIndObject B
+  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [是同构 η]
+  结论: 是IndObject A -> 是IndObject B
 -/
 theorem map {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] : IsIndObject A -> IsIndObject B
   | ⟨⟨P⟩⟩ => ⟨⟨P.extend η⟩⟩
@@ -386,7 +386,7 @@ theorem iff_of_iso
 
 中文:
 定理 iff_of_iso
-  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [IsIso η]
+  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [是同构 η]
   证明: ⟨.map η, .map (inv η)⟩
 -/
 theorem iff_of_iso {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] :
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.IsClosedUnderIsomorphisms (IsIndObject (C := C))
+  签名: ObjectProperty.在同构下封闭 (是IndObject (C := C))
   定义体: h.map i.hom
 -/
 instance : ObjectProperty.IsClosedUnderIsomorphisms (IsIndObject (C := C)) where
@@ -418,7 +418,7 @@ definition presentation
 
 中文:
 定义 presentation
-  签名: : IsIndObject A -> IndObjectPresentation A
+  签名: : 是IndObject A -> IndObjectPresentation A
 -/
 noncomputable def presentation : IsIndObject A -> IndObjectPresentation A
   | ⟨P⟩ => P.some
@@ -434,8 +434,8 @@ theorem isFiltered
 
 中文:
 定理 isFiltered
-  条件: (h : IsIndObject A)
-  结论: IsFiltered (CostructuredArrow yoneda A)
+  条件: (h : 是IndObject A)
+  结论: 是Filtered (CostructuredArrow yoneda A)
   证明: IsFiltered.of_final h.presentation.toCostructuredArrow
 
 Depends on / 依赖: IsFiltered, IsFiltered.of_final, h.presentation.toCostructuredArrow, of_final, presentation, toCostructuredArrow
@@ -454,7 +454,7 @@ theorem finallySmall
 
 中文:
 定理 finallySmall
-  条件: (h : IsIndObject A)
+  条件: (h : 是IndObject A)
   结论: FinallySmall.{v} (CostructuredArrow yoneda A)
   证明: FinallySmall.mk' h.presentation.toCostructuredArrow
 
@@ -519,7 +519,7 @@ theorem isIndObject_iff
 中文:
 定理 isIndObject_iff
   条件: (A : Cᵒᵖ ⥤ 类型v)
-  结论: IsIndObject A ↔
+  结论: 是IndObject A ↔
   证明: ⟨fun h => ⟨h.isFiltered, h.finallySmall⟩,
    fun ⟨_, _⟩ => isIndObject_of_isFiltered_of_finallySmall A⟩
 
@@ -540,7 +540,7 @@ theorem isIndObject_limit_comp_yoneda
 
 中文:
 定理 isIndObject_limit_comp_yoneda
-  条件: {J : 类型u'} [Category.{v'} J] (F : J ⥤ C) [HasLimit F]
+  条件: {J : 类型u'} [范畴.{v'} J] (F : J ⥤ C) [有极限 F]
   证明: IsIndObject.map (preservesLimitIso yoneda F).hom (isIndObject_yoneda (limit F))
 
 Depends on / 依赖: IsIndObject, IsIndObject.map, isIndObject_yoneda, preservesLimitIso, yoneda
@@ -570,7 +570,7 @@ lemma isIndObject_iff_preservesFiniteLimits
 
 中文:
 引理 isIndObject_iff_preservesFiniteLimits
-  条件: [HasFiniteColimits C] (A : Cᵒᵖ ⥤ 类型u)
+  条件: [有有限余极限 C] (A : Cᵒᵖ ⥤ 类型u)
   证明: (isIndObject_iff A).trans by
     refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ⟨?_, ?_⟩⟩
     · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda

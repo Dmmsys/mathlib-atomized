@@ -43,7 +43,7 @@ structure BasicConstructibleSetData
   公理与运算 (3 个):
     - f : R
     - n : 自然数
-    - g : Fin n -> R
+    - g : 有限集 n -> R
 -/
 structure BasicConstructibleSetData where
   /-- Given the data of a basic constructible set `s = V(g₁, ..., gₙ) \ V(f)`, return `f`. -/
@@ -413,8 +413,8 @@ lemma exists_constructibleSetData_iff
     re
 
 中文:
-引理 exists_constructibleSetData_iff
-  条件: {s : Set (PrimeSpectrum R)}
+引理 存在_constructibleSetData_iff
+  条件: {s : 集合 (素谱 R)}
   证明: by
   refine ⟨fun ⟨S, H⟩ => H ▸ S.isConstructible_toSet, fun H => ?_⟩
   induction s, H using IsConstructible.induction_of_isTopologicalBasis
@@ -464,8 +464,8 @@ lemma exists_range_eq_of_isConstructible
   simp_rw [← Finset.mem_c
 
 中文:
-引理 exists_range_eq_of_isConstructible
-  结论: {R : 类型u} [CommRing R]
+引理 存在_range_eq_of_isConstructible
+  结论: {R : 类型u} [交换环 R]
   证明: by
   obtain ⟨s, rfl⟩ := exists_constructibleSetData_iff.mpr hs
   refine ⟨Π i : s, Localization.Away (Ideal.Quotient.mk (Ideal.span (Set.range i.1.g)) i.1.f),
@@ -508,7 +508,7 @@ lemma isClosed_of_stableUnderSpecialization_of_isConstructible
 
 中文:
 引理 isClosed_of_stableUnderSpecialization_of_isConstructible
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: by
   obtain ⟨S, _, f, rfl⟩ := exists_range_eq_of_isConstructible hs'
   exact isClosed_range_of_stableUnderSpecialization _ hs
@@ -536,7 +536,7 @@ lemma isOpen_of_stableUnderGeneralization_of_isConstructible
 
 中文:
 引理 isOpen_of_stableUnderGeneralization_of_isConstructible
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: by
   rw [← isClosed_compl_iff]
   exact isClosed_of_stableUnderSpecialization_of_isConstructible hs.compl hs'.compl

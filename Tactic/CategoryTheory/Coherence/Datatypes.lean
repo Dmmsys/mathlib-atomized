@@ -57,7 +57,7 @@ structure Obj
 结构 Obj
   参数: where
   公理与运算 (1 个):
-    - e? : Option Expr
+    - e? : 选项类型 Expr
 -/
 structure Obj where
   /-- Extracts a lean expression from an `Obj` term. Return `none` in the monoidal
@@ -94,7 +94,7 @@ structure Atom₁
 
 中文:
 结构 Atom₁
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (3 个):
     - e : Expr
     - src : Obj
@@ -120,7 +120,7 @@ class MkAtom₁
 
 中文:
 类 MkAtom₁
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
     - ofExpr((e : Expr)) : m Atom₁
 -/
@@ -141,7 +141,7 @@ inductive Mor₁
 
 中文:
 归纳类型 Mor₁
-  参数: : Type
+  参数: : 类型
   构造子 (3 个):
     - id: (e : Expr) (a : Obj) : Mor₁
     - comp: (e : Expr) : Mor₁ -> Mor₁ -> Mor₁
@@ -167,7 +167,7 @@ class MkMor₁
 
 中文:
 类 MkMor₁
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
     - ofExpr((e : Expr)) : m Mor₁
 -/
@@ -232,7 +232,7 @@ definition Mor₁.toList
 
 中文:
 定义 Mor₁.toList
-  签名: : Mor₁ -> List Atom₁
+  签名: : Mor₁ -> 列表 Atom₁
 -/
 def Mor₁.toList : Mor₁ -> List Atom₁
   | .id _ _ => []
@@ -251,7 +251,7 @@ class MonadMor₁
 
 中文:
 类 MonadMor₁
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (2 个):
     - id₁M((a : Obj)) : m Mor₁
     - comp₁M((f g : Mor₁)) : m Mor₁
@@ -276,7 +276,7 @@ structure CoherenceHom
     - unfold : Expr
 
 中文:
-结构 CoherenceHom
+结构 余herence态射
   参数: where
   公理与运算 (5 个):
     - e : Expr
@@ -341,13 +341,13 @@ inductive StructuralAtom
 
 中文:
 归纳类型 StructuralAtom
-  参数: : Type
+  参数: : 类型
   构造子 (5 个):
     - associator: (e : Expr) (f g h : Mor₁) : StructuralAtom
     - leftUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
     - rightUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
     - id: (e : Expr) (f : Mor₁) : StructuralAtom
-    - coherenceHom: (α : CoherenceHom) : StructuralAtom
+    - coherenceHom: (α : 余herence态射) : StructuralAtom
 -/
 inductive StructuralAtom : Type
   /-- The expression for the associator `α_ f g h`. -/
@@ -378,7 +378,7 @@ inductive Mor₂Iso
 
 中文:
 归纳类型 Mor₂Iso
-  参数: : Type where
+  参数: : 类型 where
   构造子 (8 个):
     - structuralAtom: (α : StructuralAtom) : Mor₂Iso
     - comp: (e : Expr) (f g h : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
@@ -386,7 +386,7 @@ inductive Mor₂Iso
     - whiskerRight: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) (h : Mor₁) : Mor₂Iso
     - horizontalComp: (e : Expr) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
     - inv: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) : Mor₂Iso
-    - coherenceComp: (e : Expr) (f g h i : Mor₁) (α : CoherenceHom) (η θ : Mor₂Iso) : Mor₂Iso
+    - coherenceComp: (e : Expr) (f g h i : Mor₁) (α : 余herence态射) (η θ : Mor₂Iso) : Mor₂Iso
     - of: (η : AtomIso) : Mor₂Iso
 -/
 inductive Mor₂Iso : Type where
@@ -410,10 +410,10 @@ class MonadCoherehnceHom
     - unfoldM((α : CoherenceHom)) : m Mor₂Iso
 
 中文:
-类 MonadCoherehnceHom
-  参数: (m : Type -> Type)
+类 MonadCoherehnce态射
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
-    - unfoldM((α : CoherenceHom)) : m Mor₂Iso
+    - unfoldM((α : 余herence态射)) : m Mor₂Iso
 -/
 class MonadCoherehnceHom (m : Type -> Type) where
   /-- Unfold a coherence isomorphism. -/
@@ -507,7 +507,7 @@ definition Mor₂Iso.srcM
 
 中文:
 定义 Mor₂Iso.srcM
-  签名: {m : Type -> Type} [Monad m] [MonadMor₁ m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
 -/
 def Mor₂Iso.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂Iso -> m Mor₁
   | .structuralAtom α => α.srcM
@@ -528,7 +528,7 @@ definition Mor₂Iso.tgtM
 
 中文:
 定义 Mor₂Iso.tgtM
-  签名: {m : Type -> Type} [Monad m] [MonadMor₁ m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
 
 Depends on / 依赖: Countable, OrderTopology
 -/
@@ -563,19 +563,19 @@ class MonadMor₂Iso
 
 中文:
 类 MonadMor₂Iso
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (11 个):
     - associatorM((f g h : Mor₁)) : m StructuralAtom
     - leftUnitorM((f : Mor₁)) : m StructuralAtom
     - rightUnitorM((f : Mor₁)) : m StructuralAtom
     - id₂M((f : Mor₁)) : m StructuralAtom
-    - coherenceHomM((f g : Mor₁) (inst : Expr)) : m CoherenceHom
+    - coherenceHomM((f g : Mor₁) (inst : Expr)) : m 余herence态射
     - comp₂M((η θ : Mor₂Iso)) : m Mor₂Iso
     - whiskerLeftM((f : Mor₁) (η : Mor₂Iso)) : m Mor₂Iso
     - whiskerRightM((η : Mor₂Iso) (h : Mor₁)) : m Mor₂Iso
     - horizontalCompM((η θ : Mor₂Iso)) : m Mor₂Iso
     - symmM((η : Mor₂Iso)) : m Mor₂Iso
-    - coherenceCompM((α : CoherenceHom) (η θ : Mor₂Iso)) : m Mor₂Iso
+    - coherenceCompM((α : 余herence态射) (η θ : Mor₂Iso)) : m Mor₂Iso
 -/
 class MonadMor₂Iso (m : Type -> Type) where
   /-- The expression for the associator `α_ f g h`. -/
@@ -709,7 +709,7 @@ structure Atom
     - tgt : Mor₁
 
 中文:
-结构 Atom
+结构 原子
   参数: where
   公理与运算 (3 个):
     - e : Expr
@@ -736,7 +736,7 @@ structure IsoLift
     - eq : Expr
 
 中文:
-结构 IsoLift
+结构 是oLift
   参数: where
   公理与运算 (2 个):
     - e : Mor₂Iso
@@ -768,17 +768,17 @@ inductive Mor₂
 
 中文:
 归纳类型 Mor₂
-  参数: : Type where
+  参数: : 类型 where
   构造子 (9 个):
-    - isoHom: (e : Expr) (isoLift : IsoLift) (iso : Mor₂Iso) : Mor₂
-    - isoInv: (e : Expr) (isoLift : IsoLift) (iso : Mor₂Iso) : Mor₂
-    - id: (e : Expr) (isoLift : IsoLift) (f : Mor₁) : Mor₂
-    - comp: (e : Expr) (isoLift? : Option IsoLift) (f g h : Mor₁) (η θ : Mor₂) : Mor₂
-    - whiskerLeft: (e : Expr) (isoLift? : Option IsoLift) (f g h : Mor₁) (η : Mor₂) : Mor₂
-    - whiskerRight: (e : Expr) (isoLift? : Option IsoLift) (f g : Mor₁) (η : Mor₂) (h : Mor₁) : Mor₂
-    - horizontalComp: (e : Expr) (isoLift? : Option IsoLift) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂) : Mor₂
-    - coherenceComp: (e : Expr) (isoLift? : Option IsoLift) (f g h i : Mor₁) (α : CoherenceHom) (η θ : Mor₂) : Mor₂
-    - of: (η : Atom) : Mor₂
+    - isoHom: (e : Expr) (isoLift : 是oLift) (iso : Mor₂Iso) : Mor₂
+    - isoInv: (e : Expr) (isoLift : 是oLift) (iso : Mor₂Iso) : Mor₂
+    - id: (e : Expr) (isoLift : 是oLift) (f : Mor₁) : Mor₂
+    - comp: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h : Mor₁) (η θ : Mor₂) : Mor₂
+    - whiskerLeft: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h : Mor₁) (η : Mor₂) : Mor₂
+    - whiskerRight: (e : Expr) (isoLift? : 选项类型 是oLift) (f g : Mor₁) (η : Mor₂) (h : Mor₁) : Mor₂
+    - horizontalComp: (e : Expr) (isoLift? : 选项类型 是oLift) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂) : Mor₂
+    - coherenceComp: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h i : Mor₁) (α : 余herence态射) (η θ : Mor₂) : Mor₂
+    - of: (η : 原子) : Mor₂
 -/
 inductive Mor₂ : Type where
   /-- The expression for `Iso.hom`. -/
@@ -814,7 +814,7 @@ class MkMor₂
 
 中文:
 类 MkMor₂
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (1 个):
     - ofExpr((e : Expr)) : m Mor₂
 -/
@@ -853,7 +853,7 @@ definition Mor₂.isoLift?
 
 中文:
 定义 Mor₂.isoLift?
-  签名: : Mor₂ -> Option IsoLift
+  签名: : Mor₂ -> 选项类型 是oLift
 -/
 def Mor₂.isoLift? : Mor₂ -> Option IsoLift
   | .isoHom _ isoLift .. => some isoLift
@@ -875,7 +875,7 @@ definition Mor₂.srcM
 
 中文:
 定义 Mor₂.srcM
-  签名: {m : Type -> Type} [Monad m] [MonadMor₁ m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
 -/
 def Mor₂.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor₁
   | .isoHom _ _ iso => iso.srcM
@@ -897,7 +897,7 @@ definition Mor₂.tgtM
 
 中文:
 定义 Mor₂.tgtM
-  签名: {m : Type -> Type} [Monad m] [MonadMor₁ m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
 -/
 def Mor₂.tgtM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor₁
   | .isoHom _ _ iso => iso.tgtM
@@ -930,18 +930,18 @@ class MonadMor₂
 
 中文:
 类 MonadMor₂
-  参数: (m : Type -> Type)
+  参数: (m : 类型 -> 类型)
   公理与运算 (10 个):
     - homM((η : Mor₂Iso)) : m Mor₂
-    - atomHomM((η : AtomIso)) : m Atom
+    - atomHomM((η : AtomIso)) : m 原子
     - invM((η : Mor₂Iso)) : m Mor₂
-    - atomInvM((η : AtomIso)) : m Atom
+    - atomInvM((η : AtomIso)) : m 原子
     - id₂M((f : Mor₁)) : m Mor₂
     - comp₂M((η θ : Mor₂)) : m Mor₂
     - whiskerLeftM((f : Mor₁) (η : Mor₂)) : m Mor₂
     - whiskerRightM((η : Mor₂) (h : Mor₁)) : m Mor₂
     - horizontalCompM((η θ : Mor₂)) : m Mor₂
-    - coherenceCompM((α : CoherenceHom) (η θ : Mor₂)) : m Mor₂
+    - coherenceCompM((α : 余herence态射) (η θ : Mor₂)) : m Mor₂
 -/
 class MonadMor₂ (m : Type -> Type) where
   /-- The expression for `Iso.hom η`. -/
@@ -976,11 +976,11 @@ inductive NormalizedHom
     - cons: (e : Mor₁) : NormalizedHom -> Atom₁ -> NormalizedHom
 
 中文:
-归纳类型 NormalizedHom
-  参数: : Type
+归纳类型 Normalized态射
+  参数: : 类型
   构造子 (2 个):
-    - nil: (e : Mor₁) (a : Obj) : NormalizedHom
-    - cons: (e : Mor₁) : NormalizedHom -> Atom₁ -> NormalizedHom
+    - nil: (e : Mor₁) (a : Obj) : Normalized态射
+    - cons: (e : Mor₁) : Normalized态射 -> Atom₁ -> Normalized态射
 -/
 inductive NormalizedHom : Type
   /-- The identity 1-morphism `𝟙 a`. -/
@@ -997,8 +997,8 @@ definition NormalizedHom.e
   signature: : NormalizedHom -> Mor₁
 
 中文:
-定义 NormalizedHom.e
-  签名: : NormalizedHom -> Mor₁
+定义 Normalized态射.e
+  签名: : Normalized态射 -> Mor₁
 -/
 def NormalizedHom.e : NormalizedHom -> Mor₁
   | NormalizedHom.nil e _ => e
@@ -1012,8 +1012,8 @@ definition NormalizedHom.src
   signature: : NormalizedHom -> Obj
 
 中文:
-定义 NormalizedHom.src
-  签名: : NormalizedHom -> Obj
+定义 Normalized态射.src
+  签名: : Normalized态射 -> Obj
 -/
 def NormalizedHom.src : NormalizedHom -> Obj
   | NormalizedHom.nil _ a => a
@@ -1027,8 +1027,8 @@ definition NormalizedHom.tgt
   signature: : NormalizedHom -> Obj
 
 中文:
-定义 NormalizedHom.tgt
-  签名: : NormalizedHom -> Obj
+定义 Normalized态射.tgt
+  签名: : Normalized态射 -> Obj
 -/
 def NormalizedHom.tgt : NormalizedHom -> Obj
   | NormalizedHom.nil _ a => a
@@ -1062,8 +1062,8 @@ definition NormalizedHom.consM
   return NormalizedHom.cons (← comp₁M p.e (.of f)) p f
 
 中文:
-定义 NormalizedHom.consM
-  签名: [MonadMor₁ m] (p : NormalizedHom) (f : Atom₁)
+定义 Normalized态射.consM
+  签名: [MonadMor₁ m] (p : Normalized态射) (f : Atom₁)
   定义体: do
   return NormalizedHom.cons (← comp₁M p.e (.of f)) p f
 -/
@@ -1081,10 +1081,10 @@ class Context
     - mkContext? : Expr -> MetaM (Option ρ)
 
 中文:
-类 Context
-  参数: (ρ : Type)
+类 余ntext
+  参数: (ρ : 类型)
   公理与运算 (1 个):
-    - mkContext? : Expr -> MetaM (Option ρ)
+    - mkContext? : Expr -> MetaM (选项类型 ρ)
 -/
 class Context (ρ : Type) where
   /-- Construct a context from a lean expression for a 2-morphism. -/
@@ -1105,7 +1105,7 @@ definition mkContext
 
 中文:
 定义 mkContext
-  签名: {ρ : Type} [Context ρ] (e : Expr)
+  签名: {ρ : 类型} [余ntext ρ] (e : Expr)
   定义体: do
   match ← mkContext? e with
   | some c => return c
@@ -1145,7 +1145,7 @@ abbreviation CoherenceM
 
 中文:
 缩写 CoherenceM
-  签名: (ρ : Type)
+  签名: (ρ : 类型)
   定义体: ReaderT ρ StateT State MetaM
 
 Depends on / 依赖: ReaderT, StateT
@@ -1163,7 +1163,7 @@ Prod.fst < > ReaderT.run x ctx s
 
 中文:
 定义 CoherenceM.run
-  签名: {α ρ : Type} (x : CoherenceM ρ α) (ctx : ρ) (s : State := {})
+  签名: {α ρ : 类型} (x : CoherenceM ρ α) (ctx : ρ) (s : State := {})
   定义体: do
 Prod.fst < > ReaderT.run x ctx s
 -/

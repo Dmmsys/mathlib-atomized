@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star C(α, β)
+  签名: 对合 C(α, β)
   定义体: starContinuousMap.comp f
 
 @[simp]
@@ -134,7 +134,7 @@ instance [InvolutiveStar
 
 中文:
 实例 [InvolutiveStar
-  签名: β] [ContinuousStar β] : InvolutiveStar C(α, β) where
+  签名: β] [余ntinuousStar β] : InvolutiveStar C(α, β) where
   定义体: ext fun _ => star_star _
 
 Depends on / 依赖: star_star
@@ -152,7 +152,7 @@ instance starAddMonoid
 
 中文:
 实例 starAddMonoid
-  签名: [AddMonoid β] [ContinuousAdd β] [StarAddMonoid β] [ContinuousStar β]
+  签名: [加法幺半群 β] [连续加法 β] [StarAdd幺半群 β] [余ntinuousStar β]
   定义体: ext fun _ => star_add _ _
 
 Depends on / 依赖: star_add
@@ -171,7 +171,7 @@ instance starMul
 
 中文:
 实例 starMul
-  签名: [Mul β] [ContinuousMul β] [StarMul β] [ContinuousStar β]
+  签名: [乘法 β] [连续乘法 β] [StarMul β] [余ntinuousStar β]
   定义体: ext fun _ => star_mul _ _
 
 Depends on / 依赖: star_mul
@@ -189,8 +189,8 @@ instance [NonUnitalNonAssocSemiring
   body: { ContinuousMap.starAddMonoid, ContinuousMap.starMul with }
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: β] [IsTopologicalSemiring β] [StarRing β] [ContinuousStar β] :
+实例 [非幺非结合半环
+  签名: β] [是TopologicalSemiring β] [对合环 β] [余ntinuousStar β] :
   定义体: { ContinuousMap.starAddMonoid, ContinuousMap.starMul with }
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.starAddMonoid, ContinuousMap.starMul, starAddMonoid, starMul
@@ -208,8 +208,8 @@ instance [Star
   body: ext fun _ => star_smul _ _
 
 中文:
-实例 [Star
-  签名: R] [Star β] [SMul R β] [StarModule R β] [ContinuousStar β]
+实例 [对合
+  签名: R] [对合 β] [标量乘法 R β] [对合模 R β] [余ntinuousStar β]
   定义体: ext fun _ => star_smul _ _
 
 Depends on / 依赖: star_smul
@@ -279,7 +279,7 @@ theorem compStarAlgHom'_id
 
 中文:
 定理 compStarAlgHom'_id
-  结论: compStarAlgHom' 𝕜 A (ContinuousMap.id X) = StarAlgHom.id 𝕜 C(X, A)
+  结论: compStarAlgHom' 𝕜 A (连续映射.id X) = StarAlg态射.id 𝕜 C(X, A)
   证明: StarAlgHom.ext fun _ => ContinuousMap.ext fun _ => rfl
 -/
 theorem compStarAlgHom'_id : compStarAlgHom' 𝕜 A (ContinuousMap.id X) = StarAlgHom.id 𝕜 C(X, A) :=
@@ -333,7 +333,7 @@ definition compStarAlgHom
 
 中文:
 定义 compStarAlgHom
-  签名: (φ : A ->⋆ₐ[𝕜] B) (hφ : Continuous φ)
+  签名: (φ : A ->⋆ₐ[𝕜] B) (hφ : 连续 φ)
   定义体: (⟨φ, hφ⟩ : C(A, B)).comp f
   map_one' := ext fun _ => map_one φ
   map_mul' f g := ext fun x => map_mul φ (f x) (g x)
@@ -377,7 +377,7 @@ lemma compStarAlgHom_comp
 
 中文:
 引理 compStarAlgHom_comp
-  结论: (φ : A ->⋆ₐ[𝕜] B) (ψ : B ->⋆ₐ[𝕜] C) (hφ : Continuous φ)
+  结论: (φ : A ->⋆ₐ[𝕜] B) (ψ : B ->⋆ₐ[𝕜] C) (hφ : 连续 φ)
   证明: rfl
 -/
 lemma compStarAlgHom_comp (φ : A ->⋆ₐ[𝕜] B) (ψ : B ->⋆ₐ[𝕜] C) (hφ : Continuous φ)
@@ -455,8 +455,8 @@ definition ContinuousMap.evalStarAlgHom
     map_star' := fun _ => rfl }
 
 中文:
-定义 ContinuousMap.evalStarAlgHom
-  签名: [StarRing R] [ContinuousStar R] (x : X)
+定义 连续映射.evalStarAlgHom
+  签名: [对合环 R] [余ntinuousStar R] (x : X)
   定义体: { ContinuousMap.evalAlgHom S R x with
     map_star' := fun _ => rfl }
 

@@ -46,7 +46,7 @@ definition HasOrthogonalRows
 
 中文:
 定义 HasOrthogonalRows
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: forall ⦃i₁ i₂⦄, i₁ != i₂ -> A i₁ ⬝ᵥ A i₂ = 0
 -/
 def HasOrthogonalRows [Fintype n] : Prop :=
@@ -62,7 +62,7 @@ definition HasOrthogonalCols
 
 中文:
 定义 HasOrthogonalCols
-  签名: [Fintype m]
+  签名: [有限类型 m]
   定义体: HasOrthogonalRows Aᵀ
 
 Depends on / 依赖: HasOrthogonalRows
@@ -82,7 +82,7 @@ theorem transpose_hasOrthogonalRows_iff_hasOrthogonalCols
 
 中文:
 定理 transpose_hasOrthogonalRows_iff_hasOrthogonalCols
-  条件: [Fintype m]
+  条件: [有限类型 m]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -103,7 +103,7 @@ theorem transpose_hasOrthogonalCols_iff_hasOrthogonalRows
 
 中文:
 定理 transpose_hasOrthogonalCols_iff_hasOrthogonalRows
-  条件: [Fintype n]
+  条件: [有限类型 n]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -124,7 +124,7 @@ theorem HasOrthogonalRows.hasOrthogonalCols
 
 中文:
 定理 HasOrthogonalRows.hasOrthogonalCols
-  条件: [Fintype m] (h : Aᵀ.HasOrthogonalRows)
+  条件: [有限类型 m] (h : Aᵀ.HasOrthogonalRows)
   证明: h
 -/
 theorem HasOrthogonalRows.hasOrthogonalCols [Fintype m] (h : Aᵀ.HasOrthogonalRows) :
@@ -141,7 +141,7 @@ theorem HasOrthogonalCols.transpose_hasOrthogonalRows
 
 中文:
 定理 HasOrthogonalCols.transpose_hasOrthogonalRows
-  条件: [Fintype m] (h : A.HasOrthogonalCols)
+  条件: [有限类型 m] (h : A.HasOrthogonalCols)
   证明: h
 -/
 theorem HasOrthogonalCols.transpose_hasOrthogonalRows [Fintype m] (h : A.HasOrthogonalCols) :
@@ -158,7 +158,7 @@ theorem HasOrthogonalCols.hasOrthogonalRows
 
 中文:
 定理 HasOrthogonalCols.hasOrthogonalRows
-  条件: [Fintype n] (h : Aᵀ.HasOrthogonalCols)
+  条件: [有限类型 n] (h : Aᵀ.HasOrthogonalCols)
   证明: h
 -/
 theorem HasOrthogonalCols.hasOrthogonalRows [Fintype n] (h : Aᵀ.HasOrthogonalCols) :
@@ -175,7 +175,7 @@ theorem HasOrthogonalRows.transpose_hasOrthogonalCols
 
 中文:
 定理 HasOrthogonalRows.transpose_hasOrthogonalCols
-  条件: [Fintype n] (h : A.HasOrthogonalRows)
+  条件: [有限类型 n] (h : A.HasOrthogonalRows)
   证明: h
 -/
 theorem HasOrthogonalRows.transpose_hasOrthogonalCols [Fintype n] (h : A.HasOrthogonalRows) :

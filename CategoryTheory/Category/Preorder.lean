@@ -59,7 +59,7 @@ instance subsingleton_hom
 
 中文:
 实例 subsingleton_hom
-  签名: {α : 类型u} [Preorder α] (U V : α)
+  签名: {α : 类型u} [预序 α] (U V : α)
   定义体: ⟨fun _ _ => ULift.ext _ _ (Subsingleton.elim _ _ )⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, ULift.ext
@@ -190,7 +190,7 @@ abbreviation _root_.Quiver.Hom.le
 @[simp]
 
 中文:
-缩写 _root_.Quiver.Hom.le
+缩写 _root_.箭图.态射.le
   定义体: @leOfHom
 
 @[simp]
@@ -401,7 +401,7 @@ instance uniqueToTop
 
 中文:
 实例 uniqueToTop
-  签名: [OrderTop X] {x : X}
+  签名: [有顶序 X] {x : X}
   定义体: homOfLE le_top
   uniq := fun a => by rfl
 
@@ -422,7 +422,7 @@ instance uniqueFromBot
 
 中文:
 实例 uniqueFromBot
-  签名: [OrderBot X] {x : X}
+  签名: [有底序 X] {x : X}
   定义体: homOfLE bot_le
   uniq := fun a => by rfl
 
@@ -493,8 +493,8 @@ definition Monotone.functor
 @[simp]
 
 中文:
-定义 Monotone.functor
-  签名: {f : X -> Y} (h : Monotone f)
+定义 递增.functor
+  签名: {f : X -> Y} (h : 递增 f)
   定义体: f
   map g := CategoryTheory.homOfLE (h g.le)
 
@@ -515,8 +515,8 @@ theorem Monotone.functor_obj
   proof: rfl
 
 中文:
-定理 Monotone.functor_obj
-  条件: {f : X -> Y} (h : Monotone f)
+定理 递增.functor_obj
+  条件: {f : X -> Y} (h : 递增 f)
   结论: h.functor.obj = f
   证明: rfl
 -/
@@ -578,7 +578,7 @@ theorem monotone
 中文:
 定理 monotone
   条件: (f : X ⥤ Y)
-  结论: Monotone f.obj
+  结论: 递增 f.obj
   证明: fun _ _ hxy => (f.map hxy.hom).le
 
 Depends on / 依赖: f.map, hxy.hom
@@ -716,7 +716,7 @@ theorem Iso.to_eq
   proof: le_antisymm f.hom.le f.inv.le
 
 中文:
-定理 Iso.to_eq
+定理 同构.to_eq
   条件: {x y : X} (f : x ≅ y)
   结论: x = y
   证明: le_antisymm f.hom.le f.inv.le
@@ -742,7 +742,7 @@ definition Equivalence.toOrderIso
       fun h : a <= a' => (e.functor.map
 
 中文:
-定义 Equivalence.toOrderIso
+定义 等价.toOrderIso
   签名: (e : X ≌ Y)
   定义体: e.functor.obj
   invFun := e.inverse.obj
@@ -780,7 +780,7 @@ theorem Equivalence.toOrderIso_apply
 @[simp]
 
 中文:
-定理 Equivalence.toOrderIso_apply
+定理 等价.toOrderIso_apply
   条件: (e : X ≌ Y) (x : X)
   结论: e.toOrderIso x = e.functor.obj x
   证明: rfl
@@ -800,7 +800,7 @@ theorem Equivalence.toOrderIso_symm_apply
   proof: rfl
 
 中文:
-定理 Equivalence.toOrderIso_symm_apply
+定理 等价.toOrderIso_symm_apply
   条件: (e : X ≌ Y) (y : Y)
   证明: rfl
 -/
@@ -829,8 +829,8 @@ lemma PartialOrder.isIso_iff_eq
     infer_instance
 
 中文:
-引理 PartialOrder.isIso_iff_eq
-  结论: {X : 类型u} [PartialOrder X]
+引理 偏序.isIso_iff_eq
+  结论: {X : 类型u} [偏序 X]
   证明: by
   constructor
   · intro _

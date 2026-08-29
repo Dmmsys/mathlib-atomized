@@ -49,8 +49,8 @@ definition IsIntegralCurveOn
   body: forall t in s, HasDerivWithinAt γ (v t (γ t)) s t
 
 中文:
-定义 IsIntegralCurveOn
-  签名: (γ : 实数 -> E) (v : 实数 -> E -> E) (s : Set 实数)
+定义 Is整数egralCurveOn
+  签名: (γ : 实数 -> E) (v : 实数 -> E -> E) (s : 集合 实数)
   定义体: forall t in s, HasDerivWithinAt γ (v t (γ t)) s t
 
 Depends on / 依赖: HasDerivWithinAt
@@ -67,7 +67,7 @@ definition IsIntegralCurveAt
   body: forallᶠ t in 𝓝 t₀, HasDerivAt γ (v t (γ t)) t
 
 中文:
-定义 IsIntegralCurveAt
+定义 Is整数egralCurveAt
   签名: (γ : 实数 -> E) (v : 实数 -> E -> E) (t₀ : 实数)
   定义体: forallᶠ t in 𝓝 t₀, HasDerivAt γ (v t (γ t)) t
 
@@ -85,7 +85,7 @@ definition IsIntegralCurve
   body: forall t : Real, HasDerivAt γ (v t (γ t)) t
 
 中文:
-定义 IsIntegralCurve
+定义 Is整数egralCurve
   签名: (γ : 实数 -> E) (v : 实数 -> E -> E)
   定义体: forall t : Real, HasDerivAt γ (v t (γ t)) t
 
@@ -105,8 +105,8 @@ lemma IsIntegralCurve.isIntegralCurveOn
   proof: fun t _ => (h t).hasDerivWithinAt
 
 中文:
-引理 IsIntegralCurve.isIntegralCurveOn
-  条件: (h : Is整数egralCurve γ v) (s : Set 实数)
+引理 Is整数egralCurve.is整数egralCurveOn
+  条件: (h : Is整数egralCurve γ v) (s : 集合 实数)
   证明: fun t _ => (h t).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivWithinAt
@@ -122,7 +122,7 @@ lemma isIntegralCurveOn_univ
   proof: ⟨fun h t => (h t (mem_univ _)).hasDerivAt Filter.univ_mem, fun h => h.isIntegralCurveOn _⟩
 
 中文:
-引理 isIntegralCurveOn_univ
+引理 is整数egralCurveOn_univ
   证明: ⟨fun h t => (h t (mem_univ _)).hasDerivAt Filter.univ_mem, fun h => h.isIntegralCurveOn _⟩
 
 Depends on / 依赖: Filter, Filter.univ_mem, h.isIntegralCurveOn, hasDerivAt, isIntegralCurveOn, mem_univ, univ_mem
@@ -147,7 +147,7 @@ lemma isIntegralCurveAt_iff_exists_mem_nhds
   apply (h t (h₁ ht)).hasDeri
 
 中文:
-引理 isIntegralCurveAt_iff_exists_mem_nhds
+引理 is整数egralCurveAt_iff_存在_mem_nhds
   证明: by
   rw [IsIntegralCurveAt]; rw [Filter.eventually_iff_exists_mem]
   refine ⟨fun ⟨s, hs, h⟩ => ⟨s, hs, fun t ht => (h t ht).hasDerivWithinAt⟩, ?_⟩
@@ -184,7 +184,7 @@ lemma isIntegralCurveAt_iff_exists_pos
   exact ⟨HasDerivAt.hasDerivWithinAt, fun h => h.hasDerivAt (Metric.isOpen_ball.mem_nhds hy)⟩
 
 中文:
-引理 isIntegralCurveAt_iff_exists_pos
+引理 is整数egralCurveAt_iff_存在_pos
   证明: by
   rw [IsIntegralCurveAt]; rw [Metric.eventually_nhds_iff_ball]
   congrm exists ε > 0, forall (y : Real) (hy : y in Metric.ball t₀ ε), ?_
@@ -208,7 +208,7 @@ lemma IsIntegralCurve.isIntegralCurveAt
     ⟨univ, Filter.univ_mem, fun t _ => (h t).hasDerivWithinAt⟩
 
 中文:
-引理 IsIntegralCurve.isIntegralCurveAt
+引理 Is整数egralCurve.is整数egralCurveAt
   条件: (h : Is整数egralCurve γ v) (t : 实数)
   证明: isIntegralCurveAt_iff_exists_mem_nhds.mpr
     ⟨univ, Filter.univ_mem, fun t _ => (h t).hasDerivWithinAt⟩
@@ -230,7 +230,7 @@ lemma isIntegralCurve_iff_isIntegralCurveAt
 .hasDerivAt hs⟩ exact h t (mem_of_mem_nhds hs)
 
 中文:
-引理 isIntegralCurve_iff_isIntegralCurveAt
+引理 is整数egralCurve_iff_is整数egralCurveAt
   证明: ⟨fun h => h.isIntegralCurveAt, fun h t => by
     obtain ⟨s, hs, h⟩ := isIntegralCurveAt_iff_exists_mem_nhds.mp (h t)
 .hasDerivAt hs⟩ exact h t (mem_of_mem_nhds hs)
@@ -252,7 +252,7 @@ lemma IsIntegralCurveOn.mono
   proof: fun t ht => h t (hs ht)
 
 中文:
-引理 IsIntegralCurveOn.mono
+引理 Is整数egralCurveOn.mono
   条件: (h : Is整数egralCurveOn γ v s) (hs : s' subseteq s)
   证明: fun t ht => h t (hs ht)
 -/
@@ -269,7 +269,7 @@ lemma IsIntegralCurveAt.hasDerivAt
 .hasDerivAt hs h t₀ (mem_of_mem_nhds hs)
 
 中文:
-引理 IsIntegralCurveAt.hasDerivAt
+引理 Is整数egralCurveAt.hasDerivAt
   条件: (h : Is整数egralCurveAt γ v t₀)
   证明: have ⟨_, hs, h⟩ := isIntegralCurveAt_iff_exists_mem_nhds.mp h
 .hasDerivAt hs h t₀ (mem_of_mem_nhds hs)
@@ -290,7 +290,7 @@ lemma IsIntegralCurveOn.isIntegralCurveAt
   proof: isIntegralCurveAt_iff_exists_mem_nhds.mpr ⟨s, hs, h⟩
 
 中文:
-引理 IsIntegralCurveOn.isIntegralCurveAt
+引理 Is整数egralCurveOn.is整数egralCurveAt
   条件: (h : Is整数egralCurveOn γ v s) (hs : s in 𝓝 t₀)
   证明: isIntegralCurveAt_iff_exists_mem_nhds.mpr ⟨s, hs, h⟩
 
@@ -311,7 +311,7 @@ lemma IsIntegralCurveAt.isIntegralCurveOn
 .hasDerivWithinAt exact h _ (mem_of_mem_nhds hs')
 
 中文:
-引理 IsIntegralCurveAt.isIntegralCurveOn
+引理 Is整数egralCurveAt.is整数egralCurveOn
   条件: (h : 对任意 t in s, Is整数egralCurveAt γ v t)
   证明: by
   intros t ht
@@ -335,8 +335,8 @@ lemma isIntegralCurveOn_iff_isIntegralCurveAt
   proof: ⟨fun h _ ht => h.isIntegralCurveAt (hs.mem_nhds ht), IsIntegralCurveAt.isIntegralCurveOn⟩
 
 中文:
-引理 isIntegralCurveOn_iff_isIntegralCurveAt
-  条件: (hs : IsOpen s)
+引理 is整数egralCurveOn_iff_is整数egralCurveAt
+  条件: (hs : 是开集 s)
   证明: ⟨fun h _ ht => h.isIntegralCurveAt (hs.mem_nhds ht), IsIntegralCurveAt.isIntegralCurveOn⟩
 
 Depends on / 依赖: IsIntegralCurveAt, IsIntegralCurveAt.isIntegralCurveOn, h.isIntegralCurveAt, hs.mem_nhds, isIntegralCurveAt, isIntegralCurveOn, mem_nhds
@@ -354,7 +354,7 @@ lemma IsIntegralCurveOn.continuousWithinAt
   proof: (hγ t₀ ht).continuousWithinAt
 
 中文:
-引理 IsIntegralCurveOn.continuousWithinAt
+引理 Is整数egralCurveOn.continuousWithinAt
   条件: (hγ : Is整数egralCurveOn γ v s) (ht : t₀ in s)
   证明: (hγ t₀ ht).continuousWithinAt
 
@@ -372,7 +372,7 @@ lemma IsIntegralCurveOn.continuousOn
   proof: (hγ · · |>.continuousWithinAt)
 
 中文:
-引理 IsIntegralCurveOn.continuousOn
+引理 Is整数egralCurveOn.continuousOn
   条件: (hγ : Is整数egralCurveOn γ v s)
   证明: (hγ · · |>.continuousWithinAt)
 
@@ -391,7 +391,7 @@ lemma IsIntegralCurveAt.continuousAt
 .continuousAt hs hγ.continuousWithinAt (mem_of_mem_nhds hs)
 
 中文:
-引理 IsIntegralCurveAt.continuousAt
+引理 Is整数egralCurveAt.continuousAt
   条件: (hγ : Is整数egralCurveAt γ v t₀)
   证明: have ⟨_, hs, hγ⟩ := isIntegralCurveAt_iff_exists_mem_nhds.mp hγ
 .continuousAt hs hγ.continuousWithinAt (mem_of_mem_nhds hs)
@@ -413,9 +413,9 @@ lemma IsIntegralCurve.continuous
   proof: continuous_iff_continuousAt.mpr (hγ.isIntegralCurveAt · |>.continuousAt)
 
 中文:
-引理 IsIntegralCurve.continuous
+引理 Is整数egralCurve.continuous
   条件: (hγ : Is整数egralCurve γ v)
-  结论: Continuous γ
+  结论: 连续 γ
   证明: continuous_iff_continuousAt.mpr (hγ.isIntegralCurveAt · |>.continuousAt)
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, isIntegralCurveAt

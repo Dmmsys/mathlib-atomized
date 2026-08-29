@@ -94,7 +94,7 @@ definition toContinuousMapOn
 
 中文:
 定义 toContinuousMapOn
-  签名: (p : R[X]) (X : Set R)
+  签名: (p : R[X]) (X : 集合 R)
   定义体: ⟨fun x : X => p.toContinuousMap x, by fun_prop⟩
 
 Depends on / 依赖: fun_prop, p.toContinuousMap, toContinuousMap
@@ -114,7 +114,7 @@ lemma toContinuousMapOn_X_eq_restrict_id
 
 中文:
 引理 toContinuousMapOn_X_eq_restrict_id
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   ext; simp
 -/
@@ -265,7 +265,7 @@ definition toContinuousMapOnAlgHom
 
 中文:
 定义 toContinuousMapOnAlgHom
-  签名: (X : Set R)
+  签名: (X : 集合 R)
   定义体: p.toContinuousMapOn X
   map_zero' := by
     ext
@@ -328,7 +328,7 @@ definition polynomialFunctions
 
 中文:
 定义 polynomialFunctions
-  签名: (X : Set R)
+  签名: (X : 集合 R)
   定义体: (⊤ : Subalgebra R R[X]).map (Polynomial.toContinuousMapOnAlgHom X)
 
 @[simp]
@@ -351,7 +351,7 @@ theorem polynomialFunctions_coe
 
 中文:
 定理 polynomialFunctions_coe
-  条件: (X : Set R)
+  条件: (X : 集合 R)
   证明: by
   ext
   simp [polynomialFunctions]
@@ -383,7 +383,7 @@ theorem polynomialFunctions_separatesPoints
 
 中文:
 定理 polynomialFunctions_separatesPoints
-  条件: (X : Set R)
+  条件: (X : 集合 R)
   结论: (polynomialFunctions X).SeparatesPoints
   证明: fun x y h => by
   -- We use `Polynomial.X`, then clean up.
@@ -494,7 +494,7 @@ theorem polynomialFunctions.eq_adjoin_X
 
 中文:
 定理 polynomialFunctions.eq_adjoin_X
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   refine le_antisymm ?_
     (Algebra.adjoin_le fun _ h => ⟨X, trivial, (Set.mem_singleton_iff.1 h).symm⟩)
@@ -532,7 +532,7 @@ theorem polynomialFunctions.le_equalizer
 
 中文:
 定理 polynomialFunctions.le_equalizer
-  结论: {A : 类型} [Semiring A] [Algebra R A] (s : Set R)
+  结论: {A : 类型} [半环 A] [代数 R A] (s : 集合 R)
   证明: by
   rw [polynomialFunctions.eq_adjoin_X s]
   exact φ.adjoin_le_equalizer ψ fun x hx => (Set.mem_singleton_iff.1 hx).symm ▸ h
@@ -559,7 +559,7 @@ theorem polynomialFunctions.starClosure_eq_adjoin_X
 
 中文:
 定理 polynomialFunctions.starClosure_eq_adjoin_X
-  条件: [StarRing R] [ContinuousStar R] (s : Set R)
+  条件: [对合环 R] [余ntinuousStar R] (s : 集合 R)
   证明: by
   rw [polynomialFunctions.eq_adjoin_X s]; rw [adjoin_eq_starClosure_adjoin]
 
@@ -581,7 +581,7 @@ theorem polynomialFunctions.starClosure_le_equalizer
 
 中文:
 定理 polynomialFunctions.starClosure_le_equalizer
-  结论: {A : 类型} [StarRing R] [ContinuousStar R]
+  结论: {A : 类型} [对合环 R] [余ntinuousStar R]
   证明: by
   rw [polynomialFunctions.starClosure_eq_adjoin_X s]
   exact StarAlgHom.adjoin_le_equalizer φ ψ fun x hx => (Set.mem_singleton_iff.1 hx).symm ▸ h

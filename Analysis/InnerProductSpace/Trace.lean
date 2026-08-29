@@ -39,7 +39,7 @@ lemma trace_eq_sum_inner
 
 中文:
 引理 trace_eq_sum_inner
-  条件: (T : E ->ₗ[𝕜] E) (b : OrthonormalBasis ι 𝕜 E)
+  条件: (T : E ->ₗ[𝕜] E) (b : 正交标准基 ι 𝕜 E)
   证明: by
   classical
   rw [LinearMap.trace_eq_matrix_trace 𝕜 b.toBasis T]
@@ -120,7 +120,7 @@ lemma _root_.InnerProductSpace.trace_rankOne
   simp [trace_eq_sum_inner _ (OrthonormalBasis.singleton Unit 𝕜)]
 
 中文:
-引理 _root_.InnerProductSpace.trace_rankOne
+引理 _root_.内积空间.trace_rankOne
   条件: (x y : E)
   证明: by
   rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [trace_comp_comm']; rw [← ContinuousLinearMap.toLinearMap_comp]; rw [ContinuousLinearMap.comp_toSpanSingleton]

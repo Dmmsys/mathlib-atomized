@@ -42,7 +42,7 @@ instance instIsTopologicalSemiring
 
 中文:
 实例 instIsTopologicalSemiring
-  签名: [IsTopologicalSemiring A] (s : NonUnitalSubalgebra R A)
+  签名: [是TopologicalSemiring A] (s : NonUnital子代数 R A)
   定义体: s.toNonUnitalSubsemiring.instIsTopologicalSemiring
 
 Depends on / 依赖: instIsTopologicalSemiring, s.toNonUnitalSubsemiring.instIsTopologicalSemiring, toNonUnitalSubsemiring
@@ -61,7 +61,7 @@ instance instIsSemitopologicalSemiring
 
 中文:
 实例 instIsSemitopologicalSemiring
-  签名: [IsSemitopologicalSemiring A] (s : NonUnitalSubalgebra R A)
+  签名: [是SemitopologicalSemiring A] (s : NonUnital子代数 R A)
   定义体: s.toNonUnitalSubsemiring.instIsSemitopologicalSemiring
 
 Depends on / 依赖: instIsSemitopologicalSemiring, s.toNonUnitalSubsemiring.instIsSemitopologicalSemiring, toNonUnitalSubsemiring
@@ -83,7 +83,7 @@ definition topologicalClosure
 
 中文:
 定义 topologicalClosure
-  签名: (s : NonUnitalSubalgebra R A)
+  签名: (s : NonUnital子代数 R A)
   定义体: { s.toNonUnitalSubsemiring.topologicalClosure, s.toSubmodule.topologicalClosure with
     carrier := _root_.closure (s : Set A) }
 
@@ -104,7 +104,7 @@ theorem le_topologicalClosure
 
 中文:
 定理 le_topologicalClosure
-  条件: (s : NonUnitalSubalgebra R A)
+  条件: (s : NonUnital子代数 R A)
   结论: s <= s.topologicalClosure
   证明: subset_closure
 
@@ -123,7 +123,7 @@ theorem isClosed_topologicalClosure
 
 中文:
 定理 isClosed_topologicalClosure
-  条件: (s : NonUnitalSubalgebra R A)
+  条件: (s : NonUnital子代数 R A)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -143,7 +143,7 @@ theorem topologicalClosure_minimal
 
 中文:
 定理 topologicalClosure_minimal
-  结论: {s t : NonUnitalSubalgebra R A}
+  结论: {s t : NonUnital子代数 R A}
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -165,7 +165,7 @@ theorem topologicalClosure_mono
 
 中文:
 定理 topologicalClosure_mono
-  条件: {s t : NonUnitalSubalgebra R A} (h : s <= t)
+  条件: {s t : NonUnital子代数 R A} (h : s <= t)
   证明: closure_mono h
 
 Depends on / 依赖: closure_mono
@@ -184,7 +184,7 @@ abbreviation nonUnitalCommSemiringTopologicalClosure
 
 中文:
 缩写 nonUnitalCommSemiringTopologicalClosure
-  签名: [T2Space A] (s : NonUnitalSubalgebra R A)
+  签名: [T2空间 A] (s : NonUnital子代数 R A)
   定义体: fast_instance% s.toNonUnitalSubsemiring.nonUnitalCommSemiringTopologicalClosure hs
 
 Depends on / 依赖: fast_instance, nonUnitalCommSemiringTopologicalClosure, s.toNonUnitalSubsemiring.nonUnitalCommSemiringTopologicalClosure, toNonUnitalSubsemiring
@@ -206,7 +206,7 @@ lemma map_topologicalClosure_le
 
 中文:
 引理 map_topologicalClosure_le
-  条件: (hφ : Continuous φ)
+  条件: (hφ : 连续 φ)
   证明: image_closure_subset_closure_image hφ
 
 Depends on / 依赖: image_closure_subset_closure_image
@@ -225,7 +225,7 @@ lemma topologicalClosure_map_le
 
 中文:
 引理 topologicalClosure_map_le
-  条件: (hφ : IsClosedMap φ)
+  条件: (hφ : 是闭映射 φ)
   证明: hφ.closure_image_subset _
 
 Depends on / 依赖: closure_image_subset
@@ -244,7 +244,7 @@ lemma topologicalClosure_map
 
 中文:
 引理 topologicalClosure_map
-  条件: (hφ : IsClosedMap φ) (hφ' : Continuous φ)
+  条件: (hφ : 是闭映射 φ) (hφ' : 连续 φ)
   证明: SetLike.coe_injective hφ.closure_image_eq_of_continuous hφ' _
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, closure_image_eq_of_continuous, coe_injective
@@ -291,7 +291,7 @@ instance instIsTopologicalRing
 
 中文:
 实例 instIsTopologicalRing
-  签名: [IsTopologicalRing A] (s : NonUnitalSubalgebra R A)
+  签名: [是拓扑环 A] (s : NonUnital子代数 R A)
   定义体: s.toNonUnitalSubring.instIsTopologicalRing
 
 Depends on / 依赖: instIsTopologicalRing, s.toNonUnitalSubring.instIsTopologicalRing, toNonUnitalSubring
@@ -310,7 +310,7 @@ instance instIsSemitopologicalRing
 
 中文:
 实例 instIsSemitopologicalRing
-  签名: [IsSemitopologicalRing A] (s : NonUnitalSubalgebra R A)
+  签名: [是Semitopological环 A] (s : NonUnital子代数 R A)
   定义体: s.toNonUnitalSubring.instIsSemitopologicalRing
 
 Depends on / 依赖: instIsSemitopologicalRing, s.toNonUnitalSubring.instIsSemitopologicalRing, toNonUnitalSubring
@@ -331,7 +331,7 @@ abbreviation nonUnitalCommRingTopologicalClosure
 
 中文:
 缩写 nonUnitalCommRingTopologicalClosure
-  签名: [T2Space A] (s : NonUnitalSubalgebra R A)
+  签名: [T2空间 A] (s : NonUnital子代数 R A)
   定义体: { s.topologicalClosure.toNonUnitalRing, s.toSubsemigroup.commSemigroupTopologicalClosure hs with }
 
 Depends on / 依赖: commSemigroupTopologicalClosure, s.toSubsemigroup.commSemigroupTopologicalClosure, s.topologicalClosure.toNonUnitalRing, toNonUnitalRing, toSubsemigroup, topologicalClosure
@@ -404,7 +404,7 @@ theorem le_of_mem
 
 中文:
 定理 le_of_mem
-  条件: {x : A} {s : NonUnitalSubalgebra R A} (hs : IsClosed (s : Set A)) (hx : x in s)
+  条件: {x : A} {s : NonUnital子代数 R A} (hs : 是闭集 (s : 集合 A)) (hx : x in s)
   证明: topologicalClosure_minimal (adjoin_le <| by simpa using hx) hs
 
 Depends on / 依赖: adjoin_le, topologicalClosure_minimal
@@ -424,7 +424,7 @@ theorem le_iff_mem
 
 中文:
 定理 le_iff_mem
-  条件: {x : A} {s : NonUnitalSubalgebra R A} (hs : IsClosed (s : Set A))
+  条件: {x : A} {s : NonUnital子代数 R A} (hs : 是闭集 (s : 集合 A))
   证明: ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
 
 Depends on / 依赖: le_of_mem, self_mem
@@ -461,7 +461,7 @@ instance [T2Space
   body: fast_instance% nonUnitalCommSemiringTopologicalClosure _ mul_comm
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: A] {x
   定义体: fast_instance% nonUnitalCommSemiringTopologicalClosure _ mul_comm
 
@@ -496,7 +496,7 @@ theorem isClosedEmbedding_coe
 中文:
 定理 isClosedEmbedding_coe
   条件: (x : A)
-  结论: Topology.IsClosedEmbedding ((↑) : elemental R x -> A) where
+  结论: 拓扑.是闭嵌入 ((↑) : elemental R x -> A) where
   证明: rfl
   injective := Subtype.coe_injective
   isClosed_range := by simpa using isClosed R x
@@ -516,7 +516,7 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: [T2Space A] (x : A)
+  条件: [T2空间 A] (x : A)
   证明: topologicalClosure_adjoin_le_centralizer_centralizer R {x}
 
 Depends on / 依赖: topologicalClosure_adjoin_le_centralizer_centralizer

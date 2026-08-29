@@ -129,8 +129,8 @@ theorem UniformSpace.completelyNormalSpace_of_hasAntitoneBasis
       rw [← disjoint_nhdsSet_pr
 
 中文:
-定理 UniformSpace.completelyNormalSpace_of_hasAntitoneBasis
-  结论: {ι : 类型} [LinearOrder ι]
+定理 一致空间.completelyNormalSpace_of_hasAntitoneBasis
+  结论: {ι : 类型} [线性序 ι]
   证明: by
     let S (b : Bool) : Set α := b.casesOn (false := s) (true := t)
     have hx (b : Bool) (x : S b) : exists i, Disjoint (ball x.1 ((B i).comp (B i).inv)) (S (!b)) := by
@@ -183,8 +183,8 @@ theorem Filter.HasBasis.specializes_iff_uniformity
   proof: (nhds_basis_uniformity h).specializes_iff
 
 中文:
-定理 Filter.HasBasis.specializes_iff_uniformity
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set (α × α)}
+定理 滤子.有基.specializes_iff_uniformity
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 (α × α)}
   证明: (nhds_basis_uniformity h).specializes_iff
 
 Depends on / 依赖: nhds_basis_uniformity, specializes_iff
@@ -202,8 +202,8 @@ theorem Filter.HasBasis.inseparable_iff_uniformity
   proof: specializes_iff_inseparable.symm.trans h.specializes_iff_uniformity
 
 中文:
-定理 Filter.HasBasis.inseparable_iff_uniformity
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set (α × α)}
+定理 滤子.有基.inseparable_iff_uniformity
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 (α × α)}
   证明: specializes_iff_inseparable.symm.trans h.specializes_iff_uniformity
 
 Depends on / 依赖: h.specializes_iff_uniformity, specializes_iff_inseparable, specializes_iff_inseparable.symm.trans, specializes_iff_uniformity
@@ -224,7 +224,7 @@ theorem inseparable_iff_ker_uniformity
 中文:
 定理 inseparable_iff_ker_uniformity
   条件: {x y : α}
-  结论: Inseparable x y ↔ (x, y) in (𝓤 α).ker
+  结论: 不可分 x y ↔ (x, y) in (𝓤 α).ker
   证明: (𝓤 α).basis_sets.inseparable_iff_uniformity
 
 Depends on / 依赖: basis_sets, basis_sets.inseparable_iff_uniformity, inseparable_iff_uniformity
@@ -243,8 +243,8 @@ theorem Inseparable.nhds_le_uniformity
   apply nhds_le_uniformity
 
 中文:
-定理 Inseparable.nhds_le_uniformity
-  条件: {x y : α} (h : Inseparable x y)
+定理 不可分.nhds_le_uniformity
+  条件: {x y : α} (h : 不可分 x y)
   证明: by
   rw [h.prod rfl]
   apply nhds_le_uniformity
@@ -332,7 +332,7 @@ theorem t0Space_iff_ker_uniformity
 
 中文:
 定理 t0Space_iff_ker_uniformity
-  结论: T0Space α ↔ (𝓤 α).ker = diagonal α
+  结论: T0空间 α ↔ (𝓤 α).ker = diagonal α
   证明: by
   simp_rw [t0Space_iff_uniformity, subset_antisymm_iff, diagonal_subset_iff, subset_def,
     Prod.forall, Filter.mem_ker, mem_diagonal_iff, iff_self_and]
@@ -355,7 +355,7 @@ theorem eq_of_uniformity
 
 中文:
 定理 eq_of_uniformity
-  结论: {α : 类型} [UniformSpace α] [T0Space α] {x y : α}
+  结论: {α : 类型} [一致空间 α] [T0空间 α] {x y : α}
   证明: t0Space_iff_uniformity.mp ‹T0Space α› x y @h
 
 Depends on / 依赖: T0Space, t0Space_iff_uniformity, t0Space_iff_uniformity.mp
@@ -374,7 +374,7 @@ theorem eq_of_uniformity_basis
 
 中文:
 定理 eq_of_uniformity_basis
-  结论: {α : 类型} [UniformSpace α] [T0Space α] {ι : Sort*}
+  结论: {α : 类型} [一致空间 α] [T0空间 α] {ι : 类型层*}
   证明: (hs.inseparable_iff_uniformity.2 @h).eq
 
 Depends on / 依赖: hs.inseparable_iff_uniformity, inseparable_iff_uniformity
@@ -393,8 +393,8 @@ theorem eq_of_forall_symmetric
   proof: eq_of_uniformity_basis hasBasis_symmetric (by simpa)
 
 中文:
-定理 eq_of_forall_symmetric
-  结论: {α : 类型} [UniformSpace α] [T0Space α] {x y : α}
+定理 eq_of_对任意_symmetric
+  结论: {α : 类型} [一致空间 α] [T0空间 α] {x y : α}
   证明: eq_of_uniformity_basis hasBasis_symmetric (by simpa)
 
 Depends on / 依赖: eq_of_uniformity_basis, hasBasis_symmetric
@@ -414,7 +414,7 @@ theorem eq_of_clusterPt_uniformity
 
 中文:
 定理 eq_of_clusterPt_uniformity
-  条件: [T0Space α] {x y : α} (h : ClusterPt (x, y) (𝓤 α))
+  条件: [T0空间 α] {x y : α} (h : ClusterPt (x, y) (𝓤 α))
   结论: x = y
   证明: (inseparable_iff_clusterPt_uniformity.2 h).eq
 
@@ -435,8 +435,8 @@ theorem Filter.Tendsto.inseparable_iff_uniformity
   exact (ClusterPt.of_le_nhds (ha.prodMk_nhds hb)).mono h
 
 中文:
-定理 Filter.Tendsto.inseparable_iff_uniformity
-  结论: {β} {l : Filter β} [NeBot l] {f g : β -> α}
+定理 滤子.收敛.inseparable_iff_uniformity
+  结论: {β} {l : 滤子 β} [NeBot l] {f g : β -> α}
   证明: by
   refine ⟨fun h => (ha.prodMk_nhds hb).mono_right h.nhds_le_uniformity, fun h => ?_⟩
   rw [inseparable_iff_clusterPt_uniformity]
@@ -470,7 +470,7 @@ theorem isClosed_of_spaced_out
 
 中文:
 定理 isClosed_of_spaced_out
-  结论: [T0Space α] {V₀ : Set (α × α)} (V₀_in : V₀ in 𝓤 α) {s : Set α}
+  结论: [T0空间 α] {V₀ : 集合 (α × α)} (V₀_in : V₀ in 𝓤 α) {s : 集合 α}
   证明: by
   rcases comp_symm_mem_uniformity_sets V₀_in with ⟨V₁, V₁_in, V₁_symm, h_comp⟩
   apply isClosed_of_closure_subset
@@ -512,7 +512,7 @@ theorem isClosed_range_of_spaced_out
 
 中文:
 定理 isClosed_range_of_spaced_out
-  结论: {ι} [T0Space α] {V₀ : Set (α × α)} (V₀_in : V₀ in 𝓤 α)
+  结论: {ι} [T0空间 α] {V₀ : 集合 (α × α)} (V₀_in : V₀ in 𝓤 α)
   证明: isClosed_of_spaced_out V₀_in by
     rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ h
     exact hf (ne_of_apply_ne f h)
@@ -546,7 +546,7 @@ theorem comap_map_mk_uniformity
 
 中文:
 定理 comap_map_mk_uniformity
-  结论: comap (Prod.map mk mk) (map (Prod.map mk mk) (𝓤 α)) = 𝓤 α
+  结论: comap (积类型.map mk mk) (map (积类型.map mk mk) (𝓤 α)) = 𝓤 α
   证明: by
   refine le_antisymm ?_ le_comap_map
   refine ((((𝓤 α).basis_sets.map _).comap _).le_basis_iff uniformity_hasBasis_open).2 fun U hU => ?_
@@ -578,7 +578,7 @@ symm := tendsto_map' tendsto_map.comp tendsto_swap_uniformity
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (SeparationQuotient α) where
+  签名: : 一致空间 (SeparationQuotient α) where
   定义体: map (Prod.map mk mk) (𝓤 α)
 symm := tendsto_map' tendsto_map.comp tendsto_swap_uniformity
   comp := fun t ht => by
@@ -614,7 +614,7 @@ theorem uniformity_eq
 
 中文:
 定理 uniformity_eq
-  结论: 𝓤 (SeparationQuotient α) = (𝓤 α).map (Prod.map mk mk)
+  结论: 𝓤 (SeparationQuotient α) = (𝓤 α).map (积类型.map mk mk)
   证明: rfl
 
 @[fun_prop]
@@ -632,7 +632,7 @@ theorem uniformContinuous_mk
 
 中文:
 定理 uniformContinuous_mk
-  结论: UniformContinuous (mk : α -> SeparationQuotient α)
+  结论: 一致连续 (mk : α -> SeparationQuotient α)
   证明: le_rfl
 
 Depends on / 依赖: le_rfl
@@ -694,7 +694,7 @@ theorem uniformContinuous_lift
 
 中文:
 定理 uniformContinuous_lift
-  条件: {f : α -> β} (h : 对任意 a b, Inseparable a b -> f a = f b)
+  条件: {f : α -> β} (h : 对任意 a b, 不可分 a b -> f a = f b)
   证明: .rfl
 -/
 theorem uniformContinuous_lift {f : α -> β} (h : forall a b, Inseparable a b -> f a = f b) :
@@ -729,7 +729,7 @@ theorem comap_mk_uniformity
 
 中文:
 定理 comap_mk_uniformity
-  结论: (𝓤 (SeparationQuotient α)).comap (Prod.map mk mk) = 𝓤 α
+  结论: (𝓤 (SeparationQuotient α)).comap (积类型.map mk mk) = 𝓤 α
   证明: comap_map_mk_uniformity
 
 Depends on / 依赖: comap_map_mk_uniformity
@@ -749,7 +749,7 @@ definition lift'
 
 中文:
 定义 lift'
-  签名: [T0Space β] (f : α -> β)
+  签名: [T0空间 β] (f : α -> β)
   定义体: if hc : UniformContinuous f then lift f fun _ _ h => (h.map hc.continuous).eq
   else fun x => f (Nonempty.some ⟨x.out⟩)
 
@@ -771,7 +771,7 @@ theorem lift'_mk
 
 中文:
 定理 lift'_mk
-  条件: [T0Space β] {f : α -> β} (h : UniformContinuous f) (a : α)
+  条件: [T0空间 β] {f : α -> β} (h : 一致连续 f) (a : α)
   证明: by rw [lift', dif_pos h, lift_mk]
 
 @[fun_prop]
@@ -795,8 +795,8 @@ theorem uniformContinuous_lift'
 
 中文:
 定理 uniformContinuous_lift'
-  条件: [T0Space β] (f : α -> β)
-  结论: UniformContinuous (lift' f)
+  条件: [T0空间 β] (f : α -> β)
+  结论: 一致连续 (lift' f)
   证明: by
   by_cases hf : UniformContinuous f
   · rwa [lift', dif_pos hf, uniformContinuous_lift]
@@ -840,7 +840,7 @@ theorem map_mk
 
 中文:
 定理 map_mk
-  条件: {f : α -> β} (h : UniformContinuous f) (a : α)
+  条件: {f : α -> β} (h : 一致连续 f) (a : α)
   结论: map f (mk a) = mk (f a)
   证明: by
   rw [map]; rw [lift'_mk (uniformContinuous_mk.comp h)]; rfl
@@ -865,7 +865,7 @@ theorem uniformContinuous_map
 中文:
 定理 uniformContinuous_map
   条件: (f : α -> β)
-  结论: UniformContinuous (map f)
+  结论: 一致连续 (map f)
   证明: uniformContinuous_lift' _
 
 Depends on / 依赖: uniformContinuous_lift
@@ -890,7 +890,7 @@ theorem map_unique
 
 中文:
 定理 map_unique
-  结论: {f : α -> β} (hf : UniformContinuous f)
+  结论: {f : α -> β} (hf : 一致连续 f)
   证明: by
   ext ⟨a⟩
   calc
@@ -936,7 +936,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {f : α -> β} {g : β -> γ} (hf : UniformContinuous f) (hg : UniformContinuous g)
+  条件: {f : α -> β} {g : β -> γ} (hf : 一致连续 f) (hg : 一致连续 g)
   证明: (map_unique (hg.comp hf) <| by simp only [Function.comp_def, map_mk, hf, hg]).symm
 
 Depends on / 依赖: Function, Function.comp_def, comp_def, hg.comp, map_mk, map_unique
@@ -963,7 +963,7 @@ theorem of_uniformity_eq_top
 中文:
 定理 of_uniformity_eq_top
   条件: (h : uniformity α = ⊤)
-  结论: IndiscreteTopology α
+  结论: Indiscrete拓扑 α
   证明: ⟨(UniformSpace.ext h.symm : ⊤ = u) ▸ rfl⟩
 
 Depends on / 依赖: UniformSpace, UniformSpace.ext, h.symm
@@ -987,7 +987,7 @@ lemma eq_top_uniformSpace
 
 中文:
 引理 eq_top_uniformSpace
-  条件: [IndiscreteTopology α]
+  条件: [Indiscrete拓扑 α]
   结论: u = ⊤
   证明: by
   refine UniformSpace.ext ?_
@@ -1018,7 +1018,7 @@ lemma eq_top_iff_indiscrete
 
 中文:
 引理 eq_top_iff_indiscrete
-  结论: u = ⊤ ↔ IndiscreteTopology α
+  结论: u = ⊤ ↔ Indiscrete拓扑 α
   证明: ⟨fun h => IndiscreteTopology.mk h ▸ UniformSpace.toTopologicalSpace_top (α := α),
   fun _ => eq_top_uniformSpace⟩
 
@@ -1044,8 +1044,8 @@ lemma uniformContinuous
 
 中文:
 引理 uniformContinuous
-  条件: [IndiscreteTopology β] {f : α -> β}
-  结论: UniformContinuous f
+  条件: [Indiscrete拓扑 β] {f : α -> β}
+  结论: 一致连续 f
   证明: by
   rw [UniformContinuous]; rw [eq_top_uniformSpace (α := β)]; rw [top_uniformity]
   exact Filter.tendsto_top

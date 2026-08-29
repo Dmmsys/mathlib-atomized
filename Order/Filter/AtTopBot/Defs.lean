@@ -48,7 +48,7 @@ definition atTop
 
 中文:
 定义 atTop
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ⨅ a, 𝓟 (Ici a)
 
 @[to_dual]
@@ -70,7 +70,7 @@ theorem mem_atTop
 
 中文:
 定理 mem_atTop
-  条件: [Preorder α] (a : α)
+  条件: [预序 α] (a : α)
   结论: { b : α | a <= b } in @atTop α _
   证明: mem_iInf_of_mem a Subset.refl _
 
@@ -95,8 +95,8 @@ theorem Ici_mem_atTop
 
 中文:
 定理 Ici_mem_atTop
-  条件: [Preorder α] (a : α)
-  结论: Ici a in (atTop : Filter α)
+  条件: [预序 α] (a : α)
+  结论: 左闭右无界区间 a in (atTop : 滤子 α)
   证明: mem_atTop a
 
 @[to_dual]
@@ -122,8 +122,8 @@ theorem Ioi_mem_atTop
 
 中文:
 定理 Ioi_mem_atTop
-  条件: [Preorder α] [NoTopOrder α] (x : α)
-  结论: Ioi x in (atTop : Filter α)
+  条件: [预序 α] [无顶序 α] (x : α)
+  结论: 左开右无界区间 x in (atTop : 滤子 α)
   证明: let ⟨z, hz⟩ := exists_not_le x
   mem_of_superset (inter_mem (mem_atTop x) (mem_atTop z))
     fun _ ⟨hxy, hzy⟩ => lt_of_le_not_ge hxy fun hyx => hz (hzy.trans hyx)
@@ -151,7 +151,7 @@ theorem eventually_ge_atTop
 
 中文:
 定理 eventually_ge_atTop
-  条件: [Preorder α] (a : α)
+  条件: [预序 α] (a : α)
   结论: 对任意ᶠ x in atTop, a <= x
   证明: mem_atTop a
 
@@ -176,7 +176,7 @@ theorem eventually_gt_atTop
 
 中文:
 定理 eventually_gt_atTop
-  条件: [Preorder α] [NoTopOrder α] (a : α)
+  条件: [预序 α] [无顶序 α] (a : α)
   结论: 对任意ᶠ x in atTop, a < x
   证明: Ioi_mem_atTop a
 
@@ -201,7 +201,7 @@ theorem eventually_ne_atTop
 
 中文:
 定理 eventually_ne_atTop
-  条件: [Preorder α] [NoTopOrder α] (a : α)
+  条件: [预序 α] [无顶序 α] (a : α)
   结论: 对任意ᶠ x in atTop, x != a
   证明: (eventually_gt_atTop a).mono fun _ => ne_of_gt
 
@@ -226,8 +226,8 @@ theorem _root_.IsTop.atTop_eq
 
 中文:
 定理 _root_.IsTop.atTop_eq
-  条件: [Preorder α] {a : α} (ha : IsTop a)
-  结论: atTop = 𝓟 (Ici a)
+  条件: [预序 α] {a : α} (ha : IsTop a)
+  结论: atTop = 𝓟 (左闭右无界区间 a)
   证明: (iInf_le _ _).antisymm le_iInf fun b => principal_mono.2 Ici_subset_Ici.2 ha b
 
 @[to_dual]
@@ -252,8 +252,8 @@ theorem atTop_eq_generate_Ici
 
 中文:
 定理 atTop_eq_generate_Ici
-  条件: [Preorder α]
-  结论: atTop = generate (range (Ici (α := α)))
+  条件: [预序 α]
+  结论: atTop = generate (range (左闭右无界区间 (α := α)))
   证明: by
   simp only [generate_eq_biInf, atTop, iInf_range]
 
@@ -279,8 +279,8 @@ theorem Frequently.forall_exists_of_atTop
 @[to_dual]
 
 中文:
-定理 Frequently.forall_exists_of_atTop
-  结论: [Preorder α] {p : α -> 命题}
+定理 Frequently.对任意_存在_of_atTop
+  结论: [预序 α] {p : α -> 命题}
   证明: by
   rw [Filter.Frequently] at h
   contrapose! h
@@ -315,8 +315,8 @@ lemma atTop_eq_generate_of_forall_exists_le
     have A : Ici y in generate (Ici '' s) := mem_generate_of_mem (mem_ima
 
 中文:
-引理 atTop_eq_generate_of_forall_exists_le
-  条件: [Preorder α] {s : Set α} (hs : 对任意 x, 存在 y in s, x <= y)
+引理 atTop_eq_generate_of_对任意_存在_le
+  条件: [预序 α] {s : 集合 α} (hs : 对任意 x, 存在 y in s, x <= y)
   证明: by
   rw [atTop_eq_generate_Ici]
   apply le_antisymm
@@ -358,7 +358,7 @@ lemma atTop_eq_generate_of_not_bddAbove
 
 中文:
 引理 atTop_eq_generate_of_not_bddAbove
-  条件: [LinearOrder α] {s : Set α} (hs : ¬ BddAbove s)
+  条件: [线性序 α] {s : 集合 α} (hs : ¬ BddAbove s)
   证明: by
   refine atTop_eq_generate_of_forall_exists_le fun x => ?_
   obtain ⟨y, hy, hy'⟩ := not_bddAbove_iff.mp hs x
@@ -391,8 +391,8 @@ theorem Monotone.piecewise_eventually_eq_iUnion
       not
 
 中文:
-定理 Monotone.piecewise_eventually_eq_iUnion
-  结论: {β : α -> 类型} [Preorder ι] {s : ι -> Set α}
+定理 递增.piecewise_eventually_eq_iUnion
+  结论: {β : α -> 类型} [预序 ι] {s : ι -> 集合 α}
   证明: by
   rcases em (exists i, a in s i) with ⟨i, hi⟩ | ha
   · refine (eventually_ge_atTop i).mono fun j hij => ?_
@@ -427,8 +427,8 @@ theorem Antitone.piecewise_eventually_eq_iInter
   · simp only [(· ∘ ·), ← compl_iInter, Set.piecewise_compl]
 
 中文:
-定理 Antitone.piecewise_eventually_eq_iInter
-  结论: {β : α -> 类型} [Preorder ι] {s : ι -> Set α}
+定理 递减.piecewise_eventually_eq_i整数er
+  结论: {β : α -> 类型} [预序 ι] {s : ι -> 集合 α}
   证明: by
   classical
   convert! ← (compl_anti.comp hs).piecewise_eventually_eq_iUnion g f a using 3

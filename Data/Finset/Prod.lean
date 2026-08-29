@@ -52,7 +52,7 @@ definition product
 
 中文:
 定义 product
-  签名: (s : Finset α) (t : Finset β)
+  签名: (s : 有限集 α) (t : 有限集 β)
   定义体: ⟨_, s.nodup.product t.nodup⟩
 -/
 protected def product (s : Finset α) (t : Finset β) : Finset (α × β) :=
@@ -70,7 +70,7 @@ instance instSProd
 
 中文:
 实例 instSProd
-  签名: : SProd (Finset α) (Finset β) (Finset (α × β)) where
+  签名: : SProd (有限集 α) (有限集 β) (有限集 (α × β)) where
   定义体: Finset.product
 
 @[simp]
@@ -93,7 +93,7 @@ theorem product_eq_sprod
 
 中文:
 定理 product_eq_sprod
-  结论: Finset.product s t = s ×ˢ t
+  结论: 有限集.product s t = s ×ˢ t
   证明: rfl
 
 @[simp]
@@ -178,7 +178,7 @@ theorem coe_product
 
 中文:
 定理 coe_product
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   证明: Set.ext fun _ => Finset.mem_product
 
 Depends on / 依赖: Finset, Finset.mem_product, Set.ext, mem_product
@@ -199,8 +199,8 @@ definition _root_.Equiv.Finset.prod
   right_inv _ := rfl
 
 中文:
-定义 _root_.Equiv.Finset.prod
-  签名: (s : Finset α) (t : Finset β)
+定义 _root_.等价.有限集.乘积
+  签名: (s : 有限集 α) (t : 有限集 β)
   定义体: ⟨⟨x.1.1, (mem_product.mp x.2).1⟩, ⟨x.1.2, (mem_product.mp x.2).2⟩⟩
   invFun x := ⟨⟨x.1.1, x.2.1⟩, mem_product.mpr ⟨x.1.2, x.2.2⟩⟩
   left_inv _ := rfl
@@ -227,7 +227,7 @@ theorem subset_product_image_fst
 中文:
 定理 subset_product_image_fst
   条件: [DecidableEq α]
-  结论: (s ×ˢ t).image Prod.fst subseteq s
+  结论: (s ×ˢ t).像 积类型.fst subseteq s
   证明: fun i => by
   simp +contextual [mem_image]
 
@@ -249,7 +249,7 @@ theorem subset_product_image_snd
 中文:
 定理 subset_product_image_snd
   条件: [DecidableEq β]
-  结论: (s ×ˢ t).image Prod.snd subseteq t
+  结论: (s ×ˢ t).像 积类型.snd subseteq t
   证明: fun i => by
   simp +contextual [mem_image]
 
@@ -271,8 +271,8 @@ theorem product_image_fst
 
 中文:
 定理 product_image_fst
-  条件: [DecidableEq α] (ht : t.Nonempty)
-  结论: (s ×ˢ t).image Prod.fst = s
+  条件: [DecidableEq α] (ht : t.非空)
+  结论: (s ×ˢ t).像 积类型.fst = s
   证明: by
   ext i
   simp [mem_image, ht.exists_mem]
@@ -296,8 +296,8 @@ theorem product_image_snd
 
 中文:
 定理 product_image_snd
-  条件: [DecidableEq β] (ht : s.Nonempty)
-  结论: (s ×ˢ t).image Prod.snd = t
+  条件: [DecidableEq β] (ht : s.非空)
+  结论: (s ×ˢ t).像 积类型.snd = t
   证明: by
   ext i
   simp [mem_image, ht.exists_mem]
@@ -320,7 +320,7 @@ theorem subset_product
 
 中文:
 定理 subset_product
-  条件: [DecidableEq α] [DecidableEq β] {s : Finset (α × β)}
+  条件: [DecidableEq α] [DecidableEq β] {s : 有限集 (α × β)}
   证明: by grind
 
 @[gcongr]
@@ -420,7 +420,7 @@ theorem prodMap_map_product
 
 中文:
 定理 prodMap_map_product
-  条件: {δ : 类型} (f : α ↪ β) (g : γ ↪ δ) (s : Finset α) (t : Finset γ)
+  条件: {δ : 类型} (f : α ↪ β) (g : γ ↪ δ) (s : 有限集 α) (t : 有限集 γ)
   证明: by
   simpa [← coe_inj] using Set.prodMap_image_prod f g s t
 
@@ -444,7 +444,7 @@ theorem map_swap_product
 
 中文:
 定理 map_swap_product
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   证明: coe_injective by
     push_cast
     exact Set.image_swap_prod _ _
@@ -472,7 +472,7 @@ theorem image_swap_product
 
 中文:
 定理 image_swap_product
-  条件: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
+  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
   证明: coe_injective by
     push_cast
     exact Set.image_swap_prod _ _
@@ -495,7 +495,7 @@ theorem product_eq_biUnion
 
 中文:
 定理 product_eq_biUnion
-  条件: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
+  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
   证明: by grind
 -/
 theorem product_eq_biUnion [DecidableEq (α × β)] (s : Finset α) (t : Finset β) :
@@ -511,7 +511,7 @@ theorem product_eq_biUnion_right
 
 中文:
 定理 product_eq_biUnion_right
-  条件: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
+  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
   证明: by grind
 -/
 theorem product_eq_biUnion_right [DecidableEq (α × β)] (s : Finset α) (t : Finset β) :
@@ -531,7 +531,7 @@ theorem product_biUnion
 
 中文:
 定理 product_biUnion
-  条件: [DecidableEq γ] (s : Finset α) (t : Finset β) (f : α × β -> Finset γ)
+  条件: [DecidableEq γ] (s : 有限集 α) (t : 有限集 β) (f : α × β -> 有限集 γ)
   证明: by grind
 
 @[simp]
@@ -551,7 +551,7 @@ theorem card_product
 
 中文:
 定理 card_product
-  条件: (s : Finset α) (t : Finset β)
+  条件: (s : 有限集 α) (t : 有限集 β)
   结论: card (s ×ˢ t) = card s * card t
   证明: Multiset.card_product _ _
 
@@ -571,7 +571,7 @@ lemma nontrivial_prod_iff
 
 中文:
 引理 nontrivial_prod_iff
-  结论: (s ×ˢ t).Nontrivial ↔
+  结论: (s ×ˢ t).非平凡 ↔
   证明: by
   simp_rw [← card_pos, ← one_lt_card_iff_nontrivial, card_product]; apply Nat.one_lt_mul_iff
 
@@ -657,7 +657,7 @@ theorem filter_product_card
 
 中文:
 定理 filter_product_card
-  结论: (s : Finset α) (t : Finset β) (p : α -> 命题) (q : β -> 命题)
+  结论: (s : 有限集 α) (t : 有限集 β) (p : α -> 命题) (q : β -> 命题)
   证明: by
   classical
   rw [← card_product]; rw [← card_product]; rw [← filter_product]; rw [← filter_product]; rw [← card_union_of_disjoint]
@@ -696,8 +696,8 @@ theorem empty_product
 
 中文:
 定理 empty_product
-  条件: (t : Finset β)
-  结论: (∅ : Finset α) ×ˢ t = ∅
+  条件: (t : 有限集 β)
+  结论: (∅ : 有限集 α) ×ˢ t = ∅
   证明: rfl
 
 @[simp]
@@ -719,8 +719,8 @@ theorem product_empty
 
 中文:
 定理 product_empty
-  条件: (s : Finset α)
-  结论: s ×ˢ (∅ : Finset β) = ∅
+  条件: (s : 有限集 α)
+  结论: s ×ˢ (∅ : 有限集 β) = ∅
   证明: eq_empty_of_forall_notMem fun _ h => notMem_empty _ (Finset.mem_product.1 h).2
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -743,9 +743,9 @@ theorem Nonempty.product
   ⟨(x, y), mem_product.2 ⟨hx, hy⟩⟩
 
 中文:
-定理 Nonempty.product
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
-  结论: (s ×ˢ t).Nonempty
+定理 非空.product
+  条件: (hs : s.非空) (ht : t.非空)
+  结论: (s ×ˢ t).非空
   证明: let ⟨x, hx⟩ := hs
   let ⟨y, hy⟩ := ht
   ⟨(x, y), mem_product.2 ⟨hx, hy⟩⟩
@@ -768,9 +768,9 @@ theorem Nonempty.fst
   ⟨xy.1, (mem_product.1 hxy).1⟩
 
 中文:
-定理 Nonempty.fst
-  条件: (h : (s ×ˢ t).Nonempty)
-  结论: s.Nonempty
+定理 非空.fst
+  条件: (h : (s ×ˢ t).非空)
+  结论: s.非空
   证明: let ⟨xy, hxy⟩ := h
   ⟨xy.1, (mem_product.1 hxy).1⟩
 
@@ -793,9 +793,9 @@ theorem Nonempty.snd
 @[simp]
 
 中文:
-定理 Nonempty.snd
-  条件: (h : (s ×ˢ t).Nonempty)
-  结论: t.Nonempty
+定理 非空.snd
+  条件: (h : (s ×ˢ t).非空)
+  结论: t.非空
   证明: let ⟨xy, hxy⟩ := h
   ⟨xy.2, (mem_product.1 hxy).2⟩
 
@@ -820,7 +820,7 @@ theorem nonempty_product
 
 中文:
 定理 nonempty_product
-  结论: (s ×ˢ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ×ˢ t).非空 ↔ s.非空 ∧ t.非空
   证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.1.product h.2⟩
 
 @[simp]
@@ -845,7 +845,7 @@ theorem product_eq_empty
 
 中文:
 定理 product_eq_empty
-  条件: {s : Finset α} {t : Finset β}
+  条件: {s : 有限集 α} {t : 有限集 β}
   结论: s ×ˢ t = ∅ ↔ s = ∅ ∨ t = ∅
   证明: by
   contrapose!; exact nonempty_product
@@ -899,7 +899,7 @@ lemma product_singleton
 
 中文:
 引理 product_singleton
-  结论: s ×ˢ {b} = s.map ⟨fun i => (i, b), Prod.mk_left_injective _⟩
+  结论: s ×ˢ {b} = s.map ⟨fun i => (i, b), 积类型.mk_left_injective _⟩
   证明: by
   ext ⟨x, y⟩
   simp [and_left_comm, eq_comm]
@@ -1109,7 +1109,7 @@ definition diag
 
 中文:
 定义 diag
-  签名: : Finset (α × α)
+  签名: : 有限集 (α × α)
   定义体: s.map ⟨Function.diag, Function.diag_injective⟩
 
 Depends on / 依赖: Function, Function.diag, Function.diag_injective, diag_injective, s.map
@@ -1129,7 +1129,7 @@ definition offDiag
 
 中文:
 定义 offDiag
-  签名: : Finset (α × α)
+  签名: : 有限集 (α × α)
   定义体: .mk (Quotient.map List.offDiag (fun _ _ => List.Perm.offDiag) s.1) by
     rcases s with ⟨⟨s⟩, hs⟩
     exact hs.offDiag
@@ -1208,7 +1208,7 @@ theorem diag_nonempty
 
 中文:
 定理 diag_nonempty
-  结论: s.diag.Nonempty ↔ s.Nonempty
+  结论: s.diag.非空 ↔ s.非空
   证明: by
   simp [diag]
 
@@ -1273,7 +1273,7 @@ theorem image_diag
 
 中文:
 定理 image_diag
-  条件: [DecidableEq β] (f : α × α -> β) (s : Finset α)
+  条件: [DecidableEq β] (f : α × α -> β) (s : 有限集 α)
   证明: by
   grind
 
@@ -1296,7 +1296,7 @@ theorem coe_offDiag
 
 中文:
 定理 coe_offDiag
-  结论: (s.offDiag : Set (α × α)) = (s : Set α).offDiag
+  结论: (s.offDiag : 集合 (α × α)) = (s : 集合 α).offDiag
   证明: Set.ext fun _ => mem_offDiag
 
 @[simp]
@@ -1375,7 +1375,7 @@ theorem diag_mono
 
 中文:
 定理 diag_mono
-  结论: Monotone (diag : Finset α -> Finset (α × α))
+  结论: 递增 (diag : 有限集 α -> 有限集 (α × α))
   证明: fun _ _ => by simp [diag]
 
 @[gcongr, mono]
@@ -1398,7 +1398,7 @@ mem_offDiag.2 And.imp (@h _) (And.imp_left <| @h _) mem_offDiag.1 hx
 
 中文:
 定理 offDiag_mono
-  结论: Monotone (offDiag : Finset α -> Finset (α × α))
+  结论: 递增 (offDiag : 有限集 α -> 有限集 (α × α))
   证明: fun _ _ h _ hx =>
 mem_offDiag.2 And.imp (@h _) (And.imp_left <| @h _) mem_offDiag.1 hx
 
@@ -1422,7 +1422,7 @@ theorem diag_empty
 
 中文:
 定理 diag_empty
-  结论: (∅ : Finset α).diag = ∅
+  结论: (∅ : 有限集 α).diag = ∅
   证明: rfl
 
 @[simp]
@@ -1443,7 +1443,7 @@ theorem offDiag_empty
 
 中文:
 定理 offDiag_empty
-  结论: (∅ : Finset α).offDiag = ∅
+  结论: (∅ : 有限集 α).offDiag = ∅
   证明: rfl
 
 @[simp]
@@ -1638,7 +1638,7 @@ theorem offDiag_singleton
 中文:
 定理 offDiag_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).offDiag = ∅
+  结论: ({a} : 有限集 α).offDiag = ∅
   证明: by simp [← Finset.card_eq_zero]
 
 Depends on / 依赖: Finset, Finset.card_eq_zero, card_eq_zero
@@ -1657,7 +1657,7 @@ theorem diag_singleton
 中文:
 定理 diag_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).diag = {(a, a)}
+  结论: ({a} : 有限集 α).diag = {(a, a)}
   证明: by grind
 -/
 theorem diag_singleton (a : α) : ({a} : Finset α).diag = {(a, a)} := by grind
@@ -1709,7 +1709,7 @@ theorem offDiag_filter_lt_eq_filter_le
 
 中文:
 定理 offDiag_filter_lt_eq_filter_le
-  结论: {ι} [PartialOrder ι] [DecidableLE ι] [DecidableLT ι]
+  结论: {ι} [偏序 ι] [DecidableLE ι] [DecidableLT ι]
   证明: by
   ext
   simpa using fun _ _ a => (Ne.le_iff_lt a).symm
@@ -1738,7 +1738,7 @@ lemma card_product_filter_lt
 
 中文:
 引理 card_product_filter_lt
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   证明: by
   set u : Finset (α × α) := {x in s ×ˢ s | x.1 < x.2}
   set v : Finset (α × α) := {x in s ×ˢ s | x.2 < x.1}

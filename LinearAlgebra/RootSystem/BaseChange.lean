@@ -47,10 +47,10 @@ class IsBalanced
     - isPerfectCompl : P.toLinearMap.IsPerfectCompl (P.rootSpan R) (P.corootSpan R)
 
 中文:
-类 IsBalanced
-  参数: {ι R M N : 类型} [AddCommGroup M] [AddCommGroup N]
+类 是Balanced
+  参数: {ι R M N : 类型} [加法交换群 M] [加法交换群 N]
   公理与运算 (1 个):
-    - isPerfectCompl : P.toLinearMap.IsPerfectCompl (P.rootSpan R) (P.corootSpan R)
+    - isPerfectCompl : P.toLinearMap.是PerfectCompl (P.rootSpan R) (P.corootSpan R)
 -/
 class IsBalanced {ι R M N : Type*} [AddCommGroup M] [AddCommGroup N]
     [CommRing R] [Module R M] [Module R N] (P : RootPairing ι R M N) : Prop where
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.restrictScalars' K).IsRootSystem
+  签名: (P.restrictScalars' K).是RootSystem
   定义体: by
     rw [← span_setOfPred_mem_eq_top]
     congr
@@ -274,7 +274,7 @@ abbreviation restrictScalarsRat
 
 中文:
 缩写 restrictScalarsRat
-  签名: [CharZero L] [P.IsCrystallographic]
+  签名: [特征零 L] [P.IsCrystallographic]
   定义体: let _i : Module Rat M := Module.compHom M (algebraMap Rat L)
   let _i : Module Rat N := Module.compHom N (algebraMap Rat L)
   P.restrictScalars Rat

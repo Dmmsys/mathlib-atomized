@@ -86,8 +86,8 @@ structure ZeroHom
     - map_zero' : toFun 0 = 0
 
 中文:
-结构 ZeroHom
-  参数: (M : 类型) (N : 类型) [Zero M] [Zero N]
+结构 保零态射
+  参数: (M : 类型) (N : 类型) [零 M] [零 N]
   公理与运算 (2 个):
     - toFun : M -> N
     - map_zero' : toFun 0 = 0
@@ -108,8 +108,8 @@ class ZeroHomClass
     - map_zero : forall f : F, f 0 = 0
 
 中文:
-类 ZeroHomClass
-  参数: (F : 类型) (M N : outParam 类型) [Zero M] [Zero N] [FunLike F M N]
+类 保零态射类
+  参数: (F : 类型) (M N : outParam 类型) [零 M] [零 N] [函数状 F M N]
   公理与运算 (1 个):
     - map_zero : 对任意 f : F, f 0 = 0
 -/
@@ -134,8 +134,8 @@ structure AddHom
     - map_add' : forall x y, toFun (x + y) = toFun x + toFun y
 
 中文:
-结构 AddHom
-  参数: (M : 类型) (N : 类型) [Add M] [Add N]
+结构 加法半群态射
+  参数: (M : 类型) (N : 类型) [加法 M] [加法 N]
   公理与运算 (2 个):
     - toFun : M -> N
     - map_add' : 对任意 x y, toFun (x + y) = toFun x + toFun y
@@ -159,8 +159,8 @@ class AddHomClass
     - map_add : forall (f : F) (x y : M), f (x + y) = f x + f y
 
 中文:
-类 AddHomClass
-  参数: (F : 类型) (M N : outParam 类型) [Add M] [Add N] [FunLike F M N]
+类 加法态射类
+  参数: (F : 类型) (M N : outParam 类型) [加法 M] [加法 N] [函数状 F M N]
   公理与运算 (1 个):
     - map_add : 对任意 (f : F) (x y : M), f (x + y) = f x + f y
 -/
@@ -183,9 +183,9 @@ structure AddMonoidHom
   (no additional axioms)
 
 中文:
-结构 AddMonoidHom
-  参数: (M : 类型) (N : 类型) [AddZero M] [AddZero N]
-  继承: ZeroHom M N, AddHom M N
+结构 加法幺半群态射
+  参数: (M : 类型) (N : 类型) [加法零 M] [加法零 N]
+  继承: 保零态射 M N, 加法半群态射 M N
   (无附加公理)
 -/
 structure AddMonoidHom (M : Type*) (N : Type*) [AddZero M] [AddZero N]
@@ -207,9 +207,9 @@ class AddMonoidHomClass
   (no additional axioms)
 
 中文:
-类 AddMonoidHomClass
+类 加法幺半群态射类
   参数: (F : 类型) (M N : outParam 类型)
-  继承: AddHomClass F M N, ZeroHomClass F M N
+  继承: 加法态射类 F M N, 保零态射类 F M N
   (无附加公理)
 -/
 class AddMonoidHomClass (F : Type*) (M N : outParam Type*)
@@ -242,8 +242,8 @@ structure OneHom
     - map_one' : toFun 1 = 1
 
 中文:
-结构 OneHom
-  参数: (M : 类型) (N : 类型) [One M] [One N]
+结构 幺态射
+  参数: (M : 类型) (N : 类型) [幺 M] [幺 N]
   公理与运算 (2 个):
     - toFun : M -> N
     - map_one' : toFun 1 = 1
@@ -268,8 +268,8 @@ class OneHomClass
     - map_one : forall f : F, f 1 = 1
 
 中文:
-类 OneHomClass
-  参数: (F : 类型) (M N : outParam 类型) [One M] [One N] [FunLike F M N]
+类 幺态射类
+  参数: (F : 类型) (M N : outParam 类型) [幺 M] [幺 N] [函数状 F M N]
   公理与运算 (1 个):
     - map_one : 对任意 f : F, f 1 = 1
 -/
@@ -290,8 +290,8 @@ instance OneHom.funLike
 @[to_additive]
 
 中文:
-实例 OneHom.funLike
-  签名: : FunLike (OneHom M N) M N where
+实例 幺态射.funLike
+  签名: : 函数状 (幺态射 M N) M N where
   定义体: OneHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -315,8 +315,8 @@ instance OneHom.oneHomClass
 library_note «hom simp lemma priority»
 
 中文:
-实例 OneHom.oneHomClass
-  签名: : OneHomClass (OneHom M N) M N where
+实例 幺态射.oneHomClass
+  签名: : 幺态射类 (幺态射 M N) M N where
   定义体: OneHom.map_one'
 
 library_note «hom simp lemma priority»
@@ -371,7 +371,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: [OneHomClass F M N] (f : F)
+  条件: [幺态射类 F M N] (f : F)
   结论: f 1 = 1
   证明: OneHomClass.map_one f
 
@@ -391,7 +391,7 @@ lemma map_comp_one
 
 中文:
 引理 map_comp_one
-  条件: [OneHomClass F M N] (f : F)
+  条件: [幺态射类 F M N] (f : F)
   结论: f ∘ (1 : ι -> M) = 1
   证明: by simp
 -/
@@ -408,8 +408,8 @@ theorem Subsingleton.of_oneHomClass
   proof: DFunLike.ext _ _ fun x => by simp [Subsingleton.elim x 1]
 
 中文:
-定理 Subsingleton.of_oneHomClass
-  条件: [Subsingleton M] [OneHomClass F M N]
+定理 子单例.of_oneHomClass
+  条件: [子单例 M] [幺态射类 F M N]
   证明: DFunLike.ext _ _ fun x => by simp [Subsingleton.elim x 1]
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Subsingleton, Subsingleton.elim
@@ -429,8 +429,8 @@ instance [Subsingleton
 @[to_additive]
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (OneHom M N)
+实例 [子单例
+  签名: M] : 子单例 (幺态射 M N)
   定义体: .of_oneHomClass
 
 @[to_additive]
@@ -450,7 +450,7 @@ theorem map_eq_one_iff
 
 中文:
 定理 map_eq_one_iff
-  结论: [OneHomClass F M N] (f : F) (hf : Function.Injective f)
+  结论: [幺态射类 F M N] (f : F) (hf : 函数.单射 f)
   证明: hf.eq_iff' (map_one f)
 
 @[to_additive]
@@ -474,7 +474,7 @@ theorem map_ne_one_iff
 
 中文:
 定理 map_ne_one_iff
-  结论: {R S F : 类型} [One R] [One S] [FunLike F R S] [OneHomClass F R S] (f : F)
+  结论: {R S F : 类型} [幺 R] [幺 S] [函数状 F R S] [幺态射类 F R S] (f : F)
   证明: (map_eq_one_iff f hf).not
 
 @[to_additive]
@@ -495,7 +495,7 @@ theorem ne_one_of_map
 
 中文:
 定理 ne_one_of_map
-  结论: {R S F : 类型} [One R] [One S] [FunLike F R S] [OneHomClass F R S]
+  结论: {R S F : 类型} [幺 R] [幺 S] [函数状 F R S] [幺态射类 F R S]
   证明: ne_of_apply_ne f (by rwa [(map_one f)])
 
 Depends on / 依赖: map_one, ne_of_apply_ne
@@ -518,8 +518,8 @@ definition OneHomClass.toOneHom
   map_one' := map_one f
 
 中文:
-定义 OneHomClass.toOneHom
-  签名: [OneHomClass F M N] (f : F)
+定义 幺态射类.toOneHom
+  签名: [幺态射类 F M N] (f : F)
   定义体: f
   map_one' := map_one f
 -/
@@ -541,8 +541,8 @@ instance [OneHomClass
 @[to_additive (attr := simp)]
 
 中文:
-实例 [OneHomClass
-  签名: F M N] : CoeTC F (OneHom M N)
+实例 [幺态射类
+  签名: F M N] : CoeTC F (幺态射 M N)
   定义体: ⟨OneHomClass.toOneHom⟩
 
 @[to_additive (attr := simp)]
@@ -562,8 +562,8 @@ theorem OneHom.coe_coe
   proof: rfl
 
 中文:
-定理 OneHom.coe_coe
-  条件: [OneHomClass F M N] (f : F)
+定理 幺态射.coe_coe
+  条件: [幺态射类 F M N] (f : F)
   证明: rfl
 -/
 theorem OneHom.coe_coe [OneHomClass F M N] (f : F) :
@@ -595,8 +595,8 @@ structure MulHom
     - map_mul' : forall x y, toFun (x * y) = toFun x * toFun y
 
 中文:
-结构 MulHom
-  参数: (M : 类型) (N : 类型) [Mul M] [Mul N]
+结构 乘法半群态射
+  参数: (M : 类型) (N : 类型) [乘法 M] [乘法 N]
   公理与运算 (2 个):
     - toFun : M -> N
     - map_mul' : 对任意 x y, toFun (x * y) = toFun x * toFun y
@@ -625,8 +625,8 @@ class MulHomClass
     - map_mul : forall (f : F) (x y : M), f (x * y) = f x * f y
 
 中文:
-类 MulHomClass
-  参数: (F : 类型) (M N : outParam 类型) [Mul M] [Mul N] [FunLike F M N]
+类 乘法态射类
+  参数: (F : 类型) (M N : outParam 类型) [乘法 M] [乘法 N] [函数状 F M N]
   公理与运算 (1 个):
     - map_mul : 对任意 (f : F) (x y : M), f (x * y) = f x * f y
 -/
@@ -645,8 +645,8 @@ instance MulHom.funLike
   coe_injective f g h := by cases f; cases g; congr
 
 中文:
-实例 MulHom.funLike
-  签名: : FunLike (M ->ₙ* N) M N where
+实例 乘法半群态射.funLike
+  签名: : 函数状 (M ->ₙ* N) M N where
   定义体: MulHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -667,8 +667,8 @@ instance MulHom.mulHomClass
   body: MulHom.map_mul'
 
 中文:
-实例 MulHom.mulHomClass
-  签名: : MulHomClass (M ->ₙ* N) M N where
+实例 乘法半群态射.mulHomClass
+  签名: : 乘法态射类 (M ->ₙ* N) M N where
   定义体: MulHom.map_mul'
 
 Depends on / 依赖: MulHom, MulHom.map_mul, map_mul
@@ -693,7 +693,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  条件: [MulHomClass F M N] (f : F) (x y : M)
+  条件: [乘法态射类 F M N] (f : F) (x y : M)
   结论: f (x * y) = f x * f y
   证明: MulHomClass.map_mul f x y
 
@@ -717,7 +717,7 @@ lemma map_comp_mul
 
 中文:
 引理 map_comp_mul
-  条件: [MulHomClass F M N] (f : F) (g h : ι -> M)
+  条件: [乘法态射类 F M N] (f : F) (g h : ι -> M)
   结论: f ∘ (g * h) = f ∘ g * f ∘ h
   证明: by
   ext; simp
@@ -740,8 +740,8 @@ definition MulHomClass.toMulHom
   map_mul' := map_mul f
 
 中文:
-定义 MulHomClass.toMulHom
-  签名: [MulHomClass F M N] (f : F)
+定义 乘法态射类.toMulHom
+  签名: [乘法态射类 F M N] (f : F)
   定义体: f
   map_mul' := map_mul f
 -/
@@ -763,7 +763,7 @@ instance [MulHomClass
 @[to_additive (attr := simp)]
 
 中文:
-实例 [MulHomClass
+实例 [乘法态射类
   签名: F M N] : CoeTC F (M ->ₙ* N)
   定义体: ⟨MulHomClass.toMulHom⟩
 
@@ -785,9 +785,9 @@ theorem MulHom.coe_coe
   proof: rfl
 
 中文:
-定理 MulHom.coe_coe
-  条件: [MulHomClass F M N] (f : F)
-  结论: ((f : MulHom M N) : M -> N) = f
+定理 乘法半群态射.coe_coe
+  条件: [乘法态射类 F M N] (f : F)
+  结论: ((f : 乘法半群态射 M N) : M -> N) = f
   证明: rfl
 -/
 theorem MulHom.coe_coe [MulHomClass F M N] (f : F) : ((f : MulHom M N) : M -> N) = f := rfl
@@ -817,9 +817,9 @@ structure MonoidHom
   (no additional axioms)
 
 中文:
-结构 MonoidHom
+结构 幺半群态射
   参数: (M : 类型) (N : 类型) [MulOne M] [MulOne N]
-  继承: OneHom M N, M ->ₙ* N
+  继承: 幺态射 M N, M ->ₙ* N
   (无附加公理)
 -/
 structure MonoidHom (M : Type*) (N : Type*) [MulOne M] [MulOne N]
@@ -844,9 +844,9 @@ class MonoidHomClass
   (no additional axioms)
 
 中文:
-类 MonoidHomClass
+类 幺半群态射类
   参数: (F : 类型) (M N : outParam 类型) [MulOne M] [MulOne N]
-  继承: MulHomClass F M N, OneHomClass F M N
+  继承: 乘法态射类 F M N, 幺态射类 F M N
   (无附加公理)
 -/
 class MonoidHomClass (F : Type*) (M N : outParam Type*) [MulOne M] [MulOne N]
@@ -871,8 +871,8 @@ instance MonoidHom.instFunLike
 @[to_additive]
 
 中文:
-实例 MonoidHom.instFunLike
-  签名: : FunLike (M ->* N) M N where
+实例 幺半群态射.instFunLike
+  签名: : 函数状 (M ->* N) M N where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -905,8 +905,8 @@ instance MonoidHom.instMonoidHomClass
   map_one f := f.toOneHom.map_one'
 
 中文:
-实例 MonoidHom.instMonoidHomClass
-  签名: : MonoidHomClass (M ->* N) M N where
+实例 幺半群态射.instMonoidHomClass
+  签名: : 幺半群态射类 (M ->* N) M N where
   定义体: MonoidHom.map_mul'
   map_one f := f.toOneHom.map_one'
 
@@ -925,8 +925,8 @@ instance [Subsingleton
   body: .of_oneHomClass
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (M ->* N)
+实例 [子单例
+  签名: M] : 子单例 (M ->* N)
   定义体: .of_oneHomClass
 -/
 @[to_additive] instance [Subsingleton M] : Subsingleton (M ->* N) := .of_oneHomClass
@@ -947,8 +947,8 @@ definition MonoidHomClass.toMonoidHom
   body: { (f : M ->ₙ* N), (f : OneHom M N) with }
 
 中文:
-定义 MonoidHomClass.toMonoidHom
-  签名: [MonoidHomClass F M N] (f : F)
+定义 幺半群态射类.toMonoidHom
+  签名: [幺半群态射类 F M N] (f : F)
   定义体: { (f : M ->ₙ* N), (f : OneHom M N) with }
 
 Depends on / 依赖: OneHom
@@ -971,7 +971,7 @@ instance [MonoidHomClass
 @[to_additive (attr := simp)]
 
 中文:
-实例 [MonoidHomClass
+实例 [幺半群态射类
   签名: F M N] : CoeTC F (M ->* N)
   定义体: ⟨MonoidHomClass.toMonoidHom⟩
 
@@ -995,8 +995,8 @@ theorem MonoidHom.coe_coe
 @[to_additive]
 
 中文:
-定理 MonoidHom.coe_coe
-  条件: [MonoidHomClass F M N] (f : F)
+定理 幺半群态射.coe_coe
+  条件: [幺半群态射类 F M N] (f : F)
   结论: ((f : M ->* N) : M -> N) = f
   证明: rfl
 
@@ -1016,7 +1016,7 @@ theorem map_mul_eq_one
 
 中文:
 定理 map_mul_eq_one
-  条件: [MonoidHomClass F M N] (f : F) {a b : M} (h : a * b = 1)
+  条件: [幺半群态射类 F M N] (f : F) {a b : M} (h : a * b = 1)
   证明: by
   rw [← map_mul]; rw [h]; rw [map_one]
 
@@ -1042,7 +1042,7 @@ theorem map_div'
 
 中文:
 定理 map_div'
-  结论: [DivInvMonoid G] [DivInvMonoid H] [MulHomClass F G H]
+  结论: [除逆幺半群 G] [除逆幺半群 H] [乘法态射类 F G H]
   证明: by
   grind [div_eq_mul_inv]
 
@@ -1066,7 +1066,7 @@ lemma map_comp_div'
 
 中文:
 引理 map_comp_div'
-  结论: [DivInvMonoid G] [DivInvMonoid H] [MulHomClass F G H] (f : F)
+  结论: [除逆幺半群 G] [除逆幺半群 H] [乘法态射类 F G H] (f : F)
   证明: by
   ext; simp [map_div' f hf]
 
@@ -1092,7 +1092,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  结论: [Group G] [DivisionMonoid H] [MonoidHomClass F G H]
+  结论: [群 G] [Division幺半群 H] [幺半群态射类 F G H]
   证明: eq_inv_of_mul_eq_one_left map_mul_eq_one f inv_mul_cancel _
 
 @[to_additive (attr := simp)]
@@ -1114,7 +1114,7 @@ lemma map_comp_inv
 
 中文:
 引理 map_comp_inv
-  条件: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g : ι -> G)
+  条件: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F) (g : ι -> G)
   证明: by ext; simp
 -/
 lemma map_comp_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g : ι -> G) :
@@ -1134,7 +1134,7 @@ theorem map_mul_inv
 
 中文:
 定理 map_mul_inv
-  条件: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (a b : G)
+  条件: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F) (a b : G)
   证明: by rw [map_mul, map_inv]
 
 @[to_additive]
@@ -1155,7 +1155,7 @@ lemma map_comp_mul_inv
 
 中文:
 引理 map_comp_mul_inv
-  条件: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g h : ι -> G)
+  条件: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F) (g h : ι -> G)
   证明: by simp
 -/
 lemma map_comp_mul_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g h : ι -> G) :
@@ -1177,7 +1177,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  条件: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F)
+  条件: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F)
   证明: map_div' _ map_inv f
 
 @[to_additive (attr := simp)]
@@ -1198,7 +1198,7 @@ lemma map_comp_div
 
 中文:
 引理 map_comp_div
-  条件: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g h : ι -> G)
+  条件: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F) (g h : ι -> G)
   证明: by ext; simp
 -/
 lemma map_comp_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g h : ι -> G) :
@@ -1215,7 +1215,7 @@ theorem map_pow
 
 中文:
 定理 map_pow
-  条件: [Monoid G] [Monoid H] [MonoidHomClass F G H] (f : F) (a : G)
+  条件: [幺半群 G] [幺半群 H] [幺半群态射类 F G H] (f : F) (a : G)
 -/
 theorem map_pow [Monoid G] [Monoid H] [MonoidHomClass F G H] (f : F) (a : G) :
     forall n : Nat, f (a ^ n) = f a ^ n
@@ -1235,7 +1235,7 @@ lemma map_comp_pow
 
 中文:
 引理 map_comp_pow
-  条件: [Monoid G] [Monoid H] [MonoidHomClass F G H] (f : F) (g : ι -> G) (n : 自然数)
+  条件: [幺半群 G] [幺半群 H] [幺半群态射类 F G H] (f : F) (g : ι -> G) (n : 自然数)
   证明: by ext; simp
 
 @[to_additive]
@@ -1253,7 +1253,7 @@ theorem map_zpow'
 
 中文:
 定理 map_zpow'
-  结论: [DivInvMonoid G] [DivInvMonoid H] [MonoidHomClass F G H]
+  结论: [除逆幺半群 G] [除逆幺半群 H] [幺半群态射类 F G H]
 -/
 theorem map_zpow' [DivInvMonoid G] [DivInvMonoid H] [MonoidHomClass F G H]
     (f : F) (hf : forall x : G, f x⁻¹ = (f x)⁻¹) (a : G) : forall n : Int, f (a ^ n) = f a ^ n
@@ -1272,7 +1272,7 @@ lemma map_comp_zpow'
 
 中文:
 引理 map_comp_zpow'
-  结论: [DivInvMonoid G] [DivInvMonoid H] [MonoidHomClass F G H] (f : F)
+  结论: [除逆幺半群 G] [除逆幺半群 H] [幺半群态射类 F G H] (f : F)
   证明: by
   ext; simp [map_zpow' f hf]
 
@@ -1299,7 +1299,7 @@ theorem map_zpow
 
 中文:
 定理 map_zpow
-  结论: [Group G] [DivisionMonoid H] [MonoidHomClass F G H]
+  结论: [群 G] [Division幺半群 H] [幺半群态射类 F G H]
   证明: map_zpow' f (map_inv f) g n
 
 @[to_additive]
@@ -1320,7 +1320,7 @@ lemma map_comp_zpow
 
 中文:
 引理 map_comp_zpow
-  结论: [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g : ι -> G)
+  结论: [群 G] [Division幺半群 H] [幺半群态射类 F G H] (f : F) (g : ι -> G)
   证明: by simp
 -/
 lemma map_comp_zpow [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f : F) (g : ι -> G)
@@ -1342,8 +1342,8 @@ theorem Function.Injective.isMulTorsionFree
     simpa using congrArg f hxy
 
 中文:
-定理 Function.Injective.isMulTorsionFree
-  结论: [Monoid M] [Monoid N] [IsMulTorsionFree N]
+定理 函数.单射.isMulTorsionFree
+  结论: [幺半群 M] [幺半群 N] [是MulTorsionFree N]
   证明: hf IsMulTorsionFree.pow_left_injective hn by
     simpa using congrArg f hxy
 
@@ -1373,7 +1373,7 @@ instance MonoidHom.coeToOneHom
   body: ⟨MonoidHom.toOneHom⟩
 
 中文:
-实例 MonoidHom.coeToOneHom
+实例 幺半群态射.coeToOneHom
   签名: [MulOne M] [MulOne N]
   定义体: ⟨MonoidHom.toOneHom⟩
 
@@ -1396,7 +1396,7 @@ instance MonoidHom.coeToMulHom
   body: ⟨MonoidHom.toMulHom⟩
 
 中文:
-实例 MonoidHom.coeToMulHom
+实例 幺半群态射.coeToMulHom
   签名: [MulOne M] [MulOne N]
   定义体: ⟨MonoidHom.toMulHom⟩
 
@@ -1426,9 +1426,9 @@ theorem OneHom.coe_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.coe_mk
-  条件: [One M] [One N] (f : M -> N) (h1)
-  结论: (OneHom.mk f h1 : M -> N) = f
+定理 幺态射.coe_mk
+  条件: [幺 M] [幺 N] (f : M -> N) (h1)
+  结论: (幺态射.mk f h1 : M -> N) = f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1448,8 +1448,8 @@ theorem OneHom.toFun_eq_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.toFun_eq_coe
-  条件: [One M] [One N] (f : OneHom M N)
+定理 幺态射.toFun_eq_coe
+  条件: [幺 M] [幺 N] (f : 幺态射 M N)
   结论: f.toFun = f
   证明: rfl
 
@@ -1470,9 +1470,9 @@ theorem MulHom.coe_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.coe_mk
-  条件: [Mul M] [Mul N] (f : M -> N) (hmul)
-  结论: (MulHom.mk f hmul : M -> N) = f
+定理 乘法半群态射.coe_mk
+  条件: [乘法 M] [乘法 N] (f : M -> N) (hmul)
+  结论: (乘法半群态射.mk f hmul : M -> N) = f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1492,8 +1492,8 @@ theorem MulHom.toFun_eq_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.toFun_eq_coe
-  条件: [Mul M] [Mul N] (f : M ->ₙ* N)
+定理 乘法半群态射.toFun_eq_coe
+  条件: [乘法 M] [乘法 N] (f : M ->ₙ* N)
   结论: f.toFun = f
   证明: rfl
 
@@ -1513,7 +1513,7 @@ theorem MonoidHom.coe_mk
 @[to_additive (attr := simp)]
 
 中文:
-定理 MonoidHom.coe_mk
+定理 幺半群态射.coe_mk
   条件: [MulOne M] [MulOne N] (f hmul)
   证明: rfl
 
@@ -1534,7 +1534,7 @@ theorem MonoidHom.toOneHom_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 MonoidHom.toOneHom_coe
+定理 幺半群态射.toOneHom_coe
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   证明: rfl
 
@@ -1555,7 +1555,7 @@ theorem MonoidHom.toMulHom_coe
 @[to_additive]
 
 中文:
-定理 MonoidHom.toMulHom_coe
+定理 幺半群态射.toMulHom_coe
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   证明: rfl
 
@@ -1577,7 +1577,7 @@ theorem MonoidHom.toFun_eq_coe
 @[to_additive (attr := ext)]
 
 中文:
-定理 MonoidHom.toFun_eq_coe
+定理 幺半群态射.toFun_eq_coe
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   结论: f.toFun = f
   证明: rfl
@@ -1599,9 +1599,9 @@ theorem OneHom.ext
 @[to_additive (attr := ext)]
 
 中文:
-定理 OneHom.ext
-  条件: [One M] [One N] ⦃f g
-  结论: OneHom M N⦄ (h : 对任意 x, f x = g x) : f = g
+定理 幺态射.ext
+  条件: [幺 M] [幺 N] ⦃f g
+  结论: 幺态射 M N⦄ (h : 对任意 x, f x = g x) : f = g
   证明: DFunLike.ext _ _ h
 
 @[to_additive (attr := ext)]
@@ -1624,8 +1624,8 @@ theorem MulHom.ext
 @[to_additive (attr := ext)]
 
 中文:
-定理 MulHom.ext
-  条件: [Mul M] [Mul N] ⦃f g
+定理 乘法半群态射.ext
+  条件: [乘法 M] [乘法 N] ⦃f g
   结论: M ->ₙ* N⦄ (h : 对任意 x, f x = g x) : f = g
   证明: DFunLike.ext _ _ h
 
@@ -1647,7 +1647,7 @@ theorem MonoidHom.ext
   proof: DFunLike.ext _ _ h
 
 中文:
-定理 MonoidHom.ext
+定理 幺半群态射.ext
   条件: [MulOne M] [MulOne N] ⦃f g
   结论: M ->* N⦄ (h : 对任意 x, f x = g x) : f = g
   证明: DFunLike.ext _ _ h
@@ -1702,9 +1702,9 @@ theorem OneHom.mk_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.mk_coe
-  条件: [One M] [One N] (f : OneHom M N) (h1)
-  结论: OneHom.mk f h1 = f
+定理 幺态射.mk_coe
+  条件: [幺 M] [幺 N] (f : 幺态射 M N) (h1)
+  结论: 幺态射.mk f h1 = f
   证明: OneHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -1727,9 +1727,9 @@ theorem MulHom.mk_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.mk_coe
-  条件: [Mul M] [Mul N] (f : M ->ₙ* N) (hmul)
-  结论: MulHom.mk f hmul = f
+定理 乘法半群态射.mk_coe
+  条件: [乘法 M] [乘法 N] (f : M ->ₙ* N) (hmul)
+  结论: 乘法半群态射.mk f hmul = f
   证明: MulHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -1749,7 +1749,7 @@ theorem MonoidHom.mk_coe
   proof: MonoidHom.ext fun _ => rfl
 
 中文:
-定理 MonoidHom.mk_coe
+定理 幺半群态射.mk_coe
   条件: [MulOne M] [MulOne N] (f : M ->* N) (hmul)
   证明: MonoidHom.ext fun _ => rfl
 
@@ -1777,8 +1777,8 @@ definition OneHom.copy
 @[to_additive (attr := simp)]
 
 中文:
-定义 OneHom.copy
-  签名: [One M] [One N] (f : OneHom M N) (f' : M -> N) (h : f' = f)
+定义 幺态射.copy
+  签名: [幺 M] [幺 N] (f : 幺态射 M N) (f' : M -> N) (h : f' = f)
   定义体: f'
   map_one' := h.symm ▸ f.map_one'
 
@@ -1801,8 +1801,8 @@ theorem OneHom.coe_copy
 @[to_additive]
 
 中文:
-定理 OneHom.coe_copy
-  条件: {_ : One M} {_ : One N} (f : OneHom M N) (f' : M -> N) (h : f' = f)
+定理 幺态射.coe_copy
+  条件: {_ : 幺 M} {_ : 幺 N} (f : 幺态射 M N) (f' : M -> N) (h : f' = f)
   证明: rfl
 
 @[to_additive]
@@ -1821,8 +1821,8 @@ theorem OneHom.coe_copy_eq
   proof: DFunLike.ext' h
 
 中文:
-定理 OneHom.coe_copy_eq
-  条件: {_ : One M} {_ : One N} (f : OneHom M N) (f' : M -> N) (h : f' = f)
+定理 幺态射.coe_copy_eq
+  条件: {_ : 幺 M} {_ : 幺 N} (f : 幺态射 M N) (f' : M -> N) (h : f' = f)
   证明: DFunLike.ext' h
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -1848,8 +1848,8 @@ definition MulHom.copy
 @[to_additive (attr := simp)]
 
 中文:
-定义 MulHom.copy
-  签名: [Mul M] [Mul N] (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
+定义 乘法半群态射.copy
+  签名: [乘法 M] [乘法 N] (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
   定义体: f'
   map_mul' := h.symm ▸ f.map_mul'
 
@@ -1872,8 +1872,8 @@ theorem MulHom.coe_copy
 @[to_additive]
 
 中文:
-定理 MulHom.coe_copy
-  条件: {_ : Mul M} {_ : Mul N} (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
+定理 乘法半群态射.coe_copy
+  条件: {_ : 乘法 M} {_ : 乘法 N} (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
   证明: rfl
 
 @[to_additive]
@@ -1892,8 +1892,8 @@ theorem MulHom.coe_copy_eq
   proof: DFunLike.ext' h
 
 中文:
-定理 MulHom.coe_copy_eq
-  条件: {_ : Mul M} {_ : Mul N} (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
+定理 乘法半群态射.coe_copy_eq
+  条件: {_ : 乘法 M} {_ : 乘法 N} (f : M ->ₙ* N) (f' : M -> N) (h : f' = f)
   证明: DFunLike.ext' h
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -1918,7 +1918,7 @@ definition MonoidHom.copy
 @[to_additive (attr := simp)]
 
 中文:
-定义 MonoidHom.copy
+定义 幺半群态射.copy
   签名: [MulOne M] [MulOne N] (f : M ->* N) (f' : M -> N)
   定义体: { f.toOneHom.copy f' h, f.toMulHom.copy f' h with }
 
@@ -1940,7 +1940,7 @@ theorem MonoidHom.coe_copy
 @[to_additive]
 
 中文:
-定理 MonoidHom.coe_copy
+定理 幺半群态射.coe_copy
   结论: {_ : MulOne M} {_ : MulOne N} (f : M ->* N) (f' : M -> N)
   证明: rfl
 
@@ -1962,7 +1962,7 @@ theorem MonoidHom.copy_eq
 @[to_additive]
 
 中文:
-定理 MonoidHom.copy_eq
+定理 幺半群态射.copy_eq
   结论: {_ : MulOne M} {_ : MulOne N} (f : M ->* N) (f' : M -> N)
   证明: DFunLike.ext' h
 
@@ -1985,8 +1985,8 @@ theorem OneHom.map_one
   proof: f.map_one'
 
 中文:
-定理 OneHom.map_one
-  条件: [One M] [One N] (f : OneHom M N)
+定理 幺态射.map_one
+  条件: [幺 M] [幺 N] (f : 幺态射 M N)
   结论: f 1 = 1
   证明: f.map_one'
 -/
@@ -2007,7 +2007,7 @@ theorem MonoidHom.map_one
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_one
+定理 幺半群态射.map_one
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   结论: f 1 = 1
   证明: f.map_one'
@@ -2028,8 +2028,8 @@ theorem MulHom.map_mul
   proof: f.map_mul' a b
 
 中文:
-定理 MulHom.map_mul
-  条件: [Mul M] [Mul N] (f : M ->ₙ* N) (a b : M)
+定理 乘法半群态射.map_mul
+  条件: [乘法 M] [乘法 N] (f : M ->ₙ* N) (a b : M)
   结论: f (a * b) = f a * f b
   证明: f.map_mul' a b
 -/
@@ -2047,7 +2047,7 @@ theorem MonoidHom.map_mul
   proof: f.map_mul' a b
 
 中文:
-定理 MonoidHom.map_mul
+定理 幺半群态射.map_mul
   条件: [MulOne M] [MulOne N] (f : M ->* N) (a b : M)
   证明: f.map_mul' a b
 
@@ -2076,7 +2076,7 @@ theorem map_exists_right_inv
   ⟨f y, map_mul_eq_one f hy⟩
 
 中文:
-定理 map_exists_right_inv
+定理 map_存在_right_inv
   条件: (f : F) {x : M} (hx : 存在 y, x * y = 1)
   结论: 存在 y, f x * y = 1
   证明: let ⟨y, hy⟩ := hx
@@ -2105,7 +2105,7 @@ theorem map_exists_left_inv
   ⟨f y, map_mul_eq_one f hy⟩
 
 中文:
-定理 map_exists_left_inv
+定理 map_存在_left_inv
   条件: (f : F) {x : M} (hx : 存在 y, y * x = 1)
   结论: 存在 y, y * f x = 1
   证明: let ⟨y, hy⟩ := hx
@@ -2128,7 +2128,7 @@ theorem _root_.IsDedekindFiniteMonoid.of_injective
 @[to_additive]
 
 中文:
-定理 _root_.IsDedekindFiniteMonoid.of_injective
+定理 _root_.是DedekindFinite幺半群.of_injective
   结论: (f : F)
   证明: hf by simpa [mul_eq_one_comm] using congr_arg f eq
 
@@ -2170,8 +2170,8 @@ definition OneHom.id
   map_one' := rfl
 
 中文:
-定义 OneHom.id
-  签名: (M : 类型) [One M]
+定义 幺态射.id
+  签名: (M : 类型) [幺 M]
   定义体: x
   map_one' := rfl
 -/
@@ -2192,8 +2192,8 @@ definition MulHom.id
   map_mul' _ _ := rfl
 
 中文:
-定义 MulHom.id
-  签名: (M : 类型) [Mul M]
+定义 乘法半群态射.id
+  签名: (M : 类型) [乘法 M]
   定义体: x
   map_mul' _ _ := rfl
 -/
@@ -2217,7 +2217,7 @@ definition MonoidHom.id
 @[to_additive (attr := simp)]
 
 中文:
-定义 MonoidHom.id
+定义 幺半群态射.id
   签名: (M : 类型) [MulOne M]
   定义体: x
   map_one' := rfl
@@ -2243,9 +2243,9 @@ lemma OneHom.coe_id
 @[to_additive (attr := simp)]
 
 中文:
-引理 OneHom.coe_id
-  条件: {M : 类型} [One M]
-  结论: (OneHom.id M : M -> M) = _root_.id
+引理 幺态射.coe_id
+  条件: {M : 类型} [幺 M]
+  结论: (幺态射.id M : M -> M) = _root_.id
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2265,9 +2265,9 @@ lemma MulHom.coe_id
 @[to_additive (attr := simp)]
 
 中文:
-引理 MulHom.coe_id
-  条件: {M : 类型} [Mul M]
-  结论: (MulHom.id M : M -> M) = _root_.id
+引理 乘法半群态射.coe_id
+  条件: {M : 类型} [乘法 M]
+  结论: (乘法半群态射.id M : M -> M) = _root_.id
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2285,9 +2285,9 @@ lemma MonoidHom.coe_id
   proof: rfl
 
 中文:
-引理 MonoidHom.coe_id
+引理 幺半群态射.coe_id
   条件: {M : 类型} [MulOne M]
-  结论: (MonoidHom.id M : M -> M) = _root_.id
+  结论: (幺半群态射.id M : M -> M) = _root_.id
   证明: rfl
 -/
 lemma MonoidHom.coe_id {M : Type*} [MulOne M] : (MonoidHom.id M : M -> M) = _root_.id := rfl
@@ -2304,8 +2304,8 @@ definition OneHom.comp
   map_one' := by simp
 
 中文:
-定义 OneHom.comp
-  签名: [One M] [One N] [One P] (hnp : OneHom N P) (hmn : OneHom M N)
+定义 幺态射.comp
+  签名: [幺 M] [幺 N] [幺 P] (hnp : 幺态射 N P) (hmn : 幺态射 M N)
   定义体: hnp (hmn x)
   map_one' := by simp
 -/
@@ -2325,8 +2325,8 @@ definition MulHom.comp
   map_mul' x y := by simp
 
 中文:
-定义 MulHom.comp
-  签名: [Mul M] [Mul N] [Mul P] (hnp : N ->ₙ* P) (hmn : M ->ₙ* N)
+定义 乘法半群态射.comp
+  签名: [乘法 M] [乘法 N] [乘法 P] (hnp : N ->ₙ* P) (hmn : M ->ₙ* N)
   定义体: hnp (hmn x)
   map_mul' x y := by simp
 -/
@@ -2350,7 +2350,7 @@ definition MonoidHom.comp
 @[to_additive (attr := simp)]
 
 中文:
-定义 MonoidHom.comp
+定义 幺半群态射.comp
   签名: [MulOne M] [MulOne N] [MulOne P] (hnp : N ->* P) (hmn : M ->* N)
   定义体: hnp (hmn x)
   map_one' := by simp
@@ -2376,8 +2376,8 @@ theorem OneHom.coe_comp
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.coe_comp
-  条件: [One M] [One N] [One P] (g : OneHom N P) (f : OneHom M N)
+定理 幺态射.coe_comp
+  条件: [幺 M] [幺 N] [幺 P] (g : 幺态射 N P) (f : 幺态射 M N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2397,8 +2397,8 @@ theorem MulHom.coe_comp
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.coe_comp
-  条件: [Mul M] [Mul N] [Mul P] (g : N ->ₙ* P) (f : M ->ₙ* N)
+定理 乘法半群态射.coe_comp
+  条件: [乘法 M] [乘法 N] [乘法 P] (g : N ->ₙ* P) (f : M ->ₙ* N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2418,7 +2418,7 @@ theorem MonoidHom.coe_comp
 @[to_additive]
 
 中文:
-定理 MonoidHom.coe_comp
+定理 幺半群态射.coe_comp
   结论: [MulOne M] [MulOne N] [MulOne P]
   证明: rfl
 
@@ -2439,8 +2439,8 @@ theorem OneHom.comp_apply
 @[to_additive]
 
 中文:
-定理 OneHom.comp_apply
-  条件: [One M] [One N] [One P] (g : OneHom N P) (f : OneHom M N) (x : M)
+定理 幺态射.comp_apply
+  条件: [幺 M] [幺 N] [幺 P] (g : 幺态射 N P) (f : 幺态射 M N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -2460,8 +2460,8 @@ theorem MulHom.comp_apply
 @[to_additive]
 
 中文:
-定理 MulHom.comp_apply
-  条件: [Mul M] [Mul N] [Mul P] (g : N ->ₙ* P) (f : M ->ₙ* N) (x : M)
+定理 乘法半群态射.comp_apply
+  条件: [乘法 M] [乘法 N] [乘法 P] (g : N ->ₙ* P) (f : M ->ₙ* N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -2479,7 +2479,7 @@ theorem MonoidHom.comp_apply
   proof: rfl
 
 中文:
-定理 MonoidHom.comp_apply
+定理 幺半群态射.comp_apply
   结论: [MulOne M] [MulOne N] [MulOne P]
   证明: rfl
 -/
@@ -2499,8 +2499,8 @@ theorem OneHom.comp_assoc
 @[to_additive]
 
 中文:
-定理 OneHom.comp_assoc
-  结论: {Q : 类型} [One M] [One N] [One P] [One Q]
+定理 幺态射.comp_assoc
+  结论: {Q : 类型} [幺 M] [幺 N] [幺 P] [幺 Q]
   证明: rfl
 
 @[to_additive]
@@ -2521,8 +2521,8 @@ theorem MulHom.comp_assoc
 @[to_additive]
 
 中文:
-定理 MulHom.comp_assoc
-  结论: {Q : 类型} [Mul M] [Mul N] [Mul P] [Mul Q]
+定理 乘法半群态射.comp_assoc
+  结论: {Q : 类型} [乘法 M] [乘法 N] [乘法 P] [乘法 Q]
   证明: rfl
 
 @[to_additive]
@@ -2542,7 +2542,7 @@ theorem MonoidHom.comp_assoc
 @[to_additive]
 
 中文:
-定理 MonoidHom.comp_assoc
+定理 幺半群态射.comp_assoc
   结论: {Q : 类型} [MulOne M] [MulOne N] [MulOne P]
   证明: rfl
 
@@ -2564,8 +2564,8 @@ theorem OneHom.cancel_right
 @[to_additive]
 
 中文:
-定理 OneHom.cancel_right
-  结论: [One M] [One N] [One P] {g₁ g₂ : OneHom N P} {f : OneHom M N}
+定理 幺态射.cancel_right
+  结论: [幺 M] [幺 N] [幺 P] {g₁ g₂ : 幺态射 N P} {f : 幺态射 M N}
   证明: ⟨fun h => OneHom.ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[to_additive]
@@ -2588,8 +2588,8 @@ theorem MulHom.cancel_right
 @[to_additive]
 
 中文:
-定理 MulHom.cancel_right
-  结论: [Mul M] [Mul N] [Mul P] {g₁ g₂ : N ->ₙ* P} {f : M ->ₙ* N}
+定理 乘法半群态射.cancel_right
+  结论: [乘法 M] [乘法 N] [乘法 P] {g₁ g₂ : N ->ₙ* P} {f : M ->ₙ* N}
   证明: ⟨fun h => MulHom.ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[to_additive]
@@ -2612,7 +2612,7 @@ theorem MonoidHom.cancel_right
 @[to_additive]
 
 中文:
-定理 MonoidHom.cancel_right
+定理 幺半群态射.cancel_right
   结论: [MulOne M] [MulOne N] [MulOne P]
   证明: ⟨fun h => MonoidHom.ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
 
@@ -2638,8 +2638,8 @@ theorem OneHom.cancel_left
 @[to_additive]
 
 中文:
-定理 OneHom.cancel_left
-  结论: [One M] [One N] [One P] {g : OneHom N P} {f₁ f₂ : OneHom M N}
+定理 幺态射.cancel_left
+  结论: [幺 M] [幺 N] [幺 P] {g : 幺态射 N P} {f₁ f₂ : 幺态射 M N}
   证明: ⟨fun h => OneHom.ext fun x => hg by rw [← OneHom.comp_apply, h, OneHom.comp_apply],
     fun h => h ▸ rfl⟩
 
@@ -2665,8 +2665,8 @@ theorem MulHom.cancel_left
 @[to_additive]
 
 中文:
-定理 MulHom.cancel_left
-  结论: [Mul M] [Mul N] [Mul P] {g : N ->ₙ* P} {f₁ f₂ : M ->ₙ* N}
+定理 乘法半群态射.cancel_left
+  结论: [乘法 M] [乘法 N] [乘法 P] {g : N ->ₙ* P} {f₁ f₂ : M ->ₙ* N}
   证明: ⟨fun h => MulHom.ext fun x => hg by rw [← MulHom.comp_apply, h, MulHom.comp_apply],
     fun h => h ▸ rfl⟩
 
@@ -2690,7 +2690,7 @@ theorem MonoidHom.cancel_left
     fun h => h ▸ rfl⟩
 
 中文:
-定理 MonoidHom.cancel_left
+定理 幺半群态射.cancel_left
   结论: [MulOne M] [MulOne N] [MulOne P]
   证明: ⟨fun h => MonoidHom.ext fun x => hg by rw [← MonoidHom.comp_apply, h, MonoidHom.comp_apply],
     fun h => h ▸ rfl⟩
@@ -2716,7 +2716,7 @@ theorem MonoidHom.toOneHom_injective
 @[to_additive]
 
 中文:
-定理 MonoidHom.toOneHom_injective
+定理 幺半群态射.toOneHom_injective
   条件: [MulOne M] [MulOne N]
   证明: Function.Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
@@ -2738,7 +2738,7 @@ theorem MonoidHom.toMulHom_injective
   proof: Function.Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 中文:
-定理 MonoidHom.toMulHom_injective
+定理 幺半群态射.toMulHom_injective
   条件: [MulOne M] [MulOne N]
   证明: Function.Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
@@ -2763,9 +2763,9 @@ theorem OneHom.comp_id
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.comp_id
-  条件: [One M] [One N] (f : OneHom M N)
-  结论: f.comp (OneHom.id M) = f
+定理 幺态射.comp_id
+  条件: [幺 M] [幺 N] (f : 幺态射 M N)
+  结论: f.comp (幺态射.id M) = f
   证明: OneHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -2788,9 +2788,9 @@ theorem MulHom.comp_id
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.comp_id
-  条件: [Mul M] [Mul N] (f : M ->ₙ* N)
-  结论: f.comp (MulHom.id M) = f
+定理 乘法半群态射.comp_id
+  条件: [乘法 M] [乘法 N] (f : M ->ₙ* N)
+  结论: f.comp (乘法半群态射.id M) = f
   证明: MulHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -2812,7 +2812,7 @@ theorem MonoidHom.comp_id
 @[to_additive (attr := simp)]
 
 中文:
-定理 MonoidHom.comp_id
+定理 幺半群态射.comp_id
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   证明: MonoidHom.ext fun _ => rfl
 
@@ -2836,9 +2836,9 @@ theorem OneHom.id_comp
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.id_comp
-  条件: [One M] [One N] (f : OneHom M N)
-  结论: (OneHom.id N).comp f = f
+定理 幺态射.id_comp
+  条件: [幺 M] [幺 N] (f : 幺态射 M N)
+  结论: (幺态射.id N).comp f = f
   证明: OneHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -2861,9 +2861,9 @@ theorem MulHom.id_comp
 @[to_additive (attr := simp)]
 
 中文:
-定理 MulHom.id_comp
-  条件: [Mul M] [Mul N] (f : M ->ₙ* N)
-  结论: (MulHom.id N).comp f = f
+定理 乘法半群态射.id_comp
+  条件: [乘法 M] [乘法 N] (f : M ->ₙ* N)
+  结论: (乘法半群态射.id N).comp f = f
   证明: MulHom.ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -2885,7 +2885,7 @@ theorem MonoidHom.id_comp
 @[to_additive (reorder := a n)]
 
 中文:
-定理 MonoidHom.id_comp
+定理 幺半群态射.id_comp
   条件: [MulOne M] [MulOne N] (f : M ->* N)
   证明: MonoidHom.ext fun _ => rfl
 
@@ -2908,8 +2908,8 @@ theorem MonoidHom.map_pow
 @[to_additive (reorder := a n)]
 
 中文:
-定理 MonoidHom.map_pow
-  条件: [Monoid M] [Monoid N] (f : M ->* N) (a : M) (n : 自然数)
+定理 幺半群态射.map_pow
+  条件: [幺半群 M] [幺半群 N] (f : M ->* N) (a : M) (n : 自然数)
   证明: map_pow f a n
 
 @[to_additive (reorder := a n)]
@@ -2927,8 +2927,8 @@ theorem MonoidHom.map_zpow'
   proof: map_zpow' f hf a n
 
 中文:
-定理 MonoidHom.map_zpow'
-  结论: [DivInvMonoid M] [DivInvMonoid N] (f : M ->* N)
+定理 幺半群态射.map_zpow'
+  结论: [除逆幺半群 M] [除逆幺半群 N] (f : M ->* N)
   证明: map_zpow' f hf a n
 -/
 protected theorem MonoidHom.map_zpow' [DivInvMonoid M] [DivInvMonoid N] (f : M ->* N)
@@ -2948,8 +2948,8 @@ definition OneHom.inverse
     map_one' := by rw [← f.map_one, h₁] }
 
 中文:
-定义 OneHom.inverse
-  签名: [One M] [One N] (f : OneHom M N) (g : N -> M) (h₁ : Function.LeftInverse g f)
+定义 幺态射.inverse
+  签名: [幺 M] [幺 N] (f : 幺态射 M N) (g : N -> M) (h₁ : 函数.左逆 g f)
   定义体: { toFun := g,
     map_one' := by rw [← f.map_one, h₁] }
 
@@ -2977,8 +2977,8 @@ definition MulHom.inverse
       _ = g x * g y := h₁ _
 
 中文:
-定义 MulHom.inverse
-  签名: [Mul M] [Mul N] (f : M ->ₙ* N) (g : N -> M)
+定义 乘法半群态射.inverse
+  签名: [乘法 M] [乘法 N] (f : M ->ₙ* N) (g : N -> M)
   定义体: g
   map_mul' x y :=
     calc
@@ -3013,8 +3013,8 @@ theorem Function.Surjective.mul_comm
     simp [← ha', ← hb', ← map_mul, mul_comm']
 
 中文:
-定理 Function.Surjective.mul_comm
-  结论: [Mul M] [Mul N] {f : M ->ₙ* N} (is_surj : Function.Surjective f)
+定理 函数.满射.mul_comm
+  结论: [乘法 M] [乘法 N] {f : M ->ₙ* N} (is_surj : 函数.满射 f)
   证明: by
     have ⟨a', ha'⟩ := is_surj a
     have ⟨b', hb'⟩ := is_surj b
@@ -3042,8 +3042,8 @@ definition MonoidHom.inverse
     (f : A ->ₙ* B).inverse g h₁ h₂ with toFun := g }
 
 中文:
-定义 MonoidHom.inverse
-  签名: {A B : 类型} [Monoid A] [Monoid B] (f : A ->* B) (g : B -> A)
+定义 幺半群态射.inverse
+  签名: {A B : 类型} [幺半群 A] [幺半群 B] (f : A ->* B) (g : B -> A)
   定义体: { (f : OneHom A B).inverse g h₁,
     (f : A ->ₙ* B).inverse g h₁ h₂ with toFun := g }
 
@@ -3090,7 +3090,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Monoid.End M) M M
+  签名: : 函数状 (幺半群.End M) M M
   定义体: inferInstanceAs FunLike (M ->* M) M M
 
 @[to_additive (attr := ext)]
@@ -3113,7 +3113,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : Monoid.End M} (h : 对任意 x : M, f x = g x)
+  条件: {f g : 幺半群.End M} (h : 对任意 x : M, f x = g x)
   结论: f = g
   证明: DFunLike.ext _ _ h
 
@@ -3137,7 +3137,7 @@ instance instMonoidHomClass
 
 中文:
 实例 instMonoidHomClass
-  签名: : MonoidHomClass (Monoid.End M) M M
+  签名: : 幺半群态射类 (幺半群.End M) M M
   定义体: inferInstanceAs MonoidHomClass (M ->* M) M M
 
 @[to_additive instOne]
@@ -3159,7 +3159,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (Monoid.End M) where one
+  签名: : 幺 (幺半群.End M) where one
   定义体: .id _
 @[to_additive instMul]
 -/
@@ -3177,7 +3177,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Monoid.End M) where mul
+  签名: : 乘法 (幺半群.End M) where mul
   定义体: .comp
 
 @[to_additive instMonoid]
@@ -3203,7 +3203,7 @@ npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 
 中文:
 实例 instMonoid
-  签名: : Monoid (Monoid.End M) where
+  签名: : 幺半群 (幺半群.End M) where
   定义体: MonoidHom.comp
   one := MonoidHom.id M
   mul_assoc _ _ _ := MonoidHom.comp_assoc _ _ _
@@ -3238,7 +3238,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Monoid.End M)
+  签名: 可居 (幺半群.End M)
   定义体: ⟨1⟩
 
 @[to_additive (attr := simp, norm_cast) coe_pow]
@@ -3259,7 +3259,7 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  条件: (f : Monoid.End M) (n : 自然数)
+  条件: (f : 幺半群.End M) (n : 自然数)
   结论: (↑(f ^ n) : M -> M) = f^[n]
   证明: rfl
 
@@ -3280,7 +3280,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : Monoid.End M) : M -> M) = id
+  结论: ((1 : 幺半群.End M) : M -> M) = id
   证明: rfl
 
 @[to_additive (attr := simp) coe_mul]
@@ -3300,7 +3300,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (f g)
-  结论: ((f * g : Monoid.End M) : M -> M) = f ∘ g
+  结论: ((f * g : 幺半群.End M) : M -> M) = f ∘ g
   证明: rfl
 -/
 theorem coe_mul (f g) : ((f * g : Monoid.End M) : M -> M) = f ∘ g := rfl
@@ -3322,8 +3322,8 @@ instance [One
   body: ⟨⟨fun _ => 1, rfl⟩⟩
 
 中文:
-实例 [One
-  签名: M] [One N] : One (OneHom M N)
+实例 [幺
+  签名: M] [幺 N] : 幺 (幺态射 M N)
   定义体: ⟨⟨fun _ => 1, rfl⟩⟩
 -/
 instance [One M] [One N] : One (OneHom M N) := ⟨⟨fun _ => 1, rfl⟩⟩
@@ -3339,8 +3339,8 @@ instance [Mul
   body: ⟨⟨fun _ => 1, fun _ _ => (one_mul 1).symm⟩⟩
 
 中文:
-实例 [Mul
-  签名: M] [MulOneClass N] : One (M ->ₙ* N)
+实例 [乘法
+  签名: M] [MulOne类 N] : 幺 (M ->ₙ* N)
   定义体: ⟨⟨fun _ => 1, fun _ _ => (one_mul 1).symm⟩⟩
 
 Depends on / 依赖: one_mul
@@ -3362,7 +3362,7 @@ instance [MulOne
 
 中文:
 实例 [MulOne
-  签名: M] [MulOneClass N] : One (M ->* N)
+  签名: M] [MulOne类 N] : 幺 (M ->* N)
   定义体: ⟨⟨⟨fun _ => 1, rfl⟩, fun _ _ => (one_mul 1).symm⟩⟩
 
 @[to_additive (attr := simp)]
@@ -3385,9 +3385,9 @@ theorem OneHom.one_apply
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.one_apply
-  条件: [One M] [One N] (x : M)
-  结论: (1 : OneHom M N) x = 1
+定理 幺态射.one_apply
+  条件: [幺 M] [幺 N] (x : M)
+  结论: (1 : 幺态射 M N) x = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3407,8 +3407,8 @@ theorem MonoidHom.one_apply
 @[to_additive (attr := simp)]
 
 中文:
-定理 MonoidHom.one_apply
-  条件: [MulOne M] [MulOneClass N] (x : M)
+定理 幺半群态射.one_apply
+  条件: [MulOne M] [MulOne类 N] (x : M)
   结论: (1 : M ->* N) x = 1
   证明: rfl
 
@@ -3428,8 +3428,8 @@ theorem OneHom.one_comp
 @[to_additive (attr := simp)]
 
 中文:
-定理 OneHom.one_comp
-  条件: [One M] [One N] [One P] (f : OneHom M N)
+定理 幺态射.one_comp
+  条件: [幺 M] [幺 N] [幺 P] (f : 幺态射 M N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3452,9 +3452,9 @@ theorem OneHom.comp_one
 @[to_additive]
 
 中文:
-定理 OneHom.comp_one
-  条件: [One M] [One N] [One P] (f : OneHom N P)
-  结论: f.comp (1 : OneHom M N) = 1
+定理 幺态射.comp_one
+  条件: [幺 M] [幺 N] [幺 P] (f : 幺态射 N P)
+  结论: f.comp (1 : 幺态射 M N) = 1
   证明: by
   ext
   simp only [map_one, OneHom.coe_comp, Function.comp_apply, OneHom.one_apply]
@@ -3479,8 +3479,8 @@ instance [One
 @[to_additive]
 
 中文:
-实例 [One
-  签名: M] [One N] : Inhabited (OneHom M N)
+实例 [幺
+  签名: M] [幺 N] : 可居 (幺态射 M N)
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -3499,8 +3499,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: M] [MulOneClass N] : Inhabited (M ->ₙ* N)
+实例 [乘法
+  签名: M] [MulOne类 N] : 可居 (M ->ₙ* N)
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -3518,7 +3518,7 @@ instance [MulOne
 
 中文:
 实例 [MulOne
-  签名: M] [MulOneClass N] : Inhabited (M ->* N)
+  签名: M] [MulOne类 N] : 可居 (M ->* N)
   定义体: ⟨1⟩
 -/
 instance [MulOne M] [MulOneClass N] : Inhabited (M ->* N) := ⟨1⟩
@@ -3538,7 +3538,7 @@ theorem one_comp
 
 中文:
 定理 one_comp
-  条件: [MulOne M] [MulOne N] [MulOneClass P] (f : M ->* N)
+  条件: [MulOne M] [MulOne N] [MulOne类 P] (f : M ->* N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3559,7 +3559,7 @@ theorem comp_one
 
 中文:
 定理 comp_one
-  条件: [MulOne M] [MulOneClass N] [MulOneClass P] (f : N ->* P)
+  条件: [MulOne M] [MulOne类 N] [MulOne类 P] (f : N ->* P)
   证明: by
   ext
   simp only [map_one, coe_comp, Function.comp_apply, one_apply]
@@ -3584,7 +3584,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  条件: [Group α] [DivisionMonoid β] (f : α ->* β) (a : α)
+  条件: [群 α] [Division幺半群 β] (f : α ->* β) (a : α)
   结论: f a⁻¹ = (f a)⁻¹
   证明: map_inv f _
 -/
@@ -3603,7 +3603,7 @@ theorem map_zpow
 
 中文:
 定理 map_zpow
-  条件: [Group α] [DivisionMonoid β] (f : α ->* β) (g : α) (n : 整数)
+  条件: [群 α] [Division幺半群 β] (f : α ->* β) (g : α) (n : 整数)
   证明: map_zpow f g n
 -/
 protected theorem map_zpow [Group α] [DivisionMonoid β] (f : α ->* β) (g : α) (n : Int) :
@@ -3621,7 +3621,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  条件: [Group α] [DivisionMonoid β] (f : α ->* β) (g h : α)
+  条件: [群 α] [Division幺半群 β] (f : α ->* β) (g h : α)
   证明: map_div f g h
 -/
 protected theorem map_div [Group α] [DivisionMonoid β] (f : α ->* β) (g h : α) :
@@ -3639,7 +3639,7 @@ theorem map_mul_inv
 
 中文:
 定理 map_mul_inv
-  条件: [Group α] [DivisionMonoid β] (f : α ->* β) (g h : α)
+  条件: [群 α] [Division幺半群 β] (f : α ->* β) (g h : α)
   证明: by simp
 -/
 protected theorem map_mul_inv [Group α] [DivisionMonoid β] (f : α ->* β) (g h : α) :
@@ -3660,7 +3660,7 @@ lemma iterate_map_mul
 
 中文:
 引理 iterate_map_mul
-  结论: {M F : 类型} [Mul M] [FunLike F M M] [MulHomClass F M M]
+  结论: {M F : 类型} [乘法 M] [函数状 F M M] [乘法态射类 F M M]
   证明: Function.Semiconj₂.iterate (map_mul f) n x y
 
 @[to_additive (attr := simp)]
@@ -3685,7 +3685,7 @@ lemma iterate_map_one
 
 中文:
 引理 iterate_map_one
-  结论: {M F : 类型} [One M] [FunLike F M M] [OneHomClass F M M]
+  结论: {M F : 类型} [幺 M] [函数状 F M M] [幺态射类 F M M]
   证明: iterate_fixed (map_one f) n
 
 @[to_additive (attr := simp)]
@@ -3710,7 +3710,7 @@ lemma iterate_map_inv
 
 中文:
 引理 iterate_map_inv
-  结论: {M F : 类型} [Group M] [FunLike F M M] [MonoidHomClass F M M]
+  结论: {M F : 类型} [群 M] [函数状 F M M] [幺半群态射类 F M M]
   证明: Commute.iterate_left (map_inv f) n x
 
 @[to_additive (attr := simp)]
@@ -3735,7 +3735,7 @@ lemma iterate_map_div
 
 中文:
 引理 iterate_map_div
-  结论: {M F : 类型} [Group M] [FunLike F M M] [MonoidHomClass F M M]
+  结论: {M F : 类型} [群 M] [函数状 F M M] [幺半群态射类 F M M]
   证明: Semiconj₂.iterate (map_div f) n x y
 
 @[to_additive (attr := simp)]
@@ -3760,7 +3760,7 @@ lemma iterate_map_pow
 
 中文:
 引理 iterate_map_pow
-  结论: {M F : 类型} [Monoid M] [FunLike F M M] [MonoidHomClass F M M]
+  结论: {M F : 类型} [幺半群 M] [函数状 F M M] [幺半群态射类 F M M]
   证明: Commute.iterate_left (map_pow f · k) n x
 
 @[to_additive (attr := simp)]
@@ -3783,7 +3783,7 @@ lemma iterate_map_zpow
 
 中文:
 引理 iterate_map_zpow
-  结论: {M F : 类型} [Group M] [FunLike F M M] [MonoidHomClass F M M]
+  结论: {M F : 类型} [群 M] [函数状 F M M] [幺半群态射类 F M M]
   证明: Commute.iterate_left (map_zpow f · k) n x
 
 Depends on / 依赖: Commute, Commute.iterate_left, iterate_left, map_zpow

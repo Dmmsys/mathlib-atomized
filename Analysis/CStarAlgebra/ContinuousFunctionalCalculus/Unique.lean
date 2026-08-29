@@ -53,8 +53,8 @@ instance Real.instContinuousMapUniqueHom
   body: inferInstance
 
 中文:
-实例 Real.instContinuousMapUniqueHom
-  签名: [TopologicalSpace A]
+实例 实数.instContinuousMapUniqueHom
+  签名: [拓扑空间 A]
   定义体: inferInstance
 -/
 instance Real.instContinuousMapUniqueHom [TopologicalSpace A]
@@ -71,8 +71,8 @@ instance Complex.instContinuousMapUniqueHom
   body: inferInstance
 
 中文:
-实例 Complex.instContinuousMapUniqueHom
-  签名: [TopologicalSpace A]
+实例 复形.instContinuousMapUniqueHom
+  签名: [拓扑空间 A]
   定义体: inferInstance
 -/
 instance Complex.instContinuousMapUniqueHom [TopologicalSpace A]
@@ -104,8 +104,8 @@ lemma continuous_toNNReal
 @[simp]
 
 中文:
-引理 continuous_toNNReal
-  结论: Continuous (toNN实数 (X := X))
+引理 continuous_toNN实数
+  结论: 连续 (toNN实数 (X := X))
   证明: continuous_postcomp _
 
 @[simp]
@@ -125,7 +125,7 @@ lemma toNNReal_apply
   proof: rfl
 
 中文:
-引理 toNNReal_apply
+引理 toNN实数_apply
   条件: (f : C(X, 实数)) (x : X)
   结论: f.toNN实数 x = (f x).toNN实数
   证明: rfl
@@ -144,7 +144,7 @@ lemma toNNReal_add_add_neg_add_neg_eq
   abel
 
 中文:
-引理 toNNReal_add_add_neg_add_neg_eq
+引理 toNN实数_add_add_neg_add_neg_eq
   条件: (f g : C(X, 实数))
   证明: by
   ext x
@@ -174,7 +174,7 @@ lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq
 @[simp]
 
 中文:
-引理 toNNReal_mul_add_neg_mul_add_mul_neg_eq
+引理 toNN实数_mul_add_neg_mul_add_mul_neg_eq
   条件: (f g : C(X, 实数))
   证明: by
   ext x
@@ -205,7 +205,7 @@ lemma toNNReal_algebraMap
 @[simp]
 
 中文:
-引理 toNNReal_algebraMap
+引理 toNN实数_algebraMap
   条件: (r : 实数>=0)
   证明: by
   ext; simp
@@ -230,7 +230,7 @@ lemma toNNReal_neg_algebraMap
 @[simp]
 
 中文:
-引理 toNNReal_neg_algebraMap
+引理 toNN实数_neg_algebraMap
   条件: (r : 实数>=0)
   结论: (- algebraMap 实数 C(X, 实数) r).toNN实数 = 0
   证明: by
@@ -253,7 +253,7 @@ lemma toNNReal_one
 @[simp]
 
 中文:
-引理 toNNReal_one
+引理 toNN实数_one
   结论: (1 : C(X, 实数)).toNN实数 = 1
   证明: toNNReal_algebraMap 1
 
@@ -273,7 +273,7 @@ lemma toNNReal_neg_one
   proof: toNNReal_neg_algebraMap 1
 
 中文:
-引理 toNNReal_neg_one
+引理 toNN实数_neg_one
   结论: (-1 : C(X, 实数)).toNN实数 = 0
   证明: toNNReal_neg_algebraMap 1
 
@@ -312,7 +312,7 @@ definition realContinuousMapOfNNReal
   map_
 
 中文:
-定义 realContinuousMapOfNNReal
+定义 realContinuousMapOfNN实数
   签名: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
   定义体: φ f.toNNReal - φ (-f).toNNReal
   map_one' := by simp
@@ -368,7 +368,7 @@ lemma continuous_realContinuousMapOfNNReal
   fun_prop
 
 中文:
-引理 continuous_realContinuousMapOfNNReal
+引理 continuous_realContinuousMapOfNN实数
   结论: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
   证明: by
   dsimp [realContinuousMapOfNNReal]
@@ -400,7 +400,7 @@ lemma realContinuousMapOfNNReal_apply_comp_toReal
     simp
 
 中文:
-引理 realContinuousMapOfNNReal_apply_comp_toReal
+引理 realContinuousMapOfNN实数_apply_comp_to实数
   结论: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
   证明: by
   simp only [realContinuousMapOfNNReal_apply]
@@ -435,7 +435,7 @@ lemma realContinuousMapOfNNReal_injective
   simpa using congr($(h) ((ContinuousMap.mk toReal continuous_coe).comp f))
 
 中文:
-引理 realContinuousMapOfNNReal_injective
+引理 realContinuousMapOfNN实数_injective
   证明: by
   intro φ ψ h
   ext f
@@ -467,8 +467,8 @@ instance NNReal.instContinuousMap.UniqueHom
         Continuous ξ' ∧ ξ' (.restri
 
 中文:
-实例 NNReal.instContinuousMap.UniqueHom
-  签名: [T2Space A]
+实例 非负实数.instContinuousMap.唯一态射
+  签名: [T2空间 A]
   定义体: by
     let s' : Set Real := (↑) '' s
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
@@ -575,7 +575,7 @@ lemma toNNReal_apply
 @[fun_prop]
 
 中文:
-引理 toNNReal_apply
+引理 toNN实数_apply
   条件: (f : C(X, 实数)₀) (x : X)
   结论: f.toNN实数 x = 实数.toNN实数 (f x)
   证明: rfl
@@ -597,8 +597,8 @@ lemma continuous_toNNReal
 .comp continuous_induced_dom exact ContinuousMap.continuous_postcomp _
 
 中文:
-引理 continuous_toNNReal
-  结论: Continuous (toNN实数 (X := X))
+引理 continuous_toNN实数
+  结论: 连续 (toNN实数 (X := X))
   证明: by
   rw [continuous_induced_rng]
   convert_to! Continuous (ContinuousMap.toNNReal ∘ ((↑) : C(X, Real)₀ -> C(X, Real))) using 1
@@ -622,7 +622,7 @@ lemma toContinuousMapHom_toNNReal
 @[simp]
 
 中文:
-引理 toContinuousMapHom_toNNReal
+引理 toContinuousMapHom_toNN实数
   条件: (f : C(X, 实数)₀)
   证明: rfl
 
@@ -653,7 +653,7 @@ lemma toNNReal_smul
 @[simp]
 
 中文:
-引理 toNNReal_smul
+引理 toNN实数_smul
   条件: (r : 实数>=0) (f : C(X, 实数)₀)
   结论: (r • f).toNN实数 = r • f.toNN实数
   证明: by
@@ -686,7 +686,7 @@ lemma toNNReal_neg_smul
   rw [NNReal.smul_def]; rw [← smul_neg]; rw [← NNReal.smul_def]; rw [toNNReal_smul]
 
 中文:
-引理 toNNReal_neg_smul
+引理 toNN实数_neg_smul
   条件: (r : 实数>=0) (f : C(X, 实数)₀)
   结论: (-(r • f)).toNN实数 = r • (-f).toNN实数
   证明: by
@@ -709,7 +709,7 @@ lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq
     using! (f : C(X, Real)).toNNReal_mul_add_neg_mul_add_mul_neg_eq g
 
 中文:
-引理 toNNReal_mul_add_neg_mul_add_mul_neg_eq
+引理 toNN实数_mul_add_neg_mul_add_mul_neg_eq
   条件: (f g : C(X, 实数)₀)
   证明: by
   apply toContinuousMap_injective
@@ -737,7 +737,7 @@ lemma toNNReal_add_add_neg_add_neg_eq
     using! (f : C(X, Real)).toNNReal_add_add_neg_add_neg_eq g
 
 中文:
-引理 toNNReal_add_add_neg_add_neg_eq
+引理 toNN实数_add_add_neg_add_neg_eq
   条件: (f g : C(X, 实数)₀)
   证明: by
   apply toContinuousMap_injective
@@ -788,7 +788,7 @@ definition realContinuousMapZeroOfNNReal
     have := congr
 
 中文:
-定义 realContinuousMapZeroOfNNReal
+定义 realContinuousMapZeroOfNN实数
   签名: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
   定义体: φ f.toNNReal - φ (-f).toNNReal
   map_zero' := by simp
@@ -847,7 +847,7 @@ lemma continuous_realContinuousMapZeroOfNNReal
   fun_prop
 
 中文:
-引理 continuous_realContinuousMapZeroOfNNReal
+引理 continuous_realContinuousMapZeroOfNN实数
   结论: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
   证明: by
   dsimp [realContinuousMapZeroOfNNReal]
@@ -880,7 +880,7 @@ lemma realContinuousMapZeroOfNNReal_apply_comp_toReal
     simp
 
 中文:
-引理 realContinuousMapZeroOfNNReal_apply_comp_toReal
+引理 realContinuousMapZeroOfNN实数_apply_comp_to实数
   结论: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
   证明: by
   simp only [realContinuousMapZeroOfNNReal_apply]
@@ -916,7 +916,7 @@ lemma realContinuousMapZeroOfNNReal_injective
   simpa using congr($(h) ((ContinuousMapZero.mk ⟨toReal, continuous_coe⟩ rfl).comp f))
 
 中文:
-引理 realContinuousMapZeroOfNNReal_injective
+引理 realContinuousMapZeroOfNN实数_injective
   证明: by
   intro φ ψ h
   ext f
@@ -949,7 +949,7 @@ instance NNReal.instContinuousMapZero.UniqueHom
     have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous
 
 中文:
-实例 NNReal.instContinuousMapZero.UniqueHom
+实例 非负实数.instContinuousMapZero.唯一态射
   定义体: by
     let s' : Set Real := (↑) '' s
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
@@ -1076,7 +1076,7 @@ lemma NonUnitalStarAlgHom.map_cfcₙ
   proof: NonUnitalStarAlgHomClass.map_cfcₙ φ f a
 
 中文:
-引理 NonUnitalStarAlgHom.map_cfcₙ
+引理 非幺StarAlg态射.map_cfcₙ
   结论: (φ : A ->⋆ₙₐ[S] B) (f : R -> R) (a : A)
   证明: NonUnitalStarAlgHomClass.map_cfcₙ φ f a
 
@@ -1166,7 +1166,7 @@ lemma StarAlgHom.map_cfc
   proof: StarAlgHomClass.map_cfc φ f a
 
 中文:
-引理 StarAlgHom.map_cfc
+引理 StarAlg态射.map_cfc
   结论: (φ : A ->⋆ₐ[S] B) (f : R -> R) (a : A)
   证明: StarAlgHomClass.map_cfc φ f a
 

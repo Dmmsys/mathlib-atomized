@@ -51,13 +51,13 @@ structure Decomposition
     - L_diag_ne_zero((i : m)) : L.diag i != 0
 
 中文:
-结构 Decomposition
-  参数: (A : Matrix m n R)
+结构 分解
+  参数: (A : 矩阵 m n R)
   公理与运算 (6 个):
-    - L : Matrix m m R
-    - σ : Equiv.Perm m
+    - L : 矩阵 m m R
+    - σ : 等价.置换 m
     - pivot : m -> WithTop n
-    - isPivotedBy : (L * (A.submatrix σ id)).IsPivotedBy pivot
+    - isPivotedBy : (L * (A.submatrix σ id)).是PivotedBy pivot
     - L_lowerTriangular : L.IsLowerTriangular
     - L_diag_ne_zero((i : m)) : L.diag i != 0
 -/
@@ -83,8 +83,8 @@ theorem Decomposition.rank_eq
   exact (A.rank_submatrix cert.σ (.refl _)).symm
 
 中文:
-定理 Decomposition.rank_eq
-  条件: {A : Matrix m n R} (cert : Decomposition A)
+定理 分解.rank_eq
+  条件: {A : 矩阵 m n R} (cert : 分解 A)
   证明: by
   rw [← cert.isPivotedBy.rank_eq]; rw [cert.L.rank_mul_eq_right_of_isLowerTriangular _ cert.L_lowerTriangular cert.L_diag_ne_zero]
   exact (A.rank_submatrix cert.σ (.refl _)).symm

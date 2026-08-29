@@ -45,7 +45,7 @@ definition replaceRec
 
 中文:
 定义 replaceRec
-  签名: (f? : (Expr -> Expr) -> Expr -> Option Expr)
+  签名: (f? : (Expr -> Expr) -> Expr -> 选项类型 Expr)
   定义体: memoFix fun r e =>
     match f? r e with
     | some x => x

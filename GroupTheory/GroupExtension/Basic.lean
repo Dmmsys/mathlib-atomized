@@ -79,7 +79,7 @@ definition surjInvRightHom
 
 中文:
 定义 surjInvRightHom
-  签名: : S.Section where
+  签名: : S.截面 where
   定义体: Function.surjInv S.rightHom_surjective
   rightInverse_rightHom := Function.surjInv_eq S.rightHom_surjective
 
@@ -165,7 +165,7 @@ theorem exists_eq_inl_mul
 @[to_additive]
 
 中文:
-定理 exists_eq_inl_mul
+定理 存在_eq_inl_mul
   结论: 存在 n : N, σ g = S.inl n * σ' g
   证明: by
   obtain ⟨n, hn⟩ := mul_inv_mem_range_inl σ σ' g
@@ -193,7 +193,7 @@ theorem exists_eq_mul_inl
 @[to_additive]
 
 中文:
-定理 exists_eq_mul_inl
+定理 存在_eq_mul_inl
   结论: 存在 n : N, σ g = σ' g * S.inl n
   证明: by
   obtain ⟨n, hn⟩ := inv_mul_mem_range_inl σ' σ g
@@ -278,7 +278,7 @@ theorem exists_mul_eq_inl_mul_mul
 @[to_additive]
 
 中文:
-定理 exists_mul_eq_inl_mul_mul
+定理 存在_mul_eq_inl_mul_mul
   结论: 存在 n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ g₂
   证明: by
   obtain ⟨n, hn⟩ := mul_mul_mul_inv_mem_range_inl σ g₁ g₂
@@ -310,7 +310,7 @@ initialize_simps_projections AddGroupExtension.Section (toFun -> apply)
 initialize_simps_projections Section (toFun -> apply)
 
 中文:
-定理 exists_mul_eq_mul_mul_inl
+定理 存在_mul_eq_mul_mul_inl
   结论: 存在 n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.inl n
   证明: by
   obtain ⟨n, hn⟩ := mul_inv_mul_mul_mem_range_inl σ g₁ g₂
@@ -345,7 +345,7 @@ definition equivComp
 
 中文:
 定义 equivComp
-  签名: : S'.Section where
+  签名: : S'.截面 where
   定义体: equiv ∘ σ
   rightInverse_rightHom g := by
     rw [Function.comp_apply]; rw [equiv.rightHom_map]; rw [rightHom_section]
@@ -606,7 +606,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: : Setoid S.Splitting where
+  签名: : 集合等价关系 S.Splitting where
   定义体: S.IsConj
   iseqv :=
   { refl := refl S

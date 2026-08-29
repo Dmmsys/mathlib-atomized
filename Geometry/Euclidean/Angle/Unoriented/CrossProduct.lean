@@ -39,7 +39,7 @@ lemma norm_ofLp_crossProduct
 
 中文:
 引理 norm_ofLp_crossProduct
-  条件: (a b : EuclideanSpace 实数 (Fin 3))
+  条件: (a b : EuclideanSpace 实数 (有限集 3))
   证明: by
   have := sin_angle_nonneg a b
 .mp ?_ refine sq_eq_sq₀ (by positivity) (by positivity)
@@ -70,7 +70,7 @@ lemma norm_toLp_symm_crossProduct
 
 中文:
 引理 norm_toLp_symm_crossProduct
-  条件: (a b : Fin 3 -> 实数)
+  条件: (a b : 有限集 3 -> 实数)
   证明: by
   simp [← norm_ofLp_crossProduct (toLp 2 a) (toLp 2 b)]
 

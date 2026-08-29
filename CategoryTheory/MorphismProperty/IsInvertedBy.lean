@@ -39,7 +39,7 @@ definition IsInvertedBy
 
 中文:
 定义 IsInvertedBy
-  签名: (P : Morphism命题erty C) (F : C ⥤ D)
+  签名: (P : MorphismProperty C) (F : C ⥤ D)
   定义体: forall ⦃X Y : C⦄ (f : X ⟶ Y) (_ : P f), IsIso (F.map f)
 
 Depends on / 依赖: F.map
@@ -59,7 +59,7 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: (P Q : Morphism命题erty C) (F : C ⥤ D) (hQ : Q.IsInvertedBy F) (h : P <= Q)
+  条件: (P Q : MorphismProperty C) (F : C ⥤ D) (hQ : Q.IsInvertedBy F) (h : P <= Q)
   证明: fun _ _ _ hf => hQ _ (h _ hf)
 -/
 lemma of_le (P Q : MorphismProperty C) (F : C ⥤ D) (hQ : Q.IsInvertedBy F) (h : P <= Q) :
@@ -80,7 +80,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: {C₁ C₂ C₃ : 类型} [Category* C₁] [Category* C₂] [Category* C₃]
+  结论: {C₁ C₂ C₃ : 类型} [范畴* C₁] [范畴* C₂] [范畴* C₃]
   证明: fun X Y f hf => by
   have := hF f hf
   dsimp
@@ -110,7 +110,7 @@ theorem op
 
 中文:
 定理 op
-  条件: {W : Morphism命题erty C} {L : C ⥤ D} (h : W.IsInvertedBy L)
+  条件: {W : MorphismProperty C} {L : C ⥤ D} (h : W.IsInvertedBy L)
   结论: W.op.IsInvertedBy L.op
   证明: fun X Y f hf => by
   have := h f.unop hf
@@ -139,7 +139,7 @@ theorem rightOp
 
 中文:
 定理 rightOp
-  条件: {W : Morphism命题erty C} {L : Cᵒᵖ ⥤ D} (h : W.op.IsInvertedBy L)
+  条件: {W : MorphismProperty C} {L : Cᵒᵖ ⥤ D} (h : W.op.IsInvertedBy L)
   证明: fun X Y f hf => by
   have := h f.op hf
   dsimp
@@ -167,7 +167,7 @@ theorem leftOp
 
 中文:
 定理 leftOp
-  条件: {W : Morphism命题erty C} {L : C ⥤ Dᵒᵖ} (h : W.IsInvertedBy L)
+  条件: {W : MorphismProperty C} {L : C ⥤ Dᵒᵖ} (h : W.IsInvertedBy L)
   证明: fun X Y f hf => by
   have := h f.unop hf
   dsimp
@@ -195,7 +195,7 @@ theorem unop
 
 中文:
 定理 unop
-  条件: {W : Morphism命题erty C} {L : Cᵒᵖ ⥤ Dᵒᵖ} (h : W.op.IsInvertedBy L)
+  条件: {W : MorphismProperty C} {L : Cᵒᵖ ⥤ Dᵒᵖ} (h : W.op.IsInvertedBy L)
   证明: fun X Y f hf => by
   have := h f.op hf
   dsimp
@@ -221,8 +221,8 @@ lemma prod
   exact ⟨h₁ _ hf.1, h₂ _ hf.2⟩
 
 中文:
-引理 prod
-  结论: {C₁ C₂ : 类型} [Category* C₁] [Category* C₂]
+引理 乘积
+  结论: {C₁ C₂ : 类型} [范畴* C₁] [范畴* C₂]
   证明: fun _ _ f hf => by
   rw [isIso_prod_iff]
   exact ⟨h₁ _ hf.1, h₂ _ hf.2⟩
@@ -251,7 +251,7 @@ lemma pi
 
 中文:
 引理 pi
-  结论: {J : Type w} {C : J -> 类型u} {D : J -> 类型u'}
+  结论: {J : 类型 w} {C : J -> 类型u} {D : J -> 类型u'}
   证明: by
   intro _ _ f hf
   rw [isIso_pi_iff]
@@ -284,7 +284,7 @@ definition FunctorsInverting
 
 中文:
 定义 FunctorsInverting
-  签名: (W : Morphism命题erty C) (D : 类型) [Category* D]
+  签名: (W : MorphismProperty C) (D : 类型) [范畴* D]
   定义体: ObjectProperty.FullSubcategory fun F : C ⥤ D => W.IsInvertedBy F
 
 @[ext]
@@ -309,7 +309,7 @@ lemma FunctorsInverting.ext
 
 中文:
 引理 FunctorsInverting.ext
-  结论: {W : Morphism命题erty C} {F₁ F₂ : FunctorsInverting W D}
+  结论: {W : MorphismProperty C} {F₁ F₂ : FunctorsInverting W D}
   证明: by
   cases F₁
   cases F₂
@@ -377,7 +377,7 @@ lemma FunctorsInverting.hom_ext
 
 中文:
 引理 FunctorsInverting.hom_ext
-  结论: {W : Morphism命题erty C} {F₁ F₂ : FunctorsInverting W D}
+  结论: {W : MorphismProperty C} {F₁ F₂ : FunctorsInverting W D}
   证明: ObjectProperty.hom_ext _ (NatTrans.ext h)
 
 Depends on / 依赖: NatTrans, NatTrans.ext, ObjectProperty, ObjectProperty.hom_ext, hom_ext
@@ -396,7 +396,7 @@ definition FunctorsInverting.mk
 
 中文:
 定义 FunctorsInverting.mk
-  签名: {W : Morphism命题erty C} {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: {W : MorphismProperty C} {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: ⟨F, hF⟩
 -/
 def FunctorsInverting.mk {W : MorphismProperty C} {D : Type*} [Category* D] (F : C ⥤ D)
@@ -415,7 +415,7 @@ theorem IsInvertedBy.iff_of_iso
 
 中文:
 定理 IsInvertedBy.iff_of_iso
-  条件: (W : Morphism命题erty C) {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂)
+  条件: (W : MorphismProperty C) {F₁ F₂ : C ⥤ D} (e : F₁ ≅ F₂)
   证明: by
   dsimp [IsInvertedBy]
   simp only [NatIso.isIso_map_iff e]
@@ -448,7 +448,7 @@ lemma IsInvertedBy.isoClosure_iff
 
 中文:
 引理 IsInvertedBy.isoClosure_iff
-  条件: (W : Morphism命题erty C) (F : C ⥤ D)
+  条件: (W : MorphismProperty C) (F : C ⥤ D)
   证明: by
   constructor
   · intro h X Y f hf
@@ -489,7 +489,7 @@ lemma IsInvertedBy.iff_comp
 
 中文:
 引理 IsInvertedBy.iff_comp
-  结论: {C₁ C₂ C₃ : 类型} [Category* C₁] [Category* C₂] [Category* C₃]
+  结论: {C₁ C₂ C₃ : 类型} [范畴* C₁] [范畴* C₂] [范畴* C₃]
   证明: by
   constructor
   · intro h X Y f hf
@@ -520,7 +520,7 @@ lemma IsInvertedBy.iff_le_inverseImage_isomorphisms
 
 中文:
 引理 IsInvertedBy.iff_le_inverseImage_isomorphisms
-  条件: (W : Morphism命题erty C) (F : C ⥤ D)
+  条件: (W : MorphismProperty C) (F : C ⥤ D)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -539,7 +539,7 @@ lemma IsInvertedBy.iff_map_le_isomorphisms
 
 中文:
 引理 IsInvertedBy.iff_map_le_isomorphisms
-  条件: (W : Morphism命题erty C) (F : C ⥤ D)
+  条件: (W : MorphismProperty C) (F : C ⥤ D)
   证明: by
   rw [iff_le_inverseImage_isomorphisms]; rw [map_le_iff]
 
@@ -560,7 +560,7 @@ lemma IsInvertedBy.map_iff
 
 中文:
 引理 IsInvertedBy.map_iff
-  结论: {C₁ C₂ C₃ : 类型} [Category* C₁] [Category* C₂] [Category* C₃]
+  结论: {C₁ C₂ C₃ : 类型} [范畴* C₁] [范畴* C₂] [范畴* C₃]
   证明: by
   simp only [IsInvertedBy.iff_map_le_isomorphisms, map_map]
 

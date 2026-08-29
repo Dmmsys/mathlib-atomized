@@ -374,7 +374,7 @@ theorem compRel_of_total
 
 中文:
 定理 compRel_of_total
-  条件: [Std.Total r] (a b : α)
+  条件: [Std.全 r] (a b : α)
   结论: CompRel r a b
   证明: symmGen_of_total a b
 
@@ -692,8 +692,8 @@ definition Relation.linearOrderOfSymmGen
   toDecidableLT := decLT
 
 中文:
-定义 Relation.linearOrderOfSymmGen
-  签名: [PartialOrder α]
+定义 关系.linearOrderOfSymmGen
+  签名: [偏序 α]
   定义体: h
   toDecidableLE := decLE
   toDecidableEq := decEq
@@ -719,7 +719,7 @@ definition linearOrderOfComprel
 
 中文:
 定义 linearOrderOfComprel
-  签名: [PartialOrder α]
+  签名: [偏序 α]
   定义体: linearOrderOfSymmGen h
 
 Depends on / 依赖: linearOrderOfSymmGen
@@ -1058,7 +1058,7 @@ theorem not_symmGen_iff
 
 中文:
 定理 not_symmGen_iff
-  结论: ¬ Relation.SymmGen r a b ↔ IncompRel r a b
+  结论: ¬ 关系.SymmGen r a b ↔ IncompRel r a b
   证明: by
   simp [Relation.SymmGen, IncompRel]
 
@@ -1101,7 +1101,7 @@ theorem not_incompRel_iff_symmGen
 
 中文:
 定理 not_incompRel_iff_symmGen
-  结论: ¬ IncompRel r a b ↔ Relation.SymmGen r a b
+  结论: ¬ IncompRel r a b ↔ 关系.SymmGen r a b
   证明: by
   rw [← not_symmGen_iff]; rw [not_not]
 
@@ -1151,7 +1151,7 @@ theorem not_incompRel_of_total
 
 中文:
 定理 not_incompRel_of_total
-  条件: [Std.Total r] (a b : α)
+  条件: [Std.全 r] (a b : α)
   结论: ¬ IncompRel r a b
   证明: by
   rw [not_incompRel_iff_symmGen]
@@ -1522,7 +1522,7 @@ theorem lt_or_eq_or_gt_or_incompRel
 
 中文:
 定理 lt_or_eq_or_gt_or_incompRel
-  条件: [PartialOrder α] (a b : α)
+  条件: [偏序 α] (a b : α)
   证明: by
   simpa using lt_or_antisymmRel_or_gt_or_incompRel a b
 

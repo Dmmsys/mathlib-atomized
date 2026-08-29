@@ -120,8 +120,8 @@ theorem Convex.span_tangentConeAt
   replace hy : interior s in 𝓝 y := 
 
 中文:
-定理 Convex.span_tangentConeAt
-  结论: (conv : Convex 实数 s) (hs : (interior s).Nonempty)
+定理 凸.span_tangentConeAt
+  结论: (conv : 凸 实数 s) (hs : (interior s).非空)
   证明: by
   rcases hs with ⟨y, hy⟩
   suffices y - x in interior (tangentConeAt Real s x) by
@@ -157,7 +157,7 @@ theorem uniqueDiffWithinAt_convex
 
 中文:
 定理 uniqueDiffWithinAt_convex
-  结论: (conv : Convex 实数 s) (hs : (interior s).Nonempty)
+  结论: (conv : 凸 实数 s) (hs : (interior s).非空)
   证明: by
   simp [uniqueDiffWithinAt_iff, conv.span_tangentConeAt hs hx, hx]
 
@@ -177,7 +177,7 @@ theorem uniqueDiffOn_convex
 
 中文:
 定理 uniqueDiffOn_convex
-  条件: (conv : Convex 实数 s) (hs : (interior s).Nonempty)
+  条件: (conv : 凸 实数 s) (hs : (interior s).非空)
   证明: fun _ xs => uniqueDiffWithinAt_convex conv hs (subset_closure xs)
 
 Depends on / 依赖: subset_closure, uniqueDiffWithinAt_convex
@@ -202,7 +202,7 @@ theorem uniqueDiffOn_Ici
 中文:
 定理 uniqueDiffOn_Ici
   条件: (a : 实数)
-  结论: UniqueDiffOn 实数 (Ici a)
+  结论: UniqueDiffOn 实数 (左闭右无界区间 a)
   证明: uniqueDiffOn_convex (convex_Ici a) by simp only [interior_Ici, nonempty_Ioi]
 
 Depends on / 依赖: Complex.instStarHomClass, StarHomClass, convex_Ici, instStarHomClass, interior_Ici, nonempty_Ioi, uniqueDiffOn_convex
@@ -222,7 +222,7 @@ theorem uniqueDiffOn_Iic
 中文:
 定理 uniqueDiffOn_Iic
   条件: (a : 实数)
-  结论: UniqueDiffOn 实数 (Iic a)
+  结论: UniqueDiffOn 实数 (左无界右闭区间 a)
   证明: uniqueDiffOn_convex (convex_Iic a) by simp only [interior_Iic, nonempty_Iio]
 
 Depends on / 依赖: convex_Iic, interior_Iic, nonempty_Iio, uniqueDiffOn_convex
@@ -242,7 +242,7 @@ theorem uniqueDiffOn_Ioi
 中文:
 定理 uniqueDiffOn_Ioi
   条件: (a : 实数)
-  结论: UniqueDiffOn 实数 (Ioi a)
+  结论: UniqueDiffOn 实数 (左开右无界区间 a)
   证明: isOpen_Ioi.uniqueDiffOn
 
 Depends on / 依赖: isOpen_Ioi, isOpen_Ioi.uniqueDiffOn, uniqueDiffOn
@@ -262,7 +262,7 @@ theorem uniqueDiffOn_Iio
 中文:
 定理 uniqueDiffOn_Iio
   条件: (a : 实数)
-  结论: UniqueDiffOn 实数 (Iio a)
+  结论: UniqueDiffOn 实数 (左无界右开区间 a)
   证明: isOpen_Iio.uniqueDiffOn
 
 Depends on / 依赖: isOpen_Iio, isOpen_Iio.uniqueDiffOn, uniqueDiffOn
@@ -282,7 +282,7 @@ theorem uniqueDiffOn_Icc
 中文:
 定理 uniqueDiffOn_Icc
   条件: {a b : 实数} (hab : a < b)
-  结论: UniqueDiffOn 实数 (Icc a b)
+  结论: UniqueDiffOn 实数 (闭区间 a b)
   证明: uniqueDiffOn_convex (convex_Icc a b) by simp only [interior_Icc, nonempty_Ioo, hab]
 
 Depends on / 依赖: convex_Icc, interior_Icc, nonempty_Ioo, uniqueDiffOn_convex
@@ -324,7 +324,7 @@ uniqueDiffOn_convex (convex_Ico a b) by simp only [interior_Ico, nonempty_Ioo, h
 中文:
 定理 uniqueDiffOn_Ico
   条件: (a b : 实数)
-  结论: UniqueDiffOn 实数 (Ico a b)
+  结论: UniqueDiffOn 实数 (左闭右开区间 a b)
   证明: if hab : a < b then
 uniqueDiffOn_convex (convex_Ico a b) by simp only [interior_Ico, nonempty_Ioo, hab]
   else by simp only [Ico_eq_empty hab, uniqueDiffOn_empty]
@@ -350,7 +350,7 @@ uniqueDiffOn_convex (convex_Ioc a b) by simp only [interior_Ioc, nonempty_Ioo, h
 中文:
 定理 uniqueDiffOn_Ioc
   条件: (a b : 实数)
-  结论: UniqueDiffOn 实数 (Ioc a b)
+  结论: UniqueDiffOn 实数 (左开右闭区间 a b)
   证明: if hab : a < b then
 uniqueDiffOn_convex (convex_Ioc a b) by simp only [interior_Ioc, nonempty_Ioo, hab]
   else by simp only [Ioc_eq_empty hab, uniqueDiffOn_empty]
@@ -374,7 +374,7 @@ theorem uniqueDiffOn_Ioo
 中文:
 定理 uniqueDiffOn_Ioo
   条件: (a b : 实数)
-  结论: UniqueDiffOn 实数 (Ioo a b)
+  结论: UniqueDiffOn 实数 (开区间 a b)
   证明: isOpen_Ioo.uniqueDiffOn
 
 Depends on / 依赖: isOpen_Ioo, isOpen_Ioo.uniqueDiffOn, uniqueDiffOn
@@ -392,7 +392,7 @@ theorem uniqueDiffOn_Icc_zero_one
 
 中文:
 定理 uniqueDiffOn_Icc_zero_one
-  结论: UniqueDiffOn 实数 (Icc (0 : 实数) 1)
+  结论: UniqueDiffOn 实数 (闭区间 (0 : 实数) 1)
   证明: uniqueDiffOn_Icc zero_lt_one
 
 Depends on / 依赖: uniqueDiffOn_Icc, zero_lt_one
@@ -410,7 +410,7 @@ theorem uniqueDiffWithinAt_Ioo
 
 中文:
 定理 uniqueDiffWithinAt_Ioo
-  条件: {a b t : 实数} (ht : t in Set.Ioo a b)
+  条件: {a b t : 实数} (ht : t in 集合.开区间 a b)
   证明: IsOpen.uniqueDiffWithinAt isOpen_Ioo ht
 
 Depends on / 依赖: IsOpen, IsOpen.uniqueDiffWithinAt, SubringClass, SubringClass.toNormedRing, elemental, isOpen_Ioo, mul_comm, toNormedRing, uniqueDiffWithinAt
@@ -431,7 +431,7 @@ theorem uniqueDiffWithinAt_Ioi
 中文:
 定理 uniqueDiffWithinAt_Ioi
   条件: (a : 实数)
-  结论: UniqueDiffWithinAt 实数 (Ioi a) a
+  结论: UniqueDiffWithinAt 实数 (左开右无界区间 a) a
   证明: uniqueDiffWithinAt_convex (convex_Ioi a) (by simp) (by simp)
 
 Depends on / 依赖: convex_Ioi, uniqueDiffWithinAt_convex
@@ -451,7 +451,7 @@ theorem uniqueDiffWithinAt_Iio
 中文:
 定理 uniqueDiffWithinAt_Iio
   条件: (a : 实数)
-  结论: UniqueDiffWithinAt 实数 (Iio a) a
+  结论: UniqueDiffWithinAt 实数 (左无界右开区间 a) a
   证明: uniqueDiffWithinAt_convex (convex_Iio a) (by simp) (by simp)
 
 Depends on / 依赖: convex_Iio, uniqueDiffWithinAt_convex
@@ -471,7 +471,7 @@ theorem uniqueDiffWithinAt_Ici
 中文:
 定理 uniqueDiffWithinAt_Ici
   条件: (x : 实数)
-  结论: UniqueDiffWithinAt 实数 (Ici x) x
+  结论: UniqueDiffWithinAt 实数 (左闭右无界区间 x) x
   证明: (uniqueDiffWithinAt_Ioi x).mono Set.Ioi_subset_Ici_self
 
 Depends on / 依赖: Ioi_subset_Ici_self, Set.Ioi_subset_Ici_self, uniqueDiffWithinAt_Ioi
@@ -491,7 +491,7 @@ theorem uniqueDiffWithinAt_Iic
 中文:
 定理 uniqueDiffWithinAt_Iic
   条件: (x : 实数)
-  结论: UniqueDiffWithinAt 实数 (Iic x) x
+  结论: UniqueDiffWithinAt 实数 (左无界右闭区间 x) x
   证明: (uniqueDiffWithinAt_Iio x).mono Set.Iio_subset_Iic_self
 
 Depends on / 依赖: Iio_subset_Iic_self, Set.Iio_subset_Iic_self, uniqueDiffWithinAt_Iio

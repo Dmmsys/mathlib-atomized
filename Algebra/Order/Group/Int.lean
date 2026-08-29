@@ -31,8 +31,8 @@ instance Int.instIsOrderedAddMonoid
   body: Int.add_le_add_right
 
 中文:
-实例 Int.instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid 整数 where
+实例 整数.instIsOrderedAddMonoid
+  签名: : 是OrderedAdd幺半群 整数 where
   定义体: Int.add_le_add_right
 
 Depends on / 依赖: Int.add_le_add_right, add_le_add_right

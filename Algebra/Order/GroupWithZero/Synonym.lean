@@ -36,8 +36,8 @@ instance [MulZeroClass
   body: inferInstanceAs MulZeroClass α
 
 中文:
-实例 [MulZeroClass
-  签名: α] : MulZeroClass αᵒᵈ
+实例 [乘零类
+  签名: α] : 乘零类 αᵒᵈ
   定义体: inferInstanceAs MulZeroClass α
 
 Depends on / 依赖: MulZeroClass
@@ -53,8 +53,8 @@ instance [MulZeroOneClass
   body: inferInstanceAs MulZeroOneClass α
 
 中文:
-实例 [MulZeroOneClass
-  签名: α] : MulZeroOneClass αᵒᵈ
+实例 [乘零幺类
+  签名: α] : 乘零幺类 αᵒᵈ
   定义体: inferInstanceAs MulZeroOneClass α
 -/
 instance [MulZeroOneClass α] : MulZeroOneClass αᵒᵈ := inferInstanceAs MulZeroOneClass α
@@ -68,8 +68,8 @@ instance [Mul
   body: inferInstanceAs NoZeroDivisors α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [NoZeroDivisors α] : NoZeroDivisors αᵒᵈ
+实例 [乘法
+  签名: α] [零 α] [无零因子 α] : 无零因子 αᵒᵈ
   定义体: inferInstanceAs NoZeroDivisors α
 
 Depends on / 依赖: NoZeroDivisors
@@ -86,8 +86,8 @@ instance [SemigroupWithZero
   body: inferInstanceAs SemigroupWithZero α
 
 中文:
-实例 [SemigroupWithZero
-  签名: α] : SemigroupWithZero αᵒᵈ
+实例 [带零半群
+  签名: α] : 带零半群 αᵒᵈ
   定义体: inferInstanceAs SemigroupWithZero α
 
 Depends on / 依赖: SemigroupWithZero
@@ -103,8 +103,8 @@ instance [MonoidWithZero
   body: inferInstanceAs MonoidWithZero α
 
 中文:
-实例 [MonoidWithZero
-  签名: α] : MonoidWithZero αᵒᵈ
+实例 [带零幺半群
+  签名: α] : 带零幺半群 αᵒᵈ
   定义体: inferInstanceAs MonoidWithZero α
 -/
 instance [MonoidWithZero α] : MonoidWithZero αᵒᵈ := inferInstanceAs MonoidWithZero α
@@ -118,8 +118,8 @@ instance [Mul
   body: inferInstanceAs IsLeftCancelMulZero α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsLeftCancelMulZero α] : IsLeftCancelMulZero αᵒᵈ
+实例 [乘法
+  签名: α] [零 α] [是左消去MulZero α] : 是左消去MulZero αᵒᵈ
   定义体: inferInstanceAs IsLeftCancelMulZero α
 
 Depends on / 依赖: IsLeftCancelMulZero
@@ -136,8 +136,8 @@ instance [Mul
   body: inferInstanceAs IsRightCancelMulZero α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsRightCancelMulZero α] : IsRightCancelMulZero αᵒᵈ
+实例 [乘法
+  签名: α] [零 α] [是右消去MulZero α] : 是右消去MulZero αᵒᵈ
   定义体: inferInstanceAs IsRightCancelMulZero α
 
 Depends on / 依赖: IsRightCancelMulZero
@@ -153,8 +153,8 @@ instance [Mul
   signature: α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero αᵒᵈ where
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero αᵒᵈ where
+实例 [乘法
+  签名: α] [零 α] [是乘零消去 α] : 是乘零消去 αᵒᵈ where
 -/
 instance [Mul α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero αᵒᵈ where
 
@@ -167,8 +167,8 @@ instance [CommMonoidWithZero
   body: inferInstanceAs CommMonoidWithZero α
 
 中文:
-实例 [CommMonoidWithZero
-  签名: α] : CommMonoidWithZero αᵒᵈ
+实例 [带零交换幺半群
+  签名: α] : 带零交换幺半群 αᵒᵈ
   定义体: inferInstanceAs CommMonoidWithZero α
 
 Depends on / 依赖: CommMonoidWithZero
@@ -184,8 +184,8 @@ instance [GroupWithZero
   body: inferInstanceAs GroupWithZero α
 
 中文:
-实例 [GroupWithZero
-  签名: α] : GroupWithZero αᵒᵈ
+实例 [带零群
+  签名: α] : 带零群 αᵒᵈ
   定义体: inferInstanceAs GroupWithZero α
 -/
 instance [GroupWithZero α] : GroupWithZero αᵒᵈ := inferInstanceAs GroupWithZero α
@@ -199,8 +199,8 @@ instance [CommGroupWithZero
   body: inferInstanceAs CommGroupWithZero α
 
 中文:
-实例 [CommGroupWithZero
-  签名: α] : CommGroupWithZero αᵒᵈ
+实例 [带零交换群
+  签名: α] : 带零交换群 αᵒᵈ
   定义体: inferInstanceAs CommGroupWithZero α
 
 Depends on / 依赖: CommGroupWithZero
@@ -223,8 +223,8 @@ instance [MulZeroClass
   body: inferInstanceAs MulZeroClass α
 
 中文:
-实例 [MulZeroClass
-  签名: α] : MulZeroClass (Lex α)
+实例 [乘零类
+  签名: α] : 乘零类 (Lex α)
   定义体: inferInstanceAs MulZeroClass α
 
 Depends on / 依赖: MulZeroClass
@@ -240,8 +240,8 @@ instance [MulZeroOneClass
   body: inferInstanceAs MulZeroOneClass α
 
 中文:
-实例 [MulZeroOneClass
-  签名: α] : MulZeroOneClass (Lex α)
+实例 [乘零幺类
+  签名: α] : 乘零幺类 (Lex α)
   定义体: inferInstanceAs MulZeroOneClass α
 
 Depends on / 依赖: MulZeroOneClass
@@ -257,8 +257,8 @@ instance [Mul
   body: inferInstanceAs NoZeroDivisors α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [NoZeroDivisors α] : NoZeroDivisors (Lex α)
+实例 [乘法
+  签名: α] [零 α] [无零因子 α] : 无零因子 (Lex α)
   定义体: inferInstanceAs NoZeroDivisors α
 
 Depends on / 依赖: NoZeroDivisors
@@ -275,8 +275,8 @@ instance [SemigroupWithZero
   body: inferInstanceAs SemigroupWithZero α
 
 中文:
-实例 [SemigroupWithZero
-  签名: α] : SemigroupWithZero (Lex α)
+实例 [带零半群
+  签名: α] : 带零半群 (Lex α)
   定义体: inferInstanceAs SemigroupWithZero α
 
 Depends on / 依赖: SemigroupWithZero
@@ -292,8 +292,8 @@ instance [MonoidWithZero
   body: inferInstanceAs MonoidWithZero α
 
 中文:
-实例 [MonoidWithZero
-  签名: α] : MonoidWithZero (Lex α)
+实例 [带零幺半群
+  签名: α] : 带零幺半群 (Lex α)
   定义体: inferInstanceAs MonoidWithZero α
 
 Depends on / 依赖: MonoidWithZero
@@ -309,8 +309,8 @@ instance [Mul
   body: inferInstanceAs IsLeftCancelMulZero α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsLeftCancelMulZero α] : IsLeftCancelMulZero (Lex α)
+实例 [乘法
+  签名: α] [零 α] [是左消去MulZero α] : 是左消去MulZero (Lex α)
   定义体: inferInstanceAs IsLeftCancelMulZero α
 
 Depends on / 依赖: IsLeftCancelMulZero
@@ -327,8 +327,8 @@ instance [Mul
   body: inferInstanceAs IsRightCancelMulZero α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsRightCancelMulZero α] : IsRightCancelMulZero (Lex α)
+实例 [乘法
+  签名: α] [零 α] [是右消去MulZero α] : 是右消去MulZero (Lex α)
   定义体: inferInstanceAs IsRightCancelMulZero α
 
 Depends on / 依赖: IsRightCancelMulZero
@@ -345,8 +345,8 @@ instance [Mul
   body: inferInstanceAs IsCancelMulZero α
 
 中文:
-实例 [Mul
-  签名: α] [Zero α] [IsCancelMulZero α] : IsCancelMulZero (Lex α)
+实例 [乘法
+  签名: α] [零 α] [是乘零消去 α] : 是乘零消去 (Lex α)
   定义体: inferInstanceAs IsCancelMulZero α
 
 Depends on / 依赖: IsCancelMulZero
@@ -363,8 +363,8 @@ instance [CommMonoidWithZero
   body: inferInstanceAs CommMonoidWithZero α
 
 中文:
-实例 [CommMonoidWithZero
-  签名: α] : CommMonoidWithZero (Lex α)
+实例 [带零交换幺半群
+  签名: α] : 带零交换幺半群 (Lex α)
   定义体: inferInstanceAs CommMonoidWithZero α
 
 Depends on / 依赖: CommMonoidWithZero
@@ -381,8 +381,8 @@ instance [GroupWithZero
   body: inferInstanceAs GroupWithZero α
 
 中文:
-实例 [GroupWithZero
-  签名: α] : GroupWithZero (Lex α)
+实例 [带零群
+  签名: α] : 带零群 (Lex α)
   定义体: inferInstanceAs GroupWithZero α
 
 Depends on / 依赖: GroupWithZero
@@ -398,8 +398,8 @@ instance [CommGroupWithZero
   body: inferInstanceAs CommGroupWithZero α
 
 中文:
-实例 [CommGroupWithZero
-  签名: α] : CommGroupWithZero (Lex α)
+实例 [带零交换群
+  签名: α] : 带零交换群 (Lex α)
   定义体: inferInstanceAs CommGroupWithZero α
 
 Depends on / 依赖: CommGroupWithZero

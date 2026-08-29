@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: (epimorphisms (类型u)).IsStableUnderBaseChange
+  签名: (epimorphisms (类型u)).是StableUnderBaseChange
   定义体: by
     simp only [epimorphisms.iff, epi_iff_surjective] at hr ⊢
     intro x

@@ -222,8 +222,8 @@ theorem Splits.listProd
 
 中文:
 定理 Splits.listProd
-  条件: {l : List R[X]} (h : 对任意 f in l, Splits f)
-  结论: Splits l.prod
+  条件: {l : 列表 R[X]} (h : 对任意 f in l, Splits f)
+  结论: Splits l.乘积
   证明: list_prod_mem h
 
 @[simp, aesop safe apply]
@@ -330,7 +330,7 @@ theorem Splits.map
 
 中文:
 定理 Splits.map
-  条件: {f : R[X]} (hf : Splits f) {S : 类型} [Semiring S] (i : R ->+* S)
+  条件: {f : R[X]} (hf : Splits f) {S : 类型} [半环 S] (i : R ->+* S)
   证明: by
   induction hf using Submonoid.closure_induction <;> aesop
 -/
@@ -403,8 +403,8 @@ theorem _root_.IsUnit.splits
   proof: .of_natDegree_eq_zero (natDegree_eq_zero_of_isUnit hf)
 
 中文:
-定理 _root_.IsUnit.splits
-  条件: [NoZeroDivisors R] {f : R[X]} (hf : IsUnit f)
+定理 _root_.是单位.splits
+  条件: [无零因子 R] {f : R[X]} (hf : 是单位 f)
   结论: Splits f
   证明: .of_natDegree_eq_zero (natDegree_eq_zero_of_isUnit hf)
 
@@ -561,7 +561,7 @@ theorem Splits.multisetProd
 中文:
 定理 Splits.multisetProd
   条件: {m : Multiset R[X]} (hm : 对任意 f in m, Splits f)
-  结论: Splits m.prod
+  结论: Splits m.乘积
   证明: multiset_prod_mem _ hm
 
 @[simp, aesop safe apply]
@@ -581,8 +581,8 @@ theorem Splits.prod
   proof: prod_mem h
 
 中文:
-定理 Splits.prod
-  结论: {ι : 类型} {f : ι -> R[X]} {s : Finset ι}
+定理 Splits.乘积
+  结论: {ι : 类型} {f : ι -> R[X]} {s : 有限集 ι}
   证明: prod_mem h
 -/
 protected theorem Splits.prod {ι : Type*} {f : ι -> R[X]} {s : Finset ι}
@@ -629,7 +629,7 @@ theorem splits_iff_exists_multiset'
     o
 
 中文:
-定理 splits_iff_exists_multiset'
+定理 splits_iff_存在_multiset'
   条件: {f : R[X]}
   证明: by
   refine ⟨fun hf => ?_, ?_⟩
@@ -859,7 +859,7 @@ theorem Splits.of_algHom
 
 中文:
 定理 Splits.of_algHom
-  结论: {f : R[X]} {A B : 类型} [Semiring A] [Semiring B]
+  结论: {f : R[X]} {A B : 类型} [半环 A] [半环 B]
   证明: by
   rw [← e.comp_algebraMap]; rw [← map_map]
   apply hf.map
@@ -882,7 +882,7 @@ theorem Splits.of_isScalarTower
 
 中文:
 定理 Splits.of_isScalarTower
-  结论: {f : R[X]} {A : 类型} (B : 类型) [CommSemiring A] [Semiring B]
+  结论: {f : R[X]} {A : 类型} (B : 类型) [交换半环 A] [半环 B]
   证明: hf.of_algHom (IsScalarTower.toAlgHom R A B)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, hf.of_algHom, of_algHom, toAlgHom
@@ -1028,7 +1028,7 @@ theorem splits_iff_exists_multiset
     rintro ⟨m, hm⟩ <;> exact ⟨m.map (- ·), by simpa⟩
 
 中文:
-定理 splits_iff_exists_multiset
+定理 splits_iff_存在_multiset
   证明: by
   refine splits_iff_exists_multiset'.trans ⟨?_, ?_⟩ <;>
     rintro ⟨m, hm⟩ <;> exact ⟨m.map (- ·), by simpa⟩
@@ -1056,7 +1056,7 @@ theorem Splits.exists_eval_eq_zero
   obtain ⟨m, rfl⟩ := M
 
 中文:
-定理 Splits.exists_eval_eq_zero
+定理 Splits.存在_eval_eq_zero
   条件: (hf : Splits f) (hf0 : degree f != 0)
   证明: by
   obtain ⟨m, hm⟩ := splits_iff_exists_multiset.mp hf
@@ -1334,7 +1334,7 @@ theorem Splits.of_splits_map_of_injective
 
 中文:
 定理 Splits.of_splits_map_of_injective
-  结论: {S : 类型} [CommRing S] [IsDomain S] {i : R ->+* S}
+  结论: {S : 类型} [交换环 S] [是整环 S] {i : R ->+* S}
   证明: by
   choose j hj using hi
   rw [splits_iff_exists_multiset]
@@ -1510,7 +1510,7 @@ theorem Splits.roots_map_of_ne_zero
 
 中文:
 定理 Splits.roots_map_of_ne_zero
-  结论: {S : 类型} [CommRing S] [IsDomain S]
+  结论: {S : 类型} [交换环 S] [是整环 S]
   证明: by
   induction hf using Submonoid.closure_induction with
   | mem p hp => obtain (⟨r, rfl⟩ | ⟨a, rfl⟩) := hp <;> simp
@@ -1539,7 +1539,7 @@ omit [IsDomain R] in
 
 中文:
 定理 Splits.roots_map_of_injective
-  结论: {S : 类型} [CommRing S] [IsDomain S]
+  结论: {S : 类型} [交换环 S] [是整环 S]
   证明: (roots_map_of_injective_of_card_eq_natDegree hi hf.natDegree_eq_card_roots.symm).symm
 
 omit [IsDomain R] in
@@ -1910,7 +1910,7 @@ theorem splits_prod_iff
 
 中文:
 定理 splits_prod_iff
-  条件: {ι : 类型} {f : ι -> R[X]} {s : Finset ι} (hf : 对任意 i in s, f i != 0)
+  条件: {ι : 类型} {f : ι -> R[X]} {s : 有限集 ι} (hf : 对任意 i in s, f i != 0)
   证明: ⟨fun h _ hx => h.of_dvd (Finset.prod_ne_zero_iff.mpr hf) (Finset.dvd_prod_of_mem f hx),
     Splits.prod⟩
 
@@ -2194,7 +2194,7 @@ theorem Splits.aeval_eq_prod_aroots
 
 中文:
 定理 Splits.aeval_eq_prod_aroots
-  结论: [Algebra R S]
+  结论: [代数 R S]
   证明: by
   simp [← eval_map_algebraMap, hf.eval_eq_prod_roots]
 
@@ -2572,7 +2572,7 @@ theorem Splits.mem_subfield_of_isRoot
 
 中文:
 定理 Splits.mem_subfield_of_isRoot
-  结论: (F : Subfield R) {f : F[X]} (hf : Splits f) (hf0 : f != 0)
+  结论: (F : 子域 R) {f : F[X]} (hf : Splits f) (hf0 : f != 0)
   证明: by
   simpa using hf.mem_range_of_isRoot hf0 hx
 

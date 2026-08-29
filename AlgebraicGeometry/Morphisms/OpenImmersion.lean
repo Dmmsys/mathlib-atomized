@@ -48,7 +48,7 @@ lemma isOpenImmersion_SpecMap_iff_of_surjective
 
 中文:
 引理 isOpenImmersion_SpecMap_iff_of_surjective
-  结论: {R S : CommRingCat}
+  结论: {R S : 交换环范畴}
   证明: by
   constructor
   · intro H
@@ -113,7 +113,7 @@ theorem IsOpenImmersion.of_openCover_source
     o
 
 中文:
-定理 IsOpenImmersion.of_openCover_source
+定理 是开浸入.of_openCover_source
   结论: (f : X ⟶ Y)
   证明: by
   refine IsOpenImmersion.iff_isIso_stalkMap.mpr
@@ -154,7 +154,7 @@ lemma IsOpenImmersion.of_forall_source_exists
   exact IsOpenImmersion.of_openCover_source f 𝒰 hf hi
 
 中文:
-引理 IsOpenImmersion.of_forall_source_exists
+引理 是开浸入.of_对任意_source_存在
   结论: (f : X ⟶ Y)
   证明: by
   choose U i _ hxi hi using hX
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget (stalkwise (Function.Bijective ·))
+  签名: IsZariskiLocalAtTarget (stalkwise (函数.双射 ·))
   定义体: by
   apply stalkwiseIsZariskiLocalAtTarget_of_respectsIso
   rw [RingHom.toMorphismProperty_respectsIso_iff]
@@ -241,7 +241,7 @@ instance isOpenImmersion_isZariskiLocalAtTarget
 
 中文:
 实例 isOpenImmersion_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @IsOpenImmersion
+  签名: : IsZariskiLocalAtTarget @是开浸入
   定义体: isOpenImmersion_eq_inf ▸ inferInstance
 
 Depends on / 依赖: isOpenImmersion_eq_inf

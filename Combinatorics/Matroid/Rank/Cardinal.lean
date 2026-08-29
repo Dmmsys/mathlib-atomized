@@ -85,7 +85,7 @@ definition cRank
 
 中文:
 定义 cRank
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: ⨆ B : {B // M.IsBase B}, #B
 
 Depends on / 依赖: IsBase, M.IsBase
@@ -102,7 +102,7 @@ definition cRk
 
 中文:
 定义 cRk
-  签名: (M : Matroid α) (X : Set α)
+  签名: (M : 拟阵 α) (X : 集合 α)
   定义体: (M ↾ X).cRank
 -/
 noncomputable def cRk (M : Matroid α) (X : Set α) := (M ↾ X).cRank
@@ -187,8 +187,8 @@ theorem IsBasis'.cardinalMk_le_cRk
   proof: (isBase_restrict_iff'.2 hIX).cardinalMk_le_cRank
 
 中文:
-定理 IsBasis'.cardinalMk_le_cRk
-  条件: (hIX : M.IsBasis' I X)
+定理 是基'.cardinalMk_le_cRk
+  条件: (hIX : M.是基' I X)
   结论: #I <= M.cRk X
   证明: (isBase_restrict_iff'.2 hIX).cardinalMk_le_cRank
 -/
@@ -205,8 +205,8 @@ theorem IsBasis.cardinalMk_le_cRk
   proof: hIX.isBasis'.cardinalMk_le_cRk
 
 中文:
-定理 IsBasis.cardinalMk_le_cRk
-  条件: (hIX : M.IsBasis I X)
+定理 是基.cardinalMk_le_cRk
+  条件: (hIX : M.是基 I X)
   结论: #I <= M.cRk X
   证明: hIX.isBasis'.cardinalMk_le_cRk
 
@@ -244,7 +244,7 @@ theorem cRk_le_iff
 
 中文:
 定理 cRk_le_iff
-  结论: M.cRk X <= κ ↔ 对任意 ⦃I⦄, M.IsBasis' I X -> #I <= κ
+  结论: M.cRk X <= κ ↔ 对任意 ⦃I⦄, M.是基' I X -> #I <= κ
   证明: by
   simp_rw [cRk, cRank_le_iff, isBase_restrict_iff']
 
@@ -287,7 +287,7 @@ theorem cRk_le_cardinalMk
 
 中文:
 定理 cRk_le_cardinalMk
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.cRk X <= #X
   证明: ciSup_le fun ⟨_, hI⟩ => mk_le_mk_of_subset hI.subset_ground
 
@@ -308,7 +308,7 @@ theorem cRk_ground
 
 中文:
 定理 cRk_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.cRk M.E = M.cRank
   证明: by
   rw [cRk]; rw [restrict_ground_eq_self]
@@ -327,7 +327,7 @@ theorem cRank_restrict
 
 中文:
 定理 cRank_restrict
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M ↾ X).cRank = M.cRk X
   证明: rfl
 -/
@@ -348,8 +348,8 @@ theorem cRk_mono
 
 中文:
 定理 cRk_mono
-  条件: (M : Matroid α)
-  结论: Monotone M.cRk
+  条件: (M : 拟阵 α)
+  结论: 递增 M.cRk
   证明: by
   simp only [Monotone, cRk_le_iff]
   intro X Y hXY I hIX
@@ -375,7 +375,7 @@ theorem cRk_le_of_subset
 
 中文:
 定理 cRk_le_of_subset
-  条件: (M : Matroid α) (hXY : X subseteq Y)
+  条件: (M : 拟阵 α) (hXY : X subseteq Y)
   结论: M.cRk X <= M.cRk Y
   证明: M.cRk_mono hXY
 
@@ -396,7 +396,7 @@ theorem cRk_inter_ground
 
 中文:
 定理 cRk_inter_ground
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.cRk (X inter M.E) = M.cRk X
   证明: (M.cRk_le_of_subset inter_subset_left).antisymm cRk_le_iff.2
     fun _ h => h.isBasis_inter_ground.cardinalMk_le_cRk
@@ -421,7 +421,7 @@ theorem cRk_restrict_subset
 
 中文:
 定理 cRk_restrict_subset
-  条件: (M : Matroid α) (hYX : Y subseteq X)
+  条件: (M : 拟阵 α) (hYX : Y subseteq X)
   结论: (M ↾ X).cRk Y = M.cRk Y
   证明: by
   have aux : forall ⦃I⦄, M.IsBasis' I Y ↔ (M ↾ X).IsBasis' I Y := by
@@ -451,7 +451,7 @@ theorem cRk_restrict
 
 中文:
 定理 cRk_restrict
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   结论: (M ↾ X).cRk Y = M.cRk (X inter Y)
   证明: by
   rw [← cRk_inter_ground]; rw [restrict_ground_eq]; rw [cRk_restrict_subset _ inter_subset_right]; rw [inter_comm]
@@ -495,7 +495,7 @@ theorem cRk_map_image_lift
 
 中文:
 定理 cRk_map_image_lift
-  结论: (M : Matroid α) (hf : InjOn f M.E) (X : Set α)
+  结论: (M : 拟阵 α) (hf : 单射限制 f M.E) (X : 集合 α)
   证明: by
   nth_rw 1 [cRk, cRank, le_antisymm_iff, lift_iSup bddAbove_of_small, cRk, cRank, cRk, cRank]
   nth_rw 2 [lift_iSup bddAbove_of_small]
@@ -526,7 +526,7 @@ theorem cRk_map_image
 
 中文:
 定理 cRk_map_image
-  结论: {β : 类型u} {f : α -> β} (M : Matroid α) (hf : InjOn f M.E)
+  结论: {β : 类型u} {f : α -> β} (M : 拟阵 α) (hf : 单射限制 f M.E)
   证明: lift_inj.1 M.cRk_map_image_lift ..
 -/
 @[simp] theorem cRk_map_image {β : Type u} {f : α -> β} (M : Matroid α) (hf : InjOn f M.E)
@@ -544,7 +544,7 @@ theorem cRk_map_eq
 
 中文:
 定理 cRk_map_eq
-  条件: {β : 类型u} {f : α -> β} {X : Set β} (M : Matroid α) (hf : InjOn f M.E)
+  条件: {β : 类型u} {f : α -> β} {X : 集合 β} (M : 拟阵 α) (hf : 单射限制 f M.E)
   证明: by
   rw [← M.cRk_inter_ground]; rw [← M.cRk_map_image hf _]; rw [image_preimage_inter]; rw [← map_ground _ _ hf]; rw [cRk_inter_ground]
 
@@ -569,7 +569,7 @@ theorem cRk_comap_lift
 
 中文:
 定理 cRk_comap_lift
-  条件: (M : Matroid β) (f : α -> β) (X : Set α)
+  条件: (M : 拟阵 β) (f : α -> β) (X : 集合 α)
   证明: by
   nth_rw 1 [cRk, cRank, le_antisymm_iff, lift_iSup bddAbove_of_small, cRk, cRank, cRk, cRank]
   nth_rw 2 [lift_iSup bddAbove_of_small]
@@ -603,7 +603,7 @@ theorem cRk_comap
 
 中文:
 定理 cRk_comap
-  条件: {β : 类型u} (M : Matroid β) (f : α -> β) (X : Set α)
+  条件: {β : 类型u} (M : 拟阵 β) (f : α -> β) (X : 集合 α)
   证明: lift_inj.1 M.cRk_comap_lift ..
 -/
 @[simp] theorem cRk_comap {β : Type u} (M : Matroid β) (f : α -> β) (X : Set α) :
@@ -628,10 +628,10 @@ class InvariantCardinalRank
     - forall_card_isBasis_diff : forall ⦃I J X⦄, M.IsBasis I X -> M.IsBasis J X -> #(I \ J : Set α) = #(J \ I : Set α)
 
 中文:
-类 InvariantCardinalRank
-  参数: (M : Matroid α)
+类 不变基数秩
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - forall_card_isBasis_diff : 对任意 ⦃I J X⦄, M.IsBasis I X -> M.IsBasis J X -> #(I \ J : Set α) = #(J \ I : Set α)
+    - forall_card_isBasis_diff : 对任意 ⦃I J X⦄, M.是基 I X -> M.是基 J X -> #(I \ J : 集合 α) = #(J \ I : 集合 α)
 -/
 class InvariantCardinalRank (M : Matroid α) : Prop where
   forall_card_isBasis_diff :
@@ -651,8 +651,8 @@ theorem IsBasis.cardinalMk_sdiff_comm
 alias IsBasis.cardinalMk_diff_comm := IsBasis.cardinalMk_sdiff_comm
 
 中文:
-定理 IsBasis.cardinalMk_sdiff_comm
-  条件: (hIX : M.IsBasis I X) (hJX : M.IsBasis J X)
+定理 是基.cardinalMk_sdiff_comm
+  条件: (hIX : M.是基 I X) (hJX : M.是基 J X)
   证明: InvariantCardinalRank.forall_card_isBasis_diff hIX hJX
 
 @[deprecated (since := "2026-06-03")]
@@ -679,8 +679,8 @@ theorem IsBasis'.cardinalMk_sdiff_comm
 alias IsBasis'.cardinalMk_diff_comm := IsBasis'.cardinalMk_sdiff_comm
 
 中文:
-定理 IsBasis'.cardinalMk_sdiff_comm
-  条件: (hIX : M.IsBasis' I X) (hJX : M.IsBasis' J X)
+定理 是基'.cardinalMk_sdiff_comm
+  条件: (hIX : M.是基' I X) (hJX : M.是基' J X)
   证明: hIX.isBasis_inter_ground.cardinalMk_sdiff_comm hJX.isBasis_inter_ground
 
 @[deprecated (since := "2026-06-03")]
@@ -732,8 +732,8 @@ theorem IsBasis.cardinalMk_eq
   rw [← sdiff_union_inter I J]; rw [mk_union_of_disjoint (disjoint_sdiff_left.mono_right inter_subset_right)]; rw [hIX.cardinalMk_sdiff_comm hJX]; rw [← mk_union_of_disjoint (disjoint_sdiff_left.mono_right inter_subset_left)]; rw [inter_comm]; rw [sdiff_union_inter]
 
 中文:
-定理 IsBasis.cardinalMk_eq
-  条件: (hIX : M.IsBasis I X) (hJX : M.IsBasis J X)
+定理 是基.cardinalMk_eq
+  条件: (hIX : M.是基 I X) (hJX : M.是基 J X)
   结论: #I = #J
   证明: by
   rw [← sdiff_union_inter I J]; rw [mk_union_of_disjoint (disjoint_sdiff_left.mono_right inter_subset_right)]; rw [hIX.cardinalMk_sdiff_comm hJX]; rw [← mk_union_of_disjoint (disjoint_sdiff_left.mono_right inter_subset_left)]; rw [inter_comm]; rw [sdiff_union_inter]
@@ -753,8 +753,8 @@ theorem IsBasis'.cardinalMk_eq
   proof: hIX.isBasis_inter_ground.cardinalMk_eq hJX.isBasis_inter_ground
 
 中文:
-定理 IsBasis'.cardinalMk_eq
-  条件: (hIX : M.IsBasis' I X) (hJX : M.IsBasis' J X)
+定理 是基'.cardinalMk_eq
+  条件: (hIX : M.是基' I X) (hJX : M.是基' J X)
   结论: #I = #J
   证明: hIX.isBasis_inter_ground.cardinalMk_eq hJX.isBasis_inter_ground
 -/
@@ -815,7 +815,7 @@ theorem Indep.cardinalMk_le_isBasis'
 
 中文:
 定理 Indep.cardinalMk_le_isBasis'
-  条件: (hI : M.Indep I) (hJ : M.IsBasis' J X) (hIX : I subseteq X)
+  条件: (hI : M.Indep I) (hJ : M.是基' J X) (hIX : I subseteq X)
   证明: have ⟨_J', hJ', hIJ'⟩ := hI.subset_isBasis'_of_subset hIX
   hJ'.cardinalMk_eq hJ ▸ mk_le_mk_of_subset hIJ'
 
@@ -836,7 +836,7 @@ theorem Indep.cardinalMk_le_isBasis
 
 中文:
 定理 Indep.cardinalMk_le_isBasis
-  条件: (hI : M.Indep I) (hJ : M.IsBasis J X) (hIX : I subseteq X)
+  条件: (hI : M.Indep I) (hJ : M.是基 J X) (hIX : I subseteq X)
   证明: hI.cardinalMk_le_isBasis' hJ.isBasis' hIX
 
 Depends on / 依赖: cardinalMk_le_isBasis, hI.cardinalMk_le_isBasis, hJ.isBasis, isBasis
@@ -883,7 +883,7 @@ instance invariantCardinalRank_restrict
 
 中文:
 实例 invariantCardinalRank_restrict
-  签名: : InvariantCardinalRank (M ↾ X)
+  签名: : 不变基数秩 (M ↾ X)
   定义体: by
   refine ⟨fun I J Y hI hJ => ?_⟩
   rw [isBasis_restrict_iff'] at hI hJ
@@ -907,8 +907,8 @@ theorem IsBasis'.cardinalMk_eq_cRk
   rw [cRk]; rw [(isBase_restrict_iff'.2 hIX).cardinalMk_eq_cRank]
 
 中文:
-定理 IsBasis'.cardinalMk_eq_cRk
-  条件: (hIX : M.IsBasis' I X)
+定理 是基'.cardinalMk_eq_cRk
+  条件: (hIX : M.是基' I X)
   结论: #I = M.cRk X
   证明: by
   rw [cRk]; rw [(isBase_restrict_iff'.2 hIX).cardinalMk_eq_cRank]
@@ -926,8 +926,8 @@ theorem IsBasis.cardinalMk_eq_cRk
   proof: hIX.isBasis'.cardinalMk_eq_cRk
 
 中文:
-定理 IsBasis.cardinalMk_eq_cRk
-  条件: (hIX : M.IsBasis I X)
+定理 是基.cardinalMk_eq_cRk
+  条件: (hIX : M.是基 I X)
   结论: #I = M.cRk X
   证明: hIX.isBasis'.cardinalMk_eq_cRk
 
@@ -948,7 +948,7 @@ theorem cRk_closure
 
 中文:
 定理 cRk_closure
-  条件: (M : Matroid α) [InvariantCardinalRank M] (X : Set α)
+  条件: (M : 拟阵 α) [不变基数秩 M] (X : 集合 α)
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
   rw [← hI.isBasis_closure_right.cardinalMk_eq_cRk]; rw [← hI.cardinalMk_eq_cRk]
@@ -991,8 +991,8 @@ theorem Spanning.cRank_le_cardinalMk
   (hB.cardinalMk_eq_cRank).symm.trans_le (mk_le_mk_of_subset hBX)
 
 中文:
-定理 Spanning.cRank_le_cardinalMk
-  条件: (h : M.Spanning X)
+定理 生成.cRank_le_cardinalMk
+  条件: (h : M.生成 X)
   结论: M.cRank <= #X
   证明: have ⟨_B, hB, hBX⟩ := h.exists_isBase_subset
   (hB.cardinalMk_eq_cRank).symm.trans_le (mk_le_mk_of_subset hBX)
@@ -1183,7 +1183,7 @@ instance invariantCardinalRank_map
 
 中文:
 实例 invariantCardinalRank_map
-  签名: (M : Matroid α) [InvariantCardinalRank M] (hf : InjOn f M.E)
+  签名: (M : 拟阵 α) [不变基数秩 M] (hf : 单射限制 f M.E)
   定义体: by
   refine ⟨fun I J X hI hJ => ?_⟩
   obtain ⟨I, X, hIX, rfl, rfl⟩ := map_isBasis_iff'.1 hI
@@ -1224,7 +1224,7 @@ instance invariantCardinalRank_comap
 
 中文:
 实例 invariantCardinalRank_comap
-  签名: (M : Matroid β) [InvariantCardinalRank M] (f : α -> β)
+  签名: (M : 拟阵 β) [不变基数秩 M] (f : α -> β)
   定义体: by
   refine ⟨fun I J X hI hJ => ?_⟩
   obtain ⟨hI, hfI, hIX⟩ := comap_isBasis_iff.1 hI
@@ -1352,8 +1352,8 @@ theorem Spanning.isBase_of_le_cRank
     (toENat.monotone' <| le.trans hB.cardinalMk_eq_cRank.ge)]
 
 中文:
-定理 Spanning.isBase_of_le_cRank
-  条件: [M.RankFinite] (h : M.Spanning X) (le : #X <= M.cRank)
+定理 生成.isBase_of_le_cRank
+  条件: [M.RankFinite] (h : M.生成 X) (le : #X <= M.cRank)
   证明: by
   have ⟨B, hB, hBX⟩ := h.exists_isBase_subset
   rwa [← hB.finite.eq_of_subset_of_encard_le hBX
@@ -1402,8 +1402,8 @@ theorem Spanning.isBase_of_le_cRank_of_finite
 @[simp]
 
 中文:
-定理 Spanning.isBase_of_le_cRank_of_finite
-  结论: (h : M.Spanning X)
+定理 生成.isBase_of_le_cRank_of_finite
+  结论: (h : M.生成 X)
   证明: have ⟨_B, hB, hBX⟩ := h.exists_isBase_subset
   have := hB.rankFinite_of_finite (fin.subset hBX)
   h.isBase_of_le_cRank le
@@ -1435,8 +1435,8 @@ theorem toENat_cRank_eq
 @[simp]
 
 中文:
-定理 toENat_cRank_eq
-  条件: (M : Matroid α)
+定理 toE自然数_cRank_eq
+  条件: (M : 拟阵 α)
   结论: M.cRank.toE自然数 = M.eRank
   证明: by
   obtain h | h := M.rankFinite_or_rankInfinite
@@ -1466,8 +1466,8 @@ theorem toENat_cRk_eq
   rw [cRk]; rw [toENat_cRank_eq]; rw [eRk]
 
 中文:
-定理 toENat_cRk_eq
-  条件: (M : Matroid α) (X : Set α)
+定理 toE自然数_cRk_eq
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M.cRk X).toE自然数 = M.eRk X
   证明: by
   rw [cRk]; rw [toENat_cRank_eq]; rw [eRk]

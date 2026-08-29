@@ -39,7 +39,7 @@ theorem le_of_forall_lt_one_mul_le
 @[to_additive]
 
 中文:
-定理 le_of_forall_lt_one_mul_le
+定理 le_of_对任意_lt_one_mul_le
   条件: (h : 对任意 ε < 1, a * ε <= b)
   结论: a <= b
   证明: le_of_forall_one_lt_le_mul (α := αᵒᵈ) h
@@ -65,7 +65,7 @@ theorem le_of_forall_one_lt_div_le
 @[to_additive]
 
 中文:
-定理 le_of_forall_one_lt_div_le
+定理 le_of_对任意_one_lt_div_le
   条件: (h : 对任意 ε : α, 1 < ε -> a / ε <= b)
   结论: a <= b
   证明: le_of_forall_lt_one_mul_le fun ε ε1 => by
@@ -89,7 +89,7 @@ theorem le_iff_forall_lt_one_mul_le
   proof: le_iff_forall_one_lt_le_mul (α := αᵒᵈ)
 
 中文:
-定理 le_iff_forall_lt_one_mul_le
+定理 le_iff_对任意_lt_one_mul_le
   结论: a <= b ↔ 对任意 ε < 1, a * ε <= b
   证明: le_iff_forall_one_lt_le_mul (α := αᵒᵈ)
 
@@ -116,8 +116,8 @@ lemma exists_lt_mul_left
 @[to_additive]
 
 中文:
-引理 exists_lt_mul_left
-  结论: [Group α] [LT α] [DenselyOrdered α]
+引理 存在_lt_mul_left
+  结论: [群 α] [LT α] [稠密序 α]
   证明: by
   obtain ⟨a', hc', ha'⟩ := exists_between (div_lt_iff_lt_mul.2 hc)
   exact ⟨a', ha', div_lt_iff_lt_mul.1 hc'⟩
@@ -144,8 +144,8 @@ lemma exists_lt_mul_right
 @[to_additive]
 
 中文:
-引理 exists_lt_mul_right
-  结论: [CommGroup α] [LT α] [DenselyOrdered α]
+引理 存在_lt_mul_right
+  结论: [交换群 α] [LT α] [稠密序 α]
   证明: by
   obtain ⟨a', hc', ha'⟩ := exists_between (div_lt_iff_lt_mul'.2 hc)
   exact ⟨a', ha', div_lt_iff_lt_mul'.1 hc'⟩
@@ -172,8 +172,8 @@ lemma exists_mul_left_lt
 @[to_additive]
 
 中文:
-引理 exists_mul_left_lt
-  结论: [Group α] [LT α] [DenselyOrdered α]
+引理 存在_mul_left_lt
+  结论: [群 α] [LT α] [稠密序 α]
   证明: by
   obtain ⟨a', ha', hc'⟩ := exists_between (lt_div_iff_mul_lt.2 hc)
   exact ⟨a', ha', lt_div_iff_mul_lt.1 hc'⟩
@@ -200,8 +200,8 @@ lemma exists_mul_right_lt
 @[to_additive]
 
 中文:
-引理 exists_mul_right_lt
-  结论: [CommGroup α] [LT α] [DenselyOrdered α]
+引理 存在_mul_right_lt
+  结论: [交换群 α] [LT α] [稠密序 α]
   证明: by
   obtain ⟨a', ha', hc'⟩ := exists_between (lt_div_iff_mul_lt'.2 hc)
   exact ⟨a', ha', lt_div_iff_mul_lt'.1 hc'⟩
@@ -230,8 +230,8 @@ lemma le_mul_of_forall_lt
 @[to_additive]
 
 中文:
-引理 le_mul_of_forall_lt
-  结论: [CommGroup α] [LinearOrder α] [MulLeftMono α]
+引理 le_mul_of_对任意_lt
+  结论: [交换群 α] [线性序 α] [MulLeftMono α]
   证明: by
   refine le_of_forall_gt_imp_ge_of_dense fun d hd => ?_
   obtain ⟨a', ha', hd⟩ := exists_mul_left_lt hd
@@ -264,8 +264,8 @@ lemma mul_le_of_forall_lt
   exact hd.le.trans (h a' ha' b' hb')
 
 中文:
-引理 mul_le_of_forall_lt
-  结论: [CommGroup α] [LinearOrder α] [MulLeftMono α]
+引理 mul_le_of_对任意_lt
+  结论: [交换群 α] [线性序 α] [MulLeftMono α]
   证明: by
   refine le_of_forall_lt_imp_le_of_dense fun d hd => ?_
   obtain ⟨a', ha', hd⟩ := exists_lt_mul_left hd
@@ -307,7 +307,7 @@ theorem exists_pow_two_le_of_one_lt
 @[to_additive]
 
 中文:
-定理 exists_pow_two_le_of_one_lt
+定理 存在_pow_two_le_of_one_lt
   条件: (hx : 1 < x)
   结论: 存在 y : M, 1 < y ∧ y ^ 2 <= x
   证明: by
@@ -343,7 +343,7 @@ theorem exists_pow_lt_of_one_lt
       _ <= y ^ (n + 1) := pow_le_pow
 
 中文:
-定理 exists_pow_lt_of_one_lt
+定理 存在_pow_lt_of_one_lt
   条件: (hx : 1 < x)
   结论: 对任意 n : 自然数, 存在 y : M, 1 < y ∧ y ^ n < x
   证明: exists_pow_lt_of_one_lt hx (n + 1)
@@ -387,7 +387,7 @@ theorem exists_lt_pow_of_lt_one
   simpa [lt_inv'] using hy'
 
 中文:
-定理 exists_lt_pow_of_lt_one
+定理 存在_lt_pow_of_lt_one
   条件: (hx : x < 1) (n : 自然数)
   结论: 存在 y : M, y < 1 ∧ x < y ^ n
   证明: by

@@ -195,7 +195,7 @@ theorem trunc_C
 中文:
 定理 trunc_C
   条件: (n) (a : R)
-  结论: trunc (n + 1) (C a) = Polynomial.C a
+  结论: trunc (n + 1) (C a) = 多项式.C a
   证明: Polynomial.ext fun m => by
     rw [coeff_trunc]; rw [coeff_C]; rw [Polynomial.coeff_C]
     split_ifs with H <;> first | rfl | try simp_all
@@ -310,7 +310,7 @@ theorem eval₂_trunc_eq_sum_range
 
 中文:
 定理 eval₂_trunc_eq_sum_range
-  条件: {S : 类型} [Semiring S] (s : S) (G : R ->+* S) (n) (f : R⟦X⟧)
+  条件: {S : 类型} [半环 S] (s : S) (G : R ->+* S) (n) (f : R⟦X⟧)
   证明: by
   cases n with
   | zero =>
@@ -362,7 +362,7 @@ theorem trunc_X
 中文:
 定理 trunc_X
   条件: (n)
-  结论: trunc (n + 2) X = (Polynomial.X : R[X])
+  结论: trunc (n + 2) X = (多项式.X : R[X])
   证明: by
   ext d
   rw [coeff_trunc]; rw [coeff_X]
@@ -403,7 +403,7 @@ lemma trunc_X_of
 中文:
 引理 trunc_X_of
   条件: {n : 自然数} (hn : 2 <= n)
-  结论: trunc n X = (Polynomial.X : R[X])
+  结论: trunc n X = (多项式.X : R[X])
   证明: by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le' hn
   exact trunc_X n

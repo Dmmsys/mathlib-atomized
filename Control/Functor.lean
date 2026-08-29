@@ -46,7 +46,7 @@ theorem Functor.map_id
   proof: funext id_map
 
 中文:
-定理 Functor.map_id
+定理 函子.map_id
   结论: (id <$> ·) = (id : F α -> F α)
   证明: funext id_map
 
@@ -63,7 +63,7 @@ theorem Functor.map_comp_map
   proof: funext fun _ => (comp_map _ _ _).symm
 
 中文:
-定理 Functor.map_comp_map
+定理 函子.map_comp_map
   条件: (f : α -> β) (g : β -> γ)
   证明: funext fun _ => (comp_map _ _ _).symm
 
@@ -85,7 +85,7 @@ theorem Functor.ext
     exact E1.trans E2.symm
 
 中文:
-定理 Functor.ext
+定理 函子.ext
   条件: {F}
   证明: @map_const _ ⟨@m, @mc⟩ H1
     have E2 := @map_const _ ⟨@m, @mc'⟩ H2
@@ -356,8 +356,8 @@ definition Comp
   body: F G α
 
 中文:
-定义 Comp
-  签名: (F : 类型u -> Type w) (G : 类型v -> 类型u) (α : 类型v)
+定义 复合
+  签名: (F : 类型u -> 类型 w) (G : 类型v -> 类型u) (α : 类型v)
   定义体: F G α
 -/
 def Comp (F : Type u -> Type w) (G : Type v -> Type u) (α : Type v) : Type w :=
@@ -375,8 +375,8 @@ definition Comp.mk
   body: x
 
 中文:
-定义 Comp.mk
-  签名: {F : 类型u -> Type w} {G : 类型v -> 类型u} {α : 类型v} (x : F (G α))
+定义 复合.mk
+  签名: {F : 类型u -> 类型 w} {G : 类型v -> 类型u} {α : 类型v} (x : F (G α))
   定义体: x
 -/
 def Comp.mk {F : Type u -> Type w} {G : Type v -> Type u} {α : Type v} (x : F (G α)) : Comp F G α :=
@@ -391,8 +391,8 @@ definition Comp.run
   body: x
 
 中文:
-定义 Comp.run
-  签名: {F : 类型u -> Type w} {G : 类型v -> 类型u} {α : 类型v} (x : Comp F G α)
+定义 复合.run
+  签名: {F : 类型u -> 类型 w} {G : 类型v -> 类型u} {α : 类型v} (x : 复合 F G α)
   定义体: x
 -/
 def Comp.run {F : Type u -> Type w} {G : Type v -> Type u} {α : Type v} (x : Comp F G α) : F (G α) :=
@@ -413,7 +413,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {α} {x y : Comp F G α}
+  条件: {α} {x y : 复合 F G α}
   结论: x.run = y.run -> x = y
   证明: id
 -/
@@ -451,7 +451,7 @@ instance functor
 
 中文:
 实例 functor
-  签名: : Functor (Comp F G) where map
+  签名: : 函子 (复合 F G) where map
   定义体: @Comp.map F G _ _
 
 @[functor_norm]
@@ -475,7 +475,7 @@ theorem map_mk
 中文:
 定理 map_mk
   条件: {α β} (h : α -> β) (x : F (G α))
-  结论: h < > Comp.mk x = Comp.mk ((h <$> ·) <$> x)
+  结论: h < > 复合.mk x = 复合.mk ((h <$> ·) <$> x)
   证明: rfl
 
 @[simp]
@@ -494,7 +494,7 @@ theorem run_map
 
 中文:
 定理 run_map
-  条件: {α β} (h : α -> β) (x : Comp F G α)
+  条件: {α β} (h : α -> β) (x : 复合 F G α)
   证明: rfl
 -/
 protected theorem run_map {α β} (h : α -> β) (x : Comp F G α) :
@@ -514,7 +514,7 @@ theorem id_map
 
 中文:
 定理 id_map
-  结论: 对任意 x : Comp F G α, Comp.map id x = x
+  结论: 对任意 x : 复合 F G α, 复合.map id x = x
 -/
 protected theorem id_map : forall x : Comp F G α, Comp.map id x = x
   | Comp.mk x => by simp only [Comp.map, id_map, id_map']; rfl
@@ -547,7 +547,7 @@ instance lawfulFunctor
 
 中文:
 实例 lawfulFunctor
-  签名: : LawfulFunctor (Comp F G) where
+  签名: : Lawful函子 (复合 F G) where
   定义体: rfl
   id_map := Comp.id_map
   comp_map := Comp.comp_map
@@ -567,7 +567,7 @@ theorem functor_comp_id
 
 中文:
 定理 functor_comp_id
-  条件: {F} [AF : Functor F] [LawfulFunctor F]
+  条件: {F} [AF : 函子 F] [Lawful函子 F]
   证明: @Functor.ext F _ AF (Comp.lawfulFunctor (G := Id)) _ fun _ _ _ _ => rfl
 -/
 theorem functor_comp_id {F} [AF : Functor F] [LawfulFunctor F] :
@@ -585,8 +585,8 @@ theorem functor_id_comp
 
 中文:
 定理 functor_id_comp
-  条件: {F} [AF : Functor F] [LawfulFunctor F]
-  结论: Comp.functor (F := Id) = AF
+  条件: {F} [AF : 函子 F] [Lawful函子 F]
+  结论: 复合.functor (F := Id) = AF
   证明: @Functor.ext F _ AF (Comp.lawfulFunctor (F := Id)) _ fun _ _ _ _ => rfl
 -/
 theorem functor_id_comp {F} [AF : Functor F] [LawfulFunctor F] : Comp.functor (F := Id) = AF :=
@@ -629,7 +629,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pure (Comp F G)
+  签名: Pure (复合 F G)
   定义体: ⟨fun x => Comp.mk pure pure x⟩
 
 Depends on / 依赖: Comp.mk
@@ -649,7 +649,7 @@ instance :
 
 中文:
 实例 :
-  签名: Seq (Comp F G)
+  签名: 序列 (复合 F G)
   定义体: ⟨fun f x => Comp.seq f x⟩
 
 @[simp]
@@ -671,7 +671,7 @@ theorem run_pure
 中文:
 定理 run_pure
   条件: {α : 类型v}
-  结论: 对任意 x : α, (pure x : Comp F G α).run = pure (pure x)
+  结论: 对任意 x : α, (pure x : 复合 F G α).run = pure (pure x)
 -/
 protected theorem run_pure {α : Type v} : forall x : α, (pure x : Comp F G α).run = pure (pure x)
   | _ => rfl
@@ -687,7 +687,7 @@ theorem run_seq
 
 中文:
 定理 run_seq
-  条件: {α β : 类型v} (f : Comp F G (α -> β)) (x : Comp F G α)
+  条件: {α β : 类型v} (f : 复合 F G (α -> β)) (x : 复合 F G α)
   证明: rfl
 -/
 protected theorem run_seq {α β : Type v} (f : Comp F G (α -> β)) (x : Comp F G α) :
@@ -704,7 +704,7 @@ instance instApplicativeComp
 
 中文:
 实例 instApplicativeComp
-  签名: : Applicative (Comp F G)
+  签名: : 适用 (复合 F G)
   定义体: { map := @Comp.map F G _ _, seq := @Comp.seq F G _ _ }
 
 Depends on / 依赖: Comp.map, Comp.seq
@@ -802,7 +802,7 @@ abbreviation mapConstRev
 
 中文:
 缩写 mapConstRev
-  签名: {f : 类型u -> 类型v} [Functor f] {α β : 类型u}
+  签名: {f : 类型u -> 类型v} [函子 f] {α β : 类型u}
   定义体: fun a b => Functor.mapConst b a
 
 Depends on / 依赖: Functor, Functor.mapConst, mapConst

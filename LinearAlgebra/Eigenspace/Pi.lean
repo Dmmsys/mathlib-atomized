@@ -66,7 +66,7 @@ lemma _root_.Submodule.inf_iInf_maxGenEigenspace_of_forall_mapsTo
   · simp_rw [inf_iInf, p.inf_genEigenspace _ (hfp _), Submodule.map_iInf _ p.injective_subtype]
 
 中文:
-引理 _root_.Submodule.inf_iInf_maxGenEigenspace_of_forall_mapsTo
+引理 _root_.子模.inf_iInf_maxGenEigenspace_of_对任意_mapsTo
   结论: {μ : ι -> R}
   证明: by
   cases isEmpty_or_nonempty ι
@@ -193,7 +193,7 @@ lemma independent_iInf_maxGenEigenspace_of_forall_mapsTo
   suffices forall χ (s : Finset 
 
 中文:
-引理 independent_iInf_maxGenEigenspace_of_forall_mapsTo
+引理 independent_iInf_maxGenEigenspace_of_对任意_mapsTo
   证明: by
   replace h (l : ι) (χ : ι -> R) :
       MapsTo (f l) (⨅ i, (f i).maxGenEigenspace (χ i)) (⨅ i, (f i).maxGenEigenspace (χ i)) := by
@@ -275,8 +275,8 @@ lemma iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo
    
 
 中文:
-引理 iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo
-  结论: [FiniteDimensional K M]
+引理 iSup_iInf_maxGenEigenspace_eq_top_of_对任意_mapsTo
+  结论: [有限维 K M]
   证明: by
   generalize h_dim : finrank K M = n
   induction n using Nat.strongRecOn generalizing M with | ind n ih => ?_

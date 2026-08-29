@@ -48,7 +48,7 @@ definition SeparatedNhds
 
 中文:
 定义 SeparatedNhds
-  签名: : Set X -> Set X -> 命题
+  签名: : 集合 X -> 集合 X -> 命题
   定义体: fun s t : Set X =>
   exists U V : Set X, IsOpen U ∧ IsOpen V ∧ s subseteq U ∧ t subseteq V ∧ Disjoint U V
 -/
@@ -70,7 +70,7 @@ alias ⟨SeparatedNhds.disjoint_nhdsSet, _⟩ := separatedNhds_iff_disjoint
 
 中文:
 定理 separatedNhds_iff_disjoint
-  条件: {s t : Set X}
+  条件: {s t : 集合 X}
   结论: SeparatedNhds s t ↔ Disjoint (𝓝ˢ s) (𝓝ˢ t)
   证明: by
   simp only [(hasBasis_nhdsSet s).disjoint_iff (hasBasis_nhdsSet t), SeparatedNhds, ←
@@ -97,7 +97,7 @@ definition HasSeparatingCover
 
 中文:
 定义 HasSeparatingCover
-  签名: : Set X -> Set X -> 命题
+  签名: : 集合 X -> 集合 X -> 命题
   定义体: fun s t =>
   exists u : Nat -> Set X, s subseteq ⋃ n, u n ∧ forall n, IsOpen (u n) ∧ Disjoint (closure (u n)) t
 -/
@@ -120,7 +120,7 @@ theorem hasSeparatingCovers_iff_separatedNhds
 
 中文:
 定理 hasSeparatingCovers_iff_separatedNhds
-  条件: {s t : Set X}
+  条件: {s t : 集合 X}
   证明: by
   constructor
   · rintro ⟨⟨u, u_cov, u_props⟩, ⟨v, v_cov, v_props⟩⟩
@@ -185,8 +185,8 @@ theorem Set.hasSeparatingCover_empty_left
    fun _ => ⟨isOpen_empty, by simp only [closure_empty, empty_disjoint]⟩⟩
 
 中文:
-定理 Set.hasSeparatingCover_empty_left
-  条件: (s : Set X)
+定理 集合.hasSeparatingCover_empty_left
+  条件: (s : 集合 X)
   结论: HasSeparatingCover ∅ s
   证明: ⟨fun _ => ∅, empty_subset (⋃ _, ∅),
    fun _ => ⟨isOpen_empty, by simp only [closure_empty, empty_disjoint]⟩⟩
@@ -208,8 +208,8 @@ theorem Set.hasSeparatingCover_empty_right
    fun _ => ⟨isOpen_univ, by apply disjoint_empty⟩⟩
 
 中文:
-定理 Set.hasSeparatingCover_empty_right
-  条件: (s : Set X)
+定理 集合.hasSeparatingCover_empty_right
+  条件: (s : 集合 X)
   结论: HasSeparatingCover s ∅
   证明: ⟨fun _ => univ, (subset_univ s).trans univ.iUnion_const.symm.subset,
    fun _ => ⟨isOpen_univ, by apply disjoint_empty⟩⟩
@@ -237,7 +237,7 @@ theorem HasSeparatingCover.mono
 
 中文:
 定理 HasSeparatingCover.mono
-  结论: {s₁ s₂ t₁ t₂ : Set X} (sc_st : HasSeparatingCover s₂ t₂)
+  结论: {s₁ s₂ t₁ t₂ : 集合 X} (sc_st : HasSeparatingCover s₂ t₂)
   证明: by
   obtain ⟨u, u_cov, u_props⟩ := sc_st
   exact
@@ -293,7 +293,7 @@ theorem comm
 
 中文:
 定理 comm
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   结论: SeparatedNhds s t ↔ SeparatedNhds t s
   证明: ⟨symm, symm⟩
 -/
@@ -311,8 +311,8 @@ theorem preimage
     UV.preimage f⟩
 
 中文:
-定理 preimage
-  结论: [TopologicalSpace Y] {f : X -> Y} {s t : Set Y} (h : SeparatedNhds s t)
+定理 原像
+  结论: [拓扑空间 Y] {f : X -> Y} {s t : 集合 Y} (h : SeparatedNhds s t)
   证明: let ⟨U, V, oU, oV, sU, tV, UV⟩ := h
   ⟨f ⁻¹' U, f ⁻¹' V, oU.preimage hf, oV.preimage hf, preimage_mono sU, preimage_mono tV,
     UV.preimage f⟩
@@ -397,7 +397,7 @@ theorem empty_right
 
 中文:
 定理 empty_right
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: SeparatedNhds s ∅
   证明: ⟨_, _, isOpen_univ, isOpen_empty, fun a _ => mem_univ a, Subset.rfl, disjoint_empty _⟩
 -/
@@ -415,7 +415,7 @@ theorem empty_left
 
 中文:
 定理 empty_left
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: SeparatedNhds ∅ s
   证明: (empty_right _).symm
 -/
@@ -499,8 +499,8 @@ lemma isOpen_left_of_isOpen_union
 
 中文:
 引理 isOpen_left_of_isOpen_union
-  条件: (hst : SeparatedNhds s t) (hst' : IsOpen (s union t))
-  结论: IsOpen s
+  条件: (hst : SeparatedNhds s t) (hst' : 是开集 (s union t))
+  结论: 是开集 s
   证明: by
   obtain ⟨u, v, hu, hv, hsu, htv, huv⟩ := hst
   suffices s = (s union t) inter u from this ▸ hst'.inter hu
@@ -524,8 +524,8 @@ lemma isOpen_right_of_isOpen_union
 
 中文:
 引理 isOpen_right_of_isOpen_union
-  条件: (hst : SeparatedNhds s t) (hst' : IsOpen (s union t))
-  结论: IsOpen t
+  条件: (hst : SeparatedNhds s t) (hst' : 是开集 (s union t))
+  结论: 是开集 t
   证明: hst.symm.isOpen_left_of_isOpen_union (union_comm _ _ ▸ hst')
 
 Depends on / 依赖: hst.symm.isOpen_left_of_isOpen_union, isOpen_left_of_isOpen_union, union_comm
@@ -546,7 +546,7 @@ lemma isOpen_union_iff
 中文:
 引理 isOpen_union_iff
   条件: (hst : SeparatedNhds s t)
-  结论: IsOpen (s union t) ↔ IsOpen s ∧ IsOpen t
+  结论: 是开集 (s union t) ↔ 是开集 s ∧ 是开集 t
   证明: ⟨fun h => ⟨hst.isOpen_left_of_isOpen_union h, hst.isOpen_right_of_isOpen_union h⟩,
     fun ⟨h1, h2⟩ => h1.union h2⟩
 
@@ -570,7 +570,7 @@ lemma isClosed_left_of_isClosed_union
 
 中文:
 引理 isClosed_left_of_isClosed_union
-  条件: (hst : SeparatedNhds s t) (hst' : IsClosed (s union t))
+  条件: (hst : SeparatedNhds s t) (hst' : 是闭集 (s union t))
   证明: by
   obtain ⟨u, v, hu, hv, hsu, htv, huv⟩ := hst
   rw [← isOpen_compl_iff] at hst' ⊢
@@ -597,7 +597,7 @@ lemma isClosed_right_of_isClosed_union
 
 中文:
 引理 isClosed_right_of_isClosed_union
-  条件: (hst : SeparatedNhds s t) (hst' : IsClosed (s union t))
+  条件: (hst : SeparatedNhds s t) (hst' : 是闭集 (s union t))
   证明: hst.symm.isClosed_left_of_isClosed_union (union_comm _ _ ▸ hst')
 
 Depends on / 依赖: hst.symm.isClosed_left_of_isClosed_union, isClosed_left_of_isClosed_union, union_comm
@@ -619,7 +619,7 @@ lemma isClosed_union_iff
 中文:
 引理 isClosed_union_iff
   条件: (hst : SeparatedNhds s t)
-  结论: IsClosed (s union t) ↔ IsClosed s ∧ IsClosed t
+  结论: 是闭集 (s union t) ↔ 是闭集 s ∧ 是闭集 t
   证明: ⟨fun h => ⟨hst.isClosed_left_of_isClosed_union h, hst.isClosed_right_of_isClosed_union h⟩,
     fun ⟨h1, h2⟩ => h1.union h2⟩
 

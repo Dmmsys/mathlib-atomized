@@ -74,11 +74,11 @@ class GradeOrder
     - covBy_grade(⦃a b) : α⦄ : a ⋖ b -> grade a ⋖ grade b
 
 中文:
-类 GradeOrder
-  参数: (𝕆 α : 类型) [Preorder 𝕆] [Preorder α]
+类 Grade序
+  参数: (𝕆 α : 类型) [预序 𝕆] [预序 α]
   公理与运算 (3 个):
     - grade : α -> 𝕆
-    - grade_strictMono : StrictMono grade
+    - grade_strictMono : 严格递增 grade
     - covBy_grade(⦃a b) : α⦄ : a ⋖ b -> grade a ⋖ grade b
 -/
 class GradeOrder (𝕆 α : Type*) [Preorder 𝕆] [Preorder α] where
@@ -100,9 +100,9 @@ class GradeMinOrder
     - isMin_grade(⦃a) : α⦄ : IsMin a -> IsMin (grade a)
 
 中文:
-类 GradeMinOrder
-  参数: (𝕆 α : 类型) [Preorder 𝕆] [Preorder α]
-  继承: GradeOrder 𝕆 α
+类 GradeMin序
+  参数: (𝕆 α : 类型) [预序 𝕆] [预序 α]
+  继承: Grade序 𝕆 α
   公理与运算 (1 个):
     - isMin_grade(⦃a) : α⦄ : IsMin a -> IsMin (grade a)
 -/
@@ -121,9 +121,9 @@ class GradeMaxOrder
     - isMax_grade(⦃a) : α⦄ : IsMax a -> IsMax (grade a)
 
 中文:
-类 GradeMaxOrder
-  参数: (𝕆 α : 类型) [Preorder 𝕆] [Preorder α]
-  继承: GradeOrder 𝕆 α
+类 GradeMax序
+  参数: (𝕆 α : 类型) [预序 𝕆] [预序 α]
+  继承: Grade序 𝕆 α
   公理与运算 (1 个):
     - isMax_grade(⦃a) : α⦄ : IsMax a -> IsMax (grade a)
 -/
@@ -141,9 +141,9 @@ class GradeBoundedOrder
   (no additional axioms)
 
 中文:
-类 GradeBoundedOrder
-  参数: (𝕆 α : 类型) [Preorder 𝕆] [Preorder α]
-  继承: GradeMinOrder 𝕆 α, 
+类 GradeBounded序
+  参数: (𝕆 α : 类型) [预序 𝕆] [预序 α]
+  继承: GradeMin序 𝕆 α, 
   (无附加公理)
 -/
 class GradeBoundedOrder (𝕆 α : Type*) [Preorder 𝕆] [Preorder α] extends GradeMinOrder 𝕆 α,
@@ -209,7 +209,7 @@ theorem grade_strictMono
 
 中文:
 定理 grade_strictMono
-  结论: StrictMono (grade 𝕆 : α -> 𝕆)
+  结论: 严格递增 (grade 𝕆 : α -> 𝕆)
   证明: GradeOrder.grade_strictMono
 
 Depends on / 依赖: GradeOrder, GradeOrder.grade_strictMono, grade_strictMono
@@ -348,8 +348,8 @@ theorem grade_mono
 
 中文:
 定理 grade_mono
-  条件: [PartialOrder α] [GradeOrder 𝕆 α]
-  结论: Monotone (grade 𝕆 : α -> 𝕆)
+  条件: [偏序 α] [Grade序 𝕆 α]
+  结论: 递增 (grade 𝕆 : α -> 𝕆)
   证明: grade_strictMono.monotone
 
 Depends on / 依赖: grade_strictMono, grade_strictMono.monotone, monotone
@@ -374,7 +374,7 @@ theorem grade_injective
 
 中文:
 定理 grade_injective
-  结论: Function.Injective (grade 𝕆 : α -> 𝕆)
+  结论: 函数.单射 (grade 𝕆 : α -> 𝕆)
   证明: grade_strictMono.injective
 
 @[simp]
@@ -509,7 +509,7 @@ theorem grade_bot
 
 中文:
 定理 grade_bot
-  条件: [OrderBot 𝕆] [OrderBot α] [GradeMinOrder 𝕆 α]
+  条件: [有底序 𝕆] [有底序 α] [GradeMin序 𝕆 α]
   结论: grade 𝕆 (⊥ : α) = ⊥
   证明: (isMin_bot.grade _).eq_bot
 
@@ -532,7 +532,7 @@ theorem grade_top
 
 中文:
 定理 grade_top
-  条件: [OrderTop 𝕆] [OrderTop α] [GradeMaxOrder 𝕆 α]
+  条件: [有顶序 𝕆] [有顶序 α] [GradeMax序 𝕆 α]
   结论: grade 𝕆 (⊤ : α) = ⊤
   证明: (isMax_top.grade _).eq_top
 
@@ -563,8 +563,8 @@ instance Preorder.toGradeBoundedOrder
 @[simp]
 
 中文:
-实例 Preorder.toGradeBoundedOrder
-  签名: : GradeBoundedOrder α α where
+实例 预序.toGradeBoundedOrder
+  签名: : GradeBounded序 α α where
   定义体: id
   isMin_grade _ := id
   isMax_grade _ := id
@@ -612,7 +612,7 @@ instance OrderDual.gradeOrder
 
 中文:
 实例 OrderDual.gradeOrder
-  签名: [GradeOrder 𝕆 α]
+  签名: [Grade序 𝕆 α]
   定义体: toDual ∘ grade 𝕆 ∘ ofDual
   grade_strictMono := grade_strictMono.dual
   covBy_grade _ _ h := (h.ofDual.grade _).toDual
@@ -634,7 +634,7 @@ instance OrderDual.gradeMinOrder
 
 中文:
 实例 OrderDual.gradeMinOrder
-  签名: [GradeMaxOrder 𝕆 α]
+  签名: [GradeMax序 𝕆 α]
   定义体: { OrderDual.gradeOrder with isMin_grade := fun _ => IsMax.grade (α := α) 𝕆 }
 
 Depends on / 依赖: IsMax.grade, OrderDual, OrderDual.gradeOrder, gradeOrder, isMin_grade
@@ -652,7 +652,7 @@ instance OrderDual.gradeMaxOrder
 
 中文:
 实例 OrderDual.gradeMaxOrder
-  签名: [GradeMinOrder 𝕆 α]
+  签名: [GradeMin序 𝕆 α]
   定义体: { OrderDual.gradeOrder with isMax_grade := fun _ => IsMin.grade (α := α) 𝕆 }
 
 Depends on / 依赖: IsMin.grade, OrderDual, OrderDual.gradeOrder, gradeOrder, isMax_grade
@@ -671,8 +671,8 @@ instance [GradeBoundedOrder
 @[simp]
 
 中文:
-实例 [GradeBoundedOrder
-  签名: 𝕆 α] : GradeBoundedOrder 𝕆ᵒᵈ αᵒᵈ
+实例 [GradeBounded序
+  签名: 𝕆 α] : GradeBounded序 𝕆ᵒᵈ αᵒᵈ
   定义体: { OrderDual.gradeMinOrder, OrderDual.gradeMaxOrder with }
 
 @[simp]
@@ -696,7 +696,7 @@ theorem grade_toDual
 
 中文:
 定理 grade_toDual
-  条件: [GradeOrder 𝕆 α] (a : α)
+  条件: [Grade序 𝕆 α] (a : α)
   结论: grade 𝕆ᵒᵈ (toDual a) = toDual (grade 𝕆 a)
   证明: rfl
 
@@ -717,7 +717,7 @@ theorem grade_ofDual
 
 中文:
 定理 grade_ofDual
-  条件: [GradeOrder 𝕆 α] (a : αᵒᵈ)
+  条件: [Grade序 𝕆 α] (a : αᵒᵈ)
   结论: grade 𝕆 (ofDual a) = ofDual (grade 𝕆ᵒᵈ a)
   证明: rfl
 -/
@@ -738,8 +738,8 @@ abbreviation GradeOrder.liftLeft
 covBy_grade _ _ h := hcovBy _ _ h.grade _
 
 中文:
-缩写 GradeOrder.liftLeft
-  签名: [GradeOrder 𝕆 α] (f : 𝕆 -> ℙ) (hf : StrictMono f)
+缩写 Grade序.liftLeft
+  签名: [Grade序 𝕆 α] (f : 𝕆 -> ℙ) (hf : 严格递增 f)
   定义体: f ∘ grade 𝕆
   grade_strictMono := hf.comp grade_strictMono
 covBy_grade _ _ h := hcovBy _ _ h.grade _
@@ -760,8 +760,8 @@ abbreviation GradeMinOrder.liftLeft
   body: { GradeOrder.liftLeft f hf hcovBy with isMin_grade := fun _ ha => hmin _ <| ha.grade _ }
 
 中文:
-缩写 GradeMinOrder.liftLeft
-  签名: [GradeMinOrder 𝕆 α] (f : 𝕆 -> ℙ) (hf : StrictMono f)
+缩写 GradeMin序.liftLeft
+  签名: [GradeMin序 𝕆 α] (f : 𝕆 -> ℙ) (hf : 严格递增 f)
   定义体: { GradeOrder.liftLeft f hf hcovBy with isMin_grade := fun _ ha => hmin _ <| ha.grade _ }
 
 Depends on / 依赖: GradeOrder, GradeOrder.liftLeft, ha.grade, hcovBy, isMin_grade, liftLeft
@@ -780,8 +780,8 @@ abbreviation GradeMaxOrder.liftLeft
   body: { GradeOrder.liftLeft f hf hcovBy with isMax_grade := fun _ ha => hmax _ <| ha.grade _ }
 
 中文:
-缩写 GradeMaxOrder.liftLeft
-  签名: [GradeMaxOrder 𝕆 α] (f : 𝕆 -> ℙ) (hf : StrictMono f)
+缩写 GradeMax序.liftLeft
+  签名: [GradeMax序 𝕆 α] (f : 𝕆 -> ℙ) (hf : 严格递增 f)
   定义体: { GradeOrder.liftLeft f hf hcovBy with isMax_grade := fun _ ha => hmax _ <| ha.grade _ }
 
 Depends on / 依赖: GradeOrder, GradeOrder.liftLeft, ha.grade, hcovBy, isMax_grade, liftLeft
@@ -800,8 +800,8 @@ abbreviation GradeBoundedOrder.liftLeft
   body: { GradeMinOrder.liftLeft f hf hcovBy hmin, GradeMaxOrder.liftLeft f hf hcovBy hmax with }
 
 中文:
-缩写 GradeBoundedOrder.liftLeft
-  签名: [GradeBoundedOrder 𝕆 α] (f : 𝕆 -> ℙ) (hf : StrictMono f)
+缩写 GradeBounded序.liftLeft
+  签名: [GradeBounded序 𝕆 α] (f : 𝕆 -> ℙ) (hf : 严格递增 f)
   定义体: { GradeMinOrder.liftLeft f hf hcovBy hmin, GradeMaxOrder.liftLeft f hf hcovBy hmax with }
 
 Depends on / 依赖: GradeMaxOrder, GradeMaxOrder.liftLeft, GradeMinOrder, GradeMinOrder.liftLeft, hcovBy, liftLeft
@@ -823,8 +823,8 @@ abbreviation GradeOrder.liftRight
   covBy_grade _ _ h := (hcovBy _ _ h).grade _
 
 中文:
-缩写 GradeOrder.liftRight
-  签名: [GradeOrder 𝕆 β] (f : α -> β) (hf : StrictMono f)
+缩写 Grade序.liftRight
+  签名: [Grade序 𝕆 β] (f : α -> β) (hf : 严格递增 f)
   定义体: grade 𝕆 ∘ f
   grade_strictMono := grade_strictMono.comp hf
   covBy_grade _ _ h := (hcovBy _ _ h).grade _
@@ -845,8 +845,8 @@ abbreviation GradeMinOrder.liftRight
   body: { GradeOrder.liftRight f hf hcovBy with isMin_grade := fun _ ha => (hmin _ ha).grade _ }
 
 中文:
-缩写 GradeMinOrder.liftRight
-  签名: [GradeMinOrder 𝕆 β] (f : α -> β) (hf : StrictMono f)
+缩写 GradeMin序.liftRight
+  签名: [GradeMin序 𝕆 β] (f : α -> β) (hf : 严格递增 f)
   定义体: { GradeOrder.liftRight f hf hcovBy with isMin_grade := fun _ ha => (hmin _ ha).grade _ }
 
 Depends on / 依赖: GradeOrder, GradeOrder.liftRight, hcovBy, isMin_grade, liftRight
@@ -865,8 +865,8 @@ abbreviation GradeMaxOrder.liftRight
   body: { GradeOrder.liftRight f hf hcovBy with isMax_grade := fun _ ha => (hmax _ ha).grade _ }
 
 中文:
-缩写 GradeMaxOrder.liftRight
-  签名: [GradeMaxOrder 𝕆 β] (f : α -> β) (hf : StrictMono f)
+缩写 GradeMax序.liftRight
+  签名: [GradeMax序 𝕆 β] (f : α -> β) (hf : 严格递增 f)
   定义体: { GradeOrder.liftRight f hf hcovBy with isMax_grade := fun _ ha => (hmax _ ha).grade _ }
 
 Depends on / 依赖: GradeOrder, GradeOrder.liftRight, hcovBy, isMax_grade, liftRight
@@ -885,8 +885,8 @@ abbreviation GradeBoundedOrder.liftRight
   body: { GradeMinOrder.liftRight f hf hcovBy hmin, GradeMaxOrder.liftRight f hf hcovBy hmax with }
 
 中文:
-缩写 GradeBoundedOrder.liftRight
-  签名: [GradeBoundedOrder 𝕆 β] (f : α -> β) (hf : StrictMono f)
+缩写 GradeBounded序.liftRight
+  签名: [GradeBounded序 𝕆 β] (f : α -> β) (hf : 严格递增 f)
   定义体: { GradeMinOrder.liftRight f hf hcovBy hmin, GradeMaxOrder.liftRight f hf hcovBy hmax with }
 
 Depends on / 依赖: GradeMaxOrder, GradeMaxOrder.liftRight, GradeMinOrder, GradeMinOrder.liftRight, hcovBy, liftRight
@@ -909,8 +909,8 @@ abbreviation GradeOrder.finToNat
   body: (GradeOrder.liftLeft (_ : Fin n -> Nat) Fin.val_strictMono) fun _ _ => CovBy.coe_fin
 
 中文:
-缩写 GradeOrder.finToNat
-  签名: (n : 自然数) [GradeOrder (Fin n) α]
+缩写 Grade序.finTo自然数
+  签名: (n : 自然数) [Grade序 (有限集 n) α]
   定义体: (GradeOrder.liftLeft (_ : Fin n -> Nat) Fin.val_strictMono) fun _ _ => CovBy.coe_fin
 
 Depends on / 依赖: CovBy.coe_fin, Fin.val_strictMono, GradeOrder, GradeOrder.liftLeft, coe_fin, liftLeft, val_strictMono
@@ -932,8 +932,8 @@ abbreviation GradeMinOrder.finToNat
     exact isMin_bot
 
 中文:
-缩写 GradeMinOrder.finToNat
-  签名: (n : 自然数) [GradeMinOrder (Fin n) α]
+缩写 GradeMin序.finTo自然数
+  签名: (n : 自然数) [GradeMin序 (有限集 n) α]
   定义体: (GradeMinOrder.liftLeft (_ : Fin n -> Nat) Fin.val_strictMono fun _ _ => CovBy.coe_fin) fun a h => by
     cases n
     · exact a.elim0
@@ -958,8 +958,8 @@ instance GradeOrder.natToInt
   body: (GradeOrder.liftLeft _ Int.natCast_strictMono) fun _ _ => CovBy.intCast
 
 中文:
-实例 GradeOrder.natToInt
-  签名: [GradeOrder 自然数 α]
+实例 Grade序.natTo整数
+  签名: [Grade序 自然数 α]
   定义体: (GradeOrder.liftLeft _ Int.natCast_strictMono) fun _ _ => CovBy.intCast
 
 Depends on / 依赖: CovBy.intCast, GradeOrder, GradeOrder.liftLeft, Int.natCast_strictMono, intCast, liftLeft, natCast_strictMono
@@ -976,8 +976,8 @@ theorem GradeOrder.wellFoundedLT
   proof: (grade_strictMono (𝕆 := 𝕆)).wellFoundedLT
 
 中文:
-定理 GradeOrder.wellFoundedLT
-  结论: (𝕆 : 类型) [Preorder 𝕆] [GradeOrder 𝕆 α]
+定理 Grade序.wellFoundedLT
+  结论: (𝕆 : 类型) [预序 𝕆] [Grade序 𝕆 α]
   证明: (grade_strictMono (𝕆 := 𝕆)).wellFoundedLT
 
 Depends on / 依赖: grade_strictMono, wellFoundedLT
@@ -995,8 +995,8 @@ theorem GradeOrder.wellFoundedGT
   proof: (grade_strictMono (𝕆 := 𝕆)).wellFoundedGT
 
 中文:
-定理 GradeOrder.wellFoundedGT
-  结论: (𝕆 : 类型) [Preorder 𝕆] [GradeOrder 𝕆 α]
+定理 Grade序.wellFoundedGT
+  结论: (𝕆 : 类型) [预序 𝕆] [Grade序 𝕆 α]
   证明: (grade_strictMono (𝕆 := 𝕆)).wellFoundedGT
 
 Depends on / 依赖: grade_strictMono, wellFoundedGT
@@ -1014,7 +1014,7 @@ instance [GradeOrder
   body: GradeOrder.wellFoundedLT Nat
 
 中文:
-实例 [GradeOrder
+实例 [Grade序
   签名: 自然数 α] : WellFoundedLT α
   定义体: GradeOrder.wellFoundedLT Nat
 
@@ -1032,7 +1032,7 @@ instance [GradeOrder
   body: GradeOrder.wellFoundedGT Natᵒᵈ
 
 中文:
-实例 [GradeOrder
+实例 [Grade序
   签名: 自然数ᵒᵈ α] : WellFoundedGT α
   定义体: GradeOrder.wellFoundedGT Natᵒᵈ
 
@@ -1187,7 +1187,7 @@ instance [GradeOrder
   body: .liftRight _ (Subtype.strictMono_coe _) fun _ _ => coe_covBy_coe.2
 
 中文:
-实例 [GradeOrder
+实例 [Grade序
   签名: 𝕆 α] (s
   定义体: .liftRight _ (Subtype.strictMono_coe _) fun _ _ => coe_covBy_coe.2
 
@@ -1205,7 +1205,7 @@ instance [GradeMinOrder
   body: .liftRight _ (Subtype.strictMono_coe _) (fun _ _ => coe_covBy_coe.2) fun _ => isMin_coe.2
 
 中文:
-实例 [GradeMinOrder
+实例 [GradeMin序
   签名: 𝕆 α] (s
   定义体: .liftRight _ (Subtype.strictMono_coe _) (fun _ _ => coe_covBy_coe.2) fun _ => isMin_coe.2
 
@@ -1223,7 +1223,7 @@ instance [GradeMaxOrder
   body: .liftRight _ (Subtype.strictMono_coe _) (fun _ _ => coe_covBy_coe.2) fun _ => isMax_coe.2
 
 中文:
-实例 [GradeMaxOrder
+实例 [GradeMax序
   签名: 𝕆 α] (s
   定义体: .liftRight _ (Subtype.strictMono_coe _) (fun _ _ => coe_covBy_coe.2) fun _ => isMax_coe.2
 
@@ -1242,7 +1242,7 @@ instance [GradeBoundedOrder
     fun _ => isMax_coe.2
 
 中文:
-实例 [GradeBoundedOrder
+实例 [GradeBounded序
   签名: 𝕆 α] (s
   定义体: .liftRight _ (Subtype.strictMono_coe _) (fun _ _ => coe_covBy_coe.2) (fun _ => isMin_coe.2)
     fun _ => isMax_coe.2
@@ -1264,7 +1264,7 @@ lemma grade_coe
 
 中文:
 引理 grade_coe
-  条件: [GradeOrder 𝕆 α] (a : s)
+  条件: [Grade序 𝕆 α] (a : s)
   结论: grade 𝕆 (a : α) = grade 𝕆 a
   证明: rfl
 

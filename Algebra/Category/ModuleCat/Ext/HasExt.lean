@@ -34,7 +34,7 @@ instance [Small.{v}
 
 中文:
 实例 [Small.{v}
-  签名: R] : CategoryTheory.HasExt.{v} (ModuleCat.{v} R)
+  签名: R] : 范畴论.HasExt.{v} (模范畴.{v} R)
   定义体: CategoryTheory.hasExt_of_enoughProjectives.{v} (ModuleCat.{v} R)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.hasExt_of_enoughProjectives, ModuleCat, hasExt_of_enoughProjectives

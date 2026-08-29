@@ -52,9 +52,9 @@ theorem List.trop_sum
   | cons hd tl IH => simp [← IH]
 
 中文:
-定理 List.trop_sum
-  条件: [AddMonoid R] (l : List R)
-  结论: trop l.sum = List.prod (l.map trop)
+定理 列表.trop_sum
+  条件: [加法幺半群 R] (l : 列表 R)
+  结论: trop l.求和 = 列表.乘积 (l.map trop)
   证明: by
   induction l with
   | nil => simp
@@ -75,7 +75,7 @@ theorem Multiset.trop_sum
 
 中文:
 定理 Multiset.trop_sum
-  条件: [AddCommMonoid R] (s : Multiset R)
+  条件: [加法交换幺半群 R] (s : Multiset R)
   证明: Quotient.inductionOn s (by simpa using List.trop_sum)
 
 Depends on / 依赖: List.trop_sum, Quotient, Quotient.inductionOn, inductionOn, trop_sum
@@ -97,7 +97,7 @@ theorem trop_sum
 
 中文:
 定理 trop_sum
-  条件: [AddCommMonoid R] (s : Finset S) (f : S -> R)
+  条件: [加法交换幺半群 R] (s : 有限集 S) (f : S -> R)
   证明: by
   convert! Multiset.trop_sum (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
@@ -123,8 +123,8 @@ theorem List.untrop_prod
   | cons hd tl IH => simp [← IH]
 
 中文:
-定理 List.untrop_prod
-  条件: [AddMonoid R] (l : List (Tropical R))
+定理 列表.untrop_prod
+  条件: [加法幺半群 R] (l : 列表 (Tropical R))
   证明: by
   induction l with
   | nil => simp
@@ -146,7 +146,7 @@ theorem Multiset.untrop_prod
 
 中文:
 定理 Multiset.untrop_prod
-  条件: [AddCommMonoid R] (s : Multiset (Tropical R))
+  条件: [加法交换幺半群 R] (s : Multiset (Tropical R))
   证明: Quotient.inductionOn s (by simpa using List.untrop_prod)
 
 Depends on / 依赖: List.untrop_prod, Quotient, Quotient.inductionOn, inductionOn, untrop_prod
@@ -168,7 +168,7 @@ theorem untrop_prod
 
 中文:
 定理 untrop_prod
-  条件: [AddCommMonoid R] (s : Finset S) (f : S -> Tropical R)
+  条件: [加法交换幺半群 R] (s : 有限集 S) (f : S -> Tropical R)
   证明: by
   convert! Multiset.untrop_prod (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
@@ -194,8 +194,8 @@ theorem List.trop_minimum
   | cons hd tl IH => simp [List.minimum_cons, ← IH]
 
 中文:
-定理 List.trop_minimum
-  条件: [LinearOrder R] (l : List R)
+定理 列表.trop_minimum
+  条件: [线性序 R] (l : 列表 R)
   证明: by
   induction l with
   | nil => simp
@@ -222,7 +222,7 @@ theorem Multiset.trop_inf
 
 中文:
 定理 Multiset.trop_inf
-  条件: [LinearOrder R] [OrderTop R] (s : Multiset R)
+  条件: [线性序 R] [有顶序 R] (s : Multiset R)
   证明: by
   induction s using Multiset.induction with
   | empty => simp
@@ -248,8 +248,8 @@ theorem Finset.trop_inf
   rfl
 
 中文:
-定理 Finset.trop_inf
-  条件: [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> R)
+定理 有限集.trop_inf
+  条件: [线性序 R] [有顶序 R] (s : 有限集 S) (f : S -> R)
   证明: by
   convert! Multiset.trop_inf (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
@@ -276,7 +276,7 @@ theorem trop_sInf_image
 
 中文:
 定理 trop_sInf_image
-  条件: [ConditionallyCompleteLinearOrder R] (s : Finset S) (f : S -> WithTop R)
+  条件: [条件完备线性序 R] (s : 有限集 S) (f : S -> WithTop R)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | h)
   · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, trop_top]
@@ -301,7 +301,7 @@ theorem trop_iInf
 
 中文:
 定理 trop_iInf
-  条件: [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> WithTop R)
+  条件: [条件完备线性序 R] [有限类型 S] (f : S -> WithTop R)
   证明: by
   rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [trop_sInf_image]
 
@@ -324,7 +324,7 @@ theorem Multiset.untrop_sum
 
 中文:
 定理 Multiset.untrop_sum
-  条件: [LinearOrder R] [OrderTop R] (s : Multiset (Tropical R))
+  条件: [线性序 R] [有顶序 R] (s : Multiset (Tropical R))
   证明: by
   induction s using Multiset.induction with
   | empty => simp
@@ -349,8 +349,8 @@ theorem Finset.untrop_sum'
   simp only [Multiset.map_map, Function.comp_apply, inf_def]
 
 中文:
-定理 Finset.untrop_sum'
-  条件: [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> Tropical R)
+定理 有限集.untrop_sum'
+  条件: [线性序 R] [有顶序 R] (s : 有限集 S) (f : S -> Tropical R)
   证明: by
   convert! Multiset.untrop_sum (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply, inf_def]
@@ -375,7 +375,7 @@ theorem untrop_sum_eq_sInf_image
 
 中文:
 定理 untrop_sum_eq_sInf_image
-  结论: [ConditionallyCompleteLinearOrder R] (s : Finset S)
+  结论: [条件完备线性序 R] (s : 有限集 S)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | h)
   · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, untrop_zero]
@@ -400,7 +400,7 @@ theorem untrop_sum
 
 中文:
 定理 untrop_sum
-  条件: [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> Tropical (WithTop R))
+  条件: [条件完备线性序 R] [有限类型 S] (f : S -> Tropical (WithTop R))
   证明: by
   rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [untrop_sum_eq_sInf_image]; rw [Function.comp_def]
 
@@ -420,8 +420,8 @@ theorem Finset.untrop_sum
   simpa [← _root_.untrop_sum] using (sum_attach _ _).symm
 
 中文:
-定理 Finset.untrop_sum
-  结论: [ConditionallyCompleteLinearOrder R] (s : Finset S)
+定理 有限集.untrop_sum
+  结论: [条件完备线性序 R] (s : 有限集 S)
   证明: by
   simpa [← _root_.untrop_sum] using (sum_attach _ _).symm
 

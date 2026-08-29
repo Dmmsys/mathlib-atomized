@@ -36,10 +36,10 @@ class Injective
     - factors : forall {X Y : C} (g : X ⟶ J) (f : X ⟶ Y) [Mono f], exists h : Y ⟶ J, f ≫ h = g
 
 中文:
-类 Injective
+类 单射
   参数: (J : C)
   公理与运算 (1 个):
-    - factors : 对任意 {X Y : C} (g : X ⟶ J) (f : X ⟶ Y) [Mono f], 存在 h : Y ⟶ J, f ≫ h = g
+    - factors : 对任意 {X Y : C} (g : X ⟶ J) (f : X ⟶ Y) [单态射 f], 存在 h : Y ⟶ J, f ≫ h = g
 -/
 class Injective (J : C) : Prop where
   factors : forall {X Y : C} (g : X ⟶ J) (f : X ⟶ Y) [Mono f], exists h : Y ⟶ J, f ≫ h = g
@@ -57,7 +57,7 @@ abbreviation isInjective
 
 中文:
 缩写 isInjective
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: Injective
 
 Depends on / 依赖: Injective
@@ -74,9 +74,9 @@ lemma Limits.IsZero.injective
   proof: ⟨h.from_ _, h.eq_of_tgt _ _⟩
 
 中文:
-引理 Limits.IsZero.injective
-  条件: {X : C} (h : IsZero X)
-  结论: Injective X where
+引理 Limits.是零.injective
+  条件: {X : C} (h : 是零 X)
+  结论: 单射 X where
   证明: ⟨h.from_ _, h.eq_of_tgt _ _⟩
 
 Depends on / 依赖: eq_of_tgt, from_, h.eq_of_tgt, h.from_
@@ -99,13 +99,13 @@ structure InjectivePresentation
     - mono : Mono f  [default: by infer_instance]
 
 中文:
-结构 InjectivePresentation
+结构 单射呈现
   参数: (X : C)
   公理与运算 (4 个):
     - J : C
-    - injective : Injective J  [默认: by infer_instance]
+    - injective : 单射 J  [默认: by infer_instance]
     - f : X ⟶ J
-    - mono : Mono f  [默认: by infer_instance]
+    - mono : 单态射 f  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -132,10 +132,10 @@ class EnoughInjectives
     - presentation : forall X : C, Nonempty (InjectivePresentation X)
 
 中文:
-类 EnoughInjectives
+类 有足够单射
   参数: : 命题 where
   公理与运算 (1 个):
-    - presentation : 对任意 X : C, Nonempty (InjectivePresentation X)
+    - presentation : 对任意 X : C, 非空 (单射呈现 X)
 -/
 class EnoughInjectives : Prop where
   presentation : forall X : C, Nonempty (InjectivePresentation X)
@@ -160,7 +160,7 @@ definition factorThru
 
 中文:
 定义 factorThru
-  签名: {J X Y : C} [Injective J] (g : X ⟶ J) (f : X ⟶ Y) [Mono f]
+  签名: {J X Y : C} [单射 J] (g : X ⟶ J) (f : X ⟶ Y) [单态射 f]
   定义体: (Injective.factors g f).choose
 
 @[reassoc (attr := simp)]
@@ -181,7 +181,7 @@ theorem comp_factorThru
 
 中文:
 定理 comp_factorThru
-  条件: {J X Y : C} [Injective J] (g : X ⟶ J) (f : X ⟶ Y) [Mono f]
+  条件: {J X Y : C} [单射 J] (g : X ⟶ J) (f : X ⟶ Y) [单态射 f]
   证明: (Injective.factors g f).choose_spec
 
 Depends on / 依赖: Injective, Injective.factors, choose_spec, factors
@@ -204,7 +204,7 @@ instance zero_injective
 
 中文:
 实例 zero_injective
-  签名: [HasZeroObject C]
+  签名: [有ZeroObject C]
   定义体: (isZero_zero C).injective
 
 Depends on / 依赖: injective, isZero_zero
@@ -229,8 +229,8 @@ theorem of_iso
 
 中文:
 定理 of_iso
-  条件: {P Q : C} (i : P ≅ Q) (hP : Injective P)
-  结论: Injective Q
+  条件: {P Q : C} (i : P ≅ Q) (hP : 单射 P)
+  结论: 单射 Q
   证明: {
     factors := fun g f mono => by
       obtain ⟨h, h_eq⟩ := @Injective.factors C _ P _ _ _ (g ≫ i.inv) f mono
@@ -258,7 +258,7 @@ theorem iso_iff
 中文:
 定理 iso_iff
   条件: {P Q : C} (i : P ≅ Q)
-  结论: Injective P ↔ Injective Q
+  结论: 单射 P ↔ 单射 Q
   证明: ⟨of_iso i, of_iso i.symm⟩
 
 Depends on / 依赖: i.symm, of_iso
@@ -296,8 +296,8 @@ instance Type.enoughInjectives
           exact WithBot.coe_injective }
 
 中文:
-实例 Type.enoughInjectives
-  签名: : EnoughInjectives (类型u₁) where
+实例 类型.enoughInjectives
+  签名: : 有足够单射 (类型u₁) where
   定义体: Nonempty.intro
       { J := WithBot X
         injective := inferInstance
@@ -376,7 +376,7 @@ theorem injective_iff_projective_op
 中文:
 定理 injective_iff_projective_op
   条件: {J : C}
-  结论: Injective J ↔ Projective (op J)
+  结论: 单射 J ↔ 投射 (op J)
   证明: ⟨fun _ => inferInstance, fun _ => show Injective (unop (op J)) from inferInstance⟩
 
 Depends on / 依赖: Injective
@@ -396,7 +396,7 @@ theorem projective_iff_injective_op
 中文:
 定理 projective_iff_injective_op
   条件: {P : C}
-  结论: Projective P ↔ Injective (op P)
+  结论: 投射 P ↔ 单射 (op P)
   证明: ⟨fun _ => inferInstance, fun _ => show Projective (unop (op P)) from inferInstance⟩
 
 Depends on / 依赖: Projective
@@ -450,8 +450,8 @@ theorem injective_of_adjoint
 
 中文:
 定理 injective_of_adjoint
-  条件: (adj : L ⊣ R) (J : D) [Injective J]
-  结论: Injective R.obj J
+  条件: (adj : L ⊣ R) (J : D) [单射 J]
+  结论: 单射 R.obj J
   证明: ⟨fun {A} {_} g f im =>
     ⟨adj.homEquiv _ _ (factorThru ((adj.homEquiv A J).symm g) (L.map f)),
       (adj.homEquiv _ _).symm.injective
@@ -485,9 +485,9 @@ lemma exists_presentation
   · exact ⟨(EnoughInjectives.presentation X).some, by tauto⟩
 
 中文:
-引理 exists_presentation
+引理 存在_presentation
   条件: (X : C)
-  结论: 存在 (p : InjectivePresentation X), IsZero X -> IsZero p.J
+  结论: 存在 (p : 单射呈现 X), 是零 X -> 是零 p.J
   证明: by
   by_cases h : IsZero X
   · have := h.injective
@@ -584,7 +584,7 @@ lemma isZero_under
 
 中文:
 引理 isZero_under
-  条件: (X : C) (hX : IsZero X)
+  条件: (X : C) (hX : 是零 X)
   证明: (exists_presentation X).choose_spec hX
 
 Depends on / 依赖: choose_spec, exists_presentation
@@ -649,8 +649,8 @@ instance [EnoughInjectives
   body: ⟨fun X => ⟨{ p := _, f := (Injective.ι (unop X)).op}⟩⟩
 
 中文:
-实例 [EnoughInjectives
-  签名: C] : EnoughProjectives Cᵒᵖ
+实例 [有足够单射
+  签名: C] : 有足够投射 Cᵒᵖ
   定义体: ⟨fun X => ⟨{ p := _, f := (Injective.ι (unop X)).op}⟩⟩
 
 Depends on / 依赖: Injective
@@ -667,8 +667,8 @@ instance [EnoughProjectives
   body: ⟨fun X => ⟨⟨_, inferInstance, (Projective.π (unop X)).op, inferInstance⟩⟩⟩
 
 中文:
-实例 [EnoughProjectives
-  签名: C] : EnoughInjectives Cᵒᵖ
+实例 [有足够投射
+  签名: C] : 有足够单射 Cᵒᵖ
   定义体: ⟨fun X => ⟨⟨_, inferInstance, (Projective.π (unop X)).op, inferInstance⟩⟩⟩
 
 Depends on / 依赖: Projective
@@ -687,8 +687,8 @@ theorem enoughProjectives_of_enoughInjectives_op
 
 中文:
 定理 enoughProjectives_of_enoughInjectives_op
-  条件: [EnoughInjectives Cᵒᵖ]
-  结论: EnoughProjectives C
+  条件: [有足够单射 Cᵒᵖ]
+  结论: 有足够投射 C
   证明: ⟨fun X => ⟨{ p := _, f := (Injective.ι (op X)).unop} ⟩⟩
 
 Depends on / 依赖: Injective
@@ -707,8 +707,8 @@ theorem enoughInjectives_of_enoughProjectives_op
 
 中文:
 定理 enoughInjectives_of_enoughProjectives_op
-  条件: [EnoughProjectives Cᵒᵖ]
-  结论: EnoughInjectives C
+  条件: [有足够投射 Cᵒᵖ]
+  结论: 有足够单射 C
   证明: ⟨fun X => ⟨⟨_, inferInstance, (Projective.π (op X)).unop, inferInstance⟩⟩⟩
 
 Depends on / 依赖: Projective
@@ -737,7 +737,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (adj : F ⊣ G) [F.PreservesMonomorphisms] (I : D) (hI : Injective I)
+  条件: (adj : F ⊣ G) [F.保持Monomorphisms] (I : D) (hI : 单射 I)
   证明: ⟨fun {X} {Y} f g => by
     intro
     rcases hI.factors (F.map f ≫ adj.counit.app _) (F.map g) with ⟨w,h⟩
@@ -771,7 +771,7 @@ theorem injective_of_map_injective
 
 中文:
 定理 injective_of_map_injective
-  结论: (adj : F ⊣ G) [G.Full] [G.Faithful] (I : D)
+  结论: (adj : F ⊣ G) [G.满] [G.忠实] (I : D)
   证明: ⟨fun {X} {Y} f g => by
     intro
     have : PreservesLimitsOfSize.{0, 0} G := adj.rightAdjoint_preservesLimits
@@ -804,7 +804,7 @@ definition mapInjectivePresentation
 
 中文:
 定义 mapInjectivePresentation
-  签名: (adj : F ⊣ G) [F.PreservesMonomorphisms] (X : D)
+  签名: (adj : F ⊣ G) [F.保持Monomorphisms] (X : D)
   定义体: G.obj I.J
   injective := adj.map_injective _ I.injective
   f := G.map I.f
@@ -866,7 +866,7 @@ theorem injective_of_map_injective
 
 中文:
 定理 injective_of_map_injective
-  结论: [F.Full] [F.Faithful]
+  结论: [F.满] [F.忠实]
   证明: by
     obtain ⟨h, fac⟩ := hI.factors (F.map g) (F.map f)
     exact ⟨F.preimage h, F.map_injective (by simp [fac])⟩
@@ -890,7 +890,7 @@ lemma EnoughInjectives.of_adjunction
   proof: ⟨adj.injectivePresentationOfMap _ (EnoughInjectives.presentation _).some⟩
 
 中文:
-引理 EnoughInjectives.of_adjunction
+引理 有足够单射.of_adjunction
   结论: {C : 类型u₁} {D : 类型u₂}
   证明: ⟨adj.injectivePresentationOfMap _ (EnoughInjectives.presentation _).some⟩
 
@@ -912,7 +912,7 @@ lemma EnoughInjectives.of_equivalence
   proof: EnoughInjectives.of_adjunction (adj := e.asEquivalence.toAdjunction)
 
 中文:
-引理 EnoughInjectives.of_equivalence
+引理 有足够单射.of_equivalence
   结论: {C : 类型u₁} {D : 类型u₂}
   证明: EnoughInjectives.of_adjunction (adj := e.asEquivalence.toAdjunction)
 
@@ -939,7 +939,7 @@ theorem map_injective_iff
 中文:
 定理 map_injective_iff
   条件: (P : C)
-  结论: Injective (F.functor.obj P) ↔ Injective P
+  结论: 单射 (F.functor.obj P) ↔ 单射 P
   证明: ⟨F.symm.toAdjunction.injective_of_map_injective P, F.symm.toAdjunction.map_injective P⟩
 
 Depends on / 依赖: F.symm.toAdjunction.injective_of_map_injective, F.symm.toAdjunction.map_injective, injective_of_map_injective, map_injective, toAdjunction
@@ -978,7 +978,7 @@ theorem enoughInjectives_iff
 中文:
 定理 enoughInjectives_iff
   条件: (F : C ≌ D)
-  结论: EnoughInjectives C ↔ EnoughInjectives D
+  结论: 有足够单射 C ↔ 有足够单射 D
   证明: ⟨fun h => h.of_adjunction F.symm.toAdjunction, fun h => h.of_adjunction F.toAdjunction⟩
 
 Depends on / 依赖: F.symm.toAdjunction, F.toAdjunction, h.of_adjunction, of_adjunction, toAdjunction
@@ -1002,9 +1002,9 @@ lemma Retract.injective
   simp [Category.assoc', hg]
 
 中文:
-引理 Retract.injective
-  条件: {X Y : C} (h : Retract X Y) [i : Injective Y]
-  结论: Injective X
+引理 收缩.injective
+  条件: {X Y : C} (h : 收缩 X Y) [i : 单射 Y]
+  结论: 单射 X
   证明: by
   refine Injective.mk (fun {A B} f e _ => ?_)
   rcases i.factors (f ≫ h.i) e with ⟨g, hg⟩

@@ -38,7 +38,7 @@ theorem countP_lt_length_iff
 
 中文:
 定理 countP_lt_length_iff
-  条件: {l : List α} {p : α -> 布尔}
+  条件: {l : 列表 α} {p : α -> 布尔值}
   证明: by
   simp [Nat.lt_iff_le_and_ne, countP_le_length]
 
@@ -79,7 +79,7 @@ lemma countP_erase
 
 中文:
 引理 countP_erase
-  条件: (p : α -> 布尔) (l : List α) (a : α)
+  条件: (p : α -> 布尔值) (l : 列表 α) (a : α)
   证明: by
   grind [countP_eq_length_filter]
 
@@ -98,7 +98,7 @@ lemma count_diff
 
 中文:
 引理 count_diff
-  条件: (a : α) (l₁ : List α)
+  条件: (a : α) (l₁ : 列表 α)
 -/
 lemma count_diff (a : α) (l₁ : List α) :
     forall l₂, count a (l₁.diff l₂) = count a l₁ - count a l₂
@@ -123,7 +123,7 @@ lemma countP_diff
 
 中文:
 引理 countP_diff
-  条件: (hl : l₂ <+~ l₁) (p : α -> 布尔)
+  条件: (hl : l₂ <+~ l₁) (p : α -> 布尔值)
   证明: by
   refine (Nat.sub_eq_of_eq_add ?_).symm
   rw [← countP_append]
@@ -155,7 +155,7 @@ theorem count_map_of_injective
 
 中文:
 定理 count_map_of_injective
-  结论: [BEq β] [LawfulBEq β] (l : List α) (f : α -> β)
+  结论: [BEq β] [LawfulBEq β] (l : 列表 α) (f : α -> β)
   证明: by
   simp only [count, countP_map]
   unfold Function.comp

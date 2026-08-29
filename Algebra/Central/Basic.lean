@@ -42,7 +42,7 @@ lemma center_eq_bot
 
 中文:
 引理 center_eq_bot
-  结论: Subalgebra.center K D = ⊥
+  结论: 子代数.center K D = ⊥
   证明: eq_bot_iff.2 IsCentral.out
 
 Depends on / 依赖: IsCentral, IsCentral.out, eq_bot_iff
@@ -64,7 +64,7 @@ lemma mem_center_iff
 中文:
 引理 mem_center_iff
   条件: {x : D}
-  结论: x in Subalgebra.center K D ↔ 存在 (a : K), x = algebraMap K D a
+  结论: x in 子代数.center K D ↔ 存在 (a : K), x = algebraMap K D a
   证明: by
   rw [center_eq_bot]; rw [Algebra.mem_bot]
   simp [eq_comm]
@@ -85,7 +85,7 @@ instance self
 
 中文:
 实例 self
-  签名: : IsCentral K K where
+  签名: : 是中心 K K where
   定义体: by simp [Algebra.mem_bot]
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, CommRingCat, CommRingCat.monoidAlgebraAdj, mem_bot, monoidAlgebraAdj
@@ -149,7 +149,7 @@ lemma of_algEquiv
 中文:
 引理 of_algEquiv
   条件: (e : D ≃ₐ[K] D')
-  结论: IsCentral K D' where
+  结论: 是中心 K D' where
   证明: have ⟨k, hk⟩ := h.1 ((MulEquivClass.apply_mem_center_iff e.symm).mpr hx)
     ⟨k, by simpa [ofId] using congr(e $hk)⟩
 
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCentral K Dᵐᵒᵖ
+  签名: 是中心 K Dᵐᵒᵖ
   定义体: have ⟨k, hk⟩ := h.1 (MulOpposite.unop_mem_center_iff.mpr hz)
     ⟨k, by simpa using congr(op $hk)⟩
 

@@ -42,10 +42,10 @@ class ContinuousAdd
     - continuous_add : Continuous fun p : M × M => p.1 + p.2
 
 中文:
-类 ContinuousAdd
-  参数: (M : 类型) [TopologicalSpace M] [Add M]
+类 连续加法
+  参数: (M : 类型) [拓扑空间 M] [加法 M]
   公理与运算 (1 个):
-    - continuous_add : Continuous fun p : M × M => p.1 + p.2
+    - continuous_add : 连续 fun p : M × M => p.1 + p.2
 -/
 class ContinuousAdd (M : Type*) [TopologicalSpace M] [Add M] : Prop where
   continuous_add : Continuous fun p : M × M => p.1 + p.2
@@ -68,10 +68,10 @@ class ContinuousMul
     - continuous_mul : Continuous fun p : M × M => p.1 * p.2
 
 中文:
-类 ContinuousMul
-  参数: (M : 类型) [TopologicalSpace M] [Mul M]
+类 连续乘法
+  参数: (M : 类型) [拓扑空间 M] [乘法 M]
   公理与运算 (1 个):
-    - continuous_mul : Continuous fun p : M × M => p.1 * p.2
+    - continuous_mul : 连续 fun p : M × M => p.1 * p.2
 -/
 class ContinuousMul (M : Type*) [TopologicalSpace M] [Mul M] : Prop where
   continuous_mul : Continuous fun p : M × M => p.1 * p.2
@@ -88,10 +88,10 @@ class SeparatelyContinuousAdd
 
 中文:
 类 SeparatelyContinuousAdd
-  参数: (M : 类型) [TopologicalSpace M] [Add M]
+  参数: (M : 类型) [拓扑空间 M] [加法 M]
   公理与运算 (2 个):
-    - continuous_const_add({a : M}) : Continuous (a + ·)
-    - continuous_add_const({a : M}) : Continuous (· + a)
+    - continuous_const_add({a : M}) : 连续 (a + ·)
+    - continuous_add_const({a : M}) : 连续 (· + a)
 -/
 class SeparatelyContinuousAdd (M : Type*) [TopologicalSpace M] [Add M] : Prop where
   continuous_const_add {a : M} : Continuous (a + ·)
@@ -112,10 +112,10 @@ class SeparatelyContinuousMul
 
 中文:
 类 SeparatelyContinuousMul
-  参数: (M : 类型) [TopologicalSpace M] [Mul M]
+  参数: (M : 类型) [拓扑空间 M] [乘法 M]
   公理与运算 (2 个):
-    - continuous_const_mul({a : M}) : Continuous (a * ·)
-    - continuous_mul_const({a : M}) : Continuous (· * a)
+    - continuous_const_mul({a : M}) : 连续 (a * ·)
+    - continuous_mul_const({a : M}) : 连续 (· * a)
 -/
 class SeparatelyContinuousMul (M : Type*) [TopologicalSpace M] [Mul M] : Prop where
   continuous_const_mul {a : M} : Continuous (a * ·)
@@ -138,7 +138,7 @@ theorem continuous_mul
 
 中文:
 定理 continuous_mul
-  结论: Continuous fun p : M × M => p.1 * p.2
+  结论: 连续 fun p : M × M => p.1 * p.2
   证明: ContinuousMul.continuous_mul
 
 @[to_additive]
@@ -160,8 +160,8 @@ theorem Filter.Tendsto.mul
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.mul
-  结论: {α : 类型} {f g : α -> M} {x : Filter α} {a b : M}
+定理 滤子.收敛.mul
+  结论: {α : 类型} {f g : α -> M} {x : 滤子 α} {a b : M}
   证明: (continuous_mul.tendsto _).comp (hf.prodMk_nhds hg)
 
 @[to_additive]
@@ -183,8 +183,8 @@ lemma Filter.tendsto_of_div_tendsto_one
   simpa using Tendsto.mul hf hfg
 
 中文:
-引理 Filter.tendsto_of_div_tendsto_one
-  结论: {α E : 类型} [CommGroup E] [TopologicalSpace E]
+引理 滤子.tendsto_of_div_tendsto_one
+  结论: {α E : 类型} [交换群 E] [拓扑空间 E]
   证明: by
   simpa using Tendsto.mul hf hfg
 
@@ -209,8 +209,8 @@ theorem Continuous.mul
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 Continuous.mul
-  条件: (hf : Continuous f) (hg : Continuous g)
+定理 连续.mul
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: continuous_mul.comp₂ hf hg
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -306,7 +306,7 @@ instance [ContinuousMul
   continuous_mul_const := continuous_id.mul continuous_const
 
 中文:
-实例 [ContinuousMul
+实例 [连续乘法
   签名: M] : SeparatelyContinuousMul M where
   定义体: continuous_const.mul continuous_id
   continuous_mul_const := continuous_id.mul continuous_const
@@ -332,7 +332,7 @@ theorem continuous_const_mul
 中文:
 定理 continuous_const_mul
   条件: (m : M)
-  结论: Continuous (m * ·)
+  结论: 连续 (m * ·)
   证明: SeparatelyContinuousMul.continuous_const_mul
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -357,7 +357,7 @@ theorem continuous_mul_const
 中文:
 定理 continuous_mul_const
   条件: (m : M)
-  结论: Continuous (· * m)
+  结论: 连续 (· * m)
   证明: SeparatelyContinuousMul.continuous_mul_const
 
 @[to_additive]
@@ -379,8 +379,8 @@ theorem Filter.Tendsto.const_mul
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.const_mul
-  结论: {α : 类型} {f : α -> M} {x : Filter α} {a : M}
+定理 滤子.收敛.const_mul
+  结论: {α : 类型} {f : α -> M} {x : 滤子 α} {a : M}
   证明: .comp hf .tendsto _ continuous_const_mul b
 
 @[to_additive]
@@ -401,8 +401,8 @@ theorem Filter.Tendsto.mul_const
   proof: .comp hf .tendsto _ continuous_mul_const b
 
 中文:
-定理 Filter.Tendsto.mul_const
-  结论: {α : 类型} {f : α -> M} {x : Filter α} {a : M}
+定理 滤子.收敛.mul_const
+  结论: {α : 类型} {f : α -> M} {x : 滤子 α} {a : M}
   证明: .comp hf .tendsto _ continuous_mul_const b
 
 Depends on / 依赖: continuous_mul_const, tendsto
@@ -426,9 +426,9 @@ theorem Continuous.mul_const
 @[to_additive (attr := continuity, fun_prop)]
 
 中文:
-定理 Continuous.mul_const
-  条件: (hf : Continuous f) (b : M)
-  结论: Continuous (f · * b)
+定理 连续.mul_const
+  条件: (hf : 连续 f) (b : M)
+  结论: 连续 (f · * b)
   证明: .comp hf continuous_mul_const b
 
 @[to_additive (attr := continuity, fun_prop)]
@@ -451,9 +451,9 @@ theorem Continuous.const_mul
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Continuous.const_mul
-  条件: (hf : Continuous f) (b : M)
-  结论: Continuous (b * f ·)
+定理 连续.const_mul
+  条件: (hf : 连续 f) (b : M)
+  结论: 连续 (b * f ·)
   证明: .comp hf continuous_const_mul b
 
 @[to_additive (attr := fun_prop)]

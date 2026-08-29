@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable 整数
+  签名: 可数 整数
   定义体: Countable.of_equiv Nat Equiv.intEquivNat.symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.intEquivNat.symm, intEquivNat, of_equiv
@@ -60,7 +60,7 @@ theorem countable_iff_nonempty_embedding
 
 中文:
 定理 countable_iff_nonempty_embedding
-  结论: Countable α ↔ Nonempty (α ↪ 自然数)
+  结论: 可数 α ↔ 非空 (α ↪ 自然数)
   证明: ⟨fun ⟨⟨f, hf⟩⟩ => ⟨⟨f, hf⟩⟩, fun ⟨f⟩ => ⟨⟨f, f.2⟩⟩⟩
 -/
 theorem countable_iff_nonempty_embedding : Countable α ↔ Nonempty (α ↪ Nat) :=
@@ -77,7 +77,7 @@ theorem uncountable_iff_isEmpty_embedding
 
 中文:
 定理 uncountable_iff_isEmpty_embedding
-  结论: Uncountable α ↔ IsEmpty (α ↪ 自然数)
+  结论: 不可数 α ↔ 是空 (α ↪ 自然数)
   证明: by
   rw [← not_countable_iff]; rw [countable_iff_nonempty_embedding]; rw [not_nonempty_iff]
 
@@ -97,8 +97,8 @@ theorem nonempty_embedding_nat
 
 中文:
 定理 nonempty_embedding_nat
-  条件: (α) [Countable α]
-  结论: Nonempty (α ↪ 自然数)
+  条件: (α) [可数 α]
+  结论: 非空 (α ↪ 自然数)
   证明: countable_iff_nonempty_embedding.1 ‹_›
 
 Depends on / 依赖: countable_iff_nonempty_embedding
@@ -116,9 +116,9 @@ theorem Function.Embedding.countable
   proof: f.injective.countable
 
 中文:
-定理 Function.Embedding.countable
-  条件: [Countable β] (f : α ↪ β)
-  结论: Countable α
+定理 函数.嵌入.countable
+  条件: [可数 β] (f : α ↪ β)
+  结论: 可数 α
   证明: f.injective.countable
 -/
 protected theorem Function.Embedding.countable [Countable β] (f : α ↪ β) : Countable α :=
@@ -134,9 +134,9 @@ lemma Function.Embedding.uncountable
   proof: f.injective.uncountable
 
 中文:
-引理 Function.Embedding.uncountable
-  条件: [Uncountable α] (f : α ↪ β)
-  结论: Uncountable β
+引理 函数.嵌入.uncountable
+  条件: [不可数 α] (f : α ↪ β)
+  结论: 不可数 β
   证明: f.injective.uncountable
 -/
 protected lemma Function.Embedding.uncountable [Uncountable α] (f : α ↪ β) : Uncountable β :=
@@ -164,8 +164,8 @@ instance [Countable
   exact (Equiv.natSumNatEquivNat.injective.comp <| hf.sumMap hg).countable
 
 中文:
-实例 [Countable
-  签名: α] [Countable β] : Countable (α oplus β)
+实例 [可数
+  签名: α] [可数 β] : 可数 (α oplus β)
   定义体: by
   rcases exists_injective_nat α with ⟨f, hf⟩
   rcases exists_injective_nat β with ⟨g, hg⟩
@@ -187,8 +187,8 @@ instance Sum.uncountable_inl
   body: inl_injective.uncountable
 
 中文:
-实例 Sum.uncountable_inl
-  签名: [Uncountable α]
+实例 和.uncountable_inl
+  签名: [不可数 α]
   定义体: inl_injective.uncountable
 
 Depends on / 依赖: inl_injective, inl_injective.uncountable, uncountable
@@ -205,8 +205,8 @@ instance Sum.uncountable_inr
   body: inr_injective.uncountable
 
 中文:
-实例 Sum.uncountable_inr
-  签名: [Uncountable β]
+实例 和.uncountable_inr
+  签名: [不可数 β]
   定义体: inr_injective.uncountable
 
 Depends on / 依赖: inr_injective, inr_injective.uncountable, uncountable
@@ -223,8 +223,8 @@ instance Option.instCountable
   body: Countable.of_equiv _ (Equiv.optionEquivSumPUnit.{0, _} α).symm
 
 中文:
-实例 Option.instCountable
-  签名: [Countable α]
+实例 选项类型.instCountable
+  签名: [可数 α]
   定义体: Countable.of_equiv _ (Equiv.optionEquivSumPUnit.{0, _} α).symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.optionEquivSumPUnit, of_equiv, optionEquivSumPUnit
@@ -242,7 +242,7 @@ instance WithTop.instCountable
 
 中文:
 实例 WithTop.instCountable
-  签名: [Countable α]
+  签名: [可数 α]
   定义体: Option.instCountable
 
 Depends on / 依赖: Option.instCountable, instCountable
@@ -258,7 +258,7 @@ instance WithBot.instCountable
 
 中文:
 实例 WithBot.instCountable
-  签名: [Countable α]
+  签名: [可数 α]
   定义体: Option.instCountable
 
 Depends on / 依赖: Option.instCountable, instCountable
@@ -273,8 +273,8 @@ instance ENat.instCountable
   body: Option.instCountable
 
 中文:
-实例 ENat.instCountable
-  签名: : Countable 自然数∞
+实例 E自然数.instCountable
+  签名: : 可数 自然数∞
   定义体: Option.instCountable
 
 Depends on / 依赖: Option.instCountable, instCountable
@@ -290,8 +290,8 @@ instance Option.instUncountable
   body: Injective.uncountable fun _ _ => Option.some_inj.1
 
 中文:
-实例 Option.instUncountable
-  签名: [Uncountable α]
+实例 选项类型.instUncountable
+  签名: [不可数 α]
   定义体: Injective.uncountable fun _ _ => Option.some_inj.1
 
 Depends on / 依赖: Injective, Injective.uncountable, Option.some_inj, some_inj, uncountable
@@ -309,7 +309,7 @@ instance WithTop.instUncountable
 
 中文:
 实例 WithTop.instUncountable
-  签名: [Uncountable α]
+  签名: [不可数 α]
   定义体: Option.instUncountable
 
 Depends on / 依赖: Option.instUncountable, instUncountable
@@ -325,7 +325,7 @@ instance WithBot.instUncountable
 
 中文:
 实例 WithBot.instUncountable
-  签名: [Uncountable α]
+  签名: [不可数 α]
   定义体: Option.instUncountable
 
 Depends on / 依赖: Option.instUncountable, instUncountable
@@ -361,8 +361,8 @@ instance [Countable
   exact (Nat.pairEquiv.injective.comp <| hf.prodMap hg).countable
 
 中文:
-实例 [Countable
-  签名: α] [Countable β] : Countable (α × β)
+实例 [可数
+  签名: α] [可数 β] : 可数 (α × β)
   定义体: by
   rcases exists_injective_nat α with ⟨f, hf⟩
   rcases exists_injective_nat β with ⟨g, hg⟩
@@ -386,8 +386,8 @@ instance [Uncountable
   exact (Prod.mk_left_injective default).uncountable
 
 中文:
-实例 [Uncountable
-  签名: α] [Nonempty β] : Uncountable (α × β)
+实例 [不可数
+  签名: α] [非空 β] : 不可数 (α × β)
   定义体: by
   inhabit β
   exact (Prod.mk_left_injective default).uncountable
@@ -409,8 +409,8 @@ instance [Nonempty
   exact (Prod.mk_right_injective default).uncountable
 
 中文:
-实例 [Nonempty
-  签名: α] [Uncountable β] : Uncountable (α × β)
+实例 [非空
+  签名: α] [不可数 β] : 不可数 (α × β)
   定义体: by
   inhabit α
   exact (Prod.mk_right_injective default).uncountable
@@ -434,8 +434,8 @@ lemma countable_left_of_prod_of_nonempty
 
 中文:
 引理 countable_left_of_prod_of_nonempty
-  条件: [Nonempty β] (h : Countable (α × β))
-  结论: Countable α
+  条件: [非空 β] (h : 可数 (α × β))
+  结论: 可数 α
   证明: by
   contrapose! h
   infer_instance
@@ -459,8 +459,8 @@ lemma countable_right_of_prod_of_nonempty
 
 中文:
 引理 countable_right_of_prod_of_nonempty
-  条件: [Nonempty α] (h : Countable (α × β))
-  结论: Countable β
+  条件: [非空 α] (h : 可数 (α × β))
+  结论: 可数 β
   证明: by
   contrapose! h
   infer_instance
@@ -482,8 +482,8 @@ lemma countable_prod_swap
 
 中文:
 引理 countable_prod_swap
-  条件: [Countable (α × β)]
-  结论: Countable (β × α)
+  条件: [可数 (α × β)]
+  结论: 可数 (β × α)
   证明: Countable.of_equiv _ (Equiv.prodComm α β)
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.prodComm, of_equiv, prodComm
@@ -503,8 +503,8 @@ instance [Countable
   exact ((Equiv.sigmaEquivProd Nat Nat).injective.comp <| hf.sigma_map hg).countable
 
 中文:
-实例 [Countable
-  签名: α] [对任意 a, Countable (π a)] : Countable (Sigma π)
+实例 [可数
+  签名: α] [对任意 a, 可数 (π a)] : 可数 (依赖和类型 π)
   定义体: by
   rcases exists_injective_nat α with ⟨f, hf⟩
   choose g hg using fun a => exists_injective_nat (π a)
@@ -527,9 +527,9 @@ lemma Sigma.uncountable
   proof: (sigma_mk_injective (i := a)).uncountable
 
 中文:
-引理 Sigma.uncountable
-  条件: (a : α) [Uncountable (π a)]
-  结论: Uncountable (Sigma π)
+引理 依赖和类型.uncountable
+  条件: (a : α) [不可数 (π a)]
+  结论: 不可数 (依赖和类型 π)
   证明: (sigma_mk_injective (i := a)).uncountable
 
 Depends on / 依赖: sigma_mk_injective, uncountable
@@ -547,8 +547,8 @@ instance [Nonempty
   inhabit α; exact Sigma.uncountable default
 
 中文:
-实例 [Nonempty
-  签名: α] [对任意 a, Uncountable (π a)] : Uncountable (Sigma π)
+实例 [非空
+  签名: α] [对任意 a, 不可数 (π a)] : 不可数 (依赖和类型 π)
   定义体: by
   inhabit α; exact Sigma.uncountable default
 -/
@@ -574,8 +574,8 @@ instance [Countable
   body: Countable.of_equiv (PLift α oplus PLift β) (Equiv.plift.sumPSum Equiv.plift)
 
 中文:
-实例 [Countable
-  签名: α] [Countable β] : Countable (α oplus' β)
+实例 [可数
+  签名: α] [可数 β] : 可数 (α oplus' β)
   定义体: Countable.of_equiv (PLift α oplus PLift β) (Equiv.plift.sumPSum Equiv.plift)
 -/
 instance [Countable α] [Countable β] : Countable (α oplus' β) :=
@@ -590,8 +590,8 @@ instance [Countable
   body: Countable.of_equiv (PLift α × PLift β) (Equiv.plift.prodPProd Equiv.plift)
 
 中文:
-实例 [Countable
-  签名: α] [Countable β] : Countable (PProd α β)
+实例 [可数
+  签名: α] [可数 β] : 可数 (命题积类型 α β)
   定义体: Countable.of_equiv (PLift α × PLift β) (Equiv.plift.prodPProd Equiv.plift)
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.plift, Equiv.plift.prodPProd, of_equiv, prodPProd
@@ -608,8 +608,8 @@ instance [Countable
   body: Countable.of_equiv (Σ a : PLift α, PLift (π a.down)) (Equiv.psigmaEquivSigmaPLift π).symm
 
 中文:
-实例 [Countable
-  签名: α] [对任意 a, Countable (π a)] : Countable (PSigma π)
+实例 [可数
+  签名: α] [对任意 a, 可数 (π a)] : 可数 (命题和类型 π)
   定义体: Countable.of_equiv (Σ a : PLift α, PLift (π a.down)) (Equiv.psigmaEquivSigmaPLift π).symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.psigmaEquivSigmaPLift, a.down, of_equiv, psigmaEquivSigmaPLift
@@ -632,8 +632,8 @@ instance [Finite
   have f := fun a => (nonempty_embedding_nat (π a))
 
 中文:
-实例 [Finite
-  签名: α] [对任意 a, Countable (π a)] : Countable (对任意 a, π a)
+实例 [有限
+  签名: α] [对任意 a, 可数 (π a)] : 可数 (对任意 a, π a)
   定义体: by
   have (n : Nat) : Countable (Fin n -> Nat) := by
     induction n with

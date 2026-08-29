@@ -50,7 +50,7 @@ lemma inl_mono
 
 中文:
 引理 inl_mono
-  结论: [LinearOrderedCommGroupWithZero M₀] [GroupWithZero N₀] [Preorder N₀]
+  结论: [带零LinearOrderedComm群 M₀] [带零群 N₀] [预序 N₀]
   证明: by
   refine (WithZero.map'_mono MonoidHom.inl_mono).comp ?_
   intro x y
@@ -78,7 +78,7 @@ lemma inl_strictMono
 
 中文:
 引理 inl_strictMono
-  结论: [LinearOrderedCommGroupWithZero M₀] [GroupWithZero N₀] [PartialOrder N₀]
+  结论: [带零LinearOrderedComm群 M₀] [带零群 N₀] [偏序 N₀]
   证明: inl_mono.strictMono_of_injective inl_injective
 
 Depends on / 依赖: inl_injective, inl_mono, inl_mono.strictMono_of_injective, strictMono_of_injective
@@ -103,7 +103,7 @@ lemma inr_mono
 
 中文:
 引理 inr_mono
-  结论: [GroupWithZero M₀] [Preorder M₀] [LinearOrderedCommGroupWithZero N₀]
+  结论: [带零群 M₀] [预序 M₀] [带零LinearOrderedComm群 N₀]
   证明: by
   refine (WithZero.map'_mono MonoidHom.inr_mono).comp ?_
   intro x y
@@ -131,7 +131,7 @@ lemma inr_strictMono
 
 中文:
 引理 inr_strictMono
-  结论: [GroupWithZero M₀] [PartialOrder M₀] [LinearOrderedCommGroupWithZero N₀]
+  结论: [带零群 M₀] [偏序 M₀] [带零LinearOrderedComm群 N₀]
   证明: inr_mono.strictMono_of_injective inr_injective
 
 Depends on / 依赖: RingCone, inr_injective, inr_mono, inr_mono.strictMono_of_injective, ofSetLike, strictMono_of_injective
@@ -152,7 +152,7 @@ lemma fst_mono
 
 中文:
 引理 fst_mono
-  条件: [LinearOrderedCommGroupWithZero M₀] [GroupWithZero N₀] [Preorder N₀]
+  条件: [带零LinearOrderedComm群 M₀] [带零群 N₀] [预序 N₀]
   证明: by
   refine WithZero.forall.mpr ?_
   simp +contextual [WithZero.forall, Prod.le_def]
@@ -177,7 +177,7 @@ lemma snd_mono
 
 中文:
 引理 snd_mono
-  条件: [GroupWithZero M₀] [Preorder M₀] [LinearOrderedCommGroupWithZero N₀]
+  条件: [带零群 M₀] [预序 M₀] [带零LinearOrderedComm群 N₀]
   证明: by
   refine WithZero.forall.mpr ?_
   simp [WithZero.forall, Prod.le_def]

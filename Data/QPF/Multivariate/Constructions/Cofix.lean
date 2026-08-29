@@ -238,7 +238,7 @@ instance Cofix.mvfunctor
 
 中文:
 实例 Cofix.mvfunctor
-  签名: : MvFunctor (Cofix F) where map
+  签名: : Mv函子 (Cofix F) where map
   定义体: @Cofix.map _ _ _
 
 Depends on / 依赖: Cofix.map
@@ -869,7 +869,7 @@ exists h < > x
 
 中文:
 定理 liftR_map
-  结论: {α β : TypeVec n} {F' : TypeVec n -> 类型u} [MvFunctor F'] [LawfulMvFunctor F']
+  结论: {α β : TypeVec n} {F' : TypeVec n -> 类型u} [Mv函子 F'] [LawfulMv函子 F']
   证明: by
   rw [LiftR_def]
 exists h < > x
@@ -906,7 +906,7 @@ theorem liftR_map_last
 
 中文:
 定理 liftR_map_last
-  结论: [lawful : LawfulMvFunctor F]
+  结论: [lawful : LawfulMv函子 F]
   证明: let h : ι -> { x : ι' × ι' // uncurry R x } := fun x => ⟨(f x, g x), hh x⟩
   let b : (α ::: ι) ⟹ _ := @diagSub n α ::: h
   let c :
@@ -958,7 +958,7 @@ theorem liftR_map_last'
 
 中文:
 定理 liftR_map_last'
-  结论: [LawfulMvFunctor F] {α : TypeVec n} {ι} (R : ι -> ι -> 命题) (x : F (α ::: ι))
+  结论: [LawfulMv函子 F] {α : TypeVec n} {ι} (R : ι -> ι -> 命题) (x : F (α ::: ι))
   证明: by
   have := liftR_map_last R x f id hh
   rwa [appendFun_id_id, MvFunctor.id_map] at this
@@ -996,7 +996,7 @@ theorem Cofix.abs_repr
 中文:
 定理 Cofix.abs_repr
   条件: {α} (x : Cofix F α)
-  结论: Quot.mk _ (Cofix.repr x) = x
+  结论: 商.mk _ (Cofix.repr x) = x
   证明: by
   let R := fun x y : Cofix F α => abs (repr y) = x
   refine Cofix.bisim₂ R ?_ _ _ rfl

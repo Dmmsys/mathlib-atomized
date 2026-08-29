@@ -292,7 +292,7 @@ lemma c_prod_nonneg
 中文:
 引理 c_prod_nonneg
   条件: (hc : 0 <= c) (t : σ ->₀ 自然数)
-  结论: 0 <= t.prod (c · ^ ·)
+  结论: 0 <= t.乘积 (c · ^ ·)
   证明: Finset.prod_nonneg (fun i _ => pow_nonneg (hc i) (t i))
 -/
 private lemma c_prod_nonneg (hc : 0 <= c) (t : σ ->₀ Nat) : 0 <= t.prod (c · ^ ·) :=
@@ -459,7 +459,7 @@ lemma Finset.Nonempty.map_sum_le_sup'_map
       refine (l
 
 中文:
-引理 Finset.Nonempty.map_sum_le_sup'_map
+引理 有限集.非空.map_sum_le_sup'_map
   证明: by
   simp only [Finset.le_sup'_iff]
   induction hs using Finset.Nonempty.cons_induction with

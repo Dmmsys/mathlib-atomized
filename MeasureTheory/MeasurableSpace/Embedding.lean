@@ -58,12 +58,12 @@ structure MeasurableEmbedding
     - measurableSet_image' : forall ⦃s⦄, MeasurableSet s -> MeasurableSet (f '' s)
 
 中文:
-结构 MeasurableEmbedding
-  参数: [MeasurableSpace α] [MeasurableSpace β] (f : α -> β)
+结构 可测嵌入
+  参数: [可测空间 α] [可测空间 β] (f : α -> β)
   公理与运算 (3 个):
-    - injective : Injective f
-    - measurable : Measurable f
-    - measurableSet_image' : 对任意 ⦃s⦄, MeasurableSet s -> MeasurableSet (f '' s)
+    - injective : 单射 f
+    - measurable : 可测 f
+    - measurableSet_image' : 对任意 ⦃s⦄, 可测集 s -> 可测集 (f '' s)
 -/
 structure MeasurableEmbedding [MeasurableSpace α] [MeasurableSpace β] (f : α -> β) : Prop where
   /-- A measurable embedding is injective. -/
@@ -90,7 +90,7 @@ theorem measurableSet_image
 
 中文:
 定理 measurableSet_image
-  条件: (hf : MeasurableEmbedding f)
+  条件: (hf : 可测嵌入 f)
   证明: ⟨fun h => by simpa only [hf.injective.preimage_image] using hf.measurable h, fun h =>
     hf.measurableSet_image' h⟩
 
@@ -111,7 +111,7 @@ theorem id
 
 中文:
 定理 id
-  结论: MeasurableEmbedding (id : α -> α)
+  结论: 可测嵌入 (id : α -> α)
   证明: ⟨injective_id, measurable_id, fun s hs => by rwa [image_id]⟩
 
 Depends on / 依赖: image_id, injective_id, measurable_id
@@ -130,7 +130,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : MeasurableEmbedding g) (hf : MeasurableEmbedding f)
+  条件: (hg : 可测嵌入 g) (hf : 可测嵌入 f)
   证明: ⟨hg.injective.comp hf.injective, hg.measurable.comp hf.measurable, fun s hs => by
     rwa [image_comp, hg.measurableSet_image, hf.measurableSet_image]⟩
 
@@ -154,8 +154,8 @@ theorem subtype_coe
 
 中文:
 定理 subtype_coe
-  条件: (hs : MeasurableSet s)
-  结论: MeasurableEmbedding ((↑) : s -> α) where
+  条件: (hs : 可测集 s)
+  结论: 可测嵌入 ((↑) : s -> α) where
   证明: Subtype.coe_injective
   measurable := measurable_subtype_coe
   measurableSet_image' := fun _ => MeasurableSet.subtype_image hs
@@ -180,8 +180,8 @@ theorem measurableSet_range
 
 中文:
 定理 measurableSet_range
-  条件: (hf : MeasurableEmbedding f)
-  结论: MeasurableSet (range f)
+  条件: (hf : 可测嵌入 f)
+  结论: 可测集 (range f)
   证明: by
   rw [← image_univ]
   exact hf.measurableSet_image' MeasurableSet.univ
@@ -203,7 +203,7 @@ theorem measurableSet_preimage
 
 中文:
 定理 measurableSet_preimage
-  条件: (hf : MeasurableEmbedding f) {s : Set β}
+  条件: (hf : 可测嵌入 f) {s : 集合 β}
   证明: by
   rw [← image_preimage_eq_inter_range]; rw [hf.measurableSet_image]
 
@@ -226,7 +226,7 @@ theorem measurable_rangeSplitting
 
 中文:
 定理 measurable_rangeSplitting
-  条件: (hf : MeasurableEmbedding f)
+  条件: (hf : 可测嵌入 f)
   证明: fun s hs => by
   rwa [preimage_rangeSplitting hf.injective,
     ← (subtype_coe hf.measurableSet_range).measurableSet_image, ← image_comp,
@@ -255,7 +255,7 @@ theorem measurable_extend
 
 中文:
 定理 measurable_extend
-  结论: (hf : MeasurableEmbedding f) {g : α -> γ} {g' : β -> γ} (hg : Measurable g)
+  结论: (hf : 可测嵌入 f) {g : α -> γ} {g' : β -> γ} (hg : 可测 g)
   证明: by
   refine measurable_of_restrict_of_restrict_compl hf.measurableSet_range ?_ ?_
   · rw [domRestrict_extend_range]
@@ -284,8 +284,8 @@ theorem exists_measurable_extend
     funext fun _ => hf.injective.extend_apply _ _ _⟩
 
 中文:
-定理 exists_measurable_extend
-  结论: (hf : MeasurableEmbedding f) {g : α -> γ} (hg : Measurable g)
+定理 存在_measurable_extend
+  结论: (hf : 可测嵌入 f) {g : α -> γ} (hg : 可测 g)
   证明: ⟨extend f g fun x => Classical.choice (hne x),
     hf.measurable_extend hg (measurable_const' fun _ _ => rfl),
     funext fun _ => hf.injective.extend_apply _ _ _⟩
@@ -313,8 +313,8 @@ theorem measurable_comp_iff
 
 中文:
 定理 measurable_comp_iff
-  条件: (hg : MeasurableEmbedding g)
-  结论: Measurable (g ∘ f) ↔ Measurable f
+  条件: (hg : 可测嵌入 g)
+  结论: 可测 (g ∘ f) ↔ 可测 f
   证明: by
   refine ⟨fun H => ?_, hg.measurable.comp⟩
   suffices Measurable ((rangeSplitting g ∘ rangeFactorization g) ∘ f) by
@@ -343,7 +343,7 @@ lemma natCast
 
 中文:
 引理 natCast
-  结论: {α : 类型} [MeasurableSpace α]
+  结论: {α : 类型} [可测空间 α]
   证明: Nat.cast_injective
   measurable := measurable_from_nat
   measurableSet_image' := fun _ _ =>
@@ -379,8 +379,8 @@ lemma MeasurableSet.of_union_range_cover
   simp [image_preimage_eq_range_inter, ← union_inter_distrib_right, univ_subset_iff.1 h]
 
 中文:
-引理 MeasurableSet.of_union_range_cover
-  结论: (hi₁ : MeasurableEmbedding i₁)
+引理 可测集.of_union_range_cover
+  结论: (hi₁ : 可测嵌入 i₁)
   证明: by
   convert! (hi₁.measurableSet_image' hs₁).union (hi₂.measurableSet_image' hs₂)
   simp [image_preimage_eq_range_inter, ← union_inter_distrib_right, univ_subset_iff.1 h]
@@ -406,8 +406,8 @@ lemma MeasurableSet.of_union₃_range_cover
   simp [image_preimage_eq_range_inter, ← union_inter_distrib_right, univ_subset_iff.1 h]
 
 中文:
-引理 MeasurableSet.of_union₃_range_cover
-  结论: (hi₁ : MeasurableEmbedding i₁)
+引理 可测集.of_union₃_range_cover
+  结论: (hi₁ : 可测嵌入 i₁)
   证明: by
   convert!
 .union (hi₁.measurableSet_image' hs₁).union (hi₂.measurableSet_image' hs₂)
@@ -434,8 +434,8 @@ lemma Measurable.of_union_range_cover
   proof: fun _s hs => .of_union_range_cover hi₁ hi₂ h (hf₁ hs) (hf₂ hs)
 
 中文:
-引理 Measurable.of_union_range_cover
-  结论: (hi₁ : MeasurableEmbedding i₁)
+引理 可测.of_union_range_cover
+  结论: (hi₁ : 可测嵌入 i₁)
   证明: fun _s hs => .of_union_range_cover hi₁ hi₂ h (hf₁ hs) (hf₂ hs)
 
 Depends on / 依赖: of_union_range_cover
@@ -454,8 +454,8 @@ lemma Measurable.of_union₃_range_cover
   proof: fun _s hs => .of_union₃_range_cover hi₁ hi₂ hi₃ h (hf₁ hs) (hf₂ hs) (hf₃ hs)
 
 中文:
-引理 Measurable.of_union₃_range_cover
-  结论: (hi₁ : MeasurableEmbedding i₁)
+引理 可测.of_union₃_range_cover
+  结论: (hi₁ : 可测嵌入 i₁)
   证明: fun _s hs => .of_union₃_range_cover hi₁ hi₂ hi₃ h (hf₁ hs) (hf₂ hs) (hf₃ hs)
 -/
 lemma Measurable.of_union₃_range_cover (hi₁ : MeasurableEmbedding i₁)
@@ -478,8 +478,8 @@ theorem MeasurableSet.exists_measurable_proj
   ⟨f, hfm, congr_fun hf⟩
 
 中文:
-定理 MeasurableSet.exists_measurable_proj
-  结论: {_ : MeasurableSpace α}
+定理 可测集.存在_measurable_proj
+  结论: {_ : 可测空间 α}
   证明: let ⟨f, hfm, hf⟩ :=
     (MeasurableEmbedding.subtype_coe hs).exists_measurable_extend measurable_id fun _ =>
       hne.to_subtype
@@ -506,12 +506,12 @@ structure MeasurableEquiv
     - measurable_invFun : Measurable toEquiv.symm  [default: by measurability]
 
 中文:
-结构 MeasurableEquiv
-  参数: (α β : 类型) [MeasurableSpace α] [MeasurableSpace β]
+结构 可测等价
+  参数: (α β : 类型) [可测空间 α] [可测空间 β]
   继承: α ≃ β
   公理与运算 (2 个):
-    - measurable_toFun : Measurable toEquiv  [默认: by measurability]
-    - measurable_invFun : Measurable toEquiv.symm  [默认: by measurability]
+    - measurable_toFun : 可测 toEquiv  [默认: by measurability]
+    - measurable_invFun : 可测 toEquiv.symm  [默认: by measurability]
 
 Depends on / 依赖: measurability
 -/
@@ -540,7 +540,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Injective (toEquiv : α ≃ᵐ β -> α ≃ β)
+  结论: 单射 (toEquiv : α ≃ᵐ β -> α ≃ β)
   证明: by
   rintro ⟨e₁, _, _⟩ ⟨e₂, _, _⟩ (rfl : e₁ = e₂)
   rfl
@@ -565,7 +565,7 @@ coe_injective' _ _ he _ := toEquiv_injective DFunLike.ext' he
 
 中文:
 实例 instEquivLike
-  签名: : EquivLike (α ≃ᵐ β) α β where
+  签名: : 等价状 (α ≃ᵐ β) α β where
   定义体: e.toEquiv
   inv e := e.toEquiv.symm
   left_inv e := e.toEquiv.left_inv
@@ -621,7 +621,7 @@ theorem measurable
 中文:
 定理 measurable
   条件: (e : α ≃ᵐ β)
-  结论: Measurable (e : α -> β)
+  结论: 可测 (e : α -> β)
   证明: e.measurable_toFun
 
 @[simp]
@@ -640,7 +640,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (e : α ≃ β) (h1 : Measurable e) (h2 : Measurable e.symm)
+  条件: (e : α ≃ β) (h1 : 可测 e) (h2 : 可测 e.symm)
   证明: rfl
 -/
 theorem coe_mk (e : α ≃ β) (h1 : Measurable e) (h2 : Measurable e.symm) :
@@ -657,7 +657,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (α : 类型) [MeasurableSpace α]
+  签名: (α : 类型) [可测空间 α]
   定义体: Equiv.refl α
 
 Depends on / 依赖: Equiv.refl
@@ -675,7 +675,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (α ≃ᵐ α)
+  签名: : 可居 (α ≃ᵐ α)
   定义体: ⟨refl α⟩
 -/
 instance instInhabited : Inhabited (α ≃ᵐ α) := ⟨refl α⟩
@@ -833,7 +833,7 @@ theorem symm_mk
 
 中文:
 定理 symm_mk
-  条件: (e : α ≃ β) (h1 : Measurable e) (h2 : Measurable e.symm)
+  条件: (e : α ≃ β) (h1 : 可测 e) (h2 : 可测 e.symm)
   证明: rfl
 -/
 theorem symm_mk (e : α ≃ β) (h1 : Measurable e) (h2 : Measurable e.symm) :
@@ -895,7 +895,7 @@ theorem symm_refl
 
 中文:
 定理 symm_refl
-  条件: (α : 类型) [MeasurableSpace α]
+  条件: (α : 类型) [可测空间 α]
   结论: (refl α).symm = refl α
   证明: rfl
 
@@ -1125,7 +1125,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : α ≃ᵐ β)
-  结论: Surjective e
+  结论: 满射 e
   证明: e.toEquiv.surjective
 -/
 protected theorem surjective (e : α ≃ᵐ β) : Surjective e :=
@@ -1143,7 +1143,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : α ≃ᵐ β)
-  结论: Bijective e
+  结论: 双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective (e : α ≃ᵐ β) : Bijective e :=
@@ -1163,7 +1163,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : α ≃ᵐ β)
-  结论: Injective e
+  结论: 单射 e
   证明: e.toEquiv.injective
 
 @[simp]
@@ -1183,7 +1183,7 @@ theorem symm_preimage_preimage
 
 中文:
 定理 symm_preimage_preimage
-  条件: (e : α ≃ᵐ β) (s : Set β)
+  条件: (e : α ≃ᵐ β) (s : 集合 β)
   结论: e.symm ⁻¹' e ⁻¹' s = s
   证明: e.toEquiv.symm_preimage_preimage s
 
@@ -1203,7 +1203,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (e : α ≃ᵐ β) (s : Set α)
+  条件: (e : α ≃ᵐ β) (s : 集合 α)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toEquiv.image_eq_preimage_symm s
 
@@ -1223,7 +1223,7 @@ lemma preimage_symm
 
 中文:
 引理 preimage_symm
-  条件: (e : α ≃ᵐ β) (s : Set α)
+  条件: (e : α ≃ᵐ β) (s : 集合 α)
   结论: e.symm ⁻¹' s = e '' s
   证明: (image_eq_preimage_symm ..).symm
 
@@ -1243,7 +1243,7 @@ lemma image_symm
 
 中文:
 引理 image_symm
-  条件: (e : α ≃ᵐ β) (s : Set β)
+  条件: (e : α ≃ᵐ β) (s : 集合 β)
   结论: e.symm '' s = e ⁻¹' s
   证明: image_symm_eq_preimage ..
 
@@ -1264,7 +1264,7 @@ lemma eq_image_iff_symm_image_eq
 
 中文:
 引理 eq_image_iff_symm_image_eq
-  条件: (e : α ≃ᵐ β) (s : Set β) (t : Set α)
+  条件: (e : α ≃ᵐ β) (s : 集合 β) (t : 集合 α)
   证明: by
   rw [← coe_toEquiv]; rw [Equiv.eq_image_iff_symm_image_eq]; rw [coe_toEquiv_symm]
 
@@ -1291,7 +1291,7 @@ lemma image_preimage
 
 中文:
 引理 image_preimage
-  条件: (e : α ≃ᵐ β) (s : Set β)
+  条件: (e : α ≃ᵐ β) (s : 集合 β)
   结论: e '' e ⁻¹' s = s
   证明: by
   rw [← coe_toEquiv]; rw [Equiv.image_preimage]
@@ -1318,7 +1318,7 @@ lemma preimage_image
 
 中文:
 引理 preimage_image
-  条件: (e : α ≃ᵐ β) (s : Set α)
+  条件: (e : α ≃ᵐ β) (s : 集合 α)
   结论: e ⁻¹' e '' s = s
   证明: by
   rw [← coe_toEquiv]; rw [Equiv.preimage_image]
@@ -1344,7 +1344,7 @@ theorem measurableSet_preimage
 
 中文:
 定理 measurableSet_preimage
-  条件: (e : α ≃ᵐ β) {s : Set β}
+  条件: (e : α ≃ᵐ β) {s : 集合 β}
   证明: ⟨fun h => by simpa only [symm_preimage_preimage] using e.symm.measurable h, fun h =>
     e.measurable h⟩
 
@@ -1371,7 +1371,7 @@ theorem measurableSet_image
 中文:
 定理 measurableSet_image
   条件: (e : α ≃ᵐ β)
-  结论: MeasurableSet (e '' s) ↔ MeasurableSet s
+  结论: 可测集 (e '' s) ↔ 可测集 s
   证明: by
   rw [image_eq_preimage_symm]; rw [measurableSet_preimage]
 
@@ -1392,7 +1392,7 @@ theorem map_eq
 中文:
 定理 map_eq
   条件: (e : α ≃ᵐ β)
-  结论: MeasurableSpace.map e ‹_› = ‹_›
+  结论: 可测空间.map e ‹_› = ‹_›
   证明: e.measurable.le_map.antisymm' fun _s => e.measurableSet_preimage.1
 -/
 @[simp] theorem map_eq (e : α ≃ᵐ β) : MeasurableSpace.map e ‹_› = ‹_› :=
@@ -1412,7 +1412,7 @@ theorem measurableEmbedding
 中文:
 定理 measurableEmbedding
   条件: (e : α ≃ᵐ β)
-  结论: MeasurableEmbedding e where
+  结论: 可测嵌入 e where
   证明: e.injective
   measurable := e.measurable
   measurableSet_image' := fun _ => e.measurableSet_image.2
@@ -1432,7 +1432,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {α β} [i₁ : MeasurableSpace α] [i₂ : MeasurableSpace β] (h : α = β)
+  签名: {α β} [i₁ : 可测空间 α] [i₂ : 可测空间 β] (h : α = β)
   定义体: Equiv.cast h
 -/
 protected def cast {α β} [i₁ : MeasurableSpace α] [i₂ : MeasurableSpace β] (h : α = β)
@@ -1496,7 +1496,7 @@ definition ofUniqueOfUnique
 
 中文:
 定义 ofUniqueOfUnique
-  签名: (α β : 类型) [MeasurableSpace α] [MeasurableSpace β] [Unique α] [Unique β]
+  签名: (α β : 类型) [可测空间 α] [可测空间 β] [唯一 α] [唯一 β]
   定义体: ofUnique α β
 
 Depends on / 依赖: ofUnique
@@ -1579,7 +1579,7 @@ definition punitProd
 
 中文:
 定义 punitProd
-  签名: : PUnit × α ≃ᵐ α where
+  签名: : 命题单元 × α ≃ᵐ α where
   定义体: Equiv.punitProd α
   measurable_toFun := measurable_snd
   measurable_invFun := measurable_prodMk_left
@@ -1603,7 +1603,7 @@ definition prodPUnit
 
 中文:
 定义 prodPUnit
-  签名: : α × PUnit ≃ᵐ α where
+  签名: : α × 命题单元 ≃ᵐ α where
   定义体: Equiv.prodPUnit α
   measurable_toFun := measurable_fst
   measurable_invFun := measurable_prodMk_right
@@ -1651,8 +1651,8 @@ definition Set.prod
 measurable_invFun := Measurable.subtype_mk by fun_prop
 
 中文:
-定义 Set.prod
-  签名: (s : Set α) (t : Set β)
+定义 集合.乘积
+  签名: (s : 集合 α) (t : 集合 β)
   定义体: Equiv.Set.prod s t
   measurable_toFun := .prodMk (by measurability) (by measurability)
 measurable_invFun := Measurable.subtype_mk by fun_prop
@@ -1673,8 +1673,8 @@ definition Set.univ
   measurable_invFun := measurable_id.subtype_mk
 
 中文:
-定义 Set.univ
-  签名: (α : 类型) [MeasurableSpace α]
+定义 集合.univ
+  签名: (α : 类型) [可测空间 α]
   定义体: Equiv.Set.univ α
   measurable_toFun := measurable_id.subtype_val
   measurable_invFun := measurable_id.subtype_mk
@@ -1693,7 +1693,7 @@ definition Set.singleton
   body: Equiv.Set.singleton a
 
 中文:
-定义 Set.singleton
+定义 集合.singleton
   签名: (a : α)
   定义体: Equiv.Set.singleton a
 
@@ -1715,8 +1715,8 @@ definition Set.rangeInl
   measurable_invFun := Measurable.subtype_mk measurable_inl
 
 中文:
-定义 Set.rangeInl
-  签名: : (range Sum.inl : Set (α oplus β)) ≃ᵐ α where
+定义 集合.rangeInl
+  签名: : (range 和.inl : 集合 (α oplus β)) ≃ᵐ α where
   定义体: Equiv.Set.rangeInl α β
   measurable_toFun s (hs : MeasurableSet s) := by
     refine ⟨_, hs.inl_image, Set.ext ?_⟩
@@ -1745,8 +1745,8 @@ definition Set.rangeInr
   measurable_invFun := Measurable.subtype_mk measurable_inr
 
 中文:
-定义 Set.rangeInr
-  签名: : (range Sum.inr : Set (α oplus β)) ≃ᵐ β where
+定义 集合.rangeInr
+  签名: : (range 和.inr : 集合 (α oplus β)) ≃ᵐ β where
   定义体: Equiv.Set.rangeInr α β
   measurable_toFun s (hs : MeasurableSet s) := by
     refine ⟨_, hs.inr_image, Set.ext ?_⟩
@@ -1778,7 +1778,7 @@ definition sumProdDistrib
 
 中文:
 定义 sumProdDistrib
-  签名: (α β γ) [MeasurableSpace α] [MeasurableSpace β] [MeasurableSpace γ]
+  签名: (α β γ) [可测空间 α] [可测空间 β] [可测空间 γ]
   定义体: .sumProdDistrib α β γ
   measurable_toFun := by
     refine
@@ -1818,7 +1818,7 @@ definition prodSumDistrib
 
 中文:
 定义 prodSumDistrib
-  签名: (α β γ) [MeasurableSpace α] [MeasurableSpace β] [MeasurableSpace γ]
+  签名: (α β γ) [可测空间 α] [可测空间 β] [可测空间 γ]
   定义体: prodComm.trans (sumProdDistrib _ _ _).trans sumCongr prodComm prodComm
 
 Depends on / 依赖: prodComm, prodComm.trans, sumCongr, sumProdDistrib
@@ -1837,7 +1837,7 @@ definition sumProdSum
 
 中文:
 定义 sumProdSum
-  签名: (α β γ δ) [MeasurableSpace α] [MeasurableSpace β] [MeasurableSpace γ]
+  签名: (α β γ δ) [可测空间 α] [可测空间 β] [可测空间 γ]
   定义体: (sumProdDistrib _ _ _).trans sumCongr (prodSumDistrib _ _ _) (prodSumDistrib _ _ _)
 
 Depends on / 依赖: prodSumDistrib, sumCongr, sumProdDistrib
@@ -1992,7 +1992,7 @@ definition arrowProdEquivProdArrow
 
 中文:
 定义 arrowProdEquivProdArrow
-  签名: (α β γ : 类型) [MeasurableSpace α] [MeasurableSpace β]
+  签名: (α β γ : 类型) [可测空间 α] [可测空间 β]
   定义体: Equiv.arrowProdEquivProdArrow γ _ _
   measurable_toFun := by
     dsimp [Equiv.arrowProdEquivProdArrow]
@@ -2029,7 +2029,7 @@ exact MeasurableSet.preimage h
 
 中文:
 定义 arrowCongr'
-  签名: {α₁ β₁ α₂ β₂ : 类型} [MeasurableSpace β₁] [MeasurableSpace β₂]
+  签名: {α₁ β₁ α₂ β₂ : 类型} [可测空间 β₁] [可测空间 β₂]
   定义体: Equiv.arrowCongr' hα hβ
   measurable_toFun _ h := by
 exact MeasurableSet.preimage h
@@ -2065,7 +2065,7 @@ definition piMeasurableEquivTProd
 
 中文:
 定义 piMeasurableEquivTProd
-  签名: [DecidableEq δ'] {l : List δ'} (hnd : l.Nodup) (h : 对任意 i, i in l)
+  签名: [DecidableEq δ'] {l : 列表 δ'} (hnd : l.Nodup) (h : 对任意 i, i in l)
   定义体: List.TProd.piEquivTProd hnd h
   measurable_toFun := measurable_tProd_mk l
   measurable_invFun := measurable_tProd_elim' h
@@ -2091,7 +2091,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: [Unique δ']
+  签名: [唯一 δ']
   定义体: Equiv.piUnique π
 
 Depends on / 依赖: Equiv.piUnique, piUnique
@@ -2111,7 +2111,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (α β : 类型) [Unique α] [MeasurableSpace β]
+  签名: (α β : 类型) [唯一 α] [可测空间 β]
   定义体: MeasurableEquiv.piUnique _
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.piUnique, piUnique
@@ -2132,7 +2132,7 @@ measurable_invFun := measurable_pi_iff.2 Fin.forall_fin_two.2 ⟨measurable_fst,
 
 中文:
 定义 piFinTwo
-  签名: (α : Fin 2 -> 类型) [对任意 i, MeasurableSpace (α i)]
+  签名: (α : 有限集 2 -> 类型) [对任意 i, 可测空间 (α i)]
   定义体: piFinTwoEquiv α
 measurable_invFun := measurable_pi_iff.2 Fin.forall_fin_two.2 ⟨measurable_fst, measurable_snd⟩
 
@@ -2154,7 +2154,7 @@ definition finTwoArrow
 
 中文:
 定义 finTwoArrow
-  签名: : (Fin 2 -> α) ≃ᵐ α × α
+  签名: : (有限集 2 -> α) ≃ᵐ α × α
   定义体: piFinTwo fun _ => α
 
 Depends on / 依赖: piFinTwo
@@ -2181,7 +2181,7 @@ measurable_invFun := measurable_pi_iff.2 i.forall_iff_succAbove.2
 
 中文:
 定义 piFinSuccAbove
-  签名: {n : 自然数} (α : Fin (n + 1) -> 类型) [对任意 i, MeasurableSpace (α i)]
+  签名: {n : 自然数} (α : 有限集 (n + 1) -> 类型) [对任意 i, 可测空间 (α i)]
   定义体: (Fin.insertNthEquiv α i).symm
 measurable_toFun := (measurable_pi_apply i).prodMk measurable_pi_iff.2 fun _ =>
     measurable_pi_apply _
@@ -2238,7 +2238,7 @@ definition sumPiEquivProdPi
 
 中文:
 定义 sumPiEquivProdPi
-  签名: (α : δ oplus δ' -> 类型) [对任意 i, MeasurableSpace (α i)]
+  签名: (α : δ oplus δ' -> 类型) [对任意 i, 可测空间 (α i)]
   定义体: Equiv.sumPiEquivProdPi α
   measurable_toFun := by eta_expand; dsimp; measurability
   measurable_invFun := by
@@ -2267,7 +2267,7 @@ theorem coe_sumPiEquivProdPi
 
 中文:
 定理 coe_sumPiEquivProdPi
-  条件: (α : δ oplus δ' -> 类型) [对任意 i, MeasurableSpace (α i)]
+  条件: (α : δ oplus δ' -> 类型) [对任意 i, 可测空间 (α i)]
   证明: by rfl
 -/
 theorem coe_sumPiEquivProdPi (α : δ oplus δ' -> Type*) [forall i, MeasurableSpace (α i)] :
@@ -2283,7 +2283,7 @@ theorem coe_sumPiEquivProdPi_symm
 
 中文:
 定理 coe_sumPiEquivProdPi_symm
-  条件: (α : δ oplus δ' -> 类型) [对任意 i, MeasurableSpace (α i)]
+  条件: (α : δ oplus δ' -> 类型) [对任意 i, 可测空间 (α i)]
   证明: by rfl
 -/
 theorem coe_sumPiEquivProdPi_symm (α : δ oplus δ' -> Type*) [forall i, MeasurableSpace (α i)] :
@@ -2303,7 +2303,7 @@ definition piOptionEquivProd
 
 中文:
 定义 piOptionEquivProd
-  签名: {δ : 类型} (α : Option δ -> 类型) [对任意 i, MeasurableSpace (α i)]
+  签名: {δ : 类型} (α : 选项类型 δ -> 类型) [对任意 i, 可测空间 (α i)]
   定义体: let e : Option δ ≃ δ oplus Unit := Equiv.optionEquivSumPUnit δ
   let em1 : ((i : δ oplus Unit) -> α (e.symm i)) ≃ᵐ ((a : Option δ) -> α a) :=
     MeasurableEquiv.piCongrLeft α e.symm
@@ -2338,7 +2338,7 @@ definition piFinsetUnion
 
 中文:
 定义 piFinsetUnion
-  签名: [DecidableEq δ'] {s t : Finset δ'} (h : Disjoint s t)
+  签名: [DecidableEq δ'] {s t : 有限集 δ'} (h : Disjoint s t)
   定义体: letI e := Finset.union s t h
 .symm.trans MeasurableEquiv.sumPiEquivProdPi (fun b => π (e b))
     .piCongrLeft (fun i : ↥(s union t) => π i) e
@@ -2363,7 +2363,7 @@ definition sumCompl
 
 中文:
 定义 sumCompl
-  签名: {s : Set α} [DecidablePred (· in s)] (hs : MeasurableSet s)
+  签名: {s : 集合 α} [DecidablePred (· in s)] (hs : 可测集 s)
   定义体: .sumCompl (· in s)
   measurable_toFun := measurable_subtype_coe.sumElim measurable_subtype_coe
   measurable_invFun := Measurable.dite measurable_inl measurable_inr hs
@@ -2389,7 +2389,7 @@ definition ofInvolutive
 
 中文:
 定义 ofInvolutive
-  签名: (f : α -> α) (hf : Involutive f) (hf' : Measurable f)
+  签名: (f : α -> α) (hf : 对合 f) (hf' : 可测 f)
   定义体: hf.toPerm
 
 Depends on / 依赖: hf.toPerm, toPerm
@@ -2407,7 +2407,7 @@ theorem ofInvolutive_apply
 
 中文:
 定理 ofInvolutive_apply
-  条件: (f : α -> α) (hf : Involutive f) (hf' : Measurable f) (a : α)
+  条件: (f : α -> α) (hf : 对合 f) (hf' : 可测 f) (a : α)
   证明: rfl
 -/
 @[simp] theorem ofInvolutive_apply (f : α -> α) (hf : Involutive f) (hf' : Measurable f) (a : α) :
@@ -2423,7 +2423,7 @@ theorem ofInvolutive_symm
 
 中文:
 定理 ofInvolutive_symm
-  条件: (f : α -> α) (hf : Involutive f) (hf' : Measurable f)
+  条件: (f : α -> α) (hf : 对合 f) (hf' : 可测 f)
   证明: rfl
 -/
 @[simp] theorem ofInvolutive_symm (f : α -> α) (hf : Involutive f) (hf' : Measurable f) :
@@ -2521,8 +2521,8 @@ theorem comap_eq
 
 中文:
 定理 comap_eq
-  条件: (hf : MeasurableEmbedding f)
-  结论: MeasurableSpace.comap f ‹_› = ‹_›
+  条件: (hf : 可测嵌入 f)
+  结论: 可测空间.comap f ‹_› = ‹_›
   证明: hf.measurable.comap_le.antisymm fun _s h =>
     ⟨_, hf.measurableSet_image' h, hf.injective.preimage_image _⟩
 -/
@@ -2581,7 +2581,7 @@ definition equivImage
 
 中文:
 定义 equivImage
-  签名: (s : Set α) (hf : MeasurableEmbedding f)
+  签名: (s : 集合 α) (hf : 可测嵌入 f)
   定义体: Equiv.Set.image f s hf.injective
   measurable_toFun := (hf.measurable.comp measurable_id.subtype_val).subtype_mk
   measurable_invFun := by
@@ -2610,7 +2610,7 @@ definition equivRange
 
 中文:
 定义 equivRange
-  签名: (hf : MeasurableEmbedding f)
+  签名: (hf : 可测嵌入 f)
   定义体: (MeasurableEquiv.Set.univ _).symm.trans
 (hf.equivImage univ).trans MeasurableEquiv.cast (by rw [image_univ]) (by rw [image_univ])
 
@@ -2634,7 +2634,7 @@ theorem of_measurable_inverse_on_range
 
 中文:
 定理 of_measurable_inverse_on_range
-  结论: {g : range f -> α} (hf₁ : Measurable f)
+  结论: {g : range f -> α} (hf₁ : 可测 f)
   证明: by
   set e : α ≃ᵐ range f :=
     ⟨⟨rangeFactorization f, g, H, H.rightInverse_of_surjective rangeFactorization_surjective⟩,
@@ -2661,7 +2661,7 @@ theorem of_measurable_inverse
 
 中文:
 定理 of_measurable_inverse
-  结论: (hf₁ : Measurable f) (hf₂ : MeasurableSet (range f))
+  结论: (hf₁ : 可测 f) (hf₂ : 可测集 (range f))
   证明: of_measurable_inverse_on_range hf₁ hf₂ (hg.comp measurable_subtype_coe) H
 
 Depends on / 依赖: hg.comp, measurable_subtype_coe, of_measurable_inverse_on_range
@@ -2685,7 +2685,7 @@ definition schroederBernstein
 
 中文:
 定义 schroederBernstein
-  签名: {f : α -> β} {g : β -> α} (hf : MeasurableEmbedding f)
+  签名: {f : α -> β} {g : β -> α} (hf : 可测嵌入 f)
   定义体: by
   let F : Set α -> Set α := fun A => (g '' (f '' A)ᶜ)ᶜ
   -- We follow the proof of the usual SB theorem in mathlib,
@@ -2759,7 +2759,7 @@ lemma equivRange_apply
 
 中文:
 引理 equivRange_apply
-  条件: (hf : MeasurableEmbedding f) (x : α)
+  条件: (hf : 可测嵌入 f) (x : α)
   证明: by
   simp [MeasurableEmbedding.equivRange, MeasurableEquiv.cast, MeasurableEquiv.Set.univ,
     MeasurableEmbedding.equivImage]
@@ -2786,7 +2786,7 @@ lemma equivRange_symm_apply_mk
 
 中文:
 引理 equivRange_symm_apply_mk
-  条件: (hf : MeasurableEmbedding f) (x : α)
+  条件: (hf : 可测嵌入 f) (x : α)
   证明: by
   nth_rw 3 [← hf.equivRange.symm_apply_apply x]
   rw [hf.equivRange_apply]
@@ -2813,7 +2813,7 @@ definition invFun
 
 中文:
 定义 invFun
-  签名: [Nonempty α] (hf : MeasurableEmbedding f) (x : β)
+  签名: [非空 α] (hf : 可测嵌入 f) (x : β)
   定义体: open scoped Classical in
   if hx : x in range f then hf.equivRange.symm ⟨x, hx⟩ else (Nonempty.some inferInstance)
 
@@ -2837,7 +2837,7 @@ lemma measurable_invFun
 
 中文:
 引理 measurable_invFun
-  条件: [Nonempty α] (hf : MeasurableEmbedding f)
+  条件: [非空 α] (hf : 可测嵌入 f)
   证明: open scoped Classical in
   Measurable.dite (by fun_prop) measurable_const hf.measurableSet_range
 
@@ -2861,8 +2861,8 @@ lemma leftInverse_invFun
 
 中文:
 引理 leftInverse_invFun
-  条件: [Nonempty α] (hf : MeasurableEmbedding f)
-  结论: hf.invFun.LeftInverse f
+  条件: [非空 α] (hf : 可测嵌入 f)
+  结论: hf.invFun.左逆 f
   证明: by
   intro x
   simp [MeasurableEmbedding.invFun]
@@ -2887,8 +2887,8 @@ theorem MeasurableSpace.comap_compl
   exact (MeasurableEquiv.ofInvolutive _ compl_involutive h).measurableEmbedding.comap_eq
 
 中文:
-定理 MeasurableSpace.comap_compl
-  结论: {m' : MeasurableSpace β} [布尔eanAlgebra β]
+定理 可测空间.comap_compl
+  结论: {m' : 可测空间 β} [布尔代数 β]
   证明: by
   rw [← Function.comp_def]; rw [← MeasurableSpace.comap_comp]
   congr
@@ -2913,7 +2913,7 @@ theorem MeasurableSpace.comap_not
   proof: MeasurableSpace.comap_compl (fun _ _ => measurableSet_top) _
 
 中文:
-定理 MeasurableSpace.comap_not
+定理 可测空间.comap_not
   条件: (p : α -> 命题)
   证明: MeasurableSpace.comap_compl (fun _ _ => measurableSet_top) _
 -/
@@ -2995,7 +2995,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: (ι κ X : 类型) [MeasurableSpace X]
+  签名: (ι κ X : 类型) [可测空间 X]
   定义体: Equiv.curry ι κ X
 
 Depends on / 依赖: Equiv.curry
@@ -3014,8 +3014,8 @@ lemma coe_curry
 
 中文:
 引理 coe_curry
-  条件: (ι κ X : 类型) [MeasurableSpace X]
-  结论: ⇑(curry ι κ X) = Function.curry
+  条件: (ι κ X : 类型) [可测空间 X]
+  结论: ⇑(curry ι κ X) = 函数.curry
   证明: rfl
 -/
 lemma coe_curry (ι κ X : Type*) [MeasurableSpace X] : ⇑(curry ι κ X) = Function.curry := rfl
@@ -3030,7 +3030,7 @@ lemma coe_curry_symm
 
 中文:
 引理 coe_curry_symm
-  条件: (ι κ X : 类型) [MeasurableSpace X]
+  条件: (ι κ X : 类型) [可测空间 X]
   证明: rfl
 -/
 lemma coe_curry_symm (ι κ X : Type*) [MeasurableSpace X] :

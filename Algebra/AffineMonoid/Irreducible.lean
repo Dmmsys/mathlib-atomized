@@ -41,7 +41,7 @@ lemma irreducible_mem_submonoidClosure_subset
 
 中文:
 引理 irreducible_mem_submonoidClosure_subset
-  结论: {p in Submonoid.closure S | Irreducible p} subseteq S
+  结论: {p in 子幺半群.closure S | 不可约 p} subseteq S
   证明: by
   refine fun x hx =>
       Submonoid.closure_induction (s := S) (motive := fun x _ => (Irreducible x -> x in S))
@@ -70,7 +70,7 @@ lemma irreducible_subset_of_submonoidClosure_eq_top
 
 中文:
 引理 irreducible_subset_of_submonoidClosure_eq_top
-  条件: (hS : Submonoid.closure S = ⊤)
+  条件: (hS : 子幺半群.closure S = ⊤)
   证明: by
   simpa [hS] using irreducible_mem_submonoidClosure_subset (S := S)
 
@@ -95,8 +95,8 @@ lemma Submonoid.FG.finite_irreducible_mem_submonoidClosure
 obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset hT ▸ irreducible_mem_submonoidClosure_subset
 
 中文:
-引理 Submonoid.FG.finite_irreducible_mem_submonoidClosure
-  条件: {S : Submonoid M} (hS : S.FG)
+引理 子幺半群.FG.finite_irreducible_mem_submonoidClosure
+  条件: {S : 子幺半群 M} (hS : S.FG)
   证明: by
 obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset hT ▸ irreducible_mem_submonoidClosure_subset
 
@@ -123,7 +123,7 @@ lemma finite_irreducible
 
 中文:
 引理 finite_irreducible
-  结论: {p : M | Irreducible p}.Finite
+  结论: {p : M | 不可约 p}.有限
   证明: by
   simpa using Monoid.FG.fg_top.finite_irreducible_mem_submonoidClosure
 
@@ -158,8 +158,8 @@ lemma Submonoid.closure_irreducible
   refine (irreducib
 
 中文:
-引理 Submonoid.closure_irreducible
-  条件: [Monoid.FG M]
+引理 子幺半群.closure_irreducible
+  条件: [幺半群.FG M]
   证明: by
   classical
   -- Pick a minimal set `S` generating `M`.

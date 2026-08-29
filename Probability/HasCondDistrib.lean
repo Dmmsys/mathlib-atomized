@@ -48,7 +48,7 @@ definition HasCondDistrib
 
 中文:
 定义 HasCondDistrib
-  签名: (Y : Ω -> 𝓨) (X : Ω -> 𝓧) (κ : Kernel 𝓧 𝓨) (P : Measure Ω)
+  签名: (Y : Ω -> 𝓨) (X : Ω -> 𝓧) (κ : 核 𝓧 𝓨) (P : 测度 Ω)
   定义体: HasLaw (fun ω => (X ω, Y ω)) ((P.map X) otimesₘ κ) P
 
 @[fun_prop]
@@ -109,8 +109,8 @@ lemma HasLaw.prodMk_of_hasCondDistrib
   proof: by rwa [← h1.map_eq]
 
 中文:
-引理 HasLaw.prodMk_of_hasCondDistrib
-  结论: {Q : Measure 𝓧}
+引理 有Law.prodMk_of_hasCondDistrib
+  结论: {Q : 测度 𝓧}
   证明: by rwa [← h1.map_eq]
 
 Depends on / 依赖: h1.map_eq, map_eq
@@ -133,7 +133,7 @@ lemma HasCondDistrib.hasLaw_of_const
 
 中文:
 引理 HasCondDistrib.hasLaw_of_const
-  结论: [IsProbabilityMeasure P] {Q : Measure 𝓨} [SFinite Q]
+  结论: [是概率测度 P] {Q : 测度 𝓨} [SFinite Q]
   证明: by
     have h_snd : (P.map (fun ω => (X ω, Y ω))).snd = Q := by
       rw [h.map_eq]; rw [Measure.snd_compProd]
@@ -169,7 +169,7 @@ lemma HasCondDistrib.comp_left
 
 中文:
 引理 HasCondDistrib.comp_left
-  条件: (h : HasCondDistrib Y X κ P) {f : 𝓨 -> 𝓩} (hf : Measurable f)
+  条件: (h : HasCondDistrib Y X κ P) {f : 𝓨 -> 𝓩} (hf : 可测 f)
   证明: calc
     P.map (fun ω => (X ω, f (Y ω)))
     _ = (P.map (fun ω => (X ω, Y ω))).map (Prod.map id f) := by
@@ -200,7 +200,7 @@ lemma HasCondDistrib.fst
 
 中文:
 引理 HasCondDistrib.fst
-  结论: {Y : Ω -> 𝓨 × 𝓩} {κ : Kernel 𝓧 (𝓨 × 𝓩)} [IsSFiniteKernel κ]
+  结论: {Y : Ω -> 𝓨 × 𝓩} {κ : 核 𝓧 (𝓨 × 𝓩)} [是SFiniteKernel κ]
   证明: by
   rw [Kernel.fst_eq]
   exact h.comp_left measurable_fst
@@ -225,7 +225,7 @@ lemma HasCondDistrib.snd
 
 中文:
 引理 HasCondDistrib.snd
-  结论: {Y : Ω -> 𝓨 × 𝓩} {κ : Kernel 𝓧 (𝓨 × 𝓩)} [IsSFiniteKernel κ]
+  结论: {Y : Ω -> 𝓨 × 𝓩} {κ : 核 𝓧 (𝓨 × 𝓩)} [是SFiniteKernel κ]
   证明: by
   rw [Kernel.snd_eq]
   exact h.comp_left measurable_snd
@@ -319,7 +319,7 @@ lemma HasCondDistrib.of_compProd
 
 中文:
 引理 HasCondDistrib.of_compProd
-  结论: {Z : Ω -> 𝓩} {η : Kernel (𝓧 × 𝓨) 𝓩} [IsMarkovKernel η]
+  结论: {Z : Ω -> 𝓩} {η : 核 (𝓧 × 𝓨) 𝓩} [是MarkovKernel η]
   证明: by
   have hZ : AEMeasurable Z P := h.aemeasurable_snd.snd
   have hY : AEMeasurable Y P := h.aemeasurable_snd.fst

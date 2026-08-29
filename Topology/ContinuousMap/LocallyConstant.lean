@@ -41,7 +41,7 @@ definition toContinuousMapMonoidHom
 
 中文:
 定义 toContinuousMapMonoidHom
-  签名: [Monoid Y] [ContinuousMul Y]
+  签名: [幺半群 Y] [连续乘法 Y]
   定义体: (↑)
   map_one' := by
     ext
@@ -75,7 +75,7 @@ definition toContinuousMapLinearMap
 
 中文:
 定义 toContinuousMapLinearMap
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y] [Module R Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
   定义体: (↑)
   __ := toContinuousMapAddMonoidHom
   map_smul' x y := by
@@ -100,7 +100,7 @@ lemma toAddMonoidHom_toContinuousMapLinearMap
 
 中文:
 引理 toAddMonoidHom_toContinuousMapLinearMap
-  结论: (R : 类型) [Semiring R] [AddCommMonoid Y]
+  结论: (R : 类型) [半环 R] [加法交换幺半群 Y]
   证明: rfl
 -/
 @[simp] lemma toAddMonoidHom_toContinuousMapLinearMap (R : Type*) [Semiring R] [AddCommMonoid Y]
@@ -125,7 +125,7 @@ definition toContinuousMapAlgHom
 
 中文:
 定义 toContinuousMapAlgHom
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y]
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y]
   定义体: (↑)
   __ := toContinuousMapMonoidHom
   __ := toContinuousMapAddMonoidHom
@@ -152,7 +152,7 @@ lemma toLinearMap_toContinuousMapAlgHom
 
 中文:
 引理 toLinearMap_toContinuousMapAlgHom
-  结论: (R : 类型) [CommSemiring R] [Semiring Y]
+  结论: (R : 类型) [交换半环 R] [半环 Y]
   证明: rfl
 -/
 @[simp] lemma toLinearMap_toContinuousMapAlgHom (R : Type*) [CommSemiring R] [Semiring Y]
@@ -171,7 +171,7 @@ theorem separatesPoints_range_toContinuousMapAlgHom
 
 中文:
 定理 separatesPoints_range_toContinuousMapAlgHom
-  结论: (R : 类型) [CommSemiring R]
+  结论: (R : 类型) [交换半环 R]
   证明: fun _ _ hxy =>
   have ⟨_, hU, _, _⟩ := exists_isClopen_of_totally_separated hxy
   ⟨charFn Y hU, by simp_all [charFn]⟩

@@ -33,7 +33,7 @@ definition runTactic'
 
 中文:
 定义 runTactic'
-  签名: (mvarId : MVarId) (tacticCode : Syntax) (ctx : Context := {}) (s : State := {})
+  签名: (mvarId : MVarId) (tacticCode : Syntax) (ctx : 余ntext := {}) (s : State := {})
   定义体: do
   instantiateMVarDeclMVars mvarId
   let go : TermElabM (List MVarId) :=

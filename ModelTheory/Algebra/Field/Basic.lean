@@ -55,7 +55,7 @@ inductive FieldAxiom
 
 中文:
 归纳类型 FieldAxiom
-  参数: : Type
+  参数: : 类型
   构造子 (9 个):
     - addAssoc: FieldAxiom
     - zeroAdd: FieldAxiom
@@ -113,7 +113,7 @@ definition FieldAxiom.toProp
 
 中文:
 定义 FieldAxiom.toProp
-  签名: (K : 类型) [Add K] [Mul K] [Neg K] [Zero K] [One K]
+  签名: (K : 类型) [加法 K] [乘法 K] [取负 K] [零 K] [幺 K]
 -/
 def FieldAxiom.toProp (K : Type*) [Add K] [Mul K] [Neg K] [Zero K] [One K] :
     FieldAxiom -> Prop
@@ -216,7 +216,7 @@ abbreviation fieldOfModelField
 
 中文:
 缩写 fieldOfModelField
-  签名: (K : 类型) [Language.ring.Structure K]
+  签名: (K : 类型) [Language.ring.结构 K]
   定义体: letI : DecidableEq K := Classical.decEq K
   letI := addOfRingStructure K
   letI := mulOfRingStructure K
@@ -267,7 +267,7 @@ abbreviation compatibleRingOfModelField
 
 中文:
 缩写 compatibleRingOfModelField
-  签名: (K : 类型) [Language.ring.Structure K]
+  签名: (K : 类型) [Language.ring.结构 K]
   定义体: compatibleRingOfRingStructure K
 
 Depends on / 依赖: compatibleRingOfRingStructure
@@ -294,8 +294,8 @@ instance [Field
       | addAs
 
 中文:
-实例 [Field
-  签名: K] [CompatibleRing K] : Theory.field.Model K
+实例 [域
+  签名: K] [余mpatible环 K] : Theory.field.Model K
   定义体: { realize_of_mem := by
       simp only [Theory.field, Set.mem_range, exists_imp]
       rintro φ a rfl

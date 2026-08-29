@@ -36,7 +36,7 @@ theorem prime_iff_prime_int
 中文:
 定理 prime_iff_prime_int
   条件: {p : 自然数}
-  结论: p.Prime ↔ _root_.Prime (p : 整数)
+  结论: p.素 ↔ _root_.素 (p : 整数)
   证明: ⟨fun hp =>
     ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
       rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
@@ -67,8 +67,8 @@ lemma Prime.pow_inj
 exact ⟨H, succ_inj.mp Nat.pow_right_injective hq.two_le (H ▸ h)⟩
 
 中文:
-引理 Prime.pow_inj
-  结论: {p q m n : 自然数} (hp : p.Prime) (hq : q.Prime)
+引理 素.pow_inj
+  结论: {p q m n : 自然数} (hp : p.素) (hq : q.素)
   证明: by
   have H := dvd_antisymm (Prime.dvd_of_dvd_pow hp <| h ▸ dvd_pow_self p (succ_ne_zero m))
     (Prime.dvd_of_dvd_pow hq <| h.symm ▸ dvd_pow_self q (succ_ne_zero n))
@@ -93,7 +93,7 @@ lemma Prime.pow_inj'
   simpa using hp.pow_inj hq h
 
 中文:
-引理 Prime.pow_inj'
+引理 素.pow_inj'
   证明: by
   obtain ⟨m, rfl⟩ := exists_eq_add_one_of_ne_zero hm
   obtain ⟨n, rfl⟩ := exists_eq_add_one_of_ne_zero hn
@@ -122,7 +122,7 @@ theorem prime_ofNat_iff
   proof: Nat.prime_iff_prime_int.symm
 
 中文:
-定理 prime_ofNat_iff
+定理 prime_of自然数_iff
   条件: {n : 自然数}
   证明: Nat.prime_iff_prime_int.symm
 
@@ -142,7 +142,7 @@ theorem prime_two
 
 中文:
 定理 prime_two
-  结论: Prime (2 : 整数)
+  结论: 素 (2 : 整数)
   证明: prime_ofNat_iff.mpr Nat.prime_two
 
 Depends on / 依赖: Nat.prime_two, prime_ofNat_iff, prime_ofNat_iff.mpr, prime_two
@@ -160,7 +160,7 @@ theorem prime_three
 
 中文:
 定理 prime_three
-  结论: Prime (3 : 整数)
+  结论: 素 (3 : 整数)
   证明: prime_ofNat_iff.mpr Nat.prime_three
 
 Depends on / 依赖: Nat.prime_three, prime_ofNat_iff, prime_ofNat_iff.mpr, prime_three

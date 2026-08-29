@@ -65,10 +65,10 @@ class IsPreconnected
     - iso_constant : forall {α : Type u₁} (F : J ⥤ Discrete α) (j : J), Nonempty (F ≅ (Functor.const J).obj (F.obj j))
 
 中文:
-类 IsPreconnected
-  参数: (J : 类型u₁) [Category.{v₁} J]
+类 是预连通
+  参数: (J : 类型u₁) [范畴.{v₁} J]
   公理与运算 (1 个):
-    - iso_constant : 对任意 {α : 类型u₁} (F : J ⥤ Discrete α) (j : J), Nonempty (F ≅ (Functor.const J).obj (F.obj j))
+    - iso_constant : 对任意 {α : 类型u₁} (F : J ⥤ 离散 α) (j : J), 非空 (F ≅ (函子.const J).obj (F.obj j))
 -/
 class IsPreconnected (J : Type u₁) [Category.{v₁} J] : Prop where
   iso_constant :
@@ -96,11 +96,11 @@ class IsConnected
     - [is_nonempty : Nonempty J]
 
 中文:
-类 IsConnected
-  参数: (J : 类型u₁) [Category.{v₁} J]
-  继承: IsPreconnected J
+类 是连通
+  参数: (J : 类型u₁) [范畴.{v₁} J]
+  继承: 是预连通 J
   公理与运算 (1 个):
-    - [is_nonempty : Nonempty J]
+    - [is_nonempty : 非空 J]
 -/
 class IsConnected (J : Type u₁) [Category.{v₁} J] : Prop extends IsPreconnected J where
   [is_nonempty : Nonempty J]
@@ -126,7 +126,7 @@ definition liftToDiscrete
 
 中文:
 定义 liftToDiscrete
-  签名: {α : 类型u₂} (F : J ⥤ Discrete α)
+  签名: {α : 类型u₂} (F : J ⥤ 离散 α)
   定义体: have := Nonempty.intro j
     Discrete.mk (Function.invFun F.obj (F.obj j))
   map {j _} f := have := Nonempty.intro j
@@ -149,7 +149,7 @@ definition factorThroughDiscrete
 
 中文:
 定义 factorThroughDiscrete
-  签名: {α : 类型u₂} (F : J ⥤ Discrete α)
+  签名: {α : 类型u₂} (F : J ⥤ 离散 α)
   定义体: NatIso.ofComponents (fun _ => eqToIso Function.apply_invFun_apply) (by cat_disch)
 -/
 private def factorThroughDiscrete {α : Type u₂} (F : J ⥤ Discrete α) :
@@ -173,7 +173,7 @@ definition isoConstant
 
 中文:
 定义 isoConstant
-  签名: [IsPreconnected J] {α : 类型u₂} (F : J ⥤ Discrete α) (j : J)
+  签名: [是预连通 J] {α : 类型u₂} (F : J ⥤ 离散 α) (j : J)
   定义体: (IsPreconnected.IsoConstantAux.factorThroughDiscrete F).symm
     ≪≫ isoWhiskerRight (IsPreconnected.iso_constant _ j).some _
     ≪≫ NatIso.ofComponents (fun _ => eqToIso Function.apply_invFun_apply) (by simp)
@@ -197,7 +197,7 @@ theorem any_functor_const_on_obj
 
 中文:
 定理 any_functor_const_on_obj
-  条件: [IsPreconnected J] {α : 类型u₂} (F : J ⥤ Discrete α) (j j' : J)
+  条件: [是预连通 J] {α : 类型u₂} (F : J ⥤ 离散 α) (j j' : J)
   证明: by
   ext; exact ((isoConstant F j').hom.app j).down.1
 
@@ -215,7 +215,7 @@ theorem IsPreconnected.of_any_functor_const_on_obj
   proof: fun F j' => ⟨NatIso.ofComponents fun j => eqToIso (h F j j')⟩
 
 中文:
-定理 IsPreconnected.of_any_functor_const_on_obj
+定理 是预连通.of_any_functor_const_on_obj
   证明: fun F j' => ⟨NatIso.ofComponents fun j => eqToIso (h F j j')⟩
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, eqToIso, ofComponents
@@ -237,8 +237,8 @@ instance IsPreconnected.prod
     (any_functor_const_on_obj (Prod.sectR j' K ⋙ F) k k')
 
 中文:
-实例 IsPreconnected.prod
-  签名: [IsPreconnected J] [IsPreconnected K]
+实例 是预连通.乘积
+  签名: [是预连通 J] [是预连通 K]
   定义体: by
   refine .of_any_functor_const_on_obj (fun {a} F ⟨j, k⟩ ⟨j', k'⟩ => ?_)
   exact (any_functor_const_on_obj (Prod.sectL J k ⋙ F) j j').trans
@@ -259,8 +259,8 @@ instance IsConnected.prod
   signature: [IsConnected J] [IsConnected K]
 
 中文:
-实例 IsConnected.prod
-  签名: [IsConnected J] [IsConnected K]
+实例 是连通.乘积
+  签名: [是连通 J] [是连通 K]
 -/
 instance IsConnected.prod [IsConnected J] [IsConnected K] : IsConnected (J × K) where
 
@@ -273,8 +273,8 @@ theorem IsConnected.of_any_functor_const_on_obj
   proof: { IsPreconnected.of_any_functor_const_on_obj h with }
 
 中文:
-定理 IsConnected.of_any_functor_const_on_obj
-  结论: [Nonempty J]
+定理 是连通.of_any_functor_const_on_obj
+  结论: [非空 J]
   证明: { IsPreconnected.of_any_functor_const_on_obj h with }
 
 Depends on / 依赖: IsPreconnected, IsPreconnected.of_any_functor_const_on_obj, of_any_functor_const_on_obj
@@ -298,7 +298,7 @@ theorem constant_of_preserves_morphisms
 
 中文:
 定理 constant_of_preserves_morphisms
-  结论: [IsPreconnected J] {α : 类型u₂} (F : J -> α)
+  结论: [是预连通 J] {α : 类型u₂} (F : J -> α)
   证明: by
   simpa using
     any_functor_const_on_obj
@@ -326,7 +326,7 @@ theorem constant_of_preserves_morphisms'
 
 中文:
 定理 constant_of_preserves_morphisms'
-  结论: [IsConnected J] {α : 类型u₂} (F : J -> α)
+  结论: [是连通 J] {α : 类型u₂} (F : J -> α)
   证明: ⟨F (Classical.arbitrary _), fun _ => constant_of_preserves_morphisms _ h _ _⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, constant_of_preserves_morphisms
@@ -345,7 +345,7 @@ theorem IsPreconnected.of_constant_of_preserves_morphisms
     h F.obj fun f => by ext; exact Discrete.eq_of_hom (F.map f)
 
 中文:
-定理 IsPreconnected.of_constant_of_preserves_morphisms
+定理 是预连通.of_constant_of_preserves_morphisms
   证明: IsPreconnected.of_any_functor_const_on_obj fun F =>
     h F.obj fun f => by ext; exact Discrete.eq_of_hom (F.map f)
 
@@ -367,8 +367,8 @@ theorem IsConnected.of_constant_of_preserves_morphisms
   proof: { IsPreconnected.of_constant_of_preserves_morphisms h with }
 
 中文:
-定理 IsConnected.of_constant_of_preserves_morphisms
-  结论: [Nonempty J]
+定理 是连通.of_constant_of_preserves_morphisms
+  结论: [非空 J]
   证明: { IsPreconnected.of_constant_of_preserves_morphisms h with }
 
 Depends on / 依赖: IsPreconnected, IsPreconnected.of_constant_of_preserves_morphisms, of_constant_of_preserves_morphisms
@@ -392,7 +392,7 @@ let aux (j₁ j₂ : J) (f : j₁ ⟶ j₂) := congrArg ULift.up (h1 f).eq
 
 中文:
 定理 induct_on_objects
-  结论: [IsPreconnected J] (p : Set J) {j₀ : J} (h0 : j₀ in p)
+  结论: [是预连通 J] (p : 集合 J) {j₀ : J} (h0 : j₀ in p)
   证明: by
 let aux (j₁ j₂ : J) (f : j₁ ⟶ j₂) := congrArg ULift.up (h1 f).eq
   injection constant_of_preserves_morphisms (fun k => ULift.up.{u₁} (k in p)) aux j j₀ with i
@@ -421,7 +421,7 @@ theorem IsConnected.of_induct
     rw [w j]; rw [w j']
 
 中文:
-定理 IsConnected.of_induct
+定理 是连通.of_induct
   结论: {j₀ : J}
   证明: have := Nonempty.intro j₀
   IsConnected.of_constant_of_preserves_morphisms fun {α} F a => by
@@ -462,7 +462,7 @@ instance [hc
 
 中文:
 实例 [hc
-  签名: : IsConnected J] : IsConnected (ULiftHom.{v₂} (ULift.{u₂} J))
+  签名: : 是连通 J] : 是连通 (ULiftHom.{v₂} (类型层提升.{u₂} J))
   定义体: by
   apply IsConnected.of_induct
   · rintro p hj₀ h ⟨j⟩
@@ -495,7 +495,7 @@ theorem isPreconnected_induction
 
 中文:
 定理 isPreconnected_induction
-  结论: [IsPreconnected J] (Z : J -> Sort*)
+  结论: [是预连通 J] (Z : J -> 类型层*)
   证明: (induct_on_objects { j | Nonempty (Z j) } ⟨x⟩
       (fun f => ⟨by rintro ⟨y⟩; exact ⟨h₁ f y⟩, by rintro ⟨y⟩; exact ⟨h₂ f y⟩⟩)
       j :)
@@ -523,7 +523,7 @@ theorem isPreconnected_of_equivalent
 
 中文:
 定理 isPreconnected_of_equivalent
-  结论: {K : 类型u₂} [Category.{v₂} K] [IsPreconnected J]
+  结论: {K : 类型u₂} [范畴.{v₂} K] [是预连通 J]
   证明: ⟨calc
         F ≅ e.inverse ⋙ e.functor ⋙ F := (e.invFunIdAssoc F).symm
         _ ≅ e.inverse ⋙ (Functor.const J).obj ((e.functor ⋙ F).obj (e.inverse.obj k)) :=
@@ -553,7 +553,7 @@ lemma isPreconnected_iff_of_equivalence
 
 中文:
 引理 isPreconnected_iff_of_equivalence
-  条件: {K : 类型u₂} [Category.{v₂} K] (e : J ≌ K)
+  条件: {K : 类型u₂} [范畴.{v₂} K] (e : J ≌ K)
   证明: ⟨fun _ => isPreconnected_of_equivalent e, fun _ => isPreconnected_of_equivalent e.symm⟩
 
 Depends on / 依赖: e.symm, isPreconnected_of_equivalent
@@ -573,7 +573,7 @@ theorem isConnected_of_equivalent
 
 中文:
 定理 isConnected_of_equivalent
-  条件: {K : 类型u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J]
+  条件: {K : 类型u₂} [范畴.{v₂} K] (e : J ≌ K) [是连通 J]
   证明: { is_nonempty := Nonempty.map e.functor.obj (by infer_instance)
     toIsPreconnected := isPreconnected_of_equivalent e }
 
@@ -594,7 +594,7 @@ lemma isConnected_iff_of_equivalence
 
 中文:
 引理 isConnected_iff_of_equivalence
-  条件: {K : 类型u₂} [Category.{v₂} K] (e : J ≌ K)
+  条件: {K : 类型u₂} [范畴.{v₂} K] (e : J ≌ K)
   证明: ⟨fun _ => isConnected_of_equivalent e, fun _ => isConnected_of_equivalent e.symm⟩
 
 Depends on / 依赖: e.symm, isConnected_of_equivalent
@@ -617,7 +617,7 @@ instance isPreconnected_op
 
 中文:
 实例 isPreconnected_op
-  签名: [IsPreconnected J]
+  签名: [是预连通 J]
   定义体: fun {α} F X =>
     ⟨NatIso.ofComponents fun Y =>
       eqToIso (Discrete.ext (Discrete.eq_of_hom ((Nonempty.some
@@ -641,7 +641,7 @@ instance isConnected_op
 
 中文:
 实例 isConnected_op
-  签名: [IsConnected J]
+  签名: [是连通 J]
   定义体: Nonempty.intro (op (Classical.arbitrary J))
 
 Depends on / 依赖: Classical, Classical.arbitrary, Nonempty, Nonempty.intro, arbitrary
@@ -660,8 +660,8 @@ theorem isPreconnected_of_isPreconnected_op
 
 中文:
 定理 isPreconnected_of_isPreconnected_op
-  条件: [IsPreconnected Jᵒᵖ]
-  结论: IsPreconnected J
+  条件: [是预连通 Jᵒᵖ]
+  结论: 是预连通 J
   证明: isPreconnected_of_equivalent (opOpEquivalence J)
 
 Depends on / 依赖: isPreconnected_of_equivalent, opOpEquivalence
@@ -680,8 +680,8 @@ theorem isConnected_of_isConnected_op
 
 中文:
 定理 isConnected_of_isConnected_op
-  条件: [IsConnected Jᵒᵖ]
-  结论: IsConnected J
+  条件: [是连通 Jᵒᵖ]
+  结论: 是连通 J
   证明: isConnected_of_equivalent (opOpEquivalence J)
 
 Depends on / 依赖: isConnected_of_equivalent, opOpEquivalence
@@ -701,7 +701,7 @@ theorem isConnected_op_iff_isConnected
 
 中文:
 定理 isConnected_op_iff_isConnected
-  结论: IsConnected Jᵒᵖ ↔ IsConnected J
+  结论: 是连通 Jᵒᵖ ↔ 是连通 J
   证明: ⟨fun _ => isConnected_of_isConnected_op, fun _ => isConnected_op⟩
 
 Depends on / 依赖: isConnected_of_isConnected_op, isConnected_op
@@ -877,7 +877,7 @@ trans := trans_of Relation.ReflTransGen _
 
 中文:
 定理 zigzag_equivalence
-  结论: _root_.Equivalence (@Zigzag J _) where
+  结论: _root_.等价 (@Zigzag J _) where
   证明: refl_of Relation.ReflTransGen _
 symm := symm_of Relation.ReflTransGen _
 trans := trans_of Relation.ReflTransGen _
@@ -1187,7 +1187,7 @@ definition Zigzag.setoid
 
 中文:
 定义 Zigzag.setoid
-  签名: (J : 类型u₂) [Category.{v₁} J]
+  签名: (J : 类型u₂) [范畴.{v₁} J]
   定义体: Zigzag
   iseqv := zigzag_equivalence
 
@@ -1246,7 +1246,7 @@ lemma eq_of_zag
 
 中文:
 引理 eq_of_zag
-  条件: (X) {a b : Discrete X} (h : Zag a b)
+  条件: (X) {a b : 离散 X} (h : Zag a b)
   结论: a.as = b.as
   证明: h.elim (fun ⟨f⟩ => Discrete.eq_of_hom f) (fun ⟨f⟩ => (Discrete.eq_of_hom f).symm)
 
@@ -1269,7 +1269,7 @@ lemma eq_of_zigzag
 
 中文:
 引理 eq_of_zigzag
-  条件: (X) {a b : Discrete X} (h : Zigzag a b)
+  条件: (X) {a b : 离散 X} (h : Zigzag a b)
   结论: a.as = b.as
   证明: by
   induction h with
@@ -1294,7 +1294,7 @@ theorem zag_of_zag_obj
 
 中文:
 定理 zag_of_zag_obj
-  条件: (F : J ⥤ K) [F.Full] {j₁ j₂ : J} (h : Zag (F.obj j₁) (F.obj j₂))
+  条件: (F : J ⥤ K) [F.满] {j₁ j₂ : J} (h : Zag (F.obj j₁) (F.obj j₂))
   证明: Or.imp (Nonempty.map F.preimage) (Nonempty.map F.preimage) h
 
 Depends on / 依赖: F.preimage, Nonempty, Nonempty.map, Or.imp, preimage
@@ -1318,7 +1318,7 @@ theorem equiv_relation
 
 中文:
 定理 equiv_relation
-  结论: [IsPreconnected J] (r : J -> J -> 命题) (hr : _root_.Equivalence r)
+  结论: [是预连通 J] (r : J -> J -> 命题) (hr : _root_.等价 r)
   证明: by
   intro j₁ j₂
   have z : forall j : J, r j₁ j :=
@@ -1348,7 +1348,7 @@ theorem isPreconnected_zigzag
 
 中文:
 定理 isPreconnected_zigzag
-  条件: [IsPreconnected J] (j₁ j₂ : J)
+  条件: [是预连通 J] (j₁ j₂ : J)
   结论: Zigzag j₁ j₂
   证明: equiv_relation _ zigzag_equivalence
     (fun f => Relation.ReflTransGen.single (Or.inl (Nonempty.intro f))) _ _
@@ -1381,7 +1381,7 @@ theorem zigzag_isPreconnected
 中文:
 定理 zigzag_isPreconnected
   条件: (h : 对任意 j₁ j₂ : J, Zigzag j₁ j₂)
-  结论: IsPreconnected J
+  结论: 是预连通 J
   证明: by
   apply IsPreconnected.of_constant_of_preserves_morphisms
   intro α F hF j j'
@@ -1417,8 +1417,8 @@ theorem zigzag_isConnected
 
 中文:
 定理 zigzag_isConnected
-  条件: [Nonempty J] (h : 对任意 j₁ j₂ : J, Zigzag j₁ j₂)
-  结论: IsConnected J
+  条件: [非空 J] (h : 对任意 j₁ j₂ : J, Zigzag j₁ j₂)
+  结论: 是连通 J
   证明: { zigzag_isPreconnected h with }
 
 Depends on / 依赖: IsConnected, IsLimi, NatTrans, NatTrans.naturality, Over.forget, Over.mkIdTerminal, Over.mkIdTerminal.from, WithTerminal, WithTerminal.isLimitEquiv.symm, WithTerminal.liftToTerminal, c.map, casesOn, forget, generalizing, i.casesOn, isConnected_of_hasTerminal, isLimitEquiv, isLimitOfReflects, liftToTerminal, mkIdTerminal
@@ -1435,8 +1435,8 @@ theorem exists_zigzag'
   proof: List.exists_isChain_cons_of_relationReflTransGen (isPreconnected_zigzag _ _)
 
 中文:
-定理 exists_zigzag'
-  条件: [IsConnected J] (j₁ j₂ : J)
+定理 存在_zigzag'
+  条件: [是连通 J] (j₁ j₂ : J)
   证明: List.exists_isChain_cons_of_relationReflTransGen (isPreconnected_zigzag _ _)
 
 Depends on / 依赖: Coequifibered, Coequifibered.cancel_right_of_respectsIso, Discrete, Discrete.equivalence, F.op, HasCoproductsOfShape, IsClosedUnderIsomorphisms, List.exists_isChain_cons_of_relationReflTransGen, Quiver, Quiver.Hom.opEquiv, Under.w, cancel_right_of_respectsIso, e.hom, equivalence, exists_isChain_cons_of_relationReflTransGen, f.hom.Coequifibered, hasColimitsOfShape_of_equivalence, isClosedUnderColimitsOfShape_iff_op, isClosedUnderLimitsOfShape_inverseImage_iff, isPreconnected_zigzag
@@ -1486,7 +1486,7 @@ theorem isConnected_of_zigzag
 
 中文:
 定理 isConnected_of_zigzag
-  结论: [Nonempty J] (h : 对任意 j₁ j₂ : J, 存在 l,
+  结论: [非空 J] (h : 对任意 j₁ j₂ : J, 存在 l,
   证明: { isPreconnected_of_zigzag h with }
 
 Depends on / 依赖: isPreconnected_of_zigzag
@@ -1510,7 +1510,7 @@ definition discreteIsConnectedEquivPUnit
 
 中文:
 定义 discreteIsConnectedEquivPUnit
-  签名: {α : 类型u₁} [IsConnected (Discrete α)]
+  签名: {α : 类型u₁} [是连通 (离散 α)]
   定义体: Discrete.equivOfEquivalence.{u₁, u₁}
     { functor := Functor.star (Discrete α)
       inverse := Discrete.functor fun _ => Classical.arbitrary _
@@ -1541,7 +1541,7 @@ theorem nat_trans_from_is_connected
 
 中文:
 定理 nat_trans_from_is_connected
-  结论: [IsPreconnected J] {X Y : C}
+  结论: [是预连通 J] {X Y : C}
   证明: @constant_of_preserves_morphisms _ _ _ (X ⟶ Y) (fun j => α.app j) fun _ _ f => by
     simpa using (α.naturality f).symm
 
@@ -1564,8 +1564,8 @@ instance [IsConnected
     apply nat_trans_from_is_connected f (Classical.arbitrary J) j⟩
 
 中文:
-实例 [IsConnected
-  签名: J] : (Functor.const J
+实例 [是连通
+  签名: J] : (函子.const J
   定义体: ⟨f.app (Classical.arbitrary J), by
     ext j
     apply nat_trans_from_is_connected f (Classical.arbitrary J) j⟩
@@ -1592,7 +1592,7 @@ theorem nonempty_hom_of_preconnected_groupoid
 
 中文:
 定理 nonempty_hom_of_preconnected_groupoid
-  条件: {G} [Groupoid G] [IsPreconnected G]
+  条件: {G} [群胚 G] [是预连通 G]
   证明: by
   refine equiv_relation _ ?_ fun {j₁ j₂} => Nonempty.intro
   exact
@@ -1622,7 +1622,7 @@ instance isPreconnected_of_subsingleton
 
 中文:
 实例 isPreconnected_of_subsingleton
-  签名: [Subsingleton J]
+  签名: [子单例 J]
   定义体: ⟨NatIso.ofComponents (fun x => eqToIso (by simp [Subsingleton.allEq x j]))⟩
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Subsingleton, Subsingleton.allEq, eqToIso, ofComponents
@@ -1639,7 +1639,7 @@ instance isConnected_of_nonempty_and_subsingleton
 
 中文:
 实例 isConnected_of_nonempty_and_subsingleton
-  签名: [Nonempty J] [Subsingleton J]
+  签名: [非空 J] [子单例 J]
 -/
 instance isConnected_of_nonempty_and_subsingleton [Nonempty J] [Subsingleton J] :
     IsConnected J where

@@ -113,7 +113,7 @@ theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
     rw [
 
 中文:
-定理 tendsto_iff_forall_isCompact_tendstoUniformlyOn
+定理 tendsto_iff_对任意_isCompact_tendstoUniformlyOn
   证明: by
   rw [tendsto_nhds_compactOpen]
   constructor
@@ -239,7 +239,7 @@ instance compactConvergenceUniformSpace
 
 中文:
 实例 compactConvergenceUniformSpace
-  签名: : UniformSpace C(α, β)
+  签名: : 一致空间 C(α, β)
   定义体: .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
     refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
     simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
@@ -283,7 +283,7 @@ theorem continuous_iff_continuous_uniformOnFun
 
 中文:
 定理 continuous_iff_continuous_uniformOnFun
-  条件: {X : 类型} [TopologicalSpace X] (f : X -> C(α, β))
+  条件: {X : 类型} [拓扑空间 X] (f : X -> C(α, β))
   证明: isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
 
 Depends on / 依赖: continuous_iff, isInducing, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
@@ -308,7 +308,7 @@ exact .comap _ UniformOnFun.hasBasis_uniformity_of_basis _ _ {K | IsCompact K}
     ⟨∅, isCompact_empty⟩ (directedOn_of_sup_mem fun _ _ => IsCompact.union) h
 
 中文:
-定理 _root_.Filter.HasBasis.compactConvergenceUniformity
+定理 _root_.滤子.有基.compactConvergenceUniformity
   结论: {ι : 类型} {pi : ι -> 命题}
   证明: by
   rw [← isUniformEmbedding_toUniformOnFunIsCompact.comap_uniformity]
@@ -354,7 +354,7 @@ theorem mem_compactConvergence_entourage_iff
 
 中文:
 定理 mem_compactConvergence_entourage_iff
-  条件: (X : Set (C(α, β) × C(α, β)))
+  条件: (X : 集合 (C(α, β) × C(α, β)))
   证明: by
   simp [hasBasis_compactConvergenceUniformity.mem_iff, and_assoc]
 
@@ -376,7 +376,7 @@ theorem _root_.CompactExhaustion.hasBasis_compactConvergenceUniformity
     (Monotone.directed_le K.subset) (fun _ => K.exists_superset_of_isCompact) hb).comap _
 
 中文:
-定理 _root_.CompactExhaustion.hasBasis_compactConvergenceUniformity
+定理 _root_.余mpactExhaustion.hasBasis_compactConvergenceUniformity
   结论: {ι : 类型}
   证明: (UniformOnFun.hasBasis_uniformity_of_covering_of_basis {K | IsCompact K} K.isCompact
     (Monotone.directed_le K.subset) (fun _ => K.exists_superset_of_isCompact) hb).comap _
@@ -399,7 +399,7 @@ theorem _root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
     K.subset (fun _ => K.exists_superset_of_isCompact) hb).comap _
 
 中文:
-定理 _root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
+定理 _root_.余mpactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
   证明: (UniformOnFun.hasAntitoneBasis_uniformity {K | IsCompact K} K.isCompact
     K.subset (fun _ => K.exists_superset_of_isCompact) hb).comap _
 
@@ -422,8 +422,8 @@ instance [WeaklyLocallyCompactSpace
     hV).isCountablyGenerated
 
 中文:
-实例 [WeaklyLocallyCompactSpace
-  签名: α] [SigmaCompactSpace α] [IsCountablyGenerated (𝓤 β)] :
+实例 [WeaklyLocallyCompact空间
+  签名: α] [SigmaCompact空间 α] [是余untablyGenerated (𝓤 β)] :
   定义体: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
   ((CompactExhaustion.choice α).hasAntitoneBasis_compactConvergenceUniformity
     hV).isCountablyGenerated
@@ -482,7 +482,7 @@ theorem tendsto_iff_tendstoLocallyUniformly
 
 中文:
 定理 tendsto_iff_tendstoLocallyUniformly
-  条件: [WeaklyLocallyCompactSpace α]
+  条件: [WeaklyLocallyCompact空间 α]
   证明: by
   refine ⟨fun h V hV x => ?_, tendsto_of_tendstoLocallyUniformly⟩
   rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn] at h
@@ -514,7 +514,7 @@ theorem uniformContinuous_comp
 
 中文:
 定理 uniformContinuous_comp
-  条件: (g : C(β, δ)) (hg : UniformContinuous g)
+  条件: (g : C(β, δ)) (hg : 一致连续 g)
   证明: isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
 .comp UniformOnFun.postcomp_uniformContinuous hg
       isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
@@ -539,7 +539,7 @@ theorem isUniformInducing_comp
 
 中文:
 定理 isUniformInducing_comp
-  条件: (g : C(β, δ)) (hg : IsUniformInducing g)
+  条件: (g : C(β, δ)) (hg : 是UniformInducing g)
   证明: isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp
 .comp UniformOnFun.postcomp_isUniformInducing hg
       isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing
@@ -564,7 +564,7 @@ theorem isUniformEmbedding_comp
 
 中文:
 定理 isUniformEmbedding_comp
-  条件: (g : C(β, δ)) (hg : IsUniformEmbedding g)
+  条件: (g : C(β, δ)) (hg : 是一致嵌入 g)
   证明: isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp
 .comp UniformOnFun.postcomp_isUniformEmbedding hg
       isUniformEmbedding_toUniformOnFunIsCompact
@@ -615,7 +615,7 @@ invFun f := .comp ψ.symm.toHomeomorph f.comp φ
 .comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.unifo
 
 中文:
-定义 _root_.UniformEquiv.arrowCongr
+定义 _root_.一致等价.arrowCongr
   签名: (φ : α ≃ₜ γ) (ψ : β ≃ᵤ δ)
   定义体: .comp ψ.toHomeomorph f.comp φ.symm
 invFun f := .comp ψ.symm.toHomeomorph f.comp φ
@@ -674,7 +674,7 @@ theorem _root_.Filter.HasBasis.compactConvergenceUniformity_of_compact
     fun i hi => ⟨V i, h.mem_of_mem hi, .rfl⟩
 
 中文:
-定理 _root_.Filter.HasBasis.compactConvergenceUniformity_of_compact
+定理 _root_.滤子.有基.compactConvergenceUniformity_of_compact
   证明: hasBasis_compactConvergenceUniformity_of_compact.to_hasBasis
     (fun _U hU => (h.mem_iff.mp hU).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, fun _ h a => hi <| h a⟩)
     fun i hi => ⟨V i, h.mem_of_mem hi, .rfl⟩
@@ -748,7 +748,7 @@ theorem continuous_iff_continuous_uniformFun
 
 中文:
 定理 continuous_iff_continuous_uniformFun
-  条件: {X : 类型} [TopologicalSpace X] (f : X -> C(α, β))
+  条件: {X : 类型} [拓扑空间 X] (f : X -> C(α, β))
   证明: isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
 
 Depends on / 依赖: continuous_iff, isInducing, isUniformEmbedding_uniformFunOfFun, isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
@@ -777,7 +777,7 @@ alias _root_.ContinuousOn.tendsto_restrict_iff_tendstoUniformlyOn :=
 
 中文:
 定理 _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
-  结论: {s : Set α} [CompactSpace s]
+  结论: {s : 集合 α} [紧空间 s]
   证明: by
   rw [ContinuousMap.tendsto_iff_tendstoUniformly]; rw [tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
   congr!
@@ -856,7 +856,7 @@ theorem uniformSpace_eq_inf_precomp_of_cover
 
 中文:
 定理 uniformSpace_eq_inf_precomp_of_cover
-  结论: {δ₁ δ₂ : 类型} [TopologicalSpace δ₁]
+  结论: {δ₁ δ₂ : 类型} [拓扑空间 δ₁]
   证明: by
   -- We check the analogous result for `UniformOnFun` using
   -- `UniformOnFun.uniformSpace_eq_inf_precomp_of_cover`...
@@ -903,7 +903,7 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
 
 中文:
 定理 uniformSpace_eq_iInf_precomp_of_cover
-  结论: {δ : ι -> 类型} [对任意 i, TopologicalSpace (δ i)]
+  结论: {δ : ι -> 类型} [对任意 i, 拓扑空间 (δ i)]
   证明: by
   -- We check the analogous result for `UniformOnFun` using
   -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
@@ -949,7 +949,7 @@ instance instCompleteSpaceOfCompactlyCoherentSpace
 
 中文:
 实例 instCompleteSpaceOfCompactlyCoherentSpace
-  签名: [CompactlyCoherentSpace α]
+  签名: [余mpactlyCoherent空间 α]
   定义体: by
   rw [completeSpace_iff_isComplete_range
     isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing]; rw [range_toUniformOnFunIsCompact]; rw [← completeSpace_coe_iff_isComplete]
@@ -984,7 +984,7 @@ refine tendsto_const_nhds.con
 
 中文:
 定理 isComplete_setOfPred_eqOn
-  条件: [CompleteSpace C(α, β)] (f : α -> β) (s : Set α)
+  条件: [完备空间 C(α, β)] (f : α -> β) (s : 集合 α)
   证明: by
   classical
   intro l hlc hlf

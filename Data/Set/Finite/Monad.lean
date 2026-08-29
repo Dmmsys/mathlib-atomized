@@ -52,7 +52,7 @@ definition fintypeBind
 
 中文:
 定义 fintypeBind
-  签名: {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
+  签名: {α β} [DecidableEq β] (s : 集合 α) [有限类型 s] (f : α -> 集合 β)
   定义体: Set.fintypeBiUnion s f H
 
 Depends on / 依赖: Set.fintypeBiUnion, fintypeBiUnion
@@ -71,7 +71,7 @@ instance fintypeBind'
 
 中文:
 实例 fintypeBind'
-  签名: {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
+  签名: {α β} [DecidableEq β] (s : 集合 α) [有限类型 s] (f : α -> 集合 β)
   定义体: Set.fintypeBiUnion' s f
 
 Depends on / 依赖: Set.fintypeBiUnion, fintypeBiUnion
@@ -92,7 +92,7 @@ instance fintypePure
 
 中文:
 实例 fintypePure
-  签名: : 对任意 a : α, Fintype (pure a : Set α)
+  签名: : 对任意 a : α, 有限类型 (pure a : 集合 α)
   定义体: Set.fintypeSingleton
 
 Depends on / 依赖: Set.fintypeSingleton, fintypeSingleton
@@ -112,7 +112,7 @@ instance fintypeSeq
 
 中文:
 实例 fintypeSeq
-  签名: [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f] [Fintype s]
+  签名: [DecidableEq β] (f : 集合 (α -> β)) (s : 集合 α) [有限类型 f] [有限类型 s]
   定义体: by
   rw [seq_def]
   apply Set.fintypeBiUnion'
@@ -134,7 +134,7 @@ instance fintypeSeq'
 
 中文:
 实例 fintypeSeq'
-  签名: {α β : 类型u} [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f]
+  签名: {α β : 类型u} [DecidableEq β] (f : 集合 (α -> β)) (s : 集合 α) [有限类型 f]
   定义体: Set.fintypeSeq f s
 
 Depends on / 依赖: Set.fintypeSeq, fintypeSeq
@@ -173,7 +173,7 @@ theorem finite_pure
 中文:
 定理 finite_pure
   条件: (a : α)
-  结论: (pure a : Set α).Finite
+  结论: (pure a : 集合 α).有限
   证明: toFinite _
 
 Depends on / 依赖: toFinite
@@ -193,7 +193,7 @@ instance finite_seq
 
 中文:
 实例 finite_seq
-  签名: (f : Set (α -> β)) (s : Set α) [Finite f] [Finite s]
+  签名: (f : 集合 (α -> β)) (s : 集合 α) [有限 f] [有限 s]
   定义体: by
   rw [seq_def]
   infer_instance
@@ -232,8 +232,8 @@ theorem Finite.bind
   proof: h.biUnion hf
 
 中文:
-定理 Finite.bind
-  条件: {α β} {s : Set α} {f : α -> Set β} (h : s.Finite) (hf : 对任意 a in s, (f a).Finite)
+定理 有限.bind
+  条件: {α β} {s : 集合 α} {f : α -> 集合 β} (h : s.有限) (hf : 对任意 a in s, (f a).有限)
   证明: h.biUnion hf
 
 Depends on / 依赖: biUnion, h.biUnion
@@ -253,8 +253,8 @@ theorem Finite.seq
   proof: hf.image2 _ hs
 
 中文:
-定理 Finite.seq
-  条件: {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite)
+定理 有限.seq
+  条件: {f : 集合 (α -> β)} {s : 集合 α} (hf : f.有限) (hs : s.有限)
   证明: hf.image2 _ hs
 
 Depends on / 依赖: hf.image2, image2
@@ -272,8 +272,8 @@ theorem Finite.seq'
   proof: hf.seq hs
 
 中文:
-定理 Finite.seq'
-  条件: {α β : 类型u} {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite)
+定理 有限.seq'
+  条件: {α β : 类型u} {f : 集合 (α -> β)} {s : 集合 α} (hf : f.有限) (hs : s.有限)
   证明: hf.seq hs
 
 Depends on / 依赖: hf.seq

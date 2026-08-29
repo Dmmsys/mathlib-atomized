@@ -29,7 +29,7 @@ abbreviation GaussM
 
 中文:
 缩写 GaussM
-  签名: (n m : 自然数) (matType : 自然数 -> 自然数 -> Type)
+  签名: (n m : 自然数) (matType : 自然数 -> 自然数 -> 类型)
   定义体: StateT (matType n m) Lean.CoreM
 
 Depends on / 依赖: Lean.CoreM, StateT, matType

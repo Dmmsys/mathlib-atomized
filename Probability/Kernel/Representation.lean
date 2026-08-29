@@ -56,8 +56,8 @@ lemma exists_measurable_map_eq_unitInterval_aux
       fun x y hxy => measureRe
 
 中文:
-引理 exists_measurable_map_eq_unitInterval_aux
-  条件: (κ : Kernel X I) [IsMarkovKernel κ]
+引理 存在_measurable_map_eq_unit整数erval_aux
+  条件: (κ : 核 X I) [是MarkovKernel κ]
   证明: by
   let f := fun s (t : I) => sSup {x | (κ s).real (Icc 0 x) < t}
   have measurable_f : Measurable (uncurry f) := by
@@ -145,8 +145,8 @@ theorem exists_measurable_map_eq_unitInterval
     rw [← map_comp_right _ hg.measurable (by fun_prop)]; rw [LeftInverse.i
 
 中文:
-定理 exists_measurable_map_eq_unitInterval
-  条件: (κ : Kernel X Y) [IsMarkovKernel κ]
+定理 存在_measurable_map_eq_unit整数erval
+  条件: (κ : 核 X Y) [是MarkovKernel κ]
   证明: by
   let g := sigmoid ∘ embeddingReal Y
   have hg := measurableEmbedding_sigmoid_comp_embeddingReal Y
@@ -182,8 +182,8 @@ theorem MeasureTheory.Measure.exists_measurable_map_eq
   exact ⟨f (), by fun_prop, by simpa⟩
 
 中文:
-定理 MeasureTheory.Measure.exists_measurable_map_eq
-  条件: (μ : Measure Y) [IsProbabilityMeasure μ]
+定理 测度论.测度.存在_measurable_map_eq
+  条件: (μ : 测度 Y) [是概率测度 μ]
   证明: by
   obtain ⟨f, hf_meas, hf_map⟩ := Kernel.exists_measurable_map_eq_unitInterval (Kernel.const Unit μ)
   specialize hf_map ()

@@ -59,7 +59,7 @@ definition cycleType
 
 中文:
 定义 cycleType
-  签名: (σ : Perm α)
+  签名: (σ : 置换 α)
   定义体: σ.cycleFactorsFinset.1.map (Finset.card ∘ support)
 
 Depends on / 依赖: Finset, Finset.card, cycleFactorsFinset, support
@@ -77,7 +77,7 @@ theorem cycleType_def
 
 中文:
 定理 cycleType_def
-  条件: (σ : Perm α)
+  条件: (σ : 置换 α)
   证明: rfl
 -/
 theorem cycleType_def (σ : Perm α) :
@@ -98,7 +98,7 @@ theorem cycleType_eq'
 
 中文:
 定理 cycleType_eq'
-  结论: {σ : Perm α} (s : Finset (Perm α)) (h1 : 对任意 f : Perm α, f in s -> f.IsCycle)
+  结论: {σ : 置换 α} (s : 有限集 (置换 α)) (h1 : 对任意 f : 置换 α, f in s -> f.是环)
   证明: by
   rw [cycleType_def]
   congr
@@ -133,7 +133,7 @@ theorem cycleType_eq
 
 中文:
 定理 cycleType_eq
-  结论: {σ : Perm α} (l : List (Perm α)) (h0 : l.prod = σ)
+  结论: {σ : 置换 α} (l : 列表 (置换 α)) (h0 : l.乘积 = σ)
   证明: by
   have hl : l.Nodup := nodup_of_pairwise_disjoint_cycles h1 h2
   rw [cycleType_eq' l.toFinset]
@@ -170,7 +170,7 @@ theorem CycleType.count_def
 
 中文:
 定理 CycleType.count_def
-  条件: {σ : Perm α} (n : 自然数)
+  条件: {σ : 置换 α} (n : 自然数)
   证明: by
   -- work on the LHS
   rw [cycleType]; rw [Multiset.count_eq_card_filter_eq]
@@ -207,7 +207,7 @@ theorem cycleType_eq_zero
 
 中文:
 定理 cycleType_eq_zero
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   结论: σ.cycleType = 0 ↔ σ = 1
   证明: by
   simp [cycleType_def, cycleFactorsFinset_eq_empty_iff]
@@ -230,7 +230,7 @@ theorem cycleType_one
 
 中文:
 定理 cycleType_one
-  结论: (1 : Perm α).cycleType = 0
+  结论: (1 : 置换 α).cycleType = 0
   证明: cycleType_eq_zero.2 rfl
 
 Depends on / 依赖: cycleType_eq_zero
@@ -249,7 +249,7 @@ theorem card_cycleType_eq_zero
 
 中文:
 定理 card_cycleType_eq_zero
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   结论: Multiset.card σ.cycleType = 0 ↔ σ = 1
   证明: by
   rw [card_eq_zero]; rw [cycleType_eq_zero]
@@ -270,7 +270,7 @@ theorem card_cycleType_pos
 
 中文:
 定理 card_cycleType_pos
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   结论: 0 < Multiset.card σ.cycleType ↔ σ != 1
   证明: pos_iff_ne_zero.trans card_cycleType_eq_zero.not
 
@@ -294,7 +294,7 @@ theorem two_le_of_mem_cycleType
 
 中文:
 定理 two_le_of_mem_cycleType
-  条件: {σ : Perm α} {n : 自然数} (h : n in σ.cycleType)
+  条件: {σ : 置换 α} {n : 自然数} (h : n in σ.cycleType)
   结论: 2 <= n
   证明: by
   simp only [cycleType_def, ← Finset.mem_def, Function.comp_apply, Multiset.mem_map,
@@ -321,7 +321,7 @@ theorem one_lt_of_mem_cycleType
 
 中文:
 定理 one_lt_of_mem_cycleType
-  条件: {σ : Perm α} {n : 自然数} (h : n in σ.cycleType)
+  条件: {σ : 置换 α} {n : 自然数} (h : n in σ.cycleType)
   结论: 1 < n
   证明: two_le_of_mem_cycleType h
 
@@ -341,8 +341,8 @@ theorem IsCycle.cycleType
     (List.pairwise_singleton Disjoint σ)
 
 中文:
-定理 IsCycle.cycleType
-  条件: {σ : Perm α} (hσ : IsCycle σ)
+定理 是环.cycleType
+  条件: {σ : 置换 α} (hσ : 是环 σ)
   结论: σ.cycleType = {#σ.support}
   证明: cycleType_eq [σ] (mul_one σ) (fun _τ hτ => (congr_arg IsCycle (List.mem_singleton.mp hτ)).mpr hσ)
     (List.pairwise_singleton Disjoint σ)
@@ -368,8 +368,8 @@ theorem card_cycleType_eq_one
 
 中文:
 定理 card_cycleType_eq_one
-  条件: {σ : Perm α}
-  结论: Multiset.card σ.cycleType = 1 ↔ σ.IsCycle
+  条件: {σ : 置换 α}
+  结论: Multiset.card σ.cycleType = 1 ↔ σ.是环
   证明: by
   rw [card_eq_one]
   simp_rw [cycleType_def, Multiset.map_eq_singleton, ← Finset.singleton_val, Finset.val_inj,
@@ -399,7 +399,7 @@ theorem Disjoint.cycleType_mul
 
 中文:
 定理 Disjoint.cycleType_mul
-  条件: {σ τ : Perm α} (h : Disjoint σ τ)
+  条件: {σ τ : 置换 α} (h : Disjoint σ τ)
   证明: by
   rw [cycleType_def]; rw [cycleType_def]; rw [cycleType_def]; rw [h.cycleFactorsFinset_mul_eq_union]; rw [←
     Multiset.map_add]; rw [Finset.union_val]; rw [Multiset.add_eq_union_iff_disjoint.mpr _]
@@ -431,7 +431,7 @@ theorem cycleType_inv
 
 中文:
 定理 cycleType_inv
-  条件: (σ : Perm α)
+  条件: (σ : 置换 α)
   结论: σ⁻¹.cycleType = σ.cycleType
   证明: cycle_induction_on (P := fun τ : Perm α => τ⁻¹.cycleType = τ.cycleType) σ rfl
     (fun σ hσ => by simp only [hσ.cycleType, hσ.inv.cycleType, support_inv])
@@ -465,7 +465,7 @@ theorem cycleType_conj
 
 中文:
 定理 cycleType_conj
-  条件: {σ τ : Perm α}
+  条件: {σ τ : 置换 α}
   结论: (τ * σ * τ⁻¹).cycleType = σ.cycleType
   证明: by
   induction σ using cycle_induction_on with
@@ -498,8 +498,8 @@ theorem sum_cycleType
 
 中文:
 定理 sum_cycleType
-  条件: (σ : Perm α)
-  结论: σ.cycleType.sum = #σ.support
+  条件: (σ : 置换 α)
+  结论: σ.cycleType.求和 = #σ.support
   证明: by
   induction σ using cycle_induction_on with
   | base_one => simp
@@ -525,8 +525,8 @@ theorem sum_cycleType_le
 
 中文:
 定理 sum_cycleType_le
-  条件: (σ : Perm α)
-  结论: σ.cycleType.sum <= Fintype.card α
+  条件: (σ : 置换 α)
+  结论: σ.cycleType.求和 <= 有限类型.card α
   证明: σ.sum_cycleType ▸ Finset.card_le_univ σ.support
 
 Depends on / 依赖: Finset, Finset.card_le_univ, card_le_univ, sum_cycleType, support
@@ -546,7 +546,7 @@ theorem card_fixedPoints
 
 中文:
 定理 card_fixedPoints
-  条件: (σ : Equiv.Perm α)
+  条件: (σ : 等价.置换 α)
   证明: by
   rw [Equiv.Perm.sum_cycleType]; rw [← Finset.card_compl]; rw [Fintype.card_ofFinset]
   congr; aesop
@@ -572,7 +572,7 @@ theorem sign_of_cycleType'
 
 中文:
 定理 sign_of_cycleType'
-  条件: (σ : Perm α)
+  条件: (σ : 置换 α)
   证明: by
   induction σ using cycle_induction_on with
   | base_one => simp
@@ -604,7 +604,7 @@ theorem sign_of_cycleType
 
 中文:
 定理 sign_of_cycleType
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   证明: by
   rw [sign_of_cycleType']
   induction f.cycleType using Multiset.induction_on with
@@ -640,8 +640,8 @@ theorem lcm_cycleType
 
 中文:
 定理 lcm_cycleType
-  条件: (σ : Perm α)
-  结论: σ.cycleType.lcm = orderOf σ
+  条件: (σ : 置换 α)
+  结论: σ.cycleType.最小公倍数 = orderOf σ
   证明: by
   induction σ using cycle_induction_on with
   | base_one => simp
@@ -669,7 +669,7 @@ theorem dvd_of_mem_cycleType
 
 中文:
 定理 dvd_of_mem_cycleType
-  条件: {σ : Perm α} {n : 自然数} (h : n in σ.cycleType)
+  条件: {σ : 置换 α} {n : 自然数} (h : n in σ.cycleType)
   结论: n ∣ orderOf σ
   证明: by
   rw [← lcm_cycleType]
@@ -700,7 +700,7 @@ theorem orderOf_cycleOf_dvd_orderOf
 
 中文:
 定理 orderOf_cycleOf_dvd_orderOf
-  条件: (f : Perm α) (x : α)
+  条件: (f : 置换 α) (x : α)
   结论: orderOf (cycleOf f x) ∣ orderOf f
   证明: by
   by_cases hx : f x = x
@@ -740,7 +740,7 @@ theorem two_dvd_card_support
 
 中文:
 定理 two_dvd_card_support
-  条件: {σ : Perm α} (hσ : σ ^ 2 = 1)
+  条件: {σ : 置换 α} (hσ : σ ^ 2 = 1)
   结论: 2 ∣ #σ.support
   证明: (congr_arg (Dvd.dvd 2) σ.sum_cycleType).mp
     (Multiset.dvd_sum fun n hn => by
@@ -775,7 +775,7 @@ theorem cycleType_prime_order
 
 中文:
 定理 cycleType_prime_order
-  条件: {σ : Perm α} (hσ : (orderOf σ).Prime)
+  条件: {σ : 置换 α} (hσ : (orderOf σ).素)
   证明: by
   refine ⟨Multiset.card σ.cycleType - 1, eq_replicate.2 ⟨?_, fun n hn => ?_⟩⟩
   · rw [tsub_add_cancel_of_le]
@@ -810,7 +810,7 @@ theorem pow_prime_eq_one_iff
 
 中文:
 定理 pow_prime_eq_one_iff
-  条件: {σ : Perm α} {p : 自然数} [hp : Fact (自然数.Prime p)]
+  条件: {σ : 置换 α} {p : 自然数} [hp : Fact (自然数.素 p)]
   证明: by
   rw [← orderOf_dvd_iff_pow_eq_one]; rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
   apply forall_congr'
@@ -838,7 +838,7 @@ theorem cycleType_of_pow_prime_eq_one
 
 中文:
 定理 cycleType_of_pow_prime_eq_one
-  条件: {σ : Perm α} {p : 自然数} [Fact (自然数.Prime p)] (hσ : σ ^ p = 1)
+  条件: {σ : 置换 α} {p : 自然数} [Fact (自然数.素 p)] (hσ : σ ^ p = 1)
   证明: Multiset.eq_replicate.mpr ⟨rfl, pow_prime_eq_one_iff.mp hσ⟩
 
 Depends on / 依赖: Multiset, Multiset.eq_replicate.mpr, eq_replicate, pow_prime_eq_one_iff, pow_prime_eq_one_iff.mp
@@ -860,7 +860,7 @@ theorem isCycle_of_prime_order
 
 中文:
 定理 isCycle_of_prime_order
-  结论: {σ : Perm α} (h1 : (orderOf σ).Prime)
+  结论: {σ : 置换 α} (h1 : (orderOf σ).素)
   证明: by
   obtain ⟨n, hn⟩ := cycleType_prime_order h1
   rw [← σ.sum_cycleType]; rw [hn]; rw [Multiset.sum_replicate]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_lt_mul_iff_left₀ (orderOf_pos σ)]; rw [Nat.succ_lt_succ_iff]; rw [Nat.lt_succ_iff]; rw [Nat.le_zero] at h2
@@ -888,7 +888,7 @@ theorem cycleType_le_of_mem_cycleFactorsFinset
 
 中文:
 定理 cycleType_le_of_mem_cycleFactorsFinset
-  条件: {f g : Perm α} (hf : f in g.cycleFactorsFinset)
+  条件: {f g : 置换 α} (hf : f in g.cycleFactorsFinset)
   证明: by
   have hf' := mem_cycleFactorsFinset_iff.1 hf
   rw [cycleType_def]; rw [cycleType_def]; rw [hf'.left.cycleFactorsFinset_eq_singleton]
@@ -921,7 +921,7 @@ theorem Disjoint.cycleType_noncommProd
 
 中文:
 定理 Disjoint.cycleType_noncommProd
-  结论: {ι : 类型} {k : ι -> Perm α} {s : Finset ι}
+  结论: {ι : 类型} {k : ι -> 置换 α} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -993,7 +993,7 @@ theorem isConj_of_cycleType_eq
 
 中文:
 定理 isConj_of_cycleType_eq
-  条件: {σ τ : Perm α} (h : cycleType σ = cycleType τ)
+  条件: {σ τ : 置换 α} (h : cycleType σ = cycleType τ)
   结论: IsConj σ τ
   证明: by
   induction σ using cycle_induction_on generalizing τ with
@@ -1050,7 +1050,7 @@ theorem isConj_iff_cycleType_eq
 
 中文:
 定理 isConj_iff_cycleType_eq
-  条件: {σ τ : Perm α}
+  条件: {σ τ : 置换 α}
   结论: IsConj σ τ ↔ σ.cycleType = τ.cycleType
   证明: ⟨fun h => by
     obtain ⟨π, rfl⟩ := isConj_iff.1 h
@@ -1082,7 +1082,7 @@ theorem cycleType_extendDomain
 
 中文:
 定理 cycleType_extendDomain
-  结论: {β : 类型} [Fintype β] [DecidableEq β] {p : β -> 命题}
+  结论: {β : 类型} [有限类型 β] [DecidableEq β] {p : β -> 命题}
   证明: by
   induction g using cycle_induction_on with
   | base_one => rw [extendDomain_one, cycleType_one, cycleType_one]
@@ -1113,7 +1113,7 @@ theorem cycleType_ofSubtype
 
 中文:
 定理 cycleType_ofSubtype
-  结论: {p : α -> 命题} [DecidablePred p] [Fintype (Subtype p)]
+  结论: {p : α -> 命题} [DecidablePred p] [有限类型 (子类型 p)]
   证明: cycleType_extendDomain (Equiv.refl (Subtype p))
 
 Depends on / 依赖: Equiv.refl, Subtype, cycleType_extendDomain
@@ -1140,7 +1140,7 @@ theorem mem_cycleType_iff
 
 中文:
 定理 mem_cycleType_iff
-  条件: {n : 自然数} {σ : Perm α}
+  条件: {n : 自然数} {σ : 置换 α}
   证明: by
   constructor
   · intro h
@@ -1176,7 +1176,7 @@ theorem le_card_support_of_mem_cycleType
 
 中文:
 定理 le_card_support_of_mem_cycleType
-  条件: {n : 自然数} {σ : Perm α} (h : n in cycleType σ)
+  条件: {n : 自然数} {σ : 置换 α} (h : n in cycleType σ)
   证明: (le_sum_of_mem h).trans (le_of_eq σ.sum_cycleType)
 
 Depends on / 依赖: le_of_eq, le_sum_of_mem, sum_cycleType
@@ -1200,7 +1200,7 @@ theorem cycleType_of_card_le_mem_cycleType_add_two
 
 中文:
 定理 cycleType_of_card_le_mem_cycleType_add_two
-  结论: {n : 自然数} {g : Perm α}
+  结论: {n : 自然数} {g : 置换 α}
   证明: by
   obtain ⟨c, g', rfl, hd, hc, rfl⟩ := mem_cycleType_iff.1 hng
   suffices g'1 : g' = 1 by
@@ -1233,7 +1233,7 @@ theorem sign_of_cycleType_eq_replicate
 
 中文:
 定理 sign_of_cycleType_eq_replicate
-  结论: {σ : Perm α} {n : 自然数} (hn : 0 < n)
+  结论: {σ : 置换 α} {n : 自然数} (hn : 0 < n)
   证明: by
   rw [sign_of_cycleType']; rw [hσ]; rw [Multiset.map_replicate]; rw [Multiset.prod_replicate]
   obtain h | h := Nat.even_or_odd n
@@ -1266,7 +1266,7 @@ theorem sign_of_pow_two_eq_one
 
 中文:
 定理 sign_of_pow_two_eq_one
-  条件: {σ : Perm α} (hσ : σ ^ 2 = 1)
+  条件: {σ : 置换 α} (hσ : σ ^ 2 = 1)
   证明: by
   rw [sign_of_cycleType_eq_replicate zero_lt_two (cycleType_of_pow_prime_eq_one hσ)]; rw [if_neg (Nat.not_odd_iff.mpr rfl)]
 
@@ -1293,7 +1293,7 @@ theorem card_compl_support_modEq
 
 中文:
 定理 card_compl_support_modEq
-  结论: [DecidableEq α] {p n : 自然数} [hp : Fact p.Prime] {σ : Perm α}
+  结论: [DecidableEq α] {p n : 自然数} [hp : Fact p.素] {σ : 置换 α}
   证明: by
   rw [Nat.modEq_iff_dvd']; rw [← Finset.card_compl]; rw [compl_compl]; rw [← sum_cycleType]
   · refine Multiset.dvd_sum fun k hk => ?_
@@ -1330,7 +1330,7 @@ theorem card_fixedPoints_modEq
 
 中文:
 定理 card_fixedPoints_modEq
-  结论: [DecidableEq α] {f : Function.End α} {p n : 自然数}
+  结论: [DecidableEq α] {f : 函数.End α} {p n : 自然数}
   证明: by
   let σ : α ≃ α := ⟨f, f ^ (p ^ n - 1),
     leftInverse_iff_comp.mpr ((pow_sub_mul_pow f (Nat.one_le_pow n p hp.out.pos)).trans hf),
@@ -1369,8 +1369,8 @@ theorem exists_fixed_point_of_prime
       (card_compl_support_modEq hσ).symm)
 
 中文:
-定理 exists_fixed_point_of_prime
-  结论: {p n : 自然数} [hp : Fact p.Prime] (hα : ¬p ∣ Fintype.card α)
+定理 存在_fixed_point_of_prime
+  结论: {p n : 自然数} [hp : Fact p.素] (hα : ¬p ∣ 有限类型.card α)
   证明: by
   classical
     contrapose! hα
@@ -1402,8 +1402,8 @@ theorem exists_fixed_point_of_prime'
       (Nat.le_of_dvd (Finset.card_pos.mpr ⟨a, (h a).mpr ha⟩) (Nat.modEq_ze
 
 中文:
-定理 exists_fixed_point_of_prime'
-  结论: {p n : 自然数} [hp : Fact p.Prime] (hα : p ∣ Fintype.card α)
+定理 存在_fixed_point_of_prime'
+  结论: {p n : 自然数} [hp : Fact p.素] (hα : p ∣ 有限类型.card α)
   证明: by
   classical
     have h : forall b : α, b in σ.supportᶜ ↔ σ b = b := fun b => by
@@ -1434,7 +1434,7 @@ theorem isCycle_of_prime_order'
 
 中文:
 定理 isCycle_of_prime_order'
-  结论: {σ : Perm α} (h1 : (orderOf σ).Prime)
+  结论: {σ : 置换 α} (h1 : (orderOf σ).素)
   证明: by
   classical exact isCycle_of_prime_order h1 (lt_of_le_of_lt σ.support.card_le_univ h2)
 
@@ -1456,7 +1456,7 @@ theorem isCycle_of_prime_order''
 
 中文:
 定理 isCycle_of_prime_order''
-  结论: {σ : Perm α} (h1 : (Fintype.card α).Prime)
+  结论: {σ : 置换 α} (h1 : (有限类型.card α).素)
   证明: isCycle_of_prime_order' ((congr_arg Nat.Prime h2).mpr h1) by
     rw [← one_mul (Fintype.card α)]; rw [← h2]; rw [mul_lt_mul_iff_left₀ (orderOf_pos σ)]
     exact one_lt_two
@@ -1483,7 +1483,7 @@ definition vectorsProdEqOne
 
 中文:
 定义 vectorsProdEqOne
-  签名: : Set (List.Vector G n)
+  签名: : 集合 (列表.Vector G n)
   定义体: { v | v.toList.prod = 1 }
 
 Depends on / 依赖: toList, v.toList.prod
@@ -1504,8 +1504,8 @@ theorem mem_iff
 
 中文:
 定理 mem_iff
-  条件: {n : 自然数} (v : List.Vector G n)
-  结论: v in vectorsProdEqOne G n ↔ v.toList.prod = 1
+  条件: {n : 自然数} (v : 列表.Vector G n)
+  结论: v in vectorsProdEqOne G n ↔ v.toList.乘积 = 1
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Shrink, Shrink.linearEquiv, TensorProduct, TensorProduct.congr, linearEquiv, symm.toEquiv, toEquiv
@@ -1569,7 +1569,7 @@ instance zeroUnique
 
 中文:
 实例 zeroUnique
-  签名: : Unique (vectorsProdEqOne G 0)
+  签名: : 唯一 (vectorsProdEqOne G 0)
   定义体: by
   rw [zero_eq]
   exact Set.uniqueSingleton Vector.nil
@@ -1592,7 +1592,7 @@ instance oneUnique
 
 中文:
 实例 oneUnique
-  签名: : Unique (vectorsProdEqOne G 1)
+  签名: : 唯一 (vectorsProdEqOne G 1)
   定义体: by
   rw [one_eq]
   exact Set.uniqueSingleton (Vector.nil.cons 1)
@@ -1623,7 +1623,7 @@ congr_arg (· ::ᵥ
 
 中文:
 定义 vectorEquiv
-  签名: : List.Vector G n ≃ vectorsProdEqOne G (n + 1) where
+  签名: : 列表.Vector G n ≃ vectorsProdEqOne G (n + 1) where
   定义体: ⟨v.toList.prod⁻¹ ::ᵥ v, by
     rw [mem_iff]; rw [Vector.toList_cons]; rw [List.prod_cons]; rw [inv_mul_cancel]⟩
   invFun v := v.1.tail
@@ -1657,7 +1657,7 @@ definition equivVector
 
 中文:
 定义 equivVector
-  签名: : 对任意 n, vectorsProdEqOne G n ≃ List.Vector G (n - 1)
+  签名: : 对任意 n, vectorsProdEqOne G n ≃ 列表.Vector G (n - 1)
 -/
 def equivVector : forall n, vectorsProdEqOne G n ≃ List.Vector G (n - 1)
   | 0 => (ofUnique (vectorsProdEqOne G 0) (vectorsProdEqOne G 1)).trans (vectorEquiv G 0).symm
@@ -1672,8 +1672,8 @@ instance [Fintype
   body: Fintype.ofEquiv (List.Vector G (n - 1)) (equivVector G n).symm
 
 中文:
-实例 [Fintype
-  签名: G] : Fintype (vectorsProdEqOne G n)
+实例 [有限类型
+  签名: G] : 有限类型 (vectorsProdEqOne G n)
   定义体: Fintype.ofEquiv (List.Vector G (n - 1)) (equivVector G n).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, List.Vector, Vector, equivVector, ofEquiv
@@ -1692,8 +1692,8 @@ theorem card
 
 中文:
 定理 card
-  条件: [Fintype G]
-  结论: Fintype.card (vectorsProdEqOne G n) = Fintype.card G ^ (n - 1)
+  条件: [有限类型 G]
+  结论: 有限类型.card (vectorsProdEqOne G n) = 有限类型.card G ^ (n - 1)
   证明: (Fintype.card_congr (equivVector G n)).trans (card_vector (n - 1))
 
 Depends on / 依赖: Fintype, Fintype.card_congr, card_congr, card_vector, equivVector
@@ -1795,8 +1795,8 @@ theorem _root_.exists_prime_orderOf_dvd_card
   let f : Nat -> vectorsProdEqOn
 
 中文:
-定理 _root_.exists_prime_orderOf_dvd_card
-  结论: {G : 类型} [Group G] [Fintype G] (p : 自然数)
+定理 _root_.存在_prime_orderOf_dvd_card
+  结论: {G : 类型} [群 G] [有限类型 G] (p : 自然数)
   证明: by
   have hp' : p - 1 != 0 := mt tsub_eq_zero_iff_le.mp (not_le_of_gt hp.out.one_lt)
   have Scard :=
@@ -1849,8 +1849,8 @@ theorem _root_.exists_prime_addOrderOf_dvd_card
   proof: @exists_prime_orderOf_dvd_card (Multiplicative G) _ _ _ _ (by convert! hdvd)
 
 中文:
-定理 _root_.exists_prime_addOrderOf_dvd_card
-  结论: {G : 类型} [AddGroup G] [Fintype G] (p : 自然数)
+定理 _root_.存在_prime_addOrderOf_dvd_card
+  结论: {G : 类型} [加法群 G] [有限类型 G] (p : 自然数)
   证明: @exists_prime_orderOf_dvd_card (Multiplicative G) _ _ _ _ (by convert! hdvd)
 
 Depends on / 依赖: Multiplicative, convert, exists_prime_orderOf_dvd_card
@@ -1877,8 +1877,8 @@ theorem _root_.exists_prime_orderOf_dvd_card'
   exact exists_prime_orderOf_dvd_card p hdvd
 
 中文:
-定理 _root_.exists_prime_orderOf_dvd_card'
-  结论: {G : 类型} [Group G] [Finite G] (p : 自然数)
+定理 _root_.存在_prime_orderOf_dvd_card'
+  结论: {G : 类型} [群 G] [有限 G] (p : 自然数)
   证明: by
   have := Fintype.ofFinite G
   rw [Nat.card_eq_fintype_card] at hdvd
@@ -1909,7 +1909,7 @@ theorem subgroup_eq_top_of_swap_mem
 
 中文:
 定理 subgroup_eq_top_of_swap_mem
-  结论: [DecidableEq α] {H : Subgroup (Perm α)}
+  结论: [DecidableEq α] {H : 子群 (置换 α)}
   证明: by
   have : Fact (Fintype.card α).Prime := ⟨h0⟩
   obtain ⟨σ, hσ⟩ := exists_prime_orderOf_dvd_card (Fintype.card α) h1
@@ -1952,7 +1952,7 @@ definition partition
 
 中文:
 定义 partition
-  签名: (σ : Perm α)
+  签名: (σ : 置换 α)
   定义体: σ.cycleType + Multiset.replicate (Fintype.card α - #σ.support) 1
   parts_pos {n hn} := by
     rcases mem_add.mp hn with hn | hn
@@ -1982,7 +1982,7 @@ theorem parts_partition
 
 中文:
 定理 parts_partition
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   证明: rfl
 -/
 theorem parts_partition {σ : Perm α} :
@@ -2002,7 +2002,7 @@ theorem filter_parts_partition_eq_cycleType
 
 中文:
 定理 filter_parts_partition_eq_cycleType
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   证明: by
   rw [parts_partition]; rw [filter_add]; rw [Multiset.filter_eq_self.2 fun _ => two_le_of_mem_cycleType]; rw [Multiset.filter_eq_nil.2 fun a h => ?_]; rw [add_zero]
   rw [Multiset.eq_of_mem_replicate h]
@@ -2032,7 +2032,7 @@ theorem partition_eq_of_isConj
 
 中文:
 定理 partition_eq_of_isConj
-  条件: {σ τ : Perm α}
+  条件: {σ τ : 置换 α}
   结论: IsConj σ τ ↔ σ.partition = τ.partition
   证明: by
   rw [isConj_iff_cycleType_eq]
@@ -2074,7 +2074,7 @@ omit [Fintype α] in variable [Finite α] in
 
 中文:
 定理 isSwap_iff_cycleType
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   结论: σ.IsSwap ↔ σ.cycleType = {2}
   证明: by
   constructor
@@ -2107,7 +2107,7 @@ theorem IsSwap.orderOf
 
 中文:
 定理 IsSwap.orderOf
-  条件: {σ : Equiv.Perm α} (h : σ.IsSwap)
+  条件: {σ : 等价.置换 α} (h : σ.IsSwap)
   证明: by
   have := Fintype.ofFinite α
   rw [← lcm_cycleType]; rw [isSwap_iff_cycleType.mp h]; rw [Multiset.lcm_singleton]; rw [normalize_eq]
@@ -2135,7 +2135,7 @@ definition IsThreeCycle
 
 中文:
 定义 IsThreeCycle
-  签名: [DecidableEq α] (σ : Perm α)
+  签名: [DecidableEq α] (σ : 置换 α)
   定义体: σ.cycleType = {3}
 
 Depends on / 依赖: cycleType
@@ -2268,7 +2268,7 @@ theorem isCycle
 中文:
 定理 isCycle
   条件: (h : IsThreeCycle σ)
-  结论: IsCycle σ
+  结论: 是环 σ
   证明: by
   rw [← card_cycleType_eq_one]; rw [h.cycleType]; rw [card_singleton]
 
@@ -2316,7 +2316,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: {f : Perm α} (h : IsThreeCycle f)
+  条件: {f : 置换 α} (h : IsThreeCycle f)
   结论: IsThreeCycle f⁻¹
   证明: by
   rwa [IsThreeCycle, cycleType_inv]
@@ -2342,7 +2342,7 @@ theorem inv_iff
 
 中文:
 定理 inv_iff
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: IsThreeCycle f⁻¹ ↔ IsThreeCycle f
   证明: ⟨by
     rw [← inv_inv f]
@@ -2367,7 +2367,7 @@ theorem orderOf
 
 中文:
 定理 orderOf
-  条件: {g : Perm α} (ht : IsThreeCycle g)
+  条件: {g : 置换 α} (ht : IsThreeCycle g)
   结论: orderOf g = 3
   证明: by
   rw [← lcm_cycleType]; rw [ht.cycleType]; rw [Multiset.lcm_singleton]; rw [normalize_eq]
@@ -2391,7 +2391,7 @@ theorem isThreeCycle_sq
 
 中文:
 定理 isThreeCycle_sq
-  条件: {g : Perm α} (ht : IsThreeCycle g)
+  条件: {g : 置换 α} (ht : IsThreeCycle g)
   结论: IsThreeCycle (g * g)
   证明: by
   rw [← pow_two]; rw [← card_support_eq_three_iff]; rw [support_pow_coprime]; rw [ht.card_support]
@@ -2526,7 +2526,7 @@ theorem IsThreeCycle.nodup_iff_mem_support
 
 中文:
 定理 IsThreeCycle.nodup_iff_mem_support
-  条件: {g : Perm α} {a : α} (hg3 : g.IsThreeCycle)
+  条件: {g : 置换 α} {a : α} (hg3 : g.IsThreeCycle)
   证明: by
   constructor
   · intro ha
@@ -2666,7 +2666,7 @@ theorem IsSwap.mul_mem_closure_three_cycles
 
 中文:
 定理 IsSwap.mul_mem_closure_three_cycles
-  条件: {σ τ : Perm α} (hσ : IsSwap σ) (hτ : IsSwap τ)
+  条件: {σ τ : 置换 α} (hσ : IsSwap σ) (hτ : IsSwap τ)
   证明: by
   obtain ⟨a, b, ab, rfl⟩ := hσ
   obtain ⟨c, d, cd, rfl⟩ := hτ

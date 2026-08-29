@@ -46,7 +46,7 @@ lemma tensorProd_isSheaf
 
 中文:
 引理 tensorProd_isSheaf
-  结论: Presheaf.IsSheaf J (X.obj otimes Y.obj)
+  结论: 预层.是层 J (X.obj otimes Y.obj)
   证明: by
   apply isSheaf_of_isLimit (E := (Cone.postcompose (pairComp X Y (sheafToPresheaf J A)).inv).obj
     (BinaryFan.mk (fst X.obj Y.obj) (snd _ _)))
@@ -75,7 +75,7 @@ lemma tensorUnit_isSheaf
 
 中文:
 引理 tensorUnit_isSheaf
-  结论: Presheaf.IsSheaf J (𝟙_ (Cᵒᵖ ⥤ A))
+  结论: 预层.是层 J (𝟙_ (Cᵒᵖ ⥤ A))
   证明: by
   apply isSheaf_of_isLimit (E := (Cone.postcompose (Functor.uniqueFromEmpty _).inv).obj
     (asEmptyCone (𝟙_ _)))
@@ -104,7 +104,7 @@ example : CartesianMonoidalCategory (Sheaf J A) :=
 
 中文:
 实例 :
-  签名: Object命题erty.IsMonoidal (Presheaf.IsSheaf J (A := A))
+  签名: ObjectProperty.是幺半群 (预层.是层 J (A := A))
   定义体: tensorUnit_isSheaf _
   prop_tensor F G hF hG := tensorProd_isSheaf J ⟨F, hF⟩ ⟨G, hG⟩
 
@@ -276,7 +276,7 @@ lemma sheafToPresheaf_μ
 
 中文:
 引理 sheafToPresheaf_μ
-  条件: (X Y : Sheaf J A)
+  条件: (X Y : 层 J A)
   结论: μ (sheafToPresheaf J A) X Y = 𝟙 _
   证明: rfl
 -/
@@ -292,7 +292,7 @@ lemma sheafToPresheaf_δ
 
 中文:
 引理 sheafToPresheaf_δ
-  条件: (X Y : Sheaf J A)
+  条件: (X Y : 层 J A)
   结论: δ (sheafToPresheaf J A) X Y = 𝟙 _
   证明: rfl
 -/

@@ -60,7 +60,7 @@ definition Absorbs
 
 中文:
 定义 Absorbs
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: forallᶠ a in cobounded M, t subseteq a • s
 
 Depends on / 依赖: cobounded, subseteq
@@ -78,7 +78,7 @@ definition Absorbent
 
 中文:
 定义 Absorbent
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall x, Absorbs M s {x}
 
 Depends on / 依赖: Absorbs
@@ -137,7 +137,7 @@ lemma of_boundedSpace
 
 中文:
 引理 of_boundedSpace
-  条件: [BoundedSpace M]
+  条件: [有界空间 M]
   结论: Absorbs M s t
   证明: by simp [Absorbs]
 -/
@@ -256,8 +256,8 @@ lemma _root_.Set.Finite.absorbs_sUnion
   simp [Absorbs, hT]
 
 中文:
-引理 _root_.Set.Finite.absorbs_sUnion
-  条件: {T : Set (Set α)} (hT : T.Finite)
+引理 _root_.集合.有限.absorbs_sUnion
+  条件: {T : 集合 (集合 α)} (hT : T.有限)
   证明: by
   simp [Absorbs, hT]
 
@@ -278,8 +278,8 @@ lemma sUnion
 @[simp]
 
 中文:
-引理 sUnion
-  条件: (hT : T.Finite) (hs : 对任意 t in T, Absorbs M s t)
+引理 集合并集
+  条件: (hT : T.有限) (hs : 对任意 t in T, Absorbs M s t)
   证明: hT.absorbs_sUnion.2 hs
 
 @[simp]
@@ -301,7 +301,7 @@ protected alias ⟨_, iUnion⟩ := absorbs_iUnion
 
 中文:
 引理 _root_.absorbs_iUnion
-  条件: {ι : Sort*} [Finite ι] {t : ι -> Set α}
+  条件: {ι : 类型层*} [有限 ι] {t : ι -> 集合 α}
   证明: (finite_range t).absorbs_sUnion.trans forall_mem_range
 
 protected alias ⟨_, iUnion⟩ := absorbs_iUnion
@@ -328,8 +328,8 @@ protected alias ⟨_, biUnion⟩ := Set.Finite.absorbs_biUnion
 @[simp]
 
 中文:
-引理 _root_.Set.Finite.absorbs_biUnion
-  条件: {ι : 类型} {t : ι -> Set α} {I : Set ι} (hI : I.Finite)
+引理 _root_.集合.有限.absorbs_biUnion
+  条件: {ι : 类型} {t : ι -> 集合 α} {I : 集合 ι} (hI : I.有限)
   证明: by
   simp [Absorbs, hI]
 
@@ -358,7 +358,7 @@ protected alias ⟨_, biUnion_finset⟩ := absorbs_biUnion_finset
 
 中文:
 引理 _root_.absorbs_biUnion_finset
-  条件: {ι : 类型} {t : ι -> Set α} {I : Finset ι}
+  条件: {ι : 类型} {t : ι -> 集合 α} {I : 有限集 ι}
   证明: I.finite_toSet.absorbs_biUnion
 
 protected alias ⟨_, biUnion_finset⟩ := absorbs_biUnion_finset
@@ -387,7 +387,7 @@ lemma add
 
 中文:
 引理 add
-  结论: [AddZeroClass E] [DistribSMul M E]
+  结论: [加法零类 E] [分配标量乘法 M E]
   证明: h₂.mp h₁.eventually.mono fun x hx₁ hx₂ => by rw [smul_add]; exact add_subset_add hx₁ hx₂
 -/
 protected lemma add [AddZeroClass E] [DistribSMul M E]
@@ -405,7 +405,7 @@ lemma zero
 
 中文:
 引理 zero
-  条件: [Zero E] [SMulZeroClass M E] {s : Set E} (hs : 0 in s)
+  条件: [零 E] [SMulZero类 M E] {s : 集合 E} (hs : 0 in s)
   结论: Absorbs M s 0
   证明: Eventually.of_forall fun _ => zero_subset.2 zero_mem_smul_set hs
 -/
@@ -522,8 +522,8 @@ definition Filter.absorbing
 @[simp]
 
 中文:
-定义 Filter.absorbing
-  签名: : Filter α where
+定义 滤子.absorbing
+  签名: : 滤子 α where
   定义体: {s | Absorbs G₀ s u}
   univ_sets := .univ
   sets_of_superset h := h.mono_left
@@ -549,7 +549,7 @@ lemma Filter.mem_absorbing
   proof: .rfl
 
 中文:
-引理 Filter.mem_absorbing
+引理 滤子.mem_absorbing
   结论: s in absorbing G₀ u ↔ Absorbs G₀ s u
   证明: .rfl
 -/
@@ -568,8 +568,8 @@ protected alias ⟨_, Absorbs.sInter⟩ := Set.Finite.absorbs_sInter
 @[simp]
 
 中文:
-引理 Set.Finite.absorbs_sInter
-  条件: (hS : S.Finite)
+引理 集合.有限.absorbs_s整数er
+  条件: (hS : S.有限)
   证明: sInter_mem (f := absorbing G₀ t) hS
 
 protected alias ⟨_, Absorbs.sInter⟩ := Set.Finite.absorbs_sInter
@@ -596,8 +596,8 @@ lemma absorbs_iInter
 protected alias ⟨_, Absorbs.iInter⟩ := absorbs_iInter
 
 中文:
-引理 absorbs_iInter
-  条件: {ι : Sort*} [Finite ι] {s : ι -> Set α}
+引理 absorbs_i整数er
+  条件: {ι : 类型层*} [有限 ι] {s : ι -> 集合 α}
   证明: iInter_mem (f := absorbing G₀ t)
 
 protected alias ⟨_, Absorbs.iInter⟩ := absorbs_iInter
@@ -623,8 +623,8 @@ protected alias ⟨_, Absorbs.biInter⟩ := Set.Finite.absorbs_biInter
 @[simp]
 
 中文:
-引理 Set.Finite.absorbs_biInter
-  条件: {ι : 类型} {I : Set ι} (hI : I.Finite) {s : ι -> Set α}
+引理 集合.有限.absorbs_bi整数er
+  条件: {ι : 类型} {I : 集合 ι} (hI : I.有限) {s : ι -> 集合 α}
   证明: biInter_mem (f := absorbing G₀ t) hI
 
 protected alias ⟨_, Absorbs.biInter⟩ := Set.Finite.absorbs_biInter
@@ -685,7 +685,7 @@ alias ⟨Absorbs.of_neg_neg, Absorbs.neg_neg⟩ := absorbs_neg_neg
 
 中文:
 引理 absorbs_neg_neg
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   结论: Absorbs M (-s) (-t) ↔ Absorbs M s t
   证明: by simp [Absorbs]
 
@@ -708,7 +708,7 @@ lemma Absorbs.sub
 
 中文:
 引理 Absorbs.sub
-  条件: {s₁ s₂ t₁ t₂ : Set E} (h₁ : Absorbs M s₁ t₁) (h₂ : Absorbs M s₂ t₂)
+  条件: {s₁ s₂ t₁ t₂ : 集合 E} (h₁ : Absorbs M s₁ t₁) (h₂ : Absorbs M s₂ t₂)
   证明: by
   simpa only [sub_eq_add_neg] using h₁.add h₂.neg_neg
 
@@ -755,7 +755,7 @@ theorem _root_.absorbent_iff_forall_absorbs_singleton
   proof: .rfl
 
 中文:
-定理 _root_.absorbent_iff_forall_absorbs_singleton
+定理 _root_.absorbent_iff_对任意_absorbs_singleton
   结论: Absorbent M s ↔ 对任意 x, Absorbs M s {x}
   证明: .rfl
 -/
@@ -791,7 +791,7 @@ theorem absorbs_finite
 
 中文:
 定理 absorbs_finite
-  条件: (hs : Absorbent M s) (ht : t.Finite)
+  条件: (hs : Absorbent M s) (ht : t.有限)
   结论: Absorbs M s t
   证明: by
   rw [← Set.biUnion_of_singleton t]
@@ -816,7 +816,7 @@ theorem vadd_absorbs
 
 中文:
 定理 vadd_absorbs
-  结论: {M E : 类型} [Bornology M] [AddZeroClass E] [DistribSMul M E]
+  结论: {M E : 类型} [有界结构 M] [加法零类 E] [分配标量乘法 M E]
   证明: by
   rw [← singleton_vadd]; exact (h₁ x).add h₂
 
@@ -843,7 +843,7 @@ lemma absorbent_univ
 
 中文:
 引理 absorbent_univ
-  结论: Absorbent G₀ (univ : Set α)
+  结论: Absorbent G₀ (univ : 集合 α)
   证明: fun _ => .univ
 -/
 lemma absorbent_univ : Absorbent G₀ (univ : Set α) := fun _ => .univ
@@ -858,7 +858,7 @@ lemma absorbent_iff_inv_smul
 
 中文:
 引理 absorbent_iff_inv_smul
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: forall_congr' fun x => by simp only [absorbs_iff_eventually_cobounded_mapsTo, mapsTo_singleton]
 
 Depends on / 依赖: absorbs_iff_eventually_cobounded_mapsTo, forall_congr, mapsTo_singleton
@@ -877,7 +877,7 @@ lemma Absorbent.zero_mem
 
 中文:
 引理 Absorbent.zero_mem
-  结论: [NeBot (cobounded G₀)] [AddMonoid E] [DistribMulAction G₀ E]
+  结论: [NeBot (cobounded G₀)] [加法幺半群 E] [分配乘法作用 G₀ E]
   证明: absorbs_zero_iff.1 (hs 0)
 
 Depends on / 依赖: absorbs_zero_iff

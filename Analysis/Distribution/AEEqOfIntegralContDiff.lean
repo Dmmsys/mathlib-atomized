@@ -56,7 +56,7 @@ theorem ae_eq_zero_of_integral_contMDiff_smul_eq_zero
 
 中文:
 定理 ae_eq_zero_of_integral_contMDiff_smul_eq_zero
-  结论: [SigmaCompactSpace M]
+  结论: [SigmaCompact空间 M]
   证明: by
   -- record topological properties of `M`
   have := I.locallyCompactSpace
@@ -157,8 +157,8 @@ theorem IsOpen.ae_eq_zero_of_integral_contMDiff_smul_eq_zero'
   refine ae_eq_zero_of_integral_contMDiff_smul_eq_zero I
 
 中文:
-定理 IsOpen.ae_eq_zero_of_integral_contMDiff_smul_eq_zero'
-  结论: {U : Set M} (hU : IsOpen U)
+定理 是开集.ae_eq_zero_of_integral_contMDiff_smul_eq_zero'
+  结论: {U : 集合 M} (hU : 是开集 U)
   证明: by
   have meas_U := hU.measurableSet
   rw [← ae_restrict_iff' meas_U]; rw [ae_restrict_iff_subtype meas_U]
@@ -209,8 +209,8 @@ theorem IsOpen.ae_eq_zero_of_integral_contMDiff_smul_eq_zero
     (isSigmaCompact_iff_sigmaCompact
 
 中文:
-定理 IsOpen.ae_eq_zero_of_integral_contMDiff_smul_eq_zero
-  结论: {U : Set M} (hU : IsOpen U)
+定理 是开集.ae_eq_zero_of_integral_contMDiff_smul_eq_zero
+  结论: {U : 集合 M} (hU : 是开集 U)
   证明: haveI := I.locallyCompactSpace
   haveI := ChartedSpace.locallyCompactSpace H M
   haveI := hU.locallyCompactSpace
@@ -337,8 +337,8 @@ theorem IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero
     (fun g g_diff g_supp => h g g_diff.contDiff g_supp)
 
 中文:
-定理 IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero
-  结论: {U : Set E} (hU : IsOpen U)
+定理 是开集.ae_eq_zero_of_integral_contDiff_smul_eq_zero
+  结论: {U : 集合 E} (hU : 是开集 U)
   证明: hU.ae_eq_zero_of_integral_contMDiff_smul_eq_zero 𝓘(Real, E) hf
     (fun g g_diff g_supp => h g g_diff.contDiff g_supp)
 

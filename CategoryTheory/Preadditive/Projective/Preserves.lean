@@ -36,10 +36,10 @@ class Functor.PreservesProjectiveObjects
     - projective_obj({X : C}) : Projective X -> Projective (F.obj X)
 
 中文:
-类 Functor.PreservesProjectiveObjects
+类 函子.保持ProjectiveObjects
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - projective_obj({X : C}) : Projective X -> Projective (F.obj X)
+    - projective_obj({X : C}) : 投射 X -> 投射 (F.obj X)
 -/
 class Functor.PreservesProjectiveObjects (F : C ⥤ D) : Prop where
   projective_obj {X : C} : Projective X -> Projective (F.obj X)
@@ -53,8 +53,8 @@ instance Functor.projective_obj
   body: Functor.PreservesProjectiveObjects.projective_obj inferInstance
 
 中文:
-实例 Functor.projective_obj
-  签名: (F : C ⥤ D) [F.PreservesProjectiveObjects] (X : C) [Projective X]
+实例 函子.projective_obj
+  签名: (F : C ⥤ D) [F.保持ProjectiveObjects] (X : C) [投射 X]
   定义体: Functor.PreservesProjectiveObjects.projective_obj inferInstance
 
 Depends on / 依赖: Functor, Functor.PreservesProjectiveObjects.projective_obj, PreservesProjectiveObjects, projective_obj
@@ -72,8 +72,8 @@ theorem Functor.projective_obj_of_projective
   proof: Functor.PreservesProjectiveObjects.projective_obj h
 
 中文:
-定理 Functor.projective_obj_of_projective
-  结论: (F : C ⥤ D) [F.PreservesProjectiveObjects] {X : C}
+定理 函子.projective_obj_of_projective
+  结论: (F : C ⥤ D) [F.保持ProjectiveObjects] {X : C}
   证明: Functor.PreservesProjectiveObjects.projective_obj h
 
 Depends on / 依赖: Functor, Functor.PreservesProjectiveObjects.projective_obj, PreservesProjectiveObjects, projective_obj
@@ -91,7 +91,7 @@ instance Functor.preservesProjectiveObjects_comp
   body: G.projective_obj_of_projective ∘ F.projective_obj_of_projective
 
 中文:
-实例 Functor.preservesProjectiveObjects_comp
+实例 函子.preservesProjectiveObjects_comp
   签名: (F : C ⥤ D) (G : D ⥤ E)
   定义体: G.projective_obj_of_projective ∘ F.projective_obj_of_projective
 
@@ -110,7 +110,7 @@ theorem Functor.preservesProjectiveObjects_of_adjunction_of_preservesEpimorphism
   proof: adj.map_projective _ h
 
 中文:
-定理 Functor.preservesProjectiveObjects_of_adjunction_of_preservesEpimorphisms
+定理 函子.preservesProjectiveObjects_of_adjunction_of_preservesEpimorphisms
   证明: adj.map_projective _ h
 
 Depends on / 依赖: adj.map_projective, map_projective
@@ -137,7 +137,7 @@ theorem Functor.preservesEpimorphisms_of_adjunction_of_preservesProjectiveObject
     simp
 
 中文:
-定理 Functor.preservesEpimorphisms_of_adjunction_of_preservesProjectiveObjects
+定理 函子.preservesEpimorphisms_of_adjunction_of_preservesProjectiveObjects
   证明: by
     suffices exists h, h ≫ G.map f = Projective.π (G.obj Y) from epi_of_epi_fac this.choose_spec
     refine ⟨adj.unit.app (Projective.over (G.obj Y)) ≫

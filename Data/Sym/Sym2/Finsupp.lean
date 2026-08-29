@@ -33,7 +33,7 @@ lemma sym2_support_eq_preimage_support_mul
 
 中文:
 引理 sym2_support_eq_preimage_support_mul
-  条件: [NoZeroDivisors M₀] (f : α ->₀ M₀)
+  条件: [无零因子 M₀] (f : α ->₀ M₀)
   证明: by ext ⟨a, b⟩; simp
 -/
 lemma sym2_support_eq_preimage_support_mul [NoZeroDivisors M₀] (f : α ->₀ M₀) :

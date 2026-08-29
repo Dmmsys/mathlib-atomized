@@ -78,7 +78,7 @@ theorem union_empty
 
 中文:
 定理 union_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s union ∅ = s
   证明: ext fun x => mem_union.trans by simp
 
@@ -103,7 +103,7 @@ theorem empty_union
 
 中文:
 定理 empty_union
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ union s = s
   证明: ext fun x => mem_union.trans by simp
 
@@ -127,9 +127,9 @@ theorem Nonempty.inl
 @[aesop unsafe apply (rule_sets := [finsetNonempty])]
 
 中文:
-定理 Nonempty.inl
-  条件: {s t : Finset α} (h : s.Nonempty)
-  结论: (s union t).Nonempty
+定理 非空.inl
+  条件: {s t : 有限集 α} (h : s.非空)
+  结论: (s union t).非空
   证明: h.mono subset_union_left
 
 @[aesop unsafe apply (rule_sets := [finsetNonempty])]
@@ -150,9 +150,9 @@ theorem Nonempty.inr
   proof: h.mono subset_union_right
 
 中文:
-定理 Nonempty.inr
-  条件: {s t : Finset α} (h : t.Nonempty)
-  结论: (s union t).Nonempty
+定理 非空.inr
+  条件: {s t : 有限集 α} (h : t.非空)
+  结论: (s union t).非空
   证明: h.mono subset_union_right
 
 Depends on / 依赖: h.mono, subset_union_right
@@ -173,7 +173,7 @@ theorem insert_eq
 
 中文:
 定理 insert_eq
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: insert a s = {a} union s
   证明: rfl
 
@@ -194,7 +194,7 @@ lemma singleton_union
 
 中文:
 引理 singleton_union
-  条件: (x : α) (s : Finset α)
+  条件: (x : α) (s : 有限集 α)
   结论: {x} union s = insert x s
   证明: rfl
 -/
@@ -219,7 +219,7 @@ lemma union_singleton
 
 中文:
 引理 union_singleton
-  条件: (x : α) (s : Finset α)
+  条件: (x : α) (s : 有限集 α)
   结论: s union {x} = insert x s
   证明: by
   rw [Finset.union_comm]; rw [singleton_union]
@@ -246,7 +246,7 @@ theorem insert_union
 
 中文:
 定理 insert_union
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   结论: insert a s union t = insert a (s union t)
   证明: by
   simp only [insert_eq, union_assoc]
@@ -271,7 +271,7 @@ theorem union_insert
 
 中文:
 定理 union_insert
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   结论: s union insert a t = insert a (s union t)
   证明: by
   simp only [insert_eq, union_left_comm]
@@ -292,7 +292,7 @@ theorem insert_union_distrib
 
 中文:
 定理 insert_union_distrib
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   证明: by
   simp only [insert_union, union_insert, insert_idem]
 
@@ -319,7 +319,7 @@ theorem induction_on_union
 
 中文:
 定理 induction_on_union
-  结论: (P : Finset α -> Finset α -> 命题) (symm : 对任意 {a b}, P a b -> P b a)
+  结论: (P : 有限集 α -> 有限集 α -> 命题) (symm : 对任意 {a b}, P a b -> P b a)
   证明: by
   intro a b
   refine Finset.induction_on b empty_right fun x s _xs hi => symm ?_
@@ -358,7 +358,7 @@ theorem inter_empty
 
 中文:
 定理 inter_empty
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s inter ∅ = ∅
   证明: ext fun _ => mem_inter.trans by simp
 
@@ -383,7 +383,7 @@ theorem empty_inter
 
 中文:
 定理 empty_inter
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ inter s = ∅
   证明: ext fun _ => mem_inter.trans by simp
 
@@ -409,7 +409,7 @@ have : x = a ∨ x in s₂ ↔ x in s₂ := or_iff_right_of_imp by rintro rfl; e
 
 中文:
 定理 insert_inter_of_mem
-  条件: {s₁ s₂ : Finset α} {a : α} (h : a in s₂)
+  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a in s₂)
   证明: ext fun x => by
 have : x = a ∨ x in s₂ ↔ x in s₂ := or_iff_right_of_imp by rintro rfl; exact h
     simp only [mem_inter, mem_insert, or_and_left, this]
@@ -437,7 +437,7 @@ theorem inter_insert_of_mem
 
 中文:
 定理 inter_insert_of_mem
-  条件: {s₁ s₂ : Finset α} {a : α} (h : a in s₁)
+  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a in s₁)
   证明: by rw [inter_comm, insert_inter_of_mem h, inter_comm]
 
 @[simp]
@@ -462,7 +462,7 @@ theorem insert_inter_of_notMem
 
 中文:
 定理 insert_inter_of_notMem
-  条件: {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₂)
+  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a ∉ s₂)
   证明: ext fun x => by
     have : ¬(x = a ∧ x in s₂) := by rintro ⟨rfl, H⟩; exact h H
     simp only [mem_inter, mem_insert, or_and_right, this, false_or]
@@ -490,7 +490,7 @@ theorem inter_insert_of_notMem
 
 中文:
 定理 inter_insert_of_notMem
-  条件: {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₁)
+  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a ∉ s₁)
   证明: by rw [inter_comm, insert_inter_of_notMem h, inter_comm]
 
 @[grind =]
@@ -514,7 +514,7 @@ theorem inter_insert
 
 中文:
 定理 inter_insert
-  条件: {s₁ s₂ : Finset α} {a : α}
+  条件: {s₁ s₂ : 有限集 α} {a : α}
   证明: by
   split_ifs <;> simp [*]
 
@@ -540,7 +540,7 @@ theorem insert_inter
 
 中文:
 定理 insert_inter
-  条件: {s₁ s₂ : Finset α} {a : α}
+  条件: {s₁ s₂ : 有限集 α} {a : α}
   证明: by
   split_ifs <;> simp [*]
 
@@ -566,7 +566,7 @@ theorem singleton_inter_of_mem
 
 中文:
 定理 singleton_inter_of_mem
-  条件: {a : α} {s : Finset α} (H : a in s)
+  条件: {a : α} {s : 有限集 α} (H : a in s)
   结论: {a} inter s = {a}
   证明: show insert a ∅ inter s = insert a ∅ by rw [insert_inter_of_mem H, empty_inter]
 
@@ -592,7 +592,7 @@ theorem singleton_inter_of_notMem
 
 中文:
 定理 singleton_inter_of_notMem
-  条件: {a : α} {s : Finset α} (H : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (H : a ∉ s)
   结论: {a} inter s = ∅
   证明: eq_empty_of_forall_notMem by
     simp only [mem_inter, mem_singleton]; rintro x ⟨rfl, h⟩; exact H h
@@ -619,7 +619,7 @@ lemma singleton_inter
 
 中文:
 引理 singleton_inter
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   证明: by
   split_ifs with h <;> simp [h]
 
@@ -646,7 +646,7 @@ theorem inter_singleton_of_mem
 
 中文:
 定理 inter_singleton_of_mem
-  条件: {a : α} {s : Finset α} (h : a in s)
+  条件: {a : α} {s : 有限集 α} (h : a in s)
   结论: s inter {a} = {a}
   证明: by
   rw [inter_comm]; rw [singleton_inter_of_mem h]
@@ -671,7 +671,7 @@ theorem inter_singleton_of_notMem
 
 中文:
 定理 inter_singleton_of_notMem
-  条件: {a : α} {s : Finset α} (h : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
   结论: s inter {a} = ∅
   证明: by
   rw [inter_comm]; rw [singleton_inter_of_notMem h]
@@ -692,7 +692,7 @@ lemma inter_singleton
 
 中文:
 引理 inter_singleton
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   证明: by
   split_ifs with h <;> simp [h]
 
@@ -726,7 +726,7 @@ lemma union_nonempty
 
 中文:
 引理 union_nonempty
-  结论: (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty
+  结论: (s union t).非空 ↔ s.非空 ∨ t.非空
   证明: mod_cast Set.union_nonempty (α := α) (s := s) (t := t)
 -/
 @[simp] lemma union_nonempty : (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty :=
@@ -744,7 +744,7 @@ theorem insert_union_comm
 
 中文:
 定理 insert_union_comm
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: insert a s union t = s union insert a t
   证明: by
   rw [insert_union]; rw [union_insert]

@@ -124,7 +124,7 @@ theorem mapEquiv_refl
 
 中文:
 定理 mapEquiv_refl
-  结论: mapEquiv f (Equiv.refl α) = Equiv.refl (f α)
+  结论: mapEquiv f (等价.refl α) = 等价.refl (f α)
   证明: by
   ext x
   simp only [mapEquiv_apply, refl_apply]
@@ -229,7 +229,7 @@ theorem mapEquiv_refl_refl
 
 中文:
 定理 mapEquiv_refl_refl
-  结论: mapEquiv F (Equiv.refl α) (Equiv.refl α') = Equiv.refl (F α α')
+  结论: mapEquiv F (等价.refl α) (等价.refl α') = 等价.refl (F α α')
   证明: by
   ext x
   simp [id_bimap]

@@ -125,7 +125,7 @@ theorem card_orderOf_eq_totient_aux₁
 
 中文:
 定理 card_orderOf_eq_totient_aux₁
-  结论: {d : 自然数} (hd : d ∣ Fintype.card α)
+  结论: {d : 自然数} (hd : d ∣ 有限类型.card α)
   证明: by
   induction d using Nat.strong_induction_on with | _ d IH
   rcases Decidable.eq_or_ne d 0 with (rfl | hd0)
@@ -173,7 +173,7 @@ theorem card_orderOf_eq_totient_aux₂
 
 中文:
 定理 card_orderOf_eq_totient_aux₂
-  条件: {d : 自然数} (hd : d ∣ Fintype.card α)
+  条件: {d : 自然数} (hd : d ∣ 有限类型.card α)
   证明: by
   let c := Fintype.card α
   have hc0 : 0 < c := Fintype.card_pos_iff.2 ⟨1⟩
@@ -235,7 +235,7 @@ card_pos.1 by
 
 中文:
 定理 isCyclic_of_card_pow_eq_one_le
-  结论: IsCyclic α
+  结论: 是循环 α
   证明: have : Finset.Nonempty {a : α | orderOf a = Nat.card α} :=
 card_pos.1 by
       rw [Nat.card_eq_fintype_card]; rw [card_orderOf_eq_totient_aux₂ hn dvd_rfl]; rw [totient_pos]
@@ -266,8 +266,8 @@ lemma IsCyclic.card_orderOf_eq_totient
   classical apply card_orderOf_eq_totient_aux₂ (fun n => IsCyclic.card_pow_eq_one_le) hd
 
 中文:
-引理 IsCyclic.card_orderOf_eq_totient
-  条件: [IsCyclic α] [Fintype α] {d : 自然数} (hd : d ∣ Fintype.card α)
+引理 是循环.card_orderOf_eq_totient
+  条件: [是循环 α] [有限类型 α] {d : 自然数} (hd : d ∣ 有限类型.card α)
   证明: by
   classical apply card_orderOf_eq_totient_aux₂ (fun n => IsCyclic.card_pow_eq_one_le) hd
 
@@ -293,7 +293,7 @@ theorem isSimpleGroup_of_prime_card
 
 中文:
 定理 isSimpleGroup_of_prime_card
-  结论: {p : 自然数} [hp : Fact p.Prime]
+  结论: {p : 自然数} [hp : Fact p.素]
   证明: by
   subst h
   have : Finite α := Nat.finite_of_card_ne_zero hp.1.ne_zero
@@ -338,8 +338,8 @@ theorem MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
   have hn : x ^ 
 
 中文:
-定理 MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
-  结论: [IsCyclic G'] (f : G ->* G')
+定理 幺半群态射.isMulCommutative_of_isCyclic_of_ker_le_center
+  结论: [是循环 G'] (f : G ->* G')
   证明: by
   refine ⟨⟨fun a b => ?_⟩⟩
   let ⟨⟨x, y, (hxy : f y = x)⟩, (hx : forall a : f.range, a in zpowers _)⟩ :=
@@ -383,7 +383,7 @@ theorem commutative_of_cyclic_center_quotient
 
 中文:
 定理 commutative_of_cyclic_center_quotient
-  结论: [IsCyclic G'] (f : G ->* G') (hf : f.ker <= center G)
+  结论: [是循环 G'] (f : G ->* G') (hf : f.ker <= center G)
   证明: .is_comm.comm a b f.isMulCommutative_of_isCyclic_of_ker_le_center hf
 
 Depends on / 依赖: f.isMulCommutative_of_isCyclic_of_ker_le_center, isMulCommutative_of_isCyclic_of_ker_le_center, is_comm, is_comm.comm
@@ -405,7 +405,7 @@ definition commGroupOfCyclicCenterQuotient
 
 中文:
 定义 commGroupOfCyclicCenterQuotient
-  签名: [IsCyclic G'] (f : G ->* G') (hf : f.ker <= center G)
+  签名: [是循环 G'] (f : G ->* G') (hf : f.ker <= center G)
   定义体: f.isMulCommutative_of_isCyclic_of_ker_le_center hf
 
 Depends on / 依赖: f.isMulCommutative_of_isCyclic_of_ker_le_center, isMulCommutative_of_isCyclic_of_ker_le_center
@@ -429,7 +429,7 @@ theorem isMulCommutative_of_isCyclic_quotient_center_self
 
 中文:
 定理 isMulCommutative_of_isCyclic_quotient_center_self
-  条件: [IsCyclic (G ⧸ Subgroup.center G)]
+  条件: [是循环 (G ⧸ 子群.center G)]
   证明: by
   simp [(QuotientGroup.mk' <| .center G).isMulCommutative_of_isCyclic_of_ker_le_center]
 
@@ -471,7 +471,7 @@ theorem prime_card
 
 中文:
 定理 prime_card
-  结论: (自然数.card α).Prime
+  结论: (自然数.card α).素
   证明: by
   have hα : Nontrivial α := IsSimpleGroup.toNontrivial
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := α)
@@ -512,7 +512,7 @@ theorem finite
 
 中文:
 定理 finite
-  结论: Finite α
+  结论: 有限 α
   证明: Nat.finite_of_card_ne_zero prime_card.ne_zero
 
 Depends on / 依赖: Nat.finite_of_card_ne_zero, finite_of_card_ne_zero, ne_zero, prime_card, prime_card.ne_zero
@@ -536,8 +536,8 @@ theorem Group.is_simple_iff_prime_card
 @[to_additive]
 
 中文:
-定理 Group.is_simple_iff_prime_card
-  条件: [Group α] [IsMulCommutative α]
+定理 群.is_simple_iff_prime_card
+  条件: [群 α] [是MulCommutative α]
   证明: ⟨fun h => h.prime_card, fun h => isSimpleGroup_of_prime_card (hp := ⟨h⟩) rfl⟩
 
 @[to_additive]
@@ -559,9 +559,9 @@ theorem CommGroup.is_simple_iff_prime_card
   proof: Group.is_simple_iff_prime_card
 
 中文:
-定理 CommGroup.is_simple_iff_prime_card
-  条件: [CommGroup α]
-  结论: IsSimpleGroup α ↔ (自然数.card α).Prime
+定理 交换群.is_simple_iff_prime_card
+  条件: [交换群 α]
+  结论: 是单群 α ↔ (自然数.card α).素
   证明: Group.is_simple_iff_prime_card
 
 Depends on / 依赖: Group.is_simple_iff_prime_card, is_simple_iff_prime_card
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddCyclic 整数
+  签名: 是加法循环 整数
   定义体: ⟨1, fun n => ⟨n, by simp only [smul_eq_mul, mul_one]⟩⟩
 
 Depends on / 依赖: mul_one, smul_eq_mul
@@ -616,7 +616,7 @@ instance ZMod.instIsSimpleAddGroup
 
 中文:
 实例 ZMod.instIsSimpleAddGroup
-  签名: {p : 自然数} [hp : Fact p.Prime]
+  签名: {p : 自然数} [hp : Fact p.素]
   定义体: AddCommGroup.is_simple_iff_prime_card.2 (by simpa using hp.out)
 
 Depends on / 依赖: AddCommGroup, AddCommGroup.is_simple_iff_prime_card, hp.out, is_simple_iff_prime_card
@@ -723,8 +723,8 @@ theorem IsCyclic.exponent_eq_card
 @[to_additive]
 
 中文:
-定理 IsCyclic.exponent_eq_card
-  条件: [Group α] [IsCyclic α]
+定理 是循环.exponent_eq_card
+  条件: [群 α] [是循环 α]
   证明: by
   obtain ⟨g, hg⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := α)
   apply Nat.dvd_antisymm Group.exponent_dvd_nat_card
@@ -756,8 +756,8 @@ isCyclic_of_orderOf_eq_card g hg.trans exponent_eq_max'_orderOf.symm.trans h
 @[to_additive]
 
 中文:
-定理 IsCyclic.of_exponent_eq_card
-  条件: [CommGroup α] [Finite α] (h : exponent α = 自然数.card α)
+定理 是循环.of_exponent_eq_card
+  条件: [交换群 α] [有限 α] (h : exponent α = 自然数.card α)
   证明: let ⟨_⟩ := nonempty_fintype α
   let ⟨g, _, hg⟩ := Finset.mem_image.mp (Finset.max'_mem _ _)
 isCyclic_of_orderOf_eq_card g hg.trans exponent_eq_max'_orderOf.symm.trans h
@@ -784,8 +784,8 @@ theorem IsCyclic.iff_exponent_eq_card
 @[to_additive]
 
 中文:
-定理 IsCyclic.iff_exponent_eq_card
-  条件: [CommGroup α] [Finite α]
+定理 是循环.iff_exponent_eq_card
+  条件: [交换群 α] [有限 α]
   证明: ⟨fun _ => IsCyclic.exponent_eq_card, IsCyclic.of_exponent_eq_card⟩
 
 @[to_additive]
@@ -809,8 +809,8 @@ exponent_eq_zero_of_order_zero Infinite.orderOf_eq_zero_of_forall_mem_zpowers hg
 @[simp]
 
 中文:
-定理 IsCyclic.exponent_eq_zero_of_infinite
-  条件: [Group α] [IsCyclic α] [Infinite α]
+定理 是循环.exponent_eq_zero_of_infinite
+  条件: [群 α] [是循环 α] [无限 α]
   证明: let ⟨_, hg⟩ := IsCyclic.exists_generator (α := α)
 exponent_eq_zero_of_order_zero Infinite.orderOf_eq_zero_of_forall_mem_zpowers hg
 
@@ -837,7 +837,7 @@ theorem ZMod.exponent
 中文:
 定理 ZMod.exponent
   条件: (n : 自然数)
-  结论: AddMonoid.exponent (ZMod n) = n
+  结论: 加法幺半群.exponent (ZMod n) = n
   证明: by
   rw [IsAddCyclic.exponent_eq_card]; rw [Nat.card_zmod]
 -/
@@ -861,7 +861,7 @@ lemma not_isCyclic_iff_exponent_eq_prime
 
 中文:
 引理 not_isCyclic_iff_exponent_eq_prime
-  结论: [Group α] {p : 自然数} (hp : p.Prime)
+  结论: [群 α] {p : 自然数} (hp : p.素)
   证明: by
   -- G is a nontrivial fintype of cardinality `p ^ 2`
   have : Finite α := Nat.finite_of_card_ne_zero (hα ▸ pow_ne_zero 2 hp.ne_zero)
@@ -912,7 +912,7 @@ theorem zmultiplesHom_ker_eq
 
 中文:
 定理 zmultiplesHom_ker_eq
-  条件: [AddGroup G] (g : G)
+  条件: [加法群 G] (g : G)
   证明: by
   ext
   simp_rw [AddMonoidHom.mem_ker, mem_zmultiples_iff, zmultiplesHom_apply,
@@ -936,7 +936,7 @@ theorem zpowersHom_ker_eq
 
 中文:
 定理 zpowersHom_ker_eq
-  条件: [Group G] (g : G)
+  条件: [群 G] (g : G)
   证明: congr_arg AddSubgroup.toSubgroup zmultiplesHom_ker_eq (Additive.ofMul g)
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.toSubgroup, Additive, Additive.ofMul, congr_arg, toSubgroup, zmultiplesHom_ker_eq
@@ -1087,7 +1087,7 @@ definition zmodAddCyclicAddEquiv
 
 中文:
 定义 zmodAddCyclicAddEquiv
-  签名: [AddGroup G] (h : IsAddCyclic G)
+  签名: [加法群 G] (h : 是加法循环 G)
   定义体: zmodAddEquivOfGenerator h.exists_generator.choose_spec rfl
 
 Depends on / 依赖: choose_spec, exists_generator, h.exists_generator.choose_spec, zmodAddEquivOfGenerator
@@ -1110,8 +1110,8 @@ theorem exists_prime_addEquiv_ZMod
   · exact ⟨(zmodAddCyclicAddEquiv (G := Additive G) inferInstance).symm⟩
 
 中文:
-定理 exists_prime_addEquiv_ZMod
-  条件: [CommGroup G] [IsSimpleGroup G]
+定理 存在_prime_addEquiv_ZMod
+  条件: [交换群 G] [是单群 G]
   证明: by
   obtain ⟨g, hg⟩ := isCyclic_iff_exists_zpowers_eq_top.mp (inferInstance : IsCyclic G)
   use orderOf g; rw [orderOf_eq_card_of_zpowers_eq_top hg]
@@ -1254,7 +1254,7 @@ definition zmodCyclicMulEquiv
 
 中文:
 定义 zmodCyclicMulEquiv
-  签名: [Group G] (h : IsCyclic G)
+  签名: [群 G] (h : 是循环 G)
   定义体: AddEquiv.toMultiplicative zmodAddCyclicAddEquiv isAddCyclic_additive_iff.2 h
 
 Depends on / 依赖: AddEquiv, AddEquiv.toMultiplicative, isAddCyclic_additive_iff, toMultiplicative, zmodAddCyclicAddEquiv
@@ -1274,7 +1274,7 @@ definition addEquivOfAddCyclicCardEq
 
 中文:
 定义 addEquivOfAddCyclicCardEq
-  签名: [AddGroup G] [AddGroup G'] [hG : IsAddCyclic G]
+  签名: [加法群 G] [加法群 G'] [hG : 是加法循环 G]
   定义体: hcard ▸
 .symm.trans (zmodAddCyclicAddEquiv hH) zmodAddCyclicAddEquiv hG
 -/
@@ -1295,7 +1295,7 @@ definition mulEquivOfCyclicCardEq
 
 中文:
 定义 mulEquivOfCyclicCardEq
-  签名: [Group G] [Group G'] [hG : IsCyclic G]
+  签名: [群 G] [群 G'] [hG : 是循环 G]
   定义体: hcard ▸
 .symm.trans (zmodCyclicMulEquiv hH) zmodCyclicMulEquiv hG
 -/
@@ -1319,7 +1319,7 @@ definition mulEquivOfPrimeCardEq
 
 中文:
 定义 mulEquivOfPrimeCardEq
-  签名: {p : 自然数} [Group G] [Group G']
+  签名: {p : 自然数} [群 G] [群 G']
   定义体: by
   have hGcyc := isCyclic_of_prime_card hG
   have hHcyc := isCyclic_of_prime_card hH
@@ -1351,7 +1351,7 @@ lemma zpowersHom_bijective
 
 中文:
 引理 zpowersHom_bijective
-  条件: [Group G] {g : G} (hg : zpowers g = ⊤)
+  条件: [群 G] {g : G} (hg : zpowers g = ⊤)
   证明: by
   refine ⟨(MonoidHom.ker_eq_bot_iff _).mp ?_, MonoidHom.range_eq_top.mp hg⟩
   simp [zpowersHom_ker_eq, ← infinite_zpowers, hg, Set.infinite_univ]
@@ -1378,7 +1378,7 @@ definition intEquivOfZPowersEqTop
 
 中文:
 定义 intEquivOfZPowersEqTop
-  签名: [Group G] (g : G) (hg : zpowers g = ⊤)
+  签名: [群 G] (g : G) (hg : zpowers g = ⊤)
   定义体: .ofBijective (zpowersHom G g) (zpowersHom_bijective hg)
 
 @[simp]
@@ -1401,7 +1401,7 @@ lemma intEquivOfZPowersEqTop_symm_self
 
 中文:
 引理 intEquivOfZPowersEqTop_symm_self
-  条件: [Group G] {g : G} (hg : zpowers g = ⊤)
+  条件: [群 G] {g : G} (hg : zpowers g = ⊤)
   证明: by
   simp [MulEquiv.symm_apply_eq]
 
@@ -1422,7 +1422,7 @@ lemma mulintEquivOfZPowersEqTop_symm_apply_zpow
 
 中文:
 引理 mulintEquivOfZPowersEqTop_symm_apply_zpow
-  条件: [Group G] {g : G} (hg : zpowers g = ⊤) (k : 整数)
+  条件: [群 G] {g : G} (hg : zpowers g = ⊤) (k : 整数)
   证明: by
   simp [← ofAdd_zsmul]
 
@@ -1445,7 +1445,7 @@ lemma mulintEquivOfZPowersEqTop_strictMono
 
 中文:
 引理 mulintEquivOfZPowersEqTop_strictMono
-  结论: [CommGroup G] [PartialOrder G] [IsOrderedMonoid G]
+  结论: [交换群 G] [偏序 G] [是Ordered幺半群 G]
   证明: by
   intro x y hxy
   simp only [intEquivOfZPowersEqTop, MulEquiv.ofBijective_apply, zpowersHom_apply]
@@ -1473,7 +1473,7 @@ lemma mulintEquivOfZPowersEqTop_strictAnti
 
 中文:
 引理 mulintEquivOfZPowersEqTop_strictAnti
-  结论: [CommGroup G] [PartialOrder G] [IsOrderedMonoid G]
+  结论: [交换群 G] [偏序 G] [是Ordered幺半群 G]
   证明: by
   intro x y hxy
   simp only [intEquivOfZPowersEqTop, MulEquiv.ofBijective_apply, zpowersHom_apply]
@@ -1500,7 +1500,7 @@ abbreviation intCyclicMulEquiv
 
 中文:
 缩写 intCyclicMulEquiv
-  签名: [Group G] [IsCyclic G]
+  签名: [群 G] [是循环 G]
   定义体: intEquivOfZPowersEqTop _ (isCyclic_iff_exists_zpowers_eq_top.mp ‹IsCyclic G›).choose_spec
 
 Depends on / 依赖: IsCyclic, choose_spec, intEquivOfZPowersEqTop, isCyclic_iff_exists_zpowers_eq_top, isCyclic_iff_exists_zpowers_eq_top.mp
@@ -1520,7 +1520,7 @@ lemma zmultiplesHom_bijective
 
 中文:
 引理 zmultiplesHom_bijective
-  条件: [AddGroup G] {g : G} (hg : zmultiples g = ⊤)
+  条件: [加法群 G] {g : G} (hg : zmultiples g = ⊤)
   证明: by
   refine ⟨(AddMonoidHom.ker_eq_bot_iff _).mp ?_, AddMonoidHom.range_eq_top.mp hg⟩
   simp [zmultiplesHom_ker_eq, ← infinite_zmultiples, hg, Set.infinite_univ]
@@ -1547,7 +1547,7 @@ definition intEquivOfZMultiplesEqTop
 
 中文:
 定义 intEquivOfZMultiplesEqTop
-  签名: [AddGroup G] (g : G) (hg : zmultiples g = ⊤)
+  签名: [加法群 G] (g : G) (hg : zmultiples g = ⊤)
   定义体: .ofBijective (zmultiplesHom G g) (zmultiplesHom_bijective hg)
 
 @[simp]
@@ -1569,7 +1569,7 @@ lemma intEquivOfZMultiplesEqTop_symm_self
 
 中文:
 引理 intEquivOfZMultiplesEqTop_symm_self
-  条件: [AddGroup G] (g : G) (hg : zmultiples g = ⊤)
+  条件: [加法群 G] (g : G) (hg : zmultiples g = ⊤)
   证明: by
   simp [AddEquiv.symm_apply_eq]
 
@@ -1590,7 +1590,7 @@ lemma intEquivOfZMultiplesEqTop_symm_apply_zsmul
 
 中文:
 引理 intEquivOfZMultiplesEqTop_symm_apply_zsmul
-  结论: [AddGroup G]
+  结论: [加法群 G]
   证明: by
   simp
 -/
@@ -1611,7 +1611,7 @@ abbreviation intCyclicAddEquiv
 
 中文:
 缩写 intCyclicAddEquiv
-  签名: [AddGroup G] [IsAddCyclic G]
+  签名: [加法群 G] [是加法循环 G]
   定义体: intEquivOfZMultiplesEqTop _ (isAddCyclic_iff_exists_zmultiples_eq_top.mp ‹_›).choose_spec
 
 Depends on / 依赖: choose_spec, intEquivOfZMultiplesEqTop, isAddCyclic_iff_exists_zmultiples_eq_top, isAddCyclic_iff_exists_zmultiples_eq_top.mp
@@ -1638,8 +1638,8 @@ definition IsCyclic.mulAutMulEquiv
       (ZMod.AddAutEquivUnits (Nat.card G)).toMultiplicative
 
 中文:
-定义 IsCyclic.mulAutMulEquiv
-  签名: [Group G] [h : IsCyclic G]
+定义 是循环.mulAutMulEquiv
+  签名: [群 G] [h : 是循环 G]
   定义体: ((MulAut.congr (zmodCyclicMulEquiv h)).symm.trans
     (MulAutMultiplicative (ZMod (Nat.card G)))).trans
       (ZMod.AddAutEquivUnits (Nat.card G)).toMultiplicative
@@ -1664,8 +1664,8 @@ theorem IsCyclic.card_mulAut
   exact Nat.card_congr (mulAutMulEquiv G)
 
 中文:
-定理 IsCyclic.card_mulAut
-  条件: [Group G] [Finite G] [h : IsCyclic G]
+定理 是循环.card_mulAut
+  条件: [群 G] [有限 G] [h : 是循环 G]
   证明: by
   rw [← ZMod.card_units_eq_totient]; rw [← Nat.card_eq_fintype_card]
   exact Nat.card_congr (mulAutMulEquiv G)
@@ -1700,8 +1700,8 @@ theorem IsCyclic.card_powMonoidHom_range
 @[to_additive]
 
 中文:
-定理 IsCyclic.card_powMonoidHom_range
-  条件: [CommGroup G] [hG : IsCyclic G] [Finite G] (d : 自然数)
+定理 是循环.card_powMonoidHom_range
+  条件: [交换群 G] [hG : 是循环 G] [有限 G] (d : 自然数)
   证明: by
   obtain ⟨g, h⟩ := isCyclic_iff_exists_zpowers_eq_top.mp hG
   rw [MonoidHom.range_eq_map]; rw [← h]; rw [MonoidHom.map_zpowers]; rw [Nat.card_zpowers]; rw [powMonoidHom_apply]; rw [orderOf_pow]; rw [orderOf_eq_card_of_zpowers_eq_top h]
@@ -1728,8 +1728,8 @@ theorem IsCyclic.index_powMonoidHom_ker
 @[to_additive]
 
 中文:
-定理 IsCyclic.index_powMonoidHom_ker
-  条件: [CommGroup G] [IsCyclic G] [Finite G] (d : 自然数)
+定理 是循环.index_powMonoidHom_ker
+  条件: [交换群 G] [是循环 G] [有限 G] (d : 自然数)
   证明: by
   rw [Subgroup.index_ker]; rw [card_powMonoidHom_range]
 
@@ -1756,8 +1756,8 @@ theorem IsCyclic.card_powMonoidHom_ker
 @[to_additive]
 
 中文:
-定理 IsCyclic.card_powMonoidHom_ker
-  条件: [CommGroup G] [IsCyclic G] [Finite G] (d : 自然数)
+定理 是循环.card_powMonoidHom_ker
+  条件: [交换群 G] [是循环 G] [有限 G] (d : 自然数)
   证明: by
   have h : (powMonoidHom d : G ->* G).ker.index != 0 := Subgroup.index_ne_zero_of_finite
   rw [← mul_left_inj' h]; rw [Subgroup.card_mul_index]; rw [index_powMonoidHom_ker]; rw [Nat.mul_div_cancel']
@@ -1784,8 +1784,8 @@ theorem IsCyclic.index_powMonoidHom_range
   rw [Subgroup.index_range]; rw [card_powMonoidHom_ker]
 
 中文:
-定理 IsCyclic.index_powMonoidHom_range
-  条件: [CommGroup G] [IsCyclic G] [Finite G] (d : 自然数)
+定理 是循环.index_powMonoidHom_range
+  条件: [交换群 G] [是循环 G] [有限 G] (d : 自然数)
   证明: by
   rw [Subgroup.index_range]; rw [card_powMonoidHom_ker]
 
@@ -1919,7 +1919,7 @@ obtain ⟨n, hn⟩ := mem_zpowers_iff.mp hg x
 include hg in
 
 中文:
-引理 MonoidHom.eq_iff_eq_on_generator
+引理 幺半群态射.eq_iff_eq_on_generator
   条件: (f₁ f₂ : G ->* G')
   结论: f₁ = f₂ ↔ f₁ g = f₂ g
   证明: by
@@ -1954,7 +1954,7 @@ lemma MulEquiv.eq_iff_eq_on_generator
     MonoidHom.eq_iff_eq_on_generator hg ..
 
 中文:
-引理 MulEquiv.eq_iff_eq_on_generator
+引理 乘法等价.eq_iff_eq_on_generator
   条件: (f₁ f₂ : G ≃* G')
   结论: f₁ = f₂ ↔ f₁ g = f₂ g
   证明: (Function.Injective.eq_iff toMonoidHom_injective).symm.trans
@@ -2083,7 +2083,7 @@ theorem Group.isCyclic_of_coprime_card_range_card_ker
   · rw [Nat.car
 
 中文:
-定理 Group.isCyclic_of_coprime_card_range_card_ker
+定理 群.isCyclic_of_coprime_card_range_card_ker
   结论: {M N : 类型}
   证明: by
   cases (finite_or_infinite f.ker).symm
@@ -2123,7 +2123,7 @@ theorem Group.isCyclic_of_coprime_card_ker
   exact isCyclic_of_coprime_card_range_card_ker f h
 
 中文:
-定理 Group.isCyclic_of_coprime_card_ker
+定理 群.isCyclic_of_coprime_card_ker
   结论: {M N : 类型}
   证明: by
   rw [← Subgroup.topEquiv.isCyclic]; rw [← f.range_eq_top.mpr hf] at hN
@@ -2152,7 +2152,7 @@ theorem isCyclic_left_of_prod
 
 中文:
 定理 isCyclic_left_of_prod
-  结论: IsCyclic M
+  结论: 是循环 M
   证明: isCyclic_of_surjective (MonoidHom.fst M N) Prod.fst_surjective
 -/
 @[to_additive isAddCyclic_left_of_prod] theorem isCyclic_left_of_prod : IsCyclic M :=
@@ -2168,7 +2168,7 @@ theorem isCyclic_right_of_prod
 
 中文:
 定理 isCyclic_right_of_prod
-  结论: IsCyclic N
+  结论: 是循环 N
   证明: isCyclic_of_surjective (MonoidHom.snd M N) Prod.snd_surjective
 -/
 @[to_additive isAddCyclic_right_of_prod] theorem isCyclic_right_of_prod : IsCyclic N :=
@@ -2220,7 +2220,7 @@ theorem not_isAddCyclic_prod_of_infinite_nontrivial
 
 中文:
 定理 not_isAddCyclic_prod_of_infinite_nontrivial
-  结论: (M N : 类型) [AddGroup M] [AddGroup N]
+  结论: (M N : 类型) [加法群 M] [加法群 N]
   证明: fun hMN => by
   rw [← ((zmodAddCyclicAddEquiv <| isAddCyclic_left_of_prod M N).prodCongr (zmodAddCyclicAddEquiv <|
     isAddCyclic_right_of_prod M N)).isAddCyclic]; rw [Nat.card_eq_zero_of_infinite] at hMN
@@ -2258,7 +2258,7 @@ theorem not_isCyclic_prod_of_infinite_nontrivial
 
 中文:
 定理 not_isCyclic_prod_of_infinite_nontrivial
-  结论: (M N : 类型) [Group M] [Group N]
+  结论: (M N : 类型) [群 M] [群 N]
   证明: by
   rw [← isAddCyclic_additive_iff]; rw [(AddEquiv.prodAdditive ..).isAddCyclic]
   apply not_isAddCyclic_prod_of_infinite_nontrivial
@@ -2289,8 +2289,8 @@ theorem Group.isCyclic_prod_iff
    
 
 中文:
-定理 Group.isCyclic_prod_iff
-  条件: {M N : 类型} [Group M] [Group N]
+定理 群.isCyclic_prod_iff
+  条件: {M N : 类型} [群 M] [群 N]
   证明: by
   refine ⟨fun h => ⟨isCyclic_left_of_prod M N, isCyclic_right_of_prod M N, ?_⟩, fun ⟨hM, hN, h⟩ => ?_⟩
   · cases (finite_or_infinite M).symm

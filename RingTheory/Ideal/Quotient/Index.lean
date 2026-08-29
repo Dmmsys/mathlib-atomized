@@ -49,8 +49,8 @@ lemma Submodule.finite_quotient_smul
       (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smu
 
 中文:
-引理 Submodule.finite_quotient_smul
-  条件: [Finite (R ⧸ I)] [Finite (M ⧸ N)] (hN : N.FG)
+引理 子模.finite_quotient_smul
+  条件: [有限 (R ⧸ I)] [有限 (M ⧸ N)] (hN : N.FG)
   证明: by
   suffices (I • N).toAddSubgroup.FiniteIndex by
     exact (I • N).toAddSubgroup.finite_quotient_of_finiteIndex
@@ -100,8 +100,8 @@ lemma Submodule.index_smul_le
   let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R
 
 中文:
-引理 Submodule.index_smul_le
-  结论: [Finite (R ⧸ I)]
+引理 子模.index_smul_le
+  结论: [有限 (R ⧸ I)]
   证明: by
   classical
   cases nonempty_fintype (R ⧸ I)
@@ -157,8 +157,8 @@ lemma Ideal.finite_quotient_prod
     have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (
 
 中文:
-引理 Ideal.finite_quotient_prod
-  结论: {ι : 类型} (I : ι -> Ideal R) (s : Finset ι)
+引理 理想.finite_quotient_prod
+  结论: {ι : 类型} (I : ι -> 理想 R) (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -197,9 +197,9 @@ lemma Ideal.finite_quotient_pow
     exact Submodule.finite_quotient_smul (I ^ n) hI
 
 中文:
-引理 Ideal.finite_quotient_pow
-  条件: (hI : I.FG) [Finite (R ⧸ I)] (n)
-  结论: Finite (R ⧸ I ^ n)
+引理 理想.finite_quotient_pow
+  条件: (hI : I.FG) [有限 (R ⧸ I)] (n)
+  结论: 有限 (R ⧸ I ^ n)
   证明: by
   induction n with
   | zero =>
@@ -234,7 +234,7 @@ lemma Ideal.index_pow_le
     rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_c
 
 中文:
-引理 Ideal.index_pow_le
+引理 理想.index_pow_le
   证明: by
   have := Ideal.finite_quotient_pow ⟨s, hs⟩
   induction n with

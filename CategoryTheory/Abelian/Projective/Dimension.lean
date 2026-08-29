@@ -46,7 +46,7 @@ class HasProjectiveDimensionLT
   (no additional axioms)
 
 中文:
-类 HasProjectiveDimensionLT
+类 有ProjectiveDimensionLT
   参数: (X : C) (n : 自然数)
   (无附加公理)
 
@@ -92,7 +92,7 @@ lemma subsingleton
 
 中文:
 引理 subsingleton
-  条件: [hX : HasProjectiveDimensionLT X n] (i : 自然数) (hi : n <= i) (Y : C)
+  条件: [hX : 有ProjectiveDimensionLT X n] (i : 自然数) (hi : n <= i) (Y : C)
   证明: by
   let := HasExt.standard C
   have := hX.subsingleton' i hi
@@ -146,7 +146,7 @@ lemma Abelian.Ext.eq_zero_of_hasProjectiveDimensionLT
   proof: (HasProjectiveDimensionLT.subsingleton X n i hi Y).elim _ _
 
 中文:
-引理 Abelian.Ext.eq_zero_of_hasProjectiveDimensionLT
+引理 交换.Ext.eq_zero_of_hasProjectiveDimensionLT
   结论: [HasExt.{w} C]
   证明: (HasProjectiveDimensionLT.subsingleton X n i hi Y).elim _ _
 
@@ -198,8 +198,8 @@ lemma Limits.IsZero.hasProjectiveDimensionLT_zero
   rw [← e.mk₀_id_comp]; rw [hX.eq_of_src (𝟙 X) 0]; rw [Ext.mk₀_zero]; rw [Ext.zero_comp]
 
 中文:
-引理 Limits.IsZero.hasProjectiveDimensionLT_zero
-  条件: (hX : IsZero X)
+引理 Limits.是零.hasProjectiveDimensionLT_zero
+  条件: (hX : 是零 X)
   证明: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -225,7 +225,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasProjectiveDimensionLT (0 : C) 0
+  签名: 有ProjectiveDimensionLT (0 : C) 0
   定义体: (isZero_zero C).hasProjectiveDimensionLT_zero
 -/
 instance : HasProjectiveDimensionLT (0 : C) 0 :=
@@ -247,8 +247,8 @@ lemma isZero_of_hasProjectiveDimensionLT_zero
 
 中文:
 引理 isZero_of_hasProjectiveDimensionLT_zero
-  条件: [HasProjectiveDimensionLT X 0]
-  结论: IsZero X
+  条件: [有ProjectiveDimensionLT X 0]
+  结论: 是零 X
   证明: by
   let := HasExt.standard C
   rw [IsZero.iff_id_eq_zero]
@@ -275,7 +275,7 @@ lemma hasProjectiveDimensionLT_zero_iff_isZero
 
 中文:
 引理 hasProjectiveDimensionLT_zero_iff_isZero
-  结论: HasProjectiveDimensionLT X 0 ↔ IsZero X
+  结论: 有ProjectiveDimensionLT X 0 ↔ 是零 X
   证明: ⟨fun _ => isZero_of_hasProjectiveDimensionLT_zero X, fun h => h.hasProjectiveDimensionLT_zero⟩
 
 Depends on / 依赖: h.hasProjectiveDimensionLT_zero, hasProjectiveDimensionLT_zero, isZero_of_hasProjectiveDimensionLT_zero
@@ -323,7 +323,7 @@ instance [HasProjectiveDimensionLT
   body: hasProjectiveDimensionLT_of_ge X n (n + k) (by lia)
 
 中文:
-实例 [HasProjectiveDimensionLT
+实例 [有ProjectiveDimensionLT
   签名: X n] (k
   定义体: hasProjectiveDimensionLT_of_ge X n (n + k) (by lia)
 -/
@@ -340,7 +340,7 @@ instance [HasProjectiveDimensionLT
   body: hasProjectiveDimensionLT_of_ge X n (k + n) (by lia)
 
 中文:
-实例 [HasProjectiveDimensionLT
+实例 [有ProjectiveDimensionLT
   签名: X n] (k
   定义体: hasProjectiveDimensionLT_of_ge X n (k + n) (by lia)
 -/
@@ -357,7 +357,7 @@ instance [HasProjectiveDimensionLT
   body: inferInstanceAs (HasProjectiveDimensionLT X (n + 1))
 
 中文:
-实例 [HasProjectiveDimensionLT
+实例 [有ProjectiveDimensionLT
   签名: X n] :
   定义体: inferInstanceAs (HasProjectiveDimensionLT X (n + 1))
 -/
@@ -380,8 +380,8 @@ instance [Projective
   · exact e.eq_zero_of_projective
 
 中文:
-实例 [Projective
-  签名: X] : HasProjectiveDimensionLT X 1
+实例 [投射
+  签名: X] : 有ProjectiveDimensionLT X 1
   定义体: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -472,7 +472,7 @@ lemma projective_iff_hasProjectiveDimensionLE_zero
 
 中文:
 引理 projective_iff_hasProjectiveDimensionLE_zero
-  结论: Projective X ↔ HasProjectiveDimensionLE X 0
+  结论: 投射 X ↔ HasProjectiveDimensionLE X 0
   证明: projective_iff_hasProjectiveDimensionLT_one
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.isEquivalenceMap, projective_iff_hasProjectiveDimensionLT_one
@@ -498,8 +498,8 @@ lemma Retract.hasProjectiveDimensionLT
   rw [← x.mk₀_id_comp]; rw [← h.retract]; rw [← Ext.mk₀_comp_mk₀]; rw [Ext.comp_assoc_of_second_deg_zero]; rw [((Ext.mk₀ h.r).comp x (zero_add i)).eq_zero_of_hasProjectiveDimensionLT n hi]; rw [Ext.comp_zero]
 
 中文:
-引理 Retract.hasProjectiveDimensionLT
-  结论: {X Y : C} (h : Retract X Y) (n : 自然数)
+引理 收缩.hasProjectiveDimensionLT
+  结论: {X Y : C} (h : 收缩 X Y) (n : 自然数)
   证明: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -563,7 +563,7 @@ lemma hasProjectiveDimensionLT_X₂
 
 中文:
 引理 hasProjectiveDimensionLT_X₂
-  结论: (h₁ : HasProjectiveDimensionLT S.X₁ n)
+  结论: (h₁ : 有ProjectiveDimensionLT S.X₁ n)
   证明: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -601,7 +601,7 @@ lemma hasProjectiveDimensionLT_X₃
 
 中文:
 引理 hasProjectiveDimensionLT_X₃
-  结论: (h₁ : HasProjectiveDimensionLT S.X₁ n)
+  结论: (h₁ : 有ProjectiveDimensionLT S.X₁ n)
   证明: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -640,7 +640,7 @@ lemma hasProjectiveDimensionLT_X₁
 
 中文:
 引理 hasProjectiveDimensionLT_X₁
-  结论: (h₂ : HasProjectiveDimensionLT S.X₂ n)
+  结论: (h₂ : 有ProjectiveDimensionLT S.X₂ n)
   证明: by
   let := HasExt.standard C
   rw [hasProjectiveDimensionLT_iff]
@@ -672,7 +672,7 @@ lemma hasProjectiveDimensionLT_X₃_iff
 
 中文:
 引理 hasProjectiveDimensionLT_X₃_iff
-  条件: (n : 自然数) (h₂ : Projective S.X₂)
+  条件: (n : 自然数) (h₂ : 投射 S.X₂)
   证明: ⟨fun _ => hS.hasProjectiveDimensionLT_X₁ (n + 1) inferInstance inferInstance,
     fun _ => hS.hasProjectiveDimensionLT_X₃ (n + 1) inferInstance inferInstance⟩
 
@@ -709,7 +709,7 @@ lemma hasProjectiveDimensionLT_of_enoughInjectives
 
 中文:
 引理 hasProjectiveDimensionLT_of_enoughInjectives
-  结论: [HasExt.{w} C] [EnoughInjectives C] (X : C)
+  结论: [HasExt.{w} C] [有足够单射 C] (X : C)
   证明: by
   suffices forall ⦃d : Nat⦄ ⦃Y : C⦄ (e : Ext X Y d) (k : Nat), d = n + k -> e = 0 from
     HasProjectiveDimensionLT.mk (fun i hi Y e => by
@@ -813,8 +813,8 @@ lemma Retract.projectiveDimension_le
     exact h.hasProjectiveDimensionLT i)
 
 中文:
-引理 Retract.projectiveDimension_le
-  条件: {X Y : C} (h : Retract X Y)
+引理 收缩.projectiveDimension_le
+  条件: {X Y : C} (h : 收缩 X Y)
   证明: sInf_le_sInf_of_subset_insert_top (fun n hn => by
     simp only [Set.mem_ofPred_eq, not_top_lt, IsEmpty.forall_iff, implies_true,
       Set.insert_eq_of_mem] at hn ⊢

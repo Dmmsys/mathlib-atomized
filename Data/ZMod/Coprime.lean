@@ -34,7 +34,7 @@ theorem eq_zero_iff_gcd_ne_one
 
 中文:
 定理 eq_zero_iff_gcd_ne_one
-  条件: {a : 整数} {p : 自然数} [pp : Fact p.Prime]
+  条件: {a : 整数} {p : 自然数} [pp : Fact p.素]
   证明: by
   rw [Ne]; rw [Int.gcd_comm]; rw [← Int.isCoprime_iff_gcd_eq_one]; rw [(Nat.prime_iff_prime_int.1 pp.1).coprime_iff_not_dvd]; rw [Classical.not_not]; rw [intCast_zmod_eq_zero_iff_dvd]
 
@@ -55,7 +55,7 @@ theorem ne_zero_of_gcd_eq_one
 
 中文:
 定理 ne_zero_of_gcd_eq_one
-  条件: {a : 整数} {p : 自然数} (pp : p.Prime) (h : a.gcd p = 1)
+  条件: {a : 整数} {p : 自然数} (pp : p.素) (h : a.最大公约数 p = 1)
   结论: (a : ZMod p) != 0
   证明: mt (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mp (Classical.not_not.mpr h)
 
@@ -75,7 +75,7 @@ theorem eq_zero_of_gcd_ne_one
 
 中文:
 定理 eq_zero_of_gcd_ne_one
-  条件: {a : 整数} {p : 自然数} (pp : p.Prime) (h : a.gcd p != 1)
+  条件: {a : 整数} {p : 自然数} (pp : p.素) (h : a.最大公约数 p != 1)
   结论: (a : ZMod p) = 0
   证明: (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mpr h
 

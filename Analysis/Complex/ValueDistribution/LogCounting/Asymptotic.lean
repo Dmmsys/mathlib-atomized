@@ -53,7 +53,7 @@ lemma one_isLittleO_logCounting_single
 
 中文:
 引理 one_isLittleO_logCounting_single
-  条件: [DecidableEq E] [命题erSpace E] {e : E}
+  条件: [DecidableEq E] [真空间 E] {e : E}
   证明: by
   have hΘ : (fun r => log r - log ‖e‖) =Θ[atTop] log :=
     (IsEquivalent.sub_isLittleO IsEquivalent.refl isLittleO_const_log_atTop).isTheta
@@ -94,7 +94,7 @@ lemma zero_iff_logCounting_bounded
 
 中文:
 引理 zero_iff_logCounting_bounded
-  结论: [命题erSpace E]
+  结论: [真空间 E]
   证明: by
   classical
   refine ⟨fun h₂ => by simp [isBigO_of_le' (c := 0), h₂], ?_⟩
@@ -156,7 +156,7 @@ lemma logCounting_single_isBigO_log
 
 中文:
 引理 logCounting_single_isBigO_log
-  条件: [DecidableEq E] [命题erSpace E] {e : E} {n : 整数}
+  条件: [DecidableEq E] [真空间 E] {e : E} {n : 整数}
   证明: by
   have h₁ : logCounting (single e n) =ᶠ[atTop] (n * log · - n * log ‖e‖) := by
     filter_upwards [eventually_ge_atTop ‖e‖] with r hr
@@ -189,7 +189,7 @@ lemma logCounting_isBigO_log_of_finite_support
 
 中文:
 引理 logCounting_isBigO_log_of_finite_support
-  结论: [命题erSpace E] {D : locallyFinsupp E 整数}
+  结论: [真空间 E] {D : locallyFinsupp E 整数}
   证明: by
   classical
   rw [← sum_apply_smul_single_eq_self_on_univ h]; rw [map_sum]
@@ -220,7 +220,7 @@ lemma finite_support_of_logCounting_isBigO_log
 
 中文:
 引理 finite_support_of_logCounting_isBigO_log
-  结论: [命题erSpace E]
+  结论: [真空间 E]
   证明: by
   classical
   -- Let (N : ℕ) be a number such that ‖logCounting D x‖ ≤ N * ‖log x‖
@@ -285,7 +285,7 @@ theorem finite_support_iff_logCounting_isBigO_log
 
 中文:
 定理 finite_support_iff_logCounting_isBigO_log
-  结论: [命题erSpace E]
+  结论: [真空间 E]
   证明: ⟨logCounting_isBigO_log_of_finite_support, finite_support_of_logCounting_isBigO_log h⟩
 
 Depends on / 依赖: finite_support_of_logCounting_isBigO_log, logCounting_isBigO_log_of_finite_support
@@ -320,7 +320,7 @@ theorem logCounting_isBigO_one_iff_analyticOnNhd
 
 中文:
 定理 logCounting_isBigO_one_iff_analyticOnNhd
-  条件: {f : 𝕜 -> E} (h : Meromorphic f)
+  条件: {f : 𝕜 -> E} (h : 亚纯 f)
   证明: by
   simp only [logCounting, reduceDIte]
   rw [← locallyFinsuppWithin.zero_iff_logCounting_bounded (negPart_nonneg _)]; rw [negPart_eq_zero]; rw [← h.meromorphicOn.divisor_of_toMeromorphicNFOn]; rw [(meromorphicNFOn_toMeromorphicNFOn _ _).divisor_nonneg_iff_analyticOnNhd]

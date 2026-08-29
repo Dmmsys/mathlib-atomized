@@ -54,7 +54,7 @@ definition localizationLocalizationSubmodule
 
 中文:
 定义 localizationLocalizationSubmodule
-  签名: : Submonoid R
+  签名: : 子幺半群 R
   定义体: (N ⊔ M.map (algebraMap R S)).comap (algebraMap R S)
 
 Depends on / 依赖: M.map, algebraMap
@@ -118,7 +118,7 @@ theorem localization_localization_map_units
 
 中文:
 定理 localization_localization_map_units
-  结论: [IsLocalization N T]
+  结论: [是Localization N T]
   证明: by
   obtain ⟨y', z, eq⟩ := mem_localizationLocalizationSubmodule.mp y.prop
   rw [IsScalarTower.algebraMap_apply R S T]; rw [eq]; rw [map_mul]; rw [IsUnit.mul_iff]
@@ -150,7 +150,7 @@ theorem localization_localization_surj
 
 中文:
 定理 localization_localization_surj
-  条件: [IsLocalization N T] (x : T)
+  条件: [是Localization N T] (x : T)
   证明: by
   rcases IsLocalization.surj N x with ⟨⟨y, s⟩, eq₁⟩
   -- x = y / s
@@ -195,8 +195,8 @@ theorem localization_localization_exists_of_eq
   
 
 中文:
-定理 localization_localization_exists_of_eq
-  条件: [IsLocalization N T] (x y : R)
+定理 localization_localization_存在_of_eq
+  条件: [是Localization N T] (x y : R)
   证明: by
   rw [IsScalarTower.algebraMap_apply R S T]; rw [IsScalarTower.algebraMap_apply R S T]; rw [IsLocalization.eq_iff_exists N T]
   rintro ⟨z, eq₁⟩
@@ -237,7 +237,7 @@ include M in
 
 中文:
 定理 localization_localization_isLocalization
-  条件: [IsLocalization N T]
+  条件: [是Localization N T]
   证明: localization_localization_map_units M N T
   surj := localization_localization_surj M N T
   exists_of_eq := localization_localization_exists_of_eq M N T _ _
@@ -272,7 +272,7 @@ include M in
 
 中文:
 定理 localization_localization_isLocalization_of_has_all_units
-  结论: [IsLocalization N T]
+  结论: [是Localization N T]
   证明: by
   convert! localization_localization_isLocalization M N T using 1
   dsimp [localizationLocalizationSubmodule]
@@ -310,7 +310,7 @@ theorem isLocalization_isLocalization_atPrime_isLocalization
 
 中文:
 定理 isLocalization_isLocalization_atPrime_isLocalization
-  结论: (p : Ideal S) [Hp : p.IsPrime]
+  结论: (p : 理想 S) [Hp : p.是素]
   证明: by
   apply localization_localization_isLocalization_of_has_all_units M p.primeCompl T
   intro x hx hx'
@@ -341,7 +341,7 @@ instance isLocalization_atPrime_localization_atPrime
 
 中文:
 实例 isLocalization_atPrime_localization_atPrime
-  签名: (p : Ideal (Localization M))
+  签名: (p : 理想 (Localization M))
   定义体: isLocalization_isLocalization_atPrime_isLocalization M _ _
 
 Depends on / 依赖: isLocalization_isLocalization_atPrime_isLocalization
@@ -360,7 +360,7 @@ definition localizationLocalizationAtPrimeIsoLocalization
 
 中文:
 定义 localizationLocalizationAtPrimeIsoLocalization
-  签名: (p : Ideal (Localization M))
+  签名: (p : 理想 (Localization M))
   定义体: IsLocalization.algEquiv (p.comap (algebraMap R (Localization M))).primeCompl _ _
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, Localization, algEquiv, algebraMap, p.comap, primeCompl
@@ -385,7 +385,7 @@ abbreviation localizationAlgebraOfSubmonoidLe
 
 中文:
 缩写 localizationAlgebraOfSubmonoidLe
-  签名: (M N : Submonoid R) (h : M <= N)
+  签名: (M N : 子幺半群 R) (h : M <= N)
   定义体: (@IsLocalization.lift R _ M S _ _ T _ _ (algebraMap R T)
     (fun y => map_units T ⟨↑y, h y.prop⟩)).toAlgebra
 
@@ -407,7 +407,7 @@ theorem localization_isScalarTower_of_submonoid_le
 
 中文:
 定理 localization_isScalarTower_of_submonoid_le
-  结论: (M N : Submonoid R) (h : M <= N)
+  结论: (M N : 子幺半群 R) (h : M <= N)
   证明: letI := localizationAlgebraOfSubmonoidLe S T M N h
   IsScalarTower.of_algebraMap_eq' (IsLocalization.lift_comp _).symm
 
@@ -433,7 +433,7 @@ instance instAlgebraLocalizationAtPrime
 
 中文:
 实例 instAlgebraLocalizationAtPrime
-  签名: (x : Ideal R) [H : x.IsPrime] [IsDomain R]
+  签名: (x : 理想 R) [H : x.是素] [是整环 R]
   定义体: localizationAlgebraOfSubmonoidLe _ _ x.primeCompl (nonZeroDivisors R)
     (by
       intro a ha
@@ -472,7 +472,7 @@ theorem isLocalization_of_submonoid_le
 
 中文:
 定理 isLocalization_of_submonoid_le
-  结论: (M N : Submonoid R) (h : M <= N) [IsLocalization M S]
+  结论: (M N : 子幺半群 R) (h : M <= N) [是Localization M S]
   证明: by
     rintro ⟨_, ⟨y, hy, rfl⟩⟩
     convert! IsLocalization.map_units T ⟨y, hy⟩
@@ -536,8 +536,8 @@ theorem isLocalization_of_is_exists_mul_mem
     rw [IsLocalization.eq_iff_exists 
 
 中文:
-定理 isLocalization_of_is_exists_mul_mem
-  结论: (M N : Submonoid R) [IsLocalization M S] (h : M <= N)
+定理 isLocalization_of_is_存在_mul_mem
+  结论: (M N : 子幺半群 R) [是Localization M S] (h : M <= N)
   证明: by
     obtain ⟨m, hm⟩ := h' y
     have := IsLocalization.map_units S ⟨_, hm⟩
@@ -575,7 +575,7 @@ theorem mk'_eq_algebraMap_mk'_of_submonoid_le
 
 中文:
 定理 mk'_eq_algebraMap_mk'_of_submonoid_le
-  结论: {M N : Submonoid R} (h : M <= N) [IsLocalization M S]
+  结论: {M N : 子幺半群 R} (h : M <= N) [是Localization M S]
   证明: mk'_eq_iff_eq_mul.mpr (by simp only [IsScalarTower.algebraMap_apply R S T, ← map_mul, mk'_spec])
 -/
 theorem mk'_eq_algebraMap_mk'_of_submonoid_le {M N : Submonoid R} (h : M <= N) [IsLocalization M S]
@@ -611,7 +611,7 @@ theorem isFractionRing_of_isLocalization
 
 中文:
 定理 isFractionRing_of_isLocalization
-  结论: (S T : 类型) [CommRing S] [CommRing T] [Algebra R S]
+  结论: (S T : 类型) [交换环 S] [交换环 T] [代数 R S]
   证明: by
   have := isLocalization_of_submonoid_le S T M (nonZeroDivisors R) hM
   refine @isLocalization_of_is_exists_mul_mem _ _ _ _ _ _ _ this ?_ ?_
@@ -658,7 +658,7 @@ theorem isFractionRing_of_isDomain_of_isLocalization
 
 中文:
 定理 isFractionRing_of_isDomain_of_isLocalization
-  结论: [IsDomain R] (S T : 类型) [CommRing S]
+  结论: [是整环 R] (S T : 类型) [交换环 S]
   证明: by
   have := IsFractionRing.nontrivial R T
   have := (algebraMap S T).domain_nontrivial

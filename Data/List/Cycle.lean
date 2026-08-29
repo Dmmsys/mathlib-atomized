@@ -41,7 +41,7 @@ definition nextOr
 
 中文:
 定义 nextOr
-  签名: : 对任意 (_ : List α) (_ _ : α), α
+  签名: : 对任意 (_ : 列表 α) (_ _ : α), α
 -/
 def nextOr : forall (_ : List α) (_ _ : α), α
   | [], _, default => default
@@ -107,7 +107,7 @@ theorem nextOr_self_cons_cons
 
 中文:
 定理 nextOr_self_cons_cons
-  条件: (xs : List α) (x y d : α)
+  条件: (xs : 列表 α) (x y d : α)
   结论: nextOr (x :: y :: xs) x d = y
   证明: if_pos rfl
 
@@ -129,7 +129,7 @@ theorem nextOr_cons_of_ne
 
 中文:
 定理 nextOr_cons_of_ne
-  条件: (xs : List α) (y x d : α) (h : x != y)
+  条件: (xs : 列表 α) (y x d : α) (h : x != y)
   证明: by
   rcases xs with - | ⟨z, zs⟩
   · rfl
@@ -162,7 +162,7 @@ theorem nextOr_eq_nextOr_of_mem_dropLast
 
 中文:
 定理 nextOr_eq_nextOr_of_mem_dropLast
-  条件: (xs : List α) (x d d' : α) (x_mem : x in xs.dropLast)
+  条件: (xs : 列表 α) (x d d' : α) (x_mem : x in xs.dropLast)
   证明: by
   induction xs with
   | nil => cases x_mem
@@ -208,7 +208,7 @@ theorem mem_of_nextOr_ne
 
 中文:
 定理 mem_of_nextOr_ne
-  条件: {xs : List α} {x d : α} (h : nextOr xs x d != d)
+  条件: {xs : 列表 α} {x d : α} (h : nextOr xs x d != d)
   结论: x in xs
   证明: by
   induction xs with
@@ -250,7 +250,7 @@ theorem nextOr_concat
 
 中文:
 定理 nextOr_concat
-  条件: {xs : List α} {x : α} (d : α) (h : x ∉ xs)
+  条件: {xs : 列表 α} {x : α} (d : α) (h : x ∉ xs)
   结论: nextOr (xs ++ [x]) x d = d
   证明: by
   induction xs with
@@ -290,7 +290,7 @@ theorem nextOr_mem
 
 中文:
 定理 nextOr_mem
-  条件: {xs : List α} {x d : α} (hd : d in xs)
+  条件: {xs : 列表 α} {x d : α} (hd : d in xs)
   结论: nextOr xs x d in xs
   证明: by
   revert hd
@@ -332,7 +332,7 @@ definition next
 
 中文:
 定义 next
-  签名: (l : List α) (x : α) (h : x in l)
+  签名: (l : 列表 α) (x : α) (h : x in l)
   定义体: nextOr l x (l.get ⟨0, length_pos_of_mem h⟩)
 
 Depends on / 依赖: l.get, length_pos_of_mem, nextOr
@@ -349,7 +349,7 @@ definition prev
 
 中文:
 定义 prev
-  签名: : 对任意 l : List α, 对任意 x in l, α
+  签名: : 对任意 l : 列表 α, 对任意 x in l, α
 -/
 def prev : forall l : List α, forall x in l, α
   | [], _, h => by simp at h
@@ -813,7 +813,7 @@ theorem nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast
 
 中文:
 定理 nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast
-  结论: {l : List α} {a : α} (ha : a in l.dropLast)
+  结论: {l : 列表 α} {a : α} (ha : a in l.dropLast)
   证明: by
   match l with
   | nil => simp at ha
@@ -849,7 +849,7 @@ theorem nextOr_eq_getElem_idxOf_succ_of_mem_dropLast
 
 中文:
 定理 nextOr_eq_getElem_idxOf_succ_of_mem_dropLast
-  结论: {l : List α} {a : α} (ha : a in l.dropLast)
+  结论: {l : 列表 α} {a : α} (ha : a in l.dropLast)
   证明: Option.some_injective _ nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast ha d ▸ getElem?_pos ..
 
 Depends on / 依赖: Option.some_injective, _idxOf_succ_of_mem_dropLast, _pos, getElem, nextOr_eq_getElem, some_injective
@@ -874,7 +874,7 @@ theorem nextOr_infix_of_mem_dropLast
 
 中文:
 定理 nextOr_infix_of_mem_dropLast
-  条件: {l : List α} {a : α} (ha : a in l.dropLast) (d : α)
+  条件: {l : 列表 α} {a : α} (ha : a in l.dropLast) (d : α)
   证明: by
   refine infix_iff_getElem?.mpr ⟨l.idxOf a, ?_, fun i hi => ?_⟩
   · have ⟨_, _⟩ := l.dropLast_prefix
@@ -912,7 +912,7 @@ theorem nextOr_getLast_of_notMem_dropLast
 
 中文:
 定理 nextOr_getLast_of_notMem_dropLast
-  结论: {l : List α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast)
+  结论: {l : 列表 α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast)
   证明: by
   match l with
   | nil | [_] => simp
@@ -946,7 +946,7 @@ theorem next_getLast_eq_head_of_notMem_dropLast
 
 中文:
 定理 next_getLast_eq_head_of_notMem_dropLast
-  结论: {l : List α} (hl : l != [])
+  结论: {l : 列表 α} (hl : l != [])
   证明: .trans by grind nextOr_getLast_of_notMem_dropLast hl h _
 
 Depends on / 依赖: nextOr_getLast_of_notMem_dropLast
@@ -970,7 +970,7 @@ Nat.mod_eq_of_lt succ_idxOf_lt_length_of_mem_dropLast ha']
 
 中文:
 定理 next_eq_getElem
-  条件: {l : List α} {a : α} (ha : a in l)
+  条件: {l : 列表 α} {a : α} (ha : a in l)
   证明: by
   have hl := ne_nil_of_mem ha
   by_cases ha' : a in l.dropLast
@@ -999,7 +999,7 @@ theorem next_getElem
 
 中文:
 定理 next_getElem
-  条件: (l : List α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
+  条件: (l : 列表 α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
   证明: by
   grind [next_eq_getElem]
 
@@ -1024,7 +1024,7 @@ theorem prev_eq_getElem?_idxOf_pred_of_ne_head
 
 中文:
 定理 prev_eq_getElem?_idxOf_pred_of_ne_head
-  结论: {l : List α} {a : α} (ha : a in l)
+  结论: {l : 列表 α} {a : α} (ha : a in l)
   证明: by
   match l with
   | nil | [_] => grind
@@ -1052,7 +1052,7 @@ theorem prev_eq_getElem_idxOf_pred_of_ne_head
 
 中文:
 定理 prev_eq_getElem_idxOf_pred_of_ne_head
-  结论: {l : List α} {a : α} (ha : a in l)
+  结论: {l : 列表 α} {a : α} (ha : a in l)
   证明: Option.some_injective _ prev_eq_getElem?_idxOf_pred_of_ne_head ha ha₀ ▸ getElem?_pos ..
 
 Depends on / 依赖: Option.some_injective, _idxOf_pred_of_ne_head, _pos, getElem, prev_eq_getElem, some_injective
@@ -1078,7 +1078,7 @@ have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ Ne.symm ha₀
 
 中文:
 定理 prev_infix_of_mem_tail
-  结论: {l : List α} {a : α} (ha : a in l)
+  结论: {l : 列表 α} {a : α} (ha : a in l)
   证明: by
 have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ Ne.symm ha₀
   refine infix_iff_getElem?.mpr ⟨l.idxOf a - 1, by grind, fun i hi => ?_⟩
@@ -1117,7 +1117,7 @@ theorem prev_eq_getElem
 
 中文:
 定理 prev_eq_getElem
-  条件: {l : List α} {a : α} (ha : a in l)
+  条件: {l : 列表 α} {a : α} (ha : a in l)
   证明: by
   cases l with | nil => grind | cons head tail =>
   by_cases ha₀ : a = head
@@ -1154,7 +1154,7 @@ theorem prev_getElem
 
 中文:
 定理 prev_getElem
-  条件: (l : List α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
+  条件: (l : 列表 α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
   证明: by
   grind [prev_eq_getElem]
 
@@ -1179,7 +1179,7 @@ theorem next_getLast_eq_head
 
 中文:
 定理 next_getLast_eq_head
-  条件: (l : List α) (h : l != []) (hn : l.Nodup)
+  条件: (l : 列表 α) (h : l != []) (hn : l.Nodup)
   证明: by
   have h1 : l.length - 1 + 1 = l.length := by grind [length_pos_iff]
   simp [getLast_eq_getElem h, head_eq_getElem h, next_getElem l hn (l.length - 1) (by grind), h1]
@@ -1269,7 +1269,7 @@ theorem prev_next
 
 中文:
 定理 prev_next
-  条件: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
+  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
   证明: by
   obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
   simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
@@ -1309,7 +1309,7 @@ theorem next_prev
 
 中文:
 定理 next_prev
-  条件: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
+  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
   证明: by
   obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
   simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
@@ -1348,7 +1348,7 @@ theorem prev_reverse_eq_next
 
 中文:
 定理 prev_reverse_eq_next
-  条件: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
+  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
   证明: by
   obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
   have lpos : 0 < l.length := k.zero_le.trans_lt hk
@@ -1386,7 +1386,7 @@ theorem next_reverse_eq_prev
 
 中文:
 定理 next_reverse_eq_prev
-  条件: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
+  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
   证明: by
   convert! (prev_reverse_eq_next l.reverse (nodup_reverse.mpr h) x (mem_reverse.mpr hx)).symm
   exact (reverse_reverse l).symm
@@ -1414,7 +1414,7 @@ theorem isRotated_next_eq
 
 中文:
 定理 isRotated_next_eq
-  条件: {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
+  条件: {l l' : 列表 α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
   证明: by
   obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
   obtain ⟨n, rfl⟩ := id h
@@ -1446,7 +1446,7 @@ theorem isRotated_prev_eq
 
 中文:
 定理 isRotated_prev_eq
-  条件: {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
+  条件: {l l' : 列表 α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
   证明: by
   rw [← next_reverse_eq_prev _ hn]; rw [← next_reverse_eq_prev _ (h.nodup_iff.mp hn)]
   exact isRotated_next_eq h.reverse (nodup_reverse.mpr hn) _
@@ -1471,7 +1471,7 @@ definition Cycle
   body: Quotient (IsRotated.setoid α)
 
 中文:
-定义 Cycle
+定义 环
   签名: (α : 类型)
   定义体: Quotient (IsRotated.setoid α)
 
@@ -1494,7 +1494,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: : List α -> Cycle α
+  签名: : 列表 α -> 环 α
   定义体: Quot.mk _
 -/
 @[coe] def ofList : List α -> Cycle α :=
@@ -1512,7 +1512,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (List α) (Cycle α)
+  签名: Coe (列表 α) (环 α)
   定义体: ⟨ofList⟩
 
 @[simp]
@@ -1536,8 +1536,8 @@ theorem coe_eq_coe
 
 中文:
 定理 coe_eq_coe
-  条件: {l₁ l₂ : List α}
-  结论: (l₁ : Cycle α) = (l₂ : Cycle α) ↔ l₁ ~r l₂
+  条件: {l₁ l₂ : 列表 α}
+  结论: (l₁ : 环 α) = (l₂ : 环 α) ↔ l₁ ~r l₂
   证明: @Quotient.eq _ (IsRotated.setoid _) _ _
 
 @[simp]
@@ -1561,8 +1561,8 @@ theorem mk_eq_coe
 
 中文:
 定理 mk_eq_coe
-  条件: (l : List α)
-  结论: Quot.mk _ l = (l : Cycle α)
+  条件: (l : 列表 α)
+  结论: 商.mk _ l = (l : 环 α)
   证明: rfl
 
 @[simp]
@@ -1582,8 +1582,8 @@ theorem mk''_eq_coe
 
 中文:
 定理 mk''_eq_coe
-  条件: (l : List α)
-  结论: Quotient.mk'' l = (l : Cycle α)
+  条件: (l : 列表 α)
+  结论: 商.mk'' l = (l : 环 α)
   证明: rfl
 -/
 theorem mk''_eq_coe (l : List α) : Quotient.mk'' l = (l : Cycle α) :=
@@ -1599,7 +1599,7 @@ theorem coe_cons_eq_coe_append
 
 中文:
 定理 coe_cons_eq_coe_append
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   证明: Quot.sound ⟨1, by rw [rotate_cons_succ, rotate_zero]⟩
 
 Depends on / 依赖: Quot.sound, rotate_cons_succ, rotate_zero
@@ -1620,7 +1620,7 @@ definition nil
 
 中文:
 定义 nil
-  签名: : Cycle α
+  签名: : 环 α
   定义体: ([] : List α)
 
 @[simp]
@@ -1641,7 +1641,7 @@ theorem coe_nil
 
 中文:
 定理 coe_nil
-  结论: ↑([] : List α) = @nil α
+  结论: ↑([] : 列表 α) = @nil α
   证明: rfl
 
 @[simp]
@@ -1661,8 +1661,8 @@ theorem coe_eq_nil
 
 中文:
 定理 coe_eq_nil
-  条件: (l : List α)
-  结论: (l : Cycle α) = nil ↔ l = []
+  条件: (l : 列表 α)
+  结论: (l : 环 α) = nil ↔ l = []
   证明: coe_eq_coe.trans isRotated_nil_iff
 
 Depends on / 依赖: coe_eq_coe, coe_eq_coe.trans, isRotated_nil_iff
@@ -1682,7 +1682,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection (Cycle α)
+  签名: EmptyCollection (环 α)
   定义体: ⟨nil⟩
 
 @[simp]
@@ -1717,7 +1717,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Cycle α)
+  签名: 可居 (环 α)
   定义体: ⟨nil⟩
 -/
 instance : Inhabited (Cycle α) :=
@@ -1737,7 +1737,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {motive : Cycle α -> 命题} (s : Cycle α) (nil : motive nil)
+  结论: {motive : 环 α -> 命题} (s : 环 α) (nil : motive nil)
   证明: Quotient.inductionOn' s fun l => by
     refine List.recOn l ?_ ?_ <;> simp only [mk''_eq_coe, coe_nil]
     assumption'
@@ -1760,7 +1760,7 @@ definition Mem
 
 中文:
 定义 Mem
-  签名: (s : Cycle α) (a : α)
+  签名: (s : 环 α) (a : α)
   定义体: Quot.liftOn s (fun l => a in l) fun _ _ e => propext e.mem_iff
 
 Depends on / 依赖: Quot.liftOn, e.mem_iff, liftOn, mem_iff, propext
@@ -1780,7 +1780,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (Cycle α)
+  签名: Membership α (环 α)
   定义体: ⟨Mem⟩
 
 @[simp]
@@ -1802,8 +1802,8 @@ theorem mem_coe_iff
 
 中文:
 定理 mem_coe_iff
-  条件: {a : α} {l : List α}
-  结论: a in (↑l : Cycle α) ↔ a in l
+  条件: {a : α} {l : 列表 α}
+  结论: a in (↑l : 环 α) ↔ a in l
   证明: Iff.rfl
 
 @[simp]
@@ -1845,7 +1845,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : DecidableEq (Cycle α)
+  签名: α] : DecidableEq (环 α)
   定义体: fun s₁ s₂ =>
   Quotient.recOnSubsingleton₂' s₁ s₂ fun _ _ => decidable_of_iff' _ Quotient.eq''
 -/
@@ -1888,8 +1888,8 @@ theorem reverse_coe
 
 中文:
 定理 reverse_coe
-  条件: (l : List α)
-  结论: (l : Cycle α).reverse = l.reverse
+  条件: (l : 列表 α)
+  结论: (l : 环 α).reverse = l.reverse
   证明: rfl
 
 @[simp]
@@ -1911,7 +1911,7 @@ theorem mem_reverse_iff
 
 中文:
 定理 mem_reverse_iff
-  条件: {a : α} {s : Cycle α}
+  条件: {a : α} {s : 环 α}
   结论: a in s.reverse ↔ a in s
   证明: Quot.inductionOn s fun _ => mem_reverse
 
@@ -1936,7 +1936,7 @@ theorem reverse_reverse
 
 中文:
 定理 reverse_reverse
-  条件: (s : Cycle α)
+  条件: (s : 环 α)
   结论: s.reverse.reverse = s
   证明: Quot.inductionOn s fun _ => by simp
 
@@ -1976,7 +1976,7 @@ definition length
 
 中文:
 定义 length
-  签名: (s : Cycle α)
+  签名: (s : 环 α)
   定义体: Quot.liftOn s List.length fun _ _ e => e.perm.length_eq
 
 @[simp]
@@ -2000,8 +2000,8 @@ theorem length_coe
 
 中文:
 定理 length_coe
-  条件: (l : List α)
-  结论: length (l : Cycle α) = l.length
+  条件: (l : 列表 α)
+  结论: length (l : 环 α) = l.length
   证明: rfl
 
 @[simp]
@@ -2042,7 +2042,7 @@ theorem length_reverse
 
 中文:
 定理 length_reverse
-  条件: (s : Cycle α)
+  条件: (s : 环 α)
   结论: s.reverse.length = s.length
   证明: Quot.inductionOn s fun _ => List.length_reverse
 
@@ -2060,8 +2060,8 @@ definition Subsingleton
   body: s.length <= 1
 
 中文:
-定义 Subsingleton
-  签名: (s : Cycle α)
+定义 子单例
+  签名: (s : 环 α)
   定义体: s.length <= 1
 
 Depends on / 依赖: length, s.length
@@ -2079,7 +2079,7 @@ theorem subsingleton_nil
 
 中文:
 定理 subsingleton_nil
-  结论: Subsingleton (@nil α)
+  结论: 子单例 (@nil α)
   证明: Nat.zero_le _
 
 Depends on / 依赖: Nat.zero_le, zero_le
@@ -2099,8 +2099,8 @@ theorem length_subsingleton_iff
 
 中文:
 定理 length_subsingleton_iff
-  条件: {s : Cycle α}
-  结论: Subsingleton s ↔ length s <= 1
+  条件: {s : 环 α}
+  结论: 子单例 s ↔ length s <= 1
   证明: Iff.rfl
 
 @[simp]
@@ -2123,8 +2123,8 @@ theorem subsingleton_reverse_iff
 
 中文:
 定理 subsingleton_reverse_iff
-  条件: {s : Cycle α}
-  结论: s.reverse.Subsingleton ↔ s.Subsingleton
+  条件: {s : 环 α}
+  结论: s.reverse.子单例 ↔ s.子单例
   证明: by
   simp [length_subsingleton_iff]
 
@@ -2146,8 +2146,8 @@ theorem Subsingleton.congr
   rcases h with (rfl | ⟨z, rfl⟩) <;> simp
 
 中文:
-定理 Subsingleton.congr
-  条件: {s : Cycle α} (h : Subsingleton s)
+定理 子单例.congr
+  条件: {s : 环 α} (h : 子单例 s)
   证明: by
   induction s using Quot.inductionOn with | _ l
   simp only [length_subsingleton_iff, length_coe, mk_eq_coe, le_iff_lt_or_eq, Nat.lt_add_one_iff,
@@ -2174,8 +2174,8 @@ definition Nontrivial
 @[simp]
 
 中文:
-定义 Nontrivial
-  签名: (s : Cycle α)
+定义 非平凡
+  签名: (s : 环 α)
   定义体: exists x y : α, x != y ∧ x in s ∧ y in s
 
 @[simp]
@@ -2205,7 +2205,7 @@ theorem nontrivial_coe_nodup_iff
 
 中文:
 定理 nontrivial_coe_nodup_iff
-  条件: {l : List α} (hl : l.Nodup)
+  条件: {l : 列表 α} (hl : l.Nodup)
   证明: by
   rw [Nontrivial]
   rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
@@ -2246,8 +2246,8 @@ theorem nontrivial_reverse_iff
 
 中文:
 定理 nontrivial_reverse_iff
-  条件: {s : Cycle α}
-  结论: s.reverse.Nontrivial ↔ s.Nontrivial
+  条件: {s : 环 α}
+  结论: s.reverse.非平凡 ↔ s.非平凡
   证明: by
   simp [Nontrivial]
 
@@ -2274,7 +2274,7 @@ theorem length_nontrivial
 
 中文:
 定理 length_nontrivial
-  条件: {s : Cycle α} (h : Nontrivial s)
+  条件: {s : 环 α} (h : 非平凡 s)
   结论: 2 <= length s
   证明: by
   obtain ⟨x, y, hxy, hx, hy⟩ := h
@@ -2318,8 +2318,8 @@ theorem nodup_coe_iff
 
 中文:
 定理 nodup_coe_iff
-  条件: {l : List α}
-  结论: Nodup (l : Cycle α) ↔ l.Nodup
+  条件: {l : 列表 α}
+  结论: Nodup (l : 环 α) ↔ l.Nodup
   证明: Iff.rfl
 
 @[simp]
@@ -2341,7 +2341,7 @@ theorem nodup_reverse_iff
 
 中文:
 定理 nodup_reverse_iff
-  条件: {s : Cycle α}
+  条件: {s : 环 α}
   结论: s.reverse.Nodup ↔ s.Nodup
   证明: Quot.inductionOn s fun _ => nodup_reverse
 
@@ -2365,8 +2365,8 @@ theorem Subsingleton.nodup
     simp [this]
 
 中文:
-定理 Subsingleton.nodup
-  条件: {s : Cycle α} (h : Subsingleton s)
+定理 子单例.nodup
+  条件: {s : 环 α} (h : 子单例 s)
   结论: Nodup s
   证明: by
   induction s using Quot.inductionOn with | _ l
@@ -2399,8 +2399,8 @@ theorem Nodup.nontrivial_iff
 
 中文:
 定理 Nodup.nontrivial_iff
-  条件: {s : Cycle α} (h : Nodup s)
-  结论: Nontrivial s ↔ ¬Subsingleton s
+  条件: {s : 环 α} (h : Nodup s)
+  结论: 非平凡 s ↔ ¬子单例 s
   证明: by
   rw [length_subsingleton_iff]
   induction s using Quotient.inductionOn'
@@ -2427,7 +2427,7 @@ definition toMultiset
 
 中文:
 定义 toMultiset
-  签名: (s : Cycle α)
+  签名: (s : 环 α)
   定义体: Quotient.liftOn' s (↑) fun _ _ h => Multiset.coe_eq_coe.mpr h.perm
 
 @[simp]
@@ -2451,8 +2451,8 @@ theorem coe_toMultiset
 
 中文:
 定理 coe_toMultiset
-  条件: (l : List α)
-  结论: (l : Cycle α).toMultiset = l
+  条件: (l : 列表 α)
+  结论: (l : 环 α).toMultiset = l
   证明: rfl
 
 @[simp]
@@ -2497,7 +2497,7 @@ theorem card_toMultiset
 
 中文:
 定理 card_toMultiset
-  条件: (s : Cycle α)
+  条件: (s : 环 α)
   结论: Multiset.card s.toMultiset = s.length
   证明: Quotient.inductionOn' s (by simp)
 
@@ -2520,8 +2520,8 @@ theorem toMultiset_eq_nil
 
 中文:
 定理 toMultiset_eq_nil
-  条件: {s : Cycle α}
-  结论: s.toMultiset = 0 ↔ s = Cycle.nil
+  条件: {s : 环 α}
+  结论: s.toMultiset = 0 ↔ s = 环.nil
   证明: Quotient.inductionOn' s (by simp)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -2588,8 +2588,8 @@ theorem map_coe
 
 中文:
 定理 map_coe
-  条件: {β : 类型} (f : α -> β) (l : List α)
-  结论: map f ↑l = List.map f l
+  条件: {β : 类型} (f : α -> β) (l : 列表 α)
+  结论: map f ↑l = 列表.map f l
   证明: rfl
 
 @[simp]
@@ -2611,7 +2611,7 @@ theorem map_eq_nil
 
 中文:
 定理 map_eq_nil
-  条件: {β : 类型} (f : α -> β) (s : Cycle α)
+  条件: {β : 类型} (f : α -> β) (s : 环 α)
   结论: map f s = nil ↔ s = nil
   证明: Quotient.inductionOn' s (by simp)
 
@@ -2633,7 +2633,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {β : 类型} {f : α -> β} {b : β} {s : Cycle α}
+  条件: {β : 类型} {f : α -> β} {b : β} {s : 环 α}
   证明: Quotient.inductionOn' s (by simp)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -2655,7 +2655,7 @@ definition lists
 
 中文:
 定义 lists
-  签名: (s : Cycle α)
+  签名: (s : 环 α)
   定义体: Quotient.liftOn' s (fun l => (l.cyclicPermutations : Multiset (List α))) fun l₁ l₂ h => by
     simpa using h.cyclicPermutations.perm
 
@@ -2679,8 +2679,8 @@ theorem lists_coe
 
 中文:
 定理 lists_coe
-  条件: (l : List α)
-  结论: lists (l : Cycle α) = ↑l.cyclicPermutations
+  条件: (l : 列表 α)
+  结论: lists (l : 环 α) = ↑l.cyclicPermutations
   证明: rfl
 -/
 theorem lists_coe (l : List α) : lists (l : Cycle α) = ↑l.cyclicPermutations :=
@@ -2703,8 +2703,8 @@ theorem mem_lists_iff_coe_eq
 
 中文:
 定理 mem_lists_iff_coe_eq
-  条件: {s : Cycle α} {l : List α}
-  结论: l in s.lists ↔ (l : Cycle α) = s
+  条件: {s : 环 α} {l : 列表 α}
+  结论: l in s.lists ↔ (l : 环 α) = s
   证明: Quotient.inductionOn' s fun l => by
     rw [lists]; rw [Quotient.liftOn'_mk'']
     simp
@@ -2730,7 +2730,7 @@ theorem lists_nil
 
 中文:
 定理 lists_nil
-  结论: lists (@nil α) = {([] : List α)}
+  结论: lists (@nil α) = {([] : 列表 α)}
   证明: by
   rw [nil]; rw [lists_coe]; rw [cyclicPermutations_nil]; rw [Multiset.coe_singleton]
 
@@ -2752,7 +2752,7 @@ definition decidableNontrivialCoe
 
 中文:
 定义 decidableNontrivialCoe
-  签名: : 对任意 l : List α, Decidable (Nontrivial (l : Cycle α))
+  签名: : 对任意 l : 列表 α, 可判定 (非平凡 (l : 环 α))
 -/
 def decidableNontrivialCoe : forall l : List α, Decidable (Nontrivial (l : Cycle α))
   | [] => isFalse (by simp [Nontrivial])
@@ -2782,7 +2782,7 @@ instance fintypeNodupCycle
 
 中文:
 实例 fintypeNodupCycle
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: Fintype.ofSurjective (fun l : { l : List α // l.Nodup } => ⟨l.val, by simpa using l.prop⟩)
     fun ⟨s, hs⟩ => by
     induction s using Quotient.inductionOn' with | _ hs
@@ -2809,7 +2809,7 @@ instance fintypeNodupNontrivialCycle
 
 中文:
 实例 fintypeNodupNontrivialCycle
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: Fintype.subtype
     (((Finset.univ : Finset { s : Cycle α // s.Nodup }).map (Function.Embedding.subtype _)).filter
       Cycle.Nontrivial)
@@ -2836,7 +2836,7 @@ definition toFinset
 
 中文:
 定义 toFinset
-  签名: (s : Cycle α)
+  签名: (s : 环 α)
   定义体: s.toMultiset.toFinset
 
 @[simp]
@@ -2860,7 +2860,7 @@ theorem toFinset_toMultiset
 
 中文:
 定理 toFinset_toMultiset
-  条件: (s : Cycle α)
+  条件: (s : 环 α)
   结论: s.toMultiset.toFinset = s.toFinset
   证明: rfl
 
@@ -2883,8 +2883,8 @@ theorem coe_toFinset
 
 中文:
 定理 coe_toFinset
-  条件: (l : List α)
-  结论: (l : Cycle α).toFinset = l.toFinset
+  条件: (l : 列表 α)
+  结论: (l : 环 α).toFinset = l.toFinset
   证明: rfl
 
 @[simp]
@@ -2925,8 +2925,8 @@ theorem toFinset_eq_nil
 
 中文:
 定理 toFinset_eq_nil
-  条件: {s : Cycle α}
-  结论: s.toFinset = ∅ ↔ s = Cycle.nil
+  条件: {s : 环 α}
+  结论: s.toFinset = ∅ ↔ s = 环.nil
   证明: Quotient.inductionOn' s (by simp)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -2979,7 +2979,7 @@ theorem next_reverse_eq_prev
 
 中文:
 定理 next_reverse_eq_prev
-  条件: (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s)
+  条件: (s : 环 α) (hs : Nodup s) (x : α) (hx : x in s)
   证明: by
   simp [← prev_reverse_eq_next]
 
@@ -3008,7 +3008,7 @@ nonrec theorem next_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s
 
 中文:
 定理 next_reverse_eq_prev'
-  条件: (s : Cycle α) (hs : Nodup s.reverse) (x : α) (hx : x in s.reverse)
+  条件: (s : 环 α) (hs : Nodup s.reverse) (x : α) (hx : x in s.reverse)
   证明: by
   simp [← prev_reverse_eq_next]
 
@@ -3049,7 +3049,7 @@ nonrec theorem next_prev (s
 
 中文:
 定理 prev_mem
-  条件: (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s)
+  条件: (s : 环 α) (hs : Nodup s) (x : α) (hx : x in s)
   结论: s.prev hs x hx in s
   证明: by
   rw [← next_reverse_eq_prev]; rw [← mem_reverse_iff]
@@ -3133,9 +3133,9 @@ theorem Chain.nil
 @[simp]
 
 中文:
-定理 Chain.nil
+定理 链.nil
   条件: (r : α -> α -> 命题)
-  结论: Cycle.Chain r (@nil α)
+  结论: 环.链 r (@nil α)
   证明: by trivial
 
 @[simp]
@@ -3153,7 +3153,7 @@ theorem chain_coe_cons
 
 中文:
 定理 chain_coe_cons
-  条件: (r : α -> α -> 命题) (a : α) (l : List α)
+  条件: (r : α -> α -> 命题) (a : α) (l : 列表 α)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3175,7 +3175,7 @@ theorem chain_singleton
 中文:
 定理 chain_singleton
   条件: (r : α -> α -> 命题) (a : α)
-  结论: Chain r [a] ↔ r a a
+  结论: 链 r [a] ↔ r a a
   证明: by
   rw [chain_coe_cons]; rw [nil_append]; rw [List.isChain_pair]
 
@@ -3196,7 +3196,7 @@ theorem chain_ne_nil
 
 中文:
 定理 chain_ne_nil
-  条件: (r : α -> α -> 命题) {l : List α}
+  条件: (r : α -> α -> 命题) {l : 列表 α}
   证明: l.reverseRecOn (fun hm => hm.irrefl.elim) (by
     intro m a _H _
     rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [getLast_append_singleton])
@@ -3222,7 +3222,7 @@ theorem chain_map
 
 中文:
 定理 chain_map
-  条件: {β : 类型} {r : α -> α -> 命题} (f : β -> α) {s : Cycle β}
+  条件: {β : 类型} {r : α -> α -> 命题} (f : β -> α) {s : 环 β}
   证明: Quotient.inductionOn s fun l => by
     rcases l with - | ⟨a, l⟩
     · rfl
@@ -3273,8 +3273,8 @@ theorem Chain.imp
     exact p.imp H
 
 中文:
-定理 Chain.imp
-  条件: {r₁ r₂ : α -> α -> 命题} (H : 对任意 a b, r₁ a b -> r₂ a b) (p : Chain r₁ s)
+定理 链.imp
+  条件: {r₁ r₂ : α -> α -> 命题} (H : 对任意 a b, r₁ a b -> r₂ a b) (p : 链 r₁ s)
   证明: by
   induction s
   · trivial
@@ -3301,7 +3301,7 @@ theorem chain_mono
 
 中文:
 定理 chain_mono
-  结论: Monotone (Chain : (α -> α -> 命题) -> Cycle α -> 命题)
+  结论: 递增 (链 : (α -> α -> 命题) -> 环 α -> 命题)
   证明: fun _a _b hab _s =>
   Chain.imp hab
 -/
@@ -3327,7 +3327,7 @@ theorem chain_of_pairwise
 
 中文:
 定理 chain_of_pairwise
-  结论: (对任意 a in s, 对任意 b in s, r a b) -> Chain r s
+  结论: (对任意 a in s, 对任意 b in s, r a b) -> 链 r s
   证明: by
   induction s with
   | nil => exact fun _ => Cycle.Chain.nil r
@@ -3375,8 +3375,8 @@ theorem chain_iff_pairwise
 
 中文:
 定理 chain_iff_pairwise
-  条件: [IsTrans α r]
-  结论: Chain r s ↔ 对任意 a in s, 对任意 b in s, r a b
+  条件: [是Trans α r]
+  结论: 链 r s ↔ 对任意 a in s, 对任意 b in s, r a b
   证明: ⟨by
     induction s with
     | nil => exact fun _ b hb => (notMem_nil _ hb).elim
@@ -3419,9 +3419,9 @@ theorem Chain.eq_nil_of_irrefl
     exact (irrefl_of r a <| chain_iff_pairwise.1 h a ha a ha).elim
 
 中文:
-定理 Chain.eq_nil_of_irrefl
-  条件: [IsTrans α r] [Std.Irrefl r] (h : Chain r s)
-  结论: s = Cycle.nil
+定理 链.eq_nil_of_irrefl
+  条件: [是Trans α r] [Std.Irrefl r] (h : 链 r s)
+  结论: s = 环.nil
   证明: by
   induction s with
   | nil => rfl
@@ -3448,9 +3448,9 @@ theorem Chain.eq_nil_of_well_founded
   proof: Chain.eq_nil_of_irrefl h.imp fun _ _ => Relation.TransGen.single
 
 中文:
-定理 Chain.eq_nil_of_well_founded
-  条件: [IsWellFounded α r] (h : Chain r s)
-  结论: s = Cycle.nil
+定理 链.eq_nil_of_well_founded
+  条件: [是良基 α r] (h : 链 r s)
+  结论: s = 环.nil
   证明: Chain.eq_nil_of_irrefl h.imp fun _ _ => Relation.TransGen.single
 
 Depends on / 依赖: Chain.eq_nil_of_irrefl, Relation, Relation.TransGen.single, TransGen, eq_nil_of_irrefl, h.imp, single
@@ -3469,8 +3469,8 @@ theorem forall_eq_of_chain
   exact antisymm (hs a ha b hb) (hs b hb a ha)
 
 中文:
-定理 forall_eq_of_chain
-  结论: [IsTrans α r] [Std.Antisymm r] (hs : Chain r s) {a b : α} (ha : a in s)
+定理 对任意_eq_of_chain
+  结论: [是Trans α r] [Std.反对称 r] (hs : 链 r s) {a b : α} (ha : a in s)
   证明: by
   rw [chain_iff_pairwise] at hs
   exact antisymm (hs a ha b hb) (hs b hb a ha)

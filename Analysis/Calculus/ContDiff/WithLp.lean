@@ -86,7 +86,7 @@ theorem contDiffWithinAt_piLp_apply
 
 中文:
 定理 contDiffWithinAt_piLp_apply
-  条件: {i : ι} {t : Set (PiLp p E)} {y : PiLp p E}
+  条件: {i : ι} {t : 集合 (PiLp p E)} {y : PiLp p E}
   证明: (contDiffWithinAt_piLp p).1 contDiffWithinAt_id i
 
 Depends on / 依赖: contDiffWithinAt_id, contDiffWithinAt_piLp
@@ -226,7 +226,7 @@ theorem contDiffOn_piLp_apply
 
 中文:
 定理 contDiffOn_piLp_apply
-  条件: {i : ι} {t : Set (PiLp p E)}
+  条件: {i : ι} {t : 集合 (PiLp p E)}
   证明: (contDiffOn_piLp p).1 contDiffOn_id i
 
 Depends on / 依赖: contDiffOn_id, contDiffOn_piLp
@@ -249,7 +249,7 @@ theorem contDiff_piLp
 
 中文:
 定理 contDiff_piLp
-  结论: ContDiff 𝕜 n f ↔ 对任意 i, ContDiff 𝕜 n fun x => f x i
+  结论: 连续可微 𝕜 n f ↔ 对任意 i, 连续可微 𝕜 n fun x => f x i
   证明: by
   rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiff_iff]; rw [contDiff_pi]
   rfl
@@ -275,7 +275,7 @@ theorem contDiff_piLp'
 
 中文:
 定理 contDiff_piLp'
-  条件: (hf : 对任意 i, ContDiff 𝕜 n (fun x => f x i))
+  条件: (hf : 对任意 i, 连续可微 𝕜 n (fun x => f x i))
   证明: (contDiff_piLp p).2 hf
 
 @[fun_prop]
@@ -318,7 +318,7 @@ lemma PiLp.contDiff_ofLp
 
 中文:
 引理 PiLp.contDiff_ofLp
-  结论: ContDiff 𝕜 n (@ofLp p (Π i, E i))
+  结论: 连续可微 𝕜 n (@ofLp p (Π i, E i))
   证明: (continuousLinearEquiv p 𝕜 E).contDiff
 
 Depends on / 依赖: contDiff, continuousLinearEquiv
@@ -336,7 +336,7 @@ lemma PiLp.contDiff_toLp
 
 中文:
 引理 PiLp.contDiff_toLp
-  结论: ContDiff 𝕜 n (@toLp p (Π i, E i))
+  结论: 连续可微 𝕜 n (@toLp p (Π i, E i))
   证明: (continuousLinearEquiv p 𝕜 E).symm.contDiff
 
 Depends on / 依赖: contDiff, continuousLinearEquiv, symm.contDiff
@@ -361,7 +361,7 @@ lemma contDiff_ofLp
 
 中文:
 引理 contDiff_ofLp
-  结论: ContDiff 𝕜 n (@ofLp p (E × F))
+  结论: 连续可微 𝕜 n (@ofLp p (E × F))
   证明: (prodContinuousLinearEquiv p 𝕜 E F).contDiff
 
 Depends on / 依赖: contDiff, prodContinuousLinearEquiv
@@ -379,7 +379,7 @@ lemma contDiff_toLp
 
 中文:
 引理 contDiff_toLp
-  结论: ContDiff 𝕜 n (@toLp p (E × F))
+  结论: 连续可微 𝕜 n (@toLp p (E × F))
   证明: (prodContinuousLinearEquiv p 𝕜 E F).symm.contDiff
 
 Depends on / 依赖: contDiff, prodContinuousLinearEquiv, symm.contDiff

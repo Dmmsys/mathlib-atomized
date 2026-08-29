@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Bicone J)
+  签名: 可居 (Bicone J)
   定义体: ⟨Bicone.left⟩
 
 Depends on / 依赖: Bicone, Bicone.left
@@ -94,7 +94,7 @@ instance finBicone
 
 中文:
 实例 finBicone
-  签名: [Fintype J]
+  签名: [有限类型 J]
   定义体: [Bicone.left, Bicone.right].toFinset union Finset.image Bicone.diagram Fintype.elems
   complete j := by
     cases j <;> simp [Fintype.complete]
@@ -122,14 +122,14 @@ inductive BiconeHom
     - diagram: {j k : J} (f : j ⟶ k) : BiconeHom (Bicone.diagram j) (Bicone.diagram k)
 
 中文:
-归纳类型 BiconeHom
-  参数: : Bicone J -> Bicone J -> Type max u₁ v₁
+归纳类型 Bicone态射
+  参数: : Bicone J -> Bicone J -> 类型 最大值 u₁ v₁
   构造子 (5 个):
-    - left_id: BiconeHom Bicone.left Bicone.left
-    - right_id: BiconeHom Bicone.right Bicone.right
-    - left: (j : J) : BiconeHom Bicone.left (Bicone.diagram j)
-    - right: (j : J) : BiconeHom Bicone.right (Bicone.diagram j)
-    - diagram: {j k : J} (f : j ⟶ k) : BiconeHom (Bicone.diagram j) (Bicone.diagram k)
+    - left_id: Bicone态射 Bicone.left Bicone.left
+    - right_id: Bicone态射 Bicone.right Bicone.right
+    - left: (j : J) : Bicone态射 Bicone.left (Bicone.diagram j)
+    - right: (j : J) : Bicone态射 Bicone.right (Bicone.diagram j)
+    - diagram: {j k : J} (f : j ⟶ k) : Bicone态射 (Bicone.diagram j) (Bicone.diagram k)
 -/
 inductive BiconeHom : Bicone J -> Bicone J -> Type max u₁ v₁
   | left_id : BiconeHom Bicone.left Bicone.left
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (BiconeHom J Bicone.left Bicone.left)
+  签名: 可居 (Bicone态射 J Bicone.left Bicone.left)
   定义体: ⟨BiconeHom.left_id⟩
 
 Depends on / 依赖: BiconeHom, BiconeHom.left_id, left_id
@@ -168,7 +168,7 @@ instance BiconeHom.decidableEq
 @[simps]
 
 中文:
-实例 BiconeHom.decidableEq
+实例 Bicone态射.decidableEq
   签名: {j k : Bicone J}
   定义体: fun f g => by
   classical cases f <;> cases g <;> simp only [diagram.injEq] <;> infer_instance
@@ -242,7 +242,7 @@ instance biconeCategory
 
 中文:
 实例 biconeCategory
-  签名: : Category (Bicone J) where
+  签名: : 范畴 (Bicone J) where
   定义体: by cases f <;> simp
   comp_id f := by cases f <;> simp
   assoc f g h := by cases f <;> cases g <;> cases h <;> simp
@@ -284,7 +284,7 @@ definition biconeMk
 
 中文:
 定义 biconeMk
-  签名: {C : 类型u₁} [Category.{v₁} C] {F : J ⥤ C} (c₁ c₂ : Cone F)
+  签名: {C : 类型u₁} [范畴.{v₁} C] {F : J ⥤ C} (c₁ c₂ : 锥 F)
   定义体: Bicone.casesOn X c₁.pt c₂.pt fun j => F.obj j
   map f := by
     rcases f with (_ | _ | _ | _ | f)
@@ -344,7 +344,7 @@ instance finBiconeHom
 
 中文:
 实例 finBiconeHom
-  签名: [FinCategory J] (j k : Bicone J)
+  签名: [有限范畴 J] (j k : Bicone J)
   定义体: by
   cases j <;> cases k
   · exact
@@ -405,7 +405,7 @@ instance biconeSmallCategory
 
 中文:
 实例 biconeSmallCategory
-  签名: : SmallCategory (Bicone J)
+  签名: : 小范畴 (Bicone J)
   定义体: CategoryTheory.biconeCategory J
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.biconeCategory, biconeCategory
@@ -422,7 +422,7 @@ instance biconeFinCategory
 
 中文:
 实例 biconeFinCategory
-  签名: [FinCategory J]
+  签名: [有限范畴 J]
 -/
 instance biconeFinCategory [FinCategory J] : FinCategory (Bicone J) where
 

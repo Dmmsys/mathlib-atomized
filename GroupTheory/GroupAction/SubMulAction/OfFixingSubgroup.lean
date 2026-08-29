@@ -94,7 +94,7 @@ definition ofFixingSubgroup
 
 中文:
 定义 ofFixingSubgroup
-  签名: : SubMulAction (fixingSubgroup M s) α where
+  签名: : SubMul作用 (fixingSubgroup M s) α where
   定义体: sᶜ
   smul_mem' := fun ⟨c, hc⟩ x => by
     rw [← Subgroup.inv_mem_iff] at hc
@@ -187,7 +187,7 @@ theorem disjoint_val_image
 
 中文:
 定理 disjoint_val_image
-  条件: {t : Set (ofFixingSubgroup M s)}
+  条件: {t : 集合 (ofFixingSubgroup M s)}
   证明: by
   rw [Set.disjoint_iff]
   rintro a ⟨hbs, ⟨b, _, rfl⟩⟩; exact (b.prop hbs).elim
@@ -317,7 +317,7 @@ theorem mem_fixingSubgroup_insert_iff
 
 中文:
 定理 mem_fixingSubgroup_insert_iff
-  条件: {a : α} {s : Set α} {m : M}
+  条件: {a : α} {s : 集合 α} {m : M}
   证明: by
   simp [mem_fixingSubgroup_iff]
 
@@ -344,7 +344,7 @@ theorem fixingSubgroup_of_insert
 
 中文:
 定理 fixingSubgroup_of_insert
-  条件: (a : α) (s : Set (ofStabilizer M a))
+  条件: (a : α) (s : 集合 (ofStabilizer M a))
   证明: by
   ext m
   simp [mem_fixingSubgroup_iff, mem_ofStabilizer_iff, subgroup_smul_def, and_comm]
@@ -371,7 +371,7 @@ theorem mem_ofFixingSubgroup_insert_iff
 
 中文:
 定理 mem_ofFixingSubgroup_insert_iff
-  条件: {a : α} {s : Set (ofStabilizer M a)} {x : α}
+  条件: {a : α} {s : 集合 (ofStabilizer M a)} {x : α}
   证明: by
   grind [mem_ofFixingSubgroup_iff, mem_ofStabilizer_iff]
 
@@ -399,7 +399,7 @@ definition fixingSubgroupInsertEquiv
 
 中文:
 定义 fixingSubgroupInsertEquiv
-  签名: (a : α) (s : Set (ofStabilizer M a))
+  签名: (a : α) (s : 集合 (ofStabilizer M a))
   定义体: ⟨⟨(m : M), (mem_fixingSubgroup_iff M).mp m.prop a (Set.mem_insert _ _)⟩,
       fun ⟨x, hx⟩ => by
         simp only [← SetLike.coe_eq_coe]
@@ -439,7 +439,7 @@ definition ofFixingSubgroup_insert_map
 
 中文:
 定义 ofFixingSubgroup_insert_map
-  签名: (a : α) (s : Set (ofStabilizer M a))
+  签名: (a : α) (s : 集合 (ofStabilizer M a))
   定义体: by
     choose hx hx' using (mem_ofFixingSubgroup_insert_iff.mp x.prop)
     exact ⟨_, hx'⟩
@@ -471,7 +471,7 @@ theorem ofFixingSubgroup_insert_map_apply
 
 中文:
 定理 ofFixingSubgroup_insert_map_apply
-  结论: {a : α} {s : Set (ofStabilizer M a)}
+  结论: {a : α} {s : 集合 (ofStabilizer M a)}
   证明: rfl
 
 @[to_additive]
@@ -497,7 +497,7 @@ theorem ofFixingSubgroup_insert_map_bijective
 
 中文:
 定理 ofFixingSubgroup_insert_map_bijective
-  条件: {a : α} {s : Set (ofStabilizer M a)}
+  条件: {a : α} {s : 集合 (ofStabilizer M a)}
   证明: by
   constructor
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ h
@@ -537,7 +537,7 @@ theorem _root_.Set.conj_mem_fixingSubgroup
   exact hy
 
 中文:
-定理 _root_.Set.conj_mem_fixingSubgroup
+定理 _root_.集合.conj_mem_fixingSubgroup
   条件: (hg : g • t = s) {k : M} (hk : k in fixingSubgroup M t)
   证明: by
   simp only [mem_fixingSubgroup_iff] at hk ⊢
@@ -766,7 +766,7 @@ theorem conjMap_ofFixingSubgroup_bijective
 
 中文:
 定理 conjMap_ofFixingSubgroup_bijective
-  条件: {s t : Set α} {g : M} {hst : g • s = t}
+  条件: {s t : 集合 α} {g : M} {hst : g • s = t}
   证明: by
   constructor
   · rintro x y hxy
@@ -931,7 +931,7 @@ theorem map_ofFixingSubgroupUnion_def
 
 中文:
 定理 map_ofFixingSubgroupUnion_def
-  条件: (x : SubMulAction.ofFixingSubgroup M (s union t))
+  条件: (x : SubMul作用.ofFixingSubgroup M (s union t))
   证明: rfl
 
 @[to_additive]
@@ -1252,7 +1252,7 @@ theorem ofFixingSubgroup.append_left
 
 中文:
 定理 ofFixingSubgroup.append_left
-  结论: {n : 自然数} [Finite s]
+  结论: {n : 自然数} [有限 s]
   证明: Finite.card_eq.mp (by simp [Nat.card_coe_set_eq])
     ofFixingSubgroup.append x (Fin.castAdd n i) = (Classical.choice Hs) i := by
   simp [ofFixingSubgroup.append]
@@ -1280,7 +1280,7 @@ theorem ofFixingSubgroup.append_right
 
 中文:
 定理 ofFixingSubgroup.append_right
-  结论: {n : 自然数} [Finite s]
+  结论: {n : 自然数} [有限 s]
   证明: by
   simp [ofFixingSubgroup.append]
 
@@ -1312,7 +1312,7 @@ theorem IsPretransitive.isPretransitive_ofFixingSubgroup_inter
   rw [MulAction.isPretransitive_
 
 中文:
-定理 IsPretransitive.isPretransitive_ofFixingSubgroup_inter
+定理 是Pretransitive.isPretransitive_ofFixingSubgroup_inter
   证明: by
   rw [Ne]; rw [Set.top_eq_univ]; rw [← Set.compl_empty_iff]; rw [← Ne]; rw [← Set.nonempty_iff_ne_empty] at ha
   obtain ⟨a, ha⟩ := ha
@@ -1364,7 +1364,7 @@ theorem IsPreprimitive.isPreprimitive_ofFixingSubgroup_inter
     Nat.card_coe_set_eq _]
 
 中文:
-定理 IsPreprimitive.isPreprimitive_ofFixingSubgroup_inter
+定理 是Preprimitive.isPreprimitive_ofFixingSubgroup_inter
   证明: by
   have := IsPretransitive.isPretransitive_ofFixingSubgroup_inter hs.toIsPretransitive ha
   apply IsPreprimitive.of_card_lt (f := ofFixingSubgroup_of_inclusion M Set.inter_subset_left)
@@ -1411,8 +1411,8 @@ theorem MulAction.fixingSubgroup_le_stabilizer
   simpa only [mem_fixingSubgroup_iff, id] using hk
 
 中文:
-定理 MulAction.fixingSubgroup_le_stabilizer
-  条件: (s : Set α)
+定理 乘法作用.fixingSubgroup_le_stabilizer
+  条件: (s : 集合 α)
   证明: by
   intro k hk
   rw [mem_stabilizer_iff]

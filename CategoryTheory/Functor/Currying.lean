@@ -257,7 +257,7 @@ definition fullyFaithfulUncurry
 
 中文:
 定义 fullyFaithfulUncurry
-  签名: : (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).FullyFaithful
+  签名: : (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).满忠实
   定义体: currying.fullyFaithfulFunctor
 
 Depends on / 依赖: currying, currying.fullyFaithfulFunctor, fullyFaithfulFunctor
@@ -276,7 +276,7 @@ definition fullyFaithfulCurry
 
 中文:
 定义 fullyFaithfulCurry
-  签名: : (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).FullyFaithful
+  签名: : (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).满忠实
   定义体: currying.fullyFaithfulInverse
 
 Depends on / 依赖: currying, currying.fullyFaithfulInverse, fullyFaithfulInverse
@@ -294,7 +294,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).Full
+  签名: (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).满
   定义体: fullyFaithfulCurry.full
 
 Depends on / 依赖: fullyFaithfulCurry, fullyFaithfulCurry.full
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).Faithful
+  签名: (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).忠实
   定义体: fullyFaithfulCurry.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulCurry, fullyFaithfulCurry.faithful
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).Full
+  签名: (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).满
   定义体: fullyFaithfulUncurry.full
 
 Depends on / 依赖: fullyFaithfulUncurry, fullyFaithfulUncurry.full
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).Faithful
+  签名: (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).忠实
   定义体: fullyFaithfulUncurry.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulUncurry, fullyFaithfulUncurry.faithful
@@ -370,7 +370,7 @@ definition curryObjProdComp
 
 中文:
 定义 curryObjProdComp
-  签名: {C' D' : 类型} [Category* C'] [Category* D']
+  签名: {C' D' : 类型} [范畴* C'] [范畴* D']
   定义体: NatIso.ofComponents (fun X₁ => NatIso.ofComponents (fun X₂ => Iso.refl _))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents

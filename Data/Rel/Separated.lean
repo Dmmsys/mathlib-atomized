@@ -42,8 +42,8 @@ definition IsSeparated
   body: s.Pairwise fun x y => ¬ x ~[R] y
 
 中文:
-定义 IsSeparated
-  签名: (R : SetRel X X) (s : Set X)
+定义 是分离
+  签名: (R : SetRel X X) (s : 集合 X)
   定义体: s.Pairwise fun x y => ¬ x ~[R] y
 
 Depends on / 依赖: Pairwise, s.Pairwise
@@ -59,8 +59,8 @@ lemma IsSeparated.empty
   proof: pairwise_empty _
 
 中文:
-引理 IsSeparated.empty
-  结论: IsSeparated R (∅ : Set X)
+引理 是分离.empty
+  结论: 是分离 R (∅ : 集合 X)
   证明: pairwise_empty _
 -/
 protected lemma IsSeparated.empty : IsSeparated R (∅ : Set X) := pairwise_empty _
@@ -73,8 +73,8 @@ lemma IsSeparated.singleton
   proof: pairwise_singleton ..
 
 中文:
-引理 IsSeparated.singleton
-  结论: IsSeparated R {x}
+引理 是分离.singleton
+  结论: 是分离 R {x}
   证明: pairwise_singleton ..
 -/
 protected lemma IsSeparated.singleton : IsSeparated R {x} := pairwise_singleton ..
@@ -94,9 +94,9 @@ nonrec lemma IsSeparated.mono_left (hUV : R subseteq S) (hs : IsSeparated S s) :
 hs.mono' fun _x _y hxy h => hxy hUV h
 
 中文:
-引理 IsSeparated.of_subsingleton
-  条件: (hs : s.Subsingleton)
-  结论: IsSeparated R s
+引理 是分离.of_subsingleton
+  条件: (hs : s.子单例)
+  结论: 是分离 R s
   证明: hs.pairwise _
 
 alias _root_.Set.Subsingleton.relIsSeparated := IsSeparated.of_subsingleton
@@ -121,9 +121,9 @@ lemma IsSeparated.mono_right
   proof: ht.mono hst
 
 中文:
-引理 IsSeparated.mono_right
-  条件: (hst : s subseteq t) (ht : IsSeparated R t)
-  结论: IsSeparated R s
+引理 是分离.mono_right
+  条件: (hst : s subseteq t) (ht : 是分离 R t)
+  结论: 是分离 R s
   证明: ht.mono hst
 
 Depends on / 依赖: ht.mono
@@ -162,7 +162,7 @@ lemma isSeparated_insert
 
 中文:
 引理 isSeparated_insert
-  条件: [R.IsSymm]
+  条件: [R.是Symm]
   证明: by
   have : Std.Symm fun x y => ¬(x, y) in R := { symm _ _ := mt R.symm }
   simpa [not_imp_not, IsSeparated] using pairwise_insert_of_symm (r := fun x y => ¬(x, y) in R)
@@ -185,7 +185,7 @@ lemma isSeparated_insert_of_notMem
 
 中文:
 引理 isSeparated_insert_of_notMem
-  条件: [R.IsSymm] (hx : x ∉ s)
+  条件: [R.是Symm] (hx : x ∉ s)
   证明: have : Std.Symm fun x y => ¬(x, y) in R := { symm _ _ := mt R.symm }
   pairwise_insert_of_symm_of_notMem hx
 
@@ -205,8 +205,8 @@ lemma IsSeparated.insert'
   proof: isSeparated_insert'.2 ⟨hs, h, h'⟩
 
 中文:
-引理 IsSeparated.insert'
-  结论: (hs : IsSeparated R s) (h : 对任意 y in s, x ~[R] y -> x = y)
+引理 是分离.insert'
+  结论: (hs : 是分离 R s) (h : 对任意 y in s, x ~[R] y -> x = y)
   证明: isSeparated_insert'.2 ⟨hs, h, h'⟩
 -/
 protected lemma IsSeparated.insert' (hs : IsSeparated R s) (h : forall y in s, x ~[R] y -> x = y)
@@ -222,8 +222,8 @@ lemma IsSeparated.insert
   proof: isSeparated_insert.2 ⟨hs, h⟩
 
 中文:
-引理 IsSeparated.insert
-  结论: [R.IsSymm] (hs : IsSeparated R s)
+引理 是分离.insert
+  结论: [R.是Symm] (hs : 是分离 R s)
   证明: isSeparated_insert.2 ⟨hs, h⟩
 -/
 protected lemma IsSeparated.insert [R.IsSymm] (hs : IsSeparated R s)

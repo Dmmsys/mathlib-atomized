@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (RightFreyd V)
+  签名: 范畴 (RightFreyd V)
   定义体: inferInstanceAs Category (CategoryTheory.Quotient (rightHomotopic V))
 
 Depends on / 依赖: Category, CategoryTheory, CategoryTheory.Quotient, Quotient, rightHomotopic
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (RightFreyd V)
+  签名: 预加性 (RightFreyd V)
   定义体: Quotient.preadditive _ (by
     rintro _ _ _ _ _ _ ⟨h⟩ ⟨h'⟩
     exact ⟨RightHomotopy.add h h'⟩)
@@ -109,7 +109,7 @@ definition quotient
 
 中文:
 定义 quotient
-  签名: : Arrow V ⥤ RightFreyd V
+  签名: : 箭头 V ⥤ RightFreyd V
   定义体: CategoryTheory.Quotient.functor _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.functor, Quotient, functor
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V).Full
+  签名: (quotient V).满
   定义体: Quotient.full_functor _
 
 Depends on / 依赖: Quotient, Quotient.full_functor, full_functor
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V).EssSurj
+  签名: (quotient V).本质满射
   定义体: Quotient.essSurj_functor _
 
 Depends on / 依赖: Quotient, Quotient.essSurj_functor, essSurj_functor
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient V).Additive
+  签名: (quotient V).加性
 -/
 instance : (quotient V).Additive where
 
@@ -176,7 +176,7 @@ theorem eq_of_rightHomotopy
 
 中文:
 定理 eq_of_rightHomotopy
-  条件: {u v : Arrow V} (f g : u ⟶ v) (h : RightHomotopy f g)
+  条件: {u v : 箭头 V} (f g : u ⟶ v) (h : RightHomotopy f g)
   证明: CategoryTheory.Quotient.sound _ ⟨h⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, Quotient
@@ -195,7 +195,7 @@ definition homotopyOfEq
 
 中文:
 定义 homotopyOfEq
-  签名: {u v : Arrow V} (f g : u ⟶ v)
+  签名: {u v : 箭头 V} (f g : u ⟶ v)
   定义体: ((Quotient.functor_map_eq_iff _ _ _).mp w).some
 
 Depends on / 依赖: Quotient, Quotient.functor_map_eq_iff, functor_map_eq_iff
@@ -237,7 +237,7 @@ lemma quotient_map_eq_zero_iff
 
 中文:
 引理 quotient_map_eq_zero_iff
-  结论: (quotient V).map f = 0 ↔ Nonempty (RightHomotopy f 0)
+  结论: (quotient V).map f = 0 ↔ 非空 (RightHomotopy f 0)
   证明: ⟨fun h => ⟨homotopyOfEq _ _ (by simpa using h)⟩,
     fun ⟨h⟩ => by simpa using eq_of_rightHomotopy _ _ h⟩
 
@@ -262,8 +262,8 @@ lemma epi_of_isIso_right
 
 中文:
 引理 epi_of_isIso_right
-  条件: [IsIso f.right]
-  结论: Epi ((quotient V).map f) where
+  条件: [是同构 f.right]
+  结论: 满态射 ((quotient V).map f) where
   证明: by
     obtain ⟨g₁, rfl⟩ := (quotient V).map_surjective g₁
     obtain ⟨g₂, rfl⟩ := (quotient V).map_surjective g₂
@@ -301,7 +301,7 @@ definition rightFunctor
 
 中文:
 定义 rightFunctor
-  签名: : V ⥤ Arrow V where
+  签名: : V ⥤ 箭头 V where
   定义体: Arrow.mk (0 : 0 ⟶ X)
   map f := Arrow.homMk 0 f
 
@@ -322,7 +322,7 @@ instance :
 
 中文:
 实例 :
-  签名: (rightFunctor V).Additive
+  签名: (rightFunctor V).加性
   定义体: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -357,7 +357,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor V).Additive
+  签名: (functor V).加性
   定义体: by dsimp [functor]; infer_instance
 
 Depends on / 依赖: functor, infer_instance
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor V).Full
+  签名: (functor V).满
   定义体: by
     obtain ⟨u, rfl⟩ := (quotient V).map_surjective a
     exact ⟨u.right, (quotient V).congr_map (by cat_disch)⟩
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor V).Faithful
+  签名: (functor V).忠实
   定义体: by
     dsimp at eq
     rw [quotient_map_eq_iff] at eq
@@ -492,7 +492,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi ((quotient V).map (π f))
+  签名: 满态射 ((quotient V).map (π f))
   定义体: have : IsIso ((π f).right) := by simp only [π, homMk_right]; infer_instance
   epi_of_isIso_right _
 
@@ -554,7 +554,7 @@ definition cokernelCofork
 
 中文:
 定义 cokernelCofork
-  签名: : CokernelCofork ((quotient V).map f)
+  签名: : 余核余叉 ((quotient V).map f)
   定义体: CokernelCofork.ofπ ((quotient V).map (Candidate.π f))
     (eq_of_rightHomotopy _ _ (Candidate.condition f))
 
@@ -580,7 +580,7 @@ definition isColimitCokernelCofork
 
 中文:
 定义 isColimitCokernelCofork
-  签名: : IsColimit (cokernelCofork f)
+  签名: : 是余极限 (cokernelCofork f)
   定义体: CokernelCofork.IsColimit.ofπ' _
     (eq_of_rightHomotopy _ _ (Candidate.condition f))
     (fun g hg => Nonempty.some (by
@@ -612,7 +612,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCokernels (RightFreyd V)
+  签名: 有余kernels (RightFreyd V)
   定义体: ⟨by
     obtain ⟨f, rfl⟩ := (quotient V).map_surjective f
     exact ⟨_, Candidate.isColimitCokernelCofork f⟩⟩

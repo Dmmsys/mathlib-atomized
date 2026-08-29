@@ -41,7 +41,7 @@ finsetIco a b := (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLef
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder 整数 where
+  签名: : 局部有限序 整数 where
   定义体: (Finset.range (b + 1 - a).toNat).map Nat.castEmbedding.trans addLeftEmbedding a
 finsetIco a b := (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLeftEmbedding a
   finsetIoc a b :=
@@ -189,7 +189,7 @@ theorem card_Icc
 
 中文:
 定理 card_Icc
-  结论: #(Icc a b) = (b + 1 - a).to自然数
+  结论: #(闭区间 a b) = (b + 1 - a).to自然数
   证明: (card_map _).trans card_range _
 
 @[simp]
@@ -211,7 +211,7 @@ theorem card_Ico
 
 中文:
 定理 card_Ico
-  结论: #(Ico a b) = (b - a).to自然数
+  结论: #(左闭右开区间 a b) = (b - a).to自然数
   证明: (card_map _).trans card_range _
 
 @[simp]
@@ -233,7 +233,7 @@ theorem card_Ioc
 
 中文:
 定理 card_Ioc
-  结论: #(Ioc a b) = (b - a).to自然数
+  结论: #(左开右闭区间 a b) = (b - a).to自然数
   证明: (card_map _).trans card_range _
 
 @[simp]
@@ -255,7 +255,7 @@ theorem card_Ioo
 
 中文:
 定理 card_Ioo
-  结论: #(Ioo a b) = (b - a - 1).to自然数
+  结论: #(开区间 a b) = (b - a - 1).to自然数
   证明: (card_map _).trans card_range _
 
 @[simp]
@@ -302,7 +302,7 @@ theorem card_Icc_of_le
 中文:
 定理 card_Icc_of_le
   条件: (h : a <= b + 1)
-  结论: (#(Icc a b) : 整数) = b + 1 - a
+  结论: (#(闭区间 a b) : 整数) = b + 1 - a
   证明: by
   rw [card_Icc]; rw [toNat_sub_of_le h]
 
@@ -324,7 +324,7 @@ theorem card_Ico_of_le
 中文:
 定理 card_Ico_of_le
   条件: (h : a <= b)
-  结论: (#(Ico a b) : 整数) = b - a
+  结论: (#(左闭右开区间 a b) : 整数) = b - a
   证明: by
   rw [card_Ico]; rw [toNat_sub_of_le h]
 
@@ -346,7 +346,7 @@ theorem card_Ioc_of_le
 中文:
 定理 card_Ioc_of_le
   条件: (h : a <= b)
-  结论: (#(Ioc a b) : 整数) = b - a
+  结论: (#(左开右闭区间 a b) : 整数) = b - a
   证明: by
   rw [card_Ioc]; rw [toNat_sub_of_le h]
 
@@ -368,7 +368,7 @@ theorem card_Ioo_of_lt
 中文:
 定理 card_Ioo_of_lt
   条件: (h : a < b)
-  结论: (#(Ioo a b) : 整数) = b - a - 1
+  结论: (#(开区间 a b) : 整数) = b - a - 1
   证明: by
   rw [card_Ioo]; rw [sub_sub]; rw [toNat_sub_of_le h]
 
@@ -390,7 +390,7 @@ theorem Icc_eq_pair
 
 中文:
 定理 Icc_eq_pair
-  结论: Finset.Icc a (a + 1) = {a, a + 1}
+  结论: 有限集.闭区间 a (a + 1) = {a, a + 1}
   证明: by
   ext
   simp
@@ -414,7 +414,7 @@ theorem card_fintype_Icc_of_le
 中文:
 定理 card_fintype_Icc_of_le
   条件: (h : a <= b + 1)
-  结论: (Fintype.card (Set.Icc a b) : 整数) = b + 1 - a
+  结论: (有限类型.card (集合.闭区间 a b) : 整数) = b + 1 - a
   证明: by
   simp [h]
 -/
@@ -434,7 +434,7 @@ theorem card_fintype_Ico_of_le
 中文:
 定理 card_fintype_Ico_of_le
   条件: (h : a <= b)
-  结论: (Fintype.card (Set.Ico a b) : 整数) = b - a
+  结论: (有限类型.card (集合.左闭右开区间 a b) : 整数) = b - a
   证明: by
   simp [h]
 -/
@@ -454,7 +454,7 @@ theorem card_fintype_Ioc_of_le
 中文:
 定理 card_fintype_Ioc_of_le
   条件: (h : a <= b)
-  结论: (Fintype.card (Set.Ioc a b) : 整数) = b - a
+  结论: (有限类型.card (集合.左开右闭区间 a b) : 整数) = b - a
   证明: by
   simp [h]
 -/
@@ -474,7 +474,7 @@ theorem card_fintype_Ioo_of_lt
 中文:
 定理 card_fintype_Ioo_of_lt
   条件: (h : a < b)
-  结论: (Fintype.card (Set.Ioo a b) : 整数) = b - a - 1
+  结论: (有限类型.card (集合.开区间 a b) : 整数) = b - a - 1
   证明: by
   simp [h]
 -/
@@ -504,7 +504,7 @@ theorem image_Ico_emod
 中文:
 定理 image_Ico_emod
   条件: (n a : 整数) (h : 0 <= a)
-  结论: (Ico n (n + a)).image (· % a) = Ico 0 a
+  结论: (左闭右开区间 n (n + a)).像 (· % a) = 左闭右开区间 0 a
   证明: by
   obtain rfl | ha := eq_or_lt_of_le h
   · simp
@@ -564,7 +564,7 @@ lemma Finset.Icc_succ_succ
   omega
 
 中文:
-引理 Finset.Icc_succ_succ
+引理 有限集.Icc_succ_succ
   条件: (m n : 自然数)
   证明: by
   ext
@@ -591,7 +591,7 @@ lemma Finset.Ico_succ_succ
   omega
 
 中文:
-引理 Finset.Ico_succ_succ
+引理 有限集.Ico_succ_succ
   条件: (m n : 自然数)
   证明: by
   ext
@@ -618,7 +618,7 @@ lemma Finset.Ioc_succ_succ
   lia
 
 中文:
-引理 Finset.Ioc_succ_succ
+引理 有限集.Ioc_succ_succ
   条件: (m n : 自然数)
   证明: by
   ext
@@ -645,7 +645,7 @@ lemma Finset.Ioo_succ_succ
   lia
 
 中文:
-引理 Finset.Ioo_succ_succ
+引理 有限集.Ioo_succ_succ
   条件: (m n : 自然数)
   证明: by
   ext

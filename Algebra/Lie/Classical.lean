@@ -93,8 +93,8 @@ theorem matrix_trace_commutator_zero
 
 中文:
 定理 matrix_trace_commutator_zero
-  条件: [Fintype n] (X Y : Matrix n n R)
-  结论: Matrix.trace ⁅X, Y⁆ = 0
+  条件: [有限类型 n] (X Y : 矩阵 n n R)
+  结论: 矩阵.trace ⁅X, Y⁆ = 0
   证明: calc
     _ = Matrix.trace (X * Y) - Matrix.trace (Y * X) := trace_sub _ _
     _ = Matrix.trace (X * Y) - Matrix.trace (X * Y) :=
@@ -126,7 +126,7 @@ lie_mem' := fun _ _ => LinearMap.mem_ker.2 matrix_trace_commutator_zero _ _ _ _ 
 
 中文:
 定义 sl
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: { LinearMap.ker (Matrix.traceLinearMap n R R) with
 lie_mem' := fun _ _ => LinearMap.mem_ker.2 matrix_trace_commutator_zero _ _ _ _ }
 
@@ -147,7 +147,7 @@ theorem sl_bracket
 
 中文:
 定理 sl_bracket
-  条件: [Fintype n] (A B : sl n R)
+  条件: [有限类型 n] (A B : sl n R)
   结论: ⁅A, B⁆.val = A.val * B.val - B.val * A.val
   证明: rfl
 -/
@@ -193,7 +193,7 @@ theorem val_single
 中文:
 定理 val_single
   条件: (h : i != j) (r : R)
-  结论: (single i j h r).val = Matrix.single i j r
+  结论: (single i j h r).val = 矩阵.single i j r
   证明: rfl
 -/
 theorem val_single (h : i != j) (r : R) : (single i j h r).val = Matrix.single i j r :=
@@ -333,7 +333,7 @@ theorem sl_non_abelian
 
 中文:
 定理 sl_non_abelian
-  条件: [Fintype n] [Nontrivial R] (h : 1 < Fintype.card n)
+  条件: [有限类型 n] [非平凡 R] (h : 1 < 有限类型.card n)
   证明: by
   rcases Fintype.exists_pair_of_one_lt_card h with ⟨i, j, hij⟩
   let A := single i j hij (1 : R)
@@ -369,7 +369,7 @@ definition sp
 
 中文:
 定义 sp
-  签名: [Fintype l]
+  签名: [有限类型 l]
   定义体: skewAdjointMatricesLieSubalgebra (Matrix.J l R)
 
 Depends on / 依赖: Matrix, Matrix.J, skewAdjointMatricesLieSubalgebra
@@ -393,7 +393,7 @@ definition so
 
 中文:
 定义 so
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: skewAdjointMatricesLieSubalgebra (1 : Matrix n n R)
 
 @[simp]
@@ -417,7 +417,7 @@ theorem mem_so
 
 中文:
 定理 mem_so
-  条件: [Fintype n] (A : Matrix n n R)
+  条件: [有限类型 n] (A : 矩阵 n n R)
   结论: A in so n R ↔ Aᵀ = -A
   证明: by
   rw [so]; rw [mem_skewAdjointMatricesLieSubalgebra]; rw [mem_skewAdjointMatricesSubmodule]
@@ -439,7 +439,7 @@ definition indefiniteDiagonal
 
 中文:
 定义 indefiniteDiagonal
-  签名: : Matrix (p oplus q) (p oplus q) R
+  签名: : 矩阵 (p oplus q) (p oplus q) R
   定义体: Matrix.diagonal Sum.elim (fun _ => 1) fun _ => -1
 
 Depends on / 依赖: Matrix, Matrix.diagonal, Sum.elim, diagonal
@@ -457,7 +457,7 @@ definition so'
 
 中文:
 定义 so'
-  签名: [Fintype p] [Fintype q]
+  签名: [有限类型 p] [有限类型 q]
   定义体: skewAdjointMatricesLieSubalgebra indefiniteDiagonal p q R
 
 Depends on / 依赖: indefiniteDiagonal, skewAdjointMatricesLieSubalgebra
@@ -674,7 +674,7 @@ definition JD
 
 中文:
 定义 JD
-  签名: : Matrix (l oplus l) (l oplus l) R
+  签名: : 矩阵 (l oplus l) (l oplus l) R
   定义体: Matrix.fromBlocks 0 1 1 0
 
 Depends on / 依赖: Matrix, Matrix.fromBlocks, fromBlocks
@@ -692,7 +692,7 @@ definition typeD
 
 中文:
 定义 typeD
-  签名: [Fintype l]
+  签名: [有限类型 l]
   定义体: skewAdjointMatricesLieSubalgebra (JD l R)
 
 Depends on / 依赖: skewAdjointMatricesLieSubalgebra
@@ -710,7 +710,7 @@ definition PD
 
 中文:
 定义 PD
-  签名: : Matrix (l oplus l) (l oplus l) R
+  签名: : 矩阵 (l oplus l) (l oplus l) R
   定义体: Matrix.fromBlocks 1 (-1) 1 1
 
 Depends on / 依赖: Matrix, Matrix.fromBlocks, fromBlocks
@@ -746,7 +746,7 @@ theorem s_as_blocks
 
 中文:
 定理 s_as_blocks
-  结论: S l R = Matrix.fromBlocks 1 0 0 (-1)
+  结论: S l R = 矩阵.fromBlocks 1 0 0 (-1)
   证明: by
   rw [← Matrix.diagonal_one]; rw [Matrix.diagonal_neg]; rw [Matrix.fromBlocks_diagonal]
   rfl
@@ -772,7 +772,7 @@ theorem jd_transform
 
 中文:
 定理 jd_transform
-  条件: [Fintype l]
+  条件: [有限类型 l]
   结论: (PD l R)ᵀ * JD l R * PD l R = (2 : R) • S l R
   证明: by
   have h : (PD l R)ᵀ * JD l R = Matrix.fromBlocks 1 1 1 (-1) := by
@@ -801,7 +801,7 @@ theorem pd_inv
 
 中文:
 定理 pd_inv
-  条件: [Fintype l] [Invertible (2 : R)]
+  条件: [有限类型 l] [可逆 (2 : R)]
   结论: PD l R * ⅟(2 : R) • (PD l R)ᵀ = 1
   证明: by
   rw [PD]; rw [Matrix.fromBlocks_transpose]; rw [Matrix.fromBlocks_smul]; rw [Matrix.fromBlocks_multiply]
@@ -823,7 +823,7 @@ instance invertiblePD
 
 中文:
 实例 invertiblePD
-  签名: [Fintype l] [Invertible (2 : R)]
+  签名: [有限类型 l] [可逆 (2 : R)]
   定义体: invertibleOfRightInverse _ _ (pd_inv l R)
 
 Depends on / 依赖: invertibleOfRightInverse, pd_inv
@@ -846,7 +846,7 @@ definition typeDEquivSo'
 
 中文:
 定义 typeDEquivSo'
-  签名: [Fintype l] [Invertible (2 : R)]
+  签名: [有限类型 l] [可逆 (2 : R)]
   定义体: by
   apply (skewAdjointMatricesLieSubalgebraEquiv (JD l R) (PD l R) (by infer_instance)).trans
   apply LieEquiv.ofEq
@@ -889,7 +889,7 @@ definition typeB
 
 中文:
 定义 typeB
-  签名: [Fintype l]
+  签名: [有限类型 l]
   定义体: skewAdjointMatricesLieSubalgebra (JB l R)
 
 Depends on / 依赖: skewAdjointMatricesLieSubalgebra
@@ -929,8 +929,8 @@ theorem pb_inv
 
 中文:
 定理 pb_inv
-  条件: [Invertible (2 : R)]
-  结论: PB l R * Matrix.fromBlocks 1 0 0 (⅟(PD l R)) = 1
+  条件: [可逆 (2 : R)]
+  结论: PB l R * 矩阵.fromBlocks 1 0 0 (⅟(PD l R)) = 1
   证明: by
   rw [PB]; rw [Matrix.fromBlocks_multiply]; rw [mul_invOf_self]
   simp only [Matrix.mul_zero, Matrix.mul_one, Matrix.zero_mul, zero_add, add_zero,
@@ -953,7 +953,7 @@ instance invertiblePB
 
 中文:
 实例 invertiblePB
-  签名: [Invertible (2 : R)]
+  签名: [可逆 (2 : R)]
   定义体: invertibleOfRightInverse _ _ (pb_inv l R)
 
 Depends on / 依赖: invertibleOfRightInverse, pb_inv
@@ -973,7 +973,7 @@ theorem jb_transform
 
 中文:
 定理 jb_transform
-  结论: (PB l R)ᵀ * JB l R * PB l R = (2 : R) • Matrix.fromBlocks 1 0 0 (S l R)
+  结论: (PB l R)ᵀ * JB l R * PB l R = (2 : R) • 矩阵.fromBlocks 1 0 0 (S l R)
   证明: by
   simp [PB, JB, jd_transform, Matrix.fromBlocks_transpose, Matrix.fromBlocks_multiply,
     Matrix.fromBlocks_smul]
@@ -1034,7 +1034,7 @@ definition typeBEquivSo'
 
 中文:
 定义 typeBEquivSo'
-  签名: [Invertible (2 : R)]
+  签名: [可逆 (2 : R)]
   定义体: by
   apply (skewAdjointMatricesLieSubalgebraEquiv (JB l R) (PB l R) (by infer_instance)).trans
   symm

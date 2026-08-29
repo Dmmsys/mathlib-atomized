@@ -87,7 +87,7 @@ theorem summable_mul_of_summable_norm
 
 中文:
 定理 summable_mul_of_summable_norm
-  结论: [CompleteSpace R] {f : ι -> R} {g : ι' -> R}
+  结论: [完备空间 R] {f : ι -> R} {g : ι' -> R}
   证明: (hf.mul_norm hg).of_norm
 
 Depends on / 依赖: hf.mul_norm, mul_norm, of_norm
@@ -151,7 +151,7 @@ theorem tsum_mul_tsum_of_summable_norm
 
 中文:
 定理 tsum_mul_tsum_of_summable_norm
-  结论: [CompleteSpace R] {f : ι -> R} {g : ι' -> R}
+  结论: [完备空间 R] {f : ι -> R} {g : ι' -> R}
   证明: hf.of_norm.tsum_mul_tsum hg.of_norm (summable_mul_of_summable_norm hf hg)
 
 Depends on / 依赖: hf.of_norm.tsum_mul_tsum, hg.of_norm, of_norm, summable_mul_of_summable_norm, tsum_mul_tsum
@@ -266,7 +266,7 @@ theorem tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
 
 中文:
 定理 tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
-  结论: [CompleteSpace R] {f g : 自然数 -> R}
+  结论: [完备空间 R] {f g : 自然数 -> R}
   证明: hf.of_norm.tsum_mul_tsum_eq_tsum_sum_antidiagonal hg.of_norm (summable_mul_of_summable_norm hf hg)
 
 Depends on / 依赖: hf.of_norm.tsum_mul_tsum_eq_tsum_sum_antidiagonal, hg.of_norm, of_norm, summable_mul_of_summable_norm, tsum_mul_tsum_eq_tsum_sum_antidiagonal
@@ -359,7 +359,7 @@ theorem tsum_mul_tsum_eq_tsum_sum_range_of_summable_norm
 
 中文:
 定理 tsum_mul_tsum_eq_tsum_sum_range_of_summable_norm
-  结论: [CompleteSpace R] {f g : 自然数 -> R}
+  结论: [完备空间 R] {f g : 自然数 -> R}
   证明: by
   simp_rw [← sum_antidiagonal_eq_sum_range_succ fun k l => f k * g l]
   exact tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm hf hg
@@ -384,7 +384,7 @@ theorem hasSum_sum_range_mul_of_summable_norm
 
 中文:
 定理 hasSum_sum_range_mul_of_summable_norm
-  结论: [CompleteSpace R] {f g : 自然数 -> R}
+  结论: [完备空间 R] {f g : 自然数 -> R}
   证明: by
   convert! (summable_norm_sum_mul_range_of_summable_norm hf hg).of_norm.hasSum
   exact tsum_mul_tsum_eq_tsum_sum_range_of_summable_norm hf hg

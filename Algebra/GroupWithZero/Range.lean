@@ -114,7 +114,7 @@ definition valueMonoid
 
 中文:
 定义 valueMonoid
-  签名: : Submonoid Bˣ where
+  签名: : 子幺半群 Bˣ where
   定义体: (↑) ⁻¹' (range f)
   mul_mem' hb hb' := by
     obtain ⟨y, hy⟩ := hb
@@ -193,7 +193,7 @@ lemma valueMonoid_eq_closure
 
 中文:
 引理 valueMonoid_eq_closure
-  结论: valueMonoid f = Submonoid.closure ((↑) ⁻¹' (range f))
+  结论: valueMonoid f = 子幺半群.closure ((↑) ⁻¹' (range f))
   证明: (valueMonoid f).closure_eq.symm
 
 Depends on / 依赖: closure_eq, closure_eq.symm, valueMonoid
@@ -211,7 +211,7 @@ definition valueGroup
 
 中文:
 定义 valueGroup
-  签名: : Subgroup Bˣ
+  签名: : 子群 Bˣ
   定义体: closure (valueMonoid f)
 
 Depends on / 依赖: closure, valueMonoid
@@ -228,7 +228,7 @@ lemma valueGroup_def
 
 中文:
 引理 valueGroup_def
-  结论: valueGroup f = Subgroup.closure (valueMonoid f)
+  结论: valueGroup f = 子群.closure (valueMonoid f)
   证明: rfl
 
 Depends on / 依赖: F.mapHomotopyCategory, F.mapHomotopyCategoryFactors, Functor, Functor.additive_of_iso, HomotopyCategory, HomotopyCategory.quotient, additive_of_full_essSurj_comp, additive_of_iso, mapHomotopyCategory, mapHomotopyCategoryFactors, quotient
@@ -412,7 +412,7 @@ lemma embedding_injective
 
 中文:
 引理 embedding_injective
-  结论: Function.Injective (embedding (f := f))
+  结论: 函数.单射 (embedding (f := f))
   证明: by
   simp [embedding, WithZero.map'_injective_iff]
 
@@ -607,7 +607,7 @@ lemma valueMonoid_eq_valueGroup'
 
 中文:
 引理 valueMonoid_eq_valueGroup'
-  结论: (valueMonoid f : Set Bˣ) = valueGroup f
+  结论: (valueMonoid f : 集合 Bˣ) = valueGroup f
   证明: by
   rw [valueMonoid_eq_valueGroup]; rw [coe_toSubmonoid]
 
@@ -633,7 +633,7 @@ lemma valueGroup_eq_range
 
 中文:
 引理 valueGroup_eq_range
-  结论: Units.val '' (valueGroup f) = (range f \ {0})
+  结论: 单位群.val '' (valueGroup f) = (range f \ {0})
   证明: by
   ext x
   simp only [mem_sdiff, mem_range, mem_singleton_iff, ← valueMonoid_eq_valueGroup' f, mem_image,
@@ -717,7 +717,7 @@ lemma ValueGroup₀.restrict₀_surjective
 
 中文:
 引理 ValueGroup₀.restrict₀_surjective
-  结论: Surjective (ValueGroup₀.restrict₀ f)
+  结论: 满射 (ValueGroup₀.restrict₀ f)
   证明: fun _ => mem_range.mp (by simp [ValueGroup₀.restrict₀_range_eq_top])
 
 Depends on / 依赖: mem_range, mem_range.mp
@@ -947,7 +947,7 @@ refine .inr ⟨r, s, hr, hs, Option.some_inj.mpr by
       simp [← hrs, mul_comm]⟩
 
 中文:
-定理 zero_or_exists_mk
+定理 zero_or_存在_mk
   条件: (x : ValueGroup₀ f)
   证明: by
   obtain _ | ⟨x, hx⟩ := x
@@ -981,7 +981,7 @@ theorem zero_or_exists_mk'
   proof: x.zero_or_exists_mk.imp _root_.id fun ⟨r, s, hr, hs, hx⟩ => ⟨⟨(r, s), ⟨hr, hs⟩⟩, hx⟩
 
 中文:
-定理 zero_or_exists_mk'
+定理 zero_or_存在_mk'
   条件: (x : ValueGroup₀ f)
   证明: x.zero_or_exists_mk.imp _root_.id fun ⟨r, s, hr, hs, hx⟩ => ⟨⟨(r, s), ⟨hr, hs⟩⟩, hx⟩
 
@@ -1003,7 +1003,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroupWithZero (ValueGroup₀ f)
+  签名: 带零交换群 (ValueGroup₀ f)
 -/
 instance : CommGroupWithZero (ValueGroup₀ f) where
 

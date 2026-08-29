@@ -52,7 +52,7 @@ lemma exists_bound_fundamental_domain_of_isBigO
  
 
 中文:
-引理 exists_bound_fundamental_domain_of_isBigO
+引理 存在_bound_fundamental_domain_of_isBigO
   证明: by
   -- Extract a bound for large `im τ` using `hf_infty`.
   obtain ⟨D, hD, hf_infinity⟩ := hf_infinity.exists_pos
@@ -99,8 +99,8 @@ lemma exists_bound_of_invariant_of_isBigO
   -- Given `τ`, choose a `g = [a, b; c, d] ∈ SL(2, ℤ)` that translate
 
 中文:
-引理 exists_bound_of_invariant_of_isBigO
-  结论: {f : ℍ -> E} (hf_cont : Continuous f) {t : 实数} (ht : 0 <= t)
+引理 存在_bound_of_invariant_of_isBigO
+  结论: {f : ℍ -> E} (hf_cont : 连续 f) {t : 实数} (ht : 0 <= t)
   证明: by
   -- First find an `F` such that `∀ τ ∈ 𝒟, ‖f τ‖ ≤ F * τ.im ^ t`.
   obtain ⟨F, hF𝒟⟩ : exists F, forall τ in 𝒟, ‖f τ‖ <= F * τ.im ^ t :=
@@ -158,7 +158,7 @@ lemma exists_bound_of_subgroup_invariant_of_isBigO
       rw [← Quotient.eq_iff_equiv]; rw [Quotient.eq]; rw [QuotientGroup.leftRel
 
 中文:
-引理 exists_bound_of_subgroup_invariant_of_isBigO
+引理 存在_bound_of_subgroup_invariant_of_isBigO
   证明: by
   -- marshall the info we have in terms of a function on the quotient
   let f' τ : SL(2, Int) ⧸ Γ -> E := Quotient.lift (fun g => f (g⁻¹ • τ)) fun g h hgh => by
@@ -202,7 +202,7 @@ lemma exists_bound_of_subgroup_invariant_of_isArithmetic_of_isBigO
     (hf_inv ·)
 
 中文:
-引理 exists_bound_of_subgroup_invariant_of_isArithmetic_of_isBigO
+引理 存在_bound_of_subgroup_invariant_of_isArithmetic_of_isBigO
   证明: exists_bound_of_subgroup_invariant_of_isBigO hf_cont ht hf_infinity (Γ := Γ.comap (mapGL Real))
     (hf_inv ·)
 
@@ -226,7 +226,7 @@ lemma exists_bound_of_invariant
     (by simpa only [Real.rpow_zero] using! hf_infinity) hf_inv
 
 中文:
-引理 exists_bound_of_invariant
+引理 存在_bound_of_invariant
   证明: by
   simpa using! exists_bound_of_invariant_of_isBigO hf_cont le_rfl
     (by simpa only [Real.rpow_zero] using! hf_infinity) hf_inv
@@ -251,8 +251,8 @@ lemma exists_bound_of_subgroup_invariant
     (by simpa only [Real.rpow_zero] using! hf_infinity) hf_inv
 
 中文:
-引理 exists_bound_of_subgroup_invariant
-  结论: {f : ℍ -> E} (hf_cont : Continuous f)
+引理 存在_bound_of_subgroup_invariant
+  结论: {f : ℍ -> E} (hf_cont : 连续 f)
   证明: by
   simpa using! exists_bound_of_subgroup_invariant_of_isArithmetic_of_isBigO hf_cont le_rfl
     (by simpa only [Real.rpow_zero] using! hf_infinity) hf_inv
@@ -281,8 +281,8 @@ lemma ModularFormClass.exists_petersson_le
     (fun g => ?_) (fun g hg τ => SlashInvariantFormClass.norm_peterss
 
 中文:
-引理 ModularFormClass.exists_petersson_le
-  结论: {k : 整数} (hk : 0 <= k) (Γ : Subgroup (GL (Fin 2) 实数))
+引理 模形式类.存在_petersson_le
+  结论: {k : 整数} (hk : 0 <= k) (Γ : 子群 (GL (有限集 2) 实数))
   证明: by
   conv => enter [1, C, τ, 1]; rw [← norm_norm]
   refine mod_cast ModularGroup.exists_bound_of_subgroup_invariant_of_isArithmetic_of_isBigO
@@ -318,7 +318,7 @@ lemma CuspFormClass.petersson_bounded_left
   rw [IsZeroAtImInfty]; rw [ZeroAtFilter]; rw [← tendsto_
 
 中文:
-引理 CuspFormClass.petersson_bounded_left
+引理 尖点形式类.petersson_bounded_left
   证明: by
   conv => enter [1, C, τ, 1]; rw [← norm_norm]
   refine ModularGroup.exists_bound_of_subgroup_invariant (by fun_prop) (fun g => ?_)
@@ -353,7 +353,7 @@ lemma CuspFormClass.petersson_bounded_right
   simpa [petersson_norm_symm] using petersson_bounded_left k Γ f' f
 
 中文:
-引理 CuspFormClass.petersson_bounded_right
+引理 尖点形式类.petersson_bounded_right
   证明: by
   simpa [petersson_norm_symm] using petersson_bounded_left k Γ f' f
 
@@ -381,8 +381,8 @@ lemma CuspFormClass.exists_bound
   simp [abs_of
 
 中文:
-引理 CuspFormClass.exists_bound
-  结论: {k : 整数} {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.IsArithmetic]
+引理 尖点形式类.存在_bound
+  结论: {k : 整数} {Γ : 子群 (GL (有限集 2) 实数)} [Γ.是Arithmetic]
   证明: by
   obtain ⟨C, hC⟩ := petersson_bounded_left k Γ f f
   refine ⟨C.sqrt, fun τ => ?_⟩
@@ -421,8 +421,8 @@ have hC' : 0 <= C := le_trans (by positivity) (div_le_iff₀ (by positivity)).mp
   have h : 0 < ‖(τ.im : Complex) ^ (k : Int)‖ := mod_cast norm_pos_iff.mpr
 
 中文:
-引理 ModularFormClass.exists_bound
-  结论: {k : 整数} (hk : 0 <= k) {Γ : Subgroup (GL (Fin 2) 实数)}
+引理 模形式类.存在_bound
+  结论: {k : 整数} (hk : 0 <= k) {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   obtain ⟨C, hC⟩ := ModularFormClass.exists_petersson_le hk Γ f f
   refine ⟨C.sqrt, fun τ => ?_⟩
@@ -476,7 +476,7 @@ lemma qExpansion_coeff_isBigO_of_norm_isBigO
 
 中文:
 引理 qExpansion_coeff_isBigO_of_norm_isBigO
-  结论: {k : 整数} {Γ : Subgroup (GL (Fin 2) 实数)}
+  结论: {k : 整数} {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   let h := Γ.strictWidthInfty
   have hh : 0 < h := Γ.strictWidthInfty_pos_iff.mpr Fact.out
@@ -537,8 +537,8 @@ lemma ModularFormClass.qExpansion_isBigO
   refine (hC τ).tran
 
 中文:
-引理 ModularFormClass.qExpansion_isBigO
-  结论: {k : 整数} (hk : 0 <= k) {Γ : Subgroup (GL (Fin 2) 实数)}
+引理 模形式类.qExpansion_isBigO
+  结论: {k : 整数} (hk : 0 <= k) {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   simp only [← Real.rpow_intCast]
   apply qExpansion_coeff_isBigO_of_norm_isBigO
@@ -576,8 +576,8 @@ lemma CuspFormClass.qExpansion_isBigO
   rw [Real.norm_of_nonneg (by positivity)]; rw [Real.rpow_neg τ.im_pos.le]; rw [div_eq_mul_inv]
 
 中文:
-引理 CuspFormClass.qExpansion_isBigO
-  结论: {k : 整数} {Γ : Subgroup (GL (Fin 2) 实数)}
+引理 尖点形式类.qExpansion_isBigO
+  结论: {k : 整数} {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   apply qExpansion_coeff_isBigO_of_norm_isBigO
   obtain ⟨C, hC⟩ := exists_bound f

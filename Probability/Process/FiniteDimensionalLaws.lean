@@ -54,7 +54,7 @@ lemma isProjectiveMeasureFamily_map_restrict
 
 中文:
 引理 isProjectiveMeasureFamily_map_restrict
-  条件: (hX : 对任意 t, AEMeasurable (X t) P)
+  条件: (hX : 对任意 t, 几乎处处可测 (X t) P)
   证明: by
   intro I J hJI
   rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict₂ _).aemeasurable]
@@ -82,7 +82,7 @@ lemma isProjectiveLimit_map
 
 中文:
 引理 isProjectiveLimit_map
-  条件: (hX : AEMeasurable (fun ω => (X · ω)) P)
+  条件: (hX : 几乎处处可测 (fun ω => (X · ω)) P)
   证明: by
   intro I
   rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict _).aemeasurable hX]; rw [Function.comp_def]
@@ -107,8 +107,8 @@ lemma map_eq_iff_forall_finset_map_restrict_eq
     have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω =>
 
 中文:
-引理 map_eq_iff_forall_finset_map_restrict_eq
-  结论: [IsFiniteMeasure P]
+引理 map_eq_iff_对任意_finset_map_restrict_eq
+  结论: [是有限测度 P]
   证明: by
   refine ⟨fun h I => ?_, fun h => ?_⟩
   · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
@@ -145,8 +145,8 @@ lemma identDistrib_iff_forall_finset_identDistrib
   · exact (map_eq_iff_forall_finset_map_re
 
 中文:
-引理 identDistrib_iff_forall_finset_identDistrib
-  结论: [IsFiniteMeasure P]
+引理 identDistrib_iff_对任意_finset_identDistrib
+  结论: [是有限测度 P]
   证明: by
   refine ⟨fun h I => ⟨?_, ?_, ?_⟩, fun h => ⟨hX, hY, ?_⟩⟩
   · exact (Finset.measurable_restrict _).comp_aemeasurable hX
@@ -181,8 +181,8 @@ lemma map_restrict_eq_of_forall_ae_eq
   filter_upwards [h'] with ω h using funext h
 
 中文:
-引理 map_restrict_eq_of_forall_ae_eq
-  条件: (h : 对任意 t, X t =ᵐ[P] Y t) (I : Finset T)
+引理 map_restrict_eq_of_对任意_ae_eq
+  条件: (h : 对任意 t, X t =ᵐ[P] Y t) (I : 有限集 T)
   证明: by
   have h' : forallᵐ ω ∂P, forall (i : I), X i ω = Y i ω := by
     rw [MeasureTheory.ae_all_iff]
@@ -211,8 +211,8 @@ lemma map_eq_of_forall_ae_eq
   exact fun I => map_restrict_eq_of_forall_ae_eq h I
 
 中文:
-引理 map_eq_of_forall_ae_eq
-  结论: [IsFiniteMeasure P]
+引理 map_eq_of_对任意_ae_eq
+  结论: [是有限测度 P]
   证明: by
   rw [map_eq_iff_forall_finset_map_restrict_eq hX hY]
   exact fun I => map_restrict_eq_of_forall_ae_eq h I

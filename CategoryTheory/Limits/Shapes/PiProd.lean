@@ -39,7 +39,7 @@ definition Pi.binaryFanOfProp
     (Pi.map' Subtype.val fun _ => 𝟙 _)
 
 中文:
-定义 Pi.binaryFanOfProp
+定义 依赖函数类型.binaryFanOfProp
   签名: : BinaryFan (∏ᶜ (fun (i : {x : I // P x}) => X i.val))
   定义体: BinaryFan.mk (P := ∏ᶜ X) (Pi.map' Subtype.val fun _ => 𝟙 _)
     (Pi.map' Subtype.val fun _ => 𝟙 _)
@@ -67,8 +67,8 @@ definition Pi.binaryFanOfPropIsLimit
     (fun _ _ h₁ h₂ => Pi.hom
 
 中文:
-定义 Pi.binaryFanOfPropIsLimit
-  签名: [对任意 i, Decidable (P i)]
+定义 依赖函数类型.binaryFanOfPropIsLimit
+  签名: [对任意 i, 可判定 (P i)]
   定义体: BinaryFan.isLimitMk
     (fun s => Pi.lift fun b => if h : P b then
       s.π.app ⟨WalkingPair.left⟩ ≫ Pi.π (fun (i : {x : I // P x}) => X i.val) ⟨b, h⟩ else
@@ -127,9 +127,9 @@ lemma Pi.map_eq_prod_map
   cat_disch
 
 中文:
-引理 Pi.map_eq_prod_map
-  条件: [对任意 i, Decidable (P i)]
-  结论: Pi.map f =
+引理 依赖函数类型.map_eq_prod_map
+  条件: [对任意 i, 可判定 (P i)]
+  结论: 依赖函数类型.map f =
   证明: by
   rw [← Category.assoc]; rw [Iso.eq_comp_inv]
   dsimp only [IsLimit.conePointUniqueUpToIso, binaryFanOfProp, prodIsProd]

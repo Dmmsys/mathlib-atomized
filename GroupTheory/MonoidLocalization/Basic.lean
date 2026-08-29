@@ -93,8 +93,8 @@ structure IsLocalizationMap
     - exists_of_eq({x y}) : f x = f y -> exists c : S, c + x = c + y
 
 中文:
-结构 IsLocalizationMap
-  参数: (S : AddSubmonoid M) (f : M -> N)
+结构 是Localization映射
+  参数: (S : 加法子幺半群 M) (f : M -> N)
   公理与运算 (3 个):
     - map_addUnits((y : S)) : IsAddUnit (f y)
     - surj((z : N)) : 存在 x : M × S, z + f x.2 = f x.1
@@ -116,11 +116,11 @@ structure LocalizationMap
     - isLocalizationMap : IsLocalizationMap S toFun
 
 中文:
-结构 LocalizationMap
+结构 Localization映射
   参数: extends M ->ₙ+ N
   继承: M ->ₙ+ N
   公理与运算 (1 个):
-    - isLocalizationMap : IsLocalizationMap S toFun
+    - isLocalizationMap : 是Localization映射 S toFun
 
 Depends on / 依赖: P.flip.root
 -/
@@ -156,10 +156,10 @@ structure IsLocalizationMap
     - exists_of_eq({x y}) : f x = f y -> exists c : S, c * x = c * y
 
 中文:
-结构 IsLocalizationMap
-  参数: (S : Submonoid M) (f : M -> N)
+结构 是Localization映射
+  参数: (S : 子幺半群 M) (f : M -> N)
   公理与运算 (3 个):
-    - map_units((y : S)) : IsUnit (f y)
+    - map_units((y : S)) : 是单位 (f y)
     - surj((z : N)) : 存在 x : M × S, z * f x.2 = f x.1
     - exists_of_eq({x y}) : f x = f y -> 存在 c : S, c * x = c * y
 -/
@@ -179,11 +179,11 @@ structure LocalizationMap
     - isLocalizationMap : IsLocalizationMap S toFun
 
 中文:
-结构 LocalizationMap
+结构 Localization映射
   参数: extends M ->ₙ* N
   继承: M ->ₙ* N
   公理与运算 (1 个):
-    - isLocalizationMap : IsLocalizationMap S toFun
+    - isLocalizationMap : 是Localization映射 S toFun
 -/
 @[to_additive] structure LocalizationMap extends M ->ₙ* N where
   isLocalizationMap : IsLocalizationMap S toFun
@@ -219,7 +219,7 @@ definition r
 
 中文:
 定义 r
-  签名: (S : Submonoid M)
+  签名: (S : 子幺半群 M)
   定义体: sInf { c | forall y : S, c 1 (y, y) }
 -/
 def r (S : Submonoid M) : Con (M × S) :=
@@ -333,7 +333,7 @@ theorem r_iff_exists
 @[to_additive]
 
 中文:
-定理 r_iff_exists
+定理 r_iff_存在
   条件: {x y : M × S}
   结论: r S x y ↔ 存在 c : S, ↑c * (↑y.2 * x.1) = c * (x.2 * y.1)
   证明: by
@@ -483,7 +483,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {p : Localization S -> Sort u} (f : 对任意 (a : M) (b : S), p (mk a b))
+  签名: {p : Localization S -> 类型层 u} (f : 对任意 (a : M) (b : S), p (mk a b))
   定义体: Quot.rec (fun y => f y.1 y.2)
     (fun y z h => by cases y; cases z; exact H (r_iff_oreEqv_r.mpr h)) x
 
@@ -511,7 +511,7 @@ definition recOnSubsingleton₂
 
 中文:
 定义 recOnSubsingleton₂
-  签名: {r : Localization S -> Localization S -> Sort u}
+  签名: {r : Localization S -> Localization S -> 类型层 u}
   定义体: @Quotient.recOnSubsingleton₂' _ _ _ _ r (Prod.rec fun _ _ => Prod.rec fun _ _ => h _ _ _ _) x y
     (Prod.rec fun _ _ => Prod.rec fun _ _ => f _ _ _ _)
 
@@ -615,7 +615,7 @@ theorem mk_prod
 
 中文:
 定理 mk_prod
-  条件: {ι} (t : Finset ι) (f : ι -> M) (s : ι -> S)
+  条件: {ι} (t : 有限集 ι) (f : ι -> M) (s : ι -> S)
   证明: by
   classical
   induction t using Finset.induction_on <;> simp [mk_one, Finset.prod_insert, *, mk_mul]
@@ -640,7 +640,7 @@ theorem ndrec_mk
 
 中文:
 定理 ndrec_mk
-  结论: {p : Localization S -> Sort u} (f : 对任意 (a : M) (b : S), p (mk a b)) (H) (a : M)
+  结论: {p : Localization S -> 类型层 u} (f : 对任意 (a : M) (b : S), p (mk a b)) (H) (a : M)
   证明: rfl
 -/
 theorem ndrec_mk {p : Localization S -> Sort u} (f : forall (a : M) (b : S), p (mk a b)) (H) (a : M)
@@ -665,7 +665,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: {p : Sort u} (x : Localization S) (f : M -> S -> p)
+  签名: {p : 类型层 u} (x : Localization S) (f : M -> S -> p)
   定义体: rec f (fun h => (by simpa only [eq_rec_constant] using H h)) x
 
 @[to_additive]
@@ -689,7 +689,7 @@ theorem liftOn_mk
 
 中文:
 定理 liftOn_mk
-  条件: {p : Sort u} (f : M -> S -> p) (H) (a : M) (b : S)
+  条件: {p : 类型层 u} (f : M -> S -> p) (H) (a : M) (b : S)
   证明: rfl
 
 @[to_additive (attr := elab_as_elim, induction_eliminator, cases_eliminator)]
@@ -759,7 +759,7 @@ definition liftOn₂
 
 中文:
 定义 liftOn₂
-  签名: {p : Sort u} (x y : Localization S) (f : M -> S -> M -> S -> p)
+  签名: {p : 类型层 u} (x y : Localization S) (f : M -> S -> M -> S -> p)
   定义体: liftOn x (fun a b => liftOn y (f a b) fun hy => H ((r S).refl _) hy) fun hx =>
     induction_on y fun ⟨_, _⟩ => H hx ((r S).refl _)
 
@@ -786,7 +786,7 @@ theorem liftOn₂_mk
 
 中文:
 定理 liftOn₂_mk
-  条件: {p : Sort*} (f : M -> S -> M -> S -> p) (H) (a c : M) (b d : S)
+  条件: {p : 类型层*} (f : M -> S -> M -> S -> p) (H) (a c : M) (b d : S)
   证明: rfl
 
 @[to_additive (attr := elab_as_elim)]
@@ -982,7 +982,7 @@ lemma mkHom_surjective
 
 中文:
 引理 mkHom_surjective
-  结论: Surjective (mkHom (S := S))
+  结论: 满射 (mkHom (S := S))
   证明: by rintro ⟨x, y⟩; exact ⟨⟨x, y⟩, rfl⟩
 -/
 lemma mkHom_surjective : Surjective (mkHom (S := S)) := by rintro ⟨x, y⟩; exact ⟨⟨x, y⟩, rfl⟩
@@ -1004,7 +1004,7 @@ theorem smul_mk
 
 中文:
 定理 smul_mk
-  条件: [SMul R M] [IsScalarTower R M M] (c : R) (a b)
+  条件: [标量乘法 R M] [标量塔 R M M] (c : R) (a b)
   证明: by
   rw [mk]; rw [mk]; rw [← OreLocalization.smul_one_oreDiv_one_smul]; rw [OreLocalization.oreDiv_smul_oreDiv]
   change (c • 1) • a /ₒ (b * 1) = _
@@ -1046,7 +1046,7 @@ definition toLocalizationMap
 
 中文:
 定义 toLocalizationMap
-  签名: (f : M ->* N) (H1 : 对任意 y : S, IsUnit (f y))
+  签名: (f : M ->* N) (H1 : 对任意 y : S, 是单位 (f y))
   定义体: f
   isLocalizationMap :=
   { map_units := H1
@@ -1080,7 +1080,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  结论: {F : 类型} [FunLike F M N] [MulHomClass F M N]
+  结论: {F : 类型} [函数状 F M N] [乘法态射类 F M N]
   证明: by
   rw [← (hf.map_units 1).mul_right_inj]; rw [mul_one]
   exact (map_mul ..).symm.trans congr(f $(mul_one _))
@@ -1104,7 +1104,7 @@ theorem mulEquiv_comp
 
 中文:
 定理 mulEquiv_comp
-  结论: {f : M -> N} (hf : IsLocalizationMap S f)
+  结论: {f : M -> N} (hf : 是Localization映射 S f)
   证明: (hf.map_units x).map e
   surj y := let e : N ≃* P := e
     have ⟨x, eq⟩ := hf.surj (e.symm y)
@@ -1140,7 +1140,7 @@ abbreviation toMonoidHom
 
 中文:
 缩写 toMonoidHom
-  签名: (f : LocalizationMap S N)
+  签名: (f : Localization映射 S N)
   定义体: f
   map_one' := f.isLocalizationMap.map_one (f := f.toMulHom)
 
@@ -1161,7 +1161,7 @@ theorem toMonoidHom_injective
 
 中文:
 定理 toMonoidHom_injective
-  结论: Injective (toMonoidHom : LocalizationMap S N -> M ->* N)
+  结论: 单射 (toMonoidHom : Localization映射 S N -> M ->* N)
   证明: fun f g => by cases f; congr! with eq; ext; exact congr($eq _)
 -/
 theorem toMonoidHom_injective : Injective (toMonoidHom : LocalizationMap S N -> M ->* N) :=
@@ -1178,7 +1178,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (LocalizationMap S N) M N
+  签名: 函数状 (Localization映射 S N) M N
   定义体: f.toMonoidHom
   coe_injective := DFunLike.coe_injective.comp toMonoidHom_injective
 -/
@@ -1197,7 +1197,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass (LocalizationMap S N) M N
+  签名: 幺半群态射类 (Localization映射 S N) M N
   定义体: f.toMonoidHom.map_one
   map_mul f := f.map_mul
 -/
@@ -1217,7 +1217,7 @@ lemma toMonoidHom_apply
 
 中文:
 引理 toMonoidHom_apply
-  条件: (f : LocalizationMap S N) (x : M)
+  条件: (f : Localization映射 S N) (x : M)
   证明: rfl
 
 @[to_additive (attr := ext)]
@@ -1239,7 +1239,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : LocalizationMap S N} (h : 对任意 x, f x = g x)
+  条件: {f g : Localization映射 S N} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext _ _ h
 
@@ -1263,8 +1263,8 @@ theorem map_units
 
 中文:
 定理 map_units
-  条件: (f : LocalizationMap S N) (y : S)
-  结论: IsUnit (f y)
+  条件: (f : Localization映射 S N) (y : S)
+  结论: 是单位 (f y)
   证明: f.2.1 y
 
 @[to_additive]
@@ -1286,7 +1286,7 @@ theorem surj
 
 中文:
 定理 surj
-  条件: (f : LocalizationMap S N) (z : N)
+  条件: (f : Localization映射 S N) (z : N)
   结论: 存在 x : M × S, z * f x.2 = f x.1
   证明: f.2.2 z
 
@@ -1306,8 +1306,8 @@ theorem exists_of_eq
   proof: f.2.3
 
 中文:
-定理 exists_of_eq
-  条件: (f : LocalizationMap S N) {x y : M}
+定理 存在_of_eq
+  条件: (f : Localization映射 S N) {x y : M}
   结论: f x = f y -> 存在 c : S, c * x = c * y
   证明: f.2.3
 -/
@@ -1339,7 +1339,7 @@ theorem surj₂
 
 中文:
 定理 surj₂
-  条件: (f : LocalizationMap S N) (z w : N)
+  条件: (f : Localization映射 S N) (z w : N)
   结论: 存在 z' w' : M, 存在 d : S,
   证明: by
   let ⟨a, ha⟩ := surj f z
@@ -1378,8 +1378,8 @@ theorem eq_iff_exists
     exact (f.map_units c).mul_right_inj.mp h
 
 中文:
-定理 eq_iff_exists
-  条件: (f : LocalizationMap S N) {x y}
+定理 eq_iff_存在
+  条件: (f : Localization映射 S N) {x y}
   证明: Iff.intro f.2.3
   fun ⟨c, h⟩ => by
     replace h := congr_arg f h
@@ -1412,7 +1412,7 @@ definition sec
 
 中文:
 定义 sec
-  签名: (f : LocalizationMap S N) (z : N)
+  签名: (f : Localization映射 S N) (z : N)
   定义体: Classical.choose f.surj z
 
 @[to_additive]
@@ -1434,7 +1434,7 @@ theorem sec_spec
 
 中文:
 定理 sec_spec
-  条件: {f : LocalizationMap S N} (z : N)
+  条件: {f : Localization映射 S N} (z : N)
   证明: Classical.choose_spec f.surj z
 
 @[to_additive]
@@ -1455,7 +1455,7 @@ theorem sec_spec'
 
 中文:
 定理 sec_spec'
-  条件: {f : LocalizationMap S N} (z : N)
+  条件: {f : Localization映射 S N} (z : N)
   证明: by rw [mul_comm, sec_spec]
 
 Depends on / 依赖: mul_comm, sec_spec
@@ -1480,7 +1480,7 @@ theorem mul_inv_left
 
 中文:
 定理 mul_inv_left
-  条件: {f : M ->* N} (h : 对任意 y : S, IsUnit (f y)) (y : S) (w z : N)
+  条件: {f : M ->* N} (h : 对任意 y : S, 是单位 (f y)) (y : S) (w z : N)
   证明: by
   rw [mul_comm]
   exact Units.inv_mul_eq_iff_eq_mul (IsUnit.liftRight (f.domRestrict S) h y)
@@ -1508,7 +1508,7 @@ theorem mul_inv_right
 
 中文:
 定理 mul_inv_right
-  条件: {f : M ->* N} (h : 对任意 y : S, IsUnit (f y)) (y : S) (w z : N)
+  条件: {f : M ->* N} (h : 对任意 y : S, 是单位 (f y)) (y : S) (w z : N)
   证明: by
   rw [eq_comm]; rw [mul_inv_left h]; rw [mul_comm]; rw [eq_comm]
 
@@ -1536,7 +1536,7 @@ theorem mul_inv
 
 中文:
 定理 mul_inv
-  条件: {f : M ->* N} (h : 对任意 y : S, IsUnit (f y)) {x₁ x₂} {y₁ y₂ : S}
+  条件: {f : M ->* N} (h : 对任意 y : S, 是单位 (f y)) {x₁ x₂} {y₁ y₂ : S}
   证明: by
   rw [mul_inv_right h]; rw [mul_assoc]; rw [mul_comm _ (f y₂)]; rw [← mul_assoc]; rw [mul_inv_left h]; rw [mul_comm x₂]; rw [f.map_mul]; rw [f.map_mul]
 
@@ -1565,7 +1565,7 @@ theorem inv_inj
 
 中文:
 定理 inv_inj
-  结论: {f : M ->* N} (hf : 对任意 y : S, IsUnit (f y)) {y z : S}
+  结论: {f : M ->* N} (hf : 对任意 y : S, 是单位 (f y)) {y z : S}
   证明: by
   rw [← mul_one (f y)]; rw [eq_comm]; rw [← mul_inv_left hf y (f z) 1]; rw [h]
   exact Units.inv_mul (IsUnit.liftRight (f.domRestrict S) hf z)⁻¹
@@ -1595,7 +1595,7 @@ theorem inv_unique
 
 中文:
 定理 inv_unique
-  条件: {f : M ->* N} (h : 对任意 y : S, IsUnit (f y)) {y : S} {z : N} (H : f y * z = 1)
+  条件: {f : M ->* N} (h : 对任意 y : S, 是单位 (f y)) {y : S} {z : N} (H : f y * z = 1)
   证明: by
   rw [← one_mul _⁻¹]; rw [Units.val_mul]; rw [mul_inv_left]
   exact H.symm
@@ -1681,7 +1681,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (f : LocalizationMap S N) (x : M) (y : S)
+  签名: (f : Localization映射 S N) (x : M) (y : S)
   定义体: f x * ↑(IsUnit.liftRight (f.toMonoidHom.domRestrict S) f.map_units y)⁻¹
 
 @[to_additive]
@@ -2008,7 +2008,7 @@ theorem eq_iff_eq
 
 中文:
 定理 eq_iff_eq
-  条件: (g : LocalizationMap S P) {x y}
+  条件: (g : Localization映射 S P) {x y}
   结论: f x = f y ↔ g x = g y
   证明: f.eq_iff_exists.trans g.eq_iff_exists.symm
 
@@ -2030,7 +2030,7 @@ theorem mk'_eq_iff_mk'_eq
 
 中文:
 定理 mk'_eq_iff_mk'_eq
-  条件: (g : LocalizationMap S P) {x₁ x₂} {y₁ y₂ : S}
+  条件: (g : Localization映射 S P) {x₁ x₂} {y₁ y₂ : S}
   证明: f.eq'.trans g.eq'.symm
 -/
 theorem mk'_eq_iff_mk'_eq (g : LocalizationMap S P) {x₁ x₂} {y₁ y₂ : S} :
@@ -2055,7 +2055,7 @@ theorem exists_of_sec_mk'
 @[to_additive]
 
 中文:
-定理 exists_of_sec_mk'
+定理 存在_of_sec_mk'
   条件: (x) (y : S)
   证明: f.eq_iff_exists.1 f.mk'_eq_iff_eq.1 (mk'_sec _ _).symm
 
@@ -2348,7 +2348,7 @@ theorem isUnit_comp
 中文:
 定理 isUnit_comp
   条件: (j : N ->* P) (y : S)
-  结论: IsUnit (j.comp f.toMonoidHom y)
+  结论: 是单位 (j.comp f.toMonoidHom y)
   证明: ⟨Units.map j IsUnit.liftRight (f.toMonoidHom.domRestrict S) f.map_units y, show j _ = j _ from
       congr_arg j (IsUnit.coe_liftRight (f.toMonoidHom.domRestrict S) f.map_units _)⟩
 
@@ -2375,7 +2375,7 @@ exact ((f.map_units s).map j).mul_left_inj.mp by rw [← j.map_mul, h, ← k.map
 
 中文:
 定理 epic_of_localizationMap
-  结论: {P : 类型} [Monoid P] {j k : N ->* P}
+  结论: {P : 类型} [幺半群 P] {j k : N ->* P}
   证明: by
   ext n
   obtain ⟨⟨m, s⟩, hn : n * f s = f m⟩ := f.surj n
@@ -2420,7 +2420,7 @@ definition monoidOf
 
 中文:
 定义 monoidOf
-  签名: : Submonoid.LocalizationMap S (Localization S)
+  签名: : 子幺半群.Localization映射 S (Localization S)
   定义体: { (r S).mk'.comp <| MonoidHom.inl M S with
     toFun := fun x => mk x 1
     map_mul' := fun x y => by rw [mk_mul, mul_one]
@@ -2541,7 +2541,7 @@ theorem liftOn_mk'
 
 中文:
 定理 liftOn_mk'
-  条件: {p : Sort u} (f : M -> S -> p) (H) (a : M) (b : S)
+  条件: {p : 类型层 u} (f : M -> S -> p) (H) (a : M) (b : S)
   证明: by rw [← mk_eq_monoidOf_mk', liftOn_mk]
 
 @[to_additive (attr := simp)]
@@ -2563,7 +2563,7 @@ theorem liftOn₂_mk'
 
 中文:
 定理 liftOn₂_mk'
-  条件: {p : Sort*} (f : M -> S -> M -> S -> p) (H) (a c : M) (b d : S)
+  条件: {p : 类型层*} (f : M -> S -> M -> S -> p) (H) (a c : M) (b d : S)
   证明: by
   rw [← mk_eq_monoidOf_mk']; rw [liftOn₂_mk]
 
@@ -2592,7 +2592,7 @@ instance instIsMulTorsionFree
 
 中文:
 实例 instIsMulTorsionFree
-  签名: [IsMulTorsionFree M]
+  签名: [是MulTorsionFree M]
   定义体: by
     rintro ⟨a⟩ ⟨b⟩ (hab : mk a.1 a.2 ^ n = mk b.1 b.2 ^ n)
     change mk a.1 a.2 = mk b.1 b.2
@@ -2640,7 +2640,7 @@ theorem mk_left_injective
 中文:
 定理 mk_left_injective
   条件: (b : s)
-  结论: Injective fun a => mk a b
+  结论: 单射 fun a => mk a b
   证明: fun c d h => by
   simpa [mk_eq_mk_iff, r_iff_exists] using h
 
@@ -2711,7 +2711,7 @@ definition localizationMap
 
 中文:
 定义 localizationMap
-  签名: : S.LocalizationMap R[S⁻¹]
+  签名: : S.Localization映射 R[S⁻¹]
   定义体: Localization.monoidOf S
 -/
 protected def localizationMap : S.LocalizationMap R[S⁻¹] := Localization.monoidOf S
@@ -2752,8 +2752,8 @@ theorem Submonoid.isLocalizationMap_iff_bijective
       rw [div_eq_mul_inv]; rw [map_mul]; rw [← eq]; rw [mul_assoc]; rw [← map_mul]; rw [mul_inv_cancel]; rw [h.map_one]; rw [mul_on
 
 中文:
-定理 Submonoid.isLocalizationMap_iff_bijective
-  结论: {S : Submonoid G}
+定理 子幺半群.isLocalizationMap_iff_bijective
+  结论: {S : 子幺半群 G}
   证明: by
     refine ⟨fun g g' eq => ?_, fun m => ?_⟩
     · have ⟨c, eq⟩ := h.exists_of_eq eq
@@ -2787,8 +2787,8 @@ theorem Submonoid.isLocalizationMap_id
   proof: S.isLocalizationMap_iff_bijective (f := MulHom.id _).mpr bijective_id
 
 中文:
-定理 Submonoid.isLocalizationMap_id
-  条件: (S : Submonoid G)
+定理 子幺半群.isLocalizationMap_id
+  条件: (S : 子幺半群 G)
   证明: S.isLocalizationMap_iff_bijective (f := MulHom.id _).mpr bijective_id
 -/
 @[to_additive] theorem Submonoid.isLocalizationMap_id (S : Submonoid G) :
@@ -2806,8 +2806,8 @@ theorem Submonoid.isLocalizationMap_of_group
   exists_of_eq eq := by simp [hf eq]
 
 中文:
-定理 Submonoid.isLocalizationMap_of_group
-  结论: {S : Submonoid M}
+定理 子幺半群.isLocalizationMap_of_group
+  结论: {S : 子幺半群 M}
   证明: Group.isUnit _
   surj g := have ⟨x, y, hy, eq⟩ := surj g; ⟨⟨x, y, hy⟩, by simp [eq]⟩
   exists_of_eq eq := by simp [hf eq]
@@ -2832,8 +2832,8 @@ theorem AddSubmonoid.isLocalizationMap_nat_int
 have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero
 
 中文:
-定理 AddSubmonoid.isLocalizationMap_nat_int
-  条件: (S : AddSubmonoid 自然数) (hS : S != ⊥)
+定理 加法子幺半群.isLocalizationMap_nat_int
+  条件: (S : 加法子幺半群 自然数) (hS : S != ⊥)
   证明: S.isLocalizationMap_of_addGroup (fun _ _ => Int.natCast_inj.mp) fun z => by
     obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
     · exact ⟨z, 0, zero_mem _, by lia⟩
@@ -2859,7 +2859,7 @@ theorem AddSubmonoid.isLocalizationMap_top_nat_int
   proof: AddSubmonoid.isLocalizationMap_nat_int _ top_ne_bot
 
 中文:
-定理 AddSubmonoid.isLocalizationMap_top_nat_int
+定理 加法子幺半群.isLocalizationMap_top_nat_int
   证明: AddSubmonoid.isLocalizationMap_nat_int _ top_ne_bot
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.isLocalizationMap_nat_int, isLocalizationMap_nat_int, top_ne_bot
@@ -2887,7 +2887,7 @@ theorem injective_iff
 
 中文:
 定理 injective_iff
-  条件: (f : LocalizationMap S N)
+  条件: (f : Localization映射 S N)
   证明: by
   simp_rw [Commute.isRegular_iff (Commute.all _), IsLeftRegular,
     Injective, LocalizationMap.eq_iff_exists, exists_imp, Subtype.forall]
@@ -2910,7 +2910,7 @@ theorem top_injective_iff
 
 中文:
 定理 top_injective_iff
-  条件: (f : (⊤ : Submonoid M).LocalizationMap N)
+  条件: (f : (⊤ : 子幺半群 M).Localization映射 N)
   证明: by
   simp [injective_iff, isCancelMul_iff_forall_isRegular]
 -/
@@ -2935,7 +2935,7 @@ theorem map_isRegular
 
 中文:
 定理 map_isRegular
-  结论: (f : LocalizationMap S N) {m : M}
+  结论: (f : Localization映射 S N) {m : M}
   证明: by
   refine (Commute.isRegular_iff (Commute.all _)).mpr fun n₁ n₂ eq => ?_
   have ⟨ms₁, eq₁⟩ := f.surj n₁
@@ -2974,8 +2974,8 @@ theorem isCancelMul
 
 中文:
 定理 isCancelMul
-  条件: (f : LocalizationMap S N) [IsCancelMul M]
-  结论: IsCancelMul N
+  条件: (f : Localization映射 S N) [是消去乘法 M]
+  结论: 是消去乘法 N
   证明: by
   simp_rw [isCancelMul_iff_forall_isRegular, Commute.isRegular_iff (Commute.all _),
     ← Commute.isRightRegular_iff (Commute.all _)]
@@ -2999,8 +2999,8 @@ instance [IsCancelMul
   body: (Localization.monoidOf S).isCancelMul
 
 中文:
-实例 [IsCancelMul
-  签名: M] : IsCancelMul (Localization S)
+实例 [是消去乘法
+  签名: M] : 是消去乘法 (Localization S)
   定义体: (Localization.monoidOf S).isCancelMul
 -/
 @[to_additive] instance [IsCancelMul M] : IsCancelMul (Localization S) :=
@@ -3015,8 +3015,8 @@ instance [IsCancelMul
   body: .nontrivial (injective_iff <| Localization.monoidOf S).mpr (fun _ _ => .all _)
 
 中文:
-实例 [IsCancelMul
-  签名: M] [Nontrivial M] : Nontrivial (Localization S)
+实例 [是消去乘法
+  签名: M] [非平凡 M] : 非平凡 (Localization S)
   定义体: .nontrivial (injective_iff <| Localization.monoidOf S).mpr (fun _ _ => .all _)
 -/
 @[to_additive] instance [IsCancelMul M] [Nontrivial M] : Nontrivial (Localization S) :=
@@ -3035,7 +3035,7 @@ abbreviation cancelCommMonoid
 
 中文:
 缩写 cancelCommMonoid
-  签名: {M N} [CancelCommMonoid M] {S : Submonoid M}
+  签名: {M N} [消去交换幺半群 M] {S : 子幺半群 M}
   定义体: f.isCancelMul.mul_left_cancel
 
 Depends on / 依赖: f.isCancelMul.mul_left_cancel, isCancelMul, mul_left_cancel
@@ -3061,7 +3061,7 @@ theorem subsingleton_of_subsingleton
 
 中文:
 定理 subsingleton_of_subsingleton
-  条件: (f : LocalizationMap S N) [Subsingleton M]
+  条件: (f : Localization映射 S N) [子单例 M]
   证明: by
     obtain ⟨mx, sx, rfl⟩ := f.mk'_surjective x
     obtain ⟨my, sy, rfl⟩ := f.mk'_surjective y
@@ -3083,8 +3083,8 @@ instance [Subsingleton
   body: (Localization.monoidOf S).subsingleton_of_subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (Localization S)
+实例 [子单例
+  签名: M] : 子单例 (Localization S)
   定义体: (Localization.monoidOf S).subsingleton_of_subsingleton
 
 Depends on / 依赖: Localization, Localization.monoidOf, monoidOf, subsingleton_of_subsingleton

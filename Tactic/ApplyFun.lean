@@ -43,7 +43,7 @@ withoutRec
 
 中文:
 定义 applyFunHyp
-  签名: (f : Term) (using? : Option Term) (h : FVarId) (g : MVarId)
+  签名: (f : 项) (using? : 选项类型 项) (h : FVarId) (g : MVarId)
   定义体: do
   let using? ← using?.mapM (elabTerm · none)
   let d ← h.getDecl
@@ -132,7 +132,7 @@ definition applyFunTargetFailure
 
 中文:
 定义 applyFunTargetFailure
-  签名: (f : Term)
+  签名: (f : 项)
   定义体: do
   throwError "`apply_fun` could not apply `{f}` to the main goal."
 -/
@@ -159,7 +159,7 @@ definition maybeProveInjective
 
 中文:
 定义 maybeProveInjective
-  签名: (ginj : Expr) (using? : Option Expr)
+  签名: (ginj : Expr) (using? : 选项类型 Expr)
   定义体: do
   -- Try the `using` clause
   if let some u := using? then
@@ -217,7 +217,7 @@ withoutRecover runTermElab do
 
 中文:
 定义 applyFunTarget
-  签名: (f : Term) (using? : Option Term) (g : MVarId)
+  签名: (f : 项) (using? : 选项类型 项) (g : MVarId)
   定义体: do
   -- handle applying a two-argument theorem whose first argument is f
   let handle (thm : Name) : TacticM (List MVarId) := do

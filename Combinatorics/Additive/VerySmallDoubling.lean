@@ -351,7 +351,7 @@ lemma weaken_doubling
 
 中文:
 引理 weaken_doubling
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A)
   结论: #(A * A) < 2 * #A
   证明: by
   rw [← Nat.cast_lt (α := Rat)]; rw [Nat.cast_mul]; rw [Nat.cast_two]
@@ -374,8 +374,8 @@ lemma nonempty_of_doubling
 
 中文:
 引理 nonempty_of_doubling
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A)
-  结论: A.Nonempty
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A)
+  结论: A.非空
   证明: by
   by_contra! rfl
   simp at h
@@ -403,7 +403,7 @@ definition invMulSubgroup
 
 中文:
 定义 invMulSubgroup
-  签名: (A : Finset G) (h : #(A * A) < (3 / 2 : Rat) * #A)
+  签名: (A : 有限集 G) (h : #(A * A) < (3 / 2 : 有理数) * #A)
   定义体: A⁻¹ * A
   one_mem' := by
     have ⟨x, hx⟩ : A.Nonempty := nonempty_of_doubling h
@@ -468,8 +468,8 @@ lemma invMulSubgroup_eq_inv_mul
 
 中文:
 引理 invMulSubgroup_eq_inv_mul
-  条件: (A : Finset G) (h)
-  结论: (invMulSubgroup A h : Set G) = A⁻¹ * A
+  条件: (A : 有限集 G) (h)
+  结论: (invMulSubgroup A h : 集合 G) = A⁻¹ * A
   证明: rfl
 -/
 lemma invMulSubgroup_eq_inv_mul (A : Finset G) (h) : (invMulSubgroup A h : Set G) = A⁻¹ * A := rfl
@@ -488,8 +488,8 @@ lemma invMulSubgroup_eq_mul_inv
 
 中文:
 引理 invMulSubgroup_eq_mul_inv
-  条件: (A : Finset G) (h)
-  结论: (invMulSubgroup A h : Set G) = A * A⁻¹
+  条件: (A : 有限集 G) (h)
+  结论: (invMulSubgroup A h : 集合 G) = A * A⁻¹
   证明: by
   rw [invMulSubgroup_eq_inv_mul]; rw [eq_comm]
   norm_cast
@@ -523,7 +523,7 @@ lemma weak_invMulSubgroup_bound
 
 中文:
 引理 weak_invMulSubgroup_bound
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A)
   证明: by
   have h₀ : A.Nonempty := nonempty_of_doubling h
   have h₁ a (ha : a in A⁻¹ * A) : (1 / 2 : Rat) * #A < #{xy in A ×ˢ A | xy.1 * xy.2⁻¹ = a} := by
@@ -589,7 +589,7 @@ lemma subgroup_strong_bound_left
 
 中文:
 引理 subgroup_strong_bound_left
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A) (a : G) (ha : a in A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A) (a : G) (ha : a in A)
   证明: by
   have h₁ : (A⁻¹ * A) * (A⁻¹ * A) = A⁻¹ * A := by
     rw [← coe_inj]; rw [coe_mul]; rw [coe_mul]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [coe_mul_coe]
@@ -624,7 +624,7 @@ lemma subgroup_strong_bound_right
 
 中文:
 引理 subgroup_strong_bound_right
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A) (a : G) (ha : a in A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A) (a : G) (ha : a in A)
   证明: by
   intro z hz
   simp only [mem_smul_finset, smul_eq_mul_unop, unop_op, smul_eq_mul, mem_mul, mem_inv,
@@ -684,7 +684,7 @@ lemma smul_inv_mul_opSMul_eq_mul_of_doubling_lt_three_halves
 
 中文:
 引理 smul_inv_mul_opSMul_eq_mul_of_doubling_lt_three_halves
-  结论: (h : #(A * A) < (3 / 2 : Rat) * #A)
+  结论: (h : #(A * A) < (3 / 2 : 有理数) * #A)
   证明: (subgroup_strong_bound_right h a ha).antisymm (subgroup_strong_bound_left h a ha)
 
 Depends on / 依赖: antisymm, subgroup_strong_bound_left, subgroup_strong_bound_right
@@ -705,7 +705,7 @@ lemma card_inv_mul_of_doubling_lt_three_halves
 
 中文:
 引理 card_inv_mul_of_doubling_lt_three_halves
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A)
   证明: by
   obtain ⟨a, ha⟩ := nonempty_of_doubling h
   simp_rw [← smul_inv_mul_opSMul_eq_mul_of_doubling_lt_three_halves h ha, card_smul_finset]
@@ -734,7 +734,7 @@ lemma smul_inv_mul_eq_inv_mul_opSMul
 
 中文:
 引理 smul_inv_mul_eq_inv_mul_opSMul
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A) (ha : a in A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A) (ha : a in A)
   证明: by
   refine subset_antisymm ?_ ?_
   · rw [subset_smul_finset_iff, ← op_inv]
@@ -781,7 +781,7 @@ theorem doubling_lt_three_halves
 
 中文:
 定理 doubling_lt_three_halves
-  条件: (h : #(A * A) < (3 / 2 : Rat) * #A)
+  条件: (h : #(A * A) < (3 / 2 : 有理数) * #A)
   证明: by
   let H := invMulSubgroup A h
   refine ⟨H, inferInstance, ?_, fun a ha => ⟨?_, ?_⟩⟩
@@ -823,7 +823,7 @@ lemma op_smul_eq_iff_mem
 
 中文:
 引理 op_smul_eq_iff_mem
-  结论: {H : Subgroup G} {c : Set G} {x : G}
+  结论: {H : 子群 G} {c : 集合 G} {x : G}
   证明: by
   refine ⟨fun hx => ?_, fun hx =>
     by simp only [← hx, mem_rightCoset_iff, mul_inv_cancel, SetLike.mem_coe, one_mem]⟩
@@ -854,7 +854,7 @@ omit [DecidableEq G] in
 
 中文:
 引理 op_smul_eq_op_smul_iff_mem
-  条件: {H : Subgroup G} {x y : G}
+  条件: {H : 子群 G} {x y : G}
   证明: op_smul_eq_iff_mem (mem_orbit _ _)
 
 omit [DecidableEq G] in
@@ -877,8 +877,8 @@ lemma exists_subset_mul_eq_mul_injOn
   simpa [-SetLike.mem_coe, Set.iUnion_op_smul_set] using congr(Set.sUnion $hHZA)
 
 中文:
-引理 exists_subset_mul_eq_mul_injOn
-  条件: (H : Subgroup G) (A : Finset G)
+引理 存在_subset_mul_eq_mul_injOn
+  条件: (H : 子群 G) (A : 有限集 G)
   证明: by
   obtain ⟨Z, hZA, hZinj, hHZA⟩ :=
     ((A : Set G).surjOn_image ((H : Set G) <• ·)).exists_subset_injOn_image_eq
@@ -911,7 +911,7 @@ obtain rfl := hZ hz₁ hz₂ (rightCoset_eq_iff _).2 by
 
 中文:
 引理 card_mul_eq_mul_card_of_injOn_opSMul
-  结论: {H : Subgroup G} [Fintype H]
+  结论: {H : 子群 G} [有限类型 H]
   证明: by
   rw [card_mul_iff.2]
   · simp
@@ -1099,7 +1099,7 @@ definition expansion
 
 中文:
 定义 expansion
-  签名: (K : 实数) (S A : Finset G)
+  签名: (K : 实数) (S A : 有限集 G)
   定义体: #(A * S) - K * #A
 -/
 private def expansion (K : Real) (S A : Finset G) : Real := #(A * S) - K * #A
@@ -1116,7 +1116,7 @@ lemma expansion_empty
 
 中文:
 引理 expansion_empty
-  条件: (K : 实数) (S : Finset G)
+  条件: (K : 实数) (S : 有限集 G)
   结论: expansion K S ∅ = 0
   证明: by
   simp [expansion]
@@ -1136,7 +1136,7 @@ lemma mul_card_le_expansion
 
 中文:
 引理 mul_card_le_expansion
-  条件: (hS : S.Nonempty)
+  条件: (hS : S.非空)
   结论: (1 - K) * #A <= expansion K S A
   证明: by
   rw [one_sub_mul]; rw [expansion]; have := card_le_card_mul_right hS (s := A); gcongr
@@ -1156,7 +1156,7 @@ lemma expansion_nonneg
 
 中文:
 引理 expansion_nonneg
-  条件: (hK : K <= 1) (hS : S.Nonempty)
+  条件: (hK : K <= 1) (hS : S.非空)
   结论: 0 <= expansion K S A
   证明: by
   nlinarith [mul_card_le_expansion (K := K) hS (A := A)]
@@ -1176,7 +1176,7 @@ lemma expansion_pos
 
 中文:
 引理 expansion_pos
-  条件: (hK : K < 1) (hS : S.Nonempty) (hA : A.Nonempty)
+  条件: (hK : K < 1) (hS : S.非空) (hA : A.非空)
   证明: by
   have : (0 : Real) < #A := by simp [hA]
   nlinarith [mul_card_le_expansion (K := K) hS (A := A)]
@@ -1197,7 +1197,7 @@ lemma expansion_pos_iff
 
 中文:
 引理 expansion_pos_iff
-  条件: (hK : K < 1) (hS : S.Nonempty)
+  条件: (hK : K < 1) (hS : S.非空)
   证明: by by_contra! rfl; simp at hA
   mpr := expansion_pos hK hS
 -/
@@ -1216,7 +1216,7 @@ lemma expansion_smul_finset
 
 中文:
 引理 expansion_smul_finset
-  条件: (K : 实数) (S A : Finset G) (a : G)
+  条件: (K : 实数) (S A : 有限集 G) (a : G)
   证明: by simp [expansion, smul_mul_assoc]
 -/
 @[simp] private lemma expansion_smul_finset (K : Real) (S A : Finset G) (a : G) :
@@ -1261,7 +1261,7 @@ lemma bddBelow_expansion
 
 中文:
 引理 bddBelow_expansion
-  条件: (hK : K <= 1) (hS : S.Nonempty)
+  条件: (hK : K <= 1) (hS : S.非空)
   证明: ⟨0, by simp [lowerBounds, *]⟩
 -/
 private lemma bddBelow_expansion (hK : K <= 1) (hS : S.Nonempty) :
@@ -1278,7 +1278,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def connectivity (K : 实数) (S : Finset G)
+  签名: def connectivity (K : 实数) (S : 有限集 G)
   定义体: ⨅ A : {A : Finset G // A.Nonempty}, expansion K S A
 -/
 private noncomputable def connectivity (K : Real) (S : Finset G) : Real :=
@@ -1296,7 +1296,7 @@ lemma le_connectivity_iff
 
 中文:
 引理 le_connectivity_iff
-  条件: (hK : K <= 1) (hS : S.Nonempty) {r : 实数}
+  条件: (hK : K <= 1) (hS : S.非空) {r : 实数}
   证明: by
   have : Nonempty {A : Finset G // A.Nonempty} := ⟨{1}, by simp⟩
   simp [connectivity, le_ciInf_iff, bddBelow_expansion, *]
@@ -1318,7 +1318,7 @@ lemma connectivity_lt_iff
 
 中文:
 引理 connectivity_lt_iff
-  条件: (hK : K <= 1) (hS : S.Nonempty) {r : 实数}
+  条件: (hK : K <= 1) (hS : S.非空) {r : 实数}
   证明: by
   have : Nonempty {A : Finset G // A.Nonempty} := ⟨{1}, by simp⟩
   simp [connectivity, ciInf_lt_iff, bddBelow_expansion, *]
@@ -1338,7 +1338,7 @@ lemma connectivity_le_expansion
 
 中文:
 引理 connectivity_le_expansion
-  条件: (hK : K <= 1) (hS : S.Nonempty) (hA : A.Nonempty)
+  条件: (hK : K <= 1) (hS : S.非空) (hA : A.非空)
   证明: (le_connectivity_iff hK hS).1 le_rfl hA
 -/
 @[simp] private lemma connectivity_le_expansion (hK : K <= 1) (hS : S.Nonempty) (hA : A.Nonempty) :
@@ -1354,7 +1354,7 @@ lemma connectivity_nonneg
 
 中文:
 引理 connectivity_nonneg
-  条件: (hK : K <= 1) (hS : S.Nonempty)
+  条件: (hK : K <= 1) (hS : S.非空)
   证明: by simp [*]
 -/
 private lemma connectivity_nonneg (hK : K <= 1) (hS : S.Nonempty) :
@@ -1370,7 +1370,7 @@ definition IsFragment
 
 中文:
 定义 IsFragment
-  签名: (K : 实数) (S A : Finset G)
+  签名: (K : 实数) (S A : 有限集 G)
   定义体: expansion K S A = connectivity K S
 -/
 private def IsFragment (K : Real) (S A : Finset G) : Prop := expansion K S A = connectivity K S
@@ -1385,7 +1385,7 @@ definition IsAtom
 
 中文:
 定义 IsAtom
-  签名: (K : 实数) (S A : Finset G)
+  签名: (K : 实数) (S A : 有限集 G)
   定义体: MinimalFor (IsFragment K S) card A
 -/
 private def IsAtom (K : Real) (S A : Finset G) : Prop := MinimalFor (IsFragment K S) card A
@@ -1494,7 +1494,7 @@ have := connectivity_le_expansion hK hS hAB.mono inter_subset_union
 
 中文:
 引理 IsFragment.inter
-  结论: (hK : K <= 1) (hS : S.Nonempty) (hA : IsFragment K S A)
+  结论: (hK : K <= 1) (hS : S.非空) (hA : IsFragment K S A)
   证明: by
   unfold IsFragment at *
   have := expansion_submodularity (S := S) (A := A) (B := B) (K := K)
@@ -1526,7 +1526,7 @@ replace hB := hB.2 hAB by grw [inter_subset_right]
 
 中文:
 引理 IsAtom.eq_of_inter_nonempty
-  结论: (hK : K <= 1) (hS : S.Nonempty)
+  结论: (hK : K <= 1) (hS : S.非空)
   证明: by
   replace hAB := hA.isFragment.inter hK hS hB.isFragment hAB
 replace hA := hA.2 hAB by grw [inter_subset_left]
@@ -1560,8 +1560,8 @@ lemma exists_nonempty_isFragment
   b
 
 中文:
-引理 exists_nonempty_isFragment
-  条件: (hK : K < 1) (hS : S.Nonempty)
+引理 存在_nonempty_isFragment
+  条件: (hK : K < 1) (hS : S.非空)
   证明: by
   -- We will show this lemma by contradiction. So we suppose that the infimum in the definition of
   -- connectivity is not attained by a nonempty finite subset of `G`, or, equivalently, that for
@@ -1628,8 +1628,8 @@ lemma exists_isFragment
   proof: let ⟨A, _, hA⟩ := exists_nonempty_isFragment hK hS; ⟨A, hA⟩
 
 中文:
-引理 exists_isFragment
-  条件: (hK : K < 1) (hS : S.Nonempty)
+引理 存在_isFragment
+  条件: (hK : K < 1) (hS : S.非空)
   证明: let ⟨A, _, hA⟩ := exists_nonempty_isFragment hK hS; ⟨A, hA⟩
 -/
 private lemma exists_isFragment (hK : K < 1) (hS : S.Nonempty) :
@@ -1645,8 +1645,8 @@ lemma exists_isAtom
   proof: exists_minimalFor_of_wellFoundedLT _ _ exists_isFragment hK hS
 
 中文:
-引理 exists_isAtom
-  条件: (hK : K < 1) (hS : S.Nonempty)
+引理 存在_isAtom
+  条件: (hK : K < 1) (hS : S.非空)
   结论: 存在 A, IsAtom K S A
   证明: exists_minimalFor_of_wellFoundedLT _ _ exists_isFragment hK hS
 -/
@@ -1666,7 +1666,7 @@ lemma connectivity_pos
 
 中文:
 引理 connectivity_pos
-  条件: (hK : K < 1) (hS : S.Nonempty)
+  条件: (hK : K < 1) (hS : S.非空)
   结论: 0 < connectivity K S
   证明: by
   obtain ⟨A, hA, hSA⟩ := exists_nonempty_isFragment hK hS
@@ -1688,7 +1688,7 @@ lemma not_isFragment_empty
 
 中文:
 引理 not_isFragment_empty
-  条件: (hK : K < 1) (hS : S.Nonempty)
+  条件: (hK : K < 1) (hS : S.非空)
   结论: ¬ IsFragment K S ∅
   证明: by
   simp [IsFragment, (connectivity_pos hK hS).ne]
@@ -1708,7 +1708,7 @@ lemma IsFragment.nonempty
 
 中文:
 引理 IsFragment.nonempty
-  条件: (hK : K < 1) (hS : S.Nonempty) (hA : IsFragment K S A)
+  条件: (hK : K < 1) (hS : S.非空) (hA : IsFragment K S A)
   证明: by
   by_contra! rfl
   simp [*, not_isFragment_empty hK hS] at hA
@@ -1729,8 +1729,8 @@ lemma IsAtom.nonempty
 
 中文:
 引理 IsAtom.nonempty
-  条件: (hK : K < 1) (hS : S.Nonempty) (hA : IsAtom K S A)
-  结论: A.Nonempty
+  条件: (hK : K < 1) (hS : S.非空) (hA : IsAtom K S A)
+  结论: A.非空
   证明: hA.isFragment.nonempty hK hS
 -/
 private lemma IsAtom.nonempty (hK : K < 1) (hS : S.Nonempty) (hA : IsAtom K S A) : A.Nonempty :=
@@ -1749,8 +1749,8 @@ lemma exists_subgroup_isAtom
   obtain ⟨N, hN⟩ := exists_isAtom hK h
 
 中文:
-引理 exists_subgroup_isAtom
-  条件: (hK : K < 1) (hS : S.Nonempty)
+引理 存在_subgroup_isAtom
+  条件: (hK : K < 1) (hS : S.非空)
   证明: by
   -- We take any atom `N` of `G` with respect to `K` and `S`. Since left multiples of `N` (which
   -- are atoms as well) partition `G` by `IsAtom.eq_of_inter_nonempty`, we will deduce that a left
@@ -1808,7 +1808,7 @@ theorem card_mul_finset_lt_two
 
 中文:
 定理 card_mul_finset_lt_two
-  结论: {ε : 实数} (hε₀ : 0 < ε) (hε₁ : ε <= 1) (hS : S.Nonempty)
+  结论: {ε : 实数} (hε₀ : 0 < ε) (hε₁ : ε <= 1) (hS : S.非空)
   证明: by
   let K := 1 - ε / 2
   have hK : K < 1 := by unfold K; linarith [hε₀]
@@ -1894,7 +1894,7 @@ theorem doubling_lt_two
 
 中文:
 定理 doubling_lt_two
-  结论: {ε : 实数} (hε₀ : 0 < ε) (hε₁ : ε <= 1) (hA₀ : A.Nonempty)
+  结论: {ε : 实数} (hε₀ : 0 < ε) (hε₁ : ε <= 1) (hA₀ : A.非空)
   证明: card_mul_finset_lt_two hε₀ hε₁ hA₀ ⟨A, by rfl, hA₁⟩
 
 Depends on / 依赖: card_mul_finset_lt_two

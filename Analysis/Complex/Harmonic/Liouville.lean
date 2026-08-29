@@ -37,8 +37,8 @@ theorem InnerProductSpace.bounded_harmonic_on_complex_plane_is_constant_aux
   suffices forall z w, Complex.exp (F z) = Complex.exp (F w) by grin
 
 中文:
-定理 InnerProductSpace.bounded_harmonic_on_complex_plane_is_constant_aux
-  结论: (f : Complex -> 实数)
+定理 内积空间.bounded_harmonic_on_complex_plane_is_constant_aux
+  结论: (f : 复形 -> 实数)
   证明: by
   -- By assumption, there exists a holomorphic function $f$ such that $\Re(f) = u$.
   obtain ⟨F, hF_diff, hF_re⟩ := h_harm.exists_analyticOnNhd_univ_re_eq
@@ -77,8 +77,8 @@ theorem InnerProductSpace.bounded_harmonic_on_complex_plane_is_constant
   rw [← sub_eq_zero]; rw [← norm_eq_zero]; rw [
 
 中文:
-定理 InnerProductSpace.bounded_harmonic_on_complex_plane_is_constant
-  结论: (f : Complex -> E)
+定理 内积空间.bounded_harmonic_on_complex_plane_is_constant
+  结论: (f : 复形 -> E)
   证明: by
   intro z w
   obtain ⟨ℓ, h₁ℓ, h₂ℓ⟩ := exists_dual_vector'' Real (f z - f w)

@@ -90,7 +90,7 @@ definition cokernelLift
 
 中文:
 定义 cokernelLift
-  签名: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : CokernelCofork f)
+  签名: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : 余核余叉 f)
   定义体: by
   fconstructor
   -- The lift itself:
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCokernels SemiNormedGrp₁.{u}
+  签名: 有余kernels SemiNormedGrp₁.{u}
   定义体: HasColimit.mk
       { cocone := cokernelCocone f
         isColimit :=
@@ -325,7 +325,7 @@ definition cokernelLift
 
 中文:
 定义 cokernelLift
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : CokernelCofork f)
+  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : 余核余叉 f)
   定义体: ofHom NormedAddGroupHom.lift _ s.π.hom
     (by
       rintro _ ⟨b, rfl⟩
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCokernels SemiNormedGrp.{u}
+  签名: 有余kernels SemiNormedGrp.{u}
   定义体: HasColimit.mk
       { cocone := cokernelCocone f
         isColimit := isColimitCokernelCocone f }

@@ -81,7 +81,7 @@ lemma ordMonoidHom_eq_ord
 中文:
 引理 ordMonoidHom_eq_ord
   条件: (x : R⁰)
-  结论: (ordMonoidHom x).toAdd = Ring.ord R x
+  结论: (ordMonoidHom x).toAdd = 环.ord R x
   证明: (ENat.natCast_toNat (ord_ne_top x.2))
 
 @[simp]
@@ -105,7 +105,7 @@ lemma ordMonoidWithZeroHom_eq_ordMonoidHom
 
 中文:
 引理 ordMonoidWithZeroHom_eq_ordMonoidHom
-  条件: [Nontrivial R] (x : R⁰)
+  条件: [非平凡 R] (x : R⁰)
   证明: by
   simp only [SetLike.coe_mem, ordMonoidWithZeroHom_eq_ord, ordMonoidHom, MonoidHom.coe_mk,
     OneHom.coe_mk, toAdd_ofAdd]
@@ -131,7 +131,7 @@ lemma ordMonoidWithZeroHom_ne_zero
 
 中文:
 引理 ordMonoidWithZeroHom_ne_zero
-  条件: [Nontrivial R] {a : R} (ha : a in nonZeroDivisors R)
+  条件: [非平凡 R] {a : R} (ha : a in nonZeroDivisors R)
   证明: by
   lift a to R⁰ using ha
   simp [← ordMonoidWithZeroHom_eq_ordMonoidHom]
@@ -204,7 +204,7 @@ lemma ord_eq_addVal
 中文:
 引理 ord_eq_addVal
   条件: (x : R)
-  结论: ord R x = IsDiscreteValuationRing.addVal R x
+  结论: ord R x = 是离散赋值环.addVal R x
   证明: by
   by_cases hx : x = 0
   · simp only [ord, hx, AddValuation.map_zero]
@@ -268,7 +268,7 @@ theorem ord_add
 中文:
 定理 ord_add
   条件: (x y : R)
-  结论: min (Ring.ord R x) (Ring.ord R y) <= Ring.ord R (x + y)
+  结论: 最小值 (环.ord R x) (环.ord R y) <= 环.ord R (x + y)
   证明: by
   grw [ord_eq_addVal x, ord_eq_addVal y, ord_eq_addVal (x + y), IsDiscreteValuationRing.addVal_add]
 
@@ -330,7 +330,7 @@ lemma ordFrac_le_smul
 
 中文:
 引理 ordFrac_le_smul
-  结论: {S : 类型} [CommRing S] [Algebra S R] [Algebra S K]
+  结论: {S : 类型} [交换环 S] [代数 S R] [代数 S K]
   证明: by
   by_cases j : f = 0
   · simp [j]
@@ -369,7 +369,7 @@ lemma ordFrac_of_isUnit
 
 中文:
 引理 ordFrac_of_isUnit
-  条件: {x : R} (hx : IsUnit x)
+  条件: {x : R} (hx : 是单位 x)
   结论: ordFrac R (algebraMap R K x) = 1
   证明: by
   simp [ordFrac_eq_ord R (IsUnit.ne_zero hx), IsUnit.mem_nonZeroDivisors hx,

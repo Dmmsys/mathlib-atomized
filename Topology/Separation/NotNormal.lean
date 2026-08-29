@@ -43,7 +43,7 @@ theorem two_pow_mk_le_two_pow_mk_dense
 
 中文:
 定理 two_pow_mk_le_two_pow_mk_dense
-  结论: [NormalSpace X] {s d : Set X} (hs : IsClosed s)
+  结论: [正规空间 X] {s d : 集合 X} (hs : 是闭集 s)
   证明: by
   have h_closed (t) (ht : t in 𝒫 s) : IsClosed t := by
     rw [← inter_eq_self_of_subset_right ht]; rw [← Subtype.image_preimage_val]
@@ -84,7 +84,7 @@ theorem mk_lt_two_pow_mk_dense
 
 中文:
 定理 mk_lt_two_pow_mk_dense
-  结论: [NormalSpace X] {s d : Set X} (hs : IsClosed s)
+  结论: [正规空间 X] {s d : 集合 X} (hs : 是闭集 s)
   证明: (#s).cantor.trans_le hs.two_pow_mk_le_two_pow_mk_dense hd
 
 Depends on / 依赖: cantor, cantor.trans_le, hs.two_pow_mk_le_two_pow_mk_dense, trans_le, two_pow_mk_le_two_pow_mk_dense
@@ -109,7 +109,7 @@ theorem two_pow_mk_lt_continuum
 
 中文:
 定理 two_pow_mk_lt_continuum
-  结论: [NormalSpace X] {s : Set X} (hs : IsClosed s)
+  结论: [正规空间 X] {s : 集合 X} (hs : 是闭集 s)
   证明: have ⟨d, hd_countable, hd_dense⟩ := exists_countable_dense X
   calc
     2 ^ #s <= 2 ^ #d := hs.two_pow_mk_le_two_pow_mk_dense hd_dense
@@ -136,7 +136,7 @@ theorem mk_lt_continuum
 
 中文:
 定理 mk_lt_continuum
-  结论: [NormalSpace X] {s : Set X} (hs : IsClosed s)
+  结论: [正规空间 X] {s : 集合 X} (hs : 是闭集 s)
   证明: (#s).cantor.trans_le hs.two_pow_mk_lt_continuum
 
 Depends on / 依赖: cantor, cantor.trans_le, hs.two_pow_mk_lt_continuum, trans_le, two_pow_mk_lt_continuum
@@ -154,7 +154,7 @@ theorem not_normal_of_continuum_le_mk
 
 中文:
 定理 not_normal_of_continuum_le_mk
-  结论: {s : Set X} (hs : IsClosed s) [DiscreteTopology s]
+  结论: {s : 集合 X} (hs : 是闭集 s) [离散拓扑 s]
   证明: fun _ => hs.mk_lt_continuum.not_ge hmk
 
 Depends on / 依赖: hs.mk_lt_continuum.not_ge, mk_lt_continuum, not_ge

@@ -41,7 +41,7 @@ lemma Odd.pos
 
 中文:
 引理 Odd.pos
-  条件: [Semiring R] [PartialOrder R] [CanonicallyOrderedAdd R] [Nontrivial R] {a : R}
+  条件: [半环 R] [偏序 R] [典范有序加法 R] [非平凡 R] {a : R}
   证明: by
   rintro ⟨k, rfl⟩; simp
 -/
@@ -81,7 +81,7 @@ lemma toIsOrderedMonoid
 
 中文:
 引理 toIsOrderedMonoid
-  结论: IsOrderedMonoid R where
+  结论: 是Ordered幺半群 R where
   证明: mul_le_mul_left
 
 Depends on / 依赖: mul_le_mul_left
@@ -102,7 +102,7 @@ lemma toIsOrderedRing
 
 中文:
 引理 toIsOrderedRing
-  结论: IsOrderedRing R where
+  结论: 是Ordered环 R where
   证明: add_le_add_left
 
 @[simp]
@@ -124,7 +124,7 @@ theorem mul_pos
 
 中文:
 定理 mul_pos
-  条件: [NoZeroDivisors R] {a b : R}
+  条件: [无零因子 R] {a b : R}
   证明: by
   simp only [pos_iff_ne_zero, ne_eq, mul_eq_zero, not_or]
 -/
@@ -143,7 +143,7 @@ lemma pow_pos
 
 中文:
 引理 pow_pos
-  条件: [IsReduced R] {a : R} (ha : 0 < a) (n : 自然数)
+  条件: [是既约 R] {a : R} (ha : 0 < a) (n : 自然数)
   结论: 0 < a ^ n
   证明: pos_iff_ne_zero.2 pow_ne_zero _ ha.ne'
 
@@ -312,7 +312,7 @@ lemma mul_tsub_one
 
 中文:
 引理 mul_tsub_one
-  条件: [AddLeftReflectLE R] (a b : R)
+  条件: [加法LeftReflectLE R] (a b : R)
   证明: by rw [mul_tsub, mul_one]
 
 Depends on / 依赖: mul_one, mul_tsub
@@ -329,7 +329,7 @@ lemma tsub_one_mul
 
 中文:
 引理 tsub_one_mul
-  条件: [MulRightMono R] [AddLeftReflectLE R] (a b : R)
+  条件: [MulRightMono R] [加法LeftReflectLE R] (a b : R)
   证明: by rw [tsub_mul, one_mul]
 
 Depends on / 依赖: one_mul, tsub_mul

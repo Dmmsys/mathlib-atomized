@@ -115,7 +115,7 @@ ha fun eq => ne by simp [ArchimedeanClass.mk_eq_top_iff.mp eq]
 
 中文:
 定义 submodule
-  签名: (s : UpperSet (FiniteArchimedeanClass M))
+  签名: (s : 上集 (FiniteArchimedeanClass M))
   定义体: addSubgroup s
 smul_mem' k {a} ha ne := s.upper (ArchimedeanClass.mk_le_mk_smul ..)
 ha fun eq => ne by simp [ArchimedeanClass.mk_eq_top_iff.mp eq]
@@ -137,7 +137,7 @@ theorem submodule_strictAnti
 
 中文:
 定理 submodule_strictAnti
-  结论: StrictAnti (submodule K (M := M))
+  结论: 严格递减 (submodule K (M := M))
   证明: addSubgroup_strictAnti
 
 Depends on / 依赖: addSubgroup_strictAnti
@@ -287,7 +287,7 @@ theorem ball_strictAnti
 
 中文:
 定理 ball_strictAnti
-  结论: StrictAnti (ball (M := M) K)
+  结论: 严格递减 (ball (M := M) K)
   证明: ballAddSubgroup_strictAnti
 
 Depends on / 依赖: ballAddSubgroup_strictAnti

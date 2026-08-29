@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: (localizerMorphism C).IsRightDerivabilityStructure
+  签名: (localizerMorphism C).是RightDerivabilityStructure
   定义体: .mk' _
 -/
 instance : (localizerMorphism C).IsRightDerivabilityStructure := .mk' _

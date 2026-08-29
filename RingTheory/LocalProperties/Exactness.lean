@@ -136,7 +136,7 @@ have := SetLike.ext_iff.mp H J
 
 中文:
 定理 exact_of_isLocalized_maximal
-  结论: (H : 对任意 (J : Ideal R) [J.IsMaximal],
+  结论: (H : 对任意 (J : 理想 R) [J.是极大],
   证明: by
   simp only [LinearMap.exact_iff] at H ⊢
   apply eq_of_localization₀_maximal Nₚ g
@@ -375,7 +375,7 @@ have := SetLike.ext_iff.mp H r
 
 中文:
 引理 exact_of_isLocalized_span
-  结论: (H : 对任意 r : s, Function.Exact
+  结论: (H : 对任意 r : s, 函数.正合
   证明: by
   simp only [LinearMap.exact_iff] at H ⊢
   apply Submodule.eq_of_isLocalized₀_span s spn Nₚ g
@@ -527,8 +527,8 @@ lemma IsLocalizedModule.map_linearMap_of_isLocalization
   rw [show 1 = Algebra.linearMap R Rₚ 1 b
 
 中文:
-引理 IsLocalizedModule.map_linearMap_of_isLocalization
-  结论: (Rₚ Sₚ : 类型) [CommSemiring Rₚ]
+引理 是Localized模.map_linearMap_of_isLocalization
+  结论: (Rₚ Sₚ : 类型) [交换半环 Rₚ]
   证明: by
   apply IsLocalizedModule.linearMap_ext p.primeCompl (Algebra.linearMap _ _)
     (IsScalarTower.toAlgHom R S Sₚ : S ->ₗ[R] Sₚ)

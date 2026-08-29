@@ -53,8 +53,8 @@ definition Invertible.algebraTower
     (IsScalarTower.algebraMap_apply R S A r)
 
 中文:
-定义 Invertible.algebraTower
-  签名: (r : R) [Invertible (algebraMap R S r)]
+定义 可逆.algebraTower
+  签名: (r : R) [可逆 (algebraMap R S r)]
   定义体: Invertible.copy (Invertible.map (algebraMap S A) (algebraMap R S r)) (algebraMap R A r)
     (IsScalarTower.algebraMap_apply R S A r)
 
@@ -78,8 +78,8 @@ definition invertibleAlgebraCoeNat
   fast_instance% Invertible.algebraTower Nat R A n
 
 中文:
-定义 invertibleAlgebraCoeNat
-  签名: (n : 自然数) [inv : Invertible (n : R)]
+定义 invertibleAlgebraCoe自然数
+  签名: (n : 自然数) [inv : 可逆 (n : R)]
   定义体: haveI : Invertible (algebraMap Nat R n) := inv
   fast_instance% Invertible.algebraTower Nat R A n
 
@@ -114,7 +114,7 @@ definition algebraMapCoeffs
 
 中文:
 定义 algebraMapCoeffs
-  签名: : Basis ι A M
+  签名: : 基 ι A M
   定义体: b.mapCoeffs (RingEquiv.ofBijective _ h) fun c x => by simp
 
 @[simp]
@@ -243,8 +243,8 @@ theorem isScalarTower_of_nonempty
 
 中文:
 定理 isScalarTower_of_nonempty
-  条件: {ι} [Nonempty ι] (b : Basis ι S A)
-  结论: IsScalarTower R S S
+  条件: {ι} [非空 ι] (b : 基 ι S A)
+  结论: 标量塔 R S S
   证明: (b.repr.symm.comp <| lsingle <| Classical.arbitrary ι).isScalarTower_of_injective R
     (b.repr.symm.injective.comp <| single_injective _)
 
@@ -265,8 +265,8 @@ theorem isScalarTower_finsupp
 
 中文:
 定理 isScalarTower_finsupp
-  条件: {ι} (b : Basis ι S A)
-  结论: IsScalarTower R S (ι ->₀ S)
+  条件: {ι} (b : 基 ι S A)
+  结论: 标量塔 R S (ι ->₀ S)
   证明: b.repr.symm.isScalarTower_of_injective R b.repr.symm.injective
 
 Depends on / 依赖: b.repr.symm.injective, b.repr.symm.isScalarTower_of_injective, injective, isScalarTower_of_injective
@@ -296,7 +296,7 @@ definition smulTower
 
 中文:
 定义 smulTower
-  签名: : Basis (ι × ι') R A
+  签名: : 基 (ι × ι') R A
   定义体: haveI := c.isScalarTower_finsupp R
   .ofRepr
     (c.repr.restrictScalars R ≪≫ₗ
@@ -419,7 +419,7 @@ definition smulTower'
 
 中文:
 定义 smulTower'
-  签名: : Basis (ι' × ι) R A
+  签名: : 基 (ι' × ι) R A
   定义体: (b.smulTower c).reindex (.prodComm ..)
 
 Depends on / 依赖: b.smulTower, prodComm, reindex, smulTower
@@ -502,8 +502,8 @@ theorem Module.Basis.algebraMap_injective
   FaithfulSMul.algebraMap_injective R S
 
 中文:
-定理 Module.Basis.algebraMap_injective
-  条件: {ι : 类型} (b : Basis ι R S)
+定理 模.基.algebraMap_injective
+  条件: {ι : 类型} (b : 基 ι R S)
   证明: have : IsTorsionFree R S := b.isTorsionFree
   FaithfulSMul.algebraMap_injective R S
 
@@ -534,7 +534,7 @@ definition AlgHom.domRestrict
 @[deprecated (since := "2026-07-19")] alias AlgHom.restrictDomain := AlgHom.domRestrict
 
 中文:
-定义 AlgHom.domRestrict
+定义 代数态射.domRestrict
   签名: : B ->ₐ[A] D
   定义体: f.comp (IsScalarTower.toAlgHom A B C)
 
@@ -558,8 +558,8 @@ definition AlgHom.extendScalars
   __ := (f.domRestrict B).toRingHom.toAlgebra
 
 中文:
-定义 AlgHom.extendScalars
-  签名: : @AlgHom B C D _ _ _ _ (f.domRestrict B).toRingHom.toAlgebra where
+定义 代数态射.extendScalars
+  签名: : @代数态射 B C D _ _ _ _ (f.domRestrict B).toRingHom.toAlgebra where
   定义体: f
   commutes' := fun _ => rfl
   __ := (f.domRestrict B).toRingHom.toAlgebra

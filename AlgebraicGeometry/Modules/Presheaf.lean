@@ -40,7 +40,7 @@ abbreviation ringCatSheaf
 
 中文:
 缩写 ringCatSheaf
-  签名: : TopCat.Sheaf RingCat.{u} X
+  签名: : 顶元素范畴.层 环范畴.{u} X
   定义体: (sheafCompose _ (forget₂ CommRingCat RingCat.{u})).obj X.sheaf
 
 Depends on / 依赖: CommRingCat, RingCat, X.sheaf, sheafCompose
@@ -61,7 +61,7 @@ definition Hom.toRingCatSheafHom
   body: Functor.whiskerRight f.c _
 
 中文:
-定义 Hom.toRingCatSheafHom
+定义 态射.toRingCatSheafHom
   签名: (f : X ⟶ Y)
   定义体: Functor.whiskerRight f.c _
 

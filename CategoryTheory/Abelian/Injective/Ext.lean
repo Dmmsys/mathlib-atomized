@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: R.cochainComplex.IsKInjective
+  签名: R.cochainComplex.是KInjective
   定义体: isKInjective_of_injective _ 0
 
 Depends on / 依赖: isKInjective_of_injective

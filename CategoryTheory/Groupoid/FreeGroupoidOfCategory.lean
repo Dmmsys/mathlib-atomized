@@ -63,7 +63,7 @@ inductive FreeGroupoid.homRel
 
 中文:
 归纳类型 FreeGroupoid.homRel
-  参数: : HomRel (Quiver.FreeGroupoid C) where
+  参数: : HomRel (箭图.FreeGroupoid C) where
   构造子 (2 个):
     - map_id: (X : C) : homRel ((FreeGroupoid.of C).map (𝟙 X)) (𝟙 ((FreeGroupoid.of C).obj X))
     - map_comp: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : homRel ((FreeGroupoid.of C).map (f ≫ g)) ((FreeGroupoid.of C).map f ≫ (FreeGroupoid.of C).map g)
@@ -97,8 +97,8 @@ instance [Nonempty
   body: ⟨Quotient.mk (Quotient.mk ((Paths.of _).obj (Classical.arbitrary C)))⟩
 
 中文:
-实例 [Nonempty
-  签名: C] : Nonempty (FreeGroupoid C)
+实例 [非空
+  签名: C] : 非空 (FreeGroupoid C)
   定义体: ⟨Quotient.mk (Quotient.mk ((Paths.of _).obj (Classical.arbitrary C)))⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, Paths.of, Quotient, Quotient.mk, arbitrary
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: Groupoid (FreeGroupoid C)
+  签名: 群胚 (FreeGroupoid C)
   定义体: Quotient.groupoid (FreeGroupoid.homRel C)
 
 Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Quotient, Quotient.groupoid, groupoid, homRel
@@ -210,7 +210,7 @@ lemma of_obj_bijective
 
 中文:
 引理 of_obj_bijective
-  结论: Function.Bijective (of C).obj where
+  结论: 函数.双射 (of C).obj where
   证明: by cases h; rfl
   right X := ⟨X.as.as, rfl⟩
 
@@ -303,7 +303,7 @@ lemma lift_obj_mk
 
 中文:
 引理 lift_obj_mk
-  条件: {E : 类型u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C)
+  条件: {E : 类型u₂} [群胚.{v₂} E] (φ : C ⥤ E) (X : C)
   证明: rfl
 -/
 lemma lift_obj_mk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C) :
@@ -323,7 +323,7 @@ lemma lift_map_homMk
 
 中文:
 引理 lift_map_homMk
-  条件: {E : 类型u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : X ⟶ Y)
+  条件: {E : 类型u₂} [群胚.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : X ⟶ Y)
   证明: by
   simpa using Functor.congr_hom (lift_spec φ) f
 
@@ -399,7 +399,7 @@ theorem lift_comp
 
 中文:
 定理 lift_comp
-  条件: {H : 类型u₂} [Groupoid.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H)
+  条件: {H : 类型u₂} [群胚.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H)
   证明: by
   symm
   apply lift_unique
@@ -451,7 +451,7 @@ instance :
 
 中文:
 实例 :
-  签名: (of C).IsLocalization ⊤
+  签名: (of C).是Localization ⊤
   定义体: .mk' _ _ strictUniversalPropertyFixedTarget strictUniversalPropertyFixedTarget
 
 Depends on / 依赖: strictUniversalPropertyFixedTarget
@@ -470,7 +470,7 @@ definition liftNatIso
 @[simp]
 
 中文:
-定义 liftNatIso
+定义 lift自然数Iso
   签名: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂)
   定义体: Localization.liftNatIso (of C) ⊤ (of C ⋙ F₁) (of C ⋙ F₂) _ _ τ
 
@@ -494,7 +494,7 @@ lemma liftNatIso_hom_app
 @[simp]
 
 中文:
-引理 liftNatIso_hom_app
+引理 lift自然数Iso_hom_app
   条件: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
   证明: by
   simp [liftNatIso]
@@ -518,7 +518,7 @@ lemma liftNatIso_inv_app
   simp [liftNatIso]
 
 中文:
-引理 liftNatIso_inv_app
+引理 lift自然数Iso_inv_app
   条件: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
   证明: by
   simp [liftNatIso]
@@ -920,7 +920,7 @@ definition functorEquiv
 
 中文:
 定义 functorEquiv
-  签名: {D : 类型} [Groupoid D]
+  签名: {D : 类型} [群胚 D]
   定义体: of C ⋙ G
   invFun F := lift F
   right_inv := lift_spec
@@ -1132,7 +1132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Reflective Grpd.forgetToCat
+  签名: 反射 Grpd.forgetToCat
   定义体: free
   adj := freeForgetAdjunction
 -/

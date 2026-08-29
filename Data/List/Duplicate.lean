@@ -41,8 +41,8 @@ inductive Duplicate
 归纳类型 Duplicate
   参数: (x : α)
   构造子 (2 个):
-    - cons_mem: {l : List α} : x in l -> Duplicate x (x :: l)
-    - cons_duplicate: {y : α} {l : List α} : Duplicate x l -> Duplicate x (y :: l)
+    - cons_mem: {l : 列表 α} : x in l -> Duplicate x (x :: l)
+    - cons_duplicate: {y : α} {l : 列表 α} : Duplicate x l -> Duplicate x (y :: l)
 -/
 inductive Duplicate (x : α) : List α -> Prop
   | cons_mem {l : List α} : x in l -> Duplicate x (x :: l)
@@ -278,7 +278,7 @@ theorem Duplicate.elim_nil
 中文:
 定理 Duplicate.elim_nil
   条件: (h : x in+ [])
-  结论: False
+  结论: 假
   证明: not_duplicate_nil x h
 
 Depends on / 依赖: not_duplicate_nil
@@ -298,7 +298,7 @@ theorem Duplicate.elim_singleton
 中文:
 定理 Duplicate.elim_singleton
   条件: {y : α} (h : x in+ [y])
-  结论: False
+  结论: 假
   证明: not_duplicate_singleton x y h
 
 Depends on / 依赖: not_duplicate_singleton
@@ -409,7 +409,7 @@ theorem Duplicate.mono_sublist
 
 中文:
 定理 Duplicate.mono_sublist
-  条件: {l' : List α} (hx : x in+ l) (h : l <+ l')
+  条件: {l' : 列表 α} (hx : x in+ l) (h : l <+ l')
   结论: x in+ l'
   证明: by
   induction h with
@@ -490,7 +490,7 @@ theorem nodup_iff_forall_not_duplicate
   simp_rw [nodup_iff_sublist, duplicate_iff_sublist]
 
 中文:
-定理 nodup_iff_forall_not_duplicate
+定理 nodup_iff_对任意_not_duplicate
   结论: Nodup l ↔ 对任意 x : α, ¬x in+ l
   证明: by
   simp_rw [nodup_iff_sublist, duplicate_iff_sublist]
@@ -510,7 +510,7 @@ theorem exists_duplicate_iff_not_nodup
   simp [nodup_iff_forall_not_duplicate]
 
 中文:
-定理 exists_duplicate_iff_not_nodup
+定理 存在_duplicate_iff_not_nodup
   结论: (存在 x : α, x in+ l) ↔ ¬Nodup l
   证明: by
   simp [nodup_iff_forall_not_duplicate]

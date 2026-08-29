@@ -55,7 +55,7 @@ mul_smul _ _ _ := unop_injective mul_smul _ _ _
 
 中文:
 实例 instMulAction
-  签名: [Monoid M] [MulAction M α]
+  签名: [幺半群 M] [乘法作用 M α]
   定义体: unop_injective one_smul _ _
 mul_smul _ _ _ := unop_injective mul_smul _ _ _
 
@@ -80,7 +80,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α]
+  签名: [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α]
   定义体: unop_injective smul_assoc _ _ _
 
 @[to_additive]
@@ -104,7 +104,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: unop_injective smul_comm _ _ _
 
 @[to_additive]
@@ -128,7 +128,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul M α] [SMul Mᵐᵒᵖ α] [IsCentralScalar M α]
+  签名: [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α] [中心标量 M α]
   定义体: unop_injective op_smul_eq_smul _ _
 
 @[to_additive]
@@ -152,7 +152,7 @@ lemma op_smul_eq_op_smul_op
 
 中文:
 引理 op_smul_eq_op_smul_op
-  条件: [SMul M α] [SMul Mᵐᵒᵖ α] [IsCentralScalar M α] (r : M) (a : α)
+  条件: [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α] [中心标量 M α] (r : M) (a : α)
   证明: (op_smul_eq_smul r (op a)).symm
 
 @[to_additive]
@@ -173,7 +173,7 @@ lemma unop_smul_eq_unop_smul_unop
 
 中文:
 引理 unop_smul_eq_unop_smul_unop
-  结论: [SMul M α] [SMul Mᵐᵒᵖ α] [IsCentralScalar M α] (r : Mᵐᵒᵖ)
+  结论: [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α] [中心标量 M α] (r : Mᵐᵒᵖ)
   证明: (unop_smul_eq_smul r (unop a)).symm
 
 Depends on / 依赖: unop_smul_eq_smul
@@ -306,8 +306,8 @@ instance Semigroup.opposite_smulCommClass
 @[to_additive]
 
 中文:
-实例 Semigroup.opposite_smulCommClass
-  签名: [Semigroup α]
+实例 半群.opposite_smulCommClass
+  签名: [半群 α]
   定义体: mul_assoc _ _ _
 
 @[to_additive]
@@ -329,8 +329,8 @@ instance Semigroup.opposite_smulCommClass'
 @[to_additive]
 
 中文:
-实例 Semigroup.opposite_smulCommClass'
-  签名: [Semigroup α]
+实例 半群.opposite_smulCommClass'
+  签名: [半群 α]
   定义体: SMulCommClass.symm _ _ _
 
 @[to_additive]
@@ -350,8 +350,8 @@ instance CommSemigroup.isCentralScalar
   body: mul_comm _ _
 
 中文:
-实例 CommSemigroup.isCentralScalar
-  签名: [CommSemigroup α]
+实例 交换半群.isCentralScalar
+  签名: [交换半群 α]
   定义体: mul_comm _ _
 
 Depends on / 依赖: mul_comm
@@ -373,8 +373,8 @@ instance Monoid.toOppositeMulAction
 @[to_additive]
 
 中文:
-实例 Monoid.toOppositeMulAction
-  签名: [Monoid α]
+实例 幺半群.toOppositeMulAction
+  签名: [幺半群 α]
   定义体: mul_one
   mul_smul _ _ _ := (mul_assoc _ _ _).symm
 
@@ -398,8 +398,8 @@ instance IsScalarTower.opposite_mid
 @[to_additive]
 
 中文:
-实例 IsScalarTower.opposite_mid
-  签名: {M N} [Mul N] [SMul M N] [SMulCommClass M N N]
+实例 标量塔.opposite_mid
+  签名: {M N} [乘法 N] [标量乘法 M N] [标量交换类 M N N]
   定义体: mul_smul_comm _ _ _
 
 @[to_additive]
@@ -422,8 +422,8 @@ instance SMulCommClass.opposite_mid
     simp only [smul_mul_assoc, MulOpposite.smul_eq_mul_unop]
 
 中文:
-实例 SMulCommClass.opposite_mid
-  签名: {M N} [Mul N] [SMul M N] [IsScalarTower M N N]
+实例 标量交换类.opposite_mid
+  签名: {M N} [乘法 N] [标量乘法 M N] [标量塔 M N N]
   定义体: by
     induction y using MulOpposite.rec'
     simp only [smul_mul_assoc, MulOpposite.smul_eq_mul_unop]

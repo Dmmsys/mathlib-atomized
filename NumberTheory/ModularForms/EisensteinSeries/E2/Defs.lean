@@ -149,7 +149,7 @@ definition G2
 
 中文:
 定义 G2
-  签名: : ℍ -> Complex
+  签名: : ℍ -> 复形
   定义体: fun z => ∑'[symmetricIcc Int] m, e2Summand m z
 
 Depends on / 依赖: e2Summand, symmetricIcc
@@ -166,7 +166,7 @@ definition E2
 
 中文:
 定义 E2
-  签名: : ℍ -> Complex
+  签名: : ℍ -> 复形
   定义体: (1 / (2 * riemannZeta 2)) • G2
 
 Depends on / 依赖: riemannZeta

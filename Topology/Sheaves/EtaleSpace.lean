@@ -57,8 +57,8 @@ structure EtaleSpace
     - germ : ToType (F.stalk base)
 
 中文:
-结构 EtaleSpace
-  参数: (F : Presheaf C X)
+结构 平展空间
+  参数: (F : 预层 C X)
   公理与运算 (2 个):
     - base : X
     - germ : ToType (F.stalk base)
@@ -91,7 +91,7 @@ mem_iInf_of_mem rfl mem_principal_self _
 
 中文:
 定理 eventually_nhds
-  结论: (g : EtaleSpace F) {U : Opens X} (h : g.base in U)
+  结论: (g : 平展空间 F) {U : Opens X} (h : g.base in U)
   证明: by
   simp only [nhds_generateFrom, Filter.Eventually, mem_ofPred_eq, iInf_and, iInf_exists]
 refine mem_iInf_of_mem _ mem_iInf_of_mem ?_ mem_iInf_of_mem U mem_iInf_of_mem s
@@ -128,7 +128,7 @@ theorem continuous_base
 
 中文:
 定理 continuous_base
-  结论: Continuous (base (F := F))
+  结论: 连续 (base (F := F))
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -163,8 +163,8 @@ theorem exists_section_of_tendsto
 exact h.eventually g₀.eventually_nhds hU s hs
 
 中文:
-定理 exists_section_of_tendsto
-  结论: {α : 类型} {l : Filter α} {g : α -> F.EtaleSpace}
+定理 存在_section_of_tendsto
+  结论: {α : 类型} {l : 滤子 α} {g : α -> F.平展空间}
   证明: by
   rcases F.exists_germ_eq g₀.germ with ⟨U, hU, s, hs⟩
   use U, hU, s

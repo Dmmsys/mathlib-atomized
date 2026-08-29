@@ -163,7 +163,7 @@ theorem LSeries_eq_mul_integral_aux
 
 中文:
 定理 LSeries_eq_mul_integral_aux
-  结论: {f : 自然数 -> Complex} (hf : f 0 = 0) {r : 实数} (hr : 0 <= r) {s : Complex}
+  结论: {f : 自然数 -> 复形} (hf : f 0 = 0) {r : 实数} (hr : 0 <= r) {s : 复形}
   证明: by
   have h₁ : (-s - 1).re + r < -1 := by
     rwa [sub_re, one_re, neg_re, neg_sub_left, neg_add_lt_iff_lt_add, add_neg_cancel_comm]
@@ -220,7 +220,7 @@ theorem LSeries_eq_mul_integral
 
 中文:
 定理 LSeries_eq_mul_integral
-  结论: (f : 自然数 -> Complex) {r : 实数} (hr : 0 <= r) {s : Complex} (hs : r < s.re)
+  结论: (f : 自然数 -> 复形) {r : 实数} (hr : 0 <= r) {s : 复形} (hs : r < s.re)
   证明: by
   rw [← LSeriesSummable_congr' s (f := fun n => if n = 0 then 0 else f n)
     (by filter_upwards [eventually_ne_atTop 0] with n h using if_neg h)] at hS
@@ -251,7 +251,7 @@ theorem LSeries_eq_mul_integral'
 
 中文:
 定理 LSeries_eq_mul_integral'
-  结论: (f : 自然数 -> Complex) {r : 实数} (hr : 0 <= r) {s : Complex} (hs : r < s.re)
+  结论: (f : 自然数 -> 复形) {r : 实数} (hr : 0 <= r) {s : 复形} (hs : r < s.re)
   证明: LSeries_eq_mul_integral _ hr hs (LSeriesSummable_of_sum_norm_bigO hO hr hs)
     (isBigO_of_le _ fun _ => (norm_sum_le _ _).trans <| Real.le_norm_self _).trans hO
 
@@ -273,7 +273,7 @@ theorem LSeries_eq_mul_integral_of_nonneg
 
 中文:
 定理 LSeries_eq_mul_integral_of_nonneg
-  结论: (f : 自然数 -> 实数) {r : 实数} (hr : 0 <= r) {s : Complex} (hs : r < s.re)
+  结论: (f : 自然数 -> 实数) {r : 实数} (hr : 0 <= r) {s : 复形} (hs : r < s.re)
   证明: LSeries_eq_mul_integral' _ hr hs hO.congr_left fun _ => by simp [abs_of_nonneg (hf _)]
 
 Depends on / 依赖: LSeries_eq_mul_integral, abs_of_nonneg, congr_left, hO.congr_left
@@ -307,7 +307,7 @@ theorem lemma₁
 
 中文:
 定理 lemma₁
-  结论: (hlim : Tendsto (fun n : 自然数 => (∑ k in Icc 1 n, f k) / n) atTop (𝓝 l))
+  结论: (hlim : 收敛 (fun n : 自然数 => (∑ k in 闭区间 1 n, f k) / n) atTop (𝓝 l))
   证明: by
   have h₁ : LocallyIntegrableOn (fun t : Real => (∑ k in Icc 1 ⌊t⌋₊, f k) * (t : Complex) ^ (-(s : Complex) - 1))
         (Set.Ici 1) := by
@@ -352,7 +352,7 @@ theorem lemma₂
 
 中文:
 定理 lemma₂
-  结论: {s T ε : 实数} {S : 实数 -> Complex} (hs : 1 < s)
+  结论: {s T ε : 实数} {S : 实数 -> 复形} (hs : 1 < s)
   证明: by
   have h : LocallyIntegrableOn (fun t : Real => ‖S t‖ * (t ^ (-s - 1))) (Set.Ici 1) := by
     refine hS₁.norm.mul_continuousOn ?_ isLocallyClosed_Ici
@@ -427,7 +427,7 @@ theorem LSeries_tendsto_sub_mul_nhds_one_of_tendsto_sum_div_aux₂
 
 中文:
 定理 LSeries_tendsto_sub_mul_nhds_one_of_tendsto_sum_div_aux₂
-  结论: {s T ε : 实数} {S : 实数 -> Complex}
+  结论: {s T ε : 实数} {S : 实数 -> 复形}
   证明: by
   have hT₀ : 0 < T := zero_lt_one.trans_le hT₁
   have h {t : Real} (ht : 0 < t) : t ^ (-s) = t * t ^ (-s - 1) := by

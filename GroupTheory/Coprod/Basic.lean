@@ -146,7 +146,7 @@ definition coprodCon
 
 中文:
 定义 coprodCon
-  签名: (M N : 类型) [MulOneClass M] [MulOneClass N]
+  签名: (M N : 类型) [MulOne类 M] [MulOne类 N]
   定义体: sInf {c |
     (forall x y : M, c (of (Sum.inl (x * y))) (of (Sum.inl x) * of (Sum.inl y)))
     ∧ (forall x y : N, c (of (Sum.inr (x * y))) (of (Sum.inr x) * of (Sum.inr y)))
@@ -172,7 +172,7 @@ definition Coprod
 
 中文:
 定义 Coprod
-  签名: (M N : 类型) [MulOneClass M] [MulOneClass N]
+  签名: (M N : 类型) [MulOne类 M] [MulOne类 N]
   定义体: (coprodCon M N).Quotient
 
 Depends on / 依赖: B.toMatrix, _toLin, toMatrix
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulOneClass (M ∗ N)
+  签名: MulOne类 (M ∗ N)
   定义体: inferInstanceAs MulOneClass (coprodCon M N).Quotient
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, injective
@@ -221,7 +221,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : FreeMonoid (M oplus N) ->* M ∗ N
+  签名: : 自由幺半群 (M oplus N) ->* M ∗ N
   定义体: Con.mk' _
 
 @[to_additive (attr := simp)]
@@ -265,7 +265,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Surjective (@mk M N _ _)
+  结论: 满射 (@mk M N _ _)
   证明: Quot.mk_surjective
 
 @[to_additive (attr := simp)]
@@ -287,7 +287,7 @@ theorem mrange_mk
 
 中文:
 定理 mrange_mk
-  结论: MonoidHom.mrange (@mk M N _ _) = ⊤
+  结论: 幺半群态射.mrange (@mk M N _ _) = ⊤
   证明: Con.mrange_mk'
 
 @[to_additive]
@@ -308,7 +308,7 @@ theorem mk_eq_mk
 
 中文:
 定理 mk_eq_mk
-  条件: {w₁ w₂ : FreeMonoid (M oplus N)}
+  条件: {w₁ w₂ : 自由幺半群 (M oplus N)}
   结论: mk w₁ = mk w₂ ↔ coprodCon M N w₁ w₂
   证明: Con.eq _
 
@@ -505,7 +505,7 @@ definition clift
 
 中文:
 定义 clift
-  签名: (f : FreeMonoid (M oplus N) ->* P)
+  签名: (f : 自由幺半群 (M oplus N) ->* P)
   定义体: Con.lift _ f sInf_le ⟨hM, hN, hM₁.trans (map_one f).symm, hN₁.trans (map_one f).symm⟩
 
 @[to_additive (attr := simp)]
@@ -532,7 +532,7 @@ theorem clift_apply_inl
 
 中文:
 定理 clift_apply_inl
-  条件: (f : FreeMonoid (M oplus N) ->* P) (hM₁ hN₁ hM hN) (x : M)
+  条件: (f : 自由幺半群 (M oplus N) ->* P) (hM₁ hN₁ hM hN) (x : M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -554,7 +554,7 @@ theorem clift_apply_inr
 
 中文:
 定理 clift_apply_inr
-  条件: (f : FreeMonoid (M oplus N) ->* P) (hM₁ hN₁ hM hN) (x : N)
+  条件: (f : 自由幺半群 (M oplus N) ->* P) (hM₁ hN₁ hM hN) (x : N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -576,7 +576,7 @@ theorem clift_apply_mk
 
 中文:
 定理 clift_apply_mk
-  条件: (f : FreeMonoid (M oplus N) ->* P) (hM₁ hN₁ hM hN w)
+  条件: (f : 自由幺半群 (M oplus N) ->* P) (hM₁ hN₁ hM hN w)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -598,7 +598,7 @@ theorem clift_comp_mk
 
 中文:
 定理 clift_comp_mk
-  条件: (f : FreeMonoid (M oplus N) ->* P) (hM₁ hN₁ hM hN)
+  条件: (f : 自由幺半群 (M oplus N) ->* P) (hM₁ hN₁ hM hN)
   证明: DFunLike.ext' rfl
 
 @[to_additive (attr := simp)]
@@ -783,7 +783,7 @@ theorem map_mk_ofList
 
 中文:
 定理 map_mk_ofList
-  条件: (f : M ->* M') (g : N ->* N') (l : List (M oplus N))
+  条件: (f : M ->* M') (g : N ->* N') (l : 列表 (M oplus N))
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -915,7 +915,7 @@ theorem map_comp_map
 
 中文:
 定理 map_comp_map
-  结论: {M'' N''} [MulOneClass M''] [MulOneClass N''] (f' : M' ->* M'') (g' : N' ->* N'')
+  结论: {M'' N''} [MulOne类 M''] [MulOne类 N''] (f' : M' ->* M'') (g' : N' ->* N'')
   证明: hom_ext rfl rfl
 
 @[to_additive]
@@ -937,7 +937,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {M'' N''} [MulOneClass M''] [MulOneClass N''] (f' : M' ->* M'') (g' : N' ->* N'')
+  结论: {M'' N''} [MulOne类 M''] [MulOne类 N''] (f' : M' ->* M'') (g' : N' ->* N'')
   证明: DFunLike.congr_fun (map_comp_map f' g' f g) x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp_map
@@ -1151,7 +1151,7 @@ theorem swap_injective
 
 中文:
 定理 swap_injective
-  结论: Injective (swap M N)
+  结论: 单射 (swap M N)
   证明: LeftInverse.injective swap_swap
 
 @[to_additive (attr := simp)]
@@ -1221,7 +1221,7 @@ theorem swap_surjective
 
 中文:
 定理 swap_surjective
-  结论: Surjective (swap M N)
+  结论: 满射 (swap M N)
   证明: LeftInverse.surjective swap_swap
 
 @[to_additive]
@@ -1243,7 +1243,7 @@ theorem swap_bijective
 
 中文:
 定理 swap_bijective
-  结论: Bijective (swap M N)
+  结论: 双射 (swap M N)
   证明: ⟨swap_injective, swap_surjective⟩
 
 @[to_additive (attr := simp)]
@@ -1265,7 +1265,7 @@ theorem mker_swap
 
 中文:
 定理 mker_swap
-  结论: MonoidHom.mker (swap M N) = ⊥
+  结论: 幺半群态射.mker (swap M N) = ⊥
   证明: Submonoid.ext fun _ => swap_eq_one
 
 @[to_additive (attr := simp)]
@@ -1285,7 +1285,7 @@ theorem mrange_swap
 
 中文:
 定理 mrange_swap
-  结论: MonoidHom.mrange (swap M N) = ⊤
+  结论: 幺半群态射.mrange (swap M N) = ⊤
   证明: MonoidHom.mrange_eq_top_of_surjective _ swap_surjective
 
 Depends on / 依赖: MonoidHom, MonoidHom.mrange_eq_top_of_surjective, mrange_eq_top_of_surjective, swap_surjective
@@ -1345,7 +1345,7 @@ theorem lift_apply_mk
 
 中文:
 定理 lift_apply_mk
-  条件: (f : M ->* P) (g : N ->* P) (x : FreeMonoid (M oplus N))
+  条件: (f : M ->* P) (g : N ->* P) (x : 自由幺半群 (M oplus N))
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1536,7 +1536,7 @@ theorem comp_lift
 
 中文:
 定理 comp_lift
-  条件: {P' : 类型} [Monoid P'] (f : P ->* P') (g₁ : M ->* P) (g₂ : N ->* P)
+  条件: {P' : 类型} [幺半群 P'] (f : P ->* P') (g₁ : M ->* P) (g₂ : N ->* P)
   证明: hom_ext (by rw [MonoidHom.comp_assoc, lift_comp_inl, lift_comp_inl]) by
     rw [MonoidHom.comp_assoc]; rw [lift_comp_inr]; rw [lift_comp_inr]
 
@@ -1615,7 +1615,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (M ∗ N)
+  签名: 幺半群 (M ∗ N)
   定义体: { mul_assoc := (Con.monoid _).mul_assoc
     one_mul := (Con.monoid _).one_mul
     mul_one := (Con.monoid _).mul_one }
@@ -1898,7 +1898,7 @@ theorem fst_prod_snd
 
 中文:
 定理 fst_prod_snd
-  结论: (fst : M ∗ N ->* M).prod snd = toProd
+  结论: (fst : M ∗ N ->* M).乘积 snd = toProd
   证明: by ext1 <;> rfl
 
 @[to_additive (attr := simp) prod_mk_fst_snd]
@@ -1946,7 +1946,7 @@ theorem fst_comp_toProd
 
 中文:
 定理 fst_comp_toProd
-  结论: (MonoidHom.fst M N).comp toProd = fst
+  结论: (幺半群态射.fst M N).comp toProd = fst
   证明: by
   rw [← fst_prod_snd]; rw [MonoidHom.fst_comp_prod]
 
@@ -1998,7 +1998,7 @@ theorem snd_comp_toProd
 
 中文:
 定理 snd_comp_toProd
-  结论: (MonoidHom.snd M N).comp toProd = snd
+  结论: (幺半群态射.snd M N).comp toProd = snd
   证明: by
   rw [← fst_prod_snd]; rw [MonoidHom.snd_comp_prod]
 
@@ -2185,7 +2185,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Injective (inl : M ->* M ∗ N)
+  结论: 单射 (inl : M ->* M ∗ N)
   证明: LeftInverse.injective fst_apply_inl
 
 @[to_additive]
@@ -2207,7 +2207,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Injective (inr : N ->* M ∗ N)
+  结论: 单射 (inr : N ->* M ∗ N)
   证明: LeftInverse.injective snd_apply_inr
 
 @[to_additive]
@@ -2229,7 +2229,7 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  结论: Surjective (fst : M ∗ N ->* M)
+  结论: 满射 (fst : M ∗ N ->* M)
   证明: LeftInverse.surjective fst_apply_inl
 
 @[to_additive]
@@ -2251,7 +2251,7 @@ theorem snd_surjective
 
 中文:
 定理 snd_surjective
-  结论: Surjective (snd : M ∗ N ->* N)
+  结论: 满射 (snd : M ∗ N ->* N)
   证明: LeftInverse.surjective snd_apply_inr
 
 @[to_additive toProd_surjective]
@@ -2272,7 +2272,7 @@ theorem toProd_surjective
 
 中文:
 定理 toProd_surjective
-  结论: Surjective (toProd : M ∗ N ->* M × N)
+  结论: 满射 (toProd : M ∗ N ->* M × N)
   证明: fun x =>
   ⟨inl x.1 * inr x.2, by rw [map_mul, toProd_apply_inl, toProd_apply_inr, Prod.fst_mul_snd]⟩
 -/
@@ -2295,7 +2295,7 @@ theorem mk_of_inv_mul
 
 中文:
 定理 mk_of_inv_mul
-  结论: 对任意 x : G oplus H, mk (of (x.map Inv.inv Inv.inv)) * mk (of x) = 1
+  结论: 对任意 x : G oplus H, mk (of (x.map 取逆.inv 取逆.inv)) * mk (of x) = 1
 -/
 theorem mk_of_inv_mul : forall x : G oplus H, mk (of (x.map Inv.inv Inv.inv)) * mk (of x) = 1
   | Sum.inl _ => map_mul_eq_one inl (inv_mul_cancel _)
@@ -2318,7 +2318,7 @@ theorem con_inv_mul_cancel
 
 中文:
 定理 con_inv_mul_cancel
-  条件: (x : FreeMonoid (G oplus H))
+  条件: (x : 自由幺半群 (G oplus H))
   证明: by
   rw [← mk_eq_mk]; rw [map_mul]; rw [map_one]
   induction x using FreeMonoid.inductionOn' with
@@ -2352,7 +2352,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (G ∗ H)
+  签名: 取逆 (G ∗ H)
   定义体: Quotient.map' (fun w => ofList (w.toList.map (Sum.map Inv.inv Inv.inv)).reverse) fun _ _ =>
     (coprodCon G H).map_of_mul_left_rel_one _ con_inv_mul_cancel
 
@@ -2377,7 +2377,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (w : FreeMonoid (G oplus H))
+  条件: (w : 自由幺半群 (G oplus H))
   证明: rfl
 
 @[to_additive]
@@ -2399,7 +2399,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (G ∗ H)
+  签名: 群 (G ∗ H)
   定义体: mk_surjective.forall.2 fun x => mk_eq_mk.2 (con_inv_mul_cancel x)
 
 @[to_additive (attr := simp)]
@@ -2476,7 +2476,7 @@ theorem range_swap
 
 中文:
 定理 range_swap
-  结论: MonoidHom.range (swap G H) = ⊤
+  结论: 幺半群态射.range (swap G H) = ⊤
   证明: MonoidHom.range_eq_top.2 swap_surjective
 -/
 @[to_additive (attr := simp)] theorem range_swap : MonoidHom.range (swap G H) = ⊤ :=
@@ -2767,7 +2767,7 @@ definition coprodPUnit
 
 中文:
 定义 coprodPUnit
-  签名: : M ∗ PUnit ≃* M
+  签名: : M ∗ 命题单元 ≃* M
   定义体: MonoidHom.toMulEquiv fst inl (hom_ext rfl <| Subsingleton.elim _ _) fst_comp_inl
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, Subsingleton, Subsingleton.elim, fst_comp_inl, hom_ext, toMulEquiv
@@ -2788,7 +2788,7 @@ definition punitCoprod
 
 中文:
 定义 punitCoprod
-  签名: : PUnit ∗ M ≃* M
+  签名: : 命题单元 ∗ M ≃* M
   定义体: MonoidHom.toMulEquiv snd inr (hom_ext (Subsingleton.elim _ _) rfl) snd_comp_inr
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, Subsingleton, Subsingleton.elim, hom_ext, snd_comp_inr, toMulEquiv

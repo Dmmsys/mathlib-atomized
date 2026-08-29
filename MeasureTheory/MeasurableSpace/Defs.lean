@@ -58,13 +58,13 @@ structure MeasurableSpace
     - measurableSet_iUnion : forall f : Nat -> Set α, (forall i, MeasurableSet' (f i)) -> MeasurableSet' (⋃ i, f i)
 
 中文:
-结构 MeasurableSpace
+结构 可测空间
   参数: (α : 类型)
   公理与运算 (4 个):
-    - MeasurableSet' : Set α -> 命题
-    - measurableSet_empty : MeasurableSet' ∅
-    - measurableSet_compl : 对任意 s, MeasurableSet' s -> MeasurableSet' sᶜ
-    - measurableSet_iUnion : 对任意 f : 自然数 -> Set α, (对任意 i, MeasurableSet' (f i)) -> MeasurableSet' (⋃ i, f i)
+    - MeasurableSet' : 集合 α -> 命题
+    - measurableSet_empty : 可测集' ∅
+    - measurableSet_compl : 对任意 s, 可测集' s -> 可测集' sᶜ
+    - measurableSet_iUnion : 对任意 f : 自然数 -> 集合 α, (对任意 i, 可测集' (f i)) -> 可测集' (⋃ i, f i)
 -/
 @[class] structure MeasurableSpace (α : Type*) where
   /-- Predicate saying that a given set is measurable. Use `MeasurableSet` in the root namespace
@@ -88,7 +88,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : MeasurableSpace α] : MeasurableSpace αᵒᵈ
+  签名: : 可测空间 α] : 可测空间 αᵒᵈ
   定义体: h
 -/
 instance [h : MeasurableSpace α] : MeasurableSpace αᵒᵈ := h
@@ -102,8 +102,8 @@ definition MeasurableSet
   body: ‹MeasurableSpace α›.MeasurableSet' s
 
 中文:
-定义 MeasurableSet
-  签名: [MeasurableSpace α] (s : Set α)
+定义 可测集
+  签名: [可测空间 α] (s : 集合 α)
   定义体: ‹MeasurableSpace α›.MeasurableSet' s
 
 Depends on / 依赖: MeasurableSet, MeasurableSpace
@@ -131,9 +131,9 @@ theorem MeasurableSet.empty
   proof: MeasurableSpace.measurableSet_empty _
 
 中文:
-定理 MeasurableSet.empty
-  条件: [MeasurableSpace α]
-  结论: MeasurableSet (∅ : Set α)
+定理 可测集.empty
+  条件: [可测空间 α]
+  结论: 可测集 (∅ : 集合 α)
   证明: MeasurableSpace.measurableSet_empty _
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_empty, measurableSet_empty
@@ -153,8 +153,8 @@ theorem MeasurableSet.compl
   proof: MeasurableSpace.measurableSet_compl _ s
 
 中文:
-定理 MeasurableSet.compl
-  结论: MeasurableSet s -> MeasurableSet sᶜ
+定理 可测集.compl
+  结论: 可测集 s -> 可测集 sᶜ
   证明: MeasurableSpace.measurableSet_compl _ s
 -/
 protected theorem MeasurableSet.compl : MeasurableSet s -> MeasurableSet sᶜ :=
@@ -172,9 +172,9 @@ theorem MeasurableSet.of_compl
 @[simp]
 
 中文:
-定理 MeasurableSet.of_compl
-  条件: (h : MeasurableSet sᶜ)
-  结论: MeasurableSet s
+定理 可测集.of_compl
+  条件: (h : 可测集 sᶜ)
+  结论: 可测集 s
   证明: compl_compl s ▸ h.compl
 
 @[simp]
@@ -194,8 +194,8 @@ theorem MeasurableSet.compl_iff
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.compl_iff
-  结论: MeasurableSet sᶜ ↔ MeasurableSet s
+定理 可测集.compl_iff
+  结论: 可测集 sᶜ ↔ 可测集 s
   证明: ⟨.of_compl, .compl⟩
 
 @[simp, measurability]
@@ -217,8 +217,8 @@ theorem MeasurableSet.univ
 @[nontriviality, measurability]
 
 中文:
-定理 MeasurableSet.univ
-  结论: MeasurableSet (univ : Set α)
+定理 可测集.univ
+  结论: 可测集 (univ : 集合 α)
   证明: .of_compl by simp
 
 @[nontriviality, measurability]
@@ -237,9 +237,9 @@ theorem Subsingleton.measurableSet
   proof: Subsingleton.set_cases MeasurableSet.empty MeasurableSet.univ s
 
 中文:
-定理 Subsingleton.measurableSet
-  条件: [Subsingleton α] {s : Set α}
-  结论: MeasurableSet s
+定理 子单例.measurableSet
+  条件: [子单例 α] {s : 集合 α}
+  结论: 可测集 s
   证明: Subsingleton.set_cases MeasurableSet.empty MeasurableSet.univ s
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.empty, MeasurableSet.univ, Subsingleton, Subsingleton.set_cases, set_cases
@@ -260,9 +260,9 @@ theorem MeasurableSet.congr
 @[measurability]
 
 中文:
-定理 MeasurableSet.congr
-  条件: {s t : Set α} (hs : MeasurableSet s) (h : s = t)
-  结论: MeasurableSet t
+定理 可测集.congr
+  条件: {s t : 集合 α} (hs : 可测集 s) (h : s = t)
+  结论: 可测集 t
   证明: by
   rwa [← h]
 
@@ -287,9 +287,9 @@ theorem MeasurableSet.iUnion
     exact m.measurableSet_iUnion _ fun _ => h _
 
 中文:
-定理 MeasurableSet.iUnion
-  条件: [Countable ι] ⦃f
-  结论: ι -> Set α⦄
+定理 可测集.iUnion
+  条件: [可数 ι] ⦃f
+  结论: ι -> 集合 α⦄
   证明: by
   cases isEmpty_or_nonempty ι
   · simp
@@ -317,8 +317,8 @@ theorem MeasurableSet.biUnion
   exact MeasurableSet.iUnion (by simpa using h)
 
 中文:
-定理 MeasurableSet.biUnion
-  结论: {f : β -> Set α} {s : Set β} (hs : s.Countable)
+定理 可测集.biUnion
+  结论: {f : β -> 集合 α} {s : 集合 β} (hs : s.可数)
   证明: by
   rw [biUnion_eq_iUnion]
   have := hs.to_subtype
@@ -339,8 +339,8 @@ theorem Set.Finite.measurableSet_biUnion
   proof: .biUnion hs.countable h
 
 中文:
-定理 Set.Finite.measurableSet_biUnion
-  结论: {f : β -> Set α} {s : Set β} (hs : s.Finite)
+定理 集合.有限.measurableSet_biUnion
+  结论: {f : β -> 集合 α} {s : 集合 β} (hs : s.有限)
   证明: .biUnion hs.countable h
 
 Depends on / 依赖: biUnion, countable, hs.countable
@@ -358,8 +358,8 @@ theorem Finset.measurableSet_biUnion
   proof: s.finite_toSet.measurableSet_biUnion h
 
 中文:
-定理 Finset.measurableSet_biUnion
-  结论: {f : β -> Set α} (s : Finset β)
+定理 有限集.measurableSet_biUnion
+  结论: {f : β -> 集合 α} (s : 有限集 β)
   证明: s.finite_toSet.measurableSet_biUnion h
 
 Depends on / 依赖: finite_toSet, measurableSet_biUnion, s.finite_toSet.measurableSet_biUnion
@@ -379,8 +379,8 @@ theorem MeasurableSet.sUnion
   exact .biUnion hs h
 
 中文:
-定理 MeasurableSet.sUnion
-  结论: {s : Set (Set α)} (hs : s.Countable)
+定理 可测集.集合并集
+  结论: {s : 集合 (集合 α)} (hs : s.可数)
   证明: by
   rw [sUnion_eq_biUnion]
   exact .biUnion hs h
@@ -401,8 +401,8 @@ theorem Set.Finite.measurableSet_sUnion
 @[measurability]
 
 中文:
-定理 Set.Finite.measurableSet_sUnion
-  结论: {s : Set (Set α)} (hs : s.Finite)
+定理 集合.有限.measurableSet_sUnion
+  结论: {s : 集合 (集合 α)} (hs : s.有限)
   证明: MeasurableSet.sUnion hs.countable h
 
 @[measurability]
@@ -423,8 +423,8 @@ theorem MeasurableSet.iInter
   proof: .of_compl by rw [compl_iInter]; exact .iUnion fun b => (h b).compl
 
 中文:
-定理 MeasurableSet.iInter
-  条件: [Countable ι] {f : ι -> Set α} (h : 对任意 b, MeasurableSet (f b))
+定理 可测集.i整数er
+  条件: [可数 ι] {f : ι -> 集合 α} (h : 对任意 b, 可测集 (f b))
   证明: .of_compl by rw [compl_iInter]; exact .iUnion fun b => (h b).compl
 
 Depends on / 依赖: compl_iInter, iUnion, of_compl
@@ -442,8 +442,8 @@ theorem MeasurableSet.biInter
   proof: .of_compl by rw [compl_iInter₂]; exact .biUnion hs fun b hb => (h b hb).compl
 
 中文:
-定理 MeasurableSet.biInter
-  结论: {f : β -> Set α} {s : Set β} (hs : s.Countable)
+定理 可测集.bi整数er
+  结论: {f : β -> 集合 α} {s : 集合 β} (hs : s.可数)
   证明: .of_compl by rw [compl_iInter₂]; exact .biUnion hs fun b hb => (h b hb).compl
 
 Depends on / 依赖: biUnion, of_compl
@@ -461,8 +461,8 @@ theorem Set.Finite.measurableSet_biInter
   proof: .biInter hs.countable h
 
 中文:
-定理 Set.Finite.measurableSet_biInter
-  结论: {f : β -> Set α} {s : Set β} (hs : s.Finite)
+定理 集合.有限.measurableSet_bi整数er
+  结论: {f : β -> 集合 α} {s : 集合 β} (hs : s.有限)
   证明: .biInter hs.countable h
 
 Depends on / 依赖: biInter, countable, hs.countable
@@ -480,8 +480,8 @@ theorem Finset.measurableSet_biInter
   proof: s.finite_toSet.measurableSet_biInter h
 
 中文:
-定理 Finset.measurableSet_biInter
-  结论: {f : β -> Set α} (s : Finset β)
+定理 有限集.measurableSet_bi整数er
+  结论: {f : β -> 集合 α} (s : 有限集 β)
   证明: s.finite_toSet.measurableSet_biInter h
 
 Depends on / 依赖: finite_toSet, measurableSet_biInter, s.finite_toSet.measurableSet_biInter
@@ -501,8 +501,8 @@ theorem MeasurableSet.sInter
   exact MeasurableSet.biInter hs h
 
 中文:
-定理 MeasurableSet.sInter
-  条件: {s : Set (Set α)} (hs : s.Countable) (h : 对任意 t in s, MeasurableSet t)
+定理 可测集.集合交集
+  条件: {s : 集合 (集合 α)} (hs : s.可数) (h : 对任意 t in s, 可测集 t)
   证明: by
   rw [sInter_eq_biInter]
   exact MeasurableSet.biInter hs h
@@ -525,8 +525,8 @@ theorem Set.Finite.measurableSet_sInter
 @[simp, measurability]
 
 中文:
-定理 Set.Finite.measurableSet_sInter
-  结论: {s : Set (Set α)} (hs : s.Finite)
+定理 集合.有限.measurableSet_s整数er
+  结论: {s : 集合 (集合 α)} (hs : s.有限)
   证明: MeasurableSet.sInter hs.countable h
 
 @[simp, measurability]
@@ -551,8 +551,8 @@ theorem MeasurableSet.union
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.union
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+定理 可测集.union
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: by
   rw [union_eq_iUnion]
   exact .iUnion (Bool.forall_bool.2 ⟨h₂, h₁⟩)
@@ -578,8 +578,8 @@ theorem MeasurableSet.inter
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.inter
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+定理 可测集.inter
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: by
   rw [inter_eq_compl_compl_union_compl]
   exact (h₁.compl.union h₂.compl).compl
@@ -603,8 +603,8 @@ theorem MeasurableSet.diff
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.diff
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+定理 可测集.diff
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: h₁.inter h₂.compl
 
 @[simp, measurability]
@@ -625,8 +625,8 @@ lemma MeasurableSet.himp
 @[simp, measurability]
 
 中文:
-引理 MeasurableSet.himp
-  条件: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁) (h₂ : MeasurableSet s₂)
+引理 可测集.himp
+  条件: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁) (h₂ : 可测集 s₂)
   证明: by rw [himp_eq]; exact h₂.union h₁.compl
 
 @[simp, measurability]
@@ -646,8 +646,8 @@ theorem MeasurableSet.symmDiff
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.symmDiff
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+定理 可测集.symmDiff
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: (h₁.diff h₂).union (h₂.diff h₁)
 
 @[simp, measurability]
@@ -668,8 +668,8 @@ lemma MeasurableSet.bihimp
 @[simp, measurability]
 
 中文:
-引理 MeasurableSet.bihimp
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+引理 可测集.bihimp
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: (h₂.himp h₁).inter (h₁.himp h₂)
 
 @[simp, measurability]
@@ -687,8 +687,8 @@ theorem MeasurableSet.ite
   proof: (h₁.inter ht).union (h₂.diff ht)
 
 中文:
-定理 MeasurableSet.ite
-  结论: {t s₁ s₂ : Set α} (ht : MeasurableSet t)
+定理 可测集.ite
+  结论: {t s₁ s₂ : 集合 α} (ht : 可测集 t)
   证明: (h₁.inter ht).union (h₂.diff ht)
 -/
 protected theorem MeasurableSet.ite {t s₁ s₂ : Set α} (ht : MeasurableSet t)
@@ -709,8 +709,8 @@ theorem MeasurableSet.ite'
 @[simp, measurability]
 
 中文:
-定理 MeasurableSet.ite'
-  结论: {s t : Set α} {p : 命题} (hs : p -> MeasurableSet s)
+定理 可测集.ite'
+  结论: {s t : 集合 α} {p : 命题} (hs : p -> 可测集 s)
   证明: by
   split_ifs with h
   exacts [hs h, ht h]
@@ -736,8 +736,8 @@ theorem MeasurableSet.cond
   exacts [h₂, h₁]
 
 中文:
-定理 MeasurableSet.cond
-  结论: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁)
+定理 可测集.cond
+  结论: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁)
   证明: by
   cases i
   exacts [h₂, h₁]
@@ -758,9 +758,9 @@ theorem MeasurableSet.const
   by_cases p <;> simp [*]
 
 中文:
-定理 MeasurableSet.const
+定理 可测集.const
   条件: (p : 命题)
-  结论: MeasurableSet { _a : α | p }
+  结论: 可测集 { _a : α | p }
   证明: by
   by_cases p <;> simp [*]
 -/
@@ -779,7 +779,7 @@ lemma MeasurableSet.imp
   exact hs.compl.union ht
 
 中文:
-引理 MeasurableSet.imp
+引理 可测集.imp
   结论: {p q : α -> 命题}
   证明: by
   have h_eq : {x | p x -> q x} = {x | p x}ᶜ union {x | q x} := by grind
@@ -805,7 +805,7 @@ lemma MeasurableSet.iff
   exact (hs.imp ht).inter (ht.imp hs)
 
 中文:
-引理 MeasurableSet.iff
+引理 可测集.iff
   结论: {p q : α -> 命题}
   证明: by
   have h_eq : {x | p x ↔ q x} = {x | p x -> q x} inter {x | q x -> p x} := by ext; simp; grind
@@ -830,8 +830,8 @@ theorem nonempty_measurable_superset
 
 中文:
 定理 nonempty_measurable_superset
-  条件: (s : Set α)
-  结论: Nonempty { t // s subseteq t ∧ MeasurableSet t }
+  条件: (s : 集合 α)
+  结论: 非空 { t // s subseteq t ∧ 可测集 t }
   证明: ⟨⟨univ, subset_univ s, MeasurableSet.univ⟩⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, subset_univ
@@ -849,8 +849,8 @@ theorem MeasurableSpace.measurableSet_injective
   statement: Injective (@MeasurableSet α)
 
 中文:
-定理 MeasurableSpace.measurableSet_injective
-  结论: Injective (@MeasurableSet α)
+定理 可测空间.measurableSet_injective
+  结论: 单射 (@可测集 α)
 -/
 theorem MeasurableSpace.measurableSet_injective : Injective (@MeasurableSet α)
   | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, _ => by congr
@@ -865,8 +865,8 @@ theorem MeasurableSpace.ext
   proof: measurableSet_injective funext fun s => propext (h s)
 
 中文:
-定理 MeasurableSpace.ext
-  结论: {m₁ m₂ : MeasurableSpace α}
+定理 可测空间.ext
+  结论: {m₁ m₂ : 可测空间 α}
   证明: measurableSet_injective funext fun s => propext (h s)
 
 Depends on / 依赖: measurableSet_injective, propext
@@ -885,10 +885,10 @@ class MeasurableSingletonClass
     - measurableSet_singleton : forall x, MeasurableSet ({x} : Set α)
 
 中文:
-类 MeasurableSingletonClass
-  参数: (α : 类型) [MeasurableSpace α]
+类 MeasurableSingleton类
+  参数: (α : 类型) [可测空间 α]
   公理与运算 (1 个):
-    - measurableSet_singleton : 对任意 x, MeasurableSet ({x} : Set α)
+    - measurableSet_singleton : 对任意 x, 可测集 ({x} : 集合 α)
 -/
 class MeasurableSingletonClass (α : Type*) [MeasurableSpace α] : Prop where
   /-- A singleton is a measurable set. -/
@@ -906,8 +906,8 @@ lemma MeasurableSet.singleton
   proof: measurableSet_singleton a
 
 中文:
-引理 MeasurableSet.singleton
-  条件: [MeasurableSpace α] [MeasurableSingletonClass α] (a : α)
+引理 可测集.singleton
+  条件: [可测空间 α] [MeasurableSingleton类 α] (a : α)
   证明: measurableSet_singleton a
 
 Depends on / 依赖: measurableSet_singleton
@@ -934,7 +934,7 @@ theorem measurableSet_eq
 中文:
 定理 measurableSet_eq
   条件: {a : α}
-  结论: MeasurableSet { x | x = a }
+  结论: 可测集 { x | x = a }
   证明: .singleton a
 
 @[measurability]
@@ -955,8 +955,8 @@ theorem MeasurableSet.insert
 @[simp]
 
 中文:
-定理 MeasurableSet.insert
-  条件: {s : Set α} (hs : MeasurableSet s) (a : α)
+定理 可测集.insert
+  条件: {s : 集合 α} (hs : 可测集 s) (a : α)
   证明: .union (.singleton a) hs
 
 @[simp]
@@ -981,7 +981,7 @@ theorem measurableSet_insert
 
 中文:
 定理 measurableSet_insert
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   证明: by
   classical
   exact ⟨fun h =>
@@ -1009,9 +1009,9 @@ theorem Set.Subsingleton.measurableSet
   proof: hs.induction_on .empty .singleton
 
 中文:
-定理 Set.Subsingleton.measurableSet
-  条件: {s : Set α} (hs : s.Subsingleton)
-  结论: MeasurableSet s
+定理 集合.子单例.measurableSet
+  条件: {s : 集合 α} (hs : s.子单例)
+  结论: 可测集 s
   证明: hs.induction_on .empty .singleton
 
 Depends on / 依赖: hs.induction_on, induction_on, singleton
@@ -1031,9 +1031,9 @@ theorem Set.Finite.measurableSet
 @[measurability]
 
 中文:
-定理 Set.Finite.measurableSet
-  条件: {s : Set α} (hs : s.Finite)
-  结论: MeasurableSet s
+定理 集合.有限.measurableSet
+  条件: {s : 集合 α} (hs : s.有限)
+  结论: 可测集 s
   证明: Finite.induction_on _ hs .empty fun _ _ hsm => hsm.insert _
 
 @[measurability]
@@ -1054,9 +1054,9 @@ theorem Finset.measurableSet
   proof: s.finite_toSet.measurableSet
 
 中文:
-定理 Finset.measurableSet
-  条件: (s : Finset α)
-  结论: MeasurableSet (↑s : Set α)
+定理 有限集.measurableSet
+  条件: (s : 有限集 α)
+  结论: 可测集 (↑s : 集合 α)
   证明: s.finite_toSet.measurableSet
 -/
 protected theorem Finset.measurableSet (s : Finset α) : MeasurableSet (↑s : Set α) :=
@@ -1074,9 +1074,9 @@ theorem Set.Countable.measurableSet
   exact .biUnion hs fun b _ => .singleton b
 
 中文:
-定理 Set.Countable.measurableSet
-  条件: {s : Set α} (hs : s.Countable)
-  结论: MeasurableSet s
+定理 集合.可数.measurableSet
+  条件: {s : 集合 α} (hs : s.可数)
+  结论: 可测集 s
   证明: by
   rw [← biUnion_of_singleton s]
   exact .biUnion hs fun b _ => .singleton b
@@ -1107,7 +1107,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (m : MeasurableSpace α) (p : Set α -> 命题) (h : 对任意 s, p s ↔ MeasurableSet[m] s)
+  签名: (m : 可测空间 α) (p : 集合 α -> 命题) (h : 对任意 s, p s ↔ 可测集[m] s)
   定义体: p
   measurableSet_empty := by simpa only [h] using! m.measurableSet_empty
   measurableSet_compl := by simpa only [h] using! m.measurableSet_compl
@@ -1130,7 +1130,7 @@ lemma measurableSet_copy
 
 中文:
 引理 measurableSet_copy
-  结论: {m : MeasurableSpace α} {p : Set α -> 命题}
+  结论: {m : 可测空间 α} {p : 集合 α -> 命题}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1149,7 +1149,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: {m : MeasurableSpace α} {p : Set α -> 命题} (h : 对任意 s, p s ↔ MeasurableSet[m] s)
+  条件: {m : 可测空间 α} {p : 集合 α -> 命题} (h : 对任意 s, p s ↔ 可测集[m] s)
   证明: ext h
 -/
 lemma copy_eq {m : MeasurableSpace α} {p : Set α -> Prop} (h : forall s, p s ↔ MeasurableSet[m] s) :
@@ -1168,7 +1168,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (MeasurableSpace α)
+  签名: LE (可测空间 α)
   定义体: forall s, MeasurableSet[m₁] s -> MeasurableSet[m₂] s
 
 Depends on / 依赖: MeasurableSet
@@ -1186,8 +1186,8 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {α} {a b : MeasurableSpace α}
-  结论: a <= b ↔ a.MeasurableSet' <= b.MeasurableSet'
+  条件: {α} {a b : 可测空间 α}
+  结论: a <= b ↔ a.可测集' <= b.可测集'
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1207,7 +1207,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (MeasurableSpace α)
+  签名: 偏序 (可测空间 α)
   定义体: { PartialOrder.lift (@MeasurableSet α) measurableSet_injective with
     le := LE.le
     lt := fun m₁ m₂ => m₁ <= m₂ ∧ ¬m₂ <= m₁ }
@@ -1233,12 +1233,12 @@ inductive GenerateMeasurable
 
 中文:
 归纳类型 GenerateMeasurable
-  参数: (s : Set (Set α))
+  参数: (s : 集合 (集合 α))
   构造子 (4 个):
     - protected: basic : 对任意 u in s, GenerateMeasurable s u
     - protected: empty : GenerateMeasurable s ∅
     - protected: compl : 对任意 t, GenerateMeasurable s t -> GenerateMeasurable s tᶜ
-    - protected: iUnion : 对任意 f : 自然数 -> Set α, (对任意 n, GenerateMeasurable s (f n)) -> GenerateMeasurable s (⋃ i, f i)
+    - protected: iUnion : 对任意 f : 自然数 -> 集合 α, (对任意 n, GenerateMeasurable s (f n)) -> GenerateMeasurable s (⋃ i, f i)
 -/
 inductive GenerateMeasurable (s : Set (Set α)) : Set α -> Prop
   | protected basic : forall u in s, GenerateMeasurable s u
@@ -1262,7 +1262,7 @@ definition generateFrom
 
 中文:
 定义 generateFrom
-  签名: (s : Set (Set α))
+  签名: (s : 集合 (集合 α))
   定义体: GenerateMeasurable s
   measurableSet_empty := .empty
   measurableSet_compl := .compl
@@ -1288,7 +1288,7 @@ theorem measurableSet_generateFrom
 
 中文:
 定理 measurableSet_generateFrom
-  条件: {s : Set (Set α)} {t : Set α} (ht : t in s)
+  条件: {s : 集合 (集合 α)} {t : 集合 α} (ht : t in s)
   证明: .basic t ht
 
 @[elab_as_elim]
@@ -1310,7 +1310,7 @@ theorem generateFrom_induction
 
 中文:
 定理 generateFrom_induction
-  结论: (C : Set (Set α))
+  结论: (C : 集合 (集合 α))
   证明: by
   induction hs
   exacts [hC _ ‹_› _, empty, compl _ ‹_› ‹_›, iUnion ‹_› ‹_› ‹_›]
@@ -1337,7 +1337,7 @@ theorem generateFrom_le
 
 中文:
 定理 generateFrom_le
-  结论: {s : Set (Set α)} {m : MeasurableSpace α}
+  结论: {s : 集合 (集合 α)} {m : 可测空间 α}
   证明: fun t (ht : GenerateMeasurable s t) =>
   ht.recOn h .empty (fun _ _ => .compl) fun _ _ hf => .iUnion hf
 
@@ -1360,7 +1360,7 @@ theorem generateFrom_le_iff
 
 中文:
 定理 generateFrom_le_iff
-  条件: {s : Set (Set α)} (m : MeasurableSpace α)
+  条件: {s : 集合 (集合 α)} (m : 可测空间 α)
   证明: Iff.intro (fun h _ hu => h _ <| measurableSet_generateFrom hu) fun h => generateFrom_le h
 
 @[simp]
@@ -1382,7 +1382,7 @@ theorem generateFrom_measurableSet
 
 中文:
 定理 generateFrom_measurableSet
-  条件: [MeasurableSpace α]
+  条件: [可测空间 α]
   证明: le_antisymm (generateFrom_le fun _ => id) fun _ h => measurableSet_generateFrom h
 
 Depends on / 依赖: generateFrom_le, le_antisymm, measurableSet_generateFrom
@@ -1407,8 +1407,8 @@ theorem forall_generateFrom_mem_iff_mem_iff
     simp only [mem_iUnion, hf]
 
 中文:
-定理 forall_generateFrom_mem_iff_mem_iff
-  条件: {S : Set (Set α)} {x y : α}
+定理 对任意_generateFrom_mem_iff_mem_iff
+  条件: {S : 集合 (集合 α)} {x y : α}
   证明: by
   refine ⟨fun H s hs => H s (.basic s hs), fun H s => ?_⟩
   apply generateFrom_induction
@@ -1443,7 +1443,7 @@ definition mkOfClosure
 
 中文:
 定义 mkOfClosure
-  签名: (g : Set (Set α)) (hg : { t | MeasurableSet[generateFrom g] t } = g)
+  签名: (g : 集合 (集合 α)) (hg : { t | 可测集[generateFrom g] t } = g)
   定义体: (generateFrom g).copy (· in g) Set.ext_iff.1 hg.symm
 -/
 protected def mkOfClosure (g : Set (Set α)) (hg : { t | MeasurableSet[generateFrom g] t } = g) :
@@ -1460,7 +1460,7 @@ theorem mkOfClosure_sets
 
 中文:
 定理 mkOfClosure_sets
-  条件: {s : Set (Set α)} {hs : { t | MeasurableSet[generateFrom s] t } = s}
+  条件: {s : 集合 (集合 α)} {hs : { t | 可测集[generateFrom s] t } = s}
   证明: copy_eq _
 
 Depends on / 依赖: copy_eq
@@ -1482,7 +1482,7 @@ choice g hg := MeasurableSpace.mkOfClosure g le_antisymm hg (generateFrom_le_iff
 
 中文:
 定义 giGenerateFrom
-  签名: : GaloisInsertion (@generateFrom α) fun m => { t | MeasurableSet[m] t } where
+  签名: : Galois嵌入 (@generateFrom α) fun m => { t | 可测集[m] t } where
   定义体: generateFrom_le_iff
   le_l_u _ _ h := measurableSet_generateFrom h
 choice g hg := MeasurableSpace.mkOfClosure g le_antisymm hg (generateFrom_le_iff _).1 le_rfl
@@ -1506,7 +1506,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (MeasurableSpace α)
+  签名: 完备格 (可测空间 α)
   定义体: giGenerateFrom.liftCompleteLattice
 
 Depends on / 依赖: giGenerateFrom, giGenerateFrom.liftCompleteLattice, liftCompleteLattice
@@ -1526,7 +1526,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MeasurableSpace α)
+  签名: 可居 (可测空间 α)
   定义体: ⟨⊤⟩
 
 @[gcongr, mono]
@@ -1545,7 +1545,7 @@ theorem generateFrom_mono
 
 中文:
 定理 generateFrom_mono
-  条件: {s t : Set (Set α)} (h : s subseteq t)
+  条件: {s t : 集合 (集合 α)} (h : s subseteq t)
   结论: generateFrom s <= generateFrom t
   证明: giGenerateFrom.gc.monotone_l h
 
@@ -1564,7 +1564,7 @@ theorem generateFrom_sup_generateFrom
 
 中文:
 定理 generateFrom_sup_generateFrom
-  条件: {s t : Set (Set α)}
+  条件: {s t : 集合 (集合 α)}
   证明: (@giGenerateFrom α).gc.l_sup.symm
 
 Depends on / 依赖: gc.l_sup.symm, giGenerateFrom, l_sup
@@ -1585,7 +1585,7 @@ lemma iSup_generateFrom
 
 中文:
 引理 iSup_generateFrom
-  条件: (s : ι -> Set (Set α))
+  条件: (s : ι -> 集合 (集合 α))
   证明: (@MeasurableSpace.giGenerateFrom α).gc.l_iSup.symm
 
 @[simp]
@@ -1607,7 +1607,7 @@ lemma generateFrom_empty
 
 中文:
 引理 generateFrom_empty
-  结论: generateFrom (∅ : Set (Set α)) = ⊥
+  结论: generateFrom (∅ : 集合 (集合 α)) = ⊥
   证明: le_bot_iff.mp (generateFrom_le (by simp))
 
 Depends on / 依赖: generateFrom_le, le_bot_iff, le_bot_iff.mp
@@ -1625,7 +1625,7 @@ theorem generateFrom_singleton_empty
 
 中文:
 定理 generateFrom_singleton_empty
-  结论: generateFrom {∅} = (⊥ : MeasurableSpace α)
+  结论: generateFrom {∅} = (⊥ : 可测空间 α)
   证明: bot_unique generateFrom_le by simp [@MeasurableSet.empty α ⊥]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.empty, bot_unique, generateFrom_le
@@ -1645,7 +1645,7 @@ theorem generateFrom_singleton_univ
 
 中文:
 定理 generateFrom_singleton_univ
-  结论: generateFrom {Set.univ} = (⊥ : MeasurableSpace α)
+  结论: generateFrom {集合.univ} = (⊥ : 可测空间 α)
   证明: bot_unique generateFrom_le by simp
 
 @[simp]
@@ -1669,7 +1669,7 @@ theorem generateFrom_insert_univ
 
 中文:
 定理 generateFrom_insert_univ
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   证明: by
   rw [insert_eq]; rw [← generateFrom_sup_generateFrom]; rw [generateFrom_singleton_univ]; rw [bot_sup_eq]
 
@@ -1693,7 +1693,7 @@ theorem generateFrom_insert_empty
 
 中文:
 定理 generateFrom_insert_empty
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   证明: by
   rw [insert_eq]; rw [← generateFrom_sup_generateFrom]; rw [generateFrom_singleton_empty]; rw [bot_sup_eq]
 
@@ -1720,8 +1720,8 @@ theorem measurableSet_bot_iff
 
 中文:
 定理 measurableSet_bot_iff
-  条件: {s : Set α}
-  结论: MeasurableSet[⊥] s ↔ s = ∅ ∨ s = univ
+  条件: {s : 集合 α}
+  结论: 可测集[⊥] s ↔ s = ∅ ∨ s = univ
   证明: let b : MeasurableSpace α :=
     { MeasurableSet' := fun s => s = ∅ ∨ s = univ
       measurableSet_empty := Or.inl rfl
@@ -1757,8 +1757,8 @@ theorem measurableSet_top
 
 中文:
 定理 measurableSet_top
-  条件: {s : Set α}
-  结论: MeasurableSet[⊤] s
+  条件: {s : 集合 α}
+  结论: 可测集[⊤] s
   证明: trivial
 
 @[simp]
@@ -1780,7 +1780,7 @@ theorem measurableSet_inf
 
 中文:
 定理 measurableSet_inf
-  条件: {m₂ m₁ : MeasurableSpace α} {s : Set α}
+  条件: {m₂ m₁ : 可测空间 α} {s : 集合 α}
   证明: Iff.rfl
 
 @[simp]
@@ -1802,7 +1802,7 @@ theorem measurableSet_sInf
 
 中文:
 定理 measurableSet_sInf
-  条件: {ms : Set (MeasurableSpace α)} {s : Set α}
+  条件: {ms : 集合 (可测空间 α)} {s : 集合 α}
   证明: show s in ⋂₀ _ ↔ _ by simp
 -/
 theorem measurableSet_sInf {ms : Set (MeasurableSpace α)} {s : Set α} :
@@ -1820,7 +1820,7 @@ theorem measurableSet_iInf
 
 中文:
 定理 measurableSet_iInf
-  条件: {ι} {m : ι -> MeasurableSpace α} {s : Set α}
+  条件: {ι} {m : ι -> 可测空间 α} {s : 集合 α}
   证明: by
   rw [iInf]; rw [measurableSet_sInf]; rw [forall_mem_range]
 
@@ -1840,7 +1840,7 @@ theorem measurableSet_sup
 
 中文:
 定理 measurableSet_sup
-  条件: {m₁ m₂ : MeasurableSpace α} {s : Set α}
+  条件: {m₁ m₂ : 可测空间 α} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1862,7 +1862,7 @@ theorem measurableSet_sSup
 
 中文:
 定理 measurableSet_sSup
-  条件: {ms : Set (MeasurableSpace α)} {s : Set α}
+  条件: {ms : 集合 (可测空间 α)} {s : 集合 α}
   证明: by
   change GenerateMeasurable (⋃₀ _) _ ↔ _
   simp [← ofPred_exists]
@@ -1887,7 +1887,7 @@ theorem measurableSet_iSup
 
 中文:
 定理 measurableSet_iSup
-  条件: {ι} {m : ι -> MeasurableSpace α} {s : Set α}
+  条件: {ι} {m : ι -> 可测空间 α} {s : 集合 α}
   证明: by
   unfold iSup
   simp only [measurableSet_sSup, exists_range_iff]
@@ -1912,7 +1912,7 @@ theorem measurableSpace_iSup_eq
 
 中文:
 定理 measurableSpace_iSup_eq
-  条件: (m : ι -> MeasurableSpace α)
+  条件: (m : ι -> 可测空间 α)
   证明: by
   ext s
   rw [measurableSet_iSup]
@@ -1936,7 +1936,7 @@ theorem generateFrom_iUnion_measurableSet
 
 中文:
 定理 generateFrom_iUnion_measurableSet
-  条件: (m : ι -> MeasurableSpace α)
+  条件: (m : ι -> 可测空间 α)
   证明: (@giGenerateFrom α).l_iSup_u m
 
 Depends on / 依赖: giGenerateFrom, l_iSup_u
@@ -1966,8 +1966,8 @@ add_aesop_rules safe tactic
   (by fun_prop (disch := measurability))
 
 中文:
-定义 Measurable
-  签名: [MeasurableSpace α] [MeasurableSpace β] (f : α -> β)
+定义 可测
+  签名: [可测空间 α] [可测空间 β] (f : α -> β)
   定义体: forall ⦃t : Set β⦄, MeasurableSet t -> MeasurableSet (f ⁻¹' t)
 
 add_aesop_rules safe tactic
@@ -2011,8 +2011,8 @@ theorem measurable_id
 
 中文:
 定理 measurable_id
-  条件: {_ : MeasurableSpace α}
-  结论: Measurable (@id α)
+  条件: {_ : 可测空间 α}
+  结论: 可测 (@id α)
   证明: fun _ => id
 
 @[fun_prop]
@@ -2031,8 +2031,8 @@ theorem measurable_id'
 
 中文:
 定理 measurable_id'
-  条件: {_ : MeasurableSpace α}
-  结论: Measurable fun a : α => a
+  条件: {_ : 可测空间 α}
+  结论: 可测 fun a : α => a
   证明: measurable_id
 
 Depends on / 依赖: measurable_id
@@ -2052,8 +2052,8 @@ theorem Measurable.comp
   proof: fun _ h => hf (hg h)
 
 中文:
-定理 Measurable.comp
-  结论: {_ : MeasurableSpace α} {_ : MeasurableSpace β}
+定理 可测.comp
+  结论: {_ : 可测空间 α} {_ : 可测空间 β}
   证明: fun _ h => hf (hg h)
 -/
 protected theorem Measurable.comp {_ : MeasurableSpace α} {_ : MeasurableSpace β}
@@ -2078,7 +2078,7 @@ theorem measurable_const
 
 中文:
 定理 measurable_const
-  条件: {_ : MeasurableSpace α} {_ : MeasurableSpace β} {a : α}
+  条件: {_ : 可测空间 α} {_ : 可测空间 β} {a : α}
   证明: fun s _ => .const (a in s)
 
 @[fun_prop]
@@ -2096,8 +2096,8 @@ theorem Measurable.le
   proof: fun _ hs => hm _ (hf hs)
 
 中文:
-定理 Measurable.le
-  结论: {α} {m m0 : MeasurableSpace α} {_ : MeasurableSpace β} (hm : m <= m0)
+定理 可测.le
+  结论: {α} {m m0 : 可测空间 α} {_ : 可测空间 β} (hm : m <= m0)
   证明: fun _ hs => hm _ (hf hs)
 -/
 theorem Measurable.le {α} {m m0 : MeasurableSpace α} {_ : MeasurableSpace β} (hm : m <= m0)
@@ -2115,10 +2115,10 @@ class DiscreteMeasurableSpace
     - forall_measurableSet : forall s : Set α, MeasurableSet s
 
 中文:
-类 DiscreteMeasurableSpace
-  参数: (α : 类型) [MeasurableSpace α]
+类 DiscreteMeasurable空间
+  参数: (α : 类型) [可测空间 α]
   公理与运算 (1 个):
-    - forall_measurableSet : 对任意 s : Set α, MeasurableSet s
+    - forall_measurableSet : 对任意 s : 集合 α, 可测集 s
 -/
 class DiscreteMeasurableSpace (α : Type*) [MeasurableSpace α] : Prop where
   /-- Do not use this. Use `MeasurableSet.of_discrete` instead. -/
@@ -2134,7 +2134,7 @@ instance :
 
 中文:
 实例 :
-  签名: @DiscreteMeasurableSpace α ⊤
+  签名: @DiscreteMeasurable空间 α ⊤
   定义体: @DiscreteMeasurableSpace.mk _ (_) fun _ => MeasurableSpace.measurableSet_top
 
 Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.mk, MeasurableSpace, MeasurableSpace.measurableSet_top, measurableSet_top
@@ -2159,8 +2159,8 @@ lemma MeasurableSet.of_discrete
   proof: DiscreteMeasurableSpace.forall_measurableSet _
 
 中文:
-引理 MeasurableSet.of_discrete
-  结论: MeasurableSet s
+引理 可测集.of_discrete
+  结论: 可测集 s
   证明: DiscreteMeasurableSpace.forall_measurableSet _
 -/
 @[measurability] lemma MeasurableSet.of_discrete : MeasurableSet s :=
@@ -2175,8 +2175,8 @@ lemma Measurable.of_discrete
   proof: fun _ _ => .of_discrete
 
 中文:
-引理 Measurable.of_discrete
-  结论: Measurable f
+引理 可测.of_discrete
+  结论: 可测 f
   证明: fun _ _ => .of_discrete
 -/
 @[fun_prop] lemma Measurable.of_discrete : Measurable f := fun _ _ => .of_discrete

@@ -75,7 +75,7 @@ structure QuaternionAlgebra
     - imK : R
 
 中文:
-结构 QuaternionAlgebra
+结构 Quaternion代数
   参数: (R : 类型) (a b c : R)
   公理与运算 (4 个):
     - re : R
@@ -206,8 +206,8 @@ instance [Subsingleton
   body: (equivTuple c₁ c₂ c₃).subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton ℍ[R,c₁,c₂,c₃]
+实例 [子单例
+  签名: R] : 子单例 ℍ[R,c₁,c₂,c₃]
   定义体: (equivTuple c₁ c₂ c₃).subsingleton
 
 Depends on / 依赖: equivTuple, subsingleton
@@ -222,8 +222,8 @@ instance [Nontrivial
   body: (equivTuple c₁ c₂ c₃).surjective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial ℍ[R,c₁,c₂,c₃]
+实例 [非平凡
+  签名: R] : 非平凡 ℍ[R,c₁,c₂,c₃]
   定义体: (equivTuple c₁ c₂ c₃).surjective.nontrivial
 
 Depends on / 依赖: equivTuple, nontrivial, surjective, surjective.nontrivial
@@ -478,7 +478,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective (coe : R -> ℍ[R,c₁,c₂,c₃])
+  结论: 函数.单射 (coe : R -> ℍ[R,c₁,c₂,c₃])
   证明: fun _ _ h => congr_arg re h
 
 @[simp]
@@ -523,7 +523,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero ℍ[R,c₁,c₂,c₃]
+  签名: 零 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨⟨0, 0, 0, 0⟩⟩
 -/
 instance : Zero ℍ[R,c₁,c₂,c₃] := ⟨⟨0, 0, 0, 0⟩⟩
@@ -573,7 +573,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ℍ[R,c₁,c₂,c₃]
+  签名: 可居 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨0⟩
 -/
 instance : Inhabited ℍ[R,c₁,c₂,c₃] := ⟨0⟩
@@ -592,7 +592,7 @@ instance :
 
 中文:
 实例 :
-  签名: One ℍ[R,c₁,c₂,c₃]
+  签名: 幺 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨⟨1, 0, 0, 0⟩⟩
 -/
 instance : One ℍ[R,c₁,c₂,c₃] := ⟨⟨1, 0, 0, 0⟩⟩
@@ -650,7 +650,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add ℍ[R,c₁,c₂,c₃]
+  签名: 加法 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨fun a b => ⟨a.1 + b.1, a.2 + b.2, a.3 + b.3, a.4 + b.4⟩⟩
 
 @[simp]
@@ -846,7 +846,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg ℍ[R,c₁,c₂,c₃]
+  签名: 取负 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨fun a => ⟨-a.1, -a.2, -a.3, -a.4⟩⟩
 
 @[simp]
@@ -928,7 +928,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub ℍ[R,c₁,c₂,c₃]
+  签名: 减法 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨fun a b => ⟨a.1 - b.1, a.2 - b.2, a.3 - b.3, a.4 - b.4⟩⟩
 -/
 instance : Sub ℍ[R,c₁,c₂,c₃] :=
@@ -1092,7 +1092,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul ℍ[R,c₁,c₂,c₃]
+  签名: 乘法 ℍ[R,c₁,c₂,c₃]
   定义体: ⟨fun a b =>
     ⟨a.1 * b.1 + c₁ * a.2 * b.2 + c₃ * a.3 * b.3 + c₂ * c₃ * a.3 * b.4 - c₁ * c₃ * a.4 * b.4,
       a.1 * b.2 + a.2 * b.1 + c₂ * a.2 * b.2 - c₃ * a.3 * b.4 + c₃ * a.4 * b.3,
@@ -1145,7 +1145,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S ℍ[R,c₁,c₂,c₃]
+  签名: 标量乘法 S ℍ[R,c₁,c₂,c₃]
   定义体: ⟨s • a.1, s • a.2, s • a.3, s • a.4⟩
 -/
 instance : SMul S ℍ[R,c₁,c₂,c₃] where smul s a := ⟨s • a.1, s • a.2, s • a.3, s • a.4⟩
@@ -1159,8 +1159,8 @@ instance [SMul
   body: by ext <;> exact smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T R] : IsScalarTower S T ℍ[R,c₁,c₂,c₃] where
+实例 [标量乘法
+  签名: S T] [标量塔 S T R] : 标量塔 S T ℍ[R,c₁,c₂,c₃] where
   定义体: by ext <;> exact smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -1177,8 +1177,8 @@ instance [SMulCommClass
   body: by ext <;> exact smul_comm _ _ _
 
 中文:
-实例 [SMulCommClass
-  签名: S T R] : SMulCommClass S T ℍ[R,c₁,c₂,c₃] where
+实例 [标量交换类
+  签名: S T R] : 标量交换类 S T ℍ[R,c₁,c₂,c₃] where
   定义体: by ext <;> exact smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -1199,7 +1199,7 @@ theorem im_smul
 
 中文:
 定理 im_smul
-  条件: {S} [CommRing R] [SMulZeroClass S R] (s : S)
+  条件: {S} [交换环 R] [SMulZero类 S R] (s : S)
   结论: (s • a).im = s • a.im
   证明: QuaternionAlgebra.ext (smul_zero s).symm rfl rfl rfl
 
@@ -1237,8 +1237,8 @@ instance [Monoid
   body: (equivProd ..).injective.mulAction _ fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: S] [MulAction S R] : MulAction S ℍ[R,c₁,c₂,c₃]
+实例 [幺半群
+  签名: S] [乘法作用 S R] : 乘法作用 S ℍ[R,c₁,c₂,c₃]
   定义体: (equivProd ..).injective.mulAction _ fun _ _ => rfl
 
 Depends on / 依赖: equivProd, injective, injective.mulAction, mulAction
@@ -1258,8 +1258,8 @@ instance [AddCommGroup
 @[simp, norm_cast]
 
 中文:
-实例 [AddCommGroup
-  签名: R] : AddCommGroup ℍ[R,c₁,c₂,c₃]
+实例 [加法交换群
+  签名: R] : 加法交换群 ℍ[R,c₁,c₂,c₃]
   定义体: by
   apply (equivProd c₁ c₂ c₃).injective.addCommGroup <;> intros <;> rfl
 
@@ -1281,7 +1281,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [Zero R] [SMulZeroClass S R] (s : S) (r : R)
+  条件: [零 R] [SMulZero类 S R] (s : S) (r : R)
   证明: QuaternionAlgebra.ext rfl (smul_zero _).symm (smul_zero _).symm (smul_zero _).symm
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.ext, smul_zero
@@ -1299,8 +1299,8 @@ instance [Semiring
   body: (addEquivProd ..).injective.distribMulAction (addEquivProd c₁ c₂ c₃).toAddMonoidHom fun _ _ => rfl
 
 中文:
-实例 [Semiring
-  签名: S] [AddCommGroup R] [DistribMulAction S R] : DistribMulAction S ℍ[R,c₁,c₂,c₃]
+实例 [半环
+  签名: S] [加法交换群 R] [分配乘法作用 S R] : 分配乘法作用 S ℍ[R,c₁,c₂,c₃]
   定义体: (addEquivProd ..).injective.distribMulAction (addEquivProd c₁ c₂ c₃).toAddMonoidHom fun _ _ => rfl
 
 Depends on / 依赖: addEquivProd, distribMulAction, injective, injective.distribMulAction, toAddMonoidHom
@@ -1317,8 +1317,8 @@ instance [Semiring
   body: (addEquivProd ..).injective.module _ (addEquivProd c₁ c₂ c₃).toAddMonoidHom fun _ _ => rfl
 
 中文:
-实例 [Semiring
-  签名: S] [AddCommGroup R] [Module S R] : Module S ℍ[R,c₁,c₂,c₃]
+实例 [半环
+  签名: S] [加法交换群 R] [模 S R] : 模 S ℍ[R,c₁,c₂,c₃]
   定义体: (addEquivProd ..).injective.module _ (addEquivProd c₁ c₂ c₃).toAddMonoidHom fun _ _ => rfl
 
 Depends on / 依赖: addEquivProd, injective, injective.module, module, toAddMonoidHom
@@ -1348,7 +1348,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroupWithOne ℍ[R,c₁,c₂,c₃]
+  签名: 加法交换带幺群 ℍ[R,c₁,c₂,c₃]
   定义体: ((n : R) : ℍ[R,c₁,c₂,c₃])
   natCast_zero := by simp
   natCast_succ := by simp
@@ -1544,7 +1544,7 @@ theorem re_ofNat
 @[scoped simp]
 
 中文:
-定理 re_ofNat
+定理 re_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : ℍ[R,c₁,c₂,c₃]).re = of自然数(n)
   证明: rfl
@@ -1566,7 +1566,7 @@ theorem imI_ofNat
 @[scoped simp]
 
 中文:
-定理 imI_ofNat
+定理 imI_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : ℍ[R,c₁,c₂,c₃]).imI = 0
   证明: rfl
@@ -1588,7 +1588,7 @@ theorem imJ_ofNat
 @[scoped simp]
 
 中文:
-定理 imJ_ofNat
+定理 imJ_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : ℍ[R,c₁,c₂,c₃]).imJ = 0
   证明: rfl
@@ -1610,7 +1610,7 @@ theorem imK_ofNat
 @[scoped simp]
 
 中文:
-定理 imK_ofNat
+定理 imK_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : ℍ[R,c₁,c₂,c₃]).imK = 0
   证明: rfl
@@ -1632,7 +1632,7 @@ theorem im_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 im_ofNat
+定理 im_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : ℍ[R,c₁,c₂,c₃]).im = 0
   证明: rfl
@@ -1774,7 +1774,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring ℍ[R,c₁,c₂,c₃] where
+  签名: : 环 ℍ[R,c₁,c₂,c₃] where
   定义体: (inferInstance : AddCommGroupWithOne ℍ[R,c₁,c₂,c₃])
   left_distrib _ _ _ := by ext <;> simp <;> ring
   right_distrib _ _ _ := by ext <;> simp <;> ring
@@ -1826,7 +1826,7 @@ lemma coe_ofNat
   proof: rfl
 
 中文:
-引理 coe_ofNat
+引理 coe_of自然数
   条件: {n : 自然数} [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1849,8 +1849,8 @@ instance [CommSemiring
   com
 
 中文:
-实例 [CommSemiring
-  签名: S] [Algebra S R] : Algebra S ℍ[R,c₁,c₂,c₃] where
+实例 [交换半环
+  签名: S] [代数 S R] : 代数 S ℍ[R,c₁,c₂,c₃] where
   定义体: { toFun s := coe (algebraMap S R s)
     map_one' := by simp only [map_one, coe_one]
     map_zero' := by simp only [map_zero, coe_zero]
@@ -1899,7 +1899,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: (algebraMap R ℍ[R,c₁,c₂,c₃] : _ -> _).Injective
+  结论: (algebraMap R ℍ[R,c₁,c₂,c₃] : _ -> _).单射
   证明: fun _ _ => by simp [algebraMap_eq]
 
 Depends on / 依赖: algebraMap_eq
@@ -1917,7 +1917,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree R ℍ[R,c₁,c₂,c₃]
+  签名: 是无挠 R ℍ[R,c₁,c₂,c₃]
   定义体: (addEquivProd ..).injective.moduleIsTorsionFree _ fun _ _ => rfl
 
 Depends on / 依赖: addEquivProd, injective, injective.moduleIsTorsionFree, moduleIsTorsionFree
@@ -2037,7 +2037,7 @@ definition linearEquivTuple
 
 中文:
 定义 linearEquivTuple
-  签名: : ℍ[R,c₁,c₂,c₃] ≃ₗ[R] Fin 4 -> R
+  签名: : ℍ[R,c₁,c₂,c₃] ≃ₗ[R] 有限集 4 -> R
   定义体: (equivTuple ..).linearEquiv _
 
 @[simp]
@@ -2092,7 +2092,7 @@ definition basisOneIJK
 
 中文:
 定义 basisOneIJK
-  签名: : Basis (Fin 4) R ℍ[R,c₁,c₂,c₃]
+  签名: : 基 (有限集 4) R ℍ[R,c₁,c₂,c₃]
   定义体: .ofEquivFun linearEquivTuple c₁ c₂ c₃
 
 @[simp]
@@ -2130,7 +2130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R ℍ[R,c₁,c₂,c₃]
+  签名: 模.有限 R ℍ[R,c₁,c₂,c₃]
   定义体: .of_basis (basisOneIJK c₁ c₂ c₃)
 
 Depends on / 依赖: basisOneIJK, of_basis
@@ -2147,7 +2147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R ℍ[R,c₁,c₂,c₃]
+  签名: 模.自由 R ℍ[R,c₁,c₂,c₃]
   定义体: .of_basis (basisOneIJK c₁ c₂ c₃)
 
 Depends on / 依赖: basisOneIJK, of_basis
@@ -2168,7 +2168,7 @@ theorem rank_eq_four
 中文:
 定理 rank_eq_four
   条件: [StrongRankCondition R]
-  结论: Module.rank R ℍ[R,c₁,c₂,c₃] = 4
+  结论: 模.rank R ℍ[R,c₁,c₂,c₃] = 4
   证明: by
   rw [rank_eq_card_basis (basisOneIJK c₁ c₂ c₃)]; rw [Fintype.card_fin]
   norm_num
@@ -2192,7 +2192,7 @@ theorem finrank_eq_four
 中文:
 定理 finrank_eq_four
   条件: [StrongRankCondition R]
-  结论: Module.finrank R ℍ[R,c₁,c₂,c₃] = 4
+  结论: 模.finrank R ℍ[R,c₁,c₂,c₃] = 4
   证明: by
   rw [Module.finrank]; rw [rank_eq_four]; rw [Cardinal.toNat_ofNat]
 
@@ -2403,7 +2403,7 @@ instance instStarQuaternionAlgebra
 
 中文:
 实例 instStarQuaternionAlgebra
-  签名: : Star ℍ[R,c₁,c₂,c₃] where star a
+  签名: : 对合 ℍ[R,c₁,c₂,c₃] where star a
   定义体: ⟨a.1 + c₂ * a.2, -a.2, -a.3, -a.4⟩
 -/
 instance instStarQuaternionAlgebra : Star ℍ[R,c₁,c₂,c₃] where star a :=
@@ -2545,7 +2545,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: : StarRing ℍ[R,c₁,c₂,c₃] where
+  签名: : 对合环 ℍ[R,c₁,c₂,c₃] where
   定义体: by simp [Star.star]
   star_add a b := by ext <;> simp [add_comm]; ring
   star_mul a b := by ext <;> simp <;> ring
@@ -2679,7 +2679,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStarNormal a
+  签名: 是StarNormal a
   定义体: ⟨by
     rw [commute_iff_eq]; rw [a.star_eq_two_re_sub];
     ext <;> simp <;> ring⟩
@@ -2740,7 +2740,7 @@ theorem star_smul
 
 中文:
 定理 star_smul
-  结论: [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
+  结论: [幺半群 S] [分配乘法作用 S R] [标量交换类 S R R]
   证明: QuaternionAlgebra.ext
     (by simp [mul_smul_comm]) (smul_neg _ _).symm (smul_neg _ _).symm (smul_neg _ _).symm
 
@@ -2762,7 +2762,7 @@ theorem star_smul'
 
 中文:
 定理 star_smul'
-  条件: [Monoid S] [DistribMulAction S R] (s : S) (a : ℍ[R,c₁,0,c₃])
+  条件: [幺半群 S] [分配乘法作用 S R] (s : S) (a : ℍ[R,c₁,0,c₃])
   证明: QuaternionAlgebra.ext (by simp) (smul_neg _ _).symm (smul_neg _ _).symm (smul_neg _ _).symm
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.ext, smul_neg
@@ -2967,7 +2967,7 @@ scoped[Quaternion] notation "ℍ[" R "]" => Quaternion R
 
 中文:
 定义 Quaternion
-  签名: (R : 类型) [Zero R] [One R] [Neg R]
+  签名: (R : 类型) [零 R] [幺 R] [取负 R]
   定义体: QuaternionAlgebra R (-1) (0) (-1)
 
 @[inherit_doc]
@@ -2995,7 +2995,7 @@ definition Quaternion.equivProd
 
 中文:
 定义 Quaternion.equivProd
-  签名: (R : 类型) [Zero R] [One R] [Neg R]
+  签名: (R : 类型) [零 R] [幺 R] [取负 R]
   定义体: QuaternionAlgebra.equivProd _ _ _
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.equivProd, equivProd
@@ -3017,7 +3017,7 @@ definition Quaternion.equivTuple
 
 中文:
 定义 Quaternion.equivTuple
-  签名: (R : 类型) [Zero R] [One R] [Neg R]
+  签名: (R : 类型) [零 R] [幺 R] [取负 R]
   定义体: QuaternionAlgebra.equivTuple _ _ _
 
 @[simp]
@@ -3038,7 +3038,7 @@ theorem Quaternion.equivTuple_apply
 
 中文:
 定理 Quaternion.equivTuple_apply
-  条件: (R : 类型) [Zero R] [One R] [Neg R] (x : ℍ[R])
+  条件: (R : 类型) [零 R] [幺 R] [取负 R] (x : ℍ[R])
   证明: rfl
 -/
 theorem Quaternion.equivTuple_apply (R : Type*) [Zero R] [One R] [Neg R] (x : ℍ[R]) :
@@ -3093,8 +3093,8 @@ instance [SMul
   body: inferInstanceAs SMul S ℍ[R,-1,0,-1]
 
 中文:
-实例 [SMul
-  签名: S R] : SMul S ℍ[R]
+实例 [标量乘法
+  签名: S R] : 标量乘法 S ℍ[R]
   定义体: inferInstanceAs SMul S ℍ[R,-1,0,-1]
 -/
 instance [SMul S R] : SMul S ℍ[R] := inferInstanceAs SMul S ℍ[R,-1,0,-1]
@@ -3111,7 +3111,7 @@ __ : Ring ℍ[R] := inferInstanceAs Ring ℍ[R,-1,0,-1]
 
 中文:
 实例 instRing
-  签名: : Ring ℍ[R] where
+  签名: : 环 ℍ[R] where
   定义体: letI := Quaternion.instSMul (S := Nat) (R := R); (· • ·)
   zsmul := letI := Quaternion.instSMul (S := Int) (R := R); (· • ·)
 __ : Ring ℍ[R] := inferInstanceAs Ring ℍ[R,-1,0,-1]
@@ -3133,7 +3133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ℍ[R]
+  签名: 可居 ℍ[R]
   定义体: inferInstanceAs Inhabited ℍ[R,-1,0,-1]
 
 Depends on / 依赖: Inhabited
@@ -3149,8 +3149,8 @@ instance [SMul
   body: inferInstanceAs IsScalarTower S T ℍ[R,-1,0,-1]
 
 中文:
-实例 [SMul
-  签名: S T] [SMul S R] [SMul T R] [IsScalarTower S T R] : IsScalarTower S T ℍ[R]
+实例 [标量乘法
+  签名: S T] [标量乘法 S R] [标量乘法 T R] [标量塔 S T R] : 标量塔 S T ℍ[R]
   定义体: inferInstanceAs IsScalarTower S T ℍ[R,-1,0,-1]
 
 Depends on / 依赖: IsScalarTower
@@ -3167,8 +3167,8 @@ instance [SMul
   body: inferInstanceAs SMulCommClass S T ℍ[R,-1,0,-1]
 
 中文:
-实例 [SMul
-  签名: S R] [SMul T R] [SMulCommClass S T R] : SMulCommClass S T ℍ[R]
+实例 [标量乘法
+  签名: S R] [标量乘法 T R] [标量交换类 S T R] : 标量交换类 S T ℍ[R]
   定义体: inferInstanceAs SMulCommClass S T ℍ[R,-1,0,-1]
 
 Depends on / 依赖: SMulCommClass
@@ -3185,8 +3185,8 @@ instance [Monoid
   body: inferInstanceAs MulAction S ℍ[R,-1,0,-1]
 
 中文:
-实例 [Monoid
-  签名: S] [MulAction S R] : MulAction S ℍ[R]
+实例 [幺半群
+  签名: S] [乘法作用 S R] : 乘法作用 S ℍ[R]
   定义体: inferInstanceAs MulAction S ℍ[R,-1,0,-1]
 
 Depends on / 依赖: MulAction
@@ -3203,8 +3203,8 @@ instance [Semiring
   body: inferInstanceAs DistribMulAction S ℍ[R,-1,0,-1]
 
 中文:
-实例 [Semiring
-  签名: S] [DistribMulAction S R] : DistribMulAction S ℍ[R]
+实例 [半环
+  签名: S] [分配乘法作用 S R] : 分配乘法作用 S ℍ[R]
   定义体: inferInstanceAs DistribMulAction S ℍ[R,-1,0,-1]
 
 Depends on / 依赖: DistribMulAction
@@ -3221,8 +3221,8 @@ instance [Semiring
   body: inferInstanceAs Module S ℍ[R,-1,0,-1]
 
 中文:
-实例 [Semiring
-  签名: S] [Module S R] : Module S ℍ[R]
+实例 [半环
+  签名: S] [模 S R] : 模 S ℍ[R]
   定义体: inferInstanceAs Module S ℍ[R,-1,0,-1]
 
 Depends on / 依赖: Module
@@ -3240,7 +3240,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: [CommSemiring S] [Algebra S R]
+  签名: [交换半环 S] [代数 S R]
   定义体: inferInstanceAs Algebra S ℍ[R,-1,0,-1]
 -/
 protected instance algebra [CommSemiring S] [Algebra S R] : Algebra S ℍ[R] :=
@@ -3256,7 +3256,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star ℍ[R]
+  签名: 对合 ℍ[R]
   定义体: inferInstanceAs Star ℍ[R,-1,0,-1]
 -/
 instance : Star ℍ[R] := inferInstanceAs Star ℍ[R,-1,0,-1]
@@ -3270,7 +3270,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing ℍ[R]
+  签名: 对合环 ℍ[R]
   定义体: inferInstanceAs StarRing ℍ[R,-1,0,-1]
 
 Depends on / 依赖: StarRing
@@ -3289,7 +3289,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStarNormal a
+  签名: 是StarNormal a
   定义体: inferInstanceAs IsStarNormal (R := ℍ[R,-1,0,-1]) a
 
 @[ext]
@@ -4453,7 +4453,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective (coe : R -> ℍ[R])
+  结论: 函数.单射 (coe : R -> ℍ[R])
   证明: QuaternionAlgebra.coe_injective
 
 @[simp]
@@ -4500,7 +4500,7 @@ theorem re_smul
 
 中文:
 定理 re_smul
-  条件: [SMul S R] (s : S)
+  条件: [标量乘法 S R] (s : S)
   结论: (s • a).re = s • a.re
   证明: rfl
 -/
@@ -4518,7 +4518,7 @@ theorem imI_smul
 
 中文:
 定理 imI_smul
-  条件: [SMul S R] (s : S)
+  条件: [标量乘法 S R] (s : S)
   结论: (s • a).imI = s • a.imI
   证明: rfl
 -/
@@ -4535,7 +4535,7 @@ theorem imJ_smul
 
 中文:
 定理 imJ_smul
-  条件: [SMul S R] (s : S)
+  条件: [标量乘法 S R] (s : S)
   结论: (s • a).imJ = s • a.imJ
   证明: rfl
 -/
@@ -4554,7 +4554,7 @@ theorem imK_smul
 
 中文:
 定理 imK_smul
-  条件: [SMul S R] (s : S)
+  条件: [标量乘法 S R] (s : S)
   结论: (s • a).imK = s • a.imK
   证明: rfl
 
@@ -4576,7 +4576,7 @@ theorem im_smul
 
 中文:
 定理 im_smul
-  条件: [SMulZeroClass S R] (s : S)
+  条件: [SMulZero类 S R] (s : S)
   结论: (s • a).im = s • a.im
   证明: QuaternionAlgebra.im_smul a s
 
@@ -4599,7 +4599,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMulZeroClass S R] (s : S) (r : R)
+  条件: [SMulZero类 S R] (s : S) (r : R)
   结论: (↑(s • r) : ℍ[R]) = s • (r : ℍ[R])
   证明: QuaternionAlgebra.coe_smul _ _
 
@@ -4711,7 +4711,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: (algebraMap R ℍ[R] : _ -> _).Injective
+  结论: (algebraMap R ℍ[R] : _ -> _).单射
   证明: QuaternionAlgebra.algebraMap_injective
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.algebraMap_injective, algebraMap_injective
@@ -4747,7 +4747,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R ℍ[R]
+  签名: 模.有限 R ℍ[R]
   定义体: inferInstanceAs Module.Finite R ℍ[R,-1,0,-1]
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -4763,7 +4763,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R ℍ[R]
+  签名: 模.自由 R ℍ[R]
   定义体: inferInstanceAs Module.Free R ℍ[R,-1,0,-1]
 
 Depends on / 依赖: Module, Module.Free
@@ -4782,7 +4782,7 @@ theorem rank_eq_four
 中文:
 定理 rank_eq_four
   条件: [StrongRankCondition R]
-  结论: Module.rank R ℍ[R] = 4
+  结论: 模.rank R ℍ[R] = 4
   证明: QuaternionAlgebra.rank_eq_four _ _ _
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.rank_eq_four, rank_eq_four
@@ -4802,7 +4802,7 @@ theorem finrank_eq_four
 中文:
 定理 finrank_eq_four
   条件: [StrongRankCondition R]
-  结论: Module.finrank R ℍ[R] = 4
+  结论: 模.finrank R ℍ[R] = 4
   证明: QuaternionAlgebra.finrank_eq_four _ _ _
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.finrank_eq_four, finrank_eq_four
@@ -5047,7 +5047,7 @@ theorem star_smul
 
 中文:
 定理 star_smul
-  条件: [Monoid S] [DistribMulAction S R] (s : S) (a : ℍ[R])
+  条件: [幺半群 S] [分配乘法作用 S R] (s : S) (a : ℍ[R])
   证明: QuaternionAlgebra.star_smul' s a
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.star_smul, star_smul
@@ -5087,7 +5087,7 @@ theorem eq_re_iff_mem_range_coe
 中文:
 定理 eq_re_iff_mem_range_coe
   条件: {a : ℍ[R]}
-  结论: a = a.re ↔ a in Set.range (coe : R -> ℍ[R])
+  结论: a = a.re ↔ a in 集合.range (coe : R -> ℍ[R])
   证明: QuaternionAlgebra.eq_re_iff_mem_range_coe
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.eq_re_iff_mem_range_coe, eq_re_iff_mem_range_coe
@@ -5666,7 +5666,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial ℍ[R] where
+  签名: : 非平凡 ℍ[R] where
   定义体: ⟨0, 1, mt (congr_arg QuaternionAlgebra.re) zero_ne_one⟩
 
 Depends on / 依赖: QuaternionAlgebra, QuaternionAlgebra.re, congr_arg, zero_ne_one
@@ -5685,7 +5685,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors ℍ[R]
+  签名: 无零因子 ℍ[R]
   定义体: have : normSq a * normSq b = 0 := by rwa [← map_mul, normSq_eq_zero]
     (eq_zero_or_eq_zero_of_mul_eq_zero this).imp normSq_eq_zero.1 normSq_eq_zero.1
 
@@ -5706,7 +5706,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain ℍ[R]
+  签名: 是整环 ℍ[R]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -5781,7 +5781,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast ℍ[R] where nnratCast q
+  签名: : 非负有理数嵌入 ℍ[R] where nnratCast q
   定义体: (q : R)
 -/
 instance instNNRatCast : NNRatCast ℍ[R] where nnratCast q := (q : R)
@@ -5795,7 +5795,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: : RatCast ℍ[R] where ratCast q
+  签名: : 有理数嵌入 ℍ[R] where ratCast q
   定义体: (q : R)
 -/
 instance instRatCast : RatCast ℍ[R] where ratCast q := (q : R)
@@ -5811,7 +5811,7 @@ lemma re_nnratCast
 
 中文:
 引理 re_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : ℍ[R]).re = q
   证明: rfl
 -/
@@ -5827,7 +5827,7 @@ lemma im_nnratCast
 
 中文:
 引理 im_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : ℍ[R]).im = 0
   证明: rfl
 -/
@@ -5843,7 +5843,7 @@ lemma imI_nnratCast
 
 中文:
 引理 imI_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : ℍ[R]).imI = 0
   证明: rfl
 -/
@@ -5859,7 +5859,7 @@ lemma imJ_nnratCast
 
 中文:
 引理 imJ_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : ℍ[R]).imJ = 0
   证明: rfl
 -/
@@ -5875,7 +5875,7 @@ lemma imK_nnratCast
 
 中文:
 引理 imK_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : ℍ[R]).imK = 0
   证明: rfl
 -/
@@ -5891,7 +5891,7 @@ lemma re_ratCast
 
 中文:
 引理 re_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : ℍ[R]).re = q
   证明: rfl
 -/
@@ -5907,7 +5907,7 @@ lemma im_ratCast
 
 中文:
 引理 im_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : ℍ[R]).im = 0
   证明: rfl
 -/
@@ -5923,7 +5923,7 @@ lemma imI_ratCast
 
 中文:
 引理 imI_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : ℍ[R]).imI = 0
   证明: rfl
 -/
@@ -5939,7 +5939,7 @@ lemma imJ_ratCast
 
 中文:
 引理 imJ_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : ℍ[R]).imJ = 0
   证明: rfl
 -/
@@ -5955,7 +5955,7 @@ lemma imK_ratCast
 
 中文:
 引理 imK_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : ℍ[R]).imK = 0
   证明: rfl
 -/
@@ -5972,7 +5972,7 @@ lemma coe_nnratCast
 
 中文:
 引理 coe_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ↑(q : R) = (q : ℍ[R])
   证明: rfl
 -/
@@ -5989,7 +5989,7 @@ lemma coe_ratCast
 
 中文:
 引理 coe_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ↑(q : R) = (q : ℍ[R])
   证明: rfl
 -/
@@ -6085,7 +6085,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv ℍ[R]
+  签名: : 取逆 ℍ[R]
   定义体: ⟨fun a => (normSq a)⁻¹ • star a⟩
 
 Depends on / 依赖: normSq
@@ -6108,7 +6108,7 @@ instance instGroupWithZero
 
 中文:
 实例 instGroupWithZero
-  签名: : GroupWithZero ℍ[R]
+  签名: : 带零群 ℍ[R]
   定义体: { Quaternion.instNontrivial with
     inv_zero := by rw [inv_def, star_zero, smul_zero]
     mul_inv_cancel := fun a ha => by
@@ -6211,7 +6211,7 @@ instance instDivisionRing
 
 中文:
 实例 instDivisionRing
-  签名: : DivisionRing ℍ[R] where
+  签名: : 除环 ℍ[R] where
   定义体: Quaternion.instRing
   __ := Quaternion.instGroupWithZero
   nnqsmul := (· • ·)
@@ -6305,7 +6305,7 @@ theorem normSq_ratCast
 
 中文:
 定理 normSq_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: normSq (q : ℍ[R]) = (q : ℍ[R]) ^ 2
   证明: by
   rw [← coe_ratCast]; rw [normSq_coe]; rw [coe_pow]
@@ -6338,7 +6338,7 @@ theorem pow_four
 
 中文:
 定理 pow_four
-  条件: [Infinite R]
+  条件: [无限 R]
   结论: #R ^ 4 = #R
   证明: power_nat_eq (aleph0_le_mk R) by decide
 -/
@@ -6388,7 +6388,7 @@ theorem mk_quaternionAlgebra_of_infinite
 
 中文:
 定理 mk_quaternionAlgebra_of_infinite
-  条件: [Infinite R]
+  条件: [无限 R]
   结论: #(ℍ[R,c₁,c₂,c₃]) = #R
   证明: by
   rw [mk_quaternionAlgebra]; rw [pow_four]
@@ -6409,7 +6409,7 @@ theorem mk_univ_quaternionAlgebra
 
 中文:
 定理 mk_univ_quaternionAlgebra
-  结论: #(Set.univ : Set ℍ[R,c₁,c₂,c₃]) = #R ^ 4
+  结论: #(集合.univ : 集合 ℍ[R,c₁,c₂,c₃]) = #R ^ 4
   证明: by
   rw [mk_univ]; rw [mk_quaternionAlgebra]
 
@@ -6428,7 +6428,7 @@ theorem mk_univ_quaternionAlgebra_of_infinite
 
 中文:
 定理 mk_univ_quaternionAlgebra_of_infinite
-  条件: [Infinite R]
+  条件: [无限 R]
   证明: by rw [mk_univ_quaternionAlgebra, pow_four]
 
 Depends on / 依赖: mk_univ_quaternionAlgebra, pow_four
@@ -6492,7 +6492,7 @@ theorem mk_quaternion_of_infinite
 
 中文:
 定理 mk_quaternion_of_infinite
-  条件: [Infinite R]
+  条件: [无限 R]
   结论: #(ℍ[R]) = #R
   证明: mk_quaternionAlgebra_of_infinite _ _ _
 
@@ -6511,7 +6511,7 @@ theorem mk_univ_quaternion
 
 中文:
 定理 mk_univ_quaternion
-  结论: #(Set.univ : Set ℍ[R]) = #R ^ 4
+  结论: #(集合.univ : 集合 ℍ[R]) = #R ^ 4
   证明: mk_univ_quaternionAlgebra _ _ _
 
 Depends on / 依赖: mk_univ_quaternionAlgebra
@@ -6530,8 +6530,8 @@ theorem mk_univ_quaternion_of_infinite
 
 中文:
 定理 mk_univ_quaternion_of_infinite
-  条件: [Infinite R]
-  结论: #(Set.univ : Set ℍ[R]) = #R
+  条件: [无限 R]
+  结论: #(集合.univ : 集合 ℍ[R]) = #R
   证明: mk_univ_quaternionAlgebra_of_infinite _ _ _
 
 Depends on / 依赖: mk_univ_quaternionAlgebra_of_infinite

@@ -67,8 +67,8 @@ structure ProxyEquivConfig
   公理与运算 (4 个):
     - proxyName : Name
     - proxyEquivName : Name
-    - mkCtorProxyType : List (Expr × Name) -> TermElabM (Expr × Term)
-    - mkProxyType : Array (Name × Expr × Term) -> TermElabM (Expr × Array Term × TSyntax `tactic)
+    - mkCtorProxyType : 列表 (Expr × Name) -> TermElabM (Expr × 项)
+    - mkProxyType : 数组 (Name × Expr × 项) -> TermElabM (Expr × 数组 项 × TSyntax `tactic)
 -/
 structure ProxyEquivConfig where
   /-- Name to use for the declaration for a type that is `Equiv` to the given type. -/
@@ -104,7 +104,7 @@ definition defaultMkCtorProxyType
 
 中文:
 定义 defaultMkCtorProxyType
-  签名: (xs : List (Expr × Name))
+  签名: (xs : 列表 (Expr × Name))
   定义体: match xs with
   | [] => return (mkConst ``Unit, ← `(term| ()))
   | [(x, a)] => do
@@ -157,7 +157,7 @@ patts := patts.push ← wrapSumAccess i ctors.size patt
 
 中文:
 定义 defaultMkProxyType
-  签名: (ctors : Array (Name × Expr × Term))
+  签名: (ctors : 数组 (Name × Expr × 项))
   定义体: do
   let mut types := #[]
   let mut patts := #[]
@@ -365,7 +365,7 @@ definition elabProxyEquiv
 
 中文:
 定义 elabProxyEquiv
-  签名: (type : Term) (expectedType? : Option Expr)
+  签名: (type : 项) (expectedType? : 选项类型 Expr)
   定义体: do
   let type ← Term.elabType type
   if let some expectedType := expectedType? then
@@ -434,7 +434,7 @@ definition elab_proxy_equiv
 
 中文:
 定义 elab_proxy_equiv
-  签名: : Elab.Term.TermElab
+  签名: : Elab.项.TermElab
   定义体: fun stx expectedType? =>
   match stx with
   | `(proxy_equiv% $t) => do

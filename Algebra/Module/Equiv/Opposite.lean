@@ -31,7 +31,7 @@ theorem LinearMap.ext_ring_op
     rw [← one_mul x]; rw [← op_smul_eq_mul]; rw [f.map_smulₛₗ]; rw [h]; rw [g.map_smulₛₗ]
 
 中文:
-定理 LinearMap.ext_ring_op
+定理 线性映射.ext_ring_op
   证明: ext fun x => by
     rw [← one_mul x]; rw [← op_smul_eq_mul]; rw [f.map_smulₛₗ]; rw [h]; rw [g.map_smulₛₗ]
 

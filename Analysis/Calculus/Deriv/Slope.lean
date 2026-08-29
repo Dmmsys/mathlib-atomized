@@ -57,7 +57,7 @@ theorem hasDerivAtFilter_iff_tendsto_slope
 
 中文:
 定理 hasDerivAtFilter_iff_tendsto_slope
-  条件: {x : 𝕜} {L : Filter 𝕜}
+  条件: {x : 𝕜} {L : 滤子 𝕜}
   证明: calc HasDerivAtFilter f f' (L ×ˢ pure x)
     _ ↔ Tendsto (fun y => slope f x y - (y - x)⁻¹ • (y - x) • f') L (𝓝 0) := by
       simp only [hasDerivAtFilter_iff_tendsto, prod_pure, tendsto_map'_iff, Function.comp_def,
@@ -134,7 +134,7 @@ alias ⟨HasDerivAt.tendsto_slope, _⟩ := hasDerivAt_iff_tendsto_slope
 
 中文:
 定理 hasDerivAt_iff_tendsto_slope
-  结论: HasDerivAt f f' x ↔ Tendsto (slope f x) (𝓝[!=] x) (𝓝 f')
+  结论: 在点处可导 f f' x ↔ 收敛 (slope f x) (𝓝[!=] x) (𝓝 f')
   证明: hasDerivAtFilter_iff_tendsto_slope
 
 alias ⟨HasDerivAt.tendsto_slope, _⟩ := hasDerivAt_iff_tendsto_slope
@@ -158,8 +158,8 @@ theorem hasDerivAt_iff_tendsto_slope_left_right
 
 中文:
 定理 hasDerivAt_iff_tendsto_slope_left_right
-  条件: [LinearOrder 𝕜]
-  结论: HasDerivAt f f' x ↔
+  条件: [线性序 𝕜]
+  结论: 在点处可导 f f' x ↔
   证明: by
   simp [hasDerivAt_iff_tendsto_slope, ← Iio_union_Ioi, nhdsWithin_union]
 
@@ -206,8 +206,8 @@ theorem HasDerivAt.tendsto_slope_zero_right
   proof: h.tendsto_slope_zero.mono_left (nhdsGT_le_nhdsNE 0)
 
 中文:
-定理 HasDerivAt.tendsto_slope_zero_right
-  条件: [Preorder 𝕜] (h : HasDerivAt f f' x)
+定理 在点处可导.tendsto_slope_zero_right
+  条件: [预序 𝕜] (h : 在点处可导 f f' x)
   证明: h.tendsto_slope_zero.mono_left (nhdsGT_le_nhdsNE 0)
 
 Depends on / 依赖: h.tendsto_slope_zero.mono_left, mono_left, nhdsGT_le_nhdsNE, tendsto_slope_zero
@@ -225,8 +225,8 @@ theorem HasDerivAt.tendsto_slope_zero_left
   proof: h.tendsto_slope_zero.mono_left (nhdsLT_le_nhdsNE 0)
 
 中文:
-定理 HasDerivAt.tendsto_slope_zero_left
-  条件: [Preorder 𝕜] (h : HasDerivAt f f' x)
+定理 在点处可导.tendsto_slope_zero_left
+  条件: [预序 𝕜] (h : 在点处可导 f f' x)
   证明: h.tendsto_slope_zero.mono_left (nhdsLT_le_nhdsNE 0)
 
 Depends on / 依赖: h.tendsto_slope_zero.mono_left, mono_left, nhdsLT_le_nhdsNE, tendsto_slope_zero
@@ -332,7 +332,7 @@ theorem isSeparable_range_derivWithin
 
 中文:
 定理 isSeparable_range_derivWithin
-  条件: [SeparableSpace 𝕜] (f : 𝕜 -> F) (s : Set 𝕜)
+  条件: [可分空间 𝕜] (f : 𝕜 -> F) (s : 集合 𝕜)
   证明: by
   obtain ⟨t, ts, t_count, ht⟩ : exists t, t subseteq s ∧ Set.Countable t ∧ s subseteq closure t :=
     (IsSeparable.of_separableSpace s).exists_countable_dense_subset
@@ -361,7 +361,7 @@ theorem isSeparable_range_deriv
 
 中文:
 定理 isSeparable_range_deriv
-  条件: [SeparableSpace 𝕜] (f : 𝕜 -> F)
+  条件: [可分空间 𝕜] (f : 𝕜 -> F)
   证明: by
   rw [← derivWithin_univ]
   exact isSeparable_range_derivWithin _ _
@@ -384,8 +384,8 @@ lemma HasDerivAt.continuousAt_div
 exact continuousAt_update_same.mpr hasDerivAt_iff_tendsto_slope.mp hf
 
 中文:
-引理 HasDerivAt.continuousAt_div
-  条件: [DecidableEq 𝕜] {f : 𝕜 -> 𝕜} {c a : 𝕜} (hf : HasDerivAt f a c)
+引理 在点处可导.continuousAt_div
+  条件: [DecidableEq 𝕜] {f : 𝕜 -> 𝕜} {c a : 𝕜} (hf : 在点处可导 f a c)
   证明: by
   rw [← slope_fun_def_field]
 exact continuousAt_update_same.mpr hasDerivAt_iff_tendsto_slope.mp hf
@@ -416,7 +416,7 @@ lemma HasDerivWithinAt.nonneg_of_monotoneOn
 
 中文:
 引理 HasDerivWithinAt.nonneg_of_monotoneOn
-  结论: (hx : AccPt x (𝓟 s))
+  结论: (hx : 聚点 x (𝓟 s))
   证明: by
   have : (𝓝[s \ {x}] x).NeBot := accPt_principal_iff_nhdsWithin.mp hx
   have h'g : MonotoneOn g (insert x s) :=
@@ -483,8 +483,8 @@ lemma HasDerivAt.nonneg_of_monotone
   exact PerfectSpace.univ_preperfect _ (mem_univ _)
 
 中文:
-引理 HasDerivAt.nonneg_of_monotone
-  条件: (hd : HasDerivAt g g' x) (hg : Monotone g)
+引理 在点处可导.nonneg_of_monotone
+  条件: (hd : 在点处可导 g g' x) (hg : 递增 g)
   结论: 0 <= g'
   证明: by
   rw [← hasDerivWithinAt_univ] at hd
@@ -510,8 +510,8 @@ lemma Monotone.deriv_nonneg
   exact (hg.monotoneOn univ).derivWithin_nonneg
 
 中文:
-引理 Monotone.deriv_nonneg
-  条件: (hg : Monotone g)
+引理 递增.deriv_nonneg
+  条件: (hg : 递增 g)
   结论: 0 <= deriv g x
   证明: by
   rw [← derivWithin_univ]
@@ -535,7 +535,7 @@ lemma HasDerivWithinAt.nonpos_of_antitoneOn
 
 中文:
 引理 HasDerivWithinAt.nonpos_of_antitoneOn
-  结论: (hx : AccPt x (𝓟 s))
+  结论: (hx : 聚点 x (𝓟 s))
   证明: by
   have : MonotoneOn (-g) s := fun x hx y hy hxy => by simpa using hg hx hy hxy
   simpa using hd.neg.nonneg_of_monotoneOn hx this
@@ -581,8 +581,8 @@ lemma HasDerivAt.nonpos_of_antitone
   exact PerfectSpace.univ_preperfect _ (mem_univ _)
 
 中文:
-引理 HasDerivAt.nonpos_of_antitone
-  条件: (hd : HasDerivAt g g' x) (hg : Antitone g)
+引理 在点处可导.nonpos_of_antitone
+  条件: (hd : 在点处可导 g g' x) (hg : 递减 g)
   结论: g' <= 0
   证明: by
   rw [← hasDerivWithinAt_univ] at hd
@@ -608,8 +608,8 @@ lemma Antitone.deriv_nonpos
   exact (hg.antitoneOn univ).derivWithin_nonpos
 
 中文:
-引理 Antitone.deriv_nonpos
-  条件: (hg : Antitone g)
+引理 递减.deriv_nonpos
+  条件: (hg : 递减 g)
   结论: deriv g x <= 0
   证明: by
   rw [← derivWithin_univ]
@@ -679,7 +679,7 @@ theorem HasDerivWithinAt.liminf_right_slope_le
 
 中文:
 定理 HasDerivWithinAt.liminf_right_slope_le
-  结论: (hf : HasDerivWithinAt f f' (Ici x) x)
+  结论: (hf : HasDerivWithinAt f f' (左闭右无界区间 x) x)
   证明: (hf.Ioi_of_Ici.limsup_slope_le' (lt_irrefl x) hr).frequently
 
 Depends on / 依赖: Ioi_of_Ici, frequently, hf.Ioi_of_Ici.limsup_slope_le, limsup_slope_le, lt_irrefl
@@ -772,7 +772,7 @@ theorem HasDerivWithinAt.liminf_right_norm_slope_le
 
 中文:
 定理 HasDerivWithinAt.liminf_right_norm_slope_le
-  结论: (hf : HasDerivWithinAt f f' (Ici x) x)
+  结论: (hf : HasDerivWithinAt f f' (左闭右无界区间 x) x)
   证明: (hf.Ioi_of_Ici.limsup_norm_slope_le hr).frequently
 
 Depends on / 依赖: Ioi_of_Ici, frequently, hf.Ioi_of_Ici.limsup_norm_slope_le, limsup_norm_slope_le
@@ -794,7 +794,7 @@ theorem HasDerivWithinAt.liminf_right_slope_norm_le
 
 中文:
 定理 HasDerivWithinAt.liminf_right_slope_norm_le
-  结论: (hf : HasDerivWithinAt f f' (Ici x) x)
+  结论: (hf : HasDerivWithinAt f f' (左闭右无界区间 x) x)
   证明: by
   have := (hf.Ioi_of_Ici.limsup_slope_norm_le hr).frequently
   refine this.mp (Eventually.mono self_mem_nhdsWithin fun z hxz hz => ?_)

@@ -42,7 +42,7 @@ class HasDetPlusMinusOne
     - det_eq({g} (hg : g in Γ)) : g.det = 1 ∨ g.det = -1
 
 中文:
-类 HasDetPlusMinusOne
+类 有DetPlusMinusOne
   参数: : 命题 where
   公理与运算 (1 个):
     - det_eq({g} (hg : g in Γ)) : g.det = 1 ∨ g.det = -1
@@ -61,8 +61,8 @@ lemma HasDetPlusMinusOne.abs_det
   rcases HasDetPlusMinusOne.det_eq hg with h | h <;> simp [h]
 
 中文:
-引理 HasDetPlusMinusOne.abs_det
-  结论: [LinearOrder R] [IsOrderedRing R] [HasDetPlusMinusOne Γ]
+引理 有DetPlusMinusOne.abs_det
+  结论: [线性序 R] [是Ordered环 R] [有DetPlusMinusOne Γ]
   证明: by
   rcases HasDetPlusMinusOne.det_eq hg with h | h <;> simp [h]
 
@@ -84,7 +84,7 @@ lemma hasDetPlusMinusOne_iff_abs_det
 
 中文:
 引理 hasDetPlusMinusOne_iff_abs_det
-  条件: [LinearOrder R] [IsOrderedRing R]
+  条件: [线性序 R] [是Ordered环 R]
   证明: by
   refine ⟨fun h {g} hg => h.abs_det hg, fun h => ⟨?_⟩⟩
   simpa [-GeneralLinearGroup.val_det_apply, abs_eq zero_le_one] using @h
@@ -106,7 +106,7 @@ class HasDetOne
     - det_eq({g} (hg : g in Γ)) : g.det = 1
 
 中文:
-类 HasDetOne
+类 有DetOne
   参数: : 命题 where
   公理与运算 (1 个):
     - det_eq({g} (hg : g in Γ)) : g.det = 1
@@ -134,8 +134,8 @@ instance [HasDetOne
   body: ⟨fun {g} hg => by simp [HasDetOne.det_eq hg]⟩
 
 中文:
-实例 [HasDetOne
-  签名: Γ] : HasDetPlusMinusOne Γ
+实例 [有DetOne
+  签名: Γ] : 有DetPlusMinusOne Γ
   定义体: ⟨fun {g} hg => by simp [HasDetOne.det_eq hg]⟩
 
 Depends on / 依赖: HasDetOne, HasDetOne.det_eq, det_eq
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Subgroup SL(2, 整数)) (Subgroup (GL (Fin 2) 实数))
+  签名: Coe (子群 SL(2, 整数)) (子群 (GL (有限集 2) 实数))
   定义体: map (mapGL Real)
 -/
 instance : Coe (Subgroup SL(2, Int)) (Subgroup (GL (Fin 2) Real)) where
@@ -195,8 +195,8 @@ class IsArithmetic
     - is_commensurable : Commensurable 𝒢 𝒮ℒ
 
 中文:
-类 IsArithmetic
-  参数: (𝒢 : Subgroup (GL (Fin 2) 实数))
+类 是Arithmetic
+  参数: (𝒢 : 子群 (GL (有限集 2) 实数))
   公理与运算 (1 个):
     - is_commensurable : Commensurable 𝒢 𝒮ℒ
 -/
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsArithmetic 𝒮ℒ
+  签名: 是Arithmetic 𝒮ℒ
   定义体: .refl 𝒮ℒ
 -/
 instance : IsArithmetic 𝒮ℒ where is_commensurable := .refl 𝒮ℒ
@@ -233,8 +233,8 @@ lemma isArithmetic_iff_finiteIndex
 
 中文:
 引理 isArithmetic_iff_finiteIndex
-  条件: {Γ : Subgroup SL(2, 整数)}
-  结论: IsArithmetic Γ ↔ Γ.FiniteIndex
+  条件: {Γ : 子群 SL(2, 整数)}
+  结论: 是Arithmetic Γ ↔ Γ.FiniteIndex
   证明: by
   constructor <;>
   · refine fun ⟨h⟩ => ⟨?_⟩
@@ -262,8 +262,8 @@ instance IsArithmetic.finiteIndex_comap
   body: ⟨𝒢.index_comap (mapGL (R := Int) Real) ▸ IsArithmetic.is_commensurable.1⟩
 
 中文:
-实例 IsArithmetic.finiteIndex_comap
-  签名: (𝒢 : Subgroup (GL (Fin 2) 实数)) [IsArithmetic 𝒢]
+实例 是Arithmetic.finiteIndex_comap
+  签名: (𝒢 : 子群 (GL (有限集 2) 实数)) [是Arithmetic 𝒢]
   定义体: ⟨𝒢.index_comap (mapGL (R := Int) Real) ▸ IsArithmetic.is_commensurable.1⟩
 
 Depends on / 依赖: FiniteIndex
@@ -292,8 +292,8 @@ instance IsArithmetic.isFiniteRelIndexSL
   body: ⟨IsArithmetic.is_commensurable.1⟩
 
 中文:
-实例 IsArithmetic.isFiniteRelIndexSL
-  签名: (𝒢 : Subgroup (GL (Fin 2) 实数)) [IsArithmetic 𝒢]
+实例 是Arithmetic.isFiniteRelIndexSL
+  签名: (𝒢 : 子群 (GL (有限集 2) 实数)) [是Arithmetic 𝒢]
   定义体: ⟨IsArithmetic.is_commensurable.1⟩
 
 Depends on / 依赖: IsArithmetic, IsArithmetic.is_commensurable, is_commensurable
@@ -317,8 +317,8 @@ instance IsArithmetic.inter
     simp
 
 中文:
-实例 IsArithmetic.inter
-  签名: {Γ Γ'} [IsArithmetic Γ] [IsArithmetic Γ']
+实例 是Arithmetic.inter
+  签名: {Γ Γ'} [是Arithmetic Γ] [是Arithmetic Γ']
   定义体: by
   constructor
   constructor
@@ -352,8 +352,8 @@ instance discreteSpecialLinearGroupIntRange
   body: (isEmbedding_mapGL Real.isClosedEmbedding_intCast.1).toHomeomorph.discreteTopology
 
 中文:
-实例 discreteSpecialLinearGroupIntRange
-  签名: : DiscreteTopology (mapGL (n := n) (R := 整数) 实数).range
+实例 discreteSpecialLinearGroup整数Range
+  签名: : 离散拓扑 (mapGL (n := n) (R := 整数) 实数).range
   定义体: (isEmbedding_mapGL Real.isClosedEmbedding_intCast.1).toHomeomorph.discreteTopology
 -/
 instance discreteSpecialLinearGroupIntRange : DiscreteTopology (mapGL (n := n) (R := Int) Real).range :=
@@ -370,7 +370,7 @@ instance discreteSpecialLinearGroupIntRangeSL
   exact Real.isClosedEmbedding_intCast.specialLinearGroup_map.1
 
 中文:
-实例 discreteSpecialLinearGroupIntRangeSL
+实例 discreteSpecialLinearGroup整数RangeSL
   签名: :
   定义体: by
   refine (Topology.IsEmbedding.toHomeomorph ?_).discreteTopology
@@ -392,8 +392,8 @@ lemma isClosedEmbedding_mapGLInt
   proof: isClosedEmbedding_mapGL Real.isClosedEmbedding_intCast
 
 中文:
-引理 isClosedEmbedding_mapGLInt
-  结论: Topology.IsClosedEmbedding (mapGL 实数 : SL n 整数 -> GL n 实数)
+引理 isClosedEmbedding_mapGL整数
+  结论: 拓扑.是闭嵌入 (mapGL 实数 : SL n 整数 -> GL n 实数)
   证明: isClosedEmbedding_mapGL Real.isClosedEmbedding_intCast
 
 Depends on / 依赖: Real.isClosedEmbedding_intCast, isClosedEmbedding_intCast, isClosedEmbedding_mapGL
@@ -414,8 +414,8 @@ instance Subgroup.IsArithmetic.discreteTopology
   infer_instance
 
 中文:
-实例 Subgroup.IsArithmetic.discreteTopology
-  签名: {𝒢 : Subgroup (GL (Fin 2) 实数)} [IsArithmetic 𝒢]
+实例 子群.是Arithmetic.discreteTopology
+  签名: {𝒢 : 子群 (GL (有限集 2) 实数)} [是Arithmetic 𝒢]
   定义体: by
   rw [is_commensurable.discreteTopology_iff]
   infer_instance
@@ -450,8 +450,8 @@ definition Subgroup.adjoinNegOne
       aesop
 
 中文:
-定义 Subgroup.adjoinNegOne
-  签名: (𝒢 : Subgroup (GL n R))
+定义 子群.adjoinNegOne
+  签名: (𝒢 : 子群 (GL n R))
   定义体: {g | g in 𝒢 ∨ -g in 𝒢}
   mul_mem' ha hb := by
     rcases ha with ha | ha <;>
@@ -486,8 +486,8 @@ lemma Subgroup.mem_adjoinNegOne_iff
   proof: Iff.rfl
 
 中文:
-引理 Subgroup.mem_adjoinNegOne_iff
-  条件: {𝒢 : Subgroup (GL n R)} {g : GL n R}
+引理 子群.mem_adjoinNegOne_iff
+  条件: {𝒢 : 子群 (GL n R)} {g : GL n R}
   证明: Iff.rfl
 -/
 @[simp] lemma Subgroup.mem_adjoinNegOne_iff {𝒢 : Subgroup (GL n R)} {g : GL n R} :
@@ -504,8 +504,8 @@ lemma Subgroup.le_adjoinNegOne
   proof: fun _ hg => .inl hg
 
 中文:
-引理 Subgroup.le_adjoinNegOne
-  条件: (𝒢 : Subgroup (GL n R))
+引理 子群.le_adjoinNegOne
+  条件: (𝒢 : 子群 (GL n R))
   结论: 𝒢 <= 𝒢.adjoinNegOne
   证明: fun _ hg => .inl hg
 -/
@@ -522,8 +522,8 @@ lemma Subgroup.negOne_mem_adjoinNegOne
   proof: by simp
 
 中文:
-引理 Subgroup.negOne_mem_adjoinNegOne
-  条件: (𝒢 : Subgroup (GL n R))
+引理 子群.negOne_mem_adjoinNegOne
+  条件: (𝒢 : 子群 (GL n R))
   结论: -1 in 𝒢.adjoinNegOne
   证明: by simp
 -/
@@ -539,8 +539,8 @@ lemma Subgroup.adjoinNegOne_eq_self_iff
     fun g hg => hg.elim id (fun h => by simpa using mul_mem hG h)⟩
 
 中文:
-引理 Subgroup.adjoinNegOne_eq_self_iff
-  条件: {𝒢 : Subgroup (GL n R)}
+引理 子群.adjoinNegOne_eq_self_iff
+  条件: {𝒢 : 子群 (GL n R)}
   证明: ⟨fun h => h ▸ negOne_mem_adjoinNegOne 𝒢, fun hG => 𝒢.le_adjoinNegOne.antisymm'
     fun g hg => hg.elim id (fun h => by simpa using mul_mem hG h)⟩
 -/
@@ -560,8 +560,8 @@ lemma Subgroup.relindex_adjoinNegOne_eq_two
   simp [mem_adjoinNegOne_iff, or_comm]
 
 中文:
-引理 Subgroup.relindex_adjoinNegOne_eq_two
-  条件: {𝒢 : Subgroup (GL n R)} (h𝒢 : -1 ∉ 𝒢)
+引理 子群.relindex_adjoinNegOne_eq_two
+  条件: {𝒢 : 子群 (GL n R)} (h𝒢 : -1 ∉ 𝒢)
   证明: by
   refine relIndex_eq_two_iff_exists_notMem_and.mpr ⟨_, 𝒢.negOne_mem_adjoinNegOne, h𝒢, ?_⟩
   simp [mem_adjoinNegOne_iff, or_comm]
@@ -585,8 +585,8 @@ lemma Subgroup.relIndex_adjoinNegOne_ne_zero
   · simp [𝒢.relindex_adjoinNegOne_eq_two hG]
 
 中文:
-引理 Subgroup.relIndex_adjoinNegOne_ne_zero
-  条件: (𝒢 : Subgroup (GL n R))
+引理 子群.relIndex_adjoinNegOne_ne_zero
+  条件: (𝒢 : 子群 (GL n R))
   证明: by
   by_cases hG : -1 in 𝒢
   · simp [adjoinNegOne_eq_self_iff.mpr hG]
@@ -612,8 +612,8 @@ lemma Subgroup.commensurable_adjoinNegOne_self
   proof: ⟨by simp [Subgroup.relIndex_eq_one.mpr 𝒢.le_adjoinNegOne], 𝒢.relIndex_adjoinNegOne_ne_zero⟩
 
 中文:
-引理 Subgroup.commensurable_adjoinNegOne_self
-  条件: (𝒢 : Subgroup (GL n R))
+引理 子群.commensurable_adjoinNegOne_self
+  条件: (𝒢 : 子群 (GL n R))
   证明: ⟨by simp [Subgroup.relIndex_eq_one.mpr 𝒢.le_adjoinNegOne], 𝒢.relIndex_adjoinNegOne_ne_zero⟩
 
 Depends on / 依赖: Subgroup, Subgroup.relIndex_eq_one.mpr, le_adjoinNegOne, relIndex_adjoinNegOne_ne_zero, relIndex_eq_one
@@ -632,8 +632,8 @@ instance [TopologicalSpace
   rwa [𝒢.commensurable_adjoinNegOne_self.discreteTopology_iff]
 
 中文:
-实例 [TopologicalSpace
-  签名: R] [IsTopologicalRing R] [T2Space R]
+实例 [拓扑空间
+  签名: R] [是拓扑环 R] [T2空间 R]
   定义体: by
   rwa [𝒢.commensurable_adjoinNegOne_self.discreteTopology_iff]
 
@@ -663,8 +663,8 @@ lemma Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff
         simp [Units.ext_iff, det_neg, hn]
 
 中文:
-引理 Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff
-  条件: {𝒢 : Subgroup (GL n R)}
+引理 子群.hasDetPlusMinusOne_adjoinNegOne_iff
+  条件: {𝒢 : 子群 (GL n R)}
   证明: by
   refine ⟨fun _ => ⟨fun {g} hg => HasDetPlusMinusOne.det_eq (𝒢.le_adjoinNegOne hg)⟩, fun _ => ⟨?_⟩⟩
   rintro g (hg | hg)
@@ -697,8 +697,8 @@ lemma Subgroup.hasDetOne_adjoinNegOne_iff
   · simpa [Units.ext_iff, det_neg, hn] using HasDetOne.det_eq hg
 
 中文:
-引理 Subgroup.hasDetOne_adjoinNegOne_iff
-  条件: {𝒢 : Subgroup (GL n R)} (hn : Even (Fintype.card n))
+引理 子群.hasDetOne_adjoinNegOne_iff
+  条件: {𝒢 : 子群 (GL n R)} (hn : Even (有限类型.card n))
   证明: by
   refine ⟨fun _ => ⟨fun {g} hg => HasDetOne.det_eq (𝒢.le_adjoinNegOne hg)⟩, fun _ => ⟨?_⟩⟩
   rintro g (hg | hg)
@@ -733,8 +733,8 @@ instance Subgroup.instIsArithmeticAdjoinNegOne
   body: ⟨(𝒢.commensurable_adjoinNegOne_self).trans IsArithmetic.is_commensurable⟩
 
 中文:
-实例 Subgroup.instIsArithmeticAdjoinNegOne
-  签名: {𝒢 : Subgroup (GL (Fin 2) 实数)} [𝒢.IsArithmetic]
+实例 子群.instIsArithmeticAdjoinNegOne
+  签名: {𝒢 : 子群 (GL (有限集 2) 实数)} [𝒢.是Arithmetic]
   定义体: ⟨(𝒢.commensurable_adjoinNegOne_self).trans IsArithmetic.is_commensurable⟩
 
 Depends on / 依赖: IsArithmetic, IsArithmetic.is_commensurable, commensurable_adjoinNegOne_self, is_commensurable

@@ -114,7 +114,7 @@ theorem num_den_mk
 
 中文:
 定理 num_den_mk
-  条件: {q : Rat} {n d : 整数} (hd : d != 0) (qdf : q = n /. d)
+  条件: {q : 有理数} {n d : 整数} (hd : d != 0) (qdf : q = n /. d)
   证明: by
   obtain rfl | hn := eq_or_ne n 0
   · simp [qdf]
@@ -162,8 +162,8 @@ theorem add_den_dvd_lcm
 
 中文:
 定理 add_den_dvd_lcm
-  条件: (q₁ q₂ : Rat)
-  结论: (q₁ + q₂).den ∣ q₁.den.lcm q₂.den
+  条件: (q₁ q₂ : 有理数)
+  结论: (q₁ + q₂).den ∣ q₁.den.最小公倍数 q₂.den
   证明: by
   rw [add_def]; rw [normalize_eq]; rw [Nat.div_dvd_iff_dvd_mul (Nat.gcd_dvd_right _ _)
     (Nat.gcd_pos_of_pos_right _ (by simp [Nat.pos_iff_ne_zero])), ← Nat.gcd_mul_lcm,
@@ -195,8 +195,8 @@ theorem sub_den_dvd_lcm
 
 中文:
 定理 sub_den_dvd_lcm
-  条件: (q₁ q₂ : Rat)
-  结论: (q₁ - q₂).den ∣ q₁.den.lcm q₂.den
+  条件: (q₁ q₂ : 有理数)
+  结论: (q₁ - q₂).den ∣ q₁.den.最小公倍数 q₂.den
   证明: by
   simpa only [sub_eq_add_neg, neg_den] using add_den_dvd_lcm q₁ (-q₂)
 
@@ -216,7 +216,7 @@ theorem add_den_dvd
 
 中文:
 定理 add_den_dvd
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   结论: (q₁ + q₂).den ∣ q₁.den * q₂.den
   证明: (add_den_dvd_lcm _ _).trans (Nat.lcm_dvd_mul _ _)
 
@@ -236,7 +236,7 @@ theorem sub_den_dvd
 
 中文:
 定理 sub_den_dvd
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   结论: (q₁ - q₂).den ∣ q₁.den * q₂.den
   证明: (sub_den_dvd_lcm _ _).trans (Nat.lcm_dvd_mul _ _)
 
@@ -259,7 +259,7 @@ theorem mul_den_dvd
 
 中文:
 定理 mul_den_dvd
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   结论: (q₁ * q₂).den ∣ q₁.den * q₂.den
   证明: by
   rw [mul_def]; rw [normalize_eq]
@@ -284,7 +284,7 @@ theorem mul_num
 
 中文:
 定理 mul_num
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   证明: by
   rw [mul_def]; rw [normalize_eq]
 
@@ -307,7 +307,7 @@ theorem mul_den
 
 中文:
 定理 mul_den
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   证明: by
   rw [mul_def]; rw [normalize_eq]
 
@@ -337,7 +337,7 @@ theorem add_intCast_den
 
 中文:
 定理 add_intCast_den
-  条件: (q : Rat) (n : 整数)
+  条件: (q : 有理数) (n : 整数)
   结论: (q + n).den = q.den
   证明: by
   apply Nat.dvd_antisymm
@@ -368,7 +368,7 @@ theorem intCast_add_den
 
 中文:
 定理 intCast_add_den
-  条件: (n : 整数) (q : Rat)
+  条件: (n : 整数) (q : 有理数)
   结论: (n + q).den = q.den
   证明: by
   rw [add_comm]; rw [add_intCast_den]
@@ -395,7 +395,7 @@ theorem sub_intCast_den
 
 中文:
 定理 sub_intCast_den
-  条件: (q : Rat) (n : 整数)
+  条件: (q : 有理数) (n : 整数)
   结论: (q - n).den = q.den
   证明: by
   rw [sub_eq_add_neg]; rw [← Int.cast_neg]; rw [add_intCast_den]
@@ -422,7 +422,7 @@ theorem intCast_sub_den
 
 中文:
 定理 intCast_sub_den
-  条件: (n : 整数) (q : Rat)
+  条件: (n : 整数) (q : 有理数)
   结论: (n - q).den = q.den
   证明: by
   rw [sub_eq_add_neg]; rw [intCast_add_den]; rw [neg_den]
@@ -448,7 +448,7 @@ theorem add_natCast_den
 
 中文:
 定理 add_natCast_den
-  条件: (q : Rat) (n : 自然数)
+  条件: (q : 有理数) (n : 自然数)
   结论: (q + n).den = q.den
   证明: mod_cast add_intCast_den q n
 
@@ -472,7 +472,7 @@ theorem natCast_add_den
 
 中文:
 定理 natCast_add_den
-  条件: (n : 自然数) (q : Rat)
+  条件: (n : 自然数) (q : 有理数)
   结论: (n + q).den = q.den
   证明: mod_cast intCast_add_den n q
 
@@ -496,7 +496,7 @@ theorem sub_natCast_den
 
 中文:
 定理 sub_natCast_den
-  条件: (q : Rat) (n : 自然数)
+  条件: (q : 有理数) (n : 自然数)
   结论: (q - n).den = q.den
   证明: mod_cast sub_intCast_den q n
 
@@ -518,7 +518,7 @@ theorem natCast_sub_den
 
 中文:
 定理 natCast_sub_den
-  条件: (n : 自然数) (q : Rat)
+  条件: (n : 自然数) (q : 有理数)
   结论: (n - q).den = q.den
   证明: mod_cast intCast_sub_den n q
 
@@ -536,8 +536,8 @@ theorem add_ofNat_den
   proof: add_natCast_den q n
 
 中文:
-定理 add_ofNat_den
-  条件: (q : Rat) (n : 自然数)
+定理 add_of自然数_den
+  条件: (q : 有理数) (n : 自然数)
   结论: (q + of自然数(n)).den = q.den
   证明: add_natCast_den q n
 -/
@@ -552,8 +552,8 @@ theorem ofNat_add_den
   proof: natCast_add_den n q
 
 中文:
-定理 ofNat_add_den
-  条件: (n : 自然数) (q : Rat)
+定理 of自然数_add_den
+  条件: (n : 自然数) (q : 有理数)
   结论: (of自然数(n) + q).den = q.den
   证明: natCast_add_den n q
 -/
@@ -568,8 +568,8 @@ theorem sub_ofNat_den
   proof: sub_natCast_den ..
 
 中文:
-定理 sub_ofNat_den
-  条件: (q : Rat) (n : 自然数)
+定理 sub_of自然数_den
+  条件: (q : 有理数) (n : 自然数)
   结论: (q - of自然数(n)).den = q.den
   证明: sub_natCast_den ..
 -/
@@ -584,8 +584,8 @@ theorem ofNat_sub_den
   proof: natCast_sub_den ..
 
 中文:
-定理 ofNat_sub_den
-  条件: (n : 自然数) (q : Rat)
+定理 of自然数_sub_den
+  条件: (n : 自然数) (q : 有理数)
   结论: (of自然数(n) - q).den = q.den
   证明: natCast_sub_den ..
 -/
@@ -603,7 +603,7 @@ theorem den_mul_den_eq_den_mul_gcd
 
 中文:
 定理 den_mul_den_eq_den_mul_gcd
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   证明: by
   rw [mul_den]
   exact ((Nat.dvd_iff_div_mul_eq _ _).mp (Nat.gcd_dvd_right _ _)).symm
@@ -629,7 +629,7 @@ theorem num_mul_num_eq_num_mul_gcd
 
 中文:
 定理 num_mul_num_eq_num_mul_gcd
-  条件: (q₁ q₂ : Rat)
+  条件: (q₁ q₂ : 有理数)
   证明: by
   rw [mul_num]
   refine (Int.ediv_mul_cancel ?_).symm
@@ -658,7 +658,7 @@ theorem mul_self_num
 
 中文:
 定理 mul_self_num
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q * q).num = q.num * q.num
   证明: by
   rw [mul_num]; rw [Int.natAbs_mul]; rw [Nat.Coprime.gcd_eq_one]; rw [Int.ofNat_one]; rw [Int.ediv_one]
@@ -683,7 +683,7 @@ theorem mul_self_den
 
 中文:
 定理 mul_self_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q * q).den = q.den * q.den
   证明: by
   rw [Rat.mul_den]; rw [Int.natAbs_mul]; rw [Nat.Coprime.gcd_eq_one]; rw [Nat.div_one]
@@ -709,7 +709,7 @@ theorem add_num_den
 
 中文:
 定理 add_num_den
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   证明: by
   have hqd : (q.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.2 q.den_pos
   have hrd : (r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.2 r.den_pos
@@ -746,7 +746,7 @@ theorem isSquare_iff
 
 中文:
 定理 isSquare_iff
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: IsSquare q ↔ IsSquare q.num ∧ IsSquare q.den
   证明: by
   constructor
@@ -786,7 +786,7 @@ theorem isSquare_natCast_iff
 中文:
 定理 isSquare_natCast_iff
   条件: {n : 自然数}
-  结论: IsSquare (n : Rat) ↔ IsSquare n
+  结论: IsSquare (n : 有理数) ↔ IsSquare n
   证明: by
   simp_rw [isSquare_iff, num_natCast, den_natCast, IsSquare.one, and_true, Int.isSquare_natCast_iff]
 
@@ -813,7 +813,7 @@ theorem isSquare_intCast_iff
 中文:
 定理 isSquare_intCast_iff
   条件: {z : 整数}
-  结论: IsSquare (z : Rat) ↔ IsSquare z
+  结论: IsSquare (z : 有理数) ↔ IsSquare z
   证明: by
   simp_rw [isSquare_iff, num_intCast, den_intCast, IsSquare.one, and_true]
 
@@ -834,7 +834,7 @@ theorem isSquare_ofNat_iff
   proof: isSquare_natCast_iff
 
 中文:
-定理 isSquare_ofNat_iff
+定理 isSquare_of自然数_iff
   条件: {n : 自然数}
   证明: isSquare_natCast_iff
 
@@ -877,7 +877,7 @@ theorem exists_eq_mul_div_num_and_eq_mul_div_den
   Rat.num_den_mk d_ne_zero this
 
 中文:
-定理 exists_eq_mul_div_num_and_eq_mul_div_den
+定理 存在_eq_mul_div_num_and_eq_mul_div_den
   条件: (n : 整数) {d : 整数} (d_ne_zero : d != 0)
   证明: haveI : (n : Rat) / d = Rat.divInt n d := by rw [← Rat.divInt_eq_div]
   Rat.num_den_mk d_ne_zero this
@@ -904,7 +904,7 @@ theorem mul_num_den'
 
 中文:
 定理 mul_num_den'
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   证明: by
   let s := q.num * r.num /. (q.den * r.den : Int)
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
@@ -943,7 +943,7 @@ theorem add_num_den'
 
 中文:
 定理 add_num_den'
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   证明: by
   let s := divInt (q.num * r.den + r.num * q.den) (q.den * r.den : Int)
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
@@ -983,7 +983,7 @@ theorem substr_num_den'
 
 中文:
 定理 substr_num_den'
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [← neg_mul]; rw [← num_neg_eq_neg_num]; rw [← den_neg_eq_den r]; rw [add_num_den' q (-r)]
 
@@ -1008,7 +1008,7 @@ theorem inv_neg
 
 中文:
 定理 inv_neg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (-q)⁻¹ = -q⁻¹
   证明: by
   rw [← num_divInt_den q]
@@ -1123,7 +1123,7 @@ theorem intCast_div_self
 中文:
 定理 intCast_div_self
   条件: (n : 整数)
-  结论: ((n / n : 整数) : Rat) = n / n
+  结论: ((n / n : 整数) : 有理数) = n / n
   证明: by
   by_cases hn : n = 0
   · subst hn
@@ -1155,7 +1155,7 @@ theorem natCast_div_self
 中文:
 定理 natCast_div_self
   条件: (n : 自然数)
-  结论: ((n / n : 自然数) : Rat) = n / n
+  结论: ((n / n : 自然数) : 有理数) = n / n
   证明: intCast_div_self n
 
 Depends on / 依赖: intCast_div_self
@@ -1177,7 +1177,7 @@ theorem intCast_div
 中文:
 定理 intCast_div
   条件: (a b : 整数) (h : b ∣ a)
-  结论: ((a / b : 整数) : Rat) = a / b
+  结论: ((a / b : 整数) : 有理数) = a / b
   证明: by
   rcases h with ⟨c, rfl⟩
   rw [mul_comm b]; rw [Int.mul_ediv_assoc c (dvd_refl b)]; rw [Int.cast_mul]; rw [intCast_div_self]; rw [Int.cast_mul]; rw [mul_div_assoc]
@@ -1200,7 +1200,7 @@ theorem natCast_div
 中文:
 定理 natCast_div
   条件: (a b : 自然数) (h : b ∣ a)
-  结论: ((a / b : 自然数) : Rat) = a / b
+  结论: ((a / b : 自然数) : 有理数) = a / b
   证明: intCast_div a b (Int.ofNat_dvd.mpr h)
 
 Depends on / 依赖: Int.ofNat_dvd.mpr, intCast_div, ofNat_dvd
@@ -1225,7 +1225,7 @@ theorem den_div_intCast_eq_one_iff
 中文:
 定理 den_div_intCast_eq_one_iff
   条件: (m n : 整数) (hn : n != 0)
-  结论: ((m : Rat) / n).den = 1 ↔ n ∣ m
+  结论: ((m : 有理数) / n).den = 1 ↔ n ∣ m
   证明: by
   replace hn : (n : Rat) != 0 := num_ne_zero.mp hn
   constructor
@@ -1254,7 +1254,7 @@ theorem den_div_natCast_eq_one_iff
 中文:
 定理 den_div_natCast_eq_one_iff
   条件: (m n : 自然数) (hn : n != 0)
-  结论: ((m : Rat) / n).den = 1 ↔ n ∣ m
+  结论: ((m : 有理数) / n).den = 1 ↔ n ∣ m
   证明: (den_div_intCast_eq_one_iff m n (Int.ofNat_ne_zero.mpr hn)).trans Int.ofNat_dvd
 
 Depends on / 依赖: Int.ofNat_dvd, Int.ofNat_ne_zero.mpr, den_div_intCast_eq_one_iff, ofNat_dvd, ofNat_ne_zero
@@ -1275,7 +1275,7 @@ theorem inv_intCast_num_of_pos
 中文:
 定理 inv_intCast_num_of_pos
   条件: {a : 整数} (ha0 : 0 < a)
-  结论: (a : Rat)⁻¹.num = 1
+  结论: (a : 有理数)⁻¹.num = 1
   证明: by
   simp [*]
 -/
@@ -1294,7 +1294,7 @@ theorem inv_natCast_num_of_pos
 中文:
 定理 inv_natCast_num_of_pos
   条件: {a : 自然数} (ha0 : 0 < a)
-  结论: (a : Rat)⁻¹.num = 1
+  结论: (a : 有理数)⁻¹.num = 1
   证明: inv_intCast_num_of_pos (mod_cast ha0 : 0 < (a : Int))
 
 Depends on / 依赖: inv_intCast_num_of_pos, mod_cast
@@ -1316,7 +1316,7 @@ theorem inv_intCast_den_of_pos
 中文:
 定理 inv_intCast_den_of_pos
   条件: {a : 整数} (ha0 : 0 < a)
-  结论: ((a : Rat)⁻¹.den : 整数) = a
+  结论: ((a : 有理数)⁻¹.den : 整数) = a
   证明: by
   simp only [den_inv, num_intCast]
   grind
@@ -1341,7 +1341,7 @@ theorem inv_natCast_den_of_pos
 中文:
 定理 inv_natCast_den_of_pos
   条件: {a : 自然数} (ha0 : 0 < a)
-  结论: (a : Rat)⁻¹.den = a
+  结论: (a : 有理数)⁻¹.den = a
   证明: by
   rw [← Int.ofNat_inj]; rw [← Int.cast_natCast a]; rw [inv_intCast_den_of_pos]
   rwa [Int.natCast_pos]
@@ -1364,7 +1364,7 @@ theorem inv_intCast_num
 中文:
 定理 inv_intCast_num
   条件: (a : 整数)
-  结论: (a : Rat)⁻¹.num = 整数.sign a
+  结论: (a : 有理数)⁻¹.num = 整数.sign a
   证明: by simp
 -/
 theorem inv_intCast_num (a : Int) : (a : Rat)⁻¹.num = Int.sign a := by simp
@@ -1381,7 +1381,7 @@ theorem inv_natCast_num
 中文:
 定理 inv_natCast_num
   条件: (a : 自然数)
-  结论: (a : Rat)⁻¹.num = 整数.sign a
+  结论: (a : 有理数)⁻¹.num = 整数.sign a
   证明: by simp
 -/
 theorem inv_natCast_num (a : Nat) : (a : Rat)⁻¹.num = Int.sign a := by simp
@@ -1402,9 +1402,9 @@ theorem inv_ofNat_num
   lia
 
 中文:
-定理 inv_ofNat_num
+定理 inv_of自然数_num
   条件: (a : 自然数) [a.AtLeastTwo]
-  结论: (of自然数(a) : Rat)⁻¹.num = 1
+  结论: (of自然数(a) : 有理数)⁻¹.num = 1
   证明: by
   -- This proof is quite unpleasant: golf / find better simp lemmas?
   have : 2 <= a := Nat.AtLeastTwo.prop
@@ -1434,7 +1434,7 @@ theorem inv_intCast_den
 中文:
 定理 inv_intCast_den
   条件: (a : 整数)
-  结论: (a : Rat)⁻¹.den = if a = 0 then 1 else a.natAbs
+  结论: (a : 有理数)⁻¹.den = if a = 0 then 1 else a.natAbs
   证明: by simp
 -/
 theorem inv_intCast_den (a : Int) : (a : Rat)⁻¹.den = if a = 0 then 1 else a.natAbs := by simp
@@ -1451,7 +1451,7 @@ theorem inv_natCast_den
 中文:
 定理 inv_natCast_den
   条件: (a : 自然数)
-  结论: (a : Rat)⁻¹.den = if a = 0 then 1 else a
+  结论: (a : 有理数)⁻¹.den = if a = 0 then 1 else a
   证明: by simp
 -/
 theorem inv_natCast_den (a : Nat) : (a : Rat)⁻¹.den = if a = 0 then 1 else a := by simp
@@ -1467,9 +1467,9 @@ theorem inv_ofNat_den
   simp [den_inv, Int.natAbs_eq_iff]
 
 中文:
-定理 inv_ofNat_den
+定理 inv_of自然数_den
   条件: (a : 自然数) [a.AtLeastTwo]
-  结论: (of自然数(a) : Rat)⁻¹.den = Of自然数.of自然数 a
+  结论: (of自然数(a) : 有理数)⁻¹.den = Of自然数.of自然数 a
   证明: by
   simp [den_inv, Int.natAbs_eq_iff]
 
@@ -1490,7 +1490,7 @@ theorem den_inv_of_ne_zero
 
 中文:
 定理 den_inv_of_ne_zero
-  条件: {q : Rat} (hq : q != 0)
+  条件: {q : 有理数} (hq : q != 0)
   结论: (q⁻¹).den = q.num.natAbs
   证明: by
   simp [*]
@@ -1509,8 +1509,8 @@ theorem «forall»
   mpr h q := by simpa [num_div_den] using h q.num q.den (mod_cast q.den_ne_zero)
 
 中文:
-定理 «forall»
-  条件: {p : Rat -> 命题}
+定理 «对任意»
+  条件: {p : 有理数 -> 命题}
   结论: (对任意 r, p r) ↔ 对任意 a b : 整数, b != 0 -> p (a / b) where
   证明: h _
   mpr h q := by simpa [num_div_den] using h q.num q.den (mod_cast q.den_ne_zero)
@@ -1530,8 +1530,8 @@ theorem «exists»
   simpa using Rat.forall (p := (¬ p ·)).not
 
 中文:
-定理 «exists»
-  条件: {p : Rat -> 命题}
+定理 «存在»
+  条件: {p : 有理数 -> 命题}
   结论: (存在 r, p r) ↔ 存在 a b : 整数, b != 0 ∧ p (a / b)
   证明: by
   simpa using Rat.forall (p := (¬ p ·)).not
@@ -1558,7 +1558,7 @@ definition pnatDen
 
 中文:
 定义 pnatDen
-  签名: (x : Rat)
+  签名: (x : 有理数)
   定义体: ⟨x.den, x.pos⟩
 
 @[simp]
@@ -1580,7 +1580,7 @@ theorem coe_pnatDen
 
 中文:
 定理 coe_pnatDen
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: (x.pnatDen : 自然数) = x.den
   证明: rfl
 -/
@@ -1600,7 +1600,7 @@ theorem pnatDen_eq_iff_den_eq
 
 中文:
 定理 pnatDen_eq_iff_den_eq
-  条件: {x : Rat} {n : 自然数+}
+  条件: {x : 有理数} {n : 自然数+}
   结论: x.pnatDen = n ↔ x.den = ↑n
   证明: Subtype.ext_iff
 
@@ -1624,7 +1624,7 @@ theorem pnatDen_one
 
 中文:
 定理 pnatDen_one
-  结论: (1 : Rat).pnatDen = 1
+  结论: (1 : 有理数).pnatDen = 1
   证明: rfl
 
 @[simp]
@@ -1643,7 +1643,7 @@ theorem pnatDen_zero
 
 中文:
 定理 pnatDen_zero
-  结论: (0 : Rat).pnatDen = 1
+  结论: (0 : 有理数).pnatDen = 1
   证明: rfl
 -/
 theorem pnatDen_zero : (0 : Rat).pnatDen = 1 :=

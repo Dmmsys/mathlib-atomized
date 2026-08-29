@@ -56,7 +56,7 @@ theorem right_adjoint
 
 中文:
 定理 right_adjoint
-  条件: (sq : CommSq u (G.map i) p v) (adj : G ⊣ F)
+  条件: (sq : 交换Sq u (G.map i) p v) (adj : G ⊣ F)
   证明: ⟨by
     simp only [Adjunction.homEquiv_unit, assoc, ← F.map_comp, sq.w]
     rw [F.map_comp]; rw [Adjunction.unit_naturality_assoc]⟩
@@ -136,7 +136,7 @@ theorem right_adjoint_hasLift_iff
 
 中文:
 定理 right_adjoint_hasLift_iff
-  结论: HasLift (sq.right_adjoint adj) ↔ HasLift sq
+  结论: 有Lift (sq.right_adjoint adj) ↔ 有Lift sq
   证明: by
   simp only [HasLift.iff]
   exact Equiv.nonempty_congr (sq.rightAdjointLiftStructEquiv adj).symm
@@ -162,7 +162,7 @@ instance instHasLiftRightAdjoin
 
 中文:
 实例 instHasLiftRightAdjoin
-  签名: [HasLift sq]
+  签名: [有Lift sq]
   定义体: by
   rw [right_adjoint_hasLift_iff]
   infer_instance

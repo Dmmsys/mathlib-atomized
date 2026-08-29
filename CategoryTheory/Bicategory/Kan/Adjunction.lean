@@ -59,7 +59,7 @@ definition Adjunction.isAbsoluteLeftKan
           dsimp only [whisker_extension
 
 中文:
-定义 Adjunction.isAbsoluteLeftKan
+定义 伴随.isAbsoluteLeftKan
   签名: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
   定义体: fun {x} h =>
   .mk (fun s => LeftExtension.homMk
@@ -230,7 +230,7 @@ definition Adjunction.isAbsoluteLeftKanLift
         dsimp only [whisker_lift, StructuredArrow.mk_right, w
 
 中文:
-定义 Adjunction.isAbsoluteLeftKanLift
+定义 伴随.isAbsoluteLeftKanLift
   签名: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
   定义体: fun {x} h =>
   .mk (fun s => LeftLift.homMk

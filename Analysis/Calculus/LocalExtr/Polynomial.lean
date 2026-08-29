@@ -163,7 +163,7 @@ theorem card_rootSet_le_derivative
 
 中文:
 定理 card_rootSet_le_derivative
-  条件: {F : 类型} [CommRing F] [Algebra F 实数] (p : F[X])
+  条件: {F : 类型} [交换环 F] [代数 F 实数] (p : F[X])
   证明: by
   simpa only [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe, derivative_map] using
     card_roots_toFinset_le_derivative (p.map (algebraMap F Real))

@@ -95,12 +95,12 @@ structure Finpartition
     - bot_notMem : ⊥ ∉ parts
 
 中文:
-结构 Finpartition
-  参数: [Lattice α] [OrderBot α] (a : α)
+结构 有限分拆
+  参数: [格 α] [有底序 α] (a : α)
   公理与运算 (4 个):
-    - parts : Finset α
+    - parts : 有限集 α
     - supIndep : parts.SupIndep id
-    - sup_parts : parts.sup id = a
+    - sup_parts : parts.上确界 id = a
     - bot_notMem : ⊥ ∉ parts
 -/
 structure Finpartition [Lattice α] [OrderBot α] (a : α) where
@@ -135,7 +135,7 @@ definition ofErase
 
 中文:
 定义 ofErase
-  签名: [DecidableEq α] {a : α} (parts : Finset α) (sup_indep : parts.SupIndep id)
+  签名: [DecidableEq α] {a : α} (parts : 有限集 α) (sup_indep : parts.SupIndep id)
   定义体: parts.erase ⊥
   supIndep := sup_indep.subset (erase_subset _ _)
   sup_parts := (sup_erase_bot _).trans sup_parts
@@ -165,7 +165,7 @@ definition ofSubset
 
 中文:
 定义 ofSubset
-  签名: {a b : α} (P : Finpartition a) {parts : Finset α} (subset : parts subseteq P.parts)
+  签名: {a b : α} (P : 有限分拆 a) {parts : 有限集 α} (subset : parts subseteq P.parts)
   定义体: { parts := parts
     supIndep := P.supIndep.subset subset
     sup_parts := sup_parts
@@ -190,7 +190,7 @@ lemma sum_ofSubset_eq_sum
 
 中文:
 引理 sum_ofSubset_eq_sum
-  结论: {a b : α} (P : Finpartition a) {parts : Finset α}
+  结论: {a b : α} (P : 有限分拆 a) {parts : 有限集 α}
   证明: Finset.sum_subset subset hf
 
 Depends on / 依赖: Finset, Finset.sum_subset, subset, sum_subset
@@ -216,7 +216,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {a b : α} (P : Finpartition a) (h : a = b)
+  签名: {a b : α} (P : 有限分拆 a) (h : a = b)
   定义体: P.parts
   supIndep := P.supIndep
   sup_parts := h ▸ P.sup_parts
@@ -247,7 +247,7 @@ definition map
 
 中文:
 定义 map
-  签名: {β : 类型} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : Finpartition a)
+  签名: {β : 类型} [格 β] [有底序 β] {a : α} (e : α ≃o β) (P : 有限分拆 a)
   定义体: P.parts.map e
   supIndep u hu _ hb hbu _ hx hxu := by
     rw [← map_symm_subset] at hu
@@ -288,7 +288,7 @@ theorem parts_map
 
 中文:
 定理 parts_map
-  条件: {β : 类型} [Lattice β] [OrderBot β] {a : α} {e : α ≃o β} {P : Finpartition a}
+  条件: {β : 类型} [格 β] [有底序 β] {a : α} {e : α ≃o β} {P : 有限分拆 a}
   证明: rfl
 -/
 theorem parts_map {β : Type*} [Lattice β] [OrderBot β] {a : α} {e : α ≃o β} {P : Finpartition a} :
@@ -311,7 +311,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : Finpartition (⊥ : α) where
+  签名: : 有限分拆 (⊥ : α) where
   定义体: ∅
   supIndep := supIndep_empty _
   sup_parts := Finset.sup_empty
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Finpartition (⊥ : α))
+  签名: 可居 (有限分拆 (⊥ : α))
   定义体: ⟨Finpartition.empty α⟩
 
 @[simp]
@@ -356,7 +356,7 @@ theorem default_eq_empty
 
 中文:
 定理 default_eq_empty
-  结论: (default : Finpartition (⊥ : α)) = Finpartition.empty α
+  结论: (default : 有限分拆 (⊥ : α)) = 有限分拆.empty α
   证明: rfl
 -/
 theorem default_eq_empty : (default : Finpartition (⊥ : α)) = Finpartition.empty α :=
@@ -452,7 +452,7 @@ theorem disjoint
 
 中文:
 定理 disjoint
-  结论: (P.parts : Set α).PairwiseDisjoint id
+  结论: (P.parts : 集合 α).PairwiseDisjoint id
   证明: P.supIndep.pairwiseDisjoint
 -/
 protected theorem disjoint : (P.parts : Set α).PairwiseDisjoint id :=
@@ -472,7 +472,7 @@ theorem sup_parts_apply
 
 中文:
 定理 sup_parts_apply
-  结论: [SemilatticeSup β] [OrderBot β] (hf : 对任意 x y, f (x ⊔ y) = f x ⊔ f y)
+  结论: [SemilatticeSup β] [有底序 β] (hf : 对任意 x y, f (x ⊔ y) = f x ⊔ f y)
   证明: (apply_sup_eq_sup_comp f hf hbot).symm.trans (congrArg f P.sup_parts)
 
 Depends on / 依赖: P.sup_parts, apply_sup_eq_sup_comp, sup_parts, symm.trans
@@ -494,7 +494,7 @@ theorem pairwiseDisjoint_apply
 
 中文:
 定理 pairwiseDisjoint_apply
-  结论: [SemilatticeInf β] [OrderBot β] (hf : 对任意 x y, f (x ⊓ y) = f x ⊓ f y)
+  结论: [SemilatticeInf β] [有底序 β] (hf : 对任意 x y, f (x ⊓ y) = f x ⊓ f y)
   证明: by
   intro _ hx _ hy hxy
   have := (P.disjoint hx hy hxy).eq_bot
@@ -561,7 +561,7 @@ theorem parts_nonempty_iff
 
 中文:
 定理 parts_nonempty_iff
-  结论: P.parts.Nonempty ↔ a != ⊥
+  结论: P.parts.非空 ↔ a != ⊥
   证明: by
   contrapose!; exact parts_eq_empty_iff
 
@@ -581,8 +581,8 @@ theorem parts_nonempty
 
 中文:
 定理 parts_nonempty
-  条件: (P : Finpartition a) (ha : a != ⊥)
-  结论: P.parts.Nonempty
+  条件: (P : 有限分拆 a) (ha : a != ⊥)
+  结论: P.parts.非空
   证明: parts_nonempty_iff.2 ha
 
 Depends on / 依赖: parts_nonempty_iff
@@ -603,7 +603,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Finpartition (⊥ : α))
+  签名: 唯一 (有限分拆 (⊥ : α))
   定义体: { (inferInstance : Inhabited (Finpartition (⊥ : α))) with
     uniq := fun P => by
       ext a
@@ -630,7 +630,7 @@ instance instNonempty
 
 中文:
 实例 instNonempty
-  签名: : Nonempty (Finpartition a)
+  签名: : 非空 (有限分拆 a)
   定义体: by
   by_cases h : a = ⊥
   · rw [h]; exact ⟨Finpartition.empty α⟩
@@ -700,7 +700,7 @@ instance [Fintype
     ⟨⟨_, y, z, w⟩, rfl⟩
 
 中文:
-实例 [Fintype
+实例 [有限类型
   签名: α] [DecidableEq α] (a
   定义体: @Fintype.ofSurjective { p : Finset α // p.SupIndep id ∧ p.sup id = a ∧ ⊥ ∉ p } (Finpartition a) _
     (Subtype.fintype _) (fun i => ⟨i.1, i.2.1, i.2.2.1, i.2.2.2⟩) fun ⟨_, y, z, w⟩ =>
@@ -728,7 +728,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Finpartition a)
+  签名: LE (有限分拆 a)
   定义体: ⟨fun P Q => forall ⦃b⦄, b in P.parts -> exists c in Q.parts, b <= c⟩
 
 Depends on / 依赖: P.parts, Q.parts
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Finpartition a)
+  签名: 偏序 (有限分拆 a)
   定义体: { (inferInstance : LE (Finpartition a)) with
     le_refl := fun _ b hb => ⟨b, hb, le_rfl⟩
     le_trans := fun _ Q R hPQ hQR b hb => by
@@ -800,8 +800,8 @@ instance [Decidable
     · exact fun b hb => ⟨a, mem_singleton_self _, P.le hb⟩
 
 中文:
-实例 [Decidable
-  签名: (a = ⊥)] : OrderTop (Finpartition a) where
+实例 [可判定
+  签名: (a = ⊥)] : 有顶序 (有限分拆 a) where
   定义体: if ha : a = ⊥ then (Finpartition.empty α).copy ha.symm else indiscrete ha
   le_top P := by
     split_ifs with h
@@ -835,8 +835,8 @@ theorem parts_top_subset
 
 中文:
 定理 parts_top_subset
-  条件: (a : α) [Decidable (a = ⊥)]
-  结论: (⊤ : Finpartition a).parts subseteq {a}
+  条件: (a : α) [可判定 (a = ⊥)]
+  结论: (⊤ : 有限分拆 a).parts subseteq {a}
   证明: by
   intro b hb
   have hb : b in Finpartition.parts (dite _ _ _) := hb
@@ -863,7 +863,7 @@ theorem parts_top_subsingleton
 
 中文:
 定理 parts_top_subsingleton
-  条件: (a : α) [Decidable (a = ⊥)]
+  条件: (a : α) [可判定 (a = ⊥)]
   证明: Set.subsingleton_of_subset_singleton fun _ hb => mem_singleton.1 parts_top_subset _ hb
 
 Depends on / 依赖: Set.subsingleton_of_subset_singleton, mem_singleton, parts_top_subset, subsingleton_of_subset_singleton
@@ -921,8 +921,8 @@ theorem exists_le_of_le
   grw [← P.su
 
 中文:
-定理 exists_le_of_le
-  条件: {a b : α} {P Q : Finpartition a} (h : P <= Q) (hb : b in Q.parts)
+定理 存在_le_of_le
+  条件: {a b : α} {P Q : 有限分拆 a} (h : P <= Q) (hb : b in Q.parts)
   证明: by
   classical
   by_contra H
@@ -961,7 +961,7 @@ theorem card_mono
 
 中文:
 定理 card_mono
-  条件: {a : α} {P Q : Finpartition a} (h : P <= Q)
+  条件: {a : α} {P Q : 有限分拆 a} (h : P <= Q)
   结论: #Q.parts <= #P.parts
   证明: by
   have : forall b in Q.parts, exists c in P.parts, c <= b := fun b => exists_le_of_le h
@@ -1050,7 +1050,7 @@ lemma mem_toSubtype_iff
 
 中文:
 引理 mem_toSubtype_iff
-  条件: (p : Subtype Pr)
+  条件: (p : 子类型 Pr)
   证明: Subtype.lattice Prsup Prinf
     letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
     p in (toSubtype P Prsup Prinf Prbot hs hP).parts ↔ p.val in P.parts := by simp [toSubtype]
@@ -1075,7 +1075,7 @@ lemma sum_eq_sum_finpartition_subtype
 
 中文:
 引理 sum_eq_sum_finpartition_subtype
-  条件: {X : 类型} [AddCommMonoid X] (f : α -> X)
+  条件: {X : 类型} [加法交换幺半群 X] (f : α -> X)
   证明: Subtype.lattice Prsup Prinf
     letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
     ∑ p in P.parts, f p = ∑ p in (Finpartition.toSubtype P Prsup Prinf Prbot hs hP).parts, f p := by
@@ -1113,7 +1113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Finpartition a)
+  签名: 最小值 (有限分拆 a)
   定义体: ⟨fun P Q =>
     ofErase ((P.parts ×ˢ Q.parts).image fun bc => bc.1 ⊓ bc.2)
       (by
@@ -1155,7 +1155,7 @@ theorem parts_inf
 
 中文:
 定理 parts_inf
-  条件: (P Q : Finpartition a)
+  条件: (P Q : 有限分拆 a)
   证明: rfl
 -/
 theorem parts_inf (P Q : Finpartition a) :
@@ -1179,7 +1179,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (Finpartition a)
+  签名: SemilatticeInf (有限分拆 a)
   定义体: { inf := Min.min
     inf_le_left := fun P Q b hb => by
       obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
@@ -1226,7 +1226,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (P : Finpartition a) (hb : b <= a)
+  签名: (P : 有限分拆 a) (hb : b <= a)
   定义体: (P.parts.image (· ⊓ b)).erase ⊥
   supIndep := supIndep_iff_pairwiseDisjoint.mpr fun x hx y hy hxy => by
     simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
@@ -1265,7 +1265,7 @@ lemma sum_restrict
 
 中文:
 引理 sum_restrict
-  结论: (P : Finpartition a) (hb : b <= a) {M : 类型} [AddCommMonoid M]
+  结论: (P : 有限分拆 a) (hb : b <= a) {M : 类型} [加法交换幺半群 M]
   证明: by
   have hinj : forall x in P.parts.filter (· ⊓ b != ⊥), forall y in P.parts.filter (· ⊓ b != ⊥),
       x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
@@ -1309,7 +1309,7 @@ definition ofPairwiseDisjoint
 
 中文:
 定义 ofPairwiseDisjoint
-  签名: (parts : Finset α) (hdisjoint : (parts : Set α).PairwiseDisjoint id)
+  签名: (parts : 有限集 α) (hdisjoint : (parts : 集合 α).PairwiseDisjoint id)
   定义体: parts.erase ⊥
   supIndep := Finset.supIndep_iff_pairwiseDisjoint.mpr fun _ ha _ hb hab =>
     hdisjoint (Finset.erase_subset _ _ ha) (Finset.erase_subset _ _ hb) hab
@@ -1342,7 +1342,7 @@ lemma sum_ofPairwiseDisjoint_eq_sum
 
 中文:
 引理 sum_ofPairwiseDisjoint_eq_sum
-  结论: {parts : Finset α}
+  结论: {parts : 有限集 α}
   证明: by
   by_cases hbot : ⊥ in parts
   · simp only [Finpartition.ofPairwiseDisjoint]
@@ -1389,7 +1389,7 @@ definition combine
 
 中文:
 定义 combine
-  签名: {ι : 类型} {I : Finset ι} {a : ι -> α} (P : 对任意 i, Finpartition (a i))
+  签名: {ι : 类型} {I : 有限集 ι} {a : ι -> α} (P : 对任意 i, 有限分拆 (a i))
   定义体: I.biUnion fun i => (P i).parts
   supIndep :=
     .biUnion (by simpa only [sup_parts]) (fun i _ => (P i).supIndep)
@@ -1428,7 +1428,7 @@ lemma sum_combine
 
 中文:
 引理 sum_combine
-  结论: {ι : 类型} {I : Finset ι} {s : ι -> α} (P : 对任意 i, Finpartition (s i))
+  结论: {ι : 类型} {I : 有限集 ι} {s : ι -> α} (P : 对任意 i, 有限分拆 (s i))
   证明: by
   simp_rw [combine]
   refine Finset.sum_biUnion fun i hi j hj hij => ?_
@@ -1467,7 +1467,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (P : Finpartition a) (Q : 对任意 i in P.parts, Finpartition i)
+  签名: (P : 有限分拆 a) (Q : 对任意 i in P.parts, 有限分拆 i)
   定义体: (combine (fun i : P.parts => Q i.1 i.2) P.supIndep.attach).copy by
     rw [Finset.sup_attach (f := fun x => x)]; rw [← Function.id_def]; rw [P.sup_parts]
 
@@ -1531,7 +1531,7 @@ theorem card_bind
 
 中文:
 定理 card_bind
-  条件: (Q : 对任意 i in P.parts, Finpartition i)
+  条件: (Q : 对任意 i in P.parts, 有限分拆 i)
   证明: by
   apply card_biUnion
   rintro ⟨b, hb⟩ - ⟨c, hc⟩ - hbc
@@ -1576,7 +1576,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (P : Finpartition a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c)
+  签名: (P : 有限分拆 a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c)
   定义体: insert b P.parts
   supIndep := by
     refine P.supIndep.insert ?_
@@ -1605,7 +1605,7 @@ theorem card_extend
 
 中文:
 定理 card_extend
-  结论: (P : Finpartition a) (b c : α) {hb : b != ⊥} {hab : Disjoint a b}
+  结论: (P : 有限分拆 a) (b c : α) {hb : b != ⊥} {hab : Disjoint a b}
   证明: card_insert_of_notMem fun h => hb hab.symm.eq_bot_of_le P.le h
 
 Depends on / 依赖: P.le, card_insert_of_notMem, eq_bot_of_le, hab.symm.eq_bot_of_le
@@ -1833,7 +1833,7 @@ lemma subset
 
 中文:
 引理 subset
-  条件: {a : Finset α} (ha : a in P.parts)
+  条件: {a : 有限集 α} (ha : a in P.parts)
   结论: a subseteq s
   证明: P.le ha
 
@@ -1854,8 +1854,8 @@ theorem nonempty_of_mem_parts
 
 中文:
 定理 nonempty_of_mem_parts
-  条件: {a : Finset α} (ha : a in P.parts)
-  结论: a.Nonempty
+  条件: {a : 有限集 α} (ha : a in P.parts)
+  结论: a.非空
   证明: nonempty_iff_ne_empty.2 P.ne_bot ha
 
 @[simp]
@@ -1934,7 +1934,7 @@ theorem exists_mem
   exact mem_sup.1 ha
 
 中文:
-定理 exists_mem
+定理 存在_mem
   条件: (ha : a in s)
   结论: 存在 t in P.parts, a in t
   证明: by
@@ -1979,7 +1979,7 @@ theorem existsUnique_mem
   exact P.eq_of_mem_parts hu ht hu' ht'
 
 中文:
-定理 existsUnique_mem
+定理 存在Unique_mem
   条件: (ha : a in s)
   结论: 存在! t, t in P.parts ∧ a in t
   证明: by
@@ -2023,7 +2023,7 @@ definition ofExistsUnique
 
 中文:
 定义 ofExistsUnique
-  签名: (parts : Finset (Finset α)) (h : 对任意 p in parts, p subseteq s)
+  签名: (parts : 有限集 (有限集 α)) (h : 对任意 p in parts, p subseteq s)
   定义体: parts
   supIndep := by
     simp only [supIndep_iff_pairwiseDisjoint]
@@ -2140,7 +2140,7 @@ lemma part_nonempty
 
 中文:
 引理 part_nonempty
-  结论: (P.part a).Nonempty ↔ a in s
+  结论: (P.part a).非空 ↔ a in s
   证明: by
   contrapose!; exact part_eq_empty P
 
@@ -2303,7 +2303,7 @@ theorem part_surjOn
 
 中文:
 定理 part_surjOn
-  结论: Set.SurjOn P.part s P.parts
+  结论: 集合.满射限制 P.part s P.parts
   证明: fun p hp => by
   obtain ⟨x, hx⟩ := P.nonempty_of_mem_parts hp
   have hx' := mem_of_subset (P.le hp) hx
@@ -2328,8 +2328,8 @@ theorem exists_subset_part_bijOn
   exact ⟨r, mod_cast hrs, hr⟩
 
 中文:
-定理 exists_subset_part_bijOn
-  结论: 存在 r subseteq s, Set.BijOn P.part r P.parts
+定理 存在_subset_part_bijOn
+  结论: 存在 r subseteq s, 集合.双射限制 P.part r P.parts
   证明: by
   obtain ⟨r, hrs, hr⟩ := P.part_surjOn.exists_bijOn_subset
   lift r to Finset α using s.finite_toSet.subset hrs
@@ -2359,7 +2359,7 @@ theorem mem_part_iff_exists
     exact hap
 
 中文:
-定理 mem_part_iff_exists
+定理 mem_part_iff_存在
   条件: {b}
   结论: a in P.part b ↔ 存在 p in P.parts, a in p ∧ b in p
   证明: by
@@ -2436,8 +2436,8 @@ lemma exists_enumeration
   simp [equivSigmaParts, Equiv.sigmaCongr, Equiv.sigmaCongrLeft]
 
 中文:
-引理 exists_enumeration
-  结论: 存在 f : s ≃ Σ t : P.parts, Fin #t.1,
+引理 存在_enumeration
+  结论: 存在 f : s ≃ Σ t : P.parts, 有限集 #t.1,
   证明: by
   use P.equivSigmaParts.trans ((Equiv.refl _).sigmaCongr (fun t => t.1.equivFin))
   simp [equivSigmaParts, Equiv.sigmaCongr, Equiv.sigmaCongrLeft]
@@ -2495,7 +2495,7 @@ theorem parts_bot
 
 中文:
 定理 parts_bot
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: rfl
 -/
 theorem parts_bot (s : Finset α) :
@@ -2513,8 +2513,8 @@ theorem card_bot
 
 中文:
 定理 card_bot
-  条件: (s : Finset α)
-  结论: #(⊥ : Finpartition s).parts = #s
+  条件: (s : 有限集 α)
+  结论: #(⊥ : 有限分拆 s).parts = #s
   证明: Finset.card_map _
 
 Depends on / 依赖: Finset, Finset.card_map, card_map
@@ -2531,7 +2531,7 @@ theorem mem_bot_iff
 
 中文:
 定理 mem_bot_iff
-  结论: t in (⊥ : Finpartition s).parts ↔ 存在 a in s, {a} = t
+  结论: t in (⊥ : 有限分拆 s).parts ↔ 存在 a in s, {a} = t
   证明: mem_map
 
 Depends on / 依赖: mem_map
@@ -2621,7 +2621,7 @@ definition ofSetSetoid
 
 中文:
 定义 ofSetSetoid
-  签名: (s : Setoid α) (x : Finset α) [DecidableRel s.r]
+  签名: (s : 集合等价关系 α) (x : 有限集 α) [DecidableRel s.r]
   定义体: x.image fun a => {b in x | s.r a b}
   supIndep := by
     suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
@@ -2666,7 +2666,7 @@ theorem mem_part_ofSetSetoid_iff_rel
 
 中文:
 定理 mem_part_ofSetSetoid_iff_rel
-  条件: {s : Setoid α} (x : Finset α) [DecidableRel s.r] {b : α}
+  条件: {s : 集合等价关系 α} (x : 有限集 α) [DecidableRel s.r] {b : α}
   证明: by
   suffices (exists a₁ in x, (b in x ∧ s a₁ b) ∧ a in x ∧ s a₁ a) ↔ a in x ∧ b in x ∧ s a b by
     simpa [mem_part_iff_exists, ofSetSetoid_parts]
@@ -2705,7 +2705,7 @@ definition ofSetoid
 
 中文:
 定义 ofSetoid
-  签名: (s : Setoid α) [DecidableRel s.r]
+  签名: (s : 集合等价关系 α) [DecidableRel s.r]
   定义体: ofSetSetoid s univ
 
 Depends on / 依赖: ofSetSetoid
@@ -2725,7 +2725,7 @@ theorem mem_part_ofSetoid_iff_rel
 
 中文:
 定理 mem_part_ofSetoid_iff_rel
-  条件: {s : Setoid α} [DecidableRel s.r] {b : α}
+  条件: {s : 集合等价关系 α} [DecidableRel s.r] {b : α}
   证明: by
   suffices b in (ofSetSetoid s univ).part a ↔ a in univ ∧ b in univ ∧ s a b by simpa
   exact mem_part_ofSetSetoid_iff_rel univ
@@ -2757,7 +2757,7 @@ definition atomise
 
 中文:
 定义 atomise
-  签名: (s : Finset α) (F : Finset (Finset α))
+  签名: (s : 有限集 α) (F : 有限集 (有限集 α))
   定义体: ofErase (F.powerset.image fun Q => {i in s | forall t in F, t in Q ↔ i in t})
     (Set.PairwiseDisjoint.supIndep fun x hx y hy h =>
       disjoint_left.mpr fun z hz1 hz2 =>
@@ -2837,7 +2837,7 @@ theorem atomise_empty
 
 中文:
 定理 atomise_empty
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: (atomise s ∅).parts = {s}
   证明: by
   simp only [atomise, powerset_empty, image_singleton, notMem_empty, IsEmpty.forall_iff,

@@ -67,7 +67,7 @@ exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
 
 中文:
 定义 ofFunction
-  签名: (m : Set α -> 实数>=0∞) (m_empty : m ∅ = 0)
+  签名: (m : 集合 α -> 实数>=0∞) (m_empty : m ∅ = 0)
   定义体: let μ s := ⨅ (f : Nat -> Set α) (_ : s subseteq ⋃ i, f i), ∑' i, m (f i)
   { measureOf := μ
     empty := by
@@ -122,7 +122,7 @@ theorem ofFunction_apply
 
 中文:
 定理 ofFunction_apply
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: rfl
 -/
 theorem ofFunction_apply (s : Set α) :
@@ -146,7 +146,7 @@ theorem ofFunction_eq_iInf_mem
 
 中文:
 定理 ofFunction_eq_iInf_mem
-  条件: {P : Set α -> 命题} (m_top : 对任意 s, ¬ P s -> m s = ∞) (s : Set α)
+  条件: {P : 集合 α -> 命题} (m_top : 对任意 s, ¬ P s -> m s = ∞) (s : 集合 α)
   证明: by
   rw [OuterMeasure.ofFunction_apply]
   apply le_antisymm
@@ -193,8 +193,8 @@ le_of_eq tsum_eq_single 0 by
 
 中文:
 定理 ofFunction_le
-  条件: (s : Set α)
-  结论: OuterMeasure.ofFunction m m_empty s <= m s
+  条件: (s : 集合 α)
+  结论: 外测度.ofFunction m m_empty s <= m s
   证明: let f : Nat -> Set α := fun i => Nat.casesOn i s fun _ => ∅
 iInf_le_of_le f
 iInf_le_of_le (subset_iUnion f 0)
@@ -225,7 +225,7 @@ theorem ofFunction_eq
 
 中文:
 定理 ofFunction_eq
-  结论: (s : Set α) (m_mono : 对任意 ⦃t : Set α⦄, s subseteq t -> m s <= m t)
+  结论: (s : 集合 α) (m_mono : 对任意 ⦃t : 集合 α⦄, s subseteq t -> m s <= m t)
   证明: le_antisymm (ofFunction_le s)
     le_iInf fun f => le_iInf fun hf => le_trans (m_mono hf) (m_subadd f)
 
@@ -250,7 +250,7 @@ le_trans (μ.mono hs) le_trans (measure_iUnion_le f) ENNReal.tsum_le_tsum fun _ 
 
 中文:
 定理 le_ofFunction
-  条件: {μ : OuterMeasure α}
+  条件: {μ : 外测度 α}
   证明: ⟨fun H s => le_trans (H s) (ofFunction_le s), fun H _ =>
     le_iInf fun f =>
       le_iInf fun hs =>
@@ -292,7 +292,7 @@ theorem ofFunction_eq_sSup
 
 中文:
 定理 ofFunction_eq_sSup
-  结论: OuterMeasure.ofFunction m m_empty = sSup { μ | 对任意 s, μ s <= m s }
+  结论: 外测度.ofFunction m m_empty = sSup { μ | 对任意 s, μ s <= m s }
   证明: (@isGreatest_ofFunction α m m_empty).isLUB.sSup_eq.symm
 
 Depends on / 依赖: isGreatest_ofFunction, isLUB.sSup_eq.symm, m_empty, sSup_eq
@@ -316,7 +316,7 @@ theorem ofFunction_union_of_top_of_nonempty_inter
 
 中文:
 定理 ofFunction_union_of_top_of_nonempty_inter
-  结论: {s t : Set α}
+  结论: {s t : 集合 α}
   证明: by
   refine le_antisymm (measure_union_le _ _) (le_iInf₂ fun f hf => ?_)
   set μ := OuterMeasure.ofFunction m m_empty
@@ -374,7 +374,7 @@ theorem comap_ofFunction
 
 中文:
 定理 comap_ofFunction
-  条件: {β} (f : β -> α) (h : Monotone m ∨ Surjective f)
+  条件: {β} (f : β -> α) (h : 递增 m ∨ 满射 f)
   证明: by
   refine le_antisymm (le_ofFunction.2 fun s => ?_) fun s => ?_
   · rw [comap_apply]
@@ -442,7 +442,7 @@ theorem map_ofFunction
 
 中文:
 定理 map_ofFunction
-  条件: {β} {f : α -> β} (hf : Injective f)
+  条件: {β} {f : α -> β} (hf : 单射 f)
   证明: by
   refine (map_ofFunction_le _).antisymm fun s => ?_
   simp only [ofFunction_apply, map_apply, le_iInf_iff]
@@ -480,7 +480,7 @@ theorem restrict_ofFunction
 
 中文:
 定理 restrict_ofFunction
-  条件: (s : Set α) (hm : Monotone m)
+  条件: (s : 集合 α) (hm : 递增 m)
   证明: by
       rw [restrict]
       simp only [inter_comm _ s, LinearMap.comp_apply]
@@ -514,7 +514,7 @@ theorem smul_ofFunction
 中文:
 定理 smul_ofFunction
   条件: {c : 实数>=0∞} (hc : c != ∞)
-  结论: c • OuterMeasure.ofFunction m m_empty =
+  结论: c • 外测度.ofFunction m m_empty =
   证明: by
   ext1 s
   have : Nonempty { t : Nat -> Set α // s subseteq ⋃ i, t i } := ⟨⟨fun _ => s, subset_iUnion (fun _ => s) 0⟩⟩
@@ -548,7 +548,7 @@ definition boundedBy
 
 中文:
 定义 boundedBy
-  签名: : OuterMeasure α
+  签名: : 外测度 α
   定义体: OuterMeasure.ofFunction (fun s => ⨆ _ : s.Nonempty, m s) (by simp [Set.not_nonempty_empty])
 
 Depends on / 依赖: Nonempty, OuterMeasure, OuterMeasure.ofFunction, Set.not_nonempty_empty, not_nonempty_empty, ofFunction, s.Nonempty
@@ -569,7 +569,7 @@ theorem boundedBy_le
 
 中文:
 定理 boundedBy_le
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: boundedBy m s <= m s
   证明: (ofFunction_le _).trans iSup_const_le
 
@@ -592,7 +592,7 @@ theorem boundedBy_eq_ofFunction
 
 中文:
 定理 boundedBy_eq_ofFunction
-  条件: (m_empty : m ∅ = 0) (s : Set α)
+  条件: (m_empty : m ∅ = 0) (s : 集合 α)
   证明: by
   have : (fun s : Set α => ⨆ _ : s.Nonempty, m s) = m := by
     ext1 t
@@ -619,7 +619,7 @@ theorem boundedBy_apply
 
 中文:
 定理 boundedBy_apply
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simp [boundedBy, ofFunction_apply]
 
@@ -643,7 +643,7 @@ theorem boundedBy_eq
 
 中文:
 定理 boundedBy_eq
-  结论: (s : Set α) (m_empty : m ∅ = 0) (m_mono : 对任意 ⦃t : Set α⦄, s subseteq t -> m s <= m t)
+  结论: (s : 集合 α) (m_empty : m ∅ = 0) (m_mono : 对任意 ⦃t : 集合 α⦄, s subseteq t -> m s <= m t)
   证明: by
   rw [boundedBy_eq_ofFunction m_empty]; rw [ofFunction_eq s m_mono m_subadd]
 
@@ -667,7 +667,7 @@ theorem boundedBy_eq_self
 
 中文:
 定理 boundedBy_eq_self
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: boundedBy m = m
   证明: ext fun _ => boundedBy_eq _ measure_empty (fun _ ht => measure_mono ht) measure_iUnion_le
 
@@ -689,7 +689,7 @@ theorem le_boundedBy
 
 中文:
 定理 le_boundedBy
-  条件: {μ : OuterMeasure α}
+  条件: {μ : 外测度 α}
   结论: μ <= boundedBy m ↔ 对任意 s, μ s <= m s
   证明: by
   rw [boundedBy]; rw [le_ofFunction]; rw [forall_congr']; intro s
@@ -716,7 +716,7 @@ theorem le_boundedBy'
 
 中文:
 定理 le_boundedBy'
-  条件: {μ : OuterMeasure α}
+  条件: {μ : 外测度 α}
   证明: by
   rw [le_boundedBy]; rw [forall_congr']
   intro s
@@ -749,7 +749,7 @@ theorem boundedBy_top
 
 中文:
 定理 boundedBy_top
-  结论: boundedBy (⊤ : Set α -> 实数>=0∞) = ⊤
+  结论: boundedBy (⊤ : 集合 α -> 实数>=0∞) = ⊤
   证明: by
   rw [eq_top_iff]; rw [le_boundedBy']
   intro s hs
@@ -779,7 +779,7 @@ theorem boundedBy_zero
 
 中文:
 定理 boundedBy_zero
-  结论: boundedBy (0 : Set α -> 实数>=0∞) = 0
+  结论: boundedBy (0 : 集合 α -> 实数>=0∞) = 0
   证明: by
   rw [← coe_bot]; rw [eq_bot_iff]
   apply boundedBy_le
@@ -869,7 +869,7 @@ top_unique (h u hs ht).ge.trans le_iSup (fun _ => m u) (hs.mono inter_subset_rig
 
 中文:
 定理 boundedBy_union_of_top_of_nonempty_inter
-  结论: {s t : Set α}
+  结论: {s t : 集合 α}
   证明: ofFunction_union_of_top_of_nonempty_inter fun u hs ht =>
 top_unique (h u hs ht).ge.trans le_iSup (fun _ => m u) (hs.mono inter_subset_right)
 
@@ -897,7 +897,7 @@ definition sInfGen
 
 中文:
 定义 sInfGen
-  签名: (m : Set (OuterMeasure α)) (s : Set α)
+  签名: (m : 集合 (外测度 α)) (s : 集合 α)
   定义体: ⨅ (μ : OuterMeasure α) (_ : μ in m), μ s
 
 Depends on / 依赖: OuterMeasure
@@ -915,7 +915,7 @@ theorem sInfGen_def
 
 中文:
 定理 sInfGen_def
-  条件: (m : Set (OuterMeasure α)) (t : Set α)
+  条件: (m : 集合 (外测度 α)) (t : 集合 α)
   证明: rfl
 -/
 theorem sInfGen_def (m : Set (OuterMeasure α)) (t : Set α) :
@@ -938,7 +938,7 @@ theorem sInf_eq_boundedBy_sInfGen
 
 中文:
 定理 sInf_eq_boundedBy_sInfGen
-  条件: (m : Set (OuterMeasure α))
+  条件: (m : 集合 (外测度 α))
   证明: by
   refine le_antisymm ?_ ?_
   · refine le_boundedBy.2 fun s => le_iInf₂ fun μ hμ => ?_
@@ -971,7 +971,7 @@ theorem iSup_sInfGen_nonempty
 
 中文:
 定理 iSup_sInfGen_nonempty
-  条件: {m : Set (OuterMeasure α)} (h : m.Nonempty) (t : Set α)
+  条件: {m : 集合 (外测度 α)} (h : m.非空) (t : 集合 α)
   证明: by
   rcases t.eq_empty_or_nonempty with (rfl | ht)
   · simp [biInf_const h]
@@ -996,7 +996,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: {m : Set (OuterMeasure α)} {s : Set α} (h : m.Nonempty)
+  条件: {m : 集合 (外测度 α)} {s : 集合 α} (h : m.非空)
   证明: by
   simp_rw [sInf_eq_boundedBy_sInfGen, boundedBy_apply, iSup_sInfGen_nonempty h]
 
@@ -1017,7 +1017,7 @@ theorem sInf_apply'
 
 中文:
 定理 sInf_apply'
-  条件: {m : Set (OuterMeasure α)} {s : Set α} (h : s.Nonempty)
+  条件: {m : 集合 (外测度 α)} {s : 集合 α} (h : s.非空)
   证明: m.eq_empty_or_nonempty.elim (fun hm => by simp [hm, h]) sInf_apply
 
 Depends on / 依赖: eq_empty_or_nonempty, m.eq_empty_or_nonempty.elim, sInf_apply
@@ -1039,7 +1039,7 @@ theorem iInf_apply
 
 中文:
 定理 iInf_apply
-  条件: {ι} [Nonempty ι] (m : ι -> OuterMeasure α) (s : Set α)
+  条件: {ι} [非空 ι] (m : ι -> 外测度 α) (s : 集合 α)
   证明: by
   rw [iInf]; rw [sInf_apply (range_nonempty m)]
   simp only [iInf_range]
@@ -1063,7 +1063,7 @@ theorem iInf_apply'
 
 中文:
 定理 iInf_apply'
-  条件: {ι} (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty)
+  条件: {ι} (m : ι -> 外测度 α) {s : 集合 α} (hs : s.非空)
   证明: by
   rw [iInf]; rw [sInf_apply' hs]
   simp only [iInf_range]
@@ -1087,7 +1087,7 @@ theorem biInf_apply
 
 中文:
 定理 biInf_apply
-  条件: {ι} {I : Set ι} (hI : I.Nonempty) (m : ι -> OuterMeasure α) (s : Set α)
+  条件: {ι} {I : 集合 ι} (hI : I.非空) (m : ι -> 外测度 α) (s : 集合 α)
   证明: by
   have := hI.to_subtype
   simp only [← iInf_subtype'', iInf_apply]
@@ -1110,7 +1110,7 @@ theorem biInf_apply'
 
 中文:
 定理 biInf_apply'
-  条件: {ι} (I : Set ι) (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty)
+  条件: {ι} (I : 集合 ι) (m : ι -> 外测度 α) {s : 集合 α} (hs : s.非空)
   证明: by
   simp only [← iInf_subtype'', iInf_apply' _ hs]
 
@@ -1130,7 +1130,7 @@ theorem map_iInf_le
 
 中文:
 定理 map_iInf_le
-  条件: {ι β} (f : α -> β) (m : ι -> OuterMeasure α)
+  条件: {ι β} (f : α -> β) (m : ι -> 外测度 α)
   证明: (map_mono f).map_iInf_le
 
 Depends on / 依赖: map_iInf_le, map_mono
@@ -1154,7 +1154,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι β} (f : α -> β) (m : ι -> OuterMeasure β)
+  条件: {ι β} (f : α -> β) (m : ι -> 外测度 β)
   证明: by
   refine ext_nonempty fun s hs => ?_
   refine ((comap_mono f).map_iInf_le s).antisymm ?_
@@ -1185,7 +1185,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  条件: {ι β} {f : α -> β} (hf : Injective f) (m : ι -> OuterMeasure α)
+  条件: {ι β} {f : α -> β} (hf : 单射 f) (m : ι -> 外测度 α)
   证明: by
   refine Eq.trans ?_ (map_comap _ _)
   simp only [comap_iInf, comap_map hf]
@@ -1212,7 +1212,7 @@ theorem map_iInf_comap
 
 中文:
 定理 map_iInf_comap
-  条件: {ι β} [Nonempty ι] {f : α -> β} (m : ι -> OuterMeasure β)
+  条件: {ι β} [非空 ι] {f : α -> β} (m : ι -> 外测度 β)
   证明: by
   refine (map_iInf_le _ _).antisymm fun s => ?_
   simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
@@ -1247,7 +1247,7 @@ theorem map_biInf_comap
 
 中文:
 定理 map_biInf_comap
-  条件: {ι β} {I : Set ι} (hI : I.Nonempty) {f : α -> β} (m : ι -> OuterMeasure β)
+  条件: {ι β} {I : 集合 ι} (hI : I.非空) {f : α -> β} (m : ι -> 外测度 β)
   证明: by
   have := hI.to_subtype
   rw [← iInf_subtype'']; rw [← iInf_subtype'']
@@ -1274,7 +1274,7 @@ theorem restrict_iInf_restrict
 
 中文:
 定理 restrict_iInf_restrict
-  条件: {ι} (s : Set α) (m : ι -> OuterMeasure α)
+  条件: {ι} (s : 集合 α) (m : ι -> 外测度 α)
   证明: calc restrict s (⨅ i, restrict s (m i))
     _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
     _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
@@ -1299,7 +1299,7 @@ theorem restrict_iInf
 
 中文:
 定理 restrict_iInf
-  条件: {ι} [Nonempty ι] (s : Set α) (m : ι -> OuterMeasure α)
+  条件: {ι} [非空 ι] (s : 集合 α) (m : ι -> 外测度 α)
   证明: (congr_arg (map ((↑) : s -> α)) (comap_iInf _ _)).trans (map_iInf_comap _)
 
 Depends on / 依赖: comap_iInf, congr_arg, map_iInf_comap
@@ -1321,7 +1321,7 @@ theorem restrict_biInf
 
 中文:
 定理 restrict_biInf
-  条件: {ι} {I : Set ι} (hI : I.Nonempty) (s : Set α) (m : ι -> OuterMeasure α)
+  条件: {ι} {I : 集合 ι} (hI : I.非空) (s : 集合 α) (m : ι -> 外测度 α)
   证明: by
   have := hI.to_subtype
   rw [← iInf_subtype'']; rw [← iInf_subtype'']
@@ -1346,7 +1346,7 @@ theorem restrict_sInf_eq_sInf_restrict
 
 中文:
 定理 restrict_sInf_eq_sInf_restrict
-  条件: (m : Set (OuterMeasure α)) {s : Set α} (hm : m.Nonempty)
+  条件: (m : 集合 (外测度 α)) {s : 集合 α} (hm : m.非空)
   证明: by
   simp only [sInf_eq_iInf, restrict_biInf, hm, iInf_image]
 

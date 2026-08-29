@@ -85,8 +85,8 @@ instance [HasLimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasLimits
-  签名: C] : HasLimits (SimplicialObject C)
+实例 [有极限
+  签名: C] : 有极限 (SimplicialObject C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasLimits C] : HasLimits (SimplicialObject C) :=
@@ -106,8 +106,8 @@ instance [HasColimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimits
-  签名: C] : HasColimits (SimplicialObject C)
+实例 [有余极限
+  签名: C] : 有余极限 (SimplicialObject C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasColimits C] : HasColimits (SimplicialObject C) :=
@@ -147,7 +147,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: {n} (i : Fin (n + 2))
+  签名: {n} (i : 有限集 (n + 2))
   定义体: X.map (SimplexCategory.δ i).op
 
 Depends on / 依赖: SimplexCategory, X.map
@@ -166,8 +166,8 @@ lemma δ_def
 
 中文:
 引理 δ_def
-  条件: {n} (i : Fin (n + 2))
-  结论: X.δ i = X.map (SimplexCategory.δ i).op
+  条件: {n} (i : 有限集 (n + 2))
+  结论: X.δ i = X.map (单纯形范畴.δ i).op
   证明: rfl
 -/
 lemma δ_def {n} (i : Fin (n + 2)) : X.δ i = X.map (SimplexCategory.δ i).op := rfl
@@ -182,7 +182,7 @@ definition σ
 
 中文:
 定义 σ
-  签名: {n} (i : Fin (n + 1))
+  签名: {n} (i : 有限集 (n + 1))
   定义体: X.map (SimplexCategory.σ i).op
 
 Depends on / 依赖: SimplexCategory, X.map
@@ -201,8 +201,8 @@ lemma σ_def
 
 中文:
 引理 σ_def
-  条件: {n} (i : Fin (n + 1))
-  结论: X.σ i = X.map (SimplexCategory.σ i).op
+  条件: {n} (i : 有限集 (n + 1))
+  结论: X.σ i = X.map (单纯形范畴.σ i).op
   证明: rfl
 -/
 lemma σ_def {n} (i : Fin (n + 1)) : X.σ i = X.map (SimplexCategory.σ i).op := rfl
@@ -260,7 +260,7 @@ theorem eqToIso_refl
 中文:
 定理 eqToIso_refl
   条件: {n : 自然数} (h : n = n)
-  结论: X.eqToIso h = Iso.refl _
+  结论: X.eqToIso h = 同构.refl _
   证明: by
   simp [eqToIso]
 
@@ -285,7 +285,7 @@ theorem δ_comp_δ
 
 中文:
 定理 δ_comp_δ
-  条件: {n} {i j : Fin (n + 2)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_δ H]
@@ -313,7 +313,7 @@ theorem δ_comp_δ'
 
 中文:
 定理 δ_comp_δ'
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : Fin.castSucc i < j)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : 有限集.castSucc i < j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_δ' H]
@@ -340,7 +340,7 @@ theorem δ_comp_δ''
 
 中文:
 定理 δ_comp_δ''
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : i <= 有限集.castSucc j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_δ'' H]
@@ -369,7 +369,7 @@ theorem δ_comp_δ_self
 
 中文:
 定理 δ_comp_δ_self
-  条件: {n} {i : Fin (n + 2)}
+  条件: {n} {i : 有限集 (n + 2)}
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_δ_self]
@@ -396,7 +396,7 @@ theorem δ_comp_δ_self'
 
 中文:
 定理 δ_comp_δ_self'
-  条件: {n} {j : Fin (n + 3)} {i : Fin (n + 2)} (H : j = Fin.castSucc i)
+  条件: {n} {j : 有限集 (n + 3)} {i : 有限集 (n + 2)} (H : j = 有限集.castSucc i)
   证明: by
   subst H
   rw [δ_comp_δ_self]
@@ -420,7 +420,7 @@ theorem δ_comp_σ_of_le
 
 中文:
 定理 δ_comp_σ_of_le
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= Fin.castSucc j)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= 有限集.castSucc j)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_σ_of_le H]
@@ -449,8 +449,8 @@ theorem δ_comp_σ_self
 
 中文:
 定理 δ_comp_σ_self
-  条件: {n} {i : Fin (n + 1)}
-  结论: X.σ i ≫ X.δ (Fin.castSucc i) = 𝟙 _
+  条件: {n} {i : 有限集 (n + 1)}
+  结论: X.σ i ≫ X.δ (有限集.castSucc i) = 𝟙 _
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_σ_self, op_id, X.map_id]
@@ -476,7 +476,7 @@ theorem δ_comp_σ_self'
 
 中文:
 定理 δ_comp_σ_self'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = Fin.castSucc i)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = 有限集.castSucc i)
   证明: by
   subst H
   rw [δ_comp_σ_self]
@@ -503,7 +503,7 @@ theorem δ_comp_σ_succ
 
 中文:
 定理 δ_comp_σ_succ
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   结论: X.σ i ≫ X.δ i.succ = 𝟙 _
   证明: by
   dsimp [δ, σ]
@@ -530,7 +530,7 @@ theorem δ_comp_σ_succ'
 
 中文:
 定理 δ_comp_σ_succ'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.succ)
   证明: by
   subst H
   rw [δ_comp_σ_succ]
@@ -556,7 +556,7 @@ theorem δ_comp_σ_of_gt
 
 中文:
 定理 δ_comp_σ_of_gt
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : Fin.castSucc j < i)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : 有限集.castSucc j < i)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_σ_of_gt H]
@@ -583,7 +583,7 @@ theorem δ_comp_σ_of_gt'
 
 中文:
 定理 δ_comp_σ_of_gt'
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : j.succ < i)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.δ_comp_σ_of_gt' H]
@@ -611,7 +611,7 @@ theorem σ_comp_σ
 
 中文:
 定理 σ_comp_σ
-  条件: {n} {i j : Fin (n + 1)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, ← op_comp, SimplexCategory.σ_comp_σ H]
@@ -638,7 +638,7 @@ theorem δ_naturality
 
 中文:
 定理 δ_naturality
-  条件: {X' X : SimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : Fin (n + 2))
+  条件: {X' X : SimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : 有限集 (n + 2))
   证明: f.naturality _
 
 @[reassoc (attr := simp)]
@@ -660,7 +660,7 @@ theorem σ_naturality
 
 中文:
 定理 σ_naturality
-  条件: {X' X : SimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : Fin (n + 1))
+  条件: {X' X : SimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : 有限集 (n + 1))
   证明: f.naturality _
 
 Depends on / 依赖: f.naturality, naturality
@@ -708,7 +708,7 @@ lemma whiskering_obj_obj_δ
 
 中文:
 引理 whiskering_obj_obj_δ
-  条件: (F : C ⥤ D) (X : SimplicialObject C) {n : 自然数} (i : Fin (n + 2))
+  条件: (F : C ⥤ D) (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 2))
   证明: rfl
 -/
 lemma whiskering_obj_obj_δ (F : C ⥤ D) (X : SimplicialObject C) {n : Nat} (i : Fin (n + 2)) :
@@ -726,7 +726,7 @@ lemma whiskering_obj_obj_σ
 
 中文:
 引理 whiskering_obj_obj_σ
-  条件: (F : C ⥤ D) (X : SimplicialObject C) {n : 自然数} (i : Fin (n + 1))
+  条件: (F : C ⥤ D) (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 1))
   证明: rfl
 -/
 lemma whiskering_obj_obj_σ (F : C ⥤ D) (X : SimplicialObject C) {n : Nat} (i : Fin (n + 1)) :
@@ -768,7 +768,7 @@ definition whiskering
 
 中文:
 定义 whiskering
-  签名: {n} (D : 类型) [Category* D]
+  签名: {n} (D : 类型) [范畴* D]
   定义体: whiskeringRight _ _ _
 
 Depends on / 依赖: whiskeringRight
@@ -870,7 +870,7 @@ abbreviation Truncated.sk
 
 中文:
 缩写 Truncated.sk
-  签名: (n : 自然数) [对任意 (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
+  签名: (n : 自然数) [对任意 (F : (单纯形范畴.Truncated n)ᵒᵖ ⥤ C),
   定义体: lan (SimplexCategory.Truncated.inclusion n).op
 -/
 protected abbrev Truncated.sk (n : Nat) [forall (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
@@ -888,7 +888,7 @@ abbreviation Truncated.cosk
 
 中文:
 缩写 Truncated.cosk
-  签名: (n : 自然数) [对任意 (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
+  签名: (n : 自然数) [对任意 (F : (单纯形范畴.Truncated n)ᵒᵖ ⥤ C),
   定义体: ran (SimplexCategory.Truncated.inclusion n).op
 -/
 protected abbrev Truncated.cosk (n : Nat) [forall (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
@@ -906,7 +906,7 @@ abbreviation sk
 
 中文:
 缩写 sk
-  签名: (n : 自然数) [对任意 (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
+  签名: (n : 自然数) [对任意 (F : (单纯形范畴.Truncated n)ᵒᵖ ⥤ C),
   定义体: truncation n ⋙ Truncated.sk n
 
 Depends on / 依赖: Truncated, Truncated.sk, truncation
@@ -925,7 +925,7 @@ abbreviation cosk
 
 中文:
 缩写 cosk
-  签名: (n : 自然数) [对任意 (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
+  签名: (n : 自然数) [对任意 (F : (单纯形范畴.Truncated n)ᵒᵖ ⥤ C),
   定义体: truncation n ⋙ Truncated.cosk n
 
 Depends on / 依赖: Truncated, Truncated.cosk, truncation
@@ -997,7 +997,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((sk n).obj X).IsLeftKanExtension ((skAdj n).unit.app _)
+  签名: ((sk n).obj X).是LeftKanExtension ((skAdj n).unit.app _)
   定义体: by
   dsimp [sk, skAdj]
   rw [lanAdjunction_unit]
@@ -1024,7 +1024,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((cosk n).obj X).IsRightKanExtension ((coskAdj n).counit.app _)
+  签名: ((cosk n).obj X).是RightKanExtension ((coskAdj n).counit.app _)
   定义体: by
   dsimp [cosk, coskAdj]
   rw [ranAdjunction_counit]
@@ -1056,7 +1056,7 @@ instance cosk_reflective
 
 中文:
 实例 cosk_reflective
-  签名: : IsIso (coskAdj (C := C) n).counit
+  签名: : 是同构 (coskAdj (C := C) n).counit
   定义体: reflective' (SimplexCategory.Truncated.inclusion n).op
 
 Depends on / 依赖: counit
@@ -1074,7 +1074,7 @@ instance sk_coreflective
 
 中文:
 实例 sk_coreflective
-  签名: : IsIso (skAdj (C := C) n).unit
+  签名: : 是同构 (skAdj (C := C) n).unit
   定义体: coreflective' (SimplexCategory.Truncated.inclusion n).op
 -/
 instance sk_coreflective : IsIso (skAdj (C := C) n).unit :=
@@ -1111,7 +1111,7 @@ instance cosk.full
 
 中文:
 实例 cosk.full
-  签名: : (Truncated.cosk (C := C) n).Full
+  签名: : (Truncated.cosk (C := C) n).满
   定义体: FullyFaithful.full (cosk.fullyFaithful _)
 
 Depends on / 依赖: FullyFaithful, FullyFaithful.full, cosk.fullyFaithful, fullyFaithful
@@ -1128,7 +1128,7 @@ instance cosk.faithful
 
 中文:
 实例 cosk.faithful
-  签名: : (Truncated.cosk (C := C) n).Faithful
+  签名: : (Truncated.cosk (C := C) n).忠实
   定义体: FullyFaithful.faithful (cosk.fullyFaithful _)
 
 Depends on / 依赖: Faithful
@@ -1146,7 +1146,7 @@ instance coskAdj.reflective
 
 中文:
 实例 coskAdj.reflective
-  签名: : Reflective (Truncated.cosk (C := C) n)
+  签名: : 反射 (Truncated.cosk (C := C) n)
   定义体: Reflective.mk (truncation _) (coskAdj _)
 -/
 noncomputable instance coskAdj.reflective : Reflective (Truncated.cosk (C := C) n) :=
@@ -1162,7 +1162,7 @@ definition sk.fullyFaithful
 
 中文:
 定义 sk.fullyFaithful
-  签名: : (Truncated.sk (C := C) n).FullyFaithful
+  签名: : (Truncated.sk (C := C) n).满忠实
   定义体: Adjunction.fullyFaithfulLOfIsIsoUnit (skAdj n)
 
 Depends on / 依赖: FullyFaithful
@@ -1180,7 +1180,7 @@ instance sk.full
 
 中文:
 实例 sk.full
-  签名: : (Truncated.sk (C := C) n).Full
+  签名: : (Truncated.sk (C := C) n).满
   定义体: FullyFaithful.full (sk.fullyFaithful _)
 
 Depends on / 依赖: FullyFaithful, FullyFaithful.full, fullyFaithful, sk.fullyFaithful
@@ -1197,7 +1197,7 @@ instance sk.faithful
 
 中文:
 实例 sk.faithful
-  签名: : (Truncated.sk (C := C) n).Faithful
+  签名: : (Truncated.sk (C := C) n).忠实
   定义体: FullyFaithful.faithful (sk.fullyFaithful _)
 
 Depends on / 依赖: Faithful
@@ -1215,7 +1215,7 @@ instance skAdj.coreflective
 
 中文:
 实例 skAdj.coreflective
-  签名: : Coreflective (Truncated.sk (C := C) n)
+  签名: : 余反射 (Truncated.sk (C := C) n)
   定义体: Coreflective.mk (truncation _) (skAdj _)
 -/
 noncomputable instance skAdj.coreflective : Coreflective (Truncated.sk (C := C) n) :=
@@ -1278,7 +1278,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Augmented C)
+  签名: 范畴 (Augmented C)
   定义体: inferInstanceAs Category (Comma _ _)
 
 Depends on / 依赖: Category
@@ -1398,7 +1398,7 @@ definition toArrow
 
 中文:
 定义 toArrow
-  签名: : Augmented C ⥤ Arrow C where
+  签名: : Augmented C ⥤ 箭头 C where
   定义体: { left := drop.obj X _⦋0⦌
       right := point.obj X
       hom := X.hom.app _ }
@@ -1468,7 +1468,7 @@ definition whiskeringObj
 
 中文:
 定义 whiskeringObj
-  签名: (D : 类型) [Category* D] (F : C ⥤ D)
+  签名: (D : 类型) [范畴* D] (F : C ⥤ D)
   定义体: { left := ((whiskering _ _).obj F).obj (drop.obj X)
       right := F.obj (point.obj X)
       hom := whiskerRight X.hom F ≫ (Functor.constComp _ _ _).hom }
@@ -1512,7 +1512,7 @@ definition whiskering
 
 中文:
 定义 whiskering
-  签名: (D : 类型u') [Category.{v'} D]
+  签名: (D : 类型u') [范畴.{v'} D]
   定义体: whiskeringObj _ _
   map η :=
     { app := fun A =>
@@ -1658,7 +1658,7 @@ definition augmentOfIsTerminal
 
 中文:
 定义 augmentOfIsTerminal
-  签名: (X : SimplicialObject C) {T : C} (hT : IsTerminal T)
+  签名: (X : SimplicialObject C) {T : C} (hT : 是终止 T)
   定义体: X
   right := T
   hom := { app _ := hT.from _ }
@@ -1704,7 +1704,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CosimplicialObject C)
+  签名: 范畴 (CosimplicialObject C)
   定义体: by
   dsimp only [CosimplicialObject]
   infer_instance
@@ -1735,8 +1735,8 @@ instance [HasLimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasLimits
-  签名: C] : HasLimits (CosimplicialObject C)
+实例 [有极限
+  签名: C] : 有极限 (CosimplicialObject C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasLimits C] : HasLimits (CosimplicialObject C) :=
@@ -1757,8 +1757,8 @@ instance [HasColimits
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimits
-  签名: C] : HasColimits (CosimplicialObject C)
+实例 [有余极限
+  签名: C] : 有余极限 (CosimplicialObject C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasColimits C] : HasColimits (CosimplicialObject C) :=
@@ -1800,7 +1800,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: {n} (i : Fin (n + 2))
+  签名: {n} (i : 有限集 (n + 2))
   定义体: X.map (SimplexCategory.δ i)
 
 Depends on / 依赖: SimplexCategory, X.map
@@ -1818,7 +1818,7 @@ definition σ
 
 中文:
 定义 σ
-  签名: {n} (i : Fin (n + 1))
+  签名: {n} (i : 有限集 (n + 1))
   定义体: X.map (SimplexCategory.σ i)
 
 Depends on / 依赖: SimplexCategory, X.map
@@ -1859,7 +1859,7 @@ theorem eqToIso_refl
 中文:
 定理 eqToIso_refl
   条件: {n : 自然数} (h : n = n)
-  结论: X.eqToIso h = Iso.refl _
+  结论: X.eqToIso h = 同构.refl _
   证明: by
   simp [eqToIso]
 
@@ -1884,7 +1884,7 @@ theorem δ_comp_δ
 
 中文:
 定理 δ_comp_δ
-  条件: {n} {i j : Fin (n + 2)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_δ H]
@@ -1913,7 +1913,7 @@ theorem δ_comp_δ'
 
 中文:
 定理 δ_comp_δ'
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : Fin.castSucc i < j)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : 有限集.castSucc i < j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_δ' H]
@@ -1942,7 +1942,7 @@ theorem δ_comp_δ''
 
 中文:
 定理 δ_comp_δ''
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : i <= 有限集.castSucc j)
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_δ'' H]
@@ -1971,7 +1971,7 @@ theorem δ_comp_δ_self
 
 中文:
 定理 δ_comp_δ_self
-  条件: {n} {i : Fin (n + 2)}
+  条件: {n} {i : 有限集 (n + 2)}
   证明: by
   dsimp [δ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_δ_self]
@@ -1998,7 +1998,7 @@ theorem δ_comp_δ_self'
 
 中文:
 定理 δ_comp_δ_self'
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = Fin.castSucc i)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : j = 有限集.castSucc i)
   证明: by
   subst H
   rw [δ_comp_δ_self]
@@ -2022,7 +2022,7 @@ theorem δ_comp_σ_of_le
 
 中文:
 定理 δ_comp_σ_of_le
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= Fin.castSucc j)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= 有限集.castSucc j)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_σ_of_le H]
@@ -2051,8 +2051,8 @@ theorem δ_comp_σ_self
 
 中文:
 定理 δ_comp_σ_self
-  条件: {n} {i : Fin (n + 1)}
-  结论: X.δ (Fin.castSucc i) ≫ X.σ i = 𝟙 _
+  条件: {n} {i : 有限集 (n + 1)}
+  结论: X.δ (有限集.castSucc i) ≫ X.σ i = 𝟙 _
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_σ_self, X.map_id]
@@ -2078,7 +2078,7 @@ theorem δ_comp_σ_self'
 
 中文:
 定理 δ_comp_σ_self'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = Fin.castSucc i)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = 有限集.castSucc i)
   证明: by
   subst H
   rw [δ_comp_σ_self]
@@ -2105,7 +2105,7 @@ theorem δ_comp_σ_succ
 
 中文:
 定理 δ_comp_σ_succ
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   结论: X.δ i.succ ≫ X.σ i = 𝟙 _
   证明: by
   dsimp [δ, σ]
@@ -2132,7 +2132,7 @@ theorem δ_comp_σ_succ'
 
 中文:
 定理 δ_comp_σ_succ'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.succ)
   证明: by
   subst H
   rw [δ_comp_σ_succ]
@@ -2158,7 +2158,7 @@ theorem δ_comp_σ_of_gt
 
 中文:
 定理 δ_comp_σ_of_gt
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : Fin.castSucc j < i)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : 有限集.castSucc j < i)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_σ_of_gt H]
@@ -2185,7 +2185,7 @@ theorem δ_comp_σ_of_gt'
 
 中文:
 定理 δ_comp_σ_of_gt'
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : j.succ < i)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, SimplexCategory.δ_comp_σ_of_gt' H]
@@ -2215,7 +2215,7 @@ theorem σ_comp_σ
 
 中文:
 定理 σ_comp_σ
-  条件: {n} {i j : Fin (n + 1)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
   证明: by
   dsimp [δ, σ]
   simp only [← X.map_comp, SimplexCategory.σ_comp_σ H]
@@ -2242,7 +2242,7 @@ theorem δ_naturality
 
 中文:
 定理 δ_naturality
-  条件: {X' X : CosimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : Fin (n + 2))
+  条件: {X' X : CosimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : 有限集 (n + 2))
   证明: f.naturality _
 
 @[reassoc (attr := simp)]
@@ -2264,7 +2264,7 @@ theorem σ_naturality
 
 中文:
 定理 σ_naturality
-  条件: {X' X : CosimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : Fin (n + 1))
+  条件: {X' X : CosimplicialObject C} (f : X ⟶ X') {n : 自然数} (i : 有限集 (n + 1))
   证明: f.naturality _
 
 Depends on / 依赖: f.naturality, naturality
@@ -2287,7 +2287,7 @@ definition whiskering
 
 中文:
 定义 whiskering
-  签名: (D : 类型) [Category* D]
+  签名: (D : 类型) [范畴* D]
   定义体: whiskeringRight _ _ _
 
 Depends on / 依赖: whiskeringRight
@@ -2351,7 +2351,7 @@ definition whiskering
 
 中文:
 定义 whiskering
-  签名: {n} (D : 类型) [Category* D]
+  签名: {n} (D : 类型) [范畴* D]
   定义体: whiskeringRight _ _ _
 
 Depends on / 依赖: whiskeringRight
@@ -2488,7 +2488,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Augmented C)
+  签名: 范畴 (Augmented C)
   定义体: inferInstanceAs Category (Comma _ _)
 
 Depends on / 依赖: Category
@@ -2578,7 +2578,7 @@ lemma w_app
 
 中文:
 引理 w_app
-  条件: {X Y : Augmented C} {η : X ⟶ Y} {n : SimplexCategory}
+  条件: {X Y : Augmented C} {η : X ⟶ Y} {n : 单纯形范畴}
   证明: NatTrans.congr_app η.w n
 
 Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app
@@ -2606,7 +2606,7 @@ definition toArrow
 
 中文:
 定义 toArrow
-  签名: : Augmented C ⥤ Arrow C where
+  签名: : Augmented C ⥤ 箭头 C where
   定义体: { left := point.obj X
       right := (drop.obj X) ^⦋0⦌
       hom := X.hom.app _ }
@@ -2652,7 +2652,7 @@ definition whiskeringObj
 
 中文:
 定义 whiskeringObj
-  签名: (D : 类型) [Category* D] (F : C ⥤ D)
+  签名: (D : 类型) [范畴* D] (F : C ⥤ D)
   定义体: { left := F.obj (point.obj X)
       right := ((whiskering _ _).obj F).obj (drop.obj X)
       hom := (Functor.constComp _ _ _).inv ≫ whiskerRight X.hom F }
@@ -2703,7 +2703,7 @@ definition whiskering
 
 中文:
 定义 whiskering
-  签名: (D : 类型u') [Category.{v'} D]
+  签名: (D : 类型u') [范畴.{v'} D]
   定义体: whiskeringObj _ _
   map η :=
     { app := fun A =>

@@ -51,7 +51,7 @@ theorem integrableOn_exp_Iic
 中文:
 定理 integrableOn_exp_Iic
   条件: (c : 实数)
-  结论: 整数egrableOn exp (Iic c)
+  结论: 整数egrableOn exp (左无界右闭区间 c)
   证明: by
   refine
     integrableOn_Iic_of_intervalIntegral_norm_bounded (exp c) c
@@ -82,7 +82,7 @@ theorem integrableOn_exp_neg_Ioi
 中文:
 定理 integrableOn_exp_neg_Ioi
   条件: (c : 实数)
-  结论: 整数egrableOn (fun (x : 实数) => exp (-x)) (Ioi c)
+  结论: 整数egrableOn (fun (x : 实数) => exp (-x)) (左开右无界区间 c)
   证明: Iff.mp integrableOn_Ici_iff_integrableOn_Ioi (integrableOn_exp_Iic (-c)).comp_neg_Ici
 
 Depends on / 依赖: Iff.mp, comp_neg_Ici, integrableOn_Ici_iff_integrableOn_Ioi, integrableOn_exp_Iic
@@ -107,7 +107,7 @@ theorem integral_exp_Iic
 中文:
 定理 integral_exp_Iic
   条件: (c : 实数)
-  结论: ∫ x : 实数 in Iic c, exp x = exp c
+  结论: ∫ x : 实数 in 左无界右闭区间 c, exp x = exp c
   证明: by
   refine
     tendsto_nhds_unique
@@ -134,7 +134,7 @@ theorem integral_exp_Iic_zero
 
 中文:
 定理 integral_exp_Iic_zero
-  结论: ∫ x : 实数 in Iic 0, exp x = 1
+  结论: ∫ x : 实数 in 左无界右闭区间 0, exp x = 1
   证明: exp_zero ▸ integral_exp_Iic 0
 
 Depends on / 依赖: exp_zero, integral_exp_Iic
@@ -155,7 +155,7 @@ theorem integral_exp_neg_Ioi
 中文:
 定理 integral_exp_neg_Ioi
   条件: (c : 实数)
-  结论: (∫ x : 实数 in Ioi c, exp (-x)) = exp (-c)
+  结论: (∫ x : 实数 in 左开右无界区间 c, exp (-x)) = exp (-c)
   证明: by
   simpa only [integral_comp_neg_Ioi] using integral_exp_Iic (-c)
 
@@ -175,7 +175,7 @@ theorem integral_exp_neg_Ioi_zero
 
 中文:
 定理 integral_exp_neg_Ioi_zero
-  结论: (∫ x : 实数 in Ioi 0, exp (-x)) = 1
+  结论: (∫ x : 实数 in 左开右无界区间 0, exp (-x)) = 1
   证明: by
   simpa only [neg_zero, exp_zero] using integral_exp_neg_Ioi 0
 
@@ -200,7 +200,7 @@ theorem integrableOn_exp_mul_complex_Ioi
 
 中文:
 定理 integrableOn_exp_mul_complex_Ioi
-  条件: {a : Complex} (ha : a.re < 0) (c : 实数)
+  条件: {a : 复形} (ha : a.re < 0) (c : 实数)
   证明: by
   refine (integrable_norm_iff ?_).mp ?_
   · apply Continuous.aestronglyMeasurable
@@ -232,7 +232,7 @@ theorem integrableOn_exp_mul_complex_Iic
 
 中文:
 定理 integrableOn_exp_mul_complex_Iic
-  条件: {a : Complex} (ha : 0 < a.re) (c : 实数)
+  条件: {a : 复形} (ha : 0 < a.re) (c : 实数)
   证明: by
   simpa using Iff.mpr integrableOn_Iic_iff_integrableOn_Iio
     (integrableOn_exp_mul_complex_Ioi (a := -a) (by simpa) (-c)).comp_neg_Iio
@@ -307,7 +307,7 @@ theorem integral_exp_mul_complex_Ioi
 
 中文:
 定理 integral_exp_mul_complex_Ioi
-  条件: {a : Complex} (ha : a.re < 0) (c : 实数)
+  条件: {a : 复形} (ha : a.re < 0) (c : 实数)
   证明: by
   refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Ioi c
     (integrableOn_exp_mul_complex_Ioi ha c) tendsto_id) ?_
@@ -339,7 +339,7 @@ theorem integral_exp_mul_complex_Iic
 
 中文:
 定理 integral_exp_mul_complex_Iic
-  条件: {a : Complex} (ha : 0 < a.re) (c : 实数)
+  条件: {a : 复形} (ha : 0 < a.re) (c : 实数)
   证明: by
   simpa [neg_mul, ← mul_neg, ← Complex.ofReal_neg,
     integral_comp_neg_Ioi (f := fun x : Real => Complex.exp (a * x))]
@@ -562,7 +562,7 @@ theorem not_integrableOn_Ioi_rpow
 中文:
 定理 not_integrableOn_Ioi_rpow
   条件: (s : 实数)
-  结论: ¬ 整数egrableOn (fun x => x ^ s) (Ioi (0 : 实数))
+  结论: ¬ 整数egrableOn (fun x => x ^ s) (左开右无界区间 (0 : 实数))
   证明: by
   intro h
   rcases le_or_gt s (-1) with hs | hs
@@ -593,9 +593,9 @@ theorem setIntegral_Ioi_zero_rpow
   proof: MeasureTheory.integral_undef (not_integrableOn_Ioi_rpow s)
 
 中文:
-定理 setIntegral_Ioi_zero_rpow
+定理 set整数egral_Ioi_zero_rpow
   条件: (s : 实数)
-  结论: ∫ x in Ioi (0 : 实数), x ^ s = 0
+  结论: ∫ x in 左开右无界区间 (0 : 实数), x ^ s = 0
   证明: MeasureTheory.integral_undef (not_integrableOn_Ioi_rpow s)
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.integral_undef, integral_undef, not_integrableOn_Ioi_rpow
@@ -652,7 +652,7 @@ theorem integrableOn_Ioi_norm_cpow_of_lt
 
 中文:
 定理 integrableOn_Ioi_norm_cpow_of_lt
-  条件: {a : Complex} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
+  条件: {a : 复形} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
   证明: by
   refine (integrableOn_Ioi_rpow_of_lt ha hc).congr_fun (fun x hx => ?_) measurableSet_Ioi
   rw [Complex.norm_cpow_eq_rpow_re_of_pos (hc.trans hx)]
@@ -677,7 +677,7 @@ refine (integrable_norm_iff ?_).mp integrableOn_Ioi_norm_cpow_of_lt ha hc
 
 中文:
 定理 integrableOn_Ioi_cpow_of_lt
-  条件: {a : Complex} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
+  条件: {a : 复形} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
   证明: by
 refine (integrable_norm_iff ?_).mp integrableOn_Ioi_norm_cpow_of_lt ha hc
   refine ContinuousOn.aestronglyMeasurable (fun t ht => ?_) measurableSet_Ioi
@@ -705,7 +705,7 @@ refine (integrableOn_Ioi_rpow_iff ht).mp h.congr_fun (fun a ha => ?_) measurable
 
 中文:
 定理 integrableOn_Ioi_norm_cpow_iff
-  条件: {s : Complex} {t : 实数} (ht : 0 < t)
+  条件: {s : 复形} {t : 实数} (ht : 0 < t)
   证明: by
   refine ⟨fun h => ?_, fun h => integrableOn_Ioi_norm_cpow_of_lt h ht⟩
 refine (integrableOn_Ioi_rpow_iff ht).mp h.congr_fun (fun a ha => ?_) measurableSet_Ioi
@@ -735,7 +735,7 @@ theorem integrableOn_Ioi_cpow_iff
 
 中文:
 定理 integrableOn_Ioi_cpow_iff
-  条件: {s : Complex} {t : 实数} (ht : 0 < t)
+  条件: {s : 复形} {t : 实数} (ht : 0 < t)
   证明: ⟨fun h => (integrableOn_Ioi_norm_cpow_iff ht).mp h.norm, fun h => integrableOn_Ioi_cpow_of_lt h ht⟩
 
 Depends on / 依赖: h.norm, integrableOn_Ioi_cpow_of_lt, integrableOn_Ioi_norm_cpow_iff
@@ -758,8 +758,8 @@ theorem integrableOn_Ioi_deriv_ofReal_cpow
   rw [Complex.deriv_ofReal_cpo
 
 中文:
-定理 integrableOn_Ioi_deriv_ofReal_cpow
-  条件: {s : Complex} {t : 实数} (ht : 0 < t) (hs : s.re < 0)
+定理 integrableOn_Ioi_deriv_of实数_cpow
+  条件: {s : 复形} {t : 实数} (ht : 0 < t) (hs : s.re < 0)
   证明: by
   have h : IntegrableOn (fun x : Real => s * x ^ (s - 1)) (Set.Ioi t) := by
     refine (integrableOn_Ioi_cpow_of_lt ?_ ht).const_mul _
@@ -793,8 +793,8 @@ theorem integrableOn_Ioi_deriv_norm_ofReal_cpow
     exact (int
 
 中文:
-定理 integrableOn_Ioi_deriv_norm_ofReal_cpow
-  条件: {s : Complex} {t : 实数} (ht : 0 < t) (hs : s.re <= 0)
+定理 integrableOn_Ioi_deriv_norm_of实数_cpow
+  条件: {s : 复形} {t : 实数} (ht : 0 < t) (hs : s.re <= 0)
   证明: by
   rw [integrableOn_congr_fun (fun x hx => by
     rw [deriv_norm_ofReal_cpow _ (ht.trans hx)]) measurableSet_Ioi]
@@ -833,7 +833,7 @@ theorem not_integrableOn_Ioi_cpow
 
 中文:
 定理 not_integrableOn_Ioi_cpow
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   intro h
   rcases le_or_gt s.re (-1) with hs | hs
@@ -868,9 +868,9 @@ theorem setIntegral_Ioi_zero_cpow
   proof: MeasureTheory.integral_undef (not_integrableOn_Ioi_cpow s)
 
 中文:
-定理 setIntegral_Ioi_zero_cpow
-  条件: (s : Complex)
-  结论: ∫ x in Ioi (0 : 实数), (x : Complex) ^ s = 0
+定理 set整数egral_Ioi_zero_cpow
+  条件: (s : 复形)
+  结论: ∫ x in 左开右无界区间 (0 : 实数), (x : 复形) ^ s = 0
   证明: MeasureTheory.integral_undef (not_integrableOn_Ioi_cpow s)
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.integral_undef, integral_undef, not_integrableOn_Ioi_cpow
@@ -895,7 +895,7 @@ theorem integral_Ioi_cpow_of_lt
 
 中文:
 定理 integral_Ioi_cpow_of_lt
-  条件: {a : Complex} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
+  条件: {a : 复形} (ha : a.re < -1) {c : 实数} (hc : 0 < c)
   证明: by
   refine
     tendsto_nhds_unique
@@ -944,7 +944,7 @@ theorem integrable_inv_one_add_sq
 
 中文:
 定理 integrable_inv_one_add_sq
-  结论: 整数egrable fun (x : 实数) => (1 + x ^ 2)⁻¹
+  结论: 可积 fun (x : 实数) => (1 + x ^ 2)⁻¹
   证明: by
   suffices Integrable fun (x : Real) => (1 + ‖x‖ ^ 2) ^ ((-2 : Real) / 2) by simpa [rpow_neg_one]
   exact integrable_rpow_neg_one_add_norm_sq (by simp)

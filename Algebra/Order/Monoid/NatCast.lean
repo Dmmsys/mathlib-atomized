@@ -29,7 +29,7 @@ lemma lt_add_one
 
 中文:
 引理 lt_add_one
-  结论: [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
+  结论: [幺 α] [加法零类 α] [偏序 α] [ZeroLEOne类 α]
   证明: lt_add_of_pos_right _ zero_lt_one
 
 Depends on / 依赖: lt_add_of_pos_right, zero_lt_one
@@ -48,7 +48,7 @@ lemma lt_one_add
 
 中文:
 引理 lt_one_add
-  结论: [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
+  结论: [幺 α] [加法零类 α] [偏序 α] [ZeroLEOne类 α]
   证明: lt_add_of_pos_left _ zero_lt_one
 
 Depends on / 依赖: lt_add_of_pos_left, zero_lt_one
@@ -71,7 +71,7 @@ lemma zero_le_two
 
 中文:
 引理 zero_le_two
-  条件: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
   证明: by
   rw [← one_add_one_eq_two]
   exact add_nonneg zero_le_one zero_le_one
@@ -95,7 +95,7 @@ lemma zero_le_three
 
 中文:
 引理 zero_le_three
-  条件: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
   证明: by
   rw [← two_add_one_eq_three]
   exact add_nonneg zero_le_two zero_le_one
@@ -119,7 +119,7 @@ lemma zero_le_four
 
 中文:
 引理 zero_le_four
-  条件: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
   证明: by
   rw [← three_add_one_eq_four]
   exact add_nonneg zero_le_three zero_le_one
@@ -143,7 +143,7 @@ lemma one_le_two
 
 中文:
 引理 one_le_two
-  条件: [LE α] [ZeroLEOneClass α] [AddLeftMono α]
+  条件: [LE α] [ZeroLEOne类 α] [AddLeftMono α]
   证明: calc (1 : α) = 1 + 0 := (add_zero 1).symm
      _ <= 1 + 1 := by gcongr; exact zero_le_one
      _ = 2 := one_add_one_eq_two
@@ -168,7 +168,7 @@ lemma one_le_two'
 
 中文:
 引理 one_le_two'
-  条件: [LE α] [ZeroLEOneClass α] [AddRightMono α]
+  条件: [LE α] [ZeroLEOne类 α] [AddRightMono α]
   证明: calc (1 : α) = 0 + 1 := (zero_add 1).symm
      _ <= 1 + 1 := by gcongr; exact zero_le_one
      _ = 2 := one_add_one_eq_two
@@ -306,7 +306,7 @@ instance ZeroLEOneClass.neZero.two
   body: ⟨zero_lt_two.ne'⟩
 
 中文:
-实例 ZeroLEOneClass.neZero.two
+实例 ZeroLEOne类.neZero.two
   签名: : NeZero (2 : α)
   定义体: ⟨zero_lt_two.ne'⟩
 
@@ -322,7 +322,7 @@ instance ZeroLEOneClass.neZero.three
   body: ⟨zero_lt_three.ne'⟩
 
 中文:
-实例 ZeroLEOneClass.neZero.three
+实例 ZeroLEOne类.neZero.three
   签名: : NeZero (3 : α)
   定义体: ⟨zero_lt_three.ne'⟩
 
@@ -338,7 +338,7 @@ instance ZeroLEOneClass.neZero.four
   body: ⟨zero_lt_four.ne'⟩
 
 中文:
-实例 ZeroLEOneClass.neZero.four
+实例 ZeroLEOne类.neZero.four
   签名: : NeZero (4 : α)
   定义体: ⟨zero_lt_four.ne'⟩
 

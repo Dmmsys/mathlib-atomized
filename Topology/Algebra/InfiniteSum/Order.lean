@@ -40,7 +40,7 @@ lemma hasProd_le_of_prod_le
 
 中文:
 引理 hasProd_le_of_prod_le
-  结论: [ClosedIicTopology α] [L.NeBot]
+  结论: [ClosedIic拓扑 α] [L.NeBot]
   证明: le_of_tendsto' hf h
 
 @[to_additive]
@@ -64,7 +64,7 @@ theorem le_hasProd_of_le_prod
 
 中文:
 定理 le_hasProd_of_le_prod
-  结论: [ClosedIciTopology α] [L.NeBot]
+  结论: [ClosedIci拓扑 α] [L.NeBot]
   证明: ge_of_tendsto' hf h
 
 @[to_additive]
@@ -86,7 +86,7 @@ theorem Multipliable.tprod_le_of_prod_range_le
 
 中文:
 定理 Multipliable.tprod_le_of_prod_range_le
-  结论: [ClosedIicTopology α] {f : 自然数 -> α}
+  结论: [ClosedIic拓扑 α] {f : 自然数 -> α}
   证明: le_of_tendsto' hf.hasProd.tendsto_prod_nat h
 -/
 protected theorem Multipliable.tprod_le_of_prod_range_le [ClosedIicTopology α] {f : Nat -> α}
@@ -114,7 +114,7 @@ theorem hasProd_le
 
 中文:
 定理 hasProd_le
-  条件: (h : 对任意 i, f i <= g i) (hf : HasProd f a₁ L) (hg : HasProd g a₂ L) [L.NeBot]
+  条件: (h : 对任意 i, f i <= g i) (hf : 有积类型 f a₁ L) (hg : 有积类型 g a₂ L) [L.NeBot]
   证明: le_of_tendsto_of_tendsto' hf hg fun _ => prod_le_prod' fun i _ => h i
 
 @[to_additive]
@@ -139,7 +139,7 @@ theorem hasProd_mono
 
 中文:
 定理 hasProd_mono
-  条件: (hf : HasProd f a₁ L) (hg : HasProd g a₂ L) (h : f <= g) [L.NeBot]
+  条件: (hf : 有积类型 f a₁ L) (hg : 有积类型 g a₂ L) (h : f <= g) [L.NeBot]
   结论: a₁ <= a₂
   证明: hasProd_le h hf hg
 
@@ -170,7 +170,7 @@ theorem hasProd_le_inj
 
 中文:
 定理 hasProd_le_inj
-  结论: {g : κ -> α} (e : ι -> κ) (he : Injective e)
+  结论: {g : κ -> α} (e : ι -> κ) (he : 单射 e)
   证明: by
   rw [← hasProd_extend_one he] at hf
   refine hasProd_le (fun c => ?_) hf hg
@@ -208,7 +208,7 @@ theorem Multipliable.tprod_le_tprod_of_inj
 
 中文:
 定理 Multipliable.tprod_le_tprod_of_inj
-  结论: {g : κ -> α} (e : ι -> κ) (he : Injective e)
+  结论: {g : κ -> α} (e : ι -> κ) (he : 单射 e)
   证明: hasProd_le_inj _ he hs h hf.hasProd hg.hasProd
 
 @[to_additive]
@@ -237,7 +237,7 @@ lemma Multipliable.tprod_subtype_le
 
 中文:
 引理 Multipliable.tprod_subtype_le
-  结论: {κ γ : 类型} [CommGroup γ] [PartialOrder γ]
+  结论: {κ γ : 类型} [交换群 γ] [偏序 γ]
   证明: by
   apply Multipliable.tprod_le_tprod_of_inj _
     (Subtype.coe_injective)
@@ -274,7 +274,7 @@ refine ge_of_tendsto hf .filter_mono L.le_atTop eventually_atTop.2 ?_
 
 中文:
 定理 prod_le_hasProd
-  结论: [L.NeBot] [L.LeAtTop] (s : Finset ι) (hs : 对任意 i, i ∉ s -> 1 <= f i)
+  结论: [L.NeBot] [L.LeAtTop] (s : 有限集 ι) (hs : 对任意 i, i ∉ s -> 1 <= f i)
   证明: by
 refine ge_of_tendsto hf .filter_mono L.le_atTop eventually_atTop.2 ?_
   exact ⟨s, fun _t hst => prod_le_prod_of_subset_of_one_le' hst fun i _ hbs => hs i hbs⟩
@@ -302,7 +302,7 @@ theorem isLUB_hasProd
 
 中文:
 定理 isLUB_hasProd
-  条件: (h : 对任意 i, 1 <= f i) (hf : HasProd f a)
+  条件: (h : 对任意 i, 1 <= f i) (hf : 有积类型 f a)
   证明: by
   exact isLUB_of_tendsto_atTop (Finset.prod_mono_set_of_one_le' h) hf
 
@@ -329,7 +329,7 @@ theorem le_hasProd
 
 中文:
 定理 le_hasProd
-  条件: [L.NeBot] [L.LeAtTop] (hf : HasProd f a L) (i : ι) (hb : 对任意 j, j != i -> 1 <= f j)
+  条件: [L.NeBot] [L.LeAtTop] (hf : 有积类型 f a L) (i : ι) (hb : 对任意 j, j != i -> 1 <= f j)
   证明: calc
     f i = ∏ i in {i}, f i := by rw [prod_singleton]
     _ <= a := prod_le_hasProd _ (by simpa) hf
@@ -362,7 +362,7 @@ theorem lt_hasProd
 
 中文:
 定理 lt_hasProd
-  结论: [L.NeBot] [L.LeAtTop] [MulRightStrictMono α] (hf : HasProd f a L) (i : ι)
+  结论: [L.NeBot] [L.LeAtTop] [MulRightStrictMono α] (hf : 有积类型 f a L) (i : ι)
   证明: by
   classical
   calc
@@ -396,7 +396,7 @@ theorem Multipliable.prod_le_tprod
 
 中文:
 定理 Multipliable.prod_le_tprod
-  结论: [L.NeBot] [L.LeAtTop] {f : ι -> α} (s : Finset ι)
+  结论: [L.NeBot] [L.LeAtTop] {f : ι -> α} (s : 有限集 ι)
   证明: prod_le_hasProd s hs hf.hasProd
 
 @[to_additive]
@@ -553,8 +553,8 @@ theorem HasProd.one_le
 @[to_additive]
 
 中文:
-定理 HasProd.one_le
-  条件: [L.NeBot] (h : 对任意 i, 1 <= g i) (ha : HasProd g a L)
+定理 有积类型.one_le
+  条件: [L.NeBot] (h : 对任意 i, 1 <= g i) (ha : 有积类型 g a L)
   结论: 1 <= a
   证明: hasProd_le h hasProd_one ha
 
@@ -578,8 +578,8 @@ theorem HasProd.le_one
 @[to_additive tsum_nonneg]
 
 中文:
-定理 HasProd.le_one
-  条件: [L.NeBot] (h : 对任意 i, g i <= 1) (ha : HasProd g a L)
+定理 有积类型.le_one
+  条件: [L.NeBot] (h : 对任意 i, g i <= 1) (ha : 有积类型 g a L)
   结论: a <= 1
   证明: hasProd_le h ha hasProd_one
 
@@ -687,7 +687,7 @@ theorem hasProd_one_iff_of_one_le
 
 中文:
 定理 hasProd_one_iff_of_one_le
-  结论: {ι α : 类型} {L : SummationFilter ι} [CommMonoid α]
+  结论: {ι α : 类型} {L : SummationFilter ι} [交换幺半群 α]
   证明: by
   refine ⟨fun hf' => ?_, ?_⟩
   · ext i
@@ -732,7 +732,7 @@ theorem hasProd_lt
 
 中文:
 定理 hasProd_lt
-  结论: [L.NeBot] [L.LeAtTop] (h : f <= g) (hi : f i < g i) (hf : HasProd f a₁ L)
+  结论: [L.NeBot] [L.LeAtTop] (h : f <= g) (hi : f i < g i) (hf : 有积类型 f a₁ L)
   证明: by
   classical
   have : update f i 1 <= update g i 1 := update_le_update_iff.mpr ⟨rfl.le, fun i _ => h i⟩
@@ -765,7 +765,7 @@ theorem hasProd_strict_mono
 
 中文:
 定理 hasProd_strict_mono
-  条件: (hf : HasProd f a₁) (hg : HasProd g a₂) (h : f < g)
+  条件: (hf : 有积类型 f a₁) (hg : 有积类型 g a₂) (h : f < g)
   结论: a₁ < a₂
   证明: let ⟨hle, _i, hi⟩ := Pi.lt_def.mp h
   hasProd_lt hle hi hf hg
@@ -866,8 +866,8 @@ theorem HasProd.nonneg
   proof: ge_of_tendsto' h fun s => s.prod_nonneg fun i _ => hf i
 
 中文:
-定理 HasProd.nonneg
-  条件: [L.NeBot] {f : ι -> α} (hf : 对任意 i, 0 <= f i) {a : α} (h : HasProd f a L)
+定理 有积类型.nonneg
+  条件: [L.NeBot] {f : ι -> α} (hf : 对任意 i, 0 <= f i) {a : α} (h : 有积类型 f a L)
   证明: ge_of_tendsto' h fun s => s.prod_nonneg fun i _ => hf i
 
 Depends on / 依赖: ge_of_tendsto, prod_nonneg, s.prod_nonneg
@@ -931,7 +931,7 @@ theorem le_hasProd'
 
 中文:
 定理 le_hasProd'
-  条件: (hf : HasProd f a) (i : ι)
+  条件: (hf : 有积类型 f a) (i : ι)
   结论: f i <= a
   证明: le_hasProd hf i fun _ _ => one_le
 
@@ -978,7 +978,7 @@ theorem hasProd_one_iff
 
 中文:
 定理 hasProd_one_iff
-  结论: HasProd f 1 ↔ 对任意 x, f x = 1
+  结论: 有积类型 f 1 ↔ 对任意 x, f x = 1
   证明: (hasProd_one_iff_of_one_le fun _ => one_le).trans funext_iff
 
 @[to_additive]
@@ -1052,8 +1052,8 @@ theorem isLUB_hasProd'
 
 中文:
 定理 isLUB_hasProd'
-  条件: (hf : HasProd f a)
-  结论: IsLUB (Set.range fun s => ∏ i in s, f i) a
+  条件: (hf : 有积类型 f a)
+  结论: IsLUB (集合.range fun s => ∏ i in s, f i) a
   证明: by
   exact isLUB_of_tendsto_atTop (Finset.prod_mono_set' f) hf
 
@@ -1088,7 +1088,7 @@ theorem hasProd_of_isLUB_of_one_le
 
 中文:
 定理 hasProd_of_isLUB_of_one_le
-  结论: [CommMonoid α] [LinearOrder α] [IsOrderedMonoid α]
+  结论: [交换幺半群 α] [线性序 α] [是Ordered幺半群 α]
   证明: tendsto_atTop_isLUB (Finset.prod_mono_set_of_one_le' h) hf
 
 @[to_additive]
@@ -1114,7 +1114,7 @@ theorem hasProd_of_isGLB_of_le_one
 
 中文:
 定理 hasProd_of_isGLB_of_le_one
-  结论: [CommMonoid α] [LinearOrder α] [IsOrderedMonoid α]
+  结论: [交换幺半群 α] [线性序 α] [是Ordered幺半群 α]
   证明: tendsto_atTop_isGLB (Finset.prod_anti_set_of_le_one' h₀) hf
 
 @[to_additive]
@@ -1140,7 +1140,7 @@ theorem hasProd_of_isLUB
 
 中文:
 定理 hasProd_of_isLUB
-  结论: [CommMonoid α] [LinearOrder α]
+  结论: [交换幺半群 α] [线性序 α]
   证明: tendsto_atTop_isLUB (Finset.prod_mono_set' f) hf
 
 @[to_additive]
@@ -1168,7 +1168,7 @@ theorem multipliable_mabs_iff
 
 中文:
 定理 multipliable_mabs_iff
-  结论: [CommGroup α] [LinearOrder α] [IsOrderedMonoid α]
+  结论: [交换群 α] [线性序 α] [是Ordered幺半群 α]
   证明: let s := { x | 1 <= f x }
   have h1 : forall x : s, mabs (f x) = f x := fun x => mabs_of_one_le x.2
   have h2 : forall x : ↑sᶜ, mabs (f x) = (f x)⁻¹ := fun x => mabs_of_lt_one (not_le.1 x.2)
@@ -1206,8 +1206,8 @@ theorem Finite.of_summable_const
 
 
 中文:
-定理 Finite.of_summable_const
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 有限.of_summable_const
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: by
   have H : forall s : Finset ι, #s • b <= ∑' _ : ι, b := fun s => by
     simpa using sum_le_hasSum s (fun a _ => hb.le) hf.hasSum
@@ -1239,8 +1239,8 @@ theorem Set.Finite.of_summable_const
   proof: finite_univ_iff.2 .of_summable_const hb hf
 
 中文:
-定理 Set.Finite.of_summable_const
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+定理 集合.有限.of_summable_const
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: finite_univ_iff.2 .of_summable_const hb hf
 
 Depends on / 依赖: finite_univ_iff, of_summable_const
@@ -1313,7 +1313,7 @@ tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hf.tendsto_atTop_zero
 
 中文:
 定理 Summable.tendsto_atTop_of_pos
-  结论: [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [域 α] [线性序 α] [是StrictOrdered环 α]
   证明: inv_inv f ▸ Filter.Tendsto.inv_tendsto_nhdsGT_zero
 tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hf.tendsto_atTop_zero
       Eventually.of_forall fun _ => inv_pos.2 (hf' _)

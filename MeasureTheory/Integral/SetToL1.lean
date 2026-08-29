@@ -146,7 +146,7 @@ definition setToL1S
 
 中文:
 定义 setToL1S
-  签名: (T : Set α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
+  签名: (T : 集合 α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
   定义体: (toSimpleFunc f).setToSimpleFunc T
 
 Depends on / 依赖: setToSimpleFunc, toSimpleFunc
@@ -166,7 +166,7 @@ theorem setToL1S_eq_setToSimpleFunc
 
 中文:
 定理 setToL1S_eq_setToSimpleFunc
-  条件: (T : Set α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
+  条件: (T : 集合 α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
   证明: rfl
 
 @[simp]
@@ -188,7 +188,7 @@ theorem setToL1S_zero_left
 中文:
 定理 setToL1S_zero_left
   条件: (f : α ->₁ₛ[μ] E)
-  结论: setToL1S (0 : Set α -> E ->L[实数] F) f = 0
+  结论: setToL1S (0 : 集合 α -> E ->L[实数] F) f = 0
   证明: SimpleFunc.setToSimpleFunc_zero _
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.setToSimpleFunc_zero, setToSimpleFunc_zero
@@ -206,7 +206,7 @@ theorem setToL1S_zero_left'
 
 中文:
 定理 setToL1S_zero_left'
-  结论: {T : Set α -> E ->L[实数] F}
+  结论: {T : 集合 α -> E ->L[实数] F}
   证明: SimpleFunc.setToSimpleFunc_zero' h_zero _ (SimpleFunc.integrable f)
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_zero, h_zero, integrable, setToSimpleFunc_zero
@@ -225,7 +225,7 @@ theorem setToL1S_congr
 
 中文:
 定理 setToL1S_congr
-  结论: (T : Set α -> E ->L[实数] F) (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: (T : 集合 α -> E ->L[实数] F) (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable f) h
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_congr, h_add, h_zero, integrable, setToSimpleFunc_congr
@@ -245,7 +245,7 @@ theorem setToL1S_congr_left
 
 中文:
 定理 setToL1S_congr_left
-  结论: (T T' : Set α -> E ->L[实数] F)
+  结论: (T T' : 集合 α -> E ->L[实数] F)
   证明: SimpleFunc.setToSimpleFunc_congr_left T T' h (simpleFunc.toSimpleFunc f) (SimpleFunc.integrable f)
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_congr_left, integrable, setToSimpleFunc_congr_left, simpleFunc, simpleFunc.toSimpleFunc, toSimpleFunc
@@ -269,7 +269,7 @@ theorem setToL1S_congr_measure
 
 中文:
 定理 setToL1S_congr_measure
-  结论: {μ' : Measure α} (T : Set α -> E ->L[实数] F)
+  结论: {μ' : 测度 α} (T : 集合 α -> E ->L[实数] F)
   证明: by
   refine SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable f) ?_
   refine (toSimpleFunc_eq_toFun f).trans ?_
@@ -298,7 +298,7 @@ theorem setToL1S_add_left
 
 中文:
 定理 setToL1S_add_left
-  条件: (T T' : Set α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
+  条件: (T T' : 集合 α -> E ->L[实数] F) (f : α ->₁ₛ[μ] E)
   证明: SimpleFunc.setToSimpleFunc_add_left T T'
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.setToSimpleFunc_add_left, setToSimpleFunc_add_left
@@ -317,7 +317,7 @@ theorem setToL1S_add_left'
 
 中文:
 定理 setToL1S_add_left'
-  结论: (T T' T'' : Set α -> E ->L[实数] F)
+  结论: (T T' T'' : 集合 α -> E ->L[实数] F)
   证明: SimpleFunc.setToSimpleFunc_add_left' T T' T'' h_add (SimpleFunc.integrable f)
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_add_left, h_add, integrable, setToSimpleFunc_add_left
@@ -337,7 +337,7 @@ theorem setToL1S_smul_left
 
 中文:
 定理 setToL1S_smul_left
-  条件: (T : Set α -> E ->L[实数] F) (c : 实数) (f : α ->₁ₛ[μ] E)
+  条件: (T : 集合 α -> E ->L[实数] F) (c : 实数) (f : α ->₁ₛ[μ] E)
   证明: SimpleFunc.setToSimpleFunc_smul_left T c _
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.setToSimpleFunc_smul_left, setToSimpleFunc_smul_left
@@ -356,7 +356,7 @@ theorem setToL1S_smul_left'
 
 中文:
 定理 setToL1S_smul_left'
-  结论: (T T' : Set α -> E ->L[实数] F) (c : 实数)
+  结论: (T T' : 集合 α -> E ->L[实数] F) (c : 实数)
   证明: SimpleFunc.setToSimpleFunc_smul_left' T T' c h_smul (SimpleFunc.integrable f)
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_smul_left, h_smul, integrable, setToSimpleFunc_smul_left
@@ -382,7 +382,7 @@ theorem setToL1S_add
 
 中文:
 定理 setToL1S_add
-  结论: (T : Set α -> E ->L[实数] F) (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: (T : 集合 α -> E ->L[实数] F) (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: by
   simp_rw [setToL1S]
   rw [← SimpleFunc.setToSimpleFunc_add T h_add (SimpleFunc.integrable f)
@@ -418,7 +418,7 @@ theorem setToL1S_neg
 
 中文:
 定理 setToL1S_neg
-  结论: {T : Set α -> E ->L[实数] F} (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: {T : 集合 α -> E ->L[实数] F} (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: by
   simp_rw [setToL1S]
   have : simpleFunc.toSimpleFunc (-f) =ᵐ[μ] ⇑(-simpleFunc.toSimpleFunc f) :=
@@ -447,7 +447,7 @@ theorem setToL1S_sub
 
 中文:
 定理 setToL1S_sub
-  结论: {T : Set α -> E ->L[实数] F} (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: {T : 集合 α -> E ->L[实数] F} (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: by
   rw [sub_eq_add_neg]; rw [setToL1S_add T h_zero h_add]; rw [setToL1S_neg h_zero h_add]; rw [sub_eq_add_neg]
 
@@ -472,7 +472,7 @@ theorem setToL1S_smul_real
 
 中文:
 定理 setToL1S_smul_real
-  结论: (T : Set α -> E ->L[实数] F)
+  结论: (T : 集合 α -> E ->L[实数] F)
   证明: by
   simp_rw [setToL1S]
   rw [← SimpleFunc.setToSimpleFunc_smul_real T h_add c (SimpleFunc.integrable f)]
@@ -533,7 +533,7 @@ theorem norm_setToL1S_le
 
 中文:
 定理 norm_setToL1S_le
-  结论: (T : Set α -> E ->L[实数] F) {C : 实数}
+  结论: (T : 集合 α -> E ->L[实数] F) {C : 实数}
   证明: by
   rw [setToL1S]; rw [norm_eq_sum_mul f]
   exact
@@ -565,7 +565,7 @@ theorem setToL1S_indicatorConst
 
 中文:
 定理 setToL1S_indicatorConst
-  结论: {T : Set α -> E ->L[实数] F} {s : Set α}
+  结论: {T : 集合 α -> E ->L[实数] F} {s : 集合 α}
   证明: by
   have h_empty : T ∅ = 0 := h_zero _ MeasurableSet.empty measure_empty
   rw [setToL1S_eq_setToSimpleFunc]
@@ -595,7 +595,7 @@ theorem setToL1S_const
 
 中文:
 定理 setToL1S_const
-  结论: [IsFiniteMeasure μ] {T : Set α -> E ->L[实数] F}
+  结论: [是有限测度 μ] {T : 集合 α -> E ->L[实数] F}
   证明: setToL1S_indicatorConst h_zero h_add MeasurableSet.univ (measure_lt_top _ _) x
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, h_add, h_zero, measure_lt_top, setToL1S_indicatorConst
@@ -622,7 +622,7 @@ theorem setToL1S_mono_left
 
 中文:
 定理 setToL1S_mono_left
-  结论: {T T' : Set α -> E ->L[实数] G''} (hTT' : 对任意 s x, T s x <= T' s x)
+  结论: {T T' : 集合 α -> E ->L[实数] G''} (hTT' : 对任意 s x, T s x <= T' s x)
   证明: SimpleFunc.setToSimpleFunc_mono_left T T' hTT' _
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.setToSimpleFunc_mono_left, setToSimpleFunc_mono_left
@@ -643,7 +643,7 @@ omit [IsOrderedAddMonoid G''] in
 
 中文:
 定理 setToL1S_mono_left'
-  结论: {T T' : Set α -> E ->L[实数] G''}
+  结论: {T T' : 集合 α -> E ->L[实数] G''}
   证明: SimpleFunc.setToSimpleFunc_mono_left' T T' hTT' _ (SimpleFunc.integrable f)
 
 omit [IsOrderedAddMonoid G''] in
@@ -673,7 +673,7 @@ theorem setToL1S_nonneg
 
 中文:
 定理 setToL1S_nonneg
-  结论: (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: by
   simp_rw [setToL1S]
   obtain ⟨f', hf', hff'⟩ := exists_simpleFunc_nonneg_ae_eq hf
@@ -710,7 +710,7 @@ theorem setToL1S_mono
 
 中文:
 定理 setToL1S_mono
-  结论: (h_zero : 对任意 s, MeasurableSet s -> μ s = 0 -> T s = 0)
+  结论: (h_zero : 对任意 s, 可测集 s -> μ s = 0 -> T s = 0)
   证明: by
   rw [← sub_nonneg] at hfg ⊢
   rw [← setToL1S_sub h_zero h_add]
@@ -744,7 +744,7 @@ definition setToL1SCLM'
 
 中文:
 定义 setToL1SCLM'
-  签名: {T : Set α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  签名: {T : 集合 α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   定义体: LinearMap.mkContinuous
     ⟨⟨setToL1S T, setToL1S_add T (fun _ => hT.eq_zero_of_measure_zero) hT.1⟩,
       setToL1S_smul T (fun _ => hT.eq_zero_of_measure_zero) hT.1 h_smul⟩
@@ -772,7 +772,7 @@ definition setToL1SCLM
 
 中文:
 定义 setToL1SCLM
-  签名: {T : Set α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  签名: {T : 集合 α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   定义体: LinearMap.mkContinuous
     ⟨⟨setToL1S T, setToL1S_add T (fun _ => hT.eq_zero_of_measure_zero) hT.1⟩,
       setToL1S_smul_real T (fun _ => hT.eq_zero_of_measure_zero) hT.1⟩
@@ -801,7 +801,7 @@ theorem setToL1SCLM_zero_left
 
 中文:
 定理 setToL1SCLM_zero_left
-  结论: (hT : DominatedFinMeasAdditive μ (0 : Set α -> E ->L[实数] F) C)
+  结论: (hT : DominatedFinMeasAdditive μ (0 : 集合 α -> E ->L[实数] F) C)
   证明: setToL1S_zero_left _
 
 Depends on / 依赖: setToL1S_zero_left
@@ -880,7 +880,7 @@ theorem setToL1SCLM_congr_measure
 
 中文:
 定理 setToL1SCLM_congr_measure
-  结论: {μ' : Measure α} (hT : DominatedFinMeasAdditive μ T C)
+  结论: {μ' : 测度 α} (hT : DominatedFinMeasAdditive μ T C)
   证明: setToL1S_congr_measure T (fun _ => hT.eq_zero_of_measure_zero) hT.1 hμ _ _ h
 
 Depends on / 依赖: eq_zero_of_measure_zero, hT.eq_zero_of_measure_zero, setToL1S_congr_measure
@@ -981,7 +981,7 @@ theorem norm_setToL1SCLM_le
 
 中文:
 定理 norm_setToL1SCLM_le
-  结论: {T : Set α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  结论: {T : 集合 α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   证明: LinearMap.mkContinuous_norm_le _ hC _
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, mkContinuous_norm_le
@@ -1000,7 +1000,7 @@ theorem norm_setToL1SCLM_le'
 
 中文:
 定理 norm_setToL1SCLM_le'
-  条件: {T : Set α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  条件: {T : 集合 α -> E ->L[实数] F} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   证明: LinearMap.mkContinuous_norm_le' _ _
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, mkContinuous_norm_le
@@ -1019,7 +1019,7 @@ theorem setToL1SCLM_const
 
 中文:
 定理 setToL1SCLM_const
-  结论: [IsFiniteMeasure μ] {T : Set α -> E ->L[实数] F} {C : 实数}
+  结论: [是有限测度 μ] {T : 集合 α -> E ->L[实数] F} {C : 实数}
   证明: setToL1S_const (fun _ => hT.eq_zero_of_measure_zero) hT.1 x
 
 Depends on / 依赖: eq_zero_of_measure_zero, hT.eq_zero_of_measure_zero, setToL1S_const
@@ -1046,7 +1046,7 @@ theorem setToL1SCLM_mono_left
 
 中文:
 定理 setToL1SCLM_mono_left
-  结论: {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: SimpleFunc.setToSimpleFunc_mono_left T T' hTT' _
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.setToSimpleFunc_mono_left, setToSimpleFunc_mono_left
@@ -1069,7 +1069,7 @@ omit [IsOrderedAddMonoid G'] in
 
 中文:
 定理 setToL1SCLM_mono_left'
-  结论: {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: SimpleFunc.setToSimpleFunc_mono_left' T T' hTT' _ (SimpleFunc.integrable f)
 
 omit [IsOrderedAddMonoid G'] in
@@ -1093,7 +1093,7 @@ theorem setToL1SCLM_nonneg
 
 中文:
 定理 setToL1SCLM_nonneg
-  结论: {T : Set α -> G' ->L[实数] G''} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  结论: {T : 集合 α -> G' ->L[实数] G''} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   证明: setToL1S_nonneg (fun _ => hT.eq_zero_of_measure_zero) hT.1 hT_nonneg hf
 
 Depends on / 依赖: eq_zero_of_measure_zero, hT.eq_zero_of_measure_zero, hT_nonneg, setToL1S_nonneg
@@ -1113,7 +1113,7 @@ theorem setToL1SCLM_mono
 
 中文:
 定理 setToL1SCLM_mono
-  结论: {T : Set α -> G' ->L[实数] G''} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
+  结论: {T : 集合 α -> G' ->L[实数] G''} {C : 实数} (hT : DominatedFinMeasAdditive μ T C)
   证明: setToL1S_mono (fun _ => hT.eq_zero_of_measure_zero) hT.1 hT_nonneg hfg
 
 Depends on / 依赖: eq_zero_of_measure_zero, hT.eq_zero_of_measure_zero, hT_nonneg, setToL1S_mono
@@ -1353,7 +1353,7 @@ theorem setToL1_zero_left
 
 中文:
 定理 setToL1_zero_left
-  结论: (hT : DominatedFinMeasAdditive μ (0 : Set α -> E ->L[实数] F) C)
+  结论: (hT : DominatedFinMeasAdditive μ (0 : 集合 α -> E ->L[实数] F) C)
   证明: setToL1_unique hT (A := 0) (by simp) f
 
 Depends on / 依赖: setToL1_unique
@@ -1396,7 +1396,7 @@ theorem setToL1_congr_left
 
 中文:
 定理 setToL1_congr_left
-  结论: (T T' : Set α -> E ->L[实数] F) {C C' : 实数}
+  结论: (T T' : 集合 α -> E ->L[实数] F) {C C' : 实数}
   证明: by
   apply setToL1_unique hT (A := setToL1 hT') _ f
   intro f
@@ -1430,7 +1430,7 @@ theorem setToL1_congr_left'
 
 中文:
 定理 setToL1_congr_left'
-  结论: (T T' : Set α -> E ->L[实数] F) {C C' : 实数}
+  结论: (T T' : 集合 α -> E ->L[实数] F) {C C' : 实数}
   证明: by
   apply setToL1_unique hT (A := setToL1 hT') _ f
   intro f
@@ -1588,7 +1588,7 @@ theorem setToL1_simpleFunc_indicatorConst
 
 中文:
 定理 setToL1_simpleFunc_indicatorConst
-  结论: (hT : DominatedFinMeasAdditive μ T C) {s : Set α}
+  结论: (hT : DominatedFinMeasAdditive μ T C) {s : 集合 α}
   证明: by
   rw [setToL1_eq_setToL1SCLM]
   exact setToL1S_indicatorConst (fun s => hT.eq_zero_of_measure_zero) hT.1 hs hμs x
@@ -1613,7 +1613,7 @@ theorem setToL1_indicatorConstLp
 
 中文:
 定理 setToL1_indicatorConstLp
-  结论: (hT : DominatedFinMeasAdditive μ T C) {s : Set α}
+  结论: (hT : DominatedFinMeasAdditive μ T C) {s : 集合 α}
   证明: by
   rw [← Lp.simpleFunc.coe_indicatorConst hs hμs x]
   exact setToL1_simpleFunc_indicatorConst hT hs hμs.lt_top x
@@ -1636,7 +1636,7 @@ theorem setToL1_const
 
 中文:
 定理 setToL1_const
-  条件: [IsFiniteMeasure μ] (hT : DominatedFinMeasAdditive μ T C) (x : E)
+  条件: [是有限测度 μ] (hT : DominatedFinMeasAdditive μ T C) (x : E)
   证明: setToL1_indicatorConstLp hT MeasurableSet.univ (measure_ne_top _ _) x
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, measure_ne_top, setToL1_indicatorConstLp
@@ -1668,7 +1668,7 @@ theorem setToL1_mono_left'
 
 中文:
 定理 setToL1_mono_left'
-  结论: [OrderClosedTopology G''] {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: [OrderClosed拓扑 G''] {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: by
   induction f using Lp.induction (hp_ne_top := one_ne_top) with
   | @indicatorConst c s hs hμs =>
@@ -1702,7 +1702,7 @@ theorem setToL1_mono_left
 
 中文:
 定理 setToL1_mono_left
-  结论: [OrderClosedTopology G''] {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: [OrderClosed拓扑 G''] {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: setToL1_mono_left' hT hT' (fun s _ _ x => hTT' s x) f
 
 Depends on / 依赖: setToL1_mono_left
@@ -1728,7 +1728,7 @@ theorem setToL1_nonneg
 
 中文:
 定理 setToL1_nonneg
-  结论: [ClosedIciTopology G''] {T : Set α -> G' ->L[实数] G''} {C : 实数}
+  结论: [ClosedIci拓扑 G''] {T : 集合 α -> G' ->L[实数] G''} {C : 实数}
   证明: by
   suffices forall f : { g : α ->₁[μ] G' // 0 <= g }, 0 <= setToL1 hT f from
     this (⟨f, hf⟩ : { g : α ->₁[μ] G' // 0 <= g })
@@ -1768,7 +1768,7 @@ theorem setToL1_mono
 
 中文:
 定理 setToL1_mono
-  结论: [ClosedIciTopology G''] [IsOrderedAddMonoid G']
+  结论: [ClosedIci拓扑 G''] [是OrderedAdd幺半群 G']
   证明: by
   rw [← sub_nonneg] at hfg ⊢
   rw [← (setToL1 hT).map_sub]
@@ -1917,7 +1917,7 @@ theorem norm_setToL1_le'
 中文:
 定理 norm_setToL1_le'
   条件: (hT : DominatedFinMeasAdditive μ T C)
-  结论: ‖setToL1 hT‖ <= max C 0
+  结论: ‖setToL1 hT‖ <= 最大值 C 0
   证明: ContinuousLinearMap.opNorm_le_bound _ (le_max_right _ _) (norm_setToL1_le_mul_norm' hT)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, le_max_right, norm_setToL1_le_mul_norm, opNorm_le_bound
@@ -2011,7 +2011,7 @@ theorem setToFun_eq
 
 中文:
 定理 setToFun_eq
-  结论: [hF : CompleteSpace F]
+  结论: [hF : 完备空间 F]
   证明: by
   simp [setToFun, hF, hf]
 
@@ -2033,7 +2033,7 @@ theorem L1.setToFun_eq_setToL1
 
 中文:
 定理 L1.setToFun_eq_setToL1
-  结论: [CompleteSpace F]
+  结论: [完备空间 F]
   证明: by
   rw [setToFun_eq hT (L1.integrable_coeFn f)]; rw [Integrable.toL1_coeFn]
 
@@ -2057,7 +2057,7 @@ theorem setToFun_undef
 
 中文:
 定理 setToFun_undef
-  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : ¬整数egrable f μ)
+  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : ¬可积 f μ)
   证明: by
   by_cases hF : CompleteSpace F
   · simp [setToFun, hF, hf]
@@ -2348,7 +2348,7 @@ theorem setToFun_zero_left
 
 中文:
 定理 setToFun_zero_left
-  条件: {hT : DominatedFinMeasAdditive μ (0 : Set α -> E ->L[实数] F) C}
+  条件: {hT : DominatedFinMeasAdditive μ (0 : 集合 α -> E ->L[实数] F) C}
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp [setToFun, hF]
@@ -2412,7 +2412,7 @@ theorem setToFun_add
 
 中文:
 定理 setToFun_add
-  结论: (hT : DominatedFinMeasAdditive μ T C) (hf : 整数egrable f μ)
+  结论: (hT : DominatedFinMeasAdditive μ T C) (hf : 可积 f μ)
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp [setToFun, hF]
@@ -2445,7 +2445,7 @@ theorem setToFun_finsetSum'
 
 中文:
 定理 setToFun_finsetSum'
-  结论: (hT : DominatedFinMeasAdditive μ T C) {ι} (s : Finset ι)
+  结论: (hT : DominatedFinMeasAdditive μ T C) {ι} (s : 有限集 ι)
   证明: by
   classical
   revert hf
@@ -2489,7 +2489,7 @@ theorem setToFun_finsetSum
 
 中文:
 定理 setToFun_finsetSum
-  结论: (hT : DominatedFinMeasAdditive μ T C) {ι} (s : Finset ι) {f : ι -> α -> E}
+  结论: (hT : DominatedFinMeasAdditive μ T C) {ι} (s : 有限集 ι) {f : ι -> α -> E}
   证明: by
   convert! setToFun_finsetSum' hT s hf with a; simp
 
@@ -2575,7 +2575,7 @@ theorem setToFun_sub
 
 中文:
 定理 setToFun_sub
-  结论: (hT : DominatedFinMeasAdditive μ T C) (hf : 整数egrable f μ)
+  结论: (hT : DominatedFinMeasAdditive μ T C) (hf : 可积 f μ)
   证明: by
   rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [setToFun_add hT hf hg.neg]; rw [setToFun_neg hT g]
 
@@ -2603,7 +2603,7 @@ theorem setToFun_smul
 
 中文:
 定理 setToFun_smul
-  结论: [NormedDivisionRing 𝕜] [Module 𝕜 E] [NormSMulClass 𝕜 E]
+  结论: [NormedDivision环 𝕜] [模 𝕜 E] [NormSMul类 𝕜 E]
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp [setToFun, hF]
@@ -2720,7 +2720,7 @@ theorem setToFun_toL1
 
 中文:
 定理 setToFun_toL1
-  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 整数egrable f μ)
+  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 可积 f μ)
   证明: setToFun_congr_ae hT hf.coeFn_toL1
 
 Depends on / 依赖: coeFn_toL1, hf.coeFn_toL1, setToFun_congr_ae
@@ -2742,7 +2742,7 @@ theorem setToFun_indicator_const
 
 中文:
 定理 setToFun_indicator_const
-  结论: [CompleteSpace F] (hT : DominatedFinMeasAdditive μ T C) {s : Set α}
+  结论: [完备空间 F] (hT : DominatedFinMeasAdditive μ T C) {s : 集合 α}
   证明: by
   rw [setToFun_congr_ae hT (@indicatorConstLp_coeFn _ _ _ 1 _ _ _ hs hμs x).symm]
   rw [L1.setToFun_eq_setToL1 hT]
@@ -2770,7 +2770,7 @@ theorem setToFun_const
 
 中文:
 定理 setToFun_const
-  结论: [CompleteSpace F] [IsFiniteMeasure μ]
+  结论: [完备空间 F] [是有限测度 μ]
   证明: by
   have : (fun _ : α => x) = Set.indicator univ fun _ => x := (indicator_univ _).symm
   rw [this]
@@ -2800,7 +2800,7 @@ theorem setToFun_simpleFunc
 
 中文:
 定理 setToFun_simpleFunc
-  结论: [CompleteSpace F] (hT : DominatedFinMeasAdditive μ T C)
+  结论: [完备空间 F] (hT : DominatedFinMeasAdditive μ T C)
   证明: by
   have h'f : MemLp f 1 μ := memLp_one_iff_integrable.mpr hf
   let g := f.toLp h'f
@@ -2832,7 +2832,7 @@ theorem setToFun_simpleFunc_eq_setToSimpleFunc
 
 中文:
 定理 setToFun_simpleFunc_eq_setToSimpleFunc
-  结论: [CompleteSpace F]
+  结论: [完备空间 F]
   证明: by
   rw [setToFun_simpleFunc hT f hf]
   rfl
@@ -2867,7 +2867,7 @@ theorem setToFun_mono_left'
 
 中文:
 定理 setToFun_mono_left'
-  结论: [OrderClosedTopology G''] {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: [OrderClosed拓扑 G''] {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: by
   by_cases hG'' : CompleteSpace G''; swap
   · simp [setToFun, hG'']
@@ -2897,7 +2897,7 @@ theorem setToFun_mono_left
 
 中文:
 定理 setToFun_mono_left
-  结论: [OrderClosedTopology G''] {T T' : Set α -> E ->L[实数] G''} {C C' : 实数}
+  结论: [OrderClosed拓扑 G''] {T T' : 集合 α -> E ->L[实数] G''} {C C' : 实数}
   证明: setToFun_mono_left' hT hT' (fun s _ _ x => hTT' s x) f
 
 Depends on / 依赖: setToFun_mono_left
@@ -2923,7 +2923,7 @@ theorem setToFun_nonneg
 
 中文:
 定理 setToFun_nonneg
-  结论: [ClosedIciTopology G''] {T : Set α -> G' ->L[实数] G''} {C : 实数}
+  结论: [ClosedIci拓扑 G''] {T : 集合 α -> G' ->L[实数] G''} {C : 实数}
   证明: by
   by_cases hG'' : CompleteSpace G''; swap
   · simp [setToFun, hG'']
@@ -2959,7 +2959,7 @@ theorem setToFun_mono
 
 中文:
 定理 setToFun_mono
-  结论: [ClosedIciTopology G''] [IsOrderedAddMonoid G']
+  结论: [ClosedIci拓扑 G''] [是OrderedAdd幺半群 G']
   证明: by
   rw [← sub_nonneg]; rw [← setToFun_sub hT hg hf]
   refine setToFun_nonneg hT hT_nonneg (hfg.mono fun a ha => ?_)
@@ -3241,7 +3241,7 @@ theorem continuous_L1_toL1
 
 中文:
 定理 continuous_L1_toL1
-  条件: {μ' : Measure α} (c' : 实数>=0∞) (hc' : c' != ∞) (hμ'_le : μ' <= c' • μ)
+  条件: {μ' : 测度 α} (c' : 实数>=0∞) (hc' : c' != ∞) (hμ'_le : μ' <= c' • μ)
   证明: by
   by_cases hc'0 : c' = 0
   · have hμ'0 : μ' = 0 := by rw [← Measure.nonpos_iff_eq_zero']; refine hμ'_le.trans ?_; simp [hc'0]
@@ -3308,7 +3308,7 @@ theorem setToFun_congr_measure_of_integrable
 
 中文:
 定理 setToFun_congr_measure_of_integrable
-  结论: {μ' : Measure α} (c' : 实数>=0∞) (hc' : c' != ∞)
+  结论: {μ' : 测度 α} (c' : 实数>=0∞) (hc' : c' != ∞)
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp [setToFun, hF]
@@ -3366,7 +3366,7 @@ theorem setToFun_congr_measure
 
 中文:
 定理 setToFun_congr_measure
-  结论: {μ' : Measure α} (c c' : 实数>=0∞) (hc : c != ∞) (hc' : c' != ∞)
+  结论: {μ' : 测度 α} (c c' : 实数>=0∞) (hc : c != ∞) (hc' : c' != ∞)
   证明: by
   by_cases hf : Integrable f μ
   · exact setToFun_congr_measure_of_integrable c' hc' hμ'_le hT hT' f hf
@@ -3402,7 +3402,7 @@ theorem setToFun_congr_measure_of_add_right
 
 中文:
 定理 setToFun_congr_measure_of_add_right
-  结论: {μ' : Measure α}
+  结论: {μ' : 测度 α}
   证明: by
   refine setToFun_congr_measure_of_integrable 1 one_ne_top ?_ hT_add hT f hf
   rw [one_smul]
@@ -3433,7 +3433,7 @@ theorem setToFun_congr_measure_of_add_left
 
 中文:
 定理 setToFun_congr_measure_of_add_left
-  结论: {μ' : Measure α}
+  结论: {μ' : 测度 α}
   证明: by
   refine setToFun_congr_measure_of_integrable 1 one_ne_top ?_ hT_add hT f hf
   rw [one_smul]
@@ -3464,7 +3464,7 @@ theorem setToFun_add_measure
 
 中文:
 定理 setToFun_add_measure
-  结论: {ν : Measure α} (hTμ : DominatedFinMeasAdditive μ T C)
+  结论: {ν : 测度 α} (hTμ : DominatedFinMeasAdditive μ T C)
   证明: have hTμ_add : DominatedFinMeasAdditive (μ + ν) T (max C 0) :=
     (hTμ.of_le (le_max_left C 0)).add_measure_right μ ν (le_max_right C 0)
   have hTν_add : DominatedFinMeasAdditive (μ + ν) T' (max C' 0) :=
@@ -3500,7 +3500,7 @@ theorem setToFun_sub_measure
 
 中文:
 定理 setToFun_sub_measure
-  结论: {ν : Measure α} (hTμ : DominatedFinMeasAdditive μ T C)
+  结论: {ν : 测度 α} (hTμ : DominatedFinMeasAdditive μ T C)
   证明: by
   simp [sub_eq_add_neg, setToFun_add_measure hTμ hTν.neg hμ hν, setToFun_neg' hTν]
 
@@ -3528,7 +3528,7 @@ theorem setToFun_finsetSum_measure
 
 中文:
 定理 setToFun_finsetSum_measure
-  结论: {ι} {s : Finset ι} (hs : s.Nonempty)
+  结论: {ι} {s : 有限集 ι} (hs : s.非空)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton i => simp
@@ -3776,7 +3776,7 @@ theorem norm_setToFun_le
 
 中文:
 定理 norm_setToFun_le
-  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 整数egrable f μ) (hC : 0 <= C)
+  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 可积 f μ) (hC : 0 <= C)
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp only [setToFun, hF, ↓reduceDIte, norm_zero]
@@ -3809,7 +3809,7 @@ theorem norm_setToFun_le'
 
 中文:
 定理 norm_setToFun_le'
-  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 整数egrable f μ)
+  条件: (hT : DominatedFinMeasAdditive μ T C) (hf : 可积 f μ)
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp only [setToFun, hF, ↓reduceDIte, norm_zero]
@@ -3886,7 +3886,7 @@ theorem norm_setToFun_le_toReal
   apply (norm_setToFun_le hT hf hC).
 
 中文:
-定理 norm_setToFun_le_toReal
+定理 norm_setToFun_le_to实数
   条件: (hT : DominatedFinMeasAdditive μ T C) (hC : 0 <= C)
   证明: by
   by_cases hF : CompleteSpace F; swap
@@ -4106,7 +4106,7 @@ theorem setToFun_tsum
 
 中文:
 定理 setToFun_tsum
-  结论: [CompleteSpace E] (hT : DominatedFinMeasAdditive μ T C)
+  结论: [完备空间 E] (hT : DominatedFinMeasAdditive μ T C)
   证明: by
   by_cases hF : CompleteSpace F; swap
   · simp [setToFun, hF]
@@ -4200,7 +4200,7 @@ theorem _root_.measurableSet_integrable
 
 中文:
 定理 _root_.measurableSet_integrable
-  结论: {β : 类型} {mβ : MeasurableSpace β} [SFinite μ]
+  结论: {β : 类型} {mβ : 可测空间 β} [SFinite μ]
   证明: by
   simp_rw [Integrable, hf.of_uncurry_left.aestronglyMeasurable, true_and]
   exact measurableSet_lt (Measurable.lintegral_prod_right hf.enorm) measurable_const
@@ -4231,7 +4231,7 @@ theorem StronglyMeasurable.setToFun_prod_right
 
 中文:
 定理 StronglyMeasurable.setToFun_prod_right
-  结论: {β : 类型} {mβ : MeasurableSpace β} [SFinite μ]
+  结论: {β : 类型} {mβ : 可测空间 β} [SFinite μ]
   证明: by
   classical
   by_cases hF : CompleteSpace F; swap;

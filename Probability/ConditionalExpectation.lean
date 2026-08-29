@@ -53,7 +53,7 @@ theorem condExp_indep_eq
 
 中文:
 定理 condExp_indep_eq
-  结论: (hle₁ : m₁ <= m) (hle₂ : m₂ <= m) [SigmaFinite (μ.trim hle₂)]
+  结论: (hle₁ : m₁ <= m) (hle₂ : m₂ <= m) [σ有限 (μ.trim hle₂)]
   证明: by
   by_cases hfint : Integrable f μ
   swap; · rw [condExp_of_not_integrable hfint, integral_undef hfint]; rfl

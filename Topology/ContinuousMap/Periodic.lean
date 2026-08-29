@@ -40,7 +40,7 @@ theorem periodic_tsum_comp_add_zsmul
 
 中文:
 定理 periodic_tsum_comp_add_zsmul
-  结论: [AddCommGroup X] [ContinuousAdd X] [AddCommMonoid Y]
+  结论: [加法交换群 X] [连续加法 X] [加法交换幺半群 Y]
   证明: by
   intro x
   by_cases h : Summable fun n : Int => f.comp (ContinuousMap.addRight (n • p))

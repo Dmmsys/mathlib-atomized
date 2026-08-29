@@ -47,8 +47,8 @@ structure HeytingHom
     - map_himp' : forall a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
 
 中文:
-结构 HeytingHom
-  参数: (α β : 类型) [HeytingAlgebra α] [HeytingAlgebra β]
+结构 Heyting态射
+  参数: (α β : 类型) [Heyting代数 α] [Heyting代数 β]
   公理与运算 (2 个):
     - map_bot' : toFun ⊥ = ⊥
     - map_himp' : 对任意 a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
@@ -71,8 +71,8 @@ structure CoheytingHom
     - map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
 
 中文:
-结构 CoheytingHom
-  参数: (α β : 类型) [CoheytingAlgebra α] [CoheytingAlgebra β]
+结构 余heyting态射
+  参数: (α β : 类型) [余heyting代数 α] [余heyting代数 β]
   公理与运算 (2 个):
     - map_top' : toFun ⊤ = ⊤
     - map_sdiff' : 对任意 a b, toFun (a \ b) = toFun a \ toFun b
@@ -95,8 +95,8 @@ structure BiheytingHom
     - map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
 
 中文:
-结构 BiheytingHom
-  参数: (α β : 类型) [BiheytingAlgebra α] [BiheytingAlgebra β]
+结构 Biheyting态射
+  参数: (α β : 类型) [Biheyting代数 α] [Biheyting代数 β]
   公理与运算 (2 个):
     - map_himp' : 对任意 a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
     - map_sdiff' : 对任意 a b, toFun (a \ b) = toFun a \ toFun b
@@ -120,9 +120,9 @@ class HeytingHomClass
     - map_himp((f : F)) : forall a b, f (a ⇨ b) = f a ⇨ f b
 
 中文:
-类 HeytingHomClass
-  参数: (F α β : 类型) [HeytingAlgebra α] [HeytingAlgebra β] [FunLike F α β]
-  继承: LatticeHomClass F α β
+类 Heyting态射类
+  参数: (F α β : 类型) [Heyting代数 α] [Heyting代数 β] [函数状 F α β]
+  继承: 格态射类 F α β
   公理与运算 (2 个):
     - map_bot((f : F)) : f ⊥ = ⊥
     - map_himp((f : F)) : 对任意 a b, f (a ⇨ b) = f a ⇨ f b
@@ -146,9 +146,9 @@ class CoheytingHomClass
     - map_sdiff((f : F)) : forall a b, f (a \ b) = f a \ f b
 
 中文:
-类 CoheytingHomClass
-  参数: (F α β : 类型) [CoheytingAlgebra α] [CoheytingAlgebra β] [FunLike F α β]
-  继承: LatticeHomClass F α β
+类 余heyting态射类
+  参数: (F α β : 类型) [余heyting代数 α] [余heyting代数 β] [函数状 F α β]
+  继承: 格态射类 F α β
   公理与运算 (2 个):
     - map_top((f : F)) : f ⊤ = ⊤
     - map_sdiff((f : F)) : 对任意 a b, f (a \ b) = f a \ f b
@@ -173,9 +173,9 @@ class BiheytingHomClass
     - map_sdiff((f : F)) : forall a b, f (a \ b) = f a \ f b
 
 中文:
-类 BiheytingHomClass
-  参数: (F α β : 类型) [BiheytingAlgebra α] [BiheytingAlgebra β] [FunLike F α β]
-  继承: LatticeHomClass F α β
+类 Biheyting态射类
+  参数: (F α β : 类型) [Biheyting代数 α] [Biheyting代数 β] [函数状 F α β]
+  继承: 格态射类 F α β
   公理与运算 (2 个):
     - map_himp((f : F)) : 对任意 a b, f (a ⇨ b) = f a ⇨ f b
     - map_sdiff((f : F)) : 对任意 a b, f (a \ b) = f a \ f b
@@ -280,8 +280,8 @@ instance BoundedLatticeHomClass.toBiheytingHomClass
     map_sdiff := fun f a b => by rw [sdiff_eq, sdiff_eq, map_inf, (isCompl_compl.map _).compl_eq] }
 
 中文:
-实例 BoundedLatticeHomClass.toBiheytingHomClass
-  签名: [布尔eanAlgebra α] [布尔eanAlgebra β]
+实例 有界格态射类.toBiheytingHomClass
+  签名: [布尔代数 α] [布尔代数 β]
   定义体: { ‹BoundedLatticeHomClass F α β› with
     map_himp := fun f a b => by rw [himp_eq, himp_eq, map_sup, (isCompl_compl.map _).compl_eq]
     map_sdiff := fun f a b => by rw [sdiff_eq, sdiff_eq, map_inf, (isCompl_compl.map _).compl_eq] }
@@ -412,8 +412,8 @@ instance [HeytingAlgebra
       map_himp' := map_himp f }⟩
 
 中文:
-实例 [HeytingAlgebra
-  签名: α] [HeytingAlgebra β] [HeytingHomClass F α β] : CoeTC F (HeytingHom α β)
+实例 [Heyting代数
+  签名: α] [Heyting代数 β] [Heyting态射类 F α β] : CoeTC F (Heyting态射 α β)
   定义体: ⟨fun f =>
     { toFun := f
       map_sup' := map_sup f
@@ -445,8 +445,8 @@ instance [CoheytingAlgebra
       map_sdiff' := map_sdiff f }⟩
 
 中文:
-实例 [CoheytingAlgebra
-  签名: α] [CoheytingAlgebra β] [CoheytingHomClass F α β] :
+实例 [余heyting代数
+  签名: α] [余heyting代数 β] [余heyting态射类 F α β] :
   定义体: ⟨fun f =>
     { toFun := f
       map_sup' := map_sup f
@@ -479,8 +479,8 @@ instance [BiheytingAlgebra
       map_sdiff' := map_sdiff f }⟩
 
 中文:
-实例 [BiheytingAlgebra
-  签名: α] [BiheytingAlgebra β] [BiheytingHomClass F α β] :
+实例 [Biheyting代数
+  签名: α] [Biheyting代数 β] [Biheyting态射类 F α β] :
   定义体: ⟨fun f =>
     { toFun := f
       map_sup' := map_sup f
@@ -514,7 +514,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (HeytingHom α β) α β where
+  签名: : 函数状 (Heyting态射 α β) α β where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
 
@@ -537,7 +537,7 @@ instance instHeytingHomClass
 
 中文:
 实例 instHeytingHomClass
-  签名: : HeytingHomClass (HeytingHom α β) α β where
+  签名: : Heyting态射类 (Heyting态射 α β) α β where
   定义体: f.map_sup'
   map_inf f := f.map_inf'
   map_bot f := f.map_bot'
@@ -564,7 +564,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : HeytingHom α β}
+  条件: {f : Heyting态射 α β}
   结论: f.toFun = ⇑f
   证明: rfl
 
@@ -587,7 +587,7 @@ theorem toFun_eq_coe_aux
 
 中文:
 定理 toFun_eq_coe_aux
-  条件: {f : HeytingHom α β}
+  条件: {f : Heyting态射 α β}
   结论: (↑f.toLatticeHom) = ⇑f
   证明: rfl
 
@@ -608,7 +608,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : HeytingHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : Heyting态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -633,7 +633,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -661,7 +661,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -679,7 +679,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -704,7 +704,7 @@ definition id
 
 中文:
 定义 id
-  签名: : HeytingHom α α
+  签名: : Heyting态射 α α
   定义体: { BotHom.id _ with
     toLatticeHom := LatticeHom.id _
     map_himp' := fun _ _ => rfl }
@@ -727,7 +727,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(HeytingHom.id α) = id
+  结论: ⇑(Heyting态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(HeytingHom.id α) = id :=
@@ -748,7 +748,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: HeytingHom.id α a = a
+  结论: Heyting态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : HeytingHom.id α a = a :=
@@ -764,7 +764,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HeytingHom α α)
+  签名: 可居 (Heyting态射 α α)
   定义体: ⟨HeytingHom.id _⟩
 
 Depends on / 依赖: HeytingHom, HeytingHom.id
@@ -782,7 +782,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (HeytingHom α β)
+  签名: 偏序 (Heyting态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -803,7 +803,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : HeytingHom β γ) (g : HeytingHom α β)
+  签名: (f : Heyting态射 β γ) (g : Heyting态射 α β)
   定义体: { f.toLatticeHom.comp g.toLatticeHom with
     toFun := f ∘ g
     map_bot' := by simp
@@ -833,7 +833,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : HeytingHom β γ) (g : HeytingHom α β)
+  条件: (f : Heyting态射 β γ) (g : Heyting态射 α β)
   结论: ⇑(f.comp g) = f ∘ g
   证明: rfl
 
@@ -856,7 +856,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : HeytingHom β γ) (g : HeytingHom α β) (a : α)
+  条件: (f : Heyting态射 β γ) (g : Heyting态射 α β) (a : α)
   结论: f.comp g a = f (g a)
   证明: rfl
 
@@ -878,7 +878,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : HeytingHom γ δ) (g : HeytingHom β γ) (h : HeytingHom α β)
+  条件: (f : Heyting态射 γ δ) (g : Heyting态射 β γ) (h : Heyting态射 α β)
   证明: rfl
 
 @[simp]
@@ -901,8 +901,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : HeytingHom α β)
-  结论: f.comp (HeytingHom.id α) = f
+  条件: (f : Heyting态射 α β)
+  结论: f.comp (Heyting态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -924,8 +924,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : HeytingHom α β)
-  结论: (HeytingHom.id β).comp f = f
+  条件: (f : Heyting态射 α β)
+  结论: (Heyting态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -947,7 +947,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: (hf : Surjective f)
+  条件: (hf : 满射 f)
   结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
 
@@ -970,7 +970,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: (hg : Injective g)
+  条件: (hg : 单射 g)
   结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
   证明: ⟨fun h => HeytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
@@ -996,7 +996,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CoheytingHom α β) α β
+  签名: 函数状 (余heyting态射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
 
@@ -1019,7 +1019,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoheytingHomClass (CoheytingHom α β) α β
+  签名: 余heyting态射类 (余heyting态射 α β) α β
   定义体: f.map_sup'
   map_inf f := f.map_inf'
   map_top f := f.map_top'
@@ -1046,7 +1046,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : CoheytingHom α β}
+  条件: {f : 余heyting态射 α β}
   结论: f.toFun = (f : α -> β)
   证明: rfl
 
@@ -1069,7 +1069,7 @@ theorem toFun_eq_coe_aux
 
 中文:
 定理 toFun_eq_coe_aux
-  条件: {f : CoheytingHom α β}
+  条件: {f : 余heyting态射 α β}
   结论: (↑f.toLatticeHom) = ⇑f
   证明: rfl
 
@@ -1090,7 +1090,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : CoheytingHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 余heyting态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -1115,7 +1115,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -1143,7 +1143,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -1161,7 +1161,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -1186,7 +1186,7 @@ definition id
 
 中文:
 定义 id
-  签名: : CoheytingHom α α
+  签名: : 余heyting态射 α α
   定义体: { TopHom.id _ with
     toLatticeHom := LatticeHom.id _
     map_sdiff' := fun _ _ => rfl }
@@ -1209,7 +1209,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(CoheytingHom.id α) = id
+  结论: ⇑(余heyting态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(CoheytingHom.id α) = id :=
@@ -1230,7 +1230,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: CoheytingHom.id α a = a
+  结论: 余heyting态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : CoheytingHom.id α a = a :=
@@ -1246,7 +1246,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CoheytingHom α α)
+  签名: 可居 (余heyting态射 α α)
   定义体: ⟨CoheytingHom.id _⟩
 
 Depends on / 依赖: CoheytingHom, CoheytingHom.id
@@ -1264,7 +1264,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (CoheytingHom α β)
+  签名: 偏序 (余heyting态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -1285,7 +1285,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : CoheytingHom β γ) (g : CoheytingHom α β)
+  签名: (f : 余heyting态射 β γ) (g : 余heyting态射 α β)
   定义体: { f.toLatticeHom.comp g.toLatticeHom with
     toFun := f ∘ g
     map_top' := by simp
@@ -1315,7 +1315,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : CoheytingHom β γ) (g : CoheytingHom α β)
+  条件: (f : 余heyting态射 β γ) (g : 余heyting态射 α β)
   结论: ⇑(f.comp g) = f ∘ g
   证明: rfl
 
@@ -1338,7 +1338,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : CoheytingHom β γ) (g : CoheytingHom α β) (a : α)
+  条件: (f : 余heyting态射 β γ) (g : 余heyting态射 α β) (a : α)
   结论: f.comp g a = f (g a)
   证明: rfl
 
@@ -1360,7 +1360,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : CoheytingHom γ δ) (g : CoheytingHom β γ) (h : CoheytingHom α β)
+  条件: (f : 余heyting态射 γ δ) (g : 余heyting态射 β γ) (h : 余heyting态射 α β)
   证明: rfl
 
 @[simp]
@@ -1383,8 +1383,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : CoheytingHom α β)
-  结论: f.comp (CoheytingHom.id α) = f
+  条件: (f : 余heyting态射 α β)
+  结论: f.comp (余heyting态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1406,8 +1406,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : CoheytingHom α β)
-  结论: (CoheytingHom.id β).comp f = f
+  条件: (f : 余heyting态射 α β)
+  结论: (余heyting态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1429,7 +1429,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: (hf : Surjective f)
+  条件: (hf : 满射 f)
   结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
 
@@ -1452,7 +1452,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: (hg : Injective g)
+  条件: (hg : 单射 g)
   结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
   证明: ⟨fun h => CoheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
@@ -1478,7 +1478,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (BiheytingHom α β) α β
+  签名: 函数状 (Biheyting态射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
 
@@ -1501,7 +1501,7 @@ instance :
 
 中文:
 实例 :
-  签名: BiheytingHomClass (BiheytingHom α β) α β
+  签名: Biheyting态射类 (Biheyting态射 α β) α β
   定义体: f.map_sup'
   map_inf f := f.map_inf'
   map_himp f := f.map_himp'
@@ -1528,7 +1528,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : BiheytingHom α β}
+  条件: {f : Biheyting态射 α β}
   结论: f.toFun = (f : α -> β)
   证明: rfl
 
@@ -1551,7 +1551,7 @@ theorem toFun_eq_coe_aux
 
 中文:
 定理 toFun_eq_coe_aux
-  条件: {f : BiheytingHom α β}
+  条件: {f : Biheyting态射 α β}
   结论: (↑f.toLatticeHom) = ⇑f
   证明: rfl
 
@@ -1572,7 +1572,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : BiheytingHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : Biheyting态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -1597,7 +1597,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -1627,7 +1627,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -1645,7 +1645,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -1668,7 +1668,7 @@ definition id
 
 中文:
 定义 id
-  签名: : BiheytingHom α α
+  签名: : Biheyting态射 α α
   定义体: { HeytingHom.id _, CoheytingHom.id _ with toLatticeHom := LatticeHom.id _ }
 
 @[simp, norm_cast]
@@ -1687,7 +1687,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(BiheytingHom.id α) = id
+  结论: ⇑(Biheyting态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(BiheytingHom.id α) = id :=
@@ -1708,7 +1708,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: BiheytingHom.id α a = a
+  结论: Biheyting态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : BiheytingHom.id α a = a :=
@@ -1724,7 +1724,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (BiheytingHom α α)
+  签名: 可居 (Biheyting态射 α α)
   定义体: ⟨BiheytingHom.id _⟩
 
 Depends on / 依赖: BiheytingHom, BiheytingHom.id
@@ -1742,7 +1742,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (BiheytingHom α β)
+  签名: 偏序 (Biheyting态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -1763,7 +1763,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : BiheytingHom β γ) (g : BiheytingHom α β)
+  签名: (f : Biheyting态射 β γ) (g : Biheyting态射 α β)
   定义体: { f.toLatticeHom.comp g.toLatticeHom with
     toFun := f ∘ g
     map_himp' := fun a b => by simp
@@ -1793,7 +1793,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : BiheytingHom β γ) (g : BiheytingHom α β)
+  条件: (f : Biheyting态射 β γ) (g : Biheyting态射 α β)
   结论: ⇑(f.comp g) = f ∘ g
   证明: rfl
 
@@ -1816,7 +1816,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : BiheytingHom β γ) (g : BiheytingHom α β) (a : α)
+  条件: (f : Biheyting态射 β γ) (g : Biheyting态射 α β) (a : α)
   结论: f.comp g a = f (g a)
   证明: rfl
 
@@ -1838,7 +1838,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : BiheytingHom γ δ) (g : BiheytingHom β γ) (h : BiheytingHom α β)
+  条件: (f : Biheyting态射 γ δ) (g : Biheyting态射 β γ) (h : Biheyting态射 α β)
   证明: rfl
 
 @[simp]
@@ -1861,8 +1861,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : BiheytingHom α β)
-  结论: f.comp (BiheytingHom.id α) = f
+  条件: (f : Biheyting态射 α β)
+  结论: f.comp (Biheyting态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1884,8 +1884,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : BiheytingHom α β)
-  结论: (BiheytingHom.id β).comp f = f
+  条件: (f : Biheyting态射 α β)
+  结论: (Biheyting态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1907,7 +1907,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: (hf : Surjective f)
+  条件: (hf : 满射 f)
   结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
 
@@ -1930,7 +1930,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: (hg : Injective g)
+  条件: (hg : 单射 g)
   结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
   证明: ⟨fun h => BiheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 

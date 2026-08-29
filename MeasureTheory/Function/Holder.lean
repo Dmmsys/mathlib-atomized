@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: HSMul (Lp 𝕜 p μ) (Lp E q μ) (Lp E r μ)
+  签名: 异质标量乘法 (Lp 𝕜 p μ) (Lp E q μ) (Lp E r μ)
   定义体: (Lp.memLp g).smul (Lp.memLp f)
 
 Depends on / 依赖: Lp.memLp
@@ -753,7 +753,7 @@ lemma smul_assoc
 
 中文:
 引理 smul_assoc
-  结论: [IsScalarTower 𝕜' 𝕜 E]
+  结论: [标量塔 𝕜' 𝕜 E]
   证明: by
   simp only [smul_def, ← MemLp.toLp_const_smul]
   apply MemLp.toLp_congr
@@ -782,7 +782,7 @@ lemma smul_comm
 
 中文:
 引理 smul_comm
-  结论: [SMulCommClass 𝕜' 𝕜 E]
+  结论: [标量交换类 𝕜' 𝕜 E]
   证明: by
   simp only [smul_def, ← MemLp.toLp_const_smul]
   apply MemLp.toLp_congr

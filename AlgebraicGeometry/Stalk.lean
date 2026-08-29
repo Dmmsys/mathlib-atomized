@@ -41,7 +41,7 @@ definition IsAffineOpen.fromSpecStalk
   body: Spec.map (X.presheaf.germ _ x hxU) ≫ hU.fromSpec
 
 中文:
-定义 IsAffineOpen.fromSpecStalk
+定义 是仿射开集.fromSpecStalk
   定义体: Spec.map (X.presheaf.germ _ x hxU) ≫ hU.fromSpec
 
 Depends on / 依赖: Spec.map, X.presheaf.germ, fromSpec, hU.fromSpec, presheaf
@@ -65,7 +65,7 @@ theorem IsAffineOpen.fromSpecStalk_eq
     rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Pr
 
 中文:
-定理 IsAffineOpen.fromSpecStalk_eq
+定理 是仿射开集.fromSpecStalk_eq
   条件: (x : X) (hxU : x in U) (hxV : x in V)
   证明: by
   obtain ⟨U', h₁, h₂, h₃ : U' <= U ⊓ V⟩ :=
@@ -98,8 +98,8 @@ definition Scheme.fromSpecStalk
 @[simps over] noncomputable
 
 中文:
-定义 Scheme.fromSpecStalk
-  签名: (X : Scheme) (x : X)
+定义 概形.fromSpecStalk
+  签名: (X : 概形) (x : X)
   定义体: (isAffineOpen_opensRange (X.affineCover.f (X.affineCover.idx x))).fromSpecStalk
     (X.affineCover.covers x)
 
@@ -128,7 +128,7 @@ theorem IsAffineOpen.fromSpecStalk_eq_fromSpecStalk
   proof: fromSpecStalk_eq ..
 
 中文:
-定理 IsAffineOpen.fromSpecStalk_eq_fromSpecStalk
+定理 是仿射开集.fromSpecStalk_eq_fromSpecStalk
   条件: {x : X} (hxU : x in U)
   证明: fromSpecStalk_eq ..
 
@@ -151,8 +151,8 @@ instance IsAffineOpen.fromSpecStalk_isPreimmersion
     IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.pr
 
 中文:
-实例 IsAffineOpen.fromSpecStalk_isPreimmersion
-  签名: {X : Scheme.{u}} {U : Opens X}
+实例 是仿射开集.fromSpecStalk_isPreimmersion
+  签名: {X : 概形.{u}} {U : Opens X}
   定义体: by
   dsimp [IsAffineOpen.fromSpecStalk]
   have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
@@ -187,8 +187,8 @@ lemma IsAffineOpen.fromSpecStalk_closedPoint
   rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x]; rw [hxU⟩]; rw [hU.fromSpec_primeIdealOf ⟨x]; rw [hxU⟩]
 
 中文:
-引理 IsAffineOpen.fromSpecStalk_closedPoint
-  结论: {U : Opens X} (hU : IsAffineOpen U)
+引理 是仿射开集.fromSpecStalk_closedPoint
+  结论: {U : Opens X} (hU : 是仿射开集 U)
   证明: by
   rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_apply]
   rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x]; rw [hxU⟩]; rw [hU.fromSpec_primeIdealOf ⟨x]; rw [hxU⟩]
@@ -405,7 +405,7 @@ definition Opens.fromSpecStalkOfMem
 
 中文:
 定义 Opens.fromSpecStalkOfMem
-  签名: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
+  签名: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
   定义体: Spec.map (inv (U.ι.stalkMap ⟨x, hxU⟩)) ≫ U.toScheme.fromSpecStalk ⟨x, hxU⟩
 
 Depends on / 依赖: Spec.map, U.toScheme.fromSpecStalk, fromSpecStalk, stalkMap, toScheme
@@ -428,7 +428,7 @@ lemma Opens.fromSpecStalkOfMem_ι
 
 中文:
 引理 Opens.fromSpecStalkOfMem_ι
-  条件: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
+  条件: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
   证明: by
   simp only [Opens.fromSpecStalkOfMem, Spec.map_inv, Category.assoc, IsIso.inv_comp_eq]
   exact (Scheme.SpecMap_stalkMap_fromSpecStalk U.ι (x := ⟨x, hxU⟩)).symm
@@ -456,7 +456,7 @@ lemma fromSpecStalk_toSpecΓ
 
 中文:
 引理 fromSpecStalk_toSpecΓ
-  条件: (X : Scheme.{u}) (x : X)
+  条件: (X : 概形.{u}) (x : X)
   证明: by
   rw [Scheme.toSpecΓ_naturality]; rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Scheme.fromSpecStalk_appTop]
   simp
@@ -485,7 +485,7 @@ lemma Opens.fromSpecStalkOfMem_toSpecΓ
 
 中文:
 引理 Opens.fromSpecStalkOfMem_toSpecΓ
-  条件: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
+  条件: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
   证明: by
   rw [fromSpecStalkOfMem]; rw [Opens.toSpecΓ]; rw [Category.assoc]; rw [fromSpecStalk_toSpecΓ_assoc]; rw [← Spec.map_comp]; rw [← Spec.map_comp]
   congr 1
@@ -748,7 +748,7 @@ instance isLocalHom_stalkClosedPointTo'
 
 中文:
 实例 isLocalHom_stalkClosedPointTo'
-  签名: {R : 类型u} [CommRing R] [IsLocalRing R]
+  签名: {R : 类型u} [交换环 R] [是局部环 R]
   定义体: isLocalHom_stalkClosedPointTo f
 
 Depends on / 依赖: isLocalHom_stalkClosedPointTo
@@ -814,7 +814,7 @@ lemma germ_stalkClosedPointTo_Spec
 
 中文:
 引理 germ_stalkClosedPointTo_Spec
-  条件: {R S : CommRingCat} [IsLocalRing S] (φ : R ⟶ S)
+  条件: {R S : 交换环范畴} [是局部环 S] (φ : R ⟶ S)
   证明: by
   rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [← Iso.inv_comp_eq]; rw [← ΓSpecIso_inv_naturality_assoc]
   simp_rw [Opens.map_top]

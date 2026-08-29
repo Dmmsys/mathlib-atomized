@@ -41,7 +41,7 @@ lemma csSup_mem_of_not_isSuccLimit
 
 中文:
 引理 csSup_mem_of_not_isSuccLimit
-  结论: (hne : s.Nonempty) (hbdd : BddAbove s)
+  结论: (hne : s.非空) (hbdd : BddAbove s)
   证明: by
   rw [isSuccLimit_iff]; rw [not_and_or]; rw [not_not] at hlim
   rcases hlim with (hmin | hlim)
@@ -75,7 +75,7 @@ lemma exists_eq_ciSup_of_not_isSuccLimit
 @[deprecated csInf_mem_of_not_isPredLimit (since := "2026-04-24")]
 
 中文:
-引理 exists_eq_ciSup_of_not_isSuccLimit
+引理 存在_eq_ciSup_of_not_isSuccLimit
   结论: (hbdd : BddAbove (range f))
   证明: csSup_mem_of_not_isSuccLimit (range_nonempty f) hbdd hf
 
@@ -100,7 +100,7 @@ lemma csInf_mem_of_not_isPredPrelimit
 
 中文:
 引理 csInf_mem_of_not_isPredPrelimit
-  结论: (hne : s.Nonempty) (hbdd : BddBelow s)
+  结论: (hne : s.非空) (hbdd : BddBelow s)
   证明: csInf_mem_of_not_isPredLimit hne hbdd mt IsPredLimit.isPredPrelimit hlim
 
 @[deprecated exists_eq_ciInf_of_not_isPredLimit (since := "2026-04-24")]
@@ -123,7 +123,7 @@ lemma exists_eq_ciInf_of_not_isPredPrelimit
 @[to_dual]
 
 中文:
-引理 exists_eq_ciInf_of_not_isPredPrelimit
+引理 存在_eq_ciInf_of_not_isPredPrelimit
   结论: (hf : BddBelow (range f))
   证明: exists_eq_ciInf_of_not_isPredLimit hf mt IsPredLimit.isPredPrelimit hf'
 
@@ -148,7 +148,7 @@ lemma IsLUB.mem_of_nonempty_of_not_isSuccLimit
 
 中文:
 引理 IsLUB.mem_of_nonempty_of_not_isSuccLimit
-  结论: (hs : IsLUB s x) (hne : s.Nonempty)
+  结论: (hs : IsLUB s x) (hne : s.非空)
   证明: hs.csSup_eq hne ▸ csSup_mem_of_not_isSuccLimit hne hs.bddAbove (hs.csSup_eq hne ▸ hx)
 
 @[to_dual]
@@ -171,8 +171,8 @@ lemma IsLUB.exists_of_nonempty_of_not_isSuccLimit
 @[deprecated mem_of_nonempty_of_not_isSuccLimit (since := "2026-04-24")]
 
 中文:
-引理 IsLUB.exists_of_nonempty_of_not_isSuccLimit
-  条件: (hf : IsLUB (range f) x) (hx : ¬ IsSuccLimit x)
+引理 IsLUB.存在_of_nonempty_of_not_isSuccLimit
+  条件: (hf : IsLUB (range f) x) (hx : ¬ 是SuccLimit x)
   证明: hf.mem_of_nonempty_of_not_isSuccLimit (range_nonempty f) hx
 
 @[deprecated mem_of_nonempty_of_not_isSuccLimit (since := "2026-04-24")]
@@ -238,7 +238,7 @@ lemma IsLUB.exists_of_nonempty_of_not_isSuccPrelimit
 @[deprecated exists_of_nonempty_of_not_isPredLimit (since := "2026-04-24")]
 
 中文:
-引理 IsLUB.exists_of_nonempty_of_not_isSuccPrelimit
+引理 IsLUB.存在_of_nonempty_of_not_isSuccPrelimit
   证明: hf.exists_of_nonempty_of_not_isSuccLimit mt IsSuccLimit.isSuccPrelimit hx
 
 @[deprecated exists_of_nonempty_of_not_isPredLimit (since := "2026-04-24")]
@@ -258,7 +258,7 @@ lemma IsGLB.exists_of_nonempty_of_not_isPredPrelimit
   proof: hf.exists_of_nonempty_of_not_isPredLimit mt IsPredLimit.isPredPrelimit hx
 
 中文:
-引理 IsGLB.exists_of_nonempty_of_not_isPredPrelimit
+引理 IsGLB.存在_of_nonempty_of_not_isPredPrelimit
   证明: hf.exists_of_nonempty_of_not_isPredLimit mt IsPredLimit.isPredPrelimit hx
 
 Depends on / 依赖: IsPredLimit, IsPredLimit.isPredPrelimit, exists_of_nonempty_of_not_isPredLimit, hf.exists_of_nonempty_of_not_isPredLimit, isPredPrelimit
@@ -279,7 +279,7 @@ definition ConditionallyCompleteLinearOrder.toSuccOrder
   body: .ofLinearWellFoundedLT _
 
 中文:
-定义 ConditionallyCompleteLinearOrder.toSuccOrder
+定义 条件完备线性序.toSuccOrder
   签名: [WellFoundedLT α]
   定义体: .ofLinearWellFoundedLT _
 
@@ -349,7 +349,7 @@ lemma exists_eq_ciSup_of_not_isSuccPrelimit
 alias exists_eq_ciSup_of_not_isSuccPrelimit' := exists_eq_ciSup_of_not_isSuccPrelimit
 
 中文:
-引理 exists_eq_ciSup_of_not_isSuccPrelimit
+引理 存在_eq_ciSup_of_not_isSuccPrelimit
   条件: (hf' : ¬ IsSuccPrelimit (⨆ i, f i))
   证明: csSup_mem_of_not_isSuccPrelimit hf'
 
@@ -380,7 +380,7 @@ theorem Order.IsSuccPrelimit.sSup_Iio
 中文:
 定理 Order.IsSuccPrelimit.sSup_Iio
   条件: (h : IsSuccPrelimit x)
-  结论: sSup (Iio x) = x
+  结论: sSup (左无界右开区间 x) = x
   证明: by
   obtain rfl | hx := eq_bot_or_bot_lt x
   · simp
@@ -406,7 +406,7 @@ theorem Order.IsSuccPrelimit.iSup_Iio
 中文:
 定理 Order.IsSuccPrelimit.iSup_Iio
   条件: (h : IsSuccPrelimit x)
-  结论: ⨆ a : Iio x, a.1 = x
+  结论: ⨆ a : 左无界右开区间 x, a.1 = x
   证明: by
   rw [← sSup_eq_iSup']; rw [h.sSup_Iio]
 
@@ -425,9 +425,9 @@ theorem Order.IsSuccLimit.sSup_Iio
   proof: h.isSuccPrelimit.sSup_Iio
 
 中文:
-定理 Order.IsSuccLimit.sSup_Iio
-  条件: (h : IsSuccLimit x)
-  结论: sSup (Iio x) = x
+定理 Order.是SuccLimit.sSup_Iio
+  条件: (h : 是SuccLimit x)
+  结论: sSup (左无界右开区间 x) = x
   证明: h.isSuccPrelimit.sSup_Iio
 
 Depends on / 依赖: h.isSuccPrelimit.sSup_Iio, isSuccPrelimit, sSup_Iio
@@ -445,9 +445,9 @@ theorem Order.IsSuccLimit.iSup_Iio
   proof: h.isSuccPrelimit.iSup_Iio
 
 中文:
-定理 Order.IsSuccLimit.iSup_Iio
-  条件: (h : IsSuccLimit x)
-  结论: ⨆ a : Iio x, a.1 = x
+定理 Order.是SuccLimit.iSup_Iio
+  条件: (h : 是SuccLimit x)
+  结论: ⨆ a : 左无界右开区间 x, a.1 = x
   证明: h.isSuccPrelimit.iSup_Iio
 
 Depends on / 依赖: h.isSuccPrelimit.iSup_Iio, iSup_Iio, isSuccPrelimit
@@ -469,7 +469,7 @@ theorem sSup_Iio_eq_self_iff_isSuccPrelimit
 
 中文:
 定理 sSup_Iio_eq_self_iff_isSuccPrelimit
-  结论: sSup (Iio x) = x ↔ IsSuccPrelimit x
+  结论: sSup (左无界右开区间 x) = x ↔ IsSuccPrelimit x
   证明: by
   refine ⟨fun h => ?_, IsSuccPrelimit.sSup_Iio⟩
   by_contra hx
@@ -495,7 +495,7 @@ theorem iSup_Iio_eq_self_iff_isSuccPrelimit
 
 中文:
 定理 iSup_Iio_eq_self_iff_isSuccPrelimit
-  结论: ⨆ a : Iio x, a.1 = x ↔ IsSuccPrelimit x
+  结论: ⨆ a : 左无界右开区间 x, a.1 = x ↔ IsSuccPrelimit x
   证明: by
   rw [← sSup_eq_iSup']; rw [sSup_Iio_eq_self_iff_isSuccPrelimit]
 
@@ -522,8 +522,8 @@ theorem iSup_succ
 
 中文:
 定理 iSup_succ
-  条件: [SuccOrder α] (x : α)
-  结论: ⨆ a : Iio x, succ a.1 = x
+  条件: [Succ序 α] (x : α)
+  结论: ⨆ a : 左无界右开区间 x, succ a.1 = x
   证明: by
   have H : BddAbove (range fun a : Iio x => succ a.1) :=
     ⟨succ x, by simp +contextual [upperBounds, succ_le_succ, le_of_lt]⟩
@@ -614,7 +614,7 @@ lemma exists_eq_iSup_of_not_isSuccPrelimit
   proof: sSup_mem_of_not_isSuccPrelimit hf
 
 中文:
-引理 exists_eq_iSup_of_not_isSuccPrelimit
+引理 存在_eq_iSup_of_not_isSuccPrelimit
   条件: (hf : ¬ IsSuccPrelimit (⨆ i, f i))
   证明: sSup_mem_of_not_isSuccPrelimit hf
 
@@ -633,7 +633,7 @@ lemma exists_eq_iInf_of_not_isPredPrelimit
   proof: sInf_mem_of_not_isPredPrelimit hf
 
 中文:
-引理 exists_eq_iInf_of_not_isPredPrelimit
+引理 存在_eq_iInf_of_not_isPredPrelimit
   条件: (hf : ¬ IsPredPrelimit (⨅ i, f i))
   证明: sInf_mem_of_not_isPredPrelimit hf
 

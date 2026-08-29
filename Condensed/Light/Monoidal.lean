@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (LightCondMod.{u} R)
+  签名: 幺半群范畴 (LightCondMod.{u} R)
   定义体: monoidalCategory _ _
 
 Depends on / 依赖: monoidalCategory
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R))
+  签名: 幺半群范畴 (层 (coherentTopology LightProfinite.{u}) (模范畴.{u} R))
   定义体: inferInstanceAs (MonoidalCategory (LightCondMod _))
 
 Depends on / 依赖: LightCondMod, MonoidalCategory
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory (LightCondMod.{u} R)
+  签名: 对称范畴 (LightCondMod.{u} R)
   定义体: symmetricCategory _ _
 
 Depends on / 依赖: symmetricCategory
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalClosed (LightProfinite.{u}ᵒᵖ ⥤ ModuleCat.{u} R)
+  签名: 幺半群闭 (LightProfinite.{u}ᵒᵖ ⥤ 模范畴.{u} R)
   定义体: .ofEquiv _ (equivSmallModel LightProfinite).op.congrLeft.toAdjunction
 
 Depends on / 依赖: LightProfinite, congrLeft, equivSmallModel, ofEquiv, op.congrLeft.toAdjunction, toAdjunction
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalClosed (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R))
+  签名: 幺半群闭 (层 (coherentTopology LightProfinite.{u}) (模范畴.{u} R))
   定义体: Reflective.monoidalClosed (sheafificationAdjunction _ _)
 
 Depends on / 依赖: Reflective, Reflective.monoidalClosed, monoidalClosed, sheafificationAdjunction
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalClosed (LightCondMod.{u} R)
+  签名: 幺半群闭 (LightCondMod.{u} R)
   定义体: inferInstanceAs (MonoidalClosed (Sheaf _ _))
 
 Depends on / 依赖: MonoidalClosed
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: (presheafToSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Monoidal
+  签名: (presheafToSheaf (coherentTopology LightProfinite.{u}) (模范畴.{u} R)).幺半群
   定义体: inferInstance
 -/
 instance : (presheafToSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Monoidal :=
@@ -177,7 +177,7 @@ instance :
 
 中文:
 实例 :
-  签名: (free R).Monoidal
+  签名: (free R).幺半群
   定义体: inferInstanceAs (composeAndSheafify _ _).Monoidal
 
 Depends on / 依赖: Monoidal, composeAndSheafify

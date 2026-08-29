@@ -139,7 +139,7 @@ structure TransitiveRelation
   继承: JointlyMono₂ p₁ p₂
   公理与运算 (5 个):
     - c : PullbackCone p₂ p₁
-    - isLimit : IsLimit c
+    - isLimit : 是极限 c
     - t : c.pt ⟶ R
     - transitivity₁ : t ≫ p₁ = c.fst ≫ p₁  [默认: by cat_disch]
     - transitivity₂ : t ≫ p₂ = c.snd ≫ p₂  [默认: by cat_disch]
@@ -198,10 +198,10 @@ class IsEquivalenceRelation
     - nonempty_equivalenceRelation : Nonempty (EquivalenceRelation p₁ p₂)
 
 中文:
-类 IsEquivalenceRelation
+类 是EquivalenceRelation
   参数: {R X : C} (p₁ p₂ : R ⟶ X)
   公理与运算 (1 个):
-    - nonempty_equivalenceRelation : Nonempty (EquivalenceRelation p₁ p₂)
+    - nonempty_equivalenceRelation : 非空 (EquivalenceRelation p₁ p₂)
 -/
 class IsEquivalenceRelation {R X : C} (p₁ p₂ : R ⟶ X) : Prop where
   nonempty_equivalenceRelation : Nonempty (EquivalenceRelation p₁ p₂)
@@ -440,7 +440,7 @@ definition ReflexiveRelation.ofRefl
 
 中文:
 定义 ReflexiveRelation.ofRefl
-  签名: {X : Type w} {φ : X -> X -> 命题} (hφ : Std.Refl φ)
+  签名: {X : 类型 w} {φ : X -> X -> 命题} (hφ : Std.Refl φ)
   定义体: jointlyMono₂ φ
   r := (↾(fun x => ⟨⟨x, x⟩, hφ.refl x⟩))
 -/
@@ -460,7 +460,7 @@ definition SymmetricRelation.ofSymmetric
 
 中文:
 定义 SymmetricRelation.ofSymmetric
-  签名: {X : Type w} {φ : X -> X -> 命题} [Std.Symm φ]
+  签名: {X : 类型 w} {φ : X -> X -> 命题} [Std.Symm φ]
   定义体: jointlyMono₂ φ
   s := ↾(fun ⟨⟨x₁, x₂⟩, h⟩ => ⟨⟨x₂, x₁⟩, symm h⟩)
 -/
@@ -485,7 +485,7 @@ definition TransitiveRelation.ofIsTrans
 
 中文:
 定义 TransitiveRelation.ofIsTrans
-  签名: {X : Type w} {φ : X -> X -> 命题} (hφ : IsTrans _ φ)
+  签名: {X : 类型 w} {φ : X -> X -> 命题} (hφ : 是Trans _ φ)
   定义体: jointlyMono₂ φ
   c := Types.pullbackCone _ _
   isLimit := (Types.pullbackLimitCone _ _).isLimit
@@ -516,7 +516,7 @@ definition EquivalenceRelation.ofEquivalence
 
 中文:
 定义 EquivalenceRelation.ofEquivalence
-  签名: {X : Type w} {φ : X -> X -> 命题} (hφ : Equivalence φ)
+  签名: {X : 类型 w} {φ : X -> X -> 命题} (hφ : 等价 φ)
   定义体: ReflexiveRelation.ofRefl hφ.stdRefl
   __ := let := hφ.stdSymm; SymmetricRelation.ofSymmetric
   __ := TransitiveRelation.ofIsTrans hφ.isTrans
@@ -539,7 +539,7 @@ abbreviation Rel.ofPair
   body: fun x₁ x₂ => exists r : R, p₁ r = x₁ ∧ p₂ r = x₂
 
 中文:
-缩写 Rel.ofPair
+缩写 关系.ofPair
   定义体: fun x₁ x₂ => exists r : R, p₁ r = x₁ ∧ p₂ r = x₂
 -/
 abbrev Rel.ofPair := fun x₁ x₂ => exists r : R, p₁ r = x₁ ∧ p₂ r = x₂
@@ -580,7 +580,7 @@ alias symmetric_of_symmetricRelation := symm_of_symmetricRelation
 中文:
 引理 symm_of_symmetricRelation
   条件: (e : SymmetricRelation p₁ p₂)
-  结论: Std.Symm (Rel.ofPair p₁ p₂) where
+  结论: Std.Symm (关系.ofPair p₁ p₂) where
   证明: fun ⟨r, hr₁, hr₂⟩ => ⟨e.s r, by simpa, by simpa⟩
 
 @[deprecated (since := "2026-06-10")]
@@ -680,7 +680,7 @@ structure EffectiveEquivalenceRelation
     - B : C
     - π : A ⟶ B
     - isKernelPair : IsKernelPair π p₁ p₂
-    - isPushout : IsPushout p₁ p₂ π π
+    - isPushout : 是推出 p₁ p₂ π π
 -/
 structure EffectiveEquivalenceRelation {R A : C} (p₁ p₂ : R ⟶ A) extends EquivalenceRelation p₁ p₂
     where
@@ -701,10 +701,10 @@ class IsEffectiveEquivalenceRelation
     - nonempty_effectiveEquivalenceRelation : Nonempty (EffectiveEquivalenceRelation p₁ p₂)
 
 中文:
-类 IsEffectiveEquivalenceRelation
+类 是EffectiveEquivalenceRelation
   参数: {R A : C} (p₁ p₂ : R ⟶ A)
   公理与运算 (1 个):
-    - nonempty_effectiveEquivalenceRelation : Nonempty (EffectiveEquivalenceRelation p₁ p₂)
+    - nonempty_effectiveEquivalenceRelation : 非空 (EffectiveEquivalenceRelation p₁ p₂)
 -/
 class IsEffectiveEquivalenceRelation {R A : C} (p₁ p₂ : R ⟶ A) : Prop where
   nonempty_effectiveEquivalenceRelation : Nonempty (EffectiveEquivalenceRelation p₁ p₂)
@@ -748,7 +748,7 @@ structure UniversallyEffectiveEquivalenceRelation
   参数: {R A : C} (p₁ p₂ : R ⟶ A)
   继承: EffectiveEquivalenceRelation p₁ p₂
   公理与运算 (1 个):
-    - universally_effectiveEpi_π : Morphism命题erty.universally (fun _ _ f => EffectiveEpi f) toEffectiveEquivalenceRelation.π
+    - universally_effectiveEpi_π : MorphismProperty.universally (fun _ _ f => 有效满态射 f) toEffectiveEquivalenceRelation.π
 -/
 structure UniversallyEffectiveEquivalenceRelation {R A : C} (p₁ p₂ : R ⟶ A)
     extends EffectiveEquivalenceRelation p₁ p₂ where
@@ -765,10 +765,10 @@ class IsUniversallyEffectiveEquivalenceRelation
     - nonempty_universallyEffectiveEquivalenceRelation : Nonempty (UniversallyEffectiveEquivalenceRelation p₁ p₂)
 
 中文:
-类 IsUniversallyEffectiveEquivalenceRelation
+类 是UniversallyEffectiveEquivalenceRelation
   参数: {R A : C} (p₁ p₂ : R ⟶ A)
   公理与运算 (1 个):
-    - nonempty_universallyEffectiveEquivalenceRelation : Nonempty (UniversallyEffectiveEquivalenceRelation p₁ p₂)
+    - nonempty_universallyEffectiveEquivalenceRelation : 非空 (UniversallyEffectiveEquivalenceRelation p₁ p₂)
 -/
 class IsUniversallyEffectiveEquivalenceRelation {R A : C} (p₁ p₂ : R ⟶ A) : Prop where
   nonempty_universallyEffectiveEquivalenceRelation :
@@ -785,10 +785,10 @@ class IsUniversallyEffectiveEquivalenceRelationCategory
     - isUniversallyEffectiveEquivalenceRelation((p₁ p₂ : R ⟶ A) [IsEquivalenceRelation p₁ p₂]) : IsUniversallyEffectiveEquivalenceRelation p₁ p₂
 
 中文:
-类 IsUniversallyEffectiveEquivalenceRelationCategory
+类 是UniversallyEffectiveEquivalenceRelation范畴
   参数: where
   公理与运算 (1 个):
-    - isUniversallyEffectiveEquivalenceRelation((p₁ p₂ : R ⟶ A) [IsEquivalenceRelation p₁ p₂]) : IsUniversallyEffectiveEquivalenceRelation p₁ p₂
+    - isUniversallyEffectiveEquivalenceRelation((p₁ p₂ : R ⟶ A) [是EquivalenceRelation p₁ p₂]) : 是UniversallyEffectiveEquivalenceRelation p₁ p₂
 -/
 class IsUniversallyEffectiveEquivalenceRelationCategory where
   isUniversallyEffectiveEquivalenceRelation (p₁ p₂ : R ⟶ A) [IsEquivalenceRelation p₁ p₂] :

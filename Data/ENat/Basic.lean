@@ -114,7 +114,7 @@ theorem succ_natCast
 中文:
 定理 succ_natCast
   条件: (n : 自然数)
-  结论: SuccOrder.succ (n : 自然数∞) = (n + 1 : 自然数)
+  结论: Succ序.succ (n : 自然数∞) = (n + 1 : 自然数)
   证明: WithTop.succ_coe
 
 @[deprecated (since := "2026-07-17")] alias succ_coe := succ_natCast
@@ -133,7 +133,7 @@ theorem succ_top
 
 中文:
 定理 succ_top
-  结论: SuccOrder.succ (⊤ : 自然数∞) = ⊤
+  结论: Succ序.succ (⊤ : 自然数∞) = ⊤
   证明: rfl
 -/
 @[simp] theorem succ_top : SuccOrder.succ (⊤ : Nat∞) = ⊤ := rfl
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: SuccAddOrder 自然数∞
+  签名: SuccAdd序 自然数∞
   定义体: by cases x <;> simp
 -/
 instance : SuccAddOrder Nat∞ where
@@ -595,7 +595,7 @@ theorem lift_ofNat
   proof: rfl
 
 中文:
-定理 lift_ofNat
+定理 lift_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
@@ -686,7 +686,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation 自然数∞
+  签名: 良基关系 自然数∞
   定义体: WellFoundedLT.toWellFoundedRelation
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.toWellFoundedRelation, toWellFoundedRelation
@@ -703,7 +703,7 @@ definition toNat
   body: WithTop.untopD 0
 
 中文:
-定义 toNat
+定义 to自然数
   签名: : 自然数∞ -> 自然数
   定义体: WithTop.untopD 0
 
@@ -723,8 +723,8 @@ definition toNatHom
   map_mul' := WithTop.untopD_zero_mul
 
 中文:
-定义 toNatHom
-  签名: : MonoidWithZeroHom 自然数∞ 自然数 where
+定义 to自然数Hom
+  签名: : 带零幺半群态射 自然数∞ 自然数 where
   定义体: toNat
   map_one' := rfl
   map_zero' := rfl
@@ -747,7 +747,7 @@ lemma coe_toNatHom
   proof: rfl
 
 中文:
-引理 coe_toNatHom
+引理 coe_to自然数Hom
   结论: to自然数Hom = to自然数
   证明: rfl
 -/
@@ -765,7 +765,7 @@ lemma toNatHom_apply
 @[simp]
 
 中文:
-引理 toNatHom_apply
+引理 to自然数Hom_apply
   条件: (n : 自然数)
   结论: to自然数Hom n = to自然数 n
   证明: rfl
@@ -789,7 +789,7 @@ theorem toNat_natCast
 @[simp]
 
 中文:
-定理 toNat_natCast
+定理 to自然数_natCast
   条件: (n : 自然数)
   结论: to自然数 n = n
   证明: rfl
@@ -815,7 +815,7 @@ theorem toNat_zero
 @[simp]
 
 中文:
-定理 toNat_zero
+定理 to自然数_zero
   结论: to自然数 0 = 0
   证明: rfl
 
@@ -836,7 +836,7 @@ theorem toNat_one
 @[simp]
 
 中文:
-定理 toNat_one
+定理 to自然数_one
   结论: to自然数 1 = 1
   证明: rfl
 
@@ -858,7 +858,7 @@ theorem toNat_ofNat
 @[simp]
 
 中文:
-定理 toNat_ofNat
+定理 to自然数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: to自然数 of自然数(n) = n
   证明: rfl
@@ -878,7 +878,7 @@ theorem toNat_top
   proof: rfl
 
 中文:
-定理 toNat_top
+定理 to自然数_top
   结论: to自然数 ⊤ = 0
   证明: rfl
 -/
@@ -894,7 +894,7 @@ theorem toNat_eq_zero
   proof: WithTop.untopD_eq_self_iff
 
 中文:
-定理 toNat_eq_zero
+定理 to自然数_eq_zero
   结论: to自然数 n = 0 ↔ n = 0 ∨ n = ⊤
   证明: WithTop.untopD_eq_self_iff
 -/
@@ -912,7 +912,7 @@ theorem toNat_pos
   exact ⟨hn0, hxt⟩
 
 中文:
-定理 toNat_pos
+定理 to自然数_pos
   条件: (hn0 : n != 0) (hxt : n != ⊤)
   结论: 0 < n.to自然数
   证明: by
@@ -940,7 +940,7 @@ theorem lift_eq_toNat_of_lt_top
 @[simp]
 
 中文:
-定理 lift_eq_toNat_of_lt_top
+定理 lift_eq_to自然数_of_lt_top
   条件: {x : 自然数∞} (hx : x < ⊤)
   结论: x.lift hx = x.to自然数
   证明: by
@@ -969,7 +969,7 @@ theorem recTopCoe_zero
 
 中文:
 定理 recTopCoe_zero
-  条件: {C : 自然数∞ -> Sort*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
+  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
   结论: @recTopCoe C d f 0 = f 0
   证明: rfl
 
@@ -992,7 +992,7 @@ theorem recTopCoe_one
 
 中文:
 定理 recTopCoe_one
-  条件: {C : 自然数∞ -> Sort*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
+  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
   结论: @recTopCoe C d f 1 = f 1
   证明: rfl
 
@@ -1013,8 +1013,8 @@ theorem recTopCoe_ofNat
 @[simp]
 
 中文:
-定理 recTopCoe_ofNat
-  条件: {C : 自然数∞ -> Sort*} (d : C ⊤) (f : 对任意 a : 自然数, C a) (x : 自然数) [x.AtLeastTwo]
+定理 recTopCoe_of自然数
+  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a) (x : 自然数) [x.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -1063,7 +1063,7 @@ theorem top_ne_ofNat
   proof: nofun
 
 中文:
-定理 top_ne_ofNat
+定理 top_ne_of自然数
   条件: (a : 自然数) [a.AtLeastTwo]
   结论: ⊤ != (of自然数(a) : 自然数∞)
   证明: nofun
@@ -1144,7 +1144,7 @@ theorem ofNat_ne_top
   proof: nofun
 
 中文:
-定理 ofNat_ne_top
+定理 of自然数_ne_top
   条件: (a : 自然数) [a.AtLeastTwo]
   结论: (of自然数(a) : 自然数∞) != ⊤
   证明: nofun
@@ -1248,7 +1248,7 @@ theorem top_sub_ofNat
 @[simp]
 
 中文:
-定理 top_sub_ofNat
+定理 top_sub_of自然数
   条件: (a : 自然数) [a.AtLeastTwo]
   结论: (⊤ : 自然数∞) - of自然数(a) = ⊤
   证明: rfl
@@ -1337,7 +1337,7 @@ alias ⟨_, natCast_toNat⟩ := natCast_toNat_eq_self
 @[deprecated (since := "2026-07-17")] alias coe_toNat := natCast_toNat
 
 中文:
-定理 natCast_toNat_eq_self
+定理 natCast_to自然数_eq_self
   结论: E自然数.to自然数 n = n ↔ n != ⊤
   证明: ENat.recTopCoe (by decide) (fun _ => by simp [toNat_natCast]) n
 
@@ -1372,7 +1372,7 @@ lemma toNat_eq_iff_eq_natCast
 @[deprecated (since := "2026-07-17")] alias toNat_eq_iff_eq_coe := toNat_eq_iff_eq_natCast
 
 中文:
-引理 toNat_eq_iff_eq_natCast
+引理 to自然数_eq_iff_eq_natCast
   条件: (n : 自然数∞) (m : 自然数) [NeZero m]
   证明: by
   cases n
@@ -1401,7 +1401,7 @@ theorem natCast_toNat_le_self
 @[deprecated (since := "2026-07-17")] alias coe_toNat_le_self := natCast_toNat_le_self
 
 中文:
-定理 natCast_toNat_le_self
+定理 natCast_to自然数_le_self
   条件: (n : 自然数∞)
   结论: ↑(to自然数 n) <= n
   证明: ENat.recTopCoe le_top (fun _ => le_rfl) n
@@ -1428,7 +1428,7 @@ theorem toNat_add
   rfl
 
 中文:
-定理 toNat_add
+定理 to自然数_add
   条件: {m n : 自然数∞} (hm : m != ⊤) (hn : n != ⊤)
   结论: to自然数 (m + n) = to自然数 m + to自然数 n
   证明: by
@@ -1455,7 +1455,7 @@ theorem toNat_sub
   · rw [← natCast_sub, toNat_natCast, toNat_natCast, toNat_natCast]
 
 中文:
-定理 toNat_sub
+定理 to自然数_sub
   条件: {n : 自然数∞} (hn : n != ⊤) (m : 自然数∞)
   结论: to自然数 (m - n) = to自然数 m - to自然数 n
   证明: by
@@ -1487,7 +1487,7 @@ theorem toNat_mul
   · simp only [toNat_natCast]; rw [← natCast_mul, toNat_natCast]
 
 中文:
-定理 toNat_mul
+定理 to自然数_mul
   条件: (a b : 自然数∞)
   结论: (a * b).to自然数 = a.to自然数 * b.to自然数
   证明: by
@@ -1515,7 +1515,7 @@ theorem toNat_eq_iff
   induction m <;> simp [hn.symm]
 
 中文:
-定理 toNat_eq_iff
+定理 to自然数_eq_iff
   条件: {m : 自然数∞} {n : 自然数} (hn : n != 0)
   结论: to自然数 m = n ↔ m = n
   证明: by
@@ -1542,7 +1542,7 @@ lemma toNat_le_of_le_natCast
 @[gcongr]
 
 中文:
-引理 toNat_le_of_le_natCast
+引理 to自然数_le_of_le_natCast
   条件: {m : 自然数∞} {n : 自然数} (h : m <= n)
   结论: to自然数 m <= n
   证明: by
@@ -1574,7 +1574,7 @@ lemma toNat_le_toNat
 @[deprecated Order.succ_eq_add_one (since := "2026-05-25")]
 
 中文:
-引理 toNat_le_toNat
+引理 to自然数_le_to自然数
   条件: {m n : 自然数∞} (h : m <= n) (hn : n != ⊤)
   结论: to自然数 m <= to自然数 n
   证明: toNat_le_of_le_natCast h.trans_eq (natCast_toNat hn).symm
@@ -2206,7 +2206,7 @@ lemma ne_top_iff_exists
   proof: WithTop.ne_top_iff_exists
 
 中文:
-引理 ne_top_iff_exists
+引理 ne_top_iff_存在
   结论: n != ⊤ ↔ 存在 m : 自然数, ↑m = n
   证明: WithTop.ne_top_iff_exists
 
@@ -2223,7 +2223,7 @@ lemma eq_top_iff_forall_ne
   proof: WithTop.eq_top_iff_forall_ne
 
 中文:
-引理 eq_top_iff_forall_ne
+引理 eq_top_iff_对任意_ne
   结论: n = ⊤ ↔ 对任意 m : 自然数, ↑m != n
   证明: WithTop.eq_top_iff_forall_ne
 
@@ -2240,7 +2240,7 @@ lemma forall_ne_top
   proof: WithTop.forall_ne_top
 
 中文:
-引理 forall_ne_top
+引理 对任意_ne_top
   条件: {p : 自然数∞ -> 命题}
   结论: (对任意 x, x != ⊤ -> p x) ↔ 对任意 x : 自然数, p x
   证明: WithTop.forall_ne_top
@@ -2258,7 +2258,7 @@ lemma exists_ne_top
   proof: WithTop.exists_ne_top
 
 中文:
-引理 exists_ne_top
+引理 存在_ne_top
   条件: {p : 自然数∞ -> 命题}
   结论: (存在 x != ⊤, p x) ↔ 存在 x : 自然数, p x
   证明: WithTop.exists_ne_top
@@ -2275,7 +2275,7 @@ lemma eq_top_iff_forall_gt
   proof: WithTop.eq_top_iff_forall_gt
 
 中文:
-引理 eq_top_iff_forall_gt
+引理 eq_top_iff_对任意_gt
   结论: n = ⊤ ↔ 对任意 m : 自然数, m < n
   证明: WithTop.eq_top_iff_forall_gt
 
@@ -2291,7 +2291,7 @@ lemma eq_top_iff_forall_ge
   proof: WithTop.eq_top_iff_forall_ge
 
 中文:
-引理 eq_top_iff_forall_ge
+引理 eq_top_iff_对任意_ge
   结论: n = ⊤ ↔ 对任意 m : 自然数, m <= n
   证明: WithTop.eq_top_iff_forall_ge
 
@@ -2308,7 +2308,7 @@ lemma forall_natCast_le_iff_le
   proof: WithTop.forall_coe_le_iff_le
 
 中文:
-引理 forall_natCast_le_iff_le
+引理 对任意_natCast_le_iff_le
   结论: (对任意 a : 自然数, a <= m -> a <= n) ↔ m <= n
   证明: WithTop.forall_coe_le_iff_le
 
@@ -2326,7 +2326,7 @@ lemma eq_of_forall_natCast_le_iff
   proof: WithTop.eq_of_forall_coe_le_iff hm
 
 中文:
-引理 eq_of_forall_natCast_le_iff
+引理 eq_of_对任意_natCast_le_iff
   条件: (hm : 对任意 a : 自然数, a <= m ↔ a <= n)
   结论: m = n
   证明: WithTop.eq_of_forall_coe_le_iff hm
@@ -2348,7 +2348,7 @@ lemma exists_nat_gt
 exact not_forall.mp eq_top_iff_forall_ge.2.mt hn
 
 中文:
-引理 exists_nat_gt
+引理 存在_nat_gt
   条件: (hn : n != ⊤)
   结论: 存在 m : 自然数, n < m
   证明: by
@@ -2571,7 +2571,7 @@ lemma add_left_injective_of_ne_top
 中文:
 引理 add_left_injective_of_ne_top
   条件: {n : 自然数∞} (hn : n != ⊤)
-  结论: Function.Injective (· + n)
+  结论: 函数.单射 (· + n)
   证明: by
   intro a b e
   exact le_antisymm
@@ -2600,7 +2600,7 @@ lemma add_right_injective_of_ne_top
 中文:
 引理 add_right_injective_of_ne_top
   条件: {n : 自然数∞} (hn : n != ⊤)
-  结论: Function.Injective (n + ·)
+  结论: 函数.单射 (n + ·)
   证明: by
   simp_rw [add_comm n _]
   exact add_left_injective_of_ne_top hn
@@ -2623,7 +2623,7 @@ lemma mul_right_strictMono
 中文:
 引理 mul_right_strictMono
   条件: (ha : a != 0) (h_top : a != ⊤)
-  结论: StrictMono (a * ·)
+  结论: 严格递增 (a * ·)
   证明: WithTop.mul_right_strictMono (pos_iff_ne_zero.2 ha) h_top
 
 Depends on / 依赖: WithTop, WithTop.mul_right_strictMono, h_top, mul_right_strictMono, pos_iff_ne_zero
@@ -2645,7 +2645,7 @@ lemma mul_left_strictMono
 中文:
 引理 mul_left_strictMono
   条件: (ha : a != 0) (h_top : a != ⊤)
-  结论: StrictMono (· * a)
+  结论: 严格递增 (· * a)
   证明: WithTop.mul_left_strictMono (pos_iff_ne_zero.2 ha) h_top
 
 @[simp]
@@ -2808,7 +2808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique 自然数∞ˣ
+  签名: 唯一 自然数∞ˣ
   定义体: by
     have := x.val_inv
     have x_top : x.val != ⊤ := by
@@ -3132,7 +3132,7 @@ theorem map_ofNat
 @[simp]
 
 中文:
-定理 map_ofNat
+定理 map_of自然数
   条件: (f : 自然数 -> α) (n : 自然数) [n.AtLeastTwo]
   结论: map f of自然数(n) = f n
   证明: rfl
@@ -3179,8 +3179,8 @@ theorem strictMono_map_iff
 
 中文:
 定理 strictMono_map_iff
-  条件: {f : 自然数 -> α} [Preorder α]
-  结论: StrictMono (E自然数.map f) ↔ StrictMono f
+  条件: {f : 自然数 -> α} [预序 α]
+  结论: 严格递增 (E自然数.map f) ↔ 严格递增 f
   证明: WithTop.strictMono_map_iff
 
 @[simp]
@@ -3202,8 +3202,8 @@ theorem monotone_map_iff
 
 中文:
 定理 monotone_map_iff
-  条件: {f : 自然数 -> α} [Preorder α]
-  结论: Monotone (E自然数.map f) ↔ Monotone f
+  条件: {f : 自然数 -> α} [预序 α]
+  结论: 递增 (E自然数.map f) ↔ 递增 f
   证明: WithTop.monotone_map_iff
 
 Depends on / 依赖: WithTop, WithTop.monotone_map_iff, monotone_map_iff
@@ -3241,7 +3241,7 @@ lemma map_natCast_strictMono
 
 中文:
 引理 map_natCast_strictMono
-  结论: StrictMono (map (自然数.cast : 自然数 -> α))
+  结论: 严格递增 (map (自然数.cast : 自然数 -> α))
   证明: strictMono_map_iff.2 Nat.strictMono_cast
 
 Depends on / 依赖: Nat.strictMono_cast, strictMono_cast, strictMono_map_iff
@@ -3259,7 +3259,7 @@ lemma map_natCast_injective
 
 中文:
 引理 map_natCast_injective
-  结论: Injective (map (自然数.cast : 自然数 -> α))
+  结论: 单射 (map (自然数.cast : 自然数 -> α))
   证明: map_natCast_strictMono.injective
 
 Depends on / 依赖: injective, map_natCast_strictMono, map_natCast_strictMono.injective
@@ -3313,7 +3313,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: {β F} [Add β] [FunLike F 自然数 β] [AddHomClass F 自然数 β]
+  结论: {β F} [加法 β] [函数状 F 自然数 β] [加法态射类 F 自然数 β]
   证明: WithTop.map_add f a b
 -/
 protected theorem map_add {β F} [Add β] [FunLike F Nat β] [AddHomClass F Nat β]
@@ -3332,8 +3332,8 @@ definition _root_.OneHom.ENatMap
   map_one' := by simp
 
 中文:
-定义 _root_.OneHom.ENatMap
-  签名: {N : 类型} [One N] (f : OneHom 自然数 N)
+定义 _root_.幺态射.E自然数Map
+  签名: {N : 类型} [幺 N] (f : 幺态射 自然数 N)
   定义体: ENat.map f
   map_one' := by simp
 -/
@@ -3352,8 +3352,8 @@ definition _root_.ZeroHom.ENatMap
   map_zero' := by simp
 
 中文:
-定义 _root_.ZeroHom.ENatMap
-  签名: {N : 类型} [Zero N] (f : ZeroHom 自然数 N)
+定义 _root_.保零态射.E自然数Map
+  签名: {N : 类型} [零 N] (f : 保零态射 自然数 N)
   定义体: ENat.map f
   map_zero' := by simp
 -/
@@ -3374,8 +3374,8 @@ definition _root_.AddHom.ENatMap
   map_add' := ENat.map_add f
 
 中文:
-定义 _root_.AddHom.ENatMap
-  签名: {N : 类型} [Add N] (f : AddHom 自然数 N)
+定义 _root_.加法半群态射.E自然数Map
+  签名: {N : 类型} [加法 N] (f : 加法半群态射 自然数 N)
   定义体: ENat.map f
   map_add' := ENat.map_add f
 -/
@@ -3395,8 +3395,8 @@ definition _root_.AddMonoidHom.ENatMap
   body: { ZeroHom.ENatMap f.toZeroHom, AddHom.ENatMap f.toAddHom with toFun := ENat.map f }
 
 中文:
-定义 _root_.AddMonoidHom.ENatMap
-  签名: {N : 类型} [AddZeroClass N]
+定义 _root_.加法幺半群态射.E自然数Map
+  签名: {N : 类型} [加法零类 N]
   定义体: { ZeroHom.ENatMap f.toZeroHom, AddHom.ENatMap f.toAddHom with toFun := ENat.map f }
 -/
 protected def _root_.AddMonoidHom.ENatMap {N : Type*} [AddZeroClass N]
@@ -3420,8 +3420,8 @@ definition _root_.MonoidWithZeroHom.ENatMap
       · 
 
 中文:
-定义 _root_.MonoidWithZeroHom.ENatMap
-  签名: {S : 类型} [MulZeroOneClass S] [DecidableEq S]
+定义 _root_.带零幺半群态射.E自然数Map
+  签名: {S : 类型} [乘零幺类 S] [DecidableEq S]
   定义体: { f.toZeroHom.ENatMap, f.toMonoidHom.toOneHom.ENatMap with
     toFun := ENat.map f
     map_mul' := fun x y => by
@@ -3464,8 +3464,8 @@ definition _root_.RingHom.ENatMap
 @[simp]
 
 中文:
-定义 _root_.RingHom.ENatMap
-  签名: {S : 类型} [CommSemiring S] [PartialOrder S]
+定义 _root_.环态射.E自然数Map
+  签名: {S : 类型} [交换半环 S] [偏序 S]
   定义体: { MonoidWithZeroHom.ENatMap f.toMonoidWithZeroHom hf, f.toAddMonoidHom.ENatMap with }
 
 @[simp]
@@ -3486,7 +3486,7 @@ lemma map_natCast_mul
 
 中文:
 引理 map_natCast_mul
-  条件: {R : 类型} [NonAssocSemiring R] [DecidableEq R] [CharZero R] (a b : 自然数∞)
+  条件: {R : 类型} [非结合半环 R] [DecidableEq R] [特征零 R] (a b : 自然数∞)
   证明: map_mul ((.ofClass (Nat.castRingHom R) : Nat ->*₀ R).ENatMap Nat.cast_injective) a b
 
 Depends on / 依赖: ENatMap, Nat.castRingHom, Nat.cast_injective, castRingHom, cast_injective, map_mul, ofClass
@@ -3527,7 +3527,7 @@ lemma eq_top_iff_forall_ge
   proof: _root_.WithBot.eq_top_iff_forall_ge
 
 中文:
-引理 eq_top_iff_forall_ge
+引理 eq_top_iff_对任意_ge
   条件: {n : WithBot 自然数∞}
   结论: n = ⊤ ↔ 对任意 m : 自然数, m <= n
   证明: _root_.WithBot.eq_top_iff_forall_ge
@@ -3725,7 +3725,7 @@ lemma add_ofNat_cancel
 @[simp]
 
 中文:
-引理 add_ofNat_cancel
+引理 add_of自然数_cancel
   条件: {a b : WithBot 自然数∞} {c : 自然数} [c.AtLeastTwo]
   证明: WithBot.add_natCast_cancel
 
@@ -3792,7 +3792,7 @@ lemma ofNat_add_cancel
   proof: WithBot.natCast_add_cancel
 
 中文:
-引理 ofNat_add_cancel
+引理 of自然数_add_cancel
   条件: {a b : WithBot 自然数∞} {c : 自然数} [c.AtLeastTwo]
   证明: WithBot.natCast_add_cancel
 

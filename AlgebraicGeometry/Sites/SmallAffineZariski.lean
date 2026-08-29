@@ -50,8 +50,8 @@ definition Scheme.AffineZariskiSite
   body: { U : X.Opens // IsAffineOpen U }
 
 中文:
-定义 Scheme.AffineZariskiSite
-  签名: (X : Scheme.{u})
+定义 概形.AffineZariskiSite
+  签名: (X : 概形.{u})
   定义体: { U : X.Opens // IsAffineOpen U }
 
 Depends on / 依赖: IsAffineOpen, X.Opens
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder X.AffineZariskiSite
+  签名: 预序 X.AffineZariskiSite
   定义体: exists f : Γ(X, V.toOpens), X.basicOpen f = U.toOpens
   le_refl U := ⟨1, Scheme.basicOpen_of_isUnit _ isUnit_one⟩
   le_trans := by
@@ -137,7 +137,7 @@ lemma toOpens_injective
 
 中文:
 引理 toOpens_injective
-  结论: Function.Injective (toOpens (X := X))
+  结论: 函数.单射 (toOpens (X := X))
   证明: Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder X.AffineZariskiSite
+  签名: 偏序 X.AffineZariskiSite
   定义体: Subtype.ext ((toOpens_mono hUV).antisymm (toOpens_mono hVU))
 
 Depends on / 依赖: Subtype, Subtype.ext, antisymm, toOpens_mono
@@ -225,7 +225,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toOpensFunctor X).Faithful
+  签名: (toOpensFunctor X).忠实
 -/
 instance : (toOpensFunctor X).Faithful where
 
@@ -271,7 +271,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toOpensFunctor X).IsLocallyFull (Opens.grothendieckTopology X)
+  签名: (toOpensFunctor X).是LocallyFull (Opens.grothendieckTopology X)
   定义体: by
     intro U V h x hx
     obtain ⟨f, hfU, hxf⟩ := V.2.exists_basicOpen_le ⟨x, hx⟩ (h.le hx)
@@ -302,7 +302,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toOpensFunctor X).IsCoverDense (Opens.grothendieckTopology X)
+  签名: (toOpensFunctor X).是余verDense (Opens.grothendieckTopology X)
   定义体: by
     intro U x hx
     obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open hx U.2
@@ -327,7 +327,7 @@ definition grothendieckTopology
 
 中文:
 定义 grothendieckTopology
-  签名: : GrothendieckTopology X.AffineZariskiSite
+  签名: : Grothendieck拓扑 X.AffineZariskiSite
   定义体: (toOpensFunctor X).inducedTopology (Opens.grothendieckTopology X)
 
 Depends on / 依赖: Opens.grothendieckTopology, grothendieckTopology, inducedTopology, toOpensFunctor
@@ -351,7 +351,7 @@ lemma mem_grothendieckTopology
 
 中文:
 引理 mem_grothendieckTopology
-  条件: {U : X.AffineZariskiSite} {S : Sieve U}
+  条件: {U : X.AffineZariskiSite} {S : 筛 U}
   证明: by
   rw [grothendieckTopology]; rw [Functor.mem_inducedTopology_iff_of_isCoverDense]
   apply forall₂_congr fun x hxU => ⟨?_, ?_⟩
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toOpensFunctor X).IsDenseSubsite
+  签名: (toOpensFunctor X).是DenseSubsite
   定义体: by simp [grothendieckTopology]
 
 Depends on / 依赖: grothendieckTopology
@@ -401,7 +401,7 @@ definition presieveOfSections
 
 中文:
 定义 presieveOfSections
-  签名: (U : X.AffineZariskiSite) (s : Set Γ(X, U.toOpens))
+  签名: (U : X.AffineZariskiSite) (s : 集合 Γ(X, U.toOpens))
   定义体: fun V _ => exists f in s, X.basicOpen f = V.toOpens
 
 Depends on / 依赖: V.toOpens, X.basicOpen, basicOpen, toOpens
@@ -497,7 +497,7 @@ lemma presieveOfSections_eq_ofArrows
 
 中文:
 引理 presieveOfSections_eq_ofArrows
-  条件: (U : X.AffineZariskiSite) (s : Set Γ(X, U.toOpens))
+  条件: (U : X.AffineZariskiSite) (s : 集合 Γ(X, U.toOpens))
   证明: by
   refine funext₂ fun ⟨V, hV⟩ ⟨f, hf⟩ => eq_iff_iff.mpr ⟨?_, ?_⟩
   · rintro ⟨f, hfs, rfl⟩
@@ -632,7 +632,7 @@ abbreviation sheafEquiv
 
 中文:
 缩写 sheafEquiv
-  签名: : Sheaf (grothendieckTopology X) A ≌ TopCat.Sheaf A X
+  签名: : 层 (grothendieckTopology X) A ≌ 顶元素范畴.层 A X
   定义体: (toOpensFunctor X).sheafInducedTopologyEquivOfIsCoverDense _ _
 
 Depends on / 依赖: sheafInducedTopologyEquivOfIsCoverDense, toOpensFunctor
@@ -699,7 +699,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Scheme.AffineZariskiSite.directedCover X).LocallyDirected
+  签名: (概形.AffineZariskiSite.directedCover X).LocallyDirected
   定义体: X.homOfLE (((Scheme.AffineZariskiSite.toOpensFunctor _).map f).le)
   directed {U V} x := by
     let a := (pullback.fst _ _ ≫ U.1.ι) x
@@ -783,8 +783,8 @@ lemma coequifibered_iff_forall_isLocalizationAway
       (α.app _) (α.app (.op (U.basicOpen f)))
 
 中文:
-引理 coequifibered_iff_forall_isLocalizationAway
-  结论: {F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat}
+引理 coequifibered_iff_对任意_isLocalizationAway
+  结论: {F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴}
   证明: (F.map (homOfLE (U.basicOpen_le f)).op).hom.toAlgebra
       IsLocalization.Away (α.app (.op U) f) (F.obj (.op (U.basicOpen f))) := by
   trans forall (U : X.AffineZariskiSite) (f : Γ(X, U.1)),
@@ -834,7 +834,7 @@ definition relativeGluingData
 
 中文:
 定义 relativeGluingData
-  签名: {F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat}
+  签名: {F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴}
   定义体: F.rightOp ⋙ Scheme.Spec
   natTrans := Functor.whiskerRight α.rightOp Scheme.Spec ≫ (restrictIsoSpec X).inv
   equifibered := (H.rightOp.whiskerRight _).comp (.of_isIso _)
@@ -864,7 +864,7 @@ lemma PreservesLocalization.isLocallyDirected
 
 中文:
 引理 PreservesLocalization.isLocallyDirected
-  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat)
+  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴)
   证明: (relativeGluingData H).instIsLocallyDirectedI₀CompFunctorForgetOfIsThin
 
 @[deprecated "By `inferInstance`." (since := "2026-02-01")]
@@ -889,7 +889,7 @@ lemma PreservesLocalization.isOpenImmersion
 
 中文:
 引理 PreservesLocalization.isOpenImmersion
-  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat)
+  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴)
   证明: by
   exact fun U V => (relativeGluingData H).instIsOpenImmersionMapI₀Functor
 
@@ -918,7 +918,7 @@ lemma opensRange_relativeGluingData_map
 
 中文:
 引理 opensRange_relativeGluingData_map
-  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat)
+  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴)
   证明: by
   have := coequifibered_iff_forall_isLocalizationAway.mp H U r
   let := (F.map (homOfLE (U.basicOpen_le r)).op).hom.toAlgebra
@@ -961,7 +961,7 @@ alias _root_.AlgebraicGeometry.Scheme.preservesLocalization_toOpensFunctor :=
 
 中文:
 引理 PreservesLocalization.colimitDesc_preimage
-  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ CommRingCat)
+  结论: (F : X.AffineZariskiSiteᵒᵖ ⥤ 交换环范畴)
   证明: by
   simpa using! (relativeGluingData H).toBase_preimage_eq_opensRange_ι U
 
@@ -998,7 +998,7 @@ definition isColimitCocone
 
 中文:
 定义 isColimitCocone
-  签名: : IsColimit (cocone X)
+  签名: : 是余极限 (cocone X)
   定义体: letI D := relativeGluingData (X := X) (.of_isIso (𝟙 _))
   letI F := D.functor
   -- Why doesn't typeclass synthesis work here?

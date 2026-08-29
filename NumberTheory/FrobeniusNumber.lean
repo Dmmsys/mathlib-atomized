@@ -52,7 +52,7 @@ definition FrobeniusNumber
 
 中文:
 定义 FrobeniusNumber
-  签名: (n : 自然数) (s : Set 自然数)
+  签名: (n : 自然数) (s : 集合 自然数)
   定义体: IsGreatest { k | k ∉ AddSubmonoid.closure s } n
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure, IsGreatest, closure
@@ -71,7 +71,7 @@ theorem frobeniusNumber_iff
 
 中文:
 定理 frobeniusNumber_iff
-  条件: {n : 自然数} {s : Set 自然数}
+  条件: {n : 自然数} {s : 集合 自然数}
   证明: by
   simp_rw [FrobeniusNumber, IsGreatest, upperBounds, Set.mem_ofPred, not_imp_comm, not_le]
 
@@ -150,7 +150,7 @@ definition setGcd
 
 中文:
 定义 setGcd
-  签名: (s : Set 自然数)
+  签名: (s : 集合 自然数)
   定义体: (generator <| Ideal.span <| ((↑) : Nat -> Int) '' s).natAbs
 
 Depends on / 依赖: Ideal.span, generator, natAbs
@@ -196,7 +196,7 @@ lemma setGcd_dvd_of_mem_closure
 
 中文:
 引理 setGcd_dvd_of_mem_closure
-  条件: (h : n in AddSubmonoid.closure s)
+  条件: (h : n in 加法子幺半群.closure s)
   结论: setGcd s ∣ n
   证明: AddSubmonoid.closure_induction (fun _ => setGcd_dvd_of_mem) (dvd_zero _) (fun _ _ _ _ => dvd_add) h
 
@@ -328,7 +328,7 @@ lemma exists_ne_zero_of_setGcd_ne_zero
   exact setGcd_eq_zero_iff.mpr hs
 
 中文:
-引理 exists_ne_zero_of_setGcd_ne_zero
+引理 存在_ne_zero_of_setGcd_ne_zero
   条件: (hs : setGcd s != 0)
   结论: 存在 n in s, n != 0
   证明: by
@@ -354,7 +354,7 @@ lemma span_singleton_setGcd
 
 中文:
 引理 span_singleton_setGcd
-  结论: Ideal.span {(setGcd s : 整数)} = Ideal.span (((↑) : 自然数 -> 整数) '' s)
+  结论: 理想.span {(setGcd s : 整数)} = 理想.span (((↑) : 自然数 -> 整数) '' s)
   证明: by
   rw [setGcd]; rw [← Ideal.span_singleton_eq_span_singleton.mpr (Int.associated_natAbs _)]; rw [Ideal.span]; rw [span_singleton_generator]
 
@@ -373,7 +373,7 @@ lemma subset_span_setGcd
 
 中文:
 引理 subset_span_setGcd
-  结论: s subseteq Ideal.span {setGcd s}
+  结论: s subseteq 理想.span {setGcd s}
   证明: fun _x hx => Ideal.mem_span_singleton.mpr (setGcd_dvd_of_mem hx)
 
 Depends on / 依赖: Ideal.mem_span_singleton.mpr, mem_span_singleton, setGcd_dvd_of_mem
@@ -395,7 +395,7 @@ theorem exists_mem_span_nat_finset_of_ge
     (span_singleton_se
 
 中文:
-定理 exists_mem_span_nat_finset_of_ge
+定理 存在_mem_span_nat_finset_of_ge
   证明: by
   by_cases h0 : setGcd s = 0
   · refine ⟨∅, 0, by simp, fun _ _ dvd => by cases zero_dvd_iff.mp (h0 ▸ dvd); exact zero_mem _⟩
@@ -454,8 +454,8 @@ theorem exists_mem_closure_of_ge
     (Submodule.span_mono hts (hn m ge dvd))⟩
 
 中文:
-定理 exists_mem_closure_of_ge
-  结论: 存在 n, 对任意 m >= n, setGcd s ∣ m -> m in AddSubmonoid.closure s
+定理 存在_mem_closure_of_ge
+  结论: 存在 n, 对任意 m >= n, setGcd s ∣ m -> m in 加法子幺半群.closure s
   证明: have ⟨_t, n, hts, hn⟩ := exists_mem_span_nat_finset_of_ge s
   ⟨n, fun m ge dvd => (Submodule.span_nat_eq_addSubmonoidClosure s).le
     (Submodule.span_mono hts (hn m ge dvd))⟩
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNoetherian 自然数 自然数
+  签名: 是Noether 自然数 自然数
   定义体: by
     have ⟨t, n, hts, hn⟩ := exists_mem_span_nat_finset_of_ge s
     classical
@@ -549,7 +549,7 @@ theorem addSubmonoid_fg
 
 中文:
 定理 addSubmonoid_fg
-  条件: (s : AddSubmonoid 自然数)
+  条件: (s : 加法子幺半群 自然数)
   结论: s.FG
   证明: by
   rw [← s.toNatSubmodule_toAddSubmonoid]; rw [← Submodule.fg_iff_addSubmonoid_fg]
@@ -577,8 +577,8 @@ fun h => hn.1 AddSubmonoid.closure_mono (Set.singleton_subset_iff.mpr h)
        
 
 中文:
-定理 exists_frobeniusNumber_iff
-  条件: {s : Set 自然数}
+定理 存在_frobeniusNumber_iff
+  条件: {s : 集合 自然数}
   证明: fun ⟨n, hn⟩ => by
     rw [frobeniusNumber_iff] at hn
 exact ⟨dvd_one.mp Nat.dvd_add_iff_right (setGcd_dvd_of_mem_closure (hn.2 (n + 1)

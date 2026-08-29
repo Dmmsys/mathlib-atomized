@@ -130,7 +130,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (N : Matroid β) (f : α -> β)
+  签名: (N : 拟阵 β) (f : α -> β)
   定义体: IndepMatroid.matroid
   { E := f ⁻¹' N.E
     Indep := fun I => N.Indep (f '' I) ∧ InjOn f I
@@ -194,7 +194,7 @@ lemma comap_indep_iff
 
 中文:
 引理 comap_indep_iff
-  结论: (N.comap f).Indep I ↔ N.Indep (f '' I) ∧ InjOn f I
+  结论: (N.comap f).Indep I ↔ N.Indep (f '' I) ∧ 单射限制 f I
   证明: Iff.rfl
 -/
 @[simp] lemma comap_indep_iff : (N.comap f).Indep I ↔ N.Indep (f '' I) ∧ InjOn f I := Iff.rfl
@@ -210,7 +210,7 @@ lemma comap_ground_eq
 
 中文:
 引理 comap_ground_eq
-  条件: (N : Matroid β) (f : α -> β)
+  条件: (N : 拟阵 β) (f : α -> β)
   结论: (N.comap f).E = f ⁻¹' N.E
   证明: rfl
 -/
@@ -259,7 +259,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (N : Matroid β)
+  条件: (N : 拟阵 β)
   结论: N.comap id = N
   证明: ext_indep rfl by simp [injective_id.injOn]
 -/
@@ -279,7 +279,7 @@ refine fun hi => hf.mono subset_trans ?_ (preimage_mono hi.subset_ground)
 
 中文:
 引理 comap_indep_iff_of_injOn
-  条件: (hf : InjOn f (f ⁻¹' N.E))
+  条件: (hf : 单射限制 f (f ⁻¹' N.E))
   证明: by
   rw [comap_indep_iff]; rw [and_iff_left_iff_imp]
 refine fun hi => hf.mono subset_trans ?_ (preimage_mono hi.subset_ground)
@@ -325,7 +325,7 @@ lemma comap_loopyOn
 
 中文:
 引理 comap_loopyOn
-  条件: (f : α -> β) (E : Set β)
+  条件: (f : α -> β) (E : 集合 β)
   结论: comap (loopyOn E) f = loopyOn (f ⁻¹' E)
   证明: by
   rw [eq_loopyOn_iff]; aesop
@@ -349,7 +349,7 @@ lemma comap_isBasis_iff
 
 中文:
 引理 comap_isBasis_iff
-  条件: {I X : Set α}
+  条件: {I X : 集合 α}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨hI, hinj⟩ := comap_indep_iff.1 h.indep
@@ -390,7 +390,7 @@ lemma comap_isBase_iff
 
 中文:
 引理 comap_isBase_iff
-  条件: {B : Set α}
+  条件: {B : 集合 α}
   证明: by
   rw [← isBasis_ground_iff]; rw [comap_isBasis_iff]; rfl
 -/
@@ -412,7 +412,7 @@ lemma comap_isBasis'_iff
 
 中文:
 引理 comap_isBasis'_iff
-  条件: {I X : Set α}
+  条件: {I X : 集合 α}
   证明: by
   simp only [isBasis'_iff_isBasis_inter_ground, comap_ground_eq, comap_isBasis_iff,
     image_inter_preimage, subset_inter_iff, ← and_assoc, and_iff_left_iff_imp,
@@ -442,7 +442,7 @@ instance comap_finitary
 
 中文:
 实例 comap_finitary
-  签名: (N : Matroid β) [N.Finitary] (f : α -> β)
+  签名: (N : 拟阵 β) [N.Finitary] (f : α -> β)
   定义体: by
   refine ⟨fun I hI => ?_⟩
   rw [comap_indep_iff]; rw [indep_iff_forall_finite_subset_indep]
@@ -477,7 +477,7 @@ instance comap_rankFinite
 
 中文:
 实例 comap_rankFinite
-  签名: (N : Matroid β) [N.RankFinite] (f : α -> β)
+  签名: (N : 拟阵 β) [N.RankFinite] (f : α -> β)
   定义体: by
   obtain ⟨B, hB⟩ := (N.comap f).exists_isBase
   refine hB.rankFinite_of_finite ?_
@@ -508,7 +508,7 @@ definition comapOn
 
 中文:
 定义 comapOn
-  签名: (N : Matroid β) (E : Set α) (f : α -> β)
+  签名: (N : 拟阵 β) (E : 集合 α) (f : α -> β)
   定义体: (N.comap f) ↾ E
 
 Depends on / 依赖: N.comap
@@ -527,7 +527,7 @@ lemma comapOn_preimage_eq
 
 中文:
 引理 comapOn_preimage_eq
-  条件: (N : Matroid β) (f : α -> β)
+  条件: (N : 拟阵 β) (f : α -> β)
   结论: N.comapOn (f ⁻¹' N.E) f = N.comap f
   证明: by
   rw [comapOn]; rw [restrict_eq_self_iff]; rfl
@@ -600,7 +600,7 @@ lemma comapOn_isBase_iff_of_surjOn
 
 中文:
 引理 comapOn_isBase_iff_of_surjOn
-  条件: (h : SurjOn f E N.E)
+  条件: (h : 满射限制 f E N.E)
   证明: by
   simp_rw [comapOn_isBase_iff, and_congr_left_iff, and_imp, isBasis'_iff_isBasis_inter_ground,
     inter_eq_self_of_subset_right h, isBasis_ground_iff, implies_true]
@@ -626,7 +626,7 @@ lemma comapOn_isBase_iff_of_bijOn
 
 中文:
 引理 comapOn_isBase_iff_of_bijOn
-  条件: (h : BijOn f E N.E)
+  条件: (h : 双射限制 f E N.E)
   证明: by
   rw [← and_iff_left_of_imp (IsBase.subset_ground (M := N.comapOn E f) (B := B))]; rw [comapOn_ground_eq]; rw [and_congr_left_iff]
   suffices h' : B subseteq E -> InjOn f B from fun hB =>
@@ -654,7 +654,7 @@ lemma comapOn_dual_eq_of_bijOn
 
 中文:
 引理 comapOn_dual_eq_of_bijOn
-  条件: (h : BijOn f E N.E)
+  条件: (h : 双射限制 f E N.E)
   证明: by
   refine ext_isBase (by simp) (fun B hB => ?_)
   rw [comapOn_isBase_iff_of_bijOn (by simpa)]; rw [dual_isBase_iff]; rw [comapOn_isBase_iff_of_bijOn h]; rw [dual_isBase_iff _]; rw [comapOn_ground_eq]; rw [and_iff_left sdiff_subset]; rw [and_iff_left (by simpa)]; rw [h.injOn.image_sdiff_subset (by 
@@ -729,7 +729,7 @@ definition mapSetEmbedding
 
 中文:
 定义 mapSetEmbedding
-  签名: (M : Matroid α) (f : M.E ↪ β)
+  签名: (M : 拟阵 α) (f : M.E ↪ β)
   定义体: Matroid.ofExistsMatroid
   (E := range f)
   (Indep := fun I => M.Indep ↑(f ⁻¹' I) ∧ I subseteq range f)
@@ -771,7 +771,7 @@ lemma mapSetEmbedding_ground
 
 中文:
 引理 mapSetEmbedding_ground
-  条件: (M : Matroid α) (f : M.E ↪ β)
+  条件: (M : 拟阵 α) (f : M.E ↪ β)
   证明: rfl
 -/
 @[simp] lemma mapSetEmbedding_ground (M : Matroid α) (f : M.E ↪ β) :
@@ -787,7 +787,7 @@ lemma mapSetEmbedding_indep_iff
 
 中文:
 引理 mapSetEmbedding_indep_iff
-  条件: {f : M.E ↪ β} {I : Set β}
+  条件: {f : M.E ↪ β} {I : 集合 β}
   证明: Iff.rfl
 -/
 @[simp] lemma mapSetEmbedding_indep_iff {f : M.E ↪ β} {I : Set β} :
@@ -802,8 +802,8 @@ lemma Indep.exists_eq_image_of_mapSetEmbedding
   proof: ⟨f ⁻¹' I, hI.1, Eq.symm image_preimage_eq_of_subset hI.2⟩
 
 中文:
-引理 Indep.exists_eq_image_of_mapSetEmbedding
-  结论: {f : M.E ↪ β} {I : Set β}
+引理 Indep.存在_eq_image_of_mapSetEmbedding
+  结论: {f : M.E ↪ β} {I : 集合 β}
   证明: ⟨f ⁻¹' I, hI.1, Eq.symm image_preimage_eq_of_subset hI.2⟩
 
 Depends on / 依赖: Eq.symm, image_preimage_eq_of_subset
@@ -829,7 +829,7 @@ lemma mapSetEmbedding_indep_iff'
 
 中文:
 引理 mapSetEmbedding_indep_iff'
-  条件: {f : M.E ↪ β} {I : Set β}
+  条件: {f : M.E ↪ β} {I : 集合 β}
   证明: by
   simp only [mapSetEmbedding_indep_iff, subset_range_iff_exists_image_eq]
   constructor
@@ -871,7 +871,7 @@ definition map
 
 中文:
 定义 map
-  签名: (M : Matroid α) (f : α -> β) (hf : InjOn f M.E)
+  签名: (M : 拟阵 α) (f : α -> β) (hf : 单射限制 f M.E)
   定义体: Matroid.ofExistsMatroid
   (E := f '' M.E)
   (Indep := fun I => exists I₀, M.Indep I₀ ∧ I = f '' I₀)
@@ -902,7 +902,7 @@ lemma map_ground
 
 中文:
 引理 map_ground
-  条件: (M : Matroid α) (f : α -> β) (hf)
+  条件: (M : 拟阵 α) (f : α -> β) (hf)
   结论: (M.map f hf).E = f '' M.E
   证明: rfl
 -/
@@ -918,7 +918,7 @@ lemma map_indep_iff
 
 中文:
 引理 map_indep_iff
-  条件: {hf} {I : Set β}
+  条件: {hf} {I : 集合 β}
   证明: Iff.rfl
 -/
 @[simp] lemma map_indep_iff {hf} {I : Set β} :
@@ -955,8 +955,8 @@ lemma Indep.exists_bijOn_of_map
   exact ⟨I₀, hI₀, (hf.mono hI₀.subset_ground).bijOn_image⟩
 
 中文:
-引理 Indep.exists_bijOn_of_map
-  条件: {I : Set β} (hf) (hI : (M.map f hf).Indep I)
+引理 Indep.存在_bijOn_of_map
+  条件: {I : 集合 β} (hf) (hI : (M.map f hf).Indep I)
   证明: by
   obtain ⟨I₀, hI₀, rfl⟩ := hI
   exact ⟨I₀, hI₀, (hf.mono hI₀.subset_ground).bijOn_image⟩
@@ -981,7 +981,7 @@ lemma map_image_indep_iff
 
 中文:
 引理 map_image_indep_iff
-  条件: {hf} {I : Set α} (hI : I subseteq M.E)
+  条件: {hf} {I : 集合 α} (hI : I subseteq M.E)
   证明: by
   rw [map_indep_iff]
   refine ⟨fun ⟨J, hJ, hIJ⟩ => ?_, fun h => ⟨I, h, rfl⟩⟩
@@ -1011,7 +1011,7 @@ lemma map_isBase_iff
 
 中文:
 引理 map_isBase_iff
-  条件: (M : Matroid α) (f : α -> β) (hf) {B : Set β}
+  条件: (M : 拟阵 α) (f : α -> β) (hf) {B : 集合 β}
   证明: by
   rw [isBase_iff_maximal_indep]
   refine ⟨fun h => ?_, ?_⟩
@@ -1047,7 +1047,7 @@ lemma IsBase.map
 
 中文:
 引理 IsBase.map
-  条件: {B : Set α} (hB : M.IsBase B) {f : α -> β} (hf)
+  条件: {B : 集合 α} (hB : M.IsBase B) {f : α -> β} (hf)
   结论: (M.map f hf).IsBase (f '' B)
   证明: by
   rw [map_isBase_iff]; exact ⟨B, hB, rfl⟩
@@ -1074,7 +1074,7 @@ lemma map_dep_iff
 
 中文:
 引理 map_dep_iff
-  条件: {hf} {D : Set β}
+  条件: {hf} {D : 集合 β}
   证明: by
   simp only [Dep, map_indep_iff, not_exists, not_and, map_ground, subset_image_iff]
   constructor
@@ -1110,7 +1110,7 @@ lemma map_image_isBase_iff
 
 中文:
 引理 map_image_isBase_iff
-  条件: {hf} {B : Set α} (hB : B subseteq M.E)
+  条件: {hf} {B : 集合 α} (hB : B subseteq M.E)
   证明: by
   rw [map_isBase_iff]
   refine ⟨fun ⟨J, hJ, hIJ⟩ => ?_, fun h => ⟨B, h, rfl⟩⟩
@@ -1138,8 +1138,8 @@ lemma IsBasis.map
   simp only [map_indep_iff, not_ex
 
 中文:
-引理 IsBasis.map
-  条件: {X : Set α} (hIX : M.IsBasis I X) {f : α -> β} (hf)
+引理 是基.map
+  条件: {X : 集合 α} (hIX : M.是基 I X) {f : α -> β} (hf)
   证明: by
   refine (hIX.indep.map f hf).isBasis_of_forall_insert (image_mono hIX.subset) ?_
   rintro _ ⟨⟨e, he, rfl⟩, he'⟩
@@ -1177,7 +1177,7 @@ lemma map_isBasis_iff
 
 中文:
 引理 map_isBasis_iff
-  条件: {I X : Set α} (f : α -> β) (hf) (hI : I subseteq M.E) (hX : X subseteq M.E)
+  条件: {I X : 集合 α} (f : α -> β) (hf) (hI : I subseteq M.E) (hX : X subseteq M.E)
   证明: by
   refine ⟨fun h => ?_, fun h => h.map hf⟩
   obtain ⟨I', hI', hII'⟩ := map_indep_iff.1 h.indep
@@ -1217,7 +1217,7 @@ lemma map_isBasis_iff'
 
 中文:
 引理 map_isBasis_iff'
-  条件: {I X : Set β} {hf}
+  条件: {I X : 集合 β} {hf}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨I, hI, rfl⟩ := subset_image_iff.1 h.indep.subset_ground
@@ -1368,7 +1368,7 @@ lemma map_comap
 
 中文:
 引理 map_comap
-  条件: {f : α -> β} (h_range : N.E subseteq range f) (hf : InjOn f (f ⁻¹' N.E))
+  条件: {f : α -> β} (h_range : N.E subseteq range f) (hf : 单射限制 f (f ⁻¹' N.E))
   证明: by
   refine ext_indep (by simpa [image_preimage_eq_iff]) ?_
   simp only [map_ground, comap_ground_eq, map_indep_iff, comap_indep_iff, forall_subset_image_iff]
@@ -1395,7 +1395,7 @@ lemma comap_map
 
 中文:
 引理 comap_map
-  条件: {f : α -> β} (hf : f.Injective)
+  条件: {f : α -> β} (hf : f.单射)
   结论: (M.map f hf.injOn).comap f = M
   证明: by
   simp [ext_iff_indep, preimage_image_eq _ hf, and_iff_left hf.injOn,
@@ -1416,7 +1416,7 @@ instance [M.Nonempty]
   body: ⟨by simp [M.ground_nonempty]⟩
 
 中文:
-实例 [M.Nonempty]
+实例 [M.非空]
   签名: {f : α -> β} (hf)
   定义体: ⟨by simp [M.ground_nonempty]⟩
 
@@ -1434,7 +1434,7 @@ instance [M.Finite]
   body: ⟨M.ground_finite.image f⟩
 
 中文:
-实例 [M.Finite]
+实例 [M.有限]
   签名: {f : α -> β} (hf)
   定义体: ⟨M.ground_finite.image f⟩
 
@@ -1546,7 +1546,7 @@ definition mapSetEquiv
 
 中文:
 定义 mapSetEquiv
-  签名: (M : Matroid α) {E : Set β} (e : M.E ≃ E)
+  签名: (M : 拟阵 α) {E : 集合 β} (e : M.E ≃ E)
   定义体: Matroid.ofExistsMatroid E (fun I => (M.Indep ↑(e.symm '' (E ↓inter I)) ∧ I subseteq E))
   ⟨M.mapSetEmbedding (e.toEmbedding.trans <| Function.Embedding.subtype _), by
     have hrw : forall I : Set β, Subtype.val ∘ ⇑e ⁻¹' I = ⇑e.symm '' E ↓inter I := fun I => by ext; simp
@@ -1570,7 +1570,7 @@ lemma mapSetEquiv_indep_iff
 
 中文:
 引理 mapSetEquiv_indep_iff
-  条件: (M : Matroid α) {E : Set β} (e : M.E ≃ E) {I : Set β}
+  条件: (M : 拟阵 α) {E : 集合 β} (e : M.E ≃ E) {I : 集合 β}
   证明: Iff.rfl
 -/
 @[simp] lemma mapSetEquiv_indep_iff (M : Matroid α) {E : Set β} (e : M.E ≃ E) {I : Set β} :
@@ -1586,7 +1586,7 @@ lemma mapSetEquiv.ground
 
 中文:
 引理 mapSetEquiv.ground
-  条件: (M : Matroid α) {E : Set β} (e : M.E ≃ E)
+  条件: (M : 拟阵 α) {E : 集合 β} (e : M.E ≃ E)
   证明: rfl
 -/
 @[simp] lemma mapSetEquiv.ground (M : Matroid α) {E : Set β} (e : M.E ≃ E) :
@@ -1605,7 +1605,7 @@ definition mapEmbedding
 
 中文:
 定义 mapEmbedding
-  签名: (M : Matroid α) (f : α ↪ β)
+  签名: (M : 拟阵 α) (f : α ↪ β)
   定义体: M.map f f.injective.injOn
 
 Depends on / 依赖: M.map, f.injective.injOn, injective
@@ -1622,7 +1622,7 @@ lemma mapEmbedding_ground_eq
 
 中文:
 引理 mapEmbedding_ground_eq
-  条件: (M : Matroid α) (f : α ↪ β)
+  条件: (M : 拟阵 α) (f : α ↪ β)
   证明: rfl
 -/
 @[simp] lemma mapEmbedding_ground_eq (M : Matroid α) (f : α ↪ β) :
@@ -1643,7 +1643,7 @@ lemma mapEmbedding_indep_iff
 
 中文:
 引理 mapEmbedding_indep_iff
-  条件: {f : α ↪ β} {I : Set β}
+  条件: {f : α ↪ β} {I : 集合 β}
   证明: by
   rw [mapEmbedding]; rw [map_indep_iff]
   refine ⟨?_, fun ⟨h,h'⟩ => ⟨f ⁻¹' I, h, by rwa [eq_comm, image_preimage_eq_iff]⟩⟩
@@ -1693,7 +1693,7 @@ lemma IsBase.mapEmbedding
 
 中文:
 引理 IsBase.mapEmbedding
-  条件: {B : Set α} (hB : M.IsBase B) (f : α ↪ β)
+  条件: {B : 集合 α} (hB : M.IsBase B) (f : α ↪ β)
   证明: by
   rw [Matroid.mapEmbedding]; rw [map_isBase_iff]
   exact ⟨B, hB, rfl⟩
@@ -1715,8 +1715,8 @@ lemma IsBasis.mapEmbedding
   apply hIX.map
 
 中文:
-引理 IsBasis.mapEmbedding
-  条件: {X : Set α} (hIX : M.IsBasis I X) (f : α ↪ β)
+引理 是基.mapEmbedding
+  条件: {X : 集合 α} (hIX : M.是基 I X) (f : α ↪ β)
   证明: by
   apply hIX.map
 
@@ -1741,7 +1741,7 @@ lemma mapEmbedding_isBase_iff
 
 中文:
 引理 mapEmbedding_isBase_iff
-  条件: {f : α ↪ β} {B : Set β}
+  条件: {f : α ↪ β} {B : 集合 β}
   证明: by
   rw [mapEmbedding]; rw [map_isBase_iff]
   refine ⟨?_, fun ⟨h,h'⟩ => ⟨f ⁻¹' B, h, by rwa [eq_comm, image_preimage_eq_iff]⟩⟩
@@ -1774,7 +1774,7 @@ lemma mapEmbedding_isBasis_iff
 
 中文:
 引理 mapEmbedding_isBasis_iff
-  条件: {f : α ↪ β} {I X : Set β}
+  条件: {f : α ↪ β} {I X : 集合 β}
   证明: by
   rw [mapEmbedding]; rw [map_isBasis_iff']
   refine ⟨?_, fun ⟨hb, hIX, hX⟩ => ?_⟩
@@ -1803,7 +1803,7 @@ instance [M.Nonempty]
   body: inferInstanceAs (M.map f f.injective.injOn).Nonempty
 
 中文:
-实例 [M.Nonempty]
+实例 [M.非空]
   签名: {f : α ↪ β}
   定义体: inferInstanceAs (M.map f f.injective.injOn).Nonempty
 
@@ -1821,7 +1821,7 @@ instance [M.Finite]
   body: inferInstanceAs (M.map f f.injective.injOn).Finite
 
 中文:
-实例 [M.Finite]
+实例 [M.有限]
   签名: {f : α ↪ β}
   定义体: inferInstanceAs (M.map f f.injective.injOn).Finite
 
@@ -1900,7 +1900,7 @@ definition mapEquiv
 
 中文:
 定义 mapEquiv
-  签名: (M : Matroid α) (f : α ≃ β)
+  签名: (M : 拟阵 α) (f : α ≃ β)
   定义体: M.mapEmbedding f.toEmbedding
 
 Depends on / 依赖: M.mapEmbedding, f.toEmbedding, mapEmbedding, toEmbedding
@@ -1917,7 +1917,7 @@ lemma mapEquiv_ground_eq
 
 中文:
 引理 mapEquiv_ground_eq
-  条件: (M : Matroid α) (f : α ≃ β)
+  条件: (M : 拟阵 α) (f : α ≃ β)
   证明: rfl
 -/
 @[simp] lemma mapEquiv_ground_eq (M : Matroid α) (f : α ≃ β) :
@@ -1953,7 +1953,7 @@ lemma mapEquiv_indep_iff
 
 中文:
 引理 mapEquiv_indep_iff
-  条件: {I : Set β}
+  条件: {I : 集合 β}
   结论: (M.mapEquiv f).Indep I ↔ M.Indep (f.symm '' I)
   证明: by
   rw [mapEquiv_eq_map]; rw [map_indep_iff]
@@ -1976,7 +1976,7 @@ lemma mapEquiv_dep_iff
 
 中文:
 引理 mapEquiv_dep_iff
-  条件: {D : Set β}
+  条件: {D : 集合 β}
   结论: (M.mapEquiv f).Dep D ↔ M.Dep (f.symm '' D)
   证明: by
   rw [mapEquiv_eq_map]; rw [map_dep_iff]
@@ -1998,7 +1998,7 @@ lemma mapEquiv_isBase_iff
 
 中文:
 引理 mapEquiv_isBase_iff
-  条件: {B : Set β}
+  条件: {B : 集合 β}
   证明: by
   rw [mapEquiv_eq_map]; rw [map_isBase_iff]
   exact ⟨by rintro ⟨I, hI, rfl⟩; simpa, fun h => ⟨_, h, by simp⟩⟩
@@ -2022,7 +2022,7 @@ lemma mapEquiv_isBasis_iff
 
 中文:
 引理 mapEquiv_isBasis_iff
-  条件: {α β : 类型} {M : Matroid α} (f : α ≃ β) {I X : Set β}
+  条件: {α β : 类型} {M : 拟阵 α} (f : α ≃ β) {I X : 集合 β}
   证明: by
   rw [mapEquiv_eq_map]; rw [map_isBasis_iff']
   refine ⟨fun h => ?_, fun h => ⟨_, _, h, by simp, by simp⟩⟩
@@ -2045,7 +2045,7 @@ instance [M.Nonempty]
   body: inferInstanceAs (M.map f f.injective.injOn).Nonempty
 
 中文:
-实例 [M.Nonempty]
+实例 [M.非空]
   签名: {f : α ≃ β}
   定义体: inferInstanceAs (M.map f f.injective.injOn).Nonempty
 
@@ -2063,7 +2063,7 @@ instance [M.Finite]
   body: inferInstanceAs (M.map f f.injective.injOn).Finite
 
 中文:
-实例 [M.Finite]
+实例 [M.有限]
   签名: {f : α ≃ β}
   定义体: inferInstanceAs (M.map f f.injective.injOn).Finite
 
@@ -2142,7 +2142,7 @@ definition restrictSubtype
 
 中文:
 定义 restrictSubtype
-  签名: (M : Matroid α) (X : Set α)
+  签名: (M : 拟阵 α) (X : 集合 α)
   定义体: (M ↾ X).comap (↑)
 -/
 def restrictSubtype (M : Matroid α) (X : Set α) : Matroid X := (M ↾ X).comap (↑)
@@ -2176,7 +2176,7 @@ lemma restrictSubtype_indep_iff
 
 中文:
 引理 restrictSubtype_indep_iff
-  条件: {I : Set X}
+  条件: {I : 集合 X}
   证明: by
   simp [restrictSubtype, Subtype.val_injective.injOn]
 -/
@@ -2237,7 +2237,7 @@ lemma restrictSubtype_isBasis_iff
 
 中文:
 引理 restrictSubtype_isBasis_iff
-  条件: {Y : Set α} {I X : Set Y}
+  条件: {Y : 集合 α} {I X : 集合 Y}
   证明: by
   rw [restrictSubtype]; rw [comap_isBasis_iff]; rw [and_iff_right Subtype.val_injective.injOn]; rw [and_iff_left_of_imp]; rw [isBasis_restrict_iff']; rw [isBasis'_iff_isBasis_inter_ground]
   · simp
@@ -2265,8 +2265,8 @@ lemma restrictSubtype_isBase_iff
 
 中文:
 引理 restrictSubtype_isBase_iff
-  条件: {B : Set X}
-  结论: (M.restrictSubtype X).IsBase B ↔ M.IsBasis' B X
+  条件: {B : 集合 X}
+  结论: (M.restrictSubtype X).IsBase B ↔ M.是基' B X
   证明: by
   rw [restrictSubtype]; rw [comap_isBase_iff]
   simp [Subtype.val_injective.injOn, isBasis_restrict_iff',
@@ -2290,7 +2290,7 @@ lemma restrictSubtype_ground_isBase_iff
 
 中文:
 引理 restrictSubtype_ground_isBase_iff
-  条件: {B : Set M.E}
+  条件: {B : 集合 M.E}
   证明: by
   rw [restrictSubtype_isBase_iff]; rw [isBasis'_iff_isBasis]; rw [isBasis_ground_iff]
 -/
@@ -2309,7 +2309,7 @@ lemma restrictSubtype_ground_isBasis_iff
 
 中文:
 引理 restrictSubtype_ground_isBasis_iff
-  条件: {I X : Set M.E}
+  条件: {I X : 集合 M.E}
   证明: by
   rw [restrictSubtype_isBasis_iff]; rw [isBasis'_iff_isBasis]
 -/
@@ -2330,7 +2330,7 @@ lemma eq_of_restrictSubtype_eq
 
 中文:
 引理 eq_of_restrictSubtype_eq
-  结论: {N : Matroid α} (hM : M.E = E) (hN : N.E = E)
+  结论: {N : 拟阵 α} (hM : M.E = E) (hN : N.E = E)
   证明: by
   subst hM
   refine ext_indep (by rw [hN]) (fun I hI => ?_)
@@ -2399,7 +2399,7 @@ lemma map_val_restrictSubtype_eq
 
 中文:
 引理 map_val_restrictSubtype_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   simp [restrictSubtype, map_comap]
 -/
@@ -2418,7 +2418,7 @@ lemma map_val_restrictSubtype_ground_eq
 
 中文:
 引理 map_val_restrictSubtype_ground_eq
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   证明: by
   simp
 -/
@@ -2437,7 +2437,7 @@ instance [M.Finitary]
 
 中文:
 实例 [M.Finitary]
-  签名: {X : Set α}
+  签名: {X : 集合 α}
   定义体: by
   rw [restrictSubtype]; infer_instance
 
@@ -2457,7 +2457,7 @@ instance [M.RankFinite]
 
 中文:
 实例 [M.RankFinite]
-  签名: {X : Set α}
+  签名: {X : 集合 α}
   定义体: by
   rw [restrictSubtype]; infer_instance
 
@@ -2476,8 +2476,8 @@ instance [M.Finite]
   ⟨Finite.ground_finite⟩
 
 中文:
-实例 [M.Finite]
-  签名: : (M.restrictSubtype M.E).Finite
+实例 [M.有限]
+  签名: : (M.restrictSubtype M.E).有限
   定义体: have := M.ground_finite.to_subtype
   ⟨Finite.ground_finite⟩
 
@@ -2497,8 +2497,8 @@ instance [M.Nonempty]
   ⟨by simp⟩
 
 中文:
-实例 [M.Nonempty]
-  签名: : (M.restrictSubtype M.E).Nonempty
+实例 [M.非空]
+  签名: : (M.restrictSubtype M.E).非空
   定义体: have := M.ground_nonempty.coe_sort
   ⟨by simp⟩
 

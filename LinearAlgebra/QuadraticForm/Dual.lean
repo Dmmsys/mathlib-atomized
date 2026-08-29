@@ -47,7 +47,7 @@ definition dualProd
 
 中文:
 定义 dualProd
-  签名: : LinearMap.BilinForm R (Module.Dual R M × M)
+  签名: : 线性映射.BilinForm R (模.对偶 R M × M)
   定义体: (applyₗ.comp (snd R (Module.Dual R M) M)).compl₂ (fst R (Module.Dual R M) M) +
       ((applyₗ.comp (snd R (Module.Dual R M) M)).compl₂ (fst R (Module.Dual R M) M)).flip
 
@@ -67,7 +67,7 @@ theorem isSymm_dualProd
 
 中文:
 定理 isSymm_dualProd
-  结论: (dualProd R M).IsSymm
+  结论: (dualProd R M).是Symm
   证明: ⟨fun _x _y => add_comm _ _⟩
 
 Depends on / 依赖: add_comm
@@ -155,7 +155,7 @@ definition dualProd
 
 中文:
 定义 dualProd
-  签名: : QuadraticForm R (Module.Dual R M × M) where
+  签名: : QuadraticForm R (模.对偶 R M × M) where
   定义体: p.1 p.2
   toFun_smul a p := by
     rw [Prod.smul_fst]; rw [Prod.smul_snd]; rw [LinearMap.smul_apply]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
@@ -181,7 +181,7 @@ theorem _root_.LinearMap.dualProd.toQuadraticForm
   proof: ext fun _a => (two_nsmul _).symm
 
 中文:
-定理 _root_.LinearMap.dualProd.toQuadraticForm
+定理 _root_.线性映射.dualProd.toQuadraticForm
   证明: ext fun _a => (two_nsmul _).symm
 
 Depends on / 依赖: two_nsmul
@@ -275,7 +275,7 @@ definition toDualProd
 
 中文:
 定义 toDualProd
-  签名: (Q : QuadraticForm R M) [Invertible (2 : R)]
+  签名: (Q : QuadraticForm R M) [可逆 (2 : R)]
   定义体: LinearMap.prod
     (Q.associated.comp (LinearMap.fst _ _ _) + Q.associated.comp (LinearMap.snd _ _ _))
     (LinearMap.fst _ _ _ - LinearMap.snd _ _ _)
@@ -327,7 +327,7 @@ lemma LinearMap.BilinForm.linearIndependent_of_pairwise_le_zero
     rw [← hc];
 
 中文:
-引理 LinearMap.BilinForm.linearIndependent_of_pairwise_le_zero
+引理 线性映射.BilinForm.linearIndependent_of_pairwise_le_zero
   结论: {ι R M : 类型}
   证明: by
   refine linearIndependent_iff'.mpr fun s c hc => ?_

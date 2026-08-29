@@ -37,8 +37,8 @@ lemma not_weaklyQuasiFiniteAt
 
 中文:
 引理 not_weaklyQuasiFiniteAt
-  条件: (P : Ideal R[X]) [P.IsPrime]
-  结论: ¬ Algebra.WeaklyQuasiFiniteAt R P
+  条件: (P : 理想 R[X]) [P.是素]
+  结论: ¬ 代数.WeaklyQuasiFiniteAt R P
   证明: by
   intro H
   wlog hR : IsField R
@@ -77,8 +77,8 @@ lemma not_quasiFiniteAt
 
 中文:
 引理 not_quasiFiniteAt
-  条件: (P : Ideal R[X]) [P.IsPrime]
-  结论: ¬ Algebra.QuasiFiniteAt R P
+  条件: (P : 理想 R[X]) [P.是素]
+  结论: ¬ 代数.QuasiFiniteAt R P
   证明: fun _ => not_weaklyQuasiFiniteAt P inferInstance
 
 Depends on / 依赖: DFunLike, DFunLike.coe, Function, Function.const_injective, const_injective, ne_of_apply_ne, not_weaklyQuasiFiniteAt, zero_ne_one

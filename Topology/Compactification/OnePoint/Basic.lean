@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OnePoint X)
+  签名: 可居 (OnePoint X)
   定义体: ⟨∞⟩
 -/
 instance : Inhabited (OnePoint X) := ⟨∞⟩
@@ -202,8 +202,8 @@ instance [IsEmpty
   body: inferInstanceAs Subsingleton (Option X)
 
 中文:
-实例 [IsEmpty
-  签名: X] : Subsingleton (OnePoint X)
+实例 [是空
+  签名: X] : 子单例 (OnePoint X)
   定义体: inferInstanceAs Subsingleton (Option X)
 
 Depends on / 依赖: Subsingleton
@@ -220,7 +220,7 @@ lemma «forall»
   proof: Option.forall
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : OnePoint X -> 命题}
   证明: Option.forall
 -/
@@ -237,7 +237,7 @@ lemma «exists»
   proof: Option.exists
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : OnePoint X -> 命题}
   证明: Option.exists
 -/
@@ -254,8 +254,8 @@ instance [Fintype
   body: inferInstanceAs (Fintype (Option X))
 
 中文:
-实例 [Fintype
-  签名: X] : Fintype (OnePoint X)
+实例 [有限类型
+  签名: X] : 有限类型 (OnePoint X)
   定义体: inferInstanceAs (Fintype (Option X))
 
 Depends on / 依赖: Fintype
@@ -273,7 +273,7 @@ instance infinite
 
 中文:
 实例 infinite
-  签名: [Infinite X]
+  签名: [无限 X]
   定义体: inferInstanceAs (Infinite (Option X))
 
 Depends on / 依赖: Infinite
@@ -293,7 +293,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : X -> OnePoint X)
+  结论: 函数.单射 ((↑) : X -> OnePoint X)
   证明: Option.some_injective X
 
 @[norm_cast]
@@ -381,7 +381,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {C : OnePoint X -> Sort*} (infty : C ∞) (coe : 对任意 x : X, C x)
+  签名: {C : OnePoint X -> 类型层*} (infty : C ∞) (coe : 对任意 x : X, C x)
 -/
 protected def rec {C : OnePoint X -> Sort*} (infty : C ∞) (coe : forall x : X, C x) :
     forall z : OnePoint X, C z
@@ -447,7 +447,7 @@ theorem isCompl_range_coe_infty
 
 中文:
 定理 isCompl_range_coe_infty
-  结论: IsCompl (range ((↑) : X -> OnePoint X)) {∞}
+  结论: 是补集 (range ((↑) : X -> OnePoint X)) {∞}
   证明: isCompl_range_some_none X
 
 Depends on / 依赖: isCompl_range_some_none
@@ -529,7 +529,7 @@ theorem compl_infty
 
 中文:
 定理 compl_infty
-  结论: ({∞}ᶜ : Set (OnePoint X)) = range ((↑) : X -> OnePoint X)
+  结论: ({∞}ᶜ : 集合 (OnePoint X)) = range ((↑) : X -> OnePoint X)
   证明: (@isCompl_range_coe_infty X).symm.compl_eq
 
 Depends on / 依赖: compl_eq, isCompl_range_coe_infty, symm.compl_eq
@@ -549,8 +549,8 @@ theorem compl_image_coe
 
 中文:
 定理 compl_image_coe
-  条件: (s : Set X)
-  结论: ((↑) '' s : Set (OnePoint X))ᶜ = (↑) '' sᶜ union {∞}
+  条件: (s : 集合 X)
+  结论: ((↑) '' s : 集合 (OnePoint X))ᶜ = (↑) '' sᶜ union {∞}
   证明: by
   rw [coe_injective.compl_image_eq]; rw [compl_range_coe]
 
@@ -570,7 +570,7 @@ theorem ne_infty_iff_exists
   induction x using OnePoint.rec <;> simp
 
 中文:
-定理 ne_infty_iff_exists
+定理 ne_infty_iff_存在
   条件: {x : OnePoint X}
   结论: x != ∞ ↔ 存在 y : X, (y : OnePoint X) = x
   证明: by
@@ -652,7 +652,7 @@ theorem infty_notMem_image_coe
 
 中文:
 定理 infty_notMem_image_coe
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: ∞ ∉ ((↑) : X -> OnePoint X) '' s
   证明: notMem_subset (image_subset_range _ _) infty_notMem_range_coe
 
@@ -801,7 +801,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (OnePoint X)
+  签名: 拓扑空间 (OnePoint X)
   定义体: (∞ in s -> IsCompact (((↑) : X -> OnePoint X) ⁻¹' s)ᶜ) ∧
     IsOpen (((↑) : X -> OnePoint X) ⁻¹' s)
   isOpen_univ := by simp
@@ -906,7 +906,7 @@ theorem isOpen_iff_of_notMem
 中文:
 定理 isOpen_iff_of_notMem
   条件: (h : ∞ ∉ s)
-  结论: IsOpen s ↔ IsOpen ((↑) ⁻¹' s : Set X)
+  结论: 是开集 s ↔ 是开集 ((↑) ⁻¹' s : 集合 X)
   证明: by
   simp [isOpen_def, h]
 
@@ -929,7 +929,7 @@ theorem isClosed_iff_of_mem
 中文:
 定理 isClosed_iff_of_mem
   条件: (h : ∞ in s)
-  结论: IsClosed s ↔ IsClosed ((↑) ⁻¹' s : Set X)
+  结论: 是闭集 s ↔ 是闭集 ((↑) ⁻¹' s : 集合 X)
   证明: by
   have : ∞ ∉ sᶜ := fun H => H h
   rw [← isOpen_compl_iff]; rw [isOpen_iff_of_notMem this]; rw [← isOpen_compl_iff]; rw [preimage_compl]
@@ -978,8 +978,8 @@ theorem isOpen_image_coe
 
 中文:
 定理 isOpen_image_coe
-  条件: {s : Set X}
-  结论: IsOpen ((↑) '' s : Set (OnePoint X)) ↔ IsOpen s
+  条件: {s : 集合 X}
+  结论: 是开集 ((↑) '' s : 集合 (OnePoint X)) ↔ 是开集 s
   证明: by
   rw [isOpen_iff_of_notMem infty_notMem_image_coe]; rw [preimage_image_eq _ coe_injective]
 
@@ -1002,7 +1002,7 @@ theorem isOpen_compl_image_coe
 
 中文:
 定理 isOpen_compl_image_coe
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [isOpen_iff_of_mem]; rw [← preimage_compl]; rw [compl_compl]; rw [preimage_image_eq _ coe_injective]
   exact infty_notMem_image_coe
@@ -1028,7 +1028,7 @@ theorem isClosed_image_coe
 
 中文:
 定理 isClosed_image_coe
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_compl_image_coe]
 
@@ -1048,7 +1048,7 @@ definition opensOfCompl
 
 中文:
 定义 opensOfCompl
-  签名: (s : Set X) (h₁ : IsClosed s) (h₂ : IsCompact s)
+  签名: (s : 集合 X) (h₁ : 是闭集 s) (h₂ : 是紧集 s)
   定义体: ⟨((↑) '' s)ᶜ, isOpen_compl_image_coe.2 ⟨h₁, h₂⟩⟩
 
 Depends on / 依赖: isOpen_compl_image_coe
@@ -1069,7 +1069,7 @@ theorem infty_mem_opensOfCompl
 
 中文:
 定理 infty_mem_opensOfCompl
-  条件: {s : Set X} (h₁ : IsClosed s) (h₂ : IsCompact s)
+  条件: {s : 集合 X} (h₁ : 是闭集 s) (h₂ : 是紧集 s)
   证明: mem_compl infty_notMem_image_coe
 
 @[continuity]
@@ -1091,7 +1091,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : X -> OnePoint X)
+  结论: 连续 ((↑) : X -> OnePoint X)
   证明: continuous_def.mpr fun _s hs => hs.right
 
 Depends on / 依赖: continuous_def, continuous_def.mpr, hs.right
@@ -1109,7 +1109,7 @@ theorem isOpenMap_coe
 
 中文:
 定理 isOpenMap_coe
-  结论: IsOpenMap ((↑) : X -> OnePoint X)
+  结论: 是开映射 ((↑) : X -> OnePoint X)
   证明: fun _ => isOpen_image_coe.2
 
 Depends on / 依赖: isOpen_image_coe
@@ -1126,7 +1126,7 @@ theorem isOpenEmbedding_coe
 
 中文:
 定理 isOpenEmbedding_coe
-  结论: IsOpenEmbedding ((↑) : X -> OnePoint X)
+  结论: 是开嵌入 ((↑) : X -> OnePoint X)
   证明: .of_continuous_injective_isOpenMap continuous_coe coe_injective isOpenMap_coe
 
 Depends on / 依赖: coe_injective, continuous_coe, isOpenMap_coe, of_continuous_injective_isOpenMap
@@ -1144,7 +1144,7 @@ theorem isOpen_range_coe
 
 中文:
 定理 isOpen_range_coe
-  结论: IsOpen (range ((↑) : X -> OnePoint X))
+  结论: 是开集 (range ((↑) : X -> OnePoint X))
   证明: isOpenEmbedding_coe.isOpen_range
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.isOpen_range, isOpen_range
@@ -1164,7 +1164,7 @@ theorem isClosed_infty
 
 中文:
 定理 isClosed_infty
-  结论: IsClosed ({∞} : Set (OnePoint X))
+  结论: 是闭集 ({∞} : 集合 (OnePoint X))
   证明: by
   rw [← compl_range_coe]; rw [isClosed_compl_iff]
   exact isOpen_range_coe
@@ -1205,7 +1205,7 @@ theorem nhdsWithin_coe_image
 
 中文:
 定理 nhdsWithin_coe_image
-  条件: (s : Set X) (x : X)
+  条件: (s : 集合 X) (x : X)
   证明: (isOpenEmbedding_coe.isEmbedding.map_nhdsWithin_eq _ _).symm
 
 Depends on / 依赖: isEmbedding, isOpenEmbedding_coe, isOpenEmbedding_coe.isEmbedding.map_nhdsWithin_eq, map_nhdsWithin_eq
@@ -1225,7 +1225,7 @@ theorem nhdsWithin_coe
 
 中文:
 定理 nhdsWithin_coe
-  条件: (s : Set (OnePoint X)) (x : X)
+  条件: (s : 集合 (OnePoint X)) (x : X)
   结论: 𝓝[s] ↑x = map (↑) (𝓝[(↑) ⁻¹' s] x)
   证明: (isOpenEmbedding_coe.map_nhdsWithin_preimage_eq _ _).symm
 
@@ -1324,7 +1324,7 @@ instance nhdsNE_infty_neBot
 
 中文:
 实例 nhdsNE_infty_neBot
-  签名: [NoncompactSpace X]
+  签名: [Noncompact空间 X]
   定义体: by
   rw [nhdsNE_infty_eq]
   infer_instance
@@ -1371,7 +1371,7 @@ theorem tendsto_coe_infty
 
 中文:
 定理 tendsto_coe_infty
-  结论: Tendsto (↑) (coclosedCompact X) (𝓝 (∞ : OnePoint X))
+  结论: 收敛 (↑) (coclosedCompact X) (𝓝 (∞ : OnePoint X))
   证明: by
   rw [nhds_infty_eq]
   exact Filter.Tendsto.mono_right tendsto_map le_sup_left
@@ -1441,7 +1441,7 @@ theorem le_nhds_infty
 
 中文:
 定理 le_nhds_infty
-  条件: {f : Filter (OnePoint X)}
+  条件: {f : 滤子 (OnePoint X)}
   证明: by
   simp only [hasBasis_nhds_infty.ge_iff, and_imp]
 
@@ -1486,7 +1486,7 @@ theorem tendsto_nhds_infty'
 
 中文:
 定理 tendsto_nhds_infty'
-  条件: {α : 类型} {f : OnePoint X -> α} {l : Filter α}
+  条件: {α : 类型} {f : OnePoint X -> α} {l : 滤子 α}
   证明: by
   simp [nhds_infty_eq, and_comm]
 
@@ -1508,7 +1508,7 @@ theorem tendsto_nhds_infty
 
 中文:
 定理 tendsto_nhds_infty
-  条件: {α : 类型} {f : OnePoint X -> α} {l : Filter α}
+  条件: {α : 类型} {f : OnePoint X -> α} {l : 滤子 α}
   证明: tendsto_nhds_infty'.trans by
     simp only [tendsto_pure_left, hasBasis_coclosedCompact.tendsto_left_iff, forall_and,
       and_assoc]
@@ -1532,7 +1532,7 @@ theorem continuousAt_infty'
 
 中文:
 定理 continuousAt_infty'
-  条件: {Y : 类型} [TopologicalSpace Y] {f : OnePoint X -> Y}
+  条件: {Y : 类型} [拓扑空间 Y] {f : OnePoint X -> Y}
   证明: tendsto_nhds_infty'.trans and_iff_right (tendsto_pure_nhds _ _)
 
 Depends on / 依赖: and_iff_right, tendsto_nhds_infty, tendsto_pure_nhds
@@ -1551,7 +1551,7 @@ theorem continuousAt_infty
 
 中文:
 定理 continuousAt_infty
-  条件: {Y : 类型} [TopologicalSpace Y] {f : OnePoint X -> Y}
+  条件: {Y : 类型} [拓扑空间 Y] {f : OnePoint X -> Y}
   证明: continuousAt_infty'.trans by simp only [hasBasis_coclosedCompact.tendsto_left_iff, and_assoc]
 
 Depends on / 依赖: and_assoc, continuousAt_infty, hasBasis_coclosedCompact, hasBasis_coclosedCompact.tendsto_left_iff, tendsto_left_iff
@@ -1572,7 +1572,7 @@ theorem continuousAt_coe
 
 中文:
 定理 continuousAt_coe
-  条件: {Y : 类型} [TopologicalSpace Y] {f : OnePoint X -> Y} {x : X}
+  条件: {Y : 类型} [拓扑空间 Y] {f : OnePoint X -> Y} {x : X}
   证明: by
   rw [ContinuousAt]; rw [nhds_coe_eq]; rw [tendsto_map'_iff]; rw [ContinuousAt]; rfl
 
@@ -1595,8 +1595,8 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: {Y : 类型} [TopologicalSpace Y] (f : OnePoint X -> Y)
-  结论: Continuous f ↔
+  条件: {Y : 类型} [拓扑空间 Y] (f : OnePoint X -> Y)
+  结论: 连续 f ↔
   证明: by
   simp only [continuous_iff_continuousAt, OnePoint.forall, continuousAt_coe, continuousAt_infty',
     Function.comp_def]
@@ -1621,7 +1621,7 @@ definition continuousMapMk
 
 中文:
 定义 continuousMapMk
-  签名: {Y : 类型} [TopologicalSpace Y] (f : C(X, Y)) (y : Y)
+  签名: {Y : 类型} [拓扑空间 Y] (f : C(X, Y)) (y : Y)
   定义体: x.elim y f
   continuous_toFun := by
     rw [continuous_iff]
@@ -1647,7 +1647,7 @@ lemma continuous_iff_from_discrete
 
 中文:
 引理 continuous_iff_from_discrete
-  结论: {Y : 类型} [TopologicalSpace Y]
+  结论: {Y : 类型} [拓扑空间 Y]
   证明: by
   simp [continuous_iff, cocompact_eq_cofinite, continuous_of_discreteTopology]
 
@@ -1668,7 +1668,7 @@ definition continuousMapMkDiscrete
 
 中文:
 定义 continuousMapMkDiscrete
-  签名: {Y : 类型} [TopologicalSpace Y]
+  签名: {Y : 类型} [拓扑空间 Y]
   定义体: continuousMapMk ⟨f, continuous_of_discreteTopology⟩ y (by simpa [cocompact_eq_cofinite])
 
 Depends on / 依赖: cocompact_eq_cofinite, continuousMapMk, continuous_of_discreteTopology
@@ -1697,7 +1697,7 @@ definition continuousMapDiscreteEquiv
 
 中文:
 定义 continuousMapDiscreteEquiv
-  签名: (Y : 类型) [DiscreteTopology X] [TopologicalSpace Y]
+  签名: (Y : 类型) [离散拓扑 X] [拓扑空间 Y]
   定义体: ⟨(f ·), ⟨f ∞, continuous_iff_from_discrete _
   invFun f :=
     { toFun := fun x => match x with
@@ -1739,7 +1739,7 @@ lemma continuous_iff_from_nat
 
 中文:
 引理 continuous_iff_from_nat
-  条件: {Y : 类型} [TopologicalSpace Y] (f : OnePoint 自然数 -> Y)
+  条件: {Y : 类型} [拓扑空间 Y] (f : OnePoint 自然数 -> Y)
   证明: by
   rw [continuous_iff_from_discrete]; rw [Nat.cofinite_eq_atTop]
 
@@ -1758,8 +1758,8 @@ definition continuousMapMkNat
   body: continuousMapMkDiscrete f y (by rwa [Nat.cofinite_eq_atTop])
 
 中文:
-定义 continuousMapMkNat
-  签名: {Y : 类型} [TopologicalSpace Y]
+定义 continuousMapMk自然数
+  签名: {Y : 类型} [拓扑空间 Y]
   定义体: continuousMapMkDiscrete f y (by rwa [Nat.cofinite_eq_atTop])
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, continuousMapMkDiscrete
@@ -1781,8 +1781,8 @@ definition continuousMapNatEquiv
     invFun := fun ⟨f, hf⟩ => ⟨f, by rwa [Nat.cofinite_eq_atTop]⟩ }
 
 中文:
-定义 continuousMapNatEquiv
-  签名: (Y : 类型) [TopologicalSpace Y] [T2Space Y]
+定义 continuousMap自然数Equiv
+  签名: (Y : 类型) [拓扑空间 Y] [T2空间 Y]
   定义体: by
   refine (continuousMapDiscreteEquiv Nat Y).trans {
     toFun := fun ⟨f, hf⟩ => ⟨f, by rwa [← Nat.cofinite_eq_atTop]⟩
@@ -1809,7 +1809,7 @@ theorem denseRange_coe
 
 中文:
 定理 denseRange_coe
-  条件: [NoncompactSpace X]
+  条件: [Noncompact空间 X]
   结论: DenseRange ((↑) : X -> OnePoint X)
   证明: by
   rw [DenseRange]; rw [← compl_infty]
@@ -1834,8 +1834,8 @@ theorem isDenseEmbedding_coe
 
 中文:
 定理 isDenseEmbedding_coe
-  条件: [NoncompactSpace X]
-  结论: IsDenseEmbedding ((↑) : X -> OnePoint X)
+  条件: [Noncompact空间 X]
+  结论: 是稠密嵌入 ((↑) : X -> OnePoint X)
   证明: { isOpenEmbedding_coe with dense := denseRange_coe }
 
 @[simp, norm_cast]
@@ -1883,7 +1883,7 @@ theorem inseparable_coe
 中文:
 定理 inseparable_coe
   条件: {x y : X}
-  结论: Inseparable (x : OnePoint X) y ↔ Inseparable x y
+  结论: 不可分 (x : OnePoint X) y ↔ 不可分 x y
   证明: isOpenEmbedding_coe.isInducing.inseparable_iff
 
 Depends on / 依赖: inseparable_iff, isInducing, isOpenEmbedding_coe, isOpenEmbedding_coe.isInducing.inseparable_iff
@@ -1924,7 +1924,7 @@ theorem not_inseparable_infty_coe
 中文:
 定理 not_inseparable_infty_coe
   条件: {x : X}
-  结论: ¬Inseparable ∞ (x : OnePoint X)
+  结论: ¬不可分 ∞ (x : OnePoint X)
   证明: fun h =>
   not_specializes_infty_coe h.specializes
 -/
@@ -1944,7 +1944,7 @@ theorem not_inseparable_coe_infty
 中文:
 定理 not_inseparable_coe_infty
   条件: {x : X}
-  结论: ¬Inseparable (x : OnePoint X) ∞
+  结论: ¬不可分 (x : OnePoint X) ∞
   证明: fun h =>
   not_specializes_infty_coe h.specializes'
 -/
@@ -1988,7 +1988,7 @@ theorem continuous_map_iff
 
 中文:
 定理 continuous_map_iff
-  条件: [TopologicalSpace Y] {f : X -> Y}
+  条件: [拓扑空间 Y] {f : X -> Y}
   证明: by
   simp_rw [continuous_iff, map_some, ← comap_coe_nhds_infty, tendsto_comap_iff, map_infty,
     isOpenEmbedding_coe.isInducing.continuous_iff (Y := Y)]
@@ -2013,7 +2013,7 @@ theorem continuous_map
 
 中文:
 定理 continuous_map
-  结论: [TopologicalSpace Y] {f : X -> Y} (hc : Continuous f)
+  结论: [拓扑空间 Y] {f : X -> Y} (hc : 连续 f)
   证明: continuous_map_iff.mpr ⟨hc, h⟩
 
 Depends on / 依赖: continuous_map_iff, continuous_map_iff.mpr
@@ -2050,7 +2050,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (OnePoint X)
+  签名: 紧空间 (OnePoint X)
   定义体: by
     have : Tendsto ((↑) : X -> OnePoint X) (cocompact X) (𝓝 ∞) := by
       rw [nhds_infty_eq]
@@ -2080,8 +2080,8 @@ instance [T0Space
   exacts [rfl, congr_arg some h.eq]
 
 中文:
-实例 [T0Space
-  签名: X] : T0Space (OnePoint X)
+实例 [T0空间
+  签名: X] : T0空间 (OnePoint X)
   定义体: by
   refine ⟨fun x y hxy => ?_⟩
   rcases inseparable_iff.1 hxy with (⟨rfl, rfl⟩ | ⟨x, rfl, y, rfl, h⟩)
@@ -2107,8 +2107,8 @@ instance [T1Space
       exact ⟨isClosed_singleton, isCompact_singleton⟩
 
 中文:
-实例 [T1Space
-  签名: X] : T1Space (OnePoint X) where
+实例 [T1空间
+  签名: X] : T1空间 (OnePoint X) where
   定义体: by
     induction z using OnePoint.rec
     · exact isClosed_infty
@@ -2136,8 +2136,8 @@ instance [WeaklyLocallyCompactSpace
     rw [nhds_infty_eq]; rw [disjoint_sup_right]; rw [nhds_coe_eq]; rw [coclosedCompact_eq_cocompact]; rw [disjoint_map coe_injective]; rw [← principal_singleton]; rw [disjoint_p
 
 中文:
-实例 [WeaklyLocallyCompactSpace
-  签名: X] [R1Space X] : NormalSpace (OnePoint X)
+实例 [WeaklyLocallyCompact空间
+  签名: X] [R1空间 X] : 正规空间 (OnePoint X)
   定义体: by
   suffices R1Space (OnePoint X) by infer_instance
   have key : forall z : X, Disjoint (𝓝 (some z)) (𝓝 ∞) := fun z => by
@@ -2172,8 +2172,8 @@ instance [PreconnectedSpace
   toNonempty := inferInstance
 
 中文:
-实例 [PreconnectedSpace
-  签名: X] [NoncompactSpace X] : ConnectedSpace (OnePoint X) where
+实例 [预连通空间
+  签名: X] [Noncompact空间 X] : 连通空间 (OnePoint X) where
   定义体: isDenseEmbedding_coe.isDenseInducing.preconnectedSpace
   toNonempty := inferInstance
 
@@ -2198,7 +2198,7 @@ theorem not_continuous_cofiniteTopology_of_symm
 
 中文:
 定理 not_continuous_cofiniteTopology_of_symm
-  条件: [Infinite X] [DiscreteTopology X]
+  条件: [无限 X] [离散拓扑 X]
   证明: by
   inhabit X
   simp only [continuous_iff_continuousAt, ContinuousAt, not_forall]
@@ -2383,7 +2383,7 @@ theorem Continuous.homeoOfEquivCompactToT2.t1_counterexample
     OnePoint.not_continuous_cofiniteTopology_of_symm⟩
 
 中文:
-定理 Continuous.homeoOfEquivCompactToT2.t1_counterexample
+定理 连续.homeoOfEquivCompactToT2.t1_counterexample
   证明: ⟨OnePoint Nat, CofiniteTopology (OnePoint Nat), inferInstance, inferInstance, inferInstance,
     inferInstance, CofiniteTopology.of, CofiniteTopology.continuous_of,
     OnePoint.not_continuous_cofiniteTopology_of_symm⟩

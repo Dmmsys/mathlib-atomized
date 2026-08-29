@@ -142,7 +142,7 @@ theorem card_sym_fin_eq_multichoose
 
 中文:
 定理 card_sym_fin_eq_multichoose
-  结论: 对任意 n k : 自然数, card (Sym (Fin n) k) = multichoose n k
+  结论: 对任意 n k : 自然数, card (Sym (有限集 n) k) = multichoose n k
 -/
 theorem card_sym_fin_eq_multichoose : forall n k : Nat, card (Sym (Fin n) k) = multichoose n k
   | n, 0 => by simp
@@ -166,7 +166,7 @@ theorem card_sym_eq_multichoose
 
 中文:
 定理 card_sym_eq_multichoose
-  条件: (α : 类型) (k : 自然数) [Fintype α] [Fintype (Sym α k)]
+  条件: (α : 类型) (k : 自然数) [有限类型 α] [有限类型 (Sym α k)]
   证明: by
   rw [← card_sym_fin_eq_multichoose]
   exact card_congr (equivCongr (equivFin α))
@@ -189,7 +189,7 @@ theorem card_sym_eq_choose
 
 中文:
 定理 card_sym_eq_choose
-  条件: {α : 类型} [Fintype α] (k : 自然数) [Fintype (Sym α k)]
+  条件: {α : 类型} [有限类型 α] (k : 自然数) [有限类型 (Sym α k)]
   证明: by
   rw [card_sym_eq_multichoose]; rw [Nat.multichoose_eq]
 
@@ -219,8 +219,8 @@ theorem card_image_diag
 
 中文:
 定理 card_image_diag
-  条件: (s : Finset α)
-  结论: #(s.diag.image Sym2.mk.uncurry) = #s
+  条件: (s : 有限集 α)
+  结论: #(s.diag.像 Sym2.mk.uncurry) = #s
   证明: by
   simp [card_image_of_injOn]
 
@@ -243,7 +243,7 @@ lemma two_mul_card_image_offDiag
 
 中文:
 引理 two_mul_card_image_offDiag
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   rw [card_eq_sum_card_image (Sym2.mk.uncurry : α × α -> _)]; rw [sum_const_nat (Sym2.ind _)]; rw [mul_comm]
   -- FIXME: Would be cool for the final `aesop` call not to require this `a ≠ b ∨ b ≠ a` trick.
@@ -272,7 +272,7 @@ theorem card_image_offDiag
 
 中文:
 定理 card_image_offDiag
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   rw [Nat.choose_two_right]; rw [Nat.mul_sub_left_distrib]; rw [mul_one]; rw [← offDiag_card]; rw [Nat.div_eq_of_eq_mul_right Nat.zero_lt_two (two_mul_card_image_offDiag s).symm]
 
@@ -293,7 +293,7 @@ theorem card_subtype_diag
 
 中文:
 定理 card_subtype_diag
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: card { a : Sym2 α // a.IsDiag } = card α
   证明: card_congr diagElemEquiv
 
@@ -318,7 +318,7 @@ theorem card_subtype_not_diag
 
 中文:
 定理 card_subtype_not_diag
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   convert! card_image_offDiag (univ : Finset α)
   rw [← filter_image_mk_not_isDiag]; rw [Fintype.card_of_subtype]
@@ -349,8 +349,8 @@ lemma card_diagSet_compl
 
 中文:
 引理 card_diagSet_compl
-  条件: [Fintype α]
-  结论: card (diagSetᶜ : Set (Sym2 α)) = (card α).choose 2
+  条件: [有限类型 α]
+  结论: card (diagSetᶜ : 集合 (Sym2 α)) = (card α).choose 2
   证明: card_subtype_not_diag
 
 Depends on / 依赖: card_subtype_not_diag
@@ -369,7 +369,7 @@ theorem card
 
 中文:
 定理 card
-  条件: {α} [Fintype α]
+  条件: {α} [有限类型 α]
   结论: card (Sym2 α) = 自然数.choose (card α + 1) 2
   证明: Finset.card_sym2 _
 -/

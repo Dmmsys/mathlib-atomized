@@ -35,7 +35,7 @@ instance adhesive_over
 
 中文:
 实例 adhesive_over
-  签名: [Adhesive C] [HasPullbacks C] [HasPushouts C] (B : C)
+  签名: [Adhesive C] [有Pullbacks C] [有Pushouts C] (B : C)
   定义体: adhesive_of_preserves_and_reflects_isomorphism (Over.forget B)
 
 Depends on / 依赖: Over.forget, adhesive_of_preserves_and_reflects_isomorphism, forget

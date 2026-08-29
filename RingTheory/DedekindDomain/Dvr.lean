@@ -62,11 +62,11 @@ class IsDedekindDomainDvr
     - is_dvr_at_nonzero_prime : forall P != (⊥ : Ideal A), forall _ : P.IsPrime, IsDiscreteValuationRing (Localization.AtPrime P)
 
 中文:
-类 IsDedekindDomainDvr
-  参数: : 命题 extends IsNoetherian A A where
-  继承: IsNoetherian A A
+类 是DedekindDomainDvr
+  参数: : 命题 extends 是Noether A A where
+  继承: 是Noether A A
   公理与运算 (1 个):
-    - is_dvr_at_nonzero_prime : 对任意 P != (⊥ : Ideal A), 对任意 _ : P.IsPrime, IsDiscreteValuationRing (Localization.AtPrime P)
+    - is_dvr_at_nonzero_prime : 对任意 P != (⊥ : 理想 A), 对任意 _ : P.是素, 是离散赋值环 (Localization.AtPrime P)
 -/
 class IsDedekindDomainDvr : Prop extends IsNoetherian A A where
   is_dvr_at_nonzero_prime : forall P != (⊥ : Ideal A), forall _ : P.IsPrime,
@@ -86,8 +86,8 @@ theorem Ring.DimensionLEOne.localization
   refine h.not_lt_lt ⊥ (p.under R) 
 
 中文:
-定理 Ring.DimensionLEOne.localization
-  结论: {R : 类型} (Rₘ : 类型) [CommRing R] [IsDomain R]
+定理 环.维数不超过一.localization
+  结论: {R : 类型} (Rₘ : 类型) [交换环 R] [是整环 R]
   证明: ⟨by
   intro p hp0 hpp
   refine Ideal.isMaximal_def.mpr ⟨hpp.ne_top, Ideal.maximal_of_no_maximal fun P hpP hPm => ?_⟩
@@ -123,8 +123,8 @@ theorem IsLocalization.isDedekindDomain
   have : IsScalarTower A A
 
 中文:
-定理 IsLocalization.isDedekindDomain
-  结论: [IsDedekindDomain A] {M : Submonoid A} (hM : M <= A⁰)
+定理 是Localization.isDedekindDomain
+  结论: [是Dedekind整环 A] {M : 子幺半群 A} (hM : M <= A⁰)
   证明: by
   have h : forall y : M, IsUnit (algebraMap A (FractionRing A) y) := by
     rintro ⟨y, hy⟩
@@ -165,8 +165,8 @@ theorem IsLocalization.AtPrime.isDedekindDomain
   proof: IsLocalization.isDedekindDomain A P.primeCompl_le_nonZeroDivisors Aₘ
 
 中文:
-定理 IsLocalization.AtPrime.isDedekindDomain
-  结论: [IsDedekindDomain A] (P : Ideal A) [P.IsPrime]
+定理 是Localization.AtPrime.isDedekindDomain
+  结论: [是Dedekind整环 A] (P : 理想 A) [P.是素]
   证明: IsLocalization.isDedekindDomain A P.primeCompl_le_nonZeroDivisors Aₘ
 
 Depends on / 依赖: IsLocalization, IsLocalization.isDedekindDomain, P.primeCompl_le_nonZeroDivisors, isDedekindDomain, primeCompl_le_nonZeroDivisors
@@ -186,7 +186,7 @@ instance Localization.AtPrime.isDedekindDomain
 
 中文:
 实例 Localization.AtPrime.isDedekindDomain
-  签名: [IsDedekindDomain A] (P : Ideal A) [P.IsPrime]
+  签名: [是Dedekind整环 A] (P : 理想 A) [P.是素]
   定义体: IsLocalization.AtPrime.isDedekindDomain A P _
 
 Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.AtPrime.isDedekindDomain, isDedekindDomain
@@ -213,8 +213,8 @@ theorem IsLocalization.AtPrime.not_isField
           ((map_ne_
 
 中文:
-定理 IsLocalization.AtPrime.not_isField
-  结论: {P : Ideal A} (hP : P != ⊥) [pP : P.IsPrime] (Aₘ : 类型)
+定理 是Localization.AtPrime.not_isField
+  结论: {P : 理想 A} (hP : P != ⊥) [pP : P.是素] (Aₘ : 类型)
   证明: by
   intro h
   let := h.toField
@@ -257,8 +257,8 @@ theorem IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
     ((IsDiscreteValuationRing.TFAE Aₘ hnf).out 0 2).mp
 
 中文:
-定理 IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
-  结论: [IsDedekindDomain A]
+定理 是Localization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
+  结论: [是Dedekind整环 A]
   证明: by
   let : IsNoetherianRing Aₘ :=
     IsLocalization.isNoetherianRing P.primeCompl _ IsDedekindRing.toIsNoetherian
@@ -290,8 +290,8 @@ instance IsDedekindDomain.isDedekindDomainDvr
     IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain A hP _
 
 中文:
-实例 IsDedekindDomain.isDedekindDomainDvr
-  签名: [IsDedekindDomain A]
+实例 是Dedekind整环.isDedekindDomainDvr
+  签名: [是Dedekind整环 A]
   定义体: fun _ hP _ =>
     IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain A hP _
 -/
@@ -313,8 +313,8 @@ instance IsDedekindDomainDvr.ring_dimensionLEOne
     let Q := f ⟨q, hq.isPrime, Set.disjoint_left.mpr fun _ a => 
 
 中文:
-实例 IsDedekindDomainDvr.ring_dimensionLEOne
-  签名: [h : IsDedekindDomainDvr A]
+实例 是DedekindDomainDvr.ring_dimensionLEOne
+  签名: [h : 是DedekindDomainDvr A]
   定义体: by
     intro p hp hpp
     rcases p.exists_le_maximal (Ideal.IsPrime.ne_top hpp) with ⟨q, hq, hpq⟩
@@ -355,8 +355,8 @@ instance IsDedekindDomainDvr.isIntegrallyClosed
     inferInstance
 
 中文:
-实例 IsDedekindDomainDvr.isIntegrallyClosed
-  签名: [h : IsDedekindDomainDvr A]
+实例 是DedekindDomainDvr.is整数egrallyClosed
+  签名: [h : 是DedekindDomainDvr A]
   定义体: IsIntegrallyClosed.of_localization_maximal fun p hp0 hpm =>
     let ⟨_, _⟩ := (IsDiscreteValuationRing.iff_pid_with_one_nonzero_prime
       (Localization.AtPrime p)).mp (h.is_dvr_at_nonzero_prime p hp0 hpm.isPrime)
@@ -379,7 +379,7 @@ instance IsDedekindDomainDvr.isDedekindDomain
   signature: [IsDedekindDomainDvr A]
 
 中文:
-实例 IsDedekindDomainDvr.isDedekindDomain
-  签名: [IsDedekindDomainDvr A]
+实例 是DedekindDomainDvr.isDedekindDomain
+  签名: [是DedekindDomainDvr A]
 -/
 instance IsDedekindDomainDvr.isDedekindDomain [IsDedekindDomainDvr A] : IsDedekindDomain A where

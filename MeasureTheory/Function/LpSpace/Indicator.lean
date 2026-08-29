@@ -48,7 +48,7 @@ theorem exists_eLpNorm_indicator_le
   obtain ⟨η, hη_pos, hη_
 
 中文:
-定理 exists_eLpNorm_indicator_le
+定理 存在_eLpNorm_indicator_le
   条件: (hp : p != ∞) (c : E) {ε : 实数>=0∞} (hε : ε != 0)
   证明: by
   rcases eq_or_ne p 0 with (rfl | h'p)
@@ -156,8 +156,8 @@ theorem _root_.Continuous.memLp_of_hasCompactSupport
     (fun x => image_eq_zero_of_notMem_tsupport) (h'f.measure_lt_top.ne) le_top
 
 中文:
-定理 _root_.Continuous.memLp_of_hasCompactSupport
-  结论: [OpensMeasurableSpace X]
+定理 _root_.连续.memLp_of_hasCompactSupport
+  结论: [OpensMeasurable空间 X]
   证明: by
   have := hf.memLp_top_of_hasCompactSupport h'f μ
   exact this.mono_exponent_of_measure_support_ne_top
@@ -189,7 +189,7 @@ definition indicatorConstLp
 
 中文:
 定义 indicatorConstLp
-  签名: (p : 实数>=0∞) (hs : MeasurableSet s) (hμs : μ s != ∞) (c : E)
+  签名: (p : 实数>=0∞) (hs : 可测集 s) (hμs : μ s != ∞) (c : E)
   定义体: MemLp.toLp (s.indicator fun _ => c) (memLp_indicator_const p hs c (Or.inr hμs))
 
 Depends on / 依赖: MemLp.toLp, Or.inr, indicator, memLp_indicator_const, s.indicator
@@ -455,7 +455,7 @@ theorem edist_indicatorConstLp_eq_enorm
 
 中文:
 定理 edist_indicatorConstLp_eq_enorm
-  条件: {t : Set α} {ht : MeasurableSet t} {hμt : μ t != ∞}
+  条件: {t : 集合 α} {ht : 可测集 t} {hμt : μ t != ∞}
   证明: by
   unfold indicatorConstLp
   rw [Lp.edist_toLp_toLp]; rw [eLpNorm_indicator_sub_indicator]; rw [Lp.enorm_toLp]
@@ -481,7 +481,7 @@ theorem dist_indicatorConstLp_eq_norm
 
 中文:
 定理 dist_indicatorConstLp_eq_norm
-  条件: {t : Set α} {ht : MeasurableSet t} {hμt : μ t != ∞}
+  条件: {t : 集合 α} {ht : 可测集 t} {hμt : μ t != ∞}
   证明: by
   -- Squeezed for performance reasons
   simp only [Lp.dist_edist, edist_indicatorConstLp_eq_enorm, enorm, ENNReal.coe_toReal,
@@ -512,7 +512,7 @@ theorem tendsto_indicatorConstLp_set
 
 中文:
 定理 tendsto_indicatorConstLp_set
-  结论: [hp₁ : Fact (1 <= p)] {β : 类型} {l : Filter β} {t : β -> Set α}
+  结论: [hp₁ : Fact (1 <= p)] {β : 类型} {l : 滤子 β} {t : β -> 集合 α}
   证明: by
   rw [tendsto_iff_dist_tendsto_zero]
   have hp₀ : p != 0 := (one_pos.trans_le hp₁.out).ne'
@@ -547,7 +547,7 @@ theorem continuous_indicatorConstLp_set
 
 中文:
 定理 continuous_indicatorConstLp_set
-  结论: [Fact (1 <= p)] {X : 类型} [TopologicalSpace X]
+  结论: [Fact (1 <= p)] {X : 类型} [拓扑空间 X]
   证明: continuous_iff_continuousAt.2 fun x => tendsto_indicatorConstLp_set hp (h x)
 
 @[simp]
@@ -591,7 +591,7 @@ theorem indicatorConstLp_inj
 
 中文:
 定理 indicatorConstLp_inj
-  结论: {s t : Set α} (hs : MeasurableSet s) (hsμ : μ s != ∞)
+  结论: {s t : 集合 α} (hs : 可测集 s) (hsμ : μ s != ∞)
   证明: by
   simp_rw [← indicator_const_eventuallyEq hc, indicatorConstLp, MemLp.toLp_eq_toLp_iff]
 
@@ -646,7 +646,7 @@ theorem indicatorConstLp_disjoint_union
 
 中文:
 定理 indicatorConstLp_disjoint_union
-  结论: {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t)
+  结论: {s t : 集合 α} (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   ext1
   grw [Lp.coeFn_add, indicatorConstLp_coeFn, indicatorConstLp_coeFn, indicatorConstLp_coeFn]
@@ -700,7 +700,7 @@ lemma Lp.coeFn_const
 
 中文:
 引理 Lp.coeFn_const
-  结论: Lp.const p μ c =ᵐ[μ] Function.const α c
+  结论: Lp.const p μ c =ᵐ[μ] 函数.const α c
   证明: AEEqFun.coeFn_const α c
 
 Depends on / 依赖: AEEqFun, AEEqFun.coeFn_const, coeFn_const
@@ -833,7 +833,7 @@ theorem Lp.norm_const_le
 
 中文:
 定理 Lp.norm_const_le
-  结论: ‖Lp.const p μ c‖ <= ‖c‖ * μ.real Set.univ ^ (1 / p.to实数)
+  结论: ‖Lp.const p μ c‖ <= ‖c‖ * μ.real 集合.univ ^ (1 / p.to实数)
   证明: by
   rw [← indicatorConstLp_univ]
   exact norm_indicatorConstLp_le
@@ -856,7 +856,7 @@ definition Lp.constₗ
 
 中文:
 定义 Lp.constₗ
-  签名: (𝕜 : 类型) [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E]
+  签名: (𝕜 : 类型) [赋范环 𝕜] [模 𝕜 E] [是BoundedSMul 𝕜 E]
   定义体: Lp.const p μ
   map_add' := map_add _
   map_smul' _ _ := rfl
@@ -880,7 +880,7 @@ definition Lp.constL
 
 中文:
 定义 Lp.constL
-  签名: (𝕜 : 类型) [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E] [Fact (1 <= p)]
+  签名: (𝕜 : 类型) [赋范环 𝕜] [模 𝕜 E] [是BoundedSMul 𝕜 E] [Fact (1 <= p)]
   定义体: (Lp.constₗ p μ 𝕜).mkContinuous (μ.real Set.univ ^ (1 / p.toReal)) fun _ =>
     (Lp.norm_const_le _ _ _).trans_eq (mul_comm _ _)
 -/
@@ -899,7 +899,7 @@ theorem Lp.norm_constL_le
 
 中文:
 定理 Lp.norm_constL_le
-  结论: (𝕜 : 类型) [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
+  结论: (𝕜 : 类型) [NontriviallyNormedField 𝕜] [赋范空间 𝕜 E]
   证明: LinearMap.mkContinuous_norm_le _ (by positivity) _
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, mkContinuous_norm_le
@@ -925,7 +925,7 @@ theorem indicatorConstLp_compMeasurePreserving
 
 中文:
 定理 indicatorConstLp_compMeasurePreserving
-  结论: {s : Set β} (hs : MeasurableSet s)
+  结论: {s : 集合 β} (hs : 可测集 s)
   证明: rfl
 -/
 theorem indicatorConstLp_compMeasurePreserving {s : Set β} (hs : MeasurableSet s)
@@ -954,7 +954,7 @@ theorem indicatorConstLp_eq_toSpanSingleton_compLp
 
 中文:
 定理 indicatorConstLp_eq_toSpanSingleton_compLp
-  结论: {s : Set α} [NormedSpace 实数 E]
+  结论: {s : 集合 α} [赋范空间 实数 E]
   证明: by
   ext1
   refine indicatorConstLp_coeFn.trans ?_

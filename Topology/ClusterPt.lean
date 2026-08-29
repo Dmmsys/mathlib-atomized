@@ -55,7 +55,7 @@ theorem clusterPt_sup
 
 中文:
 定理 clusterPt_sup
-  条件: {F G : Filter X}
+  条件: {F G : 滤子 X}
   结论: ClusterPt x (F ⊔ G) ↔ ClusterPt x F ∨ ClusterPt x G
   证明: by
   simp only [ClusterPt, inf_sup_left, sup_neBot]
@@ -76,7 +76,7 @@ theorem ClusterPt.neBot
 
 中文:
 定理 ClusterPt.neBot
-  条件: {F : Filter X} (h : ClusterPt x F)
+  条件: {F : 滤子 X} (h : ClusterPt x F)
   结论: NeBot (𝓝 x ⊓ F)
   证明: h
 -/
@@ -92,8 +92,8 @@ theorem Filter.HasBasis.clusterPt_iff
   proof: hX.inf_basis_neBot_iff hF
 
 中文:
-定理 Filter.HasBasis.clusterPt_iff
-  结论: {ιX ιF} {pX : ιX -> 命题} {sX : ιX -> Set X} {pF : ιF -> 命题}
+定理 滤子.有基.clusterPt_iff
+  结论: {ιX ιF} {pX : ιX -> 命题} {sX : ιX -> 集合 X} {pF : ιF -> 命题}
   证明: hX.inf_basis_neBot_iff hF
 
 Depends on / 依赖: hX.inf_basis_neBot_iff, inf_basis_neBot_iff
@@ -114,8 +114,8 @@ theorem Filter.HasBasis.clusterPt_iff_frequently
     Set.Nonempty, id, mem_inter_iff]
 
 中文:
-定理 Filter.HasBasis.clusterPt_iff_frequently
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set X} {F : Filter X}
+定理 滤子.有基.clusterPt_iff_frequently
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 X} {F : 滤子 X}
   证明: by
   simp only [hx.clusterPt_iff F.basis_sets, Filter.frequently_iff, inter_comm (s _),
     Set.Nonempty, id, mem_inter_iff]
@@ -138,7 +138,7 @@ theorem clusterPt_iff_frequently
 
 中文:
 定理 clusterPt_iff_frequently
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   结论: ClusterPt x F ↔ 对任意 s in 𝓝 x, 存在ᶠ y in F, y in s
   证明: (𝓝 x).basis_sets.clusterPt_iff_frequently
 
@@ -157,7 +157,7 @@ theorem ClusterPt.frequently
 
 中文:
 定理 ClusterPt.frequently
-  结论: {F : Filter X} {p : X -> 命题} (hx : ClusterPt x F)
+  结论: {F : 滤子 X} {p : X -> 命题} (hx : ClusterPt x F)
   证明: clusterPt_iff_frequently.mp hx {y | p y} hp
 
 Depends on / 依赖: clusterPt_iff_frequently, clusterPt_iff_frequently.mp
@@ -177,8 +177,8 @@ theorem Filter.HasBasis.clusterPt_iff_frequently'
   exact ⟨fun h a b c d => h d b, fun h a b c d => h c d b⟩
 
 中文:
-定理 Filter.HasBasis.clusterPt_iff_frequently'
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set X} {F : Filter X}
+定理 滤子.有基.clusterPt_iff_frequently'
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 X} {F : 滤子 X}
   证明: by
   simp only [(𝓝 x).basis_sets.clusterPt_iff hx, Filter.frequently_iff]
   exact ⟨fun h a b c d => h d b, fun h a b c d => h c d b⟩
@@ -201,7 +201,7 @@ theorem clusterPt_iff_frequently'
 
 中文:
 定理 clusterPt_iff_frequently'
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   结论: ClusterPt x F ↔ 对任意 s in F, 存在ᶠ y in 𝓝 x, y in s
   证明: F.basis_sets.clusterPt_iff_frequently'
 
@@ -220,7 +220,7 @@ theorem ClusterPt.frequently'
 
 中文:
 定理 ClusterPt.frequently'
-  结论: {F : Filter X} {p : X -> 命题} (hx : ClusterPt x F)
+  结论: {F : 滤子 X} {p : X -> 命题} (hx : ClusterPt x F)
   证明: clusterPt_iff_frequently'.mp hx {y | p y} hp
 
 Depends on / 依赖: clusterPt_iff_frequently
@@ -239,7 +239,7 @@ theorem clusterPt_iff_nonempty
 
 中文:
 定理 clusterPt_iff_nonempty
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   证明: inf_neBot_iff
 
 Depends on / 依赖: inf_neBot_iff
@@ -259,7 +259,7 @@ theorem clusterPt_iff_not_disjoint
 
 中文:
 定理 clusterPt_iff_not_disjoint
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   证明: by
   rw [disjoint_iff]; rw [ClusterPt]; rw [neBot_iff]
 
@@ -280,7 +280,7 @@ theorem Filter.HasBasis.clusterPt_iff_forall_mem_closure
   tauto
 
 中文:
-定理 Filter.HasBasis.clusterPt_iff_forall_mem_closure
+定理 滤子.有基.clusterPt_iff_对任意_mem_closure
   结论: {ι} {p : ι -> 命题}
   证明: by
   simp only [(nhds_basis_opens _).clusterPt_iff hF, mem_closure_iff]
@@ -303,8 +303,8 @@ theorem clusterPt_iff_forall_mem_closure
 alias ⟨ClusterPt.mem_closure_of_mem, _⟩ := clusterPt_iff_forall_mem_closure
 
 中文:
-定理 clusterPt_iff_forall_mem_closure
-  条件: {F : Filter X}
+定理 clusterPt_iff_对任意_mem_closure
+  条件: {F : 滤子 X}
   证明: F.basis_sets.clusterPt_iff_forall_mem_closure
 
 alias ⟨ClusterPt.mem_closure_of_mem, _⟩ := clusterPt_iff_forall_mem_closure
@@ -365,7 +365,7 @@ theorem ClusterPt.of_le_nhds
 
 中文:
 定理 ClusterPt.of_le_nhds
-  条件: {f : Filter X} (H : f <= 𝓝 x) [NeBot f]
+  条件: {f : 滤子 X} (H : f <= 𝓝 x) [NeBot f]
   结论: ClusterPt x f
   证明: by
   rwa [ClusterPt, inf_eq_right.mpr H]
@@ -385,7 +385,7 @@ theorem ClusterPt.of_le_nhds'
 
 中文:
 定理 ClusterPt.of_le_nhds'
-  条件: {f : Filter X} (H : f <= 𝓝 x) (_hf : NeBot f)
+  条件: {f : 滤子 X} (H : f <= 𝓝 x) (_hf : NeBot f)
   证明: ClusterPt.of_le_nhds H
 
 Depends on / 依赖: ClusterPt, ClusterPt.of_le_nhds, of_le_nhds
@@ -406,7 +406,7 @@ theorem ClusterPt.of_nhds_le
 
 中文:
 定理 ClusterPt.of_nhds_le
-  条件: {f : Filter X} (H : 𝓝 x <= f)
+  条件: {f : 滤子 X} (H : 𝓝 x <= f)
   结论: ClusterPt x f
   证明: by
   simp only [ClusterPt, inf_eq_left.mpr H, nhds_neBot]
@@ -427,7 +427,7 @@ theorem ClusterPt.mono
 
 中文:
 定理 ClusterPt.mono
-  条件: {f g : Filter X} (H : ClusterPt x f) (h : f <= g)
+  条件: {f g : 滤子 X} (H : ClusterPt x f) (h : f <= g)
   结论: ClusterPt x g
   证明: NeBot.mono H inf_le_inf_left _ h
 
@@ -447,7 +447,7 @@ theorem ClusterPt.of_inf_left
 
 中文:
 定理 ClusterPt.of_inf_left
-  条件: {f g : Filter X} (H : ClusterPt x <| f ⊓ g)
+  条件: {f g : 滤子 X} (H : ClusterPt x <| f ⊓ g)
   结论: ClusterPt x f
   证明: H.mono inf_le_left
 
@@ -466,7 +466,7 @@ theorem ClusterPt.of_inf_right
 
 中文:
 定理 ClusterPt.of_inf_right
-  条件: {f g : Filter X} (H : ClusterPt x <| f ⊓ g)
+  条件: {f g : 滤子 X} (H : ClusterPt x <| f ⊓ g)
   证明: H.mono inf_le_right
 
 Depends on / 依赖: H.mono, inf_le_right
@@ -511,7 +511,7 @@ theorem Filter.EventuallyEq.mapClusterPt_iff
 alias ⟨MapClusterPt.congrFun, _⟩ := Filter.EventuallyEq.mapClusterPt_iff
 
 中文:
-定理 Filter.EventuallyEq.mapClusterPt_iff
+定理 滤子.EventuallyEq.mapClusterPt_iff
   条件: {v : α -> X} (h : u =ᶠ[F] v)
   证明: by
   simp only [mapClusterPt_def, map_congr h]
@@ -536,7 +536,7 @@ theorem MapClusterPt.mono
 
 中文:
 定理 MapClusterPt.mono
-  条件: {G : Filter α} (h : MapClusterPt x F u) (hle : F <= G)
+  条件: {G : 滤子 α} (h : MapClusterPt x F u) (hle : F <= G)
   证明: h.clusterPt.mono (map_mono hle)
 
 Depends on / 依赖: clusterPt, h.clusterPt.mono, map_mono
@@ -555,7 +555,7 @@ theorem MapClusterPt.tendsto_comp'
 
 中文:
 定理 MapClusterPt.tendsto_comp'
-  结论: [TopologicalSpace Y] {f : X -> Y} {y : Y}
+  结论: [拓扑空间 Y] {f : X -> Y} {y : Y}
   证明: (tendsto_inf.2 ⟨hf, tendsto_map.mono_left inf_le_right⟩).neBot (hx := hu)
 
 Depends on / 依赖: inf_le_right, mono_left, tendsto_inf, tendsto_map, tendsto_map.mono_left
@@ -574,7 +574,7 @@ theorem MapClusterPt.tendsto_comp
 
 中文:
 定理 MapClusterPt.tendsto_comp
-  结论: [TopologicalSpace Y] {f : X -> Y} {y : Y}
+  结论: [拓扑空间 Y] {f : X -> Y} {y : Y}
   证明: hu.tendsto_comp' (hf.mono_left inf_le_left)
 
 Depends on / 依赖: hf.mono_left, hu.tendsto_comp, inf_le_left, mono_left, tendsto_comp
@@ -597,7 +597,7 @@ alias ⟨_, ClusterPt.mapClusterPt_id⟩ := mapClusterPt_id_iff
 
 中文:
 定理 mapClusterPt_id_iff
-  条件: [TopologicalSpace α] {a : α}
+  条件: [拓扑空间 α] {a : α}
   结论: MapClusterPt a F id ↔ ClusterPt a F
   证明: by
   rw [MapClusterPt]; rw [map_id]
@@ -621,7 +621,7 @@ theorem MapClusterPt.continuousAt_comp
 
 中文:
 定理 MapClusterPt.continuousAt_comp
-  结论: [TopologicalSpace Y] {f : X -> Y} (hf : ContinuousAt f x)
+  结论: [拓扑空间 Y] {f : X -> Y} (hf : ContinuousAt f x)
   证明: hu.tendsto_comp hf
 
 Depends on / 依赖: hu.tendsto_comp, tendsto_comp
@@ -640,7 +640,7 @@ theorem ContinuousAt.mapClusterPt
 
 中文:
 定理 ContinuousAt.mapClusterPt
-  结论: [TopologicalSpace α] {a : α} (hf : ContinuousAt u a)
+  结论: [拓扑空间 α] {a : α} (hf : ContinuousAt u a)
   证明: hu.mapClusterPt_id.continuousAt_comp hf
 
 Depends on / 依赖: continuousAt_comp, hu.mapClusterPt_id.continuousAt_comp, mapClusterPt_id
@@ -659,8 +659,8 @@ theorem Filter.HasBasis.mapClusterPt_iff_frequently
   simp_rw [MapClusterPt, hx.clusterPt_iff_frequently, frequently_map]
 
 中文:
-定理 Filter.HasBasis.mapClusterPt_iff_frequently
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.mapClusterPt_iff_frequently
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: by
   simp_rw [MapClusterPt, hx.clusterPt_iff_frequently, frequently_map]
 
@@ -735,8 +735,8 @@ theorem Filter.Tendsto.mapClusterPt
   proof: .of_le_nhds h
 
 中文:
-定理 Filter.Tendsto.mapClusterPt
-  条件: [NeBot F] (h : Tendsto u F (𝓝 x))
+定理 滤子.收敛.mapClusterPt
+  条件: [NeBot F] (h : 收敛 u F (𝓝 x))
   结论: MapClusterPt x F u
   证明: .of_le_nhds h
 
@@ -755,7 +755,7 @@ theorem MapClusterPt.of_comp
 
 中文:
 定理 MapClusterPt.of_comp
-  结论: {φ : β -> α} {p : Filter β} (h : Tendsto φ p F)
+  结论: {φ : β -> α} {p : 滤子 β} (h : 收敛 φ p F)
   证明: H.clusterPt.mono map_mono h
 
 Depends on / 依赖: H.clusterPt.mono, clusterPt, map_mono
@@ -773,8 +773,8 @@ theorem IsClosed.mem_of_mapClusterPt
   proof: (hf.frequently' h).mem_of_closed hs
 
 中文:
-定理 IsClosed.mem_of_mapClusterPt
-  结论: {l : X} {s : Set X} {f : α -> X} {b : Filter α}
+定理 是闭集.mem_of_mapClusterPt
+  结论: {l : X} {s : 集合 X} {f : α -> X} {b : 滤子 α}
   证明: (hf.frequently' h).mem_of_closed hs
 
 Depends on / 依赖: frequently, hf.frequently, mem_of_closed
@@ -793,8 +793,8 @@ theorem mapClusterPt_atTop_iff_forall_mem_closure
   simp [MapClusterPt, (atTop_basis.map x).clusterPt_iff_forall_mem_closure]
 
 中文:
-定理 mapClusterPt_atTop_iff_forall_mem_closure
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι]
+定理 mapClusterPt_atTop_iff_对任意_mem_closure
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
   证明: by
   simp [MapClusterPt, (atTop_basis.map x).clusterPt_iff_forall_mem_closure]
 
@@ -818,7 +818,7 @@ theorem accPt_sup
 
 中文:
 定理 accPt_sup
-  条件: {x : X} {F G : Filter X}
+  条件: {x : X} {F G : 滤子 X}
   证明: by
   simp only [AccPt, inf_sup_left, sup_neBot]
 
@@ -840,8 +840,8 @@ theorem accPt_iff_clusterPt
 
 中文:
 定理 accPt_iff_clusterPt
-  条件: {x : X} {F : Filter X}
-  结论: AccPt x F ↔ ClusterPt x (𝓟 {x}ᶜ ⊓ F)
+  条件: {x : X} {F : 滤子 X}
+  结论: 聚点 x F ↔ ClusterPt x (𝓟 {x}ᶜ ⊓ F)
   证明: by
   rw [AccPt]; rw [nhdsWithin]; rw [ClusterPt]; rw [inf_assoc]
 
@@ -861,7 +861,7 @@ theorem accPt_principal_iff_clusterPt
 
 中文:
 定理 accPt_principal_iff_clusterPt
-  条件: {x : X} {C : Set X}
+  条件: {x : X} {C : 集合 X}
   证明: by
   rw [accPt_iff_clusterPt]; rw [inf_principal]; rw [inter_comm]; rw [sdiff_eq]
 
@@ -884,8 +884,8 @@ theorem accPt_iff_nhds
 
 中文:
 定理 accPt_iff_nhds
-  条件: {x : X} {C : Set X}
-  结论: AccPt x (𝓟 C) ↔ 对任意 U in 𝓝 x, 存在 y in U inter C, y != x
+  条件: {x : X} {C : 集合 X}
+  结论: 聚点 x (𝓟 C) ↔ 对任意 U in 𝓝 x, 存在 y in U inter C, y != x
   证明: by
   simp [accPt_principal_iff_clusterPt, clusterPt_principal_iff, Set.Nonempty,
     and_assoc]
@@ -908,8 +908,8 @@ theorem accPt_iff_frequently
 
 中文:
 定理 accPt_iff_frequently
-  条件: {x : X} {C : Set X}
-  结论: AccPt x (𝓟 C) ↔ 存在ᶠ y in 𝓝 x, y != x ∧ y in C
+  条件: {x : X} {C : 集合 X}
+  结论: 聚点 x (𝓟 C) ↔ 存在ᶠ y in 𝓝 x, y != x ∧ y in C
   证明: by
   simp [accPt_principal_iff_clusterPt, clusterPt_principal_iff_frequently, and_comm]
 
@@ -933,7 +933,7 @@ frequently_inf_principal.trans by simp only [and_comm]
 
 中文:
 定理 accPt_iff_frequently_nhdsNE
-  条件: {X : 类型} [TopologicalSpace X] {x : X} {C : Set X}
+  条件: {X : 类型} [拓扑空间 X] {x : X} {C : 集合 X}
   证明: by
   have : (existsᶠ z in 𝓝[!=] x, z in C) ↔ existsᶠ z in 𝓝 x, z in C ∧ z in ({x} : Set X)ᶜ :=
 frequently_inf_principal.trans by simp only [and_comm]
@@ -962,7 +962,7 @@ theorem accPt_principal_iff_nhdsWithin
 
 中文:
 定理 accPt_principal_iff_nhdsWithin
-  结论: AccPt x (𝓟 s) ↔ (𝓝[s \ {x}] x).NeBot
+  结论: 聚点 x (𝓟 s) ↔ (𝓝[s \ {x}] x).NeBot
   证明: by
   rw [accPt_principal_iff_clusterPt]; rw [ClusterPt]; rw [nhdsWithin]
 
@@ -981,9 +981,9 @@ theorem AccPt.mono
   proof: NeBot.mono h (inf_le_inf_left _ hFG)
 
 中文:
-定理 AccPt.mono
-  条件: {F G : Filter X} (h : AccPt x F) (hFG : F <= G)
-  结论: AccPt x G
+定理 聚点.mono
+  条件: {F G : 滤子 X} (h : 聚点 x F) (hFG : F <= G)
+  结论: 聚点 x G
   证明: NeBot.mono h (inf_le_inf_left _ hFG)
 
 Depends on / 依赖: NeBot.mono, inf_le_inf_left
@@ -1001,8 +1001,8 @@ theorem AccPt.clusterPt
   proof: (accPt_iff_clusterPt.mp h).mono inf_le_right
 
 中文:
-定理 AccPt.clusterPt
-  条件: {x : X} {F : Filter X} (h : AccPt x F)
+定理 聚点.clusterPt
+  条件: {x : X} {F : 滤子 X} (h : 聚点 x F)
   结论: ClusterPt x F
   证明: (accPt_iff_clusterPt.mp h).mono inf_le_right
 
@@ -1029,7 +1029,7 @@ theorem clusterPt_principal
 
 中文:
 定理 clusterPt_principal
-  条件: {x : X} {C : Set X}
+  条件: {x : X} {C : 集合 X}
   证明: by
   constructor
   · intro h
@@ -1068,8 +1068,8 @@ theorem isClosed_setOfPred_clusterPt
 
 中文:
 定理 isClosed_setOfPred_clusterPt
-  条件: {f : Filter X}
-  结论: IsClosed { x | ClusterPt x f }
+  条件: {f : 滤子 X}
+  结论: 是闭集 { x | ClusterPt x f }
   证明: by
   simp only [clusterPt_iff_forall_mem_closure, ofPred_forall]
   exact isClosed_biInter fun _ _ => isClosed_closure
@@ -1200,7 +1200,7 @@ theorem dense_compl_singleton
 中文:
 定理 dense_compl_singleton
   条件: (x : X) [NeBot (𝓝[!=] x)]
-  结论: Dense ({x}ᶜ : Set X)
+  结论: 稠密 ({x}ᶜ : 集合 X)
   证明: by
   intro y
   rcases eq_or_ne y x with (rfl | hne)
@@ -1227,7 +1227,7 @@ theorem closure_compl_singleton
 中文:
 定理 closure_compl_singleton
   条件: (x : X) [NeBot (𝓝[!=] x)]
-  结论: closure {x}ᶜ = (univ : Set X)
+  结论: closure {x}ᶜ = (univ : 集合 X)
   证明: (dense_compl_singleton x).closure_eq
 
 Depends on / 依赖: closure_eq, dense_compl_singleton
@@ -1249,7 +1249,7 @@ theorem interior_singleton
 中文:
 定理 interior_singleton
   条件: (x : X) [NeBot (𝓝[!=] x)]
-  结论: interior {x} = (∅ : Set X)
+  结论: interior {x} = (∅ : 集合 X)
   证明: interior_eq_empty_iff_dense_compl.2 (dense_compl_singleton x)
 
 Depends on / 依赖: dense_compl_singleton, interior_eq_empty_iff_dense_compl
@@ -1269,7 +1269,7 @@ theorem not_isOpen_singleton
 中文:
 定理 not_isOpen_singleton
   条件: (x : X) [NeBot (𝓝[!=] x)]
-  结论: ¬IsOpen ({x} : Set X)
+  结论: ¬是开集 ({x} : 集合 X)
   证明: dense_compl_singleton_iff_not_open.1 (dense_compl_singleton x)
 
 Depends on / 依赖: dense_compl_singleton, dense_compl_singleton_iff_not_open
@@ -1305,7 +1305,7 @@ theorem mem_closure_iff_nhds
 
 中文:
 定理 mem_closure_iff_nhds
-  结论: x in closure s ↔ 对任意 t in 𝓝 x, (t inter s).Nonempty
+  结论: x in closure s ↔ 对任意 t in 𝓝 x, (t inter s).非空
   证明: mem_closure_iff_clusterPt.trans clusterPt_principal_iff
 
 Depends on / 依赖: clusterPt_principal_iff, mem_closure_iff_clusterPt, mem_closure_iff_clusterPt.trans
@@ -1366,7 +1366,7 @@ theorem mem_closure_iff_nhds_basis'
 
 中文:
 定理 mem_closure_iff_nhds_basis'
-  条件: {p : ι -> 命题} {s : ι -> Set X} (h : (𝓝 x).HasBasis p s)
+  条件: {p : ι -> 命题} {s : ι -> 集合 X} (h : (𝓝 x).有基 p s)
   证明: mem_closure_iff_clusterPt.trans
 (h.clusterPt_iff (hasBasis_principal _)).trans by simp only [forall_const]
 
@@ -1388,7 +1388,7 @@ theorem mem_closure_iff_nhds_basis
 
 中文:
 定理 mem_closure_iff_nhds_basis
-  条件: {p : ι -> 命题} {s : ι -> Set X} (h : (𝓝 x).HasBasis p s)
+  条件: {p : ι -> 命题} {s : ι -> 集合 X} (h : (𝓝 x).有基 p s)
   证明: (mem_closure_iff_nhds_basis' h).trans by
     simp only [Set.Nonempty, mem_inter_iff, and_comm]
 
@@ -1412,7 +1412,7 @@ theorem clusterPt_iff_lift'_closure
 
 中文:
 定理 clusterPt_iff_lift'_closure
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   证明: by
   simp_rw [clusterPt_iff_forall_mem_closure,
     (hasBasis_pure _).le_basis_iff F.basis_sets.lift'_closure, id, singleton_subset_iff, true_and,
@@ -1445,7 +1445,7 @@ theorem clusterPt_iff_lift'_closure'
 
 中文:
 定理 clusterPt_iff_lift'_closure'
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   证明: by
   rw [clusterPt_iff_lift'_closure]; rw [inf_comm]
   constructor
@@ -1479,7 +1479,7 @@ theorem clusterPt_lift'_closure_iff
 
 中文:
 定理 clusterPt_lift'_closure_iff
-  条件: {F : Filter X}
+  条件: {F : 滤子 X}
   证明: by
   simp [clusterPt_iff_lift'_closure, lift'_lift'_assoc (monotone_closure X) (monotone_closure X)]
 
@@ -1501,7 +1501,7 @@ theorem isClosed_iff_clusterPt
 
 中文:
 定理 isClosed_iff_clusterPt
-  结论: IsClosed s ↔ 对任意 a, ClusterPt a (𝓟 s) -> a in s
+  结论: 是闭集 s ↔ 对任意 a, ClusterPt a (𝓟 s) -> a in s
   证明: calc
     IsClosed s ↔ closure s subseteq s := closure_subset_iff_isClosed.symm
     _ ↔ forall a, ClusterPt a (𝓟 s) -> a in s := by simp only [subset_def, mem_closure_iff_clusterPt]
@@ -1524,7 +1524,7 @@ theorem isClosed_iff_accPt
 
 中文:
 定理 isClosed_iff_accPt
-  结论: IsClosed s ↔ 对任意 a, AccPt a (𝓟 s) -> a in s
+  结论: 是闭集 s ↔ 对任意 a, 聚点 a (𝓟 s) -> a in s
   证明: by
   simp [isClosed_iff_clusterPt, clusterPt_principal, or_imp]
 
@@ -1563,7 +1563,7 @@ exact ⟨fun hs x F F_ne FS Fx => hs _ NeBot.mono F_ne (le_inf Fx FS),
          fun hs x hx => hs x (𝓝 x ⊓ 𝓟 s) hx inf_le_right inf_le_left⟩
 
 中文:
-引理 isClosed_iff_forall_filter
+引理 isClosed_iff_对任意_filter
   证明: by
   simp_rw [isClosed_iff_clusterPt]
 exact ⟨fun hs x F F_ne FS Fx => hs _ NeBot.mono F_ne (le_inf Fx FS),

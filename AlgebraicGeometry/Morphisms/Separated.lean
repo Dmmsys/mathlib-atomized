@@ -51,10 +51,10 @@ class IsSeparated
     - isClosedImmersion_diagonal : IsClosedImmersion (pullback.diagonal f)  [default: by infer_instance]
 
 中文:
-类 IsSeparated
+类 是分离
   参数: : 命题 where
   公理与运算 (1 个):
-    - isClosedImmersion_diagonal : IsClosedImmersion (pullback.diagonal f)  [默认: by infer_instance]
+    - isClosedImmersion_diagonal : 是闭浸入 (pullback.diagonal f)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.RespectsIso @IsSeparated
+  签名: MorphismProperty.RespectsIso @是分离
   定义体: by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
@@ -133,7 +133,7 @@ instance stableUnderComposition
 
 中文:
 实例 stableUnderComposition
-  签名: : Morphism命题erty.IsStableUnderComposition @IsSeparated
+  签名: : MorphismProperty.是StableUnderComposition @是分离
   定义体: by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
@@ -153,8 +153,8 @@ instance [IsSeparated
   body: stableUnderComposition.comp_mem f g inferInstance inferInstance
 
 中文:
-实例 [IsSeparated
-  签名: f] [IsSeparated g] : IsSeparated (f ≫ g)
+实例 [是分离
+  签名: f] [是分离 g] : 是分离 (f ≫ g)
   定义体: stableUnderComposition.comp_mem f g inferInstance inferInstance
 
 Depends on / 依赖: comp_mem, stableUnderComposition, stableUnderComposition.comp_mem
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsSeparated
+  签名: MorphismProperty.是Multiplicative @是分离
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @IsSeparated where
@@ -191,7 +191,7 @@ instance isStableUnderBaseChange
 
 中文:
 实例 isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @IsSeparated
+  签名: : MorphismProperty.是StableUnderBaseChange @是分离
   定义体: by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @IsSeparated
+  签名: IsZariskiLocalAtTarget @是分离
   定义体: by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
@@ -272,8 +272,8 @@ lemma of_isAffineHom
 
 中文:
 引理 of_isAffineHom
-  条件: [h : IsAffineHom f]
-  结论: IsSeparated f
+  条件: [h : 是仿射态射 f]
+  结论: 是分离 f
   证明: by
   wlog hY : IsAffine Y
   · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsSeparated) _
@@ -315,7 +315,7 @@ instance [IsSeparated
   convert (inferInstance : IsClosedImmersion (pullback.mapDesc f (𝟙 _) g))
 
 中文:
-实例 [IsSeparated
+实例 [是分离
   签名: g] :
   定义体: by
   rw [← MorphismProperty.cancel_left_of_respectsIso @IsClosedImmersion (pullback.fst f (𝟙 Y))]
@@ -357,7 +357,7 @@ lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
   have H : pullback.fst f f x = pul
 
 中文:
-引理 Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
+引理 概形.拉回.diagonalCoverDiagonalRange_eq_top_of_injective
   证明: by
   rw [← top_le_iff]
   rintro x -
@@ -410,7 +410,7 @@ lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange
   obtain ⟨y : 𝒰.X i, hy :
 
 中文:
-引理 Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange
+引理 概形.拉回.range_diagonal_subset_diagonalCoverDiagonalRange
   证明: by
   rintro _ ⟨x, rfl⟩
   simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
@@ -499,7 +499,7 @@ lemma isSeparated_of_injective
 
 中文:
 引理 isSeparated_of_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: by
   constructor
   let 𝒰 := Y.affineCover
@@ -532,7 +532,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsClosedImmersion @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @是闭浸入 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsClosedImmersion _)
 
@@ -551,8 +551,8 @@ lemma IsClosedImmersion.of_comp
   proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 中文:
-引理 IsClosedImmersion.of_comp
-  条件: [IsClosedImmersion (f ≫ g)] [IsSeparated g]
+引理 是闭浸入.of_comp
+  条件: [是闭浸入 (f ≫ g)] [是分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -570,8 +570,8 @@ lemma IsClosedImmersion.comp_iff
   proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 IsClosedImmersion.comp_iff
-  条件: [IsClosedImmersion g]
+引理 是闭浸入.comp_iff
+  条件: [是闭浸入 g]
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -599,9 +599,9 @@ lemma IsSeparated.of_comp
   exact ⟨@IsClosedImmersion.of_comp _ _ _ _ _ this inferInstance⟩
 
 中文:
-引理 IsSeparated.of_comp
-  条件: [IsSeparated (f ≫ g)]
-  结论: IsSeparated f
+引理 是分离.of_comp
+  条件: [是分离 (f ≫ g)]
+  结论: 是分离 f
   证明: by
   have : IsClosedImmersion (pullback.diagonal (f ≫ g)) := inferInstance
   rw [pullback.diagonal_comp] at this
@@ -625,9 +625,9 @@ lemma IsSeparated.comp_iff
   proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 IsSeparated.comp_iff
-  条件: [IsSeparated g]
-  结论: IsSeparated (f ≫ g) ↔ IsSeparated f
+引理 是分离.comp_iff
+  条件: [是分离 g]
+  结论: 是分离 (f ≫ g) ↔ 是分离 f
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -645,7 +645,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsSeparated ⊤
+  签名: MorphismProperty.有OfPostcompProperty @是分离 ⊤
   定义体: .of_comp f g
 
 Depends on / 依赖: of_comp
@@ -664,7 +664,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsAffineHom @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @是仿射态射 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsAffineHom _)
 
@@ -683,8 +683,8 @@ lemma IsAffineHom.of_comp
   proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 中文:
-引理 IsAffineHom.of_comp
-  条件: [IsAffineHom (f ≫ g)] [IsSeparated g]
+引理 是仿射态射.of_comp
+  条件: [是仿射态射 (f ≫ g)] [是分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -703,9 +703,9 @@ lemma IsAffineHom.comp_iff
   proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 IsAffineHom.comp_iff
-  条件: [IsAffineHom g]
-  结论: IsAffineHom (f ≫ g) ↔ IsAffineHom f
+引理 是仿射态射.comp_iff
+  条件: [是仿射态射 g]
+  结论: 是仿射态射 (f ≫ g) ↔ 是仿射态射 f
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -730,7 +730,7 @@ instance isClosedImmersion_equalizer_ι_left
 
 中文:
 实例 isClosedImmersion_equalizer_ι_left
-  签名: {S : Scheme} {X Y : Over S} [IsSeparated Y.hom]
+  签名: {S : 概形} {X Y : Over S} [是分离 Y.hom]
   定义体: by
   refine MorphismProperty.of_isPullback
     ((Limits.isPullback_equalizer_prod f g).map (Over.forget _)).flip ?_
@@ -768,7 +768,7 @@ lemma ext_of_isDominant_of_isSeparated
 
 中文:
 引理 ext_of_isDominant_of_isSeparated
-  结论: [IsReduced X] {f g : X ⟶ Y}
+  结论: [是既约 X] {f g : X ⟶ Y}
   证明: by
   let X' : Over Z := Over.mk (f ≫ s)
   let Y' : Over Z := Over.mk s
@@ -815,7 +815,7 @@ lemma ext_of_fromSpecResidueField_eq
 
 中文:
 引理 ext_of_fromSpecResidueField_eq
-  结论: (f g : X ⟶ Y) (i : Y ⟶ Z) [IsSeparated i] [IsReduced X]
+  结论: (f g : X ⟶ Y) (i : Y ⟶ Z) [是分离 i] [是既约 X]
   证明: by
   suffices IsDominant (equalizer.ι f g) from
     ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
@@ -844,7 +844,7 @@ lemma ext_of_isDominant_of_isSeparated'
 
 中文:
 引理 ext_of_isDominant_of_isSeparated'
-  结论: [X.Over S] [Y.Over S] [IsReduced X] [IsSeparated (Y ↘ S)]
+  结论: [X.Over S] [Y.Over S] [是既约 X] [是分离 (Y ↘ S)]
   证明: ext_of_isDominant_of_isSeparated (Y ↘ S) (by simp) ι hU
 
 Depends on / 依赖: ext_of_isDominant_of_isSeparated
@@ -868,10 +868,10 @@ class IsSeparated
     - isSeparated_terminal_from : IsSeparated (terminal.from X)
 
 中文:
-类 IsSeparated
-  参数: (X : Scheme.{u})
+类 是分离
+  参数: (X : 概形.{u})
   公理与运算 (1 个):
-    - isSeparated_terminal_from : IsSeparated (terminal.from X)
+    - isSeparated_terminal_from : 是分离 (terminal.from X)
 -/
 protected class IsSeparated (X : Scheme.{u}) : Prop where
   isSeparated_terminal_from : IsSeparated (terminal.from X)
@@ -892,7 +892,7 @@ lemma isSeparated_iff_isClosedImmersion_prod_lift
 
 中文:
 引理 isSeparated_iff_isClosedImmersion_prod_lift
-  条件: {X : Scheme.{u}}
+  条件: {X : 概形.{u}}
   证明: by
   rw [isSeparated_iff]; rw [AlgebraicGeometry.isSeparated_iff]; rw [iff_iff_eq]; rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _ (prodIsoPullback X X).hom]
   congr
@@ -916,8 +916,8 @@ instance [X.IsSeparated]
   rwa [← isSeparated_iff_isClosedImmersion_prod_lift]
 
 中文:
-实例 [X.IsSeparated]
-  签名: : IsClosedImmersion (prod.lift (𝟙 X) (𝟙 X))
+实例 [X.是分离]
+  签名: : 是闭浸入 (乘积.lift (𝟙 X) (𝟙 X))
   定义体: by
   rwa [← isSeparated_iff_isClosedImmersion_prod_lift]
 
@@ -954,7 +954,7 @@ instance IsSeparated.hasAffineProperty
   rfl
 
 中文:
-实例 IsSeparated.hasAffineProperty
+实例 是分离.hasAffineProperty
   签名: :
   定义体: by
   convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsSeparated with X Y f hY
@@ -979,7 +979,7 @@ lemma ext_of_isDominant
 
 中文:
 引理 ext_of_isDominant
-  结论: [IsReduced X] {f g : X ⟶ Y} [Y.IsSeparated]
+  结论: [是既约 X] {f g : X ⟶ Y} [Y.是分离]
   证明: ext_of_isDominant_of_isSeparated (Limits.terminal.from _) (Limits.terminal.hom_ext _ _) ι hU
 
 Depends on / 依赖: Limits, Limits.terminal.from, Limits.terminal.hom_ext, ext_of_isDominant_of_isSeparated, hom_ext, terminal

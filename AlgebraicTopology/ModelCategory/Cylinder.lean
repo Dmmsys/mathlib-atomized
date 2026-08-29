@@ -242,7 +242,7 @@ definition toFullSubcategory
 
 中文:
 定义 toFullSubcategory
-  签名: {P : Object命题erty C} {X : P.FullSubcategory} (Q : Precylinder X.obj)
+  签名: {P : ObjectProperty C} {X : P.满子范畴} (Q : Precylinder X.obj)
   定义体: ⟨Q.I, hQ⟩
   i₀ := P.homMk Q.i₀
   i₁ := P.homMk Q.i₁
@@ -273,7 +273,7 @@ definition map
 
 中文:
 定义 map
-  签名: {X : C} (P : Precylinder X) {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: {X : C} (P : Precylinder X) {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: F.obj P.I
   i₀ := F.map P.i₀
   i₁ := F.map P.i₁
@@ -305,11 +305,11 @@ structure Cylinder
     - weakEquivalence_π : WeakEquivalence π  [default: by infer_instance]
 
 中文:
-结构 Cylinder
-  参数: [CategoryWithWeakEquivalences C] (A : C)
+结构 柱
+  参数: [带弱等价范畴 C] (A : C)
   继承: Precylinder A
   公理与运算 (1 个):
-    - weakEquivalence_π : WeakEquivalence π  [默认: by infer_instance]
+    - weakEquivalence_π : 弱等价 π  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -340,7 +340,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : Cylinder A where
+  签名: : 柱 A where
   定义体: P.toPrecylinder.symm
   weakEquivalence_π := by dsimp; infer_instance
 
@@ -387,7 +387,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence P.i₀
+  签名: 弱等价 P.i₀
   定义体: weakEquivalence_of_postcomp_of_fac P.i₀_π
 
 Depends on / 依赖: weakEquivalence_of_postcomp_of_fac
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence P.i₁
+  签名: 弱等价 P.i₁
   定义体: weakEquivalence_of_postcomp_of_fac P.i₁_π
 
 Depends on / 依赖: weakEquivalence_of_postcomp_of_fac
@@ -425,10 +425,10 @@ class IsGood
     - cofibration_i : Cofibration P.i  [default: by infer_instance]
 
 中文:
-类 IsGood
-  参数: [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
+类 是Good
+  参数: [HasBinaryCoproduct A A] [带余纤维化范畴 C]
   公理与运算 (1 个):
-    - cofibration_i : Cofibration P.i  [默认: by infer_instance]
+    - cofibration_i : 余纤维化 P.i  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -446,11 +446,11 @@ class IsVeryGood
     - fibration_π : Fibration P.π  [default: by infer_instance]
 
 中文:
-类 IsVeryGood
-  参数: [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
-  继承: P.IsGood
+类 是VeryGood
+  参数: [HasBinaryCoproduct A A] [带余纤维化范畴 C]
+  继承: P.是Good
   公理与运算 (1 个):
-    - fibration_π : Fibration P.π  [默认: by infer_instance]
+    - fibration_π : 纤维化 P.π  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -479,7 +479,7 @@ instance :
 
 中文:
 实例 :
-  签名: Cofibration P.i₀
+  签名: 余纤维化 P.i₀
   定义体: by
   rw [← P.inl_i]
   infer_instance
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: Cofibration P.i₁
+  签名: 余纤维化 P.i₁
   定义体: by
   rw [← P.inr_i]
   infer_instance
@@ -549,7 +549,7 @@ instance [HasBinaryCoproducts
 
 中文:
 实例 [HasBinaryCoproducts
-  签名: C] [CategoryWithCofibrations C] [P.IsGood]
+  签名: C] [带余纤维化范畴 C] [P.是Good]
   定义体: by
     have hi : cofibrations C P.i := by rw [← cofibration_iff]; infer_instance
     rw [P.symm_i]; rw [cofibration_iff]
@@ -581,7 +581,7 @@ instance [HasBinaryCoproduct
 
 中文:
 实例 [HasBinaryCoproduct
-  签名: A A] [HasTerminal C] [IsFibrant A] [P.IsVeryGood] : IsFibrant P.I
+  签名: A A] [有终止 C] [IsFibrant A] [P.是VeryGood] : IsFibrant P.I
   定义体: isFibrant_of_fibration P.π
 
 Depends on / 依赖: isFibrant_of_fibration
@@ -600,7 +600,7 @@ instance [(cofibrations
 
 中文:
 实例 [(cofibrations
-  签名: C).RespectsIso] [HasBinaryCoproducts C] [P.IsVeryGood] :
+  签名: C).RespectsIso] [HasBinaryCoproducts C] [P.是VeryGood] :
   定义体: by dsimp; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -639,7 +639,7 @@ definition ofFactorizationData
 
 中文:
 定义 ofFactorizationData
-  签名: : Cylinder A where
+  签名: : 柱 A where
   定义体: h.Z
   i₀ := coprod.inl ≫ h.i
   i₁ := coprod.inr ≫ h.i
@@ -683,7 +683,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofFactorizationData h).IsVeryGood
+  签名: (ofFactorizationData h).是VeryGood
   定义体: by simpa using inferInstanceAs (Cofibration h.i)
   fibration_π := by dsimp; infer_instance
 
@@ -702,8 +702,8 @@ instance [HasTerminal
   body: isFibrant_of_fibration (ofFactorizationData h).π
 
 中文:
-实例 [HasTerminal
-  签名: C] [IsFibrant A] [(fibrations C).IsStableUnderComposition] :
+实例 [有终止
+  签名: C] [IsFibrant A] [(fibrations C).是StableUnderComposition] :
   定义体: isFibrant_of_fibration (ofFactorizationData h).π
 
 Depends on / 依赖: isFibrant_of_fibration, ofFactorizationData
@@ -724,7 +724,7 @@ lemma exists_very_good
     inferInstance⟩
 
 中文:
-引理 exists_very_good
+引理 存在_very_good
   证明: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
     inferInstance⟩
 
@@ -745,7 +745,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Cylinder A)
+  签名: 非空 (柱 A)
   定义体: ⟨(exists_very_good A).choose⟩
 
 Depends on / 依赖: exists_very_good
@@ -774,7 +774,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: [IsCofibrant A] (P P' : Cylinder A) [P'.IsGood]
+  签名: [IsCofibrant A] (P P' : 柱 A) [P'.是Good]
   定义体: P.toPrecylinder.trans P'.toPrecylinder
   weakEquivalence_π := by
     have : WeakEquivalence ((P.i₀ ≫ pushout.inl P.i₁ P'.i₀) ≫

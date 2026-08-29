@@ -33,10 +33,10 @@ class IsEmpty
     - false : α -> False
 
 中文:
-类 IsEmpty
-  参数: (α : Sort u)
+类 是空
+  参数: (α : 类型层 u)
   公理与运算 (1 个):
-    - false : α -> False
+    - false : α -> 假
 -/
 class IsEmpty (α : Sort u) : Prop where
   protected false : α -> False
@@ -50,8 +50,8 @@ instance Empty.instIsEmpty
   body: ⟨Empty.elim⟩
 
 中文:
-实例 Empty.instIsEmpty
-  签名: : IsEmpty Empty
+实例 空.instIsEmpty
+  签名: : 是空 空
   定义体: ⟨Empty.elim⟩
 
 Depends on / 依赖: Empty.elim
@@ -68,8 +68,8 @@ instance PEmpty.instIsEmpty
   body: ⟨PEmpty.elim⟩
 
 中文:
-实例 PEmpty.instIsEmpty
-  签名: : IsEmpty PEmpty
+实例 命题空.instIsEmpty
+  签名: : 是空 命题空
   定义体: ⟨PEmpty.elim⟩
 
 Depends on / 依赖: PEmpty, PEmpty.elim
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty False
+  签名: 是空 假
   定义体: ⟨id⟩
 -/
 instance : IsEmpty False :=
@@ -102,8 +102,8 @@ instance Fin.isEmpty
   body: ⟨fun n => Nat.not_lt_zero n.1 n.2⟩
 
 中文:
-实例 Fin.isEmpty
-  签名: : IsEmpty (Fin 0)
+实例 有限集.isEmpty
+  签名: : 是空 (有限集 0)
   定义体: ⟨fun n => Nat.not_lt_zero n.1 n.2⟩
 
 Depends on / 依赖: Nat.not_lt_zero, not_lt_zero
@@ -120,8 +120,8 @@ instance Fin.isEmpty'
   body: Fin.isEmpty
 
 中文:
-实例 Fin.isEmpty'
-  签名: : IsEmpty (Fin 自然数.zero)
+实例 有限集.isEmpty'
+  签名: : 是空 (有限集 自然数.zero)
   定义体: Fin.isEmpty
 
 Depends on / 依赖: Fin.isEmpty, isEmpty
@@ -139,9 +139,9 @@ theorem Function.isEmpty
   proof: ⟨fun x => IsEmpty.false (f x)⟩
 
 中文:
-定理 Function.isEmpty
-  条件: [IsEmpty β] (f : α -> β)
-  结论: IsEmpty α
+定理 函数.isEmpty
+  条件: [是空 β] (f : α -> β)
+  结论: 是空 α
   证明: ⟨fun x => IsEmpty.false (f x)⟩
 -/
 protected theorem Function.isEmpty [IsEmpty β] (f : α -> β) : IsEmpty α :=
@@ -157,9 +157,9 @@ theorem Function.Surjective.isEmpty
   proof: ⟨fun y => let ⟨x, _⟩ := hf y; IsEmpty.false x⟩
 
 中文:
-定理 Function.Surjective.isEmpty
-  条件: [IsEmpty α] {f : α -> β} (hf : f.Surjective)
-  结论: IsEmpty β
+定理 函数.满射.isEmpty
+  条件: [是空 α] {f : α -> β} (hf : f.满射)
+  结论: 是空 β
   证明: ⟨fun y => let ⟨x, _⟩ := hf y; IsEmpty.false x⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.false
@@ -180,8 +180,8 @@ instance PProd.isEmpty_left
   body: Function.isEmpty PProd.fst
 
 中文:
-实例 PProd.isEmpty_left
-  签名: [IsEmpty α]
+实例 命题积类型.isEmpty_left
+  签名: [是空 α]
   定义体: Function.isEmpty PProd.fst
 
 Depends on / 依赖: Function, Function.isEmpty, PProd.fst, isEmpty
@@ -198,8 +198,8 @@ instance PProd.isEmpty_right
   body: Function.isEmpty PProd.snd
 
 中文:
-实例 PProd.isEmpty_right
-  签名: [IsEmpty β]
+实例 命题积类型.isEmpty_right
+  签名: [是空 β]
   定义体: Function.isEmpty PProd.snd
 
 Depends on / 依赖: Function, Function.isEmpty, PProd.snd, isEmpty
@@ -216,8 +216,8 @@ instance Prod.isEmpty_left
   body: Function.isEmpty Prod.fst
 
 中文:
-实例 Prod.isEmpty_left
-  签名: {α β} [IsEmpty α]
+实例 积类型.isEmpty_left
+  签名: {α β} [是空 α]
   定义体: Function.isEmpty Prod.fst
 
 Depends on / 依赖: Function, Function.isEmpty, Prod.fst, isEmpty
@@ -234,8 +234,8 @@ instance Prod.isEmpty_right
   body: Function.isEmpty Prod.snd
 
 中文:
-实例 Prod.isEmpty_right
-  签名: {α β} [IsEmpty β]
+实例 积类型.isEmpty_right
+  签名: {α β} [是空 β]
   定义体: Function.isEmpty Prod.snd
 
 Depends on / 依赖: Function, Function.isEmpty, Prod.snd, isEmpty
@@ -252,8 +252,8 @@ instance Quot.instIsEmpty
   body: Function.Surjective.isEmpty Quot.exists_rep
 
 中文:
-实例 Quot.instIsEmpty
-  签名: [IsEmpty α] {r : α -> α -> 命题}
+实例 商.instIsEmpty
+  签名: [是空 α] {r : α -> α -> 命题}
   定义体: Function.Surjective.isEmpty Quot.exists_rep
 
 Depends on / 依赖: Function, Function.Surjective.isEmpty, Quot.exists_rep, Surjective, exists_rep, isEmpty
@@ -270,8 +270,8 @@ instance Quotient.instIsEmpty
   body: Quot.instIsEmpty
 
 中文:
-实例 Quotient.instIsEmpty
-  签名: [IsEmpty α] {s : Setoid α}
+实例 商.instIsEmpty
+  签名: [是空 α] {s : 集合等价关系 α}
   定义体: Quot.instIsEmpty
 
 Depends on / 依赖: Quot.instIsEmpty, instIsEmpty
@@ -288,8 +288,8 @@ instance [IsEmpty
   body: ⟨fun x => PSum.rec IsEmpty.false IsEmpty.false x⟩
 
 中文:
-实例 [IsEmpty
-  签名: α] [IsEmpty β] : IsEmpty (α oplus' β)
+实例 [是空
+  签名: α] [是空 β] : 是空 (α oplus' β)
   定义体: ⟨fun x => PSum.rec IsEmpty.false IsEmpty.false x⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, PSum.rec
@@ -307,7 +307,7 @@ instance instIsEmptySum
 
 中文:
 实例 instIsEmptySum
-  签名: {α β} [IsEmpty α] [IsEmpty β]
+  签名: {α β} [是空 α] [是空 β]
   定义体: ⟨fun x => Sum.rec IsEmpty.false IsEmpty.false x⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, Sum.rec
@@ -324,7 +324,7 @@ instance [IsEmpty
   body: ⟨fun x => IsEmpty.false x.1⟩
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: α] (p
   定义体: ⟨fun x => IsEmpty.false x.1⟩
 -/
@@ -341,9 +341,9 @@ theorem Subtype.isEmpty_of_false
   proof: ⟨fun x => hp _ x.2⟩
 
 中文:
-定理 Subtype.isEmpty_of_false
+定理 子类型.isEmpty_of_false
   条件: {p : α -> 命题} (hp : 对任意 a, ¬p a)
-  结论: IsEmpty (Subtype p)
+  结论: 是空 (子类型 p)
   证明: ⟨fun x => hp _ x.2⟩
 -/
 theorem Subtype.isEmpty_of_false {p : α -> Prop} (hp : forall a, ¬p a) : IsEmpty (Subtype p) :=
@@ -358,8 +358,8 @@ instance Subtype.isEmpty_false
   body: Subtype.isEmpty_of_false fun _ => id
 
 中文:
-实例 Subtype.isEmpty_false
-  签名: : IsEmpty { _a : α // False }
+实例 子类型.isEmpty_false
+  签名: : 是空 { _a : α // 假 }
   定义体: Subtype.isEmpty_of_false fun _ => id
 
 Depends on / 依赖: Subtype, Subtype.isEmpty_of_false, isEmpty_of_false
@@ -378,8 +378,8 @@ instance Sigma.isEmpty_left
 example [h : Nonempty α] [IsEmpty β] : IsEmpty (α -> β) := by infer_instance
 
 中文:
-实例 Sigma.isEmpty_left
-  签名: {α} [IsEmpty α] {E : α -> 类型v}
+实例 依赖和类型.isEmpty_left
+  签名: {α} [是空 α] {E : α -> 类型v}
   定义体: Function.isEmpty Sigma.fst
 
 example [h : Nonempty α] [IsEmpty β] : IsEmpty (α -> β) := by infer_instance
@@ -403,7 +403,7 @@ definition isEmptyElim
 
 中文:
 定义 isEmptyElim
-  签名: [IsEmpty α] {p : α -> Sort v} (a : α)
+  签名: [是空 α] {p : α -> 类型层 v} (a : α)
   定义体: (IsEmpty.false a).elim
 
 Depends on / 依赖: IsEmpty, IsEmpty.false
@@ -421,7 +421,7 @@ theorem isEmpty_iff
 
 中文:
 定理 isEmpty_iff
-  结论: IsEmpty α ↔ α -> False
+  结论: 是空 α ↔ α -> 假
   证明: ⟨@IsEmpty.false α, IsEmpty.mk⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, IsEmpty.mk
@@ -445,7 +445,7 @@ definition elim
 
 中文:
 定义 elim
-  签名: (_ : IsEmpty α) {p : α -> Sort v} (a : α)
+  签名: (_ : 是空 α) {p : α -> 类型层 v} (a : α)
   定义体: isEmptyElim a
 -/
 protected def elim (_ : IsEmpty α) {p : α -> Sort v} (a : α) : p a :=
@@ -461,7 +461,7 @@ definition elim'
 
 中文:
 定义 elim'
-  签名: (h : IsEmpty α) (a : α)
+  签名: (h : 是空 α) (a : α)
   定义体: (h.false a).elim
 -/
 protected def elim' (h : IsEmpty α) (a : α) : β :=
@@ -479,7 +479,7 @@ theorem prop_iff
 中文:
 定理 prop_iff
   条件: {p : 命题}
-  结论: IsEmpty p ↔ ¬p
+  结论: 是空 p ↔ ¬p
   证明: isEmpty_iff
 -/
 protected theorem prop_iff {p : Prop} : IsEmpty p ↔ ¬p :=
@@ -500,9 +500,9 @@ theorem forall_iff
 @[simp]
 
 中文:
-定理 forall_iff
+定理 对任意_iff
   条件: {p : α -> 命题}
-  结论: (对任意 a, p a) ↔ True
+  结论: (对任意 a, p a) ↔ 真
   证明: iff_true_intro isEmptyElim
 
 @[simp]
@@ -523,9 +523,9 @@ theorem exists_iff
   proof: iff_false_intro fun ⟨x, _⟩ => IsEmpty.false x
 
 中文:
-定理 exists_iff
+定理 存在_iff
   条件: {p : α -> 命题}
-  结论: (存在 a, p a) ↔ False
+  结论: (存在 a, p a) ↔ 假
   证明: iff_false_intro fun ⟨x, _⟩ => IsEmpty.false x
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, iff_false_intro

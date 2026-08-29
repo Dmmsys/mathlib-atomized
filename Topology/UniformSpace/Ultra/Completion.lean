@@ -34,8 +34,8 @@ lemma IsUniformInducing.isUltraUniformity
   proof: hf.comap_uniformSpace ▸ .comap inferInstance f
 
 中文:
-引理 IsUniformInducing.isUltraUniformity
-  结论: [IsUltraUniformity Y] {f : X -> Y}
+引理 是UniformInducing.isUltraUniformity
+  结论: [是UltraUniformity Y] {f : X -> Y}
   证明: hf.comap_uniformSpace ▸ .comap inferInstance f
 
 Depends on / 依赖: comap_uniformSpace, hf.comap_uniformSpace
@@ -54,7 +54,7 @@ instance CauchyFilter.isSymm_gen
 
 中文:
 实例 CauchyFilter.isSymm_gen
-  签名: {s : SetRel X X} [s.IsSymm]
+  签名: {s : SetRel X X} [s.是Symm]
   定义体: by simp [CauchyFilter.gen, s.mem_filter_prod_comm]
 
 Depends on / 依赖: CauchyFilter, CauchyFilter.gen, mem_filter_prod_comm, s.mem_filter_prod_comm
@@ -73,7 +73,7 @@ instance CauchyFilter.isTrans_gen
 
 中文:
 实例 CauchyFilter.isTrans_gen
-  签名: {s : SetRel X X} [s.IsTrans]
+  签名: {s : SetRel X X} [s.是Trans]
   定义体: IsTransitiveRel.mem_filter_prod_trans
 
 Depends on / 依赖: IsTransitiveRel, IsTransitiveRel.mem_filter_prod_trans, mem_filter_prod_trans
@@ -93,8 +93,8 @@ instance IsUltraUniformity.cauchyFilter
   · exact fun _ ⟨_, _, hU⟩ => by simpa using CauchyFilter.isTrans_gen
 
 中文:
-实例 IsUltraUniformity.cauchyFilter
-  签名: [IsUltraUniformity X]
+实例 是UltraUniformity.cauchyFilter
+  签名: [是UltraUniformity X]
   定义体: by
   apply mk_of_hasBasis (CauchyFilter.basis_uniformity IsUltraUniformity.hasBasis)
   · exact fun _ ⟨_, hU, _⟩ => by simpa using CauchyFilter.isSymm_gen
@@ -117,7 +117,7 @@ lemma IsUltraUniformity.cauchyFilter_iff
    fun _ => inferInstance⟩
 
 中文:
-引理 IsUltraUniformity.cauchyFilter_iff
+引理 是UltraUniformity.cauchyFilter_iff
   证明: ⟨fun _ => CauchyFilter.isUniformInducing_pureCauchy.isUltraUniformity,
    fun _ => inferInstance⟩
 -/
@@ -143,8 +143,8 @@ instance IsUltraUniformity.separationQuotient
     ri
 
 中文:
-实例 IsUltraUniformity.separationQuotient
-  签名: [IsUltraUniformity X]
+实例 是UltraUniformity.separationQuotient
+  签名: [是UltraUniformity X]
   定义体: by
   have := IsUltraUniformity.hasBasis.map
     (Prod.map SeparationQuotient.mk (SeparationQuotient.mk (X := X)))
@@ -184,7 +184,7 @@ lemma IsUltraUniformity.separationQuotient_iff
    fun _ => inferInstance⟩
 
 中文:
-引理 IsUltraUniformity.separationQuotient_iff
+引理 是UltraUniformity.separationQuotient_iff
   证明: ⟨fun _ => SeparationQuotient.isUniformInducing_mk.isUltraUniformity,
    fun _ => inferInstance⟩
 -/
@@ -203,7 +203,7 @@ lemma IsUltraUniformity.completion_iff
   exact Iff.rfl
 
 中文:
-引理 IsUltraUniformity.completion_iff
+引理 是UltraUniformity.completion_iff
   证明: by
   rw [iff_comm]; rw [← cauchyFilter_iff]; rw [← separationQuotient_iff]
   exact Iff.rfl
@@ -222,8 +222,8 @@ instance IsUltraUniformity.completion
   body: completion_iff.2 inferInstance
 
 中文:
-实例 IsUltraUniformity.completion
-  签名: [IsUltraUniformity X]
+实例 是UltraUniformity.completion
+  签名: [是UltraUniformity X]
   定义体: completion_iff.2 inferInstance
 
 Depends on / 依赖: completion_iff

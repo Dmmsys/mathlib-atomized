@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (RingAut R)
+  签名: 群 (RingAut R)
   定义体: RingEquiv.trans h g
   one := RingEquiv.refl R
   inv := RingEquiv.symm
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RingAut R)
+  签名: 可居 (RingAut R)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (RingAut R) :=
@@ -157,7 +157,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : RingAut R ->* Equiv.Perm R where
+  签名: : RingAut R ->* 等价.置换 R where
   定义体: RingEquiv.toEquiv
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -183,7 +183,7 @@ theorem one_eq_refl
 
 中文:
 定理 one_eq_refl
-  结论: (1 : R ≃+* R) = RingEquiv.refl R
+  结论: (1 : R ≃+* R) = 环等价.refl R
   证明: rfl
 
 @[simp]

@@ -87,7 +87,7 @@ definition runDefEqTactic
 
 中文:
 定义 runDefEqTactic
-  签名: (m : Option FVarId -> Expr -> MetaM Expr)
+  签名: (m : 选项类型 FVarId -> Expr -> MetaM Expr)
   定义体: withMainContext do
   withLocation (expandOptLocation (Lean.mkOptionalNode loc?))
     (atLocal := fun h => liftMetaTactic1 fun mvarId => do
@@ -201,7 +201,7 @@ definition unfoldFVars
 
 中文:
 定义 unfoldFVars
-  签名: (fvars : Array FVarId) (e : Expr)
+  签名: (fvars : 数组 FVarId) (e : Expr)
   定义体: do
   transform (usedLetOnly := true) e fun node => do
     match node with
@@ -246,7 +246,7 @@ definition refoldFVars
 
 中文:
 定义 refoldFVars
-  签名: (fvars : Array FVarId) (loc? : Option FVarId) (e : Expr)
+  签名: (fvars : 数组 FVarId) (loc? : 选项类型 FVarId) (e : Expr)
   定义体: do
   -- Filter the fvars, only taking those that are from earlier in the local context.
   let fvars ←
@@ -518,7 +518,7 @@ definition etaStruct?
 
 中文:
 定义 etaStruct?
-  签名: (e : Expr) (tryWhnfR : 布尔 := true)
+  签名: (e : Expr) (tryWhnfR : 布尔值 := true)
   定义体: do
   let .const f _ := e.getAppFn | return none
   let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? f | return none

@@ -29,7 +29,7 @@ definition NormedSpace.normalize
   body: ‖x‖⁻¹ • x
 
 中文:
-定义 NormedSpace.normalize
+定义 赋范空间.normalize
   签名: (x : V)
   定义体: ‖x‖⁻¹ • x
 -/

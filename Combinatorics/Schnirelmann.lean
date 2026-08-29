@@ -60,7 +60,7 @@ definition schnirelmannDensity
 
 中文:
 定义 schnirelmannDensity
-  签名: (A : Set 自然数) [DecidablePred (· in A)]
+  签名: (A : 集合 自然数) [DecidablePred (· in A)]
   定义体: ⨅ n : {n : Nat // 0 < n}, #{a in Ioc 0 n | a in A} / n
 -/
 noncomputable def schnirelmannDensity (A : Set Nat) [DecidablePred (· in A)] : Real :=
@@ -245,7 +245,7 @@ lemma schnirelmannDensity_le_of_subset
 
 中文:
 引理 schnirelmannDensity_le_of_subset
-  条件: {B : Set 自然数} [DecidablePred (· in B)] (h : A subseteq B)
+  条件: {B : 集合 自然数} [DecidablePred (· in B)] (h : A subseteq B)
   证明: ciInf_mono ⟨0, fun _ ⟨_, hx⟩ => hx ▸ by positivity⟩ fun _ => by gcongr
 
 Depends on / 依赖: ciInf_mono
@@ -390,7 +390,7 @@ lemma schnirelmannDensity_le_iff_forall
   simp only [schnirelmannDensity_lt_iff]
 
 中文:
-引理 schnirelmannDensity_le_iff_forall
+引理 schnirelmannDensity_le_iff_对任意
   条件: {x : 实数}
   证明: by
   rw [le_iff_forall_pos_lt_add]
@@ -415,7 +415,7 @@ lemma schnirelmannDensity_congr'
 
 中文:
 引理 schnirelmannDensity_congr'
-  结论: {B : Set 自然数} [DecidablePred (· in B)]
+  结论: {B : 集合 自然数} [DecidablePred (· in B)]
   证明: by
   rw [schnirelmannDensity]; rw [schnirelmannDensity]; congr; ext ⟨n, hn⟩; congr 3; ext x; simp_all
 
@@ -480,7 +480,7 @@ lemma schnirelmannDensity_congr
 
 中文:
 引理 schnirelmannDensity_congr
-  条件: {B : Set 自然数} [DecidablePred (· in B)] (h : A = B)
+  条件: {B : 集合 自然数} [DecidablePred (· in B)] (h : A = B)
   证明: schnirelmannDensity_congr' (by simp_all)
 
 Depends on / 依赖: schnirelmannDensity_congr
@@ -501,7 +501,7 @@ lemma exists_of_schnirelmannDensity_eq_zero
   linarith
 
 中文:
-引理 exists_of_schnirelmannDensity_eq_zero
+引理 存在_of_schnirelmannDensity_eq_zero
   条件: {ε : 实数} (hε : 0 < ε) (hA : schnirelmannDensity A = 0)
   证明: by
   by_contra! h
@@ -553,7 +553,7 @@ lemma schnirelmannDensity_finset
 
 中文:
 引理 schnirelmannDensity_finset
-  条件: (A : Finset 自然数)
+  条件: (A : 有限集 自然数)
   结论: schnirelmannDensity A = 0
   证明: by
   refine le_antisymm ?_ schnirelmannDensity_nonneg
@@ -590,7 +590,7 @@ lemma schnirelmannDensity_finite
 
 中文:
 引理 schnirelmannDensity_finite
-  条件: {A : Set 自然数} [DecidablePred (· in A)] (hA : A.Finite)
+  条件: {A : 集合 自然数} [DecidablePred (· in A)] (hA : A.有限)
   证明: by simpa using schnirelmannDensity_finset hA.toFinset
 
 Depends on / 依赖: hA.toFinset, schnirelmannDensity_finset, toFinset
@@ -608,7 +608,7 @@ lemma schnirelmannDensity_univ
 
 中文:
 引理 schnirelmannDensity_univ
-  结论: schnirelmannDensity Set.univ = 1
+  结论: schnirelmannDensity 集合.univ = 1
   证明: (schnirelmannDensity_eq_one_iff_of_zero_mem (by simp)).2 (by simp)
 -/
 @[simp] lemma schnirelmannDensity_univ : schnirelmannDensity Set.univ = 1 :=
@@ -627,7 +627,7 @@ alias schnirelmannDensity_setOf_even := schnirelmannDensity_setOfPred_even
 
 中文:
 引理 schnirelmannDensity_setOfPred_even
-  结论: schnirelmannDensity (Set.ofPred Even) = 0
+  结论: schnirelmannDensity (集合.ofPred Even) = 0
   证明: schnirelmannDensity_eq_zero_of_one_notMem by simp
 
 @[deprecated (since := "2026-07-09")]
@@ -654,7 +654,7 @@ alias schnirelmannDensity_setOf_prime := schnirelmannDensity_setOfPred_prime
 
 中文:
 引理 schnirelmannDensity_setOfPred_prime
-  结论: schnirelmannDensity (Set.ofPred 自然数.Prime) = 0
+  结论: schnirelmannDensity (集合.ofPred 自然数.素) = 0
   证明: schnirelmannDensity_eq_zero_of_one_notMem by simp [Nat.not_prime_one]
 
 @[deprecated (since := "2026-07-09")]
@@ -792,7 +792,7 @@ alias schnirelmannDensity_setOf_Odd := schnirelmannDensity_setOfPred_Odd
 
 中文:
 引理 schnirelmannDensity_setOfPred_Odd
-  结论: schnirelmannDensity (Set.ofPred Odd) = 2⁻¹
+  结论: schnirelmannDensity (集合.ofPred Odd) = 2⁻¹
   证明: by
   have h : Set.ofPred Odd = {n | n % 2 = 1} := Set.ext fun _ => Nat.odd_iff
   simp only [h]
@@ -835,7 +835,7 @@ theorem add_eq_univ_of_one_le_schirelmannDensity_add_schnirelmannDensity
 
 中文:
 定理 add_eq_univ_of_one_le_schirelmannDensity_add_schnirelmannDensity
-  结论: {A B : Set 自然数}
+  结论: {A B : 集合 自然数}
   证明: by
   rw [Set.eq_univ_iff_forall]
   rintro (_ | m)

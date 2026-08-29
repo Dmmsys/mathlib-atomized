@@ -35,8 +35,8 @@ structure AlgebraNorm
   (no additional axioms)
 
 中文:
-结构 AlgebraNorm
-  参数: (R : 类型) [SeminormedCommRing R] (S : 类型) [Ring S] [Algebra R S]
+结构 代数范数
+  参数: (R : 类型) [SeminormedComm环 R] (S : 类型) [环 S] [代数 R S]
   (无附加公理)
 -/
 structure AlgebraNorm (R : Type*) [SeminormedCommRing R] (S : Type*) [Ring S] [Algebra R S] extends
@@ -63,9 +63,9 @@ class AlgebraNormClass
   (no additional axioms)
 
 中文:
-类 AlgebraNormClass
-  参数: (F : 类型) (R : outParam <| 类型) [SeminormedCommRing R]
-  继承: RingNormClass F S Real, SeminormClass F R S
+类 代数范数类
+  参数: (F : 类型) (R : outParam <| 类型) [SeminormedComm环 R]
+  继承: 环范数类 F S 实数, 半范数类 F R S
   (无附加公理)
 -/
 class AlgebraNormClass (F : Type*) (R : outParam <| Type*) [SeminormedCommRing R]
@@ -86,7 +86,7 @@ definition toRingSeminorm'
 
 中文:
 定义 toRingSeminorm'
-  签名: (f : AlgebraNorm R S)
+  签名: (f : 代数范数 R S)
   定义体: f.toRingNorm.toRingSeminorm
 
 Depends on / 依赖: f.toRingNorm.toRingSeminorm, toRingNorm, toRingSeminorm
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (AlgebraNorm R S) S 实数
+  签名: 函数状 (代数范数 R S) S 实数
   定义体: f.toFun
   coe_injective f f' h := by
     simp only [AddGroupSeminorm.toFun_eq_coe, RingSeminorm.toFun_eq_coe] at h
@@ -149,7 +149,7 @@ instance algebraNormClass
 
 中文:
 实例 algebraNormClass
-  签名: : AlgebraNormClass (AlgebraNorm R S) R S where
+  签名: : 代数范数类 (代数范数 R S) R S where
   定义体: f.map_zero'
   map_add_le_add f := f.add_le'
   map_mul_le_mul f := f.mul_le'
@@ -180,7 +180,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : AlgebraNorm R S)
+  条件: (p : 代数范数 R S)
   结论: p.toFun = p
   证明: rfl
 
@@ -200,7 +200,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : AlgebraNorm R S}
+  条件: {p q : 代数范数 R S}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -271,7 +271,7 @@ definition restriction
 
 中文:
 定义 restriction
-  签名: (A : Subalgebra R S) (f : AlgebraNorm R S)
+  签名: (A : 子代数 R S) (f : 代数范数 R S)
   定义体: f x.val
   map_zero' := map_zero f
   add_le' x y := map_add_le_add _ _ _
@@ -310,7 +310,7 @@ definition isScalarTower_restriction
 
 中文:
 定义 isScalarTower_restriction
-  签名: {A : 类型} [CommRing A] [Algebra R A] [Algebra A S]
+  签名: {A : 类型} [交换环 A] [代数 R A] [代数 A S]
   定义体: f (algebraMap A S x)
   map_zero' := by simp only [map_zero]
   add_le' x y := by simp only [map_add, map_add_le_add]
@@ -348,9 +348,9 @@ structure MulAlgebraNorm
   (no additional axioms)
 
 中文:
-结构 MulAlgebraNorm
-  参数: (R : 类型) [SeminormedCommRing R] (S : 类型) [Ring S] [Algebra R S]
-  继承: MulRingNorm S, Seminorm R S
+结构 乘法代数范数
+  参数: (R : 类型) [SeminormedComm环 R] (S : 类型) [环 S] [代数 R S]
+  继承: 乘法环范数 S, 半范数 R S
   (无附加公理)
 -/
 structure MulAlgebraNorm (R : Type*) [SeminormedCommRing R] (S : Type*) [Ring S] [Algebra R S]
@@ -378,9 +378,9 @@ class MulAlgebraNormClass
   (no additional axioms)
 
 中文:
-类 MulAlgebraNormClass
-  参数: (F : 类型) (R : outParam <| 类型) [SeminormedCommRing R]
-  继承: MulRingNormClass F S Real, SeminormClass F R S
+类 乘法代数范数类
+  参数: (F : 类型) (R : outParam <| 类型) [SeminormedComm环 R]
+  继承: 乘法环范数类 F S 实数, 半范数类 F R S
   (无附加公理)
 -/
 class MulAlgebraNormClass (F : Type*) (R : outParam <| Type*) [SeminormedCommRing R]
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (MulAlgebraNorm R S) S 实数
+  签名: 函数状 (乘法代数范数 R S) S 实数
   定义体: f.toFun
   coe_injective f f' h := by
     simp only [AddGroupSeminorm.toFun_eq_coe, MulRingSeminorm.toFun_eq_coe, DFunLike.coe_fn_eq] at h
@@ -436,7 +436,7 @@ instance mulAlgebraNormClass
 
 中文:
 实例 mulAlgebraNormClass
-  签名: : MulAlgebraNormClass (MulAlgebraNorm R S) R S where
+  签名: : 乘法代数范数类 (乘法代数范数 R S) R S where
   定义体: f.map_zero'
   map_add_le_add f := f.add_le'
   map_one f := f.map_one'
@@ -469,7 +469,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (p : MulAlgebraNorm R S)
+  条件: (p : 乘法代数范数 R S)
   结论: p.toFun = p
   证明: rfl
 
@@ -489,7 +489,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : MulAlgebraNorm R S}
+  条件: {p q : 乘法代数范数 R S}
   结论: (对任意 x, p x = q x) -> p = q
   证明: DFunLike.ext p q
 
@@ -510,7 +510,7 @@ theorem extends_norm'
 
 中文:
 定理 extends_norm'
-  条件: (f : MulAlgebraNorm R S) (a : R)
+  条件: (f : 乘法代数范数 R S) (a : R)
   结论: f (a • (1 : S)) = ‖a‖
   证明: by
   rw [← mul_one ‖a‖]; rw [← f.map_one']; rw [← f.smul']; rw [toFun_eq_coe]
@@ -532,7 +532,7 @@ theorem extends_norm
 
 中文:
 定理 extends_norm
-  条件: (f : MulAlgebraNorm R S) (a : R)
+  条件: (f : 乘法代数范数 R S) (a : R)
   结论: f (algebraMap R S a) = ‖a‖
   证明: by
   rw [Algebra.algebraMap_eq_smul_one]; exact extends_norm' _ _
@@ -553,7 +553,7 @@ definition toAlgebraNorm
 
 中文:
 定义 toAlgebraNorm
-  签名: (f : MulAlgebraNorm R S)
+  签名: (f : 乘法代数范数 R S)
   定义体: f
   mul_le' _ _ := (f.map_mul' _ _).le
 -/
@@ -573,7 +573,7 @@ instance instCoeAlgebraNorm
 
 中文:
 实例 instCoeAlgebraNorm
-  签名: : Coe (MulAlgebraNorm R S) (AlgebraNorm R S)
+  签名: : Coe (乘法代数范数 R S) (代数范数 R S)
   定义体: ⟨toAlgebraNorm⟩
 
 @[simp]
@@ -594,8 +594,8 @@ lemma coe_AlgebraNorm
 
 中文:
 引理 coe_AlgebraNorm
-  条件: (f : MulAlgebraNorm R S)
-  结论: ⇑(f : AlgebraNorm R S) = ⇑f
+  条件: (f : 乘法代数范数 R S)
+  结论: ⇑(f : 代数范数 R S) = ⇑f
   证明: rfl
 -/
 lemma coe_AlgebraNorm (f : MulAlgebraNorm R S) : ⇑(f : AlgebraNorm R S) = ⇑f := rfl
@@ -622,7 +622,7 @@ exact Or.inl norm_algebraMap' L r
 
 中文:
 定义 toMulAlgebraNorm
-  签名: : MulAlgebraNorm K L where
+  签名: : 乘法代数范数 K L where
   定义体: NormedField.toMulRingNorm L
   smul' r x := by
     simp only [Algebra.smul_def, AddGroupSeminorm.toFun_eq_coe, MulRingSeminorm.toFun_eq_coe,
@@ -676,7 +676,7 @@ definition toRingNorm
 
 中文:
 定义 toRingNorm
-  签名: (f : MulRingNorm R)
+  签名: (f : 乘法环范数 R)
   定义体: f
   __ := f
   mul_le' x y := le_of_eq (f.map_mul' x y)
@@ -700,7 +700,7 @@ theorem isPowMul
 
 中文:
 定理 isPowMul
-  条件: {A : 类型} [Ring A] (f : MulRingNorm A)
+  条件: {A : 类型} [环 A] (f : 乘法环范数 A)
   结论: IsPowMul f
   证明: fun x n hn => by
   cases n

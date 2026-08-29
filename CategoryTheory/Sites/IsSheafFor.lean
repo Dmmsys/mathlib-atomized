@@ -102,7 +102,7 @@ definition FamilyOfElements
 
 中文:
 定义 FamilyOfElements
-  签名: (P : Cᵒᵖ ⥤ Type w) (R : Presieve X)
+  签名: (P : Cᵒᵖ ⥤ 类型 w) (R : Presieve X)
   定义体: forall ⦃Y : C⦄ (f : Y ⟶ X), R f -> P.obj (op Y)
 
 Depends on / 依赖: P.obj
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FamilyOfElements P (⊥ : Presieve X))
+  签名: 可居 (FamilyOfElements P (⊥ : Presieve X))
   定义体: ⟨fun _ _ => False.elim⟩
 
 @[ext]
@@ -289,7 +289,7 @@ definition FamilyOfElements.Compatible
     g₁ ≫ f₁ = g₂ ≫ f₂ -> P.map g₁.op (x f₁ h₁) = P.map g₂.op (x f₂ h₂)
 
 中文:
-定义 FamilyOfElements.Compatible
+定义 FamilyOfElements.余mpatible
   签名: (x : FamilyOfElements P R)
   定义体: forall ⦃Y₁ Y₂ Z⦄ (g₁ : Z ⟶ Y₁) (g₂ : Z ⟶ Y₂) ⦃f₁ : Y₁ ⟶ X⦄ ⦃f₂ : Y₂ ⟶ X⦄ (h₁ : R f₁) (h₂ : R f₂),
     g₁ ≫ f₁ = g₂ ≫ f₂ -> P.map g₁.op (x f₁ h₁) = P.map g₂.op (x f₂ h₂)
@@ -312,7 +312,7 @@ definition FamilyOfElements.PullbackCompatible
 
 中文:
 定义 FamilyOfElements.PullbackCompatible
-  签名: (x : FamilyOfElements P R) [R.HasPairwisePullbacks]
+  签名: (x : FamilyOfElements P R) [R.有PairwisePullbacks]
   定义体: forall ⦃Y₁ Y₂⦄ ⦃f₁ : Y₁ ⟶ X⦄ ⦃f₂ : Y₂ ⟶ X⦄ (h₁ : R f₁) (h₂ : R f₂),
     haveI := HasPairwisePullbacks.has_pullbacks h₁ h₂
     P.map (pullback.fst f₁ f₂).op (x f₁ h₁) = P.map (pullback.snd f₁ f₂).op (x f₂ h₂)
@@ -343,7 +343,7 @@ theorem pullbackCompatible_iff
 
 中文:
 定理 pullbackCompatible_iff
-  条件: (x : FamilyOfElements P R) [R.HasPairwisePullbacks]
+  条件: (x : FamilyOfElements P R) [R.有PairwisePullbacks]
   证明: by
   constructor
   · intro t Y₁ Y₂ f₁ f₂ hf₁ hf₂
@@ -376,7 +376,7 @@ theorem FamilyOfElements.Compatible.restrict
   proof: fun q _ _ _ g₁ g₂ _ _ h₁ h₂ comm => q g₁ g₂ (h _ _ h₁) (h _ _ h₂) comm
 
 中文:
-定理 FamilyOfElements.Compatible.restrict
+定理 FamilyOfElements.余mpatible.restrict
   结论: {R₁ R₂ : Presieve X} (h : R₁ <= R₂)
   证明: fun q _ _ _ g₁ g₂ _ _ h₁ h₂ comm => q g₁ g₂ (h _ _ h₁) (h _ _ h₂) comm
 -/
@@ -416,8 +416,8 @@ theorem FamilyOfElements.Compatible.sieveExtend
   simp [comm, h₁.choose_spec.choose_spec.choose_spec.2, h₂.choose_spec.choose_spec.choose_spec.2]
 
 中文:
-定理 FamilyOfElements.Compatible.sieveExtend
-  条件: {x : FamilyOfElements P R} (hx : x.Compatible)
+定理 FamilyOfElements.余mpatible.sieveExtend
+  条件: {x : FamilyOfElements P R} (hx : x.余mpatible)
   证明: by
   intro _ _ _ _ _ _ _ h₁ h₂ comm
   simp only [FamilyOfElements.sieveExtend, ← comp_apply, ← Functor.map_comp, ← op_comp]
@@ -449,7 +449,7 @@ theorem extend_agrees
 
 中文:
 定理 extend_agrees
-  条件: {x : FamilyOfElements P R} (t : x.Compatible) {f : Y ⟶ X} (hf : R f)
+  条件: {x : FamilyOfElements P R} (t : x.余mpatible) {f : Y ⟶ X} (hf : R f)
   证明: by
   have h := (le_generate R Y _ hf).choose_spec
   unfold FamilyOfElements.sieveExtend
@@ -483,7 +483,7 @@ theorem restrict_extend
 
 中文:
 定理 restrict_extend
-  条件: {x : FamilyOfElements P R} (t : x.Compatible)
+  条件: {x : FamilyOfElements P R} (t : x.余mpatible)
   证明: by
   funext Y f hf
   exact extend_agrees t hf
@@ -507,8 +507,8 @@ lemma FamilyOfElements.Compatible.of_mono
   simpa using hx _ _ hf₁ hf₂ heq
 
 中文:
-引理 FamilyOfElements.Compatible.of_mono
-  结论: (f : P ⟶ Q) [Mono f] {x : R.FamilyOfElements P}
+引理 FamilyOfElements.余mpatible.of_mono
+  结论: (f : P ⟶ Q) [单态射 f] {x : R.FamilyOfElements P}
   证明: by
   intro Y Z W g₁ g₂ f₁ f₂ hf₁ hf₂ heq
   refine injective_of_mono (f.app _) ?_
@@ -586,7 +586,7 @@ theorem FamilyOfElements.Compatible.to_sieveCompatible
   proof: (compatible_iff_sieveCompatible x).1 t
 
 中文:
-定理 FamilyOfElements.Compatible.to_sieveCompatible
+定理 FamilyOfElements.余mpatible.to_sieveCompatible
   结论: {x : FamilyOfElements P (S : Presieve X)}
   证明: (compatible_iff_sieveCompatible x).1 t
 
@@ -616,7 +616,7 @@ theorem extend_restrict
 
 中文:
 定理 extend_restrict
-  条件: {x : FamilyOfElements P (generate R).arrows} (t : x.Compatible)
+  条件: {x : FamilyOfElements P (generate R).arrows} (t : x.余mpatible)
   证明: by
   rw [compatible_iff_sieveCompatible] at t
   funext _ _ h
@@ -646,7 +646,7 @@ theorem restrict_inj
 
 中文:
 定理 restrict_inj
-  结论: {x₁ x₂ : FamilyOfElements P (generate R).arrows} (t₁ : x₁.Compatible)
+  结论: {x₁ x₂ : FamilyOfElements P (generate R).arrows} (t₁ : x₁.余mpatible)
   证明: fun h => by
   rw [← extend_restrict t₁]; rw [← extend_restrict t₂]
   congr
@@ -703,7 +703,7 @@ theorem FamilyOfElements.comp_of_compatible
 
 中文:
 定理 FamilyOfElements.comp_of_compatible
-  结论: (S : Sieve X) {x : FamilyOfElements P S}
+  结论: (S : 筛 X) {x : FamilyOfElements P S}
   证明: by
   simpa using t (𝟙 _) g (S.downward_closed hf g) hf (id_comp _)
 
@@ -773,8 +773,8 @@ theorem FamilyOfElements.Compatible.functorPullback
   exact h (F.map g₁) (F.map g₂) h₁ h₂ (by simp only [← F.map_comp, eq])
 
 中文:
-定理 FamilyOfElements.Compatible.functorPullback
-  条件: (h : x.Compatible)
+定理 FamilyOfElements.余mpatible.functorPullback
+  条件: (h : x.余mpatible)
   证明: by
   intro Z₁ Z₂ W g₁ g₂ f₁ f₂ h₁ h₂ eq
   exact h (F.map g₁) (F.map g₂) h₁ h₂ (by simp only [← F.map_comp, eq])
@@ -800,7 +800,7 @@ definition FamilyOfElements.functorPushforward
 
 中文:
 定义 FamilyOfElements.functorPushforward
-  签名: {D : 类型u₂} [Category.{v₂} D] (F : D ⥤ C)
+  签名: {D : 类型u₂} [范畴.{v₂} D] (F : D ⥤ C)
   定义体: fun Y f h => by
   obtain ⟨Z, g, h, h₁, _⟩ := getFunctorPushforwardStructure h
   exact P.map h.op (x g h₁)
@@ -846,7 +846,7 @@ theorem FamilyOfElements.Compatible.pullback
   simp only [assoc]
 
 中文:
-定理 FamilyOfElements.Compatible.pullback
+定理 FamilyOfElements.余mpatible.pullback
   结论: (f : Y ⟶ X) {x : FamilyOfElements P S.arrows}
   证明: by
   simp only [compatible_iff_sieveCompatible] at h ⊢
@@ -923,7 +923,7 @@ theorem FamilyOfElements.Compatible.map
   rwa [← NatTrans.naturality_apply, ← NatTrans.naturality_apply, h]
 
 中文:
-定理 FamilyOfElements.Compatible.map
+定理 FamilyOfElements.余mpatible.map
   结论: (f : P ⟶ Q) {x : FamilyOfElements P R}
   证明: by
   intro Z₁ Z₂ W g₁ g₂ f₁ f₂ h₁ h₂ eq
@@ -999,7 +999,7 @@ theorem is_compatible_of_exists_amalgamation
   simp
 
 中文:
-定理 is_compatible_of_exists_amalgamation
+定理 is_compatible_of_存在_amalgamation
   结论: (x : FamilyOfElements P R)
   证明: by
   obtain ⟨t, ht⟩ := h
@@ -1106,7 +1106,7 @@ lemma FamilyOfElements.IsAmalgamation.of_mono
 
 中文:
 引理 FamilyOfElements.IsAmalgamation.of_mono
-  结论: (f : P ⟶ Q) [Mono f] {x : R.FamilyOfElements P}
+  结论: (f : P ⟶ Q) [单态射 f] {x : R.FamilyOfElements P}
   证明: by
   intro Y u hu
   refine injective_of_mono (f.app _) ?_
@@ -1131,7 +1131,7 @@ definition IsSeparatedFor
 
 中文:
 定义 IsSeparatedFor
-  签名: (P : Cᵒᵖ ⥤ Type w) (R : Presieve X)
+  签名: (P : Cᵒᵖ ⥤ 类型 w) (R : Presieve X)
   定义体: forall (x : FamilyOfElements P R) (t₁ t₂), x.IsAmalgamation t₁ -> x.IsAmalgamation t₂ -> t₁ = t₂
 
 Depends on / 依赖: FamilyOfElements, IsAmalgamation, x.IsAmalgamation
@@ -1216,7 +1216,7 @@ theorem isSeparatedFor_top
 
 中文:
 定理 isSeparatedFor_top
-  条件: (P : Cᵒᵖ ⥤ Type w)
+  条件: (P : Cᵒᵖ ⥤ 类型 w)
   结论: IsSeparatedFor P (⊤ : Presieve X)
   证明: fun x t₁ t₂ h₁ h₂ => by
   have q₁ := h₁ (𝟙 X) (by tauto)
@@ -1243,7 +1243,7 @@ definition IsSheafFor
 
 中文:
 定义 IsSheafFor
-  签名: (P : Cᵒᵖ ⥤ Type w) (R : Presieve X)
+  签名: (P : Cᵒᵖ ⥤ 类型 w) (R : Presieve X)
   定义体: forall x : FamilyOfElements P R, x.Compatible -> exists! t, x.IsAmalgamation t
 
 Depends on / 依赖: Compatible, FamilyOfElements, IsAmalgamation, x.Compatible, x.IsAmalgamation
@@ -1270,7 +1270,7 @@ definition YonedaSheafCondition
 
 中文:
 定义 YonedaSheafCondition
-  签名: (P : Cᵒᵖ ⥤ 类型v₁) (S : Sieve X)
+  签名: (P : Cᵒᵖ ⥤ 类型v₁) (S : 筛 X)
   定义体: forall f : S.functor ⟶ P, exists! g, S.functorInclusion ≫ g = f
 
 Depends on / 依赖: S.functor, S.functorInclusion, functor, functorInclusion
@@ -1304,7 +1304,7 @@ definition shrinkFunctorHomEquiv
 
 中文:
 定义 shrinkFunctorHomEquiv
-  签名: [LocallySmall.{w} C] {F : Cᵒᵖ ⥤ Type w}
+  签名: [LocallySmall.{w} C] {F : Cᵒᵖ ⥤ 类型 w}
   定义体: ⟨fun Y f hf => t.app _ ⟨shrinkYonedaObjObjEquiv.symm f, by simpa⟩, by
     rw [Presieve.compatible_iff_sieveCompatible]
     intro Y Z f g hf
@@ -1361,7 +1361,7 @@ lemma shrinkFunctor_ι_comp_eq_iff_isAmalgamation
 
 中文:
 引理 shrinkFunctor_ι_comp_eq_iff_isAmalgamation
-  结论: [LocallySmall.{w} C] (F : Cᵒᵖ ⥤ Type w)
+  结论: [LocallySmall.{w} C] (F : Cᵒᵖ ⥤ 类型 w)
   证明: by
   dsimp [Presieve.FamilyOfElements.IsAmalgamation]
   refine ⟨?_, fun h => ?_⟩
@@ -1569,7 +1569,7 @@ theorem isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor
     exact is_compatible_of_exis
 
 中文:
-定理 isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor
+定理 isSeparatedFor_and_存在_isAmalgamation_iff_isSheafFor
   证明: by
   rw [IsSeparatedFor]; rw [← forall_and]
   apply forall_congr'
@@ -1695,7 +1695,7 @@ theorem IsSheafFor.valid_glue
 
 中文:
 定理 IsSheafFor.valid_glue
-  结论: (t : IsSheafFor P R) {x : FamilyOfElements P R} (hx : x.Compatible)
+  结论: (t : IsSheafFor P R) {x : FamilyOfElements P R} (hx : x.余mpatible)
   证明: t.isAmalgamation hx f Hf
 
 Depends on / 依赖: isAmalgamation, t.isAmalgamation
@@ -1767,7 +1767,7 @@ theorem isSheafFor_singleton_iso
 
 中文:
 定理 isSheafFor_singleton_iso
-  条件: (P : Cᵒᵖ ⥤ Type w)
+  条件: (P : Cᵒᵖ ⥤ 类型 w)
   证明: by
   intro x _
   refine ⟨x _ (Presieve.singleton_self _), ?_, ?_⟩
@@ -1804,7 +1804,7 @@ alias isSheafFor_top_sieve := isSheafFor_top
 
 中文:
 定理 isSheafFor_top
-  条件: (P : Cᵒᵖ ⥤ Type w)
+  条件: (P : Cᵒᵖ ⥤ 类型 w)
   结论: IsSheafFor P (⊤ : Presieve X)
   证明: by
   rw [← arrows_top]; rw [← generate_of_singleton_isSplitEpi (𝟙 X)]
@@ -1839,7 +1839,7 @@ lemma isSheafFor_of_nat_equiv
 
 中文:
 引理 isSheafFor_of_nat_equiv
-  结论: {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'}
+  结论: {P₁ : Cᵒᵖ ⥤ 类型 w} {P₂ : Cᵒᵖ ⥤ 类型 w'}
   证明: fun x₂ hx₂ => by
   have he' : forall ⦃X Y : C⦄ (f : X ⟶ Y) (x : P₂.obj (op Y)),
     e.symm (P₂.map f.op x) = P₁.map f.op (e.symm x) := fun X Y f x =>
@@ -1891,7 +1891,7 @@ lemma isSheafFor_iff_of_nat_equiv
 
 中文:
 引理 isSheafFor_iff_of_nat_equiv
-  结论: {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'}
+  结论: {P₁ : Cᵒᵖ ⥤ 类型 w} {P₂ : Cᵒᵖ ⥤ 类型 w'}
   证明: by
   refine ⟨fun h => isSheafFor_of_nat_equiv _ he h,
       fun h => isSheafFor_of_nat_equiv (fun _ => (@e _).symm) ?_ h⟩
@@ -1926,7 +1926,7 @@ theorem isSheafFor_iso
 
 中文:
 定理 isSheafFor_iso
-  条件: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSheafFor P R)
+  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (hP : IsSheafFor P R)
   证明: isSheafFor_of_nat_equiv (fun X => (i.app (op X)).toEquiv)
     (fun _ _ f x => ConcreteCategory.congr_hom (i.hom.naturality f.op) x) hP
 
@@ -1947,7 +1947,7 @@ theorem isSheafFor_iff_of_iso
 
 中文:
 定理 isSheafFor_iff_of_iso
-  条件: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P')
+  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P')
   证明: ⟨isSheafFor_iso i, isSheafFor_iso i.symm⟩
 
 Depends on / 依赖: i.symm, isSheafFor_iso
@@ -1968,7 +1968,7 @@ simpa using congrArg (i.hom.app _) hP (x.map i.inv) _ _ (ht₁.map i.inv) (ht₂
 
 中文:
 定理 isSeparatedFor_iso
-  条件: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSeparatedFor P R)
+  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (hP : IsSeparatedFor P R)
   证明: by
   intro x t₁ t₂ ht₁ ht₂
 simpa using congrArg (i.hom.app _) hP (x.map i.inv) _ _ (ht₁.map i.inv) (ht₂.map i.inv)
@@ -1992,7 +1992,7 @@ exact injective_of_mono _ h (x.map f) _ _ (ht₁.map f) (ht₂.map f)
 
 中文:
 引理 IsSeparatedFor.of_mono
-  条件: (f : P ⟶ Q) [Mono f] (h : R.IsSeparatedFor Q)
+  条件: (f : P ⟶ Q) [单态射 f] (h : R.IsSeparatedFor Q)
   证明: by
   intro x t₁ t₂ ht₁ ht₂
 exact injective_of_mono _ h (x.map f) _ _ (ht₁.map f) (ht₂.map f)
@@ -2024,7 +2024,7 @@ theorem isSheafFor_subsieve_aux
 
 中文:
 定理 isSheafFor_subsieve_aux
-  结论: (P : Cᵒᵖ ⥤ Type w) {S : Sieve X} {R : Presieve X}
+  结论: (P : Cᵒᵖ ⥤ 类型 w) {S : 筛 X} {R : Presieve X}
   证明: by
   rw [← isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
   constructor
@@ -2066,7 +2066,7 @@ theorem isSheafFor_subsieve
 
 中文:
 定理 isSheafFor_subsieve
-  结论: (P : Cᵒᵖ ⥤ Type w) {S : Sieve X} {R : Presieve X}
+  结论: (P : Cᵒᵖ ⥤ 类型 w) {S : 筛 X} {R : Presieve X}
   证明: isSheafFor_subsieve_aux P h (by simpa using trans (𝟙 _)) fun _ f _ => (trans f).isSeparatedFor
 
 Depends on / 依赖: isSeparatedFor, isSheafFor_subsieve_aux
@@ -2091,7 +2091,7 @@ definition Arrows.Compatible
     P.map gi.op (x i) = P.map gj.op (x j)
 
 中文:
-定义 Arrows.Compatible
+定义 箭头.余mpatible
   签名: (x : (i : I) -> P.obj (op (X i)))
   定义体: forall i j Z (gi : Z ⟶ X i) (gj : Z ⟶ X j), gi ≫ π i = gj ≫ π j ->
     P.map gi.op (x i) = P.map gj.op (x j)
@@ -2139,8 +2139,8 @@ theorem exists_familyOfElements
 fun j => (hx _ j (X j) _ (𝟙 _) <| by rw [← h', id_comp]).trans by simp⟩
 
 中文:
-定理 exists_familyOfElements
-  条件: (hx : Compatible P π x)
+定理 存在_familyOfElements
+  条件: (hx : 余mpatible P π x)
   证明: by
   choose i h h' using @ofArrows_surj _ _ _ _ _ π
   exact ⟨fun Y f hf => P.map (eqToHom (h f hf).symm).op (x _),
@@ -2214,7 +2214,7 @@ theorem familyOfElements_compatible
 
 中文:
 定理 familyOfElements_compatible
-  结论: hx.familyOfElements.Compatible
+  结论: hx.familyOfElements.余mpatible
   证明: by
   rintro Y₁ Y₂ Z g₁ g₂ f₁ f₂ ⟨i⟩ ⟨j⟩ hgf
   simp [hx i j Z g₁ g₂ hgf]
@@ -2279,7 +2279,7 @@ definition Arrows.toCompatible
     simp [← comp_apply, ← Functor.map_comp, ← op_comp, h]
 
 中文:
-定义 Arrows.toCompatible
+定义 箭头.toCompatible
   签名: (s : P.obj (op B))
   定义体: P.map (π i).op s
   property i j Z gi gj h := by
@@ -2355,7 +2355,7 @@ lemma isSheafFor_pullback_iff
 
 中文:
 引理 isSheafFor_pullback_iff
-  结论: (P : Cᵒᵖ ⥤ Type w) {X : C} (R : Sieve X)
+  结论: (P : Cᵒᵖ ⥤ 类型 w) {X : C} (R : 筛 X)
   证明: by
   obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
   have := Sieve.pullback_ofArrows_of_iso _ g (asIso f)
@@ -2499,7 +2499,7 @@ definition Arrows.PullbackCompatible
     P.map (pullback.snd (π i) (π j)).op (x j)
 
 中文:
-定义 Arrows.PullbackCompatible
+定义 箭头.PullbackCompatible
   签名: (x : (i : I) -> P.obj (op (X i)))
   定义体: forall i j, P.map (pullback.fst (π i) (π j)).op (x i) =
     P.map (pullback.snd (π i) (π j)).op (x j)
@@ -2524,7 +2524,7 @@ theorem Arrows.pullbackCompatible_iff
       ← comp_apply, ← Functor.map_comp, ← op_comp, pullback.lift_snd]
 
 中文:
-定理 Arrows.pullbackCompatible_iff
+定理 箭头.pullbackCompatible_iff
   条件: (x : (i : I) -> P.obj (op (X i)))
   证明: by
   refine ⟨fun t i j => ?_, fun t i j Z gi gj comm => ?_⟩
@@ -2645,7 +2645,7 @@ theorem isSheafFor_bind
 
 中文:
 定理 isSheafFor_bind
-  结论: (P : Cᵒᵖ ⥤ 类型) (U : Sieve X)
+  结论: (P : Cᵒᵖ ⥤ 类型) (U : 筛 X)
   证明: by
   intro s hs
   let y : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄ (hf : U f), Presieve.FamilyOfElements P (B hf : Presieve Y) :=
@@ -2719,7 +2719,7 @@ theorem isSheafFor_trans
 
 中文:
 定理 isSheafFor_trans
-  结论: (P : Cᵒᵖ ⥤ 类型) (R S : Sieve X)
+  结论: (P : Cᵒᵖ ⥤ 类型) (R S : 筛 X)
   证明: by
   have : (Sieve.bind R fun Y f _ => S.pullback f : Presieve X) <= S := by
     rintro Z f ⟨W, f, g, hg, hf : S _, rfl⟩

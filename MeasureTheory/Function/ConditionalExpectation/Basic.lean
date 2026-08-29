@@ -153,7 +153,7 @@ theorem condExp_of_not_sigmaFinite
 
 中文:
 定理 condExp_of_not_sigmaFinite
-  条件: (hm : m <= m₀) (hμm_not : ¬SigmaFinite (μ.trim hm))
+  条件: (hm : m <= m₀) (hμm_not : ¬σ有限 (μ.trim hm))
   证明: by rw [condExp, dif_pos hm, dif_neg]; push Not; exact fun h => absurd h hμm_not
 
 Depends on / 依赖: absurd, condExp, dif_neg, dif_pos
@@ -174,7 +174,7 @@ theorem condExp_of_sigmaFinite
 
 中文:
 定理 condExp_of_sigmaFinite
-  条件: (hm : m <= m₀) [hμm : SigmaFinite (μ.trim hm)]
+  条件: (hm : m <= m₀) [hμm : σ有限 (μ.trim hm)]
   证明: by
   rw [condExp]; rw [dif_pos hm]
   grind
@@ -203,7 +203,7 @@ theorem condExp_of_stronglyMeasurable
 
 中文:
 定理 condExp_of_stronglyMeasurable
-  结论: (hm : m <= m₀) [hμm : SigmaFinite (μ.trim hm)] {f : α -> E}
+  结论: (hm : m <= m₀) [hμm : σ有限 (μ.trim hm)] {f : α -> E}
   证明: by
   rw [condExp_of_sigmaFinite hm]; rw [if_pos hfi]; rw [if_pos hf]
 
@@ -226,7 +226,7 @@ theorem condExp_const
 
 中文:
 定理 condExp_const
-  条件: (hm : m <= m₀) (c : E) [IsFiniteMeasure μ]
+  条件: (hm : m <= m₀) (c : E) [是有限测度 μ]
   证明: condExp_of_stronglyMeasurable hm stronglyMeasurable_const (integrable_const c)
 
 Depends on / 依赖: condExp_of_stronglyMeasurable, integrable_const, stronglyMeasurable_const
@@ -253,7 +253,7 @@ theorem condExp_ae_eq_condExpL1
 
 中文:
 定理 condExp_ae_eq_condExpL1
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   rw [condExp_of_sigmaFinite hm]
   by_cases hfi : Integrable f μ
@@ -292,7 +292,7 @@ theorem condExp_ae_eq_condExpL1CLM
 
 中文:
 定理 condExp_ae_eq_condExpL1CLM
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   refine (condExp_ae_eq_condExpL1 hm f).trans (Eventually.of_forall fun x => ?_)
   rw [condExpL1_eq hf]
@@ -323,7 +323,7 @@ theorem condExp_of_not_integrable
 
 中文:
 定理 condExp_of_not_integrable
-  条件: (hf : ¬整数egrable f μ)
+  条件: (hf : ¬可积 f μ)
   结论: μ[f | m] = 0
   证明: by
   by_cases hm : m <= m₀
@@ -503,7 +503,7 @@ theorem condExp_of_aestronglyMeasurable'
 
 中文:
 定理 condExp_of_aestronglyMeasurable'
-  结论: (hm : m <= m₀) [hμm : SigmaFinite (μ.trim hm)] {f : α -> E}
+  结论: (hm : m <= m₀) [hμm : σ有限 (μ.trim hm)] {f : α -> E}
   证明: by
   refine ((condExp_congr_ae hf.ae_eq_mk).trans ?_).trans hf.ae_eq_mk.symm
   rw [condExp_of_stronglyMeasurable hm hf.stronglyMeasurable_mk
@@ -535,7 +535,7 @@ theorem integrable_condExp
 
 中文:
 定理 integrable_condExp
-  结论: 整数egrable (μ[f | m]) μ
+  结论: 可积 (μ[f | m]) μ
   证明: by
   by_cases hm : m <= m₀
   swap; · rw [condExp_of_not_le hm]; exact integrable_zero _ _ _
@@ -563,8 +563,8 @@ theorem setIntegral_condExp
   exact setIntegral_condExpL1 hf hs
 
 中文:
-定理 setIntegral_condExp
-  结论: (hm : m <= m₀) [SigmaFinite (μ.trim hm)] (hf : 整数egrable f μ)
+定理 set整数egral_condExp
+  结论: (hm : m <= m₀) [σ有限 (μ.trim hm)] (hf : 可积 f μ)
   证明: by
   rw [setIntegral_congr_ae (hm s hs) ((condExp_ae_eq_condExpL1 hm f).mono fun x hx _ => hx)]
   exact setIntegral_condExpL1 hf hs
@@ -591,7 +591,7 @@ theorem integral_condExp
 
 中文:
 定理 integral_condExp
-  条件: (hm : m <= m₀) [hμm : SigmaFinite (μ.trim hm)]
+  条件: (hm : m <= m₀) [hμm : σ有限 (μ.trim hm)]
   证明: by
   by_cases hf : Integrable f μ
   · suffices ∫ x in Set.univ, (μ[f | m]) x ∂μ = ∫ x in Set.univ, f x ∂μ by
@@ -620,7 +620,7 @@ theorem integral_condExp_indicator
 
 中文:
 定理 integral_condExp_indicator
-  结论: [mβ : MeasurableSpace β] {Y : α -> β} (hY : Measurable Y)
+  结论: [mβ : 可测空间 β] {Y : α -> β} (hY : 可测 Y)
   证明: by
   rw [integral_condExp]; rw [integral_indicator hA]; rw [setIntegral_const]; rw [smul_eq_mul]; rw [mul_one]
 
@@ -644,8 +644,8 @@ theorem ae_eq_condExp_of_forall_setIntegral_eq
   rw [hg_eq s hs hμs]; rw [setIntegral_condExp hm hf hs]
 
 中文:
-定理 ae_eq_condExp_of_forall_setIntegral_eq
-  结论: (hm : m <= m₀) [SigmaFinite (μ.trim hm)]
+定理 ae_eq_condExp_of_对任意_set整数egral_eq
+  结论: (hm : m <= m₀) [σ有限 (μ.trim hm)]
   证明: by
   refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' hm hg_int_finite
     (fun s _ _ => integrable_condExp.integrableOn) (fun s hs hμs => ?_) hgm
@@ -754,7 +754,7 @@ theorem condExp_bot
 
 中文:
 定理 condExp_bot
-  条件: [IsProbabilityMeasure μ] (f : α -> E)
+  条件: [是概率测度 μ] (f : α -> E)
   结论: μ[f | ⊥] = fun _ => ∫ x, f x ∂μ
   证明: by
   refine (condExp_bot' f).trans ?_
@@ -784,7 +784,7 @@ theorem condExp_add
 
 中文:
 定理 condExp_add
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ) (m : MeasurableSpace α)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ) (m : 可测空间 α)
   证明: by
   by_cases hm : m <= m₀
   swap; · simp_rw [condExp_of_not_le hm]; simp
@@ -825,7 +825,7 @@ theorem condExp_finsetSum
 
 中文:
 定理 condExp_finsetSum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> α -> E}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α -> E}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -869,7 +869,7 @@ theorem condExp_smul
 
 中文:
 定理 condExp_smul
-  条件: [NormedSpace 𝕜 E] (c : 𝕜) (f : α -> E) (m : MeasurableSpace α)
+  条件: [赋范空间 𝕜 E] (c : 𝕜) (f : α -> E) (m : 可测空间 α)
   证明: by
   by_cases hm : m <= m₀
   swap; · simp_rw [condExp_of_not_le hm]; simp
@@ -909,7 +909,7 @@ theorem condExp_neg
 
 中文:
 定理 condExp_neg
-  条件: (f : α -> E) (m : MeasurableSpace α)
+  条件: (f : α -> E) (m : 可测空间 α)
   结论: μ[-f | m] =ᵐ[μ] -μ[f | m]
   证明: by
   calc
@@ -937,7 +937,7 @@ theorem condExp_sub
 
 中文:
 定理 condExp_sub
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ) (m : MeasurableSpace α)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ) (m : 可测空间 α)
   证明: by
   simp_rw [sub_eq_add_neg]
   exact (condExp_add hf hg.neg _).trans (EventuallyEq.rfl.add (condExp_neg ..))
@@ -964,7 +964,7 @@ theorem condExp_condExp_of_le
 
 中文:
 定理 condExp_condExp_of_le
-  结论: {m₁ m₂ m₀ : MeasurableSpace α} {μ : Measure α} (hm₁₂ : m₁ <= m₂)
+  结论: {m₁ m₂ m₀ : 可测空间 α} {μ : 测度 α} (hm₁₂ : m₁ <= m₂)
   证明: by
   by_cases hμm₁ : SigmaFinite (μ.trim (hm₁₂.trans hm₂))
   swap; · simp_rw [condExp_of_not_sigmaFinite (hm₁₂.trans hm₂) hμm₁]; rfl
@@ -1004,8 +1004,8 @@ theorem _root_.ContinuousLinearMap.comp_condExp_comm
           ∫ 
 
 中文:
-定理 _root_.ContinuousLinearMap.comp_condExp_comm
-  结论: {F : 类型} [NormedAddCommGroup F]
+定理 _root_.连续线性映射.comp_condExp_comm
+  结论: {F : 类型} [赋范交换加群 F]
   证明: by
   by_cases hm : m <= m₀
   · by_cases hμ : SigmaFinite (μ.trim hm)
@@ -1047,8 +1047,8 @@ theorem _root_.ContinuousLinearMap.comp_condExp_add_const_comm
   exact hp.trans (condExp_add (T.integrable_comp hf_int) (integrable_const a) m).symm
 
 中文:
-定理 _root_.ContinuousLinearMap.comp_condExp_add_const_comm
-  结论: {F : 类型} [NormedAddCommGroup F]
+定理 _root_.连续线性映射.comp_condExp_add_const_comm
+  结论: {F : 类型} [赋范交换加群 F]
   证明: by
   have hp : (fun x => T (μ[f | m] x) + a) =ᵐ[μ] μ[T ∘ f | m] + μ[(fun y => a) | m] := by
     filter_upwards [T.comp_condExp_comm hf_int] with b hb
@@ -1085,7 +1085,7 @@ lemma MemLp.condExpL2_ae_eq_condExp'
 
 中文:
 引理 MemLp.condExpL2_ae_eq_condExp'
-  结论: (hm : m <= m₀) (hf1 : 整数egrable f μ) (hf2 : MemLp f 2 μ)
+  结论: (hm : m <= m₀) (hf1 : 可积 f μ) (hf2 : MemLp f 2 μ)
   证明: by
   refine ae_eq_condExp_of_forall_setIntegral_eq hm hf1
     (fun s hs htop => integrableOn_condExpL2_of_measure_ne_top hm htop.ne _) (fun s hs htop => ?_)
@@ -1115,7 +1115,7 @@ lemma MemLp.condExpL2_ae_eq_condExp
 
 中文:
 引理 MemLp.condExpL2_ae_eq_condExp
-  条件: (hm : m <= m₀) (hf : MemLp f 2 μ) [IsFiniteMeasure μ]
+  条件: (hm : m <= m₀) (hf : MemLp f 2 μ) [是有限测度 μ]
   证明: hf.condExpL2_ae_eq_condExp' hm (memLp_one_iff_integrable.1 <| hf.mono_exponent one_le_two)
 
 Depends on / 依赖: condExpL2_ae_eq_condExp, hf.condExpL2_ae_eq_condExp, hf.mono_exponent, memLp_one_iff_integrable, mono_exponent, one_le_two
@@ -1144,7 +1144,7 @@ lemma condExp_ofNat
   simpa [Nat.cast_smul_eq_nsmul] using! condExp_smul (μ := μ) (m := m) (n : Real) f
 
 中文:
-引理 condExp_ofNat
+引理 condExp_of自然数
   条件: (n : 自然数) [n.AtLeastTwo] (f : α -> R)
   证明: by
   simpa [Nat.cast_smul_eq_nsmul] using! condExp_smul (μ := μ) (m := m) (n : Real) f
@@ -1170,7 +1170,7 @@ theorem tendsto_condExpL1_of_dominated_convergence
 
 中文:
 定理 tendsto_condExpL1_of_dominated_convergence
-  结论: (hm : m <= m₀) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m₀) [σ有限 (μ.trim hm)]
   证明: tendsto_setToFun_of_dominated_convergence _ bound_fs hfs_meas h_int_bound_fs hfs_bound hfs
 
 Depends on / 依赖: bound_fs, h_int_bound_fs, hfs_bound, hfs_meas, tendsto_setToFun_of_dominated_convergence
@@ -1201,7 +1201,7 @@ theorem condExp_tsum
 
 中文:
 定理 condExp_tsum
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   by_cases hm : m <= m₀; swap
   · simp only [condExp_of_not_le hm, Pi.zero_apply, tsum_zero]
@@ -1305,7 +1305,7 @@ lemma condExp_mono
 
 中文:
 引理 condExp_mono
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ) (hfg : f <=ᵐ[μ] g)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ) (hfg : f <=ᵐ[μ] g)
   证明: by
   by_cases hm : m <= m₀
   swap; · simp_rw [condExp_of_not_le hm]; rfl

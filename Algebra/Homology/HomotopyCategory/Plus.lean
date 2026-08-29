@@ -51,7 +51,7 @@ lemma plus_cylinder
 
 中文:
 引理 plus_cylinder
-  条件: (K : CochainComplex C 整数) (hK : CochainComplex.plus C K)
+  条件: (K : 上链复形 C 整数) (hK : 上链复形.plus C K)
   证明: by
   obtain ⟨n, hn⟩ := hK
   refine ⟨n - 1, ?_⟩
@@ -95,7 +95,7 @@ lemma plus_pathObject
 
 中文:
 引理 plus_pathObject
-  条件: (K : CochainComplex C 整数) (hK : CochainComplex.plus C K)
+  条件: (K : 上链复形 C 整数) (hK : 上链复形.plus C K)
   证明: by
   obtain ⟨n, hn⟩ := hK
   refine ⟨n - 1, ?_⟩
@@ -134,7 +134,7 @@ lemma isStrictlyGE_mappingCone
 
 中文:
 引理 isStrictlyGE_mappingCone
-  结论: {K L : CochainComplex C 整数} (f : K ⟶ L)
+  结论: {K L : 上链复形 C 整数} (f : K ⟶ L)
   证明: by
   rw [isStrictlyGE_iff]
   intro i hi
@@ -204,7 +204,7 @@ definition plus
 
 中文:
 定义 plus
-  签名: : Object命题erty (HomotopyCategory C (.up 整数))
+  签名: : ObjectProperty (HomotopyCategory C (.up 整数))
   定义体: (CochainComplex.plus C).strictMap (quotient _ _)
 
 Depends on / 依赖: CochainComplex, CochainComplex.plus, quotient, strictMap
@@ -229,7 +229,7 @@ lemma plus_quotient_obj_iff
 
 中文:
 引理 plus_quotient_obj_iff
-  条件: (K : CochainComplex C 整数)
+  条件: (K : 上链复形 C 整数)
   证明: by
   refine ⟨?_, fun h => ⟨_, h⟩⟩
   simp only [plus, ObjectProperty.strictMap_iff]
@@ -258,8 +258,8 @@ instance [HasZeroObject
       exact ⟨0, inferInstance⟩⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : (plus C).ContainsZero where
+实例 [有ZeroObject
+  签名: C] : (plus C).余ntainsZero where
   定义体: ⟨(HomotopyCategory.quotient _ _).obj 0, Functor.map_isZero _ (isZero_zero _), by
       simp only [plus_quotient_obj_iff]
       exact ⟨0, inferInstance⟩⟩
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: (plus C).IsStableUnderShift 整数
+  签名: (plus C).是StableUnderShift 整数
   定义体: { le_shift K hK := by
         obtain ⟨K : CochainComplex _ _, rfl⟩ := K.quotient_obj_surjective
         simp only [plus_quotient_obj_iff] at hK
@@ -324,8 +324,8 @@ instance [HasZeroObject
  
 
 中文:
-实例 [HasZeroObject
-  签名: C] [HasBinaryBiproducts C] :
+实例 [有ZeroObject
+  签名: C] [有BinaryBiproducts C] :
   定义体: by
     obtain ⟨n₁, _⟩ : (CochainComplex.plus C) T.obj₁.as := by
       rwa [← plus_quotient_obj_iff]
@@ -363,8 +363,8 @@ instance [HasZeroObject
   body: .of_isTriangulatedClosed₃
 
 中文:
-实例 [HasZeroObject
-  签名: C] [HasBinaryBiproducts C] : (plus C).IsTriangulated where
+实例 [有ZeroObject
+  签名: C] [有BinaryBiproducts C] : (plus C).是三角 where
   定义体: .of_isTriangulatedClosed₃
 -/
 instance [HasZeroObject C] [HasBinaryBiproducts C] : (plus C).IsTriangulated where
@@ -412,7 +412,7 @@ abbreviation fullyFaithfulι
 
 中文:
 缩写 fullyFaithfulι
-  签名: : (ι C).FullyFaithful
+  签名: : (ι C).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
@@ -430,7 +430,7 @@ deriving MorphismProperty.IsMultiplicative
 
 中文:
 定义 quasiIso
-  签名: : Morphism命题erty (Plus A)
+  签名: : MorphismProperty (Plus A)
   定义体: (HomotopyCategory.quasiIso A _).inverseImage (ι A)
 deriving MorphismProperty.IsMultiplicative
 
@@ -473,7 +473,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso A).IsCompatibleWithShift 整数
+  签名: (quasiIso A).是余mpatibleWithShift 整数
   定义体: by
     ext X Y f
     simp only [quasiIso_iff, ← MorphismProperty.IsCompatibleWithShift.iff
@@ -530,7 +530,7 @@ definition quotient
 
 中文:
 定义 quotient
-  签名: : CochainComplex.Plus C ⥤ Plus C
+  签名: : 上链复形.Plus C ⥤ Plus C
   定义体: ObjectProperty.lift _
     (CochainComplex.Plus.ι C ⋙ HomotopyCategory.quotient C (.up Int)) (by
       rintro ⟨K, h⟩
@@ -578,7 +578,7 @@ lemma quotient_obj_surjective
 
 中文:
 引理 quotient_obj_surjective
-  结论: Function.Surjective (quotient C).obj
+  结论: 函数.满射 (quotient C).obj
   证明: fun K => by
     obtain ⟨L, hL⟩ := HomotopyCategory.quotient_obj_surjective K.obj
     refine ⟨⟨L, ?_⟩, by ext; exact hL⟩
@@ -606,7 +606,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient C).EssSurj
+  签名: (quotient C).本质满射
   定义体: by
     obtain ⟨L, rfl⟩ := quotient_obj_surjective K
     exact ⟨L, ⟨Iso.refl _⟩⟩
@@ -628,7 +628,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quotient C).Full
+  签名: (quotient C).满
   定义体: by dsimp [quotient]; infer_instance
 
 Depends on / 依赖: infer_instance, quotient
@@ -839,8 +839,8 @@ instance [HasZeroObject
   infer_instance
 
 中文:
-实例 [HasZeroObject
-  签名: C] [HasBinaryBiproducts C] [HasZeroObject D] [HasBinaryBiproducts D] :
+实例 [有ZeroObject
+  签名: C] [有BinaryBiproducts C] [有ZeroObject D] [有BinaryBiproducts D] :
   定义体: by
   dsimp only [mapHomotopyCategoryPlus]
   infer_instance
@@ -863,8 +863,8 @@ instance [Full
       exact (F.mapHomotopyCategory _).map_preimage f.hom⟩
 
 中文:
-实例 [Full
-  签名: F] [Faithful F] : Full F.mapHomotopyCategoryPlus where
+实例 [满
+  签名: F] [忠实 F] : 满 F.mapHomotopyCategoryPlus where
   定义体: ⟨ObjectProperty.homMk ((F.mapHomotopyCategory _).preimage f.hom), by
       ext
       exact (F.mapHomotopyCategory _).map_preimage f.hom⟩
@@ -888,8 +888,8 @@ instance [Full
     exact (F.mapHomotopyCategory _).map_injective ((ObjectProperty.ι _).congr_map h)
 
 中文:
-实例 [Full
-  签名: F] [Faithful F] : Faithful F.mapHomotopyCategoryPlus where
+实例 [满
+  签名: F] [忠实 F] : 忠实 F.mapHomotopyCategoryPlus where
   定义体: by
     ext
     exact (F.mapHomotopyCategory _).map_injective ((ObjectProperty.ι _).congr_map h)
@@ -913,7 +913,7 @@ definition mapHomotopyCategoryPlusCompIso
 
 中文:
 定义 mapHomotopyCategoryPlusCompIso
-  签名: {E : 类型} [Category* E] [Preadditive E]
+  签名: {E : 类型} [范畴* E] [预加性 E]
   定义体: ((HomotopyCategory.plus _).fullyFaithfulι.whiskeringRight _).preimageIso
     (isoWhiskerLeft (HomotopyCategory.Plus.ι C)
       (mapHomotopyCategoryCompIso e (.up Int)))

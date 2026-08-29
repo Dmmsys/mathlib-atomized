@@ -57,7 +57,7 @@ lemma ObjectProperty.IsConservativeFamilyOfPoints.isMonoidal_W
     infer_instance)
 
 中文:
-引理 ObjectProperty.IsConservativeFamilyOfPoints.isMonoidal_W
+引理 ObjectProperty.是余nservativeFamilyOfPoints.isMonoidal_W
   证明: .mk' _ (fun f g hf hg => by
     simp only [hP.W_iff (A := A)] at hf hg ⊢
     intro Φ
@@ -86,8 +86,8 @@ instance [J.HasSheafCompose
   exact hP.isMonoidal_W A
 
 中文:
-实例 [J.HasSheafCompose
-  签名: (forget A)] [HasEnoughPoints.{w} J] :
+实例 [J.有SheafCompose
+  签名: (forget A)] [有EnoughPoints.{w} J] :
   定义体: by
   obtain ⟨P, _, hP⟩ := HasEnoughPoints.exists_objectProperty J
   exact hP.isMonoidal_W A

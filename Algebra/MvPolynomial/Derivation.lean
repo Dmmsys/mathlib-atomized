@@ -138,7 +138,7 @@ theorem derivation_C
 
 中文:
 定理 derivation_C
-  条件: (D : Derivation R (MvPolynomial σ R) A) (a : R)
+  条件: (D : 导子 R (多元多项式 σ R) A) (a : R)
   结论: D (C a) = 0
   证明: D.map_algebraMap a
 
@@ -162,7 +162,7 @@ theorem derivation_C_mul
 
 中文:
 定理 derivation_C_mul
-  条件: (D : Derivation R (MvPolynomial σ R) A) (a : R) (f : MvPolynomial σ R)
+  条件: (D : 导子 R (多元多项式 σ R) A) (a : R) (f : 多元多项式 σ R)
   证明: by
   have : C (σ := σ) a • D f = D (C a * f) := by simp
   rw [this]; rw [C_mul']; rw [D.map_smul]
@@ -184,7 +184,7 @@ theorem derivation_eqOn_supported
 
 中文:
 定理 derivation_eqOn_supported
-  结论: {D₁ D₂ : Derivation R (MvPolynomial σ R) A} {s : Set σ}
+  结论: {D₁ D₂ : 导子 R (多元多项式 σ R) A} {s : 集合 σ}
   证明: Derivation.eqOn_adjoin (Set.forall_mem_image.2 h) hf
 
 Depends on / 依赖: Derivation, Derivation.eqOn_adjoin, Set.forall_mem_image, eqOn_adjoin, forall_mem_image
@@ -203,8 +203,8 @@ theorem derivation_eq_of_forall_mem_vars
   proof: derivation_eqOn_supported h f.mem_supported_vars
 
 中文:
-定理 derivation_eq_of_forall_mem_vars
-  结论: {D₁ D₂ : Derivation R (MvPolynomial σ R) A}
+定理 derivation_eq_of_对任意_mem_vars
+  结论: {D₁ D₂ : 导子 R (多元多项式 σ R) A}
   证明: derivation_eqOn_supported h f.mem_supported_vars
 
 Depends on / 依赖: derivation_eqOn_supported, f.mem_supported_vars, mem_supported_vars
@@ -224,8 +224,8 @@ theorem derivation_eq_zero_of_forall_mem_vars
 @[ext]
 
 中文:
-定理 derivation_eq_zero_of_forall_mem_vars
-  结论: {D : Derivation R (MvPolynomial σ R) A}
+定理 derivation_eq_zero_of_对任意_mem_vars
+  结论: {D : 导子 R (多元多项式 σ R) A}
   证明: show D f = (0 : Derivation R (MvPolynomial σ R) A) f from derivation_eq_of_forall_mem_vars h
 
 @[ext]
@@ -247,7 +247,7 @@ theorem derivation_ext
 
 中文:
 定理 derivation_ext
-  条件: {D₁ D₂ : Derivation R (MvPolynomial σ R) A} (h : 对任意 i, D₁ (X i) = D₂ (X i))
+  条件: {D₁ D₂ : 导子 R (多元多项式 σ R) A} (h : 对任意 i, D₁ (X i) = D₂ (X i))
   证明: Derivation.ext fun _ => derivation_eq_of_forall_mem_vars fun i _ => h i
 
 Depends on / 依赖: Derivation, Derivation.ext, derivation_eq_of_forall_mem_vars
@@ -275,7 +275,7 @@ theorem leibniz_iff_X
 
 中文:
 定理 leibniz_iff_X
-  条件: (D : MvPolynomial σ R ->ₗ[R] A) (h₁ : D 1 = 0)
+  条件: (D : 多元多项式 σ R ->ₗ[R] A) (h₁ : D 1 = 0)
   证明: by
   refine ⟨fun H p i => H _ _, fun H => ?_⟩
   have hC : forall r, D (C r) = 0 := by intro r; rw [C_eq_smul_one, D.map_smul, h₁, smul_zero]
@@ -400,7 +400,7 @@ right_inv := fun _ => funext mkDerivation_X _ _ }
 
 中文:
 定义 mkDerivationEquiv
-  签名: : (σ -> A) ≃ₗ[R] Derivation R (MvPolynomial σ R) A
+  签名: : (σ -> A) ≃ₗ[R] 导子 R (多元多项式 σ R) A
   定义体: LinearEquiv.symm
     { invFun := mkDerivation R
       toFun := fun D i => D (X i)

@@ -36,8 +36,8 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
-  签名: : Ideal (R × S)
+定义 乘积
+  签名: : 理想 (R × S)
   定义体: I.comap (RingHom.fst R S) ⊓ J.comap (RingHom.snd R S)
 
 @[simp]
@@ -60,8 +60,8 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (I : Ideal R) (J : Ideal S)
-  结论: ↑(prod I J) = (I ×ˢ J : Set (R × S))
+  条件: (I : 理想 R) (J : 理想 S)
+  结论: ↑(乘积 I J) = (I ×ˢ J : 集合 (R × S))
   证明: rfl
 
 @[simp]
@@ -84,7 +84,7 @@ theorem mem_prod
 中文:
 定理 mem_prod
   条件: {x : R × S}
-  结论: x in prod I J ↔ x.1 in I ∧ x.2 in J
+  结论: x in 乘积 I J ↔ x.1 in I ∧ x.2 in J
   证明: Iff.rfl
 
 @[simp]
@@ -107,8 +107,8 @@ theorem _root_.RingHom.ker_prodMap
 @[simp]
 
 中文:
-定理 _root_.RingHom.ker_prodMap
-  结论: {T U : 类型} [Semiring T] [Semiring U] (f : R ->+* S)
+定理 _root_.环态射.ker_prodMap
+  结论: {T U : 类型} [半环 T] [半环 U] (f : R ->+* S)
   证明: by
   ext ⟨⟩; simp
 
@@ -131,7 +131,7 @@ theorem prod_top_top
 
 中文:
 定理 prod_top_top
-  结论: prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤
+  结论: 乘积 (⊤ : 理想 R) (⊤ : 理想 S) = ⊤
   证明: Ideal.ext by simp
 
 @[simp]
@@ -154,7 +154,7 @@ theorem prod_bot_bot
 
 中文:
 定理 prod_bot_bot
-  结论: prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥
+  结论: 乘积 (⊥ : 理想 R) (⊥ : 理想 S) = ⊥
   证明: SetLike.coe_injective Set.singleton_prod_singleton
 
 @[gcongr]
@@ -175,7 +175,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ <= I₂) (hJ : J₁ <= J₂)
+  条件: {I₁ I₂ : 理想 R} {J₁ J₂ : 理想 S} (hI : I₁ <= I₂) (hJ : J₁ <= J₂)
   证明: Set.prod_mono hI hJ
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -195,8 +195,8 @@ theorem prod_mono_left
 
 中文:
 定理 prod_mono_left
-  条件: {I₁ I₂ : Ideal R} {J : Ideal S} (hI : I₁ <= I₂)
-  结论: prod I₁ J <= prod I₂ J
+  条件: {I₁ I₂ : 理想 R} {J : 理想 S} (hI : I₁ <= I₂)
+  结论: 乘积 I₁ J <= 乘积 I₂ J
   证明: Set.prod_mono_left hI
 
 Depends on / 依赖: Set.prod_mono_left, prod_mono_left
@@ -215,8 +215,8 @@ theorem prod_mono_right
 
 中文:
 定理 prod_mono_right
-  条件: {I : Ideal R} {J₁ J₂ : Ideal S} (hJ : J₁ <= J₂)
-  结论: prod I J₁ <= prod I J₂
+  条件: {I : 理想 R} {J₁ J₂ : 理想 S} (hJ : J₁ <= J₂)
+  结论: 乘积 I J₁ <= 乘积 I J₂
   证明: Set.prod_mono_right hJ
 
 Depends on / 依赖: Set.prod_mono_right, prod_mono_right
@@ -239,7 +239,7 @@ theorem ideal_prod_eq
 
 中文:
 定理 ideal_prod_eq
-  条件: (I : Ideal (R × S))
+  条件: (I : 理想 (R × S))
   证明: by
   apply Ideal.ext
   rintro ⟨r, s⟩
@@ -278,8 +278,8 @@ theorem map_fst_prod
 
 中文:
 定理 map_fst_prod
-  条件: (I : Ideal R) (J : Ideal S)
-  结论: map (RingHom.fst R S) (prod I J) = I
+  条件: (I : 理想 R) (J : 理想 S)
+  结论: map (环态射.fst R S) (乘积 I J) = I
   证明: by
   ext x
   rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]
@@ -320,8 +320,8 @@ theorem map_snd_prod
 
 中文:
 定理 map_snd_prod
-  条件: (I : Ideal R) (J : Ideal S)
-  结论: map (RingHom.snd R S) (prod I J) = J
+  条件: (I : 理想 R) (J : 理想 S)
+  结论: map (环态射.snd R S) (乘积 I J) = J
   证明: by
   ext x
   rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
@@ -383,7 +383,7 @@ definition idealProdEquiv
 
 中文:
 定义 idealProdEquiv
-  签名: : Ideal (R × S) ≃o Ideal R × Ideal S where
+  签名: : 理想 (R × S) ≃o 理想 R × 理想 S where
   定义体: ⟨map (RingHom.fst R S) I, map (RingHom.snd R S) I⟩
   invFun I := prod I.1 I.2
   left_inv I := (ideal_prod_eq I).symm
@@ -417,7 +417,7 @@ theorem idealProdEquiv_symm_apply
 
 中文:
 定理 idealProdEquiv_symm_apply
-  条件: (I : Ideal R) (J : Ideal S)
+  条件: (I : 理想 R) (J : 理想 S)
   证明: rfl
 -/
 theorem idealProdEquiv_symm_apply (I : Ideal R) (J : Ideal S) :
@@ -438,7 +438,7 @@ theorem span_prod_le
 
 中文:
 定理 span_prod_le
-  条件: {s : Set R} {t : Set S}
+  条件: {s : 集合 R} {t : 集合 S}
   证明: by
   rw [ideal_prod_eq (span (s ×ˢ t))]; rw [map_span]; rw [map_span]
   gcongr
@@ -472,7 +472,7 @@ theorem span_prod
 
 中文:
 定理 span_prod
-  条件: {s : Set R} {t : Set S} (hst : s.Nonempty ↔ t.Nonempty)
+  条件: {s : 集合 R} {t : 集合 S} (hst : s.非空 ↔ t.非空)
   证明: by
   simp_rw [iff_iff_and_or_not_and_not, Set.not_nonempty_iff_eq_empty] at hst
   obtain ⟨hs, ht⟩ | ⟨rfl, rfl⟩ := hst
@@ -511,7 +511,7 @@ theorem prod_inj
 
 中文:
 定理 prod_inj
-  条件: {I I' : Ideal R} {J J' : Ideal S}
+  条件: {I I' : 理想 R} {J J' : 理想 S}
   证明: by
   simp only [← idealProdEquiv_symm_apply, idealProdEquiv.symm.injective.eq_iff, Prod.mk_inj]
 
@@ -537,7 +537,7 @@ theorem prod_eq_bot_iff
 
 中文:
 定理 prod_eq_bot_iff
-  条件: {I : Ideal R} {J : Ideal S}
+  条件: {I : 理想 R} {J : 理想 S}
   证明: by
   rw [← prod_inj]; rw [prod_bot_bot]
 
@@ -561,7 +561,7 @@ theorem prod_eq_top_iff
 
 中文:
 定理 prod_eq_top_iff
-  条件: {I : Ideal R} {J : Ideal S}
+  条件: {I : 理想 R} {J : 理想 S}
   证明: by
   rw [← prod_inj]; rw [prod_top_top]
 
@@ -590,7 +590,7 @@ theorem isPrime_of_isPrime_prod_top
 
 中文:
 定理 isPrime_of_isPrime_prod_top
-  条件: {I : Ideal R} (h : (Ideal.prod I (⊤ : Ideal S)).IsPrime)
+  条件: {I : 理想 R} (h : (理想.乘积 I (⊤ : 理想 S)).是素)
   证明: by
   constructor
   · contrapose h
@@ -630,7 +630,7 @@ theorem isPrime_of_isPrime_prod_top'
 
 中文:
 定理 isPrime_of_isPrime_prod_top'
-  条件: {I : Ideal S} (h : (Ideal.prod (⊤ : Ideal R) I).IsPrime)
+  条件: {I : 理想 S} (h : (理想.乘积 (⊤ : 理想 R) I).是素)
   证明: by
   apply isPrime_of_isPrime_prod_top (S := R)
   rw [← map_prodComm_prod]
@@ -658,8 +658,8 @@ theorem isPrime_ideal_prod_top
 
 中文:
 定理 isPrime_ideal_prod_top
-  条件: {I : Ideal R} [h : I.IsPrime]
-  结论: (prod I (⊤ : Ideal S)).IsPrime where
+  条件: {I : 理想 R} [h : I.是素]
+  结论: (乘积 I (⊤ : 理想 S)).是素 where
   证明: by simpa using h.ne_top
   mem_or_mem' {x y} := by simpa using h.mem_or_mem
 
@@ -684,8 +684,8 @@ theorem isPrime_ideal_prod_top'
 
 中文:
 定理 isPrime_ideal_prod_top'
-  条件: {I : Ideal S} [h : I.IsPrime]
-  结论: (prod (⊤ : Ideal R) I).IsPrime
+  条件: {I : 理想 S} [h : I.是素]
+  结论: (乘积 (⊤ : 理想 R) I).是素
   证明: by
   let : IsPrime (prod I (⊤ : Ideal R)) := isPrime_ideal_prod_top
   rw [← map_prodComm_prod]
@@ -713,7 +713,7 @@ theorem ideal_prod_prime_aux
 
 中文:
 定理 ideal_prod_prime_aux
-  条件: {I : Ideal R} {J : Ideal S}
+  条件: {I : 理想 R} {J : 理想 S}
   证明: by
   contrapose!
   simp only [ne_top_iff_one, isPrime_iff, not_and, not_forall, not_or]
@@ -748,7 +748,7 @@ theorem ideal_prod_prime
 
 中文:
 定理 ideal_prod_prime
-  条件: (I : Ideal (R × S))
+  条件: (I : 理想 (R × S))
   证明: by
   constructor
   · rw [ideal_prod_eq I]
@@ -796,8 +796,8 @@ instance [IsPrincipalIdealRing
     exact ⟨_, rfl⟩
 
 中文:
-实例 [IsPrincipalIdealRing
-  签名: R] [IsPrincipalIdealRing S] : IsPrincipalIdealRing (R × S) where
+实例 [是主理想环
+  签名: R] [是主理想环 S] : 是主理想环 (R × S) where
   定义体: by
     rw [I.ideal_prod_eq]; rw [← span_singleton_generator (I.map _)]; rw [← span_singleton_generator (I.map (RingHom.snd R S))]; rw [← Ideal.span]; rw [← Ideal.span]; rw [← Ideal.span_prod (iff_of_true (by simp) (by simp))]; rw [Set.singleton_prod_singleton]
     exact ⟨_, rfl⟩

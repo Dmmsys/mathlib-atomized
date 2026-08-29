@@ -251,7 +251,7 @@ lemma intDegree_div
 
 中文:
 引理 intDegree_div
-  条件: {x y : RatFunc K} (hx : x != 0) (hy : y != 0)
+  条件: {x y : 有理函数 K} (hx : x != 0) (hy : y != 0)
   证明: by
   rw [div_eq_mul_inv]; rw [intDegree_mul]; rw [intDegree_inv]; rw [← sub_eq_add_neg] <;> grind
 

@@ -32,7 +32,7 @@ definition invtSubmodule
 
 中文:
 定义 invtSubmodule
-  签名: : Sublattice (Submodule k V)
+  签名: : 子格 (子模 k V)
   定义体: ⨅ g, Module.End.invtSubmodule (ρ g)
 
 Depends on / 依赖: Module, Module.End.invtSubmodule, invtSubmodule
@@ -51,7 +51,7 @@ lemma mem_invtSubmodule
 
 中文:
 引理 mem_invtSubmodule
-  条件: {p : Submodule k V}
+  条件: {p : 子模 k V}
   证明: by
   rw [invtSubmodule]; rw [Sublattice.mem_iInf]
 
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder ρ.invtSubmodule
+  签名: 有界序 ρ.invtSubmodule
   定义体: ⟨⊤, invtSubmodule.top_mem ρ⟩
   bot := ⟨⊥, invtSubmodule.bot_mem ρ⟩
   le_top := fun ⟨p, hp⟩ => by simp
@@ -132,7 +132,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: (↑(⊤ : ρ.invtSubmodule) : Submodule k V) = ⊤
+  结论: (↑(⊤ : ρ.invtSubmodule) : 子模 k V) = ⊤
   证明: rfl
 -/
 @[simp] protected lemma coe_top : (↑(⊤ : ρ.invtSubmodule) : Submodule k V) = ⊤ := rfl
@@ -147,7 +147,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (↑(⊥ : ρ.invtSubmodule) : Submodule k V) = ⊥
+  结论: (↑(⊥ : ρ.invtSubmodule) : 子模 k V) = ⊥
   证明: rfl
 -/
 @[simp] protected lemma coe_bot : (↑(⊥ : ρ.invtSubmodule) : Submodule k V) = ⊥ := rfl
@@ -168,7 +168,7 @@ lemma nontrivial_iff
 
 中文:
 引理 nontrivial_iff
-  结论: Nontrivial ρ.invtSubmodule ↔ Nontrivial V
+  结论: 非平凡 ρ.invtSubmodule ↔ 非平凡 V
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · contrapose! h
@@ -194,8 +194,8 @@ instance [Nontrivial
   body: (invtSubmodule.nontrivial_iff ρ).mpr inferInstance
 
 中文:
-实例 [Nontrivial
-  签名: V] : Nontrivial ρ.invtSubmodule
+实例 [非平凡
+  签名: V] : 非平凡 ρ.invtSubmodule
   定义体: (invtSubmodule.nontrivial_iff ρ).mpr inferInstance
 
 Depends on / 依赖: invtSubmodule, invtSubmodule.nontrivial_iff, nontrivial_iff
@@ -216,8 +216,8 @@ lemma asAlgebraHom_mem_of_forall_mem
   apply x.induction_on <;> aesop
 
 中文:
-引理 asAlgebraHom_mem_of_forall_mem
-  结论: (p : Submodule k V) (hp : 对任意 g, 对任意 v in p, ρ g v in p)
+引理 asAlgebraHom_mem_of_对任意_mem
+  结论: (p : 子模 k V) (hp : 对任意 g, 对任意 v in p, ρ g v in p)
   证明: by
   apply x.induction_on <;> aesop
 
@@ -242,7 +242,7 @@ definition mapSubmodule
 
 中文:
 定义 mapSubmodule
-  签名: : ρ.invtSubmodule ≃o Submodule k[G] ρ.asModule where
+  签名: : ρ.invtSubmodule ≃o 子模 k[G] ρ.asModule where
   定义体: { toAddSubmonoid := (p : Submodule k V).toAddSubmonoid.map ρ.asModuleEquiv.symm
       smul_mem' := by
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,

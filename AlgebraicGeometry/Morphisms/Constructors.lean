@@ -56,7 +56,7 @@ definition AffineTargetMorphismProperty.diagonal
 
 中文:
 定义 AffineTargetMorphismProperty.diagonal
-  签名: (P : AffineTargetMorphism命题erty)
+  签名: (P : AffineTargetMorphismProperty)
   定义体: fun {X _} f _ =>
     forall ⦃U₁ U₂ : Scheme⦄ (f₁ : U₁ ⟶ X) (f₂ : U₂ ⟶ X) [IsAffine U₁] [IsAffine U₂] [IsOpenImmersion f₁]
       [IsOpenImmersion f₂], P (pullback.mapDesc f₁ f₂ f)
@@ -86,7 +86,7 @@ instance AffineTargetMorphismProperty.diagonal_respectsIso
 
 中文:
 实例 AffineTargetMorphismProperty.diagonal_respectsIso
-  签名: (P : AffineTargetMorphism命题erty)
+  签名: (P : AffineTargetMorphismProperty)
   定义体: by
   delta AffineTargetMorphismProperty.diagonal
   apply AffineTargetMorphismProperty.respectsIso_mk
@@ -125,8 +125,8 @@ theorem HasAffineProperty.diagonal_of_openCover
   apply of_openCover 
 
 中文:
-定理 HasAffineProperty.diagonal_of_openCover
-  结论: (P) {Q} [HasAffine命题erty P Q]
+定理 有AffineProperty.diagonal_of_openCover
+  结论: (P) {Q} [有AffineProperty P Q]
   证明: by
   let := isLocal_affineProperty P
   let 𝒱 := (Scheme.Pullback.openCoverOfBase 𝒰 f f).bind fun i =>
@@ -173,7 +173,7 @@ theorem HasAffineProperty.diagonal_of_openCover_diagonal
     (fun _ _ _ => h𝒰 _ _ _)
 
 中文:
-定理 HasAffineProperty.diagonal_of_openCover_diagonal
+定理 有AffineProperty.diagonal_of_openCover_diagonal
   证明: diagonal_of_openCover P f 𝒰 (fun _ => Scheme.affineCover _)
     (fun _ _ _ => h𝒰 _ _ _)
 
@@ -201,7 +201,7 @@ theorem HasAffineProperty.diagonal_of_diagonal_of_isPullback
   convert! HasAffineProperty.of_isPullback (P := P) (.of_has
 
 中文:
-定理 HasAffineProperty.diagonal_of_diagonal_of_isPullback
+定理 有AffineProperty.diagonal_of_diagonal_of_isPullback
   证明: by
   let := isLocal_affineProperty P
   rw [← Q.diagonal.cancel_left_of_respectsIso h.isoPullback.inv]; rw [h.isoPullback_inv_snd]
@@ -241,7 +241,7 @@ theorem HasAffineProperty.diagonal_iff
   let 𝒰 := X.affineCover.pushforwardIso (inv (pull
 
 中文:
-定理 HasAffineProperty.diagonal_iff
+定理 有AffineProperty.diagonal_iff
   证明: by
   let := isLocal_affineProperty P
   refine ⟨fun hf => ?_, diagonal_of_diagonal_of_isPullback P .of_id_fst⟩
@@ -323,7 +323,7 @@ instance HasAffineProperty.diagonal_affineProperty_isLocal
     refine (diagonal_iff (targetA
 
 中文:
-实例 HasAffineProperty.diagonal_affineProperty_isLocal
+实例 有AffineProperty.diagonal_affineProperty_isLocal
   定义体: inferInstance
   to_basicOpen {_ Y} _ f r hf :=
     diagonal_of_diagonal_of_isPullback (targetAffineLocally Q)
@@ -404,7 +404,7 @@ theorem universally_isZariskiLocalAtTarget
 
 中文:
 定理 universally_isZariskiLocalAtTarget
-  结论: (P : Morphism命题erty Scheme)
+  结论: (P : MorphismProperty 概形)
   证明: by
   apply IsZariskiLocalAtTarget.mk'
   · exact fun {X Y} f U => P.universally.of_isPullback
@@ -456,7 +456,7 @@ lemma universally_isZariskiLocalAtSource
 
 中文:
 引理 universally_isZariskiLocalAtSource
-  结论: (P : Morphism命题erty Scheme)
+  结论: (P : MorphismProperty 概形)
   证明: by
   refine .mk_of_iff_of_zeroHypercover ?_
   intro X Y f 𝒰
@@ -750,7 +750,7 @@ definition stalkwise
 
 中文:
 定义 stalkwise
-  签名: (P : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题)
+  签名: (P : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题)
   定义体: fun _ _ f => forall x, P (f.stalkMap x).hom
 
 Depends on / 依赖: f.stalkMap, stalkMap
@@ -779,7 +779,7 @@ exact (RingHom.RespectsIso.cancel_right_isIso hP _ _).mpr hf (e x)
 
 中文:
 引理 stalkwise_respectsIso
-  条件: (hP : RingHom.RespectsIso P)
+  条件: (hP : 环态射.RespectsIso P)
   证明: by
     simp only [stalkwise, Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply]
     intro x
@@ -820,7 +820,7 @@ lemma stalkwiseIsZariskiLocalAtTarget_of_respectsIso
 
 中文:
 引理 stalkwiseIsZariskiLocalAtTarget_of_respectsIso
-  条件: (hP : RingHom.RespectsIso P)
+  条件: (hP : 环态射.RespectsIso P)
   证明: by
   have hP' : (RingHom.toMorphismProperty P).RespectsIso :=
     RingHom.toMorphismProperty_respectsIso_iff.mp hP
@@ -866,7 +866,7 @@ lemma stalkwise_isZariskiLocalAtSource_of_respectsIso
 
 中文:
 引理 stalkwise_isZariskiLocalAtSource_of_respectsIso
-  条件: (hP : RingHom.RespectsIso P)
+  条件: (hP : 环态射.RespectsIso P)
   证明: by
   let := stalkwise_respectsIso hP
   apply IsZariskiLocalAtSource.mk'
@@ -907,7 +907,7 @@ lemma stalkwise_SpecMap_iff
 
 中文:
 引理 stalkwise_SpecMap_iff
-  条件: (hP : RingHom.RespectsIso P) {R S : CommRingCat} (φ : R ⟶ S)
+  条件: (hP : 环态射.RespectsIso P) {R S : 交换环范畴} (φ : R ⟶ S)
   证明: by
   have hP' : (RingHom.toMorphismProperty P).RespectsIso :=
     RingHom.toMorphismProperty_respectsIso_iff.mp hP

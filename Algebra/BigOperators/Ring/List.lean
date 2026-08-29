@@ -43,8 +43,8 @@ lemma list_sum_right
 
 中文:
 引理 list_sum_right
-  条件: (a : R) (l : List R) (h : 对任意 b in l, Commute a b)
-  结论: Commute a l.sum
+  条件: (a : R) (l : 列表 R) (h : 对任意 b in l, Commute a b)
+  结论: Commute a l.求和
   证明: by
   induction l with
   | nil => exact Commute.zero_right _
@@ -72,8 +72,8 @@ lemma list_sum_left
 
 中文:
 引理 list_sum_left
-  条件: (b : R) (l : List R) (h : 对任意 a in l, Commute a b)
-  结论: Commute l.sum b
+  条件: (b : R) (l : 列表 R) (h : 对任意 a in l, Commute a b)
+  结论: Commute l.求和 b
   证明: ((Commute.list_sum_right _ _) fun _x hx => (h _ hx).symm).symm
 
 Depends on / 依赖: Commute, Commute.list_sum_right, list_sum_right
@@ -99,7 +99,7 @@ lemma prod_map_neg
 
 中文:
 引理 prod_map_neg
-  条件: (l : List M)
+  条件: (l : 列表 M)
   证明: by
   induction l <;> simp [*, pow_succ, ((Commute.neg_one_left _).pow_left _).left_comm]
 
@@ -123,7 +123,7 @@ lemma prod_eq_zero
 
 中文:
 引理 prod_eq_zero
-  结论: 对任意 {l : List M₀}, (0 : M₀) in l -> l.prod = 0
+  结论: 对任意 {l : 列表 M₀}, (0 : M₀) in l -> l.乘积 = 0
 -/
 lemma prod_eq_zero : forall {l : List M₀}, (0 : M₀) in l -> l.prod = 0
   -- | absurd h (not_mem_nil _)
@@ -143,7 +143,7 @@ lemma prod_eq_zero_iff
 
 中文:
 引理 prod_eq_zero_iff
-  结论: 对任意 {l : List M₀}, l.prod = 0 ↔ (0 : M₀) in l
+  结论: 对任意 {l : 列表 M₀}, l.乘积 = 0 ↔ (0 : M₀) in l
 -/
 @[simp] lemma prod_eq_zero_iff : forall {l : List M₀}, l.prod = 0 ↔ (0 : M₀) in l
   | [] => by simp
@@ -161,7 +161,7 @@ lemma prod_ne_zero
 中文:
 引理 prod_ne_zero
   条件: (hL : (0 : M₀) ∉ l)
-  结论: l.prod != 0
+  结论: l.乘积 != 0
   证明: mt prod_eq_zero_iff.1 hL
 
 Depends on / 依赖: prod_eq_zero_iff
@@ -183,7 +183,7 @@ lemma sum_map_mul_left
 
 中文:
 引理 sum_map_mul_left
-  结论: (l.map fun b => r * f b).sum = r * (l.map f).sum
+  结论: (l.map fun b => r * f b).求和 = r * (l.map f).求和
   证明: sum_map_hom l f AddMonoidHom.mulLeft r
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, mulLeft, sum_map_hom
@@ -201,7 +201,7 @@ lemma sum_map_mul_right
 
 中文:
 引理 sum_map_mul_right
-  结论: (l.map fun b => f b * r).sum = (l.map f).sum * r
+  结论: (l.map fun b => f b * r).求和 = (l.map f).求和 * r
   证明: sum_map_hom l f AddMonoidHom.mulRight r
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulRight, mulRight, sum_map_hom
@@ -227,8 +227,8 @@ lemma dvd_sum
 
 中文:
 引理 dvd_sum
-  条件: [NonUnitalSemiring R] {a} {l : List R} (h : 对任意 x in l, a ∣ x)
-  结论: a ∣ l.sum
+  条件: [非幺半环 R] {a} {l : 列表 R} (h : 对任意 x in l, a ∣ x)
+  结论: a ∣ l.求和
   证明: by
   induction l with
   | nil => exact dvd_zero _
@@ -254,7 +254,7 @@ lemma sum_zipWith_distrib_left
 
 中文:
 引理 sum_zipWith_distrib_left
-  条件: [NonUnitalNonAssocSemiring R] (f : ι -> κ -> R) (a : R)
+  条件: [非幺非结合半环 R] (f : ι -> κ -> R) (a : R)
 -/
 @[simp] lemma sum_zipWith_distrib_left [NonUnitalNonAssocSemiring R] (f : ι -> κ -> R) (a : R) :
     forall (l₁ : List ι) (l₂ : List κ),

@@ -65,7 +65,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: : Dual R V ->ₗ[R] Dual A (A otimes[R] V)
+  签名: : 对偶 R V ->ₗ[R] 对偶 A (A otimes[R] V)
   定义体: (AlgebraTensorModule.rid R A A).compRight R ∘ₗ LinearMap.baseChangeHom R A V R
 
 @[simp]
@@ -86,7 +86,7 @@ theorem baseChange_apply_tmul
 
 中文:
 定理 baseChange_apply_tmul
-  条件: (f : Dual R V) (a : A) (v : V)
+  条件: (f : 对偶 R V) (a : A) (v : V)
   证明: rfl
 -/
 theorem baseChange_apply_tmul (f : Dual R V) (a : A) (v : V) :
@@ -107,7 +107,7 @@ theorem baseChange_baseChange
 
 中文:
 定理 baseChange_baseChange
-  条件: (f : Dual R V)
+  条件: (f : 对偶 R V)
   证明: by
   ext; simp
 -/
@@ -157,7 +157,7 @@ theorem toDual_comp_apply
 
 中文:
 定理 toDual_comp_apply
-  条件: (f : Dual R V) (v : V)
+  条件: (f : 对偶 R V) (v : V)
   证明: by
   simp [toDual, linearMapLeftRightHom_comp_apply]
 
@@ -180,7 +180,7 @@ theorem toDual_apply
 
 中文:
 定理 toDual_apply
-  条件: (f : Dual R V)
+  条件: (f : 对偶 R V)
   证明: by
   apply ibc.algHom_ext
   intro v
@@ -252,7 +252,7 @@ theorem toDualBaseChangeAux_tmul
 
 中文:
 定理 toDualBaseChangeAux_tmul
-  条件: (a : A) (f : Dual R V) (v : V)
+  条件: (a : A) (f : 对偶 R V) (v : V)
   证明: by
   simp [toDualBaseChangeAux, toDual_comp_apply]
 -/
@@ -322,7 +322,7 @@ theorem toDualBaseChange_tmul
 
 中文:
 定理 toDualBaseChange_tmul
-  条件: (a : A) (f : Dual R V) (v : V)
+  条件: (a : A) (f : 对偶 R V) (v : V)
   证明: toDualBaseChangeAux_tmul ibc a f v
 
 Depends on / 依赖: toDualBaseChangeAux_tmul

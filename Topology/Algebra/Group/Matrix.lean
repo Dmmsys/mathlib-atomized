@@ -44,7 +44,7 @@ theorem continuous_apply
 
 中文:
 定理 continuous_apply
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: (by fun_prop : Continuous fun A : Matrix n n R => A i).comp by fun_prop
 
 @[fun_prop]
@@ -66,8 +66,8 @@ lemma _root_.Continuous.generalLinearGroup_map
   proof: (continuous_id.matrix_map hf).units_map
 
 中文:
-引理 _root_.Continuous.generalLinearGroup_map
-  条件: (hf : Continuous f)
+引理 _root_.连续.generalLinearGroup_map
+  条件: (hf : 连续 f)
   证明: (continuous_id.matrix_map hf).units_map
 -/
 lemma _root_.Continuous.generalLinearGroup_map (hf : Continuous f) :
@@ -83,8 +83,8 @@ lemma _root_.Topology.IsInducing.generalLinearGroup_map
   proof: hf.matrix_map.units_map
 
 中文:
-引理 _root_.Topology.IsInducing.generalLinearGroup_map
-  条件: (hf : IsInducing f)
+引理 _root_.拓扑.是Inducing.generalLinearGroup_map
+  条件: (hf : 是Inducing f)
   证明: hf.matrix_map.units_map
 -/
 lemma _root_.Topology.IsInducing.generalLinearGroup_map (hf : IsInducing f) :
@@ -100,8 +100,8 @@ lemma _root_.Topology.IsEmbedding.generalLinearGroup_map
   proof: hf.matrix_map.units_map
 
 中文:
-引理 _root_.Topology.IsEmbedding.generalLinearGroup_map
-  条件: (hf : IsEmbedding f)
+引理 _root_.拓扑.是嵌入.generalLinearGroup_map
+  条件: (hf : 是嵌入 f)
   证明: hf.matrix_map.units_map
 -/
 lemma _root_.Topology.IsEmbedding.generalLinearGroup_map (hf : IsEmbedding f) :
@@ -119,8 +119,8 @@ lemma _root_.Topology.IsClosedEmbedding.generalLinearGroup_map
   proof: hf.matrix_map.units_map
 
 中文:
-引理 _root_.Topology.IsClosedEmbedding.generalLinearGroup_map
-  结论: [T0Space R]
+引理 _root_.拓扑.是闭嵌入.generalLinearGroup_map
+  结论: [T0空间 R]
   证明: hf.matrix_map.units_map
 -/
 lemma _root_.Topology.IsClosedEmbedding.generalLinearGroup_map [T0Space R]
@@ -167,7 +167,7 @@ lemma continuous_upperRightHom
 
 中文:
 引理 continuous_upperRightHom
-  条件: {R : 类型} [Ring R] [TopologicalSpace R] [IsTopologicalRing R]
+  条件: {R : 类型} [环 R] [拓扑空间 R] [是拓扑环 R]
   证明: by
   simp only [continuous_induced_rng, Function.comp_def, upperRightHom_apply,
     Units.embedProduct_apply, Units.inv_mk, continuous_prodMk, MulOpposite.unop_op]
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (SL n R)
+  签名: 拓扑空间 (SL n R)
   定义体: inferInstanceAs TopologicalSpace (Subtype _)
 
 @[fun_prop]
@@ -227,7 +227,7 @@ theorem continuous_apply
 
 中文:
 定理 continuous_apply
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: (by fun_prop : Continuous fun A : Matrix n n R => A i).comp by fun_prop
 
 Depends on / 依赖: Continuous, Matrix, fun_prop
@@ -250,8 +250,8 @@ lemma _root_.Continuous.specialLinearGroup_map
   exact (continuous_id.matrix_map hf).comp continuous_subtype_val
 
 中文:
-引理 _root_.Continuous.specialLinearGroup_map
-  条件: (hf : Continuous f)
+引理 _root_.连续.specialLinearGroup_map
+  条件: (hf : 连续 f)
   证明: by
   refine IsInducing.subtypeVal.continuous_iff.mpr ?_
   exact (continuous_id.matrix_map hf).comp continuous_subtype_val
@@ -272,8 +272,8 @@ lemma _root_.Topology.IsInducing.specialLinearGroup_map
   proof: (hf.matrix_map.comp .subtypeVal).of_comp (by fun_prop) continuous_subtype_val
 
 中文:
-引理 _root_.Topology.IsInducing.specialLinearGroup_map
-  条件: (hf : IsInducing f)
+引理 _root_.拓扑.是Inducing.specialLinearGroup_map
+  条件: (hf : 是Inducing f)
   证明: (hf.matrix_map.comp .subtypeVal).of_comp (by fun_prop) continuous_subtype_val
 -/
 lemma _root_.Topology.IsInducing.specialLinearGroup_map (hf : IsInducing f) :
@@ -289,8 +289,8 @@ lemma _root_.Topology.IsEmbedding.specialLinearGroup_map
   proof: (hf.matrix_map.comp .subtypeVal).of_comp (by fun_prop) continuous_subtype_val
 
 中文:
-引理 _root_.Topology.IsEmbedding.specialLinearGroup_map
-  条件: (hf : IsEmbedding f)
+引理 _root_.拓扑.是嵌入.specialLinearGroup_map
+  条件: (hf : 是嵌入 f)
   证明: (hf.matrix_map.comp .subtypeVal).of_comp (by fun_prop) continuous_subtype_val
 -/
 lemma _root_.Topology.IsEmbedding.specialLinearGroup_map (hf : IsEmbedding f) :
@@ -308,8 +308,8 @@ instance [DiscreteTopology
   body: inferInstanceAs DiscreteTopology (Subtype _)
 
 中文:
-实例 [DiscreteTopology
-  签名: R] : DiscreteTopology (SL n R)
+实例 [离散拓扑
+  签名: R] : 离散拓扑 (SL n R)
   定义体: inferInstanceAs DiscreteTopology (Subtype _)
 
 Depends on / 依赖: DiscreteTopology, Subtype
@@ -327,7 +327,7 @@ lemma isClosedEmbedding_val
 
 中文:
 引理 isClosedEmbedding_val
-  条件: [T1Space R]
+  条件: [T1空间 R]
   证明: (isClosed_singleton.preimage continuous_id.matrix_det).isClosedEmbedding_subtypeVal
 
 Depends on / 依赖: continuous_id, continuous_id.matrix_det, isClosedEmbedding_subtypeVal, isClosed_singleton, isClosed_singleton.preimage, matrix_det, preimage
@@ -345,8 +345,8 @@ lemma _root_.Topology.IsClosedEmbedding.specialLinearGroup_map
   proof: (hf.matrix_map.comp isClosedEmbedding_val).of_comp .subtypeVal
 
 中文:
-引理 _root_.Topology.IsClosedEmbedding.specialLinearGroup_map
-  结论: [T1Space R]
+引理 _root_.拓扑.是闭嵌入.specialLinearGroup_map
+  结论: [T1空间 R]
   证明: (hf.matrix_map.comp isClosedEmbedding_val).of_comp .subtypeVal
 -/
 lemma _root_.Topology.IsClosedEmbedding.specialLinearGroup_map [T1Space R]
@@ -363,7 +363,7 @@ instance instT1Space
 
 中文:
 实例 instT1Space
-  签名: [T1Space R]
+  签名: [T1空间 R]
   定义体: isClosedEmbedding_val.isEmbedding.t1Space
 
 Depends on / 依赖: isClosedEmbedding_val, isClosedEmbedding_val.isEmbedding.t1Space, isEmbedding, t1Space
@@ -382,7 +382,7 @@ continuous_mul := continuous_induced_rng.mpr
 
 中文:
 实例 topologicalGroup
-  签名: : IsTopologicalGroup (SL n R) where
+  签名: : 是拓扑群 (SL n R) where
   定义体: continuous_induced_rng.mpr continuous_induced_dom.matrix_adjugate
 continuous_mul := continuous_induced_rng.mpr
     (continuous_induced_dom.comp continuous_fst).mul (continuous_induced_dom.comp continuous_snd)
@@ -413,7 +413,7 @@ lemma continuous_toGL
 
 中文:
 引理 continuous_toGL
-  结论: Continuous (toGL : SL n R -> GL n R)
+  结论: 连续 (toGL : SL n R -> GL n R)
   证明: by
   simp_rw [Units.continuous_iff, ← map_inv]
   constructor <;> fun_prop
@@ -434,7 +434,7 @@ lemma isInducing_toGL
 
 中文:
 引理 isInducing_toGL
-  结论: IsInducing (toGL : SL n R -> GL n R)
+  结论: 是Inducing (toGL : SL n R -> GL n R)
   证明: .of_comp continuous_toGL Units.continuous_val (IsInducing.induced _)
 
 Depends on / 依赖: IsInducing, IsInducing.induced, Units.continuous_val, continuous_toGL, continuous_val, induced, of_comp
@@ -452,7 +452,7 @@ lemma isEmbedding_toGL
 
 中文:
 引理 isEmbedding_toGL
-  结论: IsEmbedding (toGL : SL n R -> GL n R)
+  结论: 是嵌入 (toGL : SL n R -> GL n R)
   证明: ⟨isInducing_toGL, toGL_injective⟩
 
 Depends on / 依赖: isInducing_toGL, toGL_injective
@@ -472,7 +472,7 @@ theorem range_toGL
 
 中文:
 定理 range_toGL
-  条件: {A : 类型} [CommRing A]
+  条件: {A : 类型} [交换环 A]
   证明: by
   ext x
   simpa [Units.ext_iff] using ⟨fun ⟨y, hy⟩ => by simp [← hy], fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
@@ -495,8 +495,8 @@ lemma isClosedEmbedding_toGL
 
 中文:
 引理 isClosedEmbedding_toGL
-  条件: [T0Space R]
-  结论: IsClosedEmbedding (toGL : SL n R -> GL n R)
+  条件: [T0空间 R]
+  结论: 是闭嵌入 (toGL : SL n R -> GL n R)
   证明: ⟨isEmbedding_toGL, by simpa [range_toGL] using isClosed_singleton.preimage by fun_prop⟩
 
 Depends on / 依赖: fun_prop, isClosed_singleton, isClosed_singleton.preimage, isEmbedding_toGL, preimage, range_toGL
@@ -527,8 +527,8 @@ lemma continuous_mapGL
 
 中文:
 引理 continuous_mapGL
-  条件: [ContinuousSMul R S]
-  结论: Continuous (mapGL S : SL n R -> _)
+  条件: [连续标量乘法 R S]
+  结论: 连续 (mapGL S : SL n R -> _)
   证明: continuous_toGL.comp
     (continuous_algebraMap_iff_smul R S |>.2 continuous_smul).specialLinearGroup_map
 
@@ -548,7 +548,7 @@ lemma isInducing_mapGL
 
 中文:
 引理 isInducing_mapGL
-  条件: (h : IsInducing (algebraMap R S))
+  条件: (h : 是Inducing (algebraMap R S))
   证明: isInducing_toGL.comp h.specialLinearGroup_map
 
 Depends on / 依赖: h.specialLinearGroup_map, isInducing_toGL, isInducing_toGL.comp, specialLinearGroup_map
@@ -567,7 +567,7 @@ lemma isEmbedding_mapGL
 
 中文:
 引理 isEmbedding_mapGL
-  条件: (h : IsEmbedding (algebraMap R S))
+  条件: (h : 是嵌入 (algebraMap R S))
   证明: isEmbedding_toGL.comp h.specialLinearGroup_map
 
 Depends on / 依赖: h.specialLinearGroup_map, isEmbedding_toGL, isEmbedding_toGL.comp, specialLinearGroup_map
@@ -586,7 +586,7 @@ lemma isClosedEmbedding_mapGL
 
 中文:
 引理 isClosedEmbedding_mapGL
-  结论: [IsTopologicalRing R] [T1Space R] [T1Space S]
+  结论: [是拓扑环 R] [T1空间 R] [T1空间 S]
   证明: isClosedEmbedding_toGL.comp h.specialLinearGroup_map
 
 Depends on / 依赖: h.specialLinearGroup_map, isClosedEmbedding_toGL, isClosedEmbedding_toGL.comp, specialLinearGroup_map

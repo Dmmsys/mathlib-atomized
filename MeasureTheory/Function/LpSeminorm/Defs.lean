@@ -71,7 +71,7 @@ definition eLpNorm'
 
 中文:
 定义 eLpNorm'
-  签名: {_ : MeasurableSpace α} (f : α -> ε) (q : 实数) (μ : Measure α)
+  签名: {_ : 可测空间 α} (f : α -> ε) (q : 实数) (μ : 测度 α)
   定义体: (∫⁻ a, ‖f a‖ₑ ^ q ∂μ) ^ (1 / q)
 -/
 def eLpNorm' {_ : MeasurableSpace α} (f : α -> ε) (q : Real) (μ : Measure α) : Real>=0∞ :=
@@ -87,7 +87,7 @@ lemma eLpNorm'_eq_lintegral_enorm
 
 中文:
 引理 eLpNorm'_eq_lintegral_enorm
-  条件: (f : α -> ε) (q : 实数) (μ : Measure α)
+  条件: (f : α -> ε) (q : 实数) (μ : 测度 α)
   证明: rfl
 -/
 lemma eLpNorm'_eq_lintegral_enorm (f : α -> ε) (q : Real) (μ : Measure α) :
@@ -104,7 +104,7 @@ definition eLpNormEssSup
 
 中文:
 定义 eLpNormEssSup
-  签名: (f : α -> ε) (μ : Measure α)
+  签名: (f : α -> ε) (μ : 测度 α)
   定义体: essSup (fun x => ‖f x‖ₑ) μ
 
 Depends on / 依赖: essSup
@@ -122,7 +122,7 @@ lemma eLpNormEssSup_eq_essSup_enorm
 
 中文:
 引理 eLpNormEssSup_eq_essSup_enorm
-  条件: (f : α -> ε) (μ : Measure α)
+  条件: (f : α -> ε) (μ : 测度 α)
   证明: rfl
 -/
 lemma eLpNormEssSup_eq_essSup_enorm (f : α -> ε) (μ : Measure α) :
@@ -138,7 +138,7 @@ definition eLpNorm
 
 中文:
 定义 eLpNorm
-  签名: {_ : MeasurableSpace α}
+  签名: {_ : 可测空间 α}
   定义体: if p = 0 then 0 else if p = ∞ then eLpNormEssSup f μ else eLpNorm' f (ENNReal.toReal p) μ
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, eLpNorm, eLpNormEssSup, toReal, volume_tac
@@ -199,7 +199,7 @@ lemma eLpNorm_eq_lintegral_rpow_enorm_toReal
 alias eLpNorm_eq_lintegral_rpow_enorm := eLpNorm_eq_lintegral_rpow_enorm_toReal
 
 中文:
-引理 eLpNorm_eq_lintegral_rpow_enorm_toReal
+引理 eLpNorm_eq_lintegral_rpow_enorm_to实数
   条件: (hp_ne_zero : p != 0) (hp_ne_top : p != ∞) {f : α -> ε}
   证明: by
   rw [eLpNorm_eq_eLpNorm' hp_ne_zero hp_ne_top]; rw [eLpNorm'_eq_lintegral_enorm]
@@ -294,7 +294,7 @@ definition MemLp
 
 中文:
 定义 MemLp
-  签名: [TopologicalSpace ε] (f : α -> ε) (p : 实数>=0∞) (μ : Measure α := by volume_tac)
+  签名: [拓扑空间 ε] (f : α -> ε) (p : 实数>=0∞) (μ : 测度 α := by volume_tac)
   定义体: AEStronglyMeasurable f μ ∧ eLpNorm f p μ < ∞
 
 Depends on / 依赖: AEStronglyMeasurable, eLpNorm, volume_tac
@@ -312,7 +312,7 @@ theorem MemLp.aestronglyMeasurable
 
 中文:
 定理 MemLp.aestronglyMeasurable
-  条件: [TopologicalSpace ε] {f : α -> ε} {p : 实数>=0∞} (h : MemLp f p μ)
+  条件: [拓扑空间 ε] {f : α -> ε} {p : 实数>=0∞} (h : MemLp f p μ)
   证明: h.1
 -/
 theorem MemLp.aestronglyMeasurable [TopologicalSpace ε] {f : α -> ε} {p : Real>=0∞} (h : MemLp f p μ) :
@@ -329,7 +329,7 @@ lemma MemLp.aemeasurable
 
 中文:
 引理 MemLp.aemeasurable
-  结论: [MeasurableSpace ε] [TopologicalSpace ε]
+  结论: [可测空间 ε] [拓扑空间 ε]
   证明: hf.aestronglyMeasurable.aemeasurable
 
 Depends on / 依赖: aemeasurable, aestronglyMeasurable, hf.aestronglyMeasurable.aemeasurable
@@ -398,7 +398,7 @@ definition lpNorm
 
 中文:
 定义 lpNorm
-  签名: (f : α -> E) (p : 实数>=0∞) (μ : Measure α)
+  签名: (f : α -> E) (p : 实数>=0∞) (μ : 测度 α)
   定义体: open scoped Classical in if AEStronglyMeasurable f μ then (eLpNorm f p μ).toReal else 0
 
 Depends on / 依赖: AEStronglyMeasurable, Classical, eLpNorm, scoped, toReal

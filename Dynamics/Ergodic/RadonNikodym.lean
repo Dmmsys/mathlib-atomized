@@ -47,7 +47,7 @@ theorem singularPart
 
 中文:
 定理 singularPart
-  结论: [SigmaFinite ν] {f : X -> X}
+  结论: [σ有限 ν] {f : X -> X}
   证明: by
   rcases (μ.mutuallySingular_singularPart ν).symm with ⟨s, hsm, hνs, hμs⟩
   convert! hfμ.restrict_preimage hsm using 1
@@ -86,7 +86,7 @@ theorem withDensity_rnDeriv
 
 中文:
 定理 withDensity_rnDeriv
-  结论: [SigmaFinite ν] {f : X -> X}
+  结论: [σ有限 ν] {f : X -> X}
   证明: by
   use hfμ.measurable
   ext s hs
@@ -114,7 +114,7 @@ theorem rnDeriv_comp_aeEq
 
 中文:
 定理 rnDeriv_comp_aeEq
-  结论: [IsFiniteMeasure ν] {f : X -> X}
+  结论: [是有限测度 ν] {f : X -> X}
   证明: by
   wlog hμν : μ ≪ ν generalizing μ
   · specialize this (hfμ.withDensity_rnDeriv hfν) (withDensity_absolutelyContinuous _ _)

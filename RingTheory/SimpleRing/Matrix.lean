@@ -28,7 +28,7 @@ instance matrix
 
 中文:
 实例 matrix
-  签名: [IsSimpleRing A]
+  签名: [是单环 A]
   定义体: letI := Classical.decEq ι; TwoSidedIdeal.orderIsoMatrix
 
 Depends on / 依赖: Classical, Classical.decEq, TwoSidedIdeal, TwoSidedIdeal.orderIsoMatrix, orderIsoMatrix

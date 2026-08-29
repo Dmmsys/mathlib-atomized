@@ -212,7 +212,7 @@ theorem seminormFromConst_seq_antitone
 中文:
 定理 seminormFromConst_seq_antitone
   条件: (x : R)
-  结论: Antitone (seminormFromConst_seq c f x)
+  结论: 递减 (seminormFromConst_seq c f x)
   证明: by
   intro m n hmn
   simp only [seminormFromConst_seq]
@@ -253,7 +253,7 @@ definition seminormFromConst'
 
 中文:
 定义 seminormFromConst'
-  签名: (c : R) (f : RingSeminorm R) (x : R)
+  签名: (c : R) (f : 环半范数 R) (x : R)
   定义体: iInf (seminormFromConst_seq c f x)
 
 Depends on / 依赖: seminormFromConst_seq
@@ -336,7 +336,7 @@ apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 
 
 中文:
 定义 seminormFromConst
-  签名: : RingSeminorm R where
+  签名: : 环半范数 R where
   定义体: seminormFromConst' c f
   map_zero' := tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 0)
     (by simpa [seminormFromConst_seq_zero c (map_zero _)] using! tendsto_const_nhds)
@@ -694,7 +694,7 @@ definition normFromConst
 
 中文:
 定义 normFromConst
-  签名: {k : K} {g : RingSeminorm K} (hg1 : g 1 <= 1) (hg_k : g k != 0)
+  签名: {k : K} {g : 环半范数 K} (hg1 : g 1 <= 1) (hg_k : g k != 0)
   定义体: (seminormFromConst hg1 hg_k hg_pm).toRingNorm (RingSeminorm.ne_zero_iff.mpr
     ⟨k, by rwa [seminormFromConst_def hg1 hg_k, seminormFromConst_apply_c hg1 hg_k hg_pm]⟩)
 
@@ -715,7 +715,7 @@ theorem seminormFromConstRingNormOfField_def
 
 中文:
 定理 seminormFromConstRingNormOfField_def
-  结论: {k : K} {g : RingSeminorm K} (hg1 : g 1 <= 1)
+  结论: {k : K} {g : 环半范数 K} (hg1 : g 1 <= 1)
   证明: rfl
 -/
 theorem seminormFromConstRingNormOfField_def {k : K} {g : RingSeminorm K} (hg1 : g 1 <= 1)

@@ -33,7 +33,7 @@ definition startsWith
 
 中文:
 定义 startsWith
-  签名: (w : α × 布尔)
+  签名: (w : α × 布尔值)
   定义体: {g : FreeGroup α | (FreeGroup.toWord g)[0]? = some w}
 
 Depends on / 依赖: FreeGroup, FreeGroup.toWord, toWord
@@ -52,7 +52,7 @@ theorem startsWith.ne_one
 
 中文:
 定理 startsWith.ne_one
-  条件: {w : α × 布尔} (g : FreeGroup α) (h : g in FreeGroup.startsWith w)
+  条件: {w : α × 布尔值} (g : 自由群 α) (h : g in 自由群.startsWith w)
   证明: fun h1 => by simp [h1, startsWith, FreeGroup.toWord_one] at h
 
 @[simp]
@@ -78,7 +78,7 @@ lemma startsWith.disjoint_iff_ne
 
 中文:
 引理 startsWith.disjoint_iff_ne
-  条件: {w w' : α × 布尔}
+  条件: {w w' : α × 布尔值}
   证明: by
   simp_all only [ne_eq, startsWith, Set.disjoint_iff_inter_eq_empty, Set.ext_iff, Set.mem_inter_iff,
     Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_and, Option.some.injEq]
@@ -113,7 +113,7 @@ theorem startsWith_mk_mul
 
 中文:
 定理 startsWith_mk_mul
-  结论: {w : α × 布尔} (g : FreeGroup α)
+  结论: {w : α × 布尔值} (g : 自由群 α)
   证明: by
   by_cases hC : 0 < g.toWord.length
   · simp only [startsWith, Set.mem_ofPred_eq, getElem?_pos, Option.some.injEq,
@@ -151,7 +151,7 @@ lemma startsWith.smul_def
 
 中文:
 引理 startsWith.smul_def
-  条件: {w : α × 布尔} {g : startsWith w} {x : X}
+  条件: {w : α × 布尔值} {g : startsWith w} {x : X}
   结论: g • x = g.val • x
   证明: by
   rfl
@@ -179,7 +179,7 @@ theorem Orbit.duplicate
 
 中文:
 定理 Orbit.duplicate
-  条件: (x : X) (w : α × 布尔)
+  条件: (x : X) (w : α × 布尔值)
   证明: by
   ext i
   constructor

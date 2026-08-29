@@ -50,7 +50,7 @@ definition extendRight
 
 中文:
 定义 extendRight
-  签名: : 整数ermediateField K M
+  签名: : 中间域 K M
   定义体: F.map (Algebra.algHom K L M)
 
 Depends on / 依赖: Algebra, Algebra.algHom, F.map, algHom
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (F.extendRight M)
+  签名: 标量乘法 S (F.extendRight M)
   定义体: by
     refine ⟨s • x, ?_⟩
     rw [Algebra.smul_def]
@@ -236,7 +236,7 @@ smul_def' s x := Subtype.ext by
 
 中文:
 实例 algebra
-  签名: : Algebra S (F.extendRight M) where
+  签名: : 代数 S (F.extendRight M) where
   定义体: (algebraMap S M).codRestrict (F.extendRight M).toSubalgebra (algebraMap_mem F M ·)
 commutes' _ _ := Subtype.ext by simp [Algebra.commutes]
 smul_def' s x := Subtype.ext by
@@ -268,7 +268,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower S (F.extendRight M) M
+  签名: 标量塔 S (F.extendRight M) M
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -285,7 +285,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower S F (F.extendRight M)
+  签名: 标量塔 S F (F.extendRight M)
   定义体: IsScalarTower.to₁₂₃ S F (F.extendRight M) M
 
 Depends on / 依赖: F.extendRight, IsScalarTower, IsScalarTower.to, extendRight
@@ -301,8 +301,8 @@ instance [Algebra
   body: IsScalarTower.to₁₂₃ R S (F.extendRight M) M
 
 中文:
-实例 [Algebra
-  签名: R S] [Algebra R F] [Algebra R M] [IsScalarTower R F M] [IsScalarTower R S M] :
+实例 [代数
+  签名: R S] [代数 R F] [代数 R M] [标量塔 R F M] [标量塔 R S M] :
   定义体: IsScalarTower.to₁₂₃ R S (F.extendRight M) M
 
 Depends on / 依赖: F.extendRight, IsScalarTower, IsScalarTower.to, extendRight
@@ -324,7 +324,7 @@ definition _root_.IntermediateField.extendRightEquiv'
 @[simp]
 
 中文:
-定义 _root_.IntermediateField.extendRightEquiv'
+定义 _root_.中间域.extendRightEquiv'
   签名: : F ≃ₐ[S] (F.extendRight M)
   定义体: AlgEquiv.ofBijective (Algebra.algHom S F (F.extendRight M)) (extendRightEquiv F M).bijective
 
@@ -429,8 +429,8 @@ instance isIntegralClosure
   rw [Subtype.ext_iff]; rw [← algebraMap_apply (F.extendRight M)]; rw [← algebraMap_apply (F.extendRight M)]; rw [algebraMap_extendRightEquiv']; rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
-实例 isIntegralClosure
-  签名: [Algebra R F] [Algebra R M] [IsScalarTower R F M]
+实例 is整数egralClosure
+  签名: [代数 R F] [代数 R M] [标量塔 R F M]
   定义体: by
   refine .of_algEquiv S (F.extendRightEquiv' M R) fun x => ?_
   rw [Subtype.ext_iff]; rw [← algebraMap_apply (F.extendRight M)]; rw [← algebraMap_apply (F.extendRight M)]; rw [algebraMap_extendRightEquiv']; rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]

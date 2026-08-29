@@ -50,8 +50,8 @@ instance instNatCast
   body: op n
 
 中文:
-实例 instNatCast
-  签名: [自然数Cast R]
+实例 inst自然数Cast
+  签名: [自然数嵌入 R]
   定义体: op n
 -/
 @[to_additive] instance instNatCast [NatCast R] : NatCast Rᵐᵒᵖ where natCast n := op n
@@ -66,8 +66,8 @@ instance instIntCast
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-实例 instIntCast
-  签名: [整数Cast R]
+实例 inst整数Cast
+  签名: [整数嵌入 R]
   定义体: op n
 
 @[to_additive (attr := simp, norm_cast)]
@@ -88,7 +88,7 @@ theorem op_natCast
 
 中文:
 定理 op_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: op (n : R) = n
   证明: rfl
 
@@ -109,8 +109,8 @@ theorem op_ofNat
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-定理 op_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 op_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -133,7 +133,7 @@ theorem op_intCast
 
 中文:
 定理 op_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: op (n : R) = n
   证明: rfl
 
@@ -156,7 +156,7 @@ theorem unop_natCast
 
 中文:
 定理 unop_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: unop (n : Rᵐᵒᵖ) = n
   证明: rfl
 
@@ -177,8 +177,8 @@ theorem unop_ofNat
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-定理 unop_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 unop_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -199,7 +199,7 @@ theorem unop_intCast
 
 中文:
 定理 unop_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: unop (n : Rᵐᵒᵖ) = n
   证明: rfl
 -/
@@ -220,7 +220,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: instNatCast
   toAddMonoid := instAddMonoid
   toOne := instOne
@@ -247,7 +247,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: [AddCommMonoidWithOne R]
+  签名: [加法交换带幺幺半群 R]
   定义体: instAddMonoidWithOne
   __ := instAddCommMonoid
 
@@ -271,7 +271,7 @@ instance instAddGroupWithOne
 
 中文:
 实例 instAddGroupWithOne
-  签名: [AddGroupWithOne R]
+  签名: [加法带幺群 R]
   定义体: instAddMonoidWithOne
   toIntCast := instIntCast
   __ := instAddGroup
@@ -298,7 +298,7 @@ instance instAddCommGroupWithOne
 
 中文:
 实例 instAddCommGroupWithOne
-  签名: [AddCommGroupWithOne R]
+  签名: [加法交换带幺群 R]
   定义体: instAddCommGroup
   __ := instAddGroupWithOne
 
@@ -320,7 +320,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
   定义体: instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
@@ -344,7 +344,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring R]
+  签名: [非幺半环 R]
   定义体: instNonUnitalNonAssocSemiring
   __ := instSemigroupWithZero
 
@@ -366,7 +366,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddCommMonoidWithOne
@@ -390,7 +390,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
@@ -413,7 +413,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R]
+  签名: [非幺交换半环 R]
   定义体: instNonUnitalSemiring
   __ := instCommSemigroup
 
@@ -434,7 +434,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
   定义体: instSemiring
   __ := instCommMonoid
 
@@ -455,7 +455,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R]
+  签名: [非幺非结合环 R]
   定义体: instAddCommGroup
   __ := instNonUnitalNonAssocSemiring
 
@@ -476,7 +476,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing R]
+  签名: [非幺环 R]
   定义体: instNonUnitalNonAssocRing
   __ := instNonUnitalSemiring
 
@@ -498,7 +498,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [NonAssocRing R]
+  签名: [非结合环 R]
   定义体: instNonUnitalNonAssocRing
   __ := instNonAssocSemiring
   __ := instAddCommGroupWithOne
@@ -521,7 +521,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring R]
+  签名: [环 R]
   定义体: instSemiring
   __ := instAddCommGroupWithOne
 
@@ -542,7 +542,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing R]
+  签名: [非幺交换环 R]
   定义体: instNonUnitalRing
   __ := instNonUnitalCommSemiring
 
@@ -563,7 +563,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: instRing
   __ := instCommMonoid
 
@@ -583,7 +583,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: [Ring R] [IsDomain R]
+  签名: [环 R] [是整环 R]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -631,7 +631,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: [AddCommMonoidWithOne R]
+  签名: [加法交换带幺幺半群 R]
   定义体: instNatCast
   toOne := instOne
   __ := instAddCommMonoid
@@ -661,7 +661,7 @@ intCast_negSucc _ := congr_arg op Int.cast_negSucc _
 
 中文:
 实例 instAddCommGroupWithOne
-  签名: [AddCommGroupWithOne R]
+  签名: [加法交换带幺群 R]
   定义体: instIntCast
   toAddCommGroup := instAddCommGroup
   __ := instAddCommMonoidWithOne
@@ -689,7 +689,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
   定义体: instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
@@ -713,7 +713,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring R]
+  签名: [非幺半环 R]
   定义体: instNonUnitalNonAssocSemiring
   __ := instSemigroupWithZero
 
@@ -735,7 +735,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddCommMonoidWithOne
@@ -759,7 +759,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
@@ -782,7 +782,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R]
+  签名: [非幺交换半环 R]
   定义体: instNonUnitalSemiring
   __ := instCommSemigroup
 
@@ -803,7 +803,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
   定义体: instSemiring
   __ := instCommMonoid
 
@@ -824,7 +824,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R]
+  签名: [非幺非结合环 R]
   定义体: instAddCommGroup
   __ := instNonUnitalNonAssocSemiring
 
@@ -845,7 +845,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing R]
+  签名: [非幺环 R]
   定义体: instNonUnitalNonAssocRing
   __ := instNonUnitalSemiring
 
@@ -867,7 +867,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [NonAssocRing R]
+  签名: [非结合环 R]
   定义体: instNonUnitalNonAssocRing
   __ := instNonAssocSemiring
   __ := instAddCommGroupWithOne
@@ -890,7 +890,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring R]
+  签名: [环 R]
   定义体: instSemiring
   __ := instAddCommGroupWithOne
 
@@ -911,7 +911,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing R]
+  签名: [非幺交换环 R]
   定义体: instNonUnitalRing
   __ := instNonUnitalCommSemiring
 
@@ -932,7 +932,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: instRing
   __ := instCommMonoid
 
@@ -952,7 +952,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: [Ring R] [IsDomain R]
+  签名: [环 R] [是整环 R]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -977,8 +977,8 @@ definition NonUnitalRingHom.toOpposite
     toFun := MulOpposite.op ∘ f }
 
 中文:
-定义 NonUnitalRingHom.toOpposite
-  签名: {R S : 类型} [NonUnitalNonAssocSemiring R]
+定义 非幺环态射.toOpposite
+  签名: {R S : 类型} [非幺非结合半环 R]
   定义体: { ((opAddEquiv : S ≃+ Sᵐᵒᵖ).toAddMonoidHom.comp ↑f : R ->+ Sᵐᵒᵖ), f.toMulHom.toOpposite hf with
     toFun := MulOpposite.op ∘ f }
 
@@ -1002,8 +1002,8 @@ definition NonUnitalRingHom.fromOpposite
     f.toMulHom.fromOpposite hf with toFun := f ∘ MulOpposite.unop }
 
 中文:
-定义 NonUnitalRingHom.fromOpposite
-  签名: {R S : 类型} [NonUnitalNonAssocSemiring R]
+定义 非幺环态射.fromOpposite
+  签名: {R S : 类型} [非幺非结合半环 R]
   定义体: { (f.toAddMonoidHom.comp (opAddEquiv : R ≃+ Rᵐᵒᵖ).symm.toAddMonoidHom : Rᵐᵒᵖ ->+ S),
     f.toMulHom.fromOpposite hf with toFun := f ∘ MulOpposite.unop }
 
@@ -1027,8 +1027,8 @@ definition NonUnitalRingHom.op
   invFun f := { AddMonoidHom.mulUnop f.toAddMonoidHom, MulHom.unop f.toMulHom with }
 
 中文:
-定义 NonUnitalRingHom.op
-  签名: {R S} [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+定义 非幺环态射.op
+  签名: {R S} [非幺非结合半环 R] [非幺非结合半环 S]
   定义体: { AddMonoidHom.mulOp f.toAddMonoidHom, MulHom.op f.toMulHom with }
   invFun f := { AddMonoidHom.mulUnop f.toAddMonoidHom, MulHom.unop f.toMulHom with }
 
@@ -1051,8 +1051,8 @@ definition NonUnitalRingHom.unop
   body: NonUnitalRingHom.op.symm
 
 中文:
-定义 NonUnitalRingHom.unop
-  签名: {R S} [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+定义 非幺环态射.unop
+  签名: {R S} [非幺非结合半环 R] [非幺非结合半环 S]
   定义体: NonUnitalRingHom.op.symm
 
 Depends on / 依赖: NonUnitalRingHom, NonUnitalRingHom.op.symm
@@ -1074,8 +1074,8 @@ definition RingHom.toOpposite
     toFun := MulOpposite.op ∘ f }
 
 中文:
-定义 RingHom.toOpposite
-  签名: {R S : 类型} [Semiring R] [Semiring S] (f : R ->+* S)
+定义 环态射.toOpposite
+  签名: {R S : 类型} [半环 R] [半环 S] (f : R ->+* S)
   定义体: { ((opAddEquiv : S ≃+ Sᵐᵒᵖ).toAddMonoidHom.comp ↑f : R ->+ Sᵐᵒᵖ), f.toMonoidHom.toOpposite hf with
     toFun := MulOpposite.op ∘ f }
 
@@ -1099,8 +1099,8 @@ definition RingHom.fromOpposite
     f.toMonoidHom.fromOpposite hf with toFun := f ∘ MulOpposite.unop }
 
 中文:
-定义 RingHom.fromOpposite
-  签名: {R S : 类型} [Semiring R] [Semiring S] (f : R ->+* S)
+定义 环态射.fromOpposite
+  签名: {R S : 类型} [半环 R] [半环 S] (f : R ->+* S)
   定义体: { (f.toAddMonoidHom.comp (opAddEquiv : R ≃+ Rᵐᵒᵖ).symm.toAddMonoidHom : Rᵐᵒᵖ ->+ S),
     f.toMonoidHom.fromOpposite hf with toFun := f ∘ MulOpposite.unop }
 
@@ -1124,8 +1124,8 @@ definition RingHom.op
   invFun f := { AddMonoidHom.mulUnop f.toAddMonoidHom, MonoidHom.unop f.toMonoidHom with }
 
 中文:
-定义 RingHom.op
-  签名: {R S} [NonAssocSemiring R] [NonAssocSemiring S]
+定义 环态射.op
+  签名: {R S} [非结合半环 R] [非结合半环 S]
   定义体: { AddMonoidHom.mulOp f.toAddMonoidHom, MonoidHom.op f.toMonoidHom with }
   invFun f := { AddMonoidHom.mulUnop f.toAddMonoidHom, MonoidHom.unop f.toMonoidHom with }
 
@@ -1147,8 +1147,8 @@ definition RingHom.unop
   body: RingHom.op.symm
 
 中文:
-定义 RingHom.unop
-  签名: {R S} [NonAssocSemiring R] [NonAssocSemiring S]
+定义 环态射.unop
+  签名: {R S} [非结合半环 R] [非结合半环 S]
   定义体: RingHom.op.symm
 
 Depends on / 依赖: RingHom, RingHom.op.symm

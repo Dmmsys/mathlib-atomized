@@ -320,7 +320,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (ι f g)
+  签名: 单态射 (ι f g)
   定义体: mono_of_mono_fac (ι_fst f g)
 
 Depends on / 依赖: mono_of_mono_fac
@@ -337,7 +337,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (π f g)
+  签名: 满态射 (π f g)
   定义体: epi_of_epi_fac (inr_π f g)
 
 Depends on / 依赖: epi_of_epi_fac
@@ -359,7 +359,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: : IsLimit (KernelFork.ofι _ (ι_φ f g))
+  签名: : 是极限 (核叉.ofι _ (ι_φ f g))
   定义体: KernelFork.IsLimit.ofι' _ _ (fun {A} k hk => by
     refine ⟨kernel.lift _ (k ≫ biprod.fst) ?_, ?_⟩
     all_goals
@@ -395,7 +395,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: : IsColimit (CokernelCofork.ofπ _ (φ_π f g))
+  签名: : 是余极限 (余核余叉.ofπ _ (φ_π f g))
   定义体: CokernelCofork.IsColimit.ofπ' _ _ (fun {A} k hk => by
     refine ⟨cokernel.desc _ (biprod.inr ≫ k) ?_, ?_⟩
     all_goals
@@ -436,7 +436,7 @@ definition snakeInput
 
 中文:
 定义 snakeInput
-  签名: : ShortComplex.SnakeInput C where
+  签名: : 短复形.蛇输入 C where
   定义体: { f := kernel.map f (f ≫ g) (𝟙 _) g (by simp)
       g := kernel.map (f ≫ g) g f (𝟙 _) (by simp)
       zero := by aesop }
@@ -576,7 +576,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono ((kernelCokernelCompSequence f g).map' 0 1)
+  签名: 单态射 ((kernelCokernelCompSequence f g).map' 0 1)
   定义体: by
   dsimp; infer_instance
 
@@ -599,7 +599,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi ((kernelCokernelCompSequence f g).map' 4 5)
+  签名: 满态射 ((kernelCokernelCompSequence f g).map' 4 5)
   定义体: by
   dsimp [ComposableArrows.Precomp.map]
   infer_instance

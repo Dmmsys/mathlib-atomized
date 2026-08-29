@@ -69,7 +69,7 @@ theorem continuous_reflTransSymmAux
 
 中文:
 定理 continuous_reflTransSymmAux
-  结论: Continuous reflTransSymmAux
+  结论: 连续 reflTransSymmAux
   证明: continuous_if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop) (by grind)
 
 Depends on / 依赖: continuous_if_le, fun_prop
@@ -141,7 +141,7 @@ definition reflTransSymm
 
 中文:
 定义 reflTransSymm
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: p ⟨reflTransSymmAux x, reflTransSymmAux_mem_I x⟩
   continuous_toFun := by fun_prop
   map_zero_left := by simp [reflTransSymmAux]
@@ -177,7 +177,7 @@ definition reflSymmTrans
 
 中文:
 定义 reflSymmTrans
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: (reflTransSymm p.symm).cast rfl congr_arg _ (Path.symm_symm _)
 
 Depends on / 依赖: Path.symm_symm, congr_arg, p.symm, reflTransSymm, symm_symm
@@ -220,7 +220,7 @@ theorem continuous_transReflReparamAux
 
 中文:
 定理 continuous_transReflReparamAux
-  结论: Continuous transReflReparamAux
+  结论: 连续 transReflReparamAux
   证明: continuous_if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop) (by grind)
 
 Depends on / 依赖: continuous_if_le, fun_prop
@@ -308,7 +308,7 @@ theorem trans_refl_reparam
 
 中文:
 定理 trans_refl_reparam
-  条件: (p : Path x₀ x₁)
+  条件: (p : 道路 x₀ x₁)
   证明: by
   ext
   unfold transReflReparamAux
@@ -339,7 +339,7 @@ definition transRefl
 
 中文:
 定义 transRefl
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: ((Homotopy.reparam p (fun t => ⟨transReflReparamAux t, transReflReparamAux_mem_I t⟩)
           (by fun_prop) (Subtype.ext transReflReparamAux_zero)
           (Subtype.ext transReflReparamAux_one)).cast
@@ -363,7 +363,7 @@ definition reflTrans
 
 中文:
 定义 reflTrans
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: (transRefl p.symm).symm₂.cast (by simp) (by simp)
 
 Depends on / 依赖: p.symm, transRefl
@@ -408,7 +408,7 @@ theorem continuous_transAssocReparamAux
 
 中文:
 定理 continuous_transAssocReparamAux
-  结论: Continuous transAssocReparamAux
+  结论: 连续 transAssocReparamAux
   证明: continuous_if_le (by fun_prop) (by fun_prop) (by fun_prop)
     (continuous_if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
       (by grind)).continuousOn (by grind)
@@ -502,7 +502,7 @@ theorem trans_assoc_reparam
 
 中文:
 定理 trans_assoc_reparam
-  条件: {x₀ x₁ x₂ x₃ : X} (p : Path x₀ x₁) (q : Path x₁ x₂) (r : Path x₂ x₃)
+  条件: {x₀ x₁ x₂ x₃ : X} (p : 道路 x₀ x₁) (q : 道路 x₁ x₂) (r : 道路 x₂ x₃)
   证明: by
   ext x
   simp only [transAssocReparamAux, Path.trans_apply, Function.comp_apply, Path.coe_reparam]
@@ -540,7 +540,7 @@ definition transAssoc
 
 中文:
 定义 transAssoc
-  签名: {x₀ x₁ x₂ x₃ : X} (p : Path x₀ x₁) (q : Path x₁ x₂) (r : Path x₂ x₃)
+  签名: {x₀ x₁ x₂ x₃ : X} (p : 道路 x₀ x₁) (q : 道路 x₁ x₂) (r : 道路 x₂ x₃)
   定义体: ((Homotopy.reparam (p.trans (q.trans r))
           (fun t => ⟨transAssocReparamAux t, transAssocReparamAux_mem_I t⟩) (by fun_prop)
           (Subtype.ext transAssocReparamAux_zero) (Subtype.ext transAssocReparamAux_one)).cast
@@ -571,7 +571,7 @@ theorem refl_trans
 
 中文:
 定理 refl_trans
-  条件: (p : Path x₀ x₁)
+  条件: (p : 道路 x₀ x₁)
   证明: ⟨Homotopy.reflTrans p⟩
 
 Depends on / 依赖: Homotopy, Homotopy.reflTrans, reflTrans
@@ -590,7 +590,7 @@ theorem trans_refl
 
 中文:
 定理 trans_refl
-  条件: (p : Path x₀ x₁)
+  条件: (p : 道路 x₀ x₁)
   证明: ⟨Homotopy.transRefl p⟩
 
 Depends on / 依赖: Homotopy, Homotopy.transRefl, transRefl
@@ -609,7 +609,7 @@ theorem trans_symm
 
 中文:
 定理 trans_symm
-  条件: (p : Path x₀ x₁)
+  条件: (p : 道路 x₀ x₁)
   证明: ⟨(Homotopy.reflTransSymm p).symm⟩
 
 Depends on / 依赖: Homotopy, Homotopy.reflTransSymm, reflTransSymm
@@ -628,7 +628,7 @@ theorem symm_trans
 
 中文:
 定理 symm_trans
-  条件: (p : Path x₀ x₁)
+  条件: (p : 道路 x₀ x₁)
   证明: ⟨(Homotopy.reflSymmTrans p).symm⟩
 
 Depends on / 依赖: Homotopy, Homotopy.reflSymmTrans, reflSymmTrans
@@ -647,7 +647,7 @@ theorem trans_assoc
 
 中文:
 定理 trans_assoc
-  条件: {x₀ x₁ x₂ x₃ : X} (p : Path x₀ x₁) (q : Path x₁ x₂) (r : Path x₂ x₃)
+  条件: {x₀ x₁ x₂ x₃ : X} (p : 道路 x₀ x₁) (q : 道路 x₁ x₂) (r : 道路 x₂ x₃)
   证明: ⟨Homotopy.transAssoc p q r⟩
 
 Depends on / 依赖: Homotopy, Homotopy.transAssoc, transAssoc
@@ -673,7 +673,7 @@ theorem refl_trans
 
 中文:
 定理 refl_trans
-  条件: (γ : Homotopic.Quotient x₀ x₁)
+  条件: (γ : 同伦.商 x₀ x₁)
   证明: by
   induction γ using Quotient.ind with | mk γ =>
   simpa [← mk_trans, ← mk_refl, eq] using Homotopic.refl_trans γ
@@ -702,7 +702,7 @@ theorem trans_refl
 
 中文:
 定理 trans_refl
-  条件: (γ : Homotopic.Quotient x₀ x₁)
+  条件: (γ : 同伦.商 x₀ x₁)
   证明: by
   induction γ using Quotient.ind with | mk γ =>
   simpa [← mk_trans, ← mk_refl, eq] using Homotopic.trans_refl γ
@@ -731,7 +731,7 @@ theorem trans_symm
 
 中文:
 定理 trans_symm
-  条件: (γ : Homotopic.Quotient x₀ x₁)
+  条件: (γ : 同伦.商 x₀ x₁)
   证明: by
   induction γ using Quotient.ind with | mk γ =>
   simpa [← mk_trans, ← mk_symm, ← mk_refl, eq] using Homotopic.trans_symm γ
@@ -760,7 +760,7 @@ theorem symm_trans
 
 中文:
 定理 symm_trans
-  条件: (γ : Homotopic.Quotient x₀ x₁)
+  条件: (γ : 同伦.商 x₀ x₁)
   证明: by
   induction γ using Quotient.ind with | mk γ =>
   simpa [← mk_trans, ← mk_symm, ← mk_refl, eq] using Homotopic.symm_trans γ
@@ -960,7 +960,7 @@ instance :
 
 中文:
 实例 :
-  签名: Groupoid (FundamentalGroupoid X)
+  签名: 群胚 (FundamentalGroupoid X)
   定义体: Path.Homotopic.Quotient x.as y.as
   id x := ⟦Path.refl x.as⟧
   comp := Path.Homotopic.Quotient.trans
@@ -1010,7 +1010,7 @@ theorem id_eq_path_refl
 中文:
 定理 id_eq_path_refl
   条件: (x : FundamentalGroupoid X)
-  结论: 𝟙 x = ⟦Path.refl x.as⟧
+  结论: 𝟙 x = ⟦道路.refl x.as⟧
   证明: rfl
 -/
 theorem id_eq_path_refl (x : FundamentalGroupoid X) : 𝟙 x = ⟦Path.refl x.as⟧ := rfl
@@ -1079,7 +1079,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {Z : 类型} [TopologicalSpace Z] (g : C(Y, Z)) (f : C(X, Y))
+  条件: {Z : 类型} [拓扑空间 Z] (g : C(Y, Z)) (f : C(X, Y))
   证明: by
   simp only [map]; congr; ext x y ⟨p⟩; rfl
 -/
@@ -1102,7 +1102,7 @@ definition fundamentalGroupoidFunctor
 
 中文:
 定义 fundamentalGroupoidFunctor
-  签名: : TopCat ⥤ Grpd where
+  签名: : 顶元素范畴 ⥤ Grpd where
   定义体: { α := FundamentalGroupoid X }
   map f := map f.hom
   map_id _ := FundamentalGroupoid.map_id
@@ -1136,7 +1136,7 @@ theorem map_eq
 
 中文:
 定理 map_eq
-  条件: {X Y : TopCat.{u}} {x₀ x₁ : X} (f : C(X, Y)) (p : Path.Homotopic.Quotient x₀ x₁)
+  条件: {X Y : 顶元素范畴.{u}} {x₀ x₁ : X} (f : C(X, Y)) (p : 道路.同伦.商 x₀ x₁)
   证明: rfl
 -/
 theorem map_eq {X Y : TopCat.{u}} {x₀ x₁ : X} (f : C(X, Y)) (p : Path.Homotopic.Quotient x₀ x₁) :
@@ -1152,7 +1152,7 @@ abbreviation toTop
 
 中文:
 缩写 toTop
-  签名: {X : TopCat.{u}} (x : πₓ X)
+  签名: {X : 顶元素范畴.{u}} (x : πₓ X)
   定义体: x.as
 
 Depends on / 依赖: x.as
@@ -1169,7 +1169,7 @@ abbreviation fromTop
 
 中文:
 缩写 fromTop
-  签名: {X : TopCat.{u}} (x : X)
+  签名: {X : 顶元素范畴.{u}} (x : X)
   定义体: ⟨x⟩
 -/
 abbrev fromTop {X : TopCat.{u}} (x : X) : πₓ X := ⟨x⟩
@@ -1184,7 +1184,7 @@ abbreviation toPath
 
 中文:
 缩写 toPath
-  签名: {X : TopCat.{u}} {x₀ x₁ : πₓ X} (p : x₀ ⟶ x₁)
+  签名: {X : 顶元素范畴.{u}} {x₀ x₁ : πₓ X} (p : x₀ ⟶ x₁)
   定义体: p
 -/
 abbrev toPath {X : TopCat.{u}} {x₀ x₁ : πₓ X} (p : x₀ ⟶ x₁) :
@@ -1201,7 +1201,7 @@ abbreviation fromPath
 
 中文:
 缩写 fromPath
-  签名: {x₀ x₁ : X} (p : Path.Homotopic.Quotient x₀ x₁)
+  签名: {x₀ x₁ : X} (p : 道路.同伦.商 x₀ x₁)
   定义体: p
 -/
 abbrev fromPath {x₀ x₁ : X} (p : Path.Homotopic.Quotient x₀ x₁) :
@@ -1217,7 +1217,7 @@ theorem fromPath_eq_iff_homotopic
 
 中文:
 定理 fromPath_eq_iff_homotopic
-  条件: {x₀ x₁ : X} (f : Path x₀ x₁) (g : Path x₀ x₁)
+  条件: {x₀ x₁ : X} (f : 道路 x₀ x₁) (g : 道路 x₀ x₁)
   证明: ⟨fun ih => Quotient.exact ih, fun h => Quotient.sound h⟩
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.sound
@@ -1259,7 +1259,7 @@ lemma conj_eqToHom
 
 中文:
 引理 conj_eqToHom
-  条件: {x y x' y' : X} {p : Path.Homotopic.Quotient x y} (hx : x' = x) (hy : y' = y)
+  条件: {x y x' y' : X} {p : 道路.同伦.商 x y} (hx : x' = x) (hy : y' = y)
   证明: by
   subst hx hy; simp
 -/

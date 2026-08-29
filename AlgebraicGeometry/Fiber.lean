@@ -43,7 +43,7 @@ definition Scheme.Hom.fiber
   body: pullback f (Y.fromSpecResidueField y)
 
 中文:
-定义 Scheme.Hom.fiber
+定义 概形.态射.fiber
   签名: (f : X ⟶ Y) (y : Y)
   定义体: pullback f (Y.fromSpecResidueField y)
 
@@ -60,7 +60,7 @@ definition Scheme.Hom.fiberι
   body: pullback.fst _ _
 
 中文:
-定义 Scheme.Hom.fiberι
+定义 概形.态射.fiberι
   签名: (f : X ⟶ Y) (y : Y)
   定义体: pullback.fst _ _
 
@@ -81,7 +81,7 @@ definition Scheme.Hom.fiberToSpecResidueField
 @[reassoc]
 
 中文:
-定义 Scheme.Hom.fiberToSpecResidueField
+定义 概形.态射.fiberToSpecResidueField
   签名: (f : X ⟶ Y) (y : Y)
   定义体: pullback.snd _ _
 
@@ -103,7 +103,7 @@ lemma Scheme.Hom.fiber_fac
   proof: pullback.condition
 
 中文:
-引理 Scheme.Hom.fiber_fac
+引理 概形.态射.fiber_fac
   条件: (f : X ⟶ Y) (y : Y)
   证明: pullback.condition
 
@@ -121,7 +121,7 @@ definition Scheme.Hom.fiberOverSpecResidueField
   body: f.fiberToSpecResidueField y
 
 中文:
-定义 Scheme.Hom.fiberOverSpecResidueField
+定义 概形.态射.fiberOverSpecResidueField
   定义体: f.fiberToSpecResidueField y
 -/
 @[reducible] def Scheme.Hom.fiberOverSpecResidueField
@@ -137,7 +137,7 @@ lemma Scheme.Hom.fiberToSpecResidueField_apply
   proof: Subsingleton.elim (α := PrimeSpectrum _) _ _
 
 中文:
-引理 Scheme.Hom.fiberToSpecResidueField_apply
+引理 概形.态射.fiberToSpecResidueField_apply
   条件: (f : X ⟶ Y) (y : Y) (x : f.fiber y)
   证明: Subsingleton.elim (α := PrimeSpectrum _) _ _
 
@@ -162,7 +162,7 @@ lemma isPullback_fiberToSpecResidueField_of_isPullback
 
 中文:
 引理 isPullback_fiberToSpecResidueField_of_isPullback
-  结论: {P X Y Z : Scheme.{u}} {fst : P ⟶ X}
+  结论: {P X Y Z : 概形.{u}} {fst : P ⟶ X}
   证明: by
   refine .of_right (h₁₂ := pullback.fst _ _) ?_ ?_
       (IsPullback.of_hasPullback f (Z.fromSpecResidueField (g y)))
@@ -198,7 +198,7 @@ refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.resi
 
 中文:
 定义 Spec.fiberToSpecResidueFieldIso
-  签名: (R S : 类型u) [CommRing R] [CommRing S]
+  签名: (R S : 类型u) [交换环 R] [交换环 S]
   定义体: by
   refine Arrow.isoMk' _ _
     (pullbackSymmetry _ _ ≪≫ ?_ ≪≫ pullbackSpecIso R p.asIdeal.ResidueField S) ?_ ?_
@@ -233,7 +233,7 @@ lemma Scheme.Hom.range_fiberι
   simp [fiber, fiberι, Scheme.Pullback.range_fst, Scheme.range_fromSpecResidueField]
 
 中文:
-引理 Scheme.Hom.range_fiberι
+引理 概形.态射.range_fiberι
   条件: (f : X ⟶ Y) (y : Y)
   证明: by
   simp [fiber, fiberι, Scheme.Pullback.range_fst, Scheme.range_fromSpecResidueField]
@@ -259,7 +259,7 @@ definition Scheme.Hom.fiberHomeo
 @[simp]
 
 中文:
-定义 Scheme.Hom.fiberHomeo
+定义 概形.态射.fiberHomeo
   签名: (f : X ⟶ Y) (y : Y)
   定义体: .trans (f.fiberι y).isEmbedding.toHomeomorph (.setCongr (f.range_fiberι y))
 
@@ -282,7 +282,7 @@ lemma Scheme.Hom.fiberHomeo_apply
 @[simp]
 
 中文:
-引理 Scheme.Hom.fiberHomeo_apply
+引理 概形.态射.fiberHomeo_apply
   条件: (f : X ⟶ Y) (y : Y) (x : f.fiber y)
   证明: rfl
 
@@ -301,7 +301,7 @@ lemma Scheme.Hom.fiberι_fiberHomeo_symm
   proof: congr($((f.fiberHomeo y).apply_symm_apply x).1)
 
 中文:
-引理 Scheme.Hom.fiberι_fiberHomeo_symm
+引理 概形.态射.fiberι_fiberHomeo_symm
   条件: (f : X ⟶ Y) (y : Y) (x : f ⁻¹' {y})
   证明: congr($((f.fiberHomeo y).apply_symm_apply x).1)
 
@@ -322,7 +322,7 @@ definition Scheme.Hom.asFiber
 @[simp]
 
 中文:
-定义 Scheme.Hom.asFiber
+定义 概形.态射.asFiber
   签名: (f : X ⟶ Y) (x : X)
   定义体: (f.fiberHomeo (f x)).symm ⟨x, rfl⟩
 
@@ -344,7 +344,7 @@ lemma Scheme.Hom.fiberι_asFiber
   proof: f.fiberι_fiberHomeo_symm _ _
 
 中文:
-引理 Scheme.Hom.fiberι_asFiber
+引理 概形.态射.fiberι_asFiber
   条件: (f : X ⟶ Y) (x : X)
   结论: f.fiberι _ (f.asFiber x) = x
   证明: f.fiberι_fiberHomeo_symm _ _
@@ -373,8 +373,8 @@ lemma Scheme.Hom.isCompact_preimage_singleton
 alias QuasiCompact.isCompact_preimage_singleton := Scheme.Hom.isCompact_preimage_singleton
 
 中文:
-引理 Scheme.Hom.isCompact_preimage_singleton
-  条件: (f : X ⟶ Y) [QuasiCompact f] (y : Y)
+引理 概形.态射.isCompact_preimage_singleton
+  条件: (f : X ⟶ Y) [拟紧 f] (y : Y)
   证明: f.range_fiberι y ▸ isCompact_range (f.fiberι y).continuous
 
 @[deprecated (since := "2026-02-05")]
@@ -412,7 +412,7 @@ definition Scheme.Hom.asFiberHom
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.Hom.asFiberHom
+定义 概形.态射.asFiberHom
   签名: (f : X ⟶ Y) (x : X)
   定义体: pullback.lift (X.fromSpecResidueField x) (Spec.map (f.residueFieldMap _)) (by simp)
 
@@ -435,7 +435,7 @@ lemma Scheme.Hom.asFiberHom_fiberι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Hom.asFiberHom_fiberι
+引理 概形.态射.asFiberHom_fiberι
   条件: (f : X ⟶ Y) (x : X)
   证明: pullback.lift_fst ..
 
@@ -458,7 +458,7 @@ lemma Scheme.Hom.asFiberHom_fiberToSpecResidueField
 @[simp]
 
 中文:
-引理 Scheme.Hom.asFiberHom_fiberToSpecResidueField
+引理 概形.态射.asFiberHom_fiberToSpecResidueField
   条件: (f : X ⟶ Y) (x : X)
   证明: pullback.lift_snd ..
 
@@ -482,7 +482,7 @@ lemma Scheme.Hom.asFiberHom_apply
 @[simp]
 
 中文:
-引理 Scheme.Hom.asFiberHom_apply
+引理 概形.态射.asFiberHom_apply
   条件: (f : X ⟶ Y) (x : X) (y)
   证明: (f.fiberι _).isEmbedding.injective (by simp [← Scheme.Hom.comp_apply])
 
@@ -504,7 +504,7 @@ lemma Scheme.Hom.range_asFiberHom
   proof: by aesop
 
 中文:
-引理 Scheme.Hom.range_asFiberHom
+引理 概形.态射.range_asFiberHom
   条件: (f : X ⟶ Y) (x : X)
   证明: by aesop
 -/

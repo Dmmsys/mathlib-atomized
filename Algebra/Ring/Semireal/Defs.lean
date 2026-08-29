@@ -45,10 +45,10 @@ class IsSemireal
     - one_add_ne_zero({s : R} (hs : IsSumSq s)) : 1 + s != 0
 
 中文:
-类 IsSemireal
-  参数: [Add R] [Mul R] [One R] [Zero R]
+类 是Semireal
+  参数: [加法 R] [乘法 R] [幺 R] [零 R]
   公理与运算 (1 个):
-    - one_add_ne_zero({s : R} (hs : IsSumSq s)) : 1 + s != 0
+    - one_add_ne_zero({s : R} (hs : 是SumSq s)) : 1 + s != 0
 -/
 class IsSemireal [Add R] [Mul R] [One R] [Zero R] : Prop where
   one_add_ne_zero {s : R} (hs : IsSumSq s) : 1 + s != 0
@@ -62,8 +62,8 @@ theorem IsSemireal.not_isSumSq_neg_one
   proof: (by simpa using one_add_ne_zero ·)
 
 中文:
-定理 IsSemireal.not_isSumSq_neg_one
-  条件: [AddGroup R] [One R] [Mul R] [IsSemireal R]
+定理 是Semireal.not_isSumSq_neg_one
+  条件: [加法群 R] [幺 R] [乘法 R] [是Semireal R]
   证明: (by simpa using one_add_ne_zero ·)
 
 Depends on / 依赖: one_add_ne_zero
@@ -85,7 +85,7 @@ alias ⟨_, IsSemireal.of_not_isSumSq_neg_one⟩ := isSemireal_iff_not_isSumSq_n
 
 中文:
 定理 isSemireal_iff_not_isSumSq_neg_one
-  条件: [AddGroup R] [One R] [Mul R]
+  条件: [加法群 R] [幺 R] [乘法 R]
   证明: IsSemireal.not_isSumSq_neg_one _
   mpr h := ⟨by aesop (add simp add_eq_zero_iff_neg_eq)⟩
 
@@ -110,8 +110,8 @@ instance [Semiring
                               (le_of_le_of_eq (le_add_of_nonneg_right hs.nonneg) amo))
 
 中文:
-实例 [Semiring
-  签名: R] [LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R] : IsSemireal R where
+实例 [半环
+  签名: R] [线性序 R] [是StrictOrdered环 R] [ExistsAddOfLE R] : 是Semireal R where
   定义体: zero_ne_one' R (le_antisymm zero_le_one
                               (le_of_le_of_eq (le_add_of_nonneg_right hs.nonneg) amo))
 

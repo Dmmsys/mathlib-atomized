@@ -52,8 +52,8 @@ definition OptionsPerPos.setBool
   opts.insert p e
 
 中文:
-定义 OptionsPerPos.setBool
-  签名: (opts : OptionsPerPos) (p : SubExpr.Pos) (n : Name) (v : 布尔)
+定义 OptionsPerPos.set布尔
+  签名: (opts : OptionsPerPos) (p : SubExpr.Pos) (n : Name) (v : 布尔值)
   定义体: .setBool n v let e := opts.getD p {}
   opts.insert p e
 
@@ -80,7 +80,7 @@ definition annotateGoToDef
 
 中文:
 定义 annotateGoToDef
-  签名: (stx : Term) (target : Name)
+  签名: (stx : 项) (target : Name)
   定义体: do
   let module := (← findModuleOf? target).getD (← getEnv).mainModule
   let some range ← findDeclarationRanges? target | return stx
@@ -108,7 +108,7 @@ definition annotateGoToSyntaxDef
 
 中文:
 定义 annotateGoToSyntaxDef
-  签名: (stx : Term)
+  签名: (stx : 项)
   定义体: do
   annotateGoToDef stx stx.raw.getKind
 -/

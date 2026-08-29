@@ -54,11 +54,11 @@ structure OrderRingHom
     - monotone' : Monotone toFun
 
 中文:
-结构 OrderRingHom
-  参数: (α β : 类型) [NonAssocSemiring α] [Preorder α] [NonAssocSemiring β]
+结构 Order环态射
+  参数: (α β : 类型) [非结合半环 α] [预序 α] [非结合半环 β]
   继承: α ->+* β
   公理与运算 (1 个):
-    - monotone' : Monotone toFun
+    - monotone' : 递增 toFun
 -/
 structure OrderRingHom (α β : Type*) [NonAssocSemiring α] [Preorder α] [NonAssocSemiring β]
   [Preorder β] extends α ->+* β where
@@ -82,7 +82,7 @@ structure OrderRingIso
 
 中文:
 结构 OrderRingIso
-  参数: (α β : 类型) [Mul α] [Add α] [Mul β] [Add β] [LE α] [LE β]
+  参数: (α β : 类型) [乘法 α] [加法 α] [乘法 β] [加法 β] [LE α] [LE β]
   公理与运算 (1 个):
     - map_le_map_iff'({a b : α}) : toFun a <= toFun b ↔ a <= b
 -/
@@ -114,7 +114,7 @@ definition OrderRingHomClass.toOrderRingHom
 
 中文:
 定义 OrderRingHomClass.toOrderRingHom
-  签名: [NonAssocSemiring α] [Preorder α] [NonAssocSemiring β]
+  签名: [非结合半环 α] [预序 α] [非结合半环 β]
   定义体: { (f : α ->+* β) with monotone' := OrderHomClass.monotone f }
 
 Depends on / 依赖: OrderHomClass, OrderHomClass.monotone, monotone
@@ -132,8 +132,8 @@ instance [NonAssocSemiring
   body: ⟨OrderRingHomClass.toOrderRingHom⟩
 
 中文:
-实例 [NonAssocSemiring
-  签名: α] [Preorder α] [NonAssocSemiring β] [Preorder β]
+实例 [非结合半环
+  签名: α] [预序 α] [非结合半环 β] [预序 β]
   定义体: ⟨OrderRingHomClass.toOrderRingHom⟩
 
 Depends on / 依赖: OrderRingHomClass, OrderRingHomClass.toOrderRingHom, toOrderRingHom
@@ -162,7 +162,7 @@ definition OrderRingIsoClass.toOrderRingIso
 
 中文:
 定义 OrderRingIsoClass.toOrderRingIso
-  签名: [Mul α] [Add α] [LE α] [Mul β] [Add β] [LE β]
+  签名: [乘法 α] [加法 α] [LE α] [乘法 β] [加法 β] [LE β]
   定义体: { (RingEquivClass.toRingEquiv f : α ≃+* β) with map_le_map_iff' := map_le_map_iff f }
 
 Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, map_le_map_iff, toRingEquiv
@@ -180,8 +180,8 @@ instance [Mul
   body: ⟨OrderRingIsoClass.toOrderRingIso⟩
 
 中文:
-实例 [Mul
-  签名: α] [Add α] [LE α] [Mul β] [Add β] [LE β] [OrderIsoClass F α β]
+实例 [乘法
+  签名: α] [加法 α] [LE α] [乘法 β] [加法 β] [LE β] [OrderIso类 F α β]
   定义体: ⟨OrderRingIsoClass.toOrderRingIso⟩
 
 Depends on / 依赖: OrderRingIsoClass, OrderRingIsoClass.toOrderRingIso, toOrderRingIso
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (α ->+*o β) α β
+  签名: 函数状 (α ->+*o β) α β
   定义体: f.toFun
   coe_injective f g h := by
     cases f; cases g; congr
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (α ->+*o β) α β
+  签名: 序态射类 (α ->+*o β) α β
   定义体: f.monotone' h
 
 Depends on / 依赖: f.monotone, monotone
@@ -293,7 +293,7 @@ instance :
 
 中文:
 实例 :
-  签名: RingHomClass (α ->+*o β) α β
+  签名: 环态射类 (α ->+*o β) α β
   定义体: f.map_mul'
   map_one f := f.map_one'
   map_add f := f.map_add'
@@ -648,7 +648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->+*o α)
+  签名: 可居 (α ->+*o α)
   定义体: ⟨OrderRingHom.id α⟩
 
 @[simp, norm_cast]
@@ -669,7 +669,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(OrderRingHom.id α) = id
+  结论: ⇑(Order环态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(OrderRingHom.id α) = id :=
@@ -692,7 +692,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: OrderRingHom.id α a = a
+  结论: Order环态射.id α a = a
   证明: rfl
 
 @[simp]
@@ -713,7 +713,7 @@ theorem coe_ringHom_id
 
 中文:
 定理 coe_ringHom_id
-  结论: (OrderRingHom.id α : α ->+* α) = RingHom.id α
+  结论: (Order环态射.id α : α ->+* α) = 环态射.id α
   证明: rfl
 
 @[simp]
@@ -734,7 +734,7 @@ theorem coe_orderAddMonoidHom_id
 
 中文:
 定理 coe_orderAddMonoidHom_id
-  结论: (OrderRingHom.id α : α ->+o α) = OrderAddMonoidHom.id α
+  结论: (Order环态射.id α : α ->+o α) = OrderAdd幺半群态射.id α
   证明: rfl
 
 @[simp]
@@ -856,7 +856,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->+*o β)
-  结论: f.comp (OrderRingHom.id α) = f
+  结论: f.comp (Order环态射.id α) = f
   证明: rfl
 
 @[simp]
@@ -879,7 +879,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->+*o β)
-  结论: (OrderRingHom.id β).comp f = f
+  结论: (Order环态射.id β).comp f = f
   证明: rfl
 
 @[simp]
@@ -900,7 +900,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {f₁ f₂ : β ->+*o γ} {g : α ->+*o β} (hg : Surjective g)
+  条件: {f₁ f₂ : β ->+*o γ} {g : α ->+*o β} (hg : 满射 g)
   证明: ⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, fun h => by rw [h]⟩
 
 @[simp]
@@ -922,7 +922,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {f : β ->+*o γ} {g₁ g₂ : α ->+*o β} (hf : Injective f)
+  条件: {f : β ->+*o γ} {g₁ g₂ : α ->+*o β} (hf : 单射 f)
   证明: ⟨fun h => ext fun a => hf by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -944,8 +944,8 @@ instance [Preorder
   body: Preorder.lift ((⇑) : _ -> α -> β)
 
 中文:
-实例 [Preorder
-  签名: β] : Preorder (OrderRingHom α β)
+实例 [预序
+  签名: β] : 预序 (Order环态射 α β)
   定义体: Preorder.lift ((⇑) : _ -> α -> β)
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -962,8 +962,8 @@ instance [PartialOrder
   body: PartialOrder.lift _ DFunLike.coe_injective
 
 中文:
-实例 [PartialOrder
-  签名: β] : PartialOrder (OrderRingHom α β)
+实例 [偏序
+  签名: β] : 偏序 (Order环态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -1019,7 +1019,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (α ≃+*o β) α β
+  签名: 等价状 (α ≃+*o β) α β
   定义体: f.toFun
   inv f := f.invFun
   coe_injective' f g h₁ h₂ := by
@@ -1051,7 +1051,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderIsoClass (α ≃+*o β) α β
+  签名: OrderIso类 (α ≃+*o β) α β
   定义体: f.map_le_map_iff'
 
 Depends on / 依赖: f.map_le_map_iff, map_le_map_iff
@@ -1070,7 +1070,7 @@ instance :
 
 中文:
 实例 :
-  签名: RingEquivClass (α ≃+*o β) α β
+  签名: 环等价类 (α ≃+*o β) α β
   定义体: f.map_mul'
   map_add f := f.map_add'
 
@@ -1276,7 +1276,7 @@ theorem coe_toOrderIso
 中文:
 定理 coe_toOrderIso
   条件: (f : α ≃+*o β)
-  结论: DFunLike.coe (f : α ≃o β) = f
+  结论: 依赖函数状.coe (f : α ≃o β) = f
   证明: rfl
 -/
 theorem coe_toOrderIso (f : α ≃+*o β) : DFunLike.coe (f : α ≃o β) = f :=
@@ -1314,7 +1314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ≃+*o α)
+  签名: 可居 (α ≃+*o α)
   定义体: ⟨OrderRingIso.refl α⟩
 
 @[simp]
@@ -1362,7 +1362,7 @@ theorem coe_ringEquiv_refl
 
 中文:
 定理 coe_ringEquiv_refl
-  结论: (OrderRingIso.refl α : α ≃+* α) = RingEquiv.refl α
+  结论: (OrderRingIso.refl α : α ≃+* α) = 环等价.refl α
   证明: rfl
 
 @[simp]
@@ -1456,7 +1456,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Bijective (OrderRingIso.symm : (α ≃+*o β) -> β ≃+*o α)
+  结论: 双射 (OrderRingIso.symm : (α ≃+*o β) -> β ≃+*o α)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -1775,7 +1775,7 @@ theorem coe_toOrderRingHom_refl
 
 中文:
 定理 coe_toOrderRingHom_refl
-  结论: (OrderRingIso.refl α : α ->+*o α) = OrderRingHom.id α
+  结论: (OrderRingIso.refl α : α ->+*o α) = Order环态射.id α
   证明: rfl
 -/
 theorem coe_toOrderRingHom_refl : (OrderRingIso.refl α : α ->+*o α) = OrderRingHom.id α :=
@@ -1791,7 +1791,7 @@ theorem toOrderRingHom_injective
 
 中文:
 定理 toOrderRingHom_injective
-  结论: Injective (toOrderRingHom : α ≃+*o β -> α ->+*o β)
+  结论: 单射 (toOrderRingHom : α ≃+*o β -> α ->+*o β)
   证明: fun f g h => DFunLike.coe_injective by convert! DFunLike.ext'_iff.1 h using 0
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, DFunLike.ext, _iff, coe_injective, convert

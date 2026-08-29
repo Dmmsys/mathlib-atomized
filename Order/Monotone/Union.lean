@@ -42,7 +42,7 @@ theorem StrictMonoOn.union
 
 中文:
 定理 StrictMonoOn.union
-  结论: {s t : Set α} {c : α} (h₁ : StrictMonoOn f s)
+  结论: {s t : 集合 α} {c : α} (h₁ : StrictMonoOn f s)
   证明: by
   have A : forall x, x in s union t -> x <= c -> x in s := by
     intro x hx hxc
@@ -92,7 +92,7 @@ theorem StrictMonoOn.Iic_union_Ici
 
 中文:
 定理 StrictMonoOn.Iic_union_Ici
-  结论: (h₁ : StrictMonoOn f (Iic a))
+  结论: (h₁ : StrictMonoOn f (左无界右闭区间 a))
   证明: by
   rw [← strictMonoOn_univ]; rw [← @Iic_union_Ici _ _ a]
   exact StrictMonoOn.union h₁ h₂ isGreatest_Iic isLeast_Ici
@@ -112,7 +112,7 @@ theorem StrictAntiOn.union
 
 中文:
 定理 StrictAntiOn.union
-  结论: {s t : Set α} {c : α} (h₁ : StrictAntiOn f s)
+  结论: {s t : 集合 α} {c : α} (h₁ : StrictAntiOn f s)
   证明: (h₁.dual_right.union h₂.dual_right hs ht).dual_right
 -/
 protected theorem StrictAntiOn.union {s t : Set α} {c : α} (h₁ : StrictAntiOn f s)
@@ -129,7 +129,7 @@ theorem StrictAntiOn.Iic_union_Ici
 
 中文:
 定理 StrictAntiOn.Iic_union_Ici
-  结论: (h₁ : StrictAntiOn f (Iic a))
+  结论: (h₁ : StrictAntiOn f (左无界右闭区间 a))
   证明: (h₁.dual_right.Iic_union_Ici h₂.dual_right).dual_right
 -/
 protected theorem StrictAntiOn.Iic_union_Ici (h₁ : StrictAntiOn f (Iic a))
@@ -154,7 +154,7 @@ theorem MonotoneOn.union_right
 
 中文:
 定理 MonotoneOn.union_right
-  结论: {s t : Set α} {c : α} (h₁ : MonotoneOn f s)
+  结论: {s t : 集合 α} {c : α} (h₁ : MonotoneOn f s)
   证明: by
   have A : forall x, x in s union t -> x <= c -> x in s := by
     intro x hx hxc
@@ -204,7 +204,7 @@ theorem MonotoneOn.Iic_union_Ici
 
 中文:
 定理 MonotoneOn.Iic_union_Ici
-  条件: (h₁ : MonotoneOn f (Iic a)) (h₂ : MonotoneOn f (Ici a))
+  条件: (h₁ : MonotoneOn f (左无界右闭区间 a)) (h₂ : MonotoneOn f (左闭右无界区间 a))
   证明: by
   rw [← monotoneOn_univ]; rw [← @Iic_union_Ici _ _ a]
   exact MonotoneOn.union_right h₁ h₂ isGreatest_Iic isLeast_Ici
@@ -224,7 +224,7 @@ theorem AntitoneOn.union_right
 
 中文:
 定理 AntitoneOn.union_right
-  结论: {s t : Set α} {c : α} (h₁ : AntitoneOn f s)
+  结论: {s t : 集合 α} {c : α} (h₁ : AntitoneOn f s)
   证明: (h₁.dual_right.union_right h₂.dual_right hs ht).dual_right
 -/
 protected theorem AntitoneOn.union_right {s t : Set α} {c : α} (h₁ : AntitoneOn f s)
@@ -241,7 +241,7 @@ theorem AntitoneOn.Iic_union_Ici
 
 中文:
 定理 AntitoneOn.Iic_union_Ici
-  条件: (h₁ : AntitoneOn f (Iic a)) (h₂ : AntitoneOn f (Ici a))
+  条件: (h₁ : AntitoneOn f (左无界右闭区间 a)) (h₂ : AntitoneOn f (左闭右无界区间 a))
   证明: (h₁.dual_right.Iic_union_Ici h₂.dual_right).dual_right
 -/
 protected theorem AntitoneOn.Iic_union_Ici (h₁ : AntitoneOn f (Iic a)) (h₂ : AntitoneOn f (Ici a)) :

@@ -81,7 +81,7 @@ theorem card_image_polynomial_eval
 
 中文:
 定理 card_image_polynomial_eval
-  条件: [DecidableEq R] [Fintype R] {p : R[X]} (hp : 0 < p.degree)
+  条件: [DecidableEq R] [有限类型 R] {p : R[X]} (hp : 0 < p.degree)
   证明: Finset.card_le_mul_card_image _ _ (fun a _ =>
     calc
       _ = #(p - C a).roots.toFinset :=
@@ -115,8 +115,8 @@ theorem exists_root_sum_quadratic
     exact ⟨a, b, by rw [ha, ← hb, eval_neg, neg_add_ca
 
 中文:
-定理 exists_root_sum_quadratic
-  结论: [Fintype R] {f g : R[X]} (hf2 : degree f = 2) (hg2 : degree g = 2)
+定理 存在_root_sum_quadratic
+  结论: [有限类型 R] {f g : R[X]} (hf2 : degree f = 2) (hg2 : degree g = 2)
   证明: letI := Classical.decEq R
   suffices ¬Disjoint (univ.image fun x : R => eval x f)
     (univ.image fun x : R => eval x (-g)) by
@@ -169,7 +169,7 @@ theorem prod_univ_units_id_eq_neg_one
 
 中文:
 定理 prod_univ_units_id_eq_neg_one
-  条件: [CommRing K] [IsDomain K] [Fintype Kˣ]
+  条件: [交换环 K] [是整环 K] [有限类型 Kˣ]
   证明: by
   classical
     have : (∏ x in (@univ Kˣ _).erase (-1), x) = 1 :=
@@ -208,7 +208,7 @@ exact (Fintype.card_pos).ne' Nat.eq_zero_of_zero_dvd pzero ▸ hd
 
 中文:
 定理 card_cast_subgroup_card_ne_zero
-  结论: [Ring K] [NoZeroDivisors K] [Nontrivial K]
+  结论: [环 K] [无零因子 K] [非平凡 K]
   证明: by
   let n := Fintype.card G
   intro nzero
@@ -265,7 +265,7 @@ theorem sum_subgroup_units_eq_zero
 
 中文:
 定理 sum_subgroup_units_eq_zero
-  结论: [Ring K] [NoZeroDivisors K]
+  结论: [环 K] [无零因子 K]
   证明: by
   rw [Subgroup.ne_bot_iff_exists_ne_one] at hg
   rcases hg with ⟨a, ha⟩
@@ -321,7 +321,7 @@ theorem sum_subgroup_units
 
 中文:
 定理 sum_subgroup_units
-  结论: [Ring K] [NoZeroDivisors K]
+  结论: [环 K] [无零因子 K]
   证明: by
   by_cases G_bot : G = ⊥
   · subst G_bot
@@ -365,7 +365,7 @@ theorem sum_subgroup_pow_eq_zero
 
 中文:
 定理 sum_subgroup_pow_eq_zero
-  结论: [CommRing K] [NoZeroDivisors K]
+  结论: [交换环 K] [无零因子 K]
   证明: by
   rw [← Nat.card_eq_fintype_card] at k_lt_card_G
   nontriviality K
@@ -526,7 +526,7 @@ instance instGrindPowIdentity
 
 中文:
 实例 instGrindPowIdentity
-  签名: : Grind.PowIdentity K (Fintype.card K) where
+  签名: : Grind.PowIdentity K (有限类型.card K) where
   定义体: pow_card
 
 Depends on / 依赖: pow_card
@@ -558,8 +558,8 @@ theorem card
 
 中文:
 定理 card
-  条件: (p : 自然数) [CharP K p]
-  结论: 存在 n : 自然数+, 自然数.Prime p ∧ q = p ^ (n : 自然数)
+  条件: (p : 自然数) [特征p K p]
+  结论: 存在 n : 自然数+, 自然数.素 p ∧ q = p ^ (n : 自然数)
   证明: by
   have hp : Fact p.Prime := ⟨CharP.char_is_prime K p⟩
   let : Module (ZMod p) K := { (ZMod.castHom dvd_rfl K : ZMod p ->+* _).toModule with }
@@ -595,7 +595,7 @@ theorem card'
 
 中文:
 定理 card'
-  结论: 存在 (p : 自然数), CharP K p ∧ 存在 (n : 自然数+), 自然数.Prime p ∧ Fintype.card K = p ^ (n : 自然数)
+  结论: 存在 (p : 自然数), 特征p K p ∧ 存在 (n : 自然数+), 自然数.素 p ∧ 有限类型.card K = p ^ (n : 自然数)
   证明: let ⟨p, hc⟩ := CharP.exists K
   ⟨p, hc, @FiniteField.card K _ _ p hc⟩
 
@@ -617,7 +617,7 @@ lemma isPrimePow_card
 
 中文:
 引理 isPrimePow_card
-  结论: IsPrimePow (Fintype.card K)
+  结论: IsPrimePow (有限类型.card K)
   证明: by
   obtain ⟨p, _, n, hp, hn⟩ := card' K
   exact ⟨p, n, Nat.prime_iff.mp hp, n.prop, hn.symm⟩
@@ -663,7 +663,7 @@ theorem forall_pow_eq_one_iff
     
 
 中文:
-定理 forall_pow_eq_one_iff
+定理 对任意_pow_eq_one_iff
   条件: (i : 自然数)
   结论: (对任意 x : Kˣ, x ^ i = 1) ↔ q - 1 ∣ i
   证明: by
@@ -855,7 +855,7 @@ definition frobeniusAlgEquiv
 
 中文:
 定义 frobeniusAlgEquiv
-  签名: (p : 自然数) [ExpChar R p] [PerfectRing R p]
+  签名: (p : 自然数) [ExpChar R p] [完美环 R p]
   定义体: .ofBijective (frobeniusAlgHom K R) by
     obtain ⟨p', _, n, hp, card_eq⟩ := card' K
     rw [coe_frobeniusAlgHom]; rw [card_eq]
@@ -887,7 +887,7 @@ definition frobeniusAlgEquivOfAlgebraic
 
 中文:
 定义 frobeniusAlgEquivOfAlgebraic
-  签名: [Algebra.IsAlgebraic K L]
+  签名: [代数.是代数 K L]
   定义体: (Algebra.IsAlgebraic.algEquivEquivAlgHom K L).symm (frobeniusAlgHom K L)
 -/
 @[simps!] noncomputable def frobeniusAlgEquivOfAlgebraic [Algebra.IsAlgebraic K L] : Gal(L/K) :=
@@ -903,7 +903,7 @@ theorem coe_frobeniusAlgEquivOfAlgebraic
 
 中文:
 定理 coe_frobeniusAlgEquivOfAlgebraic
-  条件: [Algebra.IsAlgebraic K L]
+  条件: [代数.是代数 K L]
   证明: rfl
 -/
 theorem coe_frobeniusAlgEquivOfAlgebraic [Algebra.IsAlgebraic K L] :
@@ -919,7 +919,7 @@ lemma coe_frobeniusAlgEquivOfAlgebraic_iterate
 
 中文:
 引理 coe_frobeniusAlgEquivOfAlgebraic_iterate
-  条件: [Algebra.IsAlgebraic K L] (n : 自然数)
+  条件: [代数.是代数 K L] (n : 自然数)
   证明: pow_iterate (Fintype.card K) n
 
 Depends on / 依赖: Fintype, Fintype.card, pow_iterate
@@ -946,7 +946,7 @@ theorem orderOf_frobeniusAlgHom
 
 中文:
 定理 orderOf_frobeniusAlgHom
-  结论: orderOf (frobeniusAlgHom K L) = Module.finrank K L
+  结论: orderOf (frobeniusAlgHom K L) = 模.finrank K L
   证明: (orderOf_eq_iff Module.finrank_pos).mpr by
     have := Fintype.ofFinite L
     refine ⟨DFunLike.ext _ _ fun x => ?_, fun m lt pos eq => ?_⟩
@@ -1201,7 +1201,7 @@ theorem roots_X_pow_card_sub_X
 
 中文:
 定理 roots_X_pow_card_sub_X
-  结论: roots (X ^ q - X : K[X]) = Finset.univ.val
+  结论: roots (X ^ q - X : K[X]) = 有限集.univ.val
   证明: by
   classical
     have aux : (X ^ q - X : K[X]) != 0 := X_pow_card_sub_X_ne_zero K Fintype.one_lt_card
@@ -1243,7 +1243,7 @@ theorem frobenius_pow
 
 中文:
 定理 frobenius_pow
-  条件: {p : 自然数} [Fact p.Prime] [CharP K p] {n : 自然数} (hcard : q = p ^ n)
+  条件: {p : 自然数} [Fact p.素] [特征p K p] {n : 自然数} (hcard : q = p ^ n)
   证明: by
   ext x; conv_rhs => rw [RingHom.one_def, RingHom.id_apply, ← pow_card x, hcard]
   clear hcard
@@ -1326,7 +1326,7 @@ theorem sq_add_sq
 
 中文:
 定理 sq_add_sq
-  条件: (p : 自然数) [hp : Fact p.Prime] (x : ZMod p)
+  条件: (p : 自然数) [hp : Fact p.素] (x : ZMod p)
   结论: 存在 a b : ZMod p, a ^ 2 + b ^ 2 = x
   证明: by
   rcases hp.1.eq_two_or_odd with rfl | hp_odd
@@ -1374,8 +1374,8 @@ theorem Nat.sq_add_sq_zmodEq
   exact m
 
 中文:
-定理 Nat.sq_add_sq_zmodEq
-  条件: (p : 自然数) [Fact p.Prime] (x : 整数)
+定理 自然数.sq_add_sq_zmodEq
+  条件: (p : 自然数) [Fact p.素] (x : 整数)
   证明: by
   rcases ZMod.sq_add_sq p x with ⟨a, b, hx⟩
   refine ⟨a.valMinAbs.natAbs, b.valMinAbs.natAbs, ZMod.natAbs_valMinAbs_le _,
@@ -1407,8 +1407,8 @@ theorem Nat.sq_add_sq_modEq
   simpa only [← Int.natCast_modEq_iff] using! Nat.sq_add_sq_zmodEq p x
 
 中文:
-定理 Nat.sq_add_sq_modEq
-  条件: (p : 自然数) [Fact p.Prime] (x : 自然数)
+定理 自然数.sq_add_sq_modEq
+  条件: (p : 自然数) [Fact p.素] (x : 自然数)
   证明: by
   simpa only [← Int.natCast_modEq_iff] using! Nat.sq_add_sq_zmodEq p x
 
@@ -1434,7 +1434,7 @@ theorem sq_add_sq
 
 中文:
 定理 sq_add_sq
-  条件: (R : 类型) [Ring R] [IsDomain R] (p : 自然数) [NeZero p] [CharP R p] (x : 整数)
+  条件: (R : 类型) [环 R] [是整环 R] (p : 自然数) [NeZero p] [特征p R p] (x : 整数)
   证明: by
   have := char_is_prime_of_pos R p
   obtain ⟨a, b, hab⟩ := ZMod.sq_add_sq p x
@@ -1503,7 +1503,7 @@ theorem Nat.ModEq.pow_totient
     coe_
 
 中文:
-定理 Nat.ModEq.pow_totient
+定理 自然数.ModEq.pow_totient
   条件: {x n : 自然数} (h : 自然数.Coprime x n)
   结论: x ^ φ n ≡ 1 [MOD n]
   证明: by
@@ -1542,7 +1542,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (Subfield (ZMod p))
+  签名: 子单例 (子域 (ZMod p))
   定义体: subsingleton_of_bot_eq_top top_unique (a := ⊥) fun n _ =>
   have := zsmul_mem (one_mem (⊥ : Subfield (ZMod p))) n.val
   by rwa [natCast_zsmul, Nat.smul_one_eq_cast, ZMod.natCast_zmod_val] at this
@@ -1565,7 +1565,7 @@ theorem fieldRange_castHom_eq_bot
 
 中文:
 定理 fieldRange_castHom_eq_bot
-  条件: (p : 自然数) [Fact p.Prime] [DivisionRing K] [CharP K p]
+  条件: (p : 自然数) [Fact p.素] [除环 K] [特征p K p]
   证明: by
   rw [RingHom.fieldRange_eq_map]; rw [← Subfield.map_bot (K := ZMod p)]; rw [Subsingleton.elim ⊥]
 
@@ -1650,8 +1650,8 @@ theorem frobenius_zmod
 
 中文:
 定理 frobenius_zmod
-  条件: (p : 自然数) [Fact p.Prime]
-  结论: frobenius (ZMod p) p = RingHom.id _
+  条件: (p : 自然数) [Fact p.素]
+  结论: frobenius (ZMod p) p = 环态射.id _
   证明: by
   ext a
   rw [frobenius_def]; rw [ZMod.pow_card]; rw [RingHom.id_apply]
@@ -1675,8 +1675,8 @@ theorem card_units
 
 中文:
 定理 card_units
-  条件: (p : 自然数) [Fact p.Prime]
-  结论: Fintype.card (ZMod p)ˣ = p - 1
+  条件: (p : 自然数) [Fact p.素]
+  结论: 有限类型.card (ZMod p)ˣ = p - 1
   证明: by
   rw [Fintype.card_units]; rw [card]
 
@@ -1697,7 +1697,7 @@ theorem units_pow_card_sub_one_eq_one
 
 中文:
 定理 units_pow_card_sub_one_eq_one
-  条件: (p : 自然数) [Fact p.Prime] (a : (ZMod p)ˣ)
+  条件: (p : 自然数) [Fact p.素] (a : (ZMod p)ˣ)
   结论: a ^ (p - 1) = 1
   证明: by
   rw [← card_units p]; rw [pow_card_eq_one]
@@ -1809,7 +1809,7 @@ theorem expand_card
 
 中文:
 定理 expand_card
-  条件: (f : Polynomial (ZMod p))
+  条件: (f : 多项式 (ZMod p))
   证明: by have h := FiniteField.expand_card f; rwa [ZMod.card p] at h
 
 Depends on / 依赖: FiniteField, FiniteField.expand_card, ZMod.card, expand_card
@@ -1833,8 +1833,8 @@ theorem Int.ModEq.pow_card_sub_one_eq_one
   simpa [← ZMod.intCast_eq_intCast_iff] using ZMod.pow_card_sub_one_eq_one this
 
 中文:
-定理 Int.ModEq.pow_card_sub_one_eq_one
-  条件: {p : 自然数} (hp : 自然数.Prime p) {n : 整数} (hpn : IsCoprime n p)
+定理 整数.ModEq.pow_card_sub_one_eq_one
+  条件: {p : 自然数} (hp : 自然数.素 p) {n : 整数} (hpn : IsCoprime n p)
   证明: by
   have : Fact p.Prime := ⟨hp⟩
   have : ¬(n : ZMod p) = 0 := by
@@ -1861,8 +1861,8 @@ theorem Int.prime_dvd_pow_sub_one
   proof: (ModEq.pow_card_sub_one_eq_one hp hpn).symm.dvd
 
 中文:
-定理 Int.prime_dvd_pow_sub_one
-  条件: {p : 自然数} (hp : 自然数.Prime p) {n : 整数} (hpn : IsCoprime n p)
+定理 整数.prime_dvd_pow_sub_one
+  条件: {p : 自然数} (hp : 自然数.素 p) {n : 整数} (hpn : IsCoprime n p)
   证明: (ModEq.pow_card_sub_one_eq_one hp hpn).symm.dvd
 
 Depends on / 依赖: ModEq.pow_card_sub_one_eq_one, pow_card_sub_one_eq_one, symm.dvd
@@ -1883,8 +1883,8 @@ theorem Int.ModEq.pow_prime_eq_self
   simp [← ZMod.intCast_eq_intCast_iff]
 
 中文:
-定理 Int.ModEq.pow_prime_eq_self
-  条件: {p : 自然数} (hp : 自然数.Prime p) (n : 整数)
+定理 整数.ModEq.pow_prime_eq_self
+  条件: {p : 自然数} (hp : 自然数.素 p) (n : 整数)
   结论: n ^ p ≡ n [ZMOD p]
   证明: by
   have : Fact p.Prime := ⟨hp⟩
@@ -1906,8 +1906,8 @@ theorem Int.prime_dvd_pow_self_sub
   proof: (ModEq.pow_prime_eq_self hp n).symm.dvd
 
 中文:
-定理 Int.prime_dvd_pow_self_sub
-  条件: {p : 自然数} (hp : 自然数.Prime p) (n : 整数)
+定理 整数.prime_dvd_pow_self_sub
+  条件: {p : 自然数} (hp : 自然数.素 p) (n : 整数)
   结论: (p : 整数) ∣ n ^ p - n
   证明: (ModEq.pow_prime_eq_self hp n).symm.dvd
 
@@ -1930,8 +1930,8 @@ theorem Int.ModEq.pow_eq_pow
     grw [← pow_sub_mul_pow n hxy, ← h, pow_mul, Int.ModEq.pow_card_sub_one
 
 中文:
-定理 Int.ModEq.pow_eq_pow
-  结论: {p x y : 自然数} (hp : 自然数.Prime p) (h : p - 1 ∣ x - y) (hxy : y <= x)
+定理 整数.ModEq.pow_eq_pow
+  结论: {p x y : 自然数} (hp : 自然数.素 p) (h : p - 1 ∣ x - y) (hxy : y <= x)
   证明: by
   rw [← Nat.mul_div_eq_iff_dvd] at h
   by_cases hn : n ≡ 0 [ZMOD p]
@@ -1961,8 +1961,8 @@ theorem Nat.ModEq.pow_card_sub_one_eq_one
   exact Int.ModEq.pow_card_sub_one_eq_one hp (isCoprime_iff_coprime.mpr hpn)
 
 中文:
-定理 Nat.ModEq.pow_card_sub_one_eq_one
-  条件: {p : 自然数} (hp : p.Prime) {n : 自然数} (hpn : n.Coprime p)
+定理 自然数.ModEq.pow_card_sub_one_eq_one
+  条件: {p : 自然数} (hp : p.素) {n : 自然数} (hpn : n.Coprime p)
   证明: by
   rw [← Int.natCast_modEq_iff]; rw [Nat.cast_pow]; rw [Nat.cast_one]
   exact Int.ModEq.pow_card_sub_one_eq_one hp (isCoprime_iff_coprime.mpr hpn)
@@ -1983,8 +1983,8 @@ theorem Nat.pow_card_sub_one_sub_one_mod_card
   proof: Nat.sub_mod_eq_zero_of_mod_eq (Nat.ModEq.pow_card_sub_one_eq_one hp hpn)
 
 中文:
-定理 Nat.pow_card_sub_one_sub_one_mod_card
-  条件: {p : 自然数} (hp : p.Prime) {n : 自然数} (hpn : n.Coprime p)
+定理 自然数.pow_card_sub_one_sub_one_mod_card
+  条件: {p : 自然数} (hp : p.素) {n : 自然数} (hpn : n.Coprime p)
   证明: Nat.sub_mod_eq_zero_of_mod_eq (Nat.ModEq.pow_card_sub_one_eq_one hp hpn)
 
 Depends on / 依赖: Nat.ModEq.pow_card_sub_one_eq_one, Nat.sub_mod_eq_zero_of_mod_eq, pow_card_sub_one_eq_one, sub_mod_eq_zero_of_mod_eq
@@ -2057,7 +2057,7 @@ theorem ZMod.eq_one_or_isUnit_sub_one
 
 中文:
 定理 ZMod.eq_one_or_isUnit_sub_one
-  结论: {n p k : 自然数} [Fact p.Prime] (hn : n = p ^ k) (a : ZMod n)
+  结论: {n p k : 自然数} [Fact p.素] (hn : n = p ^ k) (a : ZMod n)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn0
   · exact Or.inl (orderOf_eq_one_iff.mp ((orderOf a).coprime_zero_right.mp ha))
@@ -2103,7 +2103,7 @@ theorem mem_bot_iff_intCast
 
 中文:
 定理 mem_bot_iff_intCast
-  条件: (p : 自然数) [Fact p.Prime] (K) [DivisionRing K] [CharP K p] {x : K}
+  条件: (p : 自然数) [Fact p.素] (K) [除环 K] [特征p K p] {x : K}
   证明: by
   simp [← fieldRange_castHom_eq_bot p, ZMod.intCast_surjective.exists]
 
@@ -2125,8 +2125,8 @@ theorem Subfield.card_bot
   rw [← fieldRange_castHom_eq_bot p]; rw [← Nat.card_eq_of_bijective _ (RingHom.rangeRestrictField_bijective _)]; rw [Nat.card_zmod]
 
 中文:
-定理 Subfield.card_bot
-  结论: 自然数.card (⊥ : Subfield F) = p
+定理 子域.card_bot
+  结论: 自然数.card (⊥ : 子域 F) = p
   证明: by
   rw [← fieldRange_castHom_eq_bot p]; rw [← Nat.card_eq_of_bijective _ (RingHom.rangeRestrictField_bijective _)]; rw [Nat.card_zmod]
 
@@ -2147,8 +2147,8 @@ definition Subfield.fintypeBot
     fun _ => by simp_rw [Finset.mem_map, mem_univ, true_and, ← fieldRange_castHom_eq_bot p]; rfl
 
 中文:
-定义 Subfield.fintypeBot
-  签名: : Fintype (⊥ : Subfield F)
+定义 子域.fintypeBot
+  签名: : 有限类型 (⊥ : 子域 F)
   定义体: Fintype.subtype (univ.map ⟨_, (ZMod.castHom (m := p) dvd_rfl F).injective⟩)
     fun _ => by simp_rw [Finset.mem_map, mem_univ, true_and, ← fieldRange_castHom_eq_bot p]; rfl
 
@@ -2172,7 +2172,7 @@ theorem Subfield.roots_X_pow_char_sub_X_bot
   exact FiniteField.roots_X_pow_card_sub_X _
 
 中文:
-定理 Subfield.roots_X_pow_char_sub_X_bot
+定理 子域.roots_X_pow_char_sub_X_bot
   证明: Subfield.fintypeBot F p
     (X ^ p - X : (⊥ : Subfield F)[X]).roots = Finset.univ.val := by
   let _ := Subfield.fintypeBot F p
@@ -2198,7 +2198,7 @@ theorem Subfield.splits_bot
   rw [splits_iff_card_roots]; rw [roots_X_pow_char_sub_X_bot]; rw [← Finset.card_def]; rw [Finset.card_univ]; rw [FiniteField.X_pow_card_sub_X_natDegree_eq _ (Fact.out (p := p.Prime)).one_lt]; rw [Fintype.card_eq_nat_card]; rw [card_bot F p]
 
 中文:
-定理 Subfield.splits_bot
+定理 子域.splits_bot
   证明: by
   let _ := Subfield.fintypeBot F p
   rw [splits_iff_card_roots]; rw [roots_X_pow_char_sub_X_bot]; rw [← Finset.card_def]; rw [Finset.card_univ]; rw [FiniteField.X_pow_card_sub_X_natDegree_eq _ (Fact.out (p := p.Prime)).one_lt]; rw [Fintype.card_eq_nat_card]; rw [card_bot F p]
@@ -2223,9 +2223,9 @@ theorem Subfield.mem_bot_iff_pow_eq_self
   simpa [sub_eq_zero, iff_comm, FiniteField.X_pow_card_sub_X_ne_zero F (Fact.out : p.Prime).one_lt]
 
 中文:
-定理 Subfield.mem_bot_iff_pow_eq_self
+定理 子域.mem_bot_iff_pow_eq_self
   条件: {x : F}
-  结论: x in (⊥ : Subfield F) ↔ x ^ p = x
+  结论: x in (⊥ : 子域 F) ↔ x ^ p = x
   证明: by
   have := roots_X_pow_char_sub_X_bot F p ▸
       (splits_bot F p).roots_map (Subfield.subtype _) ▸ Multiset.mem_map (b := x)
@@ -2285,7 +2285,7 @@ h.ne (Ring.neg_one_ne_one_of_char_ne_two hF) by simp
   simpa [Finite.injective_iff_surjective, Function.Surjective, IsSquare, eq_comm] using h
 
 中文:
-定理 exists_nonsquare
+定理 存在_nonsquare
   条件: (hF : ringChar F != 2)
   结论: 存在 a : F, ¬IsSquare a
   证明: by
@@ -2317,7 +2317,7 @@ theorem even_card_iff_char_two
 
 中文:
 定理 even_card_iff_char_two
-  结论: ringChar F = 2 ↔ Fintype.card F % 2 = 0
+  结论: ringChar F = 2 ↔ 有限类型.card F % 2 = 0
   证明: by
   rcases FiniteField.card F (ringChar F) with ⟨n, hp, h⟩
   rw [h]; rw [← Nat.even_iff]; rw [Nat.even_pow]; rw [hp.even_iff]
@@ -2342,7 +2342,7 @@ theorem even_card_of_char_two
 中文:
 定理 even_card_of_char_two
   条件: (hF : ringChar F = 2)
-  结论: Fintype.card F % 2 = 0
+  结论: 有限类型.card F % 2 = 0
   证明: even_card_iff_char_two.mp hF
 
 Depends on / 依赖: even_card_iff_char_two, even_card_iff_char_two.mp
@@ -2362,7 +2362,7 @@ theorem odd_card_of_char_ne_two
 中文:
 定理 odd_card_of_char_ne_two
   条件: (hF : ringChar F != 2)
-  结论: Fintype.card F % 2 = 1
+  结论: 有限类型.card F % 2 = 1
   证明: Nat.mod_two_ne_zero.mp (mt even_card_iff_char_two.mpr hF)
 
 Depends on / 依赖: Nat.mod_two_ne_zero.mp, even_card_iff_char_two, even_card_iff_char_two.mpr, mod_two_ne_zero

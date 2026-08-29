@@ -36,7 +36,7 @@ definition kerIdeal
 
 中文:
 定义 kerIdeal
-  签名: : Ideal (TrivSqZeroExt R M)
+  签名: : 理想 (TrivSqZeroExt R M)
   定义体: RingHom.ker (fstHom R R M)
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.descendsAlong, MorphismProperty, MorphismProperty.of_isPullback_of_descendsAlong, QuasiCompact, RingHom, RingHom.ker, Surjective, X.Opens, continuous, descendsAlong, exists_opens_image_eq_of_prespectralSpace, f.continuous, f.isOpenMap.exists_opens_image_eq_of_prespectralSpace, fstHom, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_univ, isOpenMap, isOpen_univ

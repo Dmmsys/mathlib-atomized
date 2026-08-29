@@ -80,7 +80,7 @@ definition condExpIndL1Fin
 
 中文:
 定义 condExpIndL1Fin
-  签名: (hm : m <= m0) [SigmaFinite (μ.trim hm)] (hs : MeasurableSet s) (hμs : μ s != ∞)
+  签名: (hm : m <= m0) [σ有限 (μ.trim hm)] (hs : 可测集 s) (hμs : μ s != ∞)
   定义体: (integrable_condExpIndSMul hm hs hμs x).toL1 _
 
 Depends on / 依赖: integrable_condExpIndSMul
@@ -99,7 +99,7 @@ theorem condExpIndL1Fin_ae_eq_condExpIndSMul
 
 中文:
 定理 condExpIndL1Fin_ae_eq_condExpIndSMul
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: (integrable_condExpIndSMul hm hs hμs x).coeFn_toL1
 
 Depends on / 依赖: coeFn_toL1, integrable_condExpIndSMul
@@ -124,7 +124,7 @@ theorem q
 
 中文:
 定理 q
-  条件: {hs : MeasurableSet s} {hμs : μ s != ∞} {x : G}
+  条件: {hs : 可测集 s} {hμs : μ s != ∞} {x : G}
   证明: by
   rw [memLp_one_iff_integrable]; apply integrable_condExpIndSMul
 -/
@@ -146,7 +146,7 @@ theorem condExpIndL1Fin_add
 
 中文:
 定理 condExpIndL1Fin_add
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x y : G)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x y : G)
   证明: by
   ext1
   unfold condExpIndL1Fin Integrable.toL1
@@ -176,7 +176,7 @@ theorem condExpIndL1Fin_smul
 
 中文:
 定理 condExpIndL1Fin_smul
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (c : 实数) (x : G)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (c : 实数) (x : G)
   证明: by
   ext1
   grw [Lp.coeFn_smul, condExpIndL1Fin_ae_eq_condExpIndSMul, condExpIndL1Fin_ae_eq_condExpIndSMul,
@@ -203,7 +203,7 @@ theorem condExpIndL1Fin_smul'
 
 中文:
 定理 condExpIndL1Fin_smul'
-  结论: [NormedSpace 实数 F] [SMulCommClass 实数 𝕜 F] (hs : MeasurableSet s)
+  结论: [赋范空间 实数 F] [标量交换类 实数 𝕜 F] (hs : 可测集 s)
   证明: by
   ext1
   grw [Lp.coeFn_smul, condExpIndL1Fin_ae_eq_condExpIndSMul, condExpIndL1Fin_ae_eq_condExpIndSMul,
@@ -230,7 +230,7 @@ theorem norm_condExpIndL1Fin_le
 
 中文:
 定理 norm_condExpIndL1Fin_le
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x : G)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x : G)
   证明: by
   rw [L1.norm_eq_integral_norm]; rw [← ENNReal.toReal_ofReal (norm_nonneg x)]; rw [measureReal_def]; rw [← ENNReal.toReal_mul]; rw [← ENNReal.ofReal_le_iff_le_toReal (ENNReal.mul_ne_top hμs ENNReal.ofReal_ne_top)]; rw [ofReal_integral_norm_eq_lintegral_enorm]
   swap; · rw [← memLp_one_iff_integra
@@ -268,7 +268,7 @@ theorem condExpIndL1Fin_disjoint_union
 
 中文:
 定理 condExpIndL1Fin_disjoint_union
-  结论: (hs : MeasurableSet s) (ht : MeasurableSet t) (hμs : μ s != ∞)
+  结论: (hs : 可测集 s) (ht : 可测集 t) (hμs : μ s != ∞)
   证明: by
   ext1
   grw [Lp.coeFn_add, condExpIndL1Fin_ae_eq_condExpIndSMul, condExpIndL1Fin_ae_eq_condExpIndSMul,
@@ -314,7 +314,7 @@ definition condExpIndL1
 
 中文:
 定义 condExpIndL1
-  签名: {m m0 : MeasurableSpace α} (hm : m <= m0) (μ : Measure α) (s : Set α)
+  签名: {m m0 : 可测空间 α} (hm : m <= m0) (μ : 测度 α) (s : 集合 α)
   定义体: if hs : MeasurableSet s ∧ μ s != ∞ then condExpIndL1Fin hm hs.1 hs.2 x else 0
 
 Depends on / 依赖: MeasurableSet, condExpIndL1Fin
@@ -336,7 +336,7 @@ theorem condExpIndL1_of_measurableSet_of_measure_ne_top
 
 中文:
 定理 condExpIndL1_of_measurableSet_of_measure_ne_top
-  结论: (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   simp only [condExpIndL1, And.intro hs hμs, dif_pos, Ne, not_false_iff, and_self_iff]
 
@@ -382,7 +382,7 @@ theorem condExpIndL1_of_not_measurableSet
 
 中文:
 定理 condExpIndL1_of_not_measurableSet
-  条件: (hs : ¬MeasurableSet s) (x : G)
+  条件: (hs : ¬可测集 s) (x : G)
   证明: by
   simp only [condExpIndL1, hs, dif_neg, not_false_iff, false_and]
 
@@ -480,7 +480,7 @@ theorem condExpIndL1_smul'
 
 中文:
 定理 condExpIndL1_smul'
-  条件: [NormedSpace 实数 F] [SMulCommClass 实数 𝕜 F] (c : 𝕜) (x : F)
+  条件: [赋范空间 实数 F] [标量交换类 实数 𝕜 F] (c : 𝕜) (x : F)
   证明: by
   by_cases hs : MeasurableSet s
   swap; · simp_rw [condExpIndL1_of_not_measurableSet hs]; rw [smul_zero]
@@ -552,7 +552,7 @@ theorem continuous_condExpIndL1
 
 中文:
 定理 continuous_condExpIndL1
-  结论: Continuous fun x : G => condExpIndL1 hm μ s x
+  结论: 连续 fun x : G => condExpIndL1 hm μ s x
   证明: continuous_of_linear_of_bound condExpIndL1_add condExpIndL1_smul norm_condExpIndL1_le
 
 Depends on / 依赖: condExpIndL1_add, condExpIndL1_smul, continuous_of_linear_of_bound, norm_condExpIndL1_le
@@ -573,7 +573,7 @@ theorem condExpIndL1_disjoint_union
 
 中文:
 定理 condExpIndL1_disjoint_union
-  结论: (hs : MeasurableSet s) (ht : MeasurableSet t) (hμs : μ s != ∞)
+  结论: (hs : 可测集 s) (ht : 可测集 t) (hμs : μ s != ∞)
   证明: by
   have hμst : μ (s union t) != ∞ :=
     ((measure_union_le s t).trans_lt (lt_top_iff_ne_top.mpr (ENNReal.add_ne_top.mpr ⟨hμs, hμt⟩))).ne
@@ -606,7 +606,7 @@ definition condExpInd
 
 中文:
 定义 condExpInd
-  签名: {m m0 : MeasurableSpace α} (hm : m <= m0) (μ : Measure α) [SigmaFinite (μ.trim hm)]
+  签名: {m m0 : 可测空间 α} (hm : m <= m0) (μ : 测度 α) [σ有限 (μ.trim hm)]
   定义体: condExpIndL1 hm μ s
   map_add' := condExpIndL1_add
   map_smul' := condExpIndL1_smul
@@ -635,7 +635,7 @@ theorem condExpInd_ae_eq_condExpIndSMul
 
 中文:
 定理 condExpInd_ae_eq_condExpIndSMul
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: by
   grw [← condExpIndL1Fin_ae_eq_condExpIndSMul]
   simp [condExpInd, condExpIndL1, hs, hμs]
@@ -663,7 +663,7 @@ theorem aestronglyMeasurable_condExpInd
 
 中文:
 定理 aestronglyMeasurable_condExpInd
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x : G)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x : G)
   证明: (aestronglyMeasurable_condExpIndSMul hm hs hμs x).congr
     (condExpInd_ae_eq_condExpIndSMul hm hs hμs x).symm
 
@@ -713,7 +713,7 @@ theorem condExpInd_smul'
 
 中文:
 定理 condExpInd_smul'
-  条件: [NormedSpace 实数 F] [SMulCommClass 实数 𝕜 F] (c : 𝕜) (x : F)
+  条件: [赋范空间 实数 F] [标量交换类 实数 𝕜 F] (c : 𝕜) (x : F)
   证明: condExpIndL1_smul' c x
 
 Depends on / 依赖: condExpIndL1_smul
@@ -770,7 +770,7 @@ theorem condExpInd_disjoint_union_apply
 
 中文:
 定理 condExpInd_disjoint_union_apply
-  结论: (hs : MeasurableSet s) (ht : MeasurableSet t)
+  结论: (hs : 可测集 s) (ht : 可测集 t)
   证明: condExpIndL1_disjoint_union hs ht hμs hμt hst x
 
 Depends on / 依赖: condExpIndL1_disjoint_union
@@ -791,7 +791,7 @@ theorem condExpInd_disjoint_union
 
 中文:
 定理 condExpInd_disjoint_union
-  结论: (hs : MeasurableSet s) (ht : MeasurableSet t) (hμs : μ s != ∞)
+  结论: (hs : 可测集 s) (ht : 可测集 t) (hμs : μ s != ∞)
   证明: by
   ext1 x; push_cast; exact condExpInd_disjoint_union_apply hs ht hμs hμt hst x
 
@@ -814,7 +814,7 @@ theorem dominatedFinMeasAdditive_condExpInd
 
 中文:
 定理 dominatedFinMeasAdditive_condExpInd
-  结论: (hm : m <= m0) (μ : Measure α)
+  结论: (hm : m <= m0) (μ : 测度 α)
   证明: ⟨fun _ _ => condExpInd_disjoint_union, fun _ _ _ => norm_condExpInd_le.trans (one_mul _).symm.le⟩
 
 Depends on / 依赖: condExpInd_disjoint_union, norm_condExpInd_le, norm_condExpInd_le.trans, one_mul, symm.le
@@ -839,8 +839,8 @@ theorem setIntegral_condExpInd
     _ = μ.real (t inter s) • x := setIntegral_condExpIndSMul hs ht hμs hμt x
 
 中文:
-定理 setIntegral_condExpInd
-  结论: (hs : MeasurableSet[m] s) (ht : MeasurableSet t) (hμs : μ s != ∞)
+定理 set整数egral_condExpInd
+  结论: (hs : 可测集[m] s) (ht : 可测集 t) (hμs : μ s != ∞)
   证明: calc
     ∫ a in s, condExpInd G' hm μ t x a ∂μ = ∫ a in s, condExpIndSMul hm ht hμt x a ∂μ :=
       setIntegral_congr_ae (hm s hs)
@@ -874,7 +874,7 @@ theorem condExpInd_of_measurable
 
 中文:
 定理 condExpInd_of_measurable
-  条件: (hs : MeasurableSet[m] s) (hμs : μ s != ∞) (c : G)
+  条件: (hs : 可测集[m] s) (hμs : μ s != ∞) (c : G)
   证明: by
   ext1
   grw [indicatorConstLp_coeFn, condExpInd_ae_eq_condExpIndSMul hm (hm s hs) hμs,
@@ -909,7 +909,7 @@ theorem condExpInd_nonneg
 
 中文:
 定理 condExpInd_nonneg
-  结论: {E} [NormedAddCommGroup E] [PartialOrder E] [NormedSpace 实数 E]
+  结论: {E} [赋范交换加群 E] [偏序 E] [赋范空间 实数 E]
   证明: by
   rw [← coeFn_le]
   refine EventuallyLE.trans_eq ?_ (condExpInd_ae_eq_condExpIndSMul hm hs hμs x).symm
@@ -946,7 +946,7 @@ definition condExpL1CLM
 
 中文:
 定义 condExpL1CLM
-  签名: (hm : m <= m0) (μ : Measure α) [CompleteSpace ↑(Lp F' 1 μ)]
+  签名: (hm : m <= m0) (μ : 测度 α) [完备空间 ↑(Lp F' 1 μ)]
   定义体: L1.setToL1 (dominatedFinMeasAdditive_condExpInd F' hm μ)
 
 Depends on / 依赖: L1.setToL1, dominatedFinMeasAdditive_condExpInd, setToL1
@@ -993,7 +993,7 @@ theorem condExpL1CLM_indicatorConstLp
 
 中文:
 定理 condExpL1CLM_indicatorConstLp
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x : F')
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x : F')
   证明: L1.setToL1_indicatorConstLp (dominatedFinMeasAdditive_condExpInd F' hm μ) hs hμs x
 
 Depends on / 依赖: L1.setToL1_indicatorConstLp, dominatedFinMeasAdditive_condExpInd, setToL1_indicatorConstLp
@@ -1013,7 +1013,7 @@ theorem condExpL1CLM_indicatorConst
 
 中文:
 定理 condExpL1CLM_indicatorConst
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x : F')
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x : F')
   证明: by
   rw [Lp.simpleFunc.coe_indicatorConst]; exact condExpL1CLM_indicatorConstLp hs hμs x
 
@@ -1038,8 +1038,8 @@ theorem setIntegral_condExpL1CLM_of_measure_ne_top
     rw [Lp.simpleFunc.coe_indicatorConst]; rw [s
 
 中文:
-定理 setIntegral_condExpL1CLM_of_measure_ne_top
-  结论: (f : α ->₁[μ] F') (hs : MeasurableSet[m] s)
+定理 set整数egral_condExpL1CLM_of_measure_ne_top
+  结论: (f : α ->₁[μ] F') (hs : 可测集[m] s)
   证明: by
   refine @Lp.induction _ _ _ _ _ _ _ ENNReal.one_ne_top
     (fun f : α ->₁[μ] F' => ∫ x in s, condExpL1CLM F' hm μ f x ∂μ = ∫ x in s, f x ∂μ) ?_ ?_
@@ -1085,8 +1085,8 @@ theorem setIntegral_condExpL1CLM
     rw [← Set.inter_i
 
 中文:
-定理 setIntegral_condExpL1CLM
-  条件: (f : α ->₁[μ] F') (hs : MeasurableSet[m] s)
+定理 set整数egral_condExpL1CLM
+  条件: (f : α ->₁[μ] F') (hs : 可测集[m] s)
   证明: by
   let S := spanningSets (μ.trim hm)
   have hS_meas : forall i, MeasurableSet[m] (S i) := measurableSet_spanningSets (μ.trim hm)
@@ -1255,7 +1255,7 @@ definition condExpL1
 
 中文:
 定义 condExpL1
-  签名: (hm : m <= m0) (μ : Measure α) [SigmaFinite (μ.trim hm)]
+  签名: (hm : m <= m0) (μ : 测度 α) [σ有限 (μ.trim hm)]
   定义体: setToFun μ (condExpInd F' hm μ) (dominatedFinMeasAdditive_condExpInd F' hm μ) f
 
 Depends on / 依赖: condExpInd, dominatedFinMeasAdditive_condExpInd, setToFun
@@ -1275,7 +1275,7 @@ theorem condExpL1_undef
 
 中文:
 定理 condExpL1_undef
-  条件: (hf : ¬整数egrable f μ)
+  条件: (hf : ¬可积 f μ)
   结论: condExpL1 hm μ f = 0
   证明: setToFun_undef (dominatedFinMeasAdditive_condExpInd F' hm μ) hf
 
@@ -1296,7 +1296,7 @@ theorem condExpL1_eq
 
 中文:
 定理 condExpL1_eq
-  结论: [CompleteSpace F']
+  结论: [完备空间 F']
   证明: setToFun_eq (dominatedFinMeasAdditive_condExpInd F' hm μ) hf
 
 @[simp]
@@ -1343,7 +1343,7 @@ theorem condExpL1_measure_zero
 中文:
 定理 condExpL1_measure_zero
   条件: (hm : m <= m0)
-  结论: condExpL1 hm (0 : Measure α) f = 0
+  结论: condExpL1 hm (0 : 测度 α) f = 0
   证明: setToFun_measure_zero _ rfl
 
 Depends on / 依赖: setToFun_measure_zero
@@ -1433,7 +1433,7 @@ theorem integrable_condExpL1
 中文:
 定理 integrable_condExpL1
   条件: (f : α -> F')
-  结论: 整数egrable (condExpL1 hm μ f) μ
+  结论: 可积 (condExpL1 hm μ f) μ
   证明: L1.integrable_coeFn _
 
 Depends on / 依赖: L1.integrable_coeFn, integrable_coeFn
@@ -1453,8 +1453,8 @@ theorem setIntegral_condExpL1
   exact setIntegral_congr_ae (hm s hs) (hf.coeFn_toL1.mono fun x hx _ => hx)
 
 中文:
-定理 setIntegral_condExpL1
-  条件: [CompleteSpace F'] (hf : 整数egrable f μ) (hs : MeasurableSet[m] s)
+定理 set整数egral_condExpL1
+  条件: [完备空间 F'] (hf : 可积 f μ) (hs : 可测集[m] s)
   证明: by
   simp_rw [condExpL1_eq hf]
   rw [setIntegral_condExpL1CLM (hf.toL1 f) hs]
@@ -1478,7 +1478,7 @@ theorem condExpL1_add
 
 中文:
 定理 condExpL1_add
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: setToFun_add _ hf hg
 
 Depends on / 依赖: setToFun_add
@@ -1542,7 +1542,7 @@ theorem condExpL1_sub
 
 中文:
 定理 condExpL1_sub
-  条件: (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (hf : 可积 f μ) (hg : 可积 g μ)
   证明: setToFun_sub _ hf hg
 
 Depends on / 依赖: setToFun_sub
@@ -1565,7 +1565,7 @@ theorem condExpL1_of_aestronglyMeasurable'
 
 中文:
 定理 condExpL1_of_aestronglyMeasurable'
-  结论: [CompleteSpace F'] (hfm : AEStronglyMeasurable[m] f μ)
+  结论: [完备空间 F'] (hfm : AEStronglyMeasurable[m] f μ)
   证明: by
   rw [condExpL1_eq hfi]
   refine EventuallyEq.trans ?_ (Integrable.coeFn_toL1 hfi)

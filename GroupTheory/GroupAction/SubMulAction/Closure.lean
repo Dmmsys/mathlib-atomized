@@ -29,7 +29,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (R : 类型) {M : 类型} [SMul R M] (s : Set M)
+  签名: (R : 类型) {M : 类型} [标量乘法 R M] (s : 集合 M)
   定义体: sInf { p | s subseteq (p : Set M) }
 
 Depends on / 依赖: subseteq
@@ -52,7 +52,7 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  结论: x in closure R s ↔ 对任意 p : SubMulAction R M, s subseteq p -> x in p
+  结论: x in closure R s ↔ 对任意 p : SubMul作用 R M, s subseteq p -> x in p
   证明: Set.mem_iInter₂
 
 @[to_additive]
@@ -168,7 +168,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (p : SubMulAction R M)
+  签名: (p : SubMul作用 R M)
   定义体: exists (s : Set M), s.Finite ∧ p = closure R s
 
 @[to_additive]
@@ -190,8 +190,8 @@ theorem fg_iff
 
 中文:
 定理 fg_iff
-  条件: {p : SubMulAction R M}
-  结论: p.FG ↔ 存在 (s : Finset M), p = closure R s
+  条件: {p : SubMul作用 R M}
+  结论: p.FG ↔ 存在 (s : 有限集 M), p = closure R s
   证明: Set.exists_finite_iff_finset
 
 Depends on / 依赖: Set.exists_finite_iff_finset, exists_finite_iff_finset

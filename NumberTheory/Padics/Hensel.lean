@@ -57,7 +57,7 @@ theorem padic_polynomial_dist
 
 中文:
 定理 padic_polynomial_dist
-  结论: {p : 自然数} [Fact p.Prime] {R : 类型} [CommSemiring R] [Algebra R 整数_[p]]
+  结论: {p : 自然数} [Fact p.素] {R : 类型} [交换半环 R] [代数 R 整数_[p]]
   证明: by
   let ⟨z, hz⟩ := (F.map (algebraMap R Int_[p])).evalSubFactor x y
   simp only [Polynomial.eval_map_algebraMap] at hz
@@ -90,7 +90,7 @@ theorem comp_tendsto_lim
 
 中文:
 定理 comp_tendsto_lim
-  结论: {p : 自然数} [Fact p.Prime] {F : Polynomial 整数_[p]}
+  结论: {p : 自然数} [Fact p.素] {F : 多项式 整数_[p]}
   证明: Filter.Tendsto.comp (@Polynomial.continuousAt _ _ _ _ F _) ncs.tendsto_limit
 -/
 private theorem comp_tendsto_lim {p : Nat} [Fact p.Prime] {F : Polynomial Int_[p]}
@@ -239,7 +239,7 @@ theorem a_soln_is_unique
 
 中文:
 定理 a_soln_is_unique
-  结论: {p : 自然数} [Fact p.Prime] {R : 类型} [CommSemiring R]
+  结论: {p : 自然数} [Fact p.素] {R : 类型} [交换半环 R]
   证明: by
   let h := z' - a
   let ⟨q, hq⟩ := (F.map (algebraMap R Int_[p])).binomExpansion a h
@@ -946,7 +946,7 @@ theorem bound'
 
 中文:
 定理 bound'
-  结论: Tendsto (fun n : 自然数 => ‖F.derivative.aeval a‖ * T ^ 2 ^ n) atTop (𝓝 0)
+  结论: 收敛 (fun n : 自然数 => ‖F.derivative.aeval a‖ * T ^ 2 ^ n) atTop (𝓝 0)
   证明: by
   rw [← mul_zero ‖F.derivative.aeval a‖]
   exact

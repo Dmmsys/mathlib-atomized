@@ -40,11 +40,11 @@ class HasIterationOfShape
     - hasColimitsOfShape : HasColimitsOfShape J C  [default: by infer_instance]
 
 中文:
-类 HasIterationOfShape
+类 有IterationOfShape
   参数: : 命题 where
   公理与运算 (2 个):
-    - hasColimitsOfShape_of_isSuccLimit((j : J) (hj : Order.IsSuccLimit j)) : HasColimitsOfShape (Set.Iio j) C  [默认: by infer_instance]
-    - hasColimitsOfShape : HasColimitsOfShape J C  [默认: by infer_instance]
+    - hasColimitsOfShape_of_isSuccLimit((j : J) (hj : Order.是SuccLimit j)) : 有形状余极限 (集合.左无界右开区间 j) C  [默认: by infer_instance]
+    - hasColimitsOfShape : 有形状余极限 J C  [默认: by infer_instance]
 
 Depends on / 依赖: HasColimitsOfShape, hasColimitsOfShape, infer_instance
 -/
@@ -63,8 +63,8 @@ instance [HasColimitsOfSize.{w,
   signature: w} C] : HasIterationOfShape J C where
 
 中文:
-实例 [HasColimitsOfSize.{w,
-  签名: w} C] : HasIterationOfShape J C where
+实例 [有余limitsOfSize.{w,
+  签名: w} C] : 有IterationOfShape J C where
 -/
 instance [HasColimitsOfSize.{w, w} C] : HasIterationOfShape J C where
 
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasIterationOfShape J (Arrow C)
+  签名: 有IterationOfShape J (箭头 C)
   定义体: by
     have := hasColimitsOfShape_of_isSuccLimit C j hj
     infer_instance
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasIterationOfShape J (K ⥤ C)
+  签名: 有IterationOfShape J (K ⥤ C)
   定义体: by
     have := hasColimitsOfShape_of_isSuccLimit C j hj
     infer_instance
@@ -229,7 +229,7 @@ lemma hasIterationOfShape_of_initialSeg
 
 中文:
 引理 hasIterationOfShape_of_initialSeg
-  结论: {α : 类型} [LinearOrder α]
+  结论: {α : 类型} [线性序 α]
   证明: hasColimitsOfShape_of_initialSeg C h
   hasColimitsOfShape_of_isSuccLimit j hj := by
     have := hj.nonempty_Iio.to_subtype

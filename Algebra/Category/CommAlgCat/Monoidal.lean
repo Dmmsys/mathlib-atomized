@@ -105,7 +105,7 @@ definition binaryCofanIsColimit
 
 中文:
 定义 binaryCofanIsColimit
-  签名: : IsColimit (binaryCofan A B)
+  签名: : 是余极限 (binaryCofan A B)
   定义体: BinaryCofan.IsColimit.mk _
     (fun f g => ofHom (lift f.hom g.hom fun _ _ => .all _ _))
     (fun f g => by ext1; exact lift_comp_includeLeft _ _ fun _ _ => .all _ _)
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (CommAlgCat.{u} R)
+  签名: 幺半群范畴 (交换Alg范畴.{u} R)
   定义体: of R (S otimes[R] T)
   whiskerLeft _ {_ _} f := ofHom (map (.id _ _) f.hom)
   whiskerRight f T := ofHom (map f.hom (.id _ _))
@@ -194,7 +194,7 @@ lemma coe_tensorUnit
 
 中文:
 引理 coe_tensorUnit
-  结论: 𝟙_ (CommAlgCat.{u} R) = R
+  结论: 𝟙_ (交换Alg范畴.{u} R) = R
   证明: rfl
 -/
 @[simp] lemma coe_tensorUnit : 𝟙_ (CommAlgCat.{u} R) = R := rfl
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (CommAlgCat.{u} R)
+  签名: 辫范畴 (交换Alg范畴.{u} R)
   定义体: isoMk (comm R _ _)
   braiding_naturality_right := by intros; ext : 1; dsimp; ext <;> rfl
   braiding_naturality_left := by intros; ext : 1; dsimp; ext <;> rfl
@@ -377,7 +377,7 @@ tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimi
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory (CommAlgCat.{u} R)ᵒᵖ
+  签名: CartesianMonoidal范畴 (交换Alg范畴.{u} R)ᵒᵖ
   定义体: terminalOpOfInitial isInitialSelf
   fst := _
   snd := _
@@ -408,7 +408,7 @@ lemma fst_unop_hom
 
 中文:
 引理 fst_unop_hom
-  条件: (A B : (CommAlgCat.{u} R)ᵒᵖ)
+  条件: (A B : (交换Alg范畴.{u} R)ᵒᵖ)
   结论: (fst A B).unop.hom = includeLeft
   证明: rfl
 -/
@@ -424,7 +424,7 @@ lemma snd_unop_hom
 
 中文:
 引理 snd_unop_hom
-  条件: (A B : (CommAlgCat.{u} R)ᵒᵖ)
+  条件: (A B : (交换Alg范畴.{u} R)ᵒᵖ)
   结论: (snd A B).unop.hom = includeRight
   证明: rfl
 -/
@@ -441,7 +441,7 @@ lemma toUnit_unop_hom
 
 中文:
 引理 toUnit_unop_hom
-  结论: (toUnit A).unop.hom = Algebra.ofId R A.unop
+  结论: (toUnit A).unop.hom = 代数.ofId R A.unop
   证明: rfl
 -/
 @[simp] lemma toUnit_unop_hom : (toUnit A).unop.hom = Algebra.ofId R A.unop := rfl

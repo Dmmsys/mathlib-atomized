@@ -34,7 +34,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: : MulZeroClass 自然数 where
+  签名: : 乘零类 自然数 where
   定义体: Nat.zero_mul
   mul_zero := Nat.mul_zero
 
@@ -55,7 +55,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: : SemigroupWithZero 自然数 where
+  签名: : 带零半群 自然数 where
   定义体: instSemigroup
   __ := instMulZeroClass
 
@@ -77,7 +77,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: : MonoidWithZero 自然数 where
+  签名: : 带零幺半群 自然数 where
   定义体: instMonoid
   __ := instMulZeroClass
   __ := instSemigroupWithZero
@@ -100,7 +100,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: : CommMonoidWithZero 自然数 where
+  签名: : 带零交换幺半群 自然数 where
   定义体: instCommMonoid
   __ := instMonoidWithZero
 
@@ -121,7 +121,7 @@ instance instIsCancelMulZero
 
 中文:
 实例 instIsCancelMulZero
-  签名: : IsCancelMulZero 自然数 where
+  签名: : 是乘零消去 自然数 where
   定义体: Nat.eq_of_mul_eq_mul_left (Nat.pos_of_ne_zero h)
   mul_right_cancel_of_ne_zero h _ _ := Nat.eq_of_mul_eq_mul_right (Nat.pos_of_ne_zero h)
 
@@ -141,7 +141,7 @@ instance instMulDivCancelClass
 
 中文:
 实例 instMulDivCancelClass
-  签名: : MulDivCancelClass 自然数 where
+  签名: : MulDivCancel类 自然数 where
   定义体: Nat.mul_div_cancel _ (Nat.pos_iff_ne_zero.2 hb)
 
 Depends on / 依赖: Nat.mul_div_cancel, Nat.pos_iff_ne_zero, mul_div_cancel, pos_iff_ne_zero
@@ -160,7 +160,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: : MulZeroOneClass 自然数 where
+  签名: : 乘零幺类 自然数 where
   定义体: instMulZeroClass
   __ := instMulOneClass
 

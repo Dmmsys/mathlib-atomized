@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: Complete布尔eanAlgebra (Morphism命题erty C)
+  签名: 完备布尔代数 (MorphismProperty C)
   定义体: forall ⦃X Y : C⦄ (f : X ⟶ Y), P₁ f -> P₂ f
   __ := (inferInstance : CompleteBooleanAlgebra (forall ⦃X Y : C⦄ (_ : X ⟶ Y), Prop))
 -/
@@ -83,7 +83,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: {P Q : Morphism命题erty C}
+  条件: {P Q : MorphismProperty C}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Morphism命题erty C)
+  签名: 可居 (MorphismProperty C)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (MorphismProperty C) :=
@@ -117,7 +117,7 @@ lemma top_eq
 
 中文:
 引理 top_eq
-  结论: (⊤ : Morphism命题erty C) = fun _ _ _ => True
+  结论: (⊤ : MorphismProperty C) = fun _ _ _ => 真
   证明: rfl
 -/
 lemma top_eq : (⊤ : MorphismProperty C) = fun _ _ _ => True := rfl
@@ -139,7 +139,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: (W W' : Morphism命题erty C) (h : 对任意 ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f)
+  条件: (W W' : MorphismProperty C) (h : 对任意 ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f)
   证明: by
   funext X Y f
   rw [h]
@@ -165,7 +165,7 @@ lemma top_apply
 中文:
 引理 top_apply
   条件: {X Y : C} (f : X ⟶ Y)
-  结论: (⊤ : Morphism命题erty C) f
+  结论: (⊤ : MorphismProperty C) f
   证明: by
   simp only [top_eq]
 
@@ -188,7 +188,7 @@ lemma of_eq_top
 
 中文:
 引理 of_eq_top
-  条件: {P : Morphism命题erty C} (h : P = ⊤) {X Y : C} (f : X ⟶ Y)
+  条件: {P : MorphismProperty C} (h : P = ⊤) {X Y : C} (f : X ⟶ Y)
   结论: P f
   证明: by
   simp [h]
@@ -210,7 +210,7 @@ lemma sup_iff
 
 中文:
 引理 sup_iff
-  条件: (W W' : Morphism命题erty C) {X Y : C} (f : X ⟶ Y)
+  条件: (W W' : MorphismProperty C) {X Y : C} (f : X ⟶ Y)
   结论: (W ⊔ W') f ↔ W f ∨ W' f
   证明: Iff.rfl
 
@@ -234,7 +234,7 @@ lemma sSup_iff
 
 中文:
 引理 sSup_iff
-  条件: (S : Set (Morphism命题erty C)) {X Y : C} (f : X ⟶ Y)
+  条件: (S : 集合 (MorphismProperty C)) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp +instances [MorphismProperty]
 
@@ -260,7 +260,7 @@ lemma iSup_iff
 
 中文:
 引理 iSup_iff
-  条件: {ι : Sort*} (W : ι -> Morphism命题erty C) {X Y : C} (f : X ⟶ Y)
+  条件: {ι : 类型层*} (W : ι -> MorphismProperty C) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp [← sSup_range]
 
@@ -284,7 +284,7 @@ lemma inf_iff
 
 中文:
 引理 inf_iff
-  条件: (W W' : Morphism命题erty C) {X Y : C} (f : X ⟶ Y)
+  条件: (W W' : MorphismProperty C) {X Y : C} (f : X ⟶ Y)
   结论: (W ⊓ W') f ↔ W f ∧ W' f
   证明: Iff.rfl
 
@@ -308,7 +308,7 @@ lemma sInf_iff
 
 中文:
 引理 sInf_iff
-  条件: (S : Set (Morphism命题erty C)) {X Y : C} (f : X ⟶ Y)
+  条件: (S : 集合 (MorphismProperty C)) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp +instances [MorphismProperty]
 
@@ -332,7 +332,7 @@ lemma iInf_iff
 
 中文:
 引理 iInf_iff
-  条件: {ι : 类型} (W : ι -> Morphism命题erty C) {X Y : C} (f : X ⟶ Y)
+  条件: {ι : 类型} (W : ι -> MorphismProperty C) {X Y : C} (f : X ⟶ Y)
   证明: by
   simp [← sInf_range]
 
@@ -354,7 +354,7 @@ definition op
 
 中文:
 定义 op
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun _ _ f => P f.unop
 
 Depends on / 依赖: f.unop
@@ -373,7 +373,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (P : Morphism命题erty Cᵒᵖ)
+  签名: (P : MorphismProperty Cᵒᵖ)
   定义体: fun _ _ f => P f.op
 
 Depends on / 依赖: f.op
@@ -391,7 +391,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: P.op.unop = P
   证明: rfl
 -/
@@ -409,7 +409,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (P : Morphism命题erty Cᵒᵖ)
+  条件: (P : MorphismProperty Cᵒᵖ)
   结论: P.unop.op = P
   证明: rfl
 -/
@@ -435,7 +435,7 @@ definition inverseImage
 
 中文:
 定义 inverseImage
-  签名: (P : Morphism命题erty D) (F : C ⥤ D)
+  签名: (P : MorphismProperty D) (F : C ⥤ D)
   定义体: fun _ _ f =>
   P (F.map f)
 
@@ -457,7 +457,7 @@ lemma inverseImage_iff
 
 中文:
 引理 inverseImage_iff
-  条件: (P : Morphism命题erty D) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y)
+  条件: (P : MorphismProperty D) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y)
   证明: by rfl
 
 @[simp]
@@ -478,7 +478,7 @@ lemma op_inverseImage
 
 中文:
 引理 op_inverseImage
-  条件: (P : Morphism命题erty D) (F : C ⥤ D)
+  条件: (P : MorphismProperty D) (F : C ⥤ D)
   证明: rfl
 
 @[gcongr]
@@ -522,7 +522,7 @@ lemma inverseImage_id
 
 中文:
 引理 inverseImage_id
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: P.inverseImage (𝟭 C) = P
   证明: rfl
 
@@ -542,7 +542,7 @@ lemma inverseImage_inverseImage
 
 中文:
 引理 inverseImage_inverseImage
-  条件: (P : Morphism命题erty E) (F : C ⥤ D) (G : D ⥤ E)
+  条件: (P : MorphismProperty E) (F : C ⥤ D) (G : D ⥤ E)
   证明: rfl
 -/
 lemma inverseImage_inverseImage (P : MorphismProperty E) (F : C ⥤ D) (G : D ⥤ E) :
@@ -559,10 +559,10 @@ inductive strictMap
     - map: {X Y : C} {f : X ⟶ Y} (hf : P f) : strictMap _ _ (F.map f)
 
 中文:
-归纳类型 strictMap
-  参数: (P : Morphism命题erty C) (F : C ⥤ D)
+归纳类型 strict映射
+  参数: (P : MorphismProperty C) (F : C ⥤ D)
   构造子 (1 个):
-    - map: {X Y : C} {f : X ⟶ Y} (hf : P f) : strictMap _ _ (F.map f)
+    - map: {X Y : C} {f : X ⟶ Y} (hf : P f) : strict映射 _ _ (F.map f)
 -/
 inductive strictMap (P : MorphismProperty C) (F : C ⥤ D) : MorphismProperty D where
   | map {X Y : C} {f : X ⟶ Y} (hf : P f) : strictMap _ _ (F.map f)
@@ -579,7 +579,7 @@ lemma map_mem_strictMap
 
 中文:
 引理 map_mem_strictMap
-  条件: (P : Morphism命题erty C) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) (hf : P f)
+  条件: (P : MorphismProperty C) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) (hf : P f)
   证明: ⟨hf⟩
 
 @[gcongr]
@@ -602,7 +602,7 @@ lemma monotone_strictMap
 中文:
 引理 monotone_strictMap
   条件: (F : C ⥤ D)
-  结论: Monotone (fun P : Morphism命题erty C => P.strictMap F)
+  结论: 递增 (fun P : MorphismProperty C => P.strict映射 F)
   证明: fun _ _ h _ _ _ ⟨hf⟩ => ⟨h _ hf⟩
 
 @[simp]
@@ -625,7 +625,7 @@ lemma strictMap_id
 
 中文:
 引理 strictMap_id
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: by
   ext
   exact ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
@@ -652,7 +652,7 @@ lemma strictMap_strictMap
 
 中文:
 引理 strictMap_strictMap
-  条件: (P : Morphism命题erty C) (F : C ⥤ D) (G : D ⥤ E)
+  条件: (P : MorphismProperty C) (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   ext
   exact ⟨fun ⟨⟨h⟩⟩ => ⟨h⟩, fun ⟨h⟩ => ⟨⟨h⟩⟩⟩
@@ -675,7 +675,7 @@ lemma strictMap_le_iff_le_inverseImage
 
 中文:
 引理 strictMap_le_iff_le_inverseImage
-  结论: (F : C ⥤ D) (P : Morphism命题erty C)
+  结论: (F : C ⥤ D) (P : MorphismProperty C)
   证明: ⟨fun h _ _ _ hf => h _ ⟨hf⟩, fun h _ _ _ ⟨hf⟩ => h _ hf⟩
 -/
 lemma strictMap_le_iff_le_inverseImage (F : C ⥤ D) (P : MorphismProperty C)
@@ -694,7 +694,7 @@ lemma gc_strictMap
 中文:
 引理 gc_strictMap
   条件: (F : C ⥤ D)
-  结论: GaloisConnection (strictMap · F) (inverseImage · F)
+  结论: GaloisConnection (strict映射 · F) (inverseImage · F)
   证明: strictMap_le_iff_le_inverseImage F
 
 Depends on / 依赖: strictMap_le_iff_le_inverseImage
@@ -712,7 +712,7 @@ lemma le_inverseImage_strictMap
 
 中文:
 引理 le_inverseImage_strictMap
-  条件: (P : Morphism命题erty C) (F : C ⥤ D)
+  条件: (P : MorphismProperty C) (F : C ⥤ D)
   证明: (gc_strictMap F).le_u_l P
 
 Depends on / 依赖: gc_strictMap, le_u_l
@@ -733,7 +733,7 @@ lemma strictMap_inverseImage_le
 
 中文:
 引理 strictMap_inverseImage_le
-  条件: (P : Morphism命题erty D) (F : C ⥤ D)
+  条件: (P : MorphismProperty D) (F : C ⥤ D)
   证明: (gc_strictMap F).l_u_le P
 
 @[simp]
@@ -757,7 +757,7 @@ lemma strictMap_inverseImage_strictMap
 
 中文:
 引理 strictMap_inverseImage_strictMap
-  条件: (P : Morphism命题erty C) (F : C ⥤ D)
+  条件: (P : MorphismProperty C) (F : C ⥤ D)
   证明: (gc_strictMap F).l_u_l_eq_l P
 
 @[simp]
@@ -781,7 +781,7 @@ lemma inverseImage_strictMap_inverseImage
 
 中文:
 引理 inverseImage_strictMap_inverseImage
-  条件: (P : Morphism命题erty D) (F : C ⥤ D)
+  条件: (P : MorphismProperty D) (F : C ⥤ D)
   证明: (gc_strictMap F).u_l_u_eq_u P
 
 @[simp]
@@ -897,7 +897,7 @@ lemma strictMap_sup
 
 中文:
 引理 strictMap_sup
-  条件: (F : C ⥤ D) (P P' : Morphism命题erty C)
+  条件: (F : C ⥤ D) (P P' : MorphismProperty C)
   证明: (gc_strictMap F).l_sup
 
 @[simp]
@@ -921,7 +921,7 @@ lemma strictMap_iSup
 
 中文:
 引理 strictMap_iSup
-  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> Morphism命题erty C)
+  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> MorphismProperty C)
   证明: (gc_strictMap F).l_iSup
 
 @[simp]
@@ -945,7 +945,7 @@ lemma strictMap_sSup
 
 中文:
 引理 strictMap_sSup
-  条件: (F : C ⥤ D) (P : Set (Morphism命题erty C))
+  条件: (F : C ⥤ D) (P : 集合 (MorphismProperty C))
   证明: (gc_strictMap F).l_sSup
 
 @[simp]
@@ -969,7 +969,7 @@ lemma inverseImage_inf
 
 中文:
 引理 inverseImage_inf
-  条件: (F : C ⥤ D) (P P' : Morphism命题erty D)
+  条件: (F : C ⥤ D) (P P' : MorphismProperty D)
   证明: (gc_strictMap F).u_inf
 
 @[simp]
@@ -993,7 +993,7 @@ lemma inverseImage_iInf
 
 中文:
 引理 inverseImage_iInf
-  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> Morphism命题erty D)
+  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> MorphismProperty D)
   证明: (gc_strictMap F).u_iInf
 
 @[simp]
@@ -1017,7 +1017,7 @@ lemma inverseImage_sInf
 
 中文:
 引理 inverseImage_sInf
-  条件: (F : C ⥤ D) (P : Set (Morphism命题erty D))
+  条件: (F : C ⥤ D) (P : 集合 (MorphismProperty D))
   证明: (gc_strictMap F).u_sInf
 
 @[simp]
@@ -1041,7 +1041,7 @@ lemma inverseImage_sup
 
 中文:
 引理 inverseImage_sup
-  条件: (F : C ⥤ D) (P P' : Morphism命题erty D)
+  条件: (F : C ⥤ D) (P P' : MorphismProperty D)
   证明: rfl
 
 @[simp]
@@ -1064,7 +1064,7 @@ lemma inverseImage_iSup
 
 中文:
 引理 inverseImage_iSup
-  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> Morphism命题erty D)
+  条件: (F : C ⥤ D) {ι : 类型} (P : ι -> MorphismProperty D)
   证明: by
   ext; simp
 
@@ -1086,7 +1086,7 @@ lemma inverseImage_sSup
 
 中文:
 引理 inverseImage_sSup
-  条件: (F : C ⥤ D) (P : Set (Morphism命题erty D))
+  条件: (F : C ⥤ D) (P : 集合 (MorphismProperty D))
   证明: by
   ext; simp
 -/
@@ -1105,7 +1105,7 @@ definition map
 
 中文:
 定义 map
-  签名: (P : Morphism命题erty C) (F : C ⥤ D)
+  签名: (P : MorphismProperty C) (F : C ⥤ D)
   定义体: fun _ _ f =>
   exists (X' Y' : C) (f' : X' ⟶ Y') (_ : P f'), Nonempty (Arrow.mk (F.map f') ≅ Arrow.mk f)
 -/
@@ -1124,7 +1124,7 @@ lemma map_mem_map
 
 中文:
 引理 map_mem_map
-  条件: (P : Morphism命题erty C) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) (hf : P f)
+  条件: (P : MorphismProperty C) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) (hf : P f)
   证明: ⟨X, Y, f, hf, ⟨Iso.refl _⟩⟩
 
 @[gcongr]
@@ -1178,7 +1178,7 @@ lemma map_top_eq_top_of_essSurj_of_full
 
 中文:
 引理 map_top_eq_top_of_essSurj_of_full
-  条件: (F : C ⥤ D) [F.EssSurj] [F.Full]
+  条件: (F : C ⥤ D) [F.本质满射] [F.满]
   证明: by
   rw [eq_top_iff]
   intro X Y f _
@@ -1212,7 +1212,7 @@ definition toSet
 
 中文:
 定义 toSet
-  签名: : Set (Arrow C)
+  签名: : 集合 (箭头 C)
   定义体: Set.ofPred (fun f => P f.hom)
 
 Depends on / 依赖: Set.ofPred, f.hom, f.mono, ofPred
@@ -1230,7 +1230,7 @@ lemma mem_toSet_iff
 
 中文:
 引理 mem_toSet_iff
-  条件: (f : Arrow C)
+  条件: (f : 箭头 C)
   结论: f in P.toSet ↔ P f.hom
   证明: Iff.rfl
 
@@ -1250,7 +1250,7 @@ lemma toSet_iSup
 
 中文:
 引理 toSet_iSup
-  条件: {ι : 类型} (W : ι -> Morphism命题erty C)
+  条件: {ι : 类型} (W : ι -> MorphismProperty C)
   证明: by
   ext
   simp [mem_toSet_iff]
@@ -1272,7 +1272,7 @@ lemma toSet_max
 
 中文:
 引理 toSet_max
-  条件: (W₁ W₂ : Morphism命题erty C)
+  条件: (W₁ W₂ : MorphismProperty C)
   证明: rfl
 -/
 lemma toSet_max (W₁ W₂ : MorphismProperty C) :
@@ -1350,7 +1350,7 @@ lemma arrow_mk_mem_toSet_iff
 中文:
 引理 arrow_mk_mem_toSet_iff
   条件: {X Y : C} (f : X ⟶ Y)
-  结论: Arrow.mk f in P.toSet ↔ P f
+  结论: 箭头.mk f in P.toSet ↔ P f
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1463,7 +1463,7 @@ lemma ofHoms_homFamily
 
 中文:
 引理 ofHoms_homFamily
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: ofHoms P.homFamily = P
   证明: by
   ext _ _ f
@@ -1527,7 +1527,7 @@ lemma ofHoms_le_iff
 
 中文:
 引理 ofHoms_le_iff
-  条件: {ι : 类型} {X Y : ι -> C} (f : 对任意 i, X i ⟶ Y i) (P : Morphism命题erty C)
+  条件: {ι : 类型} {X Y : ι -> C} (f : 对任意 i, X i ⟶ Y i) (P : MorphismProperty C)
   证明: ⟨fun h i => h _ (ofHoms.mk i), fun h _ _ _⟨i⟩ => h i⟩
 
 Depends on / 依赖: ofHoms, ofHoms.mk
@@ -1587,7 +1587,7 @@ lemma single_le_iff
 
 中文:
 引理 single_le_iff
-  条件: (W : Morphism命题erty C) {X Y : C} (f : X ⟶ Y)
+  条件: (W : MorphismProperty C) {X Y : C} (f : X ⟶ Y)
   结论: single f <= W ↔ W f
   证明: by
   simp
@@ -1612,7 +1612,7 @@ class RespectsRight
 
 中文:
 类 RespectsRight
-  参数: (P Q : Morphism命题erty C)
+  参数: (P Q : MorphismProperty C)
   公理与运算 (1 个):
     - postcomp({X Y Z : C} (i : Y ⟶ Z) (hi : Q i) (f : X ⟶ Y) (hf : P f)) : P (f ≫ i)
 -/
@@ -1630,7 +1630,7 @@ class RespectsLeft
 
 中文:
 类 RespectsLeft
-  参数: (P Q : Morphism命题erty C)
+  参数: (P Q : MorphismProperty C)
   公理与运算 (1 个):
     - precomp({X Y Z : C} (i : X ⟶ Y) (hi : Q i) (f : Y ⟶ Z) (hf : P f)) : P (i ≫ f)
 -/
@@ -1648,7 +1648,7 @@ class Respects
 
 中文:
 类 Respects
-  参数: (P Q : Morphism命题erty C)
+  参数: (P Q : MorphismProperty C)
   继承: P.RespectsLeft Q, P.RespectsRight Q
   (无附加公理)
 -/
@@ -1671,8 +1671,8 @@ instance RespectsLeft.inf
   body: ⟨precomp i hi f hf.left, precomp i hi f hf.right⟩
 
 中文:
-实例 RespectsLeft.inf
-  签名: (P₁ P₂ Q : Morphism命题erty C) [P₁.RespectsLeft Q]
+实例 RespectsLeft.下确界
+  签名: (P₁ P₂ Q : MorphismProperty C) [P₁.RespectsLeft Q]
   定义体: ⟨precomp i hi f hf.left, precomp i hi f hf.right⟩
 
 Depends on / 依赖: hf.left, hf.right, precomp
@@ -1693,7 +1693,7 @@ lemma RespectsLeft.sInf
 
 中文:
 引理 RespectsLeft.sInf
-  结论: {W : Set (Morphism命题erty C)} {Q : Morphism命题erty C}
+  结论: {W : 集合 (MorphismProperty C)} {Q : MorphismProperty C}
   证明: by
     rw [sInf_iff] at hf ⊢
     exact fun _ hW' => (h _ hW').precomp _ hi _ (hf _ hW')
@@ -1718,7 +1718,7 @@ instance RespectsLeft.iInf
 
 中文:
 实例 RespectsLeft.iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C} {Q : Morphism命题erty C}
+  签名: {ι : 类型} {W : ι -> MorphismProperty C} {Q : MorphismProperty C}
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -1739,8 +1739,8 @@ instance RespectsRight.inf
   body: ⟨postcomp i hi f hf.left, postcomp i hi f hf.right⟩
 
 中文:
-实例 RespectsRight.inf
-  签名: (P₁ P₂ Q : Morphism命题erty C) [P₁.RespectsRight Q]
+实例 RespectsRight.下确界
+  签名: (P₁ P₂ Q : MorphismProperty C) [P₁.RespectsRight Q]
   定义体: ⟨postcomp i hi f hf.left, postcomp i hi f hf.right⟩
 
 Depends on / 依赖: hf.left, hf.right, postcomp
@@ -1761,7 +1761,7 @@ lemma RespectsRight.sInf
 
 中文:
 引理 RespectsRight.sInf
-  结论: {W : Set (Morphism命题erty C)} {Q : Morphism命题erty C}
+  结论: {W : 集合 (MorphismProperty C)} {Q : MorphismProperty C}
   证明: by
     rw [sInf_iff] at hf ⊢
     exact fun _ hW' => (h _ hW').postcomp _ hi _ (hf _ hW')
@@ -1786,7 +1786,7 @@ instance RespectsRight.iInf
 
 中文:
 实例 RespectsRight.iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C} {Q : Morphism命题erty C}
+  签名: {ι : 类型} {W : ι -> MorphismProperty C} {Q : MorphismProperty C}
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -1814,7 +1814,7 @@ abbreviation isomorphisms
 
 中文:
 缩写 isomorphisms
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => IsIso f
 -/
 abbrev isomorphisms : MorphismProperty C := fun _ _ f => IsIso f
@@ -1829,7 +1829,7 @@ abbreviation monomorphisms
 
 中文:
 缩写 monomorphisms
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Mono f
 -/
 abbrev monomorphisms : MorphismProperty C := fun _ _ f => Mono f
@@ -1846,7 +1846,7 @@ abbreviation epimorphisms
 
 中文:
 缩写 epimorphisms
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Epi f
 
 @[simp]
@@ -1891,7 +1891,7 @@ abbreviation RespectsIso
 
 中文:
 缩写 RespectsIso
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: P.Respects (isomorphisms C)
 
 Depends on / 依赖: P.Respects, Respects, isomorphisms
@@ -1907,8 +1907,8 @@ instance RespectsIso.inf
   body: RespectsIso.inf
 
 中文:
-实例 RespectsIso.inf
-  签名: (P Q : Morphism命题erty C) [P.RespectsIso] [Q.RespectsIso]
+实例 RespectsIso.下确界
+  签名: (P Q : MorphismProperty C) [P.RespectsIso] [Q.RespectsIso]
   定义体: RespectsIso.inf
 -/
 instance RespectsIso.inf (P Q : MorphismProperty C) [P.RespectsIso] [Q.RespectsIso] :
@@ -1927,7 +1927,7 @@ lemma RespectsIso.sInf
 
 中文:
 引理 RespectsIso.sInf
-  条件: {W : Set (Morphism命题erty C)} (h : 对任意 W' in W, W'.RespectsIso)
+  条件: {W : 集合 (MorphismProperty C)} (h : 对任意 W' in W, W'.RespectsIso)
   证明: RespectsLeft.sInf (fun W' hW' => (h W' hW').toRespectsLeft)
   toRespectsRight := RespectsRight.sInf (fun W' hW' => (h W' hW').toRespectsRight)
 
@@ -1950,7 +1950,7 @@ instance RespectsIso.iInf
 
 中文:
 实例 RespectsIso.iInf
-  签名: {ι : 类型} {W : ι -> Morphism命题erty C} [对任意 i, (W i).RespectsIso]
+  签名: {ι : 类型} {W : ι -> MorphismProperty C} [对任意 i, (W i).RespectsIso]
   定义体: by
   rw [← sInf_range]
   exact sInf (by simpa)
@@ -1973,7 +1973,7 @@ lemma RespectsIso.mk
 
 中文:
 引理 RespectsIso.mk
-  结论: (P : Morphism命题erty C)
+  结论: (P : MorphismProperty C)
   证明: hprecomp (asIso e) f hf
   postcomp e (_ : IsIso e) f hf := hpostcomp (asIso e) f hf
 
@@ -1996,7 +1996,7 @@ lemma RespectsIso.precomp
 
 中文:
 引理 RespectsIso.precomp
-  结论: (P : Morphism命题erty C) [P.RespectsIso] {X Y Z : C} (e : X ⟶ Y)
+  结论: (P : MorphismProperty C) [P.RespectsIso] {X Y Z : C} (e : X ⟶ Y)
   证明: RespectsLeft.precomp (Q := isomorphisms C) e ‹IsIso e› f hf
 
 Depends on / 依赖: RespectsLeft, RespectsLeft.precomp, isomorphisms, precomp
@@ -2016,7 +2016,7 @@ instance :
 
 中文:
 实例 :
-  签名: RespectsIso (⊤ : Morphism命题erty C)
+  签名: RespectsIso (⊤ : MorphismProperty C)
   定义体: trivial
   postcomp _ _ _ _ := trivial
 -/
@@ -2034,7 +2034,7 @@ lemma RespectsIso.postcomp
 
 中文:
 引理 RespectsIso.postcomp
-  结论: (P : Morphism命题erty C) [P.RespectsIso] {X Y Z : C} (e : Y ⟶ Z)
+  结论: (P : MorphismProperty C) [P.RespectsIso] {X Y Z : C} (e : Y ⟶ Z)
   证明: RespectsRight.postcomp (Q := isomorphisms C) e ‹IsIso e› f hf
 
 Depends on / 依赖: RespectsRight, RespectsRight.postcomp, isomorphisms, postcomp
@@ -2054,7 +2054,7 @@ instance RespectsIso.op
 
 中文:
 实例 RespectsIso.op
-  签名: (P : Morphism命题erty C) [RespectsIso P]
+  签名: (P : MorphismProperty C) [RespectsIso P]
   定义体: postcomp P e.unop f.unop hf
   postcomp e (_ : IsIso e) f hf := precomp P e.unop f.unop hf
 
@@ -2075,7 +2075,7 @@ instance RespectsIso.unop
 
 中文:
 实例 RespectsIso.unop
-  签名: (P : Morphism命题erty Cᵒᵖ) [RespectsIso P]
+  签名: (P : MorphismProperty Cᵒᵖ) [RespectsIso P]
   定义体: postcomp P e.op f.op hf
   postcomp e (_ : IsIso e) f hf := precomp P e.op f.op hf
 
@@ -2095,7 +2095,7 @@ definition isoClosure
 
 中文:
 定义 isoClosure
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun _ _ f => exists (Y₁ Y₂ : C) (f' : Y₁ ⟶ Y₂) (_ : P f'), Nonempty (Arrow.mk f' ≅ Arrow.mk f)
 
 Depends on / 依赖: Arrow.mk, Nonempty
@@ -2114,7 +2114,7 @@ lemma le_isoClosure
 
 中文:
 引理 le_isoClosure
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: P <= P.isoClosure
   证明: fun _ _ f hf => ⟨_, _, f, hf, ⟨Iso.refl _⟩⟩
 
@@ -2137,7 +2137,7 @@ instance isoClosure_respectsIso
 
 中文:
 实例 isoClosure_respectsIso
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
       ⟨Arrow.isoMk (asIso iso.hom.left ≪≫ asIso (inv e)) (asIso iso.hom.right) (by simp)⟩⟩
   postcomp := fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
@@ -2162,7 +2162,7 @@ lemma monotone_isoClosure
 
 中文:
 引理 monotone_isoClosure
-  结论: Monotone (isoClosure (C := C))
+  结论: 递增 (isoClosure (C := C))
   证明: by
   intro P Q h X Y f ⟨X', Y', f', hf', ⟨e⟩⟩
   exact ⟨X', Y', f', h _ hf', ⟨e⟩⟩
@@ -2181,7 +2181,7 @@ theorem cancel_left_of_respectsIso
 
 中文:
 定理 cancel_left_of_respectsIso
-  结论: (P : Morphism命题erty C) [hP : RespectsIso P] {X Y Z : C}
+  结论: (P : MorphismProperty C) [hP : RespectsIso P] {X Y Z : C}
   证明: ⟨fun h => by simpa using RespectsIso.precomp P (inv f) (f ≫ g) h, RespectsIso.precomp P f g⟩
 
 Depends on / 依赖: RespectsIso, RespectsIso.precomp, precomp
@@ -2200,7 +2200,7 @@ theorem cancel_right_of_respectsIso
 
 中文:
 定理 cancel_right_of_respectsIso
-  结论: (P : Morphism命题erty C) [hP : RespectsIso P] {X Y Z : C}
+  结论: (P : MorphismProperty C) [hP : RespectsIso P] {X Y Z : C}
   证明: ⟨fun h => by simpa using RespectsIso.postcomp P (inv g) (f ≫ g) h, RespectsIso.postcomp P g f⟩
 
 Depends on / 依赖: RespectsIso, RespectsIso.postcomp, postcomp
@@ -2220,7 +2220,7 @@ lemma comma_iso_iff
 
 中文:
 引理 comma_iso_iff
-  结论: (P : Morphism命题erty C) [P.RespectsIso]
+  结论: (P : MorphismProperty C) [P.RespectsIso]
   证明: by
   simp [← Comma.inv_left_hom_right e.hom, cancel_left_of_respectsIso, cancel_right_of_respectsIso]
 
@@ -2242,7 +2242,7 @@ theorem arrow_iso_iff
 
 中文:
 定理 arrow_iso_iff
-  结论: (P : Morphism命题erty C) [RespectsIso P] {f g : Arrow C}
+  结论: (P : MorphismProperty C) [RespectsIso P] {f g : 箭头 C}
   证明: P.comma_iso_iff e
 
 Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
@@ -2261,7 +2261,7 @@ theorem arrow_mk_iso_iff
 
 中文:
 定理 arrow_mk_iso_iff
-  结论: (P : Morphism命题erty C) [RespectsIso P] {W X Y Z : C}
+  结论: (P : MorphismProperty C) [RespectsIso P] {W X Y Z : C}
   证明: P.arrow_iso_iff e
 
 Depends on / 依赖: P.arrow_iso_iff, arrow_iso_iff
@@ -2286,7 +2286,7 @@ theorem RespectsIso.of_respects_arrow_iso
 
 中文:
 定理 RespectsIso.of_respects_arrow_iso
-  结论: (P : Morphism命题erty C)
+  结论: (P : MorphismProperty C)
   证明: by
     refine hP (Arrow.mk f) (Arrow.mk (e ≫ f)) (Arrow.isoMk (asIso (inv e)) (Iso.refl _) ?_) hf
     simp
@@ -2318,7 +2318,7 @@ lemma isoClosure_eq_iff
 
 中文:
 引理 isoClosure_eq_iff
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: by
   refine ⟨(· ▸ P.isoClosure_respectsIso), fun hP => le_antisymm ?_ (P.le_isoClosure)⟩
   intro X Y f ⟨X', Y', f', hf', ⟨e⟩⟩
@@ -2344,7 +2344,7 @@ lemma isoClosure_eq_self
 
 中文:
 引理 isoClosure_eq_self
-  条件: (P : Morphism命题erty C) [P.RespectsIso]
+  条件: (P : MorphismProperty C) [P.RespectsIso]
   证明: by rwa [isoClosure_eq_iff]
 
 @[simp]
@@ -2365,7 +2365,7 @@ lemma isoClosure_isoClosure
 
 中文:
 引理 isoClosure_isoClosure
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: P.isoClosure.isoClosure_eq_self
 
 Depends on / 依赖: P.isoClosure.isoClosure_eq_self, isoClosure, isoClosure_eq_self
@@ -2388,7 +2388,7 @@ lemma isoClosure_le_iff
 
 中文:
 引理 isoClosure_le_iff
-  条件: (P Q : Morphism命题erty C) [Q.RespectsIso]
+  条件: (P Q : MorphismProperty C) [Q.RespectsIso]
   证明: by
   constructor
   · exact P.le_isoClosure.trans
@@ -2418,7 +2418,7 @@ lemma isoClosure_strictMap_le
 
 中文:
 引理 isoClosure_strictMap_le
-  条件: (P : Morphism命题erty C) (F : C ⥤ D)
+  条件: (P : MorphismProperty C) (F : C ⥤ D)
   证明: fun _ _ _ ⟨⟨_, _, _, hf, ⟨i⟩⟩⟩ => ⟨_, _, _, ⟨hf⟩, ⟨F.mapArrow.mapIso i⟩⟩
 
 Depends on / 依赖: F.mapArrow.mapIso, mapArrow, mapIso
@@ -2441,7 +2441,7 @@ lemma map_eq_isoClosure
 
 中文:
 引理 map_eq_isoClosure
-  条件: (W : Morphism命题erty C) (F : C ⥤ D)
+  条件: (W : MorphismProperty C) (F : C ⥤ D)
   证明: by
   ext
   refine ⟨fun ⟨_, _, f, hf, hf'⟩ => ⟨_, _, _, ⟨hf⟩, hf'⟩, fun ⟨_, _, f, hf, hf'⟩ => ?_⟩
@@ -2467,7 +2467,7 @@ instance map_respectsIso
 
 中文:
 实例 map_respectsIso
-  签名: (P : Morphism命题erty C) (F : C ⥤ D)
+  签名: (P : MorphismProperty C) (F : C ⥤ D)
   定义体: by
   rw [map_eq_isoClosure]
   infer_instance
@@ -2492,7 +2492,7 @@ lemma map_le_iff
 
 中文:
 引理 map_le_iff
-  条件: (P : Morphism命题erty C) {F : C ⥤ D} (Q : Morphism命题erty D) [RespectsIso Q]
+  条件: (P : MorphismProperty C) {F : C ⥤ D} (Q : MorphismProperty D) [RespectsIso Q]
   证明: by
   rw [map_eq_isoClosure]; rw [isoClosure_le_iff]; rw [strictMap_le_iff_le_inverseImage]
 
@@ -2519,7 +2519,7 @@ lemma map_isoClosure
 
 中文:
 引理 map_isoClosure
-  条件: (P : Morphism命题erty C) (F : C ⥤ D)
+  条件: (P : MorphismProperty C) (F : C ⥤ D)
   证明: by
   apply le_antisymm
   · rw [map_eq_isoClosure, map_eq_isoClosure, isoClosure_le_iff]
@@ -2545,7 +2545,7 @@ lemma map_id_eq_isoClosure
 
 中文:
 引理 map_id_eq_isoClosure
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: rfl
 -/
 lemma map_id_eq_isoClosure (P : MorphismProperty C) :
@@ -2564,7 +2564,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (P : Morphism命题erty C) [RespectsIso P]
+  条件: (P : MorphismProperty C) [RespectsIso P]
   证明: by
   rw [map_id_eq_isoClosure]; rw [P.isoClosure_eq_self]
 
@@ -2594,7 +2594,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: (P : Morphism命题erty C) (F : C ⥤ D) {E : 类型} [Category* E] (G : D ⥤ E)
+  条件: (P : MorphismProperty C) (F : C ⥤ D) {E : 类型} [范畴* E] (G : D ⥤ E)
   证明: by
   apply le_antisymm
   · rw [map_le_iff]
@@ -2629,7 +2629,7 @@ instance RespectsIso.inverseImage
 
 中文:
 实例 RespectsIso.inverseImage
-  签名: (P : Morphism命题erty D) [RespectsIso P] (F : C ⥤ D)
+  签名: (P : MorphismProperty D) [RespectsIso P] (F : C ⥤ D)
   定义体: by
     simpa [MorphismProperty.inverseImage, cancel_left_of_respectsIso] using hf
   postcomp {X Y Z} e (he : IsIso e) f hf := by
@@ -2659,7 +2659,7 @@ lemma map_eq_of_iso
 
 中文:
 引理 map_eq_of_iso
-  条件: (P : Morphism命题erty C) {F G : C ⥤ D} (e : F ≅ G)
+  条件: (P : MorphismProperty C) {F G : C ⥤ D} (e : F ≅ G)
   证明: by
   revert F G e
   suffices forall {F G : C ⥤ D} (_ : F ≅ G), P.map F <= P.map G from
@@ -2687,7 +2687,7 @@ lemma map_inverseImage_le
 
 中文:
 引理 map_inverseImage_le
-  条件: (P : Morphism命题erty D) (F : C ⥤ D)
+  条件: (P : MorphismProperty D) (F : C ⥤ D)
   证明: fun _ _ _ ⟨_, _, f, hf, ⟨e⟩⟩ => ⟨_, _, F.map f, hf, ⟨e⟩⟩
 
 Depends on / 依赖: F.map
@@ -2823,7 +2823,7 @@ theorem isomorphisms.iff
 
 中文:
 定理 isomorphisms.iff
-  结论: (isomorphisms C) f ↔ IsIso f
+  结论: (isomorphisms C) f ↔ 是同构 f
   证明: by rfl
 
 @[simp]
@@ -2843,7 +2843,7 @@ theorem monomorphisms.iff
 
 中文:
 定理 monomorphisms.iff
-  结论: (monomorphisms C) f ↔ Mono f
+  结论: (monomorphisms C) f ↔ 单态射 f
   证明: by rfl
 
 @[simp]
@@ -2861,7 +2861,7 @@ theorem epimorphisms.iff
 
 中文:
 定理 epimorphisms.iff
-  结论: (epimorphisms C) f ↔ Epi f
+  结论: (epimorphisms C) f ↔ 满态射 f
   证明: by rfl
 -/
 theorem epimorphisms.iff : (epimorphisms C) f ↔ Epi f := by rfl
@@ -2877,7 +2877,7 @@ theorem isomorphisms.infer_property
 
 中文:
 定理 isomorphisms.infer_property
-  条件: [hf : IsIso f]
+  条件: [hf : 是同构 f]
   结论: (isomorphisms C) f
   证明: hf
 -/
@@ -2895,7 +2895,7 @@ theorem monomorphisms.infer_property
 
 中文:
 定理 monomorphisms.infer_property
-  条件: [hf : Mono f]
+  条件: [hf : 单态射 f]
   结论: (monomorphisms C) f
   证明: hf
 -/
@@ -2913,7 +2913,7 @@ theorem epimorphisms.infer_property
 
 中文:
 定理 epimorphisms.infer_property
-  条件: [hf : Epi f]
+  条件: [hf : 满态射 f]
   结论: (epimorphisms C) f
   证明: hf
 -/
@@ -3047,7 +3047,7 @@ definition prod
   body: fun _ _ f => W₁ f.1 ∧ W₂ f.2
 
 中文:
-定义 prod
+定义 乘积
   签名: {C₁ C₂ : 类型} [CategoryStruct C₁] [CategoryStruct C₂]
   定义体: fun _ _ f => W₁ f.1 ∧ W₂ f.2
 -/
@@ -3066,7 +3066,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {J : Type w} {C : J -> 类型u} [对任意 j, Category.{v} (C j)]
+  签名: {J : 类型 w} {C : J -> 类型u} [对任意 j, 范畴.{v} (C j)]
   定义体: fun _ _ f => forall j, (W j) (f j)
 -/
 def pi {J : Type w} {C : J -> Type u} [forall j, Category.{v} (C j)]
@@ -3085,7 +3085,7 @@ definition functorCategory
 
 中文:
 定义 functorCategory
-  签名: (W : Morphism命题erty C) (J : 类型) [Category* J]
+  签名: (W : MorphismProperty C) (J : 类型) [范畴* J]
   定义体: fun _ _ f => forall (j : J), W (f.app j)
 
 Depends on / 依赖: f.app
@@ -3104,7 +3104,7 @@ definition arrow
 
 中文:
 定义 arrow
-  签名: (W : Morphism命题erty C)
+  签名: (W : MorphismProperty C)
   定义体: fun _ _ f => W f.left ∧ W f.right
 
 Depends on / 依赖: f.left, f.right

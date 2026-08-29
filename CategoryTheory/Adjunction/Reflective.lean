@@ -44,9 +44,9 @@ class Reflective
     - adj : L ⊣ R
 
 中文:
-类 Reflective
+类 反射
   参数: (R : D ⥤ C)
-  继承: R.Full, R.Faithful
+  继承: R.满, R.忠实
   公理与运算 (2 个):
     - L : C ⥤ D
     - adj : L ⊣ R
@@ -69,7 +69,7 @@ definition reflector
 
 中文:
 定义 reflector
-  签名: [Reflective i]
+  签名: [反射 i]
   定义体: Reflective.L (R := i)
 
 Depends on / 依赖: Reflective, Reflective.L
@@ -86,7 +86,7 @@ definition reflectorAdjunction
 
 中文:
 定义 reflectorAdjunction
-  签名: [Reflective i]
+  签名: [反射 i]
   定义体: Reflective.adj
 
 Depends on / 依赖: Reflective, Reflective.adj
@@ -102,8 +102,8 @@ instance [Reflective
   body: ⟨_, ⟨reflectorAdjunction i⟩⟩
 
 中文:
-实例 [Reflective
-  签名: i] : i.IsRightAdjoint
+实例 [反射
+  签名: i] : i.是右伴随
   定义体: ⟨_, ⟨reflectorAdjunction i⟩⟩
 
 Depends on / 依赖: reflectorAdjunction
@@ -119,8 +119,8 @@ instance [Reflective
   body: ⟨_, ⟨reflectorAdjunction i⟩⟩
 
 中文:
-实例 [Reflective
-  签名: i] : (reflector i).IsLeftAdjoint
+实例 [反射
+  签名: i] : (reflector i).是左伴随
   定义体: ⟨_, ⟨reflectorAdjunction i⟩⟩
 
 Depends on / 依赖: reflectorAdjunction
@@ -136,8 +136,8 @@ definition Functor.fullyFaithfulOfReflective
   body: (reflectorAdjunction i).fullyFaithfulROfIsIsoCounit
 
 中文:
-定义 Functor.fullyFaithfulOfReflective
-  签名: [Reflective i]
+定义 函子.fullyFaithfulOfReflective
+  签名: [反射 i]
   定义体: (reflectorAdjunction i).fullyFaithfulROfIsIsoCounit
 
 Depends on / 依赖: fullyFaithfulROfIsIsoCounit, reflectorAdjunction
@@ -158,7 +158,7 @@ theorem unit_obj_eq_map_unit
 
 中文:
 定理 unit_obj_eq_map_unit
-  条件: [Reflective i] (X : C)
+  条件: [反射 i] (X : C)
   证明: by
   rw [← cancel_mono (i.map ((reflectorAdjunction i).counit.app ((reflector i).obj X)))]; rw [← i.map_comp]
   simp
@@ -192,8 +192,8 @@ theorem Functor.essImage.unit_isIso
   rwa [isIso_unit_app_iff_mem_essImage]
 
 中文:
-定理 Functor.essImage.unit_isIso
-  条件: [Reflective i] {A : C} (h : i.essImage A)
+定理 函子.essImage.unit_isIso
+  条件: [反射 i] {A : C} (h : i.essImage A)
   证明: by
   rwa [isIso_unit_app_iff_mem_essImage]
 
@@ -219,7 +219,7 @@ theorem mem_essImage_of_unit_isSplitMono
 
 中文:
 定理 mem_essImage_of_unit_isSplitMono
-  结论: [Reflective i] {A : C}
+  结论: [反射 i] {A : C}
   证明: by
   let η : 𝟭 C ⟶ reflector i ⋙ i := (reflectorAdjunction i).unit
   have : IsIso (η.app (i.obj ((reflector i).obj A))) :=
@@ -252,8 +252,8 @@ instance Reflective.comp
   adj := (reflectorAdjunction G).comp (reflectorAdjunction F)
 
 中文:
-实例 Reflective.comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [Reflective F] [Reflective G]
+实例 反射.comp
+  签名: (F : C ⥤ D) (G : D ⥤ E) [反射 F] [反射 G]
   定义体: reflector G ⋙ reflector F
   adj := (reflectorAdjunction G).comp (reflectorAdjunction F)
 
@@ -275,7 +275,7 @@ definition unitCompPartialBijectiveAux
 
 中文:
 定义 unitCompPartialBijectiveAux
-  签名: [Reflective i] (A : C) (B : D)
+  签名: [反射 i] (A : C) (B : D)
   定义体: ((reflectorAdjunction i).homEquiv _ _).symm.trans
     (Functor.FullyFaithful.ofFullyFaithful i).homEquiv
 
@@ -297,7 +297,7 @@ theorem unitCompPartialBijectiveAux_symm_apply
 
 中文:
 定理 unitCompPartialBijectiveAux_symm_apply
-  结论: [Reflective i] {A : C} {B : D}
+  结论: [反射 i] {A : C} {B : D}
   证明: by
   simp [unitCompPartialBijectiveAux, Adjunction.homEquiv_unit]
 
@@ -322,7 +322,7 @@ definition unitCompPartialBijective
 
 中文:
 定义 unitCompPartialBijective
-  签名: [Reflective i] (A : C) {B : C} (hB : i.essImage B)
+  签名: [反射 i] (A : C) {B : C} (hB : i.essImage B)
   定义体: calc
     (A ⟶ B) ≃ (A ⟶ i.obj (Functor.essImage.witness hB)) := Iso.homCongr (Iso.refl _) hB.getIso.symm
     _ ≃ (i.obj _ ⟶ i.obj (Functor.essImage.witness hB)) := unitCompPartialBijectiveAux _ _
@@ -352,7 +352,7 @@ theorem unitCompPartialBijective_symm_apply
 
 中文:
 定理 unitCompPartialBijective_symm_apply
-  结论: [Reflective i] (A : C) {B : C} (hB : i.essImage B)
+  结论: [反射 i] (A : C) {B : C} (hB : i.essImage B)
   证明: by
   simp [unitCompPartialBijective, unitCompPartialBijectiveAux_symm_apply]
 
@@ -374,7 +374,7 @@ theorem unitCompPartialBijective_symm_natural
 
 中文:
 定理 unitCompPartialBijective_symm_natural
-  结论: [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
+  结论: [反射 i] (A : C) {B B' : C} (h : B ⟶ B')
   证明: by
   simp
 -/
@@ -394,7 +394,7 @@ theorem unitCompPartialBijective_natural
 
 中文:
 定理 unitCompPartialBijective_natural
-  结论: [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
+  结论: [反射 i] (A : C) {B B' : C} (h : B ⟶ B')
   证明: by
   rw [← Equiv.eq_symm_apply]; rw [unitCompPartialBijective_symm_natural A h hB]; rw [Equiv.symm_apply_apply]
 
@@ -414,7 +414,7 @@ instance [Reflective
   body: Functor.essImage.unit_isIso X.property
 
 中文:
-实例 [Reflective
+实例 [反射
   签名: i] (X
   定义体: Functor.essImage.unit_isIso X.property
 
@@ -448,7 +448,7 @@ counitIso := Functor.fullyFaithfulCancelRight i.essImage.ι
 
 中文:
 定义 equivEssImageOfReflective
-  签名: [Reflective i]
+  签名: [反射 i]
   定义体: i.toEssImage
   inverse := i.essImage.ι ⋙ reflector i
   unitIso := (asIso <| (reflectorAdjunction i).counit).symm
@@ -476,9 +476,9 @@ class Coreflective
     - adj : L ⊣ R
 
 中文:
-类 Coreflective
+类 余反射
   参数: (L : C ⥤ D)
-  继承: L.Full, L.Faithful
+  继承: L.满, L.忠实
   公理与运算 (2 个):
     - R : D ⥤ C
     - adj : L ⊣ R
@@ -501,7 +501,7 @@ definition coreflector
 
 中文:
 定义 coreflector
-  签名: [Coreflective j]
+  签名: [余反射 j]
   定义体: Coreflective.R (L := j)
 
 Depends on / 依赖: Coreflective, Coreflective.R
@@ -518,7 +518,7 @@ definition coreflectorAdjunction
 
 中文:
 定义 coreflectorAdjunction
-  签名: [Coreflective j]
+  签名: [余反射 j]
   定义体: Coreflective.adj
 
 Depends on / 依赖: Coreflective, Coreflective.adj
@@ -534,8 +534,8 @@ instance [Coreflective
   body: ⟨_, ⟨coreflectorAdjunction j⟩⟩
 
 中文:
-实例 [Coreflective
-  签名: j] : j.IsLeftAdjoint
+实例 [余反射
+  签名: j] : j.是左伴随
   定义体: ⟨_, ⟨coreflectorAdjunction j⟩⟩
 
 Depends on / 依赖: coreflectorAdjunction
@@ -551,8 +551,8 @@ instance [Coreflective
   body: ⟨_, ⟨coreflectorAdjunction j⟩⟩
 
 中文:
-实例 [Coreflective
-  签名: j] : (coreflector j).IsRightAdjoint
+实例 [余反射
+  签名: j] : (coreflector j).是右伴随
   定义体: ⟨_, ⟨coreflectorAdjunction j⟩⟩
 
 Depends on / 依赖: coreflectorAdjunction
@@ -568,8 +568,8 @@ definition Functor.fullyFaithfulOfCoreflective
   body: (coreflectorAdjunction j).fullyFaithfulLOfIsIsoUnit
 
 中文:
-定义 Functor.fullyFaithfulOfCoreflective
-  签名: [Coreflective j]
+定义 函子.fullyFaithfulOfCoreflective
+  签名: [余反射 j]
   定义体: (coreflectorAdjunction j).fullyFaithfulLOfIsIsoUnit
 
 Depends on / 依赖: coreflectorAdjunction, fullyFaithfulLOfIsIsoUnit
@@ -592,7 +592,7 @@ example [Coreflective j] {B : C} : IsIso ((coreflectorAdjunction j).counit.app (
 
 中文:
 引理 counit_obj_eq_map_counit
-  条件: [Coreflective j] (X : D)
+  条件: [余反射 j] (X : D)
   证明: by
   rw [← cancel_epi (j.map ((coreflectorAdjunction j).unit.app ((coreflector j).obj X)))]; rw [← j.map_comp]
   simp
@@ -623,8 +623,8 @@ lemma Functor.essImage.counit_isIso
   rwa [isIso_counit_app_iff_mem_essImage]
 
 中文:
-引理 Functor.essImage.counit_isIso
-  条件: [Coreflective j] {A : D} (h : j.essImage A)
+引理 函子.essImage.counit_isIso
+  条件: [余反射 j] {A : D} (h : j.essImage A)
   证明: by
   rwa [isIso_counit_app_iff_mem_essImage]
 
@@ -650,7 +650,7 @@ lemma mem_essImage_of_counit_isSplitEpi
 
 中文:
 引理 mem_essImage_of_counit_isSplitEpi
-  结论: [Coreflective j] {A : D}
+  结论: [余反射 j] {A : D}
   证明: by
   let ε : coreflector j ⋙ j ⟶ 𝟭 D := (coreflectorAdjunction j).counit
   have : IsIso (ε.app (j.obj ((coreflector j).obj A))) :=
@@ -683,8 +683,8 @@ instance Coreflective.comp
   adj := (coreflectorAdjunction F).comp (coreflectorAdjunction G)
 
 中文:
-实例 Coreflective.comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [Coreflective F] [Coreflective G]
+实例 余反射.comp
+  签名: (F : C ⥤ D) (G : D ⥤ E) [余反射 F] [余反射 G]
   定义体: coreflector G ⋙ coreflector F
   adj := (coreflectorAdjunction F).comp (coreflectorAdjunction G)
 

@@ -34,7 +34,7 @@ instance typesCartesianMonoidalCategory
 
 中文:
 实例 typesCartesianMonoidalCategory
-  签名: : CartesianMonoidalCategory (类型u) where
+  签名: : CartesianMonoidal范畴 (类型u) where
   定义体: X × Y
   tensorUnit := PUnit
   __ := CartesianMonoidalCategory.ofChosenFiniteProducts
@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (类型u)
+  签名: 辫范畴 (类型u)
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -92,7 +92,7 @@ theorem types_tensorUnit_def
 
 中文:
 定理 types_tensorUnit_def
-  结论: 𝟙_ (类型u) = PUnit
+  结论: 𝟙_ (类型u) = 命题单元
   证明: rfl
 -/
 theorem types_tensorUnit_def : 𝟙_ (Type u) = PUnit := rfl
@@ -178,7 +178,7 @@ theorem leftUnitor_hom_apply
 
 中文:
 定理 leftUnitor_hom_apply
-  条件: {X : 类型u} {x : X} {p : PUnit}
+  条件: {X : 类型u} {x : X} {p : 命题单元}
   证明: rfl
 
 @[simp]
@@ -222,7 +222,7 @@ theorem rightUnitor_hom_apply
 
 中文:
 定理 rightUnitor_hom_apply
-  条件: {X : 类型u} {x : X} {p : PUnit}
+  条件: {X : 类型u} {x : X} {p : 命题单元}
   证明: rfl
 
 @[simp]
@@ -453,7 +453,7 @@ theorem CartesianMonoidalCategory.lift_apply
   proof: rfl
 
 中文:
-定理 CartesianMonoidalCategory.lift_apply
+定理 CartesianMonoidal范畴.lift_apply
   条件: {X Y Z : 类型u} {f : X ⟶ Y} {g : X ⟶ Z} {x : X}
   证明: rfl
 -/
@@ -473,7 +473,7 @@ definition MonoidalFunctor.mapPi
 
 中文:
 定义 MonoidalFunctor.mapPi
-  签名: {C : 类型} [Category* C] [MonoidalCategory C]
+  签名: {C : 类型} [范畴* C] [幺半群范畴 C]
   定义体: Functor.mapIso _ (Fin.consEquiv _).symm.toIso ≪≫ (Functor.Monoidal.μIso F β (Fin n -> β)).symm
 
 Depends on / 依赖: Fin.consEquiv, Functor, Functor.Monoidal, Functor.mapIso, Monoidal, consEquiv, mapIso, symm.toIso

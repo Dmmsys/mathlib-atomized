@@ -36,7 +36,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: {σ} (f : σ -> Option σ)
+  签名: {σ} (f : σ -> 选项类型 σ)
   定义体: PFun.fix fun s => Part.some (f s).elim (Sum.inl s) Sum.inr
 
 Depends on / 依赖: PFun.fix, Part.some, Sum.inl, Sum.inr
@@ -54,7 +54,7 @@ definition Reaches
 
 中文:
 定义 Reaches
-  签名: {σ} (f : σ -> Option σ)
+  签名: {σ} (f : σ -> 选项类型 σ)
   定义体: ReflTransGen fun a b => b in f a
 
 Depends on / 依赖: ReflTransGen
@@ -72,7 +72,7 @@ definition Reaches₁
 
 中文:
 定义 Reaches₁
-  签名: {σ} (f : σ -> Option σ)
+  签名: {σ} (f : σ -> 选项类型 σ)
   定义体: TransGen fun a b => b in f a
 
 Depends on / 依赖: TransGen
@@ -90,7 +90,7 @@ theorem reaches₁_eq
 
 中文:
 定理 reaches₁_eq
-  条件: {σ} {f : σ -> Option σ} {a b c} (h : f a = f b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c} (h : f a = f b)
   证明: TransGen.head'_iff.trans (TransGen.head'_iff.trans <| by rw [h]).symm
 
 Depends on / 依赖: TransGen, TransGen.head, _iff, _iff.trans
@@ -109,7 +109,7 @@ theorem reaches_total
 
 中文:
 定理 reaches_total
-  条件: {σ} {f : σ -> Option σ} {a b c} (hab : Reaches f a b) (hac : Reaches f a c)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c} (hab : Reaches f a b) (hac : Reaches f a c)
   证明: ReflTransGen.total_of_right_unique (fun _ _ _ => Option.mem_unique) hab hac
 
 Depends on / 依赖: Option.mem_unique, ReflTransGen, ReflTransGen.total_of_right_unique, mem_unique, total_of_right_unique
@@ -130,7 +130,7 @@ theorem reaches₁_fwd
 
 中文:
 定理 reaches₁_fwd
-  条件: {σ} {f : σ -> Option σ} {a b c} (h₁ : Reaches₁ f a c) (h₂ : b in f a)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c} (h₁ : Reaches₁ f a c) (h₂ : b in f a)
   证明: by
   rcases TransGen.head'_iff.1 h₁ with ⟨b', hab, hbc⟩
   cases Option.mem_unique hab h₂; exact hbc
@@ -152,7 +152,7 @@ definition Reaches₀
 
 中文:
 定义 Reaches₀
-  签名: {σ} (f : σ -> Option σ) (a b : σ)
+  签名: {σ} (f : σ -> 选项类型 σ) (a b : σ)
   定义体: forall c, Reaches₁ f b c -> Reaches₁ f a c
 -/
 def Reaches₀ {σ} (f : σ -> Option σ) (a b : σ) : Prop :=
@@ -167,7 +167,7 @@ theorem Reaches₀.trans
 
 中文:
 定理 Reaches₀.trans
-  结论: {σ} {f : σ -> Option σ} {a b c : σ} (h₁ : Reaches₀ f a b)
+  结论: {σ} {f : σ -> 选项类型 σ} {a b c : σ} (h₁ : Reaches₀ f a b)
 -/
 theorem Reaches₀.trans {σ} {f : σ -> Option σ} {a b c : σ} (h₁ : Reaches₀ f a b)
     (h₂ : Reaches₀ f b c) : Reaches₀ f a c
@@ -184,7 +184,7 @@ theorem Reaches₀.refl
 
 中文:
 定理 Reaches₀.refl
-  条件: {σ} {f : σ -> Option σ} (a : σ)
+  条件: {σ} {f : σ -> 选项类型 σ} (a : σ)
   结论: Reaches₀ f a a
 -/
 theorem Reaches₀.refl {σ} {f : σ -> Option σ} (a : σ) : Reaches₀ f a a
@@ -200,7 +200,7 @@ theorem Reaches₀.single
 
 中文:
 定理 Reaches₀.single
-  条件: {σ} {f : σ -> Option σ} {a b : σ} (h : b in f a)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b : σ} (h : b in f a)
   结论: Reaches₀ f a b
 -/
 theorem Reaches₀.single {σ} {f : σ -> Option σ} {a b : σ} (h : b in f a) : Reaches₀ f a b
@@ -216,7 +216,7 @@ theorem Reaches₀.head
 
 中文:
 定理 Reaches₀.head
-  条件: {σ} {f : σ -> Option σ} {a b c : σ} (h : b in f a) (h₂ : Reaches₀ f b c)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c : σ} (h : b in f a) (h₂ : Reaches₀ f b c)
   证明: (Reaches₀.single h).trans h₂
 
 Depends on / 依赖: single
@@ -235,7 +235,7 @@ theorem Reaches₀.tail
 
 中文:
 定理 Reaches₀.tail
-  条件: {σ} {f : σ -> Option σ} {a b c : σ} (h₁ : Reaches₀ f a b) (h : c in f b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c : σ} (h₁ : Reaches₀ f a b) (h : c in f b)
   证明: h₁.trans (Reaches₀.single h)
 
 Depends on / 依赖: single
@@ -254,7 +254,7 @@ theorem reaches₀_eq
 
 中文:
 定理 reaches₀_eq
-  条件: {σ} {f : σ -> Option σ} {a b} (e : f a = f b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b} (e : f a = f b)
   结论: Reaches₀ f a b
 -/
 theorem reaches₀_eq {σ} {f : σ -> Option σ} {a b} (e : f a = f b) : Reaches₀ f a b
@@ -270,7 +270,7 @@ theorem Reaches₁.to₀
 
 中文:
 定理 Reaches₁.to₀
-  条件: {σ} {f : σ -> Option σ} {a b : σ} (h : Reaches₁ f a b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b : σ} (h : Reaches₁ f a b)
   结论: Reaches₀ f a b
 -/
 theorem Reaches₁.to₀ {σ} {f : σ -> Option σ} {a b : σ} (h : Reaches₁ f a b) : Reaches₀ f a b
@@ -286,7 +286,7 @@ theorem Reaches.to₀
 
 中文:
 定理 Reaches.to₀
-  条件: {σ} {f : σ -> Option σ} {a b : σ} (h : Reaches f a b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b : σ} (h : Reaches f a b)
   结论: Reaches₀ f a b
 -/
 theorem Reaches.to₀ {σ} {f : σ -> Option σ} {a b : σ} (h : Reaches f a b) : Reaches₀ f a b
@@ -302,7 +302,7 @@ theorem Reaches₀.tail'
 
 中文:
 定理 Reaches₀.tail'
-  条件: {σ} {f : σ -> Option σ} {a b c : σ} (h : Reaches₀ f a b) (h₂ : c in f b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b c : σ} (h : Reaches₀ f a b) (h₂ : c in f b)
   证明: h _ (TransGen.single h₂)
 
 Depends on / 依赖: TransGen, TransGen.single, single
@@ -327,7 +327,7 @@ H _ ha' fun b' e => h' _ Part.mem_some_iff.2 by rw [e]; rfl
 
 中文:
 定义 evalInduction
-  签名: {σ} {f : σ -> Option σ} {b : σ} {C : σ -> Sort*} {a : σ}
+  签名: {σ} {f : σ -> 选项类型 σ} {b : σ} {C : σ -> 类型层*} {a : σ}
   定义体: PFun.fixInduction h fun a' ha' h' =>
 H _ ha' fun b' e => h' _ Part.mem_some_iff.2 by rw [e]; rfl
 
@@ -356,7 +356,7 @@ theorem mem_eval
 
 中文:
 定理 mem_eval
-  条件: {σ} {f : σ -> Option σ} {a b}
+  条件: {σ} {f : σ -> 选项类型 σ} {a b}
   结论: b in eval f a ↔ Reaches f a b ∧ f b = none
   证明: by
   refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => ?_⟩
@@ -401,7 +401,7 @@ theorem eval_maximal₁
 
 中文:
 定理 eval_maximal₁
-  条件: {σ} {f : σ -> Option σ} {a b} (h : b in eval f a) (c)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b} (h : b in eval f a) (c)
   结论: ¬Reaches₁ f b c
   证明: mem_eval.1 h
     let ⟨b', h', _⟩ := TransGen.head'_iff.1 bc
@@ -427,7 +427,7 @@ theorem eval_maximal
 
 中文:
 定理 eval_maximal
-  条件: {σ} {f : σ -> Option σ} {a b} (h : b in eval f a) {c}
+  条件: {σ} {f : σ -> 选项类型 σ} {a b} (h : b in eval f a) {c}
   结论: Reaches f b c ↔ c = b
   证明: let ⟨_, b0⟩ := mem_eval.1 h
   reflTransGen_iff_eq fun b' h' => by cases b0.symm.trans h'
@@ -455,7 +455,7 @@ theorem reaches_eval
 
 中文:
 定理 reaches_eval
-  条件: {σ} {f : σ -> Option σ} {a b} (ab : Reaches f a b)
+  条件: {σ} {f : σ -> 选项类型 σ} {a b} (ab : Reaches f a b)
   结论: eval f a = eval f b
   证明: by
   refine Part.ext fun _ => ⟨fun h => ?_, fun h => ?_⟩
@@ -487,7 +487,7 @@ definition Respects
 
 中文:
 定义 Respects
-  签名: {σ₁ σ₂} (f₁ : σ₁ -> Option σ₁) (f₂ : σ₂ -> Option σ₂) (tr : σ₁ -> σ₂ -> 命题)
+  签名: {σ₁ σ₂} (f₁ : σ₁ -> 选项类型 σ₁) (f₂ : σ₂ -> 选项类型 σ₂) (tr : σ₁ -> σ₂ -> 命题)
   定义体: forall ⦃a₁ a₂⦄, tr a₁ a₂ -> (match f₁ a₁ with
     | some b₁ => exists b₂, tr b₁ b₂ ∧ Reaches₁ f₂ a₂ b₂
     | none => f₂ a₂ = none : Prop)
@@ -746,7 +746,7 @@ definition FRespects
 
 中文:
 定义 FRespects
-  签名: {σ₁ σ₂} (f₂ : σ₂ -> Option σ₂) (tr : σ₁ -> σ₂) (a₂ : σ₂)
+  签名: {σ₁ σ₂} (f₂ : σ₂ -> 选项类型 σ₂) (tr : σ₁ -> σ₂) (a₂ : σ₂)
 -/
 def FRespects {σ₁ σ₂} (f₂ : σ₂ -> Option σ₂) (tr : σ₁ -> σ₂) (a₂ : σ₂) : Option σ₁ -> Prop
   | some b₁ => Reaches₁ f₂ a₂ (tr b₁)
@@ -761,7 +761,7 @@ theorem frespects_eq
 
 中文:
 定理 frespects_eq
-  条件: {σ₁ σ₂} {f₂ : σ₂ -> Option σ₂} {tr : σ₁ -> σ₂} {a₂ b₂} (h : f₂ a₂ = f₂ b₂)
+  条件: {σ₁ σ₂} {f₂ : σ₂ -> 选项类型 σ₂} {tr : σ₁ -> σ₂} {a₂ b₂} (h : f₂ a₂ = f₂ b₂)
 -/
 theorem frespects_eq {σ₁ σ₂} {f₂ : σ₂ -> Option σ₂} {tr : σ₁ -> σ₂} {a₂ b₂} (h : f₂ a₂ = f₂ b₂) :
     forall {b₁}, FRespects f₂ tr a₂ b₁ ↔ FRespects f₂ tr b₂ b₁
@@ -807,7 +807,7 @@ theorem tr_eval'
 
 中文:
 定理 tr_eval'
-  结论: {σ₁ σ₂} (f₁ : σ₁ -> Option σ₁) (f₂ : σ₂ -> Option σ₂) (tr : σ₁ -> σ₂)
+  结论: {σ₁ σ₂} (f₁ : σ₁ -> 选项类型 σ₁) (f₂ : σ₂ -> 选项类型 σ₂) (tr : σ₁ -> σ₂)
   证明: Part.ext fun b₂ =>
     ⟨fun h =>
       let ⟨b₁, bb, hb⟩ := tr_eval_rev H rfl h
@@ -844,7 +844,7 @@ structure EvalsTo
 
 中文:
 结构 EvalsTo
-  参数: {σ : 类型} (f : σ -> Option σ) (a : σ) (b : Option σ)
+  参数: {σ : 类型} (f : σ -> 选项类型 σ) (a : σ) (b : 选项类型 σ)
   公理与运算 (2 个):
     - steps : 自然数
     - evals_in_steps : (flip bind f)^[steps] a = b
@@ -868,7 +868,7 @@ structure EvalsToInTime
 
 中文:
 结构 EvalsToInTime
-  参数: {σ : 类型} (f : σ -> Option σ) (a : σ) (b : Option σ) (m : 自然数)
+  参数: {σ : 类型} (f : σ -> 选项类型 σ) (a : σ) (b : 选项类型 σ) (m : 自然数)
   公理与运算 (1 个):
     - steps_le_m : steps <= m
 -/
@@ -886,7 +886,7 @@ definition EvalsTo.refl
 
 中文:
 定义 EvalsTo.refl
-  签名: {σ : 类型} (f : σ -> Option σ) (a : σ)
+  签名: {σ : 类型} (f : σ -> 选项类型 σ) (a : σ)
   定义体: ⟨0, rfl⟩
 -/
 def EvalsTo.refl {σ : Type*} (f : σ -> Option σ) (a : σ) : EvalsTo f a (some a) :=
@@ -904,7 +904,7 @@ definition EvalsTo.trans
 
 中文:
 定义 EvalsTo.trans
-  签名: {σ : 类型} (f : σ -> Option σ) (a : σ) (b : σ) (c : Option σ)
+  签名: {σ : 类型} (f : σ -> 选项类型 σ) (a : σ) (b : σ) (c : 选项类型 σ)
   定义体: ⟨h₂.steps + h₁.steps, by rw [Function.iterate_add_apply, h₁.evals_in_steps, h₂.evals_in_steps]⟩
 
 Depends on / 依赖: Function, Function.iterate_add_apply, evals_in_steps, iterate_add_apply
@@ -923,7 +923,7 @@ definition EvalsToInTime.refl
 
 中文:
 定义 EvalsToInTime.refl
-  签名: {σ : 类型} (f : σ -> Option σ) (a : σ)
+  签名: {σ : 类型} (f : σ -> 选项类型 σ) (a : σ)
   定义体: ⟨EvalsTo.refl f a, le_refl 0⟩
 
 Depends on / 依赖: EvalsTo, EvalsTo.refl, le_refl
@@ -943,7 +943,7 @@ definition EvalsToInTime.trans
 
 中文:
 定义 EvalsToInTime.trans
-  签名: {σ : 类型} (f : σ -> Option σ) (m₁ : 自然数) (m₂ : 自然数) (a : σ) (b : σ)
+  签名: {σ : 类型} (f : σ -> 选项类型 σ) (m₁ : 自然数) (m₂ : 自然数) (a : σ) (b : σ)
   定义体: ⟨EvalsTo.trans f a b c h₁.toEvalsTo h₂.toEvalsTo, add_le_add h₂.steps_le_m h₁.steps_le_m⟩
 
 Depends on / 依赖: EvalsTo, EvalsTo.trans, add_le_add, steps_le_m, toEvalsTo

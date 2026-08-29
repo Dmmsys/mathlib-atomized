@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow 实数>=0 实数
+  签名: 幂 实数>=0 实数
   定义体: ⟨rpow⟩
 
 @[simp]
@@ -1069,7 +1069,7 @@ lemma rpow_ofNat
   proof: rpow_natCast x n
 
 中文:
-引理 rpow_ofNat
+引理 rpow_of自然数
   条件: (x : 实数>=0) (n : 自然数) [n.AtLeastTwo]
   证明: rpow_natCast x n
 
@@ -1152,7 +1152,7 @@ theorem list_prod_map_rpow
 
 中文:
 定理 list_prod_map_rpow
-  条件: (l : List 实数>=0) (r : 实数)
+  条件: (l : 列表 实数>=0) (r : 实数)
   证明: l.prod_hom (rpowMonoidHom r)
 
 Depends on / 依赖: l.prod_hom, prod_hom, rpowMonoidHom
@@ -1172,7 +1172,7 @@ theorem list_prod_map_rpow'
 
 中文:
 定理 list_prod_map_rpow'
-  条件: {ι} (l : List ι) (f : ι -> 实数>=0) (r : 实数)
+  条件: {ι} (l : 列表 ι) (f : ι -> 实数>=0) (r : 实数)
   证明: by
   rw [← list_prod_map_rpow]; rw [List.map_map]; rfl
 
@@ -1213,7 +1213,7 @@ lemma finsetProd_rpow
 
 中文:
 引理 finsetProd_rpow
-  条件: {ι} (s : Finset ι) (f : ι -> 实数>=0) (r : 实数)
+  条件: {ι} (s : 有限集 ι) (f : ι -> 实数>=0) (r : 实数)
   证明: multiset_prod_map_rpow _ _ _
 
 @[deprecated (since := "2026-04-08")] alias finset_prod_rpow := finsetProd_rpow
@@ -1244,8 +1244,8 @@ theorem _root_.Real.list_prod_map_rpow
   exact mod_cast this
 
 中文:
-定理 _root_.Real.list_prod_map_rpow
-  条件: (l : List 实数) (hl : 对任意 x in l, (0 : 实数) <= x) (r : 实数)
+定理 _root_.实数.list_prod_map_rpow
+  条件: (l : 列表 实数) (hl : 对任意 x in l, (0 : 实数) <= x) (r : 实数)
   证明: by
   lift l to List Real>=0 using hl
   have := congr_arg ((↑) : Real>=0 -> Real) (NNReal.list_prod_map_rpow l r)
@@ -1275,8 +1275,8 @@ theorem _root_.Real.list_prod_map_rpow'
   simpa using hl
 
 中文:
-定理 _root_.Real.list_prod_map_rpow'
-  结论: {ι} (l : List ι) (f : ι -> 实数)
+定理 _root_.实数.list_prod_map_rpow'
+  结论: {ι} (l : 列表 ι) (f : ι -> 实数)
   证明: by
   rw [← Real.list_prod_map_rpow (l.map f) _ r]; rw [List.map_map]
   · rfl
@@ -1302,7 +1302,7 @@ theorem _root_.Real.multiset_prod_map_rpow
   simpa using Real.list_prod_map_rpow' l f hs r
 
 中文:
-定理 _root_.Real.multiset_prod_map_rpow
+定理 _root_.实数.multiset_prod_map_rpow
   结论: {ι} (s : Multiset ι) (f : ι -> 实数)
   证明: by
   obtain ⟨l⟩ := s
@@ -1326,7 +1326,7 @@ theorem _root_.Real.finsetProd_rpow
 @[deprecated (since := "2026-04-08")] alias _root_.Real.finset_prod_rpow := Real.finsetProd_rpow
 
 中文:
-定理 _root_.Real.finsetProd_rpow
+定理 _root_.实数.finsetProd_rpow
   证明: Real.multiset_prod_map_rpow s.val f hs r
 
 @[deprecated (since := "2026-04-08")] alias _root_.Real.finset_prod_rpow := Real.finsetProd_rpow
@@ -2069,7 +2069,7 @@ theorem rpow_left_injective
 中文:
 定理 rpow_left_injective
   条件: {x : 实数} (hx : x != 0)
-  结论: Function.Injective fun y : 实数>=0 => y ^ x
+  结论: 函数.单射 fun y : 实数>=0 => y ^ x
   证明: fun y z hyz => by simpa only [rpow_inv_rpow_self hx] using congr_arg (fun y => y ^ (1 / x)) hyz
 
 Depends on / 依赖: congr_arg, rpow_inv_rpow_self
@@ -2109,7 +2109,7 @@ theorem rpow_left_surjective
 中文:
 定理 rpow_left_surjective
   条件: {x : 实数} (hx : x != 0)
-  结论: Function.Surjective fun y : 实数>=0 => y ^ x
+  结论: 函数.满射 fun y : 实数>=0 => y ^ x
   证明: fun y => ⟨y ^ x⁻¹, by simp_rw [← rpow_mul, inv_mul_cancel₀ hx, rpow_one]⟩
 
 Depends on / 依赖: rpow_mul, rpow_one, simp_rw
@@ -2129,7 +2129,7 @@ theorem rpow_left_bijective
 中文:
 定理 rpow_left_bijective
   条件: {x : 实数} (hx : x != 0)
-  结论: Function.Bijective fun y : 实数>=0 => y ^ x
+  结论: 函数.双射 fun y : 实数>=0 => y ^ x
   证明: ⟨rpow_left_injective hx, rpow_left_surjective hx⟩
 
 Depends on / 依赖: rpow_left_injective, rpow_left_surjective
@@ -2430,7 +2430,7 @@ theorem _root_.Real.toNNReal_rpow_of_nonneg
   rw [← NNReal.coe_rpow]; rw [Real.toNNReal_coe]
 
 中文:
-定理 _root_.Real.toNNReal_rpow_of_nonneg
+定理 _root_.实数.toNN实数_rpow_of_nonneg
   条件: {x y : 实数} (hx : 0 <= x)
   证明: by
   nth_rw 1 [← Real.coe_toNNReal x hx]
@@ -2455,7 +2455,7 @@ theorem strictMono_rpow_of_pos
 中文:
 定理 strictMono_rpow_of_pos
   条件: {z : 实数} (h : 0 < z)
-  结论: StrictMono fun x : 实数>=0 => x ^ z
+  结论: 严格递增 fun x : 实数>=0 => x ^ z
   证明: fun x y hxy => by simp only [NNReal.rpow_lt_rpow hxy h]
 
 Depends on / 依赖: NNReal, NNReal.rpow_lt_rpow, rpow_lt_rpow
@@ -2476,7 +2476,7 @@ theorem monotone_rpow_of_nonneg
 中文:
 定理 monotone_rpow_of_nonneg
   条件: {z : 实数} (h : 0 <= z)
-  结论: Monotone fun x : 实数>=0 => x ^ z
+  结论: 递增 fun x : 实数>=0 => x ^ z
   证明: h.eq_or_lt.elim (fun h0 => h0 ▸ by simp only [rpow_zero, monotone_const]) fun h0 =>
     (strictMono_rpow_of_pos h0).monotone
 
@@ -2548,7 +2548,7 @@ theorem _root_.Real.nnnorm_rpow_of_nonneg
   ext; exact Real.norm_rpow_of_nonneg hx
 
 中文:
-定理 _root_.Real.nnnorm_rpow_of_nonneg
+定理 _root_.实数.nnnorm_rpow_of_nonneg
   条件: {x y : 实数} (hx : 0 <= x)
   结论: ‖x ^ y‖₊ = ‖x‖₊ ^ y
   证明: by
@@ -2590,7 +2590,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow 实数>=0∞ 实数
+  签名: 幂 实数>=0∞ 实数
   定义体: ⟨rpow⟩
 
 @[simp]
@@ -2970,7 +2970,7 @@ theorem rpow_ofNNReal
 @[simp]
 
 中文:
-定理 rpow_ofNNReal
+定理 rpow_ofNN实数
   条件: {M : 实数>=0} {P : 实数} (hP : 0 <= P)
   结论: (M : 实数>=0∞) ^ P = ↑(M ^ P)
   证明: by
@@ -3613,7 +3613,7 @@ lemma rpow_ofNat
 @[simp, norm_cast]
 
 中文:
-引理 rpow_ofNat
+引理 rpow_of自然数
   条件: (x : 实数>=0∞) (n : 自然数) [n.AtLeastTwo]
   证明: rpow_natCast x n
 
@@ -3774,7 +3774,7 @@ theorem prod_coe_rpow
 
 中文:
 定理 prod_coe_rpow
-  条件: {ι} (s : Finset ι) (f : ι -> 实数>=0) (r : 实数)
+  条件: {ι} (s : 有限集 ι) (f : ι -> 实数>=0) (r : 实数)
   证明: by
   classical
   induction s using Finset.induction with
@@ -3847,7 +3847,7 @@ have h2f : forall i in s, f i != ∞ := fun i hi => hf i mem_insert_of_mem hi
 
 中文:
 定理 prod_rpow_of_ne_top
-  条件: {ι} {s : Finset ι} {f : ι -> 实数>=0∞} (hf : 对任意 i in s, f i != ∞) (r : 实数)
+  条件: {ι} {s : 有限集 ι} {f : ι -> 实数>=0∞} (hf : 对任意 i in s, f i != ∞) (r : 实数)
   证明: by
   classical
   induction s using Finset.induction with
@@ -3883,7 +3883,7 @@ theorem prod_rpow_of_nonneg
 
 中文:
 定理 prod_rpow_of_nonneg
-  条件: {ι} {s : Finset ι} {f : ι -> 实数>=0∞} {r : 实数} (hr : 0 <= r)
+  条件: {ι} {s : 有限集 ι} {f : ι -> 实数>=0∞} {r : 实数} (hr : 0 <= r)
   证明: by
   classical
   induction s using Finset.induction with
@@ -3976,7 +3976,7 @@ theorem strictMono_rpow_of_pos
 中文:
 定理 strictMono_rpow_of_pos
   条件: {z : 实数} (h : 0 < z)
-  结论: StrictMono fun x : 实数>=0∞ => x ^ z
+  结论: 严格递增 fun x : 实数>=0∞ => x ^ z
   证明: by
   intro x y hxy
   lift x to Real>=0 using ne_top_of_lt hxy
@@ -4008,7 +4008,7 @@ theorem monotone_rpow_of_nonneg
 中文:
 定理 monotone_rpow_of_nonneg
   条件: {z : 实数} (h : 0 <= z)
-  结论: Monotone fun x : 实数>=0∞ => x ^ z
+  结论: 递增 fun x : 实数>=0∞ => x ^ z
   证明: h.eq_or_lt.elim (fun h0 => h0 ▸ by simp only [rpow_zero, monotone_const]) fun h0 =>
     (strictMono_rpow_of_pos h0).monotone
 
@@ -4167,7 +4167,7 @@ lemma max_rpow
 中文:
 引理 max_rpow
   条件: {x y : 实数>=0∞} {p : 实数} (hp : 0 <= p)
-  结论: max x y ^ p = max (x ^ p) (y ^ p)
+  结论: 最大值 x y ^ p = 最大值 (x ^ p) (y ^ p)
   证明: by
   rcases le_total x y with hxy | hxy
   · rw [max_eq_right hxy, max_eq_right (rpow_le_rpow hxy hp)]
@@ -4811,7 +4811,7 @@ lemma toNNReal_rpow
     simp [← coe_rpow_of_nonneg _ (le_of_lt
 
 中文:
-引理 toNNReal_rpow
+引理 toNN实数_rpow
   条件: (x : 实数>=0∞) (z : 实数)
   结论: (x ^ z).toNN实数 = x.toNN实数 ^ z
   证明: by
@@ -4851,7 +4851,7 @@ theorem toReal_rpow
   rw [ENNReal.toReal]; rw [ENNReal.toReal]; rw [← NNReal.coe_rpow]; rw [ENNReal.toNNReal_rpow]
 
 中文:
-定理 toReal_rpow
+定理 to实数_rpow
   条件: (x : 实数>=0∞) (z : 实数)
   结论: x.to实数 ^ z = (x ^ z).to实数
   证明: by
@@ -4874,7 +4874,7 @@ theorem ofReal_rpow_of_pos
   simp [hx_pos]
 
 中文:
-定理 ofReal_rpow_of_pos
+定理 of实数_rpow_of_pos
   条件: {x p : 实数} (hx_pos : 0 < x)
   证明: by
   simp_rw [ENNReal.ofReal]
@@ -4906,7 +4906,7 @@ theorem ofReal_rpow_of_nonneg
   exact ofReal_rpow_of_pos (hx_nonneg.lt_of_ne hx0.symm)
 
 中文:
-定理 ofReal_rpow_of_nonneg
+定理 of实数_rpow_of_nonneg
   条件: {x p : 实数} (hx_nonneg : 0 <= x) (hp_nonneg : 0 <= p)
   证明: by
   by_cases hp0 : p = 0
@@ -5169,7 +5169,7 @@ lemma rpow_left_injective
 中文:
 引理 rpow_left_injective
   条件: {x : 实数} (hx : x != 0)
-  结论: Injective fun y : 实数>=0∞ => y ^ x
+  结论: 单射 fun y : 实数>=0∞ => y ^ x
   证明: HasLeftInverse.injective ⟨fun y => y ^ x⁻¹, rpow_rpow_inv hx⟩
 
 Depends on / 依赖: HasLeftInverse, HasLeftInverse.injective, injective, rpow_rpow_inv
@@ -5189,7 +5189,7 @@ theorem rpow_left_surjective
 中文:
 定理 rpow_left_surjective
   条件: {x : 实数} (hx : x != 0)
-  结论: Function.Surjective fun y : 实数>=0∞ => y ^ x
+  结论: 函数.满射 fun y : 实数>=0∞ => y ^ x
   证明: HasRightInverse.surjective ⟨fun y => y ^ x⁻¹, rpow_inv_rpow hx⟩
 
 Depends on / 依赖: HasRightInverse, HasRightInverse.surjective, rpow_inv_rpow, surjective
@@ -5209,7 +5209,7 @@ theorem rpow_left_bijective
 中文:
 定理 rpow_left_bijective
   条件: {x : 实数} (hx : x != 0)
-  结论: Function.Bijective fun y : 实数>=0∞ => y ^ x
+  结论: 函数.双射 fun y : 实数>=0∞ => y ^ x
   证明: ⟨rpow_left_injective hx, rpow_left_surjective hx⟩
 
 Depends on / 依赖: rpow_left_injective, rpow_left_surjective
@@ -5226,7 +5226,7 @@ lemma _root_.Real.enorm_rpow_of_nonneg
   proof: by simp [enorm, nnnorm_rpow_of_nonneg hx, coe_rpow_of_nonneg _ hy]
 
 中文:
-引理 _root_.Real.enorm_rpow_of_nonneg
+引理 _root_.实数.enorm_rpow_of_nonneg
   条件: {x y : 实数} (hx : 0 <= x) (hy : 0 <= y)
   证明: by simp [enorm, nnnorm_rpow_of_nonneg hx, coe_rpow_of_nonneg _ hy]
 
@@ -5438,8 +5438,8 @@ theorem IsNat.nnreal_rpow_eq_nnreal_pow
   rw [h.1]; rw [NNReal.rpow_natCast]
 
 中文:
-定理 IsNat.nnreal_rpow_eq_nnreal_pow
-  条件: {b : 实数} {n : 自然数} (h : Is自然数 b n) (a : 实数>=0)
+定理 是自然数.nnreal_rpow_eq_nnreal_pow
+  条件: {b : 实数} {n : 自然数} (h : 是自然数 b n) (a : 实数>=0)
   证明: by
   rw [h.1]; rw [NNReal.rpow_natCast]
 
@@ -5459,8 +5459,8 @@ theorem IsInt.nnreal_rpow_eq_inv_nnreal_pow
   rw [h.1]; rw [NNReal.rpow_intCast]; rw [Int.negOfNat_eq]; rw [zpow_neg]; rw [Int.ofNat_eq_natCast]; rw [zpow_natCast]
 
 中文:
-定理 IsInt.nnreal_rpow_eq_inv_nnreal_pow
-  条件: {b : 实数} {n : 自然数} (h : Is整数 b (.negOf自然数 n)) (a : 实数>=0)
+定理 是整数.nnreal_rpow_eq_inv_nnreal_pow
+  条件: {b : 实数} {n : 自然数} (h : 是整数 b (.negOf自然数 n)) (a : 实数>=0)
   证明: by
   rw [h.1]; rw [NNReal.rpow_intCast]; rw [Int.negOfNat_eq]; rw [zpow_neg]; rw [Int.ofNat_eq_natCast]; rw [zpow_natCast]
 
@@ -5484,8 +5484,8 @@ theorem IsNat.nnreal_rpow_isNNRat
   positivity
 
 中文:
-定理 IsNat.nnreal_rpow_isNNRat
-  结论: {a : 实数>=0} {b : 实数} {m n d r : 自然数} (ha : Is自然数 a m)
+定理 是自然数.nnreal_rpow_isNNRat
+  结论: {a : 实数>=0} {b : 实数} {m n d r : 自然数} (ha : 是自然数 a m)
   证明: by
   rcases ha with ⟨rfl⟩
   constructor
@@ -5517,8 +5517,8 @@ theorem IsNNRat.nnreal_rpow_isNNRat
   simp [← hden.1, ha.den_nz]
 
 中文:
-定理 IsNNRat.nnreal_rpow_isNNRat
-  结论: (a : 实数>=0) (b : 实数) (na da : 自然数) (ha : IsNNRat a na da)
+定理 是NNRat.nnreal_rpow_isNNRat
+  结论: (a : 实数>=0) (b : 实数) (na da : 自然数) (ha : 是NNRat a na da)
   证明: by
   suffices IsNNRat (nr / dr : Real>=0) nr dr by
     simpa [ha.to_eq, NNReal.div_rpow, hnum.1, hden.1]

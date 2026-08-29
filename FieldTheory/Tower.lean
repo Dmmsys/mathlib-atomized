@@ -51,8 +51,8 @@ theorem left
 
 中文:
 定理 left
-  条件: [IsDomain K] [Nontrivial A]
-  结论: Module.Finite F K
+  条件: [是整环 K] [非平凡 A]
+  结论: 模.有限 F K
   证明: let ⟨x, hx⟩ := exists_ne (0 : A)
   Module.Finite.of_injective
     (LinearMap.ringLmapEquivSelf K Nat A |>.symm x |>.restrictScalars F) (smul_left_injective K hx)
@@ -81,8 +81,8 @@ theorem right
 
 中文:
 定理 right
-  条件: [hf : Module.Finite F A]
-  结论: Module.Finite K A
+  条件: [hf : 模.有限 F A]
+  结论: 模.有限 K A
   证明: let ⟨⟨b, hb⟩⟩ := hf
 ⟨⟨b, Submodule.restrictScalars_injective F _ _ by
     rw [Submodule.restrictScalars_top]; rw [eq_top_iff]; rw [← hb]; rw [Submodule.span_le]

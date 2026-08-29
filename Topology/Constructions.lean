@@ -65,7 +65,7 @@ instance instTopologicalSpaceQuotient
 
 中文:
 实例 instTopologicalSpaceQuotient
-  签名: {s : Setoid X} [t : TopologicalSpace X]
+  签名: {s : 集合等价关系 X} [t : 拓扑空间 X]
   定义体: coinduced Quotient.mk' t
 
 Depends on / 依赖: Quotient, Quotient.mk, coinduced
@@ -84,7 +84,7 @@ instance instTopologicalSpaceSigma
 
 中文:
 实例 instTopologicalSpaceSigma
-  签名: {ι : 类型} {X : ι -> 类型v} [t₂ : 对任意 i, TopologicalSpace (X i)]
+  签名: {ι : 类型} {X : ι -> 类型v} [t₂ : 对任意 i, 拓扑空间 (X i)]
   定义体: ⨆ i, coinduced (Sigma.mk i) (t₂ i)
 
 Depends on / 依赖: Sigma.mk, coinduced
@@ -102,8 +102,8 @@ instance Pi.topologicalSpace
   body: ⨅ i, induced (fun f => f i) (t₂ i)
 
 中文:
-实例 Pi.topologicalSpace
-  签名: {ι : 类型} {Y : ι -> 类型v} [t₂ : (i : ι) -> TopologicalSpace (Y i)]
+实例 依赖函数类型.topologicalSpace
+  签名: {ι : 类型} {Y : ι -> 类型v} [t₂ : (i : ι) -> 拓扑空间 (Y i)]
   定义体: ⨅ i, induced (fun f => f i) (t₂ i)
 
 Depends on / 依赖: induced
@@ -121,8 +121,8 @@ instance ULift.topologicalSpace
   body: t.induced ULift.down
 
 中文:
-实例 ULift.topologicalSpace
-  签名: [t : TopologicalSpace X]
+实例 类型层提升.topologicalSpace
+  签名: [t : 拓扑空间 X]
   定义体: t.induced ULift.down
 
 Depends on / 依赖: ULift.down, induced, t.induced
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Additive X)
+  签名: 拓扑空间 (加性 X)
   定义体: ‹TopologicalSpace X›
 
 Depends on / 依赖: TopologicalSpace
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Multiplicative X)
+  签名: 拓扑空间 (Multiplicative X)
   定义体: ‹TopologicalSpace X›
 
 Depends on / 依赖: TopologicalSpace
@@ -184,8 +184,8 @@ instance [DiscreteTopology
   body: ‹DiscreteTopology X›
 
 中文:
-实例 [DiscreteTopology
-  签名: X] : DiscreteTopology (Additive X)
+实例 [离散拓扑
+  签名: X] : 离散拓扑 (加性 X)
   定义体: ‹DiscreteTopology X›
 
 Depends on / 依赖: DiscreteTopology
@@ -200,8 +200,8 @@ instance [DiscreteTopology
   body: ‹DiscreteTopology X›
 
 中文:
-实例 [DiscreteTopology
-  签名: X] : DiscreteTopology (Multiplicative X)
+实例 [离散拓扑
+  签名: X] : 离散拓扑 (Multiplicative X)
   定义体: ‹DiscreteTopology X›
 
 Depends on / 依赖: DiscreteTopology
@@ -217,8 +217,8 @@ instance [CompactSpace
   body: ‹CompactSpace X›
 
 中文:
-实例 [CompactSpace
-  签名: X] : CompactSpace (Additive X)
+实例 [紧空间
+  签名: X] : 紧空间 (加性 X)
   定义体: ‹CompactSpace X›
 
 Depends on / 依赖: CompactSpace
@@ -233,8 +233,8 @@ instance [CompactSpace
   body: ‹CompactSpace X›
 
 中文:
-实例 [CompactSpace
-  签名: X] : CompactSpace (Multiplicative X)
+实例 [紧空间
+  签名: X] : 紧空间 (Multiplicative X)
   定义体: ‹CompactSpace X›
 
 Depends on / 依赖: CompactSpace
@@ -250,8 +250,8 @@ instance [NoncompactSpace
   body: ‹NoncompactSpace X›
 
 中文:
-实例 [NoncompactSpace
-  签名: X] : NoncompactSpace (Additive X)
+实例 [Noncompact空间
+  签名: X] : Noncompact空间 (加性 X)
   定义体: ‹NoncompactSpace X›
 
 Depends on / 依赖: NoncompactSpace
@@ -266,8 +266,8 @@ instance [NoncompactSpace
   body: ‹NoncompactSpace X›
 
 中文:
-实例 [NoncompactSpace
-  签名: X] : NoncompactSpace (Multiplicative X)
+实例 [Noncompact空间
+  签名: X] : Noncompact空间 (Multiplicative X)
   定义体: ‹NoncompactSpace X›
 
 Depends on / 依赖: NoncompactSpace
@@ -283,8 +283,8 @@ instance [WeaklyLocallyCompactSpace
   body: ‹WeaklyLocallyCompactSpace X›
 
 中文:
-实例 [WeaklyLocallyCompactSpace
-  签名: X] : WeaklyLocallyCompactSpace (Additive X)
+实例 [WeaklyLocallyCompact空间
+  签名: X] : WeaklyLocallyCompact空间 (加性 X)
   定义体: ‹WeaklyLocallyCompactSpace X›
 
 Depends on / 依赖: WeaklyLocallyCompactSpace
@@ -300,8 +300,8 @@ instance [WeaklyLocallyCompactSpace
   body: ‹WeaklyLocallyCompactSpace X›
 
 中文:
-实例 [WeaklyLocallyCompactSpace
-  签名: X] : WeaklyLocallyCompactSpace (Multiplicative X)
+实例 [WeaklyLocallyCompact空间
+  签名: X] : WeaklyLocallyCompact空间 (Multiplicative X)
   定义体: ‹WeaklyLocallyCompactSpace X›
 
 Depends on / 依赖: WeaklyLocallyCompactSpace
@@ -318,8 +318,8 @@ instance [LocallyCompactSpace
   body: ‹LocallyCompactSpace X›
 
 中文:
-实例 [LocallyCompactSpace
-  签名: X] : LocallyCompactSpace (Additive X)
+实例 [局部紧空间
+  签名: X] : 局部紧空间 (加性 X)
   定义体: ‹LocallyCompactSpace X›
 
 Depends on / 依赖: LocallyCompactSpace
@@ -334,8 +334,8 @@ instance [LocallyCompactSpace
   body: ‹LocallyCompactSpace X›
 
 中文:
-实例 [LocallyCompactSpace
-  签名: X] : LocallyCompactSpace (Multiplicative X)
+实例 [局部紧空间
+  签名: X] : 局部紧空间 (Multiplicative X)
   定义体: ‹LocallyCompactSpace X›
 
 Depends on / 依赖: LocallyCompactSpace
@@ -352,7 +352,7 @@ theorem continuous_ofMul
 
 中文:
 定理 continuous_ofMul
-  结论: Continuous (ofMul : X -> Additive X)
+  结论: 连续 (ofMul : X -> 加性 X)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -369,7 +369,7 @@ theorem continuous_toMul
 
 中文:
 定理 continuous_toMul
-  结论: Continuous (toMul : Additive X -> X)
+  结论: 连续 (toMul : 加性 X -> X)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -386,7 +386,7 @@ theorem continuous_ofAdd
 
 中文:
 定理 continuous_ofAdd
-  结论: Continuous (ofAdd : X -> Multiplicative X)
+  结论: 连续 (ofAdd : X -> Multiplicative X)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -403,7 +403,7 @@ theorem continuous_toAdd
 
 中文:
 定理 continuous_toAdd
-  结论: Continuous (toAdd : Multiplicative X -> X)
+  结论: 连续 (toAdd : Multiplicative X -> X)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -420,7 +420,7 @@ theorem isOpenMap_ofMul
 
 中文:
 定理 isOpenMap_ofMul
-  结论: IsOpenMap (ofMul : X -> Additive X)
+  结论: 是开映射 (ofMul : X -> 加性 X)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -437,7 +437,7 @@ theorem isOpenMap_toMul
 
 中文:
 定理 isOpenMap_toMul
-  结论: IsOpenMap (toMul : Additive X -> X)
+  结论: 是开映射 (toMul : 加性 X -> X)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -454,7 +454,7 @@ theorem isOpenMap_ofAdd
 
 中文:
 定理 isOpenMap_ofAdd
-  结论: IsOpenMap (ofAdd : X -> Multiplicative X)
+  结论: 是开映射 (ofAdd : X -> Multiplicative X)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -471,7 +471,7 @@ theorem isOpenMap_toAdd
 
 中文:
 定理 isOpenMap_toAdd
-  结论: IsOpenMap (toAdd : Multiplicative X -> X)
+  结论: 是开映射 (toAdd : Multiplicative X -> X)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -488,7 +488,7 @@ theorem isClosedMap_ofMul
 
 中文:
 定理 isClosedMap_ofMul
-  结论: IsClosedMap (ofMul : X -> Additive X)
+  结论: 是闭映射 (ofMul : X -> 加性 X)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -505,7 +505,7 @@ theorem isClosedMap_toMul
 
 中文:
 定理 isClosedMap_toMul
-  结论: IsClosedMap (toMul : Additive X -> X)
+  结论: 是闭映射 (toMul : 加性 X -> X)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -522,7 +522,7 @@ theorem isClosedMap_ofAdd
 
 中文:
 定理 isClosedMap_ofAdd
-  结论: IsClosedMap (ofAdd : X -> Multiplicative X)
+  结论: 是闭映射 (ofAdd : X -> Multiplicative X)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -539,7 +539,7 @@ theorem isClosedMap_toAdd
 
 中文:
 定理 isClosedMap_toAdd
-  结论: IsClosedMap (toAdd : Multiplicative X -> X)
+  结论: 是闭映射 (toAdd : Multiplicative X -> X)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -591,7 +591,7 @@ theorem nhds_toMul
 
 中文:
 定理 nhds_toMul
-  条件: (x : Additive X)
+  条件: (x : 加性 X)
   结论: 𝓝 x.toMul = map toMul (𝓝 x)
   证明: rfl
 -/
@@ -639,7 +639,7 @@ instance OrderDual.instTopologicalSpace
 
 中文:
 实例 OrderDual.instTopologicalSpace
-  签名: : TopologicalSpace Xᵒᵈ
+  签名: : 拓扑空间 Xᵒᵈ
   定义体: ‹_›
 -/
 instance OrderDual.instTopologicalSpace : TopologicalSpace Xᵒᵈ := ‹_›
@@ -653,7 +653,7 @@ instance OrderDual.instDiscreteTopology
 
 中文:
 实例 OrderDual.instDiscreteTopology
-  签名: [DiscreteTopology X]
+  签名: [离散拓扑 X]
   定义体: ‹_›
 -/
 instance OrderDual.instDiscreteTopology [DiscreteTopology X] : DiscreteTopology Xᵒᵈ := ‹_›
@@ -668,7 +668,7 @@ theorem continuous_toDual
 
 中文:
 定理 continuous_toDual
-  结论: Continuous (toDual : X -> Xᵒᵈ)
+  结论: 连续 (toDual : X -> Xᵒᵈ)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -685,7 +685,7 @@ theorem continuous_ofDual
 
 中文:
 定理 continuous_ofDual
-  结论: Continuous (ofDual : Xᵒᵈ -> X)
+  结论: 连续 (ofDual : Xᵒᵈ -> X)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -702,7 +702,7 @@ theorem isOpenMap_toDual
 
 中文:
 定理 isOpenMap_toDual
-  结论: IsOpenMap (toDual : X -> Xᵒᵈ)
+  结论: 是开映射 (toDual : X -> Xᵒᵈ)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -719,7 +719,7 @@ theorem isOpenMap_ofDual
 
 中文:
 定理 isOpenMap_ofDual
-  结论: IsOpenMap (ofDual : Xᵒᵈ -> X)
+  结论: 是开映射 (ofDual : Xᵒᵈ -> X)
   证明: IsOpenMap.id
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id
@@ -736,7 +736,7 @@ theorem isClosedMap_toDual
 
 中文:
 定理 isClosedMap_toDual
-  结论: IsClosedMap (toDual : X -> Xᵒᵈ)
+  结论: 是闭映射 (toDual : X -> Xᵒᵈ)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -753,7 +753,7 @@ theorem isClosedMap_ofDual
 
 中文:
 定理 isClosedMap_ofDual
-  结论: IsClosedMap (ofDual : Xᵒᵈ -> X)
+  结论: 是闭映射 (ofDual : Xᵒᵈ -> X)
   证明: IsClosedMap.id
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.id
@@ -836,8 +836,8 @@ theorem Quotient.preimage_mem_nhds
   proof: preimage_nhds_coinduced hs
 
 中文:
-定理 Quotient.preimage_mem_nhds
-  结论: [TopologicalSpace X] [s : Setoid X] {V : Set <| Quotient s}
+定理 商.preimage_mem_nhds
+  结论: [拓扑空间 X] [s : 集合等价关系 X] {V : 集合 <| 商 s}
   证明: preimage_nhds_coinduced hs
 
 Depends on / 依赖: preimage_nhds_coinduced
@@ -855,8 +855,8 @@ theorem Dense.quotient
   proof: Quotient.mk''_surjective.denseRange.dense_image continuous_coinduced_rng H
 
 中文:
-定理 Dense.quotient
-  条件: [Setoid X] [TopologicalSpace X] {s : Set X} (H : Dense s)
+定理 稠密.quotient
+  条件: [集合等价关系 X] [拓扑空间 X] {s : 集合 X} (H : 稠密 s)
   证明: Quotient.mk''_surjective.denseRange.dense_image continuous_coinduced_rng H
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.denseRange.dense_image, continuous_coinduced_rng, denseRange, dense_image
@@ -875,7 +875,7 @@ theorem DenseRange.quotient
 
 中文:
 定理 DenseRange.quotient
-  条件: [Setoid X] [TopologicalSpace X] {f : Y -> X} (hf : DenseRange f)
+  条件: [集合等价关系 X] [拓扑空间 X] {f : Y -> X} (hf : DenseRange f)
   证明: Quotient.mk''_surjective.denseRange.comp hf continuous_coinduced_rng
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.denseRange.comp, continuous_coinduced_rng, denseRange
@@ -894,7 +894,7 @@ theorem continuous_map_of_le
 
 中文:
 定理 continuous_map_of_le
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: continuous_coinduced_rng
 
 Depends on / 依赖: continuous_coinduced_rng
@@ -913,7 +913,7 @@ theorem continuous_map_sInf
 
 中文:
 定理 continuous_map_sInf
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: continuous_coinduced_rng
 
 Depends on / 依赖: continuous_coinduced_rng
@@ -934,8 +934,8 @@ instance Sum.discreteTopology
   body: ⟨sup_eq_bot_iff.2 by simp [h.eq_bot, hY.eq_bot]⟩
 
 中文:
-实例 Sum.discreteTopology
-  签名: [TopologicalSpace X] [TopologicalSpace Y] [h : DiscreteTopology X]
+实例 和.discreteTopology
+  签名: [拓扑空间 X] [拓扑空间 Y] [h : 离散拓扑 X]
   定义体: ⟨sup_eq_bot_iff.2 by simp [h.eq_bot, hY.eq_bot]⟩
 
 Depends on / 依赖: eq_bot, h.eq_bot, hY.eq_bot, sup_eq_bot_iff
@@ -953,8 +953,8 @@ instance Sigma.discreteTopology
   body: ⟨iSup_eq_bot.2 fun _ => by simp only [(h _).eq_bot, coinduced_bot]⟩
 
 中文:
-实例 Sigma.discreteTopology
-  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, TopologicalSpace (Y i)]
+实例 依赖和类型.discreteTopology
+  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, 拓扑空间 (Y i)]
   定义体: ⟨iSup_eq_bot.2 fun _ => by simp only [(h _).eq_bot, coinduced_bot]⟩
 
 Depends on / 依赖: coinduced_bot, eq_bot, iSup_eq_bot
@@ -972,8 +972,8 @@ instance Prod.indiscreteTopology
   body: ⟨inf_eq_top_iff.2 by simp [h.eq_top, hY.eq_top]⟩
 
 中文:
-实例 Prod.indiscreteTopology
-  签名: [TopologicalSpace X] [TopologicalSpace Y]
+实例 积类型.indiscreteTopology
+  签名: [拓扑空间 X] [拓扑空间 Y]
   定义体: ⟨inf_eq_top_iff.2 by simp [h.eq_top, hY.eq_top]⟩
 
 Depends on / 依赖: eq_top, h.eq_top, hY.eq_top, inf_eq_top_iff
@@ -991,8 +991,8 @@ instance Pi.indiscreteTopology
   body: ⟨iInf_eq_top.2 fun _ => by simp only [(h _).eq_top, induced_top]⟩
 
 中文:
-实例 Pi.indiscreteTopology
-  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, TopologicalSpace (Y i)]
+实例 依赖函数类型.indiscreteTopology
+  签名: {ι : 类型} {Y : ι -> 类型v} [对任意 i, 拓扑空间 (Y i)]
   定义体: ⟨iInf_eq_top.2 fun _ => by simp only [(h _).eq_top, induced_top]⟩
 
 Depends on / 依赖: eq_top, iInf_eq_top, induced_top
@@ -1011,7 +1011,7 @@ lemma comap_nhdsWithin_range
 
 中文:
 引理 comap_nhdsWithin_range
-  条件: {α β} [TopologicalSpace β] (f : α -> β) (y : β)
+  条件: {α β} [拓扑空间 β] (f : α -> β) (y : β)
   证明: comap_inf_principal_range
 -/
 @[simp] lemma comap_nhdsWithin_range {α β} [TopologicalSpace β] (f : α -> β) (y : β) :
@@ -1031,7 +1031,7 @@ theorem mem_nhds_subtype
 
 中文:
 定理 mem_nhds_subtype
-  条件: (s : Set X) (x : { x // x in s }) (t : Set { x // x in s })
+  条件: (s : 集合 X) (x : { x // x in s }) (t : 集合 { x // x in s })
   证明: mem_nhds_induced _ x t
 
 Depends on / 依赖: mem_nhds_induced
@@ -1051,7 +1051,7 @@ theorem nhds_subtype
 
 中文:
 定理 nhds_subtype
-  条件: (s : Set X) (x : { x // x in s })
+  条件: (s : 集合 X) (x : { x // x in s })
   结论: 𝓝 x = comap (↑) (𝓝 (x : X))
   证明: nhds_induced _ x
 
@@ -1071,7 +1071,7 @@ lemma nhds_subtype_eq_comap_nhdsWithin
 
 中文:
 引理 nhds_subtype_eq_comap_nhdsWithin
-  条件: (s : Set X) (x : { x // x in s })
+  条件: (s : 集合 X) (x : { x // x in s })
   证明: by
   rw [nhds_subtype]; rw [← comap_nhdsWithin_range]; rw [Subtype.range_val]
 
@@ -1092,7 +1092,7 @@ theorem nhdsWithin_subtype_eq_bot_iff
 
 中文:
 定理 nhdsWithin_subtype_eq_bot_iff
-  条件: {s t : Set X} {x : s}
+  条件: {s t : 集合 X} {x : s}
   证明: by
   rw [inf_principal_eq_bot_iff_comap]; rw [nhdsWithin]; rw [nhdsWithin]; rw [comap_inf]; rw [comap_principal]; rw [nhds_induced]
 
@@ -1113,7 +1113,7 @@ theorem nhds_ne_subtype_eq_bot_iff
 
 中文:
 定理 nhds_ne_subtype_eq_bot_iff
-  条件: {S : Set X} {x : S}
+  条件: {S : 集合 X} {x : S}
   证明: by
   rw [← nhdsWithin_subtype_eq_bot_iff]; rw [preimage_compl]; rw [← image_singleton]; rw [Subtype.coe_injective.preimage_image]
 
@@ -1134,7 +1134,7 @@ theorem nhds_ne_subtype_neBot_iff
 
 中文:
 定理 nhds_ne_subtype_neBot_iff
-  条件: {S : Set X} {x : S}
+  条件: {S : 集合 X} {x : S}
   证明: by
   rw [neBot_iff]; rw [neBot_iff]; rw [not_iff_not]; rw [nhds_ne_subtype_eq_bot_iff]
 
@@ -1160,10 +1160,10 @@ structure IsDiscrete
     - to_subtype : DiscreteTopology ↥s
 
 中文:
-结构 IsDiscrete
-  参数: (s : Set X)
+结构 是离散
+  参数: (s : 集合 X)
   公理与运算 (1 个):
-    - to_subtype : DiscreteTopology ↥s
+    - to_subtype : 离散拓扑 ↥s
 -/
 structure IsDiscrete (s : Set X) : Prop where
   to_subtype : DiscreteTopology ↥s
@@ -1178,7 +1178,7 @@ lemma isDiscrete_iff_discreteTopology
 
 中文:
 引理 isDiscrete_iff_discreteTopology
-  结论: IsDiscrete s ↔ DiscreteTopology s
+  结论: 是离散 s ↔ 离散拓扑 s
   证明: ⟨fun s => s.to_subtype, fun s => ⟨s⟩⟩
 
 Depends on / 依赖: s.to_subtype, to_subtype
@@ -1195,8 +1195,8 @@ lemma SetLike.isDiscrete_iff_discreteTopology
   proof: ⟨fun s => s.to_subtype, fun s => ⟨s⟩⟩
 
 中文:
-引理 SetLike.isDiscrete_iff_discreteTopology
-  条件: {S : 类型} [SetLike S X] {s : S}
+引理 集合状.isDiscrete_iff_discreteTopology
+  条件: {S : 类型} [集合状 S X] {s : S}
   证明: ⟨fun s => s.to_subtype, fun s => ⟨s⟩⟩
 
 Depends on / 依赖: s.to_subtype, to_subtype
@@ -1215,9 +1215,9 @@ lemma DiscreteTopology.isDiscrete
   proof: ⟨inferInstance⟩
 
 中文:
-引理 DiscreteTopology.isDiscrete
-  条件: [DiscreteTopology s]
-  结论: IsDiscrete s
+引理 离散拓扑.isDiscrete
+  条件: [离散拓扑 s]
+  结论: 是离散 s
   证明: ⟨inferInstance⟩
 -/
 lemma DiscreteTopology.isDiscrete [DiscreteTopology s] : IsDiscrete s := ⟨inferInstance⟩
@@ -1244,7 +1244,7 @@ definition TopologicalSpace.cofinite
     exact Finite.sInter (mem_image_of_mem _ hts) (
 
 中文:
-定义 TopologicalSpace.cofinite
+定义 拓扑空间.cofinite
   签名: {X : 类型}
   定义体: s.Nonempty -> Set.Finite sᶜ
   isOpen_univ := by simp
@@ -1278,7 +1278,7 @@ abbreviation CofiniteTopology
   body: WithTopology X .cofinite
 
 中文:
-缩写 CofiniteTopology
+缩写 余有限拓扑
   签名: (X : 类型)
   定义体: WithTopology X .cofinite
 
@@ -1299,7 +1299,7 @@ definition of
 
 中文:
 定义 of
-  签名: : X ≃ CofiniteTopology X
+  签名: : X ≃ 余有限拓扑 X
   定义体: (WithTopology.equiv _ _).symm
 
 Depends on / 依赖: WithTopology, WithTopology.equiv
@@ -1315,8 +1315,8 @@ instance [Inhabited
   body: of default
 
 中文:
-实例 [Inhabited
-  签名: X] : Inhabited (CofiniteTopology X) where default
+实例 [可居
+  签名: X] : 可居 (余有限拓扑 X) where default
   定义体: of default
 -/
 instance [Inhabited X] : Inhabited (CofiniteTopology X) where default := of default
@@ -1336,8 +1336,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: {s : Set (CofiniteTopology X)}
-  结论: IsOpen s ↔ s.Nonempty -> sᶜ.Finite
+  条件: {s : 集合 (余有限拓扑 X)}
+  结论: 是开集 s ↔ s.非空 -> sᶜ.有限
   证明: by
   simp_rw [isOpen_coinduced, TopologicalSpace.cofinite, isOpen_mk, ← Set.preimage_compl,
     WithTopology.preimage_toTopology, image_nonempty,
@@ -1362,8 +1362,8 @@ theorem isOpen_iff'
 
 中文:
 定理 isOpen_iff'
-  条件: {s : Set (CofiniteTopology X)}
-  结论: IsOpen s ↔ s = ∅ ∨ sᶜ.Finite
+  条件: {s : 集合 (余有限拓扑 X)}
+  结论: 是开集 s ↔ s = ∅ ∨ sᶜ.有限
   证明: by
   simp only [isOpen_iff, nonempty_iff_ne_empty, or_iff_not_imp_left]
 
@@ -1384,8 +1384,8 @@ theorem isClosed_iff
 
 中文:
 定理 isClosed_iff
-  条件: {s : Set (CofiniteTopology X)}
-  结论: IsClosed s ↔ s = univ ∨ s.Finite
+  条件: {s : 集合 (余有限拓扑 X)}
+  结论: 是闭集 s ↔ s = univ ∨ s.有限
   证明: by
   simp only [← isOpen_compl_iff, isOpen_iff', compl_compl, compl_empty_iff]
 
@@ -1412,7 +1412,7 @@ theorem nhds_eq
 
 中文:
 定理 nhds_eq
-  条件: (x : CofiniteTopology X)
+  条件: (x : 余有限拓扑 X)
   结论: 𝓝 x = pure x ⊔ cofinite
   证明: by
   ext U
@@ -1444,7 +1444,7 @@ theorem mem_nhds_iff
 
 中文:
 定理 mem_nhds_iff
-  条件: {x : CofiniteTopology X} {s : Set (CofiniteTopology X)}
+  条件: {x : 余有限拓扑 X} {s : 集合 (余有限拓扑 X)}
   证明: by simp [nhds_eq]
 
 Depends on / 依赖: nhds_eq
@@ -1531,7 +1531,7 @@ lemma continuous_bool_rng
 
 中文:
 引理 continuous_bool_rng
-  条件: [TopologicalSpace X] {f : X -> 布尔} (b : 布尔)
+  条件: [拓扑空间 X] {f : X -> 布尔值} (b : 布尔值)
   证明: by
   rw [continuous_discrete_rng]; rw [Bool.forall_bool' b]; rw [IsClopen]; rw [← isOpen_compl_iff]; rw [← preimage_compl]; rw [Bool.compl_singleton]; rw [and_comm]
 
@@ -1558,9 +1558,9 @@ lemma Topology.IsInducing.subtypeVal
   proof: ⟨rfl⟩
 
 中文:
-引理 Topology.IsInducing.subtypeVal
-  条件: {t : Set Y}
-  结论: IsInducing ((↑) : t -> Y)
+引理 拓扑.是Inducing.subtypeVal
+  条件: {t : 集合 Y}
+  结论: 是Inducing ((↑) : t -> Y)
   证明: ⟨rfl⟩
 -/
 lemma Topology.IsInducing.subtypeVal {t : Set Y} : IsInducing ((↑) : t -> Y) := ⟨rfl⟩
@@ -1576,8 +1576,8 @@ lemma Topology.IsInducing.of_codRestrict
 @[fun_prop]
 
 中文:
-引理 Topology.IsInducing.of_codRestrict
-  结论: {f : X -> Y} {t : Set Y} (ht : 对任意 x, f x in t)
+引理 拓扑.是Inducing.of_codRestrict
+  结论: {f : X -> Y} {t : 集合 Y} (ht : 对任意 x, f x in t)
   证明: subtypeVal.comp h
 
 @[fun_prop]
@@ -1599,8 +1599,8 @@ lemma Topology.IsEmbedding.subtypeVal
 @[fun_prop]
 
 中文:
-引理 Topology.IsEmbedding.subtypeVal
-  结论: IsEmbedding ((↑) : Subtype p -> X)
+引理 拓扑.是嵌入.subtypeVal
+  结论: 是嵌入 ((↑) : 子类型 p -> X)
   证明: ⟨.subtypeVal, Subtype.coe_injective⟩
 
 @[fun_prop]
@@ -1622,8 +1622,8 @@ theorem Topology.IsClosedEmbedding.subtypeVal
 @[continuity, fun_prop]
 
 中文:
-定理 Topology.IsClosedEmbedding.subtypeVal
-  条件: (h : IsClosed {a | p a})
+定理 拓扑.是闭嵌入.subtypeVal
+  条件: (h : 是闭集 {a | p a})
   证明: ⟨.subtypeVal, by rwa [Subtype.range_coe_subtype]⟩
 
 @[continuity, fun_prop]
@@ -1645,7 +1645,7 @@ theorem continuous_subtype_val
 
 中文:
 定理 continuous_subtype_val
-  结论: Continuous (@Subtype.val X p)
+  结论: 连续 (@子类型.val X p)
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -1664,8 +1664,8 @@ theorem Continuous.subtype_val
 @[fun_prop]
 
 中文:
-定理 Continuous.subtype_val
-  条件: {f : Y -> Subtype p} (hf : Continuous f)
+定理 连续.subtype_val
+  条件: {f : Y -> 子类型 p} (hf : 连续 f)
   证明: continuous_subtype_val.comp hf
 
 @[fun_prop]
@@ -1686,8 +1686,8 @@ theorem IsOpen.isOpenEmbedding_subtypeVal
   proof: ⟨.subtypeVal, (@Subtype.range_coe _ s).symm ▸ hs⟩
 
 中文:
-定理 IsOpen.isOpenEmbedding_subtypeVal
-  条件: {s : Set X} (hs : IsOpen s)
+定理 是开集.isOpenEmbedding_subtypeVal
+  条件: {s : 集合 X} (hs : 是开集 s)
   证明: ⟨.subtypeVal, (@Subtype.range_coe _ s).symm ▸ hs⟩
 
 Depends on / 依赖: Subtype, Subtype.range_coe, range_coe, subtypeVal
@@ -1706,9 +1706,9 @@ theorem IsOpen.isOpenMap_subtype_val
   proof: hs.isOpenEmbedding_subtypeVal.isOpenMap
 
 中文:
-定理 IsOpen.isOpenMap_subtype_val
-  条件: {s : Set X} (hs : IsOpen s)
-  结论: IsOpenMap ((↑) : s -> X)
+定理 是开集.isOpenMap_subtype_val
+  条件: {s : 集合 X} (hs : 是开集 s)
+  结论: 是开映射 ((↑) : s -> X)
   证明: hs.isOpenEmbedding_subtypeVal.isOpenMap
 
 Depends on / 依赖: hs.isOpenEmbedding_subtypeVal.isOpenMap, isOpenEmbedding_subtypeVal, isOpenMap
@@ -1729,8 +1729,8 @@ theorem IsOpenMap.domRestrict
 @[fun_prop]
 
 中文:
-定理 IsOpenMap.domRestrict
-  条件: {f : X -> Y} (hf : IsOpenMap f) {s : Set X} (hs : IsOpen s)
+定理 是开映射.domRestrict
+  条件: {f : X -> Y} (hf : 是开映射 f) {s : 集合 X} (hs : 是开集 s)
   证明: hf.comp hs.isOpenMap_subtype_val
 
 @[deprecated (since := "2026-07-19")] alias IsOpenMap.restrict := IsOpenMap.domRestrict
@@ -1755,8 +1755,8 @@ lemma IsClosed.isClosedEmbedding_subtypeVal
   proof: .subtypeVal hs
 
 中文:
-引理 IsClosed.isClosedEmbedding_subtypeVal
-  条件: {s : Set X} (hs : IsClosed s)
+引理 是闭集.isClosedEmbedding_subtypeVal
+  条件: {s : 集合 X} (hs : 是闭集 s)
   证明: .subtypeVal hs
 
 Depends on / 依赖: subtypeVal
@@ -1773,8 +1773,8 @@ theorem IsClosed.isClosedMap_subtype_val
   proof: hs.isClosedEmbedding_subtypeVal.isClosedMap
 
 中文:
-定理 IsClosed.isClosedMap_subtype_val
-  条件: {s : Set X} (hs : IsClosed s)
+定理 是闭集.isClosedMap_subtype_val
+  条件: {s : 集合 X} (hs : 是闭集 s)
   证明: hs.isClosedEmbedding_subtypeVal.isClosedMap
 
 Depends on / 依赖: hs.isClosedEmbedding_subtypeVal.isClosedMap, isClosedEmbedding_subtypeVal, isClosedMap
@@ -1796,8 +1796,8 @@ theorem IsClosedMap.domRestrict
 @[continuity, fun_prop]
 
 中文:
-定理 IsClosedMap.domRestrict
-  结论: {f : X -> Y} (hf : IsClosedMap f) {s : Set X}
+定理 是闭映射.domRestrict
+  结论: {f : X -> Y} (hf : 是闭映射 f) {s : 集合 X}
   证明: hf.comp hs.isClosedMap_subtype_val
 
 @[deprecated (since := "2026-07-19")] alias IsClosedMap.restrict := IsClosedMap.domRestrict
@@ -1822,8 +1822,8 @@ theorem Continuous.subtype_mk
   proof: continuous_induced_rng.2 h
 
 中文:
-定理 Continuous.subtype_mk
-  条件: {f : Y -> X} (h : Continuous f) (hp : 对任意 x, p (f x))
+定理 连续.subtype_mk
+  条件: {f : Y -> X} (h : 连续 f) (hp : 对任意 x, p (f x))
   证明: continuous_induced_rng.2 h
 
 Depends on / 依赖: continuous_induced_rng
@@ -1843,8 +1843,8 @@ theorem IsOpenMap.subtype_mk
   exact Set.ext fun _ => exists_congr fun _ => and_congr_right' Subtype.ext_iff
 
 中文:
-定理 IsOpenMap.subtype_mk
-  条件: {f : Y -> X} (hf : IsOpenMap f) (hp : 对任意 x, p (f x))
+定理 是开映射.subtype_mk
+  条件: {f : Y -> X} (hf : 是开映射 f) (hp : 对任意 x, p (f x))
   证明: fun u hu => by
   convert! (hf u hu).preimage continuous_subtype_val
   exact Set.ext fun _ => exists_congr fun _ => and_congr_right' Subtype.ext_iff
@@ -1869,8 +1869,8 @@ theorem IsClosedMap.subtype_mk
 @[fun_prop]
 
 中文:
-定理 IsClosedMap.subtype_mk
-  条件: {f : Y -> X} (hf : IsClosedMap f) (hp : 对任意 x, p (f x))
+定理 是闭映射.subtype_mk
+  条件: {f : Y -> X} (hf : 是闭映射 f) (hp : 对任意 x, p (f x))
   证明: fun u hu => by
   convert! (hf u hu).preimage continuous_subtype_val
   exact Set.ext fun _ => exists_congr fun _ => and_congr_right' Subtype.ext_iff
@@ -1894,8 +1894,8 @@ theorem Continuous.subtype_coind
   proof: hf.subtype_mk hp
 
 中文:
-定理 Continuous.subtype_coind
-  条件: {f : Y -> X} (hf : Continuous f) (hp : 对任意 x, p (f x))
+定理 连续.subtype_coind
+  条件: {f : Y -> X} (hf : 连续 f) (hp : 对任意 x, p (f x))
   证明: hf.subtype_mk hp
 
 Depends on / 依赖: hf.subtype_mk, subtype_mk
@@ -1913,8 +1913,8 @@ theorem IsOpenMap.subtype_coind
   proof: hf.subtype_mk hp
 
 中文:
-定理 IsOpenMap.subtype_coind
-  条件: {f : Y -> X} (hf : IsOpenMap f) (hp : 对任意 x, p (f x))
+定理 是开映射.subtype_coind
+  条件: {f : Y -> X} (hf : 是开映射 f) (hp : 对任意 x, p (f x))
   证明: hf.subtype_mk hp
 
 Depends on / 依赖: hf.subtype_mk, subtype_mk
@@ -1934,8 +1934,8 @@ theorem IsClosedMap.subtype_coind
 @[fun_prop]
 
 中文:
-定理 IsClosedMap.subtype_coind
-  条件: {f : Y -> X} (hf : IsClosedMap f) (hp : 对任意 x, p (f x))
+定理 是闭映射.subtype_coind
+  条件: {f : Y -> X} (hf : 是闭映射 f) (hp : 对任意 x, p (f x))
   证明: hf.subtype_mk hp
 
 @[fun_prop]
@@ -1956,8 +1956,8 @@ theorem Continuous.subtype_map
   proof: (h.comp continuous_subtype_val).subtype_mk _
 
 中文:
-定理 Continuous.subtype_map
-  结论: {f : X -> Y} (h : Continuous f) {q : Y -> 命题}
+定理 连续.subtype_map
+  结论: {f : X -> Y} (h : 连续 f) {q : Y -> 命题}
   证明: (h.comp continuous_subtype_val).subtype_mk _
 
 Depends on / 依赖: continuous_subtype_val, h.comp, subtype_mk
@@ -1975,8 +1975,8 @@ theorem IsOpenMap.subtype_map
   proof: (hf.comp hs.isOpenMap_subtype_val).subtype_mk _
 
 中文:
-定理 IsOpenMap.subtype_map
-  结论: {f : X -> Y} (hf : IsOpenMap f) {s : Set X} {t : Set Y} (hs : IsOpen s)
+定理 是开映射.subtype_map
+  结论: {f : X -> Y} (hf : 是开映射 f) {s : 集合 X} {t : 集合 Y} (hs : 是开集 s)
   证明: (hf.comp hs.isOpenMap_subtype_val).subtype_mk _
 
 Depends on / 依赖: hf.comp, hs.isOpenMap_subtype_val, isOpenMap_subtype_val, subtype_mk
@@ -1994,8 +1994,8 @@ theorem IsClosedMap.subtype_map
   proof: (hf.comp hs.isClosedMap_subtype_val).subtype_mk _
 
 中文:
-定理 IsClosedMap.subtype_map
-  结论: {f : X -> Y} (hf : IsClosedMap f) {s : Set X} {t : Set Y}
+定理 是闭映射.subtype_map
+  结论: {f : X -> Y} (hf : 是闭映射 f) {s : 集合 X} {t : 集合 Y}
   证明: (hf.comp hs.isClosedMap_subtype_val).subtype_mk _
 
 Depends on / 依赖: hf.comp, hs.isClosedMap_subtype_val, isClosedMap_subtype_val, subtype_mk
@@ -2015,8 +2015,8 @@ theorem continuous_inclusion
 
 中文:
 定理 continuous_inclusion
-  条件: {s t : Set X} (h : s subseteq t)
-  结论: Continuous (inclusion h)
+  条件: {s t : 集合 X} (h : s subseteq t)
+  结论: 连续 (inclusion h)
   证明: continuous_id.subtype_map h
 
 Depends on / 依赖: continuous_id, continuous_id.subtype_map, subtype_map
@@ -2033,8 +2033,8 @@ theorem IsOpen.isOpenMap_inclusion
   proof: IsOpenMap.id.subtype_map hs h
 
 中文:
-定理 IsOpen.isOpenMap_inclusion
-  条件: {s t : Set X} (hs : IsOpen s) (h : s subseteq t)
+定理 是开集.isOpenMap_inclusion
+  条件: {s t : 集合 X} (hs : 是开集 s) (h : s subseteq t)
   证明: IsOpenMap.id.subtype_map hs h
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.id.subtype_map, subtype_map
@@ -2054,8 +2054,8 @@ theorem IsClosed.isClosedMap_inclusion
 @[simp]
 
 中文:
-定理 IsClosed.isClosedMap_inclusion
-  条件: {s t : Set X} (hs : IsClosed s) (h : s subseteq t)
+定理 是闭集.isClosedMap_inclusion
+  条件: {s t : 集合 X} (hs : 是闭集 s) (h : s subseteq t)
   证明: IsClosedMap.id.subtype_map hs h
 
 @[simp]
@@ -2100,8 +2100,8 @@ theorem Continuous.rangeFactorization
   proof: continuous_rangeFactorization_iff.mpr hf
 
 中文:
-定理 Continuous.rangeFactorization
-  条件: {f : X -> Y} (hf : Continuous f)
+定理 连续.rangeFactorization
+  条件: {f : X -> Y} (hf : 连续 f)
   证明: continuous_rangeFactorization_iff.mpr hf
 
 Depends on / 依赖: continuous_rangeFactorization_iff, continuous_rangeFactorization_iff.mpr
@@ -2120,7 +2120,7 @@ theorem continuousAt_subtype_val
 
 中文:
 定理 continuousAt_subtype_val
-  条件: {p : X -> 命题} {x : Subtype p}
+  条件: {p : X -> 命题} {x : 子类型 p}
   证明: continuous_subtype_val.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_subtype_val, continuous_subtype_val.continuousAt
@@ -2142,7 +2142,7 @@ definition Homeomorph.ofEqSubtypes
 @[simp]
 
 中文:
-定义 Homeomorph.ofEqSubtypes
+定义 同胚.ofEqSubtypes
   签名: {p q : X -> 命题} (hpq : p = q)
   定义体: Equiv.subtypeEquivProp hpq
   continuous_toFun := continuous_id.subtype_map (fun x => by simp [hpq])
@@ -2167,7 +2167,7 @@ lemma Homeomorph.ofEqSubtypes_toEquiv
   proof: rfl
 
 中文:
-引理 Homeomorph.ofEqSubtypes_toEquiv
+引理 同胚.ofEqSubtypes_toEquiv
   条件: {p q : X -> 命题} (hpq : p = q)
   证明: rfl
 -/
@@ -2188,9 +2188,9 @@ theorem Subtype.dense_iff
 @[simp]
 
 中文:
-定理 Subtype.dense_iff
-  条件: {s : Set X} {t : Set s}
-  结论: Dense t ↔ s subseteq closure ((↑) '' t)
+定理 子类型.dense_iff
+  条件: {s : 集合 X} {t : 集合 s}
+  结论: 稠密 t ↔ s subseteq closure ((↑) '' t)
   证明: by
   rw [IsInducing.subtypeVal.dense_iff]; rw [SetCoe.forall]
   rfl
@@ -2215,7 +2215,7 @@ theorem denseRange_inclusion_iff
 
 中文:
 定理 denseRange_inclusion_iff
-  条件: {s t : Set X} (hst : s subseteq t)
+  条件: {s t : 集合 X} (hst : s subseteq t)
   证明: by
   rw [DenseRange]; rw [Subtype.dense_iff]; rw [← range_comp]; rw [val_comp_inclusion]; rw [Subtype.range_coe]
 
@@ -2237,7 +2237,7 @@ theorem map_nhds_subtype_val
 
 中文:
 定理 map_nhds_subtype_val
-  条件: {s : Set X} (x : s)
+  条件: {s : 集合 X} (x : s)
   结论: map ((↑) : s -> X) (𝓝 x) = 𝓝[s] ↑x
   证明: by
   rw [IsInducing.subtypeVal.map_nhds_eq]; rw [Subtype.range_val]
@@ -2279,7 +2279,7 @@ theorem nhds_subtype_eq_comap
 中文:
 定理 nhds_subtype_eq_comap
   条件: {x : X} {h : p x}
-  结论: 𝓝 (⟨x, h⟩ : Subtype p) = comap (↑) (𝓝 x)
+  结论: 𝓝 (⟨x, h⟩ : 子类型 p) = comap (↑) (𝓝 x)
   证明: nhds_induced _ _
 
 Depends on / 依赖: nhds_induced
@@ -2296,7 +2296,7 @@ theorem tendsto_subtype_rng
 
 中文:
 定理 tendsto_subtype_rng
-  条件: {Y : 类型} {p : X -> 命题} {l : Filter Y} {f : Y -> Subtype p}
+  条件: {Y : 类型} {p : X -> 命题} {l : 滤子 Y} {f : Y -> 子类型 p}
 -/
 theorem tendsto_subtype_rng {Y : Type*} {p : X -> Prop} {l : Filter Y} {f : Y -> Subtype p} :
     forall {x : Subtype p}, Tendsto f l (𝓝 x) ↔ Tendsto (fun x => (f x : X)) l (𝓝 (x : X))
@@ -2314,7 +2314,7 @@ theorem closure_subtype
 
 中文:
 定理 closure_subtype
-  条件: {x : { a // p a }} {s : Set { a // p a }}
+  条件: {x : { a // p a }} {s : 集合 { a // p a }}
   证明: closure_induced
 
 @[simp]
@@ -2338,7 +2338,7 @@ alias ⟨_, ContinuousAt.codRestrict⟩ := continuousAt_codRestrict_iff
 
 中文:
 定理 continuousAt_codRestrict_iff
-  条件: {f : X -> Y} {t : Set Y} (h1 : 对任意 x, f x in t) {x : X}
+  条件: {f : X -> Y} {t : 集合 Y} (h1 : 对任意 x, f x in t) {x : X}
   证明: IsInducing.subtypeVal.continuousAt_iff
 
 alias ⟨_, ContinuousAt.codRestrict⟩ := continuousAt_codRestrict_iff
@@ -2361,7 +2361,7 @@ theorem ContinuousAt.restrict
 
 中文:
 定理 ContinuousAt.restrict
-  结论: {f : X -> Y} {s : Set X} {t : Set Y} (h1 : MapsTo f s t) {x : s}
+  结论: {f : X -> Y} {s : 集合 X} {t : 集合 Y} (h1 : 映射到 f s t) {x : s}
   证明: (h2.comp continuousAt_subtype_val).codRestrict _
 
 Depends on / 依赖: codRestrict, continuousAt_subtype_val, h2.comp
@@ -2382,7 +2382,7 @@ theorem ContinuousAt.restrictPreimage
 
 中文:
 定理 ContinuousAt.restrictPreimage
-  条件: {f : X -> Y} {s : Set Y} {x : f ⁻¹' s} (h : ContinuousAt f x)
+  条件: {f : X -> Y} {s : 集合 Y} {x : f ⁻¹' s} (h : ContinuousAt f x)
   证明: h.restrict _
 
 @[continuity, fun_prop]
@@ -2403,8 +2403,8 @@ theorem Continuous.codRestrict
   proof: hf.subtype_mk hs
 
 中文:
-定理 Continuous.codRestrict
-  条件: {f : X -> Y} {s : Set Y} (hf : Continuous f) (hs : 对任意 a, f a in s)
+定理 连续.codRestrict
+  条件: {f : X -> Y} {s : 集合 Y} (hf : 连续 f) (hs : 对任意 a, f a in s)
   证明: hf.subtype_mk hs
 
 Depends on / 依赖: hf.subtype_mk, subtype_mk
@@ -2427,7 +2427,7 @@ theorem continuous_codRestrict_iff
 
 中文:
 定理 continuous_codRestrict_iff
-  条件: {f : X -> Y} {s : Set Y} (hs : 对任意 a, f a in s)
+  条件: {f : X -> Y} {s : 集合 Y} (hs : 对任意 a, f a in s)
   证明: by
   refine ⟨?_, fun hf => hf.codRestrict hs⟩
   simp_rw [continuous_def]
@@ -2452,8 +2452,8 @@ theorem IsOpenMap.codRestrict
   proof: hf.subtype_mk hs
 
 中文:
-定理 IsOpenMap.codRestrict
-  条件: {f : X -> Y} (hf : IsOpenMap f) {s : Set Y} (hs : 对任意 a, f a in s)
+定理 是开映射.codRestrict
+  条件: {f : X -> Y} (hf : 是开映射 f) {s : 集合 Y} (hs : 对任意 a, f a in s)
   证明: hf.subtype_mk hs
 
 Depends on / 依赖: hf.subtype_mk, subtype_mk
@@ -2473,8 +2473,8 @@ theorem IsClosedMap.codRestrict
 @[continuity, fun_prop]
 
 中文:
-定理 IsClosedMap.codRestrict
-  条件: {f : X -> Y} (hf : IsClosedMap f) {s : Set Y} (hs : 对任意 a, f a in s)
+定理 是闭映射.codRestrict
+  条件: {f : X -> Y} (hf : 是闭映射 f) {s : 集合 Y} (hs : 对任意 a, f a in s)
   证明: hf.subtype_mk hs
 
 @[continuity, fun_prop]
@@ -2495,8 +2495,8 @@ theorem Continuous.restrict
   proof: (h2.comp continuous_subtype_val).codRestrict _
 
 中文:
-定理 Continuous.restrict
-  结论: {f : X -> Y} {s : Set X} {t : Set Y} (h1 : MapsTo f s t)
+定理 连续.restrict
+  结论: {f : X -> Y} {s : 集合 X} {t : 集合 Y} (h1 : 映射到 f s t)
   证明: (h2.comp continuous_subtype_val).codRestrict _
 
 Depends on / 依赖: codRestrict, continuous_subtype_val, h2.comp
@@ -2514,8 +2514,8 @@ lemma IsOpenMap.mapsToRestrict
   proof: (hf.domRestrict hs).codRestrict _
 
 中文:
-引理 IsOpenMap.mapsToRestrict
-  结论: {f : X -> Y} (hf : IsOpenMap f) {s : Set X} {t : Set Y}
+引理 是开映射.mapsToRestrict
+  结论: {f : X -> Y} (hf : 是开映射 f) {s : 集合 X} {t : 集合 Y}
   证明: (hf.domRestrict hs).codRestrict _
 
 Depends on / 依赖: codRestrict, domRestrict, hf.domRestrict
@@ -2535,8 +2535,8 @@ lemma IsClosedMap.mapsToRestrict
 @[continuity, fun_prop]
 
 中文:
-引理 IsClosedMap.mapsToRestrict
-  结论: {f : X -> Y} (hf : IsClosedMap f) {s : Set X} {t : Set Y}
+引理 是闭映射.mapsToRestrict
+  结论: {f : X -> Y} (hf : 是闭映射 f) {s : 集合 X} {t : 集合 Y}
   证明: (hf.domRestrict hs).codRestrict _
 
 @[continuity, fun_prop]
@@ -2559,8 +2559,8 @@ theorem Continuous.restrictPreimage
 @[fun_prop]
 
 中文:
-定理 Continuous.restrictPreimage
-  条件: {f : X -> Y} {s : Set Y} (h : Continuous f)
+定理 连续.restrictPreimage
+  条件: {f : X -> Y} {s : 集合 Y} (h : 连续 f)
   证明: h.restrict _
 
 @[fun_prop]
@@ -2583,7 +2583,7 @@ lemma Topology.IsEmbedding.restrict
 @[fun_prop]
 
 中文:
-引理 Topology.IsEmbedding.restrict
+引理 拓扑.是嵌入.restrict
   结论: {f : X -> Y}
   证明: .of_comp (hf.continuous.restrict H) continuous_subtype_val (hf.comp .subtypeVal)
 
@@ -2608,7 +2608,7 @@ lemma Topology.IsOpenEmbedding.restrict
     exact continuous_subtype_val.1 _ (hf.isOpenMap _ hs))⟩
 
 中文:
-引理 Topology.IsOpenEmbedding.restrict
+引理 拓扑.是开嵌入.restrict
   结论: {f : X -> Y}
   证明: ⟨hf.isEmbedding.restrict H, (by
     rw [MapsTo.range_restrict]
@@ -2632,8 +2632,8 @@ theorem Topology.IsInducing.codRestrict
   proof: he.of_comp (he.continuous.codRestrict hs) continuous_subtype_val
 
 中文:
-定理 Topology.IsInducing.codRestrict
-  结论: {e : X -> Y} (he : IsInducing e) {s : Set Y}
+定理 拓扑.是Inducing.codRestrict
+  结论: {e : X -> Y} (he : 是Inducing e) {s : 集合 Y}
   证明: he.of_comp (he.continuous.codRestrict hs) continuous_subtype_val
 
 Depends on / 依赖: codRestrict, continuous, continuous_subtype_val, he.continuous.codRestrict, he.of_comp, of_comp
@@ -2651,8 +2651,8 @@ lemma Topology.IsEmbedding.codRestrict
   proof: he.of_comp (he.continuous.codRestrict hs) continuous_subtype_val
 
 中文:
-引理 Topology.IsEmbedding.codRestrict
-  结论: {e : X -> Y} (he : IsEmbedding e) (s : Set Y)
+引理 拓扑.是嵌入.codRestrict
+  结论: {e : X -> Y} (he : 是嵌入 e) (s : 集合 Y)
   证明: he.of_comp (he.continuous.codRestrict hs) continuous_subtype_val
 -/
 protected lemma Topology.IsEmbedding.codRestrict {e : X -> Y} (he : IsEmbedding e) (s : Set Y)
@@ -2673,7 +2673,7 @@ lemma Topology.IsEmbedding.inclusion
 @[fun_prop]
 
 中文:
-引理 Topology.IsEmbedding.inclusion
+引理 拓扑.是嵌入.inclusion
   条件: (h : s subseteq t)
   证明: IsEmbedding.subtypeVal.codRestrict _ _
 
@@ -2695,8 +2695,8 @@ lemma Topology.IsOpenEmbedding.inclusion
 @[fun_prop]
 
 中文:
-引理 Topology.IsOpenEmbedding.inclusion
-  条件: (hst : s subseteq t) (hs : IsOpen (t ↓inter s))
+引理 拓扑.是开嵌入.inclusion
+  条件: (hst : s subseteq t) (hs : 是开集 (t ↓inter s))
   证明: .inclusion _
   isOpen_range := by rwa [range_inclusion]
 
@@ -2718,8 +2718,8 @@ lemma Topology.IsClosedEmbedding.inclusion
   isClosed_range := by rwa [range_inclusion]
 
 中文:
-引理 Topology.IsClosedEmbedding.inclusion
-  条件: (hst : s subseteq t) (hs : IsClosed (t ↓inter s))
+引理 拓扑.是闭嵌入.inclusion
+  条件: (hst : s subseteq t) (hs : 是闭集 (t ↓inter s))
   证明: .inclusion _
   isClosed_range := by rwa [range_inclusion]
 -/
@@ -2737,8 +2737,8 @@ theorem DiscreteTopology.of_subset
   proof: (IsEmbedding.inclusion ts).discreteTopology
 
 中文:
-定理 DiscreteTopology.of_subset
-  结论: {X : 类型} [TopologicalSpace X] {s t : Set X}
+定理 离散拓扑.of_subset
+  结论: {X : 类型} [拓扑空间 X] {s t : 集合 X}
   证明: (IsEmbedding.inclusion ts).discreteTopology
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.inclusion, discreteTopology, inclusion
@@ -2757,9 +2757,9 @@ lemma IsDiscrete.mono
   proof: ⟨.of_subset hs.to_subtype hst⟩
 
 中文:
-引理 IsDiscrete.mono
-  条件: {t : Set X} (hs : IsDiscrete s) (hst : t subseteq s)
-  结论: IsDiscrete t
+引理 是离散.mono
+  条件: {t : 集合 X} (hs : 是离散 s) (hst : t subseteq s)
+  结论: 是离散 t
   证明: ⟨.of_subset hs.to_subtype hst⟩
 
 Depends on / 依赖: hs.to_subtype, of_subset, to_subtype
@@ -2777,8 +2777,8 @@ theorem DiscreteTopology.preimage_of_continuous_injective
     (by exact fun _ x => x) hc) ((MapsTo.restrict_inj _).mpr hinj.injOn)
 
 中文:
-定理 DiscreteTopology.preimage_of_continuous_injective
-  结论: {X Y : 类型} [TopologicalSpace X]
+定理 离散拓扑.preimage_of_continuous_injective
+  结论: {X Y : 类型} [拓扑空间 X]
   证明: DiscreteTopology.of_continuous_injective (β := s) (Continuous.restrict
     (by exact fun _ x => x) hc) ((MapsTo.restrict_inj _).mpr hinj.injOn)
 
@@ -2801,8 +2801,8 @@ lemma Topology.IsCoinducing.restrictPreimage_of_isOpen
   rw [hs.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]; rw [← hf.isOpen_preimage]; rw [(hs.preimage hf.continuous).isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]; rw [image_val_preimage_restrictPreimage]
 
 中文:
-引理 Topology.IsCoinducing.restrictPreimage_of_isOpen
-  结论: {f : X -> Y} (hf : IsCoinducing f)
+引理 拓扑.是余inducing.restrictPreimage_of_isOpen
+  结论: {f : X -> Y} (hf : 是余inducing f)
   证明: by
   refine .of_isOpen_preimage_iff_isOpen fun _ => ?_
   rw [hs.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]; rw [← hf.isOpen_preimage]; rw [(hs.preimage hf.continuous).isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]; rw [image_val_preimage_restrictPreimage]
@@ -2825,8 +2825,8 @@ theorem Topology.IsQuotientMap.restrictPreimage_isOpen
     ⟨.restrictPreimage_of_isOpen hf.isCoinducing hs, hf.surjective.restrictPreimage _⟩
 
 中文:
-定理 Topology.IsQuotientMap.restrictPreimage_isOpen
-  结论: {f : X -> Y} (hf : IsQuotientMap f)
+定理 拓扑.是商映射.restrictPreimage_isOpen
+  结论: {f : X -> Y} (hf : 是商映射 f)
   证明: (isQuotientMap_iff _).2
     ⟨.restrictPreimage_of_isOpen hf.isCoinducing hs, hf.surjective.restrictPreimage _⟩
 
@@ -2850,8 +2850,8 @@ lemma isClosed_preimage_val
 
 中文:
 引理 isClosed_preimage_val
-  条件: {s t : Set X}
-  结论: IsClosed (s ↓inter t) ↔ s inter closure (s inter t) subseteq t
+  条件: {s t : 集合 X}
+  结论: 是闭集 (s ↓inter t) ↔ s inter closure (s inter t) subseteq t
   证明: by
   rw [← closure_eq_iff_isClosed]; rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]; rw [← Subtype.val_injective.image_injective.eq_iff]; rw [Subtype.image_preimage_coe]; rw [Subtype.image_preimage_coe]; rw [subset_antisymm_iff]; rw [and_iff_left]; rw [Set.subset_inter_iff]; rw [and_i
 
@@ -2874,7 +2874,7 @@ theorem frontier_inter_open_inter
 
 中文:
 定理 frontier_inter_open_inter
-  条件: {s t : Set X} (ht : IsOpen t)
+  条件: {s t : 集合 X} (ht : 是开集 t)
   证明: by
   simp only [Set.inter_comm _ t, ← Subtype.preimage_coe_eq_preimage_coe_iff,
     ht.isOpenMap_subtype_val.preimage_frontier_eq_frontier_preimage continuous_subtype_val,
@@ -2902,9 +2902,9 @@ lemma IsOpen.preimage_val
   proof: ht.preimage continuous_subtype_val
 
 中文:
-引理 IsOpen.preimage_val
-  条件: {s t : Set X} (ht : IsOpen t)
-  结论: IsOpen (s ↓inter t)
+引理 是开集.preimage_val
+  条件: {s t : 集合 X} (ht : 是开集 t)
+  结论: 是开集 (s ↓inter t)
   证明: ht.preimage continuous_subtype_val
 
 Depends on / 依赖: continuous_subtype_val, ht.preimage, preimage
@@ -2922,8 +2922,8 @@ lemma IsOpen.image_val
   simpa using IsInducing.subtypeVal.image_eq_isOpen_inter_range ht
 
 中文:
-引理 IsOpen.image_val
-  条件: {s : Set X} {t : Set s} (ht : IsOpen t)
+引理 是开集.image_val
+  条件: {s : 集合 X} {t : 集合 s} (ht : 是开集 t)
   证明: by
   simpa using IsInducing.subtypeVal.image_eq_isOpen_inter_range ht
 
@@ -2951,8 +2951,8 @@ lemma exists_open_dense_of_open_dense_subtype
     simpa u
 
 中文:
-引理 exists_open_dense_of_open_dense_subtype
-  结论: (hs : Dense s) {u : Set s} (huo : IsOpen u)
+引理 存在_open_dense_of_open_dense_subtype
+  结论: (hs : 稠密 s) {u : 集合 s} (huo : 是开集 u)
   证明: by
   choose v hv1 hv2 using huo
   refine ⟨v, hv1, ?_, hv2⟩
@@ -2989,9 +2989,9 @@ lemma IsClosed.preimage_val
   proof: ht.preimage continuous_subtype_val
 
 中文:
-引理 IsClosed.preimage_val
-  条件: {s t : Set X} (ht : IsClosed t)
-  结论: IsClosed (s ↓inter t)
+引理 是闭集.preimage_val
+  条件: {s t : 集合 X} (ht : 是闭集 t)
+  结论: 是闭集 (s ↓inter t)
   证明: ht.preimage continuous_subtype_val
 
 Depends on / 依赖: continuous_subtype_val, ht.preimage, preimage
@@ -3009,8 +3009,8 @@ lemma IsClosed.image_val
   simpa using IsInducing.subtypeVal.image_eq_isClosed_inter_range ht
 
 中文:
-引理 IsClosed.image_val
-  条件: {s : Set X} {t : Set s} (ht : IsClosed t)
+引理 是闭集.image_val
+  条件: {s : 集合 X} {t : 集合 s} (ht : 是闭集 t)
   证明: by
   simpa using IsInducing.subtypeVal.image_eq_isClosed_inter_range ht
 
@@ -3030,8 +3030,8 @@ lemma IsOpen.inter_preimage_val_iff
     fun h => (Subtype.preimage_coe_self_inter _ _).symm ▸ h.preimage_val⟩
 
 中文:
-引理 IsOpen.inter_preimage_val_iff
-  条件: {s t : Set X} (hs : IsOpen s)
+引理 是开集.inter_preimage_val_iff
+  条件: {s t : 集合 X} (hs : 是开集 s)
   证明: ⟨fun h => by simpa using hs.isOpenMap_subtype_val _ h,
     fun h => (Subtype.preimage_coe_self_inter _ _).symm ▸ h.preimage_val⟩
 -/
@@ -3050,8 +3050,8 @@ lemma IsClosed.inter_preimage_val_iff
     fun h => (Subtype.preimage_coe_self_inter _ _).symm ▸ h.preimage_val⟩
 
 中文:
-引理 IsClosed.inter_preimage_val_iff
-  条件: {s t : Set X} (hs : IsClosed s)
+引理 是闭集.inter_preimage_val_iff
+  条件: {s t : 集合 X} (hs : 是闭集 s)
   证明: ⟨fun h => by simpa using hs.isClosedMap_subtype_val _ h,
     fun h => (Subtype.preimage_coe_self_inter _ _).symm ▸ h.preimage_val⟩
 -/
@@ -3081,7 +3081,7 @@ theorem isQuotientMap_quot_mk
 
 中文:
 定理 isQuotientMap_quot_mk
-  结论: IsQuotientMap (@Quot.mk X r)
+  结论: 是商映射 (@商.mk X r)
   证明: ⟨⟨rfl⟩, Quot.exists_rep⟩
 
 @[continuity, fun_prop]
@@ -3104,7 +3104,7 @@ theorem continuous_quot_mk
 
 中文:
 定理 continuous_quot_mk
-  结论: Continuous (@Quot.mk X r)
+  结论: 连续 (@商.mk X r)
   证明: continuous_coinduced_rng
 
 @[continuity, fun_prop]
@@ -3127,7 +3127,7 @@ theorem continuous_quot_lift
 
 中文:
 定理 continuous_quot_lift
-  条件: {f : X -> Y} (hr : 对任意 a b, r a b -> f a = f b) (h : Continuous f)
+  条件: {f : X -> Y} (hr : 对任意 a b, r a b -> f a = f b) (h : 连续 f)
   证明: continuous_coinduced_dom.2 h
 
 @[continuity, fun_prop]
@@ -3169,7 +3169,7 @@ theorem isQuotientMap_quotient_mk'
 
 中文:
 定理 isQuotientMap_quotient_mk'
-  结论: IsQuotientMap (@Quotient.mk' X s)
+  结论: 是商映射 (@商.mk' X s)
   证明: isQuotientMap_quot_mk
 
 Depends on / 依赖: isQuotientMap_quot_mk
@@ -3187,7 +3187,7 @@ theorem continuous_quotient_mk'
 
 中文:
 定理 continuous_quotient_mk'
-  结论: Continuous (@Quotient.mk' X s)
+  结论: 连续 (@商.mk' X s)
   证明: continuous_coinduced_rng
 
 Depends on / 依赖: continuous_coinduced_rng
@@ -3204,8 +3204,8 @@ theorem Continuous.quotient_lift
   proof: continuous_coinduced_dom.2 h
 
 中文:
-定理 Continuous.quotient_lift
-  条件: {f : X -> Y} (h : Continuous f) (hs : 对任意 a b, a ≈ b -> f a = f b)
+定理 连续.quotient_lift
+  条件: {f : X -> Y} (h : 连续 f) (hs : 对任意 a b, a ≈ b -> f a = f b)
   证明: continuous_coinduced_dom.2 h
 
 Depends on / 依赖: continuous_coinduced_dom
@@ -3223,8 +3223,8 @@ theorem Continuous.quotient_liftOn'
   proof: h.quotient_lift hs
 
 中文:
-定理 Continuous.quotient_liftOn'
-  结论: {f : X -> Y} (h : Continuous f)
+定理 连续.quotient_liftOn'
+  结论: {f : X -> Y} (h : 连续 f)
   证明: h.quotient_lift hs
 
 Depends on / 依赖: h.quotient_lift, quotient_lift
@@ -3245,8 +3245,8 @@ theorem Continuous.quotient_map'
   proof: (continuous_quotient_mk'.comp hf).quotient_lift _
 
 中文:
-定理 Continuous.quotient_map'
-  结论: {t : Setoid Y} {f : X -> Y} (hf : Continuous f)
+定理 连续.quotient_map'
+  结论: {t : 集合等价关系 Y} {f : X -> Y} (hf : 连续 f)
   证明: (continuous_quotient_mk'.comp hf).quotient_lift _
 
 Depends on / 依赖: continuous_quotient_mk, quotient_lift
@@ -3275,7 +3275,7 @@ theorem continuous_pi_iff
 
 中文:
 定理 continuous_pi_iff
-  结论: Continuous f ↔ 对任意 i, Continuous fun a => f a i
+  结论: 连续 f ↔ 对任意 i, 连续 fun a => f a i
   证明: by
   simp only [continuous_iInf_rng, continuous_induced_rng, comp_def]
 
@@ -3300,8 +3300,8 @@ theorem continuous_pi
 
 中文:
 定理 continuous_pi
-  条件: (h : 对任意 i, Continuous fun a => f a i)
-  结论: Continuous f
+  条件: (h : 对任意 i, 连续 fun a => f a i)
+  结论: 连续 f
   证明: continuous_pi_iff.2 h
 
 @[continuity, fun_prop]
@@ -3324,7 +3324,7 @@ theorem continuous_apply
 中文:
 定理 continuous_apply
   条件: (i : ι)
-  结论: Continuous fun p : 对任意 i, A i => p i
+  结论: 连续 fun p : 对任意 i, A i => p i
   证明: continuous_iInf_dom continuous_induced_dom
 
 @[continuity]
@@ -3343,7 +3343,7 @@ theorem continuous_apply_apply
 
 中文:
 定理 continuous_apply_apply
-  结论: {ρ : κ -> ι -> 类型} [对任意 j i, TopologicalSpace (ρ j i)] (j : κ)
+  结论: {ρ : κ -> ι -> 类型} [对任意 j i, 拓扑空间 (ρ j i)] (j : κ)
   证明: (continuous_apply i).comp (continuous_apply j)
 
 Depends on / 依赖: continuous_apply
@@ -3383,8 +3383,8 @@ theorem Filter.Tendsto.apply_nhds
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.apply_nhds
-  结论: {l : Filter Y} {f : Y -> 对任意 i, A i} {x : 对任意 i, A i}
+定理 滤子.收敛.apply_nhds
+  结论: {l : 滤子 Y} {f : Y -> 对任意 i, A i} {x : 对任意 i, A i}
   证明: (continuousAt_apply i _).tendsto.comp h
 
 @[fun_prop]
@@ -3404,7 +3404,7 @@ theorem Continuous.piMap
   proof: continuous_pi fun i => (hf i).comp (continuous_apply i)
 
 中文:
-定理 Continuous.piMap
+定理 连续.piMap
   证明: continuous_pi fun i => (hf i).comp (continuous_apply i)
 -/
 protected theorem Continuous.piMap
@@ -3445,7 +3445,7 @@ theorem IsOpenMap.piMap
   exact Filter.pi_mono fun i => (hfo i).nhds_le _
 
 中文:
-定理 IsOpenMap.piMap
+定理 是开映射.piMap
   结论: {f : 对任意 i, A i -> B i}
   证明: by
   refine IsOpenMap.of_nhds_le fun x => ?_
@@ -3468,7 +3468,7 @@ theorem IsOpenQuotientMap.piMap
     .of_forall fun i => (hf i).1⟩
 
 中文:
-定理 IsOpenQuotientMap.piMap
+定理 是OpenQuotient映射.piMap
   证明: ⟨.piMap fun i => (hf i).1, .piMap fun i => (hf i).2, .piMap (fun i => (hf i).3)
     .of_forall fun i => (hf i).1⟩
 -/
@@ -3488,7 +3488,7 @@ theorem tendsto_pi_nhds
 
 中文:
 定理 tendsto_pi_nhds
-  条件: {f : Y -> 对任意 i, A i} {g : 对任意 i, A i} {u : Filter Y}
+  条件: {f : Y -> 对任意 i, A i} {g : 对任意 i, A i} {u : 滤子 Y}
   证明: by
   rw [nhds_pi]; rw [Filter.tendsto_pi]
 
@@ -3574,7 +3574,7 @@ lemma Topology.IsInducing.piMap
   simp [isInducing_iff_nhds, nhds_pi, (hf _).nhds_eq_comap, Filter.pi_comap]
 
 中文:
-引理 Topology.IsInducing.piMap
+引理 拓扑.是Inducing.piMap
   结论: {f : 对任意 i, A i -> B i}
   证明: by
   simp [isInducing_iff_nhds, nhds_pi, (hf _).nhds_eq_comap, Filter.pi_comap]
@@ -3592,7 +3592,7 @@ lemma Topology.IsEmbedding.piMap
   proof: ⟨.piMap fun i => (hf i).1, .piMap fun i => (hf i).2⟩
 
 中文:
-引理 Topology.IsEmbedding.piMap
+引理 拓扑.是嵌入.piMap
   结论: {f : 对任意 i, A i -> B i}
   证明: ⟨.piMap fun i => (hf i).1, .piMap fun i => (hf i).2⟩
 -/
@@ -3609,7 +3609,7 @@ theorem Pi.continuous_precomp'
   proof: continuous_pi fun j => continuous_apply (φ j)
 
 中文:
-定理 Pi.continuous_precomp'
+定理 依赖函数类型.continuous_precomp'
   条件: {ι' : 类型} (φ : ι' -> ι)
   证明: continuous_pi fun j => continuous_apply (φ j)
 
@@ -3628,7 +3628,7 @@ theorem Pi.continuous_precomp
   proof: Pi.continuous_precomp' φ
 
 中文:
-定理 Pi.continuous_precomp
+定理 依赖函数类型.continuous_precomp
   条件: {ι' : 类型} (φ : ι' -> ι)
   证明: Pi.continuous_precomp' φ
 
@@ -3647,8 +3647,8 @@ theorem Pi.continuous_postcomp'
   proof: continuous_pi fun i => (hg i).comp continuous_apply i
 
 中文:
-定理 Pi.continuous_postcomp'
-  结论: {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+定理 依赖函数类型.continuous_postcomp'
+  结论: {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: continuous_pi fun i => (hg i).comp continuous_apply i
 
 Depends on / 依赖: continuous_apply, continuous_pi
@@ -3667,8 +3667,8 @@ theorem Pi.continuous_postcomp
   proof: Pi.continuous_postcomp' fun _ => hg
 
 中文:
-定理 Pi.continuous_postcomp
-  条件: [TopologicalSpace Y] {g : X -> Y} (hg : Continuous g)
+定理 依赖函数类型.continuous_postcomp
+  条件: [拓扑空间 Y] {g : X -> Y} (hg : 连续 g)
   证明: Pi.continuous_postcomp' fun _ => hg
 
 Depends on / 依赖: Pi.continuous_postcomp, continuous_postcomp
@@ -3687,7 +3687,7 @@ lemma Pi.induced_precomp'
   simp [Pi.topologicalSpace, induced_iInf, induced_compose, comp_def]
 
 中文:
-引理 Pi.induced_precomp'
+引理 依赖函数类型.induced_precomp'
   条件: {ι' : 类型} (φ : ι' -> ι)
   证明: by
   simp [Pi.topologicalSpace, induced_iInf, induced_compose, comp_def]
@@ -3708,8 +3708,8 @@ lemma Pi.induced_precomp
   proof: induced_precomp' φ
 
 中文:
-引理 Pi.induced_precomp
-  条件: [TopologicalSpace Y] {ι' : 类型} (φ : ι' -> ι)
+引理 依赖函数类型.induced_precomp
+  条件: [拓扑空间 Y] {ι' : 类型} (φ : ι' -> ι)
   证明: induced_precomp' φ
 
 Depends on / 依赖: induced_precomp
@@ -3736,7 +3736,7 @@ definition Homeomorph.piCurry
 @[continuity, fun_prop]
 
 中文:
-定义 Homeomorph.piCurry
+定义 同胚.piCurry
   签名: {X Y Z : 类型}
   定义体: Function.curry
   invFun := Function.uncurry
@@ -3771,8 +3771,8 @@ lemma Pi.continuous_domRestrict
 @[continuity, fun_prop]
 
 中文:
-引理 Pi.continuous_domRestrict
-  条件: (S : Set ι)
+引理 依赖函数类型.continuous_domRestrict
+  条件: (S : 集合 ι)
   证明: Pi.continuous_precomp' ((↑) : S -> ι)
 
 @[deprecated (since := "2026-07-19")] alias Pi.continuous_restrict := Pi.continuous_domRestrict
@@ -3801,8 +3801,8 @@ lemma Pi.continuous_domRestrict₂
 @[continuity, fun_prop]
 
 中文:
-引理 Pi.continuous_domRestrict₂
-  条件: {s t : Set ι} (hst : s subseteq t)
+引理 依赖函数类型.continuous_domRestrict₂
+  条件: {s t : 集合 ι} (hst : s subseteq t)
   证明: continuous_pi fun _ => continuous_apply _
 
 @[deprecated (since := "2026-07-19")] alias Pi.continuous_restrict₂ := Pi.continuous_domRestrict₂
@@ -3829,9 +3829,9 @@ theorem Finset.continuous_restrict
 @[continuity, fun_prop]
 
 中文:
-定理 Finset.continuous_restrict
-  条件: (s : Finset ι)
-  结论: Continuous (s.restrict (π := A))
+定理 有限集.continuous_restrict
+  条件: (s : 有限集 ι)
+  结论: 连续 (s.restrict (π := A))
   证明: continuous_pi fun _ => continuous_apply _
 
 @[continuity, fun_prop]
@@ -3849,8 +3849,8 @@ theorem Finset.continuous_restrict₂
   proof: continuous_pi fun _ => continuous_apply _
 
 中文:
-定理 Finset.continuous_restrict₂
-  条件: {s t : Finset ι} (hst : s subseteq t)
+定理 有限集.continuous_restrict₂
+  条件: {s t : 有限集 ι} (hst : s subseteq t)
   证明: continuous_pi fun _ => continuous_apply _
 -/
 theorem Finset.continuous_restrict₂ {s t : Finset ι} (hst : s subseteq t) :
@@ -3874,8 +3874,8 @@ alias Pi.continuous_restrict_apply := Pi.continuous_domRestrict_apply
 @[continuity, fun_prop]
 
 中文:
-定理 Pi.continuous_domRestrict_apply
-  条件: (s : Set X) {f : X -> Z} (hf : Continuous f)
+定理 依赖函数类型.continuous_domRestrict_apply
+  条件: (s : 集合 X) {f : X -> Z} (hf : 连续 f)
   证明: hf.comp continuous_subtype_val
 
 @[deprecated (since := "2026-07-19")]
@@ -3906,8 +3906,8 @@ alias Pi.continuous_restrict₂_apply := Pi.continuous_domRestrict₂_apply
 @[continuity, fun_prop]
 
 中文:
-定理 Pi.continuous_domRestrict₂_apply
-  结论: {s t : Set X} (hst : s subseteq t)
+定理 依赖函数类型.continuous_domRestrict₂_apply
+  结论: {s t : 集合 X} (hst : s subseteq t)
   证明: hf.comp (continuous_inclusion hst)
 
 @[deprecated (since := "2026-07-19")]
@@ -3936,8 +3936,8 @@ theorem Finset.continuous_restrict_apply
 @[continuity, fun_prop]
 
 中文:
-定理 Finset.continuous_restrict_apply
-  条件: (s : Finset X) {f : X -> Z} (hf : Continuous f)
+定理 有限集.continuous_restrict_apply
+  条件: (s : 有限集 X) {f : X -> Z} (hf : 连续 f)
   证明: hf.comp continuous_subtype_val
 
 @[continuity, fun_prop]
@@ -3957,8 +3957,8 @@ theorem Finset.continuous_restrict₂_apply
   proof: hf.comp (continuous_inclusion hst)
 
 中文:
-定理 Finset.continuous_restrict₂_apply
-  结论: {s t : Finset X} (hst : s subseteq t)
+定理 有限集.continuous_restrict₂_apply
+  结论: {s t : 有限集 X} (hst : s subseteq t)
   证明: hf.comp (continuous_inclusion hst)
 
 Depends on / 依赖: continuous_inclusion, hf.comp
@@ -3980,8 +3980,8 @@ lemma Pi.induced_domRestrict
 @[deprecated (since := "2026-07-19")] alias Pi.induced_restrict := Pi.induced_domRestrict
 
 中文:
-引理 Pi.induced_domRestrict
-  条件: (S : Set ι)
+引理 依赖函数类型.induced_domRestrict
+  条件: (S : 集合 ι)
   证明: by
   simp +unfoldPartialApp [← iInf_subtype'', ← induced_precomp' ((↑) : S -> ι),
     domRestrict]
@@ -4011,8 +4011,8 @@ lemma Pi.induced_domRestrict_sUnion
 alias Pi.induced_restrict_sUnion := Pi.induced_domRestrict_sUnion
 
 中文:
-引理 Pi.induced_domRestrict_sUnion
-  条件: (𝔖 : Set (Set ι))
+引理 依赖函数类型.induced_domRestrict_sUnion
+  条件: (𝔖 : 集合 (集合 ι))
   证明: by
   simp_rw [Pi.induced_domRestrict, iInf_sUnion]
 
@@ -4038,8 +4038,8 @@ theorem Filter.Tendsto.update
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.update
-  结论: [DecidableEq ι] {l : Filter Y} {f : Y -> 对任意 i, A i} {x : 对任意 i, A i}
+定理 滤子.收敛.update
+  结论: [DecidableEq ι] {l : 滤子 Y} {f : Y -> 对任意 i, A i} {x : 对任意 i, A i}
   证明: tendsto_pi_nhds.2 fun j => by rcases eq_or_ne j i with (rfl | hj) <;> simp [*, hf.apply_nhds]
 
 @[fun_prop]
@@ -4085,8 +4085,8 @@ theorem Continuous.update
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.update i hg.continuousAt
 
 中文:
-定理 Continuous.update
-  结论: [DecidableEq ι] (hf : Continuous f) (i : ι) {g : X -> A i}
+定理 连续.update
+  结论: [DecidableEq ι] (hf : 连续 f) (i : ι) {g : X -> A i}
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.update i hg.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, hf.continuousAt.update, hg.continuousAt, update
@@ -4128,7 +4128,7 @@ theorem continuous_mulSingle
 
 中文:
 定理 continuous_mulSingle
-  条件: [对任意 i, One (A i)] [DecidableEq ι] (i : ι)
+  条件: [对任意 i, 幺 (A i)] [DecidableEq ι] (i : ι)
   证明: continuous_const.update _ continuous_id
 
 Depends on / 依赖: continuous_const, continuous_const.update, continuous_id, update
@@ -4150,7 +4150,7 @@ theorem Filter.Tendsto.finCons
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.finCons
+定理 滤子.收敛.finCons
   证明: tendsto_pi_nhds.2 fun j => Fin.cases (by simpa) (by simpa using tendsto_pi_nhds.1 hg) j
 
 @[fun_prop]
@@ -4176,7 +4176,7 @@ theorem ContinuousAt.finCons
 
 中文:
 定理 ContinuousAt.finCons
-  结论: {f : X -> A 0} {g : X -> 对任意 j : Fin n, A (Fin.succ j)} {x : X}
+  结论: {f : X -> A 0} {g : X -> 对任意 j : 有限集 n, A (有限集.succ j)} {x : X}
   证明: hf.tendsto.finCons hg
 
 @[fun_prop]
@@ -4198,8 +4198,8 @@ theorem Continuous.finCons
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finCons hg.continuousAt
 
 中文:
-定理 Continuous.finCons
-  结论: {f : X -> A 0} {g : X -> 对任意 j : Fin n, A (Fin.succ j)}
+定理 连续.finCons
+  结论: {f : X -> A 0} {g : X -> 对任意 j : 有限集 n, A (有限集.succ j)}
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finCons hg.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, finCons, hf.continuousAt.finCons, hg.continuousAt
@@ -4218,7 +4218,7 @@ theorem Filter.Tendsto.matrixVecCons
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.matrixVecCons
+定理 滤子.收敛.matrixVecCons
   证明: hf.finCons hg
 
 @[fun_prop]
@@ -4263,7 +4263,7 @@ theorem Continuous.matrixVecCons
   proof: hf.finCons hg
 
 中文:
-定理 Continuous.matrixVecCons
+定理 连续.matrixVecCons
   证明: hf.finCons hg
 
 Depends on / 依赖: finCons, hf.finCons
@@ -4283,7 +4283,7 @@ theorem Filter.Tendsto.finSnoc
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.finSnoc
+定理 滤子.收敛.finSnoc
   证明: tendsto_pi_nhds.2 fun j => Fin.lastCases (by simpa) (by simpa using tendsto_pi_nhds.1 hf) j
 
 @[fun_prop]
@@ -4310,7 +4310,7 @@ theorem ContinuousAt.finSnoc
 
 中文:
 定理 ContinuousAt.finSnoc
-  结论: {f : X -> 对任意 j : Fin n, A j.castSucc} {g : X -> A (Fin.last _)} {x : X}
+  结论: {f : X -> 对任意 j : 有限集 n, A j.castSucc} {g : X -> A (有限集.last _)} {x : X}
   证明: hf.tendsto.finSnoc hg
 
 @[fun_prop]
@@ -4332,8 +4332,8 @@ theorem Continuous.finSnoc
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finSnoc hg.continuousAt
 
 中文:
-定理 Continuous.finSnoc
-  结论: {f : X -> 对任意 j : Fin n, A j.castSucc} {g : X -> A (Fin.last _)}
+定理 连续.finSnoc
+  结论: {f : X -> 对任意 j : 有限集 n, A j.castSucc} {g : X -> A (有限集.last _)}
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finSnoc hg.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, finSnoc, hf.continuousAt.finSnoc, hg.continuousAt
@@ -4352,7 +4352,7 @@ theorem Filter.Tendsto.finInsertNth
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.finInsertNth
+定理 滤子.收敛.finInsertNth
   证明: tendsto_pi_nhds.2 fun j => Fin.succAboveCases i (by simpa) (by simpa using tendsto_pi_nhds.1 hg) j
 
 @[fun_prop]
@@ -4398,7 +4398,7 @@ theorem Continuous.finInsertNth
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finInsertNth i hg.continuousAt
 
 中文:
-定理 Continuous.finInsertNth
+定理 连续.finInsertNth
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finInsertNth i hg.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, finInsertNth, hf.continuousAt.finInsertNth, hg.continuousAt
@@ -4419,8 +4419,8 @@ theorem Filter.Tendsto.finInit
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.finInit
-  结论: {f : Y -> 对任意 j : Fin (n + 1), A j} {l : Filter Y} {x : 对任意 j, A j}
+定理 滤子.收敛.finInit
+  结论: {f : Y -> 对任意 j : 有限集 (n + 1), A j} {l : 滤子 Y} {x : 对任意 j, A j}
   证明: tendsto_pi_nhds.2 fun j => apply_nhds hg j.castSucc
 
 @[fun_prop]
@@ -4444,7 +4444,7 @@ theorem ContinuousAt.finInit
 
 中文:
 定理 ContinuousAt.finInit
-  结论: {f : X -> 对任意 j : Fin (n + 1), A j} {x : X}
+  结论: {f : X -> 对任意 j : 有限集 (n + 1), A j} {x : X}
   证明: hf.tendsto.finInit
 
 @[fun_prop]
@@ -4465,8 +4465,8 @@ theorem Continuous.finInit
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finInit
 
 中文:
-定理 Continuous.finInit
-  条件: {f : X -> 对任意 j : Fin (n + 1), A j} (hf : Continuous f)
+定理 连续.finInit
+  条件: {f : X -> 对任意 j : 有限集 (n + 1), A j} (hf : 连续 f)
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finInit
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, finInit, hf.continuousAt.finInit
@@ -4486,8 +4486,8 @@ theorem Filter.Tendsto.finTail
 @[fun_prop]
 
 中文:
-定理 Filter.Tendsto.finTail
-  结论: {f : Y -> 对任意 j : Fin (n + 1), A j} {l : Filter Y} {x : 对任意 j, A j}
+定理 滤子.收敛.finTail
+  结论: {f : Y -> 对任意 j : 有限集 (n + 1), A j} {l : 滤子 Y} {x : 对任意 j, A j}
   证明: tendsto_pi_nhds.2 fun j => apply_nhds hg j.succ
 
 @[fun_prop]
@@ -4511,7 +4511,7 @@ theorem ContinuousAt.finTail
 
 中文:
 定理 ContinuousAt.finTail
-  结论: {f : X -> 对任意 j : Fin (n + 1), A j} {x : X}
+  结论: {f : X -> 对任意 j : 有限集 (n + 1), A j} {x : X}
   证明: hf.tendsto.finTail
 
 @[fun_prop]
@@ -4532,8 +4532,8 @@ theorem Continuous.finTail
   proof: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finTail
 
 中文:
-定理 Continuous.finTail
-  条件: {f : X -> 对任意 j : Fin (n + 1), A j} (hf : Continuous f)
+定理 连续.finTail
+  条件: {f : X -> 对任意 j : 有限集 (n + 1), A j} (hf : 连续 f)
   证明: continuous_iff_continuousAt.2 fun _ => hf.continuousAt.finTail
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, finTail, hf.continuousAt.finTail
@@ -4555,7 +4555,7 @@ theorem isOpen_set_pi
 
 中文:
 定理 isOpen_set_pi
-  结论: {i : Set ι} {s : 对任意 a, Set (A a)} (hi : i.Finite)
+  结论: {i : 集合 ι} {s : 对任意 a, 集合 (A a)} (hi : i.有限)
   证明: by
   rw [pi_def]; exact hi.isOpen_biInter fun a ha => (hs _ ha).preimage (continuous_apply _)
 
@@ -4581,7 +4581,7 @@ theorem isOpen_pi_iff
 
 中文:
 定理 isOpen_pi_iff
-  条件: {s : Set (对任意 a, A a)}
+  条件: {s : 集合 (对任意 a, A a)}
   证明: by
   rw [isOpen_iff_nhds]
   simp_rw [le_principal_iff, nhds_pi, Filter.mem_pi', mem_nhds_iff]
@@ -4638,7 +4638,7 @@ theorem isOpen_pi_iff'
 
 中文:
 定理 isOpen_pi_iff'
-  条件: [Finite ι] {s : Set (对任意 a, A a)}
+  条件: [有限 ι] {s : 集合 (对任意 a, A a)}
   证明: by
   cases nonempty_fintype ι
   rw [isOpen_iff_nhds]
@@ -4680,7 +4680,7 @@ theorem isClosed_set_pi
 
 中文:
 定理 isClosed_set_pi
-  条件: {i : Set ι} {s : 对任意 a, Set (A a)} (hs : 对任意 a in i, IsClosed (s a))
+  条件: {i : 集合 ι} {s : 对任意 a, 集合 (A a)} (hs : 对任意 a in i, 是闭集 (s a))
   证明: by
   rw [pi_def]; exact isClosed_biInter fun a ha => (hs _ ha).preimage (continuous_apply _)
 
@@ -4699,7 +4699,7 @@ lemma Topology.IsClosedEmbedding.piMap
   proof: ⟨.piMap fun i => (hf i).1, by simpa using isClosed_set_pi fun i _ => (hf i).2⟩
 
 中文:
-引理 Topology.IsClosedEmbedding.piMap
+引理 拓扑.是闭嵌入.piMap
   结论: {f : 对任意 i, A i -> B i}
   证明: ⟨.piMap fun i => (hf i).1, by simpa using isClosed_set_pi fun i _ => (hf i).2⟩
 -/
@@ -4716,8 +4716,8 @@ lemma Topology.IsOpenEmbedding.piMap
   proof: ⟨.piMap fun i => (hf i).1, by simpa using isOpen_set_pi Set.finite_univ fun i _ => (hf i).2⟩
 
 中文:
-引理 Topology.IsOpenEmbedding.piMap
-  结论: [Finite ι] {f : 对任意 i, A i -> B i}
+引理 拓扑.是开嵌入.piMap
+  结论: [有限 ι] {f : 对任意 i, A i -> B i}
   证明: ⟨.piMap fun i => (hf i).1, by simpa using isOpen_set_pi Set.finite_univ fun i _ => (hf i).2⟩
 -/
 protected lemma Topology.IsOpenEmbedding.piMap [Finite ι] {f : forall i, A i -> B i}
@@ -4735,7 +4735,7 @@ theorem mem_nhds_of_pi_mem_nhds
 
 中文:
 定理 mem_nhds_of_pi_mem_nhds
-  结论: {I : Set ι} {s : 对任意 i, Set (A i)} (a : 对任意 i, A i) (hs : I.pi s in 𝓝 a)
+  结论: {I : 集合 ι} {s : 对任意 i, 集合 (A i)} (a : 对任意 i, A i) (hs : I.pi s in 𝓝 a)
   证明: by
   rw [nhds_pi] at hs; exact mem_of_pi_mem_pi hs hi
 
@@ -4757,7 +4757,7 @@ theorem set_pi_mem_nhds
 
 中文:
 定理 set_pi_mem_nhds
-  结论: {i : Set ι} {s : 对任意 a, Set (A a)} {x : 对任意 a, A a} (hi : i.Finite)
+  结论: {i : 集合 ι} {s : 对任意 a, 集合 (A a)} {x : 对任意 a, A a} (hi : i.有限)
   证明: by
   rw [pi_def]; rw [biInter_mem hi]
   exact fun a ha => (continuous_apply a).continuousAt (hs a ha)
@@ -4780,7 +4780,7 @@ theorem set_pi_mem_nhds_iff
 
 中文:
 定理 set_pi_mem_nhds_iff
-  条件: {I : Set ι} (hI : I.Finite) {s : 对任意 i, Set (A i)} (a : 对任意 i, A i)
+  条件: {I : 集合 ι} (hI : I.有限) {s : 对任意 i, 集合 (A i)} (a : 对任意 i, A i)
   证明: by
   rw [nhds_pi]; rw [pi_mem_pi_iff hI]
 
@@ -4802,7 +4802,7 @@ theorem interior_pi_set
 
 中文:
 定理 interior_pi_set
-  条件: {I : Set ι} (hI : I.Finite) {s : 对任意 i, Set (A i)}
+  条件: {I : 集合 ι} (hI : I.有限) {s : 对任意 i, 集合 (A i)}
   证明: by
   ext a
   simp only [Set.mem_pi, mem_interior_iff_mem_nhds, set_pi_mem_nhds_iff hI]
@@ -4827,8 +4827,8 @@ theorem exists_finset_piecewise_mem_of_mem_nhds
   simpa [Finset.mem_coe.1 hi] using mem_of_mem_nhds (htx i)
 
 中文:
-定理 exists_finset_piecewise_mem_of_mem_nhds
-  结论: [DecidableEq ι] {s : Set (对任意 a, A a)} {x : 对任意 a, A a}
+定理 存在_finset_piecewise_mem_of_mem_nhds
+  结论: [DecidableEq ι] {s : 集合 (对任意 a, A a)} {x : 对任意 a, A a}
   证明: by
   simp only [nhds_pi, Filter.mem_pi'] at hs
   rcases hs with ⟨I, t, htx, hts⟩
@@ -4861,7 +4861,7 @@ refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs
 
 中文:
 定理 pi_generateFrom_eq
-  条件: {A : ι -> 类型} {g : 对任意 a, Set (Set (A a))}
+  条件: {A : ι -> 类型} {g : 对任意 a, 集合 (集合 (A a))}
   证明: by
   refine le_antisymm ?_ ?_
   · apply le_generateFrom
@@ -4931,7 +4931,7 @@ theorem pi_generateFrom_eq_finite
 
 中文:
 定理 pi_generateFrom_eq_finite
-  结论: {X : ι -> 类型} {g : 对任意 a, Set (Set (X a))} [Finite ι]
+  结论: {X : ι -> 类型} {g : 对任意 a, 集合 (集合 (X a))} [有限 ι]
   证明: by
   cases nonempty_fintype ι
   rw [pi_generateFrom_eq]
@@ -5013,8 +5013,8 @@ instance Pi.discreteTopology
     exact isOpen_set_pi finite_univ fun i _ => (isOpen_discrete {x i})
 
 中文:
-实例 Pi.discreteTopology
-  签名: : DiscreteTopology (对任意 i, A i)
+实例 依赖函数类型.discreteTopology
+  签名: : 离散拓扑 (对任意 i, A i)
   定义体: discreteTopology_iff_isOpen_singleton.mpr fun x => by
     rw [← univ_pi_singleton]
     exact isOpen_set_pi finite_univ fun i _ => (isOpen_discrete {x i})
@@ -5038,8 +5038,8 @@ lemma Function.Surjective.isEmbedding_comp
     Function.comp_def]
 
 中文:
-引理 Function.Surjective.isEmbedding_comp
-  条件: {n m : 类型} (f : m -> n) (hf : Function.Surjective f)
+引理 函数.满射.isEmbedding_comp
+  条件: {n m : 类型} (f : m -> n) (hf : 函数.满射 f)
   证明: by
   refine ⟨isInducing_iff_nhds.mpr fun x => ?_, hf.injective_comp_right⟩
   simp only [nhds_pi, Filter.pi, Filter.comap_iInf, ← hf.iInf_congr, Filter.comap_comap,
@@ -5073,7 +5073,7 @@ theorem continuous_sigmaMk
 中文:
 定理 continuous_sigmaMk
   条件: {i : ι}
-  结论: Continuous (@Sigma.mk ι σ i)
+  结论: 连续 (@依赖和类型.mk ι σ i)
   证明: continuous_iSup_rng continuous_coinduced_rng
 
 Depends on / 依赖: continuous_coinduced_rng, continuous_iSup_rng
@@ -5094,8 +5094,8 @@ theorem isOpen_sigma_iff
 
 中文:
 定理 isOpen_sigma_iff
-  条件: {s : Set (Sigma σ)}
-  结论: IsOpen s ↔ 对任意 i, IsOpen (Sigma.mk i ⁻¹' s)
+  条件: {s : 集合 (依赖和类型 σ)}
+  结论: 是开集 s ↔ 对任意 i, 是开集 (依赖和类型.mk i ⁻¹' s)
   证明: by
   rw [isOpen_iSup_iff]
   rfl
@@ -5118,8 +5118,8 @@ theorem isClosed_sigma_iff
 
 中文:
 定理 isClosed_sigma_iff
-  条件: {s : Set (Sigma σ)}
-  结论: IsClosed s ↔ 对任意 i, IsClosed (Sigma.mk i ⁻¹' s)
+  条件: {s : 集合 (依赖和类型 σ)}
+  结论: 是闭集 s ↔ 对任意 i, 是闭集 (依赖和类型.mk i ⁻¹' s)
   证明: by
   simp only [← isOpen_compl_iff, isOpen_sigma_iff, preimage_compl]
 
@@ -5147,7 +5147,7 @@ theorem isOpenMap_sigmaMk
 中文:
 定理 isOpenMap_sigmaMk
   条件: {i : ι}
-  结论: IsOpenMap (@Sigma.mk ι σ i)
+  结论: 是开映射 (@依赖和类型.mk ι σ i)
   证明: by
   intro s hs
   rw [isOpen_sigma_iff]
@@ -5180,7 +5180,7 @@ theorem isOpen_range_sigmaMk
 中文:
 定理 isOpen_range_sigmaMk
   条件: {i : ι}
-  结论: IsOpen (range (@Sigma.mk ι σ i))
+  结论: 是开集 (range (@依赖和类型.mk ι σ i))
   证明: isOpenMap_sigmaMk.isOpen_range
 
 Depends on / 依赖: isOpenMap_sigmaMk, isOpenMap_sigmaMk.isOpen_range, isOpen_range
@@ -5207,7 +5207,7 @@ theorem isClosedMap_sigmaMk
 中文:
 定理 isClosedMap_sigmaMk
   条件: {i : ι}
-  结论: IsClosedMap (@Sigma.mk ι σ i)
+  结论: 是闭映射 (@依赖和类型.mk ι σ i)
   证明: by
   intro s hs
   rw [isClosed_sigma_iff]
@@ -5240,7 +5240,7 @@ theorem isClosed_range_sigmaMk
 中文:
 定理 isClosed_range_sigmaMk
   条件: {i : ι}
-  结论: IsClosed (range (@Sigma.mk ι σ i))
+  结论: 是闭集 (range (@依赖和类型.mk ι σ i))
   证明: isClosedMap_sigmaMk.isClosed_range
 
 Depends on / 依赖: isClosedMap_sigmaMk, isClosedMap_sigmaMk.isClosed_range, isClosed_range
@@ -5258,9 +5258,9 @@ lemma Topology.IsOpenEmbedding.sigmaMk
   proof: .of_continuous_injective_isOpenMap continuous_sigmaMk sigma_mk_injective isOpenMap_sigmaMk
 
 中文:
-引理 Topology.IsOpenEmbedding.sigmaMk
+引理 拓扑.是开嵌入.sigmaMk
   条件: {i : ι}
-  结论: IsOpenEmbedding (@Sigma.mk ι σ i)
+  结论: 是开嵌入 (@依赖和类型.mk ι σ i)
   证明: .of_continuous_injective_isOpenMap continuous_sigmaMk sigma_mk_injective isOpenMap_sigmaMk
 
 Depends on / 依赖: continuous_sigmaMk, isOpenMap_sigmaMk, of_continuous_injective_isOpenMap, sigma_mk_injective
@@ -5278,9 +5278,9 @@ lemma Topology.IsClosedEmbedding.sigmaMk
   proof: .of_continuous_injective_isClosedMap continuous_sigmaMk sigma_mk_injective isClosedMap_sigmaMk
 
 中文:
-引理 Topology.IsClosedEmbedding.sigmaMk
+引理 拓扑.是闭嵌入.sigmaMk
   条件: {i : ι}
-  结论: IsClosedEmbedding (@Sigma.mk ι σ i)
+  结论: 是闭嵌入 (@依赖和类型.mk ι σ i)
   证明: .of_continuous_injective_isClosedMap continuous_sigmaMk sigma_mk_injective isClosedMap_sigmaMk
 
 Depends on / 依赖: continuous_sigmaMk, isClosedMap_sigmaMk, of_continuous_injective_isClosedMap, sigma_mk_injective
@@ -5298,9 +5298,9 @@ lemma Topology.IsEmbedding.sigmaMk
   proof: IsClosedEmbedding.sigmaMk.1
 
 中文:
-引理 Topology.IsEmbedding.sigmaMk
+引理 拓扑.是嵌入.sigmaMk
   条件: {i : ι}
-  结论: IsEmbedding (@Sigma.mk ι σ i)
+  结论: 是嵌入 (@依赖和类型.mk ι σ i)
   证明: IsClosedEmbedding.sigmaMk.1
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.sigmaMk, sigmaMk
@@ -5318,9 +5318,9 @@ theorem Sigma.nhds_mk
   proof: (IsOpenEmbedding.sigmaMk.map_nhds_eq x).symm
 
 中文:
-定理 Sigma.nhds_mk
+定理 依赖和类型.nhds_mk
   条件: (i : ι) (x : σ i)
-  结论: 𝓝 (⟨i, x⟩ : Sigma σ) = Filter.map (Sigma.mk i) (𝓝 x)
+  结论: 𝓝 (⟨i, x⟩ : 依赖和类型 σ) = 滤子.map (依赖和类型.mk i) (𝓝 x)
   证明: (IsOpenEmbedding.sigmaMk.map_nhds_eq x).symm
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.sigmaMk.map_nhds_eq, map_nhds_eq, sigmaMk
@@ -5340,9 +5340,9 @@ theorem Sigma.nhds_eq
   apply Sigma.nhds_mk
 
 中文:
-定理 Sigma.nhds_eq
-  条件: (x : Sigma σ)
-  结论: 𝓝 x = Filter.map (Sigma.mk x.1) (𝓝 x.2)
+定理 依赖和类型.nhds_eq
+  条件: (x : 依赖和类型 σ)
+  结论: 𝓝 x = 滤子.map (依赖和类型.mk x.1) (𝓝 x.2)
   证明: by
   cases x
   apply Sigma.nhds_mk
@@ -5365,7 +5365,7 @@ theorem comap_sigmaMk_nhds
 中文:
 定理 comap_sigmaMk_nhds
   条件: (i : ι) (x : σ i)
-  结论: comap (Sigma.mk i) (𝓝 ⟨i, x⟩) = 𝓝 x
+  结论: comap (依赖和类型.mk i) (𝓝 ⟨i, x⟩) = 𝓝 x
   证明: (IsEmbedding.sigmaMk.nhds_eq_comap _).symm
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.sigmaMk.nhds_eq_comap, nhds_eq_comap, sigmaMk
@@ -5387,8 +5387,8 @@ theorem isOpen_sigma_fst_preimage
 
 中文:
 定理 isOpen_sigma_fst_preimage
-  条件: (s : Set ι)
-  结论: IsOpen (Sigma.fst ⁻¹' s : Set (Σ a, σ a))
+  条件: (s : 集合 ι)
+  结论: 是开集 (依赖和类型.fst ⁻¹' s : 集合 (Σ a, σ a))
   证明: by
   rw [← biUnion_of_singleton s]; rw [preimage_iUnion₂]
   simp only [← range_sigmaMk]
@@ -5416,7 +5416,7 @@ theorem continuous_sigma_iff
 
 中文:
 定理 continuous_sigma_iff
-  条件: {f : Sigma σ -> X}
+  条件: {f : 依赖和类型 σ -> X}
   证明: by
   delta instTopologicalSpaceSigma
   rw [continuous_iSup_dom]
@@ -5444,7 +5444,7 @@ theorem continuous_sigma
 
 中文:
 定理 continuous_sigma
-  条件: {f : Sigma σ -> X} (hf : 对任意 i, Continuous fun a => f ⟨i, a⟩)
+  条件: {f : 依赖和类型 σ -> X} (hf : 对任意 i, 连续 fun a => f ⟨i, a⟩)
   证明: continuous_sigma_iff.2 hf
 
 Depends on / 依赖: continuous_sigma_iff
@@ -5469,7 +5469,7 @@ theorem inducing_sigma
 
 中文:
 定理 inducing_sigma
-  条件: {f : Sigma σ -> X}
+  条件: {f : 依赖和类型 σ -> X}
   证明: by
   refine ⟨fun h => ⟨fun i => h.comp IsEmbedding.sigmaMk.1, fun i => ?_⟩, ?_⟩
   · rcases h.isOpen_iff.1 (isOpen_range_sigmaMk (i := i)) with ⟨U, hUo, hU⟩
@@ -5530,8 +5530,8 @@ theorem Continuous.sigma_map
   proof: continuous_sigma_map.2 hf
 
 中文:
-定理 Continuous.sigma_map
-  条件: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)} (hf : 对任意 i, Continuous (f₂ i))
+定理 连续.sigma_map
+  条件: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)} (hf : 对任意 i, 连续 (f₂ i))
   证明: continuous_sigma_map.2 hf
 
 Depends on / 依赖: continuous_sigma_map
@@ -5552,8 +5552,8 @@ theorem isOpenMap_sigma
 
 中文:
 定理 isOpenMap_sigma
-  条件: {f : Sigma σ -> X}
-  结论: IsOpenMap f ↔ 对任意 i, IsOpenMap fun a => f ⟨i, a⟩
+  条件: {f : 依赖和类型 σ -> X}
+  结论: 是开映射 f ↔ 对任意 i, 是开映射 fun a => f ⟨i, a⟩
   证明: by
   simp only [isOpenMap_iff_nhds_le, Sigma.forall, Sigma.nhds_eq, map_map, comp_def]
 
@@ -5595,7 +5595,7 @@ lemma Topology.isInducing_sigmaMap
     ← map_sigma_mk_comap h₁, map_inj sigma_mk_injective]
 
 中文:
-引理 Topology.isInducing_sigmaMap
+引理 拓扑.isInducing_sigmaMap
   结论: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)}
   证明: by
   simp only [isInducing_iff_nhds, Sigma.forall, Sigma.nhds_mk, Sigma.map_mk,
@@ -5619,7 +5619,7 @@ lemma Topology.isEmbedding_sigmaMap
     h.sigma_map_iff]
 
 中文:
-引理 Topology.isEmbedding_sigmaMap
+引理 拓扑.isEmbedding_sigmaMap
   结论: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)}
   证明: by
   simp only [isEmbedding_iff, isInducing_sigmaMap h, forall_and,
@@ -5643,8 +5643,8 @@ lemma Topology.isOpenEmbedding_sigmaMap
     forall_and]
 
 中文:
-引理 Topology.isOpenEmbedding_sigmaMap
-  条件: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)} (h : Injective f₁)
+引理 拓扑.isOpenEmbedding_sigmaMap
+  条件: {f₁ : ι -> κ} {f₂ : 对任意 i, σ i -> τ (f₁ i)} (h : 单射 f₁)
   证明: by
   simp only [isOpenEmbedding_iff_isEmbedding_isOpenMap, isOpenMap_sigma_map, isEmbedding_sigmaMap h,
     forall_and]
@@ -5671,8 +5671,8 @@ theorem ULift.isOpen_iff
   rw [ULift.topologicalSpace]; rw [← Equiv.ulift_apply]; rw [← Equiv.ulift.coinduced_symm]; rw [← isOpen_coinduced]
 
 中文:
-定理 ULift.isOpen_iff
-  条件: [TopologicalSpace X] {s : Set (ULift.{v} X)}
+定理 类型层提升.isOpen_iff
+  条件: [拓扑空间 X] {s : 集合 (类型层提升.{v} X)}
   证明: by
   rw [ULift.topologicalSpace]; rw [← Equiv.ulift_apply]; rw [← Equiv.ulift.coinduced_symm]; rw [← isOpen_coinduced]
 
@@ -5694,8 +5694,8 @@ theorem ULift.isClosed_iff
 @[continuity, fun_prop]
 
 中文:
-定理 ULift.isClosed_iff
-  条件: [TopologicalSpace X] {s : Set (ULift.{v} X)}
+定理 类型层提升.isClosed_iff
+  条件: [拓扑空间 X] {s : 集合 (类型层提升.{v} X)}
   证明: by
   rw [← isOpen_compl_iff]; rw [← isOpen_compl_iff]; rw [isOpen_iff]; rw [preimage_compl]
 
@@ -5721,8 +5721,8 @@ theorem continuous_uliftDown
 
 中文:
 定理 continuous_uliftDown
-  条件: [TopologicalSpace X]
-  结论: Continuous (ULift.down : ULift.{v, u} X -> X)
+  条件: [拓扑空间 X]
+  结论: 连续 (类型层提升.down : 类型层提升.{v, u} X -> X)
   证明: continuous_induced_dom
 
 @[continuity, fun_prop]
@@ -5746,8 +5746,8 @@ theorem continuous_uliftUp
 
 中文:
 定理 continuous_uliftUp
-  条件: [TopologicalSpace X]
-  结论: Continuous (ULift.up : X -> ULift.{v, u} X)
+  条件: [拓扑空间 X]
+  结论: 连续 (类型层提升.up : X -> 类型层提升.{v, u} X)
   证明: continuous_induced_rng.2 continuous_id
 
 @[continuity, fun_prop]
@@ -5772,7 +5772,7 @@ theorem continuous_uliftMap
 
 中文:
 定理 continuous_uliftMap
-  结论: [TopologicalSpace X] [TopologicalSpace Y]
+  结论: [拓扑空间 X] [拓扑空间 Y]
   证明: by
   change Continuous (ULift.up ∘ f ∘ ULift.down)
   fun_prop
@@ -5799,8 +5799,8 @@ lemma Topology.IsEmbedding.uliftDown
 @[fun_prop]
 
 中文:
-引理 Topology.IsEmbedding.uliftDown
-  条件: [TopologicalSpace X]
+引理 拓扑.是嵌入.uliftDown
+  条件: [拓扑空间 X]
   证明: ⟨⟨rfl⟩, ULift.down_injective⟩
 
 @[fun_prop]
@@ -5820,8 +5820,8 @@ lemma Topology.IsClosedEmbedding.uliftDown
   proof: ⟨.uliftDown, by simp only [ULift.down_surjective.range_eq, isClosed_univ]⟩
 
 中文:
-引理 Topology.IsClosedEmbedding.uliftDown
-  条件: [TopologicalSpace X]
+引理 拓扑.是闭嵌入.uliftDown
+  条件: [拓扑空间 X]
   证明: ⟨.uliftDown, by simp only [ULift.down_surjective.range_eq, isClosed_univ]⟩
 
 Depends on / 依赖: ULift.down_surjective.range_eq, down_surjective, isClosed_univ, range_eq, uliftDown
@@ -5839,8 +5839,8 @@ instance [TopologicalSpace
   body: IsEmbedding.uliftDown.discreteTopology
 
 中文:
-实例 [TopologicalSpace
-  签名: X] [DiscreteTopology X] : DiscreteTopology (ULift X)
+实例 [拓扑空间
+  签名: X] [离散拓扑 X] : 离散拓扑 (类型层提升 X)
   定义体: IsEmbedding.uliftDown.discreteTopology
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.discreteTopology, discreteTopology, uliftDown
@@ -5861,8 +5861,8 @@ definition ContinuousMap.uliftEquiv
   invFun f := ⟨ULift.up ∘ f ∘ ULift.down, by fun_prop⟩
 
 中文:
-定义 ContinuousMap.uliftEquiv
-  签名: (X : 类型u) (Y : 类型v) [TopologicalSpace X] [TopologicalSpace Y]
+定义 连续映射.uliftEquiv
+  签名: (X : 类型u) (Y : 类型v) [拓扑空间 X] [拓扑空间 Y]
   定义体: ⟨ULift.down ∘ f ∘ ULift.up, by fun_prop⟩
   invFun f := ⟨ULift.up ∘ f ∘ ULift.down, by fun_prop⟩
 
@@ -5892,9 +5892,9 @@ theorem IsOpen.trans
   exact hs.inter hs'
 
 中文:
-定理 IsOpen.trans
-  条件: (ht : IsOpen t) (hs : IsOpen s)
-  结论: IsOpen (t : Set X)
+定理 是开集.trans
+  条件: (ht : 是开集 t) (hs : 是开集 s)
+  结论: 是开集 (t : 集合 X)
   证明: by
   rcases isOpen_induced_iff.mp ht with ⟨s', hs', rfl⟩
   rw [Subtype.image_preimage_coe]
@@ -5920,9 +5920,9 @@ theorem IsClosed.trans
   exact hs.inter hs'
 
 中文:
-定理 IsClosed.trans
-  条件: (ht : IsClosed t) (hs : IsClosed s)
-  结论: IsClosed (t : Set X)
+定理 是闭集.trans
+  条件: (ht : 是闭集 t) (hs : 是闭集 s)
+  结论: 是闭集 (t : 集合 X)
   证明: by
   rcases isClosed_induced_iff.mp ht with ⟨s', hs', rfl⟩
   rw [Subtype.image_preimage_coe]
@@ -5953,7 +5953,7 @@ theorem nhdsSet_prod_le
 
 中文:
 定理 nhdsSet_prod_le
-  条件: (s : Set X) (t : Set Y)
+  条件: (s : 集合 X) (t : 集合 Y)
   结论: 𝓝ˢ (s ×ˢ t) <= 𝓝ˢ s ×ˢ 𝓝ˢ t
   证明: ((hasBasis_nhdsSet _).prod (hasBasis_nhdsSet _)).ge_iff.2 fun (_u, _v) ⟨⟨huo, hsu⟩, hvo, htv⟩ =>
 (huo.prod hvo).mem_nhdsSet.2 prod_mono hsu htv
@@ -5974,7 +5974,7 @@ theorem Filter.eventually_nhdsSet_prod_iff
   simp_rw [eventually_nhdsSet_iff_forall, forall_prod_set, nhds_prod_eq, eventually_prod_iff]
 
 中文:
-定理 Filter.eventually_nhdsSet_prod_iff
+定理 滤子.eventually_nhdsSet_prod_iff
   条件: {p : X × Y -> 命题}
   证明: by
   simp_rw [eventually_nhdsSet_iff_forall, forall_prod_set, nhds_prod_eq, eventually_prod_iff]
@@ -5997,7 +5997,7 @@ theorem Filter.Eventually.prod_nhdsSet
   proof: nhdsSet_prod_le _ _ (mem_of_superset (prod_mem_prod hs ht) fun _ ⟨hx, hy⟩ => hp hx hy)
 
 中文:
-定理 Filter.Eventually.prod_nhdsSet
+定理 滤子.Eventually.prod_nhdsSet
   结论: {p : X × Y -> 命题} {px : X -> 命题} {py : Y -> 命题}
   证明: nhdsSet_prod_le _ _ (mem_of_superset (prod_mem_prod hs ht) fun _ ⟨hx, hy⟩ => hp hx hy)
 

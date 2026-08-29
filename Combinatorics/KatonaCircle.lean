@@ -34,7 +34,7 @@ abbreviation Numbering
 
 中文:
 缩写 Numbering
-  签名: : Type _
+  签名: : 类型 _
   定义体: X ≃ Fin (card X)
 -/
 abbrev Numbering : Type _ := X ≃ Fin (card X)
@@ -49,7 +49,7 @@ lemma Fintype.card_numbering
   proof: card_equiv (equivFin _)
 
 中文:
-引理 Fintype.card_numbering
+引理 有限类型.card_numbering
   条件: [DecidableEq X]
   结论: card (Numbering X) = (card X)!
   证明: card_equiv (equivFin _)
@@ -70,7 +70,7 @@ definition IsPrefix
 
 中文:
 定义 IsPrefix
-  签名: (f : Numbering X) (s : Finset X)
+  签名: (f : Numbering X) (s : 有限集 X)
   定义体: forall x, x in s ↔ f x < #s
 -/
 def IsPrefix (f : Numbering X) (s : Finset X) := forall x, x in s ↔ f x < #s
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: Decidable (IsPrefix f s)
+  签名: 可判定 (IsPrefix f s)
   定义体: inferInstanceAs Decidable (forall _, _)
 
 Depends on / 依赖: Decidable
@@ -122,7 +122,7 @@ definition prefixed
 
 中文:
 定义 prefixed
-  签名: (s : Finset X)
+  签名: (s : 有限集 X)
   定义体: {f | IsPrefix f s}
 
 Depends on / 依赖: IsPrefix
@@ -162,7 +162,7 @@ definition prefixedEquiv
 
 中文:
 定义 prefixedEquiv
-  签名: (s : Finset X)
+  签名: (s : 有限集 X)
   定义体: { fst.toFun x := ⟨f.1 x, by simp [← mem_prefixed.1 f.2 x]⟩
       fst.invFun n :=
 ⟨f.1.symm ⟨n, n.2.trans_le by simpa using s.card_le_univ⟩, by
@@ -241,7 +241,7 @@ lemma card_prefixed
 
 中文:
 引理 card_prefixed
-  条件: (s : Finset X)
+  条件: (s : 有限集 X)
   结论: #(prefixed s) = (#s)! * (card X - #s)!
   证明: by
   simpa [-mem_prefixed] using Fintype.card_congr (prefixedEquiv s)
@@ -266,8 +266,8 @@ lemma dens_prefixed
 
 中文:
 引理 dens_prefixed
-  条件: (s : Finset X)
-  结论: (prefixed s).dens = ((card X).choose #s : Rat>=0)⁻¹
+  条件: (s : 有限集 X)
+  结论: (prefixed s).dens = ((card X).choose #s : 有理数>=0)⁻¹
   证明: by
   simp [dens, card_prefixed, Nat.cast_choose _ s.card_le_univ]
 

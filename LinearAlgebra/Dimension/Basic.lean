@@ -78,7 +78,7 @@ theorem rank_le_card
 
 中文:
 定理 rank_le_card
-  结论: Module.rank R M <= #M
+  结论: 模.rank R M <= #M
   证明: (Module.rank_def _ _).trans_le (ciSup_le' fun _ => mk_set_le _)
 
 Depends on / 依赖: Module, Module.rank_def, ciSup_le, mk_set_le, rank_def, trans_le
@@ -96,7 +96,7 @@ instance nonempty_linearIndependent_set
 
 中文:
 实例 nonempty_linearIndependent_set
-  签名: : Nonempty {s : Set M // LinearIndepOn R id s}
+  签名: : 非空 {s : 集合 M // LinearIndepOn R id s}
   定义体: ⟨⟨∅, linearIndepOn_empty _ _⟩⟩
 
 Depends on / 依赖: linearIndepOn_empty
@@ -124,7 +124,7 @@ theorem cardinal_lift_le_rank
 
 中文:
 定理 cardinal_lift_le_rank
-  结论: {ι : Type w} {v : ι -> M}
+  结论: {ι : 类型 w} {v : ι -> M}
   证明: by
   rw [Module.rank]
   refine le_trans ?_ (lift_le.mpr <| le_ciSup bddAbove_of_small ⟨_, hv.linearIndepOn_id⟩)
@@ -149,7 +149,7 @@ lemma aleph0_le_rank
 
 中文:
 引理 aleph0_le_rank
-  结论: {ι : Type w} [Infinite ι] {v : ι -> M}
+  结论: {ι : 类型 w} [无限 ι] {v : ι -> M}
   证明: aleph0_le_lift.mp (aleph0_le_lift.mpr <| aleph0_le_mk ι).trans hv.cardinal_lift_le_rank
 
 Depends on / 依赖: aleph0_le_lift, aleph0_le_lift.mp, aleph0_le_lift.mpr, aleph0_le_mk, cardinal_lift_le_rank, hv.cardinal_lift_le_rank
@@ -189,7 +189,7 @@ theorem cardinal_le_rank'
 
 中文:
 定理 cardinal_le_rank'
-  结论: {s : Set M}
+  结论: {s : 集合 M}
   证明: hs.cardinal_le_rank
 
 Depends on / 依赖: cardinal_le_rank, hs.cardinal_le_rank
@@ -208,8 +208,8 @@ theorem _root_.LinearIndepOn.encard_le_toENat_rank
   simpa using OrderHom.mono (β := Nat∞) Cardinal.toENat hs.linearIndependent.cardinal_lift_le_rank
 
 中文:
-定理 _root_.LinearIndepOn.encard_le_toENat_rank
-  结论: {ι : 类型} {v : ι -> M} {s : Set ι}
+定理 _root_.LinearIndepOn.encard_le_toE自然数_rank
+  结论: {ι : 类型} {v : ι -> M} {s : 集合 ι}
   证明: by
   simpa using OrderHom.mono (β := Nat∞) Cardinal.toENat hs.linearIndependent.cardinal_lift_le_rank
 
@@ -238,8 +238,8 @@ theorem exists_set_linearIndependent_of_lt_lift_rank
   exact ⟨t, by simp [ht, hcc'], hs.mono hst⟩
 
 中文:
-定理 exists_set_linearIndependent_of_lt_lift_rank
-  结论: {c : Cardinal.{w}}
+定理 存在_set_linearIndependent_of_lt_lift_rank
+  结论: {c : 基数.{w}}
   证明: by
   rcases Cardinal.lt_lift_iff.mp h with ⟨c', hc', hcc'⟩
   rcases exists_lt_of_lt_ciSup (by simpa [← hcc', Module.rank_def] using h) with ⟨⟨s, hs⟩, h⟩
@@ -266,8 +266,8 @@ theorem exists_set_linearIndependent_of_lt_rank
   simpa using exists_set_linearIndependent_of_lt_lift_rank (Cardinal.lift_lt.mpr h)
 
 中文:
-定理 exists_set_linearIndependent_of_lt_rank
-  条件: {c : Cardinal.{v}} (h : c < Module.rank R M)
+定理 存在_set_linearIndependent_of_lt_rank
+  条件: {c : 基数.{v}} (h : c < 模.rank R M)
   证明: by
   simpa using exists_set_linearIndependent_of_lt_lift_rank (Cardinal.lift_lt.mpr h)
 
@@ -296,7 +296,7 @@ theorem le_rank_iff_exists_finset
     have ⟨t, ht⟩ := exists_finset_eq
 
 中文:
-定理 le_rank_iff_exists_finset
+定理 le_rank_iff_存在_finset
   条件: {n : 自然数}
   证明: by
     contrapose! le
@@ -338,7 +338,7 @@ theorem le_rank_iff
 中文:
 定理 le_rank_iff
   条件: {n : 自然数}
-  结论: n <= Module.rank R M ↔ 存在 v : Fin n -> M, LinearIndependent R v
+  结论: n <= 模.rank R M ↔ 存在 v : 有限集 n -> M, LinearIndependent R v
   证明: by
   refine le_rank_iff_exists_finset.trans ⟨fun ⟨s, s_card, s_ind⟩ => ?_, fun ⟨v, v_ind⟩ => ?_⟩
   · exact ⟨_, s_ind.comp _ (s.equivFinOfCardEq s_card).symm.injective⟩
@@ -366,7 +366,7 @@ theorem le_rank_iff_exists_linearMap
   exact ⟨Finsupp.linearCombination .. ∘ₗ _, this⟩
 
 中文:
-定理 le_rank_iff_exists_linearMap
+定理 le_rank_iff_存在_linearMap
   条件: {n : 自然数}
   证明: by
   refine le_rank_iff.trans ⟨fun ⟨v, v_ind⟩ => ?_, fun ⟨f, f_inj⟩ =>
@@ -408,8 +408,8 @@ theorem rank_subsingleton
 
 中文:
 定理 rank_subsingleton
-  条件: [Subsingleton R]
-  结论: Module.rank R M = 1
+  条件: [子单例 R]
+  结论: 模.rank R M = 1
   证明: by
   rw [Module.rank_def]; rw [ciSup_eq_of_forall_le_of_forall_lt_exists_gt]
   · have := Module.subsingleton R M
@@ -439,8 +439,8 @@ theorem Module.one_le_rank_iff
   · exact ⟨f ∘ₗ _, hf.comp (LinearEquiv.piUnique R ..).injective⟩
 
 中文:
-定理 Module.one_le_rank_iff
-  结论: 1 <= Module.rank R M ↔ 存在 f : R ->ₗ[R] M, Injective f
+定理 模.one_le_rank_iff
+  结论: 1 <= 模.rank R M ↔ 存在 f : R ->ₗ[R] M, 单射 f
   证明: by
   nontriviality R
   refine le_rank_iff_exists_linearMap.trans ⟨fun ⟨f, hf⟩ => ?_, fun ⟨f, hf⟩ => ?_⟩
@@ -468,9 +468,9 @@ theorem Module.rank_eq_zero_of_not_faithfulSMul
   exact ⟨fun {x y} hxy => hf (by simpa [← map_smul] using hxy (f 1))⟩
 
 中文:
-定理 Module.rank_eq_zero_of_not_faithfulSMul
-  条件: (h : ¬ FaithfulSMul R M)
-  结论: Module.rank R M = 0
+定理 模.rank_eq_zero_of_not_faithfulSMul
+  条件: (h : ¬ 忠实标量乘法 R M)
+  结论: 模.rank R M = 0
   证明: by
   contrapose! h
   obtain ⟨f, hf⟩ := by rwa [← Cardinal.one_le_iff_ne_zero, one_le_rank_iff] at h
@@ -668,9 +668,9 @@ theorem CommSemiring.rank_self
 have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0] 
 
 中文:
-定理 CommSemiring.rank_self
-  条件: (R) [CommSemiring R]
-  结论: Module.rank R R = 1
+定理 交换半环.rank_self
+  条件: (R) [交换半环 R]
+  结论: 模.rank R R = 1
   证明: by
   nontriviality R
   rw [le_antisymm_iff]; rw [← not_lt]; rw [← two_le_iff_one_lt]; rw [← Nat.cast_two]; rw [Module.le_rank_iff_exists_linearMap]; rw [Module.one_le_rank_iff]
@@ -707,7 +707,7 @@ theorem lift_rank_le_of_injective_injective
 
 中文:
 定理 lift_rank_le_of_injective_injective
-  结论: [AddCommGroup M'] [Module R' M']
+  结论: [加法交换群 M'] [模 R' M']
   证明: by
   simp_rw [Module.rank, lift_iSup bddAbove_of_small]
   exact ciSup_mono_of_forall_exists' bddAbove_of_small fun ⟨s, h⟩ =>
@@ -738,7 +738,7 @@ theorem rank_le_of_injective_injective
 
 中文:
 定理 rank_le_of_injective_injective
-  结论: [AddCommGroup M₁] [Module R' M₁]
+  结论: [加法交换群 M₁] [模 R' M₁]
   证明: by
   simpa only [lift_id] using lift_rank_le_of_injective_injective i j hi hj hc
 
@@ -933,8 +933,8 @@ theorem LinearMap.lift_rank_le_of_injective
   proof: lift_rank_le_of_injective_injectiveₛ (RingHom.id R) f (fun _ _ h => h) i f.map_smul
 
 中文:
-定理 LinearMap.lift_rank_le_of_injective
-  条件: (f : M ->ₗ[R] M') (i : Injective f)
+定理 线性映射.lift_rank_le_of_injective
+  条件: (f : M ->ₗ[R] M') (i : 单射 f)
   证明: lift_rank_le_of_injective_injectiveₛ (RingHom.id R) f (fun _ _ h => h) i f.map_smul
 
 Depends on / 依赖: RingHom, RingHom.id, f.map_smul, map_smul
@@ -952,8 +952,8 @@ theorem LinearMap.rank_le_of_injective
   proof: Cardinal.lift_le.1 (f.lift_rank_le_of_injective i)
 
 中文:
-定理 LinearMap.rank_le_of_injective
-  条件: (f : M ->ₗ[R] M₁) (i : Injective f)
+定理 线性映射.rank_le_of_injective
+  条件: (f : M ->ₗ[R] M₁) (i : 单射 f)
   证明: Cardinal.lift_le.1 (f.lift_rank_le_of_injective i)
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le, f.lift_rank_le_of_injective, lift_le, lift_rank_le_of_injective
@@ -985,7 +985,7 @@ theorem lift_rank_range_le
 中文:
 定理 lift_rank_range_le
   条件: (f : M ->ₗ[R] M')
-  结论: Cardinal.lift.{v}
+  结论: 基数.lift.{v}
   证明: by
   simp only [Module.rank_def]
   rw [Cardinal.lift_iSup Cardinal.bddAbove_of_small]
@@ -1026,7 +1026,7 @@ theorem rank_range_le
 中文:
 定理 rank_range_le
   条件: (f : M ->ₗ[R] M₁)
-  结论: Module.rank R (LinearMap.range f) <= Module.rank R M
+  结论: 模.rank R (线性映射.range f) <= 模.rank R M
   证明: by
   simpa using lift_rank_range_le f
 
@@ -1047,7 +1047,7 @@ theorem lift_rank_map_le
 
 中文:
 定理 lift_rank_map_le
-  条件: (f : M ->ₗ[R] M') (p : Submodule R M)
+  条件: (f : M ->ₗ[R] M') (p : 子模 R M)
   证明: by
   have h := lift_rank_range_le (f.comp (Submodule.subtype p))
   rwa [LinearMap.range_comp, range_subtype] at h
@@ -1069,7 +1069,7 @@ theorem rank_map_le
 
 中文:
 定理 rank_map_le
-  条件: (f : M ->ₗ[R] M₁) (p : Submodule R M)
+  条件: (f : M ->ₗ[R] M₁) (p : 子模 R M)
   证明: by simpa using lift_rank_map_le f p
 
 Depends on / 依赖: lift_rank_map_le
@@ -1088,7 +1088,7 @@ theorem rank_map_eq
 
 中文:
 定理 rank_map_eq
-  条件: {f : M ->ₗ[R] M₁} (hf : Injective f) (p : Submodule R M)
+  条件: {f : M ->ₗ[R] M₁} (hf : 单射 f) (p : 子模 R M)
   证明: le_antisymm (rank_map_le f p)
     ((f.submoduleMap p).rank_le_of_injective <| LinearMap.submoduleMap_injective hf p)
 
@@ -1110,9 +1110,9 @@ lemma Submodule.rank_mono
 Subtype.ext show x = y from Subtype.ext_iff.1 eq
 
 中文:
-引理 Submodule.rank_mono
-  条件: {s t : Submodule R M} (h : s <= t)
-  结论: Module.rank R s <= Module.rank R t
+引理 子模.rank_mono
+  条件: {s t : 子模 R M} (h : s <= t)
+  结论: 模.rank R s <= 模.rank R t
   证明: (Submodule.inclusion h).rank_le_of_injective fun ⟨x, _⟩ ⟨y, _⟩ eq =>
 Subtype.ext show x = y from Subtype.ext_iff.1 eq
 
@@ -1134,7 +1134,7 @@ theorem LinearEquiv.lift_rank_eq
   · exact f.symm.toLinearMap.lift_rank_le_of_injective f.symm.injective
 
 中文:
-定理 LinearEquiv.lift_rank_eq
+定理 线性等价.lift_rank_eq
   条件: (f : M ≃ₗ[R] M')
   证明: by
   apply le_antisymm
@@ -1159,9 +1159,9 @@ theorem LinearEquiv.rank_eq
   proof: Cardinal.lift_inj.1 f.lift_rank_eq
 
 中文:
-定理 LinearEquiv.rank_eq
+定理 线性等价.rank_eq
   条件: (f : M ≃ₗ[R] M₁)
-  结论: Module.rank R M = Module.rank R M₁
+  结论: 模.rank R M = 模.rank R M₁
   证明: Cardinal.lift_inj.1 f.lift_rank_eq
 
 Depends on / 依赖: Cardinal, Cardinal.lift_inj, f.lift_rank_eq, lift_inj, lift_rank_eq
@@ -1179,7 +1179,7 @@ theorem lift_rank_range_of_injective
 
 中文:
 定理 lift_rank_range_of_injective
-  条件: (f : M ->ₗ[R] M') (h : Injective f)
+  条件: (f : M ->ₗ[R] M') (h : 单射 f)
   证明: (LinearEquiv.ofInjective f h).lift_rank_eq.symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, lift_rank_eq, lift_rank_eq.symm, ofInjective
@@ -1198,7 +1198,7 @@ theorem rank_range_of_injective
 
 中文:
 定理 rank_range_of_injective
-  条件: (f : M ->ₗ[R] M₁) (h : Injective f)
+  条件: (f : M ->ₗ[R] M₁) (h : 单射 f)
   证明: (LinearEquiv.ofInjective f h).rank_eq.symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, ofInjective, rank_eq, rank_eq.symm
@@ -1216,8 +1216,8 @@ theorem LinearEquiv.lift_rank_map_eq
   proof: (f.submoduleMap p).lift_rank_eq.symm
 
 中文:
-定理 LinearEquiv.lift_rank_map_eq
-  条件: (f : M ≃ₗ[R] M') (p : Submodule R M)
+定理 线性等价.lift_rank_map_eq
+  条件: (f : M ≃ₗ[R] M') (p : 子模 R M)
   证明: (f.submoduleMap p).lift_rank_eq.symm
 
 Depends on / 依赖: f.submoduleMap, lift_rank_eq, lift_rank_eq.symm, submoduleMap
@@ -1235,8 +1235,8 @@ theorem LinearEquiv.rank_map_eq
   proof: (f.submoduleMap p).rank_eq.symm
 
 中文:
-定理 LinearEquiv.rank_map_eq
-  条件: (f : M ≃ₗ[R] M₁) (p : Submodule R M)
+定理 线性等价.rank_map_eq
+  条件: (f : M ≃ₗ[R] M₁) (p : 子模 R M)
   证明: (f.submoduleMap p).rank_eq.symm
 
 Depends on / 依赖: f.submoduleMap, rank_eq, rank_eq.symm, submoduleMap
@@ -1258,7 +1258,7 @@ theorem rank_top
 
 中文:
 定理 rank_top
-  结论: Module.rank R (⊤ : Submodule R M) = Module.rank R M
+  结论: 模.rank R (⊤ : 子模 R M) = 模.rank R M
   证明: (LinearEquiv.ofTop ⊤ rfl).rank_eq
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofTop, rank_eq
@@ -1279,7 +1279,7 @@ theorem rank_range_of_surjective
 
 中文:
 定理 rank_range_of_surjective
-  条件: (f : M ->ₗ[R] M') (h : Surjective f)
+  条件: (f : M ->ₗ[R] M') (h : 满射 f)
   证明: by
   rw [LinearMap.range_eq_top.2 h]; rw [rank_top]
 
@@ -1301,9 +1301,9 @@ theorem Submodule.rank_le
   exact rank_mono le_top
 
 中文:
-定理 Submodule.rank_le
-  条件: (s : Submodule R M)
-  结论: Module.rank R s <= Module.rank R M
+定理 子模.rank_le
+  条件: (s : 子模 R M)
+  结论: 模.rank R s <= 模.rank R M
   证明: by
   rw [← rank_top R M]
   exact rank_mono le_top
@@ -1325,8 +1325,8 @@ theorem LinearMap.lift_rank_le_of_surjective
   apply lift_rank_range_le
 
 中文:
-定理 LinearMap.lift_rank_le_of_surjective
-  条件: (f : M ->ₗ[R] M') (h : Surjective f)
+定理 线性映射.lift_rank_le_of_surjective
+  条件: (f : M ->ₗ[R] M') (h : 满射 f)
   证明: by
   rw [← rank_range_of_surjective f h]
   apply lift_rank_range_le
@@ -1349,8 +1349,8 @@ theorem LinearMap.rank_le_of_surjective
   apply rank_range_le
 
 中文:
-定理 LinearMap.rank_le_of_surjective
-  条件: (f : M ->ₗ[R] M₁) (h : Surjective f)
+定理 线性映射.rank_le_of_surjective
+  条件: (f : M ->ₗ[R] M₁) (h : 满射 f)
   证明: by
   rw [← rank_range_of_surjective f h]
   apply rank_range_le
@@ -1373,7 +1373,7 @@ lemma rank_le_of_isSMulRegular
 
 中文:
 引理 rank_le_of_isSMulRegular
-  结论: {S : 类型} [CommSemiring S] [Algebra S R] [Module S M]
+  结论: {S : 类型} [交换半环 S] [代数 S R] [模 S M]
   证明: ((Algebra.lsmul S R M s).restrict h).rank_le_of_injective
     fun _ _ h => by simpa using hr (Subtype.ext_iff.mp h)
 
@@ -1399,8 +1399,8 @@ lemma Module.rank_top_le_rank_of_isScalarTower
     ⟨s, hs.restrict_scalars (by simpa [← faithfulSMul_iff_injective_smul_one])⟩ le_rfl
 
 中文:
-引理 Module.rank_top_le_rank_of_isScalarTower
-  结论: [Module R' M]
+引理 模.rank_top_le_rank_of_isScalarTower
+  结论: [模 R' M]
   证明: by
   rw [Module.rank]; rw [Module.rank]
   exact ciSup_le' fun ⟨s, hs⟩ => le_ciSup_of_le Cardinal.bddAbove_of_small
@@ -1426,8 +1426,8 @@ lemma Module.lift_rank_bot_le_lift_rank_of_isScalarTower
     (faithfulSMul_iff_injective_smul_one R' T).mp ‹_›
 
 中文:
-引理 Module.lift_rank_bot_le_lift_rank_of_isScalarTower
-  结论: (T : Type w) [Module R R']
+引理 模.lift_rank_bot_le_lift_rank_of_isScalarTower
+  结论: (T : 类型 w) [模 R R']
   证明: LinearMap.lift_rank_le_of_injective ((LinearMap.toSpanSingleton R' T 1).restrictScalars R)
     (faithfulSMul_iff_injective_smul_one R' T).mp ‹_›
 
@@ -1451,8 +1451,8 @@ lemma Module.rank_bot_le_rank_of_isScalarTower
   simpa using Module.lift_rank_bot_le_lift_rank_of_isScalarTower R R' T
 
 中文:
-引理 Module.rank_bot_le_rank_of_isScalarTower
-  结论: (T : 类型u') [Module R R'] [NonAssocSemiring T]
+引理 模.rank_bot_le_rank_of_isScalarTower
+  结论: (T : 类型u') [模 R R'] [非结合半环 T]
   证明: by
   simpa using Module.lift_rank_bot_le_lift_rank_of_isScalarTower R R' T
 

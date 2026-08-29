@@ -67,7 +67,7 @@ definition derived'
 
 中文:
 定义 derived'
-  签名: [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
+  签名: [G'.是左导出函子 α W₁] [F'.是右导出函子 β W₂]
   定义体: η
   counit := ε
   left_triangle_components := by
@@ -257,7 +257,7 @@ definition derived
 
 中文:
 定义 derived
-  签名: [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
+  签名: [G'.是左导出函子 α W₁] [F'.是右导出函子 β W₂]
   定义体: adj.derived' W₁ W₂ α β (adj.derivedη W₁ α β) (adj.derivedε W₂ α β)
 
 Depends on / 依赖: adj.derived, derived

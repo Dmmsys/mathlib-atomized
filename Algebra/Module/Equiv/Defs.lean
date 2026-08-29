@@ -55,9 +55,9 @@ structure LinearEquiv
   (no additional axioms)
 
 中文:
-结构 LinearEquiv
-  参数: {R : 类型} {S : 类型} [Semiring R] [Semiring S] (σ : R ->+* S)
-  继承: LinearMap σ M M₂, M ≃+ M₂
+结构 线性等价
+  参数: {R : 类型} {S : 类型} [半环 R] [半环 S] (σ : R ->+* S)
+  继承: 线性映射 σ M M₂, M ≃+ M₂
   (无附加公理)
 -/
 structure LinearEquiv {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S)
@@ -100,9 +100,9 @@ class SemilinearEquivClass
     - map_smulₛₗ : forall (f : F) (r : R) (x : M), f (r • x) = σ r • f x
 
 中文:
-类 SemilinearEquivClass
-  参数: (F : 类型) {R S : outParam 类型} [Semiring R] [Semiring S]
-  继承: AddEquivClass F M M₂
+类 半线性等价类
+  参数: (F : 类型) {R S : outParam 类型} [半环 R] [半环 S]
+  继承: 加法等价类 F M M₂
   公理与运算 (1 个):
     - map_smulₛₗ : 对任意 (f : F) (r : R) (x : M), f (r • x) = σ r • f x
 -/
@@ -126,7 +126,7 @@ abbreviation LinearEquivClass
 
 中文:
 缩写 LinearEquivClass
-  签名: (F : 类型) (R M M₂ : outParam 类型) [Semiring R] [AddCommMonoid M]
+  签名: (F : 类型) (R M M₂ : outParam 类型) [半环 R] [加法交换幺半群 M]
   定义体: SemilinearEquivClass F (RingHom.id R) M M₂
 
 Depends on / 依赖: RingHom, RingHom.id, SemilinearEquivClass
@@ -281,7 +281,7 @@ theorem toLinearMap_injective
 
 中文:
 定理 toLinearMap_injective
-  结论: Injective (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
+  结论: 单射 (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
   证明: fun _ _ H => toEquiv_injective Equiv.ext LinearMap.congr_fun H
 
 @[simp, norm_cast]
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (M ≃ₛₗ[σ] M₂) M M₂
+  签名: 等价状 (M ≃ₛₗ[σ] M₂) M M₂
   定义体: e.toFun
   inv := LinearEquiv.invFun
   coe_injective' _ _ h _ := toLinearMap_injective (DFunLike.coe_injective h)
@@ -353,7 +353,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilinearEquivClass (M ≃ₛₗ[σ] M₂) σ M M₂
+  签名: 半线性等价类 (M ≃ₛₗ[σ] M₂) σ M M₂
   定义体: (·.map_add')
   map_smulₛₗ := (·.map_smul')
 
@@ -377,7 +377,7 @@ theorem toLinearMap_eq_coe
 中文:
 定理 toLinearMap_eq_coe
   条件: {e : M ≃ₛₗ[σ] M₂}
-  结论: e.toLinearMap = SemilinearMapClass.semilinearMap e
+  结论: e.toLinearMap = 半线性映射类.semilinearMap e
   证明: rfl
 
 @[simp]
@@ -414,7 +414,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Injective (M ≃ₛₗ[σ] M₂) (M -> M₂) DFunLike.coe
+  结论: @单射 (M ≃ₛₗ[σ] M₂) (M -> M₂) 依赖函数状.coe
   证明: DFunLike.coe_injective
 
 @[simp]
@@ -434,8 +434,8 @@ lemma _root_.SemilinearEquivClass.semilinearEquiv_apply
   proof: rfl
 
 中文:
-引理 _root_.SemilinearEquivClass.semilinearEquiv_apply
-  结论: {F : 类型} [EquivLike F M M₂]
+引理 _root_.半线性等价类.semilinearEquiv_apply
+  结论: {F : 类型} [等价状 F M M₂]
   证明: rfl
 -/
 lemma _root_.SemilinearEquivClass.semilinearEquiv_apply {F : Type*} [EquivLike F M M₂]
@@ -607,7 +607,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: [Module R M]
+  签名: [模 R M]
   定义体: { LinearMap.id, Equiv.refl M with }
 
 Depends on / 依赖: Equiv.refl, LinearMap, LinearMap.id
@@ -629,7 +629,7 @@ theorem refl_apply
 
 中文:
 定理 refl_apply
-  条件: [Module R M] (x : M)
+  条件: [模 R M] (x : M)
   结论: refl R M x = x
   证明: rfl
 -/
@@ -678,7 +678,7 @@ definition Simps.apply
 
 中文:
 定义 Simps.apply
-  签名: {R : 类型} {S : 类型} [Semiring R] [Semiring S]
+  签名: {R : 类型} {S : 类型} [半环 R] [半环 S]
   定义体: e
 -/
 def Simps.apply {R : Type*} {S : Type*} [Semiring R] [Semiring S]
@@ -701,7 +701,7 @@ initialize_simps_projections LinearEquiv (toFun -> apply, invFun -> symm_apply)
 
 中文:
 定义 Simps.symm_apply
-  签名: {R S : 类型} [Semiring R] [Semiring S]
+  签名: {R S : 类型} [半环 R] [半环 S]
   定义体: e.symm
 
 initialize_simps_projections LinearEquiv (toFun -> apply, invFun -> symm_apply)
@@ -1030,7 +1030,7 @@ theorem comp_symm
 
 中文:
 定理 comp_symm
-  结论: e.toLinearMap ∘ₛₗ e.symm.toLinearMap = LinearMap.id
+  结论: e.toLinearMap ∘ₛₗ e.symm.toLinearMap = 线性映射.id
   证明: LinearMap.ext e.apply_symm_apply
 
 Depends on / 依赖: LinearMap, LinearMap.ext, apply_symm_apply, e.apply_symm_apply
@@ -1050,7 +1050,7 @@ theorem symm_comp
 
 中文:
 定理 symm_comp
-  结论: e.symm.toLinearMap ∘ₛₗ e.toLinearMap = LinearMap.id
+  结论: e.symm.toLinearMap ∘ₛₗ e.toLinearMap = 线性映射.id
   证明: LinearMap.ext e.symm_apply_apply
 
 @[simp]
@@ -1648,8 +1648,8 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  条件: [Module R M]
-  结论: (refl R M).symm = LinearEquiv.refl R M
+  条件: [模 R M]
+  结论: (refl R M).symm = 线性等价.refl R M
   证明: rfl
 
 @[simp]
@@ -1674,7 +1674,7 @@ theorem self_trans_symm
 中文:
 定理 self_trans_symm
   条件: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  结论: f.trans f.symm = LinearEquiv.refl R₁ M₁
+  结论: f.trans f.symm = 线性等价.refl R₁ M₁
   证明: by
   ext x
   simp
@@ -1702,7 +1702,7 @@ theorem symm_trans_self
 中文:
 定理 symm_trans_self
   条件: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  结论: f.symm.trans f = LinearEquiv.refl R₂ M₂
+  结论: f.symm.trans f = 线性等价.refl R₂ M₂
   证明: by
   ext x
   simp
@@ -1727,8 +1727,8 @@ theorem refl_toLinearMap
 
 中文:
 定理 refl_toLinearMap
-  条件: [Module R M]
-  结论: (LinearEquiv.refl R M : M ->ₗ[R] M) = LinearMap.id
+  条件: [模 R M]
+  结论: (线性等价.refl R M : M ->ₗ[R] M) = 线性映射.id
   证明: rfl
 
 @[simp]
@@ -1749,7 +1749,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f h₁ h₂)
-  结论: (LinearEquiv.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e
+  结论: (线性等价.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e
   证明: ext fun _ => rfl
 -/
 theorem mk_coe (f h₁ h₂) : (LinearEquiv.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e :=
@@ -1899,7 +1899,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  条件: [Module R M] [Module S M₂] [RingHomInvPair σ' σ] [RingHomInvPair σ σ']
+  条件: [模 R M] [模 S M₂] [RingHomInvPair σ' σ] [RingHomInvPair σ σ']
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -1971,7 +1971,7 @@ theorem coe_symm_mk
 
 中文:
 定理 coe_symm_mk
-  结论: [Module R M] [Module R M₂]
+  结论: [模 R M] [模 R M₂]
   证明: rfl
 
 @[simp]
@@ -1992,7 +1992,7 @@ theorem coe_symm_mk'
 
 中文:
 定理 coe_symm_mk'
-  结论: [Module R M] [Module R M₂]
+  结论: [模 R M] [模 R M₂]
   证明: rfl
 -/
 theorem coe_symm_mk' [Module R M] [Module R M₂]
@@ -2009,7 +2009,7 @@ theorem bijective
 
 中文:
 定理 bijective
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective : Function.Bijective e :=
@@ -2025,7 +2025,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: e.toEquiv.injective
 -/
 protected theorem injective : Function.Injective e :=
@@ -2041,7 +2041,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: e.toEquiv.surjective
 -/
 protected theorem surjective : Function.Surjective e :=
@@ -2058,7 +2058,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toEquiv.image_eq_preimage_symm s
 -/
@@ -2076,7 +2076,7 @@ theorem image_symm_eq_preimage
 
 中文:
 定理 image_symm_eq_preimage
-  条件: (s : Set M₂)
+  条件: (s : 集合 M₂)
   结论: e.symm '' s = e ⁻¹' s
   证明: e.toEquiv.symm.image_eq_preimage_symm s
 -/
@@ -2129,7 +2129,7 @@ definition _root_.RingEquiv.toSemilinearEquiv
     map_smul' := f.map_mul }
 
 中文:
-定义 _root_.RingEquiv.toSemilinearEquiv
+定义 _root_.环等价.toSemilinearEquiv
   签名: (f : R ≃+* S)
   定义体: RingHomInvPair.of_ringEquiv f
     haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
@@ -2163,7 +2163,7 @@ lemma _root_.RingEquiv.symm_toSemilinearEquiv_symm_apply
   proof: rfl
 
 中文:
-引理 _root_.RingEquiv.symm_toSemilinearEquiv_symm_apply
+引理 _root_.环等价.symm_toSemilinearEquiv_symm_apply
   条件: (f : R ≃+* S) (x : R)
   证明: rfl
 
@@ -2237,7 +2237,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Sˣ (V ≃ₗ[R] W)
+  签名: 标量乘法 Sˣ (V ≃ₗ[R] W)
   定义体: { __ := (α : S) • e.toLinearMap
     invFun x := (↑α⁻¹ : S) • e.symm x
     left_inv _ := by simp [LinearMapClass.map_smul_of_tower e.symm, smul_smul]
@@ -2294,7 +2294,7 @@ theorem symm_smul
 
 中文:
 定理 symm_smul
-  条件: [SMulCommClass R S V] (e : V ≃ₗ[R] W) (α : Sˣ)
+  条件: [标量交换类 R S V] (e : V ≃ₗ[R] W) (α : Sˣ)
   证明: rfl
 -/
 @[simp] theorem symm_smul [SMulCommClass R S V] (e : V ≃ₗ[R] W) (α : Sˣ) :
@@ -2326,7 +2326,7 @@ theorem smul_trans
 
 中文:
 定理 smul_trans
-  结论: [SMulCommClass R S V] [IsScalarTower S R G]
+  结论: [标量交换类 R S V] [标量塔 S R G]
   证明: by ext; simp [LinearMapClass.map_smul_of_tower f]
 
 Depends on / 依赖: LinearMapClass, LinearMapClass.map_smul_of_tower, map_smul_of_tower
@@ -2345,7 +2345,7 @@ theorem trans_smul
 
 中文:
 定理 trans_smul
-  结论: [IsScalarTower S R G]
+  结论: [标量塔 S R G]
   证明: by ext; simp
 -/
 theorem trans_smul [IsScalarTower S R G]

@@ -61,7 +61,7 @@ definition PushoutI.con
 
 中文:
 定义 PushoutI.con
-  签名: [对任意 i, Monoid (G i)] [Monoid H] (φ : 对任意 i, H ->* G i)
+  签名: [对任意 i, 幺半群 (G i)] [幺半群 H] (φ : 对任意 i, H ->* G i)
   定义体: conGen (fun x y : Coprod (CoprodI G) H =>
     exists i x', x = inl (of (φ i x')) ∧ y = inr x')
 
@@ -82,7 +82,7 @@ definition PushoutI
 
 中文:
 定义 PushoutI
-  签名: [对任意 i, Monoid (G i)] [Monoid H] (φ : 对任意 i, H ->* G i)
+  签名: [对任意 i, 幺半群 (G i)] [幺半群 H] (φ : 对任意 i, H ->* G i)
   定义体: (PushoutI.con φ).Quotient
 
 Depends on / 依赖: PushoutI, PushoutI.con, Quotient
@@ -107,7 +107,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (PushoutI φ)
+  签名: : 乘法 (PushoutI φ)
   定义体: by
   delta PushoutI; infer_instance
 -/
@@ -125,7 +125,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (PushoutI φ)
+  签名: : 幺 (PushoutI φ)
   定义体: by
   delta PushoutI; infer_instance
 -/
@@ -144,7 +144,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: : Monoid (PushoutI φ)
+  签名: : 幺半群 (PushoutI φ)
   定义体: { Con.monoid _ with
     toMul := PushoutI.mul
     toOne := PushoutI.one }
@@ -389,7 +389,7 @@ theorem hom_ext_nonempty
 
 中文:
 定理 hom_ext_nonempty
-  结论: [hn : Nonempty ι]
+  结论: [hn : 非空 ι]
   证明: hom_ext h by
     cases hn with
     | intro i =>
@@ -457,7 +457,7 @@ definition ofCoprodI
 
 中文:
 定义 ofCoprodI
-  签名: : CoprodI G ->* PushoutI φ
+  签名: : 余prodI G ->* PushoutI φ
   定义体: CoprodI.lift of
 
 @[simp]
@@ -558,7 +558,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (PushoutI φ)
+  签名: 群 (PushoutI φ)
   定义体: { Con.group (PushoutI.con φ) with
     toMonoid := PushoutI.monoid }
 
@@ -606,11 +606,11 @@ structure Transversal
     - compl : forall i, IsComplement (φ i).range (set i)
 
 中文:
-结构 Transversal
-  参数: : Type _ where
+结构 横截
+  参数: : 类型 _ where
   公理与运算 (4 个):
-    - injective : 对任意 i, Injective (φ i)
-    - set : 对任意 i, Set (G i)
+    - injective : 对任意 i, 单射 (φ i)
+    - set : 对任意 i, 集合 (G i)
     - one_mem : 对任意 i, 1 in set i
     - compl : 对任意 i, IsComplement (φ i).range (set i)
 
@@ -644,8 +644,8 @@ theorem transversal_nonempty
 
 中文:
 定理 transversal_nonempty
-  条件: (hφ : 对任意 i, Injective (φ i))
-  结论: Nonempty (Transversal φ)
+  条件: (hφ : 对任意 i, 单射 (φ i))
+  结论: 非空 (横截 φ)
   证明: by
   choose t ht using fun i => (φ i).range.exists_isComplement_right 1
   apply Nonempty.intro
@@ -680,9 +680,9 @@ structure _root_.Monoid.PushoutI.NormalWord
     - normalized : forall i g, ⟨i, g⟩ in toList -> g in d.set i
 
 中文:
-结构 _root_.Monoid.PushoutI.NormalWord
-  参数: (d : Transversal φ)
-  继承: CoprodI.Word G
+结构 _root_.幺半群.PushoutI.NormalWord
+  参数: (d : 横截 φ)
+  继承: 余prodI.Word G
   公理与运算 (2 个):
     - head : H
     - normalized : 对任意 i g, ⟨i, g⟩ in toList -> g in d.set i
@@ -705,9 +705,9 @@ structure Pair
     - normalized : forall i g, ⟨i, g⟩ in tail.toList -> g in d.set i
 
 中文:
-结构 Pair
-  参数: (d : Transversal φ) (i : ι)
-  继承: CoprodI.Word.Pair G i
+结构 对
+  参数: (d : 横截 φ) (i : ι)
+  继承: 余prodI.Word.对 G i
   公理与运算 (1 个):
     - normalized : 对任意 i g, ⟨i, g⟩ in tail.toList -> g in d.set i
 -/
@@ -746,7 +746,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NormalWord d)
+  签名: 可居 (NormalWord d)
   定义体: ⟨NormalWord.empty⟩
 
 Depends on / 依赖: NormalWord, NormalWord.empty
@@ -798,7 +798,7 @@ instance baseAction
 
 中文:
 实例 baseAction
-  签名: : MulAction H (NormalWord d)
+  签名: : 乘法作用 H (NormalWord d)
   定义体: { smul := fun h w => { w with head := h * w.head },
     one_smul := by simp +instances [instHSMul]
     mul_smul := by simp +instances [instHSMul, mul_assoc] }
@@ -838,7 +838,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: (w : NormalWord d)
   定义体: base φ w.head * ofCoprodI (w.toWord).prod
 
@@ -887,7 +887,7 @@ theorem prod_empty
 
 中文:
 定理 prod_empty
-  结论: (empty : NormalWord d).prod = 1
+  结论: (empty : NormalWord d).乘积 = 1
   证明: by
   simp [prod, empty]
 -/
@@ -982,7 +982,7 @@ theorem eq_one_of_smul_normalized
 
 中文:
 定理 eq_one_of_smul_normalized
-  结论: (w : CoprodI.Word G) {i : ι} (h : H)
+  结论: (w : 余prodI.Word G) {i : ι} (h : H)
   证明: by
   simp only [← (d.compl _).equiv_snd_eq_self_iff_mem (one_mem _)] at hw hφw
   have hhead : ((d.compl i).equiv (Word.equivPair i w).head).2 =
@@ -1098,7 +1098,7 @@ definition rcons
 
 中文:
 定义 rcons
-  签名: (i : ι) (p : Pair d i)
+  签名: (i : ι) (p : 对 d i)
   定义体: letI n := (d.compl i).equiv p.head
   let w := (Word.equivPair i).symm { p.toPair with head := n.2 }
   { toWord := w
@@ -1139,7 +1139,7 @@ theorem rcons_injective
 中文:
 定理 rcons_injective
   条件: {i : ι}
-  结论: Function.Injective (rcons (d := d) i)
+  结论: 函数.单射 (rcons (d := d) i)
   证明: by
   rintro ⟨⟨head₁, tail₁⟩, _⟩ ⟨⟨head₂, tail₂⟩, _⟩
   simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
@@ -1289,7 +1289,7 @@ MulAction.toEndHom by
 
 中文:
 实例 mulAction
-  签名: : MulAction (PushoutI φ) (NormalWord d)
+  签名: : 乘法作用 (PushoutI φ) (NormalWord d)
   定义体: MulAction.ofEndHom
     lift
       (fun _ => MulAction.toEndHom)
@@ -1422,7 +1422,7 @@ definition consRecOn
 
 中文:
 定义 consRecOn
-  签名: {motive : NormalWord d -> Sort _} (w : NormalWord d)
+  签名: {motive : NormalWord d -> 类型层 _} (w : NormalWord d)
   定义体: by
   rcases w with ⟨w, head, h3⟩
   convert! base head ⟨w, 1, h3⟩ rfl ?_
@@ -1581,7 +1581,7 @@ theorem prod_smul_empty
 中文:
 定理 prod_smul_empty
   条件: (w : NormalWord d)
-  结论: w.prod • empty = w
+  结论: w.乘积 • empty = w
   证明: by
   induction w using consRecOn with
   | empty => simp
@@ -1643,7 +1643,7 @@ theorem prod_injective
 
 中文:
 定理 prod_injective
-  结论: {ι : 类型} {G : ι -> 类型} [(i : ι) -> Group (G i)] {φ : (i : ι) -> H ->* G i}
+  结论: {ι : 类型} {G : ι -> 类型} [(i : ι) -> 群 (G i)] {φ : (i : ι) -> H ->* G i}
   证明: by
   let := Classical.decEq ι
   let := fun i => Classical.decEq (G i)
@@ -1667,7 +1667,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul (PushoutI φ) (NormalWord d)
+  签名: 忠实标量乘法 (PushoutI φ) (NormalWord d)
   定义体: ⟨fun h => by simpa using congr_arg prod (h empty)⟩
 
 Depends on / 依赖: congr_arg
@@ -1688,7 +1688,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul H (NormalWord d)
+  签名: 忠实标量乘法 H (NormalWord d)
   定义体: ⟨by simp [base_smul_def']⟩
 
 Depends on / 依赖: base_smul_def
@@ -1718,7 +1718,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: (hφ : 对任意 i, Function.Injective (φ i)) (i : ι)
+  条件: (hφ : 对任意 i, 函数.单射 (φ i)) (i : ι)
   证明: by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   let _ := Classical.decEq ι
@@ -1760,7 +1760,7 @@ theorem base_injective
 
 中文:
 定理 base_injective
-  条件: (hφ : 对任意 i, Function.Injective (φ i))
+  条件: (hφ : 对任意 i, 函数.单射 (φ i))
   证明: by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   let _ := Classical.decEq ι
@@ -1796,7 +1796,7 @@ definition Reduced
   body: forall g, g in w.toList -> g.2 ∉ (φ g.1).range
 
 中文:
-定义 Reduced
+定义 既约
   签名: (w : Word G)
   定义体: forall g, g in w.toList -> g.2 ∉ (φ g.1).range
 
@@ -1821,8 +1821,8 @@ theorem Reduced.exists_normalWord_prod_eq
     · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head
 
 中文:
-定理 Reduced.exists_normalWord_prod_eq
-  条件: (d : Transversal φ) {w : Word G} (hw : Reduced φ w)
+定理 既约.存在_normalWord_prod_eq
+  条件: (d : 横截 φ) {w : Word G} (hw : 既约 φ w)
   证明: by
   induction w using Word.consRecOn with
   | empty => exact ⟨empty, by simp, rfl⟩
@@ -1862,7 +1862,7 @@ theorem Reduced.eq_empty_of_mem_range
   suffices w'.toWord = 
 
 中文:
-定理 Reduced.eq_empty_of_mem_range
+定理 既约.eq_empty_of_mem_range
   证明: by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   rcases hw.exists_normalWord_prod_eq d with ⟨w', hw'prod, hw'map⟩

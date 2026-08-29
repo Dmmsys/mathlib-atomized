@@ -96,7 +96,7 @@ lemma MultipliableUniformlyOn.exists
 @[to_additive]
 
 中文:
-引理 MultipliableUniformlyOn.exists
+引理 MultipliableUniformlyOn.存在
   条件: (h : MultipliableUniformlyOn f s)
   证明: h
 
@@ -275,7 +275,7 @@ theorem HasProdUniformlyOn.tprod_eqOn
 
 中文:
 定理 HasProdUniformlyOn.tprod_eqOn
-  条件: [T2Space α] (h : HasProdUniformlyOn f g s)
+  条件: [T2空间 α] (h : HasProdUniformlyOn f g s)
   证明: fun _ hx => (h.hasProd hx).tprod_eq
 
 @[to_additive]
@@ -383,7 +383,7 @@ lemma HasProdUniformlyOn.mono
 
 中文:
 引理 HasProdUniformlyOn.mono
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: hasProdUniformlyOn_iff_tendstoUniformlyOn.mpr h.tendstoUniformlyOn.mono hst
 
 @[to_additive]
@@ -405,7 +405,7 @@ lemma MultipliableUniformlyOn.mono
 
 中文:
 引理 MultipliableUniformlyOn.mono
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: (h.exists.choose_spec.mono hst).multipliableUniformlyOn
 
 Depends on / 依赖: choose_spec, h.exists.choose_spec.mono, multipliableUniformlyOn
@@ -506,7 +506,7 @@ lemma hasProdLocallyUniformlyOn_of_of_forall_exists_nhds
     simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn] using h
 
 中文:
-引理 hasProdLocallyUniformlyOn_of_of_forall_exists_nhds
+引理 hasProdLocallyUniformlyOn_of_of_对任意_存在_nhds
   证明: tendstoLocallyUniformlyOn_of_forall_exists_nhds by
     simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn] using h
 
@@ -553,8 +553,8 @@ lemma HasProdLocallyUniformlyOn.exists_hasProdUniformlyOn
 @[to_additive]
 
 中文:
-引理 HasProdLocallyUniformlyOn.exists_hasProdUniformlyOn
-  结论: [LocallyCompactSpace β]
+引理 HasProdLocallyUniformlyOn.存在_hasProdUniformlyOn
+  结论: [局部紧空间 β]
   证明: by
   obtain ⟨K, ⟨hK1, hK2⟩, hK3⟩ := (compact_basis_nhds x).mem_iff.mp hx
   exact ⟨K, nhdsWithin_le_nhds hK1,
@@ -614,8 +614,8 @@ lemma hasProdLocallyUniformlyOn_of_forall_compact
 @[to_additive]
 
 中文:
-引理 hasProdLocallyUniformlyOn_of_forall_compact
-  结论: (hs : IsOpen s) [LocallyCompactSpace β]
+引理 hasProdLocallyUniformlyOn_of_对任意_compact
+  结论: (hs : 是开集 s) [局部紧空间 β]
   证明: by
   rw [HasProdLocallyUniformlyOn]; rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hs]
   simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn] using h
@@ -662,7 +662,7 @@ lemma HasProdLocallyUniformlyOn.mono
 
 中文:
 引理 HasProdLocallyUniformlyOn.mono
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: TendstoLocallyUniformlyOn.mono h hst
 
 @[to_additive]
@@ -684,7 +684,7 @@ lemma MultipliableLocallyUniformlyOn.mono
 
 中文:
 引理 MultipliableLocallyUniformlyOn.mono
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: (h.choose_spec.mono hst).multipliableLocallyUniformlyOn
 
 Depends on / 依赖: choose_spec, h.choose_spec.mono, multipliableLocallyUniformlyOn
@@ -708,7 +708,7 @@ lemma multipliableLocallyUniformlyOn_of_of_forall_exists_nhds
   | ⟨t, ht, htr⟩ => ⟨t, ht, htr.hasProdUniformlyOn⟩).multipliableLocallyUniformlyOn
 
 中文:
-引理 multipliableLocallyUniformlyOn_of_of_forall_exists_nhds
+引理 multipliableLocallyUniformlyOn_of_of_对任意_存在_nhds
   证明: (hasProdLocallyUniformlyOn_of_of_forall_exists_nhds <| fun x hx => match h x hx with
   | ⟨t, ht, htr⟩ => ⟨t, ht, htr.hasProdUniformlyOn⟩).multipliableLocallyUniformlyOn
 
@@ -749,8 +749,8 @@ lemma MultipliableLocallyUniformlyOn.exists_multipliableUniformlyOn
 @[to_additive]
 
 中文:
-引理 MultipliableLocallyUniformlyOn.exists_multipliableUniformlyOn
-  结论: [LocallyCompactSpace β]
+引理 MultipliableLocallyUniformlyOn.存在_multipliableUniformlyOn
+  结论: [局部紧空间 β]
   证明: let H := (h.choose_spec.exists_hasProdUniformlyOn hx).choose_spec
   ⟨_, H.1, H.2.multipliableUniformlyOn⟩
 
@@ -849,7 +849,7 @@ theorem HasProdLocallyUniformlyOn.tprod_eqOn
 
 中文:
 定理 HasProdLocallyUniformlyOn.tprod_eqOn
-  结论: [T2Space α]
+  结论: [T2空间 α]
   证明: fun _ hx => (h.hasProd hx).tprod_eq
 
 @[to_additive]
@@ -901,7 +901,7 @@ theorem HasProdLocallyUniformlyOn.comp
 
 中文:
 定理 HasProdLocallyUniformlyOn.comp
-  结论: {γ : 类型} [TopologicalSpace γ] {t : Set γ}
+  结论: {γ : 类型} [拓扑空间 γ] {t : 集合 γ}
   证明: TendstoLocallyUniformlyOn.comp h h' hh chh
 
 @[to_additive]
@@ -927,7 +927,7 @@ theorem MultipliableLocallyUniformlyOn.comp
 
 中文:
 定理 MultipliableLocallyUniformlyOn.comp
-  结论: {γ : 类型} [TopologicalSpace γ] {t : Set γ}
+  结论: {γ : 类型} [拓扑空间 γ] {t : 集合 γ}
   证明: (h.hasProdLocallyUniformlyOn.comp h' hh chh).multipliableLocallyUniformlyOn
 
 @[to_additive]
@@ -1058,7 +1058,7 @@ lemma MultipliableUniformly.exists
 @[to_additive]
 
 中文:
-引理 MultipliableUniformly.exists
+引理 MultipliableUniformly.存在
   条件: (h : MultipliableUniformly f)
   证明: h
 
@@ -1296,7 +1296,7 @@ theorem HasProdUniformly.hasProd
 中文:
 定理 HasProdUniformly.hasProd
   条件: (h : HasProdUniformly f g)
-  结论: HasProd (f · x) (g x)
+  结论: 有积类型 (f · x) (g x)
   证明: h.tendstoUniformly.tendsto_at _
 
 @[to_additive]
@@ -1444,7 +1444,7 @@ lemma MultipliableLocallyUniformly.exists
 @[to_additive]
 
 中文:
-引理 MultipliableLocallyUniformly.exists
+引理 MultipliableLocallyUniformly.存在
   条件: (h : MultipliableLocallyUniformly f)
   证明: h
 
@@ -1553,7 +1553,7 @@ lemma hasProdLocallyUniformly_of_of_forall_exists_nhds
 @[to_additive]
 
 中文:
-引理 hasProdLocallyUniformly_of_of_forall_exists_nhds
+引理 hasProdLocallyUniformly_of_of_对任意_存在_nhds
   证明: tendstoLocallyUniformly_of_forall_exists_nhds by
     simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn] using h
 
@@ -1609,8 +1609,8 @@ lemma hasProdLocallyUniformly_of_forall_compact
 @[to_additive]
 
 中文:
-引理 hasProdLocallyUniformly_of_forall_compact
-  结论: [LocallyCompactSpace β]
+引理 hasProdLocallyUniformly_of_对任意_compact
+  结论: [局部紧空间 β]
   证明: by
   rw [HasProdLocallyUniformly]; rw [tendstoLocallyUniformly_iff_forall_isCompact]
   simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn] using h
@@ -1637,7 +1637,7 @@ lemma multipliableLocallyUniformly_of_of_forall_exists_nhds
 @[to_additive]
 
 中文:
-引理 multipliableLocallyUniformly_of_of_forall_exists_nhds
+引理 multipliableLocallyUniformly_of_of_对任意_存在_nhds
   证明: hasProdLocallyUniformly_of_of_forall_exists_nhds
     (fun x => (h x).imp fun _ ht => ⟨ht.1, ht.2.hasProdUniformlyOn⟩)
 .multipliableLocallyUniformly
@@ -1668,7 +1668,7 @@ theorem HasProdLocallyUniformly.hasProd
 中文:
 定理 HasProdLocallyUniformly.hasProd
   条件: (h : HasProdLocallyUniformly f g)
-  结论: HasProd (f · x) (g x)
+  结论: 有积类型 (f · x) (g x)
   证明: h.tendstoLocallyUniformlyOn.tendsto_at (Set.mem_univ x)
 
 @[to_additive]

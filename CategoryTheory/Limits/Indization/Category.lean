@@ -77,7 +77,7 @@ definition Ind
 
 中文:
 定义 Ind
-  签名: : Type (max u (v + 1))
+  签名: : 类型 (最大值 u (v + 1))
   定义体: ShrinkHoms (ObjectProperty.FullSubcategory (IsIndObject (C := C)))
 
 Depends on / 依赖: FullSubcategory, IsIndObject, ObjectProperty, ObjectProperty.FullSubcategory, ShrinkHoms
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{v} (Ind C)
+  签名: 范畴.{v} (Ind C)
   定义体: inferInstanceAs Category.{v}
     (ShrinkHoms (ObjectProperty.FullSubcategory (IsIndObject (C := C))))
 
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Ind.inclusion C).Full
+  签名: (Ind.inclusion C).满
   定义体: inferInstanceAs ((Ind.equivalence C).functor ⋙ ObjectProperty.ι _).Full
 
 Depends on / 依赖: Ind.equivalence, ObjectProperty, equivalence, functor
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Ind.inclusion C).Faithful
+  签名: (Ind.inclusion C).忠实
   定义体: inferInstanceAs ((Ind.equivalence C).functor ⋙ ObjectProperty.ι _).Faithful
 
 Depends on / 依赖: Faithful, Ind.equivalence, ObjectProperty, equivalence, functor
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Ind.yoneda (C := C)).Full
+  签名: (Ind.yoneda (C := C)).满
   定义体: inferInstanceAs Functor.Full
     ObjectProperty.lift _ CategoryTheory.yoneda isIndObject_yoneda ⋙ (Ind.equivalence C).inverse
 -/
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Ind.yoneda (C := C)).Faithful
+  签名: (Ind.yoneda (C := C)).忠实
   定义体: inferInstanceAs Functor.Faithful
     ObjectProperty.lift _ CategoryTheory.yoneda isIndObject_yoneda ⋙ (Ind.equivalence C).inverse
 
@@ -276,7 +276,7 @@ definition Ind.yonedaCompInclusion
 
 中文:
 定义 Ind.yonedaCompInclusion
-  签名: : Ind.yoneda ⋙ Ind.inclusion C ≅ CategoryTheory.yoneda
+  签名: : Ind.yoneda ⋙ Ind.inclusion C ≅ 范畴论.yoneda
   定义体: isoWhiskerLeft (ObjectProperty.lift _ _ _)
     (isoWhiskerRight (Ind.equivalence C).counitIso (ObjectProperty.ι _))
 
@@ -342,7 +342,7 @@ instance [HasLimitsOfShape
       ((Ind.equivalence C).functor ⋙ ObjectProperty.ι _)
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: WalkingParallelPair C] :
   定义体: inferInstanceAs
     CreatesLimitsOfShape WalkingParallelPair
@@ -365,7 +365,7 @@ instance [HasLimitsOfShape
   body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Ind.inclusion C)
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: WalkingParallelPair C] :
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Ind.inclusion C)
 
@@ -386,8 +386,8 @@ instance [HasFiniteLimits
   createsFiniteLimitsOfCreatesEqualizersAndFiniteProducts (Ind.inclusion C)
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] : CreatesFiniteLimits (Ind.inclusion C)
+实例 [有有限极限
+  签名: C] : 创造有限极限 (Ind.inclusion C)
   定义体: letI _ : CreatesFiniteProducts (Ind.inclusion C) :=
     { creates _ _ := createsLimitsOfShapeOfEquiv (Discrete.equivalence Equiv.ulift) _ }
   createsFiniteLimitsOfCreatesEqualizersAndFiniteProducts (Ind.inclusion C)
@@ -408,8 +408,8 @@ instance [HasFiniteLimits
   body: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Ind.inclusion C)
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] : HasFiniteLimits (Ind C)
+实例 [有有限极限
+  签名: C] : 有有限极限 (Ind C)
   定义体: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Ind.inclusion C)
 
 Depends on / 依赖: Ind.inclusion, hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits, inclusion
@@ -426,7 +426,7 @@ instance [HasLimits
   body: createsLimitsOfSizeOfCreatesEqualizersAndProducts.{v, v} (Ind.inclusion C)
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] : CreatesLimitsOfSize.{v, v} (Ind.inclusion C)
   定义体: createsLimitsOfSizeOfCreatesEqualizersAndProducts.{v, v} (Ind.inclusion C)
 
@@ -444,8 +444,8 @@ instance [HasLimits
   body: hasLimits_of_hasLimits_createsLimits (Ind.inclusion C)
 
 中文:
-实例 [HasLimits
-  签名: C] : HasLimits (Ind C)
+实例 [有极限
+  签名: C] : 有极限 (Ind C)
   定义体: hasLimits_of_hasLimits_createsLimits (Ind.inclusion C)
 
 Depends on / 依赖: Ind.inclusion, hasLimits_of_hasLimits_createsLimits, inclusion
@@ -487,7 +487,7 @@ theorem Ind.isIndObject_inclusion_obj
 中文:
 定理 Ind.isIndObject_inclusion_obj
   条件: (X : Ind C)
-  结论: IsIndObject ((Ind.inclusion C).obj X)
+  结论: 是IndObject ((Ind.inclusion C).obj X)
   证明: X.2
 -/
 theorem Ind.isIndObject_inclusion_obj (X : Ind C) : IsIndObject ((Ind.inclusion C).obj X) :=
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (Ind.yoneda (C := C))
+  签名: 保持FiniteColimits (Ind.yoneda (C := C))
   定义体: preservesFiniteColimits_of_coflat _
 -/
 noncomputable instance : PreservesFiniteColimits (Ind.yoneda (C := C)) :=
@@ -605,7 +605,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Ind.lim (I : 类型v) [SmallCategory I] [IsFiltered I]
+  签名: def Ind.lim (I : 类型v) [小范畴 I] [是Filtered I]
   定义体: (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim
 -/
 protected noncomputable def Ind.lim (I : Type v) [SmallCategory I] [IsFiltered I] :
@@ -628,7 +628,7 @@ definition Ind.limCompInclusion
 
 中文:
 定义 Ind.limCompInclusion
-  签名: {I : 类型v} [SmallCategory I] [IsFiltered I]
+  签名: {I : 类型v} [小范畴 I] [是Filtered I]
   定义体: calc
   Ind.lim I ⋙ Ind.inclusion C
     ≅ (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim ⋙ Ind.inclusion C := Functor.associator _ _ _
@@ -693,7 +693,7 @@ instance [HasFiniteCoproducts
   hasCoproducts_of_finite_and_filtered
 
 中文:
-实例 [HasFiniteCoproducts
+实例 [有FiniteCoproducts
   签名: C] : HasCoproducts.{v} (Ind C)
   定义体: have : HasFiniteCoproducts (Ind C) :=
     ⟨fun _ => hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift)⟩
@@ -748,7 +748,7 @@ instance [HasColimitsOfShape
   exact hasColimit_
 
 中文:
-实例 [HasColimitsOfShape
+实例 [有形状余极限
   签名: WalkingParallelPair C] :
   定义体: by
   refine ⟨fun F => ?_⟩
@@ -776,8 +776,8 @@ instance [HasFiniteColimits
   body: has_colimits_of_hasCoequalizers_and_coproducts
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] : HasColimits (Ind C)
+实例 [有有限余极限
+  签名: C] : 有余极限 (Ind C)
   定义体: has_colimits_of_hasCoequalizers_and_coproducts
 
 Depends on / 依赖: has_colimits_of_hasCoequalizers_and_coproducts
@@ -800,7 +800,7 @@ theorem Ind.exists_nonempty_arrow_mk_iso_ind_lim
   · exact 
 
 中文:
-定理 Ind.exists_nonempty_arrow_mk_iso_ind_lim
+定理 Ind.存在_nonempty_arrow_mk_iso_ind_lim
   条件: {A B : Ind C} {f : A ⟶ B}
   证明: by
   obtain ⟨P⟩ := nonempty_indParallelPairPresentation A.2 B.2

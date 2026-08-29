@@ -41,7 +41,7 @@ definition invariants
 
 中文:
 定义 invariants
-  签名: [m : MeasurableSpace α] (f : α -> α)
+  签名: [m : 可测空间 α] (f : α -> α)
   定义体: { m ⊓ ⟨fun s => f ⁻¹' s = s, by simp, by simp, fun f hf => by simp [hf]⟩ with
     MeasurableSet' := fun s => MeasurableSet[m] s ∧ f ⁻¹' s = s }
 
@@ -65,7 +65,7 @@ theorem measurableSet_invariants
 
 中文:
 定理 measurableSet_invariants
-  条件: {f : α -> α} {s : Set α}
+  条件: {f : α -> α} {s : 集合 α}
   证明: .rfl
 
 @[simp]
@@ -85,7 +85,7 @@ theorem invariants_id
 
 中文:
 定理 invariants_id
-  结论: invariants (id : α -> α) = ‹MeasurableSpace α›
+  结论: invariants (id : α -> α) = ‹可测空间 α›
   证明: ext fun _ => ⟨And.left, fun h => ⟨h, rfl⟩⟩
 
 Depends on / 依赖: And.left
@@ -105,7 +105,7 @@ theorem invariants_le
 中文:
 定理 invariants_le
   条件: (f : α -> α)
-  结论: invariants f <= ‹MeasurableSpace α›
+  结论: invariants f <= ‹可测空间 α›
   证明: fun _ => And.left
 
 Depends on / 依赖: And.left
@@ -192,7 +192,7 @@ theorem measurable_invariants_of_semiconj
 
 中文:
 定理 measurable_invariants_of_semiconj
-  结论: {fa : α -> α} {fb : β -> β} {g : α -> β} (hg : Measurable g)
+  结论: {fa : α -> α} {fb : β -> β} {g : α -> β} (hg : 可测 g)
   证明: fun s hs =>
   ⟨hg hs.1, by rw [← preimage_comp, hfg.comp_eq, preimage_comp, hs.2]⟩
 -/
@@ -213,7 +213,7 @@ theorem comp_eq_of_measurable_invariants
 
 中文:
 定理 comp_eq_of_measurable_invariants
-  结论: {f : α -> α} {g : α -> β} [MeasurableSingletonClass β]
+  结论: {f : α -> α} {g : α -> β} [MeasurableSingleton类 β]
   证明: by
   funext x
   suffices x in f ⁻¹' g ⁻¹' {g x} by simpa

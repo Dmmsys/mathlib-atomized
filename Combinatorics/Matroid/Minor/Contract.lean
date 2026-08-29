@@ -64,7 +64,7 @@ definition contract
 
 中文:
 定义 contract
-  签名: (M : Matroid α) (C : Set α)
+  签名: (M : 拟阵 α) (C : 集合 α)
   定义体: (M✶ ＼ C)✶
 -/
 def contract (M : Matroid α) (C : Set α) : Matroid α := (M✶ ＼ C)✶
@@ -83,7 +83,7 @@ lemma contract_ground
 
 中文:
 引理 contract_ground
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   结论: (M ／ C).E = M.E \ C
   证明: rfl
 -/
@@ -102,7 +102,7 @@ lemma dual_delete_dual
 
 中文:
 引理 dual_delete_dual
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M✶ ＼ X)✶ = M ／ X
   证明: rfl
 
@@ -125,7 +125,7 @@ lemma dual_delete
 
 中文:
 引理 dual_delete
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M ＼ X)✶ = M✶ ／ X
   证明: by
   rw [← dual_dual M]; rw [dual_delete_dual]; rw [dual_dual]
@@ -150,7 +150,7 @@ lemma dual_contract
 
 中文:
 引理 dual_contract
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M ／ X)✶ = M✶ ＼ X
   证明: by
   rw [← dual_delete_dual]; rw [dual_dual]
@@ -174,7 +174,7 @@ lemma dual_contract_dual
 
 中文:
 引理 dual_contract_dual
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M✶ ／ X)✶ = M ＼ X
   证明: by
   simp
@@ -197,7 +197,7 @@ lemma contract_contract
 
 中文:
 引理 contract_contract
-  条件: (M : Matroid α) (C₁ C₂ : Set α)
+  条件: (M : 拟阵 α) (C₁ C₂ : 集合 α)
   结论: M ／ C₁ ／ C₂ = M ／ (C₁ union C₂)
   证明: by
   simp [← dual_inj]
@@ -219,7 +219,7 @@ lemma contract_comm
 
 中文:
 引理 contract_comm
-  条件: (M : Matroid α) (C₁ C₂ : Set α)
+  条件: (M : 拟阵 α) (C₁ C₂ : 集合 α)
   结论: M ／ C₁ ／ C₂ = M ／ C₂ ／ C₁
   证明: by
   simp [union_comm]
@@ -241,7 +241,7 @@ lemma dual_contract_delete
 
 中文:
 引理 dual_contract_delete
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   结论: (M ／ X ＼ Y)✶ = M✶ ＼ X ／ Y
   证明: by
   simp
@@ -261,7 +261,7 @@ lemma dual_delete_contract
 
 中文:
 引理 dual_delete_contract
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   结论: (M ＼ X ／ Y)✶ = M✶ ／ X ＼ Y
   证明: by
   simp
@@ -323,7 +323,7 @@ lemma contract_empty
 
 中文:
 引理 contract_empty
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M ／ ∅ = M
   证明: by
   rw [← dual_delete_dual]; rw [delete_empty]; rw [dual_dual]
@@ -345,7 +345,7 @@ alias contract_contract_eq_contract_diff := contract_contract_eq_contract_sdiff
 
 中文:
 引理 contract_contract_eq_contract_sdiff
-  条件: (M : Matroid α) (C₁ C₂ : Set α)
+  条件: (M : 拟阵 α) (C₁ C₂ : 集合 α)
   证明: by
   simp
 
@@ -393,7 +393,7 @@ lemma contract_inter_ground_eq
 
 中文:
 引理 contract_inter_ground_eq
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   结论: M ／ (C inter M.E) = M ／ C
   证明: by
   rw [← dual_delete_dual]; rw [← dual_ground]; rw [delete_inter_ground_eq]; rw [dual_delete_dual]
@@ -415,7 +415,7 @@ lemma contract_ground_subset_ground
 
 中文:
 引理 contract_ground_subset_ground
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   结论: (M ／ C).E subseteq M.E
   证明: (M.contract_ground C).trans_subset sdiff_subset
 
@@ -547,8 +547,8 @@ lemma IsNonloop.contractElem_indep_iff
   simp [he.indep.contract_indep_iff]
 
 中文:
-引理 IsNonloop.contractElem_indep_iff
-  条件: (he : M.IsNonloop e)
+引理 是Nonloop.contractElem_indep_iff
+  条件: (he : M.是Nonloop e)
   证明: by
   simp [he.indep.contract_indep_iff]
 
@@ -641,8 +641,8 @@ lemma IsBasis.contract_eq_contract_delete
     rw [← dual_contract]; rw [dual_coloops]; rw [← IsLoop];
 
 中文:
-引理 IsBasis.contract_eq_contract_delete
-  条件: (hI : M.IsBasis I X)
+引理 是基.contract_eq_contract_delete
+  条件: (hI : M.是基 I X)
   结论: M ／ X = M ／ I ＼ (X \ I)
   证明: by
   nth_rw 1 [← sdiff_union_of_subset hI.subset, ← dual_inj, dual_contract_delete, dual_contract,
@@ -678,7 +678,7 @@ lemma Indep.union_isBasis_union_of_contract_isBasis
 
 中文:
 引理 Indep.union_isBasis_union_of_contract_isBasis
-  条件: (hI : M.Indep I) (hB : (M ／ I).IsBasis J X)
+  条件: (hI : M.Indep I) (hB : (M ／ I).是基 J X)
   证明: by
   simp_rw [IsBasis, hI.contract_indep_iff, contract_ground, subset_sdiff,
     maximal_subset_iff, and_imp] at hB
@@ -713,8 +713,8 @@ lemma IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
       union_eq_self_of_subset_right hJI, h
 
 中文:
-引理 IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
-  条件: (hIX : M.IsBasis' I X) (hJI : J subseteq I)
+引理 是基'.contract_isBasis'_sdiff_sdiff_of_subset
+  条件: (hIX : M.是基' I X) (hJI : J subseteq I)
   证明: by
   suffices forall ⦃K⦄, Disjoint K J -> M.Indep (K union J) -> K subseteq X -> I subseteq K union J -> K subseteq I by
     simpa +contextual [IsBasis', (hIX.indep.subset hJI).contract_indep_iff,
@@ -749,8 +749,8 @@ lemma IsBasis'.contract_isBasis'_sdiff_of_subset
 alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sdiff_o
 
 中文:
-引理 IsBasis'.contract_isBasis'_sdiff_of_subset
-  条件: (hIX : M.IsBasis' I X) (hJI : J subseteq I)
+引理 是基'.contract_isBasis'_sdiff_of_subset
+  条件: (hIX : M.是基' I X) (hJI : J subseteq I)
   证明: by
   simpa [isBasis'_iff_isBasis_inter_ground, inter_sdiff_assoc, ← sdiff_inter_distrib_right] using
     (hIX.contract_isBasis'_sdiff_sdiff_of_subset hJI).isBasis_inter_ground
@@ -780,8 +780,8 @@ lemma IsBasis.contract_isBasis_sdiff_sdiff_of_subset
 alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isB
 
 中文:
-引理 IsBasis.contract_isBasis_sdiff_sdiff_of_subset
-  条件: (hIX : M.IsBasis I X) (hJI : J subseteq I)
+引理 是基.contract_isBasis_sdiff_sdiff_of_subset
+  条件: (hIX : M.是基 I X) (hJI : J subseteq I)
   证明: by
   have h := (hIX.isBasis'.contract_isBasis'_sdiff_of_subset hJI).isBasis_inter_ground
   rwa [contract_ground, ← inter_sdiff_assoc, inter_eq_self_of_subset_left hIX.subset_ground] at h
@@ -813,8 +813,8 @@ lemma IsBasis.contract_sdiff_isBasis_sdiff
     exact disjoint_s
 
 中文:
-引理 IsBasis.contract_sdiff_isBasis_sdiff
-  结论: (hIX : M.IsBasis I X) (hJY : M.IsBasis J Y)
+引理 是基.contract_sdiff_isBasis_sdiff
+  结论: (hIX : M.是基 I X) (hJY : M.是基 J Y)
   证明: by
   refine (hJY.contract_isBasis_sdiff_sdiff_of_subset hIJ).isBasis_subset ?_ ?_
   · rw [subset_sdiff, and_iff_right (sdiff_subset.trans hJY.subset),
@@ -847,8 +847,8 @@ lemma IsBasis'.contract_isBasis_union_union
     h.contract_isBasis'_sdiff_sdiff_of_subset subset_union_right
 
 中文:
-引理 IsBasis'.contract_isBasis_union_union
-  结论: (h : M.IsBasis' (J union I) (X union I))
+引理 是基'.contract_isBasis_union_union
+  结论: (h : M.是基' (J union I) (X union I))
   证明: by
   simpa [hJI.sdiff_eq_left, hXI.sdiff_eq_left] using
     h.contract_isBasis'_sdiff_sdiff_of_subset subset_union_right
@@ -870,8 +870,8 @@ refine (isBasis'_iff_isBasis ?_).1 h.isBasis'.contract_isBasis_union_union hJI h
   exact subset_union_left.trans h.subset_ground
 
 中文:
-引理 IsBasis.contract_isBasis_union_union
-  结论: (h : M.IsBasis (J union I) (X union I))
+引理 是基.contract_isBasis_union_union
+  结论: (h : M.是基 (J union I) (X union I))
   证明: by
 refine (isBasis'_iff_isBasis ?_).1 h.isBasis'.contract_isBasis_union_union hJI hXI
   rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left hXI]
@@ -896,8 +896,8 @@ lemma IsBasis'.contract_eq_contract_delete
   rw [← contract_inter_ground_eq]; rw [hI.isBasis_inter_ground.contract_eq_contract_delete]; rw [eq_comm]; rw [← delete_inter_ground_eq]; rw [contract_ground]; rw [sdiff_eq]; rw [sdiff_eq]; rw [← inter_inter_distrib_right]; rw [← sdiff_eq]
 
 中文:
-引理 IsBasis'.contract_eq_contract_delete
-  条件: (hI : M.IsBasis' I X)
+引理 是基'.contract_eq_contract_delete
+  条件: (hI : M.是基' I X)
   结论: M ／ X = M ／ I ＼ (X \ I)
   证明: by
   rw [← contract_inter_ground_eq]; rw [hI.isBasis_inter_ground.contract_eq_contract_delete]; rw [eq_comm]; rw [← delete_inter_ground_eq]; rw [contract_ground]; rw [sdiff_eq]; rw [sdiff_eq]; rw [← inter_inter_distrib_right]; rw [← sdiff_eq]
@@ -915,8 +915,8 @@ lemma IsBasis'.contract_indep_iff
   rw [hI.contract_eq_contract_delete]; rw [delete_indep_iff]; rw [hI.indep.contract_indep_iff]; rw [and_comm]; rw [← and_assoc]; rw [← disjoint_union_right]; rw [sdiff_union_self]; rw [union_eq_self_of_subset_right hI.subset]; rw [and_comm]; rw [disjoint_comm]
 
 中文:
-引理 IsBasis'.contract_indep_iff
-  条件: (hI : M.IsBasis' I X)
+引理 是基'.contract_indep_iff
+  条件: (hI : M.是基' I X)
   证明: by
   rw [hI.contract_eq_contract_delete]; rw [delete_indep_iff]; rw [hI.indep.contract_indep_iff]; rw [and_comm]; rw [← and_assoc]; rw [← disjoint_union_right]; rw [sdiff_union_self]; rw [union_eq_self_of_subset_right hI.subset]; rw [and_comm]; rw [disjoint_comm]
 -/
@@ -933,8 +933,8 @@ lemma IsBasis.contract_indep_iff
   proof: hI.isBasis'.contract_indep_iff
 
 中文:
-引理 IsBasis.contract_indep_iff
-  条件: (hI : M.IsBasis I X)
+引理 是基.contract_indep_iff
+  条件: (hI : M.是基 I X)
   证明: hI.isBasis'.contract_indep_iff
 
 Depends on / 依赖: contract_indep_iff, hI.isBasis, isBasis
@@ -953,8 +953,8 @@ lemma IsBasis'.contract_dep_iff
   rw [hI.contract_eq_contract_delete]; rw [delete_dep_iff]; rw [hI.indep.contract_dep_iff]; rw [and_comm]; rw [← and_assoc]; rw [← disjoint_union_right]; rw [sdiff_union_of_subset hI.subset]; rw [disjoint_comm]; rw [and_comm]
 
 中文:
-引理 IsBasis'.contract_dep_iff
-  条件: (hI : M.IsBasis' I X) {D : Set α}
+引理 是基'.contract_dep_iff
+  条件: (hI : M.是基' I X) {D : 集合 α}
   证明: by
   rw [hI.contract_eq_contract_delete]; rw [delete_dep_iff]; rw [hI.indep.contract_dep_iff]; rw [and_comm]; rw [← and_assoc]; rw [← disjoint_union_right]; rw [sdiff_union_of_subset hI.subset]; rw [disjoint_comm]; rw [and_comm]
 -/
@@ -971,8 +971,8 @@ lemma IsBasis.contract_dep_iff
   proof: hI.isBasis'.contract_dep_iff
 
 中文:
-引理 IsBasis.contract_dep_iff
-  条件: (hI : M.IsBasis I X) {D : Set α}
+引理 是基.contract_dep_iff
+  条件: (hI : M.是基 I X) {D : 集合 α}
   证明: hI.isBasis'.contract_dep_iff
 
 Depends on / 依赖: contract_dep_iff, hI.isBasis, isBasis
@@ -991,8 +991,8 @@ lemma IsBasis.contract_indep_iff_of_disjoint
   rw [hI.contract_indep_iff]; rw [and_iff_left hdj]
 
 中文:
-引理 IsBasis.contract_indep_iff_of_disjoint
-  条件: (hI : M.IsBasis I X) (hdj : Disjoint X J)
+引理 是基.contract_indep_iff_of_disjoint
+  条件: (hI : M.是基 I X) (hdj : Disjoint X J)
   证明: by
   rw [hI.contract_indep_iff]; rw [and_iff_left hdj]
 
@@ -1015,8 +1015,8 @@ lemma IsBasis.contract_indep_sdiff_iff
 alias IsBasis.contract_indep_diff_iff := IsBasis.contract_indep_sdiff_iff
 
 中文:
-引理 IsBasis.contract_indep_sdiff_iff
-  条件: (hI : M.IsBasis I X)
+引理 是基.contract_indep_sdiff_iff
+  条件: (hI : M.是基 I X)
   证明: by
   rw [hI.contract_indep_iff]; rw [and_iff_left disjoint_sdiff_right]
 
@@ -1045,8 +1045,8 @@ lemma IsBasis'.contract_indep_sdiff_iff
 alias IsBasis'.contract_indep_diff_iff := IsBasis'.contract_indep_sdiff_iff
 
 中文:
-引理 IsBasis'.contract_indep_sdiff_iff
-  条件: (hI : M.IsBasis' I X)
+引理 是基'.contract_indep_sdiff_iff
+  条件: (hI : M.是基' I X)
   证明: by
   rw [hI.contract_indep_iff]; rw [and_iff_left disjoint_sdiff_right]
 
@@ -1075,8 +1075,8 @@ lemma IsBasis.contract_isBasis_of_isBasis'
   · rw [closure_union_congr_right hJC.closure_eq_closure, sdiff_union
 
 中文:
-引理 IsBasis.contract_isBasis_of_isBasis'
-  结论: (h : M.IsBasis I X) (hJC : M.IsBasis' J C)
+引理 是基.contract_isBasis_of_isBasis'
+  结论: (h : M.是基 I X) (hJC : M.是基' J C)
   证明: by
   have hIX := h.subset
   have hJCss := hJC.subset
@@ -1111,8 +1111,8 @@ lemma IsBasis'.contract_isBasis'
   exact h.isBasis_inter_ground.contract_isBasis_of_isBasis' hJC h_ind
 
 中文:
-引理 IsBasis'.contract_isBasis'
-  结论: (h : M.IsBasis' I X) (hJC : M.IsBasis' J C)
+引理 是基'.contract_isBasis'
+  结论: (h : M.是基' I X) (hJC : M.是基' J C)
   证明: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [contract_ground]; rw [← sdiff_inter_distrib_right]
   exact h.isBasis_inter_ground.contract_isBasis_of_isBasis' hJC h_ind
@@ -1131,8 +1131,8 @@ lemma IsBasis.contract_isBasis
   proof: h.contract_isBasis_of_isBasis' hJC.isBasis' h_ind
 
 中文:
-引理 IsBasis.contract_isBasis
-  结论: (h : M.IsBasis I X) (hJC : M.IsBasis J C)
+引理 是基.contract_isBasis
+  结论: (h : M.是基 I X) (hJC : M.是基 J C)
   证明: h.contract_isBasis_of_isBasis' hJC.isBasis' h_ind
 
 Depends on / 依赖: contract_isBasis_of_isBasis, h.contract_isBasis_of_isBasis, hJC.isBasis, h_ind, isBasis
@@ -1152,8 +1152,8 @@ lemma IsBasis.contract_isBasis_of_disjoint
   rwa [(hdj.mono_right h.subset).sdiff_eq_right, hdj.sdiff_eq_right, imp_iff_right h_ind] at h'
 
 中文:
-引理 IsBasis.contract_isBasis_of_disjoint
-  结论: (h : M.IsBasis I X) (hJC : M.IsBasis J C)
+引理 是基.contract_isBasis_of_disjoint
+  结论: (h : M.是基 I X) (hJC : M.是基 J C)
   证明: by
   have h' := h.contract_isBasis hJC
   rwa [(hdj.mono_right h.subset).sdiff_eq_right, hdj.sdiff_eq_right, imp_iff_right h_ind] at h'
@@ -1174,8 +1174,8 @@ lemma IsBasis'.contract_isBasis_of_indep
   proof: h.contract_isBasis' (h_ind.subset subset_union_right).isBasis_self.isBasis' (by simpa)
 
 中文:
-引理 IsBasis'.contract_isBasis_of_indep
-  条件: (h : M.IsBasis' I X) (h_ind : M.Indep (I union J))
+引理 是基'.contract_isBasis_of_indep
+  条件: (h : M.是基' I X) (h_ind : M.Indep (I union J))
   证明: h.contract_isBasis' (h_ind.subset subset_union_right).isBasis_self.isBasis' (by simpa)
 -/
 lemma IsBasis'.contract_isBasis_of_indep (h : M.IsBasis' I X) (h_ind : M.Indep (I union J)) :
@@ -1191,8 +1191,8 @@ lemma IsBasis.contract_isBasis_of_indep
   proof: h.contract_isBasis (h_ind.subset subset_union_right).isBasis_self (by simpa)
 
 中文:
-引理 IsBasis.contract_isBasis_of_indep
-  条件: (h : M.IsBasis I X) (h_ind : M.Indep (I union J))
+引理 是基.contract_isBasis_of_indep
+  条件: (h : M.是基 I X) (h_ind : M.Indep (I union J))
   证明: h.contract_isBasis (h_ind.subset subset_union_right).isBasis_self (by simpa)
 
 Depends on / 依赖: contract_isBasis, h.contract_isBasis, h_ind, h_ind.subset, isBasis_self, subset, subset_union_right
@@ -1212,8 +1212,8 @@ lemma IsBasis.contract_isBasis_of_disjoint_indep
   exact h.contract_isBasis_of_indep h_ind
 
 中文:
-引理 IsBasis.contract_isBasis_of_disjoint_indep
-  结论: (h : M.IsBasis I X) (hdj : Disjoint J X)
+引理 是基.contract_isBasis_of_disjoint_indep
+  结论: (h : M.是基 I X) (hdj : Disjoint J X)
   证明: by
   rw [← hdj.sdiff_eq_right]; rw [← (hdj.mono_right h.subset).sdiff_eq_right]
   exact h.contract_isBasis_of_indep h_ind
@@ -1289,7 +1289,7 @@ instance contract_finite
 
 中文:
 实例 contract_finite
-  签名: [M.Finite]
+  签名: [M.有限]
   定义体: by
   rw [← dual_delete_dual]
   infer_instance
@@ -1458,7 +1458,7 @@ lemma contract_loops_eq
 
 中文:
 引理 contract_loops_eq
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   结论: (M ／ C).loops = M.closure C \ C
   证明: by
   simp [Set.ext_iff, ← isLoop_iff, contract_isLoop_iff_mem_closure]
@@ -1485,7 +1485,7 @@ lemma contract_coloops_eq
 
 中文:
 引理 contract_coloops_eq
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   结论: (M ／ C).coloops = M.coloops \ C
   证明: by
   rw [← dual_delete_dual]; rw [dual_coloops]; rw [delete_loops_eq]; rw [dual_loops]
@@ -1532,9 +1532,9 @@ lemma IsNonloop.of_contract
 @[simp]
 
 中文:
-引理 IsNonloop.of_contract
-  条件: (h : (M ／ C).IsNonloop e)
-  结论: M.IsNonloop e
+引理 是Nonloop.of_contract
+  条件: (h : (M ／ C).是Nonloop e)
+  结论: M.是Nonloop e
   证明: by
   rw [← indep_singleton] at h ⊢
   exact h.of_contract
@@ -1563,7 +1563,7 @@ lemma contract_isNonloop_iff
 
 中文:
 引理 contract_isNonloop_iff
-  结论: (M ／ C).IsNonloop e ↔ e in M.E \ M.closure C
+  结论: (M ／ C).是Nonloop e ↔ e in M.E \ M.closure C
   证明: by
   rw [isNonloop_iff_mem_compl_loops]; rw [contract_ground]; rw [contract_loops_eq]
   refine ⟨fun ⟨he,heC⟩ => ⟨he.1, fun h => heC ⟨h, he.2⟩⟩,
@@ -1595,8 +1595,8 @@ lemma IsBasis.sdiff_subset_loops_contract
 alias IsBasis.diff_subset_loops_contract := IsBasis.sdiff_subset_loops_contract
 
 中文:
-引理 IsBasis.sdiff_subset_loops_contract
-  条件: (hIX : M.IsBasis I X)
+引理 是基.sdiff_subset_loops_contract
+  条件: (hIX : M.是基 I X)
   结论: X \ I subseteq (M ／ I).loops
   证明: by
   rw [sdiff_subset_iff]; rw [contract_loops_eq]; rw [union_sdiff_self]; rw [union_eq_self_of_subset_left (M.subset_closure I)]
@@ -1631,7 +1631,7 @@ lemma contract_closure_eq_contract_delete
 
 中文:
 引理 contract_closure_eq_contract_delete
-  条件: (M : Matroid α) (C : Set α)
+  条件: (M : 拟阵 α) (C : 集合 α)
   证明: by
   wlog hCE : C subseteq M.E with aux
   · rw [← M.contract_inter_ground_eq C, ← closure_inter_ground, aux _ _ inter_subset_right,
@@ -1662,7 +1662,7 @@ lemma contract_closure_eq
 
 中文:
 引理 contract_closure_eq
-  条件: (M : Matroid α) (C X : Set α)
+  条件: (M : 拟阵 α) (C X : 集合 α)
   证明: by
   rw [← sdiff_union_inter (M.closure (X union C) \ C) X]; rw [sdiff_sdiff]; rw [union_comm C]; rw [← contract_loops_eq]; rw [union_comm X]; rw [← contract_contract]; rw [contract_loops_eq]; rw [subset_antisymm_iff]; rw [union_subset_iff]; rw [and_iff_right sdiff_subset]; rw [← sdiff_subset_iff]
  
@@ -1717,7 +1717,7 @@ lemma contract_spanning_iff'
 
 中文:
 引理 contract_spanning_iff'
-  结论: (M ／ C).Spanning X ↔ M.Spanning (X union (C inter M.E)) ∧ Disjoint X C
+  结论: (M ／ C).生成 X ↔ M.生成 (X union (C inter M.E)) ∧ Disjoint X C
   证明: by
   rw [← contract_inter_ground_eq]; rw [contract_spanning_iff]; rw [and_congr_right_iff]
   refine fun h => ⟨fun hdj => ?_, Disjoint.mono_right inter_subset_left⟩
@@ -1745,9 +1745,9 @@ lemma Spanning.contract
   exact hX.superset (by tauto_set) (by tauto_set)
 
 中文:
-引理 Spanning.contract
-  条件: (hX : M.Spanning X) (C : Set α)
-  结论: (M ／ C).Spanning (X \ C)
+引理 生成.contract
+  条件: (hX : M.生成 X) (C : 集合 α)
+  结论: (M ／ C).生成 (X \ C)
   证明: by
   have hXE := hX.subset_ground
   rw [contract_spanning_iff']; rw [and_iff_left disjoint_sdiff_left]
@@ -1772,8 +1772,8 @@ lemma Spanning.contract_eq_loopyOn
   simp [hX.closure_eq]
 
 中文:
-引理 Spanning.contract_eq_loopyOn
-  条件: (hX : M.Spanning X)
+引理 生成.contract_eq_loopyOn
+  条件: (hX : M.生成 X)
   结论: M ／ X = loopyOn (M.E \ X)
   证明: by
   rw [eq_loopyOn_iff_loops_eq]
@@ -1799,8 +1799,8 @@ lemma IsCircuit.contract_isCircuit
     disjoint_sdiff_left, sdiff_union_of_s
 
 中文:
-引理 IsCircuit.contract_isCircuit
-  条件: (hK : M.IsCircuit K) (hC : C ⊂ K)
+引理 是Circuit.contract_isCircuit
+  条件: (hK : M.是Circuit K) (hC : C ⊂ K)
   证明: by
   suffices forall e in K, e ∉ C -> M.Indep (K \ {e} union C) by
     simpa [isCircuit_iff_dep_forall_sdiff_singleton_indep, sdiff_sdiff_comm (s := K) (t := C),
@@ -1827,8 +1827,8 @@ lemma IsCircuit.contractElem_isCircuit
   proof: hC.contract_isCircuit (ssubset_of_ne_of_subset hnt.ne_singleton.symm (by simpa))
 
 中文:
-引理 IsCircuit.contractElem_isCircuit
-  条件: (hC : M.IsCircuit C) (hnt : C.Nontrivial) (heC : e in C)
+引理 是Circuit.contractElem_isCircuit
+  条件: (hC : M.是Circuit C) (hnt : C.非平凡) (heC : e in C)
   证明: hC.contract_isCircuit (ssubset_of_ne_of_subset hnt.ne_singleton.symm (by simpa))
 
 Depends on / 依赖: contract_isCircuit, hC.contract_isCircuit, hnt.ne_singleton.symm, ne_singleton, ssubset_of_ne_of_subset
@@ -1849,8 +1849,8 @@ lemma IsCircuit.contract_dep
   rw [← contract_inter_ground_eq]; rw [Dep]; rw [hI.contract_indep_iff]; rw [and_iff_left (hCK.mono_left inter_subset_left)]; rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left (hCK.symm.mono_right inter_subset_left)]; rw [and_iff_left hK.
 
 中文:
-引理 IsCircuit.contract_dep
-  条件: (hK : M.IsCircuit K) (hCK : Disjoint C K)
+引理 是Circuit.contract_dep
+  条件: (hK : M.是Circuit K) (hCK : Disjoint C K)
   结论: (M ／ C).Dep K
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis (C inter M.E)
@@ -1876,8 +1876,8 @@ lemma IsCircuit.contract_dep_of_not_subset
   rwa [contract_contract, inter_union_sdiff] at hwin
 
 中文:
-引理 IsCircuit.contract_dep_of_not_subset
-  条件: (hK : M.IsCircuit K) {C : Set α} (hKC : ¬ K subseteq C)
+引理 是Circuit.contract_dep_of_not_subset
+  条件: (hK : M.是Circuit K) {C : 集合 α} (hKC : ¬ K subseteq C)
   证明: by
   have h' := hK.contract_isCircuit (C := C inter K) (inter_subset_right.ssubset_of_ne (by simpa))
   simp only [sdiff_inter_self_eq_sdiff] at h'
@@ -1907,8 +1907,8 @@ simpa [inter_eq_self_of_subset_right hKC] using hC.contract_isCircuit (C := C \ 
 alias IsCircuit.contract_diff_isCircuit := IsCircuit.contract_sdiff_isCircuit
 
 中文:
-引理 IsCircuit.contract_sdiff_isCircuit
-  条件: (hC : M.IsCircuit C) (hK : K.Nonempty) (hKC : K subseteq C)
+引理 是Circuit.contract_sdiff_isCircuit
+  条件: (hC : M.是Circuit C) (hK : K.非空) (hKC : K subseteq C)
   证明: by
 simpa [inter_eq_self_of_subset_right hKC] using hC.contract_isCircuit (C := C \ K)
     by rwa [sdiff_ssubset_left_iff, inter_eq_self_of_subset_right hKC]
@@ -1941,8 +1941,8 @@ lemma IsCircuit.exists_subset_isCircuit_of_contract
   
 
 中文:
-引理 IsCircuit.exists_subset_isCircuit_of_contract
-  条件: (hC : (M ／ K).IsCircuit C)
+引理 是Circuit.存在_subset_isCircuit_of_contract
+  条件: (hC : (M ／ K).是Circuit C)
   证明: by
   wlog hKi : M.Indep K generalizing K with aux
   · obtain ⟨I, hI⟩ := M.exists_isBasis' K
@@ -2006,7 +2006,7 @@ lemma IsCocircuit.delete_isCocircuit
 
 中文:
 引理 IsCocircuit.delete_isCocircuit
-  条件: {D : Set α} (hK : M.IsCocircuit K) (hD : D ⊂ K)
+  条件: {D : 集合 α} (hK : M.IsCocircuit K) (hD : D ⊂ K)
   证明: by
   rw [isCocircuit_def]; rw [dual_delete]
   exact hK.isCircuit.contract_isCircuit hD
@@ -2033,7 +2033,7 @@ alias IsCocircuit.delete_diff_isCocircuit := IsCocircuit.delete_sdiff_isCocircui
 
 中文:
 引理 IsCocircuit.delete_sdiff_isCocircuit
-  结论: {X : Set α} (hK : M.IsCocircuit K) (hXK : X subseteq K)
+  结论: {X : 集合 α} (hK : M.IsCocircuit K) (hXK : X subseteq K)
   证明: by
   rw [isCocircuit_def]; rw [dual_delete]
   exact hK.isCircuit.contract_sdiff_isCircuit hX hXK
@@ -2066,7 +2066,7 @@ lemma contract_delete_sdiff
 
 中文:
 引理 contract_delete_sdiff
-  条件: (M : Matroid α) (C D : Set α)
+  条件: (M : 拟阵 α) (C D : 集合 α)
   结论: M ／ C ＼ D = M ／ C ＼ (D \ C)
   证明: by
   rw [delete_eq_delete_iff]; rw [contract_ground]; rw [sdiff_eq]; rw [sdiff_eq]; rw [← inter_inter_distrib_right]; rw [inter_assoc]
@@ -2095,7 +2095,7 @@ lemma contract_restrict_eq_restrict_contract
 
 中文:
 引理 contract_restrict_eq_restrict_contract
-  条件: (M : Matroid α) (h : Disjoint C R)
+  条件: (M : 拟阵 α) (h : Disjoint C R)
   证明: by
   refine ext_indep (by simp [h.sdiff_eq_right]) fun I (hI : I subseteq R) => ?_
   obtain ⟨J, hJ⟩ := (M ↾ (R union C)).exists_isBasis' C
@@ -2127,7 +2127,7 @@ lemma restrict_contract_eq_contract_restrict
 
 中文:
 引理 restrict_contract_eq_contract_restrict
-  条件: (M : Matroid α) (hCR : C subseteq R)
+  条件: (M : 拟阵 α) (hCR : C subseteq R)
   证明: by
   rw [contract_restrict_eq_restrict_contract _ disjoint_sdiff_right]
   simp [union_eq_self_of_subset_right hCR]
@@ -2155,7 +2155,7 @@ lemma contract_delete_comm
 
 中文:
 引理 contract_delete_comm
-  条件: (M : Matroid α) (hCD : Disjoint C D)
+  条件: (M : 拟阵 α) (hCD : Disjoint C D)
   结论: M ／ C ＼ D = M ＼ D ／ C
   证明: by
   wlog hCE : C subseteq M.E generalizing C with aux
@@ -2185,7 +2185,7 @@ lemma contract_delete_comm'
 
 中文:
 引理 contract_delete_comm'
-  条件: (M : Matroid α) (C D : Set α)
+  条件: (M : 拟阵 α) (C D : 集合 α)
   结论: M ／ C ＼ D = M ＼ (D \ C) ／ C
   证明: by
   rw [contract_delete_sdiff]; rw [contract_delete_comm _ disjoint_sdiff_right]
@@ -2209,7 +2209,7 @@ lemma delete_contract_eq_sdiff
 
 中文:
 引理 delete_contract_eq_sdiff
-  条件: (M : Matroid α) (D C : Set α)
+  条件: (M : 拟阵 α) (D C : 集合 α)
   结论: M ＼ D ／ C = M ＼ D ／ (C \ D)
   证明: by
   rw [contract_eq_contract_iff]; rw [delete_ground]; rw [← sdiff_inter_distrib_right]; rw [sdiff_eq]; rw [sdiff_eq]; rw [inter_assoc]
@@ -2235,7 +2235,7 @@ lemma delete_contract_comm'
 
 中文:
 引理 delete_contract_comm'
-  条件: (M : Matroid α) (D C : Set α)
+  条件: (M : 拟阵 α) (D C : 集合 α)
   结论: M ＼ D ／ C = M ／ (C \ D) ＼ D
   证明: by
   rw [delete_contract_eq_sdiff]; rw [← contract_delete_comm _ disjoint_sdiff_left]
@@ -2256,7 +2256,7 @@ lemma contract_delete_contract'
 
 中文:
 引理 contract_delete_contract'
-  条件: (M : Matroid α) (C D C' : Set α)
+  条件: (M : 拟阵 α) (C D C' : 集合 α)
   证明: by
   rw [delete_contract_eq_sdiff]; rw [← contract_delete_comm _ disjoint_sdiff_left]; rw [contract_contract]
 
@@ -2276,7 +2276,7 @@ lemma contract_delete_contract
 
 中文:
 引理 contract_delete_contract
-  条件: (M : Matroid α) (C D C' : Set α) (h : Disjoint C' D)
+  条件: (M : 拟阵 α) (C D C' : 集合 α) (h : Disjoint C' D)
   证明: by rw [contract_delete_contract', sdiff_eq_left.mpr h]
 
 Depends on / 依赖: contract_delete_contract, sdiff_eq_left, sdiff_eq_left.mpr
@@ -2295,7 +2295,7 @@ lemma contract_delete_contract_delete'
 
 中文:
 引理 contract_delete_contract_delete'
-  条件: (M : Matroid α) (C D C' D' : Set α)
+  条件: (M : 拟阵 α) (C D C' D' : 集合 α)
   证明: by
   rw [contract_delete_contract']; rw [delete_delete]
 
@@ -2316,7 +2316,7 @@ lemma contract_delete_contract_delete
 
 中文:
 引理 contract_delete_contract_delete
-  条件: (M : Matroid α) (C D C' D' : Set α) (h : Disjoint C' D)
+  条件: (M : 拟阵 α) (C D C' D' : 集合 α) (h : Disjoint C' D)
   证明: by
   rw [contract_delete_contract_delete']; rw [sdiff_eq_left.mpr h]
 
@@ -2337,7 +2337,7 @@ lemma delete_contract_delete'
 
 中文:
 引理 delete_contract_delete'
-  条件: (M : Matroid α) (D C D' : Set α)
+  条件: (M : 拟阵 α) (D C D' : 集合 α)
   证明: by
   rw [delete_contract_comm']; rw [delete_delete]
 
@@ -2358,7 +2358,7 @@ lemma delete_contract_delete
 
 中文:
 引理 delete_contract_delete
-  条件: (M : Matroid α) (D C D' : Set α) (h : Disjoint C D)
+  条件: (M : 拟阵 α) (D C D' : 集合 α) (h : Disjoint C D)
   证明: by
   rw [delete_contract_delete']; rw [sdiff_eq_left.mpr h]
 

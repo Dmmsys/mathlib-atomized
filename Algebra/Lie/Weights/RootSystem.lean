@@ -126,7 +126,7 @@ lemma chainLength_of_isZero
 
 中文:
 引理 chainLength_of_isZero
-  条件: (hα : α.IsZero)
+  条件: (hα : α.是零)
   结论: chainLength α β = 0
   证明: dif_pos hα
 
@@ -481,7 +481,7 @@ lemma chainLength_zero
 
 中文:
 引理 chainLength_zero
-  条件: [Nontrivial L]
+  条件: [非平凡 L]
   结论: chainLength 0 β = 0
   证明: by
   simp [← chainBotCoeff_add_chainTopCoeff]
@@ -718,7 +718,7 @@ lemma chainTopCoeff_zero_right
 
 中文:
 引理 chainTopCoeff_zero_right
-  条件: [Nontrivial L] (hα : α.IsNonZero)
+  条件: [非平凡 L] (hα : α.IsNonZero)
   证明: by
   symm
   apply eq_of_le_of_not_lt
@@ -771,7 +771,7 @@ lemma chainBotCoeff_zero_right
 
 中文:
 引理 chainBotCoeff_zero_right
-  条件: [Nontrivial L] (hα : α.IsNonZero)
+  条件: [非平凡 L] (hα : α.IsNonZero)
   证明: chainTopCoeff_zero_right (-α) hα.neg
 
 Depends on / 依赖: chainTopCoeff_zero_right
@@ -792,7 +792,7 @@ lemma chainLength_zero_right
 
 中文:
 引理 chainLength_zero_right
-  条件: [Nontrivial L] (hα : α.IsNonZero)
+  条件: [非平凡 L] (hα : α.IsNonZero)
   结论: chainLength α 0 = 2
   证明: by
   rw [← chainBotCoeff_add_chainTopCoeff]; rw [chainTopCoeff_zero_right α hα]; rw [chainBotCoeff_zero_right α hα]
@@ -1115,7 +1115,7 @@ instance :
 
 中文:
 实例 :
-  签名: (rootSystem H).IsRootSystem
+  签名: (rootSystem H).是RootSystem
   定义体: RootPairing.isRootSystem_mk'' fun α β =>
     ⟨chainBotCoeff β.1 α.1 - chainTopCoeff β.1 α.1, by simp [apply_coroot_eq_cast β.1 α.1]⟩
 
@@ -1313,7 +1313,7 @@ instance :
 
 中文:
 实例 :
-  签名: (rootSystem H).IsReduced
+  签名: (rootSystem H).是既约
   定义体: by
     intro ⟨α, hα⟩ ⟨β, hβ⟩ e
     rw [LinearIndependent.pair_iff' ((rootSystem H).ne_zero _)]; rw [not_forall] at e

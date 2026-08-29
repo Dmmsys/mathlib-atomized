@@ -75,7 +75,7 @@ definition isLimitFanMkObjOfIsLimit
 
 中文:
 定义 isLimitFanMkObjOfIsLimit
-  签名: [PreservesLimit (Discrete.functor f) G] {P : C} (g : 对任意 j, P ⟶ f j)
+  签名: [保持极限 (离散.functor f) G] {P : C} (g : 对任意 j, P ⟶ f j)
   定义体: isLimitMapConeFanMkEquiv _ _ _ (isLimitOfPreserves G t)
 
 Depends on / 依赖: isLimitMapConeFanMkEquiv, isLimitOfPreserves
@@ -95,7 +95,7 @@ definition isLimitOfIsLimitFanMkObj
 
 中文:
 定义 isLimitOfIsLimitFanMkObj
-  签名: [ReflectsLimit (Discrete.functor f) G] {P : C} (g : 对任意 j, P ⟶ f j)
+  签名: [反映极限 (离散.functor f) G] {P : C} (g : 对任意 j, P ⟶ f j)
   定义体: isLimitOfReflects G ((isLimitMapConeFanMkEquiv _ _ _).symm t)
 
 Depends on / 依赖: isLimitMapConeFanMkEquiv, isLimitOfReflects
@@ -119,7 +119,7 @@ definition isLimitOfHasProductOfPreservesLimit
 
 中文:
 定义 isLimitOfHasProductOfPreservesLimit
-  签名: [PreservesLimit (Discrete.functor f) G]
+  签名: [保持极限 (离散.functor f) G]
   定义体: isLimitFanMkObjOfIsLimit G f _ (productIsProduct _)
 
 Depends on / 依赖: isLimitFanMkObjOfIsLimit, productIsProduct
@@ -146,7 +146,7 @@ lemma PreservesProduct.of_iso_comparison
 
 中文:
 引理 PreservesProduct.of_iso_comparison
-  条件: [i : IsIso (piComparison G f)]
+  条件: [i : 是同构 (piComparison G f)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone (productIsProduct f)
   apply (isLimitMapConeFanMkEquiv _ _ _).symm _
@@ -176,7 +176,7 @@ lemma inv_piComparison_comp_map_π
 
 中文:
 引理 inv_piComparison_comp_map_π
-  条件: [IsIso (piComparison G f)] (j : J)
+  条件: [是同构 (piComparison G f)] (j : J)
   证明: by
   simp only [IsIso.inv_comp_eq, piComparison_comp_π]
 
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (piComparison G f)
+  签名: 是同构 (piComparison G f)
   定义体: by
   rw [← PreservesProduct.iso_hom]
   infer_instance
@@ -300,7 +300,7 @@ definition isColimitCofanMkObjOfIsColimit
 
 中文:
 定义 isColimitCofanMkObjOfIsColimit
-  签名: [PreservesColimit (Discrete.functor f) G] {P : C}
+  签名: [保持余极限 (离散.functor f) G] {P : C}
   定义体: isColimitMapCoconeCofanMkEquiv _ _ _ (isColimitOfPreserves G t)
 
 Depends on / 依赖: isColimitMapCoconeCofanMkEquiv, isColimitOfPreserves
@@ -320,7 +320,7 @@ definition isColimitOfIsColimitCofanMkObj
 
 中文:
 定义 isColimitOfIsColimitCofanMkObj
-  签名: [ReflectsColimit (Discrete.functor f) G] {P : C}
+  签名: [反映余极限 (离散.functor f) G] {P : C}
   定义体: isColimitOfReflects G ((isColimitMapCoconeCofanMkEquiv _ _ _).symm t)
 
 Depends on / 依赖: isColimitMapCoconeCofanMkEquiv, isColimitOfReflects
@@ -345,7 +345,7 @@ definition isColimitOfHasCoproductOfPreservesColimit
 
 中文:
 定义 isColimitOfHasCoproductOfPreservesColimit
-  签名: [PreservesColimit (Discrete.functor f) G]
+  签名: [保持余极限 (离散.functor f) G]
   定义体: isColimitCofanMkObjOfIsColimit G f _ (coproductIsCoproduct _)
 
 Depends on / 依赖: coproductIsCoproduct, isColimitCofanMkObjOfIsColimit
@@ -372,7 +372,7 @@ lemma PreservesCoproduct.of_iso_comparison
 
 中文:
 引理 PreservesCoproduct.of_iso_comparison
-  条件: [i : IsIso (sigmaComparison G f)]
+  条件: [i : 是同构 (sigmaComparison G f)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone (coproductIsCoproduct f)
   apply (isColimitMapCoconeCofanMkEquiv _ _ _).symm _
@@ -402,7 +402,7 @@ lemma map_ι_comp_inv_sigmaComparison
 
 中文:
 引理 map_ι_comp_inv_sigmaComparison
-  条件: [IsIso (sigmaComparison G f)] (j : J)
+  条件: [是同构 (sigmaComparison G f)] (j : J)
   证明: by
   simp
 -/
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (sigmaComparison G f)
+  签名: 是同构 (sigmaComparison G f)
   定义体: by
   rw [← PreservesCoproduct.inv_hom]
   infer_instance

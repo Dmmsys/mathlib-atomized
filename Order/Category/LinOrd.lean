@@ -35,8 +35,8 @@ structure Hom
     - hom' : X ->o Y
 
 中文:
-结构 Hom
-  参数: (X Y : LinOrd.{u})
+结构 态射
+  参数: (X Y : 线性序.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : X ->o Y
@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category LinOrd.{u}
+  签名: 范畴 线性序.{u}
   定义体: Hom X Y
   id _ := ⟨OrderHom.id⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory LinOrd (· ->o ·)
+  签名: 余ncrete范畴 线性序 (· ->o ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -102,8 +102,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := LinOrd) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : LinOrd.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 线性序.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := LinOrd) f
 -/
 abbrev Hom.hom {X Y : LinOrd.{u}} (f : Hom X Y) :=
@@ -119,7 +119,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y)
+  签名: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y)
   定义体: ConcreteCategory.ofHom (C := LinOrd) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, LinOrd
@@ -139,8 +139,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : LinOrd.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 线性序.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -162,7 +162,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : LinOrd}
+  条件: {X : 线性序}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 -/
@@ -181,7 +181,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : LinOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 线性序} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -202,7 +202,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : LinOrd} (f : X ⟶ Y)
+  条件: {X Y : 线性序} (f : X ⟶ Y)
   证明: rfl
 
 @[ext]
@@ -222,7 +222,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : LinOrd} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 线性序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -245,8 +245,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [LinearOrder X]
-  结论: (LinOrd.of X : 类型u) = X
+  条件: (X : 类型u) [线性序 X]
+  结论: (线性序.of X : 类型u) = X
   证明: rfl
 
 @[simp]
@@ -265,8 +265,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : LinOrd}
-  结论: (𝟙 X : X ⟶ X).hom = OrderHom.id
+  条件: {X : 线性序}
+  结论: (𝟙 X : X ⟶ X).hom = 序态射.id
   证明: rfl
 -/
 lemma hom_id {X : LinOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id := rfl
@@ -283,7 +283,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : LinOrd) (x : X)
+  条件: (X : 线性序) (x : X)
   证明: by simp
 
 @[simp]
@@ -302,7 +302,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 线性序} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -320,7 +320,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 线性序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -342,7 +342,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : LinOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 线性序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -367,7 +367,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y)
+  条件: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -389,7 +389,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : LinOrd} (f : X ⟶ Y)
+  条件: {X Y : 线性序} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -411,8 +411,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [LinearOrder X]
-  结论: ofHom OrderHom.id = 𝟙 (of X)
+  条件: {X : 类型u} [线性序 X]
+  结论: ofHom 序态射.id = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -430,7 +430,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [LinearOrder X] [LinearOrder Y] [LinearOrder Z]
+  结论: {X Y Z : 类型u} [线性序 X] [线性序 Y] [线性序 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [LinearOrder X] [LinearOrder Y] [LinearOrder Z]
@@ -448,7 +448,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) (x : X)
+  条件: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) (x : X) :
@@ -466,7 +466,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : LinOrd} (e : X ≅ Y) (x : X)
+  条件: {X Y : 线性序} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -486,7 +486,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : LinOrd} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 线性序} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -504,7 +504,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited LinOrd
+  签名: 可居 线性序
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited LinOrd :=
@@ -521,7 +521,7 @@ instance hasForgetToLat
 
 中文:
 实例 hasForgetToLat
-  签名: : HasForget₂ LinOrd Lat where
+  签名: : 有Forget₂ 线性序 格 where
   定义体: .of X
   forget₂.map f := Lat.ofHom (OrderHomClass.toLatticeHom _ _ f.hom)
 -/
@@ -541,8 +541,8 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : LinOrd.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 线性序.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -563,7 +563,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : LinOrd ⥤ LinOrd where
+  签名: : 线性序 ⥤ 线性序 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.dual
 
@@ -588,7 +588,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : LinOrd ≌ LinOrd where
+  签名: : 线性序 ≌ 线性序 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X

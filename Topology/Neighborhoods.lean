@@ -40,7 +40,7 @@ theorem nhds_def'
 中文:
 定理 nhds_def'
   条件: (x : X)
-  结论: 𝓝 x = ⨅ (s : Set X) (_ : IsOpen s) (_ : x in s), 𝓟 s
+  结论: 𝓝 x = ⨅ (s : 集合 X) (_ : 是开集 s) (_ : x in s), 𝓟 s
   证明: by
   simp only [nhds_def, mem_ofPred_eq, @and_comm (x in _), iInf_and]
 
@@ -97,7 +97,7 @@ compl_surjective.exists.trans by simp only [isOpen_compl_iff, mem_compl_iff]⟩
 中文:
 定理 nhds_basis_closeds
   条件: (x : X)
-  结论: (𝓝 x).HasBasis (fun s : Set X => x ∉ s ∧ IsClosed s) compl
+  结论: (𝓝 x).有基 (fun s : 集合 X => x ∉ s ∧ 是闭集 s) compl
   证明: ⟨fun t => (nhds_basis_opens x).mem_iff.trans
 compl_surjective.exists.trans by simp only [isOpen_compl_iff, mem_compl_iff]⟩
 
@@ -139,8 +139,8 @@ theorem Filter.HasBasis.nhds_interior
   proof: lift'_nhds_interior x ▸ h.lift'_interior
 
 中文:
-定理 Filter.HasBasis.nhds_interior
-  结论: {x : X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.nhds_interior
+  结论: {x : X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: lift'_nhds_interior x ▸ h.lift'_interior
 
 Depends on / 依赖: _interior, _nhds_interior, h.lift
@@ -161,7 +161,7 @@ theorem le_nhds_iff
 中文:
 定理 le_nhds_iff
   条件: {f}
-  结论: f <= 𝓝 x ↔ 对任意 s : Set X, x in s -> IsOpen s -> s in f
+  结论: f <= 𝓝 x ↔ 对任意 s : 集合 X, x in s -> 是开集 s -> s in f
   证明: by simp [nhds_def]
 
 Depends on / 依赖: nhds_def
@@ -180,7 +180,7 @@ theorem nhds_le_of_le
 
 中文:
 定理 nhds_le_of_le
-  条件: {f} (h : x in s) (o : IsOpen s) (sf : 𝓟 s <= f)
+  条件: {f} (h : x in s) (o : 是开集 s) (sf : 𝓟 s <= f)
   结论: 𝓝 x <= f
   证明: by
   rw [nhds_def]; exact iInf₂_le_of_le s ⟨h, o⟩ sf
@@ -201,7 +201,7 @@ theorem mem_nhds_iff
 
 中文:
 定理 mem_nhds_iff
-  结论: s in 𝓝 x ↔ 存在 t subseteq s, IsOpen t ∧ x in t
+  结论: s in 𝓝 x ↔ 存在 t subseteq s, 是开集 t ∧ x in t
   证明: (nhds_basis_opens x).mem_iff.trans exists_congr fun _ =>
     ⟨fun h => ⟨h.2, h.1.2, h.1.1⟩, fun h => ⟨⟨h.2.2, h.2.1⟩, h.1⟩⟩
 
@@ -314,7 +314,7 @@ theorem Filter.Eventually.self_of_nhds
   proof: mem_of_mem_nhds h
 
 中文:
-定理 Filter.Eventually.self_of_nhds
+定理 滤子.Eventually.self_of_nhds
   条件: {p : X -> 命题} (h : 对任意ᶠ y in 𝓝 x, p y)
   结论: p x
   证明: mem_of_mem_nhds h
@@ -334,8 +334,8 @@ theorem IsOpen.mem_nhds
   proof: mem_nhds_iff.2 ⟨s, Subset.refl _, hs, hx⟩
 
 中文:
-定理 IsOpen.mem_nhds
-  条件: (hs : IsOpen s) (hx : x in s)
+定理 是开集.mem_nhds
+  条件: (hs : 是开集 s) (hx : x in s)
   结论: s in 𝓝 x
   证明: mem_nhds_iff.2 ⟨s, Subset.refl _, hs, hx⟩
 
@@ -354,8 +354,8 @@ theorem IsOpen.mem_nhds_iff
   proof: ⟨mem_of_mem_nhds, fun hx => mem_nhds_iff.2 ⟨s, Subset.rfl, hs, hx⟩⟩
 
 中文:
-定理 IsOpen.mem_nhds_iff
-  条件: (hs : IsOpen s)
+定理 是开集.mem_nhds_iff
+  条件: (hs : 是开集 s)
   结论: s in 𝓝 x ↔ x in s
   证明: ⟨mem_of_mem_nhds, fun hx => mem_nhds_iff.2 ⟨s, Subset.rfl, hs, hx⟩⟩
 -/
@@ -372,8 +372,8 @@ theorem IsClosed.compl_mem_nhds
   proof: hs.isOpen_compl.mem_nhds (mem_compl hx)
 
 中文:
-定理 IsClosed.compl_mem_nhds
-  条件: (hs : IsClosed s) (hx : x ∉ s)
+定理 是闭集.compl_mem_nhds
+  条件: (hs : 是闭集 s) (hx : x ∉ s)
   结论: sᶜ in 𝓝 x
   证明: hs.isOpen_compl.mem_nhds (mem_compl hx)
 
@@ -391,8 +391,8 @@ theorem IsOpen.eventually_mem
   proof: IsOpen.mem_nhds hs hx
 
 中文:
-定理 IsOpen.eventually_mem
-  条件: (hs : IsOpen s) (hx : x in s)
+定理 是开集.eventually_mem
+  条件: (hs : 是开集 s) (hx : x in s)
   证明: IsOpen.mem_nhds hs hx
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, mem_nhds
@@ -434,8 +434,8 @@ theorem exists_open_set_nhds
   proof: ⟨interior U, fun x hx => mem_interior_iff_mem_nhds.2 h x hx, isOpen_interior, interior_subset⟩
 
 中文:
-定理 exists_open_set_nhds
-  条件: {U : Set X} (h : 对任意 x in s, U in 𝓝 x)
+定理 存在_open_set_nhds
+  条件: {U : 集合 X} (h : 对任意 x in s, U in 𝓝 x)
   证明: ⟨interior U, fun x hx => mem_interior_iff_mem_nhds.2 h x hx, isOpen_interior, interior_subset⟩
 
 Depends on / 依赖: interior, interior_subset, isOpen_interior, mem_interior_iff_mem_nhds
@@ -453,8 +453,8 @@ theorem exists_open_set_nhds'
   proof: exists_open_set_nhds (by simpa using h)
 
 中文:
-定理 exists_open_set_nhds'
-  条件: {U : Set X} (h : U in ⨆ x in s, 𝓝 x)
+定理 存在_open_set_nhds'
+  条件: {U : 集合 X} (h : U in ⨆ x in s, 𝓝 x)
   证明: exists_open_set_nhds (by simpa using h)
 
 Depends on / 依赖: exists_open_set_nhds
@@ -475,7 +475,7 @@ theorem Filter.Eventually.eventually_nhds
 @[simp]
 
 中文:
-定理 Filter.Eventually.eventually_nhds
+定理 滤子.Eventually.eventually_nhds
   条件: {p : X -> 命题} (h : 对任意ᶠ y in 𝓝 x, p y)
   证明: let ⟨t, htp, hto, ha⟩ := eventually_nhds_iff.1 h
   eventually_nhds_iff.2 ⟨t, fun _x hx => eventually_nhds_iff.2 ⟨t, htp, hto, hx⟩, hto, ha⟩
@@ -620,7 +620,7 @@ theorem Filter.EventuallyEq.eq_of_nhds
 @[simp]
 
 中文:
-定理 Filter.EventuallyEq.eq_of_nhds
+定理 滤子.EventuallyEq.eq_of_nhds
   条件: {f g : X -> α} (h : f =ᶠ[𝓝 x] g)
   结论: f x = g x
   证明: h.self_of_nhds
@@ -661,7 +661,7 @@ theorem Filter.EventuallyEq.eventuallyEq_nhds
   proof: h.eventually_nhds
 
 中文:
-定理 Filter.EventuallyEq.eventuallyEq_nhds
+定理 滤子.EventuallyEq.eventuallyEq_nhds
   条件: {f g : X -> α} (h : f =ᶠ[𝓝 x] g)
   证明: h.eventually_nhds
 
@@ -680,7 +680,7 @@ theorem Filter.EventuallyLE.eventuallyLE_nhds
   proof: h.eventually_nhds
 
 中文:
-定理 Filter.EventuallyLE.eventuallyLE_nhds
+定理 滤子.EventuallyLE.eventuallyLE_nhds
   条件: [LE α] {f g : X -> α} (h : f <=ᶠ[𝓝 x] g)
   证明: h.eventually_nhds
 
@@ -700,7 +700,7 @@ theorem all_mem_nhds
 
 中文:
 定理 all_mem_nhds
-  条件: (x : X) (P : Set X -> 命题) (hP : 对任意 s t, s subseteq t -> P s -> P t)
+  条件: (x : X) (P : 集合 X -> 命题) (hP : 对任意 s t, s subseteq t -> P s -> P t)
   证明: ((nhds_basis_opens x).forall_iff hP).trans by simp only [@and_comm (x in _), and_imp]
 
 Depends on / 依赖: and_comm, and_imp, forall_iff, nhds_basis_opens
@@ -719,7 +719,7 @@ theorem all_mem_nhds_filter
 
 中文:
 定理 all_mem_nhds_filter
-  结论: (x : X) (f : Set X -> Set α) (hf : 对任意 s t, s subseteq t -> f s subseteq f t)
+  结论: (x : X) (f : 集合 X -> 集合 α) (hf : 对任意 s t, s subseteq t -> f s subseteq f t)
   证明: all_mem_nhds _ _ fun s t ssubt h => mem_of_superset h (hf s t ssubt)
 
 Depends on / 依赖: all_mem_nhds, mem_of_superset
@@ -738,7 +738,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {f : α -> X} {l : Filter α}
+  条件: {f : α -> X} {l : 滤子 α}
   证明: all_mem_nhds_filter _ _ (fun _ _ h => preimage_mono h) _
 
 Depends on / 依赖: all_mem_nhds_filter, preimage_mono
@@ -758,7 +758,7 @@ theorem tendsto_atTop_nhds
 
 中文:
 定理 tendsto_atTop_nhds
-  条件: [Nonempty α] [SemilatticeSup α] {f : α -> X}
+  条件: [非空 α] [SemilatticeSup α] {f : α -> X}
   证明: (atTop_basis.tendsto_iff (nhds_basis_opens x)).trans by
     simp only [and_imp, true_and, mem_Ici]
 
@@ -780,8 +780,8 @@ theorem tendsto_const_nhds
 
 中文:
 定理 tendsto_const_nhds
-  条件: {f : Filter α}
-  结论: Tendsto (fun _ : α => x) f (𝓝 x)
+  条件: {f : 滤子 α}
+  结论: 收敛 (fun _ : α => x) f (𝓝 x)
   证明: tendsto_nhds.mpr fun _ _ ha => univ_mem' fun _ => ha
 
 Depends on / 依赖: tendsto_nhds, tendsto_nhds.mpr, univ_mem
@@ -799,7 +799,7 @@ theorem tendsto_atTop_of_eventually_const
 
 中文:
 定理 tendsto_atTop_of_eventually_const
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: Tendsto.congr' (EventuallyEq.symm ((eventually_ge_atTop i₀).mono h)) tendsto_const_nhds
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.symm, Tendsto, Tendsto.congr, eventually_ge_atTop, tendsto_const_nhds
@@ -818,7 +818,7 @@ theorem tendsto_atBot_of_eventually_const
 
 中文:
 定理 tendsto_atBot_of_eventually_const
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: tendsto_atTop_of_eventually_const (ι := ιᵒᵈ) h
 
 Depends on / 依赖: tendsto_atTop_of_eventually_const
@@ -837,7 +837,7 @@ theorem pure_le_nhds
 
 中文:
 定理 pure_le_nhds
-  结论: pure <= (𝓝 : X -> Filter X)
+  结论: pure <= (𝓝 : X -> 滤子 X)
   证明: fun _ _ hs => mem_pure.2 mem_of_mem_nhds hs
 
 Depends on / 依赖: mem_of_mem_nhds, mem_pure
@@ -856,7 +856,7 @@ theorem tendsto_pure_nhds
 中文:
 定理 tendsto_pure_nhds
   条件: (f : α -> X) (a : α)
-  结论: Tendsto f (pure a) (𝓝 (f a))
+  结论: 收敛 f (pure a) (𝓝 (f a))
   证明: (tendsto_pure_pure f a).mono_right (pure_le_nhds _)
 
 Depends on / 依赖: mono_right, pure_le_nhds, tendsto_pure_pure
@@ -875,8 +875,8 @@ theorem OrderTop.tendsto_atTop_nhds
 @[simp]
 
 中文:
-定理 OrderTop.tendsto_atTop_nhds
-  条件: [PartialOrder α] [OrderTop α] (f : α -> X)
+定理 有顶序.tendsto_atTop_nhds
+  条件: [偏序 α] [有顶序 α] (f : α -> X)
   证明: (tendsto_atTop_pure f).mono_right (pure_le_nhds _)
 
 @[simp]
@@ -916,7 +916,7 @@ theorem tendsto_nhds_of_eventually_eq
 
 中文:
 定理 tendsto_nhds_of_eventually_eq
-  条件: {l : Filter α} {f : α -> X} (h : 对任意ᶠ x' in l, f x' = x)
+  条件: {l : 滤子 α} {f : α -> X} (h : 对任意ᶠ x' in l, f x' = x)
   证明: tendsto_const_nhds.congr' (.symm h)
 
 Depends on / 依赖: tendsto_const_nhds, tendsto_const_nhds.congr
@@ -934,8 +934,8 @@ theorem Filter.EventuallyEq.tendsto
   proof: tendsto_nhds_of_eventually_eq hf
 
 中文:
-定理 Filter.EventuallyEq.tendsto
-  条件: {l : Filter α} {f : α -> X} (hf : f =ᶠ[l] fun _ => x)
+定理 滤子.EventuallyEq.tendsto
+  条件: {l : 滤子 α} {f : α -> X} (hf : f =ᶠ[l] fun _ => x)
   证明: tendsto_nhds_of_eventually_eq hf
 
 Depends on / 依赖: tendsto_nhds_of_eventually_eq
@@ -1052,7 +1052,7 @@ alias isOpen_setOf_eventually_nhds := isOpen_setOfPred_eventually_nhds
 中文:
 定理 isOpen_setOfPred_eventually_nhds
   条件: {p : X -> 命题}
-  结论: IsOpen { x | 对任意ᶠ y in 𝓝 x, p y }
+  结论: 是开集 { x | 对任意ᶠ y in 𝓝 x, p y }
   证明: by
   simp only [← interior_setOfPred_eq, isOpen_interior]
 
@@ -1079,7 +1079,7 @@ theorem subset_interior_iff_nhds
 
 中文:
 定理 subset_interior_iff_nhds
-  条件: {V : Set X}
+  条件: {V : 集合 X}
   结论: s subseteq interior V ↔ 对任意 x in s, V in 𝓝 x
   证明: by
   simp_rw [subset_def, mem_interior_iff_mem_nhds]
@@ -1101,7 +1101,7 @@ theorem isOpen_iff_nhds
 
 中文:
 定理 isOpen_iff_nhds
-  结论: IsOpen s ↔ 对任意 x in s, 𝓝 x <= 𝓟 s
+  结论: 是开集 s ↔ 对任意 x in s, 𝓝 x <= 𝓟 s
   证明: calc
     IsOpen s ↔ s subseteq interior s := subset_interior_iff_isOpen.symm
     _ ↔ forall x in s, 𝓝 x <= 𝓟 s := by simp_rw [interior_eq_nhds, subset_def, mem_ofPred]
@@ -1124,8 +1124,8 @@ theorem TopologicalSpace.ext_iff_nhds
 alias ⟨_, TopologicalSpace.ext_nhds⟩ := TopologicalSpace.ext_iff_nhds
 
 中文:
-定理 TopologicalSpace.ext_iff_nhds
-  条件: {X} {t t' : TopologicalSpace X}
+定理 拓扑空间.ext_iff_nhds
+  条件: {X} {t t' : 拓扑空间 X}
   证明: ⟨fun H _ => congrFun (congrArg _ H) _, fun H => by ext; simp_rw [@isOpen_iff_nhds _ _ _, H]⟩
 
 alias ⟨_, TopologicalSpace.ext_nhds⟩ := TopologicalSpace.ext_iff_nhds
@@ -1148,7 +1148,7 @@ theorem isOpen_iff_mem_nhds
 
 中文:
 定理 isOpen_iff_mem_nhds
-  结论: IsOpen s ↔ 对任意 x in s, s in 𝓝 x
+  结论: 是开集 s ↔ 对任意 x in s, s in 𝓝 x
   证明: isOpen_iff_nhds.trans forall_congr' fun _ => imp_congr_right fun _ => le_principal_iff
 
 Depends on / 依赖: forall_congr, imp_congr_right, isOpen_iff_nhds, isOpen_iff_nhds.trans, le_principal_iff
@@ -1166,7 +1166,7 @@ theorem isOpen_iff_eventually
 
 中文:
 定理 isOpen_iff_eventually
-  结论: IsOpen s ↔ 对任意 x, x in s -> 对任意ᶠ y in 𝓝 x, y in s
+  结论: 是开集 s ↔ 对任意 x, x in s -> 对任意ᶠ y in 𝓝 x, y in s
   证明: isOpen_iff_mem_nhds
 
 Depends on / 依赖: isOpen_iff_mem_nhds
@@ -1187,7 +1187,7 @@ theorem isOpen_singleton_iff_nhds_eq_pure
 中文:
 定理 isOpen_singleton_iff_nhds_eq_pure
   条件: (x : X)
-  结论: IsOpen ({x} : Set X) ↔ 𝓝 x = pure x
+  结论: 是开集 ({x} : 集合 X) ↔ 𝓝 x = pure x
   证明: by
   simp [← (pure_le_nhds _).ge_iff_eq', isOpen_iff_mem_nhds]
 
@@ -1210,7 +1210,7 @@ theorem isOpen_singleton_iff_punctured_nhds
 中文:
 定理 isOpen_singleton_iff_punctured_nhds
   条件: (x : X)
-  结论: IsOpen ({x} : Set X) ↔ 𝓝[!=] x = ⊥
+  结论: 是开集 ({x} : 集合 X) ↔ 𝓝[!=] x = ⊥
   证明: by
   rw [isOpen_singleton_iff_nhds_eq_pure]; rw [nhdsWithin]; rw [← mem_iff_inf_principal_compl]; rw [le_antisymm_iff]
   simp [pure_le_nhds x]
@@ -1260,7 +1260,7 @@ theorem isClosed_iff_frequently
 
 中文:
 定理 isClosed_iff_frequently
-  结论: IsClosed s ↔ 对任意 x, (存在ᶠ y in 𝓝 x, y in s) -> x in s
+  结论: 是闭集 s ↔ 对任意 x, (存在ᶠ y in 𝓝 x, y in s) -> x in s
   证明: by
   rw [← closure_subset_iff_isClosed]
   refine forall_congr' fun x => ?_
@@ -1288,7 +1288,7 @@ lemma nhdsWithin_neBot
 
 中文:
 引理 nhdsWithin_neBot
-  结论: (𝓝[s] x).NeBot ↔ 对任意 ⦃t⦄, t in 𝓝 x -> (t inter s).Nonempty
+  结论: (𝓝[s] x).NeBot ↔ 对任意 ⦃t⦄, t in 𝓝 x -> (t inter s).非空
   证明: by
   rw [nhdsWithin]; rw [inf_neBot_iff]
   exact forall₂_congr fun U _ =>
@@ -1315,7 +1315,7 @@ theorem nhdsWithin_mono
 
 中文:
 定理 nhdsWithin_mono
-  条件: (x : X) {s t : Set X} (h : s subseteq t)
+  条件: (x : X) {s t : 集合 X} (h : s subseteq t)
   结论: 𝓝[s] x <= 𝓝[t] x
   证明: inf_le_inf_left _ (principal_mono.mpr h)
 
@@ -1337,8 +1337,8 @@ theorem IsClosed.interior_union_left
         ⟨ha, h⟩⟩
 
 中文:
-定理 IsClosed.interior_union_left
-  条件: (_ : IsClosed s)
+定理 是闭集.interior_union_left
+  条件: (_ : 是闭集 s)
   证明: fun a ⟨u, ⟨⟨hu₁, hu₂⟩, ha⟩⟩ =>
   (Classical.em (a in s)).imp_right fun h =>
     mem_interior.mpr
@@ -1362,8 +1362,8 @@ theorem IsClosed.interior_union_right
   simpa only [union_comm _ t] using h.interior_union_left
 
 中文:
-定理 IsClosed.interior_union_right
-  条件: (h : IsClosed t)
+定理 是闭集.interior_union_right
+  条件: (h : 是闭集 t)
   证明: by
   simpa only [union_comm _ t] using h.interior_union_left
 
@@ -1384,8 +1384,8 @@ theorem IsOpen.inter_closure
     simpa only [← interior_compl, compl_inter] using IsClosed.interior_union_left h.isClosed_compl
 
 中文:
-定理 IsOpen.inter_closure
-  条件: (h : IsOpen s)
+定理 是开集.inter_closure
+  条件: (h : 是开集 s)
   结论: s inter closure t subseteq closure (s inter t)
   证明: compl_subset_compl.mp by
     simpa only [← interior_compl, compl_inter] using IsClosed.interior_union_left h.isClosed_compl
@@ -1407,8 +1407,8 @@ theorem IsOpen.closure_inter
   simpa only [inter_comm t] using h.inter_closure
 
 中文:
-定理 IsOpen.closure_inter
-  条件: (h : IsOpen t)
+定理 是开集.closure_inter
+  条件: (h : 是开集 t)
   结论: closure s inter t subseteq closure (s inter t)
   证明: by
   simpa only [inter_comm t] using h.inter_closure
@@ -1429,8 +1429,8 @@ theorem Dense.open_subset_closure_inter
     _ subseteq closure (t inter s) := ht.inter_closure
 
 中文:
-定理 Dense.open_subset_closure_inter
-  条件: (hs : Dense s) (ht : IsOpen t)
+定理 稠密.open_subset_closure_inter
+  条件: (hs : 稠密 s) (ht : 是开集 t)
   证明: calc
     t = t inter closure s := by rw [hs.closure_eq, inter_univ]
     _ subseteq closure (t inter s) := ht.inter_closure
@@ -1453,8 +1453,8 @@ theorem Dense.inter_of_isOpen_left
 closure_minimal hso.inter_closure isClosed_closure by simp [hs.closure_eq, ht.closure_eq]
 
 中文:
-定理 Dense.inter_of_isOpen_left
-  条件: (hs : Dense s) (ht : Dense t) (hso : IsOpen s)
+定理 稠密.inter_of_isOpen_left
+  条件: (hs : 稠密 s) (ht : 稠密 t) (hso : 是开集 s)
   证明: fun x =>
 closure_minimal hso.inter_closure isClosed_closure by simp [hs.closure_eq, ht.closure_eq]
 -/
@@ -1471,8 +1471,8 @@ theorem Dense.inter_of_isOpen_right
   proof: inter_comm t s ▸ ht.inter_of_isOpen_left hs hto
 
 中文:
-定理 Dense.inter_of_isOpen_right
-  条件: (hs : Dense s) (ht : Dense t) (hto : IsOpen t)
+定理 稠密.inter_of_isOpen_right
+  条件: (hs : 稠密 s) (ht : 稠密 t) (hto : 是开集 t)
   证明: inter_comm t s ▸ ht.inter_of_isOpen_left hs hto
 
 Depends on / 依赖: ht.inter_of_isOpen_left, inter_comm, inter_of_isOpen_left
@@ -1491,8 +1491,8 @@ theorem Dense.inter_nhds_nonempty
   (hs.inter_open_nonempty U ho ⟨x, hx⟩).mono fun _y hy => ⟨hy.2, hsub hy.1⟩
 
 中文:
-定理 Dense.inter_nhds_nonempty
-  条件: (hs : Dense s) (ht : t in 𝓝 x)
+定理 稠密.inter_nhds_nonempty
+  条件: (hs : 稠密 s) (ht : t in 𝓝 x)
   证明: let ⟨U, hsub, ho, hx⟩ := mem_nhds_iff.1 ht
   (hs.inter_open_nonempty U ho ⟨x, hx⟩).mono fun _y hy => ⟨hy.2, hsub hy.1⟩
 
@@ -1544,7 +1544,7 @@ theorem Filter.Frequently.mem_of_closed
   proof: hs.closure_subset h.mem_closure
 
 中文:
-定理 Filter.Frequently.mem_of_closed
+定理 滤子.Frequently.mem_of_closed
   结论: (h : 存在ᶠ x in 𝓝 x, x in s)
   证明: hs.closure_subset h.mem_closure
 
@@ -1563,8 +1563,8 @@ theorem IsClosed.mem_of_frequently_of_tendsto
   proof: (hf.frequently <| show existsᶠ x in b, (fun y => y in s) (f x) from h).mem_of_closed hs
 
 中文:
-定理 IsClosed.mem_of_frequently_of_tendsto
-  结论: {f : α -> X} {b : Filter α}
+定理 是闭集.mem_of_frequently_of_tendsto
+  结论: {f : α -> X} {b : 滤子 α}
   证明: (hf.frequently <| show existsᶠ x in b, (fun y => y in s) (f x) from h).mem_of_closed hs
 
 Depends on / 依赖: frequently, hf.frequently, mem_of_closed
@@ -1582,8 +1582,8 @@ theorem IsClosed.mem_of_tendsto
   proof: hs.mem_of_frequently_of_tendsto h.frequently hf
 
 中文:
-定理 IsClosed.mem_of_tendsto
-  结论: {f : α -> X} {b : Filter α} [NeBot b]
+定理 是闭集.mem_of_tendsto
+  结论: {f : α -> X} {b : 滤子 α} [NeBot b]
   证明: hs.mem_of_frequently_of_tendsto h.frequently hf
 
 Depends on / 依赖: frequently, h.frequently, hs.mem_of_frequently_of_tendsto, mem_of_frequently_of_tendsto
@@ -1602,7 +1602,7 @@ theorem mem_closure_of_frequently_of_tendsto
 
 中文:
 定理 mem_closure_of_frequently_of_tendsto
-  结论: {f : α -> X} {b : Filter α}
+  结论: {f : α -> X} {b : 滤子 α}
   证明: (hf.frequently h).mem_closure
 
 Depends on / 依赖: frequently, hf.frequently, mem_closure
@@ -1621,7 +1621,7 @@ theorem mem_closure_of_tendsto
 
 中文:
 定理 mem_closure_of_tendsto
-  结论: {f : α -> X} {b : Filter α} [NeBot b]
+  结论: {f : α -> X} {b : 滤子 α} [NeBot b]
   证明: mem_closure_of_frequently_of_tendsto h.frequently hf
 
 Depends on / 依赖: frequently, h.frequently, mem_closure_of_frequently_of_tendsto
@@ -1647,8 +1647,8 @@ theorem tendsto_inf_principal_nhds_iff_of_forall_eq
   rw [sup_inf_right]; rw [sup_
 
 中文:
-定理 tendsto_inf_principal_nhds_iff_of_forall_eq
-  结论: {f : α -> X} {l : Filter α} {s : Set α}
+定理 tendsto_inf_principal_nhds_iff_of_对任意_eq
+  结论: {f : α -> X} {l : 滤子 α} {s : 集合 α}
   证明: by
   rw [tendsto_iff_comap]; rw [tendsto_iff_comap]
   replace h : 𝓟 sᶜ <= comap f (𝓝 x) := by

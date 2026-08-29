@@ -47,7 +47,7 @@ instance sumCongrHom.decidableMemRange
 
 中文:
 实例 sumCongrHom.decidableMemRange
-  签名: {α β : 类型} [DecidableEq α] [DecidableEq β] [Fintype α]
+  签名: {α β : 类型} [DecidableEq α] [DecidableEq β] [有限类型 α]
   定义体: fun _ => inferInstance
 
 @[simp]
@@ -66,7 +66,7 @@ theorem sumCongrHom.card_range
 
 中文:
 定理 sumCongrHom.card_range
-  结论: {α β : 类型} [Fintype (sumCongrHom α β).range]
+  结论: {α β : 类型} [有限类型 (sumCongrHom α β).range]
   证明: Fintype.card_eq.mpr ⟨(ofInjective (sumCongrHom α β) sumCongrHom_injective).symm⟩
 
 Depends on / 依赖: Fintype, Fintype.card_eq.mpr, card_eq, ofInjective, sumCongrHom, sumCongrHom_injective
@@ -175,7 +175,7 @@ definition subgroupOfMulAction
 
 中文:
 定义 subgroupOfMulAction
-  签名: (G H : 类型) [Group G] [MulAction G H] [FaithfulSMul G H]
+  签名: (G H : 类型) [群 G] [乘法作用 G H] [忠实标量乘法 G H]
   定义体: MulEquiv.ofLeftInverse' _ (Classical.choose_spec MulAction.toPerm_injective.hasLeftInverse)
 
 Depends on / 依赖: Classical, Classical.choose_spec, MulAction, MulAction.toPerm_injective.hasLeftInverse, MulEquiv, MulEquiv.ofLeftInverse, choose_spec, hasLeftInverse, ofLeftInverse, toPerm_injective

@@ -76,7 +76,7 @@ lemma nonempty_iff_nontrivial
 
 中文:
 引理 nonempty_iff_nontrivial
-  结论: Nonempty (PrimeSpectrum R) ↔ Nontrivial R
+  结论: 非空 (素谱 R) ↔ 非平凡 R
   证明: by
   refine ⟨fun ⟨p⟩ => ⟨0, 1, fun h => p.2.ne_top ?_⟩, fun h => ?_⟩
   · simp [Ideal.eq_top_iff_one p.asIdeal, ← h]
@@ -102,7 +102,7 @@ lemma isEmpty_iff_subsingleton
 
 中文:
 引理 isEmpty_iff_subsingleton
-  结论: IsEmpty (PrimeSpectrum R) ↔ Subsingleton R
+  结论: 是空 (素谱 R) ↔ 子单例 R
   证明: by
   contrapose!; exact nonempty_iff_nontrivial
 
@@ -120,8 +120,8 @@ instance [Nontrivial
   body: nonempty_iff_nontrivial.mpr inferInstance
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nonempty PrimeSpectrum R
+实例 [非平凡
+  签名: R] : 非空 素谱 R
   定义体: nonempty_iff_nontrivial.mpr inferInstance
 
 Depends on / 依赖: nonempty_iff_nontrivial, nonempty_iff_nontrivial.mpr
@@ -138,8 +138,8 @@ instance [Subsingleton
   body: isEmpty_iff_subsingleton.mpr inferInstance
 
 中文:
-实例 [Subsingleton
-  签名: R] : IsEmpty (PrimeSpectrum R)
+实例 [子单例
+  签名: R] : 是空 (素谱 R)
   定义体: isEmpty_iff_subsingleton.mpr inferInstance
 
 Depends on / 依赖: isEmpty_iff_subsingleton, isEmpty_iff_subsingleton.mpr
@@ -158,8 +158,8 @@ lemma nontrivial
 
 中文:
 引理 nontrivial
-  条件: (p : PrimeSpectrum R)
-  结论: Nontrivial R
+  条件: (p : 素谱 R)
+  结论: 非平凡 R
   证明: nonempty_iff_nontrivial.mp ⟨p⟩
 
 Depends on / 依赖: nonempty_iff_nontrivial, nonempty_iff_nontrivial.mp
@@ -181,7 +181,7 @@ theorem range_asIdeal
 
 中文:
 定理 range_asIdeal
-  结论: Set.range PrimeSpectrum.asIdeal = {J : Ideal R | J.IsPrime}
+  结论: 集合.range 素谱.asIdeal = {J : 理想 R | J.是素}
   证明: Set.ext fun J =>
 ⟨fun hJ => let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr hj ▸ j.isPrime,
       fun hJ => Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
@@ -204,7 +204,7 @@ definition primeSpectrumProdOfSum
 
 中文:
 定义 primeSpectrumProdOfSum
-  签名: : PrimeSpectrum R oplus PrimeSpectrum S -> PrimeSpectrum (R × S)
+  签名: : 素谱 R oplus 素谱 S -> 素谱 (R × S)
 -/
 def primeSpectrumProdOfSum : PrimeSpectrum R oplus PrimeSpectrum S -> PrimeSpectrum (R × S)
   | Sum.inl ⟨I, _⟩ => ⟨Ideal.prod I ⊤, Ideal.isPrime_ideal_prod_top⟩
@@ -270,7 +270,7 @@ theorem primeSpectrumProd_symm_inl_asIdeal
 
 中文:
 定理 primeSpectrumProd_symm_inl_asIdeal
-  条件: (x : PrimeSpectrum R)
+  条件: (x : 素谱 R)
   证明: by
   cases x
   rfl
@@ -295,7 +295,7 @@ theorem primeSpectrumProd_symm_inr_asIdeal
 
 中文:
 定理 primeSpectrumProd_symm_inr_asIdeal
-  条件: (x : PrimeSpectrum S)
+  条件: (x : 素谱 S)
   证明: by
   cases x
   rfl
@@ -317,7 +317,7 @@ definition zeroLocus
 
 中文:
 定义 zeroLocus
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: { x | s subseteq x.asIdeal }
 
 @[simp]
@@ -341,7 +341,7 @@ theorem mem_zeroLocus
 
 中文:
 定理 mem_zeroLocus
-  条件: (x : PrimeSpectrum R) (s : Set R)
+  条件: (x : 素谱 R) (s : 集合 R)
   结论: x in zeroLocus s ↔ s subseteq x.asIdeal
   证明: Iff.rfl
 
@@ -366,8 +366,8 @@ theorem zeroLocus_span
 
 中文:
 定理 zeroLocus_span
-  条件: (s : Set R)
-  结论: zeroLocus (Ideal.span s : Set R) = zeroLocus s
+  条件: (s : 集合 R)
+  结论: zeroLocus (理想.span s : 集合 R) = zeroLocus s
   证明: by
   ext x
   exact (Submodule.gi R R).gc s x.asIdeal
@@ -388,7 +388,7 @@ definition vanishingIdeal
 
 中文:
 定义 vanishingIdeal
-  签名: (t : Set (PrimeSpectrum R))
+  签名: (t : 集合 (素谱 R))
   定义体: ⨅ x in t, x.asIdeal
 
 Depends on / 依赖: asIdeal, x.asIdeal
@@ -410,7 +410,7 @@ theorem coe_vanishingIdeal
 
 中文:
 定理 coe_vanishingIdeal
-  条件: (t : Set (PrimeSpectrum R))
+  条件: (t : 集合 (素谱 R))
   证明: by
   ext f
   rw [vanishingIdeal]; rw [SetLike.mem_coe]; rw [Submodule.mem_iInf]
@@ -439,7 +439,7 @@ theorem mem_vanishingIdeal
 
 中文:
 定理 mem_vanishingIdeal
-  条件: (t : Set (PrimeSpectrum R)) (f : R)
+  条件: (t : 集合 (素谱 R)) (f : R)
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_vanishingIdeal]; rw [Set.mem_ofPred_eq]
 
@@ -462,7 +462,7 @@ theorem vanishingIdeal_singleton
 
 中文:
 定理 vanishingIdeal_singleton
-  条件: (x : PrimeSpectrum R)
+  条件: (x : 素谱 R)
   证明: by simp [vanishingIdeal]
 
 Depends on / 依赖: vanishingIdeal
@@ -481,7 +481,7 @@ theorem subset_zeroLocus_iff_le_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_iff_le_vanishingIdeal
-  条件: (t : Set (PrimeSpectrum R)) (I : Ideal R)
+  条件: (t : 集合 (素谱 R)) (I : 理想 R)
   证明: ⟨fun h _ k => (mem_vanishingIdeal _ _).mpr fun _ j => (mem_zeroLocus _ _).mpr (h j) k, fun h =>
     fun x j => (mem_zeroLocus _ _).mpr (le_trans h fun _ h => ((mem_vanishingIdeal _ _).mp h) x j)⟩
 
@@ -548,7 +548,7 @@ theorem subset_zeroLocus_iff_subset_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_iff_subset_vanishingIdeal
-  条件: (t : Set (PrimeSpectrum R)) (s : Set R)
+  条件: (t : 集合 (素谱 R)) (s : 集合 R)
   证明: (gc_set R) s t
 
 Depends on / 依赖: gc_set
@@ -570,7 +570,7 @@ theorem subset_vanishingIdeal_zeroLocus
 
 中文:
 定理 subset_vanishingIdeal_zeroLocus
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: s subseteq vanishingIdeal (zeroLocus s)
   证明: (gc_set R).le_u_l s
 
@@ -592,7 +592,7 @@ theorem le_vanishingIdeal_zeroLocus
 
 中文:
 定理 le_vanishingIdeal_zeroLocus
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: I <= vanishingIdeal (zeroLocus I)
   证明: (gc R).le_u_l I
 
@@ -616,7 +616,7 @@ theorem vanishingIdeal_zeroLocus_eq_radical
 
 中文:
 定理 vanishingIdeal_zeroLocus_eq_radical
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: Ideal.ext fun f => by
     rw [mem_vanishingIdeal]; rw [Ideal.radical_eq_sInf]; rw [Submodule.mem_sInf]
     exact ⟨fun h x hx => h ⟨x, hx.2⟩ hx.1, fun h x hx => h x.1 ⟨hx, x.2⟩⟩
@@ -662,7 +662,7 @@ theorem vanishingIdeal_univ
 
 中文:
 定理 vanishingIdeal_univ
-  结论: vanishingIdeal Set.univ = nilradical R
+  结论: vanishingIdeal 集合.univ = nilradical R
   证明: by
   rw [vanishingIdeal]; rw [iInf_univ]; rw [nilradical_eq_iInf]
 
@@ -683,8 +683,8 @@ theorem zeroLocus_radical
 
 中文:
 定理 zeroLocus_radical
-  条件: (I : Ideal R)
-  结论: zeroLocus (I.radical : Set R) = zeroLocus I
+  条件: (I : 理想 R)
+  结论: zeroLocus (I.radical : 集合 R) = zeroLocus I
   证明: vanishingIdeal_zeroLocus_eq_radical I ▸ (gc R).l_u_l_eq_l I
 
 Depends on / 依赖: l_u_l_eq_l, vanishingIdeal_zeroLocus_eq_radical
@@ -702,7 +702,7 @@ theorem subset_zeroLocus_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_vanishingIdeal
-  条件: (t : Set (PrimeSpectrum R))
+  条件: (t : 集合 (素谱 R))
   证明: (gc R).l_u_le t
 
 Depends on / 依赖: l_u_le
@@ -722,7 +722,7 @@ theorem zeroLocus_anti_mono
 
 中文:
 定理 zeroLocus_anti_mono
-  条件: {s t : Set R} (h : s subseteq t)
+  条件: {s t : 集合 R} (h : s subseteq t)
   结论: zeroLocus t subseteq zeroLocus s
   证明: (gc_set R).monotone_l h
 
@@ -741,7 +741,7 @@ theorem zeroLocus_anti_mono_ideal
 
 中文:
 定理 zeroLocus_anti_mono_ideal
-  条件: {s t : Ideal R} (h : s <= t)
+  条件: {s t : 理想 R} (h : s <= t)
   证明: (gc R).monotone_l h
 
 Depends on / 依赖: monotone_l
@@ -760,7 +760,7 @@ theorem vanishingIdeal_anti_mono
 
 中文:
 定理 vanishingIdeal_anti_mono
-  条件: {s t : Set (PrimeSpectrum R)} (h : s subseteq t)
+  条件: {s t : 集合 (素谱 R)} (h : s subseteq t)
   证明: (gc R).monotone_u h
 
 Depends on / 依赖: monotone_u
@@ -780,7 +780,7 @@ theorem zeroLocus_subset_zeroLocus_iff
 
 中文:
 定理 zeroLocus_subset_zeroLocus_iff
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: by
   rw [subset_zeroLocus_iff_le_vanishingIdeal]; rw [vanishingIdeal_zeroLocus_eq_radical]
 
@@ -823,7 +823,7 @@ theorem zeroLocus_bot
 
 中文:
 定理 zeroLocus_bot
-  结论: zeroLocus ((⊥ : Ideal R) : Set R) = Set.univ
+  结论: zeroLocus ((⊥ : 理想 R) : 集合 R) = 集合.univ
   证明: (gc R).l_bot
 
 @[simp]
@@ -847,7 +847,7 @@ lemma zeroLocus_nilradical
 
 中文:
 引理 zeroLocus_nilradical
-  结论: zeroLocus (nilradical R : Set R) = Set.univ
+  结论: zeroLocus (nilradical R : 集合 R) = 集合.univ
   证明: by
   rw [nilradical]; rw [zeroLocus_radical]; rw [Ideal.zero_eq_bot]; rw [zeroLocus_bot]
 
@@ -871,7 +871,7 @@ theorem zeroLocus_singleton_zero
 
 中文:
 定理 zeroLocus_singleton_zero
-  结论: zeroLocus ({0} : Set R) = Set.univ
+  结论: zeroLocus ({0} : 集合 R) = 集合.univ
   证明: zeroLocus_bot
 
 @[simp]
@@ -894,7 +894,7 @@ theorem zeroLocus_empty
 
 中文:
 定理 zeroLocus_empty
-  结论: zeroLocus (∅ : Set R) = Set.univ
+  结论: zeroLocus (∅ : 集合 R) = 集合.univ
   证明: (gc_set R).l_bot
 
 @[simp]
@@ -916,7 +916,7 @@ theorem vanishingIdeal_empty
 
 中文:
 定理 vanishingIdeal_empty
-  结论: vanishingIdeal (∅ : Set (PrimeSpectrum R)) = ⊤
+  结论: vanishingIdeal (∅ : 集合 (素谱 R)) = ⊤
   证明: by
   simpa using! (gc R).u_top
 
@@ -946,7 +946,7 @@ theorem zeroLocus_empty_of_one_mem
 
 中文:
 定理 zeroLocus_empty_of_one_mem
-  条件: {s : Set R} (h : (1 : R) in s)
+  条件: {s : 集合 R} (h : (1 : R) in s)
   结论: zeroLocus s = ∅
   证明: by
   rw [Set.eq_empty_iff_forall_notMem]
@@ -983,7 +983,7 @@ theorem zeroLocus_singleton_one
 
 中文:
 定理 zeroLocus_singleton_one
-  结论: zeroLocus ({1} : Set R) = ∅
+  结论: zeroLocus ({1} : 集合 R) = ∅
   证明: zeroLocus_empty_of_one_mem (Set.mem_singleton (1 : R))
 
 Depends on / 依赖: Set.mem_singleton, mem_singleton, zeroLocus_empty_of_one_mem
@@ -1012,8 +1012,8 @@ theorem zeroLocus_empty_iff_eq_top
 
 中文:
 定理 zeroLocus_empty_iff_eq_top
-  条件: {I : Ideal R}
-  结论: zeroLocus (I : Set R) = ∅ ↔ I = ⊤
+  条件: {I : 理想 R}
+  结论: zeroLocus (I : 集合 R) = ∅ ↔ I = ⊤
   证明: by
   constructor
   · contrapose!
@@ -1049,7 +1049,7 @@ theorem zeroLocus_univ
 
 中文:
 定理 zeroLocus_univ
-  结论: zeroLocus (Set.univ : Set R) = ∅
+  结论: zeroLocus (集合.univ : 集合 R) = ∅
   证明: zeroLocus_empty_of_one_mem (Set.mem_univ 1)
 
 Depends on / 依赖: Set.mem_univ, mem_univ, zeroLocus_empty_of_one_mem
@@ -1069,7 +1069,7 @@ theorem vanishingIdeal_eq_top_iff
 
 中文:
 定理 vanishingIdeal_eq_top_iff
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   结论: vanishingIdeal s = ⊤ ↔ s = ∅
   证明: by
   rw [← top_le_iff]; rw [← subset_zeroLocus_iff_le_vanishingIdeal]; rw [Submodule.top_coe]; rw [zeroLocus_univ]; rw [Set.subset_empty_iff]
@@ -1090,7 +1090,7 @@ theorem zeroLocus_eq_univ_iff
 
 中文:
 定理 zeroLocus_eq_univ_iff
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   rw [← Set.univ_subset_iff]; rw [subset_zeroLocus_iff_subset_vanishingIdeal]; rw [vanishingIdeal_univ]
 
@@ -1110,7 +1110,7 @@ theorem zeroLocus_sup
 
 中文:
 定理 zeroLocus_sup
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: (gc R).l_sup
 
 Depends on / 依赖: l_sup
@@ -1130,7 +1130,7 @@ theorem zeroLocus_union
 
 中文:
 定理 zeroLocus_union
-  条件: (s s' : Set R)
+  条件: (s s' : 集合 R)
   结论: zeroLocus (s union s') = zeroLocus s inter zeroLocus s'
   证明: (gc_set R).l_sup
 
@@ -1149,7 +1149,7 @@ theorem vanishingIdeal_union
 
 中文:
 定理 vanishingIdeal_union
-  条件: (t t' : Set (PrimeSpectrum R))
+  条件: (t t' : 集合 (素谱 R))
   证明: (gc R).u_inf
 
 Depends on / 依赖: u_inf
@@ -1168,7 +1168,7 @@ theorem zeroLocus_iSup
 
 中文:
 定理 zeroLocus_iSup
-  条件: {ι : Sort*} (I : ι -> Ideal R)
+  条件: {ι : 类型层*} (I : ι -> 理想 R)
   证明: (gc R).l_iSup
 
 Depends on / 依赖: l_iSup
@@ -1187,7 +1187,7 @@ theorem zeroLocus_iUnion
 
 中文:
 定理 zeroLocus_iUnion
-  条件: {ι : Sort*} (s : ι -> Set R)
+  条件: {ι : 类型层*} (s : ι -> 集合 R)
   证明: (gc_set R).l_iSup
 
 Depends on / 依赖: gc_set, l_iSup
@@ -1206,7 +1206,7 @@ theorem zeroLocus_iUnion₂
 
 中文:
 定理 zeroLocus_iUnion₂
-  条件: {ι : Sort*} {κ : (i : ι) -> Sort*} (s : 对任意 i, κ i -> Set R)
+  条件: {ι : 类型层*} {κ : (i : ι) -> 类型层*} (s : 对任意 i, κ i -> 集合 R)
   证明: (gc_set R).l_iSup₂
 
 Depends on / 依赖: gc_set
@@ -1225,7 +1225,7 @@ theorem zeroLocus_bUnion
 
 中文:
 定理 zeroLocus_bUnion
-  条件: (s : Set (Set R))
+  条件: (s : 集合 (集合 R))
   证明: by simp only [zeroLocus_iUnion]
 
 Depends on / 依赖: zeroLocus_iUnion
@@ -1243,7 +1243,7 @@ theorem vanishingIdeal_iUnion
 
 中文:
 定理 vanishingIdeal_iUnion
-  条件: {ι : Sort*} (t : ι -> Set (PrimeSpectrum R))
+  条件: {ι : 类型层*} (t : ι -> 集合 (素谱 R))
   证明: (gc R).u_iInf
 
 Depends on / 依赖: u_iInf
@@ -1262,7 +1262,7 @@ theorem zeroLocus_inf
 
 中文:
 定理 zeroLocus_inf
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: Set.ext fun x => x.2.inf_le
 
 Depends on / 依赖: Set.ext, inf_le
@@ -1283,7 +1283,7 @@ theorem union_zeroLocus
 
 中文:
 定理 union_zeroLocus
-  条件: (s s' : Set R)
+  条件: (s s' : 集合 R)
   证明: by
   rw [zeroLocus_inf]
   simp
@@ -1305,7 +1305,7 @@ theorem zeroLocus_mul
 
 中文:
 定理 zeroLocus_mul
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: Set.ext fun x => x.2.mul_le
 
 Depends on / 依赖: Set.ext, mul_le
@@ -1350,7 +1350,7 @@ theorem zeroLocus_pow
 
 中文:
 定理 zeroLocus_pow
-  条件: (I : Ideal R) {n : 自然数} (hn : n != 0)
+  条件: (I : 理想 R) {n : 自然数} (hn : n != 0)
   证明: zeroLocus_radical (I ^ n) ▸ (I.radical_pow hn).symm ▸ zeroLocus_radical I
 
 @[simp]
@@ -1396,7 +1396,7 @@ theorem sup_vanishingIdeal_le
 
 中文:
 定理 sup_vanishingIdeal_le
-  条件: (t t' : Set (PrimeSpectrum R))
+  条件: (t t' : 集合 (素谱 R))
   证明: by
   intro r
   rw [Submodule.mem_sup]; rw [mem_vanishingIdeal]
@@ -1427,7 +1427,7 @@ theorem mem_compl_zeroLocus_iff_notMem
 
 中文:
 定理 mem_compl_zeroLocus_iff_notMem
-  条件: {f : R} {I : PrimeSpectrum R}
+  条件: {f : R} {I : 素谱 R}
   证明: by
   rw [Set.mem_compl_iff]; rw [mem_zeroLocus]; rw [Set.singleton_subset_iff]; rfl
 
@@ -1454,7 +1454,7 @@ lemma zeroLocus_insert_zero
 
 中文:
 引理 zeroLocus_insert_zero
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: zeroLocus (insert 0 s) = zeroLocus s
   证明: by
   rw [← Set.union_singleton]; rw [zeroLocus_union]; rw [zeroLocus_singleton_zero]; rw [Set.inter_univ]
@@ -1482,7 +1482,7 @@ alias zeroLocus_diff_singleton_zero := zeroLocus_sdiff_singleton_zero
 
 中文:
 引理 zeroLocus_sdiff_singleton_zero
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: zeroLocus (s \ {0}) = zeroLocus s
   证明: by
   rw [← zeroLocus_insert_zero]; rw [← zeroLocus_insert_zero (s := s)]; simp
@@ -1509,7 +1509,7 @@ lemma zeroLocus_smul_of_isUnit
 
 中文:
 引理 zeroLocus_smul_of_isUnit
-  条件: {r : R} (hr : IsUnit r) (s : Set R)
+  条件: {r : R} (hr : 是单位 r) (s : 集合 R)
   证明: by
   ext; simp [Set.subset_def, ← Set.image_smul, Ideal.unit_mul_mem_iff_mem _ hr]
 
@@ -1533,8 +1533,8 @@ instance [IsDomain
 @[simp]
 
 中文:
-实例 [IsDomain
-  签名: R] : OrderBot (PrimeSpectrum R) where
+实例 [是整环
+  签名: R] : 有底序 (素谱 R) where
   定义体: ⟨⊥, Ideal.isPrime_bot⟩
   bot_le I := @bot_le _ _ _ I.asIdeal
 
@@ -1558,8 +1558,8 @@ theorem asIdeal_bot
 
 中文:
 定理 asIdeal_bot
-  条件: [IsDomain R]
-  结论: (⊥ : PrimeSpectrum R).asIdeal = ⊥
+  条件: [是整环 R]
+  结论: (⊥ : 素谱 R).asIdeal = ⊥
   证明: rfl
 -/
 theorem asIdeal_bot [IsDomain R] : (⊥ : PrimeSpectrum R).asIdeal = ⊥ := rfl
@@ -1582,7 +1582,7 @@ lemma isMax_iff
 
 中文:
 引理 isMax_iff
-  条件: {x : PrimeSpectrum R}
+  条件: {x : 素谱 R}
   证明: by
   refine ⟨fun hx => ⟨⟨x.2.ne_top, fun I hI => ?_⟩⟩, fun hx y e => (hx.eq_of_le y.2.ne_top e).ge⟩
   by_contra e
@@ -1613,7 +1613,7 @@ lemma zeroLocus_eq_singleton
 
 中文:
 引理 zeroLocus_eq_singleton
-  条件: (m : Ideal R) [m.IsMaximal]
+  条件: (m : 理想 R) [m.是极大]
   证明: by
   ext I
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -1644,7 +1644,7 @@ lemma isMin_iff
 
 中文:
 引理 isMin_iff
-  条件: {x : PrimeSpectrum R}
+  条件: {x : 素谱 R}
   证明: by
   change IsMin _ ↔ Minimal (fun q : Ideal R => q.IsPrime ∧ ⊥ <= q) _
   simp only [IsMin, Minimal, x.2, bot_le, and_self, and_true, true_and]
@@ -1685,8 +1685,8 @@ theorem exists_primeSpectrum_prod_le
   have lt_add : forall z ∉ M, M < M + sp
 
 中文:
-定理 exists_primeSpectrum_prod_le
-  条件: (I : Ideal R)
+定理 存在_primeSpectrum_prod_le
+  条件: (I : 理想 R)
   证明: by
   induction I using IsNoetherian.induction with | hgt M hgt =>
   change Ideal R at M
@@ -1743,8 +1743,8 @@ theorem exists_primeSpectrum_prod_le_and_ne_bot_of_domain
       apply Ring.not_isFie
 
 中文:
-定理 exists_primeSpectrum_prod_le_and_ne_bot_of_domain
-  结论: (h_fA : ¬IsField A) {I : Ideal A}
+定理 存在_primeSpectrum_prod_le_and_ne_bot_of_domain
+  结论: (h_fA : ¬是域 A) {I : 理想 A}
   证明: by
   induction I using IsNoetherian.induction with | hgt M hgt =>
   change Ideal A at M

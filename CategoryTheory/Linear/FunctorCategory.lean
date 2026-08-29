@@ -47,7 +47,7 @@ instance functorCategoryLinear
 
 中文:
 实例 functorCategoryLinear
-  签名: : Linear R (C ⥤ D) where
+  签名: : 线性 R (C ⥤ D) where
   定义体: { smul := fun r α =>
         { app := fun X => r • α.app X
           naturality := by

@@ -64,11 +64,11 @@ structure PowerBasis
 
 中文:
 结构 PowerBasis
-  参数: (R S : 类型) [CommRing R] [Ring S] [Algebra R S]
+  参数: (R S : 类型) [交换环 R] [环 S] [代数 R S]
   公理与运算 (4 个):
     - gen : S
     - dim : 自然数
-    - basis : Basis (Fin dim) R S
+    - basis : 基 (有限集 dim) R S
     - basis_eq_pow : 对任意 (i), basis i = gen ^ (i : 自然数)
 -/
 structure PowerBasis (R S : Type*) [CommRing R] [Ring S] [Algebra R S] where
@@ -96,7 +96,7 @@ theorem coe_basis
 中文:
 定理 coe_basis
   条件: (pb : PowerBasis R S)
-  结论: ⇑pb.basis = fun i : Fin pb.dim => pb.gen ^ (i : 自然数)
+  结论: ⇑pb.basis = fun i : 有限集 pb.dim => pb.gen ^ (i : 自然数)
   证明: funext pb.basis_eq_pow
 
 Depends on / 依赖: basis_eq_pow, pb.basis_eq_pow
@@ -116,7 +116,7 @@ theorem finite
 中文:
 定理 finite
   条件: (pb : PowerBasis R S)
-  结论: Module.Finite R S
+  结论: 模.有限 R S
   证明: .of_basis pb.basis
 
 Depends on / 依赖: of_basis, pb.basis
@@ -135,7 +135,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def _root_.Module.Basis.PowerBasis {ι : 类型} [Fintype ι] (B : Basis ι R S)
+  签名: def _root_.模.基.PowerBasis {ι : 类型} [有限类型 ι] (B : 基 ι R S)
   定义体: ⟨x, Fintype.card ι, B.reindex e, fun i => by simp [hx]⟩
 
 @[simp]
@@ -156,8 +156,8 @@ theorem _root_.Module.Basis.PowerBasis_gen
   proof: rfl
 
 中文:
-定理 _root_.Module.Basis.PowerBasis_gen
-  结论: {ι : 类型} [Fintype ι] (B : Basis ι R S) {x : S}
+定理 _root_.模.基.PowerBasis_gen
+  结论: {ι : 类型} [有限类型 ι] (B : 基 ι R S) {x : S}
   证明: rfl
 -/
 theorem _root_.Module.Basis.PowerBasis_gen {ι : Type*} [Fintype ι] (B : Basis ι R S) {x : S}
@@ -276,7 +276,7 @@ theorem dim_ne_zero
 
 中文:
 定理 dim_ne_zero
-  条件: [Nontrivial S] (pb : PowerBasis R S)
+  条件: [非平凡 S] (pb : PowerBasis R S)
   结论: pb.dim != 0
   证明: fun h =>
   not_nonempty_iff.mpr (h.symm ▸ Fin.isEmpty : IsEmpty (Fin pb.dim)) pb.basis.index_nonempty
@@ -295,7 +295,7 @@ theorem dim_pos
 
 中文:
 定理 dim_pos
-  条件: [Nontrivial S] (pb : PowerBasis R S)
+  条件: [非平凡 S] (pb : PowerBasis R S)
   结论: 0 < pb.dim
   证明: Nat.pos_of_ne_zero pb.dim_ne_zero
 
@@ -313,8 +313,8 @@ theorem exists_eq_aeval
   proof: (mem_span_pow pb.dim_ne_zero).mp (by simpa using pb.basis.mem_span y)
 
 中文:
-定理 exists_eq_aeval
-  条件: [Nontrivial S] (pb : PowerBasis R S) (y : S)
+定理 存在_eq_aeval
+  条件: [非平凡 S] (pb : PowerBasis R S) (y : S)
   证明: (mem_span_pow pb.dim_ne_zero).mp (by simpa using pb.basis.mem_span y)
 
 Depends on / 依赖: dim_ne_zero, mem_span, mem_span_pow, pb.basis.mem_span, pb.dim_ne_zero
@@ -336,7 +336,7 @@ theorem exists_eq_aeval'
   exact ⟨f, hf⟩
 
 中文:
-定理 exists_eq_aeval'
+定理 存在_eq_aeval'
   条件: (pb : PowerBasis R S) (y : S)
   结论: 存在 f : R[X], y = aeval pb.gen f
   证明: by
@@ -364,7 +364,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: {S' : 类型} [Semiring S'] [Algebra R S'] (pb : PowerBasis R S)
+  结论: {S' : 类型} [半环 S'] [代数 R S'] (pb : PowerBasis R S)
   证明: by
   ext x
   obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
@@ -394,7 +394,7 @@ theorem exists_smodEq
   rw [SModEq]; rw [← 
 
 中文:
-定理 exists_smodEq
+定理 存在_smodEq
   条件: (pb : PowerBasis A B) (b : B)
   证明: by
   rcases subsingleton_or_nontrivial B
@@ -436,7 +436,7 @@ theorem exists_gen_dvd_sub
   simpa [← Ideal.mem_span_singleton, ← mk_eq_zero, mk_sub, sub_eq_zero] using! pb.exists_smodEq b
 
 中文:
-定理 exists_gen_dvd_sub
+定理 存在_gen_dvd_sub
   条件: (pb : PowerBasis A B) (b : B)
   结论: 存在 a, pb.gen ∣ b - algebraMap A B a
   证明: by
@@ -604,7 +604,7 @@ theorem degree_minpolyGen
 
 中文:
 定理 degree_minpolyGen
-  条件: [Nontrivial A] (pb : PowerBasis A S)
+  条件: [非平凡 A] (pb : PowerBasis A S)
   证明: by
   unfold minpolyGen
   rw [degree_sub_eq_left_of_degree_lt] <;> rw [degree_X_pow]
@@ -630,7 +630,7 @@ theorem natDegree_minpolyGen
 
 中文:
 定理 natDegree_minpolyGen
-  条件: [Nontrivial A] (pb : PowerBasis A S)
+  条件: [非平凡 A] (pb : PowerBasis A S)
   证明: natDegree_eq_of_degree_eq_some pb.degree_minpolyGen
 
 @[simp]
@@ -685,9 +685,9 @@ theorem isIntegral_gen
 @[simp]
 
 中文:
-定理 isIntegral_gen
+定理 is整数egral_gen
   条件: (pb : PowerBasis A S)
-  结论: Is整数egral A pb.gen
+  结论: 是整 A pb.gen
   证明: ⟨minpolyGen pb, minpolyGen_monic pb, aeval_minpolyGen pb⟩
 
 @[simp]
@@ -710,7 +710,7 @@ theorem degree_minpoly
 
 中文:
 定理 degree_minpoly
-  条件: [Nontrivial A] (pb : PowerBasis A S)
+  条件: [非平凡 A] (pb : PowerBasis A S)
   证明: by rw [← minpolyGen_eq, degree_minpolyGen]
 
 @[simp]
@@ -731,7 +731,7 @@ theorem natDegree_minpoly
 
 中文:
 定理 natDegree_minpoly
-  条件: [Nontrivial A] (pb : PowerBasis A S)
+  条件: [非平凡 A] (pb : PowerBasis A S)
   证明: by rw [← minpolyGen_eq, natDegree_minpolyGen]
 
 Depends on / 依赖: minpolyGen_eq, natDegree_minpolyGen
@@ -757,7 +757,7 @@ theorem leftMulMatrix
 中文:
 定理 leftMulMatrix
   条件: (pb : PowerBasis A S)
-  结论: Algebra.leftMulMatrix pb.basis pb.gen =
+  结论: 代数.leftMulMatrix pb.basis pb.gen =
   证明: by
   cases subsingleton_or_nontrivial A; · subsingleton
   rw [Algebra.leftMulMatrix_apply]; rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix_symm]
@@ -1041,7 +1041,7 @@ definition liftEquiv'
 
 中文:
 定义 liftEquiv'
-  签名: [IsDomain B] (pb : PowerBasis A S)
+  签名: [是整环 B] (pb : PowerBasis A S)
   定义体: pb.liftEquiv.trans ((Equiv.refl _).subtypeEquiv fun x => by
     rw [Equiv.refl_apply]; rw [mem_roots_iff_aeval_eq_zero]
     · simp
@@ -1069,8 +1069,8 @@ definition AlgHom.fintype
   Fintype.ofEquiv _ pb.liftEquiv'.symm
 
 中文:
-定义 AlgHom.fintype
-  签名: [IsDomain B] (pb : PowerBasis A S)
+定义 代数态射.fintype
+  签名: [是整环 B] (pb : PowerBasis A S)
   定义体: letI := Classical.decEq B
   Fintype.ofEquiv _ pb.liftEquiv'.symm
 -/
@@ -1322,7 +1322,7 @@ theorem linearIndependent_pow
 
 中文:
 定理 linearIndependent_pow
-  条件: [Algebra K S] (x : S)
+  条件: [代数 K S] (x : S)
   证明: by
   by_cases h : IsIntegral K x; swap
   · rw [minpoly.eq_zero h, natDegree_zero]
@@ -1362,8 +1362,8 @@ theorem IsIntegral.mem_span_pow
   simp only [add_zero, zero_mul, minpoly.aeval, aeval_add, map_mul]
 
 中文:
-定理 IsIntegral.mem_span_pow
-  结论: [Nontrivial R] {x y : S} (hx : Is整数egral R x)
+定理 是整.mem_span_pow
+  结论: [非平凡 R] {x y : S} (hx : 是整 R x)
   证明: by
   obtain ⟨f, rfl⟩ := hy
   apply mem_span_pow'.mpr _
@@ -1518,7 +1518,7 @@ theorem adjoin_gen_eq_top
 中文:
 定理 adjoin_gen_eq_top
   条件: (B : PowerBasis R S)
-  结论: adjoin R ({B.gen} : Set S) = ⊤
+  结论: adjoin R ({B.gen} : 集合 S) = ⊤
   证明: by
   rw [← toSubmodule_eq_top]; rw [_root_.eq_top_iff]; rw [← B.basis.span_eq]; rw [Submodule.span_le]
   rintro x ⟨i, rfl⟩

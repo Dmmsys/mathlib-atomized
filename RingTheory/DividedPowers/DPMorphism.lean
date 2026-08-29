@@ -68,8 +68,8 @@ structure IsDPMorphism
     - dpow_comp : forall {n : Nat}, forall a in I, hJ.dpow n (f a) = f (hI.dpow n a)
 
 中文:
-结构 IsDPMorphism
-  参数: {A B : 类型} [CommSemiring A] [CommSemiring B] {I : Ideal A} {J : Ideal B}
+结构 是DP态射
+  参数: {A B : 类型} [交换半环 A] [交换半环 B] {I : 理想 A} {J : 理想 B}
   公理与运算 (2 个):
     - ideal_comp : I.map f <= J
     - dpow_comp : 对任意 {n : 自然数}, 对任意 a in I, hJ.dpow n (f a) = f (hI.dpow n a)
@@ -151,7 +151,7 @@ theorem map_dpow
 
 中文:
 定理 map_dpow
-  条件: {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {n : 自然数} {a : A} (ha : a in I)
+  条件: {f : A ->+* B} (hf : 是DP态射 hI hJ f) {n : 自然数} {a : A} (ha : a in I)
   证明: (hf.2 a ha).symm
 -/
 theorem map_dpow {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {n : Nat} {a : A} (ha : a in I) :
@@ -171,7 +171,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {f : A ->+* B} {g : B ->+* C} (hg : IsDPMorphism hJ hK g) (hf : IsDPMorphism hI hJ f)
+  条件: {f : A ->+* B} {g : B ->+* C} (hg : 是DP态射 hJ hK g) (hf : 是DP态射 hI hJ f)
   证明: by
   refine ⟨le_trans (map_map f g ▸ map_mono hf.1) hg.1, fun a ha => ?_⟩
   simp only [RingHom.coe_comp, Function.comp_apply]
@@ -203,9 +203,9 @@ structure DPMorphism
     - dpow_comp : forall {n : Nat}, forall a in I, hJ.dpow n (toRingHom a) = toRingHom (hI.dpow n a)
 
 中文:
-结构 DPMorphism
-  参数: {A B : 类型} [CommSemiring A] [CommSemiring B] {I : Ideal A} {J : Ideal B}
-  继承: RingHom A B
+结构 DP态射
+  参数: {A B : 类型} [交换半环 A] [交换半环 B] {I : 理想 A} {J : 理想 B}
+  继承: 环态射 A B
   公理与运算 (2 个):
     - ideal_comp : I.map toRingHom <= J
     - dpow_comp : 对任意 {n : 自然数}, 对任意 a in I, hJ.dpow n (toRingHom a) = toRingHom (hI.dpow n a)
@@ -233,7 +233,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (DPMorphism hI hJ) A B where
+  签名: : 函数状 (DP态射 hI hJ) A B where
   定义体: h.toRingHom
   coe_injective h h' hh' := by
     cases h; cases h'; congr
@@ -257,7 +257,7 @@ instance coe_ringHom
 
 中文:
 实例 coe_ringHom
-  签名: : CoeOut (DPMorphism hI hJ) (A ->+* B)
+  签名: : CoeOut (DP态射 hI hJ) (A ->+* B)
   定义体: ⟨DPMorphism.toRingHom⟩
 
 Depends on / 依赖: DPMorphism, DPMorphism.toRingHom, toRingHom
@@ -275,7 +275,7 @@ theorem coe_toRingHom
 
 中文:
 定理 coe_toRingHom
-  条件: {f : DPMorphism hI hJ}
+  条件: {f : DP态射 hI hJ}
   结论: ⇑(f : A ->+* B) = f
   证明: rfl
 -/
@@ -292,7 +292,7 @@ lemma toRingHom_apply
 
 中文:
 引理 toRingHom_apply
-  条件: {f : DPMorphism hI hJ} {a : A}
+  条件: {f : DP态射 hI hJ} {a : A}
   结论: f.toRingHom a = f a
   证明: rfl
 -/
@@ -311,8 +311,8 @@ lemma isDPMorphism
 
 中文:
 引理 isDPMorphism
-  条件: (f : DPMorphism hI hJ)
-  结论: IsDPMorphism hI hJ f.toRingHom
+  条件: (f : DP态射 hI hJ)
+  结论: 是DP态射 hI hJ f.toRingHom
   证明: ⟨f.ideal_comp, f.dpow_comp⟩
 
 Depends on / 依赖: dpow_comp, f.dpow_comp, f.ideal_comp, ideal_comp
@@ -330,7 +330,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: {f : A ->+* B} (hf : IsDPMorphism hI hJ f)
+  签名: {f : A ->+* B} (hf : 是DP态射 hI hJ f)
   定义体: ⟨f, hf.1, hf.2⟩
 -/
 def mk' {f : A ->+* B} (hf : IsDPMorphism hI hJ f) : DPMorphism hI hJ :=
@@ -399,7 +399,7 @@ definition fromGens
 
 中文:
 定义 fromGens
-  签名: {f : A ->+* B} {S : Set A} (hS : I = span S) (hf : I.map f <= J)
+  签名: {f : A ->+* B} {S : 集合 A} (hS : I = span S) (hf : I.map f <= J)
   定义体: f
   ideal_comp := hf
   dpow_comp {n} x hx := by
@@ -433,7 +433,7 @@ definition id
 
 中文:
 定义 id
-  签名: : DPMorphism hI hI where
+  签名: : DP态射 hI hI where
   定义体: RingHom.id A
   ideal_comp := by simp only [map_id, le_refl]
   dpow_comp _ _ := by simp only [RingHom.id_apply]
@@ -455,7 +455,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (DPMorphism hI hI)
+  签名: 可居 (DP态射 hI hI)
   定义体: ⟨DPMorphism.id hI⟩
 
 Depends on / 依赖: DPMorphism, DPMorphism.id
@@ -472,7 +472,7 @@ theorem fromGens_coe
 
 中文:
 定理 fromGens_coe
-  结论: {f : A ->+* B} {S : Set A} (hS : I = span S) (hf : I.map f <= J)
+  结论: {f : A ->+* B} {S : 集合 A} (hS : I = span S) (hf : I.map f <= J)
   证明: rfl
 -/
 theorem fromGens_coe {f : A ->+* B} {S : Set A} (hS : I = span S) (hf : I.map f <= J)
@@ -504,7 +504,7 @@ theorem on_span
 
 中文:
 定理 on_span
-  结论: {f : A ->+* B} {S : Set A} (hS : I = span S) (hS' : 对任意 s in S, f s in J)
+  结论: {f : A ->+* B} {S : 集合 A} (hS : I = span S) (hS' : 对任意 s in S, f s in J)
   证明: by
   suffices h : I.map f <= J by
     exact ⟨h, fun a ha => by
@@ -540,7 +540,7 @@ theorem of_comp
 
 中文:
 定理 of_comp
-  结论: (f : A ->+* B) (g : B ->+* C) (heq : J = I.map f) (hf : IsDPMorphism hI hJ f)
+  结论: (f : A ->+* B) (g : B ->+* C) (heq : J = I.map f) (hf : 是DP态射 hI hJ f)
   证明: by
   apply on_span _ _ heq
   · rintro b ⟨a, ha, rfl⟩
@@ -577,7 +577,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : DPMorphism hJ hK) (f : DPMorphism hI hJ)
+  签名: (g : DP态射 hJ hK) (f : DP态射 hI hJ)
   定义体: mk' (IsDPMorphism.comp hK g.isDPMorphism f.isDPMorphism)
 -/
 protected def comp (g : DPMorphism hJ hK) (f : DPMorphism hI hJ) :
@@ -594,7 +594,7 @@ lemma comp_toRingHom
 
 中文:
 引理 comp_toRingHom
-  条件: (g : DPMorphism hJ hK) (f : DPMorphism hI hJ)
+  条件: (g : DP态射 hJ hK) (f : DP态射 hI hJ)
   证明: rfl
 -/
 @[simp] lemma comp_toRingHom (g : DPMorphism hJ hK) (f : DPMorphism hI hJ) :
@@ -617,7 +617,7 @@ theorem dpow_comp_from_gens
 
 中文:
 定理 dpow_comp_from_gens
-  结论: {S : Set A} (hS : I = span S) (hS' : 对任意 s in S, f s in J)
+  结论: {S : 集合 A} (hS : I = span S) (hS' : 对任意 s in S, f s in J)
   证明: (IsDPMorphism.on_span hI hJ hS hS' hdp).2
 
 Depends on / 依赖: IsDPMorphism, IsDPMorphism.on_span, on_span
@@ -646,7 +646,7 @@ theorem dpow_eq_from_gens
 
 中文:
 定理 dpow_eq_from_gens
-  结论: {S : Set A} (hS : I = span S)
+  结论: {S : 集合 A} (hS : I = span S)
   证明: by
   ext n a
   by_cases ha : a in I

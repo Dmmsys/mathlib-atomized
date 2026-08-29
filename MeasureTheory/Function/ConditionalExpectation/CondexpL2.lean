@@ -138,7 +138,7 @@ theorem integrable_condExpL2_of_isFiniteMeasure
 
 中文:
 定理 integrable_condExpL2_of_isFiniteMeasure
-  条件: (hm : m <= m0) [IsFiniteMeasure μ] {f : α ->₂[μ] E}
+  条件: (hm : m <= m0) [是有限测度 μ] {f : α ->₂[μ] E}
   证明: integrableOn_univ.mp integrableOn_condExpL2_of_measure_ne_top hm (measure_ne_top _ _) f
 
 Depends on / 依赖: condExpL2
@@ -282,7 +282,7 @@ theorem condExpL2_indicator_of_measurable
 
 中文:
 定理 condExpL2_indicator_of_measurable
-  结论: (hm : m <= m0) (hs : MeasurableSet[m] s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集[m] s) (hμs : μ s != ∞)
   证明: by
   rw [condExpL2]
   have : Fact (m <= m0) := ⟨hm⟩
@@ -359,7 +359,7 @@ theorem integral_condExpL2_eq_of_fin_meas_real
 
 中文:
 定理 integral_condExpL2_eq_of_fin_meas_real
-  结论: (f : Lp 𝕜 2 μ) (hs : MeasurableSet[m] s)
+  结论: (f : Lp 𝕜 2 μ) (hs : 可测集[m] s)
   证明: by
   rw [← L2.inner_indicatorConstLp_one (𝕜 := 𝕜) (hm s hs) hμs f]
   have h_eq_inner : ∫ x in s, (condExpL2 𝕜 𝕜 hm f : α -> 𝕜) x ∂μ =
@@ -392,7 +392,7 @@ theorem lintegral_nnnorm_condExpL2_le
 
 中文:
 定理 lintegral_nnnorm_condExpL2_le
-  条件: (hs : MeasurableSet[m] s) (hμs : μ s != ∞) (f : Lp 实数 2 μ)
+  条件: (hs : 可测集[m] s) (hμs : μ s != ∞) (f : Lp 实数 2 μ)
   证明: by
   let h_meas := lpMeas.aestronglyMeasurable (condExpL2 Real Real hm f)
   let g := h_meas.choose
@@ -441,7 +441,7 @@ theorem condExpL2_ae_eq_zero_of_ae_eq_zero
 
 中文:
 定理 condExpL2_ae_eq_zero_of_ae_eq_zero
-  结论: (hs : MeasurableSet[m] s) (hμs : μ s != ∞) {f : Lp 实数 2 μ}
+  结论: (hs : 可测集[m] s) (hμs : μ s != ∞) {f : Lp 实数 2 μ}
   证明: by
   suffices h_nnnorm_eq_zero : ∫⁻ x in s, ‖(condExpL2 Real Real hm f : α -> Real) x‖₊ ∂μ = 0 by
     rw [lintegral_eq_zero_iff] at h_nnnorm_eq_zero
@@ -487,7 +487,7 @@ theorem lintegral_nnnorm_condExpL2_indicator_le_real
 
 中文:
 定理 lintegral_nnnorm_condExpL2_indicator_le_real
-  结论: (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   refine (lintegral_nnnorm_condExpL2_le ht hμt _).trans (le_of_eq ?_)
   have h_eq :
@@ -580,7 +580,7 @@ theorem integral_condExpL2_eq
 
 中文:
 定理 integral_condExpL2_eq
-  结论: (hm : m <= m0) (f : Lp E' 2 μ) (hs : MeasurableSet[m] s)
+  结论: (hm : m <= m0) (f : Lp E' 2 μ) (hs : 可测集[m] s)
   证明: by
   rw [← sub_eq_zero]; rw [←
     integral_sub' (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs)
@@ -677,7 +677,7 @@ theorem condExpL2_indicator_ae_eq_smul
 
 中文:
 定理 condExpL2_indicator_ae_eq_smul
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   rw [indicatorConstLp_eq_toSpanSingleton_compLp hs hμs x]
   have h_comp :=
@@ -716,7 +716,7 @@ theorem condExpL2_indicator_eq_toSpanSingleton_comp
 
 中文:
 定理 condExpL2_indicator_eq_toSpanSingleton_comp
-  结论: (hm : m <= m0) (hs : MeasurableSet s)
+  结论: (hm : m <= m0) (hs : 可测集 s)
   证明: by
   ext1
   refine (condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).trans ?_
@@ -754,8 +754,8 @@ theorem setLIntegral_nnnorm_condExpL2_indicator_le
         ((condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).mono fun a 
 
 中文:
-定理 setLIntegral_nnnorm_condExpL2_indicator_le
-  结论: (hm : m <= m0) (hs : MeasurableSet s)
+定理 setL整数egral_nnnorm_condExpL2_indicator_le
+  结论: (hm : m <= m0) (hs : 可测集 s)
   证明: calc
     ∫⁻ a in t, ‖(condExpL2 E' 𝕜 hm (indicatorConstLp 2 hs hμs x) : α -> E') a‖₊ ∂μ =
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
@@ -793,7 +793,7 @@ theorem lintegral_nnnorm_condExpL2_indicator_le
 
 中文:
 定理 lintegral_nnnorm_condExpL2_indicator_le
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   refine lintegral_le_of_forall_fin_meas_trim_le hm (μ s * ‖x‖₊) fun t ht hμt => ?_
   refine (setLIntegral_nnnorm_condExpL2_indicator_le hm hs hμs x ht hμt).trans ?_
@@ -827,7 +827,7 @@ theorem integrable_condExpL2_indicator
 
 中文:
 定理 integrable_condExpL2_indicator
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: by
   refine integrable_of_forall_fin_meas_le' hm (μ s * ‖x‖₊)
     (ENNReal.mul_lt_top hμs.lt_top ENNReal.coe_lt_top) ?_ ?_
@@ -866,7 +866,7 @@ definition condExpIndSMul
 
 中文:
 定义 condExpIndSMul
-  签名: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞) (x : G)
+  签名: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞) (x : G)
   定义体: (toSpanSingleton Real x).compLpL 2 μ (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs (1 : Real)))
 
 Depends on / 依赖: compLpL, condExpL2, indicatorConstLp, toSpanSingleton
@@ -890,7 +890,7 @@ theorem aestronglyMeasurable_condExpIndSMul
 
 中文:
 定理 aestronglyMeasurable_condExpIndSMul
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   have h : AEStronglyMeasurable[m] (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) μ :=
     aestronglyMeasurable_condExpL2 _ _
@@ -919,7 +919,7 @@ theorem condExpIndSMul_add
 
 中文:
 定理 condExpIndSMul_add
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (x y : G)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (x y : G)
   证明: by
   simp_rw [condExpIndSMul]; rw [toSpanSingleton_add, add_compLpL, add_apply]
 
@@ -940,7 +940,7 @@ theorem condExpIndSMul_smul
 
 中文:
 定理 condExpIndSMul_smul
-  结论: [NormedSpace 实数 F] [SMulCommClass 实数 𝕜 F] (hs : MeasurableSet s)
+  结论: [赋范空间 实数 F] [标量交换类 实数 𝕜 F] (hs : 可测集 s)
   证明: by
   simp_rw [condExpIndSMul, toSpanSingleton_smul, smul_compLpL, smul_apply]
 
@@ -961,7 +961,7 @@ theorem condExpIndSMul_ae_eq_smul
 
 中文:
 定理 condExpIndSMul_ae_eq_smul
-  条件: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞) (x : G)
+  条件: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞) (x : G)
   证明: (toSpanSingleton Real x).coeFn_compLpL _
 
 Depends on / 依赖: coeFn_compLpL, toSpanSingleton
@@ -985,8 +985,8 @@ theorem setLIntegral_nnnorm_condExpIndSMul_le
     _ = (∫⁻ a in t, 
 
 中文:
-定理 setLIntegral_nnnorm_condExpIndSMul_le
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+定理 setL整数egral_nnnorm_condExpIndSMul_le
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: calc
     ∫⁻ a in t, ‖condExpIndSMul hm hs hμs x a‖₊ ∂μ =
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
@@ -1024,7 +1024,7 @@ theorem lintegral_nnnorm_condExpIndSMul_le
 
 中文:
 定理 lintegral_nnnorm_condExpIndSMul_le
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   refine lintegral_le_of_forall_fin_meas_trim_le hm (μ s * ‖x‖₊) fun t ht hμt => ?_
   refine (setLIntegral_nnnorm_condExpIndSMul_le hm hs hμs x ht hμt).trans ?_
@@ -1056,7 +1056,7 @@ theorem integrable_condExpIndSMul
 
 中文:
 定理 integrable_condExpIndSMul
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)] (hs : MeasurableSet s)
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)] (hs : 可测集 s)
   证明: by
   refine integrable_of_forall_fin_meas_le' hm (μ s * ‖x‖₊)
     (ENNReal.mul_lt_top hμs.lt_top ENNReal.coe_lt_top) ?_ ?_
@@ -1090,7 +1090,7 @@ theorem condExpIndSMul_empty
 中文:
 定理 condExpIndSMul_empty
   条件: {x : G}
-  结论: condExpIndSMul hm MeasurableSet.empty
+  结论: condExpIndSMul hm 可测集.empty
   证明: by
   rw [condExpIndSMul]; rw [indicatorConstLp_empty]
   simp only [Submodule.coe_zero, map_zero]
@@ -1115,8 +1115,8 @@ theorem setIntegral_condExpL2_indicator
     _ = μ.real (t inter s) • (1 : Real)
 
 中文:
-定理 setIntegral_condExpL2_indicator
-  结论: (hs : MeasurableSet[m] s) (ht : MeasurableSet t)
+定理 set整数egral_condExpL2_indicator
+  结论: (hs : 可测集[m] s) (ht : 可测集 t)
   证明: calc
     ∫ x in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) x ∂μ =
         ∫ x in s, indicatorConstLp 2 ht hμt (1 : Real) x ∂μ :=
@@ -1149,8 +1149,8 @@ theorem setIntegral_condExpIndSMul
     _ = (∫ a in s, (condExpL2 Real Real
 
 中文:
-定理 setIntegral_condExpIndSMul
-  结论: (hs : MeasurableSet[m] s) (ht : MeasurableSet t)
+定理 set整数egral_condExpIndSMul
+  结论: (hs : 可测集[m] s) (ht : 可测集 t)
   证明: calc
     ∫ a in s, (condExpIndSMul hm ht hμt x) a ∂μ =
         ∫ a in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) a • x ∂μ :=
@@ -1187,7 +1187,7 @@ theorem condExpL2_indicator_nonneg
 
 中文:
 定理 condExpL2_indicator_nonneg
-  结论: (hm : m <= m0) (hs : MeasurableSet s) (hμs : μ s != ∞)
+  结论: (hm : m <= m0) (hs : 可测集 s) (hμs : μ s != ∞)
   证明: by
   have h : AEStronglyMeasurable[m] (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) μ :=
     aestronglyMeasurable_condExpL2 _ _

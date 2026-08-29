@@ -46,7 +46,7 @@ theorem hasFDerivAtFilter
 
 中文:
 定理 hasFDerivAtFilter
-  结论: HasFDerivAtFilter f f L
+  结论: 有FDerivAtFilter f f L
   证明: .of_isLittleOTVS (IsLittleOTVS.zero _ _).congr_left fun x => by
     simp only [f.map_sub, sub_self, Pi.zero_apply]
 
@@ -111,7 +111,7 @@ theorem hasFDerivAt
 
 中文:
 定理 hasFDerivAt
-  结论: HasFDerivAt f f x
+  结论: 在点处Fréchet可导 f f x
   证明: f.hasFDerivAtFilter
 
 @[simp, fun_prop]
@@ -175,7 +175,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 f
+  结论: 可微 𝕜 f
   证明: fun _ =>
   f.differentiableAt
 
@@ -267,7 +267,7 @@ theorem hasFDerivAtFilter
 
 中文:
 定理 hasFDerivAtFilter
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   证明: h.toContinuousLinearMap.hasFDerivAtFilter
 
 @[fun_prop]
@@ -291,7 +291,7 @@ theorem hasFDerivWithinAt
 
 中文:
 定理 hasFDerivWithinAt
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   证明: h.hasFDerivAtFilter
 
 @[fun_prop]
@@ -315,7 +315,7 @@ theorem hasFDerivAt
 
 中文:
 定理 hasFDerivAt
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   证明: h.hasFDerivAtFilter
 
 @[fun_prop]
@@ -340,7 +340,7 @@ theorem differentiableAt
 
 中文:
 定理 differentiableAt
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   结论: DifferentiableAt 𝕜 f x
   证明: h.hasFDerivAt.differentiableAt
 
@@ -362,7 +362,7 @@ theorem differentiableWithinAt
 
 中文:
 定理 differentiableWithinAt
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   证明: h.differentiableAt.differentiableWithinAt
 
 Depends on / 依赖: differentiableAt, differentiableWithinAt, h.differentiableAt.differentiableWithinAt
@@ -381,7 +381,7 @@ theorem fderiv
 
 中文:
 定理 fderiv
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   证明: HasFDerivAt.fderiv h.hasFDerivAt
 -/
 protected theorem fderiv (h : IsBoundedLinearMap 𝕜 f) :
@@ -402,7 +402,7 @@ theorem fderivWithin
 
 中文:
 定理 fderivWithin
-  结论: (h : IsBoundedLinearMap 𝕜 f)
+  结论: (h : 是BoundedLinear映射 𝕜 f)
   证明: by
   rw [DifferentiableAt.fderivWithin h.differentiableAt hxs]
   exact h.fderiv
@@ -428,8 +428,8 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  条件: (h : IsBoundedLinearMap 𝕜 f)
-  结论: Differentiable 𝕜 f
+  条件: (h : 是BoundedLinear映射 𝕜 f)
+  结论: 可微 𝕜 f
   证明: fun _ => h.differentiableAt
 
 @[fun_prop]
@@ -451,7 +451,7 @@ theorem differentiableOn
 
 中文:
 定理 differentiableOn
-  条件: (h : IsBoundedLinearMap 𝕜 f)
+  条件: (h : 是BoundedLinear映射 𝕜 f)
   结论: DifferentiableOn 𝕜 f s
   证明: h.differentiable.differentiableOn
 

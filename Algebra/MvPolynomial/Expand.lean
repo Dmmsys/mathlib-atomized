@@ -40,7 +40,7 @@ definition expand
 
 中文:
 定义 expand
-  签名: : MvPolynomial σ R ->ₐ[R] MvPolynomial σ R
+  签名: : 多元多项式 σ R ->ₐ[R] 多元多项式 σ R
   定义体: bind₁ fun i => X i ^ p
 -/
 noncomputable def expand : MvPolynomial σ R ->ₐ[R] MvPolynomial σ R :=
@@ -76,7 +76,7 @@ theorem expand_C
 中文:
 定理 expand_C
   条件: (r : R)
-  结论: expand p (C r : MvPolynomial σ R) = C r
+  结论: expand p (C r : 多元多项式 σ R) = C r
   证明: eval₂Hom_C _ _ _
 
 @[simp]
@@ -99,7 +99,7 @@ theorem expand_X
 中文:
 定理 expand_X
   条件: (i : σ)
-  结论: expand p (X i : MvPolynomial σ R) = X i ^ p
+  结论: expand p (X i : 多元多项式 σ R) = X i ^ p
   证明: eval₂Hom_X' _ _ _
 
 @[simp]
@@ -176,8 +176,8 @@ lemma expand_zero_apply
 
 中文:
 引理 expand_zero_apply
-  条件: (f : MvPolynomial σ R)
-  结论: expand 0 f = .C (MvPolynomial.eval 1 f)
+  条件: (f : 多元多项式 σ R)
+  结论: expand 0 f = .C (多元多项式.eval 1 f)
   证明: by
   simp
 
@@ -199,7 +199,7 @@ theorem expand_one
 
 中文:
 定理 expand_one
-  结论: expand 1 = AlgHom.id R (MvPolynomial σ R)
+  结论: expand 1 = 代数态射.id R (多元多项式 σ R)
   证明: by
   ext1 i
   simp
@@ -219,7 +219,7 @@ theorem expand_one_apply
 
 中文:
 定理 expand_one_apply
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   结论: expand 1 f = f
   证明: by simp
 -/
@@ -262,7 +262,7 @@ theorem expand_mul
 
 中文:
 定理 expand_mul
-  条件: (q : 自然数) (φ : MvPolynomial σ R)
+  条件: (q : 自然数) (φ : 多元多项式 σ R)
   结论: φ.expand (p * q) = (φ.expand q).expand p
   证明: DFunLike.congr_fun (expand_mul_eq_comp p q) φ
 
@@ -288,7 +288,7 @@ lemma coeff_expand_smul
 
 中文:
 引理 coeff_expand_smul
-  条件: (hp : p != 0) (φ : MvPolynomial σ R) (m : σ ->₀ 自然数)
+  条件: (hp : p != 0) (φ : 多元多项式 σ R) (m : σ ->₀ 自然数)
   证明: by
   classical
   induction φ using induction_on' <;> simp [*, nsmul_right_inj hp]
@@ -314,7 +314,7 @@ lemma coeff_expand_zero
 
 中文:
 引理 coeff_expand_zero
-  条件: (hp : p != 0) (φ : MvPolynomial σ R)
+  条件: (hp : p != 0) (φ : 多元多项式 σ R)
   证明: calc (expand p φ).coeff 0 = (expand p φ).coeff (p • 0) := by rw [smul_zero]
                           _ = φ.coeff 0 := by rw [coeff_expand_smul p hp]
 
@@ -340,7 +340,7 @@ theorem expand_injective
 中文:
 定理 expand_injective
   条件: {n : 自然数} (hn : 0 < n)
-  结论: Function.Injective (expand n (R := R) (σ := σ))
+  结论: 函数.单射 (expand n (R := R) (σ := σ))
   证明: fun g g' H => by
     ext d
     rw [← coeff_expand_smul _ (n.ne_zero_iff_zero_lt.mpr hn)]; rw [H]; rw [coeff_expand_smul _
@@ -362,7 +362,7 @@ theorem expand_inj
 
 中文:
 定理 expand_inj
-  条件: {p : 自然数} (hp : 0 < p) {f g : MvPolynomial σ R}
+  条件: {p : 自然数} (hp : 0 < p) {f g : 多元多项式 σ R}
   证明: (expand_injective hp).eq_iff
 
 Depends on / 依赖: eq_iff, expand_injective
@@ -381,7 +381,7 @@ theorem expand_eq_zero
 
 中文:
 定理 expand_eq_zero
-  条件: {p : 自然数} (hp : 0 < p) {f : MvPolynomial σ R}
+  条件: {p : 自然数} (hp : 0 < p) {f : 多元多项式 σ R}
   结论: expand p f = 0 ↔ f = 0
   证明: (expand_injective hp).eq_iff' (map_zero _)
 
@@ -401,7 +401,7 @@ theorem expand_ne_zero
 
 中文:
 定理 expand_ne_zero
-  条件: {p : 自然数} (hp : 0 < p) {f : MvPolynomial σ R}
+  条件: {p : 自然数} (hp : 0 < p) {f : 多元多项式 σ R}
   结论: expand p f != 0 ↔ f != 0
   证明: (expand_eq_zero hp).not
 
@@ -421,7 +421,7 @@ theorem expand_eq_C
 
 中文:
 定理 expand_eq_C
-  条件: {p : 自然数} (hp : 0 < p) {f : MvPolynomial σ R} {r : R}
+  条件: {p : 自然数} (hp : 0 < p) {f : 多元多项式 σ R} {r : R}
   证明: by
   rw [← expand_C]; rw [expand_inj hp]; rw [expand_C]
 
@@ -443,7 +443,7 @@ theorem expand_comp_bind₁
 
 中文:
 定理 expand_comp_bind₁
-  条件: (p : 自然数) (f : σ -> MvPolynomial τ R)
+  条件: (p : 自然数) (f : σ -> 多元多项式 τ R)
   证明: by
   ext1 i
   simp
@@ -466,7 +466,7 @@ theorem expand_bind₁
 
 中文:
 定理 expand_bind₁
-  条件: (f : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: (f : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: by
   rw [← AlgHom.comp_apply]; rw [expand_comp_bind₁]
 
@@ -491,7 +491,7 @@ theorem map_expand
 
 中文:
 定理 map_expand
-  条件: (f : R ->+* S) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* S) (φ : 多元多项式 σ R)
   证明: by simp [expand, map_bind₁]
 
 @[simp]
@@ -540,7 +540,7 @@ theorem rename_expand
 
 中文:
 定理 rename_expand
-  条件: (f : σ -> τ) (φ : MvPolynomial σ R)
+  条件: (f : σ -> τ) (φ : 多元多项式 σ R)
   证明: DFunLike.congr_fun (rename_comp_expand p f) φ
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, rename_comp_expand
@@ -588,7 +588,7 @@ lemma eval₂_expand
 
 中文:
 引理 eval₂_expand
-  条件: (f : R ->+* S) (g : σ -> S) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* S) (g : σ -> S) (φ : 多元多项式 σ R)
   证明: DFunLike.congr_fun (eval₂Hom_comp_expand p f g) φ
 
 @[simp]
@@ -613,7 +613,7 @@ lemma aeval_comp_expand
 
 中文:
 引理 aeval_comp_expand
-  条件: {A : 类型} [CommSemiring A] [Algebra R A] (f : σ -> A)
+  条件: {A : 类型} [交换半环 A] [代数 R A] (f : σ -> A)
   证明: by
   ext; simp
 
@@ -636,7 +636,7 @@ lemma aeval_expand
 
 中文:
 引理 aeval_expand
-  结论: {A : 类型} [CommSemiring A] [Algebra R A]
+  结论: {A : 类型} [交换半环 A] [代数 R A]
   证明: eval₂_expand ..
 
 @[simp]
@@ -657,7 +657,7 @@ lemma eval_expand
 
 中文:
 引理 eval_expand
-  条件: (f : σ -> R) (φ : MvPolynomial σ R)
+  条件: (f : σ -> R) (φ : 多元多项式 σ R)
   证明: eval₂_expand ..
 -/
 lemma eval_expand (f : σ -> R) (φ : MvPolynomial σ R) :
@@ -772,7 +772,7 @@ theorem totalDegree_expand
 
 中文:
 定理 totalDegree_expand
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   classical
   rcases p.eq_zero_or_pos with hp | hp
@@ -824,7 +824,7 @@ theorem isLocalHom_expand
 中文:
 定理 isLocalHom_expand
   条件: {p : 自然数} (hp : p != 0)
-  结论: IsLocalHom (expand p (R := R) (σ := σ))
+  结论: 是Local态射 (expand p (R := R) (σ := σ))
   证明: by
   refine ⟨fun f hf => ?_⟩
   rw [MvPolynomial.isUnit_iff] at hf ⊢
@@ -858,7 +858,7 @@ theorem of_irreducible_expand
 
 中文:
 定理 of_irreducible_expand
-  结论: {p : 自然数} (hp : p != 0) {f : MvPolynomial σ R}
+  结论: {p : 自然数} (hp : p != 0) {f : 多元多项式 σ R}
   证明: let _ := isLocalHom_expand R σ hp
   hf.of_map
 

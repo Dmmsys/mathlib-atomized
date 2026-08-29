@@ -76,7 +76,7 @@ theorem iterateMapComap_le_succ
 
 中文:
 定理 iterateMapComap_le_succ
-  条件: (K : Submodule R N) (h : K.map f <= K.map i) (n : 自然数)
+  条件: (K : 子模 R N) (h : K.map f <= K.map i) (n : 自然数)
   证明: by
   nth_rw 2 [iterateMapComap]
   rw [iterate_succ']; rw [Function.comp_apply]; rw [← iterateMapComap]; rw [← map_le_iff_le_comap]
@@ -121,7 +121,7 @@ theorem iterateMapComap_eq_succ
 
 中文:
 定理 iterateMapComap_eq_succ
-  结论: (K : Submodule R N)
+  结论: (K : 子模 R N)
   证明: by
   induction n with
   | zero =>
@@ -162,7 +162,7 @@ theorem ker_le_of_iterateMapComap_eq_succ
 
 中文:
 定理 ker_le_of_iterateMapComap_eq_succ
-  结论: (K : Submodule R N)
+  结论: (K : 子模 R N)
   证明: by
   rw [show K = _ from f.iterateMapComap_eq_succ i K m heq hf hi 0]
   exact f.ker_le_comap

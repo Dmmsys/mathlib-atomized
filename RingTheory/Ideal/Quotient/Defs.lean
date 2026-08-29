@@ -48,7 +48,7 @@ instance instHasQuotient
 
 中文:
 实例 instHasQuotient
-  签名: : HasQuotient R (Ideal R)
+  签名: : 有商 R (理想 R)
   定义体: Submodule.hasQuotient
 
 Depends on / 依赖: Submodule, Submodule.hasQuotient, hasQuotient
@@ -72,7 +72,7 @@ instance one
 
 中文:
 实例 one
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: ⟨Submodule.Quotient.mk 1⟩
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk
@@ -94,7 +94,7 @@ definition ringCon
 
 中文:
 定义 ringCon
-  签名: (I : Ideal R) [I.IsTwoSided]
+  签名: (I : 理想 R) [I.是TwoSided]
   定义体: QuotientAddGroup.con I.toAddSubgroup
   mul' {a₁ b₁ a₂ b₂} h₁ h₂ := by
     rw [Submodule.quotientRel_def] at h₁ h₂ ⊢
@@ -118,7 +118,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: (I : Ideal R) [I.IsTwoSided]
+  签名: (I : 理想 R) [I.是TwoSided]
   定义体: inferInstanceAs Ring (Quotient.ringCon I).Quotient
 
 Depends on / 依赖: Quotient, Quotient.ringCon, ringCon
@@ -136,7 +136,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: {R} [CommRing R] (I : Ideal R)
+  签名: {R} [交换环 R] (I : 理想 R)
   定义体: (ring I).toSemiring
 
 Depends on / 依赖: toSemiring
@@ -152,7 +152,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: {R} [CommRing R] (I : Ideal R)
+  签名: {R} [交换环 R] (I : 理想 R)
   定义体: by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (mul_comm a b)
 
 Depends on / 依赖: congr_arg, mul_comm
@@ -170,7 +170,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: {R} [CommRing R] (I : Ideal R)
+  签名: {R} [交换环 R] (I : 理想 R)
 
 Depends on / 依赖: with_reducible_and_instances
 -/
@@ -247,7 +247,7 @@ theorem ringHom_ext
 
 中文:
 定理 ringHom_ext
-  条件: [NonAssocSemiring S] ⦃f g
+  条件: [非结合半环 S] ⦃f g
   结论: R ⧸ I ->+* S⦄ (h : f.comp (mk I) = g.comp (mk I)) :
   证明: RingHom.ext fun x => Quotient.inductionOn' x (RingHom.congr_fun h :)
 
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (R ⧸ I)
+  签名: 非空 (R ⧸ I)
   定义体: ⟨mk I 37⟩
 -/
 instance : Nonempty (R ⧸ I) :=
@@ -306,7 +306,7 @@ theorem mk_eq_mk
 中文:
 定理 mk_eq_mk
   条件: (x : R)
-  结论: (Submodule.Quotient.mk x : R ⧸ I) = mk I x
+  结论: (子模.商.mk x : R ⧸ I) = mk I x
   证明: rfl
 -/
 theorem mk_eq_mk (x : R) : (Submodule.Quotient.mk x : R ⧸ I) = mk I x := rfl
@@ -390,7 +390,7 @@ theorem mk_out
 中文:
 定理 mk_out
   条件: (x : R ⧸ I)
-  结论: Ideal.Quotient.mk I (Quotient.out x) = x
+  结论: 理想.商.mk I (商.out x) = x
   证明: Quotient.out_eq x
 
 Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
@@ -409,7 +409,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk I)
+  结论: 函数.满射 (mk I)
   证明: fun y =>
   Quotient.inductionOn' y fun x => Exists.intro x rfl
 -/
@@ -449,7 +449,7 @@ theorem quotient_ring_saturate
 
 中文:
 定理 quotient_ring_saturate
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   ext x
   simp only [mem_preimage, mem_image, mem_iUnion, Ideal.Quotient.eq]
@@ -623,7 +623,7 @@ theorem factor_eq
 
 中文:
 定理 factor_eq
-  结论: factor (le_refl S) = RingHom.id _
+  结论: factor (le_refl S) = 环态射.id _
   证明: by
   ext
   simp
@@ -728,7 +728,7 @@ lemma factor_surjective
 中文:
 引理 factor_surjective
   条件: (H : S <= T)
-  结论: Function.Surjective (factor H)
+  结论: 函数.满射 (factor H)
   证明: Ideal.Quotient.lift_surjective_of_surjective _ _ Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.lift_surjective_of_surjective, Ideal.Quotient.mk_surjective, Quotient, lift_surjective_of_surjective, mk_surjective

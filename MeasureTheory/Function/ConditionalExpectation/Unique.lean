@@ -61,7 +61,7 @@ theorem lpMeas.ae_eq_zero_of_forall_setIntegral_eq_zero
     rw 
 
 中文:
-定理 lpMeas.ae_eq_zero_of_forall_setIntegral_eq_zero
+定理 lpMeas.ae_eq_zero_of_对任意_set整数egral_eq_zero
   结论: (hm : m <= m0) (f : lpMeas E' 𝕜 m p μ)
   证明: by
   obtain ⟨g, hg_sm, hfg⟩ := lpMeas.ae_fin_strongly_measurable' hm f hp_ne_zero hp_ne_top
@@ -109,7 +109,7 @@ theorem Lp.ae_eq_zero_of_forall_setIntegral_eq_zero'
 include 𝕜 in
 
 中文:
-定理 Lp.ae_eq_zero_of_forall_setIntegral_eq_zero'
+定理 Lp.ae_eq_zero_of_对任意_set整数egral_eq_zero'
   结论: (hm : m <= m0) (f : Lp E' p μ)
   证明: by
   let f_meas : lpMeas E' 𝕜 m p μ := ⟨f, hf_meas⟩
@@ -149,7 +149,7 @@ theorem Lp.ae_eq_of_forall_setIntegral_eq'
     
 
 中文:
-定理 Lp.ae_eq_of_forall_setIntegral_eq'
+定理 Lp.ae_eq_of_对任意_set整数egral_eq'
   结论: (hm : m <= m0) (f g : Lp E' p μ) (hp_ne_zero : p != 0)
   证明: by
   suffices h_sub : ⇑(f - g) =ᵐ[μ] 0 by
@@ -198,8 +198,8 @@ theorem ae_eq_of_forall_setIntegral_eq_of_sigmaFinite'
     rw [IntegrableOn]; rw [restrict_trim hm _
 
 中文:
-定理 ae_eq_of_forall_setIntegral_eq_of_sigmaFinite'
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+定理 ae_eq_of_对任意_set整数egral_eq_of_sigmaFinite'
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: by
   rw [← ae_eq_trim_iff_of_aestronglyMeasurable hm hfm hgm]
   have hf_mk_int_finite (s) :
@@ -261,7 +261,7 @@ theorem integral_norm_le_of_forall_fin_meas_integral_eq
     stronglyMeasurable_const.measurable
 
 中文:
-定理 integral_norm_le_of_forall_fin_meas_integral_eq
+定理 integral_norm_le_of_对任意_fin_meas_integral_eq
   结论: (hm : m <= m0) {f g : α -> 实数}
   证明: by
   rw [integral_norm_eq_pos_sub_neg hgi]; rw [integral_norm_eq_pos_sub_neg hfi]
@@ -313,7 +313,7 @@ theorem lintegral_enorm_le_of_forall_fin_meas_integral_eq
   · positivity
 
 中文:
-定理 lintegral_enorm_le_of_forall_fin_meas_integral_eq
+定理 lintegral_enorm_le_of_对任意_fin_meas_integral_eq
   结论: (hm : m <= m0) {f g : α -> 实数}
   证明: by
   rw [← ofReal_integral_norm_eq_lintegral_enorm hfi]; rw [←

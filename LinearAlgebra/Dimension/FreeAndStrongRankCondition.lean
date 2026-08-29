@@ -44,8 +44,8 @@ definition Basis.ofRankEqZero
 @[simp]
 
 中文:
-定义 Basis.ofRankEqZero
-  签名: [Module.Free K V] {ι : 类型} [IsEmpty ι]
+定义 基.ofRankEqZero
+  签名: [模.自由 K V] {ι : 类型} [是空 ι]
   定义体: haveI : Subsingleton V := by
     obtain ⟨_, b⟩ := Module.Free.exists_basis (R := K) (M := V)
     have := mk_eq_zero_iff.1 (hV ▸ b.mk_eq_rank'')
@@ -74,8 +74,8 @@ theorem Basis.ofRankEqZero_apply
   proof: rfl
 
 中文:
-定理 Basis.ofRankEqZero_apply
-  结论: [Module.Free K V] {ι : 类型} [IsEmpty ι]
+定理 基.ofRankEqZero_apply
+  结论: [模.自由 K V] {ι : 类型} [是空 ι]
   证明: rfl
 -/
 theorem Basis.ofRankEqZero_apply [Module.Free K V] {ι : Type*} [IsEmpty ι]
@@ -100,8 +100,8 @@ theorem le_rank_iff_exists_linearIndependent
   
 
 中文:
-定理 le_rank_iff_exists_linearIndependent
-  条件: [Module.Free K V] {c : Cardinal}
+定理 le_rank_iff_存在_linearIndependent
+  条件: [模.自由 K V] {c : 基数}
   证明: by
   have := nontrivial_of_invariantBasisNumber K
   constructor
@@ -147,7 +147,7 @@ theorem le_rank_iff_exists_linearIndependent_finset
     exact ⟨s, ⟨s, rfl, rfl⟩, si⟩
 
 中文:
-定理 le_rank_iff_exists_linearIndependent_finset
+定理 le_rank_iff_存在_linearIndependent_finset
   证明: by
   simp only [le_rank_iff_exists_linearIndependent, mk_set_eq_nat_iff_finset]
   constructor
@@ -186,7 +186,7 @@ theorem rank_le_one_iff
 
 中文:
 定理 rank_le_one_iff
-  条件: [Module.Free K V]
+  条件: [模.自由 K V]
   证明: by
   obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := K) (M := V)
   constructor
@@ -241,7 +241,7 @@ theorem rank_eq_one_iff
 
 中文:
 定理 rank_eq_one_iff
-  条件: [Module.Free K V]
+  条件: [模.自由 K V]
   证明: by
   have := nontrivial_of_invariantBasisNumber K
   refine ⟨fun h => ?_, fun ⟨v₀, h, hv⟩ => (rank_le_one_iff.2 ⟨v₀, hv⟩).antisymm ?_⟩
@@ -280,7 +280,7 @@ theorem rank_submodule_le_one_iff
 
 中文:
 定理 rank_submodule_le_one_iff
-  条件: (s : Submodule K V) [Module.Free K s]
+  条件: (s : 子模 K V) [模.自由 K s]
   证明: by
   simp_rw [rank_le_one_iff, le_span_singleton_iff]
   simp
@@ -308,7 +308,7 @@ theorem rank_submodule_eq_one_iff
 
 中文:
 定理 rank_submodule_eq_one_iff
-  条件: (s : Submodule K V) [Module.Free K s]
+  条件: (s : 子模 K V) [模.自由 K s]
   证明: by
   simp_rw [rank_eq_one_iff, le_span_singleton_iff]
   refine ⟨fun ⟨⟨v₀, hv₀⟩, H, h⟩ => ⟨v₀, hv₀, fun h' => by
@@ -349,7 +349,7 @@ theorem rank_submodule_le_one_iff'
 
 中文:
 定理 rank_submodule_le_one_iff'
-  条件: (s : Submodule K V) [Module.Free K s]
+  条件: (s : 子模 K V) [模.自由 K s]
   证明: by
   have := nontrivial_of_invariantBasisNumber K
   constructor
@@ -390,8 +390,8 @@ theorem Submodule.rank_le_one_iff_isPrincipal
   · rintro ⟨a, ⟨h, 
 
 中文:
-定理 Submodule.rank_le_one_iff_isPrincipal
-  条件: (W : Submodule K V) [Module.Free K W]
+定理 子模.rank_le_one_iff_isPrincipal
+  条件: (W : 子模 K V) [模.自由 K W]
   证明: by
   simp only [rank_le_one_iff, Submodule.isPrincipal_iff, le_antisymm_iff, le_span_singleton_iff,
     span_singleton_le_iff_mem]
@@ -426,8 +426,8 @@ theorem Module.rank_le_one_iff_top_isPrincipal
   rw [← Submodule.rank_le_one_iff_isPrincipal]; rw [rank_top]
 
 中文:
-定理 Module.rank_le_one_iff_top_isPrincipal
-  条件: [Module.Free K V]
+定理 模.rank_le_one_iff_top_isPrincipal
+  条件: [模.自由 K V]
   证明: by
   have := Module.Free.of_equiv (topEquiv (R := K) (M := V)).symm
   rw [← Submodule.rank_le_one_iff_isPrincipal]; rw [rank_top]
@@ -454,7 +454,7 @@ theorem finrank_eq_one_iff
 
 中文:
 定理 finrank_eq_one_iff
-  条件: [Module.Free K V] (ι : 类型) [Unique ι]
+  条件: [模.自由 K V] (ι : 类型) [唯一 ι]
   证明: by
   constructor
   · intro h
@@ -484,7 +484,7 @@ theorem finrank_eq_one_iff'
 
 中文:
 定理 finrank_eq_one_iff'
-  条件: [Module.Free K V]
+  条件: [模.自由 K V]
   证明: by
   rw [← rank_eq_one_iff]
   exact toNat_eq_iff one_ne_zero
@@ -507,7 +507,7 @@ theorem finrank_le_one_iff
 
 中文:
 定理 finrank_le_one_iff
-  条件: [Module.Free K V] [Module.Finite K V]
+  条件: [模.自由 K V] [模.有限 K V]
   证明: by
   rw [← rank_le_one_iff]; rw [← finrank_eq_rank]; rw [Nat.cast_le_one]
 
@@ -526,7 +526,7 @@ theorem Submodule.finrank_le_one_iff_isPrincipal
   rw [← W.rank_le_one_iff_isPrincipal]; rw [← finrank_eq_rank]; rw [Nat.cast_le_one]
 
 中文:
-定理 Submodule.finrank_le_one_iff_isPrincipal
+定理 子模.finrank_le_one_iff_isPrincipal
   证明: by
   rw [← W.rank_le_one_iff_isPrincipal]; rw [← finrank_eq_rank]; rw [Nat.cast_le_one]
 
@@ -547,8 +547,8 @@ theorem Module.finrank_le_one_iff_top_isPrincipal
   rw [← Module.rank_le_one_iff_top_isPrincipal]; rw [← finrank_eq_rank]; rw [Nat.cast_le_one]
 
 中文:
-定理 Module.finrank_le_one_iff_top_isPrincipal
-  条件: [Module.Free K V] [Module.Finite K V]
+定理 模.finrank_le_one_iff_top_isPrincipal
+  条件: [模.自由 K V] [模.有限 K V]
   证明: by
   rw [← Module.rank_le_one_iff_top_isPrincipal]; rw [← finrank_eq_rank]; rw [Nat.cast_le_one]
 
@@ -575,7 +575,7 @@ theorem lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank
 
 中文:
 定理 lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank
-  结论: [Module.Free K V]
+  结论: [模.自由 K V]
   证明: by
   have := nontrivial_of_invariantBasisNumber K
   obtain ⟨s, hs⟩ := Module.Free.exists_basis (R := K) (M := V)
@@ -609,7 +609,7 @@ theorem cardinalMk_eq_cardinalMk_field_pow_rank
 
 中文:
 定理 cardinalMk_eq_cardinalMk_field_pow_rank
-  结论: (K V : 类型u) [Ring K] [StrongRankCondition K]
+  结论: (K V : 类型u) [环 K] [StrongRankCondition K]
   证明: by
   simpa using lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank K V
 
@@ -634,7 +634,7 @@ theorem cardinal_lt_aleph0_of_finiteDimensional
 
 中文:
 定理 cardinal_lt_aleph0_of_finiteDimensional
-  条件: [Finite K] [Module.Free K V] [Module.Finite K V]
+  条件: [有限 K] [模.自由 K V] [模.有限 K V]
   证明: by
   rw [← lift_lt_aleph0.{v]; rw [u}]; rw [lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank K V]
   exact power_lt_aleph0 (lift_lt_aleph0.2 (lt_aleph0_of_finite K))
@@ -673,7 +673,7 @@ theorem eq_bot_of_rank_le_one
 
 中文:
 定理 eq_bot_of_rank_le_one
-  条件: (h : Module.rank F S <= 1) [Module.Free F S]
+  条件: (h : 模.rank F S <= 1) [模.自由 F S]
   结论: S = ⊥
   证明: by
   nontriviality E
@@ -716,7 +716,7 @@ theorem eq_bot_of_finrank_one
 
 中文:
 定理 eq_bot_of_finrank_one
-  条件: (h : finrank F S = 1) [Module.Free F S]
+  条件: (h : finrank F S = 1) [模.自由 F S]
   结论: S = ⊥
   证明: by
   refine Subalgebra.eq_bot_of_rank_le_one ?_
@@ -750,8 +750,8 @@ theorem rank_eq_one_iff
 
 中文:
 定理 rank_eq_one_iff
-  条件: [Nontrivial E] [Module.Free F S]
-  结论: Module.rank F S = 1 ↔ S = ⊥
+  条件: [非平凡 E] [模.自由 F S]
+  结论: 模.rank F S = 1 ↔ S = ⊥
   证明: by
   refine ⟨fun h => Subalgebra.eq_bot_of_rank_le_one h.le, ?_⟩
   rintro rfl
@@ -790,7 +790,7 @@ theorem finrank_eq_one_iff
 
 中文:
 定理 finrank_eq_one_iff
-  条件: [Nontrivial E] [Module.Free F S]
+  条件: [非平凡 E] [模.自由 F S]
   结论: finrank F S = 1 ↔ S = ⊥
   证明: by
   rw [← Subalgebra.rank_eq_one_iff]
@@ -814,7 +814,7 @@ theorem bot_eq_top_iff_rank_eq_one
 
 中文:
 定理 bot_eq_top_iff_rank_eq_one
-  条件: [Nontrivial E] [Module.Free F E]
+  条件: [非平凡 E] [模.自由 F E]
   证明: by
   have := Module.Free.of_equiv (Subalgebra.topEquiv (R := F) (A := E)).toLinearEquiv.symm
   rw [← rank_top]; rw [Subalgebra.rank_eq_one_iff]; rw [eq_comm]
@@ -842,7 +842,7 @@ alias ⟨_, b
 
 中文:
 定理 bot_eq_top_iff_finrank_eq_one
-  条件: [Nontrivial E] [Module.Free F E]
+  条件: [非平凡 E] [模.自由 F E]
   证明: by
   have := Module.Free.of_equiv (Subalgebra.topEquiv (R := F) (A := E)).toLinearEquiv.symm
   rw [← finrank_top]; rw [← subalgebra_top_finrank_eq_submodule_top_finrank]; rw [Subalgebra.finrank_eq_one_iff]; rw [eq_comm]
@@ -877,8 +877,8 @@ lemma _root_.Algebra.finrank_eq_one_iff_bijective_algebraMap
   rwa [Algebra.surjective_algebraMap_iff, eq_comm, Subalgebra.bot_eq_top_iff_finrank_eq_one]
 
 中文:
-引理 _root_.Algebra.finrank_eq_one_iff_bijective_algebraMap
-  条件: [Module.Free F E]
+引理 _root_.代数.finrank_eq_one_iff_bijective_algebraMap
+  条件: [模.自由 F E]
   证明: by
   refine ⟨?_, Module.finrank_of_bijective_algebraMap⟩
   nontriviality E

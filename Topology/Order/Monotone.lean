@@ -47,7 +47,7 @@ lemma MonotoneOn.insert_of_continuousWithinAt
 
 中文:
 引理 MonotoneOn.insert_of_continuousWithinAt
-  结论: [TopologicalSpace β] [OrderClosedTopology β]
+  结论: [拓扑空间 β] [OrderClosed拓扑 β]
   证明: by
   have : (𝓝[s] x).NeBot := hx
   apply monotoneOn_insert_iff.2 ⟨fun b hb hbx => ?_, fun b hb hxb => ?_, hf⟩
@@ -94,7 +94,7 @@ lemma MonotoneOn.countable_setOfPred_two_preimages
 
 中文:
 引理 MonotoneOn.countable_setOfPred_two_preimages
-  结论: [SecondCountableTopology α]
+  结论: [第二可数拓扑 α]
   证明: by
   nontriviality α
   let t := {c | exists x, exists y, x in s ∧ y in s ∧ x < y ∧ f x = c ∧ f y = c}
@@ -155,8 +155,8 @@ lemma Monotone.countable_setOfPred_two_preimages
   Monotone.countable_setOfPred_two_preimages
 
 中文:
-引理 Monotone.countable_setOfPred_two_preimages
-  结论: [SecondCountableTopology α]
+引理 递增.countable_setOfPred_two_preimages
+  结论: [第二可数拓扑 α]
   证明: by
   rw [← monotoneOn_univ] at hf
   simpa using hf.countable_setOfPred_two_preimages
@@ -188,7 +188,7 @@ lemma AntitoneOn.countable_setOfPred_two_preimages
 
 中文:
 引理 AntitoneOn.countable_setOfPred_two_preimages
-  结论: [SecondCountableTopology α]
+  结论: [第二可数拓扑 α]
   证明: (MonotoneOn.countable_setOfPred_two_preimages hf.dual_right :)
 
 @[deprecated (since := "2026-07-09")] alias AntitoneOn.countable_setOf_two_preimages :=
@@ -216,8 +216,8 @@ lemma Antitone.countable_setOfPred_two_preimages
   Antitone.countable_setOfPred_two_preimages
 
 中文:
-引理 Antitone.countable_setOfPred_two_preimages
-  结论: [SecondCountableTopology α]
+引理 递减.countable_setOfPred_two_preimages
+  结论: [第二可数拓扑 α]
   证明: (Monotone.countable_setOfPred_two_preimages hf.dual_right :)
 
 @[deprecated (since := "2026-07-09")] alias Antitone.countable_setOf_two_preimages :=
@@ -349,8 +349,8 @@ theorem Monotone.countable_not_continuousAt
   simpa [continuousWithinAt_univ] using (hf.monotoneOn univ).countable_not_continuousWithinAt
 
 中文:
-定理 Monotone.countable_not_continuousAt
-  条件: (hf : Monotone f)
+定理 递增.countable_not_continuousAt
+  条件: (hf : 递增 f)
   证明: by
   simpa [continuousWithinAt_univ] using (hf.monotoneOn univ).countable_not_continuousWithinAt
 
@@ -387,8 +387,8 @@ theorem Antitone.countable_not_continuousAt
   proof: hf.dual_right.countable_not_continuousAt
 
 中文:
-定理 Antitone.countable_not_continuousAt
-  条件: (hf : Antitone f)
+定理 递减.countable_not_continuousAt
+  条件: (hf : 递减 f)
   证明: hf.dual_right.countable_not_continuousAt
 
 Depends on / 依赖: countable_not_continuousAt, dual_right, hf.dual_right.countable_not_continuousAt
@@ -416,8 +416,8 @@ theorem Monotone.leftOrdContinuous
   proof: fun s x hs hx => IsLUB.isLUB_of_tendsto (hf.monotoneOn s) hx hs ((cont x).mono hx.1)
 
 中文:
-定理 Monotone.leftOrdContinuous
-  结论: (hf : Monotone f)
+定理 递增.leftOrdContinuous
+  结论: (hf : 递增 f)
   证明: fun s x hs hx => IsLUB.isLUB_of_tendsto (hf.monotoneOn s) hx hs ((cont x).mono hx.1)
 
 Depends on / 依赖: IsLUB.isLUB_of_tendsto, hf.monotoneOn, isLUB_of_tendsto, monotoneOn
@@ -439,8 +439,8 @@ theorem Continuous.leftOrdContinuous
   proof: hf.leftOrdContinuous fun _ => cont.continuousWithinAt
 
 中文:
-定理 Continuous.leftOrdContinuous
-  条件: (cont : Continuous f) (hf : Monotone f)
+定理 连续.leftOrdContinuous
+  条件: (cont : 连续 f) (hf : 递增 f)
   证明: hf.leftOrdContinuous fun _ => cont.continuousWithinAt
 
 Depends on / 依赖: cont.continuousWithinAt, continuousWithinAt, hf.leftOrdContinuous, leftOrdContinuous
@@ -470,7 +470,7 @@ theorem MonotoneOn.map_csSup_of_continuousWithinAt
 
 中文:
 定理 MonotoneOn.map_csSup_of_continuousWithinAt
-  结论: {f : α -> β} {A : Set α}
+  结论: {f : α -> β} {A : 集合 α}
   证明: --This is a particular case of the more general `IsLUB.isLUB_of_tendsto`
 .symm ((isLUB_csSup A_nonemp A_bdd).isLUB_of_tendsto Mf A_nonemp <|
     Cf.mono_left fun ⦃_⦄ a => a).csSup_eq (A_nonemp.image f)
@@ -495,8 +495,8 @@ theorem Monotone.map_csSup_of_continuousAt
     (Mf.monotoneOn _) A_nonemp A_bdd
 
 中文:
-定理 Monotone.map_csSup_of_continuousAt
-  结论: {f : α -> β} {A : Set α}
+定理 递增.map_csSup_of_continuousAt
+  结论: {f : α -> β} {A : 集合 α}
   证明: MonotoneOn.map_csSup_of_continuousWithinAt Cf.continuousWithinAt
     (Mf.monotoneOn _) A_nonemp A_bdd
 
@@ -518,8 +518,8 @@ theorem Monotone.map_ciSup_of_continuousAt
   rw [iSup]; rw [Monotone.map_csSup_of_continuousAt Cf Mf (range_nonempty g) bdd]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
 中文:
-定理 Monotone.map_ciSup_of_continuousAt
-  结论: {ι : Sort*} [Nonempty ι] {f : α -> β} {g : ι -> α}
+定理 递增.map_ciSup_of_continuousAt
+  结论: {ι : 类型层*} [非空 ι] {f : α -> β} {g : ι -> α}
   证明: by
   rw [iSup]; rw [Monotone.map_csSup_of_continuousAt Cf Mf (range_nonempty g) bdd]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
@@ -540,7 +540,7 @@ theorem MonotoneOn.map_csInf_of_continuousWithinAt
 
 中文:
 定理 MonotoneOn.map_csInf_of_continuousWithinAt
-  结论: {f : α -> β} {A : Set α}
+  结论: {f : α -> β} {A : 集合 α}
   证明: MonotoneOn.map_csSup_of_continuousWithinAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Mf.dual, MonotoneOn, MonotoneOn.map_csSup_of_continuousWithinAt, bddDefault, map_csSup_of_continuousWithinAt
@@ -560,8 +560,8 @@ theorem Monotone.map_csInf_of_continuousAt
   proof: Monotone.map_csSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual A_nonemp A_bdd
 
 中文:
-定理 Monotone.map_csInf_of_continuousAt
-  结论: {f : α -> β} {A : Set α} (Cf : ContinuousAt f (sInf A))
+定理 递增.map_csInf_of_continuousAt
+  结论: {f : α -> β} {A : 集合 α} (Cf : ContinuousAt f (sInf A))
   证明: Monotone.map_csSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Mf.dual, Monotone, Monotone.map_csSup_of_continuousAt, bddDefault, map_csSup_of_continuousAt
@@ -581,8 +581,8 @@ theorem Monotone.map_ciInf_of_continuousAt
   rw [iInf]; rw [Monotone.map_csInf_of_continuousAt Cf Mf (range_nonempty g) bdd]; rw [← range_comp]; rw [iInf]; rw [comp_def]
 
 中文:
-定理 Monotone.map_ciInf_of_continuousAt
-  结论: {ι : Sort*} [Nonempty ι] {f : α -> β} {g : ι -> α}
+定理 递增.map_ciInf_of_continuousAt
+  结论: {ι : 类型层*} [非空 ι] {f : α -> β} {g : ι -> α}
   证明: by
   rw [iInf]; rw [Monotone.map_csInf_of_continuousAt Cf Mf (range_nonempty g) bdd]; rw [← range_comp]; rw [iInf]; rw [comp_def]
 
@@ -603,7 +603,7 @@ theorem AntitoneOn.map_csInf_of_continuousWithinAt
 
 中文:
 定理 AntitoneOn.map_csInf_of_continuousWithinAt
-  结论: {f : α -> β} {A : Set α}
+  结论: {f : α -> β} {A : 集合 α}
   证明: MonotoneOn.map_csInf_of_continuousWithinAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Af.dual_right, MonotoneOn, MonotoneOn.map_csInf_of_continuousWithinAt, bddDefault, dual_right, map_csInf_of_continuousWithinAt
@@ -623,8 +623,8 @@ theorem Antitone.map_csInf_of_continuousAt
   proof: Monotone.map_csInf_of_continuousAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 中文:
-定理 Antitone.map_csInf_of_continuousAt
-  结论: {f : α -> β} {A : Set α} (Cf : ContinuousAt f (sInf A))
+定理 递减.map_csInf_of_continuousAt
+  结论: {f : α -> β} {A : 集合 α} (Cf : ContinuousAt f (sInf A))
   证明: Monotone.map_csInf_of_continuousAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Af.dual_right, Monotone, Monotone.map_csInf_of_continuousAt, bddDefault, dual_right, map_csInf_of_continuousAt
@@ -644,8 +644,8 @@ theorem Antitone.map_ciInf_of_continuousAt
   rw [iInf]; rw [Antitone.map_csInf_of_continuousAt Cf Af (range_nonempty g) bdd]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
 中文:
-定理 Antitone.map_ciInf_of_continuousAt
-  结论: {ι : Sort*} [Nonempty ι] {f : α -> β} {g : ι -> α}
+定理 递减.map_ciInf_of_continuousAt
+  结论: {ι : 类型层*} [非空 ι] {f : α -> β} {g : ι -> α}
   证明: by
   rw [iInf]; rw [Antitone.map_csInf_of_continuousAt Cf Af (range_nonempty g) bdd]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
@@ -666,7 +666,7 @@ theorem AntitoneOn.map_csSup_of_continuousWithinAt
 
 中文:
 定理 AntitoneOn.map_csSup_of_continuousWithinAt
-  结论: {f : α -> β} {A : Set α}
+  结论: {f : α -> β} {A : 集合 α}
   证明: MonotoneOn.map_csSup_of_continuousWithinAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Af.dual_right, MonotoneOn, MonotoneOn.map_csSup_of_continuousWithinAt, bddDefault, dual_right, map_csSup_of_continuousWithinAt
@@ -686,8 +686,8 @@ theorem Antitone.map_csSup_of_continuousAt
   proof: Monotone.map_csSup_of_continuousAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 中文:
-定理 Antitone.map_csSup_of_continuousAt
-  结论: {f : α -> β} {A : Set α} (Cf : ContinuousAt f (sSup A))
+定理 递减.map_csSup_of_continuousAt
+  结论: {f : α -> β} {A : 集合 α} (Cf : ContinuousAt f (sSup A))
   证明: Monotone.map_csSup_of_continuousAt (β := βᵒᵈ) Cf Af.dual_right A_nonemp A_bdd
 
 Depends on / 依赖: A_bdd, A_nonemp, Af.dual_right, Monotone, Monotone.map_csSup_of_continuousAt, bddDefault, dual_right, map_csSup_of_continuousAt
@@ -707,8 +707,8 @@ theorem Antitone.map_ciSup_of_continuousAt
   rw [iSup]; rw [Antitone.map_csSup_of_continuousAt Cf Af (range_nonempty g) bdd]; rw [← range_comp]; rw [iInf]; rw [comp_def]
 
 中文:
-定理 Antitone.map_ciSup_of_continuousAt
-  结论: {ι : Sort*} [Nonempty ι] {f : α -> β} {g : ι -> α}
+定理 递减.map_ciSup_of_continuousAt
+  结论: {ι : 类型层*} [非空 ι] {f : α -> β} {g : ι -> α}
   证明: by
   rw [iSup]; rw [Antitone.map_csSup_of_continuousAt Cf Af (range_nonempty g) bdd]; rw [← range_comp]; rw [iInf]; rw [comp_def]
 
@@ -737,7 +737,7 @@ theorem sSup_mem_closure
 
 中文:
 定理 sSup_mem_closure
-  条件: {s : Set α} (hs : s.Nonempty)
+  条件: {s : 集合 α} (hs : s.非空)
   结论: sSup s in closure s
   证明: (isLUB_sSup s).mem_closure hs
 
@@ -757,7 +757,7 @@ theorem sInf_mem_closure
 
 中文:
 定理 sInf_mem_closure
-  条件: {s : Set α} (hs : s.Nonempty)
+  条件: {s : 集合 α} (hs : s.非空)
   结论: sInf s in closure s
   证明: (isGLB_sInf s).mem_closure hs
 
@@ -776,8 +776,8 @@ theorem IsClosed.sSup_mem
   proof: (isLUB_sSup s).mem_of_isClosed hs hc
 
 中文:
-定理 IsClosed.sSup_mem
-  条件: {s : Set α} (hs : s.Nonempty) (hc : IsClosed s)
+定理 是闭集.sSup_mem
+  条件: {s : 集合 α} (hs : s.非空) (hc : 是闭集 s)
   结论: sSup s in s
   证明: (isLUB_sSup s).mem_of_isClosed hs hc
 
@@ -796,8 +796,8 @@ theorem IsClosed.sInf_mem
   proof: (isGLB_sInf s).mem_of_isClosed hs hc
 
 中文:
-定理 IsClosed.sInf_mem
-  条件: {s : Set α} (hs : s.Nonempty) (hc : IsClosed s)
+定理 是闭集.sInf_mem
+  条件: {s : 集合 α} (hs : s.非空) (hc : 是闭集 s)
   结论: sInf s in s
   证明: (isGLB_sInf s).mem_of_isClosed hs hc
 
@@ -819,7 +819,7 @@ theorem MonotoneOn.map_sSup_of_continuousWithinAt
 
 中文:
 定理 MonotoneOn.map_sSup_of_continuousWithinAt
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: by
   rcases s.eq_empty_or_nonempty with h | h
   · simp [h, fbot]
@@ -843,8 +843,8 @@ theorem Monotone.map_sSup_of_continuousAt
   proof: MonotoneOn.map_sSup_of_continuousWithinAt Cf.continuousWithinAt (Mf.monotoneOn _) fbot
 
 中文:
-定理 Monotone.map_sSup_of_continuousAt
-  结论: {f : α -> β} {s : Set α} (Cf : ContinuousAt f (sSup s))
+定理 递增.map_sSup_of_continuousAt
+  结论: {f : α -> β} {s : 集合 α} (Cf : ContinuousAt f (sSup s))
   证明: MonotoneOn.map_sSup_of_continuousWithinAt Cf.continuousWithinAt (Mf.monotoneOn _) fbot
 
 Depends on / 依赖: Cf.continuousWithinAt, Mf.monotoneOn, MonotoneOn, MonotoneOn.map_sSup_of_continuousWithinAt, continuousWithinAt, map_sSup_of_continuousWithinAt, monotoneOn
@@ -863,8 +863,8 @@ theorem Monotone.map_iSup_of_continuousAt
   rw [iSup]; rw [Mf.map_sSup_of_continuousAt Cf fbot]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
 中文:
-定理 Monotone.map_iSup_of_continuousAt
-  结论: {ι : Sort*} {f : α -> β} {g : ι -> α}
+定理 递增.map_iSup_of_continuousAt
+  结论: {ι : 类型层*} {f : α -> β} {g : ι -> α}
   证明: by
   rw [iSup]; rw [Mf.map_sSup_of_continuousAt Cf fbot]; rw [← range_comp]; rw [iSup]; rw [comp_def]
 
@@ -885,7 +885,7 @@ theorem MonotoneOn.map_sInf_of_continuousWithinAt
 
 中文:
 定理 MonotoneOn.map_sInf_of_continuousWithinAt
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: MonotoneOn.map_sSup_of_continuousWithinAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual ftop
 
 Depends on / 依赖: Mf.dual, MonotoneOn, MonotoneOn.map_sSup_of_continuousWithinAt, map_sSup_of_continuousWithinAt
@@ -904,8 +904,8 @@ theorem Monotone.map_sInf_of_continuousAt
   proof: Monotone.map_sSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual ftop
 
 中文:
-定理 Monotone.map_sInf_of_continuousAt
-  结论: {f : α -> β} {s : Set α} (Cf : ContinuousAt f (sInf s))
+定理 递增.map_sInf_of_continuousAt
+  结论: {f : α -> β} {s : 集合 α} (Cf : ContinuousAt f (sInf s))
   证明: Monotone.map_sSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual ftop
 
 Depends on / 依赖: Mf.dual, Monotone, Monotone.map_sSup_of_continuousAt, map_sSup_of_continuousAt
@@ -923,8 +923,8 @@ theorem Monotone.map_iInf_of_continuousAt
   proof: Monotone.map_iSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual ftop
 
 中文:
-定理 Monotone.map_iInf_of_continuousAt
-  结论: {ι : Sort*} {f : α -> β} {g : ι -> α}
+定理 递增.map_iInf_of_continuousAt
+  结论: {ι : 类型层*} {f : α -> β} {g : ι -> α}
   证明: Monotone.map_iSup_of_continuousAt (α := αᵒᵈ) (β := βᵒᵈ) Cf Mf.dual ftop
 
 Depends on / 依赖: Mf.dual, Monotone, Monotone.map_iSup_of_continuousAt, map_iSup_of_continuousAt
@@ -944,7 +944,7 @@ theorem AntitoneOn.map_sSup_of_continuousWithinAt
 
 中文:
 定理 AntitoneOn.map_sSup_of_continuousWithinAt
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: MonotoneOn.map_sSup_of_continuousWithinAt
     (show ContinuousWithinAt (OrderDual.toDual ∘ f) s (sSup s) from Cf) Af fbot
 
@@ -966,8 +966,8 @@ theorem Antitone.map_sSup_of_continuousAt
     fbot
 
 中文:
-定理 Antitone.map_sSup_of_continuousAt
-  结论: {f : α -> β} {s : Set α} (Cf : ContinuousAt f (sSup s))
+定理 递减.map_sSup_of_continuousAt
+  结论: {f : α -> β} {s : 集合 α} (Cf : ContinuousAt f (sSup s))
   证明: Monotone.map_sSup_of_continuousAt (show ContinuousAt (OrderDual.toDual ∘ f) (sSup s) from Cf) Af
     fbot
 
@@ -988,8 +988,8 @@ theorem Antitone.map_iSup_of_continuousAt
     fbot
 
 中文:
-定理 Antitone.map_iSup_of_continuousAt
-  结论: {ι : Sort*} {f : α -> β} {g : ι -> α}
+定理 递减.map_iSup_of_continuousAt
+  结论: {ι : 类型层*} {f : α -> β} {g : ι -> α}
   证明: Monotone.map_iSup_of_continuousAt (show ContinuousAt (OrderDual.toDual ∘ f) (iSup g) from Cf) Af
     fbot
 
@@ -1012,7 +1012,7 @@ theorem AntitoneOn.map_sInf_of_continuousWithinAt
 
 中文:
 定理 AntitoneOn.map_sInf_of_continuousWithinAt
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: MonotoneOn.map_sInf_of_continuousWithinAt
     (show ContinuousWithinAt (OrderDual.toDual ∘ f) s (sInf s) from Cf) Af ftop
 
@@ -1034,8 +1034,8 @@ theorem Antitone.map_sInf_of_continuousAt
     ftop
 
 中文:
-定理 Antitone.map_sInf_of_continuousAt
-  结论: {f : α -> β} {s : Set α} (Cf : ContinuousAt f (sInf s))
+定理 递减.map_sInf_of_continuousAt
+  结论: {f : α -> β} {s : 集合 α} (Cf : ContinuousAt f (sInf s))
   证明: Monotone.map_sInf_of_continuousAt (show ContinuousAt (OrderDual.toDual ∘ f) (sInf s) from Cf) Af
     ftop
 
@@ -1056,8 +1056,8 @@ theorem Antitone.map_iInf_of_continuousAt
     ftop
 
 中文:
-定理 Antitone.map_iInf_of_continuousAt
-  结论: {ι : Sort*} {f : α -> β} {g : ι -> α}
+定理 递减.map_iInf_of_continuousAt
+  结论: {ι : 类型层*} {f : α -> β} {g : ι -> α}
   证明: Monotone.map_iInf_of_continuousAt (show ContinuousAt (OrderDual.toDual ∘ f) (iInf g) from Cf) Af
     ftop
 
@@ -1085,7 +1085,7 @@ theorem csSup_mem_closure
 
 中文:
 定理 csSup_mem_closure
-  条件: {s : Set α} (hs : s.Nonempty) (B : BddAbove s)
+  条件: {s : 集合 α} (hs : s.非空) (B : BddAbove s)
   结论: sSup s in closure s
   证明: (isLUB_csSup hs B).mem_closure hs
 
@@ -1105,7 +1105,7 @@ theorem csInf_mem_closure
 
 中文:
 定理 csInf_mem_closure
-  条件: {s : Set α} (hs : s.Nonempty) (B : BddBelow s)
+  条件: {s : 集合 α} (hs : s.非空) (B : BddBelow s)
   结论: sInf s in closure s
   证明: (isGLB_csInf hs B).mem_closure hs
 
@@ -1123,8 +1123,8 @@ theorem IsClosed.csSup_mem
   proof: (isLUB_csSup hs B).mem_of_isClosed hs hc
 
 中文:
-定理 IsClosed.csSup_mem
-  条件: {s : Set α} (hc : IsClosed s) (hs : s.Nonempty) (B : BddAbove s)
+定理 是闭集.csSup_mem
+  条件: {s : 集合 α} (hc : 是闭集 s) (hs : s.非空) (B : BddAbove s)
   证明: (isLUB_csSup hs B).mem_of_isClosed hs hc
 
 Depends on / 依赖: isLUB_csSup, mem_of_isClosed
@@ -1142,8 +1142,8 @@ theorem IsClosed.csInf_mem
   proof: (isGLB_csInf hs B).mem_of_isClosed hs hc
 
 中文:
-定理 IsClosed.csInf_mem
-  条件: {s : Set α} (hc : IsClosed s) (hs : s.Nonempty) (B : BddBelow s)
+定理 是闭集.csInf_mem
+  条件: {s : 集合 α} (hc : 是闭集 s) (hs : s.非空) (B : BddBelow s)
   证明: (isGLB_csInf hs B).mem_of_isClosed hs hc
 
 Depends on / 依赖: isGLB_csInf, mem_of_isClosed
@@ -1161,8 +1161,8 @@ theorem IsClosed.isLeast_csInf
   proof: ⟨hc.csInf_mem hs B, (isGLB_csInf hs B).1⟩
 
 中文:
-定理 IsClosed.isLeast_csInf
-  条件: {s : Set α} (hc : IsClosed s) (hs : s.Nonempty) (B : BddBelow s)
+定理 是闭集.isLeast_csInf
+  条件: {s : 集合 α} (hc : 是闭集 s) (hs : s.非空) (B : BddBelow s)
   证明: ⟨hc.csInf_mem hs B, (isGLB_csInf hs B).1⟩
 
 Depends on / 依赖: csInf_mem, hc.csInf_mem, isGLB_csInf
@@ -1180,8 +1180,8 @@ theorem IsClosed.isGreatest_csSup
   proof: IsClosed.isLeast_csInf (α := αᵒᵈ) hc hs B
 
 中文:
-定理 IsClosed.isGreatest_csSup
-  条件: {s : Set α} (hc : IsClosed s) (hs : s.Nonempty) (B : BddAbove s)
+定理 是闭集.isGreatest_csSup
+  条件: {s : 集合 α} (hc : 是闭集 s) (hs : s.非空) (B : BddAbove s)
   证明: IsClosed.isLeast_csInf (α := αᵒᵈ) hc hs B
 
 Depends on / 依赖: IsClosed, IsClosed.isLeast_csInf, isLeast_csInf
@@ -1205,7 +1205,7 @@ lemma MonotoneOn.tendsto_nhdsWithin_Ioo_left
 
 中文:
 引理 MonotoneOn.tendsto_nhdsWithin_Ioo_left
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α]
   证明: by
   refine tendsto_order.2 ⟨fun l hl => ?_, fun m hm => ?_⟩
   · obtain ⟨z, ⟨yz, zx⟩, lz⟩ : exists a : α, a in Ioo y x ∧ l < f a := by
@@ -1246,7 +1246,7 @@ exact hl.trans_le csInf_le h_bdd (mem_image_of_mem _ hw)
 
 中文:
 引理 MonotoneOn.tendsto_nhdsWithin_Ioo_right
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α]
   证明: by
   refine tendsto_order.2 ⟨fun l hl => ?_, fun m hm => ?_⟩
   · rcases h_nonempty with ⟨p, hy, hx⟩
@@ -1287,7 +1287,7 @@ lemma MonotoneOn.tendsto_nhdsLT
 
 中文:
 引理 MonotoneOn.tendsto_nhdsLT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: by
   rcases eq_empty_or_nonempty (Iio x) with (h | h); · simp [h]
   refine tendsto_order.2 ⟨fun l hl => ?_, fun m hm => ?_⟩
@@ -1320,7 +1320,7 @@ lemma MonotoneOn.tendsto_nhdsGT
 
 中文:
 引理 MonotoneOn.tendsto_nhdsGT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: MonotoneOn.tendsto_nhdsLT (α := αᵒᵈ) (β := βᵒᵈ) Mf.dual h_bdd
 
 Depends on / 依赖: Mf.dual, MonotoneOn, MonotoneOn.tendsto_nhdsLT, h_bdd, tendsto_nhdsLT
@@ -1340,8 +1340,8 @@ theorem Monotone.tendsto_nhdsLT
   proof: MonotoneOn.tendsto_nhdsLT (Mf.monotoneOn _) (Mf.map_bddAbove bddAbove_Iio)
 
 中文:
-定理 Monotone.tendsto_nhdsLT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+定理 递增.tendsto_nhdsLT
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: MonotoneOn.tendsto_nhdsLT (Mf.monotoneOn _) (Mf.map_bddAbove bddAbove_Iio)
 
 Depends on / 依赖: Mf.map_bddAbove, Mf.monotoneOn, MonotoneOn, MonotoneOn.tendsto_nhdsLT, bddAbove_Iio, map_bddAbove, monotoneOn, tendsto_nhdsLT
@@ -1360,8 +1360,8 @@ theorem Monotone.tendsto_nhdsGT
   proof: Monotone.tendsto_nhdsLT (α := αᵒᵈ) (β := βᵒᵈ) Mf.dual x
 
 中文:
-定理 Monotone.tendsto_nhdsGT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+定理 递增.tendsto_nhdsGT
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: Monotone.tendsto_nhdsLT (α := αᵒᵈ) (β := βᵒᵈ) Mf.dual x
 
 Depends on / 依赖: Mf.dual, Monotone, Monotone.tendsto_nhdsLT, tendsto_nhdsLT
@@ -1381,7 +1381,7 @@ lemma AntitoneOn.tendsto_nhdsWithin_Ioo_left
 
 中文:
 引理 AntitoneOn.tendsto_nhdsWithin_Ioo_left
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α]
   证明: MonotoneOn.tendsto_nhdsWithin_Ioo_left h_nonempty Af.dual_right h_bdd
 
 Depends on / 依赖: Af.dual_right, MonotoneOn, MonotoneOn.tendsto_nhdsWithin_Ioo_left, dual_right, h_bdd, h_nonempty, tendsto_nhdsWithin_Ioo_left
@@ -1403,7 +1403,7 @@ lemma AntitoneOn.tendsto_nhdsWithin_Ioo_right
 
 中文:
 引理 AntitoneOn.tendsto_nhdsWithin_Ioo_right
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α]
   证明: MonotoneOn.tendsto_nhdsWithin_Ioo_right h_nonempty Af.dual_right h_bdd
 
 Depends on / 依赖: Af.dual_right, MonotoneOn, MonotoneOn.tendsto_nhdsWithin_Ioo_right, dual_right, h_bdd, h_nonempty, tendsto_nhdsWithin_Ioo_right
@@ -1425,7 +1425,7 @@ lemma AntitoneOn.tendsto_nhdsLT
 
 中文:
 引理 AntitoneOn.tendsto_nhdsLT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: MonotoneOn.tendsto_nhdsLT Af.dual_right h_bdd
 
 Depends on / 依赖: Af.dual_right, MonotoneOn, MonotoneOn.tendsto_nhdsLT, dual_right, h_bdd, tendsto_nhdsLT
@@ -1446,7 +1446,7 @@ lemma AntitoneOn.tendsto_nhdsGT
 
 中文:
 引理 AntitoneOn.tendsto_nhdsGT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: MonotoneOn.tendsto_nhdsGT Af.dual_right h_bdd
 
 Depends on / 依赖: Af.dual_right, MonotoneOn, MonotoneOn.tendsto_nhdsGT, dual_right, h_bdd, tendsto_nhdsGT
@@ -1466,8 +1466,8 @@ theorem Antitone.tendsto_nhdsLT
   proof: Monotone.tendsto_nhdsLT Af.dual_right x
 
 中文:
-定理 Antitone.tendsto_nhdsLT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+定理 递减.tendsto_nhdsLT
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: Monotone.tendsto_nhdsLT Af.dual_right x
 
 Depends on / 依赖: Af.dual_right, Monotone, Monotone.tendsto_nhdsLT, dual_right, tendsto_nhdsLT
@@ -1486,8 +1486,8 @@ theorem Antitone.tendsto_nhdsGT
   proof: Monotone.tendsto_nhdsGT Af.dual_right x
 
 中文:
-定理 Antitone.tendsto_nhdsGT
-  结论: {α β : 类型} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
+定理 递减.tendsto_nhdsGT
+  结论: {α β : 类型} [线性序 α] [拓扑空间 α] [Order拓扑 α]
   证明: Monotone.tendsto_nhdsGT Af.dual_right x
 
 Depends on / 依赖: Af.dual_right, Monotone, Monotone.tendsto_nhdsGT, dual_right, tendsto_nhdsGT

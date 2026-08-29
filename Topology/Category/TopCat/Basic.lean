@@ -39,12 +39,12 @@ structure TopCat
     - [str : TopologicalSpace carrier]
 
 中文:
-结构 TopCat
+结构 顶元素范畴
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : TopologicalSpace carrier]
+    - [str : 拓扑空间 carrier]
 -/
 structure TopCat where
   /-- The object in `TopCat` associated to a type equipped with the appropriate
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (TopCat) (类型u)
+  签名: CoeSort (顶元素范畴) (类型u)
   定义体: ⟨TopCat.carrier⟩
 
 Depends on / 依赖: TopCat, TopCat.carrier, carrier
@@ -102,7 +102,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   结论: (of X : 类型u) = X
   证明: rfl
 -/
@@ -120,7 +120,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   结论: of X = X
   证明: rfl
 -/
@@ -140,8 +140,8 @@ structure Hom
     - hom' : C(X, Y)
 
 中文:
-结构 Hom
-  参数: (X Y : TopCat.{u})
+结构 态射
+  参数: (X Y : 顶元素范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : C(X, Y)
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category TopCat
+  签名: 范畴 顶元素范畴
   定义体: Hom X Y
   id X := ⟨ContinuousMap.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} TopCat (fun X Y => C(X, Y))
+  签名: 余ncrete范畴.{u} 顶元素范畴 (fun X Y => C(X, Y))
   定义体: Hom.hom'
   ofHom f := ⟨f⟩
 
@@ -207,8 +207,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := TopCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : TopCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 顶元素范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := TopCat) f
 -/
 abbrev Hom.hom {X Y : TopCat.{u}} (f : Hom X Y) :=
@@ -224,7 +224,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y))
+  签名: {X Y : 类型u} [拓扑空间 X] [拓扑空间 Y] (f : C(X, Y))
   定义体: ConcreteCategory.ofHom (C := TopCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, TopCat
@@ -243,8 +243,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : TopCat) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 顶元素范畴) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -272,8 +272,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : TopCat.{u}}
-  结论: (𝟙 X : X ⟶ X).hom = ContinuousMap.id X
+  条件: {X : 顶元素范畴.{u}}
+  结论: (𝟙 X : X ⟶ X).hom = 连续映射.id X
   证明: rfl
 
 @[simp]
@@ -292,7 +292,7 @@ theorem id_app
 
 中文:
 定理 id_app
-  条件: (X : TopCat.{u}) (x : ↑X)
+  条件: (X : 顶元素范畴.{u}) (x : ↑X)
   结论: (𝟙 X : X ⟶ X) x = x
   证明: rfl
 -/
@@ -311,7 +311,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -332,7 +332,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -351,7 +351,7 @@ theorem comp_app
 
 中文:
 定理 comp_app
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: rfl
 -/
 theorem comp_app {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
@@ -369,7 +369,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[ext]
@@ -391,7 +391,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : TopCat.{u}} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 顶元素范畴.{u}} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -416,7 +416,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : TopCat.{u}} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 顶元素范畴.{u}} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -440,7 +440,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y))
+  条件: {X Y : 类型u} [拓扑空间 X] [拓扑空间 Y] (f : C(X, Y))
   证明: rfl
 
 @[simp]
@@ -461,7 +461,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -483,8 +483,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [TopologicalSpace X]
-  结论: ofHom (ContinuousMap.id X) = 𝟙 (of X)
+  条件: {X : 类型u} [拓扑空间 X]
+  结论: ofHom (连续映射.id X) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -502,7 +502,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
+  结论: {X Y Z : 类型u} [拓扑空间 X] [拓扑空间 Y] [拓扑空间 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
@@ -520,7 +520,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) (x : X)
+  条件: {X Y : 类型u} [拓扑空间 X] [拓扑空间 Y] (f : C(X, Y)) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) (x : X) :
@@ -538,7 +538,7 @@ lemma hom_inv_id_apply
 
 中文:
 引理 hom_inv_id_apply
-  条件: {X Y : TopCat.{u}} (f : X ≅ Y) (x : X)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ≅ Y) (x : X)
   结论: f.inv (f.hom x) = x
   证明: by
   simp
@@ -558,7 +558,7 @@ lemma inv_hom_id_apply
 
 中文:
 引理 inv_hom_id_apply
-  条件: {X Y : TopCat.{u}} (f : X ≅ Y) (y : Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ≅ Y) (y : Y)
   结论: f.hom (f.inv y) = y
   证明: by
   simp
@@ -578,8 +578,8 @@ definition Hom.equivContinuousMap
   invFun f := ofHom f
 
 中文:
-定义 Hom.equivContinuousMap
-  签名: (X Y : TopCat.{u})
+定义 态射.equivContinuousMap
+  签名: (X Y : 顶元素范畴.{u})
   定义体: f.hom
   invFun f := ofHom f
 
@@ -604,7 +604,7 @@ theorem coe_of_of
 
 中文:
 定理 coe_of_of
-  结论: {X Y : 类型u} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型u} [拓扑空间 X] [拓扑空间 Y]
   证明: rfl
 -/
 theorem coe_of_of {X Y : Type u} [TopologicalSpace X] [TopologicalSpace Y]
@@ -627,7 +627,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited TopCat
+  签名: : 可居 顶元素范畴
   定义体: ⟨TopCat.of Empty⟩
 
 Depends on / 依赖: TopCat, TopCat.of
@@ -646,7 +646,7 @@ map f := @ofHom _ _ ⊥ ⊥ @ContinuousMap.mk _ _ ⊥ ⊥ f continuous_bot
 
 中文:
 定义 discrete
-  签名: : 类型u ⥤ TopCat.{u} where
+  签名: : 类型u ⥤ 顶元素范畴.{u} where
   定义体: @of X ⊥
 map f := @ofHom _ _ ⊥ ⊥ @ContinuousMap.mk _ _ ⊥ ⊥ f continuous_bot
 -/
@@ -668,7 +668,7 @@ map f := @ofHom _ _ ⊤ ⊤ @ContinuousMap.mk _ _ ⊤ ⊤ f continuous_top
 
 中文:
 定义 trivial
-  签名: : 类型u ⥤ TopCat.{u} where
+  签名: : 类型u ⥤ 顶元素范畴.{u} where
   定义体: @of X ⊤
 map f := @ofHom _ _ ⊤ ⊤ @ContinuousMap.mk _ _ ⊤ ⊤ f continuous_top
 -/
@@ -689,7 +689,7 @@ definition isoOfHomeo
 
 中文:
 定义 isoOfHomeo
-  签名: {X Y : TopCat.{u}} (f : X ≃ₜ Y)
+  签名: {X Y : 顶元素范畴.{u}} (f : X ≃ₜ Y)
   定义体: ofHom f
   inv := ofHom f.symm
 -/
@@ -716,7 +716,7 @@ definition homeoOfIso
 
 中文:
 定义 homeoOfIso
-  签名: {X Y : TopCat.{u}} (f : X ≅ Y)
+  签名: {X Y : 顶元素范畴.{u}} (f : X ≅ Y)
   定义体: f.hom
   invFun := f.inv
   left_inv x := by simp
@@ -752,7 +752,7 @@ theorem of_isoOfHomeo
 
 中文:
 定理 of_isoOfHomeo
-  条件: {X Y : TopCat.{u}} (f : X ≃ₜ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ≃ₜ Y)
   结论: homeoOfIso (isoOfHomeo f) = f
   证明: by
   ext
@@ -778,7 +778,7 @@ theorem of_homeoOfIso
 
 中文:
 定理 of_homeoOfIso
-  条件: {X Y : TopCat.{u}} (f : X ≅ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ≅ Y)
   结论: isoOfHomeo (homeoOfIso f) = f
   证明: by
   ext
@@ -800,7 +800,7 @@ inferInstanceAs IsIso (TopCat.isoOfHomeo e).hom
 
 中文:
 引理 isIso_of_bijective_of_isOpenMap
-  结论: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  结论: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: let e : X ≃ₜ Y :=
     (Equiv.ofBijective f hfbij).toHomeomorphOfContinuousOpen f.hom.continuous hfcl
 inferInstanceAs IsIso (TopCat.isoOfHomeo e).hom
@@ -825,7 +825,7 @@ inferInstanceAs IsIso (TopCat.isoOfHomeo e).hom
 
 中文:
 引理 isIso_of_bijective_of_isClosedMap
-  结论: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  结论: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: let e : X ≃ₜ Y :=
     (Equiv.ofBijective f hfbij).toHomeomorphOfContinuousClosed f.hom.continuous hfcl
 inferInstanceAs IsIso (TopCat.isoOfHomeo e).hom
@@ -849,7 +849,7 @@ lemma isIso_iff_isHomeomorph
 
 中文:
 引理 isIso_iff_isHomeomorph
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: ⟨fun _ => (homeoOfIso (asIso f)).isHomeomorph,
     fun H => isIso_of_bijective_of_isOpenMap _ H.bijective H.isOpenMap⟩
 
@@ -872,7 +872,7 @@ theorem isOpenEmbedding_iff_comp_isIso
 
 中文:
 定理 isOpenEmbedding_iff_comp_isIso
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso g]
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 g]
   证明: (TopCat.homeoOfIso (asIso g)).isOpenEmbedding.of_comp_iff f
 
 @[simp]
@@ -896,7 +896,7 @@ theorem isOpenEmbedding_iff_comp_isIso'
 
 中文:
 定理 isOpenEmbedding_iff_comp_isIso'
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso g]
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 g]
   证明: by
   simp only
   exact isOpenEmbedding_iff_comp_isIso f g
@@ -925,7 +925,7 @@ theorem isOpenEmbedding_iff_isIso_comp
 
 中文:
 定理 isOpenEmbedding_iff_isIso_comp
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f]
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 f]
   证明: by
   constructor
   · intro h
@@ -958,7 +958,7 @@ theorem isOpenEmbedding_iff_isIso_comp'
 
 中文:
 定理 isOpenEmbedding_iff_isIso_comp'
-  条件: {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f]
+  条件: {X Y Z : 顶元素范畴.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 f]
   证明: by
   simp only
   exact isOpenEmbedding_iff_isIso_comp f g
@@ -982,7 +982,7 @@ abbreviation isEmbedding
 
 中文:
 缩写 isEmbedding
-  签名: : Morphism命题erty TopCat
+  签名: : MorphismProperty 顶元素范畴
   定义体: fun ⦃A X : TopCat⦄ (f : A ⟶ X) => Topology.IsEmbedding f.hom
 
 @[simp]
@@ -1005,7 +1005,7 @@ lemma isEmbedding_iff
 中文:
 引理 isEmbedding_iff
   条件: ⦃A X
-  结论: TopCat⦄ (f : A ⟶ X) : isEmbedding f ↔ Topology.IsEmbedding f.hom
+  结论: 顶元素范畴⦄ (f : A ⟶ X) : isEmbedding f ↔ 拓扑.是嵌入 f.hom
   证明: .rfl
 -/
 lemma isEmbedding_iff ⦃A X : TopCat⦄ (f : A ⟶ X) : isEmbedding f ↔ Topology.IsEmbedding f.hom :=
@@ -1023,7 +1023,7 @@ definition const
 
 中文:
 定义 const
-  签名: {X Y : TopCat.{u}} (y : Y)
+  签名: {X Y : 顶元素范畴.{u}} (y : Y)
   定义体: ofHom ⟨fun _ => y, by fun_prop⟩
 
 @[simp]
@@ -1044,7 +1044,7 @@ lemma const_apply
 
 中文:
 引理 const_apply
-  条件: {X Y : TopCat.{u}} (y : Y) (x : X)
+  条件: {X Y : 顶元素范畴.{u}} (y : Y) (x : X)
   证明: rfl
 -/
 lemma const_apply {X Y : TopCat.{u}} (y : Y) (x : X) :

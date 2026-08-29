@@ -72,8 +72,8 @@ lemma exists_quasiIso_injective
     rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (Injecti
 
 中文:
-引理 exists_quasiIso_injective
-  结论: [EnoughInjectives C]
+引理 存在_quasiIso_injective
+  结论: [有足够单射 C]
   证明: by
   obtain ⟨L, i, _, _, _⟩ := modelCategoryQuillen.exists_quasiIso_injective K.obj n
   let L' : CochainComplex (InjectiveObject C) Int :=
@@ -116,8 +116,8 @@ lemma exists_injective_nonempty_iso
   exact ⟨M, infer
 
 中文:
-引理 exists_injective_nonempty_iso
-  结论: [EnoughInjectives C] (K : DerivedCategory.Plus C)
+引理 存在_injective_nonempty_iso
+  结论: [有足够单射 C] (K : 导出范畴.Plus C)
   证明: by
   have : K.obj.IsGE n := (K.isGE_ι_obj_iff n).2 (by assumption)
   obtain ⟨L, _, ⟨e⟩⟩ := DerivedCategory.exists_iso_Q_obj_of_isGE K.obj n
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: (localizerMorphism C).IsInduced
+  签名: (localizerMorphism C).是Induced
   定义体: rfl
 -/
 instance : (localizerMorphism C).IsInduced where
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrantObjectLocalizerMorphism C).IsInduced
+  签名: (fibrantObjectLocalizerMorphism C).是Induced
   定义体: rfl
 -/
 instance : (fibrantObjectLocalizerMorphism C).IsInduced where
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: (localizerMorphism C).IsRightDerivabilityStructure
+  签名: (localizerMorphism C).是RightDerivabilityStructure
   定义体: by
   rw [LocalizerMorphism.isRightDerivabilityStructure_iff_of_equivalences
     (T := localizerMorphism C) (B := FibrantObject.localizerMorphism (Plus C))
@@ -372,7 +372,7 @@ abbreviation localizerMorphism
 
 中文:
 缩写 localizerMorphism
-  签名: : LocalizerMorphism
+  签名: : Localizer态射
   定义体: (InjectiveObject.ι C).mapHomotopyCategoryPlus
   map K L f (hf : IsIso f) := by
     dsimp only [MorphismProperty.inverseImage, HomotopyCategory.Plus.quasiIso]
@@ -538,7 +538,7 @@ abbreviation L
 
 中文:
 缩写 L
-  签名: : LocalizerMorphism
+  签名: : Localizer态射
   定义体: HomotopyCategory.Plus.quotient (InjectiveObject C)
   map _ _ f hf := (isIso_quotient_map_iff f).2 hf
 -/
@@ -558,7 +558,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L C).IsInduced
+  签名: (L C).是Induced
   定义体: by ext; apply isIso_quotient_map_iff
 -/
 private instance : (L C).IsInduced where
@@ -577,7 +577,7 @@ abbreviation R
 
 中文:
 缩写 R
-  签名: : LocalizerMorphism (CochainComplex.Plus.quasiIso C) (quasiIso C) where
+  签名: : Localizer态射 (上链复形.Plus.quasiIso C) (quasiIso C) where
   定义体: HomotopyCategory.Plus.quotient C
   map _ _ _ _ := by simpa [quasiIso, quotient_map_mem_quasiIso_iff]
 -/
@@ -595,7 +595,7 @@ instance :
 
 中文:
 实例 :
-  签名: (R C).IsInduced
+  签名: (R C).是Induced
   定义体: by ext; apply quotient_map_mem_quasiIso_iff
 -/
 private instance : (R C).IsInduced where
@@ -617,7 +617,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L C).IsLocalizedEquivalence
+  签名: (L C).是LocalizedEquivalence
   定义体: by
   have :
       ((L C).functor ⋙ 𝟭 (Plus (InjectiveObject C))).IsLocalization
@@ -645,7 +645,7 @@ instance :
 
 中文:
 实例 :
-  签名: (R C).IsLocalizedEquivalence
+  签名: (R C).是LocalizedEquivalence
   定义体: LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization
     (R C) ((quasiIso C).Q)
 -/
@@ -732,7 +732,7 @@ instance isRightDerivabilityStructure
 
 中文:
 实例 isRightDerivabilityStructure
-  签名: : (localizerMorphism C).IsRightDerivabilityStructure
+  签名: : (localizerMorphism C).是RightDerivabilityStructure
   定义体: LocalizerMorphism.isRightDerivabilityStructure_of_isLocalizedEquivalence
     (isRightDerivabilityStructure.iso C)
 

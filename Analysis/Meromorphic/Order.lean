@@ -315,7 +315,7 @@ theorem MeromorphicOn.eventually_codiscreteWithin_apply_ne_zero
 
 中文:
 定理 MeromorphicOn.eventually_codiscreteWithin_apply_ne_zero
-  结论: {U : Set 𝕜} {f : 𝕜 -> E}
+  结论: {U : 集合 𝕜} {f : 𝕜 -> E}
   证明: by
   simp_rw [eventually_iff, mem_codiscreteWithin, disjoint_principal_right]
   intro x hx
@@ -881,7 +881,7 @@ theorem meromorphicOrderAt_const
 
 中文:
 定理 meromorphicOrderAt_const
-  条件: (z₀ : 𝕜) (e : E) [Decidable (e = 0)]
+  条件: (z₀ : 𝕜) (e : E) [可判定 (e = 0)]
   证明: by
   split_ifs with he
   · simp [he, meromorphicOrderAt_eq_top_iff]
@@ -928,7 +928,7 @@ theorem meromorphicOrderAt_const_intCast
 
 中文:
 定理 meromorphicOrderAt_const_intCast
-  条件: (z₀ : 𝕜) (n : 整数) [Decidable ((n : 𝕜') = 0)]
+  条件: (z₀ : 𝕜) (n : 整数) [可判定 ((n : 𝕜') = 0)]
   证明: meromorphicOrderAt_const z₀ (n : 𝕜')
 
 Depends on / 依赖: meromorphicOrderAt_const
@@ -947,7 +947,7 @@ theorem meromorphicOrderAt_const_natCast
 
 中文:
 定理 meromorphicOrderAt_const_natCast
-  条件: (z₀ : 𝕜) (n : 自然数) [Decidable ((n : 𝕜') = 0)]
+  条件: (z₀ : 𝕜) (n : 自然数) [可判定 ((n : 𝕜') = 0)]
   证明: meromorphicOrderAt_const z₀ (n : 𝕜')
 
 Depends on / 依赖: meromorphicOrderAt_const
@@ -967,8 +967,8 @@ theorem meromorphicOrderAt_const_ofNat
   simp [Semiring.toGrindSemiring_ofNat 𝕜' n]
 
 中文:
-定理 meromorphicOrderAt_const_ofNat
-  条件: (z₀ : 𝕜) (n : 自然数) [Decidable ((n : 𝕜') = 0)]
+定理 meromorphicOrderAt_const_of自然数
+  条件: (z₀ : 𝕜) (n : 自然数) [可判定 ((n : 𝕜') = 0)]
   证明: by
   convert! meromorphicOrderAt_const z₀ (n : 𝕜')
   simp [Semiring.toGrindSemiring_ofNat 𝕜' n]
@@ -1126,7 +1126,7 @@ theorem meromorphicOrderAt_smul
 
 中文:
 定理 meromorphicOrderAt_smul
-  结论: [NormedAlgebra 𝕜 R] [IsScalarTower 𝕜 R E]
+  结论: [赋范代数 𝕜 R] [标量塔 𝕜 R E]
   证明: by
   -- Trivial cases: one of the functions vanishes around z₀
   cases h₂f : meromorphicOrderAt f x with
@@ -1194,7 +1194,7 @@ theorem meromorphicOrderAt_prod
 
 中文:
 定理 meromorphicOrderAt_prod
-  结论: {x : 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜'}
+  结论: {x : 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜'}
   证明: by
   classical
   induction s using Finset.induction with
@@ -1235,7 +1235,7 @@ theorem meromorphicOrderAt_fun_prod
 
 中文:
 定理 meromorphicOrderAt_fun_prod
-  结论: {x : 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜'}
+  结论: {x : 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜'}
   证明: by
   convert! meromorphicOrderAt_prod hf
   exact (Finset.prod_apply _ s f).symm
@@ -1783,8 +1783,8 @@ theorem exists_meromorphicOrderAt_ne_top_iff_forall
     · obtain ⟨
 
 中文:
-定理 exists_meromorphicOrderAt_ne_top_iff_forall
-  条件: (hf : MeromorphicOn f U) (hU : IsConnected U)
+定理 存在_meromorphicOrderAt_ne_top_iff_对任意
+  条件: (hf : MeromorphicOn f U) (hU : 是连通 U)
   证明: by
   constructor
   · intro h₂f
@@ -1827,7 +1827,7 @@ theorem exists_meromorphicOrderAt_ne_top_iff_forall_mem
   <;> simp
 
 中文:
-定理 exists_meromorphicOrderAt_ne_top_iff_forall_mem
+定理 存在_meromorphicOrderAt_ne_top_iff_对任意_mem
   结论: (hf : MeromorphicOn f U)
   证明: by
   convert exists_meromorphicOrderAt_ne_top_iff_forall hf hU
@@ -2300,7 +2300,7 @@ lemma meromorphicOrderAt_deriv_eq_sub_one
 
 中文:
 引理 meromorphicOrderAt_deriv_eq_sub_one
-  结论: [CompleteSpace E] {f : 𝕜 -> E} {x : 𝕜} {n : 整数}
+  结论: [完备空间 E] {f : 𝕜 -> E} {x : 𝕜} {n : 整数}
   证明: by
   have hmero : MeromorphicAt f x := meromorphicAt_of_meromorphicOrderAt_ne_zero (by aesop)
   rw [meromorphicOrderAt_eq_int_iff hmero] at hf
@@ -2343,7 +2343,7 @@ lemma meromorphicOrderAt_deriv
 
 中文:
 引理 meromorphicOrderAt_deriv
-  结论: [CompleteSpace E] {f : 𝕜 -> E} {x : 𝕜} {n : 整数}
+  结论: [完备空间 E] {f : 𝕜 -> E} {x : 𝕜} {n : 整数}
   证明: by
   simpa using meromorphicOrderAt_deriv_eq_sub_one hn hf
 
@@ -2369,7 +2369,7 @@ theorem meromorphicOrderAt_logDeriv_eq_neg_one
 
 中文:
 定理 meromorphicOrderAt_logDeriv_eq_neg_one
-  结论: [CharZero 𝕜] (hf : MeromorphicAt f x)
+  结论: [特征零 𝕜] (hf : MeromorphicAt f x)
   证明: by
   lift meromorphicOrderAt f x to Int using h₂ with n hn
   rw [logDeriv]; rw [meromorphicOrderAt_div hf.deriv hf]; rw [meromorphicOrderAt_deriv_eq_sub_one (Int.cast_ne_zero.mpr (by exact_mod_cast h₁)) hn.symm]; rw [← hn]

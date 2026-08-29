@@ -41,8 +41,8 @@ abbreviation IsOpenImmersion
   body: fun _ _ f => LocallyRingedSpace.IsOpenImmersion f.toLRSHom
 
 中文:
-缩写 IsOpenImmersion
-  签名: : Morphism命题erty (Scheme.{u})
+缩写 是开浸入
+  签名: : MorphismProperty (概形.{u})
   定义体: fun _ _ f => LocallyRingedSpace.IsOpenImmersion f.toLRSHom
 
 Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion, f.toLRSHom, toLRSHom
@@ -59,8 +59,8 @@ instance IsOpenImmersion.comp
   body: LocallyRingedSpace.IsOpenImmersion.comp f.toLRSHom g.toLRSHom
 
 中文:
-实例 IsOpenImmersion.comp
-  签名: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+实例 是开浸入.comp
+  签名: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: LocallyRingedSpace.IsOpenImmersion.comp f.toLRSHom g.toLRSHom
 
 Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion.comp, f.toLRSHom, g.toLRSHom, toLRSHom
@@ -88,7 +88,7 @@ definition scheme
 
 中文:
 定义 scheme
-  签名: (X : LocallyRingedSpace.{u})
+  签名: (X : LocallyRinged空间.{u})
   定义体: X
   local_affine := by
     intro x
@@ -125,8 +125,8 @@ theorem IsOpenImmersion.isOpen_range
   proof: H.base_open.isOpen_range
 
 中文:
-定理 IsOpenImmersion.isOpen_range
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [H : IsOpenImmersion f]
+定理 是开浸入.isOpen_range
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [H : 是开浸入 f]
   证明: H.base_open.isOpen_range
 
 Depends on / 依赖: H.base_open.isOpen_range, base_open, isOpen_range
@@ -149,7 +149,7 @@ theorem isOpenEmbedding
 
 中文:
 定理 isOpenEmbedding
-  结论: IsOpenEmbedding f
+  结论: 是开嵌入 f
   证明: H.base_open
 
 Depends on / 依赖: H.base_open, base_open
@@ -192,7 +192,7 @@ theorem mem_opensRange
 
 中文:
 定理 mem_opensRange
-  条件: {f : X ⟶ Y} [IsOpenImmersion f] {y : Y}
+  条件: {f : X ⟶ Y} [是开浸入 f] {y : Y}
   证明: .rfl
 -/
 theorem mem_opensRange {f : X ⟶ Y} [IsOpenImmersion f] {y : Y} :
@@ -226,7 +226,7 @@ definition opensFunctorAdjunction
 
 中文:
 定义 opensFunctorAdjunction
-  签名: : f.opensFunctor ⊣ TopologicalSpace.Opens.map f.base
+  签名: : f.opensFunctor ⊣ 拓扑空间.Opens.map f.base
   定义体: IsOpenMap.adjunction ‹IsOpenImmersion f›.base_open.isOpenMap
 
 Depends on / 依赖: IsOpenImmersion, IsOpenMap, IsOpenMap.adjunction, adjunction, base_open, base_open.isOpenMap, isOpenMap
@@ -244,7 +244,7 @@ instance :
 
 中文:
 实例 :
-  签名: f.opensFunctor.IsLeftAdjoint
+  签名: f.opensFunctor.是左伴随
   定义体: f.opensFunctorAdjunction.isLeftAdjoint
 
 Depends on / 依赖: f.opensFunctorAdjunction.isLeftAdjoint, isLeftAdjoint, opensFunctorAdjunction
@@ -264,7 +264,7 @@ instance :
 
 中文:
 实例 :
-  签名: f.opensFunctor.IsCocontinuous (Opens.grothendieckTopology _)
+  签名: f.opensFunctor.是余continuous (Opens.grothendieckTopology _)
   定义体: by
   rw [f.opensFunctorAdjunction.isCocontinuous_iff_coverPreserving]
   exact coverPreserving_opens_map f.base
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: f.opensFunctor.Full
+  签名: f.opensFunctor.满
   定义体: have : Mono f.base := (TopCat.mono_iff_injective f.base).mpr f.isOpenEmbedding.injective
   inferInstanceAs f.isOpenEmbedding.functor.Full
 
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: f.opensFunctor.IsContinuous
+  签名: f.opensFunctor.是连续
   定义体: f.isOpenEmbedding.functor_isContinuous
 
 @[simp]
@@ -444,7 +444,7 @@ lemma opensRange_comp
 
 中文:
 引理 opensRange_comp
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: TopologicalSpace.Opens.ext (Set.range_comp g f)
 
 Depends on / 依赖: Set.range_comp, TopologicalSpace, TopologicalSpace.Opens.ext, range_comp
@@ -463,7 +463,7 @@ lemma opensRange_of_isIso
 
 中文:
 引理 opensRange_of_isIso
-  条件: {X Y : Scheme} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : 概形} (f : X ⟶ Y) [是同构 f]
   证明: TopologicalSpace.Opens.ext (Set.range_eq_univ.mpr f.homeomorph.surjective)
 
 Depends on / 依赖: Set.range_eq_univ.mpr, TopologicalSpace, TopologicalSpace.Opens.ext, f.homeomorph.surjective, homeomorph, range_eq_univ, surjective
@@ -483,7 +483,7 @@ lemma opensRange_comp_of_isIso
 
 中文:
 引理 opensRange_comp_of_isIso
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: by
   rw [opensRange_comp]; rw [opensRange_of_isIso]; rw [image_top_eq_opensRange]
 
@@ -558,7 +558,7 @@ lemma image_le_image_iff
 
 中文:
 引理 image_le_image_iff
-  条件: (f : X ⟶ Y) [IsOpenImmersion f] (U U' : X.Opens)
+  条件: (f : X ⟶ Y) [是开浸入 f] (U U' : X.Opens)
   证明: by
   refine ⟨fun h => ?_, f.image_mono⟩
   rw [← preimage_image_eq f U]; rw [← preimage_image_eq f U']
@@ -629,7 +629,7 @@ lemma image_injective
 
 中文:
 引理 image_injective
-  结论: Function.Injective (f ''ᵁ ·)
+  结论: 函数.单射 (f ''ᵁ ·)
   证明: by
   intro U V hUV
   simpa using congrArg (f ⁻¹ᵁ ·) hUV
@@ -650,7 +650,7 @@ lemma image_iSup
 
 中文:
 引理 image_iSup
-  条件: {ι : Sort*} (s : ι -> X.Opens)
+  条件: {ι : 类型层*} (s : ι -> X.Opens)
   证明: by
   ext : 1
   simp [Set.image_iUnion]
@@ -676,7 +676,7 @@ lemma image_iSup₂
 
 中文:
 引理 image_iSup₂
-  条件: {ι : Sort*} {κ : ι -> Sort*} (s : (i : ι) -> κ i -> X.Opens)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (s : (i : ι) -> κ i -> X.Opens)
   证明: by
   ext : 1
   simp [Set.image_iUnion₂]
@@ -703,7 +703,7 @@ lemma comp_image
 
 中文:
 引理 comp_image
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) (U : X.Opens)
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) (U : X.Opens)
   证明: TopologicalSpace.Opens.ext (Set.image_comp g f U)
 
 @[simp]
@@ -728,7 +728,7 @@ lemma id_image
 
 中文:
 引理 id_image
-  条件: {X : Scheme} (U : X.Opens)
+  条件: {X : 概形} (U : X.Opens)
   结论: 𝟙 X ''ᵁ U = U
   证明: TopologicalSpace.Opens.ext (Set.image_id _)
 
@@ -751,7 +751,7 @@ lemma inv_image
 
 中文:
 引理 inv_image
-  条件: {X Y : Scheme} (e : X ≅ Y) (U : Y.Opens)
+  条件: {X Y : 概形} (e : X ≅ Y) (U : Y.Opens)
   结论: e.inv ''ᵁ U = e.hom ⁻¹ᵁ U
   证明: TopologicalSpace.Opens.ext (Scheme.homeoOfIso e.symm).toEquiv.image_eq_preimage_symm _
 
@@ -773,7 +773,7 @@ lemma inv_preimage
 
 中文:
 引理 inv_preimage
-  条件: {X Y : Scheme} (e : X ≅ Y) (U : X.Opens)
+  条件: {X Y : 概形} (e : X ≅ Y) (U : X.Opens)
   结论: e.inv ⁻¹ᵁ U = e.hom ''ᵁ U
   证明: (inv_image e.symm U).symm
 
@@ -797,7 +797,7 @@ lemma apply_mem_image_iff
 
 中文:
 引理 apply_mem_image_iff
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
+  结论: {X Y : 概形} (f : X ⟶ Y) [是开浸入 f]
   证明: f.isOpenEmbedding.injective.mem_set_image
 
 @[simp]
@@ -820,7 +820,7 @@ lemma preimage_opensRange
 
 中文:
 引理 preimage_opensRange
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   simp [Scheme.Hom.opensRange]
 
@@ -847,7 +847,7 @@ lemma isIso_app
 中文:
 引理 isIso_app
   条件: (V : Y.Opens) (hV : V <= f.opensRange)
-  结论: IsIso (f.app V)
+  结论: 是同构 (f.app V)
   证明: by
   rw [show V = f ''ᵁ f ⁻¹ᵁ V from Opens.ext (Set.image_preimage_eq_of_subset hV).symm]
   infer_instance
@@ -1048,7 +1048,7 @@ lemma appLE_appIso_inv
 
 中文:
 引理 appLE_appIso_inv
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] {U : Y.Opens}
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] {U : Y.Opens}
   证明: by
   simp only [appLE, Category.assoc, appIso_inv_naturality, Functor.op_obj, Functor.op_map,
     Quiver.Hom.unop_op, opensFunctor_map_homOfLE, app_appIso_inv_assoc, Opens.carrier_eq_coe]
@@ -1083,7 +1083,7 @@ lemma appIso_inv_appLE
 
 中文:
 引理 appIso_inv_appLE
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] {U V : X.Opens}
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] {U V : X.Opens}
   证明: by
   simp only [appLE, appIso_inv_app_assoc, eqToHom_op]
   rw [← Functor.map_comp]
@@ -1157,7 +1157,7 @@ lemma comp_appIso
 
 中文:
 引理 comp_appIso
-  结论: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsOpenImmersion f]
+  结论: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是开浸入 f]
   证明: by
   ext : 1; simp [appIso_hom, app_eq_appLE, appLE_comp_appLE, -comp_appLE]
 
@@ -1185,8 +1185,8 @@ definition IsOpenImmersion.opensEquiv
   right_inv U := Subtype.ext (Opens.ext (Set.image_preimage_eq_of_subset U.2))
 
 中文:
-定义 IsOpenImmersion.opensEquiv
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+定义 是开浸入.opensEquiv
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   定义体: ⟨f ''ᵁ U, Set.image_subset_range _ _⟩
   invFun U := f ⁻¹ᵁ U
   left_inv _ := Opens.ext (Set.preimage_image_eq _ f.isOpenEmbedding.injective)
@@ -1217,7 +1217,7 @@ instance isOpenImmersion_SpecMap_localizationAway
 
 中文:
 实例 isOpenImmersion_SpecMap_localizationAway
-  签名: {R : CommRingCat.{u}} (f : R)
+  签名: {R : 交换环范畴.{u}} (f : R)
   定义体: by
   apply SheafedSpace.IsOpenImmersion.of_stalk_iso (H := ?_)
   · exact (PrimeSpectrum.localization_away_isOpenEmbedding (Localization.Away f) f :)
@@ -1250,8 +1250,8 @@ lemma Hom.opensRange_localizationAway
   exact PrimeSpectrum.localization_away_comap_range _ g
 
 中文:
-引理 Hom.opensRange_localizationAway
-  条件: {R : CommRingCat.{u}} (g : R)
+引理 态射.opensRange_localizationAway
+  条件: {R : 交换环范畴.{u}} (g : R)
   证明: by
   rw [SetLike.ext'_iff]
   exact PrimeSpectrum.localization_away_comap_range _ g
@@ -1278,8 +1278,8 @@ lemma _root_.AlgebraicGeometry.IsOpenImmersion.of_isLocalization
     (Submonoid.powers f) S (Localization.Away f)).symm.toAlgHom.toRi
 
 中文:
-引理 _root_.AlgebraicGeometry.IsOpenImmersion.of_isLocalization
-  结论: {R S} [CommRing R] [CommRing S]
+引理 _root_.AlgebraicGeometry.是开浸入.of_isLocalization
+  结论: {R S} [交换环 R] [交换环 S]
   证明: by
   have e := (IsLocalization.algEquiv (.powers f) S
     (Localization.Away f)).symm.toAlgHom.comp_algebraMap
@@ -1316,7 +1316,7 @@ theorem exists_affine_mem_range_and_range_subset
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem
 
 中文:
-定理 exists_affine_mem_range_and_range_subset
+定理 存在_affine_mem_range_and_range_subset
   证明: by
   obtain ⟨⟨V, hxV⟩, R, ⟨e⟩⟩ := X.2 x
   have : e.hom.base ⟨x, hxV⟩ in (Opens.map (e.inv.base ≫ V.inclusion')).obj U :=
@@ -1366,7 +1366,7 @@ definition toScheme
 
 中文:
 定义 toScheme
-  签名: : Scheme
+  签名: : 概形
   定义体: by
   apply LocallyRingedSpace.IsOpenImmersion.scheme (toLocallyRingedSpace _ f)
   intro x
@@ -1450,7 +1450,7 @@ instance toSchemeHom_isOpenImmersion
 
 中文:
 实例 toSchemeHom_isOpenImmersion
-  签名: : AlgebraicGeometry.IsOpenImmersion (toSchemeHom Y f)
+  签名: : AlgebraicGeometry.是开浸入 (toSchemeHom Y f)
   定义体: H
 -/
 instance toSchemeHom_isOpenImmersion : AlgebraicGeometry.IsOpenImmersion (toSchemeHom Y f) :=
@@ -1467,7 +1467,7 @@ theorem scheme_eq_of_locallyRingedSpace_eq
 
 中文:
 定理 scheme_eq_of_locallyRingedSpace_eq
-  结论: {X Y : Scheme.{u}}
+  结论: {X Y : 概形.{u}}
   证明: by
   cases X; cases Y; congr
 -/
@@ -1487,7 +1487,7 @@ theorem scheme_toScheme
 
 中文:
 定理 scheme_toScheme
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [AlgebraicGeometry.IsOpenImmersion f]
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [AlgebraicGeometry.是开浸入 f]
   证明: by
   apply scheme_eq_of_locallyRingedSpace_eq
   exact locallyRingedSpace_toLocallyRingedSpace f.toLRSHom
@@ -1519,8 +1519,8 @@ definition Scheme.restrict
     toPresheafedSpace := X.toPresheafedSpace.restrict h }
 
 中文:
-定义 Scheme.restrict
-  签名: : Scheme
+定义 概形.restrict
+  签名: : 概形
   定义体: { PresheafedSpace.IsOpenImmersion.toScheme X (X.toPresheafedSpace.ofRestrict h) with
     toPresheafedSpace := X.toPresheafedSpace.restrict h }
 
@@ -1538,7 +1538,7 @@ lemma Scheme.restrict_toPresheafedSpace
   proof: rfl
 
 中文:
-引理 Scheme.restrict_toPresheafedSpace
+引理 概形.restrict_toPresheafedSpace
   证明: rfl
 -/
 lemma Scheme.restrict_toPresheafedSpace :
@@ -1557,7 +1557,7 @@ definition Scheme.ofRestrict
 @[simp]
 
 中文:
-定义 Scheme.ofRestrict
+定义 概形.ofRestrict
   签名: : X.restrict h ⟶ X
   定义体: ⟨X.toLocallyRingedSpace.ofRestrict h⟩
 
@@ -1578,7 +1578,7 @@ lemma Scheme.ofRestrict_app
   proof: rfl
 
 中文:
-引理 Scheme.ofRestrict_app
+引理 概形.ofRestrict_app
   条件: (V)
   证明: rfl
 -/
@@ -1597,8 +1597,8 @@ instance IsOpenImmersion.ofRestrict
 @[simp]
 
 中文:
-实例 IsOpenImmersion.ofRestrict
-  签名: : IsOpenImmersion (X.ofRestrict h)
+实例 是开浸入.ofRestrict
+  签名: : 是开浸入 (X.ofRestrict h)
   定义体: show PresheafedSpace.IsOpenImmersion (X.toPresheafedSpace.ofRestrict h) by infer_instance
 
 @[simp]
@@ -1620,7 +1620,7 @@ lemma Scheme.ofRestrict_appLE
   exact (X.presheaf.map_comp _ _).symm
 
 中文:
-引理 Scheme.ofRestrict_appLE
+引理 概形.ofRestrict_appLE
   条件: (V W e)
   证明: by
   dsimp [Hom.appLE]
@@ -1650,7 +1650,7 @@ lemma Scheme.ofRestrict_appIso
 @[simp]
 
 中文:
-引理 Scheme.ofRestrict_appIso
+引理 概形.ofRestrict_appIso
   条件: (U)
   证明: by
   ext1
@@ -1677,7 +1677,7 @@ lemma Scheme.restrict_presheaf_map
   proof: rfl
 
 中文:
-引理 Scheme.restrict_presheaf_map
+引理 概形.restrict_presheaf_map
   条件: (V W) (i : V ⟶ W)
   证明: rfl
 -/
@@ -1709,8 +1709,8 @@ theorem isIso
 
 中文:
 定理 isIso
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] [Epi f.base]
-  结论: IsIso f
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] [满态射 f.base]
+  结论: 是同构 f
   证明: @isIso_of_reflects_iso _ _ _ _ _ _ f
     (Scheme.forgetToLocallyRingedSpace ⋙
       LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace)
@@ -1735,7 +1735,7 @@ theorem of_isIso_stalkMap
 
 中文:
 定理 of_isIso_stalkMap
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) (hf : IsOpenEmbedding f)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) (hf : 是开嵌入 f)
   证明: have (x : X) : IsIso (f.toShHom.hom.stalkMap x) := inferInstanceAs (IsIso (f.stalkMap x))
   SheafedSpace.IsOpenImmersion.of_stalk_iso f.toShHom hf
 
@@ -1768,7 +1768,7 @@ IsOpenImmersion.of_isIso_stalkMap _
 
 中文:
 引理 of_comp
-  结论: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [IsOpenImmersion g]
+  结论: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) [是开浸入 g]
   证明: haveI (x : X) : IsIso (f.stalkMap x) :=
     haveI : IsIso (g.stalkMap (f x) ≫ f.stalkMap x) := by
       rw [← Scheme.Hom.stalkMap_comp]
@@ -1799,7 +1799,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsOpenImmersion @IsOpenImmersion
+  签名: MorphismProperty.有OfPostcompProperty @是开浸入 @是开浸入
   定义体: .of_comp f g
 
 Depends on / 依赖: of_comp
@@ -1818,7 +1818,7 @@ theorem iff_isIso_stalkMap
 
 中文:
 定理 iff_isIso_stalkMap
-  条件: {X Y : Scheme.{u}} {f : X ⟶ Y}
+  条件: {X Y : 概形.{u}} {f : X ⟶ Y}
   证明: ⟨fun H => ⟨H.1, fun x => inferInstanceAs IsIso (f.toPshHom.stalkMap x)⟩,
     fun ⟨h, _⟩ => .of_isIso_stalkMap f h⟩
 
@@ -1865,7 +1865,7 @@ theorem _root_.AlgebraicGeometry.isIso_iff_isIso_stalkMap
 
 中文:
 定理 _root_.AlgebraicGeometry.isIso_iff_isIso_stalkMap
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   rw [isIso_iff_isOpenImmersion_and_epi_base]; rw [IsOpenImmersion.iff_isIso_stalkMap]; rw [and_comm]; rw [← and_assoc]
   refine and_congr ⟨?_, ?_⟩ Iff.rfl
@@ -1929,7 +1929,7 @@ instance mono
 
 中文:
 实例 mono
-  签名: : Mono f
+  签名: : 单态射 f
   定义体: (forget).mono_of_mono_map (inferInstanceAs (Mono f.toLRSHom))
 
 Depends on / 依赖: f.toLRSHom, forget, mono_of_mono_map, toLRSHom
@@ -1964,7 +1964,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyRingedSpace.IsOpenImmersion ((forget).map f)
+  签名: LocallyRinged空间.是开浸入 ((forget).map f)
   定义体: ⟨H.base_open, H.c_iso⟩
 
 Depends on / 依赖: H.base_open, H.c_iso, base_open, c_iso
@@ -2029,7 +2029,7 @@ instance hasLimit_cospan_forget_of_right
 
 中文:
 实例 hasLimit_cospan_forget_of_right
-  签名: : HasLimit (cospan g f ⋙ forget)
+  签名: : 有极限 (cospan g f ⋙ forget)
   定义体: by
   rw [hasLimit_iff_of_iso (diagramIsoCospan _)]
   exact inferInstanceAs (HasLimit (cospan ((forget).map g) ((forget).map f)))
@@ -2073,7 +2073,7 @@ instance forgetCreatesPullbackOfLeft
 
 中文:
 实例 forgetCreatesPullbackOfLeft
-  签名: : CreatesLimit (cospan f g) forget
+  签名: : 创造极限 (cospan f g) forget
   定义体: createsLimitOfFullyFaithfulOfIso
     (PresheafedSpace.IsOpenImmersion.toScheme Y (pullback.snd f.toLRSHom g.toLRSHom).toShHom.hom)
     (eqToIso (by simp) ≪≫ HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
@@ -2098,7 +2098,7 @@ instance forgetCreatesPullbackOfRight
 
 中文:
 实例 forgetCreatesPullbackOfRight
-  签名: : CreatesLimit (cospan g f) forget
+  签名: : 创造极限 (cospan g f) forget
   定义体: createsLimitOfFullyFaithfulOfIso
     (PresheafedSpace.IsOpenImmersion.toScheme Y (pullback.fst g.toLRSHom f.toLRSHom).1)
     (eqToIso (by simp) ≪≫ HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
@@ -2120,7 +2120,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan f g) forget
+  签名: 保持极限 (cospan f g) forget
   定义体: CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit _ _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit, preservesLimit_of_createsLimit_and_hasLimit
@@ -2138,7 +2138,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan g f) forget
+  签名: 保持极限 (cospan g f) forget
   定义体: preservesPullback_symmetry _ _ _
 
 Depends on / 依赖: preservesPullback_symmetry
@@ -2197,7 +2197,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (pullback.snd f g)
+  签名: 是开浸入 (pullback.snd f g)
   定义体: by
   have := PreservesPullback.iso_hom_snd forget f g
   dsimp only [Scheme.forgetToLocallyRingedSpace, inducedFunctor_map] at this
@@ -2226,7 +2226,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (pullback.fst g f)
+  签名: 是开浸入 (pullback.fst g f)
   定义体: by
   rw [← pullbackSymmetry_hom_comp_snd]
   infer_instance
@@ -2250,7 +2250,7 @@ instance [IsOpenImmersion
   infer_instance
 
 中文:
-实例 [IsOpenImmersion
+实例 [是开浸入
   签名: g] :
   定义体: by
   rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]
@@ -2282,7 +2282,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan f g) Scheme.forgetToTop
+  签名: 保持极限 (cospan f g) 概形.forgetToTop
   定义体: by
   delta Scheme.forgetToTop
   refine @Limits.comp_preservesLimit _ _ _ _ _ _ (K := cospan f g) _ _ (F := forget)
@@ -2312,7 +2312,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan g f) Scheme.forgetToTop
+  签名: 保持极限 (cospan g f) 概形.forgetToTop
   定义体: preservesPullback_symmetry _ _ _
 
 Depends on / 依赖: preservesPullback_symmetry
@@ -2330,7 +2330,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan f g) Scheme.forget
+  签名: 保持极限 (cospan f g) 概形.forget
   定义体: by delta Scheme.forget; infer_instance
 
 Depends on / 依赖: Scheme, Scheme.forget, forget, infer_instance
@@ -2347,7 +2347,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimit (cospan g f) Scheme.forget
+  签名: 保持极限 (cospan g f) 概形.forget
   定义体: by delta Scheme.forget; infer_instance
 
 Depends on / 依赖: Scheme, Scheme.forget, forget, infer_instance
@@ -2393,7 +2393,7 @@ theorem _root_.AlgebraicGeometry.Scheme.Hom.opensRange_pullbackSnd
   proof: Opens.ext (range_pullbackSnd f g)
 
 中文:
-定理 _root_.AlgebraicGeometry.Scheme.Hom.opensRange_pullbackSnd
+定理 _root_.AlgebraicGeometry.概形.态射.opensRange_pullbackSnd
   证明: Opens.ext (range_pullbackSnd f g)
 
 Depends on / 依赖: Opens.ext, range_pullbackSnd
@@ -2441,7 +2441,7 @@ theorem _root_.AlgebraicGeometry.Scheme.Hom.opensRange_pullbackFst
   proof: Opens.ext (range_pullbackFst f g)
 
 中文:
-定理 _root_.AlgebraicGeometry.Scheme.Hom.opensRange_pullbackFst
+定理 _root_.AlgebraicGeometry.概形.态射.opensRange_pullbackFst
   证明: Opens.ext (range_pullbackFst f g)
 
 Depends on / 依赖: Opens.ext, range_pullbackFst
@@ -2507,7 +2507,7 @@ lemma image_preimage_eq_preimage_image_of_isPullback
 
 中文:
 引理 image_preimage_eq_preimage_image_of_isPullback
-  结论: {X Y U V : Scheme.{u}}
+  结论: {X Y U V : 概形.{u}}
   证明: by
   ext x
   by_cases hx : x in Set.range iU
@@ -2548,7 +2548,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (H' : Set.range g subseteq Set.range f)
+  签名: (H' : 集合.range g subseteq 集合.range f)
   定义体: ⟨LocallyRingedSpace.IsOpenImmersion.lift f.toLRSHom g.toLRSHom H'⟩
 
 @[reassoc (attr := simp)]
@@ -2570,7 +2570,7 @@ theorem lift_fac
 
 中文:
 定理 lift_fac
-  条件: (H' : Set.range g subseteq Set.range f)
+  条件: (H' : 集合.range g subseteq 集合.range f)
   结论: lift f g H' ≫ f = g
   证明: Scheme.Hom.ext' LocallyRingedSpace.IsOpenImmersion.lift_fac f.toLRSHom g.toLRSHom H'
 
@@ -2592,7 +2592,7 @@ theorem lift_uniq
 
 中文:
 定理 lift_uniq
-  条件: (H' : Set.range g subseteq Set.range f) (l : Y ⟶ X) (hl : l ≫ f = g)
+  条件: (H' : 集合.range g subseteq 集合.range f) (l : Y ⟶ X) (hl : l ≫ f = g)
   证明: Scheme.Hom.ext' LocallyRingedSpace.IsOpenImmersion.lift_uniq
     f.toLRSHom g.toLRSHom H' l.toLRSHom congr(($hl).toLRSHom)
 
@@ -2617,7 +2617,7 @@ lemma comp_lift
 
 中文:
 引理 comp_lift
-  条件: {Y' : Scheme} (g' : Y' ⟶ Y) (H : Set.range g subseteq Set.range f)
+  条件: {Y' : 概形} (g' : Y' ⟶ Y) (H : 集合.range g subseteq 集合.range f)
   证明: by
   simp [← cancel_mono f]
 
@@ -2669,7 +2669,7 @@ definition isoOfRangeEq
 
 中文:
 定义 isoOfRangeEq
-  签名: [IsOpenImmersion g] (e : Set.range f = Set.range g)
+  签名: [是开浸入 g] (e : 集合.range f = 集合.range g)
   定义体: lift g f (le_of_eq e)
   inv := lift f g (le_of_eq e.symm)
   hom_inv_id := by rw [← cancel_mono f]; simp
@@ -2698,7 +2698,7 @@ lemma isoOfRangeEq_hom_fac
 
 中文:
 引理 isoOfRangeEq_hom_fac
-  结论: {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: lift_fac _ _ (le_of_eq e)
 
 @[reassoc (attr := simp)]
@@ -2721,7 +2721,7 @@ lemma isoOfRangeEq_inv_fac
 
 中文:
 引理 isoOfRangeEq_inv_fac
-  结论: {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+  结论: {X Y Z : 概形.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: lift_fac _ _ (le_of_eq e.symm)
 
 Depends on / 依赖: e.symm, le_of_eq, lift_fac
@@ -2742,7 +2742,7 @@ theorem app_eq_invApp_app_of_comp_eq_aux
 
 中文:
 定理 app_eq_invApp_app_of_comp_eq_aux
-  结论: {X Y U : Scheme.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
+  结论: {X Y U : 概形.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
   证明: by
   simp_all
 -/
@@ -2764,7 +2764,7 @@ theorem app_eq_appIso_inv_app_of_comp_eq
 
 中文:
 定理 app_eq_appIso_inv_app_of_comp_eq
-  结论: {X Y U : Scheme.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
+  结论: {X Y U : 概形.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
   证明: by
   subst H
   rw [Scheme.Hom.comp_app]; rw [Category.assoc]; rw [Scheme.Hom.appIso_inv_app_assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [Quiver.Hom.unop_op]; rw [eqToHom_map]; rw [eqToHom_trans]; rw [eqToHom_op]; rw [eqToHom_refl]; rw [CategoryTheory.Functor.map_id];
@@ -2788,7 +2788,7 @@ theorem lift_app
 
 中文:
 定理 lift_app
-  结论: {X Y U : Scheme.{u}} (f : U ⟶ Y) (g : X ⟶ Y) [IsOpenImmersion f] (H)
+  结论: {X Y U : 概形.{u}} (f : U ⟶ Y) (g : X ⟶ Y) [是开浸入 f] (H)
   证明: IsOpenImmersion.app_eq_appIso_inv_app_of_comp_eq _ _ _ (lift_fac _ _ _).symm _
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.app_eq_appIso_inv_app_of_comp_eq, app_eq_appIso_inv_app_of_comp_eq, lift_fac
@@ -2816,7 +2816,7 @@ lemma isPullback
 
 中文:
 引理 isPullback
-  结论: {U V X Y : Scheme.{u}} (g : U ⟶ V) (iU : U ⟶ X) (iV : V ⟶ Y) (f : X ⟶ Y)
+  结论: {U V X Y : 概形.{u}} (g : U ⟶ V) (iU : U ⟶ X) (iV : V ⟶ Y) (f : X ⟶ Y)
   证明: by
   let e := IsOpenImmersion.isoOfRangeEq (pullback.snd iV f) iU
     (by simpa [range_pullbackSnd] using congr(($H').1))
@@ -2855,7 +2855,7 @@ definition ΓIso
 
 中文:
 定义 ΓIso
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : Y.Opens)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] (U : Y.Opens)
   定义体: (f.appIso (f ⁻¹ᵁ U)).symm ≪≫
     Y.presheaf.mapIso (eqToIso <| (f.image_preimage_eq_opensRange_inf U).symm).op
 
@@ -2883,7 +2883,7 @@ lemma ΓIso_inv
 
 中文:
 引理 ΓIso_inv
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] (U : Y.Opens)
   证明: by
   simp only [ΓIso, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv, eqToHom_op,
     Iso.symm_inv, Scheme.Hom.appIso_hom', Scheme.Hom.map_appLE]
@@ -2912,7 +2912,7 @@ lemma map_ΓIso_inv
 
 中文:
 引理 map_ΓIso_inv
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] (U : Y.Opens)
   证明: by
   simp [Scheme.Hom.appLE_eq_app]
 
@@ -2937,7 +2937,7 @@ lemma app_ΓIso_hom
 
 中文:
 引理 app_ΓIso_hom
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f] (U : Y.Opens)
   证明: by
   rw [← map_ΓIso_inv]
   simp [-ΓIso_inv]
@@ -2962,7 +2962,7 @@ definition ΓIsoTop
 
 中文:
 定义 ΓIsoTop
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   定义体: (f.appIso ⊤).symm ≪≫ Y.presheaf.mapIso (eqToIso f.image_top_eq_opensRange.symm).op
 
 Depends on / 依赖: Y.presheaf.mapIso, appIso, eqToIso, f.appIso, f.image_top_eq_opensRange.symm, image_top_eq_opensRange, mapIso, presheaf
@@ -2993,7 +2993,7 @@ lemma isIso_of_isOpenImmersion_of_opensRange_eq_top
 
 中文:
 引理 isIso_of_isOpenImmersion_of_opensRange_eq_top
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   rw [isIso_iff_isOpenImmersion_and_epi_base]
   refine ⟨inferInstance, ?_⟩
@@ -3044,7 +3044,7 @@ instance isOpenImmersion_respectsIso
 
 中文:
 实例 isOpenImmersion_respectsIso
-  签名: : Morphism命题erty.RespectsIso @IsOpenImmersion
+  签名: : MorphismProperty.RespectsIso @是开浸入
   定义体: by
   apply MorphismProperty.respectsIso_of_isStableUnderComposition
   intro _ _ f (hf : IsIso f)
@@ -3151,7 +3151,7 @@ lemma image_zeroLocus
 
 中文:
 引理 image_zeroLocus
-  条件: {U : X.Opens} (s : Set Γ(X, U))
+  条件: {U : X.Opens} (s : 集合 Γ(X, U))
   证明: by
   ext x
   by_cases hx : x in Set.range f
@@ -3187,7 +3187,7 @@ definition stalkMapIsoOfIsPullback
 
 中文:
 定义 stalkMapIsoOfIsPullback
-  签名: {P X Y Z : Scheme.{u}}
+  签名: {P X Y Z : 概形.{u}}
   定义体: haveI : IsOpenImmersion fst := MorphismProperty.of_isPullback h.flip ‹_›
   Arrow.isoMk' _ _
     (TopCat.Presheaf.stalkCongr _ (.of_eq <| by rw [← hx, ← Scheme.Hom.comp_apply, h.w]; simp) ≪≫

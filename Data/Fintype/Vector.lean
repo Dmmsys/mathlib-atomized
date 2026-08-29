@@ -30,7 +30,7 @@ instance [Finite
   body: Finite.of_equiv _ (Equiv.vectorEquivFin _ _).symm
 
 中文:
-实例 [Finite
+实例 [有限
   签名: α] {n
   定义体: Finite.of_equiv _ (Equiv.vectorEquivFin _ _).symm
 
@@ -48,7 +48,7 @@ instance [Fintype
   body: fast_instance% Fintype.ofEquiv _ (Equiv.vectorEquivFin _ _).symm
 
 中文:
-实例 [Fintype
+实例 [有限类型
   签名: α] {n
   定义体: fast_instance% Fintype.ofEquiv _ (Equiv.vectorEquivFin _ _).symm
 
@@ -70,7 +70,7 @@ instance [Finite
   body: inferInstanceAs Finite (Quotient _)
 
 中文:
-实例 [Finite
+实例 [有限
   签名: α] {n
   定义体: inferInstanceAs Finite (Quotient _)
 
@@ -89,7 +89,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: [DecidableEq α] [Fintype α] {n : 自然数}
+  签名: [DecidableEq α] [有限类型 α] {n : 自然数}
   定义体: inferInstanceAs Fintype (Quotient _)
 
 Depends on / 依赖: Fintype, Quotient
@@ -110,7 +110,7 @@ instance [Finite
   body: Finite.of_equiv _ Sym.symEquivSym'.symm
 
 中文:
-实例 [Finite
+实例 [有限
   签名: α] {n
   定义体: Finite.of_equiv _ Sym.symEquivSym'.symm
 
@@ -129,7 +129,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: [DecidableEq α] [Fintype α] {n : 自然数}
+  签名: [DecidableEq α] [有限类型 α] {n : 自然数}
   定义体: fast_instance% Fintype.ofEquiv _ Sym.symEquivSym'.symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, Sym.symEquivSym, fast_instance, ofEquiv, symEquivSym

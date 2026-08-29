@@ -270,7 +270,7 @@ theorem contDiff_bernoulliFun
 
 中文:
 定理 contDiff_bernoulliFun
-  结论: ContDiff 实数 ⊤ (bernoulliFun k)
+  结论: 连续可微 实数 ⊤ (bernoulliFun k)
   证明: by
   simp +unfoldPartialApp [bernoulliFun, Polynomial.eval_map_algebraMap, Polynomial.contDiff_aeval]
 
@@ -292,7 +292,7 @@ theorem continuous_bernoulliFun
 
 中文:
 定理 continuous_bernoulliFun
-  结论: Continuous (bernoulliFun k)
+  结论: 连续 (bernoulliFun k)
   证明: Polynomial.continuous_aeval _
 
 Depends on / 依赖: Polynomial, Polynomial.continuous_aeval, continuous_aeval
@@ -310,7 +310,7 @@ theorem intervalIntegrable_bernoulliFun
 @[simp]
 
 中文:
-定理 intervalIntegrable_bernoulliFun
+定理 interval整数egrable_bernoulliFun
   条件: (a b : 实数)
   证明: (continuous_bernoulliFun k).intervalIntegrable a b
 
@@ -823,7 +823,7 @@ theorem periodizedBernoulli.continuous
 中文:
 定理 periodizedBernoulli.continuous
   条件: {k : 自然数} (hk : k != 1)
-  结论: Continuous (periodizedBernoulli k)
+  结论: 连续 (periodizedBernoulli k)
   证明: AddCircle.liftIco_zero_continuous
     (mod_cast (bernoulliFun_endpoints_eq_of_ne_one hk).symm)
     (Polynomial.continuous _).continuousOn
@@ -984,7 +984,7 @@ theorem hasSum_one_div_nat_pow_mul_fourier
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_fourier
-  条件: {k : 自然数} (hk : 2 <= k) {x : 实数} (hx : x in Icc (0 : 实数) 1)
+  条件: {k : 自然数} (hk : 2 <= k) {x : 实数} (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   convert! (hasSum_one_div_pow_mul_fourier_mul_bernoulliFun hk hx).nat_add_neg using 1
   · ext1 n
@@ -1027,7 +1027,7 @@ theorem hasSum_one_div_nat_pow_mul_cos
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_cos
-  条件: {k : 自然数} (hk : k != 0) {x : 实数} (hx : x in Icc (0 : 实数) 1)
+  条件: {k : 自然数} (hk : k != 0) {x : 实数} (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   have :
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k) * (fourier n (x : 𝕌) + fourier (-n) (x : 𝕌)))
@@ -1084,7 +1084,7 @@ theorem hasSum_one_div_nat_pow_mul_sin
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_sin
-  条件: {k : 自然数} (hk : k != 0) {x : 实数} (hx : x in Icc (0 : 实数) 1)
+  条件: {k : 自然数} (hk : k != 0) {x : 实数} (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   have :
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k + 1) * (fourier n (x : 𝕌) - fourier (-n) (x : 𝕌)))

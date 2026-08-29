@@ -95,7 +95,7 @@ alias image_finset_prod := image_finsetProd
 
 中文:
 定理 image_finsetProd
-  条件: (f : F) (m : Finset ι) (s : ι -> Set α)
+  条件: (f : F) (m : 有限集 ι) (s : ι -> 集合 α)
   证明: (image_multiset_prod f _).trans congr_arg Multiset.prod Multiset.map_map _ _ _
 
 @[deprecated (since := "2026-04-08")] alias image_finset_sum := image_finsetSum
@@ -134,7 +134,7 @@ theorem mem_finsetProd
 
 中文:
 定理 mem_finsetProd
-  条件: (t : Finset ι) (f : ι -> Set α) (a : α)
+  条件: (t : 有限集 ι) (f : ι -> 集合 α) (a : α)
   证明: by
   classical
     induction t using Finset.induction_on generalizing a with
@@ -189,7 +189,7 @@ lemma mem_pow_iff_prod
 
 中文:
 引理 mem_pow_iff_prod
-  条件: {n : 自然数} {s : Set α} {a : α}
+  条件: {n : 自然数} {s : 集合 α} {a : α}
   证明: by
   simpa using mem_finsetProd (t := .univ) (f := fun _ : Fin n => s) _
 
@@ -213,7 +213,7 @@ theorem mem_fintype_prod
 
 中文:
 定理 mem_fintype_prod
-  条件: [Fintype ι] (f : ι -> Set α) (a : α)
+  条件: [有限类型 ι] (f : ι -> 集合 α) (a : α)
   证明: by
   rw [mem_finsetProd]
   simp
@@ -243,7 +243,7 @@ theorem list_prod_mem_list_prod
 
 中文:
 定理 list_prod_mem_list_prod
-  条件: (t : List ι) (f : ι -> Set α) (g : ι -> α) (hg : 对任意 i in t, g i in f i)
+  条件: (t : 列表 ι) (f : ι -> 集合 α) (g : ι -> α) (hg : 对任意 i in t, g i in f i)
   证明: by
   induction t with
   | nil => simp_rw [List.map_nil, List.prod_nil, Set.mem_one]
@@ -283,7 +283,7 @@ theorem list_prod_subset_list_prod
 
 中文:
 定理 list_prod_subset_list_prod
-  条件: (t : List ι) (f₁ f₂ : ι -> Set α) (hf : 对任意 i in t, f₁ i subseteq f₂ i)
+  条件: (t : 列表 ι) (f₁ f₂ : ι -> 集合 α) (hf : 对任意 i in t, f₁ i subseteq f₂ i)
   证明: by
   induction t with
   | nil => rfl
@@ -316,7 +316,7 @@ theorem list_prod_singleton
 
 中文:
 定理 list_prod_singleton
-  条件: {M : 类型} [Monoid M] (s : List M)
+  条件: {M : 类型} [幺半群 M] (s : 列表 M)
   证明: (map_list_prod (singletonMonoidHom : M ->* Set M) _).symm
 
 Depends on / 依赖: map_list_prod, singletonMonoidHom
@@ -340,7 +340,7 @@ theorem multiset_prod_mem_multiset_prod
 
 中文:
 定理 multiset_prod_mem_multiset_prod
-  结论: (t : Multiset ι) (f : ι -> Set α) (g : ι -> α)
+  结论: (t : Multiset ι) (f : ι -> 集合 α) (g : ι -> α)
   证明: by
   induction t using Quotient.inductionOn
   simp_rw [Multiset.quot_mk_to_coe, Multiset.map_coe, Multiset.prod_coe]
@@ -371,7 +371,7 @@ theorem multiset_prod_subset_multiset_prod
 
 中文:
 定理 multiset_prod_subset_multiset_prod
-  结论: (t : Multiset ι) (f₁ f₂ : ι -> Set α)
+  结论: (t : Multiset ι) (f₁ f₂ : ι -> 集合 α)
   证明: by
   induction t using Quotient.inductionOn
   simp_rw [Multiset.quot_mk_to_coe, Multiset.map_coe, Multiset.prod_coe]
@@ -398,7 +398,7 @@ theorem multiset_prod_singleton
 
 中文:
 定理 multiset_prod_singleton
-  条件: {M : 类型} [CommMonoid M] (s : Multiset M)
+  条件: {M : 类型} [交换幺半群 M] (s : Multiset M)
   证明: (map_multiset_prod (singletonMonoidHom : M ->* Set M) _).symm
 
 Depends on / 依赖: map_multiset_prod, singletonMonoidHom
@@ -424,7 +424,7 @@ alias finset_prod_mem_finset_prod := finsetProd_mem_finsetProd
 
 中文:
 定理 finsetProd_mem_finsetProd
-  结论: (t : Finset ι) (f : ι -> Set α) (g : ι -> α)
+  结论: (t : 有限集 ι) (f : ι -> 集合 α) (g : ι -> α)
   证明: multiset_prod_mem_multiset_prod _ _ _ hg
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_mem_finset_sum := finsetSum_mem_finsetSum
@@ -463,7 +463,7 @@ alias finset_prod_subset_finset_prod := finsetProd_subset_finsetProd
 
 中文:
 定理 finsetProd_subset_finsetProd
-  结论: (t : Finset ι) (f₁ f₂ : ι -> Set α)
+  结论: (t : 有限集 ι) (f₁ f₂ : ι -> 集合 α)
   证明: multiset_prod_subset_multiset_prod _ _ _ hf
 
 @[deprecated (since := "2026-04-08")]
@@ -502,7 +502,7 @@ alias finset_prod_singleton := finsetProd_singleton
 
 中文:
 定理 finsetProd_singleton
-  条件: {M ι : 类型} [CommMonoid M] (s : Finset ι) (I : ι -> M)
+  条件: {M ι : 类型} [交换幺半群 M] (s : 有限集 ι) (I : ι -> M)
   证明: (map_prod (singletonMonoidHom : M ->* Set M) _ _).symm
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_singleton := finsetSum_singleton
@@ -540,7 +540,7 @@ alias image_finset_prod_pi := image_finsetProd_pi
 
 中文:
 定理 image_finsetProd_pi
-  条件: (l : Finset ι) (S : ι -> Set α)
+  条件: (l : 有限集 ι) (S : ι -> 集合 α)
   证明: by
   ext
   simp_rw [mem_finsetProd, mem_image, mem_pi, exists_prop, Finset.mem_coe]
@@ -575,7 +575,7 @@ theorem image_fintype_prod_pi
 
 中文:
 定理 image_fintype_prod_pi
-  条件: [Fintype ι] (S : ι -> Set α)
+  条件: [有限类型 ι] (S : ι -> 集合 α)
   证明: by
   simpa only [Finset.coe_univ] using image_finsetProd_pi Finset.univ S
 

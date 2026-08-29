@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow 实数 实数
+  签名: 幂 实数 实数
   定义体: ⟨rpow⟩
 
 @[simp]
@@ -93,7 +93,7 @@ theorem rpow_def
 中文:
 定理 rpow_def
   条件: (x y : 实数)
-  结论: x ^ y = ((x : Complex) ^ (y : Complex)).re
+  结论: x ^ y = ((x : 复形) ^ (y : 复形)).re
   证明: rfl
 -/
 theorem rpow_def (x y : Real) : x ^ y = ((x : Complex) ^ (y : Complex)).re := rfl
@@ -263,7 +263,7 @@ lemma rpow_ofNat
 @[simp]
 
 中文:
-引理 rpow_ofNat
+引理 rpow_of自然数
   条件: (x : 实数) (n : 自然数) [n.AtLeastTwo]
   证明: rpow_natCast x n
 
@@ -288,7 +288,7 @@ theorem rpow_neg_ofNat
 @[simp]
 
 中文:
-定理 rpow_neg_ofNat
+定理 rpow_neg_of自然数
   条件: (x : 实数) (n : 自然数) [n.AtLeastTwo]
   结论: x ^ (-of自然数(n) : 实数) = x ^ (-of自然数(n) : 整数)
   证明: rpow_neg_natCast _ _
@@ -1157,7 +1157,7 @@ theorem rpow_sum_of_pos
 
 中文:
 定理 rpow_sum_of_pos
-  条件: {ι : 类型} {a : 实数} (ha : 0 < a) (f : ι -> 实数) (s : Finset ι)
+  条件: {ι : 类型} {a : 实数} (ha : 0 < a) (f : ι -> 实数) (s : 有限集 ι)
   证明: map_sum (⟨⟨fun (x : Real) => (a ^ x : Real), rpow_zero a⟩, rpow_add ha⟩ : Real ->+ (Additive Real)) f s
 
 Depends on / 依赖: Additive, map_sum, rpow_add, rpow_zero
@@ -1181,7 +1181,7 @@ theorem rpow_sum_of_nonneg
 
 中文:
 定理 rpow_sum_of_nonneg
-  结论: {ι : 类型} {a : 实数} (ha : 0 <= a) {s : Finset ι} {f : ι -> 实数}
+  结论: {ι : 类型} {a : 实数} (ha : 0 <= a) {s : 有限集 ι} {f : ι -> 实数}
   证明: by
   induction s using Finset.cons_induction with
   | empty => rw [sum_empty, Finset.prod_empty, rpow_zero]
@@ -1300,7 +1300,7 @@ theorem _root_.HasCompactSupport.rpow_const
 
 中文:
 定理 _root_.HasCompactSupport.rpow_const
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> 实数}
+  结论: {α : 类型} [拓扑空间 α] {f : α -> 实数}
   证明: hf.comp_left (g := (· ^ r)) (Real.zero_rpow hr)
 -/
 protected theorem _root_.HasCompactSupport.rpow_const {α : Type*} [TopologicalSpace α] {f : α -> Real}
@@ -1328,9 +1328,9 @@ theorem ofReal_cpow
     simp [Complex.ofReal_log hx]
 
 中文:
-定理 ofReal_cpow
+定理 of实数_cpow
   条件: {x : 实数} (hx : 0 <= x) (y : 实数)
-  结论: ((x ^ y : 实数) : Complex) = (x : Complex) ^ (y : Complex)
+  结论: ((x ^ y : 实数) : 复形) = (x : 复形) ^ (y : 复形)
   证明: by
   simp only [Real.rpow_def_of_nonneg hx, Complex.cpow_def, ofReal_eq_zero]; split_ifs <;>
     simp [Complex.ofReal_log hx]
@@ -1354,8 +1354,8 @@ theorem ofReal_cpow_of_nonpos
   rw [cpow_def_of_ne_zero hne]; rw [cpow_def_of_ne_zero (neg_ne_zero.2 hne)]; rw [← exp_add]; rw [← add_mul]; rw [log]; rw [log]; rw [norm_neg]; 
 
 中文:
-定理 ofReal_cpow_of_nonpos
-  条件: {x : 实数} (hx : x <= 0) (y : Complex)
+定理 of实数_cpow_of_nonpos
+  条件: {x : 实数} (hx : x <= 0) (y : 复形)
   证明: by
   rcases hx.eq_or_lt with (rfl | hlt)
   · rcases eq_or_ne y 0 with (rfl | hy) <;> simp [*]
@@ -1385,8 +1385,8 @@ lemma cpow_ofReal
     rw [re_ofReal_mul]; rw [im_ofReal_mul]; rw [log_re]; rw [log_im]; rw [mul_comm y]; rw [mul_comm y]; rw [Real.exp_mul]; rw [Real.exp_
 
 中文:
-引理 cpow_ofReal
-  条件: (x : Complex) (y : 实数)
+引理 cpow_of实数
+  条件: (x : 复形) (y : 实数)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp [ofReal_cpow le_rfl]
@@ -1416,9 +1416,9 @@ lemma cpow_ofReal_re
   rw [cpow_ofReal]; generalize arg x * y = z; simp [Real.cos]
 
 中文:
-引理 cpow_ofReal_re
-  条件: (x : Complex) (y : 实数)
-  结论: (x ^ (y : Complex)).re = ‖x‖ ^ y * 实数.cos (arg x * y)
+引理 cpow_of实数_re
+  条件: (x : 复形) (y : 实数)
+  结论: (x ^ (y : 复形)).re = ‖x‖ ^ y * 实数.cos (arg x * y)
   证明: by
   rw [cpow_ofReal]; generalize arg x * y = z; simp [Real.cos]
 
@@ -1438,9 +1438,9 @@ lemma cpow_ofReal_im
   rw [cpow_ofReal]; generalize arg x * y = z; simp [Real.sin]
 
 中文:
-引理 cpow_ofReal_im
-  条件: (x : Complex) (y : 实数)
-  结论: (x ^ (y : Complex)).im = ‖x‖ ^ y * 实数.sin (arg x * y)
+引理 cpow_of实数_im
+  条件: (x : 复形) (y : 实数)
+  结论: (x ^ (y : 复形)).im = ‖x‖ ^ y * 实数.sin (arg x * y)
   证明: by
   rw [cpow_ofReal]; generalize arg x * y = z; simp [Real.sin]
 
@@ -1460,7 +1460,7 @@ theorem norm_cpow_of_ne_zero
 
 中文:
 定理 norm_cpow_of_ne_zero
-  条件: {z : Complex} (hz : z != 0) (w : Complex)
+  条件: {z : 复形} (hz : z != 0) (w : 复形)
   证明: by
   rw [cpow_def_of_ne_zero hz]; rw [norm_exp]; rw [mul_re]; rw [log_re]; rw [log_im]; rw [Real.exp_sub]; rw [Real.rpow_def_of_pos (norm_pos_iff.mpr hz)]
 
@@ -1485,7 +1485,7 @@ theorem norm_cpow_of_imp
 
 中文:
 定理 norm_cpow_of_imp
-  条件: {z w : Complex} (h : z = 0 -> w.re = 0 -> w = 0)
+  条件: {z w : 复形} (h : z = 0 -> w.re = 0 -> w = 0)
   证明: by
   rcases ne_or_eq z 0 with (hz | rfl) <;> [exact norm_cpow_of_ne_zero hz w; rw [norm_zero]]
   rcases eq_or_ne w.re 0 with hw | hw
@@ -1519,7 +1519,7 @@ theorem norm_cpow_le
 
 中文:
 定理 norm_cpow_le
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ‖z ^ w‖ <= ‖z‖ ^ w.re / 实数.exp (arg z * im w)
   证明: by
   by_cases! h : z = 0 -> w.re = 0 -> w = 0
@@ -1550,8 +1550,8 @@ theorem norm_cpow_real
 
 中文:
 定理 norm_cpow_real
-  条件: (x : Complex) (y : 实数)
-  结论: ‖x ^ (y : Complex)‖ = ‖x‖ ^ y
+  条件: (x : 复形) (y : 实数)
+  结论: ‖x ^ (y : 复形)‖ = ‖x‖ ^ y
   证明: by
   rw [norm_cpow_of_imp] <;> simp
 
@@ -1575,8 +1575,8 @@ theorem norm_cpow_inv_nat
 
 中文:
 定理 norm_cpow_inv_nat
-  条件: (x : Complex) (n : 自然数)
-  结论: ‖x ^ (n⁻¹ : Complex)‖ = ‖x‖ ^ (n⁻¹ : 实数)
+  条件: (x : 复形) (n : 自然数)
+  结论: ‖x ^ (n⁻¹ : 复形)‖ = ‖x‖ ^ (n⁻¹ : 实数)
   证明: by
   rw [← norm_cpow_real]; simp
 
@@ -1597,8 +1597,8 @@ theorem norm_cpow_eq_rpow_re_of_pos
 
 中文:
 定理 norm_cpow_eq_rpow_re_of_pos
-  条件: {x : 实数} (hx : 0 < x) (y : Complex)
-  结论: ‖(x : Complex) ^ y‖ = x ^ y.re
+  条件: {x : 实数} (hx : 0 < x) (y : 复形)
+  结论: ‖(x : 复形) ^ y‖ = x ^ y.re
   证明: by
   rw [norm_cpow_of_ne_zero (ofReal_ne_zero.mpr hx.ne')]; rw [arg_ofReal_of_nonneg hx.le]; rw [zero_mul]; rw [Real.exp_zero]; rw [div_one]; rw [Complex.norm_of_nonneg hx.le]
 
@@ -1618,7 +1618,7 @@ theorem norm_cpow_eq_rpow_re_of_nonneg
 
 中文:
 定理 norm_cpow_eq_rpow_re_of_nonneg
-  条件: {x : 实数} (hx : 0 <= x) {y : Complex} (hy : re y != 0)
+  条件: {x : 实数} (hx : 0 <= x) {y : 复形} (hy : re y != 0)
   证明: by
   rw [norm_cpow_of_imp] <;> simp [*, arg_ofReal_of_nonneg, abs_of_nonneg]
 
@@ -1640,8 +1640,8 @@ lemma norm_ofReal_cpow_eventually_eq_atTop
   rw [norm_cpow_eq_rpow_re_of_pos ht]
 
 中文:
-引理 norm_ofReal_cpow_eventually_eq_atTop
-  条件: (c : Complex)
+引理 norm_of实数_cpow_eventually_eq_atTop
+  条件: (c : 复形)
   证明: by
   filter_upwards [eventually_gt_atTop 0] with t ht
   rw [norm_cpow_eq_rpow_re_of_pos ht]
@@ -1664,7 +1664,7 @@ lemma norm_natCast_cpow_of_re_ne_zero
 
 中文:
 引理 norm_natCast_cpow_of_re_ne_zero
-  条件: (n : 自然数) {s : Complex} (hs : s.re != 0)
+  条件: (n : 自然数) {s : 复形} (hs : s.re != 0)
   证明: by
   rw [← ofReal_natCast]; rw [norm_cpow_eq_rpow_re_of_nonneg n.cast_nonneg hs]
 
@@ -1685,7 +1685,7 @@ lemma norm_natCast_cpow_of_pos
 
 中文:
 引理 norm_natCast_cpow_of_pos
-  条件: {n : 自然数} (hn : 0 < n) (s : Complex)
+  条件: {n : 自然数} (hn : 0 < n) (s : 复形)
   证明: by
   rw [← ofReal_natCast]; rw [norm_cpow_eq_rpow_re_of_pos (Nat.cast_pos.mpr hn) _]
 
@@ -1706,8 +1706,8 @@ lemma norm_natCast_cpow_pos_of_pos
 
 中文:
 引理 norm_natCast_cpow_pos_of_pos
-  条件: {n : 自然数} (hn : 0 < n) (s : Complex)
-  结论: 0 < ‖(n : Complex) ^ s‖
+  条件: {n : 自然数} (hn : 0 < n) (s : 复形)
+  结论: 0 < ‖(n : 复形) ^ s‖
   证明: (norm_natCast_cpow_of_pos hn _).symm ▸ Real.rpow_pos_of_pos (Nat.cast_pos.mpr hn) _
 
 Depends on / 依赖: Nat.cast_pos.mpr, Real.rpow_pos_of_pos, cast_pos, norm_natCast_cpow_of_pos, rpow_pos_of_pos
@@ -1727,8 +1727,8 @@ theorem cpow_mul_ofReal_nonneg
   · rw [← ofReal_log hx, ← ofReal_mul, ofReal_im]; exact Real.pi_pos.le
 
 中文:
-定理 cpow_mul_ofReal_nonneg
-  条件: {x : 实数} (hx : 0 <= x) (y : 实数) (z : Complex)
+定理 cpow_mul_of实数_nonneg
+  条件: {x : 实数} (hx : 0 <= x) (y : 实数) (z : 复形)
   证明: by
   rw [cpow_mul]; rw [ofReal_cpow hx]
   · rw [← ofReal_log hx, ← ofReal_mul, ofReal_im, neg_lt_zero]; exact Real.pi_pos
@@ -3280,7 +3280,7 @@ theorem rpow_left_injOn
 中文:
 定理 rpow_left_injOn
   条件: {x : 实数} (hx : x != 0)
-  结论: InjOn (fun y : 实数 => y ^ x) { y : 实数 | 0 <= y }
+  结论: 单射限制 (fun y : 实数 => y ^ x) { y : 实数 | 0 <= y }
   证明: by
   rintro y hy z hz (hyz : y ^ x = z ^ x)
   rw [← rpow_one y]; rw [← rpow_one z]; rw [← mul_inv_cancel₀ hx]; rw [rpow_mul hy]; rw [rpow_mul hz]; rw [hyz]
@@ -4286,7 +4286,7 @@ exact Real.rpow_le_rpow_of_exponent_le one_
 
 中文:
 引理 norm_prime_cpow_le_one_half
-  条件: (p : 自然数.Primes) {s : Complex} (hs : 1 < s.re)
+  条件: (p : 自然数.Primes) {s : 复形} (hs : 1 < s.re)
   证明: by
   rw [norm_natCast_cpow_of_re_ne_zero p <| by rw [neg_re]; linarith only [hs]]
   refine (Real.rpow_le_rpow_of_nonpos zero_lt_two (Nat.cast_le.mpr p.prop.two_le) <|
@@ -4319,7 +4319,7 @@ lemma one_sub_prime_cpow_ne_zero
 
 中文:
 引理 one_sub_prime_cpow_ne_zero
-  条件: {p : 自然数} (hp : p.Prime) {s : Complex} (hs : 1 < s.re)
+  条件: {p : 自然数} (hp : p.素) {s : 复形} (hs : 1 < s.re)
   证明: by
   refine sub_ne_zero_of_ne fun H => ?_
   have := norm_prime_cpow_le_one_half ⟨p, hp⟩ hs
@@ -4349,7 +4349,7 @@ lemma norm_natCast_cpow_le_norm_natCast_cpow_of_pos
 
 中文:
 引理 norm_natCast_cpow_le_norm_natCast_cpow_of_pos
-  结论: {n : 自然数} (hn : 0 < n) {w z : Complex}
+  结论: {n : 自然数} (hn : 0 < n) {w z : 复形}
   证明: by
   simp_rw [norm_natCast_cpow_of_pos hn]
   exact Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hn) h
@@ -4374,7 +4374,7 @@ lemma norm_natCast_cpow_le_norm_natCast_cpow_iff
 
 中文:
 引理 norm_natCast_cpow_le_norm_natCast_cpow_iff
-  条件: {n : 自然数} (hn : 1 < n) {w z : Complex}
+  条件: {n : 自然数} (hn : 1 < n) {w z : 复形}
   证明: by
   simp_rw [norm_natCast_cpow_of_pos (Nat.zero_lt_of_lt hn),
     Real.rpow_le_rpow_left_iff (Nat.one_lt_cast.mpr hn)]
@@ -4518,8 +4518,8 @@ lemma cpow_inv_two_re
 
 中文:
 引理 cpow_inv_two_re
-  条件: (x : Complex)
-  结论: (x ^ (2⁻¹ : Complex)).re = √((‖x‖ + x.re) / 2)
+  条件: (x : 复形)
+  结论: (x ^ (2⁻¹ : 复形)).re = √((‖x‖ + x.re) / 2)
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_re]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [cos_half]; rw [← sqrt_mul]; rw [← mul_div_assoc]; rw [mul_add]; rw [mul_one]; rw [norm_mul_cos_arg]
   exacts [norm_nonneg _, (neg_pi_lt_arg _).le, arg_le_pi _]
@@ -4543,7 +4543,7 @@ lemma cpow_inv_two_im_eq_sqrt
 
 中文:
 引理 cpow_inv_two_im_eq_sqrt
-  条件: {x : Complex} (hx : 0 <= x.im)
+  条件: {x : 复形} (hx : 0 <= x.im)
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_sqrt]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
   · rwa [arg_nonneg_iff]
@@ -4569,7 +4569,7 @@ lemma cpow_inv_two_im_eq_neg_sqrt
 
 中文:
 引理 cpow_inv_two_im_eq_neg_sqrt
-  条件: {x : Complex} (hx : x.im < 0)
+  条件: {x : 复形} (hx : x.im < 0)
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_neg_sqrt]; rw [mul_neg]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
   · linarith [pi_pos, n
@@ -4594,8 +4594,8 @@ lemma abs_cpow_inv_two_im
 
 中文:
 引理 abs_cpow_inv_two_im
-  条件: (x : Complex)
-  结论: |(x ^ (2⁻¹ : Complex)).im| = √((‖x‖ - x.re) / 2)
+  条件: (x : 复形)
+  结论: |(x ^ (2⁻¹ : 复形)).im| = √((‖x‖ - x.re) / 2)
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [abs_mul]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_sin_half]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_
 
@@ -4617,7 +4617,7 @@ lemma inv_natCast_cpow_ofReal_pos
   positivity
 
 中文:
-引理 inv_natCast_cpow_ofReal_pos
+引理 inv_natCast_cpow_of实数_pos
   条件: {n : 自然数} (hn : n != 0) (x : 实数)
   证明: by
   refine RCLike.inv_pos_of_pos ?_
@@ -4654,8 +4654,8 @@ theorem IsNat.rpow_eq_pow
   rw [h.1]; rw [Real.rpow_natCast]
 
 中文:
-定理 IsNat.rpow_eq_pow
-  条件: {b : 实数} {n : 自然数} (h : Is自然数 b n) (a : 实数)
+定理 是自然数.rpow_eq_pow
+  条件: {b : 实数} {n : 自然数} (h : 是自然数 b n) (a : 实数)
   结论: a ^ b = a ^ n
   证明: by
   rw [h.1]; rw [Real.rpow_natCast]
@@ -4675,8 +4675,8 @@ theorem IsInt.rpow_eq_inv_pow
   rw [h.1]; rw [Real.rpow_intCast]; rw [Int.negOfNat_eq]; rw [zpow_neg]; rw [Int.ofNat_eq_natCast]; rw [zpow_natCast]
 
 中文:
-定理 IsInt.rpow_eq_inv_pow
-  条件: {b : 实数} {n : 自然数} (h : Is整数 b (.negOf自然数 n)) (a : 实数)
+定理 是整数.rpow_eq_inv_pow
+  条件: {b : 实数} {n : 自然数} (h : 是整数 b (.negOf自然数 n)) (a : 实数)
   证明: by
   rw [h.1]; rw [Real.rpow_intCast]; rw [Int.negOfNat_eq]; rw [zpow_neg]; rw [Int.ofNat_eq_natCast]; rw [zpow_natCast]
 
@@ -4699,8 +4699,8 @@ theorem IsNat.rpow_isNNRat
   rw [hb.to_eq rfl rfl]; rw [div_eq_mul_inv]; rw [Real.rpow_natCast_mul]; rw [← Nat.cast_pow]; rw [hm]; rw [← hkl]; rw [← hr]; rw [Nat.cast_pow]; rw [Real.pow_rpow_inv_natCast] <;> positivity
 
 中文:
-定理 IsNat.rpow_isNNRat
-  结论: {a b : 实数} {m n d r : 自然数} (ha : Is自然数 a m) (hb : IsNNRat b n d)
+定理 是自然数.rpow_isNNRat
+  结论: {a b : 实数} {m n d r : 自然数} (ha : 是自然数 a m) (hb : 是NNRat b n d)
   证明: by
   rcases ha with ⟨rfl⟩
   constructor
@@ -4731,8 +4731,8 @@ theorem IsNNRat.rpow_isNNRat
   exact lt_of_le_of_ne' da.cast_nonneg ha.den_nz
 
 中文:
-定理 IsNNRat.rpow_isNNRat
-  结论: (a b : 实数) (na da : 自然数) (ha : IsNNRat a na da)
+定理 是NNRat.rpow_isNNRat
+  结论: (a b : 实数) (na da : 自然数) (ha : 是NNRat a na da)
   证明: by
   suffices IsNNRat (nr / dr : Real) nr dr by
     simpa [ha.to_eq, Real.div_rpow, hnum.1, hden.1]
@@ -4764,7 +4764,7 @@ theorem rpow_isRat_eq_inv_rpow
 
 中文:
 定理 rpow_isRat_eq_inv_rpow
-  条件: (a b : 实数) (n d : 自然数) (hb : IsRat b (整数.negOf自然数 n) d)
+  条件: (a b : 实数) (n d : 自然数) (hb : 是有理数 b (整数.negOf自然数 n) d)
   证明: by
   rw [← Real.rpow_neg_eq_inv_rpow]; rw [hb.neg_to_eq rfl rfl]
 

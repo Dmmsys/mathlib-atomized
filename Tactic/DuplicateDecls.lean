@@ -278,7 +278,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord ModuleKey
+  签名: 序 ModuleKey
   定义体: ⟨fun a b => (compare a.1 b.1).then (compare a.2 b.2)⟩
 
 Depends on / 依赖: compare
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max ModuleKey
+  签名: 最大值 ModuleKey
   定义体: maxOfLe
 
 Depends on / 依赖: maxOfLe

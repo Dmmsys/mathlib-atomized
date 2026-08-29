@@ -60,7 +60,7 @@ definition isLocal
 
 中文:
 定义 isLocal
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f =>
   forall Z, P Z -> Function.Bijective (fun (g : _ ⟶ Z) => f ≫ g)
 -/
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isLocal.IsMultiplicative
+  签名: P.isLocal.是Multiplicative
   定义体: by simpa [id_comp] using! Function.bijective_id
   comp_mem f g hf hg Z hZ := by
     simpa using! Function.Bijective.comp (hf Z hZ) (hg Z hZ)
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isLocal.HasTwoOutOfThree命题erty
+  签名: P.isLocal.有TwoOutOfThreeProperty
   定义体: by
     rw [← Function.Bijective.of_comp_iff _ (hg Z hZ)]
     simpa using! hfg Z hZ
@@ -217,7 +217,7 @@ lemma isLocal_of_isIso
 
 中文:
 引理 isLocal_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: P.isLocal f
   证明: fun Z _ => by
   constructor
@@ -300,7 +300,7 @@ lemma le_isLocal_iff
 
 中文:
 引理 le_isLocal_iff
-  条件: (P : Object命题erty C) (W : Morphism命题erty C)
+  条件: (P : ObjectProperty C) (W : MorphismProperty C)
   证明: ⟨fun h _ hZ _ _ _ hf => h _ hf _ hZ,
     fun h _ _ _ hf _ hZ => h _ hZ _ hf⟩
 
@@ -346,7 +346,7 @@ definition isColocal
 
 中文:
 定义 isColocal
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ g =>
   forall X, P X -> Function.Bijective (fun (f : X ⟶ _) => f ≫ g)
 -/
@@ -445,7 +445,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isColocal.IsMultiplicative
+  签名: P.isColocal.是Multiplicative
   定义体: by simpa [id_comp] using! Function.bijective_id
   comp_mem f g hf hg X hX := by
     convert! Function.Bijective.comp (hg X hX) (hf X hX)
@@ -476,7 +476,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isColocal.HasTwoOutOfThree命题erty
+  签名: P.isColocal.有TwoOutOfThreeProperty
   定义体: by
     rw [← Function.Bijective.of_comp_iff' (hg X hX)]
     convert! hfg X hX
@@ -514,7 +514,7 @@ lemma isColocal_of_isIso
 
 中文:
 引理 isColocal_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: P.isColocal f
   证明: fun Z _ => by
   constructor
@@ -597,7 +597,7 @@ lemma le_isColocal_iff
 
 中文:
 引理 le_isColocal_iff
-  条件: (P : Object命题erty C) (W : Morphism命题erty C)
+  条件: (P : ObjectProperty C) (W : MorphismProperty C)
   证明: ⟨fun h _ hZ _ _ _ hf => h _ hf _ hZ,
     fun h _ _ _ hf _ hZ => h _ hZ _ hf⟩
 -/
@@ -650,7 +650,7 @@ lemma isLocal_adj_unit_app
 中文:
 引理 isLocal_adj_unit_app
   条件: (X : D)
-  结论: isLocal (· in Set.range F.obj) (adj.unit.app X)
+  结论: isLocal (· in 集合.range F.obj) (adj.unit.app X)
   证明: by
   rintro _ ⟨Y, rfl⟩
   convert!
@@ -736,7 +736,7 @@ lemma isLocalization_isLocal
 
 中文:
 引理 isLocalization_isLocal
-  结论: G.IsLocalization (isLocal (· in Set.range F.obj))
+  结论: G.是Localization (isLocal (· in 集合.range F.obj))
   证明: by
   rw [isLocal_eq_inverseImage_isomorphisms adj]
   exact adj.isLocalization
@@ -773,7 +773,7 @@ lemma isColocal_adj_counit_app
 中文:
 引理 isColocal_adj_counit_app
   条件: (X : C)
-  结论: isColocal (· in Set.range G.obj) (adj.counit.app X)
+  结论: isColocal (· in 集合.range G.obj) (adj.counit.app X)
   证明: by
   rintro _ ⟨Y, rfl⟩
   convert!
@@ -859,7 +859,7 @@ lemma isLocalization_isColocal
 
 中文:
 引理 isLocalization_isColocal
-  结论: F.IsLocalization (isColocal (· in Set.range G.obj))
+  结论: F.是Localization (isColocal (· in 集合.range G.obj))
   证明: by
   rw [isColocal_eq_inverseImage_isomorphisms adj]
   exact adj.isLocalization'
@@ -887,7 +887,7 @@ lemma ObjectProperty.le_isLocal_isLocal
 
 中文:
 引理 ObjectProperty.le_isLocal_isLocal
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   rw [← le_isLocal_iff]
 
@@ -908,7 +908,7 @@ lemma MorphismProperty.le_isLocal_isLocal
 
 中文:
 引理 MorphismProperty.le_isLocal_isLocal
-  条件: (W : Morphism命题erty C)
+  条件: (W : MorphismProperty C)
   证明: by
   rw [ObjectProperty.le_isLocal_iff]
 
@@ -929,7 +929,7 @@ lemma ObjectProperty.le_isColocal_isColocal
 
 中文:
 引理 ObjectProperty.le_isColocal_isColocal
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   rw [← le_isColocal_iff]
 
@@ -950,7 +950,7 @@ lemma MorphismProperty.le_isColocal_isColocal
 
 中文:
 引理 MorphismProperty.le_isColocal_isColocal
-  条件: (W : Morphism命题erty C)
+  条件: (W : MorphismProperty C)
   证明: by
   rw [ObjectProperty.le_isColocal_iff]
 

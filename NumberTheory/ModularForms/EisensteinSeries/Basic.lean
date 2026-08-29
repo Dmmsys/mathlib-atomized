@@ -44,7 +44,7 @@ definition eisensteinSeriesMF
 
 中文:
 定义 eisensteinSeriesMF
-  签名: {k : 整数} {N : 自然数} [NeZero N] (hk : 3 <= k) (a : Fin 2 -> ZMod N)
+  签名: {k : 整数} {N : 自然数} [NeZero N] (hk : 3 <= k) (a : 有限集 2 -> ZMod N)
   定义体: eisensteinSeriesSIF a k
   slash_action_eq' := (eisensteinSeriesSIF a k).slash_action_eq'
   holo' := eisensteinSeriesSIF_mdifferentiable hk a
@@ -95,7 +95,7 @@ abbreviation E₄
 
 中文:
 缩写 E₄
-  签名: : ModularForm 𝒮ℒ 4
+  签名: : 模形式 𝒮ℒ 4
   定义体: E (by norm_num : 3 <= 4)
 -/
 abbrev E₄ : ModularForm 𝒮ℒ 4 := E (by norm_num : 3 <= 4)
@@ -110,7 +110,7 @@ abbreviation E₆
 
 中文:
 缩写 E₆
-  签名: : ModularForm 𝒮ℒ 6
+  签名: : 模形式 𝒮ℒ 6
   定义体: E (by norm_num : 3 <= 6)
 -/
 abbrev E₆ : ModularForm 𝒮ℒ 6 := E (by norm_num : 3 <= 6)

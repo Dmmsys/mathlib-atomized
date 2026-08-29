@@ -54,7 +54,7 @@ definition ninePointCircle
 
 中文:
 定义 ninePointCircle
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
   定义体: ((n + 1) / n : Real) • (s.centroid -ᵥ s.circumcenter) +ᵥ s.circumcenter
   radius := s.circumradius / (n : Real)
 
@@ -75,7 +75,7 @@ theorem ninePointCircle_center
 
 中文:
 定理 ninePointCircle_center
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   结论: s.ninePointCircle.center =
   证明: rfl
 -/
@@ -96,7 +96,7 @@ theorem ninePointCircle_center_mem_affineSpan
 
 中文:
 定理 ninePointCircle_center_mem_affineSpan
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: by
   rw [ninePointCircle_center]
   refine AffineSubspace.vadd_mem_of_mem_direction ?_ s.circumcenter_mem_affineSpan
@@ -124,7 +124,7 @@ theorem ninePointCircle_radius
 
 中文:
 定理 ninePointCircle_radius
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: rfl
 
 @[simp]
@@ -147,7 +147,7 @@ theorem ninePointCircle_reindex
 
 中文:
 定理 ninePointCircle_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   have h : n = m := by simpa using Fin.equiv_iff_eq.mp ⟨e⟩
   ext
@@ -176,7 +176,7 @@ theorem ninePointCircle_map
 
 中文:
 定理 ninePointCircle_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂] [InnerProductSpace 实数 V₂]
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂] [内积空间 实数 V₂]
   证明: by
   ext
   · simp [ninePointCircle_center, centroid_map]
@@ -209,7 +209,7 @@ theorem ninePointCircle_restrict
 
 中文:
 定理 ninePointCircle_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).ninePointCircle =
     { center := ⟨s.ninePointCircle.center,
@@ -246,7 +246,7 @@ theorem faceOppositeCentroid_mem_ninePointCircle
 
 中文:
 定理 faceOppositeCentroid_mem_ninePointCircle
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   rw [mem_sphere]; rw [ninePointCircle_center]; rw [ninePointCircle_radius]; rw [← dist_circumcenter_eq_circumradius' s i]
   simp_rw [dist_eq_norm_vsub]
@@ -279,7 +279,7 @@ theorem ninePointCircle_eq_circumsphere_medial
 
 中文:
 定理 ninePointCircle_eq_circumsphere_medial
-  条件: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: by
   apply s.medial.circumsphere_unique_dist_eq.2
   constructor
@@ -309,7 +309,7 @@ definition eulerPoint
 
 中文:
 定义 eulerPoint
-  签名: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  签名: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   定义体: (n : Real)⁻¹ • (s.points i -ᵥ s.mongePoint) +ᵥ s.mongePoint
 
 @[simp]
@@ -335,7 +335,7 @@ theorem eulerPoint_reindex
 
 中文:
 定理 eulerPoint_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   have h : n = m := by simpa using Fin.equiv_iff_eq.mp ⟨e⟩
   ext i
@@ -365,7 +365,7 @@ theorem eulerPoint_map
 
 中文:
 定理 eulerPoint_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂] [InnerProductSpace 实数 V₂]
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂] [内积空间 实数 V₂]
   证明: by
   simp [eulerPoint]
 
@@ -392,7 +392,7 @@ theorem eulerPoint_restrict
 
 中文:
 定理 eulerPoint_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).eulerPoint i = s.eulerPoint i := by
   simp [eulerPoint]
@@ -422,7 +422,7 @@ theorem points_vsub_eulerPoint
 
 中文:
 定理 points_vsub_eulerPoint
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   rw [eulerPoint]; rw [vsub_vadd_eq_vsub_sub]
   by_cases hn : n = 0
@@ -460,7 +460,7 @@ theorem midpoint_faceOppositeCentroid_eulerPoint
 
 中文:
 定理 midpoint_faceOppositeCentroid_eulerPoint
-  结论: {n : 自然数} [hn : NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [hn : NeZero n] (s : 单纯形 实数 P n)
   证明: by
   apply vsub_left_cancel (p := s.circumcenter)
   rw [ninePointCircle_center]; rw [midpoint_vsub]; rw [vadd_vsub]; rw [eulerPoint]; rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [← centroid]
@@ -510,7 +510,7 @@ theorem isDiameter_ninePointCircle
 
 中文:
 定理 isDiameter_ninePointCircle
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: s.faceOppositeCentroid_mem_ninePointCircle i
   midpoint_eq_center := s.midpoint_faceOppositeCentroid_eulerPoint i
 
@@ -532,7 +532,7 @@ theorem eulerPoint_mem_ninePointCircle
 
 中文:
 定理 eulerPoint_mem_ninePointCircle
-  结论: {n : 自然数} [NeZero n] (s : Simplex 实数 P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 实数 P n)
   证明: (s.isDiameter_ninePointCircle i).right_mem
 
 Depends on / 依赖: isDiameter_ninePointCircle, right_mem, s.isDiameter_ninePointCircle
@@ -583,7 +583,7 @@ theorem eulerPoint_eq_midpoint
 
 中文:
 定理 eulerPoint_eq_midpoint
-  条件: (s : Triangle 实数 P) (i : Fin 3)
+  条件: (s : Triangle 实数 P) (i : 有限集 3)
   证明: by
   apply vsub_right_cancel (p := s.points i)
   rw [orthocenter_eq_mongePoint]; rw [Simplex.points_vsub_eulerPoint]; rw [vsub_midpoint]
@@ -612,7 +612,7 @@ theorem altitudeFoot_mem_ninePointCircle
 
 中文:
 定理 altitudeFoot_mem_ninePointCircle
-  条件: (s : Triangle 实数 P) (i : Fin 3)
+  条件: (s : Triangle 实数 P) (i : 有限集 3)
   证明: by
   convert! s.orthogonalProjectionSpan_eulerPoint_mem_ninePointCircle i
   rw [Simplex.altitudeFoot]

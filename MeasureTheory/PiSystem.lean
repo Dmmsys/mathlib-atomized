@@ -76,7 +76,7 @@ definition IsPiSystem
 
 中文:
 定义 IsPiSystem
-  签名: (C : Set (Set α))
+  签名: (C : 集合 (集合 α))
   定义体: forallᵉ (s in C) (t in C), (s inter t : Set α).Nonempty -> s inter t in C
 
 Depends on / 依赖: Nonempty
@@ -96,7 +96,7 @@ theorem isPiSystem_measurableSet
 
 中文:
 定理 isPiSystem_measurableSet
-  条件: {α : 类型} [MeasurableSpace α]
+  条件: {α : 类型} [可测空间 α]
   证明: fun _ hs _ ht _ => hs.inter ht
 
 Depends on / 依赖: hs.inter
@@ -119,8 +119,8 @@ theorem IsPiSystem.singleton
 
 中文:
 定理 IsPiSystem.singleton
-  条件: (S : Set α)
-  结论: IsPiSystem ({S} : Set (Set α))
+  条件: (S : 集合 α)
+  结论: IsPiSystem ({S} : 集合 (集合 α))
   证明: by
   intro s h_s t h_t _
   rw [Set.mem_singleton_iff.1 h_s]; rw [Set.mem_singleton_iff.1 h_t]; rw [Set.inter_self]; rw [Set.mem_singleton_iff]
@@ -147,7 +147,7 @@ theorem IsPiSystem.insert_empty
 
 中文:
 定理 IsPiSystem.insert_empty
-  条件: {S : Set (Set α)} (h_pi : IsPiSystem S)
+  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
   证明: by
   intro s hs t ht hst
   rcases hs with hs | hs
@@ -183,7 +183,7 @@ theorem IsPiSystem.insert_univ
 
 中文:
 定理 IsPiSystem.insert_univ
-  条件: {S : Set (Set α)} (h_pi : IsPiSystem S)
+  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
   证明: by
   intro s hs t ht hst
   rcases hs with hs | hs
@@ -216,7 +216,7 @@ theorem IsPiSystem.comap
 
 中文:
 定理 IsPiSystem.comap
-  条件: {α β} {S : Set (Set β)} (h_pi : IsPiSystem S) (f : α -> β)
+  条件: {α β} {S : 集合 (集合 β)} (h_pi : IsPiSystem S) (f : α -> β)
   证明: by
   rintro _ ⟨s, hs_mem, rfl⟩ _ ⟨t, ht_mem, rfl⟩ hst
   rw [← Set.preimage_inter] at hst ⊢
@@ -245,7 +245,7 @@ lemma IsPiSystem.dissipate_mem
 
 中文:
 引理 IsPiSystem.dissipate_mem
-  结论: {s : 自然数 -> Set α} {C : Set (Set α)}
+  结论: {s : 自然数 -> 集合 α} {C : 集合 (集合 α)}
   证明: by
   induction n with
   | zero => simpa using h 0
@@ -280,7 +280,7 @@ theorem isPiSystem_iUnion_of_directed_le
 
 中文:
 定理 isPiSystem_iUnion_of_directed_le
-  结论: {α ι} (p : ι -> Set (Set α))
+  结论: {α ι} (p : ι -> 集合 (集合 α))
   证明: by
   intro t1 ht1 t2 ht2 h
   rw [Set.mem_iUnion] at ht1 ht2 ⊢
@@ -311,7 +311,7 @@ theorem isPiSystem_iUnion_of_monotone
 
 中文:
 定理 isPiSystem_iUnion_of_monotone
-  结论: {α ι} [SemilatticeSup ι] (p : ι -> Set (Set α))
+  结论: {α ι} [SemilatticeSup ι] (p : ι -> 集合 (集合 α))
   证明: isPiSystem_iUnion_of_directed_le p hp_pi (Monotone.directed_le hp_mono)
 
 Depends on / 依赖: Monotone, Monotone.directed_le, directed_le, hp_mono, hp_pi, isPiSystem_iUnion_of_directed_le
@@ -332,8 +332,8 @@ lemma IsPiSystem.prod
   exact mem_image2_of_mem (hC _ hs₁ _ hs₂ hst.1) (hD _ ht₁ _ ht₂ hst.2)
 
 中文:
-引理 IsPiSystem.prod
-  条件: {C : Set (Set α)} {D : Set (Set β)} (hC : IsPiSystem C) (hD : IsPiSystem D)
+引理 IsPiSystem.乘积
+  条件: {C : 集合 (集合 α)} {D : 集合 (集合 β)} (hC : IsPiSystem C) (hD : IsPiSystem D)
   证明: by
   rintro _ ⟨s₁, hs₁, t₁, ht₁, rfl⟩ _ ⟨s₂, hs₂, t₂, ht₂, rfl⟩ hst
   rw [prod_inter_prod] at hst ⊢; rw [prod_nonempty_iff] at hst
@@ -362,8 +362,8 @@ lemma IsPiSystem.biInter_mem
     refine ih (fun s hs => ?_) h'.ri
 
 中文:
-引理 IsPiSystem.biInter_mem
-  结论: {S : Set (Set α)} (h_pi : IsPiSystem S) {t : Finset (Set α)}
+引理 IsPiSystem.bi整数er_mem
+  结论: {S : 集合 (集合 α)} (h_pi : IsPiSystem S) {t : 有限集 (集合 α)}
   证明: by
   induction t_ne using Finset.Nonempty.cons_induction with
   | singleton a => simpa using ht
@@ -402,8 +402,8 @@ theorem isPiSystem_image_Iio
 
 中文:
 定理 isPiSystem_image_Iio
-  条件: (s : Set α)
-  结论: IsPiSystem (Iio '' s)
+  条件: (s : 集合 α)
+  结论: IsPiSystem (左无界右开区间 '' s)
   证明: by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
   exact ⟨a ⊓ b, inf_ind a b ha hb, Iio_inter_Iio.symm⟩
@@ -424,7 +424,7 @@ theorem isPiSystem_Iio
 
 中文:
 定理 isPiSystem_Iio
-  结论: IsPiSystem (range Iio : Set (Set α))
+  结论: IsPiSystem (range 左无界右开区间 : 集合 (集合 α))
   证明: @image_univ α _ Iio ▸ isPiSystem_image_Iio univ
 
 Depends on / 依赖: image_univ, isPiSystem_image_Iio
@@ -443,8 +443,8 @@ theorem isPiSystem_image_Ioi
 
 中文:
 定理 isPiSystem_image_Ioi
-  条件: (s : Set α)
-  结论: IsPiSystem (Ioi '' s)
+  条件: (s : 集合 α)
+  结论: IsPiSystem (左开右无界区间 '' s)
   证明: @isPiSystem_image_Iio αᵒᵈ _ s
 
 Depends on / 依赖: isPiSystem_image_Iio
@@ -462,7 +462,7 @@ theorem isPiSystem_Ioi
 
 中文:
 定理 isPiSystem_Ioi
-  结论: IsPiSystem (range Ioi : Set (Set α))
+  结论: IsPiSystem (range 左开右无界区间 : 集合 (集合 α))
   证明: @image_univ α _ Ioi ▸ isPiSystem_image_Ioi univ
 
 Depends on / 依赖: image_univ, isPiSystem_image_Ioi
@@ -483,8 +483,8 @@ theorem isPiSystem_image_Iic
 
 中文:
 定理 isPiSystem_image_Iic
-  条件: (s : Set α)
-  结论: IsPiSystem (Iic '' s)
+  条件: (s : 集合 α)
+  结论: IsPiSystem (左无界右闭区间 '' s)
   证明: by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
   exact ⟨a ⊓ b, inf_ind a b ha hb, Iic_inter_Iic.symm⟩
@@ -505,7 +505,7 @@ theorem isPiSystem_Iic
 
 中文:
 定理 isPiSystem_Iic
-  结论: IsPiSystem (range Iic : Set (Set α))
+  结论: IsPiSystem (range 左无界右闭区间 : 集合 (集合 α))
   证明: @image_univ α _ Iic ▸ isPiSystem_image_Iic univ
 
 Depends on / 依赖: image_univ, isPiSystem_image_Iic
@@ -524,8 +524,8 @@ theorem isPiSystem_image_Ici
 
 中文:
 定理 isPiSystem_image_Ici
-  条件: (s : Set α)
-  结论: IsPiSystem (Ici '' s)
+  条件: (s : 集合 α)
+  结论: IsPiSystem (左闭右无界区间 '' s)
   证明: @isPiSystem_image_Iic αᵒᵈ _ s
 
 Depends on / 依赖: isPiSystem_image_Iic
@@ -543,7 +543,7 @@ theorem isPiSystem_Ici
 
 中文:
 定理 isPiSystem_Ici
-  结论: IsPiSystem (range Ici : Set (Set α))
+  结论: IsPiSystem (range 左闭右无界区间 : 集合 (集合 α))
   证明: @image_univ α _ Ici ▸ isPiSystem_image_Ici univ
 
 Depends on / 依赖: image_univ, isPiSystem_image_Ici
@@ -564,7 +564,7 @@ theorem isPiSystem_Ixx_mem
 
 中文:
 定理 isPiSystem_Ixx_mem
-  结论: {Ixx : α -> α -> Set α} {p : α -> α -> 命题}
+  结论: {Ixx : α -> α -> 集合 α} {p : α -> α -> 命题}
   证明: by
   rintro _ ⟨l₁, hls₁, u₁, hut₁, _, rfl⟩ _ ⟨l₂, hls₂, u₂, hut₂, _, rfl⟩
   simp only [Hi]
@@ -591,7 +591,7 @@ theorem isPiSystem_Ixx
 
 中文:
 定理 isPiSystem_Ixx
-  结论: {Ixx : α -> α -> Set α} {p : α -> α -> 命题}
+  结论: {Ixx : α -> α -> 集合 α} {p : α -> α -> 命题}
   证明: by
   simpa only [exists_range_iff] using isPiSystem_Ixx_mem (@Hne) (@Hi) (range f) (range g)
 
@@ -613,7 +613,7 @@ theorem isPiSystem_Ioo_mem
 
 中文:
 定理 isPiSystem_Ioo_mem
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: isPiSystem_Ixx_mem (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo s t
 
 Depends on / 依赖: Ioo_inter_Ioo, hax.trans, isPiSystem_Ixx_mem
@@ -651,7 +651,7 @@ theorem isPiSystem_Ioc_mem
 
 中文:
 定理 isPiSystem_Ioc_mem
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: isPiSystem_Ixx_mem (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc s t
 
 Depends on / 依赖: Ioc_inter_Ioc, hax.trans_le, isPiSystem_Ixx_mem, trans_le
@@ -689,7 +689,7 @@ theorem isPiSystem_Ico_mem
 
 中文:
 定理 isPiSystem_Ico_mem
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: isPiSystem_Ixx_mem (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico s t
 
 Depends on / 依赖: Ico_inter_Ico, hax.trans_lt, isPiSystem_Ixx_mem, trans_lt
@@ -727,7 +727,7 @@ theorem isPiSystem_Icc_mem
 
 中文:
 定理 isPiSystem_Icc_mem
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: isPiSystem_Ixx_mem (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) s t
 
 Depends on / 依赖: Icc_inter_Icc, isPiSystem_Ixx_mem, nonempty_Icc
@@ -769,10 +769,10 @@ inductive generatePiSystem
 
 中文:
 归纳类型 generatePiSystem
-  参数: (S : Set (Set α))
+  参数: (S : 集合 (集合 α))
   构造子 (2 个):
-    - base: {s : Set α} (h_s : s in S) : generatePiSystem S s
-    - inter: {s t : Set α} (h_s : generatePiSystem S s) (h_t : generatePiSystem S t) (h_nonempty : (s inter t).Nonempty) : generatePiSystem S (s inter t)
+    - base: {s : 集合 α} (h_s : s in S) : generatePiSystem S s
+    - inter: {s t : 集合 α} (h_s : generatePiSystem S s) (h_t : generatePiSystem S t) (h_nonempty : (s inter t).非空) : generatePiSystem S (s inter t)
 -/
 inductive generatePiSystem (S : Set (Set α)) : Set (Set α)
   | base {s : Set α} (h_s : s in S) : generatePiSystem S s
@@ -790,7 +790,7 @@ theorem isPiSystem_generatePiSystem
 
 中文:
 定理 isPiSystem_generatePiSystem
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: IsPiSystem (generatePiSystem S)
   证明: fun _ h_s _ h_t h_nonempty => generatePiSystem.inter h_s h_t h_nonempty
 
@@ -811,7 +811,7 @@ theorem subset_generatePiSystem_self
 
 中文:
 定理 subset_generatePiSystem_self
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: S subseteq generatePiSystem S
   证明: fun _ =>
   generatePiSystem.base
@@ -832,7 +832,7 @@ theorem generatePiSystem_subset_self
 
 中文:
 定理 generatePiSystem_subset_self
-  条件: {S : Set (Set α)} (h_S : IsPiSystem S)
+  条件: {S : 集合 (集合 α)} (h_S : IsPiSystem S)
   证明: fun x h => by
   induction h with
   | base h_s => exact h_s
@@ -857,7 +857,7 @@ theorem generatePiSystem_eq
 
 中文:
 定理 generatePiSystem_eq
-  条件: {S : Set (Set α)} (h_pi : IsPiSystem S)
+  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
   结论: generatePiSystem S = S
   证明: Set.Subset.antisymm (generatePiSystem_subset_self h_pi) (subset_generatePiSystem_self S)
 
@@ -879,7 +879,7 @@ theorem generatePiSystem_mono
 
 中文:
 定理 generatePiSystem_mono
-  条件: {S T : Set (Set α)} (hST : S subseteq T)
+  条件: {S T : 集合 (集合 α)} (hST : S subseteq T)
   证明: fun t ht => by
   induction ht with
   | base h_s => exact generatePiSystem.base (Set.mem_of_subset_of_mem hST h_s)
@@ -906,7 +906,7 @@ theorem generatePiSystem_measurableSet
 
 中文:
 定理 generatePiSystem_measurableSet
-  结论: [M : MeasurableSpace α] {S : Set (Set α)}
+  结论: [M : 可测空间 α] {S : 集合 (集合 α)}
   证明: by
   induction h_in_pi with
   | base h_s => apply h_meas_S _ h_s
@@ -932,7 +932,7 @@ theorem generateFrom_measurableSet_of_generatePiSystem
 
 中文:
 定理 generateFrom_measurableSet_of_generatePiSystem
-  结论: {g : Set (Set α)} (t : Set α)
+  结论: {g : 集合 (集合 α)} (t : 集合 α)
   证明: @generatePiSystem_measurableSet α (generateFrom g) g
     (fun _ h_s_in_g => measurableSet_generateFrom h_s_in_g) t ht
 
@@ -956,7 +956,7 @@ theorem generateFrom_generatePiSystem_eq
 
 中文:
 定理 generateFrom_generatePiSystem_eq
-  条件: {g : Set (Set α)}
+  条件: {g : 集合 (集合 α)}
   证明: by
   apply le_antisymm <;> apply generateFrom_le
   · exact fun t h_t => generateFrom_measurableSet_of_generatePiSystem t h_t
@@ -989,7 +989,7 @@ theorem mem_generatePiSystem_iUnion_elim
 
 中文:
 定理 mem_generatePiSystem_iUnion_elim
-  结论: {α β} {g : β -> Set (Set α)} (h_pi : 对任意 b, IsPiSystem (g b))
+  结论: {α β} {g : β -> 集合 (集合 α)} (h_pi : 对任意 b, IsPiSystem (g b))
   证明: by
   classical
   induction h_t with
@@ -1048,7 +1048,7 @@ theorem mem_generatePiSystem_iUnion_elim'
 
 中文:
 定理 mem_generatePiSystem_iUnion_elim'
-  结论: {α β} {g : β -> Set (Set α)} {s : Set β}
+  结论: {α β} {g : β -> 集合 (集合 α)} {s : 集合 β}
   证明: by
   classical
   have : t in generatePiSystem (⋃ b : s, (g ∘ Subtype.val) b) := by
@@ -1108,8 +1108,8 @@ definition piiUnionInter
     exists (t : Finset ι) (_ : ↑t subseteq S) (f : ι -> Set α) (_ : forall x, x in t -> f x in π x), s = ⋂ x in t, f x }
 
 中文:
-定义 piiUnionInter
-  签名: (π : ι -> Set (Set α)) (S : Set ι)
+定义 piiUnion整数er
+  签名: (π : ι -> 集合 (集合 α)) (S : 集合 ι)
   定义体: { s : Set α |
     exists (t : Finset ι) (_ : ↑t subseteq S) (f : ι -> Set α) (_ : forall x, x in t -> f x in π x), s = ⋂ x in t, f x }
 
@@ -1138,8 +1138,8 @@ theorem piiUnionInter_singleton
        
 
 中文:
-定理 piiUnionInter_singleton
-  条件: (π : ι -> Set (Set α)) (i : ι)
+定理 piiUnion整数er_singleton
+  条件: (π : ι -> 集合 (集合 α)) (i : ι)
   证明: by
   ext1 s
   simp only [piiUnionInter, exists_prop, mem_union]
@@ -1197,8 +1197,8 @@ theorem piiUnionInter_singleton_left
   grind
 
 中文:
-定理 piiUnionInter_singleton_left
-  条件: (s : ι -> Set α) (S : Set ι)
+定理 piiUnion整数er_singleton_left
+  条件: (s : ι -> 集合 α) (S : 集合 ι)
   证明: by
   ext1 s'
   simp_rw [piiUnionInter, Set.mem_singleton_iff, exists_prop, Set.mem_ofPred_eq]
@@ -1230,8 +1230,8 @@ theorem generateFrom_piiUnionInter_singleton_left
     refine ⟨{k}, fun m hm => ?_, s, fun i _ => ?_, ?
 
 中文:
-定理 generateFrom_piiUnionInter_singleton_left
-  条件: (s : ι -> Set α) (S : Set ι)
+定理 generateFrom_piiUnion整数er_singleton_left
+  条件: (s : ι -> 集合 α) (S : 集合 ι)
   证明: by
   refine le_antisymm (generateFrom_le ?_) (generateFrom_mono ?_)
   · rintro _ ⟨I, hI, f, hf, rfl⟩
@@ -1270,8 +1270,8 @@ theorem isPiSystem_piiUnionInter
     simp only [hp1S, hp2
 
 中文:
-定理 isPiSystem_piiUnionInter
-  条件: (π : ι -> Set (Set α)) (hpi : 对任意 x, IsPiSystem (π x)) (S : Set ι)
+定理 isPiSystem_piiUnion整数er
+  条件: (π : ι -> 集合 (集合 α)) (hpi : 对任意 x, IsPiSystem (π x)) (S : 集合 ι)
   证明: by
   classical
   rintro t1 ⟨p1, hp1S, f1, hf1m, ht1_eq⟩ t2 ⟨p2, hp2S, f2, hf2m, ht2_eq⟩ h_nonempty
@@ -1321,8 +1321,8 @@ theorem piiUnionInter_mono_left
   ⟨t, ht_mem, ft, fun x hxt => h_le x (hft_mem_pi x hxt), h_eq⟩
 
 中文:
-定理 piiUnionInter_mono_left
-  条件: {π π' : ι -> Set (Set α)} (h_le : 对任意 i, π i subseteq π' i) (S : Set ι)
+定理 piiUnion整数er_mono_left
+  条件: {π π' : ι -> 集合 (集合 α)} (h_le : 对任意 i, π i subseteq π' i) (S : 集合 ι)
   证明: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
   ⟨t, ht_mem, ft, fun x hxt => h_le x (hft_mem_pi x hxt), h_eq⟩
 
@@ -1342,8 +1342,8 @@ theorem piiUnionInter_mono_right
   ⟨t, ht_mem.trans hST, ft, hft_mem_pi, h_eq⟩
 
 中文:
-定理 piiUnionInter_mono_right
-  条件: {π : ι -> Set (Set α)} {S T : Set ι} (hST : S subseteq T)
+定理 piiUnion整数er_mono_right
+  条件: {π : ι -> 集合 (集合 α)} {S T : 集合 ι} (hST : S subseteq T)
   证明: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
   ⟨t, ht_mem.trans hST, ft, hft_mem_pi, h_eq⟩
 
@@ -1366,8 +1366,8 @@ theorem generateFrom_piiUnionInter_le
   exact measurableSet_generateFrom (hft_mem_pi x hx_mem)
 
 中文:
-定理 generateFrom_piiUnionInter_le
-  结论: {m : MeasurableSpace α} (π : ι -> Set (Set α))
+定理 generateFrom_piiUnion整数er_le
+  结论: {m : 可测空间 α} (π : ι -> 集合 (集合 α))
   证明: by
   refine generateFrom_le ?_
   rintro t ⟨ht_p, _, ft, hft_mem_pi, rfl⟩
@@ -1399,8 +1399,8 @@ theorem subset_piiUnionInter
   exact subset_union_left
 
 中文:
-定理 subset_piiUnionInter
-  条件: {π : ι -> Set (Set α)} {S : Set ι} {i : ι} (his : i in S)
+定理 subset_piiUnion整数er
+  条件: {π : ι -> 集合 (集合 α)} {S : 集合 ι} {i : ι} (his : i in S)
   证明: by
   have h_ss : {i} subseteq S := by
     intro j hj
@@ -1431,8 +1431,8 @@ theorem mem_piiUnionInter_of_measurableSet
   proof: subset_piiUnionInter hiS hs
 
 中文:
-定理 mem_piiUnionInter_of_measurableSet
-  结论: (m : ι -> MeasurableSpace α) {S : Set ι} {i : ι}
+定理 mem_piiUnion整数er_of_measurableSet
+  结论: (m : ι -> 可测空间 α) {S : 集合 ι} {i : ι}
   证明: subset_piiUnionInter hiS hs
 
 Depends on / 依赖: subset_piiUnionInter
@@ -1451,8 +1451,8 @@ theorem le_generateFrom_piiUnionInter
   proof: generateFrom_mono (subset_piiUnionInter hxS)
 
 中文:
-定理 le_generateFrom_piiUnionInter
-  条件: {π : ι -> Set (Set α)} (S : Set ι) {x : ι} (hxS : x in S)
+定理 le_generateFrom_piiUnion整数er
+  条件: {π : ι -> 集合 (集合 α)} (S : 集合 ι) {x : ι} (hxS : x in S)
   证明: generateFrom_mono (subset_piiUnionInter hxS)
 
 Depends on / 依赖: generateFrom_mono, subset_piiUnionInter
@@ -1475,8 +1475,8 @@ theorem measurableSet_iSup_of_mem_piiUnionInter
   exact le_iSup₂ (f := fun i (_ : i in S) => m i) i hi'
 
 中文:
-定理 measurableSet_iSup_of_mem_piiUnionInter
-  结论: (m : ι -> MeasurableSpace α) (S : Set ι) (t : Set α)
+定理 measurableSet_iSup_of_mem_piiUnion整数er
+  结论: (m : ι -> 可测空间 α) (S : 集合 ι) (t : 集合 α)
   证明: by
   rcases ht with ⟨pt, hpt, ft, ht_m, rfl⟩
   refine pt.measurableSet_biInter fun i hi => ?_
@@ -1510,8 +1510,8 @@ theorem generateFrom_piiUnionInter_measurableSet
     exact generateFrom_mono (mem_piiUnionInter_of_measura
 
 中文:
-定理 generateFrom_piiUnionInter_measurableSet
-  条件: (m : ι -> MeasurableSpace α) (S : Set ι)
+定理 generateFrom_piiUnion整数er_measurableSet
+  条件: (m : ι -> 可测空间 α) (S : 集合 ι)
   证明: by
   refine le_antisymm ?_ ?_
   · rw [← @generateFrom_measurableSet α (⨆ i in S, m i)]
@@ -1558,10 +1558,10 @@ structure DynkinSystem
 结构 DynkinSystem
   参数: (α : 类型)
   公理与运算 (4 个):
-    - Has : Set α -> 命题
+    - Has : 集合 α -> 命题
     - has_empty : Has ∅
     - has_compl : 对任意 {a}, Has a -> Has aᶜ
-    - has_iUnion_nat : 对任意 {f : 自然数 -> Set α}, Pairwise (Disjoint on f) -> (对任意 i, Has (f i)) -> Has (⋃ i, f i)
+    - has_iUnion_nat : 对任意 {f : 自然数 -> 集合 α}, 两两 (Disjoint on f) -> (对任意 i, Has (f i)) -> Has (⋃ i, f i)
 -/
 structure DynkinSystem (α : Type*) where
   /-- Predicate saying that a given set is contained in the Dynkin system. -/
@@ -1589,7 +1589,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: 对任意 {d₁ d₂ : DynkinSystem α}, (对任意 s : Set α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂
+  结论: 对任意 {d₁ d₂ : DynkinSystem α}, (对任意 s : 集合 α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂
   证明: funext fun x => propext h x
     subst this
     rfl
@@ -1656,7 +1656,7 @@ theorem has_iUnion
 
 中文:
 定理 has_iUnion
-  结论: {β} [Countable β] {f : β -> Set α} (hd : Pairwise (Disjoint on f))
+  结论: {β} [可数 β] {f : β -> 集合 α} (hd : 两两 (Disjoint on f))
   证明: by
   cases nonempty_encodable β
   rw [← Encodable.iUnion_decode₂]
@@ -1686,7 +1686,7 @@ theorem has_union
 
 中文:
 定理 has_union
-  条件: {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂)
+  条件: {s₁ s₂ : 集合 α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂)
   证明: by
   rw [union_eq_iUnion]
   exact d.has_iUnion (pairwise_disjoint_on_bool.2 h) (Bool.forall_bool.2 ⟨h₂, h₁⟩)
@@ -1713,7 +1713,7 @@ theorem has_sdiff
 
 中文:
 定理 has_sdiff
-  条件: {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq s₁)
+  条件: {s₁ s₂ : 集合 α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq s₁)
   证明: by
   apply d.has_compl_iff.1
   simp only [sdiff_eq, compl_inter, compl_compl]
@@ -1779,7 +1779,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (DynkinSystem α)
+  签名: 偏序 (DynkinSystem α)
   定义体: { DynkinSystem.instLEDynkinSystem with
     le_refl := fun _ _ => le_rfl
     le_trans := fun _ _ _ hab hbc => le_def.mpr (le_trans hab hbc)
@@ -1806,7 +1806,7 @@ definition ofMeasurableSpace
 
 中文:
 定义 ofMeasurableSpace
-  签名: (m : MeasurableSpace α)
+  签名: (m : 可测空间 α)
   定义体: m.MeasurableSet'
   has_empty := m.measurableSet_empty
   has_compl {a} := m.measurableSet_compl a
@@ -1830,7 +1830,7 @@ theorem ofMeasurableSpace_le_ofMeasurableSpace_iff
 
 中文:
 定理 ofMeasurableSpace_le_ofMeasurableSpace_iff
-  条件: {m₁ m₂ : MeasurableSpace α}
+  条件: {m₁ m₂ : 可测空间 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1853,12 +1853,12 @@ inductive GenerateHas
 
 中文:
 归纳类型 GenerateHas
-  参数: (s : Set (Set α))
+  参数: (s : 集合 (集合 α))
   构造子 (4 个):
     - basic: 对任意 t in s, GenerateHas s t
     - empty: GenerateHas s ∅
     - compl: 对任意 {a}, GenerateHas s a -> GenerateHas s aᶜ
-    - iUnion: 对任意 {f : 自然数 -> Set α}, Pairwise (Disjoint on f) -> (对任意 i, GenerateHas s (f i)) -> GenerateHas s (⋃ i, f i)
+    - iUnion: 对任意 {f : 自然数 -> 集合 α}, 两两 (Disjoint on f) -> (对任意 i, GenerateHas s (f i)) -> GenerateHas s (⋃ i, f i)
 -/
 inductive GenerateHas (s : Set (Set α)) : Set α -> Prop
   | basic : forall t in s, GenerateHas s t
@@ -1882,7 +1882,7 @@ theorem generateHas_compl
 
 中文:
 定理 generateHas_compl
-  条件: {C : Set (Set α)} {s : Set α}
+  条件: {C : 集合 (集合 α)} {s : 集合 α}
   结论: GenerateHas C sᶜ ↔ GenerateHas C s
   证明: by
   refine ⟨?_, GenerateHas.compl⟩
@@ -1911,7 +1911,7 @@ definition generate
 
 中文:
 定义 generate
-  签名: (s : Set (Set α))
+  签名: (s : 集合 (集合 α))
   定义体: GenerateHas s
   has_empty := GenerateHas.empty
   has_compl {_} := GenerateHas.compl
@@ -1936,7 +1936,7 @@ theorem generateHas_def
 
 中文:
 定理 generateHas_def
-  条件: {C : Set (Set α)}
+  条件: {C : 集合 (集合 α)}
   结论: (generate C).Has = GenerateHas C
   证明: rfl
 -/
@@ -1953,7 +1953,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (DynkinSystem α)
+  签名: 可居 (DynkinSystem α)
   定义体: ⟨generate univ⟩
 
 Depends on / 依赖: generate
@@ -2038,7 +2038,7 @@ definition restrictOn
 
 中文:
 定义 restrictOn
-  签名: {s : Set α} (h : d.Has s)
+  签名: {s : 集合 α} (h : d.Has s)
   定义体: d.Has (t inter s)
   has_empty := by simp [d.has_empty]
   has_compl {t} hts := by
@@ -2076,7 +2076,7 @@ theorem generate_le
 
 中文:
 定理 generate_le
-  条件: {s : Set (Set α)} (h : 对任意 t in s, d.Has t)
+  条件: {s : 集合 (集合 α)} (h : 对任意 t in s, d.Has t)
   结论: generate s <= d
   证明: fun _ ht =>
   ht.recOn h d.has_empty (fun {_} _ h => d.has_compl h) fun {_} hd _ hf => d.has_iUnion hd hf
@@ -2094,7 +2094,7 @@ theorem generate_has_subset_generate_measurable
 
 中文:
 定理 generate_has_subset_generate_measurable
-  结论: {C : Set (Set α)} {s : Set α}
+  结论: {C : 集合 (集合 α)} {s : 集合 α}
   证明: generate_le (ofMeasurableSpace (generateFrom C)) (fun _ => measurableSet_generateFrom) s hs
 
 Depends on / 依赖: generateFrom, generate_le, measurableSet_generateFrom, ofMeasurableSpace
@@ -2119,7 +2119,7 @@ theorem generate_inter
 
 中文:
 定理 generate_inter
-  结论: {s : Set (Set α)} (hs : IsPiSystem s) {t₁ t₂ : Set α}
+  结论: {s : 集合 (集合 α)} (hs : IsPiSystem s) {t₁ t₂ : 集合 α}
   证明: have : generate s <= (generate s).restrictOn ht₂ :=
     generate_le _ fun s₁ hs₁ =>
       have : (generate s).Has s₁ := GenerateHas.basic s₁ hs₁
@@ -2157,7 +2157,7 @@ theorem generateFrom_eq
 
 中文:
 定理 generateFrom_eq
-  条件: {s : Set (Set α)} (hs : IsPiSystem s)
+  条件: {s : 集合 (集合 α)} (hs : IsPiSystem s)
   证明: le_antisymm (generateFrom_le fun t ht => GenerateHas.basic t ht)
     (ofMeasurableSpace_le_ofMeasurableSpace_iff.mp <| by
       rw [ofMeasurableSpace_toMeasurableSpace]
@@ -2203,7 +2203,7 @@ theorem induction_on_inter
 
 中文:
 定理 induction_on_inter
-  结论: {m : MeasurableSpace α} {C : 对任意 s : Set α, MeasurableSet s -> 命题}
+  结论: {m : 可测空间 α} {C : 对任意 s : 集合 α, 可测集 s -> 命题}
   证明: by
   have eq : MeasurableSet = DynkinSystem.GenerateHas s := by
     rw [h_eq]; rw [DynkinSystem.generateFrom_eq h_inter]

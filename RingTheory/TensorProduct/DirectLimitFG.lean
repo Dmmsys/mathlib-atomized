@@ -64,7 +64,7 @@ instance Submodule.FG.directedSystem
   map_map := fun _ _ _ _ _ _ => rfl
 
 中文:
-实例 Submodule.FG.directedSystem
+实例 子模.FG.directedSystem
   签名: :
   定义体: fun _ _ => rfl
   map_map := fun _ _ _ _ _ _ => rfl
@@ -92,8 +92,8 @@ definition Submodule.FG.directLimit
           ⟨Submodule.span R {x}
 
 中文:
-定义 Submodule.FG.directLimit
-  签名: [DecidableEq {P : Submodule R M // P.FG}]
+定义 子模.FG.directLimit
+  签名: [DecidableEq {P : 子模 R M // P.FG}]
   定义体: LinearEquiv.ofBijective
     (Module.DirectLimit.lift _ _ _ _ (fun P => P.val.subtype) (fun _ _ _ _ => rfl))
     ⟨Module.DirectLimit.lift_injective _ _ (fun P => Submodule.injective_subtype P.val),
@@ -145,7 +145,7 @@ theorem DirectedSystem.rTensor
 
 中文:
 定理 DirectedSystem.rTensor
-  结论: {ι : 类型} [Preorder ι] {F : ι -> 类型}
+  结论: {ι : 类型} [预序 ι] {F : ι -> 类型}
   证明: by
     rw [← id_apply (R := R) t]
     apply DFunLike.congr_fun
@@ -182,7 +182,7 @@ theorem Submodule.FG.rTensor.directedSystem
   proof: Submodule.FG.directedSystem.rTensor R N
 
 中文:
-定理 Submodule.FG.rTensor.directedSystem
+定理 子模.FG.rTensor.directedSystem
   证明: Submodule.FG.directedSystem.rTensor R N
 
 Depends on / 依赖: P.FG, P.val, Submodule, otimes
@@ -201,8 +201,8 @@ definition Submodule.FG.rTensor.directLimit
   body: (TensorProduct.directLimitLeft _ N).symm.trans ((Submodule.FG.directLimit R M).rTensor N)
 
 中文:
-定义 Submodule.FG.rTensor.directLimit
-  签名: [DecidableEq {P : Submodule R M // P.FG}]
+定义 子模.FG.rTensor.directLimit
+  签名: [DecidableEq {P : 子模 R M // P.FG}]
   定义体: (TensorProduct.directLimitLeft _ N).symm.trans ((Submodule.FG.directLimit R M).rTensor N)
 
 Depends on / 依赖: P.FG, P.val, Submodule, otimes
@@ -227,8 +227,8 @@ theorem Submodule.FG.rTensor.directLimit_apply
     exact DFunLike.congr_fun 
 
 中文:
-定理 Submodule.FG.rTensor.directLimit_apply
-  结论: [DecidableEq {P : Submodule R M // P.FG}]
+定理 子模.FG.rTensor.directLimit_apply
+  结论: [DecidableEq {P : 子模 R M // P.FG}]
   证明: by
   suffices (Submodule.FG.rTensor.directLimit R M N).toLinearMap.comp
       (Module.DirectLimit.of R {P : Submodule R M // P.FG} (fun P => P.val otimes[R] N)
@@ -262,8 +262,8 @@ theorem Submodule.FG.rTensor.directLimit_apply'
   apply Submodule.FG.rTensor.directLimit_apply
 
 中文:
-定理 Submodule.FG.rTensor.directLimit_apply'
-  结论: [DecidableEq {P : Submodule R M // P.FG}]
+定理 子模.FG.rTensor.directLimit_apply'
+  结论: [DecidableEq {P : 子模 R M // P.FG}]
   证明: by
   apply Submodule.FG.rTensor.directLimit_apply
 
@@ -296,7 +296,7 @@ theorem DirectedSystem.lTensor
 
 中文:
 定理 DirectedSystem.lTensor
-  结论: {ι : 类型} [Preorder ι] {F : ι -> 类型}
+  结论: {ι : 类型} [预序 ι] {F : ι -> 类型}
   证明: by
     rw [← id_apply (R := R) t]
     apply DFunLike.congr_fun
@@ -333,7 +333,7 @@ theorem Submodule.FG.lTensor.directedSystem
   proof: Submodule.FG.directedSystem.lTensor R M
 
 中文:
-定理 Submodule.FG.lTensor.directedSystem
+定理 子模.FG.lTensor.directedSystem
   证明: Submodule.FG.directedSystem.lTensor R M
 
 Depends on / 依赖: Q.FG, Q.val, Submodule, otimes
@@ -352,8 +352,8 @@ definition Submodule.FG.lTensor.directLimit
   body: (TensorProduct.directLimitRight _ M).symm.trans ((Submodule.FG.directLimit R N).lTensor M)
 
 中文:
-定义 Submodule.FG.lTensor.directLimit
-  签名: [DecidableEq {Q : Submodule R N // Q.FG}]
+定义 子模.FG.lTensor.directLimit
+  签名: [DecidableEq {Q : 子模 R N // Q.FG}]
   定义体: (TensorProduct.directLimitRight _ M).symm.trans ((Submodule.FG.directLimit R N).lTensor M)
 
 Depends on / 依赖: Q.FG, Q.val, Submodule, otimes
@@ -379,8 +379,8 @@ theorem Submodule.FG.lTensor.directLimit_apply
   e
 
 中文:
-定理 Submodule.FG.lTensor.directLimit_apply
-  结论: [DecidableEq {P : Submodule R N // P.FG}]
+定理 子模.FG.lTensor.directLimit_apply
+  结论: [DecidableEq {P : 子模 R N // P.FG}]
   证明: by
   suffices (Submodule.FG.lTensor.directLimit R M N).toLinearMap.comp
       (Module.DirectLimit.of R {Q : Submodule R N // Q.FG} (fun Q => M otimes[R] Q.val)
@@ -414,8 +414,8 @@ theorem Submodule.FG.lTensor.directLimit_apply'
   proof: Submodule.FG.lTensor.directLimit_apply R M N ⟨Q, hQ⟩ u
 
 中文:
-定理 Submodule.FG.lTensor.directLimit_apply'
-  结论: [DecidableEq {Q : Submodule R N // Q.FG}]
+定理 子模.FG.lTensor.directLimit_apply'
+  结论: [DecidableEq {Q : 子模 R N // Q.FG}]
   证明: Submodule.FG.lTensor.directLimit_apply R M N ⟨Q, hQ⟩ u
 
 Depends on / 依赖: Submodule, Submodule.FG.lTensor.directLimit_apply, directLimit_apply, lTensor
@@ -445,7 +445,7 @@ theorem TensorProduct.exists_of_fg
 include hP in
 
 中文:
-定理 TensorProduct.exists_of_fg
+定理 张量积.存在_of_fg
   证明: by
   let ⟨P, t, ht⟩ := Module.DirectLimit.exists_of ((Submodule.FG.rTensor.directLimit R M N).symm u)
   use P.val, P.property, t
@@ -476,7 +476,7 @@ theorem TensorProduct.eq_of_fg_of_subtype_eq
 include hP in
 
 中文:
-定理 TensorProduct.eq_of_fg_of_subtype_eq
+定理 张量积.eq_of_fg_of_subtype_eq
   结论: {t' : P otimes[R] N}
   证明: by
   simp only [← Submodule.FG.rTensor.directLimit_apply' R M N hP, EmbeddingLike.apply_eq_iff_eq] at h
@@ -509,7 +509,7 @@ theorem TensorProduct.eq_zero_of_fg_of_subtype_eq_zero
 include hP hP' in
 
 中文:
-定理 TensorProduct.eq_zero_of_fg_of_subtype_eq_zero
+定理 张量积.eq_zero_of_fg_of_subtype_eq_zero
   条件: (h : rTensor N P.subtype t = 0)
   证明: by
   rw [← (rTensor N P.subtype).map_zero] at h
@@ -538,7 +538,7 @@ theorem TensorProduct.eq_of_fg_of_subtype_eq'
   use Q, le_trans le_sup_left 
 
 中文:
-定理 TensorProduct.eq_of_fg_of_subtype_eq'
+定理 张量积.eq_of_fg_of_subtype_eq'
   证明: by
   simp only [← subtype_comp_inclusion _ _ (le_sup_left : _ <= P ⊔ P'),
     ← subtype_comp_inclusion _ _ (le_sup_right : _ <= P ⊔ P'),
@@ -586,7 +586,7 @@ theorem TensorProduct.Algebra.exists_of_fg
   rw [← subtype_comp_inclusion
 
 中文:
-定理 TensorProduct.Algebra.exists_of_fg
+定理 张量积.代数.存在_of_fg
   证明: by
   obtain ⟨P, ⟨s, hs⟩, hu⟩ := TensorProduct.exists_of_fg u
   use Algebra.adjoin R s, Subalgebra.fg_adjoin_finset _
@@ -623,7 +623,7 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq
 
 
 中文:
-定理 TensorProduct.Algebra.eq_of_fg_of_subtype_eq
+定理 张量积.代数.eq_of_fg_of_subtype_eq
   证明: by
   classical
   let ⟨P, hP, u, hu⟩ := TensorProduct.exists_of_fg t
@@ -702,7 +702,7 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq'
   let ⟨B, hB_le, hB, h⟩ := TensorPro
 
 中文:
-定理 TensorProduct.Algebra.eq_of_fg_of_subtype_eq'
+定理 张量积.代数.eq_of_fg_of_subtype_eq'
   结论: {t' : A' otimes[R] N}
   证明: by
   have hj : (A ⊔ A').val.comp (Subalgebra.inclusion le_sup_left) = A.val := by ext; rfl
@@ -738,7 +738,7 @@ theorem Submodule.exists_fg_of_baseChange_eq_zero
   have hu' : (A.val.toLinearMap.rTensor N) (f.baseCha
 
 中文:
-定理 Submodule.exists_fg_of_baseChange_eq_zero
+定理 子模.存在_fg_of_baseChange_eq_zero
   证明: by
   obtain ⟨A, hA, ht_memA⟩ := TensorProduct.Algebra.exists_of_fg t
   obtain ⟨u, hu⟩ := _root_.id ht_memA

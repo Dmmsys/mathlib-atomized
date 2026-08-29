@@ -47,7 +47,7 @@ instance preservesLimit_finite_toFunctor
 
 中文:
 实例 preservesLimit_finite_toFunctor
-  签名: {J : Type w} [SmallCategory J]
+  签名: {J : 类型 w} [小范畴 J]
   定义体: preservesLimit_of_preserves_limit_cone (finiteLimitCone K).isLimit
     (finiteLimitCone _).isLimit.ofIsoLimit
       (Cone.ext (eqToIso (show Finset.univ.inf _ = f _ by aesop)) (by subsingleton))
@@ -69,7 +69,7 @@ instance preservesLimitsOfShape_finite_toFunctor
 
 中文:
 实例 preservesLimitsOfShape_finite_toFunctor
-  签名: {J : Type w} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型 w} [小范畴 J] [有限范畴 J]
 -/
 instance preservesLimitsOfShape_finite_toFunctor {J : Type w} [SmallCategory J] [FinCategory J] :
     PreservesLimitsOfShape J (toOrderHom f).toFunctor where
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (toOrderHom f).toFunctor
+  签名: 保持FiniteLimits (toOrderHom f).toFunctor
   定义体: inferInstance
 -/
 instance : PreservesFiniteLimits (toOrderHom f).toFunctor where
@@ -108,7 +108,7 @@ instance preservesColimit_finite_toFunctor
 
 中文:
 实例 preservesColimit_finite_toFunctor
-  签名: {J : Type w} [SmallCategory J]
+  签名: {J : 类型 w} [小范畴 J]
   定义体: preservesColimit_of_preserves_colimit_cocone (finiteColimitCocone K).isColimit
     (finiteColimitCocone _).isColimit.ofIsoColimit
       (Cocone.ext (eqToIso (show Finset.univ.sup _ = f _ by aesop)) (by subsingleton))
@@ -130,7 +130,7 @@ instance preservesColimitsOfShape_finite_toFunctor
 
 中文:
 实例 preservesColimitsOfShape_finite_toFunctor
-  签名: {J : Type w} [SmallCategory J]
+  签名: {J : 类型 w} [小范畴 J]
 -/
 instance preservesColimitsOfShape_finite_toFunctor {J : Type w} [SmallCategory J]
     [FinCategory J] : PreservesColimitsOfShape J (toOrderHom f).toFunctor where
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (toOrderHom f).toFunctor
+  签名: 保持FiniteColimits (toOrderHom f).toFunctor
   定义体: inferInstance
 -/
 instance : PreservesFiniteColimits (toOrderHom f).toFunctor where
@@ -168,7 +168,7 @@ instance preservesLimit_toFunctor
 
 中文:
 实例 preservesLimit_toFunctor
-  签名: [sInfHomClass F α β] {J : Type w} [Category.{w'} J]
+  签名: [sInf态射类 F α β] {J : 类型 w} [范畴.{w'} J]
   定义体: preservesLimit_of_preserves_limit_cone (limitCone K).isLimit
     (limitCone _).isLimit.ofIsoLimit (Cone.ext (eqToIso (by aesop)) (by subsingleton))
 
@@ -188,7 +188,7 @@ instance preservesLimitsOfShape_toFunctor
 
 中文:
 实例 preservesLimitsOfShape_toFunctor
-  签名: [sInfHomClass F α β] {J : Type w} [Category.{w'} J]
+  签名: [sInf态射类 F α β] {J : 类型 w} [范畴.{w'} J]
 -/
 instance preservesLimitsOfShape_toFunctor [sInfHomClass F α β] {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J (toOrderHom f).toFunctor where
@@ -202,7 +202,7 @@ instance preservesLimitsOfSize_toFunctor
 
 中文:
 实例 preservesLimitsOfSize_toFunctor
-  签名: [sInfHomClass F α β]
+  签名: [sInf态射类 F α β]
 -/
 instance preservesLimitsOfSize_toFunctor [sInfHomClass F α β] :
     PreservesLimitsOfSize.{w', w} (toOrderHom f).toFunctor where
@@ -216,7 +216,7 @@ instance preservesLimits_toFunctor
 
 中文:
 实例 preservesLimits_toFunctor
-  签名: [sInfHomClass F α β]
+  签名: [sInf态射类 F α β]
 -/
 instance preservesLimits_toFunctor [sInfHomClass F α β] :
     PreservesLimits (toOrderHom f).toFunctor where
@@ -232,7 +232,7 @@ instance preservesColimit_toFunctor
 
 中文:
 实例 preservesColimit_toFunctor
-  签名: [sSupHomClass F α β] {J : Type w} [Category.{w'} J]
+  签名: [sSup态射类 F α β] {J : 类型 w} [范畴.{w'} J]
   定义体: preservesColimit_of_preserves_colimit_cocone (colimitCocone K).isColimit
     (colimitCocone _).isColimit.ofIsoColimit (Cocone.ext (eqToIso (by aesop)) (by subsingleton))
 
@@ -252,7 +252,7 @@ instance preservesColimitsOfShape_toFunctor
 
 中文:
 实例 preservesColimitsOfShape_toFunctor
-  签名: [sSupHomClass F α β] {J : Type w} [Category.{w'} J]
+  签名: [sSup态射类 F α β] {J : 类型 w} [范畴.{w'} J]
 -/
 instance preservesColimitsOfShape_toFunctor [sSupHomClass F α β] {J : Type w} [Category.{w'} J] :
     PreservesColimitsOfShape J (toOrderHom f).toFunctor where
@@ -266,7 +266,7 @@ instance preservesColimitsOfSize_toFunctor
 
 中文:
 实例 preservesColimitsOfSize_toFunctor
-  签名: [sSupHomClass F α β]
+  签名: [sSup态射类 F α β]
 -/
 instance preservesColimitsOfSize_toFunctor [sSupHomClass F α β] :
     PreservesColimitsOfSize.{w', w} (toOrderHom f).toFunctor where
@@ -280,7 +280,7 @@ instance preservesColimits_toFunctor
 
 中文:
 实例 preservesColimits_toFunctor
-  签名: [sSupHomClass F α β]
+  签名: [sSup态射类 F α β]
 -/
 instance preservesColimits_toFunctor [sSupHomClass F α β] :
     PreservesColimits (toOrderHom f).toFunctor where

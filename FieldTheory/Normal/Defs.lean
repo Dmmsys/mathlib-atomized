@@ -42,9 +42,9 @@ class Normal
     - splits'((x : K)) : Splits ((minpoly F x).map (algebraMap F K))
 
 中文:
-类 Normal
-  参数: : 命题 extends Algebra.IsAlgebraic F K where
-  继承: Algebra.IsAlgebraic F K
+类 正规
+  参数: : 命题 extends 代数.是代数 F K where
+  继承: 代数.是代数 F K
   公理与运算 (1 个):
     - splits'((x : K)) : Splits ((minpoly F x).map (algebraMap F K))
 -/
@@ -63,9 +63,9 @@ theorem Normal.isIntegral
   proof: Algebra.IsIntegral.isIntegral x
 
 中文:
-定理 Normal.isIntegral
-  条件: (_ : Normal F K) (x : K)
-  结论: Is整数egral F x
+定理 正规.is整数egral
+  条件: (_ : 正规 F K) (x : K)
+  结论: 是整 F x
   证明: Algebra.IsIntegral.isIntegral x
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral
@@ -83,8 +83,8 @@ theorem Normal.splits
   proof: Normal.splits' x
 
 中文:
-定理 Normal.splits
-  条件: (_ : Normal F K) (x : K)
+定理 正规.splits
+  条件: (_ : 正规 F K) (x : K)
   结论: Splits ((minpoly F x).map (algebraMap F K))
   证明: Normal.splits' x
 
@@ -124,7 +124,7 @@ theorem Normal.out
   proof: normal_iff.1
 
 中文:
-定理 Normal.out
+定理 正规.out
   证明: normal_iff.1
 
 Depends on / 依赖: normal_iff
@@ -146,7 +146,7 @@ instance normal_self
 
 中文:
 实例 normal_self
-  签名: : Normal F F where
+  签名: : 正规 F F where
   定义体: fun _ => isIntegral_algebraMap.isAlgebraic
   splits' := fun x => (minpoly.eq_X_sub_C' x).symm ▸ by simp
 
@@ -175,9 +175,9 @@ theorem Normal.tower_top_of_normal
       ((map_dvd_map' _).mpr (minpoly.dvd_map_of_isScalarTower F K x))⟩
 
 中文:
-定理 Normal.tower_top_of_normal
-  条件: [h : Normal F E]
-  结论: Normal K E
+定理 正规.tower_top_of_normal
+  条件: [h : 正规 F E]
+  结论: 正规 K E
   证明: normal_iff.2 fun x => by
     obtain ⟨hx, hhx⟩ := h.out x
     rw [algebraMap_eq F K E]; rw [← map_map] at hhx
@@ -202,8 +202,8 @@ instance IntermediateField.normal
   body: Normal.tower_top_of_normal F K E
 
 中文:
-实例 IntermediateField.normal
-  签名: (K : 整数ermediateField F E) [Normal F E]
+实例 中间域.normal
+  签名: (K : 中间域 F E) [正规 F E]
   定义体: Normal.tower_top_of_normal F K E
 
 Depends on / 依赖: Normal, Normal.tower_top_of_normal, tower_top_of_normal
@@ -221,9 +221,9 @@ theorem AlgHom.normal_bijective
   proof: h.toIsAlgebraic.bijective_of_isScalarTower' ϕ
 
 中文:
-定理 AlgHom.normal_bijective
-  条件: [h : Normal F E] (ϕ : E ->ₐ[F] K)
-  结论: Function.Bijective ϕ
+定理 代数态射.normal_bijective
+  条件: [h : 正规 F E] (ϕ : E ->ₐ[F] K)
+  结论: 函数.双射 ϕ
   证明: h.toIsAlgebraic.bijective_of_isScalarTower' ϕ
 
 Depends on / 依赖: bijective_of_isScalarTower, h.toIsAlgebraic.bijective_of_isScalarTower, toIsAlgebraic
@@ -248,9 +248,9 @@ theorem Normal.of_algEquiv
   exact ⟨h.1.map f, h.2.map _⟩
 
 中文:
-定理 Normal.of_algEquiv
-  条件: [h : Normal F E] (f : E ≃ₐ[F] E')
-  结论: Normal F E'
+定理 正规.of_algEquiv
+  条件: [h : 正规 F E] (f : E ≃ₐ[F] E')
+  结论: 正规 F E'
   证明: by
   rw [normal_iff] at h ⊢
   intro x; specialize h (f.symm x)
@@ -275,9 +275,9 @@ theorem AlgEquiv.transfer_normal
   proof: ⟨fun _ => Normal.of_algEquiv f, fun _ => Normal.of_algEquiv f.symm⟩
 
 中文:
-定理 AlgEquiv.transfer_normal
+定理 代数等价.transfer_normal
   条件: (f : E ≃ₐ[F] E')
-  结论: Normal F E ↔ Normal F E'
+  结论: 正规 F E ↔ 正规 F E'
   证明: ⟨fun _ => Normal.of_algEquiv f, fun _ => Normal.of_algEquiv f.symm⟩
 
 Depends on / 依赖: Normal, Normal.of_algEquiv, f.symm, of_algEquiv
@@ -301,8 +301,8 @@ theorem Normal.of_equiv_equiv
   exact (h (g.symm x)).2.map _
 
 中文:
-定理 Normal.of_equiv_equiv
-  结论: {M N : 类型} [Field N] [Field M] [Algebra M N]
+定理 正规.of_equiv_equiv
+  结论: {M N : 类型} [域 N] [域 M] [代数 M N]
   证明: by
   have := h
   rw [normal_iff] at h ⊢
@@ -344,7 +344,7 @@ theorem restrictScalars_normal
 
 中文:
 定理 restrictScalars_normal
-  条件: {E : 整数ermediateField K L}
+  条件: {E : 中间域 K L}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -380,8 +380,8 @@ definition AlgHom.restrictNormalAux
         (min
 
 中文:
-定义 AlgHom.restrictNormalAux
-  签名: [h : Normal F E]
+定义 代数态射.restrictNormalAux
+  签名: [h : 正规 F E]
   定义体: ⟨ϕ x, by
       suffices (toAlgHom F E K₁).range.map ϕ <= _ by exact this ⟨x, Subtype.mem x, rfl⟩
       rintro x ⟨y, ⟨z, hy⟩, hx⟩
@@ -425,8 +425,8 @@ definition AlgHom.restrictNormal
     (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K₁)).toAlgHom
 
 中文:
-定义 AlgHom.restrictNormal
-  签名: [Normal F E]
+定义 代数态射.restrictNormal
+  签名: [正规 F E]
   定义体: ((AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K₂)).symm.toAlgHom.comp
         (ϕ.restrictNormalAux E)).comp
     (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K₁)).toAlgHom
@@ -449,8 +449,8 @@ definition AlgHom.restrictNormal'
 @[simp]
 
 中文:
-定义 AlgHom.restrictNormal'
-  签名: [Normal F E]
+定义 代数态射.restrictNormal'
+  签名: [正规 F E]
   定义体: AlgEquiv.ofBijective (AlgHom.restrictNormal ϕ E) (AlgHom.normal_bijective F E E _)
 
 @[simp]
@@ -472,8 +472,8 @@ theorem AlgHom.restrictNormal_commutes
       (ϕ.restrictNormalAux E ⟨IsScalarTower.toAlgHom F E K₁ x, x, rfl⟩))
 
 中文:
-定理 AlgHom.restrictNormal_commutes
-  条件: [Normal F E] (x : E)
+定理 代数态射.restrictNormal_commutes
+  条件: [正规 F E] (x : E)
   证明: Subtype.ext_iff.mp
     (AlgEquiv.apply_symm_apply (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K₂))
       (ϕ.restrictNormalAux E ⟨IsScalarTower.toAlgHom F E K₁ x, x, rfl⟩))
@@ -496,8 +496,8 @@ theorem AlgHom.restrictNormal_comp
     (algebraMap E K₃).injective (by simp only [AlgHom.comp_apply, AlgHom.restrictNormal_commutes])
 
 中文:
-定理 AlgHom.restrictNormal_comp
-  条件: [Normal F E]
+定理 代数态射.restrictNormal_comp
+  条件: [正规 F E]
   证明: AlgHom.ext fun _ =>
     (algebraMap E K₃).injective (by simp only [AlgHom.comp_apply, AlgHom.restrictNormal_commutes])
 
@@ -519,8 +519,8 @@ definition AlgEquiv.restrictNormal
 @[simp]
 
 中文:
-定义 AlgEquiv.restrictNormal
-  签名: [Normal F E]
+定义 代数等价.restrictNormal
+  签名: [正规 F E]
   定义体: AlgHom.restrictNormal' χ.toAlgHom E
 
 @[simp]
@@ -540,8 +540,8 @@ theorem AlgEquiv.restrictNormal_commutes
   proof: χ.toAlgHom.restrictNormal_commutes E x
 
 中文:
-定理 AlgEquiv.restrictNormal_commutes
-  条件: [Normal F E] (x : E)
+定理 代数等价.restrictNormal_commutes
+  条件: [正规 F E] (x : E)
   证明: χ.toAlgHom.restrictNormal_commutes E x
 
 Depends on / 依赖: restrictNormal_commutes, toAlgHom, toAlgHom.restrictNormal_commutes
@@ -559,8 +559,8 @@ theorem AlgEquiv.restrictNormal_apply
   proof: AlgEquiv.restrictNormal_commutes σ L x
 
 中文:
-定理 AlgEquiv.restrictNormal_apply
-  结论: (L : 整数ermediateField F K₁) [Normal F L] (σ : Gal(K₁/F))
+定理 代数等价.restrictNormal_apply
+  结论: (L : 中间域 F K₁) [正规 F L] (σ : Gal(K₁/F))
   证明: AlgEquiv.restrictNormal_commutes σ L x
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_commutes, restrictNormal_commutes
@@ -579,8 +579,8 @@ theorem AlgEquiv.restrictNormal_eq_one_iff
   simp [AlgEquiv.ext_iff, Subtype.ext_iff, AlgEquiv.restrictNormal_apply]
 
 中文:
-定理 AlgEquiv.restrictNormal_eq_one_iff
-  结论: (L : 整数ermediateField F K₁) [Normal F L]
+定理 代数等价.restrictNormal_eq_one_iff
+  结论: (L : 中间域 F K₁) [正规 F L]
   证明: by
   simp [AlgEquiv.ext_iff, Subtype.ext_iff, AlgEquiv.restrictNormal_apply]
 
@@ -601,8 +601,8 @@ theorem AlgEquiv.restrictNormal_trans
       (by simp only [AlgEquiv.trans_apply, AlgEquiv.restrictNormal_commutes])
 
 中文:
-定理 AlgEquiv.restrictNormal_trans
-  条件: [Normal F E]
+定理 代数等价.restrictNormal_trans
+  条件: [正规 F E]
   证明: AlgEquiv.ext fun _ =>
     (algebraMap E K₃).injective
       (by simp only [AlgEquiv.trans_apply, AlgEquiv.restrictNormal_commutes])
@@ -624,8 +624,8 @@ definition AlgEquiv.restrictNormalHom
   body: MonoidHom.mk' (fun χ => χ.restrictNormal E) fun ω χ => χ.restrictNormal_trans ω E
 
 中文:
-定义 AlgEquiv.restrictNormalHom
-  签名: [Normal F E]
+定义 代数等价.restrictNormalHom
+  签名: [正规 F E]
   定义体: MonoidHom.mk' (fun χ => χ.restrictNormal E) fun ω χ => χ.restrictNormal_trans ω E
 
 Depends on / 依赖: MonoidHom, MonoidHom.mk, restrictNormal, restrictNormal_trans
@@ -642,8 +642,8 @@ lemma AlgEquiv.restrictNormalHom_apply
   proof: AlgEquiv.restrictNormal_commutes σ L x
 
 中文:
-引理 AlgEquiv.restrictNormalHom_apply
-  结论: (L : 整数ermediateField F K₁) [Normal F L]
+引理 代数等价.restrictNormalHom_apply
+  结论: (L : 中间域 F K₁) [正规 F L]
   证明: AlgEquiv.restrictNormal_commutes σ L x
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_commutes, restrictNormal_commutes
@@ -675,8 +675,8 @@ definition Normal.algHomEquivAut
     rw [
 
 中文:
-定义 Normal.algHomEquivAut
-  签名: [Normal F E]
+定义 正规.algHomEquivAut
+  签名: [正规 F E]
   定义体: AlgHom.restrictNormal' σ E
   invFun σ := (IsScalarTower.toAlgHom F E K₁).comp σ.toAlgHom
   left_inv σ := by
@@ -725,7 +725,7 @@ theorem AlgEquiv.restrictNormalHom_id
   simp only [Algebra.algebraMap_self, RingHom.id_apply]
 
 中文:
-定理 AlgEquiv.restrictNormalHom_id
+定理 代数等价.restrictNormalHom_id
   结论: (F K : 类型)
   证明: by
   ext f x
@@ -761,7 +761,7 @@ theorem AlgEquiv.restrictNormalHom_comp
     ← algebraMap_apply, AlgEquiv.restrictNormal_commutes, MonoidHom.coe_comp]
 
 中文:
-定理 AlgEquiv.restrictNormalHom_comp
+定理 代数等价.restrictNormalHom_comp
   结论: (F K₁ K₂ K₃ : 类型)
   证明: by
   ext f x
@@ -796,7 +796,7 @@ theorem AlgEquiv.restrictNormalHom_comp_apply
   rw [IsScalarTower.AlgEquiv.restrictNormalHom_comp F K₁ K₂ K₃]; rw [MonoidHom.comp_apply]
 
 中文:
-定理 AlgEquiv.restrictNormalHom_comp_apply
+定理 代数等价.restrictNormalHom_comp_apply
   结论: (K₁ K₂ : 类型) {F K₃ : 类型}
   证明: by
   rw [IsScalarTower.AlgEquiv.restrictNormalHom_comp F K₁ K₂ K₃]; rw [MonoidHom.comp_apply]

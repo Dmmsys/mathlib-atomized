@@ -153,7 +153,7 @@ lemma isSheaf_functorEnrichedHom
 
 中文:
 引理 isSheaf_functorEnrichedHom
-  结论: (F G : Cᵒᵖ ⥤ A) (hG : Presheaf.IsSheaf J G)
+  结论: (F G : Cᵒᵖ ⥤ A) (hG : 预层.是层 J G)
   证明: fun M => by
   rw [Presieve.isSheaf_iff_of_nat_equiv
     (functorEnrichedHomCoyonedaObjEquiv M F G)
@@ -191,7 +191,7 @@ lemma transport_isMonoidal
 
 中文:
 引理 transport_isMonoidal
-  结论: {D : 类型u₂} [Category.{v₂} D] (K : GrothendieckTopology D)
+  结论: {D : 类型u₂} [范畴.{v₂} D] (K : Grothendieck拓扑 D)
   证明: by
   rw [← J.W_inverseImage_whiskeringLeft K G]
   infer_instance
@@ -260,7 +260,7 @@ lemma whiskerRight
 
 中文:
 引理 whiskerRight
-  结论: [BraidedCategory A]
+  结论: [辫范畴 A]
   证明: (J.W.arrow_mk_iso_iff (Arrow.isoMk (β_ F₁ G) (β_ F₂ G))).2 (hf.whiskerLeft G)
 
 Depends on / 依赖: Arrow.isoMk, J.W.arrow_mk_iso_iff, arrow_mk_iso_iff, hf.whiskerLeft, whiskerLeft
@@ -281,7 +281,7 @@ instance monoidal
 
 中文:
 实例 monoidal
-  签名: [BraidedCategory A]
+  签名: [辫范畴 A]
   定义体: hg.whiskerLeft F
   whiskerRight _ hf G := hf.whiskerRight G
 
@@ -314,7 +314,7 @@ definition monoidalCategory
 
 中文:
 定义 monoidalCategory
-  签名: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
+  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
   定义体: inferInstanceAs (MonoidalCategory
     (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
 
@@ -341,7 +341,7 @@ definition braidedCategory
 
 中文:
 定义 braidedCategory
-  签名: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
+  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
   定义体: inferInstanceAs (BraidedCategory
     (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
 
@@ -366,7 +366,7 @@ definition symmetricCategory
 
 中文:
 定义 symmetricCategory
-  签名: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
+  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
   定义体: inferInstanceAs (SymmetricCategory
     (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
 
@@ -389,7 +389,7 @@ instance [(J.W
 
 中文:
 实例 [(J.W
-  签名: (A := A)).IsMonoidal] [HasWeakSheafify J A] :
+  签名: (A := A)).是幺半群] [HasWeakSheafify J A] :
   定义体: inferInstanceAs (Localization.Monoidal.toMonoidalCategory
     (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Monoidal
 
@@ -417,7 +417,7 @@ noncomputable example
 
 中文:
 实例 [(J.W
-  签名: (A := A)).IsMonoidal] [HasWeakSheafify J A] [BraidedCategory A] :
+  签名: (A := A)).是幺半群] [HasWeakSheafify J A] [辫范畴 A] :
   定义体: braidedCategory J A
     (presheafToSheaf J A).Braided :=
   inferInstanceAs (Localization.Monoidal.toMonoidalCategory

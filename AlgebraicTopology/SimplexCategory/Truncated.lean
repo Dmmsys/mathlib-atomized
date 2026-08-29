@@ -91,7 +91,7 @@ theorem initial_incl
 中文:
 定理 initial_incl
   条件: {n m : 自然数} [NeZero n] (hm : n <= m)
-  结论: (incl n m).Initial
+  结论: (incl n m).初始
   证明: by
   have : (incl n m hm ⋙ inclusion m).Initial :=
     Functor.initial_of_natIso (inclCompInclusion (by lia)).symm
@@ -114,7 +114,7 @@ abbreviation δ
 
 中文:
 缩写 δ
-  签名: (m : 自然数) {n} (i : Fin (n + 2)) (hn := by decide) (hn' := by decide)
+  签名: (m : 自然数) {n} (i : 有限集 (n + 2)) (hn := by decide) (hn' := by decide)
   定义体: Hom.tr (SimplexCategory.δ i)
 
 Depends on / 依赖: Hom.tr, SimplexCategory, SimplexCategory.Truncated, Truncated
@@ -132,7 +132,7 @@ abbreviation σ
 
 中文:
 缩写 σ
-  签名: (m : 自然数) {n} (i : Fin (n + 1)) (hn := by decide) (hn' := by decide)
+  签名: (m : 自然数) {n} (i : 有限集 (n + 1)) (hn := by decide) (hn' := by decide)
   定义体: Hom.tr (SimplexCategory.σ i)
 
 Depends on / 依赖: Hom.tr, SimplexCategory, SimplexCategory.Truncated, Truncated
@@ -152,7 +152,7 @@ abbreviation δ₂
 
 中文:
 缩写 δ₂
-  签名: {n} (i : Fin (n + 2)) (hn := by decide) (hn' := by decide)
+  签名: {n} (i : 有限集 (n + 2)) (hn := by decide) (hn' := by decide)
   定义体: δ 2 i hn hn'
 -/
 abbrev δ₂ {n} (i : Fin (n + 2)) (hn := by decide) (hn' := by decide) := δ 2 i hn hn'
@@ -169,7 +169,7 @@ abbreviation σ₂
 
 中文:
 缩写 σ₂
-  签名: {n} (i : Fin (n + 1)) (hn := by decide) (hn' := by decide)
+  签名: {n} (i : 有限集 (n + 1)) (hn := by decide) (hn' := by decide)
   定义体: σ 2 i hn hn'
 
 @[reassoc (attr := simp)]
@@ -213,7 +213,7 @@ lemma δ₂_zero_comp_σ₂_one
 
 中文:
 引理 δ₂_zero_comp_σ₂_one
-  结论: δ₂ (0 : Fin 3) ≫ σ₂ 1 = σ₂ 0 ≫ δ₂ 0
+  结论: δ₂ (0 : 有限集 3) ≫ σ₂ 1 = σ₂ 0 ≫ δ₂ 0
   证明: ObjectProperty.hom_ext _ (SimplexCategory.δ_comp_σ_of_le (i := 0) (j := 0) (Fin.zero_le _))
 
 @[reassoc (attr := simp)]
@@ -284,7 +284,7 @@ lemma δ₂_two_comp_σ₂_one
 
 中文:
 引理 δ₂_two_comp_σ₂_one
-  结论: δ₂ (2 : Fin 3) ≫ σ₂ 1 = 𝟙 _
+  结论: δ₂ (2 : 有限集 3) ≫ σ₂ 1 = 𝟙 _
   证明: ObjectProperty.hom_ext _ (SimplexCategory.δ_comp_σ_succ' (by decide))
 
 @[reassoc]
@@ -305,7 +305,7 @@ lemma δ₂_two_comp_σ₂_zero
 
 中文:
 引理 δ₂_two_comp_σ₂_zero
-  结论: δ₂ (2 : Fin 3) ≫ σ₂ 0 = σ₂ 0 ≫ δ₂ 1
+  结论: δ₂ (2 : 有限集 3) ≫ σ₂ 0 = σ₂ 0 ≫ δ₂ 1
   证明: ObjectProperty.hom_ext _ (SimplexCategory.δ_comp_σ_of_gt' (by decide))
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.hom_ext, SimplexCategory, hom_ext
@@ -323,7 +323,7 @@ lemma δ₂_one_eq_const
 
 中文:
 引理 δ₂_one_eq_const
-  结论: δ₂ (1 : Fin 2) = Hom.tr (const _ _ 0)
+  结论: δ₂ (1 : 有限集 2) = 态射.tr (const _ _ 0)
   证明: by decide
 -/
 lemma δ₂_one_eq_const : δ₂ (1 : Fin 2) = Hom.tr (const _ _ 0) := by decide
@@ -340,7 +340,7 @@ lemma δ₂_zero_eq_const
 
 中文:
 引理 δ₂_zero_eq_const
-  结论: δ₂ (0 : Fin 2) = Hom.tr (const _ _ 1)
+  结论: δ₂ (0 : 有限集 2) = 态射.tr (const _ _ 1)
   证明: by decide
 
 @[reassoc]
@@ -358,7 +358,7 @@ lemma δ₂_zero_comp_δ₂_two
 
 中文:
 引理 δ₂_zero_comp_δ₂_two
-  结论: δ₂ (0 : Fin 2) ≫ δ₂ 2 = δ₂ 1 ≫ δ₂ 0
+  结论: δ₂ (0 : 有限集 2) ≫ δ₂ 2 = δ₂ 1 ≫ δ₂ 0
   证明: by decide
 -/
 lemma δ₂_zero_comp_δ₂_two : δ₂ (0 : Fin 2) ≫ δ₂ 2 = δ₂ 1 ≫ δ₂ 0 := by decide

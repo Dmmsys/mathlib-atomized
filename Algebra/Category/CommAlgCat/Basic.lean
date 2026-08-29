@@ -39,13 +39,13 @@ structure CommAlgCat
     - [algebra : Algebra R carrier]
 
 中文:
-结构 CommAlgCat
+结构 交换Alg范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [commRing : CommRing carrier]
-    - [algebra : Algebra R carrier]
+    - [commRing : 交换环 carrier]
+    - [algebra : 代数 R carrier]
 -/
 structure CommAlgCat where
   private mk ::
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CommAlgCat R) (类型v)
+  签名: CoeSort (交换Alg范畴 R) (类型v)
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -94,7 +94,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [CommRing X] [Algebra R X]
+  签名: (X : 类型v) [交换环 X] [代数 R X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type v) [CommRing X] [Algebra R X] : CommAlgCat.{v} R := ⟨X⟩
@@ -111,7 +111,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [CommRing X] [Algebra R X]
+  条件: (X : 类型v) [交换环 X] [代数 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -130,8 +130,8 @@ structure Hom
     - hom' : A ->ₐ[R] B
 
 中文:
-结构 Hom
-  参数: (A B : CommAlgCat.{v} R)
+结构 态射
+  参数: (A B : 交换Alg范畴.{v} R)
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₐ[R] B
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommAlgCat.{v} R)
+  签名: 范畴 (交换Alg范畴.{v} R)
   定义体: Hom A B
   id A := ⟨AlgHom.id R A⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (CommAlgCat.{v} R) (· ->ₐ[R] ·)
+  签名: 余ncrete范畴 (交换Alg范畴.{v} R) (· ->ₐ[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -197,8 +197,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommAlgCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: (f : Hom A B)
+缩写 态射.hom
+  签名: (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := CommAlgCat R) f
 -/
 abbrev Hom.hom (f : Hom A B) := ConcreteCategory.hom (C := CommAlgCat R) f
@@ -231,8 +231,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : CommAlgCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : 交换Alg范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -252,7 +252,7 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  结论: (𝟙 A : A ⟶ A).hom = AlgHom.id R A
+  结论: (𝟙 A : A ⟶ A).hom = 代数态射.id R A
   证明: rfl
 -/
 @[simp] lemma hom_id : (𝟙 A : A ⟶ A).hom = AlgHom.id R A := rfl
@@ -268,7 +268,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (A : CommAlgCat.{v} R) (a : A)
+  条件: (A : 交换Alg范畴.{v} R) (a : A)
   结论: (𝟙 A : A ⟶ A) a = a
   证明: by simp
 -/
@@ -455,7 +455,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommAlgCat R)
+  签名: 可居 (交换Alg范畴 R)
   定义体: ⟨of R R⟩
 -/
 instance : Inhabited (CommAlgCat R) := ⟨of R R⟩
@@ -473,8 +473,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: (A : CommAlgCat.{v} R)
-  结论: (forget (CommAlgCat.{v} R)).obj A = A
+  条件: (A : 交换Alg范畴.{v} R)
+  结论: (forget (交换Alg范畴.{v} R)).obj A = A
   证明: rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-06")]
@@ -494,7 +494,7 @@ lemma forget_map
 中文:
 引理 forget_map
   条件: (f : A ⟶ B)
-  结论: (forget (CommAlgCat.{v} R)).map f = (f : _ -> _)
+  结论: (forget (交换Alg范畴.{v} R)).map f = (f : _ -> _)
   证明: rfl
 -/
 lemma forget_map (f : A ⟶ B) : (forget (CommAlgCat.{v} R)).map f = (f : _ -> _) := rfl
@@ -509,7 +509,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing ((forget (CommAlgCat R)).obj A)
+  签名: 交换环 ((forget (交换Alg范畴 R)).obj A)
   定义体: inferInstanceAs CommRing A
 
 Depends on / 依赖: CommRing
@@ -526,7 +526,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R ((forget (CommAlgCat R)).obj A)
+  签名: 代数 R ((forget (交换Alg范畴 R)).obj A)
   定义体: inferInstanceAs Algebra R A
 
 Depends on / 依赖: Algebra
@@ -544,7 +544,7 @@ instance hasForgetToCommRingCat
 
 中文:
 实例 hasForgetToCommRingCat
-  签名: : HasForget₂ (CommAlgCat.{v} R) CommRingCat.{v} where
+  签名: : 有Forget₂ (交换Alg范畴.{v} R) 交换环范畴.{v} where
   定义体: .of A
   forget₂.map f := CommRingCat.ofHom f.hom.toRingHom
 -/
@@ -563,7 +563,7 @@ instance hasForgetToAlgCat
 
 中文:
 实例 hasForgetToAlgCat
-  签名: : HasForget₂ (CommAlgCat.{v} R) (AlgCat.{v} R) where
+  签名: : 有Forget₂ (交换Alg范畴.{v} R) (Alg范畴.{v} R) where
   定义体: .of R A
   forget₂.map f := AlgCat.ofHom f.hom
 -/
@@ -581,7 +581,7 @@ lemma forget₂_commRingCat_obj
 
 中文:
 引理 forget₂_commRingCat_obj
-  条件: (A : CommAlgCat.{v} R)
+  条件: (A : 交换Alg范畴.{v} R)
   证明: rfl
 -/
 @[simp] lemma forget₂_commRingCat_obj (A : CommAlgCat.{v} R) :
@@ -613,7 +613,7 @@ lemma forget₂_algCat_obj
 
 中文:
 引理 forget₂_algCat_obj
-  条件: (A : CommAlgCat.{v} R)
+  条件: (A : 交换Alg范畴.{v} R)
   证明: rfl
 -/
 @[simp] lemma forget₂_algCat_obj (A : CommAlgCat.{v} R) :
@@ -649,7 +649,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : 类型v} {_ : CommRing X} {_ : CommRing Y} {_ : Algebra R X} {_ : Algebra R Y}
+  签名: {X Y : 类型v} {_ : 交换环 X} {_ : 交换环 Y} {_ : 代数 R X} {_ : 代数 R Y}
   定义体: ofHom (e : X ->ₐ[R] Y)
   inv := ofHom (e.symm : Y ->ₐ[R] X)
 -/
@@ -726,7 +726,7 @@ instance reflectsIsomorphisms_forget
 
 中文:
 实例 reflectsIsomorphisms_forget
-  签名: : (forget (CommAlgCat.{u} R)).ReflectsIsomorphisms where
+  签名: : (forget (交换Alg范畴.{u} R)).反映同构 where
   定义体: by
     let i := asIso ((forget (CommAlgCat.{u} R)).map f)
     let e : X ≃ₐ[R] Y := { f.hom, i.toEquiv with }
@@ -754,7 +754,7 @@ ULift.algEquiv.symm.toAlgHom.comp f.hom.comp ULift.algEquiv.toAlgHom
 
 中文:
 定义 uliftFunctor
-  签名: : CommAlgCat.{v} R ⥤ CommAlgCat.{max v w} R where
+  签名: : 交换Alg范畴.{v} R ⥤ 交换Alg范畴.{最大值 v w} R where
   定义体: .of R ULift A
 map {A B} f := CommAlgCat.ofHom
 ULift.algEquiv.symm.toAlgHom.comp f.hom.comp ULift.algEquiv.toAlgHom
@@ -774,7 +774,7 @@ definition fullyFaithfulUliftFunctor
 
 中文:
 定义 fullyFaithfulUliftFunctor
-  签名: : (uliftFunctor R).FullyFaithful where
+  签名: : (uliftFunctor R).满忠实 where
   定义体: CommAlgCat.ofHom ULift.algEquiv.toAlgHom.comp f.hom.comp ULift.algEquiv.symm.toAlgHom
 
 Depends on / 依赖: CommAlgCat, CommAlgCat.ofHom, ULift.algEquiv.symm.toAlgHom, ULift.algEquiv.toAlgHom.comp, algEquiv, f.hom.comp, toAlgHom
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftFunctor R).Full
+  签名: (uliftFunctor R).满
   定义体: (fullyFaithfulUliftFunctor R).full
 
 Depends on / 依赖: fullyFaithfulUliftFunctor
@@ -811,7 +811,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftFunctor R).Faithful
+  签名: (uliftFunctor R).忠实
   定义体: (fullyFaithfulUliftFunctor R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulUliftFunctor
@@ -840,7 +840,7 @@ inverse.map {A B} f := CommAlgCat.ofHom CommRingCat.toAlgHom f
 
 中文:
 定义 commAlgCatEquivUnder
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: R.mkUnder A
   functor.map {A B} f := f.hom.toUnder
   inverse.obj A := .of _ A
@@ -871,7 +871,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits (CommAlgCat.{u} R)
+  签名: 有余极限 (交换Alg范畴.{u} R)
   定义体: Adjunction.has_colimits_of_equivalence (commAlgCatEquivUnder (.of R)).functor
 
 Depends on / 依赖: Adjunction, Adjunction.has_colimits_of_equivalence, commAlgCatEquivUnder, functor, has_colimits_of_equivalence
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits (CommAlgCat.{u} R)
+  签名: 有极限 (交换Alg范畴.{u} R)
   定义体: Adjunction.has_limits_of_equivalence (commAlgCatEquivUnder (.of R)).functor
 
 Depends on / 依赖: Adjunction, Adjunction.has_limits_of_equivalence, commAlgCatEquivUnder, functor, has_limits_of_equivalence

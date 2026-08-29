@@ -34,8 +34,8 @@ Pi.topologicalSpace
     Eq.symm toTopologicalSpace_iInf
 
 中文:
-实例 Pi.uniformSpace
-  签名: : UniformSpace (对任意 i, α i)
+实例 依赖函数类型.uniformSpace
+  签名: : 一致空间 (对任意 i, α i)
   定义体: UniformSpace.ofCoreEq (⨅ i, UniformSpace.comap (eval i) (U i)).toCore
 Pi.topologicalSpace
     Eq.symm toTopologicalSpace_iInf
@@ -56,7 +56,7 @@ lemma Pi.uniformSpace_eq
   ext : 1; rfl
 
 中文:
-引理 Pi.uniformSpace_eq
+引理 依赖函数类型.uniformSpace_eq
   证明: by
   ext : 1; rfl
 -/
@@ -72,7 +72,7 @@ theorem Pi.uniformity
   proof: iInf_uniformity
 
 中文:
-定理 Pi.uniformity
+定理 依赖函数类型.uniformity
   证明: iInf_uniformity
 
 Depends on / 依赖: iInf_uniformity
@@ -94,8 +94,8 @@ instance [Countable
   infer_instance
 
 中文:
-实例 [Countable
-  签名: ι] [对任意 i, IsCountablyGenerated (𝓤 (α i))] :
+实例 [可数
+  签名: ι] [对任意 i, 是余untablyGenerated (𝓤 (α i))] :
   定义体: by
   rw [Pi.uniformity]
   infer_instance
@@ -118,7 +118,7 @@ theorem uniformContinuous_pi
 
 中文:
 定理 uniformContinuous_pi
-  条件: {β : 类型} [UniformSpace β] {f : β -> 对任意 i, α i}
+  条件: {β : 类型} [一致空间 β] {f : β -> 对任意 i, α i}
   证明: by
   simp only [UniformContinuous, Pi.uniformity, tendsto_iInf, tendsto_comap_iff, Function.comp_def]
 
@@ -140,9 +140,9 @@ theorem Pi.uniformContinuous_proj
   proof: uniformContinuous_pi.1 uniformContinuous_id i
 
 中文:
-定理 Pi.uniformContinuous_proj
+定理 依赖函数类型.uniformContinuous_proj
   条件: (i : ι)
-  结论: UniformContinuous fun a : 对任意 i : ι, α i => a i
+  结论: 一致连续 fun a : 对任意 i : ι, α i => a i
   证明: uniformContinuous_pi.1 uniformContinuous_id i
 
 Depends on / 依赖: uniformContinuous_id, uniformContinuous_pi
@@ -159,7 +159,7 @@ theorem Pi.uniformContinuous_precomp'
   proof: uniformContinuous_pi.mpr fun j => uniformContinuous_proj α (φ j)
 
 中文:
-定理 Pi.uniformContinuous_precomp'
+定理 依赖函数类型.uniformContinuous_precomp'
   条件: (φ : ι' -> ι)
   证明: uniformContinuous_pi.mpr fun j => uniformContinuous_proj α (φ j)
 
@@ -178,7 +178,7 @@ theorem Pi.uniformContinuous_precomp
   proof: Pi.uniformContinuous_precomp' _ φ
 
 中文:
-定理 Pi.uniformContinuous_precomp
+定理 依赖函数类型.uniformContinuous_precomp
   条件: (φ : ι' -> ι)
   证明: Pi.uniformContinuous_precomp' _ φ
 
@@ -197,8 +197,8 @@ theorem Pi.uniformContinuous_postcomp'
   proof: uniformContinuous_pi.mpr fun i => (hg i).comp uniformContinuous_proj α i
 
 中文:
-定理 Pi.uniformContinuous_postcomp'
-  结论: {β : ι -> 类型} [对任意 i, UniformSpace (β i)]
+定理 依赖函数类型.uniformContinuous_postcomp'
+  结论: {β : ι -> 类型} [对任意 i, 一致空间 (β i)]
   证明: uniformContinuous_pi.mpr fun i => (hg i).comp uniformContinuous_proj α i
 
 Depends on / 依赖: uniformContinuous_pi, uniformContinuous_pi.mpr, uniformContinuous_proj
@@ -217,8 +217,8 @@ theorem Pi.uniformContinuous_postcomp
   proof: Pi.uniformContinuous_postcomp' _ fun _ => hg
 
 中文:
-定理 Pi.uniformContinuous_postcomp
-  结论: {α : 类型} [UniformSpace α] {g : α -> β}
+定理 依赖函数类型.uniformContinuous_postcomp
+  结论: {α : 类型} [一致空间 α] {g : α -> β}
   证明: Pi.uniformContinuous_postcomp' _ fun _ => hg
 
 Depends on / 依赖: Pi.uniformContinuous_postcomp, uniformContinuous_postcomp
@@ -237,7 +237,7 @@ lemma Pi.uniformSpace_comap_precomp'
   simp [Pi.uniformSpace_eq, UniformSpace.comap_iInf, ← UniformSpace.comap_comap, comp_def]
 
 中文:
-引理 Pi.uniformSpace_comap_precomp'
+引理 依赖函数类型.uniformSpace_comap_precomp'
   条件: (φ : ι' -> ι)
   证明: by
   simp [Pi.uniformSpace_eq, UniformSpace.comap_iInf, ← UniformSpace.comap_comap, comp_def]
@@ -258,7 +258,7 @@ lemma Pi.uniformSpace_comap_precomp
   proof: uniformSpace_comap_precomp' (fun _ => β) φ
 
 中文:
-引理 Pi.uniformSpace_comap_precomp
+引理 依赖函数类型.uniformSpace_comap_precomp
   条件: (φ : ι' -> ι)
   证明: uniformSpace_comap_precomp' (fun _ => β) φ
 
@@ -278,8 +278,8 @@ lemma Pi.uniformContinuous_restrict
   proof: Pi.uniformContinuous_precomp' _ ((↑) : S -> ι)
 
 中文:
-引理 Pi.uniformContinuous_restrict
-  条件: (S : Set ι)
+引理 依赖函数类型.uniformContinuous_restrict
+  条件: (S : 集合 ι)
   证明: Pi.uniformContinuous_precomp' _ ((↑) : S -> ι)
 
 Depends on / 依赖: Pi.uniformContinuous_precomp, uniformContinuous_precomp
@@ -299,8 +299,8 @@ lemma Pi.uniformSpace_comap_restrict
     [← iInf_subtype'', ← uniformSpace_comap_precomp' _ ((↑) : S -> ι), Set.domRestrict]
 
 中文:
-引理 Pi.uniformSpace_comap_restrict
-  条件: (S : Set ι)
+引理 依赖函数类型.uniformSpace_comap_restrict
+  条件: (S : 集合 ι)
   证明: by
   simp +unfoldPartialApp
     [← iInf_subtype'', ← uniformSpace_comap_precomp' _ ((↑) : S -> ι), Set.domRestrict]
@@ -324,7 +324,7 @@ lemma cauchy_pi_iff
 
 中文:
 引理 cauchy_pi_iff
-  条件: [Nonempty ι] {l : Filter (对任意 i, α i)}
+  条件: [非空 ι] {l : 滤子 (对任意 i, α i)}
   证明: by
   simp_rw +instances [Pi.uniformSpace_eq, cauchy_iInf_uniformSpace, cauchy_comap_uniformSpace]
 
@@ -345,7 +345,7 @@ lemma cauchy_pi_iff'
 
 中文:
 引理 cauchy_pi_iff'
-  条件: {l : Filter (对任意 i, α i)} [l.NeBot]
+  条件: {l : 滤子 (对任意 i, α i)} [l.NeBot]
   证明: by
   simp_rw +instances [Pi.uniformSpace_eq, cauchy_iInf_uniformSpace', cauchy_comap_uniformSpace]
 
@@ -367,7 +367,7 @@ lemma Cauchy.pi
 
 中文:
 引理 Cauchy.pi
-  条件: [Nonempty ι] {l : 对任意 i, Filter (α i)} (hl : 对任意 i, Cauchy (l i))
+  条件: [非空 ι] {l : 对任意 i, 滤子 (α i)} (hl : 对任意 i, Cauchy (l i))
   证明: by
   have := fun i => (hl i).1
   simpa [cauchy_pi_iff]
@@ -393,8 +393,8 @@ instance Pi.complete
     rwa [nhds_pi, le_pi]
 
 中文:
-实例 Pi.complete
-  签名: [对任意 i, CompleteSpace (α i)]
+实例 依赖函数类型.complete
+  签名: [对任意 i, 完备空间 (α i)]
   定义体: by
     have := hf.1
     simp_rw [cauchy_pi_iff', cauchy_iff_exists_le_nhds] at hf
@@ -422,8 +422,8 @@ lemma Pi.uniformSpace_comap_restrict_sUnion
   simp_rw [Pi.uniformSpace_comap_restrict α, iInf_sUnion]
 
 中文:
-引理 Pi.uniformSpace_comap_restrict_sUnion
-  条件: (𝔖 : Set (Set ι))
+引理 依赖函数类型.uniformSpace_comap_restrict_sUnion
+  条件: (𝔖 : 集合 (集合 ι))
   证明: by
   simp_rw [Pi.uniformSpace_comap_restrict α, iInf_sUnion]
 
@@ -449,8 +449,8 @@ theorem CompleteSpace.iInf
     simp_rw [isUniformInducing_iff, iInf_u
 
 中文:
-定理 CompleteSpace.iInf
-  结论: {ι X : 类型} {u : ι -> UniformSpace X}
+定理 完备空间.iInf
+  结论: {ι X : 类型} {u : ι -> 一致空间 X}
   证明: by
   -- We can assume `X` is nonempty.
   nontriviality X

@@ -49,11 +49,11 @@ inductive IsSumSq
     - sq_add: (a : R) {s : R} (hs : IsSumSq s) : IsSumSq (a * a + s)
 
 中文:
-归纳类型 IsSumSq
-  参数: [Mul R] [Add R] [Zero R]
+归纳类型 是SumSq
+  参数: [乘法 R] [加法 R] [零 R]
   构造子 (2 个):
-    - zero: IsSumSq 0
-    - sq_add: (a : R) {s : R} (hs : IsSumSq s) : IsSumSq (a * a + s)
+    - zero: 是SumSq 0
+    - sq_add: (a : R) {s : R} (hs : 是SumSq s) : 是SumSq (a * a + s)
 -/
 inductive IsSumSq [Mul R] [Add R] [Zero R] : R -> Prop
   | zero : IsSumSq 0
@@ -71,8 +71,8 @@ theorem IsSumSq.rec'
   | .sq_add _ hs => sq_add (.mul_self _) hs (rec' zero sq_add _)
 
 中文:
-定理 IsSumSq.rec'
-  结论: [Mul R] [Add R] [Zero R]
+定理 是SumSq.rec'
+  结论: [乘法 R] [加法 R] [零 R]
   证明: match h with
   | .zero => zero
   | .sq_add _ hs => sq_add (.mul_self _) hs (rec' zero sq_add _)
@@ -104,8 +104,8 @@ theorem IsSumSq.add
   induction h₁ <;> simp_all [add_assoc, sq_add]
 
 中文:
-定理 IsSumSq.add
-  结论: [AddMonoid R] [Mul R] {s₁ s₂ : R}
+定理 是SumSq.add
+  结论: [加法幺半群 R] [乘法 R] {s₁ s₂ : R}
   证明: by
   induction h₁ <;> simp_all [add_assoc, sq_add]
 
@@ -137,7 +137,7 @@ definition sumSq
 
 中文:
 定义 sumSq
-  签名: : AddSubmonoid T where
+  签名: : 加法子幺半群 T where
   定义体: {s : T | IsSumSq s}
   zero_mem' := .zero
   add_mem' := .add
@@ -161,7 +161,7 @@ theorem mem_sumSq
 
 中文:
 定理 mem_sumSq
-  结论: s in sumSq T ↔ IsSumSq s
+  结论: s in sumSq T ↔ 是SumSq s
   证明: Iff.rfl
 -/
 @[simp] theorem mem_sumSq : s in sumSq T ↔ IsSumSq s := Iff.rfl
@@ -179,9 +179,9 @@ theorem IsSumSq.mul_self
   simpa using sq_add a zero
 
 中文:
-定理 IsSumSq.mul_self
-  条件: [AddZeroClass R] [Mul R] (a : R)
-  结论: IsSumSq (a * a)
+定理 是SumSq.mul_self
+  条件: [加法零类 R] [乘法 R] (a : R)
+  结论: 是SumSq (a * a)
   证明: by
   simpa using sq_add a zero
 -/
@@ -204,8 +204,8 @@ theorem IsSquare.isSumSq
 
 中文:
 定理 IsSquare.isSumSq
-  条件: [AddZeroClass R] [Mul R] {x : R} (hx : IsSquare x)
-  结论: IsSumSq x
+  条件: [加法零类 R] [乘法 R] {x : R} (hx : IsSquare x)
+  结论: 是SumSq x
   证明: by aesop
 -/
 theorem IsSquare.isSumSq [AddZeroClass R] [Mul R] {x : R} (hx : IsSquare x) : IsSumSq x := by aesop
@@ -223,9 +223,9 @@ theorem IsSumSq.one
   proof: by aesop
 
 中文:
-定理 IsSumSq.one
-  条件: [AddZeroClass R] [MulOneClass R]
-  结论: IsSumSq (1 : R)
+定理 是SumSq.one
+  条件: [加法零类 R] [MulOne类 R]
+  结论: 是SumSq (1 : R)
   证明: by aesop
 -/
 theorem IsSumSq.one [AddZeroClass R] [MulOneClass R] : IsSumSq (1 : R) := by aesop
@@ -246,8 +246,8 @@ theorem AddSubmonoid.closure_isSquare
   induction hx <;> aesop
 
 中文:
-定理 AddSubmonoid.closure_isSquare
-  条件: [AddMonoid R] [Mul R]
+定理 加法子幺半群.closure_isSquare
+  条件: [加法幺半群 R] [乘法 R]
   证明: by
   refine closure_eq_of_le (fun x hx => IsSquare.isSumSq hx) (fun x hx => ?_)
   induction hx <;> aesop
@@ -274,8 +274,8 @@ theorem IsSumSq.sum
   simpa using sum_mem (S := AddSubmonoid.sumSq _) hs
 
 中文:
-定理 IsSumSq.sum
-  结论: [AddCommMonoid R] [Mul R] {ι : 类型} {I : Finset ι} {s : ι -> R}
+定理 是SumSq.求和
+  结论: [加法交换幺半群 R] [乘法 R] {ι : 类型} {I : 有限集 ι} {s : ι -> R}
   证明: by
   simpa using sum_mem (S := AddSubmonoid.sumSq _) hs
 
@@ -294,8 +294,8 @@ theorem IsSumSq.sum_isSquare
   proof: by aesop
 
 中文:
-定理 IsSumSq.sum_isSquare
-  结论: [AddCommMonoid R] [Mul R] {ι : 类型} (I : Finset ι) {x : ι -> R}
+定理 是SumSq.sum_isSquare
+  结论: [加法交换幺半群 R] [乘法 R] {ι : 类型} (I : 有限集 ι) {x : ι -> R}
   证明: by aesop
 -/
 theorem IsSumSq.sum_isSquare [AddCommMonoid R] [Mul R] {ι : Type*} (I : Finset ι) {x : ι -> R}
@@ -317,8 +317,8 @@ theorem IsSumSq.sum_mul_self
 @[simp↓]
 
 中文:
-定理 IsSumSq.sum_mul_self
-  条件: [AddCommMonoid R] [Mul R] {ι : 类型} (I : Finset ι) (a : ι -> R)
+定理 是SumSq.sum_mul_self
+  条件: [加法交换幺半群 R] [乘法 R] {ι : 类型} (I : 有限集 ι) (a : ι -> R)
   证明: by aesop
 
 @[simp↓]
@@ -336,8 +336,8 @@ theorem IsSumSq.sum_sq
   proof: by aesop
 
 中文:
-定理 IsSumSq.sum_sq
-  条件: [CommSemiring R] {ι : 类型} (I : Finset ι) (a : ι -> R)
+定理 是SumSq.sum_sq
+  条件: [交换半环 R] {ι : 类型} (I : 有限集 ι) (a : ι -> R)
   证明: by aesop
 -/
 theorem IsSumSq.sum_sq [CommSemiring R] {ι : Type*} (I : Finset ι) (a : ι -> R) :
@@ -357,7 +357,7 @@ definition sumSq
 
 中文:
 定义 sumSq
-  签名: : NonUnitalSubsemiring T
+  签名: : NonUnital子半环 T
   定义体: (Subsemigroup.square T).nonUnitalSubsemiringClosure
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.square, nonUnitalSubsemiringClosure, square
@@ -405,7 +405,7 @@ theorem mem_sumSq
 中文:
 定理 mem_sumSq
   条件: {s : T}
-  结论: s in sumSq T ↔ IsSumSq s
+  结论: s in sumSq T ↔ 是SumSq s
   证明: by
   simp [← NonUnitalSubsemiring.mem_toAddSubmonoid]
 
@@ -424,7 +424,7 @@ theorem coe_sumSq
 
 中文:
 定理 coe_sumSq
-  结论: sumSq T = {s : T | IsSumSq s}
+  结论: sumSq T = {s : T | 是SumSq s}
   证明: by ext; simp
 -/
 @[simp, norm_cast] theorem coe_sumSq : sumSq T = {s : T | IsSumSq s} := by ext; simp
@@ -465,9 +465,9 @@ theorem IsSumSq.natCast
 @[simp]
 
 中文:
-定理 IsSumSq.natCast
-  条件: {R : 类型} [NonAssocSemiring R] (n : 自然数)
-  结论: IsSumSq (n : R)
+定理 是SumSq.natCast
+  条件: {R : 类型} [非结合半环 R] (n : 自然数)
+  结论: 是SumSq (n : R)
   证明: by
   induction n <;> aesop
 
@@ -487,9 +487,9 @@ theorem Nat.isSumSq
   proof: IsSumSq.natCast n
 
 中文:
-定理 Nat.isSumSq
+定理 自然数.isSumSq
   条件: (n : 自然数)
-  结论: IsSumSq n
+  结论: 是SumSq n
   证明: IsSumSq.natCast n
 
 Depends on / 依赖: IsSumSq, IsSumSq.natCast, natCast
@@ -511,8 +511,8 @@ theorem IsSumSq.mul
   simpa using mul_mem (by simpa : _ in NonUnitalSubsemiring.sumSq R) (by simpa)
 
 中文:
-定理 IsSumSq.mul
-  结论: [NonUnitalCommSemiring R] {s₁ s₂ : R}
+定理 是SumSq.mul
+  结论: [非幺交换半环 R] {s₁ s₂ : R}
   证明: by
   simpa using mul_mem (by simpa : _ in NonUnitalSubsemiring.sumSq R) (by simpa)
 
@@ -532,8 +532,8 @@ theorem Submonoid.square_subsemiringClosure
   simp [Submonoid.subsemiringClosure_eq_closure]
 
 中文:
-定理 Submonoid.square_subsemiringClosure
-  条件: {T : 类型} [CommSemiring T]
+定理 子幺半群.square_subsemiringClosure
+  条件: {T : 类型} [交换半环 T]
   证明: by
   simp [Submonoid.subsemiringClosure_eq_closure]
 -/
@@ -556,7 +556,7 @@ definition sumSq
 
 中文:
 定义 sumSq
-  签名: : Subsemiring T where
+  签名: : 子半环 T where
   定义体: NonUnitalSubsemiring.sumSq T
   one_mem' := by simp
 
@@ -600,7 +600,7 @@ theorem mem_sumSq
 中文:
 定理 mem_sumSq
   条件: {s : T}
-  结论: s in sumSq T ↔ IsSumSq s
+  结论: s in sumSq T ↔ 是SumSq s
   证明: by
   simp [← Subsemiring.mem_toNonUnitalSubsemiring]
 
@@ -619,7 +619,7 @@ theorem coe_sumSq
 
 中文:
 定理 coe_sumSq
-  结论: sumSq T = {s : T | IsSumSq s}
+  结论: sumSq T = {s : T | 是SumSq s}
   证明: by ext; simp
 -/
 @[simp, norm_cast] theorem coe_sumSq : sumSq T = {s : T | IsSumSq s} := by ext; simp
@@ -659,8 +659,8 @@ theorem IsSumSq.prod
   simpa using prod_mem (S := Subsemiring.sumSq R) (by simpa)
 
 中文:
-定理 IsSumSq.prod
-  结论: [CommSemiring R] {ι : 类型} {I : Finset ι} {x : ι -> R}
+定理 是SumSq.乘积
+  结论: [交换半环 R] {ι : 类型} {I : 有限集 ι} {x : ι -> R}
   证明: by
   simpa using prod_mem (S := Subsemiring.sumSq R) (by simpa)
 
@@ -683,8 +683,8 @@ theorem IsSumSq.nonneg
   | sq_add hx _ h => exact add_nonneg (IsSquare.nonneg hx) h
 
 中文:
-定理 IsSumSq.nonneg
-  结论: {R : 类型} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是SumSq.nonneg
+  结论: {R : 类型} [半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   induction hs using IsSumSq.rec' with
   | zero => simp

@@ -63,7 +63,7 @@ abbreviation CondensedSet.toTopCat
 
 中文:
 缩写 CondensedSet.toTopCat
-  签名: : TopCat.{u + 1}
+  签名: : 顶元素范畴.{u + 1}
   定义体: TopCat.of (X.obj.obj ⟨of PUnit⟩)
 
 Depends on / 依赖: TopCat, TopCat.of, X.obj.obj
@@ -167,7 +167,7 @@ definition condensedSetToTopCat
 
 中文:
 定义 condensedSetToTopCat
-  签名: : CondensedSet.{u} ⥤ TopCat.{u + 1} where
+  签名: : CondensedSet.{u} ⥤ 顶元素范畴.{u + 1} where
   定义体: X.toTopCat
   map f := toTopCatMap f
 
@@ -194,7 +194,7 @@ definition topCatAdjunctionCounit
 
 中文:
 定义 topCatAdjunctionCounit
-  签名: (X : TopCat.{u + 1})
+  签名: (X : 顶元素范畴.{u + 1})
   定义体: TopCat.ofHom
   { toFun x := x.1 PUnit.unit
     continuous_toFun := by
@@ -221,7 +221,7 @@ lemma topCatAdjunctionCounit_hom_apply
 
 中文:
 引理 topCatAdjunctionCounit_hom_apply
-  条件: (X : TopCat) (x)
+  条件: (X : 顶元素范畴) (x)
   证明: rfl
 -/
 @[simp] lemma topCatAdjunctionCounit_hom_apply (X : TopCat) (x) :
@@ -243,7 +243,7 @@ definition topCatAdjunctionCounitEquiv
 
 中文:
 定义 topCatAdjunctionCounitEquiv
-  签名: (X : TopCat.{u + 1})
+  签名: (X : 顶元素范畴.{u + 1})
   定义体: topCatAdjunctionCounit X
   invFun x := ContinuousMap.const _ x
 
@@ -264,7 +264,7 @@ lemma topCatAdjunctionCounit_bijective
 
 中文:
 引理 topCatAdjunctionCounit_bijective
-  条件: (X : TopCat.{u + 1})
+  条件: (X : 顶元素范畴.{u + 1})
   证明: (topCatAdjunctionCounitEquiv X).bijective
 
 Depends on / 依赖: bijective, topCatAdjunctionCounitEquiv
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: topCatToCondensedSet.Faithful
+  签名: topCatToCondensedSet.忠实
   定义体: topCatAdjunction.faithful_R_of_epi_counit_app
 
 Depends on / 依赖: faithful_R_of_epi_counit_app, topCatAdjunction, topCatAdjunction.faithful_R_of_epi_counit_app
@@ -397,7 +397,7 @@ definition condensedSetToCompactlyGenerated
 
 中文:
 定义 condensedSetToCompactlyGenerated
-  签名: : CondensedSet.{u} ⥤ CompactlyGenerated.{u, u + 1} where
+  签名: : CondensedSet.{u} ⥤ 余mpactlyGenerated.{u, u + 1} where
   定义体: CompactlyGenerated.of (condensedSetToTopCat.obj X)
   map f := InducedCategory.homMk (toTopCatMap f)
 
@@ -489,7 +489,7 @@ definition compactlyGeneratedAdjunctionCounitIso
 
 中文:
 定义 compactlyGeneratedAdjunctionCounitIso
-  签名: (X : CompactlyGenerated.{u, u + 1})
+  签名: (X : 余mpactlyGenerated.{u, u + 1})
   定义体: isoOfHomeo (compactlyGeneratedAdjunctionCounitHomeo X.toTop)
 
 Depends on / 依赖: X.toTop, compactlyGeneratedAdjunctionCounitHomeo, isoOfHomeo
@@ -511,7 +511,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso compactlyGeneratedAdjunction.counit
+  签名: 是同构 compactlyGeneratedAdjunction.counit
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X

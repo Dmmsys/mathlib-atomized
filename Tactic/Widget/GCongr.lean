@@ -37,7 +37,7 @@ for pos in subexprPos do
 
 中文:
 定义 makeGCongrString
-  签名: (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
+  签名: (pos : 数组 Lean.SubExpr.GoalsLocation) (goalType : Expr)
   定义体: do
 let subexprPos := getGoalLocations pos
 unless goalType.isAppOf ``LE.le || goalType.isAppOf ``LT.lt || goalType.isAppOf `Int.ModEq do

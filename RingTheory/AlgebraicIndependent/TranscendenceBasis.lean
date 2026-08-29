@@ -59,8 +59,8 @@ theorem exists_isTranscendenceBasis_superset
     using exists_maximal_algebraicIndependent s _ (subset_univ _) hs
 
 中文:
-定理 exists_isTranscendenceBasis_superset
-  结论: {s : Set A}
+定理 存在_isTranscendenceBasis_superset
+  结论: {s : 集合 A}
   证明: by
   simpa [← isTranscendenceBasis_iff_maximal]
     using exists_maximal_algebraicIndependent s _ (subset_univ _) hs
@@ -85,8 +85,8 @@ theorem exists_isTranscendenceBasis
     ((algebraicIndependent_empty_iff R A).mpr (FaithfulSMul.algebraMap_injective R A))
 
 中文:
-定理 exists_isTranscendenceBasis
-  条件: [FaithfulSMul R A]
+定理 存在_isTranscendenceBasis
+  条件: [忠实标量乘法 R A]
   证明: by
   simpa using exists_isTranscendenceBasis_superset
     ((algebraicIndependent_empty_iff R A).mpr (FaithfulSMul.algebraMap_injective R A))
@@ -108,8 +108,8 @@ theorem exists_isTranscendenceBasis'
   ⟨s, Subtype.val, h⟩
 
 中文:
-定理 exists_isTranscendenceBasis'
-  条件: [FaithfulSMul R A]
+定理 存在_isTranscendenceBasis'
+  条件: [忠实标量乘法 R A]
   证明: have ⟨s, h⟩ := exists_isTranscendenceBasis R A
   ⟨s, Subtype.val, h⟩
 
@@ -172,7 +172,7 @@ theorem AlgebraicIndependent.isTranscendenceBasis_iff
 
 中文:
 定理 AlgebraicIndependent.isTranscendenceBasis_iff
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   fconstructor
   · rintro p κ w i' j rfl
@@ -224,7 +224,7 @@ theorem IsTranscendenceBasis.isAlgebraic
 
 中文:
 定理 IsTranscendenceBasis.isAlgebraic
-  条件: [Nontrivial R] (hx : IsTranscendenceBasis R x)
+  条件: [非平凡 R] (hx : IsTranscendenceBasis R x)
   证明: by
   constructor
   intro a
@@ -304,7 +304,7 @@ theorem isTranscendenceBasis_iff_algebraicIndependent_isAlgebraic
 
 中文:
 定理 isTranscendenceBasis_iff_algebraicIndependent_isAlgebraic
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: ⟨fun h => ⟨h.1, h.1.isTranscendenceBasis_iff_isAlgebraic.mp h⟩,
     fun ⟨ind, alg⟩ => ind.isTranscendenceBasis_iff_isAlgebraic.mpr alg⟩
 
@@ -373,7 +373,7 @@ lemma IsTranscendenceBasis.isAlgebraic_iff
 
 中文:
 引理 IsTranscendenceBasis.isAlgebraic_iff
-  结论: [IsDomain S] [NoZeroDivisors A]
+  结论: [是整环 S] [无零因子 A]
   证明: by
   refine ⟨fun _ i => Algebra.IsAlgebraic.isAlgebraic (v i), fun H => ?_⟩
   let Rv := adjoin R (range v)
@@ -419,7 +419,7 @@ theorem IsTranscendenceBasis.mvPolynomial
 
 中文:
 定理 IsTranscendenceBasis.mvPolynomial
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   refine isTranscendenceBasis_iff_algebraicIndependent_isAlgebraic.2 ⟨algebraicIndependent_X .., ?_⟩
   rw [adjoin_range_X]
@@ -447,7 +447,7 @@ theorem IsTranscendenceBasis.mvPolynomial'
 
 中文:
 定理 IsTranscendenceBasis.mvPolynomial'
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   证明: by nontriviality R; exact .mvPolynomial ι R
 
 Depends on / 依赖: mvPolynomial, nontriviality
@@ -471,7 +471,7 @@ refine (isTranscendenceBasis_equiv (Equiv.equivPUnit.{_, 1} _).symm).mp
 
 中文:
 定理 IsTranscendenceBasis.polynomial
-  条件: [Nonempty ι] [Subsingleton ι]
+  条件: [非空 ι] [子单例 ι]
   证明: by
   nontriviality R
   have := (nonempty_unique ι).some
@@ -509,7 +509,7 @@ theorem IsTranscendenceBasis.sumElim_comp
 
 中文:
 定理 IsTranscendenceBasis.sumElim_comp
-  结论: [NoZeroDivisors A] {x : ι -> S} {y : ι' -> A}
+  结论: [无零因子 A] {x : ι -> S} {y : ι' -> A}
   证明: by
   cases subsingleton_or_nontrivial R
   · rw [isTranscendenceBasis_iff_of_subsingleton] at hx ⊢; infer_instance
@@ -562,7 +562,7 @@ theorem IsTranscendenceBasis.isEmpty_iff_isAlgebraic
 
 中文:
 定理 IsTranscendenceBasis.isEmpty_iff_isAlgebraic
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   refine ⟨fun _ => ?_, fun _ => hx.1.isEmpty_of_isAlgebraic⟩
   have := hx.isAlgebraic
@@ -590,7 +590,7 @@ theorem IsTranscendenceBasis.nonempty_iff_transcendental
 
 中文:
 定理 IsTranscendenceBasis.nonempty_iff_transcendental
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [← not_isEmpty_iff]; rw [Algebra.transcendental_iff_not_isAlgebraic]; rw [hx.isEmpty_iff_isAlgebraic]
 
@@ -665,7 +665,7 @@ definition indepMatroid
 
 中文:
 定义 indepMatroid
-  签名: : IndepMatroid A where
+  签名: : 独立拟阵 A where
   定义体: univ
   Indep := AlgebraicIndepOn R id
   indep_empty := (algebraicIndependent_empty_iff ..).mpr (FaithfulSMul.algebraMap_injective R A)
@@ -712,7 +712,7 @@ definition matroid
 
 中文:
 定义 matroid
-  签名: : Matroid A
+  签名: : 拟阵 A
   定义体: (indepMatroid R A).matroid.copyBase univ
   (fun s => IsTranscendenceBasis R ((↑) : s -> A)) rfl
   (fun B => by simp_rw [Matroid.isBase_iff_maximal_indep, isTranscendenceBasis_iff_maximal]; rfl)
@@ -786,7 +786,7 @@ theorem matroid_indep_iff
 
 中文:
 定理 matroid_indep_iff
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -804,7 +804,7 @@ theorem matroid_isBase_iff
 
 中文:
 定理 matroid_isBase_iff
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -831,8 +831,8 @@ theorem matroid_isBasis_iff
 
 中文:
 定理 matroid_isBasis_iff
-  条件: [IsDomain A] {s t : Set A}
-  结论: (matroid R A).IsBasis s t ↔
+  条件: [是整环 A] {s t : 集合 A}
+  结论: (matroid R A).是基 s t ↔
   证明: by
   rw [Matroid.IsBasis]; rw [maximal_iff_forall_insert fun s t h hst => ⟨h.1.subset hst]; rw [hst.trans h.2⟩]
   simp_rw [matroid_indep_iff, ← and_assoc, matroid_e, subset_univ, and_true]
@@ -865,7 +865,7 @@ theorem matroid_isBasis_iff_of_subsingleton
 
 中文:
 定理 matroid_isBasis_iff_of_subsingleton
-  条件: [Subsingleton A] {s t : Set A}
+  条件: [子单例 A] {s t : 集合 A}
   证明: by
   have := (FaithfulSMul.algebraMap_injective R A).subsingleton
   simp_rw [Matroid.IsBasis, matroid_indep_iff, of_subsingleton, true_and,
@@ -894,7 +894,7 @@ theorem isAlgebraic_adjoin_iff_of_matroid_isBasis
 
 中文:
 定理 isAlgebraic_adjoin_iff_of_matroid_isBasis
-  结论: [NoZeroDivisors A] {s t : Set A} {a : A}
+  结论: [无零因子 A] {s t : 集合 A} {a : A}
   证明: by
   cases subsingleton_or_nontrivial A
   · apply iff_of_false <;> apply is_transcendental_of_subsingleton
@@ -926,7 +926,7 @@ theorem matroid_closure_eq
 
 中文:
 定理 matroid_closure_eq
-  条件: [IsDomain A] {s : Set A}
+  条件: [是整环 A] {s : 集合 A}
   证明: by
   have ⟨B, hB⟩ := (matroid R A).exists_isBasis s
   simp_rw [← hB.closure_eq_closure, hB.1.1.1.closure_eq_setOfPred_isBasis_insert, Set.ext_iff,
@@ -961,7 +961,7 @@ theorem matroid_isFlat_iff
 
 中文:
 定理 matroid_isFlat_iff
-  条件: [IsDomain A] {s : Set A}
+  条件: [是整环 A] {s : 集合 A}
   证明: by
   rw [Matroid.isFlat_iff_closure_eq]; rw [matroid_closure_eq]
   set S := algebraicClosure (adjoin R s) A
@@ -994,7 +994,7 @@ theorem matroid_spanning_iff
 
 中文:
 定理 matroid_spanning_iff
-  条件: [IsDomain A] {s : Set A}
+  条件: [是整环 A] {s : 集合 A}
   证明: by
   simp_rw [Matroid.spanning_iff, matroid_e, subset_univ, and_true, eq_univ_iff_forall,
     matroid_closure_eq, SetLike.mem_coe, mem_algebraicClosure, Algebra.isAlgebraic_def]
@@ -1022,8 +1022,8 @@ theorem matroid_isFlat_of_subsingleton
 
 中文:
 定理 matroid_isFlat_of_subsingleton
-  条件: [Subsingleton A] (s : Set A)
-  结论: (matroid R A).IsFlat s
+  条件: [子单例 A] (s : 集合 A)
+  结论: (matroid R A).是平坦 s
   证明: by
   simp_rw [Matroid.isFlat_iff, matroid_e, subset_univ,
     and_true, matroid_isBasis_iff_of_subsingleton]
@@ -1048,7 +1048,7 @@ theorem matroid_closure_of_subsingleton
 
 中文:
 定理 matroid_closure_of_subsingleton
-  条件: [Subsingleton A] (s : Set A)
+  条件: [子单例 A] (s : 集合 A)
   证明: by
   simp_rw [Matroid.closure, matroid_isFlat_of_subsingleton, true_and, matroid_e, inter_univ]
   exact subset_antisymm (sInter_subset_of_mem <| subset_refl s) (subset_sInter fun _ => id)
@@ -1071,7 +1071,7 @@ theorem matroid_spanning_iff_of_subsingleton
 
 中文:
 定理 matroid_spanning_iff_of_subsingleton
-  条件: [Subsingleton A] {s : Set A}
+  条件: [子单例 A] {s : 集合 A}
   证明: by
   simp_rw [Matroid.spanning_iff, matroid_closure_of_subsingleton, matroid_e, subset_univ, and_true]
 
@@ -1097,8 +1097,8 @@ theorem exists_isTranscendenceBasis_between
   rw [← matroid_spanning_iff] a
 
 中文:
-定理 exists_isTranscendenceBasis_between
-  结论: [NoZeroDivisors A] (s t : Set A) (hst : s subseteq t)
+定理 存在_isTranscendenceBasis_between
+  结论: [无零因子 A] (s t : 集合 A) (hst : s subseteq t)
   证明: by
   have := ht.nontrivial
   have := Subtype.val_injective (p := (· in adjoin R t)).nontrivial
@@ -1132,8 +1132,8 @@ theorem exists_isTranscendenceBasis_subset
   exact ⟨t, ht⟩
 
 中文:
-定理 exists_isTranscendenceBasis_subset
-  结论: [NoZeroDivisors A] [FaithfulSMul R A]
+定理 存在_isTranscendenceBasis_subset
+  结论: [无零因子 A] [忠实标量乘法 R A]
   证明: by
   have ⟨t, _, ht⟩ := exists_isTranscendenceBasis_between ∅ s (empty_subset _)
     ((algebraicIndependent_empty_iff ..).mpr <| FaithfulSMul.algebraMap_injective R A)
@@ -1158,7 +1158,7 @@ theorem isAlgebraic_iff_exists_isTranscendenceBasis_subset
   exact Matroid.spanning_iff_exists_isBase_subset (subset_univ _)
 
 中文:
-定理 isAlgebraic_iff_exists_isTranscendenceBasis_subset
+定理 isAlgebraic_iff_存在_isTranscendenceBasis_subset
   证明: by
   simp_rw [← matroid_spanning_iff, ← matroid_isBase_iff, and_comm (a := _ subseteq s)]
   exact Matroid.spanning_iff_exists_isBase_subset (subset_univ _)
@@ -1212,7 +1212,7 @@ theorem cardinalMk_eq_trdeg
 
 中文:
 定理 cardinalMk_eq_trdeg
-  条件: {ι : Type w} {x : ι -> A} (hx : IsTranscendenceBasis R x)
+  条件: {ι : 类型 w} {x : ι -> A} (hx : IsTranscendenceBasis R x)
   证明: by
   rw [← lift_id #ι]; rw [lift_cardinalMk_eq_trdeg hx]; rw [lift_id]
 
@@ -1282,9 +1282,9 @@ theorem MvPolynomial.trdeg_of_isDomain
   rwa [lift_id', ← lift_lift.{u}, lift_id] at this
 
 中文:
-定理 MvPolynomial.trdeg_of_isDomain
-  条件: [IsDomain S]
-  结论: trdeg S (MvPolynomial ι S) = lift.{v} #ι
+定理 多元多项式.trdeg_of_isDomain
+  条件: [是整环 S]
+  结论: trdeg S (多元多项式 ι S) = lift.{v} #ι
   证明: by
   have := (IsTranscendenceBasis.mvPolynomial ι S).lift_cardinalMk_eq_trdeg.symm
   rwa [lift_id', ← lift_lift.{u}, lift_id] at this
@@ -1308,9 +1308,9 @@ theorem Polynomial.trdeg_of_isDomain
   simpa using (IsTranscendenceBasis.polynomial Unit R).lift_cardinalMk_eq_trdeg.symm
 
 中文:
-定理 Polynomial.trdeg_of_isDomain
-  条件: [IsDomain R]
-  结论: trdeg R (Polynomial R) = 1
+定理 多项式.trdeg_of_isDomain
+  条件: [是整环 R]
+  结论: trdeg R (多项式 R) = 1
   证明: by
   simpa using (IsTranscendenceBasis.polynomial Unit R).lift_cardinalMk_eq_trdeg.symm
 
@@ -1332,7 +1332,7 @@ lift_lt.mp (lift_trdeg_le_of_surjective f surj).trans_lt by simp
 
 中文:
 定理 trdeg_lt_aleph0_of_finiteType
-  条件: [IsDomain R] [fin : FiniteType R S]
+  条件: [是整环 R] [fin : 有限型 R S]
   结论: trdeg R S < ℵ₀
   证明: have ⟨n, f, surj⟩ := FiniteType.iff_quotient_mvPolynomial''.mp fin
 lift_lt.mp (lift_trdeg_le_of_surjective f surj).trans_lt by simp
@@ -1362,8 +1362,8 @@ lemma isDomain_of_adjoin_range
 
 中文:
 引理 isDomain_of_adjoin_range
-  条件: [Algebra.IsAlgebraic (adjoin R s) A]
-  结论: IsDomain A
+  条件: [代数.是代数 (adjoin R s) A]
+  结论: 是整环 A
   证明: have := Algebra.IsAlgebraic.nontrivial (adjoin R s) A
   (isDomain_iff_noZeroDivisors_and_nontrivial _).mpr
     ⟨‹_›, (Subtype.val_injective (p := (· in adjoin R s))).nontrivial⟩
@@ -1392,7 +1392,7 @@ theorem trdeg_le_cardinalMk
 
 中文:
 定理 trdeg_le_cardinalMk
-  条件: [alg : Algebra.IsAlgebraic (adjoin R s) A]
+  条件: [alg : 代数.是代数 (adjoin R s) A]
   结论: trdeg R A <= #s
   证明: by
   by_cases h : Injective (algebraMap R A)
@@ -1455,7 +1455,7 @@ theorem isTranscendenceBasis_of_le_trdeg_of_finite
 
 中文:
 定理 isTranscendenceBasis_of_le_trdeg_of_finite
-  结论: {ι : Type w} [Finite ι] (x : ι -> A)
+  结论: {ι : 类型 w} [有限 ι] (x : ι -> A)
   证明: isTranscendenceBasis_of_lift_le_trdeg_of_finite R x (by rwa [lift_id, lift_id])
 
 Depends on / 依赖: isTranscendenceBasis_of_lift_le_trdeg_of_finite, lift_id
@@ -1476,7 +1476,7 @@ theorem isTranscendenceBasis_of_lift_le_trdeg
 
 中文:
 定理 isTranscendenceBasis_of_lift_le_trdeg
-  结论: [Algebra.IsAlgebraic (adjoin R (range x)) A]
+  结论: [代数.是代数 (adjoin R (range x)) A]
   证明: have := mk_lt_aleph0_iff.mp (lift_lt.mp <| le.trans_lt <| (lift_lt.mpr fin).trans_eq <| by simp)
   isTranscendenceBasis_of_lift_le_trdeg_of_finite R x le
 
@@ -1498,7 +1498,7 @@ theorem isTranscendenceBasis_of_le_trdeg
 
 中文:
 定理 isTranscendenceBasis_of_le_trdeg
-  结论: {ι : Type w} (x : ι -> A)
+  结论: {ι : 类型 w} (x : ι -> A)
   证明: isTranscendenceBasis_of_lift_le_trdeg R x fin (by rwa [lift_id, lift_id])
 
 Depends on / 依赖: isTranscendenceBasis_of_lift_le_trdeg, lift_id
@@ -1556,7 +1556,7 @@ theorem isTranscendenceBasis_of_trdeg_le
 
 中文:
 定理 isTranscendenceBasis_of_trdeg_le
-  结论: {ι : Type w} {x : ι -> A} (hx : AlgebraicIndependent R x)
+  结论: {ι : 类型 w} {x : ι -> A} (hx : AlgebraicIndependent R x)
   证明: isTranscendenceBasis_of_lift_trdeg_le hx fin (by rwa [lift_id, lift_id])
 
 Depends on / 依赖: isTranscendenceBasis_of_lift_trdeg_le, lift_id
@@ -1576,7 +1576,7 @@ theorem isTranscendenceBasis_of_lift_trdeg_le_of_finite
 
 中文:
 定理 isTranscendenceBasis_of_lift_trdeg_le_of_finite
-  结论: [Finite ι] (hx : AlgebraicIndependent R x)
+  结论: [有限 ι] (hx : AlgebraicIndependent R x)
   证明: isTranscendenceBasis_of_lift_trdeg_le hx
     (lift_lt.mp <| le.trans_lt <| by simp) le
 
@@ -1597,7 +1597,7 @@ theorem isTranscendenceBasis_of_trdeg_le_of_finite
 
 中文:
 定理 isTranscendenceBasis_of_trdeg_le_of_finite
-  结论: {ι : Type w} [Finite ι] {x : ι -> A}
+  结论: {ι : 类型 w} [有限 ι] {x : ι -> A}
   证明: isTranscendenceBasis_of_lift_trdeg_le_of_finite hx (by rwa [lift_id, lift_id])
 
 Depends on / 依赖: isTranscendenceBasis_of_lift_trdeg_le_of_finite, lift_id
@@ -1625,7 +1625,7 @@ theorem lift_trdeg_add_eq
 
 中文:
 定理 lift_trdeg_add_eq
-  结论: [Nontrivial R] [NoZeroDivisors A] [FaithfulSMul R S]
+  结论: [非平凡 R] [无零因子 A] [忠实标量乘法 R S]
   证明: by
   have ⟨s, hs⟩ := exists_isTranscendenceBasis R S
   have ⟨t, ht⟩ := exists_isTranscendenceBasis S A
@@ -1653,7 +1653,7 @@ theorem trdeg_add_eq
 
 中文:
 定理 trdeg_add_eq
-  结论: [Nontrivial R] {A : 类型v} [CommRing A] [NoZeroDivisors A]
+  结论: [非平凡 R] {A : 类型v} [交换环 A] [无零因子 A]
   证明: by
   rw [← (trdeg R S).lift_id]; rw [← (trdeg S A).lift_id]; rw [← (trdeg R A).lift_id]
   exact lift_trdeg_add_eq R S A

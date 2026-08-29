@@ -55,7 +55,7 @@ definition CommGrpObj.ofRepresentableBy
 
 中文:
 定义 CommGrpObj.ofRepresentableBy
-  签名: (F : Cᵒᵖ ⥤ CommGrpCat.{w})
+  签名: (F : Cᵒᵖ ⥤ 交换群范畴.{w})
   定义体: GrpObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat GrpCat) α
   __ := IsCommMonObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat CommMonCat) α
 
@@ -85,7 +85,7 @@ definition yonedaCommGrpGrpObj
 
 中文:
 定义 yonedaCommGrpGrpObj
-  签名: (G : CommGrp C)
+  签名: (G : 交换群 C)
   定义体: .of (unop H ⟶ G.toGrp)
   map {H I} f := CommGrpCat.ofHom {
     toFun := (f.unop ≫ ·)
@@ -126,7 +126,7 @@ definition yonedaCommGrpGrp
 
 中文:
 定义 yonedaCommGrpGrp
-  签名: : CommGrp C ⥤ (Grp C)ᵒᵖ ⥤ CommGrpCat where
+  签名: : 交换群 C ⥤ (群 C)ᵒᵖ ⥤ 交换群范畴 where
   定义体: yonedaCommGrpGrpObj
   map {X₁ X₂} ψ := {
     app Y := CommGrpCat.ofHom {

@@ -79,7 +79,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {F : 类型} [FunLike F R S] [MonoidWithZeroHomClass F R S]
+  结论: {F : 类型} [函数状 F R S] [带零幺半群态射类 F R S]
   证明: by
   unfold IsTopologicallyNilpotent at ha ⊢
   simp_rw [← map_pow]
@@ -128,8 +128,8 @@ theorem _root_.IsNilpotent.isTopologicallyNilpotent
   rw [← Nat.add_sub_of_le hi]; rw [pow_add]; rw [hn]; rw [zero_mul]
 
 中文:
-定理 _root_.IsNilpotent.isTopologicallyNilpotent
-  条件: {a : R} (ha : IsNilpotent a)
+定理 _root_.是幂零.isTopologicallyNilpotent
+  条件: {a : R} (ha : 是幂零 a)
   证明: by
   obtain ⟨n, hn⟩ := ha
   apply tendsto_atTop_of_eventually_const (i₀ := n)
@@ -154,7 +154,7 @@ theorem exists_pow_mem_of_mem_nhds
   proof: (ha.eventually_mem hv).exists
 
 中文:
-定理 exists_pow_mem_of_mem_nhds
+定理 存在_pow_mem_of_mem_nhds
   结论: {a : R} (ha : IsTopologicallyNilpotent a)
   证明: (ha.eventually_mem hv).exists
 
@@ -183,7 +183,7 @@ theorem mul_right_of_commute
 
 中文:
 定理 mul_right_of_commute
-  结论: [IsLinearTopology Rᵐᵒᵖ R]
+  结论: [是线性拓扑 Rᵐᵒᵖ R]
   证明: by
   simp_rw [IsTopologicallyNilpotent, hab.mul_pow]
   exact IsLinearTopology.tendsto_mul_zero_of_left _ _ ha
@@ -208,7 +208,7 @@ theorem mul_left_of_commute
 
 中文:
 定理 mul_left_of_commute
-  结论: [IsLinearTopology R R] {a b : R}
+  结论: [是线性拓扑 R R] {a b : R}
   证明: by
   simp_rw [IsTopologicallyNilpotent, hab.mul_pow]
   exact IsLinearTopology.tendsto_mul_zero_of_right _ _ hb
@@ -238,7 +238,7 @@ theorem add_of_commute
 
 中文:
 定理 add_of_commute
-  结论: [IsLinearTopology R R] {a b : R}
+  结论: [是线性拓扑 R R] {a b : R}
   证明: by
   simp only [IsTopologicallyNilpotent, atTop_basis.tendsto_iff IsLinearTopology.hasBasis_ideal,
     true_and]
@@ -340,7 +340,7 @@ definition _root_.topologicalNilradical
 
 中文:
 定义 _root_.topologicalNilradical
-  签名: : Ideal R where
+  签名: : 理想 R where
   定义体: {a | IsTopologicallyNilpotent a}
   add_mem' := add
   zero_mem' := zero

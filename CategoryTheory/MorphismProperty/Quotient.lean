@@ -39,8 +39,8 @@ class HasQuotient
     - iff((W)) : forall ⦃X Y : C⦄ ⦃f g : X ⟶ Y⦄, homRel f g -> (W f ↔ W g)
 
 中文:
-类 HasQuotient
-  参数: (W : Morphism命题erty C) (homRel : HomRel C)
+类 有商
+  参数: (W : MorphismProperty C) (homRel : HomRel C)
   公理与运算 (1 个):
     - iff((W)) : 对任意 ⦃X Y : C⦄ ⦃f g : X ⟶ Y⦄, homRel f g -> (W f ↔ W g)
 -/
@@ -67,8 +67,8 @@ lemma HasQuotient.iff_of_eqvGen
   | trans _ _ _ _ _ h₁ h₂ => exact h₁.trans h₂
 
 中文:
-引理 HasQuotient.iff_of_eqvGen
-  结论: [W.HasQuotient homRel] {X Y : C} {f g : X ⟶ Y}
+引理 有商.iff_of_eqvGen
+  结论: [W.有商 homRel] {X Y : C} {f g : X ⟶ Y}
   证明: by
   induction h with
   | rel _ _ h => exact iff W h
@@ -101,7 +101,7 @@ definition quotient
 
 中文:
 定义 quotient
-  签名: [W.HasQuotient homRel]
+  签名: [W.有商 homRel]
   定义体: fun ⟨X⟩ ⟨Y⟩ f => exists (f' : X ⟶ Y) (_ : W f'), f = (Quotient.functor _).map f'
 
 Depends on / 依赖: Quotient, Quotient.functor, functor

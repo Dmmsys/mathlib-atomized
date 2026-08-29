@@ -61,7 +61,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: : DistribMulAction S R[M]
+  签名: : 分配乘法作用 S R[M]
   定义体: fast_instance% coeffEquiv.distribMulAction _
 
 @[to_additive (dont_translate := S) (attr := simp)]
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R S[M]
+  签名: 模 R S[M]
   定义体: fast_instance% coeffEquiv.module _
 
 @[to_additive]
@@ -131,7 +131,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [IsTorsionFree R S]
+  签名: [是无挠 R S]
   定义体: coeffEquiv.moduleIsTorsionFree _
 
 Depends on / 依赖: coeffEquiv, coeffEquiv.moduleIsTorsionFree, moduleIsTorsionFree
@@ -377,7 +377,7 @@ definition uniqueLinearEquiv
 
 中文:
 定义 uniqueLinearEquiv
-  签名: [One M] [Subsingleton M]
+  签名: [幺 M] [子单例 M]
   定义体: coeffAddEquiv.trans Finsupp.uniqueAddEquiv 1
   map_smul' r x := by simp
 
@@ -399,7 +399,7 @@ lemma uniqueLinearEquiv_apply
 
 中文:
 引理 uniqueLinearEquiv_apply
-  条件: [One M] [Subsingleton M] (x : S[M])
+  条件: [幺 M] [子单例 M] (x : S[M])
   证明: rfl
 -/
 lemma uniqueLinearEquiv_apply [One M] [Subsingleton M] (x : S[M]) :
@@ -417,7 +417,7 @@ lemma uniqueLinearEquiv_symm_apply
 
 中文:
 引理 uniqueLinearEquiv_symm_apply
-  条件: [One M] [Subsingleton M] (s : S)
+  条件: [幺 M] [子单例 M] (s : S)
   证明: rfl
 -/
 lemma uniqueLinearEquiv_symm_apply [One M] [Subsingleton M] (s : S) :
@@ -437,7 +437,7 @@ definition supported
 
 中文:
 定义 supported
-  签名: : Submodule R S[M]
+  签名: : 子模 R S[M]
   定义体: (Finsupp.supported S R s).comap (coeffLinearEquiv R).toLinearMap
 
 Depends on / 依赖: Finsupp, Finsupp.supported, coeffLinearEquiv, supported, toLinearMap
@@ -581,7 +581,7 @@ definition supportedEquivFinsupp
 
 中文:
 定义 supportedEquivFinsupp
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: { toFun x := ⟨x.1.coeff, x.2⟩
     invFun x := ⟨.ofCoeff x.1, x.2⟩
     left_inv _ := rfl
@@ -614,7 +614,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: [Semiring S] [SMulZeroClass R S] [FaithfulSMul R S] [Nonempty M]
+  签名: [半环 S] [SMulZero类 R S] [忠实标量乘法 R S] [非空 M]
   定义体: coeffEquiv.faithfulSMul _
 
 Depends on / 依赖: coeffEquiv, coeffEquiv.faithfulSMul, faithfulSMul
@@ -636,7 +636,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: (R k) [Semiring k]
+  签名: (R k) [半环 k]
   定义体: coeffLinearEquiv _
 
 @[to_additive (dont_translate := k) (attr := simp)]
@@ -657,7 +657,7 @@ lemma basis_apply
 
 中文:
 引理 basis_apply
-  条件: (k) [Semiring k] (r : R)
+  条件: (k) [半环 k] (r : R)
   证明: rfl
 -/
 lemma basis_apply (k) [Semiring k] (r : R) :
@@ -681,7 +681,7 @@ definition comapDistribMulActionSelf
 
 中文:
 定义 comapDistribMulActionSelf
-  签名: [Group G] [Semiring S]
+  签名: [群 G] [半环 S]
   定义体: have := Finsupp.comapDistribMulAction (G := G) (α := G) (M := S)
   fast_instance% coeffEquiv.distribMulAction _
 
@@ -706,7 +706,7 @@ lemma single_mem_span_single
 
 中文:
 引理 single_mem_span_single
-  条件: [Semiring R] [Nontrivial R] {m : M} {s : Set M}
+  条件: [半环 R] [非平凡 R] {m : M} {s : 集合 M}
   证明: by
   refine (Set.mem_image_equiv (f := (coeffLinearEquiv R).toEquiv)).symm.trans ?_
   change _ in (Submodule.span R _).map (coeffLinearEquiv R).toLinearMap ↔ _
@@ -741,7 +741,7 @@ definition singleDistribMulActionHom
 
 中文:
 定义 singleDistribMulActionHom
-  签名: [Monoid R] [DistribMulAction R S] (a : M)
+  签名: [幺半群 R] [分配乘法作用 R S] (a : M)
   定义体: singleAddHom a
   map_smul' S m := by simp
 
@@ -764,7 +764,7 @@ theorem distribMulActionHom_ext'
 
 中文:
 定理 distribMulActionHom_ext'
-  结论: {N : 类型} [Monoid R] [AddMonoid N] [DistribMulAction R N]
+  结论: {N : 类型} [幺半群 R] [加法幺半群 N] [分配乘法作用 R N]
   证明: DistribMulActionHom.toAddMonoidHom_injective addMonoidHom_ext fun a x => congr($(h a) x)
 
 Depends on / 依赖: DistribMulActionHom, DistribMulActionHom.toAddMonoidHom_injective, addMonoidHom_ext, toAddMonoidHom_injective
@@ -789,7 +789,7 @@ definition lsingle
 
 中文:
 定义 lsingle
-  签名: [Semiring R] [Module R S] (a : M)
+  签名: [半环 R] [模 R S] (a : M)
   定义体: (coeffLinearEquiv _).symm.toLinearMap.comp Finsupp.lsingle a
 
 @[to_additive (attr := simp)]
@@ -810,7 +810,7 @@ lemma lsingle_apply
 
 中文:
 引理 lsingle_apply
-  条件: [Semiring R] [Module R S] (a : M) (b : S)
+  条件: [半环 R] [模 R S] (a : M) (b : S)
   证明: rfl
 
 Depends on / 依赖: single
@@ -831,7 +831,7 @@ lemma lhom_ext'
 
 中文:
 引理 lhom_ext'
-  结论: {N : 类型} [Semiring R] [AddCommMonoid N] [Module R N] [Module R S]
+  结论: {N : 类型} [半环 R] [加法交换幺半群 N] [模 R N] [模 R S]
   证明: LinearMap.toAddMonoidHom_injective addMonoidHom_ext fun a x => congr($(H a) x)
 
 Depends on / 依赖: LinearMap, LinearMap.toAddMonoidHom_injective, addMonoidHom_ext, toAddMonoidHom_injective
@@ -874,8 +874,8 @@ lemma of_mem_span_of_iff
 
 中文:
 引理 of_mem_span_of_iff
-  条件: [Nontrivial R]
-  结论: of R M m in Submodule.span R (of R M '' s) ↔ m in s
+  条件: [非平凡 R]
+  结论: of R M m in 子模.span R (of R M '' s) ↔ m in s
   证明: single_mem_span_single
 
 Depends on / 依赖: single_mem_span_single
@@ -894,7 +894,7 @@ lemma mem_closure_of_mem_span_closure
 
 中文:
 引理 mem_closure_of_mem_span_closure
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [← MonoidHom.map_mclosure] at h; simpa using of_mem_span_of_iff.1 h
 
@@ -957,7 +957,7 @@ instance isScalarTower_self
 
 中文:
 实例 isScalarTower_self
-  签名: [IsScalarTower R S S]
+  签名: [标量塔 R S S]
   定义体: by
     classical ext; simp [coeff_mul, sum_smul_index', Finsupp.smul_sum, smul_mul_assoc]
 
@@ -984,7 +984,7 @@ instance smulCommClass_self
 
 中文:
 实例 smulCommClass_self
-  签名: [SMulCommClass R S S]
+  签名: [标量交换类 R S S]
   定义体: by
     classical ext; simp [coeff_mul, sum_smul_index', Finsupp.smul_sum, mul_smul_comm]
 
@@ -1007,7 +1007,7 @@ instance smulCommClass_symm_self
 
 中文:
 实例 smulCommClass_symm_self
-  签名: [SMulCommClass S R S]
+  签名: [标量交换类 S R S]
   定义体: have := SMulCommClass.symm S R S; .symm ..
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -1039,7 +1039,7 @@ definition submoduleOfSMulMem
 
 中文:
 定义 submoduleOfSMulMem
-  签名: (W : Submodule S V) (h : 对任意 (g : M) (v : V), v in W -> of S M g • v in W)
+  签名: (W : 子模 S V) (h : 对任意 (g : M) (v : V), v in W -> of S M g • v in W)
   定义体: W
   zero_mem' := W.zero_mem'
   add_mem' := W.add_mem'
@@ -1078,7 +1078,7 @@ lemma of'_mem_span
 
 中文:
 引理 of'_mem_span
-  条件: [Nontrivial R] {m : M} {s : Set M}
+  条件: [非平凡 R] {m : M} {s : 集合 M}
   证明: single_mem_span_single
 -/
 lemma of'_mem_span [Nontrivial R] {m : M} {s : Set M} :
@@ -1100,7 +1100,7 @@ lemma mem_closure_of_mem_span_closure
 
 中文:
 引理 mem_closure_of_mem_span_closure
-  结论: [AddMonoid M] [Nontrivial R] {m : M} {s : Set M}
+  结论: [加法幺半群 M] [非平凡 R] {m : M} {s : 集合 M}
   证明: by
   suffices Multiplicative.ofAdd m in Submonoid.closure (Multiplicative.toAdd ⁻¹' s) by
     simpa [← AddSubmonoid.toSubmonoid_closure]
@@ -1135,7 +1135,7 @@ lemma liftNC_smul
 
 中文:
 引理 liftNC_smul
-  条件: [AddZeroClass M] (f : S ->+* R) (g : Multiplicative M ->* R) (c : S) (φ : S[M])
+  条件: [加法零类 M] (f : S ->+* R) (g : Multiplicative M ->* R) (c : S) (φ : S[M])
   证明: by
   suffices (liftNC (↑f) g).comp (smulAddHom S S[M] c) =
       (AddMonoidHom.mulLeft (f c)).comp (liftNC f g) from DFunLike.congr_fun this φ

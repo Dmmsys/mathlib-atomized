@@ -70,11 +70,11 @@ class HasShift
     - shiftMonoidal : shift.Monoidal  [default: by infer_instance]
 
 中文:
-类 HasShift
-  参数: (C : 类型u) (A : 类型) [Category.{v} C] [AddMonoid A]
+类 有Shift
+  参数: (C : 类型u) (A : 类型) [范畴.{v} C] [加法幺半群 A]
   公理与运算 (2 个):
-    - shift : Discrete A ⥤ C ⥤ C
-    - shiftMonoidal : shift.Monoidal  [默认: by infer_instance]
+    - shift : 离散 A ⥤ C ⥤ C
+    - shiftMonoidal : shift.幺半群  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -273,7 +273,7 @@ definition shiftMonoidalFunctor
 
 中文:
 定义 shiftMonoidalFunctor
-  签名: : Discrete A ⥤ C ⥤ C
+  签名: : 离散 A ⥤ C ⥤ C
   定义体: HasShift.shift
 
 Depends on / 依赖: HasShift, HasShift.shift
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: (shiftMonoidalFunctor C A).Monoidal
+  签名: (shiftMonoidalFunctor C A).幺半群
   定义体: HasShift.shiftMonoidal
 
 Depends on / 依赖: HasShift, HasShift.shiftMonoidal, shiftMonoidal

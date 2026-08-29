@@ -34,7 +34,7 @@ definition symbols
 
 中文:
 定义 symbols
-  签名: (a : FreeMonoid α)
+  签名: (a : 自由幺半群 α)
   定义体: List.toFinset a
 
 @[to_additive (attr := simp)]
@@ -56,7 +56,7 @@ theorem symbols_one
 
 中文:
 定理 symbols_one
-  结论: symbols (1 : FreeMonoid α) = ∅
+  结论: symbols (1 : 自由幺半群 α) = ∅
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -99,7 +99,7 @@ theorem symbols_mul
 
 中文:
 定理 symbols_mul
-  条件: {a b : FreeMonoid α}
+  条件: {a b : 自由幺半群 α}
   结论: symbols (a * b) = symbols a union symbols b
   证明: List.toFinset_append
 
@@ -122,7 +122,7 @@ theorem mem_symbols
 
 中文:
 定理 mem_symbols
-  条件: {m : α} {a : FreeMonoid α}
+  条件: {m : α} {a : 自由幺半群 α}
   结论: m in symbols a ↔ m in a
   证明: List.mem_toFinset
 

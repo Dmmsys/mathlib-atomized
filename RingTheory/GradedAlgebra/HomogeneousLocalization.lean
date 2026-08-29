@@ -103,7 +103,7 @@ structure NumDenSameDeg
 
 中文:
 结构 NumDenSameDeg
-  参数: (𝒜 : ι -> σ) (x : Submonoid A)
+  参数: (𝒜 : ι -> σ) (x : 子幺半群 A)
   公理与运算 (3 个):
     - deg : ι
     - (num(den) : 𝒜 deg)
@@ -136,7 +136,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {𝒜 : ι -> σ} (x : Submonoid A)
+  结论: {𝒜 : ι -> σ} (x : 子幺半群 A)
   证明: by
   rcases c1 with ⟨i1, ⟨n1, hn1⟩, ⟨d1, hd1⟩, h1⟩
   rcases c2 with ⟨i2, ⟨n2, hn2⟩, ⟨d2, hd2⟩, h2⟩
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (NumDenSameDeg 𝒜 x)
+  签名: 取负 (NumDenSameDeg 𝒜 x)
   定义体: ⟨c.deg, ⟨-c.num, neg_mem c.num.2⟩, c.den, c.den_mem⟩
 
 @[simp]
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul α (NumDenSameDeg 𝒜 x)
+  签名: 标量乘法 α (NumDenSameDeg 𝒜 x)
   定义体: ⟨c.deg, m • c.num, c.den, c.den_mem⟩
 
 @[simp]
@@ -359,7 +359,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (NumDenSameDeg 𝒜 x)
+  签名: 幺 (NumDenSameDeg 𝒜 x)
   定义体: { deg := 0
       num := ⟨1, one_mem⟩
       den := ⟨1, one_mem⟩
@@ -448,7 +448,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (NumDenSameDeg 𝒜 x)
+  签名: 零 (NumDenSameDeg 𝒜 x)
   定义体: ⟨0, 0, ⟨1, one_mem⟩, one_mem _⟩
 
 @[simp]
@@ -533,7 +533,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (NumDenSameDeg 𝒜 x)
+  签名: 乘法 (NumDenSameDeg 𝒜 x)
   定义体: { deg := p.deg + q.deg
       num := ⟨p.num * q.num, mul_mem p.num.prop q.num.prop⟩
       den := ⟨p.den * q.den, mul_mem p.den.prop q.den.prop⟩
@@ -630,7 +630,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (NumDenSameDeg 𝒜 x)
+  签名: 加法 (NumDenSameDeg 𝒜 x)
   定义体: { deg := c1.deg + c2.deg
       num := ⟨c1.den * c2.num + c2.den * c1.num,
         add_mem (GradedMul.mul_mem c1.den.2 c2.num.2)
@@ -726,7 +726,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (NumDenSameDeg 𝒜 x)
+  签名: 交换幺半群 (NumDenSameDeg 𝒜 x)
   定义体: ext _ (add_assoc _ _ _) (mul_assoc _ _ _) (mul_assoc _ _ _)
   one_mul _ := ext _ (zero_add _) (one_mul _) (one_mul _)
   mul_one _ := ext _ (add_zero _) (mul_one _) (mul_one _)
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (NumDenSameDeg 𝒜 x) 自然数
+  签名: 幂 (NumDenSameDeg 𝒜 x) 自然数
   定义体: ⟨n • c.deg, @GradedMonoid.GMonoid.gnpow _ (fun i => ↥(𝒜 i)) _ _ n _ c.num,
       @GradedMonoid.GMonoid.gnpow _ (fun i => ↥(𝒜 i)) _ _ n _ c.den, by
         induction n with
@@ -870,7 +870,7 @@ definition HomogeneousLocalization
 
 中文:
 定义 HomogeneousLocalization
-  签名: (𝒜 : ι -> σ) (x : Submonoid A)
+  签名: (𝒜 : ι -> σ) (x : 子幺半群 A)
   定义体: Quotient (Setoid.ker <| HomogeneousLocalization.NumDenSameDeg.embedding 𝒜 x)
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.NumDenSameDeg.embedding, NumDenSameDeg, Quotient, Setoid, Setoid.ker, embedding
@@ -913,7 +913,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk (𝒜 := 𝒜) (x := x))
+  结论: 函数.满射 (mk (𝒜 := 𝒜) (x := x))
   证明: Quotient.mk''_surjective
 -/
 lemma mk_surjective : Function.Surjective (mk (𝒜 := 𝒜) (x := x)) :=
@@ -972,7 +972,7 @@ theorem val_injective
 
 中文:
 定理 val_injective
-  结论: Function.Injective (HomogeneousLocalization.val (𝒜 := 𝒜) (x := x))
+  结论: 函数.单射 (HomogeneousLocalization.val (𝒜 := 𝒜) (x := x))
   证明: fun a b => Quotient.recOnSubsingleton₂' a b fun _ _ h => Quotient.sound' h
 -/
 theorem val_injective : Function.Injective (HomogeneousLocalization.val (𝒜 := 𝒜) (x := x)) :=
@@ -992,7 +992,7 @@ lemma subsingleton
 中文:
 引理 subsingleton
   条件: (hx : 0 in x)
-  结论: Subsingleton (HomogeneousLocalization 𝒜 x)
+  结论: 子单例 (HomogeneousLocalization 𝒜 x)
   证明: have := IsLocalization.subsingleton (S := at x) hx
   (HomogeneousLocalization.val_injective (𝒜 := 𝒜) (x := x)).subsingleton
 
@@ -1021,7 +1021,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul α (HomogeneousLocalization 𝒜 x)
+  签名: 标量乘法 α (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.map' (m • ·) fun c1 c2 (h : Localization.mk _ _ = Localization.mk _ _) => by
     change Localization.mk _ _ = Localization.mk _ _
     simp only [num_smul, den_smul]
@@ -1093,7 +1093,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (HomogeneousLocalization 𝒜 x)
+  签名: 标量乘法 自然数 (HomogeneousLocalization 𝒜 x)
   定义体: haveI := AddSubmonoidClass.nsmulMemClass (S := σ) (M := A)
   HomogeneousLocalization.instSMul x
 
@@ -1141,7 +1141,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (HomogeneousLocalization 𝒜 x)
+  签名: 标量乘法 整数 (HomogeneousLocalization 𝒜 x)
   定义体: haveI := AddSubgroupClass.zsmulMemClass (S := σ) (M := A)
   HomogeneousLocalization.instSMul x
 
@@ -1191,7 +1191,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (HomogeneousLocalization 𝒜 x)
+  签名: 取负 (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.map' Neg.neg fun c1 c2 (h : Localization.mk _ _ = Localization.mk _ _) => by
     change Localization.mk _ _ = Localization.mk _ _
     simp only [num_neg, den_neg, ← Localization.neg_mk]
@@ -1266,7 +1266,7 @@ instance hasPow
 
 中文:
 实例 hasPow
-  签名: : Pow (HomogeneousLocalization 𝒜 x) 自然数 where
+  签名: : 幂 (HomogeneousLocalization 𝒜 x) 自然数 where
   定义体: (Quotient.map' (· ^ n) fun c1 c2 (h : Localization.mk _ _ = Localization.mk _ _) => by
           change Localization.mk _ _ = Localization.mk _ _
           simp only [num_pow, den_pow]
@@ -1316,7 +1316,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (HomogeneousLocalization 𝒜 x)
+  签名: 加法 (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.map₂ (· + ·)
       fun c1 c2 (h : Localization.mk _ _ = Localization.mk _ _) c3 c4
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
@@ -1362,7 +1362,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (HomogeneousLocalization 𝒜 x)
+  签名: 减法 (HomogeneousLocalization 𝒜 x)
   定义体: z1 + -z2
 
 Depends on / 依赖: jacobiSymNat, jacobiSymNat.mod_left, jacobiSymNat.qr, mod_left
@@ -1384,7 +1384,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (HomogeneousLocalization 𝒜 x)
+  签名: 乘法 (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.map₂ (· * ·)
       fun c1 c2 (h : Localization.mk _ _ = Localization.mk _ _) c3 c4
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
@@ -1430,7 +1430,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (HomogeneousLocalization 𝒜 x)
+  签名: 幺 (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.mk'' 1
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1462,7 +1462,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (HomogeneousLocalization 𝒜 x)
+  签名: 零 (HomogeneousLocalization 𝒜 x)
   定义体: Quotient.mk'' 0
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1494,7 +1494,7 @@ theorem zero_eq
 
 中文:
 定理 zero_eq
-  结论: (0 : HomogeneousLocalization 𝒜 x) = Quotient.mk'' 0
+  结论: (0 : HomogeneousLocalization 𝒜 x) = 商.mk'' 0
   证明: rfl
 -/
 theorem zero_eq : (0 : HomogeneousLocalization 𝒜 x) = Quotient.mk'' 0 :=
@@ -1510,7 +1510,7 @@ theorem one_eq
 
 中文:
 定理 one_eq
-  结论: (1 : HomogeneousLocalization 𝒜 x) = Quotient.mk'' 1
+  结论: (1 : HomogeneousLocalization 𝒜 x) = 商.mk'' 1
   证明: rfl
 -/
 theorem one_eq : (1 : HomogeneousLocalization 𝒜 x) = Quotient.mk'' 1 :=
@@ -1666,7 +1666,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (HomogeneousLocalization 𝒜 x)
+  签名: 自然数嵌入 (HomogeneousLocalization 𝒜 x)
   定义体: ⟨Nat.unaryCast⟩
 
 Depends on / 依赖: Nat.unaryCast, unaryCast
@@ -1686,7 +1686,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (HomogeneousLocalization 𝒜 x)
+  签名: 整数嵌入 (HomogeneousLocalization 𝒜 x)
   定义体: ⟨Int.castDef⟩
 
 @[simp]
@@ -1753,7 +1753,7 @@ instance homogeneousLocalizationCommRing
 
 中文:
 实例 homogeneousLocalizationCommRing
-  签名: : CommRing (HomogeneousLocalization 𝒜 x)
+  签名: : 交换环 (HomogeneousLocalization 𝒜 x)
   定义体: (HomogeneousLocalization.val_injective x).commRing _ val_zero val_one val_add val_mul val_neg
     val_sub (val_nsmul x · ·) (val_zsmul x · ·) val_pow val_natCast val_intCast
 
@@ -1913,7 +1913,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (𝒜 0) (HomogeneousLocalization 𝒜 x)
+  签名: 代数 (𝒜 0) (HomogeneousLocalization 𝒜 x)
   定义体: (fromZeroRingHom 𝒜 x).toAlgebra
 
 Depends on / 依赖: fromZeroRingHom, toAlgebra
@@ -1946,7 +1946,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower (𝒜 0) (HomogeneousLocalization 𝒜 x) (Localization x)
+  签名: 标量塔 (𝒜 0) (HomogeneousLocalization 𝒜 x) (Localization x)
   定义体: .of_algebraMap_eq' rfl
 
 Depends on / 依赖: of_algebraMap_eq
@@ -2214,7 +2214,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (HomogeneousLocalization.AtPrime 𝒜 𝔭)
+  签名: 非平凡 (HomogeneousLocalization.AtPrime 𝒜 𝔭)
   定义体: ⟨⟨0, 1, fun r => by simp [ext_iff_val, val_zero, val_one, zero_ne_one] at r⟩⟩
 
 Depends on / 依赖: ext_iff_val, val_one, val_zero, zero_ne_one
@@ -2234,7 +2234,7 @@ instance isLocalRing
 
 中文:
 实例 isLocalRing
-  签名: : IsLocalRing (HomogeneousLocalization.AtPrime 𝒜 𝔭)
+  签名: : 是局部环 (HomogeneousLocalization.AtPrime 𝒜 𝔭)
   定义体: IsLocalRing.of_isUnit_or_isUnit_one_sub_self fun a => by
     simpa only [← isUnit_iff_isUnit_val, val_sub, val_one]
       using IsLocalRing.isUnit_or_isUnit_one_sub_self _
@@ -2419,7 +2419,7 @@ definition NumDenSameDeg.map
 
 中文:
 定义 NumDenSameDeg.map
-  签名: (f : 𝒜 ->+*ᵍ ℬ) {W₁ : Submonoid A} {W₂ : Submonoid B}
+  签名: (f : 𝒜 ->+*ᵍ ℬ) {W₁ : 子幺半群 A} {W₂ : 子幺半群 B}
   定义体: c.deg
   den := f.gradedAddHom _ c.den
   num := f.gradedAddHom _ c.num
@@ -2485,7 +2485,7 @@ abbreviation mapId
 
 中文:
 缩写 mapId
-  签名: {P Q : Submonoid A} (h : P <= Q)
+  签名: {P Q : 子幺半群 A} (h : P <= Q)
   定义体: map (.id _) h
 -/
 abbrev mapId {P Q : Submonoid A} (h : P <= Q) :
@@ -2526,7 +2526,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (P : Submonoid A)
+  条件: (P : 子幺半群 A)
   结论: map (.id 𝒜) (P := P) (Q := P) le_rfl = .id _
   证明: by
   ext x
@@ -2742,7 +2742,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (localRingHom f I J hIJ)
+  签名: 是Local态射 (localRingHom f I J hIJ)
   定义体: by
     rw [← isUnit_iff_isUnit_val] at hx ⊢
     rw [val_localRingHom] at hx

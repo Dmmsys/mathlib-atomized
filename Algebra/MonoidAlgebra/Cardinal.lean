@@ -41,7 +41,7 @@ alias cardinalMk_lift_of_fintype := cardinalMk_eq_lift_of_fintype
 
 中文:
 引理 cardinalMk_eq_lift_of_fintype
-  条件: [Fintype M']
+  条件: [有限类型 M']
   结论: #R[M'] = lift.{v} #R ^ card M'
   证明: by
   simp [coeffEquiv.cardinal_eq]
@@ -73,7 +73,7 @@ lemma cardinalMk_of_fintype
 
 中文:
 引理 cardinalMk_of_fintype
-  条件: [Fintype M]
+  条件: [有限类型 M]
   结论: #R[M] = #R ^ card M
   证明: by simp
 
@@ -97,7 +97,7 @@ alias cardinalMk_lift_of_infinite := cardinalMk_eq_max_lift_of_infinite
 
 中文:
 引理 cardinalMk_eq_max_lift_of_infinite
-  条件: [Infinite M'] [Nontrivial R]
+  条件: [无限 M'] [非平凡 R]
   证明: by simp [coeffEquiv.cardinal_eq, max_comm]
 
 @[deprecated (since := "2026-03-26")]
@@ -127,8 +127,8 @@ lemma cardinalMk_of_infinite
 
 中文:
 引理 cardinalMk_of_infinite
-  条件: [Infinite M] [Nontrivial R]
-  结论: #R[M] = max #R #M
+  条件: [无限 M] [非平凡 R]
+  结论: #R[M] = 最大值 #R #M
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -151,7 +151,7 @@ alias cardinalMk_lift_of_infinite' := cardinalMk_eq_max_lift_of_infinite'
 
 中文:
 引理 cardinalMk_eq_max_lift_of_infinite'
-  条件: [Nonempty M'] [Infinite R]
+  条件: [非空 M'] [无限 R]
   证明: by simp [coeffEquiv.cardinal_eq, max_comm]
 
 @[deprecated (since := "2026-03-26")]
@@ -179,8 +179,8 @@ lemma cardinalMk_of_infinite'
 
 中文:
 引理 cardinalMk_of_infinite'
-  条件: [Nonempty M] [Infinite R]
-  结论: #R[M] = max #R #M
+  条件: [非空 M] [无限 R]
+  结论: #R[M] = 最大值 #R #M
   证明: by simp
 -/
 lemma cardinalMk_of_infinite' [Nonempty M] [Infinite R] : #R[M] = max #R #M := by simp

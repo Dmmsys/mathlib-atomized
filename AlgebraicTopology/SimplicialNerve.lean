@@ -62,7 +62,7 @@ structure SimplicialThickening
 
 中文:
 结构 SimplicialThickening
-  参数: (J : 类型) [LinearOrder J]
+  参数: (J : 类型) [线性序 J]
   公理与运算 (1 个):
     - as : J
 -/
@@ -91,10 +91,10 @@ structure Path
     - le_right((k : J) (_ : k in I)) : k <= j  [default: by simp]
 
 中文:
-结构 Path
-  参数: {J : 类型} [LinearOrder J] (i j : J)
+结构 道路
+  参数: {J : 类型} [线性序 J] (i j : J)
   公理与运算 (5 个):
-    - I : Set J
+    - I : 集合 J
     - left : i in I  [默认: by simp]
     - right : j in I  [默认: by simp]
     - left_le((k : J) (_ : k in I)) : i <= k  [默认: by simp]
@@ -120,8 +120,8 @@ lemma Path.le
   proof: f.left_le _ f.right
 
 中文:
-引理 Path.le
-  条件: {J : 类型} [LinearOrder J] {i j : J} (f : Path i j)
+引理 道路.le
+  条件: {J : 类型} [线性序 J] {i j : J} (f : 道路 i j)
   结论: i <= j
   证明: f.left_le _ f.right
 
@@ -167,7 +167,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {J : 类型} [LinearOrder J]
+  结论: {J : 类型} [线性序 J]
   证明: by
   apply Path.ext
   ext
@@ -200,7 +200,7 @@ definition compFunctor
 
 中文:
 定义 compFunctor
-  签名: {J : 类型} [LinearOrder J]
+  签名: {J : 类型} [线性序 J]
   定义体: x.1 ≫ x.2
   map f := ⟨⟨⟨Set.union_subset_union f.1.1.1.1 f.2.1.1.1⟩⟩⟩
 -/
@@ -240,7 +240,7 @@ abbreviation functorMap
 
 中文:
 缩写 functorMap
-  签名: {J K : 类型u} [LinearOrder J] [LinearOrder K]
+  签名: {J K : 类型u} [线性序 J] [线性序 K]
   定义体: ⟨f '' I.I, Set.mem_image_of_mem f I.left, Set.mem_image_of_mem f I.right,
     by rintro _ ⟨k, hk, rfl⟩; exact f.monotone (I.left_le k hk),
     by rintro _ ⟨k, hk, rfl⟩; exact f.monotone (I.le_right k hk)⟩
@@ -289,7 +289,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: {J K : 类型u} [LinearOrder J] [LinearOrder K]
+  签名: {J K : 类型u} [线性序 J] [线性序 K]
   定义体: .mk (f x.as)
   map i j := nerveMap ((functorMap f i j))
   map_id i := by
@@ -330,7 +330,7 @@ lemma functor_id
 
 中文:
 引理 functor_id
-  条件: (J : 类型u) [LinearOrder J]
+  条件: (J : 类型u) [线性序 J]
   证明: by
   refine EnrichedFunctor.ext _ (fun _ => rfl) fun i j => ?_
   ext
@@ -358,7 +358,7 @@ lemma functor_comp
 
 中文:
 引理 functor_comp
-  结论: {J K L : 类型u} [LinearOrder J] [LinearOrder K]
+  结论: {J K L : 类型u} [线性序 J] [线性序 K]
   证明: by
   refine EnrichedFunctor.ext _ (fun _ => rfl) fun i j => ?_
   ext
@@ -393,7 +393,7 @@ definition SimplicialNerve
 
 中文:
 定义 SimplicialNerve
-  签名: (C : 类型u) [Category.{v} C] [SimplicialCategory C]
+  签名: (C : 类型u) [范畴.{v} C] [SimplicialCategory C]
   定义体: EnrichedFunctor SSet (SimplicialThickening (ULift (Fin (n.unop.len + 1)))) C
   map f := ↾((SimplicialThickening.functor f.unop.toOrderHom.uliftMap).comp
     (E := C) SSet)

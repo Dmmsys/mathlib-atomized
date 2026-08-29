@@ -172,8 +172,8 @@ theorem free
 
 中文:
 定理 free
-  条件: [Module.Free R V]
-  结论: Module.Free S W
+  条件: [模.自由 R V]
+  结论: 模.自由 S W
   证明: Module.Free.of_basis (ibc.basis (Module.Free.chooseBasis R V))
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, Module.Free.of_basis, chooseBasis, ibc.basis, of_basis
@@ -215,7 +215,7 @@ theorem of_basis
 
 中文:
 定理 of_basis
-  结论: IsBaseChange R (Finsupp.linearCombination A b)
+  结论: IsBaseChange R (有限支撑.linearCombination A b)
   证明: by
   classical
   let j := TensorProduct.finsuppScalarRight A R R ι
@@ -259,7 +259,7 @@ theorem of_fintype_basis
 
 中文:
 定理 of_fintype_basis
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: by
   have : DecidableEq ι := Classical.typeDecidableEq ι
   let j : R otimes[A] (ι -> A) ≃ₗ[R] ι -> R := piScalarRight A R R ι
@@ -303,7 +303,7 @@ theorem of_fintype_basis_eq
 
 中文:
 定理 of_fintype_basis_eq
-  条件: [Fintype ι] {a : ι -> A} {v : V}
+  条件: [有限类型 ι] {a : ι -> A} {v : V}
   证明: by
   rw [← LinearEquiv.symm_apply_eq]
   rw [Fintype.linearCombination_apply]; rw [b.equivFun_symm_apply]

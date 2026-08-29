@@ -50,7 +50,7 @@ theorem Icc_mul_Icc_subset'
 
 中文:
 定理 Icc_mul_Icc_subset'
-  条件: [LocallyFiniteOrder α] (a b c d : α)
+  条件: [局部有限序 α] (a b c d : α)
   证明: Finset.coe_subset.mp by simpa using Set.Icc_mul_Icc_subset' _ _ _ _
 
 @[to_additive Iic_add_Iic_subset]
@@ -76,7 +76,7 @@ theorem Iic_mul_Iic_subset'
 中文:
 定理 Iic_mul_Iic_subset'
   条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: Iic a * Iic b subseteq Iic (a * b)
+  结论: 左无界右闭区间 a * 左无界右闭区间 b subseteq 左无界右闭区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iic_subset' _ _
 
 @[to_additive Ici_add_Ici_subset]
@@ -99,7 +99,7 @@ theorem Ici_mul_Ici_subset'
 中文:
 定理 Ici_mul_Ici_subset'
   条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: Ici a * Ici b subseteq Ici (a * b)
+  结论: 左闭右无界区间 a * 左闭右无界区间 b subseteq 左闭右无界区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ici_subset' _ _
 
 Depends on / 依赖: Finset, Finset.coe_subset.mp, Ici_mul_Ici_subset, Set.Ici_mul_Ici_subset, coe_subset
@@ -127,7 +127,7 @@ theorem Icc_mul_Ico_subset'
 
 中文:
 定理 Icc_mul_Ico_subset'
-  条件: [LocallyFiniteOrder α] (a b c d : α)
+  条件: [局部有限序 α] (a b c d : α)
   证明: Finset.coe_subset.mp by simpa using Set.Icc_mul_Ico_subset' _ _ _ _
 
 @[to_additive Ico_add_Icc_subset]
@@ -151,7 +151,7 @@ theorem Ico_mul_Icc_subset'
 
 中文:
 定理 Ico_mul_Icc_subset'
-  条件: [LocallyFiniteOrder α] (a b c d : α)
+  条件: [局部有限序 α] (a b c d : α)
   证明: Finset.coe_subset.mp by simpa using Set.Ico_mul_Icc_subset' _ _ _ _
 
 @[to_additive Ioc_add_Ico_subset]
@@ -175,7 +175,7 @@ theorem Ioc_mul_Ico_subset'
 
 中文:
 定理 Ioc_mul_Ico_subset'
-  条件: [LocallyFiniteOrder α] (a b c d : α)
+  条件: [局部有限序 α] (a b c d : α)
   证明: Finset.coe_subset.mp by simpa using Set.Ioc_mul_Ico_subset' _ _ _ _
 
 @[to_additive Ico_add_Ioc_subset]
@@ -199,7 +199,7 @@ theorem Ico_mul_Ioc_subset'
 
 中文:
 定理 Ico_mul_Ioc_subset'
-  条件: [LocallyFiniteOrder α] (a b c d : α)
+  条件: [局部有限序 α] (a b c d : α)
   证明: Finset.coe_subset.mp by simpa using Set.Ico_mul_Ioc_subset' _ _ _ _
 
 @[to_additive Iic_add_Iio_subset]
@@ -225,7 +225,7 @@ theorem Iic_mul_Iio_subset'
 中文:
 定理 Iic_mul_Iio_subset'
   条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: Iic a * Iio b subseteq Iio (a * b)
+  结论: 左无界右闭区间 a * 左无界右开区间 b subseteq 左无界右开区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iio_subset' _ _
 
 @[to_additive Iio_add_Iic_subset]
@@ -250,7 +250,7 @@ theorem Iio_mul_Iic_subset'
 中文:
 定理 Iio_mul_Iic_subset'
   条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: Iio a * Iic b subseteq Iio (a * b)
+  结论: 左无界右开区间 a * 左无界右闭区间 b subseteq 左无界右开区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Iio_mul_Iic_subset' _ _
 
 @[to_additive Ioi_add_Ici_subset]
@@ -275,7 +275,7 @@ theorem Ioi_mul_Ici_subset'
 中文:
 定理 Ioi_mul_Ici_subset'
   条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: Ioi a * Ici b subseteq Ioi (a * b)
+  结论: 左开右无界区间 a * 左闭右无界区间 b subseteq 左开右无界区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Ioi_mul_Ici_subset' _ _
 
 @[to_additive Ici_add_Ioi_subset]
@@ -298,7 +298,7 @@ theorem Ici_mul_Ioi_subset'
 中文:
 定理 Ici_mul_Ioi_subset'
   条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: Ici a * Ioi b subseteq Ioi (a * b)
+  结论: 左闭右无界区间 a * 左开右无界区间 b subseteq 左开右无界区间 (a * b)
   证明: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ioi_subset' _ _
 
 Depends on / 依赖: Finset, Finset.coe_subset.mp, Ici_mul_Ioi_subset, Set.Ici_mul_Ioi_subset, coe_subset

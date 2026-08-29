@@ -137,10 +137,10 @@ class IsRightKanExtension
     - nonempty_isUniversal : Nonempty (RightExtension.mk F' α).IsUniversal
 
 中文:
-类 IsRightKanExtension
+类 是RightKanExtension
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_isUniversal : Nonempty (RightExtension.mk F' α).IsUniversal
+    - nonempty_isUniversal : 非空 (RightExtension.mk F' α).是泛
 -/
 class IsRightKanExtension : Prop where
   nonempty_isUniversal : Nonempty (RightExtension.mk F' α).IsUniversal
@@ -157,7 +157,7 @@ definition isUniversalOfIsRightKanExtension
 
 中文:
 定义 isUniversalOfIsRightKanExtension
-  签名: : (RightExtension.mk F' α).IsUniversal
+  签名: : (RightExtension.mk F' α).是泛
   定义体: IsRightKanExtension.nonempty_isUniversal.some
 
 Depends on / 依赖: IsRightKanExtension, IsRightKanExtension.nonempty_isUniversal.some, nonempty_isUniversal
@@ -450,10 +450,10 @@ class IsLeftKanExtension
     - nonempty_isUniversal : Nonempty (LeftExtension.mk F' α).IsUniversal
 
 中文:
-类 IsLeftKanExtension
+类 是LeftKanExtension
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_isUniversal : Nonempty (LeftExtension.mk F' α).IsUniversal
+    - nonempty_isUniversal : 非空 (LeftExtension.mk F' α).是泛
 -/
 class IsLeftKanExtension : Prop where
   nonempty_isUniversal : Nonempty (LeftExtension.mk F' α).IsUniversal
@@ -470,7 +470,7 @@ definition isUniversalOfIsLeftKanExtension
 
 中文:
 定义 isUniversalOfIsLeftKanExtension
-  签名: : (LeftExtension.mk F' α).IsUniversal
+  签名: : (LeftExtension.mk F' α).是泛
   定义体: IsLeftKanExtension.nonempty_isUniversal.some
 
 Depends on / 依赖: IsLeftKanExtension, IsLeftKanExtension.nonempty_isUniversal.some, nonempty_isUniversal
@@ -793,7 +793,7 @@ abbreviation HasLeftKanExtension
   body: HasInitial (LeftExtension L F)
 
 中文:
-缩写 HasLeftKanExtension
+缩写 有LeftKanExtension
   签名: (L : C ⥤ D) (F : C ⥤ H)
   定义体: HasInitial (LeftExtension L F)
 
@@ -810,7 +810,7 @@ lemma HasLeftKanExtension.mk
   proof: (F'.isUniversalOfIsLeftKanExtension α).hasInitial
 
 中文:
-引理 HasLeftKanExtension.mk
+引理 有LeftKanExtension.mk
   结论: (F' : D ⥤ H) {L : C ⥤ D} {F : C ⥤ H} (α : F ⟶ L ⋙ F')
   证明: (F'.isUniversalOfIsLeftKanExtension α).hasInitial
 
@@ -871,7 +871,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L.rightKanExtension F).IsRightKanExtension (L.rightKanExtensionCounit F)
+  签名: (L.rightKanExtension F).是RightKanExtension (L.rightKanExtensionCounit F)
   定义体: ⟨terminalIsTerminal⟩
 
 @[ext]
@@ -956,7 +956,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L.leftKanExtension F).IsLeftKanExtension (L.leftKanExtensionUnit F)
+  签名: (L.leftKanExtension F).是LeftKanExtension (L.leftKanExtensionUnit F)
   定义体: ⟨initialIsInitial⟩
 
 @[ext]
@@ -1409,7 +1409,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEquivalence (LeftExtension.precomp L F G)
+  签名: 是等价 (LeftExtension.precomp L F G)
   定义体: by
   apply StructuredArrow.isEquivalenceMap₂
 
@@ -1430,7 +1430,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEquivalence (RightExtension.precomp L F G)
+  签名: 是等价 (RightExtension.precomp L F G)
   定义体: by
   apply CostructuredArrow.isEquivalenceMap₂
 
@@ -1654,7 +1654,7 @@ lemma hasLeftExtension_iff_of_iso₁
 
 中文:
 引理 hasLeftExtension_iff_of_iso₁
-  结论: HasLeftKanExtension L F ↔ HasLeftKanExtension L' F
+  结论: 有LeftKanExtension L F ↔ 有LeftKanExtension L' F
   证明: (leftExtensionEquivalenceOfIso₁ iso₁ F).hasInitial_iff
 
 Depends on / 依赖: hasInitial_iff
@@ -1742,7 +1742,7 @@ lemma hasLeftExtension_iff_of_iso₂
 
 中文:
 引理 hasLeftExtension_iff_of_iso₂
-  结论: HasLeftKanExtension L F ↔ HasLeftKanExtension L F'
+  结论: 有LeftKanExtension L F ↔ 有LeftKanExtension L F'
   证明: (leftExtensionEquivalenceOfIso₂ L iso₂).hasInitial_iff
 
 Depends on / 依赖: hasInitial_iff
@@ -2095,7 +2095,7 @@ theorem isLeftKanExtension_iff_postcompose
 
 中文:
 定理 isLeftKanExtension_iff_postcompose
-  结论: [F₁.IsLeftKanExtension α]
+  结论: [F₁.是LeftKanExtension α]
   证明: by
   let Ψ := leftExtensionEquivalenceOfIso₁ e F₀
   obtain ⟨⟨hα⟩⟩ := (inferInstance : F₁.IsLeftKanExtension α)
@@ -2156,7 +2156,7 @@ definition coconeOfIsLeftKanExtension
 
 中文:
 定义 coconeOfIsLeftKanExtension
-  签名: (c : Cocone F)
+  签名: (c : 余锥 F)
   定义体: c.pt
   ι := F'.descOfIsLeftKanExtension α _ c.ι
 
@@ -2187,7 +2187,7 @@ definition isColimitCoconeOfIsLeftKanExtension
 
 中文:
 定义 isColimitCoconeOfIsLeftKanExtension
-  签名: {c : Cocone F} (hc : IsColimit c)
+  签名: {c : 余锥 F} (hc : 是余极限 c)
   定义体: hc.desc (Cocone.mk _ (α ≫ whiskerLeft L s.ι))
   fac s := by
     have : F'.descOfIsLeftKanExtension α ((const D).obj c.pt) c.ι ≫
@@ -2306,7 +2306,7 @@ definition coneOfIsRightKanExtension
 
 中文:
 定义 coneOfIsRightKanExtension
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: c.pt
   π := F'.liftOfIsRightKanExtension α _ c.π
 
@@ -2337,7 +2337,7 @@ definition isLimitConeOfIsRightKanExtension
 
 中文:
 定义 isLimitConeOfIsRightKanExtension
-  签名: {c : Cone F} (hc : IsLimit c)
+  签名: {c : 锥 F} (hc : 是极限 c)
   定义体: hc.lift (Cone.mk _ (whiskerLeft L s.π ≫ α))
   fac s := by
     have : (Functor.const _).map (hc.lift (Cone.mk _ (whiskerLeft L s.π ≫ α))) ≫
@@ -2454,7 +2454,7 @@ instance isLeftKanExtensionId
 
 中文:
 实例 isLeftKanExtensionId
-  签名: : F₀.IsLeftKanExtension F₀.leftUnitor.inv where
+  签名: : F₀.是LeftKanExtension F₀.leftUnitor.inv where
   定义体: ⟨StructuredArrow.mkIdInitial⟩
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mkIdInitial, mkIdInitial
@@ -2473,7 +2473,7 @@ instance isRightKanExtensionId
 
 中文:
 实例 isRightKanExtensionId
-  签名: : F₀.IsRightKanExtension F₀.leftUnitor.hom where
+  签名: : F₀.是RightKanExtension F₀.leftUnitor.hom where
   定义体: ⟨CostructuredArrow.mkIdTerminal⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mkIdTerminal, mkIdTerminal

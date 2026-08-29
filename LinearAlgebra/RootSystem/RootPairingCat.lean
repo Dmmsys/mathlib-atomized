@@ -55,15 +55,15 @@ structure RootPairingCat
     - pairing : RootPairing index R weight coweight
 
 中文:
-结构 RootPairingCat
-  参数: (R : 类型u) [CommRing R]
+结构 RootPairing范畴
+  参数: (R : 类型u) [交换环 R]
   公理与运算 (8 个):
     - weight : 类型v
-    - [weightIsAddCommGroup : AddCommGroup weight]
-    - [weightIsModule : Module R weight]
+    - [weightIsAddCommGroup : 加法交换群 weight]
+    - [weightIsModule : 模 R weight]
     - coweight : 类型v
-    - [coweightIsAddCommGroup : AddCommGroup coweight]
-    - [coweightIsModule : Module R coweight]
+    - [coweightIsAddCommGroup : 加法交换群 coweight]
+    - [coweightIsModule : 模 R coweight]
     - index : 类型v
     - pairing : RootPairing index R weight coweight
 -/
@@ -98,7 +98,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category.{v, max (v + 1) u} (RootPairingCat.{v} R) where
+  签名: : 范畴.{v, 最大值 (v + 1) u} (RootPairing范畴.{v} R) where
   定义体: RootPairing.Hom P.pairing Q.pairing
   id P := RootPairing.Hom.id P.pairing
   comp f g := RootPairing.Hom.comp g f

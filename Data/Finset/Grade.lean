@@ -62,7 +62,7 @@ lemma _root_.CovBy.exists_multiset_cons
   proof: (lt_iff_cons_le.1 h.lt).imp fun _a ha => ha.eq_of_not_lt h.2 lt_cons_self _ _
 
 中文:
-引理 _root_.CovBy.exists_multiset_cons
+引理 _root_.CovBy.存在_multiset_cons
   条件: (h : s ⋖ t)
   结论: 存在 a, a ::ₘ s = t
   证明: (lt_iff_cons_le.1 h.lt).imp fun _a ha => ha.eq_of_not_lt h.2 lt_cons_self _ _
@@ -159,7 +159,7 @@ instance instGradeMinOrder
 
 中文:
 实例 instGradeMinOrder
-  签名: : GradeMinOrder 自然数 (Multiset α) where
+  签名: : GradeMin序 自然数 (Multiset α) where
   定义体: card
   grade_strictMono := card_strictMono
   covBy_grade _ _ := CovBy.card_multiset
@@ -203,7 +203,7 @@ lemma ordConnected_range_val
 
 中文:
 引理 ordConnected_range_val
-  结论: Set.OrdConnected (Set.range val : Set <| Multiset α)
+  结论: 集合.序连通 (集合.range val : 集合 <| Multiset α)
   证明: ⟨by rintro _ _ _ ⟨s, rfl⟩ t ht; exact ⟨⟨t, Multiset.nodup_of_le ht.2 s.2⟩, rfl⟩⟩
 
 Depends on / 依赖: Multiset, Multiset.nodup_of_le, nodup_of_le
@@ -221,7 +221,7 @@ lemma ordConnected_range_coe
 
 中文:
 引理 ordConnected_range_coe
-  结论: Set.OrdConnected (Set.range ((↑) : Finset α -> Set α))
+  结论: 集合.序连通 (集合.range ((↑) : 有限集 α -> 集合 α))
   证明: ⟨by rintro _ _ _ ⟨s, rfl⟩ t ht; exact ⟨_, (s.finite_toSet.subset ht.2).coe_toFinset⟩⟩
 
 Depends on / 依赖: coe_toFinset, finite_toSet, s.finite_toSet.subset, subset
@@ -271,7 +271,7 @@ lemma coe_wcovBy_coe
 
 中文:
 引理 coe_wcovBy_coe
-  结论: (s : Set α) ⩿ t ↔ s ⩿ t
+  结论: (s : 集合 α) ⩿ t ↔ s ⩿ t
   证明: ordConnected_range_coe.apply_wcovBy_apply_iff ⟨⟨_, coe_injective⟩, coe_subset⟩
 -/
 @[simp] lemma coe_wcovBy_coe : (s : Set α) ⩿ t ↔ s ⩿ t :=
@@ -292,7 +292,7 @@ alias ⟨_, _root_.CovBy.finset_coe⟩ := coe_covBy_coe
 
 中文:
 引理 coe_covBy_coe
-  结论: (s : Set α) ⋖ t ↔ s ⋖ t
+  结论: (s : 集合 α) ⋖ t ↔ s ⋖ t
   证明: ordConnected_range_coe.apply_covBy_apply_iff ⟨⟨_, coe_injective⟩, coe_subset⟩
 
 alias ⟨_, _root_.WCovBy.finset_val⟩ := val_wcovBy_val
@@ -336,7 +336,7 @@ lemma _root_.CovBy.exists_finset_cons
   ⟨a, ha, (hst.eq_of_not_ssuperset <| h.2 <| ssubset_cons _).symm⟩
 
 中文:
-引理 _root_.CovBy.exists_finset_cons
+引理 _root_.CovBy.存在_finset_cons
   条件: (h : s ⋖ t)
   结论: 存在 a, 存在 ha : a ∉ s, s.cons a ha = t
   证明: let ⟨a, ha, hst⟩ := ssubset_iff_exists_cons_subset.1 h.lt
@@ -357,7 +357,7 @@ lemma covBy_iff_exists_cons
   proof: ⟨CovBy.exists_finset_cons, by rintro ⟨a, ha, rfl⟩; exact covBy_cons _⟩
 
 中文:
-引理 covBy_iff_exists_cons
+引理 covBy_iff_存在_cons
   结论: s ⋖ t ↔ 存在 a, 存在 ha : a ∉ s, s.cons a ha = t
   证明: ⟨CovBy.exists_finset_cons, by rintro ⟨a, ha, rfl⟩; exact covBy_cons _⟩
 
@@ -399,7 +399,7 @@ lemma wcovBy_insert
 
 中文:
 引理 wcovBy_insert
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: s ⩿ insert a s
   证明: by simp [← coe_wcovBy_coe]
 -/
@@ -415,7 +415,7 @@ lemma erase_wcovBy
 
 中文:
 引理 erase_wcovBy
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: s.erase a ⩿ s
   证明: by simp [← coe_wcovBy_coe]
 -/
@@ -459,7 +459,7 @@ classical exact insert_empty_eq (β := Finset α) a ▸ covBy_insert notMem_empt
 中文:
 引理 empty_covBy_singleton
   条件: (a : α)
-  结论: ∅ ⋖ ({a} : Finset α)
+  结论: ∅ ⋖ ({a} : 有限集 α)
   证明: by
 classical exact insert_empty_eq (β := Finset α) a ▸ covBy_insert notMem_empty a
 -/
@@ -494,7 +494,7 @@ lemma _root_.CovBy.exists_finset_insert
   simpa using h.exists_finset_cons
 
 中文:
-引理 _root_.CovBy.exists_finset_insert
+引理 _root_.CovBy.存在_finset_insert
   条件: (h : s ⋖ t)
   结论: 存在 a ∉ s, insert a s = t
   证明: by
@@ -516,7 +516,7 @@ lemma _root_.CovBy.exists_finset_erase
   simpa only [← coe_inj, coe_erase] using! h.finset_coe.exists_set_sdiff_singleton
 
 中文:
-引理 _root_.CovBy.exists_finset_erase
+引理 _root_.CovBy.存在_finset_erase
   条件: (h : s ⋖ t)
   结论: 存在 a in t, t.erase a = s
   证明: by
@@ -537,7 +537,7 @@ lemma covBy_iff_exists_insert
   simp only [← coe_covBy_coe, Set.covBy_iff_exists_insert, ← coe_inj, coe_insert, mem_coe]
 
 中文:
-引理 covBy_iff_exists_insert
+引理 covBy_iff_存在_insert
   结论: s ⋖ t ↔ 存在 a ∉ s, insert a s = t
   证明: by
   simp only [← coe_covBy_coe, Set.covBy_iff_exists_insert, ← coe_inj, coe_insert, mem_coe]
@@ -598,7 +598,7 @@ lemma covBy_iff_exists_erase
   simp only [← coe_covBy_coe, Set.covBy_iff_exists_sdiff_singleton, ← coe_inj, coe_erase, mem_coe]
 
 中文:
-引理 covBy_iff_exists_erase
+引理 covBy_iff_存在_erase
   结论: s ⋖ t ↔ 存在 a in t, t.erase a = s
   证明: by
   simp only [← coe_covBy_coe, Set.covBy_iff_exists_sdiff_singleton, ← coe_inj, coe_erase, mem_coe]
@@ -622,7 +622,7 @@ lemma isAtom_singleton
 中文:
 引理 isAtom_singleton
   条件: (a : α)
-  结论: IsAtom ({a} : Finset α)
+  结论: IsAtom ({a} : 有限集 α)
   证明: ⟨singleton_ne_empty a, fun _ => eq_empty_of_ssubset_singleton⟩
 -/
 @[simp] lemma isAtom_singleton (a : α) : IsAtom ({a} : Finset α) :=
@@ -661,7 +661,7 @@ lemma isCoatom_compl_singleton
 中文:
 引理 isCoatom_compl_singleton
   条件: (a : α)
-  结论: IsCoatom ({a}ᶜ : Finset α)
+  结论: IsCoatom ({a}ᶜ : 有限集 α)
   证明: (isAtom_singleton a).compl
 
 Depends on / 依赖: isAtom_singleton
@@ -701,7 +701,7 @@ instance instGradeMinOrder_multiset
 
 中文:
 实例 instGradeMinOrder_multiset
-  签名: : GradeMinOrder (Multiset α) (Finset α) where
+  签名: : GradeMin序 (Multiset α) (有限集 α) where
   定义体: val
   grade_strictMono := val_strictMono
   covBy_grade _ _ := CovBy.finset_val
@@ -724,7 +724,7 @@ lemma grade_multiset_eq
 
 中文:
 引理 grade_multiset_eq
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: grade (Multiset α) s = s.1
   证明: rfl
 -/
@@ -743,7 +743,7 @@ instance instGradeMinOrder_nat
 
 中文:
 实例 instGradeMinOrder_nat
-  签名: : GradeMinOrder 自然数 (Finset α) where
+  签名: : GradeMin序 自然数 (有限集 α) where
   定义体: card
   grade_strictMono := card_strictMono
   covBy_grade _ _ := CovBy.card_finset
@@ -766,7 +766,7 @@ lemma grade_eq
 
 中文:
 引理 grade_eq
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: grade 自然数 s = s.card
   证明: rfl
 -/

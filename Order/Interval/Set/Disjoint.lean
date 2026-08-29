@@ -53,7 +53,7 @@ theorem Iic_disjoint_Ioi
 中文:
 定理 Iic_disjoint_Ioi
   条件: (h : a <= b)
-  结论: Disjoint (Iic a) (Ioi b)
+  结论: Disjoint (左无界右闭区间 a) (左开右无界区间 b)
   证明: disjoint_left.mpr fun _ ha hb => (h.trans_lt hb).not_ge ha
 
 @[to_dual (attr := simp)]
@@ -78,7 +78,7 @@ theorem Iio_disjoint_Ici
 中文:
 定理 Iio_disjoint_Ici
   条件: (h : a <= b)
-  结论: Disjoint (Iio a) (Ici b)
+  结论: Disjoint (左无界右开区间 a) (左闭右无界区间 b)
   证明: disjoint_left.mpr fun _ ha hb => (h.trans_lt' ha).not_ge hb
 
 @[simp]
@@ -103,7 +103,7 @@ theorem Iic_disjoint_Ioc
 中文:
 定理 Iic_disjoint_Ioc
   条件: (h : a <= b)
-  结论: Disjoint (Iic a) (Ioc b c)
+  结论: Disjoint (左无界右闭区间 a) (左开右闭区间 b c)
   证明: (Iic_disjoint_Ioi h).mono le_rfl Ioc_subset_Ioi_self
 
 @[simp]
@@ -128,7 +128,7 @@ theorem Ioc_disjoint_Ioc_of_le
 中文:
 定理 Ioc_disjoint_Ioc_of_le
   条件: {d : α} (h : b <= c)
-  结论: Disjoint (Ioc a b) (Ioc c d)
+  结论: Disjoint (左开右闭区间 a b) (左开右闭区间 c d)
   证明: (Iic_disjoint_Ioc h).mono Ioc_subset_Iic_self le_rfl
 
 @[simp]
@@ -151,7 +151,7 @@ theorem Ico_disjoint_Ico_same
 
 中文:
 定理 Ico_disjoint_Ico_same
-  结论: Disjoint (Ico a b) (Ico b c)
+  结论: Disjoint (左闭右开区间 a b) (左闭右开区间 b c)
   证明: disjoint_left.mpr fun _ hab hbc => hab.2.not_ge hbc.1
 
 @[to_dual (attr := simp)]
@@ -175,7 +175,7 @@ theorem Ici_disjoint_Iic
 
 中文:
 定理 Ici_disjoint_Iic
-  结论: Disjoint (Ici a) (Iic b) ↔ ¬a <= b
+  结论: Disjoint (左闭右无界区间 a) (左无界右闭区间 b) ↔ ¬a <= b
   证明: by
   rw [Set.disjoint_iff_inter_eq_empty]; rw [Ici_inter_Iic]; rw [Icc_eq_empty_iff]
 
@@ -199,7 +199,7 @@ theorem Ioc_disjoint_Ioi
 中文:
 定理 Ioc_disjoint_Ioi
   条件: (h : b <= c)
-  结论: Disjoint (Ioc a b) (Ioi c)
+  结论: Disjoint (左开右闭区间 a b) (左开右无界区间 c)
   证明: disjoint_left.mpr (fun _ hx hy => (hx.2.trans h).not_gt hy)
 
 Depends on / 依赖: disjoint_left, disjoint_left.mpr, not_gt
@@ -219,7 +219,7 @@ theorem Ioc_disjoint_Ioi_same
 
 中文:
 定理 Ioc_disjoint_Ioi_same
-  结论: Disjoint (Ioc a b) (Ioi b)
+  结论: Disjoint (左开右闭区间 a b) (左开右无界区间 b)
   证明: Ioc_disjoint_Ioi le_rfl
 
 @[to_dual]
@@ -244,7 +244,7 @@ theorem Ioi_disjoint_Iio_of_not_lt
 中文:
 定理 Ioi_disjoint_Iio_of_not_lt
   条件: (h : ¬a < b)
-  结论: Disjoint (Ioi a) (Iio b)
+  结论: Disjoint (左开右无界区间 a) (左无界右开区间 b)
   证明: disjoint_left.mpr fun _ hx hy => h (hx.trans hy)
 
 @[to_dual]
@@ -269,7 +269,7 @@ theorem Ioi_disjoint_Iio_of_le
 中文:
 定理 Ioi_disjoint_Iio_of_le
   条件: (h : a <= b)
-  结论: Disjoint (Ioi b) (Iio a)
+  结论: Disjoint (左开右无界区间 b) (左无界右开区间 a)
   证明: Ioi_disjoint_Iio_of_not_lt (not_lt_of_ge h)
 
 @[to_dual]
@@ -292,7 +292,7 @@ theorem Ioi_disjoint_Iio_same
 
 中文:
 定理 Ioi_disjoint_Iio_same
-  结论: Disjoint (Ioi a) (Iio a)
+  结论: Disjoint (左开右无界区间 a) (左无界右开区间 a)
   证明: Ioi_disjoint_Iio_of_le le_rfl
 
 @[to_dual (attr := simp)]
@@ -318,8 +318,8 @@ theorem Ioi_disjoint_Iio_iff
 
 中文:
 定理 Ioi_disjoint_Iio_iff
-  条件: [DenselyOrdered α]
-  结论: Disjoint (Ioi a) (Iio b) ↔ ¬a < b
+  条件: [稠密序 α]
+  结论: Disjoint (左开右无界区间 a) (左无界右开区间 b) ↔ ¬a < b
   证明: ⟨fun h hab => (exists_between hab).elim
     fun _ hc => h.notMem_of_mem_left hc.left hc.right,
     Ioi_disjoint_Iio_of_not_lt⟩
@@ -346,7 +346,7 @@ theorem iUnion_Iic
 
 中文:
 定理 iUnion_Iic
-  结论: ⋃ a : α, Iic a = univ
+  结论: ⋃ a : α, 左无界右闭区间 a = univ
   证明: iUnion_eq_univ_iff.2 fun x => ⟨x, self_mem_Iic⟩
 
 @[to_dual (attr := simp)]
@@ -372,7 +372,7 @@ theorem iUnion_Icc_right
 中文:
 定理 iUnion_Icc_right
   条件: (a : α)
-  结论: ⋃ b, Icc a b = Ici a
+  结论: ⋃ b, 闭区间 a b = 左闭右无界区间 a
   证明: by
   simp only [← Ici_inter_Iic, ← inter_iUnion, iUnion_Iic, inter_univ]
 
@@ -399,7 +399,7 @@ theorem iUnion_Ioc_right
 中文:
 定理 iUnion_Ioc_right
   条件: (a : α)
-  结论: ⋃ b, Ioc a b = Ioi a
+  结论: ⋃ b, 左开右闭区间 a b = 左开右无界区间 a
   证明: by
   simp only [← Ioi_inter_Iic, ← inter_iUnion, iUnion_Iic, inter_univ]
 
@@ -424,8 +424,8 @@ theorem iUnion_Iio
 
 中文:
 定理 iUnion_Iio
-  条件: [NoMaxOrder α]
-  结论: ⋃ a : α, Iio a = univ
+  条件: [NoMax序 α]
+  结论: ⋃ a : α, 左无界右开区间 a = univ
   证明: iUnion_eq_univ_iff.2 exists_gt
 
 @[to_dual (attr := simp)]
@@ -450,8 +450,8 @@ theorem iUnion_Ico_right
 
 中文:
 定理 iUnion_Ico_right
-  条件: [NoMaxOrder α] (a : α)
-  结论: ⋃ b, Ico a b = Ici a
+  条件: [NoMax序 α] (a : α)
+  结论: ⋃ b, 左闭右开区间 a b = 左闭右无界区间 a
   证明: by
   simp only [← Ici_inter_Iio, ← inter_iUnion, iUnion_Iio, inter_univ]
 
@@ -475,8 +475,8 @@ theorem iUnion_Ioo_right
 
 中文:
 定理 iUnion_Ioo_right
-  条件: [NoMaxOrder α] (a : α)
-  结论: ⋃ b, Ioo a b = Ioi a
+  条件: [NoMax序 α] (a : α)
+  结论: ⋃ b, 开区间 a b = 左开右无界区间 a
   证明: by
   simp only [← Ioi_inter_Iio, ← inter_iUnion, iUnion_Iio, inter_univ]
 
@@ -505,7 +505,7 @@ theorem Ico_disjoint_Ico
 
 中文:
 定理 Ico_disjoint_Ico
-  结论: Disjoint (Ico a₁ a₂) (Ico b₁ b₂) ↔ min a₂ b₂ <= max a₁ b₁
+  结论: Disjoint (左闭右开区间 a₁ a₂) (左闭右开区间 b₁ b₂) ↔ 最小值 a₂ b₂ <= 最大值 a₁ b₁
   证明: by
   simp_rw [Set.disjoint_iff_inter_eq_empty, Ico_inter_Ico, Ico_eq_empty_iff, not_lt]
 
@@ -531,7 +531,7 @@ theorem Ioc_disjoint_Ioc
 
 中文:
 定理 Ioc_disjoint_Ioc
-  结论: Disjoint (Ioc a₁ a₂) (Ioc b₁ b₂) ↔ min a₂ b₂ <= max a₁ b₁
+  结论: Disjoint (左开右闭区间 a₁ a₂) (左开右闭区间 b₁ b₂) ↔ 最小值 a₂ b₂ <= 最大值 a₁ b₁
   证明: by
   have h : _ ↔ min (toDual a₁) (toDual b₁) <= max (toDual a₂) (toDual b₂) := Ico_disjoint_Ico
   simpa only [Ico_toDual] using! h
@@ -556,7 +556,7 @@ theorem Ioo_disjoint_Ioo
 
 中文:
 定理 Ioo_disjoint_Ioo
-  条件: [DenselyOrdered α]
+  条件: [稠密序 α]
   证明: by
   simp_rw [Set.disjoint_iff_inter_eq_empty, Ioo_inter_Ioo, Ioo_eq_empty_iff, not_lt]
 
@@ -581,7 +581,7 @@ theorem eq_of_Ico_disjoint
 
 中文:
 定理 eq_of_Ico_disjoint
-  结论: {x₁ x₂ y₁ y₂ : α} (h : Disjoint (Ico x₁ x₂) (Ico y₁ y₂)) (hx : x₁ < x₂)
+  结论: {x₁ x₂ y₁ y₂ : α} (h : Disjoint (左闭右开区间 x₁ x₂) (左闭右开区间 y₁ y₂)) (hx : x₁ < x₂)
   证明: by
   rw [Ico_disjoint_Ico]; rw [min_eq_left (le_of_lt h2.2)]; rw [le_max_iff] at h
   apply le_antisymm h2.1
@@ -747,7 +747,7 @@ theorem IsGLB.biUnion_Ioi_eq
 中文:
 定理 IsGLB.biUnion_Ioi_eq
   条件: (h : IsGLB s a)
-  结论: ⋃ x in s, Ioi x = Ioi a
+  结论: ⋃ x in s, 左开右无界区间 x = 左开右无界区间 a
   证明: by
   refine (iUnion₂_subset fun x hx => ?_).antisymm fun x hx => ?_
   · exact Ioi_subset_Ioi (h.1 hx)
@@ -774,7 +774,7 @@ theorem IsGLB.iUnion_Ioi_eq
 中文:
 定理 IsGLB.iUnion_Ioi_eq
   条件: (h : IsGLB (range f) a)
-  结论: ⋃ x, Ioi (f x) = Ioi a
+  结论: ⋃ x, 左开右无界区间 (f x) = 左开右无界区间 a
   证明: biUnion_range.symm.trans h.biUnion_Ioi_eq
 
 Depends on / 依赖: biUnion_Ioi_eq, biUnion_range, biUnion_range.symm.trans, h.biUnion_Ioi_eq
@@ -794,7 +794,7 @@ theorem IsLUB.biUnion_Iio_eq
 中文:
 定理 IsLUB.biUnion_Iio_eq
   条件: (h : IsLUB s a)
-  结论: ⋃ x in s, Iio x = Iio a
+  结论: ⋃ x in s, 左无界右开区间 x = 左无界右开区间 a
   证明: h.dual.biUnion_Ioi_eq
 
 Depends on / 依赖: biUnion_Ioi_eq, h.dual.biUnion_Ioi_eq
@@ -814,7 +814,7 @@ theorem IsLUB.iUnion_Iio_eq
 中文:
 定理 IsLUB.iUnion_Iio_eq
   条件: (h : IsLUB (range f) a)
-  结论: ⋃ x, Iio (f x) = Iio a
+  结论: ⋃ x, 左无界右开区间 (f x) = 左无界右开区间 a
   证明: h.dual.iUnion_Ioi_eq
 
 Depends on / 依赖: h.dual.iUnion_Ioi_eq, iUnion_Ioi_eq
@@ -832,7 +832,7 @@ theorem iUnion_Ioi_eq_Ioi_iInf
 
 中文:
 定理 iUnion_Ioi_eq_Ioi_iInf
-  条件: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  条件: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: isGLB_iInf.iUnion_Ioi_eq
 
 Depends on / 依赖: HomogeneousIdeal, Ideal.homogeneousCore.gc, IsGreatest, IsGreatest.isLUB, IsLUB.sSup_eq, Monotone, coe_mono, coe_mono.map_isGreatest, convert, homogeneousCore, iUnion_Ioi_eq, isGLB_iInf, isGLB_iInf.iUnion_Ioi_eq, isGreatest_u, isHomogeneous, map_isGreatest, mem_image, mem_ofPred_eq, sSup_eq, toIdeal
@@ -851,7 +851,7 @@ theorem iUnion_Iio_eq_Iio_iSup
 
 中文:
 定理 iUnion_Iio_eq_Iio_iSup
-  条件: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  条件: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: isLUB_iSup.iUnion_Iio_eq
 
 Depends on / 依赖: iUnion_Iio_eq, isLUB_iSup, isLUB_iSup.iUnion_Iio_eq
@@ -951,7 +951,7 @@ theorem IsLUB.biUnion_Iic_eq_Iic
 中文:
 定理 IsLUB.biUnion_Iic_eq_Iic
   条件: (a_lub : IsLUB s a) (a_mem : a in s)
-  结论: ⋃ x in s, Iic x = Iic a
+  结论: ⋃ x in s, 左无界右闭区间 x = 左无界右闭区间 a
   证明: a_lub.dual.biUnion_Ici_eq_Ici a_mem
 
 Depends on / 依赖: a_lub, a_lub.dual.biUnion_Ici_eq_Ici, a_mem, biUnion_Ici_eq_Ici
@@ -971,7 +971,7 @@ theorem iUnion_Ici_eq_Ioi_iInf
 
 中文:
 定理 iUnion_Ici_eq_Ioi_iInf
-  结论: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  结论: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: by
   simp only [← IsGLB.biUnion_Ici_eq_Ioi (@isGLB_iInf _ _ _ f) no_least_elem, mem_range,
     iUnion_exists, iUnion_iUnion_eq']
@@ -993,7 +993,7 @@ theorem iUnion_Iic_eq_Iio_iSup
 
 中文:
 定理 iUnion_Iic_eq_Iio_iSup
-  结论: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  结论: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: @iUnion_Ici_eq_Ioi_iInf ι (OrderDual R) _ f no_greatest_elem
 
 Depends on / 依赖: OrderDual, iUnion_Ici_eq_Ioi_iInf, no_greatest_elem
@@ -1014,7 +1014,7 @@ theorem iUnion_Ici_eq_Ici_iInf
 
 中文:
 定理 iUnion_Ici_eq_Ici_iInf
-  结论: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  结论: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: by
   simp only [← IsGLB.biUnion_Ici_eq_Ici (@isGLB_iInf _ _ _ f) has_least_elem, mem_range,
     iUnion_exists, iUnion_iUnion_eq']
@@ -1036,7 +1036,7 @@ theorem iUnion_Iic_eq_Iic_iSup
 
 中文:
 定理 iUnion_Iic_eq_Iic_iSup
-  结论: {R : 类型} [CompleteLinearOrder R] {f : ι -> R}
+  结论: {R : 类型} [完备线性序 R] {f : ι -> R}
   证明: @iUnion_Ici_eq_Ici_iInf ι (OrderDual R) _ f has_greatest_elem
 
 Depends on / 依赖: OrderDual, has_greatest_elem, iUnion_Ici_eq_Ici_iInf
@@ -1056,7 +1056,7 @@ theorem iUnion_Iio_eq_univ_iff
 
 中文:
 定理 iUnion_Iio_eq_univ_iff
-  结论: ⋃ i, Iio (f i) = univ ↔ (¬ BddAbove (range f))
+  结论: ⋃ i, 左无界右开区间 (f i) = univ ↔ (¬ BddAbove (range f))
   证明: by
   simp [not_bddAbove_iff, Set.eq_univ_iff_forall]
 
@@ -1080,7 +1080,7 @@ theorem iUnion_Iic_of_not_bddAbove_range
 中文:
 定理 iUnion_Iic_of_not_bddAbove_range
   条件: (hf : ¬ BddAbove (range f))
-  结论: ⋃ i, Iic (f i) = univ
+  结论: ⋃ i, 左无界右闭区间 (f i) = univ
   证明: by
   refine Set.eq_univ_of_subset ?_ (iUnion_Iio_eq_univ_iff.mpr hf)
   gcongr
@@ -1103,8 +1103,8 @@ theorem iInter_Iic_eq_empty_iff
   simp [not_bddBelow_iff, Set.eq_empty_iff_forall_notMem]
 
 中文:
-定理 iInter_Iic_eq_empty_iff
-  结论: ⋂ i, Iic (f i) = ∅ ↔ ¬ BddBelow (range f)
+定理 i整数er_Iic_eq_empty_iff
+  结论: ⋂ i, 左无界右闭区间 (f i) = ∅ ↔ ¬ BddBelow (range f)
   证明: by
   simp [not_bddBelow_iff, Set.eq_empty_iff_forall_notMem]
 
@@ -1127,9 +1127,9 @@ theorem iInter_Iio_of_not_bddBelow_range
   exact Iio_subset_Iic_self
 
 中文:
-定理 iInter_Iio_of_not_bddBelow_range
+定理 i整数er_Iio_of_not_bddBelow_range
   条件: (hf : ¬ BddBelow (range f))
-  结论: ⋂ i, Iio (f i) = ∅
+  结论: ⋂ i, 左无界右开区间 (f i) = ∅
   证明: by
   refine eq_empty_of_subset_empty ?_
   rw [← iInter_Iic_eq_empty_iff.mpr hf]

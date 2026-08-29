@@ -55,10 +55,10 @@ class HasZeroMorphisms
     - zero_comp : forall (X : C) {Y Z : C} (f : Y ⟶ Z), (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)  [default: by cat_disch]
 
 中文:
-类 HasZeroMorphisms
+类 有ZeroMorphisms
   参数: where
   公理与运算 (3 个):
-    - [zero : 对任意 X Y : C, Zero (X ⟶ Y)]
+    - [zero : 对任意 X Y : C, 零 (X ⟶ Y)]
     - comp_zero : 对任意 {X Y : C} (f : X ⟶ Y) (Z : C), f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)  [默认: by cat_disch]
     - zero_comp : 对任意 (X : C) {Y Z : C} (f : Y ⟶ Z), (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)  [默认: by cat_disch]
 
@@ -89,7 +89,7 @@ theorem comp_zero
 
 中文:
 定理 comp_zero
-  条件: [HasZeroMorphisms C] {X Y : C} {f : X ⟶ Y} {Z : C}
+  条件: [有ZeroMorphisms C] {X Y : C} {f : X ⟶ Y} {Z : C}
   证明: HasZeroMorphisms.comp_zero f Z
 
 @[simp]
@@ -111,7 +111,7 @@ theorem zero_comp
 
 中文:
 定理 zero_comp
-  条件: [HasZeroMorphisms C] {X : C} {Y Z : C} {f : Y ⟶ Z}
+  条件: [有ZeroMorphisms C] {X : C} {Y Z : C} {f : Y ⟶ Z}
   证明: HasZeroMorphisms.zero_comp X f
 
 Depends on / 依赖: HasZeroMorphisms, HasZeroMorphisms.zero_comp, zero_comp
@@ -130,7 +130,7 @@ instance hasZeroMorphismsPEmpty
 
 中文:
 实例 hasZeroMorphismsPEmpty
-  签名: : HasZeroMorphisms (Discrete PEmpty) where
+  签名: : 有ZeroMorphisms (离散 命题空) where
   定义体: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -148,7 +148,7 @@ instance hasZeroMorphismsPUnit
 
 中文:
 实例 hasZeroMorphismsPUnit
-  签名: : HasZeroMorphisms (Discrete PUnit) where
+  签名: : 有ZeroMorphisms (离散 命题单元) where
   定义体: by repeat (constructor)
 
 Depends on / 依赖: repeat
@@ -176,7 +176,7 @@ theorem ext_aux
 
 中文:
 定理 ext_aux
-  结论: (I J : HasZeroMorphisms C)
+  结论: (I J : 有ZeroMorphisms C)
   证明: by
   have : I.zero = J.zero := by
     funext X Y
@@ -216,7 +216,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (I J : HasZeroMorphisms C)
+  条件: (I J : 有ZeroMorphisms C)
   结论: I = J
   证明: by
   apply ext_aux
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (HasZeroMorphisms C)
+  签名: 子单例 (有ZeroMorphisms C)
   定义体: ⟨ext⟩
 -/
 instance : Subsingleton (HasZeroMorphisms C) :=
@@ -271,7 +271,7 @@ instance hasZeroMorphismsOpposite
 
 中文:
 实例 hasZeroMorphismsOpposite
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: ⟨(0 : unop Y ⟶ unop X).op⟩
   comp_zero f Z := congr_arg Quiver.Hom.op (HasZeroMorphisms.zero_comp (unop Z) f.unop)
   zero_comp X {Y Z} (f : Y ⟶ Z) :=
@@ -334,7 +334,7 @@ theorem zero_of_comp_mono
 
 中文:
 定理 zero_of_comp_mono
-  条件: {X Y Z : C} {f : X ⟶ Y} (g : Y ⟶ Z) [Mono g] (h : f ≫ g = 0)
+  条件: {X Y Z : C} {f : X ⟶ Y} (g : Y ⟶ Z) [单态射 g] (h : f ≫ g = 0)
   结论: f = 0
   证明: by
   rw [← zero_comp]; rw [cancel_mono] at h
@@ -359,7 +359,7 @@ theorem zero_of_epi_comp
 
 中文:
 定理 zero_of_epi_comp
-  条件: {X Y Z : C} (f : X ⟶ Y) {g : Y ⟶ Z} [Epi f] (h : f ≫ g = 0)
+  条件: {X Y Z : C} (f : X ⟶ Y) {g : Y ⟶ Z} [满态射 f] (h : f ≫ g = 0)
   结论: g = 0
   证明: by
   rw [← comp_zero]; rw [cancel_epi] at h
@@ -381,7 +381,7 @@ lemma comp_eq_zero_iff_of_epi
 
 中文:
 引理 comp_eq_zero_iff_of_epi
-  条件: {X Y Z : C} (f : X ⟶ Y) {g : Y ⟶ Z} [Epi f]
+  条件: {X Y Z : C} (f : X ⟶ Y) {g : Y ⟶ Z} [满态射 f]
   证明: ⟨zero_of_epi_comp _, by simp +contextual⟩
 
 Depends on / 依赖: contextual, zero_of_epi_comp
@@ -400,7 +400,7 @@ theorem eq_zero_of_image_eq_zero
 
 中文:
 定理 eq_zero_of_image_eq_zero
-  条件: {X Y : C} {f : X ⟶ Y} [HasImage f] (w : image.ι f = 0)
+  条件: {X Y : C} {f : X ⟶ Y} [有像 f] (w : 像.ι f = 0)
   证明: by rw [← image.fac f, w, HasZeroMorphisms.comp_zero]
 
 Depends on / 依赖: HasZeroMorphisms, HasZeroMorphisms.comp_zero, IsMonoidal, NatTrans, NatTrans.IsMonoidal.tensor, NatTrans.IsMonoidal.unit, comp_zero, image.fac, tensor
@@ -419,8 +419,8 @@ theorem nonzero_image_of_nonzero
 
 中文:
 定理 nonzero_image_of_nonzero
-  条件: {X Y : C} {f : X ⟶ Y} [HasImage f] (w : f != 0)
-  结论: image.ι f != 0
+  条件: {X Y : C} {f : X ⟶ Y} [有像 f] (w : f != 0)
+  结论: 像.ι f != 0
   证明: fun h => w (eq_zero_of_image_eq_zero h)
 
 Depends on / 依赖: eq_zero_of_image_eq_zero
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (C ⥤ D)
+  签名: 有ZeroMorphisms (C ⥤ D)
   定义体: ⟨{ app := fun _ => 0 }⟩
   comp_zero := fun η H => by
     ext X; dsimp; apply comp_zero
@@ -501,7 +501,7 @@ theorem eq_zero_of_src
 
 中文:
 定理 eq_zero_of_src
-  条件: {X Y : C} (o : IsZero X) (f : X ⟶ Y)
+  条件: {X Y : C} (o : 是零 X) (f : X ⟶ Y)
   结论: f = 0
   证明: o.eq_of_src _ _
 
@@ -521,7 +521,7 @@ theorem eq_zero_of_tgt
 
 中文:
 定理 eq_zero_of_tgt
-  条件: {X Y : C} (o : IsZero Y) (f : X ⟶ Y)
+  条件: {X Y : C} (o : 是零 Y) (f : X ⟶ Y)
   结论: f = 0
   证明: o.eq_of_tgt _ _
 
@@ -546,7 +546,7 @@ theorem iff_id_eq_zero
 中文:
 定理 iff_id_eq_zero
   条件: (X : C)
-  结论: IsZero X ↔ 𝟙 X = 0
+  结论: 是零 X ↔ 𝟙 X = 0
   证明: ⟨fun h => h.eq_of_src _ _, fun h =>
     ⟨fun Y => ⟨⟨⟨0⟩, fun f => by
         rw [← id_comp f]; rw [← id_comp (0 : X ⟶ Y)]; rw [h]; rw [zero_comp]; rw [zero_comp]; simp only⟩⟩,
@@ -573,8 +573,8 @@ theorem of_mono_zero
 
 中文:
 定理 of_mono_zero
-  条件: (X Y : C) [Mono (0 : X ⟶ Y)]
-  结论: IsZero X
+  条件: (X Y : C) [单态射 (0 : X ⟶ Y)]
+  结论: 是零 X
   证明: (iff_id_eq_zero X).mpr ((cancel_mono (0 : X ⟶ Y)).1 (by simp))
 
 Depends on / 依赖: cancel_mono, iff_id_eq_zero
@@ -593,8 +593,8 @@ theorem of_epi_zero
 
 中文:
 定理 of_epi_zero
-  条件: (X Y : C) [Epi (0 : X ⟶ Y)]
-  结论: IsZero Y
+  条件: (X Y : C) [满态射 (0 : X ⟶ Y)]
+  结论: 是零 Y
   证明: (iff_id_eq_zero Y).mpr ((cancel_epi (0 : X ⟶ Y)).1 (by simp))
 
 Depends on / 依赖: cancel_epi, iff_id_eq_zero
@@ -615,8 +615,8 @@ theorem of_mono_eq_zero
 
 中文:
 定理 of_mono_eq_zero
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f] (h : f = 0)
-  结论: IsZero X
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] (h : f = 0)
+  结论: 是零 X
   证明: by
   subst h
   apply of_mono_zero X Y
@@ -640,8 +640,8 @@ theorem of_epi_eq_zero
 
 中文:
 定理 of_epi_eq_zero
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f] (h : f = 0)
-  结论: IsZero Y
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f] (h : f = 0)
+  结论: 是零 Y
   证明: by
   subst h
   apply of_epi_zero X Y
@@ -670,8 +670,8 @@ theorem iff_isSplitMono_eq_zero
 
 中文:
 定理 iff_isSplitMono_eq_zero
-  条件: {X Y : C} (f : X ⟶ Y) [IsSplitMono f]
-  结论: IsZero X ↔ f = 0
+  条件: {X Y : C} (f : X ⟶ Y) [是分裂单态射 f]
+  结论: 是零 X ↔ f = 0
   证明: by
   rw [iff_id_eq_zero]
   constructor
@@ -710,8 +710,8 @@ theorem iff_isSplitEpi_eq_zero
 
 中文:
 定理 iff_isSplitEpi_eq_zero
-  条件: {X Y : C} (f : X ⟶ Y) [IsSplitEpi f]
-  结论: IsZero Y ↔ f = 0
+  条件: {X Y : C} (f : X ⟶ Y) [是分裂满态射 f]
+  结论: 是零 Y ↔ f = 0
   证明: by
   rw [iff_id_eq_zero]
   constructor
@@ -745,8 +745,8 @@ theorem of_mono
 
 中文:
 定理 of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f] (i : IsZero Y)
-  结论: IsZero X
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] (i : 是零 Y)
+  结论: 是零 X
   证明: by
   obtain rfl := i.eq_zero_of_tgt f
   exact IsZero.of_mono_zero X Y
@@ -770,8 +770,8 @@ theorem of_epi
 
 中文:
 定理 of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f] (i : IsZero X)
-  结论: IsZero Y
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f] (i : 是零 X)
+  结论: 是零 Y
   证明: by
   obtain rfl := i.eq_zero_of_src f
   exact IsZero.of_epi_zero X Y
@@ -811,8 +811,8 @@ definition IsZero.hasZeroMorphisms
  
 
 中文:
-定义 IsZero.hasZeroMorphisms
-  签名: {O : C} (hO : IsZero O)
+定义 是零.hasZeroMorphisms
+  签名: {O : C} (hO : 是零 O)
   定义体: { zero := hO.from_ X ≫ hO.to_ Y }
   zero_comp X {Y Z} f := by
     change (hO.from_ X ≫ hO.to_ Y) ≫ f = hO.from_ X ≫ hO.to_ Z
@@ -871,7 +871,7 @@ definition zeroMorphismsOfZeroObject
 
 中文:
 定义 zeroMorphismsOfZeroObject
-  签名: : HasZeroMorphisms C where
+  签名: : 有ZeroMorphisms C where
   定义体: { zero := (default : X ⟶ 0) ≫ default }
   zero_comp X {Y Z} f := by
     change ((default : X ⟶ 0) ≫ default) ≫ f = (default : X ⟶ 0) ≫ default
@@ -958,7 +958,7 @@ theorem zeroIsoIsTerminal_hom
 
 中文:
 定理 zeroIsoIsTerminal_hom
-  条件: {X : C} (t : IsTerminal X)
+  条件: {X : C} (t : 是终止 X)
   结论: (zeroIsoIsTerminal t).hom = 0
   证明: by ext
 
@@ -982,7 +982,7 @@ theorem zeroIsoIsTerminal_inv
 
 中文:
 定理 zeroIsoIsTerminal_inv
-  条件: {X : C} (t : IsTerminal X)
+  条件: {X : C} (t : 是终止 X)
   结论: (zeroIsoIsTerminal t).inv = 0
   证明: by ext
 
@@ -1052,7 +1052,7 @@ theorem zeroIsoTerminal_hom
 
 中文:
 定理 zeroIsoTerminal_hom
-  条件: [HasTerminal C]
+  条件: [有终止 C]
   结论: zeroIsoTerminal.hom = (0 : 0 ⟶ ⊤_ C)
   证明: by ext
 
@@ -1072,7 +1072,7 @@ theorem zeroIsoTerminal_inv
 
 中文:
 定理 zeroIsoTerminal_inv
-  条件: [HasTerminal C]
+  条件: [有终止 C]
   结论: zeroIsoTerminal.inv = (0 : ⊤_ C ⟶ 0)
   证明: by ext
 -/
@@ -1103,8 +1103,8 @@ theorem IsZero.map
 @[simp]
 
 中文:
-定理 IsZero.map
-  结论: [HasZeroObject D] [HasZeroMorphisms D] {F : C ⥤ D} (hF : IsZero F) {X Y : C}
+定理 是零.map
+  结论: [有ZeroObject D] [有ZeroMorphisms D] {F : C ⥤ D} (hF : 是零 F) {X Y : C}
   证明: (hF.obj _).eq_of_src _ _
 
 @[simp]
@@ -1127,8 +1127,8 @@ theorem _root_.CategoryTheory.Functor.zero_obj
 @[simp]
 
 中文:
-定理 _root_.CategoryTheory.Functor.zero_obj
-  条件: [HasZeroObject D] (X : C)
+定理 _root_.范畴论.函子.zero_obj
+  条件: [有ZeroObject D] (X : C)
   证明: (isZero_zero _).obj _
 
 @[simp]
@@ -1149,8 +1149,8 @@ theorem _root_.CategoryTheory.zero_map
   proof: (isZero_zero _).map _
 
 中文:
-定理 _root_.CategoryTheory.zero_map
-  结论: [HasZeroObject D] [HasZeroMorphisms D] {X Y : C}
+定理 _root_.范畴论.zero_map
+  结论: [有ZeroObject D] [有ZeroMorphisms D] {X Y : C}
   证明: (isZero_zero _).map _
 
 Depends on / 依赖: isZero_zero
@@ -1322,7 +1322,7 @@ theorem mono_of_source_iso_zero
 中文:
 定理 mono_of_source_iso_zero
   条件: {X Y : C} (f : X ⟶ Y) (i : X ≅ 0)
-  结论: Mono f
+  结论: 单态射 f
   证明: ⟨fun {Z} g h _ => by rw [zero_of_target_iso_zero g i, zero_of_target_iso_zero h i]⟩
 
 Depends on / 依赖: zero_of_target_iso_zero
@@ -1342,7 +1342,7 @@ theorem epi_of_target_iso_zero
 中文:
 定理 epi_of_target_iso_zero
   条件: {X Y : C} (f : X ⟶ Y) (i : Y ≅ 0)
-  结论: Epi f
+  结论: 满态射 f
   证明: ⟨fun {Z} g h _ => by rw [zero_of_source_iso_zero g i, zero_of_source_iso_zero h i]⟩
 
 Depends on / 依赖: zero_of_source_iso_zero
@@ -1441,7 +1441,7 @@ definition isoZeroOfMonoZero
 
 中文:
 定义 isoZeroOfMonoZero
-  签名: {X Y : C} (_ : Mono (0 : X ⟶ Y))
+  签名: {X Y : C} (_ : 单态射 (0 : X ⟶ Y))
   定义体: 0
   inv := 0
   hom_inv_id := (cancel_mono (0 : X ⟶ Y)).mp (by simp)
@@ -1465,7 +1465,7 @@ definition isoZeroOfEpiZero
 
 中文:
 定义 isoZeroOfEpiZero
-  签名: {X Y : C} (_ : Epi (0 : X ⟶ Y))
+  签名: {X Y : C} (_ : 满态射 (0 : X ⟶ Y))
   定义体: 0
   inv := 0
   hom_inv_id := (cancel_epi (0 : X ⟶ Y)).mp (by simp)
@@ -1487,7 +1487,7 @@ definition isoZeroOfMonoEqZero
 
 中文:
 定义 isoZeroOfMonoEqZero
-  签名: {X Y : C} {f : X ⟶ Y} [Mono f] (h : f = 0)
+  签名: {X Y : C} {f : X ⟶ Y} [单态射 f] (h : f = 0)
   定义体: by
   subst h
   apply isoZeroOfMonoZero (Y := Y) ‹_›
@@ -1510,7 +1510,7 @@ definition isoZeroOfEpiEqZero
 
 中文:
 定义 isoZeroOfEpiEqZero
-  签名: {X Y : C} {f : X ⟶ Y} [Epi f] (h : f = 0)
+  签名: {X Y : C} {f : X ⟶ Y} [满态射 f] (h : f = 0)
   定义体: by
   subst h
   apply isoZeroOfEpiZero (X := X) ‹_›
@@ -1694,7 +1694,7 @@ lemma isIsoZero_iff_source_target_isZero
 中文:
 引理 isIsoZero_iff_source_target_isZero
   条件: (X Y : C)
-  结论: IsIso (0 : X ⟶ Y) ↔ IsZero X ∧ IsZero Y
+  结论: 是同构 (0 : X ⟶ Y) ↔ 是零 X ∧ 是零 Y
   证明: by
   constructor
   · intro h
@@ -1772,7 +1772,7 @@ theorem hasZeroObject_of_hasInitial_object
 
 中文:
 定理 hasZeroObject_of_hasInitial_object
-  条件: [HasZeroMorphisms C] [HasInitial C]
+  条件: [有ZeroMorphisms C] [HasInitial C]
   证明: by
   refine ⟨⟨⊥_ C, fun X => ⟨⟨⟨0⟩, by cat_disch⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩⟩
   calc
@@ -1805,7 +1805,7 @@ theorem hasZeroObject_of_hasTerminal_object
 
 中文:
 定理 hasZeroObject_of_hasTerminal_object
-  条件: [HasZeroMorphisms C] [HasTerminal C]
+  条件: [有ZeroMorphisms C] [有终止 C]
   证明: by
   refine ⟨⟨⊤_ C, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, by cat_disch⟩⟩⟩⟩
   calc
@@ -1837,7 +1837,7 @@ theorem image_ι_comp_eq_zero
 
 中文:
 定理 image_ι_comp_eq_zero
-  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} [HasImage f]
+  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} [有像 f]
   证明: zero_of_epi_comp (factorThruImage f) by simp [h]
 
 Depends on / 依赖: factorThruImage, zero_of_epi_comp
@@ -1856,7 +1856,7 @@ theorem comp_factorThruImage_eq_zero
 
 中文:
 定理 comp_factorThruImage_eq_zero
-  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} [HasImage g]
+  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} [有像 g]
   证明: zero_of_comp_mono (image.ι g) by simp [h]
 
 Depends on / 依赖: AddCommGroup, zero_of_comp_mono
@@ -1961,7 +1961,7 @@ definition imageZero'
 
 中文:
 定义 imageZero'
-  签名: {X Y : C} {f : X ⟶ Y} (h : f = 0) [HasImage f]
+  签名: {X Y : C} {f : X ⟶ Y} (h : f = 0) [有像 f]
   定义体: image.eqToIso h ≪≫ imageZero
 
 Depends on / 依赖: eqToIso, image.eqToIso, imageZero
@@ -1984,9 +1984,9 @@ theorem image.ι_zero
   simp
 
 中文:
-定理 image.ι_zero
-  条件: {X Y : C} [HasImage (0 : X ⟶ Y)]
-  结论: image.ι (0 : X ⟶ Y) = 0
+定理 像.ι_zero
+  条件: {X Y : C} [有像 (0 : X ⟶ Y)]
+  结论: 像.ι (0 : X ⟶ Y) = 0
   证明: by
   rw [← image.lift_fac (monoFactorisationZero X Y)]
   simp
@@ -2013,8 +2013,8 @@ theorem image.ι_zero'
   simp
 
 中文:
-定理 image.ι_zero'
-  条件: [HasEqualizers C] {X Y : C} {f : X ⟶ Y} (h : f = 0) [HasImage f]
+定理 像.ι_zero'
+  条件: [HasEqualizers C] {X Y : C} {f : X ⟶ Y} (h : f = 0) [有像 f]
   证明: by
   rw [image.eq_fac h]
   simp
@@ -2040,7 +2040,7 @@ instance isSplitMono_sigma_ι
 
 中文:
 实例 isSplitMono_sigma_ι
-  签名: {β : 类型u'} [HasZeroMorphisms C] (f : β -> C)
+  签名: {β : 类型u'} [有ZeroMorphisms C] (f : β -> C)
   定义体: by
   classical exact IsSplitMono.mk' { retraction := Sigma.desc <| Pi.single b (𝟙 _) }
 
@@ -2062,7 +2062,7 @@ instance isSplitEpi_pi_π
 
 中文:
 实例 isSplitEpi_pi_π
-  签名: {β : 类型u'} [HasZeroMorphisms C] (f : β -> C)
+  签名: {β : 类型u'} [有ZeroMorphisms C] (f : β -> C)
   定义体: by
   classical exact IsSplitEpi.mk' { section_ := Pi.lift <| Pi.single b (𝟙 _) }
 
@@ -2083,7 +2083,7 @@ instance isSplitMono_coprod_inl
 
 中文:
 实例 isSplitMono_coprod_inl
-  签名: [HasZeroMorphisms C] {X Y : C} [HasColimit (pair X Y)]
+  签名: [有ZeroMorphisms C] {X Y : C} [有余极限 (pair X Y)]
   定义体: IsSplitMono.mk' { retraction := coprod.desc (𝟙 X) 0 }
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, coprod, coprod.desc, retraction
@@ -2103,7 +2103,7 @@ instance isSplitMono_coprod_inr
 
 中文:
 实例 isSplitMono_coprod_inr
-  签名: [HasZeroMorphisms C] {X Y : C} [HasColimit (pair X Y)]
+  签名: [有ZeroMorphisms C] {X Y : C} [有余极限 (pair X Y)]
   定义体: IsSplitMono.mk' { retraction := coprod.desc 0 (𝟙 Y) }
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, coprod, coprod.desc, retraction
@@ -2123,7 +2123,7 @@ instance isSplitEpi_prod_fst
 
 中文:
 实例 isSplitEpi_prod_fst
-  签名: [HasZeroMorphisms C] {X Y : C} [HasLimit (pair X Y)]
+  签名: [有ZeroMorphisms C] {X Y : C} [有极限 (pair X Y)]
   定义体: IsSplitEpi.mk' { section_ := prod.lift (𝟙 X) 0 }
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, prod.lift, section_
@@ -2143,7 +2143,7 @@ instance isSplitEpi_prod_snd
 
 中文:
 实例 isSplitEpi_prod_snd
-  签名: [HasZeroMorphisms C] {X Y : C} [HasLimit (pair X Y)]
+  签名: [有ZeroMorphisms C] {X Y : C} [有极限 (pair X Y)]
   定义体: IsSplitEpi.mk' { section_ := prod.lift 0 (𝟙 Y) }
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, prod.lift, section_
@@ -2168,8 +2168,8 @@ definition IsLimit.ofIsZero
   uniq _ _ _ := hc.eq_of_tgt _ _
 
 中文:
-定义 IsLimit.ofIsZero
-  签名: (c : Cone F) (hF : IsZero F) (hc : IsZero c.pt)
+定义 是极限.ofIsZero
+  签名: (c : 锥 F) (hF : 是零 F) (hc : 是零 c.pt)
   定义体: 0
   fac _ j := (F.isZero_iff.1 hF j).eq_of_tgt _ _
   uniq _ _ _ := hc.eq_of_tgt _ _
@@ -2190,8 +2190,8 @@ definition IsColimit.ofIsZero
   uniq _ _ _ := hc.eq_of_src _ _
 
 中文:
-定义 IsColimit.ofIsZero
-  签名: (c : Cocone F) (hF : IsZero F) (hc : IsZero c.pt)
+定义 是余极限.ofIsZero
+  签名: (c : 余锥 F) (hF : 是零 F) (hc : 是零 c.pt)
   定义体: 0
   fac _ j := (F.isZero_iff.1 hF j).eq_of_src _ _
   uniq _ _ _ := hc.eq_of_src _ _
@@ -2212,9 +2212,9 @@ lemma IsLimit.isZero_pt
     (IsLimit.ofIsZero (Cone.mk 0 0) hF (isZero_zero C)))
 
 中文:
-引理 IsLimit.isZero_pt
-  条件: {c : Cone F} (hc : IsLimit c) (hF : IsZero F)
-  结论: IsZero c.pt
+引理 是极限.isZero_pt
+  条件: {c : 锥 F} (hc : 是极限 c) (hF : 是零 F)
+  结论: 是零 c.pt
   证明: (isZero_zero C).of_iso (IsLimit.conePointUniqueUpToIso hc
     (IsLimit.ofIsZero (Cone.mk 0 0) hF (isZero_zero C)))
 
@@ -2235,9 +2235,9 @@ lemma IsColimit.isZero_pt
     (IsColimit.ofIsZero (Cocone.mk 0 0) hF (isZero_zero C)))
 
 中文:
-引理 IsColimit.isZero_pt
-  条件: {c : Cocone F} (hc : IsColimit c) (hF : IsZero F)
-  结论: IsZero c.pt
+引理 是余极限.isZero_pt
+  条件: {c : 余锥 F} (hc : 是余极限 c) (hF : 是零 F)
+  结论: 是零 c.pt
   证明: (isZero_zero C).of_iso (IsColimit.coconePointUniqueUpToIso hc
     (IsColimit.ofIsZero (Cocone.mk 0 0) hF (isZero_zero C)))
 
@@ -2269,8 +2269,8 @@ definition _root_.CategoryTheory.Functor.FullyFaithful.hasZeroMorphisms
 omit [HasZeroObject C] in
 
 中文:
-定义 _root_.CategoryTheory.Functor.FullyFaithful.hasZeroMorphisms
-  签名: (hF : F.FullyFaithful)
+定义 _root_.范畴论.函子.满忠实.hasZeroMorphisms
+  签名: (hF : F.满忠实)
   定义体: ⟨hF.preimage 0⟩
   comp_zero f _ := by
     apply hF.map_injective
@@ -2308,8 +2308,8 @@ lemma _root_.CategoryTheory.Functor.FullyFaithful.hasZeroMorphisms_def
     (0 : X ⟶ Y) = hF.preimage 0 := rfl
 
 中文:
-引理 _root_.CategoryTheory.Functor.FullyFaithful.hasZeroMorphisms_def
-  结论: (hF : F.FullyFaithful)
+引理 _root_.范畴论.函子.满忠实.hasZeroMorphisms_def
+  结论: (hF : F.满忠实)
   证明: hF.hasZeroMorphisms
     (0 : X ⟶ Y) = hF.preimage 0 := rfl
 
@@ -2337,9 +2337,9 @@ lemma IsTerminal.isZero
   apply hX.hom_ext
 
 中文:
-引理 IsTerminal.isZero
-  条件: {X : C} (hX : IsTerminal X)
-  结论: IsZero X
+引理 是终止.isZero
+  条件: {X : C} (hX : 是终止 X)
+  结论: 是零 X
   证明: by
   rw [IsZero.iff_id_eq_zero]
   apply hX.hom_ext
@@ -2364,7 +2364,7 @@ lemma IsInitial.isZero
 中文:
 引理 IsInitial.isZero
   条件: {X : C} (hX : IsInitial X)
-  结论: IsZero X
+  结论: 是零 X
   证明: by
   rw [IsZero.iff_id_eq_zero]
   apply hX.hom_ext
@@ -2390,7 +2390,7 @@ definition Pi.ι
   body: Pi.lift (Function.update (fun _ => 0) b (𝟙 _))
 
 中文:
-定义 Pi.ι
+定义 依赖函数类型.ι
   签名: (b : β)
   定义体: Pi.lift (Function.update (fun _ => 0) b (𝟙 _))
 
@@ -2412,9 +2412,9 @@ lemma Pi.ι_π_eq_id
   simp [Pi.ι]
 
 中文:
-引理 Pi.ι_π_eq_id
+引理 依赖函数类型.ι_π_eq_id
   条件: (b : β)
-  结论: Pi.ι f b ≫ Pi.π f b = 𝟙 _
+  结论: 依赖函数类型.ι f b ≫ 依赖函数类型.π f b = 𝟙 _
   证明: by
   simp [Pi.ι]
 -/
@@ -2436,9 +2436,9 @@ lemma Pi.ι_π_of_ne
 @[reassoc]
 
 中文:
-引理 Pi.ι_π_of_ne
+引理 依赖函数类型.ι_π_of_ne
   条件: {b c : β} (h : b != c)
-  结论: Pi.ι f b ≫ Pi.π f c = 0
+  结论: 依赖函数类型.ι f b ≫ 依赖函数类型.π f c = 0
   证明: by
   simp [Pi.ι, Function.update_of_ne h.symm]
 
@@ -2460,7 +2460,7 @@ lemma Pi.ι_π
   grind [CategoryTheory.eqToHom_refl]
 
 中文:
-引理 Pi.ι_π
+引理 依赖函数类型.ι_π
   条件: (b c : β)
   证明: by
   grind [CategoryTheory.eqToHom_refl]
@@ -2489,7 +2489,7 @@ definition Sigma.π
   body: Limits.Sigma.desc (Function.update (fun _ => 0) b (𝟙 _))
 
 中文:
-定义 Sigma.π
+定义 依赖和类型.π
   签名: (b : β)
   定义体: Limits.Sigma.desc (Function.update (fun _ => 0) b (𝟙 _))
 
@@ -2511,9 +2511,9 @@ lemma Sigma.ι_π_eq_id
   simp [Sigma.π]
 
 中文:
-引理 Sigma.ι_π_eq_id
+引理 依赖和类型.ι_π_eq_id
   条件: (b : β)
-  结论: Sigma.ι f b ≫ Sigma.π f b = 𝟙 _
+  结论: 依赖和类型.ι f b ≫ 依赖和类型.π f b = 𝟙 _
   证明: by
   simp [Sigma.π]
 -/
@@ -2535,9 +2535,9 @@ lemma Sigma.ι_π_of_ne
 @[reassoc]
 
 中文:
-引理 Sigma.ι_π_of_ne
+引理 依赖和类型.ι_π_of_ne
   条件: {b c : β} (h : b != c)
-  结论: Sigma.ι f b ≫ Sigma.π f c = 0
+  结论: 依赖和类型.ι f b ≫ 依赖和类型.π f c = 0
   证明: by
   simp [Sigma.π, Function.update_of_ne h]
 
@@ -2559,7 +2559,7 @@ theorem Sigma.ι_π
   grind [CategoryTheory.eqToHom_refl]
 
 中文:
-定理 Sigma.ι_π
+定理 依赖和类型.ι_π
   条件: (b c : β)
   证明: by
   grind [CategoryTheory.eqToHom_refl]
@@ -2588,7 +2588,7 @@ definition prod.inl
   body: prod.lift (𝟙 _) 0
 
 中文:
-定义 prod.inl
+定义 乘积.inl
   签名: : X ⟶ X ⨯ Y
   定义体: prod.lift (𝟙 _) 0
 
@@ -2606,7 +2606,7 @@ definition prod.inr
   body: prod.lift 0 (𝟙 _)
 
 中文:
-定义 prod.inr
+定义 乘积.inr
   签名: : Y ⟶ X ⨯ Y
   定义体: prod.lift 0 (𝟙 _)
 
@@ -2627,8 +2627,8 @@ lemma prod.inl_fst
   simp [prod.inl]
 
 中文:
-引理 prod.inl_fst
-  结论: prod.inl X Y ≫ prod.fst = 𝟙 X
+引理 乘积.inl_fst
+  结论: 乘积.inl X Y ≫ 乘积.fst = 𝟙 X
   证明: by
   simp [prod.inl]
 
@@ -2649,8 +2649,8 @@ lemma prod.inl_snd
   simp [prod.inl]
 
 中文:
-引理 prod.inl_snd
-  结论: prod.inl X Y ≫ prod.snd = 0
+引理 乘积.inl_snd
+  结论: 乘积.inl X Y ≫ 乘积.snd = 0
   证明: by
   simp [prod.inl]
 
@@ -2671,8 +2671,8 @@ lemma prod.inr_fst
   simp [prod.inr]
 
 中文:
-引理 prod.inr_fst
-  结论: prod.inr X Y ≫ prod.fst = 0
+引理 乘积.inr_fst
+  结论: 乘积.inr X Y ≫ 乘积.fst = 0
   证明: by
   simp [prod.inr]
 
@@ -2693,8 +2693,8 @@ lemma prod.inr_snd
   simp [prod.inr]
 
 中文:
-引理 prod.inr_snd
-  结论: prod.inr X Y ≫ prod.snd = 𝟙 Y
+引理 乘积.inr_snd
+  结论: 乘积.inr X Y ≫ 乘积.snd = 𝟙 Y
   证明: by
   simp [prod.inr]
 
@@ -2713,7 +2713,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (prod.inl X Y)
+  签名: 单态射 (乘积.inl X Y)
   定义体: by simpa using congrArg (· ≫ prod.fst) e
 
 Depends on / 依赖: prod.fst
@@ -2731,7 +2731,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (prod.inr X Y)
+  签名: 单态射 (乘积.inr X Y)
   定义体: by simpa using congrArg (· ≫ prod.snd) e
 
 Depends on / 依赖: prod.snd
@@ -2879,7 +2879,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (coprod.fst X Y)
+  签名: 满态射 (coprod.fst X Y)
   定义体: by simpa using congrArg (coprod.inl ≫ ·) e
 
 Depends on / 依赖: coprod, coprod.inl
@@ -2897,7 +2897,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (coprod.snd X Y)
+  签名: 满态射 (coprod.snd X Y)
   定义体: by simpa using congrArg (coprod.inr ≫ ·) e
 
 Depends on / 依赖: coprod, coprod.inr
@@ -2928,7 +2928,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms P.FullSubcategory
+  签名: 有ZeroMorphisms P.满子范畴
   定义体: { zero := P.homMk 0 }
   __ := P.fullyFaithfulι.hasZeroMorphisms
 
@@ -2954,7 +2954,7 @@ lemma homMk_zero
 
 中文:
 引理 homMk_zero
-  条件: (X Y : P.FullSubcategory)
+  条件: (X Y : P.满子范畴)
   证明: rfl
 
 @[simp]
@@ -2973,7 +2973,7 @@ lemma zero_hom
 
 中文:
 引理 zero_hom
-  条件: (X Y : P.FullSubcategory)
+  条件: (X Y : P.满子范畴)
   证明: rfl
 -/
 lemma zero_hom (X Y : P.FullSubcategory) :

@@ -45,9 +45,9 @@ structure εNFA
 结构 εNFA
   参数: (α : 类型u) (σ : 类型v)
   公理与运算 (3 个):
-    - step : σ -> Option α -> Set σ
-    - start : Set σ
-    - accept : Set σ
+    - step : σ -> 选项类型 α -> 集合 σ
+    - start : 集合 σ
+    - accept : 集合 σ
 -/
 structure εNFA (α : Type u) (σ : Type v) where
   /-- Transition function. The automaton is rendered non-deterministic by this transition function
@@ -75,7 +75,7 @@ inductive εClosure
 
 中文:
 归纳类型 εClosure
-  参数: (S : Set σ)
+  参数: (S : 集合 σ)
   构造子 (2 个):
     - base: 对任意 s in S, εClosure S s
     - step: 对任意 (s), 对任意 t in M.step s none, εClosure S s -> εClosure S t
@@ -98,7 +98,7 @@ theorem subset_εClosure
 
 中文:
 定理 subset_εClosure
-  条件: (S : Set σ)
+  条件: (S : 集合 σ)
   结论: S subseteq M.εClosure S
   证明: εClosure.base
 
@@ -169,7 +169,7 @@ theorem mem_εClosure_iff_exists
     induction h <;> subst_vars <;> solve_by_elim [εClosure.step]
 
 中文:
-定理 mem_εClosure_iff_exists
+定理 mem_εClosure_iff_存在
   结论: s in M.εClosure S ↔ 存在 t in S, s in M.εClosure {t} where
   证明: by
     induction h with
@@ -206,7 +206,7 @@ definition stepSet
 
 中文:
 定义 stepSet
-  签名: (S : Set σ) (a : α)
+  签名: (S : 集合 σ) (a : α)
   定义体: ⋃ s in S, M.εClosure (M.step s a)
 
 Depends on / 依赖: M.step
@@ -278,7 +278,7 @@ definition evalFrom
 
 中文:
 定义 evalFrom
-  签名: (start : Set σ)
+  签名: (start : 集合 σ)
   定义体: List.foldl M.stepSet (M.εClosure start)
 
 @[simp]
@@ -302,7 +302,7 @@ theorem evalFrom_nil
 
 中文:
 定理 evalFrom_nil
-  条件: (S : Set σ)
+  条件: (S : 集合 σ)
   结论: M.evalFrom S [] = M.εClosure S
   证明: rfl
 
@@ -325,7 +325,7 @@ theorem evalFrom_singleton
 
 中文:
 定理 evalFrom_singleton
-  条件: (S : Set σ) (a : α)
+  条件: (S : 集合 σ) (a : α)
   结论: M.evalFrom S [a] = M.stepSet (M.εClosure S) a
   证明: rfl
 
@@ -348,7 +348,7 @@ theorem evalFrom_append_singleton
 
 中文:
 定理 evalFrom_append_singleton
-  条件: (S : Set σ) (x : List α) (a : α)
+  条件: (S : 集合 σ) (x : 列表 α) (a : α)
   证明: by
   rw [evalFrom]; rw [List.foldl_append]; rw [List.foldl_cons]; rw [List.foldl_nil]
 
@@ -375,7 +375,7 @@ theorem evalFrom_empty
 
 中文:
 定理 evalFrom_empty
-  条件: (x : List α)
+  条件: (x : 列表 α)
   结论: M.evalFrom ∅ x = ∅
   证明: by
   induction x using List.reverseRecOn with
@@ -403,8 +403,8 @@ theorem mem_evalFrom_iff_exists
     tauto
 
 中文:
-定理 mem_evalFrom_iff_exists
-  条件: {s : σ} {S : Set σ} {x : List α}
+定理 mem_evalFrom_iff_存在
+  条件: {s : σ} {S : 集合 σ} {x : 列表 α}
   证明: by
   induction x using List.reverseRecOn generalizing s with
   | nil => apply mem_εClosure_iff_exists
@@ -498,7 +498,7 @@ theorem eval_append_singleton
 
 中文:
 定理 eval_append_singleton
-  条件: (x : List α) (a : α)
+  条件: (x : 列表 α) (a : α)
   结论: M.eval (x ++ [a]) = M.stepSet (M.eval x) a
   证明: evalFrom_append_singleton _ _ _ _
 
@@ -539,11 +539,11 @@ inductive IsPath
     - cons: (t s u : σ) (a : Option α) (x : List (Option α)) : t in M.step s a -> IsPath t u x -> IsPath s u (a :: x)
 
 中文:
-归纳类型 IsPath
-  参数: : σ -> σ -> List (Option α) -> 命题
+归纳类型 是道路
+  参数: : σ -> σ -> 列表 (选项类型 α) -> 命题
   构造子 (2 个):
-    - nil: (s : σ) : IsPath s s []
-    - cons: (t s u : σ) (a : Option α) (x : List (Option α)) : t in M.step s a -> IsPath t u x -> IsPath s u (a :: x)
+    - nil: (s : σ) : 是道路 s s []
+    - cons: (t s u : σ) (a : 选项类型 α) (x : 列表 (选项类型 α)) : t in M.step s a -> 是道路 t u x -> 是道路 s u (a :: x)
 -/
 inductive IsPath : σ -> σ -> List (Option α) -> Prop
   | nil (s : σ) : IsPath s s []
@@ -567,7 +567,7 @@ alias ⟨IsPath.eq_of_nil, _⟩ := isPath_nil
 
 中文:
 定理 isPath_nil
-  结论: M.IsPath s t [] ↔ s = t
+  结论: M.是道路 s t [] ↔ s = t
   证明: by
   rw [isPath_iff]
   simp [eq_comm]
@@ -601,8 +601,8 @@ alias ⟨_, IsPath.singleton⟩ := isPath_singleton
 
 中文:
 定理 isPath_singleton
-  条件: {a : Option α}
-  结论: M.IsPath s t [a] ↔ t in M.step s a where
+  条件: {a : 选项类型 α}
+  结论: M.是道路 s t [a] ↔ t in M.step s a where
   证明: by
     rintro (_ | ⟨_, _, _, _, _, _, ⟨⟩⟩)
     assumption
@@ -639,7 +639,7 @@ theorem isPath_append
 
 中文:
 定理 isPath_append
-  条件: {x y : List (Option α)}
+  条件: {x y : 列表 (选项类型 α)}
   证明: by
     induction x generalizing s with
     | nil =>
@@ -693,7 +693,7 @@ theorem mem_εClosure_iff_exists_path
     · rw [List.replic
 
 中文:
-定理 mem_εClosure_iff_exists_path
+定理 mem_εClosure_iff_存在_path
   条件: {s₁ s₂ : σ}
   证明: by
     induction h with
@@ -755,8 +755,8 @@ theorem mem_evalFrom_iff_exists_path
 
 
 中文:
-定理 mem_evalFrom_iff_exists_path
-  条件: {s₁ s₂ : σ} {x : List α}
+定理 mem_evalFrom_iff_存在_path
+  条件: {s₁ s₂ : σ} {x : 列表 α}
   证明: by
   induction x using List.reverseRecOn generalizing s₂ with
   | nil =>
@@ -823,8 +823,8 @@ theorem mem_accepts_iff_exists_path
     e
 
 中文:
-定理 mem_accepts_iff_exists_path
-  条件: {x : List α}
+定理 mem_accepts_iff_存在_path
+  条件: {x : 列表 α}
   证明: by
     intro ⟨s₂, _, h⟩
     rw [eval]; rw [mem_evalFrom_iff_exists] at h
@@ -896,7 +896,7 @@ theorem toNFA_evalFrom_match
 
 中文:
 定理 toNFA_evalFrom_match
-  条件: (start : Set σ)
+  条件: (start : 集合 σ)
   证明: rfl
 
 @[simp]
@@ -932,7 +932,7 @@ theorem pumping_lemma
 
 中文:
 定理 pumping_lemma
-  结论: [Fintype σ] {x : List α} (hx : x in M.accepts)
+  结论: [有限类型 σ] {x : 列表 α} (hx : x in M.accepts)
   证明: M.toNFA.pumping_lemma hx hlen
 
 Depends on / 依赖: M.toNFA.pumping_lemma, pumping_lemma
@@ -994,7 +994,7 @@ theorem toεNFA_εClosure
 
 中文:
 定理 toεNFA_εClosure
-  条件: (M : NFA α σ) (S : Set σ)
+  条件: (M : NFA α σ) (S : 集合 σ)
   结论: M.toεNFA.εClosure S = S
   证明: by
   ext a
@@ -1036,7 +1036,7 @@ theorem toεNFA_evalFrom_match
 
 中文:
 定理 toεNFA_evalFrom_match
-  条件: (M : NFA α σ) (start : Set σ)
+  条件: (M : NFA α σ) (start : 集合 σ)
   证明: by
   rw [evalFrom]; rw [εNFA.evalFrom]; rw [toεNFA_εClosure]
   suffices εNFA.stepSet (toεNFA M) = stepSet M by rw [this]
@@ -1107,7 +1107,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (εNFA α σ)
+  签名: 零 (εNFA α σ)
   定义体: ⟨⟨fun _ _ => ∅, ∅, ∅⟩⟩
 -/
 instance : Zero (εNFA α σ) :=
@@ -1123,7 +1123,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (εNFA α σ)
+  签名: 幺 (εNFA α σ)
   定义体: ⟨⟨fun _ _ => ∅, univ, univ⟩⟩
 -/
 instance : One (εNFA α σ) :=
@@ -1141,7 +1141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (εNFA α σ)
+  签名: 可居 (εNFA α σ)
   定义体: ⟨0⟩
 
 @[simp]

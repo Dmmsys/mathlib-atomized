@@ -62,7 +62,7 @@ definition jacobiSymNat
   body: jacobiSym a b
 
 中文:
-定义 jacobiSymNat
+定义 jacobiSym自然数
   签名: (a b : 自然数)
   定义体: jacobiSym a b
 
@@ -90,7 +90,7 @@ theorem jacobiSymNat.zero_right
   rw [jacobiSymNat]; rw [jacobiSym.zero_right]
 
 中文:
-定理 jacobiSymNat.zero_right
+定理 jacobiSym自然数.zero_right
   条件: (a : 自然数)
   结论: jacobiSym自然数 a 0 = 1
   证明: by
@@ -112,7 +112,7 @@ theorem jacobiSymNat.one_right
   rw [jacobiSymNat]; rw [jacobiSym.one_right]
 
 中文:
-定理 jacobiSymNat.one_right
+定理 jacobiSym自然数.one_right
   条件: (a : 自然数)
   结论: jacobiSym自然数 a 1 = 1
   证明: by
@@ -139,7 +139,7 @@ theorem jacobiSymNat.zero_left
     _ <= b := Nat.mul_div_le b 2
 
 中文:
-定理 jacobiSymNat.zero_left
+定理 jacobiSym自然数.zero_left
   条件: (b : 自然数) (hb : 自然数.beq (b / 2) 0 = false)
   结论: jacobiSym自然数 0 b = 0
   证明: by
@@ -171,7 +171,7 @@ theorem jacobiSymNat.one_left
   rw [jacobiSymNat]; rw [Nat.cast_one]; rw [jacobiSym.one_left]
 
 中文:
-定理 jacobiSymNat.one_left
+定理 jacobiSym自然数.one_left
   条件: (b : 自然数)
   结论: jacobiSym自然数 1 b = 1
   证明: by
@@ -193,7 +193,7 @@ theorem LegendreSym.to_jacobiSym
 
 中文:
 定理 LegendreSym.to_jacobiSym
-  结论: (p : 自然数) (pp : Fact p.Prime) (a r : 整数)
+  结论: (p : 自然数) (pp : Fact p.素) (a r : 整数)
   证明: by
   rwa [@jacobiSym.legendreSym.to_jacobiSym p pp a]
 
@@ -234,7 +234,7 @@ theorem jacobiSymNat.mod_left
   rw [← hr]; rw [jacobiSymNat]; rw [jacobiSymNat]; rw [_root_.jacobiSym.mod_left a b]; rw [← hab]; rfl
 
 中文:
-定理 jacobiSymNat.mod_left
+定理 jacobiSym自然数.mod_left
   条件: (a b ab : 自然数) (r : 整数) (hab : a % b = ab) (hr : jacobiSym自然数 ab b = r)
   证明: by
   rw [← hr]; rw [jacobiSymNat]; rw [jacobiSymNat]; rw [_root_.jacobiSym.mod_left a b]; rw [← hab]; rfl
@@ -260,7 +260,7 @@ theorem jacobiSymNat.even_even
   rw [hf]; rw [
 
 中文:
-定理 jacobiSymNat.even_even
+定理 jacobiSym自然数.even_even
   结论: (a b : 自然数) (hb₀ : 自然数.beq (b / 2) 0 = false) (ha : a % 2 = 0)
   证明: by
   refine jacobiSym.eq_zero_iff.mpr
@@ -299,7 +299,7 @@ theorem jacobiSymNat.odd_even
     r
 
 中文:
-定理 jacobiSymNat.odd_even
+定理 jacobiSym自然数.odd_even
   结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 2 = 0) (hc : b / 2 = c)
   证明: by
   have ha' : legendreSym 2 a = 1 := by
@@ -336,7 +336,7 @@ theorem jacobiSymNat.double_even
   exact (jacobiSym.div_four_left (mod_cast ha) hb).symm
 
 中文:
-定理 jacobiSymNat.double_even
+定理 jacobiSym自然数.double_even
   结论: (a b c : 自然数) (r : 整数) (ha : a % 4 = 0) (hb : b % 2 = 1)
   证明: by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
@@ -361,7 +361,7 @@ theorem jacobiSymNat.even_odd₁
   rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
 
 中文:
-定理 jacobiSymNat.even_odd₁
+定理 jacobiSym自然数.even_odd₁
   结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 1)
   证明: by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
@@ -388,7 +388,7 @@ theorem jacobiSymNat.even_odd₇
   rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
 
 中文:
-定理 jacobiSymNat.even_odd₇
+定理 jacobiSym自然数.even_odd₇
   结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 7)
   证明: by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
@@ -415,7 +415,7 @@ theorem jacobiSymNat.even_odd₃
   rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
 
 中文:
-定理 jacobiSymNat.even_odd₃
+定理 jacobiSym自然数.even_odd₃
   结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 3)
   证明: by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
@@ -442,7 +442,7 @@ theorem jacobiSymNat.even_odd₅
   rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
 
 中文:
-定理 jacobiSymNat.even_odd₅
+定理 jacobiSym自然数.even_odd₅
   结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 5)
   证明: by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
@@ -467,7 +467,7 @@ theorem jacobiSymNat.qr₁
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_one_mod_four ha (Nat.odd_iff.mpr hb)]
 
 中文:
-定理 jacobiSymNat.qr₁
+定理 jacobiSym自然数.qr₁
   结论: (a b : 自然数) (r : 整数) (ha : a % 4 = 1) (hb : b % 2 = 1)
   证明: by
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_one_mod_four ha (Nat.odd_iff.mpr hb)]
@@ -487,7 +487,7 @@ theorem jacobiSymNat.qr₁_mod
   proof: jacobiSymNat.qr₁ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 
 中文:
-定理 jacobiSymNat.qr₁_mod
+定理 jacobiSym自然数.qr₁_mod
   结论: (a b ab : 自然数) (r : 整数) (ha : a % 4 = 1) (hb : b % 2 = 1)
   证明: jacobiSymNat.qr₁ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 
@@ -507,7 +507,7 @@ theorem jacobiSymNat.qr₁'
   rwa [jacobiSymNat, ← jacobiSym.quadratic_reciprocity_one_mod_four hb (Nat.odd_iff.mpr ha)]
 
 中文:
-定理 jacobiSymNat.qr₁'
+定理 jacobiSym自然数.qr₁'
   结论: (a b : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 4 = 1)
   证明: by
   rwa [jacobiSymNat, ← jacobiSym.quadratic_reciprocity_one_mod_four hb (Nat.odd_iff.mpr ha)]
@@ -527,7 +527,7 @@ theorem jacobiSymNat.qr₁'_mod
   proof: jacobiSymNat.qr₁' _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 
 中文:
-定理 jacobiSymNat.qr₁'_mod
+定理 jacobiSym自然数.qr₁'_mod
   结论: (a b ab : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 4 = 1)
   证明: jacobiSymNat.qr₁' _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 -/
@@ -545,7 +545,7 @@ theorem jacobiSymNat.qr₃
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_three_mod_four ha hb, neg_inj]
 
 中文:
-定理 jacobiSymNat.qr₃
+定理 jacobiSym自然数.qr₃
   结论: (a b : 自然数) (r : 整数) (ha : a % 4 = 3) (hb : b % 4 = 3)
   证明: by
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_three_mod_four ha hb, neg_inj]
@@ -565,7 +565,7 @@ theorem jacobiSymNat.qr₃_mod
   proof: jacobiSymNat.qr₃ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 
 中文:
-定理 jacobiSymNat.qr₃_mod
+定理 jacobiSym自然数.qr₃_mod
   结论: (a b ab : 自然数) (r : 整数) (ha : a % 4 = 3) (hb : b % 4 = 3)
   证明: jacobiSymNat.qr₃ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
 
@@ -583,7 +583,7 @@ theorem isInt_jacobiSym
   statement: {a na : Int} -> {b nb : Nat} -> {r : Int} ->
 
 中文:
-定理 isInt_jacobiSym
+定理 is整数_jacobiSym
   结论: {a na : 整数} -> {b nb : 自然数} -> {r : 整数} ->
 -/
 theorem isInt_jacobiSym : {a na : Int} -> {b nb : Nat} -> {r : Int} ->
@@ -598,7 +598,7 @@ theorem isInt_jacobiSymNat
   statement: {a na : Nat} -> {b nb : Nat} -> {r : Int} ->
 
 中文:
-定理 isInt_jacobiSymNat
+定理 is整数_jacobiSym自然数
   结论: {a na : 自然数} -> {b nb : 自然数} -> {r : 整数} ->
 -/
 theorem isInt_jacobiSymNat : {a na : Nat} -> {b nb : Nat} -> {r : Int} ->
@@ -637,7 +637,7 @@ definition mkRawIntLit'
   if 0 <= n then q(.ofNat $lit) else q(.negOfNat $lit)
 
 中文:
-定义 mkRawIntLit'
+定义 mkRaw整数Lit'
   签名: (n : 整数)
   定义体: let lit : Q(Nat) := .lit .natVal n.natAbs
   if 0 <= n then q(.ofNat $lit) else q(.negOfNat $lit)
@@ -769,7 +769,7 @@ haveI : eb =Q 1 := ⟨⟩
         have hb : Q(Nat.beq (
 
 中文:
-定义 proveJacobiSymNat
+定义 proveJacobiSym自然数
   签名: (ea eb : Q(自然数))
   定义体: match eb.natLit! with
   | 0 =>
@@ -953,7 +953,7 @@ haveI' : e =Q jacobiSymNat a b := ⟨⟩
     return .isInt _ er er.int
 
 中文:
-定义 evalJacobiSymNat
+定义 evalJacobiSym自然数
   签名: : NormNumExt where eval {u α} e
   定义体: do
     let .app (.app _ (a : Q(Nat))) (b : Q(Nat)) ← Meta.whnfR e | failure

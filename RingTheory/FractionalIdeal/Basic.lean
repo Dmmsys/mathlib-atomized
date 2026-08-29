@@ -76,7 +76,7 @@ definition IsFractional
 
 中文:
 定义 IsFractional
-  签名: (I : Submodule R P)
+  签名: (I : 子模 R P)
   定义体: exists a in S, forall b in I, IsInteger R (a • b)
 
 Depends on / 依赖: IsInteger
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (FractionalIdeal S P) (Submodule R P)
+  签名: CoeOut (FractionalIdeal S P) (子模 R P)
   定义体: ⟨coeToSubmodule⟩
 
 Depends on / 依赖: coeToSubmodule
@@ -171,7 +171,7 @@ theorem isFractional
 中文:
 定理 isFractional
   条件: (I : FractionalIdeal S P)
-  结论: IsFractional S (I : Submodule R P)
+  结论: IsFractional S (I : 子模 R P)
   证明: I.prop
 -/
 protected theorem isFractional (I : FractionalIdeal S P) : IsFractional S (I : Submodule R P) :=
@@ -259,7 +259,7 @@ abbreviation equivNumOfIsSMulRegular
 
 中文:
 缩写 equivNumOfIsSMulRegular
-  签名: [FaithfulSMul R P] {I : FractionalIdeal S P}
+  签名: [忠实标量乘法 R P] {I : FractionalIdeal S P}
   定义体: by
   refine LinearEquiv.trans
     (LinearEquiv.ofBijective ((DistribSMul.toLinearMap R P I.den).restrict fun _ hx => ?_)
@@ -294,7 +294,7 @@ definition equivNum
 
 中文:
 定义 equivNum
-  签名: [IsDomain R] [Module.IsTorsionFree R P] [Nontrivial P]
+  签名: [是整环 R] [模.是无挠 R P] [非平凡 P]
   定义体: equivNumOfIsSMulRegular (smul_right_injective P h_nz)
 
 Depends on / 依赖: equivNumOfIsSMulRegular, h_nz, smul_right_injective
@@ -313,7 +313,7 @@ definition equivNumOfIsLocalization
 
 中文:
 定义 equivNumOfIsLocalization
-  签名: [FaithfulSMul R P] [IsLocalization S P]
+  签名: [忠实标量乘法 R P] [是Localization S P]
   定义体: equivNumOfIsSMulRegular (smul_bijective ..).1
 
 Depends on / 依赖: equivNumOfIsSMulRegular, smul_bijective
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (FractionalIdeal S P) P
+  签名: 集合状 (FractionalIdeal S P) P
   定义体: ↑(I : Submodule R P)
   coe_injective := SetLike.coe_injective.comp Subtype.coe_injective
 
@@ -357,7 +357,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (FractionalIdeal S P)
+  签名: 偏序 (FractionalIdeal S P)
   定义体: .ofSetLike (FractionalIdeal S P) P
 
 @[simp]
@@ -379,7 +379,7 @@ theorem mem_coe
 中文:
 定理 mem_coe
   条件: {I : FractionalIdeal S P} {x : P}
-  结论: x in (I : Submodule R P) ↔ x in I
+  结论: x in (I : 子模 R P) ↔ x in I
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -399,7 +399,7 @@ theorem coe_ext
 中文:
 定理 coe_ext
   条件: {I J : FractionalIdeal S P}
-  结论: (I : Submodule R P) = (J : Submodule R P) -> I = J
+  结论: (I : 子模 R P) = (J : 子模 R P) -> I = J
   证明: Subtype.ext
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -465,7 +465,7 @@ theorem equivNum_apply
 
 中文:
 定理 equivNum_apply
-  结论: [IsDomain R] [Module.IsTorsionFree R P] [Nontrivial P]
+  结论: [是整环 R] [模.是无挠 R P] [非平凡 P]
   证明: by
   change Algebra.linearMap R P _ = _
   rw [equivNum]; rw [LinearEquiv.trans_apply]; rw [LinearEquiv.ofBijective_apply]; rw [LinearMap.restrict_apply]; rw [Submodule.map_equivMapOfInjective_symm_apply]; rw [Subtype.coe_mk]; rw [DistribSMul.toLinearMap_apply]
@@ -494,7 +494,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (p : FractionalIdeal S P) (s : Set P) (hs : s = ↑p)
+  签名: (p : FractionalIdeal S P) (s : 集合 P) (hs : s = ↑p)
   定义体: ⟨Submodule.copy p s hs, by
     convert! p.isFractional
     ext
@@ -522,7 +522,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (p : FractionalIdeal S P) (s : Set P) (hs : s = ↑p)
+  条件: (p : FractionalIdeal S P) (s : 集合 P) (hs : s = ↑p)
   结论: ↑(p.copy s hs) = s
   证明: rfl
 -/
@@ -540,7 +540,7 @@ theorem coe_eq
 
 中文:
 定理 coe_eq
-  条件: (p : FractionalIdeal S P) (s : Set P) (hs : s = ↑p)
+  条件: (p : FractionalIdeal S P) (s : 集合 P) (hs : s = ↑p)
   结论: p.copy s hs = p
   证明: SetLike.coe_injective hs
 
@@ -608,7 +608,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (I : Submodule R P) (hI : IsFractional S I)
+  条件: (I : 子模 R P) (hI : IsFractional S I)
   证明: rfl
 -/
 theorem coe_mk (I : Submodule R P) (hI : IsFractional S I) :
@@ -666,7 +666,7 @@ theorem coeToSubmodule_inj
 中文:
 定理 coeToSubmodule_inj
   条件: {I J : FractionalIdeal S P}
-  结论: (I : Submodule R P) = J ↔ I = J
+  结论: (I : 子模 R P) = J ↔ I = J
   证明: coeToSubmodule_injective.eq_iff
 
 Depends on / 依赖: coeToSubmodule_injective, coeToSubmodule_injective.eq_iff, eq_iff
@@ -690,7 +690,7 @@ theorem isFractional_of_le_one
 
 中文:
 定理 isFractional_of_le_one
-  条件: (I : Submodule R P) (h : I <= 1)
+  条件: (I : 子模 R P) (h : I <= 1)
   结论: IsFractional S I
   证明: by
   use 1, S.one_mem
@@ -722,7 +722,7 @@ theorem isFractional_of_le
 
 中文:
 定理 isFractional_of_le
-  条件: {I : Submodule R P} {J : FractionalIdeal S P} (hIJ : I <= J)
+  条件: {I : 子模 R P} {J : FractionalIdeal S P} (hIJ : I <= J)
   证明: by
   obtain ⟨a, a_mem, ha⟩ := J.isFractional
   use a, a_mem
@@ -753,7 +753,7 @@ isFractional_of_le_one _ by simpa using coeSubmodule_mono P (le_top : I <= ⊤)�
 
 中文:
 定义 coeIdeal
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: ⟨coeSubmodule P I,
 isFractional_of_le_one _ by simpa using coeSubmodule_mono P (le_top : I <= ⊤)⟩
 
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC (Ideal R) (FractionalIdeal S P)
+  签名: CoeTC (理想 R) (FractionalIdeal S P)
   定义体: ⟨fun I => coeIdeal I⟩
 
 @[simp, norm_cast]
@@ -797,7 +797,7 @@ theorem coe_coeIdeal
 
 中文:
 定理 coe_coeIdeal
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: rfl
 -/
 theorem coe_coeIdeal (I : Ideal R) :
@@ -819,7 +819,7 @@ theorem mem_coeIdeal
 
 中文:
 定理 mem_coeIdeal
-  条件: {x : P} {I : Ideal R}
+  条件: {x : P} {I : 理想 R}
   证明: mem_coeSubmodule _ _
 
 @[simp] -- Ensure `simp` is confluent for `x ∈ ((I : Ideal R) : FractionalIdeal S P)`.
@@ -841,7 +841,7 @@ theorem mem_coeSubmodule
 
 中文:
 定理 mem_coeSubmodule
-  条件: {x : P} {I : Ideal R}
+  条件: {x : P} {I : 理想 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -860,7 +860,7 @@ theorem mem_coeIdeal_of_mem
 
 中文:
 定理 mem_coeIdeal_of_mem
-  条件: {x : R} {I : Ideal R} (hx : x in I)
+  条件: {x : R} {I : 理想 R} (hx : x in I)
   证明: (mem_coeIdeal S).mpr ⟨x, hx, rfl⟩
 
 Depends on / 依赖: mem_coeIdeal
@@ -881,7 +881,7 @@ theorem coeIdeal_le_coeIdeal'
 
 中文:
 定理 coeIdeal_le_coeIdeal'
-  条件: [IsLocalization S P] (h : S <= nonZeroDivisors R) {I J : Ideal R}
+  条件: [是Localization S P] (h : S <= nonZeroDivisors R) {I J : 理想 R}
   证明: coeSubmodule_le_coeSubmodule h
 
 @[simp, gcongr]
@@ -903,7 +903,7 @@ theorem coeIdeal_le_coeIdeal
 
 中文:
 定理 coeIdeal_le_coeIdeal
-  结论: (K : 类型) [CommRing K] [Algebra R K] [IsFractionRing R K]
+  结论: (K : 类型) [交换环 K] [代数 R K] [IsFractionRing R K]
   证明: IsFractionRing.coeSubmodule_le_coeSubmodule
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.coeSubmodule_le_coeSubmodule, coeSubmodule_le_coeSubmodule
@@ -924,7 +924,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (FractionalIdeal S P)
+  签名: 零 (FractionalIdeal S P)
   定义体: ⟨(0 : Ideal R)⟩
 
 @[simp]
@@ -974,7 +974,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ↑(0 : FractionalIdeal S P) = (⊥ : Submodule R P)
+  结论: ↑(0 : FractionalIdeal S P) = (⊥ : 子模 R P)
   证明: Submodule.ext fun _ => mem_zero_iff S
 
 @[simp, norm_cast]
@@ -995,7 +995,7 @@ theorem coeIdeal_bot
 
 中文:
 定理 coeIdeal_bot
-  结论: ((⊥ : Ideal R) : FractionalIdeal S P) = 0
+  结论: ((⊥ : 理想 R) : FractionalIdeal S P) = 0
   证明: rfl
 -/
 theorem coeIdeal_bot : ((⊥ : Ideal R) : FractionalIdeal S P) = 0 :=
@@ -1015,8 +1015,8 @@ theorem exists_mem_algebraMap_eq
   proof: ⟨fun ⟨_, hx', Eq⟩ => IsLocalization.injective _ h Eq ▸ hx', fun h => ⟨x, h, rfl⟩⟩
 
 中文:
-定理 exists_mem_algebraMap_eq
-  条件: {x : R} {I : Ideal R} (h : S <= nonZeroDivisors R)
+定理 存在_mem_algebraMap_eq
+  条件: {x : R} {I : 理想 R} (h : S <= nonZeroDivisors R)
   证明: ⟨fun ⟨_, hx', Eq⟩ => IsLocalization.injective _ h Eq ▸ hx', fun h => ⟨x, h, rfl⟩⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.injective, injective
@@ -1057,7 +1057,7 @@ theorem coeIdeal_inj'
 
 中文:
 定理 coeIdeal_inj'
-  条件: (h : S <= nonZeroDivisors R) {I J : Ideal R}
+  条件: (h : S <= nonZeroDivisors R) {I J : 理想 R}
   证明: (coeIdeal_injective' h).eq_iff
 
 Depends on / 依赖: coeIdeal_injective, eq_iff
@@ -1077,7 +1077,7 @@ theorem coeIdeal_eq_zero'
 
 中文:
 定理 coeIdeal_eq_zero'
-  条件: {I : Ideal R} (h : S <= nonZeroDivisors R)
+  条件: {I : 理想 R} (h : S <= nonZeroDivisors R)
   证明: coeIdeal_inj' h
 
 Depends on / 依赖: coeIdeal_inj
@@ -1096,7 +1096,7 @@ theorem coeIdeal_ne_zero'
 
 中文:
 定理 coeIdeal_ne_zero'
-  条件: {I : Ideal R} (h : S <= nonZeroDivisors R)
+  条件: {I : 理想 R} (h : S <= nonZeroDivisors R)
   证明: not_iff_not.mpr coeIdeal_eq_zero' h
 
 Depends on / 依赖: coeIdeal_eq_zero, not_iff_not, not_iff_not.mpr
@@ -1119,7 +1119,7 @@ theorem coeToSubmodule_eq_bot
 中文:
 定理 coeToSubmodule_eq_bot
   条件: {I : FractionalIdeal S P}
-  结论: (I : Submodule R P) = ⊥ ↔ I = 0
+  结论: (I : 子模 R P) = ⊥ ↔ I = 0
   证明: ⟨fun h => coeToSubmodule_injective (by simp [h]), fun h => by simp [h]⟩
 
 Depends on / 依赖: coeToSubmodule_injective
@@ -1139,7 +1139,7 @@ theorem coeToSubmodule_ne_bot
 中文:
 定理 coeToSubmodule_ne_bot
   条件: {I : FractionalIdeal S P}
-  结论: ↑I != (⊥ : Submodule R P) ↔ I != 0
+  结论: ↑I != (⊥ : 子模 R P) ↔ I != 0
   证明: not_iff_not.mpr coeToSubmodule_eq_bot
 
 Depends on / 依赖: coeToSubmodule_eq_bot, not_iff_not, not_iff_not.mpr
@@ -1157,7 +1157,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FractionalIdeal S P)
+  签名: 可居 (FractionalIdeal S P)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (FractionalIdeal S P) :=
@@ -1173,7 +1173,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (FractionalIdeal S P)
+  签名: 幺 (FractionalIdeal S P)
   定义体: ⟨(⊤ : Ideal R)⟩
 -/
 instance : One (FractionalIdeal S P) :=
@@ -1195,7 +1195,7 @@ theorem zero_of_num_eq_bot
 
 中文:
 定理 zero_of_num_eq_bot
-  结论: [IsDomain R] [Module.IsTorsionFree R P] (hS : 0 ∉ S)
+  结论: [是整环 R] [模.是无挠 R P] (hS : 0 ∉ S)
   证明: by
   rw [← coeToSubmodule_eq_bot]; rw [eq_bot_iff]
   intro x hx
@@ -1227,7 +1227,7 @@ theorem num_zero_eq
 
 中文:
 定理 num_zero_eq
-  条件: (h_inj : Function.Injective (algebraMap R P))
+  条件: (h_inj : 函数.单射 (algebraMap R P))
   证明: by
   simpa [num, LinearMap.ker_eq_bot] using! h_inj
 
@@ -1252,7 +1252,7 @@ theorem coeIdeal_top
 
 中文:
 定理 coeIdeal_top
-  结论: ((⊤ : Ideal R) : FractionalIdeal S P) = 1
+  结论: ((⊤ : 理想 R) : FractionalIdeal S P) = 1
   证明: rfl
 
 @[simp]
@@ -1330,7 +1330,7 @@ theorem coe_one_eq_coeSubmodule_top
 
 中文:
 定理 coe_one_eq_coeSubmodule_top
-  结论: ↑(1 : FractionalIdeal S P) = coeSubmodule P (⊤ : Ideal R)
+  结论: ↑(1 : FractionalIdeal S P) = coeSubmodule P (⊤ : 理想 R)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1350,7 +1350,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: (↑(1 : FractionalIdeal S P) : Submodule R P) = 1
+  结论: (↑(1 : FractionalIdeal S P) : 子模 R P) = 1
   证明: by
   rw [coe_one_eq_coeSubmodule_top]; rw [coeSubmodule_top]
 
@@ -1430,7 +1430,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (FractionalIdeal S P) where
+  签名: : 有底序 (FractionalIdeal S P) where
   定义体: 0
   bot_le := zero_le
 
@@ -1508,8 +1508,8 @@ theorem _root_.IsFractional.sup
   given: {I J : Submodule R P}
 
 中文:
-定理 _root_.IsFractional.sup
-  条件: {I J : Submodule R P}
+定理 _root_.IsFractional.上确界
+  条件: {I J : 子模 R P}
 -/
 theorem _root_.IsFractional.sup {I J : Submodule R P} :
     IsFractional S I -> IsFractional S J -> IsFractional S (I ⊔ J)
@@ -1532,7 +1532,7 @@ theorem _root_.IsFractional.inf_right
 
 中文:
 定理 _root_.IsFractional.inf_right
-  条件: {I : Submodule R P}
+  条件: {I : 子模 R P}
 -/
 theorem _root_.IsFractional.inf_right {I : Submodule R P} :
     IsFractional S I -> forall J, IsFractional S (I ⊓ J)
@@ -1553,7 +1553,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (FractionalIdeal S P)
+  签名: 最小值 (FractionalIdeal S P)
   定义体: ⟨fun I J => ⟨I ⊓ J, I.isFractional.inf_right J⟩⟩
 
 @[simp, norm_cast]
@@ -1576,7 +1576,7 @@ theorem coe_inf
 中文:
 定理 coe_inf
   条件: (I J : FractionalIdeal S P)
-  结论: ↑(I ⊓ J) = (I ⊓ J : Submodule R P)
+  结论: ↑(I ⊓ J) = (I ⊓ J : 子模 R P)
   证明: rfl
 -/
 theorem coe_inf (I J : FractionalIdeal S P) : ↑(I ⊓ J) = (I ⊓ J : Submodule R P) :=
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (FractionalIdeal S P)
+  签名: 最大值 (FractionalIdeal S P)
   定义体: ⟨fun I J => ⟨I ⊔ J, I.isFractional.sup J.isFractional⟩⟩
 
 @[norm_cast]
@@ -1617,7 +1617,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (I J : FractionalIdeal S P)
-  结论: ↑(I ⊔ J) = (I ⊔ J : Submodule R P)
+  结论: ↑(I ⊔ J) = (I ⊔ J : 子模 R P)
   证明: rfl
 -/
 theorem coe_sup (I J : FractionalIdeal S P) : ↑(I ⊔ J) = (I ⊔ J : Submodule R P) :=
@@ -1633,7 +1633,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: : Lattice (FractionalIdeal S P)
+  签名: : 格 (FractionalIdeal S P)
   定义体: Function.Injective.lattice _ Subtype.coe_injective .rfl .rfl coe_sup coe_inf
 
 Depends on / 依赖: Function, Function.Injective.lattice, Injective, Subtype, Subtype.coe_injective, coe_inf, coe_injective, coe_sup, lattice
@@ -1657,7 +1657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (FractionalIdeal S P)
+  签名: 加法 (FractionalIdeal S P)
   定义体: ⟨(· ⊔ ·)⟩
 
 @[simp]
@@ -1701,7 +1701,7 @@ theorem coe_add
 中文:
 定理 coe_add
   条件: (I J : FractionalIdeal S P)
-  结论: (↑(I + J) : Submodule R P) = I + J
+  结论: (↑(I + J) : 子模 R P) = I + J
   证明: rfl
 -/
 theorem coe_add (I J : FractionalIdeal S P) : (↑(I + J) : Submodule R P) = I + J :=
@@ -1747,7 +1747,7 @@ lemma coeIdeal_inf
 
 中文:
 引理 coeIdeal_inf
-  条件: [FaithfulSMul R P] (I J : Ideal R)
+  条件: [忠实标量乘法 R P] (I J : 理想 R)
   证明: by
   apply coeToSubmodule_injective
   exact Submodule.map_inf (Algebra.linearMap R P) (FaithfulSMul.algebraMap_injective R P)
@@ -1773,7 +1773,7 @@ theorem coeIdeal_sup
 
 中文:
 定理 coeIdeal_sup
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   结论: ↑(I ⊔ J) = (I + J : FractionalIdeal S P)
   证明: coeToSubmodule_injective coeSubmodule_sup _ _ _
 
@@ -1791,7 +1791,7 @@ theorem _root_.IsFractional.nsmul
 
 中文:
 定理 _root_.IsFractional.nsmul
-  条件: {I : Submodule R P}
+  条件: {I : 子模 R P}
 -/
 theorem _root_.IsFractional.nsmul {I : Submodule R P} :
     forall n : Nat, IsFractional S I -> IsFractional S (n • I : Submodule R P)
@@ -1815,7 +1815,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (FractionalIdeal S P)
+  签名: 标量乘法 自然数 (FractionalIdeal S P)
   定义体: ⟨n • ↑I, I.isFractional.nsmul n⟩
 
 @[norm_cast]
@@ -1858,7 +1858,7 @@ theorem _root_.IsFractional.mul
 
 中文:
 定理 _root_.IsFractional.mul
-  条件: {I J : Submodule R P}
+  条件: {I J : 子模 R P}
   证明: hJ n hn
         rw [mul_smul]; rw [mul_comm m]; rw [← smul_mul_assoc]; rw [← hn']; rw [← Algebra.smul_def]
         apply hI
@@ -1890,7 +1890,7 @@ theorem _root_.IsFractional.pow
 
 中文:
 定理 _root_.IsFractional.pow
-  条件: {I : Submodule R P} (h : IsFractional S I)
+  条件: {I : 子模 R P} (h : IsFractional S I)
 
 Depends on / 依赖: FractionalIdeal, mul_def
 -/
@@ -1923,7 +1923,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (FractionalIdeal S P)
+  签名: 乘法 (FractionalIdeal S P)
   定义体: ⟨fun I J => mul I J⟩
 
 @[simp]
@@ -1989,7 +1989,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (I J : FractionalIdeal S P)
-  结论: (↑(I * J) : Submodule R P) = I * J
+  结论: (↑(I * J) : 子模 R P) = I * J
   证明: by
   simp only [mul_def, coe_mk]
 
@@ -2014,7 +2014,7 @@ theorem coeIdeal_mul
 
 中文:
 定理 coeIdeal_mul
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   结论: (↑(I * J) : FractionalIdeal S P) = I * J
   证明: by
   simp only [mul_def]
@@ -2123,7 +2123,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (FractionalIdeal S P) 自然数
+  签名: 幂 (FractionalIdeal S P) 自然数
   定义体: ⟨fun I n => ⟨(I : Submodule R P) ^ n, I.isFractional.pow n⟩⟩
 
 @[simp, norm_cast]
@@ -2148,7 +2148,7 @@ theorem coe_pow
 中文:
 定理 coe_pow
   条件: (I : FractionalIdeal S P) (n : 自然数)
-  结论: ↑(I ^ n) = (I : Submodule R P) ^ n
+  结论: ↑(I ^ n) = (I : 子模 R P) ^ n
   证明: rfl
 
 @[elab_as_elim]
@@ -2190,7 +2190,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (FractionalIdeal S P)
+  签名: 自然数嵌入 (FractionalIdeal S P)
   定义体: ⟨Nat.unaryCast⟩
 
 Depends on / 依赖: Nat.unaryCast, unaryCast
@@ -2211,7 +2211,7 @@ theorem coe_natCast
 中文:
 定理 coe_natCast
   条件: (n : 自然数)
-  结论: ((n : FractionalIdeal S P) : Submodule R P) = n
+  结论: ((n : FractionalIdeal S P) : 子模 R P) = n
   证明: show ((n.unaryCast : FractionalIdeal S P) : Submodule R P) = n
   by induction n <;> simp [*, Nat.unaryCast]
 
@@ -2232,7 +2232,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring (FractionalIdeal S P)
+  签名: : 交换半环 (FractionalIdeal S P)
   定义体: Function.Injective.commSemiring _ Subtype.coe_injective coe_zero coe_one coe_add coe_mul
     (fun _ _ => coe_nsmul _ _) coe_pow coe_natCast
 
@@ -2254,7 +2254,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd (FractionalIdeal S P)
+  签名: 典范有序加法 (FractionalIdeal S P)
   定义体: ⟨_, (sup_eq_right.mpr h).symm⟩
   le_add_self _ _ := le_sup_right
   le_self_add _ _ := le_sup_left
@@ -2276,7 +2276,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing (FractionalIdeal S P)
+  签名: 是Ordered环 (FractionalIdeal S P)
   定义体: CanonicallyOrderedAdd.toIsOrderedRing
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toIsOrderedRing, toIsOrderedRing
@@ -2304,7 +2304,7 @@ definition coeSubmoduleHom
 
 中文:
 定义 coeSubmoduleHom
-  签名: : FractionalIdeal S P ->+* Submodule R P where
+  签名: : FractionalIdeal S P ->+* 子模 R P where
   定义体: coeToSubmodule
   map_one' := coe_one
   map_mul' := coe_mul
@@ -2337,7 +2337,7 @@ theorem coeIdeal_le_one
 
 中文:
 定理 coeIdeal_le_one
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: (I : FractionalIdeal S P) <= 1
   证明: fun _ hx =>
   let ⟨y, _, hy⟩ := (mem_coeIdeal S).mp hx
@@ -2366,7 +2366,7 @@ theorem le_one_iff_exists_coeIdeal
       rw [smul_eq_mul]; rw [mem_ofPre
 
 中文:
-定理 le_one_iff_exists_coeIdeal
+定理 le_one_iff_存在_coeIdeal
   条件: {J : FractionalIdeal S P}
   证明: by
   constructor
@@ -2447,7 +2447,7 @@ definition coeIdealHom
 
 中文:
 定义 coeIdealHom
-  签名: : Ideal R ->+* FractionalIdeal S P where
+  签名: : 理想 R ->+* FractionalIdeal S P where
   定义体: coeIdeal
   map_add' := coeIdeal_sup
   map_mul' := coeIdeal_mul
@@ -2474,7 +2474,7 @@ theorem coeIdeal_pow
 
 中文:
 定理 coeIdeal_pow
-  条件: (I : Ideal R) (n : 自然数)
+  条件: (I : 理想 R) (n : 自然数)
   结论: ↑(I ^ n) = (I : FractionalIdeal S P) ^ n
   证明: (coeIdealHom S P).map_pow _ n
 
@@ -2493,7 +2493,7 @@ theorem coeIdeal_finprod
 
 中文:
 定理 coeIdeal_finprod
-  结论: [IsLocalization S P] {α : Sort*} {f : α -> Ideal R}
+  结论: [是Localization S P] {α : 类型层*} {f : α -> 理想 R}
   证明: MonoidHom.map_finprod_of_injective (coeIdealHom S P).toMonoidHom (coeIdeal_injective' hS) f
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_finprod_of_injective, coeIdealHom, coeIdeal_injective, map_finprod_of_injective, toMonoidHom
@@ -2523,7 +2523,7 @@ lemma fg_of_isNoetherianRing
 
 中文:
 引理 fg_of_isNoetherianRing
-  条件: [hR : IsNoetherianRing R] (hS : S <= R⁰) (I : FractionalIdeal S P)
+  条件: [hR : 是Noether环 R] (hS : S <= R⁰) (I : FractionalIdeal S P)
   证明: by
   have := hR.noetherian I.num
   rw [← Module.Finite.iff_fg] at this ⊢

@@ -66,11 +66,11 @@ class IsLattice
     - span_eq_top : Submodule.span A (M : Set V) = ⊤
 
 中文:
-类 IsLattice
-  参数: (A : outParam 类型) [CommRing A] [Algebra R A]
+类 是格
+  参数: (A : outParam 类型) [交换环 A] [代数 R A]
   公理与运算 (2 个):
     - fg : M.FG
-    - span_eq_top : Submodule.span A (M : Set V) = ⊤
+    - span_eq_top : 子模.span A (M : 集合 V) = ⊤
 -/
 class IsLattice (A : outParam Type*) [CommRing A] [Algebra R A]
     {V : Type*} [AddCommMonoid V] [Module R V] [Module A V] [IsScalarTower R A V]
@@ -98,7 +98,7 @@ instance finite
 
 中文:
 实例 finite
-  签名: [IsLattice A M]
+  签名: [是格 A M]
   定义体: by
   rw [Module.Finite.iff_fg]
   exact IsLattice.fg
@@ -126,7 +126,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [IsLattice A M] (a : Aˣ)
+  签名: [是格 A M] (a : Aˣ)
   定义体: by
     obtain ⟨s, rfl⟩ := IsLattice.fg (M := M)
     rw [Submodule.smul_span]
@@ -161,7 +161,7 @@ lemma of_le_of_isLattice_of_fg
 
 中文:
 引理 of_le_of_isLattice_of_fg
-  结论: {M N : Submodule R V} (hle : M <= N) [IsLattice A M]
+  结论: {M N : 子模 R V} (hle : M <= N) [是格 A M]
   证明: ⟨hfg, eq_top_iff.mpr
     le_trans (by rw [IsLattice.span_eq_top]) (Submodule.span_mono hle)⟩
 
@@ -181,8 +181,8 @@ instance sup
   body: of_le_of_isLattice_of_fg A le_sup_left (Submodule.FG.sup IsLattice.fg IsLattice.fg)
 
 中文:
-实例 sup
-  签名: (M N : Submodule R V) [IsLattice A M] [IsLattice A N]
+实例 上确界
+  签名: (M N : 子模 R V) [是格 A M] [是格 A N]
   定义体: of_le_of_isLattice_of_fg A le_sup_left (Submodule.FG.sup IsLattice.fg IsLattice.fg)
 
 Depends on / 依赖: IsLattice, IsLattice.fg, Submodule, Submodule.FG.sup, le_sup_left, of_le_of_isLattice_of_fg
@@ -211,8 +211,8 @@ lemma _root_.Submodule.span_range_eq_top_of_injective_of_rank_le
     le_antisymm (LinearIndependent.cardinal_le_rank hli) (hs ▸ h
 
 中文:
-引理 _root_.Submodule.span_range_eq_top_of_injective_of_rank_le
-  结论: {M N : 类型u} [IsDomain R]
+引理 _root_.子模.span_range_eq_top_of_injective_of_rank_le
+  结论: {M N : 类型u} [是整环 R]
   证明: by
   obtain ⟨s, hs, hli⟩ := exists_set_linearIndependent R M
   replace hli := hli.map' f (LinearMap.ker_eq_bot.mpr hf)
@@ -255,7 +255,7 @@ definition _root_.Module.Basis.extendOfIsLattice
     exact linearIndependent_iff'.mp b.linearInd
 
 中文:
-定义 _root_.Module.Basis.extendOfIsLattice
+定义 _root_.模.基.extendOfIsLattice
   签名: [IsFractionRing R K] {κ : 类型}
   定义体: have hli : LinearIndependent K (fun i => (b i).val) := by
     rw [← LinearIndependent.iff_fractionRing (R := R)]; rw [linearIndependent_iff']
@@ -290,7 +290,7 @@ lemma _root_.Module.Basis.extendOfIsLattice_apply
   simp [Basis.extendOfIsLattice]
 
 中文:
-引理 _root_.Module.Basis.extendOfIsLattice_apply
+引理 _root_.模.基.extendOfIsLattice_apply
   结论: [IsFractionRing R K] {κ : 类型}
   证明: by
   simp [Basis.extendOfIsLattice]
@@ -316,7 +316,7 @@ lemma of_rank_le
 
 中文:
 引理 of_rank_le
-  结论: [Module.Finite K V] [IsFractionRing R K] {M : Submodule R V}
+  结论: [模.有限 K V] [IsFractionRing R K] {M : 子模 R V}
   证明: hfg
   span_eq_top := by
     simpa using Submodule.span_range_eq_top_of_injective_of_rank_le M.injective_subtype hr
@@ -342,7 +342,7 @@ instance free
 
 中文:
 实例 free
-  签名: [Module.IsTorsionFree R K] (M : Submodule R V) [IsLattice K M]
+  签名: [模.是无挠 R K] (M : 子模 R V) [是格 K M]
   定义体: by
   have := Module.IsTorsionFree.trans_faithfulSMul R K V
   -- any torsion free finite module over a PID is free
@@ -367,7 +367,7 @@ lemma rank'
 
 中文:
 引理 rank'
-  条件: [IsFractionRing R K] (M : Submodule R V) [IsLattice K M]
+  条件: [IsFractionRing R K] (M : 子模 R V) [是格 K M]
   证明: by
   let b := Module.Free.chooseBasis R M
   rw [rank_eq_card_basis b]; rw [← rank_eq_card_basis (b.extendOfIsLattice K)]
@@ -391,7 +391,7 @@ lemma rank_of_pi
 
 中文:
 引理 rank_of_pi
-  结论: {ι : 类型} [Fintype ι] [IsFractionRing R K] (M : Submodule R (ι -> K))
+  结论: {ι : 类型} [有限类型 ι] [IsFractionRing R K] (M : 子模 R (ι -> K))
   证明: by
   rw [IsLattice.rank' K M]
   simp
@@ -413,7 +413,7 @@ lemma finrank_of_pi
 
 中文:
 引理 finrank_of_pi
-  结论: {ι : 类型} [Fintype ι] [IsFractionRing R K] (M : Submodule R (ι -> K))
+  结论: {ι : 类型} [有限类型 ι] [IsFractionRing R K] (M : 子模 R (ι -> K))
   证明: Module.finrank_eq_of_rank_eq (IsLattice.rank_of_pi K M)
 
 Depends on / 依赖: IsLattice, IsLattice.rank_of_pi, Module, Module.finrank_eq_of_rank_eq, finrank_eq_of_rank_eq, rank_of_pi
@@ -438,8 +438,8 @@ instance inf
     have h := Submodule.rank_sup_add
 
 中文:
-实例 inf
-  签名: [Module.Finite K V] [IsFractionRing R K] (M N : Submodule R V)
+实例 下确界
+  签名: [模.有限 K V] [IsFractionRing R K] (M N : 子模 R V)
   定义体: by
     have : IsNoetherian R ↥(M ⊓ N) := isNoetherian_of_le inf_le_left
     rw [← Module.Finite.iff_fg]

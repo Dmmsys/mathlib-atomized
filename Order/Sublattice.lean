@@ -39,10 +39,10 @@ structure Sublattice
     - infClosed' : InfClosed carrier
 
 中文:
-结构 Sublattice
+结构 子格
   参数: where
   公理与运算 (3 个):
-    - carrier : Set α
+    - carrier : 集合 α
     - supClosed' : SupClosed carrier
     - infClosed' : InfClosed carrier
 -/
@@ -69,7 +69,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (Sublattice α) α where
+  签名: : 集合状 (子格 α) α where
   定义体: L.carrier
   coe_injective L M h := by cases L; congr
 
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Sublattice α)
+  签名: 偏序 (子格 α)
   定义体: .ofSetLike (Sublattice α) α
 
 Depends on / 依赖: Sublattice, ofSetLike
@@ -108,7 +108,7 @@ initialize_simps_projections Sublattice (carrier -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: (L : Sublattice α)
+  签名: (L : 子格 α)
   定义体: L
 
 initialize_simps_projections Sublattice (carrier -> coe, as_prefix coe)
@@ -127,7 +127,7 @@ abbreviation ofIsSublattice
 
 中文:
 缩写 ofIsSublattice
-  签名: (s : Set α) (hs : IsSublattice s)
+  签名: (s : 集合 α) (hs : 是子格 s)
   定义体: ⟨s, hs.1, hs.2⟩
 -/
 abbrev ofIsSublattice (s : Set α) (hs : IsSublattice s) : Sublattice α := ⟨s, hs.1, hs.2⟩
@@ -142,7 +142,7 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  结论: (L : Set α) = M ↔ L = M
+  结论: (L : 集合 α) = M ↔ L = M
   证明: SetLike.coe_set_eq
 
 Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
@@ -160,8 +160,8 @@ lemma supClosed
 
 中文:
 引理 supClosed
-  条件: (L : Sublattice α)
-  结论: SupClosed (L : Set α)
+  条件: (L : 子格 α)
+  结论: SupClosed (L : 集合 α)
   证明: L.supClosed'
 -/
 @[simp] lemma supClosed (L : Sublattice α) : SupClosed (L : Set α) := L.supClosed'
@@ -176,8 +176,8 @@ lemma infClosed
 
 中文:
 引理 infClosed
-  条件: (L : Sublattice α)
-  结论: InfClosed (L : Set α)
+  条件: (L : 子格 α)
+  结论: InfClosed (L : 集合 α)
   证明: L.infClosed'
 -/
 @[simp] lemma infClosed (L : Sublattice α) : InfClosed (L : Set α) := L.infClosed'
@@ -228,8 +228,8 @@ lemma isSublattice
 
 中文:
 引理 isSublattice
-  条件: (L : Sublattice α)
-  结论: IsSublattice (L : Set α)
+  条件: (L : 子格 α)
+  结论: 是子格 (L : 集合 α)
   证明: ⟨L.supClosed, L.infClosed⟩
 -/
 @[simp] lemma isSublattice (L : Sublattice α) : IsSublattice (L : Set α) :=
@@ -324,7 +324,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (L : Sublattice α) (s : Set α) (hs : s = L)
+  签名: (L : 子格 α) (s : 集合 α) (hs : s = L)
   定义体: s
   supClosed' := hs.symm ▸ L.supClosed'
   infClosed' := hs.symm ▸ L.infClosed'
@@ -345,7 +345,7 @@ lemma coe_copy
 
 中文:
 引理 coe_copy
-  条件: (L : Sublattice α) (s : Set α) (hs)
+  条件: (L : 子格 α) (s : 集合 α) (hs)
   结论: L.copy s hs = s
   证明: rfl
 -/
@@ -362,7 +362,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: (L : Sublattice α) (s : Set α) (hs)
+  条件: (L : 子格 α) (s : 集合 α) (hs)
   结论: L.copy s hs = L
   证明: SetLike.coe_injective hs
 
@@ -397,7 +397,7 @@ instance instSupCoe
 
 中文:
 实例 instSupCoe
-  签名: : Max L where
+  签名: : 最大值 L where
   定义体: ⟨a ⊔ b, L.supClosed a.2 b.2⟩
 
 Depends on / 依赖: L.supClosed, supClosed
@@ -415,7 +415,7 @@ instance instInfCoe
 
 中文:
 实例 instInfCoe
-  签名: : Min L where
+  签名: : 最小值 L where
   定义体: ⟨a ⊓ b, L.infClosed a.2 b.2⟩
 
 Depends on / 依赖: L.infClosed, infClosed
@@ -500,7 +500,7 @@ instance instLatticeCoe
 
 中文:
 实例 instLatticeCoe
-  签名: (L : Sublattice α)
+  签名: (L : 子格 α)
   定义体: Subtype.coe_injective.lattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.lattice, coe_injective, lattice
@@ -518,7 +518,7 @@ instance instDistribLatticeCoe
 
 中文:
 实例 instDistribLatticeCoe
-  签名: {α : 类型} [DistribLattice α] (L : Sublattice α)
+  签名: {α : 类型} [Distrib格 α] (L : 子格 α)
   定义体: Subtype.coe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.distribLattice, coe_injective, distribLattice
@@ -539,7 +539,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (L : Sublattice α)
+  签名: (L : 子格 α)
   定义体: ((↑) : L -> α)
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -560,7 +560,7 @@ lemma coe_subtype
 
 中文:
 引理 coe_subtype
-  条件: (L : Sublattice α)
+  条件: (L : 子格 α)
   结论: L.subtype = ((↑) : L -> α)
   证明: rfl
 -/
@@ -576,7 +576,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: (L : Sublattice α) (a : L)
+  条件: (L : 子格 α) (a : L)
   结论: L.subtype a = a
   证明: rfl
 
@@ -595,8 +595,8 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (L : Sublattice α)
-  结论: Injective subtype L
+  条件: (L : 子格 α)
+  结论: 单射 subtype L
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -639,7 +639,7 @@ lemma coe_inclusion
 中文:
 引理 coe_inclusion
   条件: (h : L <= M)
-  结论: inclusion h = Set.inclusion h
+  结论: inclusion h = 集合.inclusion h
   证明: rfl
 -/
 @[simp] lemma coe_inclusion (h : L <= M) : inclusion h = Set.inclusion h := rfl
@@ -655,7 +655,7 @@ lemma inclusion_apply
 中文:
 引理 inclusion_apply
   条件: (h : L <= M) (a : L)
-  结论: inclusion h a = Set.inclusion h a
+  结论: inclusion h a = 集合.inclusion h a
   证明: rfl
 -/
 lemma inclusion_apply (h : L <= M) (a : L) : inclusion h a = Set.inclusion h a := rfl
@@ -672,7 +672,7 @@ lemma inclusion_injective
 中文:
 引理 inclusion_injective
   条件: (h : L <= M)
-  结论: Injective inclusion h
+  结论: 单射 inclusion h
   证明: Set.inclusion_injective h
 
 Depends on / 依赖: Set.inclusion_injective, inclusion_injective
@@ -690,8 +690,8 @@ lemma inclusion_rfl
 
 中文:
 引理 inclusion_rfl
-  条件: (L : Sublattice α)
-  结论: inclusion le_rfl = LatticeHom.id L
+  条件: (L : 子格 α)
+  结论: inclusion le_rfl = 格态射.id L
   证明: rfl
 -/
 @[simp] lemma inclusion_rfl (L : Sublattice α) : inclusion le_rfl = LatticeHom.id L := rfl
@@ -724,7 +724,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (Sublattice α) where
+  签名: : 顶元素 (子格 α) where
   定义体: univ
   top.supClosed' := supClosed_univ
   top.infClosed' := infClosed_univ
@@ -746,7 +746,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (Sublattice α) where
+  签名: : 底元素 (子格 α) where
   定义体: ∅
   bot.supClosed' := supClosed_empty
   bot.infClosed' := infClosed_empty
@@ -768,7 +768,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (Sublattice α) where
+  签名: : 最小值 (子格 α) where
   定义体: { carrier := L inter M
                supClosed' := L.supClosed.inter M.supClosed
                infClosed' := L.infClosed.inter M.infClosed }
@@ -794,7 +794,7 @@ infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
 
 中文:
 实例 instInfSet
-  签名: : InfSet (Sublattice α) where
+  签名: : 下确界集 (子格 α) where
   定义体: { carrier := ⨅ L in S, L
 supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
                 forall_mem_range.2 fun _ => L.supClosed
@@ -820,7 +820,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (Sublattice α)
+  签名: : 可居 (子格 α)
   定义体: ⟨⊥⟩
 -/
 instance instInhabited : Inhabited (Sublattice α) := ⟨⊥⟩
@@ -836,7 +836,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Sublattice α) ≃o α where
+  签名: : (⊤ : 子格 α) ≃o α where
   定义体: Equiv.Set.univ _
   map_rel_iff' := Iff.rfl
 
@@ -856,7 +856,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: (⊤ : Sublattice α) = (univ : Set α)
+  结论: (⊤ : 子格 α) = (univ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : (⊤ : Sublattice α) = (univ : Set α) := rfl
@@ -870,7 +870,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (⊥ : Sublattice α) = (∅ : Set α)
+  结论: (⊥ : 子格 α) = (∅ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : (⊥ : Sublattice α) = (∅ : Set α) := rfl
@@ -885,8 +885,8 @@ lemma coe_inf'
 
 中文:
 引理 coe_inf'
-  条件: (L M : Sublattice α)
-  结论: L ⊓ M = (L : Set α) inter M
+  条件: (L M : 子格 α)
+  结论: L ⊓ M = (L : 集合 α) inter M
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inf' (L M : Sublattice α) : L ⊓ M = (L : Set α) inter M := rfl
@@ -901,8 +901,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (S : Set (Sublattice α))
-  结论: sInf S = ⋂ L in S, (L : Set α)
+  条件: (S : 集合 (子格 α))
+  结论: sInf S = ⋂ L in S, (L : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sInf (S : Set (Sublattice α)) : sInf S = ⋂ L in S, (L : Set α) := rfl
@@ -918,8 +918,8 @@ lemma coe_iInf
 
 中文:
 引理 coe_iInf
-  条件: (f : ι -> Sublattice α)
-  结论: ⨅ i, f i = ⋂ i, (f i : Set α)
+  条件: (f : ι -> 子格 α)
+  结论: ⨅ i, f i = ⋂ i, (f i : 集合 α)
   证明: by
   simp [iInf]
 -/
@@ -936,7 +936,7 @@ lemma coe_eq_univ
 
 中文:
 引理 coe_eq_univ
-  结论: L = (univ : Set α) ↔ L = ⊤
+  结论: L = (univ : 集合 α) ↔ L = ⊤
   证明: by rw [← coe_top, coe_inj]
 -/
 @[simp, norm_cast] lemma coe_eq_univ : L = (univ : Set α) ↔ L = ⊤ := by rw [← coe_top, coe_inj]
@@ -950,7 +950,7 @@ lemma coe_eq_empty
 
 中文:
 引理 coe_eq_empty
-  结论: L = (∅ : Set α) ↔ L = ⊥
+  结论: L = (∅ : 集合 α) ↔ L = ⊥
   证明: by rw [← coe_bot, coe_inj]
 -/
 @[simp, norm_cast] lemma coe_eq_empty : L = (∅ : Set α) ↔ L = ⊥ := by rw [← coe_bot, coe_inj]
@@ -967,7 +967,7 @@ lemma notMem_bot
 中文:
 引理 notMem_bot
   条件: (a : α)
-  结论: a ∉ (⊥ : Sublattice α)
+  结论: a ∉ (⊥ : 子格 α)
   证明: id
 -/
 @[simp] lemma notMem_bot (a : α) : a ∉ (⊥ : Sublattice α) := id
@@ -983,7 +983,7 @@ lemma mem_top
 中文:
 引理 mem_top
   条件: (a : α)
-  结论: a in (⊤ : Sublattice α)
+  结论: a in (⊤ : 子格 α)
   证明: mem_univ _
 -/
 @[simp] lemma mem_top (a : α) : a in (⊤ : Sublattice α) := mem_univ _
@@ -1013,7 +1013,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: {S : Set (Sublattice α)}
+  条件: {S : 集合 (子格 α)}
   结论: a in sInf S ↔ 对任意 L in S, a in L
   证明: by
   rw [← SetLike.mem_coe]; simp
@@ -1032,7 +1032,7 @@ lemma mem_iInf
 
 中文:
 引理 mem_iInf
-  条件: {f : ι -> Sublattice α}
+  条件: {f : ι -> 子格 α}
   结论: a in ⨅ i, f i ↔ 对任意 i, a in f i
   证明: by
   rw [← SetLike.mem_coe]; simp
@@ -1059,7 +1059,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (Sublattice α) where
+  签名: : 完备格 (子格 α) where
   定义体: ⊥
   bot_le := fun _S _a => False.elim
   top := ⊤
@@ -1094,7 +1094,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  结论: Subsingleton (Sublattice α) ↔ IsEmpty α
+  结论: 子单例 (子格 α) ↔ 是空 α
   证明: ⟨fun _ => univ_eq_empty_iff.1 coe_inj.2 Subsingleton.elim ⊤ ⊥,
     fun _ => SetLike.coe_injective.subsingleton⟩
 
@@ -1113,8 +1113,8 @@ instance [IsEmpty
   body: @Subsingleton.elim _ (subsingleton_iff.2 ‹_›) _ _
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (Sublattice α) where
+实例 [是空
+  签名: α] : 唯一 (子格 α) where
   定义体: @Subsingleton.elim _ (subsingleton_iff.2 ‹_›) _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, subsingleton_iff
@@ -1134,7 +1134,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : LatticeHom α β) (L : Sublattice β)
+  签名: (f : 格态射 α β) (L : 子格 β)
   定义体: f ⁻¹' L
   supClosed' := L.supClosed.preimage _
   infClosed' := L.infClosed.preimage _
@@ -1155,7 +1155,7 @@ lemma coe_comap
 
 中文:
 引理 coe_comap
-  条件: (L : Sublattice β) (f : LatticeHom α β)
+  条件: (L : 子格 β) (f : 格态射 α β)
   结论: L.comap f = f ⁻¹' L
   证明: rfl
 -/
@@ -1173,7 +1173,7 @@ lemma mem_comap
 
 中文:
 引理 mem_comap
-  条件: {L : Sublattice β}
+  条件: {L : 子格 β}
   结论: a in L.comap f ↔ f a in L
   证明: Iff.rfl
 -/
@@ -1189,7 +1189,7 @@ lemma comap_mono
 
 中文:
 引理 comap_mono
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: fun _ _ => preimage_mono
 
 Depends on / 依赖: preimage_mono
@@ -1207,8 +1207,8 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (L : Sublattice α)
-  结论: L.comap (LatticeHom.id _) = L
+  条件: (L : 子格 α)
+  结论: L.comap (格态射.id _) = L
   证明: rfl
 -/
 @[simp] lemma comap_id (L : Sublattice α) : L.comap (LatticeHom.id _) = L := rfl
@@ -1223,7 +1223,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  条件: (L : Sublattice γ) (g : LatticeHom β γ) (f : LatticeHom α β)
+  条件: (L : 子格 γ) (g : 格态射 β γ) (f : 格态射 α β)
   证明: rfl
 -/
 @[simp] lemma comap_comap (L : Sublattice γ) (g : LatticeHom β γ) (f : LatticeHom α β) :
@@ -1241,7 +1241,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : LatticeHom α β) (L : Sublattice α)
+  签名: (f : 格态射 α β) (L : 子格 α)
   定义体: f '' L
   supClosed' := L.supClosed.image f
   infClosed' := L.infClosed.image f
@@ -1262,8 +1262,8 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  条件: (f : LatticeHom α β) (L : Sublattice α)
-  结论: (L.map f : Set β) = f '' L
+  条件: (f : 格态射 α β) (L : 子格 α)
+  结论: (L.map f : 集合 β) = f '' L
   证明: rfl
 -/
 @[simp] lemma coe_map (f : LatticeHom α β) (L : Sublattice α) : (L.map f : Set β) = f '' L := rfl
@@ -1295,7 +1295,7 @@ lemma mem_map_of_mem
 
 中文:
 引理 mem_map_of_mem
-  条件: (f : LatticeHom α β) {a : α}
+  条件: (f : 格态射 α β) {a : α}
   结论: a in L -> f a in L.map f
   证明: mem_image_of_mem f
 
@@ -1313,7 +1313,7 @@ lemma apply_coe_mem_map
 
 中文:
 引理 apply_coe_mem_map
-  条件: (f : LatticeHom α β) (a : L)
+  条件: (f : 格态射 α β) (a : L)
   结论: f a in L.map f
   证明: mem_map_of_mem f a.prop
 
@@ -1331,7 +1331,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: fun _ _ => image_mono
 
 Depends on / 依赖: image_mono
@@ -1348,7 +1348,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: L.map (LatticeHom.id α) = L
+  结论: L.map (格态射.id α) = L
   证明: SetLike.coe_injective image_id _
 -/
 @[simp] lemma map_id : L.map (LatticeHom.id α) = L := SetLike.coe_injective image_id _
@@ -1363,7 +1363,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: (g : LatticeHom β γ) (f : LatticeHom α β)
+  条件: (g : 格态射 β γ) (f : 格态射 α β)
   证明: SetLike.coe_injective image_image _ _ _
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.of_isUnit_or_isUnit_one_sub_self, IsUnit, IsUnit.mk0, Or.inl, Or.inr, classical, isUnit_one, of_isUnit_or_isUnit_one_sub_self, sub_zero
@@ -1401,7 +1401,7 @@ lemma apply_mem_map_iff
 
 中文:
 引理 apply_mem_map_iff
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: f a in L.map f ↔ a in L
   证明: hf.mem_set_image
 
@@ -1419,7 +1419,7 @@ lemma map_equiv_eq_comap_symm
 
 中文:
 引理 map_equiv_eq_comap_symm
-  条件: (f : α ≃o β) (L : Sublattice α)
+  条件: (f : α ≃o β) (L : 子格 α)
   证明: SetLike.coe_injective f.toEquiv.image_eq_preimage_symm L
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -1438,7 +1438,7 @@ lemma comap_equiv_eq_map_symm
 
 中文:
 引理 comap_equiv_eq_map_symm
-  条件: (f : β ≃o α) (L : Sublattice α)
+  条件: (f : β ≃o α) (L : 子格 α)
   证明: (map_equiv_eq_comap_symm f.symm L).symm
 
 Depends on / 依赖: f.symm, map_equiv_eq_comap_symm
@@ -1457,7 +1457,7 @@ lemma map_symm_eq_iff_eq_map
 
 中文:
 引理 map_symm_eq_iff_eq_map
-  条件: {M : Sublattice β} {e : β ≃o α}
+  条件: {M : 子格 β} {e : β ≃o α}
   证明: by
   simp_rw [← coe_inj]; exact (Equiv.eq_image_iff_symm_image_eq _ _ _).symm
 
@@ -1478,7 +1478,7 @@ lemma map_le_iff_le_comap
 
 中文:
 引理 map_le_iff_le_comap
-  条件: {f : LatticeHom α β} {M : Sublattice β}
+  条件: {f : 格态射 α β} {M : 子格 β}
   结论: L.map f <= M ↔ L <= M.comap f
   证明: image_subset_iff
 
@@ -1498,7 +1498,7 @@ lemma gc_map_comap
 
 中文:
 引理 gc_map_comap
-  条件: (f : LatticeHom α β)
+  条件: (f : 格态射 α β)
   结论: GaloisConnection (map f) (comap f)
   证明: fun _ _ => map_le_iff_le_comap
 
@@ -1518,8 +1518,8 @@ lemma map_bot
 
 中文:
 引理 map_bot
-  条件: (f : LatticeHom α β)
-  结论: (⊥ : Sublattice α).map f = ⊥
+  条件: (f : 格态射 α β)
+  结论: (⊥ : 子格 α).map f = ⊥
   证明: (gc_map_comap f).l_bot
 -/
 @[simp] lemma map_bot (f : LatticeHom α β) : (⊥ : Sublattice α).map f = ⊥ := (gc_map_comap f).l_bot
@@ -1535,7 +1535,7 @@ lemma map_sup
 
 中文:
 引理 map_sup
-  条件: (f : LatticeHom α β) (L M : Sublattice α)
+  条件: (f : 格态射 α β) (L M : 子格 α)
   结论: (L ⊔ M).map f = L.map f ⊔ M.map f
   证明: (gc_map_comap f).l_sup
 
@@ -1555,7 +1555,7 @@ lemma map_iSup
 
 中文:
 引理 map_iSup
-  条件: (f : LatticeHom α β) (L : ι -> Sublattice α)
+  条件: (f : 格态射 α β) (L : ι -> 子格 α)
   结论: (⨆ i, L i).map f = ⨆ i, (L i).map f
   证明: (gc_map_comap f).l_iSup
 
@@ -1575,8 +1575,8 @@ lemma comap_top
 
 中文:
 引理 comap_top
-  条件: (f : LatticeHom α β)
-  结论: (⊤ : Sublattice β).comap f = ⊤
+  条件: (f : 格态射 α β)
+  结论: (⊤ : 子格 β).comap f = ⊤
   证明: (gc_map_comap f).u_top
 -/
 @[simp] lemma comap_top (f : LatticeHom α β) : (⊤ : Sublattice β).comap f = ⊤ :=
@@ -1592,7 +1592,7 @@ lemma comap_inf
 
 中文:
 引理 comap_inf
-  条件: (L M : Sublattice β) (f : LatticeHom α β)
+  条件: (L M : 子格 β) (f : 格态射 α β)
   证明: (gc_map_comap f).u_inf
 
 Depends on / 依赖: gc_map_comap, u_inf
@@ -1610,7 +1610,7 @@ lemma comap_iInf
 
 中文:
 引理 comap_iInf
-  条件: (f : LatticeHom α β) (s : ι -> Sublattice β)
+  条件: (f : 格态射 α β) (s : ι -> 子格 β)
   证明: (gc_map_comap f).u_iInf
 
 Depends on / 依赖: gc_map_comap, u_iInf
@@ -1629,7 +1629,7 @@ lemma map_inf_le
 
 中文:
 引理 map_inf_le
-  条件: (L M : Sublattice α) (f : LatticeHom α β)
+  条件: (L M : 子格 α) (f : 格态射 α β)
   结论: map f (L ⊓ M) <= map f L ⊓ map f M
   证明: map_mono.map_inf_le _ _
 
@@ -1648,7 +1648,7 @@ lemma le_comap_sup
 
 中文:
 引理 le_comap_sup
-  条件: (L M : Sublattice β) (f : LatticeHom α β)
+  条件: (L M : 子格 β) (f : 格态射 α β)
   证明: comap_mono.le_map_sup _ _
 
 Depends on / 依赖: comap_mono, comap_mono.le_map_sup, le_map_sup
@@ -1666,7 +1666,7 @@ lemma le_comap_iSup
 
 中文:
 引理 le_comap_iSup
-  条件: (f : LatticeHom α β) (L : ι -> Sublattice β)
+  条件: (f : 格态射 α β) (L : ι -> 子格 β)
   证明: comap_mono.le_map_iSup
 
 Depends on / 依赖: comap_mono, comap_mono.le_map_iSup, le_map_iSup
@@ -1686,7 +1686,7 @@ lemma map_inf
 
 中文:
 引理 map_inf
-  条件: (L M : Sublattice α) (f : LatticeHom α β) (hf : Injective f)
+  条件: (L M : 子格 α) (f : 格态射 α β) (hf : 单射 f)
   证明: by
   rw [← SetLike.coe_set_eq]
   simp [Set.image_inter hf]
@@ -1709,8 +1709,8 @@ lemma map_top
 
 中文:
 引理 map_top
-  条件: (f : LatticeHom α β) (h : Surjective f)
-  结论: Sublattice.map f ⊤ = ⊤
+  条件: (f : 格态射 α β) (h : 满射 f)
+  结论: 子格.map f ⊤ = ⊤
   证明: SetLike.coe_injective by simp [h.range_eq]
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, h.range_eq, range_eq
@@ -1736,8 +1736,8 @@ definition prod
   infClosed' := L.infClosed.prod M.infClosed
 
 中文:
-定义 prod
-  签名: (L : Sublattice α) (M : Sublattice β)
+定义 乘积
+  签名: (L : 子格 α) (M : 子格 β)
   定义体: L ×ˢ M
   supClosed' := L.supClosed.prod M.supClosed
   infClosed' := L.infClosed.prod M.infClosed
@@ -1762,8 +1762,8 @@ lemma mem_prod
 
 中文:
 引理 mem_prod
-  条件: {M : Sublattice β} {p : α × β}
-  结论: p in L.prod M ↔ p.1 in L ∧ p.2 in M
+  条件: {M : 子格 β} {p : α × β}
+  结论: p in L.乘积 M ↔ p.1 in L ∧ p.2 in M
   证明: Iff.rfl
 
 @[gcongr]
@@ -1781,7 +1781,7 @@ lemma prod_mono
 
 中文:
 引理 prod_mono
-  条件: {L₁ L₂ : Sublattice α} {M₁ M₂ : Sublattice β} (hL : L₁ <= L₂) (hM : M₁ <= M₂)
+  条件: {L₁ L₂ : 子格 α} {M₁ M₂ : 子格 β} (hL : L₁ <= L₂) (hM : M₁ <= M₂)
   证明: Set.prod_mono hL hM
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -1799,7 +1799,7 @@ lemma prod_mono_left
 
 中文:
 引理 prod_mono_left
-  条件: {L₁ L₂ : Sublattice α} {M : Sublattice β} (hL : L₁ <= L₂)
+  条件: {L₁ L₂ : 子格 α} {M : 子格 β} (hL : L₁ <= L₂)
   证明: prod_mono hL le_rfl
 
 Depends on / 依赖: le_rfl, prod_mono
@@ -1818,8 +1818,8 @@ lemma prod_mono_right
 
 中文:
 引理 prod_mono_right
-  条件: {M₁ M₂ : Sublattice β} (hM : M₁ <= M₂)
-  结论: L.prod M₁ <= L.prod M₂
+  条件: {M₁ M₂ : 子格 β} (hM : M₁ <= M₂)
+  结论: L.乘积 M₁ <= L.乘积 M₂
   证明: prod_mono le_rfl hM
 
 Depends on / 依赖: le_rfl, prod_mono
@@ -1837,7 +1837,7 @@ lemma prod_left_mono
 
 中文:
 引理 prod_left_mono
-  结论: Monotone fun L : Sublattice α => L.prod M
+  结论: 递增 fun L : 子格 α => L.乘积 M
   证明: fun _ _ => prod_mono_left
 
 Depends on / 依赖: prod_mono_left
@@ -1853,7 +1853,7 @@ lemma prod_right_mono
 
 中文:
 引理 prod_right_mono
-  结论: Monotone fun M : Sublattice β => L.prod M
+  结论: 递增 fun M : 子格 β => L.乘积 M
   证明: fun _ _ => prod_mono_right
 
 Depends on / 依赖: prod_mono_right
@@ -1871,8 +1871,8 @@ lemma prod_top
 
 中文:
 引理 prod_top
-  条件: (L : Sublattice α)
-  结论: L.prod (⊤ : Sublattice β) = L.comap LatticeHom.fst
+  条件: (L : 子格 α)
+  结论: L.乘积 (⊤ : 子格 β) = L.comap 格态射.fst
   证明: ext fun a => by simp [mem_prod, LatticeHom.coe_fst]
 
 Depends on / 依赖: LatticeHom, LatticeHom.coe_fst, coe_fst, mem_prod
@@ -1891,8 +1891,8 @@ lemma top_prod
 
 中文:
 引理 top_prod
-  条件: (L : Sublattice β)
-  结论: (⊤ : Sublattice α).prod L = L.comap LatticeHom.snd
+  条件: (L : 子格 β)
+  结论: (⊤ : 子格 α).乘积 L = L.comap 格态射.snd
   证明: ext fun a => by simp [mem_prod, LatticeHom.coe_snd]
 
 Depends on / 依赖: LatticeHom, LatticeHom.coe_snd, coe_snd, mem_prod
@@ -1910,7 +1910,7 @@ lemma top_prod_top
 
 中文:
 引理 top_prod_top
-  结论: (⊤ : Sublattice α).prod (⊤ : Sublattice β) = ⊤
+  结论: (⊤ : 子格 α).乘积 (⊤ : 子格 β) = ⊤
   证明: (top_prod _).trans comap_top _
 -/
 @[simp] lemma top_prod_top : (⊤ : Sublattice α).prod (⊤ : Sublattice β) = ⊤ :=
@@ -1927,8 +1927,8 @@ lemma prod_bot
 
 中文:
 引理 prod_bot
-  条件: (L : Sublattice α)
-  结论: L.prod (⊥ : Sublattice β) = ⊥
+  条件: (L : 子格 α)
+  结论: L.乘积 (⊥ : 子格 β) = ⊥
   证明: SetLike.coe_injective prod_empty
 -/
 @[simp] lemma prod_bot (L : Sublattice α) : L.prod (⊥ : Sublattice β) = ⊥ :=
@@ -1945,8 +1945,8 @@ lemma bot_prod
 
 中文:
 引理 bot_prod
-  条件: (M : Sublattice β)
-  结论: (⊥ : Sublattice α).prod M = ⊥
+  条件: (M : 子格 β)
+  结论: (⊥ : 子格 α).乘积 M = ⊥
   证明: SetLike.coe_injective empty_prod
 -/
 @[simp] lemma bot_prod (M : Sublattice β) : (⊥ : Sublattice α).prod M = ⊥ :=
@@ -1963,7 +1963,7 @@ lemma le_prod_iff
 
 中文:
 引理 le_prod_iff
-  条件: {M : Sublattice β} {N : Sublattice (α × β)}
+  条件: {M : 子格 β} {N : 子格 (α × β)}
   证明: by
   simp [SetLike.le_def, forall_and]
 
@@ -1985,8 +1985,8 @@ lemma prod_eq_bot
 
 中文:
 引理 prod_eq_bot
-  条件: {M : Sublattice β}
-  结论: L.prod M = ⊥ ↔ L = ⊥ ∨ M = ⊥
+  条件: {M : 子格 β}
+  结论: L.乘积 M = ⊥ ↔ L = ⊥ ∨ M = ⊥
   证明: by
   simpa only [← coe_inj] using! Set.prod_eq_empty_iff
 -/
@@ -2003,7 +2003,7 @@ lemma prod_eq_top
 
 中文:
 引理 prod_eq_top
-  条件: [Nonempty α] [Nonempty β] {M : Sublattice β}
+  条件: [非空 α] [非空 β] {M : 子格 β}
   证明: by simpa only [← coe_inj] using! Set.prod_eq_univ
 -/
 @[simp] lemma prod_eq_top [Nonempty α] [Nonempty β] {M : Sublattice β} :
@@ -2022,7 +2022,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (L : Sublattice α) (M : Sublattice β)
+  签名: (L : 子格 α) (M : 子格 β)
   定义体: Equiv.Set.prod _ _
   map_rel_iff' := Iff.rfl
 
@@ -2051,7 +2051,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (s : Set κ) (L : 对任意 i, Sublattice (π i))
+  签名: (s : 集合 κ) (L : 对任意 i, 子格 (π i))
   定义体: s.pi fun i => L i
   supClosed' := supClosed_pi fun i _ => (L i).supClosed
   infClosed' := infClosed_pi fun i _ => (L i).infClosed
@@ -2075,7 +2075,7 @@ lemma mem_pi
 
 中文:
 引理 mem_pi
-  条件: {s : Set κ} {L : 对任意 i, Sublattice (π i)} {x : 对任意 i, π i}
+  条件: {s : 集合 κ} {L : 对任意 i, 子格 (π i)} {x : 对任意 i, π i}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_pi {s : Set κ} {L : forall i, Sublattice (π i)} {x : forall i, π i} :
@@ -2092,7 +2092,7 @@ lemma pi_empty
 
 中文:
 引理 pi_empty
-  条件: (L : 对任意 i, Sublattice (π i))
+  条件: (L : 对任意 i, 子格 (π i))
   结论: pi ∅ L = ⊤
   证明: ext fun a => by simp [mem_pi]
 -/
@@ -2109,8 +2109,8 @@ lemma pi_top
 
 中文:
 引理 pi_top
-  条件: (s : Set κ)
-  结论: (pi s fun _ => ⊤ : Sublattice (对任意 i, π i)) = ⊤
+  条件: (s : 集合 κ)
+  结论: (pi s fun _ => ⊤ : 子格 (对任意 i, π i)) = ⊤
   证明: ext fun a => by simp [mem_pi]
 -/
 @[simp] lemma pi_top (s : Set κ) : (pi s fun _ => ⊤ : Sublattice (forall i, π i)) = ⊤ :=
@@ -2127,8 +2127,8 @@ lemma pi_bot
 
 中文:
 引理 pi_bot
-  条件: {s : Set κ} (hs : s.Nonempty)
-  结论: (pi s fun _ => ⊥ : Sublattice (对任意 i, π i)) = ⊥
+  条件: {s : 集合 κ} (hs : s.非空)
+  结论: (pi s fun _ => ⊥ : 子格 (对任意 i, π i)) = ⊥
   证明: ext fun a => by simpa [mem_pi] using! hs
 -/
 @[simp] lemma pi_bot {s : Set κ} (hs : s.Nonempty) : (pi s fun _ => ⊥ : Sublattice (forall i, π i)) = ⊥ :=
@@ -2145,8 +2145,8 @@ lemma pi_univ_bot
 
 中文:
 引理 pi_univ_bot
-  条件: [Nonempty κ]
-  结论: (pi univ fun _ => ⊥ : Sublattice (对任意 i, π i)) = ⊥
+  条件: [非空 κ]
+  结论: (pi univ fun _ => ⊥ : 子格 (对任意 i, π i)) = ⊥
   证明: by simp
 -/
 lemma pi_univ_bot [Nonempty κ] : (pi univ fun _ => ⊥ : Sublattice (forall i, π i)) = ⊥ := by simp
@@ -2161,7 +2161,7 @@ lemma le_pi
 
 中文:
 引理 le_pi
-  条件: {s : Set κ} {L : 对任意 i, Sublattice (π i)} {M : Sublattice (对任意 i, π i)}
+  条件: {s : 集合 κ} {L : 对任意 i, 子格 (π i)} {M : 子格 (对任意 i, π i)}
   证明: by simp [SetLike.le_def]; grind
 
 Depends on / 依赖: SetLike, SetLike.le_def, le_def
@@ -2181,7 +2181,7 @@ lemma pi_univ_eq_bot_iff
 
 中文:
 引理 pi_univ_eq_bot_iff
-  条件: {L : 对任意 i, Sublattice (π i)}
+  条件: {L : 对任意 i, 子格 (π i)}
   结论: pi univ L = ⊥ ↔ 存在 i, L i = ⊥
   证明: by
   simp_rw [← coe_inj]; simp
@@ -2200,7 +2200,7 @@ lemma pi_univ_eq_bot
 
 中文:
 引理 pi_univ_eq_bot
-  条件: {L : 对任意 i, Sublattice (π i)} {i : κ} (hL : L i = ⊥)
+  条件: {L : 对任意 i, 子格 (π i)} {i : κ} (hL : L i = ⊥)
   结论: pi univ L = ⊥
   证明: pi_univ_eq_bot_iff.2 ⟨i, hL⟩
 
@@ -2223,7 +2223,7 @@ definition range
 
 中文:
 定义 range
-  签名: (f : LatticeHom α β)
+  签名: (f : 格态射 α β)
   定义体: (Sublattice.map f ⊤).copy (Set.range f) image_univ.symm
 
 Depends on / 依赖: Set.range, Sublattice, Sublattice.map, image_univ, image_univ.symm
@@ -2240,7 +2240,7 @@ lemma range_coe
 
 中文:
 引理 range_coe
-  结论: (LatticeHom.range f : Set β) = Set.range f
+  结论: (格态射.range f : 集合 β) = 集合.range f
   证明: rfl
 -/
 lemma range_coe : (LatticeHom.range f : Set β) = Set.range f := rfl

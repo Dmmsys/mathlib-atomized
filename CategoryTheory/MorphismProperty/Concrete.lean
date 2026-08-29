@@ -46,7 +46,7 @@ definition injective
 
 中文:
 定义 injective
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Injective f
 -/
 protected def injective : MorphismProperty C := fun _ _ f => Injective f
@@ -61,7 +61,7 @@ definition surjective
 
 中文:
 定义 surjective
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Surjective f
 -/
 protected def surjective : MorphismProperty C := fun _ _ f => Surjective f
@@ -76,7 +76,7 @@ definition bijective
 
 中文:
 定义 bijective
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Bijective f
 -/
 protected def bijective : MorphismProperty C := fun _ _ f => Bijective f
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.injective C).IsMultiplicative
+  签名: (MorphismProperty.injective C).是Multiplicative
   定义体: by
     delta MorphismProperty.injective
     convert! injective_id
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.surjective C).IsMultiplicative
+  签名: (MorphismProperty.surjective C).是Multiplicative
   定义体: by
     delta MorphismProperty.surjective
     convert! surjective_id
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.bijective C).IsMultiplicative
+  签名: (MorphismProperty.bijective C).是Multiplicative
   定义体: by
     delta MorphismProperty.bijective
     convert! bijective_id
@@ -224,7 +224,7 @@ instance injective_respectsIso
 
 中文:
 实例 injective_respectsIso
-  签名: : (Morphism命题erty.injective C).RespectsIso
+  签名: : (MorphismProperty.injective C).RespectsIso
   定义体: respectsIso_of_isStableUnderComposition
     (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.injective)
 
@@ -245,7 +245,7 @@ instance surjective_respectsIso
 
 中文:
 实例 surjective_respectsIso
-  签名: : (Morphism命题erty.surjective C).RespectsIso
+  签名: : (MorphismProperty.surjective C).RespectsIso
   定义体: respectsIso_of_isStableUnderComposition
     (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.surjective)
 
@@ -266,7 +266,7 @@ instance bijective_respectsIso
 
 中文:
 实例 bijective_respectsIso
-  签名: : (Morphism命题erty.bijective C).RespectsIso
+  签名: : (MorphismProperty.bijective C).RespectsIso
   定义体: respectsIso_of_isStableUnderComposition
     (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.bijective)
 

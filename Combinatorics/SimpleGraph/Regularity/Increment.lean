@@ -59,7 +59,7 @@ definition increment
 
 中文:
 定义 increment
-  签名: : Finpartition (univ : Finset α)
+  签名: : 有限分拆 (univ : 有限集 α)
   定义体: P.bind fun _ => chunk hP G ε
 
 Depends on / 依赖: P.bind
@@ -86,7 +86,7 @@ theorem card_increment
 
 中文:
 定理 card_increment
-  条件: (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPG : ¬P.IsUniform G ε)
+  条件: (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPG : ¬P.是一致 G ε)
   证明: by
   have hPα' : stepBound #P.parts <= card α := by grw [← hPα, stepBound]; gcongr; simp
   have hPpos : 0 < stepBound #P.parts := stepBound_pos (nonempty_of_not_uniform hPG).card_pos

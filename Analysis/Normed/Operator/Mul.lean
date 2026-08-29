@@ -132,7 +132,7 @@ definition _root_.NonUnitalAlgHom.Lmul
     map_zero' := ext fun _ => zero_mul _ }
 
 中文:
-定义 _root_.NonUnitalAlgHom.Lmul
+定义 _root_.非幺Alg态射.Lmul
   签名: : R ->ₙₐ[𝕜] R ->L[𝕜] R
   定义体: { mul 𝕜 R with
     map_mul' := fun _ _ => ext fun _ => mul_assoc _ _ _
@@ -156,8 +156,8 @@ theorem _root_.NonUnitalAlgHom.coe_Lmul
   proof: rfl
 
 中文:
-定理 _root_.NonUnitalAlgHom.coe_Lmul
-  结论: ⇑(NonUnitalAlgHom.Lmul 𝕜 R) = mul 𝕜 R
+定理 _root_.非幺Alg态射.coe_Lmul
+  结论: ⇑(非幺Alg态射.Lmul 𝕜 R) = mul 𝕜 R
   证明: rfl
 -/
 theorem _root_.NonUnitalAlgHom.coe_Lmul : ⇑(NonUnitalAlgHom.Lmul 𝕜 R) = mul 𝕜 R :=
@@ -284,10 +284,10 @@ class _root_.RegularNormedAlgebra
     - isometry_mul' : Isometry (mul 𝕜 R)
 
 中文:
-类 _root_.RegularNormedAlgebra
+类 _root_.RegularNormed代数
   参数: : 命题 where
   公理与运算 (1 个):
-    - isometry_mul' : Isometry (mul 𝕜 R)
+    - isometry_mul' : 等距 (mul 𝕜 R)
 -/
 class _root_.RegularNormedAlgebra : Prop where
   /-- The left regular representation of the algebra on itself is an isometry. -/
@@ -305,7 +305,7 @@ fun x => le_antisymm (opNorm_mul_apply_le _ _ _) by
       simp [norm_one]
 
 中文:
-实例 _root_.NormedAlgebra.instRegularNormedAlgebra
+实例 _root_.赋范代数.instRegularNormedAlgebra
   签名: {𝕜 R : 类型} [NontriviallyNormedField 𝕜]
   定义体: AddMonoidHomClass.isometry_of_norm (mul 𝕜 R)
 fun x => le_antisymm (opNorm_mul_apply_le _ _ _) by
@@ -335,7 +335,7 @@ lemma isometry_mul
 
 中文:
 引理 isometry_mul
-  结论: Isometry (mul 𝕜 R)
+  结论: 等距 (mul 𝕜 R)
   证明: RegularNormedAlgebra.isometry_mul'
 
 @[simp]
@@ -447,7 +447,7 @@ lemma flip_mul
 
 中文:
 引理 flip_mul
-  结论: (ContinuousLinearMap.mul 𝕜 R).flip = .mul 𝕜 R
+  结论: (连续线性映射.mul 𝕜 R).flip = .mul 𝕜 R
   证明: by ext; simp [mul_comm]
 -/
 @[simp] lemma flip_mul : (ContinuousLinearMap.mul 𝕜 R).flip = .mul 𝕜 R := by ext; simp [mul_comm]
@@ -868,7 +868,7 @@ theorem opNorm_lsmul
 
 中文:
 定理 opNorm_lsmul
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E] [NormSMulClass R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E] [NormSMul类 R E]
   证明: by
   refine ContinuousLinearMap.opNorm_eq_of_bounds zero_le_one (fun x => ?_) fun N _ h => ?_
   · rw [one_mul]
@@ -905,7 +905,7 @@ theorem opNNNorm_lsmul
 
 中文:
 定理 opNNNorm_lsmul
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E] [NormSMulClass R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E] [NormSMul类 R E]
   证明: by
   rw [← NNReal.coe_inj]
   simp
@@ -931,7 +931,7 @@ theorem opENorm_lsmul
 
 中文:
 定理 opENorm_lsmul
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E] [NormSMulClass R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E] [NormSMul类 R E]
   证明: by
   simp [enorm_eq_nnnorm]
 
@@ -962,7 +962,7 @@ theorem opNorm_lsmul_apply
 
 中文:
 定理 opNorm_lsmul_apply
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E]
   证明: by
   refine ContinuousLinearMap.opNorm_eq_of_bounds (norm_nonneg _) (fun x => ?_) fun N _ h => ?_
   · simp [norm_smul]
@@ -998,7 +998,7 @@ theorem opNNNorm_lsmul_apply
 
 中文:
 定理 opNNNorm_lsmul_apply
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E]
   证明: by
   rw [← NNReal.coe_inj]
   simp
@@ -1025,7 +1025,7 @@ theorem opENorm_lsmul_apply
 
 中文:
 定理 opENorm_lsmul_apply
-  结论: [NormedDivisionRing R] [NormedAlgebra 𝕜 R] [Module R E]
+  结论: [NormedDivision环 R] [赋范代数 𝕜 R] [模 R E]
   证明: by
   simp [enorm_eq_nnnorm]
 

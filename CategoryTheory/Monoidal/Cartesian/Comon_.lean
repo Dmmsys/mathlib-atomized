@@ -48,7 +48,7 @@ definition cartesianComon
 
 中文:
 定义 cartesianComon
-  签名: : C ⥤ Comon C where
+  签名: : C ⥤ 余mon C where
   定义体: {
     X := X
     comon := {
@@ -87,7 +87,7 @@ theorem counit_eq_toUnit
 
 中文:
 定理 counit_eq_toUnit
-  条件: (A : C) [ComonObj A]
+  条件: (A : C) [余monObj A]
   结论: ε[A] = toUnit _
   证明: by ext
 -/
@@ -107,7 +107,7 @@ theorem comul_eq_lift
 
 中文:
 定理 comul_eq_lift
-  条件: (A : C) [ComonObj A]
+  条件: (A : C) [余monObj A]
   结论: Δ[A] = lift (𝟙 _) (𝟙 _)
   证明: by
   ext
@@ -131,7 +131,7 @@ definition isoCartesianComon
 
 中文:
 定义 isoCartesianComon
-  签名: (A : Comon C)
+  签名: (A : 余mon C)
   定义体: { hom := .mk' (𝟙 _)
     inv := .mk' (𝟙 _) }
 -/
@@ -154,7 +154,7 @@ definition comonEquiv
 
 中文:
 定义 comonEquiv
-  签名: : Comon C ≌ C where
+  签名: : 余mon C ≌ C where
   定义体: Comon.forget C
   inverse := cartesianComon C
   unitIso := NatIso.ofComponents isoCartesianComon

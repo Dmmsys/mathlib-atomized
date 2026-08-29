@@ -47,7 +47,7 @@ definition Prod.bitraverse
   signature: {α α' β β'} (f : α -> F α') (f' : β -> F β')
 
 中文:
-定义 Prod.bitraverse
+定义 积类型.bitraverse
   签名: {α α' β β'} (f : α -> F α') (f' : β -> F β')
 -/
 def Prod.bitraverse {α α' β β'} (f : α -> F α') (f' : β -> F β') : α × β -> F (α' × β')
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bitraversable Prod
+  签名: Bitraversable 积类型
   定义体: @Prod.bitraverse
 
 Depends on / 依赖: Prod.bitraverse, bitraverse
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulBitraversable Prod
+  签名: LawfulBitraversable 积类型
   定义体: by
   constructor <;> intros <;> casesm _ × _ <;>
     simp [bitraverse, Prod.bitraverse, functor_norm] <;> rfl
@@ -103,7 +103,7 @@ definition Sum.bitraverse
   signature: {α α' β β'} (f : α -> F α') (f' : β -> F β')
 
 中文:
-定义 Sum.bitraverse
+定义 和.bitraverse
   签名: {α α' β β'} (f : α -> F α') (f' : β -> F β')
 -/
 def Sum.bitraverse {α α' β β'} (f : α -> F α') (f' : β -> F β') : α oplus β -> F (α' oplus β')
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bitraversable Sum
+  签名: Bitraversable 和
   定义体: @Sum.bitraverse
 
 Depends on / 依赖: Sum.bitraverse, bitraverse
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulBitraversable Sum
+  签名: LawfulBitraversable 和
   定义体: by
   constructor <;> intros <;> casesm _ oplus _ <;>
     simp [bitraverse, Sum.bitraverse, functor_norm] <;> rfl
@@ -164,7 +164,7 @@ definition Const.bitraverse
 
 中文:
 定义 Const.bitraverse
-  签名: {F : 类型u -> 类型u} [Applicative F] {α α' β β'} (f : α -> F α')
+  签名: {F : 类型u -> 类型u} [适用 F] {α α' β β'} (f : α -> F α')
   定义体: f
 -/
 def Const.bitraverse {F : Type u -> Type u} [Applicative F] {α α' β β'} (f : α -> F α')
@@ -312,8 +312,8 @@ instance [LawfulTraversable
     simp [binaturality, naturality_pf]
 
 中文:
-实例 [LawfulTraversable
-  签名: F] [LawfulTraversable G] [LawfulBitraversable t] :
+实例 [合法可遍历
+  签名: F] [合法可遍历 G] [LawfulBitraversable t] :
   定义体: by
   constructor <;> intros <;>
     simp [bitraverse, Bicompl.bitraverse, bimap, traverse_id, bitraverse_id_id, comp_bitraverse,
@@ -376,7 +376,7 @@ instance [LawfulTraversable
     simp [naturality, binaturality']
 
 中文:
-实例 [LawfulTraversable
+实例 [合法可遍历
   签名: F] [LawfulBitraversable t] : LawfulBitraversable (bicompr F t)
   定义体: by
   constructor <;> intros <;>

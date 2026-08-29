@@ -36,7 +36,7 @@ theorem StarConvex.contractibleSpace
 
 中文:
 定理 StarConvex.contractibleSpace
-  条件: (h : StarConvex 实数 x s) (hne : s.Nonempty)
+  条件: (h : StarConvex 实数 x s) (hne : s.非空)
   证明: by
   refine
     (contractible_iff_id_nullhomotopic s).2 ⟨⟨x, h.mem hne⟩,
@@ -62,8 +62,8 @@ theorem Convex.contractibleSpace
   (hs.starConvex hx).contractibleSpace hne
 
 中文:
-定理 Convex.contractibleSpace
-  条件: (hs : Convex 实数 s) (hne : s.Nonempty)
+定理 凸.contractibleSpace
+  条件: (hs : 凸 实数 s) (hne : s.非空)
   证明: let ⟨_, hx⟩ := hne
   (hs.starConvex hx).contractibleSpace hne
 -/

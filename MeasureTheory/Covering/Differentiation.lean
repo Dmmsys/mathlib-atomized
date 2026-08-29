@@ -96,7 +96,7 @@ definition limRatio
 
 中文:
 定义 limRatio
-  签名: (ρ : Measure α) (x : α)
+  签名: (ρ : 测度 α) (x : α)
   定义体: limUnder (v.filterAt x) fun a => ρ a / μ a
 
 Depends on / 依赖: filterAt, limUnder, v.filterAt
@@ -122,7 +122,7 @@ theorem ae_eventually_measure_pos
 
 中文:
 定理 ae_eventually_measure_pos
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   证明: by
   set s := {x | ¬forallᶠ a in v.filterAt x, 0 < μ a} with hs
   simp -zeta only [not_lt, not_eventually, nonpos_iff_eq_zero] at hs
@@ -163,7 +163,7 @@ theorem eventually_measure_lt_top
 
 中文:
 定理 eventually_measure_lt_top
-  条件: [IsLocallyFiniteMeasure μ] (x : α)
+  条件: [是局部有限测度 μ] (x : α)
   证明: (μ.finiteAt_nhds x).eventually.filter_mono inf_le_left
 
 Depends on / 依赖: eventually, eventually.filter_mono, filter_mono, finiteAt_nhds, inf_le_left
@@ -187,7 +187,7 @@ theorem measure_le_of_frequently_le
 
 中文:
 定理 measure_le_of_frequently_le
-  结论: [SecondCountableTopology α] [BorelSpace α] {ρ : Measure α}
+  结论: [第二可数拓扑 α] [Borel空间 α] {ρ : 测度 α}
   证明: by
   -- this follows from a covering argument using the sets satisfying `ρ a ≤ ν a`.
   apply ENNReal.le_of_forall_pos_le_add fun ε εpos _ => ?_
@@ -344,7 +344,7 @@ theorem null_of_frequently_le_of_frequently_ge
 
 中文:
 定理 null_of_frequently_le_of_frequently_ge
-  结论: {c d : 实数>=0} (hcd : c < d) (s : Set α)
+  结论: {c d : 实数>=0} (hcd : c < d) (s : 集合 α)
   证明: by
   apply measure_null_of_locally_null s fun x _ => ?_
   obtain ⟨o, xo, o_open, μo⟩ : exists o : Set α, x in o ∧ IsOpen o ∧ μ o < ∞ :=
@@ -387,7 +387,7 @@ theorem ae_tendsto_div
 
 中文:
 定理 ae_tendsto_div
-  结论: 对任意ᵐ x ∂μ, 存在 c, Tendsto (fun a => ρ a / μ a) (v.filterAt x) (𝓝 c)
+  结论: 对任意ᵐ x ∂μ, 存在 c, 收敛 (fun a => ρ a / μ a) (v.filterAt x) (𝓝 c)
   证明: by
   obtain ⟨w, w_count, w_dense, _, w_top⟩ :
     exists w : Set Real>=0∞, w.Countable ∧ Dense w ∧ 0 ∉ w ∧ ∞ ∉ w :=
@@ -465,7 +465,7 @@ theorem exists_measurable_supersets_limRatio
     the con
 
 中文:
-定理 exists_measurable_supersets_limRatio
+定理 存在_measurable_supersets_limRatio
   条件: {p q : 实数>=0} (hpq : p < q)
   证明: by
   /- Here is a rough sketch, assuming that the measure is finite and the limit is well defined
@@ -626,7 +626,7 @@ theorem aemeasurable_limRatio
 
 中文:
 定理 aemeasurable_limRatio
-  结论: AEMeasurable (v.limRatio ρ) μ
+  结论: 几乎处处可测 (v.limRatio ρ) μ
   证明: by
   apply ENNReal.aemeasurable_of_exist_almost_disjoint_supersets _ _ fun p q hpq => ?_
   exact v.exists_measurable_supersets_limRatio hρ hpq
@@ -665,7 +665,7 @@ theorem limRatioMeas_measurable
 
 中文:
 定理 limRatioMeas_measurable
-  结论: Measurable (v.limRatioMeas hρ)
+  结论: 可测 (v.limRatioMeas hρ)
   证明: AEMeasurable.measurable_mk _
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.measurable_mk, measurable_mk
@@ -713,7 +713,7 @@ theorem measure_le_mul_of_subset_limRatioMeas_lt
 
 中文:
 定理 measure_le_mul_of_subset_limRatioMeas_lt
-  结论: {p : 实数>=0} {s : Set α}
+  结论: {p : 实数>=0} {s : 集合 α}
   证明: by
   let t := {x : α | Tendsto (fun a => ρ a / μ a) (v.filterAt x) (𝓝 (v.limRatioMeas hρ x))}
   have A : μ tᶜ = 0 := v.ae_tendsto_limRatioMeas hρ
@@ -755,7 +755,7 @@ theorem mul_measure_le_of_subset_lt_limRatioMeas
 
 中文:
 定理 mul_measure_le_of_subset_lt_limRatioMeas
-  结论: {q : 实数>=0} {s : Set α}
+  结论: {q : 实数>=0} {s : 集合 α}
   证明: by
   let t := {x : α | Tendsto (fun a => ρ a / μ a) (v.filterAt x) (𝓝 (v.limRatioMeas hρ x))}
   have A : μ tᶜ = 0 := v.ae_tendsto_limRatioMeas hρ
@@ -890,7 +890,7 @@ theorem withDensity_le_mul
 
 中文:
 定理 withDensity_le_mul
-  条件: {s : Set α} (hs : MeasurableSet s) {t : 实数>=0} (ht : 1 < t)
+  条件: {s : 集合 α} (hs : 可测集 s) {t : 实数>=0} (ht : 1 < t)
   证明: by
   /- We cut `s` into the sets where `v.limRatioMeas hρ = 0`, where `v.limRatioMeas hρ = ∞`, and
     where `v.limRatioMeas hρ ∈ [t^n, t^(n+1))` for `n : ℤ`. The first and second have measure `0`.
@@ -978,7 +978,7 @@ theorem le_mul_withDensity
 
 中文:
 定理 le_mul_withDensity
-  条件: {s : Set α} (hs : MeasurableSet s) {t : 实数>=0} (ht : 1 < t)
+  条件: {s : 集合 α} (hs : 可测集 s) {t : 实数>=0} (ht : 1 < t)
   证明: by
   /- We cut `s` into the sets where `v.limRatioMeas hρ = 0`, where `v.limRatioMeas hρ = ∞`, and
     where `v.limRatioMeas hρ ∈ [t^n, t^(n+1))` for `n : ℤ`. The first and second have measure `0`.
@@ -1180,7 +1180,7 @@ theorem ae_tendsto_measure_inter_div_of_measurableSet
 
 中文:
 定理 ae_tendsto_measure_inter_div_of_measurableSet
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   have : IsLocallyFiniteMeasure (μ.restrict s) :=
     isLocallyFiniteMeasure_of_le restrict_le_self
@@ -1216,7 +1216,7 @@ theorem ae_tendsto_measure_inter_div
 
 中文:
 定理 ae_tendsto_measure_inter_div
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   let t := toMeasurable μ s
   have A :
@@ -1267,7 +1267,7 @@ theorem ae_tendsto_lintegral_div'
 
 中文:
 定理 ae_tendsto_lintegral_div'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (h'f : (∫⁻ y, f y ∂μ) != ∞)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (h'f : (∫⁻ y, f y ∂μ) != ∞)
   证明: by
   let ρ := μ.withDensity f
   have : IsFiniteMeasure ρ := isFiniteMeasure_withDensity h'f
@@ -1310,7 +1310,7 @@ theorem ae_tendsto_lintegral_div
 
 中文:
 定理 ae_tendsto_lintegral_div
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (h'f : (∫⁻ y, f y ∂μ) != ∞)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (h'f : (∫⁻ y, f y ∂μ) != ∞)
   证明: by
   have A : (∫⁻ y, hf.mk f y ∂μ) != ∞ := by
     convert! h'f using 1
@@ -1354,7 +1354,7 @@ theorem ae_tendsto_lintegral_enorm_sub_div'_of_integrable
 
 中文:
 定理 ae_tendsto_lintegral_enorm_sub_div'_of_integrable
-  结论: {f : α -> E} (hf : 整数egrable f μ)
+  结论: {f : α -> E} (hf : 可积 f μ)
   证明: by
   /- For every `c`, then `(∫⁻ y in a, ‖f y - c‖ₑ ∂μ) / μ a` tends almost everywhere to `‖f x - c‖`.
     We apply this to a countable set of `c` which is dense in the range of `f`, to deduce the
@@ -1447,7 +1447,7 @@ theorem ae_tendsto_lintegral_enorm_sub_div_of_integrable
 
 中文:
 定理 ae_tendsto_lintegral_enorm_sub_div_of_integrable
-  条件: {f : α -> E} (hf : 整数egrable f μ)
+  条件: {f : α -> E} (hf : 可积 f μ)
   证明: by
   have I : Integrable (hf.1.mk f) μ := hf.congr hf.1.ae_eq_mk
   filter_upwards [v.ae_tendsto_lintegral_enorm_sub_div'_of_integrable I hf.1.stronglyMeasurable_mk,
@@ -1578,7 +1578,7 @@ theorem ae_tendsto_average
 
 中文:
 定理 ae_tendsto_average
-  结论: [NormedSpace 实数 E] [CompleteSpace E] {f : α -> E}
+  结论: [赋范空间 实数 E] [完备空间 E] {f : α -> E}
   证明: by
   filter_upwards [v.ae_tendsto_average_norm_sub hf, v.ae_eventually_measure_pos] with x hx h'x
   rw [tendsto_iff_norm_sub_tendsto_zero]

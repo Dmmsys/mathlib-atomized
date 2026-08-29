@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnoughProjectives Profinite.{u}
+  签名: 有足够投射 Profinite.{u}
   定义体: ⟨projectivePresentation X⟩
 
 Depends on / 依赖: projectivePresentation

@@ -113,7 +113,7 @@ theorem ker_id
 
 中文:
 定理 ker_id
-  结论: ker (LinearMap.id : M ->ₗ[R] M) = ⊥
+  结论: ker (线性映射.id : M ->ₗ[R] M) = ⊥
   证明: rfl
 
 @[simp]
@@ -154,7 +154,7 @@ theorem ker_toAddSubmonoid
 中文:
 定理 ker_toAddSubmonoid
   条件: (f : M ->ₛₗ[τ₁₂] M₂)
-  结论: (ker f).toAddSubmonoid = (AddMonoidHom.mker f)
+  结论: (ker f).toAddSubmonoid = (加法幺半群态射.mker f)
   证明: rfl
 -/
 theorem ker_toAddSubmonoid (f : M ->ₛₗ[τ₁₂] M₂) : (ker f).toAddSubmonoid = (AddMonoidHom.mker f) :=
@@ -171,7 +171,7 @@ theorem le_ker_iff_comp_subtype_eq_zero
 
 中文:
 定理 le_ker_iff_comp_subtype_eq_zero
-  条件: {N : Submodule R M} {f : M ->ₛₗ[τ₁₂] M₂}
+  条件: {N : 子模 R M} {f : M ->ₛₗ[τ₁₂] M₂}
   证明: by
   rw [SetLike.le_def]; rw [LinearMap.ext_iff]; rw [Subtype.forall]; rfl
 
@@ -278,7 +278,7 @@ theorem ker_le_comap
 
 中文:
 定理 ker_le_comap
-  条件: {p : Submodule R₂ M₂} (f : M ->ₛₗ[τ₁₂] M₂)
+  条件: {p : 子模 R₂ M₂} (f : M ->ₛₗ[τ₁₂] M₂)
   证明: fun x hx => by simp [mem_ker.mp hx]
 
 Depends on / 依赖: mem_ker, mem_ker.mp
@@ -298,7 +298,7 @@ theorem disjoint_ker
 
 中文:
 定理 disjoint_ker
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M}
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M}
   证明: by
   simp [disjoint_def]
 
@@ -361,7 +361,7 @@ theorem le_ker_iff_map
 
 中文:
 定理 le_ker_iff_map
-  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M}
+  条件: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M}
   证明: by rw [ker, eq_bot_iff, map_le_iff_le_comap]
 
 @[simp]
@@ -382,7 +382,7 @@ theorem ker_codRestrict
 
 中文:
 定理 ker_codRestrict
-  条件: (p : Submodule R₂ M₂) (f : M ->ₛₗ[τ₁₂] M₂) (hf)
+  条件: (p : 子模 R₂ M₂) (f : M ->ₛₗ[τ₁₂] M₂) (hf)
   证明: by rw [ker, comap_codRestrict, Submodule.map_bot]; rfl
 
 Depends on / 依赖: Submodule, Submodule.map_bot, comap_codRestrict, map_bot
@@ -400,7 +400,7 @@ lemma ker_domRestrict
 
 中文:
 引理 ker_domRestrict
-  条件: (p : Submodule R M) (f : M ->ₛₗ[τ₁₂] M₂)
+  条件: (p : 子模 R M) (f : M ->ₛₗ[τ₁₂] M₂)
   证明: ker_comp ..
 
 Depends on / 依赖: ker_comp
@@ -422,7 +422,7 @@ theorem ker_restrict
 
 中文:
 定理 ker_restrict
-  结论: {p : Submodule R M} {q : Submodule R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
+  结论: {p : 子模 R M} {q : 子模 R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
   证明: by
   rw [restrict_eq_codRestrict_domRestrict]; rw [ker_codRestrict]; rw [ker_domRestrict]
 
@@ -518,8 +518,8 @@ theorem exists_ne_zero_of_sSup_eq_top
 @[simp]
 
 中文:
-定理 exists_ne_zero_of_sSup_eq_top
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} (h : f != 0) (s : Set (Submodule R M))
+定理 存在_ne_zero_of_sSup_eq_top
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} (h : f != 0) (s : 集合 (子模 R M))
   证明: by
   contrapose! h
   simp_rw [← ker_eq_top, eq_top_iff, ← hs, sSup_le_iff, le_ker_iff_comp_subtype_eq_zero]
@@ -545,8 +545,8 @@ theorem _root_.AddMonoidHom.coe_toIntLinearMap_ker
   proof: rfl
 
 中文:
-定理 _root_.AddMonoidHom.coe_toIntLinearMap_ker
-  结论: {M M₂ : 类型} [AddCommGroup M] [AddCommGroup M₂]
+定理 _root_.加法幺半群态射.coe_to整数LinearMap_ker
+  结论: {M M₂ : 类型} [加法交换群 M] [加法交换群 M₂]
   证明: rfl
 -/
 theorem _root_.AddMonoidHom.coe_toIntLinearMap_ker {M M₂ : Type*} [AddCommGroup M] [AddCommGroup M₂]
@@ -566,7 +566,7 @@ theorem ker_eq_bot_of_injective
 
 中文:
 定理 ker_eq_bot_of_injective
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : Injective f)
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : 单射 f)
   结论: ker f = ⊥
   证明: by
   rw [eq_bot_iff]
@@ -710,7 +710,7 @@ theorem disjoint_ker_iff_injOn
 
 中文:
 定理 disjoint_ker_iff_injOn
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   证明: by
   rw [disjoint_ker]; rw [Set.injOn_iff_map_eq_zero]
 
@@ -730,7 +730,7 @@ theorem injOn_of_disjoint_ker
 
 中文:
 定理 injOn_of_disjoint_ker
-  结论: {p : Submodule R M} {s : Set M} (h : s subseteq p)
+  结论: {p : 子模 R M} {s : 集合 M} (h : s subseteq p)
   证明: .mono h disjoint_ker_iff_injOn.mp hd
 
 Depends on / 依赖: disjoint_ker_iff_injOn, disjoint_ker_iff_injOn.mp
@@ -752,7 +752,7 @@ theorem ker_eq_bot
 中文:
 定理 ker_eq_bot
   条件: {f : M ->ₛₗ[τ₁₂] M₂}
-  结论: ker f = ⊥ ↔ Injective f
+  结论: ker f = ⊥ ↔ 单射 f
   证明: by
   simpa [disjoint_iff_inf_le] using disjoint_ker_iff_injOn (f := f) (p := ⊤)
 
@@ -774,7 +774,7 @@ lemma injective_domRestrict_iff
 
 中文:
 引理 injective_domRestrict_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M}
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} {S : 子模 R M}
   证明: by
   simp [← ker_eq_bot, ker_domRestrict, disjoint_iff_comap_eq_bot]
 
@@ -801,7 +801,7 @@ alias injective_restrict_iff_disjoint := injective_restrict_iff
 
 中文:
 定理 injective_restrict_iff
-  结论: {p : Submodule R M} {q : Submodule R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
+  结论: {p : 子模 R M} {q : 子模 R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
   证明: by
   simp [← ker_eq_bot, ker_restrict, disjoint_iff_comap_eq_bot]
 
@@ -830,7 +830,7 @@ theorem injective_codRestrict_iff
 
 中文:
 定理 injective_codRestrict_iff
-  结论: {q : Submodule R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
+  结论: {q : 子模 R₂ M₂} {f : M ->ₛₗ[τ₁₂] M₂}
   证明: Set.injective_codRestrict _
 
 Depends on / 依赖: Set.injective_codRestrict, injective_codRestrict
@@ -991,7 +991,7 @@ theorem ker_inclusion
 
 中文:
 定理 ker_inclusion
-  条件: (p p' : Submodule R M) (h : p <= p')
+  条件: (p p' : 子模 R M) (h : p <= p')
   结论: ker (inclusion h) = ⊥
   证明: by
   rw [inclusion]; rw [ker_codRestrict]; rw [ker_subtype]
@@ -1095,7 +1095,7 @@ theorem ker
 
 中文:
 定理 ker
-  结论: LinearMap.ker (e : M ->ₛₗ[σ₁₂] M₂) = ⊥
+  结论: 线性映射.ker (e : M ->ₛₗ[σ₁₂] M₂) = ⊥
   证明: LinearMap.ker_eq_bot_of_injective e.toEquiv.injective
 
 @[simp]

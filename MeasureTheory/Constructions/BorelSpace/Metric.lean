@@ -55,7 +55,7 @@ theorem measurableSet_ball
 
 中文:
 定理 measurableSet_ball
-  结论: MeasurableSet (Metric.ball x ε)
+  结论: 可测集 (Metric.ball x ε)
   证明: Metric.isOpen_ball.measurableSet
 
 @[measurability]
@@ -76,7 +76,7 @@ theorem measurableSet_closedBall
 
 中文:
 定理 measurableSet_closedBall
-  结论: MeasurableSet (Metric.closedBall x ε)
+  结论: 可测集 (Metric.closedBall x ε)
   证明: Metric.isClosed_closedBall.measurableSet
 
 Depends on / 依赖: Metric, Metric.isClosed_closedBall.measurableSet, isClosed_closedBall, measurableSet
@@ -97,8 +97,8 @@ theorem measurable_infDist
 
 中文:
 定理 measurable_infDist
-  条件: {s : Set α}
-  结论: Measurable fun x => infDist x s
+  条件: {s : 集合 α}
+  结论: 可测 fun x => infDist x s
   证明: (continuous_infDist_pt s).measurable
 
 @[fun_prop]
@@ -118,8 +118,8 @@ theorem Measurable.infDist
   proof: measurable_infDist.comp hf
 
 中文:
-定理 Measurable.infDist
-  条件: {f : β -> α} (hf : Measurable f) {s : Set α}
+定理 可测.infDist
+  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
   证明: measurable_infDist.comp hf
 
 Depends on / 依赖: measurable_infDist, measurable_infDist.comp
@@ -141,8 +141,8 @@ theorem measurable_infNndist
 
 中文:
 定理 measurable_infNndist
-  条件: {s : Set α}
-  结论: Measurable fun x => infNndist x s
+  条件: {s : 集合 α}
+  结论: 可测 fun x => infNndist x s
   证明: (continuous_infNndist_pt s).measurable
 
 @[fun_prop]
@@ -162,8 +162,8 @@ theorem Measurable.infNndist
   proof: measurable_infNndist.comp hf
 
 中文:
-定理 Measurable.infNndist
-  条件: {f : β -> α} (hf : Measurable f) {s : Set α}
+定理 可测.infNndist
+  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
   证明: measurable_infNndist.comp hf
 
 Depends on / 依赖: measurable_infNndist, measurable_infNndist.comp
@@ -188,7 +188,7 @@ theorem measurable_dist
 
 中文:
 定理 measurable_dist
-  结论: Measurable fun p : α × α => dist p.1 p.2
+  结论: 可测 fun p : α × α => dist p.1 p.2
   证明: continuous_dist.measurable
 
 @[fun_prop]
@@ -210,8 +210,8 @@ theorem Measurable.dist
 @[fun_prop]
 
 中文:
-定理 Measurable.dist
-  条件: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.dist
+  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
   证明: continuous_dist.measurable2 hf hg
 
 @[fun_prop]
@@ -232,8 +232,8 @@ lemma AEMeasurable.dist
   proof: continuous_dist.aemeasurable2 hf hg
 
 中文:
-引理 AEMeasurable.dist
-  结论: {f g : β -> α} {μ : Measure β}
+引理 几乎处处可测.dist
+  结论: {f g : β -> α} {μ : 测度 β}
   证明: continuous_dist.aemeasurable2 hf hg
 
 Depends on / 依赖: aemeasurable2, continuous_dist, continuous_dist.aemeasurable2
@@ -255,7 +255,7 @@ theorem measurable_nndist
 
 中文:
 定理 measurable_nndist
-  结论: Measurable fun p : α × α => nndist p.1 p.2
+  结论: 可测 fun p : α × α => nndist p.1 p.2
   证明: continuous_nndist.measurable
 
 @[fun_prop]
@@ -275,8 +275,8 @@ theorem Measurable.nndist
   proof: continuous_nndist.measurable2 hf hg
 
 中文:
-定理 Measurable.nndist
-  条件: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.nndist
+  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
   证明: continuous_nndist.measurable2 hf hg
 
 Depends on / 依赖: continuous_nndist, continuous_nndist.measurable2, measurable2
@@ -309,7 +309,7 @@ theorem measurableSet_eball
 
 中文:
 定理 measurableSet_eball
-  结论: MeasurableSet (Metric.eball x ε)
+  结论: 可测集 (Metric.eball x ε)
   证明: Metric.isOpen_eball.measurableSet
 
 @[fun_prop]
@@ -332,7 +332,7 @@ theorem measurable_edist_right
 
 中文:
 定理 measurable_edist_right
-  结论: Measurable (edist x)
+  结论: 可测 (edist x)
   证明: by fun_prop
 
 @[fun_prop]
@@ -352,7 +352,7 @@ theorem measurable_edist_left
 
 中文:
 定理 measurable_edist_left
-  结论: Measurable fun y => edist y x
+  结论: 可测 fun y => edist y x
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -375,8 +375,8 @@ alias measurable_infEdist := measurable_infEDist
 
 中文:
 定理 measurable_infEDist
-  条件: {s : Set α}
-  结论: Measurable fun x => infEDist x s
+  条件: {s : 集合 α}
+  结论: 可测 fun x => infEDist x s
   证明: continuous_infEDist.measurable
 
 @[deprecated (since := "2026-01-08")]
@@ -405,8 +405,8 @@ theorem Measurable.infEDist
 alias Measurable.infEdist := Measurable.infEDist
 
 中文:
-定理 Measurable.infEDist
-  条件: {f : β -> α} (hf : Measurable f) {s : Set α}
+定理 可测.infEDist
+  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
   证明: measurable_infEDist.comp hf
 
 @[deprecated (since := "2026-01-08")]
@@ -435,7 +435,7 @@ theorem tendsto_measure_cthickening
 
 中文:
 定理 tendsto_measure_cthickening
-  结论: {μ : Measure α} {s : Set α}
+  结论: {μ : 测度 α} {s : 集合 α}
   证明: by
   have A : Tendsto (fun r => μ (cthickening r s)) (𝓝[Ioi 0] 0) (𝓝 (μ (closure s))) := by
     rw [closure_eq_iInter_cthickening]
@@ -473,7 +473,7 @@ theorem tendsto_measure_cthickening_of_isClosed
 
 中文:
 定理 tendsto_measure_cthickening_of_isClosed
-  结论: {μ : Measure α} {s : Set α}
+  结论: {μ : 测度 α} {s : 集合 α}
   证明: by
   convert! tendsto_measure_cthickening hs
   exact h's.closure_eq.symm
@@ -499,7 +499,7 @@ theorem tendsto_measure_thickening
 
 中文:
 定理 tendsto_measure_thickening
-  结论: {μ : Measure α} {s : Set α}
+  结论: {μ : 测度 α} {s : 集合 α}
   证明: by
   rw [closure_eq_iInter_thickening]
   exact tendsto_measure_biInter_gt (fun r _ => isOpen_thickening.nullMeasurableSet)
@@ -526,7 +526,7 @@ theorem tendsto_measure_thickening_of_isClosed
 
 中文:
 定理 tendsto_measure_thickening_of_isClosed
-  结论: {μ : Measure α} {s : Set α}
+  结论: {μ : 测度 α} {s : 集合 α}
   证明: by
   convert! tendsto_measure_thickening hs
   exact h's.closure_eq.symm
@@ -553,7 +553,7 @@ theorem measurable_edist
 
 中文:
 定理 measurable_edist
-  结论: Measurable fun p : α × α => edist p.1 p.2
+  结论: 可测 fun p : α × α => edist p.1 p.2
   证明: continuous_edist.measurable
 
 @[fun_prop]
@@ -575,8 +575,8 @@ theorem Measurable.edist
 @[fun_prop]
 
 中文:
-定理 Measurable.edist
-  条件: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
+定理 可测.edist
+  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
   证明: continuous_edist.measurable2 hf hg
 
 @[fun_prop]
@@ -597,8 +597,8 @@ theorem AEMeasurable.edist
   proof: continuous_edist.aemeasurable2 hf hg
 
 中文:
-定理 AEMeasurable.edist
-  结论: {f g : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
+定理 几乎处处可测.edist
+  结论: {f g : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: continuous_edist.aemeasurable2 hf hg
 
 Depends on / 依赖: aemeasurable2, continuous_edist, continuous_edist.aemeasurable2
@@ -620,7 +620,7 @@ theorem tendsto_measure_cthickening_of_isCompact
 
 中文:
 定理 tendsto_measure_cthickening_of_isCompact
-  结论: [MetricSpace α] [MeasurableSpace α]
+  结论: [度量空间 α] [可测空间 α]
   证明: tendsto_measure_cthickening_of_isClosed
     ⟨1, zero_lt_one, hs.isBounded.cthickening.measure_lt_top.ne⟩ hs.isClosed
 
@@ -647,7 +647,7 @@ let F := f.toEquiv.toHomeomorphOfIsInducing .induced _
     f.measurableEmbedding.borelSpace F.isInducing⟩
 
 中文:
-定理 exists_borelSpace_of_countablyGenerated_of_separatesPoints
+定理 存在_borelSpace_of_countablyGenerated_of_separatesPoints
   结论: (α : 类型)
   证明: by
   rcases measurableEquiv_nat_bool_of_countablyGenerated α with ⟨s, ⟨f⟩⟩
@@ -679,7 +679,7 @@ theorem exists_opensMeasurableSpace_of_countablySeparated
   exact ⟨τ, ‹_›, ‹_›, @OpensMeasurableSpace.mk _ _ m (τm'.measurable_eq.symm.le.trans m'le)⟩
 
 中文:
-定理 exists_opensMeasurableSpace_of_countablySeparated
+定理 存在_opensMeasurableSpace_of_countablySeparated
   结论: (α : 类型)
   证明: by
   rcases exists_countablyGenerated_le_of_countablySeparated α with ⟨m', _, _, m'le⟩
@@ -714,7 +714,7 @@ lemma measurable_enorm
 
 中文:
 引理 measurable_enorm
-  结论: Measurable (enorm : ε -> 实数>=0∞)
+  结论: 可测 (enorm : ε -> 实数>=0∞)
   证明: continuous_enorm.measurable
 
 @[fun_prop]
@@ -736,9 +736,9 @@ lemma Measurable.enorm
 @[fun_prop]
 
 中文:
-引理 Measurable.enorm
-  条件: {f : β -> ε} (hf : Measurable f)
-  结论: Measurable (‖f ·‖ₑ)
+引理 可测.enorm
+  条件: {f : β -> ε} (hf : 可测 f)
+  结论: 可测 (‖f ·‖ₑ)
   证明: measurable_enorm.comp hf
 
 @[fun_prop]
@@ -756,8 +756,8 @@ lemma AEMeasurable.enorm
   proof: measurable_enorm.comp_aemeasurable hf
 
 中文:
-引理 AEMeasurable.enorm
-  条件: {f : β -> ε} {μ : Measure β} (hf : AEMeasurable f μ)
+引理 几乎处处可测.enorm
+  条件: {f : β -> ε} {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: measurable_enorm.comp_aemeasurable hf
 -/
 protected lemma AEMeasurable.enorm {f : β -> ε} {μ : Measure β} (hf : AEMeasurable f μ) :
@@ -783,7 +783,7 @@ theorem measurable_norm
 
 中文:
 定理 measurable_norm
-  结论: Measurable (norm : α -> 实数)
+  结论: 可测 (norm : α -> 实数)
   证明: continuous_norm.measurable
 
 @[fun_prop]
@@ -806,9 +806,9 @@ theorem Measurable.norm
 @[fun_prop]
 
 中文:
-定理 Measurable.norm
-  条件: {f : β -> α} (hf : Measurable f)
-  结论: Measurable fun a => norm (f a)
+定理 可测.norm
+  条件: {f : β -> α} (hf : 可测 f)
+  结论: 可测 fun a => norm (f a)
   证明: measurable_norm.comp hf
 
 @[fun_prop]
@@ -828,8 +828,8 @@ theorem AEMeasurable.norm
   proof: measurable_norm.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.norm
-  条件: {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
+定理 几乎处处可测.norm
+  条件: {f : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: measurable_norm.comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_norm, measurable_norm.comp_aemeasurable
@@ -850,7 +850,7 @@ theorem measurable_nnnorm
 
 中文:
 定理 measurable_nnnorm
-  结论: Measurable (nnnorm : α -> 实数>=0)
+  结论: 可测 (nnnorm : α -> 实数>=0)
   证明: continuous_nnnorm.measurable
 
 @[fun_prop]
@@ -873,9 +873,9 @@ theorem Measurable.nnnorm
 @[fun_prop]
 
 中文:
-定理 Measurable.nnnorm
-  条件: {f : β -> α} (hf : Measurable f)
-  结论: Measurable fun a => ‖f a‖₊
+定理 可测.nnnorm
+  条件: {f : β -> α} (hf : 可测 f)
+  结论: 可测 fun a => ‖f a‖₊
   证明: measurable_nnnorm.comp hf
 
 @[fun_prop]
@@ -893,8 +893,8 @@ lemma AEMeasurable.nnnorm
   proof: measurable_nnnorm.comp_aemeasurable hf
 
 中文:
-引理 AEMeasurable.nnnorm
-  条件: {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
+引理 几乎处处可测.nnnorm
+  条件: {f : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: measurable_nnnorm.comp_aemeasurable hf
 -/
 protected lemma AEMeasurable.nnnorm {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) :

@@ -36,7 +36,7 @@ structure Opposite
     - unop : α
 
 中文:
-结构 Opposite
+结构 对偶
   参数: where
   公理与运算 (2 个):
     - op : :
@@ -75,7 +75,7 @@ theorem op_injective
 
 中文:
 定理 op_injective
-  结论: Function.Injective (op : α -> αᵒᵖ)
+  结论: 函数.单射 (op : α -> αᵒᵖ)
   证明: fun _ _ => congr_arg Opposite.unop
 
 Depends on / 依赖: Opposite, Opposite.unop, congr_arg
@@ -94,7 +94,7 @@ theorem unop_injective
 
 中文:
 定理 unop_injective
-  结论: Function.Injective (unop : αᵒᵖ -> α)
+  结论: 函数.单射 (unop : αᵒᵖ -> α)
   证明: fun _ _ h => congrArg op h
 
 @[simp]
@@ -220,7 +220,7 @@ theorem op_surjective
 
 中文:
 定理 op_surjective
-  结论: Function.Surjective (op : α -> αᵒᵖ)
+  结论: 函数.满射 (op : α -> αᵒᵖ)
   证明: equivToOpposite.surjective
 
 Depends on / 依赖: equivToOpposite, equivToOpposite.surjective, surjective
@@ -239,7 +239,7 @@ theorem unop_surjective
 
 中文:
 定理 unop_surjective
-  结论: Function.Surjective (unop : αᵒᵖ -> α)
+  结论: 函数.满射 (unop : αᵒᵖ -> α)
   证明: equivToOpposite.symm.surjective
 
 @[simp]
@@ -335,8 +335,8 @@ instance [Inhabited
   body: ⟨op default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited αᵒᵖ
+实例 [可居
+  签名: α] : 可居 αᵒᵖ
   定义体: ⟨op default⟩
 -/
 instance [Inhabited α] : Inhabited αᵒᵖ :=
@@ -351,8 +351,8 @@ instance [Nonempty
   body: Nonempty.map op ‹_›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty αᵒᵖ
+实例 [非空
+  签名: α] : 非空 αᵒᵖ
   定义体: Nonempty.map op ‹_›
 
 Depends on / 依赖: Nonempty, Nonempty.map
@@ -368,8 +368,8 @@ instance [Subsingleton
   body: unop_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton αᵒᵖ
+实例 [子单例
+  签名: α] : 子单例 αᵒᵖ
   定义体: unop_injective.subsingleton
 
 Depends on / 依赖: subsingleton, unop_injective, unop_injective.subsingleton

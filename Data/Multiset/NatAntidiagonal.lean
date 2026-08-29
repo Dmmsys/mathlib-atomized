@@ -220,7 +220,7 @@ theorem map_swap_antidiagonal
 中文:
 定理 map_swap_antidiagonal
   条件: {n : 自然数}
-  结论: (antidiagonal n).map Prod.swap = antidiagonal n
+  结论: (antidiagonal n).map 积类型.swap = antidiagonal n
   证明: by
   rw [antidiagonal]; rw [map_coe]; rw [List.Nat.map_swap_antidiagonal]; rw [coe_reverse]
 

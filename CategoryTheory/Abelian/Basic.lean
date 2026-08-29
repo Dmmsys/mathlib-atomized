@@ -122,13 +122,13 @@ class Abelian
     - [has_cokernels : HasCokernels C]
 
 中文:
-类 Abelian
-  参数: extends Preadditive C, IsNormalMonoCategory C, IsNormalEpiCategory C
-  继承: Preadditive C, IsNormalMonoCategory C, IsNormalEpiCategory C
+类 交换
+  参数: extends 预加性 C, 是正规单态射范畴 C, 是正规满态射范畴 C
+  继承: 预加性 C, 是正规单态射范畴 C, 是正规满态射范畴 C
   公理与运算 (3 个):
-    - [has_finite_products : HasFiniteProducts C]
-    - [has_kernels : HasKernels C]
-    - [has_cokernels : HasCokernels C]
+    - [has_finite_products : 有FiniteProducts C]
+    - [has_kernels : 有Kernels C]
+    - [has_cokernels : 有余kernels C]
 -/
 class Abelian extends Preadditive C, IsNormalMonoCategory C, IsNormalEpiCategory C where
   [has_finite_products : HasFiniteProducts C]
@@ -240,7 +240,7 @@ definition imageFactorisation
 
 中文:
 定义 imageFactorisation
-  签名: {X Y : C} (f : X ⟶ Y) [IsIso (Abelian.coimageImageComparison f)]
+  签名: {X Y : C} (f : X ⟶ Y) [是同构 (交换.coimageImageComparison f)]
   定义体: imageMonoFactorisation f
   isImage :=
     { lift := fun F => inv (Abelian.coimageImageComparison f) ≫ cokernel.desc _ F.e F.kernel_ι_comp
@@ -277,7 +277,7 @@ instance [HasZeroObject
   exact IsIso.comp_isIso
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] {X Y
   定义体: by
   rw [imageMonoFactorisation_e']
@@ -302,7 +302,7 @@ instance [HasZeroObject
   infer_instance
 
 中文:
-实例 [HasZeroObject
+实例 [有ZeroObject
   签名: C] {X Y
   定义体: by
   dsimp
@@ -326,7 +326,7 @@ theorem hasImages
 
 中文:
 定理 hasImages
-  结论: HasImages C
+  结论: 有Images C
   证明: { has_image := fun {_} {_} f => { exists_image := ⟨imageFactorisation f⟩ } }
 
 Depends on / 依赖: exists_image, has_image, imageFactorisation
@@ -357,7 +357,7 @@ lemma isNormalMonoCategory
 
 中文:
 引理 isNormalMonoCategory
-  结论: IsNormalMonoCategory C where
+  结论: 是正规单态射范畴 C where
   证明: ⟨{
       Z := _
       g := cokernel.π f
@@ -407,7 +407,7 @@ lemma isNormalEpiCategory
 
 中文:
 引理 isNormalEpiCategory
-  结论: IsNormalEpiCategory C where
+  结论: 是正规满态射范畴 C where
   证明: ⟨{
       W := kernel f
       g := kernel.ι _
@@ -464,7 +464,7 @@ definition ofCoimageImageComparisonIsIso
 
 中文:
 定义 ofCoimageImageComparisonIsIso
-  签名: : Abelian C where
+  签名: : 交换 C where
 -/
 def ofCoimageImageComparisonIsIso : Abelian C where
 
@@ -490,7 +490,7 @@ theorem hasFiniteBiproducts
 
 中文:
 定理 hasFiniteBiproducts
-  结论: HasFiniteBiproducts C
+  结论: 有FiniteBiproducts C
   证明: Limits.HasFiniteBiproducts.of_hasFiniteProducts
 
 Depends on / 依赖: HasFiniteBiproducts, Limits, Limits.HasFiniteBiproducts.of_hasFiniteProducts, of_hasFiniteProducts
@@ -549,7 +549,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (Abelian.factorThruImage f)
+  签名: 满态射 (交换.factorThruImage f)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -566,7 +566,7 @@ instance isIso_factorThruImage
 
 中文:
 实例 isIso_factorThruImage
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -583,7 +583,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (Abelian.factorThruCoimage f)
+  签名: 单态射 (交换.factorThruCoimage f)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -600,7 +600,7 @@ instance isIso_factorThruCoimage
 
 中文:
 实例 isIso_factorThruCoimage
-  签名: [Epi f]
+  签名: [满态射 f]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -629,7 +629,7 @@ theorem mono_of_kernel_ι_eq_zero
 中文:
 定理 mono_of_kernel_ι_eq_zero
   条件: (h : kernel.ι f = 0)
-  结论: Mono f
+  结论: 单态射 f
   证明: mono_of_kernel_zero h
 
 Depends on / 依赖: mono_of_kernel_zero
@@ -649,7 +649,7 @@ theorem epi_of_cokernel_π_eq_zero
 中文:
 定理 epi_of_cokernel_π_eq_zero
   条件: (h : cokernel.π f = 0)
-  结论: Epi f
+  结论: 满态射 f
   证明: epi_of_cokernel_zero h
 
 Depends on / 依赖: epi_of_cokernel_zero
@@ -675,7 +675,7 @@ theorem image_ι_comp_eq_zero
 中文:
 定理 image_ι_comp_eq_zero
   条件: {R : C} {g : Q ⟶ R} (h : f ≫ g = 0)
-  结论: Abelian.image.ι f ≫ g = 0
+  结论: 交换.像.ι f ≫ g = 0
   证明: zero_of_epi_comp (Abelian.factorThruImage f) by simp [h]
 
 Depends on / 依赖: Abelian, Abelian.factorThruImage, factorThruImage, zero_of_epi_comp
@@ -695,7 +695,7 @@ theorem comp_coimage_π_eq_zero
 中文:
 定理 comp_coimage_π_eq_zero
   条件: {R : C} {g : Q ⟶ R} (h : f ≫ g = 0)
-  结论: f ≫ Abelian.coimage.π g = 0
+  结论: f ≫ 交换.coimage.π g = 0
   证明: zero_of_comp_mono (Abelian.factorThruCoimage g) by simp [h]
 
 Depends on / 依赖: Abelian, Abelian.factorThruCoimage, factorThruCoimage, zero_of_comp_mono
@@ -806,7 +806,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (coimageImageComparison f)
+  签名: 是同构 (coimageImageComparison f)
   定义体: by
   convert!
     Iso.isIso_hom
@@ -837,7 +837,7 @@ abbreviation coimageIsoImage
 
 中文:
 缩写 coimageIsoImage
-  签名: : Abelian.coimage f ≅ Abelian.image f
+  签名: : 交换.coimage f ≅ 交换.像 f
   定义体: asIso (coimageImageComparison f)
 
 Depends on / 依赖: coimageImageComparison
@@ -855,7 +855,7 @@ abbreviation coimageIsoImage'
 
 中文:
 缩写 coimageIsoImage'
-  签名: : Abelian.coimage f ≅ image f
+  签名: : 交换.coimage f ≅ 像 f
   定义体: IsImage.isoExt (coimageStrongEpiMonoFactorisation f).toMonoIsImage (Image.isImage f)
 
 Depends on / 依赖: Image.isImage, IsImage, IsImage.isoExt, coimageStrongEpiMonoFactorisation, isImage, isoExt, toMonoIsImage
@@ -926,8 +926,8 @@ lemma image.ι_comp_eq_zero
   simp [← cancel_epi (Abelian.factorThruImage _)]
 
 中文:
-引理 image.ι_comp_eq_zero
-  结论: image.ι f ≫ g = 0 ↔ f ≫ g = 0
+引理 像.ι_comp_eq_zero
+  结论: 像.ι f ≫ g = 0 ↔ f ≫ g = 0
   证明: by
   simp [← cancel_epi (Abelian.factorThruImage _)]
 -/
@@ -965,7 +965,7 @@ map {f g} u := kernel.lift _ (Abelian.image.ι f.hom ≫ u.right) by simp [← A
 
 中文:
 定义 im
-  签名: : Arrow C ⥤ C where
+  签名: : 箭头 C ⥤ C where
   定义体: Abelian.image f.hom
 map {f g} u := kernel.lift _ (Abelian.image.ι f.hom ≫ u.right) by simp [← Arrow.w_assoc u]
 
@@ -989,7 +989,7 @@ map {f g} u := cokernel.desc _ (u.left ≫ Abelian.coimage.π g.hom) by
 
 中文:
 定义 coim
-  签名: : Arrow C ⥤ C where
+  签名: : 箭头 C ⥤ C where
   定义体: Abelian.coimage f.hom
 map {f g} u := cokernel.desc _ (u.left ≫ Abelian.coimage.π g.hom) by
     simp [← Category.assoc, coimage.comp_π_eq_zero]; simp
@@ -1030,7 +1030,7 @@ abbreviation imageIsoImage
 
 中文:
 缩写 imageIsoImage
-  签名: : Abelian.image f ≅ image f
+  签名: : 交换.像 f ≅ 像 f
   定义体: IsImage.isoExt (imageStrongEpiMonoFactorisation f).toMonoIsImage (Image.isImage f)
 
 Depends on / 依赖: Image.isImage, IsImage, IsImage.isoExt, imageStrongEpiMonoFactorisation, isImage, isoExt, toMonoIsImage
@@ -1050,7 +1050,7 @@ theorem imageIsoImage_hom_comp_image_ι
 
 中文:
 定理 imageIsoImage_hom_comp_image_ι
-  结论: (imageIsoImage f).hom ≫ Limits.image.ι _ = kernel.ι _
+  结论: (imageIsoImage f).hom ≫ Limits.像.ι _ = kernel.ι _
   证明: by
   simp only [IsImage.isoExt_hom, IsImage.lift_ι, imageStrongEpiMonoFactorisation_m]
 
@@ -1101,7 +1101,7 @@ definition epiIsCokernelOfKernel
 
 中文:
 定义 epiIsCokernelOfKernel
-  签名: [Epi f] (s : Fork f 0) (h : IsLimit s)
+  签名: [满态射 f] (s : 叉 f 0) (h : 是极限 s)
   定义体: NonPreadditiveAbelian.epiIsCokernelOfKernel s h
 
 Depends on / 依赖: NonPreadditiveAbelian, NonPreadditiveAbelian.epiIsCokernelOfKernel, epiIsCokernelOfKernel
@@ -1120,7 +1120,7 @@ definition monoIsKernelOfCokernel
 
 中文:
 定义 monoIsKernelOfCokernel
-  签名: [Mono f] (s : Cofork f 0) (h : IsColimit s)
+  签名: [单态射 f] (s : 余叉 f 0) (h : 是余极限 s)
   定义体: NonPreadditiveAbelian.monoIsKernelOfCokernel s h
 
 Depends on / 依赖: NonPreadditiveAbelian, NonPreadditiveAbelian.monoIsKernelOfCokernel, monoIsKernelOfCokernel
@@ -1143,7 +1143,7 @@ definition epiDesc
 
 中文:
 定义 epiDesc
-  签名: [Epi f] {T : C} (g : X ⟶ T) (hg : kernel.ι f ≫ g = 0)
+  签名: [满态射 f] {T : C} (g : X ⟶ T) (hg : kernel.ι f ≫ g = 0)
   定义体: (epiIsCokernelOfKernel _ (limit.isLimit _)).desc (CokernelCofork.ofπ _ hg)
 
 @[reassoc (attr := simp)]
@@ -1164,7 +1164,7 @@ theorem comp_epiDesc
 
 中文:
 定理 comp_epiDesc
-  条件: [Epi f] {T : C} (g : X ⟶ T) (hg : kernel.ι f ≫ g = 0)
+  条件: [满态射 f] {T : C} (g : X ⟶ T) (hg : kernel.ι f ≫ g = 0)
   证明: (epiIsCokernelOfKernel _ (limit.isLimit _)).fac (CokernelCofork.ofπ _ hg) WalkingParallelPair.one
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.of, WalkingParallelPair, WalkingParallelPair.one, epiIsCokernelOfKernel, isLimit, limit.isLimit
@@ -1185,7 +1185,7 @@ definition monoLift
 
 中文:
 定义 monoLift
-  签名: [Mono f] {T : C} (g : T ⟶ Y) (hg : g ≫ cokernel.π f = 0)
+  签名: [单态射 f] {T : C} (g : T ⟶ Y) (hg : g ≫ cokernel.π f = 0)
   定义体: (monoIsKernelOfCokernel _ (colimit.isColimit _)).lift (KernelFork.ofι _ hg)
 
 @[reassoc (attr := simp)]
@@ -1207,7 +1207,7 @@ theorem monoLift_comp
 
 中文:
 定理 monoLift_comp
-  条件: [Mono f] {T : C} (g : T ⟶ Y) (hg : g ≫ cokernel.π f = 0)
+  条件: [单态射 f] {T : C} (g : T ⟶ Y) (hg : g ≫ cokernel.π f = 0)
   证明: (monoIsKernelOfCokernel _ (colimit.isColimit _)).fac (KernelFork.ofι _ hg)
     WalkingParallelPair.zero
 
@@ -1365,7 +1365,7 @@ abbreviation pullbackToBiproductFork
 
 中文:
 缩写 pullbackToBiproductFork
-  签名: : KernelFork (biprod.desc f (-g))
+  签名: : 核叉 (biprod.desc f (-g))
   定义体: KernelFork.ofι (pullbackToBiproduct f g) by
     rw [biprod.lift_desc]; rw [comp_neg]; rw [pullback.condition]; rw [add_neg_cancel]
 
@@ -1393,7 +1393,7 @@ sub_eq_zero.1 by
 
 中文:
 定义 isLimitPullbackToBiproduct
-  签名: : IsLimit (pullbackToBiproductFork f g)
+  签名: : 是极限 (pullbackToBiproductFork f g)
   定义体: Fork.IsLimit.mk _
     (fun s =>
 pullback.lift (Fork.ι s ≫ biprod.fst) (Fork.ι s ≫ biprod.snd)
@@ -1453,7 +1453,7 @@ abbreviation biproductToPushoutCofork
 
 中文:
 缩写 biproductToPushoutCofork
-  签名: : CokernelCofork (biprod.lift f (-g))
+  签名: : 余核余叉 (biprod.lift f (-g))
   定义体: CokernelCofork.ofπ (biproductToPushout f g) by
     rw [biprod.lift_desc]; rw [neg_comp]; rw [pushout.condition]; rw [add_neg_cancel]
 
@@ -1479,7 +1479,7 @@ sub_eq_zero.1 by
 
 中文:
 定义 isColimitBiproductToPushout
-  签名: : IsColimit (biproductToPushoutCofork f g)
+  签名: : 是余极限 (biproductToPushoutCofork f g)
   定义体: Cofork.IsColimit.mk _
     (fun s =>
 pushout.desc (biprod.inl ≫ Cofork.π s) (biprod.inr ≫ Cofork.π s)
@@ -1521,7 +1521,7 @@ instance epi_pullback_of_epi_f
 
 中文:
 实例 epi_pullback_of_epi_f
-  签名: [Epi f]
+  签名: [满态射 f]
   定义体: -- It will suffice to consider some morphism e : Y ⟶ R such that
     -- pullback.snd f g ≫ e = 0 and show that e = 0.
     epi_of_cancel_zero _ fun {R} e h => by
@@ -1576,7 +1576,7 @@ instance epi_pullback_of_epi_g
 
 中文:
 实例 epi_pullback_of_epi_g
-  签名: [Epi g]
+  签名: [满态射 g]
   定义体: -- It will suffice to consider some morphism e : X ⟶ R such that
   -- pullback.fst f g ≫ e = 0 and show that e = 0.
   epi_of_cancel_zero _ fun {R} e h => by
@@ -1630,8 +1630,8 @@ theorem epi_snd_of_isLimit
 
 中文:
 定理 epi_snd_of_isLimit
-  条件: [Epi f] {s : PullbackCone f g} (hs : IsLimit s)
-  结论: Epi s.snd
+  条件: [满态射 f] {s : PullbackCone f g} (hs : 是极限 s)
+  结论: 满态射 s.snd
   证明: by
   have : Epi (NatTrans.app (limit.cone (cospan f g)).π WalkingCospan.right) :=
     Abelian.epi_pullback_of_epi_f f g
@@ -1659,8 +1659,8 @@ theorem epi_fst_of_isLimit
 
 中文:
 定理 epi_fst_of_isLimit
-  条件: [Epi g] {s : PullbackCone f g} (hs : IsLimit s)
-  结论: Epi s.fst
+  条件: [满态射 g] {s : PullbackCone f g} (hs : 是极限 s)
+  结论: 满态射 s.fst
   证明: by
   have : Epi (NatTrans.app (limit.cone (cospan f g)).π WalkingCospan.left) :=
     Abelian.epi_pullback_of_epi_g f g
@@ -1684,7 +1684,7 @@ theorem epi_fst_of_factor_thru_epi_mono_factorization
 
 中文:
 定理 epi_fst_of_factor_thru_epi_mono_factorization
-  结论: (g₁ : Y ⟶ W) [Epi g₁] (g₂ : W ⟶ Z) [Mono g₂]
+  结论: (g₁ : Y ⟶ W) [满态射 g₁] (g₂ : W ⟶ Z) [单态射 g₂]
   证明: by
   apply epi_fst_of_isLimit _ _ (PullbackCone.isLimitOfFactors f g g₂ f' g₁ hf hg t ht)
 
@@ -1718,7 +1718,7 @@ instance mono_pushout_of_mono_f
 
 中文:
 实例 mono_pushout_of_mono_f
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: mono_of_cancel_zero _ fun {R} e h => by
     let u := biprod.lift (0 : R ⟶ Y) e
     have hu : u ≫ BiproductToPushoutIsCokernel.biproductToPushout f g = 0 := by simpa [u]
@@ -1768,7 +1768,7 @@ instance mono_pushout_of_mono_g
 
 中文:
 实例 mono_pushout_of_mono_g
-  签名: [Mono g]
+  签名: [单态射 g]
   定义体: mono_of_cancel_zero _ fun {R} e h => by
     let u := biprod.lift e (0 : R ⟶ Z)
     have hu : u ≫ BiproductToPushoutIsCokernel.biproductToPushout f g = 0 := by simpa [u]
@@ -1817,8 +1817,8 @@ theorem mono_inr_of_isColimit
 
 中文:
 定理 mono_inr_of_isColimit
-  条件: [Mono f] {s : PushoutCocone f g} (hs : IsColimit s)
-  结论: Mono s.inr
+  条件: [单态射 f] {s : PushoutCocone f g} (hs : 是余极限 s)
+  结论: 单态射 s.inr
   证明: by
   have : Mono (NatTrans.app (colimit.cocone (span f g)).ι WalkingCospan.right) :=
     Abelian.mono_pushout_of_mono_f f g
@@ -1849,8 +1849,8 @@ theorem mono_inl_of_isColimit
 
 中文:
 定理 mono_inl_of_isColimit
-  条件: [Mono g] {s : PushoutCocone f g} (hs : IsColimit s)
-  结论: Mono s.inl
+  条件: [单态射 g] {s : PushoutCocone f g} (hs : 是余极限 s)
+  结论: 单态射 s.inl
   证明: by
   have : Mono (NatTrans.app (colimit.cocone (span f g)).ι WalkingCospan.left) :=
     Abelian.mono_pushout_of_mono_g f g
@@ -1876,7 +1876,7 @@ theorem mono_inl_of_factor_thru_epi_mono_factorization
 
 中文:
 定理 mono_inl_of_factor_thru_epi_mono_factorization
-  结论: (f : X ⟶ Y) (g : X ⟶ Z) (g₁ : X ⟶ W) [Epi g₁]
+  结论: (f : X ⟶ Y) (g : X ⟶ Z) (g₁ : X ⟶ W) [满态射 g₁]
   证明: by
   apply mono_inl_of_isColimit _ _ (PushoutCocone.isColimitOfFactors _ _ _ _ _ hf hg t ht)
 
@@ -1909,7 +1909,7 @@ definition abelian
 
 中文:
 定义 abelian
-  签名: : Abelian C where
+  签名: : 交换 C where
   定义体: NonPreadditiveAbelian.preadditive
   normalMonoOfMono := fun f _ => ⟨normalMonoOfMono f⟩
   normalEpiOfEpi := fun f _ => ⟨normalEpiOfEpi f⟩
@@ -1948,20 +1948,20 @@ structure AbelianStruct
     - fac : imageπ ≫ imageι = f  [default: by cat_disch]
 
 中文:
-结构 AbelianStruct
+结构 交换结构
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (12 个):
-    - kernelFork : KernelFork f
-    - isLimitKernelFork : IsLimit kernelFork
-    - cokernelCofork : CokernelCofork f
-    - isColimitCokernelCofork : IsColimit cokernelCofork
+    - kernelFork : 核叉 f
+    - isLimitKernelFork : 是极限 kernelFork
+    - cokernelCofork : 余核余叉 f
+    - isColimitCokernelCofork : 是余极限 cokernelCofork
     - image : C
-    - imageπ : X ⟶ image
+    - imageπ : X ⟶ 像
     - ι_imageπ : kernelFork.ι ≫ imageπ = 0  [默认: by cat_disch]
-    - imageIsCokernel : IsColimit (CokernelCofork.ofπ _ ι_imageπ)
-    - imageι : image ⟶ Y
+    - imageIsCokernel : 是余极限 (余核余叉.ofπ _ ι_imageπ)
+    - imageι : 像 ⟶ Y
     - imageι_π : imageι ≫ cokernelCofork.π = 0  [默认: by cat_disch]
-    - imageIsKernel : IsLimit (KernelFork.ofι _ imageι_π)
+    - imageIsKernel : 是极限 (核叉.ofι _ imageι_π)
     - fac : imageπ ≫ imageι = f  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
@@ -2021,7 +2021,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: [HasFiniteProducts C]
+  签名: [有FiniteProducts C]
   定义体: ⟨fun f => ⟨_, (h f).some.isLimitKernelFork⟩⟩
   has_cokernels := ⟨fun f => ⟨_, (h f).some.isColimitCokernelCofork⟩⟩
   normalMonoOfMono f _ := by

@@ -48,7 +48,7 @@ definition sectionsPrecomp
 
 中文:
 定义 sectionsPrecomp
-  签名: (F : C ⥤ D) {P : D ⥤ Type w} (x : P.sections)
+  签名: (F : C ⥤ D) {P : D ⥤ 类型 w} (x : P.sections)
   定义体: x.val _
   property _ := x.property _
 
@@ -80,7 +80,7 @@ lemma bijective_sectionsPrecomp
 
 中文:
 引理 bijective_sectionsPrecomp
-  条件: (F : C ⥤ D) (P : D ⥤ Type w) [F.Initial]
+  条件: (F : C ⥤ D) (P : D ⥤ 类型 w) [F.初始]
   证明: by
   refine ⟨fun s₁ s₂ h => ?_, fun t => ?_⟩
   · ext Y
@@ -131,7 +131,7 @@ definition colimitTypePrecomp
 
 中文:
 定义 colimitTypePrecomp
-  签名: (F : C ⥤ D) (P : D ⥤ Type w)
+  签名: (F : C ⥤ D) (P : D ⥤ 类型 w)
   定义体: (F ⋙ P).descColimitType (P.coconeTypes.precomp F)
 
 @[simp]
@@ -153,7 +153,7 @@ lemma colimitTypePrecomp_ιColimitType
 
 中文:
 引理 colimitTypePrecomp_ιColimitType
-  结论: (F : C ⥤ D) {P : D ⥤ Type w}
+  结论: (F : C ⥤ D) {P : D ⥤ 类型 w}
   证明: rfl
 -/
 lemma colimitTypePrecomp_ιColimitType (F : C ⥤ D) {P : D ⥤ Type w}
@@ -181,7 +181,7 @@ lemma bijective_colimitTypePrecomp
 
 中文:
 引理 bijective_colimitTypePrecomp
-  条件: (F : C ⥤ D) (P : D ⥤ Type w) [F.Final]
+  条件: (F : C ⥤ D) (P : D ⥤ 类型 w) [F.终]
   证明: by
   refine ⟨?_, fun x => ?_⟩
   · have h (Y : D) : exists (a : P.obj Y -> (F ⋙ P).ColimitType), forall (j : StructuredArrow Y F),

@@ -284,7 +284,7 @@ theorem isCoseparating_unop_iff
 
 中文:
 定理 isCoseparating_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   证明: P.unop.isSeparating_op_iff.symm
 
 Depends on / 依赖: P.unop.isSeparating_op_iff.symm, isSeparating_op_iff
@@ -303,7 +303,7 @@ theorem isSeparating_unop_iff
 
 中文:
 定理 isSeparating_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   证明: P.unop.isCoseparating_op_iff.symm
 
 Depends on / 依赖: P.unop.isCoseparating_op_iff.symm, isCoseparating_op_iff
@@ -399,7 +399,7 @@ theorem isDetecting_unop_iff
 
 中文:
 定理 isDetecting_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   结论: IsDetecting P.unop ↔ IsCodetecting P
   证明: P.unop.isCodetecting_op_iff.symm
 
@@ -419,7 +419,7 @@ theorem isCodetecting_unop_iff
 
 中文:
 定理 isCodetecting_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   结论: IsCodetecting P.unop ↔ IsDetecting P
   证明: P.unop.isDetecting_op_iff.symm
 
@@ -734,7 +734,7 @@ theorem IsSeparating.of_le
 
 中文:
 定理 IsSeparating.of_le
-  条件: (hP : IsSeparating P) {Q : Object命题erty C} (h : P <= Q)
+  条件: (hP : IsSeparating P) {Q : ObjectProperty C} (h : P <= Q)
   证明: fun _ _ _ _ hfg => hP _ _ fun _ hG _ => hfg _ (h _ hG) _
 -/
 theorem IsSeparating.of_le (hP : IsSeparating P) {Q : ObjectProperty C} (h : P <= Q) :
@@ -750,7 +750,7 @@ theorem IsCoseparating.of_le
 
 中文:
 定理 IsCoseparating.of_le
-  条件: (hP : IsCoseparating P) {Q : Object命题erty C} (h : P <= Q)
+  条件: (hP : IsCoseparating P) {Q : ObjectProperty C} (h : P <= Q)
   证明: fun _ _ _ _ hfg => hP _ _ fun _ hG _ => hfg _ (h _ hG) _
 -/
 theorem IsCoseparating.of_le (hP : IsCoseparating P) {Q : ObjectProperty C} (h : P <= Q) :
@@ -766,7 +766,7 @@ theorem IsDetecting.of_le
 
 中文:
 定理 IsDetecting.of_le
-  条件: (hP : IsDetecting P) {Q : Object命题erty C} (h : P <= Q)
+  条件: (hP : IsDetecting P) {Q : ObjectProperty C} (h : P <= Q)
   证明: fun _ _ _ hf => hP _ fun _ hG _ => hf _ (h _ hG) _
 -/
 theorem IsDetecting.of_le (hP : IsDetecting P) {Q : ObjectProperty C} (h : P <= Q) :
@@ -782,7 +782,7 @@ theorem IsCodetecting.of_le
 
 中文:
 定理 IsCodetecting.of_le
-  条件: (h𝒢 : IsCodetecting P) {Q : Object命题erty C} (h : P <= Q)
+  条件: (h𝒢 : IsCodetecting P) {Q : ObjectProperty C} (h : P <= Q)
   证明: fun _ _ _ hf => h𝒢 _ fun _ hG _ => hf _ (h _ hG) _
 -/
 theorem IsCodetecting.of_le (h𝒢 : IsCodetecting P) {Q : ObjectProperty C} (h : P <= Q) :
@@ -802,7 +802,7 @@ lemma isThin_of_isSeparating_bot
 
 中文:
 引理 isThin_of_isSeparating_bot
-  条件: (h : IsSeparating (⊥ : Object命题erty C))
+  条件: (h : IsSeparating (⊥ : ObjectProperty C))
   证明: fun _ _ => ⟨fun _ _ => h _ _ (by simp)⟩
 -/
 lemma isThin_of_isSeparating_bot (h : IsSeparating (⊥ : ObjectProperty C)) :
@@ -819,8 +819,8 @@ lemma isSeparating_bot_of_isThin
 
 中文:
 引理 isSeparating_bot_of_isThin
-  条件: [Quiver.IsThin C]
-  结论: IsSeparating (⊥ : Object命题erty C)
+  条件: [箭图.IsThin C]
+  结论: IsSeparating (⊥ : ObjectProperty C)
   证明: fun _ _ _ _ _ => Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -838,7 +838,7 @@ lemma isThin_of_isCoseparating_bot
 
 中文:
 引理 isThin_of_isCoseparating_bot
-  条件: (h : IsCoseparating (⊥ : Object命题erty C))
+  条件: (h : IsCoseparating (⊥ : ObjectProperty C))
   证明: fun _ _ => ⟨fun _ _ => h _ _ (by simp)⟩
 -/
 lemma isThin_of_isCoseparating_bot (h : IsCoseparating (⊥ : ObjectProperty C)) :
@@ -855,8 +855,8 @@ lemma isCoseparating_bot_of_isThin
 
 中文:
 引理 isCoseparating_bot_of_isThin
-  条件: [Quiver.IsThin C]
-  结论: IsCoseparating (⊥ : Object命题erty C)
+  条件: [箭图.IsThin C]
+  结论: IsCoseparating (⊥ : ObjectProperty C)
   证明: fun _ _ _ _ _ => Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -874,7 +874,7 @@ lemma isGroupoid_of_isDetecting_bot
 
 中文:
 引理 isGroupoid_of_isDetecting_bot
-  条件: (h : IsDetecting (⊥ : Object命题erty C))
+  条件: (h : IsDetecting (⊥ : ObjectProperty C))
   证明: h _ (by simp)
 -/
 lemma isGroupoid_of_isDetecting_bot (h : IsDetecting (⊥ : ObjectProperty C)) :
@@ -891,7 +891,7 @@ lemma isDetecting_bot_of_isGroupoid
 
 中文:
 引理 isDetecting_bot_of_isGroupoid
-  条件: [IsGroupoid C]
+  条件: [是群胚 C]
   证明: fun _ _ _ _ => inferInstance
 -/
 lemma isDetecting_bot_of_isGroupoid [IsGroupoid C] :
@@ -908,7 +908,7 @@ lemma isGroupoid_of_isCodetecting_bot
 
 中文:
 引理 isGroupoid_of_isCodetecting_bot
-  条件: (h : IsCodetecting (⊥ : Object命题erty C))
+  条件: (h : IsCodetecting (⊥ : ObjectProperty C))
   证明: h _ (by simp)
 -/
 lemma isGroupoid_of_isCodetecting_bot (h : IsCodetecting (⊥ : ObjectProperty C)) :
@@ -925,7 +925,7 @@ lemma isCodetecting_bot_of_isGroupoid
 
 中文:
 引理 isCodetecting_bot_of_isGroupoid
-  条件: [IsGroupoid C]
+  条件: [是群胚 C]
   证明: fun _ _ _ _ => inferInstance
 -/
 lemma isCodetecting_bot_of_isGroupoid [IsGroupoid C] :
@@ -947,7 +947,7 @@ lemma IsSeparating.mk_of_exists_epi
     (fun i => by simpa using h _ (hs i) (c.inj i ≫ p))
 
 中文:
-引理 IsSeparating.mk_of_exists_epi
+引理 IsSeparating.mk_of_存在_epi
   证明: by
   intro X Y f g h
   obtain ⟨ι, s, hs, c, hc, p, _⟩ := hP X
@@ -980,7 +980,7 @@ lemma IsCoseparating.mk_of_exists_mono
     (fun i => by simpa using h _ (hs i) (j ≫ c.proj i))
 
 中文:
-引理 IsCoseparating.mk_of_exists_mono
+引理 IsCoseparating.mk_of_存在_mono
   证明: by
   intro X Y f g h
   obtain ⟨ι, s, hs, c, hc, j, _⟩ := hP Y
@@ -1011,7 +1011,7 @@ lemma IsSeparating.mk_of_exists_colimitsOfShape
   exact p.isColimit.hom_ext (fun j => h _ (p.prop_diag_obj _) _)
 
 中文:
-引理 IsSeparating.mk_of_exists_colimitsOfShape
+引理 IsSeparating.mk_of_存在_colimitsOfShape
   证明: by
   intro X Y f g h
   obtain ⟨J, _, ⟨p⟩⟩ := hP X
@@ -1037,7 +1037,7 @@ lemma IsCoseparating.mk_of_exists_limitsOfShape
   exact p.isLimit.hom_ext (fun j => h _ (p.prop_diag_obj _) _)
 
 中文:
-引理 IsCoseparating.mk_of_exists_limitsOfShape
+引理 IsCoseparating.mk_of_存在_limitsOfShape
   证明: by
   intro X Y f g h
   obtain ⟨J, _, ⟨p⟩⟩ := hP Y
@@ -1176,7 +1176,7 @@ abbreviation productToFamily
 
 中文:
 缩写 productToFamily
-  签名: (X : C) (i : StructuredArrow X P.ι)
+  签名: (X : C) (i : 结构化箭头 X P.ι)
   定义体: i.right.obj
 
 Depends on / 依赖: i.right.obj
@@ -1293,7 +1293,7 @@ theorem hasInitial_of_isCoseparating
 
 中文:
 定理 hasInitial_of_isCoseparating
-  结论: [LocallySmall.{w} C] [WellPowered.{w} C]
+  结论: [LocallySmall.{w} C] [良幂.{w} C]
   证明: by
   have := hasFiniteLimits_of_hasLimitsOfSize C
   have := hasProductsOfShape_of_small C (Subtype P)
@@ -1338,7 +1338,7 @@ theorem hasTerminal_of_isSeparating
 
 中文:
 定理 hasTerminal_of_isSeparating
-  结论: [LocallySmall.{w} Cᵒᵖ] [WellPowered.{w} Cᵒᵖ]
+  结论: [LocallySmall.{w} Cᵒᵖ] [良幂.{w} Cᵒᵖ]
   证明: by
   have : HasInitial Cᵒᵖ := hasInitial_of_isCoseparating (P.isCoseparating_op_iff.2 hP)
   exact hasTerminal_of_hasInitial_op
@@ -1370,7 +1370,7 @@ theorem eq_of_le_of_isDetecting
 
 中文:
 定理 eq_of_le_of_isDetecting
-  结论: {𝒢 : Object命题erty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
+  结论: {𝒢 : ObjectProperty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
   证明: by
   suffices IsIso (ofLE _ _ h₁) by exact le_antisymm h₁ (le_of_comm (inv (ofLE _ _ h₁)) (by simp))
   refine h𝒢 _ fun G hG f => ?_
@@ -1402,7 +1402,7 @@ theorem inf_eq_of_isDetecting
 
 中文:
 定理 inf_eq_of_isDetecting
-  结论: [HasPullbacks C] {𝒢 : Object命题erty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
+  结论: [有Pullbacks C] {𝒢 : ObjectProperty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
   证明: eq_of_le_of_isDetecting h𝒢 _ _ _root_.inf_le_left
     fun _ hG _ hf => (inf_factors _).2 ⟨hf, h _ hG hf⟩
 
@@ -1427,7 +1427,7 @@ P = P ⊓ Q := Eq.symm inf_eq_of_isDetecting h𝒢 _ _ fun G hG _ hf => (h G hG)
 
 中文:
 定理 eq_of_isDetecting
-  结论: [HasPullbacks C] {𝒢 : Object命题erty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
+  结论: [有Pullbacks C] {𝒢 : ObjectProperty C} (h𝒢 : 𝒢.IsDetecting) {X : C}
   证明: calc
 P = P ⊓ Q := Eq.symm inf_eq_of_isDetecting h𝒢 _ _ fun G hG _ hf => (h G hG).1 hf
     _ = Q ⊓ P := inf_comm ..
@@ -1458,7 +1458,7 @@ theorem wellPowered_of_isDetecting
 
 中文:
 定理 wellPowered_of_isDetecting
-  结论: [HasPullbacks C] {𝒢 : Object命题erty C}
+  结论: [有Pullbacks C] {𝒢 : ObjectProperty C}
   证明: small_of_injective
     (f := fun P : Subobject X => { f : Σ G : Subtype 𝒢, G.1 ⟶ X | P.Factors f.2 })
       fun P Q h => Subobject.eq_of_isDetecting h𝒢 _ _
@@ -1492,7 +1492,7 @@ theorem isCoseparating_inverseImage_proj
 
 中文:
 定理 isCoseparating_inverseImage_proj
-  条件: {P : Object命题erty C} (hP : P.IsCoseparating)
+  条件: {P : ObjectProperty C} (hP : P.IsCoseparating)
   证明: by
   refine fun X Y f g hfg => ext _ _ (hP _ _ fun G hG h => ?_)
   exact congr_arg CommaMorphism.right (hfg (mk (Y.hom ≫ T.map h)) hG (homMk h rfl))
@@ -1522,7 +1522,7 @@ theorem isSeparating_inverseImage_proj
 
 中文:
 定理 isSeparating_inverseImage_proj
-  条件: {P : Object命题erty C} (hP : P.IsSeparating)
+  条件: {P : ObjectProperty C} (hP : P.IsSeparating)
   证明: by
   refine fun X Y f g hfg => ext _ _ (hP _ _ fun G hG h => ?_)
   exact congr_arg CommaMorphism.left (hfg (mk (S.map h ≫ X.hom)) hG (homMk h rfl))
@@ -2157,7 +2157,7 @@ Quiver.Hom.op_inj (yoneda.obj G).map_injective (by ext; apply hfg)⟩
 中文:
 定理 isCoseparator_iff_faithful_yoneda_obj
   条件: (G : C)
-  结论: IsCoseparator G ↔ (yoneda.obj G).Faithful
+  结论: IsCoseparator G ↔ (yoneda.obj G).忠实
   证明: ⟨fun hG => ⟨fun hfg => Quiver.Hom.unop_inj (hG.def _ _ (congr_hom hfg))⟩, fun _ =>
     (isCoseparator_def _).2 fun _ _ _ _ hfg =>
 Quiver.Hom.op_inj (yoneda.obj G).map_injective (by ext; apply hfg)⟩
@@ -2262,7 +2262,7 @@ lemma isSeparator_of_isColimit_cofan
 
 中文:
 引理 isSeparator_of_isColimit_cofan
-  结论: {β : Type w} {f : β -> C}
+  结论: {β : 类型 w} {f : β -> C}
   证明: by
   rw [isSeparator_def]
   refine fun _ _ _ _ huv => hf _ _ (fun _ h g => ?_)
@@ -2292,7 +2292,7 @@ lemma isSeparator_iff_of_isColimit_cofan
 
 中文:
 引理 isSeparator_iff_of_isColimit_cofan
-  结论: {β : Type w} {f : β -> C}
+  结论: {β : 类型 w} {f : β -> C}
   证明: by
   refine ⟨fun h X Y u v huv => ?_, fun h => isSeparator_of_isColimit_cofan h hc⟩
   refine h.def _ _ fun g => hc.hom_ext fun b => ?_
@@ -2317,7 +2317,7 @@ theorem isSeparator_sigma
 
 中文:
 定理 isSeparator_sigma
-  条件: {β : Type w} (f : β -> C) [HasCoproduct f]
+  条件: {β : 类型 w} (f : β -> C) [HasCoproduct f]
   证明: isSeparator_iff_of_isColimit_cofan (hc := colimit.isColimit _)
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isSeparator_iff_of_isColimit_cofan
@@ -2431,7 +2431,7 @@ theorem isSeparator_sigma_of_isSeparator
 
 中文:
 定理 isSeparator_sigma_of_isSeparator
-  结论: {β : Type w} (f : β -> C) [HasCoproduct f] (b : β)
+  结论: {β : 类型 w} (f : β -> C) [HasCoproduct f] (b : β)
   证明: (isSeparator_sigma _).2 ObjectProperty.IsSeparating.of_le hb by simp
 
 Depends on / 依赖: IsSeparating, ObjectProperty, ObjectProperty.IsSeparating.of_le, isSeparator_sigma, of_le
@@ -2455,7 +2455,7 @@ lemma isCoseparator_of_isLimit_fan
 
 中文:
 引理 isCoseparator_of_isLimit_fan
-  结论: {β : Type w} {f : β -> C}
+  结论: {β : 类型 w} {f : β -> C}
   证明: by
   rw [isCoseparator_def]
   refine fun _ _ _ _ huv => hf _ _ (fun _ h g => ?_)
@@ -2486,7 +2486,7 @@ lemma isCoseparator_iff_of_isLimit_fan
 
 中文:
 引理 isCoseparator_iff_of_isLimit_fan
-  结论: {β : Type w} {f : β -> C}
+  结论: {β : 类型 w} {f : β -> C}
   证明: by
   refine ⟨fun h X Y u v huv => ?_, fun h => isCoseparator_of_isLimit_fan h hc⟩
   refine h.def _ _ fun g => hc.hom_ext fun b => ?_
@@ -2511,7 +2511,7 @@ theorem isCoseparator_pi
 
 中文:
 定理 isCoseparator_pi
-  条件: {β : Type w} (f : β -> C) [HasProduct f]
+  条件: {β : 类型 w} (f : β -> C) [HasProduct f]
   证明: isCoseparator_iff_of_isLimit_fan (hc := limit.isLimit _)
 
 Depends on / 依赖: isCoseparator_iff_of_isLimit_fan, isLimit, limit.isLimit
@@ -2607,7 +2607,7 @@ theorem isCoseparator_pi_of_isCoseparator
 
 中文:
 定理 isCoseparator_pi_of_isCoseparator
-  结论: {β : Type w} (f : β -> C) [HasProduct f] (b : β)
+  结论: {β : 类型 w} (f : β -> C) [HasProduct f] (b : β)
   证明: (isCoseparator_pi _).2 ObjectProperty.IsCoseparating.of_le hb by simp
 
 Depends on / 依赖: IsCoseparating, ObjectProperty, ObjectProperty.IsCoseparating.of_le, isCoseparator_pi, of_le
@@ -2705,7 +2705,7 @@ theorem wellPowered_of_isDetector
 
 中文:
 定理 wellPowered_of_isDetector
-  条件: [HasPullbacks C] (G : C) (hG : IsDetector G)
+  条件: [有Pullbacks C] (G : C) (hG : IsDetector G)
   证明: wellPowered_of_isDetecting hG
 
 Depends on / 依赖: wellPowered_of_isDetecting
@@ -2724,7 +2724,7 @@ theorem wellPowered_of_isSeparator
 
 中文:
 定理 wellPowered_of_isSeparator
-  条件: [HasPullbacks C] [Balanced C] (G : C) (hG : IsSeparator G)
+  条件: [有Pullbacks C] [Balanced C] (G : C) (hG : IsSeparator G)
   证明: wellPowered_of_isDetecting hG.isDetector
 
 Depends on / 依赖: hG.isDetector, isDetector, wellPowered_of_isDetecting
@@ -2748,7 +2748,7 @@ class HasSeparator
     - hasSeparator : exists G : C, IsSeparator G
 
 中文:
-类 HasSeparator
+类 有Separator
   参数: : 命题 where
   公理与运算 (1 个):
     - hasSeparator : 存在 G : C, IsSeparator G
@@ -2766,7 +2766,7 @@ class HasCoseparator
     - hasCoseparator : exists G : C, IsCoseparator G
 
 中文:
-类 HasCoseparator
+类 有余separator
   参数: : 命题 where
   公理与运算 (1 个):
     - hasCoseparator : 存在 G : C, IsCoseparator G
@@ -2784,7 +2784,7 @@ class HasDetector
     - hasDetector : exists G : C, IsDetector G
 
 中文:
-类 HasDetector
+类 有Detector
   参数: : 命题 where
   公理与运算 (1 个):
     - hasDetector : 存在 G : C, IsDetector G
@@ -2802,7 +2802,7 @@ class HasCodetector
     - hasCodetector : exists G : C, IsCodetector G
 
 中文:
-类 HasCodetector
+类 有余detector
   参数: : 命题 where
   公理与运算 (1 个):
     - hasCodetector : 存在 G : C, IsCodetector G
@@ -2826,7 +2826,7 @@ definition separator
 
 中文:
 定义 separator
-  签名: [HasSeparator C]
+  签名: [有Separator C]
   定义体: HasSeparator.hasSeparator.choose
 
 Depends on / 依赖: HasSeparator, HasSeparator.hasSeparator.choose, SplitEpiCategory, hasSeparator, regularEpiCategoryOfSplitEpiCategory
@@ -2843,7 +2843,7 @@ definition coseparator
 
 中文:
 定义 coseparator
-  签名: [HasCoseparator C]
+  签名: [有余separator C]
   定义体: HasCoseparator.hasCoseparator.choose
 
 Depends on / 依赖: HasCoseparator, HasCoseparator.hasCoseparator.choose, IsRegularEpiCategory, hasCoseparator, strongEpiCategory_of_regularEpiCategory
@@ -2860,7 +2860,7 @@ definition detector
 
 中文:
 定义 detector
-  签名: [HasDetector C]
+  签名: [有Detector C]
   定义体: HasDetector.hasDetector.choose
 
 Depends on / 依赖: HasDetector, HasDetector.hasDetector.choose, hasDetector
@@ -2877,7 +2877,7 @@ definition codetector
 
 中文:
 定义 codetector
-  签名: [HasCodetector C]
+  签名: [有余detector C]
   定义体: HasCodetector.hasCodetector.choose
 
 Depends on / 依赖: HasCodetector, HasCodetector.hasCodetector.choose, hasCodetector
@@ -2895,7 +2895,7 @@ theorem isSeparator_separator
 
 中文:
 定理 isSeparator_separator
-  条件: [HasSeparator C]
+  条件: [有Separator C]
   结论: IsSeparator (separator C)
   证明: HasSeparator.hasSeparator.choose_spec
 
@@ -2915,7 +2915,7 @@ theorem isDetector_separator
 
 中文:
 定理 isDetector_separator
-  条件: [Balanced C] [HasSeparator C]
+  条件: [Balanced C] [有Separator C]
   结论: IsDetector (separator C)
   证明: .isDetector isSeparator_separator C
 
@@ -2935,7 +2935,7 @@ theorem isCoseparator_coseparator
 
 中文:
 定理 isCoseparator_coseparator
-  条件: [HasCoseparator C]
+  条件: [有余separator C]
   结论: IsCoseparator (coseparator C)
   证明: HasCoseparator.hasCoseparator.choose_spec
 
@@ -2955,7 +2955,7 @@ theorem isCodetector_coseparator
 
 中文:
 定理 isCodetector_coseparator
-  条件: [Balanced C] [HasCoseparator C]
+  条件: [Balanced C] [有余separator C]
   结论: IsCodetector (coseparator C)
   证明: .isCodetector isCoseparator_coseparator C
 
@@ -2975,7 +2975,7 @@ theorem isDetector_detector
 
 中文:
 定理 isDetector_detector
-  条件: [HasDetector C]
+  条件: [有Detector C]
   结论: IsDetector (detector C)
   证明: HasDetector.hasDetector.choose_spec
 
@@ -2995,7 +2995,7 @@ theorem isSeparator_detector
 
 中文:
 定理 isSeparator_detector
-  条件: [HasEqualizers C] [HasDetector C]
+  条件: [HasEqualizers C] [有Detector C]
   结论: IsSeparator (detector C)
   证明: .isSeparator isDetector_detector C
 
@@ -3015,7 +3015,7 @@ theorem isCodetector_codetector
 
 中文:
 定理 isCodetector_codetector
-  条件: [HasCodetector C]
+  条件: [有余detector C]
   结论: IsCodetector (codetector C)
   证明: HasCodetector.hasCodetector.choose_spec
 
@@ -3034,7 +3034,7 @@ theorem isCoseparator_codetector
 
 中文:
 定理 isCoseparator_codetector
-  条件: [HasCoequalizers C] [HasCodetector C]
+  条件: [HasCoequalizers C] [有余detector C]
   证明: isCodetector_codetector C
 
 Depends on / 依赖: isCodetector_codetector
@@ -3056,9 +3056,9 @@ theorem HasSeparator.hasDetector
   proof: ⟨_, isDetector_separator C⟩
 
 中文:
-定理 HasSeparator.hasDetector
-  条件: [Balanced C] [HasSeparator C]
-  结论: HasDetector C
+定理 有Separator.hasDetector
+  条件: [Balanced C] [有Separator C]
+  结论: 有Detector C
   证明: ⟨_, isDetector_separator C⟩
 
 Depends on / 依赖: isDetector_separator
@@ -3076,9 +3076,9 @@ theorem HasDetector.hasSeparator
   proof: ⟨_, isSeparator_detector C⟩
 
 中文:
-定理 HasDetector.hasSeparator
-  条件: [HasEqualizers C] [HasDetector C]
-  结论: HasSeparator C
+定理 有Detector.hasSeparator
+  条件: [HasEqualizers C] [有Detector C]
+  结论: 有Separator C
   证明: ⟨_, isSeparator_detector C⟩
 
 Depends on / 依赖: isSeparator_detector
@@ -3096,9 +3096,9 @@ theorem HasCoseparator.hasCodetector
   proof: ⟨_, isCodetector_coseparator C⟩
 
 中文:
-定理 HasCoseparator.hasCodetector
-  条件: [Balanced C] [HasCoseparator C]
-  结论: HasCodetector C
+定理 有余separator.hasCodetector
+  条件: [Balanced C] [有余separator C]
+  结论: 有余detector C
   证明: ⟨_, isCodetector_coseparator C⟩
 
 Depends on / 依赖: isCodetector_coseparator
@@ -3116,9 +3116,9 @@ theorem HasCodetector.hasCoseparator
   proof: ⟨_, isCoseparator_codetector C⟩
 
 中文:
-定理 HasCodetector.hasCoseparator
-  条件: [HasCoequalizers C] [HasCodetector C]
-  结论: HasCoseparator C
+定理 有余detector.hasCoseparator
+  条件: [HasCoequalizers C] [有余detector C]
+  结论: 有余separator C
   证明: ⟨_, isCoseparator_codetector C⟩
 
 Depends on / 依赖: isCoseparator_codetector
@@ -3135,8 +3135,8 @@ instance HasDetector.wellPowered
   body: wellPowered_of_isDetector _ isDetector_detector C
 
 中文:
-实例 HasDetector.wellPowered
-  签名: [HasPullbacks C] [HasDetector C]
+实例 有Detector.wellPowered
+  签名: [有Pullbacks C] [有Detector C]
   定义体: wellPowered_of_isDetector _ isDetector_detector C
 
 Depends on / 依赖: isDetector_detector, wellPowered_of_isDetector
@@ -3153,8 +3153,8 @@ instance HasSeparator.wellPowered
   body: HasSeparator.hasDetector.wellPowered
 
 中文:
-实例 HasSeparator.wellPowered
-  签名: [HasPullbacks C] [Balanced C] [HasSeparator C]
+实例 有Separator.wellPowered
+  签名: [有Pullbacks C] [Balanced C] [有Separator C]
   定义体: HasSeparator.hasDetector.wellPowered
 
 Depends on / 依赖: HasSeparator, HasSeparator.hasDetector.wellPowered, J.map, hasDetector, wellPowered
@@ -3176,9 +3176,9 @@ theorem HasSeparator.of_equivalence
   proof: .of_equivalence α⟩ ⟨α.functor.obj (separator C), isSeparator_separator C
 
 中文:
-定理 HasSeparator.of_equivalence
-  条件: [HasSeparator C] (α : C ≌ D)
-  结论: HasSeparator D
+定理 有Separator.of_equivalence
+  条件: [有Separator C] (α : C ≌ D)
+  结论: 有Separator D
   证明: .of_equivalence α⟩ ⟨α.functor.obj (separator C), isSeparator_separator C
 
 Depends on / 依赖: functor, functor.obj, isSeparator_separator, of_equivalence, separator
@@ -3196,9 +3196,9 @@ theorem HasCoseparator.of_equivalence
   proof: .of_equivalence α⟩ ⟨α.functor.obj (coseparator C), isCoseparator_coseparator C
 
 中文:
-定理 HasCoseparator.of_equivalence
-  条件: [HasCoseparator C] (α : C ≌ D)
-  结论: HasCoseparator D
+定理 有余separator.of_equivalence
+  条件: [有余separator C] (α : C ≌ D)
+  结论: 有余separator D
   证明: .of_equivalence α⟩ ⟨α.functor.obj (coseparator C), isCoseparator_coseparator C
 
 Depends on / 依赖: coseparator, functor, functor.obj, isCoseparator_coseparator, of_equivalence
@@ -3224,7 +3224,7 @@ theorem hasSeparator_op_iff
 
 中文:
 定理 hasSeparator_op_iff
-  结论: HasSeparator Cᵒᵖ ↔ HasCoseparator C
+  结论: 有Separator Cᵒᵖ ↔ 有余separator C
   证明: ⟨fun ⟨G, hG⟩ => ⟨unop G, (isCoseparator_unop_iff G).mpr hG⟩,
    fun ⟨G, hG⟩ => ⟨op G, (isSeparator_op_iff G).mpr hG⟩⟩
 
@@ -3250,7 +3250,7 @@ theorem hasCoseparator_op_iff
 
 中文:
 定理 hasCoseparator_op_iff
-  结论: HasCoseparator Cᵒᵖ ↔ HasSeparator C
+  结论: 有余separator Cᵒᵖ ↔ 有Separator C
   证明: ⟨fun ⟨G, hG⟩ => ⟨unop G, (isSeparator_unop_iff G).mpr hG⟩,
    fun ⟨G, hG⟩ => ⟨op G, (isCoseparator_op_iff G).mpr hG⟩⟩
 
@@ -3276,7 +3276,7 @@ theorem hasDetector_op_iff
 
 中文:
 定理 hasDetector_op_iff
-  结论: HasDetector Cᵒᵖ ↔ HasCodetector C
+  结论: 有Detector Cᵒᵖ ↔ 有余detector C
   证明: ⟨fun ⟨G, hG⟩ => ⟨unop G, (isCodetector_unop_iff G).mpr hG⟩,
    fun ⟨G, hG⟩ => ⟨op G, (isDetector_op_iff G).mpr hG⟩⟩
 
@@ -3300,7 +3300,7 @@ theorem hasCodetector_op_iff
 
 中文:
 定理 hasCodetector_op_iff
-  结论: HasCodetector Cᵒᵖ ↔ HasDetector C
+  结论: 有余detector Cᵒᵖ ↔ 有Detector C
   证明: ⟨fun ⟨G, hG⟩ => ⟨unop G, (isDetector_unop_iff G).mpr hG⟩,
    fun ⟨G, hG⟩ => ⟨op G, (isCodetector_op_iff G).mpr hG⟩⟩
 
@@ -3319,8 +3319,8 @@ instance HasSeparator.hasCoseparator_op
   body: by simp [*]
 
 中文:
-实例 HasSeparator.hasCoseparator_op
-  签名: [HasSeparator C]
+实例 有Separator.hasCoseparator_op
+  签名: [有Separator C]
   定义体: by simp [*]
 
 Depends on / 依赖: leftSection, rightSection
@@ -3335,8 +3335,8 @@ theorem HasSeparator.hasCoseparator_of_hasSeparator_op
   proof: by simp_all
 
 中文:
-定理 HasSeparator.hasCoseparator_of_hasSeparator_op
-  条件: [h : HasSeparator Cᵒᵖ]
+定理 有Separator.hasCoseparator_of_hasSeparator_op
+  条件: [h : 有Separator Cᵒᵖ]
   证明: by simp_all
 -/
 theorem HasSeparator.hasCoseparator_of_hasSeparator_op [h : HasSeparator Cᵒᵖ] :
@@ -3351,8 +3351,8 @@ instance HasCoseparator.hasSeparator_op
   body: by simp [*]
 
 中文:
-实例 HasCoseparator.hasSeparator_op
-  签名: [HasCoseparator C]
+实例 有余separator.hasSeparator_op
+  签名: [有余separator C]
   定义体: by simp [*]
 -/
 instance HasCoseparator.hasSeparator_op [HasCoseparator C] : HasSeparator Cᵒᵖ := by simp [*]
@@ -3365,8 +3365,8 @@ theorem HasCoseparator.hasSeparator_of_hasCoseparator_op
   proof: by simp_all
 
 中文:
-定理 HasCoseparator.hasSeparator_of_hasCoseparator_op
-  条件: [HasCoseparator Cᵒᵖ]
+定理 有余separator.hasSeparator_of_hasCoseparator_op
+  条件: [有余separator Cᵒᵖ]
   证明: by simp_all
 -/
 theorem HasCoseparator.hasSeparator_of_hasCoseparator_op [HasCoseparator Cᵒᵖ] :
@@ -3381,8 +3381,8 @@ instance HasDetector.hasCodetector_op
   body: by simp [*]
 
 中文:
-实例 HasDetector.hasCodetector_op
-  签名: [HasDetector C]
+实例 有Detector.hasCodetector_op
+  签名: [有Detector C]
   定义体: by simp [*]
 -/
 instance HasDetector.hasCodetector_op [HasDetector C] : HasCodetector Cᵒᵖ := by simp [*]
@@ -3395,8 +3395,8 @@ theorem HasDetector.hasCodetector_of_hasDetector_op
   proof: by simp_all
 
 中文:
-定理 HasDetector.hasCodetector_of_hasDetector_op
-  条件: [HasDetector Cᵒᵖ]
+定理 有Detector.hasCodetector_of_hasDetector_op
+  条件: [有Detector Cᵒᵖ]
   证明: by simp_all
 -/
 theorem HasDetector.hasCodetector_of_hasDetector_op [HasDetector Cᵒᵖ] :
@@ -3411,8 +3411,8 @@ instance HasCodetector.hasDetector_op
   body: by simp [*]
 
 中文:
-实例 HasCodetector.hasDetector_op
-  签名: [HasCodetector C]
+实例 有余detector.hasDetector_op
+  签名: [有余detector C]
   定义体: by simp [*]
 -/
 instance HasCodetector.hasDetector_op [HasCodetector C] : HasDetector Cᵒᵖ := by simp [*]
@@ -3425,8 +3425,8 @@ theorem HasCodetector.hasDetector_of_hasCodetector_op
   proof: by simp_all
 
 中文:
-定理 HasCodetector.hasDetector_of_hasCodetector_op
-  条件: [HasCodetector Cᵒᵖ]
+定理 有余detector.hasDetector_of_hasCodetector_op
+  条件: [有余detector Cᵒᵖ]
   证明: by simp_all
 -/
 theorem HasCodetector.hasDetector_of_hasCodetector_op [HasCodetector Cᵒᵖ] :

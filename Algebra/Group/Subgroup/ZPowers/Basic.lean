@@ -98,7 +98,7 @@ theorem coe_zpowers
 中文:
 定理 coe_zpowers
   条件: (g : G)
-  结论: ↑(zpowers g) = Set.range (g ^ · : 整数 -> G)
+  结论: ↑(zpowers g) = 集合.range (g ^ · : 整数 -> G)
   证明: rfl
 
 @[to_additive] -- TODO: delete?
@@ -242,7 +242,7 @@ theorem forall_zpowers
   proof: Set.forall_subtype_range_iff
 
 中文:
-定理 forall_zpowers
+定理 对任意_zpowers
   条件: {x : G} {p : zpowers x -> 命题}
   结论: (对任意 g, p g) ↔ 对任意 m : 整数, p ⟨x ^ m, m, rfl⟩
   证明: Set.forall_subtype_range_iff
@@ -266,7 +266,7 @@ theorem exists_zpowers
 @[to_additive]
 
 中文:
-定理 exists_zpowers
+定理 存在_zpowers
   条件: {x : G} {p : zpowers x -> 命题}
   结论: (存在 g, p g) ↔ 存在 m : 整数, p ⟨x ^ m, m, rfl⟩
   证明: Set.exists_subtype_range_iff
@@ -291,7 +291,7 @@ theorem forall_mem_zpowers
 @[to_additive]
 
 中文:
-定理 forall_mem_zpowers
+定理 对任意_mem_zpowers
   条件: {x : G} {p : G -> 命题}
   结论: (对任意 g in zpowers x, p g) ↔ 对任意 m : 整数, p (x ^ m)
   证明: Set.forall_mem_range
@@ -314,7 +314,7 @@ theorem exists_mem_zpowers
   proof: Set.exists_range_iff
 
 中文:
-定理 exists_mem_zpowers
+定理 存在_mem_zpowers
   条件: {x : G} {p : G -> 命题}
   结论: (存在 g in zpowers x, p g) ↔ 存在 m : 整数, p (x ^ m)
   证明: Set.exists_range_iff
@@ -337,7 +337,7 @@ theorem MonoidHom.map_zpowers
   rw [Subgroup.zpowers_eq_closure]; rw [Subgroup.zpowers_eq_closure]; rw [f.map_closure]; rw [Set.image_singleton]
 
 中文:
-定理 MonoidHom.map_zpowers
+定理 幺半群态射.map_zpowers
   条件: (f : G ->* N) (x : G)
   证明: by
   rw [Subgroup.zpowers_eq_closure]; rw [Subgroup.zpowers_eq_closure]; rw [f.map_closure]; rw [Set.image_singleton]
@@ -360,9 +360,9 @@ theorem Int.mem_zmultiples_iff
 @[simp]
 
 中文:
-定理 Int.mem_zmultiples_iff
+定理 整数.mem_zmultiples_iff
   条件: {a b : 整数}
-  结论: b in AddSubgroup.zmultiples a ↔ a ∣ b
+  结论: b in 加法子群.zmultiples a ↔ a ∣ b
   证明: exists_congr fun k => by rw [mul_comm, eq_comm, ← smul_eq_mul]
 
 @[simp]
@@ -384,8 +384,8 @@ lemma Int.zmultiples_one
   simp [Int.mem_zmultiples_iff]
 
 中文:
-引理 Int.zmultiples_one
-  结论: AddSubgroup.zmultiples (1 : 整数) = ⊤
+引理 整数.zmultiples_one
+  结论: 加法子群.zmultiples (1 : 整数) = ⊤
   证明: by
   ext z
   simp [Int.mem_zmultiples_iff]
@@ -494,7 +494,7 @@ alias ⟨_, zpowers_le_of_mem⟩ := zpowers_le
 
 中文:
 定理 zpowers_le
-  条件: {g : G} {H : Subgroup G}
+  条件: {g : G} {H : 子群 G}
   结论: zpowers g <= H ↔ g in H
   证明: by
   rw [zpowers_eq_closure]; rw [closure_le]; rw [Set.singleton_subset_iff]; rw [SetLike.mem_coe]
@@ -572,7 +572,7 @@ theorem zpowers_one_eq_bot
 
 中文:
 定理 zpowers_one_eq_bot
-  结论: Subgroup.zpowers (1 : G) = ⊥
+  结论: 子群.zpowers (1 : G) = ⊥
   证明: Subgroup.zpowers_eq_bot.mpr rfl
 
 @[to_additive (attr := simp)]
@@ -613,7 +613,7 @@ theorem Int.zmultiples_natAbs
   simp [le_antisymm_iff, Int.mem_zmultiples_iff, Int.dvd_natAbs, Int.natAbs_dvd]
 
 中文:
-定理 Int.zmultiples_natAbs
+定理 整数.zmultiples_natAbs
   条件: (a : 整数)
   证明: by
   simp [le_antisymm_iff, Int.mem_zmultiples_iff, Int.dvd_natAbs, Int.natAbs_dvd]
@@ -635,8 +635,8 @@ lemma Int.addSubgroupClosure_one
   simp [AddSubgroup.mem_closure_singleton]
 
 中文:
-引理 Int.addSubgroupClosure_one
-  结论: AddSubgroup.closure ({1} : Set 整数) = ⊤
+引理 整数.addSubgroupClosure_one
+  结论: 加法子群.closure ({1} : 集合 整数) = ⊤
   证明: by
   ext
   simp [AddSubgroup.mem_closure_singleton]

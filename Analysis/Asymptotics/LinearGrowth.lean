@@ -1080,7 +1080,7 @@ definition linearGrowthInfTopHom
 
 中文:
 定义 linearGrowthInfTopHom
-  签名: : InfTopHom (自然数 -> E实数) E实数 where
+  签名: : InfTop态射 (自然数 -> E实数) E实数 where
   定义体: linearGrowthInf
   map_inf' _ _ := linearGrowthInf_inf
   map_top' := linearGrowthInf_top
@@ -1105,7 +1105,7 @@ lemma linearGrowthInf_biInf
 
 中文:
 引理 linearGrowthInf_biInf
-  条件: {α : 类型} (u : α -> 自然数 -> E实数) {s : Set α} (hs : s.Finite)
+  条件: {α : 类型} (u : α -> 自然数 -> E实数) {s : 集合 α} (hs : s.有限)
   证明: by
   have := map_finset_inf linearGrowthInfTopHom hs.toFinset u
   simpa only [linearGrowthInfTopHom, InfTopHom.coe_mk, InfHom.coe_mk, Finset.inf_eq_iInf,
@@ -1130,7 +1130,7 @@ lemma linearGrowthInf_iInf
 
 中文:
 引理 linearGrowthInf_iInf
-  条件: {ι : 类型} [Finite ι] (u : ι -> 自然数 -> E实数)
+  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> E实数)
   证明: by
   rw [← iInf_univ]; rw [linearGrowthInf_biInf u Set.finite_univ]; rw [iInf_univ]
 
@@ -1177,7 +1177,7 @@ definition linearGrowthSupBotHom
 
 中文:
 定义 linearGrowthSupBotHom
-  签名: : SupBotHom (自然数 -> E实数) E实数 where
+  签名: : SupBot态射 (自然数 -> E实数) E实数 where
   定义体: linearGrowthSup
   map_sup' _ _ := linearGrowthSup_sup
   map_bot' := linearGrowthSup_bot
@@ -1202,7 +1202,7 @@ lemma linearGrowthSup_biSup
 
 中文:
 引理 linearGrowthSup_biSup
-  条件: {α : 类型} (u : α -> 自然数 -> E实数) {s : Set α} (hs : s.Finite)
+  条件: {α : 类型} (u : α -> 自然数 -> E实数) {s : 集合 α} (hs : s.有限)
   证明: by
   have := map_finset_sup linearGrowthSupBotHom hs.toFinset u
   simpa only [linearGrowthSupBotHom, SupBotHom.coe_mk, SupHom.coe_mk, Finset.sup_eq_iSup,
@@ -1227,7 +1227,7 @@ lemma linearGrowthSup_iSup
 
 中文:
 引理 linearGrowthSup_iSup
-  条件: {ι : 类型} [Finite ι] (u : ι -> 自然数 -> E实数)
+  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> E实数)
   证明: by
   rw [← iSup_univ]; rw [linearGrowthSup_biSup u Set.finite_univ]; rw [iSup_univ]
 
@@ -1257,7 +1257,7 @@ lemma Real.eventually_atTop_exists_int_between
   exact ⟨_, le_of_add_le_add_right (ab_x.trans (Int.lt_floor_add_one _).le), Int.floor_le _⟩
 
 中文:
-引理 Real.eventually_atTop_exists_int_between
+引理 实数.eventually_atTop_存在_int_between
   条件: {a b : 实数} (h : a < b)
   证明: by
   refine (eventually_ge_atTop (b - a)⁻¹).mono fun x ab_x => ?_
@@ -1286,7 +1286,7 @@ lemma Real.eventually_atTop_exists_nat_between
   exact_mod_cast Int.toNat_eq_max m
 
 中文:
-引理 Real.eventually_atTop_exists_nat_between
+引理 实数.eventually_atTop_存在_nat_between
   条件: {a b : 实数} (h : a < b) (hb : 0 <= b)
   证明: by
   filter_upwards [eventually_ge_atTop 0, Real.eventually_atTop_exists_int_between h]
@@ -1323,7 +1323,7 @@ lemma EReal.eventually_atTop_exists_nat_between
     | 
 
 中文:
-引理 EReal.eventually_atTop_exists_nat_between
+引理 E实数.eventually_atTop_存在_nat_between
   条件: {a b : E实数} (h : a < b) (hb : 0 <= b)
   证明: match a with
   | ⊤ => (not_top_lt h).rec
@@ -1404,7 +1404,7 @@ lemma le_linearGrowthInf_comp
 
 中文:
 引理 le_linearGrowthInf_comp
-  条件: (hu : 0 <=ᶠ[atTop] u) (hv : Tendsto v atTop atTop)
+  条件: (hu : 0 <=ᶠ[atTop] u) (hv : 收敛 v atTop atTop)
   证明: by
   have uv_0 : 0 <= linearGrowthInf (u ∘ v) := by
     rw [← linearGrowthInf_const zero_ne_bot zero_ne_top]
@@ -1489,8 +1489,8 @@ lemma _root_.Monotone.linearGrowthInf_nonneg
     exact le_top.trans (linearGrowthInf_top.symm.trans_le (linearGrowthInf_
 
 中文:
-引理 _root_.Monotone.linearGrowthInf_nonneg
-  条件: (h : Monotone u) (h' : u != ⊥)
+引理 _root_.递增.linearGrowthInf_nonneg
+  条件: (h : 递增 u) (h' : u != ⊥)
   证明: by
   simp only [ne_eq, funext_iff, not_forall] at h'
   obtain ⟨m, hm⟩ := h'
@@ -1521,8 +1521,8 @@ lemma _root_.Monotone.linearGrowthSup_nonneg
   proof: (h.linearGrowthInf_nonneg h').trans (linearGrowthInf_le_linearGrowthSup)
 
 中文:
-引理 _root_.Monotone.linearGrowthSup_nonneg
-  条件: (h : Monotone u) (h' : u != ⊥)
+引理 _root_.递增.linearGrowthSup_nonneg
+  条件: (h : 递增 u) (h' : u != ⊥)
   证明: (h.linearGrowthInf_nonneg h').trans (linearGrowthInf_le_linearGrowthSup)
 
 Depends on / 依赖: h.linearGrowthInf_nonneg, linearGrowthInf_le_linearGrowthSup, linearGrowthInf_nonneg
@@ -1548,7 +1548,7 @@ lemma linearGrowthInf_comp_nonneg
 
 中文:
 引理 linearGrowthInf_comp_nonneg
-  条件: (h : Monotone u) (h' : u != ⊥) (hv : Tendsto v atTop atTop)
+  条件: (h : 递增 u) (h' : u != ⊥) (hv : 收敛 v atTop atTop)
   证明: by
   simp only [ne_eq, funext_iff, not_forall] at h'
   obtain ⟨m, hum⟩ := h'
@@ -1581,7 +1581,7 @@ lemma linearGrowthSup_comp_nonneg
 
 中文:
 引理 linearGrowthSup_comp_nonneg
-  条件: (h : Monotone u) (h' : u != ⊥) (hv : Tendsto v atTop atTop)
+  条件: (h : 递增 u) (h' : u != ⊥) (hv : 收敛 v atTop atTop)
   证明: (linearGrowthInf_comp_nonneg h h' hv).trans linearGrowthInf_le_linearGrowthSup
 
 Depends on / 依赖: linearGrowthInf_comp_nonneg, linearGrowthInf_le_linearGrowthSup
@@ -1605,8 +1605,8 @@ have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf
   have 
 
 中文:
-引理 _root_.Monotone.linearGrowthInf_comp_le
-  结论: (h : Monotone u)
+引理 _root_.递增.linearGrowthInf_comp_le
+  结论: (h : 递增 u)
   证明: by
   -- First we apply `le_mul_of_forall_lt`.
   by_cases u_0 : u = ⊥
@@ -1674,8 +1674,8 @@ lemma _root_.Monotone.le_linearGrowthSup_comp
     (linearG
 
 中文:
-引理 _root_.Monotone.le_linearGrowthSup_comp
-  结论: (h : Monotone u)
+引理 _root_.递增.le_linearGrowthSup_comp
+  结论: (h : 递增 u)
   证明: by
   have v_0 := hv.symm.lt_of_le (linearGrowthInf_natCast_nonneg v)
   -- WLOG, `u` is non-bot, and we can apply `mul_le_of_forall_lt_of_nonneg`.
@@ -1741,8 +1741,8 @@ lemma _root_.Monotone.linearGrowthInf_comp
   -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
 
 中文:
-引理 _root_.Monotone.linearGrowthInf_comp
-  结论: {a : E实数} (h : Monotone u)
+引理 _root_.递增.linearGrowthInf_comp
+  结论: {a : E实数} (h : 递增 u)
   证明: by
   have hv₁ : 0 < liminf (fun n => (v n : EReal) / n) atTop := by
     rw [← hv.liminf_eq] at ha
@@ -1795,8 +1795,8 @@ lemma _root_.Monotone.linearGrowthSup_comp
   -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
 
 中文:
-引理 _root_.Monotone.linearGrowthSup_comp
-  结论: {a : E实数} (h : Monotone u)
+引理 _root_.递增.linearGrowthSup_comp
+  结论: {a : E实数} (h : 递增 u)
   证明: by
   have hv₁ : 0 < liminf (fun n => (v n : EReal) / n) atTop := by
     rw [← hv.liminf_eq] at ha
@@ -1846,8 +1846,8 @@ lemma _root_.Monotone.linearGrowthInf_comp_mul
     exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
 
 中文:
-引理 _root_.Monotone.linearGrowthInf_comp_mul
-  条件: {m : 自然数} (h : Monotone u) (hm : m != 0)
+引理 _root_.递增.linearGrowthInf_comp_mul
+  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
   证明: by
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)
@@ -1877,8 +1877,8 @@ lemma _root_.Monotone.linearGrowthSup_comp_mul
     exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
 
 中文:
-引理 _root_.Monotone.linearGrowthSup_comp_mul
-  条件: {m : 自然数} (h : Monotone u) (hm : m != 0)
+引理 _root_.递增.linearGrowthSup_comp_mul
+  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
   证明: by
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)

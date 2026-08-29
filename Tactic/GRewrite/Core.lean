@@ -186,7 +186,7 @@ structure State
 结构 State
   参数: where
   公理与运算 (2 个):
-    - cache : Std.HashSet (Option Expr × Expr × 布尔)  [默认: {}]
+    - cache : Std.HashSet (选项类型 Expr × Expr × 布尔值)  [默认: {}]
     - progress : Progress  [默认: .noMatch]
 -/
 structure State where
@@ -216,11 +216,11 @@ structure GRewriteLemma
 结构 GRewriteLemma
   参数: where
   公理与运算 (5 个):
-    - symm : 布尔
+    - symm : 布尔值
     - proof : Expr
     - type : Expr
     - index : HeadIndex × 自然数
-    - mvarIds : Array (MVarId × Array LocalDecl)
+    - mvarIds : 数组 (MVarId × 数组 LocalDecl)
 -/
 structure GRewriteLemma where
   /-- Whether the lemma rewrites right-to-left (i.e. whether it has a `←`). -/
@@ -268,7 +268,7 @@ definition GRewriteLemma.apply
 
 中文:
 定义 GRewriteLemma.apply
-  签名: (lem : GRewriteLemma) (goal : MVarId) (symm : 布尔)
+  签名: (lem : GRewriteLemma) (goal : MVarId) (symm : 布尔值)
   定义体: do
   withTraceNode `Meta.grewrite (fun _ => return m!"rewriting with `{lem.proof}`") do
   let (type, proof) ←
@@ -316,7 +316,7 @@ definition makeGCongrGoal
 
 中文:
 定义 makeGCongrGoal
-  签名: (rel? : Option Expr) (e : Expr) (forward : 布尔)
+  签名: (rel? : 选项类型 Expr) (e : Expr) (forward : 布尔值)
   定义体: do
   if let some rel := rel? then
     let .forallE _ d₁ (.forallE _ d₂ _ _) _ ← whnf (← inferType rel) | throwFunctionExpected rel
@@ -400,7 +400,7 @@ definition processGCongrHypothesisAux
 
 中文:
 定义 processGCongrHypothesisAux
-  签名: (goal : MVarId) (forward : 布尔) (config : Config)
+  签名: (goal : MVarId) (forward : 布尔值) (config : 余nfig)
   定义体: do
   let some (relName, rel?, lhs, rhs) := getRel' (← whnf (← goal.getType)) |
     throwError "internal `grewrite` error: invalid `gcongr` goal {goal}"
@@ -440,7 +440,7 @@ definition processGCongrHypothesis
 
 中文:
 定义 processGCongrHypothesis
-  签名: (goal : MVarId) (forward : 布尔)
+  签名: (goal : MVarId) (forward : 布尔值)
   定义体: do
   -- If the local context was not changed, we don't need to modify the local contexts.
   if (← goal.getDecl).lctx.numIndices == (← getLCtx).numIndices then
@@ -497,7 +497,7 @@ definition processGCongrLemma
 
 中文:
 定义 processGCongrLemma
-  签名: (goal : MVarId) (lem : GCongrLemma) (forward : 布尔)
+  签名: (goal : MVarId) (lem : GCongrLemma) (forward : 布尔值)
   定义体: withTraceNode `Meta.grewrite (fun _ =>
     return m!"applying `gcongr` lemma {.ofConstName lem.declName}") do
   let (mainGoals, sideGoals) ← try applyGCongrLemma goal lem catch _ => return false
@@ -554,7 +554,7 @@ definition grewriteCore
 
 中文:
 定义 grewriteCore
-  签名: (relName : Name) (rel? : Option Expr) (e : Expr) (forward : 布尔)
+  签名: (relName : Name) (rel? : 选项类型 Expr) (e : Expr) (forward : 布尔值)
   定义体: withTraceNodeBefore `Meta.grewrite (fun _ => return m!"visiting `{e}` in the \
     {if forward then "LHS" else "RHS"} of relation `{rel?.elim m!"->" (m!"{·}")}`") do
   let e ← instantiateMVars e; let rel? ← rel?.mapM instantiateMVars

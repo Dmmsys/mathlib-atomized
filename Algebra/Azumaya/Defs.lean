@@ -45,7 +45,7 @@ abbreviation instModuleTensorProductMop
 
 中文:
 缩写 instModuleTensorProductMop
-  签名: : Module (A otimes[R] Aᵐᵒᵖ) A
+  签名: : 模 (A otimes[R] Aᵐᵒᵖ) A
   定义体: TensorProduct.Algebra.module
 
 Depends on / 依赖: Algebra, TensorProduct, TensorProduct.Algebra.module, module
@@ -66,8 +66,8 @@ definition AlgHom.mulLeftRight
   Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R
 
 中文:
-定义 AlgHom.mulLeftRight
-  签名: : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] Module.End R A
+定义 代数态射.mulLeftRight
+  签名: : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] 模.End R A
   定义体: letI : Module (A otimes[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
   letI : IsScalarTower R (A otimes[R] Aᵐᵒᵖ) A := {
     smul_assoc := fun r ab a => by
@@ -98,7 +98,7 @@ lemma AlgHom.mulLeftRight_apply
   simp [TensorProduct.Algebra.moduleAux, ← mul_assoc]
 
 中文:
-引理 AlgHom.mulLeftRight_apply
+引理 代数态射.mulLeftRight_apply
   条件: (a : A) (b : Aᵐᵒᵖ) (x : A)
   证明: by
   simp only [AlgHom.mulLeftRight, Algebra.lsmul_coe]
@@ -124,11 +124,11 @@ class IsAzumaya
     - bij : Function.Bijective AlgHom.mulLeftRight R A
 
 中文:
-类 IsAzumaya
-  参数: : 命题 extends Module.Projective R A, FaithfulSMul R A, Module.Finite R A where
-  继承: Module.Projective R A, FaithfulSMul R A, Module.Finite R A
+类 是Azumaya
+  参数: : 命题 extends 模.投射 R A, 忠实标量乘法 R A, 模.有限 R A where
+  继承: 模.投射 R A, 忠实标量乘法 R A, 模.有限 R A
   公理与运算 (1 个):
-    - bij : Function.Bijective AlgHom.mulLeftRight R A
+    - bij : 函数.双射 代数态射.mulLeftRight R A
 -/
 class IsAzumaya : Prop extends Module.Projective R A, FaithfulSMul R A, Module.Finite R A where
 bij : Function.Bijective AlgHom.mulLeftRight R A

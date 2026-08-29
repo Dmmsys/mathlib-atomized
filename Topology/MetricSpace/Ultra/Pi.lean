@@ -36,8 +36,8 @@ instance Pi.instIsUltrametricDist
   exact Finset.sup_mono_fun fun i _ => IsUltrametricDist.dist_triangle_max (f i) (g i) (h i)
 
 中文:
-实例 Pi.instIsUltrametricDist
-  签名: {ι : 类型} {X : ι -> 类型} [Fintype ι]
+实例 依赖函数类型.instIsUltrametricDist
+  签名: {ι : 类型} {X : ι -> 类型} [有限类型 ι]
   定义体: by
   constructor
   intro f g h

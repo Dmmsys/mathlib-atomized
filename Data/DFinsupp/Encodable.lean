@@ -29,8 +29,8 @@ instance [Encodable
   .ofEquiv _ DFinsupp.sigmaFinsetFunEquiv
 
 中文:
-实例 [Encodable
-  签名: ι] [对任意 i, Encodable (α i)] [对任意 i (x : α i), Decidable (x != 0)] :
+实例 [可编码
+  签名: ι] [对任意 i, 可编码 (α i)] [对任意 i (x : α i), 可判定 (x != 0)] :
   定义体: letI : DecidableEq ι := Encodable.decidableEqOfEncodable _
   letI : forall s : Finset ι, Encodable (forall i : s, {x : α i // x != 0}) := fun _ =>
 .ofEquiv _ .piCongrLeft' _ Encodable.fintypeEquivFin
@@ -58,8 +58,8 @@ instance [Countable
     infer_instance
 
 中文:
-实例 [Countable
-  签名: ι] [对任意 i, Countable (α i)] : Countable (Π₀ i, α i)
+实例 [可数
+  签名: ι] [对任意 i, 可数 (α i)] : 可数 (Π₀ i, α i)
   定义体: by
   classical
     let _ := Encodable.ofCountable ι

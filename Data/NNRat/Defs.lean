@@ -74,8 +74,8 @@ deriving instance Sub for NNRat
 deriving instance Inhabited for NNRat
 
 中文:
-实例 Rat.instPosMulMono
-  签名: : PosMulMono Rat where
+实例 有理数.instPosMulMono
+  签名: : 正乘递增 有理数 where
   定义体: by
     simpa [mul_sub, sub_nonneg] using Rat.mul_nonneg hr (sub_nonneg.2 hpq)
 
@@ -119,7 +119,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial Rat>=0 where 存在_pair_ne
+  签名: : 非平凡 有理数>=0 where 存在_pair_ne
   定义体: ⟨1, 0, by decide⟩
 -/
 instance instNontrivial : Nontrivial Rat>=0 where exists_pair_ne := ⟨1, 0, by decide⟩
@@ -134,7 +134,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot Rat>=0 where
+  签名: : 有底序 有理数>=0 where
   定义体: 0
   bot_le q := q.2
 -/
@@ -153,7 +153,7 @@ lemma val_eq_cast
 
 中文:
 引理 val_eq_cast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q.1 = q
   证明: rfl
 -/
@@ -169,7 +169,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero Rat>=0 where
+  签名: : 特征零 有理数>=0 where
   定义体: by simpa using! congr_arg num hab
 
 Depends on / 依赖: congr_arg
@@ -189,7 +189,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift Rat Rat>=0 (↑) fun q => 0 <= q where
+  签名: : CanLift 有理数 有理数>=0 (↑) fun q => 0 <= q where
   定义体: ⟨⟨q, hq⟩, rfl⟩
 
 @[ext]
@@ -208,7 +208,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: (p : Rat) = (q : Rat) -> p = q
+  结论: (p : 有理数) = (q : 有理数) -> p = q
   证明: Subtype.ext
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -226,7 +226,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Rat>=0 -> Rat)
+  结论: 单射 ((↑) : 有理数>=0 -> 有理数)
   证明: Subtype.coe_injective
 -/
 protected theorem coe_injective : Injective ((↑) : Rat>=0 -> Rat) :=
@@ -244,7 +244,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  结论: (p : Rat) = q ↔ p = q
+  结论: (p : 有理数) = q ↔ p = q
   证明: Subtype.coe_inj
 
 Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj
@@ -263,8 +263,8 @@ theorem ne_iff
 
 中文:
 定理 ne_iff
-  条件: {x y : Rat>=0}
-  结论: (x : Rat) != (y : Rat) ↔ x != y
+  条件: {x y : 有理数>=0}
+  结论: (x : 有理数) != (y : 有理数) ↔ x != y
   证明: NNRat.coe_inj.not
 
 Depends on / 依赖: NNRat.coe_inj.not, coe_inj
@@ -284,7 +284,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (q : Rat) (hq)
+  条件: (q : 有理数) (hq)
   结论: NNRat.cast ⟨q, hq⟩ = q
   证明: rfl
 -/
@@ -300,8 +300,8 @@ lemma «forall»
   proof: Subtype.forall
 
 中文:
-引理 «forall»
-  条件: {p : Rat>=0 -> 命题}
+引理 «对任意»
+  条件: {p : 有理数>=0 -> 命题}
   结论: (对任意 q, p q) ↔ 对任意 q hq, p ⟨q, hq⟩
   证明: Subtype.forall
 -/
@@ -316,8 +316,8 @@ lemma «exists»
   proof: Subtype.exists
 
 中文:
-引理 «exists»
-  条件: {p : Rat>=0 -> 命题}
+引理 «存在»
+  条件: {p : 有理数>=0 -> 命题}
   结论: (存在 q, p q) ↔ 存在 q hq, p ⟨q, hq⟩
   证明: Subtype.exists
 -/
@@ -332,8 +332,8 @@ definition _root_.Rat.toNNRat
   body: ⟨max q 0, le_max_right _ _⟩
 
 中文:
-定义 _root_.Rat.toNNRat
-  签名: (q : Rat)
+定义 _root_.有理数.toNNRat
+  签名: (q : 有理数)
   定义体: ⟨max q 0, le_max_right _ _⟩
 
 Depends on / 依赖: le_max_right
@@ -351,9 +351,9 @@ theorem _root_.Rat.coe_toNNRat
   proof: max_eq_left hq
 
 中文:
-定理 _root_.Rat.coe_toNNRat
-  条件: (q : Rat) (hq : 0 <= q)
-  结论: (q.toNNRat : Rat) = q
+定理 _root_.有理数.coe_toNNRat
+  条件: (q : 有理数) (hq : 0 <= q)
+  结论: (q.toNNRat : 有理数) = q
   证明: max_eq_left hq
 
 Depends on / 依赖: max_eq_left
@@ -371,8 +371,8 @@ theorem _root_.Rat.le_coe_toNNRat
   proof: le_max_left _ _
 
 中文:
-定理 _root_.Rat.le_coe_toNNRat
-  条件: (q : Rat)
+定理 _root_.有理数.le_coe_toNNRat
+  条件: (q : 有理数)
   结论: q <= q.toNNRat
   证明: le_max_left _ _
 
@@ -395,8 +395,8 @@ theorem coe_nonneg
 
 中文:
 定理 coe_nonneg
-  条件: (q : Rat>=0)
-  结论: (0 : Rat) <= q
+  条件: (q : 有理数>=0)
+  结论: (0 : 有理数) <= q
   证明: q.2
 -/
 theorem coe_nonneg (q : Rat>=0) : (0 : Rat) <= q :=
@@ -412,7 +412,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ((0 : Rat>=0) : Rat) = 0
+  结论: ((0 : 有理数>=0) : 有理数) = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zero : ((0 : Rat>=0) : Rat) = 0 := rfl
@@ -455,7 +455,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ((1 : Rat>=0) : Rat) = 1
+  结论: ((1 : 有理数>=0) : 有理数) = 1
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_one : ((1 : Rat>=0) : Rat) = 1 := rfl
@@ -508,8 +508,8 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: (p q : Rat>=0)
-  结论: ((p + q : Rat>=0) : Rat) = p + q
+  条件: (p q : 有理数>=0)
+  结论: ((p + q : 有理数>=0) : 有理数) = p + q
   证明: rfl
 
 @[simp, norm_cast]
@@ -529,8 +529,8 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (p q : Rat>=0)
-  结论: ((p * q : Rat>=0) : Rat) = p * q
+  条件: (p q : 有理数>=0)
+  结论: ((p * q : 有理数>=0) : 有理数) = p * q
   证明: rfl
 -/
 theorem coe_mul (p q : Rat>=0) : ((p * q : Rat>=0) : Rat) = p * q :=
@@ -547,8 +547,8 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  条件: (q : Rat>=0) (n : 自然数)
-  结论: (↑(q ^ n) : Rat) = (q : Rat) ^ n
+  条件: (q : 有理数>=0) (n : 自然数)
+  结论: (↑(q ^ n) : 有理数) = (q : 有理数) ^ n
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_pow (q : Rat>=0) (n : Nat) : (↑(q ^ n) : Rat) = (q : Rat) ^ n :=
@@ -565,7 +565,7 @@ lemma num_pow
 
 中文:
 引理 num_pow
-  条件: (q : Rat>=0) (n : 自然数)
+  条件: (q : 有理数>=0) (n : 自然数)
   结论: (q ^ n).num = q.num ^ n
   证明: by simp [num, Int.natAbs_pow]
 -/
@@ -583,7 +583,7 @@ lemma den_pow
 
 中文:
 引理 den_pow
-  条件: (q : Rat>=0) (n : 自然数)
+  条件: (q : 有理数>=0) (n : 自然数)
   结论: (q ^ n).den = q.den ^ n
   证明: rfl
 
@@ -604,7 +604,7 @@ theorem coe_sub
 中文:
 定理 coe_sub
   条件: (h : q <= p)
-  结论: ((p - q : Rat>=0) : Rat) = p - q
+  结论: ((p - q : 有理数>=0) : 有理数) = p - q
   证明: max_eq_left le_sub_comm.2 by rwa [sub_zero]
 
 Depends on / 依赖: le_sub_comm, max_eq_left, sub_zero
@@ -624,7 +624,7 @@ theorem coe_eq_zero
 
 中文:
 定理 coe_eq_zero
-  结论: (q : Rat) = 0 ↔ q = 0
+  结论: (q : 有理数) = 0 ↔ q = 0
   证明: by norm_cast
 -/
 theorem coe_eq_zero : (q : Rat) = 0 ↔ q = 0 := by norm_cast
@@ -641,7 +641,7 @@ theorem coe_ne_zero
 
 中文:
 定理 coe_ne_zero
-  结论: (q : Rat) != 0 ↔ q != 0
+  结论: (q : 有理数) != 0 ↔ q != 0
   证明: coe_eq_zero.not
 
 @[simp]
@@ -664,7 +664,7 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  结论: (⟨0, le_rfl⟩ : Rat>=0) = 0
+  结论: (⟨0, le_rfl⟩ : 有理数>=0) = 0
   证明: rfl
 
 @[norm_cast]
@@ -684,7 +684,7 @@ theorem coe_le_coe
 
 中文:
 定理 coe_le_coe
-  结论: (p : Rat) <= q ↔ p <= q
+  结论: (p : 有理数) <= q ↔ p <= q
   证明: Iff.rfl
 
 @[norm_cast]
@@ -707,7 +707,7 @@ theorem coe_lt_coe
 
 中文:
 定理 coe_lt_coe
-  结论: (p : Rat) < q ↔ p < q
+  结论: (p : 有理数) < q ↔ p < q
   证明: Iff.rfl
 
 @[norm_cast]
@@ -728,7 +728,7 @@ theorem coe_pos
 
 中文:
 定理 coe_pos
-  结论: (0 : Rat) < q ↔ 0 < q
+  结论: (0 : 有理数) < q ↔ 0 < q
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl, IntermediateField, IsGalois, IsGalois.tower_top_intermediateField, tower_top_intermediateField
@@ -746,7 +746,7 @@ theorem coe_mono
 
 中文:
 定理 coe_mono
-  结论: Monotone ((↑) : Rat>=0 -> Rat)
+  结论: 递增 ((↑) : 有理数>=0 -> 有理数)
   证明: fun _ _ => coe_le_coe.2
 
 Depends on / 依赖: coe_le_coe
@@ -766,7 +766,7 @@ theorem toNNRat_mono
 
 中文:
 定理 toNNRat_mono
-  结论: Monotone toNNRat
+  结论: 递增 toNNRat
   证明: fun _ _ h => max_le_max h le_rfl
 
 @[simp]
@@ -790,7 +790,7 @@ theorem toNNRat_coe
 
 中文:
 定理 toNNRat_coe
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: toNNRat q = q
   证明: ext max_eq_left q.2
 
@@ -832,7 +832,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion toNNRat (↑)
+  签名: : Galois嵌入 toNNRat (↑)
   定义体: GaloisInsertion.monotoneIntro coe_mono toNNRat_mono Rat.le_coe_toNNRat toNNRat_coe
 -/
 protected def gi : GaloisInsertion toNNRat (↑) :=
@@ -852,7 +852,7 @@ definition coeHom
 
 中文:
 定义 coeHom
-  签名: : Rat>=0 ->+* Rat where
+  签名: : 有理数>=0 ->+* 有理数 where
   定义体: (↑)
   map_one' := coe_one
   map_mul' := coe_mul
@@ -880,7 +880,7 @@ lemma coe_natCast
 中文:
 引理 coe_natCast
   条件: (n : 自然数)
-  结论: (↑(↑n : Rat>=0) : Rat) = n
+  结论: (↑(↑n : 有理数>=0) : 有理数) = n
   证明: rfl
 
 @[simp]
@@ -902,7 +902,7 @@ theorem mk_natCast
 中文:
 定理 mk_natCast
   条件: (n : 自然数)
-  结论: @Eq Rat>=0 (⟨(n : Rat), 自然数.cast_nonneg' n⟩ : Rat>=0) n
+  结论: @相等 有理数>=0 (⟨(n : 有理数), 自然数.cast_nonneg' n⟩ : 有理数>=0) n
   证明: rfl
 
 @[simp]
@@ -923,7 +923,7 @@ theorem coe_coeHom
 
 中文:
 定理 coe_coeHom
-  结论: ⇑coeHom = ((↑) : Rat>=0 -> Rat)
+  结论: ⇑coeHom = ((↑) : 有理数>=0 -> 有理数)
   证明: rfl
 
 @[norm_cast]
@@ -943,8 +943,8 @@ theorem nsmul_coe
 
 中文:
 定理 nsmul_coe
-  条件: (q : Rat>=0) (n : 自然数)
-  结论: ↑(n • q) = n • (q : Rat)
+  条件: (q : 有理数>=0) (n : 自然数)
+  结论: ↑(n • q) = n • (q : 有理数)
   证明: coeHom.toAddMonoidHom.map_nsmul _ _
 
 Depends on / 依赖: coeHom, coeHom.toAddMonoidHom.map_nsmul, map_nsmul, toAddMonoidHom
@@ -966,8 +966,8 @@ show y <= max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans le_max_left _ _�
 
 中文:
 定理 bddAbove_coe
-  条件: {s : Set Rat>=0}
-  结论: BddAbove ((↑) '' s : Set Rat) ↔ BddAbove s
+  条件: {s : 集合 有理数>=0}
+  结论: BddAbove ((↑) '' s : 集合 有理数) ↔ BddAbove s
   证明: ⟨fun ⟨b, hb⟩ =>
     ⟨toNNRat b, fun ⟨y, _⟩ hys =>
 show y <= max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans le_max_left _ _⟩,
@@ -994,8 +994,8 @@ theorem bddBelow_coe
 
 中文:
 定理 bddBelow_coe
-  条件: (s : Set Rat>=0)
-  结论: BddBelow (((↑) : Rat>=0 -> Rat) '' s)
+  条件: (s : 集合 有理数>=0)
+  结论: BddBelow (((↑) : 有理数>=0 -> 有理数) '' s)
   证明: ⟨0, fun _ ⟨q, _, h⟩ => h ▸ q.2⟩
 
 @[norm_cast]
@@ -1017,8 +1017,8 @@ theorem coe_max
 
 中文:
 定理 coe_max
-  条件: (x y : Rat>=0)
-  结论: ((max x y : Rat>=0) : Rat) = max (x : Rat) (y : Rat)
+  条件: (x y : 有理数>=0)
+  结论: ((最大值 x y : 有理数>=0) : 有理数) = 最大值 (x : 有理数) (y : 有理数)
   证明: coe_mono.map_max
 
 @[norm_cast]
@@ -1040,8 +1040,8 @@ theorem coe_min
 
 中文:
 定理 coe_min
-  条件: (x y : Rat>=0)
-  结论: ((min x y : Rat>=0) : Rat) = min (x : Rat) (y : Rat)
+  条件: (x y : 有理数>=0)
+  结论: ((最小值 x y : 有理数>=0) : 有理数) = 最小值 (x : 有理数) (y : 有理数)
   证明: coe_mono.map_min
 
 Depends on / 依赖: coe_mono, coe_mono.map_min, map_min
@@ -1062,7 +1062,7 @@ theorem sub_def
 
 中文:
 定理 sub_def
-  条件: (p q : Rat>=0)
+  条件: (p q : 有理数>=0)
   结论: p - q = toNNRat (p - q)
   证明: rfl
 
@@ -1083,8 +1083,8 @@ theorem abs_coe
 
 中文:
 定理 abs_coe
-  条件: (q : Rat>=0)
-  结论: |(q : Rat)| = q
+  条件: (q : 有理数>=0)
+  结论: |(q : 有理数)| = q
   证明: abs_of_nonneg q.2
 
 Depends on / 依赖: abs_of_nonneg
@@ -1105,7 +1105,7 @@ theorem nonpos_iff_eq_zero
 
 中文:
 定理 nonpos_iff_eq_zero
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q <= 0 ↔ q = 0
   证明: ⟨fun h => le_antisymm h q.2, fun h => h.symm ▸ q.2⟩
 
@@ -1345,7 +1345,7 @@ theorem toNNRat_le_iff_le_coe
 
 中文:
 定理 toNNRat_le_iff_le_coe
-  条件: {p : Rat>=0}
+  条件: {p : 有理数>=0}
   结论: toNNRat q <= p ↔ q <= ↑p
   证明: NNRat.gi.gc q p
 
@@ -1366,7 +1366,7 @@ theorem le_toNNRat_iff_coe_le
 
 中文:
 定理 le_toNNRat_iff_coe_le
-  条件: {q : Rat>=0} (hp : 0 <= p)
+  条件: {q : 有理数>=0} (hp : 0 <= p)
   结论: q <= toNNRat p ↔ ↑q <= p
   证明: by
   rw [← coe_le_coe]; rw [Rat.coe_toNNRat p hp]
@@ -1388,7 +1388,7 @@ theorem le_toNNRat_iff_coe_le'
 
 中文:
 定理 le_toNNRat_iff_coe_le'
-  条件: {q : Rat>=0} (hq : 0 < q)
+  条件: {q : 有理数>=0} (hq : 0 < q)
   结论: q <= toNNRat p ↔ ↑q <= p
   证明: (le_or_gt 0 p).elim le_toNNRat_iff_coe_le fun hp => by
     simp only [(hp.trans_le q.coe_nonneg).not_ge, toNNRat_eq_zero.2 hp.le, hq.not_ge]
@@ -1411,7 +1411,7 @@ theorem toNNRat_lt_iff_lt_coe
 
 中文:
 定理 toNNRat_lt_iff_lt_coe
-  条件: {p : Rat>=0} (hq : 0 <= q)
+  条件: {p : 有理数>=0} (hq : 0 <= q)
   结论: toNNRat q < p ↔ q < ↑p
   证明: by
   rw [← coe_lt_coe]; rw [Rat.coe_toNNRat q hq]
@@ -1432,7 +1432,7 @@ theorem lt_toNNRat_iff_coe_lt
 
 中文:
 定理 lt_toNNRat_iff_coe_lt
-  条件: {q : Rat>=0}
+  条件: {q : 有理数>=0}
   结论: q < toNNRat p ↔ ↑q < p
   证明: NNRat.gi.gc.lt_iff_lt
 
@@ -1488,8 +1488,8 @@ definition Rat.nnabs
 @[norm_cast, simp]
 
 中文:
-定义 Rat.nnabs
-  签名: (x : Rat)
+定义 有理数.nnabs
+  签名: (x : 有理数)
   定义体: ⟨abs x, abs_nonneg x⟩
 
 @[norm_cast, simp]
@@ -1510,9 +1510,9 @@ theorem Rat.coe_nnabs
   proof: rfl
 
 中文:
-定理 Rat.coe_nnabs
-  条件: (x : Rat)
-  结论: (Rat.nnabs x : Rat) = abs x
+定理 有理数.coe_nnabs
+  条件: (x : 有理数)
+  结论: (有理数.nnabs x : 有理数) = abs x
   证明: rfl
 -/
 theorem Rat.coe_nnabs (x : Rat) : (Rat.nnabs x : Rat) = abs x := rfl
@@ -1536,8 +1536,8 @@ lemma num_coe
 
 中文:
 引理 num_coe
-  条件: (q : Rat>=0)
-  结论: (q : Rat).num = q.num
+  条件: (q : 有理数>=0)
+  结论: (q : 有理数).num = q.num
   证明: by
   simp only [num, Int.natCast_natAbs, Rat.num_nonneg, coe_nonneg, abs_of_nonneg]
 -/
@@ -1554,7 +1554,7 @@ theorem natAbs_num_coe
 
 中文:
 定理 natAbs_num_coe
-  结论: (q : Rat).num.natAbs = q.num
+  结论: (q : 有理数).num.natAbs = q.num
   证明: rfl
 -/
 theorem natAbs_num_coe : (q : Rat).num.natAbs = q.num := rfl
@@ -1569,7 +1569,7 @@ lemma den_coe
 
 中文:
 引理 den_coe
-  结论: (q : Rat).den = q.den
+  结论: (q : 有理数).den = q.den
   证明: rfl
 -/
 @[norm_cast] lemma den_coe : (q : Rat).den = q.den := rfl
@@ -1616,7 +1616,7 @@ lemma den_pos
 
 中文:
 引理 den_pos
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: 0 < q.den
   证明: Rat.den_pos _
 -/
@@ -1632,7 +1632,7 @@ lemma den_ne_zero
 
 中文:
 引理 den_ne_zero
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q.den != 0
   证明: Rat.den_ne_zero _
 -/
@@ -1649,7 +1649,7 @@ lemma coprime_num_den
 
 中文:
 引理 coprime_num_den
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q.num.Coprime q.den
   证明: by simpa [num, den] using Rat.reduced _
 
@@ -1701,7 +1701,7 @@ lemma num_ofNat
   proof: rfl
 
 中文:
-引理 num_ofNat
+引理 num_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: num of自然数(n) = Of自然数.of自然数 n
   证明: rfl
@@ -1720,7 +1720,7 @@ lemma den_ofNat
   proof: rfl
 
 中文:
-引理 den_ofNat
+引理 den_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: den of自然数(n) = 1
   证明: rfl
@@ -1779,7 +1779,7 @@ definition divNat
   body: ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩
 
 中文:
-定义 divNat
+定义 div自然数
   签名: (n d : 自然数)
   定义体: ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩
 
@@ -1800,9 +1800,9 @@ lemma coe_divNat
   proof: rfl
 
 中文:
-引理 coe_divNat
+引理 coe_div自然数
   条件: (n d : 自然数)
-  结论: (div自然数 n d : Rat) = .div整数 n d
+  结论: (div自然数 n d : 有理数) = .div整数 n d
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_divNat (n d : Nat) : (divNat n d : Rat) = .divInt n d := rfl
@@ -1816,7 +1816,7 @@ lemma mk_divInt
   proof: rfl
 
 中文:
-引理 mk_divInt
+引理 mk_div整数
   条件: (n d : 自然数)
   证明: rfl
 -/
@@ -1835,7 +1835,7 @@ lemma divNat_inj
   rw [← coe_inj]; simp [Rat.mkRat_eq_iff, h₁, h₂]; norm_cast
 
 中文:
-引理 divNat_inj
+引理 div自然数_inj
   条件: (h₁ : d₁ != 0) (h₂ : d₂ != 0)
   结论: div自然数 n₁ d₁ = div自然数 n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁
   证明: by
@@ -1857,7 +1857,7 @@ lemma divNat_zero
   proof: by simp [divNat]
 
 中文:
-引理 divNat_zero
+引理 div自然数_zero
   条件: (n : 自然数)
   结论: div自然数 n 0 = 0
   证明: by simp [divNat]
@@ -1874,8 +1874,8 @@ lemma num_divNat_den
   proof: ext by rw [← (q : Rat).mkRat_num_den']; simp [num_coe, den_coe]
 
 中文:
-引理 num_divNat_den
-  条件: (q : Rat>=0)
+引理 num_div自然数_den
+  条件: (q : 有理数>=0)
   结论: div自然数 q.num q.den = q
   证明: ext by rw [← (q : Rat).mkRat_num_den']; simp [num_coe, den_coe]
 -/
@@ -1892,9 +1892,9 @@ lemma natCast_eq_divNat
   proof: (num_divNat_den _).symm
 
 中文:
-引理 natCast_eq_divNat
+引理 natCast_eq_div自然数
   条件: (n : 自然数)
-  结论: (n : Rat>=0) = div自然数 n 1
+  结论: (n : 有理数>=0) = div自然数 n 1
   证明: (num_divNat_den _).symm
 
 Depends on / 依赖: num_divNat_den
@@ -1911,7 +1911,7 @@ lemma divNat_mul_divNat
   ext; push_cast; exact Rat.divInt_mul_divInt _ _
 
 中文:
-引理 divNat_mul_divNat
+引理 div自然数_mul_div自然数
   条件: (n₁ n₂ : 自然数) {d₁ d₂}
   证明: by
   ext; push_cast; exact Rat.divInt_mul_divInt _ _
@@ -1933,7 +1933,7 @@ lemma divNat_mul_left
   ext; push_cast; exact Rat.divInt_mul_left (mod_cast ha)
 
 中文:
-引理 divNat_mul_left
+引理 div自然数_mul_left
   条件: {a : 自然数} (ha : a != 0) (n d : 自然数)
   结论: div自然数 (a * n) (a * d) = div自然数 n d
   证明: by
@@ -1955,7 +1955,7 @@ lemma divNat_mul_right
   ext; push_cast; exact Rat.divInt_mul_right (mod_cast ha)
 
 中文:
-引理 divNat_mul_right
+引理 div自然数_mul_right
   条件: {a : 自然数} (ha : a != 0) (n d : 自然数)
   结论: div自然数 (n * a) (d * a) = div自然数 n d
   证明: by
@@ -1981,7 +1981,7 @@ lemma mul_den_eq_num
 
 中文:
 引理 mul_den_eq_num
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q * q.den = q.num
   证明: by
   ext
@@ -2006,7 +2006,7 @@ lemma den_mul_eq_num
 
 中文:
 引理 den_mul_eq_num
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q.den * q = q.num
   证明: by rw [mul_comm, mul_den_eq_num]
 
@@ -2027,7 +2027,7 @@ definition numDenCasesOn.{u}
 
 中文:
 定义 numDenCasesOn.{u}
-  签名: {C : Rat>=0 -> Sort u} (q) (H : 对任意 n d, d != 0 -> n.Coprime d -> C (div自然数 n d))
+  签名: {C : 有理数>=0 -> 类型层 u} (q) (H : 对任意 n d, d != 0 -> n.Coprime d -> C (div自然数 n d))
   定义体: by rw [← q.num_divNat_den]; exact H _ _ q.den_ne_zero q.coprime_num_den
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, coprime_num_den, den_ne_zero, inclusion, inf_le_right, injective, num_divNat_den, of_injective, q.coprime_num_den, q.den_ne_zero, q.num_divNat_den, toLinearMap
@@ -2047,7 +2047,7 @@ lemma add_def
 
 中文:
 引理 add_def
-  条件: (q r : Rat>=0)
+  条件: (q r : 有理数>=0)
   结论: q + r = div自然数 (q.num * r.den + r.num * q.den) (q.den * r.den)
   证明: by
   ext; simp [Rat.add_def', Rat.mkRat_eq_divInt, num_coe, den_coe]
@@ -2069,7 +2069,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  条件: (q r : Rat>=0)
+  条件: (q r : 有理数>=0)
   结论: q * r = div自然数 (q.num * r.num) (q.den * r.den)
   证明: by
   ext; simp [Rat.mul_eq_mkRat, Rat.mkRat_eq_divInt, num_coe, den_coe]
@@ -2091,7 +2091,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: {p q : Rat>=0}
+  条件: {p q : 有理数>=0}
   结论: p < q ↔ p.num * q.den < q.num * p.den
   证明: by
   rw [← NNRat.coe_lt_coe]; rw [Rat.lt_iff]; norm_cast
@@ -2113,7 +2113,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {p q : Rat>=0}
+  条件: {p q : 有理数>=0}
   结论: p <= q ↔ p.num * q.den <= q.num * p.den
   证明: by
   rw [← NNRat.coe_le_coe]; rw [Rat.le_iff]; norm_cast
@@ -2138,8 +2138,8 @@ lemma nnratCast_eq
 
 中文:
 引理 nnratCast_eq
-  条件: (a b : Rat>=0)
-  结论: a = b ↔ (a : Rat) = (b : Rat)
+  条件: (a b : 有理数>=0)
+  结论: a = b ↔ (a : 有理数) = (b : 有理数)
   证明: NNRat.coe_inj.symm
 -/
 @[qify_simps] lemma nnratCast_eq (a b : Rat>=0) : a = b ↔ (a : Rat) = (b : Rat) := NNRat.coe_inj.symm
@@ -2154,8 +2154,8 @@ lemma nnratCast_le
 
 中文:
 引理 nnratCast_le
-  条件: (a b : Rat>=0)
-  结论: a <= b ↔ (a : Rat) <= (b : Rat)
+  条件: (a b : 有理数>=0)
+  结论: a <= b ↔ (a : 有理数) <= (b : 有理数)
   证明: NNRat.coe_le_coe.symm
 -/
 @[qify_simps] lemma nnratCast_le (a b : Rat>=0) : a <= b ↔ (a : Rat) <= (b : Rat) := NNRat.coe_le_coe.symm
@@ -2170,8 +2170,8 @@ lemma nnratCast_lt
 
 中文:
 引理 nnratCast_lt
-  条件: (a b : Rat>=0)
-  结论: a < b ↔ (a : Rat) < (b : Rat)
+  条件: (a b : 有理数>=0)
+  结论: a < b ↔ (a : 有理数) < (b : 有理数)
   证明: NNRat.coe_lt_coe.symm
 -/
 @[qify_simps] lemma nnratCast_lt (a b : Rat>=0) : a < b ↔ (a : Rat) < (b : Rat) := NNRat.coe_lt_coe.symm
@@ -2186,8 +2186,8 @@ lemma nnratCast_ne
 
 中文:
 引理 nnratCast_ne
-  条件: (a b : Rat>=0)
-  结论: a != b ↔ (a : Rat) != (b : Rat)
+  条件: (a b : 有理数>=0)
+  结论: a != b ↔ (a : 有理数) != (b : 有理数)
   证明: NNRat.ne_iff.symm
 -/
 @[qify_simps] lemma nnratCast_ne (a b : Rat>=0) : a != b ↔ (a : Rat) != (b : Rat) := NNRat.ne_iff.symm

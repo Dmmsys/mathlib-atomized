@@ -45,7 +45,7 @@ definition subobjectModule
 
 中文:
 定义 subobjectModule
-  签名: : Subobject M ≃o Submodule R M
+  签名: : Subobject M ≃o 子模 R M
   定义体: OrderIso.symm
     { invFun := fun S => LinearMap.range S.arrow.hom
       toFun := fun N => Subobject.mk (ofHom N.subtype)
@@ -101,7 +101,7 @@ instance wellPowered_moduleCat
 
 中文:
 实例 wellPowered_moduleCat
-  签名: : WellPowered.{v} (ModuleCat.{v} R)
+  签名: : 良幂.{v} (模范畴.{v} R)
   定义体: ⟨fun M => ⟨⟨_, ⟨(subobjectModule M).toEquiv⟩⟩⟩⟩
 
 Depends on / 依赖: subobjectModule, toEquiv
@@ -123,7 +123,7 @@ definition toKernelSubobject
 
 中文:
 定义 toKernelSubobject
-  签名: {M N : ModuleCat.{v} R} {f : M ⟶ N}
+  签名: {M N : 模范畴.{v} R} {f : M ⟶ N}
   定义体: (kernelSubobjectIso f ≪≫ ModuleCat.kernelIsoKer f).inv.hom
 
 @[simp]
@@ -147,7 +147,7 @@ theorem toKernelSubobject_arrow
 
 中文:
 定理 toKernelSubobject_arrow
-  条件: {M N : ModuleCat R} {f : M ⟶ N} (x : LinearMap.ker f.hom)
+  条件: {M N : 模范畴 R} {f : M ⟶ N} (x : 线性映射.ker f.hom)
   证明: by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10959): the whole proof was just `simp [toKernelSubobject]`.
   simp [toKernelSubobject, -hom_comp, ← CategoryTheory.comp_apply]
@@ -169,7 +169,7 @@ theorem cokernel_π_imageSubobject_ext
 
 中文:
 定理 cokernel_π_imageSubobject_ext
-  结论: {L M N : ModuleCat.{v} R} (f : L ⟶ M) [HasImage f]
+  结论: {L M N : 模范畴.{v} R} (f : L ⟶ M) [有像 f]
   证明: by
   subst w
   simp

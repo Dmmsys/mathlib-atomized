@@ -28,7 +28,7 @@ definition _root_.Equiv.pnatEquivNat
   right_inv := Nat.natPred_succPNat
 
 中文:
-定义 _root_.Equiv.pnatEquivNat
+定义 _root_.等价.pnatEquiv自然数
   签名: : 自然数+ ≃ 自然数 where
   定义体: PNat.natPred
   invFun := Nat.succPNat

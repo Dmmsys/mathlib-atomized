@@ -43,7 +43,7 @@ theorem isFixedPt_of_tendsto_iterate
 
 中文:
 定理 isFixedPt_of_tendsto_iterate
-  结论: {x y : α} (hy : Tendsto (fun n => f^[n] x) atTop (𝓝 y))
+  结论: {x y : α} (hy : 收敛 (fun n => f^[n] x) atTop (𝓝 y))
   证明: by
   refine tendsto_nhds_unique ((tendsto_add_atTop_iff_nat 1).1 ?_) hy
   simp only [iterate_succ' f]
@@ -68,8 +68,8 @@ theorem isClosed_fixedPoints
 
 中文:
 定理 isClosed_fixedPoints
-  条件: (hf : Continuous f)
-  结论: IsClosed (fixedPoints f)
+  条件: (hf : 连续 f)
+  结论: 是闭集 (fixedPoints f)
   证明: isClosed_eq hf continuous_id
 
 Depends on / 依赖: continuous_id, isClosed_eq

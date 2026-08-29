@@ -35,8 +35,8 @@ instance [Nonempty
   body: Equiv.plift.nonempty
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (PLift α)
+实例 [非空
+  签名: α] : 非空 (命题层提升 α)
   定义体: Equiv.plift.nonempty
 
 Depends on / 依赖: Equiv.plift.nonempty, nonempty
@@ -53,8 +53,8 @@ instance [Unique
   body: Equiv.plift.unique
 
 中文:
-实例 [Unique
-  签名: α] : Unique (PLift α)
+实例 [唯一
+  签名: α] : 唯一 (命题层提升 α)
   定义体: Equiv.plift.unique
 
 Depends on / 依赖: Equiv.plift.unique, unique
@@ -72,7 +72,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : DecidableEq (PLift α)
+  签名: α] : DecidableEq (命题层提升 α)
   定义体: Equiv.plift.decidableEq
 
 Depends on / 依赖: Equiv.plift.decidableEq, decidableEq
@@ -89,8 +89,8 @@ instance [IsEmpty
   body: Equiv.plift.isEmpty
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (PLift α)
+实例 [是空
+  签名: α] : 是空 (命题层提升 α)
   定义体: Equiv.plift.isEmpty
 
 Depends on / 依赖: Equiv.plift.isEmpty, isEmpty
@@ -108,7 +108,7 @@ theorem up_injective
 
 中文:
 定理 up_injective
-  结论: Injective (@up α)
+  结论: 单射 (@up α)
   证明: Equiv.plift.symm.injective
 
 Depends on / 依赖: Equiv.plift.symm.injective, injective
@@ -126,7 +126,7 @@ theorem up_surjective
 
 中文:
 定理 up_surjective
-  结论: Surjective (@up α)
+  结论: 满射 (@up α)
   证明: Equiv.plift.symm.surjective
 
 Depends on / 依赖: Equiv.plift.symm.surjective, surjective
@@ -144,7 +144,7 @@ theorem up_bijective
 
 中文:
 定理 up_bijective
-  结论: Bijective (@up α)
+  结论: 双射 (@up α)
   证明: Equiv.plift.symm.bijective
 
 Depends on / 依赖: Equiv.plift.symm.bijective, bijective
@@ -179,7 +179,7 @@ theorem down_surjective
 
 中文:
 定理 down_surjective
-  结论: Surjective (@down α)
+  结论: 满射 (@down α)
   证明: Equiv.plift.surjective
 
 Depends on / 依赖: Equiv.plift.surjective, surjective
@@ -197,7 +197,7 @@ theorem down_bijective
 
 中文:
 定理 down_bijective
-  结论: Bijective (@down α)
+  结论: 双射 (@down α)
   证明: Equiv.plift.bijective
 
 Depends on / 依赖: Equiv.plift.bijective, bijective
@@ -218,9 +218,9 @@ theorem «forall»
 @[simp]
 
 中文:
-定理 «forall»
-  条件: {p : PLift α -> 命题}
-  结论: (对任意 x, p x) ↔ 对任意 x : α, p (PLift.up x)
+定理 «对任意»
+  条件: {p : 命题层提升 α -> 命题}
+  结论: (对任意 x, p x) ↔ 对任意 x : α, p (命题层提升.up x)
   证明: up_surjective.forall
 
 @[simp]
@@ -239,9 +239,9 @@ theorem «exists»
   proof: up_surjective.exists
 
 中文:
-定理 «exists»
-  条件: {p : PLift α -> 命题}
-  结论: (存在 x, p x) ↔ 存在 x : α, p (PLift.up x)
+定理 «存在»
+  条件: {p : 命题层提升 α -> 命题}
+  结论: (存在 x, p x) ↔ 存在 x : α, p (命题层提升.up x)
   证明: up_surjective.exists
 -/
 theorem «exists» {p : PLift α -> Prop} : (exists x, p x) ↔ exists x : α, p (PLift.up x) :=
@@ -257,7 +257,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  结论: Injective (PLift.map f) ↔ Injective f
+  结论: 单射 (命题层提升.map f) ↔ 单射 f
   证明: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
 -/
 @[simp] lemma map_injective : Injective (PLift.map f) ↔ Injective f :=
@@ -273,7 +273,7 @@ lemma map_surjective
 
 中文:
 引理 map_surjective
-  结论: Surjective (PLift.map f) ↔ Surjective f
+  结论: 满射 (命题层提升.map f) ↔ 满射 f
   证明: (down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
 -/
 @[simp] lemma map_surjective : Surjective (PLift.map f) ↔ Surjective f :=
@@ -289,7 +289,7 @@ lemma map_bijective
 
 中文:
 引理 map_bijective
-  结论: Bijective (PLift.map f) ↔ Bijective f
+  结论: 双射 (命题层提升.map f) ↔ 双射 f
   证明: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
 -/
 @[simp] lemma map_bijective : Bijective (PLift.map f) ↔ Bijective f :=
@@ -310,8 +310,8 @@ instance [Nonempty
   body: Equiv.ulift.nonempty
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (ULift α)
+实例 [非空
+  签名: α] : 非空 (类型层提升 α)
   定义体: Equiv.ulift.nonempty
 
 Depends on / 依赖: Equiv.ulift.nonempty, nonempty
@@ -328,8 +328,8 @@ instance [Unique
   body: Equiv.ulift.unique
 
 中文:
-实例 [Unique
-  签名: α] : Unique (ULift α)
+实例 [唯一
+  签名: α] : 唯一 (类型层提升 α)
   定义体: Equiv.ulift.unique
 
 Depends on / 依赖: Equiv.ulift.unique, unique
@@ -347,7 +347,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : DecidableEq (ULift α)
+  签名: α] : DecidableEq (类型层提升 α)
   定义体: Equiv.ulift.decidableEq
 
 Depends on / 依赖: Equiv.ulift.decidableEq, decidableEq
@@ -364,8 +364,8 @@ instance [IsEmpty
   body: Equiv.ulift.isEmpty
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (ULift α)
+实例 [是空
+  签名: α] : 是空 (类型层提升 α)
   定义体: Equiv.ulift.isEmpty
 
 Depends on / 依赖: Equiv.ulift.isEmpty, isEmpty
@@ -383,7 +383,7 @@ theorem up_injective
 
 中文:
 定理 up_injective
-  结论: Injective (@up α)
+  结论: 单射 (@up α)
   证明: Equiv.ulift.symm.injective
 
 Depends on / 依赖: Equiv.ulift.symm.injective, injective
@@ -401,7 +401,7 @@ theorem up_surjective
 
 中文:
 定理 up_surjective
-  结论: Surjective (@up α)
+  结论: 满射 (@up α)
   证明: Equiv.ulift.symm.surjective
 
 Depends on / 依赖: Equiv.ulift.symm.surjective, surjective
@@ -419,7 +419,7 @@ theorem up_bijective
 
 中文:
 定理 up_bijective
-  结论: Bijective (@up α)
+  结论: 双射 (@up α)
   证明: Equiv.ulift.symm.bijective
 
 Depends on / 依赖: Equiv.ulift.symm.bijective, bijective
@@ -454,7 +454,7 @@ theorem down_surjective
 
 中文:
 定理 down_surjective
-  结论: Surjective (@down α)
+  结论: 满射 (@down α)
   证明: Equiv.ulift.surjective
 
 Depends on / 依赖: Equiv.ulift.surjective, surjective
@@ -474,7 +474,7 @@ theorem down_bijective
 
 中文:
 定理 down_bijective
-  结论: Bijective (@down α)
+  结论: 双射 (@down α)
   证明: Equiv.ulift.bijective
 
 @[simp]
@@ -497,9 +497,9 @@ theorem «forall»
 @[simp]
 
 中文:
-定理 «forall»
-  条件: {p : ULift α -> 命题}
-  结论: (对任意 x, p x) ↔ 对任意 x : α, p (ULift.up x)
+定理 «对任意»
+  条件: {p : 类型层提升 α -> 命题}
+  结论: (对任意 x, p x) ↔ 对任意 x : α, p (类型层提升.up x)
   证明: up_surjective.forall
 
 @[simp]
@@ -518,9 +518,9 @@ theorem «exists»
   proof: up_surjective.exists
 
 中文:
-定理 «exists»
-  条件: {p : ULift α -> 命题}
-  结论: (存在 x, p x) ↔ 存在 x : α, p (ULift.up x)
+定理 «存在»
+  条件: {p : 类型层提升 α -> 命题}
+  结论: (存在 x, p x) ↔ 存在 x : α, p (类型层提升.up x)
   证明: up_surjective.exists
 -/
 theorem «exists» {p : ULift α -> Prop} : (exists x, p x) ↔ exists x : α, p (ULift.up x) :=
@@ -536,7 +536,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  结论: Injective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Injective f
+  结论: 单射 (类型层提升.map f : 类型层提升.{u'} α -> 类型层提升.{v'} β) ↔ 单射 f
   证明: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
 -/
 @[simp] lemma map_injective : Injective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Injective f :=
@@ -569,7 +569,7 @@ lemma map_bijective
 
 中文:
 引理 map_bijective
-  结论: Bijective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Bijective f
+  结论: 双射 (类型层提升.map f : 类型层提升.{u'} α -> 类型层提升.{v'} β) ↔ 双射 f
   证明: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
 
 @[ext]
@@ -591,7 +591,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (x y : ULift α) (h : x.down = y.down)
+  条件: (x y : 类型层提升 α) (h : x.down = y.down)
   结论: x = y
   证明: congrArg up h
 
@@ -612,7 +612,7 @@ lemma rec_update
 
 中文:
 引理 rec_update
-  结论: {β : ULift α -> 类型} [DecidableEq α]
+  结论: {β : 类型层提升 α -> 类型} [DecidableEq α]
   证明: Function.rec_update up_injective (ULift.rec ·) (fun _ _ => rfl) (fun
     | _, _, .up _, h => (h _ rfl).elim) _ _ _
 

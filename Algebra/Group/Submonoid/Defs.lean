@@ -68,8 +68,8 @@ class OneMemClass
     - one_mem : forall s : S, (1 : M) in s
 
 中文:
-类 OneMemClass
-  参数: (S : 类型) (M : outParam 类型) [One M] [SetLike S M]
+类 OneMem类
+  参数: (S : 类型) (M : outParam 类型) [幺 M] [集合状 S M]
   公理与运算 (1 个):
     - one_mem : 对任意 s : S, (1 : M) in s
 -/
@@ -89,8 +89,8 @@ class ZeroMemClass
     - zero_mem : forall s : S, (0 : M) in s
 
 中文:
-类 ZeroMemClass
-  参数: (S : 类型) (M : outParam 类型) [Zero M] [SetLike S M]
+类 ZeroMem类
+  参数: (S : 类型) (M : outParam 类型) [零 M] [集合状 S M]
   公理与运算 (1 个):
     - zero_mem : 对任意 s : S, (0 : M) in s
 
@@ -118,8 +118,8 @@ theorem OneMemClass.coe_nonempty
   proof: ⟨1, one_mem s⟩
 
 中文:
-定理 OneMemClass.coe_nonempty
-  条件: {S M : 类型} [One M] [SetLike S M] [OneMemClass S M] (s : S)
+定理 OneMem类.coe_nonempty
+  条件: {S M : 类型} [幺 M] [集合状 S M] [OneMem类 S M] (s : S)
   证明: ⟨1, one_mem s⟩
 
 Depends on / 依赖: one_mem
@@ -141,9 +141,9 @@ structure Submonoid
     - one_mem' : (1 : M) in carrier
 
 中文:
-结构 Submonoid
-  参数: (M : 类型) [MulOneClass M]
-  继承: Subsemigroup M
+结构 子幺半群
+  参数: (M : 类型) [MulOne类 M]
+  继承: 子半群 M
   公理与运算 (1 个):
     - one_mem' : (1 : M) in carrier
 -/
@@ -166,9 +166,9 @@ class SubmonoidClass
   (no additional axioms)
 
 中文:
-类 SubmonoidClass
-  参数: (S : 类型) (M : outParam 类型) [MulOneClass M] [SetLike S M]
-  继承: MulMemClass S M, OneMemClass S M
+类 子幺半群类
+  参数: (S : 类型) (M : outParam 类型) [MulOne类 M] [集合状 S M]
+  继承: MulMem类 S M, OneMem类 S M
   (无附加公理)
 -/
 class SubmonoidClass (S : Type*) (M : outParam Type*) [MulOneClass M] [SetLike S M] : Prop
@@ -187,9 +187,9 @@ structure AddSubmonoid
     - zero_mem' : (0 : M) in carrier
 
 中文:
-结构 AddSubmonoid
-  参数: (M : 类型) [AddZeroClass M]
-  继承: AddSubsemigroup M
+结构 加法子幺半群
+  参数: (M : 类型) [加法零类 M]
+  继承: 加法子半群 M
   公理与运算 (1 个):
     - zero_mem' : (0 : M) in carrier
 -/
@@ -213,9 +213,9 @@ class AddSubmonoidClass
   (no additional axioms)
 
 中文:
-类 AddSubmonoidClass
-  参数: (S : 类型) (M : outParam 类型) [AddZeroClass M] [SetLike S M]
-  继承: AddMemClass S M, ZeroMemClass S M
+类 加法子幺半群类
+  参数: (S : 类型) (M : outParam 类型) [加法零类 M] [集合状 S M]
+  继承: 加法Mem类 S M, ZeroMem类 S M
   (无附加公理)
 -/
 class AddSubmonoidClass (S : Type*) (M : outParam Type*) [AddZeroClass M] [SetLike S M] : Prop
@@ -233,7 +233,7 @@ theorem pow_mem
 
 中文:
 定理 pow_mem
-  结论: {M A} [Monoid M] [SetLike A M] [SubmonoidClass A M] {S : A} {x : M}
+  结论: {M A} [幺半群 M] [集合状 A M] [子幺半群类 A M] {S : A} {x : M}
 -/
 theorem pow_mem {M A} [Monoid M] [SetLike A M] [SubmonoidClass A M] {S : A} {x : M}
     (hx : x in S) : forall n : Nat, x ^ n in S
@@ -259,7 +259,7 @@ lemma toSubsemigroup_injective
 
 中文:
 引理 toSubsemigroup_injective
-  结论: (toSubsemigroup : Submonoid M -> Subsemigroup M).Injective
+  结论: (toSubsemigroup : 子幺半群 M -> 子半群 M).单射
   证明: fun ⟨s, hs⟩ ⟨t, ht⟩ => by congr!
 
 @[to_additive (attr := simp)]
@@ -281,7 +281,7 @@ lemma toSubsemigroup_inj
 
 中文:
 引理 toSubsemigroup_inj
-  条件: {s t : Submonoid M}
+  条件: {s t : 子幺半群 M}
   结论: s.toSubsemigroup = t.toSubsemigroup ↔ s = t
   证明: toSubsemigroup_injective.eq_iff
 
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Submonoid M) M
+  签名: 集合状 (子幺半群 M) M
   定义体: s.carrier
   coe_injective := SetLike.coe_injective.comp toSubsemigroup_injective
 
@@ -327,7 +327,7 @@ initialize_simps_projections AddSubmonoid (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Submonoid M)
+  签名: 偏序 (子幺半群 M)
   定义体: .ofSetLike (Submonoid M) M
 
 initialize_simps_projections Submonoid (carrier -> coe, as_prefix coe)
@@ -353,7 +353,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S M : 类型} [Monoid M] [SetLike S M] [SubmonoidClass S M] (s : S)
+  签名: {S M : 类型} [幺半群 M] [集合状 S M] [子幺半群类 S M] (s : S)
   定义体: ⟨⟨s, MulMemClass.mul_mem⟩, OneMemClass.one_mem s⟩
 
 @[to_additive]
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubmonoidClass (Submonoid M) M
+  签名: 子幺半群类 (子幺半群 M) M
   定义体: Submonoid.one_mem'
   mul_mem {s} := s.mul_mem'
 
@@ -408,7 +408,7 @@ theorem mem_toSubsemigroup
 
 中文:
 定理 mem_toSubsemigroup
-  条件: {s : Submonoid M} {x : M}
+  条件: {s : 子幺半群 M} {x : M}
   结论: x in s.toSubsemigroup ↔ x in s
   证明: Iff.rfl
 
@@ -433,7 +433,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Submonoid M} {x : M}
+  条件: {s : 子幺半群 M} {x : M}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -458,7 +458,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {s : Subsemigroup M} {x : M} (h_one)
+  条件: {s : 子半群 M} {x : M} (h_one)
   结论: x in mk s h_one ↔ x in s
   证明: Iff.rfl
 
@@ -483,8 +483,8 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: {s : Subsemigroup M} (h_one)
-  结论: (mk s h_one : Set M) = s
+  条件: {s : 子半群 M} (h_one)
+  结论: (mk s h_one : 集合 M) = s
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -504,7 +504,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {s t : Subsemigroup M} (h_one) (h_one')
+  条件: {s t : 子半群 M} (h_one) (h_one')
   结论: mk s h_one <= mk t h_one' ↔ s <= t
   证明: Iff.rfl
 
@@ -526,7 +526,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Submonoid M} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 子幺半群 M} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -549,7 +549,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Submonoid M) (s : Set M) (hs : s = S)
+  签名: (S : 子幺半群 M) (s : 集合 M) (hs : s = S)
   定义体: s
   one_mem' := show 1 in s from hs.symm ▸ S.one_mem'
   mul_mem' := hs.symm ▸ S.mul_mem'
@@ -575,8 +575,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: {s : Set M} (hs : s = S)
-  结论: (S.copy s hs : Set M) = s
+  条件: {s : 集合 M} (hs : s = S)
+  结论: (S.copy s hs : 集合 M) = s
   证明: rfl
 
 @[to_additive]
@@ -596,7 +596,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: {s : Set M} (hs : s = S)
+  条件: {s : 集合 M} (hs : s = S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -659,7 +659,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Submonoid M)
+  签名: 顶元素 (子幺半群 M)
   定义体: ⟨{ carrier := Set.univ
       one_mem' := Set.mem_univ 1
       mul_mem' := fun _ _ => Set.mem_univ _ }⟩
@@ -689,7 +689,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Submonoid M)
+  签名: 底元素 (子幺半群 M)
   定义体: ⟨{ carrier := {1}
       one_mem' := Set.mem_singleton 1
       mul_mem' := fun ha hb => by
@@ -720,7 +720,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Submonoid M)
+  签名: 可居 (子幺半群 M)
   定义体: ⟨⊥⟩
 
 @[to_additive (attr := simp)]
@@ -743,7 +743,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : M}
-  结论: x in (⊥ : Submonoid M) ↔ x = 1
+  结论: x in (⊥ : 子幺半群 M) ↔ x = 1
   证明: Set.mem_singleton_iff
 
 @[to_additive (attr := simp)]
@@ -768,7 +768,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : M)
-  结论: x in (⊤ : Submonoid M)
+  结论: x in (⊤ : 子幺半群 M)
   证明: Set.mem_univ x
 
 @[to_additive (attr := simp, norm_cast)]
@@ -791,7 +791,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Submonoid M) : Set M) = Set.univ
+  结论: ((⊤ : 子幺半群 M) : 集合 M) = 集合.univ
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -812,7 +812,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Submonoid M) : Set M) = {1}
+  结论: ((⊥ : 子幺半群 M) : 集合 M) = {1}
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -833,7 +833,7 @@ lemma mk_eq_top
 
 中文:
 引理 mk_eq_top
-  条件: (toSubsemigroup : Subsemigroup M) (one_mem')
+  条件: (toSubsemigroup : 子半群 M) (one_mem')
   证明: by simp [← SetLike.coe_set_eq]
 
 @[to_additive (attr := simp)]
@@ -855,7 +855,7 @@ lemma mk_eq_bot
 
 中文:
 引理 mk_eq_bot
-  条件: (toSubsemigroup : Subsemigroup M) (one_mem')
+  条件: (toSubsemigroup : 子半群 M) (one_mem')
   证明: by
   simp [← SetLike.coe_set_eq]
 
@@ -882,7 +882,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Submonoid M)
+  签名: 最小值 (子幺半群 M)
   定义体: ⟨fun S₁ S₂ =>
     { carrier := S₁ inter S₂
       one_mem' := ⟨S₁.one_mem, S₂.one_mem⟩
@@ -912,8 +912,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : Submonoid M)
-  结论: ((p ⊓ p' : Submonoid M) : Set M) = (p : Set M) inter p'
+  条件: (p p' : 子幺半群 M)
+  结论: ((p ⊓ p' : 子幺半群 M) : 集合 M) = (p : 集合 M) inter p'
   证明: rfl
 
 @[to_additive (attr := simp, grind =)]
@@ -935,7 +935,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : Submonoid M} {x : M}
+  条件: {p p' : 子幺半群 M} {x : M}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -964,7 +964,7 @@ mem_bot.mp Subsingleton.elim (⊤ : Submonoid M) ⊥ ▸ mem_top i
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (Submonoid M) ↔ Subsingleton M
+  结论: 子单例 (子幺半群 M) ↔ 子单例 M
   证明: ⟨fun _ =>
     ⟨fun x y =>
       have : forall i : M, i = 1 := fun i =>
@@ -999,7 +999,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (Submonoid M) ↔ Nontrivial M
+  结论: 非平凡 (子幺半群 M) ↔ 非平凡 M
   证明: not_iff_not.mp
     ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
       not_nontrivial_iff_subsingleton.symm)
@@ -1025,8 +1025,8 @@ instance [Subsingleton
 @[to_additive]
 
 中文:
-实例 [Subsingleton
-  签名: M] : Unique (Submonoid M)
+实例 [子单例
+  签名: M] : 唯一 (子幺半群 M)
   定义体: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
 
 @[to_additive]
@@ -1046,8 +1046,8 @@ instance [Nontrivial
   body: nontrivial_iff.mpr ‹_›
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nontrivial (Submonoid M)
+实例 [非平凡
+  签名: M] : 非平凡 (子幺半群 M)
   定义体: nontrivial_iff.mpr ‹_›
 
 Depends on / 依赖: nontrivial_iff, nontrivial_iff.mpr
@@ -1152,7 +1152,7 @@ theorem eq_of_eqOn_topM
 
 中文:
 定理 eq_of_eqOn_topM
-  条件: {f g : M ->* N} (h : Set.EqOn f g (⊤ : Submonoid M))
+  条件: {f g : M ->* N} (h : 集合.EqOn f g (⊤ : 子幺半群 M))
   结论: f = g
   证明: ext fun _ => h trivial
 -/
@@ -1181,7 +1181,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One S'
+  签名: : 幺 S'
   定义体: ⟨⟨1, OneMemClass.one_mem S'⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1244,7 +1244,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : S') = ⟨1, OneMemClass.one_mem S'⟩
+  结论: (1 : S') = ⟨1, OneMem类.one_mem S'⟩
   证明: rfl
 -/
 theorem one_def : (1 : S') = ⟨1, OneMemClass.one_mem S'⟩ :=
@@ -1270,7 +1270,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: {M} [Monoid M] {A : 类型} [SetLike A M] [SubmonoidClass A M] (S : A)
+  签名: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] (S : A)
   定义体: ⟨fun a n => ⟨a.1 ^ n, pow_mem a.2 n⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1293,7 +1293,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  结论: {M} [Monoid M] {A : 类型} [SetLike A M] [SubmonoidClass A M] {S : A} (x : S)
+  结论: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] {S : A} (x : S)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1313,7 +1313,7 @@ theorem mk_pow
 
 中文:
 定理 mk_pow
-  结论: {M} [Monoid M] {A : 类型} [SetLike A M] [SubmonoidClass A M] {S : A} (x : M)
+  结论: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] {S : A} (x : M)
   证明: rfl
 -/
 theorem mk_pow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : A} (x : M)
@@ -1420,7 +1420,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (SubmonoidClass.subtype S' : S' -> M) = Subtype.val
+  结论: (子幺半群类.subtype S' : S' -> M) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (SubmonoidClass.subtype S' : S' -> M) = Subtype.val :=
@@ -1444,7 +1444,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul S
+  签名: : 乘法 S
   定义体: ⟨fun a b => ⟨a.1 * b.1, S.mul_mem a.2 b.2⟩⟩
 
 Depends on / 依赖: S.mul_mem, mul_mem
@@ -1466,7 +1466,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One S
+  签名: : 幺 S
   定义体: ⟨⟨_, S.one_mem⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1621,7 +1621,7 @@ instance toMulOneClass
 
 中文:
 实例 toMulOneClass
-  签名: {M : 类型} [MulOneClass M] (S : Submonoid M)
+  签名: {M : 类型} [MulOne类 M] (S : 子幺半群 M)
   定义体: SubmonoidClass.toMulOneClass S
 
 @[to_additive]
@@ -1642,7 +1642,7 @@ theorem pow_mem
 
 中文:
 定理 pow_mem
-  条件: {M : 类型} [Monoid M] (S : Submonoid M) {x : M} (hx : x in S) (n : 自然数)
+  条件: {M : 类型} [幺半群 M] (S : 子幺半群 M) {x : M} (hx : x in S) (n : 自然数)
   证明: pow_mem hx n
 -/
 protected theorem pow_mem {M : Type*} [Monoid M] (S : Submonoid M) {x : M} (hx : x in S) (n : Nat) :
@@ -1661,7 +1661,7 @@ instance toMonoid
 
 中文:
 实例 toMonoid
-  签名: {M : 类型} [Monoid M] (S : Submonoid M)
+  签名: {M : 类型} [幺半群 M] (S : 子幺半群 M)
   定义体: SubmonoidClass.toMonoid S
 
 Depends on / 依赖: SubmonoidClass, SubmonoidClass.toMonoid, toMonoid
@@ -1681,7 +1681,7 @@ instance toCommMonoid
 
 中文:
 实例 toCommMonoid
-  签名: {M} [CommMonoid M] (S : Submonoid M)
+  签名: {M} [交换幺半群 M] (S : 子幺半群 M)
   定义体: SubmonoidClass.toCommMonoid S
 
 Depends on / 依赖: SubmonoidClass, SubmonoidClass.toCommMonoid, toCommMonoid
@@ -1726,7 +1726,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: {s : Submonoid M} (x : s)
+  条件: {s : 子幺半群 M} (x : s)
   证明: rfl
 
 @[to_additive]
@@ -1747,7 +1747,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (s : Submonoid M)
+  条件: (s : 子幺半群 M)
   证明: Subtype.coe_injective
 
 @[to_additive (attr := simp)]
@@ -1769,7 +1769,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: ⇑S.subtype = Subtype.val
+  结论: ⇑S.subtype = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : ⇑S.subtype = Subtype.val :=

@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable BinaryTree
+  签名: 可遍历 BinaryTree
   定义体: map
   traverse := traverse
 -/
@@ -126,7 +126,7 @@ lemma naturality
 
 中文:
 引理 naturality
-  结论: {F G : 类型u -> 类型} [Applicative F] [Applicative G] [LawfulApplicative F]
+  结论: {F G : 类型u -> 类型} [适用 F] [适用 G] [合法适用 F]
   证明: by
   induction t with
   | nil => rw [traverse, traverse, η.preserves_pure]
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable BinaryTree
+  签名: 合法可遍历 BinaryTree
   定义体: rfl
   id_map := id_map
   comp_map := comp_map

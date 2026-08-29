@@ -60,7 +60,7 @@ theorem arcsin_mem_Icc
 中文:
 定理 arcsin_mem_Icc
   条件: (x : 实数)
-  结论: arcsin x in Icc (-(π / 2)) (π / 2)
+  结论: arcsin x in 闭区间 (-(π / 2)) (π / 2)
   证明: Subtype.coe_prop _
 
 Depends on / 依赖: Subtype, Subtype.coe_prop, coe_prop
@@ -83,7 +83,7 @@ theorem range_arcsin
 
 中文:
 定理 range_arcsin
-  结论: range arcsin = Icc (-(π / 2)) (π / 2)
+  结论: range arcsin = 闭区间 (-(π / 2)) (π / 2)
   证明: by
   rw [arcsin]; rw [range_comp Subtype.val]
   ext
@@ -170,7 +170,7 @@ theorem sin_arcsin'
 
 中文:
 定理 sin_arcsin'
-  条件: {x : 实数} (hx : x in Icc (-1 : 实数) 1)
+  条件: {x : 实数} (hx : x in 闭区间 (-1 : 实数) 1)
   结论: sin (arcsin x) = x
   证明: by
   simpa [arcsin, IccExtend_of_mem _ _ hx, -OrderIso.apply_symm_apply] using
@@ -213,7 +213,7 @@ theorem arcsin_sin'
 
 中文:
 定理 arcsin_sin'
-  条件: {x : 实数} (hx : x in Icc (-(π / 2)) (π / 2))
+  条件: {x : 实数} (hx : x in 闭区间 (-(π / 2)) (π / 2))
   结论: arcsin (sin x) = x
   证明: injOn_sin (arcsin_mem_Icc _) hx by rw [sin_arcsin (neg_one_le_sin _) (sin_le_one _)]
 
@@ -255,7 +255,7 @@ theorem strictMonoOn_arcsin
 
 中文:
 定理 strictMonoOn_arcsin
-  结论: StrictMonoOn arcsin (Icc (-1) 1)
+  结论: StrictMonoOn arcsin (闭区间 (-1) 1)
   证明: (Subtype.strictMono_coe _).comp_strictMonoOn
     sinOrderIso.symm.strictMono.strictMonoOn_IccExtend _
 
@@ -299,7 +299,7 @@ theorem monotone_arcsin
 
 中文:
 定理 monotone_arcsin
-  结论: Monotone arcsin
+  结论: 递增 arcsin
   证明: (Subtype.mono_coe _).comp sinOrderIso.symm.monotone.IccExtend _
 
 @[gcongr]
@@ -339,7 +339,7 @@ theorem injOn_arcsin
 
 中文:
 定理 injOn_arcsin
-  结论: InjOn arcsin (Icc (-1) 1)
+  结论: 单射限制 arcsin (闭区间 (-1) 1)
   证明: strictMonoOn_arcsin.injOn
 
 Depends on / 依赖: strictMonoOn_arcsin, strictMonoOn_arcsin.injOn
@@ -383,7 +383,7 @@ theorem continuous_arcsin
 
 中文:
 定理 continuous_arcsin
-  结论: Continuous arcsin
+  结论: 连续 arcsin
   证明: continuous_subtype_val.comp sinOrderIso.symm.continuous.Icc_extend'
 
 @[fun_prop]
@@ -428,7 +428,7 @@ theorem arcsin_eq_of_sin_eq
 
 中文:
 定理 arcsin_eq_of_sin_eq
-  条件: {x y : 实数} (h₁ : sin x = y) (h₂ : x in Icc (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (h₁ : sin x = y) (h₂ : x in 闭区间 (-(π / 2)) (π / 2))
   证明: by
   subst y
   exact injOn_sin (arcsin_mem_Icc _) h₂ (sin_arcsin' (sin_mem_Icc x))
@@ -605,7 +605,7 @@ theorem arcsin_le_iff_le_sin
 
 中文:
 定理 arcsin_le_iff_le_sin
-  条件: {x y : 实数} (hx : x in Icc (-1 : 实数) 1) (hy : y in Icc (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hx : x in 闭区间 (-1 : 实数) 1) (hy : y in 闭区间 (-(π / 2)) (π / 2))
   证明: by
   rw [← arcsin_sin' hy]; rw [strictMonoOn_arcsin.le_iff_le hx (sin_mem_Icc _)]; rw [arcsin_sin' hy]
 
@@ -630,7 +630,7 @@ theorem arcsin_le_iff_le_sin'
 
 中文:
 定理 arcsin_le_iff_le_sin'
-  条件: {x y : 实数} (hy : y in Ico (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hy : y in 左闭右开区间 (-(π / 2)) (π / 2))
   证明: by
   rcases le_total x (-1) with hx₁ | hx₁
   · simp [arcsin_of_le_neg_one hx₁, hy.1, hx₁.trans (neg_one_le_sin _)]
@@ -659,7 +659,7 @@ theorem le_arcsin_iff_sin_le
 
 中文:
 定理 le_arcsin_iff_sin_le
-  条件: {x y : 实数} (hx : x in Icc (-(π / 2)) (π / 2)) (hy : y in Icc (-1 : 实数) 1)
+  条件: {x y : 实数} (hx : x in 闭区间 (-(π / 2)) (π / 2)) (hy : y in 闭区间 (-1 : 实数) 1)
   证明: by
   rw [← neg_le_neg_iff]; rw [← arcsin_neg]; rw [arcsin_le_iff_le_sin ⟨neg_le_neg hy.2]; rw [neg_le.2 hy.1⟩ ⟨neg_le_neg hx.2]; rw [neg_le.2 hx.1⟩]; rw [sin_neg]; rw [neg_le_neg_iff]
 
@@ -680,7 +680,7 @@ theorem le_arcsin_iff_sin_le'
 
 中文:
 定理 le_arcsin_iff_sin_le'
-  条件: {x y : 实数} (hx : x in Ioc (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hx : x in 左开右闭区间 (-(π / 2)) (π / 2))
   证明: by
   rw [← neg_le_neg_iff]; rw [← arcsin_neg]; rw [arcsin_le_iff_le_sin' ⟨neg_le_neg hx.2]; rw [neg_lt.2 hx.1⟩]; rw [sin_neg]; rw [neg_le_neg_iff]
 
@@ -700,7 +700,7 @@ theorem arcsin_lt_iff_lt_sin
 
 中文:
 定理 arcsin_lt_iff_lt_sin
-  条件: {x y : 实数} (hx : x in Icc (-1 : 实数) 1) (hy : y in Icc (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hx : x in 闭区间 (-1 : 实数) 1) (hy : y in 闭区间 (-(π / 2)) (π / 2))
   证明: not_le.symm.trans (not_congr <| le_arcsin_iff_sin_le hy hx).trans not_le
 
 Depends on / 依赖: le_arcsin_iff_sin_le, not_congr, not_le, not_le.symm.trans
@@ -719,7 +719,7 @@ theorem arcsin_lt_iff_lt_sin'
 
 中文:
 定理 arcsin_lt_iff_lt_sin'
-  条件: {x y : 实数} (hy : y in Ioc (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hy : y in 左开右闭区间 (-(π / 2)) (π / 2))
   证明: not_le.symm.trans (not_congr <| le_arcsin_iff_sin_le' hy).trans not_le
 
 Depends on / 依赖: le_arcsin_iff_sin_le, not_congr, not_le, not_le.symm.trans
@@ -738,7 +738,7 @@ theorem lt_arcsin_iff_sin_lt
 
 中文:
 定理 lt_arcsin_iff_sin_lt
-  条件: {x y : 实数} (hx : x in Icc (-(π / 2)) (π / 2)) (hy : y in Icc (-1 : 实数) 1)
+  条件: {x y : 实数} (hx : x in 闭区间 (-(π / 2)) (π / 2)) (hy : y in 闭区间 (-1 : 实数) 1)
   证明: not_le.symm.trans (not_congr <| arcsin_le_iff_le_sin hy hx).trans not_le
 
 Depends on / 依赖: arcsin_le_iff_le_sin, not_congr, not_le, not_le.symm.trans
@@ -757,7 +757,7 @@ theorem lt_arcsin_iff_sin_lt'
 
 中文:
 定理 lt_arcsin_iff_sin_lt'
-  条件: {x y : 实数} (hx : x in Ico (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hx : x in 左闭右开区间 (-(π / 2)) (π / 2))
   证明: not_le.symm.trans (not_congr <| arcsin_le_iff_le_sin' hx).trans not_le
 
 Depends on / 依赖: arcsin_le_iff_le_sin, not_congr, not_le, not_le.symm.trans
@@ -780,7 +780,7 @@ theorem arcsin_eq_iff_eq_sin
 
 中文:
 定理 arcsin_eq_iff_eq_sin
-  条件: {x y : 实数} (hy : y in Ioo (-(π / 2)) (π / 2))
+  条件: {x y : 实数} (hy : y in 开区间 (-(π / 2)) (π / 2))
   证明: by
   simp only [le_antisymm_iff, arcsin_le_iff_le_sin' (mem_Ico_of_Ioo hy),
     le_arcsin_iff_sin_le' (mem_Ioc_of_Ioo hy)]
@@ -1501,7 +1501,7 @@ theorem strictAntiOn_arccos
 
 中文:
 定理 strictAntiOn_arccos
-  结论: StrictAntiOn arccos (Icc (-1) 1)
+  结论: StrictAntiOn arccos (闭区间 (-1) 1)
   证明: fun _ hx _ hy h =>
   sub_lt_sub_left (strictMonoOn_arcsin hx hy h) _
 
@@ -1566,7 +1566,7 @@ theorem antitone_arccos
 
 中文:
 定理 antitone_arccos
-  结论: Antitone arccos
+  结论: 递减 arccos
   证明: fun _ _ => arccos_le_arccos
 
 Depends on / 依赖: arccos_le_arccos
@@ -1583,7 +1583,7 @@ theorem arccos_injOn
 
 中文:
 定理 arccos_injOn
-  结论: InjOn arccos (Icc (-1) 1)
+  结论: 单射限制 arccos (闭区间 (-1) 1)
   证明: strictAntiOn_arccos.injOn
 
 Depends on / 依赖: strictAntiOn_arccos, strictAntiOn_arccos.injOn
@@ -1978,7 +1978,7 @@ theorem continuous_arccos
 
 中文:
 定理 continuous_arccos
-  结论: Continuous arccos
+  结论: 连续 arccos
   证明: continuous_const.sub continuous_arcsin
 
 Depends on / 依赖: continuous_arcsin, continuous_const, continuous_const.sub
@@ -2131,7 +2131,7 @@ definition sinPartialEquiv
 
 中文:
 定义 sinPartialEquiv
-  签名: : PartialEquiv 实数 实数 where
+  签名: : 部分等价 实数 实数 where
   定义体: sin
   invFun := arcsin
   source := Icc (-(π / 2)) (π / 2)
@@ -2163,7 +2163,7 @@ theorem mapsTo_sin_Ioo
 
 中文:
 定理 mapsTo_sin_Ioo
-  结论: MapsTo sin (Ioo (-(π / 2)) (π / 2)) (Ioo (-1) 1)
+  结论: 映射到 sin (开区间 (-(π / 2)) (π / 2)) (开区间 (-1) 1)
   证明: sinPartialHomeomorph.map_source'
 
 @[simp]
@@ -2185,7 +2185,7 @@ lemma arcsin_image_Icc
 
 中文:
 引理 arcsin_image_Icc
-  结论: arcsin '' Set.Icc (-1) 1 = Set.Icc (-(π / 2)) (π / 2)
+  结论: arcsin '' 集合.闭区间 (-1) 1 = 集合.闭区间 (-(π / 2)) (π / 2)
   证明: by
   simpa using sinPartialEquiv.symm.image_source_eq_target
 
@@ -2258,7 +2258,7 @@ definition cosPartialEquiv
 
 中文:
 定义 cosPartialEquiv
-  签名: : PartialEquiv 实数 实数 where
+  签名: : 部分等价 实数 实数 where
   定义体: cos θ
   invFun x := arccos x
   source := Icc 0 π
@@ -2292,7 +2292,7 @@ theorem mapsTo_cos_Ioo
 
 中文:
 定理 mapsTo_cos_Ioo
-  结论: MapsTo cos (Ioo 0 π) (Ioo (-1) 1)
+  结论: 映射到 cos (开区间 0 π) (开区间 (-1) 1)
   证明: cosPartialHomeomorph.map_source'
 
 @[simp]
@@ -2313,7 +2313,7 @@ lemma arccos_image_Icc
 
 中文:
 引理 arccos_image_Icc
-  结论: arccos '' Icc (-1) 1 = Icc 0 π
+  结论: arccos '' 闭区间 (-1) 1 = 闭区间 0 π
   证明: by
   simpa using cosPartialEquiv.symm.image_source_eq_target
 
@@ -2345,8 +2345,8 @@ theorem arcsin
 
 中文:
 定理 arcsin
-  条件: (h : Tendsto f l (𝓝 x))
-  结论: Tendsto (arcsin <| f ·) l (𝓝 (arcsin x))
+  条件: (h : 收敛 f l (𝓝 x))
+  结论: 收敛 (arcsin <| f ·) l (𝓝 (arcsin x))
   证明: (continuous_arcsin.tendsto _).comp h
 -/
 protected theorem arcsin (h : Tendsto f l (𝓝 x)) : Tendsto (arcsin <| f ·) l (𝓝 (arcsin x)) :=
@@ -2364,7 +2364,7 @@ theorem arcsin_nhdsLE
 
 中文:
 定理 arcsin_nhdsLE
-  条件: (h : Tendsto f l (𝓝[<=] x))
+  条件: (h : 收敛 f l (𝓝[<=] x))
   证明: by
   refine ((continuous_arcsin.tendsto _).inf <| MapsTo.tendsto fun y hy => ?_).comp h
   exact monotone_arcsin hy
@@ -2387,8 +2387,8 @@ theorem arcsin_nhdsGE
 
 中文:
 定理 arcsin_nhdsGE
-  条件: (h : Tendsto f l (𝓝[>=] x))
-  结论: Tendsto (arcsin <| f ·) l (𝓝[>=] (arcsin x))
+  条件: (h : 收敛 f l (𝓝[>=] x))
+  结论: 收敛 (arcsin <| f ·) l (𝓝[>=] (arcsin x))
   证明: ((continuous_arcsin.tendsto _).inf <| MapsTo.tendsto fun _ => arcsin_le_arcsin).comp h
 
 Depends on / 依赖: MapsTo, MapsTo.tendsto, arcsin_le_arcsin, continuous_arcsin, continuous_arcsin.tendsto, tendsto
@@ -2407,8 +2407,8 @@ theorem arccos
 
 中文:
 定理 arccos
-  条件: (h : Tendsto f l (𝓝 x))
-  结论: Tendsto (arccos <| f ·) l (𝓝 (arccos x))
+  条件: (h : 收敛 f l (𝓝 x))
+  结论: 收敛 (arccos <| f ·) l (𝓝 (arccos x))
   证明: (continuous_arccos.tendsto _).comp h
 -/
 protected theorem arccos (h : Tendsto f l (𝓝 x)) : Tendsto (arccos <| f ·) l (𝓝 (arccos x)) :=
@@ -2425,8 +2425,8 @@ theorem arccos_nhdsLE
 
 中文:
 定理 arccos_nhdsLE
-  条件: (h : Tendsto f l (𝓝[<=] x))
-  结论: Tendsto (arccos <| f ·) l (𝓝[>=] (arccos x))
+  条件: (h : 收敛 f l (𝓝[<=] x))
+  结论: 收敛 (arccos <| f ·) l (𝓝[>=] (arccos x))
   证明: ((continuous_arccos.tendsto _).inf <| MapsTo.tendsto fun _ => arccos_le_arccos).comp h
 
 Depends on / 依赖: MapsTo, MapsTo.tendsto, arccos_le_arccos, continuous_arccos, continuous_arccos.tendsto, tendsto
@@ -2447,7 +2447,7 @@ theorem arccos_nhdsGE
 
 中文:
 定理 arccos_nhdsGE
-  条件: (h : Tendsto f l (𝓝[>=] x))
+  条件: (h : 收敛 f l (𝓝[>=] x))
   证明: by
   refine ((continuous_arccos.tendsto _).inf <| MapsTo.tendsto fun y hy => ?_).comp h
   push _ in _ at hy ⊢
@@ -2527,9 +2527,9 @@ theorem Continuous.arcsin
   proof: continuous_arcsin.comp h
 
 中文:
-定理 Continuous.arcsin
-  条件: (h : Continuous f)
-  结论: Continuous (arcsin <| f ·)
+定理 连续.arcsin
+  条件: (h : 连续 f)
+  结论: 连续 (arcsin <| f ·)
   证明: continuous_arcsin.comp h
 -/
 protected theorem Continuous.arcsin (h : Continuous f) : Continuous (arcsin <| f ·) :=
@@ -2545,9 +2545,9 @@ theorem Continuous.arccos
   proof: continuous_arccos.comp h
 
 中文:
-定理 Continuous.arccos
-  条件: (h : Continuous f)
-  结论: Continuous (arccos <| f ·)
+定理 连续.arccos
+  条件: (h : 连续 f)
+  结论: 连续 (arccos <| f ·)
   证明: continuous_arccos.comp h
 -/
 protected theorem Continuous.arccos (h : Continuous f) : Continuous (arccos <| f ·) :=

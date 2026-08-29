@@ -62,12 +62,12 @@ structure Algebra.Presentation
     - span_range_relation_eq_ker : Ideal.span (Set.range relation) = toGenerators.ker
 
 中文:
-结构 Algebra.Presentation
-  参数: extends Algebra.Generators R S ι
-  继承: Algebra.Generators R S ι
+结构 代数.呈现
+  参数: extends 代数.生成元 R S ι
+  继承: 代数.生成元 R S ι
   公理与运算 (2 个):
-    - relation : σ -> toGenerators.Ring
-    - span_range_relation_eq_ker : Ideal.span (Set.range relation) = toGenerators.ker
+    - relation : σ -> toGenerators.环
+    - span_range_relation_eq_ker : 理想.span (集合.range relation) = toGenerators.ker
 -/
 structure Algebra.Presentation extends Algebra.Generators R S ι where
   /-- The assignment of each relation to a polynomial in the generators. -/
@@ -144,8 +144,8 @@ abbreviation Quotient
   body: P.Ring ⧸ P.ker
 
 中文:
-缩写 Quotient
-  签名: : Type (max w u)
+缩写 商
+  签名: : 类型 (最大值 w u)
   定义体: P.Ring ⧸ P.ker
 -/
 protected abbrev Quotient : Type (max w u) := P.Ring ⧸ P.ker
@@ -163,7 +163,7 @@ definition quotientEquiv
 
 中文:
 定义 quotientEquiv
-  签名: : P.Quotient ≃ₐ[P.Ring] S
+  签名: : P.商 ≃ₐ[P.环] S
   定义体: Ideal.quotientKerAlgEquivOfRightInverse (f := Algebra.ofId P.Ring S) (g := P.σ) fun x => by
     rw [Algebra.ofId_apply]; rw [P.algebraMap_apply]; rw [P.aeval_val_σ]
 
@@ -189,8 +189,8 @@ lemma quotientEquiv_mk
 
 中文:
 引理 quotientEquiv_mk
-  条件: (p : P.Ring)
-  结论: P.quotientEquiv p = algebraMap P.Ring S p
+  条件: (p : P.环)
+  结论: P.quotientEquiv p = algebraMap P.环 S p
   证明: rfl
 
 @[simp]
@@ -237,7 +237,7 @@ definition dimension
 
 中文:
 定义 dimension
-  签名: (P : Presentation R S ι σ)
+  签名: (P : 呈现 R S ι σ)
   定义体: Nat.card ι - Nat.card σ
 
 Depends on / 依赖: Nat.card
@@ -258,7 +258,7 @@ lemma fg_ker
 
 中文:
 引理 fg_ker
-  条件: [Finite σ]
+  条件: [有限 σ]
   结论: P.ker.FG
   证明: by
   use (Set.finite_range P.relation).toFinset
@@ -279,8 +279,8 @@ instance [Finite
   body: FinitePresentation.quotient P.fg_ker
 
 中文:
-实例 [Finite
-  签名: σ] [Finite ι] : FinitePresentation R P.Quotient
+实例 [有限
+  签名: σ] [有限 ι] : 有限呈现 R P.商
   定义体: FinitePresentation.quotient P.fg_ker
 
 Depends on / 依赖: FinitePresentation, FinitePresentation.quotient, P.fg_ker, fg_ker, quotient
@@ -298,7 +298,7 @@ lemma finitePresentation_of_isFinite
 
 中文:
 引理 finitePresentation_of_isFinite
-  条件: [Finite σ] [Finite ι] (P : Presentation R S ι σ)
+  条件: [有限 σ] [有限 ι] (P : 呈现 R S ι σ)
   证明: FinitePresentation.equiv (P.quotientEquiv.restrictScalars R)
 
 Depends on / 依赖: FinitePresentation, FinitePresentation.equiv, P.quotientEquiv.restrictScalars, quotientEquiv, restrictScalars
@@ -322,8 +322,8 @@ lemma exists_presentation_fin
   letI H' := Submodule.fg
 
 中文:
-引理 exists_presentation_fin
-  条件: [FinitePresentation R S]
+引理 存在_presentation_fin
+  条件: [有限呈现 R S]
   证明: letI H := FinitePresentation.out (R := R) (A := S)
   letI n : Nat := H.choose
   letI f : MvPolynomial (Fin n) R ->ₐ[R] S := H.choose_spec.choose
@@ -362,7 +362,7 @@ definition ofFinitePresentationVars
 
 中文:
 定义 ofFinitePresentationVars
-  签名: [FinitePresentation R S]
+  签名: [有限呈现 R S]
   定义体: (exists_presentation_fin R S).choose
 
 Depends on / 依赖: exists_presentation_fin
@@ -383,7 +383,7 @@ definition ofFinitePresentationRels
 
 中文:
 定义 ofFinitePresentationRels
-  签名: [FinitePresentation R S]
+  签名: [有限呈现 R S]
   定义体: (exists_presentation_fin R S).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, exists_presentation_fin
@@ -404,7 +404,7 @@ definition ofFinitePresentation
 
 中文:
 定义 ofFinitePresentation
-  签名: [FinitePresentation R S]
+  签名: [有限呈现 R S]
   定义体: (exists_presentation_fin R S).choose_spec.choose_spec.some
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.some, exists_presentation_fin
@@ -431,7 +431,7 @@ definition ofAlgEquiv
 
 中文:
 定义 ofAlgEquiv
-  签名: (P : Presentation R S ι σ) {T : 类型} [CommRing T] [Algebra R T]
+  签名: (P : 呈现 R S ι σ) {T : 类型} [交换环 T] [代数 R T]
   定义体: Generators.ofAlgEquiv P.toGenerators e
   relation i := P.relation i
   span_range_relation_eq_ker := by simp [P.span_range_relation_eq_ker]
@@ -458,7 +458,7 @@ lemma dimension_ofAlgEquiv
 
 中文:
 引理 dimension_ofAlgEquiv
-  结论: (P : Presentation R S ι σ) {T : 类型} [CommRing T] [Algebra R T]
+  结论: (P : 呈现 R S ι σ) {T : 类型} [交换环 T] [代数 R T]
   证明: rfl
 -/
 lemma dimension_ofAlgEquiv (P : Presentation R S ι σ) {T : Type*} [CommRing T] [Algebra R T]
@@ -483,7 +483,7 @@ definition ofBijectiveAlgebraMap
 
 中文:
 定义 ofBijectiveAlgebraMap
-  签名: (h : Function.Bijective (algebraMap R S))
+  签名: (h : 函数.双射 (algebraMap R S))
   定义体: Generators.ofSurjectiveAlgebraMap h.surjective
   relation := PEmpty.elim
   span_range_relation_eq_ker := by
@@ -518,7 +518,7 @@ lemma ofBijectiveAlgebraMap_dimension
 
 中文:
 引理 ofBijectiveAlgebraMap_dimension
-  条件: (h : Function.Bijective (algebraMap R S))
+  条件: (h : 函数.双射 (algebraMap R S))
   证明: by
   simp [dimension]
 
@@ -539,7 +539,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Presentation R R PEmpty.{w + 1} PEmpty.{t + 1}
+  签名: : 呈现 R R 命题空.{w + 1} 命题空.{t + 1}
   定义体: ofBijectiveAlgebraMap Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id, ofBijectiveAlgebraMap
@@ -557,7 +557,7 @@ lemma id_dimension
 
 中文:
 引理 id_dimension
-  结论: (Presentation.id R).dimension = 0
+  结论: (呈现.id R).dimension = 0
   证明: ofBijectiveAlgebraMap_dimension (R := R) Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id, ofBijectiveAlgebraMap_dimension
@@ -585,7 +585,7 @@ lemma _root_.Algebra.Generators.ker_localizationAway
       AlgEquiv.coe_toAlgHom, 
 
 中文:
-引理 _root_.Algebra.Generators.ker_localizationAway
+引理 _root_.代数.生成元.ker_localizationAway
   证明: by
   have : aeval (S₁ := S) (Generators.localizationAway S r).val =
       (mvPolynomialQuotientEquiv S r).toAlgHom.comp
@@ -630,7 +630,7 @@ definition localizationAway
 
 中文:
 定义 localizationAway
-  签名: : Presentation R S Unit Unit where
+  签名: : 呈现 R S 单元 单元 where
   定义体: Generators.localizationAway S r
   relation _ := C r * X () - 1
   span_range_relation_eq_ker := by
@@ -677,7 +677,7 @@ lemma _root_.Algebra.Generators.C_mul_X_sub_one_mem_ker
   proof: (Presentation.localizationAway S r).relation_mem_ker ()
 
 中文:
-引理 _root_.Algebra.Generators.C_mul_X_sub_one_mem_ker
+引理 _root_.代数.生成元.C_mul_X_sub_one_mem_ker
   证明: (Presentation.localizationAway S r).relation_mem_ker ()
 
 Depends on / 依赖: Presentation, Presentation.localizationAway, localizationAway, relation_mem_ker
@@ -778,7 +778,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: : Presentation T (T otimes[R] S) ι σ where
+  签名: : 呈现 T (T otimes[R] S) ι σ where
   定义体: P.toGenerators.baseChange T
   relation i := MvPolynomial.map (algebraMap R T) (P.relation i)
   span_range_relation_eq_ker := P.span_range_relation_eq_ker_baseChange T
@@ -858,7 +858,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def aux (_Q : Presentation S T ι' σ') (P : Presentation R S ι σ)
+  签名: def aux (_Q : 呈现 S T ι' σ') (P : 呈现 R S ι σ)
   定义体: aeval (Sum.elim X (MvPolynomial.C ∘ P.val))
 -/
 private noncomputable def aux (_Q : Presentation S T ι' σ') (P : Presentation R S ι σ) :
@@ -903,7 +903,7 @@ lemma aux_X
 中文:
 引理 aux_X
   条件: (i : ι' oplus ι)
-  结论: (Q.aux P) (X i) = Sum.elim X (C ∘ P.val) i
+  结论: (Q.aux P) (X i) = 和.elim X (C ∘ P.val) i
   证明: aeval_X (Sum.elim X (C ∘ P.val)) i
 -/
 private lemma aux_X (i : ι' oplus ι) : (Q.aux P) (X i) = Sum.elim X (C ∘ P.val) i :=
@@ -972,7 +972,7 @@ use rename Sum.inr P.σ a
 
 中文:
 引理 aux_surjective
-  结论: Function.Surjective (Q.aux P)
+  结论: 函数.满射 (Q.aux P)
   证明: fun p => by
   induction p using MvPolynomial.induction_on with
   | C a =>
@@ -1121,7 +1121,7 @@ lemma span_range_relation_eq_ker_comp
 
 中文:
 引理 span_range_relation_eq_ker_comp
-  结论: Ideal.span
+  结论: 理想.span
   证明: by
   rw [Generators.ker_eq_ker_aeval_val]; rw [Q.aeval_comp_val_eq]; rw [← AlgHom.comap_ker]
   change _ = Ideal.comap _ (RingHom.ker (aeval Q.val))
@@ -1156,7 +1156,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : Presentation R T (ι' oplus ι) (σ' oplus σ) where
+  签名: : 呈现 R T (ι' oplus ι) (σ' oplus σ) where
   定义体: Q.toGenerators.comp P.toGenerators
   relation := Sum.elim (Q.compRelationAux P)
     (fun rp => MvPolynomial.rename Sum.inr <| P.relation rp)
@@ -1250,7 +1250,7 @@ lemma relation_comp_localizationAway_inl
 
 中文:
 引理 relation_comp_localizationAway_inl
-  结论: (P : Presentation R S ι σ)
+  结论: (P : 呈现 R S ι σ)
   证明: by
   simp only [Presentation.comp, Sum.elim_inl, Presentation.compRelationAux,
     Presentation.localizationAway_relation, sub_eq_add_neg, C_mul_X_eq_monomial,
@@ -1292,7 +1292,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : Presentation R S ι σ)
+  签名: (P : 呈现 R S ι σ)
   定义体: P.toGenerators.reindex e
   relation := rename e.symm ∘ P.relation ∘ f
   span_range_relation_eq_ker := by
@@ -1324,7 +1324,7 @@ lemma dimension_reindex
 
 中文:
 引理 dimension_reindex
-  条件: (P : Presentation R S ι σ) {ι' σ' : 类型} (e : ι' ≃ ι) (f : σ' ≃ σ)
+  条件: (P : 呈现 R S ι σ) {ι' σ' : 类型} (e : ι' ≃ ι) (f : σ' ≃ σ)
   证明: by
   simp [dimension, Nat.card_congr e, Nat.card_congr f]
 
@@ -1358,7 +1358,7 @@ definition naive
 
 中文:
 定义 naive
-  签名: {v : ι -> MvPolynomial σ R}
+  签名: {v : ι -> 多元多项式 σ R}
   定义体: Generators.naive s hs
   relation := v
   span_range_relation_eq_ker := (Generators.ker_naive s hs).symm
@@ -1442,8 +1442,8 @@ lemma Generators.fg_ker_of_finitePresentation
   exact Algebra.FinitePresentation.ker_fG_of_surjective _ P.aeval_val_surjective
 
 中文:
-引理 Generators.fg_ker_of_finitePresentation
-  结论: [Algebra.FinitePresentation R S] {α : 类型}
+引理 生成元.fg_ker_of_finitePresentation
+  结论: [代数.有限呈现 R S] {α : 类型}
   证明: by
   rw [Generators.ker_eq_ker_aeval_val]
   exact Algebra.FinitePresentation.ker_fG_of_surjective _ P.aeval_val_surjective

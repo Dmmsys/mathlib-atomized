@@ -153,7 +153,7 @@ theorem ergodic_smul_of_denseRange_pow
 
 中文:
 定理 ergodic_smul_of_denseRange_pow
-  结论: {M : 类型} [Monoid M] [TopologicalSpace M]
+  结论: {M : 类型} [幺半群 M] [拓扑空间 M]
   证明: by
   borelize M
   refine ⟨measurePreserving_smul _ _, ⟨fun s hsm hs => ?_⟩⟩
@@ -201,7 +201,7 @@ theorem ErgodicSMul.trans_isMinimal
 
 中文:
 定理 ErgodicSMul.trans_isMinimal
-  结论: (N : 类型) [MulAction M N]
+  结论: (N : 类型) [乘法作用 M N]
   证明: by
     simpa only [smul_one_smul] using SMulInvariantMeasure.measure_preimage_smul (c • 1 : N) hsm
   aeconst_of_forall_preimage_smul_ae_eq {s} hsm hs := by
@@ -326,7 +326,7 @@ theorem DenseRange.zpow_of_ergodic_mul_left
 
 中文:
 定理 DenseRange.zpow_of_ergodic_mul_left
-  结论: [OpensMeasurableSpace G]
+  结论: [OpensMeasurable空间 G]
   证明: by
   intro a
   by_contra h
@@ -430,7 +430,7 @@ theorem ergodic_mul_left_iff_denseRange_zpow
 
 中文:
 定理 ergodic_mul_left_iff_denseRange_zpow
-  结论: (μ : Measure G) [IsFiniteMeasure μ]
+  结论: (μ : 测度 G) [是有限测度 μ]
   证明: ⟨.zpow_of_ergodic_mul_left, (ergodic_mul_left_of_denseRange_zpow · μ)⟩
 
 Depends on / 依赖: ergodic_mul_left_of_denseRange_zpow, zpow_of_ergodic_mul_left
@@ -512,7 +512,7 @@ theorem ergodic_of_dense_iUnion_preimage_one
 
 中文:
 定理 ergodic_of_dense_iUnion_preimage_one
-  结论: [CompactSpace G] {μ : Measure G} [μ.IsHaarMeasure]
+  结论: [紧空间 G] {μ : 测度 G} [μ.是Haar测度]
   证明: ⟨f.measurePreserving hcont hsurj rfl, f.preErgodic_of_dense_iUnion_preimage_one hf⟩
 
 Depends on / 依赖: f.measurePreserving, f.preErgodic_of_dense_iUnion_preimage_one, measurePreserving, preErgodic_of_dense_iUnion_preimage_one

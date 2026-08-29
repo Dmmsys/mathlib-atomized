@@ -162,7 +162,7 @@ definition ofProd
 
 中文:
 定义 ofProd
-  签名: : CliffordAlgebra (Q₁.prod Q₂) ->ₐ[R] (evenOdd Q₁ ᵍotimes[R] evenOdd Q₂)
+  签名: : CliffordAlgebra (Q₁.乘积 Q₂) ->ₐ[R] (evenOdd Q₁ ᵍotimes[R] evenOdd Q₂)
   定义体: lift _ ⟨
     LinearMap.coprod
       ((GradedTensorProduct.includeLeft (evenOdd Q₁) (evenOdd Q₂)).toLinearMap
@@ -231,7 +231,7 @@ definition toProd
 
 中文:
 定义 toProd
-  签名: : evenOdd Q₁ ᵍotimes[R] evenOdd Q₂ ->ₐ[R] CliffordAlgebra (Q₁.prod Q₂)
+  签名: : evenOdd Q₁ ᵍotimes[R] evenOdd Q₂ ->ₐ[R] CliffordAlgebra (Q₁.乘积 Q₂)
   定义体: GradedTensorProduct.lift _ _
     (CliffordAlgebra.map <| .inl _ _)
     (CliffordAlgebra.map <| .inr _ _)
@@ -314,7 +314,7 @@ lemma toProd_comp_ofProd
 
 中文:
 引理 toProd_comp_ofProd
-  结论: (toProd Q₁ Q₂).comp (ofProd Q₁ Q₂) = AlgHom.id _ _
+  结论: (toProd Q₁ Q₂).comp (ofProd Q₁ Q₂) = 代数态射.id _ _
   证明: by
   ext m <;> dsimp
   · rw [ofProd_ι_mk, map_add, toProd_one_tmul_ι, toProd_ι_tmul_one, Prod.mk_zero_zero,
@@ -342,7 +342,7 @@ lemma ofProd_comp_toProd
 
 中文:
 引理 ofProd_comp_toProd
-  结论: (ofProd Q₁ Q₂).comp (toProd Q₁ Q₂) = AlgHom.id _ _
+  结论: (ofProd Q₁ Q₂).comp (toProd Q₁ Q₂) = 代数态射.id _ _
   证明: by
   ext <;> simp
 -/
@@ -364,7 +364,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: : CliffordAlgebra (Q₁.prod Q₂) ≃ₐ[R] (evenOdd Q₁ ᵍotimes[R] evenOdd Q₂)
+  签名: : CliffordAlgebra (Q₁.乘积 Q₂) ≃ₐ[R] (evenOdd Q₁ ᵍotimes[R] evenOdd Q₂)
   定义体: AlgEquiv.ofAlgHom (ofProd Q₁ Q₂) (toProd Q₁ Q₂) (ofProd_comp_toProd _ _) (toProd_comp_ofProd _ _)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, ofAlgHom, ofProd, ofProd_comp_toProd, toProd, toProd_comp_ofProd

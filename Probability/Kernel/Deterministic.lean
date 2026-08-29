@@ -64,10 +64,10 @@ class IsDeterministic
     - parallelComp_self_comp_copy' : (κ ∥ₖ κ) ∘ₖ Kernel.copy α = Kernel.copy β ∘ₖ κ
 
 中文:
-类 IsDeterministic
-  参数: (κ : Kernel α β)
+类 是确定性
+  参数: (κ : 核 α β)
   公理与运算 (1 个):
-    - parallelComp_self_comp_copy' : (κ ∥ₖ κ) ∘ₖ Kernel.copy α = Kernel.copy β ∘ₖ κ
+    - parallelComp_self_comp_copy' : (κ ∥ₖ κ) ∘ₖ 核.copy α = 核.copy β ∘ₖ κ
 -/
 class IsDeterministic (κ : Kernel α β) : Prop where
   parallelComp_self_comp_copy' : (κ ∥ₖ κ) ∘ₖ Kernel.copy α = Kernel.copy β ∘ₖ κ
@@ -84,7 +84,7 @@ lemma parallelComp_self_comp_copy
 
 中文:
 引理 parallelComp_self_comp_copy
-  条件: {κ : Kernel α β} [IsDeterministic κ]
+  条件: {κ : 核 α β} [是确定性 κ]
   证明: IsDeterministic.parallelComp_self_comp_copy'
 
 Depends on / 依赖: IsDeterministic, IsDeterministic.parallelComp_self_comp_copy, parallelComp_self_comp_copy
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDeterministic (mβ := mα) (Kernel.id (α := α))
+  签名: 是确定性 (mβ := mα) (核.id (α := α))
   定义体: by unfold Kernel.id; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.id, infer_instance, of_isLocalization
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDeterministic (copy α)
+  签名: 是确定性 (copy α)
   定义体: by unfold copy; infer_instance
 
 Depends on / 依赖: IsFractionRing, QuasiFinite, infer_instance
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDeterministic (discard α)
+  签名: 是确定性 (discard α)
   定义体: by unfold discard; infer_instance
 
 Depends on / 依赖: discard, infer_instance
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDeterministic (swap α β)
+  签名: 是确定性 (swap α β)
   定义体: by unfold swap; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -186,7 +186,7 @@ DFunLike.congr_fun have := DFunLike.congr_fun κ.parallelComp_self_comp_copy a
 
 中文:
 引理 isDeterministic_iff_isZeroOneMeasure
-  条件: (κ : Kernel α β) [IsFiniteKernel κ]
+  条件: (κ : 核 α β) [是FiniteKernel κ]
   证明: by
   constructor
   · intro h a
@@ -239,8 +239,8 @@ theorem IsDeterministic.exists_eq_deterministic
       exact (indicator_eq_one_iff_mem ENNReal).sy
 
 中文:
-定理 IsDeterministic.exists_eq_deterministic
-  结论: [StandardBorelSpace β] (κ : Kernel α β)
+定理 是确定性.存在_eq_deterministic
+  结论: [StandardBorel空间 β] (κ : 核 α β)
   证明: by
   choose f hf using fun a => exists_eq_dirac (μ := κ a)
   refine ⟨f, ?_, ?_⟩
@@ -286,7 +286,7 @@ lemma comp_parallelComp_comp_copy
 
 中文:
 引理 comp_parallelComp_comp_copy
-  结论: {γ : 类型} [MeasurableSpace γ] {κ : Kernel α β}
+  结论: {γ : 类型} [可测空间 γ] {κ : 核 α β}
   证明: by
   simp only [parallelComp_comp_copy]
   ext a : 1

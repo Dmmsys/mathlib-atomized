@@ -47,12 +47,12 @@ structure RingSubgroupsBasis
 
 中文:
 结构 RingSubgroupsBasis
-  参数: {A ι : 类型} [Ring A] (B : ι -> AddSubgroup A)
+  参数: {A ι : 类型} [环 A] (B : ι -> 加法子群 A)
   公理与运算 (4 个):
     - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
-    - mul : 对任意 i, 存在 j, (B j : Set A) * B j subseteq B i
-    - leftMul : 对任意 x : A, 对任意 i, 存在 j, (B j : Set A) subseteq (x * ·) ⁻¹' B i
-    - rightMul : 对任意 x : A, 对任意 i, 存在 j, (B j : Set A) subseteq (· * x) ⁻¹' B i
+    - mul : 对任意 i, 存在 j, (B j : 集合 A) * B j subseteq B i
+    - leftMul : 对任意 x : A, 对任意 i, 存在 j, (B j : 集合 A) subseteq (x * ·) ⁻¹' B i
+    - rightMul : 对任意 x : A, 对任意 i, 存在 j, (B j : 集合 A) subseteq (· * x) ⁻¹' B i
 -/
 structure RingSubgroupsBasis {A ι : Type*} [Ring A] (B : ι -> AddSubgroup A) : Prop where
   /-- Condition for `B` to be a filter basis on `A`. -/
@@ -84,7 +84,7 @@ theorem of_comm
 
 中文:
 定理 of_comm
-  结论: {A ι : 类型} [CommRing A] (B : ι -> AddSubgroup A)
+  结论: {A ι : 类型} [交换环 A] (B : ι -> 加法子群 A)
   证明: { inter
     mul
     leftMul
@@ -127,7 +127,7 @@ definition toRingFilterBasis
 
 中文:
 定义 toRingFilterBasis
-  签名: [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroupsBasis B)
+  签名: [非空 ι] {B : ι -> 加法子群 A} (hB : RingSubgroupsBasis B)
   定义体: { U | exists i, U = B i }
   nonempty := by
     inhabit ι
@@ -214,7 +214,7 @@ theorem mem_addGroupFilterBasis_iff
 
 中文:
 定理 mem_addGroupFilterBasis_iff
-  条件: {V : Set A}
+  条件: {V : 集合 A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -235,7 +235,7 @@ theorem mem_addGroupFilterBasis
 中文:
 定理 mem_addGroupFilterBasis
   条件: (i)
-  结论: (B i : Set A) in hB.toRingFilterBasis.toAddGroupFilterBasis
+  结论: (B i : 集合 A) in hB.toRingFilterBasis.toAddGroupFilterBasis
   证明: ⟨i, rfl⟩
 -/
 theorem mem_addGroupFilterBasis (i) : (B i : Set A) in hB.toRingFilterBasis.toAddGroupFilterBasis :=
@@ -254,7 +254,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: : TopologicalSpace A
+  签名: : 拓扑空间 A
   定义体: hB.toRingFilterBasis.toAddGroupFilterBasis.topology
 
 Depends on / 依赖: hB.toRingFilterBasis.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, toRingFilterBasis, topology
@@ -279,7 +279,7 @@ theorem hasBasis_nhds_zero
 
 中文:
 定理 hasBasis_nhds_zero
-  结论: HasBasis (@nhds A hB.topology 0) (fun _ => True) fun i => B i
+  结论: 有基 (@邻域滤子 A hB.topology 0) (fun _ => 真) fun i => B i
   证明: ⟨by
     intro s
     rw [hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff]
@@ -418,7 +418,7 @@ theorem nonarchimedean
 
 中文:
 定理 nonarchimedean
-  结论: @NonarchimedeanRing A _ hB.topology
+  结论: @Nonarchimedean环 A _ hB.topology
   证明: by
   let := hB.topology
   constructor
@@ -452,11 +452,11 @@ structure SubmodulesRingBasis
 
 中文:
 结构 SubmodulesRingBasis
-  参数: (B : ι -> Submodule R A)
+  参数: (B : ι -> 子模 R A)
   公理与运算 (3 个):
     - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
     - leftMul : 对任意 (a : A) (i), 存在 j, a • B j <= B i
-    - mul : 对任意 i, 存在 j, (B j : Set A) * B j subseteq B i
+    - mul : 对任意 i, 存在 j, (B j : 集合 A) * B j subseteq B i
 -/
 structure SubmodulesRingBasis (B : ι -> Submodule R A) : Prop where
   /-- Condition for `B` to be a filter basis on `A`. -/
@@ -520,7 +520,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: [Nonempty ι] (hB : SubmodulesRingBasis B)
+  签名: [非空 ι] (hB : SubmodulesRingBasis B)
   定义体: hB.toRing_subgroups_basis.topology
 
 Depends on / 依赖: hB.toRing_subgroups_basis.topology, toRing_subgroups_basis, topology
@@ -544,7 +544,7 @@ structure SubmodulesBasis
 
 中文:
 结构 SubmodulesBasis
-  参数: [TopologicalSpace R] (B : ι -> Submodule R M)
+  参数: [拓扑空间 R] (B : ι -> 子模 R M)
   公理与运算 (2 个):
     - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
     - smul : 对任意 (m : M) (i : ι), 对任意ᶠ a in 𝓝 (0 : R), a • m in B i
@@ -669,7 +669,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: : TopologicalSpace M
+  签名: : 拓扑空间 M
   定义体: hB.toModuleFilterBasis.toAddGroupFilterBasis.topology
 
 Depends on / 依赖: hB.toModuleFilterBasis.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, toModuleFilterBasis, topology
@@ -748,7 +748,7 @@ The non-Archimedean subgr
 中文:
 定理 nonarchimedean
   条件: (hB : SubmodulesBasis B)
-  结论: @NonarchimedeanAddGroup M _ hB.topology
+  结论: @NonarchimedeanAdd群 M _ hB.topology
   证明: by
   let := hB.topology
   constructor
@@ -835,7 +835,7 @@ structure RingFilterBasis.SubmodulesBasis
 
 中文:
 结构 RingFilterBasis.SubmodulesBasis
-  参数: (BR : RingFilterBasis R) (B : ι -> Submodule R M)
+  参数: (BR : RingFilterBasis R) (B : ι -> 子模 R M)
   公理与运算 (2 个):
     - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
     - smul : 对任意 (m : M) (i : ι), 存在 U in BR, U subseteq (· • m) ⁻¹' B i
@@ -864,7 +864,7 @@ theorem RingFilterBasis.submodulesBasisIsBasis
 
 中文:
 定理 RingFilterBasis.submodulesBasisIsBasis
-  结论: (BR : RingFilterBasis R) {B : ι -> Submodule R M}
+  结论: (BR : RingFilterBasis R) {B : ι -> 子模 R M}
   证明: let _ := BR.topology
   { inter := hB.inter
     smul := by
@@ -895,7 +895,7 @@ definition RingFilterBasis.moduleFilterBasis
 
 中文:
 定义 RingFilterBasis.moduleFilterBasis
-  签名: [Nonempty ι] (BR : RingFilterBasis R) {B : ι -> Submodule R M}
+  签名: [非空 ι] (BR : RingFilterBasis R) {B : ι -> 子模 R M}
   定义体: @SubmodulesBasis.toModuleFilterBasis ι R _ M _ _ BR.topology _ _ (BR.submodulesBasisIsBasis hB)
 
 Depends on / 依赖: BR.submodulesBasisIsBasis, BR.topology, SubmodulesBasis, SubmodulesBasis.toModuleFilterBasis, submodulesBasisIsBasis, toModuleFilterBasis, topology

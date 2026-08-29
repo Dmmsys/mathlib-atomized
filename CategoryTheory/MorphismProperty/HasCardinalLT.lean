@@ -36,7 +36,7 @@ abbreviation HasCardinalLT
 
 中文:
 缩写 HasCardinalLT
-  签名: (P : Morphism命题erty C) (κ : Cardinal.{w})
+  签名: (P : MorphismProperty C) (κ : 基数.{w})
   定义体: _root_.HasCardinalLT P.toSet κ
 -/
 protected abbrev HasCardinalLT (P : MorphismProperty C) (κ : Cardinal.{w}) :=
@@ -57,7 +57,7 @@ lemma hasCardinalLT_ofHoms
 
 中文:
 引理 hasCardinalLT_ofHoms
-  结论: {C : 类型} [Category* C]
+  结论: {C : 类型} [范畴* C]
   证明: h.of_surjective (fun i => ⟨Arrow.mk (f i), ⟨i⟩⟩) (by
     rintro ⟨f, hf⟩
     rw [MorphismProperty.mem_toSet_iff]; rw [MorphismProperty.ofHoms_iff] at hf
@@ -115,7 +115,7 @@ lemma HasCardinalLT.sup
   exact hasCardinalLT_union hκ h₁ h₂
 
 中文:
-引理 HasCardinalLT.sup
+引理 HasCardinalLT.上确界
   证明: by
   dsimp only [MorphismProperty.HasCardinalLT]
   rw [MorphismProperty.toSet_max]

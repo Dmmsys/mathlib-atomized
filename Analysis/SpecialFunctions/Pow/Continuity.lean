@@ -48,8 +48,8 @@ theorem zero_cpow_eq_nhds
 
 中文:
 定理 zero_cpow_eq_nhds
-  条件: {b : Complex} (hb : b != 0)
-  结论: (fun x : Complex => (0 : Complex) ^ x) =ᶠ[𝓝 b] 0
+  条件: {b : 复形} (hb : b != 0)
+  结论: (fun x : 复形 => (0 : 复形) ^ x) =ᶠ[𝓝 b] 0
   证明: by
   suffices forallᶠ x : Complex in 𝓝 b, x != 0 from
     this.mono fun x hx => by
@@ -81,7 +81,7 @@ theorem cpow_eq_nhds
 
 中文:
 定理 cpow_eq_nhds
-  条件: {a b : Complex} (ha : a != 0)
+  条件: {a b : 复形} (ha : a != 0)
   证明: by
   suffices forallᶠ x : Complex in 𝓝 a, x != 0 from
     this.mono fun x hx => by
@@ -113,7 +113,7 @@ theorem cpow_eq_nhds'
 
 中文:
 定理 cpow_eq_nhds'
-  条件: {p : Complex × Complex} (hp_fst : p.fst != 0)
+  条件: {p : 复形 × 复形} (hp_fst : p.fst != 0)
   证明: by
   suffices IsOpen {x : Complex × Complex | x.1 = 0}ᶜ from
     mem_nhds_iff.mpr ⟨_, fun x hx => by simp_all [cpow_def_of_ne_zero], this, hp_fst⟩
@@ -146,8 +146,8 @@ theorem continuousAt_const_cpow
 
 中文:
 定理 continuousAt_const_cpow
-  条件: {a b : Complex} (ha : a != 0)
-  结论: ContinuousAt (fun x : Complex => a ^ x) b
+  条件: {a b : 复形} (ha : a != 0)
+  结论: ContinuousAt (fun x : 复形 => a ^ x) b
   证明: by
   have cpow_eq : (fun x : Complex => a ^ x) = fun x => exp (log a * x) := by
     ext1 b
@@ -179,8 +179,8 @@ theorem continuousAt_const_cpow'
 
 中文:
 定理 continuousAt_const_cpow'
-  条件: {a b : Complex} (h : b != 0)
-  结论: ContinuousAt (fun x : Complex => a ^ x) b
+  条件: {a b : 复形} (h : b != 0)
+  结论: ContinuousAt (fun x : 复形 => a ^ x) b
   证明: by
   by_cases ha : a = 0
   · rw [ha, continuousAt_congr (zero_cpow_eq_nhds h)]
@@ -211,7 +211,7 @@ theorem continuousAt_cpow
 
 中文:
 定理 continuousAt_cpow
-  条件: {p : Complex × Complex} (hp_fst : p.fst in slitPlane)
+  条件: {p : 复形 × 复形} (hp_fst : p.fst in slitPlane)
   证明: by
   rw [continuousAt_congr (cpow_eq_nhds' <| slitPlane_ne_zero hp_fst)]
   refine continuous_exp.continuousAt.comp ?_
@@ -241,7 +241,7 @@ theorem continuousAt_cpow_const
 
 中文:
 定理 continuousAt_cpow_const
-  条件: {a b : Complex} (ha : a in slitPlane)
+  条件: {a b : 复形} (ha : a in slitPlane)
   证明: Tendsto.comp (@continuousAt_cpow (a, b) ha) (continuousAt_id.prodMk continuousAt_const)
 
 Depends on / 依赖: Tendsto, Tendsto.comp, continuousAt_const, continuousAt_cpow, continuousAt_id, continuousAt_id.prodMk, prodMk
@@ -259,8 +259,8 @@ theorem Filter.Tendsto.cpow
   proof: (@continuousAt_cpow (a, b) ha).tendsto.comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.cpow
-  结论: {l : Filter α} {f g : α -> Complex} {a b : Complex} (hf : Tendsto f l (𝓝 a))
+定理 滤子.收敛.cpow
+  结论: {l : 滤子 α} {f g : α -> 复形} {a b : 复形} (hf : 收敛 f l (𝓝 a))
   证明: (@continuousAt_cpow (a, b) ha).tendsto.comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuousAt_cpow, hf.prodMk_nhds, prodMk_nhds, tendsto, tendsto.comp
@@ -282,8 +282,8 @@ theorem Filter.Tendsto.const_cpow
   | inr h => exact (continuousAt_const_cpow' h).tendsto.comp hf
 
 中文:
-定理 Filter.Tendsto.const_cpow
-  结论: {l : Filter α} {f : α -> Complex} {a b : Complex} (hf : Tendsto f l (𝓝 b))
+定理 滤子.收敛.const_cpow
+  结论: {l : 滤子 α} {f : α -> 复形} {a b : 复形} (hf : 收敛 f l (𝓝 b))
   证明: by
   cases h with
   | inl h => exact (continuousAt_const_cpow h).tendsto.comp hf
@@ -345,7 +345,7 @@ theorem ContinuousOn.const_cpow
 
 中文:
 定理 ContinuousOn.const_cpow
-  条件: {b : Complex} (hf : ContinuousOn f s) (h : b != 0 ∨ 对任意 a in s, f a != 0)
+  条件: {b : 复形} (hf : ContinuousOn f s) (h : b != 0 ∨ 对任意 a in s, f a != 0)
   证明: fun a ha => (hf a ha).const_cpow (h.imp id fun h => h a ha)
 
 Depends on / 依赖: const_cpow, h.imp
@@ -362,8 +362,8 @@ theorem Continuous.cpow
   proof: continuous_iff_continuousAt.2 fun a => hf.continuousAt.cpow hg.continuousAt (h0 a)
 
 中文:
-定理 Continuous.cpow
-  结论: (hf : Continuous f) (hg : Continuous g)
+定理 连续.cpow
+  结论: (hf : 连续 f) (hg : 连续 g)
   证明: continuous_iff_continuousAt.2 fun a => hf.continuousAt.cpow hg.continuousAt (h0 a)
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, hf.continuousAt.cpow, hg.continuousAt
@@ -381,8 +381,8 @@ theorem Continuous.const_cpow
   proof: continuous_iff_continuousAt.2 fun a => hf.continuousAt.const_cpow h.imp id fun h => h a
 
 中文:
-定理 Continuous.const_cpow
-  条件: {b : Complex} (hf : Continuous f) (h : b != 0 ∨ 对任意 a, f a != 0)
+定理 连续.const_cpow
+  条件: {b : 复形} (hf : 连续 f) (h : b != 0 ∨ 对任意 a, f a != 0)
   证明: continuous_iff_continuousAt.2 fun a => hf.continuousAt.const_cpow h.imp id fun h => h a
 
 Depends on / 依赖: const_cpow, continuousAt, continuous_iff_continuousAt, h.imp, hf.continuousAt.const_cpow
@@ -403,7 +403,7 @@ theorem ContinuousOn.cpow_const
 
 中文:
 定理 ContinuousOn.cpow_const
-  结论: {b : Complex} (hf : ContinuousOn f s)
+  结论: {b : 复形} (hf : ContinuousOn f s)
   证明: hf.cpow continuousOn_const h
 
 @[fun_prop]
@@ -426,8 +426,8 @@ lemma continuous_const_cpow
 
 中文:
 引理 continuous_const_cpow
-  条件: (z : Complex) [NeZero z]
-  结论: Continuous fun s : Complex => z ^ s
+  条件: (z : 复形) [NeZero z]
+  结论: 连续 fun s : 复形 => z ^ s
   证明: continuous_id.const_cpow (.inl <| NeZero.ne z)
 
 Depends on / 依赖: NeZero, NeZero.ne, const_cpow, continuous_id, continuous_id.const_cpow
@@ -737,7 +737,7 @@ theorem continuous_rpow_const
 中文:
 定理 continuous_rpow_const
   条件: {q : 实数} (h : 0 <= q)
-  结论: Continuous (fun x : 实数 => x ^ q)
+  结论: 连续 (fun x : 实数 => x ^ q)
   证明: continuous_iff_continuousAt.mpr fun x => continuousAt_rpow_const x q (.inr h)
 
 @[fun_prop]
@@ -760,7 +760,7 @@ lemma continuous_const_rpow
 中文:
 引理 continuous_const_rpow
   条件: {a : 实数} (h : a != 0)
-  结论: Continuous (fun x : 实数 => a ^ x)
+  结论: 连续 (fun x : 实数 => a ^ x)
   证明: continuous_iff_continuousAt.mpr fun _ => continuousAt_const_rpow h
 
 Depends on / 依赖: continuousAt_const_rpow, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr
@@ -783,8 +783,8 @@ theorem Filter.Tendsto.rpow
   proof: (Real.continuousAt_rpow (x, y) h).tendsto.comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.rpow
-  结论: {l : Filter α} {f g : α -> 实数} {x y : 实数} (hf : Tendsto f l (𝓝 x))
+定理 滤子.收敛.rpow
+  结论: {l : 滤子 α} {f g : α -> 实数} {x y : 实数} (hf : 收敛 f l (𝓝 x))
   证明: (Real.continuousAt_rpow (x, y) h).tendsto.comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: Real.continuousAt_rpow, continuousAt_rpow, hf.prodMk_nhds, prodMk_nhds, tendsto, tendsto.comp
@@ -803,8 +803,8 @@ theorem Filter.Tendsto.rpow_const
   else hf.rpow tendsto_const_nhds (h.imp id fun h' => h'.lt_of_ne h0)
 
 中文:
-定理 Filter.Tendsto.rpow_const
-  结论: {l : Filter α} {f : α -> 实数} {x p : 实数} (hf : Tendsto f l (𝓝 x))
+定理 滤子.收敛.rpow_const
+  结论: {l : 滤子 α} {f : α -> 实数} {x p : 实数} (hf : 收敛 f l (𝓝 x))
   证明: if h0 : 0 = p then h0 ▸ by simp [tendsto_const_nhds]
   else hf.rpow tendsto_const_nhds (h.imp id fun h' => h'.lt_of_ne h0)
 
@@ -824,8 +824,8 @@ theorem Filter.Tendsto.rpow_const_nhds_zero
   proof: Real.zero_rpow hp.ne' ▸ hf.rpow_const (.inr hp.le)
 
 中文:
-定理 Filter.Tendsto.rpow_const_nhds_zero
-  结论: {l : Filter α} {f : α -> 实数} {p : 实数}
+定理 滤子.收敛.rpow_const_nhds_zero
+  结论: {l : 滤子 α} {f : α -> 实数} {p : 实数}
   证明: Real.zero_rpow hp.ne' ▸ hf.rpow_const (.inr hp.le)
 
 Depends on / 依赖: Real.zero_rpow, hf.rpow_const, hp.le, hp.ne, rpow_const, zero_rpow
@@ -880,8 +880,8 @@ nonrec theorem ContinuousWithinAt.rpow_const (hf : ContinuousWithinAt f s x) (h 
 nonrec theorem ContinuousAt.rpow_const (hf : C
 
 中文:
-定理 Continuous.rpow
-  条件: (hf : Continuous f) (hg : Continuous g) (h : 对任意 x, f x != 0 ∨ 0 < g x)
+定理 连续.rpow
+  条件: (hf : 连续 f) (hg : 连续 g) (h : 对任意 x, f x != 0 ∨ 0 < g x)
   证明: continuous_iff_continuousAt.2 fun x => hf.continuousAt.rpow hg.continuousAt (h x)
 
 nonrec theorem ContinuousWithinAt.rpow_const (hf : ContinuousWithinAt f s x) (h : f x != 0 ∨ 0 <= p) :
@@ -931,8 +931,8 @@ theorem Continuous.rpow_const
   proof: continuous_iff_continuousAt.2 fun x => hf.continuousAt.rpow_const (h x)
 
 中文:
-定理 Continuous.rpow_const
-  条件: (hf : Continuous f) (h : 对任意 x, f x != 0 ∨ 0 <= p)
+定理 连续.rpow_const
+  条件: (hf : 连续 f) (h : 对任意 x, f x != 0 ∨ 0 <= p)
   证明: continuous_iff_continuousAt.2 fun x => hf.continuousAt.rpow_const (h x)
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, hf.continuousAt.rpow_const, rpow_const
@@ -970,7 +970,7 @@ theorem continuousAt_cpow_zero_of_re_pos
 
 中文:
 定理 continuousAt_cpow_zero_of_re_pos
-  条件: {z : Complex} (hz : 0 < z.re)
+  条件: {z : 复形} (hz : 0 < z.re)
   证明: by
   have hz₀ : z != 0 := ne_of_apply_ne re hz.ne'
   rw [ContinuousAt]; rw [zero_cpow hz₀]; rw [tendsto_zero_iff_norm_tendsto_zero]
@@ -1017,7 +1017,7 @@ theorem continuousAt_cpow_of_re_pos
 
 中文:
 定理 continuousAt_cpow_of_re_pos
-  条件: {p : Complex × Complex} (h₁ : 0 <= p.1.re ∨ p.1.im != 0) (h₂ : 0 < p.2.re)
+  条件: {p : 复形 × 复形} (h₁ : 0 <= p.1.re ∨ p.1.im != 0) (h₂ : 0 < p.2.re)
   证明: by
   obtain ⟨z, w⟩ := p
   rw [← not_lt_zero_iff]; rw [lt_iff_le_and_ne]; rw [not_and_or]; rw [Ne]; rw [Classical.not_not]; rw [not_le_zero_iff] at h₁
@@ -1044,7 +1044,7 @@ theorem continuousAt_cpow_const_of_re_pos
 
 中文:
 定理 continuousAt_cpow_const_of_re_pos
-  条件: {z w : Complex} (hz : 0 <= re z ∨ im z != 0) (hw : 0 < re w)
+  条件: {z w : 复形} (hz : 0 <= re z ∨ im z != 0) (hw : 0 < re w)
   证明: Tendsto.comp (@continuousAt_cpow_of_re_pos (z, w) hz hw)
     (continuousAt_id.prodMk continuousAt_const)
 
@@ -1070,8 +1070,8 @@ theorem continuousAt_ofReal_cpow
   · -- x = 0 : reduce to continuous
 
 中文:
-定理 continuousAt_ofReal_cpow
-  条件: (x : 实数) (y : Complex) (h : 0 < y.re ∨ x != 0)
+定理 continuousAt_of实数_cpow
+  条件: (x : 实数) (y : 复形) (h : 0 < y.re ∨ x != 0)
   证明: by
   rcases lt_trichotomy (0 : Real) x with (hx | rfl | hx)
   · -- x > 0 : easy case
@@ -1115,8 +1115,8 @@ theorem continuousAt_ofReal_cpow_const
   proof: (continuousAt_ofReal_cpow x y h).comp₂_of_eq (by fun_prop) (by fun_prop) rfl
 
 中文:
-定理 continuousAt_ofReal_cpow_const
-  条件: (x : 实数) (y : Complex) (h : 0 < y.re ∨ x != 0)
+定理 continuousAt_of实数_cpow_const
+  条件: (x : 实数) (y : 复形) (h : 0 < y.re ∨ x != 0)
   证明: (continuousAt_ofReal_cpow x y h).comp₂_of_eq (by fun_prop) (by fun_prop) rfl
 
 Depends on / 依赖: continuousAt_ofReal_cpow, fun_prop
@@ -1134,8 +1134,8 @@ theorem continuous_ofReal_cpow_const
   proof: continuous_iff_continuousAt.mpr fun x => continuousAt_ofReal_cpow_const x y (Or.inl hs)
 
 中文:
-定理 continuous_ofReal_cpow_const
-  条件: {y : Complex} (hs : 0 < y.re)
+定理 continuous_of实数_cpow_const
+  条件: {y : 复形} (hs : 0 < y.re)
   证明: continuous_iff_continuousAt.mpr fun x => continuousAt_ofReal_cpow_const x y (Or.inl hs)
 
 Depends on / 依赖: Or.inl, continuousAt_ofReal_cpow_const, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr
@@ -1247,8 +1247,8 @@ theorem Filter.Tendsto.nnrpow
   proof: Tendsto.comp (NNReal.continuousAt_rpow h) (hx.prodMk_nhds hy)
 
 中文:
-定理 Filter.Tendsto.nnrpow
-  结论: {α : 类型} {f : Filter α} {u : α -> 实数>=0} {v : α -> 实数} {x : 实数>=0}
+定理 滤子.收敛.nnrpow
+  结论: {α : 类型} {f : 滤子 α} {u : α -> 实数>=0} {v : α -> 实数} {x : 实数>=0}
   证明: Tendsto.comp (NNReal.continuousAt_rpow h) (hx.prodMk_nhds hy)
 
 Depends on / 依赖: NNReal, NNReal.continuousAt_rpow, Tendsto, Tendsto.comp, continuousAt_rpow, hx.prodMk_nhds, prodMk_nhds
@@ -1304,7 +1304,7 @@ theorem continuous_rpow_const
 中文:
 定理 continuous_rpow_const
   条件: {y : 实数} (h : 0 <= y)
-  结论: Continuous fun x : 实数>=0 => x ^ y
+  结论: 连续 fun x : 实数>=0 => x ^ y
   证明: continuous_iff_continuousAt.2 fun _ => continuousAt_rpow_const (Or.inr h)
 
 @[fun_prop]
@@ -1348,7 +1348,7 @@ theorem continuousOn_rpow_const
 
 中文:
 定理 continuousOn_rpow_const
-  结论: {r : 实数} {s : Set 实数>=0}
+  结论: {r : 实数} {s : 集合 实数>=0}
   证明: h.elim (fun _ => ContinuousOn.mono (s := {0}ᶜ) (by fun_prop) (by simp_all))
     (NNReal.continuous_rpow_const · |>.continuousOn)
 
@@ -1468,7 +1468,7 @@ theorem continuous_rpow_const
 中文:
 定理 continuous_rpow_const
   条件: {y : 实数}
-  结论: Continuous fun a : 实数>=0∞ => a ^ y
+  结论: 连续 fun a : 实数>=0∞ => a ^ y
   证明: by
   refine continuous_iff_continuousAt.2 fun x => ?_
   rcases lt_trichotomy (0 : Real) y with (hy | rfl | hy)
@@ -1529,8 +1529,8 @@ theorem Filter.Tendsto.ennrpow_const
   proof: (ENNReal.continuous_rpow_const.tendsto a).comp hm
 
 中文:
-定理 Filter.Tendsto.ennrpow_const
-  结论: {α : 类型} {f : Filter α} {m : α -> 实数>=0∞} {a : 实数>=0∞} (r : 实数)
+定理 滤子.收敛.ennrpow_const
+  结论: {α : 类型} {f : 滤子 α} {m : α -> 实数>=0∞} {a : 实数>=0∞} (r : 实数)
   证明: (ENNReal.continuous_rpow_const.tendsto a).comp hm
 
 Depends on / 依赖: ENNReal, ENNReal.continuous_rpow_const.tendsto, continuous_rpow_const, tendsto

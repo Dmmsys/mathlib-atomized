@@ -527,7 +527,7 @@ lemma binEntropy_continuous
 
 中文:
 引理 binEntropy_continuous
-  结论: Continuous binEntropy
+  结论: 连续 binEntropy
   证明: by
   rw [binEntropy_eq_negMulLog_add_negMulLog_one_sub']; fun_prop
 -/
@@ -823,7 +823,7 @@ lemma qaryEntropy_continuous
 
 中文:
 引理 qaryEntropy_continuous
-  结论: Continuous (qaryEntropy q)
+  结论: 连续 (qaryEntropy q)
   证明: by
   unfold qaryEntropy; fun_prop
 
@@ -1274,7 +1274,7 @@ lemma binEntropy_strictMonoOn
 
 中文:
 引理 binEntropy_strictMonoOn
-  结论: StrictMonoOn binEntropy (Icc 0 2⁻¹)
+  结论: StrictMonoOn binEntropy (闭区间 0 2⁻¹)
   证明: by
   rw [show Icc (0 : Real) 2⁻¹ = Icc 0 (1 - 1 / 2) by norm_num]; rw [← qaryEntropy_two]
   exact qaryEntropy_strictMonoOn (by rfl)
@@ -1298,7 +1298,7 @@ lemma binEntropy_strictAntiOn
 
 中文:
 引理 binEntropy_strictAntiOn
-  结论: StrictAntiOn binEntropy (Icc 2⁻¹ 1)
+  结论: StrictAntiOn binEntropy (闭区间 2⁻¹ 1)
   证明: by
   rw [show (Icc (2⁻¹ : Real) 1) = Icc (1 / 2) 1 by norm_num]; rw [← qaryEntropy_two]
   convert! qaryEntropy_strictAntiOn (by rfl) using 1
@@ -1329,7 +1329,7 @@ lemma strictConcaveOn_qaryEntropy
 
 中文:
 引理 strictConcaveOn_qaryEntropy
-  结论: StrictConcaveOn 实数 (Icc 0 1) (qaryEntropy q)
+  结论: StrictConcaveOn 实数 (闭区间 0 1) (qaryEntropy q)
   证明: by
   apply strictConcaveOn_of_deriv2_neg (convex_Icc 0 1) qaryEntropy_continuous.continuousOn
   intro p hp
@@ -1360,7 +1360,7 @@ lemma strictConcave_binEntropy
 
 中文:
 引理 strictConcave_binEntropy
-  结论: StrictConcaveOn 实数 (Icc 0 1) binEntropy
+  结论: StrictConcaveOn 实数 (闭区间 0 1) binEntropy
   证明: qaryEntropy_two ▸ strictConcaveOn_qaryEntropy
 
 Depends on / 依赖: qaryEntropy_two, strictConcaveOn_qaryEntropy

@@ -52,11 +52,11 @@ class NumberField
     - [to_finiteDimensional : FiniteDimensional Rat K]
 
 中文:
-类 NumberField
-  参数: (K : 类型) [Field K]
+类 数域
+  参数: (K : 类型) [域 K]
   公理与运算 (2 个):
-    - [to_charZero : CharZero K]
-    - [to_finiteDimensional : FiniteDimensional Rat K]
+    - [to_charZero : 特征零 K]
+    - [to_finiteDimensional : 有限维 有理数 K]
 -/
 class NumberField (K : Type*) [Field K] : Prop where
   [to_charZero : CharZero K]
@@ -84,8 +84,8 @@ theorem isAlgebraic
 
 中文:
 定理 isAlgebraic
-  条件: [NumberField K]
-  结论: Algebra.IsAlgebraic Rat K
+  条件: [数域 K]
+  结论: 代数.是代数 有理数 K
   证明: Algebra.IsAlgebraic.of_finite _ _
 -/
 protected theorem isAlgebraic [NumberField K] : Algebra.IsAlgebraic Rat K :=
@@ -100,8 +100,8 @@ instance [NumberField
   body: Module.Finite.of_restrictScalars_finite Rat K L
 
 中文:
-实例 [NumberField
-  签名: K] [NumberField L] [Algebra K L] : FiniteDimensional K L
+实例 [数域
+  签名: K] [数域 L] [代数 K L] : 有限维 K L
   定义体: Module.Finite.of_restrictScalars_finite Rat K L
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_restrictScalars_finite, of_restrictScalars_finite
@@ -123,8 +123,8 @@ theorem of_module_finite
 
 中文:
 定理 of_module_finite
-  条件: [NumberField K] [Algebra K L] [Module.Finite K L]
-  结论: NumberField L where
+  条件: [数域 K] [代数 K L] [模.有限 K L]
+  结论: 数域 L where
   证明: charZero_of_injective_algebraMap (algebraMap K L).injective
   to_finiteDimensional :=
     letI := charZero_of_injective_algebraMap (algebraMap K L).injective
@@ -149,7 +149,7 @@ instance of_intermediateField
 
 中文:
 实例 of_intermediateField
-  签名: [NumberField K] [NumberField L] [Algebra K L]
+  签名: [数域 K] [数域 L] [代数 K L]
   定义体: of_module_finite K E
 
 Depends on / 依赖: of_module_finite
@@ -169,7 +169,7 @@ instance of_subfield
 
 中文:
 实例 of_subfield
-  签名: [NumberField K] (E : Subfield K)
+  签名: [数域 K] (E : 子域 K)
   定义体: FiniteDimensional.left Rat E K
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.left
@@ -188,7 +188,7 @@ theorem of_tower
 
 中文:
 定理 of_tower
-  结论: [NumberField K] [NumberField L] [Algebra K L] (E : 类型) [Field E]
+  结论: [数域 K] [数域 L] [代数 K L] (E : 类型) [域 E]
   证明: letI := Module.Finite.left K E L
   of_module_finite K E
 
@@ -214,8 +214,8 @@ theorem of_ringEquiv
 
 中文:
 定理 of_ringEquiv
-  条件: (e : K ≃+* L) [NumberField K]
-  结论: NumberField L
+  条件: (e : K ≃+* L) [数域 K]
+  结论: 数域 L
   证明: letI := CharZero.of_addMonoidHom e.toAddMonoidHom (by simp) e.injective
   {
     to_charZero := inferInstance
@@ -253,8 +253,8 @@ deriving CommRing, IsDomain, Nontrivial
 @[inherit_doc] scoped notation "𝓞" => NumberField.RingOfIntegers
 
 中文:
-定义 RingOfIntegers
-  签名: : Type _
+定义 RingOf整数egers
+  签名: : 类型 _
   定义体: integralClosure Int K
 deriving CommRing, IsDomain, Nontrivial
 
@@ -279,8 +279,8 @@ instance [NumberField
   body: inferInstanceAs (CharZero (integralClosure _ _))
 
 中文:
-实例 [NumberField
-  签名: K] : CharZero (𝓞 K)
+实例 [数域
+  签名: K] : 特征零 (𝓞 K)
   定义体: inferInstanceAs (CharZero (integralClosure _ _))
 
 Depends on / 依赖: CharZero, integralClosure
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (𝓞 K) K
+  签名: 代数 (𝓞 K) K
   定义体: inferInstanceAs _
 -/
 instance : Algebra (𝓞 K) K := inferInstanceAs _
@@ -316,7 +316,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree (𝓞 K) K
+  签名: 是无挠 (𝓞 K) K
   定义体: inferInstanceAs (IsTorsionFree (integralClosure _ _) _)
 
 Depends on / 依赖: IsTorsionFree, integralClosure
@@ -606,7 +606,7 @@ definition mapRingHom
 
 中文:
 定义 mapRingHom
-  签名: {K L : 类型} [Field K] [Field L] (f : K ->+* L)
+  签名: {K L : 类型} [域 K] [域 L] (f : K ->+* L)
   定义体: ⟨f k.val, map_isIntegral_int f k.2⟩
   map_zero' := by ext; simp only [map_mk, map_zero]
   map_one' := by ext; simp only [map_mk, map_one]
@@ -635,7 +635,7 @@ theorem mapRingHom_apply
 
 中文:
 定理 mapRingHom_apply
-  条件: {K L : 类型} [Field K] [Field L] (f : K ->+* L) (x : 𝓞 K)
+  条件: {K L : 类型} [域 K] [域 L] (f : K ->+* L) (x : 𝓞 K)
   证明: rfl
 -/
 theorem mapRingHom_apply {K L : Type*} [Field K] [Field L] (f : K ->+* L) (x : 𝓞 K) :
@@ -655,7 +655,7 @@ definition mapRingEquiv
 
 中文:
 定义 mapRingEquiv
-  签名: {K L : 类型} [Field K] [Field L] (e : K ≃+* L)
+  签名: {K L : 类型} [域 K] [域 L] (e : K ≃+* L)
   定义体: RingEquiv.ofRingHom (mapRingHom e) (mapRingHom e.symm)
     (RingHom.ext fun x => ext (EquivLike.right_inv e x.1))
       (RingHom.ext fun x => ext (EquivLike.left_inv e x.1))
@@ -682,7 +682,7 @@ theorem mapRingEquiv_apply
 
 中文:
 定理 mapRingEquiv_apply
-  条件: {K L : 类型} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 K)
+  条件: {K L : 类型} [域 K] [域 L] (e : K ≃+* L) (x : 𝓞 K)
   证明: rfl
 
 @[simp]
@@ -701,7 +701,7 @@ theorem mapRingEquiv_symm_apply
 
 中文:
 定理 mapRingEquiv_symm_apply
-  条件: {K L : 类型} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 L)
+  条件: {K L : 类型} [域 K] [域 L] (e : K ≃+* L) (x : 𝓞 L)
   证明: rfl
 -/
 theorem mapRingEquiv_symm_apply {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 L) :
@@ -718,8 +718,8 @@ instance inst_ringOfIntegersAlgebra
   body: (RingOfIntegers.mapRingHom (algebraMap K L)).toAlgebra
 
 中文:
-实例 inst_ringOfIntegersAlgebra
-  签名: [Algebra K L]
+实例 inst_ringOf整数egersAlgebra
+  签名: [代数 K L]
   定义体: (RingOfIntegers.mapRingHom (algebraMap K L)).toAlgebra
 
 Depends on / 依赖: RingOfIntegers, RingOfIntegers.mapRingHom, algebraMap, mapRingHom, toAlgebra
@@ -744,7 +744,7 @@ definition mapAlgHom
 
 中文:
 定义 mapAlgHom
-  签名: {k K L F : 类型} [Field k] [Field K] [Field L] [Algebra k K]
+  签名: {k K L F : 类型} [域 k] [域 K] [域 L] [代数 k K]
   定义体: mapRingHom f
   commutes' x := SetCoe.ext (AlgHomClass.commutes
     ((AlgHomClass.toAlgHom f).restrictScalars (𝓞 k)) x)
@@ -769,7 +769,7 @@ definition mapAlgEquiv
 
 中文:
 定义 mapAlgEquiv
-  签名: {k K L E : 类型} [Field k] [Field K] [Field L] [Algebra k K]
+  签名: {k K L E : 类型} [域 k] [域 K] [域 L] [代数 k K]
   定义体: AlgEquiv.ofAlgHom (mapAlgHom e) (mapAlgHom (AlgEquivClass.toAlgEquiv e : K ≃ₐ[k] L).symm)
     (AlgHom.ext fun x => ext (EquivLike.right_inv e x.1))
       (AlgHom.ext fun x => ext (EquivLike.left_inv e x.1))
@@ -792,7 +792,7 @@ instance inst_isScalarTower
 
 中文:
 实例 inst_isScalarTower
-  签名: (k K L : 类型) [Field k] [Field K] [Field L]
+  签名: (k K L : 类型) [域 k] [域 K] [域 L]
   定义体: IsScalarTower.of_algHom (mapAlgHom (IsScalarTower.toAlgHom k K L))
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algHom, IsScalarTower.toAlgHom, mapAlgHom, of_algHom, toAlgHom
@@ -814,7 +814,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  结论: Function.Injective (algebraMap (𝓞 K) K)
+  结论: 函数.单射 (algebraMap (𝓞 K) K)
   证明: FaithfulSMul.algebraMap_injective _ _
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective
@@ -891,9 +891,9 @@ theorem isIntegral_coe
   proof: x.2
 
 中文:
-定理 isIntegral_coe
+定理 is整数egral_coe
   条件: (x : 𝓞 K)
-  结论: Is整数egral 整数 (algebraMap _ K x)
+  结论: 是整 整数 (algebraMap _ K x)
   证明: x.2
 -/
 theorem isIntegral_coe (x : 𝓞 K) : IsIntegral Int (algebraMap _ K x) :=
@@ -912,9 +912,9 @@ theorem isIntegral
   rwa [IsScalarTower.algebraMap_eq (S := 𝓞 K), ← Polynomial.hom_eval₂, coe_eq_zero_iff] at hP
 
 中文:
-定理 isIntegral
+定理 is整数egral
   条件: (x : 𝓞 K)
-  结论: Is整数egral 整数 x
+  结论: 是整 整数 x
   证明: by
   obtain ⟨P, hPm, hP⟩ := x.isIntegral_coe
   refine ⟨P, hPm, ?_⟩
@@ -936,7 +936,7 @@ instance [NumberField
   body: integralClosure.isFractionRing_of_finite_extension Rat _
 
 中文:
-实例 [NumberField
+实例 [数域
   签名: K] : IsFractionRing (𝓞 K) K
   定义体: integralClosure.isFractionRing_of_finite_extension Rat _
 
@@ -955,7 +955,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egralClosure (𝓞 K) 整数 K
+  签名: 是整闭包 (𝓞 K) 整数 K
   定义体: integralClosure.isIntegralClosure _ _
 
 Depends on / 依赖: integralClosure, integralClosure.isIntegralClosure, isIntegralClosure
@@ -973,7 +973,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.Is整数egral 整数 (𝓞 K)
+  签名: 代数.是整 整数 (𝓞 K)
   定义体: IsIntegralClosure.isIntegral_algebra Int K
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isIntegral_algebra, isIntegral_algebra
@@ -990,8 +990,8 @@ instance [NumberField
   body: integralClosure.isIntegrallyClosedOfFiniteExtension Rat
 
 中文:
-实例 [NumberField
-  签名: K] : Is整数egrallyClosed (𝓞 K)
+实例 [数域
+  签名: K] : 是整闭 (𝓞 K)
   定义体: integralClosure.isIntegrallyClosedOfFiniteExtension Rat
 
 Depends on / 依赖: integralClosure, integralClosure.isIntegrallyClosedOfFiniteExtension, isIntegrallyClosedOfFiniteExtension
@@ -1009,7 +1009,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def equiv (R : 类型) [CommRing R] [Algebra R K]
+  签名: def equiv (R : 类型) [交换环 R] [代数 R K]
   定义体: (IsIntegralClosure.equiv Int R K _).symm.toRingEquiv
 -/
 protected noncomputable def equiv (R : Type*) [CommRing R] [Algebra R K]
@@ -1027,8 +1027,8 @@ instance [CharZero
   body: .of_module K
 
 中文:
-实例 [CharZero
-  签名: K] : CharZero (𝓞 K)
+实例 [特征零
+  签名: K] : 特征零 (𝓞 K)
   定义体: .of_module K
 
 Depends on / 依赖: of_module
@@ -1047,7 +1047,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNoetherian 整数 (𝓞 K)
+  签名: 是Noether 整数 (𝓞 K)
   定义体: IsIntegralClosure.isNoetherian _ Rat K _
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian
@@ -1065,7 +1065,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup.FG (𝓞 K)
+  签名: 加法群.FG (𝓞 K)
   定义体: Finite.iff_addGroup_fg.mp IsNoetherian.finite Int (𝓞 K)
 
 Depends on / 依赖: Finite, Finite.iff_addGroup_fg.mp, IsNoetherian, IsNoetherian.finite, finite, iff_addGroup_fg
@@ -1087,7 +1087,7 @@ theorem not_isField
 
 中文:
 定理 not_isField
-  结论: ¬IsField (𝓞 K)
+  结论: ¬是域 (𝓞 K)
   证明: by
   have h_inj : Function.Injective (algebraMap Int (𝓞 K)) := RingHom.injective_int (algebraMap Int (𝓞 K))
   intro hf
@@ -1115,7 +1115,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDedekindDomain (𝓞 K)
+  签名: 是Dedekind整环 (𝓞 K)
   定义体: IsIntegralClosure.isDedekindDomain Int Rat K _
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isDedekindDomain, isDedekindDomain
@@ -1133,7 +1133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Free 整数 (𝓞 K)
+  签名: 自由 整数 (𝓞 K)
   定义体: IsIntegralClosure.module_free Int Rat K (𝓞 K)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.module_free, module_free
@@ -1151,7 +1151,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (Algebra.algebraMapSubmonoid (𝓞 K) 整数⁰) K
+  签名: 是Localization (代数.algebraMapSubmonoid (𝓞 K) 整数⁰) K
   定义体: IsIntegralClosure.isLocalization_of_isSeparable Int Rat K (𝓞 K)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isLocalization_of_isSeparable, isLocalization_of_isSeparable
@@ -1169,7 +1169,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Basis (Free.ChooseBasisIndex 整数 (𝓞 K)) 整数 (𝓞 K)
+  签名: : 基 (自由.ChooseBasisIndex 整数 (𝓞 K)) 整数 (𝓞 K)
   定义体: Free.chooseBasis Int (𝓞 K)
 
 Depends on / 依赖: Free.chooseBasis, chooseBasis
@@ -1189,7 +1189,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : M -> K) (h : 对任意 x, Is整数egral 整数 (f x)) (x : M)
+  签名: (f : M -> K) (h : 对任意 x, 是整 整数 (f x)) (x : M)
   定义体: ⟨f x, h x⟩
 -/
 def restrict (f : M -> K) (h : forall x, IsIntegral Int (f x)) (x : M) : 𝓞 K :=
@@ -1207,7 +1207,7 @@ definition restrict_addMonoidHom
 
 中文:
 定义 restrict_addMonoidHom
-  签名: [AddZeroClass M] (f : M ->+ K) (h : 对任意 x, Is整数egral 整数 (f x))
+  签名: [加法零类 M] (f : M ->+ K) (h : 对任意 x, 是整 整数 (f x))
   定义体: restrict f h
   map_zero' := by simp only [restrict, map_zero]; rfl
   map_add' x y := by simp only [restrict, map_add]; rfl
@@ -1232,7 +1232,7 @@ definition restrict_monoidHom
 
 中文:
 定义 restrict_monoidHom
-  签名: [MulOneClass M] (f : M ->* K) (h : 对任意 x, Is整数egral 整数 (f x))
+  签名: [MulOne类 M] (f : M ->* K) (h : 对任意 x, 是整 整数 (f x))
   定义体: restrict f h
   map_one' := by simp only [restrict, map_one]; rfl
   map_mul' x y := by simp only [restrict, map_mul]; rfl
@@ -1258,7 +1258,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower (𝓞 K) (𝓞 L) L
+  签名: 标量塔 (𝓞 K) (𝓞 L) L
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -1276,7 +1276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egralClosure (𝓞 L) (𝓞 K) L
+  签名: 是整闭包 (𝓞 L) (𝓞 K) L
   定义体: IsIntegralClosure.tower_top (R := Int)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.tower_top, tower_top
@@ -1294,7 +1294,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def algEquiv (R : 类型) [CommRing R] [Algebra (𝓞 K) R] [Algebra R L]
+  签名: def algEquiv (R : 类型) [交换环 R] [代数 (𝓞 K) R] [代数 R L]
   定义体: (IsIntegralClosure.equiv (𝓞 K) R L _).symm
 -/
 protected noncomputable def algEquiv (R : Type*) [CommRing R] [Algebra (𝓞 K) R] [Algebra R L]
@@ -1310,8 +1310,8 @@ instance extension_algebra_isIntegral
   body: IsIntegralClosure.isIntegral_algebra (𝓞 K) L
 
 中文:
-实例 extension_algebra_isIntegral
-  签名: : Algebra.Is整数egral (𝓞 K) (𝓞 L)
+实例 extension_algebra_is整数egral
+  签名: : 代数.是整 (𝓞 K) (𝓞 L)
   定义体: IsIntegralClosure.isIntegral_algebra (𝓞 K) L
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isIntegral_algebra, isIntegral_algebra
@@ -1329,7 +1329,7 @@ instance extension_isNoetherian
 
 中文:
 实例 extension_isNoetherian
-  签名: [NumberField K] [NumberField L]
+  签名: [数域 K] [数域 L]
   定义体: IsIntegralClosure.isNoetherian (𝓞 K) K L (𝓞 L)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian
@@ -1350,7 +1350,7 @@ theorem ker_algebraMap_eq_bot
 
 中文:
 定理 ker_algebraMap_eq_bot
-  结论: RingHom.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
+  结论: 环态射.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
   证明: (RingHom.ker_eq_bot_iff_eq_zero (algebraMap (𝓞 K) (𝓞 L))).mpr fun x hx => by
   have h : (algebraMap K L) x = (algebraMap (𝓞 K) (𝓞 L)) x := rfl
   simp only [hx, map_zero, map_eq_zero, RingOfIntegers.coe_eq_zero_iff] at h
@@ -1374,7 +1374,7 @@ theorem algebraMap.injective
 
 中文:
 定理 algebraMap.injective
-  结论: Function.Injective (algebraMap (𝓞 K) (𝓞 L))
+  结论: 函数.单射 (algebraMap (𝓞 K) (𝓞 L))
   证明: (RingHom.injective_iff_ker_eq_bot (algebraMap (𝓞 K) (𝓞 L))).mpr (ker_algebraMap_eq_bot K L)
 
 Depends on / 依赖: RingHom, RingHom.injective_iff_ker_eq_bot, algebraMap, injective_iff_ker_eq_bot, ker_algebraMap_eq_bot
@@ -1392,7 +1392,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree (𝓞 K) (𝓞 L)
+  签名: 是无挠 (𝓞 K) (𝓞 L)
   定义体: isTorsionFree_iff_algebraMap_injective.mpr algebraMap.injective K L
 
 Depends on / 依赖: algebraMap, algebraMap.injective, injective, isTorsionFree_iff_algebraMap_injective, isTorsionFree_iff_algebraMap_injective.mpr
@@ -1410,7 +1410,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree (𝓞 K) L
+  签名: 是无挠 (𝓞 K) L
   定义体: .trans_faithfulSMul (𝓞 K) (𝓞 L) L
 
 Depends on / 依赖: trans_faithfulSMul
@@ -1435,7 +1435,7 @@ definition integralBasis
 
 中文:
 定义 integralBasis
-  签名: : Basis (Free.ChooseBasisIndex 整数 (𝓞 K)) Rat K
+  签名: : 基 (自由.ChooseBasisIndex 整数 (𝓞 K)) 有理数 K
   定义体: Basis.localizationLocalization Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K)
 
 @[simp]
@@ -1458,7 +1458,7 @@ theorem integralBasis_apply
 
 中文:
 定理 integralBasis_apply
-  条件: (i : Free.ChooseBasisIndex 整数 (𝓞 K))
+  条件: (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
   证明: Basis.localizationLocalization_apply Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K) i
 
 @[simp]
@@ -1480,7 +1480,7 @@ theorem integralBasis_repr_apply
 
 中文:
 定理 integralBasis_repr_apply
-  条件: (x : (𝓞 K)) (i : Free.ChooseBasisIndex 整数 (𝓞 K))
+  条件: (x : (𝓞 K)) (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
   证明: Basis.localizationLocalization_repr_algebraMap Rat (nonZeroDivisors Int) K _ x i
 
 Depends on / 依赖: Basis.localizationLocalization_repr_algebraMap, localizationLocalization_repr_algebraMap, nonZeroDivisors
@@ -1520,8 +1520,8 @@ theorem RingOfIntegers.rank
   proof: IsIntegralClosure.rank Int Rat K (𝓞 K)
 
 中文:
-定理 RingOfIntegers.rank
-  结论: Module.finrank 整数 (𝓞 K) = Module.finrank Rat K
+定理 RingOf整数egers.rank
+  结论: 模.finrank 整数 (𝓞 K) = 模.finrank 有理数 K
   证明: IsIntegralClosure.rank Int Rat K (𝓞 K)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.rank
@@ -1544,7 +1544,7 @@ instance numberField
 
 中文:
 实例 numberField
-  签名: : NumberField Rat where
+  签名: : 数域 有理数 where
 -/
 instance numberField : NumberField Rat where
 
@@ -1559,8 +1559,8 @@ definition ringOfIntegersEquiv
 @[simp]
 
 中文:
-定义 ringOfIntegersEquiv
-  签名: : 𝓞 Rat ≃+* 整数
+定义 ringOf整数egersEquiv
+  签名: : 𝓞 有理数 ≃+* 整数
   定义体: RingOfIntegers.equiv Int
 
 @[simp]
@@ -1582,8 +1582,8 @@ theorem ringOfIntegersEquiv_apply_coe
   simp
 
 中文:
-定理 ringOfIntegersEquiv_apply_coe
-  条件: (z : 𝓞 Rat)
+定理 ringOf整数egersEquiv_apply_coe
+  条件: (z : 𝓞 有理数)
   证明: by
   obtain ⟨z, rfl⟩ := Rat.ringOfIntegersEquiv.symm.surjective z
   simp
@@ -1604,7 +1604,7 @@ theorem ringOfIntegersEquiv_symm_apply_coe
   proof: eq_intCast ringOfIntegersEquiv.symm _ ▸ rfl
 
 中文:
-定理 ringOfIntegersEquiv_symm_apply_coe
+定理 ringOf整数egersEquiv_symm_apply_coe
   条件: (x : 整数)
   证明: eq_intCast ringOfIntegersEquiv.symm _ ▸ rfl
 

@@ -130,7 +130,7 @@ abbreviation moduleTopology
 
 中文:
 缩写 moduleTopology
-  签名: : TopologicalSpace A
+  签名: : 拓扑空间 A
   定义体: sInf {t | @ContinuousSMul R A _ _ t ∧ @ContinuousAdd A t _}
 
 Depends on / 依赖: ContinuousAdd, ContinuousSMul
@@ -148,8 +148,8 @@ class IsModuleTopology
     - eq_moduleTopology' : τA = moduleTopology R A
 
 中文:
-类 IsModuleTopology
-  参数: [τA : TopologicalSpace A]
+类 是模拓扑
+  参数: [τA : 拓扑空间 A]
   公理与运算 (1 个):
     - eq_moduleTopology' : τA = moduleTopology R A
 -/
@@ -168,7 +168,7 @@ theorem eq_moduleTopology
 
 中文:
 定理 eq_moduleTopology
-  条件: [τA : TopologicalSpace A] [IsModuleTopology R A]
+  条件: [τA : 拓扑空间 A] [是模拓扑 R A]
   证明: IsModuleTopology.eq_moduleTopology' (R := R) (A := A)
 
 Depends on / 依赖: IsModuleTopology, IsModuleTopology.eq_moduleTopology, eq_moduleTopology
@@ -198,7 +198,7 @@ theorem ModuleTopology.continuousSMul
 
 中文:
 定理 ModuleTopology.continuousSMul
-  结论: @ContinuousSMul R A _ _ (moduleTopology R A)
+  结论: @连续标量乘法 R A _ _ (moduleTopology R A)
   证明: /- Proof: We need to prove that the product topology is finer than the pullback
      of the module topology. But the module topology is an Inf and thus a limit,
      and pullback is a right adjoint, so it preserves limits.
@@ -224,7 +224,7 @@ theorem ModuleTopology.continuousAdd
 
 中文:
 定理 ModuleTopology.continuousAdd
-  结论: @ContinuousAdd A (moduleTopology R A) _
+  结论: @连续加法 A (moduleTopology R A) _
   证明: continuousAdd_sInf fun _ h => h.2
 
 Depends on / 依赖: continuousAdd_sInf
@@ -241,8 +241,8 @@ instance IsModuleTopology.toContinuousSMul
   body: eq_moduleTopology R A ▸ ModuleTopology.continuousSMul R A
 
 中文:
-实例 IsModuleTopology.toContinuousSMul
-  签名: [TopologicalSpace A] [IsModuleTopology R A]
+实例 是模拓扑.toContinuousSMul
+  签名: [拓扑空间 A] [是模拓扑 R A]
   定义体: eq_moduleTopology R A ▸ ModuleTopology.continuousSMul R A
 
 Depends on / 依赖: ModuleTopology, ModuleTopology.continuousSMul, continuousSMul, eq_moduleTopology
@@ -260,8 +260,8 @@ theorem IsModuleTopology.toContinuousAdd
   proof: eq_moduleTopology R A ▸ ModuleTopology.continuousAdd R A
 
 中文:
-定理 IsModuleTopology.toContinuousAdd
-  条件: [TopologicalSpace A] [IsModuleTopology R A]
+定理 是模拓扑.toContinuousAdd
+  条件: [拓扑空间 A] [是模拓扑 R A]
   证明: eq_moduleTopology R A ▸ ModuleTopology.continuousAdd R A
 
 Depends on / 依赖: ModuleTopology, ModuleTopology.continuousAdd, continuousAdd, eq_moduleTopology
@@ -279,7 +279,7 @@ theorem moduleTopology_le
 
 中文:
 定理 moduleTopology_le
-  条件: [τA : TopologicalSpace A] [ContinuousSMul R A] [ContinuousAdd A]
+  条件: [τA : 拓扑空间 A] [连续标量乘法 R A] [连续加法 A]
   证明: sInf_le ⟨inferInstance, inferInstance⟩
 
 Depends on / 依赖: sInf_le
@@ -306,7 +306,7 @@ theorem of_continuous_id
 
 中文:
 定理 of_continuous_id
-  结论: [ContinuousAdd A] [ContinuousSMul R A]
+  结论: [连续加法 A] [连续标量乘法 R A]
   证明: le_antisymm (continuous_id_iff_le.1 h) (moduleTopology_le _ _)
 
 Depends on / 依赖: continuous_id_iff_le, le_antisymm, moduleTopology_le
@@ -329,7 +329,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -363,7 +363,7 @@ theorem isoₛₗ
 
 中文:
 定理 isoₛₗ
-  条件: (hσ : Continuous σ) (hσ' : Continuous σ') (e : A ≃SL[σ] B')
+  条件: (hσ : 连续 σ) (hσ' : 连续 σ') (e : A ≃SL[σ] B')
   证明: by
     -- get these in before I start putting new topologies on A and B and have to use `@`
     let g : A ->ₛₗ[σ] B' := e
@@ -406,7 +406,7 @@ theorem iso
 中文:
 定理 iso
   条件: (e : A ≃L[R] B)
-  结论: IsModuleTopology R B
+  结论: 是模拓扑 R B
   证明: IsModuleTopology.isoₛₗ continuous_id continuous_id e
 -/
 protected theorem iso (e : A ≃L[R] B) : IsModuleTopology R B :=
@@ -472,8 +472,8 @@ instance _root_.IsTopologicalSemiring.toOppositeIsModuleTopology
   body: .iso (MulOpposite.opContinuousLinearEquiv Rᵐᵒᵖ).symm
 
 中文:
-实例 _root_.IsTopologicalSemiring.toOppositeIsModuleTopology
-  签名: : IsModuleTopology Rᵐᵒᵖ R
+实例 _root_.是TopologicalSemiring.toOppositeIsModuleTopology
+  签名: : 是模拓扑 Rᵐᵒᵖ R
   定义体: .iso (MulOpposite.opContinuousLinearEquiv Rᵐᵒᵖ).symm
 
 Depends on / 依赖: MulOpposite, MulOpposite.opContinuousLinearEquiv, opContinuousLinearEquiv
@@ -510,7 +510,7 @@ theorem continuous_of_distribMulActionHomₑ
 
 中文:
 定理 continuous_of_distribMulActionHomₑ
-  条件: {σ : R ->* S} (hσ : Continuous σ) (φ : A ->ₑ+[σ] B')
+  条件: {σ : R ->* S} (hσ : 连续 σ) (φ : A ->ₑ+[σ] B')
   证明: by
   -- the proof: We know that `+ : B × B → B` and `• : R × B → B` are continuous for the module
   -- topology on `B`, and two earlier theorems (`continuousSMul_induced` and
@@ -542,7 +542,7 @@ theorem continuous_of_distribMulActionHom
 中文:
 定理 continuous_of_distribMulActionHom
   条件: (φ : A ->+[R] B)
-  结论: Continuous φ
+  结论: 连续 φ
   证明: continuous_of_distribMulActionHomₑ continuous_id φ
 
 Depends on / 依赖: continuous_id
@@ -564,7 +564,7 @@ theorem continuous_of_linearMapₛₗ
 
 中文:
 定理 continuous_of_linearMapₛₗ
-  条件: {σ : R ->+* S} (hσ : Continuous σ) (φ : A ->ₛₗ[σ] B')
+  条件: {σ : R ->+* S} (hσ : 连续 σ) (φ : A ->ₛₗ[σ] B')
   证明: continuous_of_distribMulActionHomₑ hσ φ.toDistribMulActionHom
 
 Depends on / 依赖: toDistribMulActionHom
@@ -588,7 +588,7 @@ theorem continuous_of_linearMap
 中文:
 定理 continuous_of_linearMap
   条件: (φ : A ->ₗ[R] B)
-  结论: Continuous φ
+  结论: 连续 φ
   证明: continuous_of_distribMulActionHom φ.toDistribMulActionHom
 
 Depends on / 依赖: continuous_of_distribMulActionHom, toDistribMulActionHom
@@ -608,7 +608,7 @@ theorem continuous_neg
 
 中文:
 定理 continuous_neg
-  结论: (C : 类型) [AddCommGroup C] [Module R C] [TopologicalSpace C]
+  结论: (C : 类型) [加法交换群 C] [模 R C] [拓扑空间 C]
   证明: haveI : ContinuousAdd C := IsModuleTopology.toContinuousAdd R C
   continuous_of_linearMap (LinearEquiv.neg R).toLinearMap
 
@@ -630,7 +630,7 @@ theorem continuousNeg
 
 中文:
 定理 continuousNeg
-  结论: (C : 类型) [AddCommGroup C] [Module R C] [TopologicalSpace C]
+  结论: (C : 类型) [加法交换群 C] [模 R C] [拓扑空间 C]
   证明: continuous_neg R C
 
 Depends on / 依赖: continuous_neg
@@ -653,7 +653,7 @@ theorem topologicalAddGroup
 
 中文:
 定理 topologicalAddGroup
-  结论: (C : 类型) [AddCommGroup C] [Module R C] [TopologicalSpace C]
+  结论: (C : 类型) [加法交换群 C] [模 R C] [拓扑空间 C]
   证明: (IsModuleTopology.toContinuousAdd R C).1
   continuous_neg := continuous_neg R C
 
@@ -681,7 +681,7 @@ theorem continuous_of_ringHom
 
 中文:
 定理 continuous_of_ringHom
-  结论: {R A B} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B]
+  结论: {R A B} [交换半环 R] [半环 A] [代数 R A] [半环 B]
   证明: by
   let inst := Module.compHom B (φ.comp (algebraMap R A))
   let φ' : A ->ₗ[R] B := ⟨φ, fun r m => by simp [Algebra.smul_def]; rfl⟩
@@ -725,7 +725,7 @@ theorem isQuotientMap_of_surjectiveₛₗ
 
 中文:
 定理 isQuotientMap_of_surjectiveₛₗ
-  结论: [τB : TopologicalSpace B'] [IsModuleTopology S B']
+  结论: [τB : 拓扑空间 B'] [是模拓扑 S B']
   证明: hφ
   eq_coinduced := by
     -- We need to prove that the topology on B is coinduced from that on A.
@@ -815,7 +815,7 @@ theorem isQuotientMap_of_surjective
 
 中文:
 定理 isQuotientMap_of_surjective
-  结论: [τB : TopologicalSpace B] [IsModuleTopology R B]
+  结论: [τB : 拓扑空间 B] [是模拓扑 R B]
   证明: isQuotientMap_of_surjectiveₛₗ .id φ hφ
 -/
 theorem isQuotientMap_of_surjective [τB : TopologicalSpace B] [IsModuleTopology R B]
@@ -833,7 +833,7 @@ AddMonoidHom.isOpenQuotientMap_of_isQuotientMap isQuotientMap_of_surjectiveₛ�
 
 中文:
 定理 isOpenQuotientMap_of_surjectiveₛₗ
-  结论: [TopologicalSpace B'] [IsModuleTopology S B']
+  结论: [拓扑空间 B'] [是模拓扑 S B']
   证明: have := toContinuousAdd R A
 AddMonoidHom.isOpenQuotientMap_of_isQuotientMap isQuotientMap_of_surjectiveₛₗ hσ φ hφ
 
@@ -857,7 +857,7 @@ omit [IsModuleTopology R A] in
 
 中文:
 定理 isOpenQuotientMap_of_surjective
-  结论: [TopologicalSpace B] [IsModuleTopology R B]
+  结论: [拓扑空间 B] [是模拓扑 R B]
   证明: isOpenQuotientMap_of_surjectiveₛₗ .id φ hφ
 
 omit [IsModuleTopology R A] in
@@ -886,7 +886,7 @@ omit [IsModuleTopology R A] in
 
 中文:
 定理 isOpenMap_of_surjectiveₛₗ
-  结论: [TopologicalSpace B'] [IsModuleTopology S B']
+  结论: [拓扑空间 B'] [是模拓扑 S B']
   证明: by
   have hOpenMap :=
     letI : TopologicalSpace A := moduleTopology R A
@@ -921,7 +921,7 @@ theorem isOpenMap_of_surjective
 
 中文:
 定理 isOpenMap_of_surjective
-  结论: [TopologicalSpace B] [IsModuleTopology R B]
+  结论: [拓扑空间 B] [是模拓扑 R B]
   证明: isOpenMap_of_surjectiveₛₗ .id φ hφ
 -/
 theorem isOpenMap_of_surjective [TopologicalSpace B] [IsModuleTopology R B]
@@ -988,7 +988,7 @@ have module := ModuleTopology.eq_coinduced_of_surjective Submodule.mkQ_surjectiv
 
 中文:
 实例 instQuot
-  签名: (S : Submodule R A)
+  签名: (S : 子模 R A)
   定义体: by
   constructor
   have := toContinuousAdd R A
@@ -1029,7 +1029,7 @@ instance instProd
 
 中文:
 实例 instProd
-  签名: : IsModuleTopology R (M × N)
+  签名: : 是模拓扑 R (M × N)
   定义体: by
   constructor
   have : ContinuousAdd M := toContinuousAdd R M
@@ -1095,7 +1095,7 @@ instance instPi
 
 中文:
 实例 instPi
-  签名: : IsModuleTopology R (对任意 i, A i)
+  签名: : 是模拓扑 R (对任意 i, A i)
   定义体: by
   -- This is an easy induction on the size of the finite type, given the result
   -- for binary products above. We use a "decategorified" induction principle for finite types.
@@ -1156,7 +1156,7 @@ theorem continuous_bilinear_of_pi_fintype
 
 中文:
 定理 continuous_bilinear_of_pi_fintype
-  结论: (ι : 类型) [Finite ι]
+  结论: (ι : 类型) [有限 ι]
   证明: by
   classical
   cases nonempty_fintype ι
@@ -1218,7 +1218,7 @@ theorem continuous_bilinear_of_finite_left
 
 中文:
 定理 continuous_bilinear_of_finite_left
-  结论: [Module.Finite R A]
+  结论: [模.有限 R A]
   证明: by
   -- `A` is finite and hence admits a surjection from `Rⁿ` for some finite `n`.
   obtain ⟨m, f, hf⟩ := Module.Finite.exists_fin' R A
@@ -1259,7 +1259,7 @@ theorem continuous_bilinear_of_finite_right
 
 中文:
 定理 continuous_bilinear_of_finite_right
-  结论: [Module.Finite R B]
+  结论: [模.有限 R B]
   证明: by
   -- We already proved this when `A` is finite instead of `B`, so it's obvious by symmetry
   rw [show (fun ab => bil ab.1 ab.2 : (A × B -> C)) =
@@ -1300,7 +1300,7 @@ include R in
 
 中文:
 定理 continuous_mul_of_finite
-  结论: Continuous (fun ab => ab.1 * ab.2 : D × D -> D)
+  结论: 连续 (fun ab => ab.1 * ab.2 : D × D -> D)
   证明: -- Proof: multiplication is bilinear so this follows from previous results.
   continuous_bilinear_of_finite_left (LinearMap.mul R D)
 
@@ -1323,7 +1323,7 @@ theorem isTopologicalRing
 
 中文:
 定理 isTopologicalRing
-  结论: IsTopologicalRing D where
+  结论: 是拓扑环 D where
   证明: (toContinuousAdd R D).1
   continuous_mul := continuous_mul_of_finite R D
   continuous_neg := continuous_neg R D

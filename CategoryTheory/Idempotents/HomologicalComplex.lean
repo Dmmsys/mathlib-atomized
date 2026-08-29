@@ -149,7 +149,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: (P : Karoubi (HomologicalComplex C c))
+  签名: (P : Karoubi (同调复形 C c))
   定义体: ⟨P.X.X n, P.p.f n, by
       simpa only [HomologicalComplex.comp_f] using HomologicalComplex.congr_hom P.idem n⟩
   d i j := { f := P.p.f i ≫ P.X.d i j }
@@ -178,7 +178,7 @@ definition map
 
 中文:
 定义 map
-  签名: {P Q : Karoubi (HomologicalComplex C c)} (f : P ⟶ Q)
+  签名: {P Q : Karoubi (同调复形 C c)} (f : P ⟶ Q)
   定义体: { f := f.f.f n }
 
 Depends on / 依赖: f.f.f
@@ -202,7 +202,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c where
+  签名: : Karoubi (同调复形 C c) ⥤ 同调复形 (Karoubi C) c where
   定义体: Functor.obj
   map f := Functor.map f
 
@@ -232,7 +232,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: (K : HomologicalComplex (Karoubi C) c)
+  签名: (K : 同调复形 (Karoubi C) c)
   定义体: { X := fun n => (K.X n).X
       d := fun i j => (K.d i j).f
       shape := fun i j hij => hom_eq_zero_iff.mp (K.shape i j hij)
@@ -266,7 +266,7 @@ definition map
 
 中文:
 定义 map
-  签名: {K L : HomologicalComplex (Karoubi C) c} (f : K ⟶ L)
+  签名: {K L : 同调复形 (Karoubi C) c} (f : K ⟶ L)
   定义体: { f := fun n => (f.f n).f
       comm' := fun i j hij => by simpa only [comp_f] using! hom_ext_iff.mp (f.comm' i j hij) }
 
@@ -292,7 +292,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c) where
+  签名: : 同调复形 (Karoubi C) c ⥤ Karoubi (同调复形 C c) where
   定义体: Inverse.obj
   map f := Inverse.map f
 
@@ -318,7 +318,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (HomologicalComplex (Karoubi C) c)
+  签名: : inverse ⋙ functor ≅ 𝟭 (同调复形 (Karoubi C) c)
   定义体: eqToIso (Functor.ext (fun P => HomologicalComplex.ext (by cat_disch) (by simp))
     (by cat_disch))
 
@@ -350,7 +350,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (Karoubi (HomologicalComplex C c)) ≅ functor ⋙ inverse where
+  签名: : 𝟭 (Karoubi (同调复形 C c)) ≅ functor ⋙ inverse where
   定义体: { app := fun P =>
         { f :=
             { f := fun n => P.p.f n
@@ -456,7 +456,7 @@ definition karoubiChainComplexEquivalence
 
 中文:
 定义 karoubiChainComplexEquivalence
-  签名: : Karoubi (ChainComplex C α) ≌ ChainComplex (Karoubi C) α
+  签名: : Karoubi (链复形 C α) ≌ 链复形 (Karoubi C) α
   定义体: karoubiHomologicalComplexEquivalence C (ComplexShape.down α)
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, karoubiHomologicalComplexEquivalence
@@ -498,8 +498,8 @@ instance [IsIdempotentComplete
   infer_instance
 
 中文:
-实例 [IsIdempotentComplete
-  签名: C] : IsIdempotentComplete (HomologicalComplex C c)
+实例 [是IdempotentComplete
+  签名: C] : 是IdempotentComplete (同调复形 C c)
   定义体: by
   rw [isIdempotentComplete_iff_of_equivalence
       ((toKaroubiEquivalence C).mapHomologicalComplex c)]; rw [← isIdempotentComplete_iff_of_equivalence (karoubiHomologicalComplexEquivalence C c)]

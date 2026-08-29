@@ -51,11 +51,11 @@ structure IsSpectralMap
     - isCompact_preimage_of_isOpen(⦃s) : Set β⦄ : IsOpen s -> IsCompact s -> IsCompact (f ⁻¹' s)
 
 中文:
-结构 IsSpectralMap
+结构 是谱映射
   参数: (f : α -> β)
-  继承: Continuous f
+  继承: 连续 f
   公理与运算 (1 个):
-    - isCompact_preimage_of_isOpen(⦃s) : Set β⦄ : IsOpen s -> IsCompact s -> IsCompact (f ⁻¹' s)
+    - isCompact_preimage_of_isOpen(⦃s) : 集合 β⦄ : 是开集 s -> 是紧集 s -> 是紧集 (f ⁻¹' s)
 -/
 structure IsSpectralMap (f : α -> β) : Prop extends Continuous f where
   /-- A function between topological spaces is spectral if it is continuous and the preimage of
@@ -71,8 +71,8 @@ theorem IsCompact.preimage_of_isOpen
   proof: hf.isCompact_preimage_of_isOpen h₁ h₀
 
 中文:
-定理 IsCompact.preimage_of_isOpen
-  条件: (hf : IsSpectralMap f) (h₀ : IsCompact s) (h₁ : IsOpen s)
+定理 是紧集.preimage_of_isOpen
+  条件: (hf : 是谱映射 f) (h₀ : 是紧集 s) (h₁ : 是开集 s)
   证明: hf.isCompact_preimage_of_isOpen h₁ h₀
 
 Depends on / 依赖: hf.isCompact_preimage_of_isOpen, isCompact_preimage_of_isOpen
@@ -91,9 +91,9 @@ theorem IsSpectralMap.continuous
   proof: hf.toContinuous
 
 中文:
-定理 IsSpectralMap.continuous
-  条件: {f : α -> β} (hf : IsSpectralMap f)
-  结论: Continuous f
+定理 是谱映射.continuous
+  条件: {f : α -> β} (hf : 是谱映射 f)
+  结论: 连续 f
   证明: hf.toContinuous
 
 Depends on / 依赖: hf.toContinuous, toContinuous
@@ -113,7 +113,7 @@ theorem isSpectralMap_id
 
 中文:
 定理 isSpectralMap_id
-  结论: IsSpectralMap (@id α)
+  结论: 是谱映射 (@id α)
   证明: ⟨continuous_id, fun _s _ => id⟩
 
 @[stacks 005B]
@@ -134,8 +134,8 @@ theorem IsSpectralMap.comp
     ((hs₁.preimage_of_isOpen hf hs₀).preimage_of_isOpen hg) (hs₀.preimage hf.continuous)⟩
 
 中文:
-定理 IsSpectralMap.comp
-  条件: {f : β -> γ} {g : α -> β} (hf : IsSpectralMap f) (hg : IsSpectralMap g)
+定理 是谱映射.comp
+  条件: {f : β -> γ} {g : α -> β} (hf : 是谱映射 f) (hg : 是谱映射 g)
   证明: ⟨hf.continuous.comp hg.continuous, fun _s hs₀ hs₁ =>
     ((hs₁.preimage_of_isOpen hf hs₀).preimage_of_isOpen hg) (hs₀.preimage hf.continuous)⟩
 
@@ -156,9 +156,9 @@ theorem IsProperMap.isSpectralMap
   proof: ⟨hf.toContinuous, fun _ _ => hf.isCompact_preimage⟩
 
 中文:
-定理 IsProperMap.isSpectralMap
-  条件: {f : α -> β} (hf : Is命题erMap f)
-  结论: IsSpectralMap f
+定理 是真映射.isSpectralMap
+  条件: {f : α -> β} (hf : 是真映射 f)
+  结论: 是谱映射 f
   证明: ⟨hf.toContinuous, fun _ _ => hf.isCompact_preimage⟩
 
 Depends on / 依赖: hf.isCompact_preimage, hf.toContinuous, isCompact_preimage, toContinuous
@@ -179,11 +179,11 @@ structure SpectralMap
     - spectral' : IsSpectralMap toFun
 
 中文:
-结构 SpectralMap
-  参数: (α β : 类型) [TopologicalSpace α] [TopologicalSpace β]
+结构 谱映射
+  参数: (α β : 类型) [拓扑空间 α] [拓扑空间 β]
   公理与运算 (2 个):
     - toFun : α -> β
-    - spectral' : IsSpectralMap toFun
+    - spectral' : 是谱映射 toFun
 -/
 structure SpectralMap (α β : Type*) [TopologicalSpace α] [TopologicalSpace β] where
   /-- function between topological spaces -/
@@ -203,10 +203,10 @@ class SpectralMapClass
     - map_spectral((f : F)) : IsSpectralMap f
 
 中文:
-类 SpectralMapClass
-  参数: (F α β : 类型) [TopologicalSpace α] [TopologicalSpace β]
+类 谱映射类
+  参数: (F α β : 类型) [拓扑空间 α] [拓扑空间 β]
   公理与运算 (1 个):
-    - map_spectral((f : F)) : IsSpectralMap f
+    - map_spectral((f : F)) : 是谱映射 f
 -/
 class SpectralMapClass (F α β : Type*) [TopologicalSpace α] [TopologicalSpace β]
     [FunLike F α β] : Prop where
@@ -233,8 +233,8 @@ instance [TopologicalSpace
   body: ⟨fun f => ⟨_, map_spectral f⟩⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [TopologicalSpace β] [FunLike F α β] [SpectralMapClass F α β] :
+实例 [拓扑空间
+  签名: α] [拓扑空间 β] [函数状 F α β] [谱映射类 F α β] :
   定义体: ⟨fun f => ⟨_, map_spectral f⟩⟩
 
 Depends on / 依赖: map_spectral
@@ -260,7 +260,7 @@ definition toContinuousMap
 
 中文:
 定义 toContinuousMap
-  签名: (f : SpectralMap α β)
+  签名: (f : 谱映射 α β)
   定义体: ⟨_, f.spectral'.continuous⟩
 
 Depends on / 依赖: continuous, f.spectral, spectral
@@ -279,7 +279,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (SpectralMap α β) α β where
+  签名: : 函数状 (谱映射 α β) α β where
   定义体: SpectralMap.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: SpectralMapClass (SpectralMap α β) α β
+  签名: 谱映射类 (谱映射 α β) α β
   定义体: f.spectral'
 
 @[simp]
@@ -325,7 +325,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : SpectralMap α β}
+  条件: {f : 谱映射 α β}
   结论: f.toFun = (f : α -> β)
   证明: rfl
 
@@ -346,7 +346,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : SpectralMap α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 谱映射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -367,7 +367,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : SpectralMap α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 谱映射 α β) (f' : α -> β) (h : f' = f)
   定义体: ⟨f', h.symm.subst f.spectral'⟩
 
 @[simp]
@@ -387,7 +387,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : SpectralMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 谱映射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -405,7 +405,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : SpectralMap α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 谱映射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -426,7 +426,7 @@ definition id
 
 中文:
 定义 id
-  签名: : SpectralMap α α
+  签名: : 谱映射 α α
   定义体: ⟨id, isSpectralMap_id⟩
 -/
 protected def id : SpectralMap α α :=
@@ -444,7 +444,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SpectralMap α α)
+  签名: 可居 (谱映射 α α)
   定义体: ⟨SpectralMap.id α⟩
 
 @[simp, norm_cast]
@@ -465,7 +465,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(SpectralMap.id α) = id
+  结论: ⇑(谱映射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(SpectralMap.id α) = id :=
@@ -486,7 +486,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: SpectralMap.id α a = a
+  结论: 谱映射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : SpectralMap.id α a = a :=
@@ -504,7 +504,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : SpectralMap β γ) (g : SpectralMap α β)
+  签名: (f : 谱映射 β γ) (g : 谱映射 α β)
   定义体: ⟨f.toContinuousMap.comp g.toContinuousMap, f.spectral'.comp g.spectral'⟩
 
 @[simp]
@@ -528,7 +528,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : SpectralMap β γ) (g : SpectralMap α β)
+  条件: (f : 谱映射 β γ) (g : 谱映射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -549,7 +549,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : SpectralMap β γ) (g : SpectralMap α β) (a : α)
+  条件: (f : 谱映射 β γ) (g : 谱映射 α β) (a : α)
   结论: (f.comp g) a = f (g a)
   证明: rfl
 -/
@@ -568,7 +568,7 @@ theorem coe_comp_continuousMap
 
 中文:
 定理 coe_comp_continuousMap
-  条件: (f : SpectralMap β γ) (g : SpectralMap α β)
+  条件: (f : 谱映射 β γ) (g : 谱映射 α β)
   证明: rfl
 
 @[simp]
@@ -590,7 +590,7 @@ theorem coe_comp_continuousMap'
 
 中文:
 定理 coe_comp_continuousMap'
-  条件: (f : SpectralMap β γ) (g : SpectralMap α β)
+  条件: (f : 谱映射 β γ) (g : 谱映射 α β)
   证明: rfl
 
 @[simp]
@@ -612,7 +612,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : SpectralMap γ δ) (g : SpectralMap β γ) (h : SpectralMap α β)
+  条件: (f : 谱映射 γ δ) (g : 谱映射 β γ) (h : 谱映射 α β)
   证明: rfl
 
 @[simp]
@@ -635,8 +635,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : SpectralMap α β)
-  结论: f.comp (SpectralMap.id α) = f
+  条件: (f : 谱映射 α β)
+  结论: f.comp (谱映射.id α) = f
   证明: ext fun _a => rfl
 
 @[simp]
@@ -658,8 +658,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : SpectralMap α β)
-  结论: (SpectralMap.id β).comp f = f
+  条件: (f : 谱映射 α β)
+  结论: (谱映射.id β).comp f = f
   证明: ext fun _a => rfl
 
 @[simp]
@@ -681,7 +681,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : SpectralMap β γ} {f : SpectralMap α β} (hf : Surjective f)
+  条件: {g₁ g₂ : 谱映射 β γ} {f : 谱映射 α β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h,
    fun a => of_eq (congrFun (congrArg comp a) f)⟩
 
@@ -705,7 +705,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : SpectralMap β γ} {f₁ f₂ : SpectralMap α β} (hg : Injective g)
+  条件: {g : 谱映射 β γ} {f₁ f₂ : 谱映射 α β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg

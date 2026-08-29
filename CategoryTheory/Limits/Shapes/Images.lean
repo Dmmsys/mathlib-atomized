@@ -84,12 +84,12 @@ structure MonoFactorisation
     - fac : e ≫ m = f  [default: by cat_disch]
 
 中文:
-结构 MonoFactorisation
+结构 单态射分解
   参数: (f : X ⟶ Y)
   公理与运算 (5 个):
     - I : C
     - m : I ⟶ Y
-    - [m_mono : Mono m]
+    - [m_mono : 单态射 m]
     - e : X ⟶ I
     - fac : e ≫ m = f  [默认: by cat_disch]
 
@@ -123,7 +123,7 @@ definition self
 
 中文:
 定义 self
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: X
   m := f
   e := 𝟙 X
@@ -144,8 +144,8 @@ instance [Mono
   body: ⟨self f⟩
 
 中文:
-实例 [Mono
-  签名: f] : Inhabited (MonoFactorisation f)
+实例 [单态射
+  签名: f] : 可居 (单态射分解 f)
   定义体: ⟨self f⟩
 -/
 instance [Mono f] : Inhabited (MonoFactorisation f) := ⟨self f⟩
@@ -171,7 +171,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {F F' : MonoFactorisation f} (hI : F.I = F'.I)
+  结论: {F F' : 单态射分解 f} (hI : F.I = F'.I)
   证明: by
   obtain ⟨_, Fm, _, Ffac⟩ := F; obtain ⟨_, Fm', _, Ffac'⟩ := F'
   cases hI
@@ -206,7 +206,7 @@ definition compMono
 
 中文:
 定义 compMono
-  签名: (F : MonoFactorisation f) {Y' : C} (g : Y ⟶ Y') [Mono g]
+  签名: (F : 单态射分解 f) {Y' : C} (g : Y ⟶ Y') [单态射 g]
   定义体: F.I
   m := F.m ≫ g
   m_mono := mono_comp _ _
@@ -235,7 +235,7 @@ definition ofCompIso
 
 中文:
 定义 ofCompIso
-  签名: {Y' : C} {g : Y ⟶ Y'} [IsIso g] (F : MonoFactorisation (f ≫ g))
+  签名: {Y' : C} {g : Y ⟶ Y'} [是同构 g] (F : 单态射分解 (f ≫ g))
   定义体: F.I
   m := F.m ≫ inv g
   m_mono := mono_comp _ _
@@ -262,7 +262,7 @@ definition isoComp
 
 中文:
 定义 isoComp
-  签名: (F : MonoFactorisation f) {X' : C} (g : X' ⟶ X)
+  签名: (F : 单态射分解 f) {X' : C} (g : X' ⟶ X)
   定义体: F.I
   m := F.m
   e := g ≫ F.e
@@ -287,7 +287,7 @@ definition ofIsoComp
 
 中文:
 定义 ofIsoComp
-  签名: {X' : C} (g : X' ⟶ X) [IsIso g] (F : MonoFactorisation (g ≫ f))
+  签名: {X' : C} (g : X' ⟶ X) [是同构 g] (F : 单态射分解 (g ≫ f))
   定义体: F.I
   m := F.m
   e := inv g ≫ F.e
@@ -315,7 +315,7 @@ definition ofArrowIso
 
 中文:
 定义 ofArrowIso
-  签名: {f g : Arrow C} (F : MonoFactorisation f.hom) (sq : f ⟶ g) [IsIso sq]
+  签名: {f g : 箭头 C} (F : 单态射分解 f.hom) (sq : f ⟶ g) [是同构 sq]
   定义体: F.I
   m := F.m ≫ sq.right
   e := inv sq.left ≫ F.e
@@ -347,7 +347,7 @@ definition ofIsoI
 
 中文:
 定义 ofIsoI
-  签名: (F : MonoFactorisation f) {I'} (e : F.I ≅ I')
+  签名: (F : 单态射分解 f) {I'} (e : F.I ≅ I')
   定义体: I'
   m := e.inv ≫ F.m
   e := F.e ≫ e.hom
@@ -378,7 +378,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (F : MonoFactorisation f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
+  签名: (F : 单态射分解 f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
   定义体: F.I
   m := m
   e := e
@@ -408,7 +408,7 @@ lemma fac_apply
 
 中文:
 引理 fac_apply
-  结论: {F G : C ⥤ Type w} {f : F ⟶ G} {X : C}
+  结论: {F G : C ⥤ 类型 w} {f : F ⟶ G} {X : C}
   证明: by
   simp [← comp_apply, ← NatTrans.comp_app]
 
@@ -433,11 +433,11 @@ structure IsImage
     - lift_fac : forall F' : MonoFactorisation f, lift F' ≫ F'.m = F.m  [default: by cat_disch]
 
 中文:
-结构 IsImage
-  参数: (F : MonoFactorisation f)
+结构 是像
+  参数: (F : 单态射分解 f)
   公理与运算 (2 个):
-    - lift : 对任意 F' : MonoFactorisation f, F.I ⟶ F'.I
-    - lift_fac : 对任意 F' : MonoFactorisation f, lift F' ≫ F'.m = F.m  [默认: by cat_disch]
+    - lift : 对任意 F' : 单态射分解 f, F.I ⟶ F'.I
+    - lift_fac : 对任意 F' : 单态射分解 f, lift F' ≫ F'.m = F.m  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -462,7 +462,7 @@ theorem fac_lift
 
 中文:
 定理 fac_lift
-  条件: {F : MonoFactorisation f} (hF : IsImage F) (F' : MonoFactorisation f)
+  条件: {F : 单态射分解 f} (hF : 是像 F) (F' : 单态射分解 f)
   证明: (cancel_mono F'.m).1 by simp
 
 Depends on / 依赖: cancel_mono
@@ -486,7 +486,7 @@ definition self
 
 中文:
 定义 self
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: F'.e
 -/
 def self [Mono f] : IsImage (MonoFactorisation.self f) where lift F' := F'.e
@@ -500,8 +500,8 @@ instance [Mono
   body: ⟨self f⟩
 
 中文:
-实例 [Mono
-  签名: f] : Inhabited (IsImage (MonoFactorisation.self f))
+实例 [单态射
+  签名: f] : 可居 (是像 (单态射分解.self f))
   定义体: ⟨self f⟩
 -/
 instance [Mono f] : Inhabited (IsImage (MonoFactorisation.self f)) :=
@@ -526,7 +526,7 @@ definition isoExt
 
 中文:
 定义 isoExt
-  签名: {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F')
+  签名: {F F' : 单态射分解 f} (hF : 是像 F) (hF' : 是像 F')
   定义体: hF.lift F'
   inv := hF'.lift F
   hom_inv_id := (cancel_mono F.m).1 (by simp)
@@ -620,7 +620,7 @@ definition ofArrowIso
 
 中文:
 定义 ofArrowIso
-  签名: {f g : Arrow C} {F : MonoFactorisation f.hom} (hF : IsImage F) (sq : f ⟶ g)
+  签名: {f g : 箭头 C} {F : 单态射分解 f.hom} (hF : 是像 F) (sq : f ⟶ g)
   定义体: hF.lift (F'.ofArrowIso (inv sq))
   lift_fac F' := by
     simpa only [MonoFactorisation.ofArrowIso_m, Arrow.inv_right, ← Category.assoc,
@@ -651,7 +651,7 @@ definition ofIsoI
 
 中文:
 定义 ofIsoI
-  签名: {F : MonoFactorisation f} (hF : IsImage F) {I' : C} (e : F.I ≅ I')
+  签名: {F : 单态射分解 f} (hF : 是像 F) {I' : C} (e : F.I ≅ I')
   定义体: e.inv ≫ hF.lift F'
 
 Depends on / 依赖: e.inv, hF.lift, isIso_prodComparison_of_preservesLimit_pair
@@ -677,7 +677,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : MonoFactorisation f} (hF : IsImage F) (m : F.I ⟶ Y) (e : X ⟶ F.I)
+  签名: {F : 单态射分解 f} (hF : 是像 F) (m : F.I ⟶ Y) (e : X ⟶ F.I)
   定义体: hF.lift
 
 Depends on / 依赖: F.copy, IsImage, cat_disch, hF.lift
@@ -705,8 +705,8 @@ structure ImageFactorisation
 结构 ImageFactorisation
   参数: (f : X ⟶ Y)
   公理与运算 (2 个):
-    - F : MonoFactorisation f
-    - isImage : IsImage F
+    - F : 单态射分解 f
+    - isImage : 是像 F
 -/
 structure ImageFactorisation (f : X ⟶ Y) where
   F : MonoFactorisation f
@@ -725,8 +725,8 @@ instance [Mono
   body: ⟨⟨_, IsImage.self f⟩⟩
 
 中文:
-实例 [Mono
-  签名: f] : Inhabited (ImageFactorisation f)
+实例 [单态射
+  签名: f] : 可居 (ImageFactorisation f)
   定义体: ⟨⟨_, IsImage.self f⟩⟩
 
 Depends on / 依赖: IsImage, IsImage.self
@@ -748,7 +748,7 @@ definition ofArrowIso
 
 中文:
 定义 ofArrowIso
-  签名: {f g : Arrow C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [IsIso sq]
+  签名: {f g : 箭头 C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [是同构 sq]
   定义体: F.F.ofArrowIso sq
   isImage := F.isImage.ofArrowIso sq
 
@@ -825,7 +825,7 @@ class HasImage
   (no additional axioms)
 
 中文:
-类 HasImage
+类 有像
   参数: (f : X ⟶ Y)
   (无附加公理)
 -/
@@ -844,9 +844,9 @@ theorem HasImage.mk
   proof: ⟨Nonempty.intro F⟩
 
 中文:
-定理 HasImage.mk
+定理 有像.mk
   条件: {f : X ⟶ Y} (F : ImageFactorisation f)
-  结论: HasImage f
+  结论: 有像 f
   证明: ⟨Nonempty.intro F⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -863,8 +863,8 @@ theorem HasImage.of_arrow_iso
   proof: ⟨⟨h.exists_image.some.ofArrowIso sq⟩⟩
 
 中文:
-定理 HasImage.of_arrow_iso
-  条件: {f g : Arrow C} [h : HasImage f.hom] (sq : f ⟶ g) [IsIso sq]
+定理 有像.of_arrow_iso
+  条件: {f g : 箭头 C} [h : 有像 f.hom] (sq : f ⟶ g) [是同构 sq]
   证明: ⟨⟨h.exists_image.some.ofArrowIso sq⟩⟩
 
 Depends on / 依赖: exists_image, h.exists_image.some.ofArrowIso, ofArrowIso
@@ -889,7 +889,7 @@ definition Image.imageFactorisation
   body: Classical.choice HasImage.exists_image
 
 中文:
-定义 Image.imageFactorisation
+定义 像.imageFactorisation
   签名: : ImageFactorisation f
   定义体: Classical.choice HasImage.exists_image
 
@@ -907,8 +907,8 @@ definition Image.monoFactorisation
   body: (Image.imageFactorisation f).F
 
 中文:
-定义 Image.monoFactorisation
-  签名: : MonoFactorisation f
+定义 像.monoFactorisation
+  签名: : 单态射分解 f
   定义体: (Image.imageFactorisation f).F
 
 Depends on / 依赖: Image.imageFactorisation, imageFactorisation
@@ -925,8 +925,8 @@ definition Image.isImage
   body: (Image.imageFactorisation f).isImage
 
 中文:
-定义 Image.isImage
-  签名: : IsImage (Image.monoFactorisation f)
+定义 像.isImage
+  签名: : 是像 (像.monoFactorisation f)
   定义体: (Image.imageFactorisation f).isImage
 
 Depends on / 依赖: Image.imageFactorisation, imageFactorisation, isImage
@@ -945,7 +945,7 @@ definition image
   body: (Image.monoFactorisation f).I
 
 中文:
-定义 image
+定义 像
   签名: : C
   定义体: (Image.monoFactorisation f).I
 
@@ -965,8 +965,8 @@ definition image.ι
 @[simp]
 
 中文:
-定义 image.ι
-  签名: : image f ⟶ Y
+定义 像.ι
+  签名: : 像 f ⟶ Y
   定义体: (Image.monoFactorisation f).m
 
 @[simp]
@@ -984,8 +984,8 @@ theorem image.as_ι
   proof: rfl
 
 中文:
-定理 image.as_ι
-  结论: (Image.monoFactorisation f).m = image.ι f
+定理 像.as_ι
+  结论: (像.monoFactorisation f).m = 像.ι f
   证明: rfl
 -/
 theorem image.as_ι : (Image.monoFactorisation f).m = image.ι f := rfl
@@ -1000,7 +1000,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (image.ι f)
+  签名: 单态射 (像.ι f)
   定义体: (Image.monoFactorisation f).m_mono
 
 Depends on / 依赖: Image.monoFactorisation, m_mono, monoFactorisation
@@ -1018,7 +1018,7 @@ definition factorThruImage
 
 中文:
 定义 factorThruImage
-  签名: : X ⟶ image f
+  签名: : X ⟶ 像 f
   定义体: (Image.monoFactorisation f).e
 
 Depends on / 依赖: Image.monoFactorisation, monoFactorisation
@@ -1040,7 +1040,7 @@ theorem as_factorThruImage
 
 中文:
 定理 as_factorThruImage
-  结论: (Image.monoFactorisation f).e = factorThruImage f
+  结论: (像.monoFactorisation f).e = factorThruImage f
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -1058,8 +1058,8 @@ theorem image.fac
   proof: (Image.monoFactorisation f).fac
 
 中文:
-定理 image.fac
-  结论: factorThruImage f ≫ image.ι f = f
+定理 像.fac
+  结论: factorThruImage f ≫ 像.ι f = f
   证明: (Image.monoFactorisation f).fac
 -/
 theorem image.fac : factorThruImage f ≫ image.ι f = f :=
@@ -1078,8 +1078,8 @@ definition image.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 image.lift
-  签名: (F' : MonoFactorisation f)
+定义 像.lift
+  签名: (F' : 单态射分解 f)
   定义体: (Image.isImage f).lift F'
 
 @[reassoc (attr := simp)]
@@ -1100,9 +1100,9 @@ theorem image.lift_fac
 @[reassoc (attr := simp)]
 
 中文:
-定理 image.lift_fac
-  条件: (F' : MonoFactorisation f)
-  结论: image.lift F' ≫ F'.m = image.ι f
+定理 像.lift_fac
+  条件: (F' : 单态射分解 f)
+  结论: 像.lift F' ≫ F'.m = 像.ι f
   证明: (Image.isImage f).lift_fac F'
 
 @[reassoc (attr := simp)]
@@ -1123,9 +1123,9 @@ theorem image.fac_lift
 @[simp]
 
 中文:
-定理 image.fac_lift
-  条件: (F' : MonoFactorisation f)
-  结论: factorThruImage f ≫ image.lift F' = F'.e
+定理 像.fac_lift
+  条件: (F' : 单态射分解 f)
+  结论: factorThruImage f ≫ 像.lift F' = F'.e
   证明: (Image.isImage f).fac_lift F'
 
 @[simp]
@@ -1148,9 +1148,9 @@ theorem image.isImage_lift
 @[reassoc (attr := simp)]
 
 中文:
-定理 image.isImage_lift
-  条件: (F : MonoFactorisation f)
-  结论: (Image.isImage f).lift F = image.lift F
+定理 像.isImage_lift
+  条件: (F : 单态射分解 f)
+  结论: (像.isImage f).lift F = 像.lift F
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -1170,8 +1170,8 @@ theorem IsImage.lift_ι
 @[reassoc (attr := simp)]
 
 中文:
-定理 IsImage.lift_ι
-  条件: {F : MonoFactorisation f} (hF : IsImage F)
+定理 是像.lift_ι
+  条件: {F : 单态射分解 f} (hF : 是像 F)
   证明: hF.lift_fac _
 
 @[reassoc (attr := simp)]
@@ -1193,7 +1193,7 @@ theorem image.lift_mk_factorThruImage
 @[reassoc (attr := simp)]
 
 中文:
-定理 image.lift_mk_factorThruImage
+定理 像.lift_mk_factorThruImage
   证明: (Image.isImage f).lift_fac _
 
 @[reassoc (attr := simp)]
@@ -1214,8 +1214,8 @@ theorem image.lift_mk_comp
   proof: image.lift_fac _
 
 中文:
-定理 image.lift_mk_comp
-  结论: {C : 类型u} [Category.{v} C] {X Y Z : C}
+定理 像.lift_mk_comp
+  结论: {C : 类型u} [范畴.{v} C] {X Y Z : C}
   证明: image.lift_fac _
 -/
 theorem image.lift_mk_comp {C : Type u} [Category.{v} C] {X Y Z : C}
@@ -1240,8 +1240,8 @@ instance image.lift_mono
   simpa using! MonoFactorisation.m_mono _
 
 中文:
-实例 image.lift_mono
-  签名: (F' : MonoFactorisation f)
+实例 像.lift_mono
+  签名: (F' : 单态射分解 f)
   定义体: by
   refine @mono_of_mono _ _ _ _ _ _ F'.m ?_
   simpa using! MonoFactorisation.m_mono _
@@ -1261,8 +1261,8 @@ theorem HasImage.uniq
   proof: (cancel_mono F'.m).1 (by simp [w])
 
 中文:
-定理 HasImage.uniq
-  条件: (F' : MonoFactorisation f) (l : image f ⟶ F'.I) (w : l ≫ F'.m = image.ι f)
+定理 有像.uniq
+  条件: (F' : 单态射分解 f) (l : 像 f ⟶ F'.I) (w : l ≫ F'.m = 像.ι f)
   证明: (cancel_mono F'.m).1 (by simp [w])
 
 Depends on / 依赖: cancel_mono
@@ -1300,10 +1300,10 @@ class HasImages
     - has_image : forall {X Y : C} (f : X ⟶ Y), HasImage f
 
 中文:
-类 HasImages
+类 有Images
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_image : 对任意 {X Y : C} (f : X ⟶ Y), HasImage f
+    - has_image : 对任意 {X Y : C} (f : X ⟶ Y), 有像 f
 -/
 class HasImages : Prop where
   has_image : forall {X Y : C} (f : X ⟶ Y), HasImage f
@@ -1328,7 +1328,7 @@ definition imageMonoIsoSource
 
 中文:
 定义 imageMonoIsoSource
-  签名: [Mono f]
+  签名: [单态射 f]
   定义体: IsImage.isoExt (Image.isImage f) (IsImage.self f)
 
 @[reassoc (attr := simp)]
@@ -1353,8 +1353,8 @@ theorem imageMonoIsoSource_inv_ι
 
 中文:
 定理 imageMonoIsoSource_inv_ι
-  条件: [Mono f]
-  结论: (imageMonoIsoSource f).inv ≫ image.ι f = f
+  条件: [单态射 f]
+  结论: (imageMonoIsoSource f).inv ≫ 像.ι f = f
   证明: by
   simp [imageMonoIsoSource]
 
@@ -1379,8 +1379,8 @@ theorem imageMonoIsoSource_hom_self
 
 中文:
 定理 imageMonoIsoSource_hom_self
-  条件: [Mono f]
-  结论: (imageMonoIsoSource f).hom ≫ f = image.ι f
+  条件: [单态射 f]
+  结论: (imageMonoIsoSource f).hom ≫ f = 像.ι f
   证明: by
   simp only [← imageMonoIsoSource_inv_ι f]
   rw [← Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.id_comp]
@@ -1415,8 +1415,8 @@ theorem image.ext
   have t : v ≫ q = 𝟙 
 
 中文:
-定理 image.ext
-  结论: [HasImage f] {W : C} {g h : image f ⟶ W} [HasLimit (parallelPair g h)]
+定理 像.ext
+  结论: [有像 f] {W : C} {g h : 像 f ⟶ W} [有极限 (parallelPair g h)]
   证明: by
   let q := equalizer.ι g h
   let e' := equalizer.lift _ w
@@ -1466,8 +1466,8 @@ instance [HasImage
   body: ⟨fun _ _ w => image.ext f w⟩
 
 中文:
-实例 [HasImage
-  签名: f] [对任意 {Z : C} (g h : image f ⟶ Z), HasLimit (parallelPair g h)] :
+实例 [有像
+  签名: f] [对任意 {Z : C} (g h : 像 f ⟶ Z), 有极限 (parallelPair g h)] :
   定义体: ⟨fun _ _ w => image.ext f w⟩
 
 Depends on / 依赖: image.ext
@@ -1489,8 +1489,8 @@ theorem epi_image_of_epi
 
 中文:
 定理 epi_image_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [HasImage f] [E : Epi f]
-  结论: Epi (image.ι f)
+  条件: {X Y : C} (f : X ⟶ Y) [有像 f] [E : 满态射 f]
+  结论: 满态射 (像.ι f)
   证明: by
   rw [← image.fac f] at E
   exact epi_of_epi (factorThruImage f) (image.ι f)
@@ -1513,7 +1513,7 @@ theorem epi_of_epi_image
 
 中文:
 定理 epi_of_epi_image
-  结论: {X Y : C} (f : X ⟶ Y) [HasImage f] [Epi (image.ι f)]
+  结论: {X Y : C} (f : X ⟶ Y) [有像 f] [满态射 (像.ι f)]
   证明: by
   rw [← image.fac f]
   apply epi_comp
@@ -1545,7 +1545,7 @@ definition image.eqToHom
       fac := by rw [h]; simp only [image.fac] }
 
 中文:
-定义 image.eqToHom
+定义 像.eqToHom
   签名: (h : f = f')
   定义体: image.lift
     { I := image f'
@@ -1580,7 +1580,7 @@ definition image.eqToIso
   body: asIso (image.eqToHom h)
 
 中文:
-定义 image.eqToIso
+定义 像.eqToIso
   签名: (h : f = f')
   定义体: asIso (image.eqToHom h)
 
@@ -1601,7 +1601,7 @@ theorem image.eq_fac
   simp [asIso, image.eqToIso, image.eqToHom]
 
 中文:
-定理 image.eq_fac
+定理 像.eq_fac
   条件: [HasEqualizers C] (h : f = f')
   证明: by
   apply image.ext
@@ -1636,8 +1636,8 @@ definition image.preComp
 @[reassoc (attr := simp)]
 
 中文:
-定义 image.preComp
-  签名: [HasImage g] [HasImage (f ≫ g)]
+定义 像.preComp
+  签名: [有像 g] [有像 (f ≫ g)]
   定义体: image.lift
     { I := image g
       m := image.ι g
@@ -1666,8 +1666,8 @@ theorem image.preComp_ι
 @[reassoc (attr := simp)]
 
 中文:
-定理 image.preComp_ι
-  条件: [HasImage g] [HasImage (f ≫ g)]
+定理 像.preComp_ι
+  条件: [有像 g] [有像 (f ≫ g)]
   证明: by
       simp [image.preComp]
 
@@ -1689,8 +1689,8 @@ theorem image.factorThruImage_preComp
   proof: by simp [image.preComp]
 
 中文:
-定理 image.factorThruImage_preComp
-  条件: [HasImage g] [HasImage (f ≫ g)]
+定理 像.factorThruImage_preComp
+  条件: [有像 g] [有像 (f ≫ g)]
   证明: by simp [image.preComp]
 
 Depends on / 依赖: image.preComp, preComp
@@ -1710,8 +1710,8 @@ instance image.preComp_mono
   infer_instance
 
 中文:
-实例 image.preComp_mono
-  签名: [HasImage g] [HasImage (f ≫ g)]
+实例 像.preComp_mono
+  签名: [有像 g] [有像 (f ≫ g)]
   定义体: by
   refine @mono_of_mono _ _ _ _ _ _ (image.ι g) ?_
   simp only [image.preComp_ι]
@@ -1736,8 +1736,8 @@ theorem image.preComp_comp
   rw [image.lift_fac]
 
 中文:
-定理 image.preComp_comp
-  结论: {W : C} (h : Z ⟶ W) [HasImage (g ≫ h)] [HasImage (f ≫ g ≫ h)]
+定理 像.preComp_comp
+  结论: {W : C} (h : Z ⟶ W) [有像 (g ≫ h)] [有像 (f ≫ g ≫ h)]
   证明: by
   apply (cancel_mono (image.ι h)).1
   simp only [preComp, Category.assoc, fac, lift_mk_comp, eqToHom]
@@ -1766,8 +1766,8 @@ instance image.preComp_epi_of_epi
   exact epi_comp _ _
 
 中文:
-实例 image.preComp_epi_of_epi
-  签名: [HasImage g] [HasImage (f ≫ g)] [Epi f]
+实例 像.preComp_epi_of_epi
+  签名: [有像 g] [有像 (f ≫ g)] [满态射 f]
   定义体: by
   apply @epi_of_epi_fac _ _ _ _ _ _ _ _ ?_ (image.factorThruImage_preComp _ _)
   exact epi_comp _ _
@@ -1797,7 +1797,7 @@ instance hasImage_iso_comp
 
 中文:
 实例 hasImage_iso_comp
-  签名: [IsIso f] [HasImage g]
+  签名: [是同构 f] [有像 g]
   定义体: HasImage.mk
     { F := (Image.monoFactorisation g).isoComp f
       isImage := { lift := fun F' => image.lift (F'.ofIsoComp f)
@@ -1834,8 +1834,8 @@ instance image.isIso_precomp_iso
         simp [image.preComp]⟩⟩⟩
 
 中文:
-实例 image.isIso_precomp_iso
-  签名: (f : X ⟶ Y) [IsIso f] [HasImage g]
+实例 像.isIso_precomp_iso
+  签名: (f : X ⟶ Y) [是同构 f] [有像 g]
   定义体: ⟨⟨image.lift
         { I := image (f ≫ g)
           m := image.ι (f ≫ g)
@@ -1878,7 +1878,7 @@ instance hasImage_comp_iso
 
 中文:
 实例 hasImage_comp_iso
-  签名: [HasImage f] [IsIso g]
+  签名: [有像 f] [是同构 g]
   定义体: HasImage.mk
     { F := (Image.monoFactorisation f).compMono g
       isImage :=
@@ -1915,8 +1915,8 @@ definition image.compIso
   inv := image.lift ((Image.monoFactorisation f).compMono g)
 
 中文:
-定义 image.compIso
-  签名: [HasImage f] [IsIso g]
+定义 像.compIso
+  签名: [有像 f] [是同构 g]
   定义体: image.lift (Image.monoFactorisation (f ≫ g)).ofCompIso
   inv := image.lift ((Image.monoFactorisation f).compMono g)
 
@@ -1939,8 +1939,8 @@ theorem image.compIso_hom_comp_image_ι
   simp [image.compIso]
 
 中文:
-定理 image.compIso_hom_comp_image_ι
-  条件: [HasImage f] [IsIso g]
+定理 像.compIso_hom_comp_image_ι
+  条件: [有像 f] [是同构 g]
   证明: by
   ext
   simp [image.compIso]
@@ -1965,8 +1965,8 @@ theorem image.compIso_inv_comp_image_ι
   simp [image.compIso]
 
 中文:
-定理 image.compIso_inv_comp_image_ι
-  条件: [HasImage f] [IsIso g]
+定理 像.compIso_inv_comp_image_ι
+  条件: [有像 f] [是同构 g]
   证明: by
   ext
   simp [image.compIso]
@@ -2006,11 +2006,11 @@ structure ImageMap
     - map_ι : map ≫ image.ι g.hom = image.ι f.hom ≫ sq.right  [default: by aesop]
 
 中文:
-结构 ImageMap
-  参数: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+结构 像映射
+  参数: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   公理与运算 (2 个):
-    - map : image f.hom ⟶ image g.hom
-    - map_ι : map ≫ image.ι g.hom = image.ι f.hom ≫ sq.right  [默认: by aesop]
+    - map : 像 f.hom ⟶ 像 g.hom
+    - map_ι : map ≫ 像.ι g.hom = 像.ι f.hom ≫ sq.right  [默认: by aesop]
 -/
 structure ImageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g) where
   map : image f.hom ⟶ image g.hom
@@ -2028,7 +2028,7 @@ instance inhabitedImageMap
 
 中文:
 实例 inhabitedImageMap
-  签名: {f : Arrow C} [HasImage f.hom]
+  签名: {f : 箭头 C} [有像 f.hom]
   定义体: ⟨⟨𝟙 _, by simp⟩⟩
 -/
 instance inhabitedImageMap {f : Arrow C} [HasImage f.hom] : Inhabited (ImageMap (𝟙 f)) :=
@@ -2046,8 +2046,8 @@ theorem ImageMap.factor_map
   proof: (cancel_mono (image.ι g.hom)).1 by simp
 
 中文:
-定理 ImageMap.factor_map
-  结论: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+定理 像映射.factor_map
+  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   证明: (cancel_mono (image.ι g.hom)).1 by simp
 
 Depends on / 依赖: cancel_mono, g.hom
@@ -2067,8 +2067,8 @@ definition ImageMap.transport
   map_ι := by simp [map_ι]
 
 中文:
-定义 ImageMap.transport
-  签名: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+定义 像映射.transport
+  签名: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   定义体: image.lift F ≫ map ≫ hF'.lift (Image.monoFactorisation g.hom)
   map_ι := by simp [map_ι]
 
@@ -2090,10 +2090,10 @@ class HasImageMap
     - mk' : : has_image_map : Nonempty (ImageMap sq)
 
 中文:
-类 HasImageMap
-  参数: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+类 有像映射
+  参数: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   公理与运算 (1 个):
-    - mk' : : has_image_map : Nonempty (ImageMap sq)
+    - mk' : : has_image_map : 非空 (像映射 sq)
 -/
 class HasImageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g) : Prop where
 mk' ::
@@ -2110,8 +2110,8 @@ theorem HasImageMap.mk
   proof: ⟨Nonempty.intro m⟩
 
 中文:
-定理 HasImageMap.mk
-  结论: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
+定理 有像映射.mk
+  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] {sq : f ⟶ g}
   证明: ⟨Nonempty.intro m⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -2129,8 +2129,8 @@ theorem HasImageMap.transport
   proof: HasImageMap.mk ImageMap.transport sq F hF' map_ι
 
 中文:
-定理 HasImageMap.transport
-  结论: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+定理 有像映射.transport
+  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   证明: HasImageMap.mk ImageMap.transport sq F hF' map_ι
 
 Depends on / 依赖: HasImageMap, HasImageMap.mk, ImageMap, ImageMap.transport, transport
@@ -2149,8 +2149,8 @@ definition HasImageMap.imageMap
   body: Classical.choice @HasImageMap.has_image_map _ _ _ _ _ _ sq _
 
 中文:
-定义 HasImageMap.imageMap
-  签名: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
+定义 有像映射.imageMap
+  签名: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
   定义体: Classical.choice @HasImageMap.has_image_map _ _ _ _ _ _ sq _
 
 Depends on / 依赖: Classical, Classical.choice, HasImageMap, HasImageMap.has_image_map, choice, has_image_map
@@ -2181,8 +2181,8 @@ instance HasImageMap.comp
         rw [Category.assoc]; rw [ImageMap.map_ι]; rw [ImageMap.map_ι_assoc]; rw [Arrow.comp_right] }
 
 中文:
-实例 HasImageMap.comp
-  签名: {f g h : Arrow C} [HasImage f.hom] [HasImage g.hom] [HasImage h.hom]
+实例 有像映射.comp
+  签名: {f g h : 箭头 C} [有像 f.hom] [有像 g.hom] [有像 h.hom]
   定义体: HasImageMap.mk
     { map := (HasImageMap.imageMap sq1).map ≫ (HasImageMap.imageMap sq2).map
       map_ι := by
@@ -2214,8 +2214,8 @@ theorem ImageMap.map_uniq_aux
   apply (cancel_mono (image.ι g.hom)).1 this
 
 中文:
-定理 ImageMap.map_uniq_aux
-  结论: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
+定理 像映射.map_uniq_aux
+  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] {sq : f ⟶ g}
   证明: by
   have : map ≫ image.ι g.hom = map' ≫ image.ι g.hom := by rw [map_ι, map_ι']
   apply (cancel_mono (image.ι g.hom)).1 this
@@ -2243,8 +2243,8 @@ theorem ImageMap.map_uniq
 alias ImageMap.mk.injEq' := ImageMap.mk.injEq
 
 中文:
-定理 ImageMap.map_uniq
-  结论: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom]
+定理 像映射.map_uniq
+  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom]
   证明: by
   apply ImageMap.map_uniq_aux _ F.map_ι _ G.map_ι
 
@@ -2271,7 +2271,7 @@ ImageMap.ext ImageMap.map_uniq a b
 
 中文:
 实例 :
-  签名: Subsingleton (ImageMap sq)
+  签名: 子单例 (像映射 sq)
   定义体: Subsingleton.intro fun a b =>
 ImageMap.ext ImageMap.map_uniq a b
 
@@ -2294,8 +2294,8 @@ abbreviation image.map
   body: (HasImageMap.imageMap sq).map
 
 中文:
-缩写 image.map
-  签名: : image f.hom ⟶ image g.hom
+缩写 像.map
+  签名: : 像 f.hom ⟶ 像 g.hom
   定义体: (HasImageMap.imageMap sq).map
 
 Depends on / 依赖: HasImageMap, HasImageMap.imageMap, imageMap
@@ -2311,7 +2311,7 @@ theorem image.factor_map
   proof: by simp
 
 中文:
-定理 image.factor_map
+定理 像.factor_map
   证明: by simp
 -/
 theorem image.factor_map :
@@ -2326,8 +2326,8 @@ theorem image.map_ι
   proof: by simp
 
 中文:
-定理 image.map_ι
-  结论: image.map sq ≫ image.ι g.hom = image.ι f.hom ≫ sq.right
+定理 像.map_ι
+  结论: 像.map sq ≫ 像.ι g.hom = 像.ι f.hom ≫ sq.right
   证明: by simp
 -/
 theorem image.map_ι : image.map sq ≫ image.ι g.hom = image.ι f.hom ≫ sq.right := by simp
@@ -2341,8 +2341,8 @@ theorem image.map_homMk'_ι
   proof: image.map_ι _
 
 中文:
-定理 image.map_homMk'_ι
-  结论: {X Y P Q : C} {k : X ⟶ Y} [HasImage k] {l : P ⟶ Q} [HasImage l]
+定理 像.map_homMk'_ι
+  结论: {X Y P Q : C} {k : X ⟶ Y} [有像 k] {l : P ⟶ Q} [有像 l]
   证明: image.map_ι _
 
 Depends on / 依赖: F.obj, Iso.refl, NatIso, NatIso.ofComponents, evaluation, image.map_, ofComponents, preservesColimitsOfShape_of_evaluation, preservesColimitsOfShape_of_natIso, tensorLeft, this.symm
@@ -2369,7 +2369,7 @@ definition imageMapComp
 
 中文:
 定义 imageMapComp
-  签名: : ImageMap (sq ≫ sq') where map
+  签名: : 像映射 (sq ≫ sq') where map
   定义体: image.map sq ≫ image.map sq'
 
 @[simp]
@@ -2389,8 +2389,8 @@ theorem image.map_comp
     congr; simp only [eq_iff_true_of_subsingleton]
 
 中文:
-定理 image.map_comp
-  条件: [HasImageMap (sq ≫ sq')]
+定理 像.map_comp
+  条件: [有像映射 (sq ≫ sq')]
   证明: show (HasImageMap.imageMap (sq ≫ sq')).map = (imageMapComp sq sq').map by
     congr; simp only [eq_iff_true_of_subsingleton]
 
@@ -2419,7 +2419,7 @@ definition imageMapId
 
 中文:
 定义 imageMapId
-  签名: : ImageMap (𝟙 f) where map
+  签名: : 像映射 (𝟙 f) where map
   定义体: 𝟙 (image f.hom)
 
 @[simp]
@@ -2440,9 +2440,9 @@ theorem image.map_id
     congr; simp only [eq_iff_true_of_subsingleton]
 
 中文:
-定理 image.map_id
-  条件: [HasImageMap (𝟙 f)]
-  结论: image.map (𝟙 f) = 𝟙 (image f.hom)
+定理 像.map_id
+  条件: [有像映射 (𝟙 f)]
+  结论: 像.map (𝟙 f) = 𝟙 (像 f.hom)
   证明: show (HasImageMap.imageMap (𝟙 f)).map = (imageMapId f).map by
     congr; simp only [eq_iff_true_of_subsingleton]
 
@@ -2470,10 +2470,10 @@ class HasImageMaps
     - has_image_map : forall {f g : Arrow C} (st : f ⟶ g), HasImageMap st
 
 中文:
-类 HasImageMaps
+类 有ImageMaps
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_image_map : 对任意 {f g : Arrow C} (st : f ⟶ g), HasImageMap st
+    - has_image_map : 对任意 {f g : 箭头 C} (st : f ⟶ g), 有像映射 st
 -/
 class HasImageMaps : Prop where
   has_image_map : forall {f g : Arrow C} (st : f ⟶ g), HasImageMap st
@@ -2500,7 +2500,7 @@ definition im
 
 中文:
 定义 im
-  签名: : Arrow C ⥤ C where
+  签名: : 箭头 C ⥤ C where
   定义体: image f.hom
   map st := image.map st
 
@@ -2527,9 +2527,9 @@ structure StrongEpiMonoFactorisation
 中文:
 结构 StrongEpiMonoFactorisation
   参数: {X Y : C} (f : X ⟶ Y)
-  继承: MonoFactorisation f
+  继承: 单态射分解 f
   公理与运算 (1 个):
-    - [e_strong_epi : StrongEpi e]
+    - [e_strong_epi : 强满态射 e]
 -/
 structure StrongEpiMonoFactorisation {X Y : C} (f : X ⟶ Y) extends MonoFactorisation f where
   [e_strong_epi : StrongEpi e]
@@ -2548,7 +2548,7 @@ instance strongEpiMonoFactorisationInhabited
 
 中文:
 实例 strongEpiMonoFactorisationInhabited
-  签名: {X Y : C} (f : X ⟶ Y) [StrongEpi f]
+  签名: {X Y : C} (f : X ⟶ Y) [强满态射 f]
   定义体: ⟨⟨⟨Y, 𝟙 Y, f, by simp⟩⟩⟩
 -/
 instance strongEpiMonoFactorisationInhabited {X Y : C} (f : X ⟶ Y) [StrongEpi f] :
@@ -2586,7 +2586,7 @@ class HasStrongEpiMonoFactorisations
   (no additional axioms)
 
 中文:
-类 HasStrongEpiMonoFactorisations
+类 有StrongEpiMonoFactorisations
   参数: : 命题 where mk' ::
   (无附加公理)
 -/
@@ -2605,7 +2605,7 @@ theorem HasStrongEpiMonoFactorisations.mk
   proof: ⟨fun f => Nonempty.intro d f⟩
 
 中文:
-定理 HasStrongEpiMonoFactorisations.mk
+定理 有StrongEpiMonoFactorisations.mk
   证明: ⟨fun f => Nonempty.intro d f⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -2639,10 +2639,10 @@ class HasStrongEpiImages
     - strong_factorThruImage : forall {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
 
 中文:
-类 HasStrongEpiImages
+类 有StrongEpiImages
   参数: : 命题 where
   公理与运算 (1 个):
-    - strong_factorThruImage : 对任意 {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
+    - strong_factorThruImage : 对任意 {X Y : C} (f : X ⟶ Y), 强满态射 (factorThruImage f)
 -/
 class HasStrongEpiImages : Prop where
   strong_factorThruImage : forall {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
@@ -2688,7 +2688,7 @@ theorem strongEpi_factorThruImage_of_strongEpiMonoFactorisation
 
 中文:
 定理 strongEpi_factorThruImage_of_strongEpiMonoFactorisation
-  结论: {X Y : C} {f : X ⟶ Y} [HasImage f]
+  结论: {X Y : C} {f : X ⟶ Y} [有像 f]
   证明: strongEpi_of_strongEpiMonoFactorisation F Image.isImage f
 
 Depends on / 依赖: Image.isImage, isImage, strongEpi_of_strongEpiMonoFactorisation
@@ -2758,8 +2758,8 @@ definition image.isoStrongEpiMono
 IsImage.isoExt F.toMonoIsImage Image.isImage f
 
 中文:
-定义 image.isoStrongEpiMono
-  签名: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f) [StrongEpi e]
+定义 像.isoStrongEpiMono
+  签名: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f) [强满态射 e]
   定义体: let F : StrongEpiMonoFactorisation f := { I := I', m := m, e := e }
 IsImage.isoExt F.toMonoIsImage Image.isImage f
 
@@ -2785,7 +2785,7 @@ theorem image.isoStrongEpiMono_hom_comp_ι
 @[simp]
 
 中文:
-定理 image.isoStrongEpiMono_hom_comp_ι
+定理 像.isoStrongEpiMono_hom_comp_ι
   结论: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
   证明: by
   dsimp [isoStrongEpiMono]
@@ -2810,7 +2810,7 @@ theorem image.isoStrongEpiMono_inv_comp_mono
   proof: image.lift_fac _
 
 中文:
-定理 image.isoStrongEpiMono_inv_comp_mono
+定理 像.isoStrongEpiMono_inv_comp_mono
   结论: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
   证明: image.lift_fac _
 
@@ -2877,7 +2877,7 @@ theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence
 
 中文:
 定理 hasStrongEpiMonoFactorisations_imp_of_isEquivalence
-  结论: (F : C ⥤ D) [IsEquivalence F]
+  结论: (F : C ⥤ D) [是等价 F]
   证明: ⟨fun {X} {Y} f => by
     let em : StrongEpiMonoFactorisation (F.inv.map f) :=
       (HasStrongEpiMonoFactorisations.has_fac (F.inv.map f)).some

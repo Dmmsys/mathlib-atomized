@@ -59,8 +59,8 @@ lemma hasProjectiveDimensionLT_of_forall_finite
     rcases M
 
 中文:
-引理 hasProjectiveDimensionLT_of_forall_finite
-  结论: (M : ModuleCat.{v} R) [Module.Finite R M] (n : 自然数)
+引理 hasProjectiveDimensionLT_of_对任意_finite
+  结论: (M : 模范畴.{v} R) [模.有限 R M] (n : 自然数)
   证明: by
   induction n generalizing M with
   | zero =>
@@ -129,7 +129,7 @@ lemma projectiveDimension_quotSMulTop_eq_succ_of_isSMulRegular
 
 中文:
 引理 projectiveDimension_quotSMulTop_eq_succ_of_isSMulRegular
-  结论: (M : ModuleCat.{v} R)
+  结论: (M : 模范畴.{v} R)
   证明: by
   have sub : Subsingleton M ↔ Subsingleton (QuotSMulTop x M) := by
     refine ⟨fun h => inferInstance, fun h => ?_⟩
@@ -214,7 +214,7 @@ lemma projectiveDimension_quotient_eq_add_length_of_isWeaklyRegular
 
 中文:
 引理 projectiveDimension_quotient_eq_add_length_of_isWeaklyRegular
-  结论: (M : ModuleCat.{v} R)
+  结论: (M : 模范畴.{v} R)
   证明: by
   generalize len : rs.length = n
   induction n generalizing M rs with
@@ -263,7 +263,7 @@ lemma projectiveDimension_quotient_eq_length
 
 中文:
 引理 projectiveDimension_quotient_eq_length
-  条件: (rs : List R) (reg : IsRegular R rs)
+  条件: (rs : 列表 R) (reg : 是正则 R rs)
   证明: by
   have mem_max : forall x in rs, x in maximalIdeal R := by
     intro x hx

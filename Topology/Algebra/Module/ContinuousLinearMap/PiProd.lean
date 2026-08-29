@@ -93,7 +93,7 @@ definition prod
 @[simp, norm_cast]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f₁ : M₁ ->L[R] M₂) (f₂ : M₁ ->L[R] M₃)
   定义体: .prod f₁ f₂
 
@@ -242,7 +242,7 @@ theorem coe_inl
 
 中文:
 定理 coe_inl
-  结论: (inl R M₁ M₂ : M₁ ->ₗ[R] M₁ × M₂) = LinearMap.inl R M₁ M₂
+  结论: (inl R M₁ M₂ : M₁ ->ₗ[R] M₁ × M₂) = 线性映射.inl R M₁ M₂
   证明: rfl
 
 @[simp, norm_cast]
@@ -261,7 +261,7 @@ theorem coe_inr
 
 中文:
 定理 coe_inr
-  结论: (inr R M₁ M₂ : M₂ ->ₗ[R] M₁ × M₂) = LinearMap.inr R M₁ M₂
+  结论: (inr R M₁ M₂ : M₂ ->ₗ[R] M₁ × M₂) = 线性映射.inr R M₁ M₂
   证明: rfl
 -/
 theorem coe_inr : (inr R M₁ M₂ : M₂ ->ₗ[R] M₁ × M₂) = LinearMap.inr R M₁ M₂ :=
@@ -357,7 +357,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ↑(fst R M₁ M₂) = LinearMap.fst R M₁ M₂
+  结论: ↑(fst R M₁ M₂) = 线性映射.fst R M₁ M₂
   证明: rfl
 
 @[simp, norm_cast]
@@ -378,7 +378,7 @@ theorem coe_fst'
 
 中文:
 定理 coe_fst'
-  结论: ⇑(fst R M₁ M₂) = Prod.fst
+  结论: ⇑(fst R M₁ M₂) = 积类型.fst
   证明: rfl
 
 @[simp, norm_cast]
@@ -399,7 +399,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ↑(snd R M₁ M₂) = LinearMap.snd R M₁ M₂
+  结论: ↑(snd R M₁ M₂) = 线性映射.snd R M₁ M₂
   证明: rfl
 
 @[simp, norm_cast]
@@ -420,7 +420,7 @@ theorem coe_snd'
 
 中文:
 定理 coe_snd'
-  结论: ⇑(snd R M₁ M₂) = Prod.snd
+  结论: ⇑(snd R M₁ M₂) = 积类型.snd
   证明: rfl
 
 @[simp]
@@ -441,7 +441,7 @@ theorem fst_prod_snd
 
 中文:
 定理 fst_prod_snd
-  结论: (fst R M₁ M₂).prod (snd R M₁ M₂) = .id R (M₁ × M₂)
+  结论: (fst R M₁ M₂).乘积 (snd R M₁ M₂) = .id R (M₁ × M₂)
   证明: ext fun ⟨_x, _y⟩ => rfl
 
 @[simp]
@@ -671,7 +671,7 @@ theorem coe_pi
 中文:
 定理 coe_pi
   条件: (f : 对任意 i, M ->L[R] φ i)
-  结论: (pi f : M ->ₗ[R] 对任意 i, φ i) = LinearMap.pi fun i => f i
+  结论: (pi f : M ->ₗ[R] 对任意 i, φ i) = 线性映射.pi fun i => f i
   证明: rfl
 -/
 theorem coe_pi (f : forall i, M ->L[R] φ i) : (pi f : M ->ₗ[R] forall i, φ i) = LinearMap.pi fun i => f i :=
@@ -833,7 +833,7 @@ theorem coe_proj
 中文:
 定理 coe_proj
   条件: (i : ι)
-  结论: (proj i).toLinearMap = (LinearMap.proj i : ((i : ι) -> φ i) ->ₗ[R] _)
+  结论: (proj i).toLinearMap = (线性映射.proj i : ((i : ι) -> φ i) ->ₗ[R] _)
   证明: rfl
 
 @[simp]
@@ -955,7 +955,7 @@ theorem coe_piMap'
 中文:
 定理 coe_piMap'
   条件: (f : 对任意 i, φ i ->L[R] ψ i)
-  结论: ⇑(piMap f) = Pi.map fun i => f i
+  结论: ⇑(piMap f) = 依赖函数类型.map fun i => f i
   证明: rfl
 -/
 theorem coe_piMap' (f : forall i, φ i ->L[R] ψ i) : ⇑(piMap f) = Pi.map fun i => f i :=
@@ -976,7 +976,7 @@ definition _root_.Pi.compRightL
   map_smul' := by intros; ext; simp
 
 中文:
-定义 _root_.Pi.compRightL
+定义 _root_.依赖函数类型.compRightL
   签名: {α : 类型} (f : α -> ι)
   定义体: fun v i => v (f i)
   map_add' := by intros; ext; simp
@@ -996,7 +996,7 @@ lemma _root_.Pi.compRightL_apply
   proof: rfl
 
 中文:
-引理 _root_.Pi.compRightL_apply
+引理 _root_.依赖函数类型.compRightL_apply
   条件: {α : 类型} (f : α -> ι) (v : (i : ι) -> φ i) (i : α)
   证明: rfl
 -/
@@ -1034,7 +1034,7 @@ lemma sum_comp_single
 
 中文:
 引理 sum_comp_single
-  条件: [Fintype ι] [DecidableEq ι] (L : (Π i, φ i) ->L[R] M) (v : Π i, φ i)
+  条件: [有限类型 ι] [DecidableEq ι] (L : (Π i, φ i) ->L[R] M) (v : Π i, φ i)
   证明: by
   simp [← map_sum, LinearMap.sum_single_apply]
 
@@ -1352,7 +1352,7 @@ lemma coprod_inl_inr
 
 中文:
 引理 coprod_inl_inr
-  结论: ContinuousLinearMap.coprod (.inl R M N) (.inr R M N) = .id R (M × N)
+  结论: 连续线性映射.coprod (.inl R M N) (.inr R M N) = .id R (M × N)
   证明: coe_injective LinearMap.coprod_inl_inr
 
 @[simp]
@@ -1374,7 +1374,7 @@ lemma coprod_comp_inl_inr
 
 中文:
 引理 coprod_comp_inl_inr
-  条件: [ContinuousAdd M₁] [ContinuousAdd M₂] (f : M × M₁ ->L[R] M₂)
+  条件: [连续加法 M₁] [连续加法 M₂] (f : M × M₁ ->L[R] M₂)
   证明: by
   rw [← ContinuousLinearMap.comp_coprod]; rw [coprod_inl_inr]; rw [comp_id]
 
@@ -1408,7 +1408,7 @@ definition coprodEquiv
 
 中文:
 定义 coprodEquiv
-  签名: [ContinuousAdd M₁] [ContinuousAdd M₂] [Semiring S] [Module S M]
+  签名: [连续加法 M₁] [连续加法 M₂] [半环 S] [模 S M]
   定义体: f.1.coprod f.2
   invFun f := (f.comp (.inl ..), f.comp (.inr ..))
   left_inv f := by simp

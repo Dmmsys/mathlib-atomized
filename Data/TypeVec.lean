@@ -72,7 +72,7 @@ definition Arrow
 @[inherit_doc] scoped[MvFunctor] infixl:40 " ⟹ " => TypeVec.Arrow
 
 中文:
-定义 Arrow
+定义 箭头
   签名: (α : TypeVec.{u} n) (β : TypeVec.{v} n)
   定义体: forall i : Fin2 n, α i -> β i
 
@@ -99,7 +99,7 @@ theorem Arrow.ext
   intro h; funext i; apply h
 
 中文:
-定理 Arrow.ext
+定理 箭头.ext
   条件: (f g : α ⟹ β)
   证明: by
   intro h; funext i; apply h
@@ -117,8 +117,8 @@ instance Arrow.inhabited
   body: ⟨fun _ _ => default⟩
 
 中文:
-实例 Arrow.inhabited
-  签名: (α β : TypeVec n) [对任意 i, Inhabited (β i)]
+实例 箭头.inhabited
+  签名: (α β : TypeVec n) [对任意 i, 可居 (β i)]
   定义体: ⟨fun _ _ => default⟩
 -/
 instance Arrow.inhabited (α β : TypeVec n) [forall i, Inhabited (β i)] : Inhabited (α ⟹ β) :=
@@ -292,7 +292,7 @@ instance last.inhabited
 
 中文:
 实例 last.inhabited
-  签名: (α : TypeVec (n + 1)) [Inhabited (α Fin2.fz)]
+  签名: (α : TypeVec (n + 1)) [可居 (α Fin2.fz)]
   定义体: ⟨show α Fin2.fz from default⟩
 
 Depends on / 依赖: Fin2.fz
@@ -394,7 +394,7 @@ definition append1Cases
 
 中文:
 定义 append1Cases
-  签名: {C : TypeVec (n + 1) -> Sort u} (H : 对任意 α β, C (append1 α β)) (γ)
+  签名: {C : TypeVec (n + 1) -> 类型层 u} (H : 对任意 α β, C (append1 α β)) (γ)
   定义体: by
   rw [← @append1_drop_last _ γ]; apply H
 
@@ -416,7 +416,7 @@ theorem append1_cases_append1
 
 中文:
 定理 append1_cases_append1
-  条件: {C : TypeVec (n + 1) -> Sort u} (H : 对任意 α β, C (append1 α β)) (α β)
+  条件: {C : TypeVec (n + 1) -> 类型层 u} (H : 对任意 α β, C (append1 α β)) (α β)
   证明: rfl
 -/
 theorem append1_cases_append1 {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α β)) (α β) :
@@ -575,7 +575,7 @@ definition Arrow.mp
   signature: {α β : TypeVec n} (h : α = β)
 
 中文:
-定义 Arrow.mp
+定义 箭头.mp
   签名: {α β : TypeVec n} (h : α = β)
 -/
 def Arrow.mp {α β : TypeVec n} (h : α = β) : α ⟹ β
@@ -589,7 +589,7 @@ definition Arrow.mpr
   signature: {α β : TypeVec n} (h : α = β)
 
 中文:
-定义 Arrow.mpr
+定义 箭头.mpr
   签名: {α β : TypeVec n} (h : α = β)
 -/
 def Arrow.mpr {α β : TypeVec n} (h : α = β) : β ⟹ α
@@ -970,7 +970,7 @@ instance subsingleton0
 
 中文:
 实例 subsingleton0
-  签名: : Subsingleton (TypeVec 0)
+  签名: : 子单例 (TypeVec 0)
   定义体: ⟨fun _ _ => funext Fin2.elim0⟩
 
 Depends on / 依赖: Fin2.elim0
@@ -990,7 +990,7 @@ definition casesNil
 
 中文:
 定义 casesNil
-  签名: {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0)
+  签名: {β : TypeVec 0 -> 类型层*} (f : β Fin2.elim0)
   定义体: fun v => cast (by congr; funext i; cases i) f
 -/
 protected def casesNil {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0) : forall v, β v :=
@@ -1006,7 +1006,7 @@ definition casesCons
 
 中文:
 定义 casesCons
-  签名: (n : 自然数) {β : TypeVec (n + 1) -> Sort*}
+  签名: (n : 自然数) {β : TypeVec (n + 1) -> 类型层*}
   定义体: fun v : TypeVec (n + 1) => cast (by simp) (f v.last v.drop)
 -/
 protected def casesCons (n : Nat) {β : TypeVec (n + 1) -> Sort*}
@@ -1024,7 +1024,7 @@ theorem casesNil_append1
 
 中文:
 定理 casesNil_append1
-  条件: {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0)
+  条件: {β : TypeVec 0 -> 类型层*} (f : β Fin2.elim0)
   证明: rfl
 
 Depends on / 依赖: Quotient, Quotient.map, c.pow
@@ -1043,7 +1043,7 @@ theorem casesCons_append1
 
 中文:
 定理 casesCons_append1
-  结论: (n : 自然数) {β : TypeVec (n + 1) -> Sort*}
+  结论: (n : 自然数) {β : TypeVec (n + 1) -> 类型层*}
   证明: rfl
 -/
 protected theorem casesCons_append1 (n : Nat) {β : TypeVec (n + 1) -> Sort*}
@@ -1066,7 +1066,7 @@ definition typevecCasesNil₃
 
 中文:
 定义 typevecCasesNil₃
-  签名: {β : 对任意 v v' : TypeVec 0, v ⟹ v' -> Sort*}
+  签名: {β : 对任意 v v' : TypeVec 0, v ⟹ v' -> 类型层*}
   定义体: fun v v' fs => by
   refine cast ?_ f
   have eq₁ : v = Fin2.elim0 := by funext i; contradiction
@@ -1100,7 +1100,7 @@ definition typevecCasesCons₃
 
 中文:
 定义 typevecCasesCons₃
-  签名: (n : 自然数) {β : 对任意 v v' : TypeVec (n + 1), v ⟹ v' -> Sort*}
+  签名: (n : 自然数) {β : 对任意 v v' : TypeVec (n + 1), v ⟹ v' -> 类型层*}
   定义体: by
   intro v v'
   rw [← append1_drop_last v]; rw [← append1_drop_last v']
@@ -1133,7 +1133,7 @@ definition typevecCasesNil₂
 
 中文:
 定义 typevecCasesNil₂
-  签名: {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun)
+  签名: {β : Fin2.elim0 ⟹ Fin2.elim0 -> 类型层*} (f : β nilFun)
   定义体: by
   intro g
   suffices g = nilFun by rwa [this]
@@ -1185,7 +1185,7 @@ theorem typevecCasesNil₂_appendFun
 
 中文:
 定理 typevecCasesNil₂_appendFun
-  条件: {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun)
+  条件: {β : Fin2.elim0 ⟹ Fin2.elim0 -> 类型层*} (f : β nilFun)
   证明: rfl
 -/
 theorem typevecCasesNil₂_appendFun {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun) :
@@ -1271,7 +1271,7 @@ definition prod
   signature: : forall {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
 
 中文:
-定义 prod
+定义 乘积
   签名: : 对任意 {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
 -/
 def prod : forall {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
@@ -1535,7 +1535,7 @@ definition ofRepeat
 
 中文:
 定义 ofRepeat
-  签名: {α : Sort _}
+  签名: {α : 类型层 _}
 
 Depends on / 依赖: c.eq
 -/
@@ -1587,7 +1587,7 @@ definition prod.fst
   signature: : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
 
 中文:
-定义 prod.fst
+定义 乘积.fst
   签名: : 对任意 {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
 -/
 def prod.fst : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
@@ -1602,7 +1602,7 @@ definition prod.snd
   signature: : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
 
 中文:
-定义 prod.snd
+定义 乘积.snd
   签名: : 对任意 {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
 -/
 def prod.snd : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
@@ -1617,7 +1617,7 @@ definition prod.diag
   signature: : forall {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
 
 中文:
-定义 prod.diag
+定义 乘积.diag
   签名: : 对任意 {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
 -/
 def prod.diag : forall {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
@@ -1632,7 +1632,7 @@ definition prod.mk
   signature: : forall {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i -> β i -> (α otimes β) i
 
 中文:
-定义 prod.mk
+定义 乘积.mk
   签名: : 对任意 {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i -> β i -> (α otimes β) i
 
 Depends on / 依赖: i.fs
@@ -1710,7 +1710,7 @@ definition prod.map
   signature: : forall {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
 
 中文:
-定义 prod.map
+定义 乘积.map
   签名: : 对任意 {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
 -/
 protected def prod.map : forall {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
@@ -1791,7 +1791,7 @@ theorem fst_diag
 中文:
 定理 fst_diag
   条件: {α : TypeVec n}
-  结论: TypeVec.prod.fst ⊚ (prod.diag : α ⟹ _) = id
+  结论: TypeVec.乘积.fst ⊚ (乘积.diag : α ⟹ _) = id
   证明: by
   funext i; induction i with
   | fz => rfl
@@ -1819,7 +1819,7 @@ theorem snd_diag
 中文:
 定理 snd_diag
   条件: {α : TypeVec n}
-  结论: TypeVec.prod.snd ⊚ (prod.diag : α ⟹ _) = id
+  结论: TypeVec.乘积.snd ⊚ (乘积.diag : α ⟹ _) = id
   证明: by
   funext i; induction i with
   | fz => rfl
@@ -2010,7 +2010,7 @@ theorem diag_sub_val
 中文:
 定理 diag_sub_val
   条件: {n} {α : TypeVec.{u} n}
-  结论: subtypeVal (repeatEq α) ⊚ diagSub = prod.diag
+  结论: subtypeVal (repeatEq α) ⊚ diagSub = 乘积.diag
   证明: by
   ext i x
   induction i with
@@ -2106,7 +2106,7 @@ theorem dropFun_diag
 中文:
 定理 dropFun_diag
   条件: {α}
-  结论: dropFun (@prod.diag (n + 1) α) = prod.diag
+  结论: dropFun (@乘积.diag (n + 1) α) = 乘积.diag
   证明: rfl
 
 @[simp]

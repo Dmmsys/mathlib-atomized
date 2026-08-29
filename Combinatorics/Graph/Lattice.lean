@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (Graph α β)
+  签名: SemilatticeInf (图 α β)
   定义体: {
     vertexSet := V(G) inter V(H)
     edgeSet := {e in E(G) inter E(H) | forall x y, G.IsLink e x y ↔ H.IsLink e x y}
@@ -94,7 +94,7 @@ lemma vertexSet_inf
 
 中文:
 引理 vertexSet_inf
-  条件: (G H : Graph α β)
+  条件: (G H : 图 α β)
   结论: V(G ⊓ H) = V(G) inter V(H)
   证明: rfl
 -/
@@ -110,7 +110,7 @@ lemma edgeSet_inf
 
 中文:
 引理 edgeSet_inf
-  条件: (G H : Graph α β)
+  条件: (G H : 图 α β)
   证明: rfl
 
 Depends on / 依赖: ContT.uliftable, Equiv.ulift.symm, uliftable
@@ -241,8 +241,8 @@ lemma Compatible.edgeSet_inf
   exact le_antisymm (fun e he => he.1) fun e he => ⟨he, fun _ _ => h.isLink_congr he.1 he.2⟩
 
 中文:
-引理 Compatible.edgeSet_inf
-  条件: (h : G.Compatible H)
+引理 余mpatible.edgeSet_inf
+  条件: (h : G.余mpatible H)
   结论: E(G ⊓ H) = E(G) inter E(H)
   证明: by
   rw [G.edgeSet_inf]

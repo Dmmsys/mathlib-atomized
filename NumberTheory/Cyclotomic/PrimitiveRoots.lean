@@ -116,7 +116,7 @@ theorem zeta_spec
 
 中文:
 定理 zeta_spec
-  结论: IsPrimitiveRoot (zeta n A B) n
+  结论: 是PrimitiveRoot (zeta n A B) n
   证明: (exists_isPrimitiveRoot A B (Set.mem_singleton n) (NeZero.ne _) :
     exists r : B, IsPrimitiveRoot r n).choose_spec
 
@@ -138,7 +138,7 @@ theorem aeval_zeta
 
 中文:
 定理 aeval_zeta
-  条件: [IsDomain B] [NeZero (n : B)]
+  条件: [是整环 B] [NeZero (n : B)]
   证明: by
   rw [← eval_map_algebraMap]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff]
   exact zeta_spec n A B
@@ -163,7 +163,7 @@ theorem zeta_isRoot
 
 中文:
 定理 zeta_isRoot
-  条件: [IsDomain B] [NeZero (n : B)]
+  条件: [是整环 B] [NeZero (n : B)]
   结论: IsRoot (cyclotomic n B) (zeta n A B)
   证明: by
   convert! aeval_zeta n A B using 0
@@ -300,7 +300,7 @@ definition embeddingsEquivPrimitiveRoots
 
 中文:
 定义 embeddingsEquivPrimitiveRoots
-  签名: (C : 类型) [CommRing C] [IsDomain C] [Algebra K C]
+  签名: (C : 类型) [交换环 C] [是整环 C] [代数 K C]
   定义体: (hζ.powerBasis K).liftEquiv.trans
     { toFun := fun x => by
         haveI := IsCyclotomicExtension.neZero' n K L
@@ -344,7 +344,7 @@ theorem embeddingsEquivPrimitiveRoots_apply_coe
 
 中文:
 定理 embeddingsEquivPrimitiveRoots_apply_coe
-  结论: (C : 类型) [CommRing C] [IsDomain C] [Algebra K C]
+  结论: (C : 类型) [交换环 C] [是整环 C] [代数 K C]
   证明: rfl
 -/
 theorem embeddingsEquivPrimitiveRoots_apply_coe (C : Type*) [CommRing C] [IsDomain C] [Algebra K C]
@@ -372,7 +372,7 @@ theorem finrank
 
 中文:
 定理 finrank
-  条件: (hirr : Irreducible (cyclotomic n K))
+  条件: (hirr : 不可约 (cyclotomic n K))
   结论: finrank K L = n.totient
   证明: by
   have := IsCyclotomicExtension.neZero' n K L
@@ -403,8 +403,8 @@ theorem _root_.IsPrimitiveRoot.lcm_totient_le_finrank
   have : IsPrimitiveRoot z k := hx.pow_mul_pow_lcm hy h
 
 中文:
-定理 _root_.IsPrimitiveRoot.lcm_totient_le_finrank
-  结论: [FiniteDimensional K L] {p q : 自然数} {x y : L}
+定理 _root_.是PrimitiveRoot.lcm_totient_le_finrank
+  结论: [有限维 K L] {p q : 自然数} {x y : L}
   证明: by
   rcases Nat.eq_zero_or_pos p with (rfl | hppos)
   · simp
@@ -460,7 +460,7 @@ theorem dvd_of_isCyclotomicExtension
 
 中文:
 定理 dvd_of_isCyclotomicExtension
-  结论: [IsCyclotomicExtension {n} Rat K] {ζ : K}
+  结论: [是CyclotomicExtension {n} 有理数 K] {ζ : K}
   证明: by
   have hl : NeZero l := ⟨hl⟩
   have hroot := IsCyclotomicExtension.zeta_spec n Rat K
@@ -507,8 +507,8 @@ theorem exists_neg_pow_of_isOfFinOrder
   obtain ⟨k, hkpos, hkn⟩ := isOfFinOrder_iff_pow_eq_on
 
 中文:
-定理 exists_neg_pow_of_isOfFinOrder
-  结论: [IsCyclotomicExtension {n} Rat K]
+定理 存在_neg_pow_of_isOfFinOrder
+  结论: [是CyclotomicExtension {n} 有理数 K]
   证明: by
   have hnegζ : IsPrimitiveRoot (-ζ) (2 * n) := by
     convert! IsPrimitiveRoot.orderOf (-ζ)
@@ -550,8 +550,8 @@ theorem exists_pow_or_neg_mul_pow_of_isOfFinOrder
   rcases Nat.even_or_odd r with (h | h) <;> simp [neg_pow, h.neg_one_pow]
 
 中文:
-定理 exists_pow_or_neg_mul_pow_of_isOfFinOrder
-  结论: [IsCyclotomicExtension {n} Rat K]
+定理 存在_pow_or_neg_mul_pow_of_isOfFinOrder
+  结论: [是CyclotomicExtension {n} 有理数 K]
   证明: by
   obtain ⟨r, hr⟩ := hζ.exists_neg_pow_of_isOfFinOrder hno hx
   refine ⟨r % n, Nat.mod_lt _ (NeZero.pos _), ?_⟩
@@ -586,7 +586,7 @@ theorem norm_eq_neg_one_pow
 
 中文:
 定理 norm_eq_neg_one_pow
-  条件: (hζ : IsPrimitiveRoot ζ 2) [IsDomain L]
+  条件: (hζ : 是PrimitiveRoot ζ 2) [是整环 L]
   证明: by
   rw [hζ.eq_neg_one_of_two_right]; rw [show -1 = algebraMap K L (-1) by simp]; rw [Algebra.norm_algebraMap]
 
@@ -615,7 +615,7 @@ theorem norm_eq_one
 
 中文:
 定理 norm_eq_one
-  结论: [IsDomain L] [IsCyclotomicExtension {n} K L] (hn : n != 2)
+  结论: [是整环 L] [是CyclotomicExtension {n} K L] (hn : n != 2)
   证明: by
   have := IsCyclotomicExtension.neZero' n K L
   by_cases h1 : n = 1
@@ -680,7 +680,7 @@ theorem norm_of_cyclotomic_irreducible
 
 中文:
 定理 norm_of_cyclotomic_irreducible
-  结论: [IsDomain L] [IsCyclotomicExtension {n} K L]
+  结论: [是整环 L] [是CyclotomicExtension {n} K L]
   证明: by
   split_ifs with hn
   · subst hn
@@ -725,7 +725,7 @@ theorem sub_one_norm_eq_eval_cyclotomic
 
 中文:
 定理 sub_one_norm_eq_eval_cyclotomic
-  结论: [IsCyclotomicExtension {n} K L] (h : 2 < n)
+  结论: [是CyclotomicExtension {n} K L] (h : 2 < n)
   证明: by
   have := IsCyclotomicExtension.neZero' n K L
   let E := AlgebraicClosure L
@@ -773,7 +773,7 @@ theorem sub_one_norm_isPrimePow
 
 中文:
 定理 sub_one_norm_isPrimePow
-  结论: (hn : IsPrimePow n) [IsCyclotomicExtension {n} K L]
+  结论: (hn : IsPrimePow n) [是CyclotomicExtension {n} K L]
   证明: by
   have := (lt_of_le_of_ne (succ_le_of_lt (IsPrimePow.one_lt hn)) h.symm)
   let hprime : Fact n.minFac.Prime := ⟨minFac_prime (IsPrimePow.ne_one hn)⟩
@@ -815,7 +815,7 @@ theorem minpoly_sub_one_eq_cyclotomic_comp
 
 中文:
 定理 minpoly_sub_one_eq_cyclotomic_comp
-  结论: [Algebra K A] [IsDomain A] {ζ : A}
+  结论: [代数 K A] [是整环 A] {ζ : A}
   证明: by
   have := IsCyclotomicExtension.neZero' n K A
   rw [show ζ - 1 = ζ + algebraMap K A (-1) by simp [sub_eq_add_neg],
@@ -853,7 +853,7 @@ theorem norm_pow_sub_one_of_prime_pow_ne_two
 
 中文:
 定理 norm_pow_sub_one_of_prime_pow_ne_two
-  结论: {k s : 自然数} (hζ : IsPrimitiveRoot ζ (p ^ (k + 1)))
+  结论: {k s : 自然数} (hζ : 是PrimitiveRoot ζ (p ^ (k + 1)))
   证明: by
   have hirr₁ : Irreducible (cyclotomic (p ^ (k - s + 1)) K) :=
     cyclotomic_irreducible_pow_of_irreducible_pow hpri.1 (by lia) hirr
@@ -929,7 +929,7 @@ theorem norm_pow_sub_one_of_prime_ne_two
 
 中文:
 定理 norm_pow_sub_one_of_prime_ne_two
-  结论: {k : 自然数} (hζ : IsPrimitiveRoot ζ (p ^ (k + 1)))
+  结论: {k : 自然数} (hζ : 是PrimitiveRoot ζ (p ^ (k + 1)))
   证明: by
   refine hζ.norm_pow_sub_one_of_prime_pow_ne_two hirr hs fun h => ?_
   rw [← pow_one 2] at h
@@ -960,7 +960,7 @@ theorem norm_sub_one_of_prime_ne_two
 
 中文:
 定理 norm_sub_one_of_prime_ne_two
-  结论: {k : 自然数} (hζ : IsPrimitiveRoot ζ ↑(p ^ (k + 1)))
+  结论: {k : 自然数} (hζ : 是PrimitiveRoot ζ ↑(p ^ (k + 1)))
   证明: by
   simpa using hζ.norm_pow_sub_one_of_prime_ne_two hirr k.zero_le h
 
@@ -985,7 +985,7 @@ theorem norm_sub_one_of_prime_ne_two'
 
 中文:
 定理 norm_sub_one_of_prime_ne_two'
-  结论: [hpri : Fact p.Prime]
+  结论: [hpri : Fact p.素]
   证明: by
   replace hirr : Irreducible (cyclotomic (p ^ (0 + 1)) K) := by simp [hirr]
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simp [hζ]
@@ -1017,7 +1017,7 @@ theorem norm_pow_sub_one_two
 
 中文:
 定理 norm_pow_sub_one_two
-  结论: {k : 自然数} (hζ : IsPrimitiveRoot ζ (2 ^ (k + 1)))
+  结论: {k : 自然数} (hζ : 是PrimitiveRoot ζ (2 ^ (k + 1)))
   证明: by
   have := hζ.pow_of_dvd
     (fun h => two_ne_zero (eq_zero_of_pow_eq_zero h)) (pow_dvd_pow 2 (le_succ k))
@@ -1057,7 +1057,7 @@ theorem norm_sub_one_two
 
 中文:
 定理 norm_sub_one_two
-  结论: {k : 自然数} (hζ : IsPrimitiveRoot ζ (2 ^ k)) (hk : 2 <= k)
+  结论: {k : 自然数} (hζ : 是PrimitiveRoot ζ (2 ^ k)) (hk : 2 <= k)
   证明: by
   have : 2 < 2 ^ k := by
     nth_rw 1 [← pow_one 2]
@@ -1095,7 +1095,7 @@ theorem norm_pow_sub_one_eq_prime_pow_of_ne_zero
 
 中文:
 定理 norm_pow_sub_one_eq_prime_pow_of_ne_zero
-  结论: {k s : 自然数} (hζ : IsPrimitiveRoot ζ (p ^ (k + 1)))
+  结论: {k s : 自然数} (hζ : 是PrimitiveRoot ζ (p ^ (k + 1)))
   证明: by
   by_cases htwo : p ^ (k - s + 1) = 2
   · obtain ⟨hp, hks⟩ := (Nat.prime_two.pow_eq_iff).1 htwo
@@ -1140,7 +1140,7 @@ theorem norm_zeta_eq_one
 
 中文:
 定理 norm_zeta_eq_one
-  结论: [IsCyclotomicExtension {n} K L] (hn : n != 2)
+  结论: [是CyclotomicExtension {n} K L] (hn : n != 2)
   证明: (zeta_spec n K L).norm_eq_one hn hirr
 
 Depends on / 依赖: norm_eq_one, zeta_spec
@@ -1159,7 +1159,7 @@ theorem norm_zeta_sub_one_of_isPrimePow
 
 中文:
 定理 norm_zeta_sub_one_of_isPrimePow
-  结论: (hn : IsPrimePow n) [IsCyclotomicExtension {n} K L]
+  结论: (hn : IsPrimePow n) [是CyclotomicExtension {n} K L]
   证明: (zeta_spec n K L).sub_one_norm_isPrimePow hn hirr h
 
 Depends on / 依赖: sub_one_norm_isPrimePow, zeta_spec
@@ -1179,7 +1179,7 @@ theorem norm_zeta_pow_sub_one_of_prime_pow_ne_two
 
 中文:
 定理 norm_zeta_pow_sub_one_of_prime_pow_ne_two
-  结论: {k : 自然数} [Fact p.Prime]
+  结论: {k : 自然数} [Fact p.素]
   证明: (zeta_spec _ K L).norm_pow_sub_one_of_prime_pow_ne_two hirr hs htwo
 
 Depends on / 依赖: norm_pow_sub_one_of_prime_pow_ne_two, zeta_spec
@@ -1201,7 +1201,7 @@ theorem norm_zeta_pow_sub_one_of_prime_ne_two
 
 中文:
 定理 norm_zeta_pow_sub_one_of_prime_ne_two
-  结论: {k : 自然数} [Fact p.Prime]
+  结论: {k : 自然数} [Fact p.素]
   证明: (zeta_spec _ K L).norm_sub_one_of_prime_ne_two hirr h
 
 Depends on / 依赖: norm_sub_one_of_prime_ne_two, zeta_spec
@@ -1222,7 +1222,7 @@ theorem norm_zeta_sub_one_of_prime_ne_two
 
 中文:
 定理 norm_zeta_sub_one_of_prime_ne_two
-  结论: [Fact p.Prime]
+  结论: [Fact p.素]
   证明: (zeta_spec _ K L).norm_sub_one_of_prime_ne_two' hirr h
 
 Depends on / 依赖: norm_sub_one_of_prime_ne_two, zeta_spec

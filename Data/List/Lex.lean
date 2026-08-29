@@ -73,8 +73,8 @@ theorem lex_nil_or_eq_nil
 
 中文:
 定理 lex_nil_or_eq_nil
-  条件: {r : α -> α -> 命题} (l : List α)
-  结论: List.Lex r [] l ∨ l = []
+  条件: {r : α -> α -> 命题} (l : 列表 α)
+  结论: 列表.Lex r [] l ∨ l = []
   证明: match l with
   | [] => Or.inr rfl
   | _ :: _ => .inl .nil
@@ -101,7 +101,7 @@ theorem lex_singleton_iff
 中文:
 定理 lex_singleton_iff
   条件: {r : α -> α -> 命题} (a b : α)
-  结论: List.Lex r [a] [b] ↔ r a b
+  结论: 列表.Lex r [a] [b] ↔ r a b
   证明: ⟨fun | .rel h => h, .rel⟩
 -/
 theorem lex_singleton_iff {r : α -> α -> Prop} (a b : α) : List.Lex r [a] [b] ↔ r a b :=
@@ -126,7 +126,7 @@ instance isOrderConnected
 
 中文:
 实例 isOrderConnected
-  签名: (r : α -> α -> 命题) [IsOrderConnected α r] [Std.Trichotomous r]
+  签名: (r : α -> α -> 命题) [是OrderConnected α r] [Std.三歧 r]
   定义体: aux where
     aux
     | _, [], _ :: _, nil => Or.inr nil
@@ -168,7 +168,7 @@ instance trichotomous
 
 中文:
 实例 trichotomous
-  签名: (r : α -> α -> 命题) [Std.Trichotomous r]
+  签名: (r : α -> α -> 命题) [Std.三歧 r]
   定义体: aux where
     aux
     | [], [], _, _ => rfl
@@ -323,7 +323,7 @@ theorem to_ne
 
 中文:
 定理 to_ne
-  结论: 对任意 {l₁ l₂ : List α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
+  结论: 对任意 {l₁ l₂ : 列表 α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
 -/
 theorem to_ne : forall {l₁ l₂ : List α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
   | _, _, cons h, e => to_ne h (List.cons.inj e).2
@@ -347,8 +347,8 @@ exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
   
 
 中文:
-定理 _root_.Decidable.List.Lex.ne_iff
-  结论: [DecidableEq α] {l₁ l₂ : List α}
+定理 _root_.可判定.列表.Lex.ne_iff
+  结论: [DecidableEq α] {l₁ l₂ : 列表 α}
   证明: ⟨to_ne, fun h => by
     induction l₁ generalizing l₂ <;> rcases l₂ with - | ⟨b, l₂⟩
     · contradiction
@@ -388,7 +388,7 @@ theorem ne_iff
 
 中文:
 定理 ne_iff
-  条件: {l₁ l₂ : List α} (H : length l₁ <= length l₂)
+  条件: {l₁ l₂ : 列表 α} (H : length l₁ <= length l₂)
   结论: Lex (· != ·) l₁ l₂ ↔ l₁ != l₂
   证明: by
   classical
@@ -413,8 +413,8 @@ instance [LinearOrder
   linearOrderOfSTO (Lex (· < ·))
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (List α)
+实例 [线性序
+  签名: α] : 线性序 (列表 α)
   定义体: have : forall {r} [IsStrictTotalOrder α r], IsStrictTotalOrder (List α) (Lex r) :=
     { isStrictWeakOrder_of_isOrderConnected with }
   linearOrderOfSTO (Lex (· < ·))
@@ -437,7 +437,7 @@ instance LE'
 
 中文:
 实例 LE'
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: Preorder.toLE
 
 Depends on / 依赖: Preorder, Preorder.toLE
@@ -457,8 +457,8 @@ theorem lt_iff_lex_lt
 
 中文:
 定理 lt_iff_lex_lt
-  条件: [LT α] (l l' : List α)
-  结论: List.lt l l' ↔ Lex (· < ·) l l'
+  条件: [LT α] (l l' : 列表 α)
+  结论: 列表.lt l l' ↔ Lex (· < ·) l l'
   证明: by
   rw [List.lt]
 
@@ -479,7 +479,7 @@ theorem head_le_of_lt
 
 中文:
 定理 head_le_of_lt
-  条件: [Preorder α] {a a' : α} {l l' : List α} (h : (a' :: l') < (a :: l))
+  条件: [预序 α] {a a' : α} {l l' : 列表 α} (h : (a' :: l') < (a :: l))
   证明: match h with
   | .cons _ => le_rfl
   | .rel h => h.le
@@ -507,7 +507,7 @@ theorem head!_le_of_lt
 
 中文:
 定理 head!_le_of_lt
-  条件: [Preorder α] [Inhabited α] (l l' : List α) (h : l' < l) (hl' : l' != [])
+  条件: [预序 α] [可居 α] (l l' : 列表 α) (h : l' < l) (hl' : l' != [])
   证明: by
   replace h : List.Lex (· < ·) l' l := h
   by_cases hl : l = []
@@ -535,7 +535,7 @@ theorem cons_le_cons
 
 中文:
 定理 cons_le_cons
-  条件: [LinearOrder α] (a : α) {l l' : List α} (h : l' <= l)
+  条件: [线性序 α] (a : α) {l l' : 列表 α} (h : l' <= l)
   证明: by
   rw [le_iff_lt_or_eq] at h ⊢
   exact h.imp .cons (congr_arg _)

@@ -67,7 +67,7 @@ definition valueAtInfty
 
 中文:
 定义 valueAtInfty
-  签名: (f : ℍ -> Complex)
+  签名: (f : ℍ -> 复形)
   定义体: limUnder atImInfty f
 
 Depends on / 依赖: atImInfty, limUnder
@@ -84,7 +84,7 @@ lemma IsZeroAtImInfty.valueAtInfty_eq_zero
 
 中文:
 引理 IsZeroAtImInfty.valueAtInfty_eq_zero
-  条件: {f : ℍ -> Complex} (hf : IsZeroAtImInfty f)
+  条件: {f : ℍ -> 复形} (hf : IsZeroAtImInfty f)
   证明: hf.limUnder_eq
 
 Depends on / 依赖: hf.limUnder_eq, limUnder_eq
@@ -123,7 +123,7 @@ definition cuspFunction
 
 中文:
 定义 cuspFunction
-  签名: (f : ℍ -> Complex)
+  签名: (f : ℍ -> 复形)
   定义体: Function.Periodic.cuspFunction h (f ∘ ofComplex)
 
 Depends on / 依赖: Function, Function.Periodic.cuspFunction, Periodic, cuspFunction, ofComplex
@@ -142,7 +142,7 @@ theorem eq_cuspFunction
 
 中文:
 定理 eq_cuspFunction
-  结论: {f : ℍ -> Complex} (τ : ℍ) (hh : h != 0)
+  结论: {f : ℍ -> 复形} (τ : ℍ) (hh : h != 0)
   证明: by
   simpa [cuspFunction] using (Periodic.eq_cuspFunction hh hfper τ)
 
@@ -168,7 +168,7 @@ theorem differentiableAt_cuspFunction
 
 中文:
 定理 differentiableAt_cuspFunction
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   rcases eq_or_ne q 0 with rfl | hq'
   · exact hfper.differentiableAt_cuspFunction_zero hh
@@ -202,7 +202,7 @@ lemma differentiableOn_cuspFunction_ball
 
 中文:
 引理 differentiableOn_cuspFunction_ball
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: fun _ hz => (differentiableAt_cuspFunction hh hfper hfhol hfbdd <| mem_ball_zero_iff.mp hz)
 .differentiableWithinAt
 
@@ -225,7 +225,7 @@ lemma analyticAt_cuspFunction_zero
 
 中文:
 引理 analyticAt_cuspFunction_zero
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: DifferentiableOn.analyticAt (differentiableOn_cuspFunction_ball hh hfper hfhol hfbdd)
     (by simpa [ball_zero_eq] using Metric.ball_mem_nhds (0 : Complex) zero_lt_one)
 
@@ -252,7 +252,7 @@ lemma cuspFunction_apply_zero
 
 中文:
 引理 cuspFunction_apply_zero
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   refine (Tendsto.limUnder_eq ?_).symm
   have : (cuspFunction h f ∘ fun τ => 𝕢 h τ : ℍ -> Complex) = f := by
@@ -293,7 +293,7 @@ theorem periodic_comp_ofComplex
 
 中文:
 定理 periodic_comp_ofComplex
-  条件: [SlashInvariantFormClass F Γ k] (hΓ : h in Γ.strictPeriods)
+  条件: [斜不变形式类 F Γ k] (hΓ : h in Γ.strictPeriods)
   证明: by
   intro w
   by_cases! hw : 0 < im w
@@ -328,7 +328,7 @@ theorem eq_cuspFunction
 
 中文:
 定理 eq_cuspFunction
-  结论: [SlashInvariantFormClass F Γ k] (τ : ℍ)
+  结论: [斜不变形式类 F Γ k] (τ : ℍ)
   证明: eq_cuspFunction τ hh (SlashInvariantFormClass.periodic_comp_ofComplex f hΓ)
 -/
 protected theorem eq_cuspFunction [SlashInvariantFormClass F Γ k] (τ : ℍ)
@@ -352,7 +352,7 @@ theorem bounded_at_infty_comp_ofComplex
 
 中文:
 定理 bounded_at_infty_comp_ofComplex
-  条件: [ModularFormClass F Γ k] (hi : IsCusp OnePoint.infty Γ)
+  条件: [模形式类 F Γ k] (hi : IsCusp OnePoint.infty Γ)
   证明: (OnePoint.isBoundedAt_infty_iff.mp (bdd_at_cusps f hi)).comp_tendsto tendsto_comap_im_ofComplex
 
 Depends on / 依赖: OnePoint, OnePoint.isBoundedAt_infty_iff.mp, bdd_at_cusps, comp_tendsto, isBoundedAt_infty_iff, tendsto_comap_im_ofComplex
@@ -372,7 +372,7 @@ theorem differentiableAt_cuspFunction
 
 中文:
 定理 differentiableAt_cuspFunction
-  结论: [ModularFormClass F Γ k]
+  结论: [模形式类 F Γ k]
   证明: have : Fact (IsCusp OnePoint.infty Γ) := ⟨Γ.isCusp_of_mem_strictPeriods hh hΓ⟩
   differentiableAt_cuspFunction hh (periodic_comp_ofComplex f hΓ) (holo f) (bdd_at_infty f) hq
 -/
@@ -393,7 +393,7 @@ lemma analyticAt_cuspFunction_zero
 
 中文:
 引理 analyticAt_cuspFunction_zero
-  结论: [ModularFormClass F Γ k] (hh : 0 < h)
+  结论: [模形式类 F Γ k] (hh : 0 < h)
   证明: have : Fact (IsCusp OnePoint.infty Γ) := ⟨Γ.isCusp_of_mem_strictPeriods hh hΓ⟩
   analyticAt_cuspFunction_zero hh (periodic_comp_ofComplex f hΓ) (holo f) (bdd_at_infty f)
 -/
@@ -417,7 +417,7 @@ definition qExpansion
 
 中文:
 定义 qExpansion
-  签名: (f : ℍ -> Complex)
+  签名: (f : ℍ -> 复形)
   定义体: .mk fun m => (↑m.factorial)⁻¹ * iteratedDeriv m (cuspFunction h f) 0
 
 Depends on / 依赖: cuspFunction, factorial, iteratedDeriv, m.factorial
@@ -436,7 +436,7 @@ lemma qExpansion_coeff
 
 中文:
 引理 qExpansion_coeff
-  条件: (f : ℍ -> Complex) (m : 自然数)
+  条件: (f : ℍ -> 复形) (m : 自然数)
   证明: by
   simp [qExpansion]
 
@@ -457,7 +457,7 @@ lemma qExpansion_coeff_zero
 
 中文:
 引理 qExpansion_coeff_zero
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   simp [qExpansion_coeff, cuspFunction_apply_zero hh hfanalytic hfper]
 
@@ -484,7 +484,7 @@ lemma hasSum_qExpansion_of_norm_lt
 
 中文:
 引理 hasSum_qExpansion_of_norm_lt
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   convert!
     hasSum_taylorSeries_on_ball (differentiableOn_cuspFunction_ball hh hfper hfhol hfbdd)
@@ -517,7 +517,7 @@ lemma hasSum_qExpansion
 
 中文:
 引理 hasSum_qExpansion
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   have : ‖𝕢 h τ‖ < 1 := Periodic.norm_qParam_lt_one hh τ.im_pos
   simpa [eq_cuspFunction τ hh.ne' hfper] using
@@ -545,7 +545,7 @@ definition qExpansionFormalMultilinearSeries
 
 中文:
 定义 qExpansionFormalMultilinearSeries
-  签名: : FormalMultilinearSeries Complex Complex Complex
+  签名: : FormalMultilinearSeries 复形 复形 复形
   定义体: .ofScalars Complex fun m => (qExpansion h f).coeff m
 
 @[simp]
@@ -656,7 +656,7 @@ lemma hasSum_cuspFunction_of_hasSum_punctured
 
 中文:
 引理 hasSum_cuspFunction_of_hasSum_punctured
-  结论: {f : ℍ -> Complex} (hh : 0 < h) {c : 自然数 -> Complex}
+  结论: {f : ℍ -> 复形} (hh : 0 < h) {c : 自然数 -> 复形}
   证明: by
   have h1 := Periodic.im_invQParam_pos_of_norm_lt_one hh hq hq1
   let τ : ℍ := ⟨Periodic.invQParam h q, h1⟩
@@ -692,7 +692,7 @@ lemma hasFPowerSeriesOnBall_update
 
 中文:
 引理 hasFPowerSeriesOnBall_update
-  结论: {f : ℍ -> Complex} (hh : 0 < h) {c : 自然数 -> Complex}
+  结论: {f : ℍ -> 复形} (hh : 0 < h) {c : 自然数 -> 复形}
   证明: by
   constructor
   · refine le_of_forall_lt_imp_le_of_dense fun r hr => ?_
@@ -739,7 +739,7 @@ theorem isBoundedAtImInfty_of_hasSum_qExpansion
 
 中文:
 定理 isBoundedAtImInfty_of_hasSum_qExpansion
-  结论: {f : ℍ -> Complex} {c : 自然数 -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} {c : 自然数 -> 复形} (hh : 0 < h)
   证明: by
   have hfeq : f = fun τ : ℍ => update (cuspFunction h f) 0 (c 0) (𝕢 h τ) := by
     funext τ
@@ -780,7 +780,7 @@ lemma hasFPowerSeriesOnBall_cuspFunction
 
 中文:
 引理 hasFPowerSeriesOnBall_cuspFunction
-  结论: {f : ℍ -> Complex} {c : 自然数 -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} {c : 自然数 -> 复形} (hh : 0 < h)
   证明: by
   -- previous lemma gives result after updating at 0
   have H1 : HasFPowerSeriesOnBall (update (cuspFunction h f) 0 (c 0)) (.ofScalars Complex c) 0 1 :=
@@ -818,8 +818,8 @@ lemma qExpansion_coeff_eq_circleIntegral
   simp_rw [qExpansi
 
 中文:
-引理 qExpansion_coeff_eq_circleIntegral
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+引理 qExpansion_coeff_eq_circle整数egral
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   have := ((differentiableOn_cuspFunction_ball hh hfper hfhol hfbdd).mono
     (Metric.closedBall_subset_ball hR')).circleIntegral_one_div_sub_center_pow_smul hR n
@@ -852,8 +852,8 @@ have hR1 : R < 1 := Real.exp_lt_one_iff.2 by simpa [neg_div] using div_pos (by p
   -- First apply `qExpansion_coeff_eq_circl
 
 中文:
-引理 qExpansion_coeff_eq_intervalIntegral
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+引理 qExpansion_coeff_eq_interval整数egral
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   -- We use a circle integral in the `q`-domain of radius `R = exp (-2 * π * t / h)`.
   let R := Real.exp (-2 * π * t / h)
@@ -906,7 +906,7 @@ theorem exp_decay_sub_atImInfty
 
 中文:
 定理 exp_decay_sub_atImInfty
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   have := hfbdd.comp_tendsto tendsto_comap_im_ofComplex
   convert!
@@ -944,7 +944,7 @@ lemma zero_at_infty_comp_ofComplex
 
 中文:
 引理 zero_at_infty_comp_ofComplex
-  条件: {f : ℍ -> Complex} (hf : IsZeroAtImInfty f)
+  条件: {f : ℍ -> 复形} (hf : IsZeroAtImInfty f)
   证明: hf.comp tendsto_comap_im_ofComplex
 
 Depends on / 依赖: hf.comp, tendsto_comap_im_ofComplex
@@ -963,7 +963,7 @@ theorem cuspFunction_apply_zero
 
 中文:
 定理 cuspFunction_apply_zero
-  条件: {f : ℍ -> Complex} (hf : IsZeroAtImInfty f) (hh : 0 < h)
+  条件: {f : ℍ -> 复形} (hf : IsZeroAtImInfty f) (hh : 0 < h)
   证明: Periodic.cuspFunction_zero_of_zero_at_inf hh hf.zero_at_infty_comp_ofComplex
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction_zero_of_zero_at_inf, cuspFunction_zero_of_zero_at_inf, hf.zero_at_infty_comp_ofComplex, zero_at_infty_comp_ofComplex
@@ -983,7 +983,7 @@ theorem exp_decay_atImInfty
 
 中文:
 定理 exp_decay_atImInfty
-  结论: {f : ℍ -> Complex} (hf : IsZeroAtImInfty f) (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hf : IsZeroAtImInfty f) (hh : 0 < h)
   证明: by
   simpa [hf.valueAtInfty_eq_zero] using exp_decay_sub_atImInfty hh hfper hfhol hfbdd
 
@@ -1009,8 +1009,8 @@ lemma qExpansion_coeff_eq_intervalIntegral
     (holo f) (bdd_at_infty f) n ht
 
 中文:
-引理 qExpansion_coeff_eq_intervalIntegral
-  结论: [ModularFormClass F Γ k]
+引理 qExpansion_coeff_eq_interval整数egral
+  结论: [模形式类 F Γ k]
   证明: have : Fact (IsCusp OnePoint.infty Γ) := ⟨Γ.isCusp_of_mem_strictPeriods hh hΓ⟩
   qExpansion_coeff_eq_intervalIntegral hh (periodic_comp_ofComplex f hΓ)
     (holo f) (bdd_at_infty f) n ht
@@ -1037,7 +1037,7 @@ theorem exp_decay_sub_atImInfty'
 
 中文:
 定理 exp_decay_sub_atImInfty'
-  结论: [ModularFormClass F Γ k] [Γ.HasDetPlusMinusOne]
+  结论: [模形式类 F Γ k] [Γ.有DetPlusMinusOne]
   证明: by
   have hh : 0 < Γ.strictWidthInfty := Γ.strictWidthInfty_pos_iff.mpr Fact.out
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
@@ -1067,7 +1067,7 @@ theorem exp_decay_atImInfty'
 
 中文:
 定理 exp_decay_atImInfty'
-  结论: [ModularFormClass F Γ k] [Γ.HasDetPlusMinusOne]
+  结论: [模形式类 F Γ k] [Γ.有DetPlusMinusOne]
   证明: by
   simpa [hf.valueAtInfty_eq_zero] using exp_decay_sub_atImInfty' f
 
@@ -1184,7 +1184,7 @@ theorem exp_decay_atImInfty'
 
 中文:
 定理 exp_decay_atImInfty'
-  结论: [Γ.HasDetPlusMinusOne] [DiscreteTopology Γ]
+  结论: [Γ.有DetPlusMinusOne] [离散拓扑 Γ]
   证明: ModularFormClass.exp_decay_atImInfty' f (CuspFormClass.zero_at_infty f)
 
 Depends on / 依赖: CuspFormClass, CuspFormClass.zero_at_infty, ModularFormClass, ModularFormClass.exp_decay_atImInfty, exp_decay_atImInfty, zero_at_infty
@@ -1212,7 +1212,7 @@ theorem cuspFunction_mul_zero
 
 中文:
 定理 cuspFunction_mul_zero
-  结论: {f g : Complex -> Complex} (hfcts : ContinuousAt (Periodic.cuspFunction h f) 0)
+  结论: {f g : 复形 -> 复形} (hfcts : ContinuousAt (周期.cuspFunction h f) 0)
   证明: by
   rw [Periodic.cuspFunction]; rw [update_self]
 .limUnder_eq exact (Periodic.tendsto_nhds_zero hfcts).mul (Periodic.tendsto_nhds_zero hgcts)
@@ -1236,7 +1236,7 @@ lemma qExpansion_mul_coeff_zero
 
 中文:
 引理 qExpansion_mul_coeff_zero
-  结论: {f g : ℍ -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  结论: {f g : ℍ -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: by
   simpa [qExpansion_coeff] using! cuspFunction_mul_zero hfcts hgcts
 
@@ -1261,7 +1261,7 @@ lemma cuspFunction_mul
 
 中文:
 引理 cuspFunction_mul
-  结论: {f g : ℍ -> Complex}
+  结论: {f g : ℍ -> 复形}
   证明: by
   ext z
   by_cases H : z = 0
@@ -1289,7 +1289,7 @@ lemma cuspFunction_smul
 
 中文:
 引理 cuspFunction_smul
-  条件: {f : ℍ -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0) (a : Complex)
+  条件: {f : ℍ -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0) (a : 复形)
   证明: by
   apply Periodic.cuspFunction_smul hfcts
 
@@ -1309,7 +1309,7 @@ lemma cuspFunction_neg
 
 中文:
 引理 cuspFunction_neg
-  条件: {f : ℍ -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  条件: {f : ℍ -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: Periodic.cuspFunction_neg hfcts
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction_neg, cuspFunction_neg
@@ -1328,7 +1328,7 @@ lemma cuspFunction_add
 
 中文:
 引理 cuspFunction_add
-  结论: {f g : ℍ -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  结论: {f g : ℍ -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: Periodic.cuspFunction_add hfcts hgcts
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction_add, cuspFunction_add
@@ -1348,7 +1348,7 @@ lemma cuspFunction_sub
 
 中文:
 引理 cuspFunction_sub
-  结论: {f g : ℍ -> Complex} (hfcts : ContinuousAt (cuspFunction h f) 0)
+  结论: {f g : ℍ -> 复形} (hfcts : ContinuousAt (cuspFunction h f) 0)
   证明: Periodic.cuspFunction_sub hfcts hgcts
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction_sub, cuspFunction_sub
@@ -1374,7 +1374,7 @@ lemma qExpansion_mul
 
 中文:
 引理 qExpansion_mul
-  结论: {f g : ℍ -> Complex}
+  结论: {f g : ℍ -> 复形}
   证明: by
   ext
   simp only [qExpansion_coeff, cuspFunction_mul hf.continuousAt hg.continuousAt,
@@ -1409,7 +1409,7 @@ lemma qExpansion_smul
 
 中文:
 引理 qExpansion_smul
-  条件: {f : ℍ -> Complex} (hf : AnalyticAt Complex (cuspFunction h f) 0) (a : Complex)
+  条件: {f : ℍ -> 复形} (hf : AnalyticAt 复形 (cuspFunction h f) 0) (a : 复形)
   证明: by
   ext m
   simp [qExpansion_coeff, cuspFunction_smul hf.continuousAt, iteratedDeriv_const_smul_field,
@@ -1434,7 +1434,7 @@ lemma qExpansion_neg
 
 中文:
 引理 qExpansion_neg
-  条件: {f : ℍ -> Complex} (hf : AnalyticAt Complex (cuspFunction h f) 0)
+  条件: {f : ℍ -> 复形} (hf : AnalyticAt 复形 (cuspFunction h f) 0)
   证明: by
   simpa using qExpansion_smul hf (-1)
 
@@ -1457,7 +1457,7 @@ lemma qExpansion_add
 
 中文:
 引理 qExpansion_add
-  结论: {f g : ℍ -> Complex}
+  结论: {f g : ℍ -> 复形}
   证明: by
   ext m
   simp [qExpansion_coeff, cuspFunction_add hf.continuousAt hg.continuousAt,
@@ -1485,7 +1485,7 @@ lemma qExpansion_sub
 
 中文:
 引理 qExpansion_sub
-  结论: {f g : ℍ -> Complex} (hf : AnalyticAt Complex (cuspFunction h f) 0) (hg : AnalyticAt Complex
+  结论: {f g : ℍ -> 复形} (hf : AnalyticAt 复形 (cuspFunction h f) 0) (hg : AnalyticAt 复形
   证明: by
   have hg' : AnalyticAt Complex (cuspFunction h (-g)) 0 := by
     simpa [cuspFunction_neg hg.continuousAt] using hg.neg
@@ -1543,7 +1543,7 @@ lemma qExpansion_eq_zero_iff
 
 中文:
 引理 qExpansion_eq_zero_iff
-  结论: {f : ℍ -> Complex} (hh : 0 < h)
+  结论: {f : ℍ -> 复形} (hh : 0 < h)
   证明: by
   constructor
   · intro H
@@ -1583,7 +1583,7 @@ lemma qExpansion_one
 中文:
 引理 qExpansion_one
   条件: (h)
-  结论: qExpansion h (1 : ℍ -> Complex) = 1
+  结论: qExpansion h (1 : ℍ -> 复形) = 1
   证明: by
   ext m
   have h1 : cuspFunction h 1 = 1 := by
@@ -1620,7 +1620,7 @@ lemma cuspFunction_smul
 
 中文:
 引理 cuspFunction_smul
-  结论: (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : Complex)
+  结论: (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : 复形)
   证明: cuspFunction_smul (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ).continuousAt a
 -/
 protected lemma cuspFunction_smul (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : Complex)
@@ -1655,7 +1655,7 @@ lemma cuspFunction_add
 
 中文:
 引理 cuspFunction_add
-  结论: {G : 类型} [FunLike G ℍ Complex] (hh : 0 < h)
+  结论: {G : 类型} [函数状 G ℍ 复形] (hh : 0 < h)
   证明: cuspFunction_add (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ).continuousAt
     (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ).continuousAt
 -/
@@ -1676,7 +1676,7 @@ lemma cuspFunction_sub
 
 中文:
 引理 cuspFunction_sub
-  结论: {G : 类型} [FunLike G ℍ Complex] (hh : 0 < h)
+  结论: {G : 类型} [函数状 G ℍ 复形] (hh : 0 < h)
   证明: cuspFunction_sub (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ).continuousAt
     (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ).continuousAt
 -/
@@ -1697,7 +1697,7 @@ lemma cuspFunction_mul
 
 中文:
 引理 cuspFunction_mul
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: cuspFunction_mul (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ).continuousAt
     (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ).continuousAt
 -/
@@ -1717,7 +1717,7 @@ lemma qExpansion_smul
 
 中文:
 引理 qExpansion_smul
-  结论: (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : Complex)
+  结论: (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : 复形)
   证明: qExpansion_smul (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ) a
 -/
 protected lemma qExpansion_smul (hh : 0 < h) (hΓ : h in Γ.strictPeriods) (a : Complex)
@@ -1752,7 +1752,7 @@ lemma qExpansion_add
 
 中文:
 引理 qExpansion_add
-  结论: {G : 类型} [FunLike G ℍ Complex] (hh : 0 < h)
+  结论: {G : 类型} [函数状 G ℍ 复形] (hh : 0 < h)
   证明: qExpansion_add (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ)
       (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ)
 -/
@@ -1773,7 +1773,7 @@ lemma qExpansion_sub
 
 中文:
 引理 qExpansion_sub
-  结论: {G : 类型} [FunLike G ℍ Complex] (hh : 0 < h)
+  结论: {G : 类型} [函数状 G ℍ 复形] (hh : 0 < h)
   证明: qExpansion_sub (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ)
     (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ)
 -/
@@ -1794,7 +1794,7 @@ lemma qExpansion_mul_coe
 
 中文:
 引理 qExpansion_mul_coe
-  结论: {G : 类型} [FunLike G ℍ Complex] (hh : 0 < h)
+  结论: {G : 类型} [函数状 G ℍ 复形] (hh : 0 < h)
   证明: qExpansion_mul (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ)
     (ModularFormClass.analyticAt_cuspFunction_zero g hh hΓ)
 -/
@@ -1814,7 +1814,7 @@ lemma qExpansion_mul
 
 中文:
 引理 qExpansion_mul
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: ModularForm.qExpansion_mul_coe hh hΓ f g
 -/
 protected lemma qExpansion_mul [Γ.HasDetPlusMinusOne] (hh : 0 < h)
@@ -1857,7 +1857,7 @@ lemma qExpansion_one
 
 中文:
 引理 qExpansion_one
-  条件: [Γ.HasDetPlusMinusOne]
+  条件: [Γ.有DetPlusMinusOne]
   证明: by
   simp [qExpansion_one]
 
@@ -1878,7 +1878,7 @@ lemma qExpansion_mcast
 
 中文:
 引理 qExpansion_mcast
-  结论: {a b : 整数} {Γ' : Subgroup (GL (Fin 2) 实数)}
+  结论: {a b : 整数} {Γ' : 子群 (GL (有限集 2) 实数)}
   证明: rfl
 -/
 protected lemma qExpansion_mcast {a b : Int} {Γ' : Subgroup (GL (Fin 2) Real)}
@@ -1899,7 +1899,7 @@ lemma qExpansion_pow
 
 中文:
 引理 qExpansion_pow
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: by
   induction n with
   | zero => simp only [coe_pow, pow_zero, qExpansion_one]
@@ -1928,7 +1928,7 @@ lemma mul_ne_zero
 
 中文:
 引理 mul_ne_zero
-  结论: [Γ.HasDetPlusMinusOne] (hΓ : 存在 h in Γ.strictPeriods, 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hΓ : 存在 h in Γ.strictPeriods, 0 < h)
   证明: by
   obtain ⟨h, hΓ, hh⟩ := hΓ
   simp only [ne_eq, ← ModularForm.qExpansion_eq_zero_iff hh hΓ,
@@ -1982,7 +1982,7 @@ definition qExpansionRingHom
 
 中文:
 定义 qExpansionRingHom
-  签名: (h) [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  签名: (h) [Γ.有DetPlusMinusOne] (hh : 0 < h)
   定义体: DirectSum.toSemiring (qExpansionAddHom hh hΓ) ModularForm.qExpansion_one
     (ModularForm.qExpansion_mul hh hΓ)
 
@@ -2006,7 +2006,7 @@ lemma qExpansionRingHom_apply
 
 中文:
 引理 qExpansionRingHom_apply
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: DirectSum.toSemiring_of ..
 
 Depends on / 依赖: DirectSum, DirectSum.toSemiring_of, toSemiring_of
@@ -2027,7 +2027,7 @@ lemma qExpansion_of_mul
 
 中文:
 引理 qExpansion_of_mul
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: by
   simpa [DirectSum.of_mul_of] using! ModularForm.qExpansion_mul hh hΓ f g
 
@@ -2051,7 +2051,7 @@ lemma qExpansion_of_pow
 
 中文:
 引理 qExpansion_of_pow
-  结论: [Γ.HasDetPlusMinusOne] (hh : 0 < h)
+  结论: [Γ.有DetPlusMinusOne] (hh : 0 < h)
   证明: by
   have := (qExpansionRingHom h hh hΓ).map_pow (DirectSum.of _ k f) n
   simpa [DirectSum.ofPow]
@@ -2074,7 +2074,7 @@ lemma hasSum_qExpansion
 
 中文:
 引理 hasSum_qExpansion
-  结论: (hh : 0 < h) {k : 整数} [ModularFormClass F Γ k]
+  结论: (hh : 0 < h) {k : 整数} [模形式类 F Γ k]
   证明: τ.hasSum_qExpansion hh (periodic_comp_ofComplex f hΓ) (holo f) (bdd_at_infty f)
 
 Depends on / 依赖: bdd_at_infty, hasSum_qExpansion, periodic_comp_ofComplex
@@ -2134,7 +2134,7 @@ lemma hasFPowerSeries_cuspFunction
 
 中文:
 引理 hasFPowerSeries_cuspFunction
-  结论: {c : 自然数 -> Complex} (hh : 0 < h)
+  结论: {c : 自然数 -> 复形} (hh : 0 < h)
   证明: by
   have h1 := (hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf).hasFPowerSeriesAt
   have h2 : HasFPowerSeriesAt (cuspFunction h f) (qExpansionFormalMultilinearSeries h f) 0 := by
@@ -2166,7 +2166,7 @@ lemma qExpansion_coeff_unique
 
 中文:
 引理 qExpansion_coeff_unique
-  结论: {c : 自然数 -> Complex} (hh : 0 < h)
+  结论: {c : 自然数 -> 复形} (hh : 0 < h)
   证明: by
   have h1 := (hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf).hasFPowerSeriesAt
   have h2 := (hasFPowerSeries_cuspFunction f hh hfanalytic hf).hasFPowerSeriesAt
@@ -2193,8 +2193,8 @@ lemma ModularFormClass.qExpansion_coeff_unique
   proof: qExpansion_coeff_unique f hh (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ) hf m
 
 中文:
-引理 ModularFormClass.qExpansion_coeff_unique
-  结论: {c : 自然数 -> Complex} (hh : 0 < h)
+引理 模形式类.qExpansion_coeff_unique
+  结论: {c : 自然数 -> 复形} (hh : 0 < h)
   证明: qExpansion_coeff_unique f hh (ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ) hf m
 -/
 protected lemma ModularFormClass.qExpansion_coeff_unique {c : Nat -> Complex} (hh : 0 < h)

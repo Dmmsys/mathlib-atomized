@@ -39,12 +39,12 @@ structure UniformSpaceCat
     - [str : UniformSpace carrier]
 
 中文:
-结构 UniformSpaceCat
-  参数: : Type (u + 1) where
+结构 一致空间范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : UniformSpace carrier]
+    - [str : 一致空间 carrier]
 -/
 structure UniformSpaceCat : Type (u + 1) where
   /-- Construct a bundled `UniformSpace` from the underlying type and the typeclass. -/
@@ -67,7 +67,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort UniformSpaceCat 类型
+  签名: CoeSort 一致空间范畴 类型
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -87,10 +87,10 @@ structure Hom
     - hom' : { f : X -> Y // UniformContinuous f }
 
 中文:
-结构 Hom
-  参数: (X Y : UniformSpaceCat)
+结构 态射
+  参数: (X Y : 一致空间范畴)
   公理与运算 (1 个):
-    - hom' : { f : X -> Y // UniformContinuous f }
+    - hom' : { f : X -> Y // 一致连续 f }
 -/
 structure Hom (X Y : UniformSpaceCat) where
   /-- The underlying `UniformContinuous` function. -/
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} UniformSpaceCat.{u}
+  签名: 大范畴.{u} 一致空间范畴.{u}
   定义体: Hom
   id X := ⟨id, uniformContinuous_id⟩
   comp f g := ⟨⟨g.hom'.val ∘ f.hom'.val, g.hom'.property.comp f.hom'.property⟩⟩
@@ -138,7 +138,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: (X Y : UniformSpaceCat)
+  签名: (X Y : 一致空间范畴)
   定义体: Subtype.val
   coe_injective _ _ h := Subtype.ext h
 
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory UniformSpaceCat ({ f : · -> · // UniformContinuous f })
+  签名: 余ncrete范畴 一致空间范畴 ({ f : · -> · // 一致连续 f })
   定义体: f.hom'
   ofHom f := ⟨f⟩
 
@@ -179,8 +179,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := UniformSpaceCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : UniformSpaceCat} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 一致空间范畴} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := UniformSpaceCat) f
 -/
 abbrev Hom.hom {X Y : UniformSpaceCat} (f : Hom X Y) :=
@@ -196,7 +196,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [UniformSpace X] [UniformSpace Y]
+  签名: {X Y : 类型u} [一致空间 X] [一致空间 Y]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited UniformSpaceCat
+  签名: 可居 一致空间范畴
   定义体: ⟨UniformSpaceCat.of Empty⟩
 
 Depends on / 依赖: UniformSpaceCat, UniformSpaceCat.of
@@ -236,7 +236,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [UniformSpace X]
+  条件: (X : 类型u) [一致空间 X]
   结论: (of X : 类型u) = X
   证明: rfl
 
@@ -258,7 +258,7 @@ theorem hom_comp
 
 中文:
 定理 hom_comp
-  条件: {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 一致空间范畴} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -281,7 +281,7 @@ theorem hom_id
 
 中文:
 定理 hom_id
-  条件: (X : UniformSpaceCat)
+  条件: (X : 一致空间范畴)
   结论: (𝟙 X : X ⟶ X).hom = ⟨id, uniformContinuous_id⟩
   证明: rfl
 
@@ -301,7 +301,7 @@ theorem hom_ofHom
 
 中文:
 定理 hom_ofHom
-  结论: {X Y : 类型u} [UniformSpace X] [UniformSpace Y]
+  结论: {X Y : 类型u} [一致空间 X] [一致空间 Y]
   证明: rfl
 -/
 theorem hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y]
@@ -319,7 +319,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 一致空间范畴} (f : X ⟶ Y) (g : Y ⟶ Z)
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 -/
@@ -337,7 +337,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  条件: (X : UniformSpaceCat)
+  条件: (X : 一致空间范畴)
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 -/
@@ -356,7 +356,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: {X Y : UniformSpaceCat} (f : X -> Y) (hf : UniformContinuous f)
+  条件: {X Y : 一致空间范畴} (f : X -> Y) (hf : 一致连续 f)
   证明: rfl
 
 @[ext]
@@ -377,7 +377,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {X Y : UniformSpaceCat} {f g : X ⟶ Y} (h : (f : X -> Y) = g)
+  条件: {X Y : 一致空间范畴} {f g : X ⟶ Y} (h : (f : X -> Y) = g)
   结论: f = g
   证明: Hom.ext (Subtype.ext h)
 
@@ -399,7 +399,7 @@ instance hasForgetToTop
 
 中文:
 实例 hasForgetToTop
-  签名: : HasForget₂ UniformSpaceCat.{u} TopCat.{u} where
+  签名: : 有Forget₂ 一致空间范畴.{u} 顶元素范畴.{u} where
   定义体: { obj := fun X => TopCat.of X
       map := fun f => TopCat.ofHom
         { toFun := f
@@ -429,13 +429,13 @@ structure CpltSepUniformSpace
     - [isT0 : T0Space α]
 
 中文:
-结构 CpltSepUniformSpace
+结构 CpltSepUniform空间
   参数: where
   公理与运算 (4 个):
     - α : 类型u
-    - [isUniformSpace : UniformSpace α]
-    - [isCompleteSpace : CompleteSpace α]
-    - [isT0 : T0Space α]
+    - [isUniformSpace : 一致空间 α]
+    - [isCompleteSpace : 完备空间 α]
+    - [isT0 : T0空间 α]
 -/
 structure CpltSepUniformSpace where
   /-- The underlying space -/
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CpltSepUniformSpace (类型u)
+  签名: CoeSort CpltSepUniform空间 (类型u)
   定义体: ⟨CpltSepUniformSpace.α⟩
 
 Depends on / 依赖: CpltSepUniformSpace
@@ -476,7 +476,7 @@ definition toUniformSpace
 
 中文:
 定义 toUniformSpace
-  签名: (X : CpltSepUniformSpace)
+  签名: (X : CpltSepUniform空间)
   定义体: UniformSpaceCat.of X
 
 Depends on / 依赖: UniformSpaceCat, UniformSpaceCat.of
@@ -494,7 +494,7 @@ instance completeSpace
 
 中文:
 实例 completeSpace
-  签名: (X : CpltSepUniformSpace)
+  签名: (X : CpltSepUniform空间)
   定义体: CpltSepUniformSpace.isCompleteSpace X
 
 Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.isCompleteSpace, isCompleteSpace
@@ -512,7 +512,7 @@ instance t0Space
 
 中文:
 实例 t0Space
-  签名: (X : CpltSepUniformSpace)
+  签名: (X : CpltSepUniform空间)
   定义体: CpltSepUniformSpace.isT0 X
 
 Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.isT0
@@ -532,7 +532,7 @@ definition of
 
 中文:
 定义 of
-  签名: (X : 类型u) [UniformSpace X] [CompleteSpace X] [T0Space X]
+  签名: (X : 类型u) [一致空间 X] [完备空间 X] [T0空间 X]
   定义体: ⟨X⟩
 
 @[simp]
@@ -551,7 +551,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [UniformSpace X] [CompleteSpace X] [T0Space X]
+  条件: (X : 类型u) [一致空间 X] [完备空间 X] [T0空间 X]
   证明: rfl
 -/
 theorem coe_of (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X] :
@@ -568,7 +568,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CpltSepUniformSpace
+  签名: 可居 CpltSepUniform空间
   定义体: ⟨CpltSepUniformSpace.of Empty⟩
 
 Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.of
@@ -586,7 +586,7 @@ instance category
 
 中文:
 实例 category
-  签名: : LargeCategory CpltSepUniformSpace
+  签名: : 大范畴 CpltSepUniform空间
   定义体: inferInstanceAs Category (InducedCategory _ toUniformSpace)
 
 Depends on / 依赖: Category, InducedCategory, toUniformSpace
@@ -605,7 +605,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: (X Y : CpltSepUniformSpace)
+  签名: (X Y : CpltSepUniform空间)
   定义体: Subtype.val
   coe_injective _ _ h := Subtype.ext h
 
@@ -627,7 +627,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory CpltSepUniformSpace
+  签名: : 余ncrete范畴 CpltSepUniform空间
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toUniformSpace) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory, toUniformSpace
@@ -647,7 +647,7 @@ instance hasForgetToUniformSpace
 
 中文:
 实例 hasForgetToUniformSpace
-  签名: : HasForget₂ CpltSepUniformSpace UniformSpaceCat
+  签名: : 有Forget₂ CpltSepUniform空间 一致空间范畴
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toUniformSpace) _
 
 Depends on / 依赖: InducedCategory, toUniformSpace
@@ -667,7 +667,7 @@ theorem hom_comp
 
 中文:
 定理 hom_comp
-  条件: {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : CpltSepUniform空间} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem hom_comp {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -688,7 +688,7 @@ theorem hom_id
 
 中文:
 定理 hom_id
-  条件: (X : CpltSepUniformSpace)
+  条件: (X : CpltSepUniform空间)
   证明: rfl
 
 @[simp]
@@ -708,7 +708,7 @@ theorem hom_ofHom
 
 中文:
 定理 hom_ofHom
-  结论: {X Y : 类型u} [UniformSpace X] [UniformSpace Y]
+  结论: {X Y : 类型u} [一致空间 X] [一致空间 Y]
   证明: rfl
 -/
 theorem hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y]
@@ -740,7 +740,7 @@ definition completionFunctor
 
 中文:
 定义 completionFunctor
-  签名: : UniformSpaceCat ⥤ CpltSepUniformSpace where
+  签名: : 一致空间范畴 ⥤ CpltSepUniform空间 where
   定义体: CpltSepUniformSpace.of (Completion X)
   map f := ConcreteCategory.ofHom ⟨Completion.map f.1, Completion.uniformContinuous_map⟩
   map_id _ := InducedCategory.hom_ext (hom_ext (by apply Completion.map_id))
@@ -769,7 +769,7 @@ definition completionHom
 
 中文:
 定义 completionHom
-  签名: (X : UniformSpaceCat)
+  签名: (X : 一致空间范畴)
   定义体: ((↑) : X -> Completion X)
   hom'.property := Completion.uniformContinuous_coe X
 
@@ -794,8 +794,8 @@ theorem completionHom_val
 
 中文:
 定理 completionHom_val
-  条件: (X : UniformSpaceCat) (x)
-  结论: (completionHom X) x = (x : Completion X)
+  条件: (X : 一致空间范畴) (x)
+  结论: (completionHom X) x = (x : 完备化 X)
   证明: rfl
 -/
 theorem completionHom_val (X : UniformSpaceCat) (x) : (completionHom X) x = (x : Completion X) :=
@@ -813,7 +813,7 @@ definition extensionHom
 
 中文:
 定义 extensionHom
-  签名: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
+  签名: {X : 一致空间范畴} {Y : CpltSepUniform空间}
   定义体: ConcreteCategory.ofHom ⟨Completion.extension f, Completion.uniformContinuous_extension⟩
 
 @[simp]
@@ -838,7 +838,7 @@ theorem extensionHom_val
 
 中文:
 定理 extensionHom_val
-  结论: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
+  结论: {X : 一致空间范畴} {Y : CpltSepUniform空间}
   证明: rfl
 
 @[simp]
@@ -860,7 +860,7 @@ theorem extension_comp_hom
 
 中文:
 定理 extension_comp_hom
-  结论: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
+  结论: {X : 一致空间范畴} {Y : CpltSepUniform空间}
   证明: by
   ext x
   exact congr_fun (Completion.extension_comp_coe f.hom.property) x
@@ -891,7 +891,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : completionFunctor ⊣ forget₂ CpltSepUniformSpace UniformSpaceCat
+  签名: : completionFunctor ⊣ forget₂ CpltSepUniform空间 一致空间范畴
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun X Y =>
         { toFun := fun f => completionHom X ≫ f.hom
@@ -932,7 +932,7 @@ instance :
 
 中文:
 实例 :
-  签名: Reflective (forget₂ CpltSepUniformSpace UniformSpaceCat)
+  签名: 反射 (forget₂ CpltSepUniform空间 一致空间范畴)
   定义体: completionFunctor
   adj := adj
   map_surjective f := ⟨ConcreteCategory.ofHom f.hom, rfl⟩

@@ -56,7 +56,7 @@ definition lieEquivMatrix'
 
 中文:
 定义 lieEquivMatrix'
-  签名: : Module.End R (n -> R) ≃ₗ⁅R⁆ Matrix n n R
+  签名: : 模.End R (n -> R) ≃ₗ⁅R⁆ 矩阵 n n R
   定义体: { LinearMap.toMatrix' with
     map_lie' := fun {T S} => by
       let f := @LinearMap.toMatrix' R _ n n _ _
@@ -87,7 +87,7 @@ theorem lieEquivMatrix'_apply
 
 中文:
 定理 lieEquivMatrix'_apply
-  条件: (f : Module.End R (n -> R))
+  条件: (f : 模.End R (n -> R))
   证明: rfl
 
 @[simp]
@@ -107,7 +107,7 @@ theorem lieEquivMatrix'_symm_apply
 
 中文:
 定理 lieEquivMatrix'_symm_apply
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   证明: rfl
 -/
 theorem lieEquivMatrix'_symm_apply (A : Matrix n n R) :
@@ -128,7 +128,7 @@ definition lieConj
 
 中文:
 定义 lieConj
-  签名: (P : Matrix n n R) (h : Invertible P)
+  签名: (P : 矩阵 n n R) (h : 可逆 P)
   定义体: ((@lieEquivMatrix' R _ n _ _).symm.trans (P.toLinearEquiv' h).lieConj).trans lieEquivMatrix'
 
 @[simp]
@@ -153,7 +153,7 @@ theorem lieConj_apply
 
 中文:
 定理 lieConj_apply
-  条件: (P A : Matrix n n R) (h : Invertible P)
+  条件: (P A : 矩阵 n n R) (h : 可逆 P)
   证明: by
   simp [LinearEquiv.conj_apply, Matrix.lieConj, LinearMap.toMatrix'_comp,
     LinearMap.toMatrix'_toLin']
@@ -180,7 +180,7 @@ theorem lieConj_symm_apply
 
 中文:
 定理 lieConj_symm_apply
-  条件: (P A : Matrix n n R) (h : Invertible P)
+  条件: (P A : 矩阵 n n R) (h : 可逆 P)
   证明: by
   simp [LinearEquiv.symm_conj_apply, Matrix.lieConj, LinearMap.toMatrix'_comp,
     LinearMap.toMatrix'_toLin']
@@ -211,7 +211,7 @@ definition reindexLieEquiv
 
 中文:
 定义 reindexLieEquiv
-  签名: : Matrix n n R ≃ₗ⁅R⁆ Matrix m m R
+  签名: : 矩阵 n n R ≃ₗ⁅R⁆ 矩阵 m m R
   定义体: { Matrix.reindexLinearEquiv R R e e with
     toFun := Matrix.reindex e e
     map_lie' := fun {_ _} => by
@@ -242,7 +242,7 @@ theorem reindexLieEquiv_apply
 
 中文:
 定理 reindexLieEquiv_apply
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: rfl
 
 @[simp]
@@ -280,7 +280,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRingModule (Matrix n n R) (n -> R)
+  签名: Lie环模 (矩阵 n n R) (n -> R)
   定义体: mulVec
   add_lie := add_mulVec
   lie_add := mulVec_add
@@ -305,7 +305,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule R (Matrix n n R) (n -> R)
+  签名: Lie模 R (矩阵 n n R) (n -> R)
   定义体: smul_mulVec
   lie_smul t A := mulVec_smul A t
 
@@ -326,7 +326,7 @@ lemma lie_apply
 
 中文:
 引理 lie_apply
-  条件: (A : Matrix n n R) (v : n -> R)
+  条件: (A : 矩阵 n n R) (v : n -> R)
   结论: ⁅A, v⁆ = A *ᵥ v
   证明: rfl
 -/
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFaithful R (Matrix n n R) (n -> R)
+  签名: 是忠实 R (矩阵 n n R) (n -> R)
   定义体: by
     simpa using EmbeddingLike.injective _
 

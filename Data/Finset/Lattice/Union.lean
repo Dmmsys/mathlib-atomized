@@ -42,7 +42,7 @@ theorem sup_biUnion
 
 中文:
 定理 sup_biUnion
-  条件: [DecidableEq β] (s : Finset γ) (t : γ -> Finset β)
+  条件: [DecidableEq β] (s : 有限集 γ) (t : γ -> 有限集 β)
   证明: eq_of_forall_ge_iff fun c => by simp [@forall_comm _ β]
 
 Depends on / 依赖: eq_of_forall_ge_iff, forall_comm
@@ -67,7 +67,7 @@ theorem inf_biUnion
 
 中文:
 定理 inf_biUnion
-  条件: [DecidableEq β] (s : Finset γ) (t : γ -> Finset β)
+  条件: [DecidableEq β] (s : 有限集 γ) (t : γ -> 有限集 β)
   证明: @sup_biUnion αᵒᵈ _ _ _ _ _ _ _ _
 -/
 @[simp, grind =] theorem inf_biUnion [DecidableEq β] (s : Finset γ) (t : γ -> Finset β) :
@@ -91,8 +91,8 @@ theorem sup'_biUnion
   proof: eq_of_forall_ge_iff fun c => by simp [@forall_comm _ β]
 
 中文:
-定理 sup'_biUnion
-  结论: [DecidableEq β] {s : Finset γ} (Hs : s.Nonempty) {t : γ -> Finset β}
+定理 上确界'_biUnion
+  结论: [DecidableEq β] {s : 有限集 γ} (Hs : s.非空) {t : γ -> 有限集 β}
   证明: eq_of_forall_ge_iff fun c => by simp [@forall_comm _ β]
 -/
 theorem sup'_biUnion [DecidableEq β] {s : Finset γ} (Hs : s.Nonempty) {t : γ -> Finset β}
@@ -117,8 +117,8 @@ theorem inf'_biUnion
   proof: sup'_biUnion (α := αᵒᵈ) _ Hs Ht
 
 中文:
-定理 inf'_biUnion
-  结论: [DecidableEq β] {s : Finset γ} (Hs : s.Nonempty) {t : γ -> Finset β}
+定理 下确界'_biUnion
+  结论: [DecidableEq β] {s : 有限集 γ} (Hs : s.非空) {t : γ -> 有限集 β}
   证明: sup'_biUnion (α := αᵒᵈ) _ Hs Ht
 -/
 theorem inf'_biUnion [DecidableEq β] {s : Finset γ} (Hs : s.Nonempty) {t : γ -> Finset β}
@@ -142,7 +142,7 @@ theorem sup_eq_biUnion
 
 中文:
 定理 sup_eq_biUnion
-  条件: {α β} [DecidableEq β] (s : Finset α) (t : α -> Finset β)
+  条件: {α β} [DecidableEq β] (s : 有限集 α) (t : α -> 有限集 β)
   证明: by
   ext
   rw [mem_sup]; rw [mem_biUnion]

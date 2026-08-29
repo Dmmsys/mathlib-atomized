@@ -164,7 +164,7 @@ structure LinearDisjoint
 结构 LinearDisjoint
   参数: : 命题 where
   公理与运算 (1 个):
-    - injective : Function.Injective (mulMap M N)
+    - injective : 函数.单射 (mulMap M N)
 -/
 protected structure LinearDisjoint : Prop where
   injective : Function.Injective (mulMap M N)
@@ -227,7 +227,7 @@ theorem LinearDisjoint.of_subsingleton
 
 中文:
 定理 LinearDisjoint.of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: M.LinearDisjoint N
   证明: haveI : Subsingleton S := Module.subsingleton R S
   ⟨Function.injective_of_subsingleton _⟩
@@ -252,7 +252,7 @@ theorem LinearDisjoint.of_subsingleton_top
 
 中文:
 定理 LinearDisjoint.of_subsingleton_top
-  条件: [Subsingleton S]
+  条件: [子单例 S]
   结论: M.LinearDisjoint N
   证明: ⟨Function.injective_of_subsingleton _⟩
 
@@ -349,7 +349,7 @@ theorem map
 
 中文:
 定理 map
-  结论: (H : M.LinearDisjoint N) {T : Type w} [Semiring T] [Algebra R T]
+  结论: (H : M.LinearDisjoint N) {T : 类型 w} [半环 T] [代数 R T]
   证明: by
   rw [linearDisjoint_iff] at H ⊢
   have := hf.comp H
@@ -384,7 +384,7 @@ theorem of_basis_left'
 
 中文:
 定理 of_basis_left'
-  结论: {ι : 类型} (m : Basis ι R M)
+  结论: {ι : 类型} (m : 基 ι R M)
   证明: by
   classical simp_rw [mulLeftMap_eq_mulMap_comp, ← Basis.coe_repr_symm,
     ← LinearEquiv.coe_rTensor, LinearEquiv.comp_coe, LinearMap.coe_comp,
@@ -414,7 +414,7 @@ theorem of_basis_right'
 
 中文:
 定理 of_basis_right'
-  结论: {ι : 类型} (n : Basis ι R N)
+  结论: {ι : 类型} (n : 基 ι R N)
   证明: by
   classical simp_rw [mulRightMap_eq_mulMap_comp, ← Basis.coe_repr_symm,
     ← LinearEquiv.coe_lTensor, LinearEquiv.comp_coe, LinearMap.coe_comp,
@@ -446,7 +446,7 @@ theorem of_basis_mul'
 
 中文:
 定理 of_basis_mul'
-  结论: {κ ι : 类型} (m : Basis κ R M) (n : Basis ι R N)
+  结论: {κ ι : 类型} (m : 基 κ R M) (n : 基 ι R N)
   证明: by
   let i0 := (finsuppTensorFinsupp' R κ ι).symm
   let i1 := TensorProduct.congr m.repr n.repr
@@ -479,7 +479,7 @@ theorem bot_left
 
 中文:
 定理 bot_left
-  结论: (⊥ : Submodule R S).LinearDisjoint N
+  结论: (⊥ : 子模 R S).LinearDisjoint N
   证明: ⟨Function.injective_of_subsingleton _⟩
 
 Depends on / 依赖: Function, Function.injective_of_subsingleton, injective_of_subsingleton
@@ -497,7 +497,7 @@ theorem bot_right
 
 中文:
 定理 bot_right
-  结论: M.LinearDisjoint (⊥ : Submodule R S)
+  结论: M.LinearDisjoint (⊥ : 子模 R S)
   证明: ⟨Function.injective_of_subsingleton _⟩
 
 Depends on / 依赖: Function, Function.injective_of_subsingleton, injective_of_subsingleton
@@ -517,7 +517,7 @@ theorem one_left
 
 中文:
 定理 one_left
-  结论: (1 : Submodule R S).LinearDisjoint N
+  结论: (1 : 子模 R S).LinearDisjoint N
   证明: by
   rw [linearDisjoint_iff]; rw [← Algebra.toSubmodule_bot]; rw [mulMap_one_left_eq]
   exact N.injective_subtype.comp N.lTensorOne.injective
@@ -540,7 +540,7 @@ theorem one_right
 
 中文:
 定理 one_right
-  结论: M.LinearDisjoint (1 : Submodule R S)
+  结论: M.LinearDisjoint (1 : 子模 R S)
   证明: by
   rw [linearDisjoint_iff]; rw [← Algebra.toSubmodule_bot]; rw [mulMap_one_right_eq]
   exact M.injective_subtype.comp M.rTensorOne.injective
@@ -716,7 +716,7 @@ theorem linearIndependent_left_of_flat
 
 中文:
 定理 linearIndependent_left_of_flat
-  结论: (H : M.LinearDisjoint N) [Module.Flat R N]
+  结论: (H : M.LinearDisjoint N) [模.平坦 R N]
   证明: by
   refine LinearMap.ker_eq_bot_of_injective ?_
   classical simp_rw [mulLeftMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
@@ -744,7 +744,7 @@ theorem of_basis_left
 
 中文:
 定理 of_basis_left
-  结论: {ι : 类型} (m : Basis ι R M)
+  结论: {ι : 类型} (m : 基 ι R M)
   证明: of_basis_left' M N m (LinearMap.ker_eq_bot.1 H)
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, ker_eq_bot, of_basis_left
@@ -769,7 +769,7 @@ theorem linearIndependent_right_of_flat
 
 中文:
 定理 linearIndependent_right_of_flat
-  结论: (H : M.LinearDisjoint N) [Module.Flat R M]
+  结论: (H : M.LinearDisjoint N) [模.平坦 R M]
   证明: by
   refine LinearMap.ker_eq_bot_of_injective ?_
   classical simp_rw [mulRightMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
@@ -797,7 +797,7 @@ theorem of_basis_right
 
 中文:
 定理 of_basis_right
-  结论: {ι : 类型} (n : Basis ι R N)
+  结论: {ι : 类型} (n : 基 ι R N)
   证明: of_basis_right' M N n (LinearMap.ker_eq_bot.1 H)
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, ker_eq_bot, of_basis_right
@@ -823,7 +823,7 @@ theorem linearIndependent_mul_of_flat_left
 
 中文:
 定理 linearIndependent_mul_of_flat_left
-  结论: (H : M.LinearDisjoint N) [Module.Flat R M]
+  结论: (H : M.LinearDisjoint N) [模.平坦 R M]
   证明: by
   rw [LinearIndependent] at hm hn ⊢
   let i0 := (finsuppTensorFinsupp' R κ ι).symm
@@ -867,7 +867,7 @@ theorem linearIndependent_mul_of_flat_right
 
 中文:
 定理 linearIndependent_mul_of_flat_right
-  结论: (H : M.LinearDisjoint N) [Module.Flat R N]
+  结论: (H : M.LinearDisjoint N) [模.平坦 R N]
   证明: by
   rw [LinearIndependent] at hm hn ⊢
   let i0 := (finsuppTensorFinsupp' R κ ι).symm
@@ -936,7 +936,7 @@ theorem of_basis_mul
 
 中文:
 定理 of_basis_mul
-  结论: {κ ι : 类型} (m : Basis κ R M) (n : Basis ι R N)
+  结论: {κ ι : 类型} (m : 基 κ R M) (n : 基 ι R N)
   证明: by
   rw [LinearIndependent] at H
   exact of_basis_mul' M N m n H
@@ -964,7 +964,7 @@ Module.Flat.rTensor_preserves_injective_linearMap _ inclusion_injective h
 
 中文:
 定理 of_le_left_of_flat
-  结论: (H : M.LinearDisjoint N) {M' : Submodule R S}
+  结论: (H : M.LinearDisjoint N) {M' : 子模 R S}
   证明: by
   let i := mulMap M N ∘ₗ (inclusion h).rTensor N
 have hi : Function.Injective i := H.injective.comp
@@ -998,7 +998,7 @@ Module.Flat.lTensor_preserves_injective_linearMap _ inclusion_injective h
 
 中文:
 定理 of_le_right_of_flat
-  结论: (H : M.LinearDisjoint N) {N' : Submodule R S}
+  结论: (H : M.LinearDisjoint N) {N' : 子模 R S}
   证明: by
   let i := mulMap M N ∘ₗ (inclusion h).lTensor M
 have hi : Function.Injective i := H.injective.comp
@@ -1027,7 +1027,7 @@ theorem of_le_of_flat_right
 
 中文:
 定理 of_le_of_flat_right
-  结论: (H : M.LinearDisjoint N) {M' N' : Submodule R S}
+  结论: (H : M.LinearDisjoint N) {M' N' : 子模 R S}
   证明: (H.of_le_left_of_flat hm).of_le_right_of_flat hn
 
 Depends on / 依赖: H.of_le_left_of_flat, of_le_left_of_flat, of_le_right_of_flat
@@ -1047,7 +1047,7 @@ theorem of_le_of_flat_left
 
 中文:
 定理 of_le_of_flat_left
-  结论: (H : M.LinearDisjoint N) {M' N' : Submodule R S}
+  结论: (H : M.LinearDisjoint N) {M' N' : 子模 R S}
   证明: (H.of_le_right_of_flat hn).of_le_left_of_flat hm
 
 Depends on / 依赖: H.of_le_right_of_flat, of_le_left_of_flat, of_le_right_of_flat
@@ -1066,7 +1066,7 @@ theorem of_left_le_one_of_flat
 
 中文:
 定理 of_left_le_one_of_flat
-  条件: (h : M <= 1) [Module.Flat R N]
+  条件: (h : M <= 1) [模.平坦 R N]
   证明: (one_left N).of_le_left_of_flat h
 
 Depends on / 依赖: of_le_left_of_flat, one_left
@@ -1084,7 +1084,7 @@ theorem of_right_le_one_of_flat
 
 中文:
 定理 of_right_le_one_of_flat
-  条件: (h : N <= 1) [Module.Flat R M]
+  条件: (h : N <= 1) [模.平坦 R M]
   证明: (one_right M).of_le_right_of_flat h
 
 Depends on / 依赖: of_le_right_of_flat, one_right
@@ -1119,7 +1119,7 @@ theorem not_linearIndependent_pair_of_commute_of_flat_left
 
 中文:
 定理 not_linearIndependent_pair_of_commute_of_flat_left
-  结论: [Module.Flat R M]
+  结论: [模.平坦 R M]
   证明: fun h => by
   let n : Fin 2 -> N := (inclusion inf_le_right) ∘ ![a, b]
   have hn : LinearIndependent R n := h.map' _ (ker_inclusion _ _ _)
@@ -1158,7 +1158,7 @@ theorem not_linearIndependent_pair_of_commute_of_flat_right
 
 中文:
 定理 not_linearIndependent_pair_of_commute_of_flat_right
-  结论: [Module.Flat R N]
+  结论: [模.平坦 R N]
   证明: fun h => by
   let m : Fin 2 -> M := (inclusion inf_le_left) ∘ ![a, b]
   have hm : LinearIndependent R m := h.map' _ (ker_inclusion _ _ _)
@@ -1195,7 +1195,7 @@ theorem not_linearIndependent_pair_of_commute_of_flat
 
 中文:
 定理 not_linearIndependent_pair_of_commute_of_flat
-  结论: (hf : Module.Flat R M ∨ Module.Flat R N)
+  结论: (hf : 模.平坦 R M ∨ 模.平坦 R N)
   证明: by
   rcases hf with _ | _
   · exact H.not_linearIndependent_pair_of_commute_of_flat_left a b hc
@@ -1228,7 +1228,7 @@ theorem rank_inf_le_one_of_commute_of_flat
 
 中文:
 定理 rank_inf_le_one_of_commute_of_flat
-  结论: (hf : Module.Flat R M ∨ Module.Flat R N)
+  结论: (hf : 模.平坦 R M ∨ 模.平坦 R N)
   证明: by
   nontriviality R
   refine _root_.rank_le fun s h => ?_
@@ -1268,7 +1268,7 @@ theorem rank_inf_le_one_of_commute_of_flat_left
 
 中文:
 定理 rank_inf_le_one_of_commute_of_flat_left
-  结论: [Module.Flat R M]
+  结论: [模.平坦 R M]
   证明: H.rank_inf_le_one_of_commute_of_flat (Or.inl ‹_›) hc
 
 Depends on / 依赖: H.rank_inf_le_one_of_commute_of_flat, Or.inl, rank_inf_le_one_of_commute_of_flat
@@ -1287,7 +1287,7 @@ theorem rank_inf_le_one_of_commute_of_flat_right
 
 中文:
 定理 rank_inf_le_one_of_commute_of_flat_right
-  结论: [Module.Flat R N]
+  结论: [模.平坦 R N]
   证明: H.rank_inf_le_one_of_commute_of_flat (Or.inr ‹_›) hc
 
 Depends on / 依赖: H.rank_inf_le_one_of_commute_of_flat, Or.inr, rank_inf_le_one_of_commute_of_flat
@@ -1310,7 +1310,7 @@ theorem rank_le_one_of_commute_of_flat_of_self
 
 中文:
 定理 rank_le_one_of_commute_of_flat_of_self
-  结论: (H : M.LinearDisjoint M) [Module.Flat R M]
+  结论: (H : M.LinearDisjoint M) [模.平坦 R M]
   证明: by
   rw [← inf_of_le_left (le_refl M)] at hc ⊢
   exact H.rank_inf_le_one_of_commute_of_flat_left hc
@@ -1358,7 +1358,7 @@ theorem not_linearIndependent_pair_of_flat_left
 
 中文:
 定理 not_linearIndependent_pair_of_flat_left
-  结论: [Module.Flat R M]
+  结论: [模.平坦 R M]
   证明: H.not_linearIndependent_pair_of_commute_of_flat_left a b (mul_comm _ _)
 
 Depends on / 依赖: H.not_linearIndependent_pair_of_commute_of_flat_left, mul_comm, not_linearIndependent_pair_of_commute_of_flat_left
@@ -1377,7 +1377,7 @@ theorem not_linearIndependent_pair_of_flat_right
 
 中文:
 定理 not_linearIndependent_pair_of_flat_right
-  结论: [Module.Flat R N]
+  结论: [模.平坦 R N]
   证明: H.not_linearIndependent_pair_of_commute_of_flat_right a b (mul_comm _ _)
 
 Depends on / 依赖: H.not_linearIndependent_pair_of_commute_of_flat_right, mul_comm, not_linearIndependent_pair_of_commute_of_flat_right
@@ -1396,7 +1396,7 @@ theorem not_linearIndependent_pair_of_flat
 
 中文:
 定理 not_linearIndependent_pair_of_flat
-  结论: (hf : Module.Flat R M ∨ Module.Flat R N)
+  结论: (hf : 模.平坦 R M ∨ 模.平坦 R N)
   证明: H.not_linearIndependent_pair_of_commute_of_flat hf a b (mul_comm _ _)
 
 Depends on / 依赖: H.not_linearIndependent_pair_of_commute_of_flat, mul_comm, not_linearIndependent_pair_of_commute_of_flat
@@ -1417,7 +1417,7 @@ theorem rank_inf_le_one_of_flat
 
 中文:
 定理 rank_inf_le_one_of_flat
-  条件: (hf : Module.Flat R M ∨ Module.Flat R N)
+  条件: (hf : 模.平坦 R M ∨ 模.平坦 R N)
   证明: H.rank_inf_le_one_of_commute_of_flat hf fun _ _ => mul_comm _ _
 
 Depends on / 依赖: H.rank_inf_le_one_of_commute_of_flat, mul_comm, rank_inf_le_one_of_commute_of_flat
@@ -1437,8 +1437,8 @@ theorem rank_inf_le_one_of_flat_left
 
 中文:
 定理 rank_inf_le_one_of_flat_left
-  条件: [Module.Flat R M]
-  结论: Module.rank R ↥(M ⊓ N) <= 1
+  条件: [模.平坦 R M]
+  结论: 模.rank R ↥(M ⊓ N) <= 1
   证明: H.rank_inf_le_one_of_commute_of_flat_left fun _ _ => mul_comm _ _
 
 Depends on / 依赖: H.rank_inf_le_one_of_commute_of_flat_left, mul_comm, rank_inf_le_one_of_commute_of_flat_left
@@ -1457,8 +1457,8 @@ theorem rank_inf_le_one_of_flat_right
 
 中文:
 定理 rank_inf_le_one_of_flat_right
-  条件: [Module.Flat R N]
-  结论: Module.rank R ↥(M ⊓ N) <= 1
+  条件: [模.平坦 R N]
+  结论: 模.rank R ↥(M ⊓ N) <= 1
   证明: H.rank_inf_le_one_of_commute_of_flat_right fun _ _ => mul_comm _ _
 
 Depends on / 依赖: H.rank_inf_le_one_of_commute_of_flat_right, mul_comm, rank_inf_le_one_of_commute_of_flat_right
@@ -1478,7 +1478,7 @@ theorem rank_le_one_of_flat_of_self
 
 中文:
 定理 rank_le_one_of_flat_of_self
-  条件: (H : M.LinearDisjoint M) [Module.Flat R M]
+  条件: (H : M.LinearDisjoint M) [模.平坦 R M]
   证明: H.rank_le_one_of_commute_of_flat_of_self fun _ _ => mul_comm _ _
 
 Depends on / 依赖: H.rank_le_one_of_commute_of_flat_of_self, mul_comm, rank_le_one_of_commute_of_flat_of_self

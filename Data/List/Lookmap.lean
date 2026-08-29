@@ -39,7 +39,7 @@ theorem lookmap.go_append
 
 中文:
 定理 lookmap.go_append
-  条件: (l : List α) (acc : Array α)
+  条件: (l : 列表 α) (acc : 数组 α)
   证明: by
   cases l with
   | nil => simp [go, lookmap]
@@ -101,7 +101,7 @@ theorem lookmap_cons_none
 
 中文:
 定理 lookmap_cons_none
-  条件: {a : α} (l : List α) (h : f a = none)
+  条件: {a : α} (l : 列表 α) (h : f a = none)
   证明: by
   simp only [lookmap, lookmap.go, Array.toListAppend_eq, nil_append]
   rw [lookmap.go_append]; rw [lookmap]; rw [h]; simp
@@ -130,7 +130,7 @@ theorem lookmap_cons_some
 
 中文:
 定理 lookmap_cons_some
-  条件: {a b : α} (l : List α) (h : f a = some b)
+  条件: {a b : α} (l : 列表 α) (h : f a = some b)
   证明: by
   simp only [lookmap, lookmap.go, Array.toListAppend_eq, nil_append]
   rw [h]
@@ -156,7 +156,7 @@ theorem lookmap_cons
 
 中文:
 定理 lookmap_cons
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   证明: by
   cases h : f a <;> simp_all
 -/
@@ -175,7 +175,7 @@ theorem lookmap_some
 
 中文:
 定理 lookmap_some
-  结论: 对任意 l : List α, l.lookmap some = l
+  结论: 对任意 l : 列表 α, l.lookmap some = l
 -/
 theorem lookmap_some : forall l : List α, l.lookmap some = l
   | [] => rfl
@@ -190,7 +190,7 @@ theorem lookmap_none
 
 中文:
 定理 lookmap_none
-  结论: 对任意 l : List α, (l.lookmap fun _ => none) = l
+  结论: 对任意 l : 列表 α, (l.lookmap fun _ => none) = l
 -/
 theorem lookmap_none : forall l : List α, (l.lookmap fun _ => none) = l
   | [] => rfl
@@ -209,7 +209,7 @@ theorem lookmap_congr
 
 中文:
 定理 lookmap_congr
-  条件: {f g : α -> Option α}
+  条件: {f g : α -> 选项类型 α}
   证明: forall_mem_cons.1 H
     rcases h : g a with - | b
     · simp [h, H₁.trans h, lookmap_congr H₂]
@@ -236,8 +236,8 @@ theorem lookmap_of_forall_not
   proof: (lookmap_congr H).trans (lookmap_none l)
 
 中文:
-定理 lookmap_of_forall_not
-  条件: {l : List α} (H : 对任意 a in l, f a = none)
+定理 lookmap_of_对任意_not
+  条件: {l : 列表 α} (H : 对任意 a in l, f a = none)
   结论: l.lookmap f = l
   证明: (lookmap_congr H).trans (lookmap_none l)
 
@@ -279,7 +279,7 @@ theorem lookmap_id'
 
 中文:
 定理 lookmap_id'
-  条件: (h : 对任意 (a), 对任意 b in f a, a = b) (l : List α)
+  条件: (h : 对任意 (a), 对任意 b in f a, a = b) (l : 列表 α)
   结论: l.lookmap f = l
   证明: by
   rw [← map_id (l.lookmap f)]; rw [lookmap_map_eq]; rw [map_id]; exact h
@@ -304,7 +304,7 @@ theorem length_lookmap
 
 中文:
 定理 length_lookmap
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (l.lookmap f) = length l
   证明: by
   rw [← length_map]; rw [lookmap_map_eq _ fun _ => ()]; rw [length_map]; simp
@@ -335,7 +335,7 @@ theorem perm_lookmap
 
 中文:
 定理 perm_lookmap
-  结论: (f : α -> Option α) {l₁ l₂ : List α}
+  结论: (f : α -> 选项类型 α) {l₁ l₂ : 列表 α}
   证明: by
   induction p with
   | nil => simp

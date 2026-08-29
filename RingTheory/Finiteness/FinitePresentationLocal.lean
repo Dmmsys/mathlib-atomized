@@ -46,7 +46,7 @@ lemma of_span_eq_top_target_aux
 
 中文:
 引理 of_span_eq_top_target_aux
-  结论: {A : 类型} [CommRing A] [Algebra R A]
+  结论: {A : 类型} [交换环 A] [代数 R A]
   证明: by
   apply Algebra.FinitePresentation.of_surjective hf
   apply RingHom.ker_fg_of_localizationSpan t ht
@@ -94,7 +94,7 @@ lemma of_span_eq_top_target
 
 中文:
 引理 of_span_eq_top_target
-  结论: (s : Set S) (hs : Ideal.span (s : Set S) = ⊤)
+  结论: (s : 集合 S) (hs : 理想.span (s : 集合 S) = ⊤)
   证明: by
   obtain ⟨s, h₁, hs⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
   replace h (i : s) : Algebra.FinitePresentation R (Localization.Away i.val) := h i (h₁ i.property)
@@ -216,7 +216,7 @@ instance pi
 
 中文:
 实例 pi
-  签名: {ι : 类型} [Finite ι] (S : ι -> 类型) [对任意 i, CommRing (S i)] [对任意 i, Algebra R (S i)]
+  签名: {ι : 类型} [有限 ι] (S : ι -> 类型) [对任意 i, 交换环 (S i)] [对任意 i, 代数 R (S i)]
   定义体: by
   classical
   let (i : ι) : Algebra (Π a, S a) (S i) := (Pi.evalAlgHom R S i).toAlgebra

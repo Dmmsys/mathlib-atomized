@@ -65,7 +65,7 @@ Eq.symm
 
 中文:
 定理 volume_eq_stieltjes_id
-  结论: (volume : Measure 实数) = StieltjesFunction.id.measure
+  结论: (volume : 测度 实数) = Stieltjes函数.id.measure
   证明: by
   have : IsAddLeftInvariant StieltjesFunction.id.measure :=
     ⟨fun a =>
@@ -109,7 +109,7 @@ theorem volume_val
 中文:
 定理 volume_val
   条件: (s)
-  结论: volume s = StieltjesFunction.id.measure s
+  结论: volume s = Stieltjes函数.id.measure s
   证明: by
   simp [volume_eq_stieltjes_id]
 
@@ -135,7 +135,7 @@ theorem volume_Ico
 中文:
 定理 volume_Ico
   条件: {a b : 实数}
-  结论: volume (Ico a b) = of实数 (b - a)
+  结论: volume (左闭右开区间 a b) = of实数 (b - a)
   证明: by simp [volume_val]
 
 @[simp]
@@ -158,7 +158,7 @@ theorem volume_real_Ico
 中文:
 定理 volume_real_Ico
   条件: {a b : 实数}
-  结论: volume.real (Ico a b) = max (b - a) 0
+  结论: volume.real (左闭右开区间 a b) = 最大值 (b - a) 0
   证明: by
   simp [measureReal_def, ENNReal.toReal_ofReal']
 
@@ -182,7 +182,7 @@ theorem volume_real_Ico_of_le
 中文:
 定理 volume_real_Ico_of_le
   条件: {a b : 实数} (hab : a <= b)
-  结论: volume.real (Ico a b) = b - a
+  结论: volume.real (左闭右开区间 a b) = b - a
   证明: by
   simp [hab]
 
@@ -206,7 +206,7 @@ theorem volume_Icc
 中文:
 定理 volume_Icc
   条件: {a b : 实数}
-  结论: volume (Icc a b) = of实数 (b - a)
+  结论: volume (闭区间 a b) = of实数 (b - a)
   证明: by simp [volume_val]
 
 @[simp]
@@ -229,7 +229,7 @@ theorem volume_real_Icc
 中文:
 定理 volume_real_Icc
   条件: {a b : 实数}
-  结论: volume.real (Icc a b) = max (b - a) 0
+  结论: volume.real (闭区间 a b) = 最大值 (b - a) 0
   证明: by
   simp [measureReal_def, ENNReal.toReal_ofReal']
 
@@ -253,7 +253,7 @@ theorem volume_real_Icc_of_le
 中文:
 定理 volume_real_Icc_of_le
   条件: {a b : 实数} (hab : a <= b)
-  结论: volume.real (Icc a b) = b - a
+  结论: volume.real (闭区间 a b) = b - a
   证明: by
   simp [hab]
 
@@ -277,7 +277,7 @@ theorem volume_Ioo
 中文:
 定理 volume_Ioo
   条件: {a b : 实数}
-  结论: volume (Ioo a b) = of实数 (b - a)
+  结论: volume (开区间 a b) = of实数 (b - a)
   证明: by simp [volume_val]
 
 @[simp]
@@ -327,7 +327,7 @@ theorem volume_real_Ioo
 中文:
 定理 volume_real_Ioo
   条件: {a b : 实数}
-  结论: volume.real (Ioo a b) = max (b - a) 0
+  结论: volume.real (开区间 a b) = 最大值 (b - a) 0
   证明: by
   simp [measureReal_def, ENNReal.toReal_ofReal']
 
@@ -351,7 +351,7 @@ theorem volume_real_Ioo_of_le
 中文:
 定理 volume_real_Ioo_of_le
   条件: {a b : 实数} (hab : a <= b)
-  结论: volume.real (Ioo a b) = b - a
+  结论: volume.real (开区间 a b) = b - a
   证明: by
   simp [hab]
 
@@ -375,7 +375,7 @@ theorem volume_Ioc
 中文:
 定理 volume_Ioc
   条件: {a b : 实数}
-  结论: volume (Ioc a b) = of实数 (b - a)
+  结论: volume (左开右闭区间 a b) = of实数 (b - a)
   证明: by simp [volume_val]
 
 @[simp]
@@ -425,7 +425,7 @@ theorem volume_real_Ioc
 中文:
 定理 volume_real_Ioc
   条件: {a b : 实数}
-  结论: volume.real (Ioc a b) = max (b - a) 0
+  结论: volume.real (左开右闭区间 a b) = 最大值 (b - a) 0
   证明: by
   simp [measureReal_def, ENNReal.toReal_ofReal']
 
@@ -447,7 +447,7 @@ theorem volume_real_Ioc_of_le
 中文:
 定理 volume_real_Ioc_of_le
   条件: {a b : 实数} (hab : a <= b)
-  结论: volume.real (Ioc a b) = b - a
+  结论: volume.real (左开右闭区间 a b) = b - a
   证明: by
   simp [hab]
 -/
@@ -466,7 +466,7 @@ theorem volume_singleton
 中文:
 定理 volume_singleton
   条件: {a : 实数}
-  结论: volume ({a} : Set 实数) = 0
+  结论: volume ({a} : 集合 实数) = 0
   证明: by simp
 -/
 theorem volume_singleton {a : Real} : volume ({a} : Set Real) = 0 := by simp
@@ -486,7 +486,7 @@ theorem volume_univ
 
 中文:
 定理 volume_univ
-  结论: volume (univ : Set 实数) = ∞
+  结论: volume (univ : 集合 实数) = ∞
   证明: ENNReal.eq_top_of_forall_nnreal_le fun r =>
     calc
       (r : Real>=0∞) = volume (Icc (0 : Real) r) := by simp
@@ -698,7 +698,7 @@ alias noAtoms_volume := nullSingletonClass_volume
 
 中文:
 实例 nullSingletonClass_volume
-  签名: : NullSingletonClass (volume : Measure 实数)
+  签名: : NullSingleton类 (volume : 测度 实数)
   定义体: ⟨fun _ => volume_singleton⟩
 
 @[deprecated (since := "2026-06-09")]
@@ -787,7 +787,7 @@ theorem volume_Ioi
 中文:
 定理 volume_Ioi
   条件: {a : 实数}
-  结论: volume (Ioi a) = ∞
+  结论: volume (左开右无界区间 a) = ∞
   证明: top_unique
     le_of_tendsto' ENNReal.tendsto_nat_nhds_top fun n =>
       calc
@@ -820,7 +820,7 @@ theorem volume_Ici
 中文:
 定理 volume_Ici
   条件: {a : 实数}
-  结论: volume (Ici a) = ∞
+  结论: volume (左闭右无界区间 a) = ∞
   证明: by rw [← measure_congr Ioi_ae_eq_Ici]; simp
 
 @[simp]
@@ -848,7 +848,7 @@ theorem volume_Iio
 中文:
 定理 volume_Iio
   条件: {a : 实数}
-  结论: volume (Iio a) = ∞
+  结论: volume (左无界右开区间 a) = ∞
   证明: top_unique
     le_of_tendsto' ENNReal.tendsto_nat_nhds_top fun n =>
       calc
@@ -879,7 +879,7 @@ theorem volume_Iic
 中文:
 定理 volume_Iic
   条件: {a : 实数}
-  结论: volume (Iic a) = ∞
+  结论: volume (左无界右闭区间 a) = ∞
   证明: by rw [← measure_congr Iio_ae_eq_Iic]; simp
 
 Depends on / 依赖: Iio_ae_eq_Iic, measure_congr
@@ -899,7 +899,7 @@ instance locallyFinite_volume
 
 中文:
 实例 locallyFinite_volume
-  签名: : IsLocallyFiniteMeasure (volume : Measure 实数)
+  签名: : 是局部有限测度 (volume : 测度 实数)
   定义体: ⟨fun x =>
     ⟨Ioo (x - 1) (x + 1),
       IsOpen.mem_nhds isOpen_Ioo ⟨sub_lt_self _ zero_lt_one, lt_add_of_pos_right _ zero_lt_one⟩, by
@@ -992,7 +992,7 @@ theorem volume_le_diam
 
 中文:
 定理 volume_le_diam
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: volume s <= ediam s
   证明: by
   by_cases hs : Bornology.IsBounded s
@@ -1020,7 +1020,7 @@ theorem _root_.Filter.Eventually.volume_pos_of_nhds_real
   simpa [-mem_Ioo] using hx.1.trans hx.2
 
 中文:
-定理 _root_.Filter.Eventually.volume_pos_of_nhds_real
+定理 _root_.滤子.Eventually.volume_pos_of_nhds_real
   结论: {p : 实数 -> 命题} {a : 实数}
   证明: by
   rcases h.exists_Ioo_subset with ⟨l, u, hx, hs⟩
@@ -1053,7 +1053,7 @@ theorem volume_Icc_pi
 中文:
 定理 volume_Icc_pi
   条件: {a b : ι -> 实数}
-  结论: volume (Icc a b) = ∏ i, ENN实数.of实数 (b i - a i)
+  结论: volume (闭区间 a b) = ∏ i, 广义非负实数.of实数 (b i - a i)
   证明: by
   rw [← pi_univ_Icc]; rw [volume_pi_pi]
   simp only [Real.volume_Icc]
@@ -1077,7 +1077,7 @@ theorem volume_Icc_pi_toReal
   simp only [volume_Icc_pi, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
 
 中文:
-定理 volume_Icc_pi_toReal
+定理 volume_Icc_pi_to实数
   条件: {a b : ι -> 实数} (h : a <= b)
   证明: by
   simp only [volume_Icc_pi, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
@@ -1122,7 +1122,7 @@ theorem volume_pi_Ioo_toReal
   simp only [volume_pi_Ioo, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
 
 中文:
-定理 volume_pi_Ioo_toReal
+定理 volume_pi_Ioo_to实数
   条件: {a b : ι -> 实数} (h : a <= b)
   证明: by
   simp only [volume_pi_Ioo, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
@@ -1167,7 +1167,7 @@ theorem volume_pi_Ioc_toReal
   simp only [volume_pi_Ioc, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
 
 中文:
-定理 volume_pi_Ioc_toReal
+定理 volume_pi_Ioc_to实数
   条件: {a b : ι -> 实数} (h : a <= b)
   证明: by
   simp only [volume_pi_Ioc, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
@@ -1217,7 +1217,7 @@ nonrec theorem volume_pi_ball (a : ι -> Real) {r : Real} (hr : 0 < r) :
   simp only [MeasureTheory.volume_pi_ball a 
 
 中文:
-定理 volume_pi_Ico_toReal
+定理 volume_pi_Ico_to实数
   条件: {a b : ι -> 实数} (h : a <= b)
   证明: by
   simp only [volume_pi_Ico, ENNReal.toReal_prod, ENNReal.toReal_ofReal (sub_nonneg.2 (h _))]
@@ -1261,7 +1261,7 @@ Subset.trans (subset_pi_eval_image univ s) pi_mono fun _ _ => subset_closure
 
 中文:
 定理 volume_pi_le_prod_diam
-  条件: (s : Set (ι -> 实数))
+  条件: (s : 集合 (ι -> 实数))
   证明: calc
     volume s <= volume (pi univ fun i => closure (Function.eval i '' s)) :=
 volume.mono
@@ -1298,8 +1298,8 @@ theorem volume_pi_le_diam_pow
 
 中文:
 定理 volume_pi_le_diam_pow
-  条件: (s : Set (ι -> 实数))
-  结论: volume s <= ediam s ^ Fintype.card ι
+  条件: (s : 集合 (ι -> 实数))
+  结论: volume s <= ediam s ^ 有限类型.card ι
   证明: calc
     volume s <= ∏ i : ι, ediam (Function.eval i '' s) := volume_pi_le_prod_diam s
     _ <= ∏ _i : ι, (1 : Real>=0) * ediam s :=
@@ -1401,7 +1401,7 @@ theorem volume_preimage_mul_left
 
 中文:
 定理 volume_preimage_mul_left
-  条件: {a : 实数} (h : a != 0) (s : Set 实数)
+  条件: {a : 实数} (h : a != 0) (s : 集合 实数)
   证明: calc
     volume ((a * ·) ⁻¹' s) = Measure.map (a * ·) volume s :=
       ((Homeomorph.mulLeft₀ a h).toMeasurableEquiv.map_apply s).symm
@@ -1476,7 +1476,7 @@ theorem volume_preimage_mul_right
 
 中文:
 定理 volume_preimage_mul_right
-  条件: {a : 实数} (h : a != 0) (s : Set 实数)
+  条件: {a : 实数} (h : a != 0) (s : 集合 实数)
   证明: calc
     volume ((· * a) ⁻¹' s) = Measure.map (· * a) volume s :=
       ((Homeomorph.mulRight₀ a h).toMeasurableEquiv.map_apply s).symm
@@ -1563,7 +1563,7 @@ theorem volume_preserving_transvectionStruct
 
 中文:
 定理 volume_preserving_transvectionStruct
-  条件: [DecidableEq ι] (t : TransvectionStruct ι 实数)
+  条件: [DecidableEq ι] (t : 平换结构 ι 实数)
   证明: by
   /- We use `lmarginal` to conveniently use Fubini's theorem.
     Along the coordinate where there is a shearing, it acts like a
@@ -1608,7 +1608,7 @@ theorem map_matrix_volume_pi_eq_smul_volume_pi
 
 中文:
 定理 map_matrix_volume_pi_eq_smul_volume_pi
-  条件: [DecidableEq ι] {M : Matrix ι ι 实数} (hM : det M != 0)
+  条件: [DecidableEq ι] {M : 矩阵 ι ι 实数} (hM : det M != 0)
   证明: by
   -- This follows from the cases we have already proved, of diagonal matrices and transvections,
   -- as these matrices generate all invertible matrices.
@@ -1692,7 +1692,7 @@ definition regionBetween
 
 中文:
 定义 regionBetween
-  签名: (f g : α -> 实数) (s : Set α)
+  签名: (f g : α -> 实数) (s : 集合 α)
   定义体: { p : α × Real | p.1 in s ∧ p.2 in Ioo (f p.1) (g p.1) }
 -/
 def regionBetween (f g : α -> Real) (s : Set α) : Set (α × Real) :=
@@ -1710,7 +1710,7 @@ theorem regionBetween_subset
 
 中文:
 定理 regionBetween_subset
-  条件: (f g : α -> 实数) (s : Set α)
+  条件: (f g : α -> 实数) (s : 集合 α)
   结论: regionBetween f g s subseteq s ×ˢ univ
   证明: by
   simpa only [prod_univ, regionBetween, Set.preimage, ofPred_subset_ofPred] using fun a => And.left
@@ -1738,7 +1738,7 @@ theorem measurableSet_regionBetween
 
 中文:
 定理 measurableSet_regionBetween
-  条件: (hf : Measurable f) (hg : Measurable g) (hs : MeasurableSet s)
+  条件: (hf : 可测 f) (hg : 可测 g) (hs : 可测集 s)
   证明: by
   dsimp only [regionBetween, Ioo, mem_ofPred_eq, ofPred_and]
   refine
@@ -1774,7 +1774,7 @@ theorem measurableSet_region_between_oc
 
 中文:
 定理 measurableSet_region_between_oc
-  结论: (hf : Measurable f) (hg : Measurable g)
+  结论: (hf : 可测 f) (hg : 可测 g)
   证明: by
   dsimp only [regionBetween, Ioc, mem_ofPred_eq, ofPred_and]
   refine
@@ -1811,7 +1811,7 @@ theorem measurableSet_region_between_co
 
 中文:
 定理 measurableSet_region_between_co
-  结论: (hf : Measurable f) (hg : Measurable g)
+  结论: (hf : 可测 f) (hg : 可测 g)
   证明: by
   dsimp only [regionBetween, Ico, mem_ofPred_eq, ofPred_and]
   refine
@@ -1848,7 +1848,7 @@ theorem measurableSet_region_between_cc
 
 中文:
 定理 measurableSet_region_between_cc
-  结论: (hf : Measurable f) (hg : Measurable g)
+  结论: (hf : 可测 f) (hg : 可测 g)
   证明: by
   dsimp only [regionBetween, Icc, mem_ofPred_eq, ofPred_and]
   refine
@@ -1880,7 +1880,7 @@ theorem measurableSet_graph
 
 中文:
 定理 measurableSet_graph
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   证明: by
   simpa using measurableSet_region_between_cc hf hf MeasurableSet.univ
 
@@ -1909,7 +1909,7 @@ theorem volume_regionBetween_eq_lintegral'
 
 中文:
 定理 volume_regionBetween_eq_lintegral'
-  结论: (hf : Measurable f) (hg : Measurable g)
+  结论: (hf : 可测 f) (hg : 可测 g)
   证明: by
   classical
     rw [Measure.prod_apply]
@@ -1959,7 +1959,7 @@ theorem volume_regionBetween_eq_lintegral
 
 中文:
 定理 volume_regionBetween_eq_lintegral
-  结论: [SFinite μ] (hf : AEMeasurable f (μ.restrict s))
+  结论: [SFinite μ] (hf : 几乎处处可测 f (μ.restrict s))
   证明: by
   have h₁ :
     (fun y => ENNReal.ofReal ((g - f) y)) =ᵐ[μ.restrict s] fun y =>
@@ -2011,7 +2011,7 @@ lemma nullMeasurableSet_regionBetween
 
 中文:
 引理 nullMeasurableSet_regionBetween
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   refine NullMeasurableSet.inter
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
@@ -2044,7 +2044,7 @@ lemma nullMeasurableSet_region_between_oc
 
 中文:
 引理 nullMeasurableSet_region_between_oc
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   refine NullMeasurableSet.inter
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
@@ -2082,7 +2082,7 @@ lemma nullMeasurableSet_region_between_co
 
 中文:
 引理 nullMeasurableSet_region_between_co
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   refine NullMeasurableSet.inter
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
@@ -2120,7 +2120,7 @@ lemma nullMeasurableSet_region_between_cc
 
 中文:
 引理 nullMeasurableSet_region_between_cc
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   refine NullMeasurableSet.inter
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
@@ -2164,7 +2164,7 @@ theorem ae_restrict_of_ae_restrict_inter_Ioo
 
 中文:
 定理 ae_restrict_of_ae_restrict_inter_Ioo
-  结论: {μ : Measure 实数} [NullSingletonClass μ] {s : Set 实数}
+  结论: {μ : 测度 实数} [NullSingleton类 μ] {s : 集合 实数}
   证明: by
   /- By second-countability, we cover `s` by countably many intervals `(a, b)` (except maybe for
     two endpoints, which don't matter since `μ` does not have any atom). -/
@@ -2218,7 +2218,7 @@ theorem ae_of_mem_of_ae_of_mem_inter_Ioo
 
 中文:
 定理 ae_of_mem_of_ae_of_mem_inter_Ioo
-  结论: {μ : Measure 实数} [NullSingletonClass μ] {s : Set 实数}
+  结论: {μ : 测度 实数} [NullSingleton类 μ] {s : 集合 实数}
   证明: by
   /- By second-countability, we cover `s` by countably many intervals `(a, b)` (except maybe for
     two endpoints, which don't matter since `μ` does not have any atom). -/

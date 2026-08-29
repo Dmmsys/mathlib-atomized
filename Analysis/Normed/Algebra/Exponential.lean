@@ -174,7 +174,7 @@ theorem exp_of_isEmpty_algebra_rat
 
 中文:
 定理 exp_of_isEmpty_algebra_rat
-  条件: [IsEmpty (Algebra Rat 𝔸)] (x : 𝔸)
+  条件: [是空 (代数 有理数 𝔸)] (x : 𝔸)
   结论: exp x = 1
   证明: by
   rw [exp]; rw [dif_neg (not_nonempty_iff.mpr ‹_›)]
@@ -233,7 +233,7 @@ theorem expSeries_sum_eq
 中文:
 定理 expSeries_sum_eq
   条件: (x : 𝔸)
-  结论: (expSeries 𝕂 𝔸).sum x = ∑' n : 自然数, (n !⁻¹ : 𝕂) • x ^ n
+  结论: (expSeries 𝕂 𝔸).求和 x = ∑' n : 自然数, (n !⁻¹ : 𝕂) • x ^ n
   证明: tsum_congr fun n => expSeries_apply_eq x n
 
 Depends on / 依赖: expSeries_apply_eq, tsum_congr
@@ -253,8 +253,8 @@ theorem expSeries_sum_eq_rat
 
 中文:
 定理 expSeries_sum_eq_rat
-  条件: [Algebra Rat 𝔸]
-  结论: (expSeries 𝕂 𝔸).sum = (expSeries Rat 𝔸).sum
+  条件: [代数 有理数 𝔸]
+  结论: (expSeries 𝕂 𝔸).求和 = (expSeries 有理数 𝔸).求和
   证明: by
   ext; simp_rw [expSeries_sum_eq, inv_natCast_smul_eq 𝕂 Rat]
 
@@ -275,7 +275,7 @@ theorem expSeries_eq_expSeries_rat
 
 中文:
 定理 expSeries_eq_expSeries_rat
-  条件: [Algebra Rat 𝔸] (n : 自然数)
+  条件: [代数 有理数 𝔸] (n : 自然数)
   证明: by
   ext c
   simp [expSeries, inv_natCast_smul_eq 𝕂 Rat]
@@ -301,8 +301,8 @@ theorem exp_eq_expSeries_sum
 
 中文:
 定理 exp_eq_expSeries_sum
-  条件: [CharZero 𝕂]
-  结论: exp = (expSeries 𝕂 𝔸).sum
+  条件: [特征零 𝕂]
+  结论: exp = (expSeries 𝕂 𝔸).求和
   证明: by
   ext x
   rw [exp]; rw [dif_pos ⟨RestrictScalars.algebra Rat 𝕂 𝔸⟩]; rw [← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
@@ -328,7 +328,7 @@ theorem exp_eq_tsum
 
 中文:
 定理 exp_eq_tsum
-  条件: [CharZero 𝕂]
+  条件: [特征零 𝕂]
   结论: exp = fun x : 𝔸 => ∑' n : 自然数, (n !⁻¹ : 𝕂) • x ^ n
   证明: by
   rw [exp_eq_expSeries_sum 𝕂]
@@ -353,8 +353,8 @@ theorem exp_eq_tsum_rat
 
 中文:
 定理 exp_eq_tsum_rat
-  条件: [Algebra Rat 𝔸]
-  结论: exp = fun x : 𝔸 => ∑' n : 自然数, (n !⁻¹ : Rat) • x ^ n
+  条件: [代数 有理数 𝔸]
+  结论: exp = fun x : 𝔸 => ∑' n : 自然数, (n !⁻¹ : 有理数) • x ^ n
   证明: exp_eq_tsum Rat
 
 Depends on / 依赖: exp_eq_tsum
@@ -374,7 +374,7 @@ theorem exp_eq_ofScalarsSum
 
 中文:
 定理 exp_eq_ofScalarsSum
-  条件: [CharZero 𝕂]
+  条件: [特征零 𝕂]
   证明: by
   rw [exp_eq_tsum 𝕂]; rw [ofScalarsSum_eq_tsum]
 
@@ -470,7 +470,7 @@ theorem exp_op
 
 中文:
 定理 exp_op
-  条件: [T2Space 𝔸] (x : 𝔸)
+  条件: [T2空间 𝔸] (x : 𝔸)
   证明: by
   obtain h | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
 · have : IsEmpty (Algebra Rat 𝔸ᵐᵒᵖ) := ⟨fun _ => h.elim (RingEquiv.opOp 𝔸).algebra Rat⟩
@@ -502,7 +502,7 @@ theorem exp_unop
 
 中文:
 定理 exp_unop
-  条件: [T2Space 𝔸] (x : 𝔸ᵐᵒᵖ)
+  条件: [T2空间 𝔸] (x : 𝔸ᵐᵒᵖ)
   证明: by
   induction x; simp
 -/
@@ -523,7 +523,7 @@ theorem star_exp
 
 中文:
 定理 star_exp
-  条件: [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] (x : 𝔸)
+  条件: [T2空间 𝔸] [对合环 𝔸] [余ntinuousStar 𝔸] (x : 𝔸)
   证明: by
   obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
   · simp
@@ -578,7 +578,7 @@ theorem _root_.IsSelfAdjoint.exp
 
 中文:
 定理 _root_.IsSelfAdjoint.exp
-  结论: [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
+  结论: [T2空间 𝔸] [对合环 𝔸] [余ntinuousStar 𝔸] {x : 𝔸}
   证明: (star_exp x).trans h.symm ▸ rfl
 
 Depends on / 依赖: h.symm, star_exp
@@ -601,7 +601,7 @@ theorem _root_.Commute.exp_right
 
 中文:
 定理 _root_.Commute.exp_right
-  条件: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
+  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
   证明: by
   obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
   · simp
@@ -627,7 +627,7 @@ theorem _root_.Commute.exp_left
 
 中文:
 定理 _root_.Commute.exp_left
-  条件: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
+  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
   证明: h.symm.exp_right.symm
 
 Depends on / 依赖: exp_right, h.symm.exp_right.symm
@@ -646,7 +646,7 @@ theorem _root_.Commute.exp
 
 中文:
 定理 _root_.Commute.exp
-  条件: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
+  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
   证明: h.exp_left.exp_right
 
 Depends on / 依赖: exp_left, exp_right, h.exp_left.exp_right
@@ -715,7 +715,7 @@ theorem expSeries_sum_eq_div
 中文:
 定理 expSeries_sum_eq_div
   条件: (x : 𝔸)
-  结论: (expSeries 𝕂 𝔸).sum x = ∑' n : 自然数, x ^ n / n !
+  结论: (expSeries 𝕂 𝔸).求和 x = ∑' n : 自然数, x ^ n / n !
   证明: tsum_congr (expSeries_apply_eq_div x)
 
 Depends on / 依赖: expSeries_apply_eq_div, tsum_congr
@@ -737,7 +737,7 @@ theorem exp_eq_tsum_div
 
 中文:
 定理 exp_eq_tsum_div
-  条件: [CharZero 𝔸]
+  条件: [特征零 𝔸]
   结论: exp = fun x : 𝔸 => ∑' n : 自然数, x ^ n / n !
   证明: by
   rw [exp_eq_expSeries_sum Rat]
@@ -864,7 +864,7 @@ theorem expSeries_hasSum_exp_of_mem_ball
 
 中文:
 定理 expSeries_hasSum_exp_of_mem_ball
-  结论: [CharZero 𝕂] (x : 𝔸)
+  结论: [特征零 𝕂] (x : 𝔸)
   证明: by
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
     FormalMultilinearSeries.hasSum (expSeries 𝕂 𝔸) hx
@@ -889,7 +889,7 @@ theorem expSeries_hasSum_exp_of_mem_ball'
 
 中文:
 定理 expSeries_hasSum_exp_of_mem_ball'
-  结论: [CharZero 𝕂] (x : 𝔸)
+  结论: [特征零 𝕂] (x : 𝔸)
   证明: by
   rw [← expSeries_apply_eq']
   exact expSeries_hasSum_exp_of_mem_ball x hx
@@ -914,7 +914,7 @@ theorem hasFPowerSeriesOnBall_exp_of_radius_pos
 
 中文:
 定理 hasFPowerSeriesOnBall_exp_of_radius_pos
-  条件: [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
+  条件: [特征零 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
   证明: by
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
     (expSeries 𝕂 𝔸).hasFPowerSeriesOnBall h
@@ -938,7 +938,7 @@ theorem hasFPowerSeriesAt_exp_zero_of_radius_pos
 
 中文:
 定理 hasFPowerSeriesAt_exp_zero_of_radius_pos
-  条件: [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
+  条件: [特征零 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
   证明: by
   simpa only [exp, expSeries_sum_eq_rat] using
     (hasFPowerSeriesOnBall_exp_of_radius_pos h).hasFPowerSeriesAt
@@ -962,7 +962,7 @@ theorem continuousOn_exp
 
 中文:
 定理 continuousOn_exp
-  条件: [CharZero 𝕂]
+  条件: [特征零 𝕂]
   证明: by
   have := FormalMultilinearSeries.continuousOn (p := expSeries 𝕂 𝔸)
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using this
@@ -988,7 +988,7 @@ theorem analyticAt_exp_of_mem_ball
 
 中文:
 定理 analyticAt_exp_of_mem_ball
-  结论: [CharZero 𝕂] (x : 𝔸)
+  结论: [特征零 𝕂] (x : 𝔸)
   证明: by
   by_cases h : (expSeries 𝕂 𝔸).radius = 0
   · rw [h] at hx; exact (ENNReal.not_lt_zero hx).elim
@@ -1022,7 +1022,7 @@ theorem exp_add_of_commute_of_mem_ball
 
 中文:
 定理 exp_add_of_commute_of_mem_ball
-  结论: [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y)
+  结论: [特征零 𝕂] {x y : 𝔸} (hxy : Commute x y)
   证明: by
   rw [exp_eq_tsum 𝕂]; rw [tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
       (norm_expSeries_summable_of_mem_ball' x hx) (norm_expSeries_summable_of_mem_ball' y hy)]
@@ -1066,7 +1066,7 @@ definition invertibleExpOfMemBall
 
 中文:
 定义 invertibleExpOfMemBall
-  签名: [CharZero 𝕂] {x : 𝔸}
+  签名: [特征零 𝕂] {x : 𝔸}
   定义体: exp (-x)
   invOf_mul_self := by
     have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
@@ -1099,7 +1099,7 @@ theorem isUnit_exp_of_mem_ball
 
 中文:
 定理 isUnit_exp_of_mem_ball
-  结论: [CharZero 𝕂] {x : 𝔸}
+  结论: [特征零 𝕂] {x : 𝔸}
   证明: @isUnit_of_invertible _ _ _ (invertibleExpOfMemBall hx)
 
 Depends on / 依赖: invertibleExpOfMemBall, isUnit_of_invertible
@@ -1119,7 +1119,7 @@ theorem invOf_exp_of_mem_ball
 
 中文:
 定理 invOf_exp_of_mem_ball
-  结论: [CharZero 𝕂] {x : 𝔸}
+  结论: [特征零 𝕂] {x : 𝔸}
   证明: by
   let := invertibleExpOfMemBall hx; convert! (rfl : ⅟(exp x) = _)
 
@@ -1144,7 +1144,7 @@ theorem map_exp_of_mem_ball
 
 中文:
 定理 map_exp_of_mem_ball
-  结论: [Algebra 𝕂 𝔹] [CharZero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹]
+  结论: [代数 𝕂 𝔹] [特征零 𝕂] {F} [函数状 F 𝔸 𝔹] [环态射类 F 𝔸 𝔹]
   证明: by
   rw [exp_eq_tsum 𝕂]; rw [exp_eq_tsum 𝕂]
   refine ((expSeries_summable_of_mem_ball' _ hx).hasSum.map f hf).tsum_eq.symm.trans ?_
@@ -1173,7 +1173,7 @@ theorem algebraMap_exp_comm_of_mem_ball
 
 中文:
 定理 algebraMap_exp_comm_of_mem_ball
-  结论: [CharZero 𝕂] [CompleteSpace 𝕂] (x : 𝕂)
+  结论: [特征零 𝕂] [完备空间 𝕂] (x : 𝕂)
   证明: map_exp_of_mem_ball (algebraMap _ _) (algebraMapCLM _ _).continuous _ hx
 
 Depends on / 依赖: algebraMap, algebraMapCLM, continuous, map_exp_of_mem_ball
@@ -1228,7 +1228,7 @@ theorem expSeries_div_summable_of_mem_ball
 
 中文:
 定理 expSeries_div_summable_of_mem_ball
-  结论: [CompleteSpace 𝔸] (x : 𝔸)
+  结论: [完备空间 𝔸] (x : 𝔸)
   证明: (norm_expSeries_div_summable_of_mem_ball 𝕂 x hx).of_norm
 
 Depends on / 依赖: norm_expSeries_div_summable_of_mem_ball, of_norm
@@ -1249,7 +1249,7 @@ theorem expSeries_div_hasSum_exp_of_mem_ball
 
 中文:
 定理 expSeries_div_hasSum_exp_of_mem_ball
-  结论: [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸)
+  结论: [特征零 𝕂] [完备空间 𝔸] (x : 𝔸)
   证明: by
   rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
   exact expSeries_hasSum_exp_of_mem_ball x hx
@@ -1273,7 +1273,7 @@ theorem exp_neg_of_mem_ball
 
 中文:
 定理 exp_neg_of_mem_ball
-  结论: [CharZero 𝕂] [CompleteSpace 𝔸] {x : 𝔸}
+  结论: [特征零 𝕂] [完备空间 𝔸] {x : 𝔸}
   证明: letI := invertibleExpOfMemBall hx
   invOf_eq_inv (exp x)
 
@@ -1301,7 +1301,7 @@ theorem exp_add_of_mem_ball
 
 中文:
 定理 exp_add_of_mem_ball
-  结论: [CharZero 𝕂] {x y : 𝔸}
+  结论: [特征零 𝕂] {x y : 𝔸}
   证明: exp_add_of_commute_of_mem_ball (Commute.all x y) hx hy
 
 Depends on / 依赖: Commute, Commute.all, exp_add_of_commute_of_mem_ball
@@ -1427,7 +1427,7 @@ theorem algebraMap_exp_comm
 
 中文:
 定理 algebraMap_exp_comm
-  条件: [CompleteSpace 𝕂] (x : 𝕂)
+  条件: [完备空间 𝕂] (x : 𝕂)
   证明: algebraMap_exp_comm_of_mem_ball x (expSeries_radius_eq_top 𝕂 𝕂).symm ▸ edist_lt_top _ _
 
 Depends on / 依赖: algebraMap_exp_comm_of_mem_ball, edist_lt_top, expSeries_radius_eq_top
@@ -1528,7 +1528,7 @@ theorem exp_hasFPowerSeriesOnBall
 
 中文:
 定理 exp_hasFPowerSeriesOnBall
-  结论: HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
+  结论: 有FPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
   证明: expSeries_radius_eq_top 𝕂 𝔸 ▸ hasFPowerSeriesOnBall_exp_of_radius_pos (expSeries_radius_pos _ _)
 
 Depends on / 依赖: expSeries_radius_eq_top, expSeries_radius_pos, hasFPowerSeriesOnBall_exp_of_radius_pos
@@ -1593,7 +1593,7 @@ theorem exp_continuous
 
 中文:
 定理 exp_continuous
-  结论: Continuous (exp : 𝔸 -> 𝔸)
+  结论: 连续 (exp : 𝔸 -> 𝔸)
   证明: by
   rw [← continuousOn_univ]; rw [← Metric.eball_top_eq_univ (0 : 𝔸)]; rw [←
     expSeries_radius_eq_top Rat 𝔸]
@@ -1616,8 +1616,8 @@ lemma _root_.Filter.Tendsto.exp
   proof: (exp_continuous.tendsto _).comp hf
 
 中文:
-引理 _root_.Filter.Tendsto.exp
-  结论: {α : 类型} {l : Filter α} {f : α -> 𝔸} {a : 𝔸}
+引理 _root_.滤子.收敛.exp
+  结论: {α : 类型} {l : 滤子 α} {f : α -> 𝔸} {a : 𝔸}
   证明: (exp_continuous.tendsto _).comp hf
 
 Depends on / 依赖: exp_continuous, exp_continuous.tendsto, tendsto
@@ -1682,7 +1682,7 @@ theorem isUnit_exp
 中文:
 定理 isUnit_exp
   条件: (x : 𝔸)
-  结论: IsUnit (exp x)
+  结论: 是单位 (exp x)
   证明: isUnit_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
 
 Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, isUnit_exp_of_mem_ball
@@ -1701,7 +1701,7 @@ theorem invOf_exp
 
 中文:
 定理 invOf_exp
-  条件: (x : 𝔸) [Invertible (exp x)]
+  条件: (x : 𝔸) [可逆 (exp x)]
   结论: ⅟(exp x) = exp (-x)
   证明: invOf_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
 
@@ -1721,7 +1721,7 @@ theorem _root_.Ring.inverse_exp
   Ring.inverse_invertible _
 
 中文:
-定理 _root_.Ring.inverse_exp
+定理 _root_.环.inverse_exp
   条件: (x : 𝔸)
   结论: (exp x)⁻¹ʳ = exp (-x)
   证明: letI := invertibleExp x
@@ -1745,7 +1745,7 @@ theorem exp_mem_unitary_of_mem_skewAdjoint
 
 中文:
 定理 exp_mem_unitary_of_mem_skewAdjoint
-  结论: [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
+  结论: [对合环 𝔸] [余ntinuousStar 𝔸] {x : 𝔸}
   证明: by
   rw [Unitary.mem_iff]; rw [star_exp]; rw [skewAdjoint.mem_iff.mp h]; rw [←
     exp_add_of_commute (Commute.refl x).neg_left]; rw [← exp_add_of_commute (Commute.refl x).neg_right]; rw [neg_add_cancel]; rw [add_neg_cancel]; rw [exp_zero]; rw [and_self_iff]
@@ -1826,7 +1826,7 @@ theorem exp_sum_of_commute
 
 中文:
 定理 exp_sum_of_commute
-  结论: {ι} (s : Finset ι) (f : ι -> 𝔸)
+  结论: {ι} (s : 有限集 ι) (f : ι -> 𝔸)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1887,7 +1887,7 @@ theorem map_exp
 
 中文:
 定理 map_exp
-  结论: [Algebra Rat 𝔹]
+  结论: [代数 有理数 𝔹]
   证明: map_exp_of_mem_ball f hf x (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
 
 Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, map_exp_of_mem_ball
@@ -1907,7 +1907,7 @@ theorem exp_smul
 
 中文:
 定理 exp_smul
-  条件: {G} [Monoid G] [MulSemiringAction G 𝔸] [ContinuousConstSMul G 𝔸] (g : G) (x : 𝔸)
+  条件: {G} [幺半群 G] [MulSemiring作用 G 𝔸] [连续常数标量乘法 G 𝔸] (g : G) (x : 𝔸)
   证明: (map_exp (MulSemiringAction.toRingHom G 𝔸 g) (continuous_const_smul g) x).symm
 
 Depends on / 依赖: MulSemiringAction, MulSemiringAction.toRingHom, continuous_const_smul, map_exp, toRingHom
@@ -1972,8 +1972,8 @@ theorem _root_.Prod.fst_exp
 @[simp]
 
 中文:
-定理 _root_.Prod.fst_exp
-  条件: [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹)
+定理 _root_.积类型.fst_exp
+  条件: [赋范代数 有理数 𝔹] [完备空间 𝔹] (x : 𝔸 × 𝔹)
   证明: map_exp (RingHom.fst 𝔸 𝔹) continuous_fst x
 
 @[simp]
@@ -1996,8 +1996,8 @@ theorem _root_.Prod.snd_exp
 @[simp]
 
 中文:
-定理 _root_.Prod.snd_exp
-  条件: [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹)
+定理 _root_.积类型.snd_exp
+  条件: [赋范代数 有理数 𝔹] [完备空间 𝔹] (x : 𝔸 × 𝔹)
   证明: map_exp (RingHom.snd 𝔸 𝔹) continuous_snd x
 
 @[simp]
@@ -2019,8 +2019,8 @@ theorem _root_.Pi.coe_exp
   map_exp (Pi.evalRingHom 𝔸 i) (continuous_apply _) x
 
 中文:
-定理 _root_.Pi.coe_exp
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [Finite ι] [对任意 i, NormedRing (𝔸 i)]
+定理 _root_.依赖函数类型.coe_exp
+  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [对任意 i, 赋范环 (𝔸 i)]
   证明: let ⟨_⟩ := nonempty_fintype ι
   map_exp (Pi.evalRingHom 𝔸 i) (continuous_apply _) x
 
@@ -2041,8 +2041,8 @@ theorem _root_.Pi.exp_def
   proof: funext Pi.coe_exp x
 
 中文:
-定理 _root_.Pi.exp_def
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [Finite ι] [对任意 i, NormedRing (𝔸 i)]
+定理 _root_.依赖函数类型.exp_def
+  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [对任意 i, 赋范环 (𝔸 i)]
   证明: funext Pi.coe_exp x
 
 Depends on / 依赖: Pi.coe_exp, coe_exp
@@ -2064,8 +2064,8 @@ theorem _root_.Function.update_exp
   exact (Function.apply_update (fun i => exp) x j xj i).symm
 
 中文:
-定理 _root_.Function.update_exp
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [Finite ι] [DecidableEq ι]
+定理 _root_.函数.update_exp
+  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [DecidableEq ι]
   证明: by
   ext i
   simp_rw [Pi.exp_def]
@@ -2282,7 +2282,7 @@ theorem exp_sum
 
 中文:
 定理 exp_sum
-  条件: {ι} (s : Finset ι) (f : ι -> 𝔸)
+  条件: {ι} (s : 有限集 ι) (f : ι -> 𝔸)
   结论: exp (∑ i in s, f i) = ∏ i in s, exp (f i)
   证明: by
   rw [exp_sum_of_commute]; rw [Finset.noncommProd_eq_prod]
@@ -2336,9 +2336,9 @@ theorem ofReal_exp_Real_Real
   proof: map_exp (algebraMap Real Complex) (continuous_algebraMap _ _) r
 
 中文:
-定理 ofReal_exp_Real_Real
+定理 of实数_exp_实数_实数
   条件: (r : 实数)
-  结论: ↑(exp r) = exp (r : Complex)
+  结论: ↑(exp r) = exp (r : 复形)
   证明: map_exp (algebraMap Real Complex) (continuous_algebraMap _ _) r
 
 Depends on / 依赖: algebraMap, continuous_algebraMap, map_exp

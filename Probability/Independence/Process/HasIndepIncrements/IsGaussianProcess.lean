@@ -66,7 +66,7 @@ definition orderEmbOfFinWithBot
 
 中文:
 定义 orderEmbOfFinWithBot
-  签名: (i : Fin (#I + 1))
+  签名: (i : 有限集 (#I + 1))
   定义体: if h : i = 0
     then ⊥
     else I.orderEmbOfFin rfl (i.pred h)
@@ -109,7 +109,7 @@ lemma orderEmbOfFinWithBot_of_ne_zero
 
 中文:
 引理 orderEmbOfFinWithBot_of_ne_zero
-  条件: (i : Fin (#I + 1)) (hi : i != 0)
+  条件: (i : 有限集 (#I + 1)) (hi : i != 0)
   证明: by
   rw [orderEmbOfFinWithBot]; rw [dif_neg hi]
 
@@ -134,7 +134,7 @@ lemma orderEmbOfFinWithBot_succ
 
 中文:
 引理 orderEmbOfFinWithBot_succ
-  条件: (i : Fin #I)
+  条件: (i : 有限集 #I)
   证明: by
   rw [orderEmbOfFinWithBot_of_ne_zero]; rw [Fin.pred_succ]
   simp
@@ -164,8 +164,8 @@ lemma monotone_orderEmbOfFinWithBot
 
 中文:
 引理 monotone_orderEmbOfFinWithBot
-  条件: [OrderBot T]
-  结论: Monotone (I.orderEmbOfFinWithBot)
+  条件: [有底序 T]
+  结论: 递增 (I.orderEmbOfFinWithBot)
   证明: by
   intro i j hij
   obtain rfl | hi := eq_or_ne i 0
@@ -199,7 +199,7 @@ definition incrementsToRestrict
 
 中文:
 定义 incrementsToRestrict
-  签名: (R : 类型) [Semiring R] [AddCommMonoid E]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 E]
   定义体: { toFun x i := ∑ j <= (I.orderIsoOfFin rfl).symm i, x j
     map_add' x y := by ext; simp [sum_add_distrib]
     map_smul' m x := by ext; simp [smul_sum]
@@ -231,7 +231,7 @@ lemma incrementsToRestrict_increments_orderEmbOfFinWithBot_ae_eq_restrict
 
 中文:
 引理 incrementsToRestrict_increments_orderEmbOfFinWithBot_ae_eq_restrict
-  结论: [Bot T] (R : 类型)
+  结论: [底元素 T] (R : 类型)
   证明: by
   filter_upwards [h] with ω hω
   ext t

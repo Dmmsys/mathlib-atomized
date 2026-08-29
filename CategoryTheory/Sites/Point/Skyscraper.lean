@@ -483,7 +483,7 @@ definition skyscraperSheafFunctor
 
 中文:
 定义 skyscraperSheafFunctor
-  签名: : A ⥤ Sheaf J A where
+  签名: : A ⥤ 层 J A where
   定义体: ⟨Φ.skyscraperPresheaf M, Φ.isSheaf_skyscraperPresheaf M⟩
   map f := ⟨Φ.skyscraperPresheafFunctor.map f⟩
 
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.sheafFiber (A := A)).IsLeftAdjoint
+  签名: (Φ.sheafFiber (A := A)).是左伴随
   定义体: Φ.skyscraperSheafAdjunction.isLeftAdjoint
 
 Depends on / 依赖: IsLeftAdjoint
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.skyscraperSheafFunctor (A := A)).IsRightAdjoint
+  签名: (Φ.skyscraperSheafFunctor (A := A)).是右伴随
   定义体: Φ.skyscraperSheafAdjunction.isRightAdjoint
 
 Depends on / 依赖: IsRightAdjoint
@@ -608,7 +608,7 @@ alias skyscraperSheafAdjunction_homEquiv_apply_val
 
 中文:
 引理 skyscraperSheafAdjunction_homEquiv_apply_hom
-  结论: {F : Sheaf J A} {M : A}
+  结论: {F : 层 J A} {M : A}
   证明: Φ.skyscraperSheafAdjunction.homEquiv F M
     letI a : F.obj ⟶ Φ.skyscraperPresheaf M := (e f).hom
     a = Φ.skyscraperPresheafHomEquiv f := by
@@ -645,7 +645,7 @@ lemma skyscraperSheafAdjunction_homEquiv_symm_apply
 
 中文:
 引理 skyscraperSheafAdjunction_homEquiv_symm_apply
-  结论: {F : Sheaf J A} {M : A}
+  结论: {F : 层 J A} {M : A}
   证明: Φ.skyscraperSheafAdjunction.homEquiv F M
     e.symm f = Φ.skyscraperPresheafHomEquiv.symm f.hom := by
   simp [skyscraperSheafAdjunction, Functor.FullyFaithful.homEquiv]
@@ -766,7 +766,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (Φ.sheafFiber (A := A))
+  签名: 保持FiniteColimits (Φ.sheafFiber (A := A))
   定义体: have : PreservesColimitsOfSize.{w, w} (Φ.sheafFiber (A := A)) := inferInstance
   PreservesColimitsOfSize.preservesFiniteColimits _
 -/

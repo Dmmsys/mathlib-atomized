@@ -52,8 +52,8 @@ structure Sequence
     - degree_eq'((i : Nat)) : (elems' i).degree = i
 
 中文:
-结构 Sequence
-  参数: [Semiring R]
+结构 序列
+  参数: [半环 R]
   公理与运算 (2 个):
     - elems' : 自然数 -> R[X]
     - degree_eq'((i : 自然数)) : (elems' i).degree = i
@@ -80,7 +80,7 @@ instance coeFun
 
 中文:
 实例 coeFun
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: ⟨Sequence.elems'⟩
 
 Depends on / 依赖: Sequence, Sequence.elems
@@ -164,7 +164,7 @@ lemma degree_strictMono
 
 中文:
 引理 degree_strictMono
-  结论: StrictMono degree ∘ S
+  结论: 严格递增 degree ∘ S
   证明: fun _ _ => by simp
 -/
 lemma degree_strictMono : StrictMono degree ∘ S := fun _ _ => by simp
@@ -179,7 +179,7 @@ lemma natDegree_strictMono
 
 中文:
 引理 natDegree_strictMono
-  结论: StrictMono natDegree ∘ S
+  结论: 严格递增 natDegree ∘ S
   证明: fun _ _ => by simp
 -/
 lemma natDegree_strictMono : StrictMono natDegree ∘ S := fun _ _ => by simp
@@ -207,7 +207,7 @@ lemma span_degreeLT
 
 中文:
 引理 span_degreeLT
-  条件: {m : 自然数} (hCoeff : 对任意 i < m, IsUnit (S i).leadingCoeff)
+  条件: {m : 自然数} (hCoeff : 对任意 i < m, 是单位 (S i).leadingCoeff)
   证明: by
   apply span_eq_of_le
   · intro P hP
@@ -299,7 +299,7 @@ lemma span_degreeLE
 
 中文:
 引理 span_degreeLE
-  条件: {m : 自然数} (hCoeff : 对任意 i <= m, IsUnit (S i).leadingCoeff)
+  条件: {m : 自然数} (hCoeff : 对任意 i <= m, 是单位 (S i).leadingCoeff)
   证明: by
   rw [← Set.Iio_succ_eq_Iic]; rw [span_degreeLT _ (fun i hi => hCoeff i (Order.lt_succ_iff.mp hi))]
   simp [← Polynomial.degreeLT_succ_eq_degreeLE]
@@ -329,8 +329,8 @@ lemma span
 
 中文:
 引理 span
-  条件: (hCoeff : 对任意 i, IsUnit (S i).leadingCoeff)
-  结论: span R (Set.range S) = ⊤
+  条件: (hCoeff : 对任意 i, 是单位 (S i).leadingCoeff)
+  结论: span R (集合.range S) = ⊤
   证明: by
   rw [eq_top_iff']
   intro P
@@ -403,7 +403,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Basis 自然数 R R[X]
+  签名: : 基 自然数 R R[X]
   定义体: Basis.mk S.linearIndependent eq_top_iff.mp S.span hCoeff
 
 Depends on / 依赖: Basis.mk, S.linearIndependent, S.span, eq_top_iff, eq_top_iff.mp, hCoeff, linearIndependent
@@ -442,7 +442,7 @@ lemma basis_degree_strictMono
 
 中文:
 引理 basis_degree_strictMono
-  结论: StrictMono degree ∘ (S.basis hCoeff)
+  结论: 严格递增 degree ∘ (S.basis hCoeff)
   证明: fun _ _ => by simp
 -/
 lemma basis_degree_strictMono : StrictMono degree ∘ (S.basis hCoeff) := fun _ _ => by simp
@@ -457,7 +457,7 @@ lemma basis_natDegree_strictMono
 
 中文:
 引理 basis_natDegree_strictMono
-  结论: StrictMono natDegree ∘ (S.basis hCoeff)
+  结论: 严格递增 natDegree ∘ (S.basis hCoeff)
   证明: fun _ _ => by simp
 -/
 lemma basis_natDegree_strictMono : StrictMono natDegree ∘ (S.basis hCoeff) := fun _ _ => by simp

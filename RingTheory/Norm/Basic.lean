@@ -94,7 +94,7 @@ theorem PowerBasis.norm_gen_eq_prod_roots
 
 中文:
 定理 PowerBasis.norm_gen_eq_prod_roots
-  结论: [Algebra R F] (pb : PowerBasis R S)
+  结论: [代数 R F] (pb : PowerBasis R S)
   证明: by
   have := Module.nontrivial R F
   have := minpoly.monic pb.isIntegral_gen
@@ -132,7 +132,7 @@ theorem norm_zero
 
 中文:
 定理 norm_zero
-  条件: [Nontrivial S] [Module.Free R S] [Module.Finite R S]
+  条件: [非平凡 S] [模.自由 R S] [模.有限 R S]
   结论: norm R (0 : S) = 0
   证明: by
   nontriviality
@@ -165,7 +165,7 @@ theorem norm_eq_zero_iff
 
 中文:
 定理 norm_eq_zero_iff
-  条件: [IsDomain R] [IsDomain S] [Module.Free R S] [Module.Finite R S] {x : S}
+  条件: [是整环 R] [是整环 S] [模.自由 R S] [模.有限 R S] {x : S}
   证明: by
   constructor
   swap
@@ -204,7 +204,7 @@ theorem norm_ne_zero_iff
 
 中文:
 定理 norm_ne_zero_iff
-  条件: [IsDomain R] [IsDomain S] [Module.Free R S] [Module.Finite R S] {x : S}
+  条件: [是整环 R] [是整环 S] [模.自由 R S] [模.有限 R S] {x : S}
   证明: not_iff_not.mpr norm_eq_zero_iff
 
 Depends on / 依赖: norm_eq_zero_iff, not_iff_not, not_iff_not.mpr
@@ -224,7 +224,7 @@ theorem norm_eq_zero_iff'
 
 中文:
 定理 norm_eq_zero_iff'
-  条件: [IsDomain R] [IsDomain S] [Module.Free R S] [Module.Finite R S] {x : S}
+  条件: [是整环 R] [是整环 S] [模.自由 R S] [模.有限 R S] {x : S}
   证明: norm_eq_zero_iff
 
 Depends on / 依赖: norm_eq_zero_iff
@@ -245,7 +245,7 @@ theorem norm_eq_zero_iff_of_basis
 
 中文:
 定理 norm_eq_zero_iff_of_basis
-  条件: [IsDomain R] [IsDomain S] (b : Basis ι R S) {x : S}
+  条件: [是整环 R] [是整环 S] (b : 基 ι R S) {x : S}
   证明: by
   have : Module.Free R S := Module.Free.of_basis b
   have : Module.Finite R S := Module.Finite.of_basis b
@@ -269,7 +269,7 @@ theorem norm_ne_zero_iff_of_basis
 
 中文:
 定理 norm_ne_zero_iff_of_basis
-  条件: [IsDomain R] [IsDomain S] (b : Basis ι R S) {x : S}
+  条件: [是整环 R] [是整环 S] (b : 基 ι R S) {x : S}
   证明: not_iff_not.mpr (norm_eq_zero_iff_of_basis b)
 
 Depends on / 依赖: norm_eq_zero_iff_of_basis, not_iff_not, not_iff_not.mpr
@@ -299,7 +299,7 @@ theorem norm_inv
 中文:
 定理 norm_inv
   条件: (x : L)
-  结论: Algebra.norm K x⁻¹ = (Algebra.norm K x)⁻¹
+  结论: 代数.norm K x⁻¹ = (代数.norm K x)⁻¹
   证明: by
   by_cases hx : x = 0
   · simp [hx]
@@ -324,7 +324,7 @@ theorem norm_zpow
 中文:
 定理 norm_zpow
   条件: (x : L) (n : 整数)
-  结论: Algebra.norm K (x ^ n) = Algebra.norm K x ^ n
+  结论: 代数.norm K (x ^ n) = 代数.norm K x ^ n
   证明: map_zpow' _ norm_inv _ _
 
 Depends on / 依赖: map_zpow, norm_inv
@@ -353,8 +353,8 @@ theorem _root_.IntermediateField.AdjoinSimple.norm_gen_eq_one
   · exact IntermediateField.subset_adjoin K _ (Set.mem_singleton x)
 
 中文:
-定理 _root_.IntermediateField.AdjoinSimple.norm_gen_eq_one
-  条件: {x : L} (hx : ¬Is整数egral K x)
+定理 _root_.中间域.AdjoinSimple.norm_gen_eq_one
+  条件: {x : L} (hx : ¬是整 K x)
   证明: by
   rw [norm_eq_one_of_not_exists_basis]
   contrapose hx
@@ -388,7 +388,7 @@ theorem _root_.IntermediateField.AdjoinSimple.norm_gen_eq_prod_roots
     rw [adjoin.powerBasis_gen hx]; rw [← m
 
 中文:
-定理 _root_.IntermediateField.AdjoinSimple.norm_gen_eq_prod_roots
+定理 _root_.中间域.AdjoinSimple.norm_gen_eq_prod_roots
   结论: (x : L)
   证明: by
   have injKxL := (algebraMap K⟮x⟯ L).injective
@@ -434,7 +434,7 @@ theorem norm_eq_prod_embeddings_gen
 
 中文:
 定理 norm_eq_prod_embeddings_gen
-  结论: [Algebra R F] (pb : PowerBasis R S)
+  结论: [代数 R F] (pb : PowerBasis R S)
   证明: by
   let := Classical.decEq F
   rw [PowerBasis.norm_gen_eq_prod_roots pb hE]
@@ -473,7 +473,7 @@ theorem prod_embeddings_eq_finrank_pow
 
 中文:
 定理 prod_embeddings_eq_finrank_pow
-  结论: [Algebra L F] [IsScalarTower K L F] [IsAlgClosed E]
+  结论: [代数 L F] [标量塔 K L F] [是代数闭 E]
   证明: by
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
@@ -512,7 +512,7 @@ lemma norm_eq_of_algEquiv
 
 中文:
 引理 norm_eq_of_algEquiv
-  条件: [Ring T] [Algebra R T] (e : S ≃ₐ[R] T) (x)
+  条件: [环 T] [代数 R T] (e : S ≃ₐ[R] T) (x)
   证明: by
   simp_rw [Algebra.norm_apply, ← LinearMap.det_conj _ e.toLinearEquiv]; congr; ext; simp
 
@@ -539,7 +539,7 @@ lemma norm_eq_of_ringEquiv
 
 中文:
 引理 norm_eq_of_ringEquiv
-  结论: {A B C : 类型} [CommRing A] [CommRing B] [Ring C]
+  结论: {A B C : 类型} [交换环 A] [交换环 B] [环 C]
   证明: by
   classical
   by_cases h : exists s : Finset C, Nonempty (Basis s B C)
@@ -585,7 +585,7 @@ lemma norm_eq_of_equiv_equiv
 
 中文:
 引理 norm_eq_of_equiv_equiv
-  结论: {A₁ B₁ A₂ B₂ : 类型} [CommRing A₁] [Ring B₁]
+  结论: {A₁ B₁ A₂ B₂ : 类型} [交换环 A₁] [环 B₁]
   证明: by
   let := (RingHom.comp (e₂ : B₁ ->+* B₂) (algebraMap A₁ B₁)).toAlgebra' ?_
   · let e' : B₁ ≃ₐ[A₁] B₂ := { e₂ with commutes' := fun _ => rfl }

@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategoryStruct (Dial C)
+  签名: 幺半群范畴结构 (Dial C)
   定义体: tensorUnitImpl
   tensorObj := tensorObjImpl
   whiskerLeft X _ _ f := tensorHomImpl (𝟙 X) f
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (Dial C)
+  签名: 幺半群范畴 (Dial C)
   定义体: .ofTensorHom
     (id_tensorHom_id := id_tensorHom_id)
     (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom)
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory (Dial C)
+  签名: 对称范畴 (Dial C)
   定义体: braiding
   braiding_naturality_right := braiding_naturality_right
   braiding_naturality_left := braiding_naturality_left

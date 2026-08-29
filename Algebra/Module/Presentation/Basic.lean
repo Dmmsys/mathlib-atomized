@@ -61,11 +61,11 @@ structure Relations
     - relation((r : R)) : G ->₀ A
 
 中文:
-结构 Relations
+结构 关系
   参数: where
   公理与运算 (3 个):
-    - G : Type w₀
-    - R : Type w₁
+    - G : 类型 w₀
+    - R : 类型 w₁
     - relation((r : R)) : G ->₀ A
 -/
 structure Relations where
@@ -89,7 +89,7 @@ definition Quotient
 deriving AddCommGroup, Module A
 
 中文:
-定义 Quotient
+定义 商
   定义体: (relations.G ->₀ A) ⧸ Submodule.span A (Set.range relations.relation)
 deriving AddCommGroup, Module A
 
@@ -108,7 +108,7 @@ definition toQuotient
 
 中文:
 定义 toQuotient
-  签名: : (relations.G ->₀ A) ->ₗ[A] relations.Quotient
+  签名: : (relations.G ->₀ A) ->ₗ[A] relations.商
   定义体: Submodule.mkQ _
 
 Depends on / 依赖: Submodule, Submodule.mkQ
@@ -126,8 +126,8 @@ lemma Quotient.linearMap_ext
   proof: Submodule.linearMap_qext _ (Finsupp.lhom_ext' (fun g => LinearMap.ext_ring (h g)))
 
 中文:
-引理 Quotient.linearMap_ext
-  结论: {M : 类型v} [AddCommGroup M] [Module A M]
+引理 商.linearMap_ext
+  结论: {M : 类型v} [加法交换群 M] [模 A M]
   证明: Submodule.linearMap_qext _ (Finsupp.lhom_ext' (fun g => LinearMap.ext_ring (h g)))
 
 Depends on / 依赖: Finsupp, Finsupp.lhom_ext, LinearMap, LinearMap.ext_ring, Submodule, Submodule.linearMap_qext, ext_ring, lhom_ext, linearMap_qext
@@ -149,7 +149,7 @@ lemma surjective_toQuotient
 
 中文:
 引理 surjective_toQuotient
-  结论: Function.Surjective relations.toQuotient
+  结论: 函数.满射 relations.toQuotient
   证明: Submodule.mkQ_surjective _
 
 Depends on / 依赖: Submodule, Submodule.mkQ_surjective, mkQ_surjective
@@ -326,11 +326,11 @@ structure Solution
     - linearCombination_var_relation((r : relations.R)) : Finsupp.linearCombination _ var (relations.relation r) = 0
 
 中文:
-结构 Solution
+结构 解
   参数: where
   公理与运算 (2 个):
     - var((g : relations.G)) : M
-    - linearCombination_var_relation((r : relations.R)) : Finsupp.linearCombination _ var (relations.relation r) = 0
+    - linearCombination_var_relation((r : relations.R)) : 有限支撑.linearCombination _ var (relations.relation r) = 0
 -/
 structure Solution where
   /-- the image in `M` of each variable -/
@@ -469,7 +469,7 @@ lemma range_π
 
 中文:
 引理 range_π
-  结论: LinearMap.range solution.π = Submodule.span A (Set.range solution.var)
+  结论: 线性映射.range solution.π = 子模.span A (集合.range solution.var)
   证明: Finsupp.range_linearCombination _
 
 Depends on / 依赖: Finsupp, Finsupp.range_linearCombination, range_linearCombination
@@ -514,7 +514,7 @@ definition fromQuotient
 
 中文:
 定义 fromQuotient
-  签名: : relations.Quotient ->ₗ[A] M
+  签名: : relations.商 ->ₗ[A] M
   定义体: Submodule.liftQ _ solution.π solution.span_relation_le_ker_π
 
 @[simp]
@@ -579,7 +579,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: : relations.Solution N where
+  签名: : relations.解 N where
   定义体: f (solution.var g)
   linearCombination_var_relation r := by
     have : Finsupp.linearCombination _ (fun g => f (solution.var g)) = f.comp solution.π := by aesop
@@ -608,7 +608,7 @@ lemma postcomp_comp
 
 中文:
 引理 postcomp_comp
-  条件: {N' : 类型v''} [AddCommGroup N'] [Module A N'] (g : N ->ₗ[A] N')
+  条件: {N' : 类型v''} [加法交换群 N'] [模 A N'] (g : N ->ₗ[A] N')
   证明: rfl
 
 @[simp]
@@ -627,7 +627,7 @@ lemma postcomp_id
 
 中文:
 引理 postcomp_id
-  结论: solution.postcomp LinearMap.id = solution
+  结论: solution.postcomp 线性映射.id = solution
   证明: rfl
 -/
 lemma postcomp_id : solution.postcomp LinearMap.id = solution := rfl
@@ -644,7 +644,7 @@ lemma congr_var
 
 中文:
 引理 congr_var
-  条件: {solution' : relations.Solution M} (h : solution = solution') (g : relations.G)
+  条件: {solution' : relations.解 M} (h : solution = solution') (g : relations.G)
   证明: by rw [h]
 -/
 lemma congr_var {solution' : relations.Solution M} (h : solution = solution') (g : relations.G) :
@@ -660,7 +660,7 @@ lemma congr_postcomp
 
 中文:
 引理 congr_postcomp
-  结论: {solution' : relations.Solution M} (h : solution = solution')
+  结论: {solution' : relations.解 M} (h : solution = solution')
   证明: by rw [h]
 -/
 lemma congr_postcomp {solution' : relations.Solution M} (h : solution = solution')
@@ -693,7 +693,7 @@ definition ofπ
 
 中文:
 定义 ofπ
-  签名: : relations.Solution M where
+  签名: : relations.解 M where
   定义体: π (Finsupp.single g 1)
   linearCombination_var_relation r := by
     have : π = Finsupp.linearCombination _ (fun g => π (Finsupp.single g 1)) := by ext; simp
@@ -749,7 +749,7 @@ definition ofπ'
 
 中文:
 定义 ofπ'
-  签名: : relations.Solution M
+  签名: : relations.解 M
   定义体: ofπ π (fun r => by
     simpa using DFunLike.congr_fun hπ (Finsupp.single r 1))
 
@@ -883,10 +883,10 @@ structure IsPresentation
     - bijective : Function.Bijective solution.fromQuotient
 
 中文:
-结构 IsPresentation
-  参数: (solution : relations.Solution M)
+结构 是呈现
+  参数: (solution : relations.解 M)
   公理与运算 (1 个):
-    - bijective : Function.Bijective solution.fromQuotient
+    - bijective : 函数.双射 solution.fromQuotient
 -/
 structure IsPresentation (solution : relations.Solution M) : Prop where
   bijective : Function.Bijective solution.fromQuotient
@@ -909,7 +909,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: : relations.Quotient ≃ₗ[A] M
+  签名: : relations.商 ≃ₗ[A] M
   定义体: LinearEquiv.ofBijective _ h.bijective
 
 @[simp]
@@ -931,7 +931,7 @@ lemma linearEquiv_apply
 
 中文:
 引理 linearEquiv_apply
-  条件: (x : relations.Quotient)
+  条件: (x : relations.商)
   证明: rfl
 
 @[simp]
@@ -970,7 +970,7 @@ lemma surjective_π
 
 中文:
 引理 surjective_π
-  结论: Function.Surjective solution.π
+  结论: 函数.满射 solution.π
   证明: by
   simpa only [← surjective_fromQuotient_iff_surjective_π] using h.bijective.2
 
@@ -990,7 +990,7 @@ lemma ker_π
 
 中文:
 引理 ker_π
-  结论: LinearMap.ker solution.π = Submodule.span A (Set.range relations.relation)
+  结论: 线性映射.ker solution.π = 子模.span A (集合.range relations.relation)
   证明: by
   simpa only [← injective_fromQuotient_iff_ker_π_eq_span] using h.bijective.1
 
@@ -1011,7 +1011,7 @@ lemma exact
 
 中文:
 引理 exact
-  结论: Function.Exact relations.map solution.π
+  结论: 函数.正合 relations.map solution.π
   证明: by
   rw [LinearMap.exact_iff]; rw [range_map]; rw [← solution.injective_fromQuotient_iff_ker_π_eq_span]
   exact h.bijective.1
@@ -1036,7 +1036,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (s : relations.Solution N)
+  签名: (s : relations.解 N)
   定义体: s.fromQuotient.comp h.linearEquiv.symm.toLinearMap
 
 @[simp]
@@ -1061,7 +1061,7 @@ lemma desc_var
 
 中文:
 引理 desc_var
-  条件: (s : relations.Solution N) (g : relations.G)
+  条件: (s : relations.解 N) (g : relations.G)
   证明: by
   dsimp [desc]
   simp only [linearEquiv_symm_var, fromQuotient_toQuotient, π_single]
@@ -1089,7 +1089,7 @@ lemma desc_comp_π
 
 中文:
 引理 desc_comp_π
-  条件: (s : relations.Solution N)
+  条件: (s : relations.解 N)
   结论: (h.desc s).comp solution.π = s.π
   证明: by aesop
 
@@ -1110,7 +1110,7 @@ lemma π_desc_apply
 
 中文:
 引理 π_desc_apply
-  条件: (s : relations.Solution N) (x : relations.G ->₀ A)
+  条件: (s : relations.解 N) (x : relations.G ->₀ A)
   证明: DFunLike.congr_fun (h.desc_comp_π s) x
 
 @[simp]
@@ -1132,7 +1132,7 @@ lemma postcomp_desc
 
 中文:
 引理 postcomp_desc
-  条件: (s : relations.Solution N)
+  条件: (s : relations.解 N)
   证明: by aesop
 -/
 lemma postcomp_desc (s : relations.Solution N) :
@@ -1191,7 +1191,7 @@ definition linearMapEquiv
 
 中文:
 定义 linearMapEquiv
-  签名: : (M ->ₗ[A] N) ≃ relations.Solution N where
+  签名: : (M ->ₗ[A] N) ≃ relations.解 N where
   定义体: solution.postcomp f
   invFun s := h.desc s
   left_inv f := h.postcomp_injective (by simp)
@@ -1349,7 +1349,7 @@ lemma of_linearEquiv
 中文:
 引理 of_linearEquiv
   条件: (e : M ≃ₗ[A] N)
-  结论: (solution.postcomp e.toLinearMap).IsPresentation where
+  结论: (solution.postcomp e.toLinearMap).是呈现 where
   证明: by
     have : (solution.postcomp e.toLinearMap).fromQuotient =
       e.toLinearMap.comp (solution.fromQuotient) := by aesop
@@ -1384,7 +1384,7 @@ definition ofQuotient
 
 中文:
 定义 ofQuotient
-  签名: : relations.Solution relations.Quotient
+  签名: : relations.解 relations.商
   定义体: ofπ relations.toQuotient (by simp)
 
 @[simp]
@@ -1407,7 +1407,7 @@ lemma ofQuotient_π
 
 中文:
 引理 ofQuotient_π
-  结论: (ofQuotient relations).π = Submodule.mkQ _
+  结论: (ofQuotient relations).π = 子模.mkQ _
   证明: ofπ_π _ _
 
 @[simp]
@@ -1441,7 +1441,7 @@ lemma ofQuotient_isPresentation
 
 中文:
 引理 ofQuotient_isPresentation
-  结论: (ofQuotient relations).IsPresentation where
+  结论: (ofQuotient relations).是呈现 where
   证明: by
     simpa only [ofQuotient_fromQuotient, LinearMap.id_coe] using Function.bijective_id
 
@@ -1465,12 +1465,12 @@ structure IsPresentationCore
     - postcomp_injective({N : Type w'} [AddCommGroup N] [Module A N] {f f' : M ->ₗ[A] N} (h : solution.postcomp f = solution.postcomp f')) : f = f'
 
 中文:
-结构 IsPresentationCore
-  参数: (solution : relations.Solution M)
+结构 是PresentationCore
+  参数: (solution : relations.解 M)
   公理与运算 (3 个):
-    - desc({N : Type w'} [AddCommGroup N] [Module A N] (s : relations.Solution N)) : M ->ₗ[A] N
-    - postcomp_desc({N : Type w'} [AddCommGroup N] [Module A N] (s : relations.Solution N)) : solution.postcomp (desc s) = s
-    - postcomp_injective({N : Type w'} [AddCommGroup N] [Module A N] {f f' : M ->ₗ[A] N} (h : solution.postcomp f = solution.postcomp f')) : f = f'
+    - desc({N : 类型 w'} [加法交换群 N] [模 A N] (s : relations.解 N)) : M ->ₗ[A] N
+    - postcomp_desc({N : 类型 w'} [加法交换群 N] [模 A N] (s : relations.解 N)) : solution.postcomp (desc s) = s
+    - postcomp_injective({N : 类型 w'} [加法交换群 N] [模 A N] {f f' : M ->ₗ[A] N} (h : solution.postcomp f = solution.postcomp f')) : f = f'
 -/
 structure IsPresentationCore (solution : relations.Solution M) where
   /-- any solution in a module `N : Type w'` is obtained in a unique way
@@ -1496,7 +1496,7 @@ lemma desc_var
 
 中文:
 引理 desc_var
-  结论: (h : IsPresentationCore.{w'} solution)
+  结论: (h : 是PresentationCore.{w'} solution)
   证明: congr_var (h.postcomp_desc s) g
 
 Depends on / 依赖: congr_var, h.postcomp_desc, postcomp_desc
@@ -1522,7 +1522,7 @@ definition down
 
 中文:
 定义 down
-  签名: (h : IsPresentationCore.{max w' w''} solution)
+  签名: (h : 是PresentationCore.{最大值 w' w''} solution)
   定义体: ULift.moduleEquiv.toLinearMap.comp
     (h.desc (s.postcomp ULift.moduleEquiv.symm.toLinearMap))
   postcomp_desc s := by
@@ -1562,7 +1562,7 @@ lemma isPresentation
 
 中文:
 引理 isPresentation
-  结论: {solution : relations.Solution M}
+  结论: {solution : relations.解 M}
   证明: by
     let e : relations.Quotient ≃ₗ[A] M :=
       LinearEquiv.ofLinearMap solution.fromQuotient
@@ -1648,9 +1648,9 @@ structure Presentation
   (no additional axioms)
 
 中文:
-结构 Presentation
-  参数: extends Relations.{w₀, w₁} A,
-  继承: Relations.{w₀, w₁} A, 
+结构 呈现
+  参数: extends 关系.{w₀, w₁} A,
+  继承: 关系.{w₀, w₁} A, 
   (无附加公理)
 -/
 structure Presentation extends Relations.{w₀, w₁} A,
@@ -1671,8 +1671,8 @@ definition Presentation.ofIsPresentation
   toIsPresentation := h
 
 中文:
-定义 Presentation.ofIsPresentation
-  签名: {relations : Relations.{w₀, w₁} A}
+定义 呈现.ofIsPresentation
+  签名: {relations : 关系.{w₀, w₁} A}
   定义体: relations
   toSolution := solution
   toIsPresentation := h
@@ -1698,8 +1698,8 @@ definition Presentation.ofLinearEquiv
   body: ofIsPresentation (pres.toIsPresentation.of_linearEquiv e)
 
 中文:
-定义 Presentation.ofLinearEquiv
-  签名: (pres : Presentation.{w₀, w₁} A M)
+定义 呈现.ofLinearEquiv
+  签名: (pres : 呈现.{w₀, w₁} A M)
   定义体: ofIsPresentation (pres.toIsPresentation.of_linearEquiv e)
 
 Depends on / 依赖: ofIsPresentation, of_linearEquiv, pres.toIsPresentation.of_linearEquiv, toIsPresentation

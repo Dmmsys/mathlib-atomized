@@ -51,7 +51,7 @@ theorem convex_re_epigraph
 
 中文:
 定理 convex_re_epigraph
-  条件: [AddCommMonoid E] [Module 实数 E] (hφcv : ConvexOn 实数 s φ)
+  条件: [加法交换幺半群 E] [模 实数 E] (hφcv : ConvexOn 实数 s φ)
   证明: by
   have lem : { p : E × 𝕜 | p.1 in s ∧ φ p.1 <= re p.2 } =
     ((LinearMap.id : E ->ₗ[Real] E).prodMap reLm) ⁻¹' { p : E × Real | p.1 in s ∧ φ p.1 <= p.2 } := by simp
@@ -82,7 +82,7 @@ theorem _root_.LowerSemicontinuousOn.isClosed_re_epigraph
 
 中文:
 定理 _root_.LowerSemicontinuousOn.isClosed_re_epigraph
-  结论: (hsc : IsClosed s)
+  结论: (hsc : 是闭集 s)
   证明: by
   let A := { p : E × EReal | p.1 in s ∧ φ p.1 <= p.2 }
   have hC : { p : E × 𝕜 | p.1 in s ∧ φ p.1 <= re p.2 }
@@ -123,8 +123,8 @@ lemma exists_affine_le_of_lt
   refine ⟨- c •
 
 中文:
-引理 exists_affine_le_of_lt
-  结论: {x : E} {a : 实数} (hx : x in s) (hax : a < φ x) (hsc : IsClosed s)
+引理 存在_affine_le_of_lt
+  结论: {x : E} {a : 实数} (hx : x in s) (hax : a < φ x) (hsc : 是闭集 s)
   证明: by
   let A := { p : E × 𝕜 | p.1 in s ∧ φ p.1 <= re p.2 }
   obtain ⟨L, ⟨b, hLb⟩⟩ := geometric_hahn_banach_point_closed (𝕜 := 𝕜) hφcv.convex_re_epigraph
@@ -169,8 +169,8 @@ lemma exists_affine_le_of_lt_real
   exact ⟨l 1, c', fun y hy => by simpa [h1] using hlc'_le ⟨y, hy⟩, by simpa [h1] using hlc'_eq⟩
 
 中文:
-引理 exists_affine_le_of_lt_real
-  结论: {s : Set 实数} {f : 实数 -> 实数} {x : 实数} {a : 实数} (hx : x in s)
+引理 存在_affine_le_of_lt_real
+  结论: {s : 集合 实数} {f : 实数 -> 实数} {x : 实数} {a : 实数} (hx : x in s)
   证明: by
   obtain ⟨l, c', hlc'_le, hlc'_eq⟩ := exists_affine_le_of_lt (𝕜 := Real) hx hax hsc hfc hf
   have h1 y : l 1 * y = l y := by rw [mul_comm, ← smul_eq_mul, ← map_smul, smul_eq_mul, mul_one]
@@ -199,8 +199,8 @@ lemma exists_affine_le_real
   exact ⟨c, c', hlc'_le⟩
 
 中文:
-引理 exists_affine_le_real
-  结论: {s : Set 实数} {f : 实数 -> 实数}
+引理 存在_affine_le_real
+  结论: {s : 集合 实数} {f : 实数 -> 实数}
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | ⟨x, hxs⟩
   · simp
@@ -236,7 +236,7 @@ theorem sSup_affine_eq
 
 中文:
 定理 sSup_affine_eq
-  结论: (hsc : IsClosed s)
+  结论: (hsc : 是闭集 s)
   证明: by
   let A := { p : E × 𝕜 | p.1 in s ∧ φ p.1 <= re p.2 }
   ext x
@@ -280,7 +280,7 @@ theorem sSup_of_countable_affine_eq
 
 中文:
 定理 sSup_of_countable_affine_eq
-  结论: [HereditarilyLindelofSpace E] (hsc : IsClosed s)
+  结论: [HereditarilyLindelof空间 E] (hsc : 是闭集 s)
   证明: by
   by_cases! hs : s.Nonempty
   · let 𝓕 := {f | f <= s.domRestrict φ ∧
@@ -330,7 +330,7 @@ theorem sSup_of_nat_affine_eq
 
 中文:
 定理 sSup_of_nat_affine_eq
-  结论: [HereditarilyLindelofSpace E] (hsc : IsClosed s)
+  结论: [HereditarilyLindelof空间 E] (hsc : 是闭集 s)
   证明: by
   obtain ⟨𝓕', h𝓕'⟩ := hφcv.sSup_of_countable_affine_eq (𝕜 := 𝕜) hsc hφc
   by_cases! he : 𝓕'.Nonempty
@@ -428,7 +428,7 @@ theorem univ_sSup_of_countable_affine_eq
 
 中文:
 定理 univ_sSup_of_countable_affine_eq
-  结论: [HereditarilyLindelofSpace E]
+  结论: [HereditarilyLindelof空间 E]
   证明: by
   let 𝓕 := {f | f <= φ ∧ exists (l : E ->L[𝕜] 𝕜) (c : Real), f = (re ∘ l) + const E c}
   have hl : IsLUB 𝓕 φ := by
@@ -473,7 +473,7 @@ theorem univ_sSup_of_nat_affine_eq
 
 中文:
 定理 univ_sSup_of_nat_affine_eq
-  结论: [HereditarilyLindelofSpace E]
+  结论: [HereditarilyLindelof空间 E]
   证明: by
   obtain ⟨l, c, hle, hsup⟩ := hφcv.sSup_of_nat_affine_eq (𝕜 := 𝕜) (s := univ) isClosed_univ
     (lowerSemicontinuousOn_univ_iff.2 hφc)
@@ -510,7 +510,7 @@ theorem real_sSup_affine_eq
 
 中文:
 定理 real_sSup_affine_eq
-  结论: (hsc : IsClosed s)
+  结论: (hsc : 是闭集 s)
   证明: sSup_affine_eq (𝕜 := Real) hsc hφc hφcv
 
 Depends on / 依赖: sSup_affine_eq
@@ -531,7 +531,7 @@ theorem real_sSup_of_countable_affine_eq
 
 中文:
 定理 real_sSup_of_countable_affine_eq
-  结论: [HereditarilyLindelofSpace E] (hsc : IsClosed s)
+  结论: [HereditarilyLindelof空间 E] (hsc : 是闭集 s)
   证明: sSup_of_countable_affine_eq (𝕜 := Real) hsc hφc hφcv
 
 Depends on / 依赖: sSup_of_countable_affine_eq
@@ -552,7 +552,7 @@ theorem real_sSup_of_nat_affine_eq
 
 中文:
 定理 real_sSup_of_nat_affine_eq
-  结论: [HereditarilyLindelofSpace E] (hsc : IsClosed s)
+  结论: [HereditarilyLindelof空间 E] (hsc : 是闭集 s)
   证明: sSup_of_nat_affine_eq (𝕜 := Real) hsc hφc hφcv
 
 Depends on / 依赖: sSup_of_nat_affine_eq
@@ -593,7 +593,7 @@ theorem real_univ_sSup_of_countable_affine_eq
 
 中文:
 定理 real_univ_sSup_of_countable_affine_eq
-  结论: [HereditarilyLindelofSpace E]
+  结论: [HereditarilyLindelof空间 E]
   证明: univ_sSup_of_countable_affine_eq (𝕜 := Real) hφc hφcv
 
 Depends on / 依赖: univ_sSup_of_countable_affine_eq
@@ -614,7 +614,7 @@ theorem real_univ_sSup_of_nat_affine_eq
 
 中文:
 定理 real_univ_sSup_of_nat_affine_eq
-  结论: [HereditarilyLindelofSpace E]
+  结论: [HereditarilyLindelof空间 E]
   证明: univ_sSup_of_nat_affine_eq (𝕜 := Real) hφc hφcv
 
 Depends on / 依赖: univ_sSup_of_nat_affine_eq

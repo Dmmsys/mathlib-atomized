@@ -38,8 +38,8 @@ instance [PseudoMetrizableSpace
   inferInstance
 
 中文:
-实例 [PseudoMetrizableSpace
-  签名: Y] : PseudoMetrizableSpace C(X, Y)
+实例 [PseudoMetrizable空间
+  签名: Y] : PseudoMetrizable空间 C(X, Y)
   定义体: let := pseudoMetrizableSpaceUniformity Y
   have := pseudoMetrizableSpaceUniformity_countably_generated Y
   inferInstance
@@ -59,8 +59,8 @@ instance [MetrizableSpace
   signature: Y] : MetrizableSpace C(X, Y) where
 
 中文:
-实例 [MetrizableSpace
-  签名: Y] : MetrizableSpace C(X, Y) where
+实例 [Metrizable空间
+  签名: Y] : Metrizable空间 C(X, Y) where
 -/
 instance [MetrizableSpace Y] : MetrizableSpace C(X, Y) where
 

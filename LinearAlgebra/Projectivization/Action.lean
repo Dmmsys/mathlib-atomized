@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (ℙ K V)
+  签名: 乘法作用 G (ℙ K V)
   定义体: x.map (DistribMulAction.toModuleEnd _ _ g)
     (DistribMulAction.toLinearEquiv _ _ g).injective
   one_smul x := show map _ _ _ = _ by simp [map_one, Module.End.one_eq_id]
@@ -86,7 +86,7 @@ lemma generalLinearGroup_smul_def
 
 中文:
 引理 generalLinearGroup_smul_def
-  条件: (g : LinearMap.GeneralLinearGroup K V) (x : ℙ K V)
+  条件: (g : 线性映射.GeneralLinearGroup K V) (x : ℙ K V)
   证明: by
   rfl
 -/
@@ -107,7 +107,7 @@ lemma matrixSpecialLinearGroup_smul_def
 
 中文:
 引理 matrixSpecialLinearGroup_smul_def
-  结论: {ι F : 类型} [Fintype ι] [DecidableEq ι] [Field F]
+  结论: {ι F : 类型} [有限类型 ι] [DecidableEq ι] [域 F]
   证明: by
   rfl
 
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreprimitive (SpecialLinearGroup K V) (ℙ K V)
+  签名: 是Preprimitive (SpecialLinearGroup K V) (ℙ K V)
   定义体: isPreprimitive_of_is_two_pretransitive inferInstance
 
 Depends on / 依赖: isPreprimitive_of_is_two_pretransitive
@@ -373,7 +373,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplyPretransitive (Matrix.SpecialLinearGroup ι K) (ℙ K (ι -> K)) 2
+  签名: IsMultiplyPretransitive (矩阵.SpecialLinearGroup ι K) (ℙ K (ι -> K)) 2
   定义体: let φ : SpecialLinearGroup K (ι -> K) ->* Matrix.SpecialLinearGroup ι K :=
     Matrix.SpecialLinearGroup.toLin'_equiv.symm.toMonoidHom
   let f : ℙ K (ι -> K) ->ₑ[φ] ℙ K (ι -> K) :=
@@ -401,7 +401,7 @@ instance prePrimitive_SL
 
 中文:
 实例 prePrimitive_SL
-  签名: : IsPreprimitive (Matrix.SpecialLinearGroup ι K) (ℙ K (ι -> K))
+  签名: : 是Preprimitive (矩阵.SpecialLinearGroup ι K) (ℙ K (ι -> K))
   定义体: isPreprimitive_of_is_two_pretransitive inferInstance
 
 Depends on / 依赖: isPreprimitive_of_is_two_pretransitive
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (Matrix.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
+  签名: 乘法作用 (矩阵.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
   定义体: MulAction.compHom _ PSLAction.toPermHom
 
 Depends on / 依赖: MulAction, MulAction.compHom, PSLAction, PSLAction.toPermHom, compHom, toPermHom
@@ -502,8 +502,8 @@ lemma _root_.Matrix.ProjectiveSpecialLinearGroup.smul_proj_mk
   proof: rfl
 
 中文:
-引理 _root_.Matrix.ProjectiveSpecialLinearGroup.smul_proj_mk
-  结论: (g : Matrix.SpecialLinearGroup ι K)
+引理 _root_.矩阵.ProjectiveSpecialLinearGroup.smul_proj_mk
+  结论: (g : 矩阵.SpecialLinearGroup ι K)
   证明: rfl
 -/
 lemma _root_.Matrix.ProjectiveSpecialLinearGroup.smul_proj_mk (g : Matrix.SpecialLinearGroup ι K)
@@ -522,7 +522,7 @@ theorem _root_.Matrix.ProjectiveSpecialLinearGroup.toPermHom_injective
     Subgroup.mem_bot] at hg
 
 中文:
-定理 _root_.Matrix.ProjectiveSpecialLinearGroup.toPermHom_injective
+定理 _root_.矩阵.ProjectiveSpecialLinearGroup.toPermHom_injective
   证明: by
   rw [injective_iff_map_eq_one]
   intro g hg
@@ -552,7 +552,7 @@ Matrix.ProjectiveSpecialLinearGroup.toPermHom_injective Equiv.ext fun x => by
 
 中文:
 实例 :
-  签名: FaithfulSMul (Matrix.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
+  签名: 忠实标量乘法 (矩阵.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
   定义体: faithfulSMul_iff.2 fun g hg =>
 Matrix.ProjectiveSpecialLinearGroup.toPermHom_injective Equiv.ext fun x => by
       simpa using! hg x
@@ -576,7 +576,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreprimitive (Matrix.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
+  签名: 是Preprimitive (矩阵.ProjectiveSpecialLinearGroup ι K) (ℙ K (ι -> K))
   定义体: @MulAction.IsPreprimitive.of_surjective _ _ _ _ _ _ _ _ (QuotientGroup.mk' _)
     {toFun := id, map_smul' := by intros; simp; rfl} (prePrimitive_SL (ι := ι) (K := K))
     Function.surjective_id
@@ -604,7 +604,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction PGL(ι, K) (ℙ K (ι -> K))
+  签名: 乘法作用 PGL(ι, K) (ℙ K (ι -> K))
   定义体: mulActionOfGL fun u => ind fun v hv => by
     simp only [smul_mk, mk_eq_mk_iff]
     exact ⟨u, by simp [Units.smul_def]⟩

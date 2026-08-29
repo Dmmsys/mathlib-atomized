@@ -212,7 +212,7 @@ definition InnerRegularWRT
 
 中文:
 定义 InnerRegularWRT
-  签名: {α} {_ : MeasurableSpace α} (μ : Measure α) (p q : Set α -> 命题)
+  签名: {α} {_ : 可测空间 α} (μ : 测度 α) (p q : 集合 α -> 命题)
   定义体: forall ⦃U⦄, q U -> forall r < μ U, exists K, K subseteq U ∧ p K ∧ r < μ K
 
 Depends on / 依赖: subseteq
@@ -264,8 +264,8 @@ theorem eq_of_innerRegularWRT_of_forall_eq
   exact hμν t ht2
 
 中文:
-定理 eq_of_innerRegularWRT_of_forall_eq
-  结论: {ν : Measure α} (hμ : μ.InnerRegularWRT p q)
+定理 eq_of_innerRegularWRT_of_对任意_eq
+  结论: {ν : 测度 α} (hμ : μ.InnerRegularWRT p q)
   证明: by
   rw [hμ.measure_eq_iSup hU]; rw [hν.measure_eq_iSup hU]
   congr! 4 with t _ ht2
@@ -294,7 +294,7 @@ theorem exists_subset_lt_add
     exact ⟨K, hKU, hKc, ENNReal.lt_add_of_sub_lt_right (Or.inl hμU) hrK⟩
 
 中文:
-定理 exists_subset_lt_add
+定理 存在_subset_lt_add
   结论: (H : InnerRegularWRT μ p q) (h0 : p ∅) (hU : q U) (hμU : μ U != ∞)
   证明: by
   rcases eq_or_ne (μ U) 0 with h₀ | h₀
@@ -328,7 +328,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {α β} [MeasurableSpace α] [MeasurableSpace β]
+  结论: {α β} [可测空间 α] [可测空间 β]
   证明: by
   intro U hU r hr
   rw [map_apply_of_aemeasurable hf (hB₂ _ hU)] at hr
@@ -363,7 +363,7 @@ theorem map'
 
 中文:
 定理 map'
-  结论: {α β} [MeasurableSpace α] [MeasurableSpace β] {μ : Measure α} {pa qa : Set α -> 命题}
+  结论: {α β} [可测空间 α] [可测空间 β] {μ : 测度 α} {pa qa : 集合 α -> 命题}
   证明: by
   intro U hU r hr
   rw [f.map_apply U] at hr
@@ -400,7 +400,7 @@ theorem comap
 
 中文:
 定理 comap
-  结论: {α β} [MeasurableSpace α] {mβ : MeasurableSpace β}
+  结论: {α β} [可测空间 α] {mβ : 可测空间 β}
   证明: by
   intro U hU r hr
   rw [hf.comap_apply] at hr
@@ -464,7 +464,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: {q' : Set α -> 命题} (H : InnerRegularWRT μ p q) (H' : InnerRegularWRT μ q q')
+  条件: {q' : 集合 α -> 命题} (H : InnerRegularWRT μ p q) (H' : InnerRegularWRT μ q q')
   证明: by
   intro U hU r hr
   rcases H' hU r hr with ⟨F, hFU, hqF, hF⟩; rcases H hqF _ hF with ⟨K, hKF, hpK, hrK⟩
@@ -489,7 +489,7 @@ theorem rfl
 
 中文:
 定理 rfl
-  条件: {p : Set α -> 命题}
+  条件: {p : 集合 α -> 命题}
   结论: InnerRegularWRT μ p p
   证明: fun U hU _r hr => ⟨U, Subset.rfl, hU, hr⟩
 
@@ -528,7 +528,7 @@ theorem mono
 
 中文:
 定理 mono
-  结论: {p' q' : Set α -> 命题} (H : InnerRegularWRT μ p q)
+  结论: {p' q' : 集合 α -> 命题} (H : InnerRegularWRT μ p q)
   证明: .trans (of_imp h) .trans H of_imp h'
 
 Depends on / 依赖: of_imp
@@ -555,10 +555,10 @@ class OuterRegular
     - outerRegular : forall ⦃A : Set α⦄, MeasurableSet A -> forall r > μ A, exists U, U ⊇ A ∧ IsOpen U ∧ μ U < r
 
 中文:
-类 OuterRegular
-  参数: (μ : Measure α)
+类 外正则
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
-    - outerRegular : 对任意 ⦃A : Set α⦄, MeasurableSet A -> 对任意 r > μ A, 存在 U, U ⊇ A ∧ IsOpen U ∧ μ U < r
+    - outerRegular : 对任意 ⦃A : 集合 α⦄, 可测集 A -> 对任意 r > μ A, 存在 U, U ⊇ A ∧ 是开集 U ∧ μ U < r
 -/
 class OuterRegular (μ : Measure α) : Prop where
   protected outerRegular :
@@ -575,11 +575,11 @@ class Regular
     - innerRegular : InnerRegularWRT μ IsCompact IsOpen
 
 中文:
-类 Regular
-  参数: (μ : Measure α)
-  继承: IsFiniteMeasureOnCompacts μ, OuterRegular μ
+类 正则
+  参数: (μ : 测度 α)
+  继承: 紧集上有限测度 μ, 外正则 μ
   公理与运算 (1 个):
-    - innerRegular : InnerRegularWRT μ IsCompact IsOpen
+    - innerRegular : InnerRegularWRT μ 是紧集 是开集
 -/
 class Regular (μ : Measure α) : Prop extends IsFiniteMeasureOnCompacts μ, OuterRegular μ where
   innerRegular : InnerRegularWRT μ IsCompact IsOpen
@@ -596,10 +596,10 @@ class WeaklyRegular
 
 中文:
 类 WeaklyRegular
-  参数: (μ : Measure α)
-  继承: OuterRegular μ
+  参数: (μ : 测度 α)
+  继承: 外正则 μ
   公理与运算 (1 个):
-    - innerRegular : InnerRegularWRT μ IsClosed IsOpen
+    - innerRegular : InnerRegularWRT μ 是闭集 是开集
 -/
 class WeaklyRegular (μ : Measure α) : Prop extends OuterRegular μ where
   protected innerRegular : InnerRegularWRT μ IsClosed IsOpen
@@ -614,10 +614,10 @@ class InnerRegular
     - innerRegular : InnerRegularWRT μ IsCompact MeasurableSet
 
 中文:
-类 InnerRegular
-  参数: (μ : Measure α)
+类 内正则
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
-    - innerRegular : InnerRegularWRT μ IsCompact MeasurableSet
+    - innerRegular : InnerRegularWRT μ 是紧集 可测集
 -/
 class InnerRegular (μ : Measure α) : Prop where
   protected innerRegular : InnerRegularWRT μ IsCompact MeasurableSet
@@ -633,9 +633,9 @@ class InnerRegularCompactLTTop
 
 中文:
 类 InnerRegularCompactLTTop
-  参数: (μ : Measure α)
+  参数: (μ : 测度 α)
   公理与运算 (1 个):
-    - innerRegular : InnerRegularWRT μ IsCompact (fun s => MeasurableSet s ∧ μ s != ∞)
+    - innerRegular : InnerRegularWRT μ 是紧集 (fun s => 可测集 s ∧ μ s != ∞)
 -/
 class InnerRegularCompactLTTop (μ : Measure α) : Prop where
   protected innerRegular : InnerRegularWRT μ IsCompact (fun s => MeasurableSet s ∧ μ s != ∞)
@@ -665,7 +665,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : OuterRegular (0 : Measure α)
+  签名: : 外正则 (0 : 测度 α)
   定义体: ⟨fun A _ _r hr => ⟨univ, subset_univ A, isOpen_univ, hr⟩⟩
 
 Depends on / 依赖: isOpen_univ, subset_univ
@@ -686,8 +686,8 @@ theorem _root_.Set.exists_isOpen_lt_of_lt
   exact ⟨U, (subset_toMeasurable _ _).trans hAU, hUo, hU⟩
 
 中文:
-定理 _root_.Set.exists_isOpen_lt_of_lt
-  条件: [OuterRegular μ] (A : Set α) (r : 实数>=0∞) (hr : μ A < r)
+定理 _root_.集合.存在_isOpen_lt_of_lt
+  条件: [外正则 μ] (A : 集合 α) (r : 实数>=0∞) (hr : μ A < r)
   证明: by
   rcases OuterRegular.outerRegular (measurableSet_toMeasurable μ A) r
       (by rwa [measure_toMeasurable]) with
@@ -715,8 +715,8 @@ theorem _root_.Set.measure_eq_iInf_isOpen
   simpa only [iInf_lt_iff, exists_prop] using A.exists_isOpen_lt_of_lt r hr
 
 中文:
-定理 _root_.Set.measure_eq_iInf_isOpen
-  条件: (A : Set α) (μ : Measure α) [OuterRegular μ]
+定理 _root_.集合.measure_eq_iInf_isOpen
+  条件: (A : 集合 α) (μ : 测度 α) [外正则 μ]
   证明: by
   refine le_antisymm (le_iInf₂ fun s hs => le_iInf fun _ => μ.mono hs) ?_
   refine le_of_forall_gt fun r hr => ?_
@@ -739,8 +739,8 @@ theorem _root_.Set.exists_isOpen_lt_add
   proof: A.exists_isOpen_lt_of_lt _ (ENNReal.lt_add_right hA hε)
 
 中文:
-定理 _root_.Set.exists_isOpen_lt_add
-  结论: [OuterRegular μ] (A : Set α) (hA : μ A != ∞) {ε : 实数>=0∞}
+定理 _root_.集合.存在_isOpen_lt_add
+  结论: [外正则 μ] (A : 集合 α) (hA : μ A != ∞) {ε : 实数>=0∞}
   证明: A.exists_isOpen_lt_of_lt _ (ENNReal.lt_add_right hA hε)
 
 Depends on / 依赖: A.exists_isOpen_lt_of_lt, ENNReal, ENNReal.lt_add_right, exists_isOpen_lt_of_lt, lt_add_right
@@ -762,8 +762,8 @@ theorem _root_.Set.exists_isOpen_le_add
     exact ⟨U, AU, U_open, hU.le⟩
 
 中文:
-定理 _root_.Set.exists_isOpen_le_add
-  结论: (A : Set α) (μ : Measure α) [OuterRegular μ] {ε : 实数>=0∞}
+定理 _root_.集合.存在_isOpen_le_add
+  结论: (A : 集合 α) (μ : 测度 α) [外正则 μ] {ε : 实数>=0∞}
   证明: by
   rcases eq_or_ne (μ A) ∞ with (H | H)
   · exact ⟨univ, subset_univ _, isOpen_univ, by simp only [H, _root_.top_add, le_top]⟩
@@ -794,8 +794,8 @@ theorem _root_.MeasurableSet.exists_isOpen_sdiff_lt
 alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_isOpen_sdif
 
 中文:
-定理 _root_.MeasurableSet.exists_isOpen_sdiff_lt
-  结论: [OuterRegular μ] {A : Set α}
+定理 _root_.可测集.存在_isOpen_sdiff_lt
+  结论: [外正则 μ] {A : 集合 α}
   证明: by
   rcases A.exists_isOpen_lt_add hA' hε with ⟨U, hAU, hUo, hU⟩
   use U, hAU, hUo, hU.trans_le le_top
@@ -832,7 +832,7 @@ theorem map
 
 中文:
 定理 map
-  结论: [OpensMeasurableSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [OpensMeasurable空间 α] [可测空间 β] [拓扑空间 β]
   证明: by
   refine ⟨fun A hA r hr => ?_⟩
   rw [map_apply f.measurable hA]; rw [← f.image_symm] at hr
@@ -866,7 +866,7 @@ theorem comap'
 
 中文:
 定理 comap'
-  结论: {mβ : MeasurableSpace β} [TopologicalSpace β] (μ : Measure β) [OuterRegular μ]
+  结论: {mβ : 可测空间 β} [拓扑空间 β] (μ : 测度 β) [外正则 μ]
   证明: by
     rw [f_me.comap_apply] at hr
     obtain ⟨U, hUA, Uopen, hμU⟩ := OuterRegular.outerRegular (f_me.measurableSet_image' hA) r hr
@@ -896,7 +896,7 @@ theorem comap
 
 中文:
 定理 comap
-  结论: [BorelSpace α] {mβ : MeasurableSpace β} [TopologicalSpace β] [BorelSpace β]
+  结论: [Borel空间 α] {mβ : 可测空间 β} [拓扑空间 β] [Borel空间 β]
   证明: OuterRegular.comap' μ f.continuous f.measurableEmbedding
 -/
 protected theorem comap [BorelSpace α] {mβ : MeasurableSpace β} [TopologicalSpace β] [BorelSpace β]
@@ -919,7 +919,7 @@ theorem smul
 
 中文:
 定理 smul
-  条件: (μ : Measure α) [OuterRegular μ] {x : 实数>=0∞} (hx : x != ∞)
+  条件: (μ : 测度 α) [外正则 μ] {x : 实数>=0∞} (hx : x != ∞)
   证明: by
   rcases eq_or_ne x 0 with (rfl | h0)
   · rw [zero_smul]
@@ -947,7 +947,7 @@ instance smul_nnreal
 
 中文:
 实例 smul_nnreal
-  签名: (μ : Measure α) [OuterRegular μ] (c : 实数>=0)
+  签名: (μ : 测度 α) [外正则 μ] (c : 实数>=0)
   定义体: OuterRegular.smul μ coe_ne_top
 
 Depends on / 依赖: OuterRegular, OuterRegular.smul, coe_ne_top
@@ -973,7 +973,7 @@ lemma of_restrict
 
 中文:
 引理 of_restrict
-  结论: [OpensMeasurableSpace α] {μ : Measure α} {s : 自然数 -> Set α}
+  结论: [OpensMeasurable空间 α] {μ : 测度 α} {s : 自然数 -> 集合 α}
   证明: by
   refine ⟨fun A hA r hr => ?_⟩
   have HA : μ A < ∞ := lt_of_lt_of_le hr le_top
@@ -1034,7 +1034,7 @@ lemma measure_closure_eq_of_isCompact
 
 中文:
 引理 measure_closure_eq_of_isCompact
-  结论: [R1Space α] [OuterRegular μ]
+  结论: [R1空间 α] [外正则 μ]
   证明: by
   apply le_antisymm ?_ (measure_mono subset_closure)
   simp only [measure_eq_iInf_isOpen k, le_iInf_iff]
@@ -1064,7 +1064,7 @@ theorem ext_isOpen
 
 中文:
 定理 ext_isOpen
-  结论: {ν : Measure α} [OuterRegular μ] [OuterRegular ν]
+  结论: {ν : 测度 α} [外正则 μ] [外正则 ν]
   证明: by
   ext s ms
   rw [Set.measure_eq_iInf_isOpen]; rw [Set.measure_eq_iInf_isOpen]
@@ -1094,7 +1094,7 @@ theorem ext_isOpen_isBounded
 
 中文:
 定理 ext_isOpen_isBounded
-  结论: {α : 类型} [PseudoMetricSpace α] {mα : MeasurableSpace α}
+  结论: {α : 类型} [伪度量空间 α] {mα : 可测空间 α}
   证明: by
   refine ext_isOpen fun U hU => ?_
   obtain ⟨f, hm, hu, hf⟩ := Metric.eq_countable_union_of_isBounded_of_isOpen hU
@@ -1154,7 +1154,7 @@ lemma of_restrict
 
 中文:
 引理 of_restrict
-  结论: {μ : Measure α} {s : 自然数 -> Set α}
+  结论: {μ : 测度 α} {s : 自然数 -> 集合 α}
   证明: by
   intro F hF r hr
   have hBU : ⋃ n, F inter s n = F := by rw [← inter_iUnion, univ_subset_iff.mp hs, inter_univ]
@@ -1196,7 +1196,7 @@ exa
 
 中文:
 引理 restrict
-  条件: (h : InnerRegularWRT μ p (fun s => MeasurableSet s ∧ μ s != ∞)) (A : Set α)
+  条件: (h : InnerRegularWRT μ p (fun s => 可测集 s ∧ μ s != ∞)) (A : 集合 α)
   证明: by
   rintro s ⟨s_meas, hs⟩ r hr
   rw [restrict_apply s_meas] at hs
@@ -1244,7 +1244,7 @@ lemma restrict_of_measure_ne_top
 
 中文:
 引理 restrict_of_measure_ne_top
-  结论: (h : InnerRegularWRT μ p (fun s => MeasurableSet s ∧ μ s != ∞))
+  结论: (h : InnerRegularWRT μ p (fun s => 可测集 s ∧ μ s != ∞))
   证明: by
   have : Fact (μ A < ∞) := ⟨hA.lt_top⟩
   exact (restrict h A).trans (of_imp (fun s hs => ⟨hs, measure_ne_top _ _⟩))
@@ -1274,7 +1274,7 @@ lemma of_sigmaFinite
 
 中文:
 引理 of_sigmaFinite
-  条件: [SigmaFinite μ]
+  条件: [σ有限 μ]
   证明: by
   intro s hs r hr
   set B : Nat -> Set α := spanningSets μ
@@ -1316,7 +1316,7 @@ theorem measurableSet_of_isOpen
 
 中文:
 定理 measurableSet_of_isOpen
-  结论: [OuterRegular μ] (H : InnerRegularWRT μ p IsOpen)
+  结论: [外正则 μ] (H : InnerRegularWRT μ p 是开集)
   证明: by
   rintro s ⟨hs, hμs⟩ r hr
   have h0 : p ∅ := by
@@ -1367,7 +1367,7 @@ theorem weaklyRegular_of_finite
 
 中文:
 定理 weaklyRegular_of_finite
-  结论: [BorelSpace α] (μ : Measure α) [IsFiniteMeasure μ]
+  结论: [Borel空间 α] (μ : 测度 α) [是有限测度 μ]
   证明: by
   have hfin : forall {s}, μ s != ∞ := @(measure_ne_top μ)
   suffices forall s, MeasurableSet s -> forall ε, ε != 0 -> exists F, F subseteq s ∧ exists U, U ⊇ s ∧
@@ -1458,7 +1458,7 @@ theorem of_pseudoMetrizableSpace
 
 中文:
 定理 of_pseudoMetrizableSpace
-  结论: {X : 类型} [TopologicalSpace X] [PseudoMetrizableSpace X]
+  结论: {X : 类型} [拓扑空间 X] [PseudoMetrizable空间 X]
   证明: by
   let A : PseudoMetricSpace X := TopologicalSpace.pseudoMetrizableSpacePseudoMetric X
   intro U hU r hr
@@ -1493,7 +1493,7 @@ theorem isCompact_isClosed
 
 中文:
 定理 isCompact_isClosed
-  结论: {X : 类型} [TopologicalSpace X] [SigmaCompactSpace X]
+  结论: {X : 类型} [拓扑空间 X] [SigmaCompact空间 X]
   证明: by
   intro F hF r hr
   set B : Nat -> Set X := compactCovering X
@@ -1532,9 +1532,9 @@ theorem _root_.MeasurableSet.measure_eq_iSup_isCompact
   proof: InnerRegular.innerRegular.measure_eq_iSup hU
 
 中文:
-定理 _root_.MeasurableSet.measure_eq_iSup_isCompact
+定理 _root_.可测集.measure_eq_iSup_isCompact
   条件: ⦃U
-  结论: Set α⦄ (hU : MeasurableSet U)
+  结论: 集合 α⦄ (hU : 可测集 U)
   证明: InnerRegular.innerRegular.measure_eq_iSup hU
 
 Depends on / 依赖: InnerRegular, InnerRegular.innerRegular.measure_eq_iSup, innerRegular, measure_eq_iSup
@@ -1554,7 +1554,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : InnerRegular (0 : Measure α)
+  签名: : 内正则 (0 : 测度 α)
   定义体: ⟨fun _ _ _r hr => ⟨∅, empty_subset _, isCompact_empty, hr⟩⟩
 
 Depends on / 依赖: empty_subset, isCompact_empty
@@ -1572,7 +1572,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [h : InnerRegular μ] (c : 实数>=0∞)
+  签名: [h : 内正则 μ] (c : 实数>=0∞)
   定义体: ⟨InnerRegularWRT.smul h.innerRegular c⟩
 
 Depends on / 依赖: InnerRegularWRT, InnerRegularWRT.smul, h.innerRegular, innerRegular
@@ -1590,7 +1590,7 @@ instance smul_nnreal
 
 中文:
 实例 smul_nnreal
-  签名: [InnerRegular μ] (c : 实数>=0)
+  签名: [内正则 μ] (c : 实数>=0)
   定义体: smul (c : Real>=0∞)
 -/
 instance smul_nnreal [InnerRegular μ] (c : Real>=0) : InnerRegular (c • μ) := smul (c : Real>=0∞)
@@ -1612,7 +1612,7 @@ lemma innerRegularWRT_isClosed_isOpen
 
 中文:
 引理 innerRegularWRT_isClosed_isOpen
-  条件: [R1Space α] [OpensMeasurableSpace α] [h : InnerRegular μ]
+  条件: [R1空间 α] [OpensMeasurable空间 α] [h : 内正则 μ]
   证明: by
   intro U hU r hr
   rcases h.innerRegular hU.measurableSet r hr with ⟨K, KU, K_comp, hK⟩
@@ -1640,9 +1640,9 @@ theorem exists_isCompact_not_null
     ENNReal.iSup_eq_zero, not_forall, exists_prop, subset_univ, true_and]
 
 中文:
-定理 exists_isCompact_not_null
-  条件: [InnerRegular μ]
-  结论: (存在 K, IsCompact K ∧ μ K != 0) ↔ μ != 0
+定理 存在_isCompact_not_null
+  条件: [内正则 μ]
+  结论: (存在 K, 是紧集 K ∧ μ K != 0) ↔ μ != 0
   证明: by
   simp_rw [Ne, ← measure_univ_eq_zero, MeasurableSet.univ.measure_eq_iSup_isCompact,
     ENNReal.iSup_eq_zero, not_forall, exists_prop, subset_univ, true_and]
@@ -1662,9 +1662,9 @@ theorem _root_.MeasurableSet.exists_lt_isCompact
   proof: InnerRegular.innerRegular hA _ hr
 
 中文:
-定理 _root_.MeasurableSet.exists_lt_isCompact
-  条件: [InnerRegular μ] ⦃A
-  结论: Set α⦄
+定理 _root_.可测集.存在_lt_isCompact
+  条件: [内正则 μ] ⦃A
+  结论: 集合 α⦄
   证明: InnerRegular.innerRegular hA _ hr
 
 Depends on / 依赖: InnerRegular, InnerRegular.innerRegular, innerRegular
@@ -1685,7 +1685,7 @@ theorem map_of_continuous
 
 中文:
 定理 map_of_continuous
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: ⟨InnerRegularWRT.map h.innerRegular hf.aemeasurable (fun _s hs => hf.measurable hs)
     (fun _K hK => hK.image hf) (fun _s hs => hs)⟩
 -/
@@ -1705,7 +1705,7 @@ theorem map
 
 中文:
 定理 map
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: InnerRegular.map_of_continuous f.continuous
 -/
 protected theorem map [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
@@ -1726,7 +1726,7 @@ theorem map_iff
 
 中文:
 定理 map_iff
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: by
   refine ⟨fun h => ?_, fun h => h.map f⟩
   convert! h.map f.symm
@@ -1754,7 +1754,7 @@ theorem comap'
 
 中文:
 定理 comap'
-  结论: [BorelSpace α]
+  结论: [Borel空间 α]
   证明: H.innerRegular.comap hf.measurableEmbedding
     (fun _ hU => hf.measurableEmbedding.measurableSet_image' hU)
     (fun _ hKrange hK => hf.isInducing.isCompact_preimage' hK hKrange)
@@ -1778,7 +1778,7 @@ theorem comap
 
 中文:
 定理 comap
-  结论: [BorelSpace α] {mβ : MeasurableSpace β} [TopologicalSpace β] [BorelSpace β]
+  结论: [Borel空间 α] {mβ : 可测空间 β} [拓扑空间 β] [Borel空间 β]
   证明: InnerRegular.comap' μ f.isOpenEmbedding
 
 Depends on / 依赖: X.toDistLat.str, toDistLat
@@ -1845,7 +1845,7 @@ theorem _root_.MeasurableSet.exists_isCompact_lt_add
   proof: InnerRegularCompactLTTop.innerRegular.exists_subset_lt_add isCompact_empty ⟨hA, h'A⟩ h'A hε
 
 中文:
-定理 _root_.MeasurableSet.exists_isCompact_lt_add
+定理 _root_.可测集.存在_isCompact_lt_add
   结论: [InnerRegularCompactLTTop μ]
   证明: InnerRegularCompactLTTop.innerRegular.exists_subset_lt_add isCompact_empty ⟨hA, h'A⟩ h'A hε
 
@@ -1866,7 +1866,7 @@ theorem _root_.MeasurableSet.exists_isCompact_isClosed_lt_add
     by rwa [hK.measure_closure]⟩
 
 中文:
-定理 _root_.MeasurableSet.exists_isCompact_isClosed_lt_add
+定理 _root_.可测集.存在_isCompact_isClosed_lt_add
   证明: let ⟨K, hKA, hK, hμK⟩ := hA.exists_isCompact_lt_add h'A hε
   ⟨closure K, hK.closure_subset_measurableSet hA hKA, hK.closure, isClosed_closure,
     by rwa [hK.measure_closure]⟩
@@ -1897,8 +1897,8 @@ alias _root_.MeasurableSet.exists_isCompact_diff_lt :=
   _root_
 
 中文:
-定理 _root_.MeasurableSet.exists_isCompact_sdiff_lt
-  结论: [OpensMeasurableSpace α] [T2Space α]
+定理 _root_.可测集.存在_isCompact_sdiff_lt
+  结论: [OpensMeasurable空间 α] [T2空间 α]
   证明: by
   rcases hA.exists_isCompact_lt_add h'A hε with ⟨K, hKA, hKc, hK⟩
   exact ⟨K, hKA, hKc, measure_sdiff_lt_of_lt_add hKc.nullMeasurableSet hKA
@@ -1937,8 +1937,8 @@ theorem _root_.MeasurableSet.exists_isCompact_isClosed_sdiff_lt
 alias _root_.MeasurableSet.exists_isCom
 
 中文:
-定理 _root_.MeasurableSet.exists_isCompact_isClosed_sdiff_lt
-  结论: [BorelSpace α] [R1Space α]
+定理 _root_.可测集.存在_isCompact_isClosed_sdiff_lt
+  结论: [Borel空间 α] [R1空间 α]
   证明: by
   rcases hA.exists_isCompact_isClosed_lt_add h'A hε with ⟨K, hKA, hKco, hKcl, hK⟩
   exact ⟨K, hKA, hKco, hKcl, measure_sdiff_lt_of_lt_add hKcl.nullMeasurableSet hKA
@@ -1971,9 +1971,9 @@ theorem _root_.MeasurableSet.exists_lt_isCompact_of_ne_top
   proof: InnerRegularCompactLTTop.innerRegular ⟨hA, h'A⟩ _ hr
 
 中文:
-定理 _root_.MeasurableSet.exists_lt_isCompact_of_ne_top
+定理 _root_.可测集.存在_lt_isCompact_of_ne_top
   条件: [InnerRegularCompactLTTop μ] ⦃A
-  结论: Set α⦄
+  结论: 集合 α⦄
   证明: InnerRegularCompactLTTop.innerRegular ⟨hA, h'A⟩ _ hr
 
 Depends on / 依赖: BddDistLat, ConcreteCategory, ConcreteCategory.hom, InnerRegularCompactLTTop, InnerRegularCompactLTTop.innerRegular, innerRegular
@@ -1992,7 +1992,7 @@ theorem _root_.MeasurableSet.measure_eq_iSup_isCompact_of_ne_top
   proof: InnerRegularCompactLTTop.innerRegular.measure_eq_iSup ⟨hA, h'A⟩
 
 中文:
-定理 _root_.MeasurableSet.measure_eq_iSup_isCompact_of_ne_top
+定理 _root_.可测集.measure_eq_iSup_isCompact_of_ne_top
   结论: [InnerRegularCompactLTTop μ]
   证明: InnerRegularCompactLTTop.innerRegular.measure_eq_iSup ⟨hA, h'A⟩
 
@@ -2013,7 +2013,7 @@ instance restrict
 
 中文:
 实例 restrict
-  签名: [h : InnerRegularCompactLTTop μ] (A : Set α)
+  签名: [h : InnerRegularCompactLTTop μ] (A : 集合 α)
   定义体: ⟨InnerRegularWRT.restrict h.innerRegular A⟩
 
 Depends on / 依赖: InnerRegularWRT, InnerRegularWRT.restrict, f.hom, h.innerRegular, innerRegular, restrict
@@ -2051,7 +2051,7 @@ exists_isOpen_lt_of_lt K r (restrict_apply_le _ _).trans_lt hr
   refine ⟨U inter V, subset_inter hKU hKV, hUo.int
 
 中文:
-引理 _root_.IsCompact.exists_isOpen_lt_of_lt
+引理 _root_.是紧集.存在_isOpen_lt_of_lt
   结论: [InnerRegularCompactLTTop μ]
   证明: by
   rcases hK.exists_open_superset_measure_lt_top μ with ⟨V, hKV, hVo, hμV⟩
@@ -2085,7 +2085,7 @@ lemma _root_.IsCompact.measure_eq_iInf_isOpen
     simpa only [iInf_lt_iff, exists_prop, exists_and_left] using hK.exists_isOpen_lt_of_lt
 
 中文:
-引理 _root_.IsCompact.measure_eq_iInf_isOpen
+引理 _root_.是紧集.measure_eq_iInf_isOpen
   结论: [InnerRegularCompactLTTop μ]
   证明: by
   apply le_antisymm
@@ -2112,7 +2112,7 @@ theorem _root_.IsCompact.exists_isOpen_lt_add
   proof: hK.exists_isOpen_lt_of_lt _ (ENNReal.lt_add_right hK.measure_lt_top.ne hε)
 
 中文:
-定理 _root_.IsCompact.exists_isOpen_lt_add
+定理 _root_.是紧集.存在_isOpen_lt_add
   结论: [InnerRegularCompactLTTop μ]
   证明: hK.exists_isOpen_lt_of_lt _ (ENNReal.lt_add_right hK.measure_lt_top.ne hε)
 -/
@@ -2136,7 +2136,7 @@ theorem _root_.MeasurableSet.exists_isOpen_symmDiff_lt
   rw [← ENNReal.add_halves ε]; rw [measure_sy
 
 中文:
-定理 _root_.MeasurableSet.exists_isOpen_symmDiff_lt
+定理 _root_.可测集.存在_isOpen_symmDiff_lt
   结论: [InnerRegularCompactLTTop μ]
   证明: by
   have : ε / 2 != 0 := (ENNReal.half_pos hε).ne'
@@ -2174,7 +2174,7 @@ theorem _root_.MeasureTheory.NullMeasurableSet.exists_isOpen_symmDiff_lt
   rwa [measure_congr <| (ae_eq_refl _).symmDiff hst]
 
 中文:
-定理 _root_.MeasureTheory.NullMeasurableSet.exists_isOpen_symmDiff_lt
+定理 _root_.测度论.NullMeasurableSet.存在_isOpen_symmDiff_lt
   证明: by
   rcases hs with ⟨t, htm, hst⟩
   rcases htm.exists_isOpen_symmDiff_lt (by rwa [← measure_congr hst]) hε with ⟨U, hUo, hμU, hUs⟩
@@ -2282,7 +2282,7 @@ theorem map_of_continuous
 
 中文:
 定理 map_of_continuous
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: by
   constructor
   refine InnerRegularWRT.map h.innerRegular hf.aemeasurable ?_ (fun K hK => hK.image hf) ?_
@@ -2319,7 +2319,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : WeaklyRegular (0 : Measure α)
+  签名: : WeaklyRegular (0 : 测度 α)
   定义体: ⟨fun _ _ _r hr => ⟨∅, empty_subset _, isClosed_empty, hr⟩⟩
 
 Depends on / 依赖: empty_subset, isClosed_empty
@@ -2337,9 +2337,9 @@ theorem _root_.IsOpen.exists_lt_isClosed
   proof: WeaklyRegular.innerRegular hU r hr
 
 中文:
-定理 _root_.IsOpen.exists_lt_isClosed
+定理 _root_.是开集.存在_lt_isClosed
   条件: [WeaklyRegular μ] ⦃U
-  结论: Set α⦄ (hU : IsOpen U) {r : 实数>=0∞}
+  结论: 集合 α⦄ (hU : 是开集 U) {r : 实数>=0∞}
   证明: WeaklyRegular.innerRegular hU r hr
 
 Depends on / 依赖: WeaklyRegular, WeaklyRegular.innerRegular, innerRegular
@@ -2358,9 +2358,9 @@ theorem _root_.IsOpen.measure_eq_iSup_isClosed
   proof: WeaklyRegular.innerRegular.measure_eq_iSup hU
 
 中文:
-定理 _root_.IsOpen.measure_eq_iSup_isClosed
+定理 _root_.是开集.measure_eq_iSup_isClosed
   条件: ⦃U
-  结论: Set α⦄ (hU : IsOpen U) (μ : Measure α)
+  结论: 集合 α⦄ (hU : 是开集 U) (μ : 测度 α)
   证明: WeaklyRegular.innerRegular.measure_eq_iSup hU
 
 Depends on / 依赖: WeaklyRegular, WeaklyRegular.innerRegular.measure_eq_iSup, innerRegular, measure_eq_iSup
@@ -2397,8 +2397,8 @@ theorem _root_.MeasurableSet.exists_isClosed_lt_add
   proof: innerRegular_measurable.exists_subset_lt_add isClosed_empty ⟨hs, hμs⟩ hμs hε
 
 中文:
-定理 _root_.MeasurableSet.exists_isClosed_lt_add
-  结论: [WeaklyRegular μ] {s : Set α}
+定理 _root_.可测集.存在_isClosed_lt_add
+  结论: [WeaklyRegular μ] {s : 集合 α}
   证明: innerRegular_measurable.exists_subset_lt_add isClosed_empty ⟨hs, hμs⟩ hμs hε
 
 Depends on / 依赖: exists_subset_lt_add, innerRegular_measurable, innerRegular_measurable.exists_subset_lt_add, isClosed_empty
@@ -2423,8 +2423,8 @@ theorem _root_.MeasurableSet.exists_isClosed_sdiff_lt
 alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.Mea
 
 中文:
-定理 _root_.MeasurableSet.exists_isClosed_sdiff_lt
-  结论: [OpensMeasurableSpace α] [WeaklyRegular μ]
+定理 _root_.可测集.存在_isClosed_sdiff_lt
+  结论: [OpensMeasurable空间 α] [WeaklyRegular μ]
   证明: by
   rcases hA.exists_isClosed_lt_add h'A hε with ⟨F, hFA, hFc, hF⟩
   exact ⟨F, hFA, hFc, measure_sdiff_lt_of_lt_add hFc.nullMeasurableSet hFA
@@ -2455,9 +2455,9 @@ theorem _root_.MeasurableSet.exists_lt_isClosed_of_ne_top
   proof: innerRegular_measurable ⟨hA, h'A⟩ _ hr
 
 中文:
-定理 _root_.MeasurableSet.exists_lt_isClosed_of_ne_top
+定理 _root_.可测集.存在_lt_isClosed_of_ne_top
   条件: [WeaklyRegular μ] ⦃A
-  结论: Set α⦄
+  结论: 集合 α⦄
   证明: innerRegular_measurable ⟨hA, h'A⟩ _ hr
 
 Depends on / 依赖: innerRegular_measurable
@@ -2477,9 +2477,9 @@ theorem _root_.MeasurableSet.measure_eq_iSup_isClosed_of_ne_top
   proof: innerRegular_measurable.measure_eq_iSup ⟨hA, h'A⟩
 
 中文:
-定理 _root_.MeasurableSet.measure_eq_iSup_isClosed_of_ne_top
+定理 _root_.可测集.measure_eq_iSup_isClosed_of_ne_top
   条件: [WeaklyRegular μ] ⦃A
-  结论: Set α⦄
+  结论: 集合 α⦄
   证明: innerRegular_measurable.measure_eq_iSup ⟨hA, h'A⟩
 
 Depends on / 依赖: innerRegular_measurable, innerRegular_measurable.measure_eq_iSup, measure_eq_iSup
@@ -2503,7 +2503,7 @@ theorem restrict_of_measure_ne_top
 
 中文:
 定理 restrict_of_measure_ne_top
-  结论: [BorelSpace α] [WeaklyRegular μ] {A : Set α}
+  结论: [Borel空间 α] [WeaklyRegular μ] {A : 集合 α}
   证明: by
   have : Fact (μ A < ∞) := ⟨h'A.lt_top⟩
   refine InnerRegularWRT.weaklyRegular_of_finite (μ.restrict A) (fun V V_open r hr => ?_)
@@ -2599,7 +2599,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : Regular (0 : Measure α)
+  签名: : 正则 (0 : 测度 α)
   定义体: ⟨fun _ _ _r hr => ⟨∅, empty_subset _, isCompact_empty, hr⟩⟩
 
 Depends on / 依赖: empty_subset, isCompact_empty
@@ -2617,9 +2617,9 @@ theorem _root_.IsOpen.exists_lt_isCompact
   proof: Regular.innerRegular hU r hr
 
 中文:
-定理 _root_.IsOpen.exists_lt_isCompact
-  条件: [Regular μ] ⦃U
-  结论: Set α⦄ (hU : IsOpen U) {r : 实数>=0∞}
+定理 _root_.是开集.存在_lt_isCompact
+  条件: [正则 μ] ⦃U
+  结论: 集合 α⦄ (hU : 是开集 U) {r : 实数>=0∞}
   证明: Regular.innerRegular hU r hr
 
 Depends on / 依赖: Regular, Regular.innerRegular, innerRegular
@@ -2638,9 +2638,9 @@ theorem _root_.IsOpen.measure_eq_iSup_isCompact
   proof: Regular.innerRegular.measure_eq_iSup hU
 
 中文:
-定理 _root_.IsOpen.measure_eq_iSup_isCompact
+定理 _root_.是开集.measure_eq_iSup_isCompact
   条件: ⦃U
-  结论: Set α⦄ (hU : IsOpen U) (μ : Measure α)
+  结论: 集合 α⦄ (hU : 是开集 U) (μ : 测度 α)
   证明: Regular.innerRegular.measure_eq_iSup hU
 
 Depends on / 依赖: Regular, Regular.innerRegular.measure_eq_iSup, innerRegular, measure_eq_iSup
@@ -2661,9 +2661,9 @@ theorem exists_isCompact_not_null
     ENNReal.iSup_eq_zero, not_forall, exists_prop, subset_univ, true_and]
 
 中文:
-定理 exists_isCompact_not_null
-  条件: [Regular μ]
-  结论: (存在 K, IsCompact K ∧ μ K != 0) ↔ μ != 0
+定理 存在_isCompact_not_null
+  条件: [正则 μ]
+  结论: (存在 K, 是紧集 K ∧ μ K != 0) ↔ μ != 0
   证明: by
   simp_rw [Ne, ← measure_univ_eq_zero, isOpen_univ.measure_eq_iSup_isCompact,
     ENNReal.iSup_eq_zero, not_forall, exists_prop, subset_univ, true_and]
@@ -2695,7 +2695,7 @@ theorem map
 
 中文:
 定理 map
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: by
   have := OuterRegular.map f μ
   have := IsFiniteMeasureOnCompacts.map μ f
@@ -2727,7 +2727,7 @@ theorem map_iff
 
 中文:
 定理 map_iff
-  结论: [BorelSpace α] [MeasurableSpace β] [TopologicalSpace β]
+  结论: [Borel空间 α] [可测空间 β] [拓扑空间 β]
   证明: by
   refine ⟨fun h => ?_, fun h => h.map f⟩
   convert! h.map f.symm
@@ -2758,7 +2758,7 @@ theorem comap'
 
 中文:
 定理 comap'
-  结论: [BorelSpace α]
+  结论: [Borel空间 α]
   证明: by
   have := OuterRegular.comap' μ hf.continuous hf.measurableEmbedding
   have := IsFiniteMeasureOnCompacts.comap' μ hf.continuous hf.measurableEmbedding
@@ -2785,7 +2785,7 @@ theorem comap
 
 中文:
 定理 comap
-  结论: [BorelSpace α] {mβ : MeasurableSpace β} [TopologicalSpace β]
+  结论: [Borel空间 α] {mβ : 可测空间 β} [拓扑空间 β]
   证明: Regular.comap' μ f.isOpenEmbedding
 -/
 protected theorem comap [BorelSpace α] {mβ : MeasurableSpace β} [TopologicalSpace β]
@@ -2806,8 +2806,8 @@ theorem smul
 
 中文:
 定理 smul
-  条件: [Regular μ] {x : 实数>=0∞} (hx : x != ∞)
-  结论: (x • μ).Regular
+  条件: [正则 μ] {x : 实数>=0∞} (hx : x != ∞)
+  结论: (x • μ).正则
   证明: by
   have := OuterRegular.smul μ hx
   have := IsFiniteMeasureOnCompacts.smul μ hx
@@ -2828,7 +2828,7 @@ instance smul_nnreal
 
 中文:
 实例 smul_nnreal
-  签名: [Regular μ] (c : 实数>=0)
+  签名: [正则 μ] (c : 实数>=0)
   定义体: Regular.smul coe_ne_top
 
 Depends on / 依赖: Regular, Regular.smul, coe_ne_top
@@ -2852,7 +2852,7 @@ theorem restrict_of_measure_ne_top
 
 中文:
 定理 restrict_of_measure_ne_top
-  结论: [R1Space α] [BorelSpace α] [Regular μ]
+  结论: [R1空间 α] [Borel空间 α] [正则 μ]
   证明: by
   have : WeaklyRegular (μ.restrict A) := WeaklyRegular.restrict_of_measure_ne_top h'A
   constructor
@@ -2885,8 +2885,8 @@ instance Regular.domSMul
   body: .map .smul ((DomMulAct.mk.symm g : G)⁻¹)
 
 中文:
-实例 Regular.domSMul
-  签名: {G A : 类型} [Group G] [AddCommGroup A] [DistribMulAction G A]
+实例 正则.domSMul
+  签名: {G A : 类型} [群 G] [加法交换群 A] [分配乘法作用 G A]
   定义体: .map .smul ((DomMulAct.mk.symm g : G)⁻¹)
 
 Depends on / 依赖: DomMulAct, DomMulAct.mk.symm

@@ -41,7 +41,7 @@ lemma isSuccLimit_coe
 
 中文:
 引理 isSuccLimit_coe
-  结论: {J : 类型u} [LinearOrder J] {j : J}
+  结论: {J : 类型u} [线性序 J] {j : J}
   证明: ⟨Set.not_isMin_coe _ hm.1, fun b => by
     simp only [CovBy, not_lt, not_and, not_forall, not_le]
     intro hb

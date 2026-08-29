@@ -60,7 +60,7 @@ exact congrArg (fun x => x.1)
 
 中文:
 定理 sum_coeff_eq_coeff_sum
-  结论: {α : 类型} {S : Finset α} (x : α -> 𝕎 R)
+  结论: {α : 类型} {S : 有限集 α} (x : α -> 𝕎 R)
   证明: by
   classical
   induction S using Finset.induction generalizing n with

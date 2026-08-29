@@ -96,7 +96,7 @@ abbreviation desc
 
 中文:
 缩写 desc
-  签名: (s : Cocone X.functorN)
+  签名: (s : 余锥 X.functorN)
   定义体: (Subcomplex.topIso X).inv ≫
     Multicofork.IsColimit.desc (multicoequalizerDiagram X).isColimit (fun x => s.ι.app x)
       (fun (x, y) => by
@@ -142,7 +142,7 @@ lemma fac
 
 中文:
 引理 fac
-  条件: (s : Cocone X.functorN) (x : X.N)
+  条件: (s : 余锥 X.functorN) (x : X.N)
   证明: by
   have : x.subcomplex.ι ≫ (Subcomplex.topIso X).inv =
     ((multicoequalizerDiagram X).multicofork.map Subcomplex.toSSetFunctor).π x := rfl

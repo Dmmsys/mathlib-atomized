@@ -73,7 +73,7 @@ definition upperSet
 
 中文:
 定义 upperSet
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: IsUpperSet
   isOpen_univ := isUpperSet_univ
   isOpen_inter _ _ := IsUpperSet.inter
@@ -104,7 +104,7 @@ definition lowerSet
 
 中文:
 定义 lowerSet
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: IsLowerSet
   isOpen_univ := isLowerSet_univ
   isOpen_inter _ _ := IsLowerSet.inter
@@ -274,7 +274,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : WithUpperSet α -> Sort*} (toUpperSet : 对任意 a, motive (toUpperSet a))
+  签名: {motive : WithUpperSet α -> 类型层*} (toUpperSet : 对任意 a, motive (toUpperSet a))
   定义体: fun a => toUpperSet (ofUpperSet a)
 -/
 protected def rec {motive : WithUpperSet α -> Sort*} (toUpperSet : forall a, motive (toUpperSet a)) :
@@ -290,8 +290,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithUpperSet α)
+实例 [非空
+  签名: α] : 非空 (WithUpperSet α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -306,8 +306,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithUpperSet α)
+实例 [可居
+  签名: α] : 可居 (WithUpperSet α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithUpperSet α)
+  签名: 预序 (WithUpperSet α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (WithUpperSet α)
+  签名: 拓扑空间 (WithUpperSet α)
   定义体: fast_instance% upperSet α
 
 Depends on / 依赖: fast_instance, upperSet
@@ -588,7 +588,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : WithLowerSet α -> Sort*} (toLowerSet : 对任意 a, motive (toLowerSet a))
+  签名: {motive : WithLowerSet α -> 类型层*} (toLowerSet : 对任意 a, motive (toLowerSet a))
   定义体: fun a => toLowerSet (ofLowerSet a)
 -/
 protected def rec {motive : WithLowerSet α -> Sort*} (toLowerSet : forall a, motive (toLowerSet a)) :
@@ -604,8 +604,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithLowerSet α)
+实例 [非空
+  签名: α] : 非空 (WithLowerSet α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -620,8 +620,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithLowerSet α)
+实例 [可居
+  签名: α] : 可居 (WithLowerSet α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -640,7 +640,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithLowerSet α)
+  签名: 预序 (WithLowerSet α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (WithLowerSet α)
+  签名: 拓扑空间 (WithLowerSet α)
   定义体: fast_instance% lowerSet α
 
 Depends on / 依赖: fast_instance, lowerSet
@@ -761,7 +761,7 @@ definition WithUpperSet.toDualHomeomorph
 
 中文:
 定义 WithUpperSet.toDualHomeomorph
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: OrderDual.toDual
   invFun := OrderDual.ofDual
   left_inv := OrderDual.toDual_ofDual
@@ -789,8 +789,8 @@ class IsUpperSet
     - topology_eq_upperSetTopology : t = upperSet α
 
 中文:
-类 IsUpperSet
-  参数: (α : 类型) [t : TopologicalSpace α] [Preorder α]
+类 是上集
+  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
   公理与运算 (1 个):
     - topology_eq_upperSetTopology : t = upperSet α
 -/
@@ -808,8 +808,8 @@ instance [Preorder
   body: ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : Topology.IsUpperSet (WithUpperSet α)
+实例 [预序
+  签名: α] : 拓扑.是上集 (WithUpperSet α)
   定义体: ⟨rfl⟩
 -/
 instance [Preorder α] : Topology.IsUpperSet (WithUpperSet α) := ⟨rfl⟩
@@ -825,8 +825,8 @@ instance [Preorder
   exact ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : @Topology.IsUpperSet α (upperSet α) _
+实例 [预序
+  签名: α] : @拓扑.是上集 α (upperSet α) _
   定义体: by
   let := upperSet α
   exact ⟨rfl⟩
@@ -847,8 +847,8 @@ class IsLowerSet
     - topology_eq_lowerSetTopology : t = lowerSet α
 
 中文:
-类 IsLowerSet
-  参数: (α : 类型) [t : TopologicalSpace α] [Preorder α]
+类 是下集
+  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
   公理与运算 (1 个):
     - topology_eq_lowerSetTopology : t = lowerSet α
 -/
@@ -866,8 +866,8 @@ instance [Preorder
   body: ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : Topology.IsLowerSet (WithLowerSet α)
+实例 [预序
+  签名: α] : 拓扑.是下集 (WithLowerSet α)
   定义体: ⟨rfl⟩
 -/
 instance [Preorder α] : Topology.IsLowerSet (WithLowerSet α) := ⟨rfl⟩
@@ -883,8 +883,8 @@ instance [Preorder
   exact ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : @Topology.IsLowerSet α (lowerSet α) _
+实例 [预序
+  签名: α] : @拓扑.是下集 α (lowerSet α) _
   定义体: by
   let := lowerSet α
   exact ⟨rfl⟩
@@ -932,7 +932,7 @@ instance _root_.OrderDual.instIsLowerSet
 
 中文:
 实例 _root_.OrderDual.instIsLowerSet
-  签名: : Topology.IsLowerSet αᵒᵈ where
+  签名: : 拓扑.是下集 αᵒᵈ where
   定义体: by ext; rw [IsUpperSet.topology_eq α]
 
 Depends on / 依赖: IsUpperSet, IsUpperSet.topology_eq, topology_eq
@@ -970,7 +970,7 @@ lemma isOpen_iff_isUpperSet
 
 中文:
 引理 isOpen_iff_isUpperSet
-  结论: IsOpen s ↔ IsUpperSet s
+  结论: 是开集 s ↔ 是上集 s
   证明: by
   rw [topology_eq α]
   rfl
@@ -1011,7 +1011,7 @@ lemma isClosed_iff_isLower
 
 中文:
 引理 isClosed_iff_isLower
-  结论: IsClosed s ↔ IsLowerSet s
+  结论: 是闭集 s ↔ 是下集 s
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_isUpperSet]; rw [isLowerSet_compl.symm]; rw [compl_compl]
 
@@ -1036,7 +1036,7 @@ lemma closure_eq_lowerClosure
 
 中文:
 引理 closure_eq_lowerClosure
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: closure s = lowerClosure s
   证明: by
   rw [subset_antisymm_iff]
@@ -1068,7 +1068,7 @@ lemma closure_singleton
 中文:
 引理 closure_singleton
   条件: {a : α}
-  结论: closure {a} = Iic a
+  结论: closure {a} = 左无界右闭区间 a
   证明: by
   rw [closure_eq_lowerClosure]; rw [lowerClosure_singleton]
   rfl
@@ -1111,7 +1111,7 @@ lemma nhdsKer_eq_upperClosure
 
 中文:
 引理 nhdsKer_eq_upperClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: nhdsKer s = ↑(upperClosure s)
   证明: by
   ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
@@ -1134,7 +1134,7 @@ lemma nhdsKer_singleton
 中文:
 引理 nhdsKer_singleton
   条件: (a : α)
-  结论: nhdsKer {a} = Ici a
+  结论: nhdsKer {a} = 左闭右无界区间 a
   证明: by
   rw [nhdsKer_eq_upperClosure]; rw [upperClosure_singleton]; rw [UpperSet.coe_Ici]
 -/
@@ -1154,7 +1154,7 @@ lemma nhds_eq_principal_Ici
 中文:
 引理 nhds_eq_principal_Ici
   条件: (a : α)
-  结论: 𝓝 a = 𝓟 (Ici a)
+  结论: 𝓝 a = 𝓟 (左闭右无界区间 a)
   证明: by
   rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
 
@@ -1175,7 +1175,7 @@ lemma nhdsSet_eq_principal_upperClosure
 
 中文:
 引理 nhdsSet_eq_principal_upperClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 𝓝ˢ s = 𝓟 ↑(upperClosure s)
   证明: by
   rw [← principal_nhdsKer]; rw [nhdsKer_eq_upperClosure]
@@ -1197,8 +1197,8 @@ lemma _root_.Topology.isUpperSet_iff_nhds
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Ici]⟩
 
 中文:
-引理 _root_.Topology.isUpperSet_iff_nhds
-  条件: {α : 类型} [TopologicalSpace α] [Preorder α]
+引理 _root_.拓扑.isUpperSet_iff_nhds
+  条件: {α : 类型} [拓扑空间 α] [预序 α]
   证明: nhds_eq_principal_Ici a
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Ici]⟩
 -/
@@ -1218,7 +1218,7 @@ instance :
 
 中文:
 实例 :
-  签名: Topology.IsUpperSet 命题
+  签名: 拓扑.是上集 命题
   定义体: by
   simp [Topology.isUpperSet_iff_nhds, Prop.forall]
 
@@ -1252,7 +1252,7 @@ lemma monotone_iff_continuous
 
 中文:
 引理 monotone_iff_continuous
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   constructor
   · intro hf
@@ -1290,7 +1290,7 @@ lemma monotone_to_upperTopology_continuous
 
 中文:
 引理 monotone_to_upperTopology_continuous
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   simp_rw [continuous_def, isOpen_iff_isUpperSet]
   intro s hs
@@ -1316,7 +1316,7 @@ lemma upperSet_le_upper
 
 中文:
 引理 upperSet_le_upper
-  结论: {t₁ t₂ : TopologicalSpace α} [@Topology.IsUpperSet α t₁ _]
+  结论: {t₁ t₂ : 拓扑空间 α} [@拓扑.是上集 α t₁ _]
   证明: fun s hs => by
   rw [@isOpen_iff_isUpperSet α _ t₁]
   exact IsUpper.isUpperSet_of_isOpen hs
@@ -1369,7 +1369,7 @@ instance _root_.OrderDual.instIsUpperSet
 
 中文:
 实例 _root_.OrderDual.instIsUpperSet
-  签名: : Topology.IsUpperSet αᵒᵈ where
+  签名: : 拓扑.是上集 αᵒᵈ where
   定义体: by ext; rw [IsLowerSet.topology_eq α]
 
 Depends on / 依赖: IsLowerSet, IsLowerSet.topology_eq, topology_eq
@@ -1405,7 +1405,7 @@ lemma isOpen_iff_isLowerSet
 
 中文:
 引理 isOpen_iff_isLowerSet
-  结论: IsOpen s ↔ IsLowerSet s
+  结论: 是开集 s ↔ 是下集 s
   证明: by rw [topology_eq α]; rfl
 
 Depends on / 依赖: topology_eq
@@ -1440,7 +1440,7 @@ lemma isClosed_iff_isUpper
 
 中文:
 引理 isClosed_iff_isUpper
-  结论: IsClosed s ↔ IsUpperSet s
+  结论: 是闭集 s ↔ 是上集 s
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_isLowerSet]; rw [isUpperSet_compl.symm]; rw [compl_compl]
 
@@ -1460,7 +1460,7 @@ lemma closure_eq_upperClosure
 
 中文:
 引理 closure_eq_upperClosure
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: closure s = upperClosure s
   证明: IsUpperSet.closure_eq_lowerClosure (α := αᵒᵈ)
 
@@ -1483,7 +1483,7 @@ lemma closure_singleton
 中文:
 引理 closure_singleton
   条件: {a : α}
-  结论: closure {a} = Ici a
+  结论: closure {a} = 左闭右无界区间 a
   证明: by
   rw [closure_eq_upperClosure]; rw [upperClosure_singleton]
   rfl
@@ -1526,7 +1526,7 @@ lemma nhdsKer_eq_lowerClosure
 
 中文:
 引理 nhdsKer_eq_lowerClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: nhdsKer s = ↑(lowerClosure s)
   证明: by
   ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
@@ -1549,7 +1549,7 @@ lemma nhdsKer_singleton
 中文:
 引理 nhdsKer_singleton
   条件: (a : α)
-  结论: nhdsKer {a} = Iic a
+  结论: nhdsKer {a} = 左无界右闭区间 a
   证明: by
   rw [nhdsKer_eq_lowerClosure]; rw [lowerClosure_singleton]; rw [LowerSet.coe_Iic]
 -/
@@ -1569,7 +1569,7 @@ lemma nhds_eq_principal_Iic
 中文:
 引理 nhds_eq_principal_Iic
   条件: (a : α)
-  结论: 𝓝 a = 𝓟 (Iic a)
+  结论: 𝓝 a = 𝓟 (左无界右闭区间 a)
   证明: by
   rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
 
@@ -1590,7 +1590,7 @@ lemma nhdsSet_eq_principal_lowerClosure
 
 中文:
 引理 nhdsSet_eq_principal_lowerClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 𝓝ˢ s = 𝓟 ↑(lowerClosure s)
   证明: by
   rw [← principal_nhdsKer]; rw [nhdsKer_eq_lowerClosure]
@@ -1612,8 +1612,8 @@ lemma _root_.Topology.isLowerSet_iff_nhds
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Iic]⟩
 
 中文:
-引理 _root_.Topology.isLowerSet_iff_nhds
-  条件: {α : 类型} [TopologicalSpace α] [Preorder α]
+引理 _root_.拓扑.isLowerSet_iff_nhds
+  条件: {α : 类型} [拓扑空间 α] [预序 α]
   证明: nhds_eq_principal_Iic a
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Iic]⟩
 -/
@@ -1642,7 +1642,7 @@ lemma monotone_iff_continuous
 
 中文:
 引理 monotone_iff_continuous
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   rw [← monotone_dual_iff]
   exact IsUpperSet.monotone_iff_continuous (α := αᵒᵈ) (β := βᵒᵈ)
@@ -1664,7 +1664,7 @@ lemma monotone_to_lowerTopology_continuous
 
 中文:
 引理 monotone_to_lowerTopology_continuous
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: IsUpperSet.monotone_to_upperTopology_continuous (α := αᵒᵈ) (β := βᵒᵈ) hf.dual
 
 Depends on / 依赖: IsUpperSet, IsUpperSet.monotone_to_upperTopology_continuous, hf.dual, monotone_to_upperTopology_continuous
@@ -1685,7 +1685,7 @@ lemma lowerSet_le_lower
 
 中文:
 引理 lowerSet_le_lower
-  结论: {t₁ t₂ : TopologicalSpace α} [@Topology.IsLowerSet α t₁ _]
+  结论: {t₁ t₂ : 拓扑空间 α} [@拓扑.是下集 α t₁ _]
   证明: fun s hs => by
   rw [@isOpen_iff_isLowerSet α _ t₁]
   exact IsLower.isLowerSet_of_isOpen hs
@@ -1714,7 +1714,7 @@ lemma isUpperSet_orderDual
 
 中文:
 引理 isUpperSet_orderDual
-  条件: [Preorder α] [TopologicalSpace α]
+  条件: [预序 α] [拓扑空间 α]
   证明: by
   constructor
   · apply OrderDual.instIsLowerSet
@@ -1738,7 +1738,7 @@ lemma isLowerSet_orderDual
 
 中文:
 引理 isLowerSet_orderDual
-  条件: [Preorder α] [TopologicalSpace α]
+  条件: [预序 α] [拓扑空间 α]
   证明: isUpperSet_orderDual.symm
 
 Depends on / 依赖: isUpperSet_orderDual, isUpperSet_orderDual.symm
@@ -1780,7 +1780,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (OrderHom.id : α ->o α) = ContinuousMap.id _
+  结论: map (序态射.id : α ->o α) = 连续映射.id _
   证明: rfl
 -/
 @[simp] lemma map_id : map (OrderHom.id : α ->o α) = ContinuousMap.id _ := rfl
@@ -1849,7 +1849,7 @@ lemma isUpperSet_toUpperSet_preimage
 
 中文:
 引理 isUpperSet_toUpperSet_preimage
-  条件: {s : Set (WithUpperSet α)}
+  条件: {s : 集合 (WithUpperSet α)}
   证明: Iff.rfl
 -/
 @[simp] lemma isUpperSet_toUpperSet_preimage {s : Set (WithUpperSet α)} :
@@ -1865,7 +1865,7 @@ lemma isOpen_ofUpperSet_preimage
 
 中文:
 引理 isOpen_ofUpperSet_preimage
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: isUpperSet_toUpperSet_preimage.symm
 -/
 @[simp] lemma isOpen_ofUpperSet_preimage {s : Set α} :
@@ -1907,7 +1907,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (OrderHom.id : α ->o α) = ContinuousMap.id _
+  结论: map (序态射.id : α ->o α) = 连续映射.id _
   证明: rfl
 -/
 @[simp] lemma map_id : map (OrderHom.id : α ->o α) = ContinuousMap.id _ := rfl
@@ -1976,7 +1976,7 @@ lemma isLowerSet_toLowerSet_preimage
 
 中文:
 引理 isLowerSet_toLowerSet_preimage
-  条件: {s : Set (WithLowerSet α)}
+  条件: {s : 集合 (WithLowerSet α)}
   证明: Iff.rfl
 -/
 @[simp] lemma isLowerSet_toLowerSet_preimage {s : Set (WithLowerSet α)} :
@@ -1992,7 +1992,7 @@ lemma isOpen_ofLowerSet_preimage
 
 中文:
 引理 isOpen_ofLowerSet_preimage
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: isLowerSet_toLowerSet_preimage.symm
 -/
 @[simp] lemma isOpen_ofLowerSet_preimage {s : Set α} :

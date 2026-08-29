@@ -93,8 +93,8 @@ theorem InnerProductSpace.toInnerProductSpaceable
   proof: ⟨parallelogram_law_with_norm_mul 𝕜⟩
 
 中文:
-定理 InnerProductSpace.toInnerProductSpaceable
-  条件: [InnerProductSpace 𝕜 E]
+定理 内积空间.toInnerProductSpaceable
+  条件: [内积空间 𝕜 E]
   证明: ⟨parallelogram_law_with_norm_mul 𝕜⟩
 
 Depends on / 依赖: parallelogram_law_with_norm_mul
@@ -172,8 +172,8 @@ theorem _root_.Continuous.inner_
   fun_prop
 
 中文:
-定理 _root_.Continuous.inner_
-  条件: {f g : 实数 -> E} (hf : Continuous f) (hg : Continuous g)
+定理 _root_.连续.inner_
+  条件: {f g : 实数 -> E} (hf : 连续 f) (hg : 连续 g)
   证明: by
   unfold _root_.inner_
   fun_prop
@@ -335,8 +335,8 @@ AddMonoidHom.mk' (fun r => inner_ 𝕜 (r • x) y) fun a b => by
 
 中文:
 定理 rat_prop
-  条件: (r : Rat)
-  结论: inner命题' E (r : 𝕜)
+  条件: (r : 有理数)
+  结论: innerProp' E (r : 𝕜)
   证明: by
   intro x y
 let hom : 𝕜 ->ₗ[Rat] 𝕜 := AddMonoidHom.toRatLinearMap
@@ -370,7 +370,7 @@ theorem real_prop
 中文:
 定理 real_prop
   条件: (r : 实数)
-  结论: inner命题' E (r : 𝕜)
+  结论: innerProp' E (r : 𝕜)
   证明: by
   intro x y
   revert r
@@ -407,7 +407,7 @@ theorem I_prop
 
 中文:
 定理 I_prop
-  结论: inner命题' E (I : 𝕜)
+  结论: innerProp' E (I : 𝕜)
   证明: by
   by_cases hI : (I : 𝕜) = 0
   · rw [hI]
@@ -447,7 +447,7 @@ theorem innerProp
 中文:
 定理 innerProp
   条件: (r : 𝕜)
-  结论: inner命题' E r
+  结论: innerProp' E r
   证明: by
   intro x y
   rw [← re_add_im r]; rw [add_smul]; rw [add_left]; rw [real_prop _ x]; rw [← smul_smul]; rw [real_prop _ _ y]; rw [I_prop]; rw [map_add]; rw [map_mul]; rw [conj_ofReal]; rw [conj_ofReal]; rw [conj_I]
@@ -482,7 +482,7 @@ definition InnerProductSpace.ofNorm
     smul_left := fun _ _ _ => innerProp _ _ _ }
 
 中文:
-定义 InnerProductSpace.ofNorm
+定义 内积空间.ofNorm
   定义体: haveI : InnerProductSpaceable E := ⟨h⟩
   { inner := inner_ 𝕜
     norm_sq_eq_re_inner := inner_.norm_sq
@@ -519,7 +519,7 @@ theorem nonempty_innerProductSpace
 
 中文:
 定理 nonempty_innerProductSpace
-  结论: Nonempty (InnerProductSpace 𝕜 E)
+  结论: 非空 (内积空间 𝕜 E)
   证明: ⟨{ inner := inner_ 𝕜
       norm_sq_eq_re_inner := inner_.norm_sq
       conj_inner_symm := inner_.conj_symm

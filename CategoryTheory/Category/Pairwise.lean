@@ -52,11 +52,11 @@ inductive Pairwise
     - pair: ι -> ι -> Pairwise ι
 
 中文:
-归纳类型 Pairwise
+归纳类型 两两
   参数: (ι : 类型v)
   构造子 (2 个):
-    - single: ι -> Pairwise ι
-    - pair: ι -> ι -> Pairwise ι
+    - single: ι -> 两两 ι
+    - pair: ι -> ι -> 两两 ι
 -/
 inductive Pairwise (ι : Type v)
   | single : ι -> Pairwise ι
@@ -77,7 +77,7 @@ instance pairwiseInhabited
 
 中文:
 实例 pairwiseInhabited
-  签名: [Inhabited ι]
+  签名: [可居 ι]
   定义体: ⟨single default⟩
 
 Depends on / 依赖: single
@@ -98,13 +98,13 @@ inductive Hom
     - right: forall i j, Hom (pair i j) (single j)
 
 中文:
-归纳类型 Hom
-  参数: : Pairwise ι -> Pairwise ι -> 类型v
+归纳类型 态射
+  参数: : 两两 ι -> 两两 ι -> 类型v
   构造子 (4 个):
-    - id_single: 对任意 i, Hom (single i) (single i)
-    - id_pair: 对任意 i j, Hom (pair i j) (pair i j)
-    - left: 对任意 i j, Hom (pair i j) (single i)
-    - right: 对任意 i j, Hom (pair i j) (single j)
+    - id_single: 对任意 i, 态射 (single i) (single i)
+    - id_pair: 对任意 i j, 态射 (pair i j) (pair i j)
+    - left: 对任意 i j, 态射 (pair i j) (single i)
+    - right: 对任意 i j, 态射 (pair i j) (single j)
 -/
 inductive Hom : Pairwise ι -> Pairwise ι -> Type v
   | id_single : forall i, Hom (single i) (single i)
@@ -128,7 +128,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: [Inhabited ι]
+  签名: [可居 ι]
   定义体: ⟨id_single default⟩
 
 Depends on / 依赖: id_single
@@ -145,7 +145,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 对任意 o : Pairwise ι, Hom o o
+  签名: : 对任意 o : 两两 ι, 态射 o o
 -/
 def id : forall o : Pairwise ι, Hom o o
   | single i => id_single i
@@ -160,7 +160,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : 对任意 {o₁ o₂ o₃ : Pairwise ι} (_ : Hom o₁ o₂) (_ : Hom o₂ o₃), Hom o₁ o₃
+  签名: : 对任意 {o₁ o₂ o₃ : 两两 ι} (_ : 态射 o₁ o₂) (_ : 态射 o₂ o₃), 态射 o₁ o₃
 -/
 def comp : forall {o₁ o₂ o₃ : Pairwise ι} (_ : Hom o₁ o₂) (_ : Hom o₂ o₃), Hom o₁ o₃
   | _, _, _, id_single _, g => g
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryStruct (Pairwise ι)
+  签名: CategoryStruct (两两 ι)
   定义体: Hom
   id := id
   comp := @comp _
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Pairwise ι)
+  签名: 范畴 (两两 ι)
 -/
 instance : Category (Pairwise ι) where
 
@@ -224,8 +224,8 @@ instance [Fintype
   signature: ι] [DecidableEq ι] : FinCategory (Pairwise ι) where
 
 中文:
-实例 [Fintype
-  签名: ι] [DecidableEq ι] : FinCategory (Pairwise ι) where
+实例 [有限类型
+  签名: ι] [DecidableEq ι] : 有限范畴 (两两 ι) where
 -/
 instance [Fintype ι] [DecidableEq ι] : FinCategory (Pairwise ι) where
   fintypeHom
@@ -255,7 +255,7 @@ definition diagramObj
 
 中文:
 定义 diagramObj
-  签名: : Pairwise ι -> α
+  签名: : 两两 ι -> α
 -/
 def diagramObj : Pairwise ι -> α
   | single i => U i
@@ -272,7 +272,7 @@ definition diagramMap
 
 中文:
 定义 diagramMap
-  签名: : 对任意 {o₁ o₂ : Pairwise ι} (_ : o₁ ⟶ o₂), diagramObj U o₁ ⟶ diagramObj U o₂
+  签名: : 对任意 {o₁ o₂ : 两两 ι} (_ : o₁ ⟶ o₂), diagramObj U o₁ ⟶ diagramObj U o₂
 -/
 def diagramMap : forall {o₁ o₂ : Pairwise ι} (_ : o₁ ⟶ o₂), diagramObj U o₁ ⟶ diagramObj U o₂
   | _, _, id_single _ => 𝟙 _
@@ -297,7 +297,7 @@ definition diagram
 
 中文:
 定义 diagram
-  签名: : Pairwise ι ⥤ α where
+  签名: : 两两 ι ⥤ α where
   定义体: diagramObj U
   map := diagramMap U
 
@@ -324,7 +324,7 @@ definition coconeιApp
 
 中文:
 定义 coconeιApp
-  签名: : 对任意 o : Pairwise ι, diagramObj U o ⟶ iSup U
+  签名: : 对任意 o : 两两 ι, diagramObj U o ⟶ iSup U
 -/
 def coconeιApp : forall o : Pairwise ι, diagramObj U o ⟶ iSup U
   | single i => homOfLE (le_iSup U i)
@@ -345,7 +345,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone (diagram U) where
+  签名: : 余锥 (diagram U) where
   定义体: iSup U
   ι := { app := coconeιApp U }
 -/
@@ -367,7 +367,7 @@ definition coconeIsColimit
 
 中文:
 定义 coconeIsColimit
-  签名: : IsColimit (cocone U) where
+  签名: : 是余极限 (cocone U) where
   定义体: homOfLE
     (by
       apply sSup_le

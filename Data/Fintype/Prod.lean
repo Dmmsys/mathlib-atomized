@@ -40,7 +40,7 @@ theorem toFinset_prod
 
 中文:
 定理 toFinset_prod
-  条件: (s : Set α) (t : Set β) [Fintype s] [Fintype t] [Fintype (s ×ˢ t)]
+  条件: (s : 集合 α) (t : 集合 β) [有限类型 s] [有限类型 t] [有限类型 (s ×ˢ t)]
   证明: by
   ext
   simp
@@ -63,7 +63,7 @@ alias toFinset_off_diag := toFinset_offDiag
 
 中文:
 定理 toFinset_offDiag
-  条件: {s : Set α} [Fintype s] [Fintype s.offDiag]
+  条件: {s : 集合 α} [有限类型 s] [有限类型 s.offDiag]
   证明: Finset.ext by simp
 
 @[deprecated (since := "2026-01-09")]
@@ -90,7 +90,7 @@ instance instFintypeProd
 
 中文:
 实例 instFintypeProd
-  签名: (α β : 类型) [Fintype α] [Fintype β]
+  签名: (α β : 类型) [有限类型 α] [有限类型 β]
   定义体: ⟨univ ×ˢ univ, fun ⟨a, b⟩ => by simp⟩
 -/
 instance instFintypeProd (α β : Type*) [Fintype α] [Fintype β] : Fintype (α × β) :=
@@ -109,7 +109,7 @@ lemma univ_product_univ
 
 中文:
 引理 univ_product_univ
-  结论: univ ×ˢ univ = (univ : Finset (α × β))
+  结论: univ ×ˢ univ = (univ : 有限集 (α × β))
   证明: rfl
 -/
 @[simp] lemma univ_product_univ : univ ×ˢ univ = (univ : Finset (α × β)) := rfl
@@ -126,7 +126,7 @@ lemma product_eq_univ
 
 中文:
 引理 product_eq_univ
-  条件: [Nonempty α] [Nonempty β]
+  条件: [非空 α] [非空 β]
   结论: s ×ˢ t = univ ↔ s = univ ∧ t = univ
   证明: by
   simp [eq_univ_iff_forall, forall_and]
@@ -146,8 +146,8 @@ theorem Fintype.card_prod
   proof: card_product _ _
 
 中文:
-定理 Fintype.card_prod
-  条件: (α β : 类型) [Fintype α] [Fintype β]
+定理 有限类型.card_prod
+  条件: (α β : 类型) [有限类型 α] [有限类型 β]
   证明: card_product _ _
 
 Depends on / 依赖: card_product
@@ -166,8 +166,8 @@ lemma Fintype.card_product_filter_lt
   simpa using Finset.card_product_filter_lt (s := univ)
 
 中文:
-引理 Fintype.card_product_filter_lt
-  条件: [Fintype α] [LinearOrder α]
+引理 有限类型.card_product_filter_lt
+  条件: [有限类型 α] [线性序 α]
   证明: by
   simpa using Finset.card_product_filter_lt (s := univ)
 
@@ -198,7 +198,7 @@ theorem infinite_prod
 
 中文:
 定理 infinite_prod
-  结论: Infinite (α × β) ↔ Infinite α ∧ Nonempty β ∨ Nonempty α ∧ Infinite β
+  结论: 无限 (α × β) ↔ 无限 α ∧ 非空 β ∨ 非空 α ∧ 无限 β
   证明: by
   refine
     ⟨fun H => ?_, fun H =>
@@ -233,8 +233,8 @@ instance Pi.infinite_of_left
   exact (hm x h.1.symm).elim
 
 中文:
-实例 Pi.infinite_of_left
-  签名: {ι : Sort*} {π : ι -> 类型} [对任意 i, Nontrivial <| π i] [Infinite ι]
+实例 依赖函数类型.infinite_of_left
+  签名: {ι : 类型层*} {π : ι -> 类型} [对任意 i, 非平凡 <| π i] [无限 ι]
   定义体: by
   classical
   choose m n hm using fun i => exists_pair_ne (π i)
@@ -264,8 +264,8 @@ theorem Pi.infinite_of_exists_right
   exact Infinite.of_injective _ (update_injective m i)
 
 中文:
-定理 Pi.infinite_of_exists_right
-  结论: {ι : Sort*} {π : ι -> Sort*} (i : ι) [Infinite <| π i]
+定理 依赖函数类型.infinite_of_存在_right
+  结论: {ι : 类型层*} {π : ι -> 类型层*} (i : ι) [无限 <| π i]
   证明: by
   classical
   let ⟨m⟩ := @Pi.instNonempty ι π _
@@ -288,8 +288,8 @@ instance Pi.infinite_of_right
   body: Pi.infinite_of_exists_right (Classical.arbitrary ι)
 
 中文:
-实例 Pi.infinite_of_right
-  签名: {ι : Sort*} {π : ι -> 类型} [对任意 i, Infinite <| π i] [Nonempty ι]
+实例 依赖函数类型.infinite_of_right
+  签名: {ι : 类型层*} {π : ι -> 类型} [对任意 i, 无限 <| π i] [非空 ι]
   定义体: Pi.infinite_of_exists_right (Classical.arbitrary ι)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Pi.infinite_of_exists_right, arbitrary, infinite_of_exists_right
@@ -307,8 +307,8 @@ instance Function.infinite_of_left
   body: Pi.infinite_of_left
 
 中文:
-实例 Function.infinite_of_left
-  签名: {ι : Sort*} {π : 类型} [Nontrivial π] [Infinite ι]
+实例 函数.infinite_of_left
+  签名: {ι : 类型层*} {π : 类型} [非平凡 π] [无限 ι]
   定义体: Pi.infinite_of_left
 
 Depends on / 依赖: Pi.infinite_of_left, infinite_of_left
@@ -326,8 +326,8 @@ instance Function.infinite_of_right
   body: Pi.infinite_of_right
 
 中文:
-实例 Function.infinite_of_right
-  签名: {ι : Sort*} {π : 类型} [Infinite π] [Nonempty ι]
+实例 函数.infinite_of_right
+  签名: {ι : 类型层*} {π : 类型} [无限 π] [非空 ι]
   定义体: Pi.infinite_of_right
 
 Depends on / 依赖: Pi.infinite_of_right, infinite_of_right

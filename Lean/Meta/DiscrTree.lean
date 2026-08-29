@@ -33,7 +33,7 @@ pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
 
 中文:
 定义 getSubexpressionMatches
-  签名: {α : Type}
+  签名: {α : 类型}
   定义体: do
   match e with
   | .bvar _ => return #[]
@@ -71,7 +71,7 @@ definition keysSpecific
 
 中文:
 定义 keysSpecific
-  签名: (keys : Array DiscrTree.Key)
+  签名: (keys : 数组 DiscrTree.Key)
   定义体: keys != #[Key.star] && keys != #[Key.const ``Eq 3, Key.star, Key.star, Key.star]
 
 Depends on / 依赖: Key.const, Key.star

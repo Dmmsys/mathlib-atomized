@@ -60,7 +60,7 @@ theorem curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt_off_countable_re
   -- Warning: throughout the proof, we sometimes have `0` or `1` in product 
 
 中文:
-定理 curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt_off_countable_real
+定理 curve整数egral_add_curve整数egral_eq_of_hasFDerivWithinAt_off_countable_real
   证明: by
   -- The overall plan of the proof is to pullback the 1-form to the unit square along the homotopy,
   -- prove that it's a closed 1-form, then apply the divergence theorem.
@@ -256,7 +256,7 @@ theorem curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt_off_countable
     (fun a ha b hb hs => e.hasFDerivAt.comp
 
 中文:
-定理 curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt_off_countable
+定理 curve整数egral_add_curve整数egral_eq_of_hasFDerivWithinAt_off_countable
   证明: by
   simp only [← curveIntegral_restrictScalars (𝕜 := 𝕜) (𝕝 := Real)]
   set e := ContinuousLinearMap.restrictScalarsL 𝕜 E F Real Real
@@ -297,7 +297,7 @@ theorem curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt
     (fun a ha b hb _ => hdω_symm _ <| hφt a ha b hb) hcontdiff
 
 中文:
-定理 curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt
+定理 curve整数egral_add_curve整数egral_eq_of_hasFDerivWithinAt
   证明: φ.curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt_off_countable (s := ∅) (by simp)
     hφt (fun a ha b hb _ => hω _ <| hφt a ha b hb) hωc
     (fun a ha b hb _ => hdω_symm _ <| hφt a ha b hb) hcontdiff
@@ -328,7 +328,7 @@ theorem curveIntegral_add_curveIntegral_eq_of_diffContOnCl
     hdω_symm hcontdiff
 
 中文:
-定理 curveIntegral_add_curveIntegral_eq_of_diffContOnCl
+定理 curve整数egral_add_curve整数egral_eq_of_diffContOnCl
   证明: φ.curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt
     hφt (fun t ht => (hω.differentiableOn t ht).hasFDerivWithinAt) hω.continuousOn
     hdω_symm hcontdiff
@@ -372,8 +372,8 @@ theorem curveIntegral_segment_add_eq_of_hasFDerivWithinAt_symmetric
   have := φ.curveIntegral_add_curveIntegral_eq_of_hasFDerivWithinAt (t := range φ) (ω := ω)
 
 中文:
-定理 curveIntegral_segment_add_eq_of_hasFDerivWithinAt_symmetric
-  结论: (hs : Convex 实数 s)
+定理 curve整数egral_segment_add_eq_of_hasFDerivWithinAt_symmetric
+  结论: (hs : 凸 实数 s)
   证明: by
   set φ := ContinuousMap.Homotopy.affine (Path.segment a b : C(I, E)) (Path.segment a c)
   have hφs : range φ subseteq s := by
@@ -434,8 +434,8 @@ refine .const_add _ ?_
   refine HasFDerivWithinAt.curveIntegral_segment_so
 
 中文:
-定理 hasFDerivWithinAt_curveIntegral_segment_of_hasFDerivWithinAt_symmetric
-  结论: (hs : Convex 实数 s)
+定理 hasFDerivWithinAt_curve整数egral_segment_of_hasFDerivWithinAt_symmetric
+  结论: (hs : 凸 实数 s)
   证明: by
   suffices HasFDerivWithinAt (∫ᶜ x in .segment a b, ω x + ∫ᶜ x in .segment b ·, ω x) (ω b) s b from
     this.congr' (fun _ h =>
@@ -470,7 +470,7 @@ theorem exists_forall_hasFDerivWithinAt_of_hasFDerivWithinAt_symmetric
     exact hs.hasFDerivWithinAt_curveIntegral_segment_of_hasFDerivWithinAt_symmetric hω hdω ha hb
 
 中文:
-定理 exists_forall_hasFDerivWithinAt_of_hasFDerivWithinAt_symmetric
+定理 存在_对任意_hasFDerivWithinAt_of_hasFDerivWithinAt_symmetric
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | ⟨a, ha⟩
   · simp
@@ -499,7 +499,7 @@ theorem exists_forall_hasFDerivWithinAt_of_fderivWithin_symmetric
     (fun a ha => (hω a ha).hasFDerivWithinAt) hdω
 
 中文:
-定理 exists_forall_hasFDerivWithinAt_of_fderivWithin_symmetric
+定理 存在_对任意_hasFDerivWithinAt_of_fderivWithin_symmetric
   证明: hs.exists_forall_hasFDerivWithinAt_of_hasFDerivWithinAt_symmetric
     (fun a ha => (hω a ha).hasFDerivWithinAt) hdω
 
@@ -526,8 +526,8 @@ theorem exists_forall_hasFDerivAt_of_fderiv_symmetric
     exacts [hso.uniqueDiffOn a ha, hω.differentiableAt (hso.mem_nhds ha)
 
 中文:
-定理 exists_forall_hasFDerivAt_of_fderiv_symmetric
-  结论: (hs : Convex 实数 s) (hso : IsOpen s)
+定理 存在_对任意_hasFDerivAt_of_fderiv_symmetric
+  结论: (hs : 凸 实数 s) (hso : 是开集 s)
   证明: by
   obtain ⟨f, hf⟩ : exists f, forall a in s, HasFDerivWithinAt f (ω a) s a := by
     refine hs.exists_forall_hasFDerivWithinAt_of_fderivWithin_symmetric hω fun a ha x _ y _ => ?_
@@ -566,8 +566,8 @@ theorem exists_forall_hasDerivWithinAt
   · rintro a ha
 
 中文:
-定理 exists_forall_hasDerivWithinAt
-  条件: (hs : Convex 实数 s) (hf : DifferentiableOn 𝕜 f s)
+定理 存在_对任意_hasDerivWithinAt
+  条件: (hs : 凸 实数 s) (hf : DifferentiableOn 𝕜 f s)
   证明: by
   let : NormedSpace Real E := .restrictScalars Real 𝕜 E
   apply hs.exists_forall_hasFDerivWithinAt_of_hasFDerivWithinAt_symmetric

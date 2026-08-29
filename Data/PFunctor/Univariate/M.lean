@@ -40,11 +40,11 @@ inductive CofixA
     - intro: {n} : forall a, (F.B a -> CofixA n) -> CofixA (succ n)
 
 中文:
-归纳类型 CofixA
-  参数: : 自然数 -> Type (max uA uB)
+归纳类型 余fixA
+  参数: : 自然数 -> 类型 (最大值 uA uB)
   构造子 (2 个):
-    - continue: CofixA 0
-    - intro: {n} : 对任意 a, (F.B a -> CofixA n) -> CofixA (succ n)
+    - continue: 余fixA 0
+    - intro: {n} : 对任意 a, (F.B a -> 余fixA n) -> 余fixA (succ n)
 -/
 inductive CofixA : Nat -> Type (max uA uB)
   | continue : CofixA 0
@@ -58,8 +58,8 @@ definition CofixA.default
   signature: [Inhabited F.A]
 
 中文:
-定义 CofixA.default
-  签名: [Inhabited F.A]
+定义 余fixA.default
+  签名: [可居 F.A]
 -/
 protected def CofixA.default [Inhabited F.A] : forall n, CofixA F n
   | 0 => CofixA.continue
@@ -74,8 +74,8 @@ instance [Inhabited
   body: ⟨CofixA.default F n⟩
 
 中文:
-实例 [Inhabited
-  签名: F.A] {n} : Inhabited (CofixA F n)
+实例 [可居
+  签名: F.A] {n} : 可居 (余fixA F n)
   定义体: ⟨CofixA.default F n⟩
 
 Depends on / 依赖: CofixA, CofixA.default
@@ -92,7 +92,7 @@ theorem cofixA_eq_zero
 
 中文:
 定理 cofixA_eq_zero
-  结论: 对任意 x y : CofixA F 0, x = y
+  结论: 对任意 x y : 余fixA F 0, x = y
 -/
 theorem cofixA_eq_zero : forall x y : CofixA F 0, x = y
   | CofixA.continue, CofixA.continue => rfl
@@ -108,7 +108,7 @@ definition head'
 
 中文:
 定义 head'
-  签名: : 对任意 {n}, CofixA F (succ n) -> F.A
+  签名: : 对任意 {n}, 余fixA F (succ n) -> F.A
 -/
 def head' : forall {n}, CofixA F (succ n) -> F.A
   | _, CofixA.intro i _ => i
@@ -122,7 +122,7 @@ definition children'
 
 中文:
 定义 children'
-  签名: : 对任意 {n} (x : CofixA F (succ n)), F.B (head' x) -> CofixA F n
+  签名: : 对任意 {n} (x : 余fixA F (succ n)), F.B (head' x) -> 余fixA F n
 -/
 def children' : forall {n} (x : CofixA F (succ n)), F.B (head' x) -> CofixA F n
   | _, CofixA.intro _ f => f
@@ -139,8 +139,8 @@ theorem approx_eta
 
 中文:
 定理 approx_eta
-  条件: {n : 自然数} (x : CofixA F (n + 1))
-  结论: x = CofixA.intro (head' x) (children' x)
+  条件: {n : 自然数} (x : 余fixA F (n + 1))
+  结论: x = 余fixA.intro (head' x) (children' x)
   证明: by
   cases x; rfl
 -/
@@ -159,10 +159,10 @@ inductive Agree
 
 中文:
 归纳类型 Agree
-  参数: : 对任意 {n : 自然数}, CofixA F n -> CofixA F (n + 1) -> 命题
+  参数: : 对任意 {n : 自然数}, 余fixA F n -> 余fixA F (n + 1) -> 命题
   构造子 (2 个):
-    - continu: (x : CofixA F 0) (y : CofixA F 1) : Agree x y
-    - intro: {n} {a} (x : F.B a -> CofixA F n) (x' : F.B a -> CofixA F (n + 1)) : (对任意 i : F.B a, Agree (x i) (x' i)) -> Agree (CofixA.intro a x) (CofixA.intro a x')
+    - continu: (x : 余fixA F 0) (y : 余fixA F 1) : Agree x y
+    - intro: {n} {a} (x : F.B a -> 余fixA F n) (x' : F.B a -> 余fixA F (n + 1)) : (对任意 i : F.B a, Agree (x i) (x' i)) -> Agree (余fixA.intro a x) (余fixA.intro a x')
 -/
 inductive Agree : forall {n : Nat}, CofixA F n -> CofixA F (n + 1) -> Prop
   | continu (x : CofixA F 0) (y : CofixA F 1) : Agree x y
@@ -181,7 +181,7 @@ definition AllAgree
 
 中文:
 定义 AllAgree
-  签名: (x : 对任意 n, CofixA F n)
+  签名: (x : 对任意 n, 余fixA F n)
   定义体: forall n, Agree (x n) (x (succ n))
 
 @[simp]
@@ -201,7 +201,7 @@ theorem agree_trivial
 
 中文:
 定理 agree_trivial
-  条件: {x : CofixA F 0} {y : CofixA F 1}
+  条件: {x : 余fixA F 0} {y : 余fixA F 1}
   结论: Agree x y
   证明: by constructor
 -/
@@ -219,7 +219,7 @@ theorem agree_children
 
 中文:
 定理 agree_children
-  结论: {n : 自然数} (x : CofixA F (succ n)) (y : CofixA F (succ n + 1)) {i j}
+  结论: {n : 自然数} (x : 余fixA F (succ n)) (y : 余fixA F (succ n + 1)) {i j}
   证明: by
   obtain - | ⟨_, _, hagree⟩ := h₁; cases h₀
   apply hagree
@@ -240,7 +240,7 @@ definition truncate
 
 中文:
 定义 truncate
-  签名: : 对任意 {n : 自然数}, CofixA F (n + 1) -> CofixA F n
+  签名: : 对任意 {n : 自然数}, 余fixA F (n + 1) -> 余fixA F n
 -/
 def truncate : forall {n : Nat}, CofixA F (n + 1) -> CofixA F n
   | 0, CofixA.intro _ _ => CofixA.continue
@@ -266,7 +266,7 @@ theorem truncate_eq_of_agree
 
 中文:
 定理 truncate_eq_of_agree
-  条件: {n : 自然数} (x : CofixA F n) (y : CofixA F (succ n)) (h : Agree x y)
+  条件: {n : 自然数} (x : 余fixA F n) (y : 余fixA F (succ n)) (h : Agree x y)
   证明: by
   induction n with
   | zero =>
@@ -306,7 +306,7 @@ definition sCorec
 
 中文:
 定义 sCorec
-  签名: : X -> 对任意 n, CofixA F n
+  签名: : X -> 对任意 n, 余fixA F n
 -/
 def sCorec : X -> forall n, CofixA F n
   | _, 0 => CofixA.continue
@@ -349,8 +349,8 @@ definition Path
   body: List F.Idx
 
 中文:
-定义 Path
-  签名: (F : PFunctor.{uA, uB})
+定义 道路
+  签名: (F : P函子.{uA, uB})
   定义体: List F.Idx
 
 Depends on / 依赖: F.Idx
@@ -367,8 +367,8 @@ instance Path.inhabited
   body: ⟨[]⟩
 
 中文:
-实例 Path.inhabited
-  签名: : Inhabited (Path F)
+实例 道路.inhabited
+  签名: : 可居 (道路 F)
   定义体: ⟨[]⟩
 -/
 instance Path.inhabited : Inhabited (Path F) :=
@@ -383,8 +383,8 @@ instance CofixA.instSubsingleton
   body: ⟨by rintro ⟨⟩ ⟨⟩; rfl⟩
 
 中文:
-实例 CofixA.instSubsingleton
-  签名: : Subsingleton (CofixA F 0)
+实例 余fixA.instSubsingleton
+  签名: : 子单例 (余fixA F 0)
   定义体: ⟨by rintro ⟨⟩ ⟨⟩; rfl⟩
 -/
 instance CofixA.instSubsingleton : Subsingleton (CofixA F 0) :=
@@ -405,7 +405,7 @@ theorem head_succ'
 
 中文:
 定理 head_succ'
-  条件: (n m : 自然数) (x : 对任意 n, CofixA F n) (Hconsistent : AllAgree x)
+  条件: (n m : 自然数) (x : 对任意 n, 余fixA F n) (Hconsistent : AllAgree x)
   证明: by
   suffices forall n, head' (x (succ n)) = head' (x 1) by simp [this]
   intro n
@@ -438,10 +438,10 @@ structure MIntl
     - consistent : AllAgree approx
 
 中文:
-结构 MIntl
+结构 M整数l
   参数: where
   公理与运算 (2 个):
-    - approx : 对任意 n, CofixA F n
+    - approx : 对任意 n, 余fixA F n
     - consistent : AllAgree approx
 -/
 structure MIntl where
@@ -474,8 +474,8 @@ theorem M.default_consistent
 
 中文:
 定理 M.default_consistent
-  条件: [Inhabited F.A]
-  结论: 对任意 n, Agree (default : CofixA F n) default
+  条件: [可居 F.A]
+  结论: 对任意 n, Agree (default : 余fixA F n) default
 -/
 theorem M.default_consistent [Inhabited F.A] : forall n, Agree (default : CofixA F n) default
   | 0 => Agree.continu _ _
@@ -491,8 +491,8 @@ instance MIntl.inhabited
       consistent := M.default_consistent _ }⟩
 
 中文:
-实例 MIntl.inhabited
-  签名: [Inhabited F.A]
+实例 M整数l.inhabited
+  签名: [可居 F.A]
   定义体: ⟨{ approx := default
       consistent := M.default_consistent _ }⟩
 
@@ -512,7 +512,7 @@ instance M.inhabited
 
 中文:
 实例 M.inhabited
-  签名: [Inhabited F.A]
+  签名: [可居 F.A]
   定义体: inferInstanceAs Inhabited (MIntl F)
 
 Depends on / 依赖: Inhabited
@@ -646,7 +646,7 @@ definition ichildren
 
 中文:
 定义 ichildren
-  签名: [Inhabited (M F)] [DecidableEq F.A] (i : F.Idx) (x : M F)
+  签名: [可居 (M F)] [DecidableEq F.A] (i : F.Idx) (x : M F)
   定义体: if H' : i.1 = head x then children x (cast (congr_arg _ <| by simp only [head, H']) i.2)
   else default
 
@@ -933,7 +933,7 @@ definition cases
 
 中文:
 定义 cases
-  签名: {r : M F -> Sort w} (f : 对任意 x : F (M F), r (M.mk x)) (x : M F)
+  签名: {r : M F -> 类型层 w} (f : 对任意 x : F (M F), r (M.mk x)) (x : M F)
   定义体: suffices r (M.mk (dest x)) by
     rw [← mk_dest x]
     exact this
@@ -955,7 +955,7 @@ definition casesOn
 
 中文:
 定义 casesOn
-  签名: {r : M F -> Sort w} (x : M F) (f : 对任意 x : F (M F), r (M.mk x))
+  签名: {r : M F -> 类型层 w} (x : M F) (f : 对任意 x : F (M F), r (M.mk x))
   定义体: M.cases f x
 -/
 protected def casesOn {r : M F -> Sort w} (x : M F) (f : forall x : F (M F), r (M.mk x)) : r x :=
@@ -971,7 +971,7 @@ definition casesOn'
 
 中文:
 定义 casesOn'
-  签名: {r : M F -> Sort w} (x : M F) (f : 对任意 a f, r (M.mk ⟨a, f⟩))
+  签名: {r : M F -> 类型层 w} (x : M F) (f : 对任意 a f, r (M.mk ⟨a, f⟩))
   定义体: M.casesOn x (fun ⟨a, g⟩ => f a g)
 -/
 protected def casesOn' {r : M F -> Sort w} (x : M F) (f : forall a f, r (M.mk ⟨a, f⟩)) : r x :=
@@ -1103,7 +1103,7 @@ theorem cases_mk
 
 中文:
 定理 cases_mk
-  条件: {r : M F -> Sort*} (x : F (M F)) (f : 对任意 x : F (M F), r (M.mk x))
+  条件: {r : M F -> 类型层*} (x : F (M F)) (f : 对任意 x : F (M F), r (M.mk x))
   证明: rfl
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem casesOn_mk
 
 中文:
 定理 casesOn_mk
-  条件: {r : M F -> Sort*} (x : F (M F)) (f : 对任意 x : F (M F), r (M.mk x))
+  条件: {r : M F -> 类型层*} (x : F (M F)) (f : 对任意 x : F (M F), r (M.mk x))
   证明: cases_mk x f
 
 @[simp]
@@ -1146,7 +1146,7 @@ theorem casesOn_mk'
 
 中文:
 定理 casesOn_mk'
-  结论: {r : M F -> Sort*} {a} (x : F.B a -> M F)
+  结论: {r : M F -> 类型层*} {a} (x : F.B a -> M F)
   证明: @cases_mk F r ⟨a, x⟩ (fun ⟨a, g⟩ => f a g)
 
 Depends on / 依赖: cases_mk
@@ -1167,11 +1167,11 @@ inductive IsPath
     - cons: (xs : Path F) {a} (x : M F) (f : F.B a -> M F) (i : F.B a) : x = M.mk ⟨a, f⟩ -> IsPath xs (f i) -> IsPath (⟨a, i⟩ :: xs) x
 
 中文:
-归纳类型 IsPath
-  参数: : Path F -> M F -> 命题
+归纳类型 是道路
+  参数: : 道路 F -> M F -> 命题
   构造子 (2 个):
-    - nil: (x : M F) : IsPath [] x
-    - cons: (xs : Path F) {a} (x : M F) (f : F.B a -> M F) (i : F.B a) : x = M.mk ⟨a, f⟩ -> IsPath xs (f i) -> IsPath (⟨a, i⟩ :: xs) x
+    - nil: (x : M F) : 是道路 [] x
+    - cons: (xs : 道路 F) {a} (x : M F) (f : F.B a -> M F) (i : F.B a) : x = M.mk ⟨a, f⟩ -> 是道路 xs (f i) -> 是道路 (⟨a, i⟩ :: xs) x
 -/
 inductive IsPath : Path F -> M F -> Prop
   | nil (x : M F) : IsPath [] x
@@ -1192,7 +1192,7 @@ theorem isPath_cons
 
 中文:
 定理 isPath_cons
-  条件: {xs : Path F} {a a'} {f : F.B a -> M F} {i : F.B a'}
+  条件: {xs : 道路 F} {a a'} {f : F.B a -> M F} {i : F.B a'}
   证明: by
   generalize h : M.mk ⟨a, f⟩ = x
   rintro (_ | ⟨_, _, _, _, rfl, _⟩)
@@ -1222,7 +1222,7 @@ theorem isPath_cons'
 
 中文:
 定理 isPath_cons'
-  条件: {xs : Path F} {a} {f : F.B a -> M F} {i : F.B a}
+  条件: {xs : 道路 F} {a} {f : F.B a -> M F} {i : F.B a}
   证明: by
   generalize h : M.mk ⟨a, f⟩ = x
   rintro (_ | ⟨_, _, _, _, rfl, hp⟩)
@@ -1247,7 +1247,7 @@ definition isubtree
 
 中文:
 定义 isubtree
-  签名: [DecidableEq F.A] [Inhabited (M F)]
+  签名: [DecidableEq F.A] [可居 (M F)]
 -/
 def isubtree [DecidableEq F.A] [Inhabited (M F)] : Path F -> M F -> M F
   | [], x => x
@@ -1269,7 +1269,7 @@ head isubtree ps x
 
 中文:
 定义 iselect
-  签名: [DecidableEq F.A] [Inhabited (M F)] (ps : Path F)
+  签名: [DecidableEq F.A] [可居 (M F)] (ps : 道路 F)
   定义体: fun x : M F =>
 head isubtree ps x
 -/
@@ -1298,7 +1298,7 @@ theorem iselect_eq_default
 
 中文:
 定理 iselect_eq_default
-  结论: [DecidableEq F.A] [Inhabited (M F)] (ps : Path F) (x : M F)
+  结论: [DecidableEq F.A] [可居 (M F)] (ps : 道路 F) (x : M F)
   证明: by
   induction ps generalizing x with
   | nil =>
@@ -1402,7 +1402,7 @@ theorem ichildren_mk
 
 中文:
 定理 ichildren_mk
-  条件: [DecidableEq F.A] [Inhabited (M F)] (x : F (M F)) (i : F.Idx)
+  条件: [DecidableEq F.A] [可居 (M F)] (x : F (M F)) (i : F.Idx)
   证明: by
   dsimp only [ichildren, PFunctor.Obj.iget]
   congr with h
@@ -1430,7 +1430,7 @@ theorem isubtree_cons
 
 中文:
 定理 isubtree_cons
-  结论: [DecidableEq F.A] [Inhabited (M F)] (ps : Path F) {a} (f : F.B a -> M F)
+  结论: [DecidableEq F.A] [可居 (M F)] (ps : 道路 F) {a} (f : F.B a -> M F)
   证明: by
   simp only [isubtree, dif_pos, isubtree, M.casesOn_mk']; rfl
 
@@ -1455,7 +1455,7 @@ theorem iselect_nil
 
 中文:
 定理 iselect_nil
-  条件: [DecidableEq F.A] [Inhabited (M F)] {a} (f : F.B a -> M F)
+  条件: [DecidableEq F.A] [可居 (M F)] {a} (f : F.B a -> M F)
   证明: rfl
 
 @[simp]
@@ -1474,7 +1474,7 @@ theorem iselect_cons
 
 中文:
 定理 iselect_cons
-  条件: [DecidableEq F.A] [Inhabited (M F)] (ps : Path F) {a} (f : F.B a -> M F) {i}
+  条件: [DecidableEq F.A] [可居 (M F)] (ps : 道路 F) {a} (f : F.B a -> M F) {i}
   证明: by simp only [iselect, isubtree_cons]
 
 Depends on / 依赖: iselect, isubtree_cons
@@ -1544,7 +1544,7 @@ theorem ext_aux
 
 中文:
 定理 ext_aux
-  结论: [Inhabited (M F)] [DecidableEq F.A] {n : 自然数} (x y z : M F) (hx : Agree' n z x)
+  结论: [可居 (M F)] [DecidableEq F.A] {n : 自然数} (x y z : M F) (hx : Agree' n z x)
   证明: by
   induction n generalizing x y z with
   | zero =>
@@ -1616,7 +1616,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [Inhabited (M F)] [DecidableEq F.A] (x y : M F)
+  结论: [可居 (M F)] [DecidableEq F.A] (x y : M F)
   证明: by
   apply ext'; intro i
   induction i with
@@ -1668,7 +1668,7 @@ structure IsBisimulation
     - tail : forall {a} {f f' : F.B a -> M F}, M.mk ⟨a, f⟩ ~ M.mk ⟨a, f'⟩ -> forall i : F.B a, f i ~ f' i
 
 中文:
-结构 IsBisimulation
+结构 是Bisimulation
   参数: : 命题 where
   公理与运算 (2 个):
     - head : 对任意 {a a'} {f f'}, M.mk ⟨a, f⟩ ~ M.mk ⟨a', f'⟩ -> a = a'
@@ -1700,7 +1700,7 @@ theorem nth_of_bisim
 
 中文:
 定理 nth_of_bisim
-  结论: [Inhabited (M F)] [DecidableEq F.A]
+  结论: [可居 (M F)] [DecidableEq F.A]
   证明: by
   intro h₀ hh
   induction s₁ using PFunctor.M.casesOn' with | _ a f
@@ -1765,7 +1765,7 @@ theorem eq_of_bisim
 
 中文:
 定理 eq_of_bisim
-  条件: [Nonempty (M F)] (bisim : IsBisimulation R)
+  条件: [非空 (M F)] (bisim : 是Bisimulation R)
   结论: 对任意 s₁ s₂, R s₁ s₂ -> s₁ = s₂
   证明: by
   inhabit M F
@@ -2039,7 +2039,7 @@ definition corec'
 
 中文:
 定义 corec'
-  签名: {α : 类型u} (F : 对任意 {X : Type (max u uA uB)}, (α -> X) -> α -> M P oplus P X) (x : α)
+  签名: {α : 类型u} (F : 对任意 {X : 类型 (最大值 u uA uB)}, (α -> X) -> α -> M P oplus P X) (x : α)
   定义体: corec₁
     (fun _ rec (a : M P oplus α) =>
       let y := Sum.bind a (F (rec ∘ Sum.inr))

@@ -183,8 +183,8 @@ instance [Mul
   body: ‹_›
 
 中文:
-实例 [Mul
-  签名: Mᵐᵒᵖ] [IsLeftCancelMul Mᵐᵒᵖ] : IsLeftCancelMul Mᵈᵐᵃ
+实例 [乘法
+  签名: Mᵐᵒᵖ] [左乘消去 Mᵐᵒᵖ] : 左乘消去 Mᵈᵐᵃ
   定义体: ‹_›
 -/
 @[to_additive] instance [Mul Mᵐᵒᵖ] [IsLeftCancelMul Mᵐᵒᵖ] : IsLeftCancelMul Mᵈᵐᵃ := ‹_›
@@ -197,8 +197,8 @@ instance [Mul
   body: ‹_›
 
 中文:
-实例 [Mul
-  签名: Mᵐᵒᵖ] [IsRightCancelMul Mᵐᵒᵖ] : IsRightCancelMul Mᵈᵐᵃ
+实例 [乘法
+  签名: Mᵐᵒᵖ] [右乘消去 Mᵐᵒᵖ] : 右乘消去 Mᵈᵐᵃ
   定义体: ‹_›
 -/
 @[to_additive] instance [Mul Mᵐᵒᵖ] [IsRightCancelMul Mᵐᵒᵖ] : IsRightCancelMul Mᵈᵐᵃ := ‹_›
@@ -213,8 +213,8 @@ instance [Mul
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Mul
-  签名: Mᵐᵒᵖ] [IsCancelMul Mᵐᵒᵖ] : IsCancelMul Mᵈᵐᵃ
+实例 [乘法
+  签名: Mᵐᵒᵖ] [是消去乘法 Mᵐᵒᵖ] : 是消去乘法 Mᵈᵐᵃ
   定义体: ‹_›
 
 @[to_additive (attr := simp)]
@@ -235,7 +235,7 @@ lemma mk_one
 
 中文:
 引理 mk_one
-  条件: [One M]
+  条件: [幺 M]
   结论: mk (1 : M) = 1
   证明: rfl
 
@@ -257,7 +257,7 @@ lemma symm_mk_one
 
 中文:
 引理 symm_mk_one
-  条件: [One M]
+  条件: [幺 M]
   结论: mk.symm (1 : Mᵈᵐᵃ) = 1
   证明: rfl
 
@@ -279,7 +279,7 @@ lemma mk_mul
 
 中文:
 引理 mk_mul
-  条件: [Mul M] (a b : M)
+  条件: [乘法 M] (a b : M)
   结论: mk (a * b) = mk b * mk a
   证明: rfl
 
@@ -301,7 +301,7 @@ lemma symm_mk_mul
 
 中文:
 引理 symm_mk_mul
-  条件: [Mul M] (a b : Mᵈᵐᵃ)
+  条件: [乘法 M] (a b : Mᵈᵐᵃ)
   结论: mk.symm (a * b) = mk.symm b * mk.symm a
   证明: rfl
 
@@ -323,7 +323,7 @@ lemma mk_inv
 
 中文:
 引理 mk_inv
-  条件: [Inv M] (a : M)
+  条件: [取逆 M] (a : M)
   结论: mk (a⁻¹) = (mk a)⁻¹
   证明: rfl
 
@@ -345,7 +345,7 @@ lemma symm_mk_inv
 
 中文:
 引理 symm_mk_inv
-  条件: [Inv M] (a : Mᵈᵐᵃ)
+  条件: [取逆 M] (a : Mᵈᵐᵃ)
   结论: mk.symm (a⁻¹) = (mk.symm a)⁻¹
   证明: rfl
 
@@ -367,7 +367,7 @@ lemma mk_pow
 
 中文:
 引理 mk_pow
-  条件: [Monoid M] (a : M) (n : 自然数)
+  条件: [幺半群 M] (a : M) (n : 自然数)
   结论: mk (a ^ n) = mk a ^ n
   证明: rfl
 
@@ -389,7 +389,7 @@ lemma symm_mk_pow
 
 中文:
 引理 symm_mk_pow
-  条件: [Monoid M] (a : Mᵈᵐᵃ) (n : 自然数)
+  条件: [幺半群 M] (a : Mᵈᵐᵃ) (n : 自然数)
   结论: mk.symm (a ^ n) = mk.symm a ^ n
   证明: rfl
 
@@ -411,7 +411,7 @@ lemma mk_zpow
 
 中文:
 引理 mk_zpow
-  条件: [DivInvMonoid M] (a : M) (n : 整数)
+  条件: [除逆幺半群 M] (a : M) (n : 整数)
   结论: mk (a ^ n) = mk a ^ n
   证明: rfl
 
@@ -431,7 +431,7 @@ lemma symm_mk_zpow
 
 中文:
 引理 symm_mk_zpow
-  条件: [DivInvMonoid M] (a : Mᵈᵐᵃ) (n : 整数)
+  条件: [除逆幺半群 M] (a : Mᵈᵐᵃ) (n : 整数)
   结论: mk.symm (a ^ n) = mk.symm a ^ n
   证明: rfl
 -/
@@ -451,8 +451,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] : SMul Mᵈᵐᵃ (α -> β) where
+实例 [标量乘法
+  签名: M α] : 标量乘法 Mᵈᵐᵃ (α -> β) where
   定义体: f (mk.symm c • a)
 
 @[to_additive]
@@ -476,7 +476,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α)
+  条件: [标量乘法 M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α)
   结论: (c • f) a = f (mk.symm c • a)
   证明: rfl
 
@@ -496,8 +496,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N β] : SMulCommClass Mᵈᵐᵃ N (α -> β) where
+实例 [标量乘法
+  签名: M α] [标量乘法 N β] : 标量交换类 Mᵈᵐᵃ N (α -> β) where
   定义体: rfl
 
 @[to_additive]
@@ -517,8 +517,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N β] : SMulCommClass N Mᵈᵐᵃ (α -> β) where
+实例 [标量乘法
+  签名: M α] [标量乘法 N β] : 标量交换类 N Mᵈᵐᵃ (α -> β) where
   定义体: rfl
 
 @[to_additive]
@@ -538,8 +538,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵈᵐᵃ Nᵈᵐᵃ (α -> β) where
+实例 [标量乘法
+  签名: M α] [标量乘法 N α] [标量交换类 M N α] : 标量交换类 Mᵈᵐᵃ Nᵈᵐᵃ (α -> β) where
   定义体: funext fun _ => congr_arg f (smul_comm _ _ _).symm
 
 @[to_additive]
@@ -564,8 +564,8 @@ instance [SMul
     simpa [smul_apply, hne] using h
 
 中文:
-实例 [SMul
-  签名: M α] [FaithfulSMul M α] [Nontrivial β] : FaithfulSMul Mᵈᵐᵃ (α -> β) where
+实例 [标量乘法
+  签名: M α] [忠实标量乘法 M α] [非平凡 β] : 忠实标量乘法 Mᵈᵐᵃ (α -> β) where
   定义体: mk.symm.injective eq_of_smul_eq_smul fun a : α => by
     rcases exists_pair_ne β with ⟨x, y, hne⟩
     contrapose! hne
@@ -592,8 +592,8 @@ instance [SMul
   body: rfl
 
 中文:
-实例 [SMul
-  签名: M α] [Zero β] : SMulZeroClass Mᵈᵐᵃ (α -> β) where
+实例 [标量乘法
+  签名: M α] [零 β] : SMulZero类 Mᵈᵐᵃ (α -> β) where
   定义体: rfl
 -/
 instance [SMul M α] [Zero β] : SMulZeroClass Mᵈᵐᵃ (α -> β) where
@@ -613,8 +613,8 @@ instance [Monoid
   mul_smul _ _ f := funext fun _ => congr_arg f (mul_smul _ _ _)
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M α] : MulAction Mᵈᵐᵃ (α -> β) where
+实例 [幺半群
+  签名: M] [乘法作用 M α] : 乘法作用 Mᵈᵐᵃ (α -> β) where
   定义体: funext fun _ => congr_arg f (one_smul _ _)
   mul_smul _ _ f := funext fun _ => congr_arg f (mul_smul _ _ _)
 
@@ -646,7 +646,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (A ->* B)
+  签名: 标量乘法 Mᵈᵐᵃ (A ->* B)
   定义体: f.comp (MulDistribMulAction.toMonoidHom _ (mk.symm c))
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMonoidHom, f.comp, mk.symm, toMonoidHom
@@ -663,8 +663,8 @@ instance [Monoid
   body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [Monoid
-  签名: M'] [MulDistribMulAction M' A] [SMulCommClass M M' A] :
+实例 [幺半群
+  签名: M'] [MulDistribMul作用 M' A] [标量交换类 M M' A] :
   定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
@@ -723,7 +723,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Mᵈᵐᵃ (A ->* B)
+  签名: 乘法作用 Mᵈᵐᵃ (A ->* B)
   定义体: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, mulAction
@@ -748,7 +748,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (A ->+ B)
+  签名: 标量乘法 Mᵈᵐᵃ (A ->+ B)
   定义体: f.comp (DistribSMul.toAddMonoidHom _ (mk.symm c))
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, f.comp, mk.symm, toAddMonoidHom
@@ -765,8 +765,8 @@ instance [DistribSMul
   body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [DistribSMul
-  签名: M' A] [SMulCommClass M M' A] : SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A ->+ B)
+实例 [分配标量乘法
+  签名: M' A] [标量交换类 M M' A] : 标量交换类 Mᵈᵐᵃ M'ᵈᵐᵃ (A ->+ B)
   定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
@@ -783,8 +783,8 @@ instance [DistribSMul
   body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [DistribSMul
-  签名: M' B] : SMulCommClass Mᵈᵐᵃ M' (A ->+ B)
+实例 [分配标量乘法
+  签名: M' B] : 标量交换类 Mᵈᵐᵃ M' (A ->+ B)
   定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
@@ -863,8 +863,8 @@ instance [Monoid
   body: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: M] [AddMonoid A] [DistribMulAction M A] [AddZeroClass B] :
+实例 [幺半群
+  签名: M] [加法幺半群 A] [分配乘法作用 M A] [加法零类 B] :
   定义体: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, mulAction
@@ -881,8 +881,8 @@ instance [Monoid
   body: DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: M] [AddMonoid A] [DistribMulAction M A] [AddCommMonoid B] :
+实例 [幺半群
+  签名: M] [加法幺半群 A] [分配乘法作用 M A] [加法交换幺半群 B] :
   定义体: DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ => rfl
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coeFn, DFunLike, DFunLike.coe_injective.distribMulAction, coe_injective, distribMulAction
@@ -900,8 +900,8 @@ instance [Monoid
   body: DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: M] [Monoid A] [MulDistribMulAction M A] [CommMonoid B] :
+实例 [幺半群
+  签名: M] [幺半群 A] [MulDistribMul作用 M A] [交换幺半群 B] :
   定义体: DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulDistribMulAction, MonoidHom, MonoidHom.coeFn, coe_injective, mulDistribMulAction

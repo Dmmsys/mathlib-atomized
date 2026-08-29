@@ -117,7 +117,7 @@ abbreviation Jacobian
 
 中文:
 缩写 Jacobian
-  签名: : Type r
+  签名: : 类型 r
   定义体: WeierstrassCurve R
 
 Depends on / 依赖: WeierstrassCurve
@@ -171,7 +171,7 @@ lemma fin3_def
 
 中文:
 引理 fin3_def
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: ![P x, P y, P z] = P
   证明: by
   ext n; fin_cases n <;> rfl
@@ -210,7 +210,7 @@ lemma comp_fin3
 
 中文:
 引理 comp_fin3
-  条件: {S : Type s} (f : R -> S) (a b c : R)
+  条件: {S : 类型 s} (f : R -> S) (a b c : R)
   结论: f ∘ ![a, b, c] = ![f a, f b, f c]
   证明: (FinVec.map_eq ..).symm
 
@@ -237,7 +237,7 @@ lemma smul_fin3
 
 中文:
 引理 smul_fin3
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: u • P = ![u ^ 2 * P x, u ^ 3 * P y, u * P z]
   证明: rfl
 -/
@@ -254,7 +254,7 @@ lemma smul_fin3_ext
 
 中文:
 引理 smul_fin3_ext
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   证明: ⟨rfl, rfl, rfl⟩
 -/
 lemma smul_fin3_ext (P : Fin 3 -> R) (u : R) :
@@ -273,7 +273,7 @@ lemma comp_smul
 
 中文:
 引理 comp_smul
-  条件: (f : R ->+* S) (P : Fin 3 -> R) (u : R)
+  条件: (f : R ->+* S) (P : 有限集 3 -> R) (u : R)
   结论: f ∘ (u • P) = f u • f ∘ P
   证明: by
   ext n; fin_cases n <;> simp only [smul_fin3, comp_fin3] <;> map_simp
@@ -304,7 +304,7 @@ abbreviation PointClass
 
 中文:
 缩写 PointClass
-  签名: : Type r
+  签名: : 类型 r
   定义体: MulAction.orbitRel.Quotient Rˣ Fin 3 -> R
 
 Depends on / 依赖: MulAction, MulAction.orbitRel.Quotient, Quotient, orbitRel
@@ -325,7 +325,7 @@ lemma smul_equiv
 
 中文:
 引理 smul_equiv
-  条件: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
+  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
   结论: u • P ≈ P
   证明: ⟨hu.unit, rfl⟩
 
@@ -348,7 +348,7 @@ lemma smul_eq
 
 中文:
 引理 smul_eq
-  条件: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
+  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
   结论: (⟦u • P⟧ : PointClass R) = ⟦P⟧
   证明: Quotient.eq.mpr smul_equiv P hu
 
@@ -368,7 +368,7 @@ lemma smul_equiv_smul
 
 中文:
 引理 smul_equiv_smul
-  条件: (P Q : Fin 3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v)
+  条件: (P Q : 有限集 3 -> R) {u v : R} (hu : 是单位 u) (hv : 是单位 v)
   证明: by
   rw [← Quotient.eq_iff_equiv]; rw [← Quotient.eq_iff_equiv]; rw [smul_eq P hu]; rw [smul_eq Q hv]
 
@@ -392,7 +392,7 @@ refine ⟨?_, Quotient.exact.comp congrArg _⟩
 
 中文:
 引理 equiv_iff_eq_of_Z_eq'
-  条件: {P Q : Fin 3 -> R} (hz : P z = Q z) (hQz : Q z in nonZeroDivisors R)
+  条件: {P Q : 有限集 3 -> R} (hz : P z = Q z) (hQz : Q z in nonZeroDivisors R)
   证明: by
 refine ⟨?_, Quotient.exact.comp congrArg _⟩
   rintro ⟨u, rfl⟩
@@ -418,7 +418,7 @@ lemma equiv_iff_eq_of_Z_eq
 
 中文:
 引理 equiv_iff_eq_of_Z_eq
-  条件: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hz : P z = Q z) (hQz : Q z != 0)
+  条件: [无零因子 R] {P Q : 有限集 3 -> R} (hz : P z = Q z) (hQz : Q z != 0)
   证明: equiv_iff_eq_of_Z_eq' hz mem_nonZeroDivisors_of_ne_zero hQz
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, equiv_iff_eq_of_Z_eq, mem_nonZeroDivisors_of_ne_zero, ofComponents
@@ -440,7 +440,7 @@ lemma Z_eq_zero_of_equiv
 
 中文:
 引理 Z_eq_zero_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
   结论: P z = 0 ↔ Q z = 0
   证明: by
   rcases h with ⟨_, rfl⟩
@@ -466,7 +466,7 @@ lemma X_eq_of_equiv
 
 中文:
 引理 X_eq_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
   结论: P x * Q z ^ 2 = Q x * P z ^ 2
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -494,7 +494,7 @@ lemma Y_eq_of_equiv
 
 中文:
 引理 Y_eq_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
   结论: P y * Q z ^ 3 = Q y * P z ^ 3
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -519,7 +519,7 @@ lemma not_equiv_of_Z_eq_zero_left
 
 中文:
 引理 not_equiv_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hPz : P z = 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> R} (hPz : P z = 0) (hQz : Q z != 0)
   结论: ¬P ≈ Q
   证明: fun h => hQz (Z_eq_zero_of_equiv h).mp hPz
 
@@ -539,7 +539,7 @@ lemma not_equiv_of_Z_eq_zero_right
 
 中文:
 引理 not_equiv_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hPz : P z != 0) (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hPz : P z != 0) (hQz : Q z = 0)
   结论: ¬P ≈ Q
   证明: fun h => hPz (Z_eq_zero_of_equiv h).mpr hQz
 
@@ -559,7 +559,7 @@ lemma not_equiv_of_X_ne
 
 中文:
 引理 not_equiv_of_X_ne
-  条件: {P Q : Fin 3 -> R} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
+  条件: {P Q : 有限集 3 -> R} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
   结论: ¬P ≈ Q
   证明: hx.comp X_eq_of_equiv
 
@@ -579,7 +579,7 @@ lemma not_equiv_of_Y_ne
 
 中文:
 引理 not_equiv_of_Y_ne
-  条件: {P Q : Fin 3 -> R} (hy : P y * Q z ^ 3 != Q y * P z ^ 3)
+  条件: {P Q : 有限集 3 -> R} (hy : P y * Q z ^ 3 != Q y * P z ^ 3)
   结论: ¬P ≈ Q
   证明: hy.comp Y_eq_of_equiv
 
@@ -602,7 +602,7 @@ mul_div, ← hx, ← hy, mul_div_cancel_right₀ _ pow_ne_zero _ hQz, mul_div_ca
 
 中文:
 引理 equiv_of_X_eq_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: by
   use Units.mk0 _ hPz / Units.mk0 _ hQz
   simp only [Units.smul_def, smul_fin3, Units.val_div_eq_div_val, Units.val_mk0, div_pow, mul_comm,
@@ -630,7 +630,7 @@ lemma equiv_some_of_Z_ne_zero
 
 中文:
 引理 equiv_some_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: equiv_of_X_eq_of_Y_eq hPz one_ne_zero
     (by linear_combination (norm := (matrix_simp; ring1)) -P x * div_self (pow_ne_zero 2 hPz))
     (by linear_combination (norm := (matrix_simp; ring1)) -P y * div_self (pow_ne_zero 3 hPz))
@@ -653,7 +653,7 @@ lemma X_eq_iff
 
 中文:
 引理 X_eq_iff
-  条件: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: (div_eq_div_iff (pow_ne_zero 2 hPz) (pow_ne_zero 2 hQz)).symm
 
 Depends on / 依赖: div_eq_div_iff, pow_ne_zero
@@ -672,7 +672,7 @@ lemma Y_eq_iff
 
 中文:
 引理 Y_eq_iff
-  条件: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: (div_eq_div_iff (pow_ne_zero 3 hPz) (pow_ne_zero 3 hQz)).symm
 
 Depends on / 依赖: div_eq_div_iff, pow_ne_zero
@@ -695,7 +695,7 @@ definition polynomial
 
 中文:
 定义 polynomial
-  签名: : MvPolynomial (Fin 3) R
+  签名: : 多元多项式 (有限集 3) R
   定义体: Y ^ 2 + C W'.a₁ * X * Y * Z + C W'.a₃ * Y * Z ^ 3
     - (X ^ 3 + C W'.a₂ * X ^ 2 * Z ^ 2 + C W'.a₄ * X * Z ^ 4 + C W'.a₆ * Z ^ 6)
 -/
@@ -716,7 +716,7 @@ lemma eval_polynomial
 
 中文:
 引理 eval_polynomial
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: eval P W'.polynomial =
   证明: by
   rw [polynomial]
@@ -745,7 +745,7 @@ lemma eval_polynomial_of_Z_ne_zero
 
 中文:
 引理 eval_polynomial_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   结论: eval P W.polynomial / P z ^ 6 =
   证明: by
   linear_combination (norm := (rw [eval_polynomial, Affine.evalEval_polynomial]; ring1))
@@ -772,8 +772,8 @@ definition Equation
   body: eval P W'.polynomial = 0
 
 中文:
-定义 Equation
-  签名: (P : Fin 3 -> R)
+定义 方程
+  签名: (P : 有限集 3 -> R)
   定义体: eval P W'.polynomial = 0
 
 Depends on / 依赖: polynomial
@@ -793,8 +793,8 @@ lemma equation_iff
 
 中文:
 引理 equation_iff
-  条件: (P : Fin 3 -> R)
-  结论: W'.Equation P ↔
+  条件: (P : 有限集 3 -> R)
+  结论: W'.方程 P ↔
   证明: by
   rw [Equation]; rw [eval_polynomial]
 
@@ -819,8 +819,8 @@ lemma equation_smul
 
 中文:
 引理 equation_smul
-  条件: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
-  结论: W'.Equation (u • P) ↔ W'.Equation P
+  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
+  结论: W'.方程 (u • P) ↔ W'.方程 P
   证明: have hP (u : R) {P : Fin 3 -> R} (hP : W'.Equation P) : W'.Equation u • P := by
     rw [equation_iff] at hP ⊢
     linear_combination (norm := (simp only [smul_fin3_ext]; ring1)) u ^ 6 * hP
@@ -847,8 +847,8 @@ lemma equation_of_equiv
 
 中文:
 引理 equation_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
-  结论: W'.Equation P ↔ W'.Equation Q
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
+  结论: W'.方程 P ↔ W'.方程 Q
   证明: by
   rcases h with ⟨u, rfl⟩
   exact equation_smul Q u.isUnit
@@ -870,7 +870,7 @@ lemma equation_of_Z_eq_zero
 
 中文:
 引理 equation_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   证明: by
   simp only [equation_iff, hPz, add_zero, mul_zero, zero_pow <| OfNat.ofNat_ne_zero _, sub_eq_zero]
 
@@ -891,7 +891,7 @@ lemma equation_zero
 
 中文:
 引理 equation_zero
-  结论: W'.Equation ![1, 1, 0]
+  结论: W'.方程 ![1, 1, 0]
   证明: by
   simp only [equation_of_Z_eq_zero, fin3_def_ext, one_pow]
 
@@ -913,7 +913,7 @@ lemma equation_some
 中文:
 引理 equation_some
   条件: (a b : R)
-  结论: W'.Equation ![a, b, 1] ↔ W'.toAffine.Equation a b
+  结论: W'.方程 ![a, b, 1] ↔ W'.toAffine.方程 a b
   证明: by
   simp only [equation_iff, Affine.equation_iff', fin3_def_ext, one_pow, mul_one]
 
@@ -932,7 +932,7 @@ lemma equation_of_Z_ne_zero
 
 中文:
 引理 equation_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: (equation_of_equiv <| equiv_some_of_Z_ne_zero hPz).trans equation_some ..
 
 Depends on / 依赖: equation_of_equiv, equation_some, equiv_some_of_Z_ne_zero
@@ -954,7 +954,7 @@ definition polynomialX
 
 中文:
 定义 polynomialX
-  签名: : MvPolynomial (Fin 3) R
+  签名: : 多元多项式 (有限集 3) R
   定义体: pderiv x W'.polynomial
 
 Depends on / 依赖: pderiv, polynomial
@@ -1002,7 +1002,7 @@ lemma eval_polynomialX
 
 中文:
 引理 eval_polynomialX
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: eval P W'.polynomialX =
   证明: by
   rw [polynomialX_eq]
@@ -1028,7 +1028,7 @@ lemma eval_polynomialX_of_Z_ne_zero
 
 中文:
 引理 eval_polynomialX_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   linear_combination (norm := (rw [eval_polynomialX, Affine.evalEval_polynomialX]; ring1))
     W.a₁ * P y / P z ^ 3 * div_self hPz - 2 * W.a₂ * P x / P z ^ 2 * div_self (pow_ne_zero 2 hPz)
@@ -1054,7 +1054,7 @@ definition polynomialY
 
 中文:
 定义 polynomialY
-  签名: : MvPolynomial (Fin 3) R
+  签名: : 多元多项式 (有限集 3) R
   定义体: pderiv y W'.polynomial
 
 Depends on / 依赖: pderiv, polynomial
@@ -1100,7 +1100,7 @@ lemma eval_polynomialY
 
 中文:
 引理 eval_polynomialY
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   证明: by
   rw [polynomialY_eq]
   simp
@@ -1124,7 +1124,7 @@ lemma eval_polynomialY_of_Z_ne_zero
 
 中文:
 引理 eval_polynomialY_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   linear_combination (norm := (rw [eval_polynomialY, Affine.evalEval_polynomialY]; ring1))
     W.a₁ * P x / P z ^ 2 * div_self hPz + W.a₃ * div_self (pow_ne_zero 3 hPz)
@@ -1148,7 +1148,7 @@ definition polynomialZ
 
 中文:
 定义 polynomialZ
-  签名: : MvPolynomial (Fin 3) R
+  签名: : 多元多项式 (有限集 3) R
   定义体: pderiv z W'.polynomial
 
 Depends on / 依赖: pderiv, polynomial
@@ -1196,7 +1196,7 @@ lemma eval_polynomialZ
 
 中文:
 引理 eval_polynomialZ
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: eval P W'.polynomialZ =
   证明: by
   rw [polynomialZ_eq]
@@ -1223,7 +1223,7 @@ theorem polynomial_relation
 
 中文:
 定理 polynomial_relation
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: 6 * eval P W'.polynomial =
   证明: by
   rw [eval_polynomial]; rw [eval_polynomialX]; rw [eval_polynomialY]; rw [eval_polynomialZ]
@@ -1249,8 +1249,8 @@ definition Nonsingular
     (eval P W'.polynomialX != 0 ∨ eval P W'.polynomialY != 0 ∨ eval P W'.polynomialZ != 0)
 
 中文:
-定义 Nonsingular
-  签名: (P : Fin 3 -> R)
+定义 非奇异
+  签名: (P : 有限集 3 -> R)
   定义体: W'.Equation P ∧
     (eval P W'.polynomialX != 0 ∨ eval P W'.polynomialY != 0 ∨ eval P W'.polynomialZ != 0)
 
@@ -1272,8 +1272,8 @@ lemma nonsingular_iff
 
 中文:
 引理 nonsingular_iff
-  条件: (P : Fin 3 -> R)
-  结论: W'.Nonsingular P ↔ W'.Equation P ∧
+  条件: (P : 有限集 3 -> R)
+  结论: W'.非奇异 P ↔ W'.方程 P ∧
   证明: by
   rw [Nonsingular]; rw [eval_polynomialX]; rw [eval_polynomialY]; rw [eval_polynomialZ]
 
@@ -1302,7 +1302,7 @@ lemma nonsingular_smul
 
 中文:
 引理 nonsingular_smul
-  条件: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
+  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
   证明: have hP {u : R} (hu : IsUnit u) {P : Fin 3 -> R} (hP : W'.Nonsingular <| u • P) :
       W'.Nonsingular P := by
     rcases (nonsingular_iff _).mp hP with ⟨hP, hP'⟩
@@ -1339,8 +1339,8 @@ lemma nonsingular_of_equiv
 
 中文:
 引理 nonsingular_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
-  结论: W'.Nonsingular P ↔ W'.Nonsingular Q
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
+  结论: W'.非奇异 P ↔ W'.非奇异 Q
   证明: by
   rcases h with ⟨u, rfl⟩
   exact nonsingular_smul Q u.isUnit
@@ -1363,7 +1363,7 @@ zero_pow OfNat.ofNat_ne_zero _, neg_ne_zero]
 
 中文:
 引理 nonsingular_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   证明: by
   simp only [nonsingular_iff, hPz, add_zero, sub_zero, zero_sub, mul_zero,
 zero_pow OfNat.ofNat_ne_zero _, neg_ne_zero]
@@ -1388,8 +1388,8 @@ exact fun h => one_ne_zero by linear_combination (norm := ring1) h.1 - h.2.1
 
 中文:
 引理 nonsingular_zero
-  条件: [Nontrivial R]
-  结论: W'.Nonsingular ![1, 1, 0]
+  条件: [非平凡 R]
+  结论: W'.非奇异 ![1, 1, 0]
   证明: by
   simp only [nonsingular_of_Z_eq_zero, equation_zero, true_and, fin3_def_ext, ← not_and_or]
 exact fun h => one_ne_zero by linear_combination (norm := ring1) h.1 - h.2.1
@@ -1417,7 +1417,7 @@ lemma nonsingular_some
 中文:
 引理 nonsingular_some
   条件: (a b : R)
-  结论: W'.Nonsingular ![a, b, 1] ↔ W'.toAffine.Nonsingular a b
+  结论: W'.非奇异 ![a, b, 1] ↔ W'.toAffine.非奇异 a b
   证明: by
   simp_rw [nonsingular_iff, equation_some, fin3_def_ext, Affine.nonsingular_iff',
     Affine.equation_iff', and_congr_right_iff, ← not_and_or, not_iff_not, one_pow, mul_one,
@@ -1444,7 +1444,7 @@ lemma nonsingular_of_Z_ne_zero
 
 中文:
 引理 nonsingular_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: (nonsingular_of_equiv <| equiv_some_of_Z_ne_zero hPz).trans nonsingular_some ..
 
 Depends on / 依赖: equiv_some_of_Z_ne_zero, nonsingular_of_equiv, nonsingular_some
@@ -1464,7 +1464,7 @@ lemma nonsingular_iff_of_Z_ne_zero
 
 中文:
 引理 nonsingular_iff_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   rw [nonsingular_of_Z_ne_zero hPz]; rw [Affine.Nonsingular]; rw [← equation_of_Z_ne_zero hPz]; rw [← eval_polynomialX_of_Z_ne_zero hPz]; rw [div_ne_zero_iff]; rw [and_iff_left pow_ne_zero 4 hPz]; rw [← eval_polynomialY_of_Z_ne_zero hPz]; rw [div_ne_zero_iff]; rw [and_iff_left pow_ne_zero 3 hPz]
 
@@ -1488,7 +1488,7 @@ zero_pow OfNat.ofNat_ne_zero _, ne_self_iff_false, or_false, false_or] at hP
 
 中文:
 引理 X_ne_zero_of_Z_eq_zero
-  结论: [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Nonsingular P)
+  结论: [无零因子 R] {P : 有限集 3 -> R} (hP : W'.非奇异 P)
   证明: by
   intro hPx
   simp only [nonsingular_of_Z_eq_zero hPz, equation_of_Z_eq_zero hPz, hPx, mul_zero, zero_mul,
@@ -1515,8 +1515,8 @@ lemma isUnit_X_of_Z_eq_zero
 
 中文:
 引理 isUnit_X_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
-  结论: IsUnit (P x)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
+  结论: 是单位 (P x)
   证明: (X_ne_zero_of_Z_eq_zero hP hPz).isUnit
 
 Depends on / 依赖: X_ne_zero_of_Z_eq_zero, isUnit
@@ -1538,7 +1538,7 @@ exact hPx eq_zero_of_pow_eq_zero hP.left.symm
 
 中文:
 引理 Y_ne_zero_of_Z_eq_zero
-  结论: [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Nonsingular P)
+  结论: [无零因子 R] {P : 有限集 3 -> R} (hP : W'.非奇异 P)
   证明: by
   have hPx : P x != 0 := X_ne_zero_of_Z_eq_zero hP hPz
   intro hPy
@@ -1565,8 +1565,8 @@ lemma isUnit_Y_of_Z_eq_zero
 
 中文:
 引理 isUnit_Y_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
-  结论: IsUnit (P y)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
+  结论: 是单位 (P y)
   证明: (Y_ne_zero_of_Z_eq_zero hP hPz).isUnit
 
 Depends on / 依赖: Y_ne_zero_of_Z_eq_zero, isUnit
@@ -1590,7 +1590,7 @@ have hQy : IsUnit Q y := isUnit_Y_of_Z_eq_zero hQ hQz
 
 中文:
 引理 equiv_of_Z_eq_zero
-  结论: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
+  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
   证明: by
 have hPx : IsUnit P x := isUnit_X_of_Z_eq_zero hP hPz
 have hPy : IsUnit P y := isUnit_Y_of_Z_eq_zero hP hPz
@@ -1628,7 +1628,7 @@ lemma equiv_zero_of_Z_eq_zero
 
 中文:
 引理 equiv_zero_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
   证明: equiv_of_Z_eq_zero hP nonsingular_zero hPz rfl
 
 Depends on / 依赖: equiv_of_Z_eq_zero, nonsingular_zero
@@ -1653,7 +1653,7 @@ lemma comp_equiv_comp
 
 中文:
 引理 comp_equiv_comp
-  结论: (f : F ->+* K) {P Q : Fin 3 -> F} (hP : W.Nonsingular P)
+  结论: (f : F ->+* K) {P Q : 有限集 3 -> F} (hP : W.非奇异 P)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · by_cases hz : f (P z) = 0
@@ -1707,8 +1707,8 @@ lemma nonsingularLift_iff
 
 中文:
 引理 nonsingularLift_iff
-  条件: (P : Fin 3 -> R)
-  结论: W'.NonsingularLift ⟦P⟧ ↔ W'.Nonsingular P
+  条件: (P : 有限集 3 -> R)
+  结论: W'.NonsingularLift ⟦P⟧ ↔ W'.非奇异 P
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1727,7 +1727,7 @@ lemma nonsingularLift_zero
 
 中文:
 引理 nonsingularLift_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: W'.NonsingularLift ⟦![1, 1, 0]⟧
   证明: nonsingular_zero
 
@@ -1788,7 +1788,7 @@ abbreviation baseChange
 
 中文:
 缩写 baseChange
-  签名: [Algebra R S]
+  签名: [代数 R S]
   定义体: WeierstrassCurve.baseChange W' S
 
 Depends on / 依赖: WeierstrassCurve, WeierstrassCurve.baseChange, baseChange
@@ -1835,9 +1835,9 @@ lemma Equation.map
   rw [Equation]; rw [map_polynomial]; rw [eval_map]; rw [← eval₂_comp]; rw [h]; rw [map_zero]
 
 中文:
-引理 Equation.map
-  条件: {P : Fin 3 -> R} (h : W'.Equation P)
-  结论: (W'.map f).Equation (f ∘ P)
+引理 方程.map
+  条件: {P : 有限集 3 -> R} (h : W'.方程 P)
+  结论: (W'.map f).方程 (f ∘ P)
   证明: by
   rw [Equation]; rw [map_polynomial]; rw [eval_map]; rw [← eval₂_comp]; rw [h]; rw [map_zero]
 -/
@@ -1859,7 +1859,7 @@ lemma map_equation
 
 中文:
 引理 map_equation
-  条件: (hf : Function.Injective f) (P : Fin 3 -> R)
+  条件: (hf : 函数.单射 f) (P : 有限集 3 -> R)
   证明: by
   simp only [Equation, map_polynomial, eval_map, ← eval₂_comp, map_eq_zero_iff f hf]
 
@@ -1956,7 +1956,7 @@ lemma map_nonsingular
 
 中文:
 引理 map_nonsingular
-  条件: (hf : Function.Injective f) (P : Fin 3 -> R)
+  条件: (hf : 函数.单射 f) (P : 有限集 3 -> R)
   证明: by
   simp only [Nonsingular, W'.map_equation hf, map_polynomialX, map_polynomialY, map_polynomialZ,
     eval_map, ← eval₂_comp, map_ne_zero_iff f hf]
@@ -2022,9 +2022,9 @@ lemma Equation.baseChange
   rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
 
 中文:
-引理 Equation.baseChange
-  条件: {P : Fin 3 -> A} (h : (W'⁄A).Equation P)
-  结论: (W'⁄B).Equation (f ∘ P)
+引理 方程.baseChange
+  条件: {P : 有限集 3 -> A} (h : (W'⁄A).方程 P)
+  结论: (W'⁄B).方程 (f ∘ P)
   证明: by
   convert! Equation.map f.toRingHom h using 1
   rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
@@ -2045,7 +2045,7 @@ lemma baseChange_equation
 
 中文:
 引理 baseChange_equation
-  条件: (hf : Function.Injective f) (P : Fin 3 -> A)
+  条件: (hf : 函数.单射 f) (P : 有限集 3 -> A)
   证明: by
   rw [← RingHom.coe_coe]; rw [← map_equation _ hf]; rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
 
@@ -2127,7 +2127,7 @@ lemma baseChange_nonsingular
 
 中文:
 引理 baseChange_nonsingular
-  条件: (hf : Function.Injective f) (P : Fin 3 -> A)
+  条件: (hf : 函数.单射 f) (P : 有限集 3 -> A)
   证明: by
   rw [← RingHom.coe_coe]; rw [← map_nonsingular _ hf]; rw [AlgHom.toRingHom_eq_coe]; rw [map_baseChange]
 

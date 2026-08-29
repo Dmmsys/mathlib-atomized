@@ -85,7 +85,7 @@ definition restrictedULiftYoneda
 
 中文:
 定义 restrictedULiftYoneda
-  签名: : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂
+  签名: : ℰ ⥤ Cᵒᵖ ⥤ 类型 最大值 w v₂
   定义体: uliftYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ _).obj A.op
 
 Depends on / 依赖: A.op, Functor, Functor.whiskeringLeft, uliftYoneda, whiskeringLeft
@@ -143,7 +143,7 @@ definition restrictedULiftYonedaHomEquiv'
 
 中文:
 定义 restrictedULiftYonedaHomEquiv'
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) (E : ℰ)
   定义体: { app _ := ↾fun x => ULift.up
         (f.app (CostructuredArrow.mk (uliftYonedaEquiv.symm x)))
       naturality _ _ g := by
@@ -204,7 +204,7 @@ lemma restrictedULiftYonedaHomEquiv'_symm_naturality_right
 
 中文:
 引理 restrictedULiftYonedaHomEquiv'_symm_naturality_right
-  结论: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
+  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
   证明: by
   rfl
 
@@ -262,7 +262,7 @@ definition restrictedULiftYonedaHomEquiv
 
 中文:
 定义 restrictedULiftYonedaHomEquiv
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) (E : ℰ)
   定义体: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α P).homEquiv.trans
     (restrictedULiftYonedaHomEquiv' A P E)
 
@@ -290,7 +290,7 @@ definition uliftYonedaAdjunction
 
 中文:
 定义 uliftYonedaAdjunction
-  签名: : L ⊣ restrictedULiftYoneda.{max w v₁} A
+  签名: : L ⊣ restrictedULiftYoneda.{最大值 w v₁} A
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := restrictedULiftYonedaHomEquiv L α
       homEquiv_naturality_left_symm {P Q X} f g := by
@@ -340,7 +340,7 @@ lemma uliftYonedaAdjunction_homEquiv_app
 
 中文:
 引理 uliftYonedaAdjunction_homEquiv_app
-  结论: {P : Cᵒᵖ ⥤ Type max w v₁ v₂}
+  结论: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂}
   证明: by
   simp [uliftYonedaAdjunction, restrictedULiftYonedaHomEquiv,
     restrictedULiftYonedaHomEquiv', IsColimit.homEquiv]
@@ -372,7 +372,7 @@ include α in
 
 中文:
 引理 uliftYonedaAdjunction_unit_app_app
-  结论: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
+  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
   证明: by
   have h₁ := (uliftYonedaAdjunction.{w} L α).homEquiv_unit P _ (𝟙 _)
   simp only [Functor.comp_obj, Functor.map_id, comp_id] at h₁
@@ -418,7 +418,7 @@ lemma isIso_of_isLeftKanExtension
 
 中文:
 引理 isIso_of_isLeftKanExtension
-  结论: IsIso α
+  结论: 是同构 α
   证明: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α).isIso_hom
 
 Depends on / 依赖: Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, isIso_hom, isPointwiseLeftKanExtensionOfIsLeftKanExtension
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (uliftYoneda.{max w v₂}.leftKanExtensionUnit A)
+  签名: 是同构 (uliftYoneda.{最大值 w v₂}.leftKanExtensionUnit A)
   定义体: isIso_of_isLeftKanExtension _ (uliftYoneda.leftKanExtensionUnit A)
 
 Depends on / 依赖: isIso_of_isLeftKanExtension, leftKanExtensionUnit, uliftYoneda, uliftYoneda.leftKanExtensionUnit
@@ -502,7 +502,7 @@ definition functorToRepresentables
 
 中文:
 定义 functorToRepresentables
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: (CategoryOfElements.π P).leftOp ⋙ uliftYoneda.{w}
 
 Depends on / 依赖: CategoryOfElements, leftOp, uliftYoneda
@@ -535,7 +535,7 @@ definition coconeOfRepresentable
 
 中文:
 定义 coconeOfRepresentable
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: P
   ι :=
     { app x := uliftYonedaEquiv.symm x.unop.2
@@ -597,7 +597,7 @@ definition colimitOfRepresentable
 
 中文:
 定义 colimitOfRepresentable
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: { app X := ↾fun x => uliftYonedaEquiv
         (s.ι.app (Opposite.op (Functor.elementsMk P X x)))
       naturality X Y f := by
@@ -659,8 +659,8 @@ instance [L.IsLeftKanExtension
   body: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α).isIso_hom
 
 中文:
-实例 [L.IsLeftKanExtension
-  签名: α] : IsIso α
+实例 [L.是LeftKanExtension
+  签名: α] : 是同构 α
   定义体: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α).isIso_hom
 
 Depends on / 依赖: Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, isIso_hom, isPointwiseLeftKanExtensionOfIsLeftKanExtension
@@ -758,7 +758,7 @@ definition uniqueExtensionAlongULiftYoneda
 
 中文:
 定义 uniqueExtensionAlongULiftYoneda
-  签名: (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ)
+  签名: (L : (Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) ⥤ ℰ)
   定义体: have := isLeftKanExtension_of_preservesColimits L e
   Functor.leftKanExtensionUnique _ e.hom _ (uliftYoneda.leftKanExtensionUnit A)
 
@@ -788,7 +788,7 @@ lemma isLeftAdjoint_of_preservesColimits
 
 中文:
 引理 isLeftAdjoint_of_preservesColimits
-  结论: (L : (C ⥤ Type max w v₁ v₂) ⥤ ℰ)
+  结论: (L : (C ⥤ 类型 最大值 w v₁ v₂) ⥤ ℰ)
   证明: ⟨_, ⟨((opOpEquivalence C).congrLeft.symm.toAdjunction.comp
     (uliftYonedaAdjunction _ (𝟙 _))).ofNatIsoLeft
       ((opOpEquivalence C).congrLeft.invFunIdAssoc L)⟩⟩
@@ -957,7 +957,7 @@ definition coconeApp
 
 中文:
 定义 coconeApp
-  签名: {P : Cᵒᵖ ⥤ Type max w v₁ v₂} (x : P.Elements)
+  签名: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} (x : P.Elements)
   定义体: uliftYonedaEquiv.symm
     ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).app _
       ((φ.app x.1.unop).app _ (ULift.up (𝟙 _))))
@@ -988,7 +988,7 @@ lemma coconeApp_naturality
 
 中文:
 引理 coconeApp_naturality
-  条件: {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {x y : P.Elements} (f : x ⟶ y)
+  条件: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} {x y : P.Elements} (f : x ⟶ y)
   证明: by
   have eq₁ : uliftYoneda.map f.1.unop ≫ uliftYonedaEquiv.symm x.2 =
       uliftYonedaEquiv.{max w v₂}.symm y.2 :=
@@ -1030,7 +1030,7 @@ definition presheafHom
 
 中文:
 定义 presheafHom
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
   定义体: (colimitOfRepresentable P).desc
     (Cocone.mk _ { app x := coconeApp.{w} φ x.unop })
 
@@ -1054,7 +1054,7 @@ lemma uliftYonedaEquiv_ι_presheafHom
 
 中文:
 引理 uliftYonedaEquiv_ι_presheafHom
-  结论: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) {X : C}
+  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) {X : C}
   证明: by
   obtain ⟨x, rfl⟩ := uliftYonedaEquiv.symm.surjective f
   erw [(colimitOfRepresentable P).fac _ (Opposite.op (P.elementsMk _ x))]
@@ -1109,7 +1109,7 @@ lemma presheafHom_naturality
 
 中文:
 引理 presheafHom_naturality
-  条件: {P Q : Cᵒᵖ ⥤ Type max w v₁ v₂} (f : P ⟶ Q)
+  条件: {P Q : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} (f : P ⟶ Q)
   证明: hom_ext_uliftYoneda.{max w v₂} (fun X p => uliftYonedaEquiv.injective (by
     rw [← assoc p f]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [← assoc]; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [Functor.map_comp]
     dsimp))
@@ -1246,7 +1246,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w v₁})}
+  结论: {Φ : uliftYoneda.{最大值 w v₂}.LeftExtension (F ⋙ uliftYoneda.{最大值 w v₁})}
   证明: by
   ext P : 3
   apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
@@ -1299,7 +1299,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.op.lan.IsLeftKanExtension (compULiftYonedaIsoULiftYonedaCompLan.{w} F).hom
+  签名: F.op.lan.是LeftKanExtension (compULiftYonedaIsoULiftYonedaCompLan.{w} F).hom
   定义体: ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
 
 Depends on / 依赖: IsInitial, Limits, Limits.IsInitial.ofUnique, ofUnique
@@ -1328,7 +1328,7 @@ definition tautologicalCocone'
 
 中文:
 定义 tautologicalCocone'
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: P
   ι := { app X := X.hom }
 -/
@@ -1349,7 +1349,7 @@ definition isColimitTautologicalCocone'
 
 中文:
 定义 isColimitTautologicalCocone'
-  签名: (P : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: (IsColimit.whiskerEquivalenceEquiv
     (CategoryOfElements.costructuredArrowULiftYonedaEquivalence.{w} P)).2
       (colimitOfRepresentable.{w} P)
@@ -1444,7 +1444,7 @@ theorem final_toCostructuredArrow_comp_pre
 
 中文:
 定理 final_toCostructuredArrow_comp_pre
-  条件: {c : Cocone (F ⋙ yoneda)} (hc : IsColimit c)
+  条件: {c : 余锥 (F ⋙ yoneda)} (hc : 是余极限 c)
   证明: by
   apply Functor.final_of_isTerminal_colimit_comp_yoneda
   suffices IsTerminal (colimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙

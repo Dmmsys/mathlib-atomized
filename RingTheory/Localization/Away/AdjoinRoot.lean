@@ -67,9 +67,9 @@ theorem IsLocalization.adjoin_inv
   proof: IsLocalization.isLocalization_of_algEquiv _ (Localization.awayEquivAdjoin r)
 
 中文:
-定理 IsLocalization.adjoin_inv
+定理 是Localization.adjoin_inv
   条件: (r : R)
-  结论: IsLocalization.Away r (AdjoinRoot <| C r * X - 1)
+  结论: 是Localization.Away r (AdjoinRoot <| C r * X - 1)
   证明: IsLocalization.isLocalization_of_algEquiv _ (Localization.awayEquivAdjoin r)
 
 Depends on / 依赖: IsLocalization, IsLocalization.isLocalization_of_algEquiv, Localization, Localization.awayEquivAdjoin, awayEquivAdjoin, isLocalization_of_algEquiv
@@ -87,8 +87,8 @@ theorem IsLocalization.Away.finitePresentation
 (Localization.awayEquivAdjoin r).symm.trans IsLocalization.algEquiv (Submonoid.powers r) _ _
 
 中文:
-定理 IsLocalization.Away.finitePresentation
-  结论: (r : R) {S} [CommRing S] [Algebra R S]
+定理 是Localization.Away.finitePresentation
+  结论: (r : R) {S} [交换环 S] [代数 R S]
   证明: (AdjoinRoot.finitePresentation _).equiv
 (Localization.awayEquivAdjoin r).symm.trans IsLocalization.algEquiv (Submonoid.powers r) _ _
 
@@ -109,7 +109,7 @@ lemma Algebra.FinitePresentation.of_isLocalizationAway
   .trans R S S'
 
 中文:
-引理 Algebra.FinitePresentation.of_isLocalizationAway
+引理 代数.有限呈现.of_isLocalizationAway
   证明: have : Algebra.FinitePresentation S S' :=
     IsLocalization.Away.finitePresentation f
   .trans R S S'

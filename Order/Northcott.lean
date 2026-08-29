@@ -46,7 +46,7 @@ class Northcott
 类 Northcott
   参数: [LE β]
   公理与运算 (1 个):
-    - finite_le : 对任意 b, {a : α | h a <= b}.Finite
+    - finite_le : 对任意 b, {a : α | h a <= b}.有限
 -/
 class Northcott [LE β] : Prop where
   finite_le : forall b, {a : α | h a <= b}.Finite
@@ -66,7 +66,7 @@ theorem northcott_iff_tendsto
 
 中文:
 定理 northcott_iff_tendsto
-  条件: [LinearOrder β] [NoMaxOrder β]
+  条件: [线性序 β] [NoMax序 β]
   证明: by
   simp_rw [northcott_iff, tendsto_atTop, eventually_cofinite, not_le]
   refine ⟨fun H b => (H b).subset fun x => le_of_lt, fun H b => ?_⟩
@@ -97,8 +97,8 @@ theorem exists_min_image
   grind
 
 中文:
-定理 exists_min_image
-  条件: [LinearOrder β] [Northcott h] (s : Set α) (hs : s.Nonempty)
+定理 存在_min_image
+  条件: [线性序 β] [Northcott h] (s : 集合 α) (hs : s.非空)
   证明: by
   obtain ⟨a₁, h₁⟩ := hs
   obtain ⟨a₂, h₂, h₃⟩ := Set.exists_min_image ({a | h a <= h a₁} inter s) h
@@ -126,7 +126,7 @@ exact (finite_le (h := h) b).subset by grind
 
 中文:
 引理 comp_of_bddAbove
-  条件: [Preorder β] [LE γ] [Northcott h] (H : 对任意 c, BddAbove (h' ⁻¹' {x | x <= c}))
+  条件: [预序 β] [LE γ] [Northcott h] (H : 对任意 c, BddAbove (h' ⁻¹' {x | x <= c}))
   证明: by
     obtain ⟨b, hb⟩ := bddAbove_def.mp (H c)
 exact (finite_le (h := h) b).subset by grind
@@ -152,7 +152,7 @@ exact (finite_le (h := h') c).subset by grind
 
 中文:
 引理 comp_of_finite_fibers
-  条件: [LE γ] [Northcott h'] [Filter.TendstoCofinite h]
+  条件: [LE γ] [Northcott h'] [滤子.TendstoCofinite h]
   证明: by
     refine Set.Finite.of_finite_fibers h ?_ fun x _ =>
       (Filter.TendstoCofinite.finite_preimage_singleton h x).inter_of_right _

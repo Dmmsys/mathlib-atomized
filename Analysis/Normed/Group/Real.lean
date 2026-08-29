@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: NNNorm 实数>=0
+  签名: NN范数 实数>=0
   定义体: x
 -/
 instance : NNNorm Real>=0 where
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: ENorm 实数>=0∞
+  签名: E范数 实数>=0∞
   定义体: x
 -/
 instance : ENorm Real>=0∞ where
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: ENormedAddCommMonoid 实数>=0∞
+  签名: ENormedAddComm幺半群 实数>=0∞
   定义体: continuous_id
   enorm_zero := by simp
   enorm_eq_zero := by simp
@@ -138,7 +138,7 @@ instance norm
 
 中文:
 实例 norm
-  签名: : Norm 实数 where
+  签名: : 范数 实数 where
   定义体: |r|
 
 @[simp]
@@ -175,7 +175,7 @@ instance normedAddCommGroup
 
 中文:
 实例 normedAddCommGroup
-  签名: : NormedAddCommGroup 实数
+  签名: : 赋范交换加群 实数
   定义体: ⟨fun _r _y => by rw [Real.dist_eq, ← abs_neg, neg_sub, add_comm, sub_eq_add_neg, norm_eq_abs]⟩
 
 Depends on / 依赖: Real.dist_eq, abs_neg, add_comm, dist_eq, neg_sub, norm_eq_abs, sub_eq_add_neg
@@ -303,7 +303,7 @@ lemma norm_ofNat
   proof: norm_natCast n
 
 中文:
-引理 norm_ofNat
+引理 norm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: norm_natCast n
 -/
@@ -319,7 +319,7 @@ lemma nnnorm_ofNat
   proof: nnnorm_natCast n
 
 中文:
-引理 nnnorm_ofNat
+引理 nnnorm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: nnnorm_natCast n
 -/
@@ -377,7 +377,7 @@ lemma norm_nnratCast
 
 中文:
 引理 norm_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ‖(q : 实数)‖ = q
   证明: norm_of_nonneg q.cast_nonneg
 
@@ -401,7 +401,7 @@ lemma nnnorm_nnratCast
 
 中文:
 引理 nnnorm_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ‖(q : 实数)‖₊ = q
   证明: by
   simp [nnnorm]
@@ -466,9 +466,9 @@ lemma enorm_ofReal_of_nonneg
   simp [Real.enorm_of_nonneg, ha]
 
 中文:
-引理 enorm_ofReal_of_nonneg
+引理 enorm_of实数_of_nonneg
   条件: {a : 实数} (ha : 0 <= a)
-  结论: ‖ENN实数.of实数 a‖ₑ = ‖a‖ₑ
+  结论: ‖广义非负实数.of实数 a‖ₑ = ‖a‖ₑ
   证明: by
   simp [Real.enorm_of_nonneg, ha]
 
@@ -521,7 +521,7 @@ theorem enorm_eq_ofReal
   rw [← ofReal_norm]; rw [norm_of_nonneg hr]
 
 中文:
-定理 enorm_eq_ofReal
+定理 enorm_eq_of实数
   条件: (hr : 0 <= r)
   结论: ‖r‖ₑ = .of实数 r
   证明: by
@@ -543,7 +543,7 @@ lemma enorm_toReal
   simp [enorm_eq_ofReal, ha]
 
 中文:
-引理 enorm_toReal
+引理 enorm_to实数
   条件: {a : 实数>=0∞} (ha : a != ∞)
   结论: ‖a.to实数‖ₑ = a
   证明: by
@@ -563,9 +563,9 @@ theorem enorm_eq_ofReal_abs
   rw [← enorm_eq_ofReal (abs_nonneg _)]; rw [enorm_abs]
 
 中文:
-定理 enorm_eq_ofReal_abs
+定理 enorm_eq_of实数_abs
   条件: (r : 实数)
-  结论: ‖r‖ₑ = ENN实数.of实数 |r|
+  结论: ‖r‖ₑ = 广义非负实数.of实数 |r|
   证明: by
   rw [← enorm_eq_ofReal (abs_nonneg _)]; rw [enorm_abs]
 
@@ -587,7 +587,7 @@ theorem toNNReal_eq_nnnorm_of_nonneg
   rw [Real.norm_eq_abs r]; rw [abs_of_nonneg hr]
 
 中文:
-定理 toNNReal_eq_nnnorm_of_nonneg
+定理 toNN实数_eq_nnnorm_of_nonneg
   条件: (hr : 0 <= r)
   结论: r.toNN实数 = ‖r‖₊
   证明: by
@@ -613,9 +613,9 @@ theorem ofReal_le_enorm
   rw [enorm_eq_ofReal_abs]; gcongr; exact le_abs_self _
 
 中文:
-定理 ofReal_le_enorm
+定理 of实数_le_enorm
   条件: (r : 实数)
-  结论: ENN实数.of实数 r <= ‖r‖ₑ
+  结论: 广义非负实数.of实数 r <= ‖r‖ₑ
   证明: by
   rw [enorm_eq_ofReal_abs]; gcongr; exact le_abs_self _
 
@@ -708,7 +708,7 @@ lemma enorm_enorm
 
 中文:
 引理 enorm_enorm
-  条件: {ε : 类型} [ENorm ε] (x : ε)
+  条件: {ε : 类型} [E范数 ε] (x : ε)
   结论: ‖‖x‖ₑ‖ₑ = ‖x‖ₑ
   证明: by simp [enorm]
 -/
@@ -726,7 +726,7 @@ lemma tendsto_norm_atTop_atTop
 
 中文:
 引理 tendsto_norm_atTop_atTop
-  结论: Tendsto (norm : 实数 -> 实数) atTop atTop
+  结论: 收敛 (norm : 实数 -> 实数) atTop atTop
   证明: tendsto_abs_atTop_atTop
 
 Depends on / 依赖: tendsto_abs_atTop_atTop

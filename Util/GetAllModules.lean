@@ -36,7 +36,7 @@ definition getAllFiles
 
 中文:
 定义 getAllFiles
-  签名: (git : 布尔) (ml : String)
+  签名: (git : 布尔值) (ml : String)
   定义体: do
   let ml.lean := addExtension ⟨ml⟩ "lean" -- for example, `Mathlib.lean`
   let allModules : Array System.FilePath ← (do
@@ -74,7 +74,7 @@ definition getAllModulesSorted
 
 中文:
 定义 getAllModulesSorted
-  签名: (git : 布尔) (ml : String)
+  签名: (git : 布尔值) (ml : String)
   定义体: do
   let files ← getAllFiles git ml
   let names ← files.mapM fun f => do

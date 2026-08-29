@@ -34,7 +34,7 @@ definition AEDisjoint
 
 中文:
 定义 AEDisjoint
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: μ (s inter t) = 0
 -/
 def AEDisjoint (s t : Set α) :=
@@ -56,8 +56,8 @@ theorem exists_null_pairwise_disjoint_sdiff
   · simp only [Pairwise, 
 
 中文:
-定理 exists_null_pairwise_disjoint_sdiff
-  结论: [Countable ι] {s : ι -> Set α}
+定理 存在_null_pairwise_disjoint_sdiff
+  结论: [可数 ι] {s : ι -> 集合 α}
   证明: by
   refine ⟨fun i => toMeasurable μ (s i inter ⋃ j in ({i}ᶜ : Set ι), s j), fun i =>
     measurableSet_toMeasurable _ _, fun i => ?_, ?_⟩
@@ -195,8 +195,8 @@ theorem _root_.Pairwise.aedisjoint
   proof: hf.mono fun _i _j h => h.aedisjoint
 
 中文:
-定理 _root_.Pairwise.aedisjoint
-  条件: {f : ι -> Set α} (hf : Pairwise (Disjoint on f))
+定理 _root_.两两.aedisjoint
+  条件: {f : ι -> 集合 α} (hf : 两两 (Disjoint on f))
   证明: hf.mono fun _i _j h => h.aedisjoint
 -/
 protected theorem _root_.Pairwise.aedisjoint {f : ι -> Set α} (hf : Pairwise (Disjoint on f)) :
@@ -212,8 +212,8 @@ theorem _root_.Set.PairwiseDisjoint.aedisjoint
   proof: hf.mono' fun _i _j h => h.aedisjoint
 
 中文:
-定理 _root_.Set.PairwiseDisjoint.aedisjoint
-  结论: {f : ι -> Set α} {s : Set ι}
+定理 _root_.集合.PairwiseDisjoint.aedisjoint
+  结论: {f : ι -> 集合 α} {s : 集合 ι}
   证明: hf.mono' fun _i _j h => h.aedisjoint
 -/
 protected theorem _root_.Set.PairwiseDisjoint.aedisjoint {f : ι -> Set α} {s : Set ι}
@@ -293,7 +293,7 @@ theorem iUnion_left_iff
 
 中文:
 定理 iUnion_left_iff
-  条件: {ι : Sort*} [Countable ι] {s : ι -> Set α}
+  条件: {ι : 类型层*} [可数 ι] {s : ι -> 集合 α}
   证明: by
   simp only [AEDisjoint, iUnion_inter, measure_iUnion_null_iff]
 
@@ -319,7 +319,7 @@ theorem iUnion_right_iff
 
 中文:
 定理 iUnion_right_iff
-  条件: {ι : Sort*} [Countable ι] {t : ι -> Set α}
+  条件: {ι : 类型层*} [可数 ι] {t : ι -> 集合 α}
   证明: by
   simp only [AEDisjoint, inter_iUnion, measure_iUnion_null_iff]
 
@@ -431,7 +431,7 @@ theorem sdiff_ae_eq_left
 中文:
 定理 sdiff_ae_eq_left
   条件: (h : AEDisjoint μ s t)
-  结论: (s \ t : Set α) =ᵐ[μ] s
+  结论: (s \ t : 集合 α) =ᵐ[μ] s
   证明: @sdiff_self_inter _ s t ▸ sdiff_null_ae_eq_self h
 
 @[deprecated (since := "2026-06-03")] alias diff_ae_eq_left := sdiff_ae_eq_left
@@ -457,7 +457,7 @@ theorem sdiff_ae_eq_right
 中文:
 定理 sdiff_ae_eq_right
   条件: (h : AEDisjoint μ s t)
-  结论: (t \ s : Set α) =ᵐ[μ] t
+  结论: (t \ s : 集合 α) =ᵐ[μ] t
   证明: sdiff_ae_eq_left AEDisjoint.symm h
 
 @[deprecated (since := "2026-06-03")] alias diff_ae_eq_right := sdiff_ae_eq_right
@@ -532,7 +532,7 @@ theorem exists_disjoint_diff
 simpa using ⟨hx.1, fun hxt => hx.2 subset_toMeasurable _ _ ⟨hx.1, hxt⟩⟩⟩
 
 中文:
-定理 exists_disjoint_diff
+定理 存在_disjoint_diff
   条件: (h : AEDisjoint μ s t)
   证明: ⟨toMeasurable μ (s inter t), measurableSet_toMeasurable _ _, (measure_toMeasurable _).trans h,
     disjoint_sdiff_self_left.mono_left (b := s \ t) fun x hx => by

@@ -102,7 +102,7 @@ theorem isPreprimitive_stabilizer_subgroup
 
 中文:
 定理 isPreprimitive_stabilizer_subgroup
-  结论: [IsPreprimitive (stabilizer M s) s]
+  结论: [是Preprimitive (stabilizer M s) s]
   证明: let φ (g : stabilizer M s) : stabilizer G s :=
     ⟨⟨g, hG g.prop⟩, g.prop⟩
   let f : s ->ₑ[φ] s := {
@@ -139,7 +139,7 @@ theorem IsPretransitive.of_partition
       use k 
 
 中文:
-定理 IsPretransitive.of_partition
+定理 是Pretransitive.of_partition
   证明: by
   suffices exists (a b : α) (g : M), a in s ∧ b in sᶜ ∧ g • a = b by
     obtain ⟨a, b, g, ha, hb, hgab⟩ := this
@@ -198,7 +198,7 @@ theorem ofSubtype_mem_stabilizer
 
 中文:
 定理 ofSubtype_mem_stabilizer
-  条件: [DecidablePred fun x => x in s] (g : Perm s)
+  条件: [DecidablePred fun x => x in s] (g : 置换 s)
   证明: by
   rw [mem_stabilizer_iff]
   ext g'
@@ -279,7 +279,7 @@ theorem exists_mem_stabilizer_smul_eq
   exact ⟨swap a b, swap_mem_stabilizer ha hb, swap_apply_left a b⟩
 
 中文:
-定理 exists_mem_stabilizer_smul_eq
+定理 存在_mem_stabilizer_smul_eq
   证明: by
   intro a ha b hb
   classical
@@ -307,7 +307,7 @@ theorem stabilizer.surjective_toPerm
 
 中文:
 定理 stabilizer.surjective_toPerm
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: fun g => by
   classical
   use! Perm.ofSubtype g
@@ -333,7 +333,7 @@ instance stabilizer_isPreprimitive
 
 中文:
 实例 stabilizer_isPreprimitive
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: isPreprimitive_stabilizer_of_surjective s (stabilizer.surjective_toPerm s)
 
 Depends on / 依赖: isPreprimitive_stabilizer_of_surjective, stabilizer, stabilizer.surjective_toPerm, surjective_toPerm
@@ -478,7 +478,7 @@ lemma _root_.Subgroup.isPretransitive_of_stabilizer_lt
     apply not
 
 中文:
-引理 _root_.Subgroup.isPretransitive_of_stabilizer_lt
+引理 _root_.子群.isPretransitive_of_stabilizer_lt
   证明: by
   apply IsPretransitive.of_partition (s := s)
   · intro a ha b hb
@@ -617,7 +617,7 @@ lemma subsingleton_of_stabilizer_lt_of_subset
 
 中文:
 引理 subsingleton_of_stabilizer_lt_of_subset
-  结论: {B : Set α}
+  结论: {B : 集合 α}
   证明: by
   suffices IsTrivialBlock (Subtype.val ⁻¹' B : Set s) by
     rcases this with hB' | hB'
@@ -834,7 +834,7 @@ theorem isCoatom_stabilizer
 
 中文:
 定理 isCoatom_stabilizer
-  结论: {s : Set α}
+  结论: {s : 集合 α}
   证明: by
   obtain h | h | h := Nat.lt_trichotomy s.ncard sᶜ.ncard
   · exact isCoatom_stabilizer_of_ncard_lt_ncard_compl hs_nonempty h

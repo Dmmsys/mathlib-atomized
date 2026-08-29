@@ -91,7 +91,7 @@ instance WPath.inhabited
 
 中文:
 实例 WPath.inhabited
-  签名: (x : P.last.W) {i : Fin2 n} [I : Inhabited (P.drop.B x.head i)]
+  签名: (x : P.last.W) {i : Fin2 n} [I : 可居 (P.drop.B x.head i)]
   定义体: ⟨match x, I with
     | ⟨a, f⟩, I => WPath.root a f i (@default _ I)⟩
 
@@ -253,7 +253,7 @@ definition wp
 
 中文:
 定义 wp
-  签名: : MvPFunctor n where
+  签名: : MvP函子 n where
   定义体: P.last.W
   B := P.WPath
 
@@ -291,7 +291,7 @@ instance mvfunctorW
 
 中文:
 实例 mvfunctorW
-  签名: : MvFunctor P.W
+  签名: : Mv函子 P.W
   定义体: by delta MvPFunctor.W; infer_instance
 
 Depends on / 依赖: MvPFunctor, MvPFunctor.W, infer_instance
@@ -329,7 +329,7 @@ definition wpRec
 
 中文:
 定义 wpRec
-  签名: {α : TypeVec n} {C : Sort*}
+  签名: {α : TypeVec n} {C : 类型层*}
 -/
 def wpRec {α : TypeVec n} {C : Sort*}
     (g : forall (a : P.A) (f : P.last.B a -> P.last.W), P.WPath ⟨a, f⟩ ⟹ α -> (P.last.B a -> C) -> C) :
@@ -346,7 +346,7 @@ theorem wpRec_eq
 
 中文:
 定理 wpRec_eq
-  结论: {α : TypeVec n} {C : Sort*}
+  结论: {α : TypeVec n} {C : 类型层*}
   证明: rfl
 -/
 theorem wpRec_eq {α : TypeVec n} {C : Sort*}
@@ -366,7 +366,7 @@ definition wpInd
 
 中文:
 定义 wpInd
-  签名: {α : TypeVec n} {C : 对任意 x : P.last.W, P.WPath x ⟹ α -> Sort v}
+  签名: {α : TypeVec n} {C : 对任意 x : P.last.W, P.WPath x ⟹ α -> 类型层 v}
   定义体: wpInd
 -/
 def wpInd {α : TypeVec n} {C : forall x : P.last.W, P.WPath x ⟹ α -> Sort v}
@@ -420,7 +420,7 @@ definition wRec
 
 中文:
 定义 wRec
-  签名: {α : TypeVec n} {C : Sort*}
+  签名: {α : TypeVec n} {C : 类型层*}
   定义体: g a (P.wPathDestLeft h) (fun i => ⟨f i, P.wPathDestRight h i⟩) h'
     P.wpRec g' a f'
 
@@ -444,7 +444,7 @@ theorem wRec_eq
 
 中文:
 定理 wRec_eq
-  结论: {α : TypeVec n} {C : Sort*}
+  结论: {α : TypeVec n} {C : 类型层*}
   证明: rfl
 -/
 theorem wRec_eq {α : TypeVec n} {C : Sort*}
@@ -472,7 +472,7 @@ definition wInd
 
 中文:
 定义 wInd
-  签名: {α : TypeVec n} {C : P.W α -> Sort v}
+  签名: {α : TypeVec n} {C : P.W α -> 类型层 v}
   定义体: fun ⟨hd, ch⟩ =>
   wpInd P (fun head f f' ih' =>
     cast
@@ -505,7 +505,7 @@ theorem wInd_wMk
 
 中文:
 定理 wInd_wMk
-  结论: {α : TypeVec n} {C : P.W α -> Sort v}
+  结论: {α : TypeVec n} {C : P.W α -> 类型层 v}
   证明: rfl
 -/
 theorem wInd_wMk {α : TypeVec n} {C : P.W α -> Sort v}
@@ -528,7 +528,7 @@ definition wCases
 
 中文:
 定义 wCases
-  签名: {α : TypeVec n} {C : P.W α -> Sort v}
+  签名: {α : TypeVec n} {C : P.W α -> 类型层 v}
   定义体: P.wInd fun a f' f _ih' => ih a f' f
 
 @[deprecated (since := "2026-03-20")] alias w_cases := wCases

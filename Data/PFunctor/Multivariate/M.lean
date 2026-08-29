@@ -71,11 +71,11 @@ inductive M.Path
     - child: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : PFunctor.M.dest x = ⟨a, f⟩) (j : P.last.B a) (i : Fin2 n) (c : M.Path (f j) i) : M.Path x i
 
 中文:
-归纳类型 M.Path
+归纳类型 M.道路
   参数: : P.last.M -> Fin2 n -> 类型u
   构造子 (2 个):
-    - root: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : PFunctor.M.dest x = ⟨a, f⟩) (i : Fin2 n) (c : P.drop.B a i) : M.Path x i
-    - child: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : PFunctor.M.dest x = ⟨a, f⟩) (j : P.last.B a) (i : Fin2 n) (c : M.Path (f j) i) : M.Path x i
+    - root: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : P函子.M.dest x = ⟨a, f⟩) (i : Fin2 n) (c : P.drop.B a i) : M.道路 x i
+    - child: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : P函子.M.dest x = ⟨a, f⟩) (j : P.last.B a) (i : Fin2 n) (c : M.道路 (f j) i) : M.道路 x i
 -/
 inductive M.Path : P.last.M -> Fin2 n -> Type u
   | root (x : P.last.M)
@@ -108,8 +108,8 @@ instance M.Path.inhabited
       _ default⟩
 
 中文:
-实例 M.Path.inhabited
-  签名: (x : P.last.M) {i} [Inhabited (P.drop.B x.head i)]
+实例 M.道路.inhabited
+  签名: (x : P.last.M) {i} [可居 (P.drop.B x.head i)]
   定义体: let a := PFunctor.M.head x
   let f := PFunctor.M.children x
   ⟨M.Path.root _ a f
@@ -143,7 +143,7 @@ definition mp
 
 中文:
 定义 mp
-  签名: : MvPFunctor n where
+  签名: : MvP函子 n where
   定义体: P.last.M
   B := M.Path P
 
@@ -181,7 +181,7 @@ instance mvfunctorM
 
 中文:
 实例 mvfunctorM
-  签名: : MvFunctor P.M
+  签名: : Mv函子 P.M
   定义体: by delta M; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -198,7 +198,7 @@ instance inhabitedM
 
 中文:
 实例 inhabitedM
-  签名: {α : TypeVec _} [I : Inhabited P.A] [对任意 i : Fin2 n, Inhabited (α i)]
+  签名: {α : TypeVec _} [I : 可居 P.A] [对任意 i : Fin2 n, 可居 (α i)]
   定义体: @Obj.inhabited _ (mp P) _ (@PFunctor.M.inhabited P.last I) _
 
 Depends on / 依赖: Obj.inhabited, P.last, PFunctor, PFunctor.M.inhabited, inhabited
@@ -673,7 +673,7 @@ theorem M.bisim₀
 
 中文:
 定理 M.bisim₀
-  结论: {α : TypeVec n} (R : P.M α -> P.M α -> 命题) (h₀ : Equivalence R)
+  结论: {α : TypeVec n} (R : P.M α -> P.M α -> 命题) (h₀ : 等价 R)
   证明: by
   apply M.bisim P R _ _ _ r
   clear r x y

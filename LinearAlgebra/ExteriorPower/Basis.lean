@@ -35,7 +35,7 @@ instance instFinite
 
 中文:
 实例 instFinite
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: by
   rw [Module.Finite.iff_fg]; rw [ExteriorAlgebra.exteriorPower]; rw [LinearMap.range_eq_map]
   exact Submodule.FG.pow (Submodule.FG.map _ Module.Finite.fg_top) n
@@ -64,7 +64,7 @@ definition ιMultiDual
 
 中文:
 定义 ιMultiDual
-  签名: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  签名: {I : 类型} [线性序 I] (b : 基 I R M)
   定义体: pairingDual R M n (ιMulti_family R n b.coord s)
 
 @[simp]
@@ -87,7 +87,7 @@ lemma ιMultiDual_apply_ιMulti
 
 中文:
 引理 ιMultiDual_apply_ιMulti
-  结论: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  结论: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: by
   simp [ιMultiDual, ιMulti_family, pairingDual_ιMulti_ιMulti]
 -/
@@ -113,7 +113,7 @@ lemma ιMultiDual_apply_diag
 
 中文:
 引理 ιMultiDual_apply_diag
-  结论: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  结论: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: by
   rw [ιMulti_family]; rw [ιMultiDual_apply_ιMulti]
   suffices Matrix.of (fun i j => b.coord (powersetCard.ofFinEmbEquiv.symm s j)
@@ -149,7 +149,7 @@ lemma ιMultiDual_apply_nondiag
 
 中文:
 引理 ιMultiDual_apply_nondiag
-  结论: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  结论: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: by
   rw [ιMulti_family]; rw [ιMultiDual_apply_ιMulti]
   obtain ⟨i, his, hit⟩ := (exists_mem_notMem_iff_ne s t).mp hst
@@ -186,7 +186,7 @@ lemma ιMulti_family_linearIndependent_ofBasis
 
 中文:
 引理 ιMulti_family_linearIndependent_ofBasis
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: LinearIndependent.of_pairwise_dual_eq_zero_one _ (fun s => ιMultiDual R n b s)
     (fun _ _ h => ιMultiDual_apply_nondiag R n b _ _ h)
     (fun _ => ιMultiDual_apply_diag _ _ _ _)
@@ -212,8 +212,8 @@ definition _root_.Module.Basis.exteriorPower
 @[simp]
 
 中文:
-定义 _root_.Module.Basis.exteriorPower
-  签名: {I : 类型} [LinearOrder I] (b : Basis I R M)
+定义 _root_.模.基.exteriorPower
+  签名: {I : 类型} [线性序 I] (b : 基 I R M)
   定义体: Basis.mk (ιMulti_family_linearIndependent_ofBasis _ _ _)
     (eq_top_iff.mp <| ιMulti_family_span_of_span R b.span_eq)
 
@@ -237,7 +237,7 @@ lemma coe_basis
 
 中文:
 引理 coe_basis
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: Basis.coe_mk _ _
 
 Depends on / 依赖: Basis.coe_mk, coe_mk
@@ -257,7 +257,7 @@ lemma basis_apply
 
 中文:
 引理 basis_apply
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M) (s : powersetCard I n)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M) (s : powersetCard I n)
   证明: by
   rw [coe_basis]
 
@@ -283,7 +283,7 @@ lemma basis_coord
 
 中文:
 引理 basis_coord
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M) (s : powersetCard I n)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M) (s : powersetCard I n)
   证明: by
   apply LinearMap.ext_on (ιMulti_family_span_of_span R (Basis.span_eq b))
   rintro x ⟨t, rfl⟩
@@ -317,7 +317,7 @@ lemma basis_repr_apply
 
 中文:
 引理 basis_repr_apply
-  结论: {I : 类型} [LinearOrder I] (b : Basis I R M) (x : ⋀[R]^n M)
+  结论: {I : 类型} [线性序 I] (b : 基 I R M) (x : ⋀[R]^n M)
   证明: by
   simpa [← Basis.coord_apply] using LinearMap.congr_fun (basis_coord R n b s) x
 
@@ -344,7 +344,7 @@ lemma basis_repr_self
 
 中文:
 引理 basis_repr_self
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M) (s : powersetCard I n)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M) (s : powersetCard I n)
   证明: by
   simpa [basis_repr_apply] using ιMultiDual_apply_diag R n b s
 
@@ -368,7 +368,7 @@ lemma basis_repr_ne
 
 中文:
 引理 basis_repr_ne
-  结论: {I : 类型} [LinearOrder I] (b : Basis I R M)
+  结论: {I : 类型} [线性序 I] (b : 基 I R M)
   证明: by
   simpa [basis_repr_apply] using ιMultiDual_apply_nondiag R n b t s hst.symm
 
@@ -391,7 +391,7 @@ lemma basis_repr
 
 中文:
 引理 basis_repr
-  条件: {I : 类型} [LinearOrder I] (b : Basis I R M) (s : powersetCard I n)
+  条件: {I : 类型} [线性序 I] (b : 基 I R M) (s : powersetCard I n)
   证明: by
   ext t
   by_cases hst : s = t <;> simp [hst]
@@ -417,7 +417,7 @@ instance instFree
 
 中文:
 实例 instFree
-  签名: [Module.Free R M]
+  签名: [模.自由 R M]
   定义体: by
   classical
   have ⟨I, b⟩ := Module.Free.exists_basis R M
@@ -448,7 +448,7 @@ lemma finrank_eq
 
 中文:
 引理 finrank_eq
-  条件: [Module.Free R M] [Module.Finite R M]
+  条件: [模.自由 R M] [模.有限 R M]
   证明: by
   classical
   let : LinearOrder (Module.Free.ChooseBasisIndex R M) := linearOrderOfSTO WellOrderingRel
@@ -482,7 +482,7 @@ lemma ιMulti_family_linearIndependent_field
 
 中文:
 引理 ιMulti_family_linearIndependent_field
-  结论: {I : 类型} [LinearOrder I] {v : I -> E}
+  结论: {I : 类型} [线性序 I] {v : I -> E}
   证明: by
   let W := Submodule.span K (Set.range v)
   suffices exists b : Basis I K W, v = W.subtype ∘ b by

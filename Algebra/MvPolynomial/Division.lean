@@ -57,7 +57,7 @@ local infixl:70 " /ᵐᵒⁿᵒᵐⁱᵃˡ " => divMonomial
 
 中文:
 定义 divMonomial
-  签名: (p : MvPolynomial σ R) (s : σ ->₀ 自然数)
+  签名: (p : 多元多项式 σ R) (s : σ ->₀ 自然数)
   定义体: AddMonoidAlgebra.divOf p s
 
 local infixl:70 " /ᵐᵒⁿᵒᵐⁱᵃˡ " => divMonomial
@@ -84,7 +84,7 @@ theorem coeff_divMonomial
 
 中文:
 定理 coeff_divMonomial
-  条件: (s : σ ->₀ 自然数) (x : MvPolynomial σ R) (s' : σ ->₀ 自然数)
+  条件: (s : σ ->₀ 自然数) (x : 多元多项式 σ R) (s' : σ ->₀ 自然数)
   证明: rfl
 
 @[simp]
@@ -106,7 +106,7 @@ theorem support_divMonomial
 
 中文:
 定理 support_divMonomial
-  条件: (s : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (s : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: rfl
 
 @[simp]
@@ -128,7 +128,7 @@ theorem zero_divMonomial
 中文:
 定理 zero_divMonomial
   条件: (s : σ ->₀ 自然数)
-  结论: (0 : MvPolynomial σ R) /ᵐᵒⁿᵒᵐⁱᵃˡ s = 0
+  结论: (0 : 多元多项式 σ R) /ᵐᵒⁿᵒᵐⁱᵃˡ s = 0
   证明: AddMonoidAlgebra.zero_divOf _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.zero_divOf, zero_divOf
@@ -147,7 +147,7 @@ theorem divMonomial_zero
 
 中文:
 定理 divMonomial_zero
-  条件: (x : MvPolynomial σ R)
+  条件: (x : 多元多项式 σ R)
   结论: x /ᵐᵒⁿᵒᵐⁱᵃˡ 0 = x
   证明: x.divOf_zero
 
@@ -168,7 +168,7 @@ theorem add_divMonomial
 
 中文:
 定理 add_divMonomial
-  条件: (x y : MvPolynomial σ R) (s : σ ->₀ 自然数)
+  条件: (x y : 多元多项式 σ R) (s : σ ->₀ 自然数)
   证明: by
   simp [divMonomial, MvPolynomial, AddMonoidAlgebra.add_divOf]
 
@@ -190,7 +190,7 @@ theorem divMonomial_add
 
 中文:
 定理 divMonomial_add
-  条件: (a b : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (a b : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: x.divOf_add _ _
 
 @[simp]
@@ -214,7 +214,7 @@ theorem divMonomial_monomial_mul
 
 中文:
 定理 divMonomial_monomial_mul
-  条件: (a : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (a : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: x.of'_mul_divOf _
 
 @[simp]
@@ -238,7 +238,7 @@ theorem divMonomial_mul_monomial
 
 中文:
 定理 divMonomial_mul_monomial
-  条件: (a : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (a : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: x.mul_of'_divOf _
 
 @[simp]
@@ -262,7 +262,7 @@ theorem divMonomial_monomial
 中文:
 定理 divMonomial_monomial
   条件: (a : σ ->₀ 自然数)
-  结论: monomial a 1 /ᵐᵒⁿᵒᵐⁱᵃˡ a = (1 : MvPolynomial σ R)
+  结论: monomial a 1 /ᵐᵒⁿᵒᵐⁱᵃˡ a = (1 : 多元多项式 σ R)
   证明: AddMonoidAlgebra.of'_divOf _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.of, _divOf
@@ -284,7 +284,7 @@ local infixl:70 " %ᵐᵒⁿᵒᵐⁱᵃˡ " => modMonomial
 
 中文:
 定义 modMonomial
-  签名: (x : MvPolynomial σ R) (s : σ ->₀ 自然数)
+  签名: (x : 多元多项式 σ R) (s : σ ->₀ 自然数)
   定义体: x.modOf s
 
 local infixl:70 " %ᵐᵒⁿᵒᵐⁱᵃˡ " => modMonomial
@@ -311,7 +311,7 @@ theorem coeff_modMonomial_of_not_le
 
 中文:
 定理 coeff_modMonomial_of_not_le
-  条件: {s' s : σ ->₀ 自然数} (x : MvPolynomial σ R) (h : ¬s <= s')
+  条件: {s' s : σ ->₀ 自然数} (x : 多元多项式 σ R) (h : ¬s <= s')
   证明: x.coeff_modOf_of_not_exists_add s s' by rintro ⟨d, rfl⟩; exact h le_self_add
 
 @[simp]
@@ -335,7 +335,7 @@ theorem coeff_modMonomial_of_le
 
 中文:
 定理 coeff_modMonomial_of_le
-  条件: {s' s : σ ->₀ 自然数} (x : MvPolynomial σ R) (h : s <= s')
+  条件: {s' s : σ ->₀ 自然数} (x : 多元多项式 σ R) (h : s <= s')
   证明: x.coeff_modOf_of_exists_add _ _ exists_add_of_le h
 
 @[simp]
@@ -359,7 +359,7 @@ theorem monomial_mul_modMonomial
 
 中文:
 定理 monomial_mul_modMonomial
-  条件: (s : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (s : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: x.of'_mul_modOf _
 
 @[simp]
@@ -383,7 +383,7 @@ theorem mul_monomial_modMonomial
 
 中文:
 定理 mul_monomial_modMonomial
-  条件: (s : σ ->₀ 自然数) (x : MvPolynomial σ R)
+  条件: (s : σ ->₀ 自然数) (x : 多元多项式 σ R)
   证明: x.mul_of'_modOf _
 
 @[simp]
@@ -425,7 +425,7 @@ theorem divMonomial_add_modMonomial
 
 中文:
 定理 divMonomial_add_modMonomial
-  条件: (x : MvPolynomial σ R) (s : σ ->₀ 自然数)
+  条件: (x : 多元多项式 σ R) (s : σ ->₀ 自然数)
   证明: AddMonoidAlgebra.divOf_add_modOf x s
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.divOf_add_modOf, divOf_add_modOf
@@ -444,7 +444,7 @@ theorem modMonomial_add_divMonomial
 
 中文:
 定理 modMonomial_add_divMonomial
-  条件: (x : MvPolynomial σ R) (s : σ ->₀ 自然数)
+  条件: (x : 多元多项式 σ R) (s : σ ->₀ 自然数)
   证明: AddMonoidAlgebra.modOf_add_divOf x s
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.modOf_add_divOf, modOf_add_divOf
@@ -463,7 +463,7 @@ theorem monomial_one_dvd_iff_modMonomial_eq_zero
 
 中文:
 定理 monomial_one_dvd_iff_modMonomial_eq_zero
-  条件: {i : σ ->₀ 自然数} {x : MvPolynomial σ R}
+  条件: {i : σ ->₀ 自然数} {x : 多元多项式 σ R}
   证明: AddMonoidAlgebra.of'_dvd_iff_modOf_eq_zero
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.of, _dvd_iff_modOf_eq_zero
@@ -493,7 +493,7 @@ theorem X_mul_divMonomial
 
 中文:
 定理 X_mul_divMonomial
-  条件: (i : σ) (x : MvPolynomial σ R)
+  条件: (i : σ) (x : 多元多项式 σ R)
   证明: divMonomial_monomial_mul _ _
 
 @[simp]
@@ -519,7 +519,7 @@ theorem X_divMonomial
 中文:
 定理 X_divMonomial
   条件: (i : σ)
-  结论: (X i : MvPolynomial σ R) /ᵐᵒⁿᵒᵐⁱᵃˡ Finsupp.single i 1 = 1
+  结论: (X i : 多元多项式 σ R) /ᵐᵒⁿᵒᵐⁱᵃˡ 有限支撑.single i 1 = 1
   证明: divMonomial_monomial (Finsupp.single i 1)
 
 @[simp]
@@ -542,7 +542,7 @@ theorem mul_X_divMonomial
 
 中文:
 定理 mul_X_divMonomial
-  条件: (x : MvPolynomial σ R) (i : σ)
+  条件: (x : 多元多项式 σ R) (i : σ)
   证明: divMonomial_mul_monomial _ _
 
 @[simp]
@@ -566,7 +566,7 @@ theorem X_mul_modMonomial
 
 中文:
 定理 X_mul_modMonomial
-  条件: (i : σ) (x : MvPolynomial σ R)
+  条件: (i : σ) (x : 多元多项式 σ R)
   证明: monomial_mul_modMonomial _ _
 
 @[simp]
@@ -590,7 +590,7 @@ theorem mul_X_modMonomial
 
 中文:
 定理 mul_X_modMonomial
-  条件: (x : MvPolynomial σ R) (i : σ)
+  条件: (x : 多元多项式 σ R) (i : σ)
   证明: mul_monomial_modMonomial _ _
 
 @[simp]
@@ -614,7 +614,7 @@ theorem modMonomial_X
 中文:
 定理 modMonomial_X
   条件: (i : σ)
-  结论: (X i : MvPolynomial σ R) %ᵐᵒⁿᵒᵐⁱᵃˡ Finsupp.single i 1 = 0
+  结论: (X i : 多元多项式 σ R) %ᵐᵒⁿᵒᵐⁱᵃˡ 有限支撑.single i 1 = 0
   证明: monomial_modMonomial _
 
 Depends on / 依赖: monomial_modMonomial
@@ -632,7 +632,7 @@ theorem divMonomial_add_modMonomial_single
 
 中文:
 定理 divMonomial_add_modMonomial_single
-  条件: (x : MvPolynomial σ R) (i : σ)
+  条件: (x : 多元多项式 σ R) (i : σ)
   证明: divMonomial_add_modMonomial _ _
 
 Depends on / 依赖: divMonomial_add_modMonomial
@@ -651,7 +651,7 @@ theorem modMonomial_add_divMonomial_single
 
 中文:
 定理 modMonomial_add_divMonomial_single
-  条件: (x : MvPolynomial σ R) (i : σ)
+  条件: (x : 多元多项式 σ R) (i : σ)
   证明: modMonomial_add_divMonomial _ _
 
 Depends on / 依赖: modMonomial_add_divMonomial
@@ -670,7 +670,7 @@ theorem X_dvd_iff_modMonomial_eq_zero
 
 中文:
 定理 X_dvd_iff_modMonomial_eq_zero
-  条件: {i : σ} {x : MvPolynomial σ R}
+  条件: {i : σ} {x : 多元多项式 σ R}
   证明: monomial_one_dvd_iff_modMonomial_eq_zero
 
 Depends on / 依赖: monomial_one_dvd_iff_modMonomial_eq_zero
@@ -753,7 +753,7 @@ theorem monomial_one_dvd_monomial_one
 
 中文:
 定理 monomial_one_dvd_monomial_one
-  条件: [Nontrivial R] {i j : σ ->₀ 自然数}
+  条件: [非平凡 R] {i j : σ ->₀ 自然数}
   证明: by
   rw [monomial_dvd_monomial]
   simp_rw [one_ne_zero, false_or, dvd_rfl, and_true]
@@ -783,7 +783,7 @@ theorem X_dvd_X
 
 中文:
 定理 X_dvd_X
-  条件: [Nontrivial R] {i j : σ}
+  条件: [非平凡 R] {i j : σ}
   证明: by
   refine monomial_one_dvd_monomial_one.trans ?_
   simp_rw [Finsupp.single_le_iff, Nat.one_le_iff_ne_zero, Finsupp.single_apply_ne_zero,
@@ -838,7 +838,7 @@ theorem eq_divMonomial_single
 
 中文:
 定理 eq_divMonomial_single
-  结论: [IsLeftCancelAdd R]
+  结论: [是左消去加法 R]
   证明: by
   ext n
   rw [coeff_divMonomial]; rw [h]; rw [coeff_add]; rw [coeff_X_mul]; rw [left_eq_add]; rw [← notMem_support_iff]
@@ -870,7 +870,7 @@ instance [IsLeftCancelAdd
   simpa using congr_arg (coeff d) H
 
 中文:
-实例 [IsLeftCancelAdd
+实例 [是左消去加法
   签名: R] :
   定义体: by
   suffices IsLeftCancelAdd (MvPolynomial σ R) from
@@ -902,7 +902,7 @@ theorem eq_modMonomial_single
 
 中文:
 定理 eq_modMonomial_single
-  结论: [IsLeftCancelAdd R]
+  结论: [是左消去加法 R]
   证明: by
   have h' := id h
   rwa [← p.divMonomial_add_modMonomial_single i,
@@ -986,7 +986,7 @@ theorem X_dvd_mul_iff
 
 中文:
 定理 X_dvd_mul_iff
-  条件: [IsCancelMulZero R]
+  条件: [是乘零消去 R]
   证明: by
   nontriviality R
   constructor
@@ -1052,8 +1052,8 @@ theorem X_prime
 
 中文:
 定理 X_prime
-  条件: [IsCancelMulZero R] [Nontrivial R]
-  结论: Prime (X i : MvPolynomial σ R)
+  条件: [是乘零消去 R] [非平凡 R]
+  结论: 素 (X i : 多元多项式 σ R)
   证明: by
   refine ⟨X_ne_zero i, ?_, fun p q => X_dvd_mul_iff.mp⟩
   intro h
@@ -1091,7 +1091,7 @@ theorem dvd_X_mul_iff
 
 中文:
 定理 dvd_X_mul_iff
-  条件: [IsCancelMulZero R]
+  条件: [是乘零消去 R]
   证明: by
   constructor
   · rintro ⟨r, hp⟩
@@ -1142,8 +1142,8 @@ theorem dvd_monomial_mul_iff_exists
     p ∣ monomial n 1 * q ↔ exists m r, m <= 
 
 中文:
-定理 dvd_monomial_mul_iff_exists
-  条件: [IsCancelMulZero R] {n : σ ->₀ 自然数}
+定理 dvd_monomial_mul_iff_存在
+  条件: [是乘零消去 R] {n : σ ->₀ 自然数}
   证明: by
   rcases subsingleton_or_nontrivial R with hR | hR
   · simp only [Subsingleton.elim _ p, dvd_refl, and_self, and_true, exists_const, true_iff]

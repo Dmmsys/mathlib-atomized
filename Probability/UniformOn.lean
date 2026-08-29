@@ -64,7 +64,7 @@ deriving IsZeroOrProbabilityMeasure
 
 中文:
 定义 uniformOn
-  签名: (s : Set Ω)
+  签名: (s : 集合 Ω)
   定义体: Measure.count[|s]
 deriving IsZeroOrProbabilityMeasure
 
@@ -87,7 +87,7 @@ theorem uniformOn_empty_meas
 
 中文:
 定理 uniformOn_empty_meas
-  结论: (uniformOn ∅ : Measure Ω) = 0
+  结论: (uniformOn ∅ : 测度 Ω) = 0
   证明: by simp [uniformOn]
 
 Depends on / 依赖: uniformOn
@@ -105,7 +105,7 @@ theorem uniformOn_empty
 
 中文:
 定理 uniformOn_empty
-  条件: {s : Set Ω}
+  条件: {s : 集合 Ω}
   结论: uniformOn s ∅ = 0
   证明: by simp
 -/
@@ -123,8 +123,8 @@ lemma uniformOn_eq_zero'
 
 中文:
 引理 uniformOn_eq_zero'
-  条件: (hs : MeasurableSet s)
-  结论: uniformOn s = 0 ↔ s.Infinite ∨ s = ∅
+  条件: (hs : 可测集 s)
+  结论: uniformOn s = 0 ↔ s.无限 ∨ s = ∅
   证明: by
   simp [uniformOn, hs]
 -/
@@ -141,7 +141,7 @@ lemma uniformOn_eq_zero
 
 中文:
 引理 uniformOn_eq_zero
-  条件: [MeasurableSingletonClass Ω]
+  条件: [MeasurableSingleton类 Ω]
   证明: by simp [uniformOn]
 -/
 @[simp] lemma uniformOn_eq_zero [MeasurableSingletonClass Ω] :
@@ -160,8 +160,8 @@ theorem finite_of_uniformOn_ne_zero
 
 中文:
 定理 finite_of_uniformOn_ne_zero
-  条件: {s t : Set Ω} (h : uniformOn s t != 0)
-  结论: s.Finite
+  条件: {s t : 集合 Ω} (h : uniformOn s t != 0)
+  结论: s.有限
   证明: by
   by_contra hs'
   simp [uniformOn, cond, Measure.count_apply_infinite hs'] at h
@@ -183,7 +183,7 @@ theorem uniformOn_univ
 
 中文:
 定理 uniformOn_univ
-  条件: [Fintype Ω] {s : Set Ω}
+  条件: [有限类型 Ω] {s : 集合 Ω}
   证明: by
   simp [uniformOn, cond_apply, ← ENNReal.div_eq_inv_mul]
 
@@ -206,7 +206,7 @@ theorem isProbabilityMeasure_uniformOn'
 
 中文:
 定理 isProbabilityMeasure_uniformOn'
-  结论: {s : Set Ω}
+  结论: {s : 集合 Ω}
   证明: by
   apply cond_isProbabilityMeasure_of_finite
   · rwa [Measure.count_ne_zero_iff]
@@ -231,7 +231,7 @@ instance instIsProbabilityMeasure_uniformOn_univ
 
 中文:
 实例 instIsProbabilityMeasure_uniformOn_univ
-  签名: [Finite Ω] [Nonempty Ω]
+  签名: [有限 Ω] [非空 Ω]
   定义体: isProbabilityMeasure_uniformOn' Set.finite_univ Set.univ_nonempty .univ
 
 Depends on / 依赖: Set.finite_univ, Set.univ_nonempty, finite_univ, isProbabilityMeasure_uniformOn, univ_nonempty
@@ -254,7 +254,7 @@ lemma uniformOn_apply_finset'
 
 中文:
 引理 uniformOn_apply_finset'
-  结论: {Ω : 类型} [DecidableEq Ω] {_ : MeasurableSpace Ω} {s t : Finset Ω}
+  结论: {Ω : 类型} [DecidableEq Ω] {_ : 可测空间 Ω} {s t : 有限集 Ω}
   证明: by
   rw [uniformOn]; rw [cond_apply hs]; rw [Measure.count_apply_finset' hs]; rw [← coe_inter]; rw [Measure.count_apply_finset']
   · rw [div_eq_mul_inv, mul_comm]
@@ -283,7 +283,7 @@ lemma uniformOn_apply_finset
 
 中文:
 引理 uniformOn_apply_finset
-  条件: [DecidableEq Ω] {s t : Finset Ω}
+  条件: [DecidableEq Ω] {s t : 有限集 Ω}
   证明: uniformOn_apply_finset' s.measurableSet t.measurableSet
 
 Depends on / 依赖: measurableSet, s.measurableSet, t.measurableSet, uniformOn_apply_finset
@@ -308,7 +308,7 @@ alias uniformOn_isProbabilityMeasure := isProbabilityMeasure_uniformOn
 
 中文:
 定理 isProbabilityMeasure_uniformOn
-  条件: {s : Set Ω} (hs : s.Finite) (hs' : s.Nonempty)
+  条件: {s : 集合 Ω} (hs : s.有限) (hs' : s.非空)
   证明: by
   apply cond_isProbabilityMeasure_of_finite
   · rwa [Measure.count_ne_zero_iff]
@@ -342,7 +342,7 @@ theorem uniformOn_singleton
 
 中文:
 定理 uniformOn_singleton
-  条件: (ω : Ω) (t : Set Ω) [Decidable (ω in t)]
+  条件: (ω : Ω) (t : 集合 Ω) [可判定 (ω in t)]
   证明: by
   rw [uniformOn]; rw [cond_apply (measurableSet_singleton ω)]; rw [Measure.count_singleton]; rw [inv_one]; rw [one_mul]
   split_ifs
@@ -372,7 +372,7 @@ theorem uniformOn_inter_self
 
 中文:
 定理 uniformOn_inter_self
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   结论: uniformOn s (s inter t) = uniformOn s t
   证明: by
   rw [uniformOn]; rw [cond_inter_self hs.measurableSet]
@@ -396,7 +396,7 @@ theorem uniformOn_self
 
 中文:
 定理 uniformOn_self
-  条件: (hs : s.Finite) (hs' : s.Nonempty)
+  条件: (hs : s.有限) (hs' : s.非空)
   结论: uniformOn s s = 1
   证明: by
   rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [Set.inter_self]; rw [ENNReal.inv_mul_cancel]
@@ -424,7 +424,7 @@ theorem uniformOn_eq_one_of
 
 中文:
 定理 uniformOn_eq_one_of
-  条件: (hs : s.Finite) (hs' : s.Nonempty) (ht : s subseteq t)
+  条件: (hs : s.有限) (hs' : s.非空) (ht : s subseteq t)
   证明: by
   have := isProbabilityMeasure_uniformOn hs hs'
   refine eq_of_le_of_not_lt prob_le_one ?_
@@ -487,7 +487,7 @@ theorem uniformOn_eq_zero_iff
 
 中文:
 定理 uniformOn_eq_zero_iff
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   结论: uniformOn s t = 0 ↔ s inter t = ∅
   证明: by
   simp [uniformOn, cond_apply hs.measurableSet, Measure.count_apply_eq_top, Set.not_infinite.2 hs,
@@ -510,8 +510,8 @@ theorem uniformOn_of_univ
 
 中文:
 定理 uniformOn_of_univ
-  条件: (hs : s.Finite) (hs' : s.Nonempty)
-  结论: uniformOn s Set.univ = 1
+  条件: (hs : s.有限) (hs' : s.非空)
+  结论: uniformOn s 集合.univ = 1
   证明: uniformOn_eq_one_of hs hs' s.subset_univ
 
 Depends on / 依赖: s.subset_univ, subset_univ, uniformOn_eq_one_of
@@ -533,7 +533,7 @@ theorem uniformOn_inter
 
 中文:
 定理 uniformOn_inter
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   证明: by
   by_cases hst : s inter t = ∅
   · rw [hst, uniformOn_empty_meas, Measure.coe_zero, Pi.zero_apply, zero_mul,
@@ -563,7 +563,7 @@ theorem uniformOn_inter'
 
 中文:
 定理 uniformOn_inter'
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   证明: by
   rw [← Set.inter_comm]
   exact uniformOn_inter hs
@@ -587,7 +587,7 @@ theorem uniformOn_union
 
 中文:
 定理 uniformOn_union
-  条件: (hs : s.Finite) (htu : Disjoint t u)
+  条件: (hs : s.有限) (htu : Disjoint t u)
   证明: by
   rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [Set.inter_union_distrib_left]; rw [measure_union]; rw [mul_add]
   exacts [htu.mono inf_le_right inf_le_right, (hs.inter_of_left _).measurableSet]
@@ -610,7 +610,7 @@ theorem uniformOn_compl
 
 中文:
 定理 uniformOn_compl
-  条件: (t : Set Ω) (hs : s.Finite) (hs' : s.Nonempty)
+  条件: (t : 集合 Ω) (hs : s.有限) (hs' : s.非空)
   证明: by
   rw [← uniformOn_union hs disjoint_compl_right]; rw [Set.union_compl_self]; rw [(isProbabilityMeasure_uniformOn hs hs').measure_univ]
 
@@ -635,7 +635,7 @@ theorem uniformOn_disjoint_union
 
 中文:
 定理 uniformOn_disjoint_union
-  条件: (hs : s.Finite) (ht : t.Finite) (hst : Disjoint s t)
+  条件: (hs : s.有限) (ht : t.有限) (hst : Disjoint s t)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hs') <;> rcases t.eq_empty_or_nonempty with (rfl | ht')
   · simp
@@ -674,7 +674,7 @@ theorem uniformOn_add_compl_eq
 
 中文:
 定理 uniformOn_add_compl_eq
-  条件: (u t : Set Ω) (hs : s.Finite)
+  条件: (u t : 集合 Ω) (hs : s.有限)
   证明: by
   conv_rhs =>
     rw [(by simp : s = s inter u union s inter uᶜ)]; rw [← uniformOn_disjoint_union (hs.inter_of_left _) (hs.inter_of_left _)
@@ -709,7 +709,7 @@ lemma uniformOn_pi
 
 中文:
 引理 uniformOn_pi
-  条件: [Finite Ω] {f : ι -> Set Ω}
+  条件: [有限 Ω] {f : ι -> 集合 Ω}
   证明: by
   refine (MeasureTheory.Measure.pi_eq fun t ht => ?_).symm
   lift f to ι -> Finset Ω using by simp [Set.toFinite]

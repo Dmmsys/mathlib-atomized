@@ -47,7 +47,7 @@ lemma eqToHom_toOrderHom
 
 中文:
 引理 eqToHom_toOrderHom
-  条件: {x y : SimplexCategory} (h : WithInitial.of x = WithInitial.of y)
+  条件: {x y : 单纯形范畴} (h : WithInitial.of x = WithInitial.of y)
   证明: SimplexCategory.eqToHom_toOrderHom (by injection h)
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.eqToHom_toOrderHom, eqToHom_toOrderHom, injection
@@ -71,7 +71,7 @@ abbreviation tensorObjOf
 
 中文:
 缩写 tensorObjOf
-  签名: (m n : SimplexCategory)
+  签名: (m n : 单纯形范畴)
   定义体: .mk (m.len + n.len + 1)
 
 Depends on / 依赖: m.len, n.len
@@ -122,7 +122,7 @@ definition tensorHomOf
 
 中文:
 定义 tensorHomOf
-  签名: {x₁ y₁ x₂ y₂ : SimplexCategory} (f₁ : x₁ ⟶ y₁) (f₂ : x₂ ⟶ y₂)
+  签名: {x₁ y₁ x₂ y₂ : 单纯形范畴} (f₁ : x₁ ⟶ y₁) (f₂ : x₂ ⟶ y₂)
   定义体: letI f₁ : Fin ((x₁.len + 1) + (x₂.len + 1)) ->o Fin ((y₁.len + 1) + (y₂.len + 1)) :=
     { toFun i :=
         Fin.addCases
@@ -320,7 +320,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategoryStruct AugmentedSimplexCategory
+  签名: 幺半群范畴结构 AugmentedSimplexCategory
   定义体: tensorObj
   tensorHom := tensorHom
   tensorUnit := tensorUnit
@@ -486,7 +486,7 @@ abbreviation inl'
 
 中文:
 缩写 inl'
-  签名: (x y : SimplexCategory)
+  签名: (x y : 单纯形范畴)
   定义体: WithInitial.down inl (.of x) (.of y)
 
 Depends on / 依赖: WithInitial, WithInitial.down
@@ -503,7 +503,7 @@ abbreviation inr'
 
 中文:
 缩写 inr'
-  签名: (x y : SimplexCategory)
+  签名: (x y : 单纯形范畴)
   定义体: WithInitial.down inr (.of x) (.of y)
 
 Depends on / 依赖: WithInitial, WithInitial.down
@@ -525,7 +525,7 @@ lemma inl'_eval
 
 中文:
 引理 inl'_eval
-  条件: (x y : SimplexCategory) (i : Fin (x.len + 1))
+  条件: (x y : 单纯形范畴) (i : 有限集 (x.len + 1))
   证明: by
   ext
   simp [inl', inl, MonoidalCategoryStruct.rightUnitor, MonoidalCategoryStruct.whiskerLeft,
@@ -557,7 +557,7 @@ lemma inr'_eval
 
 中文:
 引理 inr'_eval
-  条件: (x y : SimplexCategory) (i : Fin (y.len + 1))
+  条件: (x y : 单纯形范畴) (i : 有限集 (y.len + 1))
   证明: by
   dsimp [inr', inr, MonoidalCategoryStruct.leftUnitor, MonoidalCategoryStruct.whiskerRight,
     tensorHom, WithInitial.down, leftUnitor, tensorObj]
@@ -962,7 +962,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory AugmentedSimplexCategory
+  签名: 幺半群范畴 AugmentedSimplexCategory
   定义体: MonoidalCategory.ofTensorHom
     (id_tensorHom_id := tensor_id)
     (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom)

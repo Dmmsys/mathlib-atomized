@@ -33,7 +33,7 @@ definition extractSymbols
 
 中文:
 定义 extractSymbols
-  签名: : ParserDescr -> Array String -> Array String
+  签名: : ParserDescr -> 数组 String -> 数组 String
 
 Depends on / 依赖: ParserDescr, TrailingParserDescr
 -/

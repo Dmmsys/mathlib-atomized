@@ -61,7 +61,7 @@ definition IsLocallySurjective
   body: CategoryTheory.Presheaf.IsLocallySurjective (Opens.grothendieckTopology X) T
 
 中文:
-定义 IsLocallySurjective
+定义 是LocallySurjective
   签名: (T : ℱ ⟶ 𝒢)
   定义体: CategoryTheory.Presheaf.IsLocallySurjective (Opens.grothendieckTopology X) T
 
@@ -192,8 +192,8 @@ theorem TopCat.Sheaf.isLocallySurjective_iff_epi
   proof: CategoryTheory.Sheaf.isLocallySurjective_iff_epi' ..
 
 中文:
-定理 TopCat.Sheaf.isLocallySurjective_iff_epi
-  结论: {X : TopCat.{v}} {C : 类型u} [Category.{v} C]
+定理 顶元素范畴.层.isLocallySurjective_iff_epi
+  结论: {X : 顶元素范畴.{v}} {C : 类型u} [范畴.{v} C]
   证明: CategoryTheory.Sheaf.isLocallySurjective_iff_epi' ..
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Sheaf.isLocallySurjective_iff_epi, isLocallySurjective_iff_epi

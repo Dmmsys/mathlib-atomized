@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSqrt 实数
+  签名: 余ntinuousSqrt 实数
   定义体: instContinuousSqrtRCLike (𝕜 := Real)
 
 Depends on / 依赖: instContinuousSqrtRCLike
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSqrt Complex
+  签名: 余ntinuousSqrt 复形
   定义体: instContinuousSqrtRCLike (𝕜 := Complex)
 
 Depends on / 依赖: instContinuousSqrtRCLike
@@ -83,7 +83,7 @@ sqrt_mul_sqrt := by simpa using fun _ _ h => Eq.symm add_tsub_cancel_of_le h
 
 中文:
 实例 :
-  签名: ContinuousSqrt 实数>=0
+  签名: 余ntinuousSqrt 实数>=0
   定义体: NNReal.sqrt ∘ (fun x => x.2 - x.1)
   continuousOn_sqrt := by fun_prop
   sqrt_nonneg := by simp

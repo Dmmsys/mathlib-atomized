@@ -149,7 +149,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: : Setoid A where
+  签名: : 集合等价关系 A where
   定义体: IsConjRoot R
   iseqv := ⟨fun _ => refl, symm, trans⟩
 
@@ -295,7 +295,7 @@ theorem isConjRoot_algHom_iff
 
 中文:
 定理 isConjRoot_algHom_iff
-  结论: {A} [DivisionRing A] [Algebra R A]
+  结论: {A} [除环 A] [代数 R A]
   证明: isConjRoot_algHom_iff_of_injective f.injective
 
 Depends on / 依赖: f.injective, injective, isConjRoot_algHom_iff_of_injective
@@ -314,7 +314,7 @@ theorem isConjRoot_of_aeval_eq_zero
 
 中文:
 定理 isConjRoot_of_aeval_eq_zero
-  结论: [IsDomain A] {x y : A} (hx : Is整数egral K x)
+  结论: [是整环 A] {x y : A} (hx : 是整 K x)
   证明: minpoly.eq_of_irreducible_of_monic (minpoly.irreducible hx) h (minpoly.monic hx)
 
 Depends on / 依赖: eq_of_irreducible_of_monic, irreducible, minpoly, minpoly.eq_of_irreducible_of_monic, minpoly.irreducible, minpoly.monic
@@ -333,7 +333,7 @@ theorem isConjRoot_iff_aeval_eq_zero
 
 中文:
 定理 isConjRoot_iff_aeval_eq_zero
-  结论: [IsDomain A] {x y : A}
+  结论: [是整环 A] {x y : A}
   证明: ⟨IsConjRoot.aeval_eq_zero, isConjRoot_of_aeval_eq_zero h⟩
 
 Depends on / 依赖: IsConjRoot, IsConjRoot.aeval_eq_zero, aeval_eq_zero, isConjRoot_of_aeval_eq_zero
@@ -427,8 +427,8 @@ theorem IsConjRoot.exists_algEquiv
   exact ⟨AlgEquiv.ofBijective σ (σ.normal_bijective _ _ _), hσ⟩
 
 中文:
-定理 IsConjRoot.exists_algEquiv
-  条件: [Normal K L] {x y : L} (h : IsConjRoot K x y)
+定理 IsConjRoot.存在_algEquiv
+  条件: [正规 K L] {x y : L} (h : IsConjRoot K x y)
   证明: by
   obtain ⟨σ, hσ⟩ :=
     exists_algHom_of_splits_of_aeval (normal_iff.mp inferInstance) (h ▸ minpoly.aeval K x)
@@ -451,8 +451,8 @@ theorem isConjRoot_iff_exists_algEquiv
   proof: ⟨exists_algEquiv, fun ⟨_, h⟩ => h ▸ (isConjRoot_of_algEquiv _ _).symm⟩
 
 中文:
-定理 isConjRoot_iff_exists_algEquiv
-  条件: [Normal K L] {x y : L}
+定理 isConjRoot_iff_存在_algEquiv
+  条件: [正规 K L] {x y : L}
   证明: ⟨exists_algEquiv, fun ⟨_, h⟩ => h ▸ (isConjRoot_of_algEquiv _ _).symm⟩
 
 Depends on / 依赖: exists_algEquiv, isConjRoot_of_algEquiv
@@ -471,7 +471,7 @@ theorem isConjRoot_iff_orbitRel
 
 中文:
 定理 isConjRoot_iff_orbitRel
-  条件: [Normal K L] {x y : L}
+  条件: [正规 K L] {x y : L}
   证明: (isConjRoot_iff_exists_algEquiv)
 
 Depends on / 依赖: isConjRoot_iff_exists_algEquiv
@@ -492,7 +492,7 @@ theorem IsConjRoot.of_isScalarTower
 
 中文:
 定理 IsConjRoot.of_isScalarTower
-  结论: [IsScalarTower K L S] {x y : S} (hx : Is整数egral K x)
+  结论: [标量塔 K L S] {x y : S} (hx : 是整 K x)
   证明: isConjRoot_of_aeval_eq_zero hx minpoly.aeval_of_isScalarTower K x y (aeval_eq_zero h)
 
 Depends on / 依赖: aeval_eq_zero, aeval_of_isScalarTower, i.val, isConjRoot_of_aeval_eq_zero, minpoly, minpoly.aeval_of_isScalarTower, toJson
@@ -514,7 +514,7 @@ theorem isConjRoot_iff_mem_minpoly_aroots
 
 中文:
 定理 isConjRoot_iff_mem_minpoly_aroots
-  条件: {x y : S} (h : Is整数egral K x)
+  条件: {x y : S} (h : 是整 K x)
   证明: by
   rw [Polynomial.mem_aroots]; rw [isConjRoot_iff_aeval_eq_zero h]
   simp only [iff_and_self]
@@ -559,7 +559,7 @@ instance decidable
 
 中文:
 实例 decidable
-  签名: [Normal K L] [DecidableEq L] [Fintype Gal(L/K)] (x y : L)
+  签名: [正规 K L] [DecidableEq L] [有限类型 Gal(L/K)] (x y : L)
   定义体: decidable_of_iff _ isConjRoot_iff_exists_algEquiv.symm
 
 Depends on / 依赖: decidable_of_iff, isConjRoot_iff_exists_algEquiv, isConjRoot_iff_exists_algEquiv.symm
@@ -579,7 +579,7 @@ inferInstanceAs IsEquiv A (· ≈ ·)
 
 中文:
 实例 :
-  签名: IsEquiv A (IsConjRoot R)
+  签名: Is等价 A (IsConjRoot R)
   定义体: letI := IsConjRoot.setoid R A
 inferInstanceAs IsEquiv A (· ≈ ·)
 
@@ -598,8 +598,8 @@ theorem isIntegral
   proof: ⟨minpoly R x, minpoly.monic hx, h ▸ minpoly.aeval R y⟩
 
 中文:
-定理 isIntegral
-  条件: {x y : A} (hx : Is整数egral R x) (h : IsConjRoot R x y)
+定理 is整数egral
+  条件: {x y : A} (hx : 是整 R x) (h : IsConjRoot R x y)
   证明: ⟨minpoly R x, minpoly.monic hx, h ▸ minpoly.aeval R y⟩
 
 Depends on / 依赖: linter, linter.myLinter, minpoly, minpoly.aeval, minpoly.monic, myLinter, whenLinterActivated
@@ -618,9 +618,9 @@ theorem isIntegral_iff
   proof: ⟨fun hx => isIntegral hx h, fun hy => isIntegral hy h.symm⟩
 
 中文:
-定理 isIntegral_iff
+定理 is整数egral_iff
   条件: {x y : A} (h : IsConjRoot R x y)
-  结论: Is整数egral R x ↔ Is整数egral R y
+  结论: 是整 R x ↔ 是整 R y
   证明: ⟨fun hx => isIntegral hx h, fun hy => isIntegral hy h.symm⟩
 
 Depends on / 依赖: h.symm, isIntegral
@@ -643,7 +643,7 @@ theorem eq_algebraMap_of_injective
 
 中文:
 定理 eq_algebraMap_of_injective
-  结论: [IsDomain R] [IsTorsionFree R S] {r : R} {x : S}
+  结论: [是整环 R] [是无挠 R S] {r : R} {x : S}
   证明: by
   rw [IsConjRoot]; rw [minpoly.eq_X_sub_C_of_algebraMap_inj _ hf] at h
   have : x in (X - C r).aroots S := by
@@ -691,7 +691,7 @@ theorem eq_zero_of_injective
 
 中文:
 定理 eq_zero_of_injective
-  结论: [IsDomain R] [IsTorsionFree R S] {x : S} (h : IsConjRoot R 0 x)
+  结论: [是整环 R] [是无挠 R S] {x : S} (h : IsConjRoot R 0 x)
   证明: (algebraMap R S).map_zero ▸ (eq_algebraMap_of_injective ((algebraMap R S).map_zero ▸ h) hf)
 
 Depends on / 依赖: algebraMap, eq_algebraMap_of_injective, map_zero
@@ -732,7 +732,7 @@ theorem isConjRoot_iff_eq_algebraMap_of_injective
 
 中文:
 定理 isConjRoot_iff_eq_algebraMap_of_injective
-  结论: [IsDomain R] [IsTorsionFree R S] {r : R}
+  结论: [是整环 R] [是无挠 R S] {r : R}
   证明: ⟨fun h => eq_algebraMap_of_injective h hf, fun h => h.symm ▸ rfl⟩
 
 Depends on / 依赖: eq_algebraMap_of_injective, h.symm
@@ -801,7 +801,7 @@ theorem isConjRoot_zero_iff_eq_zero_of_injective
 
 中文:
 定理 isConjRoot_zero_iff_eq_zero_of_injective
-  结论: [IsDomain R] {x : S} [IsTorsionFree R S]
+  结论: [是整环 R] {x : S} [是无挠 R S]
   证明: ⟨fun h => eq_zero_of_injective h hf, fun h => h.symm ▸ rfl⟩
 
 Depends on / 依赖: eq_zero_of_injective, h.symm
@@ -870,7 +870,7 @@ theorem ne_zero_of_injective
 
 中文:
 定理 ne_zero_of_injective
-  结论: [IsDomain R] [IsTorsionFree R S] {x y : S} (hx : x != 0)
+  结论: [是整环 R] [是无挠 R S] {x y : S} (hx : x != 0)
   证明: fun g => hx (eq_zero_of_injective (g ▸ h.symm) hf)
 
 Depends on / 依赖: eq_zero_of_injective, h.symm
@@ -916,8 +916,8 @@ theorem notMem_iff_exists_ne_and_isConjRoot
    
 
 中文:
-定理 notMem_iff_exists_ne_and_isConjRoot
-  结论: {x : L} (h : IsSeparable K x)
+定理 notMem_iff_存在_ne_and_isConjRoot
+  结论: {x : L} (h : 是可分 K x)
   证明: by
   calc
     _ ↔ 2 <= (minpoly K x).natDegree := (minpoly.two_le_natDegree_iff h.isIntegral).symm

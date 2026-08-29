@@ -66,7 +66,7 @@ abbreviation Tree.nil.{u}
   body: BinaryTree.nil
 
 中文:
-缩写 Tree.nil.{u}
+缩写 树.nil.{u}
   签名: {α : 类型u}
   定义体: BinaryTree.nil
 
@@ -85,7 +85,7 @@ abbreviation Tree.node.{u}
   body: BinaryTree.node value left right
 
 中文:
-缩写 Tree.node.{u}
+缩写 树.node.{u}
   签名: {α : 类型u}
   定义体: BinaryTree.node value left right
 
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (BinaryTree α)
+  签名: 可居 (BinaryTree α)
   定义体: ⟨nil⟩
 -/
 instance : Inhabited (BinaryTree α) :=
@@ -143,8 +143,8 @@ abbreviation _root_.Tree.traverse
   body: BinaryTree.traverse f t
 
 中文:
-缩写 _root_.Tree.traverse
-  签名: {m : 类型 -> 类型} [Applicative m] {α β} (f : α -> m β)
+缩写 _root_.树.traverse
+  签名: {m : 类型 -> 类型} [适用 m] {α β} (f : α -> m β)
   定义体: BinaryTree.traverse f t
 
 Depends on / 依赖: BinaryTree, BinaryTree.traverse, traverse
@@ -179,8 +179,8 @@ abbreviation _root_.Tree.map
   body: BinaryTree.map f t
 
 中文:
-缩写 _root_.Tree.map
-  签名: {α β} (f : α -> β) (t : Tree α)
+缩写 _root_.树.map
+  签名: {α β} (f : α -> β) (t : 树 α)
   定义体: BinaryTree.map f t
 
 Depends on / 依赖: BinaryTree, BinaryTree.map
@@ -301,8 +301,8 @@ abbreviation _root_.Tree.numNodes
   body: BinaryTree.numNodes t
 
 中文:
-缩写 _root_.Tree.numNodes
-  签名: {α} (t : Tree α)
+缩写 _root_.树.numNodes
+  签名: {α} (t : 树 α)
   定义体: BinaryTree.numNodes t
 
 Depends on / 依赖: BinaryTree, BinaryTree.numNodes, numNodes
@@ -337,8 +337,8 @@ abbreviation _root_.Tree.numLeaves
   body: BinaryTree.numLeaves t
 
 中文:
-缩写 _root_.Tree.numLeaves
-  签名: {α} (t : Tree α)
+缩写 _root_.树.numLeaves
+  签名: {α} (t : 树 α)
   定义体: BinaryTree.numLeaves t
 
 Depends on / 依赖: BinaryTree, BinaryTree.numLeaves, numLeaves
@@ -373,8 +373,8 @@ abbreviation _root_.Tree.height
   body: BinaryTree.height t
 
 中文:
-缩写 _root_.Tree.height
-  签名: {α} (t : Tree α)
+缩写 _root_.树.height
+  签名: {α} (t : 树 α)
   定义体: BinaryTree.height t
 
 Depends on / 依赖: BinaryTree, BinaryTree.height, height
@@ -473,8 +473,8 @@ abbreviation _root_.Tree.left
   body: BinaryTree.left t
 
 中文:
-缩写 _root_.Tree.left
-  签名: {α} (t : Tree α)
+缩写 _root_.树.left
+  签名: {α} (t : 树 α)
   定义体: BinaryTree.left t
 
 Depends on / 依赖: BinaryTree, BinaryTree.left
@@ -509,8 +509,8 @@ abbreviation _root_.Tree.right
   body: BinaryTree.right t
 
 中文:
-缩写 _root_.Tree.right
-  签名: {α} (t : Tree α)
+缩写 _root_.树.right
+  签名: {α} (t : 树 α)
   定义体: BinaryTree.right t
 
 Depends on / 依赖: BinaryTree, BinaryTree.right
@@ -532,7 +532,7 @@ definition unitRecOn
 
 中文:
 定义 unitRecOn
-  签名: {motive : BinaryTree Unit -> Sort*} (t : BinaryTree Unit) (base : motive nil)
+  签名: {motive : BinaryTree 单元 -> 类型层*} (t : BinaryTree 单元) (base : motive nil)
   定义体: t.recOn base fun _u => ind
 
 Depends on / 依赖: t.recOn
@@ -552,8 +552,8 @@ abbreviation _root_.Tree.unitRecOn
   body: BinaryTree.unitRecOn t base ind
 
 中文:
-缩写 _root_.Tree.unitRecOn
-  签名: {motive : Tree Unit -> Sort*} (t : Tree Unit) (base : motive nil)
+缩写 _root_.树.unitRecOn
+  签名: {motive : 树 单元 -> 类型层*} (t : 树 单元) (base : motive nil)
   定义体: BinaryTree.unitRecOn t base ind
 
 Depends on / 依赖: BinaryTree, BinaryTree.unitRecOn, unitRecOn
@@ -571,7 +571,7 @@ theorem left_node_right_eq_self
 
 中文:
 定理 left_node_right_eq_self
-  结论: 对任意 {x : BinaryTree Unit} (_hx : x != nil), x.left △ x.right = x
+  结论: 对任意 {x : BinaryTree 单元} (_hx : x != nil), x.left △ x.right = x
 -/
 theorem left_node_right_eq_self : forall {x : BinaryTree Unit} (_hx : x != nil), x.left △ x.right = x
   | nil, h => by trivial

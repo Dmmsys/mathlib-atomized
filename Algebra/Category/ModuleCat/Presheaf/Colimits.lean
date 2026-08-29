@@ -49,7 +49,7 @@ definition evaluationJointlyReflectsColimits
 
 中文:
 定义 evaluationJointlyReflectsColimits
-  签名: (c : Cocone F)
+  签名: (c : 余锥 F)
   定义体: { app := fun X => (hc X).desc ((evaluation R X).mapCocone s)
       naturality := fun {X Y} f => (hc X).hom_ext (fun j => by
         rw [(hc X).fac_assoc ((evaluation R X).mapCocone s) j]
@@ -107,7 +107,7 @@ definition colimitPresheafOfModules
 
 中文:
 定义 colimitPresheafOfModules
-  签名: : PresheafOfModules R where
+  签名: : 预模层 R where
   定义体: colimit (F ⋙ evaluation R X)
   map {_ Y} f := colimMap (Functor.whiskerLeft F (restriction R f)) ≫
     (preservesColimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
@@ -162,7 +162,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimitPresheafOfModules F
   ι :=
     { app := fun j =>
@@ -198,7 +198,7 @@ definition isColimitColimitCocone
 
 中文:
 定义 isColimitColimitCocone
-  签名: : IsColimit (colimitCocone F)
+  签名: : 是余极限 (colimitCocone F)
   定义体: evaluationJointlyReflectsColimits _ _ (fun _ => colimit.isColimit _)
 
 Depends on / 依赖: colimit, colimit.isColimit, evaluationJointlyReflectsColimits, isColimit
@@ -216,7 +216,7 @@ instance hasColimit
 
 中文:
 实例 hasColimit
-  签名: : HasColimit F
+  签名: : 有余极限 F
   定义体: ⟨_, isColimitColimitCocone F⟩
 
 Depends on / 依赖: isColimitColimitCocone
@@ -290,7 +290,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: : HasColimitsOfShape J (PresheafOfModules.{v} R) where
+  签名: : 有形状余极限 J (预模层.{v} R) where
 -/
 instance hasColimitsOfShape : HasColimitsOfShape J (PresheafOfModules.{v} R) where
 
@@ -336,7 +336,7 @@ instance hasFiniteColimits
 
 中文:
 实例 hasFiniteColimits
-  签名: : HasFiniteColimits (PresheafOfModules.{v} R)
+  签名: : 有有限余极限 (预模层.{v} R)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasFiniteColimits : HasFiniteColimits (PresheafOfModules.{v} R) :=
@@ -385,7 +385,7 @@ instance hasColimitsOfSize
 
 中文:
 实例 hasColimitsOfSize
-  签名: : HasColimitsOfSize.{v₂, u₂} (PresheafOfModules.{v} R) where
+  签名: : 有余limitsOfSize.{v₂, u₂} (预模层.{v} R) where
 -/
 instance hasColimitsOfSize : HasColimitsOfSize.{v₂, u₂} (PresheafOfModules.{v} R) where
 

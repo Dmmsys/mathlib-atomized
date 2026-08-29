@@ -38,7 +38,7 @@ abbreviation Operands
 
 中文:
 缩写 Operands
-  签名: : Fin 6 oplus s -> Type
+  签名: : 有限集 6 oplus s -> 类型
 -/
 private abbrev Operands : Fin 6 oplus s -> Type
   | .inl 0 => Bool -- add
@@ -84,7 +84,7 @@ definition rangeOfWType
 
 中文:
 定义 rangeOfWType
-  签名: : Subfield (closure s) where
+  签名: : 子域 (closure s) where
   定义体: Set.range (WType.elim _ <| operate s)
   add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
   mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
@@ -138,7 +138,7 @@ lemma surjective_ofWType
 
 中文:
 引理 surjective_ofWType
-  结论: Function.Surjective (WType.elim _ <| operate s)
+  结论: 函数.满射 (WType.elim _ <| operate s)
   证明: by
   rw [← Set.range_eq_univ]
   exact SetLike.coe_set_eq.mpr (rangeOfWType_eq_top s)
@@ -164,7 +164,7 @@ lemma cardinalMk_closure_le_max
 
 中文:
 引理 cardinalMk_closure_le_max
-  结论: #(closure s) <= max #s ℵ₀
+  结论: #(closure s) <= 最大值 #s ℵ₀
   证明: (Cardinal.mk_le_of_surjective <| surjective_ofWType s).trans by
     convert! WType.cardinalMk_le_max_aleph0_of_finite' using 1
     · rw [lift_uzero, mk_sum, lift_uzero]
@@ -199,7 +199,7 @@ lemma cardinalMk_closure
 
 中文:
 引理 cardinalMk_closure
-  条件: [Infinite s]
+  条件: [无限 s]
   结论: #(closure s) = #s
   证明: ((cardinalMk_closure_le_max s).trans_eq <| max_eq_left <| aleph0_le_mk s).antisymm
     (mk_le_mk_of_subset subset_closure)

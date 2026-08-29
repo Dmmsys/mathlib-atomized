@@ -44,7 +44,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R)
+  签名: (f : 多元多项式 σ R ->ₐ[R] 多元多项式 τ R)
   定义体: fun x i => aeval x (f (X i))
 
 @[simp]
@@ -65,7 +65,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: (f : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R) (x : τ -> R) (i : σ)
+  条件: (f : 多元多项式 σ R ->ₐ[R] 多元多项式 τ R) (x : τ -> R) (i : σ)
   证明: rfl
 
 @[simp]
@@ -89,7 +89,7 @@ theorem comap_id_apply
 中文:
 定理 comap_id_apply
   条件: (x : σ -> R)
-  结论: comap (AlgHom.id R (MvPolynomial σ R)) x = x
+  结论: comap (代数态射.id R (多元多项式 σ R)) x = x
   证明: by
   funext i
   simp only [comap, AlgHom.id_apply, aeval_X]
@@ -114,7 +114,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: comap (AlgHom.id R (MvPolynomial σ R)) = id
+  结论: comap (代数态射.id R (多元多项式 σ R)) = id
   证明: by
   funext x
   exact comap_id_apply x
@@ -146,7 +146,7 @@ theorem comap_comp_apply
 
 中文:
 定理 comap_comp_apply
-  结论: (f : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R)
+  结论: (f : 多元多项式 σ R ->ₐ[R] 多元多项式 τ R)
   证明: by
   funext i
   trans aeval x (aeval (fun i => g (X i)) (f (X i)))
@@ -186,7 +186,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  结论: (f : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R)
+  结论: (f : 多元多项式 σ R ->ₐ[R] 多元多项式 τ R)
   证明: by
   funext x
   exact comap_comp_apply _ _ _
@@ -211,7 +211,7 @@ theorem comap_eq_id_of_eq_id
 
 中文:
 定理 comap_eq_id_of_eq_id
-  结论: (f : MvPolynomial σ R ->ₐ[R] MvPolynomial σ R) (hf : 对任意 φ, f φ = φ)
+  结论: (f : 多元多项式 σ R ->ₐ[R] 多元多项式 σ R) (hf : 对任意 φ, f φ = φ)
   证明: by
   convert! comap_id_apply x
   ext1 φ
@@ -273,7 +273,7 @@ definition comapEquiv
 
 中文:
 定义 comapEquiv
-  签名: (f : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R)
+  签名: (f : 多元多项式 σ R ≃ₐ[R] 多元多项式 τ R)
   定义体: comap f
   invFun := comap f.symm
   left_inv := by
@@ -318,7 +318,7 @@ theorem comapEquiv_coe
 
 中文:
 定理 comapEquiv_coe
-  条件: (f : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R)
+  条件: (f : 多元多项式 σ R ≃ₐ[R] 多元多项式 τ R)
   证明: rfl
 
 @[simp]
@@ -338,7 +338,7 @@ theorem comapEquiv_symm_coe
 
 中文:
 定理 comapEquiv_symm_coe
-  条件: (f : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R)
+  条件: (f : 多元多项式 σ R ≃ₐ[R] 多元多项式 τ R)
   证明: rfl
 -/
 theorem comapEquiv_symm_coe (f : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R) :

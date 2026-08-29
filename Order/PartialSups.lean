@@ -108,7 +108,7 @@ lemma partialSups_iff_forall
 @[simp]
 
 中文:
-引理 partialSups_iff_forall
+引理 partialSups_iff_对任意
   结论: {f : ι -> α} (p : α -> 命题)
   证明: by
   rw [partialSups_apply]; rw [apply_sup'_eq_sup'_comp (γ := Propᵒᵈ) _ p]; rw [sup'_eq_sup]
@@ -274,8 +274,8 @@ theorem Monotone.partialSups_eq
   proof: funext fun i => le_antisymm (partialSups_le _ _ _ (@hf · i)) (le_partialSups _ _)
 
 中文:
-定理 Monotone.partialSups_eq
-  条件: {f : ι -> α} (hf : Monotone f)
+定理 递增.partialSups_eq
+  条件: {f : ι -> α} (hf : 递增 f)
   证明: funext fun i => le_antisymm (partialSups_le _ _ _ (@hf · i)) (le_partialSups _ _)
 
 Depends on / 依赖: le_antisymm, le_partialSups, partialSups_le
@@ -368,7 +368,7 @@ lemma Pi.partialSups_apply
   simp only [partialSups_apply, Finset.sup'_apply]
 
 中文:
-引理 Pi.partialSups_apply
+引理 依赖函数类型.partialSups_apply
   结论: {τ : 类型} {π : τ -> 类型} [对任意 t, SemilatticeSup (π t)]
   证明: by
   simp only [partialSups_apply, Finset.sup'_apply]
@@ -390,7 +390,7 @@ lemma comp_partialSups
 
 中文:
 引理 comp_partialSups
-  条件: {F : 类型} [FunLike F α β] [SupHomClass F α β] (f : ι -> α) (g : F)
+  条件: {F : 类型} [函数状 F α β] [并态射类 F α β] (f : ι -> α) (g : F)
   证明: by
   funext _; simp [partialSups]
 
@@ -410,7 +410,7 @@ lemma map_partialSups
 
 中文:
 引理 map_partialSups
-  条件: {F : 类型} [FunLike F α β] [SupHomClass F α β] (f : F) (g : ι -> α) (i : ι)
+  条件: {F : 类型} [函数状 F α β] [并态射类 F α β] (f : F) (g : ι -> α) (i : ι)
   证明: congr($(comp_partialSups ..) i)
 
 Depends on / 依赖: comp_partialSups
@@ -438,7 +438,7 @@ theorem partialSups_succ
 
 中文:
 定理 partialSups_succ
-  结论: [LinearOrder ι] [LocallyFiniteOrderBot ι] [SuccOrder ι]
+  结论: [线性序 ι] [LocallyFiniteOrderBot ι] [Succ序 ι]
   证明: by
   suffices Iic (Order.succ i) = Iic i union {Order.succ i} by simp only [partialSups_apply, this,
     sup'_union nonempty_Iic ⟨_, mem_singleton_self _⟩ f, sup'_singleton]
@@ -476,7 +476,7 @@ theorem partialSups_bot
 
 中文:
 定理 partialSups_bot
-  结论: [PartialOrder ι] [LocallyFiniteOrder ι] [OrderBot ι]
+  结论: [偏序 ι] [局部有限序 ι] [有底序 ι]
   证明: by
   simp only [partialSups_apply]
   -- should we add a lemma `Finset.Iic_bot`?
@@ -546,7 +546,7 @@ theorem partialSups_eq_sup_range
 
 中文:
 定理 partialSups_eq_sup_range
-  条件: [OrderBot α] (f : 自然数 -> α) (n : 自然数)
+  条件: [有底序 α] (f : 自然数 -> α) (n : 自然数)
   证明: eq_of_forall_ge_iff fun _ => by simp [Nat.lt_succ_iff]
 
 Depends on / 依赖: Nat.lt_succ_iff, eq_of_forall_ge_iff, lt_succ_iff
@@ -623,7 +623,7 @@ theorem partialSups_disjoint_of_disjoint
 
 中文:
 定理 partialSups_disjoint_of_disjoint
-  结论: (f : ι -> α) (h : Pairwise (Disjoint on f))
+  结论: (f : ι -> α) (h : 两两 (Disjoint on f))
   证明: disjoint_partialSups_left.2 fun _ hk => h (hk.trans_lt hij).ne
 
 Depends on / 依赖: disjoint_partialSups_left, hk.trans_lt, trans_lt
@@ -661,7 +661,7 @@ theorem partialSups_eq_ciSup_Iic
 
 中文:
 定理 partialSups_eq_ciSup_Iic
-  条件: [ConditionallyCompleteLattice α] (f : ι -> α) (i : ι)
+  条件: [条件完备格 α] (f : ι -> α) (i : ι)
   证明: by
   simp only [partialSups_apply]
   apply le_antisymm
@@ -697,7 +697,7 @@ theorem ciSup_partialSups_eq
 
 中文:
 定理 ciSup_partialSups_eq
-  结论: [ConditionallyCompleteLattice α]
+  结论: [条件完备格 α]
   证明: by
   by_cases hι : Nonempty ι
   · refine (ciSup_le fun i => ?_).antisymm (ciSup_mono ?_ <| le_partialSups f)
@@ -734,7 +734,7 @@ theorem ciSup_partialSups_eq'
 
 中文:
 定理 ciSup_partialSups_eq'
-  条件: [ConditionallyCompleteLinearOrder α] (f : ι -> α)
+  条件: [条件完备线性序 α] (f : ι -> α)
   证明: by
   by_cases h : BddAbove (Set.range f)
   · exact ciSup_partialSups_eq h
@@ -858,7 +858,7 @@ lemma partialSups_eq_sUnion_image
 
 中文:
 引理 partialSups_eq_sUnion_image
-  条件: (s : 自然数 -> Set α) (n : 自然数)
+  条件: (s : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   simp [partialSups_eq_biSup, Nat.lt_succ_iff]
 
@@ -879,7 +879,7 @@ lemma partialSups_eq_biUnion_range
 
 中文:
 引理 partialSups_eq_biUnion_range
-  条件: (s : 自然数 -> Set α) (n : 自然数)
+  条件: (s : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   simp [partialSups_eq_biSup, Nat.lt_succ_iff]
 
@@ -914,7 +914,7 @@ theorem exists_partialSups_eq
   ·
 
 中文:
-定理 exists_partialSups_eq
+定理 存在_partialSups_eq
   条件: (f : ι -> α) (i : ι)
   证明: by
   obtain ⟨j, hj_mem, hj_le⟩ : exists j in Finset.Iic i, forall k in Finset.Iic i, f k <= f j :=

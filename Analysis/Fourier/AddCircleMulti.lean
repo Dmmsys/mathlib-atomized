@@ -56,7 +56,7 @@ definition mFourier
 
 中文:
 定义 mFourier
-  签名: : C(UnitAddTorus d, Complex) where
+  签名: : C(UnitAddTorus d, 复形) where
   定义体: ∏ i : d, fourier (n i) (x i)
   continuous_toFun := by fun_prop
 
@@ -227,7 +227,7 @@ definition mFourierSubalgebra
 
 中文:
 定义 mFourierSubalgebra
-  签名: (d : 类型) [Fintype d]
+  签名: (d : 类型) [有限类型 d]
   定义体: Algebra.adjoin Complex (range mFourier)
   star_mem' := by
     change Algebra.adjoin Complex (range mFourier) <= star (Algebra.adjoin Complex (range mFourier))
@@ -391,7 +391,7 @@ definition measurableEquivPiIoc
 
 中文:
 定义 measurableEquivPiIoc
-  签名: : UnitAddTorus ι ≃ᵐ {x : ι -> 实数 // 对任意 i, x i in Ioc (b i) (b i + 1)}
+  签名: : UnitAddTorus ι ≃ᵐ {x : ι -> 实数 // 对任意 i, x i in 左开右闭区间 (b i) (b i + 1)}
   定义体: (MeasurableEquiv.piCongrRight fun i => AddCircle.measurableEquivIoc 1 (b i)).trans
   MeasurableEquiv.subtypePiEquivPi.symm
 
@@ -468,7 +468,7 @@ theorem coe_symm_measurableEquivPiIoc_apply
 
 中文:
 定理 coe_symm_measurableEquivPiIoc_apply
-  条件: (y : {x : ι -> 实数 // 对任意 i, x i in Ioc (b i) (b i + 1)})
+  条件: (y : {x : ι -> 实数 // 对任意 i, x i in 左开右闭区间 (b i) (b i + 1)})
   证明: rfl
 -/
 theorem coe_symm_measurableEquivPiIoc_apply (y : {x : ι -> Real // forall i, x i in Ioc (b i) (b i + 1)}) :
@@ -559,7 +559,7 @@ theorem integral_preimage
 
 中文:
 定理 integral_preimage
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   convert! integral_map_equiv (μ := volume.comap Subtype.val) (measurableEquivPiIoc a).symm f
   · exact (measurePreserving_equivPiIoc a).symm.map_eq.symm
@@ -663,7 +663,7 @@ theorem orthonormal_mFourier
 
 中文:
 定理 orthonormal_mFourier
-  结论: Orthonormal Complex (mFourierLp (d := d) 2)
+  结论: Orthonormal 复形 (mFourierLp (d := d) 2)
   证明: by
   rw [orthonormal_iff_ite]
   intro m n
@@ -748,7 +748,7 @@ definition mFourierBasis
 
 中文:
 定义 mFourierBasis
-  签名: : HilbertBasis (d -> 整数) Complex L²(UnitAddTorus d)
+  签名: : Hilbert基 (d -> 整数) 复形 L²(UnitAddTorus d)
   定义体: HilbertBasis.mk orthonormal_mFourier (span_mFourierLp_closure_eq_top (by simp)).ge
 
 Depends on / 依赖: HilbertBasis, HilbertBasis.mk, orthonormal_mFourier, span_mFourierLp_closure_eq_top

@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoetherianSpace (PrimeSpectrum R)
+  签名: NoetherianSpace (素谱 R)
   定义体: ((noetherianSpace_TFAE <| PrimeSpectrum R).out 0 1).mpr (closedsEmbedding R).dual.wellFoundedLT
 
 Depends on / 依赖: PrimeSpectrum, closedsEmbedding, dual.wellFoundedLT, noetherianSpace_TFAE, wellFoundedLT
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring.KrullDimLE 0 R
+  签名: 环.Krull维数不超过 0 R
   定义体: .mk₀ fun _ _ => inferInstance
 -/
 instance : Ring.KrullDimLE 0 R := .mk₀ fun _ _ => inferInstance
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (PrimeSpectrum R)
+  签名: 离散拓扑 (素谱 R)
   定义体: discreteTopology_iff_finite_and_krullDimLE_zero.mpr ⟨inferInstance, inferInstance⟩
 
 Depends on / 依赖: discreteTopology_iff_finite_and_krullDimLE_zero, discreteTopology_iff_finite_and_krullDimLE_zero.mpr
@@ -137,8 +137,8 @@ lemma exists_not_mem_forall_mem_of_ne
       -FaithfulSMul.algebraMap_eq_one_iff] using funext_iff.mp hr ⟨p, inferInstance⟩
 
 中文:
-引理 exists_not_mem_forall_mem_of_ne
-  条件: (p : Ideal R) [p.IsPrime]
+引理 存在_not_mem_对任意_mem_of_ne
+  条件: (p : 理想 R) [p.是素]
   证明: by
   classical
   obtain ⟨r, hr⟩ := PrimeSpectrum.toPiLocalization_bijective.2 (Pi.single ⟨p, inferInstance⟩ 1)
@@ -183,7 +183,7 @@ theorem finrank_eq_sum_primeSpectrum
 
 中文:
 定理 finrank_eq_sum_primeSpectrum
-  条件: [Fintype (PrimeSpectrum R)]
+  条件: [有限类型 (素谱 R)]
   证明: have (p : Ideal R) [p.IsPrime] : Module.Finite F (Localization.AtPrime p) :=
     Module.Finite.of_surjective (Algebra.algHom F R (Localization.AtPrime p)).toLinearMap
       (localization_surjective p.primeCompl (Localization.AtPrime p))

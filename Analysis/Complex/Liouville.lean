@@ -50,8 +50,8 @@ theorem norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le
   have hq : iteratedDeriv n f c = n.
 
 中文:
-定理 norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le
-  结论: [CompleteSpace F] {c : Complex} {R C : 实数}
+定理 norm_iteratedDeriv_le_of_对任意_mem_sphere_norm_le
+  结论: [完备空间 F] {c : 复形} {R C : 实数}
   证明: by
   have hp (z) (hz : z in sphere c R) : ‖(z - c)⁻¹ ^ (n + 1) • f z‖ <= C / (R ^ n * R) := by
     simpa [norm_smul, norm_pow, norm_inv, ← div_eq_inv_mul, mem_sphere_iff_norm.1 hz] using!
@@ -92,7 +92,7 @@ theorem norm_deriv_le_aux
 
 中文:
 定理 norm_deriv_le_aux
-  结论: [CompleteSpace F] {c : Complex} {R C : 实数} {f : Complex -> F} (hR : 0 < R)
+  结论: [完备空间 F] {c : 复形} {R C : 实数} {f : 复形 -> F} (hR : 0 < R)
   证明: by
   simpa using norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le 1 hR hf hC
 -/
@@ -118,8 +118,8 @@ theorem norm_deriv_le_of_forall_mem_sphere_norm_le
       
 
 中文:
-定理 norm_deriv_le_of_forall_mem_sphere_norm_le
-  结论: {c : Complex} {R C : 实数} {f : Complex -> F} (hR : 0 < R)
+定理 norm_deriv_le_of_对任意_mem_sphere_norm_le
+  结论: {c : 复形} {R C : 实数} {f : 复形 -> F} (hR : 0 < R)
   证明: by
   set e : F ->L[Complex] F̂ := UniformSpace.Completion.toComplL
   have : HasDerivAt (e ∘ f) (e (deriv f c)) c :=
@@ -163,7 +163,7 @@ theorem liouville_theorem_aux
 
 中文:
 定理 liouville_theorem_aux
-  结论: {f : Complex -> F} (hf : Differentiable Complex f) (hb : IsBounded (range f))
+  结论: {f : 复形 -> F} (hf : 可微 复形 f) (hb : IsBounded (range f))
   证明: by
   suffices forall c, deriv f c = 0 from is_const_of_deriv_eq_zero hf this z w
   clear z w; intro c
@@ -210,7 +210,7 @@ theorem apply_eq_apply_of_bounded
 
 中文:
 定理 apply_eq_apply_of_bounded
-  结论: {f : E -> F} (hf : Differentiable Complex f) (hb : IsBounded (range f))
+  结论: {f : E -> F} (hf : 可微 复形 f) (hb : IsBounded (range f))
   证明: by
   set g : Complex -> F := f ∘ fun t : Complex => t • (w - z) + z
   suffices g 0 = g 1 by simpa [g]
@@ -237,8 +237,8 @@ theorem exists_const_forall_eq_of_bounded
   proof: ⟨f 0, fun _ => hf.apply_eq_apply_of_bounded hb _ _⟩
 
 中文:
-定理 exists_const_forall_eq_of_bounded
-  结论: {f : E -> F} (hf : Differentiable Complex f)
+定理 存在_const_对任意_eq_of_bounded
+  结论: {f : E -> F} (hf : 可微 复形 f)
   证明: ⟨f 0, fun _ => hf.apply_eq_apply_of_bounded hb _ _⟩
 
 Depends on / 依赖: apply_eq_apply_of_bounded, hf.apply_eq_apply_of_bounded
@@ -256,8 +256,8 @@ theorem exists_eq_const_of_bounded
   proof: (hf.exists_const_forall_eq_of_bounded hb).imp fun _ => funext
 
 中文:
-定理 exists_eq_const_of_bounded
-  结论: {f : E -> F} (hf : Differentiable Complex f)
+定理 存在_eq_const_of_bounded
+  结论: {f : E -> F} (hf : 可微 复形 f)
   证明: (hf.exists_const_forall_eq_of_bounded hb).imp fun _ => funext
 
 Depends on / 依赖: exists_const_forall_eq_of_bounded, hf.exists_const_forall_eq_of_bounded
@@ -282,7 +282,7 @@ simpa [Set.image_union, Set.image_univ] using! Set.image_mon
 
 中文:
 定理 eq_const_of_tendsto_cocompact
-  结论: [Nontrivial E] {f : E -> F} (hf : Differentiable Complex f) {c : F}
+  结论: [非平凡 E] {f : E -> F} (hf : 可微 复形 f) {c : F}
   证明: by
   have h_bdd : Bornology.IsBounded (Set.range f) := by
     obtain ⟨s, hs, hs_bdd⟩ := Metric.exists_isBounded_image_of_tendsto hb
@@ -315,7 +315,7 @@ theorem apply_eq_of_tendsto_cocompact
 
 中文:
 定理 apply_eq_of_tendsto_cocompact
-  结论: [Nontrivial E] {f : E -> F} (hf : Differentiable Complex f) {c : F}
+  结论: [非平凡 E] {f : E -> F} (hf : 可微 复形 f) {c : F}
   证明: congr($(hf.eq_const_of_tendsto_cocompact hb) x)
 
 Depends on / 依赖: eq_const_of_tendsto_cocompact, hf.eq_const_of_tendsto_cocompact

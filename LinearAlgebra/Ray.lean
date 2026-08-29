@@ -49,7 +49,7 @@ definition SameRay
 
 中文:
 定义 SameRay
-  签名: (R : 类型) [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: (R : 类型) [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: v₁ = 0 ∨ v₂ = 0 ∨ exists r₁ r₂ : R, 0 < r₁ ∧ 0 < r₂ ∧ r₁ • v₁ = r₂ • v₂
 -/
 def SameRay (R : Type*) [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
@@ -70,7 +70,7 @@ definition RayVector
 
 中文:
 定义 RayVector
-  签名: (R M : 类型) [Zero M]
+  签名: (R M : 类型) [零 M]
   定义体: { v : M // v != 0 }
 -/
 def RayVector (R M : Type*) [Zero M] :=
@@ -86,7 +86,7 @@ definition RayVector.equiv
 
 中文:
 定义 RayVector.equiv
-  签名: (R M : 类型) [Zero M]
+  签名: (R M : 类型) [零 M]
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -106,7 +106,7 @@ instance RayVector.coe
 
 中文:
 实例 RayVector.coe
-  签名: {R M : 类型} [Zero M]
+  签名: {R M : 类型} [零 M]
   定义体: (equiv R M x).val
 
 @[simp]
@@ -127,7 +127,7 @@ theorem RayVector.coe_equiv_symm
 
 中文:
 定理 RayVector.coe_equiv_symm
-  条件: {R M : 类型} [Zero M] {v : M} (h : v != 0)
+  条件: {R M : 类型} [零 M] {v : M} (h : v != 0)
   证明: rfl
 
 @[ext]
@@ -146,7 +146,7 @@ theorem RayVector.ext
 
 中文:
 定理 RayVector.ext
-  条件: {R M : 类型} [Zero M] {x y : RayVector R M} (h : (x : M) = (y : M))
+  条件: {R M : 类型} [零 M] {x y : RayVector R M} (h : (x : M) = (y : M))
   证明: Subtype.ext h
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -232,7 +232,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton M] (x y : M)
+  条件: [子单例 M] (x y : M)
   结论: SameRay R x y
   证明: by
   rw [Subsingleton.elim x 0]
@@ -259,7 +259,7 @@ theorem of_subsingleton'
 
 中文:
 定理 of_subsingleton'
-  条件: [Subsingleton R] (x y : M)
+  条件: [子单例 R] (x y : M)
   结论: SameRay R x y
   证明: haveI := Module.subsingleton R M
   of_subsingleton x y
@@ -339,7 +339,7 @@ theorem exists_pos
   proof: (h.resolve_left hx).resolve_left hy
 
 中文:
-定理 exists_pos
+定理 存在_pos
   条件: (h : SameRay R x y) (hx : x != 0) (hy : y != 0)
   证明: (h.resolve_left hx).resolve_left hy
 
@@ -619,7 +619,7 @@ theorem _root_.Function.Injective.sameRay_map_iff
   simp only [SameRay, map_zero, ← hf.eq_iff, map_smul]
 
 中文:
-定理 _root_.Function.Injective.sameRay_map_iff
+定理 _root_.函数.单射.sameRay_map_iff
   证明: by
   simp only [SameRay, map_zero, ← hf.eq_iff, map_smul]
 
@@ -664,7 +664,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M] [SMulCommClass R S M]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M] [标量交换类 R S M]
   证明: h.map (s • (LinearMap.id : M ->ₗ[R] M))
 
 Depends on / 依赖: LinearMap, LinearMap.id, h.map
@@ -749,8 +749,8 @@ instance RayVector.Setoid
       exact hxy.trans hyz fun hy => (y.2 hy).elim⟩
 
 中文:
-实例 RayVector.Setoid
-  签名: : Setoid (RayVector R M) where
+实例 RayVector.集合等价关系
+  签名: : 集合等价关系 (RayVector R M) where
   定义体: SameRay R (x : M) y
   iseqv :=
     ⟨fun _ => SameRay.refl _, fun h => h.symm, by
@@ -774,7 +774,7 @@ definition Module.Ray
   body: Quotient (RayVector.Setoid R M)
 
 中文:
-定义 Module.Ray
+定义 模.Ray
   定义体: Quotient (RayVector.Setoid R M)
 
 Depends on / 依赖: Quotient, RayVector, RayVector.Setoid, Setoid
@@ -833,8 +833,8 @@ theorem Module.Ray.ind
   proof: Quotient.ind (Subtype.rec <| h) x
 
 中文:
-定理 Module.Ray.ind
-  结论: {C : Module.Ray R M -> 命题} (h : 对任意 (v) (hv : v != 0), C (rayOfNeZero R v hv))
+定理 模.Ray.ind
+  结论: {C : 模.Ray R M -> 命题} (h : 对任意 (v) (hv : v != 0), C (rayOfNeZero R v hv))
   证明: Quotient.ind (Subtype.rec <| h) x
 
 Depends on / 依赖: Quotient, Quotient.ind, Subtype, Subtype.rec
@@ -854,8 +854,8 @@ instance [Nontrivial
   body: Nonempty.map Quotient.mk' inferInstance
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nonempty (Module.Ray R M)
+实例 [非平凡
+  签名: M] : 非空 (模.Ray R M)
   定义体: Nonempty.map Quotient.mk' inferInstance
 
 Depends on / 依赖: Nonempty, Nonempty.map, Quotient, Quotient.mk
@@ -932,7 +932,7 @@ definition Module.Ray.map
 @[simp]
 
 中文:
-定义 Module.Ray.map
+定义 模.Ray.map
   签名: (e : M ≃ₗ[R] N)
   定义体: Quotient.congr (RayVector.mapLinearEquiv e) fun _ _ => (SameRay.sameRay_map_iff _).symm
 
@@ -955,7 +955,7 @@ theorem Module.Ray.map_apply
 @[simp]
 
 中文:
-定理 Module.Ray.map_apply
+定理 模.Ray.map_apply
   条件: (e : M ≃ₗ[R] N) (v : M) (hv : v != 0)
   证明: rfl
 
@@ -977,8 +977,8 @@ theorem Module.Ray.map_refl
 @[simp]
 
 中文:
-定理 Module.Ray.map_refl
-  结论: (Module.Ray.map <| LinearEquiv.refl R M) = Equiv.refl _
+定理 模.Ray.map_refl
+  结论: (模.Ray.map <| 线性等价.refl R M) = 等价.refl _
   证明: Equiv.ext Module.Ray.ind R fun _ _ => rfl
 
 @[simp]
@@ -999,9 +999,9 @@ theorem Module.Ray.map_symm
   proof: rfl
 
 中文:
-定理 Module.Ray.map_symm
+定理 模.Ray.map_symm
   条件: (e : M ≃ₗ[R] N)
-  结论: (Module.Ray.map e).symm = Module.Ray.map e.symm
+  结论: (模.Ray.map e).symm = 模.Ray.map e.symm
   证明: rfl
 -/
 theorem Module.Ray.map_symm (e : M ≃ₗ[R] N) : (Module.Ray.map e).symm = Module.Ray.map e.symm :=
@@ -1032,7 +1032,7 @@ one_smul := Quotient.ind fun _ => congr_arg Quotient.mk' one_smul _ _
 
 中文:
 实例 :
-  签名: MulAction G (Module.Ray R M)
+  签名: 乘法作用 G (模.Ray R M)
   定义体: Quotient.map (r • ·) fun _ _ h => h.smul _
 mul_smul a b := Quotient.ind fun _ => congr_arg Quotient.mk' mul_smul a b _
 one_smul := Quotient.ind fun _ => congr_arg Quotient.mk' one_smul _ _
@@ -1057,8 +1057,8 @@ theorem Module.Ray.linearEquiv_smul_eq_map
 @[simp]
 
 中文:
-定理 Module.Ray.linearEquiv_smul_eq_map
-  条件: (e : M ≃ₗ[R] M) (v : Module.Ray R M)
+定理 模.Ray.linearEquiv_smul_eq_map
+  条件: (e : M ≃ₗ[R] M) (v : 模.Ray R M)
   证明: rfl
 
 @[simp]
@@ -1103,7 +1103,7 @@ theorem units_smul_of_pos
 
 中文:
 定理 units_smul_of_pos
-  条件: (u : Rˣ) (hu : 0 < (u : R)) (v : Module.Ray R M)
+  条件: (u : Rˣ) (hu : 0 < (u : R)) (v : 模.Ray R M)
   结论: u • v = v
   证明: by
   induction v using Module.Ray.ind
@@ -1127,7 +1127,7 @@ definition someRayVector
 
 中文:
 定义 someRayVector
-  签名: (x : Module.Ray R M)
+  签名: (x : 模.Ray R M)
   定义体: Quotient.out x
 
 Depends on / 依赖: Quotient, Quotient.out
@@ -1148,8 +1148,8 @@ theorem someRayVector_ray
 
 中文:
 定理 someRayVector_ray
-  条件: (x : Module.Ray R M)
-  结论: (⟦x.someRayVector⟧ : Module.Ray R M) = x
+  条件: (x : 模.Ray R M)
+  结论: (⟦x.someRayVector⟧ : 模.Ray R M) = x
   证明: Quotient.out_eq _
 
 Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
@@ -1167,7 +1167,7 @@ definition someVector
 
 中文:
 定义 someVector
-  签名: (x : Module.Ray R M)
+  签名: (x : 模.Ray R M)
   定义体: x.someRayVector
 
 Depends on / 依赖: someRayVector, x.someRayVector
@@ -1188,7 +1188,7 @@ theorem someVector_ne_zero
 
 中文:
 定理 someVector_ne_zero
-  条件: (x : Module.Ray R M)
+  条件: (x : 模.Ray R M)
   结论: x.someVector != 0
   证明: x.someRayVector.property
 
@@ -1210,7 +1210,7 @@ theorem someVector_ray
 
 中文:
 定理 someVector_ray
-  条件: (x : Module.Ray R M)
+  条件: (x : 模.Ray R M)
   结论: rayOfNeZero R _ x.someVector_ne_zero = x
   证明: (congr_arg _ (Subtype.coe_eta _ _) :).trans x.out_eq
 
@@ -1289,7 +1289,7 @@ lemma eq_zero_of_sameRay_neg_smul_right
 
 中文:
 引理 eq_zero_of_sameRay_neg_smul_right
-  结论: [IsDomain R] [IsTorsionFree R M] {r : R} (hr : r < 0)
+  结论: [是整环 R] [是无挠 R M] {r : R} (hr : r < 0)
   证明: by
   rcases h with (rfl | h₀ | ⟨r₁, r₂, hr₁, hr₂, h⟩)
   · rfl
@@ -1321,7 +1321,7 @@ theorem eq_zero_of_sameRay_self_neg
 
 中文:
 定理 eq_zero_of_sameRay_self_neg
-  条件: [IsDomain R] [IsTorsionFree R M] (h : SameRay R x (-x))
+  条件: [是整环 R] [是无挠 R M] (h : SameRay R x (-x))
   证明: by
   refine eq_zero_of_sameRay_neg_smul_right (neg_lt_zero.2 (zero_lt_one' R)) ?_
   rwa [neg_one_smul]
@@ -1399,7 +1399,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (Module.Ray R M)
+  签名: 取负 (模.Ray R M)
   定义体: ⟨Quotient.map (fun v => -v) fun _ _ => RayVector.equiv_neg_iff.2⟩
 
 Depends on / 依赖: Quotient, Quotient.map, RayVector, RayVector.equiv_neg_iff, equiv_neg_iff
@@ -1441,7 +1441,7 @@ instance :
 
 中文:
 实例 :
-  签名: InvolutiveNeg (Module.Ray R M)
+  签名: InvolutiveNeg (模.Ray R M)
   定义体: by apply ind R (by simp) x
   -- Quotient.ind (fun a => congr_arg Quotient.mk' <| neg_neg _) x
 -/
@@ -1463,7 +1463,7 @@ theorem ne_neg_self
 
 中文:
 定理 ne_neg_self
-  条件: [IsDomain R] [IsTorsionFree R M] (x : Module.Ray R M)
+  条件: [是整环 R] [是无挠 R M] (x : 模.Ray R M)
   结论: x != -x
   证明: by
   induction x using Module.Ray.ind with | h x hx =>
@@ -1490,7 +1490,7 @@ theorem neg_units_smul
 
 中文:
 定理 neg_units_smul
-  条件: (u : Rˣ) (v : Module.Ray R M)
+  条件: (u : Rˣ) (v : 模.Ray R M)
   结论: -u • v = -(u • v)
   证明: by
   induction v using Module.Ray.ind
@@ -1517,7 +1517,7 @@ theorem units_smul_of_neg
 
 中文:
 定理 units_smul_of_neg
-  条件: (u : Rˣ) (hu : (u : R) < 0) (v : Module.Ray R M)
+  条件: (u : Rˣ) (hu : (u : R) < 0) (v : 模.Ray R M)
   结论: u • v = -v
   证明: by
   rw [← neg_inj]; rw [neg_neg]; rw [← neg_units_smul]; rw [units_smul_of_pos]
@@ -1544,7 +1544,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  条件: (f : M ≃ₗ[R] N) (v : Module.Ray R M)
+  条件: (f : M ≃ₗ[R] N) (v : 模.Ray R M)
   结论: map f (-v) = -map f v
   证明: by
   induction v using Module.Ray.ind with | h g hg => simp
@@ -1573,7 +1573,7 @@ theorem sameRay_of_mem_orbit
 
 中文:
 定理 sameRay_of_mem_orbit
-  条件: {v₁ v₂ : M} (h : v₁ in MulAction.orbit (Units.posSubgroup R) v₂)
+  条件: {v₁ v₂ : M} (h : v₁ in 乘法作用.orbit (单位群.posSubgroup R) v₂)
   证明: by
   rcases h with ⟨⟨r, hr : 0 < r.1⟩, rfl : r • v₂ = v₁⟩
   exact SameRay.sameRay_pos_smul_left _ hr
@@ -1601,7 +1601,7 @@ u⁻¹ • v = (u * u) • u⁻¹ • v := Eq.symm (u⁻¹ • v).units_smul_of_
 
 中文:
 定理 units_inv_smul
-  条件: (u : Rˣ) (v : Module.Ray R M)
+  条件: (u : Rˣ) (v : 模.Ray R M)
   结论: u⁻¹ • v = u • v
   证明: have := mul_self_pos.2 u.ne_zero
   calc
@@ -1859,7 +1859,7 @@ theorem units_smul_eq_self_iff
 
 中文:
 定理 units_smul_eq_self_iff
-  条件: {u : Rˣ} {v : Module.Ray R M}
+  条件: {u : Rˣ} {v : 模.Ray R M}
   结论: u • v = v ↔ 0 < (u : R)
   证明: by
   induction v using Module.Ray.ind with | h v hv =>
@@ -1886,7 +1886,7 @@ theorem units_smul_eq_neg_iff
 
 中文:
 定理 units_smul_eq_neg_iff
-  条件: {u : Rˣ} {v : Module.Ray R M}
+  条件: {u : Rˣ} {v : 模.Ray R M}
   结论: u • v = -v ↔ u.1 < 0
   证明: by
   rw [← neg_inj]; rw [neg_neg]; rw [← Module.Ray.neg_units_smul]; rw [units_smul_eq_self_iff]; rw [Units.val_neg]; rw [neg_pos]
@@ -2009,7 +2009,7 @@ theorem exists_pos_left
   ⟨r₂⁻¹ * r₁, mul_pos (inv_pos.2 hr₂) hr₁, by rw [mul_smul, h, inv_smul_smul₀ hr₂.ne']⟩
 
 中文:
-定理 exists_pos_left
+定理 存在_pos_left
   条件: (h : SameRay R x y) (hx : x != 0) (hy : y != 0)
   证明: let ⟨r₁, r₂, hr₁, hr₂, h⟩ := h.exists_pos hx hy
   ⟨r₂⁻¹ * r₁, mul_pos (inv_pos.2 hr₂) hr₁, by rw [mul_smul, h, inv_smul_smul₀ hr₂.ne']⟩
@@ -2030,7 +2030,7 @@ theorem exists_pos_right
   proof: (h.symm.exists_pos_left hy hx).imp fun _ => And.imp_right Eq.symm
 
 中文:
-定理 exists_pos_right
+定理 存在_pos_right
   条件: (h : SameRay R x y) (hx : x != 0) (hy : y != 0)
   证明: (h.symm.exists_pos_left hy hx).imp fun _ => And.imp_right Eq.symm
 
@@ -2053,7 +2053,7 @@ theorem exists_nonneg_left
   · exact (h.exists_pos_left hx hy).imp fun _ => And.imp_left le_of_lt
 
 中文:
-定理 exists_nonneg_left
+定理 存在_nonneg_left
   条件: (h : SameRay R x y) (hx : x != 0)
   结论: 存在 r : R, 0 <= r ∧ r • x = y
   证明: by
@@ -2078,7 +2078,7 @@ theorem exists_nonneg_right
   proof: (h.symm.exists_nonneg_left hy).imp fun _ => And.imp_right Eq.symm
 
 中文:
-定理 exists_nonneg_right
+定理 存在_nonneg_right
   条件: (h : SameRay R x y) (hy : y != 0)
   结论: 存在 r : R, 0 <= r ∧ x = r • y
   证明: (h.symm.exists_nonneg_left hy).imp fun _ => And.imp_right Eq.symm
@@ -2106,7 +2106,7 @@ theorem exists_eq_smul_add
     · rw [← add_div, add_comm, div_self h₁₂.ne'
 
 中文:
-定理 exists_eq_smul_add
+定理 存在_eq_smul_add
   条件: (h : SameRay R v₁ v₂)
   证明: by
   rcases h with (rfl | rfl | ⟨r₁, r₂, h₁, h₂, H⟩)
@@ -2144,7 +2144,7 @@ theorem exists_eq_smul
   proof: ⟨v₁ + v₂, h.exists_eq_smul_add⟩
 
 中文:
-定理 exists_eq_smul
+定理 存在_eq_smul
   条件: (h : SameRay R v₁ v₂)
   证明: ⟨v₁ + v₂, h.exists_eq_smul_add⟩
 
@@ -2173,7 +2173,7 @@ theorem exists_pos_left_iff_sameRay
   exact SameRay.sameRay_pos_smul_right x hr
 
 中文:
-定理 exists_pos_left_iff_sameRay
+定理 存在_pos_left_iff_sameRay
   条件: (hx : x != 0) (hy : y != 0)
   证明: by
   refine ⟨fun h => ?_, fun h => h.exists_pos_left hx hy⟩
@@ -2202,7 +2202,7 @@ theorem exists_pos_left_iff_sameRay_and_ne_zero
     exact (exists_pos_left_iff_sameRay hx hy).2 hxy
 
 中文:
-定理 exists_pos_left_iff_sameRay_and_ne_zero
+定理 存在_pos_left_iff_sameRay_and_ne_zero
   条件: (hx : x != 0)
   证明: by
   constructor
@@ -2233,7 +2233,7 @@ theorem exists_nonneg_left_iff_sameRay
   exact SameRay.sameRay_nonneg_smul_right x hr
 
 中文:
-定理 exists_nonneg_left_iff_sameRay
+定理 存在_nonneg_left_iff_sameRay
   条件: (hx : x != 0)
   证明: by
   refine ⟨fun h => ?_, fun h => h.exists_nonneg_left hx⟩
@@ -2260,7 +2260,7 @@ theorem exists_pos_right_iff_sameRay
   exact exists_pos_left_iff_sameRay hy hx
 
 中文:
-定理 exists_pos_right_iff_sameRay
+定理 存在_pos_right_iff_sameRay
   条件: (hx : x != 0) (hy : y != 0)
   证明: by
   rw [SameRay.sameRay_comm]
@@ -2287,7 +2287,7 @@ theorem exists_pos_right_iff_sameRay_and_ne_zero
   exact exists_pos_left_iff_sameRay_and_ne_zero hy
 
 中文:
-定理 exists_pos_right_iff_sameRay_and_ne_zero
+定理 存在_pos_right_iff_sameRay_and_ne_zero
   条件: (hy : y != 0)
   证明: by
   rw [SameRay.sameRay_comm]
@@ -2314,7 +2314,7 @@ theorem exists_nonneg_right_iff_sameRay
   exact exists_nonneg_left_iff_sameRay (R := R) hy
 
 中文:
-定理 exists_nonneg_right_iff_sameRay
+定理 存在_nonneg_right_iff_sameRay
   条件: (hy : y != 0)
   证明: by
   rw [SameRay.sameRay_comm]

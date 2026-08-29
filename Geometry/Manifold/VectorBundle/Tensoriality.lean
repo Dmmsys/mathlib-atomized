@@ -183,8 +183,8 @@ theorem sum
       exact hΦ.add (hσ.1) (.sum_section hσ.2)
 
 中文:
-定理 sum
-  结论: (hΦ : TensorialAt I F Φ x) {ι : 类型} {s : Finset ι} (σ : ι -> Π x : M, V x)
+定理 求和
+  结论: (hΦ : TensorialAt I F Φ x) {ι : 类型} {s : 有限集 ι} (σ : ι -> Π x : M, V x)
   证明: by
   classical
   induction s using Finset.induction_on with

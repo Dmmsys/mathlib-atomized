@@ -170,7 +170,7 @@ alias contMDiff_subtype_coe_Icc := contMDiff_subtypeVal_Icc
 
 中文:
 引理 contMDiff_subtypeVal_Icc
-  结论: CMDiff n (fun (z : Icc x y) => (z : 实数))
+  结论: CMDiff n (fun (z : 闭区间 x y) => (z : 实数))
   证明: isImmersionOfComplement_subtypeVal_Icc.contMDiff.of_le (OrderTop.le_top n)
 
 @[deprecated (since := "2026-07-22")]
@@ -195,7 +195,7 @@ lemma contMDiff_iff_comp_subtypeVal_Icc
 
 中文:
 引理 contMDiff_iff_comp_subtypeVal_Icc
-  条件: {f : M -> Icc x y}
+  条件: {f : M -> 闭区间 x y}
   证明: by
   rw [← ContMDiff.iff_comp_isImmersionOfComplement isImmersionOfComplement_subtypeVal_Icc]
 
@@ -221,7 +221,7 @@ lemma contMDiffOn_projIcc
 
 中文:
 引理 contMDiffOn_projIcc
-  结论: CMDiff[Icc x y] n (Set.projIcc x y h.out.le)
+  结论: CMDiff[闭区间 x y] n (集合.projIcc x y h.out.le)
   证明: by
   intro z hz
   rw [contMDiffWithinAt_iff]
@@ -278,7 +278,7 @@ lemma contMDiffOn_comp_projIcc_iff
 
 中文:
 引理 contMDiffOn_comp_projIcc_iff
-  条件: {f : Icc x y -> M}
+  条件: {f : 闭区间 x y -> M}
   证明: by
   refine ⟨fun hf => ?_, fun hf => hf.comp_contMDiffOn contMDiffOn_projIcc⟩
   convert! hf.comp_contMDiff (contMDiff_subtypeVal_Icc (x := x) (y := y)) (fun z => z.2)
@@ -311,7 +311,7 @@ lemma contMDiffWithinAt_comp_projIcc_iff
 
 中文:
 引理 contMDiffWithinAt_comp_projIcc_iff
-  条件: {f : Icc x y -> M} {w : Icc x y}
+  条件: {f : 闭区间 x y -> M} {w : 闭区间 x y}
   证明: by
   refine ⟨fun hf => ?_,
     fun hf => hf.comp_contMDiffWithinAt_of_eq (contMDiffOn_projIcc w w.2) (by simp)⟩
@@ -350,7 +350,7 @@ lemma mdifferentiableWithinAt_comp_projIcc_iff
 
 中文:
 引理 mdifferentiableWithinAt_comp_projIcc_iff
-  条件: {f : Icc x y -> M} {w : Icc x y}
+  条件: {f : 闭区间 x y -> M} {w : 闭区间 x y}
   证明: by
   refine ⟨fun hf => ?_, fun hf => ?_⟩
   · have A := (contMDiff_subtypeVal_Icc (x := x) (y := y) w).mdifferentiableAt one_ne_zero
@@ -387,7 +387,7 @@ lemma mfderivWithin_projIcc_one
 
 中文:
 引理 mfderivWithin_projIcc_one
-  条件: {z : 实数} (hz : z in Icc x y)
+  条件: {z : 实数} (hz : z in 闭区间 x y)
   证明: by
   change _ = oneTangentSpaceIcc (Set.projIcc x y h.out.le z)
   simp only [oneTangentSpaceIcc]
@@ -420,7 +420,7 @@ lemma mfderivWithin_comp_projIcc_one
 
 中文:
 引理 mfderivWithin_comp_projIcc_one
-  条件: {f : Icc x y -> M} {w : Icc x y}
+  条件: {f : 闭区间 x y -> M} {w : 闭区间 x y}
   证明: by
   by_cases hw : MDiffAt f w; swap
   · rw [mfderiv_zero_of_not_mdifferentiableAt hw, mfderivWithin_zero_of_not_mdifferentiableWithinAt]
@@ -466,7 +466,7 @@ lemma mfderiv_subtypeVal_Icc_one
 
 中文:
 引理 mfderiv_subtypeVal_Icc_one
-  条件: (z : Icc x y)
+  条件: (z : 闭区间 x y)
   证明: by
   have A : mfderiv[Icc x y] (Subtype.val ∘ (projIcc x y h.out.le)) z 1
       = mfderiv[Icc x y] (@id Real) z 1 := by

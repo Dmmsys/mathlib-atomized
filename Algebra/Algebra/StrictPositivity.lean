@@ -41,7 +41,7 @@ definition IsStrictlyPositive
 
 中文:
 定义 IsStrictlyPositive
-  签名: {A : 类型} [LE A] [Monoid A] [Zero A] (a : A)
+  签名: {A : 类型} [LE A] [幺半群 A] [零 A] (a : A)
   定义体: 0 <= a ∧ IsUnit a
 
 Depends on / 依赖: IsUnit
@@ -68,7 +68,7 @@ lemma iff_of_unital
 
 中文:
 引理 iff_of_unital
-  条件: [LE A] [Monoid A] [Zero A] {a : A}
+  条件: [LE A] [幺半群 A] [零 A] {a : A}
   证明: Iff.rfl
 
 @[aesop 20% apply (rule_sets := [CStarAlgebra])]
@@ -91,7 +91,7 @@ lemma nonneg
 
 中文:
 引理 nonneg
-  条件: [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a)
+  条件: [LE A] [幺半群 A] [零 A] {a : A} (ha : IsStrictlyPositive a)
   证明: ha.1
 
 @[aesop 20% apply (rule_sets := [CStarAlgebra])]
@@ -110,7 +110,7 @@ lemma isUnit
 
 中文:
 引理 isUnit
-  条件: [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a)
+  条件: [LE A] [幺半群 A] [零 A] {a : A} (ha : IsStrictlyPositive a)
   证明: ha.2
 -/
 protected lemma isUnit [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a) :
@@ -127,8 +127,8 @@ lemma _root_.IsUnit.isStrictlyPositive
 @[grind ->]
 
 中文:
-引理 _root_.IsUnit.isStrictlyPositive
-  结论: [LE A] [Monoid A] [Zero A]
+引理 _root_.是单位.isStrictlyPositive
+  结论: [LE A] [幺半群 A] [零 A]
   证明: iff_of_unital.mpr ⟨ha₀, ha⟩
 
 @[grind ->]
@@ -151,7 +151,7 @@ lemma isSelfAdjoint
 
 中文:
 引理 isSelfAdjoint
-  结论: [Semiring A] [PartialOrder A] [StarRing A] [StarOrderedRing A] {a : A}
+  结论: [半环 A] [偏序 A] [对合环 A] [StarOrdered环 A] {a : A}
   证明: ha.nonneg.isSelfAdjoint
 
 @[simp, grind .]
@@ -174,7 +174,7 @@ lemma _root_.isStrictlyPositive_one
 
 中文:
 引理 _root_.isStrictlyPositive_one
-  条件: [LE A] [Monoid A] [Zero A] [ZeroLEOneClass A]
+  条件: [LE A] [幺半群 A] [零 A] [ZeroLEOne类 A]
   证明: iff_of_unital.mpr ⟨zero_le_one, isUnit_one⟩
 
 @[grind =]
@@ -196,8 +196,8 @@ lemma _root_.Units.isStrictlyPositive_iff
 @[aesop safe apply]
 
 中文:
-引理 _root_.Units.isStrictlyPositive_iff
-  条件: [LE A] [Monoid A] [Zero A] {a : Aˣ}
+引理 _root_.单位群.isStrictlyPositive_iff
+  条件: [LE A] [幺半群 A] [零 A] {a : Aˣ}
   证明: ⟨fun h => h.nonneg, fun h => iff_of_unital.mp ⟨h, a.isUnit⟩⟩
 
 @[aesop safe apply]
@@ -220,8 +220,8 @@ lemma _root_.Units.isStrictlyPositive_of_le
 @[nontriviality]
 
 中文:
-引理 _root_.Units.isStrictlyPositive_of_le
-  结论: [LE A] [Monoid A] [Zero A] {a : Aˣ}
+引理 _root_.单位群.isStrictlyPositive_of_le
+  结论: [LE A] [幺半群 A] [零 A] {a : Aˣ}
   证明: a.isStrictlyPositive_iff.mpr h
 
 @[nontriviality]
@@ -242,7 +242,7 @@ lemma of_subsingleton
 
 中文:
 引理 of_subsingleton
-  结论: [PartialOrder A] [Monoid A] [Zero A] [Subsingleton A]
+  结论: [偏序 A] [幺半群 A] [零 A] [子单例 A]
   证明: iff_of_unital.mpr ⟨by simp, isUnit_of_subsingleton _⟩
 -/
 protected lemma of_subsingleton [PartialOrder A] [Monoid A] [Zero A] [Subsingleton A]
@@ -266,8 +266,8 @@ lemma _root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff
   rw [← Units.coe_star]; rw [Units.isUnit_mul_units]; rw [Units.isUnit_units_mul]
 
 中文:
-引理 _root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff
-  条件: {u a : A} (hu : IsUnit u)
+引理 _root_.是单位.isStrictlyPositive_star_right_conjugate_iff
+  条件: {u a : A} (hu : 是单位 u)
   证明: by
   simp_rw [IsStrictlyPositive.iff_of_unital, hu.star_right_conjugate_nonneg_iff]
   lift u to Aˣ using hu
@@ -293,8 +293,8 @@ lemma _root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff
 @[grind =]
 
 中文:
-引理 _root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff
-  条件: {u a : A} (hu : IsUnit u)
+引理 _root_.是单位.isStrictlyPositive_star_left_conjugate_iff
+  条件: {u a : A} (hu : 是单位 u)
   证明: by
   simpa using hu.star.isStrictlyPositive_star_right_conjugate_iff
 
@@ -319,8 +319,8 @@ theorem _root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
 @[aesop safe apply]
 
 中文:
-定理 _root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
-  结论: (a b : A) (hb : IsUnit b)
+定理 _root_.是单位.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
+  结论: (a b : A) (hb : 是单位 b)
   证明: by
   grind [hb.isStrictlyPositive_star_left_conjugate_iff]
 
@@ -344,7 +344,7 @@ theorem conjugate_of_isUnit_of_isSelfAdjoint
 
 中文:
 定理 conjugate_of_isUnit_of_isSelfAdjoint
-  结论: (a b : A) (hb : IsUnit b)
+  结论: (a b : A) (hb : 是单位 b)
   证明: (hb.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint _ _ hb₂).mpr ha
 
 Depends on / 依赖: IsStrictlyPositive, cfc_tac, hb.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint, isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
@@ -376,7 +376,7 @@ lemma smul
 
 中文:
 引理 smul
-  结论: [Semifield 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A] [PosSMulMono 𝕜 A] {c : 𝕜}
+  结论: [半域 𝕜] [偏序 𝕜] [代数 𝕜 A] [正标量乘递增 𝕜 A] {c : 𝕜}
   证明: by
   have hunit : IsUnit (c • a) :=
     isUnit_iff_exists.mpr ⟨c⁻¹ • ha.isUnit.unit⁻¹, by simp [(ne_of_lt hc).symm]⟩
@@ -404,7 +404,7 @@ lemma _root_.isStrictlyPositive_algebraMap
 
 中文:
 引理 _root_.isStrictlyPositive_algebraMap
-  结论: [ZeroLEOneClass A] [Semifield 𝕜] [PartialOrder 𝕜]
+  结论: [ZeroLEOne类 A] [半域 𝕜] [偏序 𝕜]
   证明: by
   rw [Algebra.algebraMap_eq_smul_one]
   exact IsStrictlyPositive.smul hc isStrictlyPositive_one
@@ -432,7 +432,7 @@ grind_pattern IsStrictlyPositive.spectrum_pos => x in spectrum 𝕜 a, IsStrictl
 
 中文:
 引理 spectrum_pos
-  结论: [CommSemiring 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A]
+  结论: [交换半环 𝕜] [偏序 𝕜] [代数 𝕜 A]
   证明: by
   have h₁ : 0 <= x := by grind
   have h₂ : x != 0 := by grind [= spectrum.zero_notMem_iff]

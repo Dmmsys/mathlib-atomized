@@ -48,10 +48,10 @@ structure LinearPMap
     - toFun : domain ->ₛₗ[σ] F
 
 中文:
-结构 LinearPMap
-  参数: {R S : 类型} [Ring R] [Ring S] (σ : R ->+* S) (E : 类型)
+结构 LinearP映射
+  参数: {R S : 类型} [环 R] [环 S] (σ : R ->+* S) (E : 类型)
   公理与运算 (2 个):
-    - domain : Submodule R E
+    - domain : 子模 R E
     - toFun : domain ->ₛₗ[σ] F
 -/
 structure LinearPMap {R S : Type*} [Ring R] [Ring S] (σ : R ->+* S) (E : Type*)
@@ -284,7 +284,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  条件: {s : Submodule R E} {f g : s ->ₛₗ[σ] F} (h : f = g)
+  条件: {s : 子模 R E} {f g : s ->ₛₗ[σ] F} (h : f = g)
   结论: mk s f = mk s g
   证明: h ▸ rfl
 -/
@@ -362,7 +362,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [Module R F] (f : E ->ₗ.[R] F) (c : R) (x : f.domain)
+  条件: [模 R F] (f : E ->ₗ.[R] F) (c : R) (x : f.domain)
   结论: f (c • x) = c • f x
   证明: f.toFun.map_smulₛₗ c x
 
@@ -407,7 +407,7 @@ theorem mk_apply
 
 中文:
 定理 mk_apply
-  条件: (p : Submodule R E) (f : p ->ₛₗ[σ] F) (x : p)
+  条件: (p : 子模 R E) (f : p ->ₛₗ[σ] F) (x : p)
   结论: mk p f x = f x
   证明: rfl
 -/
@@ -564,7 +564,7 @@ abbreviation mkSpanSingleton
 
 中文:
 缩写 mkSpanSingleton
-  签名: {K L E F : 类型} [DivisionRing K] [DivisionRing L]
+  签名: {K L E F : 类型} [除环 K] [除环 L]
   定义体: mkSpanSingleton' x y fun c hc =>
     (smul_eq_zero.1 hc).elim (fun hc => by rw [hc, RingHom.map_zero, zero_smul]) fun hx' =>
     absurd hx' hx
@@ -588,7 +588,7 @@ theorem mkSpanSingleton_apply
 
 中文:
 定理 mkSpanSingleton_apply
-  结论: (K L : 类型) {E F : 类型} [DivisionRing K] [DivisionRing L]
+  结论: (K L : 类型) {E F : 类型} [除环 K] [除环 L]
   证明: LinearPMap.mkSpanSingleton'_apply_self _ _ _ _
 
 Depends on / 依赖: LinearPMap, LinearPMap.mkSpanSingleton, _apply_self, mkSpanSingleton
@@ -613,7 +613,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: [Module R F] (p : Submodule R E) (p' : Submodule R F)
+  签名: [模 R F] (p : 子模 R E) (p' : 子模 R F)
   定义体: p.prod p'
   toFun := (LinearMap.fst R E F).comp (p.prod p').subtype
 
@@ -634,7 +634,7 @@ theorem fst_apply
 
 中文:
 定理 fst_apply
-  条件: [Module R F] (p : Submodule R E) (p' : Submodule R F) (x : p.prod p')
+  条件: [模 R F] (p : 子模 R E) (p' : 子模 R F) (x : p.乘积 p')
   证明: rfl
 -/
 theorem fst_apply [Module R F] (p : Submodule R E) (p' : Submodule R F) (x : p.prod p') :
@@ -654,7 +654,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: [Module R F] (p : Submodule R E) (p' : Submodule R F)
+  签名: [模 R F] (p : 子模 R E) (p' : 子模 R F)
   定义体: p.prod p'
   toFun := (LinearMap.snd R E F).comp (p.prod p').subtype
 
@@ -675,7 +675,7 @@ theorem snd_apply
 
 中文:
 定理 snd_apply
-  条件: [Module R F] (p : Submodule R E) (p' : Submodule R F) (x : p.prod p')
+  条件: [模 R F] (p : 子模 R E) (p' : 子模 R F) (x : p.乘积 p')
   证明: rfl
 -/
 theorem snd_apply [Module R F] (p : Submodule R E) (p' : Submodule R F) (x : p.prod p') :
@@ -726,7 +726,7 @@ theorem exists_of_le
   proof: ⟨⟨x.1, h.1 x.2⟩, ⟨rfl, h.2 rfl⟩⟩
 
 中文:
-定理 exists_of_le
+定理 存在_of_le
   条件: {T S : E ->ₛₗ.[σ] F} (h : T <= S) (x : T.domain)
   证明: ⟨⟨x.1, h.1 x.2⟩, ⟨rfl, h.2 rfl⟩⟩
 -/
@@ -796,7 +796,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : Bot (E ->ₛₗ.[σ] F)
+  签名: : 底元素 (E ->ₛₗ.[σ] F)
   定义体: ⟨⟨⊥, 0⟩⟩
 -/
 instance bot : Bot (E ->ₛₗ.[σ] F) :=
@@ -812,7 +812,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (E ->ₛₗ.[σ] F)
+  签名: : 可居 (E ->ₛₗ.[σ] F)
   定义体: ⟨⊥⟩
 -/
 instance inhabited : Inhabited (E ->ₛₗ.[σ] F) :=
@@ -874,7 +874,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot (E ->ₛₗ.[σ] F) where
+  签名: : 有底序 (E ->ₛₗ.[σ] F) where
   定义体: ⟨bot_le, fun x y h => by
       have hx : x = 0 := Subtype.ext ((mem_bot R).1 x.2)
       have hy : y = 0 := Subtype.ext (h.symm.trans (congr_arg _ hx))
@@ -923,7 +923,7 @@ lt_of_le_of_ne hlt.1.1 fun heq => ne_of_lt hlt eq_of_le_of_domain_eq (le_of_lt h
 
 中文:
 定理 domain_mono
-  结论: StrictMono (domain (σ := σ) (E := E) (F := F))
+  结论: 严格递增 (domain (σ := σ) (E := E) (F := F))
   证明: fun _f _g hlt =>
 lt_of_le_of_ne hlt.1.1 fun heq => ne_of_lt hlt eq_of_le_of_domain_eq (le_of_lt hlt) heq
 -/
@@ -999,7 +999,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def sup (f g : E ->ₛₗ.[σ] F)
+  签名: def 上确界 (f g : E ->ₛₗ.[σ] F)
   定义体: ⟨_, Classical.choose (sup_aux f g h)⟩
 
 @[simp]
@@ -1174,7 +1174,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (E ->ₛₗ.[σ] F)
+  签名: : 零 (E ->ₛₗ.[σ] F)
   定义体: ⟨⊤, 0⟩
 
 @[simp]
@@ -1213,7 +1213,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: (x : (⊤ : Submodule R E))
+  条件: (x : (⊤ : 子模 R E))
   结论: (0 : E ->ₛₗ.[σ] F) x = 0
   证明: rfl
 -/
@@ -1240,7 +1240,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul M (E ->ₛₗ.[σ] F)
+  签名: : 标量乘法 M (E ->ₛₗ.[σ] F)
   定义体: ⟨fun a f =>
     { domain := f.domain
       toFun := a • f.toFun }⟩
@@ -1324,7 +1324,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass M N F]
+  签名: [标量交换类 M N F]
   定义体: ⟨fun a b f => ext' smul_comm a b f.toFun⟩
 
 Depends on / 依赖: f.toFun, smul_comm
@@ -1342,7 +1342,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul M N] [IsScalarTower M N F]
+  签名: [标量乘法 M N] [标量塔 M N F]
   定义体: ⟨fun a b f => ext' smul_assoc a b f.toFun⟩
 
 Depends on / 依赖: f.toFun, smul_assoc
@@ -1361,7 +1361,7 @@ mul_smul a b f := ext' mul_smul a b f.toFun
 
 中文:
 实例 instMulAction
-  签名: : MulAction M (E ->ₛₗ.[σ] F) where
+  签名: : 乘法作用 M (E ->ₛₗ.[σ] F) where
   定义体: fun ⟨_s, f⟩ => ext' one_smul M f
 mul_smul a b f := ext' mul_smul a b f.toFun
 
@@ -1385,7 +1385,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (E ->ₛₗ.[σ] F)
+  签名: : 取负 (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f => ⟨f.domain, -f.toFun⟩⟩
 
 @[simp]
@@ -1478,7 +1478,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (E ->ₛₗ.[σ] F)
+  签名: : 加法 (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f g =>
     { domain := f.domain ⊓ g.domain
       toFun := f.toFun.comp (inclusion (inf_le_left : f.domain ⊓ g.domain <= _))
@@ -1519,7 +1519,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : Submodule R E))
+  条件: (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : 子模 R E))
   证明: rfl
 -/
 theorem add_apply (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : Submodule R E)) :
@@ -1538,7 +1538,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: : AddSemigroup (E ->ₛₗ.[σ] F)
+  签名: : 加法半群 (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f g h => by
     ext x y hxy
     · simp only [add_domain, inf_assoc]
@@ -1569,7 +1569,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: : AddZeroClass (E ->ₛₗ.[σ] F) where
+  签名: : 加法零类 (E ->ₛₗ.[σ] F) where
   定义体: fun f => by
     ext x y hxy
     · simp [add_domain]
@@ -1605,7 +1605,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid (E ->ₛₗ.[σ] F) where
+  签名: : 加法幺半群 (E ->ₛₗ.[σ] F) where
   定义体: by
     simp
   add_zero := by
@@ -1634,7 +1634,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (E ->ₛₗ.[σ] F)
+  签名: : 加法交换幺半群 (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f g => by
     ext x y hxy
     · simp only [add_domain, inf_comm]
@@ -1666,7 +1666,7 @@ instance instVAdd
 
 中文:
 实例 instVAdd
-  签名: : VAdd (E ->ₛₗ[σ] F) (E ->ₛₗ.[σ] F)
+  签名: : 向量加法 (E ->ₛₗ[σ] F) (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f g =>
     { domain := g.domain
       toFun := f.comp g.domain.subtype + g.toFun }⟩
@@ -1751,7 +1751,7 @@ add_vadd := fun _f₁ _f₂ ⟨_s, _g⟩ => ext' LinearMap.ext fun _x => add_ass
 
 中文:
 实例 instAddAction
-  签名: : AddAction (E ->ₛₗ[σ] F) (E ->ₛₗ.[σ] F) where
+  签名: : 加法作用 (E ->ₛₗ[σ] F) (E ->ₛₗ.[σ] F) where
   定义体: (· +ᵥ ·)
 zero_vadd := fun ⟨_s, _f⟩ => ext' zero_add _
 add_vadd := fun _f₁ _f₂ ⟨_s, _g⟩ => ext' LinearMap.ext fun _x => add_assoc _ _ _
@@ -1778,7 +1778,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (E ->ₛₗ.[σ] F)
+  签名: : 减法 (E ->ₛₗ.[σ] F)
   定义体: ⟨fun f g =>
     { domain := f.domain ⊓ g.domain
       toFun := f.toFun.comp (inclusion (inf_le_left : f.domain ⊓ g.domain <= _))
@@ -1819,7 +1819,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : Submodule R E))
+  条件: (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : 子模 R E))
   证明: rfl
 -/
 theorem sub_apply (f g : E ->ₛₗ.[σ] F) (x : (f.domain ⊓ g.domain : Submodule R E)) :
@@ -1845,7 +1845,7 @@ instance instSubtractionCommMonoid
 
 中文:
 实例 instSubtractionCommMonoid
-  签名: : SubtractionCommMonoid (E ->ₛₗ.[σ] F) where
+  签名: : SubtractionComm幺半群 (E ->ₛₗ.[σ] F) where
   定义体: add_comm
   sub_eq_add_neg f g := by
     ext x _ h
@@ -2086,7 +2086,7 @@ theorem sSup_aux
 
 中文:
 定理 sSup_aux
-  条件: (c : Set (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c)
+  条件: (c : 集合 (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c)
   证明: by
   rcases c.eq_empty_or_nonempty with rfl | cne
   · simp
@@ -2137,7 +2137,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def sSup (c : Set (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c)
+  签名: def sSup (c : 集合 (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c)
   定义体: ⟨_, Classical.choose sSup_aux c hc⟩
 -/
 protected noncomputable def sSup (c : Set (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c) :
@@ -2154,7 +2154,7 @@ theorem domain_sSup
 
 中文:
 定理 domain_sSup
-  条件: {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c)
+  条件: {c : 集合 (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c)
   证明: rfl
 -/
 theorem domain_sSup {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) :
@@ -2173,7 +2173,7 @@ theorem mem_domain_sSup_iff
 
 中文:
 定理 mem_domain_sSup_iff
-  结论: {c : Set (E ->ₛₗ.[σ] F)} (hnonempty : c.Nonempty)
+  结论: {c : 集合 (E ->ₛₗ.[σ] F)} (hnonempty : c.非空)
   证明: by
   rw [domain_sSup]; rw [Submodule.mem_sSup_of_directed (hnonempty.image _)
     (DirectedOn.mono_comp LinearPMap.domain_mono.monotone hc)]
@@ -2198,7 +2198,7 @@ theorem le_sSup
 
 中文:
 定理 le_sSup
-  结论: {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {f : E ->ₛₗ.[σ] F}
+  结论: {c : 集合 (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {f : E ->ₛₗ.[σ] F}
   证明: Classical.choose_spec (sSup_aux c hc) hf
 -/
 protected theorem le_sSup {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {f : E ->ₛₗ.[σ] F}
@@ -2219,7 +2219,7 @@ theorem sSup_le
 
 中文:
 定理 sSup_le
-  结论: {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {g : E ->ₛₗ.[σ] F}
+  结论: {c : 集合 (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {g : E ->ₛₗ.[σ] F}
   证明: le_of_eqLocus_ge
     sSup_le fun _ ⟨f, hf, Eq⟩ =>
       Eq ▸
@@ -2247,7 +2247,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  结论: {c : Set (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {l : E ->ₛₗ.[σ] F}
+  结论: {c : 集合 (E ->ₛₗ.[σ] F)} (hc : DirectedOn (· <= ·) c) {l : E ->ₛₗ.[σ] F}
   证明: by
   symm
   apply (Classical.choose_spec (sSup_aux c hc) hl).2
@@ -2276,7 +2276,7 @@ definition toPMap
 
 中文:
 定义 toPMap
-  签名: (f : E ->ₛₗ[σ] F) (p : Submodule R E)
+  签名: (f : E ->ₛₗ[σ] F) (p : 子模 R E)
   定义体: ⟨p, f.comp p.subtype⟩
 
 @[simp]
@@ -2300,7 +2300,7 @@ theorem toPMap_apply
 
 中文:
 定理 toPMap_apply
-  条件: (f : E ->ₛₗ[σ] F) (p : Submodule R E) (x : p)
+  条件: (f : E ->ₛₗ[σ] F) (p : 子模 R E) (x : p)
   结论: f.toPMap p x = f x
   证明: rfl
 
@@ -2321,7 +2321,7 @@ theorem toPMap_domain
 
 中文:
 定理 toPMap_domain
-  条件: (f : E ->ₛₗ[σ] F) (p : Submodule R E)
+  条件: (f : E ->ₛₗ[σ] F) (p : 子模 R E)
   结论: (f.toPMap p).domain = p
   证明: rfl
 -/
@@ -2394,7 +2394,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : E ->ₛₗ.[σ] F) (p : Submodule S F) (H : 对任意 x, f x in p)
+  签名: (f : E ->ₛₗ.[σ] F) (p : 子模 S F) (H : 对任意 x, f x in p)
   定义体: f.domain
   toFun := f.toFun.codRestrict p H
 
@@ -2441,7 +2441,7 @@ omit [Module S F] in
 
 中文:
 定义 coprod
-  签名: [Module R F] [Module S G] (f : E ->ₛₗ.[σ] G) (g : F ->ₛₗ.[σ] G)
+  签名: [模 R F] [模 S G] (f : E ->ₛₗ.[σ] G) (g : F ->ₛₗ.[σ] G)
   定义体: f.domain.prod g.domain
   toFun :=
     (show f.domain.prod g.domain ->ₛₗ[σ] G from
@@ -2474,7 +2474,7 @@ theorem coprod_apply
 
 中文:
 定理 coprod_apply
-  条件: [Module R F] [Module S G] (f : E ->ₛₗ.[σ] G) (g : F ->ₛₗ.[σ] G) (x)
+  条件: [模 R F] [模 S G] (f : E ->ₛₗ.[σ] G) (g : F ->ₛₗ.[σ] G) (x)
   证明: rfl
 -/
 theorem coprod_apply [Module R F] [Module S G] (f : E ->ₛₗ.[σ] G) (g : F ->ₛₗ.[σ] G) (x) :
@@ -2493,7 +2493,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : E ->ₛₗ.[σ] F) (S : Submodule R E)
+  签名: (f : E ->ₛₗ.[σ] F) (S : 子模 R E)
   定义体: ⟨S ⊓ f.domain, f.toFun.comp (Submodule.inclusion (by simp))⟩
 
 @[simp]
@@ -2514,7 +2514,7 @@ theorem domRestrict_domain
 
 中文:
 定理 domRestrict_domain
-  条件: (f : E ->ₛₗ.[σ] F) {S : Submodule R E}
+  条件: (f : E ->ₛₗ.[σ] F) {S : 子模 R E}
   证明: rfl
 -/
 theorem domRestrict_domain (f : E ->ₛₗ.[σ] F) {S : Submodule R E} :
@@ -2537,7 +2537,7 @@ theorem domRestrict_apply
 
 中文:
 定理 domRestrict_apply
-  条件: {f : E ->ₛₗ.[σ] F} {S : Submodule R E} ⦃x
+  条件: {f : E ->ₛₗ.[σ] F} {S : 子模 R E} ⦃x
   结论: ↥(S ⊓ f.domain)⦄ ⦃y : f.domain⦄
   证明: by
   have : Submodule.inclusion (by simp) x = y := by
@@ -2567,7 +2567,7 @@ theorem domRestrict_le
 
 中文:
 定理 domRestrict_le
-  条件: {f : E ->ₛₗ.[σ] F} {S : Submodule R E}
+  条件: {f : E ->ₛₗ.[σ] F} {S : 子模 R E}
   结论: f.domRestrict S <= f
   证明: ⟨by simp, fun _ _ hxy => domRestrict_apply hxy⟩
 
@@ -2591,7 +2591,7 @@ definition graph
 
 中文:
 定义 graph
-  签名: [Module R F] (f : E ->ₗ.[R] F)
+  签名: [模 R F] (f : E ->ₗ.[R] F)
   定义体: f.toFun.graph.map (f.domain.subtype.prodMap (LinearMap.id : F ->ₗ[R] F))
 
 Depends on / 依赖: LinearMap, LinearMap.id, domain, f.domain.subtype.prodMap, f.toFun.graph.map, prodMap, subtype
@@ -2611,7 +2611,7 @@ theorem mem_graph_iff'
 
 中文:
 定理 mem_graph_iff'
-  条件: [Module R F] (f : E ->ₗ.[R] F) {x : E × F}
+  条件: [模 R F] (f : E ->ₗ.[R] F) {x : E × F}
   证明: by simp [graph]
 
 @[simp, grind =]
@@ -2632,7 +2632,7 @@ theorem mem_graph_iff
 
 中文:
 定理 mem_graph_iff
-  条件: [Module R F] (f : E ->ₗ.[R] F) {x : E × F}
+  条件: [模 R F] (f : E ->ₗ.[R] F) {x : E × F}
   证明: by
   cases x
   simp_rw [mem_graph_iff', Prod.mk_inj]
@@ -2655,7 +2655,7 @@ theorem mem_graph
 
 中文:
 定理 mem_graph
-  条件: [Module R F] (f : E ->ₗ.[R] F) (x : domain f)
+  条件: [模 R F] (f : E ->ₗ.[R] F) (x : domain f)
   结论: ((x : E), f x) in f.graph
   证明: by simp
 -/
@@ -2679,7 +2679,7 @@ theorem graph_map_fst_eq_domain
 
 中文:
 定理 graph_map_fst_eq_domain
-  条件: [Module R F] (f : E ->ₗ.[R] F)
+  条件: [模 R F] (f : E ->ₗ.[R] F)
   证明: by
   ext x
   simp only [Submodule.mem_map, mem_graph_iff, Subtype.exists, exists_and_left, exists_eq_left,
@@ -2713,7 +2713,7 @@ theorem graph_map_snd_eq_range
 
 中文:
 定理 graph_map_snd_eq_range
-  条件: [Module R F] (f : E ->ₗ.[R] F)
+  条件: [模 R F] (f : E ->ₗ.[R] F)
   证明: by ext; simp
 -/
 theorem graph_map_snd_eq_range [Module R F] (f : E ->ₗ.[R] F) :
@@ -2979,7 +2979,7 @@ theorem mem_range_iff
 中文:
 定理 mem_range_iff
   条件: {f : E ->ₗ.[R] F} {y : F}
-  结论: y in Set.range f ↔ 存在 x : E, (x, y) in f.graph
+  结论: y in 集合.range f ↔ 存在 x : E, (x, y) in f.graph
   证明: by
   constructor <;> intro h
   · rw [Set.mem_range] at h
@@ -3197,8 +3197,8 @@ theorem existsUnique_from_graph
   exact sub_eq_zero.mp (hg hy (by simp))
 
 中文:
-定理 existsUnique_from_graph
-  结论: {g : Submodule R (E × F)}
+定理 存在Unique_from_graph
+  结论: {g : 子模 R (E × F)}
   证明: by
   refine existsUnique_of_exists_of_unique ?_ ?_
   · convert! ha
@@ -3233,7 +3233,7 @@ definition valFromGraph
 
 中文:
 定义 valFromGraph
-  签名: {g : Submodule R (E × F)}
+  签名: {g : 子模 R (E × F)}
   定义体: (ExistsUnique.exists (existsUnique_from_graph @hg ha)).choose
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.exists, existsUnique_from_graph
@@ -3253,7 +3253,7 @@ theorem valFromGraph_mem
 
 中文:
 定理 valFromGraph_mem
-  结论: {g : Submodule R (E × F)}
+  结论: {g : 子模 R (E × F)}
   证明: (ExistsUnique.exists (existsUnique_from_graph @hg ha)).choose_spec
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.exists, choose_spec, existsUnique_from_graph
@@ -3279,7 +3279,7 @@ definition toLinearPMapAux
 
 中文:
 定义 toLinearPMapAux
-  签名: (g : Submodule R (E × F))
+  签名: (g : 子模 R (E × F))
   定义体: fun x => valFromGraph hg x.2
   map_add' := fun v w => by
     have hadd := (g.map (LinearMap.fst R E F)).add_mem v.2 w.2
@@ -3320,7 +3320,7 @@ definition toLinearPMap
 
 中文:
 定义 toLinearPMap
-  签名: (g : Submodule R (E × F))
+  签名: (g : 子模 R (E × F))
   定义体: g.map (LinearMap.fst R E F)
   toFun := if hg : forall (x : E × F) (_hx : x in g) (_hx' : x.fst = 0), x.snd = 0 then
     g.toLinearPMapAux hg else 0
@@ -3342,7 +3342,7 @@ theorem toLinearPMap_domain
 
 中文:
 定理 toLinearPMap_domain
-  条件: (g : Submodule R (E × F))
+  条件: (g : 子模 R (E × F))
   证明: rfl
 -/
 theorem toLinearPMap_domain (g : Submodule R (E × F)) :
@@ -3363,7 +3363,7 @@ theorem toLinearPMap_apply_aux
 
 中文:
 定理 toLinearPMap_apply_aux
-  结论: {g : Submodule R (E × F)}
+  结论: {g : 子模 R (E × F)}
   证明: by
   classical
   change (if hg : _ then g.toLinearPMapAux hg else 0) x = _
@@ -3395,7 +3395,7 @@ theorem mem_graph_toLinearPMap
 
 中文:
 定理 mem_graph_toLinearPMap
-  结论: {g : Submodule R (E × F)}
+  结论: {g : 子模 R (E × F)}
   证明: by
   rw [toLinearPMap_apply_aux hg]
   exact valFromGraph_mem hg x.2
@@ -3428,7 +3428,7 @@ theorem toLinearPMap_graph_eq
 
 中文:
 定理 toLinearPMap_graph_eq
-  结论: (g : Submodule R (E × F))
+  结论: (g : 子模 R (E × F))
   证明: by
   ext ⟨x_fst, x_snd⟩
   constructor <;> intro hx
@@ -3469,7 +3469,7 @@ theorem toLinearPMap_range
 
 中文:
 定理 toLinearPMap_range
-  结论: (g : Submodule R (E × F))
+  结论: (g : 子模 R (E × F))
   证明: by
   rwa [← LinearPMap.graph_map_snd_eq_range, toLinearPMap_graph_eq]
 
@@ -3521,7 +3521,7 @@ theorem inverse_domain
 
 中文:
 定理 inverse_domain
-  结论: (inverse f).domain = LinearMap.range f.toFun
+  结论: (inverse f).domain = 线性映射.range f.toFun
   证明: by
   rw [inverse]; rw [Submodule.toLinearPMap_domain]; rw [← graph_map_snd_eq_range]; rw [← LinearEquiv.fst_comp_prodComm]; rw [Submodule.map_comp]
 
@@ -3603,7 +3603,7 @@ theorem inverse_range
 
 中文:
 定理 inverse_range
-  结论: LinearMap.range (inverse f).toFun = f.domain
+  结论: 线性映射.range (inverse f).toFun = f.domain
   证明: by
   rw [inverse]; rw [Submodule.toLinearPMap_range _ (mem_inverse_graph_snd_eq_zero hf)]; rw [← graph_map_fst_eq_domain]; rw [← LinearEquiv.snd_comp_prodComm]; rw [Submodule.map_comp]
 

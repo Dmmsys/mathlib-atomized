@@ -51,7 +51,7 @@ definition cauchyPDFReal
 @[simp]
 
 中文:
-定义 cauchyPDFReal
+定义 cauchyPDF实数
   签名: (x₀ : 实数) (γ : 实数>=0) (x : 实数)
   定义体: π⁻¹ * γ * ((x - x₀) ^ 2 + γ ^ 2)⁻¹
 
@@ -80,7 +80,7 @@ lemma cauchyPDFReal_scale_zero
 alias _root_Probability.CauchyPDFReal_scale_zero := cauchyPDFReal_scale_zero
 
 中文:
-引理 cauchyPDFReal_scale_zero
+引理 cauchyPDF实数_scale_zero
   条件: (x₀ : 实数)
   结论: cauchyPDF实数 x₀ 0 = 0
   证明: by
@@ -111,7 +111,7 @@ lemma cauchyPDFReal_def
 alias _root_Probability.CauchyPDFReal_def := cauchyPDFReal_def
 
 中文:
-引理 cauchyPDFReal_def
+引理 cauchyPDF实数_def
   条件: (x₀ : 实数) (γ : 实数>=0) (x : 实数)
   证明: by rfl
 
@@ -141,7 +141,7 @@ lemma cauchyPDFReal_def'
 alias _root_Probability.CauchyPDFReal_def' := cauchyPDFReal_def'
 
 中文:
-引理 cauchyPDFReal_def'
+引理 cauchyPDF实数_def'
   条件: (x₀ : 实数) (γ : 实数>=0) (x : 实数)
   证明: by
   rw [cauchyPDFReal_def]
@@ -279,9 +279,9 @@ alias _root_Probability.measurable_cauchyPDFReal := measurable_cauchyPDFReal
 @[fun_prop]
 
 中文:
-引理 measurable_cauchyPDFReal
+引理 measurable_cauchyPDF实数
   条件: (x₀ : 实数) (γ : 实数>=0)
-  结论: Measurable (cauchyPDF实数 x₀ γ)
+  结论: 可测 (cauchyPDF实数 x₀ γ)
   证明: by
   unfold cauchyPDFReal
   fun_prop
@@ -315,7 +315,7 @@ alias _root_Probability.stronglyMeasurable_cauchyPDFReal := stronglyMeasurable_c
 @[fun_prop]
 
 中文:
-引理 stronglyMeasurable_cauchyPDFReal
+引理 stronglyMeasurable_cauchyPDF实数
   条件: (x₀ : 实数) (γ : 实数>=0)
   证明: by fun_prop
 
@@ -352,7 +352,7 @@ alias _root_Probability.measurable_cauchyPDF := measurable_cauchyPDF
 中文:
 引理 measurable_cauchyPDF
   条件: (x₀ : 实数) (γ : 实数>=0)
-  结论: Measurable (cauchyPDF x₀ γ)
+  结论: 可测 (cauchyPDF x₀ γ)
   证明: by
   unfold cauchyPDF
   fun_prop
@@ -449,7 +449,7 @@ lemma integral_cauchyPDFReal_eq_one
 alias _root_Probability.integral_cauchyPDFReal := 
 
 中文:
-引理 integral_cauchyPDFReal_eq_one
+引理 integral_cauchyPDF实数_eq_one
   条件: (x₀ : 实数) {γ : 实数>=0} (hγ : γ != 0)
   证明: by
   simp [cauchyPDFReal_def', NNReal.coe_inv, integral_const_mul,
@@ -490,7 +490,7 @@ lemma integrable_cauchyPDFReal
 alias _root_Probability.integrable_cauchyPDFReal := integrable_cauchyPDFReal
 
 中文:
-引理 integrable_cauchyPDFReal
+引理 integrable_cauchyPDF实数
   条件: (x₀ : 实数) {γ : 实数>=0}
   证明: by
   by_cases! h : γ = 0

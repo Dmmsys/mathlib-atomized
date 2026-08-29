@@ -303,7 +303,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((fun B x y => B x y) : BilinForm R M -> M -> M -> R)
+  结论: 函数.单射 ((fun B x y => B x y) : BilinForm R M -> M -> M -> R)
   证明: fun B D h => by
     ext x y
     apply congrFun₂ h
@@ -558,7 +558,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (B : BilinForm R M) (W : Submodule R M)
+  签名: (B : BilinForm R M) (W : 子模 R M)
   定义体: LinearMap.domRestrict₁₂ B W W
 
 Depends on / 依赖: LinearMap, LinearMap.domRestrict

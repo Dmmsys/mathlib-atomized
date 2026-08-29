@@ -92,7 +92,7 @@ structure IsCovariantDerivativeOn
     - leibniz({σ : Π x : M, V x} {g : M -> 𝕜} {x} (hσ : MDiffAt (T% σ) x) (hg : MDiffAt g x) (hx : x in s := by trivial)) : cov (g • σ) x = g x • cov σ x + (d% g x).smulRight (σ x)
 
 中文:
-结构 IsCovariantDerivativeOn
+结构 是余variantDerivativeOn
   公理与运算 (2 个):
     - add({σ σ' : Π x : M, V x} {x} (hσ : MDiffAt (T% σ) x) (hσ' : MDiffAt (T% σ') x) (hx : x in s := by trivial)) : cov (σ + σ') x = cov σ x + cov σ' x
     - leibniz({σ : Π x : M, V x} {g : M -> 𝕜} {x} (hσ : MDiffAt (T% σ) x) (hg : MDiffAt g x) (hx : x in s := by trivial)) : cov (g • σ) x = g x • cov σ x + (d% g x).smulRight (σ x)
@@ -119,10 +119,10 @@ class ContMDiffCovariantDerivativeOn
     - contMDiff : forall {σ : Π x : M, V x}, CMDiff[u] (k + 1) (T% σ) -> letI cov (x : M) : TotalSpace (E ->L[𝕜] F) fun x => TangentSpace I x ->L[𝕜] V x  [default: ⟨x, cov σ x⟩ ContMDiffOn I (I.prod 𝓘(𝕜, E ->L[𝕜] F)) k cov u]
 
 中文:
-类 ContMDiffCovariantDerivativeOn
-  参数: [IsManifold I 1 M] [VectorBundle 𝕜 F V] (k : 自然数∞ω)
+类 余ntMDiffCovariantDerivativeOn
+  参数: [是流形 I 1 M] [向量丛 𝕜 F V] (k : 自然数∞ω)
   公理与运算 (1 个):
-    - contMDiff : 对任意 {σ : Π x : M, V x}, CMDiff[u] (k + 1) (T% σ) -> letI cov (x : M) : TotalSpace (E ->L[𝕜] F) fun x => TangentSpace I x ->L[𝕜] V x  [默认: ⟨x, cov σ x⟩ ContMDiffOn I (I.prod 𝓘(𝕜, E ->L[𝕜] F)) k cov u]
+    - contMDiff : 对任意 {σ : Π x : M, V x}, CMDiff[u] (k + 1) (T% σ) -> letI cov (x : M) : 全空间 (E ->L[𝕜] F) fun x => TangentSpace I x ->L[𝕜] V x  [默认: ⟨x, cov σ x⟩ ContMDiffOn I (I.prod 𝓘(𝕜, E ->L[𝕜] F)) k cov u]
 -/
 class ContMDiffCovariantDerivativeOn [IsManifold I 1 M] [VectorBundle 𝕜 F V] (k : Nat∞ω)
     (cov : (Π x : M, V x) -> (Π x : M, TangentSpace I x ->L[𝕜] V x))
@@ -317,7 +317,7 @@ lemma zero
 
 中文:
 引理 zero
-  结论: [VectorBundle 𝕜 F V] (hcov : IsCovariantDerivativeOn F cov s)
+  结论: [向量丛 𝕜 F V] (hcov : 是余variantDerivativeOn F cov s)
   证明: by
   simpa using (hcov.add (mdifferentiableAt_zeroSection ..)
     (mdifferentiableAt_zeroSection ..) : cov (0 + 0) x = _)
@@ -341,7 +341,7 @@ theorem smul_const
 
 中文:
 定理 smul_const
-  结论: (hcov : IsCovariantDerivativeOn F cov s)
+  结论: (hcov : 是余variantDerivativeOn F cov s)
   证明: by
   simpa [mvfderiv] using! hcov.leibniz (g := fun _ => a) hσ mdifferentiableAt_const
 
@@ -389,7 +389,7 @@ lemma affine_combination
 
 中文:
 引理 affine_combination
-  结论: (hcov : IsCovariantDerivativeOn F cov s)
+  结论: (hcov : 是余variantDerivativeOn F cov s)
   证明: by
     simp [hcov.add hσ hσ', hcov'.add hσ hσ']
     module
@@ -422,8 +422,8 @@ lemma _root_.ContMDiffCovariantDerivativeOn.affine_combination
 · exact (contMDiffOn_const.sub hf).smul_section Hcov'.contMDiff hσ
 
 中文:
-引理 _root_.ContMDiffCovariantDerivativeOn.affine_combination
-  结论: [IsManifold I 1 M]
+引理 _root_.余ntMDiffCovariantDerivativeOn.affine_combination
+  结论: [是流形 I 1 M]
   证明: by
     apply ContMDiffOn.add_section
 · exact hf.smul_section Hcov.contMDiff hσ
@@ -460,7 +460,7 @@ lemma finite_affine_combination
 
 中文:
 引理 finite_affine_combination
-  结论: {ι : 类型} {s : Finset ι}
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
     rw [← Finset.sum_add_distrib]
     congr
@@ -505,8 +505,8 @@ lemma _root_.ContMDiffCovariantDerivativeOn.finite_affine_combination
       (fun i hi => (hf i hi).smul_section <| (hcov i hi).contMDiff hσ)
 
 中文:
-引理 _root_.ContMDiffCovariantDerivativeOn.finite_affine_combination
-  结论: [IsManifold I 1 M]
+引理 _root_.余ntMDiffCovariantDerivativeOn.finite_affine_combination
+  结论: [是流形 I 1 M]
   证明: by
     simpa using ContMDiffOn.sum_section
       (fun i hi => (hf i hi).smul_section <| (hcov i hi).contMDiff hσ)
@@ -538,7 +538,7 @@ lemma add_one_form
 
 中文:
 引理 add_one_form
-  结论: (hcov : IsCovariantDerivativeOn F cov s)
+  结论: (hcov : 是余variantDerivativeOn F cov s)
   证明: by
     simp [hcov.add hσ hσ']
     abel
@@ -597,7 +597,7 @@ theorem differenceAux_tensorial
 
 中文:
 定理 differenceAux_tensorial
-  结论: (hcov : IsCovariantDerivativeOn F cov s)
+  结论: (hcov : 是余variantDerivativeOn F cov s)
   证明: by
     simp [differenceAux, hcov.leibniz hσ hf, hcov'.leibniz hσ hf]
     module
@@ -703,11 +703,11 @@ structure CovariantDerivative
     - isCovariantDerivativeOnUniv : IsCovariantDerivativeOn F toFun Set.univ
 
 中文:
-结构 CovariantDerivative
+结构 余variantDerivative
   参数: where
   公理与运算 (2 个):
     - toFun : (Π x : M, V x) -> (Π x : M, TangentSpace I x ->L[𝕜] V x)
-    - isCovariantDerivativeOnUniv : IsCovariantDerivativeOn F toFun Set.univ
+    - isCovariantDerivativeOnUniv : 是余variantDerivativeOn F toFun 集合.univ
 -/
 structure CovariantDerivative where
   /-- The covariant derivative as a function. -/
@@ -728,7 +728,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (CovariantDerivative I F V)
+  签名: CoeFun (余variantDerivative I F V)
   定义体: ⟨fun e => e.toFun⟩
 
 Depends on / 依赖: e.toFun
@@ -749,7 +749,7 @@ lemma isCovariantDerivativeOn
 
 中文:
 引理 isCovariantDerivativeOn
-  条件: (cov : CovariantDerivative I F V) {s : Set M}
+  条件: (cov : 余variantDerivative I F V) {s : 集合 M}
   证明: cov.isCovariantDerivativeOnUniv.mono (fun _ _ => trivial)
 
 @[simp]
@@ -774,7 +774,7 @@ lemma zero
 
 中文:
 引理 zero
-  条件: [VectorBundle 𝕜 F V] (cov : CovariantDerivative I F V)
+  条件: [向量丛 𝕜 F V] (cov : 余variantDerivative I F V)
   结论: cov 0 = 0
   证明: by
   ext1 x
@@ -801,7 +801,7 @@ alias of_isCovariantDerivativeOn_of_open_cover := ofIsCovariantDerivativeOnOfOpe
 
 中文:
 定义 ofIsCovariantDerivativeOnOfOpenCover
-  签名: {ι : 类型} {s : ι -> Set M}
+  签名: {ι : 类型} {s : ι -> 集合 M}
   定义体: ⟨cov, hs ▸ IsCovariantDerivativeOn.iUnion hcov⟩
 
 @[deprecated (since := "2026-07-26")]
@@ -831,7 +831,7 @@ lemma of_isCovariantDerivativeOn_of_open_cover_coe
 
 中文:
 引理 of_isCovariantDerivativeOn_of_open_cover_coe
-  结论: {ι : 类型} {s : ι -> Set M}
+  结论: {ι : 类型} {s : ι -> 集合 M}
   证明: rfl
 -/
 lemma of_isCovariantDerivativeOn_of_open_cover_coe {ι : Type*} {s : ι -> Set M}
@@ -849,10 +849,10 @@ class ContMDiffCovariantDerivative
     - contMDiff : ContMDiffCovariantDerivativeOn F k cov.toFun Set.univ
 
 中文:
-类 ContMDiffCovariantDerivative
-  参数: [IsManifold I 1 M] [VectorBundle 𝕜 F V]
+类 余ntMDiffCovariantDerivative
+  参数: [是流形 I 1 M] [向量丛 𝕜 F V]
   公理与运算 (1 个):
-    - contMDiff : ContMDiffCovariantDerivativeOn F k cov.toFun Set.univ
+    - contMDiff : 余ntMDiffCovariantDerivativeOn F k cov.toFun 集合.univ
 -/
 class ContMDiffCovariantDerivative [IsManifold I 1 M] [VectorBundle 𝕜 F V]
     (cov : CovariantDerivative I F V) (k : Nat∞ω) where
@@ -869,7 +869,7 @@ lemma contMDiffCovariantDerivativeOn_univ_iff
 
 中文:
 引理 contMDiffCovariantDerivativeOn_univ_iff
-  结论: [IsManifold I 1 M] [VectorBundle 𝕜 F V]
+  结论: [是流形 I 1 M] [向量丛 𝕜 F V]
   证明: ⟨fun h => ⟨h⟩, fun h => h.contMDiff⟩
 
 Depends on / 依赖: contMDiff, h.contMDiff
@@ -911,7 +911,7 @@ definition affineCombination
 
 中文:
 定义 affineCombination
-  签名: (cov cov' : CovariantDerivative I F V) (g : M -> 𝕜)
+  签名: (cov cov' : 余variantDerivative I F V) (g : M -> 𝕜)
   定义体: fun σ => (g • (cov σ)) + (1 - g) • (cov' σ)
   isCovariantDerivativeOnUniv :=
     cov.isCovariantDerivativeOn.affine_combination cov'.isCovariantDerivativeOn _
@@ -940,7 +940,7 @@ definition finiteAffineCombination
 
 中文:
 定义 finiteAffineCombination
-  签名: {ι : 类型} {s : Finset ι}
+  签名: {ι : 类型} {s : 有限集 ι}
   定义体: ∑ i in s, (f i x) • (cov i) t x
   isCovariantDerivativeOnUniv := IsCovariantDerivativeOn.finite_affine_combination
     (fun i => (cov i).isCovariantDerivativeOn) hf
@@ -969,8 +969,8 @@ alias ContMDiffCovariantDerivative.affine_combination :=
   ContMDiffCovariantDerivative.affineCombination
 
 中文:
-引理 ContMDiffCovariantDerivative.affineCombination
-  结论: [IsManifold I 1 M] [VectorBundle 𝕜 F V]
+引理 余ntMDiffCovariantDerivative.affineCombination
+  结论: [是流形 I 1 M] [向量丛 𝕜 F V]
   证明: ContMDiffCovariantDerivativeOn.affine_combination hf.contMDiffOn hcov.contMDiff hcov'.contMDiff
 
 @[deprecated (since := "2026-07-26")]
@@ -1005,8 +1005,8 @@ alias ContMDiffCovariantDerivative.finite_affine_combination :=
   ContMDiffCovariantDerivative.finiteAffineCombination
 
 中文:
-引理 ContMDiffCovariantDerivative.finiteAffineCombination
-  结论: [IsManifold I 1 M] [VectorBundle 𝕜 F V]
+引理 余ntMDiffCovariantDerivative.finiteAffineCombination
+  结论: [是流形 I 1 M] [向量丛 𝕜 F V]
   证明: ContMDiffCovariantDerivativeOn.finite_affine_combination
       (fun i hi => (hcov i hi).contMDiff) (fun i hi => (hf' i hi).contMDiffOn)
 
@@ -1043,7 +1043,7 @@ definition addOneForm
 
 中文:
 定义 addOneForm
-  签名: (cov : CovariantDerivative I F V)
+  签名: (cov : 余variantDerivative I F V)
   定义体: fun σ x => cov σ x + A x (σ x)
   isCovariantDerivativeOnUniv := cov.isCovariantDerivativeOnUniv.add_one_form A
 -/
@@ -1069,7 +1069,7 @@ definition difference
 
 中文:
 定义 difference
-  签名: (cov cov' : CovariantDerivative I F V)
+  签名: (cov cov' : 余variantDerivative I F V)
   定义体: cov.isCovariantDerivativeOnUniv.difference cov'.isCovariantDerivativeOnUniv
 
 Depends on / 依赖: cov.isCovariantDerivativeOnUniv.difference, difference, isCovariantDerivativeOnUniv

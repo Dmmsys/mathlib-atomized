@@ -53,7 +53,7 @@ definition upperPolar
 
 中文:
 定义 upperPolar
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { b | forall ⦃a⦄, a in s -> r a b }
 -/
 def upperPolar (s : Set α) : Set β :=
@@ -69,7 +69,7 @@ definition lowerPolar
 
 中文:
 定义 lowerPolar
-  签名: (t : Set β)
+  签名: (t : 集合 β)
   定义体: { a | forall ⦃b⦄, b in t -> r a b }
 -/
 def lowerPolar (t : Set β) : Set α :=
@@ -201,7 +201,7 @@ theorem upperPolar_swap
 
 中文:
 定理 upperPolar_swap
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   结论: upperPolar (swap r) t = lowerPolar r t
   证明: rfl
 -/
@@ -221,7 +221,7 @@ theorem lowerPolar_swap
 
 中文:
 定理 lowerPolar_swap
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: lowerPolar (swap r) s = upperPolar r s
   证明: rfl
 
@@ -339,7 +339,7 @@ theorem upperPolar_union
 
 中文:
 定理 upperPolar_union
-  条件: (s₁ s₂ : Set α)
+  条件: (s₁ s₂ : 集合 α)
   证明: ext fun _ => forall₂_or_left
 
 @[simp]
@@ -361,7 +361,7 @@ theorem lowerPolar_union
 
 中文:
 定理 lowerPolar_union
-  条件: (t₁ t₂ : Set β)
+  条件: (t₁ t₂ : 集合 β)
   证明: upperPolar_union ..
 
 @[simp]
@@ -385,7 +385,7 @@ theorem upperPolar_iUnion
 
 中文:
 定理 upperPolar_iUnion
-  条件: (f : ι -> Set α)
+  条件: (f : ι -> 集合 α)
   证明: (gc_upperPolar_lowerPolar r).l_iSup
 
 @[simp]
@@ -407,7 +407,7 @@ theorem lowerPolar_iUnion
 
 中文:
 定理 lowerPolar_iUnion
-  条件: (f : ι -> Set β)
+  条件: (f : ι -> 集合 β)
   证明: upperPolar_iUnion ..
 
 Depends on / 依赖: upperPolar_iUnion
@@ -426,7 +426,7 @@ theorem upperPolar_iUnion₂
 
 中文:
 定理 upperPolar_iUnion₂
-  条件: (f : 对任意 i, κ i -> Set α)
+  条件: (f : 对任意 i, κ i -> 集合 α)
   证明: (gc_upperPolar_lowerPolar r).l_iSup₂
 
 Depends on / 依赖: gc_upperPolar_lowerPolar
@@ -445,7 +445,7 @@ theorem lowerPolar_iUnion₂
 
 中文:
 定理 lowerPolar_iUnion₂
-  条件: (f : 对任意 i, κ i -> Set β)
+  条件: (f : 对任意 i, κ i -> 集合 β)
   证明: upperPolar_iUnion₂ ..
 -/
 theorem lowerPolar_iUnion₂ (f : forall i, κ i -> Set β) :
@@ -462,7 +462,7 @@ theorem subset_lowerPolar_upperPolar
 
 中文:
 定理 subset_lowerPolar_upperPolar
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: (gc_upperPolar_lowerPolar r).le_u_l _
 
 Depends on / 依赖: gc_upperPolar_lowerPolar, le_u_l
@@ -483,7 +483,7 @@ theorem subset_upperPolar_lowerPolar
 
 中文:
 定理 subset_upperPolar_lowerPolar
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   证明: subset_lowerPolar_upperPolar _ t
 
 @[simp]
@@ -507,7 +507,7 @@ theorem upperPolar_lowerPolar_upperPolar
 
 中文:
 定理 upperPolar_lowerPolar_upperPolar
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: (gc_upperPolar_lowerPolar r).l_u_l_eq_l _
 
 @[simp]
@@ -529,7 +529,7 @@ theorem lowerPolar_upperPolar_lowerPolar
 
 中文:
 定理 lowerPolar_upperPolar_lowerPolar
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   证明: upperPolar_lowerPolar_upperPolar _ t
 
 Depends on / 依赖: upperPolar_lowerPolar_upperPolar
@@ -548,7 +548,7 @@ theorem upperPolar_anti
 
 中文:
 定理 upperPolar_anti
-  结论: Antitone (upperPolar r)
+  结论: 递减 (upperPolar r)
   证明: (gc_upperPolar_lowerPolar r).monotone_l
 
 Depends on / 依赖: gc_upperPolar_lowerPolar, monotone_l
@@ -566,7 +566,7 @@ theorem lowerPolar_anti
 
 中文:
 定理 lowerPolar_anti
-  结论: Antitone (lowerPolar r)
+  结论: 递减 (lowerPolar r)
   证明: upperPolar_anti _
 
 Depends on / 依赖: upperPolar_anti
@@ -584,7 +584,7 @@ theorem lowerPolar_upperPolar_monotone
 
 中文:
 定理 lowerPolar_upperPolar_monotone
-  结论: Monotone (lowerPolar r ∘ upperPolar r)
+  结论: 递增 (lowerPolar r ∘ upperPolar r)
   证明: (gc_upperPolar_lowerPolar r).monotone_u_comp_l
 
 Depends on / 依赖: gc_upperPolar_lowerPolar, monotone_u_comp_l
@@ -602,7 +602,7 @@ theorem upperPolar_lowerPolar_monotone
 
 中文:
 定理 upperPolar_lowerPolar_monotone
-  结论: Monotone (upperPolar r ∘ lowerPolar r)
+  结论: 递增 (upperPolar r ∘ lowerPolar r)
   证明: (gc_lowerPolar_upperPolar r).monotone_u_comp_l
 
 Depends on / 依赖: gc_lowerPolar_upperPolar, monotone_u_comp_l
@@ -668,7 +668,7 @@ definition IsExtent
 
 中文:
 定义 IsExtent
-  签名: (r : α -> β -> 命题) (s : Set α)
+  签名: (r : α -> β -> 命题) (s : 集合 α)
   定义体: s in range (lowerPolar r)
 
 Depends on / 依赖: lowerPolar
@@ -748,7 +748,7 @@ theorem IsExtent.inter
 
 中文:
 定理 IsExtent.inter
-  条件: {s' : Set α}
+  条件: {s' : 集合 α}
   证明: by
   simp_rw [IsExtent, mem_range, forall_exists_index]
   rintro t rfl t' rfl
@@ -769,8 +769,8 @@ theorem IsExtent.iInter
   proof: ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i => (hf i).eq)⟩
 
 中文:
-定理 IsExtent.iInter
-  条件: (f : ι -> Set α) (hf : 对任意 i, IsExtent r (f i))
+定理 IsExtent.i整数er
+  条件: (f : ι -> 集合 α) (hf : 对任意 i, IsExtent r (f i))
   证明: ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i => (hf i).eq)⟩
 -/
 protected theorem IsExtent.iInter (f : ι -> Set α) (hf : forall i, IsExtent r (f i)) :
@@ -786,8 +786,8 @@ theorem IsExtent.iInter₂
   proof: ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j => (hf i j).eq)⟩
 
 中文:
-定理 IsExtent.iInter₂
-  条件: (f : 对任意 i, κ i -> Set α) (hf : 对任意 i j, IsExtent r (f i j))
+定理 IsExtent.i整数er₂
+  条件: (f : 对任意 i, κ i -> 集合 α) (hf : 对任意 i j, IsExtent r (f i j))
   证明: ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j => (hf i j).eq)⟩
 -/
 protected theorem IsExtent.iInter₂ (f : forall i, κ i -> Set α) (hf : forall i j, IsExtent r (f i j)) :
@@ -806,7 +806,7 @@ theorem IsExtent.lowerPolar_upperPolar_subset
 
 中文:
 定理 IsExtent.lowerPolar_upperPolar_subset
-  条件: {s' : Set α} (h : IsExtent r s) (hs' : s' subseteq s)
+  条件: {s' : 集合 α} (h : IsExtent r s) (hs' : s' subseteq s)
   证明: by
   rw [← h.eq]
   exact lowerPolar_upperPolar_monotone r hs'
@@ -827,8 +827,8 @@ definition IsIntent
   body: t in range (upperPolar r)
 
 中文:
-定义 IsIntent
-  签名: (r : α -> β -> 命题) (t : Set β)
+定义 Is整数ent
+  签名: (r : α -> β -> 命题) (t : 集合 β)
   定义体: t in range (upperPolar r)
 
 Depends on / 依赖: upperPolar
@@ -844,7 +844,7 @@ theorem isIntent_upperPolar
   proof: ⟨_, rfl⟩
 
 中文:
-定理 isIntent_upperPolar
+定理 is整数ent_upperPolar
   结论: Is整数ent r (upperPolar r s)
   证明: ⟨_, rfl⟩
 -/
@@ -861,7 +861,7 @@ theorem isIntent_iff
 alias ⟨IsIntent.eq, _⟩ := isIntent_iff
 
 中文:
-定理 isIntent_iff
+定理 is整数ent_iff
   结论: Is整数ent r t ↔ upperPolar r (lowerPolar r t) = t
   证明: isExtent_iff
 
@@ -882,7 +882,7 @@ theorem IsIntent.univ
   proof: IsExtent.univ
 
 中文:
-定理 IsIntent.univ
+定理 Is整数ent.univ
   结论: Is整数ent r univ
   证明: IsExtent.univ
 -/
@@ -897,8 +897,8 @@ theorem IsIntent.inter
   proof: IsExtent.inter
 
 中文:
-定理 IsIntent.inter
-  条件: {t' : Set β}
+定理 Is整数ent.inter
+  条件: {t' : 集合 β}
   证明: IsExtent.inter
 -/
 protected theorem IsIntent.inter {t' : Set β} :
@@ -914,8 +914,8 @@ theorem IsIntent.iInter
   proof: IsExtent.iInter _ hf
 
 中文:
-定理 IsIntent.iInter
-  条件: (f : ι -> Set β) (hf : 对任意 i, Is整数ent r (f i))
+定理 Is整数ent.i整数er
+  条件: (f : ι -> 集合 β) (hf : 对任意 i, Is整数ent r (f i))
   证明: IsExtent.iInter _ hf
 -/
 protected theorem IsIntent.iInter (f : ι -> Set β) (hf : forall i, IsIntent r (f i)) :
@@ -931,8 +931,8 @@ theorem IsIntent.iInter₂
   proof: IsExtent.iInter₂ _ hf
 
 中文:
-定理 IsIntent.iInter₂
-  条件: (f : 对任意 i, κ i -> Set β) (hf : 对任意 i j, Is整数ent r (f i j))
+定理 Is整数ent.i整数er₂
+  条件: (f : 对任意 i, κ i -> 集合 β) (hf : 对任意 i j, Is整数ent r (f i j))
   证明: IsExtent.iInter₂ _ hf
 -/
 protected theorem IsIntent.iInter₂ (f : forall i, κ i -> Set β) (hf : forall i j, IsIntent r (f i j)) :
@@ -950,8 +950,8 @@ theorem IsIntent.upperPolar_lowerPolar_subset
   exact upperPolar_lowerPolar_monotone r ht'
 
 中文:
-定理 IsIntent.upperPolar_lowerPolar_subset
-  条件: {t' : Set β} (h : Is整数ent r t) (ht' : t' subseteq t)
+定理 Is整数ent.upperPolar_lowerPolar_subset
+  条件: {t' : 集合 β} (h : Is整数ent r t) (ht' : t' subseteq t)
   证明: by
   rw [← h.eq]
   exact upperPolar_lowerPolar_monotone r ht'
@@ -982,11 +982,11 @@ structure Concept
     - lowerPolar_intent : lowerPolar r intent = extent
 
 中文:
-结构 Concept
+结构 余ncept
   参数: where
   公理与运算 (4 个):
-    - extent : Set α
-    - intent : Set β
+    - extent : 集合 α
+    - intent : 集合 β
     - upperPolar_extent : upperPolar r extent = intent
     - lowerPolar_intent : lowerPolar r intent = extent
 -/
@@ -1079,7 +1079,7 @@ theorem extent_injective
 
 中文:
 定理 extent_injective
-  结论: Injective (@extent α β r)
+  结论: 单射 (@extent α β r)
   证明: fun _ _ => ext
 -/
 theorem extent_injective : Injective (@extent α β r) := fun _ _ => ext
@@ -1094,7 +1094,7 @@ theorem intent_injective
 
 中文:
 定理 intent_injective
-  结论: Injective (@intent α β r)
+  结论: 单射 (@intent α β r)
   证明: fun _ _ => ext'
 -/
 theorem intent_injective : Injective (@intent α β r) := fun _ _ => ext'
@@ -1114,7 +1114,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent) (hi : i = c.intent)
+  签名: (c : 余ncept α β r) (e : 集合 α) (i : 集合 β) (he : e = c.extent) (hi : i = c.intent)
   定义体: e
   intent := i
   upperPolar_extent := he ▸ hi ▸ c.upperPolar_extent
@@ -1139,7 +1139,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (c : Concept α β r) (e : Set α) (i : Set β) (he hi)
+  条件: (c : 余ncept α β r) (e : 集合 α) (i : 集合 β) (he hi)
   结论: c.copy e i he hi = c
   证明: by
   ext; simp_all
@@ -1191,7 +1191,7 @@ theorem isExtent_extent
 
 中文:
 定理 isExtent_extent
-  条件: (c : Concept α β r)
+  条件: (c : 余ncept α β r)
   结论: IsExtent r c.extent
   证明: lowerPolar_intent c ▸ isExtent_lowerPolar
 
@@ -1209,8 +1209,8 @@ theorem isExtent_iff_exists_concept
   proof: ⟨fun h => ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isExtent_extent⟩
 
 中文:
-定理 isExtent_iff_exists_concept
-  结论: IsExtent r s ↔ 存在 c : Concept α β r, c.extent = s
+定理 isExtent_iff_存在_concept
+  结论: IsExtent r s ↔ 存在 c : 余ncept α β r, c.extent = s
   证明: ⟨fun h => ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isExtent_extent⟩
 
 Depends on / 依赖: c.isExtent_extent, isExtent_extent, ofIsExtent
@@ -1235,7 +1235,7 @@ definition ofIsIntent
 @[simp]
 
 中文:
-定义 ofIsIntent
+定义 ofIs整数ent
   签名: (ht : Is整数ent r t)
   定义体: lowerPolar r t
   intent := t
@@ -1263,8 +1263,8 @@ theorem isIntent_intent
   proof: upperPolar_extent c ▸ isIntent_upperPolar
 
 中文:
-定理 isIntent_intent
-  条件: (c : Concept α β r)
+定理 is整数ent_intent
+  条件: (c : 余ncept α β r)
   结论: Is整数ent r c.intent
   证明: upperPolar_extent c ▸ isIntent_upperPolar
 
@@ -1282,8 +1282,8 @@ theorem isIntent_iff_exists_concept
   proof: ⟨fun h => ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isIntent_intent⟩
 
 中文:
-定理 isIntent_iff_exists_concept
-  结论: Is整数ent r t ↔ 存在 c : Concept α β r, c.intent = t
+定理 is整数ent_iff_存在_concept
+  结论: Is整数ent r t ↔ 存在 c : 余ncept α β r, c.intent = t
   证明: ⟨fun h => ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isIntent_intent⟩
 
 Depends on / 依赖: c.isIntent_intent, isIntent_intent, ofIsIntent
@@ -1304,7 +1304,7 @@ definition ofObjects
 
 中文:
 定义 ofObjects
-  签名: (r : α -> β -> 命题) (s : Set α)
+  签名: (r : α -> β -> 命题) (s : 集合 α)
   定义体: ofIsIntent r _ (isIntent_upperPolar (s := s))
 
 Depends on / 依赖: isIntent_upperPolar, ofIsIntent
@@ -1382,7 +1382,7 @@ theorem leftInverse_ofObjects_extent
 
 中文:
 定理 leftInverse_ofObjects_extent
-  结论: LeftInverse (ofObjects r) extent
+  结论: 左逆 (ofObjects r) extent
   证明: fun _ => ofObjects_extent
 
 Depends on / 依赖: ofObjects_extent
@@ -1400,7 +1400,7 @@ theorem leftInvOn_extent_ofObjects
 
 中文:
 定理 leftInvOn_extent_ofObjects
-  结论: Set.LeftInvOn extent (ofObjects r) {s | IsExtent r s}
+  结论: 集合.LeftInvOn extent (ofObjects r) {s | IsExtent r s}
   证明: fun _ => IsExtent.eq
 
 Depends on / 依赖: IsExtent, IsExtent.eq
@@ -1418,7 +1418,7 @@ theorem surjective_ofObjects
 
 中文:
 定理 surjective_ofObjects
-  结论: Surjective (ofObjects r)
+  结论: 满射 (ofObjects r)
   证明: leftInverse_ofObjects_extent.surjective
 
 Depends on / 依赖: leftInverse_ofObjects_extent, leftInverse_ofObjects_extent.surjective, surjective
@@ -1439,7 +1439,7 @@ definition ofAttributes
 
 中文:
 定义 ofAttributes
-  签名: (r : α -> β -> 命题) (t : Set β)
+  签名: (r : α -> β -> 命题) (t : 集合 β)
   定义体: ofIsExtent r _ (isExtent_lowerPolar (t := t))
 
 Depends on / 依赖: isExtent_lowerPolar, ofIsExtent
@@ -1497,7 +1497,7 @@ theorem intent_ofAttributes_of_isIntent
   proof: hs.eq
 
 中文:
-定理 intent_ofAttributes_of_isIntent
+定理 intent_ofAttributes_of_is整数ent
   条件: (hs : Is整数ent r t)
   结论: (ofAttributes r t).intent = t
   证明: hs.eq
@@ -1517,7 +1517,7 @@ theorem leftInverse_ofAttributes_extent
 
 中文:
 定理 leftInverse_ofAttributes_extent
-  结论: LeftInverse (ofAttributes r) intent
+  结论: 左逆 (ofAttributes r) intent
   证明: fun c => extent_injective c.lowerPolar_intent
 
 Depends on / 依赖: c.lowerPolar_intent, extent_injective, lowerPolar_intent
@@ -1535,7 +1535,7 @@ theorem leftInvOn_ofObjects_intent
 
 中文:
 定理 leftInvOn_ofObjects_intent
-  结论: Set.LeftInvOn intent (ofAttributes r) {s | Is整数ent r s}
+  结论: 集合.LeftInvOn intent (ofAttributes r) {s | Is整数ent r s}
   证明: fun _ => IsIntent.eq
 
 Depends on / 依赖: IsIntent, IsIntent.eq
@@ -1553,7 +1553,7 @@ theorem surjective_ofAttributes
 
 中文:
 定理 surjective_ofAttributes
-  结论: Surjective (ofAttributes r)
+  结论: 满射 (ofAttributes r)
   证明: leftInverse_ofAttributes_extent.surjective
 
 Depends on / 依赖: leftInverse_ofAttributes_extent, leftInverse_ofAttributes_extent.surjective, surjective
@@ -1626,7 +1626,7 @@ theorem mem_extent_of_rel_extent
 
 中文:
 定理 mem_extent_of_rel_extent
-  条件: [IsTrans α r'] {x y} (hy : r' y x) (hx : x in c'.extent)
+  条件: [是Trans α r'] {x y} (hy : r' y x) (hx : x in c'.extent)
   证明: by
   rw [← lowerPolar_intent]
   exact fun z hz => _root_.trans hy (rel_extent_intent hx hz)
@@ -1650,7 +1650,7 @@ theorem mem_intent_of_intent_rel
 
 中文:
 定理 mem_intent_of_intent_rel
-  条件: [IsTrans α r'] {x y} (hy : r' x y) (hx : x in c'.intent)
+  条件: [是Trans α r'] {x y} (hy : r' x y) (hx : x in c'.intent)
   证明: by
   rw [← upperPolar_extent]
   exact fun z hz => _root_.trans (rel_extent_intent hz hx) hy
@@ -1678,7 +1678,7 @@ apply Not.imp_symm Std.Trichotomous.trichotomous x y (hx <| mem_extent_of_rel_ex
 
 中文:
 定理 codisjoint_extent_intent
-  条件: [Std.Trichotomous r'] [IsTrans α r']
+  条件: [Std.三歧 r'] [是Trans α r']
   证明: by
   rw [codisjoint_iff_le_sup]
   refine fun x _ => or_iff_not_imp_left.2 fun hx => ?_
@@ -1708,7 +1708,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Concept α β r)
+  签名: 偏序 (余ncept α β r)
   定义体: .lift _ extent_injective
 
 Depends on / 依赖: extent_injective
@@ -1727,7 +1727,7 @@ theorem isCompl_extent_intent
 
 中文:
 定理 isCompl_extent_intent
-  条件: [IsStrictTotalOrder α r'] (c' : Concept α α r')
+  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
   证明: ⟨c'.disjoint_extent_intent, c'.codisjoint_extent_intent⟩
 
 @[simp]
@@ -1752,7 +1752,7 @@ theorem compl_extent
 
 中文:
 定理 compl_extent
-  条件: [IsStrictTotalOrder α r'] (c' : Concept α α r')
+  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
   结论: c'.extentᶜ = c'.intent
   证明: c'.isCompl_extent_intent.compl_eq
 
@@ -1777,7 +1777,7 @@ theorem compl_intent
 
 中文:
 定理 compl_intent
-  条件: [IsStrictTotalOrder α r'] (c' : Concept α α r')
+  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
   结论: c'.intentᶜ = c'.extent
   证明: c'.isCompl_extent_intent.symm.compl_eq
 
@@ -1903,7 +1903,7 @@ theorem strictMono_extent
 
 中文:
 定理 strictMono_extent
-  结论: StrictMono (@extent α β r)
+  结论: 严格递增 (@extent α β r)
   证明: fun _ _ =>
   extent_ssubset_extent_iff.2
 -/
@@ -1923,7 +1923,7 @@ theorem strictAnti_intent
 
 中文:
 定理 strictAnti_intent
-  结论: StrictAnti (@intent α β r)
+  结论: 严格递减 (@intent α β r)
   证明: fun _ _ =>
   intent_ssubset_intent_iff.2
 
@@ -1945,7 +1945,7 @@ theorem isLowerSet_extent_le
 
 中文:
 定理 isLowerSet_extent_le
-  条件: {α : 类型} [Preorder α] (c : Concept α α (· <= ·))
+  条件: {α : 类型} [预序 α] (c : 余ncept α α (· <= ·))
   证明: @mem_extent_of_rel_extent _ _ _ _
 
 @[simp]
@@ -1969,7 +1969,7 @@ theorem isUpperSet_intent_le
 
 中文:
 定理 isUpperSet_intent_le
-  条件: {α : 类型} [Preorder α] (c : Concept α α (· <= ·))
+  条件: {α : 类型} [预序 α] (c : 余ncept α α (· <= ·))
   证明: @mem_intent_of_intent_rel _ _ _ _
 
 @[simp]
@@ -1997,7 +1997,7 @@ theorem isLowerSet_extent_lt
 
 中文:
 定理 isLowerSet_extent_lt
-  条件: {α : 类型} [PartialOrder α] (c : Concept α α (· < ·))
+  条件: {α : 类型} [偏序 α] (c : 余ncept α α (· < ·))
   证明: by
   intro a b hb ha
   obtain rfl | hb := hb.eq_or_lt
@@ -2032,7 +2032,7 @@ theorem isUpperSet_intent_lt
 
 中文:
 定理 isUpperSet_intent_lt
-  条件: {α : 类型} [PartialOrder α] (c : Concept α α (· < ·))
+  条件: {α : 类型} [偏序 α] (c : 余ncept α α (· < ·))
   证明: by
   intro a b hb ha
   obtain rfl | hb := hb.eq_or_lt
@@ -2066,7 +2066,7 @@ alias intent_sup := intent_max
 
 中文:
 实例 :
-  签名: Max (Concept α β r)
+  签名: 最大值 (余ncept α β r)
   定义体: ofIsIntent _ _ (c.isIntent_intent.inter d.isIntent_intent)
 
 alias extent_sup := extent_max
@@ -2096,7 +2096,7 @@ alias intent_inf := intent_min
 
 中文:
 实例 :
-  签名: Min (Concept α β r)
+  签名: 最小值 (余ncept α β r)
   定义体: ofIsExtent _ _ (c.isExtent_extent.inter d.isExtent_extent)
 
 alias extent_inf := extent_min
@@ -2120,7 +2120,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (Concept α β r)
+  签名: SemilatticeInf (余ncept α β r)
   定义体: extent_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 Depends on / 依赖: extent_injective, extent_injective.semilatticeInf, semilatticeInf
@@ -2138,7 +2138,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (Concept α β r)
+  签名: SemilatticeSup (余ncept α β r)
   定义体: (toDual.injective.comp intent_injective).semilatticeSup _ (by simp) (by simp) fun _ _ => rfl
 
 Depends on / 依赖: injective, intent_injective, semilatticeSup, toDual, toDual.injective.comp
@@ -2155,7 +2155,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (Concept α β r)
+  签名: 格 (余ncept α β r)
 -/
 instance : Lattice (Concept α β r) where
 
@@ -2304,7 +2304,7 @@ bot_le _ := intent_subset_intent_iff.1 subset_univ _
 
 中文:
 实例 instBoundedOrderConcept
-  签名: : BoundedOrder (Concept α β r) where
+  签名: : 有界序 (余ncept α β r) where
   定义体: ofIsExtent _ _ .univ
   le_top _ := subset_univ _
   bot := ofIsIntent _ _ .univ
@@ -2333,7 +2333,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Concept α β r)
+  签名: 下确界集 (余ncept α β r)
   定义体: ofIsExtent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isExtent_extent)
 
 @[simps!]
@@ -2354,7 +2354,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Concept α β r)
+  签名: 上确界集 (余ncept α β r)
   定义体: ofIsIntent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isIntent_intent)
 
 Depends on / 依赖: c.isIntent_intent, isIntent_intent, ofIsIntent
@@ -2379,7 +2379,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Concept α β r)
+  签名: 完备格 (余ncept α β r)
   定义体: by
     refine ⟨fun _ hc => ?_, fun _ hc => ?_⟩
 · exact intent_subset_intent_iff.1 biInter_subset_of_mem hc
@@ -2413,7 +2413,7 @@ theorem extent_iSup
 
 中文:
 定理 extent_iSup
-  条件: (f : ι -> Concept α β r)
+  条件: (f : ι -> 余ncept α β r)
   证明: by
   simp_rw [iSup, extent_sSup, ← Set.iInf_eq_iInter, iInf_range]
 
@@ -2440,7 +2440,7 @@ theorem intent_iSup
 
 中文:
 定理 intent_iSup
-  条件: (f : ι -> Concept α β r)
+  条件: (f : ι -> 余ncept α β r)
   结论: (⨆ i, f i).intent = ⋂ i, (f i).intent
   证明: by
   simp_rw [iSup, intent_sSup, ← Set.iInf_eq_iInter, iInf_range]
@@ -2467,7 +2467,7 @@ theorem extent_iInf
 
 中文:
 定理 extent_iInf
-  条件: (f : ι -> Concept α β r)
+  条件: (f : ι -> 余ncept α β r)
   结论: (⨅ i, f i).extent = ⋂ i, (f i).extent
   证明: by
   simp_rw [iInf, extent_sInf, ← Set.iInf_eq_iInter, iInf_range]
@@ -2491,7 +2491,7 @@ theorem intent_iInf
 
 中文:
 定理 intent_iInf
-  条件: (f : ι -> Concept α β r)
+  条件: (f : ι -> 余ncept α β r)
   证明: by
   simp_rw [iInf, intent_sInf, ← Set.iInf_eq_iInter, iInf_range]
 
@@ -2511,7 +2511,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Concept α β r)
+  签名: 可居 (余ncept α β r)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Concept α β r) :=
@@ -2531,7 +2531,7 @@ definition swap
 
 中文:
 定义 swap
-  签名: (c : Concept α β r)
+  签名: (c : 余ncept α β r)
   定义体: ⟨c.intent, c.extent, c.lowerPolar_intent, c.upperPolar_extent⟩
 
 @[simp]
@@ -2555,7 +2555,7 @@ theorem swap_swap
 
 中文:
 定理 swap_swap
-  条件: (c : Concept α β r)
+  条件: (c : 余ncept α β r)
   结论: c.swap.swap = c
   证明: ext rfl
 
@@ -2622,7 +2622,7 @@ definition swapEquiv
 
 中文:
 定义 swapEquiv
-  签名: : (Concept α β r)ᵒᵈ ≃o Concept β α (Function.swap r) where
+  签名: : (余ncept α β r)ᵒᵈ ≃o 余ncept β α (函数.swap r) where
   定义体: swap ∘ ofDual
   invFun := toDual ∘ swap
   left_inv := swap_swap

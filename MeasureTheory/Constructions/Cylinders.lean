@@ -62,7 +62,7 @@ definition squareCylinders
 
 中文:
 定义 squareCylinders
-  签名: (C : 对任意 i, Set (Set (α i)))
+  签名: (C : 对任意 i, 集合 (集合 (α i)))
   定义体: {S | exists s : Finset ι, exists t in univ.pi C, S = (s : Set ι).pi t}
 
 Depends on / 依赖: Finset, univ.pi
@@ -83,7 +83,7 @@ theorem squareCylinders_eq_iUnion_image
 
 中文:
 定理 squareCylinders_eq_iUnion_image
-  条件: (C : 对任意 i, Set (Set (α i)))
+  条件: (C : 对任意 i, 集合 (集合 (α i)))
   证明: by
   ext1 f
   simp only [squareCylinders, mem_iUnion, mem_image, mem_univ_pi, mem_ofPred_eq,
@@ -114,7 +114,7 @@ theorem isPiSystem_squareCylinders
 
 中文:
 定理 isPiSystem_squareCylinders
-  结论: {C : 对任意 i, Set (Set (α i))} (hC : 对任意 i, IsPiSystem (C i))
+  结论: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsPiSystem (C i))
   证明: by
   rintro S₁ ⟨s₁, t₁, h₁, rfl⟩ S₂ ⟨s₂, t₂, h₂, rfl⟩ hst_nonempty
   classical
@@ -237,7 +237,7 @@ theorem generateFrom_squareCylinders
 
 中文:
 定理 generateFrom_squareCylinders
-  条件: [对任意 i, MeasurableSpace (α i)]
+  条件: [对任意 i, 可测空间 (α i)]
   证明: by
   apply le_antisymm
   · rw [MeasurableSpace.generateFrom_le_iff]
@@ -282,7 +282,7 @@ definition cylinder
 
 中文:
 定义 cylinder
-  签名: (s : Finset ι) (S : Set (对任意 i : s, α i))
+  签名: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
   定义体: s.restrict ⁻¹' S
 
 @[simp]
@@ -305,7 +305,7 @@ theorem mem_cylinder
 
 中文:
 定理 mem_cylinder
-  条件: (s : Finset ι) (S : Set (对任意 i : s, α i)) (f : 对任意 i, α i)
+  条件: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i)) (f : 对任意 i, α i)
   证明: mem_preimage
 
 @[simp]
@@ -331,8 +331,8 @@ theorem cylinder_empty
 
 中文:
 定理 cylinder_empty
-  条件: (s : Finset ι)
-  结论: cylinder s (∅ : Set (对任意 i : s, α i)) = ∅
+  条件: (s : 有限集 ι)
+  结论: cylinder s (∅ : 集合 (对任意 i : s, α i)) = ∅
   证明: by
   rw [cylinder]; rw [preimage_empty]
 
@@ -358,8 +358,8 @@ theorem cylinder_univ
 
 中文:
 定理 cylinder_univ
-  条件: (s : Finset ι)
-  结论: cylinder s (univ : Set (对任意 i : s, α i)) = univ
+  条件: (s : 有限集 ι)
+  结论: cylinder s (univ : 集合 (对任意 i : s, α i)) = univ
   证明: by
   rw [cylinder]; rw [preimage_univ]
 
@@ -389,7 +389,7 @@ theorem cylinder_eq_empty_iff
 
 中文:
 定理 cylinder_eq_empty_iff
-  结论: [h_nonempty : Nonempty (对任意 i, α i)] (s : Finset ι)
+  结论: [h_nonempty : 非空 (对任意 i, α i)] (s : 有限集 ι)
   证明: by
   refine ⟨fun h => ?_, fun h => by (rw [h]; exact cylinder_empty _)⟩
   by_contra hS
@@ -428,7 +428,7 @@ theorem inter_cylinder
 
 中文:
 定理 inter_cylinder
-  结论: (s₁ s₂ : Finset ι) (S₁ : Set (对任意 i : s₁, α i)) (S₂ : Set (对任意 i : s₂, α i))
+  结论: (s₁ s₂ : 有限集 ι) (S₁ : 集合 (对任意 i : s₁, α i)) (S₂ : 集合 (对任意 i : s₂, α i))
   证明: rfl
 -/
 theorem inter_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
@@ -448,7 +448,7 @@ theorem inter_cylinder_same
 
 中文:
 定理 inter_cylinder_same
-  条件: (s : Finset ι) (S₁ : Set (对任意 i : s, α i)) (S₂ : Set (对任意 i : s, α i))
+  条件: (s : 有限集 ι) (S₁ : 集合 (对任意 i : s, α i)) (S₂ : 集合 (对任意 i : s, α i))
   证明: rfl
 -/
 theorem inter_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i)) :
@@ -464,7 +464,7 @@ theorem union_cylinder
 
 中文:
 定理 union_cylinder
-  结论: (s₁ s₂ : Finset ι) (S₁ : Set (对任意 i : s₁, α i)) (S₂ : Set (对任意 i : s₂, α i))
+  结论: (s₁ s₂ : 有限集 ι) (S₁ : 集合 (对任意 i : s₁, α i)) (S₂ : 集合 (对任意 i : s₂, α i))
   证明: rfl
 -/
 theorem union_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
@@ -484,7 +484,7 @@ theorem union_cylinder_same
 
 中文:
 定理 union_cylinder_same
-  条件: (s : Finset ι) (S₁ : Set (对任意 i : s, α i)) (S₂ : Set (对任意 i : s, α i))
+  条件: (s : 有限集 ι) (S₁ : 集合 (对任意 i : s, α i)) (S₂ : 集合 (对任意 i : s, α i))
   证明: rfl
 -/
 theorem union_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i)) :
@@ -501,7 +501,7 @@ theorem compl_cylinder
 
 中文:
 定理 compl_cylinder
-  条件: (s : Finset ι) (S : Set (对任意 i : s, α i))
+  条件: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
   证明: by
   ext1 f; simp only [mem_compl_iff, mem_cylinder]
 
@@ -524,7 +524,7 @@ theorem sdiff_cylinder_same
 
 中文:
 定理 sdiff_cylinder_same
-  条件: (s : Finset ι) (S T : Set (对任意 i : s, α i))
+  条件: (s : 有限集 ι) (S T : 集合 (对任意 i : s, α i))
   证明: by
   ext1 f; simp only [mem_sdiff, mem_cylinder]
 
@@ -556,7 +556,7 @@ theorem eq_of_cylinder_eq_of_subset
 
 中文:
 定理 eq_of_cylinder_eq_of_subset
-  结论: [h_nonempty : Nonempty (对任意 i, α i)] {I J : Finset ι}
+  结论: [h_nonempty : 非空 (对任意 i, α i)] {I J : 有限集 ι}
   证明: by
   rw [Set.ext_iff] at h_eq
   simp only [mem_cylinder] at h_eq
@@ -593,7 +593,7 @@ theorem cylinder_eq_cylinder_union
 
 中文:
 定理 cylinder_eq_cylinder_union
-  结论: [DecidableEq ι] (I : Finset ι) (S : Set (对任意 i : I, α i))
+  结论: [DecidableEq ι] (I : 有限集 ι) (S : 集合 (对任意 i : I, α i))
   证明: by
   ext1 f; simp only [mem_cylinder, Finset.restrict_def, Finset.restrict₂_def, mem_preimage]
 
@@ -616,7 +616,7 @@ theorem disjoint_cylinder_iff
 
 中文:
 定理 disjoint_cylinder_iff
-  结论: [Nonempty (对任意 i, α i)] {s t : Finset ι} {S : Set (对任意 i : s, α i)}
+  结论: [非空 (对任意 i, α i)] {s t : 有限集 ι} {S : 集合 (对任意 i : s, α i)}
   证明: by
   simp_rw [Set.disjoint_iff, subset_empty_iff, inter_cylinder, cylinder_eq_empty_iff]
 
@@ -639,8 +639,8 @@ theorem IsClosed.cylinder
   proof: hs.preimage (continuous_pi fun _ => continuous_apply _)
 
 中文:
-定理 IsClosed.cylinder
-  结论: [对任意 i, TopologicalSpace (α i)] (s : Finset ι) {S : Set (对任意 i : s, α i)}
+定理 是闭集.cylinder
+  结论: [对任意 i, 拓扑空间 (α i)] (s : 有限集 ι) {S : 集合 (对任意 i : s, α i)}
   证明: hs.preimage (continuous_pi fun _ => continuous_apply _)
 
 Depends on / 依赖: continuous_apply, continuous_pi, hs.preimage, preimage
@@ -658,8 +658,8 @@ theorem _root_.MeasurableSet.cylinder
   proof: measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS
 
 中文:
-定理 _root_.MeasurableSet.cylinder
-  结论: [对任意 i, MeasurableSpace (α i)] (s : Finset ι)
+定理 _root_.可测集.cylinder
+  结论: [对任意 i, 可测空间 (α i)] (s : 有限集 ι)
   证明: measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS
 
 Depends on / 依赖: measurable_pi_apply, measurable_pi_lambda
@@ -679,7 +679,7 @@ theorem dependsOn_cylinder_indicator_const
 
 中文:
 定理 dependsOn_cylinder_indicator_const
-  结论: {M : 类型} [Zero M] {I : Finset ι}
+  结论: {M : 类型} [零 M] {I : 有限集 ι}
   证明: fun x y hxy => Set.indicator_const_eq_indicator_const (by simp [Finset.restrict_def, hxy])
 
 Depends on / 依赖: Finset, Finset.restrict_def, Set.indicator_const_eq_indicator_const, indicator_const_eq_indicator_const, restrict_def
@@ -703,7 +703,7 @@ definition measurableCylinders
 
 中文:
 定义 measurableCylinders
-  签名: (α : ι -> 类型) [对任意 i, MeasurableSpace (α i)]
+  签名: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
   定义体: ⋃ (s) (S) (_ : MeasurableSet S), {cylinder s S}
 
 Depends on / 依赖: MeasurableSet, cylinder
@@ -723,7 +723,7 @@ theorem empty_mem_measurableCylinders
 
 中文:
 定理 empty_mem_measurableCylinders
-  条件: (α : ι -> 类型) [对任意 i, MeasurableSpace (α i)]
+  条件: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
   证明: by
   simp_rw [measurableCylinders, mem_iUnion, mem_singleton_iff]
   exact ⟨∅, ∅, MeasurableSet.empty, (cylinder_empty _).symm⟩
@@ -751,7 +751,7 @@ theorem mem_measurableCylinders
 
 中文:
 定理 mem_measurableCylinders
-  条件: (t : Set (对任意 i, α i))
+  条件: (t : 集合 (对任意 i, α i))
   证明: by
   simp_rw [measurableCylinders, mem_iUnion, exists_prop, mem_singleton_iff]
 
@@ -775,8 +775,8 @@ theorem _root_.MeasurableSet.of_mem_measurableCylinders
   exact mt.cylinder
 
 中文:
-定理 _root_.MeasurableSet.of_mem_measurableCylinders
-  结论: {s : Set (Π i, α i)}
+定理 _root_.可测集.of_mem_measurableCylinders
+  结论: {s : 集合 (Π i, α i)}
   证明: by
   obtain ⟨I, t, mt, rfl⟩ := (mem_measurableCylinders s).1 hs
   exact mt.cylinder
@@ -876,7 +876,7 @@ theorem cylinder_mem_measurableCylinders
 
 中文:
 定理 cylinder_mem_measurableCylinders
-  结论: (s : Finset ι) (S : Set (对任意 i : s, α i))
+  结论: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
   证明: by
   rw [mem_measurableCylinders]; exact ⟨s, S, hS, rfl⟩
 
@@ -992,7 +992,7 @@ theorem univ_mem_measurableCylinders
 
 中文:
 定理 univ_mem_measurableCylinders
-  条件: (α : ι -> 类型) [对任意 i, MeasurableSpace (α i)]
+  条件: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
   证明: by
   rw [← compl_empty]; exact compl_mem_measurableCylinders (empty_mem_measurableCylinders α)
 
@@ -1125,7 +1125,7 @@ theorem measurableCylinders_nat
 
 中文:
 定理 measurableCylinders_nat
-  条件: {X : 自然数 -> 类型} [对任意 n, MeasurableSpace (X n)]
+  条件: {X : 自然数 -> 类型} [对任意 n, 可测空间 (X n)]
   证明: by
   ext s
   simp only [mem_measurableCylinders, exists_prop, mem_iUnion]
@@ -1172,7 +1172,7 @@ definition cylinderEvents
 
 中文:
 定义 cylinderEvents
-  签名: (Δ : Set ι)
+  签名: (Δ : 集合 ι)
   定义体: ⨆ i in Δ, (m i).comap fun σ => σ i
 -/
 def cylinderEvents (Δ : Set ι) : MeasurableSpace (forall i, X i) := ⨆ i in Δ, (m i).comap fun σ => σ i
@@ -1190,7 +1190,7 @@ lemma cylinderEvents_univ
 
 中文:
 引理 cylinderEvents_univ
-  结论: cylinderEvents (X := X) univ = MeasurableSpace.pi
+  结论: cylinderEvents (X := X) univ = 可测空间.pi
   证明: by
   simp [cylinderEvents, MeasurableSpace.pi]
 
@@ -1231,7 +1231,7 @@ lemma cylinderEvents_le_pi
 
 中文:
 引理 cylinderEvents_le_pi
-  结论: cylinderEvents (X := X) Δ <= MeasurableSpace.pi
+  结论: cylinderEvents (X := X) Δ <= 可测空间.pi
   证明: by
   simpa using cylinderEvents_mono (subset_univ _)
 
@@ -1299,7 +1299,7 @@ lemma Measurable.eval_cylinderEvents
 @[fun_prop]
 
 中文:
-引理 Measurable.eval_cylinderEvents
+引理 可测.eval_cylinderEvents
   结论: {g : α -> 对任意 i, X i} (hi : i in Δ)
   证明: (measurable_cylinderEvent_apply hi).comp hg
 
@@ -1322,7 +1322,7 @@ lemma measurable_cylinderEvents_lambda
 
 中文:
 引理 measurable_cylinderEvents_lambda
-  条件: (f : α -> 对任意 i, X i) (hf : 对任意 i, Measurable fun a => f a i)
+  条件: (f : α -> 对任意 i, X i) (hf : 对任意 i, 可测 fun a => f a i)
   证明: measurable_pi_iff.mpr hf
 
 Depends on / 依赖: measurable_pi_iff, measurable_pi_iff.mpr
@@ -1385,7 +1385,7 @@ lemma measurable_uniqueElim_cylinderEvents
 
 中文:
 引理 measurable_uniqueElim_cylinderEvents
-  条件: [Unique ι]
+  条件: [唯一 ι]
   证明: by
   simp_rw [measurable_pi_iff, Unique.forall_iff, uniqueElim_default]; exact measurable_id
 
@@ -1448,7 +1448,7 @@ lemma measurable_restrict_cylinderEvents
 
 中文:
 引理 measurable_restrict_cylinderEvents
-  条件: (Δ : Set ι)
+  条件: (Δ : 集合 ι)
   证明: by
   rw [@measurable_pi_iff]; exact fun i => measurable_cylinderEvent_apply i.2
 
@@ -1474,7 +1474,7 @@ lemma MeasurableSet.eq_preimage_restrict_countable
   · rintro - - ⟨I, t, h
 
 中文:
-引理 MeasurableSet.eq_preimage_restrict_countable
+引理 可测集.eq_preimage_restrict_countable
   证明: by
   refine induction_on_inter generateFrom_squareCylinders.symm
     (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp))

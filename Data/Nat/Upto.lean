@@ -89,7 +89,7 @@ theorem wf
 
 中文:
 定理 wf
-  结论: (存在 x, p x) -> WellFounded (Upto.GT p)
+  结论: (存在 x, p x) -> 良基 (Upto.GT p)
 -/
 protected theorem wf : (exists x, p x) -> WellFounded (Upto.GT p)
   | ⟨x, h⟩ => by

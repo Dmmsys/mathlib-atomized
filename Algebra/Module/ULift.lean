@@ -42,7 +42,7 @@ instance smulLeft
 
 中文:
 实例 smulLeft
-  签名: [SMul R M]
+  签名: [标量乘法 R M]
   定义体: ⟨fun s x => s.down • x⟩
 
 @[to_additive (attr := simp)]
@@ -64,7 +64,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [SMul R M] (s : ULift R) (x : M)
+  条件: [标量乘法 R M] (s : 类型层提升 R) (x : M)
   结论: s • x = s.down • x
   证明: rfl
 -/
@@ -81,7 +81,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
+  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
   定义体: ⟨fun x y z => show (x.down • y) • z = x.down • y • z from smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc, x.down
@@ -100,7 +100,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
+  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
   定义体: ⟨fun x y z => show (x • y.down) • z = x • y.down • z from smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc, y.down
@@ -119,7 +119,7 @@ instance isScalarTower''
 
 中文:
 实例 isScalarTower''
-  签名: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
+  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
   定义体: ⟨fun x y z => show up ((x • y) • z.down) = ⟨x • y • z.down⟩ by rw [smul_assoc]⟩
 
 Depends on / 依赖: smul_assoc, z.down
@@ -139,8 +139,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: R M] [SMul Rᵐᵒᵖ M] [IsCentralScalar R M] : IsCentralScalar R (ULift M)
+实例 [标量乘法
+  签名: R M] [标量乘法 Rᵐᵒᵖ M] [中心标量 R M] : 中心标量 R (类型层提升 M)
   定义体: ⟨fun r m => congr_arg up op_smul_eq_smul r m.down⟩
 
 @[to_additive]
@@ -164,7 +164,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [Monoid R] [MulAction R M]
+  签名: [幺半群 R] [乘法作用 R M]
   定义体: mul_smul _ _
   one_smul := one_smul _
 
@@ -188,7 +188,7 @@ one_smul := fun _ => congr_arg ULift.up one_smul _ _
 
 中文:
 实例 mulAction'
-  签名: [Monoid R] [MulAction R M]
+  签名: [幺半群 R] [乘法作用 R M]
   定义体: fun _ _ _ => congr_arg ULift.up mul_smul _ _ _
 one_smul := fun _ => congr_arg ULift.up one_smul _ _
 
@@ -208,7 +208,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: [Zero M] [SMulZeroClass R M]
+  签名: [零 M] [SMulZero类 R M]
   定义体: { ULift.smulLeft with smul_zero := fun _ => smul_zero _ }
 
 Depends on / 依赖: ULift.smulLeft, smulLeft, smul_zero
@@ -226,7 +226,7 @@ instance smulZeroClass'
 
 中文:
 实例 smulZeroClass'
-  签名: [Zero M] [SMulZeroClass R M]
+  签名: [零 M] [SMulZero类 R M]
   定义体: by { ext; simp [smul_zero] }
 
 Depends on / 依赖: smul_zero
@@ -244,7 +244,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: [AddZeroClass M] [DistribSMul R M]
+  签名: [加法零类 M] [分配标量乘法 R M]
   定义体: smul_add _
 
 Depends on / 依赖: smul_add
@@ -264,7 +264,7 @@ instance distribSMul'
 
 中文:
 实例 distribSMul'
-  签名: [AddZeroClass M] [DistribSMul R M]
+  签名: [加法零类 M] [分配标量乘法 R M]
   定义体: by
     ext
     simp [smul_add]
@@ -286,7 +286,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid R] [AddMonoid M] [DistribMulAction R M]
+  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   定义体: { ULift.mulAction, ULift.distribSMul with }
 
 Depends on / 依赖: ULift.distribSMul, ULift.mulAction, distribSMul, mulAction
@@ -305,7 +305,7 @@ instance distribMulAction'
 
 中文:
 实例 distribMulAction'
-  签名: [Monoid R] [AddMonoid M] [DistribMulAction R M]
+  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   定义体: { ULift.mulAction', ULift.distribSMul' with }
 
 Depends on / 依赖: ULift.distribSMul, ULift.mulAction, distribSMul, mulAction
@@ -325,7 +325,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: [Monoid R] [Monoid M] [MulDistribMulAction R M]
+  签名: [幺半群 R] [幺半群 M] [MulDistribMul作用 R M]
   定义体: smul_one _
   smul_mul _ := smul_mul' _
 
@@ -352,7 +352,7 @@ instance mulDistribMulAction'
 
 中文:
 实例 mulDistribMulAction'
-  签名: [Monoid R] [Monoid M] [MulDistribMulAction R M]
+  签名: [幺半群 R] [幺半群 M] [MulDistribMul作用 R M]
   定义体: { ULift.mulAction' with
     smul_one := fun _ => by
       ext
@@ -385,7 +385,7 @@ instance smulWithZero
 
 中文:
 实例 smulWithZero
-  签名: [Zero R] [Zero M] [SMulWithZero R M]
+  签名: [零 R] [零 M] [带零标量乘法 R M]
   定义体: { ULift.smulLeft with
     smul_zero := fun _ => smul_zero _
     zero_smul := zero_smul _ }
@@ -408,7 +408,7 @@ zero_smul _ := ULift.ext _ _ zero_smul _ _
 
 中文:
 实例 smulWithZero'
-  签名: [Zero R] [Zero M] [SMulWithZero R M]
+  签名: [零 R] [零 M] [带零标量乘法 R M]
   定义体: ULift.ext _ _ smul_zero _
 zero_smul _ := ULift.ext _ _ zero_smul _ _
 
@@ -430,7 +430,7 @@ instance mulActionWithZero
 
 中文:
 实例 mulActionWithZero
-  签名: [MonoidWithZero R] [Zero M] [MulActionWithZero R M]
+  签名: [带零幺半群 R] [零 M] [带零乘法作用 R M]
   定义体: { ULift.smulWithZero with
     one_smul := one_smul _
     mul_smul := mul_smul }
@@ -455,7 +455,7 @@ instance mulActionWithZero'
 
 中文:
 实例 mulActionWithZero'
-  签名: [MonoidWithZero R] [Zero M] [MulActionWithZero R M]
+  签名: [带零幺半群 R] [零 M] [带零乘法作用 R M]
   定义体: { ULift.smulWithZero' with
     one_smul := one_smul _
     mul_smul := mul_smul }
@@ -482,7 +482,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ULift.smulWithZero with
     add_smul := fun _ _ => add_smul _ _
     smul_add := smul_add
@@ -512,7 +512,7 @@ add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
 
 中文:
 实例 module'
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ULift.smulWithZero' with
 add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
     one_smul := one_smul _
@@ -545,7 +545,7 @@ definition moduleEquiv
 
 中文:
 定义 moduleEquiv
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: ULift.down
   invFun := ULift.up
   map_smul' _ _ := rfl

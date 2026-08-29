@@ -63,8 +63,8 @@ lemma AddChar.norm_apply
   proof: (ψ.toMonoidHom.isOfFinOrder <| isOfFinOrder_of_finite _).norm_eq_one
 
 中文:
-引理 AddChar.norm_apply
-  结论: {G : 类型} [AddLeftCancelMonoid G] [Finite G] (ψ : AddChar G α)
+引理 加法特征.norm_apply
+  结论: {G : 类型} [加法左消去幺半群 G] [有限 G] (ψ : 加法特征 G α)
   证明: (ψ.toMonoidHom.isOfFinOrder <| isOfFinOrder_of_finite _).norm_eq_one
 -/
 @[simp] lemma AddChar.norm_apply {G : Type*} [AddLeftCancelMonoid G] [Finite G] (ψ : AddChar G α)

@@ -46,7 +46,7 @@ theorem mul_log_strictMonoOn
 
 中文:
 定理 mul_log_strictMonoOn
-  结论: StrictMonoOn (fun x => x * log x) .Ici exp (-1)
+  结论: StrictMonoOn (fun x => x * log x) .左闭右无界区间 exp (-1)
   证明: by
   refine strictMonoOn_of_deriv_pos (convex_Ici _) continuous_mul_log.continuousOn fun x hx => ?_
   have hlt : rexp (-1) < x := by simpa using hx
@@ -128,7 +128,7 @@ theorem log_div_self_antitoneOn
 
 中文:
 定理 log_div_self_antitoneOn
-  结论: AntitoneOn (fun x : 实数 => log x / x) .Ici (exp 1)
+  结论: AntitoneOn (fun x : 实数 => log x / x) .左闭右无界区间 (exp 1)
   证明: by
   intro x hex y hey hxy
   have x_pos : 0 < x := (exp_pos 1).trans_le hex
@@ -208,7 +208,7 @@ theorem log_div_sqrt_antitoneOn
 
 中文:
 定理 log_div_sqrt_antitoneOn
-  结论: AntitoneOn (fun x : 实数 => log x / √x) .Ici (exp 2)
+  结论: AntitoneOn (fun x : 实数 => log x / √x) .左闭右无界区间 (exp 2)
   证明: by
   simp_rw [sqrt_eq_rpow]
   convert! log_div_self_rpow_antitoneOn one_half_pos

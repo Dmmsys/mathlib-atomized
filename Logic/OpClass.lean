@@ -37,7 +37,7 @@ class IsSymmOp
     - symm_op : forall a b, op a b = op b a
 
 中文:
-类 IsSymmOp
+类 是SymmOp
   参数: (op : α -> α -> β)
   公理与运算 (1 个):
     - symm_op : 对任意 a b, op a b = op b a
@@ -56,7 +56,7 @@ class LeftCommutative
     - left_comm : (a₁ a₂ : α) -> (b : β) -> op a₁ (op a₂ b) = op a₂ (op a₁ b)
 
 中文:
-类 LeftCommutative
+类 左交换
   参数: (op : α -> β -> β)
   公理与运算 (1 个):
     - left_comm : (a₁ a₂ : α) -> (b : β) -> op a₁ (op a₂ b) = op a₂ (op a₁ b)
@@ -75,7 +75,7 @@ class RightCommutative
     - right_comm : (b : β) -> (a₁ a₂ : α) -> op (op b a₁) a₂ = op (op b a₂) a₁
 
 中文:
-类 RightCommutative
+类 右交换
   参数: (op : β -> α -> β)
   公理与运算 (1 个):
     - right_comm : (b : β) -> (a₁ a₂ : α) -> op (op b a₁) a₂ = op (op b a₂) a₁
@@ -97,8 +97,8 @@ theorem IsSymmOp.flip_eq
   proof: funext fun a => funext fun b => (IsSymmOp.symm_op a b).symm
 
 中文:
-定理 IsSymmOp.flip_eq
-  条件: (op : α -> α -> β) [IsSymmOp op]
+定理 是SymmOp.flip_eq
+  条件: (op : α -> α -> β) [是SymmOp op]
   结论: flip op = op
   证明: funext fun a => funext fun b => (IsSymmOp.symm_op a b).symm
 

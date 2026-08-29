@@ -36,8 +36,8 @@ instance [One
   body: inferInstanceAs One α
 
 中文:
-实例 [One
-  签名: α] : One αᵒᵈ
+实例 [幺
+  签名: α] : 幺 αᵒᵈ
   定义体: inferInstanceAs One α
 -/
 @[to_additive] instance [One α] : One αᵒᵈ := inferInstanceAs One α
@@ -52,8 +52,8 @@ instance [Mul
   body: inferInstanceAs Mul α
 
 中文:
-实例 [Mul
-  签名: α] : Mul αᵒᵈ
+实例 [乘法
+  签名: α] : 乘法 αᵒᵈ
   定义体: inferInstanceAs Mul α
 -/
 @[to_additive] instance [Mul α] : Mul αᵒᵈ := inferInstanceAs Mul α
@@ -68,8 +68,8 @@ instance [Inv
   body: inferInstanceAs Inv α
 
 中文:
-实例 [Inv
-  签名: α] : Inv αᵒᵈ
+实例 [取逆
+  签名: α] : 取逆 αᵒᵈ
   定义体: inferInstanceAs Inv α
 -/
 @[to_additive] instance [Inv α] : Inv αᵒᵈ := inferInstanceAs Inv α
@@ -84,8 +84,8 @@ instance [Div
   body: inferInstanceAs Div α
 
 中文:
-实例 [Div
-  签名: α] : Div αᵒᵈ
+实例 [除法
+  签名: α] : 除法 αᵒᵈ
   定义体: inferInstanceAs Div α
 -/
 @[to_additive] instance [Div α] : Div αᵒᵈ := inferInstanceAs Div α
@@ -101,8 +101,8 @@ instance [Pow
   body: inferInstanceAs Pow α β
 
 中文:
-实例 [Pow
-  签名: α β] : Pow αᵒᵈ β
+实例 [幂
+  签名: α β] : 幂 αᵒᵈ β
   定义体: inferInstanceAs Pow α β
 -/
 instance [Pow α β] : Pow αᵒᵈ β := inferInstanceAs Pow α β
@@ -118,8 +118,8 @@ instance [Pow
   body: inferInstanceAs Pow α β
 
 中文:
-实例 [Pow
-  签名: α β] : Pow α βᵒᵈ
+实例 [幂
+  签名: α β] : 幂 α βᵒᵈ
   定义体: inferInstanceAs Pow α β
 -/
 instance [Pow α β] : Pow α βᵒᵈ := inferInstanceAs Pow α β
@@ -133,8 +133,8 @@ instance [Semigroup
   body: inferInstanceAs Semigroup α
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup αᵒᵈ
+实例 [半群
+  签名: α] : 半群 αᵒᵈ
   定义体: inferInstanceAs Semigroup α
 -/
 @[to_additive] instance [Semigroup α] : Semigroup αᵒᵈ := inferInstanceAs Semigroup α
@@ -150,8 +150,8 @@ instance [CommSemigroup
 @[to_additive]
 
 中文:
-实例 [CommSemigroup
-  签名: α] : CommSemigroup αᵒᵈ
+实例 [交换半群
+  签名: α] : 交换半群 αᵒᵈ
   定义体: inferInstanceAs CommSemigroup α
 
 @[to_additive]
@@ -170,8 +170,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsLeftCancelMul α] : IsLeftCancelMul αᵒᵈ
+实例 [乘法
+  签名: α] [左乘消去 α] : 左乘消去 αᵒᵈ
   定义体: inferInstanceAs IsLeftCancelMul α
 
 @[to_additive]
@@ -193,8 +193,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsRightCancelMul α] : IsRightCancelMul αᵒᵈ
+实例 [乘法
+  签名: α] [右乘消去 α] : 右乘消去 αᵒᵈ
   定义体: inferInstanceAs IsRightCancelMul α
 
 @[to_additive]
@@ -213,8 +213,8 @@ instance [Mul
   signature: α] [IsCancelMul α] : IsCancelMul αᵒᵈ where
 
 中文:
-实例 [Mul
-  签名: α] [IsCancelMul α] : IsCancelMul αᵒᵈ where
+实例 [乘法
+  签名: α] [是消去乘法 α] : 是消去乘法 αᵒᵈ where
 -/
 instance [Mul α] [IsCancelMul α] : IsCancelMul αᵒᵈ where
 
@@ -227,8 +227,8 @@ instance [LeftCancelSemigroup
   signature: α] : LeftCancelSemigroup αᵒᵈ where
 
 中文:
-实例 [LeftCancelSemigroup
-  签名: α] : LeftCancelSemigroup αᵒᵈ where
+实例 [左消去半群
+  签名: α] : 左消去半群 αᵒᵈ where
 -/
 instance [LeftCancelSemigroup α] : LeftCancelSemigroup αᵒᵈ where
 
@@ -241,8 +241,8 @@ instance [RightCancelSemigroup
   signature: α] : RightCancelSemigroup αᵒᵈ where
 
 中文:
-实例 [RightCancelSemigroup
-  签名: α] : RightCancelSemigroup αᵒᵈ where
+实例 [右消去半群
+  签名: α] : 右消去半群 αᵒᵈ where
 
 Depends on / 依赖: IsOrderedMonoid, IsOrderedMonoid.toMulLeftMono, MulLeftMono, toMulLeftMono
 -/
@@ -260,8 +260,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass αᵒᵈ
+实例 [MulOne类
+  签名: α] : MulOne类 αᵒᵈ
   定义体: inferInstanceAs MulOneClass α
 
 @[to_additive]
@@ -282,8 +282,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] : Monoid αᵒᵈ
+实例 [幺半群
+  签名: α] : 幺半群 αᵒᵈ
   定义体: inferInstanceAs Monoid α
 
 @[to_additive]
@@ -304,8 +304,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid αᵒᵈ
+实例 [交换幺半群
+  签名: α] : 交换幺半群 αᵒᵈ
   定义体: inferInstanceAs CommMonoid α
 
 @[to_additive]
@@ -326,8 +326,8 @@ instance [LeftCancelMonoid
 @[to_additive]
 
 中文:
-实例 [LeftCancelMonoid
-  签名: α] : LeftCancelMonoid αᵒᵈ
+实例 [左消去幺半群
+  签名: α] : 左消去幺半群 αᵒᵈ
   定义体: inferInstanceAs LeftCancelMonoid α
 
 @[to_additive]
@@ -348,8 +348,8 @@ instance [RightCancelMonoid
 @[to_additive]
 
 中文:
-实例 [RightCancelMonoid
-  签名: α] : RightCancelMonoid αᵒᵈ
+实例 [右消去幺半群
+  签名: α] : 右消去幺半群 αᵒᵈ
   定义体: inferInstanceAs RightCancelMonoid α
 
 @[to_additive]
@@ -370,8 +370,8 @@ instance [CancelMonoid
 @[to_additive]
 
 中文:
-实例 [CancelMonoid
-  签名: α] : CancelMonoid αᵒᵈ
+实例 [消去幺半群
+  签名: α] : 消去幺半群 αᵒᵈ
   定义体: inferInstanceAs CancelMonoid α
 
 @[to_additive]
@@ -392,8 +392,8 @@ instance [CancelCommMonoid
 @[to_additive]
 
 中文:
-实例 [CancelCommMonoid
-  签名: α] : CancelCommMonoid αᵒᵈ
+实例 [消去交换幺半群
+  签名: α] : 消去交换幺半群 αᵒᵈ
   定义体: inferInstanceAs CancelCommMonoid α
 
 @[to_additive]
@@ -436,8 +436,8 @@ instance [DivInvMonoid
 @[to_additive]
 
 中文:
-实例 [DivInvMonoid
-  签名: α] : DivInvMonoid αᵒᵈ
+实例 [除逆幺半群
+  签名: α] : 除逆幺半群 αᵒᵈ
   定义体: inferInstanceAs DivInvMonoid α
 
 @[to_additive]
@@ -458,8 +458,8 @@ instance [DivisionMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionMonoid
-  签名: α] : DivisionMonoid αᵒᵈ
+实例 [Division幺半群
+  签名: α] : Division幺半群 αᵒᵈ
   定义体: inferInstanceAs DivisionMonoid α
 
 @[to_additive]
@@ -480,8 +480,8 @@ instance [DivisionCommMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionCommMonoid
-  签名: α] : DivisionCommMonoid αᵒᵈ
+实例 [DivisionComm幺半群
+  签名: α] : DivisionComm幺半群 αᵒᵈ
   定义体: inferInstanceAs DivisionCommMonoid α
 
 @[to_additive]
@@ -503,8 +503,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: α] : Group αᵒᵈ
+实例 [群
+  签名: α] : 群 αᵒᵈ
   定义体: inferInstanceAs Group α
 
 @[to_additive]
@@ -521,8 +521,8 @@ instance [CommGroup
   body: inferInstanceAs CommGroup α
 
 中文:
-实例 [CommGroup
-  签名: α] : CommGroup αᵒᵈ
+实例 [交换群
+  签名: α] : 交换群 αᵒᵈ
   定义体: inferInstanceAs CommGroup α
 
 Depends on / 依赖: CommGroup
@@ -545,7 +545,7 @@ theorem toDual_one
 
 中文:
 定理 toDual_one
-  条件: [One α]
+  条件: [幺 α]
   结论: toDual (1 : α) = 1
   证明: rfl
 
@@ -565,7 +565,7 @@ theorem ofDual_one
 
 中文:
 定理 ofDual_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (ofDual 1 : α) = 1
   证明: rfl
 -/
@@ -582,7 +582,7 @@ lemma toDual_eq_one
 
 中文:
 引理 toDual_eq_one
-  条件: [One α] {a : α}
+  条件: [幺 α] {a : α}
   结论: toDual a = 1 ↔ a = 1
   证明: .rfl
 -/
@@ -600,7 +600,7 @@ lemma ofDual_eq_one
 
 中文:
 引理 ofDual_eq_one
-  条件: [One α] {a : αᵒᵈ}
+  条件: [幺 α] {a : αᵒᵈ}
   结论: ofDual a = 1 ↔ a = 1
   证明: .rfl
 
@@ -622,7 +622,7 @@ theorem toDual_mul
 
 中文:
 定理 toDual_mul
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: toDual (a * b) = toDual a * toDual b
   证明: rfl
 
@@ -644,7 +644,7 @@ theorem ofDual_mul
 
 中文:
 定理 ofDual_mul
-  条件: [Mul α] (a b : αᵒᵈ)
+  条件: [乘法 α] (a b : αᵒᵈ)
   结论: ofDual (a * b) = ofDual a * ofDual b
   证明: rfl
 
@@ -666,7 +666,7 @@ theorem toDual_inv
 
 中文:
 定理 toDual_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: toDual a⁻¹ = (toDual a)⁻¹
   证明: rfl
 
@@ -688,7 +688,7 @@ theorem ofDual_inv
 
 中文:
 定理 ofDual_inv
-  条件: [Inv α] (a : αᵒᵈ)
+  条件: [取逆 α] (a : αᵒᵈ)
   结论: ofDual a⁻¹ = (ofDual a)⁻¹
   证明: rfl
 
@@ -710,7 +710,7 @@ theorem toDual_div
 
 中文:
 定理 toDual_div
-  条件: [Div α] (a b : α)
+  条件: [除法 α] (a b : α)
   结论: toDual (a / b) = toDual a / toDual b
   证明: rfl
 
@@ -732,7 +732,7 @@ theorem ofDual_div
 
 中文:
 定理 ofDual_div
-  条件: [Div α] (a b : αᵒᵈ)
+  条件: [除法 α] (a b : αᵒᵈ)
   结论: ofDual (a / b) = ofDual a / ofDual b
   证明: rfl
 
@@ -754,7 +754,7 @@ theorem toDual_pow
 
 中文:
 定理 toDual_pow
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: toDual (a ^ b) = toDual a ^ b
   证明: rfl
 
@@ -776,7 +776,7 @@ theorem ofDual_pow
 
 中文:
 定理 ofDual_pow
-  条件: [Pow α β] (a : αᵒᵈ) (b : β)
+  条件: [幂 α β] (a : αᵒᵈ) (b : β)
   结论: ofDual (a ^ b) = ofDual a ^ b
   证明: rfl
 
@@ -798,7 +798,7 @@ theorem pow_toDual
 
 中文:
 定理 pow_toDual
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: a ^ toDual b = a ^ b
   证明: rfl
 
@@ -818,7 +818,7 @@ theorem pow_ofDual
 
 中文:
 定理 pow_ofDual
-  条件: [Pow α β] (a : α) (b : βᵒᵈ)
+  条件: [幂 α β] (a : α) (b : βᵒᵈ)
   结论: a ^ ofDual b = a ^ b
   证明: rfl
 -/
@@ -930,7 +930,7 @@ lemma isRegular_toDual
 中文:
 引理 isRegular_toDual
   条件: {a : α}
-  结论: IsRegular (toDual a) ↔ IsRegular a
+  结论: 是正则 (toDual a) ↔ 是正则 a
   证明: .rfl
 
 @[to_additive (attr := simp)]
@@ -950,7 +950,7 @@ lemma isRegular_ofDual
 中文:
 引理 isRegular_ofDual
   条件: {a : αᵒᵈ}
-  结论: IsRegular (ofDual a) ↔ IsRegular a
+  结论: 是正则 (ofDual a) ↔ 是正则 a
   证明: .rfl
 -/
 lemma isRegular_ofDual {a : αᵒᵈ} : IsRegular (ofDual a) ↔ IsRegular a := .rfl
@@ -972,8 +972,8 @@ instance [One
   body: inferInstanceAs One α
 
 中文:
-实例 [One
-  签名: α] : One (Lex α)
+实例 [幺
+  签名: α] : 幺 (Lex α)
   定义体: inferInstanceAs One α
 -/
 @[to_additive] instance [One α] : One (Lex α) := inferInstanceAs One α
@@ -988,8 +988,8 @@ instance [Mul
   body: inferInstanceAs Mul α
 
 中文:
-实例 [Mul
-  签名: α] : Mul (Lex α)
+实例 [乘法
+  签名: α] : 乘法 (Lex α)
   定义体: inferInstanceAs Mul α
 -/
 @[to_additive] instance [Mul α] : Mul (Lex α) := inferInstanceAs Mul α
@@ -1004,8 +1004,8 @@ instance [Inv
   body: inferInstanceAs Inv α
 
 中文:
-实例 [Inv
-  签名: α] : Inv (Lex α)
+实例 [取逆
+  签名: α] : 取逆 (Lex α)
   定义体: inferInstanceAs Inv α
 -/
 @[to_additive] instance [Inv α] : Inv (Lex α) := inferInstanceAs Inv α
@@ -1020,8 +1020,8 @@ instance [Div
   body: inferInstanceAs Div α
 
 中文:
-实例 [Div
-  签名: α] : Div (Lex α)
+实例 [除法
+  签名: α] : 除法 (Lex α)
   定义体: inferInstanceAs Div α
 -/
 @[to_additive] instance [Div α] : Div (Lex α) := inferInstanceAs Div α
@@ -1037,8 +1037,8 @@ instance [Pow
   body: inferInstanceAs Pow α β
 
 中文:
-实例 [Pow
-  签名: α β] : Pow (Lex α) β
+实例 [幂
+  签名: α β] : 幂 (Lex α) β
   定义体: inferInstanceAs Pow α β
 -/
 instance [Pow α β] : Pow (Lex α) β := inferInstanceAs Pow α β
@@ -1056,8 +1056,8 @@ instance [Pow
 @[to_additive]
 
 中文:
-实例 [Pow
-  签名: α β] : Pow α (Lex β)
+实例 [幂
+  签名: α β] : 幂 α (Lex β)
   定义体: inferInstanceAs Pow α β
 
 @[to_additive]
@@ -1076,8 +1076,8 @@ instance [Semigroup
 @[to_additive]
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup (Lex α)
+实例 [半群
+  签名: α] : 半群 (Lex α)
   定义体: inferInstanceAs Semigroup α
 
 @[to_additive]
@@ -1098,8 +1098,8 @@ instance [CommSemigroup
 @[to_additive]
 
 中文:
-实例 [CommSemigroup
-  签名: α] : CommSemigroup (Lex α)
+实例 [交换半群
+  签名: α] : 交换半群 (Lex α)
   定义体: inferInstanceAs CommSemigroup α
 
 @[to_additive]
@@ -1120,8 +1120,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsLeftCancelMul α] : IsLeftCancelMul (Lex α)
+实例 [乘法
+  签名: α] [左乘消去 α] : 左乘消去 (Lex α)
   定义体: inferInstanceAs IsLeftCancelMul α
 
 @[to_additive]
@@ -1143,8 +1143,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsRightCancelMul α] : IsRightCancelMul (Lex α)
+实例 [乘法
+  签名: α] [右乘消去 α] : 右乘消去 (Lex α)
   定义体: inferInstanceAs IsRightCancelMul α
 
 @[to_additive]
@@ -1166,8 +1166,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsCancelMul α] : IsCancelMul (Lex α)
+实例 [乘法
+  签名: α] [是消去乘法 α] : 是消去乘法 (Lex α)
   定义体: inferInstanceAs IsCancelMul α
 
 @[to_additive]
@@ -1189,8 +1189,8 @@ instance [LeftCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [LeftCancelSemigroup
-  签名: α] : LeftCancelSemigroup (Lex α)
+实例 [左消去半群
+  签名: α] : 左消去半群 (Lex α)
   定义体: inferInstanceAs LeftCancelSemigroup α
 
 @[to_additive]
@@ -1212,8 +1212,8 @@ instance [RightCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [RightCancelSemigroup
-  签名: α] : RightCancelSemigroup (Lex α)
+实例 [右消去半群
+  签名: α] : 右消去半群 (Lex α)
   定义体: inferInstanceAs RightCancelSemigroup α
 
 @[to_additive]
@@ -1235,8 +1235,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass (Lex α)
+实例 [MulOne类
+  签名: α] : MulOne类 (Lex α)
   定义体: inferInstanceAs MulOneClass α
 
 @[to_additive]
@@ -1257,8 +1257,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] : Monoid (Lex α)
+实例 [幺半群
+  签名: α] : 幺半群 (Lex α)
   定义体: inferInstanceAs Monoid α
 
 @[to_additive]
@@ -1279,8 +1279,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid (Lex α)
+实例 [交换幺半群
+  签名: α] : 交换幺半群 (Lex α)
   定义体: inferInstanceAs CommMonoid α
 
 @[to_additive]
@@ -1301,8 +1301,8 @@ instance [LeftCancelMonoid
 @[to_additive]
 
 中文:
-实例 [LeftCancelMonoid
-  签名: α] : LeftCancelMonoid (Lex α)
+实例 [左消去幺半群
+  签名: α] : 左消去幺半群 (Lex α)
   定义体: inferInstanceAs LeftCancelMonoid α
 
 @[to_additive]
@@ -1323,8 +1323,8 @@ instance [RightCancelMonoid
 @[to_additive]
 
 中文:
-实例 [RightCancelMonoid
-  签名: α] : RightCancelMonoid (Lex α)
+实例 [右消去幺半群
+  签名: α] : 右消去幺半群 (Lex α)
   定义体: inferInstanceAs RightCancelMonoid α
 
 @[to_additive]
@@ -1345,8 +1345,8 @@ instance [CancelMonoid
 @[to_additive]
 
 中文:
-实例 [CancelMonoid
-  签名: α] : CancelMonoid (Lex α)
+实例 [消去幺半群
+  签名: α] : 消去幺半群 (Lex α)
   定义体: inferInstanceAs CancelMonoid α
 
 @[to_additive]
@@ -1367,8 +1367,8 @@ instance [CancelCommMonoid
 @[to_additive]
 
 中文:
-实例 [CancelCommMonoid
-  签名: α] : CancelCommMonoid (Lex α)
+实例 [消去交换幺半群
+  签名: α] : 消去交换幺半群 (Lex α)
   定义体: inferInstanceAs CancelCommMonoid α
 
 @[to_additive]
@@ -1411,8 +1411,8 @@ instance [DivInvMonoid
 @[to_additive]
 
 中文:
-实例 [DivInvMonoid
-  签名: α] : DivInvMonoid (Lex α)
+实例 [除逆幺半群
+  签名: α] : 除逆幺半群 (Lex α)
   定义体: inferInstanceAs DivInvMonoid α
 
 @[to_additive]
@@ -1433,8 +1433,8 @@ instance [DivisionMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionMonoid
-  签名: α] : DivisionMonoid (Lex α)
+实例 [Division幺半群
+  签名: α] : Division幺半群 (Lex α)
   定义体: inferInstanceAs DivisionMonoid α
 
 @[to_additive]
@@ -1455,8 +1455,8 @@ instance [DivisionCommMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionCommMonoid
-  签名: α] : DivisionCommMonoid (Lex α)
+实例 [DivisionComm幺半群
+  签名: α] : DivisionComm幺半群 (Lex α)
   定义体: inferInstanceAs DivisionCommMonoid α
 
 @[to_additive]
@@ -1478,8 +1478,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: α] : Group (Lex α)
+实例 [群
+  签名: α] : 群 (Lex α)
   定义体: inferInstanceAs Group α
 
 @[to_additive]
@@ -1496,8 +1496,8 @@ instance [CommGroup
   body: inferInstanceAs CommGroup α
 
 中文:
-实例 [CommGroup
-  签名: α] : CommGroup (Lex α)
+实例 [交换群
+  签名: α] : 交换群 (Lex α)
   定义体: inferInstanceAs CommGroup α
 
 Depends on / 依赖: CommGroup
@@ -1520,7 +1520,7 @@ theorem toLex_one
 
 中文:
 定理 toLex_one
-  条件: [One α]
+  条件: [幺 α]
   结论: toLex (1 : α) = 1
   证明: rfl
 
@@ -1542,7 +1542,7 @@ theorem toLex_eq_one
 
 中文:
 定理 toLex_eq_one
-  条件: [One α] {a : α}
+  条件: [幺 α] {a : α}
   结论: toLex a = 1 ↔ a = 1
   证明: .rfl
 
@@ -1564,7 +1564,7 @@ theorem ofLex_one
 
 中文:
 定理 ofLex_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (ofLex 1 : α) = 1
   证明: rfl
 
@@ -1586,7 +1586,7 @@ theorem ofLex_eq_one
 
 中文:
 定理 ofLex_eq_one
-  条件: [One α] {a : Lex α}
+  条件: [幺 α] {a : Lex α}
   结论: ofLex a = 1 ↔ a = 1
   证明: .rfl
 
@@ -1608,7 +1608,7 @@ theorem toLex_mul
 
 中文:
 定理 toLex_mul
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: toLex (a * b) = toLex a * toLex b
   证明: rfl
 
@@ -1630,7 +1630,7 @@ theorem ofLex_mul
 
 中文:
 定理 ofLex_mul
-  条件: [Mul α] (a b : Lex α)
+  条件: [乘法 α] (a b : Lex α)
   结论: ofLex (a * b) = ofLex a * ofLex b
   证明: rfl
 
@@ -1652,7 +1652,7 @@ theorem toLex_inv
 
 中文:
 定理 toLex_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: toLex a⁻¹ = (toLex a)⁻¹
   证明: rfl
 
@@ -1674,7 +1674,7 @@ theorem ofLex_inv
 
 中文:
 定理 ofLex_inv
-  条件: [Inv α] (a : Lex α)
+  条件: [取逆 α] (a : Lex α)
   结论: ofLex a⁻¹ = (ofLex a)⁻¹
   证明: rfl
 
@@ -1696,7 +1696,7 @@ theorem toLex_div
 
 中文:
 定理 toLex_div
-  条件: [Div α] (a b : α)
+  条件: [除法 α] (a b : α)
   结论: toLex (a / b) = toLex a / toLex b
   证明: rfl
 
@@ -1718,7 +1718,7 @@ theorem ofLex_div
 
 中文:
 定理 ofLex_div
-  条件: [Div α] (a b : Lex α)
+  条件: [除法 α] (a b : Lex α)
   结论: ofLex (a / b) = ofLex a / ofLex b
   证明: rfl
 
@@ -1740,7 +1740,7 @@ theorem toLex_pow
 
 中文:
 定理 toLex_pow
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: toLex (a ^ b) = toLex a ^ b
   证明: rfl
 
@@ -1762,7 +1762,7 @@ theorem ofLex_pow
 
 中文:
 定理 ofLex_pow
-  条件: [Pow α β] (a : Lex α) (b : β)
+  条件: [幂 α β] (a : Lex α) (b : β)
   结论: ofLex (a ^ b) = ofLex a ^ b
   证明: rfl
 
@@ -1784,7 +1784,7 @@ theorem pow_toLex
 
 中文:
 定理 pow_toLex
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: a ^ toLex b = a ^ b
   证明: rfl
 
@@ -1804,7 +1804,7 @@ theorem pow_ofLex
 
 中文:
 定理 pow_ofLex
-  条件: [Pow α β] (a : α) (b : Lex β)
+  条件: [幂 α β] (a : α) (b : Lex β)
   结论: a ^ ofLex b = a ^ b
   证明: rfl
 -/
@@ -1920,7 +1920,7 @@ lemma isRegular_toLex
 中文:
 引理 isRegular_toLex
   条件: {a : α}
-  结论: IsRegular (toLex a) ↔ IsRegular a
+  结论: 是正则 (toLex a) ↔ 是正则 a
   证明: .rfl
 
 @[to_additive (attr := simp)]
@@ -1940,7 +1940,7 @@ lemma isRegular_ofLex
 中文:
 引理 isRegular_ofLex
   条件: {a : Lex α}
-  结论: IsRegular (ofLex a) ↔ IsRegular a
+  结论: 是正则 (ofLex a) ↔ 是正则 a
   证明: .rfl
 -/
 lemma isRegular_ofLex {a : Lex α} : IsRegular (ofLex a) ↔ IsRegular a := .rfl
@@ -1962,8 +1962,8 @@ instance [One
   body: inferInstanceAs One α
 
 中文:
-实例 [One
-  签名: α] : One (Colex α)
+实例 [幺
+  签名: α] : 幺 (Colex α)
   定义体: inferInstanceAs One α
 -/
 @[to_additive] instance [One α] : One (Colex α) := inferInstanceAs One α
@@ -1978,8 +1978,8 @@ instance [Mul
   body: inferInstanceAs Mul α
 
 中文:
-实例 [Mul
-  签名: α] : Mul (Colex α)
+实例 [乘法
+  签名: α] : 乘法 (Colex α)
   定义体: inferInstanceAs Mul α
 -/
 @[to_additive] instance [Mul α] : Mul (Colex α) := inferInstanceAs Mul α
@@ -1994,8 +1994,8 @@ instance [Inv
   body: inferInstanceAs Inv α
 
 中文:
-实例 [Inv
-  签名: α] : Inv (Colex α)
+实例 [取逆
+  签名: α] : 取逆 (Colex α)
   定义体: inferInstanceAs Inv α
 -/
 @[to_additive] instance [Inv α] : Inv (Colex α) := inferInstanceAs Inv α
@@ -2010,8 +2010,8 @@ instance [Div
   body: inferInstanceAs Div α
 
 中文:
-实例 [Div
-  签名: α] : Div (Colex α)
+实例 [除法
+  签名: α] : 除法 (Colex α)
   定义体: inferInstanceAs Div α
 -/
 @[to_additive] instance [Div α] : Div (Colex α) := inferInstanceAs Div α
@@ -2027,8 +2027,8 @@ instance [Pow
   body: inferInstanceAs Pow α β
 
 中文:
-实例 [Pow
-  签名: α β] : Pow (Colex α) β
+实例 [幂
+  签名: α β] : 幂 (Colex α) β
   定义体: inferInstanceAs Pow α β
 -/
 instance [Pow α β] : Pow (Colex α) β := inferInstanceAs Pow α β
@@ -2046,8 +2046,8 @@ instance [Pow
 @[to_additive]
 
 中文:
-实例 [Pow
-  签名: α β] : Pow α (Colex β)
+实例 [幂
+  签名: α β] : 幂 α (Colex β)
   定义体: inferInstanceAs Pow α β
 
 @[to_additive]
@@ -2066,8 +2066,8 @@ instance [Semigroup
 @[to_additive]
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup (Colex α)
+实例 [半群
+  签名: α] : 半群 (Colex α)
   定义体: inferInstanceAs Semigroup α
 
 @[to_additive]
@@ -2088,8 +2088,8 @@ instance [CommSemigroup
 @[to_additive]
 
 中文:
-实例 [CommSemigroup
-  签名: α] : CommSemigroup (Colex α)
+实例 [交换半群
+  签名: α] : 交换半群 (Colex α)
   定义体: inferInstanceAs CommSemigroup α
 
 @[to_additive]
@@ -2110,8 +2110,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsLeftCancelMul α] : IsLeftCancelMul (Colex α)
+实例 [乘法
+  签名: α] [左乘消去 α] : 左乘消去 (Colex α)
   定义体: inferInstanceAs IsLeftCancelMul α
 
 @[to_additive]
@@ -2133,8 +2133,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsRightCancelMul α] : IsRightCancelMul (Colex α)
+实例 [乘法
+  签名: α] [右乘消去 α] : 右乘消去 (Colex α)
   定义体: inferInstanceAs IsRightCancelMul α
 
 @[to_additive]
@@ -2156,8 +2156,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] [IsCancelMul α] : IsCancelMul (Colex α)
+实例 [乘法
+  签名: α] [是消去乘法 α] : 是消去乘法 (Colex α)
   定义体: inferInstanceAs IsCancelMul α
 
 @[to_additive]
@@ -2179,8 +2179,8 @@ instance [LeftCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [LeftCancelSemigroup
-  签名: α] : LeftCancelSemigroup (Colex α)
+实例 [左消去半群
+  签名: α] : 左消去半群 (Colex α)
   定义体: inferInstanceAs LeftCancelSemigroup α
 
 @[to_additive]
@@ -2202,8 +2202,8 @@ instance [RightCancelSemigroup
 @[to_additive]
 
 中文:
-实例 [RightCancelSemigroup
-  签名: α] : RightCancelSemigroup (Colex α)
+实例 [右消去半群
+  签名: α] : 右消去半群 (Colex α)
   定义体: inferInstanceAs RightCancelSemigroup α
 
 @[to_additive]
@@ -2225,8 +2225,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass (Colex α)
+实例 [MulOne类
+  签名: α] : MulOne类 (Colex α)
   定义体: inferInstanceAs MulOneClass α
 
 @[to_additive]
@@ -2247,8 +2247,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] : Monoid (Colex α)
+实例 [幺半群
+  签名: α] : 幺半群 (Colex α)
   定义体: inferInstanceAs Monoid α
 
 @[to_additive]
@@ -2269,8 +2269,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid (Colex α)
+实例 [交换幺半群
+  签名: α] : 交换幺半群 (Colex α)
   定义体: inferInstanceAs CommMonoid α
 
 @[to_additive]
@@ -2291,8 +2291,8 @@ instance [LeftCancelMonoid
 @[to_additive]
 
 中文:
-实例 [LeftCancelMonoid
-  签名: α] : LeftCancelMonoid (Colex α)
+实例 [左消去幺半群
+  签名: α] : 左消去幺半群 (Colex α)
   定义体: inferInstanceAs LeftCancelMonoid α
 
 @[to_additive]
@@ -2313,8 +2313,8 @@ instance [RightCancelMonoid
 @[to_additive]
 
 中文:
-实例 [RightCancelMonoid
-  签名: α] : RightCancelMonoid (Colex α)
+实例 [右消去幺半群
+  签名: α] : 右消去幺半群 (Colex α)
   定义体: inferInstanceAs RightCancelMonoid α
 
 @[to_additive]
@@ -2336,8 +2336,8 @@ instance [CancelMonoid
 @[to_additive]
 
 中文:
-实例 [CancelMonoid
-  签名: α] : CancelMonoid (Colex α)
+实例 [消去幺半群
+  签名: α] : 消去幺半群 (Colex α)
   定义体: inferInstanceAs CancelMonoid α
 
 @[to_additive]
@@ -2358,8 +2358,8 @@ instance [CancelCommMonoid
 @[to_additive]
 
 中文:
-实例 [CancelCommMonoid
-  签名: α] : CancelCommMonoid (Colex α)
+实例 [消去交换幺半群
+  签名: α] : 消去交换幺半群 (Colex α)
   定义体: inferInstanceAs CancelCommMonoid α
 
 @[to_additive]
@@ -2402,8 +2402,8 @@ instance [DivInvMonoid
 @[to_additive]
 
 中文:
-实例 [DivInvMonoid
-  签名: α] : DivInvMonoid (Colex α)
+实例 [除逆幺半群
+  签名: α] : 除逆幺半群 (Colex α)
   定义体: inferInstanceAs DivInvMonoid α
 
 @[to_additive]
@@ -2424,8 +2424,8 @@ instance [DivisionMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionMonoid
-  签名: α] : DivisionMonoid (Colex α)
+实例 [Division幺半群
+  签名: α] : Division幺半群 (Colex α)
   定义体: inferInstanceAs DivisionMonoid α
 
 @[to_additive]
@@ -2446,8 +2446,8 @@ instance [DivisionCommMonoid
 @[to_additive]
 
 中文:
-实例 [DivisionCommMonoid
-  签名: α] : DivisionCommMonoid (Colex α)
+实例 [DivisionComm幺半群
+  签名: α] : DivisionComm幺半群 (Colex α)
   定义体: inferInstanceAs DivisionCommMonoid α
 
 @[to_additive]
@@ -2469,8 +2469,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: α] : Group (Colex α)
+实例 [群
+  签名: α] : 群 (Colex α)
   定义体: inferInstanceAs Group α
 
 @[to_additive]
@@ -2487,8 +2487,8 @@ instance [CommGroup
   body: inferInstanceAs CommGroup α
 
 中文:
-实例 [CommGroup
-  签名: α] : CommGroup (Colex α)
+实例 [交换群
+  签名: α] : 交换群 (Colex α)
   定义体: inferInstanceAs CommGroup α
 
 Depends on / 依赖: CommGroup
@@ -2511,7 +2511,7 @@ theorem toColex_one
 
 中文:
 定理 toColex_one
-  条件: [One α]
+  条件: [幺 α]
   结论: toColex (1 : α) = 1
   证明: rfl
 
@@ -2533,7 +2533,7 @@ theorem toColex_eq_one
 
 中文:
 定理 toColex_eq_one
-  条件: [One α] {a : α}
+  条件: [幺 α] {a : α}
   结论: toColex a = 1 ↔ a = 1
   证明: .rfl
 
@@ -2555,7 +2555,7 @@ theorem ofColex_one
 
 中文:
 定理 ofColex_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (ofColex 1 : α) = 1
   证明: rfl
 
@@ -2577,7 +2577,7 @@ theorem ofColex_eq_one
 
 中文:
 定理 ofColex_eq_one
-  条件: [One α] {a : Colex α}
+  条件: [幺 α] {a : Colex α}
   结论: ofColex a = 1 ↔ a = 1
   证明: .rfl
 
@@ -2599,7 +2599,7 @@ theorem toColex_mul
 
 中文:
 定理 toColex_mul
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: toColex (a * b) = toColex a * toColex b
   证明: rfl
 
@@ -2621,7 +2621,7 @@ theorem ofColex_mul
 
 中文:
 定理 ofColex_mul
-  条件: [Mul α] (a b : Colex α)
+  条件: [乘法 α] (a b : Colex α)
   结论: ofColex (a * b) = ofColex a * ofColex b
   证明: rfl
 
@@ -2643,7 +2643,7 @@ theorem toColex_inv
 
 中文:
 定理 toColex_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: toColex a⁻¹ = (toColex a)⁻¹
   证明: rfl
 
@@ -2665,7 +2665,7 @@ theorem ofColex_inv
 
 中文:
 定理 ofColex_inv
-  条件: [Inv α] (a : Colex α)
+  条件: [取逆 α] (a : Colex α)
   结论: ofColex a⁻¹ = (ofColex a)⁻¹
   证明: rfl
 
@@ -2687,7 +2687,7 @@ theorem toColex_div
 
 中文:
 定理 toColex_div
-  条件: [Div α] (a b : α)
+  条件: [除法 α] (a b : α)
   结论: toColex (a / b) = toColex a / toColex b
   证明: rfl
 
@@ -2709,7 +2709,7 @@ theorem ofColex_div
 
 中文:
 定理 ofColex_div
-  条件: [Div α] (a b : Colex α)
+  条件: [除法 α] (a b : Colex α)
   结论: ofColex (a / b) = ofColex a / ofColex b
   证明: rfl
 
@@ -2731,7 +2731,7 @@ theorem toColex_pow
 
 中文:
 定理 toColex_pow
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: toColex (a ^ b) = toColex a ^ b
   证明: rfl
 
@@ -2753,7 +2753,7 @@ theorem ofColex_pow
 
 中文:
 定理 ofColex_pow
-  条件: [Pow α β] (a : Colex α) (b : β)
+  条件: [幂 α β] (a : Colex α) (b : β)
   结论: ofColex (a ^ b) = ofColex a ^ b
   证明: rfl
 
@@ -2775,7 +2775,7 @@ theorem pow_toColex
 
 中文:
 定理 pow_toColex
-  条件: [Pow α β] (a : α) (b : β)
+  条件: [幂 α β] (a : α) (b : β)
   结论: a ^ toColex b = a ^ b
   证明: rfl
 
@@ -2795,7 +2795,7 @@ theorem pow_ofColex
 
 中文:
 定理 pow_ofColex
-  条件: [Pow α β] (a : α) (b : Colex β)
+  条件: [幂 α β] (a : α) (b : Colex β)
   结论: a ^ ofColex b = a ^ b
   证明: rfl
 -/
@@ -2907,7 +2907,7 @@ lemma isRegular_toColex
 中文:
 引理 isRegular_toColex
   条件: {a : α}
-  结论: IsRegular (toColex a) ↔ IsRegular a
+  结论: 是正则 (toColex a) ↔ 是正则 a
   证明: .rfl
 
 @[to_additive (attr := simp)]
@@ -2927,7 +2927,7 @@ lemma isRegular_ofColex
 中文:
 引理 isRegular_ofColex
   条件: {a : Colex α}
-  结论: IsRegular (ofColex a) ↔ IsRegular a
+  结论: 是正则 (ofColex a) ↔ 是正则 a
   证明: .rfl
 -/
 lemma isRegular_ofColex {a : Colex α} : IsRegular (ofColex a) ↔ IsRegular a := .rfl

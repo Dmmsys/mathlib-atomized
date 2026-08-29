@@ -127,7 +127,7 @@ lemma natCast_injOn_Iio
 
 中文:
 引理 natCast_injOn_Iio
-  结论: (Set.Iio p).InjOn ((↑) : 自然数 -> R)
+  结论: (集合.左无界右开区间 p).单射限制 ((↑) : 自然数 -> R)
   证明: fun _a ha _b hb hab => ((natCast_eq_natCast _ _).1 hab).eq_of_lt_of_lt ha hb
 
 Depends on / 依赖: eq_of_lt_of_lt, natCast_eq_natCast
@@ -194,8 +194,8 @@ lemma intCast_injOn_Ico
 
 中文:
 引理 intCast_injOn_Ico
-  条件: [IsRightCancelAdd R]
-  结论: InjOn (整数.cast : 整数 -> R) (Ico 0 p)
+  条件: [是右消去加法 R]
+  结论: 单射限制 (整数.cast : 整数 -> R) (左闭右开区间 0 p)
   证明: by
   rintro a ⟨ha₀, ha⟩ b ⟨hb₀, hb⟩ hab
   lift a to Nat using ha₀
@@ -236,7 +236,7 @@ lemma cast_ne_zero_of_ne_of_prime
 
 中文:
 引理 cast_ne_zero_of_ne_of_prime
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: fun h => by
   rw [cast_eq_zero_iff R p q] at h
   rcases hq.eq_one_or_self_of_dvd _ h with rfl | h
@@ -262,7 +262,7 @@ lemma ringChar_of_prime_eq_zero
 
 中文:
 引理 ringChar_of_prime_eq_zero
-  结论: [Nontrivial R] {p : 自然数} (hprime : 自然数.Prime p)
+  结论: [非平凡 R] {p : 自然数} (hprime : 自然数.素 p)
   证明: Or.resolve_left ((Nat.dvd_prime hprime).1 (ringChar.dvd hp0)) ringChar_ne_one
 
 Depends on / 依赖: Nat.dvd_prime, Or.resolve_left, dvd_prime, hprime, resolve_left, ringChar, ringChar.dvd, ringChar_ne_one
@@ -282,7 +282,7 @@ lemma charP_iff_prime_eq_zero
 
 中文:
 引理 charP_iff_prime_eq_zero
-  条件: [Nontrivial R] {p : 自然数} (hp : p.Prime)
+  条件: [非平凡 R] {p : 自然数} (hp : p.素)
   证明: ⟨fun _ => cast_eq_zero R p,
    fun hp0 => (ringChar_of_prime_eq_zero hp hp0) ▸ inferInstance⟩
 
@@ -309,8 +309,8 @@ lemma Ring.two_ne_zero
   exact mt (or_iff_left hR).mp CharP.ringChar_ne_one
 
 中文:
-引理 Ring.two_ne_zero
-  结论: {R : 类型} [NonAssocSemiring R] [Nontrivial R]
+引理 环.two_ne_zero
+  结论: {R : 类型} [非结合半环 R] [非平凡 R]
   证明: by
   rw [Ne]; rw [(by norm_cast : (2 : R) = (2 : Nat))]; rw [ringChar.spec]; rw [Nat.dvd_prime Nat.prime_two]
   exact mt (or_iff_left hR).mp CharP.ringChar_ne_one
@@ -332,8 +332,8 @@ lemma Ring.neg_one_ne_one_of_char_ne_two
   Ring.two_ne_zero hR (one_add_one_eq_two (R := R) ▸ neg_eq_iff_add_eq_zero.mp h)
 
 中文:
-引理 Ring.neg_one_ne_one_of_char_ne_two
-  结论: {R : 类型} [NonAssocRing R] [Nontrivial R]
+引理 环.neg_one_ne_one_of_char_ne_two
+  结论: {R : 类型} [非结合环 R] [非平凡 R]
   证明: fun h =>
   Ring.two_ne_zero hR (one_add_one_eq_two (R := R) ▸ neg_eq_iff_add_eq_zero.mp h)
 -/
@@ -353,8 +353,8 @@ lemma Ring.eq_self_iff_eq_zero_of_char_ne_two
     fun h => ((congr_arg (fun x => -x) h).trans neg_zero).trans h.symm⟩
 
 中文:
-引理 Ring.eq_self_iff_eq_zero_of_char_ne_two
-  结论: {R : 类型} [NonAssocRing R] [Nontrivial R]
+引理 环.eq_self_iff_eq_zero_of_char_ne_two
+  结论: {R : 类型} [非结合环 R] [非平凡 R]
   证明: ⟨fun h =>
     (mul_eq_zero.mp <| (two_mul a).trans <| neg_eq_iff_add_eq_zero.mp h).resolve_left
       (Ring.two_ne_zero hR),
@@ -384,8 +384,8 @@ instance Nat.lcm.charP
     simp [Prod.ext_iff, CharP.cast_eq_zero_iff R p, CharP.cast_eq_zero_iff S q, Nat.lcm_dvd_iff]
 
 中文:
-实例 Nat.lcm.charP
-  签名: [CharP S q]
+实例 自然数.最小公倍数.charP
+  签名: [特征p S q]
   定义体: by
     simp [Prod.ext_iff, CharP.cast_eq_zero_iff R p, CharP.cast_eq_zero_iff S q, Nat.lcm_dvd_iff]
 
@@ -405,8 +405,8 @@ instance Prod.charP
   convert! Nat.lcm.charP R S p p; simp
 
 中文:
-实例 Prod.charP
-  签名: [CharP S p]
+实例 积类型.charP
+  签名: [特征p S p]
   定义体: by
   convert! Nat.lcm.charP R S p p; simp
 
@@ -424,8 +424,8 @@ instance Prod.charZero_of_left
   body: CharZero.cast_injective congr(Prod.fst $h)
 
 中文:
-实例 Prod.charZero_of_left
-  签名: [CharZero R]
+实例 积类型.charZero_of_left
+  签名: [特征零 R]
   定义体: CharZero.cast_injective congr(Prod.fst $h)
 
 Depends on / 依赖: CharZero, CharZero.cast_injective, Prod.fst, cast_injective
@@ -442,8 +442,8 @@ instance Prod.charZero_of_right
   body: CharZero.cast_injective congr(Prod.snd $h)
 
 中文:
-实例 Prod.charZero_of_right
-  签名: [CharZero S]
+实例 积类型.charZero_of_right
+  签名: [特征零 S]
   定义体: CharZero.cast_injective congr(Prod.snd $h)
 
 Depends on / 依赖: CharZero, CharZero.cast_injective, Prod.snd, cast_injective
@@ -462,8 +462,8 @@ instance ULift.charP
   body: Iff.trans ULift.ext_iff CharP.cast_eq_zero_iff R p n
 
 中文:
-实例 ULift.charP
-  签名: [AddMonoidWithOne R] (p : 自然数) [CharP R p]
+实例 类型层提升.charP
+  签名: [加法带幺幺半群 R] (p : 自然数) [特征p R p]
   定义体: Iff.trans ULift.ext_iff CharP.cast_eq_zero_iff R p n
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, Iff.trans, ULift.ext_iff, cast_eq_zero_iff, ext_iff
@@ -481,7 +481,7 @@ instance MulOpposite.charP
 
 中文:
 实例 MulOpposite.charP
-  签名: [AddMonoidWithOne R] (p : 自然数) [CharP R p]
+  签名: [加法带幺幺半群 R] (p : 自然数) [特征p R p]
   定义体: MulOpposite.unop_inj.symm.trans CharP.cast_eq_zero_iff R p n
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, MulOpposite, MulOpposite.unop_inj.symm.trans, cast_eq_zero_iff, unop_inj
@@ -505,8 +505,8 @@ lemma Int.cast_injOn_of_ringChar_ne_two
   · exact ((Ring.neg_one_ne_one_of_char_ne_two hR) h).elim
 
 中文:
-引理 Int.cast_injOn_of_ringChar_ne_two
-  结论: {R : 类型} [NonAssocRing R] [Nontrivial R]
+引理 整数.cast_injOn_of_ringChar_ne_two
+  结论: {R : 类型} [非结合环 R] [非平凡 R]
   证明: by
   rintro _ (rfl | rfl | rfl) _ (rfl | rfl | rfl) h <;>
   simp only
@@ -542,8 +542,8 @@ lemma charZero_iff_forall_prime_ne_zero
   | inr h => have : CharP R 0 := h ▸ inferInstance; exact CharP.charP_to_charZero R
 
 中文:
-引理 charZero_iff_forall_prime_ne_zero
-  条件: [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R]
+引理 charZero_iff_对任意_prime_ne_zero
+  条件: [非结合环 R] [无零因子 R] [非平凡 R]
   证明: by
   refine ⟨fun h p hp => by simp [hp.ne_zero], fun h => ?_⟩
   let p := ringChar R

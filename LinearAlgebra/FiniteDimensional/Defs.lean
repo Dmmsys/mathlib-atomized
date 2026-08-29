@@ -79,8 +79,8 @@ abbreviation FiniteDimensional
   body: Module.Finite K V
 
 中文:
-缩写 FiniteDimensional
-  签名: (K V : 类型) [DivisionRing K] [AddCommGroup V] [Module K V]
+缩写 有限维
+  签名: (K V : 类型) [除环 K] [加法交换群 V] [模 K V]
   定义体: Module.Finite K V
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -104,7 +104,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: (f : V ->ₗ[K] V₂) (w : Function.Injective f) [FiniteDimensional K V₂]
+  条件: (f : V ->ₗ[K] V₂) (w : 函数.单射 f) [有限维 K V₂]
   证明: Module.Finite.of_injective f w
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_injective, of_injective
@@ -123,7 +123,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : V ->ₗ[K] V₂) (w : Function.Surjective f) [FiniteDimensional K V]
+  条件: (f : V ->ₗ[K] V₂) (w : 函数.满射 f) [有限维 K V]
   证明: Module.Finite.of_surjective f w
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_surjective, of_surjective
@@ -144,7 +144,7 @@ instance finiteDimensional_pi
 
 中文:
 实例 finiteDimensional_pi
-  签名: {ι : 类型} [Finite ι]
+  签名: {ι : 类型} [有限 ι]
   定义体: Finite.pi
 
 Depends on / 依赖: Finite, Finite.pi
@@ -162,7 +162,7 @@ instance finiteDimensional_pi'
 
 中文:
 实例 finiteDimensional_pi'
-  签名: {ι : 类型} [Finite ι] (M : ι -> 类型) [对任意 i, AddCommGroup (M i)]
+  签名: {ι : 类型} [有限 ι] (M : ι -> 类型) [对任意 i, 加法交换群 (M i)]
   定义体: Finite.pi
 
 Depends on / 依赖: Finite, Finite.pi
@@ -182,8 +182,8 @@ theorem _root_.Module.Basis.finiteDimensional_of_finite
   proof: Module.Finite.of_basis h
 
 中文:
-定理 _root_.Module.Basis.finiteDimensional_of_finite
-  条件: {ι : Type w} [Finite ι] (h : Basis ι K V)
+定理 _root_.模.基.finiteDimensional_of_finite
+  条件: {ι : 类型 w} [有限 ι] (h : 基 ι K V)
   证明: Module.Finite.of_basis h
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_basis, of_basis
@@ -204,7 +204,7 @@ definition fintypeBasisIndex
 
 中文:
 定义 fintypeBasisIndex
-  签名: {ι : 类型} [FiniteDimensional K V] (b : Basis ι K V)
+  签名: {ι : 类型} [有限维 K V] (b : 基 ι K V)
   定义体: @Fintype.ofFinite _ (Module.Finite.finite_basis b)
 
 Depends on / 依赖: Finite, Fintype, Fintype.ofFinite, Module, Module.Finite.finite_basis, finite_basis, ofFinite
@@ -222,8 +222,8 @@ instance [FiniteDimensional
   body: fintypeBasisIndex (Basis.ofVectorSpace K V)
 
 中文:
-实例 [FiniteDimensional
-  签名: K V] : Fintype (Basis.ofVectorSpaceIndex K V)
+实例 [有限维
+  签名: K V] : 有限类型 (基.ofVectorSpaceIndex K V)
   定义体: fintypeBasisIndex (Basis.ofVectorSpace K V)
 
 Depends on / 依赖: Basis.ofVectorSpace, fintypeBasisIndex, ofVectorSpace
@@ -242,7 +242,7 @@ theorem of_finite_basis
 
 中文:
 定理 of_finite_basis
-  条件: {ι : Type w} {s : Set ι} (h : Basis s K V) (hs : Set.Finite s)
+  条件: {ι : 类型 w} {s : 集合 ι} (h : 基 s K V) (hs : 集合.有限 s)
   证明: haveI := hs.fintype
   h.finiteDimensional_of_finite
 
@@ -264,7 +264,7 @@ instance finiteDimensional_submodule
 
 中文:
 实例 finiteDimensional_submodule
-  签名: [FiniteDimensional K V] (S : Submodule K V)
+  签名: [有限维 K V] (S : 子模 K V)
   定义体: by
   infer_instance
 
@@ -284,7 +284,7 @@ instance finiteDimensional_quotient
 
 中文:
 实例 finiteDimensional_quotient
-  签名: [FiniteDimensional K V] (S : Submodule K V)
+  签名: [有限维 K V] (S : 子模 K V)
   定义体: Module.Finite.quotient K S
 
 Depends on / 依赖: Finite, Module, Module.Finite.quotient, quotient
@@ -305,7 +305,7 @@ theorem of_finrank_pos
 中文:
 定理 of_finrank_pos
   条件: (h : 0 < finrank K V)
-  结论: FiniteDimensional K V
+  结论: 有限维 K V
   证明: Module.finite_of_finrank_pos h
 
 Depends on / 依赖: Module, Module.finite_of_finrank_pos, finite_of_finrank_pos
@@ -363,7 +363,7 @@ lemma of_fact_finrank_eq_two
 中文:
 引理 of_fact_finrank_eq_two
   条件: [Fact (finrank K V = 2)]
-  结论: FiniteDimensional K V
+  结论: 有限维 K V
   证明: of_fact_finrank_eq_succ 1
 
 Depends on / 依赖: of_fact_finrank_eq_succ
@@ -389,8 +389,8 @@ theorem finrank_eq_rank'
 
 中文:
 定理 finrank_eq_rank'
-  条件: [FiniteDimensional K V]
-  结论: (finrank K V : Cardinal.{v}) = Module.rank K V
+  条件: [有限维 K V]
+  结论: (finrank K V : 基数.{v}) = 模.rank K V
   证明: finrank_eq_rank _ _
 
 Depends on / 依赖: finrank_eq_rank
@@ -411,7 +411,7 @@ theorem finrank_of_infinite_dimensional
 
 中文:
 定理 finrank_of_infinite_dimensional
-  条件: (h : ¬FiniteDimensional K V)
+  条件: (h : ¬有限维 K V)
   结论: finrank K V = 0
   证明: Module.finrank_of_not_finite h
 
@@ -430,7 +430,7 @@ theorem finiteDimensional_iff_of_rank_eq_nsmul
 
 中文:
 定理 finiteDimensional_iff_of_rank_eq_nsmul
-  结论: {W} [AddCommGroup W] [Module K W] {n : 自然数}
+  结论: {W} [加法交换群 W] [模 K W] {n : 自然数}
   证明: Module.finite_iff_of_rank_eq_nsmul hn hVW
 
 Depends on / 依赖: Module, Module.finite_iff_of_rank_eq_nsmul, finite_iff_of_rank_eq_nsmul
@@ -450,7 +450,7 @@ theorem finrank_eq_card_basis'
 
 中文:
 定理 finrank_eq_card_basis'
-  条件: [FiniteDimensional K V] {ι : Type w} (h : Basis ι K V)
+  条件: [有限维 K V] {ι : 类型 w} (h : 基 ι K V)
   证明: Module.mk_finrank_eq_card_basis h
 
 Depends on / 依赖: Module, Module.mk_finrank_eq_card_basis, mk_finrank_eq_card_basis
@@ -478,7 +478,7 @@ instance finiteDimensional_self
 
 中文:
 实例 finiteDimensional_self
-  签名: : FiniteDimensional K K
+  签名: : 有限维 K K
   定义体: inferInstance
 -/
 instance finiteDimensional_self : FiniteDimensional K K := inferInstance
@@ -494,8 +494,8 @@ theorem span_of_finite
 
 中文:
 定理 span_of_finite
-  条件: {A : Set V} (hA : Set.Finite A)
-  结论: FiniteDimensional K (Submodule.span K A)
+  条件: {A : 集合 V} (hA : 集合.有限 A)
+  结论: 有限维 K (子模.span K A)
   证明: Module.Finite.span_of_finite K hA
 
 Depends on / 依赖: Finite, Module, Module.Finite.span_of_finite, span_of_finite
@@ -531,7 +531,7 @@ instance span_finset
 
 中文:
 实例 span_finset
-  签名: (s : Finset V)
+  签名: (s : 有限集 V)
   定义体: Module.Finite.span_finset K s
 
 Depends on / 依赖: Finite, Module, Module.Finite.span_finset, span_finset
@@ -562,8 +562,8 @@ theorem trans
 
 中文:
 定理 trans
-  条件: [FiniteDimensional F K] [FiniteDimensional K A]
-  结论: FiniteDimensional F A
+  条件: [有限维 F K] [有限维 K A]
+  结论: 有限维 F A
   证明: Module.Finite.trans K A
 
 Depends on / 依赖: Finite, Module, Module.Finite.trans
@@ -592,8 +592,8 @@ theorem fg_iff_finiteDimensional
 
 中文:
 定理 fg_iff_finiteDimensional
-  条件: (s : Submodule K V)
-  结论: s.FG ↔ FiniteDimensional K s
+  条件: (s : 子模 K V)
+  结论: s.FG ↔ 有限维 K s
   证明: Module.Finite.iff_fg.symm
 
 Depends on / 依赖: Finite, Module, Module.Finite.iff_fg.symm, iff_fg
@@ -620,7 +620,7 @@ theorem finiteDimensional
 
 中文:
 定理 finiteDimensional
-  条件: (f : V ≃ₗ[K] V₂) [FiniteDimensional K V]
+  条件: (f : V ≃ₗ[K] V₂) [有限维 K V]
   证明: Module.Finite.equiv f
 -/
 protected theorem finiteDimensional (f : V ≃ₗ[K] V₂) [FiniteDimensional K V] :

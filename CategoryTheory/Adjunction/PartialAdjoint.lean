@@ -57,7 +57,7 @@ definition leftAdjointObjIsDefined
 
 中文:
 定义 leftAdjointObjIsDefined
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => IsCorepresentable (F ⋙ coyoneda.obj (op X))
 
 Depends on / 依赖: IsCorepresentable, coyoneda, coyoneda.obj
@@ -423,7 +423,7 @@ definition corepresentableByCompCoyonedaObjOfIsColimit
 
 中文:
 定义 corepresentableByCompCoyonedaObjOfIsColimit
-  签名: {J : 类型} [Category* J]
+  签名: {J : 类型} [范畴* J]
   定义体: { toFun := fun f => hc.desc (Cocone.mk _
         { app := fun j => F.partialLeftAdjointHomEquiv (c'.ι.app j ≫ f)
           naturality := fun j j' φ => by
@@ -471,7 +471,7 @@ lemma leftAdjointObjIsDefined_of_isColimit
 
 中文:
 引理 leftAdjointObjIsDefined_of_isColimit
-  结论: {J : 类型} [Category* J] {R : J ⥤ C} {c : Cocone R}
+  结论: {J : 类型} [范畴* J] {R : J ⥤ C} {c : 余锥 R}
   证明: (corepresentableByCompCoyonedaObjOfIsColimit
     (R := ObjectProperty.lift _ R h) hc (colimit.isColimit _)).isCorepresentable
 
@@ -494,7 +494,7 @@ lemma leftAdjointObjIsDefined_colimit
 
 中文:
 引理 leftAdjointObjIsDefined_colimit
-  结论: {J : 类型} [Category* J] (R : J ⥤ C)
+  结论: {J : 类型} [范畴* J] (R : J ⥤ C)
   证明: leftAdjointObjIsDefined_of_isColimit (colimit.isColimit R) h
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, leftAdjointObjIsDefined_of_isColimit
@@ -521,7 +521,7 @@ definition rightAdjointObjIsDefined
 
 中文:
 定义 rightAdjointObjIsDefined
-  签名: : Object命题erty D
+  签名: : ObjectProperty D
   定义体: fun Y => IsRepresentable (F.op ⋙ yoneda.obj Y)
 
 Depends on / 依赖: F.op, IsRepresentable, yoneda, yoneda.obj
@@ -886,7 +886,7 @@ definition representableByCompYonedaObjOfIsLimit
 
 中文:
 定义 representableByCompYonedaObjOfIsLimit
-  签名: {J : 类型} [Category* J]
+  签名: {J : 类型} [范畴* J]
   定义体: { toFun := fun f => hc.lift (Cone.mk _
         { app := fun j => F.partialRightAdjointHomEquiv (f ≫ c'.π.app j)
           naturality := fun j j' φ => by
@@ -933,7 +933,7 @@ lemma rightAdjointObjIsDefined_of_isLimit
 
 中文:
 引理 rightAdjointObjIsDefined_of_isLimit
-  结论: {J : 类型} [Category* J] {R : J ⥤ D} {c : Cone R}
+  结论: {J : 类型} [范畴* J] {R : J ⥤ D} {c : 锥 R}
   证明: (representableByCompYonedaObjOfIsLimit
     (R := ObjectProperty.lift _ R h) hc (limit.isLimit _)).isRepresentable
 
@@ -956,7 +956,7 @@ lemma rightAdjointObjIsDefined_limit
 
 中文:
 引理 rightAdjointObjIsDefined_limit
-  结论: {J : 类型} [Category* J] (R : J ⥤ D)
+  结论: {J : 类型} [范畴* J] (R : J ⥤ D)
   证明: rightAdjointObjIsDefined_of_isLimit (limit.isLimit R) h
 
 Depends on / 依赖: isLimit, limit.isLimit, rightAdjointObjIsDefined_of_isLimit

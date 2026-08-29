@@ -112,7 +112,7 @@ lemma continuous_mul_log
 
 中文:
 引理 continuous_mul_log
-  结论: Continuous fun x => x * log x
+  结论: 连续 fun x => x * log x
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -151,8 +151,8 @@ lemma Continuous.mul_log
   proof: continuous_mul_log.comp hf
 
 中文:
-引理 Continuous.mul_log
-  条件: {α : 类型} [TopologicalSpace α] {f : α -> 实数} (hf : Continuous f)
+引理 连续.mul_log
+  条件: {α : 类型} [拓扑空间 α] {f : α -> 实数} (hf : 连续 f)
   证明: continuous_mul_log.comp hf
 
 Depends on / 依赖: continuous_mul_log, continuous_mul_log.comp
@@ -215,7 +215,7 @@ lemma hasDerivAt_mul_log
 中文:
 引理 hasDerivAt_mul_log
   条件: {x : 实数} (hx : x != 0)
-  结论: HasDerivAt (fun x => x * log x) (log x + 1) x
+  结论: 在点处可导 (fun x => x * log x) (log x + 1) x
   证明: by
   rw [← deriv_mul_log hx]; rw [hasDerivAt_deriv_iff]
   refine DifferentiableOn.differentiableAt differentiableOn_mul_log ?_
@@ -472,7 +472,7 @@ lemma strictConvexOn_mul_log
 
 中文:
 引理 strictConvexOn_mul_log
-  结论: StrictConvexOn 实数 (Set.Ici (0 : 实数)) (fun x => x * log x)
+  结论: StrictConvexOn 实数 (集合.左闭右无界区间 (0 : 实数)) (fun x => x * log x)
   证明: by
   refine strictConvexOn_of_deriv2_pos (convex_Ici 0) (continuous_mul_log.continuousOn) ?_
   intro x hx
@@ -499,7 +499,7 @@ lemma convexOn_mul_log
 
 中文:
 引理 convexOn_mul_log
-  结论: ConvexOn 实数 (Set.Ici (0 : 实数)) (fun x => x * log x)
+  结论: ConvexOn 实数 (集合.左闭右无界区间 (0 : 实数)) (fun x => x * log x)
   证明: strictConvexOn_mul_log.convexOn
 
 Depends on / 依赖: convexOn, strictConvexOn_mul_log, strictConvexOn_mul_log.convexOn
@@ -741,7 +741,7 @@ lemma continuous_negMulLog
 
 中文:
 引理 continuous_negMulLog
-  结论: Continuous negMulLog
+  结论: 连续 negMulLog
   证明: by
   simpa only [negMulLog_eq_neg] using continuous_mul_log.fun_neg
 -/
@@ -857,7 +857,7 @@ lemma hasDerivAt_negMulLog
 中文:
 引理 hasDerivAt_negMulLog
   条件: {x : 实数} (hx : x != 0)
-  结论: HasDerivAt negMulLog (- log x - 1) x
+  结论: 在点处可导 negMulLog (- log x - 1) x
   证明: by
   rw [← deriv_negMulLog hx]; rw [hasDerivAt_deriv_iff]
   refine DifferentiableOn.differentiableAt differentiableOn_negMulLog ?_
@@ -915,7 +915,7 @@ lemma strictConcaveOn_negMulLog
 
 中文:
 引理 strictConcaveOn_negMulLog
-  结论: StrictConcaveOn 实数 (Set.Ici (0 : 实数)) negMulLog
+  结论: StrictConcaveOn 实数 (集合.左闭右无界区间 (0 : 实数)) negMulLog
   证明: by
   simpa only [negMulLog_eq_neg] using! strictConvexOn_mul_log.neg
 
@@ -934,7 +934,7 @@ lemma concaveOn_negMulLog
 
 中文:
 引理 concaveOn_negMulLog
-  结论: ConcaveOn 实数 (Set.Ici (0 : 实数)) negMulLog
+  结论: ConcaveOn 实数 (集合.左闭右无界区间 (0 : 实数)) negMulLog
   证明: strictConcaveOn_negMulLog.concaveOn
 
 Depends on / 依赖: concaveOn, strictConcaveOn_negMulLog, strictConcaveOn_negMulLog.concaveOn

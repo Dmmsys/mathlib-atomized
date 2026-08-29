@@ -67,7 +67,7 @@ theorem _root_.IsFractional.map
 
 中文:
 定理 _root_.IsFractional.map
-  条件: (g : P ->ₐ[R] P') {I : Submodule R P}
+  条件: (g : P ->ₐ[R] P') {I : 子模 R P}
   证明: Submodule.mem_map.mp hb
       rw [AlgHom.toLinearMap_apply] at hb'
       obtain ⟨x, hx⟩ := hI b' b'_mem
@@ -165,7 +165,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: I.map (AlgHom.id _ _) = I
+  结论: I.map (代数态射.id _ _) = I
   证明: coeToSubmodule_injective (Submodule.map_id (I : Submodule R P))
 
 @[simp]
@@ -216,7 +216,7 @@ theorem map_coeIdeal
 
 中文:
 定理 map_coeIdeal
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: (I : FractionalIdeal S P).map g = I
   证明: by
   ext x
@@ -376,7 +376,7 @@ theorem map_mem_map
 
 中文:
 定理 map_mem_map
-  条件: {f : P ->ₐ[R] P'} (h : Function.Injective f) {x : P} {I : FractionalIdeal S P}
+  条件: {f : P ->ₐ[R] P'} (h : 函数.单射 f) {x : P} {I : FractionalIdeal S P}
   证明: mem_map.trans ⟨fun ⟨_, hx', x'_eq⟩ => h x'_eq ▸ hx', fun h => ⟨x, h, rfl⟩⟩
 
 Depends on / 依赖: mem_map, mem_map.trans
@@ -396,7 +396,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (f : P ->ₐ[R] P') (h : Function.Injective f)
+  条件: (f : P ->ₐ[R] P') (h : 函数.单射 f)
   证明: fun _ _ hIJ =>
   ext fun _ => (map_mem_map h).symm.trans (hIJ.symm ▸ map_mem_map h)
 -/
@@ -517,7 +517,7 @@ theorem mapEquiv_refl
 
 中文:
 定理 mapEquiv_refl
-  结论: mapEquiv AlgEquiv.refl = RingEquiv.refl (FractionalIdeal S P)
+  结论: mapEquiv 代数等价.refl = 环等价.refl (FractionalIdeal S P)
   证明: RingEquiv.ext fun x => by simp
 
 Depends on / 依赖: RingEquiv, RingEquiv.ext
@@ -543,7 +543,7 @@ theorem isFractional_span_iff
 
 中文:
 定理 isFractional_span_iff
-  条件: {s : Set P}
+  条件: {s : 集合 P}
   证明: ⟨fun ⟨a, a_mem, h⟩ => ⟨a, a_mem, fun b hb => h b (subset_span hb)⟩, fun ⟨a, a_mem, h⟩ =>
     ⟨a, a_mem, fun _ hb =>
       span_induction (hx := hb) h
@@ -585,7 +585,7 @@ theorem isFractional_of_fg
 
 中文:
 定理 isFractional_of_fg
-  条件: [IsLocalization S P] {I : Submodule R P} (hI : I.FG)
+  条件: [是Localization S P] {I : 子模 R P} (hI : I.FG)
   证明: by
   rcases hI with ⟨I, rfl⟩
   rcases exist_integer_multiples_of_finset S I with ⟨⟨s, hs1⟩, hs⟩
@@ -629,8 +629,8 @@ lemma _root_.Units.submodule_isFractional
   proof: FractionalIdeal.isFractional_of_fg (fg_unit _)
 
 中文:
-引理 _root_.Units.submodule_isFractional
-  条件: [IsLocalization S P] (I : (Submodule R P)ˣ)
+引理 _root_.单位群.submodule_isFractional
+  条件: [是Localization S P] (I : (子模 R P)ˣ)
   证明: FractionalIdeal.isFractional_of_fg (fg_unit _)
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.isFractional_of_fg, fg_unit, isFractional_of_fg
@@ -655,7 +655,7 @@ coeToSubmodule_inj.mp by rw [coe_mul, coe_one]; exact I.inv_mul⟩
 
 中文:
 定义 unitsMulEquivSubmodule
-  签名: [IsLocalization S P]
+  签名: [是Localization S P]
   定义体: Units.map (coeSubmoduleHom S P)
   invFun I := ⟨⟨I, I.submodule_isFractional⟩, ⟨↑I⁻¹, I⁻¹.submodule_isFractional⟩,
 coeToSubmodule_inj.mp by rw [coe_mul, coe_one]; exact I.mul_inv,
@@ -685,7 +685,7 @@ theorem coeIdeal_fg
 
 中文:
 定理 coeIdeal_fg
-  条件: (inj : Function.Injective (algebraMap R P)) (I : Ideal R)
+  条件: (inj : 函数.单射 (algebraMap R P)) (I : 理想 R)
   证明: coeSubmodule_fg _ inj _
 
 Depends on / 依赖: coeSubmodule_fg
@@ -706,7 +706,7 @@ theorem fg_unit
 中文:
 定理 fg_unit
   条件: (I : (FractionalIdeal S P)ˣ)
-  结论: FG (I : Submodule R P)
+  结论: FG (I : 子模 R P)
   证明: Submodule.fg_unit Units.map (coeSubmoduleHom S P).toMonoidHom I
 
 Depends on / 依赖: Submodule, Submodule.fg_unit, Units.map, coeSubmoduleHom, fg_unit, toMonoidHom
@@ -725,8 +725,8 @@ theorem fg_of_isUnit
 
 中文:
 定理 fg_of_isUnit
-  条件: (I : FractionalIdeal S P) (h : IsUnit I)
-  结论: FG (I : Submodule R P)
+  条件: (I : FractionalIdeal S P) (h : 是单位 I)
+  结论: FG (I : 子模 R P)
   证明: fg_unit h.unit
 
 Depends on / 依赖: fg_unit, h.unit
@@ -745,8 +745,8 @@ theorem _root_.Ideal.fg_of_isUnit
   exact FractionalIdeal.fg_of_isUnit (R := R) I h
 
 中文:
-定理 _root_.Ideal.fg_of_isUnit
-  结论: (inj : Function.Injective (algebraMap R P)) (I : Ideal R)
+定理 _root_.理想.fg_of_isUnit
+  结论: (inj : 函数.单射 (algebraMap R P)) (I : 理想 R)
   证明: by
   rw [← coeIdeal_fg S inj I]
   exact FractionalIdeal.fg_of_isUnit (R := R) I h
@@ -867,7 +867,7 @@ theorem canonicalEquiv_canonicalEquiv
 
 中文:
 定理 canonicalEquiv_canonicalEquiv
-  结论: (P'' : 类型) [CommRing P''] [Algebra R P'']
+  结论: (P'' : 类型) [交换环 P''] [代数 R P'']
   证明: by
   ext
   simp [IsLocalization.map_map]
@@ -890,7 +890,7 @@ theorem canonicalEquiv_trans_canonicalEquiv
 
 中文:
 定理 canonicalEquiv_trans_canonicalEquiv
-  结论: (P'' : 类型) [CommRing P''] [Algebra R P'']
+  结论: (P'' : 类型) [交换环 P''] [代数 R P'']
   证明: RingEquiv.ext (canonicalEquiv_canonicalEquiv S P P' P'')
 
 Depends on / 依赖: RingEquiv, RingEquiv.ext, canonicalEquiv_canonicalEquiv
@@ -917,7 +917,7 @@ theorem canonicalEquiv_coeIdeal
 
 中文:
 定理 canonicalEquiv_coeIdeal
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: canonicalEquiv S P P' I = I
   证明: by
   ext
@@ -945,7 +945,7 @@ theorem canonicalEquiv_self
 
 中文:
 定理 canonicalEquiv_self
-  结论: canonicalEquiv S P P = RingEquiv.refl _
+  结论: canonicalEquiv S P P = 环等价.refl _
   证明: by
   rw [← canonicalEquiv_trans_canonicalEquiv S P P]
   convert! (canonicalEquiv S P P).symm_trans_self
@@ -990,8 +990,8 @@ theorem exists_ne_zero_mem_isInteger
   
 
 中文:
-定理 exists_ne_zero_mem_isInteger
-  条件: [Nontrivial R] (hI : I != 0)
+定理 存在_ne_zero_mem_is整数eger
+  条件: [非平凡 R] (hI : I != 0)
   证明: by
   obtain ⟨y : K, y_mem, y_notMem⟩ :=
     SetLike.exists_of_lt (bot_lt_iff_ne_bot.mpr hI)
@@ -1032,7 +1032,7 @@ theorem map_ne_zero
 
 中文:
 定理 map_ne_zero
-  条件: [Nontrivial R] (hI : I != 0)
+  条件: [非平凡 R] (hI : I != 0)
   结论: I.map h != 0
   证明: by
   obtain ⟨x, x_ne_zero, hx⟩ := exists_ne_zero_mem_isInteger hI
@@ -1062,7 +1062,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: I.map h = 0 ↔ I = 0
   证明: ⟨not_imp_not.mp (map_ne_zero _), fun hI => hI.symm ▸ FractionalIdeal.map_zero h⟩
 
@@ -1081,7 +1081,7 @@ theorem coeIdeal_injective
 
 中文:
 定理 coeIdeal_injective
-  结论: Function.Injective (fun (I : Ideal R) => (I : FractionalIdeal R⁰ K))
+  结论: 函数.单射 (fun (I : 理想 R) => (I : FractionalIdeal R⁰ K))
   证明: coeIdeal_injective' le_rfl
 
 Depends on / 依赖: coeIdeal_injective, le_rfl
@@ -1101,7 +1101,7 @@ theorem coeIdeal_inj
 
 中文:
 定理 coeIdeal_inj
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   证明: coeIdeal_inj' le_rfl
 
 @[simp]
@@ -1124,7 +1124,7 @@ theorem coeIdeal_eq_zero
 
 中文:
 定理 coeIdeal_eq_zero
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: (I : FractionalIdeal R⁰ K) = 0 ↔ I = ⊥
   证明: coeIdeal_eq_zero' le_rfl
 
@@ -1146,7 +1146,7 @@ theorem coeIdeal_ne_zero
 
 中文:
 定理 coeIdeal_ne_zero
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: (I : FractionalIdeal R⁰ K) != 0 ↔ I != ⊥
   证明: coeIdeal_ne_zero' le_rfl
 
@@ -1170,7 +1170,7 @@ theorem coeIdeal_eq_one
 
 中文:
 定理 coeIdeal_eq_one
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: (I : FractionalIdeal R⁰ K) = 1 ↔ I = 1
   证明: by
   simpa only [Ideal.one_eq_top] using! coeIdeal_inj
@@ -1191,7 +1191,7 @@ theorem coeIdeal_ne_one
 
 中文:
 定理 coeIdeal_ne_one
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: (I : FractionalIdeal R⁰ K) != 1 ↔ I != 1
   证明: not_iff_not.mpr coeIdeal_eq_one
 
@@ -1212,7 +1212,7 @@ theorem num_eq_zero_iff
 
 中文:
 定理 num_eq_zero_iff
-  条件: [IsDomain R] {I : FractionalIdeal R⁰ K}
+  条件: [是整环 R] {I : FractionalIdeal R⁰ K}
   结论: I.num = 0 ↔ I = 0 where
   证明: zero_of_num_eq_bot zero_notMem_nonZeroDivisors h
   mpr h := h ▸ num_zero_eq (IsFractionRing.injective R K)
@@ -1255,7 +1255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (FractionalIdeal R₁⁰ K)
+  签名: 非平凡 (FractionalIdeal R₁⁰ K)
   定义体: ⟨⟨0, 1, fun h =>
       have : (1 : K) in (0 : FractionalIdeal R₁⁰ K) := by
         rw [← (algebraMap R₁ K).map_one]
@@ -1319,7 +1319,7 @@ theorem _root_.IsFractional.div_of_nonzero
 
 中文:
 定理 _root_.IsFractional.div_of_nonzero
-  条件: {I J : Submodule R₁ K}
+  条件: {I J : 子模 R₁ K}
   证明: SetLike.exists_of_lt (show 0 < J by simpa only using! bot_lt_iff_ne_bot.mpr h)
     obtain ⟨y', hy'⟩ := hJ y mem_J
     use aI * y'
@@ -1386,7 +1386,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (FractionalIdeal R₁⁰ K)
+  签名: 除法 (FractionalIdeal R₁⁰ K)
   定义体: ⟨fun I J => if h : J = 0 then 0 else ⟨I / J, isFractional_div_of_ne_zero h⟩⟩
 
 Depends on / 依赖: isFractional_div_of_ne_zero
@@ -1834,7 +1834,7 @@ theorem eq_zero_or_one_of_isField
 
 中文:
 定理 eq_zero_or_one_of_isField
-  条件: (hF : IsField R₁) (I : FractionalIdeal R₁⁰ K)
+  条件: (hF : 是域 R₁) (I : FractionalIdeal R₁⁰ K)
   结论: I = 0 ∨ I = 1
   证明: letI : Field R₁ := hF.toField
   eq_zero_or_one I
@@ -1873,7 +1873,7 @@ definition spanFinset
 
 中文:
 定义 spanFinset
-  签名: {ι : 类型} (s : Finset ι) (f : ι -> K)
+  签名: {ι : 类型} (s : 有限集 ι) (f : ι -> K)
   定义体: ⟨Submodule.span R₁ (f '' s), by
     obtain ⟨a', ha'⟩ := IsLocalization.exist_integer_multiples R₁⁰ s f
     refine ⟨a', a'.2, fun x hx => Submodule.span_induction ?_ ?_ ?_ ?_ hx⟩
@@ -1910,7 +1910,7 @@ lemma spanFinset_coe
 
 中文:
 引理 spanFinset_coe
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> K)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> K)
   证明: rfl
 -/
 @[simp] lemma spanFinset_coe {ι : Type*} (s : Finset ι) (f : ι -> K) :
@@ -1932,7 +1932,7 @@ theorem spanFinset_eq_zero
 
 中文:
 定理 spanFinset_eq_zero
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> K}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> K}
   证明: by
   simp only [← coeToSubmodule_inj, spanFinset_coe, coe_zero, Submodule.span_eq_bot,
     Set.mem_image, Finset.mem_coe, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
@@ -1954,7 +1954,7 @@ theorem spanFinset_ne_zero
 
 中文:
 定理 spanFinset_ne_zero
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> K}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> K}
   证明: by simp
 -/
 theorem spanFinset_ne_zero {ι : Type*} {s : Finset ι} {f : ι -> K} :
@@ -1977,7 +1977,7 @@ theorem isFractional_span_singleton
 中文:
 定理 isFractional_span_singleton
   条件: (x : P)
-  结论: IsFractional S (span R {x} : Submodule R P)
+  结论: IsFractional S (span R {x} : 子模 R P)
   证明: let ⟨a, ha⟩ := exists_integer_multiple S x
   isFractional_span_iff.mpr ⟨a, a.2, fun _ hx' => (Set.mem_singleton_iff.mp hx').symm ▸ ha⟩
 
@@ -2011,7 +2011,7 @@ theorem coe_spanSingleton
 中文:
 定理 coe_spanSingleton
   条件: (x : P)
-  结论: (spanSingleton S x : Submodule R P) = span R {x}
+  结论: (spanSingleton S x : 子模 R P) = span R {x}
   证明: by
   rw [spanSingleton]
   rfl
@@ -2147,7 +2147,7 @@ theorem spanSingleton_eq_spanSingleton
 
 中文:
 定理 spanSingleton_eq_spanSingleton
-  条件: [IsDomain R] [Module.IsTorsionFree R P] {x y : P}
+  条件: [是整环 R] [模.是无挠 R P] {x y : P}
   证明: by
   rw [← Submodule.span_singleton_eq_span_singleton]; rw [spanSingleton]; rw [spanSingleton]
   exact Subtype.mk_eq_mk
@@ -2173,7 +2173,7 @@ theorem eq_spanSingleton_of_principal
 
 中文:
 定理 eq_spanSingleton_of_principal
-  条件: (I : FractionalIdeal S P) [IsPrincipal (I : Submodule R P)]
+  条件: (I : FractionalIdeal S P) [是Principal (I : 子模 R P)]
   证明: by
   -- Porting note: this used to be `coeToSubmodule_injective (span_singleton_generator ↑I).symm`
   -- but Lean 4 struggled to unify everything. Turned it into an explicit `rw`.
@@ -2449,7 +2449,7 @@ theorem canonicalEquiv_spanSingleton
 
 中文:
 定理 canonicalEquiv_spanSingleton
-  结论: {P'} [CommRing P'] [Algebra R P'] [IsLocalization S P']
+  结论: {P'} [交换环 P'] [代数 R P'] [是Localization S P']
   证明: by
   apply SetLike.ext_iff.mpr
   intro y
@@ -2545,7 +2545,7 @@ theorem mk'_mul_coeIdeal_eq_coeIdeal
 
 中文:
 定理 mk'_mul_coeIdeal_eq_coeIdeal
-  条件: {I J : Ideal R₁} {x y : R₁} (hy : y in R₁⁰)
+  条件: {I J : 理想 R₁} {x y : R₁} (hy : y in R₁⁰)
   证明: by
   have :
     spanSingleton R₁⁰ (IsLocalization.mk' _ (1 : R₁) ⟨y, hy⟩) *
@@ -2582,7 +2582,7 @@ theorem spanSingleton_mul_coeIdeal_eq_coeIdeal
 
 中文:
 定理 spanSingleton_mul_coeIdeal_eq_coeIdeal
-  条件: {I J : Ideal R₁} {z : K}
+  条件: {I J : 理想 R₁} {z : K}
   证明: by
   rw [← mk'_mul_coeIdeal_eq_coeIdeal K (IsLocalization.sec R₁⁰ z).2.prop]; rw [IsLocalization.mk'_sec K z]
 
@@ -2687,7 +2687,7 @@ theorem exists_eq_spanSingleton_mul
       Submodule.comap (Algebra.linearMap R₁ K) ↑(spanSingleton
 
 中文:
-定理 exists_eq_spanSingleton_mul
+定理 存在_eq_spanSingleton_mul
   条件: (I : FractionalIdeal R₁⁰ K)
   证明: by
   obtain ⟨a_inv, nonzero, ha⟩ := I.isFractional
@@ -2735,7 +2735,7 @@ theorem ideal_factor_ne_zero
 
 中文:
 定理 ideal_factor_ne_zero
-  结论: {R} [CommRing R] {K : 类型} [Field K] [Algebra R K]
+  结论: {R} [交换环 R] {K : 类型} [域 K] [代数 R K]
   证明: fun h => by
   rw [h]; rw [Ideal.zero_eq_bot]; rw [coeIdeal_bot]; rw [mul_zero] at haJ
   exact hI haJ
@@ -2761,7 +2761,7 @@ theorem constant_factor_ne_zero
 
 中文:
 定理 constant_factor_ne_zero
-  结论: {R} [CommRing R] {K : 类型} [Field K] [Algebra R K]
+  结论: {R} [交换环 R] {K : 类型} [域 K] [代数 R K]
   证明: fun h => by
   rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot] at h
   rw [h]; rw [map_zero]; rw [inv_zero]; rw [spanSingleton_zero]; rw [zero_mul] at haJ
@@ -2793,7 +2793,7 @@ instance isPrincipal
 
 中文:
 实例 isPrincipal
-  签名: {R} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R] [Algebra R K]
+  签名: {R} [交换环 R] [是整环 R] [是主理想环 R] [代数 R K]
   定义体: by
   obtain ⟨a, aI, -, ha⟩ := exists_eq_spanSingleton_mul I
   use (algebraMap R K a)⁻¹ * algebraMap R K (generator aI)
@@ -2938,7 +2938,7 @@ theorem isPrincipal_of_isPrincipal_num
 
 中文:
 定理 isPrincipal_of_isPrincipal_num
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: Module.isPrincipal_submodule_iff.mp
  (FractionalIdeal.equivNumOfIsLocalization I).isPrincipal_iff.mpr
  Module.isPrincipal_submodule_iff.mpr hI
@@ -2970,7 +2970,7 @@ theorem isNoetherian_zero
 
 中文:
 定理 isNoetherian_zero
-  结论: IsNoetherian R₁ (0 : FractionalIdeal R₁⁰ K)
+  结论: 是Noether R₁ (0 : FractionalIdeal R₁⁰ K)
   证明: isNoetherian_submodule.mpr fun I (hI : I <= (0 : FractionalIdeal R₁⁰ K)) => by
     rw [coe_zero]; rw [le_bot_iff] at hI
     rw [hI]
@@ -3017,7 +3017,7 @@ theorem isNoetherian_coeIdeal
 
 中文:
 定理 isNoetherian_coeIdeal
-  条件: [IsNoetherianRing R₁] (I : Ideal R₁)
+  条件: [是Noether环 R₁] (I : 理想 R₁)
   证明: by
   rw [isNoetherian_iff]
   intro J hJ
@@ -3096,8 +3096,8 @@ theorem isNoetherian
 
 中文:
 定理 isNoetherian
-  条件: [IsNoetherianRing R₁] (I : FractionalIdeal R₁⁰ K)
-  结论: IsNoetherian R₁ I
+  条件: [是Noether环 R₁] (I : FractionalIdeal R₁⁰ K)
+  结论: 是Noether R₁ I
   证明: by
   obtain ⟨d, J, _, rfl⟩ := exists_eq_spanSingleton_mul I
   apply isNoetherian_spanSingleton_inv_to_map_mul
@@ -3125,7 +3125,7 @@ theorem isFractional_adjoin_integral
 
 中文:
 定理 isFractional_adjoin_integral
-  条件: (hx : Is整数egral R x)
+  条件: (hx : 是整 R x)
   证明: isFractional_of_fg hx.fg_adjoin_singleton
 
 Depends on / 依赖: fg_adjoin_singleton, hx.fg_adjoin_singleton, isFractional_of_fg
@@ -3147,8 +3147,8 @@ definition adjoinIntegral
 @[simp]
 
 中文:
-定义 adjoinIntegral
-  签名: (hx : Is整数egral R x)
+定义 adjoin整数egral
+  签名: (hx : 是整 R x)
   定义体: ⟨_, isFractional_adjoin_integral S x hx⟩
 
 @[simp]
@@ -3168,8 +3168,8 @@ theorem adjoinIntegral_coe
   proof: rfl
 
 中文:
-定理 adjoinIntegral_coe
-  条件: (hx : Is整数egral R x)
+定理 adjoin整数egral_coe
+  条件: (hx : 是整 R x)
   证明: rfl
 -/
 theorem adjoinIntegral_coe (hx : IsIntegral R x) :
@@ -3187,8 +3187,8 @@ theorem mem_adjoinIntegral_self
   proof: Algebra.subset_adjoin (Set.mem_singleton x)
 
 中文:
-定理 mem_adjoinIntegral_self
-  条件: (hx : Is整数egral R x)
+定理 mem_adjoin整数egral_self
+  条件: (hx : 是整 R x)
   结论: x in adjoin整数egral S x hx
   证明: Algebra.subset_adjoin (Set.mem_singleton x)
 
@@ -3228,7 +3228,7 @@ theorem _root_.IsFractional.mapEquiv
 
 中文:
 定理 _root_.IsFractional.mapEquiv
-  条件: {I : Submodule R K} (hI : IsFractional R⁰ I)
+  条件: {I : 子模 R K} (hI : IsFractional R⁰ I)
   证明: by
   simp only [IsFractional, mem_nonZeroDivisors_iff_ne_zero, ne_eq, Submodule.mem_map,
     forall_exists_index, and_imp, forall_apply_eq_imp_iff₂] at hI ⊢
@@ -3364,7 +3364,7 @@ lemma ringEquivOfRingEquiv_trans
 
 中文:
 引理 ringEquivOfRingEquiv_trans
-  结论: {T : 类型} [CommRing T] [IsDomain T] (M : 类型) [CommRing M]
+  结论: {T : 类型} [交换环 T] [是整环 T] (M : 类型) [交换环 M]
   证明: by
   have : RingHomCompTriple f (g : S ->+* T) (f.trans g : R ->+* T) := ⟨rfl⟩
   ext1 I
@@ -3395,7 +3395,7 @@ lemma ringEquivOfRingEquiv_trans_apply
 
 中文:
 引理 ringEquivOfRingEquiv_trans_apply
-  结论: {T : 类型} [CommRing T] [IsDomain T] (M : 类型)
+  结论: {T : 类型} [交换环 T] [是整环 T] (M : 类型)
   证明: by
   simp [ringEquivOfRingEquiv_trans K L M]
 

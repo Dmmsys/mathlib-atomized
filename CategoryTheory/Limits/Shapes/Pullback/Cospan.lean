@@ -43,7 +43,7 @@ abbreviation WalkingCospan
 
 中文:
 缩写 WalkingCospan
-  签名: : Type
+  签名: : 类型
   定义体: WidePullbackShape WalkingPair
 
 Depends on / 依赖: F.map, W.of_postcomp, WalkingPair, WidePullbackShape, of_postcomp
@@ -119,7 +119,7 @@ abbreviation WalkingSpan
 
 中文:
 缩写 WalkingSpan
-  签名: : Type
+  签名: : 类型
   定义体: WidePushoutShape WalkingPair
 
 Depends on / 依赖: WalkingPair, WidePushoutShape
@@ -196,8 +196,8 @@ abbreviation Hom
   body: WidePullbackShape.Hom
 
 中文:
-缩写 Hom
-  签名: : WalkingCospan -> WalkingCospan -> Type
+缩写 态射
+  签名: : WalkingCospan -> WalkingCospan -> 类型
   定义体: WidePullbackShape.Hom
 
 Depends on / 依赖: WidePullbackShape, WidePullbackShape.Hom
@@ -216,7 +216,7 @@ abbreviation Hom.inl
   body: WidePullbackShape.Hom.term _
 
 中文:
-缩写 Hom.inl
+缩写 态射.inl
   签名: : left ⟶ one
   定义体: WidePullbackShape.Hom.term _
 
@@ -236,7 +236,7 @@ abbreviation Hom.inr
   body: WidePullbackShape.Hom.term _
 
 中文:
-缩写 Hom.inr
+缩写 态射.inr
   签名: : right ⟶ one
   定义体: WidePullbackShape.Hom.term _
 
@@ -256,7 +256,7 @@ abbreviation Hom.id
   body: WidePullbackShape.Hom.id X
 
 中文:
-缩写 Hom.id
+缩写 态射.id
   签名: (X : WalkingCospan)
   定义体: WidePullbackShape.Hom.id X
 -/
@@ -279,8 +279,8 @@ abbreviation Hom
   body: WidePushoutShape.Hom
 
 中文:
-缩写 Hom
-  签名: : WalkingSpan -> WalkingSpan -> Type
+缩写 态射
+  签名: : WalkingSpan -> WalkingSpan -> 类型
   定义体: WidePushoutShape.Hom
 
 Depends on / 依赖: WidePushoutShape, WidePushoutShape.Hom
@@ -299,7 +299,7 @@ abbreviation Hom.fst
   body: WidePushoutShape.Hom.init _
 
 中文:
-缩写 Hom.fst
+缩写 态射.fst
   签名: : zero ⟶ left
   定义体: WidePushoutShape.Hom.init _
 
@@ -319,7 +319,7 @@ abbreviation Hom.snd
   body: WidePushoutShape.Hom.init _
 
 中文:
-缩写 Hom.snd
+缩写 态射.snd
   签名: : zero ⟶ right
   定义体: WidePushoutShape.Hom.init _
 
@@ -339,7 +339,7 @@ abbreviation Hom.id
   body: WidePushoutShape.Hom.id X
 
 中文:
-缩写 Hom.id
+缩写 态射.id
   签名: (X : WalkingSpan)
   定义体: WidePushoutShape.Hom.id X
 -/
@@ -375,7 +375,7 @@ definition WalkingCospan.ext
 
 中文:
 定义 WalkingCospan.ext
-  签名: {F : WalkingCospan ⥤ C} {s t : Cone F} (i : s.pt ≅ t.pt)
+  签名: {F : WalkingCospan ⥤ C} {s t : 锥 F} (i : s.pt ≅ t.pt)
   定义体: by
   apply Cone.ext i _
   rintro (⟨⟩ | ⟨⟨⟩⟩)
@@ -426,7 +426,7 @@ definition WalkingSpan.ext
 
 中文:
 定义 WalkingSpan.ext
-  签名: {F : WalkingSpan ⥤ C} {s t : Cocone F} (i : s.pt ≅ t.pt)
+  签名: {F : WalkingSpan ⥤ C} {s t : 余锥 F} (i : s.pt ≅ t.pt)
   定义体: by
   apply Cocone.ext i _
   rintro (⟨⟩ | ⟨⟨⟩⟩)
@@ -678,7 +678,7 @@ theorem span_map_fst
 中文:
 定理 span_map_fst
   条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).map WalkingSpan.Hom.fst = f
+  结论: (span f g).map WalkingSpan.态射.fst = f
   证明: rfl
 
 @[simp]
@@ -720,7 +720,7 @@ theorem span_map_snd
 中文:
 定理 span_map_snd
   条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).map WalkingSpan.Hom.snd = g
+  结论: (span f g).map WalkingSpan.态射.snd = g
   证明: rfl
 -/
 theorem span_map_snd {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).map WalkingSpan.Hom.snd = g :=
@@ -855,7 +855,7 @@ theorem cospanCompIso_app_left
 
 中文:
 定理 cospanCompIso_app_left
-  结论: (cospanCompIso F f g).app WalkingCospan.left = Iso.refl _
+  结论: (cospanCompIso F f g).app WalkingCospan.left = 同构.refl _
   证明: rfl
 
 @[simp]
@@ -875,7 +875,7 @@ theorem cospanCompIso_app_right
 
 中文:
 定理 cospanCompIso_app_right
-  结论: (cospanCompIso F f g).app WalkingCospan.right = Iso.refl _
+  结论: (cospanCompIso F f g).app WalkingCospan.right = 同构.refl _
   证明: rfl
 
 @[simp]
@@ -896,7 +896,7 @@ theorem cospanCompIso_app_one
 
 中文:
 定理 cospanCompIso_app_one
-  结论: (cospanCompIso F f g).app WalkingCospan.one = Iso.refl _
+  结论: (cospanCompIso F f g).app WalkingCospan.one = 同构.refl _
   证明: rfl
 
 @[simp]
@@ -1066,7 +1066,7 @@ theorem spanCompIso_app_left
 
 中文:
 定理 spanCompIso_app_left
-  结论: (spanCompIso F f g).app WalkingSpan.left = Iso.refl _
+  结论: (spanCompIso F f g).app WalkingSpan.left = 同构.refl _
   证明: rfl
 
 @[simp]
@@ -1086,7 +1086,7 @@ theorem spanCompIso_app_right
 
 中文:
 定理 spanCompIso_app_right
-  结论: (spanCompIso F f g).app WalkingSpan.right = Iso.refl _
+  结论: (spanCompIso F f g).app WalkingSpan.right = 同构.refl _
   证明: rfl
 
 @[simp]
@@ -1106,7 +1106,7 @@ theorem spanCompIso_app_zero
 
 中文:
 定理 spanCompIso_app_zero
-  结论: (spanCompIso F f g).app WalkingSpan.zero = Iso.refl _
+  结论: (spanCompIso F f g).app WalkingSpan.zero = 同构.refl _
   证明: rfl
 
 @[simp]

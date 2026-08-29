@@ -67,7 +67,7 @@ definition subLTerm
 
 中文:
 定义 subLTerm
-  签名: (f : MvPolynomial σ R)
+  签名: (f : 多元多项式 σ R)
   定义体: f - monomial (m.degree f) (m.leadingCoeff f)
 
 Depends on / 依赖: degree, leadingCoeff, m.degree, m.leadingCoeff, monomial
@@ -88,7 +88,7 @@ theorem degree_sub_LTerm_le
 
 中文:
 定理 degree_sub_LTerm_le
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   apply le_trans degree_sub_le
   simp only [sup_le_iff, le_refl, true_and]
@@ -122,7 +122,7 @@ theorem degree_sub_LTerm_lt
 
 中文:
 定理 degree_sub_LTerm_lt
-  条件: {f : MvPolynomial σ R} (hf : m.degree f != 0)
+  条件: {f : 多元多项式 σ R} (hf : m.degree f != 0)
   证明: by
   rw [lt_iff_le_and_ne]
   refine ⟨degree_sub_LTerm_le f, ?_⟩
@@ -165,7 +165,7 @@ definition reduce
 
 中文:
 定义 reduce
-  签名: {b : MvPolynomial σ R} (hb : IsUnit (m.leadingCoeff b)) (f : MvPolynomial σ R)
+  签名: {b : 多元多项式 σ R} (hb : 是单位 (m.leadingCoeff b)) (f : 多元多项式 σ R)
   定义体: f - monomial (m.degree f - m.degree b) (hb.unit⁻¹ * m.leadingCoeff f) * b
 
 Depends on / 依赖: degree, hb.unit, leadingCoeff, m.degree, m.leadingCoeff, monomial
@@ -192,7 +192,7 @@ theorem degree_reduce_lt
 
 中文:
 定理 degree_reduce_lt
-  结论: {f b : MvPolynomial σ R} (hb : IsUnit (m.leadingCoeff b))
+  结论: {f b : 多元多项式 σ R} (hb : 是单位 (m.leadingCoeff b))
   证明: by
   have H : m.degree f =
       m.degree ((monomial (m.degree f - m.degree b)) (hb.unit⁻¹ * m.leadingCoeff f)) +
@@ -255,7 +255,7 @@ theorem div
 
 中文:
 定理 div
-  结论: {ι : 类型} {b : ι -> MvPolynomial σ R}
+  结论: {ι : 类型} {b : ι -> 多元多项式 σ R}
   证明: by
   by_cases! hb' : exists i, m.degree (b i) = 0
   · obtain ⟨i, hb0⟩ := hb'
@@ -381,7 +381,7 @@ theorem div_set
 
 中文:
 定理 div_set
-  结论: {B : Set (MvPolynomial σ R)}
+  结论: {B : 集合 (多元多项式 σ R)}
   证明: by
   obtain ⟨g, r, H⟩ := m.div (b := fun (p : B) => p) (fun b => hB b b.prop) f
   exact ⟨g, r, H.1, H.2.1, fun c hc b hb => H.2.2 c hc ⟨b, hb⟩⟩
@@ -415,7 +415,7 @@ theorem div_single
 
 中文:
 定理 div_single
-  结论: {b : MvPolynomial σ R}
+  结论: {b : 多元多项式 σ R}
   证明: by
   obtain ⟨g, r, hgr, h1, h2⟩ := div_set (B := {b}) (m := m) (by simp [hb]) f
   specialize h1 ⟨b, by simp⟩

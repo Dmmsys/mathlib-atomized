@@ -52,11 +52,11 @@ structure PartialMap
     - hom : ↑domain ⟶ Y
 
 中文:
-结构 PartialMap
-  参数: (X Y : Scheme.{u})
+结构 Partial映射
+  参数: (X Y : 概形.{u})
   公理与运算 (3 个):
     - domain : X.Opens
-    - dense_domain : Dense (domain : Set X)
+    - dense_domain : 稠密 (domain : 集合 X)
     - hom : ↑domain ⟶ Y
 -/
 structure PartialMap (X Y : Scheme.{u}) where
@@ -76,8 +76,8 @@ abbreviation PartialMap.IsOver
   body: f.hom.IsOver S
 
 中文:
-缩写 PartialMap.IsOver
-  签名: [X.Over S] [Y.Over S] (f : X.PartialMap Y)
+缩写 Partial映射.是Over
+  签名: [X.Over S] [Y.Over S] (f : X.Partial映射 Y)
   定义体: f.hom.IsOver S
 
 Depends on / 依赖: IsOver, f.hom.IsOver
@@ -107,7 +107,7 @@ lemma ext_iff
 
 中文:
 引理 ext_iff
-  条件: (f g : X.PartialMap Y)
+  条件: (f g : X.Partial映射 Y)
   证明: by
   constructor
   · rintro rfl
@@ -144,7 +144,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (f g : X.PartialMap Y) (e : f.domain = g.domain)
+  结论: (f g : X.Partial映射 Y) (e : f.domain = g.domain)
   证明: by
   rw [ext_iff]
   exact ⟨e, H⟩
@@ -171,7 +171,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (f : X.PartialMap Y) (U : X.Opens)
+  签名: (f : X.Partial映射 Y) (U : X.Opens)
   定义体: U
   dense_domain := hU
   hom := X.homOfLE hU' ≫ f.hom
@@ -196,7 +196,7 @@ lemma restrict_id
 
 中文:
 引理 restrict_id
-  条件: (f : X.PartialMap Y)
+  条件: (f : X.Partial映射 Y)
   结论: f.restrict f.domain f.dense_domain le_rfl = f
   证明: by
   ext1 <;> simp [restrict_domain]
@@ -218,7 +218,7 @@ lemma restrict_id_hom
 
 中文:
 引理 restrict_id_hom
-  条件: (f : X.PartialMap Y)
+  条件: (f : X.Partial映射 Y)
   证明: by
   simp
 -/
@@ -240,7 +240,7 @@ lemma restrict_restrict
 
 中文:
 引理 restrict_restrict
-  结论: (f : X.PartialMap Y)
+  结论: (f : X.Partial映射 Y)
   证明: by
   ext1 <;> simp [restrict_domain]
 
@@ -265,7 +265,7 @@ lemma restrict_restrict_hom
 
 中文:
 引理 restrict_restrict_hom
-  结论: (f : X.PartialMap Y)
+  结论: (f : X.Partial映射 Y)
   证明: by
   simp
 -/
@@ -305,7 +305,7 @@ definition compHom
 
 中文:
 定义 compHom
-  签名: (f : X.PartialMap Y) (g : Y ⟶ Z)
+  签名: (f : X.Partial映射 Y) (g : Y ⟶ Z)
   定义体: f.domain
   dense_domain := f.dense_domain
   hom := f.hom ≫ g
@@ -331,7 +331,7 @@ lemma compHom_id
 
 中文:
 引理 compHom_id
-  条件: (f : X.PartialMap Y)
+  条件: (f : X.Partial映射 Y)
   结论: f.compHom (𝟙 Y) = f
   证明: by
   ext <;> simp
@@ -365,7 +365,7 @@ definition _root_.AlgebraicGeometry.Scheme.Hom.toPartialMap
   body: ⟨⊤, dense_univ, X.topIso.hom ≫ f⟩
 
 中文:
-定义 _root_.AlgebraicGeometry.Scheme.Hom.toPartialMap
+定义 _root_.AlgebraicGeometry.概形.态射.toPartialMap
   签名: (f : X ⟶ Y)
   定义体: ⟨⊤, dense_univ, X.topIso.hom ≫ f⟩
 
@@ -389,7 +389,7 @@ lemma _root_.AlgebraicGeometry.Scheme.Hom.toPartialMap_compHom
   proof: rfl
 
 中文:
-引理 _root_.AlgebraicGeometry.Scheme.Hom.toPartialMap_compHom
+引理 _root_.AlgebraicGeometry.概形.态射.toPartialMap_compHom
   条件: (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
@@ -407,7 +407,7 @@ abbreviation id
 
 中文:
 缩写 id
-  签名: : X.PartialMap X
+  签名: : X.Partial映射 X
   定义体: (𝟙 X : X ⟶ X).toPartialMap
 -/
 protected abbrev id : X.PartialMap X := (𝟙 X : X ⟶ X).toPartialMap
@@ -428,7 +428,7 @@ lemma id_compHom
 中文:
 引理 id_compHom
   条件: (f : X ⟶ Y)
-  结论: (PartialMap.id X).compHom f = f.toPartialMap
+  结论: (Partial映射.id X).compHom f = f.toPartialMap
   证明: by
   apply PartialMap.ext _ _ rfl
   simp
@@ -465,7 +465,7 @@ lemma isOver_iff
 
 中文:
 引理 isOver_iff
-  条件: [X.Over S] [Y.Over S] {f : X.PartialMap Y}
+  条件: [X.Over S] [Y.Over S] {f : X.Partial映射 Y}
   证明: by
   simp
 -/
@@ -486,7 +486,7 @@ lemma isOver_iff_eq_restrict
 
 中文:
 引理 isOver_iff_eq_restrict
-  条件: [X.Over S] [Y.Over S] {f : X.PartialMap Y}
+  条件: [X.Over S] [Y.Over S] {f : X.Partial映射 Y}
   证明: by
   simp [PartialMap.ext_iff]
 
@@ -508,7 +508,7 @@ definition fromSpecStalkOfMem
 
 中文:
 定义 fromSpecStalkOfMem
-  签名: (f : X.PartialMap Y) {x} (hx : x in f.domain)
+  签名: (f : X.Partial映射 Y) {x} (hx : x in f.domain)
   定义体: f.domain.fromSpecStalkOfMem x hx ≫ f.hom
 
 Depends on / 依赖: domain, f.domain.fromSpecStalkOfMem, f.hom, fromSpecStalkOfMem
@@ -530,7 +530,7 @@ abbreviation fromFunctionField
 
 中文:
 缩写 fromFunctionField
-  签名: [IrreducibleSpace X] (f : X.PartialMap Y)
+  签名: [不可约空间 X] (f : X.Partial映射 Y)
   定义体: f.fromSpecStalkOfMem
     ((genericPoint_specializes _).mem_open f.domain.2 f.dense_domain.nonempty.choose_spec)
 
@@ -557,7 +557,7 @@ lemma fromSpecStalkOfMem_restrict
 
 中文:
 引理 fromSpecStalkOfMem_restrict
-  结论: (f : X.PartialMap Y)
+  结论: (f : X.Partial映射 Y)
   证明: by
   dsimp only [fromSpecStalkOfMem, restrict, Scheme.Opens.fromSpecStalkOfMem]
   have e : ⟨x, hU' hx⟩ = X.homOfLE hU' ⟨x, hx⟩ := by
@@ -591,7 +591,7 @@ lemma fromFunctionField_restrict
 
 中文:
 引理 fromFunctionField_restrict
-  结论: (f : X.PartialMap Y) [IrreducibleSpace X]
+  结论: (f : X.Partial映射 Y) [不可约空间 X]
   证明: fromSpecStalkOfMem_restrict f _ _ _
 
 Depends on / 依赖: fromSpecStalkOfMem_restrict
@@ -620,7 +620,7 @@ definition ofFromSpecStalk
 
 中文:
 定义 ofFromSpecStalk
-  签名: [IrreducibleSpace X] [LocallyOfFiniteType sY] {x : X} [X.IsGermInjectiveAt x]
+  签名: [不可约空间 X] [局部有限型 sY] {x : X} [X.是GermInjectiveAt x]
   定义体: (spread_out_of_isGermInjective' sX sY φ h).choose_spec.choose_spec.choose
   domain := (spread_out_of_isGermInjective' sX sY φ h).choose
   dense_domain := (spread_out_of_isGermInjective' sX sY φ h).choose.2.dense
@@ -645,7 +645,7 @@ lemma ofFromSpecStalk_comp
 
 中文:
 引理 ofFromSpecStalk_comp
-  结论: [IrreducibleSpace X] [LocallyOfFiniteType sY]
+  结论: [不可约空间 X] [局部有限型 sY]
   证明: (spread_out_of_isGermInjective' sX sY φ h).choose_spec.choose_spec.choose_spec.2
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose_spec, spread_out_of_isGermInjective
@@ -666,7 +666,7 @@ lemma mem_domain_ofFromSpecStalk
 
 中文:
 引理 mem_domain_ofFromSpecStalk
-  结论: [IrreducibleSpace X] [LocallyOfFiniteType sY]
+  结论: [不可约空间 X] [局部有限型 sY]
   证明: (spread_out_of_isGermInjective' sX sY φ h).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, spread_out_of_isGermInjective
@@ -686,7 +686,7 @@ lemma fromSpecStalkOfMem_ofFromSpecStalk
 
 中文:
 引理 fromSpecStalkOfMem_ofFromSpecStalk
-  结论: [IrreducibleSpace X] [LocallyOfFiniteType sY]
+  结论: [不可约空间 X] [局部有限型 sY]
   证明: (spread_out_of_isGermInjective' sX sY φ h).choose_spec.choose_spec.choose_spec.1.symm
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose_spec, spread_out_of_isGermInjective
@@ -710,7 +710,7 @@ lemma fromSpecStalkOfMem_compHom
 
 中文:
 引理 fromSpecStalkOfMem_compHom
-  条件: (f : X.PartialMap Y) (g : Y ⟶ Z) (x) (hx)
+  条件: (f : X.Partial映射 Y) (g : Y ⟶ Z) (x) (hx)
   证明: by
   simp [fromSpecStalkOfMem]
 
@@ -757,7 +757,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: (f g : X.PartialMap Y)
+  签名: (f g : X.Partial映射 Y)
   定义体: exists (W : X.Opens) (hW : Dense (W : Set X)) (hWl : W <= f.domain) (hWr : W <= g.domain),
     (f.restrict W hW hWl).hom = (g.restrict W hW hWr).hom
 
@@ -780,7 +780,7 @@ lemma equiv_of_restrict_eq
 
 中文:
 引理 equiv_of_restrict_eq
-  结论: (f g : X.PartialMap Y) {W₁ W₂ : X.Opens} {hW₁ : Dense (W₁ : Set X)}
+  结论: (f g : X.Partial映射 Y) {W₁ W₂ : X.Opens} {hW₁ : 稠密 (W₁ : 集合 X)}
   证明: by
   have e : W₁ = W₂ := congr($(H).domain)
   subst e
@@ -810,7 +810,7 @@ lemma equiv.refl
 
 中文:
 引理 equiv.refl
-  条件: (f : X.PartialMap Y)
+  条件: (f : X.Partial映射 Y)
   结论: f.equiv f
   证明: ⟨f.domain, f.dense_domain, by simp⟩
 
@@ -835,7 +835,7 @@ lemma equiv.symm
 
 中文:
 引理 equiv.symm
-  条件: {f g : X.PartialMap Y}
+  条件: {f g : X.Partial映射 Y}
   结论: f.equiv g -> g.equiv f
   证明: by
   intro ⟨W, hW, hWl, hWr, e⟩
@@ -866,7 +866,7 @@ lemma equiv.trans
 
 中文:
 引理 equiv.trans
-  条件: {f g h : X.PartialMap Y}
+  条件: {f g h : X.Partial映射 Y}
   结论: f.equiv g -> g.equiv h -> f.equiv h
   证明: by
   intro ⟨W₁, hW₁, hW₁l, hW₁r, e₁⟩ ⟨W₂, hW₂, hW₂l, hW₂r, e₂⟩
@@ -899,7 +899,7 @@ lemma equivalence_rel
 
 中文:
 引理 equivalence_rel
-  结论: Equivalence (@Scheme.PartialMap.equiv X Y) where
+  结论: 等价 (@概形.Partial映射.equiv X Y) where
   证明: equiv.refl
   symm := equiv.symm
   trans := equiv.trans
@@ -921,7 +921,7 @@ instance :
 
 中文:
 实例 :
-  签名: Setoid (X.PartialMap Y)
+  签名: 集合等价关系 (X.Partial映射 Y)
   定义体: ⟨@PartialMap.equiv X Y, equivalence_rel⟩
 
 Depends on / 依赖: PartialMap, PartialMap.equiv, equivalence_rel
@@ -940,7 +940,7 @@ lemma restrict_equiv
 
 中文:
 引理 restrict_equiv
-  结论: (f : X.PartialMap Y) (U : X.Opens)
+  结论: (f : X.Partial映射 Y) (U : X.Opens)
   证明: ⟨U, hU, le_rfl, hU', by simp⟩
 
 Depends on / 依赖: le_rfl
@@ -966,7 +966,7 @@ lemma equiv_of_fromSpecStalkOfMem_eq
 
 中文:
 引理 equiv_of_fromSpecStalkOfMem_eq
-  结论: [IrreducibleSpace X]
+  结论: [不可约空间 X]
   证明: by
   have hdense : Dense ((f.domain ⊓ g.domain) : Set X) :=
     f.dense_domain.inter_of_isOpen_left g.dense_domain f.domain.2
@@ -1015,7 +1015,7 @@ lemma equiv_iff_of_isSeparated_of_le
 
 中文:
 引理 equiv_iff_of_isSeparated_of_le
-  结论: [X.Over S] [Y.Over S] [IsReduced X]
+  结论: [X.Over S] [Y.Over S] [是既约 X]
   证明: by
   refine ⟨fun ⟨V, hV, hVl, hVr, e⟩ => ?_, fun e => ⟨_, _, _, _, e⟩⟩
   have : IsDominant (X.homOfLE (inf_le_left : W ⊓ V <= W)) :=
@@ -1045,7 +1045,7 @@ lemma equiv_iff_of_isSeparated
 
 中文:
 引理 equiv_iff_of_isSeparated
-  结论: [X.Over S] [Y.Over S] [IsReduced X]
+  结论: [X.Over S] [Y.Over S] [是既约 X]
   证明: equiv_iff_of_isSeparated_of_le (S := S) _ _ _
 
 Depends on / 依赖: equiv_iff_of_isSeparated_of_le
@@ -1073,7 +1073,7 @@ lemma equiv_iff_of_domain_eq_of_isSeparated
 
 中文:
 引理 equiv_iff_of_domain_eq_of_isSeparated
-  结论: [X.Over S] [Y.Over S] [IsReduced X]
+  结论: [X.Over S] [Y.Over S] [是既约 X]
   证明: by
   rw [equiv_iff_of_isSeparated_of_le (S := S) f.dense_domain le_rfl hfg.le]
   obtain ⟨Uf, _, f⟩ := f
@@ -1107,7 +1107,7 @@ lemma equiv_toPartialMap_iff_of_isSeparated
 
 中文:
 引理 equiv_toPartialMap_iff_of_isSeparated
-  结论: [X.Over S] [Y.Over S] [IsReduced X]
+  结论: [X.Over S] [Y.Over S] [是既约 X]
   证明: by
   rw [equiv_iff_of_isSeparated (S := S)]; rw [← cancel_epi (X.isoOfEq (inf_top_eq f.domain)).hom]
   simp
@@ -1135,7 +1135,7 @@ definition RationalMap
 
 中文:
 定义 RationalMap
-  签名: (X Y : Scheme.{u})
+  签名: (X Y : 概形.{u})
   定义体: @Quotient (X.PartialMap Y) inferInstance
 
 Depends on / 依赖: PartialMap, Quotient, X.PartialMap
@@ -1155,8 +1155,8 @@ definition PartialMap.toRationalMap
   body: Quotient.mk _ f
 
 中文:
-定义 PartialMap.toRationalMap
-  签名: (f : X.PartialMap Y)
+定义 Partial映射.toRationalMap
+  签名: (f : X.Partial映射 Y)
   定义体: Quotient.mk _ f
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1172,8 +1172,8 @@ abbreviation Hom.toRationalMap
   body: f.toPartialMap.toRationalMap
 
 中文:
-缩写 Hom.toRationalMap
-  签名: (f : X.Hom Y)
+缩写 态射.toRationalMap
+  签名: (f : X.态射 Y)
   定义体: f.toPartialMap.toRationalMap
 
 Depends on / 依赖: f.toPartialMap.toRationalMap, toPartialMap, toRationalMap
@@ -1209,10 +1209,10 @@ class RationalMap.IsOver
     - exists_partialMap_over : exists g : X.PartialMap Y, g.IsOver S ∧ g.toRationalMap = f
 
 中文:
-类 RationalMap.IsOver
+类 RationalMap.是Over
   参数: [X.Over S] [Y.Over S] (f : X ⤏ Y)
   公理与运算 (1 个):
-    - exists_partialMap_over : 存在 g : X.PartialMap Y, g.IsOver S ∧ g.toRationalMap = f
+    - exists_partialMap_over : 存在 g : X.Partial映射 Y, g.是Over S ∧ g.toRationalMap = f
 -/
 class RationalMap.IsOver [X.Over S] [Y.Over S] (f : X ⤏ Y) : Prop where
   exists_partialMap_over : exists g : X.PartialMap Y, g.IsOver S ∧ g.toRationalMap = f
@@ -1226,8 +1226,8 @@ lemma PartialMap.toRationalMap_surjective
   proof: Quotient.exists_rep
 
 中文:
-引理 PartialMap.toRationalMap_surjective
-  结论: Function.Surjective (@toRationalMap X Y)
+引理 Partial映射.toRationalMap_surjective
+  结论: 函数.满射 (@toRationalMap X Y)
   证明: Quotient.exists_rep
 
 Depends on / 依赖: Quotient, Quotient.exists_rep, exists_rep
@@ -1245,9 +1245,9 @@ lemma RationalMap.exists_rep
   proof: Quotient.exists_rep f
 
 中文:
-引理 RationalMap.exists_rep
+引理 RationalMap.存在_rep
   条件: (f : X ⤏ Y)
-  结论: 存在 g : X.PartialMap Y, g.toRationalMap = f
+  结论: 存在 g : X.Partial映射 Y, g.toRationalMap = f
   证明: Quotient.exists_rep f
 
 Depends on / 依赖: Quotient, Quotient.exists_rep, exists_rep
@@ -1264,8 +1264,8 @@ lemma PartialMap.toRationalMap_eq_iff
   proof: Quotient.eq
 
 中文:
-引理 PartialMap.toRationalMap_eq_iff
-  条件: {f g : X.PartialMap Y}
+引理 Partial映射.toRationalMap_eq_iff
+  条件: {f g : X.Partial映射 Y}
   证明: Quotient.eq
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -1328,8 +1328,8 @@ lemma PartialMap.representative_toRationalMap_equiv
 @[simp]
 
 中文:
-引理 PartialMap.representative_toRationalMap_equiv
-  条件: (f : X.PartialMap Y)
+引理 Partial映射.representative_toRationalMap_equiv
+  条件: (f : X.Partial映射 Y)
   证明: by
   rw [← PartialMap.toRationalMap_eq_iff]; rw [f.toRationalMap.toRationalMap_representative]
 
@@ -1351,8 +1351,8 @@ lemma PartialMap.restrict_toRationalMap
   proof: toRationalMap_eq_iff.mpr (f.restrict_equiv U hU hU')
 
 中文:
-引理 PartialMap.restrict_toRationalMap
-  结论: (f : X.PartialMap Y) (U : X.Opens)
+引理 Partial映射.restrict_toRationalMap
+  结论: (f : X.Partial映射 Y) (U : X.Opens)
   证明: toRationalMap_eq_iff.mpr (f.restrict_equiv U hU hU')
 
 Depends on / 依赖: f.restrict_equiv, restrict_equiv, toRationalMap_eq_iff, toRationalMap_eq_iff.mpr
@@ -1388,8 +1388,8 @@ lemma RationalMap.exists_partialMap_over
   proof: IsOver.exists_partialMap_over
 
 中文:
-引理 RationalMap.exists_partialMap_over
-  条件: [X.Over S] [Y.Over S] (f : X ⤏ Y) [f.IsOver S]
+引理 RationalMap.存在_partialMap_over
+  条件: [X.Over S] [Y.Over S] (f : X ⤏ Y) [f.是Over S]
   证明: IsOver.exists_partialMap_over
 
 Depends on / 依赖: IsOver, IsOver.exists_partialMap_over, exists_partialMap_over
@@ -1452,7 +1452,7 @@ lemma RationalMap.compHom_toRationalMap
 
 中文:
 引理 RationalMap.compHom_toRationalMap
-  条件: (f : X.PartialMap Y) (g : Y ⟶ Z)
+  条件: (f : X.Partial映射 Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -1521,8 +1521,8 @@ lemma PartialMap.exists_restrict_isOver
   exact ⟨U, hU, hUr, by rw [IsOver, ← e]; infer_instance⟩
 
 中文:
-引理 PartialMap.exists_restrict_isOver
-  结论: [X.Over S] [Y.Over S] (f : X.PartialMap Y)
+引理 Partial映射.存在_restrict_isOver
+  结论: [X.Over S] [Y.Over S] (f : X.Partial映射 Y)
   证明: by
   obtain ⟨f', hf₁, hf₂⟩ := RationalMap.IsOver.exists_partialMap_over (S := S) (f := f.toRationalMap)
   obtain ⟨U, hU, hUl, hUr, e⟩ := PartialMap.toRationalMap_eq_iff.mp hf₂
@@ -1592,8 +1592,8 @@ lemma PartialMap.isOver_toRationalMap_iff_of_isSeparated
   exact ext_of_isDominant (ι := X.homOfLE hU') (by simpa using H.1)
 
 中文:
-引理 PartialMap.isOver_toRationalMap_iff_of_isSeparated
-  结论: [X.Over S] [Y.Over S] [IsReduced X]
+引理 Partial映射.isOver_toRationalMap_iff_of_isSeparated
+  结论: [X.Over S] [Y.Over S] [是既约 X]
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   obtain ⟨U, hU, hU', H⟩ := f.exists_restrict_isOver (S := S)
@@ -1636,7 +1636,7 @@ definition RationalMap.fromFunctionField
 
 中文:
 定义 RationalMap.fromFunctionField
-  签名: [IrreducibleSpace X] (f : X ⤏ Y)
+  签名: [不可约空间 X] (f : X ⤏ Y)
   定义体: by
   refine Quotient.lift PartialMap.fromFunctionField ?_ f
   intro f g ⟨W, hW, hWl, hWr, e⟩
@@ -1671,7 +1671,7 @@ lemma RationalMap.fromFunctionField_toRationalMap
 
 中文:
 引理 RationalMap.fromFunctionField_toRationalMap
-  条件: [IrreducibleSpace X] (f : X.PartialMap Y)
+  条件: [不可约空间 X] (f : X.Partial映射 Y)
   证明: rfl
 -/
 lemma RationalMap.fromFunctionField_toRationalMap [IrreducibleSpace X] (f : X.PartialMap Y) :
@@ -1692,7 +1692,7 @@ definition RationalMap.ofFunctionField
 
 中文:
 定义 RationalMap.ofFunctionField
-  签名: [Is整数egral X] [LocallyOfFiniteType sY]
+  签名: [是整 X] [局部有限型 sY]
   定义体: (PartialMap.ofFromSpecStalk sX sY f h).toRationalMap
 
 Depends on / 依赖: PartialMap, PartialMap.ofFromSpecStalk, ofFromSpecStalk, toRationalMap
@@ -1711,7 +1711,7 @@ lemma RationalMap.fromFunctionField_ofFunctionField
 
 中文:
 引理 RationalMap.fromFunctionField_ofFunctionField
-  结论: [Is整数egral X] [LocallyOfFiniteType sY]
+  结论: [是整 X] [局部有限型 sY]
   证明: PartialMap.fromSpecStalkOfMem_ofFromSpecStalk sX sY _ _
 
 Depends on / 依赖: PartialMap, PartialMap.fromSpecStalkOfMem_ofFromSpecStalk, fromSpecStalkOfMem_ofFromSpecStalk
@@ -1735,7 +1735,7 @@ lemma RationalMap.eq_of_fromFunctionField_eq
 
 中文:
 引理 RationalMap.eq_of_fromFunctionField_eq
-  结论: [Is整数egral X] (f g : X.RationalMap Y)
+  结论: [是整 X] (f g : X.RationalMap Y)
   证明: by
   obtain ⟨f, rfl⟩ := f.exists_rep
   obtain ⟨g, rfl⟩ := g.exists_rep
@@ -1773,7 +1773,7 @@ definition RationalMap.equivFunctionField
 
 中文:
 定义 RationalMap.equivFunctionField
-  签名: [Is整数egral X] [LocallyOfFiniteType sY]
+  签名: [是整 X] [局部有限型 sY]
   定义体: ⟨.ofFunctionField sX sY f f.2, PartialMap.toRationalMap_eq_iff.mpr
       ⟨_, PartialMap.dense_domain _, le_rfl, le_top, by simp [PartialMap.ofFromSpecStalk_comp]⟩⟩
   invFun f := ⟨f.1.fromFunctionField, by
@@ -1814,7 +1814,7 @@ definition RationalMap.equivFunctionFieldOver
 
 中文:
 定义 RationalMap.equivFunctionFieldOver
-  签名: [X.Over S] [Y.Over S] [Is整数egral X]
+  签名: [X.Over S] [Y.Over S] [是整 X]
   定义体: ((Equiv.subtypeEquivProp (by simp only [Hom.isOver_iff]; rfl)).trans
     (RationalMap.equivFunctionField (X ↘ S) (Y ↘ S))).trans
       (Equiv.subtypeEquivProp (by ext f; rw [RationalMap.isOver_iff]))
@@ -1859,8 +1859,8 @@ lemma PartialMap.le_domain_toRationalMap
   proof: le_sSup ⟨f, rfl, rfl⟩
 
 中文:
-引理 PartialMap.le_domain_toRationalMap
-  条件: (f : X.PartialMap Y)
+引理 Partial映射.le_domain_toRationalMap
+  条件: (f : X.Partial映射 Y)
   证明: le_sSup ⟨f, rfl, rfl⟩
 
 Depends on / 依赖: le_sSup
@@ -1900,7 +1900,7 @@ lemma RationalMap.dense_domain
 中文:
 引理 RationalMap.dense_domain
   条件: (f : X ⤏ Y)
-  结论: Dense (X := X) f.domain
+  结论: 稠密 (X := X) f.domain
   证明: f.inductionOn (fun g => g.dense_domain.mono g.le_domain_toRationalMap)
 
 Depends on / 依赖: domain, f.domain
@@ -1971,7 +1971,7 @@ definition RationalMap.toPartialMap
 
 中文:
 定义 RationalMap.toPartialMap
-  签名: [IsReduced X] [Y.IsSeparated] (f : X ⤏ Y)
+  签名: [是既约 X] [Y.是分离] (f : X ⤏ Y)
   定义体: by
   refine ⟨f.domain, f.dense_domain, f.openCoverDomain.glueMorphisms
     (fun x => (X.isoOfEq x.2.choose_spec.2).inv ≫ x.2.choose.hom) ?_⟩
@@ -2015,8 +2015,8 @@ lemma PartialMap.toPartialMap_toRationalMap_restrict
   e
 
 中文:
-引理 PartialMap.toPartialMap_toRationalMap_restrict
-  结论: [IsReduced X] [Y.IsSeparated]
+引理 Partial映射.toPartialMap_toRationalMap_restrict
+  结论: [是既约 X] [Y.是分离]
   证明: by
   dsimp [RationalMap.toPartialMap]
   refine (f.toRationalMap.openCoverDomain.ι_glueMorphisms _ _ ⟨_, f, rfl, rfl⟩).trans ?_
@@ -2056,7 +2056,7 @@ lemma RationalMap.toRationalMap_toPartialMap
 
 中文:
 引理 RationalMap.toRationalMap_toPartialMap
-  结论: [IsReduced X] [Y.IsSeparated]
+  结论: [是既约 X] [Y.是分离]
   证明: by
   obtain ⟨f, rfl⟩ := PartialMap.toRationalMap_surjective f
   trans (f.toRationalMap.toPartialMap.restrict _
@@ -2087,8 +2087,8 @@ instance [IsReduced
   infer_instance
 
 中文:
-实例 [IsReduced
-  签名: X] [Y.IsSeparated] [S.IsSeparated] [X.Over S] [Y.Over S]
+实例 [是既约
+  签名: X] [Y.是分离] [S.是分离] [X.Over S] [Y.Over S]
   定义体: by
   rw [← PartialMap.isOver_toRationalMap_iff_of_isSeparated]; rw [f.toRationalMap_toPartialMap]
   infer_instance

@@ -183,7 +183,7 @@ theorem norm_lt
 
 中文:
 定理 norm_lt
-  结论: {T : 类型} [Ring T] [LinearOrder T] [IsStrictOrderedRing T] (a : S) {y : T}
+  结论: {T : 类型} [环 T] [线性序 T] [是StrictOrdered环 T] (a : S) {y : T}
   证明: by
   obtain ⟨i⟩ := bS.index_nonempty
   have him : (Finset.univ.image fun k => abv (bS.repr a k)).Nonempty :=
@@ -238,8 +238,8 @@ theorem exists_min
       obtain ⟨b, b_mem, b_ne_zero⟩ := (I : Ideal S).ne_
 
 中文:
-定理 exists_min
-  条件: (I : (Ideal S)⁰)
+定理 存在_min
+  条件: (I : (理想 S)⁰)
   证明: by
   obtain ⟨_, ⟨b, b_mem, b_ne_zero, rfl⟩, min⟩ := @Int.exists_least_of_bdd
       (fun a => exists b in (I : Ideal S), b != (0 : S) ∧ abv (Algebra.norm R b) = a)
@@ -305,7 +305,7 @@ definition distinctElems
 
 中文:
 定义 distinctElems
-  签名: : Fin (cardM bS adm).succ ↪ R
+  签名: : 有限集 (cardM bS adm).succ ↪ R
   定义体: Fin.valEmbedding.trans (Infinite.natEmbedding R)
 
 Depends on / 依赖: Fin.valEmbedding.trans, Infinite, Infinite.natEmbedding, natEmbedding, valEmbedding
@@ -326,7 +326,7 @@ definition finsetApprox
 
 中文:
 定义 finsetApprox
-  签名: : Finset R
+  签名: : 有限集 R
   定义体: (Finset.univ.image fun xy : _ × _ => distinctElems bS adm xy.1 - distinctElems bS adm xy.2).erase
     0
 
@@ -428,7 +428,7 @@ theorem exists_mem_finsetApprox
   have ε_le : (normBound abv bS : Real) * (abv b • ε) ^ (Fintype.card ι : 
 
 中文:
-定理 exists_mem_finsetApprox
+定理 存在_mem_finsetApprox
   条件: (a : S) {b} (hb : b != (0 : R))
   证明: by
   have dim_pos := Fintype.card_pos_iff.mpr bS.index_nonempty
@@ -504,8 +504,8 @@ theorem exists_mem_finset_approx'
     lt_of_le_o
 
 中文:
-定理 exists_mem_finset_approx'
-  条件: [Algebra.IsAlgebraic R S] (a : S) {b : S} (hb : b != 0)
+定理 存在_mem_finset_approx'
+  条件: [代数.是代数 R S] (a : S) {b : S} (hb : b != 0)
   证明: by
   obtain ⟨a', b', hb', h⟩ := Algebra.IsAlgebraic.exists_smul_eq_mul R a hb
   obtain ⟨q, r, hr, hqr⟩ := exists_mem_finsetApprox bS adm a' hb'
@@ -572,7 +572,7 @@ theorem ne_bot_of_prod_finsetApprox_mem
 
 中文:
 定理 ne_bot_of_prod_finsetApprox_mem
-  结论: (J : Ideal S)
+  结论: (J : 理想 S)
   证明: (Submodule.ne_bot_iff _).mpr ⟨_, h, prod_finsetApprox_ne_zero _ _⟩
 
 Depends on / 依赖: Submodule, Submodule.ne_bot_iff, ne_bot_iff, prod_finsetApprox_ne_zero
@@ -599,8 +599,8 @@ theorem exists_mk0_eq_mk0
     ·
 
 中文:
-定理 exists_mk0_eq_mk0
-  条件: [IsDedekindDomain S] [Algebra.IsAlgebraic R S] (I : (Ideal S)⁰)
+定理 存在_mk0_eq_mk0
+  条件: [是Dedekind整环 S] [代数.是代数 R S] (I : (理想 S)⁰)
   证明: by
   set M := ∏ m in finsetApprox bS adm, m
   have hM : algebraMap R S M != 0 := prod_finsetApprox_ne_zero bS adm
@@ -657,7 +657,7 @@ definition mkMMem
 
 中文:
 定义 mkMMem
-  签名: [IsDedekindDomain S]
+  签名: [是Dedekind整环 S]
   定义体: ClassGroup.mk0
     ⟨J.1, mem_nonZeroDivisors_iff_ne_zero.mpr (ne_bot_of_prod_finsetApprox_mem bS adm J.1 J.2)⟩
 
@@ -682,7 +682,7 @@ theorem mkMMem_surjective
 
 中文:
 定理 mkMMem_surjective
-  条件: [IsDedekindDomain S] [Algebra.IsAlgebraic R S]
+  条件: [是Dedekind整环 S] [代数.是代数 R S]
   证明: by
   intro I'
   obtain ⟨⟨I, hI⟩, rfl⟩ := ClassGroup.mk0_surjective I'
@@ -722,7 +722,7 @@ definition fintypeOfAdmissibleOfAlgebraic
 
 中文:
 定义 fintypeOfAdmissibleOfAlgebraic
-  签名: [IsDedekindDomain S]
+  签名: [是Dedekind整环 S]
   定义体: @Fintype.ofSurjective _ _ _
     (@Fintype.ofEquiv _
       { J // J ∣ Ideal.span ({algebraMap R S (∏ m in finsetApprox bS adm, m)} : Set S) }
@@ -771,7 +771,7 @@ definition fintypeOfAdmissibleOfFinite
 
 中文:
 定义 fintypeOfAdmissibleOfFinite
-  签名: [Is整数egralClosure S R L]
+  签名: [是整闭包 S R L]
   定义体: by
   letI := Classical.decEq L
   letI := IsIntegralClosure.isFractionRing_of_finite_extension R K L S

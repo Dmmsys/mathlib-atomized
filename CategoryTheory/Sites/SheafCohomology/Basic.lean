@@ -115,7 +115,7 @@ abbreviation cohomologyPresheaf
 
 中文:
 缩写 cohomologyPresheaf
-  签名: (F : Sheaf J AddCommGrpCat.{v}) (n : 自然数)
+  签名: (F : 层 J 加法交换群范畴.{v}) (n : 自然数)
   定义体: (cohomologyPresheafFunctor J n).obj F
 
 Depends on / 依赖: cohomologyPresheafFunctor
@@ -134,7 +134,7 @@ abbreviation H'
 
 中文:
 缩写 H'
-  签名: (F : Sheaf J AddCommGrpCat.{v}) (n : 自然数) (X : C)
+  签名: (F : 层 J 加法交换群范畴.{v}) (n : 自然数) (X : C)
   定义体: (F.cohomologyPresheaf n).obj (Opposite.op X)
 
 Depends on / 依赖: F.cohomologyPresheaf, Opposite, Opposite.op, cohomologyPresheaf
@@ -340,7 +340,7 @@ lemma H.map_comp_apply
 
 中文:
 引理 H.map_comp_apply
-  条件: {n : 自然数} {G' : Sheaf J AddCommGrpCat.{w}} (g : G ⟶ G') (x : H F n)
+  条件: {n : 自然数} {G' : 层 J 加法交换群范畴.{w}} (g : G ⟶ G') (x : H F n)
   证明: by
   simp [H.map_apply]
 
@@ -414,7 +414,7 @@ lemma subsingleton_H_of_isZero
 
 中文:
 引理 subsingleton_H_of_isZero
-  条件: {F : Sheaf J AddCommGrpCat.{w}} (h : Limits.IsZero F) (n : 自然数)
+  条件: {F : 层 J 加法交换群范畴.{w}} (h : Limits.是零 F) (n : 自然数)
   证明: by
   rw [← functorH_obj_coe]
   apply AddCommGrpCat.subsingleton_of_isZero

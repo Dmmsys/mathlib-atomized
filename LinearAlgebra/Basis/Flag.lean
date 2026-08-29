@@ -45,7 +45,7 @@ definition flag
 
 中文:
 定义 flag
-  签名: (b : Basis (Fin n) R M) (k : Fin (n + 1))
+  签名: (b : 基 (有限集 n) R M) (k : 有限集 (n + 1))
   定义体: .span R b '' {i | i.castSucc < k}
 
 @[simp]
@@ -69,7 +69,7 @@ theorem flag_zero
 
 中文:
 定理 flag_zero
-  条件: (b : Basis (Fin n) R M)
+  条件: (b : 基 (有限集 n) R M)
   结论: b.flag 0 = ⊥
   证明: by simp [flag]
 
@@ -90,7 +90,7 @@ theorem flag_last
 
 中文:
 定理 flag_last
-  条件: (b : Basis (Fin n) R M)
+  条件: (b : 基 (有限集 n) R M)
   结论: b.flag (.last n) = ⊤
   证明: by
   simp [flag]
@@ -108,7 +108,7 @@ theorem flag_le_iff
 
 中文:
 定理 flag_le_iff
-  条件: (b : Basis (Fin n) R M) {k p}
+  条件: (b : 基 (有限集 n) R M) {k p}
   证明: span_le.trans forall_mem_image
 
 Depends on / 依赖: forall_mem_image, span_le, span_le.trans
@@ -129,7 +129,7 @@ theorem flag_succ
 
 中文:
 定理 flag_succ
-  条件: (b : Basis (Fin n) R M) (k : Fin n)
+  条件: (b : 基 (有限集 n) R M) (k : 有限集 n)
   证明: by
   simp only [flag, Fin.castSucc_lt_castSucc_iff]
   simp [Fin.castSucc_lt_iff_succ_le, le_iff_eq_or_lt, ofPred_or, image_insert_eq, span_insert]
@@ -153,7 +153,7 @@ theorem self_mem_flag
 
 中文:
 定理 self_mem_flag
-  条件: (b : Basis (Fin n) R M) {i : Fin n} {k : Fin (n + 1)} (h : i.castSucc < k)
+  条件: (b : 基 (有限集 n) R M) {i : 有限集 n} {k : 有限集 (n + 1)} (h : i.castSucc < k)
   证明: subset_span mem_image_of_mem _ h
 
 @[simp]
@@ -177,7 +177,7 @@ theorem self_mem_flag_iff
 
 中文:
 定理 self_mem_flag_iff
-  条件: [Nontrivial R] (b : Basis (Fin n) R M) {i : Fin n} {k : Fin (n + 1)}
+  条件: [非平凡 R] (b : 基 (有限集 n) R M) {i : 有限集 n} {k : 有限集 (n + 1)}
   证明: b.self_mem_span_image
 
 @[gcongr, mono]
@@ -200,8 +200,8 @@ theorem flag_mono
 
 中文:
 定理 flag_mono
-  条件: (b : Basis (Fin n) R M)
-  结论: Monotone b.flag
+  条件: (b : 基 (有限集 n) R M)
+  结论: 递增 b.flag
   证明: Fin.monotone_iff_le_succ.2 fun k => by rw [flag_succ]; exact le_sup_right
 
 Depends on / 依赖: Fin.monotone_iff_le_succ, flag_succ, le_sup_right, monotone_iff_le_succ
@@ -222,7 +222,7 @@ theorem isChain_range_flag
 
 中文:
 定理 isChain_range_flag
-  条件: (b : Basis (Fin n) R M)
+  条件: (b : 基 (有限集 n) R M)
   结论: IsChain (· <= ·) (range b.flag)
   证明: b.flag_mono.isChain_range
 
@@ -245,8 +245,8 @@ theorem flag_strictMono
 
 中文:
 定理 flag_strictMono
-  条件: [Nontrivial R] (b : Basis (Fin n) R M)
-  结论: StrictMono b.flag
+  条件: [非平凡 R] (b : 基 (有限集 n) R M)
+  结论: 严格递增 b.flag
   证明: Fin.strictMono_iff_lt_succ.2 fun _ => by simp [flag_succ]
 
 Depends on / 依赖: Fin.strictMono_iff_lt_succ, flag_succ, strictMono_iff_lt_succ
@@ -272,7 +272,7 @@ theorem flag_le_ker_coord_iff
 
 中文:
 定理 flag_le_ker_coord_iff
-  条件: [Nontrivial R] (b : Basis (Fin n) R M) {k : Fin (n + 1)} {l : Fin n}
+  条件: [非平凡 R] (b : 基 (有限集 n) R M) {k : 有限集 (n + 1)} {l : 有限集 n}
   证明: by
   simp [flag_le_iff, Finsupp.single_apply_eq_zero, imp_false, imp_not_comm]
 
@@ -294,7 +294,7 @@ theorem flag_le_ker_coord
 
 中文:
 定理 flag_le_ker_coord
-  结论: (b : Basis (Fin n) R M) {k : Fin (n + 1)} {l : Fin n}
+  结论: (b : 基 (有限集 n) R M) {k : 有限集 (n + 1)} {l : 有限集 n}
   证明: by
   nontriviality R
   exact b.flag_le_ker_coord_iff.2 h
@@ -318,7 +318,7 @@ theorem flag_le_ker_dual
 
 中文:
 定理 flag_le_ker_dual
-  条件: (b : Basis (Fin n) R M) (k : Fin n)
+  条件: (b : 基 (有限集 n) R M) (k : 有限集 n)
   证明: by
   nontriviality R
   rw [coe_dualBasis]; rw [b.flag_le_ker_coord_iff]
@@ -349,7 +349,7 @@ theorem flag_covBy
 
 中文:
 定理 flag_covBy
-  条件: (b : Basis (Fin n) K V) (i : Fin n)
+  条件: (b : 基 (有限集 n) K V) (i : 有限集 n)
   证明: by
   rw [flag_succ]
   apply covBy_span_singleton_sup
@@ -373,7 +373,7 @@ theorem flag_wcovBy
 
 中文:
 定理 flag_wcovBy
-  条件: (b : Basis (Fin n) K V) (i : Fin n)
+  条件: (b : 基 (有限集 n) K V) (i : 有限集 n)
   证明: (b.flag_covBy i).wcovBy
 
 Depends on / 依赖: b.flag_covBy, flag_covBy, wcovBy
@@ -396,7 +396,7 @@ definition toFlag
 
 中文:
 定义 toFlag
-  签名: (b : Basis (Fin n) K V)
+  签名: (b : 基 (有限集 n) K V)
   定义体: .rangeFin b.flag b.flag_zero b.flag_last b.flag_wcovBy
 
 @[simp]
@@ -418,7 +418,7 @@ theorem mem_toFlag
 
 中文:
 定理 mem_toFlag
-  条件: (b : Basis (Fin n) K V) {p : Submodule K V}
+  条件: (b : 基 (有限集 n) K V) {p : 子模 K V}
   结论: p in b.toFlag ↔ 存在 k, b.flag k = p
   证明: Iff.rfl
 
@@ -438,7 +438,7 @@ theorem isMaxChain_range_flag
 
 中文:
 定理 isMaxChain_range_flag
-  条件: (b : Basis (Fin n) K V)
+  条件: (b : 基 (有限集 n) K V)
   结论: IsMaxChain (· <= ·) (range b.flag)
   证明: b.toFlag.maxChain
 

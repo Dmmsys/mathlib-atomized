@@ -36,7 +36,7 @@ theorem monomial_one_eq_iff
 
 中文:
 定理 monomial_one_eq_iff
-  条件: [Nontrivial R] {i j : 自然数}
+  条件: [非平凡 R] {i j : 自然数}
   证明: by
   simp_rw [← ofFinsupp_single, ofFinsupp.injEq]
   exact AddMonoidAlgebra.of_injective.eq_iff
@@ -58,7 +58,7 @@ instance infinite
 
 中文:
 实例 infinite
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: Infinite.of_injective (fun i => monomial i 1) fun m n h => by simpa [monomial_one_eq_iff] using h
 
 Depends on / 依赖: Infinite, Infinite.of_injective, monomial, monomial_one_eq_iff, of_injective
@@ -140,7 +140,7 @@ theorem ringHom_ext
 
 中文:
 定理 ringHom_ext
-  结论: {S} [Semiring S] {f g : R[X] ->+* S} (h₁ : 对任意 a, f (C a) = g (C a))
+  结论: {S} [半环 S] {f g : R[X] ->+* S} (h₁ : 对任意 a, f (C a) = g (C a))
   证明: by
   set f' := f.comp (toFinsuppIso R).symm.toRingHom with hf'
   set g' := g.comp (toFinsuppIso R).symm.toRingHom with hg'
@@ -184,7 +184,7 @@ theorem ringHom_ext'
 
 中文:
 定理 ringHom_ext'
-  结论: {S} [Semiring S] {f g : R[X] ->+* S} (h₁ : f.comp C = g.comp C)
+  结论: {S} [半环 S] {f g : R[X] ->+* S} (h₁ : f.comp C = g.comp C)
   证明: ringHom_ext (RingHom.congr_fun h₁) h₂
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun, ringHom_ext

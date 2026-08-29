@@ -305,7 +305,7 @@ lemma UniqueMDiffWithinAt.bundle_preimage_aux
 
 中文:
 引理 UniqueMDiffWithinAt.bundle_preimage_aux
-  结论: {p : TotalSpace F Z}
+  结论: {p : 全空间 F Z}
   证明: by
   suffices ((extChartAt I p.proj).symm ⁻¹' s inter range I) ×ˢ univ subseteq
       (extChartAt (I.prod 𝓘(𝕜, F)) p).symm ⁻¹' (TotalSpace.proj ⁻¹' s) inter range (I.prod 𝓘(𝕜, F)) by
@@ -357,7 +357,7 @@ theorem UniqueMDiffWithinAt.bundle_preimage
 
 中文:
 定理 UniqueMDiffWithinAt.bundle_preimage
-  条件: {p : TotalSpace F Z} (hs : UniqueMDiffAt[s] p.proj)
+  条件: {p : 全空间 F Z} (hs : UniqueMDiffAt[s] p.proj)
   证明: by
   suffices UniqueMDiffAt[π F Z ⁻¹' (s inter (trivializationAt F Z p.proj).baseSet)] p from
     this.mono (by simp)

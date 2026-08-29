@@ -43,7 +43,7 @@ instance smul'
 
 中文:
 实例 smul'
-  签名: [对任意 i, SMul (α i) (β i)]
+  签名: [对任意 i, 标量乘法 (α i) (β i)]
   定义体: s i • x i
 
 @[to_additive (attr := push ←)]
@@ -64,7 +64,7 @@ lemma smul_def'
 
 中文:
 引理 smul_def'
-  条件: [对任意 i, SMul (α i) (β i)] (s : 对任意 i, α i) (x : 对任意 i, β i)
+  条件: [对任意 i, 标量乘法 (α i) (β i)] (s : 对任意 i, α i) (x : 对任意 i, β i)
   结论: s • x = fun i => s i • x i
   证明: rfl
 
@@ -87,7 +87,7 @@ lemma smul_apply'
 
 中文:
 引理 smul_apply'
-  条件: [对任意 i, SMul (α i) (β i)] (s : 对任意 i, α i) (x : 对任意 i, β i)
+  条件: [对任意 i, 标量乘法 (α i) (β i)] (s : 对任意 i, α i) (x : 对任意 i, β i)
   结论: (s • x) i = s i • x i
   证明: rfl
 
@@ -109,7 +109,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul M N] [对任意 i, SMul N (α i)] [对任意 i, SMul M (α i)]
+  签名: [标量乘法 M N] [对任意 i, 标量乘法 N (α i)] [对任意 i, 标量乘法 M (α i)]
   定义体: funext fun i => smul_assoc x y (z i)
 
 @[to_additive]
@@ -133,7 +133,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [对任意 i, SMul M (α i)] [对任意 i, SMul (α i) (β i)] [对任意 i, SMul M (β i)]
+  签名: [对任意 i, 标量乘法 M (α i)] [对任意 i, 标量乘法 (α i) (β i)] [对任意 i, 标量乘法 M (β i)]
   定义体: funext fun i => smul_assoc x (y i) (z i)
 
 @[to_additive]
@@ -157,7 +157,7 @@ instance isScalarTower''
 
 中文:
 实例 isScalarTower''
-  签名: [对任意 i, SMul (α i) (β i)] [对任意 i, SMul (β i) (γ i)] [对任意 i, SMul (α i) (γ i)]
+  签名: [对任意 i, 标量乘法 (α i) (β i)] [对任意 i, 标量乘法 (β i) (γ i)] [对任意 i, 标量乘法 (α i) (γ i)]
   定义体: funext fun i => smul_assoc (x i) (y i) (z i)
 
 @[to_additive]
@@ -181,7 +181,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [对任意 i, SMul M (α i)] [对任意 i, SMul N (α i)] [对任意 i, SMulCommClass M N (α i)]
+  签名: [对任意 i, 标量乘法 M (α i)] [对任意 i, 标量乘法 N (α i)] [对任意 i, 标量交换类 M N (α i)]
   定义体: funext fun i => smul_comm x y (z i)
 
 @[to_additive]
@@ -205,7 +205,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: [对任意 i, SMul M (β i)] [对任意 i, SMul (α i) (β i)]
+  签名: [对任意 i, 标量乘法 M (β i)] [对任意 i, 标量乘法 (α i) (β i)]
   定义体: ⟨fun x y z => funext fun i => smul_comm x (y i) (z i)⟩
 
 @[to_additive]
@@ -229,7 +229,7 @@ instance smulCommClass''
 
 中文:
 实例 smulCommClass''
-  签名: [对任意 i, SMul (β i) (γ i)] [对任意 i, SMul (α i) (γ i)]
+  签名: [对任意 i, 标量乘法 (β i) (γ i)] [对任意 i, 标量乘法 (α i) (γ i)]
   定义体: funext fun i => smul_comm (x i) (y i) (z i)
 
 @[to_additive]
@@ -251,7 +251,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [对任意 i, SMul M (α i)] [对任意 i, SMul Mᵐᵒᵖ (α i)] [对任意 i, IsCentralScalar M (α i)]
+  签名: [对任意 i, 标量乘法 M (α i)] [对任意 i, 标量乘法 Mᵐᵒᵖ (α i)] [对任意 i, 中心标量 M (α i)]
   定义体: funext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: CancelMonoid, CancelMonoid.toIsCancelMul, op_smul_eq_smul, toIsCancelMul
@@ -280,7 +280,7 @@ lemma faithfulSMul_at
 
 中文:
 引理 faithfulSMul_at
-  条件: [对任意 i, SMul M (α i)] [对任意 i, Nonempty (α i)] (i : ι) [FaithfulSMul M (α i)]
+  条件: [对任意 i, 标量乘法 M (α i)] [对任意 i, 非空 (α i)] (i : ι) [忠实标量乘法 M (α i)]
   证明: eq_of_smul_eq_smul fun a : α i => by
     classical
     simpa using
@@ -311,7 +311,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: [Nonempty ι] [对任意 i, SMul M (α i)] [对任意 i, Nonempty (α i)]
+  签名: [非空 ι] [对任意 i, 标量乘法 M (α i)] [对任意 i, 非空 (α i)]
   定义体: let ⟨i⟩ := ‹Nonempty ι›
   faithfulSMul_at i
 
@@ -338,7 +338,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: (M) {m : Monoid M} [对任意 i, MulAction M (α i)]
+  签名: (M) {m : 幺半群 M} [对任意 i, 乘法作用 M (α i)]
   定义体: funext fun _ => mul_smul _ _ _
   one_smul _ := funext fun _ => one_smul _ _
 
@@ -362,7 +362,7 @@ instance mulAction'
 
 中文:
 实例 mulAction'
-  签名: {m : 对任意 i, Monoid (α i)} [对任意 i, MulAction (α i) (β i)]
+  签名: {m : 对任意 i, 幺半群 (α i)} [对任意 i, 乘法作用 (α i) (β i)]
   定义体: funext fun _ => mul_smul _ _ _
   one_smul _ := funext fun _ => one_smul _ _
 
@@ -393,7 +393,7 @@ instance hasSMul
 
 中文:
 实例 hasSMul
-  签名: {α : 类型} [SMul M α]
+  签名: {α : 类型} [标量乘法 M α]
   定义体: Pi.instSMul
 
 Depends on / 依赖: Pi.instSMul, instSMul
@@ -417,7 +417,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: {α : 类型} [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: {α : 类型} [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: Pi.smulCommClass
 
 @[to_additive]
@@ -440,7 +440,7 @@ lemma update_smul
 
 中文:
 引理 update_smul
-  结论: [对任意 i, SMul M (α i)] [DecidableEq ι] (c : M) (f₁ : 对任意 i, α i)
+  结论: [对任意 i, 标量乘法 M (α i)] [DecidableEq ι] (c : M) (f₁ : 对任意 i, α i)
   证明: funext fun j => (apply_update (β := α) (fun _ => (c • ·)) f₁ i x₁ j).symm
 
 @[to_additive]
@@ -466,7 +466,7 @@ lemma extend_smul
 
 中文:
 引理 extend_smul
-  条件: {M α β : 类型} [SMul M β] (r : M) (f : ι -> α) (g : ι -> β) (e : α -> β)
+  条件: {M α β : 类型} [标量乘法 M β] (r : M) (f : ι -> α) (g : ι -> β) (e : α -> β)
   证明: by
   funext x
   classical
@@ -497,7 +497,7 @@ lemma piecewise_smul
 
 中文:
 引理 piecewise_smul
-  结论: [对任意 i, SMul M (α i)] (s : Set ι) [对任意 i, Decidable (i in s)]
+  结论: [对任意 i, 标量乘法 M (α i)] (s : 集合 ι) [对任意 i, 可判定 (i in s)]
   证明: s.piecewise_op (δ' := α) f₁ _ fun _ => (c • ·)
 
 Depends on / 依赖: piecewise_op, s.piecewise_op

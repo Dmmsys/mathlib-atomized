@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (Ext X Y n)
+  签名: 模 R (Ext X Y n)
   定义体: letI := HasDerivedCategory.standard C
   Equiv.module R homEquiv
 
@@ -289,7 +289,7 @@ definition bilinearCompOfLinear
 
 中文:
 定义 bilinearCompOfLinear
-  签名: (R : Type t) [CommRing R] [Linear R C] (X Y Z : C)
+  签名: (R : 类型 t) [交换环 R] [线性 R C] (X Y Z : C)
   定义体: { toFun β := α.comp β h
       map_add' := by simp
       map_smul' := by simp }

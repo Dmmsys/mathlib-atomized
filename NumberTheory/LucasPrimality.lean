@@ -91,7 +91,7 @@ theorem reverse_lucas_primality
 
 中文:
 定理 reverse_lucas_primality
-  条件: (p : 自然数) (hP : p.Prime)
+  条件: (p : 自然数) (hP : p.素)
   证明: by
   have : Fact p.Prime := ⟨hP⟩
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := (ZMod p)ˣ)
@@ -128,7 +128,7 @@ theorem lucas_primality_iff
 中文:
 定理 lucas_primality_iff
   条件: (p : 自然数)
-  结论: p.Prime ↔
+  结论: p.素 ↔
   证明: ⟨reverse_lucas_primality p, fun ⟨a, ⟨ha, hb⟩⟩ => lucas_primality p a ha hb⟩
 
 Depends on / 依赖: lucas_primality, reverse_lucas_primality

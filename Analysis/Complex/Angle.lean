@@ -115,7 +115,7 @@ lemma angle_mul_left
 
 中文:
 引理 angle_mul_left
-  条件: (ha : a != 0) (x y : Complex)
+  条件: (ha : a != 0) (x y : 复形)
   结论: angle (a * x) (a * y) = angle x y
   证明: by
   obtain rfl | hx := eq_or_ne x 0 <;> obtain rfl | hy := eq_or_ne y 0 <;>
@@ -137,7 +137,7 @@ lemma angle_mul_right
 
 中文:
 引理 angle_mul_right
-  条件: (ha : a != 0) (x y : Complex)
+  条件: (ha : a != 0) (x y : 复形)
   结论: angle (x * a) (y * a) = angle x y
   证明: by
   simp [mul_comm, angle_mul_left ha]
@@ -159,7 +159,7 @@ lemma angle_div_left_eq_angle_mul_right
 
 中文:
 引理 angle_div_left_eq_angle_mul_right
-  条件: (a x y : Complex)
+  条件: (a x y : 复形)
   结论: angle (x / a) y = angle x (y * a)
   证明: by
   obtain rfl | ha := eq_or_ne a 0
@@ -185,7 +185,7 @@ lemma angle_div_right_eq_angle_mul_left
 
 中文:
 引理 angle_div_right_eq_angle_mul_left
-  条件: (a x y : Complex)
+  条件: (a x y : 复形)
   结论: angle x (y / a) = angle (x * a) y
   证明: by
   rw [angle_comm]; rw [angle_div_left_eq_angle_mul_right]; rw [angle_comm]

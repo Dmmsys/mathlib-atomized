@@ -118,7 +118,7 @@ theorem meas_le_ae_eq_meas_lt
 
 中文:
 定理 meas_le_ae_eq_meas_lt
-  结论: {R : 类型} [LinearOrder R] [MeasurableSpace R]
+  结论: {R : 类型} [线性序 R] [可测空间 R]
   证明: Set.Countable.measure_zero (countable_meas_le_ne_meas_lt μ g) _
 
 Depends on / 依赖: Countable, Set.Countable.measure_zero, countable_meas_le_ne_meas_lt, measure_zero
@@ -257,7 +257,7 @@ theorem lintegral_comp_eq_lintegral_meas_le_mul_of_measurable
 
 中文:
 定理 lintegral_comp_eq_lintegral_meas_le_mul_of_measurable
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   /- We will reduce to the sigma-finite case, after excluding two easy cases where the result
   is more or less obvious. -/
@@ -467,7 +467,7 @@ theorem lintegral_comp_eq_lintegral_meas_le_mul
 
 中文:
 定理 lintegral_comp_eq_lintegral_meas_le_mul
-  结论: (μ : Measure α) (f_nn : 0 <=ᵐ[μ] f)
+  结论: (μ : 测度 α) (f_nn : 0 <=ᵐ[μ] f)
   证明: by
   obtain ⟨G, G_mble, G_nn, g_eq_G⟩ : exists G : Real -> Real, Measurable G ∧ 0 <= G
       ∧ g =ᵐ[volume.restrict (Ioi 0)] G := by
@@ -538,7 +538,7 @@ theorem lintegral_eq_lintegral_meas_le
 
 中文:
 定理 lintegral_eq_lintegral_meas_le
-  结论: (μ : Measure α) (f_nn : 0 <=ᵐ[μ] f)
+  结论: (μ : 测度 α) (f_nn : 0 <=ᵐ[μ] f)
   证明: by
   set cst := fun _ : Real => (1 : Real)
   have cst_intble : forall t > 0, IntervalIntegrable cst volume 0 t := fun _ _ =>
@@ -586,7 +586,7 @@ theorem lintegral_comp_eq_lintegral_meas_lt_mul
 
 中文:
 定理 lintegral_comp_eq_lintegral_meas_lt_mul
-  结论: (μ : Measure α) (f_nn : 0 <=ᵐ[μ] f)
+  结论: (μ : 测度 α) (f_nn : 0 <=ᵐ[μ] f)
   证明: by
   rw [lintegral_comp_eq_lintegral_meas_le_mul μ f_nn f_mble g_intble g_nn]
   apply lintegral_congr_ae
@@ -622,7 +622,7 @@ theorem lintegral_eq_lintegral_meas_lt
 
 中文:
 定理 lintegral_eq_lintegral_meas_lt
-  结论: (μ : Measure α)
+  结论: (μ : 测度 α)
   证明: by
   rw [lintegral_eq_lintegral_meas_le μ f_nn f_mble]
   apply lintegral_congr_ae
@@ -659,7 +659,7 @@ theorem Integrable.integral_eq_integral_meas_lt
   have rhs_integran
 
 中文:
-定理 Integrable.integral_eq_integral_meas_lt
+定理 可积.integral_eq_integral_meas_lt
   证明: by
   have key := lintegral_eq_lintegral_meas_lt μ f_nn f_intble.aemeasurable
   have lhs_finite : ∫⁻ (ω : α), ENNReal.ofReal (f ω) ∂μ < ∞ := Integrable.lintegral_lt_top f_intble
@@ -701,7 +701,7 @@ theorem Integrable.integral_eq_integral_meas_le
   exact congrArg ENNReal.toReal ht.symm
 
 中文:
-定理 Integrable.integral_eq_integral_meas_le
+定理 可积.integral_eq_integral_meas_le
   证明: by
   rw [Integrable.integral_eq_integral_meas_lt f_intble f_nn]
   apply integral_congr_ae
@@ -733,7 +733,7 @@ lemma Integrable.integral_eq_integral_Ioc_meas_le
   have o
 
 中文:
-引理 Integrable.integral_eq_integral_Ioc_meas_le
+引理 可积.integral_eq_integral_Ioc_meas_le
   结论: {f : α -> 实数} {M : 实数}
   证明: by
   rw [f_intble.integral_eq_integral_meas_le f_nn]

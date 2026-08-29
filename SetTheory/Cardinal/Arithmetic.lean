@@ -57,7 +57,7 @@ theorem mul_eq_self
 
 中文:
 定理 mul_eq_self
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
+  条件: {c : 基数} (hc : ℵ₀ <= c)
   结论: c * c = c
   证明: by
   -- The only nontrivial part is `c * c ≤ c`. We prove it inductively.
@@ -114,8 +114,8 @@ theorem mul_eq_max
 
 中文:
 定理 mul_eq_max
-  条件: {a b : Cardinal} (ha : ℵ₀ <= a) (hb : ℵ₀ <= b)
-  结论: a * b = max a b
+  条件: {a b : 基数} (ha : ℵ₀ <= a) (hb : ℵ₀ <= b)
+  结论: a * b = 最大值 a b
   证明: le_antisymm
       (mul_eq_self (ha.trans (le_max_left a b)) ▸
         mul_le_mul' (le_max_left _ _) (le_max_right _ _)) <|
@@ -147,8 +147,8 @@ theorem mul_mk_eq_max
 
 中文:
 定理 mul_mk_eq_max
-  条件: {α β : 类型u} [Infinite α] [Infinite β]
-  结论: #α * #β = max #α #β
+  条件: {α β : 类型u} [无限 α] [无限 β]
+  结论: #α * #β = 最大值 #α #β
   证明: mul_eq_max (aleph0_le_mk α) (aleph0_le_mk β)
 
 @[simp]
@@ -173,8 +173,8 @@ theorem aleph_mul_aleph
 
 中文:
 定理 aleph_mul_aleph
-  条件: (o₁ o₂ : Ordinal)
-  结论: ℵ_ o₁ * ℵ_ o₂ = ℵ_ (max o₁ o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: ℵ_ o₁ * ℵ_ o₂ = ℵ_ (最大值 o₁ o₂)
   证明: by
   rw [Cardinal.mul_eq_max (aleph0_le_aleph o₁) (aleph0_le_aleph o₂)]; rw [aleph_max]
 
@@ -199,7 +199,7 @@ theorem aleph0_mul_eq
 
 中文:
 定理 aleph0_mul_eq
-  条件: {a : Cardinal} (ha : ℵ₀ <= a)
+  条件: {a : 基数} (ha : ℵ₀ <= a)
   结论: ℵ₀ * a = a
   证明: (mul_eq_max le_rfl ha).trans (max_eq_right ha)
 
@@ -222,7 +222,7 @@ theorem mul_aleph0_eq
 
 中文:
 定理 mul_aleph0_eq
-  条件: {a : Cardinal} (ha : ℵ₀ <= a)
+  条件: {a : 基数} (ha : ℵ₀ <= a)
   结论: a * ℵ₀ = a
   证明: (mul_eq_max ha le_rfl).trans (max_eq_left ha)
 
@@ -242,7 +242,7 @@ theorem aleph0_mul_mk_eq
 
 中文:
 定理 aleph0_mul_mk_eq
-  条件: {α : 类型} [Infinite α]
+  条件: {α : 类型} [无限 α]
   结论: ℵ₀ * #α = #α
   证明: aleph0_mul_eq (aleph0_le_mk α)
 
@@ -262,7 +262,7 @@ theorem mk_mul_aleph0_eq
 
 中文:
 定理 mk_mul_aleph0_eq
-  条件: {α : 类型} [Infinite α]
+  条件: {α : 类型} [无限 α]
   结论: #α * ℵ₀ = #α
   证明: mul_aleph0_eq (aleph0_le_mk α)
 
@@ -283,7 +283,7 @@ theorem aleph0_mul_aleph
 
 中文:
 定理 aleph0_mul_aleph
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ₀ * ℵ_ o = ℵ_ o
   证明: by
   simp
@@ -303,7 +303,7 @@ theorem aleph_mul_aleph0
 
 中文:
 定理 aleph_mul_aleph0
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ℵ_ o * ℵ₀ = ℵ_ o
   证明: by
   simp
@@ -324,7 +324,7 @@ theorem mul_le_of_le
 
 中文:
 定理 mul_le_of_le
-  条件: {a b c : Cardinal} (hc : ℵ₀ <= c) (ha : a <= c) (hb : b <= c)
+  条件: {a b c : 基数} (hc : ℵ₀ <= c) (ha : a <= c) (hb : b <= c)
   结论: a * b <= c
   证明: by
   rw [← Cardinal.mul_eq_self hc]
@@ -352,7 +352,7 @@ theorem mul_lt_of_lt
 
 中文:
 定理 mul_lt_of_lt
-  条件: {a b c : Cardinal} (hc : ℵ₀ <= c) (ha : a < c) (hb : b < c)
+  条件: {a b c : 基数} (hc : ℵ₀ <= c) (ha : a < c) (hb : b < c)
   结论: a * b < c
   证明: by
   apply (mul_le_mul' (le_max_left a b) (le_max_right a b)).trans_lt
@@ -384,8 +384,8 @@ theorem mul_le_max_of_aleph0_le_left
 
 中文:
 定理 mul_le_max_of_aleph0_le_left
-  条件: {a b : Cardinal} (h : ℵ₀ <= a)
-  结论: a * b <= max a b
+  条件: {a b : 基数} (h : ℵ₀ <= a)
+  结论: a * b <= 最大值 a b
   证明: by
   convert! mul_le_mul' (le_max_left a b) (le_max_right a b) using 1
   rw [mul_eq_self]
@@ -415,7 +415,7 @@ theorem mul_eq_max_of_aleph0_le_left
 
 中文:
 定理 mul_eq_max_of_aleph0_le_left
-  条件: {a b : Cardinal} (h : ℵ₀ <= a) (h' : b != 0)
+  条件: {a b : 基数} (h : ℵ₀ <= a) (h' : b != 0)
   证明: by
   rcases le_or_gt ℵ₀ b with hb | hb
   · exact mul_eq_max h hb
@@ -449,8 +449,8 @@ theorem mul_le_max_of_aleph0_le_right
 
 中文:
 定理 mul_le_max_of_aleph0_le_right
-  条件: {a b : Cardinal} (h : ℵ₀ <= b)
-  结论: a * b <= max a b
+  条件: {a b : 基数} (h : ℵ₀ <= b)
+  结论: a * b <= 最大值 a b
   证明: by
   simpa only [mul_comm b, max_comm b] using mul_le_max_of_aleph0_le_left h
 
@@ -471,7 +471,7 @@ theorem mul_eq_max_of_aleph0_le_right
 
 中文:
 定理 mul_eq_max_of_aleph0_le_right
-  条件: {a b : Cardinal} (h' : a != 0) (h : ℵ₀ <= b)
+  条件: {a b : 基数} (h' : a != 0) (h : ℵ₀ <= b)
   证明: by
   rw [mul_comm]; rw [max_comm]
   exact mul_eq_max_of_aleph0_le_left h h'
@@ -497,8 +497,8 @@ theorem mul_eq_max'
 
 中文:
 定理 mul_eq_max'
-  条件: {a b : Cardinal} (h : ℵ₀ <= a * b)
-  结论: a * b = max a b
+  条件: {a b : 基数} (h : ℵ₀ <= a * b)
+  结论: a * b = 最大值 a b
   证明: by
   rcases aleph0_le_mul_iff.mp h with ⟨ha, hb, ha' | hb'⟩
   · exact mul_eq_max_of_aleph0_le_left ha' hb
@@ -529,8 +529,8 @@ theorem mul_le_max
 
 中文:
 定理 mul_le_max
-  条件: (a b : Cardinal)
-  结论: a * b <= max (max a b) ℵ₀
+  条件: (a b : 基数)
+  结论: a * b <= 最大值 (最大值 a b) ℵ₀
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha0); · simp
   rcases eq_or_ne b 0 with (rfl | hb0); · simp
@@ -565,7 +565,7 @@ theorem mul_eq_left
 
 中文:
 定理 mul_eq_left
-  条件: {a b : Cardinal} (ha : ℵ₀ <= a) (hb : b <= a) (hb' : b != 0)
+  条件: {a b : 基数} (ha : ℵ₀ <= a) (hb : b <= a) (hb' : b != 0)
   结论: a * b = a
   证明: by
   rw [mul_eq_max_of_aleph0_le_left ha hb']; rw [max_eq_left hb]
@@ -587,7 +587,7 @@ theorem mul_eq_right
 
 中文:
 定理 mul_eq_right
-  条件: {a b : Cardinal} (hb : ℵ₀ <= b) (ha : a <= b) (ha' : a != 0)
+  条件: {a b : 基数} (hb : ℵ₀ <= b) (ha : a <= b) (ha' : a != 0)
   结论: a * b = b
   证明: by
   rw [mul_comm]; rw [mul_eq_left hb ha ha']
@@ -610,7 +610,7 @@ theorem le_mul_left
 
 中文:
 定理 le_mul_left
-  条件: {a b : Cardinal} (h : b != 0)
+  条件: {a b : 基数} (h : b != 0)
   结论: a <= b * a
   证明: by
   convert! mul_le_mul_left (Cardinal.one_le_iff_ne_zero.mpr h) a
@@ -635,7 +635,7 @@ theorem le_mul_right
 
 中文:
 定理 le_mul_right
-  条件: {a b : Cardinal} (h : b != 0)
+  条件: {a b : 基数} (h : b != 0)
   结论: a <= a * b
   证明: by
   rw [mul_comm]
@@ -670,8 +670,8 @@ theorem mul_eq_left_iff
 
 中文:
 定理 mul_eq_left_iff
-  条件: {a b : Cardinal}
-  结论: a * b = a ↔ max ℵ₀ b <= a ∧ b != 0 ∨ b = 1 ∨ a = 0
+  条件: {a b : 基数}
+  结论: a * b = a ↔ 最大值 ℵ₀ b <= a ∧ b != 0 ∨ b = 1 ∨ a = 0
   证明: by
   rw [max_le_iff]
   refine ⟨fun h => ?_, ?_⟩
@@ -750,7 +750,7 @@ theorem add_eq_self
 
 中文:
 定理 add_eq_self
-  条件: {c : Cardinal} (h : ℵ₀ <= c)
+  条件: {c : 基数} (h : ℵ₀ <= c)
   结论: c + c = c
   证明: le_antisymm
     (by simpa [two_mul, mul_eq_self h] using mul_le_mul_left (natCast_le_aleph0 (n := 2).trans h) c)
@@ -777,8 +777,8 @@ theorem add_eq_max
 
 中文:
 定理 add_eq_max
-  条件: {a b : Cardinal} (ha : ℵ₀ <= a)
-  结论: a + b = max a b
+  条件: {a b : 基数} (ha : ℵ₀ <= a)
+  结论: a + b = 最大值 a b
   证明: le_antisymm
       (add_eq_self (ha.trans (le_max_left a b)) ▸
         add_le_add (le_max_left _ _) (le_max_right _ _)) <|
@@ -806,8 +806,8 @@ theorem add_eq_max'
 
 中文:
 定理 add_eq_max'
-  条件: {a b : Cardinal} (ha : ℵ₀ <= b)
-  结论: a + b = max a b
+  条件: {a b : 基数} (ha : ℵ₀ <= b)
+  结论: a + b = 最大值 a b
   证明: by
   rw [add_comm]; rw [max_comm]; rw [add_eq_max ha]
 
@@ -832,8 +832,8 @@ theorem add_mk_eq_max
 
 中文:
 定理 add_mk_eq_max
-  条件: {α β : 类型u} [Infinite α]
-  结论: #α + #β = max #α #β
+  条件: {α β : 类型u} [无限 α]
+  结论: #α + #β = 最大值 #α #β
   证明: add_eq_max (aleph0_le_mk α)
 
 @[simp]
@@ -855,8 +855,8 @@ theorem add_mk_eq_max'
 
 中文:
 定理 add_mk_eq_max'
-  条件: {α β : 类型u} [Infinite β]
-  结论: #α + #β = max #α #β
+  条件: {α β : 类型u} [无限 β]
+  结论: #α + #β = 最大值 #α #β
   证明: add_eq_max' (aleph0_le_mk β)
 
 Depends on / 依赖: add_eq_max, aleph0_le_mk
@@ -876,7 +876,7 @@ theorem add_mk_eq_self
 
 中文:
 定理 add_mk_eq_self
-  条件: {α : 类型} [Infinite α]
+  条件: {α : 类型} [无限 α]
   结论: #α + #α = #α
   证明: by
   simp
@@ -902,8 +902,8 @@ theorem add_le_max
 
 中文:
 定理 add_le_max
-  条件: (a b : Cardinal)
-  结论: a + b <= max (max a b) ℵ₀
+  条件: (a b : 基数)
+  结论: a + b <= 最大值 (最大值 a b) ℵ₀
   证明: by
   rcases le_or_gt ℵ₀ a with ha | ha
   · rw [add_eq_max ha]
@@ -935,7 +935,7 @@ theorem add_le_of_le
 
 中文:
 定理 add_le_of_le
-  条件: {a b c : Cardinal} (hc : ℵ₀ <= c) (h1 : a <= c) (h2 : b <= c)
+  条件: {a b c : 基数} (hc : ℵ₀ <= c) (h1 : a <= c) (h2 : b <= c)
   结论: a + b <= c
   证明: (add_le_add h1 h2).trans le_of_eq add_eq_self hc
 
@@ -957,7 +957,7 @@ theorem add_lt_of_lt
 
 中文:
 定理 add_lt_of_lt
-  条件: {a b c : Cardinal} (hc : ℵ₀ <= c) (h1 : a < c) (h2 : b < c)
+  条件: {a b c : 基数} (hc : ℵ₀ <= c) (h1 : a < c) (h2 : b < c)
   结论: a + b < c
   证明: (add_le_add (le_max_left a b) (le_max_right a b)).trans_lt
     (lt_or_ge (max a b) ℵ₀).elim (fun h => (add_lt_aleph0 h h).trans_le hc) fun h => by
@@ -981,7 +981,7 @@ theorem add_one_lt_of_lt
 
 中文:
 定理 add_one_lt_of_lt
-  条件: {a b : Cardinal} (hb : ℵ₀ <= b) (ha : a < b)
+  条件: {a b : 基数} (hb : ℵ₀ <= b) (ha : a < b)
   结论: a + 1 < b
   证明: add_lt_of_lt hb ha (one_lt_aleph0.trans_le hb)
 
@@ -1001,7 +1001,7 @@ theorem one_add_lt_of_lt
 
 中文:
 定理 one_add_lt_of_lt
-  条件: {a b : Cardinal} (hb : ℵ₀ <= b) (ha : a < b)
+  条件: {a b : 基数} (hb : ℵ₀ <= b) (ha : a < b)
   结论: 1 + a < b
   证明: add_lt_of_lt hb (one_lt_aleph0.trans_le hb) ha
 
@@ -1026,7 +1026,7 @@ theorem eq_of_add_eq_of_aleph0_le
 
 中文:
 定理 eq_of_add_eq_of_aleph0_le
-  条件: {a b c : Cardinal} (h : a + b = c) (ha : a < c) (hc : ℵ₀ <= c)
+  条件: {a b c : 基数} (h : a + b = c) (ha : a < c) (hc : ℵ₀ <= c)
   证明: by
   apply le_antisymm
   · rw [← h]
@@ -1058,7 +1058,7 @@ theorem add_eq_left
 
 中文:
 定理 add_eq_left
-  条件: {a b : Cardinal} (ha : ℵ₀ <= a) (hb : b <= a)
+  条件: {a b : 基数} (ha : ℵ₀ <= a) (hb : b <= a)
   结论: a + b = a
   证明: by
   rw [add_eq_max ha]; rw [max_eq_left hb]
@@ -1080,7 +1080,7 @@ theorem add_eq_right
 
 中文:
 定理 add_eq_right
-  条件: {a b : Cardinal} (hb : ℵ₀ <= b) (ha : a <= b)
+  条件: {a b : 基数} (hb : ℵ₀ <= b) (ha : a <= b)
   结论: a + b = b
   证明: by
   rw [add_comm]; rw [add_eq_left hb ha]
@@ -1112,8 +1112,8 @@ theorem add_eq_left_iff
 
 中文:
 定理 add_eq_left_iff
-  条件: {a b : Cardinal}
-  结论: a + b = a ↔ max ℵ₀ b <= a ∨ b = 0
+  条件: {a b : 基数}
+  结论: a + b = a ↔ 最大值 ℵ₀ b <= a ∨ b = 0
   证明: by
   rw [max_le_iff]
   refine ⟨fun h => ?_, ?_⟩
@@ -1160,8 +1160,8 @@ theorem add_eq_right_iff
 
 中文:
 定理 add_eq_right_iff
-  条件: {a b : Cardinal}
-  结论: a + b = b ↔ max ℵ₀ a <= b ∨ a = 0
+  条件: {a b : 基数}
+  结论: a + b = b ↔ 最大值 ℵ₀ a <= b ∨ a = 0
   证明: by
   rw [add_comm]; rw [add_eq_left_iff]
 
@@ -1181,7 +1181,7 @@ theorem add_nat_eq
 
 中文:
 定理 add_nat_eq
-  条件: {a : Cardinal} (n : 自然数) (ha : ℵ₀ <= a)
+  条件: {a : 基数} (n : 自然数) (ha : ℵ₀ <= a)
   结论: a + n = a
   证明: add_eq_left ha (natCast_le_aleph0.trans ha)
 
@@ -1202,7 +1202,7 @@ theorem nat_add_eq
 
 中文:
 定理 nat_add_eq
-  条件: {a : Cardinal} (n : 自然数) (ha : ℵ₀ <= a)
+  条件: {a : 基数} (n : 自然数) (ha : ℵ₀ <= a)
   结论: n + a = a
   证明: by
   rw [add_comm]; rw [add_nat_eq n ha]
@@ -1223,7 +1223,7 @@ theorem add_one_eq
 
 中文:
 定理 add_one_eq
-  条件: {a : Cardinal} (ha : ℵ₀ <= a)
+  条件: {a : 基数} (ha : ℵ₀ <= a)
   结论: a + 1 = a
   证明: add_one_of_aleph0_le ha
 
@@ -1243,7 +1243,7 @@ theorem mk_add_one_eq
 
 中文:
 定理 mk_add_one_eq
-  条件: {α : 类型} [Infinite α]
+  条件: {α : 类型} [无限 α]
   结论: #α + 1 = #α
   证明: add_one_eq (aleph0_le_mk α)
 
@@ -1264,7 +1264,7 @@ theorem mk_Iic_lt
 
 中文:
 定理 mk_Iic_lt
-  结论: {α : 类型} [LinearOrder α] [WellFoundedLT α] (i : α)
+  结论: {α : 类型} [线性序 α] [WellFoundedLT α] (i : α)
   证明: by
   rw [← Iio_insert]; rw [mk_insert self_notMem_Iio]
   exact add_one_lt_of_lt hα (mk_Iio_lt i h)
@@ -1286,7 +1286,7 @@ theorem mk_Ici_lt
 
 中文:
 定理 mk_Ici_lt
-  结论: {α : 类型} [LinearOrder α] [WellFoundedGT α] (i : α)
+  结论: {α : 类型} [线性序 α] [WellFoundedGT α] (i : α)
   证明: mk_Iic_lt (OrderDual.toDual i) h hα
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, mk_Iic_lt, toDual
@@ -1314,7 +1314,7 @@ theorem eq_of_add_eq_add_left
 
 中文:
 定理 eq_of_add_eq_add_left
-  条件: {a b c : Cardinal} (h : a + b = a + c) (ha : a < ℵ₀)
+  条件: {a b c : 基数} (h : a + b = a + c) (ha : a < ℵ₀)
   证明: by
   rcases le_or_gt ℵ₀ b with hb | hb
   · have : a < b := ha.trans_le hb
@@ -1358,7 +1358,7 @@ theorem eq_of_add_eq_add_right
 
 中文:
 定理 eq_of_add_eq_add_right
-  条件: {a b c : Cardinal} (h : a + b = c + b) (hb : b < ℵ₀)
+  条件: {a b c : 基数} (h : a + b = c + b) (hb : b < ℵ₀)
   证明: by
   rw [add_comm a b]; rw [add_comm c b] at h
   exact Cardinal.eq_of_add_eq_add_left h hb
@@ -1382,8 +1382,8 @@ theorem exists_rel_mk_fibers_lt
   simpa using! mk_Iic_lt _ hα (aleph0_le_mk _)
 
 中文:
-定理 exists_rel_mk_fibers_lt
-  条件: (α : 类型) [Infinite α]
+定理 存在_rel_mk_fibers_lt
+  条件: (α : 类型) [无限 α]
   证明: by
   obtain ⟨α, _, hα⟩ := exists_ord_eq_type_lt α
   refine ⟨LT.lt, fun x => ?_, fun y => mk_Iio_lt _ hα⟩
@@ -1421,7 +1421,7 @@ theorem ciSup_add
 
 中文:
 定理 ciSup_add
-  条件: (hf : BddAbove (range f)) (c : Cardinal.{v})
+  条件: (hf : BddAbove (range f)) (c : 基数.{v})
   证明: by
   have (i : ι) : f i + c <= (⨆ i, f i) + c := by grw [le_ciSup hf i]
   refine le_antisymm ?_ (ciSup_le' this)
@@ -1452,7 +1452,7 @@ theorem add_ciSup
 
 中文:
 定理 add_ciSup
-  条件: (hf : BddAbove (range f)) (c : Cardinal.{v})
+  条件: (hf : BddAbove (range f)) (c : 基数.{v})
   证明: by
   rw [add_comm]; rw [Cardinal.ciSup_add f hf]; simp_rw [add_comm]
 -/
@@ -1471,7 +1471,7 @@ theorem ciSup_add_ciSup
 
 中文:
 定理 ciSup_add_ciSup
-  结论: (hf : BddAbove (range f)) (g : ι' -> Cardinal.{v})
+  结论: (hf : BddAbove (range f)) (g : ι' -> 基数.{v})
   证明: by
   simp_rw [Cardinal.ciSup_add f hf, Cardinal.add_ciSup g hg]
 -/
@@ -1499,7 +1499,7 @@ theorem ciSup_mul
 
 中文:
 定理 ciSup_mul
-  条件: (c : Cardinal.{v})
+  条件: (c : 基数.{v})
   结论: (⨆ i, f i) * c = ⨆ i, f i * c
   证明: by
   cases isEmpty_or_nonempty ι; · simp
@@ -1539,7 +1539,7 @@ theorem mul_ciSup
 
 中文:
 定理 mul_ciSup
-  条件: (c : Cardinal.{v})
+  条件: (c : 基数.{v})
   结论: c * (⨆ i, f i) = ⨆ i, c * f i
   证明: by
   rw [mul_comm]; rw [Cardinal.ciSup_mul f]; simp_rw [mul_comm]
@@ -1558,7 +1558,7 @@ theorem ciSup_mul_ciSup
 
 中文:
 定理 ciSup_mul_ciSup
-  条件: (g : ι' -> Cardinal.{v})
+  条件: (g : ι' -> 基数.{v})
   证明: by
   simp_rw [Cardinal.ciSup_mul f, Cardinal.mul_ciSup g]
 -/
@@ -1580,7 +1580,7 @@ theorem sum_eq_lift_iSup_of_lift_mk_le_lift_iSup
 
 中文:
 定理 sum_eq_lift_iSup_of_lift_mk_le_lift_iSup
-  结论: [Small.{v} ι] {f : ι -> Cardinal.{v}} (hι : ℵ₀ <= #ι)
+  结论: [Small.{v} ι] {f : ι -> 基数.{v}} (hι : ℵ₀ <= #ι)
   证明: by
   rw [lift_iSup bddAbove_of_small] at h
   apply (lift_iSup_le_sum f).antisymm'
@@ -1609,7 +1609,7 @@ theorem sum_eq_iSup_of_lift_mk_le_iSup
 
 中文:
 定理 sum_eq_iSup_of_lift_mk_le_iSup
-  结论: {f : ι -> Cardinal.{max u v}} (hι : ℵ₀ <= #ι)
+  结论: {f : ι -> 基数.{最大值 u v}} (hι : ℵ₀ <= #ι)
   证明: by
   rw [← lift_id'.{u]; rw [v} (iSup _)]
   apply sum_eq_lift_iSup_of_lift_mk_le_lift_iSup hι
@@ -1633,7 +1633,7 @@ theorem sum_eq_iSup_of_mk_le_iSup
 
 中文:
 定理 sum_eq_iSup_of_mk_le_iSup
-  条件: {f : ι -> Cardinal.{u}} (hι : ℵ₀ <= #ι) (h : #ι <= iSup f)
+  条件: {f : ι -> 基数.{u}} (hι : ℵ₀ <= #ι) (h : #ι <= iSup f)
   证明: sum_eq_iSup_of_lift_mk_le_iSup hι ((lift_id #ι).symm ▸ h)
 
 Depends on / 依赖: lift_id, sum_eq_iSup_of_lift_mk_le_iSup
@@ -1660,8 +1660,8 @@ theorem aleph_add_aleph
 
 中文:
 定理 aleph_add_aleph
-  条件: (o₁ o₂ : Ordinal)
-  结论: ℵ_ o₁ + ℵ_ o₂ = ℵ_ (max o₁ o₂)
+  条件: (o₁ o₂ : 序数)
+  结论: ℵ_ o₁ + ℵ_ o₂ = ℵ_ (最大值 o₁ o₂)
   证明: by
   rw [Cardinal.add_eq_max (aleph0_le_aleph o₁)]; rw [aleph_max]
 
@@ -1683,7 +1683,7 @@ theorem add_right_inj_of_lt_aleph0
 
 中文:
 定理 add_right_inj_of_lt_aleph0
-  条件: {α β γ : Cardinal} (γ₀ : γ < aleph0)
+  条件: {α β γ : 基数} (γ₀ : γ < aleph0)
   结论: α + γ = β + γ ↔ α = β
   证明: ⟨fun h => Cardinal.eq_of_add_eq_add_right h γ₀, fun h => congr_arg (· + γ) h⟩
 
@@ -1708,7 +1708,7 @@ theorem add_nat_inj
 
 中文:
 定理 add_nat_inj
-  条件: {α β : Cardinal} (n : 自然数)
+  条件: {α β : 基数} (n : 自然数)
   结论: α + n = β + n ↔ α = β
   证明: add_right_inj_of_lt_aleph0 natCast_lt_aleph0
 
@@ -1731,7 +1731,7 @@ theorem add_one_inj
 
 中文:
 定理 add_one_inj
-  条件: {α β : Cardinal}
+  条件: {α β : 基数}
   结论: α + 1 = β + 1 ↔ α = β
   证明: add_right_inj_of_lt_aleph0 one_lt_aleph0
 
@@ -1756,7 +1756,7 @@ theorem add_le_add_iff_of_lt_aleph0
 
 中文:
 定理 add_le_add_iff_of_lt_aleph0
-  条件: {α β γ : Cardinal} (γ₀ : γ < ℵ₀)
+  条件: {α β γ : 基数} (γ₀ : γ < ℵ₀)
   证明: by
   refine ⟨fun h => ?_, fun h => by gcongr⟩
   contrapose h
@@ -1788,7 +1788,7 @@ theorem add_nat_le_add_nat_iff
 
 中文:
 定理 add_nat_le_add_nat_iff
-  条件: {α β : Cardinal} (n : 自然数)
+  条件: {α β : 基数} (n : 自然数)
   结论: α + n <= β + n ↔ α <= β
   证明: add_le_add_iff_of_lt_aleph0 natCast_lt_aleph0
 
@@ -1811,7 +1811,7 @@ theorem add_one_le_add_one_iff
 
 中文:
 定理 add_one_le_add_one_iff
-  条件: {α β : Cardinal}
+  条件: {α β : 基数}
   结论: α + 1 <= β + 1 ↔ α <= β
   证明: add_le_add_iff_of_lt_aleph0 one_lt_aleph0
 
@@ -1831,7 +1831,7 @@ lemma add_lt_add_iff_of_right_lt_aleph0
 
 中文:
 引理 add_lt_add_iff_of_right_lt_aleph0
-  条件: {a b c : Cardinal} (hc : c < ℵ₀)
+  条件: {a b c : 基数} (hc : c < ℵ₀)
   证明: by
   constructor <;> contrapose! <;> simp [add_le_add_iff_of_lt_aleph0 hc]
 
@@ -1852,7 +1852,7 @@ lemma add_lt_add_iff_of_left_lt_aleph0
 
 中文:
 引理 add_lt_add_iff_of_left_lt_aleph0
-  条件: {a b c : Cardinal} (hc : c < ℵ₀)
+  条件: {a b c : 基数} (hc : c < ℵ₀)
   证明: by
   simpa [add_comm] using add_lt_add_iff_of_right_lt_aleph0 (a := a) (b := b) hc
 
@@ -1877,7 +1877,7 @@ lemma add_lt_add
 
 中文:
 引理 add_lt_add
-  结论: {κ₁ κ₂ μ₁ μ₂ : Cardinal}
+  结论: {κ₁ κ₂ μ₁ μ₂ : 基数}
   证明: by
   rcases le_or_gt ℵ₀ (κ₂ + μ₂) with hinf | hfin
   · refine add_lt_of_lt hinf ?_ ?_ <;> apply lt_of_lt_of_le <;> solve | assumption | simp
@@ -1921,7 +1921,7 @@ lemma natCast_mul_strictMono
 中文:
 引理 natCast_mul_strictMono
   条件: {n : 自然数} (hn : n != 0)
-  结论: StrictMono fun a : Cardinal => n * a
+  结论: 严格递增 fun a : 基数 => n * a
   证明: by
   match n, hn with
   | 1, _ => simpa using! strictMono_id
@@ -1960,7 +1960,7 @@ lemma mul_natCast_strictMono
 中文:
 引理 mul_natCast_strictMono
   条件: (hn : n != 0)
-  结论: StrictMono fun a : Cardinal => a * n
+  结论: 严格递增 fun a : 基数 => a * n
   证明: fun _ _ hlt => by simpa [mul_comm] using natCast_mul_strictMono hn hlt
 
 @[simp]
@@ -2140,7 +2140,7 @@ theorem pow_le
 
 中文:
 定理 pow_le
-  条件: {κ μ : Cardinal.{u}} (H1 : ℵ₀ <= κ) (H2 : μ < ℵ₀)
+  条件: {κ μ : 基数.{u}} (H1 : ℵ₀ <= κ) (H2 : μ < ℵ₀)
   结论: κ ^ μ <= κ
   证明: let ⟨n, H3⟩ := lt_aleph0.1 H2
   H3.symm ▸
@@ -2174,7 +2174,7 @@ theorem pow_eq
 
 中文:
 定理 pow_eq
-  条件: {κ μ : Cardinal.{u}} (H1 : ℵ₀ <= κ) (H2 : 1 <= μ) (H3 : μ < ℵ₀)
+  条件: {κ μ : 基数.{u}} (H1 : ℵ₀ <= κ) (H2 : 1 <= μ) (H3 : μ < ℵ₀)
   结论: κ ^ μ = κ
   证明: (pow_le H1 H3).antisymm self_le_power κ H2
 
@@ -2197,7 +2197,7 @@ theorem power_self_eq
 
 中文:
 定理 power_self_eq
-  条件: {c : Cardinal} (h : ℵ₀ <= c)
+  条件: {c : 基数} (h : ℵ₀ <= c)
   结论: c ^ c = 2 ^ c
   证明: by
   apply ((power_le_power_right <| (cantor c).le).trans _).antisymm
@@ -2226,7 +2226,7 @@ theorem prod_eq_two_power
 
 中文:
 定理 prod_eq_two_power
-  结论: {ι : 类型u} [Infinite ι] {c : ι -> Cardinal.{v}} (h₁ : 对任意 i, 2 <= c i)
+  结论: {ι : 类型u} [无限 ι] {c : ι -> 基数.{v}} (h₁ : 对任意 i, 2 <= c i)
   证明: by
   rw [← lift_id'.{u]; rw [v} (prod.{u]; rw [v} c)]; rw [lift_prod]; rw [← lift_two_power]
   apply le_antisymm
@@ -2257,7 +2257,7 @@ theorem power_eq_two_power
 
 中文:
 定理 power_eq_two_power
-  条件: {c₁ c₂ : Cardinal} (h₁ : ℵ₀ <= c₁) (h₂ : 2 <= c₂) (h₂' : c₂ <= c₁)
+  条件: {c₁ c₂ : 基数} (h₁ : ℵ₀ <= c₁) (h₂ : 2 <= c₂) (h₂' : c₂ <= c₁)
   证明: le_antisymm (power_self_eq h₁ ▸ power_le_power_right h₂') (power_le_power_right h₂)
 
 Depends on / 依赖: le_antisymm, power_le_power_right, power_self_eq
@@ -2276,7 +2276,7 @@ theorem nat_power_eq
 
 中文:
 定理 nat_power_eq
-  条件: {c : Cardinal.{u}} (h : ℵ₀ <= c) {n : 自然数} (hn : 2 <= n)
+  条件: {c : 基数.{u}} (h : ℵ₀ <= c) {n : 自然数} (hn : 2 <= n)
   证明: power_eq_two_power h (by assumption_mod_cast) (natCast_le_aleph0.trans h)
 
 Depends on / 依赖: assumption_mod_cast, natCast_le_aleph0, natCast_le_aleph0.trans, power_eq_two_power
@@ -2296,7 +2296,7 @@ theorem power_nat_le
 
 中文:
 定理 power_nat_le
-  条件: {c : Cardinal.{u}} {n : 自然数} (h : ℵ₀ <= c)
+  条件: {c : 基数.{u}} {n : 自然数} (h : ℵ₀ <= c)
   结论: c ^ n <= c
   证明: pow_le h natCast_lt_aleph0
 
@@ -2316,7 +2316,7 @@ theorem power_nat_eq
 
 中文:
 定理 power_nat_eq
-  条件: {c : Cardinal.{u}} {n : 自然数} (h1 : ℵ₀ <= c) (h2 : 1 <= n)
+  条件: {c : 基数.{u}} {n : 自然数} (h1 : ℵ₀ <= c) (h2 : 1 <= n)
   结论: c ^ n = c
   证明: pow_eq h1 (mod_cast h2) natCast_lt_aleph0
 
@@ -2339,8 +2339,8 @@ theorem power_nat_le_max
 
 中文:
 定理 power_nat_le_max
-  条件: {c : Cardinal.{u}} {n : 自然数}
-  结论: c ^ (n : Cardinal.{u}) <= max c ℵ₀
+  条件: {c : 基数.{u}} {n : 自然数}
+  结论: c ^ (n : 基数.{u}) <= 最大值 c ℵ₀
   证明: by
   rcases le_or_gt ℵ₀ c with hc | hc
   · exact le_max_of_le_left (power_nat_le hc)
@@ -2365,7 +2365,7 @@ lemma power_le_aleph0
 
 中文:
 引理 power_le_aleph0
-  条件: {a b : Cardinal.{u}} (ha : a <= ℵ₀) (hb : b < ℵ₀)
+  条件: {a b : 基数.{u}} (ha : a <= ℵ₀) (hb : b < ℵ₀)
   结论: a ^ b <= ℵ₀
   证明: by
   lift b to Nat using hb; simpa [ha] using power_nat_le_max (c := a)
@@ -2390,7 +2390,7 @@ theorem powerlt_aleph0
 
 中文:
 定理 powerlt_aleph0
-  条件: {c : Cardinal} (h : ℵ₀ <= c)
+  条件: {c : 基数} (h : ℵ₀ <= c)
   结论: c ^< ℵ₀ = c
   证明: by
   apply le_antisymm
@@ -2422,8 +2422,8 @@ theorem powerlt_aleph0_le
 
 中文:
 定理 powerlt_aleph0_le
-  条件: (c : Cardinal)
-  结论: c ^< ℵ₀ <= max c ℵ₀
+  条件: (c : 基数)
+  结论: c ^< ℵ₀ <= 最大值 c ℵ₀
   证明: by
   rcases le_or_gt ℵ₀ c with h | h
   · rw [powerlt_aleph0 h]
@@ -2666,7 +2666,7 @@ theorem mk_perm_eq_self_power
 
 中文:
 定理 mk_perm_eq_self_power
-  结论: #(Equiv.Perm α) = #α ^ #α
+  结论: #(等价.置换 α) = #α ^ #α
   证明: ((mk_equiv_le_embedding α α).trans (mk_embedding_le_arrow α α)).antisymm by
     suffices Nonempty ((α -> Bool) ↪ Equiv.Perm (α × Bool)) by
       obtain ⟨e⟩ : Nonempty (α ≃ α × Bool) := by simp [← Cardinal.eq, mul_two]
@@ -2697,7 +2697,7 @@ theorem mk_perm_eq_two_power
 
 中文:
 定理 mk_perm_eq_two_power
-  结论: #(Equiv.Perm α) = 2 ^ #α
+  结论: #(等价.置换 α) = 2 ^ #α
   证明: by
   rw [mk_perm_eq_self_power]; rw [power_self_eq (aleph0_le_mk α)]
 
@@ -2902,7 +2902,7 @@ theorem mk_surjective_eq_arrow_of_le
 中文:
 定理 mk_surjective_eq_arrow_of_le
   条件: (le : #β <= #α)
-  结论: #{f : α -> β | Surjective f} = #(α -> β)
+  结论: #{f : α -> β | 满射 f} = #(α -> β)
   证明: mk_surjective_eq_arrow_of_lift_le (lift_le.mpr le)
 
 Depends on / 依赖: lift_le, lift_le.mpr, mk_surjective_eq_arrow_of_lift_le
@@ -2930,8 +2930,8 @@ le_antisymm ((le_def _ _).2 ⟨⟨fun a => [a], fun _ => by simp⟩⟩)
 
 中文:
 定理 mk_list_eq_mk
-  条件: (α : 类型u) [Infinite α]
-  结论: #(List α) = #α
+  条件: (α : 类型u) [无限 α]
+  结论: #(列表 α) = #α
   证明: have H1 : ℵ₀ <= #α := aleph0_le_mk α
 Eq.symm
 le_antisymm ((le_def _ _).2 ⟨⟨fun a => [a], fun _ => by simp⟩⟩)
@@ -2962,8 +2962,8 @@ theorem mk_list_eq_aleph0
 
 中文:
 定理 mk_list_eq_aleph0
-  条件: (α : 类型u) [Countable α] [Nonempty α]
-  结论: #(List α) = ℵ₀
+  条件: (α : 类型u) [可数 α] [非空 α]
+  结论: #(列表 α) = ℵ₀
   证明: mk_le_aleph0.antisymm (aleph0_le_mk _)
 
 Depends on / 依赖: aleph0_le_mk, antisymm, mk_le_aleph0, mk_le_aleph0.antisymm
@@ -2987,8 +2987,8 @@ theorem mk_list_eq_max
 
 中文:
 定理 mk_list_eq_max
-  条件: (α : 类型u) [Nonempty α]
-  结论: #(List α) = max ℵ₀ #α
+  条件: (α : 类型u) [非空 α]
+  结论: #(列表 α) = 最大值 ℵ₀ #α
   证明: by
   cases finite_or_infinite α
   · rw [mk_list_eq_aleph0, eq_comm, max_eq_left]
@@ -3018,8 +3018,8 @@ theorem mk_list_eq_max_mk_aleph0
 
 中文:
 定理 mk_list_eq_max_mk_aleph0
-  条件: (α : 类型u) [Nonempty α]
-  结论: #(List α) = max #α ℵ₀
+  条件: (α : 类型u) [非空 α]
+  结论: #(列表 α) = 最大值 #α ℵ₀
   证明: by
   rw [mk_list_eq_max]; rw [max_comm]
 
@@ -3041,8 +3041,8 @@ theorem sum_pow_eq_max_aleph0
 
 中文:
 定理 sum_pow_eq_max_aleph0
-  条件: {x : Cardinal} (h : x != 0)
-  结论: sum (fun n => x ^ n) = max ℵ₀ x
+  条件: {x : 基数} (h : x != 0)
+  结论: 求和 (fun n => x ^ n) = 最大值 ℵ₀ x
   证明: by
   have := nonempty_out h
   conv_lhs => rw [← x.mk_out, ← mk_list_eq_sum_pow, mk_list_eq_max, mk_out]
@@ -3069,7 +3069,7 @@ theorem mk_list_le_max
 中文:
 定理 mk_list_le_max
   条件: (α : 类型u)
-  结论: #(List α) <= max ℵ₀ #α
+  结论: #(列表 α) <= 最大值 ℵ₀ #α
   证明: by
   cases finite_or_infinite α
   · exact mk_le_aleph0.trans (le_max_left _ _)
@@ -3099,8 +3099,8 @@ theorem sum_pow_le_max_aleph0
 
 中文:
 定理 sum_pow_le_max_aleph0
-  条件: (x : Cardinal)
-  结论: sum (fun n => x ^ n) <= max ℵ₀ x
+  条件: (x : 基数)
+  结论: 求和 (fun n => x ^ n) <= 最大值 ℵ₀ x
   证明: by
   rw [← x.mk_out]; rw [← mk_list_eq_sum_pow]
   exact mk_list_le_max _
@@ -3131,8 +3131,8 @@ le_antisymm (mk_le_of_injective fun _ _ => Finset.singleton_inj.1)
 
 中文:
 定理 mk_finset_of_infinite
-  条件: (α : 类型u) [Infinite α]
-  结论: #(Finset α) = #α
+  条件: (α : 类型u) [无限 α]
+  结论: #(有限集 α) = #α
   证明: by
   classical
 exact Eq.symm
@@ -3171,7 +3171,7 @@ theorem mk_bounded_set_le_of_infinite
 
 中文:
 定理 mk_bounded_set_le_of_infinite
-  条件: (α : 类型u) [Infinite α] (c : Cardinal)
+  条件: (α : 类型u) [无限 α] (c : 基数)
   证明: by
   rw [← add_one_eq (aleph0_le_mk α)]
   induction c using Cardinal.inductionOn with | _ β
@@ -3238,7 +3238,7 @@ theorem mk_bounded_set_le
 
 中文:
 定理 mk_bounded_set_le
-  条件: (α : 类型u) (c : Cardinal)
+  条件: (α : 类型u) (c : 基数)
   证明: by
   trans #{ t : Set ((ULift.{u} Nat) oplus α) // #t <= c }
   · refine ⟨Embedding.subtypeMap ?_ ?_⟩
@@ -3282,7 +3282,7 @@ theorem mk_bounded_subset_le
 
 中文:
 定理 mk_bounded_subset_le
-  条件: {α : 类型u} (s : Set α) (c : Cardinal.{u})
+  条件: {α : 类型u} (s : 集合 α) (c : 基数.{u})
   证明: by
   refine le_trans ?_ (mk_bounded_set_le s c)
   refine ⟨Embedding.codRestrict _ ?_ ?_⟩
@@ -3323,7 +3323,7 @@ theorem mk_compl_of_infinite
 
 中文:
 定理 mk_compl_of_infinite
-  条件: {α : 类型} [Infinite α] (s : Set α) (h2 : #s < #α)
+  条件: {α : 类型} [无限 α] (s : 集合 α) (h2 : #s < #α)
   证明: by
   refine eq_of_add_eq_of_aleph0_le ?_ h2 (aleph0_le_mk α)
   exact mk_sum_compl s
@@ -3347,7 +3347,7 @@ theorem mk_compl_finset_of_infinite
 
 中文:
 定理 mk_compl_finset_of_infinite
-  条件: {α : 类型} [Infinite α] (s : Finset α)
+  条件: {α : 类型} [无限 α] (s : 有限集 α)
   证明: by
   apply mk_compl_of_infinite
   exact (finset_card_lt_aleph0 s).trans_le (aleph0_le_mk α)
@@ -3370,7 +3370,7 @@ theorem mk_compl_eq_mk_compl_infinite
 
 中文:
 定理 mk_compl_eq_mk_compl_infinite
-  结论: {α : 类型} [Infinite α] {s t : Set α} (hs : #s < #α)
+  结论: {α : 类型} [无限 α] {s t : 集合 α} (hs : #s < #α)
   证明: by
   rw [mk_compl_of_infinite s hs]; rw [mk_compl_of_infinite t ht]
 
@@ -3397,7 +3397,7 @@ theorem mk_compl_eq_mk_compl_finite_lift
 
 中文:
 定理 mk_compl_eq_mk_compl_finite_lift
-  结论: {α : 类型u} {β : 类型v} [Finite α] {s : Set α}
+  结论: {α : 类型u} {β : 类型v} [有限 α] {s : 集合 α}
   证明: by
   cases nonempty_fintype α
   rcases lift_mk_eq'.1 h1 with ⟨e⟩; let : Fintype β := Fintype.ofEquiv α e
@@ -3436,7 +3436,7 @@ theorem mk_compl_eq_mk_compl_finite
 
 中文:
 定理 mk_compl_eq_mk_compl_finite
-  结论: {α β : 类型u} [Finite α] {s : Set α} {t : Set β}
+  结论: {α β : 类型u} [有限 α] {s : 集合 α} {t : 集合 β}
   证明: by
   rw [← lift_inj.{u]; rw [u}]
   apply mk_compl_eq_mk_compl_finite_lift.{u, u}
@@ -3460,7 +3460,7 @@ theorem mk_compl_eq_mk_compl_finite_same
 
 中文:
 定理 mk_compl_eq_mk_compl_finite_same
-  条件: {α : 类型u} [Finite α] {s t : Set α} (h : #s = #t)
+  条件: {α : 类型u} [有限 α] {s t : 集合 α} (h : #s = #t)
   证明: mk_compl_eq_mk_compl_finite.{u} rfl h
 
 Depends on / 依赖: mk_compl_eq_mk_compl_finite
@@ -3490,7 +3490,7 @@ theorem extend_function
 
 中文:
 定理 extend_function
-  结论: {α β : 类型} {s : Set α} (f : s ↪ β)
+  结论: {α β : 类型} {s : 集合 α} (f : s ↪ β)
   证明: by
   classical
   have := h; obtain ⟨g⟩ := this
@@ -3524,7 +3524,7 @@ theorem extend_function_finite
 
 中文:
 定理 extend_function_finite
-  结论: {α : 类型u} {β : 类型v} [Finite α] {s : Set α} (f : s ↪ β)
+  结论: {α : 类型u} {β : 类型v} [有限 α] {s : 集合 α} (f : s ↪ β)
   证明: by
   apply extend_function.{u, v} f
   rw [← lift_mk_eq'] at h
@@ -3558,7 +3558,7 @@ theorem extend_function_of_lt
 
 中文:
 定理 extend_function_of_lt
-  结论: {α β : 类型} {s : Set α} (f : s ↪ β) (hs : #s < #α)
+  结论: {α β : 类型} {s : 集合 α} (f : s ↪ β) (hs : #s < #α)
   证明: by
   cases fintypeOrInfinite α
   · exact extend_function_finite f h

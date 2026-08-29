@@ -258,7 +258,7 @@ lemma SnakeLemma.exact_δ_left
 
 中文:
 引理 SnakeLemma.exact_δ_left
-  条件: (G : C₁ ->ₗ[R] C₂) (hF : G.comp π₁ = π₂.comp g₁) (h : Surjective π₁)
+  条件: (G : C₁ ->ₗ[R] C₂) (hF : G.comp π₁ = π₂.comp g₁) (h : 满射 π₁)
   证明: by
   have H₂ := δ_aux i₂ i₃ f₂ g₁ g₂ hg h₂ σ hσ ρ hρ ι₃ hι₃
   intro x
@@ -295,7 +295,7 @@ definition SnakeLemma.δ'
 
 中文:
 定义 SnakeLemma.δ'
-  签名: (hf₂ : Surjective f₂) (hg₁ : Injective g₁)
+  签名: (hf₂ : 满射 f₂) (hg₁ : 单射 g₁)
   定义体: δ i₁ i₂ i₃ f₁ f₂ hf g₁ g₂ hg h₁ h₂ _ (funext (surjInv_eq hf₂)) _ (invFun_comp hg₁) ι₃ hι₃ π₁ hπ₁
 
 Depends on / 依赖: invFun_comp, surjInv_eq
@@ -315,7 +315,7 @@ include hι₂ in
 
 中文:
 引理 SnakeLemma.δ'_eq
-  结论: (hf₂ : Surjective f₂) (hg₁ : Injective g₁)
+  结论: (hf₂ : 满射 f₂) (hg₁ : 单射 g₁)
   证明: SnakeLemma.δ_eq _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ‹_› ‹_› _ ‹_›
 
 include hι₂ in
@@ -338,7 +338,7 @@ include hπ₂ in
 
 中文:
 引理 SnakeLemma.exact_δ'_right
-  结论: (hf₂ : Surjective f₂) (hg₁ : Injective g₁)
+  结论: (hf₂ : 满射 f₂) (hg₁ : 单射 g₁)
   证明: SnakeLemma.exact_δ_right _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ‹_› _ _ _ _ _ ‹_› ‹_›
 
 include hπ₂ in
@@ -361,7 +361,7 @@ lemma SnakeLemma.exact_δ'_left
 
 中文:
 引理 SnakeLemma.exact_δ'_left
-  结论: (hf₂ : Surjective f₂) (hg₁ : Injective g₁)
+  结论: (hf₂ : 满射 f₂) (hg₁ : 单射 g₁)
   证明: SnakeLemma.exact_δ_left _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ‹_› _ ‹_› ‹_›
 -/
 lemma SnakeLemma.exact_δ'_left (hf₂ : Surjective f₂) (hg₁ : Injective g₁)

@@ -108,7 +108,7 @@ theorem toMultiset_apply
 中文:
 定理 toMultiset_apply
   条件: (f : α ->₀ 自然数)
-  结论: toMultiset f = f.sum fun a n => n • {a}
+  结论: toMultiset f = f.求和 fun a n => n • {a}
   证明: rfl
 
 @[simp]
@@ -151,7 +151,7 @@ theorem toMultiset_sum
 
 中文:
 定理 toMultiset_sum
-  条件: {f : ι -> α ->₀ 自然数} (s : Finset ι)
+  条件: {f : ι -> α ->₀ 自然数} (s : 有限集 ι)
   证明: map_sum Finsupp.toMultiset _ _
 
 Depends on / 依赖: Finsupp, Finsupp.toMultiset, LawfulMvFunctor, lawfulMvFunctor, map_sum, toMultiset
@@ -173,7 +173,7 @@ theorem toMultiset_sum_single
 
 中文:
 定理 toMultiset_sum_single
-  条件: (s : Finset ι) (n : 自然数)
+  条件: (s : 有限集 ι) (n : 自然数)
   证明: by
   simp_rw [toMultiset_sum, Finsupp.toMultiset_single, Finset.sum_nsmul, sum_multiset_singleton]
 
@@ -199,7 +199,7 @@ theorem card_toMultiset
 中文:
 定理 card_toMultiset
   条件: (f : α ->₀ 自然数)
-  结论: Multiset.card (toMultiset f) = f.sum fun _ => id
+  结论: Multiset.card (toMultiset f) = f.求和 fun _ => id
   证明: by
   simp [toMultiset_apply, Function.id_def]
 
@@ -254,7 +254,7 @@ theorem prod_toMultiset
 
 中文:
 定理 prod_toMultiset
-  条件: [CommMonoid α] (f : α ->₀ 自然数)
+  条件: [交换幺半群 α] (f : α ->₀ 自然数)
   证明: by
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
@@ -566,7 +566,7 @@ theorem toFinsupp_singleton
 中文:
 定理 toFinsupp_singleton
   条件: (a : α)
-  结论: toFinsupp ({a} : Multiset α) = Finsupp.single a 1
+  结论: toFinsupp ({a} : Multiset α) = 有限支撑.single a 1
   证明: by
   ext; rw [toFinsupp_apply, count_singleton, Finsupp.single_eq_pi_single, Pi.single_apply]
 
@@ -590,7 +590,7 @@ theorem toFinsupp_toMultiset
 中文:
 定理 toFinsupp_toMultiset
   条件: (s : Multiset α)
-  结论: Finsupp.toMultiset (toFinsupp s) = s
+  结论: 有限支撑.toMultiset (toFinsupp s) = s
   证明: Multiset.toFinsupp.symm_apply_apply s
 
 Depends on / 依赖: Multiset, Multiset.toFinsupp.symm_apply_apply, symm_apply_apply, toFinsupp
@@ -681,7 +681,7 @@ theorem toFinsupp_sum_eq
 中文:
 定理 toFinsupp_sum_eq
   条件: (s : Multiset α)
-  结论: s.toFinsupp.sum (fun _ => id) = Multiset.card s
+  结论: s.toFinsupp.求和 (fun _ => id) = Multiset.card s
   证明: by
   rw [← Finsupp.card_toMultiset]; rw [toFinsupp_toMultiset]
 
@@ -702,7 +702,7 @@ theorem Finsupp.toMultiset_toFinsupp
   proof: Multiset.toFinsupp.apply_symm_apply _
 
 中文:
-定理 Finsupp.toMultiset_toFinsupp
+定理 有限支撑.toMultiset_toFinsupp
   条件: [DecidableEq α] (f : α ->₀ 自然数)
   证明: Multiset.toFinsupp.apply_symm_apply _
 
@@ -721,7 +721,7 @@ theorem Finsupp.toMultiset_eq_iff
   proof: Multiset.toFinsupp.symm_apply_eq
 
 中文:
-定理 Finsupp.toMultiset_eq_iff
+定理 有限支撑.toMultiset_eq_iff
   条件: [DecidableEq α] {f : α ->₀ 自然数} {s : Multiset α}
   证明: Multiset.toFinsupp.symm_apply_eq
 
@@ -811,7 +811,7 @@ theorem toMultiset_strictMono
 
 中文:
 定理 toMultiset_strictMono
-  结论: StrictMono (@toMultiset ι)
+  结论: 严格递增 (@toMultiset ι)
   证明: by
   classical exact (@orderIsoMultiset ι _).strictMono
 
@@ -835,7 +835,7 @@ theorem sum_id_lt_of_lt
 中文:
 定理 sum_id_lt_of_lt
   条件: (m n : ι ->₀ 自然数) (h : m < n)
-  结论: (m.sum fun _ => id) < n.sum fun _ => id
+  结论: (m.求和 fun _ => id) < n.求和 fun _ => id
   证明: by
   rw [← card_toMultiset]; rw [← card_toMultiset]
   apply Multiset.card_lt_card
@@ -860,7 +860,7 @@ theorem lt_wf
 
 中文:
 定理 lt_wf
-  结论: WellFounded (@LT.lt (ι ->₀ 自然数) _)
+  结论: 良基 (@LT.lt (ι ->₀ 自然数) _)
   证明: Subrelation.wf (sum_id_lt_of_lt _ _) InvImage.wf _ Nat.lt_wfRel.2
 
 Depends on / 依赖: InvImage, InvImage.wf, Nat.lt_wfRel, Subrelation, Subrelation.wf, lt_wfRel, sum_id_lt_of_lt
@@ -880,7 +880,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation (ι ->₀ 自然数)
+  签名: 良基关系 (ι ->₀ 自然数)
   定义体: (· < ·)
   wf := lt_wf _
 -/
@@ -902,7 +902,7 @@ theorem Multiset.toFinsupp_strictMono
 中文:
 定理 Multiset.toFinsupp_strictMono
   条件: [DecidableEq ι]
-  结论: StrictMono (@Multiset.toFinsupp ι _)
+  结论: 严格递增 (@Multiset.toFinsupp ι _)
   证明: (@Finsupp.orderIsoMultiset ι).symm.strictMono
 
 Depends on / 依赖: Finsupp, Finsupp.orderIsoMultiset, orderIsoMultiset, strictMono, symm.strictMono
@@ -924,7 +924,7 @@ definition equivNatSum
   body: Multiset.toFinsupp.toEquiv.subtypeEquiv by simp
 
 中文:
-定义 equivNatSum
+定义 equiv自然数Sum
   签名: :
   定义体: Multiset.toFinsupp.toEquiv.subtypeEquiv by simp
 
@@ -943,7 +943,7 @@ lemma coe_equivNatSum_apply_apply
   proof: rfl
 
 中文:
-引理 coe_equivNatSum_apply_apply
+引理 coe_equiv自然数Sum_apply_apply
   条件: (s : Sym α n) (a : α)
   证明: rfl
 -/
@@ -960,8 +960,8 @@ lemma coe_equivNatSum_symm_apply
   proof: rfl
 
 中文:
-引理 coe_equivNatSum_symm_apply
-  条件: (P : {P : α ->₀ 自然数 // P.sum (fun _ => id) = n})
+引理 coe_equiv自然数Sum_symm_apply
+  条件: (P : {P : α ->₀ 自然数 // P.求和 (fun _ => id) = n})
   证明: rfl
 -/
 @[simp] lemma coe_equivNatSum_symm_apply (P : {P : α ->₀ Nat // P.sum (fun _ => id) = n}) :
@@ -977,8 +977,8 @@ definition equivNatSumOfFintype
   body: (equivNatSum α n).trans Finsupp.equivFunOnFinite.subtypeEquiv by simp [Finsupp.sum_fintype]
 
 中文:
-定义 equivNatSumOfFintype
-  签名: [Fintype α]
+定义 equiv自然数SumOfFintype
+  签名: [有限类型 α]
   定义体: (equivNatSum α n).trans Finsupp.equivFunOnFinite.subtypeEquiv by simp [Finsupp.sum_fintype]
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.subtypeEquiv, Finsupp.sum_fintype, equivFunOnFinite, equivNatSum, subtypeEquiv, sum_fintype
@@ -996,8 +996,8 @@ lemma coe_equivNatSumOfFintype_apply_apply
   proof: rfl
 
 中文:
-引理 coe_equivNatSumOfFintype_apply_apply
-  条件: [Fintype α] (s : Sym α n) (a : α)
+引理 coe_equiv自然数SumOfFintype_apply_apply
+  条件: [有限类型 α] (s : Sym α n) (a : α)
   证明: rfl
 -/
 @[simp] lemma coe_equivNatSumOfFintype_apply_apply [Fintype α] (s : Sym α n) (a : α) :
@@ -1018,8 +1018,8 @@ lemma coe_equivNatSumOfFintype_symm_apply
   simp [Multiset.count_singleton]
 
 中文:
-引理 coe_equivNatSumOfFintype_symm_apply
-  条件: [Fintype α] (P : {P : α -> 自然数 // ∑ i, P i = n})
+引理 coe_equiv自然数SumOfFintype_symm_apply
+  条件: [有限类型 α] (P : {P : α -> 自然数 // ∑ i, P i = n})
   证明: by
   obtain ⟨P, hP⟩ := P
   change Finsupp.toMultiset (Finsupp.equivFunOnFinite.symm P) = Multiset.sum _

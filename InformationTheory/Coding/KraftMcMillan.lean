@@ -55,7 +55,7 @@ definition concatFn
 
 中文:
 定义 concatFn
-  签名: (w : Fin r -> S)
+  签名: (w : 有限集 r -> S)
   定义体: (List.ofFn (fun i => (w i).val)).flatten
 -/
 private def concatFn (w : Fin r -> S) : List α :=
@@ -72,7 +72,7 @@ lemma concatFn_length
 
 中文:
 引理 concatFn_length
-  条件: {w : Fin r -> S}
+  条件: {w : 有限集 r -> S}
   证明: by
   simp [List.sum_ofFn, concatFn]
 -/
@@ -96,7 +96,7 @@ lemma concatFn_injective_of_uniquelyDecodable
 
 中文:
 引理 concatFn_injective_of_uniquelyDecodable
-  结论: {S : Finset (List α)}
+  结论: {S : 有限集 (列表 α)}
   证明: by
   intro w₁ w₂ hflat
   funext i
@@ -127,7 +127,7 @@ lemma sum_pow_length_filter_eq_le_card_mul
 
 中文:
 引理 sum_pow_length_filter_eq_le_card_mul
-  条件: [Fintype α] {T : Finset (List α)} {s : 自然数}
+  条件: [有限类型 α] {T : 有限集 (列表 α)} {s : 自然数}
   证明: by
   calc
     _ = ∑ x in T.filter (fun x => x.length = s), (1 / (Fintype.card α : Real)) ^ s :=
@@ -165,7 +165,7 @@ lemma concatFn_length_mem_Icc
 
 中文:
 引理 concatFn_length_mem_Icc
-  结论: {S : Finset (List α)}
+  结论: {S : 有限集 (列表 α)}
   证明: by
   rw [concatFn_length]; rw [Finset.mem_Icc]
   constructor
@@ -204,7 +204,7 @@ lemma kraft_mcmillan_inequality_aux
 
 中文:
 引理 kraft_mcmillan_inequality_aux
-  结论: {S : Finset (List α)} [Fintype α] [Nonempty α]
+  结论: {S : 有限集 (列表 α)} [有限类型 α] [非空 α]
   证明: by
   classical
   -- We use maxLen to bound lengths of `r`-fold concatenations.

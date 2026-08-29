@@ -56,7 +56,7 @@ definition vietoris
 
 中文:
 定义 vietoris
-  签名: : TopologicalSpace (Set α)
+  签名: : 拓扑空间 (集合 α)
   定义体: .generateFrom powerset '' {U | IsOpen U} union (fun V => {s | (s inter V).Nonempty}) '' {V | IsOpen V}
 -/
 protected def vietoris : TopologicalSpace (Set α) :=
@@ -75,8 +75,8 @@ theorem _root_.IsOpen.powerset_vietoris
   proof: isOpen_generateFrom_of_mem .inl ⟨U, h, rfl⟩
 
 中文:
-定理 _root_.IsOpen.powerset_vietoris
-  条件: {U : Set α} (h : IsOpen U)
+定理 _root_.是开集.powerset_vietoris
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: isOpen_generateFrom_of_mem .inl ⟨U, h, rfl⟩
 
 Depends on / 依赖: isOpen_generateFrom_of_mem
@@ -95,7 +95,7 @@ theorem isOpen_inter_nonempty_of_isOpen
 
 中文:
 定理 isOpen_inter_nonempty_of_isOpen
-  条件: {U : Set α} (h : IsOpen U)
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: isOpen_generateFrom_of_mem .inr ⟨U, h, rfl⟩
 
 Depends on / 依赖: isOpen_generateFrom_of_mem
@@ -115,8 +115,8 @@ theorem _root_.IsClosed.powerset_vietoris
   exact isOpen_inter_nonempty_of_isOpen h.isOpen_compl
 
 中文:
-定理 _root_.IsClosed.powerset_vietoris
-  条件: {F : Set α} (h : IsClosed F)
+定理 _root_.是闭集.powerset_vietoris
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: by
   simp_rw [powerset, ← isOpen_compl_iff, compl_ofPred, ← inter_compl_nonempty_iff]
   exact isOpen_inter_nonempty_of_isOpen h.isOpen_compl
@@ -140,7 +140,7 @@ theorem isClosed_inter_nonempty_of_isClosed
 
 中文:
 定理 isClosed_inter_nonempty_of_isClosed
-  条件: {F : Set α} (h : IsClosed F)
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: by
   simp_rw +singlePass [← compl_compl F, inter_compl_nonempty_iff, ← compl_ofPred]
   exact h.isOpen_compl.powerset_vietoris.isClosed_compl
@@ -164,7 +164,7 @@ theorem isClopen_singleton_empty
 
 中文:
 定理 isClopen_singleton_empty
-  结论: IsClopen {(∅ : Set α)}
+  结论: IsClopen {(∅ : 集合 α)}
   证明: by
   rw [← powerset_empty]
   exact ⟨isClosed_empty.powerset_vietoris, isOpen_empty.powerset_vietoris⟩
@@ -248,7 +248,7 @@ hu.isOpen_biInter fun V hV => isOpen_inter_nonempty_of_isOpen hB.isOpen huB hV
   · intro u
 
 中文:
-定理 _root_.TopologicalSpace.IsTopologicalBasis.vietoris
+定理 _root_.拓扑空间.是TopologicalBasis.vietoris
   证明: by
   refine isTopologicalBasis.isTopologicalBasis_of_exists_subset ?_ ?_ <;>
     rw [forall_mem_image]
@@ -300,7 +300,7 @@ theorem closure_finite_subsets
 
 中文:
 定理 closure_finite_subsets
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   refine subset_antisymm ?_ (fun K hKs => ?_)
   · rw [isClosed_closure.powerset_vietoris.closure_subset_iff]
@@ -343,7 +343,7 @@ theorem continuous_iff
 
 中文:
 定理 continuous_iff
-  条件: {f : α -> Set β}
+  条件: {f : α -> 集合 β}
   证明: by
   refine ⟨fun hf =>
       ⟨fun U hU => hU.powerset_vietoris.preimage hf, fun F hF => hF.powerset_vietoris.preimage hf⟩,
@@ -385,7 +385,7 @@ theorem isEmbedding_singleton
 
 中文:
 定理 isEmbedding_singleton
-  结论: IsEmbedding ({·} : α -> Set α) where
+  结论: 是嵌入 ({·} : α -> 集合 α) where
   证明: Set.singleton_injective
   eq_induced := by
     simp_rw [TopologicalSpace.vietoris, induced_generateFrom_eq, image_union, image_image,
@@ -414,7 +414,7 @@ theorem continuous_singleton
 
 中文:
 定理 continuous_singleton
-  结论: Continuous ({·} : α -> Set α)
+  结论: 连续 ({·} : α -> 集合 α)
   证明: isEmbedding_singleton.continuous
 
 Depends on / 依赖: continuous, isEmbedding_singleton, isEmbedding_singleton.continuous
@@ -437,8 +437,8 @@ theorem _root_.TopologicalSpace.isClosed_range_singleton
 · cases hs Set.mem_range_self x
 
 中文:
-定理 _root_.TopologicalSpace.isClosed_range_singleton
-  结论: [T2Space α] {t : TopologicalSpace (Set α)}
+定理 _root_.拓扑空间.isClosed_range_singleton
+  结论: [T2空间 α] {t : 拓扑空间 (集合 α)}
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_mem_nhds]
   intro s hs
@@ -479,7 +479,7 @@ theorem isClosedEmbedding_singleton
 
 中文:
 定理 isClosedEmbedding_singleton
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: isEmbedding_singleton
   isClosed_range :=
     isClosed_range_singleton isClopen_singleton_empty.isOpen isOpen_inter_nonempty_of_isOpen
@@ -512,7 +512,7 @@ theorem continuous_union
 
 中文:
 定理 continuous_union
-  结论: Continuous (fun x : Set α × Set α => x.1 union x.2)
+  结论: 连续 (fun x : 集合 α × 集合 α => x.1 union x.2)
   证明: by
   simp_rw [continuous_iff, powerset, preimage_ofPred_eq, union_subset_iff, ofPred_and]
   exact ⟨
@@ -549,7 +549,7 @@ fun F hF => isClosed_iInter fun i => hF.preimage continuous_apply i⟩
 
 中文:
 定理 continuous_range_of_finite
-  条件: {ι : 类型} [Finite ι]
+  条件: {ι : 类型} [有限 ι]
   证明: by
   simp_rw [continuous_iff, powerset, preimage_ofPred_eq, range_subset_iff, ofPred_forall]
   exact ⟨
@@ -580,9 +580,9 @@ theorem _root_.Continuous.image_vietoris
   constructor <;> exact fun U hU => (hU.preimage hf).powerset_vietoris
 
 中文:
-定理 _root_.Continuous.image_vietoris
-  条件: (hf : Continuous f)
-  结论: Continuous (f '' ·)
+定理 _root_.连续.image_vietoris
+  条件: (hf : 连续 f)
+  结论: 连续 (f '' ·)
   证明: by
   simp_rw [continuous_iff, powerset, preimage_ofPred_eq, image_subset_iff]
   constructor <;> exact fun U hU => (hU.preimage hf).powerset_vietoris
@@ -611,9 +611,9 @@ theorem _root_.Topology.IsInducing.image_vietoris
     powerset, preimage_ofPred_eq, image_subset_iff, image_inter_nonempty_iff]
 
 中文:
-定理 _root_.Topology.IsInducing.image_vietoris
-  条件: (hf : IsInducing f)
-  结论: IsInducing (f '' ·)
+定理 _root_.拓扑.是Inducing.image_vietoris
+  条件: (hf : 是Inducing f)
+  结论: 是Inducing (f '' ·)
   证明: by
   constructor
   have : {U : Set α | IsOpen U} = (f ⁻¹' ·) '' {V : Set β | IsOpen V} :=
@@ -644,9 +644,9 @@ theorem _root_.Topology.IsEmbedding.image_vietoris
   injective := hf.injective.image_injective
 
 中文:
-定理 _root_.Topology.IsEmbedding.image_vietoris
-  条件: (hf : IsEmbedding f)
-  结论: IsEmbedding (f '' ·) where
+定理 _root_.拓扑.是嵌入.image_vietoris
+  条件: (hf : 是嵌入 f)
+  结论: 是嵌入 (f '' ·) where
   证明: hf.isInducing.image_vietoris
   injective := hf.injective.image_injective
 
@@ -671,7 +671,7 @@ theorem isCompact_aux
 
 中文:
 定理 isCompact_aux
-  结论: {K : Set α} (hK : IsCompact K)
+  结论: {K : 集合 α} (hK : 是紧集 K)
   证明: by
   -- By Alexander's subbasis theorem, it is enough to consider covers by the generating sets.
   refine isCompact_generateFrom rfl fun S hS hKS => ?_
@@ -728,8 +728,8 @@ theorem _root_.IsCompact.powerset_vietoris
   simpa using! isCompact_aux hK (s := ∅)
 
 中文:
-定理 _root_.IsCompact.powerset_vietoris
-  条件: {K : Set α} (hK : IsCompact K)
+定理 _root_.是紧集.powerset_vietoris
+  条件: {K : 集合 α} (hK : 是紧集 K)
   证明: by
   simpa using! isCompact_aux hK (s := ∅)
 
@@ -748,8 +748,8 @@ instance [CompactSpace
   body: ⟨powerset_univ ▸ isCompact_univ.powerset_vietoris⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] : CompactSpace (Set α)
+实例 [紧空间
+  签名: α] : 紧空间 (集合 α)
   定义体: ⟨powerset_univ ▸ isCompact_univ.powerset_vietoris⟩
 
 Depends on / 依赖: isCompact_univ, isCompact_univ.powerset_vietoris, powerset_univ, powerset_vietoris
@@ -768,7 +768,7 @@ theorem subset_closure_of_specializes
 
 中文:
 定理 subset_closure_of_specializes
-  条件: {s t : Set α} (h : s ⤳ t)
+  条件: {s t : 集合 α} (h : s ⤳ t)
   结论: t subseteq closure s
   证明: h.mem_closed isClosed_closure.powerset_vietoris subset_closure
 
@@ -792,7 +792,7 @@ theorem specializes_iff
 
 中文:
 定理 specializes_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s ⤳ t ↔ (对任意 x in s, 存在 y in t, x ⤳ y) ∧ t subseteq closure s
   证明: by
   refine ⟨fun h => ⟨fun x hx => ?_, subset_closure_of_specializes h⟩, fun ⟨hst, hts⟩ => ?_⟩
@@ -828,7 +828,7 @@ theorem specializes_iff_of_t1Space
 
 中文:
 定理 specializes_iff_of_t1Space
-  条件: {s t : Set α} [T1Space α]
+  条件: {s t : 集合 α} [T1空间 α]
   结论: s ⤳ t ↔ s subseteq t ∧ t subseteq closure s
   证明: by
   simp_rw [specializes_iff, specializes_iff_eq, existsAndEq, and_true, ← subset_def]
@@ -849,7 +849,7 @@ theorem subset_of_specializes
 
 中文:
 定理 subset_of_specializes
-  条件: {s t : Set α} [T1Space α] (h : s ⤳ t)
+  条件: {s t : 集合 α} [T1空间 α] (h : s ⤳ t)
   结论: s subseteq t
   证明: (specializes_iff_of_t1Space.mp h).1
 
@@ -869,7 +869,7 @@ theorem specializes_of_subset_closure
 
 中文:
 定理 specializes_of_subset_closure
-  条件: {s t : Set α} (hst : s subseteq t) (hts : t subseteq closure s)
+  条件: {s t : 集合 α} (hst : s subseteq t) (hts : t subseteq closure s)
   证明: by
   aesop (add simp specializes_iff)
 
@@ -890,7 +890,7 @@ theorem specializes_closure
 
 中文:
 定理 specializes_closure
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s ⤳ closure s
   证明: specializes_of_subset_closure subset_closure .rfl
 
@@ -908,8 +908,8 @@ instance [T1Space
   body: subset_antisymm (subset_of_specializes h.specializes) (subset_of_specializes h.specializes')
 
 中文:
-实例 [T1Space
-  签名: α] : T0Space (Set α) where
+实例 [T1空间
+  签名: α] : T0空间 (集合 α) where
   定义体: subset_antisymm (subset_of_specializes h.specializes) (subset_of_specializes h.specializes')
 
 Depends on / 依赖: h.specializes, specializes, subset_antisymm, subset_of_specializes
@@ -935,7 +935,7 @@ theorem isPreconnected_nonempty_finite_subsets
 
 中文:
 定理 isPreconnected_nonempty_finite_subsets
-  条件: {s : Set α} (hs : IsPreconnected s)
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   rcases eq_empty_or_nonempty s with rfl | ⟨x, hx⟩
   · convert isPreconnected_empty
@@ -988,7 +988,7 @@ theorem isPreconnected_sUnion
 
 中文:
 定理 isPreconnected_sUnion
-  结论: {s : Set (Set α)} (hs : IsPreconnected s)
+  结论: {s : 集合 (集合 α)} (hs : 是预连通 s)
   证明: by
   obtain ⟨t, hts, ht⟩ := h
   have hts' := subset_sUnion_of_mem hts
@@ -1046,7 +1046,7 @@ theorem isPreconnected_biUnion
 
 中文:
 定理 isPreconnected_biUnion
-  结论: {s : Set α} {f : α -> Set β} (hs : IsPreconnected s)
+  结论: {s : 集合 α} {f : α -> 集合 β} (hs : 是预连通 s)
   证明: by
   rw [← sUnion_image]
   exact isPreconnected_sUnion (hs.image _ hf) (by grind)
@@ -1075,7 +1075,7 @@ instance topology
 
 中文:
 实例 topology
-  签名: : TopologicalSpace (Compacts α)
+  签名: : 拓扑空间 (余mpacts α)
   定义体: .induced (↑) (.vietoris α)
 
 @[fun_prop]
@@ -1099,7 +1099,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: IsEmbedding ((↑) : Compacts α -> Set α) where
+  结论: 是嵌入 ((↑) : 余mpacts α -> 集合 α) where
   证明: SetLike.coe_injective
   eq_induced := rfl
 
@@ -1122,7 +1122,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : Compacts α -> Set α)
+  结论: 连续 ((↑) : 余mpacts α -> 集合 α)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -1140,7 +1140,7 @@ theorem isOpen_subsets_of_isOpen
 
 中文:
 定理 isOpen_subsets_of_isOpen
-  条件: {U : Set α} (h : IsOpen U)
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: continuous_coe.isOpen_preimage _ h.powerset_vietoris
 
 Depends on / 依赖: continuous_coe, continuous_coe.isOpen_preimage, h.powerset_vietoris, isOpen_preimage, powerset_vietoris
@@ -1159,7 +1159,7 @@ theorem isOpen_inter_nonempty_of_isOpen
 
 中文:
 定理 isOpen_inter_nonempty_of_isOpen
-  条件: {U : Set α} (h : IsOpen U)
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: continuous_coe.isOpen_preimage _ vietoris.isOpen_inter_nonempty_of_isOpen h
 
 Depends on / 依赖: continuous_coe, continuous_coe.isOpen_preimage, isOpen_inter_nonempty_of_isOpen, isOpen_preimage, vietoris, vietoris.isOpen_inter_nonempty_of_isOpen
@@ -1180,7 +1180,7 @@ theorem isClosed_subsets_of_isClosed
 
 中文:
 定理 isClosed_subsets_of_isClosed
-  条件: {F : Set α} (h : IsClosed F)
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: by
   simp_rw [← isOpen_compl_iff, Set.compl_ofPred, ← Set.inter_compl_nonempty_iff]
   exact isOpen_inter_nonempty_of_isOpen h.isOpen_compl
@@ -1204,7 +1204,7 @@ theorem isClosed_inter_nonempty_of_isClosed
 
 中文:
 定理 isClosed_inter_nonempty_of_isClosed
-  条件: {F : Set α} (h : IsClosed F)
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: by
   simp_rw +singlePass [← compl_compl F, Set.inter_compl_nonempty_iff, ← Set.compl_ofPred]
   exact (isOpen_subsets_of_isOpen h.isOpen_compl).isClosed_compl
@@ -1228,7 +1228,7 @@ theorem isClopen_singleton_bot
 
 中文:
 定理 isClopen_singleton_bot
-  结论: IsClopen {(⊥ : Compacts α)}
+  结论: IsClopen {(⊥ : 余mpacts α)}
   证明: by
   convert! vietoris.isClopen_singleton_empty.preimage continuous_coe
   rw [← coe_bot]; rw [← image_singleton (f := SetLike.coe)]; rw [SetLike.coe_injective.preimage_image]
@@ -1255,7 +1255,7 @@ theorem isOpen_setOfPred_disjoint_coe
 
 中文:
 定理 isOpen_setOfPred_disjoint_coe
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: by
   rw [isOpen_iff_forall_mem_open]
   intro ⟨K, L⟩ hKL
@@ -1292,7 +1292,7 @@ alias isOpen_setOf_disjoint := isOpen_setOfPred_disjoint
 
 中文:
 定理 isOpen_setOfPred_disjoint
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: by
   simpa only [disjoint_coe_iff] using isOpen_setOfPred_disjoint_coe
 
@@ -1322,7 +1322,7 @@ theorem closure_finite_subsets
 
 中文:
 定理 closure_finite_subsets
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   change closure (SetLike.coe ⁻¹' {K : Set α | K.Finite ∧ K subseteq s}) =
     SetLike.coe ⁻¹' (closure s).powerset
@@ -1352,7 +1352,7 @@ alias dense_setOf_finite := dense_setOfPred_finite
 
 中文:
 定理 dense_setOfPred_finite
-  结论: Dense {K : Compacts α | (K : Set α).Finite}
+  结论: 稠密 {K : 余mpacts α | (K : 集合 α).有限}
   证明: by
   simpa [dense_iff_closure_eq] using closure_finite_subsets univ
 
@@ -1382,7 +1382,7 @@ theorem _root_.TopologicalSpace.IsTopologicalBasis.compacts
    
 
 中文:
-定理 _root_.TopologicalSpace.IsTopologicalBasis.compacts
+定理 _root_.拓扑空间.是TopologicalBasis.compacts
   证明: by
   refine hB.vietoris.isInducing isEmbedding_coe.isInducing
 .isTopologicalBasis_of_exists_subset ?_ ?_ <;> simp_rw [forall_mem_image]
@@ -1465,7 +1465,7 @@ theorem isEmbedding_singleton
 
 中文:
 定理 isEmbedding_singleton
-  结论: IsEmbedding ({·} : α -> Compacts α)
+  结论: 是嵌入 ({·} : α -> 余mpacts α)
   证明: isEmbedding_coe.of_comp_iff.mp vietoris.isEmbedding_singleton
 
 @[fun_prop]
@@ -1488,7 +1488,7 @@ theorem continuous_singleton
 
 中文:
 定理 continuous_singleton
-  结论: Continuous ({·} : α -> Compacts α)
+  结论: 连续 ({·} : α -> 余mpacts α)
   证明: isEmbedding_singleton.continuous
 
 @[fun_prop]
@@ -1509,7 +1509,7 @@ theorem isClosedEmbedding_singleton
 
 中文:
 定理 isClosedEmbedding_singleton
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: .of_comp isEmbedding_coe vietoris.isClosedEmbedding_singleton
 
 Depends on / 依赖: isClosedEmbedding_singleton, isEmbedding_coe, of_comp, vietoris, vietoris.isClosedEmbedding_singleton
@@ -1533,7 +1533,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSup (Compacts α)
+  签名: 余ntinuousSup (余mpacts α)
   定义体: by
   constructor
   simp_rw [isEmbedding_coe.continuous_iff, Function.comp_def, coe_sup]
@@ -1564,7 +1564,7 @@ theorem continuous_prod
 
 中文:
 定理 continuous_prod
-  结论: Continuous fun p : Compacts α × Compacts β => p.1 ×ˢ p.2
+  结论: 连续 fun p : 余mpacts α × 余mpacts β => p.1 ×ˢ p.2
   证明: by
   rw [continuous_induced_rng]; rw [continuous_generateFrom_iff]
   rintro _ (⟨U, hU, rfl⟩ | ⟨U, hU, rfl⟩)
@@ -1603,9 +1603,9 @@ theorem _root_.Continuous.compacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Continuous.compacts_map
-  条件: (hf : Continuous f)
-  结论: Continuous (Compacts.map f hf)
+定理 _root_.连续.compacts_map
+  条件: (hf : 连续 f)
+  结论: 连续 (余mpacts.map f hf)
   证明: isEmbedding_coe.continuous_iff.mpr hf.image_vietoris.comp continuous_coe
 
 @[fun_prop]
@@ -1630,8 +1630,8 @@ theorem _root_.Continuous.compacts_map'
 @[fun_prop]
 
 中文:
-定理 _root_.Continuous.compacts_map'
-  结论: {f : α -> Compacts β} {g : α -> β -> γ}
+定理 _root_.连续.compacts_map'
+  结论: {f : α -> 余mpacts β} {g : α -> β -> γ}
   证明: by
   conv in Compacts.map _ _ _ => equals ({x} ×ˢ f x).map g.uncurry hg => ext; simp
   have := hg.compacts_map
@@ -1660,8 +1660,8 @@ theorem _root_.Topology.IsInducing.compacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsInducing.compacts_map
-  条件: (hf : IsInducing f)
+定理 _root_.拓扑.是Inducing.compacts_map
+  条件: (hf : 是Inducing f)
   证明: isEmbedding_coe.isInducing.of_comp_iff.mp hf.image_vietoris.comp isEmbedding_coe.isInducing
 
 @[fun_prop]
@@ -1684,8 +1684,8 @@ theorem _root_.Topology.IsEmbedding.compacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsEmbedding.compacts_map
-  条件: (hf : IsEmbedding f)
+定理 _root_.拓扑.是嵌入.compacts_map
+  条件: (hf : 是嵌入 f)
   证明: isEmbedding_coe.of_comp_iff.mp hf.image_vietoris.comp isEmbedding_coe
 
 @[fun_prop]
@@ -1709,8 +1709,8 @@ theorem _root_.Topology.IsOpenEmbedding.compacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsOpenEmbedding.compacts_map
-  条件: (hf : IsOpenEmbedding f)
+定理 _root_.拓扑.是开嵌入.compacts_map
+  条件: (hf : 是开嵌入 f)
   证明: hf.isEmbedding.compacts_map
   isOpen_range := range_map hf.isInducing ▸ isOpen_subsets_of_isOpen hf.isOpen_range
 
@@ -1734,8 +1734,8 @@ theorem _root_.Topology.IsClosedEmbedding.compacts_map
   isClosed_range := range_map hf.isInducing ▸ isClosed_subsets_of_isClosed hf.isClosed_range
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.compacts_map
-  条件: (hf : IsClosedEmbedding f)
+定理 _root_.拓扑.是闭嵌入.compacts_map
+  条件: (hf : 是闭嵌入 f)
   证明: hf.isEmbedding.compacts_map
   isClosed_range := range_map hf.isInducing ▸ isClosed_subsets_of_isClosed hf.isClosed_range
 
@@ -1762,8 +1762,8 @@ instance [DiscreteTopology
   simp_rw [← ofPred_forall, inter_
 
 中文:
-实例 [DiscreteTopology
-  签名: α] : DiscreteTopology (Compacts α)
+实例 [离散拓扑
+  签名: α] : 离散拓扑 (余mpacts α)
   定义体: by
   rw [discreteTopology_iff_isOpen_singleton]
   intro K
@@ -1796,7 +1796,7 @@ theorem discreteTopology_iff
 
 中文:
 定理 discreteTopology_iff
-  结论: DiscreteTopology (Compacts α) ↔ DiscreteTopology α
+  结论: 离散拓扑 (余mpacts α) ↔ 离散拓扑 α
   证明: ⟨fun _ => isEmbedding_singleton.discreteTopology, fun _ => inferInstance⟩
 
 Depends on / 依赖: discreteTopology, isEmbedding_singleton, isEmbedding_singleton.discreteTopology
@@ -1813,8 +1813,8 @@ instance [T1Space
   body: isEmbedding_coe.t0Space
 
 中文:
-实例 [T1Space
-  签名: α] : T0Space (Compacts α)
+实例 [T1空间
+  签名: α] : T0空间 (余mpacts α)
   定义体: isEmbedding_coe.t0Space
 
 Depends on / 依赖: isEmbedding_coe, isEmbedding_coe.t0Space, t0Space
@@ -1837,8 +1837,8 @@ instance [T2Space
     exact ⟨_, _, isOpen_inter_nonempty_of_isOpen hV, isOp
 
 中文:
-实例 [T2Space
-  签名: α] : T2Space (Compacts α) where
+实例 [T2空间
+  签名: α] : T2空间 (余mpacts α) where
   定义体: by
     wlog h' : ¬(K₁ <= K₂) generalizing K₁ K₂
     · grind [Disjoint.symm, le_antisymm]
@@ -1870,7 +1870,7 @@ theorem t2Space_iff
 
 中文:
 定理 t2Space_iff
-  结论: T2Space (Compacts α) ↔ T2Space α
+  结论: T2空间 (余mpacts α) ↔ T2空间 α
   证明: ⟨fun _ => isEmbedding_singleton.t2Space, fun _ => inferInstance⟩
 
 Depends on / 依赖: isEmbedding_singleton, isEmbedding_singleton.t2Space, t2Space
@@ -1892,8 +1892,8 @@ instance [RegularSpace
       SeparatedNhds.of_isCompact_isClosed K.isCompact hU.isClose
 
 中文:
-实例 [RegularSpace
-  签名: α] : RegularSpace (Compacts α)
+实例 [正则空间
+  签名: α] : 正则空间 (余mpacts α)
   定义体: by
   simp_rw [regularSpace_generateFrom induced_generateFrom_eq, image_union, image_image, powerset,
     preimage_ofPred_eq, Filter.disjoint_iff]
@@ -1939,7 +1939,7 @@ theorem regularSpace_iff
 
 中文:
 定理 regularSpace_iff
-  结论: RegularSpace (Compacts α) ↔ RegularSpace α
+  结论: 正则空间 (余mpacts α) ↔ 正则空间 α
   证明: ⟨fun _ => isEmbedding_singleton.regularSpace, fun _ => inferInstance⟩
 
 @[simp]
@@ -1960,7 +1960,7 @@ theorem t3Space_iff
 
 中文:
 定理 t3Space_iff
-  结论: T3Space (Compacts α) ↔ T3Space α
+  结论: T3空间 (余mpacts α) ↔ T3空间 α
   证明: ⟨fun _ => isEmbedding_singleton.t3Space, fun _ => inferInstance⟩
 
 Depends on / 依赖: isEmbedding_singleton, isEmbedding_singleton.t3Space, t3Space
@@ -1981,8 +1981,8 @@ exact hb₂.compacts.secondCountableTopology (countable_ofPred_finite_subset hb�
 @[simp]
 
 中文:
-实例 [SecondCountableTopology
-  签名: α] : SecondCountableTopology (Compacts α)
+实例 [第二可数拓扑
+  签名: α] : 第二可数拓扑 (余mpacts α)
   定义体: by
   obtain ⟨b, hb₁, -, hb₂⟩ := exists_countable_basis α
 exact hb₂.compacts.secondCountableTopology (countable_ofPred_finite_subset hb₁).image _
@@ -2028,7 +2028,7 @@ theorem isCompact_subsets_of_isCompact
 
 中文:
 定理 isCompact_subsets_of_isCompact
-  条件: {K : Set α} (hK : IsCompact K)
+  条件: {K : 集合 α} (hK : 是紧集 K)
   证明: by
   rw [isEmbedding_coe.isCompact_iff]
   refine .of_subset_of_specializes hK.powerset_vietoris (by grind) (fun s hs => ?_)
@@ -2055,8 +2055,8 @@ instance [CompactSpace
   body: ⟨by simpa using isCompact_subsets_of_isCompact isCompact_univ⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] : CompactSpace (Compacts α)
+实例 [紧空间
+  签名: α] : 紧空间 (余mpacts α)
   定义体: ⟨by simpa using isCompact_subsets_of_isCompact isCompact_univ⟩
 
 Depends on / 依赖: isCompact_subsets_of_isCompact, isCompact_univ
@@ -2081,7 +2081,7 @@ theorem isCompact_biUnion_coe_of_isCompact
 
 中文:
 定理 isCompact_biUnion_coe_of_isCompact
-  条件: {S : Set (Compacts α)} (hS : IsCompact S)
+  条件: {S : 集合 (余mpacts α)} (hS : 是紧集 S)
   证明: by
   rw [isCompact_iff_finite_subcover]
   intro ι U hU h
@@ -2125,7 +2125,7 @@ theorem compactSpace_iff
 
 中文:
 定理 compactSpace_iff
-  结论: CompactSpace (Compacts α) ↔ CompactSpace α
+  结论: 紧空间 (余mpacts α) ↔ 紧空间 α
   证明: by
   refine ⟨fun h => ⟨?_⟩, fun _ => inferInstance⟩
   convert! isCompact_biUnion_coe_of_isCompact (α := α) isCompact_univ
@@ -2156,7 +2156,7 @@ theorem noncompactSpace_iff
 
 中文:
 定理 noncompactSpace_iff
-  结论: NoncompactSpace (Compacts α) ↔ NoncompactSpace α
+  结论: Noncompact空间 (余mpacts α) ↔ Noncompact空间 α
   证明: by
   simp_rw [← not_compactSpace_iff, compactSpace_iff]
 
@@ -2174,8 +2174,8 @@ instance [NoncompactSpace
   body: noncompactSpace_iff.mpr ‹_›
 
 中文:
-实例 [NoncompactSpace
-  签名: α] : NoncompactSpace (Compacts α)
+实例 [Noncompact空间
+  签名: α] : Noncompact空间 (余mpacts α)
   定义体: noncompactSpace_iff.mpr ‹_›
 
 Depends on / 依赖: noncompactSpace_iff, noncompactSpace_iff.mpr
@@ -2198,8 +2198,8 @@ instance [LocallyCompactSpace
   `{K' | K' ⊆ U₁ ∪ … ∪ Uₙ, K' ∩ U₁ ≠ ∅, …, K' ∩
 
 中文:
-实例 [LocallyCompactSpace
-  签名: α] : LocallyCompactSpace (Compacts α)
+实例 [局部紧空间
+  签名: α] : 局部紧空间 (余mpacts α)
   定义体: by
   refine ⟨fun K U hU => ?_⟩
   rw [isTopologicalBasis.mem_nhds_iff]; rw [exists_mem_image] at hU
@@ -2261,8 +2261,8 @@ instance [SeparableSpace
 @[simp]
 
 中文:
-实例 [SeparableSpace
-  签名: α] : SeparableSpace (Compacts α)
+实例 [可分空间
+  签名: α] : 可分空间 (余mpacts α)
   定义体: by
   obtain ⟨s, hs₁, hs₂⟩ := exists_countable_dense α
   refine ⟨_, (countable_ofPred_finite_subset hs₁).preimage SetLike.coe_injective, ?_⟩
@@ -2295,7 +2295,7 @@ theorem separableSpace_iff
 
 中文:
 定理 separableSpace_iff
-  结论: SeparableSpace (Compacts α) ↔ SeparableSpace α
+  结论: 可分空间 (余mpacts α) ↔ 可分空间 α
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   cases isEmpty_or_nonempty α
@@ -2332,7 +2332,7 @@ theorem isPreconnected_nonempty_finite_subsets
 
 中文:
 定理 isPreconnected_nonempty_finite_subsets
-  条件: {s : Set α} (hs : IsPreconnected s)
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   rw [← isEmbedding_coe.isPreconnected_image]
   convert vietoris.isPreconnected_nonempty_finite_subsets hs
@@ -2361,7 +2361,7 @@ theorem isPreconnected_nonempty_subsets
 
 中文:
 定理 isPreconnected_nonempty_subsets
-  条件: {s : Set α} (hs : IsPreconnected s)
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   refine (isPreconnected_nonempty_finite_subsets hs).subset_closure (by grind) ?_
   rw [ofPred_and]; rw [ofPred_and]
@@ -2396,7 +2396,7 @@ theorem isPreconnected_Icc
 
 中文:
 定理 isPreconnected_Icc
-  条件: {K L : Compacts α} (hK : K != ⊥) (hL : IsPreconnected (L : Set α))
+  条件: {K L : 余mpacts α} (hK : K != ⊥) (hL : 是预连通 (L : 集合 α))
   证明: by
   wlog hKL : K <= L
   · simpa [hKL] using isPreconnected_empty
@@ -2429,7 +2429,7 @@ theorem isPreconnected_Ioc
 
 中文:
 定理 isPreconnected_Ioc
-  条件: {K L : Compacts α} (hL : IsPreconnected (L : Set α))
+  条件: {K L : 余mpacts α} (hL : 是预连通 (L : 集合 α))
   证明: isPreconnected_of_forall L fun M hM => ⟨Icc M L, Icc_subset_Ioc_left hM.1, right_mem_Icc.mpr hM.2,
     left_mem_Icc.mpr hM.2, isPreconnected_Icc (ne_bot_of_gt hM.1) hL⟩
 
@@ -2453,8 +2453,8 @@ instance [LocallyConnectedSpace
   refine basis.of_isOpen_of_subset (by grind) (fun U hU => ⟨basis.
 
 中文:
-实例 [LocallyConnectedSpace
-  签名: α] : LocallyConnectedSpace (Compacts α)
+实例 [局部连通空间
+  签名: α] : 局部连通空间 (余mpacts α)
   定义体: by
   rw [locallyConnectedSpace_iff_isTopologicalBasis_isOpen_isPreconnected]
   have basis := IsTopologicalBasis.isOpen_isPreconnected.compacts (α := α)
@@ -2509,7 +2509,7 @@ instance topology
 
 中文:
 实例 topology
-  签名: : TopologicalSpace (NonemptyCompacts α)
+  签名: : 拓扑空间 (NonemptyCompacts α)
   定义体: .induced (↑) (.vietoris α)
 
 @[fun_prop]
@@ -2533,7 +2533,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: IsEmbedding ((↑) : NonemptyCompacts α -> Set α) where
+  结论: 是嵌入 ((↑) : NonemptyCompacts α -> 集合 α) where
   证明: SetLike.coe_injective
   eq_induced := rfl
 
@@ -2558,7 +2558,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : NonemptyCompacts α -> Set α)
+  结论: 连续 ((↑) : NonemptyCompacts α -> 集合 α)
   证明: isEmbedding_coe.continuous
 
 @[fun_prop]
@@ -2582,7 +2582,7 @@ eq_induced := .symm induced_compose (f := toCompacts) (g := SetLike.coe)
 
 中文:
 定理 isEmbedding_toCompacts
-  结论: IsEmbedding (toCompacts (α := α)) where
+  结论: 是嵌入 (toCompacts (α := α)) where
   证明: toCompacts_injective
 eq_induced := .symm induced_compose (f := toCompacts) (g := SetLike.coe)
 
@@ -2605,7 +2605,7 @@ theorem continuous_toCompacts
 
 中文:
 定理 continuous_toCompacts
-  结论: Continuous (toCompacts (α := α))
+  结论: 连续 (toCompacts (α := α))
   证明: isEmbedding_toCompacts.continuous
 
 @[fun_prop]
@@ -2629,7 +2629,7 @@ theorem isClosedEmbedding_toCompacts
 
 中文:
 定理 isClosedEmbedding_toCompacts
-  结论: IsClosedEmbedding (toCompacts (α := α)) where
+  结论: 是闭嵌入 (toCompacts (α := α)) where
   证明: isEmbedding_toCompacts
   isClosed_range := by
     rw [range_toCompacts]
@@ -2657,7 +2657,7 @@ theorem isOpenEmbedding_toCompacts
 
 中文:
 定理 isOpenEmbedding_toCompacts
-  结论: IsOpenEmbedding (toCompacts (α := α)) where
+  结论: 是开嵌入 (toCompacts (α := α)) where
   证明: isEmbedding_toCompacts
   isOpen_range := by
     rw [range_toCompacts]
@@ -2679,7 +2679,7 @@ theorem isOpen_subsets_of_isOpen
 
 中文:
 定理 isOpen_subsets_of_isOpen
-  条件: {U : Set α} (h : IsOpen U)
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: h.powerset_vietoris.preimage continuous_coe
 
 Depends on / 依赖: continuous_coe, h.powerset_vietoris.preimage, powerset_vietoris, preimage
@@ -2698,7 +2698,7 @@ theorem isOpen_inter_nonempty_of_isOpen
 
 中文:
 定理 isOpen_inter_nonempty_of_isOpen
-  条件: {U : Set α} (h : IsOpen U)
+  条件: {U : 集合 α} (h : 是开集 U)
   证明: (vietoris.isOpen_inter_nonempty_of_isOpen h).preimage continuous_coe
 
 Depends on / 依赖: continuous_coe, isOpen_inter_nonempty_of_isOpen, preimage, vietoris, vietoris.isOpen_inter_nonempty_of_isOpen
@@ -2717,7 +2717,7 @@ theorem isClosed_subsets_of_isClosed
 
 中文:
 定理 isClosed_subsets_of_isClosed
-  条件: {F : Set α} (h : IsClosed F)
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: h.powerset_vietoris.preimage continuous_coe
 
 Depends on / 依赖: continuous_coe, h.powerset_vietoris.preimage, powerset_vietoris, preimage
@@ -2736,7 +2736,7 @@ theorem isClosed_inter_nonempty_of_isClosed
 
 中文:
 定理 isClosed_inter_nonempty_of_isClosed
-  条件: {F : Set α} (h : IsClosed F)
+  条件: {F : 集合 α} (h : 是闭集 F)
   证明: (vietoris.isClosed_inter_nonempty_of_isClosed h).preimage continuous_coe
 
 Depends on / 依赖: continuous_coe, isClosed_inter_nonempty_of_isClosed, preimage, vietoris, vietoris.isClosed_inter_nonempty_of_isClosed
@@ -2759,7 +2759,7 @@ alias isOpen_setOf_disjoint_coe := isOpen_setOfPred_disjoint_coe
 
 中文:
 定理 isOpen_setOfPred_disjoint_coe
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: Compacts.isOpen_setOfPred_disjoint_coe.preimage
     continuous_toCompacts.prodMap continuous_toCompacts
 
@@ -2788,7 +2788,7 @@ continuous_toCompacts] using congr(toCompacts ⁻¹' (Compacts.closure_finite_su
 
 中文:
 定理 closure_finite_subsets
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simpa [isOpenEmbedding_toCompacts.isOpenMap.preimage_closure_eq_closure_preimage
 continuous_toCompacts] using congr(toCompacts ⁻¹' (Compacts.closure_finite_subsets s))
@@ -2814,7 +2814,7 @@ alias dense_setOf_finite := dense_setOfPred_finite
 
 中文:
 定理 dense_setOfPred_finite
-  结论: Dense {K : NonemptyCompacts α | (K : Set α).Finite}
+  结论: 稠密 {K : NonemptyCompacts α | (K : 集合 α).有限}
   证明: Compacts.dense_setOfPred_finite.preimage isOpenEmbedding_toCompacts.isOpenMap
 
 @[deprecated (since := "2026-07-09")]
@@ -2842,7 +2842,7 @@ theorem _root_.TopologicalSpace.IsTopologicalBasis.nonemptyCompacts
       (isOpen_subsets_of_isOpen <| isOpen_sUnion fun U hU => hB.isOpen <| 
 
 中文:
-定理 _root_.TopologicalSpace.IsTopologicalBasis.nonemptyCompacts
+定理 _root_.拓扑空间.是TopologicalBasis.nonemptyCompacts
   证明: by
   refine hB.compacts.isInducing isEmbedding_toCompacts.isInducing
 .isTopologicalBasis_of_exists_subset ?_ ?_ <;> simp_rw [forall_mem_image]
@@ -2907,7 +2907,7 @@ theorem isEmbedding_singleton
 
 中文:
 定理 isEmbedding_singleton
-  结论: IsEmbedding ({·} : α -> NonemptyCompacts α)
+  结论: 是嵌入 ({·} : α -> NonemptyCompacts α)
   证明: isEmbedding_coe.of_comp_iff.mp vietoris.isEmbedding_singleton
 
 @[fun_prop]
@@ -2930,7 +2930,7 @@ theorem continuous_singleton
 
 中文:
 定理 continuous_singleton
-  结论: Continuous ({·} : α -> NonemptyCompacts α)
+  结论: 连续 ({·} : α -> NonemptyCompacts α)
   证明: isEmbedding_singleton.continuous
 
 @[fun_prop]
@@ -2951,7 +2951,7 @@ theorem isClosedEmbedding_singleton
 
 中文:
 定理 isClosedEmbedding_singleton
-  条件: [T2Space α]
+  条件: [T2空间 α]
   证明: isClosedEmbedding_toCompacts.of_comp_iff.mp Compacts.isClosedEmbedding_singleton
 
 Depends on / 依赖: Compacts, Compacts.isClosedEmbedding_singleton, isClosedEmbedding_singleton, isClosedEmbedding_toCompacts, isClosedEmbedding_toCompacts.of_comp_iff.mp, of_comp_iff
@@ -2975,7 +2975,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSup (NonemptyCompacts α)
+  签名: 余ntinuousSup (NonemptyCompacts α)
   定义体: by
   constructor
   simp_rw [isEmbedding_toCompacts.continuous_iff, Function.comp_def, toCompacts_sup]
@@ -3024,8 +3024,8 @@ theorem _root_.Continuous.nonemptyCompacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Continuous.nonemptyCompacts_map
-  条件: (hf : Continuous f)
+定理 _root_.连续.nonemptyCompacts_map
+  条件: (hf : 连续 f)
   证明: isEmbedding_toCompacts.continuous_iff.mpr hf.compacts_map.comp continuous_toCompacts
 
 @[fun_prop]
@@ -3050,7 +3050,7 @@ theorem _root_.Continuous.nonemptyCompacts_map'
 @[fun_prop]
 
 中文:
-定理 _root_.Continuous.nonemptyCompacts_map'
+定理 _root_.连续.nonemptyCompacts_map'
   结论: {f : α -> NonemptyCompacts β} {g : α -> β -> γ}
   证明: by
   simp_rw [isEmbedding_toCompacts.continuous_iff, Function.comp_def, toCompacts_map]
@@ -3079,8 +3079,8 @@ theorem _root_.Topology.IsInducing.nonemptyCompacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsInducing.nonemptyCompacts_map
-  条件: (hf : IsInducing f)
+定理 _root_.拓扑.是Inducing.nonemptyCompacts_map
+  条件: (hf : 是Inducing f)
   证明: .of_comp hf.continuous.nonemptyCompacts_map continuous_toCompacts
     hf.compacts_map.comp isEmbedding_toCompacts.isInducing
 
@@ -3106,8 +3106,8 @@ theorem _root_.Topology.IsEmbedding.nonemptyCompacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsEmbedding.nonemptyCompacts_map
-  条件: (hf : IsEmbedding f)
+定理 _root_.拓扑.是嵌入.nonemptyCompacts_map
+  条件: (hf : 是嵌入 f)
   证明: hf.isInducing.nonemptyCompacts_map
   injective := map_injective hf.continuous hf.injective
 
@@ -3132,8 +3132,8 @@ theorem _root_.Topology.IsOpenEmbedding.nonemptyCompacts_map
 @[fun_prop]
 
 中文:
-定理 _root_.Topology.IsOpenEmbedding.nonemptyCompacts_map
-  条件: (hf : IsOpenEmbedding f)
+定理 _root_.拓扑.是开嵌入.nonemptyCompacts_map
+  条件: (hf : 是开嵌入 f)
   证明: .of_comp _ isOpenEmbedding_toCompacts hf.compacts_map.comp isOpenEmbedding_toCompacts
 
 @[fun_prop]
@@ -3154,8 +3154,8 @@ theorem _root_.Topology.IsClosedEmbedding.nonemptyCompacts_map
   proof: isClosedEmbedding_toCompacts.of_comp_iff.mp hf.compacts_map.comp isClosedEmbedding_toCompacts
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.nonemptyCompacts_map
-  条件: (hf : IsClosedEmbedding f)
+定理 _root_.拓扑.是闭嵌入.nonemptyCompacts_map
+  条件: (hf : 是闭嵌入 f)
   证明: isClosedEmbedding_toCompacts.of_comp_iff.mp hf.compacts_map.comp isClosedEmbedding_toCompacts
 
 Depends on / 依赖: compacts_map, hf.compacts_map.comp, isClosedEmbedding_toCompacts, isClosedEmbedding_toCompacts.of_comp_iff.mp, of_comp_iff
@@ -3175,8 +3175,8 @@ instance [DiscreteTopology
 @[simp]
 
 中文:
-实例 [DiscreteTopology
-  签名: α] : DiscreteTopology (NonemptyCompacts α)
+实例 [离散拓扑
+  签名: α] : 离散拓扑 (NonemptyCompacts α)
   定义体: isEmbedding_toCompacts.discreteTopology
 
 @[simp]
@@ -3197,7 +3197,7 @@ theorem discreteTopology_iff
 
 中文:
 定理 discreteTopology_iff
-  结论: DiscreteTopology (NonemptyCompacts α) ↔ DiscreteTopology α
+  结论: 离散拓扑 (NonemptyCompacts α) ↔ 离散拓扑 α
   证明: ⟨fun _ => isEmbedding_singleton.discreteTopology, fun _ => inferInstance⟩
 
 Depends on / 依赖: discreteTopology, isEmbedding_singleton, isEmbedding_singleton.discreteTopology
@@ -3214,8 +3214,8 @@ instance [T1Space
   body: isEmbedding_toCompacts.t0Space
 
 中文:
-实例 [T1Space
-  签名: α] : T0Space (NonemptyCompacts α)
+实例 [T1空间
+  签名: α] : T0空间 (NonemptyCompacts α)
   定义体: isEmbedding_toCompacts.t0Space
 
 Depends on / 依赖: isEmbedding_toCompacts, isEmbedding_toCompacts.t0Space, t0Space
@@ -3234,8 +3234,8 @@ instance [T2Space
 @[simp]
 
 中文:
-实例 [T2Space
-  签名: α] : T2Space (NonemptyCompacts α)
+实例 [T2空间
+  签名: α] : T2空间 (NonemptyCompacts α)
   定义体: isEmbedding_toCompacts.t2Space
 
 @[simp]
@@ -3256,7 +3256,7 @@ theorem t2Space_iff
 
 中文:
 定理 t2Space_iff
-  结论: T2Space (NonemptyCompacts α) ↔ T2Space α
+  结论: T2空间 (NonemptyCompacts α) ↔ T2空间 α
   证明: ⟨fun _ => isEmbedding_singleton.t2Space, fun _ => inferInstance⟩
 
 Depends on / 依赖: isEmbedding_singleton, isEmbedding_singleton.t2Space, t2Space
@@ -3275,8 +3275,8 @@ instance [RegularSpace
 @[simp]
 
 中文:
-实例 [RegularSpace
-  签名: α] : RegularSpace (NonemptyCompacts α)
+实例 [正则空间
+  签名: α] : 正则空间 (NonemptyCompacts α)
   定义体: isEmbedding_toCompacts.regularSpace
 
 @[simp]
@@ -3299,7 +3299,7 @@ theorem regularSpace_iff
 
 中文:
 定理 regularSpace_iff
-  结论: RegularSpace (NonemptyCompacts α) ↔ RegularSpace α
+  结论: 正则空间 (NonemptyCompacts α) ↔ 正则空间 α
   证明: ⟨fun _ => isEmbedding_singleton.regularSpace, fun _ => inferInstance⟩
 
 @[simp]
@@ -3320,7 +3320,7 @@ theorem t3Space_iff
 
 中文:
 定理 t3Space_iff
-  结论: T3Space (NonemptyCompacts α) ↔ T3Space α
+  结论: T3空间 (NonemptyCompacts α) ↔ T3空间 α
   证明: ⟨fun _ => isEmbedding_singleton.t3Space, fun _ => inferInstance⟩
 
 Depends on / 依赖: isEmbedding_singleton, isEmbedding_singleton.t3Space, t3Space
@@ -3339,8 +3339,8 @@ instance [SecondCountableTopology
 @[simp]
 
 中文:
-实例 [SecondCountableTopology
-  签名: α] : SecondCountableTopology (NonemptyCompacts α)
+实例 [第二可数拓扑
+  签名: α] : 第二可数拓扑 (NonemptyCompacts α)
   定义体: isEmbedding_toCompacts.secondCountableTopology
 
 @[simp]
@@ -3377,8 +3377,8 @@ instance [CompactSpace
   body: isClosedEmbedding_toCompacts.compactSpace
 
 中文:
-实例 [CompactSpace
-  签名: α] : CompactSpace (NonemptyCompacts α)
+实例 [紧空间
+  签名: α] : 紧空间 (NonemptyCompacts α)
   定义体: isClosedEmbedding_toCompacts.compactSpace
 
 Depends on / 依赖: compactSpace, isClosedEmbedding_toCompacts, isClosedEmbedding_toCompacts.compactSpace
@@ -3396,7 +3396,7 @@ theorem isCompact_subsets_of_isCompact
 
 中文:
 定理 isCompact_subsets_of_isCompact
-  条件: {K : Set α} (hK : IsCompact K)
+  条件: {K : 集合 α} (hK : 是紧集 K)
   证明: isClosedEmbedding_toCompacts.isCompact_preimage (Compacts.isCompact_subsets_of_isCompact hK)
 
 Depends on / 依赖: Compacts, Compacts.isCompact_subsets_of_isCompact, isClosedEmbedding_toCompacts, isClosedEmbedding_toCompacts.isCompact_preimage, isCompact_preimage, isCompact_subsets_of_isCompact
@@ -3419,7 +3419,7 @@ theorem isCompact_biUnion_coe_of_isCompact
 
 中文:
 定理 isCompact_biUnion_coe_of_isCompact
-  条件: {S : Set (NonemptyCompacts α)} (hs : IsCompact S)
+  条件: {S : 集合 (NonemptyCompacts α)} (hs : 是紧集 S)
   证明: by
   convert! Compacts.isCompact_biUnion_coe_of_isCompact (hs.image continuous_toCompacts)
   simp_rw [biUnion_image, coe_toCompacts]
@@ -3451,7 +3451,7 @@ theorem compactSpace_iff
 
 中文:
 定理 compactSpace_iff
-  结论: CompactSpace (NonemptyCompacts α) ↔ CompactSpace α
+  结论: 紧空间 (NonemptyCompacts α) ↔ 紧空间 α
   证明: by
   refine ⟨fun h => ⟨?_⟩, fun _ => inferInstance⟩
   convert! isCompact_biUnion_coe_of_isCompact (α := α) isCompact_univ
@@ -3482,7 +3482,7 @@ theorem noncompactSpace_iff
 
 中文:
 定理 noncompactSpace_iff
-  结论: NoncompactSpace (NonemptyCompacts α) ↔ NoncompactSpace α
+  结论: Noncompact空间 (NonemptyCompacts α) ↔ Noncompact空间 α
   证明: by
   simp_rw [← not_compactSpace_iff, compactSpace_iff]
 
@@ -3500,8 +3500,8 @@ instance [NoncompactSpace
   body: noncompactSpace_iff.mpr ‹_›
 
 中文:
-实例 [NoncompactSpace
-  签名: α] : NoncompactSpace (NonemptyCompacts α)
+实例 [Noncompact空间
+  签名: α] : Noncompact空间 (NonemptyCompacts α)
   定义体: noncompactSpace_iff.mpr ‹_›
 
 Depends on / 依赖: noncompactSpace_iff, noncompactSpace_iff.mpr
@@ -3520,8 +3520,8 @@ instance [LocallyCompactSpace
 @[simp]
 
 中文:
-实例 [LocallyCompactSpace
-  签名: α] : LocallyCompactSpace (NonemptyCompacts α)
+实例 [局部紧空间
+  签名: α] : 局部紧空间 (NonemptyCompacts α)
   定义体: isOpenEmbedding_toCompacts.locallyCompactSpace
 
 @[simp]
@@ -3573,7 +3573,7 @@ theorem _root_.TopologicalSpace.Compacts.locallyCompactSpace_iff
     isOpenEmbedding_toCompacts.locallyCompactSpace, fun _ => inferInstance⟩
 
 中文:
-定理 _root_.TopologicalSpace.Compacts.locallyCompactSpace_iff
+定理 _root_.拓扑空间.余mpacts.locallyCompactSpace_iff
   证明: ⟨fun _ => NonemptyCompacts.locallyCompactSpace_iff.mp
     isOpenEmbedding_toCompacts.locallyCompactSpace, fun _ => inferInstance⟩
 
@@ -3595,8 +3595,8 @@ instance [SeparableSpace
 @[simp]
 
 中文:
-实例 [SeparableSpace
-  签名: α] : SeparableSpace (NonemptyCompacts α)
+实例 [可分空间
+  签名: α] : 可分空间 (NonemptyCompacts α)
   定义体: isOpenEmbedding_toCompacts.separableSpace
 
 @[simp]
@@ -3620,7 +3620,7 @@ theorem separableSpace_iff
 
 中文:
 定理 separableSpace_iff
-  结论: SeparableSpace (NonemptyCompacts α) ↔ SeparableSpace α
+  结论: 可分空间 (NonemptyCompacts α) ↔ 可分空间 α
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   rw [← Compacts.separableSpace_iff]; rw [← isSeparable_univ_iff]; rw [← union_compl_self {⊥}]; rw [← range_toCompacts]
@@ -3648,7 +3648,7 @@ theorem isPreconnected_finite_subsets
 
 中文:
 定理 isPreconnected_finite_subsets
-  条件: {s : Set α} (hs : IsPreconnected s)
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   rw [← isEmbedding_toCompacts.isPreconnected_image]
   convert Compacts.isPreconnected_nonempty_finite_subsets hs
@@ -3681,7 +3681,7 @@ theorem isPreconnected_subsets
 
 中文:
 定理 isPreconnected_subsets
-  条件: {s : Set α} (hs : IsPreconnected s)
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   rw [← isEmbedding_toCompacts.isPreconnected_image]
   convert Compacts.isPreconnected_nonempty_subsets hs
@@ -3711,7 +3711,7 @@ theorem isPreconnected_Icc
 
 中文:
 定理 isPreconnected_Icc
-  条件: {K L : NonemptyCompacts α} (hL : IsPreconnected (L : Set α))
+  条件: {K L : NonemptyCompacts α} (hL : 是预连通 (L : 集合 α))
   证明: by
   rw [← isEmbedding_toCompacts.isPreconnected_image]; rw [← coe_toCompactsOrderEmbedding]; rw [OrderEmbedding.image_Icc _ (by simpa [← Set.Ioi_bot] using ordConnected_Ioi)]
   exact Compacts.isPreconnected_Icc (Compacts.coe_nonempty.mp K.nonempty) hL
@@ -3735,7 +3735,7 @@ theorem isPreconnected_Ioc
 
 中文:
 定理 isPreconnected_Ioc
-  条件: {K L : NonemptyCompacts α} (hL : IsPreconnected (L : Set α))
+  条件: {K L : NonemptyCompacts α} (hL : 是预连通 (L : 集合 α))
   证明: by
   rw [← isEmbedding_toCompacts.isPreconnected_image]; rw [← coe_toCompactsOrderEmbedding]; rw [OrderEmbedding.image_Ioc _ (by simpa [← Set.Ioi_bot] using ordConnected_Ioi)]
   exact Compacts.isPreconnected_Ioc hL
@@ -3757,7 +3757,7 @@ theorem isPreconnected_Iic
 
 中文:
 定理 isPreconnected_Iic
-  条件: {K : NonemptyCompacts α} (hK : IsPreconnected (K : Set α))
+  条件: {K : NonemptyCompacts α} (hK : 是预连通 (K : 集合 α))
   证明: isPreconnected_subsets hK
 
 Depends on / 依赖: isPreconnected_subsets
@@ -3777,8 +3777,8 @@ instance [PreconnectedSpace
 @[simp]
 
 中文:
-实例 [PreconnectedSpace
-  签名: α] : PreconnectedSpace (NonemptyCompacts α) where
+实例 [预连通空间
+  签名: α] : 预连通空间 (NonemptyCompacts α) where
   定义体: by simpa using isPreconnected_subsets isPreconnected_univ
 
 @[simp]
@@ -3805,7 +3805,7 @@ theorem preconnectedSpace_iff
 
 中文:
 定理 preconnectedSpace_iff
-  结论: PreconnectedSpace (NonemptyCompacts α) ↔ PreconnectedSpace α
+  结论: 预连通空间 (NonemptyCompacts α) ↔ 预连通空间 α
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   rw [preconnectedSpace_iff_clopen] at h ⊢
@@ -3837,8 +3837,8 @@ instance [ConnectedSpace
 @[simp]
 
 中文:
-实例 [ConnectedSpace
-  签名: α] : ConnectedSpace (NonemptyCompacts α) where
+实例 [连通空间
+  签名: α] : 连通空间 (NonemptyCompacts α) where
   定义体: inferInstance
 
 @[simp]
@@ -3858,7 +3858,7 @@ theorem connectedSpace_iff
 
 中文:
 定理 connectedSpace_iff
-  结论: ConnectedSpace (NonemptyCompacts α) ↔ ConnectedSpace α
+  结论: 连通空间 (NonemptyCompacts α) ↔ 连通空间 α
   证明: by
   simp [connectedSpace_iff]
 -/
@@ -3876,8 +3876,8 @@ instance [LocallyConnectedSpace
 @[simp]
 
 中文:
-实例 [LocallyConnectedSpace
-  签名: α] : LocallyConnectedSpace (NonemptyCompacts α)
+实例 [局部连通空间
+  签名: α] : 局部连通空间 (NonemptyCompacts α)
   定义体: isOpenEmbedding_toCompacts.locallyConnectedSpace
 
 @[simp]
@@ -3935,7 +3935,7 @@ theorem _root_.TopologicalSpace.Compacts.locallyConnectedSpace_iff
     isOpenEmbedding_toCompacts.locallyConnectedSpace, fun _ => inferInstance⟩
 
 中文:
-定理 _root_.TopologicalSpace.Compacts.locallyConnectedSpace_iff
+定理 _root_.拓扑空间.余mpacts.locallyConnectedSpace_iff
   证明: ⟨fun _ => NonemptyCompacts.locallyConnectedSpace_iff.mp
     isOpenEmbedding_toCompacts.locallyConnectedSpace, fun _ => inferInstance⟩
 

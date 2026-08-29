@@ -39,11 +39,11 @@ structure SemiNormedGrp
 
 中文:
 结构 SemiNormedGrp
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : SeminormedAddCommGroup carrier]
+    - [str : SeminormedAddComm群 carrier]
 -/
 structure SemiNormedGrp : Type (u + 1) where
   /-- Construct a bundled `SemiNormedGrp` from the underlying type and typeclass. -/
@@ -86,10 +86,10 @@ structure Hom
     - hom' : NormedAddGroupHom M N
 
 中文:
-结构 Hom
+结构 态射
   参数: (M N : SemiNormedGrp.{u})
   公理与运算 (1 个):
-    - hom' : NormedAddGroupHom M N
+    - hom' : 赋范加群态射 M N
 -/
 structure Hom (M N : SemiNormedGrp.{u}) where
   /-- The underlying `NormedAddGroupHom`. -/
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} SemiNormedGrp
+  签名: 大范畴.{u} SemiNormedGrp
   定义体: Hom X Y
   id X := ⟨NormedAddGroupHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory SemiNormedGrp (NormedAddGroupHom · ·)
+  签名: 余ncrete范畴 SemiNormedGrp (赋范加群态射 · ·)
   定义体: f.hom'
   ofHom f := ⟨f⟩
 
@@ -147,8 +147,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := SemiNormedGrp) f
 
 中文:
-缩写 Hom.hom
-  签名: {M N : SemiNormedGrp.{u}} (f : Hom M N)
+缩写 态射.hom
+  签名: {M N : SemiNormedGrp.{u}} (f : 态射 M N)
   定义体: ConcreteCategory.hom (C := SemiNormedGrp) f
 -/
 abbrev Hom.hom {M N : SemiNormedGrp.{u}} (f : Hom M N) :=
@@ -164,7 +164,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  签名: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   定义体: ConcreteCategory.ofHom (C := SemiNormedGrp) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, SemiNormedGrp
@@ -184,8 +184,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (M N : SemiNormedGrp.{u}) (f : Hom M N)
+定义 态射.Simps.hom
+  签名: (M N : SemiNormedGrp.{u}) (f : 态射 M N)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -236,7 +236,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {M : SemiNormedGrp}
-  结论: (𝟙 M : M ⟶ M).hom = NormedAddGroupHom.id M
+  结论: (𝟙 M : M ⟶ M).hom = 赋范加群态射.id M
   证明: rfl
 -/
 lemma hom_id {M : SemiNormedGrp} : (𝟙 M : M ⟶ M).hom = NormedAddGroupHom.id M := rfl
@@ -336,7 +336,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 
 @[simp]
@@ -378,7 +378,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型u} [SeminormedAddCommGroup M]
+  条件: {M : 类型u} [SeminormedAddComm群 M]
   证明: rfl
 
 @[simp]
@@ -397,7 +397,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N O : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N O : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 -/
 lemma ofHom_comp {M N O : Type u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
@@ -415,7 +415,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 -/
 lemma ofHom_apply {M N : Type u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
@@ -472,7 +472,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (V : 类型u) [SeminormedAddCommGroup V]
+  条件: (V : 类型u) [SeminormedAddComm群 V]
   结论: (SemiNormedGrp.of V : 类型u) = V
   证明: rfl
 -/
@@ -524,7 +524,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SemiNormedGrp
+  签名: 可居 SemiNormedGrp
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited SemiNormedGrp :=
@@ -579,7 +579,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasZeroMorphisms.{u, u + 1} SemiNormedGrp
+  签名: Limits.有ZeroMorphisms.{u, u + 1} SemiNormedGrp
 -/
 instance : Limits.HasZeroMorphisms.{u, u + 1} SemiNormedGrp where
 
@@ -597,8 +597,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (V : SemiNormedGrp) [Subsingleton V]
-  结论: Limits.IsZero V
+  条件: (V : SemiNormedGrp) [子单例 V]
+  结论: Limits.是零 V
   证明: by
   refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
   · ext x; have : x = 0 := Subsingleton.elim _ _; simp only [this, map_zero]
@@ -621,7 +621,7 @@ instance hasZeroObject
 
 中文:
 实例 hasZeroObject
-  签名: : Limits.HasZeroObject SemiNormedGrp.{u}
+  签名: : Limits.有ZeroObject SemiNormedGrp.{u}
   定义体: ⟨⟨of PUnit, isZero_of_subsingleton _⟩⟩
 
 Depends on / 依赖: isZero_of_subsingleton
@@ -676,7 +676,7 @@ instance Hom.add
 @[simp]
 
 中文:
-实例 Hom.add
+实例 态射.add
   签名: {M N : SemiNormedGrp}
   定义体: ofHom (f.hom + g.hom)
 
@@ -717,7 +717,7 @@ instance Hom.neg
 @[simp]
 
 中文:
-实例 Hom.neg
+实例 态射.neg
   签名: {M N : SemiNormedGrp}
   定义体: ofHom (- f.hom)
 
@@ -758,7 +758,7 @@ instance Hom.sub
 @[simp]
 
 中文:
-实例 Hom.sub
+实例 态射.sub
   签名: {M N : SemiNormedGrp}
   定义体: ofHom (f.hom - g.hom)
 
@@ -799,7 +799,7 @@ instance Hom.nsmul
 @[simp]
 
 中文:
-实例 Hom.nsmul
+实例 态射.nsmul
   签名: {M N : SemiNormedGrp}
   定义体: ofHom (n • f.hom)
 
@@ -840,7 +840,7 @@ instance Hom.zsmul
 @[simp]
 
 中文:
-实例 Hom.zsmul
+实例 态射.zsmul
   签名: {M N : SemiNormedGrp}
   定义体: ofHom (n • f.hom)
 
@@ -880,7 +880,7 @@ instance Hom.addCommGroup
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 Hom.addCommGroup
+实例 态射.addCommGroup
   签名: {V W : SemiNormedGrp}
   定义体: Function.Injective.addCommGroup _ ConcreteCategory.hom_injective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -906,11 +906,11 @@ structure SemiNormedGrp₁
 
 中文:
 结构 SemiNormedGrp₁
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : SeminormedAddCommGroup carrier]
+    - [str : SeminormedAddComm群 carrier]
 -/
 structure SemiNormedGrp₁ : Type (u + 1) where
   /-- Construct a bundled `SemiNormedGrp₁` from the underlying type and typeclass. -/
@@ -954,10 +954,10 @@ structure Hom
     - normNoninc : hom'.NormNoninc
 
 中文:
-结构 Hom
+结构 态射
   参数: (M N : SemiNormedGrp₁.{u})
   公理与运算 (2 个):
-    - hom' : NormedAddGroupHom M N
+    - hom' : 赋范加群态射 M N
     - normNoninc : hom'.NormNoninc
 -/
 structure Hom (M N : SemiNormedGrp₁.{u}) where
@@ -977,7 +977,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} SemiNormedGrp₁
+  签名: 大范畴.{u} SemiNormedGrp₁
   定义体: Hom
   id X := ⟨NormedAddGroupHom.id X, NormedAddGroupHom.NormNoninc.id⟩
   comp {_ _ _} f g := ⟨g.1.comp f.1, g.2.comp f.2⟩
@@ -1018,7 +1018,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory SemiNormedGrp₁
+  签名: 余ncrete范畴 SemiNormedGrp₁
   定义体: ⟨f.1, f.2⟩
   ofHom f := ⟨f.1, f.2⟩
 -/
@@ -1041,8 +1041,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := SemiNormedGrp₁) f
 
 中文:
-缩写 Hom.hom
-  签名: {M N : SemiNormedGrp₁.{u}} (f : Hom M N)
+缩写 态射.hom
+  签名: {M N : SemiNormedGrp₁.{u}} (f : 态射 M N)
   定义体: ConcreteCategory.hom (C := SemiNormedGrp₁) f
 -/
 abbrev Hom.hom {M N : SemiNormedGrp₁.{u}} (f : Hom M N) :=
@@ -1058,7 +1058,7 @@ abbreviation mkHom
 
 中文:
 缩写 mkHom
-  签名: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  签名: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   定义体: ConcreteCategory.ofHom ⟨f, i⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -1079,8 +1079,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (M N : SemiNormedGrp₁.{u}) (f : Hom M N)
+定义 态射.Simps.hom
+  签名: (M N : SemiNormedGrp₁.{u}) (f : 态射 M N)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -1103,7 +1103,7 @@ theorem mkHom_apply
 
 中文:
 定理 mkHom_apply
-  结论: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 -/
 theorem mkHom_apply {M N : Type u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
@@ -1152,7 +1152,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {M : SemiNormedGrp₁}
-  结论: (𝟙 M : M ⟶ M).hom = NormedAddGroupHom.id M
+  结论: (𝟙 M : M ⟶ M).hom = 赋范加群态射.id M
   证明: rfl
 -/
 lemma hom_id {M : SemiNormedGrp₁} : (𝟙 M : M ⟶ M).hom = NormedAddGroupHom.id M := rfl
@@ -1252,7 +1252,7 @@ lemma hom_mkHom
 
 中文:
 引理 hom_mkHom
-  结论: {M N : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 
 @[simp]
@@ -1294,7 +1294,7 @@ lemma mkHom_id
 
 中文:
 引理 mkHom_id
-  条件: {M : 类型u} [SeminormedAddCommGroup M]
+  条件: {M : 类型u} [SeminormedAddComm群 M]
   证明: rfl
 
 @[simp]
@@ -1315,7 +1315,7 @@ lemma mkHom_comp
 
 中文:
 引理 mkHom_comp
-  结论: {M N O : 类型u} [SeminormedAddCommGroup M] [SeminormedAddCommGroup N]
+  结论: {M N O : 类型u} [SeminormedAddComm群 M] [SeminormedAddComm群 N]
   证明: rfl
 
 @[simp]
@@ -1420,7 +1420,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ SemiNormedGrp₁ SemiNormedGrp
+  签名: 有Forget₂ SemiNormedGrp₁ SemiNormedGrp
   定义体: { obj := fun X => SemiNormedGrp.of X
       map := fun f => SemiNormedGrp.ofHom f.1 }
 
@@ -1442,7 +1442,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (V : 类型u) [SeminormedAddCommGroup V]
+  条件: (V : 类型u) [SeminormedAddComm群 V]
   结论: (SemiNormedGrp₁.of V : 类型u) = V
   证明: rfl
 -/
@@ -1494,7 +1494,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SemiNormedGrp₁
+  签名: 可居 SemiNormedGrp₁
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited SemiNormedGrp₁ :=
@@ -1531,7 +1531,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasZeroMorphisms.{u, u + 1} SemiNormedGrp₁
+  签名: Limits.有ZeroMorphisms.{u, u + 1} SemiNormedGrp₁
 -/
 instance : Limits.HasZeroMorphisms.{u, u + 1} SemiNormedGrp₁ where
 
@@ -1549,8 +1549,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (V : SemiNormedGrp₁) [Subsingleton V]
-  结论: Limits.IsZero V
+  条件: (V : SemiNormedGrp₁) [子单例 V]
+  结论: Limits.是零 V
   证明: by
   refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
   · ext x; have : x = 0 := Subsingleton.elim _ _; simp only [this, map_zero]
@@ -1573,7 +1573,7 @@ instance hasZeroObject
 
 中文:
 实例 hasZeroObject
-  签名: : Limits.HasZeroObject SemiNormedGrp₁.{u}
+  签名: : Limits.有ZeroObject SemiNormedGrp₁.{u}
   定义体: ⟨⟨of PUnit, isZero_of_subsingleton _⟩⟩
 
 Depends on / 依赖: isZero_of_subsingleton
@@ -1600,7 +1600,7 @@ theorem iso_isometry
 中文:
 定理 iso_isometry
   条件: {V W : SemiNormedGrp₁} (i : V ≅ W)
-  结论: Isometry i.hom
+  结论: 等距 i.hom
   证明: by
   change Isometry (⟨⟨i.hom, map_zero _⟩, fun _ _ => map_add _ _ _⟩ : V ->+ W)
   refine AddMonoidHomClass.isometry_of_norm _ ?_

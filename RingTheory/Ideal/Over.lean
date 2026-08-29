@@ -54,7 +54,7 @@ theorem comap_eq_of_scalar_tower_quotient
 
 中文:
 定理 comap_eq_of_scalar_tower_quotient
-  结论: [Algebra R S] [Algebra (R ⧸ p) (S ⧸ P)]
+  结论: [代数 R S] [代数 (R ⧸ p) (S ⧸ P)]
   证明: by
   ext x
   rw [mem_comap]; rw [← Quotient.eq_zero_iff_mem]; rw [← Quotient.eq_zero_iff_mem]; rw [Quotient.mk_algebraMap]; rw [IsScalarTower.algebraMap_apply R (R ⧸ p) (S ⧸ P)]; rw [Quotient.algebraMap_eq]
@@ -82,8 +82,8 @@ instance Quotient.algebraQuotientMapQuotient
 @[simp]
 
 中文:
-实例 Quotient.algebraQuotientMapQuotient
-  签名: : Algebra (R ⧸ p) (S ⧸ map (algebraMap R S) p)
+实例 商.algebraQuotientMapQuotient
+  签名: : 代数 (R ⧸ p) (S ⧸ map (algebraMap R S) p)
   定义体: Ideal.Quotient.algebraQuotientOfLEComap le_comap_map
 
 @[simp]
@@ -108,7 +108,7 @@ theorem Quotient.algebraMap_quotient_map_quotient
 @[simp]
 
 中文:
-定理 Quotient.algebraMap_quotient_map_quotient
+定理 商.algebraMap_quotient_map_quotient
   条件: (x : R)
   证明: algebraMap R S
     algebraMap (R ⧸ p) (S ⧸ map f p) (Ideal.Quotient.mk p x) =
@@ -137,7 +137,7 @@ theorem Quotient.mk_smul_mk_quotient_map_quotient
   Algebra.smul_def _ _
 
 中文:
-定理 Quotient.mk_smul_mk_quotient_map_quotient
+定理 商.mk_smul_mk_quotient_map_quotient
   条件: (x : R) (y : S)
   证明: algebraMap R S
     Quotient.mk p x • Quotient.mk (map f p) y = Quotient.mk (map f p) (f x * y) :=
@@ -160,7 +160,7 @@ instance Quotient.tower_quotient_map_quotient
     rw [Quotient.algebraMap_eq]; rw [Quotient.algebraMap_quotient_map_quotient]; rw [Quotient.mk_algebraMap]
 
 中文:
-实例 Quotient.tower_quotient_map_quotient
+实例 商.tower_quotient_map_quotient
   签名: :
   定义体: IsScalarTower.of_algebraMap_eq fun x => by
     rw [Quotient.algebraMap_eq]; rw [Quotient.algebraMap_quotient_map_quotient]; rw [Quotient.mk_algebraMap]
@@ -192,7 +192,7 @@ abbreviation under
 
 中文:
 缩写 under
-  签名: : Ideal A
+  签名: : 理想 A
   定义体: Ideal.comap (algebraMap A B) P
 
 Depends on / 依赖: Ideal.comap, algebraMap
@@ -209,7 +209,7 @@ theorem under_def
 
 中文:
 定理 under_def
-  结论: P.under A = Ideal.comap (algebraMap A B) P
+  结论: P.under A = 理想.comap (algebraMap A B) P
   证明: rfl
 -/
 theorem under_def : P.under A = Ideal.comap (algebraMap A B) P := rfl
@@ -244,8 +244,8 @@ instance IsPrime.under
 @[simp]
 
 中文:
-实例 IsPrime.under
-  签名: [hP : P.IsPrime]
+实例 是素.under
+  签名: [hP : P.是素]
   定义体: hP.comap (algebraMap A B)
 
 @[simp]
@@ -271,8 +271,8 @@ lemma under_smul
 
 中文:
 引理 under_smul
-  条件: [SMulCommClass G A B]
-  结论: (g • P : Ideal B).under A = P.under A
+  条件: [标量交换类 G A B]
+  结论: (g • P : 理想 B).under A = P.under A
   证明: by
   ext a
   rw [mem_comap]; rw [mem_comap]; rw [mem_pointwise_smul_iff_inv_smul_mem]; rw [smul_algebraMap]
@@ -301,7 +301,7 @@ theorem smul_under
 
 中文:
 定理 smul_under
-  条件: [MulSemiringAction G A] [SMulDistribClass G A B]
+  条件: [MulSemiring作用 G A] [SMulDistrib类 G A B]
   证明: by
   conv_lhs => rw [pointwise_smul_eq_comap, ← comap_coe, under_def, comap_comap]
   conv_rhs => rw [pointwise_smul_eq_comap, ← comap_coe, under_def, comap_comap]
@@ -330,7 +330,7 @@ theorem under_top
 
 中文:
 定理 under_top
-  结论: under A (⊤ : Ideal B) = ⊤
+  结论: under A (⊤ : 理想 B) = ⊤
   证明: comap_top
 
 Depends on / 依赖: comap_top
@@ -427,7 +427,7 @@ instance top_liesOver_top
 
 中文:
 实例 top_liesOver_top
-  签名: : (⊤ : Ideal B).LiesOver (⊤ : Ideal A) where
+  签名: : (⊤ : 理想 B).LiesOver (⊤ : 理想 A) where
   定义体: (under_top A B).symm
 
 Depends on / 依赖: under_top
@@ -492,8 +492,8 @@ lemma isPrime_of_liesOver
 
 中文:
 引理 isPrime_of_liesOver
-  条件: [P.LiesOver p] [P.IsPrime]
-  结论: p.IsPrime
+  条件: [P.LiesOver p] [P.是素]
+  结论: p.是素
   证明: by
   rw [over_def P p]
   exact IsPrime.under A P
@@ -520,7 +520,7 @@ exact (over_def Q p).trans
 
 中文:
 定理 LiesOver.of_eq_comap
-  结论: [Q.LiesOver p] {F : 类型} [FunLike F B C]
+  结论: [Q.LiesOver p] {F : 类型} [函数状 F B C]
   证明: by
     rw [h]
 exact (over_def Q p).trans
@@ -549,7 +549,7 @@ theorem LiesOver.of_eq_map_equiv
 
 中文:
 定理 LiesOver.of_eq_map_equiv
-  结论: [P.LiesOver p] {E : 类型} [EquivLike E B C]
+  结论: [P.LiesOver p] {E : 类型} [等价状 E B C]
   证明: by
   rw [← show _ = P.map σ from comap_symm (RingEquivClass.toRingEquiv σ)] at h
   exact of_eq_comap p (AlgEquivClass.toAlgEquiv σ : B ≃ₐ[A] C).symm h
@@ -572,7 +572,7 @@ instance LiesOver.smul
 
 中文:
 实例 LiesOver.smul
-  签名: [SMulCommClass G A B] [h : P.LiesOver p]
+  签名: [标量交换类 G A B] [h : P.LiesOver p]
   定义体: ⟨h.over.trans (under_smul A P g).symm⟩
 
 Depends on / 依赖: h.over.trans, under_smul
@@ -592,7 +592,7 @@ instance comap_liesOver
 
 中文:
 实例 comap_liesOver
-  签名: [Q.LiesOver p] {F : 类型} [FunLike F B C] [AlgHomClass F A B C]
+  签名: [Q.LiesOver p] {F : 类型} [函数状 F B C] [代数态射类 F A B C]
   定义体: LiesOver.of_eq_comap p f rfl
 
 Depends on / 依赖: LiesOver, LiesOver.of_eq_comap, of_eq_comap
@@ -611,7 +611,7 @@ instance map_equiv_liesOver
 
 中文:
 实例 map_equiv_liesOver
-  签名: [P.LiesOver p] {E : 类型} [EquivLike E B C] [AlgEquivClass E A B C]
+  签名: [P.LiesOver p] {E : 类型} [等价状 E B C] [代数等价类 E A B C]
   定义体: LiesOver.of_eq_map_equiv p σ rfl
 
 Depends on / 依赖: LiesOver, LiesOver.of_eq_map_equiv, of_eq_map_equiv
@@ -738,7 +738,7 @@ exact comap_mono le_comap_map
 
 中文:
 定理 map_under_le_under_map
-  结论: {C D : 类型} [CommSemiring C] [Semiring D] [Algebra A C]
+  结论: {C D : 类型} [交换半环 C] [半环 D] [代数 A C]
   证明: by
   apply le_comap_of_map_le
   rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [map_le_iff_le_comap]; rw [IsScalarTower.algebraMap_eq A B D]; rw [← comap_comap]
@@ -764,7 +764,7 @@ theorem under_map_eq_map_under
 
 中文:
 定理 under_map_eq_map_under
-  结论: {C D : 类型} [CommSemiring C] [Semiring D] [Algebra A C]
+  结论: {C D : 类型} [交换半环 C] [半环 D] [代数 A C]
   证明: (IsCoatom.le_iff_eq (isMaximal_def.mp h₁) (comap_ne_top (algebraMap C D) h₂)).mp
     map_under_le_under_map P
 
@@ -790,7 +790,7 @@ theorem disjoint_primeCompl_of_liesOver
 
 中文:
 定理 disjoint_primeCompl_of_liesOver
-  条件: [p.IsPrime] [hPp : 𝔓.LiesOver p]
+  条件: [p.是素] [hPp : 𝔓.LiesOver p]
   证明: by
   rw [liesOver_iff]; rw [under_def]; rw [SetLike.ext'_iff]; rw [coe_comap] at hPp
   simpa only [Algebra.algebraMapSubmonoid, primeCompl, hPp, ← le_compl_iff_disjoint_left]
@@ -862,7 +862,7 @@ theorem under_bot
 
 中文:
 定理 under_bot
-  结论: under A (⊥ : Ideal B) = ⊥
+  结论: under A (⊥ : 理想 B) = ⊥
   证明: comap_bot_of_injective (algebraMap A B) (FaithfulSMul.algebraMap_injective A B)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap, algebraMap_injective, comap_bot_of_injective
@@ -880,7 +880,7 @@ instance bot_liesOver_bot
 
 中文:
 实例 bot_liesOver_bot
-  签名: : (⊥ : Ideal B).LiesOver (⊥ : Ideal A) where
+  签名: : (⊥ : 理想 B).LiesOver (⊥ : 理想 A) where
   定义体: (under_bot A B).symm
 
 Depends on / 依赖: under_bot
@@ -902,7 +902,7 @@ theorem ne_bot_of_liesOver_of_ne_bot
 
 中文:
 定理 ne_bot_of_liesOver_of_ne_bot
-  条件: (hp : p != ⊥) (P : Ideal B) [P.LiesOver p]
+  条件: (hp : p != ⊥) (P : 理想 B) [P.LiesOver p]
   结论: P != ⊥
   证明: by
   contrapose hp
@@ -938,7 +938,7 @@ instance algebraOfLiesOver
 
 中文:
 实例 algebraOfLiesOver
-  签名: : Algebra (A ⧸ p) (B ⧸ P)
+  签名: : 代数 (A ⧸ p) (B ⧸ P)
   定义体: algebraQuotientOfLEComap (le_of_eq (P.over_def p))
 
 @[simp]
@@ -977,7 +977,7 @@ instance isScalarTower_of_liesOver
 
 中文:
 实例 isScalarTower_of_liesOver
-  签名: : IsScalarTower R (A ⧸ p) (B ⧸ P)
+  签名: : 标量塔 R (A ⧸ p) (B ⧸ P)
   定义体: IsScalarTower.of_algebraMap_eq'
     congrArg (algebraMap B (B ⧸ P)).comp (IsScalarTower.algebraMap_eq R A B)
 
@@ -1002,7 +1002,7 @@ instance instFaithfulSMul
 
 中文:
 实例 instFaithfulSMul
-  签名: : FaithfulSMul (A ⧸ p) (B ⧸ P)
+  签名: : 忠实标量乘法 (A ⧸ p) (B ⧸ P)
   定义体: by
   rw [faithfulSMul_iff_algebraMap_injective]
   rintro ⟨a⟩ ⟨b⟩ hab
@@ -1033,7 +1033,7 @@ theorem nontrivial_of_liesOver_of_ne_top
 中文:
 定理 nontrivial_of_liesOver_of_ne_top
   条件: (hp : p != ⊤)
-  结论: Nontrivial (B ⧸ P)
+  结论: 非平凡 (B ⧸ P)
   证明: by
   rwa [Quotient.nontrivial_iff, ne_top_iff_of_liesOver _ p]
 
@@ -1053,8 +1053,8 @@ theorem nontrivial_of_liesOver_of_isPrime
 
 中文:
 定理 nontrivial_of_liesOver_of_isPrime
-  条件: [hp : p.IsPrime]
-  结论: Nontrivial (B ⧸ P)
+  条件: [hp : p.是素]
+  结论: 非平凡 (B ⧸ P)
   证明: nontrivial_of_liesOver_of_ne_top P hp.ne_top
 
 Depends on / 依赖: hp.ne_top, ne_top, nontrivial_of_liesOver_of_ne_top
@@ -1175,7 +1175,7 @@ definition stabilizerHom
 
 中文:
 定义 stabilizerHom
-  签名: : MulAction.stabilizer G P ->* ((B ⧸ P) ≃ₐ[A ⧸ p] (B ⧸ P)) where
+  签名: : 乘法作用.stabilizer G P ->* ((B ⧸ P) ≃ₐ[A ⧸ p] (B ⧸ P)) where
   定义体: algEquivOfEqMap p (MulSemiringAction.toAlgEquiv A B g) g.2.symm
   map_one' := by
     ext ⟨x⟩
@@ -1205,7 +1205,7 @@ theorem stabilizerHom_apply
 
 中文:
 定理 stabilizerHom_apply
-  条件: (g : MulAction.stabilizer G P) (b : B)
+  条件: (g : 乘法作用.stabilizer G P) (b : B)
   证明: rfl
 -/
 @[simp] theorem stabilizerHom_apply (g : MulAction.stabilizer G P) (b : B) :
@@ -1224,7 +1224,7 @@ lemma ker_stabilizerHom
 
 中文:
 引理 ker_stabilizerHom
-  结论: (stabilizerHom P p G).ker = P.inertia (MulAction.stabilizer G P)
+  结论: (stabilizerHom P p G).ker = P.inertia (乘法作用.stabilizer G P)
   证明: by
   ext σ
   simp [DFunLike.ext_iff, mk_surjective.forall, Quotient.eq]
@@ -1277,7 +1277,7 @@ definition primesOver
 
 中文:
 定义 primesOver
-  签名: : Set (Ideal B)
+  签名: : 集合 (理想 B)
   定义体: { P : Ideal B | P.IsPrime ∧ P.LiesOver p }
 
 Depends on / 依赖: IsPrime, LiesOver, P.IsPrime, P.LiesOver
@@ -1329,7 +1329,7 @@ abbreviation primesOver.mk
 
 中文:
 缩写 primesOver.mk
-  签名: (P : Ideal B) [hPp : P.IsPrime] [hp : P.LiesOver p]
+  签名: (P : 理想 B) [hPp : P.是素] [hp : P.LiesOver p]
   定义体: ⟨P, ⟨hPp, hp⟩⟩
 -/
 abbrev primesOver.mk (P : Ideal B) [hPp : P.IsPrime] [hp : P.LiesOver p] : primesOver p B :=
@@ -1348,7 +1348,7 @@ theorem ne_bot_of_mem_primesOver
 
 中文:
 定理 ne_bot_of_mem_primesOver
-  结论: [FaithfulSMul A B] (hp : p != ⊥) {P : Ideal B}
+  结论: [忠实标量乘法 A B] (hp : p != ⊥) {P : 理想 B}
   证明: by
   have : P.LiesOver p := hP.2
   exact ne_bot_of_liesOver_of_ne_bot hp P

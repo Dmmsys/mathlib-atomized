@@ -34,7 +34,7 @@ instance functor
 
 中文:
 实例 functor
-  签名: : Functor Multiset where map
+  签名: : 函子 Multiset where map
   定义体: @map
 
 @[simp]
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor Multiset
+  签名: Lawful函子 Multiset
   定义体: by simp
   comp_map := by simp
   map_const {_ _} := rfl
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad Multiset
+  签名: 单子 Multiset
   定义体: { Multiset.functor with
     pure := fun x => {x}
     bind := @bind }
@@ -226,7 +226,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad Multiset
+  签名: 合法单子 Multiset
   定义体: LawfulMonad.mk'
   (bind_pure_comp := fun _ _ => by simp only [pure_def, bind_def, bind_singleton, fmap_def])
   (id_map := fun _ => by simp only [fmap_def, id_eq, map_id'])
@@ -305,7 +305,7 @@ theorem comp_traverse
 
 中文:
 定理 comp_traverse
-  结论: {G H : Type _ -> Type _} [Applicative G] [Applicative H] [CommApplicative G]
+  结论: {G H : 类型 _ -> 类型 _} [适用 G] [适用 H] [交换适用 G]
   证明: by
   induction x using Quotient.inductionOn
   simp only [traverse, quot_mk_to_coe, lift_coe, Function.comp_apply, Functor.map_map, functor_norm]
@@ -333,7 +333,7 @@ theorem map_traverse
 
 中文:
 定理 map_traverse
-  结论: {G : 类型 -> Type _} [Applicative G] [CommApplicative G] {α β γ : Type _}
+  结论: {G : 类型 -> 类型 _} [适用 G] [交换适用 G] {α β γ : 类型 _}
   证明: by
   induction x using Quotient.inductionOn
   simp only [traverse, quot_mk_to_coe, lift_coe, Function.comp_apply, Functor.map_map]
@@ -363,7 +363,7 @@ theorem traverse_map
 
 中文:
 定理 traverse_map
-  结论: {G : 类型 -> Type _} [Applicative G] [CommApplicative G] {α β γ : Type _}
+  结论: {G : 类型 -> 类型 _} [适用 G] [交换适用 G] {α β γ : 类型 _}
   证明: by
   induction x using Quotient.inductionOn
   simp only [traverse, quot_mk_to_coe, map_coe, lift_coe, Function.comp_apply]
@@ -390,7 +390,7 @@ theorem naturality
 
 中文:
 定理 naturality
-  结论: {G H : Type _ -> Type _} [Applicative G] [Applicative H] [CommApplicative G]
+  结论: {G H : 类型 _ -> 类型 _} [适用 G] [适用 H] [交换适用 G]
   证明: by
   induction x using Quotient.inductionOn
   simp only [quot_mk_to_coe, traverse, lift_coe, Function.comp_apply,

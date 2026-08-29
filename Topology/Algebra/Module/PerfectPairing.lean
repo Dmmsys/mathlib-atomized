@@ -53,10 +53,10 @@ class IsContPerfPair
     - bijective_left((p))
 
 中文:
-类 IsContPerfPair
+类 是余ntPerfPair
   参数: (p : M ->ₗ[R] N ->ₗ[R] R)
   公理与运算 (2 个):
-    - continuous_uncurry((p)) : Continuous fun (x, y) => p x y
+    - continuous_uncurry((p)) : 连续 fun (x, y) => p x y
     - bijective_left((p))
 
 Depends on / 依赖: IsContPerfPair, IsContPerfPair.continuous_uncurry, continuous_uncurry
@@ -85,7 +85,7 @@ instance flip.instIsContPerfPair
 
 中文:
 实例 flip.instIsContPerfPair
-  签名: : p.flip.IsContPerfPair where
+  签名: : p.flip.是余ntPerfPair where
   定义体: p.continuous_uncurry_of_isContPerfPair.comp continuous_swap
   bijective_left := IsContPerfPair.bijective_right p
   bijective_right := IsContPerfPair.bijective_left p
@@ -107,7 +107,7 @@ lemma continuous_of_isContPerfPair
 
 中文:
 引理 continuous_of_isContPerfPair
-  结论: Continuous (p x)
+  结论: 连续 (p x)
   证明: p.continuous_uncurry_of_isContPerfPair.comp .prodMk_right x
 
 Depends on / 依赖: continuous_uncurry_of_isContPerfPair, p.continuous_uncurry_of_isContPerfPair.comp, prodMk_right

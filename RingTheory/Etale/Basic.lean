@@ -55,11 +55,11 @@ class FormallyEtale
     - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
 
 中文:
-类 FormallyEtale
+类 形式平展
   参数: : 命题 where
   公理与运算 (2 个):
-    - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
-    - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
+    - subsingleton_kaehlerDifferential : 子单例 Ω[A⁄R]
+    - subsingleton_h1Cotangent : 子单例 (H1Cotangent R A)
 -/
 class FormallyEtale : Prop where
   subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
@@ -105,7 +105,7 @@ theorem of_formallyUnramified_and_formallySmooth
 
 中文:
 定理 of_formallyUnramified_and_formallySmooth
-  结论: [FormallyUnramified R A]
+  结论: [形式非分歧 R A]
   证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr ⟨‹_›, ‹_›⟩
 
 Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, iff_formallyUnramified_and_formallySmooth
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: FormallyEtale R R
+  签名: 形式平展 R R
   定义体: of_formallyUnramified_and_formallySmooth
 
 Depends on / 依赖: of_formallyUnramified_and_formallySmooth, transpose, without
@@ -142,7 +142,7 @@ lemma comp_bijective
 
 中文:
 引理 comp_bijective
-  条件: [FormallyEtale R A] (I : Ideal B) (hI : I ^ 2 = ⊥)
+  条件: [形式平展 R A] (I : 理想 B) (hI : I ^ 2 = ⊥)
   证明: ⟨FormallyUnramified.comp_injective I hI, FormallySmooth.comp_surjective R A I hI⟩
 
 Depends on / 依赖: FormallySmooth, FormallySmooth.comp_surjective, FormallyUnramified, FormallyUnramified.comp_injective, comp_injective, comp_surjective
@@ -198,8 +198,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [FormallyEtale R A] (e : A ≃ₐ[R] B)
-  结论: FormallyEtale R B
+  条件: [形式平展 R A] (e : A ≃ₐ[R] B)
+  结论: 形式平展 R B
   证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.of_equiv e, FormallySmooth.of_equiv e⟩
 
@@ -221,7 +221,7 @@ theorem iff_of_equiv
 中文:
 定理 iff_of_equiv
   条件: (e : A ≃ₐ[R] B)
-  结论: FormallyEtale R A ↔ FormallyEtale R B
+  结论: 形式平展 R A ↔ 形式平展 R B
   证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_equiv
@@ -247,7 +247,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [FormallyEtale R A] [FormallyEtale A B]
+  条件: [形式平展 R A] [形式平展 A B]
   证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.comp R A B, FormallySmooth.comp R A B⟩
 
@@ -270,7 +270,7 @@ lemma of_restrictScalars
 
 中文:
 引理 of_restrictScalars
-  条件: [FormallyUnramified R A] [FormallyEtale R B]
+  条件: [形式非分歧 R A] [形式平展 R B]
   证明: have := FormallyUnramified.of_restrictScalars R A B
   have := FormallySmooth.of_restrictScalars R A B
   .of_formallyUnramified_and_formallySmooth
@@ -293,7 +293,7 @@ lemma iff_restrictScalars
 
 中文:
 引理 iff_restrictScalars
-  条件: [FormallyEtale R A]
+  条件: [形式平展 R A]
   证明: ⟨fun _ => .of_restrictScalars (R := R), fun _ => .comp _ A _⟩
 
 Depends on / 依赖: of_restrictScalars
@@ -311,8 +311,8 @@ lemma _root_.Algebra.FormallySmooth.iff_restrictScalars
   proof: ⟨fun _ => .of_restrictScalars R _ _, fun _ => .comp _ A _⟩
 
 中文:
-引理 _root_.Algebra.FormallySmooth.iff_restrictScalars
-  条件: [FormallyEtale R A]
+引理 _root_.代数.形式光滑.iff_restrictScalars
+  条件: [形式平展 R A]
   证明: ⟨fun _ => .of_restrictScalars R _ _, fun _ => .comp _ A _⟩
 
 Depends on / 依赖: of_restrictScalars
@@ -356,8 +356,8 @@ instance [FormallyEtale
   body: .of_formallyUnramified_and_formallySmooth
 
 中文:
-实例 [FormallyEtale
-  签名: R A] : FormallyEtale B (B otimes[R] A)
+实例 [形式平展
+  签名: R A] : 形式平展 B (B otimes[R] A)
   定义体: .of_formallyUnramified_and_formallySmooth
 
 Depends on / 依赖: of_formallyUnramified_and_formallySmooth
@@ -407,7 +407,7 @@ theorem of_isLocalization
 
 中文:
 定理 of_isLocalization
-  结论: FormallyEtale R Rₘ
+  结论: 形式平展 R Rₘ
   证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.of_isLocalization M, FormallySmooth.of_isLocalization M⟩
 
@@ -426,7 +426,7 @@ instance [FormallyEtale
   body: .of_formallyUnramified_and_formallySmooth
 
 中文:
-实例 [FormallyEtale
+实例 [形式平展
   签名: R S] (M
   定义体: .of_formallyUnramified_and_formallySmooth
 
@@ -447,8 +447,8 @@ theorem localization_base
 
 中文:
 定理 localization_base
-  条件: [FormallyEtale R Sₘ]
-  结论: FormallyEtale Rₘ Sₘ
+  条件: [形式平展 R Sₘ]
+  结论: 形式平展 Rₘ Sₘ
   证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.localization_base M, FormallySmooth.localization_base M⟩
 
@@ -472,8 +472,8 @@ theorem localization_map
 
 中文:
 定理 localization_map
-  条件: [FormallyEtale R S]
-  结论: FormallyEtale Rₘ Sₘ
+  条件: [形式平展 R S]
+  结论: 形式平展 Rₘ Sₘ
   证明: by
   have : FormallyEtale S Sₘ := FormallyEtale.of_isLocalization (M.map (algebraMap R S))
   have : FormallyEtale R Sₘ := FormallyEtale.comp R S Sₘ
@@ -507,11 +507,11 @@ class Etale
     - finitePresentation : FinitePresentation R A  [default: by infer_instance]
 
 中文:
-类 Etale
+类 平展
   参数: : 命题 where
   公理与运算 (2 个):
-    - formallyEtale : FormallyEtale R A  [默认: by infer_instance]
-    - finitePresentation : FinitePresentation R A  [默认: by infer_instance]
+    - formallyEtale : 形式平展 R A  [默认: by infer_instance]
+    - finitePresentation : 有限呈现 R A  [默认: by infer_instance]
 
 Depends on / 依赖: FinitePresentation, finitePresentation, infer_instance
 -/
@@ -529,7 +529,7 @@ lemma Etale.iff_formallyUnramified_and_smooth
   tauto
 
 中文:
-引理 Etale.iff_formallyUnramified_and_smooth
+引理 平展.iff_formallyUnramified_and_smooth
   证明: by
   rw [etale_iff]; rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [smooth_iff]
   tauto
@@ -556,7 +556,7 @@ instance :
 
 中文:
 实例 :
-  签名: Etale R R
+  签名: 平展 R R
 -/
 instance : Etale R R where
 
@@ -568,8 +568,8 @@ instance [Etale
   signature: R A] : Smooth R A where
 
 中文:
-实例 [Etale
-  签名: R A] : Smooth R A where
+实例 [平展
+  签名: R A] : 光滑 R A where
 -/
 instance [Etale R A] : Smooth R A where
 
@@ -587,8 +587,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [Etale R A] (e : A ≃ₐ[R] B)
-  结论: Etale R B where
+  条件: [平展 R A] (e : A ≃ₐ[R] B)
+  结论: 平展 R B where
   证明: FormallyEtale.of_equiv e
   finitePresentation := FinitePresentation.equiv e
 
@@ -614,8 +614,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale A B]
-  结论: Etale R B where
+  条件: [代数 A B] [标量塔 R A B] [平展 R A] [平展 A B]
+  结论: 平展 R B where
   证明: FormallyEtale.comp R A B
   finitePresentation := FinitePresentation.trans R A B
 
@@ -634,7 +634,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [Etale R A]
+  签名: [平展 R A]
 -/
 instance baseChange [Etale R A] : Etale B (B otimes[R] A) where
 
@@ -649,7 +649,7 @@ lemma of_restrictScalars
 
 中文:
 引理 of_restrictScalars
-  条件: [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale R B]
+  条件: [代数 A B] [标量塔 R A B] [平展 R A] [平展 R B]
   证明: .of_restrict_scalars_finitePresentation R A B
   formallyEtale := .of_restrictScalars (R := R)
 
@@ -674,8 +674,8 @@ theorem of_isLocalizationAway
 
 中文:
 定理 of_isLocalizationAway
-  条件: (r : R) [IsLocalization.Away r A]
-  结论: Etale R A where
+  条件: (r : R) [是Localization.Away r A]
+  结论: 平展 R A where
   证明: Algebra.FormallyEtale.of_isLocalization (Submonoid.powers r)
   finitePresentation := IsLocalization.Away.finitePresentation r
 
@@ -728,7 +728,7 @@ definition FormallyEtale
   Algebra.FormallyEtale R S
 
 中文:
-定义 FormallyEtale
+定义 形式平展
   签名: (f : R ->+* S)
   定义体: letI := f.toAlgebra
   Algebra.FormallyEtale R S
@@ -750,7 +750,7 @@ lemma formallyEtale_algebraMap
 
 中文:
 引理 formallyEtale_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   rw [FormallyEtale]; rw [toAlgebra_algebraMap]
 
@@ -771,8 +771,8 @@ lemma FormallyEtale.comp
   exact Algebra.FormallyEtale.comp R S T
 
 中文:
-引理 FormallyEtale.comp
-  结论: {T : 类型} [CommRing T] {f : R ->+* S} {g : S ->+* T} (hf : f.FormallyEtale)
+引理 形式平展.comp
+  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T} (hf : f.形式平展)
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallyEtale.comp R S T

@@ -111,9 +111,9 @@ theorem isIntegral_denominator_smul
   proof: denominator_dvd_iff.mp dvd_rfl
 
 中文:
-定理 isIntegral_denominator_smul
+定理 is整数egral_denominator_smul
   条件: (x : S)
-  结论: Is整数egral R (denominator R x • x)
+  结论: 是整 R (denominator R x • x)
   证明: denominator_dvd_iff.mp dvd_rfl
 
 Depends on / 依赖: denominator_dvd_iff, denominator_dvd_iff.mp, dvd_rfl
@@ -190,9 +190,9 @@ theorem isIntegral_natDenominator_smul
   proof: natDenominator_dvd_iff.mp dvd_rfl
 
 中文:
-定理 isIntegral_natDenominator_smul
+定理 is整数egral_natDenominator_smul
   条件: (x : S)
-  结论: Is整数egral 整数 (natDenominator x • x)
+  结论: 是整 整数 (natDenominator x • x)
   证明: natDenominator_dvd_iff.mp dvd_rfl
 
 Depends on / 依赖: dvd_rfl, natDenominator_dvd_iff, natDenominator_dvd_iff.mp
@@ -217,8 +217,8 @@ theorem denominator_ne_zero
 
 中文:
 定理 denominator_ne_zero
-  条件: {x : S} (hx : IsAlgebraic R x)
-  结论: Algebra.denominator R x != 0
+  条件: {x : S} (hx : 是代数 R x)
+  结论: 代数.denominator R x != 0
   证明: by
   obtain ⟨r, hr0, hr⟩ := hx.exists_integral_multiple
   exact ne_zero_of_dvd_ne_zero hr0 (Algebra.denominator_dvd_iff.mpr hr)
@@ -242,8 +242,8 @@ theorem natDenominator_ne_zero
 
 中文:
 定理 natDenominator_ne_zero
-  条件: {x : S} (hx : IsAlgebraic 整数 x)
-  结论: Algebra.natDenominator x != 0
+  条件: {x : S} (hx : 是代数 整数 x)
+  结论: 代数.natDenominator x != 0
   证明: by
   rw [Algebra.natDenominator_def]; rw [Int.natAbs_ne_zero]
   exact hx.denominator_ne_zero

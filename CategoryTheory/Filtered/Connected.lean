@@ -32,9 +32,9 @@ theorem IsFilteredOrEmpty.isPreconnected
     (.single <| .inr <| .intro <| IsFiltered.rightToMax j j')
 
 中文:
-定理 IsFilteredOrEmpty.isPreconnected
-  条件: [IsFilteredOrEmpty C]
-  结论: IsPreconnected C
+定理 是FilteredOrEmpty.isPreconnected
+  条件: [是FilteredOrEmpty C]
+  结论: 是预连通 C
   证明: zigzag_isPreconnected fun j j' => .trans
     (.single <| .inl <| .intro <| IsFiltered.leftToMax j j')
     (.single <| .inr <| .intro <| IsFiltered.rightToMax j j')
@@ -58,9 +58,9 @@ theorem IsCofilteredOrEmpty.isPreconnected
     (.single <| .inl <| .intro <| IsCofiltered.minToRight j j')
 
 中文:
-定理 IsCofilteredOrEmpty.isPreconnected
-  条件: [IsCofilteredOrEmpty C]
-  结论: IsPreconnected C
+定理 是余filteredOrEmpty.isPreconnected
+  条件: [是余filteredOrEmpty C]
+  结论: 是预连通 C
   证明: zigzag_isPreconnected fun j j' => .trans
     (.single <| .inr <| .intro <| IsCofiltered.minToLeft j j')
     (.single <| .inl <| .intro <| IsCofiltered.minToRight j j')
@@ -83,9 +83,9 @@ theorem IsFiltered.isConnected
   proof: { IsFilteredOrEmpty.isPreconnected C with }
 
 中文:
-定理 IsFiltered.isConnected
-  条件: [IsFiltered C]
-  结论: IsConnected C
+定理 是Filtered.isConnected
+  条件: [是Filtered C]
+  结论: 是连通 C
   证明: { IsFilteredOrEmpty.isPreconnected C with }
 
 Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.isPreconnected, isPreconnected
@@ -104,9 +104,9 @@ theorem IsCofiltered.isConnected
   proof: { IsCofilteredOrEmpty.isPreconnected C with }
 
 中文:
-定理 IsCofiltered.isConnected
-  条件: [IsCofiltered C]
-  结论: IsConnected C
+定理 是余filtered.isConnected
+  条件: [是余filtered C]
+  结论: 是连通 C
   证明: { IsCofilteredOrEmpty.isPreconnected C with }
 
 Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.isPreconnected, isPreconnected

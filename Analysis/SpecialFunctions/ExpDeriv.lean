@@ -51,7 +51,7 @@ theorem analyticOnNhd_cexp
 
 中文:
 定理 analyticOnNhd_cexp
-  结论: AnalyticOnNhd Complex exp univ
+  结论: AnalyticOnNhd 复形 exp univ
   证明: by
   rw [Complex.exp_eq_exp_Complex]
   exact fun x _ => NormedSpace.exp_analytic x
@@ -72,7 +72,7 @@ theorem analyticOn_cexp
 
 中文:
 定理 analyticOn_cexp
-  结论: AnalyticOn Complex exp univ
+  结论: AnalyticOn 复形 exp univ
   证明: analyticOnNhd_cexp.analyticOn
 
 Depends on / 依赖: analyticOn, analyticOnNhd_cexp, analyticOnNhd_cexp.analyticOn
@@ -91,7 +91,7 @@ theorem analyticAt_cexp
 
 中文:
 定理 analyticAt_cexp
-  结论: AnalyticAt Complex exp z
+  结论: AnalyticAt 复形 exp z
   证明: analyticOnNhd_cexp z (mem_univ _)
 
 Depends on / 依赖: analyticOnNhd_cexp, mem_univ
@@ -110,7 +110,7 @@ lemma analyticWithinAt_cexp
 
 中文:
 引理 analyticWithinAt_cexp
-  条件: {s : Set Complex} {x : Complex}
+  条件: {s : 集合 复形} {x : 复形}
   证明: by
   exact analyticAt_cexp.analyticWithinAt
 
@@ -133,8 +133,8 @@ theorem AnalyticAt.cexp
 
 中文:
 定理 AnalyticAt.cexp
-  条件: (fa : AnalyticAt Complex f x)
-  结论: AnalyticAt Complex (exp ∘ f) x
+  条件: (fa : AnalyticAt 复形 f x)
+  结论: AnalyticAt 复形 (exp ∘ f) x
   证明: analyticAt_cexp.comp fa
 
 Depends on / 依赖: analyticAt_cexp, analyticAt_cexp.comp
@@ -155,8 +155,8 @@ theorem AnalyticAt.cexp'
 
 中文:
 定理 AnalyticAt.cexp'
-  条件: (fa : AnalyticAt Complex f x)
-  结论: AnalyticAt Complex (fun z => exp (f z)) x
+  条件: (fa : AnalyticAt 复形 f x)
+  结论: AnalyticAt 复形 (fun z => exp (f z)) x
   证明: fa.cexp
 
 Depends on / 依赖: fa.cexp
@@ -174,7 +174,7 @@ theorem AnalyticWithinAt.cexp
 
 中文:
 定理 AnalyticWithinAt.cexp
-  条件: (fa : AnalyticWithinAt Complex f s x)
+  条件: (fa : AnalyticWithinAt 复形 f s x)
   证明: analyticAt_cexp.comp_analyticWithinAt fa
 
 Depends on / 依赖: analyticAt_cexp, analyticAt_cexp.comp_analyticWithinAt, comp_analyticWithinAt
@@ -194,8 +194,8 @@ theorem AnalyticOnNhd.cexp
 
 中文:
 定理 AnalyticOnNhd.cexp
-  条件: (fs : AnalyticOnNhd Complex f s)
-  结论: AnalyticOnNhd Complex (fun z => exp (f z)) s
+  条件: (fs : AnalyticOnNhd 复形 f s)
+  结论: AnalyticOnNhd 复形 (fun z => exp (f z)) s
   证明: fun z n => analyticAt_cexp.comp (fs z n)
 
 Depends on / 依赖: analyticAt_cexp, analyticAt_cexp.comp
@@ -214,8 +214,8 @@ theorem AnalyticOn.cexp
 
 中文:
 定理 AnalyticOn.cexp
-  条件: (fs : AnalyticOn Complex f s)
-  结论: AnalyticOn Complex (fun z => exp (f z)) s
+  条件: (fs : AnalyticOn 复形 f s)
+  结论: AnalyticOn 复形 (fun z => exp (f z)) s
   证明: analyticOnNhd_cexp.comp_analyticOn fs (mapsTo_univ _ _)
 
 Depends on / 依赖: analyticOnNhd_cexp, analyticOnNhd_cexp.comp_analyticOn, comp_analyticOn, mapsTo_univ
@@ -246,8 +246,8 @@ theorem hasDerivAt_exp
 
 中文:
 定理 hasDerivAt_exp
-  条件: (x : Complex)
-  结论: HasDerivAt exp (exp x) x
+  条件: (x : 复形)
+  结论: 在点处可导 exp (exp x) x
   证明: by
   rw [hasDerivAt_iff_isLittleO_nhds_zero]
   have : (1 : Nat) < 2 := by simp
@@ -280,7 +280,7 @@ theorem differentiable_exp
 
 中文:
 定理 differentiable_exp
-  结论: Differentiable 𝕜 exp
+  结论: 可微 𝕜 exp
   证明: fun x =>
   (hasDerivAt_exp x).differentiableAt.restrictScalars 𝕜
 
@@ -305,7 +305,7 @@ theorem differentiableAt_exp
 
 中文:
 定理 differentiableAt_exp
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: DifferentiableAt 𝕜 exp x
   证明: differentiable_exp x
 
@@ -370,7 +370,7 @@ theorem contDiff_exp
 中文:
 定理 contDiff_exp
   条件: {n : WithTop 自然数∞}
-  结论: ContDiff 𝕜 n exp
+  结论: 连续可微 𝕜 n exp
   证明: analyticOnNhd_cexp.restrictScalars.contDiff
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, analyticOnNhd_cexp, analyticOnNhd_cexp.restrictScalars.contDiff, contDiff, evaluationJointlyReflectsColimits, functor, functorCategoryEquivalence, isColimitOfReflects, restrictScalars
@@ -389,7 +389,7 @@ theorem hasStrictDerivAt_exp
 
 中文:
 定理 hasStrictDerivAt_exp
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: HasStrictDerivAt exp (exp x) x
   证明: contDiff_exp.contDiffAt.hasStrictDerivAt' (hasDerivAt_exp x) one_ne_zero
 
@@ -409,8 +409,8 @@ theorem hasStrictFDerivAt_exp_real
 
 中文:
 定理 hasStrictFDerivAt_exp_real
-  条件: (x : Complex)
-  结论: HasStrictFDerivAt exp (exp x • (1 : Complex ->L[实数] Complex)) x
+  条件: (x : 复形)
+  结论: HasStrictFDerivAt exp (exp x • (1 : 复形 ->L[实数] 复形)) x
   证明: (hasStrictDerivAt_exp x).complexToReal_fderiv
 
 Depends on / 依赖: complexToReal_fderiv, hasStrictDerivAt_exp
@@ -453,8 +453,8 @@ theorem HasDerivAt.cexp
   proof: (Complex.hasDerivAt_exp (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.cexp
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.cexp
+  条件: (hf : 在点处可导 f f' x)
   证明: (Complex.hasDerivAt_exp (f x)).comp x hf
 
 Depends on / 依赖: Complex.hasDerivAt_exp, hasDerivAt_exp
@@ -579,8 +579,8 @@ theorem HasFDerivAt.cexp
   proof: hasFDerivWithinAt_univ.1 hf.hasFDerivWithinAt.cexp
 
 中文:
-定理 HasFDerivAt.cexp
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.cexp
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: hasFDerivWithinAt_univ.1 hf.hasFDerivWithinAt.cexp
 
 Depends on / 依赖: hasFDerivWithinAt, hasFDerivWithinAt_univ, hf.hasFDerivWithinAt.cexp
@@ -664,8 +664,8 @@ theorem Differentiable.cexp
 @[fun_prop]
 
 中文:
-定理 Differentiable.cexp
-  条件: (hc : Differentiable 𝕜 f)
+定理 可微.cexp
+  条件: (hc : 可微 𝕜 f)
   证明: fun x => (hc x).cexp
 
 @[fun_prop]
@@ -686,9 +686,9 @@ theorem ContDiff.cexp
 @[fun_prop]
 
 中文:
-定理 ContDiff.cexp
-  条件: {n} (h : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x => Complex.exp (f x)
+定理 连续可微.cexp
+  条件: {n} (h : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x => 复形.exp (f x)
   证明: Complex.contDiff_exp.comp h
 
 @[fun_prop]
@@ -781,7 +781,7 @@ theorem iteratedDeriv_cexp_const_mul
 
 中文:
 定理 iteratedDeriv_cexp_const_mul
-  条件: (n : 自然数) (c : Complex)
+  条件: (n : 自然数) (c : 复形)
   证明: by
   rw [iteratedDeriv_comp_const_mul contDiff_exp]; rw [iteratedDeriv_eq_iterate]; rw [iter_deriv_exp]
 
@@ -870,7 +870,7 @@ lemma analyticWithinAt_rexp
 
 中文:
 引理 analyticWithinAt_rexp
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 实数.exp s x
   证明: analyticAt_rexp.analyticWithinAt
 
@@ -952,7 +952,7 @@ theorem AnalyticOnNhd.rexp
 
 中文:
 定理 AnalyticOnNhd.rexp
-  条件: {s : Set E} (fs : AnalyticOnNhd 实数 f s)
+  条件: {s : 集合 E} (fs : AnalyticOnNhd 实数 f s)
   证明: fun z n => analyticAt_rexp.comp (fs z n)
 
 Depends on / 依赖: analyticAt_rexp, analyticAt_rexp.comp
@@ -1019,7 +1019,7 @@ theorem hasDerivAt_exp
 中文:
 定理 hasDerivAt_exp
   条件: (x : 实数)
-  结论: HasDerivAt exp (exp x) x
+  结论: 在点处可导 exp (exp x) x
   证明: (Complex.hasDerivAt_exp x).real_of_complex
 
 @[fun_prop]
@@ -1044,7 +1044,7 @@ theorem contDiff_exp
 中文:
 定理 contDiff_exp
   条件: {n : WithTop 自然数∞}
-  结论: ContDiff 实数 n exp
+  结论: 连续可微 实数 n exp
   证明: Complex.contDiff_exp.real_of_complex
 
 @[simp]
@@ -1067,7 +1067,7 @@ theorem differentiable_exp
 
 中文:
 定理 differentiable_exp
-  结论: Differentiable 实数 exp
+  结论: 可微 实数 exp
   证明: fun x => (hasDerivAt_exp x).differentiableAt
 
 @[simp]
@@ -1178,8 +1178,8 @@ theorem HasDerivAt.exp
   proof: (Real.hasDerivAt_exp (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.exp
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.exp
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_exp (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_exp, hasDerivAt_exp
@@ -1274,9 +1274,9 @@ theorem ContDiff.exp
 @[fun_prop]
 
 中文:
-定理 ContDiff.exp
-  条件: {n} (hf : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => 实数.exp (f x)
+定理 连续可微.exp
+  条件: {n} (hf : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => 实数.exp (f x)
   证明: Real.contDiff_exp.comp hf
 
 @[fun_prop]
@@ -1384,8 +1384,8 @@ theorem HasFDerivAt.exp
   proof: (Real.hasDerivAt_exp (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.exp
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.exp
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Real.hasDerivAt_exp (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Real.hasDerivAt_exp, comp_hasFDerivAt, hasDerivAt_exp
@@ -1492,9 +1492,9 @@ theorem Differentiable.exp
   proof: fun x => (hc x).exp
 
 中文:
-定理 Differentiable.exp
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => 实数.exp (f x)
+定理 可微.exp
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => 实数.exp (f x)
   证明: fun x => (hc x).exp
 -/
 theorem Differentiable.exp (hc : Differentiable Real f) : Differentiable Real fun x => Real.exp (f x) :=

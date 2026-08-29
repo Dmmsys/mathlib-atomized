@@ -61,11 +61,11 @@ structure HahnSeries
     - isPWO_support' : (Function.support coeff).IsPWO
 
 中文:
-结构 HahnSeries
-  参数: (Γ : 类型) (R : 类型) [PartialOrder Γ] [Zero R]
+结构 Hahn级数
+  参数: (Γ : 类型) (R : 类型) [偏序 Γ] [零 R]
   公理与运算 (2 个):
     - coeff : Γ -> R
-    - isPWO_support' : (Function.support coeff).IsPWO
+    - isPWO_support' : (函数.support coeff).IsPWO
 -/
 structure HahnSeries (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R] where
   /-- The coefficient function of a Hahn Series. -/
@@ -103,7 +103,7 @@ theorem coeff_injective
 
 中文:
 定理 coeff_injective
-  结论: Injective (coeff : R⟦Γ⟧ -> Γ -> R)
+  结论: 单射 (coeff : R⟦Γ⟧ -> Γ -> R)
   证明: fun _ _ => HahnSeries.ext
 
 @[simp]
@@ -154,7 +154,7 @@ theorem support_mk
 中文:
 定理 support_mk
   条件: (f : Γ -> R) (h)
-  结论: support ⟨f, h⟩ = Function.support f
+  结论: support ⟨f, h⟩ = 函数.support f
   证明: rfl
 
 @[simp]
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero R⟦Γ⟧
+  签名: 零 R⟦Γ⟧
   定义体: ⟨{ coeff := 0
       isPWO_support' := by simp }⟩
 
@@ -262,7 +262,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited R⟦Γ⟧
+  签名: 可居 R⟦Γ⟧
   定义体: ⟨0⟩
 -/
 instance : Inhabited R⟦Γ⟧ :=
@@ -277,8 +277,8 @@ instance [Subsingleton
   body: ⟨fun _ _ => HahnSeries.ext (by subsingleton)⟩
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton R⟦Γ⟧
+实例 [子单例
+  签名: R] : 子单例 R⟦Γ⟧
   定义体: ⟨fun _ _ => HahnSeries.ext (by subsingleton)⟩
 
 Depends on / 依赖: HahnSeries, HahnSeries.ext, subsingleton
@@ -445,7 +445,7 @@ isPWO_support' := x.isPWO_support.mono Function.support_comp_subset (ZeroHomClas
 
 中文:
 定义 map
-  签名: [Zero S] (x : R⟦Γ⟧) {F : 类型} [FunLike F R S] [ZeroHomClass F R S] (f : F)
+  签名: [零 S] (x : R⟦Γ⟧) {F : 类型} [函数状 F R S] [保零态射类 F R S] (f : F)
   定义体: f (x.coeff g)
 isPWO_support' := x.isPWO_support.mono Function.support_comp_subset (ZeroHomClass.map_zero f) _
 
@@ -470,7 +470,7 @@ lemma map_zero
 
 中文:
 引理 map_zero
-  条件: [Zero S] (f : ZeroHom R S)
+  条件: [零 S] (f : 保零态射 R S)
   结论: (0 : R⟦Γ⟧).map f = 0
   证明: by
   ext; simp
@@ -488,7 +488,7 @@ theorem support_map_subset
 
 中文:
 定理 support_map_subset
-  条件: [Zero S] (x : R⟦Γ⟧) (f : ZeroHom R S)
+  条件: [零 S] (x : R⟦Γ⟧) (f : 保零态射 R S)
   证明: Function.support_comp_subset (ZeroHomClass.map_zero f) _
 
 Depends on / 依赖: Function, Function.support_comp_subset, ZeroHomClass, ZeroHomClass.map_zero, map_zero, support_comp_subset
@@ -512,7 +512,7 @@ definition ofIterate
 
 中文:
 定义 ofIterate
-  签名: [PartialOrder Γ'] (x : R⟦Γ'⟧⟦Γ⟧)
+  签名: [偏序 Γ'] (x : R⟦Γ'⟧⟦Γ⟧)
   定义体: fun g => coeff (coeff x g.1) g.2
   isPWO_support' := by
     refine Set.PartiallyWellOrderedOn.subsetProdLex ?_ ?_
@@ -543,7 +543,7 @@ lemma mk_eq_zero
 中文:
 引理 mk_eq_zero
   条件: (f : Γ -> R) (h)
-  结论: HahnSeries.mk f h = 0 ↔ f = 0
+  结论: Hahn级数.mk f h = 0 ↔ f = 0
   证明: by
   simp_rw [HahnSeries.ext_iff, funext_iff, coeff_zero, Pi.zero_apply]
 
@@ -569,7 +569,7 @@ definition toIterate
 
 中文:
 定义 toIterate
-  签名: [PartialOrder Γ'] (x : R⟦Γ ×ₗ Γ'⟧)
+  签名: [偏序 Γ'] (x : R⟦Γ ×ₗ Γ'⟧)
   定义体: fun g => {
     coeff := fun g' => coeff x (g, g')
     isPWO_support' := Set.PartiallyWellOrderedOn.fiberProdLex x.isPWO_support' g
@@ -606,7 +606,7 @@ definition iterateEquiv
 
 中文:
 定义 iterateEquiv
-  签名: [PartialOrder Γ']
+  签名: [偏序 Γ']
   定义体: ofIterate
   invFun := toIterate
   left_inv := congrFun rfl
@@ -816,7 +816,7 @@ theorem single_injective
 中文:
 定理 single_injective
   条件: (a : Γ)
-  结论: Function.Injective (single a : R -> R⟦Γ⟧)
+  结论: 函数.单射 (single a : R -> R⟦Γ⟧)
   证明: fun r s rs => by rw [← coeff_single_same a r, ← coeff_single_same a s, rs]
 
 Depends on / 依赖: coeff_single_same
@@ -887,7 +887,7 @@ lemma map_single
 
 中文:
 引理 map_single
-  条件: [Zero S] (f : ZeroHom R S)
+  条件: [零 S] (f : 保零态射 R S)
   结论: (single a r).map f = single a (f r)
   证明: by
   ext g
@@ -910,8 +910,8 @@ instance [Nonempty
     rw [← coeff_single_same (default : Γ) r]; rw [con]; rw [coeff_single_same]⟩
 
 中文:
-实例 [Nonempty
-  签名: Γ] [Nontrivial R] : Nontrivial R⟦Γ⟧
+实例 [非空
+  签名: Γ] [非平凡 R] : 非平凡 R⟦Γ⟧
   定义体: ⟨by
     obtain ⟨r, s, rs⟩ := exists_pair_ne R
     inhabit Γ
@@ -988,7 +988,7 @@ theorem orderTop_of_subsingleton
 
 中文:
 定理 orderTop_of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: x.orderTop = ⊤
   证明: (Subsingleton.eq_zero x) ▸ orderTop_zero
 
@@ -1173,7 +1173,7 @@ theorem orderTop_le_of_coeff_ne_zero
 
 中文:
 定理 orderTop_le_of_coeff_ne_zero
-  结论: {Γ} [LinearOrder Γ] {x : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x : R⟦Γ⟧}
   证明: by
   rw [orderTop_of_ne_zero (ne_zero_of_coeff_ne_zero h)]; rw [WithTop.coe_le_coe]
   exact Set.IsWF.min_le _ _ ((mem_support _ _).2 h)
@@ -1585,7 +1585,7 @@ theorem order_le_of_coeff_ne_zero
 
 中文:
 定理 order_le_of_coeff_ne_zero
-  结论: {Γ} [Zero Γ] [LinearOrder Γ] {x : R⟦Γ⟧}
+  结论: {Γ} [零 Γ] [线性序 Γ] {x : R⟦Γ⟧}
   证明: le_trans (le_of_eq (order_of_ne (ne_zero_of_coeff_ne_zero h)))
     (Set.IsWF.min_le _ _ ((mem_support _ _).2 h))
 
@@ -1784,7 +1784,7 @@ definition ofFinsupp
 
 中文:
 定义 ofFinsupp
-  签名: : ZeroHom (Γ ->₀ R) R⟦Γ⟧ where
+  签名: : 保零态射 (Γ ->₀ R) R⟦Γ⟧ where
   定义体: { coeff := f, isPWO_support' := f.hasFiniteSupport.isPWO }
   map_zero' := by simp
 
@@ -1910,7 +1910,7 @@ theorem embDomain_mk_coeff
 
 中文:
 定理 embDomain_mk_coeff
-  结论: {f : Γ -> Γ'} (hfi : Function.Injective f)
+  结论: {f : Γ -> Γ'} (hfi : 函数.单射 f)
   证明: embDomain_coeff
 
 Depends on / 依赖: embDomain_coeff
@@ -1980,7 +1980,7 @@ theorem embDomain_of_notMem_range
 
 中文:
 定理 embDomain_of_notMem_range
-  条件: {f : Γ ↪o Γ'} {x : R⟦Γ⟧} {b : Γ'} (hb : b ∉ Set.range f)
+  条件: {f : Γ ↪o Γ'} {x : R⟦Γ⟧} {b : Γ'} (hb : b ∉ 集合.range f)
   证明: embDomain_notin_image_support fun con => hb (Set.image_subset_range _ _ con)
 
 @[deprecated (since := "2026-07-15")] alias embDomain_notin_range := embDomain_of_notMem_range
@@ -2118,7 +2118,7 @@ theorem orderTop_embDomain
 
 中文:
 定理 orderTop_embDomain
-  条件: {Γ : 类型} [LinearOrder Γ] {f : Γ ↪o Γ'} {x : R⟦Γ⟧}
+  条件: {Γ : 类型} [线性序 Γ] {f : Γ ↪o Γ'} {x : R⟦Γ⟧}
   证明: by
   obtain rfl | hx := eq_or_ne x 0
   · simp
@@ -2168,7 +2168,7 @@ theorem forallLTEqZero_supp_BddBelow
 @[deprecated bddBelow_empty (since := "2026-01-02")]
 
 中文:
-定理 forallLTEqZero_supp_BddBelow
+定理 对任意LTEqZero_supp_BddBelow
   条件: (f : Γ -> R) (n : Γ) (hn : 对任意 (m : Γ), m < n -> f m = 0)
   证明: by
   refine ⟨n, fun _ => ?_⟩
@@ -2198,8 +2198,8 @@ theorem BddBelow_zero
 
 中文:
 定理 BddBelow_zero
-  条件: [Nonempty Γ]
-  结论: BddBelow (Function.support (0 : Γ -> R))
+  条件: [非空 Γ]
+  结论: BddBelow (函数.support (0 : Γ -> R))
   证明: by
   simp
 -/
@@ -2220,7 +2220,7 @@ theorem le_orderTop_iff_forall
       exact x.isWF_support.min_mem (support_nonempty_iff.2 h) (H _ (orderTop_of_ne_zero h ▸ hi))
 
 中文:
-定理 le_orderTop_iff_forall
+定理 le_orderTop_iff_对任意
   条件: {x : R⟦Γ⟧} {i : WithTop Γ}
   证明: coeff_eq_zero_of_lt_orderTop (hj.trans_le hi)
   mpr H := by
@@ -2251,7 +2251,7 @@ theorem orderTop_lt_iff_exists
   simp
 
 中文:
-定理 orderTop_lt_iff_exists
+定理 orderTop_lt_iff_存在
   条件: {x : R⟦Γ⟧} {i : WithTop Γ}
   证明: by
   rw [← not_le]; rw [le_orderTop_iff_forall]
@@ -2277,8 +2277,8 @@ theorem le_order_iff_forall
     rwa [coeff_order_eq_zero] at this
 
 中文:
-定理 le_order_iff_forall
-  条件: [Zero Γ] {x : R⟦Γ⟧} {i : Γ} (h : x != 0)
+定理 le_order_iff_对任意
+  条件: [零 Γ] {x : R⟦Γ⟧} {i : Γ} (h : x != 0)
   证明: coeff_eq_zero_of_lt_order (hj.trans_le hi)
   mpr H := by
     contrapose! h
@@ -2306,8 +2306,8 @@ theorem order_lt_iff_exists
   simp
 
 中文:
-定理 order_lt_iff_exists
-  条件: [Zero Γ] {x : R⟦Γ⟧} {i : Γ} (h : x != 0)
+定理 order_lt_iff_存在
+  条件: [零 Γ] {x : R⟦Γ⟧} {i : Γ} (h : x != 0)
   证明: by
   rw [← not_le]; rw [le_order_iff_forall h]
   simp
@@ -2332,7 +2332,7 @@ theorem suppBddBelow_supp_PWO
 
 中文:
 定理 suppBddBelow_supp_PWO
-  条件: (f : Γ -> R) (hf : BddBelow (Function.support f))
+  条件: (f : Γ -> R) (hf : BddBelow (函数.support f))
   证明: hf.isWF.isPWO
 
 Depends on / 依赖: hf.isWF.isPWO
@@ -2355,7 +2355,7 @@ definition ofSuppBddBelow
 
 中文:
 定义 ofSuppBddBelow
-  签名: (f : Γ -> R) (hf : BddBelow (Function.support f))
+  签名: (f : Γ -> R) (hf : BddBelow (函数.support f))
   定义体: ⟨f, hf.isWF.isPWO⟩
 
 @[simp]
@@ -2382,7 +2382,7 @@ alias zero_ofSuppBddBelow := ofSuppBddBelow_zero
 
 中文:
 定理 ofSuppBddBelow_zero
-  条件: [Nonempty Γ]
+  条件: [非空 Γ]
   结论: ofSuppBddBelow 0 (by simp) = (0 : R⟦Γ⟧)
   证明: rfl
 
@@ -2459,7 +2459,7 @@ theorem order_ofForallLtEqZero
 
 中文:
 定理 order_ofForallLtEqZero
-  结论: [Zero Γ] (f : Γ -> R) (hf : f != 0) (n : Γ)
+  结论: [零 Γ] (f : Γ -> R) (hf : f != 0) (n : Γ)
   证明: by
   rw [le_order_iff_forall]
   · exact hn
@@ -2491,7 +2491,7 @@ definition truncLT
 
 中文:
 定义 truncLT
-  签名: [PartialOrder Γ] [DecidableLT Γ] (c : Γ)
+  签名: [偏序 Γ] [DecidableLT Γ] (c : Γ)
   定义体: { coeff i := if i < c then x.coeff i else 0
       isPWO_support' := Set.IsPWO.mono x.isPWO_support (by simp) }
   map_zero' := by ext; simp
@@ -2515,7 +2515,7 @@ theorem support_truncLT
 
 中文:
 定理 support_truncLT
-  条件: [PartialOrder Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧)
+  条件: [偏序 Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧)
   证明: by
   simp [truncLT, Function.support, and_comm]
 
@@ -2539,7 +2539,7 @@ theorem support_truncLT_subset
 
 中文:
 定理 support_truncLT_subset
-  条件: [PartialOrder Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧)
+  条件: [偏序 Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧)
   证明: by
   rw [support_truncLT]
   exact Set.sep_subset ..
@@ -2564,7 +2564,7 @@ theorem coeff_truncLT
 
 中文:
 定理 coeff_truncLT
-  条件: [PartialOrder Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧) (i : Γ)
+  条件: [偏序 Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧) (i : Γ)
   证明: rfl
 -/
 protected theorem coeff_truncLT [PartialOrder Γ] [DecidableLT Γ] (c : Γ) (x : R⟦Γ⟧) (i : Γ) :
@@ -2581,7 +2581,7 @@ theorem coeff_truncLT_of_lt
 
 中文:
 定理 coeff_truncLT_of_lt
-  条件: [PartialOrder Γ] [DecidableLT Γ] {c i : Γ} (h : i < c) (x : R⟦Γ⟧)
+  条件: [偏序 Γ] [DecidableLT Γ] {c i : Γ} (h : i < c) (x : R⟦Γ⟧)
   证明: by
   simp [h]
 -/
@@ -2600,7 +2600,7 @@ theorem coeff_truncLT_of_le
 
 中文:
 定理 coeff_truncLT_of_le
-  条件: [LinearOrder Γ] {c i : Γ} (h : c <= i) (x : R⟦Γ⟧)
+  条件: [线性序 Γ] {c i : Γ} (h : c <= i) (x : R⟦Γ⟧)
   证明: by
   simp [h]
 -/

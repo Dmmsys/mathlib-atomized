@@ -128,7 +128,7 @@ theorem isQuotientMap_mkQL
 
 中文:
 定理 isQuotientMap_mkQL
-  结论: IsQuotientMap S.mkQL
+  结论: 是商映射 S.mkQL
   证明: isQuotientMap_quot_mk
 
 Depends on / 依赖: isQuotientMap_quot_mk
@@ -146,8 +146,8 @@ theorem isOpenQuotientMap_mkQL
 
 中文:
 定理 isOpenQuotientMap_mkQL
-  条件: [ContinuousAdd M]
-  结论: IsOpenQuotientMap S.mkQL
+  条件: [连续加法 M]
+  结论: 是OpenQuotient映射 S.mkQL
   证明: S.isOpenQuotientMap_mkQ
 
 Depends on / 依赖: S.isOpenQuotientMap_mkQ, isOpenQuotientMap_mkQ

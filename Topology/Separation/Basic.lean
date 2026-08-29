@@ -84,10 +84,10 @@ class T0Space
     - t0 : forall ⦃x y : X⦄, Inseparable x y -> x = y
 
 中文:
-类 T0Space
-  参数: (X : 类型u) [TopologicalSpace X]
+类 T0空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - t0 : 对任意 ⦃x y : X⦄, Inseparable x y -> x = y
+    - t0 : 对任意 ⦃x y : X⦄, 不可分 x y -> x = y
 -/
 class T0Space (X : Type u) [TopologicalSpace X] : Prop where
   /-- Two inseparable points in a T₀ space are equal. -/
@@ -103,7 +103,7 @@ theorem t0Space_iff_inseparable
 
 中文:
 定理 t0Space_iff_inseparable
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 theorem t0Space_iff_inseparable (X : Type u) [TopologicalSpace X] :
@@ -121,7 +121,7 @@ theorem t0Space_iff_not_inseparable
 
 中文:
 定理 t0Space_iff_not_inseparable
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: by
   simp only [t0Space_iff_inseparable, Ne, not_imp_not, Pairwise]
 
@@ -141,8 +141,8 @@ theorem Inseparable.eq
   proof: T0Space.t0 h
 
 中文:
-定理 Inseparable.eq
-  条件: [T0Space X] {x y : X} (h : Inseparable x y)
+定理 不可分.eq
+  条件: [T0空间 X] {x y : X} (h : 不可分 x y)
   结论: x = y
   证明: T0Space.t0 h
 
@@ -161,8 +161,8 @@ theorem Topology.IsInducing.injective
   (hf.inseparable_iff.1 <| .of_eq h).eq
 
 中文:
-定理 Topology.IsInducing.injective
-  结论: [TopologicalSpace Y] [T0Space X] {f : X -> Y}
+定理 拓扑.是Inducing.injective
+  结论: [拓扑空间 Y] [T0空间 X] {f : X -> Y}
   证明: fun _ _ h =>
   (hf.inseparable_iff.1 <| .of_eq h).eq
 -/
@@ -179,8 +179,8 @@ theorem Topology.IsInducing.isEmbedding
   proof: ⟨hf, hf.injective⟩
 
 中文:
-定理 Topology.IsInducing.isEmbedding
-  结论: [TopologicalSpace Y] [T0Space X] {f : X -> Y}
+定理 拓扑.是Inducing.isEmbedding
+  结论: [拓扑空间 Y] [T0空间 X] {f : X -> Y}
   证明: ⟨hf, hf.injective⟩
 -/
 protected theorem Topology.IsInducing.isEmbedding [TopologicalSpace Y] [T0Space X] {f : X -> Y}
@@ -197,7 +197,7 @@ lemma isEmbedding_iff_isInducing
 
 中文:
 引理 isEmbedding_iff_isInducing
-  条件: [TopologicalSpace Y] [T0Space X] {f : X -> Y}
+  条件: [拓扑空间 Y] [T0空间 X] {f : X -> Y}
   证明: ⟨IsEmbedding.isInducing, IsInducing.isEmbedding⟩
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.isInducing, IsInducing, IsInducing.isEmbedding, isEmbedding, isInducing
@@ -216,7 +216,7 @@ theorem t0Space_iff_nhds_injective
 
 中文:
 定理 t0Space_iff_nhds_injective
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: t0Space_iff_inseparable X
 
 Depends on / 依赖: t0Space_iff_inseparable
@@ -236,8 +236,8 @@ theorem nhds_injective
 
 中文:
 定理 nhds_injective
-  条件: [T0Space X]
-  结论: Injective (𝓝 : X -> Filter X)
+  条件: [T0空间 X]
+  结论: 单射 (𝓝 : X -> 滤子 X)
   证明: (t0Space_iff_nhds_injective X).1 ‹_›
 
 Depends on / 依赖: t0Space_iff_nhds_injective
@@ -258,8 +258,8 @@ theorem inseparable_iff_eq
 
 中文:
 定理 inseparable_iff_eq
-  条件: [T0Space X] {x y : X}
-  结论: Inseparable x y ↔ x = y
+  条件: [T0空间 X] {x y : X}
+  结论: 不可分 x y ↔ x = y
   证明: nhds_injective.eq_iff
 
 @[simp]
@@ -283,7 +283,7 @@ theorem nhds_eq_nhds_iff
 
 中文:
 定理 nhds_eq_nhds_iff
-  条件: [T0Space X] {a b : X}
+  条件: [T0空间 X] {a b : X}
   结论: 𝓝 a = 𝓝 b ↔ a = b
   证明: nhds_injective.eq_iff
 
@@ -306,8 +306,8 @@ theorem inseparable_eq_eq
 
 中文:
 定理 inseparable_eq_eq
-  条件: [T0Space X]
-  结论: Inseparable = @Eq X
+  条件: [T0空间 X]
+  结论: 不可分 = @相等 X
   证明: funext₂ fun _ _ => propext inseparable_iff_eq
 
 Depends on / 依赖: inseparable_iff_eq, propext
@@ -327,8 +327,8 @@ fun h => hb.nhds_hasBasis.eq_of_same_basis by
       exact and_congr_right (h _)⟩
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.inseparable_iff
-  结论: {b : Set (Set X)}
+定理 拓扑空间.是TopologicalBasis.inseparable_iff
+  结论: {b : 集合 (集合 X)}
   证明: ⟨fun h _ hs => inseparable_iff_forall_isOpen.1 h _ (hb.isOpen hs),
 fun h => hb.nhds_hasBasis.eq_of_same_basis by
       convert! hb.nhds_hasBasis using 2
@@ -352,8 +352,8 @@ theorem TopologicalSpace.IsTopologicalBasis.eq_iff
   proof: inseparable_iff_eq.symm.trans hb.inseparable_iff
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.eq_iff
-  结论: [T0Space X] {b : Set (Set X)}
+定理 拓扑空间.是TopologicalBasis.eq_iff
+  结论: [T0空间 X] {b : 集合 (集合 X)}
   证明: inseparable_iff_eq.symm.trans hb.inseparable_iff
 
 Depends on / 依赖: hb.inseparable_iff, inseparable_iff, inseparable_iff_eq, inseparable_iff_eq.symm.trans
@@ -376,8 +376,8 @@ theorem t0Space_iff_exists_isOpen_xor_mem
 alias t0Space_iff_exists_isOpen_xor'_mem := t0Space_iff_exists_isOpen_xor_mem
 
 中文:
-定理 t0Space_iff_exists_isOpen_xor_mem
-  条件: (X : 类型u) [TopologicalSpace X]
+定理 t0Space_iff_存在_isOpen_xor_mem
+  条件: (X : 类型u) [拓扑空间 X]
   证明: by
   simp only [t0Space_iff_not_inseparable, xor_iff_not_iff, not_forall, exists_prop,
     inseparable_iff_forall_isOpen, Pairwise]
@@ -406,8 +406,8 @@ theorem exists_isOpen_xor_mem
 @[deprecated (since := "2026-04-04")] alias exists_isOpen_xor'_mem := exists_isOpen_xor_mem
 
 中文:
-定理 exists_isOpen_xor_mem
-  条件: [T0Space X] {x y : X} (h : x != y)
+定理 存在_isOpen_xor_mem
+  条件: [T0空间 X] {x y : X} (h : x != y)
   证明: (t0Space_iff_exists_isOpen_xor_mem X).1 ‹_› h
 
 @[deprecated (since := "2026-04-04")] alias exists_isOpen_xor'_mem := exists_isOpen_xor_mem
@@ -432,7 +432,7 @@ definition specializationOrder
 
 中文:
 定义 specializationOrder
-  签名: (X) [TopologicalSpace X] [T0Space X]
+  签名: (X) [拓扑空间 X] [T0空间 X]
   定义体: { specializationPreorder X, PartialOrder.lift (OrderDual.toDual ∘ 𝓝) nhds_injective with }
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, PartialOrder, PartialOrder.lift, nhds_injective, specializationPreorder, toDual
@@ -451,7 +451,7 @@ SeparationQuotient.mk_eq_mk.2 SeparationQuotient.isInducing_mk.inseparable_iff.1
 
 中文:
 实例 SeparationQuotient.instT0Space
-  签名: : T0Space (SeparationQuotient X)
+  签名: : T0空间 (SeparationQuotient X)
   定义体: ⟨fun x y => Quotient.inductionOn₂' x y fun _ _ h =>
 SeparationQuotient.mk_eq_mk.2 SeparationQuotient.isInducing_mk.inseparable_iff.1 h⟩
 
@@ -477,7 +477,7 @@ theorem minimal_nonempty_closed_subsingleton
 
 中文:
 定理 minimal_nonempty_closed_subsingleton
-  结论: [T0Space X] {s : Set X} (hs : IsClosed s)
+  结论: [T0空间 X] {s : 集合 X} (hs : 是闭集 s)
   证明: by
   refine fun x hx y hy => of_not_not fun hxy => ?_
   rcases exists_isOpen_xor_mem hxy with ⟨U, hUo, hU⟩
@@ -509,7 +509,7 @@ theorem minimal_nonempty_closed_eq_singleton
 
 中文:
 定理 minimal_nonempty_closed_eq_singleton
-  结论: [T0Space X] {s : Set X} (hs : IsClosed s)
+  结论: [T0空间 X] {s : 集合 X} (hs : 是闭集 s)
   证明: exists_eq_singleton_iff_nonempty_subsingleton.2
     ⟨hne, minimal_nonempty_closed_subsingleton hs hmin⟩
 
@@ -532,8 +532,8 @@ theorem IsClosed.exists_closed_singleton
   exact ⟨x, Vsub (mem_singleton x), Vcls⟩
 
 中文:
-定理 IsClosed.exists_closed_singleton
-  结论: [T0Space X] [CompactSpace X] {S : Set X}
+定理 是闭集.存在_closed_singleton
+  结论: [T0空间 X] [紧空间 X] {S : 集合 X}
   证明: by
   obtain ⟨V, Vsub, Vne, Vcls, hV⟩ := hS.exists_minimal_nonempty_closed_subset hne
   rcases minimal_nonempty_closed_eq_singleton Vcls Vne hV with ⟨x, rfl⟩
@@ -563,7 +563,7 @@ theorem minimal_nonempty_open_subsingleton
 
 中文:
 定理 minimal_nonempty_open_subsingleton
-  结论: [T0Space X] {s : Set X} (hs : IsOpen s)
+  结论: [T0空间 X] {s : 集合 X} (hs : 是开集 s)
   证明: by
   refine fun x hx y hy => of_not_not fun hxy => ?_
   rcases exists_isOpen_xor_mem hxy with ⟨U, hUo, hU⟩
@@ -594,7 +594,7 @@ theorem minimal_nonempty_open_eq_singleton
 
 中文:
 定理 minimal_nonempty_open_eq_singleton
-  结论: [T0Space X] {s : Set X} (hs : IsOpen s)
+  结论: [T0空间 X] {s : 集合 X} (hs : 是开集 s)
   证明: exists_eq_singleton_iff_nonempty_subsingleton.2 ⟨hne, minimal_nonempty_open_subsingleton hs hmin⟩
 
 Depends on / 依赖: exists_eq_singleton_iff_nonempty_subsingleton, minimal_nonempty_open_subsingleton
@@ -619,8 +619,8 @@ theorem exists_isOpen_singleton_of_isOpen_finite
   · -- Porting note: was `rc
 
 中文:
-定理 exists_isOpen_singleton_of_isOpen_finite
-  结论: [T0Space X] {s : Set X} (hfin : s.Finite)
+定理 存在_isOpen_singleton_of_isOpen_finite
+  结论: [T0空间 X] {s : 集合 X} (hfin : s.有限)
   证明: by
   lift s to Finset X using hfin
   induction s using Finset.strongInductionOn
@@ -660,8 +660,8 @@ theorem exists_open_singleton_of_finite
   ⟨x, h⟩
 
 中文:
-定理 exists_open_singleton_of_finite
-  条件: [T0Space X] [Finite X] [Nonempty X]
+定理 存在_open_singleton_of_finite
+  条件: [T0空间 X] [有限 X] [非空 X]
   证明: let ⟨x, _, h⟩ := exists_isOpen_singleton_of_isOpen_finite (Set.toFinite _)
     univ_nonempty isOpen_univ
   ⟨x, h⟩
@@ -684,7 +684,7 @@ theorem t0Space_of_injective_of_continuous
 
 中文:
 定理 t0Space_of_injective_of_continuous
-  结论: [TopologicalSpace Y] {f : X -> Y}
+  结论: [拓扑空间 Y] {f : X -> Y}
   证明: ⟨fun _ _ h => hf (h.map hf').eq⟩
 
 Depends on / 依赖: h.map
@@ -702,8 +702,8 @@ theorem Topology.IsEmbedding.t0Space
   proof: t0Space_of_injective_of_continuous hf.injective hf.continuous
 
 中文:
-定理 Topology.IsEmbedding.t0Space
-  结论: [TopologicalSpace Y] [T0Space Y] {f : X -> Y}
+定理 拓扑.是嵌入.t0Space
+  结论: [拓扑空间 Y] [T0空间 Y] {f : X -> Y}
   证明: t0Space_of_injective_of_continuous hf.injective hf.continuous
 -/
 protected theorem Topology.IsEmbedding.t0Space [TopologicalSpace Y] [T0Space Y] {f : X -> Y}
@@ -722,9 +722,9 @@ theorem Homeomorph.t0Space
 @[stacks 0B31 "part 1"]
 
 中文:
-定理 Homeomorph.t0Space
-  条件: [TopologicalSpace Y] [T0Space X] (h : X ≃ₜ Y)
-  结论: T0Space Y
+定理 同胚.t0Space
+  条件: [拓扑空间 Y] [T0空间 X] (h : X ≃ₜ Y)
+  结论: T0空间 Y
   证明: h.symm.isEmbedding.t0Space
 
 @[stacks 0B31 "part 1"]
@@ -742,8 +742,8 @@ instance Subtype.t0Space
   body: IsEmbedding.subtypeVal.t0Space
 
 中文:
-实例 Subtype.t0Space
-  签名: [T0Space X] {p : X -> 命题}
+实例 子类型.t0Space
+  签名: [T0空间 X] {p : X -> 命题}
   定义体: IsEmbedding.subtypeVal.t0Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.t0Space, subtypeVal, t0Space
@@ -762,7 +762,7 @@ theorem t0Space_iff_or_notMem_closure
 
 中文:
 定理 t0Space_iff_or_notMem_closure
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: by
   simp only [t0Space_iff_not_inseparable, inseparable_iff_mem_closure, not_and_or]
 
@@ -781,8 +781,8 @@ instance Prod.instT0Space
   body: ⟨fun _ _ h => Prod.ext (h.map continuous_fst).eq (h.map continuous_snd).eq⟩
 
 中文:
-实例 Prod.instT0Space
-  签名: [TopologicalSpace Y] [T0Space X] [T0Space Y]
+实例 积类型.instT0Space
+  签名: [拓扑空间 Y] [T0空间 X] [T0空间 Y]
   定义体: ⟨fun _ _ h => Prod.ext (h.map continuous_fst).eq (h.map continuous_snd).eq⟩
 
 Depends on / 依赖: Prod.ext, continuous_fst, continuous_snd, h.map
@@ -799,8 +799,8 @@ instance Pi.instT0Space
   body: ⟨fun _ _ h => funext fun i => (h.map (continuous_apply i)).eq⟩
 
 中文:
-实例 Pi.instT0Space
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+实例 依赖函数类型.instT0Space
+  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: ⟨fun _ _ h => funext fun i => (h.map (continuous_apply i)).eq⟩
 
 Depends on / 依赖: continuous_apply, h.map
@@ -819,8 +819,8 @@ instance ULift.instT0Space
   body: IsEmbedding.uliftDown.t0Space
 
 中文:
-实例 ULift.instT0Space
-  签名: [T0Space X]
+实例 类型层提升.instT0Space
+  签名: [T0空间 X]
   定义体: IsEmbedding.uliftDown.t0Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.t0Space, t0Space, uliftDown
@@ -841,8 +841,8 @@ theorem T0Space.of_cover
   exact congr_arg Subtype.val hxy.eq
 
 中文:
-定理 T0Space.of_cover
-  条件: (h : 对任意 x y, Inseparable x y -> 存在 s : Set X, x in s ∧ y in s ∧ T0Space s)
+定理 T0空间.of_cover
+  条件: (h : 对任意 x y, 不可分 x y -> 存在 s : 集合 X, x in s ∧ y in s ∧ T0空间 s)
   证明: by
   refine ⟨fun x y hxy => ?_⟩
   rcases h x y hxy with ⟨s, hxs, hys, hs⟩
@@ -872,9 +872,9 @@ theorem T0Space.of_open_cover
     ⟨s, hxs, (hxy.mem_open_iff hso).1 hxs, hs⟩
 
 中文:
-定理 T0Space.of_open_cover
-  条件: (h : 对任意 x, 存在 s : Set X, x in s ∧ IsOpen s ∧ T0Space s)
-  结论: T0Space X
+定理 T0空间.of_open_cover
+  条件: (h : 对任意 x, 存在 s : 集合 X, x in s ∧ 是开集 s ∧ T0空间 s)
+  结论: T0空间 X
   证明: T0Space.of_cover fun x _ hxy =>
     let ⟨s, hxs, hso, hs⟩ := h x
     ⟨s, hxs, (hxy.mem_open_iff hso).1 hxs, hs⟩
@@ -901,8 +901,8 @@ class R0Space
     - specializes_symm : Std.Symm (Specializes : X -> X -> Prop)
 
 中文:
-类 R0Space
-  参数: (X : 类型u) [TopologicalSpace X]
+类 R0空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
     - specializes_symm : Std.Symm (Specializes : X -> X -> 命题)
 -/
@@ -968,7 +968,7 @@ theorem specializes_iff_inseparable
 
 中文:
 定理 specializes_iff_inseparable
-  结论: x ⤳ y ↔ Inseparable x y
+  结论: x ⤳ y ↔ 不可分 x y
   证明: ⟨fun h => h.antisymm h.symm, Inseparable.specializes⟩
 
 Depends on / 依赖: Inseparable, Inseparable.specializes, antisymm, h.antisymm, h.symm, specializes
@@ -989,8 +989,8 @@ theorem Topology.IsInducing.r0Space
     simpa only [← hf.specializes_iff] using Specializes.symm
 
 中文:
-定理 Topology.IsInducing.r0Space
-  条件: [TopologicalSpace Y] {f : Y -> X} (hf : IsInducing f)
+定理 拓扑.是Inducing.r0Space
+  条件: [拓扑空间 Y] {f : Y -> X} (hf : 是Inducing f)
   证明: by
     simpa only [← hf.specializes_iff] using Specializes.symm
 
@@ -1012,8 +1012,8 @@ instance [TopologicalSpace
   body: h.fst.symm.prod h.snd.symm
 
 中文:
-实例 [TopologicalSpace
-  签名: Y] [R0Space Y] : R0Space (X × Y) where
+实例 [拓扑空间
+  签名: Y] [R0空间 Y] : R0空间 (X × Y) where
   定义体: h.fst.symm.prod h.snd.symm
 
 Depends on / 依赖: h.fst.symm.prod, h.snd.symm
@@ -1036,7 +1036,7 @@ lemma R0Space.closure_singleton
   ext; simp [ker_nhds_eq_specializes, ← specializes_iff_mem_closure, specializes_comm]
 
 中文:
-引理 R0Space.closure_singleton
+引理 R0空间.closure_singleton
   条件: (x : X)
   结论: closure {x} = (𝓝 x).ker
   证明: by
@@ -1062,7 +1062,7 @@ obtain ⟨i, hi⟩ : exists i, x in U i := mem_iUnion.1 hxU subset_closure rfl
 
 中文:
 定理 isCompact_closure_singleton
-  结论: IsCompact (closure {x})
+  结论: 是紧集 (closure {x})
   证明: by
   refine isCompact_of_finite_subcover fun U hUo hxU => ?_
 obtain ⟨i, hi⟩ : exists i, x in U i := mem_iUnion.1 hxU subset_closure rfl
@@ -1089,7 +1089,7 @@ theorem Filter.coclosedCompact_le_cofinite
     compl_mem_coclosedCompact.2 isCompact_closure_singleton
 
 中文:
-定理 Filter.coclosedCompact_le_cofinite
+定理 滤子.coclosedCompact_le_cofinite
   结论: coclosedCompact X <= cofinite
   证明: le_cofinite_iff_compl_singleton_mem.2 fun _ =>
     compl_mem_coclosedCompact.2 isCompact_closure_singleton
@@ -1115,8 +1115,8 @@ definition Bornology.relativelyCompact
   le_cofinite := Filter.coclosedCompact_le_cofinite
 
 中文:
-定义 Bornology.relativelyCompact
-  签名: : Bornology X where
+定义 有界结构.relativelyCompact
+  签名: : 有界结构 X where
   定义体: Filter.coclosedCompact X
   le_cofinite := Filter.coclosedCompact_le_cofinite
 
@@ -1135,8 +1135,8 @@ theorem Bornology.relativelyCompact.isBounded_iff
   proof: compl_mem_coclosedCompact
 
 中文:
-定理 Bornology.relativelyCompact.isBounded_iff
-  条件: {s : Set X}
+定理 有界结构.relativelyCompact.isBounded_iff
+  条件: {s : 集合 X}
   证明: compl_mem_coclosedCompact
 
 Depends on / 依赖: compl_mem_coclosedCompact
@@ -1156,9 +1156,9 @@ theorem Set.Finite.isCompact_closure
   Bornology.relativelyCompact.isBounded_iff.1 hs.isBounded
 
 中文:
-定理 Set.Finite.isCompact_closure
-  条件: {s : Set X} (hs : s.Finite)
-  结论: IsCompact (closure s)
+定理 集合.有限.isCompact_closure
+  条件: {s : 集合 X} (hs : s.有限)
+  结论: 是紧集 (closure s)
   证明: let _ : Bornology X := .relativelyCompact X
   Bornology.relativelyCompact.isBounded_iff.1 hs.isBounded
 
@@ -1180,10 +1180,10 @@ class T1Space
     - t1 : forall x, IsClosed ({x} : Set X)
 
 中文:
-类 T1Space
-  参数: (X : 类型u) [TopologicalSpace X]
+类 T1空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - t1 : 对任意 x, IsClosed ({x} : Set X)
+    - t1 : 对任意 x, 是闭集 ({x} : 集合 X)
 -/
 class T1Space (X : Type u) [TopologicalSpace X] : Prop where
   /-- A singleton in a T₁ space is a closed set. -/
@@ -1201,8 +1201,8 @@ theorem isClosed_singleton
 
 中文:
 定理 isClosed_singleton
-  条件: [T1Space X] {x : X}
-  结论: IsClosed ({x} : Set X)
+  条件: [T1空间 X] {x : X}
+  结论: 是闭集 ({x} : 集合 X)
   证明: T1Space.t1 x
 
 Depends on / 依赖: T1Space, T1Space.t1
@@ -1221,8 +1221,8 @@ theorem isOpen_compl_singleton
 
 中文:
 定理 isOpen_compl_singleton
-  条件: [T1Space X] {x : X}
-  结论: IsOpen ({x}ᶜ : Set X)
+  条件: [T1空间 X] {x : X}
+  结论: 是开集 ({x}ᶜ : 集合 X)
   证明: isClosed_singleton.isOpen_compl
 
 Depends on / 依赖: isClosed_singleton, isClosed_singleton.isOpen_compl, isOpen_compl
@@ -1243,8 +1243,8 @@ theorem isOpen_ne
 
 中文:
 定理 isOpen_ne
-  条件: [T1Space X] {x : X}
-  结论: IsOpen { y | y != x }
+  条件: [T1空间 X] {x : X}
+  结论: 是开集 { y | y != x }
   证明: isOpen_compl_singleton
 
 @[to_additive]
@@ -1264,8 +1264,8 @@ theorem Continuous.isOpen_mulSupport
   proof: isOpen_ne.preimage hf
 
 中文:
-定理 Continuous.isOpen_mulSupport
-  结论: [T1Space X] [One X] [TopologicalSpace Y] {f : Y -> X}
+定理 连续.isOpen_mulSupport
+  结论: [T1空间 X] [幺 X] [拓扑空间 Y] {f : Y -> X}
   证明: isOpen_ne.preimage hf
 
 Depends on / 依赖: isOpen_ne, isOpen_ne.preimage, preimage
@@ -1284,8 +1284,8 @@ theorem Ne.nhdsWithin_compl_singleton
   proof: isOpen_ne.nhdsWithin_eq h
 
 中文:
-定理 Ne.nhdsWithin_compl_singleton
-  条件: [T1Space X] {x y : X} (h : x != y)
+定理 不等.nhdsWithin_compl_singleton
+  条件: [T1空间 X] {x y : X} (h : x != y)
   结论: 𝓝[{y}ᶜ] x = 𝓝 x
   证明: isOpen_ne.nhdsWithin_eq h
 
@@ -1308,8 +1308,8 @@ theorem Ne.nhdsWithin_sdiff_singleton
 alias Ne.nhdsWithin_diff_singleton := Ne.nhdsWithin_sdiff_singleton
 
 中文:
-定理 Ne.nhdsWithin_sdiff_singleton
-  条件: [T1Space X] {x y : X} (h : x != y) (s : Set X)
+定理 不等.nhdsWithin_sdiff_singleton
+  条件: [T1空间 X] {x y : X} (h : x != y) (s : 集合 X)
   证明: by
   rw [sdiff_eq]; rw [inter_comm]; rw [nhdsWithin_inter_of_mem]
   exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
@@ -1342,7 +1342,7 @@ lemma nhdsWithin_compl_singleton_le
 
 中文:
 引理 nhdsWithin_compl_singleton_le
-  条件: [T1Space X] (x y : X)
+  条件: [T1空间 X] (x y : X)
   结论: 𝓝[{x}ᶜ] x <= 𝓝[{y}ᶜ] x
   证明: by
   rcases eq_or_ne x y with rfl | hy
@@ -1377,7 +1377,7 @@ alias
 
 中文:
 定理 isOpen_setOfPred_eventually_nhdsWithin
-  条件: [T1Space X] {p : X -> 命题}
+  条件: [T1空间 X] {p : X -> 命题}
   证明: by
   refine isOpen_iff_mem_nhds.mpr fun a ha => ?_
   filter_upwards [eventually_nhds_nhdsWithin.mpr ha] with b hb
@@ -1414,8 +1414,8 @@ lemma Set.Finite.isClosed
   exact hs.isClosed_biUnion fun i _ => isClosed_singleton
 
 中文:
-引理 Set.Finite.isClosed
-  条件: [T1Space X] {s : Set X} (hs : s.Finite)
+引理 集合.有限.isClosed
+  条件: [T1空间 X] {s : 集合 X} (hs : s.有限)
   证明: by
   rw [← biUnion_of_singleton s]
   exact hs.isClosed_biUnion fun i _ => isClosed_singleton
@@ -1436,8 +1436,8 @@ theorem TopologicalSpace.IsTopologicalBasis.exists_mem_of_ne
   exact ⟨a, ab, xa, fun h => ha h rfl⟩
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.exists_mem_of_ne
-  结论: [T1Space X] {b : Set (Set X)}
+定理 拓扑空间.是TopologicalBasis.存在_mem_of_ne
+  结论: [T1空间 X] {b : 集合 (集合 X)}
   证明: by
   rcases hb.isOpen_iff.1 isOpen_ne x h with ⟨a, ab, xa, ha⟩
   exact ⟨a, ab, xa, fun h => ha h rfl⟩
@@ -1459,9 +1459,9 @@ theorem Finset.isClosed
   proof: s.finite_toSet.isClosed
 
 中文:
-定理 Finset.isClosed
-  条件: [T1Space X] (s : Finset X)
-  结论: IsClosed (s : Set X)
+定理 有限集.isClosed
+  条件: [T1空间 X] (s : 有限集 X)
+  结论: 是闭集 (s : 集合 X)
   证明: s.finite_toSet.isClosed
 -/
 protected theorem Finset.isClosed [T1Space X] (s : Finset X) : IsClosed (s : Set X) :=
@@ -1477,7 +1477,7 @@ instance :
 
 中文:
 实例 :
-  签名: T1Space (CofiniteTopology X)
+  签名: T1空间 (余有限拓扑 X)
   定义体: CofiniteTopology.isClosed_iff.mpr by simp
 -/
 instance : T1Space (CofiniteTopology X) where
@@ -1501,7 +1501,7 @@ theorem t1Space_TFAE
 
 中文:
 定理 t1Space_TFAE
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: by
   tfae_have 1 ↔ 2 := ⟨fun h => h.1, fun h => ⟨h⟩⟩
   tfae_have 2 ↔ 3 := by
@@ -1568,7 +1568,7 @@ theorem t1Space_iff_continuous_cofinite_of
 
 中文:
 定理 t1Space_iff_continuous_cofinite_of
-  结论: T1Space X ↔ Continuous (@CofiniteTopology.of X)
+  结论: T1空间 X ↔ 连续 (@余有限拓扑.of X)
   证明: (t1Space_TFAE X).out 0 3
 
 Depends on / 依赖: t1Space_TFAE
@@ -1586,9 +1586,9 @@ theorem CofiniteTopology.continuous_of
   proof: t1Space_iff_continuous_cofinite_of.mp ‹_›
 
 中文:
-定理 CofiniteTopology.continuous_of
-  条件: [T1Space X]
-  结论: Continuous (@CofiniteTopology.of X)
+定理 余有限拓扑.continuous_of
+  条件: [T1空间 X]
+  结论: 连续 (@余有限拓扑.of X)
   证明: t1Space_iff_continuous_cofinite_of.mp ‹_›
 
 Depends on / 依赖: t1Space_iff_continuous_cofinite_of, t1Space_iff_continuous_cofinite_of.mp
@@ -1604,7 +1604,7 @@ theorem t1Space_iff_exists_open
   proof: (t1Space_TFAE X).out 0 6
 
 中文:
-定理 t1Space_iff_exists_open
+定理 t1Space_iff_存在_open
   证明: (t1Space_TFAE X).out 0 6
 
 Depends on / 依赖: t1Space_TFAE
@@ -1623,7 +1623,7 @@ theorem t1Space_iff_disjoint_pure_nhds
 
 中文:
 定理 t1Space_iff_disjoint_pure_nhds
-  结论: T1Space X ↔ 对任意 ⦃x y : X⦄, x != y -> Disjoint (pure x) (𝓝 y)
+  结论: T1空间 X ↔ 对任意 ⦃x y : X⦄, x != y -> Disjoint (pure x) (𝓝 y)
   证明: (t1Space_TFAE X).out 0 8
 
 Depends on / 依赖: t1Space_TFAE
@@ -1641,7 +1641,7 @@ theorem t1Space_iff_disjoint_nhds_pure
 
 中文:
 定理 t1Space_iff_disjoint_nhds_pure
-  结论: T1Space X ↔ 对任意 ⦃x y : X⦄, x != y -> Disjoint (𝓝 x) (pure y)
+  结论: T1空间 X ↔ 对任意 ⦃x y : X⦄, x != y -> Disjoint (𝓝 x) (pure y)
   证明: (t1Space_TFAE X).out 0 7
 
 Depends on / 依赖: t1Space_TFAE
@@ -1659,7 +1659,7 @@ theorem t1Space_iff_specializes_imp_eq
 
 中文:
 定理 t1Space_iff_specializes_imp_eq
-  结论: T1Space X ↔ 对任意 ⦃x y : X⦄, x ⤳ y -> x = y
+  结论: T1空间 X ↔ 对任意 ⦃x y : X⦄, x ⤳ y -> x = y
   证明: (t1Space_TFAE X).out 0 9
 
 Depends on / 依赖: t1Space_TFAE
@@ -1677,7 +1677,7 @@ theorem t1Space_iff_t0Space_and_r0Space
 
 中文:
 定理 t1Space_iff_t0Space_and_r0Space
-  结论: T1Space X ↔ T0Space X ∧ R0Space X
+  结论: T1空间 X ↔ T0空间 X ∧ R0空间 X
   证明: (t1Space_TFAE X).out 0 10
 
 Depends on / 依赖: t1Space_TFAE
@@ -1696,7 +1696,7 @@ theorem disjoint_pure_nhds
 
 中文:
 定理 disjoint_pure_nhds
-  条件: [T1Space X] {x y : X} (h : x != y)
+  条件: [T1空间 X] {x y : X} (h : x != y)
   结论: Disjoint (pure x) (𝓝 y)
   证明: t1Space_iff_disjoint_pure_nhds.mp ‹_› h
 
@@ -1716,7 +1716,7 @@ theorem disjoint_nhds_pure
 
 中文:
 定理 disjoint_nhds_pure
-  条件: [T1Space X] {x y : X} (h : x != y)
+  条件: [T1空间 X] {x y : X} (h : x != y)
   结论: Disjoint (𝓝 x) (pure y)
   证明: t1Space_iff_disjoint_nhds_pure.mp ‹_› h
 
@@ -1736,7 +1736,7 @@ theorem Specializes.eq
 
 中文:
 定理 Specializes.eq
-  条件: [T1Space X] {x y : X} (h : x ⤳ y)
+  条件: [T1空间 X] {x y : X} (h : x ⤳ y)
   结论: x = y
   证明: t1Space_iff_specializes_imp_eq.1 ‹_› h
 
@@ -1756,7 +1756,7 @@ theorem specializes_iff_eq
 
 中文:
 定理 specializes_iff_eq
-  条件: [T1Space X] {x y : X}
+  条件: [T1空间 X] {x y : X}
   结论: x ⤳ y ↔ x = y
   证明: ⟨Specializes.eq, fun h => h ▸ specializes_rfl⟩
 
@@ -1778,8 +1778,8 @@ theorem specializes_eq_eq
 
 中文:
 定理 specializes_eq_eq
-  条件: [T1Space X]
-  结论: (· ⤳ ·) = @Eq X
+  条件: [T1空间 X]
+  结论: (· ⤳ ·) = @相等 X
   证明: funext₂ fun _ _ => propext specializes_iff_eq
 
 @[simp]
@@ -1801,7 +1801,7 @@ theorem pure_le_nhds_iff
 
 中文:
 定理 pure_le_nhds_iff
-  条件: [T1Space X] {a b : X}
+  条件: [T1空间 X] {a b : X}
   结论: pure a <= 𝓝 b ↔ a = b
   证明: specializes_iff_pure.symm.trans specializes_iff_eq
 
@@ -1824,7 +1824,7 @@ theorem nhds_le_nhds_iff
 
 中文:
 定理 nhds_le_nhds_iff
-  条件: [T1Space X] {a b : X}
+  条件: [T1空间 X] {a b : X}
   结论: 𝓝 a <= 𝓝 b ↔ a = b
   证明: specializes_iff_eq
 
@@ -1852,7 +1852,7 @@ theorem t1Space_antitone
 中文:
 定理 t1Space_antitone
   条件: {X}
-  结论: Antitone (@T1Space X)
+  结论: 递减 (@T1空间 X)
   证明: fun a _ h _ =>
   @T1Space.mk _ a fun x => (T1Space.t1 x).mono h
 -/
@@ -1872,7 +1872,7 @@ theorem continuousWithinAt_update_of_ne
 
 中文:
 定理 continuousWithinAt_update_of_ne
-  结论: [T1Space X] [DecidableEq X] [TopologicalSpace Y] {f : X -> Y}
+  结论: [T1空间 X] [DecidableEq X] [拓扑空间 Y] {f : X -> Y}
   证明: EventuallyEq.congr_continuousWithinAt
     (mem_nhdsWithin_of_mem_nhds <| mem_of_superset (isOpen_ne.mem_nhds hne) fun _y' hy' =>
       Function.update_of_ne hy' _ _)
@@ -1899,7 +1899,7 @@ theorem continuousAt_update_of_ne
 
 中文:
 定理 continuousAt_update_of_ne
-  结论: [T1Space X] [DecidableEq X] [TopologicalSpace Y]
+  结论: [T1空间 X] [DecidableEq X] [拓扑空间 Y]
   证明: by
   simp only [← continuousWithinAt_univ, continuousWithinAt_update_of_ne hne]
 
@@ -1926,7 +1926,7 @@ theorem continuousOn_update_iff
 
 中文:
 定理 continuousOn_update_iff
-  结论: [T1Space X] [DecidableEq X] [TopologicalSpace Y] {f : X -> Y}
+  结论: [T1空间 X] [DecidableEq X] [拓扑空间 Y] {f : X -> Y}
   证明: by
   rw [ContinuousOn]; rw [← and_forall_ne x]; rw [and_comm]
   refine and_congr ⟨fun H z hz => ?_, fun H z hzx hzs => ?_⟩ (forall_congr' fun _ => ?_)
@@ -1961,7 +1961,7 @@ theorem t1Space_of_injective_of_continuous
 
 中文:
 定理 t1Space_of_injective_of_continuous
-  结论: [TopologicalSpace Y] {f : X -> Y}
+  结论: [拓扑空间 Y] {f : X -> Y}
   证明: t1Space_iff_specializes_imp_eq.2 fun _ _ h => hf (h.map hf').eq
 
 Depends on / 依赖: h.map, t1Space_iff_specializes_imp_eq
@@ -1979,8 +1979,8 @@ theorem Topology.IsEmbedding.t1Space
   proof: t1Space_of_injective_of_continuous hf.injective hf.continuous
 
 中文:
-定理 Topology.IsEmbedding.t1Space
-  结论: [TopologicalSpace Y] [T1Space Y] {f : X -> Y}
+定理 拓扑.是嵌入.t1Space
+  结论: [拓扑空间 Y] [T1空间 Y] {f : X -> Y}
   证明: t1Space_of_injective_of_continuous hf.injective hf.continuous
 -/
 protected theorem Topology.IsEmbedding.t1Space [TopologicalSpace Y] [T1Space Y] {f : X -> Y}
@@ -1997,9 +1997,9 @@ theorem Homeomorph.t1Space
   proof: h.symm.isEmbedding.t1Space
 
 中文:
-定理 Homeomorph.t1Space
-  条件: [TopologicalSpace Y] [T1Space X] (h : X ≃ₜ Y)
-  结论: T1Space Y
+定理 同胚.t1Space
+  条件: [拓扑空间 Y] [T1空间 X] (h : X ≃ₜ Y)
+  结论: T1空间 Y
   证明: h.symm.isEmbedding.t1Space
 -/
 protected theorem Homeomorph.t1Space [TopologicalSpace Y] [T1Space X] (h : X ≃ₜ Y) : T1Space Y :=
@@ -2014,8 +2014,8 @@ instance Subtype.t1Space
   body: IsEmbedding.subtypeVal.t1Space
 
 中文:
-实例 Subtype.t1Space
-  签名: {X : 类型u} [TopologicalSpace X] [T1Space X] {p : X -> 命题}
+实例 子类型.t1Space
+  签名: {X : 类型u} [拓扑空间 X] [T1空间 X] {p : X -> 命题}
   定义体: IsEmbedding.subtypeVal.t1Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.t1Space, subtypeVal, t1Space
@@ -2033,8 +2033,8 @@ instance [TopologicalSpace
   body: ⟨fun ⟨a, b⟩ => @singleton_prod_singleton _ _ a b ▸ isClosed_singleton.prod isClosed_singleton⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: Y] [T1Space X] [T1Space Y] : T1Space (X × Y)
+实例 [拓扑空间
+  签名: Y] [T1空间 X] [T1空间 Y] : T1空间 (X × Y)
   定义体: ⟨fun ⟨a, b⟩ => @singleton_prod_singleton _ _ a b ▸ isClosed_singleton.prod isClosed_singleton⟩
 
 Depends on / 依赖: isClosed_singleton, isClosed_singleton.prod, singleton_prod_singleton
@@ -2055,8 +2055,8 @@ instance ULift.instT1Space
   body: IsEmbedding.uliftDown.t1Space
 
 中文:
-实例 ULift.instT1Space
-  签名: [T1Space X]
+实例 类型层提升.instT1Space
+  签名: [T1空间 X]
   定义体: IsEmbedding.uliftDown.t1Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.t1Space, t1Space, uliftDown
@@ -2080,7 +2080,7 @@ theorem compl_singleton_mem_nhds_iff
 
 中文:
 定理 compl_singleton_mem_nhds_iff
-  条件: [T1Space X] {x y : X}
+  条件: [T1空间 X] {x y : X}
   结论: {x}ᶜ in 𝓝 y ↔ y != x
   证明: isOpen_compl_singleton.mem_nhds_iff
 
@@ -2102,7 +2102,7 @@ theorem compl_singleton_mem_nhds
 
 中文:
 定理 compl_singleton_mem_nhds
-  条件: [T1Space X] {x y : X} (h : y != x)
+  条件: [T1空间 X] {x y : X} (h : y != x)
   结论: {x}ᶜ in 𝓝 y
   证明: compl_singleton_mem_nhds_iff.mpr h
 
@@ -2125,8 +2125,8 @@ theorem closure_singleton
 
 中文:
 定理 closure_singleton
-  条件: [T1Space X] {x : X}
-  结论: closure ({x} : Set X) = {x}
+  条件: [T1空间 X] {x : X}
+  结论: closure ({x} : 集合 X) = {x}
   证明: isClosed_singleton.closure_eq
 
 Depends on / 依赖: closure_eq, isClosed_singleton, isClosed_singleton.closure_eq
@@ -2147,9 +2147,9 @@ lemma Set.Subsingleton.isClosed
   · exact isClosed_singleton
 
 中文:
-引理 Set.Subsingleton.isClosed
-  条件: [T1Space X] {s : Set X} (hs : s.Subsingleton)
-  结论: IsClosed s
+引理 集合.子单例.isClosed
+  条件: [T1空间 X] {s : 集合 X} (hs : s.子单例)
+  结论: 是闭集 s
   证明: by
   rcases hs.eq_empty_or_singleton with rfl | ⟨x, rfl⟩
   · exact isClosed_empty
@@ -2171,8 +2171,8 @@ theorem Set.Subsingleton.closure_eq
   proof: hs.isClosed.closure_eq
 
 中文:
-定理 Set.Subsingleton.closure_eq
-  条件: [T1Space X] {s : Set X} (hs : s.Subsingleton)
+定理 集合.子单例.closure_eq
+  条件: [T1空间 X] {s : 集合 X} (hs : s.子单例)
   证明: hs.isClosed.closure_eq
 
 Depends on / 依赖: closure_eq, hs.isClosed.closure_eq, isClosed
@@ -2193,8 +2193,8 @@ theorem Set.Subsingleton.closure
 @[simp]
 
 中文:
-定理 Set.Subsingleton.closure
-  条件: [T1Space X] {s : Set X} (hs : s.Subsingleton)
+定理 集合.子单例.closure
+  条件: [T1空间 X] {s : 集合 X} (hs : s.子单例)
   证明: by
   rwa [hs.closure_eq]
 
@@ -2218,8 +2218,8 @@ theorem subsingleton_closure
 
 中文:
 定理 subsingleton_closure
-  条件: [T1Space X] {s : Set X}
-  结论: (closure s).Subsingleton ↔ s.Subsingleton
+  条件: [T1空间 X] {s : 集合 X}
+  结论: (closure s).子单例 ↔ s.子单例
   证明: ⟨fun h => h.anti subset_closure, fun h => h.closure⟩
 
 Depends on / 依赖: closure, h.anti, h.closure, subset_closure
@@ -2238,7 +2238,7 @@ theorem isClosedMap_const
 
 中文:
 定理 isClosedMap_const
-  条件: {X Y} [TopologicalSpace X] [TopologicalSpace Y] [T1Space Y] {y : Y}
+  条件: {X Y} [拓扑空间 X] [拓扑空间 Y] [T1空间 Y] {y : Y}
   证明: IsClosedMap.of_nonempty fun s _ h2s => by simp_rw [const, h2s.image_const, isClosed_singleton]
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.of_nonempty, h2s.image_const, image_const, isClosed_singleton, of_nonempty, simp_rw
@@ -2257,7 +2257,7 @@ lemma isClosedMap_prodMk_left
 
 中文:
 引理 isClosedMap_prodMk_left
-  条件: [TopologicalSpace Y] [T1Space X] (x : X)
+  条件: [拓扑空间 Y] [T1空间 X] (x : X)
   证明: fun _K hK => Set.singleton_prod ▸ isClosed_singleton.prod hK
 
 Depends on / 依赖: Set.singleton_prod, isClosed_singleton, isClosed_singleton.prod, singleton_prod
@@ -2276,7 +2276,7 @@ lemma isClosedMap_prodMk_right
 
 中文:
 引理 isClosedMap_prodMk_right
-  条件: [TopologicalSpace Y] [T1Space Y] (y : Y)
+  条件: [拓扑空间 Y] [T1空间 Y] (y : Y)
   证明: fun _K hK => Set.prod_singleton ▸ hK.prod isClosed_singleton
 
 Depends on / 依赖: Set.prod_singleton, hK.prod, isClosed_singleton, prod_singleton
@@ -2299,7 +2299,7 @@ theorem nhdsWithin_insert_of_ne
 
 中文:
 定理 nhdsWithin_insert_of_ne
-  条件: [T1Space X] {x y : X} {s : Set X} (hxy : x != y)
+  条件: [T1空间 X] {x y : X} {s : 集合 X} (hxy : x != y)
   证明: by
   refine le_antisymm (Filter.le_def.2 fun t ht => ?_) (nhdsWithin_mono x <| subset_insert y s)
   obtain ⟨o, ho, hxo, host⟩ := mem_nhdsWithin.mp ht
@@ -2331,7 +2331,7 @@ theorem insert_mem_nhdsWithin_of_subset_insert
 
 中文:
 定理 insert_mem_nhdsWithin_of_subset_insert
-  结论: [T1Space X] {x y : X} {s t : Set X}
+  结论: [T1空间 X] {x y : X} {s t : 集合 X}
   证明: by
   rcases eq_or_ne x y with (rfl | h)
   · exact mem_of_superset self_mem_nhdsWithin hu
@@ -2364,7 +2364,7 @@ lemma eventuallyEq_insert
 
 中文:
 引理 eventuallyEq_insert
-  条件: [T1Space X] {s t : Set X} {x y : X} (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+  条件: [T1空间 X] {s t : 集合 X} {x y : X} (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
   证明: by
   simp_rw [eventuallyEq_set] at h ⊢
   simp_rw [← union_singleton, ← nhdsWithin_univ, ← compl_union_self {x},
@@ -2395,7 +2395,7 @@ theorem ker_nhds
 
 中文:
 定理 ker_nhds
-  条件: [T1Space X] (x : X)
+  条件: [T1空间 X] (x : X)
   结论: (𝓝 x).ker = {x}
   证明: by
   simp [ker_nhds_eq_specializes]
@@ -2417,8 +2417,8 @@ theorem biInter_basis_nhds
 @[simp]
 
 中文:
-定理 biInter_basis_nhds
-  结论: [T1Space X] {ι : Sort*} {p : ι -> 命题} {s : ι -> Set X} {x : X}
+定理 bi整数er_basis_nhds
+  结论: [T1空间 X] {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 X} {x : X}
   证明: by
   rw [← h.ker]; rw [ker_nhds]
 
@@ -2445,7 +2445,7 @@ theorem compl_singleton_mem_nhdsSet_iff
 
 中文:
 定理 compl_singleton_mem_nhdsSet_iff
-  条件: [T1Space X] {x : X} {s : Set X}
+  条件: [T1空间 X] {x : X} {s : 集合 X}
   结论: {x}ᶜ in 𝓝ˢ s ↔ x ∉ s
   证明: by
   rw [isOpen_compl_singleton.mem_nhdsSet]; rw [subset_compl_singleton_iff]
@@ -2477,7 +2477,7 @@ theorem nhdsSet_le_iff
 
 中文:
 定理 nhdsSet_le_iff
-  条件: [T1Space X] {s t : Set X}
+  条件: [T1空间 X] {s t : 集合 X}
   结论: 𝓝ˢ s <= 𝓝ˢ t ↔ s subseteq t
   证明: by
   refine ⟨?_, fun h => monotone_nhdsSet h⟩
@@ -2513,7 +2513,7 @@ theorem nhdsSet_inj_iff
 
 中文:
 定理 nhdsSet_inj_iff
-  条件: [T1Space X] {s t : Set X}
+  条件: [T1空间 X] {s t : 集合 X}
   结论: 𝓝ˢ s = 𝓝ˢ t ↔ s = t
   证明: by
   simp_rw [le_antisymm_iff]
@@ -2537,8 +2537,8 @@ theorem injective_nhdsSet
 
 中文:
 定理 injective_nhdsSet
-  条件: [T1Space X]
-  结论: Function.Injective (𝓝ˢ : Set X -> Filter X)
+  条件: [T1空间 X]
+  结论: 函数.单射 (𝓝ˢ : 集合 X -> 滤子 X)
   证明: fun _ _ hst =>
   nhdsSet_inj_iff.mp hst
 -/
@@ -2558,8 +2558,8 @@ theorem strictMono_nhdsSet
 
 中文:
 定理 strictMono_nhdsSet
-  条件: [T1Space X]
-  结论: StrictMono (𝓝ˢ : Set X -> Filter X)
+  条件: [T1空间 X]
+  结论: 严格递增 (𝓝ˢ : 集合 X -> 滤子 X)
   证明: monotone_nhdsSet.strictMono_of_injective injective_nhdsSet
 
 @[simp]
@@ -2582,7 +2582,7 @@ theorem nhds_le_nhdsSet_iff
 
 中文:
 定理 nhds_le_nhdsSet_iff
-  条件: [T1Space X] {s : Set X} {x : X}
+  条件: [T1空间 X] {s : 集合 X} {x : X}
   结论: 𝓝 x <= 𝓝ˢ s ↔ x in s
   证明: by
   rw [← nhdsSet_singleton]; rw [nhdsSet_le_iff]; rw [singleton_subset_iff]
@@ -2603,8 +2603,8 @@ theorem Dense.sdiff_singleton
 @[deprecated (since := "2026-06-03")] alias Dense.diff_singleton := Dense.sdiff_singleton
 
 中文:
-定理 Dense.sdiff_singleton
-  条件: [T1Space X] {s : Set X} (hs : Dense s) (x : X) [NeBot (𝓝[!=] x)]
+定理 稠密.sdiff_singleton
+  条件: [T1空间 X] {s : 集合 X} (hs : 稠密 s) (x : X) [NeBot (𝓝[!=] x)]
   证明: hs.inter_of_isOpen_right (dense_compl_singleton x) isOpen_compl_singleton
 
 @[deprecated (since := "2026-06-03")] alias Dense.diff_singleton := Dense.sdiff_singleton
@@ -2634,8 +2634,8 @@ theorem Dense.sdiff_finset
 @[deprecated (since := "2026-06-03")] alias Dense.diff_finset := Dense.sdiff_finset
 
 中文:
-定理 Dense.sdiff_finset
-  结论: [T1Space X] [对任意 x : X, NeBot (𝓝[!=] x)] {s : Set X} (hs : Dense s)
+定理 稠密.sdiff_finset
+  结论: [T1空间 X] [对任意 x : X, NeBot (𝓝[!=] x)] {s : 集合 X} (hs : 稠密 s)
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -2672,8 +2672,8 @@ theorem Dense.sdiff_finite
 @[deprecated (since := "2026-06-03")] alias Dense.diff_finite := Dense.sdiff_finite
 
 中文:
-定理 Dense.sdiff_finite
-  结论: [T1Space X] [对任意 x : X, NeBot (𝓝[!=] x)] {s : Set X} (hs : Dense s)
+定理 稠密.sdiff_finite
+  结论: [T1空间 X] [对任意 x : X, NeBot (𝓝[!=] x)] {s : 集合 X} (hs : 稠密 s)
   证明: by
   convert! hs.sdiff_finset ht.toFinset
   exact (Finite.coe_toFinset _).symm
@@ -2702,7 +2702,7 @@ theorem eq_of_tendsto_nhds
 
 中文:
 定理 eq_of_tendsto_nhds
-  结论: [TopologicalSpace Y] [T1Space Y] {f : X -> Y} {x : X} {y : Y}
+  结论: [拓扑空间 Y] [T1空间 Y] {f : X -> Y} {x : X} {y : Y}
   证明: by_contra fun hfa : f x != y =>
     have fact₁ : {f x}ᶜ in 𝓝 y := compl_singleton_mem_nhds hfa.symm
     have fact₂ : Tendsto f (pure x) (𝓝 y) := h.comp (tendsto_id'.2 <| pure_le_nhds x)
@@ -2726,8 +2726,8 @@ theorem Filter.Tendsto.eventually_ne
   proof: hg.eventually (isOpen_compl_singleton.eventually_mem hb)
 
 中文:
-定理 Filter.Tendsto.eventually_ne
-  结论: {X} [TopologicalSpace Y] [T1Space Y] {g : X -> Y}
+定理 滤子.收敛.eventually_ne
+  结论: {X} [拓扑空间 Y] [T1空间 Y] {g : X -> Y}
   证明: hg.eventually (isOpen_compl_singleton.eventually_mem hb)
 
 Depends on / 依赖: eventually, eventually_mem, hg.eventually, isOpen_compl_singleton, isOpen_compl_singleton.eventually_mem
@@ -2746,7 +2746,7 @@ theorem ContinuousAt.eventually_ne
 
 中文:
 定理 ContinuousAt.eventually_ne
-  结论: [TopologicalSpace Y] [T1Space Y] {g : X -> Y} {x : X} {y : Y}
+  结论: [拓扑空间 Y] [T1空间 Y] {g : X -> Y} {x : X} {y : Y}
   证明: hg1.tendsto.eventually_ne hg2
 
 Depends on / 依赖: eventually_ne, hg1.tendsto.eventually_ne, tendsto
@@ -2766,7 +2766,7 @@ theorem eventually_ne_nhds
 
 中文:
 定理 eventually_ne_nhds
-  条件: [T1Space X] {a b : X} (h : a != b)
+  条件: [T1空间 X] {a b : X} (h : a != b)
   结论: 对任意ᶠ x in 𝓝 a, x != b
   证明: IsOpen.eventually_mem isOpen_ne h
 
@@ -2785,7 +2785,7 @@ theorem eventually_ne_nhdsWithin
 
 中文:
 定理 eventually_ne_nhdsWithin
-  条件: [T1Space X] {a b : X} {s : Set X} (h : a != b)
+  条件: [T1空间 X] {a b : X} {s : 集合 X} (h : a != b)
   证明: Filter.Eventually.filter_mono nhdsWithin_le_nhds eventually_ne_nhds h
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.filter_mono, eventually_ne_nhds, filter_mono, nhdsWithin_le_nhds
@@ -2814,7 +2814,7 @@ theorem eventually_nhdsWithin_eventually_nhds_iff_of_isOpen
 
 中文:
 定理 eventually_nhdsWithin_eventually_nhds_iff_of_isOpen
-  结论: {s : Set X} {a : X} {p : X -> 命题}
+  结论: {s : 集合 X} {a : X} {p : X -> 命题}
   证明: by
   nth_rw 2 [← eventually_eventually_nhdsWithin]
   constructor
@@ -2851,7 +2851,7 @@ theorem eventually_nhdsNE_eventually_nhds_iff
 
 中文:
 定理 eventually_nhdsNE_eventually_nhds_iff
-  条件: [T1Space X] {a : X} {p : X -> 命题}
+  条件: [T1空间 X] {a : X} {p : X -> 命题}
   证明: eventually_nhdsWithin_eventually_nhds_iff_of_isOpen isOpen_ne
 
 Depends on / 依赖: eventually_nhdsWithin_eventually_nhds_iff_of_isOpen, isOpen_ne
@@ -2875,7 +2875,7 @@ alias ⟨ContinuousWithinAt.of_insert, ContinuousWithinAt.insert'⟩ := continuo
 
 中文:
 定理 continuousWithinAt_insert
-  结论: [TopologicalSpace Y] [T1Space X]
+  结论: [拓扑空间 Y] [T1空间 X]
   证明: by
   rcases eq_or_ne x y with (rfl | h)
   · exact continuousWithinAt_insert_self
@@ -2908,7 +2908,7 @@ alias continuousWithinAt_diff_singleton := continuousWithinAt_sdiff_singleton
 
 中文:
 定理 continuousWithinAt_sdiff_singleton
-  结论: [TopologicalSpace Y] [T1Space X]
+  结论: [拓扑空间 Y] [T1空间 X]
   证明: by
   rw [← continuousWithinAt_insert]; rw [insert_sdiff_singleton]; rw [continuousWithinAt_insert]
 
@@ -2937,7 +2937,7 @@ theorem continuousWithinAt_congr_set'
 
 中文:
 定理 continuousWithinAt_congr_set'
-  结论: [TopologicalSpace Y] [T1Space X]
+  结论: [拓扑空间 Y] [T1空间 X]
   证明: by
   rw [← continuousWithinAt_insert_self (s := s)]; rw [← continuousWithinAt_insert_self (s := t)]
   exact continuousWithinAt_congr_set (eventuallyEq_insert h)
@@ -2962,7 +2962,7 @@ theorem ContinuousWithinAt.eq_const_of_mem_closure
 
 中文:
 定理 ContinuousWithinAt.eq_const_of_mem_closure
-  结论: [TopologicalSpace Y] [T1Space Y]
+  结论: [拓扑空间 Y] [T1空间 Y]
   证明: by
   rw [← Set.mem_singleton_iff]; rw [← closure_singleton]
   exact h.mem_closure hx ht
@@ -2987,7 +2987,7 @@ theorem ContinuousWithinAt.eqOn_const_closure
 
 中文:
 定理 ContinuousWithinAt.eqOn_const_closure
-  结论: [TopologicalSpace Y] [T1Space Y]
+  结论: [拓扑空间 Y] [T1空间 Y]
   证明: by
   intro x hx
   apply ContinuousWithinAt.eq_const_of_mem_closure (h x hx) hx ht
@@ -3013,7 +3013,7 @@ theorem continuousAt_of_tendsto_nhds
 
 中文:
 定理 continuousAt_of_tendsto_nhds
-  结论: [TopologicalSpace Y] [T1Space Y] {f : X -> Y} {x : X} {y : Y}
+  结论: [拓扑空间 Y] [T1空间 Y] {f : X -> Y} {x : X} {y : Y}
   证明: by
   rwa [ContinuousAt, eq_of_tendsto_nhds h]
 
@@ -3036,7 +3036,7 @@ theorem tendsto_const_nhds_iff
 
 中文:
 定理 tendsto_const_nhds_iff
-  条件: [T1Space X] {l : Filter Y} [NeBot l] {c d : X}
+  条件: [T1空间 X] {l : 滤子 Y} [NeBot l] {c d : X}
   证明: by simp_rw [Tendsto, Filter.map_const, pure_le_nhds_iff]
 
 Depends on / 依赖: Filter, Filter.map_const, Tendsto, map_const, pure_le_nhds_iff, simp_rw
@@ -3058,7 +3058,7 @@ theorem isOpen_singleton_of_finite_mem_nhds
 
 中文:
 定理 isOpen_singleton_of_finite_mem_nhds
-  结论: [T1Space X] (x : X)
+  结论: [T1空间 X] (x : X)
   证明: by
   have A : {x} subseteq s := by simp only [singleton_subset_iff, mem_of_mem_nhds hs]
   have B : IsClosed (s \ {x}) := (hsf.subset sdiff_subset).isClosed
@@ -3088,7 +3088,7 @@ theorem infinite_of_mem_nhds
 
 中文:
 定理 infinite_of_mem_nhds
-  结论: {X} [TopologicalSpace X] [T1Space X] (x : X) [hx : NeBot (𝓝[!=] x)]
+  结论: {X} [拓扑空间 X] [T1空间 X] (x : X) [hx : NeBot (𝓝[!=] x)]
   证明: by
   refine fun hsf => hx.1 ?_
   rw [← isOpen_singleton_iff_punctured_nhds]
@@ -3113,8 +3113,8 @@ instance Finite.instDiscreteTopology
   body: discreteTopology_iff_forall_isClosed.mpr (·.toFinite.isClosed)
 
 中文:
-实例 Finite.instDiscreteTopology
-  签名: [T1Space X] [Finite X]
+实例 有限.instDiscreteTopology
+  签名: [T1空间 X] [有限 X]
   定义体: discreteTopology_iff_forall_isClosed.mpr (·.toFinite.isClosed)
 
 Depends on / 依赖: discreteTopology_iff_forall_isClosed, discreteTopology_iff_forall_isClosed.mpr, isClosed, toFinite, toFinite.isClosed
@@ -3132,9 +3132,9 @@ lemma Set.Finite.isDiscrete
   proof: ⟨@Finite.instDiscreteTopology _ _ _ hs.to_subtype⟩
 
 中文:
-引理 Set.Finite.isDiscrete
-  条件: [T1Space X] {s : Set X} (hs : s.Finite)
-  结论: IsDiscrete s
+引理 集合.有限.isDiscrete
+  条件: [T1空间 X] {s : 集合 X} (hs : s.有限)
+  结论: 是离散 s
   证明: ⟨@Finite.instDiscreteTopology _ _ _ hs.to_subtype⟩
 
 Depends on / 依赖: Finite, Finite.instDiscreteTopology, hs.to_subtype, instDiscreteTopology, to_subtype
@@ -3154,8 +3154,8 @@ theorem Set.Finite.continuousOn
   fun_prop
 
 中文:
-定理 Set.Finite.continuousOn
-  结论: [T1Space X] [TopologicalSpace Y] {s : Set X} (hs : s.Finite)
+定理 集合.有限.continuousOn
+  结论: [T1空间 X] [拓扑空间 Y] {s : 集合 X} (hs : s.有限)
   证明: by
   rw [continuousOn_iff_continuous_domRestrict]
   have : Finite s := hs
@@ -3184,7 +3184,7 @@ theorem SeparationQuotient.t1Space_iff
 
 中文:
 定理 SeparationQuotient.t1Space_iff
-  结论: T1Space (SeparationQuotient X) ↔ R0Space X
+  结论: T1空间 (SeparationQuotient X) ↔ R0空间 X
   证明: by
   rw [r0Space_iff]; rw [((t1Space_TFAE (SeparationQuotient X)).out 0 9 :)]
   refine ⟨fun h => ⟨fun x y xspecy => ?_⟩, ?_⟩
@@ -3219,8 +3219,8 @@ lemma isClosed_inter_singleton
 
 中文:
 引理 isClosed_inter_singleton
-  条件: [T1Space X] {A : Set X} {a : X}
-  结论: IsClosed (A inter {a})
+  条件: [T1空间 X] {A : 集合 X} {a : X}
+  结论: 是闭集 (A inter {a})
   证明: Subsingleton.inter_singleton.isClosed
 
 Depends on / 依赖: Subsingleton, Subsingleton.inter_singleton.isClosed, inter_singleton, isClosed
@@ -3239,8 +3239,8 @@ lemma isClosed_singleton_inter
 
 中文:
 引理 isClosed_singleton_inter
-  条件: [T1Space X] {A : Set X} {a : X}
-  结论: IsClosed ({a} inter A)
+  条件: [T1空间 X] {A : 集合 X} {a : X}
+  结论: 是闭集 ({a} inter A)
   证明: Subsingleton.singleton_inter.isClosed
 
 Depends on / 依赖: Subsingleton, Subsingleton.singleton_inter.isClosed, isClosed, singleton_inter
@@ -3262,7 +3262,7 @@ theorem singleton_mem_nhdsWithin_of_mem_discrete
 
 中文:
 定理 singleton_mem_nhdsWithin_of_mem_discrete
-  结论: {s : Set X} (hs : IsDiscrete s) {x : X}
+  结论: {s : 集合 X} (hs : 是离散 s) {x : X}
   证明: by
   rw [isDiscrete_iff_discreteTopology] at hs
   have : ({⟨x, hx⟩} : Set s) in 𝓝 (⟨x, hx⟩ : s) := by simp [nhds_discrete]
@@ -3288,7 +3288,7 @@ theorem nhdsWithin_of_mem_discrete
 
 中文:
 定理 nhdsWithin_of_mem_discrete
-  条件: {s : Set X} (hs : IsDiscrete s) {x : X} (hx : x in s)
+  条件: {s : 集合 X} (hs : 是离散 s) {x : X} (hx : x in s)
   证明: (le_pure_iff.2 <| singleton_mem_nhdsWithin_of_mem_discrete hs hx).antisymm (pure_le_nhdsWithin hx)
 
 Depends on / 依赖: antisymm, le_pure_iff, pure_le_nhdsWithin, singleton_mem_nhdsWithin_of_mem_discrete
@@ -3309,7 +3309,7 @@ theorem Filter.HasBasis.exists_inter_eq_singleton_of_mem_discrete
 exact ⟨i, hi, hix.antisymm singleton_subset_iff.2 ⟨mem_of_mem_nhds hb.mem_of_mem hi, hx⟩⟩
 
 中文:
-定理 Filter.HasBasis.exists_inter_eq_singleton_of_mem_discrete
+定理 滤子.有基.存在_inter_eq_singleton_of_mem_discrete
   结论: {ι : 类型} {p : ι -> 命题}
   证明: by
   rcases (nhdsWithin_hasBasis hb s).mem_iff.1 (singleton_mem_nhdsWithin_of_mem_discrete hs hx) with
@@ -3336,7 +3336,7 @@ theorem nhds_inter_eq_singleton_of_mem_discrete
 
 中文:
 定理 nhds_inter_eq_singleton_of_mem_discrete
-  结论: {s : Set X} (hs : IsDiscrete s) {x : X}
+  结论: {s : 集合 X} (hs : 是离散 s) {x : X}
   证明: by
   simpa using (𝓝 x).basis_sets.exists_inter_eq_singleton_of_mem_discrete hs hx
 
@@ -3359,7 +3359,7 @@ theorem isOpen_inter_eq_singleton_of_mem_discrete
 
 中文:
 定理 isOpen_inter_eq_singleton_of_mem_discrete
-  结论: {s : Set X} (hs : IsDiscrete s) {x : X}
+  结论: {s : 集合 X} (hs : 是离散 s) {x : X}
   证明: by
   obtain ⟨U, hU_nhds, hU_inter⟩ := nhds_inter_eq_singleton_of_mem_discrete hs hx
   obtain ⟨t, ht_sub, ht_open, ht_x⟩ := mem_nhds_iff.mp hU_nhds
@@ -3385,7 +3385,7 @@ theorem disjoint_nhdsWithin_of_mem_discrete
 
 中文:
 定理 disjoint_nhdsWithin_of_mem_discrete
-  条件: {s : Set X} (hs : IsDiscrete s) {x : X} (hx : x in s)
+  条件: {s : 集合 X} (hs : 是离散 s) {x : X} (hx : x in s)
   证明: let ⟨V, h, h'⟩ := nhds_inter_eq_singleton_of_mem_discrete hs hx
   ⟨{x}ᶜ inter V, inter_mem_nhdsWithin _ h,
     disjoint_iff_inter_eq_empty.mpr (by rw [inter_assoc, h', compl_inter_self])⟩
@@ -3446,7 +3446,7 @@ lemma nhdsNE_le_cofinite
 
 中文:
 引理 nhdsNE_le_cofinite
-  条件: {α : 类型} [TopologicalSpace α] [T1Space α] (a : α)
+  条件: {α : 类型} [拓扑空间 α] [T1空间 α] (a : α)
   证明: by
   refine le_cofinite_iff_compl_singleton_mem.mpr fun x => ?_
   rcases eq_or_ne a x with rfl | hx
@@ -3468,7 +3468,7 @@ lemma Function.update_eventuallyEq_nhdsNE
   proof: (Function.update_eventuallyEq_cofinite f a b).filter_mono (nhdsNE_le_cofinite a')
 
 中文:
-引理 Function.update_eventuallyEq_nhdsNE
+引理 函数.update_eventuallyEq_nhdsNE
   证明: (Function.update_eventuallyEq_cofinite f a b).filter_mono (nhdsNE_le_cofinite a')
 
 Depends on / 依赖: Function, Function.update_eventuallyEq_cofinite, filter_mono, nhdsNE_le_cofinite, update_eventuallyEq_cofinite
@@ -3495,8 +3495,8 @@ class R1Space
     - specializes_or_disjoint_nhds((x y : X)) : Specializes x y ∨ Disjoint (𝓝 x) (𝓝 y)
 
 中文:
-类 R1Space
-  参数: (X : 类型) [TopologicalSpace X]
+类 R1空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
     - specializes_or_disjoint_nhds((x y : X)) : Specializes x y ∨ Disjoint (𝓝 x) (𝓝 y)
 -/
@@ -3558,7 +3558,7 @@ theorem disjoint_nhds_nhds_iff_not_inseparable
 
 中文:
 定理 disjoint_nhds_nhds_iff_not_inseparable
-  结论: Disjoint (𝓝 x) (𝓝 y) ↔ ¬Inseparable x y
+  结论: Disjoint (𝓝 x) (𝓝 y) ↔ ¬不可分 x y
   证明: by
   rw [disjoint_nhds_nhds_iff_not_specializes]; rw [specializes_iff_inseparable]
 
@@ -3578,7 +3578,7 @@ theorem r1Space_iff_inseparable_or_disjoint_nhds
 
 中文:
 定理 r1Space_iff_inseparable_or_disjoint_nhds
-  条件: {X : 类型} [TopologicalSpace X]
+  条件: {X : 类型} [拓扑空间 X]
   证明: ⟨fun _h x y => (specializes_or_disjoint_nhds x y).imp_left Specializes.inseparable, fun h =>
     ⟨fun x y => (h x y).imp_left Inseparable.specializes⟩⟩
 
@@ -3598,7 +3598,7 @@ theorem Inseparable.of_nhds_neBot
   proof: (r1Space_iff_inseparable_or_disjoint_nhds.mp ‹_› _ _).resolve_right fun h' => h.ne h'.eq_bot
 
 中文:
-定理 Inseparable.of_nhds_neBot
+定理 不可分.of_nhds_neBot
   条件: {x y : X} (h : NeBot (𝓝 x ⊓ 𝓝 y))
   证明: (r1Space_iff_inseparable_or_disjoint_nhds.mp ‹_› _ _).resolve_right fun h' => h.ne h'.eq_bot
 
@@ -3621,7 +3621,7 @@ theorem r1_separation
 
 中文:
 定理 r1_separation
-  条件: {x y : X} (h : ¬Inseparable x y)
+  条件: {x y : X} (h : ¬不可分 x y)
   证明: by
   rw [← disjoint_nhds_nhds_iff_not_inseparable]; rw [(nhds_basis_opens x).disjoint_iff (nhds_basis_opens y)] at h
   obtain ⟨u, ⟨hxu, hu⟩, v, ⟨hyv, hv⟩, huv⟩ := h
@@ -3645,7 +3645,7 @@ theorem tendsto_nhds_unique_inseparable
 
 中文:
 定理 tendsto_nhds_unique_inseparable
-  结论: {f : Y -> X} {l : Filter Y} {a b : X} [NeBot l]
+  结论: {f : Y -> X} {l : 滤子 Y} {a b : X} [NeBot l]
   证明: .of_nhds_neBot neBot_of_le le_inf ha hb
 
 Depends on / 依赖: le_inf, neBot_of_le, of_nhds_neBot
@@ -3669,7 +3669,7 @@ alias isClosed_setOf_specializes := isClosed_setOfPred_specializes
 
 中文:
 定理 isClosed_setOfPred_specializes
-  结论: IsClosed { p : X × X | p.1 ⤳ p.2 }
+  结论: 是闭集 { p : X × X | p.1 ⤳ p.2 }
   证明: by
   simp only [← isOpen_compl_iff, compl_ofPred, ← disjoint_nhds_nhds_iff_not_specializes,
     isOpen_setOfPred_disjoint_nhds_nhds]
@@ -3700,7 +3700,7 @@ alias isClosed_setOf_inseparable := isClosed_setOfPred_inseparable
 
 中文:
 定理 isClosed_setOfPred_inseparable
-  结论: IsClosed { p : X × X | Inseparable p.1 p.2 }
+  结论: 是闭集 { p : X × X | 不可分 p.1 p.2 }
   证明: by
   simp only [← specializes_iff_inseparable, isClosed_setOfPred_specializes]
 
@@ -3730,8 +3730,8 @@ theorem IsCompact.mem_closure_iff_exists_inseparable
   simpa only [disjoint_iff, notMem_clos
 
 中文:
-定理 IsCompact.mem_closure_iff_exists_inseparable
-  条件: {K : Set X} (hK : IsCompact K)
+定理 是紧集.mem_closure_iff_存在_inseparable
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   refine ⟨fun hy => ?_, fun ⟨x, hxK, hxy⟩ =>
 (hxy.mem_closed_iff isClosed_closure).1 subset_closure hxK⟩
@@ -3762,8 +3762,8 @@ theorem IsCompact.closure_eq_biUnion_inseparable
   ext; simp [hK.mem_closure_iff_exists_inseparable]
 
 中文:
-定理 IsCompact.closure_eq_biUnion_inseparable
-  条件: {K : Set X} (hK : IsCompact K)
+定理 是紧集.closure_eq_biUnion_inseparable
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   ext; simp [hK.mem_closure_iff_exists_inseparable]
 
@@ -3784,8 +3784,8 @@ theorem IsCompact.closure_eq_biUnion_closure_singleton
     specializes_iff_mem_closure, ofPred_mem_eq]
 
 中文:
-定理 IsCompact.closure_eq_biUnion_closure_singleton
-  条件: {K : Set X} (hK : IsCompact K)
+定理 是紧集.closure_eq_biUnion_closure_singleton
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   simp only [hK.closure_eq_biUnion_inseparable, ← specializes_iff_inseparable,
     specializes_iff_mem_closure, ofPred_mem_eq]
@@ -3808,8 +3808,8 @@ theorem IsCompact.closure_subset_of_isOpen
   exact fun x hx y hxy => (hxy.mem_open_iff hU).1 (hKU hx)
 
 中文:
-定理 IsCompact.closure_subset_of_isOpen
-  结论: {K : Set X} (hK : IsCompact K)
+定理 是紧集.closure_subset_of_isOpen
+  结论: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   rw [hK.closure_eq_biUnion_inseparable]; rw [iUnion₂_subset_iff]
   exact fun x hx y hxy => (hxy.mem_open_iff hU).1 (hKU hx)
@@ -3834,9 +3834,9 @@ theorem IsCompact.closure
   exact ⟨t, hK.closure_subset_of_isOpen (isOpen_biUnion fun _ _ => hUo _) ht⟩
 
 中文:
-定理 IsCompact.closure
-  条件: {K : Set X} (hK : IsCompact K)
-  结论: IsCompact (closure K)
+定理 是紧集.closure
+  条件: {K : 集合 X} (hK : 是紧集 K)
+  结论: 是紧集 (closure K)
   证明: by
   refine isCompact_of_finite_subcover fun U hUo hKU => ?_
   rcases hK.elim_finite_subcover U hUo (subset_closure.trans hKU) with ⟨t, ht⟩
@@ -3858,8 +3858,8 @@ theorem IsCompact.closure_of_subset
 @[simp]
 
 中文:
-定理 IsCompact.closure_of_subset
-  条件: {s K : Set X} (hK : IsCompact K) (h : s subseteq K)
+定理 是紧集.closure_of_subset
+  条件: {s K : 集合 X} (hK : 是紧集 K) (h : s subseteq K)
   证明: hK.closure.of_isClosed_subset isClosed_closure (closure_mono h)
 
 @[simp]
@@ -3880,8 +3880,8 @@ theorem exists_isCompact_superset_iff
   proof: ⟨fun ⟨_K, hK, hsK⟩ => hK.closure_of_subset hsK, fun h => ⟨closure s, h, subset_closure⟩⟩
 
 中文:
-定理 exists_isCompact_superset_iff
-  条件: {s : Set X}
+定理 存在_isCompact_superset_iff
+  条件: {s : 集合 X}
   证明: ⟨fun ⟨_K, hK, hsK⟩ => hK.closure_of_subset hsK, fun h => ⟨closure s, h, subset_closure⟩⟩
 
 Depends on / 依赖: closure, closure_of_subset, hK.closure_of_subset, subset_closure
@@ -3904,7 +3904,7 @@ exact absurd ((h.mem_closed_iff h'L).2 hy) disjoint_left.1 hd hx
 
 中文:
 定理 SeparatedNhds.of_isCompact_isCompact_isClosed
-  结论: {K L : Set X} (hK : IsCompact K)
+  结论: {K L : 集合 X} (hK : 是紧集 K)
   证明: by
   simp_rw [separatedNhds_iff_disjoint, hK.disjoint_nhdsSet_left, hL.disjoint_nhdsSet_right,
     disjoint_nhds_nhds_iff_not_inseparable]
@@ -3934,8 +3934,8 @@ theorem IsCompact.binary_compact_cover
     rw [disjoint_iff_inter_eq_empty]; rw [sdiff_inter_sdiff]; rw [sdi
 
 中文:
-定理 IsCompact.binary_compact_cover
-  结论: {K U V : Set X}
+定理 是紧集.binary_compact_cover
+  结论: {K U V : 集合 X}
   证明: by
   have hK' : IsCompact (closure K) := hK.closure
   have : SeparatedNhds (closure K \ U) (closure K \ V) := by
@@ -3976,8 +3976,8 @@ theorem IsCompact.finite_compact_cover
     simp only [Fi
 
 中文:
-定理 IsCompact.finite_compact_cover
-  结论: {s : Set X} (hs : IsCompact s) {ι : 类型}
+定理 是紧集.finite_compact_cover
+  结论: {s : 集合 X} (hs : 是紧集 s) {ι : 类型}
   证明: by
   classical
   induction t using Finset.induction generalizing U s with
@@ -4025,8 +4025,8 @@ theorem R1Space.of_continuous_specializes_imp
     ((hc.tendsto _).disjoint · (hc.tendsto _))
 
 中文:
-定理 R1Space.of_continuous_specializes_imp
-  结论: [TopologicalSpace Y] {f : Y -> X} (hc : Continuous f)
+定理 R1空间.of_continuous_specializes_imp
+  结论: [拓扑空间 Y] {f : Y -> X} (hc : 连续 f)
   证明: (specializes_or_disjoint_nhds (f x) (f y)).imp (hspec x y)
     ((hc.tendsto _).disjoint · (hc.tendsto _))
 
@@ -4046,8 +4046,8 @@ theorem Topology.IsInducing.r1Space
   proof: .of_continuous_specializes_imp hf.continuous fun _ _ => hf.specializes_iff.1
 
 中文:
-定理 Topology.IsInducing.r1Space
-  条件: [TopologicalSpace Y] {f : Y -> X} (hf : IsInducing f)
+定理 拓扑.是Inducing.r1Space
+  条件: [拓扑空间 Y] {f : Y -> X} (hf : 是Inducing f)
   证明: .of_continuous_specializes_imp hf.continuous fun _ _ => hf.specializes_iff.1
 
 Depends on / 依赖: continuous, hf.continuous, hf.specializes_iff, of_continuous_specializes_imp, specializes_iff
@@ -4065,9 +4065,9 @@ theorem R1Space.induced
   proof: @IsInducing.r1Space _ _ _ _ (.induced f _) f (.induced f)
 
 中文:
-定理 R1Space.induced
+定理 R1空间.induced
   条件: (f : Y -> X)
-  结论: @R1Space Y (.induced f ‹_›)
+  结论: @R1空间 Y (.induced f ‹_›)
   证明: @IsInducing.r1Space _ _ _ _ (.induced f _) f (.induced f)
 -/
 protected theorem R1Space.induced (f : Y -> X) : @R1Space Y (.induced f ‹_›) :=
@@ -4091,8 +4091,8 @@ exact .inr htd.mono (iInf₂_le t htT) (iInf₂_le t htT)
 · exact .inl iInf₂_mono fun t ht => ((hT t ht).1 x y).resol
 
 中文:
-定理 R1Space.sInf
-  结论: {X : 类型} {T : Set (TopologicalSpace X)}
+定理 R1空间.sInf
+  结论: {X : 类型} {T : 集合 (拓扑空间 X)}
   证明: by
   let _ := sInf T
   refine ⟨fun x y => ?_⟩
@@ -4121,8 +4121,8 @@ theorem R1Space.iInf
   proof: .sInf forall_mem_range.2 ht
 
 中文:
-定理 R1Space.iInf
-  结论: {ι X : 类型} {t : ι -> TopologicalSpace X}
+定理 R1空间.iInf
+  结论: {ι X : 类型} {t : ι -> 拓扑空间 X}
   证明: .sInf forall_mem_range.2 ht
 -/
 protected theorem R1Space.iInf {ι X : Type*} {t : ι -> TopologicalSpace X}
@@ -4142,8 +4142,8 @@ theorem R1Space.inf
   simp [*]
 
 中文:
-定理 R1Space.inf
-  结论: {X : 类型} {t₁ t₂ : TopologicalSpace X}
+定理 R1空间.下确界
+  结论: {X : 类型} {t₁ t₂ : 拓扑空间 X}
   证明: by
   rw [inf_eq_iInf]
   apply R1Space.iInf
@@ -4164,8 +4164,8 @@ instance [TopologicalSpace
   body: .inf (.induced _) (.induced _)
 
 中文:
-实例 [TopologicalSpace
-  签名: Y] [R1Space Y] : R1Space (X × Y)
+实例 [拓扑空间
+  签名: Y] [R1空间 Y] : R1空间 (X × Y)
   定义体: .inf (.induced _) (.induced _)
 
 Depends on / 依赖: induced
@@ -4189,7 +4189,7 @@ theorem exists_mem_nhds_isCompact_mapsTo_of_isCompact_mem_nhds
       disjoint_nhds_nhds_iff_not_insepar
 
 中文:
-定理 exists_mem_nhds_isCompact_mapsTo_of_isCompact_mem_nhds
+定理 存在_mem_nhds_isCompact_mapsTo_of_isCompact_mem_nhds
   证明: by
   have hc : IsCompact (f '' K \ interior s) := (hKc.image hf).diff isOpen_interior
   obtain ⟨U, V, Uo, Vo, hxU, hV, hd⟩ : SeparatedNhds {f x} (f '' K \ interior s) := by
@@ -4234,8 +4234,8 @@ theorem IsCompact.isCompact_isClosed_basis_nhds
       (hKc.closure_subset_of_isOpen isOpen_inter
 
 中文:
-定理 IsCompact.isCompact_isClosed_basis_nhds
-  结论: {x : X} {L : Set X} (hLc : IsCompact L)
+定理 是紧集.isCompact_isClosed_basis_nhds
+  结论: {x : X} {L : 集合 X} (hLc : 是紧集 L)
   证明: hasBasis_self.2 fun _U hU =>
     let ⟨K, hKx, hKc, hKU⟩ := exists_mem_nhds_isCompact_mapsTo_of_isCompact_mem_nhds
       continuous_id (interior_mem_nhds.2 hU) hLc hxL
@@ -4266,7 +4266,7 @@ theorem Filter.coclosedCompact_eq_cocompact
   exact fun K hK => ⟨closure K, ⟨isClosed_closure, hK.closure⟩, compl_subset_compl.2 subset_closure⟩
 
 中文:
-定理 Filter.coclosedCompact_eq_cocompact
+定理 滤子.coclosedCompact_eq_cocompact
   结论: coclosedCompact X = cocompact X
   证明: by
   refine le_antisymm ?_ cocompact_le_coclosedCompact
@@ -4290,7 +4290,7 @@ theorem Bornology.relativelyCompact_eq_inCompact
   proof: Bornology.ext _ _ Filter.coclosedCompact_eq_cocompact
 
 中文:
-定理 Bornology.relativelyCompact_eq_inCompact
+定理 有界结构.relativelyCompact_eq_inCompact
   证明: Bornology.ext _ _ Filter.coclosedCompact_eq_cocompact
 
 Depends on / 依赖: Bornology, Bornology.ext, Filter, Filter.coclosedCompact_eq_cocompact, coclosedCompact_eq_cocompact
@@ -4340,9 +4340,9 @@ theorem exists_mem_nhds_isCompact_isClosed
   proof: (isCompact_isClosed_basis_nhds x).ex_mem
 
 中文:
-定理 exists_mem_nhds_isCompact_isClosed
+定理 存在_mem_nhds_isCompact_isClosed
   条件: (x : X)
-  结论: 存在 K in 𝓝 x, IsCompact K ∧ IsClosed K
+  结论: 存在 K in 𝓝 x, 是紧集 K ∧ 是闭集 K
   证明: (isCompact_isClosed_basis_nhds x).ex_mem
 
 Depends on / 依赖: ex_mem, isCompact_isClosed_basis_nhds
@@ -4366,8 +4366,8 @@ theorem exists_isOpen_superset_and_isCompact_closure
   exact ⟨interior K', isOpen_interior, hKK', hK'.closure_of_subset interior_subset⟩
 
 中文:
-定理 exists_isOpen_superset_and_isCompact_closure
-  条件: {K : Set X} (hK : IsCompact K)
+定理 存在_isOpen_superset_and_isCompact_closure
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   rcases exists_compact_superset hK with ⟨K', hK', hKK'⟩
   exact ⟨interior K', isOpen_interior, hKK', hK'.closure_of_subset interior_subset⟩
@@ -4390,7 +4390,7 @@ theorem exists_isOpen_mem_isCompact_closure
     using exists_isOpen_superset_and_isCompact_closure isCompact_singleton
 
 中文:
-定理 exists_isOpen_mem_isCompact_closure
+定理 存在_isOpen_mem_isCompact_closure
   条件: (x : X)
   证明: by
   simpa only [singleton_subset_iff]

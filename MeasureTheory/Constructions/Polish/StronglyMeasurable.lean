@@ -48,8 +48,8 @@ theorem measurableSet_exists_tendsto
     (IsSeparable.iUnion (fun i => (hf i).isSeparable_range)).clo
 
 中文:
-定理 measurableSet_exists_tendsto
-  结论: [IsCompletelyPseudoMetrizableSpace E]
+定理 measurableSet_存在_tendsto
+  结论: [是余mpletelyPseudoMetrizable空间 E]
   证明: by
   obtain rfl | hl := eq_or_neBot l
   · simp_all
@@ -95,7 +95,7 @@ theorem limUnder
 
 中文:
 定理 limUnder
-  结论: [hE : Nonempty E] [IsCompletelyMetrizableSpace E]
+  结论: [hE : 非空 E] [是余mpletelyMetrizable空间 E]
   证明: by
   obtain rfl | hl := eq_or_neBot l
   · simpa [limUnder, Filter.map_bot] using stronglyMeasurable_const
@@ -153,7 +153,7 @@ theorem StronglyMeasurable.hasProd
 
 中文:
 定理 StronglyMeasurable.hasProd
-  结论: [PseudoMetrizableSpace E] {f : ι -> X -> E} {g : X -> E}
+  结论: [PseudoMetrizable空间 E] {f : ι -> X -> E} {g : X -> E}
   证明: by
   refine stronglyMeasurable_of_tendsto L.filter ?_ (tendsto_pi_nhds.mpr h')
   fun_prop
@@ -222,7 +222,7 @@ theorem AEStronglyMeasurable.tprod
 
 中文:
 定理 AEStronglyMeasurable.tprod
-  结论: {μ : MeasureTheory.Measure X} {f : ι -> X -> E}
+  结论: {μ : 测度论.测度 X} {f : ι -> X -> E}
   证明: by
   choose g hg_meas hg_eq_f using h
   use (fun x => ∏'[L] i, g i x), StronglyMeasurable.tprod hg_meas
@@ -312,7 +312,7 @@ theorem AEStronglyMeasurable.tprod'
 
 中文:
 定理 AEStronglyMeasurable.tprod'
-  结论: {μ : MeasureTheory.Measure X} {f : ι -> X -> E}
+  结论: {μ : 测度论.测度 X} {f : ι -> X -> E}
   证明: by
   rw [tprod_def]; rw [finprod_def']
   split_ifs with hm

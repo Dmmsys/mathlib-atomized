@@ -68,8 +68,8 @@ theorem card_eq_fintype_card
 
 中文:
 定理 card_eq_fintype_card
-  条件: [Fintype α]
-  结论: 自然数.card α = Fintype.card α
+  条件: [有限类型 α]
+  结论: 自然数.card α = 有限类型.card α
   证明: mk_toNat_eq_card
 
 Depends on / 依赖: mk_toNat_eq_card
@@ -87,9 +87,9 @@ theorem _root_.Fintype.card_eq_nat_card
   proof: mk_toNat_eq_card.symm
 
 中文:
-定理 _root_.Fintype.card_eq_nat_card
-  条件: {_ : Fintype α}
-  结论: Fintype.card α = 自然数.card α
+定理 _root_.有限类型.card_eq_nat_card
+  条件: {_ : 有限类型 α}
+  结论: 有限类型.card α = 自然数.card α
   证明: mk_toNat_eq_card.symm
 
 Depends on / 依赖: mk_toNat_eq_card, mk_toNat_eq_card.symm
@@ -109,7 +109,7 @@ lemma card_eq_finsetCard
 
 中文:
 引理 card_eq_finsetCard
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: 自然数.card s = s.card
   证明: by
   simp only [Nat.card_eq_fintype_card, Fintype.card_coe]
@@ -131,7 +131,7 @@ lemma card_eq_card_toFinset
 
 中文:
 引理 card_eq_card_toFinset
-  条件: (s : Set α) [Fintype s]
+  条件: (s : 集合 α) [有限类型 s]
   结论: 自然数.card s = s.toFinset.card
   证明: by
   simp only [← Nat.card_eq_finsetCard, s.mem_toFinset]
@@ -153,7 +153,7 @@ lemma card_eq_card_finite_toFinset
 
 中文:
 引理 card_eq_card_finite_toFinset
-  条件: {s : Set α} (hs : s.Finite)
+  条件: {s : 集合 α} (hs : s.有限)
   结论: 自然数.card s = hs.toFinset.card
   证明: by
   simp only [← Nat.card_eq_finsetCard, hs.mem_toFinset]
@@ -174,7 +174,7 @@ theorem subtype_card
 
 中文:
 定理 subtype_card
-  条件: {p : α -> 命题} (s : Finset α) (H : 对任意 x : α, x in s ↔ p x)
+  条件: {p : α -> 命题} (s : 有限集 α) (H : 对任意 x : α, x in s ↔ p x)
   证明: by
   rw [← Fintype.subtype_card s H]; rw [Fintype.card_eq_nat_card]
 
@@ -195,7 +195,7 @@ theorem card_of_isEmpty
 
 中文:
 定理 card_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: 自然数.card α = 0
   证明: by simp [Nat.card]
 -/
@@ -212,7 +212,7 @@ lemma card_eq_zero_of_infinite
 
 中文:
 引理 card_eq_zero_of_infinite
-  条件: [Infinite α]
+  条件: [无限 α]
   结论: 自然数.card α = 0
   证明: mk_toNat_of_infinite
 -/
@@ -231,8 +231,8 @@ lemma cast_card
 
 中文:
 引理 cast_card
-  条件: [Finite α]
-  结论: (自然数.card α : Cardinal) = Cardinal.mk α
+  条件: [有限 α]
+  结论: (自然数.card α : 基数) = 基数.mk α
   证明: by
   rw [Nat.card]; rw [Cardinal.cast_toNat_of_lt_aleph0]
   exact Cardinal.lt_aleph0_of_finite _
@@ -253,8 +253,8 @@ lemma _root_.Set.Infinite.card_eq_zero
   proof: @card_eq_zero_of_infinite _ hs.to_subtype
 
 中文:
-引理 _root_.Set.Infinite.card_eq_zero
-  条件: {s : Set α} (hs : s.Infinite)
+引理 _root_.集合.无限.card_eq_zero
+  条件: {s : 集合 α} (hs : s.无限)
   结论: 自然数.card s = 0
   证明: @card_eq_zero_of_infinite _ hs.to_subtype
 
@@ -274,7 +274,7 @@ lemma card_eq_zero
 
 中文:
 引理 card_eq_zero
-  结论: 自然数.card α = 0 ↔ IsEmpty α ∨ Infinite α
+  结论: 自然数.card α = 0 ↔ 是空 α ∨ 无限 α
   证明: by
   simp [Nat.card, mk_eq_zero_iff, aleph0_le_mk_iff]
 
@@ -293,7 +293,7 @@ lemma card_ne_zero
 
 中文:
 引理 card_ne_zero
-  结论: 自然数.card α != 0 ↔ Nonempty α ∧ Finite α
+  结论: 自然数.card α != 0 ↔ 非空 α ∧ 有限 α
   证明: by simp [card_eq_zero, not_or]
 
 Depends on / 依赖: card_eq_zero, not_or
@@ -311,7 +311,7 @@ lemma card_pos_iff
 
 中文:
 引理 card_pos_iff
-  结论: 0 < 自然数.card α ↔ Nonempty α ∧ Finite α
+  结论: 0 < 自然数.card α ↔ 非空 α ∧ 有限 α
   证明: by
   simp [Nat.card, mk_eq_zero_iff, mk_lt_aleph0_iff]
 
@@ -331,7 +331,7 @@ lemma card_pos
 
 中文:
 引理 card_pos
-  条件: [Nonempty α] [Finite α]
+  条件: [非空 α] [有限 α]
   结论: 0 < 自然数.card α
   证明: card_pos_iff.2 ⟨‹_›, ‹_›⟩
 -/
@@ -346,8 +346,8 @@ instance [Nonempty
   body: ⟨card_pos.ne'⟩
 
 中文:
-实例 [Nonempty
-  签名: α] [Finite α] : NeZero (自然数.card α)
+实例 [非空
+  签名: α] [有限 α] : NeZero (自然数.card α)
   定义体: ⟨card_pos.ne'⟩
 
 Depends on / 依赖: card_pos, card_pos.ne
@@ -366,7 +366,7 @@ theorem finite_of_card_ne_zero
 中文:
 定理 finite_of_card_ne_zero
   条件: (h : 自然数.card α != 0)
-  结论: Finite α
+  结论: 有限 α
   证明: (card_ne_zero.1 h).2
 
 Depends on / 依赖: card_ne_zero
@@ -404,7 +404,7 @@ lemma card_le_card_of_injective
 
 中文:
 引理 card_le_card_of_injective
-  结论: {α : 类型u} {β : 类型v} [Finite β] (f : α -> β)
+  结论: {α : 类型u} {β : 类型v} [有限 β] (f : α -> β)
   证明: by
   simpa using! toNat_le_toNat (lift_mk_le_lift_mk_of_injective hf) (by simp)
 
@@ -426,7 +426,7 @@ lemma card_le_card_of_surjective
 
 中文:
 引理 card_le_card_of_surjective
-  结论: {α : 类型u} {β : 类型v} [Finite α] (f : α -> β)
+  结论: {α : 类型u} {β : 类型v} [有限 α] (f : α -> β)
   证明: by
   have : lift.{u} #β <= lift.{v} #α := mk_le_of_surjective (ULift.map_surjective.2 hf)
   simpa using! toNat_le_toNat this (by simp)
@@ -449,7 +449,7 @@ theorem card_eq_of_bijective
 
 中文:
 定理 card_eq_of_bijective
-  条件: (f : α -> β) (hf : Function.Bijective f)
+  条件: (f : α -> β) (hf : 函数.双射 f)
   结论: 自然数.card α = 自然数.card β
   证明: card_congr (Equiv.ofBijective f hf)
 
@@ -474,7 +474,7 @@ theorem bijective_iff_injective_and_card
 
 中文:
 定理 bijective_iff_injective_and_card
-  条件: [Finite β] (f : α -> β)
+  条件: [有限 β] (f : α -> β)
   证明: by
   rw [Bijective]; rw [and_congr_right_iff]
   intro h
@@ -509,7 +509,7 @@ theorem bijective_iff_surjective_and_card
 
 中文:
 定理 bijective_iff_surjective_and_card
-  条件: [Finite α] (f : α -> β)
+  条件: [有限 α] (f : α -> β)
   证明: by
   classical
   rw [_root_.and_comm]; rw [Bijective]; rw [and_congr_left_iff]
@@ -539,8 +539,8 @@ theorem _root_.Function.Injective.bijective_of_nat_card_le
 .symm⟩ ⟨inj, hc.antisymm (card_le_card_of_injective f inj)
 
 中文:
-定理 _root_.Function.Injective.bijective_of_nat_card_le
-  结论: [Finite β] {f : α -> β}
+定理 _root_.函数.单射.bijective_of_nat_card_le
+  结论: [有限 β] {f : α -> β}
   证明: (Nat.bijective_iff_injective_and_card f).mpr
 .symm⟩ ⟨inj, hc.antisymm (card_le_card_of_injective f inj)
 
@@ -561,8 +561,8 @@ theorem _root_.Function.Surjective.bijective_of_nat_card_le
     ⟨surj, hc.antisymm (card_le_card_of_surjective f surj)⟩
 
 中文:
-定理 _root_.Function.Surjective.bijective_of_nat_card_le
-  结论: [Finite α] {f : α -> β}
+定理 _root_.函数.满射.bijective_of_nat_card_le
+  结论: [有限 α] {f : α -> β}
   证明: (Nat.bijective_iff_surjective_and_card f).mpr
     ⟨surj, hc.antisymm (card_le_card_of_surjective f surj)⟩
 
@@ -585,7 +585,7 @@ theorem card_eq_of_equiv_fin
 
 中文:
 定理 card_eq_of_equiv_fin
-  条件: {α : 类型} {n : 自然数} (f : α ≃ Fin n)
+  条件: {α : 类型} {n : 自然数} (f : α ≃ 有限集 n)
   结论: 自然数.card α = n
   证明: by
   simpa only [card_eq_fintype_card, Fintype.card_fin] using card_congr f
@@ -608,7 +608,7 @@ lemma card_fin
 中文:
 引理 card_fin
   条件: (n : 自然数)
-  结论: 自然数.card (Fin n) = n
+  结论: 自然数.card (有限集 n) = n
   证明: by
   rw [Nat.card_eq_fintype_card]; rw [Fintype.card_fin]
 
@@ -632,7 +632,7 @@ lemma card_mono
 
 中文:
 引理 card_mono
-  条件: (ht : t.Finite) (h : s subseteq t)
+  条件: (ht : t.有限) (h : s subseteq t)
   结论: 自然数.card s <= 自然数.card t
   证明: toNat_le_toNat (mk_le_mk_of_subset h) ht.lt_aleph0
 
@@ -653,7 +653,7 @@ lemma card_image_le
 
 中文:
 引理 card_image_le
-  条件: {f : α -> β} (hs : s.Finite)
+  条件: {f : α -> β} (hs : s.有限)
   结论: 自然数.card (f '' s) <= 自然数.card s
   证明: have := hs.to_subtype
   card_le_card_of_surjective (imageFactorization f s) imageFactorization_surjective
@@ -682,7 +682,7 @@ lemma card_image_of_injOn
 
 中文:
 引理 card_image_of_injOn
-  条件: {f : α -> β} (hf : s.InjOn f)
+  条件: {f : α -> β} (hf : s.单射限制 f)
   结论: 自然数.card (f '' s) = 自然数.card s
   证明: by
   classical
@@ -714,7 +714,7 @@ lemma card_image_of_injective
 
 中文:
 引理 card_image_of_injective
-  条件: {f : α -> β} (hf : Injective f) (s : Set α)
+  条件: {f : α -> β} (hf : 单射 f) (s : 集合 α)
   证明: card_image_of_injOn hf.injOn
 
 Depends on / 依赖: card_image_of_injOn, hf.injOn
@@ -753,7 +753,7 @@ lemma card_preimage_of_injOn
 
 中文:
 引理 card_preimage_of_injOn
-  条件: {f : α -> β} {s : Set β} (hf : (f ⁻¹' s).InjOn f) (hsf : s subseteq range f)
+  条件: {f : α -> β} {s : 集合 β} (hf : (f ⁻¹' s).单射限制 f) (hsf : s subseteq range f)
   证明: by
   rw [← Nat.card_image_of_injOn hf]; rw [image_preimage_eq_iff.2 hsf]
 
@@ -773,7 +773,7 @@ lemma card_preimage_of_injective
 
 中文:
 引理 card_preimage_of_injective
-  条件: {f : α -> β} {s : Set β} (hf : Injective f) (hsf : s subseteq range f)
+  条件: {f : α -> β} {s : 集合 β} (hf : 单射 f) (hsf : s subseteq range f)
   证明: card_preimage_of_injOn hf.injOn hsf
 
 Depends on / 依赖: card_preimage_of_injOn, hf.injOn
@@ -791,7 +791,7 @@ lemma card_univ
 
 中文:
 引理 card_univ
-  结论: 自然数.card (univ : Set α) = 自然数.card α
+  结论: 自然数.card (univ : 集合 α) = 自然数.card α
   证明: card_congr (Equiv.Set.univ α)
 
 Depends on / 依赖: Equiv.Set.univ, card_congr
@@ -811,7 +811,7 @@ lemma card_range_of_injective
 
 中文:
 引理 card_range_of_injective
-  条件: {f : α -> β} (hf : Injective f)
+  条件: {f : α -> β} (hf : 单射 f)
   证明: by
   rw [← Nat.card_preimage_of_injective hf le_rfl]
   simp [Nat.card_univ]
@@ -864,7 +864,7 @@ theorem card_of_subsingleton
 
 中文:
 定理 card_of_subsingleton
-  条件: (a : α) [Subsingleton α]
+  条件: (a : α) [子单例 α]
   结论: 自然数.card α = 1
   证明: by
   let := Fintype.ofSubsingleton a
@@ -888,7 +888,7 @@ theorem card_eq_one_iff_unique
 
 中文:
 定理 card_eq_one_iff_unique
-  结论: 自然数.card α = 1 ↔ Subsingleton α ∧ Nonempty α
+  结论: 自然数.card α = 1 ↔ 子单例 α ∧ 非空 α
   证明: Cardinal.toNat_eq_one_iff_unique
 
 @[simp]
@@ -911,7 +911,7 @@ theorem card_unique
 
 中文:
 定理 card_unique
-  条件: [Nonempty α] [Subsingleton α]
+  条件: [非空 α] [子单例 α]
   结论: 自然数.card α = 1
   证明: by
   simp [card_eq_one_iff_unique, *]
@@ -932,7 +932,7 @@ theorem card_eq_one_iff_exists
   exact ⟨fun ⟨s, ⟨a⟩⟩ => ⟨a, fun x => s.elim x a⟩, fun ⟨x, h⟩ => ⟨subsingleton_of_forall_eq x h, ⟨x⟩⟩⟩
 
 中文:
-定理 card_eq_one_iff_exists
+定理 card_eq_one_iff_存在
   结论: 自然数.card α = 1 ↔ 存在 x : α, 对任意 y : α, y = x
   证明: by
   rw [card_eq_one_iff_unique]
@@ -954,7 +954,7 @@ theorem card_eq_two_iff
 
 中文:
 定理 card_eq_two_iff
-  结论: 自然数.card α = 2 ↔ 存在 x y : α, x != y ∧ {x, y} = @Set.univ α
+  结论: 自然数.card α = 2 ↔ 存在 x y : α, x != y ∧ {x, y} = @集合.univ α
   证明: toNat_eq_ofNat.trans mk_eq_two_iff
 
 Depends on / 依赖: mk_eq_two_iff, toNat_eq_ofNat, toNat_eq_ofNat.trans
@@ -999,7 +999,7 @@ theorem card_subtype_true
 
 中文:
 定理 card_subtype_true
-  结论: 自然数.card {_a : α // True} = 自然数.card α
+  结论: 自然数.card {_a : α // 真} = 自然数.card α
   证明: card_congr Equiv.subtypeUnivEquiv fun _ => trivial
 
 @[simp]
@@ -1026,7 +1026,7 @@ theorem card_sum
 
 中文:
 定理 card_sum
-  条件: [Finite α] [Finite β]
+  条件: [有限 α] [有限 β]
   结论: 自然数.card (α oplus β) = 自然数.card α + 自然数.card β
   证明: by
   have := Fintype.ofFinite α
@@ -1084,7 +1084,7 @@ theorem card_ulift
 中文:
 定理 card_ulift
   条件: (α : 类型)
-  结论: 自然数.card (ULift α) = 自然数.card α
+  结论: 自然数.card (类型层提升 α) = 自然数.card α
   证明: card_congr Equiv.ulift
 
 @[simp]
@@ -1107,7 +1107,7 @@ theorem card_plift
 中文:
 定理 card_plift
   条件: (α : 类型)
-  结论: 自然数.card (PLift α) = 自然数.card α
+  结论: 自然数.card (命题层提升 α) = 自然数.card α
   证明: card_congr Equiv.plift
 
 Depends on / 依赖: Equiv.plift, card_congr
@@ -1127,7 +1127,7 @@ theorem card_sigma
 
 中文:
 定理 card_sigma
-  条件: {β : α -> 类型} [Fintype α] [对任意 a, Finite (β a)]
+  条件: {β : α -> 类型} [有限类型 α] [对任意 a, 有限 (β a)]
   证明: by
   let _ (a : α) : Fintype (β a) := Fintype.ofFinite (β a)
   simp_rw [Nat.card_eq_fintype_card, Fintype.card_sigma]
@@ -1151,7 +1151,7 @@ theorem card_pi
 
 中文:
 定理 card_pi
-  条件: {β : α -> 类型} [Fintype α]
+  条件: {β : α -> 类型} [有限类型 α]
   结论: 自然数.card (对任意 a, β a) = ∏ a, 自然数.card (β a)
   证明: by
   simp_rw [Nat.card, mk_pi, prod_eq_of_fintype, toNat_lift, _root_.map_prod]
@@ -1176,7 +1176,7 @@ theorem card_fun
 
 中文:
 定理 card_fun
-  条件: [Finite α]
+  条件: [有限 α]
   结论: 自然数.card (α -> β) = 自然数.card β ^ 自然数.card α
   证明: by
   have := Fintype.ofFinite α
@@ -1236,7 +1236,7 @@ lemma card_singleton_prod
 
 中文:
 引理 card_singleton_prod
-  条件: (a : α) (t : Set β)
+  条件: (a : α) (t : 集合 β)
   结论: 自然数.card ({a} ×ˢ t) = 自然数.card t
   证明: by
   rw [singleton_prod]; rw [Nat.card_image_of_injective (Prod.mk_right_injective a)]
@@ -1258,7 +1258,7 @@ lemma card_prod_singleton
 
 中文:
 引理 card_prod_singleton
-  条件: (s : Set α) (b : β)
+  条件: (s : 集合 α) (b : β)
   结论: 自然数.card (s ×ˢ {b}) = 自然数.card s
   证明: by
   rw [prod_singleton]; rw [Nat.card_image_of_injective (Prod.mk_left_injective b)]
@@ -1282,8 +1282,8 @@ protected alias ⟨_, Nonempty.natCard_pos⟩ := natCard_pos
 
 中文:
 定理 natCard_pos
-  条件: (hs : s.Finite)
-  结论: 0 < 自然数.card s ↔ s.Nonempty
+  条件: (hs : s.有限)
+  结论: 0 < 自然数.card s ↔ s.非空
   证明: by
   simp [pos_iff_ne_zero, Nat.card_eq_zero, hs.to_subtype, nonempty_iff_ne_empty]
 
@@ -1308,7 +1308,7 @@ lemma natCard_graphOn
 
 中文:
 引理 natCard_graphOn
-  条件: (s : Set α) (f : α -> β)
+  条件: (s : 集合 α) (f : α -> β)
   结论: 自然数.card (s.graphOn f) = 自然数.card s
   证明: by
   rw [← Nat.card_image_of_injOn fst_injOn_graph]; rw [image_fst_graphOn]
@@ -1360,8 +1360,8 @@ theorem card_eq_coe_fintype_card
 
 中文:
 定理 card_eq_coe_fintype_card
-  条件: [Fintype α]
-  结论: card α = Fintype.card α
+  条件: [有限类型 α]
+  结论: card α = 有限类型.card α
   证明: by
   simp [card]
 
@@ -1383,7 +1383,7 @@ theorem card_eq_top_of_infinite
 
 中文:
 定理 card_eq_top_of_infinite
-  条件: [Infinite α]
+  条件: [无限 α]
   结论: card α = ⊤
   证明: by
   simp only [card, toENat_eq_top, aleph0_le_mk]
@@ -1403,7 +1403,7 @@ lemma card_eq_top
 
 中文:
 引理 card_eq_top
-  结论: card α = ⊤ ↔ Infinite α
+  结论: card α = ⊤ ↔ 无限 α
   证明: by simp [card, aleph0_le_mk_iff]
 -/
 @[simp] lemma card_eq_top : card α = ⊤ ↔ Infinite α := by simp [card, aleph0_le_mk_iff]
@@ -1419,7 +1419,7 @@ theorem card_lt_top_of_finite
 
 中文:
 定理 card_lt_top_of_finite
-  条件: [Finite α]
+  条件: [有限 α]
   结论: card α < ⊤
   证明: by simp [card]
 -/
@@ -1437,7 +1437,7 @@ theorem card_lt_top
 
 中文:
 定理 card_lt_top
-  结论: card α < ⊤ ↔ Finite α
+  结论: card α < ⊤ ↔ 有限 α
   证明: by simp [card, lt_aleph0_iff_finite]
 
 @[simp]
@@ -1498,7 +1498,7 @@ lemma card_ulift
 中文:
 引理 card_ulift
   条件: (α : 类型)
-  结论: card (ULift α) = card α
+  结论: card (类型层提升 α) = card α
   证明: card_congr Equiv.ulift
 -/
 @[simp] lemma card_ulift (α : Type*) : card (ULift α) = card α := card_congr Equiv.ulift
@@ -1515,7 +1515,7 @@ lemma card_plift
 中文:
 引理 card_plift
   条件: (α : 类型)
-  结论: card (PLift α) = card α
+  结论: card (命题层提升 α) = card α
   证明: card_congr Equiv.plift
 -/
 @[simp] lemma card_plift (α : Type*) : card (PLift α) = card α := card_congr Equiv.plift
@@ -1530,7 +1530,7 @@ theorem card_image_of_injOn
 
 中文:
 定理 card_image_of_injOn
-  条件: {α β : 类型} {f : α -> β} {s : Set α} (h : Set.InjOn f s)
+  条件: {α β : 类型} {f : α -> β} {s : 集合 α} (h : 集合.单射限制 f s)
   证明: card_congr (Equiv.Set.imageOfInjOn f s h).symm
 
 Depends on / 依赖: Equiv.Set.imageOfInjOn, card_congr, imageOfInjOn
@@ -1549,7 +1549,7 @@ theorem card_image_of_injective
 
 中文:
 定理 card_image_of_injective
-  结论: {α β : 类型} (f : α -> β) (s : Set α)
+  结论: {α β : 类型} (f : α -> β) (s : 集合 α)
   证明: card_image_of_injOn h.injOn
 
 Depends on / 依赖: card_image_of_injOn, h.injOn
@@ -1572,7 +1572,7 @@ exact Cardinal.gciENat.gc.monotone_u Cardinal.lift_mk_le_lift_mk_of_injective hf
 
 中文:
 引理 card_le_card_of_injective
-  条件: {α β : 类型} {f : α -> β} (hf : Injective f)
+  条件: {α β : 类型} {f : α -> β} (hf : 单射 f)
   结论: card α <= card β
   证明: by
   rw [← card_ulift α]; rw [← card_ulift β]
@@ -1599,8 +1599,8 @@ theorem _root_.Cardinal.natCast_le_toENat_iff
 @[deprecated toENat_le_natCast (since := "2026-02-17")]
 
 中文:
-定理 _root_.Cardinal.natCast_le_toENat_iff
-  条件: {n : 自然数} {c : Cardinal}
+定理 _root_.基数.natCast_le_toE自然数_iff
+  条件: {n : 自然数} {c : 基数}
   证明: by
   rw [← toENat_nat n]; rw [toENat_le_iff_of_le_aleph0 natCast_le_aleph0]
 
@@ -1624,8 +1624,8 @@ theorem _root_.Cardinal.toENat_le_natCast_iff
 @[deprecated natCast_eq_toENat (since := "2026-02-17")]
 
 中文:
-定理 _root_.Cardinal.toENat_le_natCast_iff
-  条件: {c : Cardinal} {n : 自然数}
+定理 _root_.基数.toE自然数_le_natCast_iff
+  条件: {c : 基数} {n : 自然数}
   证明: by simp
 
 @[deprecated natCast_eq_toENat (since := "2026-02-17")]
@@ -1646,8 +1646,8 @@ theorem _root_.Cardinal.natCast_eq_toENat_iff
 @[deprecated toENat_eq_natCast (since := "2026-02-17")]
 
 中文:
-定理 _root_.Cardinal.natCast_eq_toENat_iff
-  条件: {n : 自然数} {c : Cardinal}
+定理 _root_.基数.natCast_eq_toE自然数_iff
+  条件: {n : 自然数} {c : 基数}
   证明: by
   rw [le_antisymm_iff]; rw [le_antisymm_iff]; rw [Cardinal.toENat_le_natCast]; rw [Cardinal.natCast_le_toENat]
 
@@ -1671,8 +1671,8 @@ theorem _root_.Cardinal.toENat_eq_natCast_iff
 @[deprecated natCast_lt_toENat (since := "2026-02-17")]
 
 中文:
-定理 _root_.Cardinal.toENat_eq_natCast_iff
-  条件: {c : Cardinal} {n : 自然数}
+定理 _root_.基数.toE自然数_eq_natCast_iff
+  条件: {c : 基数} {n : 自然数}
   证明: by simp
 
 @[deprecated natCast_lt_toENat (since := "2026-02-17")]
@@ -1693,8 +1693,8 @@ theorem _root_.Cardinal.natCast_lt_toENat_iff
 @[deprecated toENat_lt_natCast (since := "2026-02-17")]
 
 中文:
-定理 _root_.Cardinal.natCast_lt_toENat_iff
-  条件: {n : 自然数} {c : Cardinal}
+定理 _root_.基数.natCast_lt_toE自然数_iff
+  条件: {n : 自然数} {c : 基数}
   证明: by
   simp only [← not_le, Cardinal.toENat_le_natCast]
 
@@ -1717,8 +1717,8 @@ theorem _root_.Cardinal.toENat_lt_natCast_iff
   simp only [← not_le, Cardinal.natCast_le_toENat]
 
 中文:
-定理 _root_.Cardinal.toENat_lt_natCast_iff
-  条件: {n : 自然数} {c : Cardinal}
+定理 _root_.基数.toE自然数_lt_natCast_iff
+  条件: {n : 自然数} {c : 基数}
   证明: by
   simp only [← not_le, Cardinal.natCast_le_toENat]
 
@@ -1742,7 +1742,7 @@ theorem card_eq_zero_iff_empty
 中文:
 定理 card_eq_zero_iff_empty
   条件: (α : 类型)
-  结论: card α = 0 ↔ IsEmpty α
+  结论: card α = 0 ↔ 是空 α
   证明: by
   rw [← Cardinal.mk_eq_zero_iff]
   simp [card]
@@ -1766,7 +1766,7 @@ theorem card_ne_zero_iff_nonempty
 中文:
 定理 card_ne_zero_iff_nonempty
   条件: (α : 类型)
-  结论: card α != 0 ↔ Nonempty α
+  结论: card α != 0 ↔ 非空 α
   证明: by
   simp [card_eq_zero_iff_empty]
 
@@ -1786,7 +1786,7 @@ lemma card_ne_zero
 
 中文:
 引理 card_ne_zero
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: card α != 0
   证明: (card_ne_zero_iff_nonempty _).2 ‹_›
 -/
@@ -1805,7 +1805,7 @@ theorem card_pos_iff_nonempty
 中文:
 定理 card_pos_iff_nonempty
   条件: (α : 类型)
-  结论: 0 < card α ↔ Nonempty α
+  结论: 0 < card α ↔ 非空 α
   证明: by
   rw [pos_iff_ne_zero]; rw [card_ne_zero_iff_nonempty]
 
@@ -1827,7 +1827,7 @@ theorem one_le_card_iff_nonempty
 中文:
 定理 one_le_card_iff_nonempty
   条件: (α : 类型)
-  结论: 1 <= card α ↔ Nonempty α
+  结论: 1 <= card α ↔ 非空 α
   证明: by
   simp [Order.one_le_iff_ne_zero, card_eq_zero_iff_empty]
 
@@ -1847,7 +1847,7 @@ lemma card_pos
 
 中文:
 引理 card_pos
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: 0 < card α
   证明: by simp [pos_iff_ne_zero]
 -/
@@ -1867,7 +1867,7 @@ theorem card_le_one_iff_subsingleton
 中文:
 定理 card_le_one_iff_subsingleton
   条件: (α : 类型)
-  结论: card α <= 1 ↔ Subsingleton α
+  结论: card α <= 1 ↔ 子单例 α
   证明: by
   rw [← le_one_iff_subsingleton]
   simp [card]
@@ -1889,7 +1889,7 @@ lemma card_le_one
 
 中文:
 引理 card_le_one
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: card α <= 1
   证明: by simpa [card_le_one_iff_subsingleton]
 -/
@@ -1909,7 +1909,7 @@ lemma card_eq_one_iff_unique
 中文:
 引理 card_eq_one_iff_unique
   条件: {α : 类型}
-  结论: card α = 1 ↔ Nonempty (Unique α)
+  结论: card α = 1 ↔ 非空 (唯一 α)
   证明: by
   rw [unique_iff_subsingleton_and_nonempty α]; rw [le_antisymm_iff]
   exact and_congr (card_le_one_iff_subsingleton α) (one_le_card_iff_nonempty α)
@@ -1936,7 +1936,7 @@ theorem one_lt_card_iff_nontrivial
 中文:
 定理 one_lt_card_iff_nontrivial
   条件: (α : 类型)
-  结论: 1 < card α ↔ Nontrivial α
+  结论: 1 < card α ↔ 非平凡 α
   证明: by
   rw [← Cardinal.one_lt_iff_nontrivial]
   conv_rhs => rw [← Nat.cast_one]
@@ -1962,7 +1962,7 @@ lemma one_lt_card
 
 中文:
 引理 one_lt_card
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: 1 < card α
   证明: by simpa [one_lt_card_iff_nontrivial]
 -/
@@ -1980,7 +1980,7 @@ lemma exists_ne_ne_of_three_le
 @[simp]
 
 中文:
-引理 exists_ne_ne_of_three_le
+引理 存在_ne_ne_of_three_le
   条件: (h : 3 <= E自然数.card α) (x y : α)
   结论: 存在 z, z != x ∧ z != y
   证明: Cardinal.exists_ne_ne_of_three_le (by simpa [ENat.card] using h) x y

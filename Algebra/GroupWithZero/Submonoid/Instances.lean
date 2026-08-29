@@ -33,8 +33,8 @@ instance [MulZeroOneClass
 @[simp]
 
 中文:
-实例 [MulZeroOneClass
-  签名: G] [MulZeroOneClass H] (f
+实例 [乘零幺类
+  签名: G] [乘零幺类 H] (f
   定义体: ⟨0, 0, by simp⟩
   zero_mul _ := Subtype.ext (zero_mul _)
   mul_zero _ := Subtype.ext (mul_zero _)
@@ -58,7 +58,7 @@ lemma val_mrange_zero
 
 中文:
 引理 val_mrange_zero
-  条件: [MulZeroOneClass G] [MulZeroOneClass H] (f : G ->*₀ H)
+  条件: [乘零幺类 G] [乘零幺类 H] (f : G ->*₀ H)
   证明: rfl
 -/
 lemma val_mrange_zero [MulZeroOneClass G] [MulZeroOneClass H] (f : G ->*₀ H) :
@@ -73,8 +73,8 @@ instance [MulZeroOneClass
   signature: G] [MonoidWithZero H] (f
 
 中文:
-实例 [MulZeroOneClass
-  签名: G] [MonoidWithZero H] (f
+实例 [乘零幺类
+  签名: G] [带零幺半群 H] (f
 -/
 instance [MulZeroOneClass G] [MonoidWithZero H] (f : G ->*₀ H) :
     MonoidWithZero (MonoidHom.mrange f) where
@@ -87,8 +87,8 @@ instance [MulZeroOneClass
   signature: G] [CommMonoidWithZero H] (f
 
 中文:
-实例 [MulZeroOneClass
-  签名: G] [CommMonoidWithZero H] (f
+实例 [乘零幺类
+  签名: G] [带零交换幺半群 H] (f
 -/
 instance [MulZeroOneClass G] [CommMonoidWithZero H] (f : G ->*₀ H) :
     CommMonoidWithZero (MonoidHom.mrange f) where
@@ -111,8 +111,8 @@ instance [GroupWithZero
     simpa using mul_inv_cance
 
 中文:
-实例 [GroupWithZero
-  签名: G] [GroupWithZero H] (f
+实例 [带零群
+  签名: G] [带零群 H] (f
   定义体: fun x => ⟨x⁻¹, by
     obtain ⟨y, hy⟩ := x.prop
     use y⁻¹
@@ -147,8 +147,8 @@ instance [GroupWithZero
   signature: G] [CommGroupWithZero H] (f
 
 中文:
-实例 [GroupWithZero
-  签名: G] [CommGroupWithZero H] (f
+实例 [带零群
+  签名: G] [带零交换群 H] (f
 -/
 instance [GroupWithZero G] [CommGroupWithZero H] (f : G ->*₀ H) :
     CommGroupWithZero (MonoidHom.mrange f) where
@@ -165,7 +165,7 @@ lemma mker_inverse
 
 中文:
 引理 mker_inverse
-  条件: [CommGroupWithZero H]
+  条件: [带零交换群 H]
   证明: by
   ext
   simp

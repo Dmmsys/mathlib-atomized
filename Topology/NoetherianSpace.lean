@@ -77,7 +77,7 @@ theorem noetherianSpace_iff_opens
 
 中文:
 定理 noetherianSpace_iff_opens
-  结论: NoetherianSpace α ↔ 对任意 s : Opens α, IsCompact (s : Set α)
+  结论: NoetherianSpace α ↔ 对任意 s : Opens α, 是紧集 (s : 集合 α)
   证明: by
   rw [NoetherianSpace]; rw [CompleteLattice.wellFoundedGT_iff_isSupFiniteCompact]; rw [CompleteLattice.isSupFiniteCompact_iff_all_elements_compact]
   exact forall_congr' Opens.isCompactElement_iff
@@ -108,8 +108,8 @@ theorem NoetherianSpace.isCompact
 
 中文:
 定理 NoetherianSpace.isCompact
-  条件: [NoetherianSpace α] (s : Set α)
-  结论: IsCompact s
+  条件: [NoetherianSpace α] (s : 集合 α)
+  结论: 是紧集 s
   证明: by
   refine isCompact_iff_finite_subcover.2 fun U hUo hs => ?_
   rcases ((noetherianSpace_iff_opens α).mp ‹_› ⟨⋃ i, U i, isOpen_iUnion hUo⟩).elim_finite_subcover U
@@ -133,7 +133,7 @@ theorem _root_.Topology.IsInducing.noetherianSpace
 @[stacks 0052 "(1)"]
 
 中文:
-定理 _root_.Topology.IsInducing.noetherianSpace
+定理 _root_.拓扑.是Inducing.noetherianSpace
   结论: [NoetherianSpace α] {i : β -> α}
   证明: (noetherianSpace_iff_opens _).2 fun _ => hi.isCompact_iff.2 (NoetherianSpace.isCompact _)
 
@@ -154,7 +154,7 @@ instance NoetherianSpace.set
 
 中文:
 实例 NoetherianSpace.set
-  签名: [NoetherianSpace α] (s : Set α)
+  签名: [NoetherianSpace α] (s : 集合 α)
   定义体: IsInducing.subtypeVal.noetherianSpace
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.noetherianSpace, noetherianSpace, subtypeVal
@@ -214,7 +214,7 @@ theorem noetherianSpace_iff_isCompact
 
 中文:
 定理 noetherianSpace_iff_isCompact
-  结论: NoetherianSpace α ↔ 对任意 s : Set α, IsCompact s
+  结论: NoetherianSpace α ↔ 对任意 s : 集合 α, 是紧集 s
   证明: (noetherianSpace_TFAE α).out 0 2
 
 Depends on / 依赖: noetherianSpace_TFAE
@@ -260,7 +260,7 @@ theorem noetherianSpace_of_surjective
 
 中文:
 定理 noetherianSpace_of_surjective
-  结论: [NoetherianSpace α] (f : α -> β) (hf : Continuous f)
+  结论: [NoetherianSpace α] (f : α -> β) (hf : 连续 f)
   证明: noetherianSpace_iff_isCompact.2 (Set.image_surjective.mpr hf').forall.2 fun s =>
     (NoetherianSpace.isCompact s).image hf
 
@@ -305,7 +305,7 @@ theorem NoetherianSpace.range
 
 中文:
 定理 NoetherianSpace.range
-  条件: [NoetherianSpace α] (f : α -> β) (hf : Continuous f)
+  条件: [NoetherianSpace α] (f : α -> β) (hf : 连续 f)
   证明: noetherianSpace_of_surjective (Set.rangeFactorization f) (hf.subtype_mk _)
     Set.rangeFactorization_surjective
 
@@ -330,7 +330,7 @@ theorem noetherianSpace_set_iff
 
 中文:
 定理 noetherianSpace_set_iff
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simp only [noetherianSpace_iff_isCompact, IsEmbedding.subtypeVal.isCompact_iff,
     Subtype.forall_set_subtype]
@@ -355,7 +355,7 @@ theorem noetherian_univ_iff
 
 中文:
 定理 noetherian_univ_iff
-  结论: NoetherianSpace (Set.univ : Set α) ↔ NoetherianSpace α
+  结论: NoetherianSpace (集合.univ : 集合 α) ↔ NoetherianSpace α
   证明: noetherianSpace_iff_of_homeomorph (Homeomorph.Set.univ α)
 
 Depends on / 依赖: Homeomorph, Homeomorph.Set.univ, noetherianSpace_iff_of_homeomorph
@@ -377,7 +377,7 @@ theorem NoetherianSpace.iUnion
 
 中文:
 定理 NoetherianSpace.iUnion
-  结论: {ι : 类型} (f : ι -> Set α) [Finite ι]
+  结论: {ι : 类型} (f : ι -> 集合 α) [有限 ι]
   证明: by
   simp_rw [noetherianSpace_set_iff] at hf ⊢
   intro t ht
@@ -405,8 +405,8 @@ theorem NoetherianSpace.discrete
 
 中文:
 定理 NoetherianSpace.discrete
-  条件: [NoetherianSpace α] [T2Space α]
-  结论: DiscreteTopology α
+  条件: [NoetherianSpace α] [T2空间 α]
+  结论: 离散拓扑 α
   证明: ⟨eq_bot_iff.mpr fun _ _ => isClosed_compl_iff.mp (NoetherianSpace.isCompact _).isClosed⟩
 
 Depends on / 依赖: NoetherianSpace, NoetherianSpace.isCompact, eq_bot_iff, eq_bot_iff.mpr, isClosed, isClosed_compl_iff, isClosed_compl_iff.mp, isCompact
@@ -427,8 +427,8 @@ theorem NoetherianSpace.finite
 
 中文:
 定理 NoetherianSpace.finite
-  条件: [NoetherianSpace α] [T2Space α]
-  结论: Finite α
+  条件: [NoetherianSpace α] [T2空间 α]
+  结论: 有限 α
   证明: Finite.of_finite_univ (NoetherianSpace.isCompact Set.univ).finite_of_discrete
 
 Depends on / 依赖: Finite, Finite.of_finite_univ, NoetherianSpace, NoetherianSpace.isCompact, Set.univ, finite_of_discrete, isCompact, of_finite_univ
@@ -460,7 +460,7 @@ theorem NoetherianSpace.exists_finite_set_closeds_irreducible
     · simp only [isPreirreducible_iff
 
 中文:
-定理 NoetherianSpace.exists_finite_set_closeds_irreducible
+定理 NoetherianSpace.存在_finite_set_closeds_irreducible
   条件: [NoetherianSpace α] (s : Closeds α)
   证明: by
   apply wellFounded_lt.induction s; clear s
@@ -507,7 +507,7 @@ theorem NoetherianSpace.exists_finite_set_isClosed_irreducible
   simp [← Finset.sup_id_eq_sSu
 
 中文:
-定理 NoetherianSpace.exists_finite_set_isClosed_irreducible
+定理 NoetherianSpace.存在_finite_set_isClosed_irreducible
   结论: [NoetherianSpace α]
   证明: by
   lift s to Closeds α using hs
@@ -542,7 +542,7 @@ theorem NoetherianSpace.exists_finset_irreducible
 @[stacks 0052 "(2)"]
 
 中文:
-定理 NoetherianSpace.exists_finset_irreducible
+定理 NoetherianSpace.存在_finset_irreducible
   条件: [NoetherianSpace α] (s : Closeds α)
   证明: by
   simpa [Set.exists_finite_iff_finset, Finset.sup_id_eq_sSup]
@@ -607,7 +607,7 @@ theorem NoetherianSpace.exists_isOpen_nonempty_subset_irreducibleComponent
     exact hα.
 
 中文:
-定理 NoetherianSpace.exists_isOpen_nonempty_subset_irreducibleComponent
+定理 NoetherianSpace.存在_isOpen_nonempty_subset_irreducibleComponent
   结论: [NoetherianSpace α]
   证明: by
   have hα : (irreducibleComponents α).Finite := finite_irreducibleComponents
@@ -640,7 +640,7 @@ lemma NoetherianSpace.of_subset
 
 中文:
 引理 NoetherianSpace.of_subset
-  结论: {W V : Set α} [NoetherianSpace W]
+  结论: {W V : 集合 α} [NoetherianSpace W]
   证明: Topology.IsInducing.noetherianSpace (Topology.IsEmbedding.inclusion h).isInducing
 
 Depends on / 依赖: IsEmbedding, IsInducing, Topology, Topology.IsEmbedding.inclusion, Topology.IsInducing.noetherianSpace, inclusion, isInducing, noetherianSpace
@@ -659,7 +659,7 @@ lemma NoetherianSpace.inter_of_left
 
 中文:
 引理 NoetherianSpace.inter_of_left
-  条件: (W V : Set α) [NoetherianSpace W]
+  条件: (W V : 集合 α) [NoetherianSpace W]
   证明: .of_subset Set.inter_subset_left
 
 Depends on / 依赖: Set.inter_subset_left, inter_subset_left, of_subset
@@ -677,7 +677,7 @@ lemma NoetherianSpace.inter_of_right
 
 中文:
 引理 NoetherianSpace.inter_of_right
-  条件: (W V : Set α) [NoetherianSpace V]
+  条件: (W V : 集合 α) [NoetherianSpace V]
   证明: .of_subset Set.inter_subset_right
 
 Depends on / 依赖: Set.inter_subset_right, inter_subset_right, of_subset

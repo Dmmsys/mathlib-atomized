@@ -229,7 +229,7 @@ definition getManyGoals
 
 中文:
 定义 getManyGoals
-  签名: : InfoTree -> Array (Syntax × 自然数 × 自然数 × 自然数)
+  签名: : InfoTree -> 数组 (Syntax × 自然数 × 自然数 × 自然数)
   定义体: (args.map getManyGoals).toArray.flatten
     if let .ofTacticInfo info := info then
       if ignoreBranch.contains info.stx.getKind then #[]

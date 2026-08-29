@@ -44,7 +44,7 @@ theorem cardinalMk_eq_max_lift
 
 中文:
 定理 cardinalMk_eq_max_lift
-  条件: [Nonempty X] [Nontrivial R]
+  条件: [非空 X] [非平凡 R]
   证明: by
   have hX := mk_freeMonoid X
   rw [equivMonoidAlgebraFreeMonoid.toEquiv.cardinal_eq]; rw [MonoidAlgebra.cardinalMk_eq_max_lift_of_infinite]; rw [hX]; rw [lift_max]; rw [lift_aleph0]; rw [sup_assoc]
@@ -74,8 +74,8 @@ theorem cardinalMk_eq_lift
 
 中文:
 定理 cardinalMk_eq_lift
-  条件: [IsEmpty X]
-  结论: #(FreeAlgebra R X) = Cardinal.lift.{v} #R
+  条件: [是空 X]
+  结论: #(FreeAlgebra R X) = 基数.lift.{v} #R
   证明: by
   simp [equivMonoidAlgebraFreeMonoid.toEquiv.cardinal_eq,
     MonoidAlgebra.cardinalMk_eq_lift_of_fintype]
@@ -101,7 +101,7 @@ theorem cardinalMk_eq_one
 
 中文:
 定理 cardinalMk_eq_one
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: #(FreeAlgebra R X) = 1
   证明: by
   rw [equivMonoidAlgebraFreeMonoid.toEquiv.cardinal_eq]; rw [mk_eq_one]
@@ -156,7 +156,7 @@ theorem cardinalMk_eq_max
 
 中文:
 定理 cardinalMk_eq_max
-  条件: [Nonempty X] [Nontrivial R]
+  条件: [非空 X] [非平凡 R]
   结论: #(FreeAlgebra R X) = #R ⊔ #X ⊔ ℵ₀
   证明: by
   simp
@@ -176,7 +176,7 @@ theorem cardinalMk_eq
 
 中文:
 定理 cardinalMk_eq
-  条件: [IsEmpty X]
+  条件: [是空 X]
   结论: #(FreeAlgebra R X) = #R
   证明: by
   simp
@@ -222,7 +222,7 @@ theorem lift_cardinalMk_adjoin_le
 
 中文:
 定理 lift_cardinalMk_adjoin_le
-  条件: {A : 类型v} [Semiring A] [Algebra R A] (s : Set A)
+  条件: {A : 类型v} [半环 A] [代数 R A] (s : 集合 A)
   证明: by
   have H := mk_range_le_lift (f := FreeAlgebra.lift R ((↑) : s -> A))
   rw [lift_umax]; rw [lift_id'.{v]; rw [u}] at H
@@ -249,7 +249,7 @@ theorem cardinalMk_adjoin_le
 
 中文:
 定理 cardinalMk_adjoin_le
-  条件: {A : 类型u} [Semiring A] [Algebra R A] (s : Set A)
+  条件: {A : 类型u} [半环 A] [代数 R A] (s : 集合 A)
   证明: by
   simpa using lift_cardinalMk_adjoin_le R s
 

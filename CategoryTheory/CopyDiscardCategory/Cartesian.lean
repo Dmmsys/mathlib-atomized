@@ -83,7 +83,7 @@ abbreviation ofCartesianMonoidalCategory
 
 中文:
 缩写 ofCartesianMonoidalCategory
-  签名: : CopyDiscardCategory C where
+  签名: : 余pyDiscard范畴 C where
 -/
 abbrev ofCartesianMonoidalCategory : CopyDiscardCategory C where
 

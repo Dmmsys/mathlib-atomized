@@ -55,7 +55,7 @@ instance instAddLeftReflectLE
 
 中文:
 实例 instAddLeftReflectLE
-  签名: : AddLeftReflectLE (Multiset α) where
+  签名: : 加法LeftReflectLE (Multiset α) where
   定义体: Multiset.le_of_add_le_add_left
 
 Depends on / 依赖: Multiset, Multiset.le_of_add_le_add_left, le_of_add_le_add_left
@@ -78,7 +78,7 @@ instance instAddCancelCommMonoid
 
 中文:
 实例 instAddCancelCommMonoid
-  签名: : AddCancelCommMonoid (Multiset α) where
+  签名: : 加法消去交换幺半群 (Multiset α) where
   定义体: Multiset.add_comm
   add_assoc := Multiset.add_assoc
   zero_add := Multiset.zero_add
@@ -780,7 +780,7 @@ lemma addHom_ext
 
 中文:
 引理 addHom_ext
-  条件: [AddZeroClass β] ⦃f g
+  条件: [加法零类 β] ⦃f g
   结论: Multiset α ->+ β⦄ (h : 对任意 x, f {x} = g {x}) : f = g
   证明: by
   ext s

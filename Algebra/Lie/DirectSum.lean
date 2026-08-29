@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRingModule L (⨁ i, M i)
+  签名: Lie环模 L (⨁ i, M i)
   定义体: m.mapRange (fun _ m' => ⁅x, m'⁆) fun _ => lie_zero x
   add_lie x y m := by
     ext
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule R L (⨁ i, M i)
+  签名: Lie模 R L (⨁ i, M i)
   定义体: by
     ext
     simp only [smul_lie, lie_module_bracket_apply, smul_apply]
@@ -240,7 +240,7 @@ instance lieRing
 
 中文:
 实例 lieRing
-  签名: : LieRing (⨁ i, L i)
+  签名: : Lie环 (⨁ i, L i)
   定义体: { (inferInstance : AddCommGroup _) with
     bracket := zipWith (fun _ => fun x y => ⁅x, y⁆) fun _ => lie_zero 0
     add_lie := fun x y z => by
@@ -388,7 +388,7 @@ instance lieAlgebra
 
 中文:
 实例 lieAlgebra
-  签名: : LieAlgebra R (⨁ i, L i)
+  签名: : Lie代数 R (⨁ i, L i)
   定义体: { (inferInstance : Module R _) with
     lie_smul := fun c x y => by
       ext
@@ -500,7 +500,7 @@ definition toLieAlgebra
 
 中文:
 定义 toLieAlgebra
-  签名: [DecidableEq ι] (L' : Type w₁) [LieRing L'] [LieAlgebra R L']
+  签名: [DecidableEq ι] (L' : 类型 w₁) [Lie环 L'] [Lie代数 R L']
   定义体: { toModule R ι L' fun i => (f i : L i ->ₗ[R] L') with
     toFun := toModule R ι L' fun i => (f i : L i ->ₗ[R] L')
     map_lie' := fun {x y} => by
@@ -559,7 +559,7 @@ instance lieRingOfIdeals
 
 中文:
 实例 lieRingOfIdeals
-  签名: : LieRing (⨁ i, I i)
+  签名: : Lie环 (⨁ i, I i)
   定义体: DirectSum.lieRing fun i => ↥(I i)
 
 Depends on / 依赖: DirectSum, DirectSum.lieRing, lieRing
@@ -577,7 +577,7 @@ instance lieAlgebraOfIdeals
 
 中文:
 实例 lieAlgebraOfIdeals
-  签名: : LieAlgebra R (⨁ i, I i)
+  签名: : Lie代数 R (⨁ i, I i)
   定义体: DirectSum.lieAlgebra fun i => ↥(I i)
 
 Depends on / 依赖: DirectSum, DirectSum.lieAlgebra, lieAlgebra

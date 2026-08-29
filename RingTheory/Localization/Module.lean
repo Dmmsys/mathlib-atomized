@@ -58,7 +58,7 @@ theorem span_eq_top_of_isLocalizedModule
 
 中文:
 定理 span_eq_top_of_isLocalizedModule
-  条件: {v : Set M} (hv : span R v = ⊤)
+  条件: {v : 集合 M} (hv : span R v = ⊤)
   证明: top_unique fun x _ => by
   obtain ⟨⟨m, s⟩, h⟩ := IsLocalizedModule.surj S f x
   rw [Submonoid.smul_def]; rw [← algebraMap_smul Rₛ]; rw [← Units.smul_isUnit (IsLocalization.map_units Rₛ s)]; rw [eq_comm]; rw [← inv_smul_eq_iff] at h
@@ -171,7 +171,7 @@ theorem LinearIndependent.localization
 
 中文:
 定理 LinearIndependent.localization
-  结论: [Module Rₛ M] [IsScalarTower R Rₛ M]
+  结论: [模 Rₛ M] [标量塔 R Rₛ M]
   证明: by
   have := isLocalizedModule_id S M Rₛ
   exact hli.of_isLocalizedModule Rₛ S .id
@@ -203,7 +203,7 @@ lemma IsLocalizedModule.linearIndependent_lift
 refine (isRegular_of_smul_l
 
 中文:
-引理 IsLocalizedModule.linearIndependent_lift
+引理 是Localized模.linearIndependent_lift
   条件: {ι} {v : ι -> Mₛ} (hf : LinearIndependent R v)
   证明: by
   cases isEmpty_or_nonempty ι
@@ -247,7 +247,7 @@ definition ofIsLocalizedModule
 
 中文:
 定义 ofIsLocalizedModule
-  签名: : Basis ι Rₛ Mₛ
+  签名: : 基 ι Rₛ Mₛ
   定义体: .mk (b.linearIndependent.of_isLocalizedModule Rₛ S f) by
     rw [Set.range_comp]; rw [span_eq_top_of_isLocalizedModule Rₛ S _ b.span_eq]
 
@@ -394,7 +394,7 @@ theorem span_eq_top_localization_localization
 
 中文:
 定理 span_eq_top_localization_localization
-  条件: {v : Set A} (hv : span R v = ⊤)
+  条件: {v : 集合 A} (hv : span R v = ⊤)
   证明: span_eq_top_of_isLocalizedModule Rₛ S (IsScalarTower.toAlgHom R A Aₛ).toLinearMap hv
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, span_eq_top_of_isLocalizedModule, toAlgHom, toLinearMap
@@ -417,7 +417,7 @@ definition localizationLocalization
 
 中文:
 定义 localizationLocalization
-  签名: {ι : 类型} (b : Basis ι R A)
+  签名: {ι : 类型} (b : 基 ι R A)
   定义体: b.ofIsLocalizedModule Rₛ S (IsScalarTower.toAlgHom R A Aₛ).toLinearMap
 
 @[simp]
@@ -440,7 +440,7 @@ theorem localizationLocalization_apply
 
 中文:
 定理 localizationLocalization_apply
-  条件: {ι : 类型} (b : Basis ι R A) (i)
+  条件: {ι : 类型} (b : 基 ι R A) (i)
   证明: b.ofIsLocalizedModule_apply Rₛ S _ i
 
 @[simp]
@@ -462,7 +462,7 @@ theorem localizationLocalization_repr_algebraMap
 
 中文:
 定理 localizationLocalization_repr_algebraMap
-  条件: {ι : 类型} (b : Basis ι R A) (x i)
+  条件: {ι : 类型} (b : 基 ι R A) (x i)
   证明: b.ofIsLocalizedModule_repr_apply Rₛ S _ _ i
 
 Depends on / 依赖: b.ofIsLocalizedModule_repr_apply, ofIsLocalizedModule_repr_apply
@@ -481,7 +481,7 @@ theorem localizationLocalization_span
 
 中文:
 定理 localizationLocalization_span
-  条件: {ι : 类型} (b : Basis ι R A)
+  条件: {ι : 类型} (b : 基 ι R A)
   证明: b.ofIsLocalizedModule_span Rₛ S _
 
 Depends on / 依赖: b.ofIsLocalizedModule_span, ofIsLocalizedModule_span
@@ -545,7 +545,7 @@ definition LinearMap.extendScalarsOfIsLocalization
   map_smul' := (IsLocalization.linearMap_compatibleSMul S A M N).map_smul _
 
 中文:
-定义 LinearMap.extendScalarsOfIsLocalization
+定义 线性映射.extendScalarsOfIsLocalization
   签名: (f : M ->ₗ[R] N)
   定义体: f
   map_add' := f.map_add
@@ -565,7 +565,7 @@ lemma LinearMap.restrictScalars_extendScalarsOfIsLocalization
   proof: rfl
 
 中文:
-引理 LinearMap.restrictScalars_extendScalarsOfIsLocalization
+引理 线性映射.restrictScalars_extendScalarsOfIsLocalization
   条件: (f : M ->ₗ[R] N)
   证明: rfl
 -/
@@ -581,7 +581,7 @@ lemma LinearMap.extendScalarsOfIsLocalization_apply
   proof: rfl
 
 中文:
-引理 LinearMap.extendScalarsOfIsLocalization_apply
+引理 线性映射.extendScalarsOfIsLocalization_apply
   条件: (f : M ->ₗ[A] N)
   证明: rfl
 -/
@@ -597,7 +597,7 @@ lemma LinearMap.extendScalarsOfIsLocalization_apply'
   proof: rfl
 
 中文:
-引理 LinearMap.extendScalarsOfIsLocalization_apply'
+引理 线性映射.extendScalarsOfIsLocalization_apply'
   条件: (f : M ->ₗ[R] N) (x : M)
   证明: rfl
 -/
@@ -620,7 +620,7 @@ definition LinearMap.extendScalarsOfIsLocalizationEquiv
   right_inv := by intro _; ext; simp
 
 中文:
-定义 LinearMap.extendScalarsOfIsLocalizationEquiv
+定义 线性映射.extendScalarsOfIsLocalizationEquiv
   签名: : (M ->ₗ[R] N) ≃ₗ[A] (M ->ₗ[A] N) where
   定义体: LinearMap.extendScalarsOfIsLocalization S A
   invFun := LinearMap.restrictScalars R
@@ -652,7 +652,7 @@ definition LinearEquiv.extendScalarsOfIsLocalization
     (by ext; simp) (by ext; simp)
 
 中文:
-定义 LinearEquiv.extendScalarsOfIsLocalization
+定义 线性等价.extendScalarsOfIsLocalization
   签名: (f : M ≃ₗ[R] N)
   定义体: .ofLinearMap (LinearMap.extendScalarsOfIsLocalization S A f)
     (LinearMap.extendScalarsOfIsLocalization S A f.symm)
@@ -680,7 +680,7 @@ definition LinearEquiv.extendScalarsOfIsLocalizationEquiv
   right_inv e := by ext; simp
 
 中文:
-定义 LinearEquiv.extendScalarsOfIsLocalizationEquiv
+定义 线性等价.extendScalarsOfIsLocalizationEquiv
   签名: : (M ≃ₗ[R] N) ≃ M ≃ₗ[A] N where
   定义体: e.extendScalarsOfIsLocalization S A
   invFun e := e.restrictScalars R
@@ -871,7 +871,7 @@ lemma LocalizedModule.map_injective
 
 中文:
 引理 LocalizedModule.map_injective
-  条件: (l : M ->ₗ[R] N) (hl : Function.Injective l)
+  条件: (l : M ->ₗ[R] N) (hl : 函数.单射 l)
   证明: IsLocalizedModule.map_injective S (mkLinearMap S M) (mkLinearMap S N) l hl
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.map_injective, map_injective, mkLinearMap
@@ -890,7 +890,7 @@ lemma LocalizedModule.map_surjective
 
 中文:
 引理 LocalizedModule.map_surjective
-  条件: (l : M ->ₗ[R] N) (hl : Function.Surjective l)
+  条件: (l : M ->ₗ[R] N) (hl : 函数.满射 l)
   证明: IsLocalizedModule.map_surjective S (mkLinearMap S M) (mkLinearMap S N) l hl
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.map_surjective, map_surjective, mkLinearMap
@@ -914,7 +914,7 @@ lemma LocalizedModule.restrictScalars_map_eq
 
 中文:
 引理 LocalizedModule.restrictScalars_map_eq
-  结论: {M' N' : 类型} [AddCommMonoid M'] [AddCommMonoid N']
+  结论: {M' N' : 类型} [加法交换幺半群 M'] [加法交换幺半群 N']
   证明: by
   rw [LinearEquiv.eq_toLinearMap_symm_comp]; rw [← LinearEquiv.comp_toLinearMap_symm_eq]
   apply IsLocalizedModule.linearMap_ext S g₁ g₂
@@ -949,7 +949,7 @@ lemma LocalizedModule.coe_map_eq
 
 中文:
 引理 LocalizedModule.coe_map_eq
-  结论: {M' N' : 类型} [AddCommMonoid M'] [AddCommMonoid N']
+  结论: {M' N' : 类型} [加法交换幺半群 M'] [加法交换幺半群 N']
   证明: by
   rw [← LinearMap.coe_restrictScalars R]; rw [restrictScalars_map_eq _ g₁ g₂ l]
   simp

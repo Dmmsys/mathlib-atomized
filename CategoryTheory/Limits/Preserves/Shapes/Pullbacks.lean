@@ -146,7 +146,7 @@ definition isLimitPullbackConeMapOfIsLimit
 
 中文:
 定义 isLimitPullbackConeMapOfIsLimit
-  签名: [PreservesLimit (cospan f g) G]
+  签名: [保持极限 (cospan f g) G]
   定义体: by rw [← G.map_comp, ← G.map_comp, comm]
     IsLimit (PullbackCone.mk (G.map h) (G.map k) this) :=
   (PullbackCone.isLimitMapConeEquiv _ G).1 (isLimitOfPreserves G l)
@@ -170,7 +170,7 @@ definition isLimitOfIsLimitPullbackConeMap
 
 中文:
 定义 isLimitOfIsLimitPullbackConeMap
-  签名: [ReflectsLimit (cospan f g) G]
+  签名: [反映极限 (cospan f g) G]
   定义体: isLimitOfReflects G
     ((PullbackCone.isLimitMapConeEquiv (PullbackCone.mk _ _ comm) G).2 l)
 
@@ -227,7 +227,7 @@ lemma preservesPullback_symmetry
 
 中文:
 引理 preservesPullback_symmetry
-  结论: PreservesLimit (cospan g f) G where
+  结论: 保持极限 (cospan g f) G where
   证明: ⟨by
     apply (IsLimit.postcomposeHomEquiv (diagramIsoCospan.{v₂} _) _).toFun
     apply IsLimit.ofIsoLimit _ (PullbackCone.isoMk _).symm
@@ -540,7 +540,7 @@ definition isColimitPushoutCoconeMapOfIsColimit
 
 中文:
 定义 isColimitPushoutCoconeMapOfIsColimit
-  签名: [PreservesColimit (span f g) G]
+  签名: [保持余极限 (span f g) G]
   定义体: isColimitMapCoconePushoutCoconeEquiv G comm (isColimitOfPreserves G l)
 
 Depends on / 依赖: isColimitMapCoconePushoutCoconeEquiv, isColimitOfPreserves
@@ -561,7 +561,7 @@ definition isColimitOfIsColimitPushoutCoconeMap
 
 中文:
 定义 isColimitOfIsColimitPushoutCoconeMap
-  签名: [ReflectsColimit (span f g) G]
+  签名: [反映余极限 (span f g) G]
   定义体: isColimitOfReflects G ((isColimitMapCoconePushoutCoconeEquiv G comm).symm l)
 
 Depends on / 依赖: isColimitMapCoconePushoutCoconeEquiv, isColimitOfReflects
@@ -611,7 +611,7 @@ lemma preservesPushout_symmetry
 
 中文:
 引理 preservesPushout_symmetry
-  结论: PreservesColimit (span g f) G where
+  结论: 保持余极限 (span g f) G where
   证明: ⟨by
     apply (IsColimit.precomposeHomEquiv (diagramIsoSpan.{v₂} _).symm _).toFun
     apply IsColimit.ofIsoColimit _ (PushoutCocone.isoMk _).symm
@@ -807,7 +807,7 @@ lemma PreservesPullback.of_iso_comparison
 
 中文:
 引理 PreservesPullback.of_iso_comparison
-  条件: [i : IsIso (pullbackComparison G f g)]
+  条件: [i : 是同构 (pullbackComparison G f g)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone (pullbackIsPullback f g)
   apply (isLimitMapConePullbackConeEquiv _ _).symm _
@@ -835,7 +835,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (pullbackComparison G f g)
+  签名: 是同构 (pullbackComparison G f g)
   定义体: by
   rw [← PreservesPullback.iso_hom]
   infer_instance
@@ -866,7 +866,7 @@ lemma PreservesPushout.of_iso_comparison
 
 中文:
 引理 PreservesPushout.of_iso_comparison
-  条件: [i : IsIso (pushoutComparison G f g)]
+  条件: [i : 是同构 (pushoutComparison G f g)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone (pushoutIsPushout f g)
   apply (isColimitMapCoconePushoutCoconeEquiv _ _).symm _
@@ -894,7 +894,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (pushoutComparison G f g)
+  签名: 是同构 (pushoutComparison G f g)
   定义体: by
   rw [← PreservesPushout.iso_hom]
   infer_instance

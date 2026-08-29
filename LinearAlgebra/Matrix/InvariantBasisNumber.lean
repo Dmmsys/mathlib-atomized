@@ -97,7 +97,7 @@ theorem invariantBasisNumber_iff_matrix
 
 中文:
 定理 invariantBasisNumber_iff_matrix
-  结论: InvariantBasisNumber R ↔ 对任意 n m
+  结论: 不变基数 R ↔ 对任意 n m
   证明: (invariantBasisNumber_iff R).trans .intro (fun h n m f g hfg hgf =>
       h (toLinearEquivRight'OfInv hfg hgf).symm) fun h n m e => h n m (toMatrixRight' e)
     (toMatrixRight' e.symm) (by simp [← toMatrixRight'_comp]) (by simp [← toMatrixRight'_comp])
@@ -204,8 +204,8 @@ instance [InvariantBasisNumber
   body: MulOpposite.invariantBasisNumber_iff.mpr ‹_›
 
 中文:
-实例 [InvariantBasisNumber
-  签名: R] : InvariantBasisNumber Rᵐᵒᵖ
+实例 [不变基数
+  签名: R] : 不变基数 Rᵐᵒᵖ
   定义体: MulOpposite.invariantBasisNumber_iff.mpr ‹_›
 
 Depends on / 依赖: MulOpposite, MulOpposite.invariantBasisNumber_iff.mpr, invariantBasisNumber_iff
@@ -227,8 +227,8 @@ theorem Matrix.square_of_invertible
   proof: card_eq_of_linearEquiv R (Matrix.toLinearEquivRight'OfInv h' h)
 
 中文:
-定理 Matrix.square_of_invertible
-  结论: (M : Matrix n m R) (N : Matrix m n R) (h : M * N = 1)
+定理 矩阵.square_of_invertible
+  结论: (M : 矩阵 n m R) (N : 矩阵 m n R) (h : M * N = 1)
   证明: card_eq_of_linearEquiv R (Matrix.toLinearEquivRight'OfInv h' h)
 
 Depends on / 依赖: Matrix, Matrix.toLinearEquivRight, card_eq_of_linearEquiv, toLinearEquivRight

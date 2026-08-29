@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPrincipalIdealRing (v.valuation K).integer
+  签名: 是主理想环 (v.valuation K).integer
   定义体: by
   rw [(Valuation.integer.integers (v.valuation K)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
   simpa using (v.valuation K).toMonoidWithZeroHom.range_nontrivial
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscreteValuationRing (v.valuation K).integer
+  签名: 是离散赋值环 (v.valuation K).integer
   定义体: (v.valuation K).valuationSubring_isDiscreteValuationRing
 
 Depends on / 依赖: v.valuation, valuation, valuationSubring_isDiscreteValuationRing
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPrincipalIdealRing (v.adicCompletion整数egers K)
+  签名: 是主理想环 (v.adicCompletion整数egers K)
   定义体: by
   unfold HeightOneSpectrum.adicCompletionIntegers
   rw [(Valuation.valuationSubring.integers (Valued.v)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscreteValuationRing (v.adicCompletion整数egers K)
+  签名: 是离散赋值环 (v.adicCompletion整数egers K)
   定义体: by
     unfold HeightOneSpectrum.adicCompletionIntegers
     simp only [ne_eq, Ideal.ext_iff, Valuation.mem_maximalIdeal_iff, Ideal.mem_bot, Subtype.ext_iff,
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((Valued.v : Valuation (v.adicCompletion K) 整数ᵐ⁰)).IsRankOneDiscrete
+  签名: ((赋值.v : 赋值 (v.adicCompletion K) 整数ᵐ⁰)).是RankOneDiscrete
   定义体: by
     have h : (v.valuation K).IsRankOneDiscrete := Valuation.IsRankOneDiscrete.mk' (valuation K v)
     exact ⟨h.generator, by rw [h.generator_zpowers_eq_valueGroup, adicCompletion_valueGroup_eq],
@@ -331,7 +331,7 @@ definition adicAbv
 
 中文:
 定义 adicAbv
-  签名: : AbsoluteValue K 实数
+  签名: : 绝对值 K 实数
   定义体: v.adicAbv one_lt_absNorm_nnreal v
 
 Depends on / 依赖: adicAbv, one_lt_absNorm_nnreal, v.adicAbv
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: (v.valuation K).RankOne
+  签名: (v.valuation K).秩一
   定义体: rankOne (v.valuation K) (one_lt_absNorm_nnreal v)
 
 Depends on / 依赖: one_lt_absNorm_nnreal, rankOne, v.valuation, valuation
@@ -437,7 +437,7 @@ instance instNormedFieldValuedAdicCompletion
 
 中文:
 实例 instNormedFieldValuedAdicCompletion
-  签名: : NormedField (adicCompletion K v)
+  签名: : 赋范域 (adicCompletion K v)
   定义体: Valued.toNormedField (adicCompletion K v) Intᵐ⁰
 
 Depends on / 依赖: Valued, Valued.toNormedField, adicCompletion, toNormedField
@@ -454,7 +454,7 @@ lemma toNNReal_valued_eq_adicAbv
   proof: rfl
 
 中文:
-引理 toNNReal_valued_eq_adicAbv
+引理 toNN实数_valued_eq_adicAbv
   条件: (x : WithVal (v.valuation K))
   证明: rfl
 -/
@@ -789,7 +789,7 @@ lemma HeightOneSpectrum.embedding_mul_absNorm
   rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_ca
 
 中文:
-引理 HeightOneSpectrum.embedding_mul_absNorm
+引理 高一谱.embedding_mul_absNorm
   条件: {x : R} (h_x_nezero : x != 0)
   证明: by
   rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
@@ -825,7 +825,7 @@ definition FinitePlace
 
 中文:
 定义 FinitePlace
-  签名: (K : 类型) [Field K] [NumberField K]
+  签名: (K : 类型) [域 K] [数域 K]
   定义体: {w : AbsoluteValue K Real // exists v : HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w}
 
 Depends on / 依赖: AbsoluteValue, FinitePlace, FinitePlace.embedding, HeightOneSpectrum, embedding
@@ -843,7 +843,7 @@ definition FinitePlace.mk
 
 中文:
 定义 FinitePlace.mk
-  签名: [NumberField K] (v : HeightOneSpectrum (𝓞 K))
+  签名: [数域 K] (v : 高一谱 (𝓞 K))
   定义体: ⟨place (embedding v), ⟨v, rfl⟩⟩
 
 Depends on / 依赖: IsSuccArchimedean, embedding, isPredArchimedean_of_isSuccArchimedean
@@ -861,7 +861,7 @@ definition IsFinitePlace
 
 中文:
 定义 IsFinitePlace
-  签名: [NumberField K] (w : AbsoluteValue K 实数)
+  签名: [数域 K] (w : 绝对值 K 实数)
   定义体: exists v : IsDedekindDomain.HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w
 
 Depends on / 依赖: FinitePlace, FinitePlace.embedding, HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum, embedding
@@ -881,7 +881,7 @@ lemma FinitePlace.isFinitePlace
 
 中文:
 引理 FinitePlace.isFinitePlace
-  条件: [NumberField K] (v : FinitePlace K)
+  条件: [数域 K] (v : FinitePlace K)
   结论: IsFinitePlace v.val
   证明: by
   simp [IsFinitePlace, v.prop]
@@ -901,7 +901,7 @@ lemma isFinitePlace_iff
 
 中文:
 引理 isFinitePlace_iff
-  条件: [NumberField K] (v : AbsoluteValue K 实数)
+  条件: [数域 K] (v : 绝对值 K 实数)
   证明: ⟨fun H => ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ => hw ▸ w.isFinitePlace⟩
 
 Depends on / 依赖: isFinitePlace, w.isFinitePlace
@@ -925,7 +925,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (FinitePlace K) K 实数
+  签名: 函数状 (FinitePlace K) K 实数
   定义体: w.1 x
   coe_injective _ _ h := Subtype.ext (AbsoluteValue.ext <| congr_fun h)
 -/
@@ -945,7 +945,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZeroHomClass (FinitePlace K) K 实数
+  签名: 带零幺半群态射类 (FinitePlace K) K 实数
   定义体: w.1.map_mul
   map_one w := w.1.map_one
   map_zero w := w.1.map_zero
@@ -969,7 +969,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonnegHomClass (FinitePlace K) K 实数
+  签名: Nonneg态射类 (FinitePlace K) K 实数
   定义体: w.1.nonneg
 
 @[simp]
@@ -991,7 +991,7 @@ theorem mk_apply
 
 中文:
 定理 mk_apply
-  条件: (v : HeightOneSpectrum (𝓞 K)) (x : K)
+  条件: (v : 高一谱 (𝓞 K)) (x : K)
   结论: mk v x = ‖embedding v x‖
   证明: rfl
 -/
@@ -1026,7 +1026,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulRingNormClass (FinitePlace K) K 实数
+  签名: 乘法环范数类 (FinitePlace K) K 实数
   定义体: by simpa [coe_apply] using IsAbsoluteValue.abv_add' x y
   map_neg_eq_map v x := by simp [coe_apply]
   eq_zero_of_map_eq_zero v := by simp
@@ -1148,7 +1148,7 @@ exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrim
 
 中文:
 定理 mk_eq_iff
-  条件: {v₁ v₂ : HeightOneSpectrum (𝓞 K)}
+  条件: {v₁ v₂ : 高一谱 (𝓞 K)}
   结论: mk v₁ = mk v₂ ↔ v₁ = v₂
   证明: by
   refine ⟨?_, fun a => by rw [a]⟩
@@ -1190,7 +1190,7 @@ theorem maximalIdeal_mk
 
 中文:
 定理 maximalIdeal_mk
-  条件: (v : HeightOneSpectrum (𝓞 K))
+  条件: (v : 高一谱 (𝓞 K))
   结论: maximalIdeal (mk v) = v
   证明: by
   rw [← mk_eq_iff]; rw [mk_maximalIdeal]
@@ -1240,7 +1240,7 @@ lemma maximalIdeal_injective
 
 中文:
 引理 maximalIdeal_injective
-  结论: (fun w : FinitePlace K => maximalIdeal w).Injective
+  结论: (fun w : FinitePlace K => maximalIdeal w).单射
   证明: equivHeightOneSpectrum.injective
 
 Depends on / 依赖: equivHeightOneSpectrum, equivHeightOneSpectrum.injective, injective
@@ -1367,7 +1367,7 @@ protected
 
 中文:
 引理 hasFiniteMulSupport_fun_pow_multiplicity
-  结论: {M : 类型} [CommMonoid M] {I : Ideal (𝓞 K)}
+  结论: {M : 类型} [交换幺半群 M] {I : 理想 (𝓞 K)}
   证明: UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity _
     (asIdeal_injective.comp maximalIdeal_injective) (fun v => v.maximalIdeal.irreducible) hI
 
@@ -1426,7 +1426,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonarchimedeanHomClass (FinitePlace K) K 实数
+  签名: Nonarchimedean态射类 (FinitePlace K) K 实数
   定义体: FinitePlace.add_le v a b
 
 Depends on / 依赖: FinitePlace, FinitePlace.add_le, add_le
@@ -1450,7 +1450,7 @@ alias IsDedekindDomain.HeightOneSpectrum.embedding_mul_absNorm := embedding_mul_
 
 中文:
 引理 equivHeightOneSpectrum_symm_apply
-  条件: (v : HeightOneSpectrum (𝓞 K)) (x : K)
+  条件: (v : 高一谱 (𝓞 K)) (x : K)
   证明: rfl
 
 @[deprecated (since := "2026-03-11")]
@@ -1480,7 +1480,7 @@ lemma finprod_finitePlace_pow_multiplicity
 
 中文:
 引理 finprod_finitePlace_pow_multiplicity
-  条件: {I : Ideal (𝓞 K)} (hI : I != ⊥)
+  条件: {I : 理想 (𝓞 K)} (hI : I != ⊥)
   证明: by
   conv_rhs => rw [← finprod_heightOneSpectrum_pow_multiplicity hI]
   simp only [← finprod_comp_equiv (equivHeightOneSpectrum (K := K)), equivHeightOneSpectrum_apply]
@@ -1550,7 +1550,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite Kv Lw
+  签名: 模.有限 Kv Lw
   定义体: let Φ : Kv otimes[K] L ->ₗ[Kv] Lw := Algebra.TensorProduct.lift (Algebra.algHom Kv Kv Lw)
 .toLinearMap (Algebra.algHom K L Lw) (fun _ _ => mul_comm ..)
   have h_dense : DenseRange Φ := by

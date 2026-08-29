@@ -39,7 +39,7 @@ theorem preimage_Iic
 中文:
 定理 preimage_Iic
   条件: (e : α ≃o β) (b : β)
-  结论: e ⁻¹' Iic b = Iic (e.symm b)
+  结论: e ⁻¹' 左无界右闭区间 b = 左无界右闭区间 (e.symm b)
   证明: by
   ext x
   simp [← e.le_iff_le]
@@ -69,7 +69,7 @@ theorem preimage_Iio
 中文:
 定理 preimage_Iio
   条件: (e : α ≃o β) (b : β)
-  结论: e ⁻¹' Iio b = Iio (e.symm b)
+  结论: e ⁻¹' 左无界右开区间 b = 左无界右开区间 (e.symm b)
   证明: by
   ext x
   simp [← e.lt_iff_lt]
@@ -98,7 +98,7 @@ theorem preimage_Icc
 中文:
 定理 preimage_Icc
   条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' Icc a b = Icc (e.symm a) (e.symm b)
+  结论: e ⁻¹' 闭区间 a b = 闭区间 (e.symm a) (e.symm b)
   证明: by
   simp [← Ici_inter_Iic]
 
@@ -125,7 +125,7 @@ theorem preimage_Ico
 中文:
 定理 preimage_Ico
   条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' Ico a b = Ico (e.symm a) (e.symm b)
+  结论: e ⁻¹' 左闭右开区间 a b = 左闭右开区间 (e.symm a) (e.symm b)
   证明: by
   simp [← Ici_inter_Iio]
 
@@ -152,7 +152,7 @@ theorem preimage_Ioo
 中文:
 定理 preimage_Ioo
   条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' Ioo a b = Ioo (e.symm a) (e.symm b)
+  结论: e ⁻¹' 开区间 a b = 开区间 (e.symm a) (e.symm b)
   证明: by
   simp [← Ioi_inter_Iio]
 
@@ -179,7 +179,7 @@ theorem image_Iic
 中文:
 定理 image_Iic
   条件: (e : α ≃o β) (a : α)
-  结论: e '' Iic a = Iic (e a)
+  结论: e '' 左无界右闭区间 a = 左无界右闭区间 (e a)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iic]; rw [e.symm_symm]
 
@@ -206,7 +206,7 @@ theorem image_Iio
 中文:
 定理 image_Iio
   条件: (e : α ≃o β) (a : α)
-  结论: e '' Iio a = Iio (e a)
+  结论: e '' 左无界右开区间 a = 左无界右开区间 (e a)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iio]; rw [e.symm_symm]
 
@@ -233,7 +233,7 @@ theorem image_Ioo
 中文:
 定理 image_Ioo
   条件: (e : α ≃o β) (a b : α)
-  结论: e '' Ioo a b = Ioo (e a) (e b)
+  结论: e '' 开区间 a b = 开区间 (e a) (e b)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioo]; rw [e.symm_symm]
 
@@ -260,7 +260,7 @@ theorem image_Ioc
 中文:
 定理 image_Ioc
   条件: (e : α ≃o β) (a b : α)
-  结论: e '' Ioc a b = Ioc (e a) (e b)
+  结论: e '' 左开右闭区间 a b = 左开右闭区间 (e a) (e b)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioc]; rw [e.symm_symm]
 
@@ -285,7 +285,7 @@ theorem image_Icc
 中文:
 定理 image_Icc
   条件: (e : α ≃o β) (a b : α)
-  结论: e '' Icc a b = Icc (e a) (e b)
+  结论: e '' 闭区间 a b = 闭区间 (e a) (e b)
   证明: by
   rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Icc]; rw [e.symm_symm]
 
@@ -310,7 +310,7 @@ definition IicTop
 
 中文:
 定义 IicTop
-  签名: {α : 类型} [Preorder α] [OrderTop α]
+  签名: {α : 类型} [预序 α] [有顶序 α]
   定义体: { @Equiv.subtypeUnivEquiv α (· in Iic (⊤ : α)) fun _ => le_top with
     map_rel_iff' := @fun x y => by rfl }
 

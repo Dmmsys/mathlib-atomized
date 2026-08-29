@@ -32,7 +32,7 @@ theorem isIdempotentElem_iff_quasispectrum_subset
 
 中文:
 定理 isIdempotentElem_iff_quasispectrum_subset
-  结论: [NonUnitalRing A] [StarRing A] [Module R A]
+  结论: [非幺环 A] [对合环 A] [模 R A]
   证明: by
   refine ⟨IsIdempotentElem.quasispectrum_subset R, fun h => ?_⟩
   rw [IsIdempotentElem]; rw [← cfcₙ_id' R a]; rw [← cfcₙ_mul _ _]
@@ -58,7 +58,7 @@ theorem isIdempotentElem_iff_spectrum_subset
 
 中文:
 定理 isIdempotentElem_iff_spectrum_subset
-  结论: [Ring A] [StarRing A] [Algebra R A]
+  结论: [环 A] [对合环 A] [代数 R A]
   证明: by
   grind [quasispectrum_eq_spectrum_union_zero, isIdempotentElem_iff_quasispectrum_subset R]
 

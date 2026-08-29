@@ -51,7 +51,7 @@ definition MellinConvergent
 
 中文:
 定义 MellinConvergent
-  签名: (f : 实数 -> E) (s : Complex)
+  签名: (f : 实数 -> E) (s : 复形)
   定义体: IntegrableOn (fun t : Real => (t : Complex) ^ (s - 1) • f t) (Ioi 0)
 
 Depends on / 依赖: IntegrableOn
@@ -70,7 +70,7 @@ theorem MellinConvergent.const_smul
 
 中文:
 定理 MellinConvergent.const_smul
-  结论: {f : 实数 -> E} {s : Complex} (hf : MellinConvergent f s) {𝕜 : 类型}
+  结论: {f : 实数 -> E} {s : 复形} (hf : MellinConvergent f s) {𝕜 : 类型}
   证明: by
   simpa only [MellinConvergent, smul_comm] using! hf.smul c
 
@@ -96,7 +96,7 @@ nonrec theorem MellinConvergent.div_const {f : Real -> Complex} {s : Complex} (h
 
 中文:
 定理 MellinConvergent.cpow_smul
-  条件: {f : 实数 -> E} {s a : Complex}
+  条件: {f : 实数 -> E} {s a : 复形}
   证明: by
   refine integrableOn_congr_fun (fun t ht => ?_) measurableSet_Ioi
   simp_rw [← sub_add_eq_add_sub, cpow_add _ _ (ofReal_ne_zero.2 <| ne_of_gt ht), mul_smul]
@@ -129,7 +129,7 @@ theorem MellinConvergent.comp_mul_left
 
 中文:
 定理 MellinConvergent.comp_mul_left
-  条件: {f : 实数 -> E} {s : Complex} {a : 实数} (ha : 0 < a)
+  条件: {f : 实数 -> E} {s : 复形} {a : 实数} (ha : 0 < a)
   证明: by
   have := integrableOn_Ioi_comp_mul_left_iff (fun t : Real => (t : Complex) ^ (s - 1) • f t) 0 ha
   rw [mul_zero] at this
@@ -164,7 +164,7 @@ theorem MellinConvergent.comp_rpow
 
 中文:
 定理 MellinConvergent.comp_rpow
-  条件: {f : 实数 -> E} {s : Complex} {a : 实数} (ha : a != 0)
+  条件: {f : 实数 -> E} {s : 复形} {a : 实数} (ha : a != 0)
   证明: by
   refine Iff.trans ?_ (integrableOn_Ioi_comp_rpow_iff' _ ha)
   rw [MellinConvergent]
@@ -190,8 +190,8 @@ definition Complex.VerticalIntegrable
   body: Integrable (fun (y : Real) => f (σ + y * I)) μ
 
 中文:
-定义 Complex.VerticalIntegrable
-  签名: (f : Complex -> E) (σ : 实数) (μ : Measure 实数 := by volume_tac)
+定义 复形.Vertical整数egrable
+  签名: (f : 复形 -> E) (σ : 实数) (μ : 测度 实数 := by volume_tac)
   定义体: Integrable (fun (y : Real) => f (σ + y * I)) μ
 
 Depends on / 依赖: Integrable, volume_tac
@@ -209,7 +209,7 @@ definition mellin
 
 中文:
 定义 mellin
-  签名: (f : 实数 -> E) (s : Complex)
+  签名: (f : 实数 -> E) (s : 复形)
   定义体: ∫ t : Real in Ioi 0, (t : Complex) ^ (s - 1) • f t
 -/
 def mellin (f : Real -> E) (s : Complex) : E :=
@@ -225,7 +225,7 @@ definition mellinInv
 
 中文:
 定义 mellinInv
-  签名: (σ : 实数) (f : Complex -> E) (x : 实数)
+  签名: (σ : 实数) (f : 复形 -> E) (x : 实数)
   定义体: (1 / (2 * π)) • ∫ y : Real, (x : Complex) ^ (-(σ + y * I)) • f (σ + y * I)
 -/
 def mellinInv (σ : Real) (f : Complex -> E) (x : Real) : E :=
@@ -244,7 +244,7 @@ theorem mellin_cpow_smul
 
 中文:
 定理 mellin_cpow_smul
-  条件: (f : 实数 -> E) (s a : Complex)
+  条件: (f : 实数 -> E) (s a : 复形)
   证明: by
   refine setIntegral_congr_fun measurableSet_Ioi fun t ht => ?_
   simp_rw [← sub_add_eq_add_sub, cpow_add _ _ (ofReal_ne_zero.2 <| ne_of_gt ht), mul_smul]
@@ -267,7 +267,7 @@ theorem mellin_const_smul
 
 中文:
 定理 mellin_const_smul
-  结论: (f : 实数 -> E) (s : Complex) {𝕜 : 类型}
+  结论: (f : 实数 -> E) (s : 复形) {𝕜 : 类型}
   证明: by
   simp only [mellin, smul_comm, integral_smul]
 
@@ -290,7 +290,7 @@ theorem mellin_div_const
 
 中文:
 定理 mellin_div_const
-  条件: (f : 实数 -> Complex) (s a : Complex)
+  条件: (f : 实数 -> 复形) (s a : 复形)
   结论: mellin (fun t => f t / a) s = mellin f s / a
   证明: by
   simp_rw [mellin, smul_eq_mul, ← mul_div_assoc, integral_div]
@@ -316,7 +316,7 @@ theorem mellin_comp_rpow
 
 中文:
 定理 mellin_comp_rpow
-  条件: (f : 实数 -> E) (s : Complex) (a : 实数)
+  条件: (f : 实数 -> E) (s : 复形) (a : 实数)
   证明: by
   /- This is true for `a = 0` as all sides are undefined but turn out to vanish thanks to our
   convention. The interesting case is `a ≠ 0` -/
@@ -356,7 +356,7 @@ theorem mellin_comp_mul_left
 
 中文:
 定理 mellin_comp_mul_left
-  条件: (f : 实数 -> E) (s : Complex) {a : 实数} (ha : 0 < a)
+  条件: (f : 实数 -> E) (s : 复形) {a : 实数} (ha : 0 < a)
   证明: by
   simp_rw [mellin]
   have : EqOn (fun t : Real => (t : Complex) ^ (s - 1) • f (a * t))
@@ -390,7 +390,7 @@ theorem mellin_comp_mul_right
 
 中文:
 定理 mellin_comp_mul_right
-  条件: (f : 实数 -> E) (s : Complex) {a : 实数} (ha : 0 < a)
+  条件: (f : 实数 -> E) (s : 复形) {a : 实数} (ha : 0 < a)
   证明: by
   simpa only [mul_comm] using mellin_comp_mul_left f s ha
 
@@ -413,7 +413,7 @@ theorem mellin_comp_inv
 
 中文:
 定理 mellin_comp_inv
-  条件: (f : 实数 -> E) (s : Complex)
+  条件: (f : 实数 -> E) (s : 复形)
   结论: mellin (fun t => f t⁻¹) s = mellin f (-s)
   证明: by
   simp_rw [← rpow_neg_one, mellin_comp_rpow _ _ _, abs_neg, abs_one,
@@ -435,7 +435,7 @@ definition HasMellin
 
 中文:
 定义 HasMellin
-  签名: (f : 实数 -> E) (s : Complex) (m : E)
+  签名: (f : 实数 -> E) (s : 复形) (m : E)
   定义体: MellinConvergent f s ∧ mellin f s = m
 
 Depends on / 依赖: MellinConvergent, mellin
@@ -454,7 +454,7 @@ theorem hasMellin_add
 
 中文:
 定理 hasMellin_add
-  结论: {f g : 实数 -> E} {s : Complex} (hf : MellinConvergent f s)
+  结论: {f g : 实数 -> E} {s : 复形} (hf : MellinConvergent f s)
   证明: ⟨by simpa only [MellinConvergent, smul_add] using! hf.add hg, by
     simpa only [mellin, smul_add] using! integral_add hf hg⟩
 
@@ -476,7 +476,7 @@ theorem hasMellin_sub
 
 中文:
 定理 hasMellin_sub
-  结论: {f g : 实数 -> E} {s : Complex} (hf : MellinConvergent f s)
+  结论: {f g : 实数 -> E} {s : 复形} (hf : MellinConvergent f s)
   证明: ⟨by simpa only [MellinConvergent, smul_sub] using! hf.sub hg, by
     simpa only [mellin, smul_sub] using! integral_sub hf hg⟩
 
@@ -497,7 +497,7 @@ theorem hasMellin_const_smul
 
 中文:
 定理 hasMellin_const_smul
-  结论: {f : 实数 -> E} {s : Complex} (hf : MellinConvergent f s)
+  结论: {f : 实数 -> E} {s : 复形} (hf : MellinConvergent f s)
   证明: ⟨hf.const_smul c, by simp [mellin, smul_comm, hf.integral_smul]⟩
 
 Depends on / 依赖: const_smul, hf.const_smul, hf.integral_smul, integral_smul, mellin, smul_comm
@@ -529,7 +529,7 @@ theorem mellin_convergent_iff_norm
 
 中文:
 定理 mellin_convergent_iff_norm
-  结论: [NormedSpace Complex E] {f : 实数 -> E} {T : Set 实数} (hT : T subseteq Ioi 0)
+  结论: [赋范空间 复形 E] {f : 实数 -> E} {T : 集合 实数} (hT : T subseteq 左开右无界区间 0)
   证明: by
   have : AEStronglyMeasurable (fun t : Real => (t : Complex) ^ (s - 1) • f t) (volume.restrict T) := by
     refine ((continuousOn_of_forall_continuousAt ?_).aestronglyMeasurable hT').smul
@@ -710,7 +710,7 @@ theorem mellinConvergent_of_isBigO_rpow
 
 中文:
 定理 mellinConvergent_of_isBigO_rpow
-  结论: [NormedSpace Complex E] {a b : 实数} {f : 实数 -> E} {s : Complex}
+  结论: [赋范空间 复形 E] {a b : 实数} {f : 实数 -> E} {s : 复形}
   证明: by
   rw [MellinConvergent]; rw [mellin_convergent_iff_norm Subset.rfl measurableSet_Ioi hfc.aestronglyMeasurable]
   exact mellin_convergent_of_isBigO_scalar hfc.norm hf_top.norm_left hs_top hf_bot.norm_left hs_bot
@@ -744,7 +744,7 @@ theorem isBigO_rpow_top_log_smul
 
 中文:
 定理 isBigO_rpow_top_log_smul
-  结论: [NormedSpace 实数 E] {a b : 实数} {f : 实数 -> E} (hab : b < a)
+  结论: [赋范空间 实数 E] {a b : 实数} {f : 实数 -> E} (hab : b < a)
   证明: by
   refine
     ((isLittleO_log_rpow_atTop (sub_pos.mpr hab)).isBigO.smul hf).congr'
@@ -782,7 +782,7 @@ theorem isBigO_rpow_zero_log_smul
 
 中文:
 定理 isBigO_rpow_zero_log_smul
-  结论: [NormedSpace 实数 E] {a b : 实数} {f : 实数 -> E} (hab : a < b)
+  结论: [赋范空间 实数 E] {a b : 实数} {f : 实数 -> E} (hab : a < b)
   证明: by
   have : log =o[𝓝[>] 0] fun t : Real => t ^ (a - b) := by
     refine ((isLittleO_log_rpow_atTop (sub_pos.mpr hab)).neg_left.comp_tendsto
@@ -824,7 +824,7 @@ theorem mellin_hasDerivAt_of_isBigO_rpow
 
 中文:
 定理 mellin_hasDerivAt_of_isBigO_rpow
-  结论: [NormedSpace Complex E] {a b : 实数}
+  结论: [赋范空间 复形 E] {a b : 实数}
   证明: by
   set F : Complex -> Real -> E := fun (z : Complex) (t : Real) => (t : Complex) ^ (z - 1) • f t
   set F' : Complex -> Real -> E := fun (z : Complex) (t : Real) => ((t : Complex) ^ (z - 1) * log t) • f t
@@ -919,7 +919,7 @@ theorem mellin_differentiableAt_of_isBigO_rpow
 
 中文:
 定理 mellin_differentiableAt_of_isBigO_rpow
-  结论: [NormedSpace Complex E] {a b : 实数}
+  结论: [赋范空间 复形 E] {a b : 实数}
   证明: (mellin_hasDerivAt_of_isBigO_rpow hfc hf_top hs_top hf_bot hs_bot).2.differentiableAt
 
 Depends on / 依赖: differentiableAt, hf_bot, hf_top, hs_bot, hs_top, mellin_hasDerivAt_of_isBigO_rpow
@@ -946,7 +946,7 @@ theorem mellinConvergent_of_isBigO_rpow_exp
 
 中文:
 定理 mellinConvergent_of_isBigO_rpow_exp
-  结论: [NormedSpace Complex E] {a b : 实数} (ha : 0 < a) {f : 实数 -> E}
+  结论: [赋范空间 复形 E] {a b : 实数} (ha : 0 < a) {f : 实数 -> E}
   证明: mellinConvergent_of_isBigO_rpow hfc (hf_top.trans (isLittleO_exp_neg_mul_rpow_atTop ha _).isBigO)
     (lt_add_one _) hf_bot hs_bot
 
@@ -969,7 +969,7 @@ theorem mellin_differentiableAt_of_isBigO_rpow_exp
 
 中文:
 定理 mellin_differentiableAt_of_isBigO_rpow_exp
-  结论: [NormedSpace Complex E] {a b : 实数}
+  结论: [赋范空间 复形 E] {a b : 实数}
   证明: mellin_differentiableAt_of_isBigO_rpow hfc
     (hf_top.trans (isLittleO_exp_neg_mul_rpow_atTop ha _).isBigO) (lt_add_one _) hf_bot hs_bot
 
@@ -1005,7 +1005,7 @@ theorem hasMellin_one_Ioc
 
 中文:
 定理 hasMellin_one_Ioc
-  条件: {s : Complex} (hs : 0 < re s)
+  条件: {s : 复形} (hs : 0 < re s)
   证明: by
   have aux1 : -1 < (s - 1).re := by
     simpa only [sub_re, one_re, sub_eq_add_neg] using! lt_add_of_pos_left _ hs
@@ -1042,7 +1042,7 @@ theorem hasMellin_cpow_Ioc
 
 中文:
 定理 hasMellin_cpow_Ioc
-  条件: (a : Complex) {s : Complex} (hs : 0 < re s + re a)
+  条件: (a : 复形) {s : 复形} (hs : 0 < re s + re a)
   证明: by
   have := hasMellin_one_Ioc (by rwa [add_re] : 0 < (s + a).re)
   simp_rw [HasMellin, ← MellinConvergent.cpow_smul, ← mellin_cpow_smul, ← indicator_smul,

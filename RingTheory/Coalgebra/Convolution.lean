@@ -62,7 +62,7 @@ instance convMul
 
 中文:
 实例 convMul
-  签名: : Mul (WithConv (C ->ₗ[R] A)) where
+  签名: : 乘法 (WithConv (C ->ₗ[R] A)) where
   定义体: toConv (mul' R A ∘ₗ map f.ofConv g.ofConv ∘ₗ comul)
 
 Depends on / 依赖: f.ofConv, g.ofConv, ofConv, toConv
@@ -117,8 +117,8 @@ lemma _root_.Coalgebra.Repr.convMul_apply
   simp [convMul_def, ← 𝓡.eq]
 
 中文:
-引理 _root_.Coalgebra.Repr.convMul_apply
-  结论: {a : C} (𝓡 : Coalgebra.Repr R a ι)
+引理 _root_.余algebra.Repr.convMul_apply
+  结论: {a : C} (𝓡 : 余algebra.Repr R a ι)
   证明: by
   simp [convMul_def, ← 𝓡.eq]
 
@@ -141,7 +141,7 @@ instance convNonUnitalNonAssocSemiring
 
 中文:
 实例 convNonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring (WithConv (C ->ₗ[R] A)) where
+  签名: : 非幺非结合半环 (WithConv (C ->ₗ[R] A)) where
   定义体: by ext; simp [map_add_right]
   right_distrib f g h := by ext; simp [map_add_left]
   zero_mul f := by ext; simp
@@ -164,8 +164,8 @@ instance [Monoid
   body: by ext c; simp [(ℛ R c).convMul_apply, Finset.smul_sum, smul_mul_assoc]
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S A] [SMulCommClass R S A] [IsScalarTower S A A] :
+实例 [幺半群
+  签名: S] [分配乘法作用 S A] [标量交换类 R S A] [标量塔 S A A] :
   定义体: by ext c; simp [(ℛ R c).convMul_apply, Finset.smul_sum, smul_mul_assoc]
 
 Depends on / 依赖: Finset, Finset.smul_sum, convMul_apply, smul_mul_assoc, smul_sum
@@ -183,8 +183,8 @@ instance [Monoid
   body: by ext c; simp [(ℛ R c).convMul_apply, Finset.smul_sum, mul_smul_comm]
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S A] [SMulCommClass R S A] [SMulCommClass S A A] :
+实例 [幺半群
+  签名: S] [分配乘法作用 S A] [标量交换类 R S A] [标量交换类 S A A] :
   定义体: by ext c; simp [(ℛ R c).convMul_apply, Finset.smul_sum, mul_smul_comm]
 
 Depends on / 依赖: Finset, Finset.smul_sum, convMul_apply, mul_smul_comm, smul_sum
@@ -224,8 +224,8 @@ theorem _root_.TensorProduct.map_convMul_map
     ← comp_a
 
 中文:
-定理 _root_.TensorProduct.map_convMul_map
-  结论: {D : 类型} [AddCommMonoid B] [Module R B]
+定理 _root_.张量积.map_convMul_map
+  结论: {D : 类型} [加法交换幺半群 B] [模 R B]
   证明: by
   simp_rw [convMul_def, comul_def, mul'_tensor, comp_assoc, AlgebraTensorModule.map_eq,
     ← comp_assoc _ _ (tensorTensorTensorComm R _ _ _ _).toLinearMap]
@@ -261,7 +261,7 @@ instance convNonUnitalNonAssocRing
 
 中文:
 实例 convNonUnitalNonAssocRing
-  签名: : NonUnitalNonAssocRing (WithConv (C ->ₗ[R] A)) where
+  签名: : 非幺非结合环 (WithConv (C ->ₗ[R] A)) where
 -/
 instance convNonUnitalNonAssocRing : NonUnitalNonAssocRing (WithConv (C ->ₗ[R] A)) where
 
@@ -304,7 +304,7 @@ lemma convMul_comp_coalgHom_distrib
 
 中文:
 引理 convMul_comp_coalgHom_distrib
-  结论: [AddCommMonoid B] [Module R B] [CoalgebraStruct R B]
+  结论: [加法交换幺半群 B] [模 R B] [余algebraStruct R B]
   证明: by
   simp [convMul_def, map_comp, comp_assoc]
 
@@ -330,7 +330,7 @@ instance convNonUnitalSemiring
 
 中文:
 实例 convNonUnitalSemiring
-  签名: : NonUnitalSemiring (WithConv (C ->ₗ[R] A)) where
+  签名: : 非幺半环 (WithConv (C ->ₗ[R] A)) where
   定义体: toConv_injective.eq_iff.mpr calc
     _ = (μ ∘ₗ rTensor _ μ) ∘ₗ (((f.ofConv otimesₘ g.ofConv) otimesₘ h.ofConv) ∘ₗ
         (TensorProduct.assoc R C C C).symm) ∘ₗ lTensor C δ ∘ₗ δ := by
@@ -368,7 +368,7 @@ instance convNonUnitalRing
 
 中文:
 实例 convNonUnitalRing
-  签名: : NonUnitalRing (WithConv (C ->ₗ[R] A)) where
+  签名: : 非幺环 (WithConv (C ->ₗ[R] A)) where
 -/
 instance convNonUnitalRing : NonUnitalRing (WithConv (C ->ₗ[R] A)) where
 
@@ -416,7 +416,7 @@ instance convOne
 
 中文:
 实例 convOne
-  签名: : One (WithConv (C ->ₗ[R] A)) where one
+  签名: : 幺 (WithConv (C ->ₗ[R] A)) where one
   定义体: toConv (Algebra.linearMap R A ∘ₗ counit)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, counit, linearMap, toConv
@@ -433,7 +433,7 @@ lemma convOne_def
 
 中文:
 引理 convOne_def
-  结论: (1 : WithConv (C ->ₗ[R] A)) = toConv (Algebra.linearMap R A ∘ₗ counit)
+  结论: (1 : WithConv (C ->ₗ[R] A)) = toConv (代数.linearMap R A ∘ₗ counit)
   证明: rfl
 -/
 lemma convOne_def : (1 : WithConv (C ->ₗ[R] A)) = toConv (Algebra.linearMap R A ∘ₗ counit) := rfl
@@ -465,7 +465,7 @@ instance convSemiring
 
 中文:
 实例 convSemiring
-  签名: : Semiring (WithConv (C ->ₗ[R] A)) where
+  签名: : 半环 (WithConv (C ->ₗ[R] A)) where
   定义体: by ext; simp [convOne_def, ← map_comp_rTensor]
   mul_one f := by ext; simp [convOne_def, ← map_comp_lTensor]
 
@@ -487,7 +487,7 @@ instance convAlgebra
 
 中文:
 实例 convAlgebra
-  签名: [CommSemiring S] [Algebra S A] [SMulCommClass R S A]
+  签名: [交换半环 S] [代数 S A] [标量交换类 R S A]
   定义体: .ofModule smul_mul_assoc mul_smul_comm
 
 @[simp]
@@ -509,7 +509,7 @@ lemma convAlgebraMap_apply
 
 中文:
 引理 convAlgebraMap_apply
-  条件: [CommSemiring S] [Algebra S A] [SMulCommClass R S A] (s : S) (c : C)
+  条件: [交换半环 S] [代数 S A] [标量交换类 R S A] (s : S) (c : C)
   证明: rfl
 -/
 lemma convAlgebraMap_apply [CommSemiring S] [Algebra S A] [SMulCommClass R S A] (s : S) (c : C) :
@@ -531,7 +531,7 @@ instance convCommSemiring
 
 中文:
 实例 convCommSemiring
-  签名: : CommSemiring (WithConv (C ->ₗ[R] A)) where
+  签名: : 交换半环 (WithConv (C ->ₗ[R] A)) where
   定义体: by ext x; rw [convMul_apply, ← comm_comul R x, map_comm, mul'_comm, convMul_apply]
 
 Depends on / 依赖: _comm, comm_comul, convMul_apply, map_comm
@@ -553,7 +553,7 @@ instance convRing
 
 中文:
 实例 convRing
-  签名: : Ring (WithConv (C ->ₗ[R] A)) where
+  签名: : 环 (WithConv (C ->ₗ[R] A)) where
 -/
 instance convRing : Ring (WithConv (C ->ₗ[R] A)) where
 
@@ -571,7 +571,7 @@ instance convCommRing
 
 中文:
 实例 convCommRing
-  签名: : CommRing (WithConv (C ->ₗ[R] A)) where
+  签名: : 交换环 (WithConv (C ->ₗ[R] A)) where
 -/
 instance convCommRing : CommRing (WithConv (C ->ₗ[R] A)) where
 

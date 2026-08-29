@@ -68,7 +68,7 @@ definition productIsLimit
 
 中文:
 定义 productIsLimit
-  签名: : IsLimit (productCone X Y)
+  签名: : 是极限 (productCone X Y)
   定义体: by
   refine BinaryFan.isLimitMk (fun s => ofHom _ { toFun x := (s.fst x, s.snd x) })
     (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
@@ -104,7 +104,7 @@ definition cartesianMonoidalCategory
 
 中文:
 定义 cartesianMonoidalCategory
-  签名: [对任意 (X Y : CompHausLike.{u} P), Has命题 P (X × Y)]
+  签名: [对任意 (X Y : 余mpHausLike.{u} P), 有命题 P (X × Y)]
   定义体: .ofChosenFiniteProducts
     ⟨_, CompHausLike.isTerminalPUnit⟩
     (fun X Y => ⟨productCone X Y, productIsLimit X Y⟩)
@@ -158,7 +158,7 @@ definition coproductIsColimit
 
 中文:
 定义 coproductIsColimit
-  签名: : IsColimit (coproductCocone X Y)
+  签名: : 是余极限 (coproductCocone X Y)
   定义体: by
   refine BinaryCofan.isColimitMk (fun s => ofHom _ { toFun := Sum.elim s.inl s.inr })
     (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_

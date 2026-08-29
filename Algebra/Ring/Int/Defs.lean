@@ -46,7 +46,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing 整数 where
+  签名: : 交换环 整数 where
   定义体: instAddCommGroup
   __ := instCommSemigroup
   zero_mul := Int.zero_mul
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCancelMulZero 整数
+  签名: 是乘零消去 整数
   定义体: (mul_eq_mul_left_iff ha).1
   mul_right_cancel_of_ne_zero ha _ _ := (mul_eq_mul_right_iff ha).1
 
@@ -111,7 +111,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: : IsDomain 整数 where
+  签名: : 是整环 整数 where
 -/
 instance instIsDomain : IsDomain Int where
 
@@ -125,7 +125,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero 整数 where cast_injective _ _
+  签名: : 特征零 整数 where cast_injective _ _
   定义体: ofNat.inj
 
 Depends on / 依赖: ofNat.inj
@@ -144,7 +144,7 @@ instance instMulDivCancelClass
 
 中文:
 实例 instMulDivCancelClass
-  签名: : MulDivCancelClass 整数 where mul_div_cancel _ _
+  签名: : MulDivCancel类 整数 where mul_div_cancel _ _
   定义体: mul_ediv_cancel _
 
 @[simp, norm_cast]
@@ -172,7 +172,7 @@ lemma cast_mul
 
 中文:
 引理 cast_mul
-  条件: {α : 类型} [NonAssocRing α]
+  条件: {α : 类型} [非结合环 α]
   结论: 对任意 m n, ((m * n : 整数) : α) = m * n
   证明: fun m => by
   obtain ⟨m, rfl | rfl⟩ := Int.eq_nat_or_neg m
@@ -205,7 +205,7 @@ lemma cast_mul_eq_zsmul_cast
 
 中文:
 引理 cast_mul_eq_zsmul_cast
-  条件: {α : 类型} [AddGroupWithOne α]
+  条件: {α : 类型} [加法带幺群 α]
   证明: fun m => Int.induction_on m (by simp) (fun _ ih => by simp [add_mul, add_zsmul, ih]) fun _ ih => by
     simp only [sub_mul, one_mul, cast_sub, ih, sub_zsmul, one_zsmul, ← sub_eq_add_neg, forall_const]
 
@@ -227,7 +227,7 @@ lemma cast_pow
 
 中文:
 引理 cast_pow
-  条件: {R : 类型} [Ring R] (n : 整数) (m : 自然数)
+  条件: {R : 类型} [环 R] (n : 整数) (m : 自然数)
   证明: by
   induction m <;> simp [_root_.pow_succ, *]
 -/
@@ -254,7 +254,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring 整数
+  签名: : 交换半环 整数
   定义体: inferInstance
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.instNoetherianSpace, convert, instNoetherianSpace
@@ -270,7 +270,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring 整数
+  签名: : 半环 整数
   定义体: inferInstance
 -/
 instance instSemiring : Semiring Int := inferInstance
@@ -284,7 +284,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring 整数
+  签名: : 环 整数
   定义体: inferInstance
 -/
 instance instRing : Ring Int := inferInstance

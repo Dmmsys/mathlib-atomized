@@ -77,7 +77,7 @@ definition TendstoUniformlyOnFilter
 
 中文:
 定义 TendstoUniformlyOnFilter
-  签名: (F : ι -> α -> β) (f : α -> β) (p : Filter ι) (p' : Filter α)
+  签名: (F : ι -> α -> β) (f : α -> β) (p : 滤子 ι) (p' : 滤子 α)
   定义体: forall u in 𝓤 β, forallᶠ n : ι × α in p ×ˢ p', (f n.snd, F n.fst n.snd) in u
 
 Depends on / 依赖: n.fst, n.snd
@@ -113,7 +113,7 @@ definition TendstoUniformlyOn
 
 中文:
 定义 TendstoUniformlyOn
-  签名: (F : ι -> α -> β) (f : α -> β) (p : Filter ι) (s : Set α)
+  签名: (F : ι -> α -> β) (f : α -> β) (p : 滤子 ι) (s : 集合 α)
   定义体: forall u in 𝓤 β, forallᶠ n in p, forall x : α, x in s -> (f x, F n x) in u
 -/
 def TendstoUniformlyOn (F : ι -> α -> β) (f : α -> β) (p : Filter ι) (s : Set α) :=
@@ -190,7 +190,7 @@ definition TendstoUniformly
 
 中文:
 定义 TendstoUniformly
-  签名: (F : ι -> α -> β) (f : α -> β) (p : Filter ι)
+  签名: (F : ι -> α -> β) (f : α -> β) (p : 滤子 ι)
   定义体: forall u in 𝓤 β, forallᶠ n in p, forall x : α, (f x, F n x) in u
 -/
 def TendstoUniformly (F : ι -> α -> β) (f : α -> β) (p : Filter ι) :=
@@ -279,7 +279,7 @@ lemma tendstoUniformlyOn_iff_restrict
 
 中文:
 引理 tendstoUniformlyOn_iff_restrict
-  条件: {K : Set α}
+  条件: {K : 集合 α}
   结论: TendstoUniformlyOn F f p K ↔
   证明: tendstoUniformlyOn_iff_tendstoUniformly_comp_coe
 
@@ -390,7 +390,7 @@ theorem TendstoUniformlyOnFilter.mono_left
 
 中文:
 定理 TendstoUniformlyOnFilter.mono_left
-  结论: {p'' : Filter ι} (h : TendstoUniformlyOnFilter F f p p')
+  结论: {p'' : 滤子 ι} (h : TendstoUniformlyOnFilter F f p p')
   证明: fun u hu =>
   (h u hu).filter_mono (p'.prod_mono_left hp)
 -/
@@ -409,7 +409,7 @@ theorem TendstoUniformlyOnFilter.mono_right
 
 中文:
 定理 TendstoUniformlyOnFilter.mono_right
-  结论: {p'' : Filter α} (h : TendstoUniformlyOnFilter F f p p')
+  结论: {p'' : 滤子 α} (h : TendstoUniformlyOnFilter F f p p')
   证明: fun u hu =>
   (h u hu).filter_mono (p.prod_mono_right hp)
 -/
@@ -728,8 +728,8 @@ theorem UniformContinuous.comp_tendstoUniformlyOnFilter
   proof: fun _u hu => h _ (hg hu)
 
 中文:
-定理 UniformContinuous.comp_tendstoUniformlyOnFilter
-  结论: [UniformSpace γ] {g : β -> γ}
+定理 一致连续.comp_tendstoUniformlyOnFilter
+  结论: [一致空间 γ] {g : β -> γ}
   证明: fun _u hu => h _ (hg hu)
 -/
 theorem UniformContinuous.comp_tendstoUniformlyOnFilter [UniformSpace γ] {g : β -> γ}
@@ -745,8 +745,8 @@ theorem UniformContinuous.comp_tendstoUniformlyOn
   proof: fun _u hu => h _ (hg hu)
 
 中文:
-定理 UniformContinuous.comp_tendstoUniformlyOn
-  结论: [UniformSpace γ] {g : β -> γ}
+定理 一致连续.comp_tendstoUniformlyOn
+  结论: [一致空间 γ] {g : β -> γ}
   证明: fun _u hu => h _ (hg hu)
 -/
 theorem UniformContinuous.comp_tendstoUniformlyOn [UniformSpace γ] {g : β -> γ}
@@ -762,8 +762,8 @@ theorem UniformContinuous.comp_tendstoUniformly
   proof: fun _u hu => h _ (hg hu)
 
 中文:
-定理 UniformContinuous.comp_tendstoUniformly
-  结论: [UniformSpace γ] {g : β -> γ}
+定理 一致连续.comp_tendstoUniformly
+  结论: [一致空间 γ] {g : β -> γ}
   证明: fun _u hu => h _ (hg hu)
 -/
 theorem UniformContinuous.comp_tendstoUniformly [UniformSpace γ] {g : β -> γ}
@@ -783,7 +783,7 @@ theorem TendstoUniformlyOnFilter.prodMap
 
 中文:
 定理 TendstoUniformlyOnFilter.prodMap
-  结论: {ι' α' β' : 类型} [UniformSpace β'] {F' : ι' -> α' -> β'}
+  结论: {ι' α' β' : 类型} [一致空间 β'] {F' : ι' -> α' -> β'}
   证明: by
   rw [tendstoUniformlyOnFilter_iff_tendsto] at h h' ⊢
   rw [uniformity_prod_eq_comap_prod]; rw [tendsto_comap_iff]; rw [← map_swap4_prod]; rw [tendsto_map'_iff]
@@ -812,7 +812,7 @@ theorem TendstoUniformlyOn.prodMap
 
 中文:
 定理 TendstoUniformlyOn.prodMap
-  结论: {ι' α' β' : 类型} [UniformSpace β'] {F' : ι' -> α' -> β'}
+  结论: {ι' α' β' : 类型} [一致空间 β'] {F' : ι' -> α' -> β'}
   证明: by
   rw [tendstoUniformlyOn_iff_tendstoUniformlyOnFilter] at h h' ⊢
   simpa only [prod_principal_principal] using h.prodMap h'
@@ -839,7 +839,7 @@ theorem TendstoUniformly.prodMap
 
 中文:
 定理 TendstoUniformly.prodMap
-  结论: {ι' α' β' : 类型} [UniformSpace β'] {F' : ι' -> α' -> β'}
+  结论: {ι' α' β' : 类型} [一致空间 β'] {F' : ι' -> α' -> β'}
   证明: by
   rw [← tendstoUniformlyOn_univ]; rw [← univ_prod_univ] at *
   exact h.prodMap h'
@@ -862,7 +862,7 @@ theorem TendstoUniformlyOnFilter.prodMk
 
 中文:
 定理 TendstoUniformlyOnFilter.prodMk
-  结论: {ι' β' : 类型} [UniformSpace β'] {F' : ι' -> α -> β'}
+  结论: {ι' β' : 类型} [一致空间 β'] {F' : ι' -> α -> β'}
   证明: fun u hu => ((h.prodMap h') u hu).diag_of_prod_right
 
 Depends on / 依赖: diag_of_prod_right, h.prodMap, prodMap
@@ -884,7 +884,7 @@ theorem TendstoUniformlyOn.prodMk
 
 中文:
 定理 TendstoUniformlyOn.prodMk
-  结论: {ι' β' : 类型} [UniformSpace β'] {F' : ι' -> α -> β'}
+  结论: {ι' β' : 类型} [一致空间 β'] {F' : ι' -> α -> β'}
   证明: (congr_arg _ s.inter_self).mp ((h.prodMap h').comp Function.diag)
 -/
 protected theorem TendstoUniformlyOn.prodMk {ι' β' : Type*} [UniformSpace β'] {F' : ι' -> α -> β'}
@@ -904,7 +904,7 @@ theorem TendstoUniformly.prodMk
 
 中文:
 定理 TendstoUniformly.prodMk
-  结论: {ι' β' : 类型} [UniformSpace β'] {F' : ι' -> α -> β'} {f' : α -> β'}
+  结论: {ι' β' : 类型} [一致空间 β'] {F' : ι' -> α -> β'} {f' : α -> β'}
   证明: (h.prodMap h').comp Function.diag
 
 Depends on / 依赖: Function, Function.diag, h.prodMap, prodMap
@@ -1033,8 +1033,8 @@ theorem Filter.Tendsto.tendstoUniformlyOnFilter_const
   simpa only [nhds_eq_comap_uniformity, tendsto_comap_iff] using! hg.comp (tendsto_fst (g := p'))
 
 中文:
-定理 Filter.Tendsto.tendstoUniformlyOnFilter_const
-  结论: {g : ι -> β} {b : β} (hg : Tendsto g p (𝓝 b))
+定理 滤子.收敛.tendstoUniformlyOnFilter_const
+  结论: {g : ι -> β} {b : β} (hg : 收敛 g p (𝓝 b))
   证明: by
   simpa only [nhds_eq_comap_uniformity, tendsto_comap_iff] using! hg.comp (tendsto_fst (g := p'))
 
@@ -1054,8 +1054,8 @@ theorem Filter.Tendsto.tendstoUniformlyOn_const
   proof: tendstoUniformlyOn_iff_tendstoUniformlyOnFilter.mpr (hg.tendstoUniformlyOnFilter_const (𝓟 s))
 
 中文:
-定理 Filter.Tendsto.tendstoUniformlyOn_const
-  结论: {g : ι -> β} {b : β} (hg : Tendsto g p (𝓝 b))
+定理 滤子.收敛.tendstoUniformlyOn_const
+  结论: {g : ι -> β} {b : β} (hg : 收敛 g p (𝓝 b))
   证明: tendstoUniformlyOn_iff_tendstoUniformlyOnFilter.mpr (hg.tendstoUniformlyOnFilter_const (𝓟 s))
 
 Depends on / 依赖: hg.tendstoUniformlyOnFilter_const, tendstoUniformlyOnFilter_const, tendstoUniformlyOn_iff_tendstoUniformlyOnFilter, tendstoUniformlyOn_iff_tendstoUniformlyOnFilter.mpr
@@ -1073,8 +1073,8 @@ theorem Filter.Tendsto.tendstoUniformly_const
   proof: tendstoUniformly_iff_tendstoUniformlyOnFilter.mpr (hg.tendstoUniformlyOnFilter_const _)
 
 中文:
-定理 Filter.Tendsto.tendstoUniformly_const
-  条件: {g : ι -> β} {b : β} (hg : Tendsto g p (𝓝 b))
+定理 滤子.收敛.tendstoUniformly_const
+  条件: {g : ι -> β} {b : β} (hg : 收敛 g p (𝓝 b))
   证明: tendstoUniformly_iff_tendstoUniformlyOnFilter.mpr (hg.tendstoUniformlyOnFilter_const _)
 
 Depends on / 依赖: hg.tendstoUniformlyOnFilter_const, tendstoUniformlyOnFilter_const, tendstoUniformly_iff_tendstoUniformlyOnFilter, tendstoUniformly_iff_tendstoUniformlyOnFilter.mpr
@@ -1099,7 +1099,7 @@ theorem UniformContinuousOn.tendstoUniformlyOn
 
 中文:
 定理 UniformContinuousOn.tendstoUniformlyOn
-  结论: [UniformSpace α] [UniformSpace γ] {U : Set α}
+  结论: [一致空间 α] [一致空间 γ] {U : 集合 α}
   证明: by
   set φ := fun q : α × β => ((x, q.2), q)
   rw [tendstoUniformlyOn_iff_tendsto]
@@ -1135,7 +1135,7 @@ theorem UniformContinuousOn.tendstoUniformly
 
 中文:
 定理 UniformContinuousOn.tendstoUniformly
-  结论: [UniformSpace α] [UniformSpace γ] {U : Set α}
+  结论: [一致空间 α] [一致空间 γ] {U : 集合 α}
   证明: by
   simpa only [tendstoUniformlyOn_univ, nhdsWithin_eq_nhds.2 hU]
     using hF.tendstoUniformlyOn (mem_of_mem_nhds hU)
@@ -1158,7 +1158,7 @@ theorem UniformContinuous₂.tendstoUniformly
 
 中文:
 定理 UniformContinuous₂.tendstoUniformly
-  结论: [UniformSpace α] [UniformSpace γ] {f : α -> β -> γ}
+  结论: [一致空间 α] [一致空间 γ] {f : α -> β -> γ}
   证明: UniformContinuousOn.tendstoUniformly univ_mem by rwa [univ_prod_univ, uniformContinuousOn_univ]
 
 Depends on / 依赖: UniformContinuousOn, UniformContinuousOn.tendstoUniformly, tendstoUniformly, uniformContinuousOn_univ, univ_mem, univ_prod_univ
@@ -1332,7 +1332,7 @@ definition UniformCauchySeqOnFilter
 
 中文:
 定义 UniformCauchySeqOnFilter
-  签名: (F : ι -> α -> β) (p : Filter ι) (p' : Filter α)
+  签名: (F : ι -> α -> β) (p : 滤子 ι) (p' : 滤子 α)
   定义体: forall u in 𝓤 β, forallᶠ m : (ι × ι) × α in (p ×ˢ p) ×ˢ p', (F m.fst.fst m.snd, F m.fst.snd m.snd) in u
 
 Depends on / 依赖: m.fst.fst, m.fst.snd, m.snd
@@ -1350,7 +1350,7 @@ definition UniformCauchySeqOn
 
 中文:
 定义 UniformCauchySeqOn
-  签名: (F : ι -> α -> β) (p : Filter ι) (s : Set α)
+  签名: (F : ι -> α -> β) (p : 滤子 ι) (s : 集合 α)
   定义体: forall u in 𝓤 β, forallᶠ m : ι × ι in p ×ˢ p, forall x : α, x in s -> (F m.fst x, F m.snd x) in u
 
 Depends on / 依赖: m.fst, m.snd
@@ -1548,7 +1548,7 @@ theorem UniformCauchySeqOnFilter.mono_left
 
 中文:
 定理 UniformCauchySeqOnFilter.mono_left
-  结论: {p'' : Filter ι} (hf : UniformCauchySeqOnFilter F p p')
+  结论: {p'' : 滤子 ι} (hf : UniformCauchySeqOnFilter F p p')
   证明: fun u hu =>
   (hf u hu).filter_mono (p'.prod_mono_left (Filter.prod_mono hp hp))
 -/
@@ -1568,7 +1568,7 @@ theorem UniformCauchySeqOnFilter.mono_right
 
 中文:
 定理 UniformCauchySeqOnFilter.mono_right
-  结论: {p'' : Filter α} (hf : UniformCauchySeqOnFilter F p p')
+  结论: {p'' : 滤子 α} (hf : UniformCauchySeqOnFilter F p p')
   证明: fun u hu =>
   have := (hf u hu).filter_mono ((p ×ˢ p).prod_mono_right hp)
   this.mono (by simp)
@@ -1665,8 +1665,8 @@ theorem UniformContinuous.comp_uniformCauchySeqOn
   proof: fun _u hu => hf _ (hg hu)
 
 中文:
-定理 UniformContinuous.comp_uniformCauchySeqOn
-  结论: [UniformSpace γ] {g : β -> γ}
+定理 一致连续.comp_uniformCauchySeqOn
+  结论: [一致空间 γ] {g : β -> γ}
   证明: fun _u hu => hf _ (hg hu)
 -/
 theorem UniformContinuous.comp_uniformCauchySeqOn [UniformSpace γ] {g : β -> γ}
@@ -1690,7 +1690,7 @@ theorem UniformCauchySeqOn.prodMap
 
 中文:
 定理 UniformCauchySeqOn.prodMap
-  结论: {ι' α' β' : 类型} [UniformSpace β'] {F' : ι' -> α' -> β'}
+  结论: {ι' α' β' : 类型} [一致空间 β'] {F' : ι' -> α' -> β'}
   证明: by
   intro u hu
   rw [uniformity_prod_eq_prod]; rw [mem_map]; rw [mem_prod_iff] at hu
@@ -1724,8 +1724,8 @@ theorem UniformCauchySeqOn.prod
   proof: (congr_arg _ s.inter_self).mp ((h.prodMap h').comp Function.diag)
 
 中文:
-定理 UniformCauchySeqOn.prod
-  结论: {ι' β' : 类型} [UniformSpace β'] {F' : ι' -> α -> β'}
+定理 UniformCauchySeqOn.乘积
+  结论: {ι' β' : 类型} [一致空间 β'] {F' : ι' -> α -> β'}
   证明: (congr_arg _ s.inter_self).mp ((h.prodMap h').comp Function.diag)
 
 Depends on / 依赖: Function, Function.diag, congr_arg, h.prodMap, inter_self, prodMap, s.inter_self
@@ -1746,8 +1746,8 @@ theorem UniformCauchySeqOn.prod'
   (hh.prodMap hh).eventually ((h.prod h') u hu)
 
 中文:
-定理 UniformCauchySeqOn.prod'
-  结论: {β' : 类型} [UniformSpace β'] {F' : ι -> α -> β'}
+定理 UniformCauchySeqOn.乘积'
+  结论: {β' : 类型} [一致空间 β'] {F' : ι -> α -> β'}
   证明: fun u hu =>
   have hh : Tendsto (fun x : ι => (x, x)) p (p ×ˢ p) := tendsto_diag
   (hh.prodMap hh).eventually ((h.prod h') u hu)
@@ -1798,7 +1798,7 @@ theorem UniformCauchySeqOn.cauchySeq
 
 中文:
 定理 UniformCauchySeqOn.cauchySeq
-  结论: [Nonempty ι] [SemilatticeSup ι]
+  结论: [非空 ι] [SemilatticeSup ι]
   证明: hf.cauchy_map (hp := atTop_neBot) hx
 
 Depends on / 依赖: atTop_neBot, cauchy_map, hf.cauchy_map
@@ -1826,7 +1826,7 @@ theorem tendstoUniformlyOn_of_seq_tendstoUniformlyOn
 
 中文:
 定理 tendstoUniformlyOn_of_seq_tendstoUniformlyOn
-  结论: {l : Filter ι} [l.IsCountablyGenerated]
+  结论: {l : 滤子 ι} [l.是余untablyGenerated]
   证明: by
   rw [tendstoUniformlyOn_iff_tendsto]; rw [tendsto_iff_seq_tendsto]
   intro u hu
@@ -1859,7 +1859,7 @@ theorem TendstoUniformlyOn.seq_tendstoUniformlyOn
 
 中文:
 定理 TendstoUniformlyOn.seq_tendstoUniformlyOn
-  结论: {l : Filter ι} (h : TendstoUniformlyOn F f l s)
+  结论: {l : 滤子 ι} (h : TendstoUniformlyOn F f l s)
   证明: by
   rw [tendstoUniformlyOn_iff_tendsto] at h ⊢
   exact h.comp ((hu.comp tendsto_fst).prodMk tendsto_snd)
@@ -1881,7 +1881,7 @@ theorem tendstoUniformlyOn_iff_seq_tendstoUniformlyOn
 
 中文:
 定理 tendstoUniformlyOn_iff_seq_tendstoUniformlyOn
-  条件: {l : Filter ι} [l.IsCountablyGenerated]
+  条件: {l : 滤子 ι} [l.是余untablyGenerated]
   证明: ⟨TendstoUniformlyOn.seq_tendstoUniformlyOn, tendstoUniformlyOn_of_seq_tendstoUniformlyOn⟩
 
 Depends on / 依赖: TendstoUniformlyOn, TendstoUniformlyOn.seq_tendstoUniformlyOn, seq_tendstoUniformlyOn, tendstoUniformlyOn_of_seq_tendstoUniformlyOn
@@ -1903,7 +1903,7 @@ theorem tendstoUniformly_iff_seq_tendstoUniformly
 
 中文:
 定理 tendstoUniformly_iff_seq_tendstoUniformly
-  条件: {l : Filter ι} [l.IsCountablyGenerated]
+  条件: {l : 滤子 ι} [l.是余untablyGenerated]
   证明: by
   simp_rw [← tendstoUniformlyOn_univ]
   exact tendstoUniformlyOn_iff_seq_tendstoUniformlyOn

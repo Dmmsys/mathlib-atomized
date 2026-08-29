@@ -43,7 +43,7 @@ definition triangleIndices
 
 中文:
 定义 triangleIndices
-  签名: (A : Finset (G × G))
+  签名: (A : 有限集 (G × G))
   定义体: A.map ⟨fun (a, b) => (a, b, a + b), by rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ ⟨⟩; rfl⟩
 
 @[simp]
@@ -124,7 +124,7 @@ exact .inl hs ⟨hc.1, hb.1, ha.1, hb.2.symm.trans ha.2⟩
 
 中文:
 引理 noAccidental
-  条件: (hs : IsCornerFree (A : Set (G × G)))
+  条件: (hs : IsCornerFree (A : 集合 (G × G)))
   证明: by
     simp only [mk_mem_triangleIndices] at ha hb hc
 exact .inl hs ⟨hc.1, hb.1, ha.1, hb.2.symm.trans ha.2⟩
@@ -149,7 +149,7 @@ lemma farFromTriangleFree_graph
 
 中文:
 引理 farFromTriangleFree_graph
-  条件: [Fintype G] [DecidableEq G] (hε : ε * card G ^ 2 <= #A)
+  条件: [有限类型 G] [DecidableEq G] (hε : ε * card G ^ 2 <= #A)
   证明: by
   refine farFromTriangleFree _ ?_
   simp_rw [card_triangleIndices, mul_comm_div, Nat.cast_pow, Nat.cast_add]
@@ -427,7 +427,7 @@ theorem rothNumberNat_isLittleO_id
   exact fun hδn => roth_3ap_theorem_nat ε hε hn _ hs₁ hδn.le hs₃
 
 中文:
-定理 rothNumberNat_isLittleO_id
+定理 rothNumber自然数_isLittleO_id
   证明: by
   simp only [isLittleO_iff, eventually_atTop, RCLike.norm_natCast]
   refine fun ε hε => ⟨cornersTheoremBound (ε / 3), fun n hn => ?_⟩

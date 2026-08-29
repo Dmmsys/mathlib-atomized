@@ -46,7 +46,7 @@ instance :
 
 中文:
 实例 :
-  签名: GCDMonoid 自然数
+  签名: 最大公约数幺半群 自然数
   定义体: Nat.gcd
   lcm := Nat.lcm
   gcd_dvd_left := Nat.gcd_dvd_left
@@ -80,7 +80,7 @@ theorem gcd_eq_nat_gcd
 中文:
 定理 gcd_eq_nat_gcd
   条件: (m n : 自然数)
-  结论: gcd m n = 自然数.gcd m n
+  结论: 最大公约数 m n = 自然数.最大公约数 m n
   证明: rfl
 -/
 theorem gcd_eq_nat_gcd (m n : Nat) : gcd m n = Nat.gcd m n :=
@@ -98,7 +98,7 @@ theorem lcm_eq_nat_lcm
 中文:
 定理 lcm_eq_nat_lcm
   条件: (m n : 自然数)
-  结论: lcm m n = 自然数.lcm m n
+  结论: 最小公倍数 m n = 自然数.最小公倍数 m n
   证明: rfl
 -/
 theorem lcm_eq_nat_lcm (m n : Nat) : lcm m n = Nat.lcm m n :=
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongNormalizedGCDMonoid 自然数
+  签名: StrongNormalizedGCD幺半群 自然数
   定义体: { (inferInstance : GCDMonoid Nat),
     (inferInstance : StrongNormalizationMonoid Nat) with
     normalize_gcd := fun _ _ => normalize_eq _
@@ -151,7 +151,7 @@ instance strongNormalizationMonoid
 
 中文:
 实例 strongNormalizationMonoid
-  签名: : StrongNormalizationMonoid 整数 where
+  签名: : StrongNormalization幺半群 整数 where
   定义体: if 0 <= a then 1 else -1
   normUnit_zero := if_pos le_rfl
   normUnit_mul {a b} hna hnb := by
@@ -379,7 +379,7 @@ instance :
 
 中文:
 实例 :
-  签名: GCDMonoid 整数
+  签名: 最大公约数幺半群 整数
   定义体: Int.gcd a b
   lcm a b := Int.lcm a b
   gcd_dvd_left := Int.gcd_dvd_left
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongNormalizedGCDMonoid 整数
+  签名: StrongNormalizedGCD幺半群 整数
   定义体: { Int.strongNormalizationMonoid,
     (inferInstance : GCDMonoid Int) with
     normalize_gcd := fun _ _ => normalize_coe_nat _
@@ -442,7 +442,7 @@ theorem coe_gcd
 中文:
 定理 coe_gcd
   条件: (i j : 整数)
-  结论: ↑(整数.gcd i j) = GCDMonoid.gcd i j
+  结论: ↑(整数.最大公约数 i j) = 最大公约数幺半群.最大公约数 i j
   证明: rfl
 -/
 theorem coe_gcd (i j : Int) : ↑(Int.gcd i j) = GCDMonoid.gcd i j :=
@@ -460,7 +460,7 @@ theorem coe_lcm
 中文:
 定理 coe_lcm
   条件: (i j : 整数)
-  结论: ↑(整数.lcm i j) = GCDMonoid.lcm i j
+  结论: ↑(整数.最小公倍数 i j) = 最大公约数幺半群.最小公倍数 i j
   证明: rfl
 -/
 theorem coe_lcm (i j : Int) : ↑(Int.lcm i j) = GCDMonoid.lcm i j :=
@@ -478,7 +478,7 @@ theorem natAbs_gcd
 中文:
 定理 natAbs_gcd
   条件: (i j : 整数)
-  结论: natAbs (GCDMonoid.gcd i j) = 整数.gcd i j
+  结论: natAbs (最大公约数幺半群.最大公约数 i j) = 整数.最大公约数 i j
   证明: rfl
 -/
 theorem natAbs_gcd (i j : Int) : natAbs (GCDMonoid.gcd i j) = Int.gcd i j :=
@@ -496,7 +496,7 @@ theorem natAbs_lcm
 中文:
 定理 natAbs_lcm
   条件: (i j : 整数)
-  结论: natAbs (GCDMonoid.lcm i j) = 整数.lcm i j
+  结论: natAbs (最大公约数幺半群.最小公倍数 i j) = 整数.最小公倍数 i j
   证明: rfl
 -/
 theorem natAbs_lcm (i j : Int) : natAbs (GCDMonoid.lcm i j) = Int.lcm i j :=
@@ -514,7 +514,7 @@ lemma gcd_nonneg
 中文:
 引理 gcd_nonneg
   条件: (i j : 整数)
-  结论: 0 <= GCDMonoid.gcd i j
+  结论: 0 <= 最大公约数幺半群.最大公约数 i j
   证明: by simp [← coe_gcd]
 
 Depends on / 依赖: coe_gcd
@@ -532,7 +532,7 @@ lemma lcm_nonneg
 中文:
 引理 lcm_nonneg
   条件: (i j : 整数)
-  结论: 0 <= GCDMonoid.lcm i j
+  结论: 0 <= 最大公约数幺半群.最小公倍数 i j
   证明: by simp [← coe_lcm]
 
 Depends on / 依赖: coe_lcm
@@ -557,9 +557,9 @@ theorem exists_unit_of_abs
     simp only [neg_mul, one_mul]
 
 中文:
-定理 exists_unit_of_abs
+定理 存在_unit_of_abs
   条件: (a : 整数)
-  结论: 存在 (u : 整数) (_ : IsUnit u), (整数.natAbs a : 整数) = u * a
+  结论: 存在 (u : 整数) (_ : 是单位 u), (整数.natAbs a : 整数) = u * a
   证明: by
   rcases natAbs_eq a with h | h
   · use 1, isUnit_one
@@ -590,7 +590,7 @@ theorem gcd_eq_natAbs
 中文:
 定理 gcd_eq_natAbs
   条件: {a b : 整数}
-  结论: 整数.gcd a b = 自然数.gcd a.natAbs b.natAbs
+  结论: 整数.最大公约数 a b = 自然数.最大公约数 a.natAbs b.natAbs
   证明: rfl
 -/
 theorem gcd_eq_natAbs {a b : Int} : Int.gcd a b = Nat.gcd a.natAbs b.natAbs :=
@@ -612,7 +612,7 @@ refine Associates.mk_eq_mk_iff_associated.2 Associated.symm ⟨normUnit a, ?_⟩
 
 
 中文:
-定义 associatesIntEquivNat
+定义 associates整数Equiv自然数
   签名: : Associates 整数 ≃ 自然数
   定义体: by
   refine ⟨(·.out.natAbs), (Associates.mk ·), ?_, fun n => ?_⟩
@@ -642,7 +642,7 @@ theorem Int.associated_natAbs
   proof: associated_of_dvd_dvd (Int.dvd_natCast.mpr dvd_rfl) (Int.natAbs_dvd.mpr dvd_rfl)
 
 中文:
-定理 Int.associated_natAbs
+定理 整数.associated_natAbs
   条件: (k : 整数)
   结论: Associated k k.natAbs
   证明: associated_of_dvd_dvd (Int.dvd_natCast.mpr dvd_rfl) (Int.natAbs_dvd.mpr dvd_rfl)
@@ -664,7 +664,7 @@ theorem Int.associated_iff_natAbs
   exact associated_iff_eq
 
 中文:
-定理 Int.associated_iff_natAbs
+定理 整数.associated_iff_natAbs
   条件: {a b : 整数}
   结论: Associated a b ↔ a.natAbs = b.natAbs
   证明: by
@@ -689,7 +689,7 @@ theorem Int.associated_iff
   exact Int.natAbs_eq_natAbs_iff
 
 中文:
-定理 Int.associated_iff
+定理 整数.associated_iff
   条件: {a b : 整数}
   结论: Associated a b ↔ a = b ∨ a = -b
   证明: by

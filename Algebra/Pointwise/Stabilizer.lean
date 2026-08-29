@@ -42,7 +42,7 @@ lemma stabilizer_empty
 
 中文:
 引理 stabilizer_empty
-  结论: stabilizer G (∅ : Set α) = ⊤
+  结论: stabilizer G (∅ : 集合 α) = ⊤
   证明: Subgroup.coe_eq_univ.1 eq_univ_of_forall fun _a => smul_set_empty
 
 @[to_additive (attr := simp)]
@@ -67,7 +67,7 @@ lemma stabilizer_univ
 
 中文:
 引理 stabilizer_univ
-  结论: stabilizer G (Set.univ : Set α) = ⊤
+  结论: stabilizer G (集合.univ : 集合 α) = ⊤
   证明: by
   ext
   simp
@@ -93,7 +93,7 @@ lemma stabilizer_singleton
 中文:
 引理 stabilizer_singleton
   条件: (b : α)
-  结论: stabilizer G ({b} : Set α) = stabilizer G b
+  结论: stabilizer G ({b} : 集合 α) = stabilizer G b
   证明: by ext; simp
 
 @[to_additive]
@@ -118,7 +118,7 @@ lemma mem_stabilizer_set
 
 中文:
 引理 mem_stabilizer_set
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: a in stabilizer G s ↔ 对任意 b, a • b in s ↔ b in s
   证明: by
   refine mem_stabilizer_iff.trans ⟨fun h b => ?_, fun h => ?_⟩
@@ -153,7 +153,7 @@ lemma map_stabilizer_le
 
 中文:
 引理 map_stabilizer_le
-  条件: (f : G ->* H) (s : Set G)
+  条件: (f : G ->* H) (s : 集合 G)
   证明: by
   rintro a
   simp only [Subgroup.mem_map, mem_stabilizer_iff, forall_exists_index, and_imp]
@@ -190,8 +190,8 @@ lemma stabilizer_mul_self
 
 中文:
 引理 stabilizer_mul_self
-  条件: (s : Set G)
-  结论: (stabilizer G s : Set G) * s = s
+  条件: (s : 集合 G)
+  结论: (stabilizer G s : 集合 G) * s = s
   证明: by
   ext
   refine ⟨?_, fun h => ⟨_, (stabilizer G s).one_mem, _, h, one_mul _⟩⟩
@@ -223,7 +223,7 @@ lemma stabilizer_inf_stabilizer_le_stabilizer_apply₂
 
 中文:
 引理 stabilizer_inf_stabilizer_le_stabilizer_apply₂
-  结论: {f : Set α -> Set α -> Set α}
+  结论: {f : 集合 α -> 集合 α -> 集合 α}
   证明: by aesop (add simp [SetLike.le_def])
 
 @[to_additive]
@@ -383,7 +383,7 @@ lemma op_smul_set_stabilizer_subset
 中文:
 引理 op_smul_set_stabilizer_subset
   条件: (ha : a in s)
-  结论: (stabilizer G s : Set G) <• a subseteq s
+  结论: (stabilizer G s : 集合 G) <• a subseteq s
   证明: smul_set_subset_iff.2 fun b hb => by rw [← hb]; exact smul_mem_smul_set ha
 
 @[to_additive]
@@ -432,8 +432,8 @@ exact (hs.div <| finite_singleton _).subset stabilizer_subset_div_right ha
 
 中文:
 引理 stabilizer_finite
-  条件: (hs₀ : s.Nonempty) (hs : s.Finite)
-  结论: (stabilizer G s : Set G).Finite
+  条件: (hs₀ : s.非空) (hs : s.有限)
+  结论: (stabilizer G s : 集合 G).有限
   证明: by
   obtain ⟨a, ha⟩ := hs₀
 exact (hs.div <| finite_singleton _).subset stabilizer_subset_div_right ha
@@ -463,7 +463,7 @@ lemma smul_set_stabilizer_subset
 中文:
 引理 smul_set_stabilizer_subset
   条件: (ha : a in s)
-  结论: a • (stabilizer G s : Set G) subseteq s
+  结论: a • (stabilizer G s : 集合 G) subseteq s
   证明: by
   simpa using op_smul_set_stabilizer_subset ha
 
@@ -500,8 +500,8 @@ lemma stabilizer_subgroup
 
 中文:
 引理 stabilizer_subgroup
-  条件: (s : Subgroup G)
-  结论: stabilizer G (s : Set G) = s
+  条件: (s : 子群 G)
+  结论: stabilizer G (s : 集合 G) = s
   证明: by
   simp_rw [SetLike.ext_iff, mem_stabilizer_set]
   refine fun a => ⟨fun h => ?_, fun ha b => s.mul_mem_cancel_left ha⟩
@@ -534,8 +534,8 @@ lemma stabilizer_op_subgroup
 
 中文:
 引理 stabilizer_op_subgroup
-  条件: (s : Subgroup G)
-  结论: stabilizer Gᵐᵒᵖ (s : Set G) = s.op
+  条件: (s : 子群 G)
+  结论: stabilizer Gᵐᵒᵖ (s : 集合 G) = s.op
   证明: by
   simp_rw [SetLike.ext_iff, mem_stabilizer_set]
   simp only [smul_eq_mul_unop, SetLike.mem_coe, Subgroup.mem_op, «forall», unop_op]
@@ -568,8 +568,8 @@ lemma stabilizer_subgroup_op
 
 中文:
 引理 stabilizer_subgroup_op
-  条件: (s : Subgroup Gᵐᵒᵖ)
-  结论: stabilizer G (s : Set Gᵐᵒᵖ) = s.unop
+  条件: (s : 子群 Gᵐᵒᵖ)
+  结论: stabilizer G (s : 集合 Gᵐᵒᵖ) = s.unop
   证明: by
   simp_rw [SetLike.ext_iff, mem_stabilizer_set]
   refine fun a => ⟨fun h => ?_, fun ha b => s.mul_mem_cancel_right ha⟩
@@ -606,8 +606,8 @@ lemma stabilizer_coe_finset
 
 中文:
 引理 stabilizer_coe_finset
-  条件: (s : Finset α)
-  结论: stabilizer G (s : Set α) = stabilizer G s
+  条件: (s : 有限集 α)
+  结论: stabilizer G (s : 集合 α) = stabilizer G s
   证明: by
   ext; simp [← Finset.coe_inj]
 
@@ -631,7 +631,7 @@ lemma stabilizer_finset_empty
 
 中文:
 引理 stabilizer_finset_empty
-  结论: stabilizer G (∅ : Finset α) = ⊤
+  结论: stabilizer G (∅ : 有限集 α) = ⊤
   证明: Subgroup.coe_eq_univ.1 eq_univ_of_forall Finset.smul_finset_empty
 
 @[to_additive (attr := simp)]
@@ -657,8 +657,8 @@ lemma stabilizer_finset_univ
 
 中文:
 引理 stabilizer_finset_univ
-  条件: [Fintype α]
-  结论: stabilizer G (Finset.univ : Finset α) = ⊤
+  条件: [有限类型 α]
+  结论: stabilizer G (有限集.univ : 有限集 α) = ⊤
   证明: by
   ext
   simp
@@ -685,7 +685,7 @@ lemma stabilizer_finset_singleton
 中文:
 引理 stabilizer_finset_singleton
   条件: (b : α)
-  结论: stabilizer G ({b} : Finset α) = stabilizer G b
+  结论: stabilizer G ({b} : 有限集 α) = stabilizer G b
   证明: by
   ext; simp
 
@@ -709,7 +709,7 @@ lemma mem_stabilizer_finset
 
 中文:
 引理 mem_stabilizer_finset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: a in stabilizer G s ↔ 对任意 b, a • b in s ↔ b in s
   证明: by
   simp_rw [← stabilizer_coe_finset, mem_stabilizer_set, Finset.mem_coe]
@@ -735,7 +735,7 @@ lemma mem_stabilizer_finset_iff_subset_smul_finset
 
 中文:
 引理 mem_stabilizer_finset_iff_subset_smul_finset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   证明: by
   rw [mem_stabilizer_iff]; rw [Finset.subset_iff_eq_of_card_le (Finset.card_smul_finset _ _).le]; rw [eq_comm]
 
@@ -761,7 +761,7 @@ lemma mem_stabilizer_finset_iff_smul_finset_subset
 
 中文:
 引理 mem_stabilizer_finset_iff_smul_finset_subset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   证明: by
   rw [mem_stabilizer_iff]; rw [Finset.subset_iff_eq_of_card_le (Finset.card_smul_finset _ _).ge]
 
@@ -787,7 +787,7 @@ lemma mem_stabilizer_finset'
 
 中文:
 引理 mem_stabilizer_finset'
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: a in stabilizer G s ↔ 对任意 ⦃b⦄, b in s -> a • b in s
   证明: by
   rw [← Subgroup.inv_mem_iff]; rw [mem_stabilizer_finset_iff_subset_smul_finset]
@@ -821,7 +821,7 @@ lemma mem_stabilizer_set_iff_subset_smul_set
 
 中文:
 引理 mem_stabilizer_set_iff_subset_smul_set
-  条件: {s : Set α} (hs : s.Finite)
+  条件: {s : 集合 α} (hs : s.有限)
   证明: by
   lift s to Finset α using hs
   classical
@@ -853,7 +853,7 @@ lemma mem_stabilizer_set_iff_smul_set_subset
 
 中文:
 引理 mem_stabilizer_set_iff_smul_set_subset
-  条件: {s : Set α} (hs : s.Finite)
+  条件: {s : 集合 α} (hs : s.有限)
   证明: by
   lift s to Finset α using hs
   classical
@@ -882,7 +882,7 @@ lemma mem_stabilizer_set'
 
 中文:
 引理 mem_stabilizer_set'
-  条件: {s : Set α} (hs : s.Finite)
+  条件: {s : 集合 α} (hs : s.有限)
   证明: by
   lift s to Finset α using hs
   classical simp [-mem_stabilizer_iff, mem_stabilizer_finset']

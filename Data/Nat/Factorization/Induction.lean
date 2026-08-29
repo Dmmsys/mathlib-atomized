@@ -42,7 +42,7 @@ definition recOnPrimePow
 
 中文:
 定义 recOnPrimePow
-  签名: {motive : 自然数 -> Sort*} (zero : motive 0) (one : motive 1)
+  签名: {motive : 自然数 -> 类型层*} (zero : motive 0) (one : motive 1)
   定义体: Nat.strongRec fun n =>
     match n with
     | 0 => fun _ => zero
@@ -95,7 +95,7 @@ definition recOnPosPrimePosCoprime
 
 中文:
 定义 recOnPosPrimePosCoprime
-  签名: {motive : 自然数 -> Sort*}
+  签名: {motive : 自然数 -> 类型层*}
   定义体: recOnPrimePow zero one by
     intro a p n hp' hpa hn hPa
     by_cases ha1 : a = 1
@@ -137,7 +137,7 @@ definition recOnPrimeCoprime
 
 中文:
 定义 recOnPrimeCoprime
-  签名: {motive : 自然数 -> Sort*} (zero : motive 0)
+  签名: {motive : 自然数 -> 类型层*} (zero : motive 0)
   定义体: recOnPosPrimePosCoprime (fun p n h _ => prime_pow p n h) zero (prime_pow 2 0 prime_two) coprime
 
 Depends on / 依赖: coprime, prime_pow, prime_two, recOnPosPrimePosCoprime
@@ -163,7 +163,7 @@ definition recOnMul
 
 中文:
 定义 recOnMul
-  签名: {motive : 自然数 -> Sort*} (zero : motive 0) (one : motive 1)
+  签名: {motive : 自然数 -> 类型层*} (zero : motive 0) (one : motive 1)
   定义体: recOnPrimeCoprime zero
     (fun p n hp' => Nat.rec one (fun _ ih => mul _ _ ih (prime p hp')) n)
     (fun a b _ _ _ => mul a b)
@@ -272,7 +272,7 @@ theorem multiplicative_factorization
 
 中文:
 定理 multiplicative_factorization
-  结论: {β : 类型} [CommMonoid β] (f : 自然数 -> β)
+  结论: {β : 类型} [交换幺半群 β] (f : 自然数 -> β)
   证明: by
   apply Nat.recOnPosPrimePosCoprime
   · rintro p k hp - -
@@ -313,7 +313,7 @@ theorem multiplicative_factorization'
 
 中文:
 定理 multiplicative_factorization'
-  结论: {β : 类型} [CommMonoid β] (f : 自然数 -> β)
+  结论: {β : 类型} [交换幺半群 β] (f : 自然数 -> β)
   证明: by
   obtain rfl | hn := eq_or_ne n 0
   · simpa

@@ -40,7 +40,7 @@ definition mulConst
 
 中文:
 定义 mulConst
-  签名: (A B : Finset G)
+  签名: (A B : 有限集 G)
   定义体: #(A * B) / #A
 -/
 def mulConst (A B : Finset G) : Rat>=0 := #(A * B) / #A
@@ -62,7 +62,7 @@ definition divConst
 
 中文:
 定义 divConst
-  签名: (A B : Finset G)
+  签名: (A B : 有限集 G)
   定义体: #(A / B) / #A
 -/
 def divConst (A B : Finset G) : Rat>=0 := #(A / B) / #A
@@ -110,7 +110,7 @@ lemma mulConst_mul_card
 
 中文:
 引理 mulConst_mul_card
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: σₘ[A, B] * #A = #(A * B)
   证明: by
   obtain rfl | hA := A.eq_empty_or_nonempty
@@ -143,7 +143,7 @@ lemma divConst_mul_card
 
 中文:
 引理 divConst_mul_card
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: δₘ[A, B] * #A = #(A / B)
   证明: by
   obtain rfl | hA := A.eq_empty_or_nonempty
@@ -174,7 +174,7 @@ lemma card_mul_mulConst
 
 中文:
 引理 card_mul_mulConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: #A * σₘ[A, B] = #(A * B)
   证明: by
   rw [mul_comm]; rw [mulConst_mul_card]
@@ -201,7 +201,7 @@ lemma card_mul_divConst
 
 中文:
 引理 card_mul_divConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: #A * δₘ[A, B] = #(A / B)
   证明: by
   rw [mul_comm]; rw [divConst_mul_card]
@@ -227,7 +227,7 @@ lemma mulConst_empty_left
 
 中文:
 引理 mulConst_empty_left
-  条件: (B : Finset G)
+  条件: (B : 有限集 G)
   结论: σₘ[∅, B] = 0
   证明: by simp [mulConst]
 
@@ -251,7 +251,7 @@ lemma divConst_empty_left
 
 中文:
 引理 divConst_empty_left
-  条件: (B : Finset G)
+  条件: (B : 有限集 G)
   结论: δₘ[∅, B] = 0
   证明: by simp [divConst]
 
@@ -275,7 +275,7 @@ lemma mulConst_empty_right
 
 中文:
 引理 mulConst_empty_right
-  条件: (A : Finset G)
+  条件: (A : 有限集 G)
   结论: σₘ[A, ∅] = 0
   证明: by simp [mulConst]
 
@@ -299,7 +299,7 @@ lemma divConst_empty_right
 
 中文:
 引理 divConst_empty_right
-  条件: (A : Finset G)
+  条件: (A : 有限集 G)
   结论: δₘ[A, ∅] = 0
   证明: by simp [divConst]
 
@@ -324,7 +324,7 @@ lemma mulConst_inv_right
 
 中文:
 引理 mulConst_inv_right
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: σₘ[A, B⁻¹] = δₘ[A, B]
   证明: by
   rw [mulConst]; rw [divConst]; rw [← div_eq_mul_inv]
@@ -351,7 +351,7 @@ lemma divConst_inv_right
 
 中文:
 引理 divConst_inv_right
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: δₘ[A, B⁻¹] = σₘ[A, B]
   证明: by
   rw [mulConst]; rw [divConst]; rw [div_inv_eq_mul]
@@ -380,7 +380,7 @@ lemma one_le_mulConst
 
 中文:
 引理 one_le_mulConst
-  条件: (hA : A.Nonempty) (hB : B.Nonempty)
+  条件: (hA : A.非空) (hB : B.非空)
   结论: 1 <= σₘ[A, B]
   证明: by
   rw [mulConst]; rw [one_le_div₀]
@@ -410,7 +410,7 @@ lemma one_le_mulConst_self
 
 中文:
 引理 one_le_mulConst_self
-  条件: (hA : A.Nonempty)
+  条件: (hA : A.非空)
   结论: 1 <= σₘ[A]
   证明: one_le_mulConst hA hA
 
@@ -436,7 +436,7 @@ lemma one_le_divConst
 
 中文:
 引理 one_le_divConst
-  条件: (hA : A.Nonempty) (hB : B.Nonempty)
+  条件: (hA : A.非空) (hB : B.非空)
   结论: 1 <= δₘ[A, B]
   证明: by
   rw [← mulConst_inv_right]
@@ -464,7 +464,7 @@ lemma one_le_divConst_self
 
 中文:
 引理 one_le_divConst_self
-  条件: (hA : A.Nonempty)
+  条件: (hA : A.非空)
   结论: 1 <= δₘ[A]
   证明: one_le_divConst hA hA
 
@@ -603,7 +603,7 @@ lemma cast_mulConst
 
 中文:
 引理 cast_mulConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (σₘ[A, B] : 𝕜) = #(A * B) / #A
   证明: by simp [mulConst]
 
@@ -627,7 +627,7 @@ lemma cast_divConst
 
 中文:
 引理 cast_divConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (δₘ[A, B] : 𝕜) = #(A / B) / #A
   证明: by simp [divConst]
 
@@ -652,7 +652,7 @@ lemma cast_mulConst_mul_card
 
 中文:
 引理 cast_mulConst_mul_card
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (σₘ[A, B] * #A : 𝕜) = #(A * B)
   证明: by
   norm_cast; exact mulConst_mul_card _ _
@@ -679,7 +679,7 @@ lemma cast_divConst_mul_card
 
 中文:
 引理 cast_divConst_mul_card
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (δₘ[A, B] * #A : 𝕜) = #(A / B)
   证明: by
   norm_cast; exact divConst_mul_card _ _
@@ -706,7 +706,7 @@ lemma card_mul_cast_mulConst
 
 中文:
 引理 card_mul_cast_mulConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (#A * σₘ[A, B] : 𝕜) = #(A * B)
   证明: by
   norm_cast; exact card_mul_mulConst _ _
@@ -731,7 +731,7 @@ lemma card_mul_cast_divConst
 
 中文:
 引理 card_mul_cast_divConst
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: (#A * δₘ[A, B] : 𝕜) = #(A / B)
   证明: by
   norm_cast; exact card_mul_divConst _ _
@@ -806,7 +806,7 @@ lemma mulConst_inv_left
 
 中文:
 引理 mulConst_inv_left
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: σₘ[A⁻¹, B] = δₘ[A, B]
   证明: by
   rw [mulConst]; rw [divConst]; rw [card_inv]; rw [← card_inv]; rw [mul_inv_rev]; rw [inv_inv]; rw [inv_mul_eq_div]
@@ -831,7 +831,7 @@ lemma divConst_inv_left
 
 中文:
 引理 divConst_inv_left
-  条件: (A B : Finset G)
+  条件: (A B : 有限集 G)
   结论: δₘ[A⁻¹, B] = σₘ[A, B]
   证明: by
   rw [mulConst]; rw [divConst]; rw [card_inv]; rw [← card_inv]; rw [inv_div]; rw [div_inv_eq_mul]; rw [mul_comm]

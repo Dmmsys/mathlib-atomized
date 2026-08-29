@@ -40,8 +40,8 @@ theorem Submodule.fg_iff_exists_fin_linearMap
   simp [Basis.constr_range]
 
 中文:
-定理 Submodule.fg_iff_exists_fin_linearMap
-  条件: {N : Submodule R M}
+定理 子模.fg_iff_存在_fin_linearMap
+  条件: {N : 子模 R M}
   证明: by
   simp_rw [fg_iff_exists_fin_generating_family, ← ((Pi.basisFun R _).constr Nat).exists_congr_right]
   simp [Basis.constr_range]
@@ -66,8 +66,8 @@ fun ⟨f, hf⟩ => ⟨f.toNatLinearMap, Submodule.toAddSubmonoid_inj.mp
       hf ▸ Line
 
 中文:
-定理 AddSubmonoid.fg_iff_exists_fin_addMonoidHom
-  结论: {M : 类型} [AddCommMonoid M]
+定理 加法子幺半群.fg_iff_存在_fin_addMonoidHom
+  结论: {M : 类型} [加法交换幺半群 M]
   证明: by
   rw [← S.toNatSubmodule_toAddSubmonoid]; rw [← Submodule.fg_iff_addSubmonoid_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   exact exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubmonoid _⟩,
@@ -96,8 +96,8 @@ theorem AddSubgroup.fg_iff_exists_fin_addMonoidHom
   simp [
 
 中文:
-定理 AddSubgroup.fg_iff_exists_fin_addMonoidHom
-  结论: {M : 类型} [AddCommGroup M]
+定理 加法子群.fg_iff_存在_fin_addMonoidHom
+  结论: {M : 类型} [加法交换群 M]
   证明: by
   rw [← H.toIntSubmodule_toAddSubgroup]; rw [← Submodule.fg_iff_addSubgroup_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   refine exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubgroup _⟩,
@@ -130,9 +130,9 @@ lemma exists_fin'
   ⟨n, f, by rw [← LinearMap.range_eq_top, hf]⟩
 
 中文:
-引理 exists_fin'
-  条件: [Module.Finite R M]
-  结论: 存在 (n : 自然数) (f : (Fin n -> R) ->ₗ[R] M), Surjective f
+引理 存在_fin'
+  条件: [模.有限 R M]
+  结论: 存在 (n : 自然数) (f : (有限集 n -> R) ->ₗ[R] M), 满射 f
   证明: have ⟨n, f, hf⟩ := (Submodule.fg_iff_exists_fin_linearMap R M).mp fg_top
   ⟨n, f, by rw [← LinearMap.range_eq_top, hf]⟩
 
@@ -152,8 +152,8 @@ theorem exists_fin_quot_equiv
   ⟨n, LinearMap.ker f, ⟨f.quotKerEquivOfSurjective hf⟩⟩
 
 中文:
-定理 exists_fin_quot_equiv
-  结论: (R M : 类型) [Ring R] [AddCommGroup M] [Module R M]
+定理 存在_fin_quot_equiv
+  结论: (R M : 类型) [环 R] [加法交换群 M] [模 R M]
   证明: let ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
   ⟨n, LinearMap.ker f, ⟨f.quotKerEquivOfSurjective hf⟩⟩
 
@@ -178,9 +178,9 @@ lemma _root_.Module.finite_of_finite
   obtain ⟨n, f, hf⟩ := exists_fin' R M; exact .of_surjective f hf
 
 中文:
-引理 _root_.Module.finite_of_finite
-  条件: [Finite R] [Module.Finite R M]
-  结论: Finite M
+引理 _root_.模.finite_of_finite
+  条件: [有限 R] [模.有限 R M]
+  结论: 有限 M
   证明: by
   obtain ⟨n, f, hf⟩ := exists_fin' R M; exact .of_surjective f hf
 
@@ -201,9 +201,9 @@ lemma _root_.Module.finite_iff_finite
   proof: ⟨fun _ => finite_of_finite R, fun _ => .of_finite⟩
 
 中文:
-引理 _root_.Module.finite_iff_finite
-  条件: [Finite R]
-  结论: Module.Finite R M ↔ Finite M
+引理 _root_.模.finite_iff_finite
+  条件: [有限 R]
+  结论: 模.有限 R M ↔ 有限 M
   证明: ⟨fun _ => finite_of_finite R, fun _ => .of_finite⟩
 
 Depends on / 依赖: finite_of_finite, of_finite
@@ -225,8 +225,8 @@ lemma _root_.Set.Finite.submoduleSpan
   infer_instance
 
 中文:
-引理 _root_.Set.Finite.submoduleSpan
-  条件: [Finite R] {s : Set M} (hs : s.Finite)
+引理 _root_.集合.有限.submoduleSpan
+  条件: [有限 R] {s : 集合 M} (hs : s.有限)
   证明: by
   lift s to Finset M using hs
   rw [Set.Finite]; rw [← Module.finite_iff_finite (R := R)]
@@ -253,7 +253,7 @@ lemma finite_basis
 
 中文:
 引理 finite_basis
-  结论: [Nontrivial R] {ι} [Module.Finite R M]
+  结论: [非平凡 R] {ι} [模.有限 R M]
   证明: let ⟨s, hs⟩ := ‹Module.Finite R M›
   basis_finite_of_finite_spans s.finite_toSet hs b
 
@@ -278,7 +278,7 @@ lemma not_finite_of_infinite_basis
 
 中文:
 引理 not_finite_of_infinite_basis
-  条件: [Nontrivial R] {ι} [Infinite ι] (b : Basis ι R M)
+  条件: [非平凡 R] {ι} [无限 ι] (b : 基 ι R M)
   证明: fun _ => (Finite.finite_basis b).not_infinite ‹_›
 
 Depends on / 依赖: Finite, Finite.finite_basis, finite_basis, not_infinite
@@ -340,7 +340,7 @@ definition reprEquiv
 
 中文:
 定义 reprEquiv
-  签名: : Finite.repr R M ≃ₗ[R] M
+  签名: : 有限.repr R M ≃ₗ[R] M
   定义体: LinearMap.quotKerEquivOfSurjective _ (Finite.exists_fin' R M).choose_spec.choose_spec
 
 Depends on / 依赖: Finite, Finite.exists_fin, LinearMap, LinearMap.quotKerEquivOfSurjective, choose_spec, choose_spec.choose_spec, exists_fin, quotKerEquivOfSurjective
@@ -395,7 +395,7 @@ definition reprEquivₛ
 
 中文:
 定义 reprEquivₛ
-  签名: : Finite.reprₛ R M ≃ₗ[R] M
+  签名: : 有限.reprₛ R M ≃ₗ[R] M
   定义体: ModuleCon.quotientKerEquivOfSurjective _ (Finite.exists_fin' R M).choose_spec.choose_spec
 
 Depends on / 依赖: Finite, Finite.exists_fin, ModuleCon, ModuleCon.quotientKerEquivOfSurjective, choose_spec, choose_spec.choose_spec, exists_fin, quotientKerEquivOfSurjective

@@ -52,7 +52,7 @@ theorem eventuallyConst_of_isNoetherian
 
 中文:
 定理 eventuallyConst_of_isNoetherian
-  条件: [IsNoetherian R M] (f : 自然数 ->o Submodule R M)
+  条件: [是Noether R M] (f : 自然数 ->o 子模 R M)
   证明: by
   simp_rw [eventuallyConst_atTop, eq_comm]
   exact (monotone_stabilizes_iff_noetherian.mpr inferInstance) f

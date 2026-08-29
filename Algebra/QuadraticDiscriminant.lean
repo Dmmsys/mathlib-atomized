@@ -54,7 +54,7 @@ definition discrim
 
 中文:
 定义 discrim
-  签名: [Ring R] (a b c : R)
+  签名: [环 R] (a b c : R)
   定义体: b ^ 2 - 4 * a * c
 -/
 def discrim [Ring R] (a b c : R) : R :=
@@ -72,7 +72,7 @@ lemma discrim_neg
 
 中文:
 引理 discrim_neg
-  条件: [Ring R] (a b c : R)
+  条件: [环 R] (a b c : R)
   结论: discrim (-a) (-b) (-c) = discrim a b c
   证明: by
   simp [discrim]
@@ -121,7 +121,7 @@ theorem quadratic_eq_zero_iff_discrim_eq_sq
 
 中文:
 定理 quadratic_eq_zero_iff_discrim_eq_sq
-  结论: [NeZero (2 : R)] [NoZeroDivisors R]
+  结论: [NeZero (2 : R)] [无零因子 R]
   证明: by
   refine ⟨discrim_eq_sq_of_quadratic_eq_zero, fun h => ?_⟩
   rw [discrim] at h
@@ -205,7 +205,7 @@ theorem exists_quadratic_eq_zero
   simp
 
 中文:
-定理 exists_quadratic_eq_zero
+定理 存在_quadratic_eq_zero
   条件: (ha : a != 0) (h : 存在 s, discrim a b c = s * s)
   证明: by
   rcases h with ⟨s, hs⟩
@@ -260,7 +260,7 @@ theorem discrim_eq_zero_of_existsUnique
   grind
 
 中文:
-定理 discrim_eq_zero_of_existsUnique
+定理 discrim_eq_zero_of_存在Unique
   条件: (ha : a != 0) (h : 存在! x, a * (x * x) + b * x + c = 0)
   证明: by
   simp_rw [quadratic_eq_zero_iff_discrim_eq_sq ha] at h

@@ -34,8 +34,8 @@ obtain ⟨δ, δ_pos, hδ⟩ := (disjoint_nhds_zero ..).mp disjoint_iff.mpr hn
  
 
 中文:
-实例 NormedField.instCompletableTopField
-  签名: : CompletableTopField F where
+实例 赋范域.instCompletableTopField
+  签名: : 余mpletableTopField F where
   定义体: by
 obtain ⟨δ, δ_pos, hδ⟩ := (disjoint_nhds_zero ..).mp disjoint_iff.mpr hn
     have f_bdd : f.IsBoundedUnder (· <= ·) (‖·⁻¹‖) :=

@@ -54,7 +54,7 @@ structure ProfunctorCore
 结构 ProfunctorCore
   参数: where
   公理与运算 (4 个):
-    - obj : C -> D -> Type w
+    - obj : C -> D -> 类型 w
     - map({X X' : C} {Y Y' : D} (f : X ⟶ X') (g : Y ⟶ Y')) : obj X Y' ⟶ obj X' Y
     - map_id((X : C) (Y : D)) : map (𝟙 X) (𝟙 Y) = 𝟙 _  [默认: by cat_disch]
     - map_comp({X₁ X₂ X₃ : C} {Y₁ Y₂ Y₃ : D} (f : X₁ ⟶ X₂) (f' : X₂ ⟶ X₃) (g : Y₁ ⟶ Y₂) (g' : Y₂ ⟶ Y₃)) : map (f ≫ f') (g ≫ g') = map f g' ≫ map f' g  [默认: by cat_disch]
@@ -98,8 +98,8 @@ abbreviation Functor.profunctor
   body: F
 
 中文:
-缩写 Functor.profunctor
-  签名: (F : C ⥤ Dᵒᵖ ⥤ Type w)
+缩写 函子.profunctor
+  签名: (F : C ⥤ Dᵒᵖ ⥤ 类型 w)
   定义体: F
 -/
 abbrev Functor.profunctor (F : C ⥤ Dᵒᵖ ⥤ Type w) : Profunctor.{w} C D := F
@@ -117,7 +117,7 @@ structure Hom
     - naturality(⦃X X') : C⦄ ⦃Y Y' : D⦄ (f : X ⟶ X') (g : Y ⟶ Y') : P.map f g ≫ app X' Y = app X Y' ≫ Q.map f g  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (P Q : ProfunctorCore.{w} C D)
   公理与运算 (2 个):
     - app((X : C) (Y : D)) : P.obj X Y ⟶ Q.obj X Y
@@ -281,7 +281,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: {P Q : ProfunctorCore.{w} C D} (f : P.Hom Q)
+  签名: {P Q : ProfunctorCore.{w} C D} (f : P.态射 Q)
   定义体: { app Y := f.app X (unop Y) }
 
 Depends on / 依赖: f.app
@@ -342,7 +342,7 @@ definition whiskerLeft₂
 
 中文:
 定义 whiskerLeft₂
-  签名: {A B : 类型} [Category* A] [Category* B]
+  签名: {A B : 类型} [范畴* A] [范畴* B]
   定义体: (((Functor.whiskeringLeft₂ _).obj F).obj G.op).obj P
 
 Depends on / 依赖: Functor, Functor.whiskeringLeft, G.op
@@ -402,7 +402,7 @@ definition Functor.toProfunctor
   body: (Profunctor.id (C := D)).whiskerLeft₂ F (𝟭 _)
 
 中文:
-定义 Functor.toProfunctor
+定义 函子.toProfunctor
   签名: (F : C ⥤ D)
   定义体: (Profunctor.id (C := D)).whiskerLeft₂ F (𝟭 _)
 
@@ -422,7 +422,7 @@ definition Functor.toProfunctorRev
   body: (Profunctor.id (C := D)).whiskerLeft₂ (𝟭 _) F
 
 中文:
-定义 Functor.toProfunctorRev
+定义 函子.toProfunctorRev
   签名: (F : C ⥤ D)
   定义体: (Profunctor.id (C := D)).whiskerLeft₂ (𝟭 _) F
 

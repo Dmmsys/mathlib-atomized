@@ -51,7 +51,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Subsemigroup M where
+  签名: : 子半群 M where
   定义体: Set.center M
   mul_mem' := Set.mul_mem_center
 
@@ -76,7 +76,7 @@ mul_comm a _ := Subtype.ext a.2.comm _
 
 中文:
 实例 center.commSemigroup
-  签名: : CommSemigroup (center M) where
+  签名: : 交换半群 (center M) where
   定义体: Subtype.ext b.2.mid_assoc _ _
 mul_comm a _ := Subtype.ext a.2.comm _
 
@@ -132,7 +132,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: (a) [Decidable <| 对任意 b : M, b * a = a * b]
+  签名: (a) [可判定 <| 对任意 b : M, b * a = a * b]
   定义体: decidable_of_iff' _ Semigroup.mem_center_iff
 
 Depends on / 依赖: Semigroup, Semigroup.mem_center_iff, decidable_of_iff, mem_center_iff

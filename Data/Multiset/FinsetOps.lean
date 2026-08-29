@@ -67,8 +67,8 @@ theorem coe_ndinsert
 
 中文:
 定理 coe_ndinsert
-  条件: (a : α) (l : List α)
-  结论: ndinsert a l = (insert a l : List α)
+  条件: (a : α) (l : 列表 α)
+  结论: ndinsert a l = (insert a l : 列表 α)
   证明: rfl
 
 @[simp]
@@ -466,8 +466,8 @@ theorem coe_ndunion
 
 中文:
 定理 coe_ndunion
-  条件: (l₁ l₂ : List α)
-  结论: @ndunion α _ l₁ l₂ = (l₁ union l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
+  结论: @ndunion α _ l₁ l₂ = (l₁ union l₂ : 列表 α)
   证明: rfl
 -/
 theorem coe_ndunion (l₁ l₂ : List α) : @ndunion α _ l₁ l₂ = (l₁ union l₂ : List α) :=
@@ -794,7 +794,7 @@ theorem Subset.ndunion_eq_right
 exact congr_arg ((↑) : List α -> Multiset α) List.Subset.union_eq_right h
 
 中文:
-定理 Subset.ndunion_eq_right
+定理 子集.ndunion_eq_right
   条件: {s t : Multiset α} (h : s subseteq t)
   结论: s.ndunion t = t
   证明: by
@@ -848,8 +848,8 @@ theorem coe_ndinter
 
 中文:
 定理 coe_ndinter
-  条件: (l₁ l₂ : List α)
-  结论: @ndinter α _ l₁ l₂ = (l₁ inter l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
+  结论: @ndinter α _ l₁ l₂ = (l₁ inter l₂ : 列表 α)
   证明: by
   simp only [ndinter, mem_coe, filter_coe, coe_eq_coe, ← elem_eq_mem]
   apply Perm.refl
@@ -1190,7 +1190,7 @@ theorem Subset.ndinter_eq_left
   rw [quot_mk_to_coe'']; rw [quot_mk_to_coe'']; rw [coe_ndinter]; rw [List.Subset.inter_eq_left h]
 
 中文:
-定理 Subset.ndinter_eq_left
+定理 子集.ndinter_eq_left
   条件: {s t : Multiset α} (h : s subseteq t)
   结论: s.ndinter t = s
   证明: by

@@ -63,7 +63,7 @@ definition changeOriginSeriesTerm
 
 中文:
 定义 changeOriginSeriesTerm
-  签名: (k l : 自然数) (s : Finset (Fin (k + l))) (hs : s.card = l)
+  签名: (k l : 自然数) (s : 有限集 (有限集 (k + l))) (hs : s.card = l)
   定义体: let a := ContinuousMultilinearMap.curryFinFinset 𝕜 E F hs
     (by rw [Finset.card_compl, Fintype.card_fin, hs, add_tsub_cancel_right])
   a (p (k + l))
@@ -88,7 +88,7 @@ theorem changeOriginSeriesTerm_apply
 
 中文:
 定理 changeOriginSeriesTerm_apply
-  结论: (k l : 自然数) (s : Finset (Fin (k + l))) (hs : s.card = l)
+  结论: (k l : 自然数) (s : 有限集 (有限集 (k + l))) (hs : s.card = l)
   证明: ContinuousMultilinearMap.curryFinFinset_apply_const _ _ _ _ _
 
 @[simp]
@@ -115,7 +115,7 @@ theorem norm_changeOriginSeriesTerm
 
 中文:
 定理 norm_changeOriginSeriesTerm
-  条件: (k l : 自然数) (s : Finset (Fin (k + l))) (hs : s.card = l)
+  条件: (k l : 自然数) (s : 有限集 (有限集 (k + l))) (hs : s.card = l)
   证明: by
   simp only [changeOriginSeriesTerm, LinearIsometryEquiv.norm_map]
 
@@ -139,7 +139,7 @@ theorem nnnorm_changeOriginSeriesTerm
 
 中文:
 定理 nnnorm_changeOriginSeriesTerm
-  条件: (k l : 自然数) (s : Finset (Fin (k + l))) (hs : s.card = l)
+  条件: (k l : 自然数) (s : 有限集 (有限集 (k + l))) (hs : s.card = l)
   证明: by
   simp only [changeOriginSeriesTerm, LinearIsometryEquiv.nnnorm_map]
 
@@ -162,7 +162,7 @@ theorem nnnorm_changeOriginSeriesTerm_apply_le
 
 中文:
 定理 nnnorm_changeOriginSeriesTerm_apply_le
-  结论: (k l : 自然数) (s : Finset (Fin (k + l)))
+  结论: (k l : 自然数) (s : 有限集 (有限集 (k + l)))
   证明: by
   rw [← p.nnnorm_changeOriginSeriesTerm k l s hs]; rw [← Fin.prod_const]; rw [← Fin.prod_const]
   apply ContinuousMultilinearMap.le_of_opNNNorm_le
@@ -777,8 +777,8 @@ theorem HasFPowerSeriesWithinOnBall.changeOrigin
       rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.changeOrigin
-  结论: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+定理 有FPowerSeriesWithinOnBall.changeOrigin
+  结论: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: by
     apply le_trans _ p.changeOrigin_radius
     exact tsub_le_tsub hf.r_le le_rfl
@@ -824,8 +824,8 @@ theorem HasFPowerSeriesOnBall.changeOrigin
   exact hf.changeOrigin h (by simp)
 
 中文:
-定理 HasFPowerSeriesOnBall.changeOrigin
-  结论: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.changeOrigin
+  结论: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf ⊢
   exact hf.changeOrigin h (by simp)
@@ -849,7 +849,7 @@ theorem HasFPowerSeriesWithinOnBall.analyticWithinAt_of_mem
   exact this.analyticWithinAt
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.analyticWithinAt_of_mem
+定理 有FPowerSeriesWithinOnBall.analyticWithinAt_of_mem
   证明: by
   have : (‖y - x‖₊ : Real>=0∞) < r := by simpa [edist_eq_enorm_sub] using! h.2
   have := hf.changeOrigin this (by simpa using! h.1)
@@ -878,8 +878,8 @@ theorem HasFPowerSeriesOnBall.analyticAt_of_mem
   exact hf.analyticWithinAt_of_mem (by simpa using h)
 
 中文:
-定理 HasFPowerSeriesOnBall.analyticAt_of_mem
-  结论: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.analyticAt_of_mem
+  结论: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   rw [← analyticWithinAt_univ]
@@ -903,8 +903,8 @@ theorem HasFPowerSeriesWithinOnBall.analyticOn
     inter_subset_left
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.analyticOn
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+定理 有FPowerSeriesWithinOnBall.analyticOn
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: fun _ hy => ((analyticWithinAt_insert (y := x)).2 (hf.analyticWithinAt_of_mem hy)).mono
     inter_subset_left
 
@@ -924,8 +924,8 @@ theorem HasFPowerSeriesOnBall.analyticOnNhd
   proof: fun _y hy => hf.analyticAt_of_mem hy
 
 中文:
-定理 HasFPowerSeriesOnBall.analyticOnNhd
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.analyticOnNhd
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: fun _y hy => hf.analyticAt_of_mem hy
 
 Depends on / 依赖: analyticAt_of_mem, hf.analyticAt_of_mem
@@ -948,7 +948,7 @@ theorem isOpen_analyticAt
 
 中文:
 定理 isOpen_analyticAt
-  结论: IsOpen { x | AnalyticAt 𝕜 f x }
+  结论: 是开集 { x | AnalyticAt 𝕜 f x }
   证明: by
   rw [isOpen_iff_mem_nhds]
   rintro x ⟨p, r, hr⟩
@@ -989,7 +989,7 @@ theorem AnalyticAt.exists_mem_nhds_analyticOnNhd
   proof: h.eventually_analyticAt.exists_mem
 
 中文:
-定理 AnalyticAt.exists_mem_nhds_analyticOnNhd
+定理 AnalyticAt.存在_mem_nhds_analyticOnNhd
   条件: (h : AnalyticAt 𝕜 f x)
   证明: h.eventually_analyticAt.exists_mem
 
@@ -1008,7 +1008,7 @@ theorem AnalyticAt.exists_ball_analyticOnNhd
   proof: Metric.isOpen_iff.mp (isOpen_analyticAt _ _) _ h
 
 中文:
-定理 AnalyticAt.exists_ball_analyticOnNhd
+定理 AnalyticAt.存在_ball_analyticOnNhd
   条件: (h : AnalyticAt 𝕜 f x)
   证明: Metric.isOpen_iff.mp (isOpen_analyticAt _ _) _ h
 

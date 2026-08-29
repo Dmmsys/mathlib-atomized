@@ -69,7 +69,7 @@ lemma pairwise_disjoint_gammaSet
 
 中文:
 引理 pairwise_disjoint_gammaSet
-  结论: Pairwise (Disjoint on gammaSet N r)
+  结论: 两两 (Disjoint on gammaSet N r)
   证明: by
   refine fun u v huv => ?_
   contrapose huv
@@ -95,7 +95,7 @@ lemma gammaSet_one_const
 
 中文:
 引理 gammaSet_one_const
-  条件: (a a' : Fin 2 -> ZMod 1)
+  条件: (a a' : 有限集 2 -> ZMod 1)
   结论: gammaSet 1 r a = gammaSet 1 r a'
   证明: congr_arg _ (Subsingleton.elim _ _)
 
@@ -115,7 +115,7 @@ lemma gammaSet_one_eq
 
 中文:
 引理 gammaSet_one_eq
-  条件: (a : Fin 2 -> ZMod 1)
+  条件: (a : 有限集 2 -> ZMod 1)
   证明: by
   simp [gammaSet, Subsingleton.eq_zero (α := Fin 2 -> ZMod 1)]
 
@@ -137,8 +137,8 @@ lemma gammaSet_one_mem_iff
 
 中文:
 引理 gammaSet_one_mem_iff
-  条件: (v : Fin 2 -> 整数)
-  结论: v in gammaSet 1 r 0 ↔ (v 0).gcd (v 1) = r
+  条件: (v : 有限集 2 -> 整数)
+  结论: v in gammaSet 1 r 0 ↔ (v 0).最大公约数 (v 1) = r
   证明: by
   simp [gammaSet, Subsingleton.eq_zero (α := Fin 2 -> ZMod 1)]
 
@@ -157,7 +157,7 @@ definition gammaSet_one_equiv
 
 中文:
 定义 gammaSet_one_equiv
-  签名: (a a' : Fin 2 -> ZMod 1)
+  签名: (a a' : 有限集 2 -> ZMod 1)
   定义体: Equiv.setCongr (gammaSet_one_const r a a')
 
 Depends on / 依赖: Equiv.setCongr, gammaSet_one_const, setCongr
@@ -175,7 +175,7 @@ abbreviation finGcdMap
 
 中文:
 缩写 finGcdMap
-  签名: (v : Fin 2 -> 整数)
+  签名: (v : 有限集 2 -> 整数)
   定义体: (v 0).gcd (v 1)
 -/
 abbrev finGcdMap (v : Fin 2 -> Int) : Nat := (v 0).gcd (v 1)
@@ -194,7 +194,7 @@ lemma finGcdMap_div
 
 中文:
 引理 finGcdMap_div
-  条件: {r : 自然数} [NeZero r] (v : Fin 2 -> 整数) (hv : finGcdMap v = r)
+  条件: {r : 自然数} [NeZero r] (v : 有限集 2 -> 整数) (hv : finGcdMap v = r)
   证明: by
   rw [← hv]
   apply isCoprime_div_gcd_div_gcd_of_gcd_ne_zero
@@ -221,7 +221,7 @@ lemma finGcdMap_smul
 
 中文:
 引理 finGcdMap_smul
-  条件: {r : 自然数} (a : 整数) {v : Fin 2 -> 整数} (hv : finGcdMap v = r)
+  条件: {r : 自然数} (a : 整数) {v : 有限集 2 -> 整数} (hv : finGcdMap v = r)
   证明: by
   simp [finGcdMap, Int.gcd_mul_left, hv]
 
@@ -240,8 +240,8 @@ abbreviation divIntMap
   body: v / r
 
 中文:
-缩写 divIntMap
-  签名: (r : 整数) {m : 自然数} (v : Fin m -> 整数)
+缩写 div整数Map
+  签名: (r : 整数) {m : 自然数} (v : 有限集 m -> 整数)
   定义体: v / r
 -/
 abbrev divIntMap (r : Int) {m : Nat} (v : Fin m -> Int) : Fin m -> Int := v / r
@@ -258,7 +258,7 @@ lemma mem_gammaSet_one
 
 中文:
 引理 mem_gammaSet_one
-  条件: (v : Fin 2 -> 整数)
+  条件: (v : 有限集 2 -> 整数)
   结论: v in gammaSet 1 1 0 ↔ IsCoprime (v 0) (v 1)
   证明: by
   rw [gammaSet_one_mem_iff]; rw [Int.isCoprime_iff_gcd_eq_one]
@@ -279,7 +279,7 @@ lemma gammaSet_div_gcd
 
 中文:
 引理 gammaSet_div_gcd
-  条件: {r : 自然数} {v : Fin 2 -> 整数} (hv : v in (gammaSet 1 r 0)) (i : Fin 2)
+  条件: {r : 自然数} {v : 有限集 2 -> 整数} (hv : v in (gammaSet 1 r 0)) (i : 有限集 2)
   证明: by
   fin_cases i <;> simp [← hv.2, Int.gcd_dvd_left, Int.gcd_dvd_right]
 
@@ -361,8 +361,8 @@ lemma gammaSet_eq_gcd_mul_divIntMap
     simp_all [Pi.smul_apply, divIntMap, ← Int.mul_ediv_assoc _ (gammaSet_div_gcd hv i)]
 
 中文:
-引理 gammaSet_eq_gcd_mul_divIntMap
-  条件: {r : 自然数} {v : Fin 2 -> 整数} (hv : v in gammaSet 1 r 0)
+引理 gammaSet_eq_gcd_mul_div整数Map
+  条件: {r : 自然数} {v : 有限集 2 -> 整数} (hv : v in gammaSet 1 r 0)
   证明: by
   by_cases hr : r = 0
   · have hv := hv.2
@@ -439,7 +439,7 @@ definition gammaSetDivGcdSigmaEquiv
 
 中文:
 定义 gammaSetDivGcdSigmaEquiv
-  签名: : (Fin 2 -> 整数) ≃ (Σ r : 自然数, gammaSet 1 r 0)
+  签名: : (有限集 2 -> 整数) ≃ (Σ r : 自然数, gammaSet 1 r 0)
   定义体: by
   apply (Equiv.sigmaFiberEquiv finGcdMap).symm.trans
   refine Equiv.sigmaCongrRight fun b => ?_
@@ -495,7 +495,7 @@ lemma vecMulSL_gcd
 
 中文:
 引理 vecMulSL_gcd
-  条件: {v : Fin 2 -> 整数} (hab : finGcdMap v = r) (A : SL(2, 整数))
+  条件: {v : 有限集 2 -> 整数} (hab : finGcdMap v = r) (A : SL(2, 整数))
   证明: by
   have hvr : v = r • (v / r) := by
     ext i
@@ -530,7 +530,7 @@ lemma vecMul_SL2_mem_gammaSet
 
 中文:
 引理 vecMul_SL2_mem_gammaSet
-  结论: {v : Fin 2 -> 整数} (hv : v in gammaSet N r a)
+  结论: {v : 有限集 2 -> 整数} (hv : v in gammaSet N r a)
   证明: by
   refine ⟨?_, vecMulSL_gcd hv.2 γ⟩
   have := RingHom.map_vecMul (m := Fin 2) (n := Fin 2) (Int.castRingHom (ZMod N)) γ v
@@ -600,7 +600,7 @@ definition eisSummand
 
 中文:
 定义 eisSummand
-  签名: (k : 整数) (v : Fin 2 -> 整数) (z : ℍ)
+  签名: (k : 整数) (v : 有限集 2 -> 整数) (z : ℍ)
   定义体: (v 0 * z + v 1) ^ (-k)
 -/
 def eisSummand (k : Int) (v : Fin 2 -> Int) (z : ℍ) : Complex := (v 0 * z + v 1) ^ (-k)
@@ -619,7 +619,7 @@ theorem eisSummand_SL2_apply
 
 中文:
 定理 eisSummand_SL2_apply
-  条件: (k : 整数) (i : (Fin 2 -> 整数)) (A : SL(2, 整数)) (z : ℍ)
+  条件: (k : 整数) (i : (有限集 2 -> 整数)) (A : SL(2, 整数)) (z : ℍ)
   证明: by
   simp only [eisSummand, vecMul, vec2_dotProduct, denom, UpperHalfPlane.specialLinearGroup_apply]
   have h (a b c d u v : Complex) (hc : c * z + d != 0) : (u * ((a * z + b) / (c * z + d)) + v) ^ (-k) =

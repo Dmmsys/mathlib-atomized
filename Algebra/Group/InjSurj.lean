@@ -58,7 +58,7 @@ abbreviation semigroup
 
 中文:
 缩写 semigroup
-  签名: [Semigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: fun x y z => hf by rw [mul, mul, mul, mul, mul_assoc]
 -/
 protected abbrev semigroup [Semigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -80,7 +80,7 @@ abbreviation commMagma
 
 中文:
 缩写 commMagma
-  签名: [CommMagma M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [交换原群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: hf by rw [mul, mul, mul_comm]
 -/
 protected abbrev commMagma [CommMagma M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -103,7 +103,7 @@ abbreviation commSemigroup
 
 中文:
 缩写 commSemigroup
-  签名: [CommSemigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [交换半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: hf.semigroup f mul
   __ := hf.commMagma f mul
 -/
@@ -126,7 +126,7 @@ theorem isLeftCancelMul
 
 中文:
 定理 isLeftCancelMul
-  结论: [Mul M₂] [IsLeftCancelMul M₂] (f : M₁ -> M₂) (hf : Injective f)
+  结论: [乘法 M₂] [左乘消去 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   证明: hf mul_left_cancel by simpa only [mul] using congrArg f H
 -/
 protected theorem isLeftCancelMul [Mul M₂] [IsLeftCancelMul M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -147,7 +147,7 @@ theorem isRightCancelMul
 
 中文:
 定理 isRightCancelMul
-  结论: [Mul M₂] [IsRightCancelMul M₂] (f : M₁ -> M₂) (hf : Injective f)
+  结论: [乘法 M₂] [右乘消去 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   证明: hf mul_right_cancel by simpa only [mul] using congrArg f H
 -/
 protected theorem isRightCancelMul [Mul M₂] [IsRightCancelMul M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -169,7 +169,7 @@ theorem isCancelMul
 
 中文:
 定理 isCancelMul
-  结论: [Mul M₂] [IsCancelMul M₂] (f : M₁ -> M₂) (hf : Injective f)
+  结论: [乘法 M₂] [是消去乘法 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   证明: hf.isLeftCancelMul f mul
   __ := hf.isRightCancelMul f mul
 -/
@@ -192,7 +192,7 @@ abbreviation leftCancelSemigroup
 
 中文:
 缩写 leftCancelSemigroup
-  签名: [LeftCancelSemigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [左消去半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.semigroup f mul, hf.isLeftCancelMul f mul with }
 -/
 protected abbrev leftCancelSemigroup [LeftCancelSemigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -214,7 +214,7 @@ abbreviation rightCancelSemigroup
 
 中文:
 缩写 rightCancelSemigroup
-  签名: [RightCancelSemigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [右消去半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.semigroup f mul, hf.isRightCancelMul f mul with }
 -/
 protected abbrev rightCancelSemigroup [RightCancelSemigroup M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -239,7 +239,7 @@ mul_one := fun x => hf by rw [mul, one, mul_one]
 
 中文:
 缩写 mulOneClass
-  签名: [MulOneClass M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [MulOne类 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: fun x => hf by rw [mul, one, one_mul]
 mul_one := fun x => hf by rw [mul, one, mul_one]
 -/
@@ -269,7 +269,7 @@ npow_succ := fun n x => hf by rw [npow, pow_succ, mul, npow] }
 
 中文:
 缩写 monoid
-  签名: [Monoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.semigroup f mul, hf.mulOneClass f one mul with
     npow := fun n x => x ^ n,
 npow_zero := fun x => hf by rw [npow, one, pow_zero],
@@ -297,7 +297,7 @@ abbreviation leftCancelMonoid
 
 中文:
 缩写 leftCancelMonoid
-  签名: [LeftCancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [左消去幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.monoid f one mul npow, hf.leftCancelSemigroup f mul with }
 -/
 protected abbrev leftCancelMonoid [LeftCancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -320,7 +320,7 @@ abbreviation rightCancelMonoid
 
 中文:
 缩写 rightCancelMonoid
-  签名: [RightCancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [右消去幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.monoid f one mul npow, hf.rightCancelSemigroup f mul with }
 -/
 protected abbrev rightCancelMonoid [RightCancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -343,7 +343,7 @@ abbreviation cancelMonoid
 
 中文:
 缩写 cancelMonoid
-  签名: [CancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [消去幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.leftCancelMonoid f one mul npow, hf.rightCancelMonoid f one mul npow with }
 -/
 protected abbrev cancelMonoid [CancelMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
@@ -366,7 +366,7 @@ abbreviation commMonoid
 
 中文:
 缩写 commMonoid
-  签名: [CommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [交换幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.monoid f one mul npow, hf.commSemigroup f mul with }
 -/
 protected abbrev commMonoid [CommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
@@ -388,7 +388,7 @@ abbreviation cancelCommMonoid
 
 中文:
 缩写 cancelCommMonoid
-  签名: [CancelCommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [消去交换幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.commMonoid f one mul npow, hf.leftCancelSemigroup f mul with }
 -/
 protected abbrev cancelCommMonoid [CancelCommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -411,7 +411,7 @@ abbreviation involutiveInv
 
 中文:
 缩写 involutiveInv
-  签名: {M₁ : 类型} [Inv M₁] [InvolutiveInv M₂] (f : M₁ -> M₂)
+  签名: {M₁ : 类型} [取逆 M₁] [InvolutiveInv M₂] (f : M₁ -> M₂)
   定义体: hf by rw [inv, inv, inv_inv]
 -/
 protected abbrev involutiveInv {M₁ : Type*} [Inv M₁] [InvolutiveInv M₂] (f : M₁ -> M₂)
@@ -435,7 +435,7 @@ abbreviation invOneClass
 
 中文:
 缩写 invOneClass
-  签名: [InvOneClass M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [InvOne类 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: hf by rw [inv, one, inv_one]
 -/
 protected abbrev invOneClass [InvOneClass M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
@@ -466,7 +466,7 @@ div_eq_mul_
 
 中文:
 缩写 divInvMonoid
-  签名: [DivInvMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [除逆幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.monoid f one mul npow with
     zpow := fun n x => x ^ n,
 zpow_zero' := fun x => hf by rw [zpow, zpow_zero, one],
@@ -503,7 +503,7 @@ abbreviation divInvOneMonoid
 
 中文:
 缩写 divInvOneMonoid
-  签名: [DivInvOneMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [DivInvOne幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.divInvMonoid f one mul inv div npow zpow, hf.invOneClass f one inv with }
 -/
 protected abbrev divInvOneMonoid [DivInvOneMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -532,7 +532,7 @@ inv_eq_of_mul := fun x y h => hf by
 
 中文:
 缩写 divisionMonoid
-  签名: [DivisionMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [Division幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.divInvMonoid f one mul inv div npow zpow, hf.involutiveInv f inv with
 mul_inv_rev := fun x y => hf by rw [inv, mul, mul_inv_rev, mul, inv, inv],
 inv_eq_of_mul := fun x y h => hf by
@@ -565,7 +565,7 @@ abbreviation divisionCommMonoid
 
 中文:
 缩写 divisionCommMonoid
-  签名: [DivisionCommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
+  签名: [DivisionComm幺半群 M₂] (f : M₁ -> M₂) (hf : 单射 f)
   定义体: { hf.divisionMonoid f one mul inv div npow zpow, hf.commSemigroup f mul with }
 -/
 protected abbrev divisionCommMonoid [DivisionCommMonoid M₂] (f : M₁ -> M₂) (hf : Injective f)
@@ -590,7 +590,7 @@ inv_mul_cancel := fun x => hf by rw [mul, inv, inv_mul_cancel, one] }
 
 中文:
 缩写 group
-  签名: [Group M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.divInvMonoid f one mul inv div npow zpow with
 inv_mul_cancel := fun x => hf by rw [mul, inv, inv_mul_cancel, one] }
 -/
@@ -617,7 +617,7 @@ abbreviation commGroup
 
 中文:
 缩写 commGroup
-  签名: [CommGroup M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
+  签名: [交换群 M₂] (f : M₁ -> M₂) (hf : 单射 f) (one : f 1 = 1)
   定义体: { hf.group f one mul inv div npow zpow, hf.commMonoid f one mul npow with }
 -/
 protected abbrev commGroup [CommGroup M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
@@ -652,7 +652,7 @@ abbreviation semigroup
 
 中文:
 缩写 semigroup
-  签名: [Semigroup M₁] (f : M₁ -> M₂) (hf : Surjective f)
+  签名: [半群 M₁] (f : M₁ -> M₂) (hf : 满射 f)
   定义体: hf.forall₃.2 fun x y z => by simp only [← mul, mul_assoc]
 -/
 protected abbrev semigroup [Semigroup M₁] (f : M₁ -> M₂) (hf : Surjective f)
@@ -674,7 +674,7 @@ abbreviation commMagma
 
 中文:
 缩写 commMagma
-  签名: [CommMagma M₁] (f : M₁ -> M₂) (hf : Surjective f)
+  签名: [交换原群 M₁] (f : M₁ -> M₂) (hf : 满射 f)
   定义体: hf.forall₂.2 fun x y => by rw [← mul, ← mul, mul_comm]
 -/
 protected abbrev commMagma [CommMagma M₁] (f : M₁ -> M₂) (hf : Surjective f)
@@ -697,7 +697,7 @@ abbreviation commSemigroup
 
 中文:
 缩写 commSemigroup
-  签名: [CommSemigroup M₁] (f : M₁ -> M₂) (hf : Surjective f)
+  签名: [交换半群 M₁] (f : M₁ -> M₂) (hf : 满射 f)
   定义体: hf.semigroup f mul
   __ := hf.commMagma f mul
 -/
@@ -724,7 +724,7 @@ abbreviation mulOneClass
 
 中文:
 缩写 mulOneClass
-  签名: [MulOneClass M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [MulOne类 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: hf.forall.2 fun x => by rw [← one, ← mul, one_mul]
   mul_one := hf.forall.2 fun x => by rw [← one, ← mul, mul_one]
 -/
@@ -755,7 +755,7 @@ abbreviation monoid
 
 中文:
 缩写 monoid
-  签名: [Monoid M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [幺半群 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: { hf.semigroup f mul, hf.mulOneClass f one mul with
     npow := fun n x => x ^ n,
     npow_zero := hf.forall.2 fun x => by rw [← npow, pow_zero, ← one],
@@ -786,7 +786,7 @@ abbreviation commMonoid
 
 中文:
 缩写 commMonoid
-  签名: [CommMonoid M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [交换幺半群 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: { hf.monoid f one mul npow, hf.commSemigroup f mul with }
 -/
 protected abbrev commMonoid [CommMonoid M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
@@ -809,7 +809,7 @@ abbreviation involutiveInv
 
 中文:
 缩写 involutiveInv
-  签名: {M₂ : 类型} [Inv M₂] [InvolutiveInv M₁] (f : M₁ -> M₂)
+  签名: {M₂ : 类型} [取逆 M₂] [InvolutiveInv M₁] (f : M₁ -> M₂)
   定义体: hf.forall.2 fun x => by rw [← inv, ← inv, inv_inv]
 -/
 protected abbrev involutiveInv {M₂ : Type*} [Inv M₂] [InvolutiveInv M₁] (f : M₁ -> M₂)
@@ -839,7 +839,7 @@ abbreviation divInvMonoid
 
 中文:
 缩写 divInvMonoid
-  签名: [DivInvMonoid M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [除逆幺半群 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: { hf.monoid f one mul npow with
     zpow := fun n x => x ^ n,
     zpow_zero' := hf.forall.2 fun x => by rw [← zpow, zpow_zero, ← one],
@@ -876,7 +876,7 @@ abbreviation group
 
 中文:
 缩写 group
-  签名: [Group M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [群 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: { hf.divInvMonoid f one mul inv div npow zpow with
     inv_mul_cancel := hf.forall.2 fun x => by rw [← inv, ← mul, inv_mul_cancel, one] }
 -/
@@ -903,7 +903,7 @@ abbreviation commGroup
 
 中文:
 缩写 commGroup
-  签名: [CommGroup M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
+  签名: [交换群 M₁] (f : M₁ -> M₂) (hf : 满射 f) (one : f 1 = 1)
   定义体: { hf.group f one mul inv div npow zpow, hf.commMonoid f one mul npow with }
 -/
 protected abbrev commGroup [CommGroup M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)

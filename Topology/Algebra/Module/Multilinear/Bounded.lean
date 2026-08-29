@@ -55,7 +55,7 @@ theorem image_multilinear'
 
 中文:
 定理 image_multilinear'
-  结论: [Nonempty ι] {s : Set (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
+  结论: [非空 ι] {s : 集合 (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
   证明: fun V hV => by
   classical
   if h₁ : forall c : 𝕜, ‖c‖ <= 1 then
@@ -121,7 +121,7 @@ exact (isBounded_iff_isVonNBounded _).1
 
 中文:
 定理 image_multilinear
-  结论: [ContinuousSMul 𝕜 F] {s : Set (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
+  结论: [连续标量乘法 𝕜 F] {s : 集合 (对任意 i, E i)} (hs : IsVonNBounded 𝕜 s)
   证明: by
   cases isEmpty_or_nonempty ι with
   | inl h =>

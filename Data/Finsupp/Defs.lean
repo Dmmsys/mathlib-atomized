@@ -95,10 +95,10 @@ structure Finsupp
     - mem_support_toFun : forall a, a in support ↔ toFun a != 0
 
 中文:
-结构 Finsupp
-  参数: (α : 类型) (M : 类型) [Zero M]
+结构 有限支撑
+  参数: (α : 类型) (M : 类型) [零 M]
   公理与运算 (3 个):
-    - support : Finset α
+    - support : 有限集 α
     - toFun : α -> M
     - mem_support_toFun : 对任意 a, a in support ↔ toFun a != 0
 -/
@@ -141,7 +141,7 @@ initialize_simps_projections Finsupp (toFun -> apply)
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->₀ M) α M
+  签名: : 函数状 (α ->₀ M) α M
   定义体: ⟨toFun, by
     rintro ⟨s, f, hf⟩ ⟨t, g, hg⟩ (rfl : f = g)
     congr
@@ -192,7 +192,7 @@ instance instSubsingleton
 
 中文:
 实例 instSubsingleton
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: by ext x; exact isEmptyElim x
 
 Depends on / 依赖: isEmptyElim
@@ -210,7 +210,7 @@ instance instSubsingleton'
 
 中文:
 实例 instSubsingleton'
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: by ext x; exact Subsingleton.elim ..
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -231,8 +231,8 @@ theorem nontrivial_of_nontrivial
 
 中文:
 定理 nontrivial_of_nontrivial
-  条件: [h : Nontrivial (α ->₀ M)]
-  结论: Nontrivial M
+  条件: [h : 非平凡 (α ->₀ M)]
+  结论: 非平凡 M
   证明: by
   contrapose! h; infer_instance
 
@@ -276,7 +276,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f : α -> M) (s : Finset α) (h : 对任意 a, a in s ↔ f a != 0)
+  条件: (f : α -> M) (s : 有限集 α) (h : 对任意 a, a in s ↔ f a != 0)
   结论: ⇑(⟨s, f, h⟩ : α ->₀ M) = f
   证明: rfl
 -/
@@ -293,7 +293,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (α ->₀ M)
+  签名: : 零 (α ->₀ M)
   定义体: ⟨⟨∅, 0, fun _ => ⟨fun h => (notMem_empty _ h).elim, fun H => (H rfl).elim⟩⟩⟩
 
 Depends on / 依赖: notMem_empty
@@ -370,7 +370,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (α ->₀ M)
+  签名: : 可居 (α ->₀ M)
   定义体: ⟨0⟩
 -/
 instance instInhabited : Inhabited (α ->₀ M) :=
@@ -433,7 +433,7 @@ theorem fun_support_eq
 中文:
 定理 fun_support_eq
   条件: (f : α ->₀ M)
-  结论: Function.support f = f.support
+  结论: 函数.support f = f.support
   证明: Set.ext fun _x => mem_support_iff.symm
 
 Depends on / 依赖: Set.ext, mem_support_iff, mem_support_iff.symm
@@ -566,7 +566,7 @@ theorem support_nonempty_iff
 中文:
 定理 support_nonempty_iff
   条件: {f : α ->₀ M}
-  结论: f.support.Nonempty ↔ f != 0
+  结论: f.support.非空 ↔ f != 0
   证明: by
   contrapose!; exact support_eq_empty
 
@@ -657,7 +657,7 @@ theorem support_subset_iff
 
 中文:
 定理 support_subset_iff
-  条件: {s : Set α} {f : α ->₀ M}
+  条件: {s : 集合 α} {f : α ->₀ M}
   证明: by
   grind
 -/
@@ -681,7 +681,7 @@ definition equivFunOnFinite
 
 中文:
 定义 equivFunOnFinite
-  签名: [Finite α]
+  签名: [有限 α]
   定义体: (⇑)
   invFun f := mk (Function.support f).toFinite.toFinset f fun _a => Set.Finite.mem_toFinset _
 
@@ -707,7 +707,7 @@ theorem equivFunOnFinite_symm_coe
 
 中文:
 定理 equivFunOnFinite_symm_coe
-  条件: {α} [Finite α] (f : α ->₀ M)
+  条件: {α} [有限 α] (f : α ->₀ M)
   结论: equivFunOnFinite.symm f = f
   证明: equivFunOnFinite.symm_apply_apply f
 
@@ -732,7 +732,7 @@ lemma coe_equivFunOnFinite_symm
 
 中文:
 引理 coe_equivFunOnFinite_symm
-  条件: {α} [Finite α] (f : α -> M)
+  条件: {α} [有限 α] (f : α -> M)
   结论: ⇑(equivFunOnFinite.symm f) = f
   证明: rfl
 
@@ -754,7 +754,7 @@ theorem unique_ext
 
 中文:
 定理 unique_ext
-  条件: [Unique α] {f g : α ->₀ M} (h : f default = g default)
+  条件: [唯一 α] {f g : α ->₀ M} (h : f default = g default)
   结论: f = g
   证明: ext fun a => by rwa [Unique.eq_default a]
 
@@ -783,7 +783,7 @@ definition onFinsetSupport
 
 中文:
 定义 onFinsetSupport
-  签名: (s : Finset α) (f : α -> M)
+  签名: (s : 有限集 α) (f : α -> M)
   定义体: haveI := Classical.decEq M
   {a in s | f a != 0}
 -/
@@ -803,7 +803,7 @@ definition onFinset
 
 中文:
 定义 onFinset
-  签名: (s : Finset α) (f : α -> M) (hf : 对任意 a, f a != 0 -> a in s)
+  签名: (s : 有限集 α) (f : α -> M) (hf : 对任意 a, f a != 0 -> a in s)
   定义体: onFinsetSupport s f
   toFun := f
   mem_support_toFun := by simpa [onFinsetSupport]
@@ -828,7 +828,7 @@ lemma coe_onFinset
 
 中文:
 引理 coe_onFinset
-  条件: (s : Finset α) (f : α -> M) (hf)
+  条件: (s : 有限集 α) (f : α -> M) (hf)
   结论: onFinset s f hf = f
   证明: rfl
 
@@ -848,7 +848,7 @@ theorem onFinset_apply
 
 中文:
 定理 onFinset_apply
-  条件: {s : Finset α} {f : α -> M} {hf a}
+  条件: {s : 有限集 α} {f : α -> M} {hf a}
   结论: (onFinset s f hf : α ->₀ M) a = f a
   证明: rfl
 -/
@@ -866,7 +866,7 @@ theorem support_onFinset
 
 中文:
 定理 support_onFinset
-  结论: [DecidableEq M] {s : Finset α} {f : α -> M}
+  结论: [DecidableEq M] {s : 有限集 α} {f : α -> M}
   证明: by
   dsimp [onFinset]; rw [onFinsetSupport]; congr
 
@@ -912,7 +912,7 @@ grind_pattern support_onFinset_subset => onFinset s f hf
 
 中文:
 定理 support_onFinset_subset
-  条件: {s : Finset α} {f : α -> M} {hf}
+  条件: {s : 有限集 α} {f : α -> M} {hf}
   证明: by
   grind
 
@@ -935,7 +935,7 @@ theorem mem_support_onFinset
 
 中文:
 定理 mem_support_onFinset
-  条件: {s : Finset α} {f : α -> M} (hf : 对任意 a : α, f a != 0 -> a in s) {a : α}
+  条件: {s : 有限集 α} {f : α -> M} (hf : 对任意 a : α, f a != 0 -> a in s) {a : α}
   证明: by
   rw [Finsupp.mem_support_iff]; rw [Finsupp.onFinset_apply]
 
@@ -963,7 +963,7 @@ definition ofSupportFinite
 
 中文:
 定义 ofSupportFinite
-  签名: (f : α -> M) (hf : (Function.support f).Finite)
+  签名: (f : α -> M) (hf : (函数.support f).有限)
   定义体: hf.toFinset
   toFun := f
   mem_support_toFun _ := hf.mem_toFinset
@@ -985,7 +985,7 @@ theorem ofSupportFinite_coe
 
 中文:
 定理 ofSupportFinite_coe
-  条件: {f : α -> M} {hf : (Function.support f).Finite}
+  条件: {f : α -> M} {hf : (函数.support f).有限}
   证明: rfl
 -/
 theorem ofSupportFinite_coe {f : α -> M} {hf : (Function.support f).Finite} :
@@ -1003,7 +1003,7 @@ theorem ofSupportFinite_support
 
 中文:
 定理 ofSupportFinite_support
-  条件: {f : α -> M} (hf : f.support.Finite)
+  条件: {f : α -> M} (hf : f.support.有限)
   证明: by
   ext; simp [ofSupportFinite_coe]
 
@@ -1023,7 +1023,7 @@ instance instCanLift
 
 中文:
 实例 instCanLift
-  签名: : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (Function.support f).Finite where
+  签名: : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (函数.support f).有限 where
   定义体: ⟨ofSupportFinite f hf, rfl⟩
 
 Depends on / 依赖: ofSupportFinite
@@ -1126,7 +1126,7 @@ theorem mapRange_eq_zero
 
 中文:
 定理 mapRange_eq_zero
-  条件: {a : α ->₀ M} {f : M -> N} (hf : f.Injective) (h)
+  条件: {a : α ->₀ M} {f : M -> N} (hf : f.单射) (h)
   证明: by
   simp [Finsupp.ext_iff, ← h, hf.eq_iff]
 
@@ -1288,7 +1288,7 @@ lemma mapRange_injective
 
 中文:
 引理 mapRange_injective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : Injective e)
+  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 单射 e)
   证明: by
   intro a b h
   rw [Finsupp.ext_iff] at h ⊢
@@ -1314,7 +1314,7 @@ lemma mapRange_surjective
 
 中文:
 引理 mapRange_surjective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : Surjective e)
+  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 满射 e)
   证明: by
   rw [← Set.range_eq_univ]; rw [range_mapRange]; rw [he.range_eq]
   simp
@@ -1336,7 +1336,7 @@ lemma mapRange_bijective
 
 中文:
 引理 mapRange_bijective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : Bijective e)
+  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 双射 e)
   证明: ⟨mapRange_injective e he₀ he.1, mapRange_surjective e he₀ he.2⟩
 -/
 lemma mapRange_bijective (e : M -> N) (he₀ : e 0 = 0) (he : Bijective e) :
@@ -1602,7 +1602,7 @@ theorem embDomain_of_notMem_range
 
 中文:
 定理 embDomain_of_notMem_range
-  条件: (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ Set.range f)
+  条件: (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ 集合.range f)
   证明: by grind [embDomain]
 
 @[deprecated (since := "2026-07-15")] alias embDomain_notin_range := embDomain_of_notMem_range
@@ -1628,7 +1628,7 @@ theorem embDomain_injective
 中文:
 定理 embDomain_injective
   条件: (f : α ↪ β)
-  结论: Function.Injective (embDomain f : (α ->₀ M) -> β ->₀ M)
+  结论: 函数.单射 (embDomain f : (α ->₀ M) -> β ->₀ M)
   证明: fun l₁ l₂ h => ext fun a => by simpa only [embDomain_apply_self] using DFunLike.ext_iff.1 h (f a)
 
 @[simp]
@@ -1716,7 +1716,7 @@ lemma embDomain_refl
 
 中文:
 引理 embDomain_refl
-  结论: embDomain (M := M) (Function.Embedding.refl α) = id
+  结论: embDomain (M := M) (函数.嵌入.refl α) = id
   证明: by
   ext; simp [embDomain_apply]
 

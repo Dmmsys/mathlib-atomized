@@ -44,7 +44,7 @@ definition IsTotallyUnimodular
 
 中文:
 定义 IsTotallyUnimodular
-  签名: (A : Matrix m n R)
+  签名: (A : 矩阵 m n R)
   定义体: forall k : Nat, forall f : Fin k -> m, forall g : Fin k -> n, f.Injective -> g.Injective ->
     (A.submatrix f g).det in Set.range SignType.cast
 
@@ -74,7 +74,7 @@ lemma isTotallyUnimodular_iff
 
 中文:
 引理 isTotallyUnimodular_iff
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: A.IsTotallyUnimodular ↔
   证明: by
   constructor <;> intro hA
@@ -126,7 +126,7 @@ lemma isTotallyUnimodular_iff_fintype.{w}
 
 中文:
 引理 isTotallyUnimodular_iff_fintype.{w}
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   结论: A.IsTotallyUnimodular ↔
   证明: by
   rw [isTotallyUnimodular_iff]
@@ -163,7 +163,7 @@ lemma IsTotallyUnimodular.apply
 
 中文:
 引理 IsTotallyUnimodular.apply
-  条件: {A : Matrix m n R} (hA : A.IsTotallyUnimodular) (i : m) (j : n)
+  条件: {A : 矩阵 m n R} (hA : A.IsTotallyUnimodular) (i : m) (j : n)
   证明: by
   rw [isTotallyUnimodular_iff] at hA
   simpa using hA 1 (fun _ => i) (fun _ => j)
@@ -188,7 +188,7 @@ lemma IsTotallyUnimodular.submatrix
 
 中文:
 引理 IsTotallyUnimodular.submatrix
-  结论: {A : Matrix m n R} (f : m' -> m) (g : n' -> n)
+  结论: {A : 矩阵 m n R} (f : m' -> m) (g : n' -> n)
   证明: by
   simp only [isTotallyUnimodular_iff, submatrix_submatrix] at hA ⊢
   intro _ _ _
@@ -216,7 +216,7 @@ lemma IsTotallyUnimodular.transpose
 
 中文:
 引理 IsTotallyUnimodular.transpose
-  条件: {A : Matrix m n R} (hA : A.IsTotallyUnimodular)
+  条件: {A : 矩阵 m n R} (hA : A.IsTotallyUnimodular)
   证明: by
   simp only [isTotallyUnimodular_iff, ← transpose_submatrix, det_transpose] at hA ⊢
   intro _ _ _
@@ -241,7 +241,7 @@ lemma transpose_isTotallyUnimodular_iff
 
 中文:
 引理 transpose_isTotallyUnimodular_iff
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   证明: by
   constructor <;> apply IsTotallyUnimodular.transpose
 
@@ -261,7 +261,7 @@ lemma IsTotallyUnimodular.reindex
 
 中文:
 引理 IsTotallyUnimodular.reindex
-  结论: {A : Matrix m n R} (em : m ≃ m') (en : n ≃ n')
+  结论: {A : 矩阵 m n R} (em : m ≃ m') (en : n ≃ n')
   证明: hA.submatrix _ _
 
 Depends on / 依赖: hA.submatrix, submatrix
@@ -282,7 +282,7 @@ lemma reindex_isTotallyUnimodular
 
 中文:
 引理 reindex_isTotallyUnimodular
-  条件: (A : Matrix m n R) (em : m ≃ m') (en : n ≃ n')
+  条件: (A : 矩阵 m n R) (em : m ≃ m') (en : n ≃ n')
   证明: ⟨fun hA => by simpa [Equiv.symm_apply_eq] using hA.reindex em.symm en.symm,
    fun hA => hA.reindex _ _⟩
 
@@ -310,7 +310,7 @@ lemma emptyRows_isTotallyUnimodular
 
 中文:
 引理 emptyRows_isTotallyUnimodular
-  条件: [IsEmpty m] (A : Matrix m n R)
+  条件: [是空 m] (A : 矩阵 m n R)
   证明: by
   intro k f _ _ _
   cases k with
@@ -338,7 +338,7 @@ lemma emptyCols_isTotallyUnimodular
 
 中文:
 引理 emptyCols_isTotallyUnimodular
-  条件: [IsEmpty n] (A : Matrix m n R)
+  条件: [是空 n] (A : 矩阵 m n R)
   证明: A.transpose.emptyRows_isTotallyUnimodular.transpose
 
 Depends on / 依赖: A.transpose.emptyRows_isTotallyUnimodular.transpose, emptyRows_isTotallyUnimodular, transpose
@@ -366,7 +366,7 @@ lemma IsTotallyUnimodular.fromRows_unitlike
 
 中文:
 引理 IsTotallyUnimodular.fromRows_unitlike
-  结论: [DecidableEq n] {A : Matrix m n R} {B : Matrix m' n R}
+  结论: [DecidableEq n] {A : 矩阵 m n R} {B : 矩阵 m' n R}
   证明: by
   intro k f g hf hg
   induction k with
@@ -427,7 +427,7 @@ lemma fromRows_isTotallyUnimodular_iff_rows
 
 中文:
 引理 fromRows_isTotallyUnimodular_iff_rows
-  结论: [DecidableEq n] {A : Matrix m n R} {B : Matrix m' n R}
+  结论: [DecidableEq n] {A : 矩阵 m n R} {B : 矩阵 m' n R}
   证明: ⟨.submatrix Sum.inl id, fun hA => hA.fromRows_unitlike hB⟩
 
 Depends on / 依赖: Sum.inl, fromRows_unitlike, hA.fromRows_unitlike, submatrix
@@ -448,7 +448,7 @@ lemma fromRows_one_isTotallyUnimodular_iff
 
 中文:
 引理 fromRows_one_isTotallyUnimodular_iff
-  条件: [DecidableEq n] (A : Matrix m n R)
+  条件: [DecidableEq n] (A : 矩阵 m n R)
   证明: fromRows_isTotallyUnimodular_iff_rows fun h i =>
     ⟨i, 1, funext fun j => by simp [one_apply, Pi.single_apply, eq_comm]⟩
 
@@ -474,7 +474,7 @@ lemma one_fromRows_isTotallyUnimodular_iff
 
 中文:
 引理 one_fromRows_isTotallyUnimodular_iff
-  条件: [DecidableEq n] (A : Matrix m n R)
+  条件: [DecidableEq n] (A : 矩阵 m n R)
   证明: by
   have hA :
     fromRows (1 : Matrix n n R) A =
@@ -503,7 +503,7 @@ lemma fromCols_one_isTotallyUnimodular_iff
 
 中文:
 引理 fromCols_one_isTotallyUnimodular_iff
-  条件: [DecidableEq m] (A : Matrix m n R)
+  条件: [DecidableEq m] (A : 矩阵 m n R)
   证明: by
   rw [← transpose_isTotallyUnimodular_iff]; rw [transpose_fromCols]; rw [transpose_one]; rw [fromRows_one_isTotallyUnimodular_iff]; rw [transpose_isTotallyUnimodular_iff]
 
@@ -527,7 +527,7 @@ alias ⟨_, IsTotallyUnimodular.one_fromRow
 
 中文:
 引理 one_fromCols_isTotallyUnimodular_iff
-  条件: [DecidableEq m] (A : Matrix m n R)
+  条件: [DecidableEq m] (A : 矩阵 m n R)
   证明: by
   rw [← transpose_isTotallyUnimodular_iff]; rw [transpose_fromCols]; rw [transpose_one]; rw [one_fromRows_isTotallyUnimodular_iff]; rw [transpose_isTotallyUnimodular_iff]
 
@@ -561,7 +561,7 @@ refine fromRows_isTotallyUnimodular_iff_rows fun _ _ => ?_
 
 中文:
 引理 fromRows_replicateRow0_isTotallyUnimodular_iff
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   证明: by
   classical
 refine fromRows_isTotallyUnimodular_iff_rows fun _ _ => ?_
@@ -592,7 +592,7 @@ lemma fromCols_replicateCol0_isTotallyUnimodular_iff
 
 中文:
 引理 fromCols_replicateCol0_isTotallyUnimodular_iff
-  条件: (A : Matrix m n R)
+  条件: (A : 矩阵 m n R)
   证明: by
   rw [← transpose_isTotallyUnimodular_iff]; rw [transpose_fromCols]; rw [transpose_replicateCol]; rw [fromRows_replicateRow0_isTotallyUnimodular_iff]; rw [transpose_isTotallyUnimodular_iff]
 

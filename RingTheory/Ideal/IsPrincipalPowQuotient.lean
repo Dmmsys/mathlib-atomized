@@ -57,7 +57,7 @@ definition quotEquivPowQuotPowSucc
 
 中文:
 定义 quotEquivPowQuotPowSucc
-  签名: (h : I.IsPrincipal) (h' : I != ⊥) (n : 自然数)
+  签名: (h : I.是Principal) (h' : I != ⊥) (n : 自然数)
   定义体: by
   let f : (I ^ n : Ideal R) ->ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
     Submodule.mkQ _
@@ -118,7 +118,7 @@ definition quotEquivPowQuotPowSuccEquiv
 
 中文:
 定义 quotEquivPowQuotPowSuccEquiv
-  签名: (h : I.IsPrincipal) (h' : I != ⊥) (n : 自然数)
+  签名: (h : I.是Principal) (h' : I != ⊥) (n : 自然数)
   定义体: quotEquivPowQuotPowSucc h h' n
 
 Depends on / 依赖: quotEquivPowQuotPowSucc

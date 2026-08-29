@@ -50,7 +50,7 @@ definition coevaluation
 
 中文:
 定义 coevaluation
-  签名: : K ->ₗ[K] V otimes[K] Module.Dual K V
+  签名: : K ->ₗ[K] V otimes[K] 模.对偶 K V
   定义体: let bV := Basis.ofVectorSpace K V
   (Basis.singleton Unit K).constr K fun _ =>
     ∑ i : Basis.ofVectorSpaceIndex K V, bV i otimesₜ[K] bV.coord i

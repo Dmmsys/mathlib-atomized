@@ -72,7 +72,7 @@ theorem upperBounds_l_image
 
 中文:
 定理 upperBounds_l_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: Set.ext fun b => by simp [upperBounds, gc _ _]
 
 @[to_dual]
@@ -97,7 +97,7 @@ theorem bddAbove_l_image
 
 中文:
 定理 bddAbove_l_image
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: BddAbove (l '' s) ↔ BddAbove s
   证明: ⟨fun ⟨x, hx⟩ => ⟨u x, by rwa [gc.upperBounds_l_image] at hx⟩, gc.monotone_l.map_bddAbove⟩
 
@@ -123,7 +123,7 @@ gc.l_le h.right by rwa [gc.upperBounds_l_image] at hb⟩
 
 中文:
 定理 isLUB_l_image
-  条件: {s : Set α} {a : α} (h : IsLUB s a)
+  条件: {s : 集合 α} {a : α} (h : IsLUB s a)
   结论: IsLUB (l '' s) (l a)
   证明: ⟨gc.monotone_l.mem_upperBounds_image h.left, fun b hb =>
 gc.l_le h.right by rwa [gc.upperBounds_l_image] at hb⟩
@@ -289,7 +289,7 @@ theorem l_sSup
 
 中文:
 定理 l_sSup
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: l (sSup s) = ⨆ a in s, l a
   证明: by
   simp only [sSup_eq_iSup, gc.l_iSup]
@@ -316,7 +316,7 @@ theorem compl
 
 中文:
 定理 compl
-  结论: [布尔eanAlgebra α] [布尔eanAlgebra β] {l : α -> β} {u : β -> α}
+  结论: [布尔代数 α] [布尔代数 β] {l : α -> β} {u : β -> α}
   证明: fun a b => by
   dsimp
   rw [le_compl_iff_le_compl]; rw [gc]; rw [compl_le_iff_compl_le]
@@ -650,7 +650,7 @@ theorem bddAbove_image
 
 中文:
 定理 bddAbove_image
-  条件: (e : α ≃o β) {s : Set α}
+  条件: (e : α ≃o β) {s : 集合 α}
   结论: BddAbove (e '' s) ↔ BddAbove s
   证明: e.to_galoisConnection.bddAbove_l_image
 
@@ -674,7 +674,7 @@ theorem bddAbove_preimage
 
 中文:
 定理 bddAbove_preimage
-  条件: (e : α ≃o β) {s : Set β}
+  条件: (e : α ≃o β) {s : 集合 β}
   结论: BddAbove (e ⁻¹' s) ↔ BddAbove s
   证明: by
   rw [← e.bddAbove_image]; rw [e.image_preimage]
@@ -727,7 +727,7 @@ theorem l_sup_u
 
 中文:
 定理 l_sup_u
-  条件: [SemilatticeSup α] [SemilatticeSup β] (gi : GaloisInsertion l u) (a b : β)
+  条件: [SemilatticeSup α] [SemilatticeSup β] (gi : Galois嵌入 l u) (a b : β)
   证明: calc
     l (u a ⊔ u b) = l (u a) ⊔ l (u b) := gi.gc.l_sup
     _ = a ⊔ b := by simp only [gi.l_u_eq]
@@ -757,7 +757,7 @@ _ = ⨆ i : ι, f i := congr_arg _ funext fun i => gi.l_u_eq (f i)
 
 中文:
 定理 l_iSup_u
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
   证明: calc
     l (⨆ i : ι, u (f i)) = ⨆ i : ι, l (u (f i)) := gi.gc.l_iSup
 _ = ⨆ i : ι, f i := congr_arg _ funext fun i => gi.l_u_eq (f i)
@@ -786,7 +786,7 @@ theorem l_biSup_u
 
 中文:
 定理 l_biSup_u
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
   证明: by
   simp only [iSup_subtype', gi.l_iSup_u]
 
@@ -811,7 +811,7 @@ theorem l_sSup_u_image
 
 中文:
 定理 l_sSup_u_image
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
   证明: by rw [sSup_image, gi.l_biSup_u, sSup_eq_iSup]
 
 @[to_dual]
@@ -836,7 +836,7 @@ theorem l_inf_u
 
 中文:
 定理 l_inf_u
-  条件: [SemilatticeInf α] [SemilatticeInf β] (gi : GaloisInsertion l u) (a b : β)
+  条件: [SemilatticeInf α] [SemilatticeInf β] (gi : Galois嵌入 l u) (a b : β)
   证明: calc
     l (u a ⊓ u b) = l (u (a ⊓ b)) := congr_arg l gi.gc.u_inf.symm
     _ = a ⊓ b := by simp only [gi.l_u_eq]
@@ -866,7 +866,7 @@ theorem l_iInf_u
 
 中文:
 定理 l_iInf_u
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
   证明: calc
     l (⨅ i : ι, u (f i)) = l (u (⨅ i : ι, f i)) := congr_arg l gi.gc.u_iInf.symm
     _ = ⨅ i : ι, f i := gi.l_u_eq _
@@ -895,7 +895,7 @@ theorem l_biInf_u
 
 中文:
 定理 l_biInf_u
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
   证明: by
   simp only [iInf_subtype', gi.l_iInf_u]
 
@@ -920,7 +920,7 @@ theorem l_sInf_u_image
 
 中文:
 定理 l_sInf_u_image
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
   证明: by rw [sInf_image, gi.l_biInf_u, sInf_eq_iInf]
 
 @[to_dual]
@@ -945,7 +945,7 @@ theorem l_iInf_of_u_l_eq_self
 
 中文:
 定理 l_iInf_of_u_l_eq_self
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
   证明: calc
     l (⨅ i, f i) = l (⨅ i : ι, u (l (f i))) := by simp [hf]
     _ = ⨅ i, l (f i) := gi.l_iInf_u _
@@ -978,7 +978,7 @@ theorem l_biInf_of_u_l_eq_self
 
 中文:
 定理 l_biInf_of_u_l_eq_self
-  结论: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
+  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
   证明: by
   rw [iInf_subtype']; rw [iInf_subtype']
   exact gi.l_iInf_of_u_l_eq_self _ fun _ => hf _ _
@@ -1013,7 +1013,7 @@ gi.gc.l_le hs.2 gi.gc.monotone_u.mem_upperBounds_image hx⟩
 
 中文:
 定理 isLUB_of_u_image
-  结论: [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
+  结论: [预序 α] [预序 β] (gi : Galois嵌入 l u) {s : 集合 β} {a : α}
   证明: ⟨fun x hx => (gi.le_l_u x).trans gi.gc.monotone_l hs.1 mem_image_of_mem _ hx, fun _ hx =>
 gi.gc.l_le hs.2 gi.gc.monotone_u.mem_upperBounds_image hx⟩
 
@@ -1038,7 +1038,7 @@ theorem isGLB_of_u_image
 
 中文:
 定理 isGLB_of_u_image
-  结论: [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
+  结论: [预序 α] [预序 β] (gi : Galois嵌入 l u) {s : 集合 β} {a : α}
   证明: ⟨fun _ hx => gi.gc.l_le hs.1 mem_image_of_mem _ hx, fun x hx =>
 (gi.le_l_u x).trans gi.gc.monotone_l hs.2 gi.gc.monotone_u.mem_lowerBounds_image hx⟩
 
@@ -1071,7 +1071,7 @@ gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monot
 
 中文:
 缩写 liftSemilatticeSup
-  签名: [SemilatticeSup α] (gi : GaloisInsertion l u)
+  签名: [SemilatticeSup α] (gi : Galois嵌入 l u)
   定义体: { ‹PartialOrder β› with
     sup := fun a b => l (u a ⊔ u b)
 le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
@@ -1108,7 +1108,7 @@ gi.choice (u a ⊓ u b)
 
 中文:
 缩写 liftSemilatticeInf
-  签名: [SemilatticeInf α] (gi : GaloisInsertion l u)
+  签名: [SemilatticeInf α] (gi : Galois嵌入 l u)
   定义体: { ‹PartialOrder β› with
     inf := fun a b =>
 gi.choice (u a ⊓ u b)
@@ -1144,7 +1144,7 @@ abbreviation liftLattice
 
 中文:
 缩写 liftLattice
-  签名: [Lattice α] (gi : GaloisInsertion l u)
+  签名: [格 α] (gi : Galois嵌入 l u)
   定义体: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
 
 Depends on / 依赖: gi.liftSemilatticeInf, gi.liftSemilatticeSup, liftSemilatticeInf, liftSemilatticeSup
@@ -1164,8 +1164,8 @@ abbreviation _root_.GaloisCoinsertion.liftLattice
   body: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
 
 中文:
-缩写 _root_.GaloisCoinsertion.liftLattice
-  签名: [Lattice α] (gi : GaloisCoinsertion u l)
+缩写 _root_.Galois余嵌入.liftLattice
+  签名: [格 α] (gi : Galois余嵌入 u l)
   定义体: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
 
 Depends on / 依赖: gi.liftSemilatticeInf, gi.liftSemilatticeSup, liftSemilatticeInf, liftSemilatticeSup
@@ -1188,7 +1188,7 @@ abbreviation liftOrderTop
 
 中文:
 缩写 liftOrderTop
-  签名: [Preorder α] [OrderTop α] (gi : GaloisInsertion l u)
+  签名: [预序 α] [有顶序 α] (gi : Galois嵌入 l u)
   定义体: gi.choice ⊤ le_top
   le_top := by
     simp only [gi.choice_eq]; exact fun b => (gi.le_l_u b).trans (gi.gc.monotone_l le_top)
@@ -1214,7 +1214,7 @@ abbreviation liftBoundedOrder
 
 中文:
 缩写 liftBoundedOrder
-  签名: [Preorder α] [BoundedOrder α] (gi : GaloisInsertion l u)
+  签名: [预序 α] [有界序 α] (gi : Galois嵌入 l u)
   定义体: { gi.liftOrderTop, gi.gc.liftOrderBot with }
 
 Depends on / 依赖: gi.gc.liftOrderBot, gi.liftOrderTop, liftOrderBot, liftOrderTop
@@ -1242,7 +1242,7 @@ gi.choice (sInf (u '' s))
 
 中文:
 缩写 liftCompleteLattice
-  签名: [CompleteLattice α] (gi : GaloisInsertion l u)
+  签名: [完备格 α] (gi : Galois嵌入 l u)
   定义体: { gi.liftBoundedOrder, gi.liftLattice with
     sSup := fun s => l (sSup (u '' s))
     isLUB_sSup _ := gi.isLUB_of_u_image (isLUB_sSup _)
@@ -1287,7 +1287,7 @@ theorem gc_sSup_Iic
 
 中文:
 定理 gc_sSup_Iic
-  条件: [CompleteSemilatticeSup α]
+  条件: [余mpleteSemilatticeSup α]
   证明: fun _ _ => sSup_le_iff
 
 Depends on / 依赖: sSup_le_iff
@@ -1306,7 +1306,7 @@ theorem gc_Ici_sInf
 
 中文:
 定理 gc_Ici_sInf
-  条件: [CompleteSemilatticeInf α]
+  条件: [余mpleteSemilatticeInf α]
   证明: fun _ _ => le_sInf_iff.symm
 
 Depends on / 依赖: le_sInf_iff, le_sInf_iff.symm
@@ -1328,7 +1328,7 @@ alias gi_sSup_Iic := giSSupIic
 
 中文:
 定义 giSSupIic
-  签名: [CompleteSemilatticeSup α]
+  签名: [余mpleteSemilatticeSup α]
   定义体: gc_sSup_Iic.toGaloisInsertion fun _ => le_sSup le_rfl
 
 @[deprecated (since := "2026-07-18")]
@@ -1356,7 +1356,7 @@ alias gci_Ici_sInf := gciIciSInf
 
 中文:
 定义 gciIciSInf
-  签名: [CompleteSemilatticeInf α]
+  签名: [余mpleteSemilatticeInf α]
   定义体: gc_Ici_sInf.toGaloisCoinsertion fun _ => sInf_le le_rfl
 
 @[deprecated (since := "2026-07-18")]
@@ -1389,7 +1389,7 @@ definition WithBot.giUnbotDBot
 
 中文:
 定义 WithBot.giUnbotDBot
-  签名: [Preorder α] [OrderBot α]
+  签名: [预序 α] [有底序 α]
   定义体: WithBot.unbotD_le_iff (fun _ => bot_le)
   le_l_u _ := le_rfl
   choice o _ := o.unbotD ⊥

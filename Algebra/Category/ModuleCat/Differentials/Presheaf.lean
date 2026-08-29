@@ -67,7 +67,7 @@ structure Derivation
     - d_app({X : Cᵒᵖ} (a : S.obj X)) : d (φ.app X a) = 0  [default: by cat_disch]
 
 中文:
-结构 Derivation
+结构 导子
   参数: where
   公理与运算 (4 个):
     - d({X : Dᵒᵖ}) : R.obj X ->+ M.obj X
@@ -103,7 +103,7 @@ lemma congr_d
 
 中文:
 引理 congr_d
-  条件: {d d' : M.Derivation φ} (h : d = d') {X : Dᵒᵖ} (b : R.obj X)
+  条件: {d d' : M.导子 φ} (h : d = d') {X : Dᵒᵖ} (b : R.obj X)
   证明: by rw [h]
 -/
 lemma congr_d {d d' : M.Derivation φ} (h : d = d') {X : Dᵒᵖ} (b : R.obj X) :
@@ -180,12 +180,12 @@ structure Universal
     - postcomp_injective({M' : PresheafOfModules (R ⋙ forget₂ CommRingCat RingCat)} (φ φ' : M ⟶ M') (h : d.postcomp φ = d.postcomp φ')) : φ = φ'  [default: by cat_disch]
 
 中文:
-结构 Universal
+结构 泛
   参数: where
   公理与运算 (3 个):
-    - desc({M' : PresheafOfModules (R ⋙ forget₂ CommRingCat RingCat)} (d' : M'.Derivation φ)) : M ⟶ M'
-    - fac({M' : PresheafOfModules (R ⋙ forget₂ CommRingCat RingCat)} (d' : M'.Derivation φ)) : d.postcomp (desc d') = d'  [默认: by cat_disch]
-    - postcomp_injective({M' : PresheafOfModules (R ⋙ forget₂ CommRingCat RingCat)} (φ φ' : M ⟶ M') (h : d.postcomp φ = d.postcomp φ')) : φ = φ'  [默认: by cat_disch]
+    - desc({M' : 预模层 (R ⋙ forget₂ 交换环范畴 环范畴)} (d' : M'.导子 φ)) : M ⟶ M'
+    - fac({M' : 预模层 (R ⋙ forget₂ 交换环范畴 环范畴)} (d' : M'.导子 φ)) : d.postcomp (desc d') = d'  [默认: by cat_disch]
+    - postcomp_injective({M' : 预模层 (R ⋙ forget₂ 交换环范畴 环范畴)} (φ φ' : M ⟶ M') (h : d.postcomp φ = d.postcomp φ')) : φ = φ'  [默认: by cat_disch]
 
 Depends on / 依赖: CommRingCat, PresheafOfModules, RingCat, cat_disch, d.postcomp, postcomp, postcomp_injective
 -/
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton d.Universal
+  签名: 子单例 d.泛
   定义体: by
     suffices forall {M' : PresheafOfModules (R ⋙ forget₂ CommRingCat RingCat)}
       (d' : M'.Derivation φ), h₁.desc d' = h₂.desc d' by
@@ -260,10 +260,10 @@ class HasDifferentials
     - exists_universal_derivation : exists (M : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) (d : M.Derivation φ), Nonempty d.Universal
 
 中文:
-类 HasDifferentials
+类 有Differentials
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_universal_derivation : 存在 (M : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) (d : M.Derivation φ), Nonempty d.Universal
+    - exists_universal_derivation : 存在 (M : 预模层.{u} (R ⋙ forget₂ _ _)) (d : M.导子 φ), 非空 d.泛
 -/
 class HasDifferentials : Prop where
   exists_universal_derivation : exists (M : PresheafOfModules.{u} (R ⋙ forget₂ _ _))
@@ -278,8 +278,8 @@ abbreviation Derivation'
   body: M.Derivation (F := 𝟭 D) φ'
 
 中文:
-缩写 Derivation'
-  签名: : Type _
+缩写 导子'
+  签名: : 类型 _
   定义体: M.Derivation (F := 𝟭 D) φ'
 
 Depends on / 依赖: Derivation, M.Derivation
@@ -301,7 +301,7 @@ lemma d_app
 
 中文:
 引理 d_app
-  条件: (d : M.Derivation' φ') {X : Dᵒᵖ} (a : S'.obj X)
+  条件: (d : M.导子' φ') {X : Dᵒᵖ} (a : S'.obj X)
   证明: Derivation.d_app d _
 
 Depends on / 依赖: Derivation, Derivation.d_app, d_app
@@ -323,7 +323,7 @@ definition app
 
 中文:
 定义 app
-  签名: (d : M.Derivation' φ') (X : Dᵒᵖ)
+  签名: (d : M.导子' φ') (X : Dᵒᵖ)
   定义体: ModuleCat.Derivation.mk (fun b => d.d b)
 
 @[simp]
@@ -344,7 +344,7 @@ lemma app_apply
 
 中文:
 引理 app_apply
-  条件: (d : M.Derivation' φ') {X : Dᵒᵖ} (b : R.obj X)
+  条件: (d : M.导子' φ') {X : Dᵒᵖ} (b : R.obj X)
   证明: rfl
 -/
 lemma app_apply (d : M.Derivation' φ') {X : Dᵒᵖ} (b : R.obj X) :
@@ -407,8 +407,8 @@ definition Universal.mk
   postcomp_injective := postcomp_injective
 
 中文:
-定义 Universal.mk
-  签名: {d : M.Derivation' φ'}
+定义 泛.mk
+  签名: {d : M.导子' φ'}
   定义体: desc
   fac := fac
   postcomp_injective := postcomp_injective
@@ -504,7 +504,7 @@ definition derivation'
 
 中文:
 定义 derivation'
-  签名: : (relativeDifferentials' φ').Derivation' φ'
+  签名: : (relativeDifferentials' φ').导子' φ'
   定义体: Derivation'.mk (fun X => CommRingCat.KaehlerDifferential.D (φ'.app X))
     (fun _ _ f x => (relativeDifferentials'_map_d φ' f x).symm)
 
@@ -532,7 +532,7 @@ definition isUniversal'
 
 中文:
 定义 isUniversal'
-  签名: : (derivation' φ').Universal
+  签名: : (derivation' φ').泛
   定义体: Derivation'.Universal.mk
     (fun {M'} d' =>
       { app := fun X => (d'.app X).desc
@@ -569,7 +569,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDifferentials (F := 𝟭 D) φ'
+  签名: 有Differentials (F := 𝟭 D) φ'
   定义体: ⟨_, _, ⟨isUniversal' φ'⟩⟩
 
 Depends on / 依赖: isUniversal

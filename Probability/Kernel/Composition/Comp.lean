@@ -60,7 +60,7 @@ scoped[ProbabilityTheory] infixl:100 " ∘ₖ " => ProbabilityTheory.Kernel.comp
 
 中文:
 定义 comp
-  签名: (η : Kernel β γ) (κ : Kernel α β)
+  签名: (η : 核 β γ) (κ : 核 α β)
   定义体: (κ a).bind η
   measurable' := (Measure.measurable_bind' η.measurable).comp κ.measurable
 
@@ -85,7 +85,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (η : Kernel β γ) (κ : Kernel α β) (a : α)
+  条件: (η : 核 β γ) (κ : 核 α β) (a : α)
   结论: (η ∘ₖ κ) a = (κ a).bind η
   证明: rfl
 -/
@@ -103,7 +103,7 @@ theorem comp_apply'
 
 中文:
 定理 comp_apply'
-  条件: (η : Kernel β γ) (κ : Kernel α β) (a : α) {s : Set γ} (hs : MeasurableSet s)
+  条件: (η : 核 β γ) (κ : 核 α β) (a : α) {s : 集合 γ} (hs : 可测集 s)
   证明: by
   rw [comp_apply]; rw [Measure.bind_apply hs (Kernel.aemeasurable _)]
 
@@ -130,7 +130,7 @@ theorem comp_apply_univ_le
 
 中文:
 定理 comp_apply_univ_le
-  条件: (κ : Kernel α β) (η : Kernel β γ) (a : α)
+  条件: (κ : 核 α β) (η : 核 β γ) (a : α)
   证明: by
   rw [comp_apply' _ _ _ .univ]
   let Cη := η.bound
@@ -164,8 +164,8 @@ lemma zero_comp
 
 中文:
 引理 zero_comp
-  条件: (κ : Kernel α β)
-  结论: (0 : Kernel β γ) ∘ₖ κ = 0
+  条件: (κ : 核 α β)
+  结论: (0 : 核 β γ) ∘ₖ κ = 0
   证明: by
   ext; simp [comp_apply, FunLike.coe_zero]
 -/
@@ -183,8 +183,8 @@ lemma comp_zero
 
 中文:
 引理 comp_zero
-  条件: (κ : Kernel β γ)
-  结论: κ ∘ₖ (0 : Kernel α β) = 0
+  条件: (κ : 核 β γ)
+  结论: κ ∘ₖ (0 : 核 α β) = 0
   证明: by ext; simp [comp_apply]
 -/
 @[simp] lemma comp_zero (κ : Kernel β γ) : κ ∘ₖ (0 : Kernel α β) = 0 := by ext; simp [comp_apply]
@@ -203,8 +203,8 @@ lemma id_comp
 
 中文:
 引理 id_comp
-  条件: (κ : Kernel α β)
-  结论: Kernel.id ∘ₖ κ = κ
+  条件: (κ : 核 α β)
+  结论: 核.id ∘ₖ κ = κ
   证明: by
   ext a s hs
   simpa [comp_apply' _ _ _ hs, id_apply, Measure.dirac_apply' _ hs]
@@ -229,8 +229,8 @@ lintegral_dirac' a κ.measurable_coe hs]
 
 中文:
 引理 comp_id
-  条件: (κ : Kernel β γ)
-  结论: κ ∘ₖ Kernel.id = κ
+  条件: (κ : 核 β γ)
+  结论: κ ∘ₖ 核.id = κ
   证明: by
   ext a s hs
   simp [comp_apply' _ _ _ hs, id_apply,
@@ -289,7 +289,7 @@ theorem comp_null
 
 中文:
 定理 comp_null
-  条件: (a : α) (hs : MeasurableSet s)
+  条件: (a : α) (hs : 可测集 s)
   证明: by
   rw [comp_apply' _ _ _ hs]; rw [lintegral_eq_zero_iff (η.measurable_coe hs)]
 
@@ -365,7 +365,7 @@ lemma ae_comp_of_ae_ae
 
 中文:
 引理 ae_comp_of_ae_ae
-  结论: (hp : MeasurableSet {z | p z})
+  结论: (hp : 可测集 {z | p z})
   证明: by
   rwa [ae_iff, comp_null] at *
   exact hp.compl
@@ -387,7 +387,7 @@ lemma ae_comp_iff
 
 中文:
 引理 ae_comp_iff
-  条件: (hp : MeasurableSet {z | p z})
+  条件: (hp : 可测集 {z | p z})
   证明: ⟨ae_ae_of_ae_comp, ae_comp_of_ae_ae hp⟩
 
 Depends on / 依赖: ae_ae_of_ae_comp, ae_comp_of_ae_ae
@@ -414,7 +414,7 @@ theorem comp_restrict
 
 中文:
 定理 comp_restrict
-  条件: {s : Set γ} (hs : MeasurableSet s)
+  条件: {s : 集合 γ} (hs : 可测集 s)
   证明: by
   ext a t ht
   simp_rw [comp_apply' _ _ _ ht, restrict_apply' _ _ _ ht, comp_apply' _ _ _ (ht.inter hs)]
@@ -439,7 +439,7 @@ theorem lintegral_comp
 
 中文:
 定理 lintegral_comp
-  结论: (η : Kernel β γ) (κ : Kernel α β) (a : α) {g : γ -> 实数>=0∞}
+  结论: (η : 核 β γ) (κ : 核 α β) (a : α) {g : γ -> 实数>=0∞}
   证明: by
   rw [comp_apply]; rw [Measure.lintegral_bind (Kernel.aemeasurable _) hg.aemeasurable]
 
@@ -461,7 +461,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {δ : 类型} {mδ : MeasurableSpace δ} (ξ : Kernel γ δ)
+  结论: {δ : 类型} {mδ : 可测空间 δ} (ξ : 核 γ δ)
   证明: by
   refine ext_fun fun a f hf => ?_
   simp_rw [lintegral_comp _ _ _ hf, lintegral_comp _ _ _ hf.lintegral_kernel]
@@ -487,7 +487,7 @@ lemma comp_discard'
 
 中文:
 引理 comp_discard'
-  条件: (κ : Kernel α β)
+  条件: (κ : 核 α β)
   证明: by
   ext a s hs
   simp [comp_apply' _ _ _ hs, mul_comm]
@@ -518,7 +518,7 @@ lemma comp_discard
 
 中文:
 引理 comp_discard
-  条件: (κ : Kernel α β) [IsMarkovKernel κ]
+  条件: (κ : 核 α β) [是MarkovKernel κ]
   结论: discard β ∘ₖ κ = discard α
   证明: by
   ext; simp [comp_discard']
@@ -572,7 +572,7 @@ lemma const_comp
 
 中文:
 引理 const_comp
-  条件: (μ : Measure γ) (κ : Kernel α β)
+  条件: (μ : 测度 γ) (κ : 核 α β)
   证明: by
   ext _ _ hs
   simp_rw [comp_apply' _ _ _ hs, const_apply, MeasureTheory.lintegral_const, Measure.smul_apply,
@@ -600,7 +600,7 @@ lemma const_comp'
 
 中文:
 引理 const_comp'
-  条件: (μ : Measure γ) (κ : Kernel α β) [IsMarkovKernel κ]
+  条件: (μ : 测度 γ) (κ : 核 α β) [是MarkovKernel κ]
   证明: by
   ext; simp_rw [const_comp, measure_univ, one_smul, const_apply]
 
@@ -620,7 +620,7 @@ lemma comp_add_right
 
 中文:
 引理 comp_add_right
-  条件: (μ κ : Kernel α β) (η : Kernel β γ)
+  条件: (μ κ : 核 α β) (η : 核 β γ)
   证明: by ext _ _ hs; simp [comp_apply' _ _ _ hs]
 
 Depends on / 依赖: comp_apply
@@ -641,7 +641,7 @@ lemma comp_add_left
 
 中文:
 引理 comp_add_left
-  条件: (μ : Kernel α β) (κ η : Kernel β γ)
+  条件: (μ : 核 α β) (κ η : 核 β γ)
   证明: by
   ext a s hs
   simp_rw [comp_apply' _ _ _ hs, add_apply, Measure.add_apply, comp_apply' _ _ _ hs,
@@ -668,7 +668,7 @@ lemma comp_sum_right
 
 中文:
 引理 comp_sum_right
-  条件: {ι : 类型} [Countable ι] (κ : ι -> Kernel α β) (η : Kernel β γ)
+  条件: {ι : 类型} [可数 ι] (κ : ι -> 核 α β) (η : 核 β γ)
   证明: by
   ext _ _ hs
   simp_rw [sum_apply, comp_apply' _ _ _ hs, Measure.sum_apply _ hs, sum_apply,
@@ -697,7 +697,7 @@ lemma comp_sum_left
 
 中文:
 引理 comp_sum_left
-  条件: {ι : 类型} [Countable ι] (κ : Kernel α β) (η : ι -> Kernel β γ)
+  条件: {ι : 类型} [可数 ι] (κ : 核 α β) (η : ι -> 核 β γ)
   证明: by
   ext _ _ hs
   simp_rw [sum_apply, comp_apply' _ _ _ hs, sum_apply, Measure.sum_apply _ hs,
@@ -732,7 +732,7 @@ _ = κ a (s inter t) := lintegral_indicator_one hs.inter ht
 
 中文:
 引理 copy_comp_apply_prod
-  结论: (κ : Kernel α β) (a : α) {s t : Set β} (hs : MeasurableSet s)
+  结论: (κ : 核 α β) (a : α) {s t : 集合 β} (hs : 可测集 s)
   证明: by
   rw [comp_apply' _ _ _ <| hs.prod ht]
   simp_rw [copy_apply, Measure.dirac_apply' _ <| hs.prod ht, Set.indicator_prod_one]
@@ -767,8 +767,8 @@ instance IsMarkovKernel.comp
     simp
 
 中文:
-实例 IsMarkovKernel.comp
-  签名: (η : Kernel β γ) [IsMarkovKernel η] (κ : Kernel α β)
+实例 是MarkovKernel.comp
+  签名: (η : 核 β γ) [是MarkovKernel η] (κ : 核 α β)
   定义体: by
     rw [comp_apply]
     constructor
@@ -796,8 +796,8 @@ instance IsZeroOrMarkovKernel.comp
   all_goals simpa using by infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.comp
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.comp
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
   定义体: by
   obtain rfl | _ := eq_zero_or_isMarkovKernel κ <;> obtain rfl | _ := eq_zero_or_isMarkovKernel η
   all_goals simpa using by infer_instance
@@ -822,8 +822,8 @@ instance IsFiniteKernel.comp
   _ <= κ.bound * η.bound := by gcongr; exact measure_le_bound κ a Set.univ
 
 中文:
-实例 IsFiniteKernel.comp
-  签名: (η : Kernel β γ) [IsFiniteKernel η] (κ : Kernel α β)
+实例 是FiniteKernel.comp
+  签名: (η : 核 β γ) [是FiniteKernel η] (κ : 核 α β)
   定义体: by
   refine ⟨⟨κ.bound * η.bound, ENNReal.mul_lt_top κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
   calc (η ∘ₖ κ) a Set.univ
@@ -850,8 +850,8 @@ instance IsSFiniteKernel.comp
   infer_instance
 
 中文:
-实例 IsSFiniteKernel.comp
-  签名: (η : Kernel β γ) [IsSFiniteKernel η] (κ : Kernel α β)
+实例 是SFiniteKernel.comp
+  签名: (η : 核 β γ) [是SFiniteKernel η] (κ : 核 α β)
   定义体: by
   simp_rw [← kernel_sum_seq κ, ← kernel_sum_seq η, comp_sum_left, comp_sum_right]
   infer_instance
@@ -879,7 +879,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (Kernel α α)
+  签名: 幺半群 (核 α α)
   定义体: η ∘ₖ κ
   mul_assoc ξ η κ := comp_assoc _ _ _
   one := Kernel.id
@@ -905,7 +905,7 @@ theorem pow_add
 
 中文:
 定理 pow_add
-  条件: (κ : Kernel α α) (m n : 自然数)
+  条件: (κ : 核 α α) (m n : 自然数)
   证明: _root_.pow_add κ m n
 
 Depends on / 依赖: _root_, _root_.pow_add, pow_add
@@ -924,7 +924,7 @@ theorem pow_add_apply_eq_lintegral
 
 中文:
 定理 pow_add_apply_eq_lintegral
-  结论: (κ : Kernel α α) (m n : 自然数) (a : α) {s : Set α}
+  结论: (κ : 核 α α) (m n : 自然数) (a : α) {s : 集合 α}
   证明: by
   rw [add_comm]; simp [pow_add, comp_apply' _ _ _ hs]
 
@@ -946,7 +946,7 @@ theorem pow_succ_apply_eq_lintegral
 
 中文:
 定理 pow_succ_apply_eq_lintegral
-  结论: (κ : Kernel α α) (n : 自然数) (a : α) {s : Set α}
+  结论: (κ : 核 α α) (n : 自然数) (a : α) {s : 集合 α}
   证明: by
   simpa using pow_add_apply_eq_lintegral _ n 1 _ hs
 

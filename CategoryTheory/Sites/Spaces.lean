@@ -59,7 +59,7 @@ definition grothendieckTopology
 
 中文:
 定义 grothendieckTopology
-  签名: : GrothendieckTopology (Opens T) where
+  签名: : Grothendieck拓扑 (Opens T) where
   定义体: {S | forall x in X, exists (U : Opens T) (f : U ⟶ X), S f ∧ x in U}
   top_mem' _ _ hx := ⟨_, 𝟙 _, trivial, hx⟩
   pullback_stable' X Y S f hf y hy := by
@@ -89,7 +89,7 @@ lemma mem_grothendieckTopology
 
 中文:
 引理 mem_grothendieckTopology
-  条件: {U : Opens T} {S : Sieve U}
+  条件: {U : Opens T} {S : 筛 U}
   证明: .rfl
 -/
 lemma mem_grothendieckTopology {U : Opens T} {S : Sieve U} :

@@ -88,7 +88,7 @@ lemma convex_iff
 
 中文:
 引理 convex_iff
-  条件: {M : 类型} [AddCommMonoid M] [Module 实数 M] {s : Set M}
+  条件: {M : 类型} [加法交换幺半群 M] [模 实数 M] {s : 集合 M}
   证明: by
   refine ⟨fun H => ?_, Convex.lift Real>=0⟩
   intro _ hx _ hy a b ha hb hab

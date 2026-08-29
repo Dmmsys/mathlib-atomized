@@ -138,7 +138,7 @@ lemma op_δ
 
 中文:
 引理 op_δ
-  条件: (X : SSet.{u}) {n : 自然数} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌)
+  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 2)) (x : X.op _⦋n + 1⦌)
   证明: by
   simp [SimplicialObject.δ, op_map]
 
@@ -162,7 +162,7 @@ lemma op_σ
 
 中文:
 引理 op_σ
-  条件: (X : SSet.{u}) {n : 自然数} (i : Fin (n + 1)) (x : X.op _⦋n⦌)
+  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 1)) (x : X.op _⦋n⦌)
   证明: by
   simp [SimplicialObject.σ, op_map]
 
@@ -183,7 +183,7 @@ lemma δ_opObjEquiv
 
 中文:
 引理 δ_opObjEquiv
-  条件: (X : SSet.{u}) {n : 自然数} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌)
+  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 2)) (x : X.op _⦋n + 1⦌)
   证明: by
   simp
 -/
@@ -202,7 +202,7 @@ lemma σ_opObjEquiv
 
 中文:
 引理 σ_opObjEquiv
-  条件: (X : SSet.{u}) {n : 自然数} (i : Fin (n + 1)) (x : X.op _⦋n⦌)
+  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 1)) (x : X.op _⦋n⦌)
   证明: by
   simp
 -/

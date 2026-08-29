@@ -78,11 +78,11 @@ structure IsPreBrownianReal
     - hasLaw : forall I : Finset Real>=0, HasLaw (fun ω => I.restrict (X · ω)) (projectiveFamily I) P
 
 中文:
-结构 IsPreBrownianReal
-  参数: (X : 实数>=0 -> Ω -> 实数) (P : Measure Ω := by volume_tac)
+结构 是PreBrownian实数
+  参数: (X : 实数>=0 -> Ω -> 实数) (P : 测度 Ω := by volume_tac)
   公理与运算 (2 个):
     - mk' : :
-    - hasLaw : 对任意 I : Finset 实数>=0, HasLaw (fun ω => I.restrict (X · ω)) (projectiveFamily I) P
+    - hasLaw : 对任意 I : 有限集 实数>=0, 有Law (fun ω => I.restrict (X · ω)) (projectiveFamily I) P
 
 Depends on / 依赖: Finset, HasLaw, I.restrict, hasLaw, projectiveFamily, restrict, volume_tac
 -/
@@ -102,8 +102,8 @@ lemma IsPreBrownianReal.congr
     filter_upwards [this] with ω hω using funext fun i => (hω i).symm
 
 中文:
-引理 IsPreBrownianReal.congr
-  结论: {C : 实数>=0 -> Ω -> 实数} (hB : IsPreBrownian实数 B P)
+引理 是PreBrownian实数.congr
+  结论: {C : 实数>=0 -> Ω -> 实数} (hB : 是PreBrownian实数 B P)
   证明: by
     refine (hB.hasLaw I).congr ?_
     have : forallᵐ ω ∂P, forall i : I, B i ω = C i ω := ae_all_iff.2 fun _ => h _
@@ -129,8 +129,8 @@ lemma IsPreBrownianReal.isGaussianProcess
   proof: (hB.hasLaw I).hasGaussianLaw
 
 中文:
-引理 IsPreBrownianReal.isGaussianProcess
-  条件: (hB : IsPreBrownian实数 B P)
+引理 是PreBrownian实数.isGaussianProcess
+  条件: (hB : 是PreBrownian实数 B P)
   结论: IsGaussianProcess B P where
   证明: (hB.hasLaw I).hasGaussianLaw
 
@@ -148,8 +148,8 @@ lemma IsPreBrownianReal.aemeasurable
   proof: HasGaussianLaw.aemeasurable (hB.isGaussianProcess.hasGaussianLaw_eval t)
 
 中文:
-引理 IsPreBrownianReal.aemeasurable
-  条件: (hB : IsPreBrownian实数 B P) (t : 实数>=0)
+引理 是PreBrownian实数.aemeasurable
+  条件: (hB : 是PreBrownian实数 B P) (t : 实数>=0)
   证明: HasGaussianLaw.aemeasurable (hB.isGaussianProcess.hasGaussianLaw_eval t)
 
 Depends on / 依赖: HasGaussianLaw, HasGaussianLaw.aemeasurable, aemeasurable, hB.isGaussianProcess.hasGaussianLaw_eval, hasGaussianLaw_eval, isGaussianProcess
@@ -167,8 +167,8 @@ lemma IsPreBrownianReal.hasLaw_eval
   proof: (measurePreserving_eval_projectiveFamily ⟨t, by simp⟩).hasLaw.comp (hB.hasLaw {t})
 
 中文:
-引理 IsPreBrownianReal.hasLaw_eval
-  条件: (hB : IsPreBrownian实数 B P) (t : 实数>=0)
+引理 是PreBrownian实数.hasLaw_eval
+  条件: (hB : 是PreBrownian实数 B P) (t : 实数>=0)
   证明: (measurePreserving_eval_projectiveFamily ⟨t, by simp⟩).hasLaw.comp (hB.hasLaw {t})
 
 Depends on / 依赖: hB.hasLaw, hasLaw, hasLaw.comp, measurePreserving_eval_projectiveFamily
@@ -189,8 +189,8 @@ lemma IsPreBrownianReal.eval_zero_ae_eq_zero
   exact this.ae_eq_of_dirac
 
 中文:
-引理 IsPreBrownianReal.eval_zero_ae_eq_zero
-  条件: (hB : IsPreBrownian实数 B P)
+引理 是PreBrownian实数.eval_zero_ae_eq_zero
+  条件: (hB : 是PreBrownian实数 B P)
   证明: by
   have := hB.hasLaw_eval 0
   rw [gaussianReal_zero_var] at this
@@ -214,8 +214,8 @@ lemma IsPreBrownianReal.hasLaw_sub
     {s, t} ⟨s, by simp⟩ ⟨t, by simp⟩).hasLaw.comp (hB.hasLaw _)
 
 中文:
-引理 IsPreBrownianReal.hasLaw_sub
-  条件: (hB : IsPreBrownian实数 B P) (s t : 实数>=0)
+引理 是PreBrownian实数.hasLaw_sub
+  条件: (hB : 是PreBrownian实数 B P) (s t : 实数>=0)
   证明: (measurePreserving_eval_sub_eval_projectiveFamily
     {s, t} ⟨s, by simp⟩ ⟨t, by simp⟩).hasLaw.comp (hB.hasLaw _)
 
@@ -236,8 +236,8 @@ lemma IsPreBrownianReal.integral_eval
   rw [(hB.hasLaw_eval t).integral_eq]; rw [integral_id_gaussianReal]
 
 中文:
-引理 IsPreBrownianReal.integral_eval
-  条件: (hB : IsPreBrownian实数 B P) (t : 实数>=0)
+引理 是PreBrownian实数.integral_eval
+  条件: (hB : 是PreBrownian实数 B P) (t : 实数>=0)
   证明: by
   rw [(hB.hasLaw_eval t).integral_eq]; rw [integral_id_gaussianReal]
 
@@ -256,8 +256,8 @@ lemma IsPreBrownianReal.integrable_eval
   proof: (hB.isGaussianProcess.hasGaussianLaw_eval t).integrable
 
 中文:
-引理 IsPreBrownianReal.integrable_eval
-  条件: (hB : IsPreBrownian实数 B P) (t : 实数>=0)
+引理 是PreBrownian实数.integrable_eval
+  条件: (hB : 是PreBrownian实数 B P) (t : 实数>=0)
   证明: (hB.isGaussianProcess.hasGaussianLaw_eval t).integrable
 
 Depends on / 依赖: hB.isGaussianProcess.hasGaussianLaw_eval, hasGaussianLaw_eval, integrable, isGaussianProcess
@@ -280,8 +280,8 @@ lemma IsPreBrownianReal.covariance_eval
   all_goals exact Measurable.aemeasurable (by fun_prop)
 
 中文:
-引理 IsPreBrownianReal.covariance_eval
-  条件: (hB : IsPreBrownian实数 B P) (s t : 实数>=0)
+引理 是PreBrownian实数.covariance_eval
+  条件: (hB : 是PreBrownian实数 B P) (s t : 实数>=0)
   证明: by
   convert (hB.hasLaw {s, t}).covariance_fun_comp
     (f := Function.eval ⟨s, by simp⟩) (g := fun x => x ⟨t, by simp⟩) ?_ ?_
@@ -310,8 +310,8 @@ lemma IsPreBrownianReal.covariance_fun_eval
   proof: hB.covariance_eval s t
 
 中文:
-引理 IsPreBrownianReal.covariance_fun_eval
-  条件: (hB : IsPreBrownian实数 B P) (s t : 实数>=0)
+引理 是PreBrownian实数.covariance_fun_eval
+  条件: (hB : 是PreBrownian实数 B P) (s t : 实数>=0)
   证明: hB.covariance_eval s t
 
 Depends on / 依赖: covariance_eval, hB.covariance_eval
@@ -334,7 +334,7 @@ theorem IsGaussianProcess.isPreBrownianReal_of_covariance
     apply IsGauss
 
 中文:
-定理 IsGaussianProcess.isPreBrownianReal_of_covariance
+定理 IsGaussianProcess.isPreBrownian实数_of_covariance
   结论: (h1 : IsGaussianProcess X P)
   证明: by
     refine ⟨aemeasurable_pi_lambda _ fun _ => h1.aemeasurable _, ?_⟩
@@ -396,8 +396,8 @@ lemma IsPreBrownianReal.hasIndepIncrements
     wlog h : i < j genera
 
 中文:
-引理 IsPreBrownianReal.hasIndepIncrements
-  条件: (hB : IsPreBrownian实数 B P)
+引理 是PreBrownian实数.hasIndepIncrements
+  条件: (hB : 是PreBrownian实数 B P)
   证明: by
   have : IsProbabilityMeasure P := hB.isGaussianProcess.isProbabilityMeasure
   refine fun n t ht => hB.isGaussianProcess.hasGaussianLaw_increments.iIndepFun_of_covariance_eq_zero
@@ -440,7 +440,7 @@ theorem HasIndepIncrements.isPreBrownianReal_of_hasLaw
   
 
 中文:
-定理 HasIndepIncrements.isPreBrownianReal_of_hasLaw
+定理 HasIndepIncrements.isPreBrownian实数_of_hasLaw
   证明: by
   have h0 : forallᵐ ω ∂P, X 0 ω = 0 := by
       apply HasLaw.ae_eq_of_dirac
@@ -489,9 +489,9 @@ lemma IsPreBrownianReal.neg
   grind
 
 中文:
-引理 IsPreBrownianReal.neg
-  条件: (hB : IsPreBrownian实数 B P)
-  结论: IsPreBrownian实数 (-B) P
+引理 是PreBrownian实数.neg
+  条件: (hB : 是PreBrownian实数 B P)
+  结论: 是PreBrownian实数 (-B) P
   证明: by
   refine HasIndepIncrements.isPreBrownianReal_of_hasLaw (fun t => ?_) (fun n t ht => ?_)
   · simpa using gaussianReal_neg (hB.hasLaw_eval t)
@@ -522,8 +522,8 @@ lemma IsPreBrownianReal.smul
   · rw [integral_const_mul, hB.integral_eval, mul_
 
 中文:
-引理 IsPreBrownianReal.smul
-  条件: (hB : IsPreBrownian实数 B P) {c : 实数>=0} (hc : c != 0)
+引理 是PreBrownian实数.smul
+  条件: (hB : 是PreBrownian实数 B P) {c : 实数>=0} (hc : c != 0)
   证明: by
   refine IsGaussianProcess.isPreBrownianReal_of_covariance ?_ (fun t => ?_) (fun s t hst => ?_)
   · have this t ω : (√c)⁻¹ * B (c * t) ω = (√c)⁻¹ • ((B ∘ (c * ·)) t ω) := rfl
@@ -558,8 +558,8 @@ lemma IsPreBrownianReal.shift
   · have := hB.isGaussianProcess.isProbabi
 
 中文:
-引理 IsPreBrownianReal.shift
-  条件: (hB : IsPreBrownian实数 B P) (t₀ : 实数>=0)
+引理 是PreBrownian实数.shift
+  条件: (hB : 是PreBrownian实数 B P) (t₀ : 实数>=0)
   证明: by
   refine (hB.isGaussianProcess.shift t₀).isPreBrownianReal_of_covariance
     (fun t => ?_) (fun s t hst => ?_)
@@ -598,8 +598,8 @@ lemma IsPreBrownianReal.indepFun_shift
     
 
 中文:
-引理 IsPreBrownianReal.indepFun_shift
-  条件: (hB : IsPreBrownian实数 B P) (t₀ : 实数>=0)
+引理 是PreBrownian实数.indepFun_shift
+  条件: (hB : 是PreBrownian实数 B P) (t₀ : 实数>=0)
   证明: by
   have mX t := hB.aemeasurable t
   apply IsGaussianProcess.indepFun_of_covariance_eq_zero
@@ -648,8 +648,8 @@ lemma IsPreBrownianReal.inv
     rw [covariance_c
 
 中文:
-引理 IsPreBrownianReal.inv
-  条件: (hB : IsPreBrownian实数 B P)
+引理 是PreBrownian实数.inv
+  条件: (hB : 是PreBrownian实数 B P)
   证明: by
   refine IsGaussianProcess.isPreBrownianReal_of_covariance ?_ (fun t => ?_) (fun s t hst => ?_)
   · exact (IsGaussianProcess.comp_right hB.isGaussianProcess _).smul _
@@ -693,11 +693,11 @@ structure IsBrownianReal
     - cont : forallᵐ ω ∂P, Continuous (X · ω)
 
 中文:
-结构 IsBrownianReal
-  参数: (X : 实数>=0 -> Ω -> 实数) (P : Measure Ω := by volume_tac)
-  继承: IsPreBrownianReal X P
+结构 是Brownian实数
+  参数: (X : 实数>=0 -> Ω -> 实数) (P : 测度 Ω := by volume_tac)
+  继承: 是PreBrownian实数 X P
   公理与运算 (1 个):
-    - cont : 对任意ᵐ ω ∂P, Continuous (X · ω)
+    - cont : 对任意ᵐ ω ∂P, 连续 (X · ω)
 
 Depends on / 依赖: Continuous, IsPreBrownianReal, NonUnitalCommRing, SetLike, extends, toNonUnitalCommRing, volume_tac
 -/
@@ -715,8 +715,8 @@ lemma IsBrownianReal.neg
   cont := hB.cont.mono (fun _ _ => by simpa [← Pi.neg_def, continuous_neg_iff])
 
 中文:
-引理 IsBrownianReal.neg
-  条件: (hB : IsBrownian实数 B P)
+引理 是Brownian实数.neg
+  条件: (hB : 是Brownian实数 B P)
   证明: hB.toIsPreBrownianReal.neg
   cont := hB.cont.mono (fun _ _ => by simpa [← Pi.neg_def, continuous_neg_iff])
 
@@ -739,8 +739,8 @@ lemma IsBrownianReal.smul
     fun_prop
 
 中文:
-引理 IsBrownianReal.smul
-  条件: (hB : IsBrownian实数 B P) {c : 实数>=0} (hc : c != 0)
+引理 是Brownian实数.smul
+  条件: (hB : 是Brownian实数 B P) {c : 实数>=0} (hc : c != 0)
   证明: hB.toIsPreBrownianReal.smul hc
   cont := by
     filter_upwards [hB.cont] with ω h
@@ -767,8 +767,8 @@ lemma IsBrownianReal.shift
     fun_prop
 
 中文:
-引理 IsBrownianReal.shift
-  条件: (hB : IsBrownian实数 B P) (t₀ : 实数>=0)
+引理 是Brownian实数.shift
+  条件: (hB : 是Brownian实数 B P) (t₀ : 实数>=0)
   证明: hB.toIsPreBrownianReal.shift t₀
   cont := by
     filter_upwards [hB.cont] with ω h
@@ -795,8 +795,8 @@ lemma IsBrownianReal.tendsto_nhds_zero
   exact h2.symm
 
 中文:
-引理 IsBrownianReal.tendsto_nhds_zero
-  条件: (hB : IsBrownian实数 B P)
+引理 是Brownian实数.tendsto_nhds_zero
+  条件: (hB : 是Brownian实数 B P)
   证明: by
   filter_upwards [hB.cont, hB.eval_zero_ae_eq_zero] with ω h1 h2
   convert h1.tendsto 0

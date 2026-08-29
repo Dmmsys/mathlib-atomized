@@ -36,7 +36,7 @@ lemma integrable
 
 中文:
 引理 integrable
-  结论: {E : 类型} [NormedAddCommGroup E] (f : C_c(X, E))
+  结论: {E : 类型} [赋范交换加群 E] (f : C_c(X, E))
   证明: f.continuous.integrable_of_hasCompactSupport f.hasCompactSupport
 
 Depends on / 依赖: continuous, f.continuous.integrable_of_hasCompactSupport, f.hasCompactSupport, hasCompactSupport, integrable_of_hasCompactSupport
@@ -64,7 +64,7 @@ definition integralPositiveLinearMap
 
 中文:
 定义 integralPositiveLinearMap
-  签名: (μ : Measure X)
+  签名: (μ : 测度 X)
   定义体: PositiveLinearMap.mk₀
     { toFun f := ∫ x, f x ∂μ,
       map_add' f g := integral_add' f.integrable g.integrable
@@ -94,7 +94,7 @@ definition integralLinearMap
 
 中文:
 定义 integralLinearMap
-  签名: (μ : Measure X)
+  签名: (μ : 测度 X)
   定义体: CompactlySupportedContinuousMap.toNNRealLinear (integralPositiveLinearMap μ)
 
 Depends on / 依赖: CompactlySupportedContinuousMap, CompactlySupportedContinuousMap.toNNRealLinear, integralPositiveLinearMap, toNNRealLinear

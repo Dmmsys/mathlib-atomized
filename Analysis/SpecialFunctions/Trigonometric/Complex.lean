@@ -45,7 +45,7 @@ theorem cos_eq_zero_iff
 
 中文:
 定理 cos_eq_zero_iff
-  条件: {θ : Complex}
+  条件: {θ : 复形}
   结论: cos θ = 0 ↔ 存在 k : 整数, θ = (2 * k + 1) * π / 2
   证明: by
   have h : (exp (θ * I) + exp (-θ * I)) / 2 = 0 ↔ exp (2 * θ * I) = -1 := by
@@ -76,7 +76,7 @@ theorem cos_ne_zero_iff
 
 中文:
 定理 cos_ne_zero_iff
-  条件: {θ : Complex}
+  条件: {θ : 复形}
   结论: cos θ != 0 ↔ 对任意 k : 整数, θ != (2 * k + 1) * π / 2
   证明: by
   contrapose!; exact cos_eq_zero_iff
@@ -107,7 +107,7 @@ theorem sin_eq_zero_iff
 
 中文:
 定理 sin_eq_zero_iff
-  条件: {θ : Complex}
+  条件: {θ : 复形}
   结论: sin θ = 0 ↔ 存在 k : 整数, θ = k * π
   证明: by
   rw [← Complex.cos_sub_pi_div_two]; rw [cos_eq_zero_iff]
@@ -147,7 +147,7 @@ theorem sin_ne_zero_iff
 
 中文:
 定理 sin_ne_zero_iff
-  条件: {θ : Complex}
+  条件: {θ : 复形}
   结论: sin θ != 0 ↔ 对任意 k : 整数, θ != k * π
   证明: by
   contrapose!; exact sin_eq_zero_iff
@@ -170,7 +170,7 @@ theorem tan_eq_zero_iff
 
 中文:
 定理 tan_eq_zero_iff
-  条件: {θ : Complex}
+  条件: {θ : 复形}
   结论: tan θ = 0 ↔ 存在 k : 整数, k * π / 2 = θ
   证明: by
   rw [tan]; rw [div_eq_zero_iff]; rw [← mul_eq_zero]; rw [← mul_right_inj' two_ne_zero]; rw [mul_zero]; rw [← mul_assoc]; rw [← sin_two_mul]; rw [sin_eq_zero_iff]
@@ -194,8 +194,8 @@ theorem tan_ne_zero_iff
 
 中文:
 定理 tan_ne_zero_iff
-  条件: {θ : Complex}
-  结论: tan θ != 0 ↔ 对任意 k : 整数, (k * π / 2 : Complex) != θ
+  条件: {θ : 复形}
+  结论: tan θ != 0 ↔ 对任意 k : 整数, (k * π / 2 : 复形) != θ
   证明: by
   contrapose!; exact tan_eq_zero_iff
 
@@ -236,7 +236,7 @@ theorem tan_eq_zero_iff'
 
 中文:
 定理 tan_eq_zero_iff'
-  条件: {θ : Complex} (hθ : cos θ != 0)
+  条件: {θ : 复形} (hθ : cos θ != 0)
   结论: tan θ = 0 ↔ 存在 k : 整数, k * π = θ
   证明: by
   simp only [tan, hθ, div_eq_zero_iff, sin_eq_zero_iff]; simp [eq_comm]
@@ -262,7 +262,7 @@ theorem cos_eq_cos_iff
 
 中文:
 定理 cos_eq_cos_iff
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   结论: cos x = cos y ↔ 存在 k : 整数, y = 2 * k * π + x ∨ y = 2 * k * π - x
   证明: calc
     cos x = cos y ↔ cos x - cos y = 0 := sub_eq_zero.symm
@@ -297,7 +297,7 @@ theorem sin_eq_sin_iff
 
 中文:
 定理 sin_eq_sin_iff
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   证明: by
   simp only [← Complex.cos_sub_pi_div_two, cos_eq_cos_iff, sub_eq_iff_eq_add]
   refine exists_congr fun k => or_congr ?_ ?_ <;> refine Eq.congr rfl ?_ <;> simp [field] <;> ring
@@ -322,7 +322,7 @@ theorem cos_eq_one_iff
 
 中文:
 定理 cos_eq_one_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: cos x = 1 ↔ 存在 k : 整数, k * (2 * π) = x
   证明: by
   rw [← cos_zero]; rw [eq_comm]; rw [cos_eq_cos_iff]
@@ -347,7 +347,7 @@ theorem cos_eq_neg_one_iff
 
 中文:
 定理 cos_eq_neg_one_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: cos x = -1 ↔ 存在 k : 整数, π + k * (2 * π) = x
   证明: by
   rw [← neg_eq_iff_eq_neg]; rw [← cos_sub_pi]; rw [cos_eq_one_iff]
@@ -372,7 +372,7 @@ theorem sin_eq_one_iff
 
 中文:
 定理 sin_eq_one_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: sin x = 1 ↔ 存在 k : 整数, π / 2 + k * (2 * π) = x
   证明: by
   rw [← cos_sub_pi_div_two]; rw [cos_eq_one_iff]
@@ -397,7 +397,7 @@ theorem sin_eq_neg_one_iff
 
 中文:
 定理 sin_eq_neg_one_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: sin x = -1 ↔ 存在 k : 整数, -(π / 2) + k * (2 * π) = x
   证明: by
   rw [← neg_eq_iff_eq_neg]; rw [← cos_add_pi_div_two]; rw [cos_eq_one_iff]
@@ -425,7 +425,7 @@ theorem tan_add
 
 中文:
 定理 tan_add
-  结论: {x y : Complex}
+  结论: {x y : 复形}
   证明: by
   rcases h with (⟨h1, h2⟩ | ⟨⟨k, rfl⟩, ⟨l, rfl⟩⟩)
   · rw [tan, sin_add, cos_add, ←
@@ -462,7 +462,7 @@ theorem tan_add'
 
 中文:
 定理 tan_add'
-  结论: {x y : Complex}
+  结论: {x y : 复形}
   证明: tan_add (Or.inl h)
 
 Depends on / 依赖: Or.inl, tan_add
@@ -491,7 +491,7 @@ have := tan_add (x := x) (y := -y) by
 
 中文:
 定理 tan_sub
-  结论: {x y : Complex}
+  结论: {x y : 复形}
   证明: by
 have := tan_add (x := x) (y := -y) by
     rcases h with ⟨x_ne, minus_y_ne⟩ | ⟨x_eq, minus_y_eq⟩
@@ -535,7 +535,7 @@ theorem tan_sub'
 
 中文:
 定理 tan_sub'
-  结论: {x y : Complex}
+  结论: {x y : 复形}
   证明: tan_sub (Or.inl h)
 
 Depends on / 依赖: Or.inl, tan_sub
@@ -559,8 +559,8 @@ theorem tan_two_mul
 
 中文:
 定理 tan_two_mul
-  条件: {z : Complex}
-  结论: tan (2 * z) = (2 : Complex) * tan z / ((1 : Complex) - tan z ^ 2)
+  条件: {z : 复形}
+  结论: tan (2 * z) = (2 : 复形) * tan z / ((1 : 复形) - tan z ^ 2)
   证明: by
   by_cases! h : forall k : Int, z != (2 * k + 1) * π / 2
   · rw [two_mul, two_mul, sq, tan_add (Or.inl ⟨h, h⟩)]
@@ -584,7 +584,7 @@ theorem tan_add_mul_I
 
 中文:
 定理 tan_add_mul_I
-  结论: {x y : Complex}
+  结论: {x y : 复形}
   证明: by
   rw [tan_add h]; rw [tan_mul_I]; rw [mul_assoc]
 
@@ -608,7 +608,7 @@ theorem tan_eq
 
 中文:
 定理 tan_eq
-  结论: {z : Complex}
+  结论: {z : 复形}
   证明: by
   convert! tan_add_mul_I h; exact (re_add_im z).symm
 
@@ -664,7 +664,7 @@ theorem cos_eq_two_mul_tan_half_div_one_sub_tan_half_sq
 
 中文:
 定理 cos_eq_two_mul_tan_half_div_one_sub_tan_half_sq
-  条件: (x : Complex) (h : cos x != -1)
+  条件: (x : 复形) (h : cos x != -1)
   证明: by
   conv_lhs => rw [← mul_div_cancel₀ x two_ne_zero, cos_two_mul']
   have : cos (x / 2) != 0 := by grind [cos_ne_zero_iff, cos_eq_neg_one_iff]
@@ -696,7 +696,7 @@ theorem sin_eq_two_mul_tan_half_div_one_add_tan_half_sq
 
 中文:
 定理 sin_eq_two_mul_tan_half_div_one_add_tan_half_sq
-  条件: (x : Complex)
+  条件: (x : 复形)
   证明: by
   conv_lhs => rw [← mul_div_cancel₀ x two_ne_zero, sin_two_mul]
   by_cases h : cos (x / 2) = 0
@@ -727,7 +727,7 @@ theorem tan_eq_one_sub_tan_half_sq_div_one_add_tan_half_sq
 
 中文:
 定理 tan_eq_one_sub_tan_half_sq_div_one_add_tan_half_sq
-  条件: (x : Complex)
+  条件: (x : 复形)
   证明: by
   conv_lhs => rw [← mul_div_cancel₀ x two_ne_zero, tan_two_mul]
 
@@ -772,7 +772,7 @@ theorem continuous_tan
 
 中文:
 定理 continuous_tan
-  结论: Continuous fun x : {x | cos x != 0} => tan x
+  结论: 连续 fun x : {x | cos x != 0} => tan x
   证明: continuousOn_iff_continuous_domRestrict.1 continuousOn_tan
 
 Depends on / 依赖: continuousOn_iff_continuous_domRestrict, continuousOn_tan
@@ -792,7 +792,7 @@ theorem cos_eq_iff_quadratic
 
 中文:
 定理 cos_eq_iff_quadratic
-  条件: {z w : Complex}
+  条件: {z w : 复形}
   证明: by
   rw [← sub_eq_zero]
   simpa [field, cos, exp_neg] using Eq.congr (by ring) rfl
@@ -822,7 +822,7 @@ theorem cos_surjective
 
 中文:
 定理 cos_surjective
-  结论: Function.Surjective cos
+  结论: 函数.满射 cos
   证明: by
   intro x
   obtain ⟨w, w₀, hw⟩ : exists w != 0, 1 * (w * w) + -2 * x * w + 1 = 0 := by
@@ -860,7 +860,7 @@ theorem range_cos
 
 中文:
 定理 range_cos
-  结论: Set.range cos = Set.univ
+  结论: 集合.range cos = 集合.univ
   证明: cos_surjective.range_eq
 
 Depends on / 依赖: cos_surjective, cos_surjective.range_eq, range_eq
@@ -883,7 +883,7 @@ theorem sin_surjective
 
 中文:
 定理 sin_surjective
-  结论: Function.Surjective sin
+  结论: 函数.满射 sin
   证明: by
   intro x
   rcases cos_surjective x with ⟨z, rfl⟩
@@ -909,7 +909,7 @@ theorem range_sin
 
 中文:
 定理 range_sin
-  结论: Set.range sin = Set.univ
+  结论: 集合.range sin = 集合.univ
   证明: sin_surjective.range_eq
 
 Depends on / 依赖: range_eq, sin_surjective, sin_surjective.range_eq
@@ -934,7 +934,7 @@ theorem sin_mul_sum_sin
 
 中文:
 定理 sin_mul_sum_sin
-  条件: (n : 自然数) (a b : Complex)
+  条件: (n : 自然数) (a b : 复形)
   证明: by
   apply mul_left_cancel₀ (show (-2 : Complex) != 0 by simp)
   simp_rw [← mul_assoc, mul_sum]
@@ -973,7 +973,7 @@ theorem sum_sin
 
 中文:
 定理 sum_sin
-  条件: (n : 自然数) {a : Complex} (h : 对任意 k : 整数, a != k * (2 * π)) (b : Complex)
+  条件: (n : 自然数) {a : 复形} (h : 对任意 k : 整数, a != k * (2 * π)) (b : 复形)
   证明: by
   rw [← sin_mul_sum_sin]
   grind [sin_ne_zero_iff]
@@ -1003,7 +1003,7 @@ theorem sin_mul_sum_cos
 
 中文:
 定理 sin_mul_sum_cos
-  条件: (n : 自然数) (a b : Complex)
+  条件: (n : 自然数) (a b : 复形)
   证明: by
   apply mul_left_cancel₀ (show (2 : Complex) != 0 by simp)
   simp_rw [← mul_assoc, mul_sum]
@@ -1043,7 +1043,7 @@ theorem sum_cos
 
 中文:
 定理 sum_cos
-  条件: (n : 自然数) {a : Complex} (h : 对任意 k : 整数, a != k * (2 * π)) (b : Complex)
+  条件: (n : 自然数) {a : 复形} (h : 对任意 k : 整数, a != k * (2 * π)) (b : 复形)
   证明: by
   rw [← sin_mul_sum_cos]
   grind [sin_ne_zero_iff]

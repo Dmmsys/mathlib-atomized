@@ -39,7 +39,7 @@ definition uliftFunctor
 
 中文:
 定义 uliftFunctor
-  签名: : TopCat.{u} ⥤ TopCat.{max u v} where
+  签名: : 顶元素范畴.{u} ⥤ 顶元素范畴.{最大值 u v} where
   定义体: TopCat.of (ULift.{v} X)
   map {X Y} f := ofHom ⟨ULift.map f, by fun_prop⟩
 
@@ -61,7 +61,7 @@ definition uliftFunctorObjHomeo
 
 中文:
 定义 uliftFunctorObjHomeo
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: Homeomorph.ulift.symm
 
 @[simp]
@@ -84,7 +84,7 @@ lemma uliftFunctorObjHomeo_naturality_apply
 
 中文:
 引理 uliftFunctorObjHomeo_naturality_apply
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y) (x : X)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y) (x : X)
   证明: rfl
 
 @[simp]
@@ -104,7 +104,7 @@ lemma uliftFunctorObjHomeo_symm_naturality_apply
 
 中文:
 引理 uliftFunctorObjHomeo_symm_naturality_apply
-  结论: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  结论: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: rfl
 -/
 lemma uliftFunctorObjHomeo_symm_naturality_apply {X Y : TopCat.{u}} (f : X ⟶ Y)
@@ -126,7 +126,7 @@ definition uliftFunctorCompForgetIso
 
 中文:
 定义 uliftFunctorCompForgetIso
-  签名: : uliftFunctor.{v, u} ⋙ forget TopCat.{max u v} ≅
+  签名: : uliftFunctor.{v, u} ⋙ forget 顶元素范畴.{最大值 u v} ≅
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -145,7 +145,7 @@ definition uliftFunctorFullyFaithful
 
 中文:
 定义 uliftFunctorFullyFaithful
-  签名: : uliftFunctor.{v, u}.FullyFaithful where
+  签名: : uliftFunctor.{v, u}.满忠实 where
   定义体: ofHom ⟨ULift.down ∘ f ∘ ULift.up, by fun_prop⟩
 
 Depends on / 依赖: ULift.down, ULift.up, fun_prop
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{v, u}.Full
+  签名: uliftFunctor.{v, u}.满
   定义体: uliftFunctorFullyFaithful.full
 
 Depends on / 依赖: uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.full
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{v, u}.Faithful
+  签名: uliftFunctor.{v, u}.忠实
   定义体: uliftFunctorFullyFaithful.faithful
 
 Depends on / 依赖: faithful, uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.faithful
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u}
+  签名: 保持LimitsOfSize.{w', w} uliftFunctor.{v, u}
   定义体: by
   refine ⟨⟨fun {K} => ⟨fun {c} hc => ?_⟩⟩⟩
   rw [nonempty_isLimit_iff_eq_induced]
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u}
+  签名: 保持余limitsOfSize.{w', w} uliftFunctor.{v, u}
   定义体: by
   refine ⟨⟨fun {K} => ⟨fun {c} hc => ?_⟩⟩⟩
   rw [nonempty_isColimit_iff_eq_coinduced]

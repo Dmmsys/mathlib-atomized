@@ -31,8 +31,8 @@ definition Complex.sqrt
   body: a ^ (2⁻¹ : Complex)
 
 中文:
-定义 Complex.sqrt
-  签名: (a : Complex)
+定义 复形.sqrt
+  签名: (a : 复形)
   定义体: a ^ (2⁻¹ : Complex)
 -/
 noncomputable def Complex.sqrt (a : Complex) : Complex := a ^ (2⁻¹ : Complex)
@@ -46,8 +46,8 @@ theorem Complex.sqrt_zero
   proof: by simp [sqrt]
 
 中文:
-定理 Complex.sqrt_zero
-  结论: (0 : Complex).sqrt = 0
+定理 复形.sqrt_zero
+  结论: (0 : 复形).sqrt = 0
   证明: by simp [sqrt]
 -/
 @[simp] theorem Complex.sqrt_zero : (0 : Complex).sqrt = 0 := by simp [sqrt]
@@ -60,8 +60,8 @@ theorem Complex.sqrt_one
   proof: by simp [sqrt]
 
 中文:
-定理 Complex.sqrt_one
-  结论: (1 : Complex).sqrt = 1
+定理 复形.sqrt_one
+  结论: (1 : 复形).sqrt = 1
   证明: by simp [sqrt]
 -/
 @[simp] theorem Complex.sqrt_one : (1 : Complex).sqrt = 1 := by simp [sqrt]
@@ -80,8 +80,8 @@ theorem Complex.sqrt_eq_real_add_ite
     ← cpow_inv_two_im_eq_neg_sqrt h]
 
 中文:
-定理 Complex.sqrt_eq_real_add_ite
-  条件: {a : Complex}
+定理 复形.sqrt_eq_real_add_ite
+  条件: {a : 复形}
   证明: by
   rw [← cpow_inv_two_re]; rw [sqrt]
   by_cases! h : 0 <= a.im
@@ -112,7 +112,7 @@ lemma sqrt_eq_exp
 
 中文:
 引理 sqrt_eq_exp
-  条件: {z : Complex} (hz : z != 0)
+  条件: {z : 复形} (hz : z != 0)
   结论: sqrt z = exp (log z / 2)
   证明: by
   simp [sqrt, cpow_def, hz, div_eq_mul_inv]
@@ -252,7 +252,7 @@ theorem Complex.re_sqrt_ofReal
   grind
 
 中文:
-定理 Complex.re_sqrt_ofReal
+定理 复形.re_sqrt_of实数
   条件: {a : 实数}
   证明: by
   simp only [cpow_inv_two_re, norm_real, Real.norm_eq_abs, ofReal_re, Complex.sqrt]
@@ -275,7 +275,7 @@ theorem RCLike.re_sqrt_ofReal
   aesop (add simp [sqrt, Complex.re_sqrt_ofReal])
 
 中文:
-定理 RCLike.re_sqrt_ofReal
+定理 RCLike.re_sqrt_of实数
   条件: {a : 实数}
   证明: by
   aesop (add simp [sqrt, Complex.re_sqrt_ofReal])
@@ -312,7 +312,7 @@ theorem RCLike.sqrt_complex
 
 中文:
 定理 RCLike.sqrt_complex
-  条件: {a : Complex}
+  条件: {a : 复形}
   证明: by simp [sqrt]
 -/
 @[simp] theorem RCLike.sqrt_complex {a : Complex} :
@@ -332,8 +332,8 @@ theorem Complex.sqrt_of_nonneg
   simp [sqrt, cpow_inv_two_im_eq_sqrt, abs_of_nonneg hα]
 
 中文:
-定理 Complex.sqrt_of_nonneg
-  条件: {a : Complex} (ha : 0 <= a)
+定理 复形.sqrt_of_nonneg
+  条件: {a : 复形} (ha : 0 <= a)
   证明: by
   obtain ⟨α : Real, hα, rfl⟩ := RCLike.nonneg_iff_exists_ofReal.mp ha
   simp only [coe_algebraMap, ofReal_re]
@@ -386,7 +386,7 @@ theorem Complex.sqrt_map
   aesop (add simp [RCLike.sqrt])
 
 中文:
-定理 Complex.sqrt_map
+定理 复形.sqrt_map
   条件: {a : 𝕜} (h : RCLike.im (RCLike.I : 𝕜) = 1)
   证明: by
   aesop (add simp [RCLike.sqrt])
@@ -441,8 +441,8 @@ theorem Complex.sqrt_neg_of_nonneg
   simp [sqrt, cpow_inv_two_im_eq_sqrt, abs_of_nonneg hα, cpow_inv_two_re, mul_comm]
 
 中文:
-定理 Complex.sqrt_neg_of_nonneg
-  条件: {a : Complex} (ha : 0 <= a)
+定理 复形.sqrt_neg_of_nonneg
+  条件: {a : 复形} (ha : 0 <= a)
   证明: by
   obtain ⟨α, hα, rfl⟩ := RCLike.nonneg_iff_exists_ofReal.mp ha
   rw [Complex.sqrt_of_nonneg ha]
@@ -500,7 +500,7 @@ theorem Complex.sqrt_neg_one
   simp [sqrt_neg_of_nonneg (a := 1) (by simp)]
 
 中文:
-定理 Complex.sqrt_neg_one
+定理 复形.sqrt_neg_one
   结论: sqrt (-1) = I
   证明: by
   simp [sqrt_neg_of_nonneg (a := 1) (by simp)]
@@ -541,8 +541,8 @@ theorem Complex.sqrt_I
   simp [mul_add]
 
 中文:
-定理 Complex.sqrt_I
-  结论: sqrt (I : Complex) = √2⁻¹ * (1 + I)
+定理 复形.sqrt_I
+  结论: sqrt (I : 复形) = √2⁻¹ * (1 + I)
   证明: by
   rw [sqrt]; rw [← re_add_im (I ^ 2⁻¹)]; rw [cpow_inv_two_im_eq_sqrt (by simp)]; rw [cpow_inv_two_re]
   simp [mul_add]
@@ -564,8 +564,8 @@ theorem Complex.sqrt_neg_I
   simp [mul_sub, ← sub_eq_add_neg]
 
 中文:
-定理 Complex.sqrt_neg_I
-  结论: sqrt (-I : Complex) = √2⁻¹ * (1 - I)
+定理 复形.sqrt_neg_I
+  结论: sqrt (-I : 复形) = √2⁻¹ * (1 - I)
   证明: by
   rw [sqrt]; rw [← re_add_im ((-I) ^ 2⁻¹)]; rw [cpow_inv_two_im_eq_neg_sqrt (by simp)]; rw [cpow_inv_two_re]
   simp [mul_sub, ← sub_eq_add_neg]

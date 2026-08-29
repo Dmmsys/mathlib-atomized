@@ -100,7 +100,7 @@ lemma hasColimit_iff_small_quot
 中文:
 引理 hasColimit_iff_small_quot
   条件: [DecidableEq J]
-  结论: HasColimit F ↔ Small.{w} (Quot F)
+  结论: 有余极限 F ↔ Small.{w} (商 F)
   证明: ⟨fun _ => Small.mk ⟨_, ⟨(Equiv.ofBijective _ ((isColimit_iff_bijective_desc (colimit.cocone F)).mp
     ⟨colimit.isColimit _⟩))⟩⟩, hasColimit_of_small_quot F⟩
 

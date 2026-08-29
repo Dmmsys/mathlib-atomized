@@ -79,10 +79,10 @@ class Bundle.Pretrivialization.IsLinear
     - linear : forall b in e.baseSet, IsLinearMap R fun x : E b => (e ⟨b, x⟩).2
 
 中文:
-类 Bundle.Pretrivialization.IsLinear
-  参数: [AddCommMonoid F] [Module R F]
+类 Bundle.Pretrivialization.是线性
+  参数: [加法交换幺半群 F] [模 R F]
   公理与运算 (1 个):
-    - linear : 对任意 b in e.baseSet, IsLinearMap R fun x : E b => (e ⟨b, x⟩).2
+    - linear : 对任意 b in e.baseSet, 是线性映射 R fun x : E b => (e ⟨b, x⟩).2
 -/
 protected class Bundle.Pretrivialization.IsLinear [AddCommMonoid F] [Module R F]
   [forall x, AddCommMonoid (E x)] [forall x, Module R (E x)] (e : Pretrivialization F (π F E)) : Prop where
@@ -102,7 +102,7 @@ theorem linear
 
 中文:
 定理 linear
-  结论: [AddCommMonoid F] [Module R F] [对任意 x, AddCommMonoid (E x)] [对任意 x, Module R (E x)]
+  结论: [加法交换幺半群 F] [模 R F] [对任意 x, 加法交换幺半群 (E x)] [对任意 x, 模 R (E x)]
   证明: IsLinear.linear b hb
 
 Depends on / 依赖: IsLinear, IsLinear.linear, linear
@@ -130,7 +130,7 @@ congr_arg Prod.snd e.apply_mk_symm hb v).isLinear
 
 中文:
 定义 symmₗ
-  签名: (e : Pretrivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Pretrivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: by
   refine if hb : b in e.baseSet then IsLinearMap.mk' (e.symm b) ?_ else 0
   exact (((e.linear R hb).mk' _).inverse (e.symm b) (e.symm_apply_apply_mk hb) fun v =>
@@ -157,7 +157,7 @@ lemma symmₗ_apply
 
 中文:
 引理 symmₗ_apply
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: by
   simp [Pretrivialization.symmₗ, hb]
 
@@ -181,7 +181,7 @@ lemma symmₗ_apply_of_notMem
 
 中文:
 引理 symmₗ_apply_of_notMem
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by
   simp [Pretrivialization.symmₗ, hb]
 
@@ -209,7 +209,7 @@ definition linearEquivAt
 
 中文:
 定义 linearEquivAt
-  签名: (e : Pretrivialization F (π F E)) [e.IsLinear R] (b : B) (hb : b in e.baseSet)
+  签名: (e : Pretrivialization F (π F E)) [e.是线性 R] (b : B) (hb : b in e.baseSet)
   定义体: (e ⟨b, y⟩).2
   invFun := e.symm b
   left_inv := e.symm_apply_apply_mk hb
@@ -237,7 +237,7 @@ definition linearMapAt
 
 中文:
 定义 linearMapAt
-  签名: (e : Pretrivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Pretrivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: if hb : b in e.baseSet then e.linearEquivAt R b hb else 0
 -/
 protected def linearMapAt (e : Pretrivialization F (π F E)) [e.IsLinear R] (b : B) : E b ->ₗ[R] F :=
@@ -260,7 +260,7 @@ theorem coe_linearMapAt
 
 中文:
 定理 coe_linearMapAt
-  条件: (e : Pretrivialization F (π F E)) [e.IsLinear R] (b : B)
+  条件: (e : Pretrivialization F (π F E)) [e.是线性 R] (b : B)
   证明: by
   rw [Pretrivialization.linearMapAt]
   split_ifs <;> rfl
@@ -286,7 +286,7 @@ theorem coe_linearMapAt_of_mem
 
 中文:
 定理 coe_linearMapAt_of_mem
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by
   simp_rw [coe_linearMapAt, if_pos hb]
 
@@ -308,7 +308,7 @@ theorem linearMapAt_apply
 
 中文:
 定理 linearMapAt_apply
-  条件: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B} (y : E b)
+  条件: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B} (y : E b)
   证明: by
   rw [coe_linearMapAt]
 
@@ -328,7 +328,7 @@ theorem linearMapAt_def_of_mem
 
 中文:
 定理 linearMapAt_def_of_mem
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: dif_pos hb
 
 Depends on / 依赖: dif_pos
@@ -347,7 +347,7 @@ theorem linearMapAt_def_of_notMem
 
 中文:
 定理 linearMapAt_def_of_notMem
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: dif_neg hb
 
 Depends on / 依赖: dif_neg
@@ -366,7 +366,7 @@ theorem linearMapAt_eq_zero
 
 中文:
 定理 linearMapAt_eq_zero
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: dif_neg hb
 
 Depends on / 依赖: dif_neg
@@ -385,7 +385,7 @@ theorem symmₗ_linearMapAt
 
 中文:
 定理 symmₗ_linearMapAt
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by simp [hb]
 -/
 theorem symmₗ_linearMapAt (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
@@ -401,7 +401,7 @@ theorem linearMapAt_symmₗ
 
 中文:
 定理 linearMapAt_symmₗ
-  结论: (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Pretrivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by simp [hb]
 -/
 theorem linearMapAt_symmₗ (e : Pretrivialization F (π F E)) [e.IsLinear R] {b : B}
@@ -421,10 +421,10 @@ class Trivialization.IsLinear
     - linear : forall b in e.baseSet, IsLinearMap R fun x : E b => (e ⟨b, x⟩).2
 
 中文:
-类 Trivialization.IsLinear
-  参数: [AddCommMonoid F] [Module R F] [对任意 x, AddCommMonoid (E x)]
+类 Trivialization.是线性
+  参数: [加法交换幺半群 F] [模 R F] [对任意 x, 加法交换幺半群 (E x)]
   公理与运算 (1 个):
-    - linear : 对任意 b in e.baseSet, IsLinearMap R fun x : E b => (e ⟨b, x⟩).2
+    - linear : 对任意 b in e.baseSet, 是线性映射 R fun x : E b => (e ⟨b, x⟩).2
 -/
 protected class Trivialization.IsLinear [AddCommMonoid F] [Module R F] [forall x, AddCommMonoid (E x)]
   [forall x, Module R (E x)] (e : Trivialization F (π F E)) : Prop where
@@ -444,7 +444,7 @@ theorem linear
 
 中文:
 定理 linear
-  结论: [AddCommMonoid F] [Module R F] [对任意 x, AddCommMonoid (E x)]
+  结论: [加法交换幺半群 F] [模 R F] [对任意 x, 加法交换幺半群 (E x)]
   证明: Trivialization.IsLinear.linear b hb
 -/
 protected theorem linear [AddCommMonoid F] [Module R F] [forall x, AddCommMonoid (E x)]
@@ -462,7 +462,7 @@ instance toPretrivialization.isLinear
 
 中文:
 实例 toPretrivialization.isLinear
-  签名: [AddCommMonoid F] [Module R F] [对任意 x, AddCommMonoid (E x)]
+  签名: [加法交换幺半群 F] [模 R F] [对任意 x, 加法交换幺半群 (E x)]
   定义体: { (‹_› : e.IsLinear R) with }
 
 Depends on / 依赖: IsLinear, e.IsLinear
@@ -483,7 +483,7 @@ definition linearEquivAt
 
 中文:
 定义 linearEquivAt
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B) (hb : b in e.baseSet)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B) (hb : b in e.baseSet)
   定义体: e.toPretrivialization.linearEquivAt R b hb
 
 Depends on / 依赖: e.toPretrivialization.linearEquivAt, linearEquivAt, toPretrivialization
@@ -507,7 +507,7 @@ theorem linearEquivAt_apply
 
 中文:
 定理 linearEquivAt_apply
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   证明: rfl
 
 @[simp]
@@ -527,7 +527,7 @@ theorem linearEquivAt_symm_apply
 
 中文:
 定理 linearEquivAt_symm_apply
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   证明: rfl
 -/
 theorem linearEquivAt_symm_apply (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
@@ -545,7 +545,7 @@ definition symmₗ
 
 中文:
 定义 symmₗ
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: e.toPretrivialization.symmₗ R b
 -/
 protected def symmₗ (e : Trivialization F (π F E)) [e.IsLinear R] (b : B) : F ->ₗ[R] E b :=
@@ -564,7 +564,7 @@ theorem coe_symmₗ
 
 中文:
 定理 coe_symmₗ
-  条件: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  条件: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: by
   ext y; exact e.toPretrivialization.symmₗ_apply R hb y
 
@@ -589,7 +589,7 @@ theorem symmₗ_apply
 
 中文:
 定理 symmₗ_apply
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: e.toPretrivialization.symmₗ_apply R hb y
 
 @[simp]
@@ -611,7 +611,7 @@ theorem symmₗ_apply_of_notMem
 
 中文:
 定理 symmₗ_apply_of_notMem
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: e.toPretrivialization.symmₗ_apply_of_notMem R hb y
 
 Depends on / 依赖: e.toPretrivialization.symm, toPretrivialization
@@ -631,7 +631,7 @@ definition linearMapAt
 
 中文:
 定义 linearMapAt
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: e.toPretrivialization.linearMapAt R b
 -/
 protected def linearMapAt (e : Trivialization F (π F E)) [e.IsLinear R] (b : B) : E b ->ₗ[R] F :=
@@ -650,7 +650,7 @@ theorem coe_linearMapAt
 
 中文:
 定理 coe_linearMapAt
-  条件: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  条件: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   证明: e.toPretrivialization.coe_linearMapAt b
 
 @[simp]
@@ -673,7 +673,7 @@ theorem coe_linearMapAt_of_mem
 
 中文:
 定理 coe_linearMapAt_of_mem
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by
   simp_rw [coe_linearMapAt, if_pos hb]
 
@@ -695,7 +695,7 @@ theorem linearMapAt_apply
 
 中文:
 定理 linearMapAt_apply
-  条件: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (y : E b)
+  条件: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (y : E b)
   证明: by
   rw [coe_linearMapAt]
 
@@ -715,7 +715,7 @@ theorem linearMapAt_def_of_mem
 
 中文:
 定理 linearMapAt_def_of_mem
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: dif_pos hb
 
 Depends on / 依赖: dif_pos
@@ -734,7 +734,7 @@ theorem linearMapAt_def_of_notMem
 
 中文:
 定理 linearMapAt_def_of_notMem
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: dif_neg hb
 
 Depends on / 依赖: dif_neg
@@ -754,7 +754,7 @@ theorem symm_linearMapAt
 
 中文:
 定理 symm_linearMapAt
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: by
   simp [hb]
 -/
@@ -774,7 +774,7 @@ theorem symmₗ_linearMapAt
 
 中文:
 定理 symmₗ_linearMapAt
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: e.toPretrivialization.symmₗ_linearMapAt hb y
 
 @[simp]
@@ -797,7 +797,7 @@ theorem linearMapAt_symm
 
 中文:
 定理 linearMapAt_symm
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: by
   simp [hb]
 -/
@@ -815,7 +815,7 @@ theorem linearMapAt_symmₗ
 
 中文:
 定理 linearMapAt_symmₗ
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: e.toPretrivialization.linearMapAt_symmₗ hb y
 
 Depends on / 依赖: e.toPretrivialization.linearMapAt_symm, toPretrivialization
@@ -842,7 +842,7 @@ definition coordChangeL
 
 中文:
 定义 coordChangeL
-  签名: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] (b : B)
+  签名: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] (b : B)
   定义体: { toLinearEquiv := if hb : b in e.baseSet inter e'.baseSet
       then (e.linearEquivAt R b (hb.1 :)).symm.trans (e'.linearEquivAt R b hb.2)
       else LinearEquiv.refl R F
@@ -887,7 +887,7 @@ theorem coe_coordChangeL
 
 中文:
 定理 coe_coordChangeL
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: congr_arg (fun f : F ≃ₗ[R] F => ⇑f) (dif_pos hb)
 
 Depends on / 依赖: congr_arg, dif_pos
@@ -907,7 +907,7 @@ theorem coe_coordChangeL'
 
 中文:
 定理 coe_coordChangeL'
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: LinearEquiv.coe_injective (coe_coordChangeL _ _ hb)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_injective, coe_coordChangeL, coe_injective
@@ -930,7 +930,7 @@ theorem symm_coordChangeL
 
 中文:
 定理 symm_coordChangeL
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: by
   apply ContinuousLinearEquiv.toLinearEquiv_injective
   rw [coe_coordChangeL' e' e hb]; rw [(coordChangeL R e e' b).toLinearEquiv_symm]; rw [coe_coordChangeL' e e' hb.symm]; rw [LinearEquiv.trans_symm]; rw [LinearEquiv.symm_symm]
@@ -952,7 +952,7 @@ theorem coordChangeL_apply
 
 中文:
 定理 coordChangeL_apply
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: congr_fun (coe_coordChangeL e e' hb) y
 
 Depends on / 依赖: coe_coordChangeL, congr_fun
@@ -977,7 +977,7 @@ theorem mk_coordChangeL
 
 中文:
 定理 mk_coordChangeL
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: by
   ext
   · rw [e.mk_symm hb.1 y, e'.coe_fst', e.proj_symm_apply' hb.1]
@@ -1007,7 +1007,7 @@ theorem apply_symm_apply_eq_coordChangeL
 
 中文:
 定理 apply_symm_apply_eq_coordChangeL
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R]
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R]
   证明: by
   rw [e.mk_coordChangeL e' hb]; rw [e.mk_symm hb.1]
 
@@ -1029,7 +1029,7 @@ theorem coordChangeL_apply'
 
 中文:
 定理 coordChangeL_apply'
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R] {b : B}
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R] {b : B}
   证明: by
   rw [e.coordChangeL_apply e' hb]; rw [e.mk_symm hb.1]
 
@@ -1050,7 +1050,7 @@ theorem coordChangeL_symm_apply
 
 中文:
 定理 coordChangeL_symm_apply
-  结论: (e e' : Trivialization F (π F E)) [e.IsLinear R] [e'.IsLinear R]
+  结论: (e e' : Trivialization F (π F E)) [e.是线性 R] [e'.是线性 R]
   证明: congr_arg LinearEquiv.invFun (dif_pos hb)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.invFun, congr_arg, dif_pos, invFun
@@ -1081,7 +1081,7 @@ definition zeroSection
 
 中文:
 定义 zeroSection
-  签名: [对任意 x, Zero (E x)]
+  签名: [对任意 x, 零 (E x)]
   定义体: (⟨·, 0⟩)
 
 @[simp, mfld_simps]
@@ -1102,7 +1102,7 @@ theorem zeroSection_proj
 
 中文:
 定理 zeroSection_proj
-  条件: [对任意 x, Zero (E x)] (x : B)
+  条件: [对任意 x, 零 (E x)] (x : B)
   结论: (zeroSection F E x).proj = x
   证明: rfl
 
@@ -1123,7 +1123,7 @@ theorem zeroSection_snd
 
 中文:
 定理 zeroSection_snd
-  条件: [对任意 x, Zero (E x)] (x : B)
+  条件: [对任意 x, 零 (E x)] (x : B)
   结论: (zeroSection F E x).2 = 0
   证明: rfl
 -/
@@ -1149,10 +1149,10 @@ class VectorBundle
     - continuousOn_coordChange' : forall (e e' : Trivialization F (π F E)) [MemTrivializationAtlas e] [MemTrivializationAtlas e'], ContinuousOn (fun b => Trivialization.coordChangeL R e e' b : B -> F ->L[R] F) (e.baseSet inter e'.baseSet)
 
 中文:
-类 VectorBundle
+类 向量丛
   参数: : 命题 where
   公理与运算 (2 个):
-    - trivialization_linear' : 对任意 (e : Trivialization F (π F E)) [MemTrivializationAtlas e], e.IsLinear R
+    - trivialization_linear' : 对任意 (e : Trivialization F (π F E)) [MemTrivializationAtlas e], e.是线性 R
     - continuousOn_coordChange' : 对任意 (e e' : Trivialization F (π F E)) [MemTrivializationAtlas e] [MemTrivializationAtlas e'], ContinuousOn (fun b => Trivialization.coordChangeL R e e' b : B -> F ->L[R] F) (e.baseSet inter e'.baseSet)
 -/
 class VectorBundle : Prop where
@@ -1178,7 +1178,7 @@ theorem continuousOn_coordChange
 
 中文:
 定理 continuousOn_coordChange
-  结论: [VectorBundle R F E] (e e' : Trivialization F (π F E))
+  结论: [向量丛 R F E] (e e' : Trivialization F (π F E))
   证明: VectorBundle.continuousOn_coordChange' e e'
 
 Depends on / 依赖: VectorBundle, VectorBundle.continuousOn_coordChange, continuousOn_coordChange
@@ -1210,7 +1210,7 @@ definition continuousLinearMapAt
 
 中文:
 定义 continuousLinearMapAt
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: { e.linearMapAt R b with
     toFun := e.linearMapAt R b -- given explicitly to help `simps`
     cont := by
@@ -1242,7 +1242,7 @@ lemma continuousLinearMapAt_apply_of_mem
 
 中文:
 引理 continuousLinearMapAt_apply_of_mem
-  结论: (e : Trivialization F TotalSpace.proj)
+  结论: (e : Trivialization F 全空间.proj)
   证明: by
   simp [coe_linearMapAt_of_mem e hb]
 
@@ -1269,7 +1269,7 @@ definition symmL
 
 中文:
 定义 symmL
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: { e.symmₗ R b with
     cont := by
       by_cases hb : b in e.baseSet
@@ -1305,7 +1305,7 @@ theorem symmL_apply
 
 中文:
 定理 symmL_apply
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B} (hb : b in e.baseSet)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B} (hb : b in e.baseSet)
   证明: e.toPretrivialization.symmₗ_apply R hb y
 
 @[simp]
@@ -1327,7 +1327,7 @@ lemma symmL_apply_of_notMem
 
 中文:
 引理 symmL_apply_of_notMem
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: e.toPretrivialization.symmₗ_apply_of_notMem _ hb _
 
 Depends on / 依赖: e.toPretrivialization.symm, toPretrivialization
@@ -1346,7 +1346,7 @@ theorem symmL_continuousLinearMapAt
 
 中文:
 定理 symmL_continuousLinearMapAt
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: e.symmₗ_linearMapAt hb y
 
 Depends on / 依赖: e.symm
@@ -1365,7 +1365,7 @@ theorem continuousLinearMapAt_symmL
 
 中文:
 定理 continuousLinearMapAt_symmL
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: e.linearMapAt_symmₗ hb y
 
 Depends on / 依赖: e.linearMapAt_symm
@@ -1392,7 +1392,7 @@ definition continuousLinearEquivAt
 
 中文:
 定义 continuousLinearEquivAt
-  签名: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  签名: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   定义体: { e.toPretrivialization.linearEquivAt R b hb with
     toFun := fun y => (e ⟨b, y⟩).2 -- given explicitly to help `simps`
     invFun := e.symm b -- given explicitly to help `simps`
@@ -1420,7 +1420,7 @@ theorem coe_continuousLinearEquivAt_eq
 
 中文:
 定理 coe_continuousLinearEquivAt_eq
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: (e.coe_linearMapAt_of_mem hb).symm
 
 Depends on / 依赖: coe_linearMapAt_of_mem, e.coe_linearMapAt_of_mem
@@ -1440,7 +1440,7 @@ theorem coe_continuousLinearEquivAt_eq'
 
 中文:
 定理 coe_continuousLinearEquivAt_eq'
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: DFunLike.coe_injective (e.coe_linearMapAt_of_mem hb).symm
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, coe_linearMapAt_of_mem, e.coe_linearMapAt_of_mem
@@ -1461,7 +1461,7 @@ theorem symm_continuousLinearEquivAt_eq
 
 中文:
 定理 symm_continuousLinearEquivAt_eq
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by
   ext; simp [hb]
 -/
@@ -1482,7 +1482,7 @@ theorem symm_continuousLinearEquivAt_eq'
 
 中文:
 定理 symm_continuousLinearEquivAt_eq'
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {b : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {b : B}
   证明: by
   ext; simp [hb]
 
@@ -1504,7 +1504,7 @@ theorem continuousLinearEquivAt_apply'
 
 中文:
 定理 continuousLinearEquivAt_apply'
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R]
+  结论: (e : Trivialization F (π F E)) [e.是线性 R]
   证明: rfl
 -/
 theorem continuousLinearEquivAt_apply' (e : Trivialization F (π F E)) [e.IsLinear R]
@@ -1528,7 +1528,7 @@ theorem apply_eq_prod_continuousLinearEquivAt
 
 中文:
 定理 apply_eq_prod_continuousLinearEquivAt
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] (b : B)
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] (b : B)
   证明: by
   ext
   · refine e.coe_fst ?_
@@ -1557,7 +1557,7 @@ theorem zeroSection
 
 中文:
 定理 zeroSection
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R] {x : B}
+  结论: (e : Trivialization F (π F E)) [e.是线性 R] {x : B}
   证明: by
   simp_rw [zeroSection, e.apply_eq_prod_continuousLinearEquivAt R x hx 0, map_zero]
 -/
@@ -1582,7 +1582,7 @@ using co
 
 中文:
 定理 continuous_zeroSection
-  条件: [VectorBundle R F E]
+  条件: [向量丛 R F E]
   证明: by
   refine continuous_iff_continuousAt.2 fun x => ?_
   unfold zeroSection
@@ -1614,7 +1614,7 @@ theorem continuousOn_zeroSection
 
 中文:
 定理 continuousOn_zeroSection
-  条件: [VectorBundle R F E] (s : Set B)
+  条件: [向量丛 R F E] (s : 集合 B)
   证明: (continuous_zeroSection R).continuousOn
 
 Depends on / 依赖: continuousOn, continuous_zeroSection
@@ -1633,7 +1633,7 @@ theorem continuousAt_zeroSection
 
 中文:
 定理 continuousAt_zeroSection
-  条件: [VectorBundle R F E] (x : B)
+  条件: [向量丛 R F E] (x : B)
   证明: (continuous_zeroSection R).continuousAt
 
 Depends on / 依赖: continuousAt, continuous_zeroSection
@@ -1655,7 +1655,7 @@ theorem symm_apply_eq_mk_continuousLinearEquivAt_symm
 
 中文:
 定理 symm_apply_eq_mk_continuousLinearEquivAt_symm
-  结论: (e : Trivialization F (π F E)) [e.IsLinear R]
+  结论: (e : Trivialization F (π F E)) [e.是线性 R]
   证明: by
   simpa using (mk_symm _ hb _).symm
 
@@ -1710,7 +1710,7 @@ definition VectorBundle.continuousLinearEquivAt
   body: (trivializationAt F E b).continuousLinearEquivAt R b (FiberBundle.mem_baseSet_trivializationAt' b)
 
 中文:
-定义 VectorBundle.continuousLinearEquivAt
+定义 向量丛.continuousLinearEquivAt
   签名: (b : B)
   定义体: (trivializationAt F E b).continuousLinearEquivAt R b (FiberBundle.mem_baseSet_trivializationAt' b)
 
@@ -1740,11 +1740,11 @@ structure VectorBundleCore
     - coordChange_comp : forall i j k, forall x in baseSet i inter baseSet j inter baseSet k, forall v, (coordChange j k x) (coordChange i j x v) = coordChange i k x v
 
 中文:
-结构 VectorBundleCore
+结构 向量丛核心
   参数: (ι : 类型)
   公理与运算 (8 个):
-    - baseSet : ι -> Set B
-    - isOpen_baseSet : 对任意 i, IsOpen (baseSet i)
+    - baseSet : ι -> 集合 B
+    - isOpen_baseSet : 对任意 i, 是开集 (baseSet i)
     - indexAt : B -> ι
     - mem_baseSet_at : 对任意 x, x in baseSet (indexAt x)
     - coordChange : ι -> ι -> B -> F ->L[R] F
@@ -1780,7 +1780,7 @@ definition trivialVectorBundleCore
 
 中文:
 定义 trivialVectorBundleCore
-  签名: (ι : 类型) [Inhabited ι]
+  签名: (ι : 类型) [可居 ι]
   定义体: univ
   isOpen_baseSet _ := isOpen_univ
   indexAt := default
@@ -1824,7 +1824,7 @@ definition toFiberBundleCore
 
 中文:
 定义 toFiberBundleCore
-  签名: : FiberBundleCore ι B F
+  签名: : 纤维丛核心 ι B F
   定义体: { Z with
     coordChange := fun i j b => Z.coordChange i j b
     continuousOn_coordChange := fun i j =>
@@ -1913,7 +1913,7 @@ definition Fiber
 
 中文:
 定义 Fiber
-  签名: : B -> Type _
+  签名: : B -> 类型 _
   定义体: Z.toFiberBundleCore.Fiber
 
 Depends on / 依赖: Z.toFiberBundleCore.Fiber, toFiberBundleCore
@@ -1993,7 +1993,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: : TotalSpace F Z.Fiber -> B
+  签名: : 全空间 F Z.Fiber -> B
   定义体: TotalSpace.proj
 -/
 protected def proj : TotalSpace F Z.Fiber -> B :=
@@ -2010,7 +2010,7 @@ definition TotalSpace
   body: Bundle.TotalSpace F Z.Fiber
 
 中文:
-定义 TotalSpace
+定义 全空间
   定义体: Bundle.TotalSpace F Z.Fiber
 -/
 protected def TotalSpace :=
@@ -2068,7 +2068,7 @@ instance toTopologicalSpace
 
 中文:
 实例 toTopologicalSpace
-  签名: : TopologicalSpace Z.TotalSpace
+  签名: : 拓扑空间 Z.全空间
   定义体: fast_instance% Z.toFiberBundleCore.toTopologicalSpace
 
 Depends on / 依赖: Z.toFiberBundleCore.toTopologicalSpace, fast_instance, toFiberBundleCore, toTopologicalSpace
@@ -2130,7 +2130,7 @@ theorem localTriv_apply
 
 中文:
 定理 localTriv_apply
-  条件: {i : ι} (p : Z.TotalSpace)
+  条件: {i : ι} (p : Z.全空间)
   证明: rfl
 -/
 theorem localTriv_apply {i : ι} (p : Z.TotalSpace) :
@@ -2176,7 +2176,7 @@ theorem mem_localTriv_source
 
 中文:
 定理 mem_localTriv_source
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   结论: p in (Z.localTriv i).source ↔ p.1 in Z.baseSet i
   证明: Iff.rfl
 
@@ -2365,7 +2365,7 @@ theorem mem_source_at
 
 中文:
 定理 mem_source_at
-  结论: (⟨b, a⟩ : Z.TotalSpace) in (Z.localTrivAt b).source
+  结论: (⟨b, a⟩ : Z.全空间) in (Z.localTrivAt b).source
   证明: by
   rw [localTrivAt]; rw [mem_localTriv_source]
   exact Z.mem_baseSet_at b
@@ -2392,7 +2392,7 @@ theorem localTrivAt_apply
 
 中文:
 定理 localTrivAt_apply
-  条件: (p : Z.TotalSpace)
+  条件: (p : Z.全空间)
   结论: Z.localTrivAt p.1 p = ⟨p.1, p.2⟩
   证明: Z.toFiberBundleCore.localTrivAt_apply p
 
@@ -2457,7 +2457,7 @@ instance fiberBundle
 
 中文:
 实例 fiberBundle
-  签名: : FiberBundle F Z.Fiber
+  签名: : 纤维丛 F Z.Fiber
   定义体: fast_instance% Z.toFiberBundleCore.fiberBundle
 
 Depends on / 依赖: Z.toFiberBundleCore.fiberBundle, fast_instance, fiberBundle, toFiberBundleCore
@@ -2497,7 +2497,7 @@ instance vectorBundle
 
 中文:
 实例 vectorBundle
-  签名: : VectorBundle R F Z.Fiber where
+  签名: : 向量丛 R F Z.Fiber where
   定义体: by
     rintro _ ⟨i, rfl⟩
     apply localTriv.isLinear
@@ -2531,7 +2531,7 @@ theorem continuous_proj
 
 中文:
 定理 continuous_proj
-  结论: Continuous Z.proj
+  结论: 连续 Z.proj
   证明: Z.toFiberBundleCore.continuous_proj
 
 Depends on / 依赖: Z.toFiberBundleCore.continuous_proj, continuous_proj, toFiberBundleCore
@@ -2549,7 +2549,7 @@ theorem isOpenMap_proj
 
 中文:
 定理 isOpenMap_proj
-  结论: IsOpenMap Z.proj
+  结论: 是开映射 Z.proj
   证明: Z.toFiberBundleCore.isOpenMap_proj
 
 Depends on / 依赖: Z.toFiberBundleCore.isOpenMap_proj, isOpenMap_proj, toFiberBundleCore
@@ -2728,13 +2728,13 @@ structure VectorPrebundle
 结构 VectorPrebundle
   参数: where
   公理与运算 (7 个):
-    - pretrivializationAtlas : Set (Pretrivialization F (π F E))
-    - pretrivialization_linear' : 对任意 e, e in pretrivializationAtlas -> e.IsLinear R
+    - pretrivializationAtlas : 集合 (Pretrivialization F (π F E))
+    - pretrivialization_linear' : 对任意 e, e in pretrivializationAtlas -> e.是线性 R
     - pretrivializationAt : B -> Pretrivialization F (π F E)
     - mem_base_pretrivializationAt : 对任意 x : B, x in (pretrivializationAt x).baseSet
     - pretrivialization_mem_atlas : 对任意 x : B, pretrivializationAt x in pretrivializationAtlas
     - exists_coordChange : 对任意ᵉ (e in pretrivializationAtlas) (e' in pretrivializationAtlas), 存在 f : B -> F ->L[R] F, ContinuousOn f (e.baseSet inter e'.baseSet) ∧ 对任意ᵉ (b in e.baseSet inter e'.baseSet) (v : F), f b v = (e' ⟨b, e.symm b v⟩).2
-    - totalSpaceMk_isInducing : 对任意 b : B, IsInducing (pretrivializationAt b ∘ .mk b)
+    - totalSpaceMk_isInducing : 对任意 b : B, 是Inducing (pretrivializationAt b ∘ .mk b)
 -/
 structure VectorPrebundle where
   pretrivializationAtlas : Set (Pretrivialization F (π F E))
@@ -3034,7 +3034,7 @@ definition toFiberBundle
 
 中文:
 定义 toFiberBundle
-  签名: : @FiberBundle B F _ _ _ a.totalSpaceTopology _
+  签名: : @纤维丛 B F _ _ _ a.totalSpaceTopology _
   定义体: a.toFiberPrebundle.toFiberBundle
 
 Depends on / 依赖: a.toFiberPrebundle.toFiberBundle, toFiberBundle, toFiberPrebundle
@@ -3059,7 +3059,7 @@ theorem toVectorBundle
 
 中文:
 定理 toVectorBundle
-  结论: @VectorBundle R _ F E _ _ _ _ _ _ a.totalSpaceTopology _ a.toFiberBundle
+  结论: @向量丛 R _ F E _ _ _ _ _ _ a.totalSpaceTopology _ a.toFiberBundle
   证明: letI := a.totalSpaceTopology; letI := a.toFiberBundle
   { trivialization_linear' := by
       rintro _ ⟨e, he, rfl⟩
@@ -3166,8 +3166,8 @@ theorem _root_.VectorBundleCore.inCoordinates_eq
     Z.trivializationAt_symmL hx]
 
 中文:
-定理 _root_.VectorBundleCore.inCoordinates_eq
-  结论: {ι ι'} (Z : VectorBundleCore 𝕜₁ B F ι)
+定理 _root_.向量丛核心.inCoordinates_eq
+  结论: {ι ι'} (Z : 向量丛核心 𝕜₁ B F ι)
   证明: by
   simp_rw [inCoordinates, Z'.trivializationAt_continuousLinearMapAt hy,
     Z.trivializationAt_symmL hx]

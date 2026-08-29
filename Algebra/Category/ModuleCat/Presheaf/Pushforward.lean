@@ -54,7 +54,7 @@ definition pushforward₀Obj
 
 中文:
 定义 pushforward₀Obj
-  签名: (R : Dᵒᵖ ⥤ RingCat.{u}) (M : PresheafOfModules R)
+  签名: (R : Dᵒᵖ ⥤ 环范畴.{u}) (M : 预模层 R)
   定义体: { obj X := ModuleCat.of _ (M.obj (F.op.obj X))
     map {X Y} f := M.map (F.op.map f)
     map_id X := by
@@ -94,7 +94,7 @@ definition pushforward₀
 
 中文:
 定义 pushforward₀
-  签名: (R : Dᵒᵖ ⥤ RingCat.{u})
+  签名: (R : Dᵒᵖ ⥤ 环范畴.{u})
   定义体: pushforward₀Obj F R M
   map {M₁ M₂} φ := { app X := φ.app _ }
 -/
@@ -113,7 +113,7 @@ abbreviation pushforward₀OfCommRingCat
 
 中文:
 缩写 pushforward₀OfCommRingCat
-  签名: (R : Dᵒᵖ ⥤ CommRingCat.{u})
+  签名: (R : Dᵒᵖ ⥤ 交换环范畴.{u})
   定义体: pushforward₀ F (R ⋙ forget₂ _ _)
 -/
 abbrev pushforward₀OfCommRingCat (R : Dᵒᵖ ⥤ CommRingCat.{u}) :
@@ -131,7 +131,7 @@ definition pushforward₀CompToPresheaf
 
 中文:
 定义 pushforward₀CompToPresheaf
-  签名: (R : Dᵒᵖ ⥤ RingCat.{u})
+  签名: (R : Dᵒᵖ ⥤ 环范畴.{u})
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -157,7 +157,7 @@ definition pushforward
 
 中文:
 定义 pushforward
-  签名: : PresheafOfModules.{v} R ⥤ PresheafOfModules.{v} S
+  签名: : 预模层.{v} R ⥤ 预模层.{v} S
   定义体: pushforward₀ F R ⋙ restrictScalars φ
 
 Depends on / 依赖: restrictScalars
@@ -175,7 +175,7 @@ lemma forget₂_map_pushforward_obj_map
 
 中文:
 引理 forget₂_map_pushforward_obj_map
-  条件: {U V : Cᵒᵖ} (f : U ⟶ V) (M : PresheafOfModules R)
+  条件: {U V : Cᵒᵖ} (f : U ⟶ V) (M : 预模层 R)
   证明: rfl
 -/
 lemma forget₂_map_pushforward_obj_map {U V : Cᵒᵖ} (f : U ⟶ V) (M : PresheafOfModules R) :
@@ -193,7 +193,7 @@ lemma forget₂_map_pushforward_map_app
 
 中文:
 引理 forget₂_map_pushforward_map_app
-  条件: {U : Cᵒᵖ} {M N : PresheafOfModules _} (g : M ⟶ N)
+  条件: {U : Cᵒᵖ} {M N : 预模层 _} (g : M ⟶ N)
   证明: rfl
 -/
 lemma forget₂_map_pushforward_map_app {U : Cᵒᵖ} {M N : PresheafOfModules _} (g : M ⟶ N) :
@@ -229,7 +229,7 @@ lemma pushforward_obj_map_apply
 
 中文:
 引理 pushforward_obj_map_apply
-  结论: (M : PresheafOfModules.{v} R) {X Y : Cᵒᵖ} (f : X ⟶ Y)
+  结论: (M : 预模层.{v} R) {X Y : Cᵒᵖ} (f : X ⟶ Y)
   证明: rfl
 -/
 lemma pushforward_obj_map_apply (M : PresheafOfModules.{v} R) {X Y : Cᵒᵖ} (f : X ⟶ Y)
@@ -249,7 +249,7 @@ lemma pushforward_obj_map_apply'
 
 中文:
 引理 pushforward_obj_map_apply'
-  结论: (M : PresheafOfModules.{v} R) {X Y : Cᵒᵖ} (f : X ⟶ Y)
+  结论: (M : 预模层.{v} R) {X Y : Cᵒᵖ} (f : X ⟶ Y)
   证明: rfl
 
 Depends on / 依赖: F.obj, IsZero, IsZero.of_full_of_faithful_of_isZero, ModuleCat, ModuleCat.isZero_iff_subsingleton, ModuleCat.isZero_of_subsingleton, ModuleCat.restrictScalars, isZero_iff_subsingleton, isZero_of_subsingleton, not_iff_not, not_subsingleton_iff_nontrivial, of_full_of_faithful_of_isZero, restrictScalars
@@ -271,7 +271,7 @@ lemma pushforward_map_app_apply
 
 中文:
 引理 pushforward_map_app_apply
-  结论: {M N : PresheafOfModules.{v} R} (α : M ⟶ N) (X : Cᵒᵖ)
+  结论: {M N : 预模层.{v} R} (α : M ⟶ N) (X : Cᵒᵖ)
   证明: rfl
 -/
 lemma pushforward_map_app_apply {M N : PresheafOfModules.{v} R} (α : M ⟶ N) (X : Cᵒᵖ)
@@ -291,7 +291,7 @@ lemma pushforward_map_app_apply'
 
 中文:
 引理 pushforward_map_app_apply'
-  结论: {M N : PresheafOfModules.{v} R} (α : M ⟶ N) (X : Cᵒᵖ)
+  结论: {M N : 预模层.{v} R} (α : M ⟶ N) (X : Cᵒᵖ)
   证明: rfl
 
 Depends on / 依赖: ModuleCat, ModuleCat.restrictScalars, restrictScalars

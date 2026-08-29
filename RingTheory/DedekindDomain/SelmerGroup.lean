@@ -340,7 +340,7 @@ definition selmerGroup
 
 中文:
 定义 selmerGroup
-  签名: : Subgroup K / n where
+  签名: : 子群 K / n where
   定义体: {x : K/n | forall (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuationOfNeZeroMod n x = 1}
   one_mem' _ _ := by rw [map_one]
   mul_mem' hx hy v hv := by rw [map_mul, hx v hv, hy v hv, one_mul]

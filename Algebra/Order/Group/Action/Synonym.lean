@@ -37,8 +37,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M α] : MulAction Mᵒᵈ α
+实例 [幺半群
+  签名: M] [乘法作用 M α] : 乘法作用 Mᵒᵈ α
   定义体: inferInstanceAs MulAction M α
 
 @[to_additive]
@@ -59,8 +59,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M α] : MulAction M αᵒᵈ
+实例 [幺半群
+  签名: M] [乘法作用 M α] : 乘法作用 M αᵒᵈ
   定义体: inferInstanceAs MulAction M α
 
 @[to_additive]
@@ -81,8 +81,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵒᵈ N α
+实例 [标量乘法
+  签名: M α] [标量乘法 N α] [标量交换类 M N α] : 标量交换类 Mᵒᵈ N α
   定义体: ‹SMulCommClass M N α›
 
 @[to_additive]
@@ -104,8 +104,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass M Nᵒᵈ α
+实例 [标量乘法
+  签名: M α] [标量乘法 N α] [标量交换类 M N α] : 标量交换类 M Nᵒᵈ α
   定义体: ‹SMulCommClass M N α›
 
 @[to_additive]
@@ -127,8 +127,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass M N αᵒᵈ
+实例 [标量乘法
+  签名: M α] [标量乘法 N α] [标量交换类 M N α] : 标量交换类 M N αᵒᵈ
   定义体: ‹SMulCommClass M N α›
 
 @[to_additive]
@@ -148,8 +148,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M N] [SMul M α] [SMul N α] [IsScalarTower M N α] : IsScalarTower Mᵒᵈ N α
+实例 [标量乘法
+  签名: M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α] : 标量塔 Mᵒᵈ N α
   定义体: ‹IsScalarTower M N α›
 
 @[to_additive]
@@ -169,8 +169,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M N] [SMul M α] [SMul N α] [IsScalarTower M N α] : IsScalarTower M Nᵒᵈ α
+实例 [标量乘法
+  签名: M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α] : 标量塔 M Nᵒᵈ α
   定义体: ‹IsScalarTower M N α›
 
 @[to_additive]
@@ -190,8 +190,8 @@ instance [SMul
   body: ‹IsScalarTower M N α›
 
 中文:
-实例 [SMul
-  签名: M N] [SMul M α] [SMul N α] [IsScalarTower M N α] : IsScalarTower M N αᵒᵈ
+实例 [标量乘法
+  签名: M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α] : 标量塔 M N αᵒᵈ
   定义体: ‹IsScalarTower M N α›
 
 Depends on / 依赖: IsScalarTower
@@ -216,7 +216,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid M] [MulAction M α]
+  签名: [幺半群 M] [乘法作用 M α]
   定义体: inferInstanceAs MulAction M α
 
 @[to_additive]
@@ -239,7 +239,7 @@ instance instMulAction'
 
 中文:
 实例 instMulAction'
-  签名: [Monoid M] [MulAction M α]
+  签名: [幺半群 M] [乘法作用 M α]
   定义体: inferInstanceAs MulAction M α
 
 @[to_additive]
@@ -262,7 +262,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: inferInstanceAs SMulCommClass M N α
 
 @[to_additive]
@@ -285,7 +285,7 @@ instance instSMulCommClass'
 
 中文:
 实例 instSMulCommClass'
-  签名: [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: inferInstanceAs SMulCommClass M N α
 
 @[to_additive]
@@ -308,7 +308,7 @@ instance instSMulCommClass''
 
 中文:
 实例 instSMulCommClass''
-  签名: [SMul M α] [SMul N α] [SMulCommClass M N α]
+  签名: [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
   定义体: inferInstanceAs SMulCommClass M N α
 
 @[to_additive]
@@ -331,7 +331,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α]
+  签名: [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α]
   定义体: inferInstanceAs IsScalarTower M N α
 
 @[to_additive]
@@ -354,7 +354,7 @@ instance instIsScalarTower'
 
 中文:
 实例 instIsScalarTower'
-  签名: [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α]
+  签名: [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α]
   定义体: inferInstanceAs IsScalarTower M N α
 
 @[to_additive]
@@ -375,7 +375,7 @@ instance instIsScalarTower''
 
 中文:
 实例 instIsScalarTower''
-  签名: [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α]
+  签名: [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α]
   定义体: inferInstanceAs IsScalarTower M N α
 
 Depends on / 依赖: IsScalarTower

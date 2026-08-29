@@ -37,7 +37,7 @@ theorem IsClopen.isOpen
 中文:
 定理 IsClopen.isOpen
   条件: (hs : IsClopen s)
-  结论: IsOpen s
+  结论: 是开集 s
   证明: hs.2
 -/
 protected theorem IsClopen.isOpen (hs : IsClopen s) : IsOpen s := hs.2
@@ -54,7 +54,7 @@ theorem IsClopen.isClosed
 中文:
 定理 IsClopen.isClosed
   条件: (hs : IsClopen s)
-  结论: IsClosed s
+  结论: 是闭集 s
   证明: hs.1
 -/
 protected theorem IsClopen.isClosed (hs : IsClopen s) : IsClosed s := hs.1
@@ -140,7 +140,7 @@ theorem isClopen_empty
 
 中文:
 定理 isClopen_empty
-  结论: IsClopen (∅ : Set X)
+  结论: IsClopen (∅ : 集合 X)
   证明: ⟨isClosed_empty, isOpen_empty⟩
 
 Depends on / 依赖: isClosed_empty, isOpen_empty
@@ -157,7 +157,7 @@ theorem isClopen_univ
 
 中文:
 定理 isClopen_univ
-  结论: IsClopen (univ : Set X)
+  结论: IsClopen (univ : 集合 X)
   证明: ⟨isClosed_univ, isOpen_univ⟩
 
 Depends on / 依赖: isClosed_univ, isOpen_univ
@@ -259,8 +259,8 @@ theorem IsClopen.prod
   proof: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 
 中文:
-定理 IsClopen.prod
-  条件: {t : Set Y} (hs : IsClopen s) (ht : IsClopen t)
+定理 IsClopen.乘积
+  条件: {t : 集合 Y} (hs : IsClopen s) (ht : IsClopen t)
   结论: IsClopen (s ×ˢ t)
   证明: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 -/
@@ -277,7 +277,7 @@ theorem isClopen_iUnion_of_finite
 
 中文:
 定理 isClopen_iUnion_of_finite
-  条件: {Y} [Finite Y] {s : Y -> Set X} (h : 对任意 i, IsClopen (s i))
+  条件: {Y} [有限 Y] {s : Y -> 集合 X} (h : 对任意 i, IsClopen (s i))
   证明: ⟨isClosed_iUnion_of_finite (forall_and.1 h).1, isOpen_iUnion (forall_and.1 h).2⟩
 
 Depends on / 依赖: forall_and, isClosed_iUnion_of_finite, isOpen_iUnion
@@ -295,8 +295,8 @@ theorem Set.Finite.isClopen_biUnion
   proof: ⟨hs.isClosed_biUnion fun i hi => (h i hi).1, isOpen_biUnion fun i hi => (h i hi).2⟩
 
 中文:
-定理 Set.Finite.isClopen_biUnion
-  结论: {Y} {s : Set Y} {f : Y -> Set X} (hs : s.Finite)
+定理 集合.有限.isClopen_biUnion
+  结论: {Y} {s : 集合 Y} {f : Y -> 集合 X} (hs : s.有限)
   证明: ⟨hs.isClosed_biUnion fun i hi => (h i hi).1, isOpen_biUnion fun i hi => (h i hi).2⟩
 
 Depends on / 依赖: hs.isClosed_biUnion, isClosed_biUnion, isOpen_biUnion
@@ -315,7 +315,7 @@ theorem isClopen_biUnion_finset
 
 中文:
 定理 isClopen_biUnion_finset
-  结论: {Y} {s : Finset Y} {f : Y -> Set X}
+  结论: {Y} {s : 有限集 Y} {f : Y -> 集合 X}
   证明: s.finite_toSet.isClopen_biUnion h
 
 Depends on / 依赖: finite_toSet, isClopen_biUnion, s.finite_toSet.isClopen_biUnion
@@ -333,8 +333,8 @@ theorem isClopen_iInter_of_finite
   proof: ⟨isClosed_iInter (forall_and.1 h).1, isOpen_iInter_of_finite (forall_and.1 h).2⟩
 
 中文:
-定理 isClopen_iInter_of_finite
-  条件: {Y} [Finite Y] {s : Y -> Set X} (h : 对任意 i, IsClopen (s i))
+定理 isClopen_i整数er_of_finite
+  条件: {Y} [有限 Y] {s : Y -> 集合 X} (h : 对任意 i, IsClopen (s i))
   证明: ⟨isClosed_iInter (forall_and.1 h).1, isOpen_iInter_of_finite (forall_and.1 h).2⟩
 
 Depends on / 依赖: forall_and, isClosed_iInter, isOpen_iInter_of_finite
@@ -352,8 +352,8 @@ theorem Set.Finite.isClopen_biInter
   proof: ⟨isClosed_biInter fun i hi => (h i hi).1, hs.isOpen_biInter fun i hi => (h i hi).2⟩
 
 中文:
-定理 Set.Finite.isClopen_biInter
-  结论: {Y} {s : Set Y} (hs : s.Finite) {f : Y -> Set X}
+定理 集合.有限.isClopen_bi整数er
+  结论: {Y} {s : 集合 Y} (hs : s.有限) {f : Y -> 集合 X}
   证明: ⟨isClosed_biInter fun i hi => (h i hi).1, hs.isOpen_biInter fun i hi => (h i hi).2⟩
 
 Depends on / 依赖: hs.isOpen_biInter, isClosed_biInter, isOpen_biInter
@@ -371,8 +371,8 @@ theorem isClopen_biInter_finset
   proof: s.finite_toSet.isClopen_biInter h
 
 中文:
-定理 isClopen_biInter_finset
-  结论: {Y} {s : Finset Y} {f : Y -> Set X}
+定理 isClopen_bi整数er_finset
+  结论: {Y} {s : 有限集 Y} {f : Y -> 集合 X}
   证明: s.finite_toSet.isClopen_biInter h
 
 Depends on / 依赖: finite_toSet, isClopen_biInter, s.finite_toSet.isClopen_biInter
@@ -390,8 +390,8 @@ theorem IsClopen.preimage
   proof: ⟨h.1.preimage hf, h.2.preimage hf⟩
 
 中文:
-定理 IsClopen.preimage
-  条件: {s : Set Y} (h : IsClopen s) {f : X -> Y} (hf : Continuous f)
+定理 IsClopen.原像
+  条件: {s : 集合 Y} (h : IsClopen s) {f : X -> Y} (hf : 连续 f)
   证明: ⟨h.1.preimage hf, h.2.preimage hf⟩
 
 Depends on / 依赖: preimage
@@ -411,7 +411,7 @@ theorem ContinuousOn.preimage_isClopen_of_isClopen
 
 中文:
 定理 ContinuousOn.preimage_isClopen_of_isClopen
-  结论: {f : X -> Y} {s : Set X} {t : Set Y}
+  结论: {f : X -> Y} {s : 集合 X} {t : 集合 Y}
   证明: ⟨ContinuousOn.preimage_isClosed_of_isClosed hf hs.1 ht.1,
     ContinuousOn.isOpen_inter_preimage hf hs.2 ht.2⟩
 
@@ -438,7 +438,7 @@ theorem isClopen_inter_of_disjoint_cover_clopen
 
 中文:
 定理 isClopen_inter_of_disjoint_cover_clopen
-  结论: {s a b : Set X} (h : IsClopen s) (cover : s subseteq a union b)
+  结论: {s a b : 集合 X} (h : IsClopen s) (cover : s subseteq a union b)
   证明: by
   refine ⟨?_, IsOpen.inter h.2 ha⟩
   have : IsClosed (s inter bᶜ) := IsClosed.inter h.1 (isClosed_compl_iff.2 hb)
@@ -473,7 +473,7 @@ lemma isClopen_inter_of_disjoint_cover_clopen'
 
 中文:
 引理 isClopen_inter_of_disjoint_cover_clopen'
-  结论: {s a b : Set X} (h : IsClopen s) (cover : s subseteq a union b)
+  结论: {s a b : 集合 X} (h : IsClopen s) (cover : s subseteq a union b)
   证明: by
   rw [show s inter a = s inter (s inter a) by simp]
   refine isClopen_inter_of_disjoint_cover_clopen h ?_ (h.2.inter ha) (h.2.inter hb) ?_
@@ -503,7 +503,7 @@ theorem isClopen_of_disjoint_cover_open
 
 中文:
 定理 isClopen_of_disjoint_cover_open
-  结论: {a b : Set X} (cover : univ subseteq a union b)
+  结论: {a b : 集合 X} (cover : univ subseteq a union b)
   证明: univ_inter a ▸ isClopen_inter_of_disjoint_cover_clopen isClopen_univ cover ha hb hab
 
 @[simp]
@@ -526,7 +526,7 @@ theorem isClopen_discrete
 
 中文:
 定理 isClopen_discrete
-  条件: [DiscreteTopology X] (s : Set X)
+  条件: [离散拓扑 X] (s : 集合 X)
   结论: IsClopen s
   证明: ⟨isClosed_discrete _, isOpen_discrete _⟩
 
@@ -545,7 +545,7 @@ theorem isClopen_range_inl
 
 中文:
 定理 isClopen_range_inl
-  结论: IsClopen (range (Sum.inl : X -> X oplus Y))
+  结论: IsClopen (range (和.inl : X -> X oplus Y))
   证明: ⟨isClosed_range_inl, isOpen_range_inl⟩
 
 Depends on / 依赖: isClosed_range_inl, isOpen_range_inl
@@ -563,7 +563,7 @@ theorem isClopen_range_inr
 
 中文:
 定理 isClopen_range_inr
-  结论: IsClopen (range (Sum.inr : Y -> X oplus Y))
+  结论: IsClopen (range (和.inr : Y -> X oplus Y))
   证明: ⟨isClosed_range_inr, isOpen_range_inr⟩
 
 Depends on / 依赖: isClosed_range_inr, isOpen_range_inr
@@ -581,7 +581,7 @@ theorem isClopen_range_sigmaMk
 
 中文:
 定理 isClopen_range_sigmaMk
-  条件: {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)] {i : ι}
+  条件: {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)] {i : ι}
   证明: ⟨IsClosedEmbedding.sigmaMk.isClosed_range, IsOpenEmbedding.sigmaMk.isOpen_range⟩
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.sigmaMk.isClosed_range, IsOpenEmbedding, IsOpenEmbedding.sigmaMk.isOpen_range, isClosed_range, isOpen_range, sigmaMk
@@ -599,8 +599,8 @@ theorem Topology.IsQuotientMap.isClopen_preimage
   proof: and_congr hf.isClosed_preimage hf.isOpen_preimage
 
 中文:
-定理 Topology.IsQuotientMap.isClopen_preimage
-  结论: {f : X -> Y} (hf : IsQuotientMap f)
+定理 拓扑.是商映射.isClopen_preimage
+  结论: {f : X -> Y} (hf : 是商映射 f)
   证明: and_congr hf.isClosed_preimage hf.isOpen_preimage
 -/
 protected theorem Topology.IsQuotientMap.isClopen_preimage {f : X -> Y} (hf : IsQuotientMap f)
@@ -618,7 +618,7 @@ theorem continuous_boolIndicator_iff_isClopen
 
 中文:
 定理 continuous_boolIndicator_iff_isClopen
-  条件: (U : Set X)
+  条件: (U : 集合 X)
   证明: by
   rw [continuous_bool_rng true]; rw [preimage_boolIndicator_true]
 
@@ -640,7 +640,7 @@ theorem continuousOn_boolIndicator_iff_isClopen
 
 中文:
 定理 continuousOn_boolIndicator_iff_isClopen
-  条件: (s U : Set X)
+  条件: (s U : 集合 X)
   证明: by
   rw [continuousOn_iff_continuous_domRestrict]; rw [← continuous_boolIndicator_iff_isClopen]
   rfl

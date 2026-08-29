@@ -46,8 +46,8 @@ lemma Lattice.mem_ideal_sup_principal
   Lattice.mem_ideal_sup_principal
 
 中文:
-引理 Lattice.mem_ideal_sup_principal
-  条件: [Lattice α] (a b : α) (J : Ideal α)
+引理 格.mem_ideal_sup_principal
+  条件: [格 α] (a b : α) (J : 理想 α)
   证明: ⟨fun ⟨j, ⟨jJ, _, ha', bja'⟩⟩ => ⟨j, jJ, le_trans bja' (sup_le_sup_left ha' j)⟩,
     fun ⟨j, hj, hbja⟩ => ⟨j, hj, a, le_refl a, hbja⟩⟩
 
@@ -79,8 +79,8 @@ theorem DistribLattice.prime_ideal_of_disjoint_filter_ideal
 
 
 中文:
-定理 DistribLattice.prime_ideal_of_disjoint_filter_ideal
-  结论: [DistribLattice α]
+定理 Distrib格.prime_ideal_of_disjoint_filter_ideal
+  结论: [Distrib格 α]
   证明: by
   -- Let S be the set of ideals containing I and disjoint from F.
   set S : Set (Set α) := { J : Set α | IsIdeal J ∧ I <= J ∧ Disjoint (F : Set α) J }

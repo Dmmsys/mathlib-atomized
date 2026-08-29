@@ -817,7 +817,7 @@ instance conjugateEquiv_iso
 
 中文:
 实例 conjugateEquiv_iso
-  签名: (α : L₂ ⟶ L₁) [IsIso α]
+  签名: (α : L₂ ⟶ L₁) [是同构 α]
   定义体: ⟨⟨conjugateEquiv adj₂ adj₁ (inv α),
       ⟨conjugateEquiv_comm _ _ (by simp), conjugateEquiv_comm _ _ (by simp)⟩⟩⟩
 
@@ -839,7 +839,7 @@ instance conjugateEquiv_symm_iso
 
 中文:
 实例 conjugateEquiv_symm_iso
-  签名: (α : R₁ ⟶ R₂) [IsIso α]
+  签名: (α : R₁ ⟶ R₂) [是同构 α]
   定义体: ⟨⟨(conjugateEquiv adj₂ adj₁).symm (inv α),
       ⟨conjugateEquiv_symm_comm _ _ (by simp), conjugateEquiv_symm_comm _ _ (by simp)⟩⟩⟩
 
@@ -862,7 +862,7 @@ theorem conjugateEquiv_of_iso
 
 中文:
 定理 conjugateEquiv_of_iso
-  条件: (α : L₂ ⟶ L₁) [IsIso (conjugateEquiv adj₁ adj₂ α)]
+  条件: (α : L₂ ⟶ L₁) [是同构 (conjugateEquiv adj₁ adj₂ α)]
   证明: by
   suffices IsIso ((conjugateEquiv adj₁ adj₂).symm (conjugateEquiv adj₁ adj₂ α)) by simpa using this
   infer_instance

@@ -171,7 +171,7 @@ definition equitabilise
 
 中文:
 定义 equitabilise
-  签名: : Finpartition s
+  签名: : 有限分拆 s
   定义体: (P.equitabilise_aux h).choose
 
 Depends on / 依赖: P.equitabilise_aux, equitabilise_aux
@@ -337,7 +337,7 @@ theorem exists_equipartition_card_eq
     ⟨(indiscrete (card
 
 中文:
-定理 exists_equipartition_card_eq
+定理 存在_equipartition_card_eq
   条件: (hn : n != 0) (hs : n <= #s)
   证明: by
   rw [← pos_iff_ne_zero] at hn

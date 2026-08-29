@@ -36,7 +36,7 @@ structure Bipointed
 
 中文:
 结构 Bipointed
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - X : 类型u
     - toProd : X × X
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Bipointed
+  签名: 可居 Bipointed
   定义体: ⟨of ((), ())⟩
 -/
 instance : Inhabited Bipointed :=
@@ -138,7 +138,7 @@ structure Hom
     - map_snd : toFun X.toProd.2 = Y.toProd.2
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : Bipointed.{u})
   公理与运算 (3 个):
     - toFun : X -> Y
@@ -174,7 +174,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : Bipointed.{u}} (f : Bipointed.Hom X Y) (g : Bipointed.Hom Y Z)
+  签名: {X Y Z : Bipointed.{u}} (f : Bipointed.态射 X Y) (g : Bipointed.态射 Y Z)
   定义体: ⟨g.toFun ∘ f.toFun, by rw [Function.comp_apply, f.map_fst, g.map_fst], by
     rw [Function.comp_apply]; rw [f.map_snd]; rw [g.map_snd]⟩
 
@@ -199,7 +199,7 @@ instance largeCategory
 
 中文:
 实例 largeCategory
-  签名: : LargeCategory Bipointed where
+  签名: : 大范畴 Bipointed where
   定义体: Bipointed.Hom
   id := Hom.id
   comp := @Hom.comp
@@ -244,7 +244,7 @@ instance hasForget
 
 中文:
 实例 hasForget
-  签名: : ConcreteCategory Bipointed HomSubtype where
+  签名: : 余ncrete范畴 Bipointed HomSubtype where
   定义体: ⟨f.1, ⟨f.2, f.3⟩⟩
   ofHom f := ⟨f.1, f.2.1, f.2.2⟩
 -/

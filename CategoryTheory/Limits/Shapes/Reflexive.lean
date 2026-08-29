@@ -73,7 +73,7 @@ class IsReflexivePair
     - common_section' : exists s : B ⟶ A, s ≫ f = 𝟙 B ∧ s ≫ g = 𝟙 B
 
 中文:
-类 IsReflexivePair
+类 是ReflexivePair
   参数: (f g : A ⟶ B)
   公理与运算 (1 个):
     - common_section' : 存在 s : B ⟶ A, s ≫ f = 𝟙 B ∧ s ≫ g = 𝟙 B
@@ -90,8 +90,8 @@ theorem IsReflexivePair.common_section
   proof: IsReflexivePair.common_section'
 
 中文:
-定理 IsReflexivePair.common_section
-  条件: (f g : A ⟶ B) [IsReflexivePair f g]
+定理 是ReflexivePair.common_section
+  条件: (f g : A ⟶ B) [是ReflexivePair f g]
   证明: IsReflexivePair.common_section'
 
 Depends on / 依赖: IsReflexivePair, IsReflexivePair.common_section, common_section
@@ -109,7 +109,7 @@ class IsCoreflexivePair
     - common_retraction' : exists s : B ⟶ A, f ≫ s = 𝟙 A ∧ g ≫ s = 𝟙 A
 
 中文:
-类 IsCoreflexivePair
+类 是余reflexivePair
   参数: (f g : A ⟶ B)
   公理与运算 (1 个):
     - common_retraction' : 存在 s : B ⟶ A, f ≫ s = 𝟙 A ∧ g ≫ s = 𝟙 A
@@ -126,8 +126,8 @@ theorem IsCoreflexivePair.common_retraction
   proof: IsCoreflexivePair.common_retraction'
 
 中文:
-定理 IsCoreflexivePair.common_retraction
-  条件: (f g : A ⟶ B) [IsCoreflexivePair f g]
+定理 是余reflexivePair.common_retraction
+  条件: (f g : A ⟶ B) [是余reflexivePair f g]
   证明: IsCoreflexivePair.common_retraction'
 
 Depends on / 依赖: IsCoreflexivePair, IsCoreflexivePair.common_retraction, common_retraction
@@ -144,7 +144,7 @@ theorem IsReflexivePair.mk'
   proof: ⟨⟨s, sf, sg⟩⟩
 
 中文:
-定理 IsReflexivePair.mk'
+定理 是ReflexivePair.mk'
   条件: (s : B ⟶ A) (sf : s ≫ f = 𝟙 B) (sg : s ≫ g = 𝟙 B)
   证明: ⟨⟨s, sf, sg⟩⟩
 -/
@@ -161,7 +161,7 @@ theorem IsCoreflexivePair.mk'
   proof: ⟨⟨s, fs, gs⟩⟩
 
 中文:
-定理 IsCoreflexivePair.mk'
+定理 是余reflexivePair.mk'
   条件: (s : B ⟶ A) (fs : f ≫ s = 𝟙 A) (gs : g ≫ s = 𝟙 A)
   证明: ⟨⟨s, fs, gs⟩⟩
 -/
@@ -181,7 +181,7 @@ definition commonSection
 
 中文:
 定义 commonSection
-  签名: (f g : A ⟶ B) [IsReflexivePair f g]
+  签名: (f g : A ⟶ B) [是ReflexivePair f g]
   定义体: (IsReflexivePair.common_section f g).choose
 
 @[reassoc (attr := simp)]
@@ -205,7 +205,7 @@ theorem section_comp_left
 
 中文:
 定理 section_comp_left
-  条件: (f g : A ⟶ B) [IsReflexivePair f g]
+  条件: (f g : A ⟶ B) [是ReflexivePair f g]
   结论: commonSection f g ≫ f = 𝟙 B
   证明: (IsReflexivePair.common_section f g).choose_spec.1
 
@@ -228,7 +228,7 @@ theorem section_comp_right
 
 中文:
 定理 section_comp_right
-  条件: (f g : A ⟶ B) [IsReflexivePair f g]
+  条件: (f g : A ⟶ B) [是ReflexivePair f g]
   结论: commonSection f g ≫ g = 𝟙 B
   证明: (IsReflexivePair.common_section f g).choose_spec.2
 
@@ -249,7 +249,7 @@ definition commonRetraction
 
 中文:
 定义 commonRetraction
-  签名: (f g : A ⟶ B) [IsCoreflexivePair f g]
+  签名: (f g : A ⟶ B) [是余reflexivePair f g]
   定义体: (IsCoreflexivePair.common_retraction f g).choose
 
 @[reassoc (attr := simp)]
@@ -272,7 +272,7 @@ theorem left_comp_retraction
 
 中文:
 定理 left_comp_retraction
-  条件: (f g : A ⟶ B) [IsCoreflexivePair f g]
+  条件: (f g : A ⟶ B) [是余reflexivePair f g]
   证明: (IsCoreflexivePair.common_retraction f g).choose_spec.1
 
 @[reassoc (attr := simp)]
@@ -294,7 +294,7 @@ theorem right_comp_retraction
 
 中文:
 定理 right_comp_retraction
-  条件: (f g : A ⟶ B) [IsCoreflexivePair f g]
+  条件: (f g : A ⟶ B) [是余reflexivePair f g]
   证明: (IsCoreflexivePair.common_retraction f g).choose_spec.2
 
 Depends on / 依赖: IsCoreflexivePair, IsCoreflexivePair.common_retraction, choose_spec, common_retraction
@@ -333,9 +333,9 @@ theorem IsReflexivePair.swap
   proof: IsReflexivePair.mk' _ (section_comp_right f g) (section_comp_left f g)
 
 中文:
-定理 IsReflexivePair.swap
-  条件: [IsReflexivePair f g]
-  结论: IsReflexivePair g f
+定理 是ReflexivePair.swap
+  条件: [是ReflexivePair f g]
+  结论: 是ReflexivePair g f
   证明: IsReflexivePair.mk' _ (section_comp_right f g) (section_comp_left f g)
 
 Depends on / 依赖: IsReflexivePair, IsReflexivePair.mk, section_comp_left, section_comp_right
@@ -354,9 +354,9 @@ theorem IsCoreflexivePair.swap
   proof: IsCoreflexivePair.mk' _ (right_comp_retraction f g) (left_comp_retraction f g)
 
 中文:
-定理 IsCoreflexivePair.swap
-  条件: [IsCoreflexivePair f g]
-  结论: IsCoreflexivePair g f
+定理 是余reflexivePair.swap
+  条件: [是余reflexivePair f g]
+  结论: 是余reflexivePair g f
   证明: IsCoreflexivePair.mk' _ (right_comp_retraction f g) (left_comp_retraction f g)
 
 Depends on / 依赖: IsCoreflexivePair, IsCoreflexivePair.mk, left_comp_retraction, right_comp_retraction
@@ -389,10 +389,10 @@ class HasReflexiveCoequalizers
     - has_coeq : forall ⦃A B : C⦄ (f g : A ⟶ B) [IsReflexivePair f g], HasCoequalizer f g
 
 中文:
-类 HasReflexiveCoequalizers
+类 有ReflexiveCoequalizers
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_coeq : 对任意 ⦃A B : C⦄ (f g : A ⟶ B) [IsReflexivePair f g], HasCoequalizer f g
+    - has_coeq : 对任意 ⦃A B : C⦄ (f g : A ⟶ B) [是ReflexivePair f g], HasCoequalizer f g
 -/
 class HasReflexiveCoequalizers : Prop where
   has_coeq : forall ⦃A B : C⦄ (f g : A ⟶ B) [IsReflexivePair f g], HasCoequalizer f g
@@ -407,10 +407,10 @@ class HasCoreflexiveEqualizers
     - has_eq : forall ⦃A B : C⦄ (f g : A ⟶ B) [IsCoreflexivePair f g], HasEqualizer f g
 
 中文:
-类 HasCoreflexiveEqualizers
+类 有余reflexiveEqualizers
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_eq : 对任意 ⦃A B : C⦄ (f g : A ⟶ B) [IsCoreflexivePair f g], HasEqualizer f g
+    - has_eq : 对任意 ⦃A B : C⦄ (f g : A ⟶ B) [是余reflexivePair f g], HasEqualizer f g
 -/
 class HasCoreflexiveEqualizers : Prop where
   has_eq : forall ⦃A B : C⦄ (f g : A ⟶ B) [IsCoreflexivePair f g], HasEqualizer f g
@@ -431,7 +431,7 @@ theorem hasCoequalizer_of_common_section
 
 中文:
 定理 hasCoequalizer_of_common_section
-  结论: [HasReflexiveCoequalizers C] {A B : C} {f g : A ⟶ B}
+  结论: [有ReflexiveCoequalizers C] {A B : C} {f g : A ⟶ B}
   证明: by
   let := IsReflexivePair.mk' r rf rg
   infer_instance
@@ -455,7 +455,7 @@ theorem hasEqualizer_of_common_retraction
 
 中文:
 定理 hasEqualizer_of_common_retraction
-  结论: [HasCoreflexiveEqualizers C] {A B : C} {f g : A ⟶ B}
+  结论: [有余reflexiveEqualizers C] {A B : C} {f g : A ⟶ B}
   证明: by
   let := IsCoreflexivePair.mk' r fr gr
   infer_instance
@@ -497,7 +497,7 @@ inductive WalkingReflexivePair
 
 中文:
 归纳类型 WalkingReflexivePair
-  参数: : Type where
+  参数: : 类型 where
   构造子 (2 个):
     - zero: 
     - one: 
@@ -528,15 +528,15 @@ inductive Hom
     - id: (X : WalkingReflexivePair) : Hom X X
 
 中文:
-归纳类型 Hom
-  参数: : (WalkingReflexivePair -> WalkingReflexivePair -> Type)
+归纳类型 态射
+  参数: : (WalkingReflexivePair -> WalkingReflexivePair -> 类型)
   构造子 (6 个):
-    - left: Hom one zero
-    - right: Hom one zero
-    - reflexion: Hom zero one
-    - leftCompReflexion: Hom one one
-    - rightCompReflexion: Hom one one
-    - id: (X : WalkingReflexivePair) : Hom X X
+    - left: 态射 one zero
+    - right: 态射 one zero
+    - reflexion: 态射 zero one
+    - leftCompReflexion: 态射 one one
+    - rightCompReflexion: 态射 one one
+    - id: (X : WalkingReflexivePair) : 态射 X X
 -/
 inductive Hom : (WalkingReflexivePair -> WalkingReflexivePair -> Type)
   | left : Hom one zero
@@ -555,7 +555,7 @@ definition Hom.comp
   signature: :
 
 中文:
-定义 Hom.comp
+定义 态射.comp
   签名: :
 -/
 def Hom.comp :
@@ -593,7 +593,7 @@ instance category
 
 中文:
 实例 category
-  签名: : SmallCategory WalkingReflexivePair where
+  签名: : 小范畴 WalkingReflexivePair where
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -623,7 +623,7 @@ lemma Hom.id_eq
 @[reassoc (attr := simp)]
 
 中文:
-引理 Hom.id_eq
+引理 态射.id_eq
   条件: (X : WalkingReflexivePair)
   证明: rfl
 
@@ -845,7 +845,7 @@ instance inclusionWalkingReflexivePair_final
 
 中文:
 实例 inclusionWalkingReflexivePair_final
-  签名: : Functor.Final inclusionWalkingReflexivePair where
+  签名: : 函子.终 inclusionWalkingReflexivePair where
   定义体: inferInstance
 -/
 instance inclusionWalkingReflexivePair_final : Functor.Final inclusionWalkingReflexivePair where
@@ -1020,7 +1020,7 @@ definition ofIsReflexivePair
 
 中文:
 定义 ofIsReflexivePair
-  签名: (f g : A ⟶ B) [IsReflexivePair f g]
+  签名: (f g : A ⟶ B) [是ReflexivePair f g]
   定义体: reflexivePair f g (commonSection f g)
 
 @[simp]
@@ -1043,7 +1043,7 @@ lemma ofIsReflexivePair_map_left
 
 中文:
 引理 ofIsReflexivePair_map_left
-  条件: (f g : A ⟶ B) [IsReflexivePair f g]
+  条件: (f g : A ⟶ B) [是ReflexivePair f g]
   证明: rfl
 
 @[simp]
@@ -1062,7 +1062,7 @@ lemma ofIsReflexivePair_map_right
 
 中文:
 引理 ofIsReflexivePair_map_right
-  条件: (f g : A ⟶ B) [IsReflexivePair f g]
+  条件: (f g : A ⟶ B) [是ReflexivePair f g]
   证明: rfl
 -/
 lemma ofIsReflexivePair_map_right (f g : A ⟶ B) [IsReflexivePair f g] :
@@ -1124,7 +1124,7 @@ definition mkNatTrans
         reassoc_of% h₁, reassoc_of% h₂, Category.assoc]
 
 中文:
-定义 mkNatTrans
+定义 mk自然数Trans
   签名: : F ⟶ G where
   定义体: fun x => match x with
     | zero => e₀
@@ -1158,7 +1158,7 @@ lemma mkNatTrans_app_zero
   proof: rfl
 
 中文:
-引理 mkNatTrans_app_zero
+引理 mk自然数Trans_app_zero
   结论: (mk自然数Trans e₀ e₁ h₁ h₂ h₃).app zero = e₀
   证明: rfl
 -/
@@ -1175,7 +1175,7 @@ lemma mkNatTrans_app_one
   proof: rfl
 
 中文:
-引理 mkNatTrans_app_one
+引理 mk自然数Trans_app_one
   结论: (mk自然数Trans e₀ e₁ h₁ h₂ h₃).app one = e₁
   证明: rfl
 -/
@@ -1201,7 +1201,7 @@ definition mkNatIso
             Category.comp_id
 
 中文:
-定义 mkNatIso
+定义 mk自然数Iso
   签名: (e₀ : F.obj zero ≅ G.obj zero) (e₁ : F.obj one ≅ G.obj one)
   定义体: mkNatTrans e₀.hom e₁.hom
   inv := mkNatTrans e₀.inv e₁.inv
@@ -1268,7 +1268,7 @@ definition compRightIso
 
 中文:
 定义 compRightIso
-  签名: {D : 类型u₂} [Category.{v₂} D] {A B : C}
+  签名: {D : 类型u₂} [范畴.{v₂} D] {A B : C}
   定义体: mkNatIso (Iso.refl _) (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, mkNatIso
@@ -1291,7 +1291,7 @@ lemma whiskerRightMkNatTrans
   ext x; cases x <;> simp
 
 中文:
-引理 whiskerRightMkNatTrans
+引理 whiskerRightMk自然数Trans
   结论: {F G : WalkingReflexivePair ⥤ C}
   证明: by
   ext x; cases x <;> simp

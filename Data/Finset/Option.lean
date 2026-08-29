@@ -47,7 +47,7 @@ definition toFinset
 
 中文:
 定义 toFinset
-  签名: (o : Option α)
+  签名: (o : 选项类型 α)
   定义体: o.elim ∅ singleton
 
 @[simp]
@@ -70,7 +70,7 @@ theorem toFinset_none
 
 中文:
 定理 toFinset_none
-  结论: none.toFinset = (∅ : Finset α)
+  结论: none.toFinset = (∅ : 有限集 α)
   证明: rfl
 
 @[simp]
@@ -114,7 +114,7 @@ theorem mem_toFinset
 
 中文:
 定理 mem_toFinset
-  条件: {a : α} {o : Option α}
+  条件: {a : α} {o : 选项类型 α}
   结论: a in o.toFinset ↔ a in o
   证明: by
   cases o <;> simp [eq_comm]
@@ -135,7 +135,7 @@ theorem card_toFinset
 
 中文:
 定理 card_toFinset
-  条件: (o : Option α)
+  条件: (o : 选项类型 α)
   结论: o.toFinset.card = o.elim 0 1
   证明: by cases o <;> rfl
 -/
@@ -158,7 +158,7 @@ definition insertNone
 
 中文:
 定义 insertNone
-  签名: : Finset α ↪o Finset (Option α)
+  签名: : 有限集 α ↪o 有限集 (选项类型 α)
   定义体: (OrderEmbedding.ofMapLEIff fun s => cons none (s.map Embedding.some) <| by simp) fun s t => by
     rw [cons_subset_cons]; rw [map_subset_map]
 
@@ -181,8 +181,8 @@ theorem mem_insertNone
 
 中文:
 定理 mem_insertNone
-  条件: {s : Finset α}
-  结论: 对任意 {o : Option α}, o in insertNone s ↔ 对任意 a in o, a in s
+  条件: {s : 有限集 α}
+  结论: 对任意 {o : 选项类型 α}, o in insertNone s ↔ 对任意 a in o, a in s
 -/
 theorem mem_insertNone {s : Finset α} : forall {o : Option α}, o in insertNone s ↔ forall a in o, a in s
   | none => iff_of_true (Multiset.mem_cons_self _ _) fun a h => by cases h
@@ -197,8 +197,8 @@ lemma forall_mem_insertNone
   proof: by simp [Option.forall]
 
 中文:
-引理 forall_mem_insertNone
-  条件: {s : Finset α} {p : Option α -> 命题}
+引理 对任意_mem_insertNone
+  条件: {s : 有限集 α} {p : 选项类型 α -> 命题}
   证明: by simp [Option.forall]
 
 Depends on / 依赖: Option.forall
@@ -217,7 +217,7 @@ theorem some_mem_insertNone
 
 中文:
 定理 some_mem_insertNone
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: some a in insertNone s ↔ a in s
   证明: by simp
 -/
@@ -239,7 +239,7 @@ lemma none_mem_insertNone
 
 中文:
 引理 none_mem_insertNone
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: none in insertNone s
   证明: by simp
 
@@ -265,7 +265,7 @@ theorem card_insertNone
 
 中文:
 定理 card_insertNone
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.insertNone.card = s.card + 1
   证明: by simp [insertNone]
 
@@ -286,7 +286,7 @@ definition eraseNone
 
 中文:
 定义 eraseNone
-  签名: : Finset (Option α) ->o Finset α
+  签名: : 有限集 (选项类型 α) ->o 有限集 α
   定义体: (Finset.mapEmbedding (Equiv.optionIsSomeEquiv α).toEmbedding).toOrderHom.comp
     ⟨Finset.subtype _, subtype_mono⟩
 
@@ -311,7 +311,7 @@ theorem mem_eraseNone
 
 中文:
 定理 mem_eraseNone
-  条件: {s : Finset (Option α)} {x : α}
+  条件: {s : 有限集 (选项类型 α)} {x : α}
   结论: x in eraseNone s ↔ some x in s
   证明: by
   simp [eraseNone]
@@ -330,8 +330,8 @@ lemma forall_mem_eraseNone
   proof: by simp
 
 中文:
-引理 forall_mem_eraseNone
-  条件: {s : Finset (Option α)} {p : Option α -> 命题}
+引理 对任意_mem_eraseNone
+  条件: {s : 有限集 (选项类型 α)} {p : 选项类型 α -> 命题}
   证明: by simp
 -/
 lemma forall_mem_eraseNone {s : Finset (Option α)} {p : Option α -> Prop} :
@@ -351,7 +351,7 @@ theorem eraseNone_eq_biUnion
 
 中文:
 定理 eraseNone_eq_biUnion
-  条件: [DecidableEq α] (s : Finset (Option α))
+  条件: [DecidableEq α] (s : 有限集 (选项类型 α))
   证明: by
   ext
   simp
@@ -379,8 +379,8 @@ theorem eraseNone_map_some
 
 中文:
 定理 eraseNone_map_some
-  条件: (s : Finset α)
-  结论: eraseNone (s.map Embedding.some) = s
+  条件: (s : 有限集 α)
+  结论: eraseNone (s.map 嵌入.some) = s
   证明: by
   ext
   simp
@@ -404,7 +404,7 @@ theorem eraseNone_image_some
 
 中文:
 定理 eraseNone_image_some
-  条件: [DecidableEq (Option α)] (s : Finset α)
+  条件: [DecidableEq (选项类型 α)] (s : 有限集 α)
   证明: by simpa only [map_eq_image] using! eraseNone_map_some s
 
 @[simp]
@@ -428,8 +428,8 @@ theorem coe_eraseNone
 
 中文:
 定理 coe_eraseNone
-  条件: (s : Finset (Option α))
-  结论: (eraseNone s : Set α) = some ⁻¹' s
+  条件: (s : 有限集 (选项类型 α))
+  结论: (eraseNone s : 集合 α) = some ⁻¹' s
   证明: Set.ext fun _ => mem_eraseNone
 
 @[simp]
@@ -454,7 +454,7 @@ theorem eraseNone_union
 
 中文:
 定理 eraseNone_union
-  条件: [DecidableEq (Option α)] [DecidableEq α] (s t : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] [DecidableEq α] (s t : 有限集 (选项类型 α))
   证明: by
   ext
   simp
@@ -481,7 +481,7 @@ theorem eraseNone_inter
 
 中文:
 定理 eraseNone_inter
-  条件: [DecidableEq (Option α)] [DecidableEq α] (s t : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] [DecidableEq α] (s t : 有限集 (选项类型 α))
   证明: by
   ext
   simp
@@ -508,7 +508,7 @@ theorem eraseNone_empty
 
 中文:
 定理 eraseNone_empty
-  结论: eraseNone (∅ : Finset (Option α)) = ∅
+  结论: eraseNone (∅ : 有限集 (选项类型 α)) = ∅
   证明: by
   ext
   simp
@@ -534,7 +534,7 @@ theorem eraseNone_none
 
 中文:
 定理 eraseNone_none
-  结论: eraseNone ({none} : Finset (Option α)) = ∅
+  结论: eraseNone ({none} : 有限集 (选项类型 α)) = ∅
   证明: by
   ext
   simp
@@ -558,7 +558,7 @@ theorem image_some_eraseNone
 
 中文:
 定理 image_some_eraseNone
-  条件: [DecidableEq (Option α)] (s : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] (s : 有限集 (选项类型 α))
   证明: by ext (_ | x) <;> simp
 
 @[simp]
@@ -580,7 +580,7 @@ theorem map_some_eraseNone
 
 中文:
 定理 map_some_eraseNone
-  条件: [DecidableEq (Option α)] (s : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] (s : 有限集 (选项类型 α))
   证明: by
   rw [map_eq_image]; rw [Embedding.some_apply]; rw [image_some_eraseNone]
 
@@ -605,7 +605,7 @@ theorem insertNone_eraseNone
 
 中文:
 定理 insertNone_eraseNone
-  条件: [DecidableEq (Option α)] (s : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] (s : 有限集 (选项类型 α))
   证明: by ext (_ | x) <;> simp
 
 @[simp]
@@ -627,7 +627,7 @@ theorem eraseNone_insertNone
 
 中文:
 定理 eraseNone_insertNone
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: eraseNone (insertNone s) = s
   证明: by
   ext
@@ -648,7 +648,7 @@ theorem card_eraseNone_eq_card_erase
 
 中文:
 定理 card_eraseNone_eq_card_erase
-  条件: [DecidableEq (Option α)] (s : Finset (Option α))
+  条件: [DecidableEq (选项类型 α)] (s : 有限集 (选项类型 α))
   证明: by
   rw [← card_map Function.Embedding.some]; rw [map_some_eraseNone]
 
@@ -672,7 +672,7 @@ theorem card_eraseNone_le
 
 中文:
 定理 card_eraseNone_le
-  条件: (s : Finset (Option α))
+  条件: (s : 有限集 (选项类型 α))
   结论: #s.eraseNone <= #s
   证明: by
   classical
@@ -698,7 +698,7 @@ theorem card_eraseNone_of_mem
 
 中文:
 定理 card_eraseNone_of_mem
-  条件: {s : Finset (Option α)} (h : none in s)
+  条件: {s : 有限集 (选项类型 α)} (h : none in s)
   结论: #s.eraseNone = #s - 1
   证明: by
   classical rw [card_eraseNone_eq_card_erase, card_erase_of_mem h]
@@ -720,7 +720,7 @@ theorem card_eraseNone_of_not_mem
 
 中文:
 定理 card_eraseNone_of_not_mem
-  条件: {s : Finset (Option α)} (h : none ∉ s)
+  条件: {s : 有限集 (选项类型 α)} (h : none ∉ s)
   结论: #s.eraseNone = #s
   证明: by
   classical rw [card_eraseNone_eq_card_erase, erase_eq_of_notMem h]

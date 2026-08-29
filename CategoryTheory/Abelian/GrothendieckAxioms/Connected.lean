@@ -50,8 +50,8 @@ definition IsColimit.pullbackOfHasExactColimitsOfShape
   apply hp
 
 中文:
-定义 IsColimit.pullbackOfHasExactColimitsOfShape
-  签名: [HasPullbacks C]
+定义 是余极限.pullbackOfHasExactColimitsOfShape
+  签名: [有Pullbacks C]
   定义体: by
   suffices IsIso (colimMap (pullback.snd c.ι ((Functor.const J).map f))) from
     Cocone.isColimitOfIsIsoColimMapι _
@@ -86,8 +86,8 @@ theorem IsColimit.pullback_hom_ext
   simpa using! hf j
 
 中文:
-定理 IsColimit.pullback_hom_ext
-  结论: [HasPullbacks C] [HasColimitsOfShape J C]
+定理 是余极限.pullback_hom_ext
+  结论: [有Pullbacks C] [有形状余极限 J C]
   证明: by
   refine (hc.pullbackOfHasExactColimitsOfShape f).hom_ext (fun j => ?_)
   rw [← cancel_epi (pullbackObjIso _ _ _).inv]
@@ -115,8 +115,8 @@ theorem IsColimit.pullback_zero_ext
   exact hc.pullback_hom_ext (by simpa using hf)
 
 中文:
-定理 IsColimit.pullback_zero_ext
-  结论: [HasZeroMorphisms C] [HasPullbacks C] [HasColimitsOfShape J C]
+定理 是余极限.pullback_zero_ext
+  结论: [有ZeroMorphisms C] [有Pullbacks C] [有形状余极限 J C]
   证明: by
   suffices f ≫ g = f ≫ 0 by simpa
   exact hc.pullback_hom_ext (by simpa using hf)
@@ -146,8 +146,8 @@ definition IsLimit.pushoutOfHasExactLimitsOfShape
   apply hpush.isIso_inr_of_isI
 
 中文:
-定义 IsLimit.pushoutOfHasExactLimitsOfShape
-  签名: [HasPushouts C]
+定义 是极限.pushoutOfHasExactLimitsOfShape
+  签名: [有Pushouts C]
   定义体: by
   suffices IsIso (limMap (pushout.inr c.π ((Functor.const J).map f))) from
     Cone.isLimitOfIsIsoLimMapπ _
@@ -182,8 +182,8 @@ theorem IsLimit.pushout_hom_ext
   simpa using! hf j
 
 中文:
-定理 IsLimit.pushout_hom_ext
-  结论: [HasPushouts C] [HasLimitsOfShape J C]
+定理 是极限.pushout_hom_ext
+  结论: [有Pushouts C] [有形状极限 J C]
   证明: by
   refine (hc.pushoutOfHasExactLimitsOfShape f).hom_ext (fun j => ?_)
   rw [← cancel_mono (pushoutObjIso _ _ _).hom]
@@ -211,8 +211,8 @@ theorem IsLimit.pushout_zero_ext
   exact hc.pushout_hom_ext (by simpa using hf)
 
 中文:
-定理 IsLimit.pushout_zero_ext
-  结论: [HasZeroMorphisms C] [HasPushouts C] [HasLimitsOfShape J C]
+定理 是极限.pushout_zero_ext
+  结论: [有ZeroMorphisms C] [有Pushouts C] [有形状极限 J C]
   证明: by
   suffices g ≫ f = 0 ≫ f by simpa
   exact hc.pushout_hom_ext (by simpa using hf)

@@ -67,7 +67,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CompHaus
+  签名: 可居 CompHaus
   定义体: ⟨{ toTop := TopCat.of PEmpty, prop := trivial}⟩
 
 Depends on / 依赖: PEmpty, TopCat, TopCat.of
@@ -111,7 +111,7 @@ instance :
 
 中文:
 实例 :
-  签名: Has命题 (fun _ => True) X
+  签名: 有命题 (fun _ => 真) X
   定义体: ⟨trivial⟩
 -/
 instance : HasProp (fun _ => True) X := ⟨trivial⟩
@@ -145,7 +145,7 @@ abbreviation compHausToTop
 
 中文:
 缩写 compHausToTop
-  签名: : CompHaus.{u} ⥤ TopCat.{u}
+  签名: : CompHaus.{u} ⥤ 顶元素范畴.{u}
   定义体: CompHausLike.compHausLikeToTop _
 
 Depends on / 依赖: CompHausLike, CompHausLike.compHausLikeToTop, compHausLikeToTop
@@ -167,7 +167,7 @@ definition stoneCechObj
 
 中文:
 定义 stoneCechObj
-  签名: (X : TopCat)
+  签名: (X : 顶元素范畴)
   定义体: CompHaus.of (StoneCech X)
 
 Depends on / 依赖: CompHaus, CompHaus.of, StoneCech
@@ -193,7 +193,7 @@ definition stoneCechEquivalence
 
 中文:
 定义 stoneCechEquivalence
-  签名: (X : TopCat.{u}) (Y : CompHaus.{u})
+  签名: (X : 顶元素范畴.{u}) (Y : CompHaus.{u})
   定义体: TopCat.ofHom
     { toFun := f ∘ stoneCechUnit
       continuous_toFun := f.hom.hom.2.comp (@continuous_stoneCechUnit X _) }
@@ -236,7 +236,7 @@ definition topToCompHaus
 
 中文:
 定义 topToCompHaus
-  签名: : TopCat.{u} ⥤ CompHaus.{u}
+  签名: : 顶元素范畴.{u} ⥤ CompHaus.{u}
   定义体: Adjunction.leftAdjointOfEquiv stoneCechEquivalence.{u} fun _ _ _ _ _ => rfl
 
 Depends on / 依赖: Adjunction, Adjunction.leftAdjointOfEquiv, leftAdjointOfEquiv, stoneCechEquivalence
@@ -255,7 +255,7 @@ theorem topToCompHaus_obj
 
 中文:
 定理 topToCompHaus_obj
-  条件: (X : TopCat)
+  条件: (X : 顶元素范畴)
   结论: ↥(topToCompHaus.obj X) = StoneCech X
   证明: rfl
 -/
@@ -273,7 +273,7 @@ instance compHausToTop.reflective
 
 中文:
 实例 compHausToTop.reflective
-  签名: : Reflective compHausToTop where
+  签名: : 反射 compHausToTop where
   定义体: topToCompHaus
   adj := Adjunction.adjunctionOfEquivLeft _ _
 
@@ -311,7 +311,7 @@ instance CompHaus.hasLimits
 
 中文:
 实例 CompHaus.hasLimits
-  签名: : Limits.HasLimits CompHaus
+  签名: : Limits.有极限 CompHaus
   定义体: hasLimits_of_hasLimits_createsLimits compHausToTop
 
 Depends on / 依赖: compHausToTop, hasLimits_of_hasLimits_createsLimits
@@ -329,7 +329,7 @@ instance CompHaus.hasColimits
 
 中文:
 实例 CompHaus.hasColimits
-  签名: : Limits.HasColimits CompHaus
+  签名: : Limits.有余极限 CompHaus
   定义体: hasColimits_of_reflective compHausToTop
 
 Depends on / 依赖: compHausToTop, hasColimits_of_reflective
@@ -356,7 +356,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: {J : 类型v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u})
+  签名: {J : 类型v} [小范畴 J] (F : J ⥤ CompHaus.{最大值 v u})
   定义体: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
   { pt := {
       toTop := (TopCat.limitCone FF).pt
@@ -418,7 +418,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: {J : 类型v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u})
+  签名: {J : 类型v} [小范畴 J] (F : J ⥤ CompHaus.{最大值 v u})
   定义体: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
   { lift := fun S => InducedCategory.homMk
       ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
@@ -460,7 +460,7 @@ theorem epi_iff_surjective
 中文:
 定理 epi_iff_surjective
   条件: {X Y : CompHaus.{u}} (f : X ⟶ Y)
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   constructor
   · dsimp [Function.Surjective]
@@ -520,7 +520,7 @@ abbreviation compHausLikeToCompHaus
 
 中文:
 缩写 compHausLikeToCompHaus
-  签名: (P : TopCat -> 命题)
+  签名: (P : 顶元素范畴 -> 命题)
   定义体: CompHausLike.toCompHausLike (by simp only [implies_true])
 
 Depends on / 依赖: CompHausLike, CompHausLike.toCompHausLike, implies_true, toCompHausLike

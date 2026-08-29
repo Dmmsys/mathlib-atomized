@@ -67,9 +67,9 @@ lemma MulAction.bijective₀
   proof: MulAction.bijective Units.mk0 a ha
 
 中文:
-引理 MulAction.bijective₀
+引理 乘法作用.bijective₀
   条件: (ha : a != 0)
-  结论: Bijective (a • · : α -> α)
+  结论: 双射 (a • · : α -> α)
   证明: MulAction.bijective Units.mk0 a ha
 -/
 protected lemma MulAction.bijective₀ (ha : a != 0) : Bijective (a • · : α -> α) :=
@@ -85,9 +85,9 @@ lemma MulAction.injective₀
   proof: (MulAction.bijective₀ ha).injective
 
 中文:
-引理 MulAction.injective₀
+引理 乘法作用.injective₀
   条件: (ha : a != 0)
-  结论: Injective (a • · : α -> α)
+  结论: 单射 (a • · : α -> α)
   证明: (MulAction.bijective₀ ha).injective
 -/
 protected lemma MulAction.injective₀ (ha : a != 0) : Injective (a • · : α -> α) :=
@@ -103,9 +103,9 @@ lemma MulAction.surjective₀
   proof: (MulAction.bijective₀ ha).surjective
 
 中文:
-引理 MulAction.surjective₀
+引理 乘法作用.surjective₀
   条件: (ha : a != 0)
-  结论: Surjective (a • · : α -> α)
+  结论: 满射 (a • · : α -> α)
   证明: (MulAction.bijective₀ ha).surjective
 -/
 protected lemma MulAction.surjective₀ (ha : a != 0) : Surjective (a • · : α -> α) :=
@@ -131,8 +131,8 @@ definition DistribMulAction.toAddEquiv
   __ := MulAction.toPermHom G A x
 
 中文:
-定义 DistribMulAction.toAddEquiv
-  签名: [DistribMulAction G A] (x : G)
+定义 分配乘法作用.toAddEquiv
+  签名: [分配乘法作用 G A] (x : G)
   定义体: DistribSMul.toAddMonoidHom A x
   __ := MulAction.toPermHom G A x
 
@@ -159,8 +159,8 @@ definition DistribMulAction.toAddAut
   map_mul' _ _ := AddEquiv.ext (mul_smul _ _)
 
 中文:
-定义 DistribMulAction.toAddAut
-  签名: [DistribMulAction G A]
+定义 分配乘法作用.toAddAut
+  签名: [分配乘法作用 G A]
   定义体: toAddEquiv _
   map_one' := AddEquiv.ext (one_smul _)
   map_mul' _ _ := AddEquiv.ext (mul_smul _ _)
@@ -186,7 +186,7 @@ definition smulMonoidWithZeroHom
 
 中文:
 定义 smulMonoidWithZeroHom
-  签名: [MonoidWithZero M₀] [MulZeroOneClass N₀] [MulActionWithZero M₀ N₀]
+  签名: [带零幺半群 M₀] [乘零幺类 N₀] [带零乘法作用 M₀ N₀]
   定义体: { smulMonoidHom with map_zero' := smul_zero _ }
 
 Depends on / 依赖: map_zero, smulMonoidHom, smul_zero
@@ -205,8 +205,8 @@ lemma IsUnit.smul_sub_iff_sub_inv_smul
   rw [← isUnit_smul_iff r (1 - r⁻¹ • a)]; rw [smul_sub]; rw [smul_inv_smul]
 
 中文:
-引理 IsUnit.smul_sub_iff_sub_inv_smul
-  结论: [Group G] [Monoid R] [AddGroup R] [DistribMulAction G R]
+引理 是单位.smul_sub_iff_sub_inv_smul
+  结论: [群 G] [幺半群 R] [加法群 R] [分配乘法作用 G R]
   证明: by
   rw [← isUnit_smul_iff r (1 - r⁻¹ • a)]; rw [smul_sub]; rw [smul_inv_smul]
 
@@ -235,7 +235,7 @@ theorem div_smul_div_comm
 
 中文:
 定理 div_smul_div_comm
-  结论: [Group G] [GroupWithZero G₀] [MulAction G G₀]
+  结论: [群 G] [带零群 G₀] [乘法作用 G G₀]
   证明: by
   have (x : G) : x • (0 : G₀) = 0 := by simpa using (smul_assoc x (0 : G₀) (0 : G₀)).symm
   by_cases hb : b = 0
@@ -271,7 +271,7 @@ theorem smul_zpow₀'
 
 中文:
 定理 smul_zpow₀'
-  结论: [Group G] [GroupWithZero G₀] [MulDistribMulAction G G₀]
+  结论: [群 G] [带零群 G₀] [MulDistribMul作用 G G₀]
   证明: by
   cases n <;> simp
 -/

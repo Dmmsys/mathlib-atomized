@@ -102,10 +102,10 @@ structure IsFlat
     - subset_ground : F subseteq M.E
 
 中文:
-结构 IsFlat
-  参数: (M : Matroid α) (F : Set α)
+结构 是平坦
+  参数: (M : 拟阵 α) (F : 集合 α)
   公理与运算 (2 个):
-    - subset_of_isBasis_of_isBasis : 对任意 ⦃I X⦄, M.IsBasis I F -> M.IsBasis I X -> X subseteq F
+    - subset_of_isBasis_of_isBasis : 对任意 ⦃I X⦄, M.是基 I F -> M.是基 I X -> X subseteq F
     - subset_ground : F subseteq M.E
 
 Depends on / 依赖: IsFlat, IsFlat.subset_ground, Matroid, subset_ground
@@ -127,8 +127,8 @@ lemma ground_isFlat
 
 中文:
 引理 ground_isFlat
-  条件: (M : Matroid α)
-  结论: M.IsFlat M.E
+  条件: (M : 拟阵 α)
+  结论: M.是平坦 M.E
   证明: ⟨fun _ _ _ => IsBasis.subset_ground, Subset.rfl⟩
 -/
 @[simp] lemma ground_isFlat (M : Matroid α) : M.IsFlat M.E :=
@@ -147,8 +147,8 @@ lemma IsFlat.iInter
   refine subset_union_right.trans ((hFs i).1 (X := Fs i union X) hIJ ?
 
 中文:
-引理 IsFlat.iInter
-  结论: {ι : 类型} [Nonempty ι] {Fs : ι -> Set α}
+引理 是平坦.i整数er
+  结论: {ι : 类型} [非空 ι] {Fs : ι -> 集合 α}
   证明: by
   refine ⟨fun I X hI hIX => subset_iInter fun i => ?_,
     (iInter_subset _ (Classical.arbitrary _)).trans (hFs _).subset_ground⟩
@@ -182,7 +182,7 @@ definition subtypeClosure
 
 中文:
 定义 subtypeClosure
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: ClosureOperator.ofCompletePred (fun F => M.IsFlat F.1) fun s hs => by
     obtain (rfl | hne) := s.eq_empty_or_nonempty
     · simp
@@ -213,7 +213,7 @@ lemma isFlat_iff_isClosed
 
 中文:
 引理 isFlat_iff_isClosed
-  结论: M.IsFlat F ↔ 存在 h : F subseteq M.E, M.subtypeClosure.IsClosed ⟨F, h⟩
+  结论: M.是平坦 F ↔ 存在 h : F subseteq M.E, M.subtypeClosure.是闭集 ⟨F, h⟩
   证明: by
   simpa [subtypeClosure] using IsFlat.subset_ground
 
@@ -234,8 +234,8 @@ lemma isClosed_iff_isFlat
 
 中文:
 引理 isClosed_iff_isFlat
-  条件: {F : Iic M.E}
-  结论: M.subtypeClosure.IsClosed F ↔ M.IsFlat F
+  条件: {F : 左无界右闭区间 M.E}
+  结论: M.subtypeClosure.是闭集 F ↔ M.是平坦 F
   证明: by
   simp [subtypeClosure]
 
@@ -256,7 +256,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (M : Matroid α) (X : Set α)
+  签名: (M : 拟阵 α) (X : 集合 α)
   定义体: ⋂₀ {F | M.IsFlat F ∧ X inter M.E subseteq F}
 
 Depends on / 依赖: IsFlat, M.IsFlat, subseteq
@@ -274,8 +274,8 @@ lemma closure_def
 
 中文:
 引理 closure_def
-  条件: (M : Matroid α) (X : Set α)
-  结论: M.closure X = ⋂₀ {F | M.IsFlat F ∧ X inter M.E subseteq F}
+  条件: (M : 拟阵 α) (X : 集合 α)
+  结论: M.closure X = ⋂₀ {F | M.是平坦 F ∧ X inter M.E subseteq F}
   证明: rfl
 -/
 lemma closure_def (M : Matroid α) (X : Set α) : M.closure X = ⋂₀ {F | M.IsFlat F ∧ X inter M.E subseteq F} :=
@@ -292,7 +292,7 @@ lemma closure_def'
 
 中文:
 引理 closure_def'
-  条件: (M : Matroid α) (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   rw [closure]; rw [inter_eq_self_of_subset_left hX]
 
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty {F | M.IsFlat F ∧ X inter M.E subseteq F}
+  签名: 非空 {F | M.是平坦 F ∧ X inter M.E subseteq F}
   定义体: ⟨M.E, M.ground_isFlat, inter_subset_right⟩
 
 Depends on / 依赖: M.ground_isFlat, ground_isFlat, inter_subset_right
@@ -333,7 +333,7 @@ lemma closure_eq_subtypeClosure
 
 中文:
 引理 closure_eq_subtypeClosure
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   suffices forall (x : α), (forall (t : Set α), M.IsFlat t -> X inter M.E subseteq t -> x in t) ↔
     (x in M.E ∧ forall a subseteq M.E, X inter M.E subseteq a -> M.IsFlat a -> x in a) by
@@ -362,7 +362,7 @@ lemma closure_subset_ground
 
 中文:
 引理 closure_subset_ground
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.closure X subseteq M.E
   证明: sInter_subset_of_mem ⟨M.ground_isFlat, inter_subset_right⟩
 
@@ -400,7 +400,7 @@ lemma closure_inter_ground
 
 中文:
 引理 closure_inter_ground
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   simp_rw [closure_def, inter_assoc, inter_self]
 -/
@@ -420,7 +420,7 @@ lemma inter_ground_subset_closure
 
 中文:
 引理 inter_ground_subset_closure
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: X inter M.E subseteq M.closure X
   证明: by
   simp_rw [closure_def, subset_sInter_iff]; simp
@@ -440,8 +440,8 @@ lemma mem_closure_iff_forall_mem_isFlat
   simp_rw [M.closure_def' X, mem_sInter, mem_ofPred, and_imp]
 
 中文:
-引理 mem_closure_iff_forall_mem_isFlat
-  条件: (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+引理 mem_closure_iff_对任意_mem_isFlat
+  条件: (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   simp_rw [M.closure_def' X, mem_sInter, mem_ofPred, and_imp]
 
@@ -461,8 +461,8 @@ lemma subset_closure_iff_forall_subset_isFlat
   simp_rw [M.closure_def' X, subset_sInter_iff, mem_ofPred, and_imp]
 
 中文:
-引理 subset_closure_iff_forall_subset_isFlat
-  条件: (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+引理 subset_closure_iff_对任意_subset_isFlat
+  条件: (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   simp_rw [M.closure_def' X, subset_sInter_iff, mem_ofPred, and_imp]
 
@@ -483,7 +483,7 @@ lemma subset_closure
 
 中文:
 引理 subset_closure
-  条件: (M : Matroid α) (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   simp [M.closure_def' X, subset_sInter_iff]
 
@@ -503,8 +503,8 @@ lemma IsFlat.closure
   proof: (sInter_subset_of_mem (by simpa)).antisymm (M.subset_closure F)
 
 中文:
-引理 IsFlat.closure
-  条件: (hF : M.IsFlat F)
+引理 是平坦.closure
+  条件: (hF : M.是平坦 F)
   结论: M.closure F = F
   证明: (sInter_subset_of_mem (by simpa)).antisymm (M.subset_closure F)
 
@@ -525,7 +525,7 @@ lemma isFlat_closure
 
 中文:
 引理 isFlat_closure
-  结论: M.IsFlat (M.closure X)
+  结论: M.是平坦 (M.closure X)
   证明: by
   rw [closure]; rw [sInter_eq_iInter]; exact .iInter (·.2.1)
 -/
@@ -542,7 +542,7 @@ lemma isFlat_iff_closure_eq
 
 中文:
 引理 isFlat_iff_closure_eq
-  结论: M.IsFlat F ↔ M.closure F = F
+  结论: M.是平坦 F ↔ M.closure F = F
   证明: ⟨(·.closure), (· ▸ isFlat_closure F)⟩
 
 Depends on / 依赖: closure, isFlat_closure
@@ -560,7 +560,7 @@ lemma closure_ground
 
 中文:
 引理 closure_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.closure M.E = M.E
   证明: (M.closure_subset_ground M.E).antisymm (M.subset_closure M.E)
 -/
@@ -581,7 +581,7 @@ lemma closure_univ
 
 中文:
 引理 closure_univ
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.closure univ = M.E
   证明: by
   rw [← closure_inter_ground]; rw [univ_inter]; rw [closure_ground]
@@ -604,7 +604,7 @@ lemma closure_subset_closure
 
 中文:
 引理 closure_subset_closure
-  条件: (M : Matroid α) (h : X subseteq Y)
+  条件: (M : 拟阵 α) (h : X subseteq Y)
   结论: M.closure X subseteq M.closure Y
   证明: subset_sInter (fun _ h' => sInter_subset_of_mem
     ⟨h'.1, subset_trans (inter_subset_inter_left _ h) h'.2⟩)
@@ -626,8 +626,8 @@ lemma closure_mono
 
 中文:
 引理 closure_mono
-  条件: (M : Matroid α)
-  结论: Monotone M.closure
+  条件: (M : 拟阵 α)
+  结论: 递增 M.closure
   证明: fun _ _ => M.closure_subset_closure
 
 Depends on / 依赖: M.closure_subset_closure, closure_subset_closure
@@ -647,7 +647,7 @@ lemma closure_closure
 
 中文:
 引理 closure_closure
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.closure (M.closure X) = M.closure X
   证明: (M.subset_closure _).antisymm' (subset_sInter
     (fun F hF => (closure_subset_closure _ (sInter_subset_of_mem hF)).trans hF.1.closure.subset))
@@ -704,7 +704,7 @@ lemma subset_closure_of_subset
 
 中文:
 引理 subset_closure_of_subset
-  条件: (M : Matroid α) (hXY : X subseteq Y) (hY : Y subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (hXY : X subseteq Y) (hY : Y subseteq M.E := by aesop_mat)
   证明: hXY.trans (M.subset_closure Y)
 
 Depends on / 依赖: M.closure, M.subset_closure, aesop_mat, closure, hXY.trans, subset_closure, subseteq
@@ -724,7 +724,7 @@ lemma subset_closure_of_subset'
 
 中文:
 引理 subset_closure_of_subset'
-  条件: (M : Matroid α) (hXY : X subseteq Y) (hX : X subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (hXY : X subseteq Y) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   rw [← closure_inter_ground]; exact M.subset_closure_of_subset (subset_inter hXY hX)
 
@@ -746,7 +746,7 @@ lemma exists_of_closure_ssubset
   exact hXY.not_subset (M.closure_subset_closure_of_subset_closure hcon)
 
 中文:
-引理 exists_of_closure_ssubset
+引理 存在_of_closure_ssubset
   条件: (hXY : M.closure X ⊂ M.closure Y)
   结论: 存在 e in Y, e ∉ M.closure X
   证明: by
@@ -769,7 +769,7 @@ lemma mem_closure_of_mem
 
 中文:
 引理 mem_closure_of_mem
-  条件: (M : Matroid α) (h : e in X) (hX : X subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (h : e in X) (hX : X subseteq M.E := by aesop_mat)
   证明: (M.subset_closure X) h
 
 Depends on / 依赖: M.closure, M.subset_closure, aesop_mat, closure, subset_closure
@@ -790,7 +790,7 @@ lemma mem_closure_of_mem'
 
 中文:
 引理 mem_closure_of_mem'
-  条件: (M : Matroid α) (heX : e in X) (h : e in M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (heX : e in X) (h : e in M.E := by aesop_mat)
   证明: by
   rw [← closure_inter_ground]
   exact M.mem_closure_of_mem ⟨heX, h⟩
@@ -869,7 +869,7 @@ lemma closure_iUnion_closure_eq_closure_iUnion
 
 中文:
 引理 closure_iUnion_closure_eq_closure_iUnion
-  条件: (M : Matroid α) (Xs : ι -> Set α)
+  条件: (M : 拟阵 α) (Xs : ι -> 集合 α)
   证明: by
   simp_rw [closure_eq_subtypeClosure, iUnion_inter, Subtype.coe_inj]
   convert! M.subtypeClosure.closure_iSup_closure (fun i => ⟨Xs i inter M.E, inter_subset_right⟩) <;>
@@ -894,7 +894,7 @@ lemma closure_iUnion_congr
 
 中文:
 引理 closure_iUnion_congr
-  条件: (Xs Ys : ι -> Set α) (h : 对任意 i, M.closure (Xs i) = M.closure (Ys i))
+  条件: (Xs Ys : ι -> 集合 α) (h : 对任意 i, M.closure (Xs i) = M.closure (Ys i))
   证明: by
   simp [h, ← M.closure_iUnion_closure_eq_closure_iUnion]
 
@@ -915,7 +915,7 @@ lemma closure_biUnion_closure_eq_closure_sUnion
 
 中文:
 引理 closure_biUnion_closure_eq_closure_sUnion
-  条件: (M : Matroid α) (Xs : Set (Set α))
+  条件: (M : 拟阵 α) (Xs : 集合 (集合 α))
   证明: by
   rw [sUnion_eq_iUnion]; rw [biUnion_eq_iUnion]; rw [closure_iUnion_closure_eq_closure_iUnion]
 
@@ -936,7 +936,7 @@ lemma closure_biUnion_closure_eq_closure_biUnion
 
 中文:
 引理 closure_biUnion_closure_eq_closure_biUnion
-  条件: (M : Matroid α) (Xs : ι -> Set α) (A : Set ι)
+  条件: (M : 拟阵 α) (Xs : ι -> 集合 α) (A : 集合 ι)
   证明: by
   rw [biUnion_eq_iUnion]; rw [M.closure_iUnion_closure_eq_closure_iUnion]; rw [biUnion_eq_iUnion]
 
@@ -957,7 +957,7 @@ lemma closure_biUnion_congr
 
 中文:
 引理 closure_biUnion_congr
-  结论: (M : Matroid α) (Xs Ys : ι -> Set α) (A : Set ι)
+  结论: (M : 拟阵 α) (Xs Ys : ι -> 集合 α) (A : 集合 ι)
   证明: by
   rw [← closure_biUnion_closure_eq_closure_biUnion]; rw [iUnion₂_congr h]; rw [closure_biUnion_closure_eq_closure_biUnion]
 
@@ -980,7 +980,7 @@ lemma closure_closure_union_closure_eq_closure_union
 
 中文:
 引理 closure_closure_union_closure_eq_closure_union
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [eq_comm]; rw [union_eq_iUnion]; rw [← closure_iUnion_closure_eq_closure_iUnion]; rw [union_eq_iUnion]
   simp_rw [Bool.cond_eq_ite, apply_ite]
@@ -1003,7 +1003,7 @@ lemma closure_union_closure_right_eq
 
 中文:
 引理 closure_union_closure_right_eq
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [← closure_closure_union_closure_eq_closure_union]; rw [closure_closure]; rw [closure_closure_union_closure_eq_closure_union]
 -/
@@ -1022,7 +1022,7 @@ lemma closure_union_closure_left_eq
 
 中文:
 引理 closure_union_closure_left_eq
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [← closure_closure_union_closure_eq_closure_union]; rw [closure_closure]; rw [closure_closure_union_closure_eq_closure_union]
 -/
@@ -1041,7 +1041,7 @@ lemma closure_insert_closure_eq_closure_insert
 
 中文:
 引理 closure_insert_closure_eq_closure_insert
-  条件: (M : Matroid α) (e : α) (X : Set α)
+  条件: (M : 拟阵 α) (e : α) (X : 集合 α)
   证明: by
   simp_rw [← singleton_union, closure_union_closure_right_eq]
 -/
@@ -1060,7 +1060,7 @@ lemma closure_union_congr_left
 
 中文:
 引理 closure_union_congr_left
-  条件: {X' : Set α} (h : M.closure X = M.closure X')
+  条件: {X' : 集合 α} (h : M.closure X = M.closure X')
   证明: by
   rw [← M.closure_union_closure_left_eq]; rw [h]; rw [M.closure_union_closure_left_eq]
 
@@ -1081,7 +1081,7 @@ lemma closure_union_congr_right
 
 中文:
 引理 closure_union_congr_right
-  条件: {Y' : Set α} (h : M.closure Y = M.closure Y')
+  条件: {Y' : 集合 α} (h : M.closure Y = M.closure Y')
   证明: by
   rw [← M.closure_union_closure_right_eq]; rw [h]; rw [M.closure_union_closure_right_eq]
 
@@ -1122,7 +1122,7 @@ lemma closure_union_closure_empty_eq
 
 中文:
 引理 closure_union_closure_empty_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: union_eq_self_of_subset_right (M.closure_subset_closure (empty_subset _))
 -/
 @[simp] lemma closure_union_closure_empty_eq (M : Matroid α) (X : Set α) :
@@ -1139,7 +1139,7 @@ lemma closure_empty_union_closure_eq
 
 中文:
 引理 closure_empty_union_closure_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: union_eq_self_of_subset_left (M.closure_subset_closure (empty_subset _))
 -/
 @[simp] lemma closure_empty_union_closure_eq (M : Matroid α) (X : Set α) :
@@ -1178,7 +1178,7 @@ lemma mem_closure_self
 
 中文:
 引理 mem_closure_self
-  条件: (M : Matroid α) (e : α) (he : e in M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (e : α) (he : e in M.E := by aesop_mat)
   结论: e in M.closure {e}
   证明: mem_closure_of_mem' M rfl
 
@@ -1269,7 +1269,7 @@ lemma Indep.isBasis_closure
 中文:
 引理 Indep.isBasis_closure
   条件: (hI : M.Indep I)
-  结论: M.IsBasis I (M.closure I)
+  结论: M.是基 I (M.closure I)
   证明: by
   rw [hI.closure_eq_setOfPred_isBasis_insert]; exact hI.isBasis_setOfPred_insert_isBasis
 
@@ -1292,8 +1292,8 @@ lemma IsBasis.closure_eq_closure
     (insert_subset he h.subset))
 
 中文:
-引理 IsBasis.closure_eq_closure
-  条件: (h : M.IsBasis I X)
+引理 是基.closure_eq_closure
+  条件: (h : M.是基 I X)
   结论: M.closure I = M.closure X
   证明: by
   refine subset_antisymm (M.closure_subset_closure h.subset) ?_
@@ -1319,8 +1319,8 @@ lemma IsBasis.closure_eq_right
   proof: M.closure_closure X ▸ h.closure_eq_closure
 
 中文:
-引理 IsBasis.closure_eq_right
-  条件: (h : M.IsBasis I (M.closure X))
+引理 是基.closure_eq_right
+  条件: (h : M.是基 I (M.closure X))
   结论: M.closure I = M.closure X
   证明: M.closure_closure X ▸ h.closure_eq_closure
 
@@ -1340,8 +1340,8 @@ lemma IsBasis'.closure_eq_closure
   rw [← closure_inter_ground _ X]; rw [h.isBasis_inter_ground.closure_eq_closure]
 
 中文:
-引理 IsBasis'.closure_eq_closure
-  条件: (h : M.IsBasis' I X)
+引理 是基'.closure_eq_closure
+  条件: (h : M.是基' I X)
   结论: M.closure I = M.closure X
   证明: by
   rw [← closure_inter_ground _ X]; rw [h.isBasis_inter_ground.closure_eq_closure]
@@ -1360,8 +1360,8 @@ lemma IsBasis.subset_closure
   rw [← closure_subset_closure_iff_subset_closure]; rw [h.closure_eq_closure]
 
 中文:
-引理 IsBasis.subset_closure
-  条件: (h : M.IsBasis I X)
+引理 是基.subset_closure
+  条件: (h : M.是基 I X)
   结论: X subseteq M.closure I
   证明: by
   rw [← closure_subset_closure_iff_subset_closure]; rw [h.closure_eq_closure]
@@ -1382,9 +1382,9 @@ lemma IsBasis'.isBasis_closure_right
   rw [← h.closure_eq_closure]; exact h.indep.isBasis_closure
 
 中文:
-引理 IsBasis'.isBasis_closure_right
-  条件: (h : M.IsBasis' I X)
-  结论: M.IsBasis I (M.closure X)
+引理 是基'.isBasis_closure_right
+  条件: (h : M.是基' I X)
+  结论: M.是基 I (M.closure X)
   证明: by
   rw [← h.closure_eq_closure]; exact h.indep.isBasis_closure
 -/
@@ -1401,9 +1401,9 @@ lemma IsBasis.isBasis_closure_right
   proof: h.isBasis'.isBasis_closure_right
 
 中文:
-引理 IsBasis.isBasis_closure_right
-  条件: (h : M.IsBasis I X)
-  结论: M.IsBasis I (M.closure X)
+引理 是基.isBasis_closure_right
+  条件: (h : M.是基 I X)
+  结论: M.是基 I (M.closure X)
   证明: h.isBasis'.isBasis_closure_right
 
 Depends on / 依赖: h.isBasis, isBasis, isBasis_closure_right
@@ -1690,7 +1690,7 @@ lemma isBasis_iff_indep_subset_closure
 
 中文:
 引理 isBasis_iff_indep_subset_closure
-  结论: M.IsBasis I X ↔ M.Indep I ∧ I subseteq X ∧ X subseteq M.closure I
+  结论: M.是基 I X ↔ M.Indep I ∧ I subseteq X ∧ X subseteq M.closure I
   证明: ⟨fun h => ⟨h.indep, h.subset, h.subset_closure⟩,
     fun h => h.1.isBasis_of_subset_of_subset_closure h.2.1 h.2.2⟩
 
@@ -1888,8 +1888,8 @@ lemma Indep.closure_sInter_eq_biInter_closure_of_forall_subset
   rw 
 
 中文:
-引理 Indep.closure_sInter_eq_biInter_closure_of_forall_subset
-  结论: {Js : Set (Set α)} (hI : M.Indep I)
+引理 Indep.closure_s整数er_eq_bi整数er_closure_of_对任意_subset
+  结论: {Js : 集合 (集合 α)} (hI : M.Indep I)
   证明: by
   rw [subset_antisymm_iff]; rw [subset_iInter₂_iff]
   have hiX : ⋂₀ Js subseteq I := (sInter_subset_of_mem hne.some_mem).trans (hIs _ hne.some_mem)
@@ -1943,8 +1943,8 @@ lemma closure_iInter_eq_iInter_closure_of_iUnion_indep
   simp
 
 中文:
-引理 closure_iInter_eq_iInter_closure_of_iUnion_indep
-  结论: [hι : Nonempty ι] (Is : ι -> Set α)
+引理 closure_i整数er_eq_i整数er_closure_of_iUnion_indep
+  结论: [hι : 非空 ι] (Is : ι -> 集合 α)
   证明: by
   convert!
     h.closure_sInter_eq_biInter_closure_of_forall_subset (range_nonempty Is)
@@ -1969,8 +1969,8 @@ lemma closure_sInter_eq_biInter_closure_of_sUnion_indep
   proof: h.closure_sInter_eq_biInter_closure_of_forall_subset hIs (fun _ => subset_sUnion_of_mem)
 
 中文:
-引理 closure_sInter_eq_biInter_closure_of_sUnion_indep
-  结论: (Is : Set (Set α)) (hIs : Is.Nonempty)
+引理 closure_s整数er_eq_bi整数er_closure_of_sUnion_indep
+  结论: (Is : 集合 (集合 α)) (hIs : Is.非空)
   证明: h.closure_sInter_eq_biInter_closure_of_forall_subset hIs (fun _ => subset_sUnion_of_mem)
 
 Depends on / 依赖: closure_sInter_eq_biInter_closure_of_forall_subset, h.closure_sInter_eq_biInter_closure_of_forall_subset, subset_sUnion_of_mem
@@ -1991,8 +1991,8 @@ lemma closure_biInter_eq_biInter_closure_of_biUnion_indep
   simp
 
 中文:
-引理 closure_biInter_eq_biInter_closure_of_biUnion_indep
-  结论: {ι : 类型} {A : Set ι} (hA : A.Nonempty)
+引理 closure_bi整数er_eq_bi整数er_closure_of_biUnion_indep
+  结论: {ι : 类型} {A : 集合 ι} (hA : A.非空)
   证明: by
   have := hA.coe_sort
   convert! closure_iInter_eq_iInter_closure_of_iUnion_indep (Is := fun i : A => I i) (by simpa) <;>
@@ -2016,8 +2016,8 @@ lemma Indep.closure_iInter_eq_biInter_closure_of_forall_subset
   proof: closure_iInter_eq_iInter_closure_of_iUnion_indep _ (hI.subset <| by simpa)
 
 中文:
-引理 Indep.closure_iInter_eq_biInter_closure_of_forall_subset
-  结论: [Nonempty ι] {Js : ι -> Set α}
+引理 Indep.closure_i整数er_eq_bi整数er_closure_of_对任意_subset
+  结论: [非空 ι] {Js : ι -> 集合 α}
   证明: closure_iInter_eq_iInter_closure_of_iUnion_indep _ (hI.subset <| by simpa)
 
 Depends on / 依赖: closure_iInter_eq_iInter_closure_of_iUnion_indep, hI.subset, subset
@@ -2067,8 +2067,8 @@ lemma Indep.inter_isBasis_biInter
   exact fun i hiA => (biInter_subset_of_mem hiA
 
 中文:
-引理 Indep.inter_isBasis_biInter
-  结论: {ι : 类型} (hI : M.Indep I) {X : ι -> Set α} {A : Set ι}
+引理 Indep.inter_isBasis_bi整数er
+  结论: {ι : 类型} (hI : M.Indep I) {X : ι -> 集合 α} {A : 集合 ι}
   证明: by
   refine (hI.inter_left _).isBasis_of_subset_of_subset_closure inter_subset_left ?_
   simp_rw [← biInter_inter hA,
@@ -2101,8 +2101,8 @@ lemma Indep.inter_isBasis_iInter
     exact (iInter_plift_down X).symm
 
 中文:
-引理 Indep.inter_isBasis_iInter
-  结论: [Nonempty ι] {X : ι -> Set α} (hI : M.Indep I)
+引理 Indep.inter_isBasis_i整数er
+  结论: [非空 ι] {X : ι -> 集合 α} (hI : M.Indep I)
   证明: by
   convert!
     hI.inter_isBasis_biInter (ι := PLift ι) univ_nonempty (X := fun i => X i.down)
@@ -2131,8 +2131,8 @@ lemma Indep.inter_isBasis_sInter
   exact hI.inter_isBasis_biInter hXs h
 
 中文:
-引理 Indep.inter_isBasis_sInter
-  结论: {Xs : Set (Set α)} (hI : M.Indep I) (hXs : Xs.Nonempty)
+引理 Indep.inter_isBasis_s整数er
+  结论: {Xs : 集合 (集合 α)} (hI : M.Indep I) (hXs : Xs.非空)
   证明: by
   rw [sInter_eq_biInter]
   exact hI.inter_isBasis_biInter hXs h
@@ -2198,7 +2198,7 @@ lemma isBasis'_iff_isBasis_closure
 
 中文:
 引理 isBasis'_iff_isBasis_closure
-  结论: M.IsBasis' I X ↔ M.IsBasis I (M.closure X) ∧ I subseteq X
+  结论: M.是基' I X ↔ M.是基 I (M.closure X) ∧ I subseteq X
   证明: by
   rw [← closure_inter_ground]; rw [isBasis'_iff_isBasis_inter_ground]
   exact ⟨fun h => ⟨h.isBasis_closure_right, h.subset.trans inter_subset_left⟩,
@@ -2221,8 +2221,8 @@ lemma exists_isBasis_inter_ground_isBasis_closure
   exact ⟨_, hI, hI'⟩
 
 中文:
-引理 exists_isBasis_inter_ground_isBasis_closure
-  条件: (M : Matroid α) (X : Set α)
+引理 存在_isBasis_inter_ground_isBasis_closure
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis (X inter M.E)
   have hI' := hI.isBasis_closure_right; rw [closure_inter_ground] at hI'
@@ -2248,8 +2248,8 @@ lemma IsBasis.isBasis_of_closure_eq_closure
   exact M.subset_closure Y
 
 中文:
-引理 IsBasis.isBasis_of_closure_eq_closure
-  结论: (hI : M.IsBasis I X) (hY : I subseteq Y)
+引理 是基.isBasis_of_closure_eq_closure
+  结论: (hI : M.是基 I X) (hY : I subseteq Y)
   证明: by
   refine hI.indep.isBasis_of_subset_of_subset_closure hY ?_
   rw [hI.closure_eq_closure]; rw [h]
@@ -2274,7 +2274,7 @@ lemma isBasis_union_iff_indep_closure
 
 中文:
 引理 isBasis_union_iff_indep_closure
-  结论: M.IsBasis I (I union X) ↔ M.Indep I ∧ X subseteq M.closure I
+  结论: M.是基 I (I union X) ↔ M.Indep I ∧ X subseteq M.closure I
   证明: ⟨fun h => ⟨h.indep, subset_union_right.trans h.subset_closure⟩, fun ⟨hI, hXI⟩ =>
     hI.isBasis_closure.isBasis_subset subset_union_left (union_subset (M.subset_closure I) hXI)⟩
 
@@ -2295,7 +2295,7 @@ lemma isBasis_iff_indep_closure
 
 中文:
 引理 isBasis_iff_indep_closure
-  结论: M.IsBasis I X ↔ M.Indep I ∧ X subseteq M.closure I ∧ I subseteq X
+  结论: M.是基 I X ↔ M.Indep I ∧ X subseteq M.closure I ∧ I subseteq X
   证明: ⟨fun h => ⟨h.indep, h.subset_closure, h.subset⟩, fun h =>
     (isBasis_union_iff_indep_closure.mpr ⟨h.1, h.2.1⟩).isBasis_subset h.2.2 subset_union_right⟩
 
@@ -2315,7 +2315,7 @@ lemma Indep.inter_isBasis_closure_iff_subset_closure_inter
 
 中文:
 引理 Indep.inter_isBasis_closure_iff_subset_closure_inter
-  条件: {X : Set α} (hI : M.Indep I)
+  条件: {X : 集合 α} (hI : M.Indep I)
   证明: ⟨IsBasis.subset_closure, (hI.inter_left X).isBasis_of_subset_of_subset_closure inter_subset_left⟩
 
 Depends on / 依赖: IsBasis, IsBasis.subset_closure, hI.inter_left, inter_left, inter_subset_left, isBasis_of_subset_of_subset_closure, subset_closure
@@ -2336,8 +2336,8 @@ lemma IsBasis.closure_inter_isBasis_closure
     (inter_subset_inter_left _ (h.trans (M.closure_subset_closure inter_subset_left))))
 
 中文:
-引理 IsBasis.closure_inter_isBasis_closure
-  条件: (h : M.IsBasis (X inter I) X) (hI : M.Indep I)
+引理 是基.closure_inter_isBasis_closure
+  条件: (h : M.是基 (X inter I) X) (hI : M.Indep I)
   证明: by
   rw [hI.inter_isBasis_closure_iff_subset_closure_inter] at h ⊢
   exact (M.closure_subset_closure_of_subset_closure h).trans (M.closure_subset_closure
@@ -2362,8 +2362,8 @@ lemma IsBasis.eq_of_closure_subset
   exact hI.subset.trans hJ
 
 中文:
-引理 IsBasis.eq_of_closure_subset
-  条件: (hI : M.IsBasis I X) (hJI : J subseteq I) (hJ : X subseteq M.closure J)
+引理 是基.eq_of_closure_subset
+  条件: (hI : M.是基 I X) (hJI : J subseteq I) (hJ : X subseteq M.closure J)
   证明: by
   rw [← hI.indep.closure_inter_eq_self_of_subset hJI]; rw [inter_eq_self_of_subset_right]
   exact hI.subset.trans hJ
@@ -2384,8 +2384,8 @@ lemma IsBasis.insert_isBasis_insert_of_notMem_closure
   proof: hIX.insert_isBasis_insert hIX.indep.insert_indep_iff.2 .inl ⟨heE, heI⟩
 
 中文:
-引理 IsBasis.insert_isBasis_insert_of_notMem_closure
-  结论: (hIX : M.IsBasis I X) (heI : e ∉ M.closure I)
+引理 是基.insert_isBasis_insert_of_notMem_closure
+  结论: (hIX : M.是基 I X) (heI : e ∉ M.closure I)
   证明: hIX.insert_isBasis_insert hIX.indep.insert_indep_iff.2 .inl ⟨heE, heI⟩
 
 Depends on / 依赖: IsBasis, M.IsBasis, aesop_mat, hIX.indep.insert_indep_iff, hIX.insert_isBasis_insert, insert, insert_indep_iff, insert_isBasis_insert
@@ -2405,7 +2405,7 @@ lemma empty_isBasis_iff
 
 中文:
 引理 empty_isBasis_iff
-  结论: M.IsBasis ∅ X ↔ X subseteq M.closure ∅
+  结论: M.是基 ∅ X ↔ X subseteq M.closure ∅
   证明: by
   rw [isBasis_iff_indep_closure]; rw [and_iff_right M.empty_indep]; rw [and_iff_left (empty_subset _)]
 -/
@@ -2428,7 +2428,7 @@ lemma indep_iff_forall_notMem_closure_sdiff
     (hJ.subset_closure he) (M
 
 中文:
-引理 indep_iff_forall_notMem_closure_sdiff
+引理 indep_iff_对任意_notMem_closure_sdiff
   条件: (hI : I subseteq M.E := by aesop_mat)
   证明: by
   use fun h e heI he => ((h.closure_inter_eq_self_of_subset sdiff_subset).subset ⟨he, heI⟩).2 rfl
@@ -2466,7 +2466,7 @@ lemma indep_iff_forall_notMem_closure_sdiff'
 alias indep_iff_forall_notMem_closure_diff' := indep_iff_forall_notMem_closure_sdiff'
 
 中文:
-引理 indep_iff_forall_notMem_closure_sdiff'
+引理 indep_iff_对任意_notMem_closure_sdiff'
   证明: ⟨fun h => ⟨h.subset_ground, (indep_iff_forall_notMem_closure_sdiff h.subset_ground).mp h⟩, fun h =>
     (indep_iff_forall_notMem_closure_sdiff h.1).mpr h.2⟩
 
@@ -2610,8 +2610,8 @@ lemma IsBasis.isBasis_insert_sdiff_of_mem_closure
 alias IsB
 
 中文:
-引理 IsBasis.isBasis_insert_sdiff_of_mem_closure
-  结论: (hB : M.IsBasis B X)
+引理 是基.isBasis_insert_sdiff_of_mem_closure
+  结论: (hB : M.是基 B X)
   证明: by
   rw [isBasis_iff_indep_closure] at hB ⊢
   exact ⟨hB.1.indep_insert_sdiff_of_mem_closure (hB.2.1 hfX) he heB, hB.2.1.trans_eq
@@ -2690,7 +2690,7 @@ lemma indep_iff_forall_closure_sdiff_ne
     
 
 中文:
-引理 indep_iff_forall_closure_sdiff_ne
+引理 indep_iff_对任意_closure_sdiff_ne
   证明: by
   rw [indep_iff_forall_notMem_closure_sdiff']
   refine ⟨fun ⟨hIE, h⟩ e heI h_eq => h e heI (h_eq.symm.subset (M.mem_closure_of_mem heI)),
@@ -2726,7 +2726,7 @@ lemma Indep.union_indep_iff_forall_notMem_closure_right
   obtain rfl | hssu := hKIJ.subset.eq_or_
 
 中文:
-引理 Indep.union_indep_iff_forall_notMem_closure_right
+引理 Indep.union_indep_iff_对任意_notMem_closure_right
   条件: (hI : M.Indep I) (hJ : M.Indep J)
   证明: by
   refine ⟨fun h e heJ hecl => h.notMem_closure_sdiff_of_mem (.inr heJ.1) ?_, fun h => ?_⟩
@@ -2762,7 +2762,7 @@ lemma Indep.union_indep_iff_forall_notMem_closure_left
   simp_rw [union_comm I J, hJ.union_indep_iff_forall_notMem_closure_right hI, union_comm]
 
 中文:
-引理 Indep.union_indep_iff_forall_notMem_closure_left
+引理 Indep.union_indep_iff_对任意_notMem_closure_left
   条件: (hI : M.Indep I) (hJ : M.Indep J)
   证明: by
   simp_rw [union_comm I J, hJ.union_indep_iff_forall_notMem_closure_right hI, union_comm]
@@ -2815,7 +2815,7 @@ lemma indep_iff_forall_closure_ssubset_of_ssubset
     insert_eq_of_mem hecl
 
 中文:
-引理 indep_iff_forall_closure_ssubset_of_ssubset
+引理 indep_iff_对任意_closure_ssubset_of_ssubset
   条件: (hI : I subseteq M.E := by aesop_mat)
   证明: by
   refine ⟨fun h _ => h.closure_ssubset_closure,
@@ -2851,7 +2851,7 @@ alias Indep.closure_diff_ssubset := Indep.closure_sdiff_ssubset
 
 中文:
 引理 Indep.closure_sdiff_ssubset
-  条件: (hI : M.Indep I) (hX : (I inter X).Nonempty)
+  条件: (hI : M.Indep I) (hX : (I inter X).非空)
   证明: by
 refine hI.closure_ssubset_closure sdiff_subset.ssubset_of_ne fun h => ?_
   rw [sdiff_eq_left]; rw [disjoint_iff_inter_eq_empty] at h
@@ -3136,7 +3136,7 @@ lemma ext_closure
 
 中文:
 引理 ext_closure
-  条件: {M₁ M₂ : Matroid α} (h : 对任意 X, M₁.closure X = M₂.closure X)
+  条件: {M₁ M₂ : 拟阵 α} (h : 对任意 X, M₁.closure X = M₂.closure X)
   结论: M₁ = M₂
   证明: ext_indep (by simpa using h univ)
     (fun _ _ => by simp_rw [indep_iff_forall_closure_sdiff_ne, h])
@@ -3166,8 +3166,8 @@ structure Spanning
     - subset_ground : S subseteq M.E
 
 中文:
-结构 Spanning
-  参数: (M : Matroid α) (S : Set α)
+结构 生成
+  参数: (M : 拟阵 α) (S : 集合 α)
   公理与运算 (2 个):
     - closure_eq : M.closure S = M.E
     - subset_ground : S subseteq M.E
@@ -3275,8 +3275,8 @@ lemma Spanning.superset
     (by rw [← hS.closure_eq]; exact M.closure_subset_closure hST), hT⟩
 
 中文:
-引理 Spanning.superset
-  条件: (hS : M.Spanning S) (hST : S subseteq T) (hT : T subseteq M.E := by aesop_mat)
+引理 生成.superset
+  条件: (hS : M.生成 S) (hST : S subseteq T) (hT : T subseteq M.E := by aesop_mat)
   证明: ⟨(M.closure_subset_ground _).antisymm
     (by rw [← hS.closure_eq]; exact M.closure_subset_closure hST), hT⟩
 
@@ -3299,8 +3299,8 @@ lemma Spanning.closure_eq_of_superset
   exact hS.superset (subset_inter hST hS.subset_ground)
 
 中文:
-引理 Spanning.closure_eq_of_superset
-  条件: (hS : M.Spanning S) (hST : S subseteq T)
+引理 生成.closure_eq_of_superset
+  条件: (hS : M.生成 S) (hST : S subseteq T)
   结论: M.closure T = M.E
   证明: by
   rw [← closure_inter_ground]; rw [← spanning_iff_closure_eq]
@@ -3322,9 +3322,9 @@ lemma Spanning.union_left
   proof: hS.superset subset_union_left
 
 中文:
-引理 Spanning.union_left
-  条件: (hS : M.Spanning S) (hX : X subseteq M.E := by aesop_mat)
-  结论: M.Spanning (S union X)
+引理 生成.union_left
+  条件: (hS : M.生成 S) (hX : X subseteq M.E := by aesop_mat)
+  结论: M.生成 (S union X)
   证明: hS.superset subset_union_left
 
 Depends on / 依赖: M.Spanning, Spanning, aesop_mat, hS.superset, subset_union_left, superset
@@ -3341,8 +3341,8 @@ lemma Spanning.union_right
   proof: hS.superset subset_union_right
 
 中文:
-引理 Spanning.union_right
-  条件: (hS : M.Spanning S) (hX : X subseteq M.E := by aesop_mat)
+引理 生成.union_right
+  条件: (hS : M.生成 S) (hX : X subseteq M.E := by aesop_mat)
   证明: hS.superset subset_union_right
 
 Depends on / 依赖: M.Spanning, Spanning, aesop_mat, hS.superset, subset_union_right, superset
@@ -3363,7 +3363,7 @@ lemma IsBase.spanning
 中文:
 引理 IsBase.spanning
   条件: (hB : M.IsBase B)
-  结论: M.Spanning B
+  结论: M.生成 B
   证明: ⟨hB.closure_eq, hB.subset_ground⟩
 
 Depends on / 依赖: closure_eq, hB.closure_eq, hB.subset_ground, subset_ground
@@ -3382,8 +3382,8 @@ lemma ground_spanning
 
 中文:
 引理 ground_spanning
-  条件: (M : Matroid α)
-  结论: M.Spanning M.E
+  条件: (M : 拟阵 α)
+  结论: M.生成 M.E
   证明: ⟨M.closure_ground, rfl.subset⟩
 
 Depends on / 依赖: M.closure_ground, closure_ground, rfl.subset, subset
@@ -3424,8 +3424,8 @@ lemma spanning_iff_exists_isBase_subset'
   exact ⟨B, hB', hB.subset⟩
 
 中文:
-引理 spanning_iff_exists_isBase_subset'
-  结论: M.Spanning S ↔ (存在 B, M.IsBase B ∧ B subseteq S) ∧ S subseteq M.E
+引理 spanning_iff_存在_isBase_subset'
+  结论: M.生成 S ↔ (存在 B, M.IsBase B ∧ B subseteq S) ∧ S subseteq M.E
   证明: by
   refine ⟨fun h => ⟨?_, h.subset_ground⟩, fun ⟨⟨B, hB, hBS⟩, hSE⟩ => hB.spanning.superset hBS⟩
   obtain ⟨B, hB⟩ := M.exists_isBasis S
@@ -3452,7 +3452,7 @@ lemma spanning_iff_exists_isBase_subset
   rw [spanning_iff_exists_isBase_subset']; rw [and_iff_left hS]
 
 中文:
-引理 spanning_iff_exists_isBase_subset
+引理 spanning_iff_存在_isBase_subset
   条件: (hS : S subseteq M.E := by aesop_mat)
   证明: by
   rw [spanning_iff_exists_isBase_subset']; rw [and_iff_left hS]
@@ -3474,8 +3474,8 @@ lemma Spanning.exists_isBase_subset
   rwa [spanning_iff_exists_isBase_subset] at hS
 
 中文:
-引理 Spanning.exists_isBase_subset
-  条件: (hS : M.Spanning S)
+引理 生成.存在_isBase_subset
+  条件: (hS : M.生成 S)
   结论: 存在 B, M.IsBase B ∧ B subseteq S
   证明: by
   rwa [spanning_iff_exists_isBase_subset] at hS
@@ -3539,7 +3539,7 @@ lemma Coindep.compl_spanning
 中文:
 引理 Coindep.compl_spanning
   条件: (hI : M.Coindep I)
-  结论: M.Spanning (M.E \ I)
+  结论: M.生成 (M.E \ I)
   证明: (coindep_iff_compl_spanning hI.subset_ground).mp hI
 
 Depends on / 依赖: coindep_iff_compl_spanning, hI.subset_ground, subset_ground
@@ -3600,7 +3600,7 @@ lemma Indep.isBase_of_spanning
 
 中文:
 引理 Indep.isBase_of_spanning
-  条件: (hI : M.Indep I) (hIs : M.Spanning I)
+  条件: (hI : M.Indep I) (hIs : M.生成 I)
   结论: M.IsBase I
   证明: by
   obtain ⟨B, hB, hBI⟩ := hIs.exists_isBase_subset; rwa [← hB.eq_of_subset_indep hI hBI]
@@ -3620,8 +3620,8 @@ lemma Spanning.isBase_of_indep
   proof: hI.isBase_of_spanning hIs
 
 中文:
-引理 Spanning.isBase_of_indep
-  条件: (hIs : M.Spanning I) (hI : M.Indep I)
+引理 生成.isBase_of_indep
+  条件: (hIs : M.生成 I) (hI : M.Indep I)
   结论: M.IsBase I
   证明: hI.isBase_of_spanning hIs
 
@@ -3641,7 +3641,7 @@ lemma Indep.eq_of_spanning_subset
 
 中文:
 引理 Indep.eq_of_spanning_subset
-  条件: (hI : M.Indep I) (hS : M.Spanning S) (hSI : S subseteq I)
+  条件: (hI : M.Indep I) (hS : M.生成 S) (hSI : S subseteq I)
   结论: S = I
   证明: ((hI.subset hSI).isBase_of_spanning hS).eq_of_subset_indep hI hSI
 
@@ -3661,9 +3661,9 @@ lemma IsBasis.spanning_iff_spanning
   rw [spanning_iff_closure_eq]; rw [spanning_iff_closure_eq]; rw [hIX.closure_eq_closure]
 
 中文:
-引理 IsBasis.spanning_iff_spanning
-  条件: (hIX : M.IsBasis I X)
-  结论: M.Spanning I ↔ M.Spanning X
+引理 是基.spanning_iff_spanning
+  条件: (hIX : M.是基 I X)
+  结论: M.生成 I ↔ M.生成 X
   证明: by
   rw [spanning_iff_closure_eq]; rw [spanning_iff_closure_eq]; rw [hIX.closure_eq_closure]
 
@@ -3687,8 +3687,8 @@ lemma Spanning.isBase_restrict_iff
   exact hS.subset_ground
 
 中文:
-引理 Spanning.isBase_restrict_iff
-  条件: (hS : M.Spanning S)
+引理 生成.isBase_restrict_iff
+  条件: (hS : M.生成 S)
   结论: (M ↾ S).IsBase B ↔ M.IsBase B ∧ B subseteq S
   证明: by
   rw [isBase_restrict_iff']; rw [isBasis'_iff_isBasis]
@@ -3717,8 +3717,8 @@ lemma Spanning.compl_coindep
   rwa [← spanning_iff_compl_coindep]
 
 中文:
-引理 Spanning.compl_coindep
-  条件: (hS : M.Spanning S)
+引理 生成.compl_coindep
+  条件: (hS : M.生成 S)
   结论: M.Coindep (M.E \ S)
   证明: by
   rwa [← spanning_iff_compl_coindep]
@@ -3738,8 +3738,8 @@ lemma IsBasis.isBase_of_spanning
   proof: hIX.indep.isBase_of_spanning by rwa [hIX.spanning_iff_spanning]
 
 中文:
-引理 IsBasis.isBase_of_spanning
-  条件: (hIX : M.IsBasis I X) (hX : M.Spanning X)
+引理 是基.isBase_of_spanning
+  条件: (hIX : M.是基 I X) (hX : M.生成 X)
   结论: M.IsBase I
   证明: hIX.indep.isBase_of_spanning by rwa [hIX.spanning_iff_spanning]
 
@@ -3759,8 +3759,8 @@ lemma Indep.exists_isBase_subset_spanning
   exact ⟨B, hB.1.isBase_of_spanning hS, hB.2, hB.1.subset⟩
 
 中文:
-引理 Indep.exists_isBase_subset_spanning
-  条件: (hI : M.Indep I) (hS : M.Spanning S) (hIS : I subseteq S)
+引理 Indep.存在_isBase_subset_spanning
+  条件: (hI : M.Indep I) (hS : M.生成 S) (hIS : I subseteq S)
   证明: by
   obtain ⟨B, hB⟩ := hI.subset_isBasis_of_subset hIS
   exact ⟨B, hB.1.isBase_of_spanning hS, hB.2, hB.1.subset⟩
@@ -3783,8 +3783,8 @@ lemma Restriction.isBase_iff_of_spanning
   rw [Spanning.isBase_restrict_iff (show M.Spanning R from hN)]; rw [restrict_ground_eq]
 
 中文:
-引理 Restriction.isBase_iff_of_spanning
-  条件: {N : Matroid α} (hR : N <=r M) (hN : M.Spanning N.E)
+引理 限制.isBase_iff_of_spanning
+  条件: {N : 拟阵 α} (hR : N <=r M) (hN : M.生成 N.E)
   证明: by
   obtain ⟨R, hR : R subseteq M.E, rfl⟩ := hR
   rw [Spanning.isBase_restrict_iff (show M.Spanning R from hN)]; rw [restrict_ground_eq]
@@ -3812,7 +3812,7 @@ lemma ext_spanning
 
 中文:
 引理 ext_spanning
-  结论: {M M' : Matroid α} (h : M.E = M'.E)
+  结论: {M M' : 拟阵 α} (h : M.E = M'.E)
   证明: by
   have hsp' : M.Spanning = M'.Spanning := by
     ext S
@@ -3846,7 +3846,7 @@ lemma IsBase.eq_of_superset_spanning
 
 中文:
 引理 IsBase.eq_of_superset_spanning
-  条件: (hB : M.IsBase B) (hX : M.Spanning X) (hXB : X subseteq B)
+  条件: (hB : M.IsBase B) (hX : M.生成 X) (hXB : X subseteq B)
   结论: B = X
   证明: have ⟨B', hB', hB'X⟩ := hX.exists_isBase_subset
   subset_antisymm (by rwa [← hB'.eq_of_subset_isBase hB (hB'X.trans hXB)]) hXB
@@ -3871,7 +3871,7 @@ theorem isBase_iff_minimal_spanning
 
 中文:
 定理 isBase_iff_minimal_spanning
-  结论: M.IsBase B ↔ Minimal M.Spanning B
+  结论: M.IsBase B ↔ 极小 M.生成 B
   证明: by
   rw [minimal_subset_iff]
   refine ⟨fun h => ⟨h.spanning, fun _ => h.eq_of_superset_spanning⟩, fun ⟨h, h'⟩ => ?_⟩
@@ -3896,8 +3896,8 @@ theorem Spanning.isBase_of_minimal
   rwa [isBase_iff_minimal_spanning, minimal_subset_iff, and_iff_right hX]
 
 中文:
-定理 Spanning.isBase_of_minimal
-  条件: (hX : M.Spanning X) (h : 对任意 ⦃Y⦄, M.Spanning Y -> Y subseteq X -> X = Y)
+定理 生成.isBase_of_minimal
+  条件: (hX : M.生成 X) (h : 对任意 ⦃Y⦄, M.生成 Y -> Y subseteq X -> X = Y)
   证明: by
   rwa [isBase_iff_minimal_spanning, minimal_subset_iff, and_iff_right hX]
 
@@ -3927,7 +3927,7 @@ lemma restrict_closure_eq'
 
 中文:
 引理 restrict_closure_eq'
-  条件: (M : Matroid α) (X R : Set α)
+  条件: (M : 拟阵 α) (X R : 集合 α)
   证明: by
   obtain ⟨I, hI⟩ := (M ↾ R).exists_isBasis' X
   obtain ⟨hI', hIR⟩ := isBasis'_restrict_iff.1 hI
@@ -3956,7 +3956,7 @@ lemma restrict_closure_eq
 
 中文:
 引理 restrict_closure_eq
-  条件: (M : Matroid α) (hXR : X subseteq R) (hR : R subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (hXR : X subseteq R) (hR : R subseteq M.E := by aesop_mat)
   证明: by
   rw [restrict_closure_eq']; rw [sdiff_eq_empty.mpr hR]; rw [union_empty]; rw [inter_eq_self_of_subset_left hXR]
 
@@ -3977,7 +3977,7 @@ lemma emptyOn_closure_eq
 
 中文:
 引理 emptyOn_closure_eq
-  条件: (X : Set α)
+  条件: (X : 集合 α)
   结论: (emptyOn α).closure X = ∅
   证明: (closure_subset_ground ..).antisymm empty_subset _
 -/
@@ -3996,7 +3996,7 @@ lemma loopyOn_closure_eq
 
 中文:
 引理 loopyOn_closure_eq
-  条件: (E X : Set α)
+  条件: (E X : 集合 α)
   结论: (loopyOn E).closure X = E
   证明: by
   simp [loopyOn, restrict_closure_eq']
@@ -4016,8 +4016,8 @@ lemma loopyOn_spanning_iff
 
 中文:
 引理 loopyOn_spanning_iff
-  条件: {E : Set α}
-  结论: (loopyOn E).Spanning X ↔ X subseteq E
+  条件: {E : 集合 α}
+  结论: (loopyOn E).生成 X ↔ X subseteq E
   证明: by
   rw [spanning_iff]; rw [loopyOn_closure_eq]; rw [loopyOn_ground]; rw [and_iff_right rfl]
 -/
@@ -4037,7 +4037,7 @@ lemma freeOn_closure_eq
 
 中文:
 引理 freeOn_closure_eq
-  条件: (E X : Set α)
+  条件: (E X : 集合 α)
   结论: (freeOn E).closure X = X inter E
   证明: by
   simp +contextual [← closure_inter_ground _ X, Set.ext_iff, and_comm,
@@ -4058,7 +4058,7 @@ lemma uniqueBaseOn_closure_eq
 
 中文:
 引理 uniqueBaseOn_closure_eq
-  条件: (I E X : Set α)
+  条件: (I E X : 集合 α)
   证明: by
   rw [uniqueBaseOn]; rw [restrict_closure_eq']; rw [freeOn_closure_eq]; rw [inter_right_comm]; rw [inter_assoc (c := E)]; rw [inter_self]; rw [inter_right_comm]; rw [freeOn_ground]
 -/
@@ -4110,7 +4110,7 @@ lemma comap_closure_eq
 
 中文:
 引理 comap_closure_eq
-  条件: {β : 类型} (M : Matroid β) (f : α -> β) (X : Set α)
+  条件: {β : 类型} (M : 拟阵 β) (f : α -> β) (X : 集合 α)
   证明: by
   -- Use a choice of basis and extensionality to change the goal to a statement about independence.
   obtain ⟨I, hI⟩ := (M.comap f).exists_isBasis' X
@@ -4146,7 +4146,7 @@ lemma map_closure_eq
 
 中文:
 引理 map_closure_eq
-  条件: {β : 类型} (M : Matroid α) (f : α -> β) (hf) (X : Set β)
+  条件: {β : 类型} (M : 拟阵 α) (f : α -> β) (hf) (X : 集合 β)
   证明: by
   -- It is enough to prove that `map` and `closure` commute for `M`-independent sets.
   suffices aux : forall ⦃I⦄, M.Indep I -> (M.map f hf).closure (f '' I) = f '' (M.closure I) by
@@ -4210,7 +4210,7 @@ lemma restrict_spanning_iff'
 
 中文:
 引理 restrict_spanning_iff'
-  结论: (M ↾ R).Spanning S ↔ R inter M.E subseteq M.closure S ∧ S subseteq R
+  结论: (M ↾ R).生成 S ↔ R inter M.E subseteq M.closure S ∧ S subseteq R
   证明: by
   rw [spanning_iff]; rw [restrict_closure_eq']; rw [restrict_ground_eq]; rw [and_congr_left_iff]; rw [sdiff_eq_compl_inter]; rw [← union_inter_distrib_right]; rw [inter_eq_right]; rw [union_comm]; rw [← sdiff_subset_iff]; rw [sdiff_compl]
   intro hSR

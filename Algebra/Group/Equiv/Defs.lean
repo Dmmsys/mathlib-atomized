@@ -98,9 +98,9 @@ structure AddEquiv
   (no additional axioms)
 
 中文:
-结构 AddEquiv
-  参数: (A B : 类型) [Add A] [Add B]
-  继承: A ≃ B, AddHom A B
+结构 加法等价
+  参数: (A B : 类型) [加法 A] [加法 B]
+  继承: A ≃ B, 加法半群态射 A B
   (无附加公理)
 -/
 structure AddEquiv (A B : Type*) [Add A] [Add B] extends A ≃ B, AddHom A B
@@ -115,8 +115,8 @@ class AddEquivClass
     - map_add : forall (f : F) (a b), f (a + b) = f a + f b
 
 中文:
-类 AddEquivClass
-  参数: (F : 类型) (A B : outParam 类型) [Add A] [Add B] [EquivLike F A B]
+类 加法等价类
+  参数: (F : 类型) (A B : outParam 类型) [加法 A] [加法 B] [等价状 F A B]
   公理与运算 (1 个):
     - map_add : 对任意 (f : F) (a b), f (a + b) = f a + f b
 -/
@@ -143,8 +143,8 @@ structure MulEquiv
   (no additional axioms)
 
 中文:
-结构 MulEquiv
-  参数: (M N : 类型) [Mul M] [Mul N]
+结构 乘法等价
+  参数: (M N : 类型) [乘法 M] [乘法 N]
   继承: M ≃ N, M ->ₙ* N
   (无附加公理)
 -/
@@ -171,8 +171,8 @@ lemma MulEquiv.toEquiv_injective
   given: {α β : Type*} [Mul α] [Mul β]
 
 中文:
-引理 MulEquiv.toEquiv_injective
-  条件: {α β : 类型} [Mul α] [Mul β]
+引理 乘法等价.toEquiv_injective
+  条件: {α β : 类型} [乘法 α] [乘法 β]
 -/
 lemma MulEquiv.toEquiv_injective {α β : Type*} [Mul α] [Mul β] :
     Function.Injective (toEquiv : (α ≃* β) -> (α ≃ β))
@@ -192,8 +192,8 @@ class MulEquivClass
     - map_mul : forall (f : F) (a b), f (a * b) = f a * f b
 
 中文:
-类 MulEquivClass
-  参数: (F : 类型) (A B : outParam 类型) [Mul A] [Mul B] [EquivLike F A B]
+类 乘法等价类
+  参数: (F : 类型) (A B : outParam 类型) [乘法 A] [乘法 B] [等价状 F A B]
   公理与运算 (1 个):
     - map_mul : 对任意 (f : F) (a b), f (a * b) = f a * f b
 -/
@@ -251,8 +251,8 @@ definition MulEquivClass.toMulEquiv
   body: { (f : α ≃ β), (f : α ->ₙ* β) with }
 
 中文:
-定义 MulEquivClass.toMulEquiv
-  签名: [Mul α] [Mul β] [MulEquivClass F α β] (f : F)
+定义 乘法等价类.toMulEquiv
+  签名: [乘法 α] [乘法 β] [乘法等价类 F α β] (f : F)
   定义体: { (f : α ≃ β), (f : α ->ₙ* β) with }
 -/
 def MulEquivClass.toMulEquiv [Mul α] [Mul β] [MulEquivClass F α β] (f : F) : α ≃* β :=
@@ -271,8 +271,8 @@ instance [Mul
   body: ⟨MulEquivClass.toMulEquiv⟩
 
 中文:
-实例 [Mul
-  签名: α] [Mul β] [MulEquivClass F α β] : CoeTC F (α ≃* β)
+实例 [乘法
+  签名: α] [乘法 β] [乘法等价类 F α β] : CoeTC F (α ≃* β)
   定义体: ⟨MulEquivClass.toMulEquiv⟩
 
 Depends on / 依赖: MulEquivClass, MulEquivClass.toMulEquiv, toMulEquiv
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (M ≃* N) M N
+  签名: 等价状 (M ≃* N) M N
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulEquivClass (M ≃* N) M N
+  签名: 乘法等价类 (M ≃* N) M N
   定义体: f.map_mul'
 
 Depends on / 依赖: f.map_mul, map_mul
@@ -390,7 +390,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : MulEquiv M N} (h : 对任意 x, f x = g x)
+  条件: {f g : 乘法等价 M N} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -415,7 +415,7 @@ theorem congr_arg
 
 中文:
 定理 congr_arg
-  条件: {f : MulEquiv M N} {x x' : M}
+  条件: {f : 乘法等价 M N} {x x' : M}
   结论: x = x' -> f x = f x'
   证明: DFunLike.congr_arg f
 
@@ -438,7 +438,7 @@ theorem congr_fun
 
 中文:
 定理 congr_fun
-  条件: {f g : MulEquiv M N} (h : f = g) (x : M)
+  条件: {f g : 乘法等价 M N} (h : f = g) (x : M)
   结论: f x = g x
   证明: DFunLike.congr_fun h x
 
@@ -654,7 +654,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : M ≃* N)
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: EquivLike.bijective e
 
 @[to_additive]
@@ -677,7 +677,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : M ≃* N)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: EquivLike.injective e
 
 @[to_additive]
@@ -700,7 +700,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : M ≃* N)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: EquivLike.surjective e
 
 @[to_additive]
@@ -747,7 +747,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (M : 类型) [Mul M]
+  签名: (M : 类型) [乘法 M]
   定义体: { Equiv.refl _ with map_mul' := fun _ _ => rfl }
 
 @[to_additive]
@@ -770,7 +770,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ≃* M)
+  签名: 可居 (M ≃* M)
   定义体: ⟨refl M⟩
 
 @[to_additive (attr := simp)]
@@ -833,7 +833,7 @@ lemma symm_map_mul
 
 中文:
 引理 symm_map_mul
-  条件: {M N : 类型} [Mul M] [Mul N] (h : M ≃* N) (x y : N)
+  条件: {M N : 类型} [乘法 M] [乘法 N] (h : M ≃* N) (x y : N)
   证明: map_mul (h.toMulHom.inverse h.toEquiv.symm h.left_inv h.right_inv) x y
 
 Depends on / 依赖: h.left_inv, h.right_inv, h.toEquiv.symm, h.toMulHom.inverse, inverse, left_inv, map_mul, right_inv, toEquiv, toMulHom
@@ -856,7 +856,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {M N : 类型} [Mul M] [Mul N] (h : M ≃* N)
+  签名: {M N : 类型} [乘法 M] [乘法 N] (h : M ≃* N)
   定义体: ⟨h.toEquiv.symm, h.symm_map_mul⟩
 
 @[to_additive]
@@ -922,7 +922,7 @@ theorem equivLike_inv_eq_symm
 中文:
 定理 equivLike_inv_eq_symm
   条件: (f : M ≃* N)
-  结论: EquivLike.inv f = f.symm
+  结论: 等价状.inv f = f.symm
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -986,7 +986,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (M ≃* N) -> N ≃* M)
+  结论: 函数.双射 (symm : (M ≃* N) -> N ≃* M)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[to_additive (attr := simp)]
@@ -1011,7 +1011,7 @@ theorem mk_coe'
 中文:
 定理 mk_coe'
   条件: (e : M ≃* N) (f h₁ h₂ h₃)
-  结论: (MulEquiv.mk ⟨f, e, h₁, h₂⟩ h₃ : N ≃* M) = e.symm
+  结论: (乘法等价.mk ⟨f, e, h₁, h₂⟩ h₃ : N ≃* M) = e.symm
   证明: symm_bijective.injective ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -1341,8 +1341,8 @@ theorem _root_.MulEquivClass.apply_coe_symm_apply
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.MulEquivClass.apply_coe_symm_apply
-  结论: {α β} [Mul α] [Mul β] {F} [EquivLike F α β]
+定理 _root_.乘法等价类.apply_coe_symm_apply
+  结论: {α β} [乘法 α] [乘法 β] {F} [等价状 F α β]
   证明: (e : α ≃* β).right_inv x
 
 @[to_additive (attr := simp)]
@@ -1364,8 +1364,8 @@ theorem _root_.MulEquivClass.coe_symm_apply_apply
   proof: (e : α ≃* β).left_inv x
 
 中文:
-定理 _root_.MulEquivClass.coe_symm_apply_apply
-  结论: {α β} [Mul α] [Mul β] {F} [EquivLike F α β]
+定理 _root_.乘法等价类.coe_symm_apply_apply
+  结论: {α β} [乘法 α] [乘法 β] {F} [等价状 F α β]
   证明: (e : α ≃* β).left_inv x
 
 Depends on / 依赖: left_inv
@@ -1573,7 +1573,7 @@ definition symmEquiv
 
 中文:
 定义 symmEquiv
-  签名: (P Q : 类型) [Mul P] [Mul Q]
+  签名: (P Q : 类型) [乘法 P] [乘法 Q]
   定义体: .symm
   invFun := .symm
 -/
@@ -1602,7 +1602,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {ι : 类型} {M : ι -> 类型} [对任意 i, Mul (M i)] {i j : ι} (h : i = j)
+  签名: {ι : 类型} {M : ι -> 类型} [对任意 i, 乘法 (M i)] {i j : ι} (h : i = j)
   定义体: Equiv.cast (congrArg _ h)
   map_mul' _ _ := by cases h; rfl
 -/
@@ -1631,7 +1631,7 @@ theorem coe_monoidHom_refl
 
 中文:
 定理 coe_monoidHom_refl
-  结论: (refl M : M ->* M) = MonoidHom.id M
+  结论: (refl M : M ->* M) = 幺半群态射.id M
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1718,7 +1718,7 @@ lemma comp_left_injective
 中文:
 引理 comp_left_injective
   条件: (e : M ≃* N)
-  结论: Injective fun f : N ->* P => f.comp (e : M ->* N)
+  结论: 单射 fun f : N ->* P => f.comp (e : M ->* N)
   证明: LeftInverse.injective (g := fun f => f.comp e.symm) fun f => by simp [MonoidHom.comp_assoc]
 
 @[to_additive]
@@ -1741,7 +1741,7 @@ lemma comp_right_injective
 中文:
 引理 comp_right_injective
   条件: (e : M ≃* N)
-  结论: Injective fun f : P ->* M => (e : M ->* N).comp f
+  结论: 单射 fun f : P ->* M => (e : M ->* N).comp f
   证明: LeftInverse.injective (g := (e.symm : N ->* M).comp) fun f => by simp [← MonoidHom.comp_assoc]
 
 Depends on / 依赖: LeftInverse, LeftInverse.injective, MonoidHom, MonoidHom.comp_assoc, comp_assoc, e.symm, injective
@@ -1833,7 +1833,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: {M N F} [Mul M] [Mul N] [FunLike F M N] [MulHomClass F M N]
+  签名: {M N F} [乘法 M] [乘法 N] [函数状 F M N] [乘法态射类 F M N]
   定义体: { Equiv.ofBijective f hf with map_mul' := map_mul f }
 
 @[to_additive (attr := simp)]
@@ -1855,7 +1855,7 @@ theorem ofBijective_apply_symm_apply
 
 中文:
 定理 ofBijective_apply_symm_apply
-  条件: {n : N} (f : M ->* N) (hf : Bijective f)
+  条件: {n : N} (f : M ->* N) (hf : 双射 f)
   证明: (ofBijective f hf).apply_symm_apply n
 
 Depends on / 依赖: apply_symm_apply, ofBijective
@@ -1946,7 +1946,7 @@ theorem toMonoidHom_injective
 
 中文:
 定理 toMonoidHom_injective
-  结论: Injective (toMonoidHom : M ≃* N -> M ->* N)
+  结论: 单射 (toMonoidHom : M ≃* N -> M ->* N)
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -1972,7 +1972,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  条件: [Group G] [DivisionMonoid H] (h : G ≃* H) (x : G)
+  条件: [群 G] [Division幺半群 H] (h : G ≃* H) (x : G)
   证明: map_inv h x
 -/
 protected theorem map_inv [Group G] [DivisionMonoid H] (h : G ≃* H) (x : G) :
@@ -1991,7 +1991,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  条件: [Group G] [DivisionMonoid H] (h : G ≃* H) (x y : G)
+  条件: [群 G] [Division幺半群 H] (h : G ≃* H) (x y : G)
   证明: map_div h x y
 -/
 protected theorem map_div [Group G] [DivisionMonoid H] (h : G ≃* H) (x y : G) :
@@ -2022,8 +2022,8 @@ definition MulHom.toMulEquiv
   map_mul' := f.map_mul
 
 中文:
-定义 MulHom.toMulEquiv
-  签名: [Mul M] [Mul N] (f : M ->ₙ* N) (g : N ->ₙ* M) (h₁ : g.comp f = MulHom.id _)
+定义 乘法半群态射.toMulEquiv
+  签名: [乘法 M] [乘法 N] (f : M ->ₙ* N) (g : N ->ₙ* M) (h₁ : g.comp f = 乘法半群态射.id _)
   定义体: f
   invFun := g
   left_inv := DFunLike.congr_fun h₁
@@ -2059,8 +2059,8 @@ definition MonoidHom.toMulEquiv
   map_mul' := f.map_mul
 
 中文:
-定义 MonoidHom.toMulEquiv
-  签名: [MulOneClass M] [MulOneClass N] (f : M ->* N) (g : N ->* M)
+定义 幺半群态射.toMulEquiv
+  签名: [MulOne类 M] [MulOne类 N] (f : M ->* N) (g : N ->* M)
   定义体: f
   invFun := g
   left_inv := DFunLike.congr_fun h₁
@@ -2095,7 +2095,7 @@ definition Monoid.End.equiv
 @[to_additive (attr := simp)]
 
 中文:
-定义 Monoid.End.equiv
+定义 幺半群.End.equiv
   签名: (M : 类型) [MulOne M]
   定义体: id
   invFun := id
@@ -2122,8 +2122,8 @@ theorem Monoid.End.equiv_apply
 @[to_additive (attr := simp)]
 
 中文:
-定理 Monoid.End.equiv_apply
-  条件: {M : 类型} [MulOne M] (f : Monoid.End M) (x : M)
+定理 幺半群.End.equiv_apply
+  条件: {M : 类型} [MulOne M] (f : 幺半群.End M) (x : M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2141,7 +2141,7 @@ theorem Monoid.End.equiv_symm_apply
   proof: rfl
 
 中文:
-定理 Monoid.End.equiv_symm_apply
+定理 幺半群.End.equiv_symm_apply
   条件: {M : 类型} [MulOne M] (f : M ->* M) (x : M)
   证明: rfl
 -/

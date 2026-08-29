@@ -30,7 +30,7 @@ definition multiplicity_addValuation
 
 中文:
 定义 multiplicity_addValuation
-  签名: (hp : Prime p)
+  签名: (hp : 素 p)
   定义体: AddValuation.of (emultiplicity p) (emultiplicity_zero _)
     (emultiplicity_of_one_right hp.not_isUnit)
       (fun _ _ => min_le_emultiplicity_add) fun _ _ => emultiplicity_mul hp
@@ -55,7 +55,7 @@ theorem multiplicity_addValuation_apply
 
 中文:
 定理 multiplicity_addValuation_apply
-  条件: {hp : Prime p} {r : R}
+  条件: {hp : 素 p} {r : R}
   证明: rfl
 -/
 theorem multiplicity_addValuation_apply {hp : Prime p} {r : R} :

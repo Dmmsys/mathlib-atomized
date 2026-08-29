@@ -55,7 +55,7 @@ definition IsConformalMap
 
 中文:
 定义 IsConformalMap
-  签名: {R : 类型} {X Y : 类型} [NormedField R] [SeminormedAddCommGroup X]
+  签名: {R : 类型} {X Y : 类型} [赋范域 R] [SeminormedAddComm群 X]
   定义体: exists c != (0 : R), exists li : X ->ₗᵢ[R] Y, f' = c • li.toContinuousLinearMap
 
 Depends on / 依赖: li.toContinuousLinearMap, toContinuousLinearMap
@@ -141,7 +141,7 @@ theorem LinearIsometry.isConformalMap
 @[nontriviality]
 
 中文:
-定理 LinearIsometry.isConformalMap
+定理 线性等距.isConformalMap
   条件: (f' : M ->ₗᵢ[R] N)
   证明: ⟨1, one_ne_zero, f', (one_smul _ _).symm⟩
 
@@ -163,7 +163,7 @@ theorem isConformalMap_of_subsingleton
 
 中文:
 定理 isConformalMap_of_subsingleton
-  条件: [Subsingleton M] (f' : M ->L[R] N)
+  条件: [子单例 M] (f' : M ->L[R] N)
   结论: IsConformalMap f'
   证明: ⟨1, one_ne_zero, ⟨0, fun x => by simp [Subsingleton.elim x 0]⟩, Subsingleton.elim _ _⟩
 
@@ -222,7 +222,7 @@ theorem injective
 中文:
 定理 injective
   条件: {f : M' ->L[R] N} (h : IsConformalMap f)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: by
   rcases h with ⟨c, hc, li, rfl⟩
   exact (smul_right_injective _ hc).comp li.injective
@@ -245,7 +245,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial M'] {f' : M' ->L[R] N} (hf' : IsConformalMap f')
+  条件: [非平凡 M'] {f' : M' ->L[R] N} (hf' : IsConformalMap f')
   结论: f' != 0
   证明: by
   rintro rfl

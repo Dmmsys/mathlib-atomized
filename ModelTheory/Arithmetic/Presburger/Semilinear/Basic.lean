@@ -55,7 +55,7 @@ definition IsSlice
 
 中文:
 定义 IsSlice
-  签名: {M : 类型} [Add M] (s : Set M)
+  签名: {M : 类型} [加法 M] (s : 集合 M)
   定义体: forall a in s, forall b c, a + b in s -> a + c in s -> a + b + c in s
 -/
 private def IsSlice {M : Type*} [Add M] (s : Set M) :=
@@ -77,7 +77,7 @@ theorem sep_apply_eq
 
 中文:
 定理 sep_apply_eq
-  结论: {ι : 类型} {M : ι -> 类型} [对任意 i, Add (M i)] {s : Set (对任意 i, M i)}
+  结论: {ι : 类型} {M : ι -> 类型} [对任意 i, 加法 (M i)] {s : 集合 (对任意 i, M i)}
   证明: by
   intro x ⟨hx, hxi⟩ y z ⟨hxy, hxyi⟩ ⟨hxz, hxzi⟩
   refine ⟨hs _ hx _ _ hxy hxz, ?_⟩
@@ -114,8 +114,8 @@ theorem exists_isSemilinearSet_setOfPred_le
     
 
 中文:
-定理 exists_isSemilinearSet_setOfPred_le
-  结论: {s : Set M} (hs : IsSlice s)
+定理 存在_isSemilinearSet_setOfPred_le
+  结论: {s : 集合 M} (hs : IsSlice s)
   证明: by
   classical
   let f (x : M) : AddSubmonoid M :=
@@ -215,8 +215,8 @@ theorem Nat.isSemilinearSet_of_isSlice
   obtain 
 
 中文:
-定理 Nat.isSemilinearSet_of_isSlice
-  结论: {ι : 类型} [Finite ι] {s : Set (ι -> 自然数)}
+定理 自然数.isSemilinearSet_of_isSlice
+  结论: {ι : 类型} [有限 ι] {s : 集合 (ι -> 自然数)}
   证明: by
   classical
   suffices h : forall (a : ι -> Nat) (t : Finset ι), (forall x in s, forall i ∉ t, x i = a i) -> IsSemilinearSet s by
@@ -264,8 +264,8 @@ theorem Nat.isSemilinearSet_setOfPred_eq
   conv_lhs => rw [hy, ← hx, add_right_comm _ (g y) (f z), hz, add_right_comm _ (g z)]
 
 中文:
-定理 Nat.isSemilinearSet_setOfPred_eq
-  结论: [Finite ι] {F G : 类型}
+定理 自然数.isSemilinearSet_setOfPred_eq
+  结论: [有限 ι] {F G : 类型}
   证明: by
   apply isSemilinearSet_of_isSlice
   intro x hx y z hy hz
@@ -336,8 +336,8 @@ lemma Nat.isSemilinearSet_preimage_of_isLinearSet
     isSemilinearSet_setOfPred_eq a 0 (g.comp (LinearMap.
 
 中文:
-引理 Nat.isSemilinearSet_preimage_of_isLinearSet
-  结论: [Finite ι] {F : 类型}
+引理 自然数.isSemilinearSet_preimage_of_isLinearSet
+  结论: [有限 ι] {F : 类型}
   证明: by
   rw [isLinearSet_iff_exists_fin_addMonoidHom] at hs
   rcases hs with ⟨a, n, g, rfl⟩
@@ -372,8 +372,8 @@ theorem Nat.isSemilinearSet_preimage
   exact .biUnion hS fun s hs => isSemilinearSet_preimage_of_isLinearSet (hS' s hs) f
 
 中文:
-定理 Nat.isSemilinearSet_preimage
-  结论: [Finite ι] {F : 类型}
+定理 自然数.isSemilinearSet_preimage
+  结论: [有限 ι] {F : 类型}
   证明: by
   rcases hs with ⟨S, hS, hS', rfl⟩
   simp_rw [sUnion_eq_biUnion, preimage_iUnion]
@@ -449,8 +449,8 @@ lemma Nat.isSemilinearSet_inter_of_isLinearSet
     isSemilinearSet_setO
 
 中文:
-引理 Nat.isSemilinearSet_inter_of_isLinearSet
-  结论: [Finite ι] {s₁ s₂ : Set (ι -> 自然数)}
+引理 自然数.isSemilinearSet_inter_of_isLinearSet
+  结论: [有限 ι] {s₁ s₂ : 集合 (ι -> 自然数)}
   证明: by
   classical
   have := Fintype.ofFinite ι
@@ -490,8 +490,8 @@ theorem Nat.isSemilinearSet_inter
     isSemilinearSet_inter_of_isLinearSet (hS₁' _ hs.1) (hS₂' _ hs.2)
 
 中文:
-定理 Nat.isSemilinearSet_inter
-  结论: [Finite ι] {s₁ s₂ : Set (ι -> 自然数)}
+定理 自然数.isSemilinearSet_inter
+  结论: [有限 ι] {s₁ s₂ : 集合 (ι -> 自然数)}
   证明: by
   rcases hs₁ with ⟨S₁, hS₁, hS₁', rfl⟩
   rcases hs₂ with ⟨S₂, hS₂, hS₂', rfl⟩
@@ -555,7 +555,7 @@ definition toRatVec
 
 中文:
 定义 toRatVec
-  签名: : (ι -> 自然数) ->+ (ι -> Rat)
+  签名: : (ι -> 自然数) ->+ (ι -> 有理数)
   定义体: (Nat.castAddMonoidHom Rat).compLeft ι
 -/
 private def toRatVec : (ι -> Nat) ->+ (ι -> Rat) :=
@@ -649,7 +649,7 @@ theorem linearIndepOn_toRatVec
 
 中文:
 定理 linearIndepOn_toRatVec
-  条件: {s : Set (ι -> 自然数)} (hs : LinearIndepOn 自然数 id s)
+  条件: {s : 集合 (ι -> 自然数)} (hs : LinearIndepOn 自然数 id s)
   证明: by
   rw [LinearIndepOn]; rw [← LinearIndependent.iff_fractionRing Int Rat]; rw [← LinearIndepOn]; rw [linearIndepOn_iff'']
   intro t f ht hf heq i hi
@@ -720,7 +720,7 @@ theorem finite_periods
 
 中文:
 定理 finite_periods
-  结论: hs.periods.Finite
+  结论: hs.periods.有限
   证明: hs.choose_spec.choose_spec.1
 -/
 private theorem finite_periods : hs.periods.Finite := hs.choose_spec.choose_spec.1
@@ -735,7 +735,7 @@ theorem linearIndepOn_periods
 
 中文:
 定理 linearIndepOn_periods
-  结论: LinearIndepOn 自然数 id (hs.periods : Set (ι -> 自然数))
+  结论: LinearIndepOn 自然数 id (hs.periods : 集合 (ι -> 自然数))
   证明: hs.choose_spec.choose_spec.2.1
 -/
 private theorem linearIndepOn_periods : LinearIndepOn Nat id (hs.periods : Set (ι -> Nat)) :=
@@ -751,7 +751,7 @@ theorem eq_base_vadd_closure_periods
 
 中文:
 定理 eq_base_vadd_closure_periods
-  结论: s = hs.base +ᵥ (closure hs.periods : Set (ι -> 自然数))
+  结论: s = hs.base +ᵥ (closure hs.periods : 集合 (ι -> 自然数))
   证明: hs.choose_spec.choose_spec.2.2
 -/
 private theorem eq_base_vadd_closure_periods : s = hs.base +ᵥ (closure hs.periods : Set (ι -> Nat)) :=
@@ -804,7 +804,7 @@ theorem basisSet_subset_union
 
 中文:
 定理 basisSet_subset_union
-  结论: hs.basisSet subseteq hs.periods union range (Pi.basisFun 自然数 ι)
+  结论: hs.basisSet subseteq hs.periods union range (依赖函数类型.basisFun 自然数 ι)
   证明: (linearIndepOn_toRatVec hs.linearIndepOn_periods).extend_subset _
 -/
 private theorem basisSet_subset_union : hs.basisSet subseteq hs.periods union range (Pi.basisFun Nat ι) :=
@@ -823,7 +823,7 @@ private noncomputable local instance : Fintype hs.basisSet :=
 
 中文:
 定理 finite_basisSet
-  结论: hs.basisSet.Finite
+  结论: hs.basisSet.有限
   证明: (hs.finite_periods.union (finite_range _)).subset hs.basisSet_subset_union
 
 private noncomputable local instance : Fintype hs.basisSet :=
@@ -845,7 +845,7 @@ theorem linearIndepOn_basisSet
 
 中文:
 定理 linearIndepOn_basisSet
-  结论: LinearIndepOn Rat toRatVec hs.basisSet
+  结论: LinearIndepOn 有理数 toRatVec hs.basisSet
   证明: (linearIndepOn_toRatVec hs.linearIndepOn_periods).linearIndepOn_extend _
 -/
 private theorem linearIndepOn_basisSet : LinearIndepOn Rat toRatVec hs.basisSet :=
@@ -868,7 +868,7 @@ theorem span_basisSet
 
 中文:
 定理 span_basisSet
-  结论: span Rat (toRatVec '' hs.basisSet) = ⊤
+  结论: span 有理数 (toRatVec '' hs.basisSet) = ⊤
   证明: by
   classical
   rw [basisSet]; rw [(linearIndepOn_toRatVec hs.linearIndepOn_periods).span_image_extend_eq_span_image]; rw [← top_le_iff]
@@ -958,7 +958,7 @@ theorem finite_fundamentalDomain
 
 中文:
 定理 finite_fundamentalDomain
-  结论: hs.fundamentalDomain.Finite
+  结论: hs.fundamentalDomain.有限
   证明: by
   classical
   have := Fintype.ofFinite ι
@@ -1193,7 +1193,7 @@ theorem floor_toNat_sum_le
     rw [← Nat.cast_smul_eq_nsmul Int]; rw [← Nat.cast_smul_eq_nsmul Int]; rw [← sub_smul]; rw [Int.toNat_sub_toNat_neg]; rw [← Int.cast_s
 
 中文:
-定理 floor_toNat_sum_le
+定理 floor_to自然数_sum_le
   条件: (x)
   证明: by
   rw [← toRatVec_mono]
@@ -1229,7 +1229,7 @@ theorem add_floor_neg_toNat_sum_eq
   rw [tsub_add_cancel_of_le (hs.floor_toNat_sum_le x)]
 
 中文:
-定理 add_floor_neg_toNat_sum_eq
+定理 add_floor_neg_to自然数_sum_eq
   条件: (x)
   证明: by
   simp only [fract]
@@ -1734,8 +1734,8 @@ hs.isSemilinearSet_setOfFloorNeg.union hs.isSemilinearSet_setOfFloorPos using 1
     IsProperLinearSet.setOfFloorNeg, IsProperLinearSet.setOfFloo
 
 中文:
-引理 Nat.isSemilinearSet_compl_of_isProperLinearSet
-  结论: [Finite ι] {s : Set (ι -> 自然数)}
+引理 自然数.isSemilinearSet_compl_of_isProperLinearSet
+  结论: [有限 ι] {s : 集合 (ι -> 自然数)}
   证明: by
   convert!
 hs.isSemilinearSet_setOfFractNe.union
@@ -1766,8 +1766,8 @@ theorem Nat.isSemilinearSet_compl
   exact .biInter hS fun s hs => isSemilinearSet_compl_of_isProperLinearSet (hS' s hs)
 
 中文:
-定理 Nat.isSemilinearSet_compl
-  条件: [Finite ι] {s : Set (ι -> 自然数)} (hs : IsSemilinearSet s)
+定理 自然数.isSemilinearSet_compl
+  条件: [有限 ι] {s : 集合 (ι -> 自然数)} (hs : IsSemilinearSet s)
   证明: by
   rcases hs.isProperSemilinearSet with ⟨S, hS, hS', rfl⟩
   simp_rw [sUnion_eq_biUnion, compl_iUnion]
@@ -1790,8 +1790,8 @@ theorem Nat.isSemilinearSet_sdiff
 @[deprecated (since := "2026-06-03")] alias Nat.isSemilinearSet_diff := Nat.isSemilinearSet_sdiff
 
 中文:
-定理 Nat.isSemilinearSet_sdiff
-  结论: [Finite ι] {s₁ s₂ : Set (ι -> 自然数)}
+定理 自然数.isSemilinearSet_sdiff
+  结论: [有限 ι] {s₁ s₂ : 集合 (ι -> 自然数)}
   证明: isSemilinearSet_inter hs₁ (isSemilinearSet_compl hs₂)
 
 @[deprecated (since := "2026-06-03")] alias Nat.isSemilinearSet_diff := Nat.isSemilinearSet_sdiff

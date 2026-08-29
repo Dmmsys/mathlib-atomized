@@ -133,7 +133,7 @@ theorem toList_zero
 
 中文:
 定理 toList_zero
-  结论: (Multiset.toList 0 : List α) = []
+  结论: (Multiset.toList 0 : 列表 α) = []
   证明: toList_eq_nil.mpr rfl
 
 @[simp]
@@ -264,7 +264,7 @@ decreasing_by exact card_lt_card _h
 
 中文:
 定义 strongInductionOn
-  签名: {p : Multiset α -> Sort*} (s : Multiset α) (ih : 对任意 s, (对任意 t < s, p t) -> p s)
+  签名: {p : Multiset α -> 类型层*} (s : Multiset α) (ih : 对任意 s, (对任意 t < s, p t) -> p s)
   定义体: (ih s) fun t _h =>
       strongInductionOn t ih
 termination_by card s
@@ -292,7 +292,7 @@ theorem strongInductionOn_eq
 
 中文:
 定理 strongInductionOn_eq
-  条件: {p : Multiset α -> Sort*} (s : Multiset α) (H)
+  条件: {p : Multiset α -> 类型层*} (s : Multiset α) (H)
   证明: by
   rw [strongInductionOn]
 
@@ -343,7 +343,7 @@ decreasing_by have := (card_lt_card _h); lia
 
 中文:
 定义 strongDownwardInduction
-  签名: {p : Multiset α -> Sort*} {n : 自然数}
+  签名: {p : Multiset α -> 类型层*} {n : 自然数}
   定义体: H s fun {t} ht _h =>
     strongDownwardInduction H t ht
 termination_by n - card s
@@ -371,7 +371,7 @@ theorem strongDownwardInduction_eq
 
 中文:
 定理 strongDownwardInduction_eq
-  结论: {p : Multiset α -> Sort*} {n : 自然数}
+  结论: {p : Multiset α -> 类型层*} {n : 自然数}
   证明: by
   rw [strongDownwardInduction]
 
@@ -395,7 +395,7 @@ definition strongDownwardInductionOn
 
 中文:
 定义 strongDownwardInductionOn
-  签名: {p : Multiset α -> Sort*} {n : 自然数}
+  签名: {p : Multiset α -> 类型层*} {n : 自然数}
   定义体: fun s H => strongDownwardInduction H s
 
 Depends on / 依赖: strongDownwardInduction
@@ -418,7 +418,7 @@ theorem strongDownwardInductionOn_eq
 
 中文:
 定理 strongDownwardInductionOn_eq
-  结论: {p : Multiset α -> Sort*} (s : Multiset α) {n : 自然数}
+  结论: {p : Multiset α -> 类型层*} (s : Multiset α) {n : 自然数}
   证明: by
   dsimp only [strongDownwardInductionOn]
   rw [strongDownwardInduction]
@@ -595,7 +595,7 @@ definition subsingletonEquiv
 
 中文:
 定义 subsingletonEquiv
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: ofList
   invFun :=
     (Quot.lift id) fun (a b : List α) (h : a ~ b) =>
@@ -624,7 +624,7 @@ theorem coe_subsingletonEquiv
 
 中文:
 定理 coe_subsingletonEquiv
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   证明: rfl
 -/
 theorem coe_subsingletonEquiv [Subsingleton α] :

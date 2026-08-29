@@ -47,7 +47,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm (α ->ᵇ β)
+  签名: : 范数 (α ->ᵇ β)
   定义体: ⟨(dist · 0)⟩
 -/
 instance instNorm : Norm (α ->ᵇ β) := ⟨(dist · 0)⟩
@@ -108,7 +108,7 @@ theorem norm_eq_of_nonempty
 
 中文:
 定理 norm_eq_of_nonempty
-  条件: [h : Nonempty α]
+  条件: [h : 非空 α]
   结论: ‖f‖ = sInf { C : 实数 | 对任意 x : α, ‖f x‖ <= C }
   证明: by
   obtain ⟨a⟩ := h
@@ -142,7 +142,7 @@ theorem norm_eq_zero_of_empty
 
 中文:
 定理 norm_eq_zero_of_empty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: ‖f‖ = 0
   证明: dist_zero_of_empty
 
@@ -298,7 +298,7 @@ theorem norm_le_of_nonempty
 
 中文:
 定理 norm_le_of_nonempty
-  条件: [Nonempty α] {f : α ->ᵇ β} {M : 实数}
+  条件: [非空 α] {f : α ->ᵇ β} {M : 实数}
   结论: ‖f‖ <= M ↔ 对任意 x, ‖f x‖ <= M
   证明: by
   simp_rw [norm_def, ← dist_zero_right]
@@ -322,7 +322,7 @@ theorem norm_lt_iff_of_compact
 
 中文:
 定理 norm_lt_iff_of_compact
-  条件: [CompactSpace α] {f : α ->ᵇ β} {M : 实数} (M0 : 0 < M)
+  条件: [紧空间 α] {f : α ->ᵇ β} {M : 实数} (M0 : 0 < M)
   证明: by
   simp_rw [norm_def, ← dist_zero_right]
   exact dist_lt_iff_of_compact M0
@@ -346,7 +346,7 @@ theorem norm_lt_iff_of_nonempty_compact
 
 中文:
 定理 norm_lt_iff_of_nonempty_compact
-  条件: [Nonempty α] [CompactSpace α] {f : α ->ᵇ β} {M : 实数}
+  条件: [非空 α] [紧空间 α] {f : α ->ᵇ β} {M : 实数}
   证明: by
   simp_rw [norm_def, ← dist_zero_right]
   exact dist_lt_iff_of_nonempty_compact
@@ -396,7 +396,7 @@ theorem norm_const_eq
 
 中文:
 定理 norm_const_eq
-  条件: [h : Nonempty α] (b : β)
+  条件: [h : 非空 α] (b : β)
   结论: ‖const α b‖ = ‖b‖
   证明: le_antisymm (norm_const_le b) h.elim fun x => (const α b).norm_coe_le_norm x
 
@@ -417,7 +417,7 @@ definition ofNormedAddCommGroup
 
 中文:
 定义 ofNormedAddCommGroup
-  签名: {α : 类型u} {β : 类型v} [TopologicalSpace α] [SeminormedAddCommGroup β]
+  签名: {α : 类型u} {β : 类型v} [拓扑空间 α] [SeminormedAddComm群 β]
   定义体: ⟨⟨fun n => f n, Hf⟩, ⟨_, dist_le_two_norm' H⟩⟩
 
 @[simp]
@@ -439,7 +439,7 @@ theorem coe_ofNormedAddCommGroup
 
 中文:
 定理 coe_ofNormedAddCommGroup
-  结论: {α : 类型u} {β : 类型v} [TopologicalSpace α]
+  结论: {α : 类型u} {β : 类型v} [拓扑空间 α]
   证明: rfl
 -/
 theorem coe_ofNormedAddCommGroup {α : Type u} {β : Type v} [TopologicalSpace α]
@@ -456,7 +456,7 @@ theorem norm_ofNormedAddCommGroup_le
 
 中文:
 定理 norm_ofNormedAddCommGroup_le
-  结论: {f : α -> β} (hfc : Continuous f) {C : 实数} (hC : 0 <= C)
+  结论: {f : α -> β} (hfc : 连续 f) {C : 实数} (hC : 0 <= C)
   证明: (norm_le hC).2 hfC
 
 Depends on / 依赖: norm_le
@@ -477,7 +477,7 @@ definition ofNormedAddCommGroupDiscrete
 
 中文:
 定义 ofNormedAddCommGroupDiscrete
-  签名: {α : 类型u} {β : 类型v} [TopologicalSpace α] [DiscreteTopology α]
+  签名: {α : 类型u} {β : 类型v} [拓扑空间 α] [离散拓扑 α]
   定义体: ofNormedAddCommGroup f continuous_of_discreteTopology C H
 
 @[simp]
@@ -499,7 +499,7 @@ theorem coe_ofNormedAddCommGroupDiscrete
 
 中文:
 定理 coe_ofNormedAddCommGroupDiscrete
-  结论: {α : 类型u} {β : 类型v} [TopologicalSpace α]
+  结论: {α : 类型u} {β : 类型v} [拓扑空间 α]
   证明: rfl
 -/
 theorem coe_ofNormedAddCommGroupDiscrete {α : Type u} {β : Type v} [TopologicalSpace α]
@@ -579,7 +579,7 @@ theorem bddAbove_range_norm_comp
 
 中文:
 定理 bddAbove_range_norm_comp
-  结论: BddAbove Set.range norm ∘ f
+  结论: BddAbove 集合.range norm ∘ f
   证明: (@isBounded_range _ _ _ _ f.normComp).bddAbove
 
 Depends on / 依赖: bddAbove, f.normComp, isBounded_range, normComp
@@ -617,7 +617,7 @@ instance instNormOneClass
 
 中文:
 实例 instNormOneClass
-  签名: [Nonempty α] [One β] [NormOneClass β]
+  签名: [非空 α] [幺 β] [NormOne类 β]
   定义体: by simp only [norm_eq_iSup_norm, coe_one, Pi.one_apply, norm_one, ciSup_const]
 
 Depends on / 依赖: Pi.one_apply, ciSup_const, coe_one, norm_eq_iSup_norm, norm_one, one_apply
@@ -639,7 +639,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (α ->ᵇ β)
+  签名: 取负 (α ->ᵇ β)
   定义体: ⟨fun f =>
     ofNormedAddCommGroup (-f) f.continuous.neg ‖f‖ fun x =>
       norm_neg ((⇑f) x) ▸ f.norm_coe_le_norm x⟩
@@ -702,7 +702,7 @@ theorem mkOfCompact_neg
 
 中文:
 定理 mkOfCompact_neg
-  条件: [CompactSpace α] (f : C(α, β))
+  条件: [紧空间 α] (f : C(α, β))
   结论: mkOfCompact (-f) = -mkOfCompact f
   证明: rfl
 
@@ -723,7 +723,7 @@ theorem mkOfCompact_sub
 
 中文:
 定理 mkOfCompact_sub
-  条件: [CompactSpace α] (f g : C(α, β))
+  条件: [紧空间 α] (f g : C(α, β))
   证明: rfl
 
 @[simp]
@@ -759,8 +759,8 @@ instance instSMulInt
 @[simp]
 
 中文:
-实例 instSMulInt
-  签名: : SMul 整数 (α ->ᵇ β) where
+实例 instSMul整数
+  签名: : 标量乘法 整数 (α ->ᵇ β) where
   定义体: { toContinuousMap := n • f.toContinuousMap
       map_bounded' := by simpa using (zsmulRec (· • ·) n f).map_bounded' }
 
@@ -825,7 +825,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (α ->ᵇ β)
+  签名: : 加法交换群 (α ->ᵇ β)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_nsmul _ _)
     fun _ _ => coe_zsmul _ _
@@ -846,7 +846,7 @@ instance instSeminormedAddCommGroup
 
 中文:
 实例 instSeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (α ->ᵇ β) where
+  签名: : SeminormedAddComm群 (α ->ᵇ β) where
   定义体: by simp only [norm_eq, dist_eq, dist_eq_norm_neg_add, add_apply, neg_apply]
 
 Depends on / 依赖: add_apply, dist_eq, dist_eq_norm_neg_add, neg_apply, norm_eq
@@ -865,7 +865,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: {α β} [TopologicalSpace α] [NormedAddCommGroup β]
+  签名: {α β} [拓扑空间 α] [赋范交换加群 β]
   定义体: { instSeminormedAddCommGroup with
     eq_of_dist_eq_zero }
 
@@ -987,7 +987,7 @@ theorem nnnorm_const_eq
 
 中文:
 定理 nnnorm_const_eq
-  条件: [Nonempty α] (b : β)
+  条件: [非空 α] (b : β)
   结论: ‖const α b‖₊ = ‖b‖₊
   证明: Subtype.ext norm_const_eq _
 
@@ -1094,7 +1094,7 @@ theorem norm_compContinuous_le
 
 中文:
 定理 norm_compContinuous_le
-  条件: [TopologicalSpace γ] (f : α ->ᵇ β) (g : C(γ, α))
+  条件: [拓扑空间 γ] (f : α ->ᵇ β) (g : C(γ, α))
   证明: ((lipschitz_compContinuous g).dist_le_mul f 0).trans by
     rw [NNReal.coe_one]; rw [one_mul]; rw [dist_zero_right]
 
@@ -1126,7 +1126,7 @@ instance instNormedSpace
 
 中文:
 实例 instNormedSpace
-  签名: [NormedField 𝕜] [NormedSpace 𝕜 β]
+  签名: [赋范域 𝕜] [赋范空间 𝕜 β]
   定义体: ⟨fun c f => by
     refine norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) ?_
     exact fun x =>
@@ -1163,7 +1163,7 @@ definition _root_.ContinuousLinearMap.compLeftContinuousBounded
         nor
 
 中文:
-定义 _root_.ContinuousLinearMap.compLeftContinuousBounded
+定义 _root_.连续线性映射.compLeftContinuousBounded
   签名: (g : β ->L[𝕜] γ)
   定义体: LinearMap.mkContinuous
     { toFun := fun f =>
@@ -1194,7 +1194,7 @@ theorem _root_.ContinuousLinearMap.compLeftContinuousBounded_apply
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearMap.compLeftContinuousBounded_apply
+定理 _root_.连续线性映射.compLeftContinuousBounded_apply
   结论: (g : β ->L[𝕜] γ) (f : α ->ᵇ β)
   证明: rfl
 -/
@@ -1322,7 +1322,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: : NonUnitalRing (α ->ᵇ R)
+  签名: : 非幺环 (α ->ᵇ R)
   定义体: fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
@@ -1347,7 +1347,7 @@ instance instNonUnitalSeminormedRing
 
 中文:
 实例 instNonUnitalSeminormedRing
-  签名: : NonUnitalSeminormedRing (α ->ᵇ R) where
+  签名: : 非幺Seminormed环 (α ->ᵇ R) where
   定义体: instSeminormedAddCommGroup
   __ := instNonUnitalRing
   norm_mul_le f g := norm_ofNormedAddCommGroup_le _ (by positivity)
@@ -1377,7 +1377,7 @@ lemma norm_add_eq_max
 
 中文:
 引理 norm_add_eq_max
-  条件: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
+  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
   证明: by
   have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
   have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
@@ -1404,7 +1404,7 @@ lemma nnnorm_add_eq_max
 
 中文:
 引理 nnnorm_add_eq_max
-  条件: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
+  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
   证明: NNReal.eq norm_add_eq_max h
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_add_eq_max
@@ -1424,7 +1424,7 @@ lemma norm_sub_eq_max
 
 中文:
 引理 norm_sub_eq_max
-  条件: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
+  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
   证明: by
   simpa [sub_eq_add_neg] using norm_add_eq_max (f := f) (g := -g) (by simpa)
 
@@ -1444,7 +1444,7 @@ lemma nnnorm_sub_eq_max
 
 中文:
 引理 nnnorm_sub_eq_max
-  条件: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
+  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
   证明: NNReal.eq norm_sub_eq_max h
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_sub_eq_max
@@ -1470,7 +1470,7 @@ lemma nnnorm_sum_eq_sup
 
 中文:
 引理 nnnorm_sum_eq_sup
-  结论: [IsCancelMulZero R] {ι : 类型} {f : ι -> (α ->ᵇ R)} (s : Finset ι)
+  结论: [是乘零消去 R] {ι : 类型} {f : ι -> (α ->ᵇ R)} (s : 有限集 ι)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1503,7 +1503,7 @@ instance instNonUnitalSeminormedCommRing
 
 中文:
 实例 instNonUnitalSeminormedCommRing
-  签名: [NonUnitalSeminormedCommRing R]
+  签名: [非幺SeminormedComm环 R]
   定义体: ext fun _ => mul_comm ..
 
 Depends on / 依赖: mul_comm
@@ -1523,7 +1523,7 @@ instance instNonUnitalNormedRing
 
 中文:
 实例 instNonUnitalNormedRing
-  签名: [NonUnitalNormedRing R]
+  签名: [非幺赋范环 R]
   定义体: instNonUnitalSeminormedRing
   __ := instNormedAddCommGroup
 
@@ -1543,7 +1543,7 @@ instance instNonUnitalNormedCommRing
 
 中文:
 实例 instNonUnitalNormedCommRing
-  签名: [NonUnitalNormedCommRing R]
+  签名: [非幺NormedComm环 R]
   定义体: mul_comm
 
 Depends on / 依赖: mul_comm
@@ -1586,8 +1586,8 @@ instance hasNatPow
       map_bounded' := by simpa [coe_npowRec] using (npowRec n f).map_bounded' }
 
 中文:
-实例 hasNatPow
-  签名: : Pow (α ->ᵇ R) 自然数 where
+实例 has自然数Pow
+  签名: : 幂 (α ->ᵇ R) 自然数 where
   定义体: { toContinuousMap := f.toContinuousMap ^ n
       map_bounded' := by simpa [coe_npowRec] using (npowRec n f).map_bounded' }
 
@@ -1610,7 +1610,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (α ->ᵇ R)
+  签名: 自然数嵌入 (α ->ᵇ R)
   定义体: ⟨fun n => BoundedContinuousFunction.const _ n⟩
 
 @[simp, norm_cast]
@@ -1652,7 +1652,7 @@ theorem coe_ofNat
   proof: rfl
 
 中文:
-定理 coe_ofNat
+定理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1672,7 +1672,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (α ->ᵇ R)
+  签名: 整数嵌入 (α ->ᵇ R)
   定义体: ⟨fun n => BoundedContinuousFunction.const _ n⟩
 
 @[simp, norm_cast]
@@ -1713,7 +1713,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (α ->ᵇ R)
+  签名: : 环 (α ->ᵇ R)
   定义体: fast_instance%
   DFunLike.coe_injective.ring _ coe_zero coe_one coe_add coe_mul coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) (fun _ _ => coe_zsmul _ _) (fun _ _ => coe_pow _ _) coe_natCast
@@ -1737,7 +1737,7 @@ instance instSeminormedRing
 
 中文:
 实例 instSeminormedRing
-  签名: : SeminormedRing (α ->ᵇ R) where
+  签名: : Seminormed环 (α ->ᵇ R) where
   定义体: instRing
   __ := instNonUnitalSeminormedRing
 
@@ -1760,7 +1760,7 @@ definition _root_.RingHom.compLeftContinuousBounded
     g.toAddMonoidHom.compLeftContinuousBounded α hg with }
 
 中文:
-定义 _root_.RingHom.compLeftContinuousBounded
+定义 _root_.环态射.compLeftContinuousBounded
   签名: (α : 类型)
   定义体: { g.toMonoidHom.compLeftContinuousBounded α hg,
     g.toAddMonoidHom.compLeftContinuousBounded α hg with }
@@ -1784,7 +1784,7 @@ instance instNormedRing
 
 中文:
 实例 instNormedRing
-  签名: [NormedRing R]
+  签名: [赋范环 R]
   定义体: instRing
   __ := instNonUnitalNormedRing
 
@@ -1810,7 +1810,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [SeminormedCommRing R]
+  签名: [SeminormedComm环 R]
   定义体: ext fun _ => mul_comm _ _
 
 Depends on / 依赖: mul_comm
@@ -1829,7 +1829,7 @@ instance instSeminormedCommRing
 
 中文:
 实例 instSeminormedCommRing
-  签名: [SeminormedCommRing R]
+  签名: [SeminormedComm环 R]
   定义体: instCommRing
   __ := instNonUnitalSeminormedRing
 
@@ -1850,7 +1850,7 @@ instance instNormedCommRing
 
 中文:
 实例 instNormedCommRing
-  签名: [NormedCommRing R]
+  签名: [NormedComm环 R]
   定义体: instSeminormedCommRing
   __ := instNormedAddCommGroup
 
@@ -1877,8 +1877,8 @@ instance [IsScalarTower
   body: ext fun _ => smul_mul_assoc ..
 
 中文:
-实例 [IsScalarTower
-  签名: 𝕜 β β] : IsScalarTower 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
+实例 [标量塔
+  签名: 𝕜 β β] : 标量塔 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
   定义体: ext fun _ => smul_mul_assoc ..
 
 Depends on / 依赖: smul_mul_assoc
@@ -1895,8 +1895,8 @@ instance [SMulCommClass
   body: ext fun _ => (mul_smul_comm ..).symm
 
 中文:
-实例 [SMulCommClass
-  签名: 𝕜 β β] : SMulCommClass 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
+实例 [标量交换类
+  签名: 𝕜 β β] : 标量交换类 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
   定义体: ext fun _ => (mul_smul_comm ..).symm
 
 Depends on / 依赖: mul_smul_comm
@@ -1913,8 +1913,8 @@ instance [SMulCommClass
   body: ext fun _ => mul_smul_comm ..
 
 中文:
-实例 [SMulCommClass
-  签名: 𝕜 β β] : SMulCommClass (α ->ᵇ β) 𝕜 (α ->ᵇ β) where
+实例 [标量交换类
+  签名: 𝕜 β β] : 标量交换类 (α ->ᵇ β) 𝕜 (α ->ᵇ β) where
   定义体: ext fun _ => mul_smul_comm ..
 
 Depends on / 依赖: mul_smul_comm
@@ -1973,7 +1973,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra 𝕜 (α ->ᵇ γ) where
+  签名: : 代数 𝕜 (α ->ᵇ γ) where
   定义体: C
   commutes' _ _ := ext fun _ => Algebra.commutes' _ _
   smul_def' _ _ := ext fun _ => Algebra.smul_def' _ _
@@ -2019,7 +2019,7 @@ instance instNormedAlgebra
 
 中文:
 实例 instNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (α ->ᵇ γ) where
+  签名: : 赋范代数 𝕜 (α ->ᵇ γ) where
   定义体: instAlgebra
   __ := instNormedSpace
 
@@ -2044,8 +2044,8 @@ definition AlgHom.compLeftContinuousBounded
     commutes' := fun _ => DFunLike.ext _ _ fun _ => g.commutes' _ }
 
 中文:
-定义 AlgHom.compLeftContinuousBounded
-  签名: [NormedRing β] [NormedAlgebra 𝕜 β]
+定义 代数态射.compLeftContinuousBounded
+  签名: [赋范环 β] [赋范代数 𝕜 β]
   定义体: { g.toRingHom.compLeftContinuousBounded α hg with
     commutes' := fun _ => DFunLike.ext _ _ fun _ => g.commutes' _ }
 -/
@@ -2126,7 +2126,7 @@ instance instSMul'
 
 中文:
 实例 instSMul'
-  签名: : SMul (α ->ᵇ 𝕜) (α ->ᵇ β) where
+  签名: : 标量乘法 (α ->ᵇ 𝕜) (α ->ᵇ β) where
   定义体: ofNormedAddCommGroup (fun x => f x • g x) (f.continuous.smul g.continuous) (‖f‖ * ‖g‖) fun x =>
       calc
         ‖f x • g x‖ <= ‖f x‖ * ‖g x‖ := norm_smul_le _ _
@@ -2157,7 +2157,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: : Module (α ->ᵇ 𝕜) (α ->ᵇ β)
+  签名: : 模 (α ->ᵇ 𝕜) (α ->ᵇ β)
   定义体: Module.ofMinimalAxioms
       (fun c _ _ => ext fun a => smul_add (c a) _ _)
       (fun _ _ _ => ext fun _ => add_smul _ _ _)
@@ -2184,7 +2184,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBoundedSMul (α ->ᵇ 𝕜) (α ->ᵇ β)
+  签名: 是BoundedSMul (α ->ᵇ 𝕜) (α ->ᵇ β)
   定义体: IsBoundedSMul.of_norm_smul_le fun _ _ =>
     norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) _
 
@@ -2211,7 +2211,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (α ->ᵇ β)
+  签名: : 偏序 (α ->ᵇ β)
   定义体: PartialOrder.lift (fun f => f.toFun) (by simp [Injective])
 
 Depends on / 依赖: Injective, PartialOrder, PartialOrder.lift, f.toFun
@@ -2236,7 +2236,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (α ->ᵇ β) where
+  签名: : 最大值 (α ->ᵇ β) where
   定义体: { toFun := f ⊔ g
       continuous_toFun := f.continuous.sup g.continuous
       map_bounded' := by
@@ -2276,7 +2276,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (α ->ᵇ β) where
+  签名: : 最小值 (α ->ᵇ β) where
   定义体: { toFun := f ⊓ g
       continuous_toFun := f.continuous.inf g.continuous
       map_bounded' := by
@@ -2384,7 +2384,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: : Lattice (α ->ᵇ β)
+  签名: : 格 (α ->ᵇ β)
   定义体: fast_instance%
   DFunLike.coe_injective.lattice _ .rfl .rfl coe_sup coe_inf
 
@@ -2456,7 +2456,7 @@ instance instHasSolidNorm
 
 中文:
 实例 instHasSolidNorm
-  签名: : HasSolidNorm (α ->ᵇ β)
+  签名: : 有Solid范数 (α ->ᵇ β)
   定义体: { solid := by
       intro f g h
       have i1 : forall t, ‖f t‖ <= ‖g t‖ := fun t => HasSolidNorm.solid (h t)
@@ -2482,7 +2482,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid (α ->ᵇ β) where
+  签名: : 是OrderedAdd幺半群 (α ->ᵇ β) where
   定义体: by simpa using h₁ _
 -/
 instance instIsOrderedAddMonoid : IsOrderedAddMonoid (α ->ᵇ β) where
@@ -2572,7 +2572,7 @@ theorem nnnorm_coeFn_eq
 中文:
 定理 nnnorm_coeFn_eq
   条件: (f : α ->ᵇ 实数)
-  结论: ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f
+  结论: ⇑f.nnnorm = NN范数.nnnorm ∘ ⇑f
   证明: rfl
 -/
 theorem nnnorm_coeFn_eq (f : α ->ᵇ Real) : ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f := rfl

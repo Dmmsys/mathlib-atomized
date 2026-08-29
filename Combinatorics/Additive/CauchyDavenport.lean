@@ -86,7 +86,7 @@ definition DevosMulRel
 
 中文:
 定义 DevosMulRel
-  签名: : Finset α × Finset α -> Finset α × Finset α -> 命题
+  签名: : 有限集 α × 有限集 α -> 有限集 α × 有限集 α -> 命题
   定义体: Prod.Lex (· < ·) (Prod.Lex (· > ·) (· < ·)) on fun x => (#(x.1 * x.2), #x.1 + #x.2, #x.1)
 
 @[to_additive]
@@ -221,7 +221,7 @@ lemma cauchy_davenport_minOrder_mul
 
 中文:
 引理 cauchy_davenport_minOrder_mul
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   -- Set up the induction on `x := (s, t)` along the `DevosMulRel` relation.
   set x := (s, t) with hx
@@ -316,7 +316,7 @@ lemma cauchy_davenport_of_isMulTorsionFree
 
 中文:
 引理 cauchy_davenport_of_isMulTorsionFree
-  结论: [DecidableEq G] [Group G] [IsMulTorsionFree G]
+  结论: [DecidableEq G] [群 G] [是MulTorsionFree G]
   证明: by
   simpa only [Monoid.minOrder_eq_top, min_eq_right, le_top, Nat.cast_le]
     using cauchy_davenport_minOrder_mul hs ht
@@ -342,7 +342,7 @@ lemma ZMod.cauchy_davenport
 
 中文:
 引理 ZMod.cauchy_davenport
-  结论: {p : 自然数} (hp : p.Prime) {s t : Finset (ZMod p)} (hs : s.Nonempty)
+  结论: {p : 自然数} (hp : p.素) {s t : 有限集 (ZMod p)} (hs : s.非空)
   证明: by
   simpa only [ZMod.minOrder_of_prime hp, min_le_iff, Nat.cast_le]
     using cauchy_davenport_minOrder_add hs ht
@@ -374,7 +374,7 @@ lemma cauchy_davenport_mul_of_linearOrder_isCancelMul
 
 中文:
 引理 cauchy_davenport_mul_of_linearOrder_isCancelMul
-  结论: [LinearOrder α] [Mul α] [IsCancelMul α]
+  结论: [线性序 α] [乘法 α] [是消去乘法 α]
   证明: by
   suffices s * {t.min' ht} inter ({s.max' hs} * t) = {s.max' hs * t.min' ht} by
     rw [← card_singleton_mul (s.max' hs) t]; rw [← card_mul_singleton s (t.min' ht)]; rw [← card_union_add_card_inter]; rw [← card_singleton _]; rw [← this]; rw [Nat.add_sub_cancel]

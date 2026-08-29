@@ -130,7 +130,7 @@ theorem AnalyticOnNhd.eval_polynomial
 
 中文:
 定理 AnalyticOnNhd.eval_polynomial
-  条件: {A} [NormedCommRing A] [NormedAlgebra 𝕜 A] (p : A[X])
+  条件: {A} [NormedComm环 A] [赋范代数 𝕜 A] (p : A[X])
   证明: analyticOnNhd_id.aeval_polynomial p
 
 Depends on / 依赖: aeval_polynomial, analyticOnNhd_id, analyticOnNhd_id.aeval_polynomial
@@ -148,7 +148,7 @@ theorem AnalyticOn.eval_polynomial
 
 中文:
 定理 AnalyticOn.eval_polynomial
-  条件: {A} [NormedCommRing A] [NormedAlgebra 𝕜 A] (p : A[X])
+  条件: {A} [NormedComm环 A] [赋范代数 𝕜 A] (p : A[X])
   证明: analyticOn_id.aeval_polynomial p
 
 Depends on / 依赖: aeval_polynomial, analyticOn_id, analyticOn_id.aeval_polynomial
@@ -177,7 +177,7 @@ theorem AnalyticAt.aeval_mvPolynomial
 
 中文:
 定理 AnalyticAt.aeval_mvPolynomial
-  条件: (hf : 对任意 i, AnalyticAt 𝕜 (f · i) z) (p : MvPolynomial σ A)
+  条件: (hf : 对任意 i, AnalyticAt 𝕜 (f · i) z) (p : 多元多项式 σ A)
   证明: by
   apply p.induction_on (fun k => ?_) (fun p q hp hq => ?_) fun p i hp => ?_ -- `refine` doesn't work
   · simp_rw [aeval_C]; apply analyticAt_const
@@ -220,7 +220,7 @@ theorem AnalyticOnNhd.eval_continuousLinearMap
 
 中文:
 定理 AnalyticOnNhd.eval_continuousLinearMap
-  条件: (f : E ->L[𝕜] σ -> B) (p : MvPolynomial σ B)
+  条件: (f : E ->L[𝕜] σ -> B) (p : 多元多项式 σ B)
   证明: fun x _ => .aeval_mvPolynomial (fun i => ((ContinuousLinearMap.proj i).comp f).analyticAt x) p
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.proj, aeval_mvPolynomial, analyticAt
@@ -239,7 +239,7 @@ theorem AnalyticOnNhd.eval_continuousLinearMap'
 
 中文:
 定理 AnalyticOnNhd.eval_continuousLinearMap'
-  条件: (f : σ -> E ->L[𝕜] B) (p : MvPolynomial σ B)
+  条件: (f : σ -> E ->L[𝕜] B) (p : 多元多项式 σ B)
   证明: fun x _ => .aeval_mvPolynomial (fun i => (f i).analyticAt x) p
 
 Depends on / 依赖: aeval_mvPolynomial, analyticAt
@@ -260,7 +260,7 @@ theorem AnalyticOnNhd.eval_linearMap
 
 中文:
 定理 AnalyticOnNhd.eval_linearMap
-  条件: (f : E ->ₗ[𝕜] σ -> B) (p : MvPolynomial σ B)
+  条件: (f : E ->ₗ[𝕜] σ -> B) (p : 多元多项式 σ B)
   证明: AnalyticOnNhd.eval_continuousLinearMap { f with cont := f.continuous_of_finiteDimensional } p
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.eval_continuousLinearMap, continuous_of_finiteDimensional, eval_continuousLinearMap, f.continuous_of_finiteDimensional
@@ -279,7 +279,7 @@ theorem AnalyticOnNhd.eval_linearMap'
 
 中文:
 定理 AnalyticOnNhd.eval_linearMap'
-  条件: (f : σ -> E ->ₗ[𝕜] B) (p : MvPolynomial σ B)
+  条件: (f : σ -> E ->ₗ[𝕜] B) (p : 多元多项式 σ B)
   证明: AnalyticOnNhd.eval_linearMap (.pi f) p
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.eval_linearMap, eval_linearMap
@@ -297,7 +297,7 @@ theorem AnalyticOnNhd.eval_mvPolynomial
 
 中文:
 定理 AnalyticOnNhd.eval_mvPolynomial
-  条件: [Fintype σ] (p : MvPolynomial σ 𝕜)
+  条件: [有限类型 σ] (p : 多元多项式 σ 𝕜)
   证明: AnalyticOnNhd.eval_linearMap (.id (R := 𝕜) (M := σ -> 𝕜)) p
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.eval_linearMap, eval_linearMap

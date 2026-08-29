@@ -65,7 +65,7 @@ theorem conductor_eq_of_eq
 
 中文:
 定理 conductor_eq_of_eq
-  条件: {y : S} (h : (R<x> : Set S) = R<y>)
+  条件: {y : S} (h : (R<x> : 集合 S) = R<y>)
   结论: conductor R x = conductor R y
   证明: Ideal.ext fun _ => forall_congr' fun _ => Set.ext_iff.mp h _
 
@@ -85,7 +85,7 @@ theorem conductor_subset_adjoin
 
 中文:
 定理 conductor_subset_adjoin
-  结论: (conductor R x : Set S) subseteq R<x>
+  结论: (conductor R x : 集合 S) subseteq R<x>
   证明: fun y hy => by
   simpa only [mul_one] using! hy 1
 
@@ -213,7 +213,7 @@ lemma mem_coeSubmodule_conductor
 
 中文:
 引理 mem_coeSubmodule_conductor
-  结论: {L} [CommRing L] [Algebra S L] [Algebra R L]
+  结论: {L} [交换环 L] [代数 S L] [代数 R L]
   证明: by
   trans forall z, y * (algebraMap S L) z in (R[x]).map (IsScalarTower.toAlgHom R S L)
   · simp only [coeSubmodule, Submodule.mem_map, linearMap_apply, Subalgebra.mem_map,

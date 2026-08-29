@@ -78,7 +78,7 @@ definition piPremeasure
 
 中文:
 定义 piPremeasure
-  签名: (m : 对任意 i, OuterMeasure (α i)) (s : Set (对任意 i, α i))
+  签名: (m : 对任意 i, 外测度 (α i)) (s : 集合 (对任意 i, α i))
   定义体: ∏ i, m i (eval i '' s)
 -/
 def piPremeasure (m : forall i, OuterMeasure (α i)) (s : Set (forall i, α i)) : Real>=0∞ :=
@@ -94,7 +94,7 @@ theorem piPremeasure_pi
 
 中文:
 定理 piPremeasure_pi
-  条件: {s : 对任意 i, Set (α i)} (hs : (pi univ s).Nonempty)
+  条件: {s : 对任意 i, 集合 (α i)} (hs : (pi univ s).非空)
   证明: by simp [hs, piPremeasure]
 
 Depends on / 依赖: piPremeasure
@@ -119,7 +119,7 @@ theorem piPremeasure_pi'
 
 中文:
 定理 piPremeasure_pi'
-  条件: {s : 对任意 i, Set (α i)}
+  条件: {s : 对任意 i, 集合 (α i)}
   结论: piPremeasure m (pi univ s) = ∏ i, m i (s i)
   证明: by
   cases isEmpty_or_nonempty ι
@@ -151,7 +151,7 @@ theorem piPremeasure_pi_mono
 
 中文:
 定理 piPremeasure_pi_mono
-  条件: {s t : Set (对任意 i, α i)} (h : s subseteq t)
+  条件: {s t : 集合 (对任意 i, α i)} (h : s subseteq t)
   证明: Finset.prod_le_prod' fun _ _ => measure_mono (Set.image_mono h)
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, Set.image_mono, image_mono, measure_mono, prod_le_prod
@@ -171,7 +171,7 @@ theorem piPremeasure_pi_eval
 
 中文:
 定理 piPremeasure_pi_eval
-  条件: {s : Set (对任意 i, α i)}
+  条件: {s : 集合 (对任意 i, α i)}
   证明: by
   simp only [eval, piPremeasure_pi']; rfl
 
@@ -193,7 +193,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (m : 对任意 i, OuterMeasure (α i))
+  签名: (m : 对任意 i, 外测度 (α i))
   定义体: boundedBy (piPremeasure m)
 -/
 protected def pi (m : forall i, OuterMeasure (α i)) : OuterMeasure (forall i, α i) :=
@@ -212,7 +212,7 @@ theorem pi_pi_le
 
 中文:
 定理 pi_pi_le
-  条件: (m : 对任意 i, OuterMeasure (α i)) (s : 对任意 i, Set (α i))
+  条件: (m : 对任意 i, 外测度 (α i)) (s : 对任意 i, 集合 (α i))
   证明: by
   rcases (pi univ s).eq_empty_or_nonempty with h | h
   · simp [h]
@@ -240,7 +240,7 @@ theorem le_pi
 
 中文:
 定理 le_pi
-  条件: {m : 对任意 i, OuterMeasure (α i)} {n : OuterMeasure (对任意 i, α i)}
+  条件: {m : 对任意 i, 外测度 (α i)} {n : 外测度 (对任意 i, α i)}
   证明: by
   rw [OuterMeasure.pi]; rw [le_boundedBy']; constructor
   · intro h s hs; refine (h _ hs).trans_eq (piPremeasure_pi hs)
@@ -285,7 +285,7 @@ definition tprod
 
 中文:
 定义 tprod
-  签名: (l : List δ) (μ : 对任意 i, Measure (X i))
+  签名: (l : 列表 δ) (μ : 对任意 i, 测度 (X i))
   定义体: by
   induction l with
   | nil => exact dirac PUnit.unit
@@ -312,8 +312,8 @@ theorem tprod_nil
 
 中文:
 定理 tprod_nil
-  条件: (μ : 对任意 i, Measure (X i))
-  结论: Measure.tprod [] μ = dirac PUnit.unit
+  条件: (μ : 对任意 i, 测度 (X i))
+  结论: 测度.tprod [] μ = dirac 命题单元.unit
   证明: rfl
 
 @[simp]
@@ -332,7 +332,7 @@ theorem tprod_cons
 
 中文:
 定理 tprod_cons
-  条件: (i : δ) (l : List δ) (μ : 对任意 i, Measure (X i))
+  条件: (i : δ) (l : 列表 δ) (μ : 对任意 i, 测度 (X i))
   证明: rfl
 -/
 theorem tprod_cons (i : δ) (l : List δ) (μ : forall i, Measure (X i)) :
@@ -353,7 +353,7 @@ instance sigmaFinite_tprod
 
 中文:
 实例 sigmaFinite_tprod
-  签名: (l : List δ) (μ : 对任意 i, Measure (X i)) [对任意 i, SigmaFinite (μ i)]
+  签名: (l : 列表 δ) (μ : 对任意 i, 测度 (X i)) [对任意 i, σ有限 (μ i)]
   定义体: by
   induction l with
   | nil => rw [tprod_nil]; infer_instance
@@ -384,7 +384,7 @@ theorem tprod_tprod
 
 中文:
 定理 tprod_tprod
-  结论: (l : List δ) (μ : 对任意 i, Measure (X i)) [对任意 i, SigmaFinite (μ i)]
+  结论: (l : 列表 δ) (μ : 对任意 i, 测度 (X i)) [对任意 i, σ有限 (μ i)]
   证明: by
   induction l with
   | nil => simp
@@ -424,7 +424,7 @@ definition pi'
 
 中文:
 定义 pi'
-  签名: : Measure (对任意 i, α i)
+  签名: : 测度 (对任意 i, α i)
   定义体: Measure.map (TProd.elim' mem_sortedUniv) (Measure.tprod (sortedUniv ι) μ)
 
 Depends on / 依赖: Measure, Measure.map, Measure.tprod, TProd.elim, mem_sortedUniv, sortedUniv
@@ -447,7 +447,7 @@ theorem pi'_pi
 
 中文:
 定理 pi'_pi
-  条件: [对任意 i, SigmaFinite (μ i)] (s : 对任意 i, Set (α i))
+  条件: [对任意 i, σ有限 (μ i)] (s : 对任意 i, 集合 (α i))
   证明: by
   classical
   rw [pi']
@@ -524,8 +524,8 @@ instance _root_.MeasureTheory.MeasureSpace.pi
   body: ⟨Measure.pi fun _ => volume⟩
 
 中文:
-实例 _root_.MeasureTheory.MeasureSpace.pi
-  签名: {α : ι -> 类型} [对任意 i, MeasureSpace (α i)]
+实例 _root_.测度论.测度空间.pi
+  签名: {α : ι -> 类型} [对任意 i, 测度空间 (α i)]
   定义体: ⟨Measure.pi fun _ => volume⟩
 
 Depends on / 依赖: Measure, Measure.pi, volume
@@ -550,7 +550,7 @@ theorem pi_pi_aux
 
 中文:
 定理 pi_pi_aux
-  条件: [对任意 i, SigmaFinite (μ i)] (s : 对任意 i, Set (α i)) (hs : 对任意 i, MeasurableSet (s i))
+  条件: [对任意 i, σ有限 (μ i)] (s : 对任意 i, 集合 (α i)) (hs : 对任意 i, 可测集 (s i))
   证明: by
   refine le_antisymm ?_ ?_
   · rw [Measure.pi, toMeasure_apply _ _ (MeasurableSet.pi countable_univ fun i _ => hs i)]
@@ -593,7 +593,7 @@ definition FiniteSpanningSetsIn.pi
 
 中文:
 定义 FiniteSpanningSetsIn.pi
-  签名: {C : 对任意 i, Set (Set (α i))}
+  签名: {C : 对任意 i, 集合 (集合 (α i))}
   定义体: by
   haveI := fun i => (hμ i).sigmaFinite
   haveI := Fintype.toEncodable ι
@@ -645,7 +645,7 @@ theorem pi_eq_generateFrom
 
 中文:
 定理 pi_eq_generateFrom
-  结论: {C : 对任意 i, Set (Set (α i))}
+  结论: {C : 对任意 i, 集合 (集合 (α i))}
   证明: by
   have h4C : forall (i) (s : Set (α i)), s in C i -> MeasurableSet s := by
     intro i s hs; rw [← hC]; exact measurableSet_generateFrom hs
@@ -682,7 +682,7 @@ theorem pi_eq
 
 中文:
 定理 pi_eq
-  结论: [对任意 i, SigmaFinite (μ i)] {μ' : Measure (对任意 i, α i)}
+  结论: [对任意 i, σ有限 (μ i)] {μ' : 测度 (对任意 i, α i)}
   证明: pi_eq_generateFrom (fun _ => generateFrom_measurableSet) (fun _ => isPiSystem_measurableSet)
     (fun i => (μ i).toFiniteSpanningSetsIn) h
 
@@ -709,8 +709,8 @@ theorem pi'_eq_pi
 
 中文:
 定理 pi'_eq_pi
-  条件: [Encodable ι] [对任意 i, SigmaFinite (μ i)]
-  结论: pi' μ = Measure.pi μ
+  条件: [可编码 ι] [对任意 i, σ有限 (μ i)]
+  结论: pi' μ = 测度.pi μ
   证明: Eq.symm pi_eq fun s _ => pi'_pi μ s
 
 @[simp]
@@ -734,7 +734,7 @@ nonrec theorem pi_univ [forall i, SigmaFinite (μ i)] : Measure.pi μ univ = ∏
 
 中文:
 定理 pi_pi
-  条件: [对任意 i, SigmaFinite (μ i)] (s : (i : ι) -> Set (α i))
+  条件: [对任意 i, σ有限 (μ i)] (s : (i : ι) -> 集合 (α i))
   证明: by
   have : Encodable ι := Fintype.toEncodable ι
   rw [← pi'_eq_pi]; rw [pi'_pi]
@@ -763,7 +763,7 @@ lemma pi_singleton
 
 中文:
 引理 pi_singleton
-  条件: [对任意 i, SigmaFinite (μ i)] (f : 对任意 i, α i)
+  条件: [对任意 i, σ有限 (μ i)] (f : 对任意 i, α i)
   证明: by
   simpa [Set.univ_pi_singleton, -pi_pi] using pi_pi μ fun i => {f i}
 -/
@@ -781,7 +781,7 @@ instance pi.instIsFiniteMeasure
 
 中文:
 实例 pi.instIsFiniteMeasure
-  签名: [对任意 i, IsFiniteMeasure (μ i)]
+  签名: [对任意 i, 是有限测度 (μ i)]
   定义体: ⟨Measure.pi_univ μ ▸ ENNReal.prod_lt_top (fun i _ => measure_lt_top (μ i) _)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.prod_lt_top, Measure, Measure.pi_univ, measure_lt_top, pi_univ, prod_lt_top
@@ -806,7 +806,7 @@ instance pi.instIsProbabilityMeasure
 
 中文:
 实例 pi.instIsProbabilityMeasure
-  签名: [对任意 i, IsProbabilityMeasure (μ i)]
+  签名: [对任意 i, 是概率测度 (μ i)]
   定义体: ⟨by simp only [Measure.pi_univ, measure_univ, Finset.prod_const_one]⟩
 
 @[simp]
@@ -829,7 +829,7 @@ theorem pi_pi_finset
 
 中文:
 定理 pi_pi_finset
-  条件: [对任意 i, IsProbabilityMeasure (μ i)] (f : (i : ι) -> Set (α i)) (s : Finset ι)
+  条件: [对任意 i, 是概率测度 (μ i)] (f : (i : ι) -> 集合 (α i)) (s : 有限集 ι)
   证明: by
   classical simp [← Set.univ_pi_ite, pi_pi, apply_ite]
 
@@ -856,7 +856,7 @@ theorem pi_ball
 
 中文:
 定理 pi_ball
-  条件: [对任意 i, MetricSpace (α i)] (x : 对任意 i, α i) {r : 实数} (hr : 0 < r)
+  条件: [对任意 i, 度量空间 (α i)] (x : 对任意 i, α i) {r : 实数} (hr : 0 < r)
   证明: by rw [ball_pi _ hr, pi_pi]
 
 Depends on / 依赖: ball_pi, pi_pi
@@ -875,7 +875,7 @@ theorem pi_closedBall
 
 中文:
 定理 pi_closedBall
-  条件: [对任意 i, MetricSpace (α i)] (x : 对任意 i, α i) {r : 实数} (hr : 0 <= r)
+  条件: [对任意 i, 度量空间 (α i)] (x : 对任意 i, α i) {r : 实数} (hr : 0 <= r)
   证明: by
   rw [closedBall_pi _ hr]; rw [pi_pi]
 
@@ -895,7 +895,7 @@ instance pi.sigmaFinite
 
 中文:
 实例 pi.sigmaFinite
-  签名: : SigmaFinite (Measure.pi μ)
+  签名: : σ有限 (测度.pi μ)
   定义体: (FiniteSpanningSetsIn.pi fun i => (μ i).toFiniteSpanningSetsIn).sigmaFinite
 
 Depends on / 依赖: FiniteSpanningSetsIn, FiniteSpanningSetsIn.pi, sigmaFinite, toFiniteSpanningSetsIn
@@ -921,7 +921,7 @@ theorem pi_of_empty
 
 中文:
 定理 pi_of_empty
-  结论: {α : 类型} [Fintype α] [IsEmpty α] {β : α -> 类型}
+  结论: {α : 类型} [有限类型 α] [是空 α] {β : α -> 类型}
   证明: by
   have : forall a, SigmaFinite (μ a) := isEmptyElim
   refine pi_eq fun s _ => ?_
@@ -950,7 +950,7 @@ lemma volume_pi_eq_dirac
 
 中文:
 引理 volume_pi_eq_dirac
-  结论: {ι : 类型} [Fintype ι] [IsEmpty ι]
+  结论: {ι : 类型} [有限类型 ι] [是空 ι]
   证明: Measure.pi_of_empty _ _
 
 @[simp]
@@ -974,7 +974,7 @@ theorem pi_empty_univ
 
 中文:
 定理 pi_empty_univ
-  结论: {α : 类型} [Fintype α] [IsEmpty α] {β : α -> 类型}
+  结论: {α : 类型} [有限类型 α] [是空 α] {β : α -> 类型}
   证明: by
   rw [pi_of_empty]; rw [measure_univ]
 
@@ -1002,7 +1002,7 @@ theorem pi_eval_preimage_null
 
 中文:
 定理 pi_eval_preimage_null
-  条件: {i : ι} {s : Set (α i)} (hs : μ i s = 0)
+  条件: {i : ι} {s : 集合 (α i)} (hs : μ i s = 0)
   证明: by
   classical
   -- WLOG, `s` is measurable
@@ -1102,7 +1102,7 @@ lemma pi_map_pi
 
 中文:
 引理 pi_map_pi
-  结论: {X Y : ι -> 类型} {mX : 对任意 i, MeasurableSpace (X i)} {μ : (i : ι) -> Measure (X i)}
+  结论: {X Y : ι -> 类型} {mX : 对任意 i, 可测空间 (X i)} {μ : (i : ι) -> 测度 (X i)}
   证明: by
   have (i : ι) := (hμ i).of_map _ (hf i)
   refine (pi_eq fun s hs => ?_).symm
@@ -1144,8 +1144,8 @@ lemma _root_.MeasureTheory.measurePreserving_eval
   exact fun _ _ => measure_univ
 
 中文:
-引理 _root_.MeasureTheory.measurePreserving_eval
-  条件: [对任意 i, IsProbabilityMeasure (μ i)] (i : ι)
+引理 _root_.测度论.measurePreserving_eval
+  条件: [对任意 i, 是概率测度 (μ i)] (i : ι)
   证明: by
   refine ⟨measurable_pi_apply i, ?_⟩
   classical
@@ -1171,7 +1171,7 @@ theorem pi_hyperplane
 
 中文:
 定理 pi_hyperplane
-  条件: (i : ι) [NullSingletonClass (μ i)] (x : α i)
+  条件: (i : ι) [NullSingleton类 (μ i)] (x : α i)
   证明: show Measure.pi μ (eval i ⁻¹' {x}) = 0 from pi_eval_preimage_null _ (measure_singleton x)
 
 Depends on / 依赖: Measure, Measure.pi, measure_singleton, pi_eval_preimage_null
@@ -1190,7 +1190,7 @@ theorem ae_eval_ne
 
 中文:
 定理 ae_eval_ne
-  条件: (i : ι) [NullSingletonClass (μ i)] (x : α i)
+  条件: (i : ι) [NullSingleton类 (μ i)] (x : α i)
   证明: compl_mem_ae_iff.2 (pi_hyperplane μ i x)
 
 Depends on / 依赖: compl_mem_ae_iff, pi_hyperplane
@@ -1212,7 +1212,7 @@ theorem restrict_pi_pi
 
 中文:
 定理 restrict_pi_pi
-  条件: (s : (i : ι) -> Set (α i))
+  条件: (s : (i : ι) -> 集合 (α i))
   证明: by
   refine (pi_eq fun _ h => ?_).symm
   simp_rw [restrict_apply (MeasurableSet.univ_pi h), restrict_apply (h _),
@@ -1241,7 +1241,7 @@ theorem tendsto_eval_ae_ae
 中文:
 定理 tendsto_eval_ae_ae
   条件: {i : ι}
-  结论: Tendsto (eval i) (ae (Measure.pi μ)) (ae (μ i))
+  结论: 收敛 (eval i) (ae (测度.pi μ)) (ae (μ i))
   证明: fun _ hs =>
   pi_eval_preimage_null μ hs
 -/
@@ -1258,7 +1258,7 @@ theorem ae_pi_le_pi
 
 中文:
 定理 ae_pi_le_pi
-  结论: ae (Measure.pi μ) <= Filter.pi fun i => ae (μ i)
+  结论: ae (测度.pi μ) <= 滤子.pi fun i => ae (μ i)
   证明: le_iInf fun _ => tendsto_eval_ae_ae.le_comap
 
 Depends on / 依赖: le_comap, le_iInf, tendsto_eval_ae_ae, tendsto_eval_ae_ae.le_comap
@@ -1295,7 +1295,7 @@ theorem ae_le_pi
 
 中文:
 定理 ae_le_pi
-  结论: {β : ι -> 类型} [对任意 i, Preorder (β i)] {f f' : 对任意 i, α i -> β i}
+  结论: {β : ι -> 类型} [对任意 i, 预序 (β i)] {f f' : 对任意 i, α i -> β i}
   证明: (eventually_all.2 fun i => tendsto_eval_ae_ae.eventually (h i)).mono fun _ hx => hx
 
 Depends on / 依赖: Int.emod_emod_of_dvd, Int.emod_lt_abs, Int.emod_nonneg, ZMod.intCast_mod, emod_emod_of_dvd, emod_lt_abs, emod_nonneg, eventually, eventually_all, intCast_mod, tendsto_eval_ae_ae, tendsto_eval_ae_ae.eventually
@@ -1316,7 +1316,7 @@ fun _ hst hx i hi => hst i hi hx i hi
 
 中文:
 定理 ae_le_set_pi
-  条件: {I : Set ι} {s t : 对任意 i, Set (α i)} (h : 对任意 i in I, s i <=ᵐ[μ i] t i)
+  条件: {I : 集合 ι} {s t : 对任意 i, 集合 (α i)} (h : 对任意 i in I, s i <=ᵐ[μ i] t i)
   证明: ((eventually_all_finite I.toFinite).2 fun i hi => tendsto_eval_ae_ae.eventually (h i hi)).mono
 fun _ hst hx i hi => hst i hi hx i hi
 
@@ -1337,7 +1337,7 @@ theorem ae_eq_set_pi
 
 中文:
 定理 ae_eq_set_pi
-  条件: {I : Set ι} {s t : 对任意 i, Set (α i)} (h : 对任意 i in I, s i =ᵐ[μ i] t i)
+  条件: {I : 集合 ι} {s t : 对任意 i, 集合 (α i)} (h : 对任意 i in I, s i =ᵐ[μ i] t i)
   证明: (ae_le_set_pi fun i hi => (h i hi).le).antisymm (ae_le_set_pi fun i hi => (h i hi).symm.le)
 
 Depends on / 依赖: ae_le_set_pi, antisymm, symm.le
@@ -1362,7 +1362,7 @@ lemma pi_map_piOptionEquivProd
 
 中文:
 引理 pi_map_piOptionEquivProd
-  结论: {β : Option ι -> 类型} [对任意 i, MeasurableSpace (β i)]
+  结论: {β : 选项类型 ι -> 类型} [对任意 i, 可测空间 (β i)]
   证明: by
 .symm refine pi_eq (fun s _ => ?_)
   let e_meas : ((i : ι) -> β (some i)) × β none ≃ᵐ ((i : Option ι) -> β i) :=
@@ -1403,7 +1403,7 @@ theorem pi_Iio_ae_eq_pi_Iic
 
 中文:
 定理 pi_Iio_ae_eq_pi_Iic
-  条件: {s : Set ι} {f : 对任意 i, α i}
+  条件: {s : 集合 ι} {f : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Iio_ae_eq_Iic
 
 Depends on / 依赖: Iio_ae_eq_Iic, ae_eq_set_pi
@@ -1422,7 +1422,7 @@ theorem pi_Ioi_ae_eq_pi_Ici
 
 中文:
 定理 pi_Ioi_ae_eq_pi_Ici
-  条件: {s : Set ι} {f : 对任意 i, α i}
+  条件: {s : 集合 ι} {f : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Ioi_ae_eq_Ici
 
 Depends on / 依赖: Ioi_ae_eq_Ici, ae_eq_set_pi
@@ -1483,7 +1483,7 @@ theorem pi_Ioo_ae_eq_pi_Icc
 
 中文:
 定理 pi_Ioo_ae_eq_pi_Icc
-  条件: {s : Set ι} {f g : 对任意 i, α i}
+  条件: {s : 集合 ι} {f g : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Ioo_ae_eq_Icc
 
 Depends on / 依赖: Ioo_ae_eq_Icc, ae_eq_set_pi
@@ -1502,7 +1502,7 @@ theorem pi_Ioo_ae_eq_pi_Ioc
 
 中文:
 定理 pi_Ioo_ae_eq_pi_Ioc
-  条件: {s : Set ι} {f g : 对任意 i, α i}
+  条件: {s : 集合 ι} {f g : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Ioo_ae_eq_Ioc
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, ae_eq_set_pi
@@ -1542,7 +1542,7 @@ theorem pi_Ioc_ae_eq_pi_Icc
 
 中文:
 定理 pi_Ioc_ae_eq_pi_Icc
-  条件: {s : Set ι} {f g : 对任意 i, α i}
+  条件: {s : 集合 ι} {f g : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Ioc_ae_eq_Icc
 
 Depends on / 依赖: Ioc_ae_eq_Icc, ae_eq_set_pi
@@ -1582,7 +1582,7 @@ theorem pi_Ico_ae_eq_pi_Icc
 
 中文:
 定理 pi_Ico_ae_eq_pi_Icc
-  条件: {s : Set ι} {f g : 对任意 i, α i}
+  条件: {s : 集合 ι} {f g : 对任意 i, α i}
   证明: ae_eq_set_pi fun _ _ => Ico_ae_eq_Icc
 
 Depends on / 依赖: Ico_ae_eq_Icc, ae_eq_set_pi
@@ -1627,7 +1627,7 @@ alias pi_noAtoms := pi_nullSingletonClass
 
 中文:
 定理 pi_nullSingletonClass
-  条件: (i : ι) [NullSingletonClass (μ i)]
+  条件: (i : ι) [NullSingleton类 (μ i)]
   证明: ⟨fun x => flip measure_mono_null (pi_hyperplane μ i (x i)) (singleton_subset_iff.2 rfl)⟩
 
 @[deprecated (since := "2026-06-09")]
@@ -1655,7 +1655,7 @@ alias pi_noAtoms' := pi_nullSingletonClass'
 
 中文:
 实例 pi_nullSingletonClass'
-  签名: [h : Nonempty ι] [对任意 i, NullSingletonClass (μ i)]
+  签名: [h : 非空 ι] [对任意 i, NullSingleton类 (μ i)]
   定义体: h.elim fun i => pi_nullSingletonClass i
 
 @[deprecated (since := "2026-06-09")]
@@ -1727,8 +1727,8 @@ instance _root_.IsUnifLocDoublingMeasure.pi
   simpa (disch := positivity) [Finset.prod_mul_
 
 中文:
-实例 _root_.IsUnifLocDoublingMeasure.pi
-  签名: {ι : 类型} [Fintype ι] {X : ι -> 类型}
+实例 _root_.是UnifLocDoublingMeasure.pi
+  签名: {ι : 类型} [有限类型 ι] {X : ι -> 类型}
   定义体: by
   use ∏ i, IsUnifLocDoublingMeasure.doublingConstant (μ i)
   filter_upwards [Filter.eventually_all.mpr fun i =>
@@ -1758,8 +1758,8 @@ instance IsUnifLocDoublingMeasure.volume_pi
   body: .pi _
 
 中文:
-实例 IsUnifLocDoublingMeasure.volume_pi
-  签名: {ι : 类型} [Fintype ι] {X : ι -> 类型}
+实例 是UnifLocDoublingMeasure.volume_pi
+  签名: {ι : 类型} [有限类型 ι] {X : ι -> 类型}
   定义体: .pi _
 -/
 instance IsUnifLocDoublingMeasure.volume_pi {ι : Type*} [Fintype ι] {X : ι -> Type*}
@@ -1787,7 +1787,7 @@ instance pi.isMulLeftInvariant
 
 中文:
 实例 pi.isMulLeftInvariant
-  签名: [对任意 i, Group (α i)] [对任意 i, MeasurableMul (α i)]
+  签名: [对任意 i, 群 (α i)] [对任意 i, MeasurableMul (α i)]
   定义体: by
   refine ⟨fun v => (pi_eq fun s hs => ?_).symm⟩
   rw [map_apply (measurable_const_mul _) (MeasurableSet.univ_pi hs)]; rw [show (v * ·) ⁻¹' univ.pi s = univ.pi fun i => (v i * ·) ⁻¹' s i by rfl]; rw [pi_pi]
@@ -1825,7 +1825,7 @@ instance pi.isMulRightInvariant
 
 中文:
 实例 pi.isMulRightInvariant
-  签名: [对任意 i, Group (α i)] [对任意 i, MeasurableMul (α i)]
+  签名: [对任意 i, 群 (α i)] [对任意 i, MeasurableMul (α i)]
   定义体: by
   refine ⟨fun v => (pi_eq fun s hs => ?_).symm⟩
   rw [map_apply (measurable_mul_const _) (MeasurableSet.univ_pi hs)]; rw [show (· * v) ⁻¹' univ.pi s = univ.pi fun i => (· * v i) ⁻¹' s i by rfl]; rw [pi_pi]
@@ -1865,7 +1865,7 @@ instance pi.isInvInvariant
 
 中文:
 实例 pi.isInvInvariant
-  签名: [对任意 i, Group (α i)] [对任意 i, MeasurableInv (α i)]
+  签名: [对任意 i, 群 (α i)] [对任意 i, MeasurableInv (α i)]
   定义体: by
   refine ⟨(Measure.pi_eq fun s hs => ?_).symm⟩
   have A : Inv.inv ⁻¹' pi univ s = Set.pi univ fun i => Inv.inv ⁻¹' s i := by ext; simp
@@ -1907,7 +1907,7 @@ instance pi.isOpenPosMeasure
 
 中文:
 实例 pi.isOpenPosMeasure
-  签名: [对任意 i, TopologicalSpace (α i)] [对任意 i, IsOpenPosMeasure (μ i)]
+  签名: [对任意 i, 拓扑空间 (α i)] [对任意 i, 是OpenPosMeasure (μ i)]
   定义体: by
   constructor
   rintro U U_open ⟨a, ha⟩
@@ -1953,7 +1953,7 @@ instance pi.isFiniteMeasureOnCompacts
 
 中文:
 实例 pi.isFiniteMeasureOnCompacts
-  签名: [对任意 i, TopologicalSpace (α i)]
+  签名: [对任意 i, 拓扑空间 (α i)]
   定义体: by
   constructor
   intro K hK
@@ -1992,7 +1992,7 @@ instance pi.isHaarMeasure
 
 中文:
 实例 pi.isHaarMeasure
-  签名: [对任意 i, Group (α i)] [对任意 i, TopologicalSpace (α i)]
+  签名: [对任意 i, 群 (α i)] [对任意 i, 拓扑空间 (α i)]
 -/
 instance pi.isHaarMeasure [forall i, Group (α i)] [forall i, TopologicalSpace (α i)]
     [forall i, IsHaarMeasure (μ i)] [forall i, MeasurableMul (α i)] : IsHaarMeasure (Measure.pi μ) where
@@ -2015,7 +2015,7 @@ theorem volume_pi
 
 中文:
 定理 volume_pi
-  条件: [对任意 i, MeasureSpace (α i)]
+  条件: [对任意 i, 测度空间 (α i)]
   证明: rfl
 -/
 theorem volume_pi [forall i, MeasureSpace (α i)] :
@@ -2032,7 +2032,7 @@ theorem volume_pi_pi
 
 中文:
 定理 volume_pi_pi
-  结论: [对任意 i, MeasureSpace (α i)] [对任意 i, SigmaFinite (volume : Measure (α i))]
+  结论: [对任意 i, 测度空间 (α i)] [对任意 i, σ有限 (volume : 测度 (α i))]
   证明: Measure.pi_pi (fun _ => volume) s
 
 Depends on / 依赖: Measure, Measure.pi_pi, pi_pi, volume
@@ -2051,7 +2051,7 @@ theorem volume_pi_ball
 
 中文:
 定理 volume_pi_ball
-  结论: [对任意 i, MeasureSpace (α i)] [对任意 i, SigmaFinite (volume : Measure (α i))]
+  结论: [对任意 i, 测度空间 (α i)] [对任意 i, σ有限 (volume : 测度 (α i))]
   证明: Measure.pi_ball _ _ hr
 
 Depends on / 依赖: Measure, Measure.pi_ball, pi_ball
@@ -2071,7 +2071,7 @@ theorem volume_pi_closedBall
 
 中文:
 定理 volume_pi_closedBall
-  结论: [对任意 i, MeasureSpace (α i)] [对任意 i, SigmaFinite (volume : Measure (α i))]
+  结论: [对任意 i, 测度空间 (α i)] [对任意 i, σ有限 (volume : 测度 (α i))]
   证明: Measure.pi_closedBall _ _ hr
 
 Depends on / 依赖: Measure, Measure.pi_closedBall, pi_closedBall
@@ -2097,8 +2097,8 @@ instance Pi.isMulLeftInvariant_volume
   body: pi.isMulLeftInvariant _
 
 中文:
-实例 Pi.isMulLeftInvariant_volume
-  签名: {α} [Group α] [MeasureSpace α]
+实例 依赖函数类型.isMulLeftInvariant_volume
+  签名: {α} [群 α] [测度空间 α]
   定义体: pi.isMulLeftInvariant _
 
 Depends on / 依赖: isMulLeftInvariant, pi.isMulLeftInvariant
@@ -2122,8 +2122,8 @@ instance Pi.isInvInvariant_volume
   body: pi.isInvInvariant _
 
 中文:
-实例 Pi.isInvInvariant_volume
-  签名: {α} [Group α] [MeasureSpace α] [SigmaFinite (volume : Measure α)]
+实例 依赖函数类型.isInvInvariant_volume
+  签名: {α} [群 α] [测度空间 α] [σ有限 (volume : 测度 α)]
   定义体: pi.isInvInvariant _
 
 Depends on / 依赖: isInvInvariant, pi.isInvInvariant
@@ -2265,8 +2265,8 @@ lemma Measure.pi_map_piCongrLeft
   proof: (measurePreserving_piCongrLeft (α := fun i => β i) μ e).map_eq
 
 中文:
-引理 Measure.pi_map_piCongrLeft
-  结论: (e : ι ≃ ι') {β : ι' -> 类型} [对任意 i, MeasurableSpace (β i)]
+引理 测度.pi_map_piCongrLeft
+  结论: (e : ι ≃ ι') {β : ι' -> 类型} [对任意 i, 可测空间 (β i)]
   证明: (measurePreserving_piCongrLeft (α := fun i => β i) μ e).map_eq
 
 Depends on / 依赖: map_eq, measurePreserving_piCongrLeft
@@ -2291,7 +2291,7 @@ theorem measurePreserving_arrowProdEquivProdArrow
 
 中文:
 定理 measurePreserving_arrowProdEquivProdArrow
-  结论: (α β γ : 类型) [MeasurableSpace α]
+  结论: (α β γ : 类型) [可测空间 α]
   证明: (MeasurableEquiv.arrowProdEquivProdArrow α β γ).measurable
   map_eq := by
     refine (FiniteSpanningSetsIn.ext ?_ (isPiSystem_pi.prod isPiSystem_pi)
@@ -2331,7 +2331,7 @@ theorem volume_measurePreserving_arrowProdEquivProdArrow
 
 中文:
 定理 volume_measurePreserving_arrowProdEquivProdArrow
-  结论: (α β γ : 类型) [MeasureSpace α]
+  结论: (α β γ : 类型) [测度空间 α]
   证明: measurePreserving_arrowProdEquivProdArrow α β γ (fun _ => volume) (fun _ => volume)
 
 Depends on / 依赖: measurePreserving_arrowProdEquivProdArrow, volume
@@ -2408,7 +2408,7 @@ theorem measurePreserving_sumPiEquivProdPi
 
 中文:
 定理 measurePreserving_sumPiEquivProdPi
-  结论: {X : ι oplus ι' -> 类型} {_m : 对任意 i, MeasurableSpace (X i)}
+  结论: {X : ι oplus ι' -> 类型} {_m : 对任意 i, 可测空间 (X i)}
   证明: .symm measurePreserving_sumPiEquivProdPi_symm μ
 
 Depends on / 依赖: Compatible, ValueGroupWithZero, measurePreserving_sumPiEquivProdPi_symm
@@ -2455,7 +2455,7 @@ theorem measurePreserving_piFinSuccAbove
 
 中文:
 定理 measurePreserving_piFinSuccAbove
-  结论: {n : 自然数} {α : Fin (n + 1) -> 类型u}
+  结论: {n : 自然数} {α : 有限集 (n + 1) -> 类型u}
   证明: by
   set e := (MeasurableEquiv.piFinSuccAbove α i).symm
   refine MeasurePreserving.symm e ?_
@@ -2488,7 +2488,7 @@ theorem volume_preserving_piFinSuccAbove
 
 中文:
 定理 volume_preserving_piFinSuccAbove
-  结论: {n : 自然数} (α : Fin (n + 1) -> 类型u)
+  结论: {n : 自然数} (α : 有限集 (n + 1) -> 类型u)
   证明: measurePreserving_piFinSuccAbove (fun _ => volume) i
 
 Depends on / 依赖: measurePreserving_piFinSuccAbove, volume
@@ -2513,7 +2513,7 @@ theorem measurePreserving_piUnique
 
 中文:
 定理 measurePreserving_piUnique
-  结论: {X : ι -> 类型} [Unique ι] {m : 对任意 i, MeasurableSpace (X i)}
+  结论: {X : ι -> 类型} [唯一 ι] {m : 对任意 i, 可测空间 (X i)}
   证明: (MeasurableEquiv.piUnique X).measurable
   map_eq := by
     set e := MeasurableEquiv.piUnique X
@@ -2546,7 +2546,7 @@ theorem volume_preserving_piUnique
 
 中文:
 定理 volume_preserving_piUnique
-  条件: (X : ι -> 类型) [Unique ι] [对任意 i, MeasureSpace (X i)]
+  条件: (X : ι -> 类型) [唯一 ι] [对任意 i, 测度空间 (X i)]
   证明: measurePreserving_piUnique _
 
 Depends on / 依赖: measurePreserving_piUnique
@@ -2565,7 +2565,7 @@ theorem measurePreserving_funUnique
 
 中文:
 定理 measurePreserving_funUnique
-  结论: {β : 类型u} {_m : MeasurableSpace β} (μ : Measure β)
+  结论: {β : 类型u} {_m : 可测空间 β} (μ : 测度 β)
   证明: measurePreserving_piUnique _
 
 Depends on / 依赖: measurePreserving_piUnique
@@ -2585,7 +2585,7 @@ theorem volume_preserving_funUnique
 
 中文:
 定理 volume_preserving_funUnique
-  条件: (α : 类型u) (β : 类型v) [Unique α] [MeasureSpace β]
+  条件: (α : 类型u) (β : 类型v) [唯一 α] [测度空间 β]
   证明: measurePreserving_funUnique volume α
 
 Depends on / 依赖: measurePreserving_funUnique, volume
@@ -2607,7 +2607,7 @@ theorem measurePreserving_piFinTwo
 
 中文:
 定理 measurePreserving_piFinTwo
-  结论: {α : Fin 2 -> 类型u} {m : 对任意 i, MeasurableSpace (α i)}
+  结论: {α : 有限集 2 -> 类型u} {m : 对任意 i, 可测空间 (α i)}
   证明: by
   refine ⟨MeasurableEquiv.measurable _, (Measure.prod_eq fun s t _ _ => ?_).symm⟩
   rw [MeasurableEquiv.map_apply]; rw [MeasurableEquiv.piFinTwo_apply]; rw [Fin.preimage_apply_01_prod]; rw [Measure.pi_pi]; rw [Fin.prod_univ_two]
@@ -2632,7 +2632,7 @@ theorem volume_preserving_piFinTwo
 
 中文:
 定理 volume_preserving_piFinTwo
-  结论: (α : Fin 2 -> 类型u) [对任意 i, MeasureSpace (α i)]
+  结论: (α : 有限集 2 -> 类型u) [对任意 i, 测度空间 (α i)]
   证明: measurePreserving_piFinTwo _
 
 Depends on / 依赖: measurePreserving_piFinTwo
@@ -2653,7 +2653,7 @@ theorem measurePreserving_finTwoArrow_vec
 
 中文:
 定理 measurePreserving_finTwoArrow_vec
-  结论: {α : 类型u} {_ : MeasurableSpace α} (μ ν : Measure α)
+  结论: {α : 类型u} {_ : 可测空间 α} (μ ν : 测度 α)
   证明: haveI : forall i, SigmaFinite (![μ, ν] i) := Fin.forall_fin_two.2 ⟨‹_›, ‹_›⟩
   measurePreserving_piFinTwo _
 
@@ -2677,7 +2677,7 @@ theorem measurePreserving_finTwoArrow
 
 中文:
 定理 measurePreserving_finTwoArrow
-  结论: {α : 类型u} {m : MeasurableSpace α} (μ : Measure α)
+  结论: {α : 类型u} {m : 可测空间 α} (μ : 测度 α)
   证明: by
   simpa only [Matrix.vec_single_eq_const, Matrix.vecCons_const] using
     measurePreserving_finTwoArrow_vec μ μ
@@ -2700,7 +2700,7 @@ theorem volume_preserving_finTwoArrow
 
 中文:
 定理 volume_preserving_finTwoArrow
-  结论: (α : 类型u) [MeasureSpace α]
+  结论: (α : 类型u) [测度空间 α]
   证明: measurePreserving_finTwoArrow volume
 
 Depends on / 依赖: measurePreserving_finTwoArrow, volume
@@ -2723,7 +2723,7 @@ theorem measurePreserving_pi_empty
 
 中文:
 定理 measurePreserving_pi_empty
-  结论: {ι : 类型u} {α : ι -> 类型v} [Fintype ι] [IsEmpty ι]
+  结论: {ι : 类型u} {α : ι -> 类型v} [有限类型 ι] [是空 ι]
   证明: by
   set e := MeasurableEquiv.ofUniqueOfUnique (forall i, α i) Unit
   refine ⟨e.measurable, ?_⟩
@@ -2749,7 +2749,7 @@ theorem volume_preserving_pi_empty
 
 中文:
 定理 volume_preserving_pi_empty
-  结论: {ι : 类型u} (α : ι -> 类型v) [Fintype ι] [IsEmpty ι]
+  结论: {ι : 类型u} (α : ι -> 类型v) [有限类型 ι] [是空 ι]
   证明: measurePreserving_pi_empty fun _ => volume
 
 Depends on / 依赖: measurePreserving_pi_empty, volume
@@ -2798,7 +2798,7 @@ theorem volume_preserving_piFinsetUnion
 
 中文:
 定理 volume_preserving_piFinsetUnion
-  结论: {ι : 类型} [DecidableEq ι] (α : ι -> 类型) {s t : Finset ι}
+  结论: {ι : 类型} [DecidableEq ι] (α : ι -> 类型) {s t : 有限集 ι}
   证明: measurePreserving_piFinsetUnion h (fun _ => volume)
 
 Depends on / 依赖: measurePreserving_piFinsetUnion, volume
@@ -2822,7 +2822,7 @@ exact congrArg _ funext fun i => (hf i).map_eq
 
 中文:
 定理 measurePreserving_pi
-  结论: {ι : 类型} [Fintype ι] {α : ι -> 类型v} {β : ι -> 类型}
+  结论: {ι : 类型} [有限类型 ι] {α : ι -> 类型v} {β : ι -> 类型}
   证明: measurable_pi_iff.mpr fun i => (hf i).measurable.comp (measurable_pi_apply i)
   map_eq := by
     have (i : ι) : SigmaFinite ((μ i).map (f i)) := (hf i).map_eq ▸ hν i
@@ -2854,7 +2854,7 @@ theorem volume_preserving_pi
 
 中文:
 定理 volume_preserving_pi
-  结论: {α' β' : ι -> 类型} [对任意 i, MeasureSpace (α' i)]
+  结论: {α' β' : ι -> 类型} [对任意 i, 测度空间 (α' i)]
   证明: measurePreserving_pi _ _ hf
 
 Depends on / 依赖: measurePreserving_pi
@@ -2881,7 +2881,7 @@ theorem measurePreserving_arrowCongr'
 
 中文:
 定理 measurePreserving_arrowCongr'
-  结论: {α₁ β₁ α₂ β₂ : 类型} [Fintype α₁] [Fintype α₂]
+  结论: {α₁ β₁ α₂ β₂ : 类型} [有限类型 α₁] [有限类型 α₂]
   证明: by
   convert!
     (measurePreserving_piCongrLeft (fun i : α₂ => ν i) eα).comp
@@ -2914,7 +2914,7 @@ theorem volume_preserving_arrowCongr'
 
 中文:
 定理 volume_preserving_arrowCongr'
-  结论: {α₁ β₁ α₂ β₂ : 类型} [Fintype α₁] [Fintype α₂]
+  结论: {α₁ β₁ α₂ β₂ : 类型} [有限类型 α₁] [有限类型 α₂]
   证明: measurePreserving_arrowCongr' (fun _ => volume) (fun _ => volume) hα hβ (fun _ => hm)
 
 Depends on / 依赖: measurePreserving_arrowCongr, volume

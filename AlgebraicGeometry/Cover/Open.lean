@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasPullbacks IsOpenImmersion
+  签名: MorphismProperty.有Pullbacks 是开浸入
   定义体: inferInstance
 -/
 instance : MorphismProperty.HasPullbacks IsOpenImmersion where
@@ -59,7 +59,7 @@ abbreviation OpenCover
 
 中文:
 缩写 OpenCover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: Cover.{v} (precoverage @IsOpenImmersion) X
 
 Depends on / 依赖: IsOpenImmersion, precoverage
@@ -95,7 +95,7 @@ definition affineCover
 
 中文:
 定义 affineCover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: by
   choose U R h using X.local_affine
   let e (x) := (h x).some
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited X.OpenCover
+  签名: 可居 X.OpenCover
   定义体: ⟨X.affineCover⟩
 
 Depends on / 依赖: X.affineCover, affineCover
@@ -150,7 +150,7 @@ theorem OpenCover.iSup_opensRange
 
 中文:
 定理 OpenCover.iSup_opensRange
-  条件: {X : Scheme.{u}} (𝒰 : Scheme.OpenCover.{v} X)
+  条件: {X : 概形.{u}} (𝒰 : 概形.OpenCover.{v} X)
   证明: Opens.ext by rw [Opens.coe_iSup]; exact 𝒰.iUnion_range
 
 Depends on / 依赖: Opens.coe_iSup, Opens.ext, coe_iSup, iUnion_range
@@ -169,7 +169,7 @@ lemma OpenCover.isOpenCover_opensRange
 
 中文:
 引理 OpenCover.isOpenCover_opensRange
-  条件: {X : Scheme.{u}} (𝒰 : OpenCover.{v} X)
+  条件: {X : 概形.{u}} (𝒰 : OpenCover.{v} X)
   证明: .mk 𝒰.iSup_opensRange
 
 Depends on / 依赖: iSup_opensRange
@@ -198,7 +198,7 @@ definition OpenCover.finiteSubcover
 
 中文:
 定义 OpenCover.finiteSubcover
-  签名: {X : Scheme.{u}} (𝒰 : OpenCover.{v} X) [H : CompactSpace X]
+  签名: {X : 概形.{u}} (𝒰 : OpenCover.{v} X) [H : 紧空间 X]
   定义体: by
   have :=
     @CompactSpace.elim_nhds_subcover _ _ H (fun x : X => Set.range (𝒰.f (𝒰.idx x)))
@@ -241,7 +241,7 @@ instance [H
 
 中文:
 实例 [H
-  签名: : CompactSpace X] : Fintype 𝒰.finiteSubcover.I₀
+  签名: : 紧空间 X] : 有限类型 𝒰.finiteSubcover.I₀
   定义体: by
   delta OpenCover.finiteSubcover; infer_instance
 
@@ -271,7 +271,7 @@ theorem OpenCover.compactSpace
 
 中文:
 定理 OpenCover.compactSpace
-  结论: {X : Scheme.{u}} (𝒰 : X.OpenCover) [Finite 𝒰.I₀]
+  结论: {X : 概形.{u}} (𝒰 : X.OpenCover) [有限 𝒰.I₀]
   证明: by
   cases nonempty_fintype 𝒰.I₀
   rw [← isCompact_univ_iff]; rw [← 𝒰.iUnion_range]
@@ -311,7 +311,7 @@ abbreviation AffineOpenCover
 
 中文:
 缩写 AffineOpenCover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: AffineCover.{v} @IsOpenImmersion X
 
 Depends on / 依赖: AffineCover, IsOpenImmersion
@@ -336,7 +336,7 @@ definition openCover
 
 中文:
 定义 openCover
-  签名: {X : Scheme.{u}} (𝒰 : X.AffineOpenCover)
+  签名: {X : 概形.{u}} (𝒰 : X.AffineOpenCover)
   定义体: AffineCover.cover 𝒰
 
 Depends on / 依赖: AffineCover, AffineCover.cover
@@ -365,7 +365,7 @@ definition affineOpenCover
 
 中文:
 定义 affineOpenCover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: _
   I₀ := X.affineCover.I₀
   f := X.affineCover.f
@@ -393,7 +393,7 @@ lemma openCover_affineOpenCover
 
 中文:
 引理 openCover_affineOpenCover
-  条件: (X : Scheme.{u})
+  条件: (X : 概形.{u})
   结论: X.affineOpenCover.openCover = X.affineCover
   证明: rfl
 -/
@@ -415,7 +415,7 @@ definition OpenCover.affineRefinement
 
 中文:
 定义 OpenCover.affineRefinement
-  签名: {X : Scheme.{u}} (𝓤 : X.OpenCover)
+  签名: {X : 概形.{u}} (𝓤 : X.OpenCover)
   定义体: _
   I₀ := (𝓤.bind fun j => (𝓤.X j).affineCover).I₀
   f := (𝓤.bind fun j => (𝓤.X j).affineCover).f
@@ -551,7 +551,7 @@ definition affineOpenCoverOfSpanRangeEqTop
 
 中文:
 定义 affineOpenCoverOfSpanRangeEqTop
-  签名: {R : CommRingCat} {ι : 类型} (s : ι -> R)
+  签名: {R : 交换环范畴} {ι : 类型} (s : ι -> R)
   定义体: ι
   X i := .of (Localization.Away (s i))
   f i := Spec.map (CommRingCat.ofHom (algebraMap R (Localization.Away (s i))))
@@ -587,7 +587,7 @@ definition OpenCover.fromAffineRefinement
 
 中文:
 定义 OpenCover.fromAffineRefinement
-  签名: {X : Scheme.{u}} (𝓤 : X.OpenCover)
+  签名: {X : 概形.{u}} (𝓤 : X.OpenCover)
   定义体: j.fst
   h₀ j := (𝓤.X j.fst).affineCover.f _
 
@@ -613,7 +613,7 @@ lemma OpenCover.ext_elem
 
 中文:
 引理 OpenCover.ext_elem
-  结论: {X : Scheme.{u}} {U : X.Opens} (f g : Γ(X, U)) (𝒰 : X.OpenCover)
+  结论: {X : 概形.{u}} {U : X.Opens} (f g : Γ(X, U)) (𝒰 : X.OpenCover)
   证明: by
   fapply TopCat.Sheaf.eq_of_locally_eq' X.sheaf
     (fun i => (𝒰.f (𝒰.idx i)).opensRange ⊓ U) _ (fun _ => homOfLE inf_le_right)
@@ -647,7 +647,7 @@ lemma zero_of_zero_cover
 
 中文:
 引理 zero_of_zero_cover
-  结论: {X : Scheme.{u}} {U : X.Opens} (s : Γ(X, U)) (𝒰 : X.OpenCover)
+  结论: {X : 概形.{u}} {U : X.Opens} (s : Γ(X, U)) (𝒰 : X.OpenCover)
   证明: 𝒰.ext_elem s 0 (fun i => by rw [map_zero]; exact h i)
 
 Depends on / 依赖: ext_elem, map_zero
@@ -673,7 +673,7 @@ lemma isNilpotent_of_isNilpotent_cover
 
 中文:
 引理 isNilpotent_of_isNilpotent_cover
-  结论: {X : Scheme.{u}} {U : X.Opens} (s : Γ(X, U))
+  结论: {X : 概形.{u}} {U : X.Opens} (s : Γ(X, U))
   证明: by
   choose fn hfn using h
   have : Fintype 𝒰.I₀ := Fintype.ofFinite 𝒰.I₀
@@ -717,7 +717,7 @@ X r := Spec .of Localization.Away r
 
 中文:
 定义 affineBasisCoverOfAffine
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: R
 X r := Spec .of Localization.Away r
   f r := Spec.map (CommRingCat.ofHom (algebraMap R (Localization.Away r)))
@@ -747,7 +747,7 @@ definition affineBasisCover
 
 中文:
 定义 affineBasisCover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: X.affineCover.bind fun _ => affineBasisCoverOfAffine _
 
 Depends on / 依赖: X.affineCover.bind, affineBasisCoverOfAffine, affineCover
@@ -765,7 +765,7 @@ definition affineBasisCoverRing
 
 中文:
 定义 affineBasisCoverRing
-  签名: (X : Scheme.{u}) (i : X.affineBasisCover.I₀)
+  签名: (X : 概形.{u}) (i : X.affineBasisCover.I₀)
   定义体: CommRingCat.of @Localization.Away (X.local_affine i.1).choose_spec.choose _ i.2
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, Localization, Localization.Away, X.local_affine, choose_spec, choose_spec.choose, local_affine
@@ -783,7 +783,7 @@ theorem affineBasisCover_obj
 
 中文:
 定理 affineBasisCover_obj
-  条件: (X : Scheme.{u}) (i : X.affineBasisCover.I₀)
+  条件: (X : 概形.{u}) (i : X.affineBasisCover.I₀)
   证明: rfl
 -/
 theorem affineBasisCover_obj (X : Scheme.{u}) (i : X.affineBasisCover.I₀) :
@@ -806,7 +806,7 @@ theorem affineBasisCover_map_range
 
 中文:
 定理 affineBasisCover_map_range
-  结论: (X : Scheme.{u}) (x : X)
+  结论: (X : 概形.{u}) (x : X)
   证明: by
   simp only [affineBasisCover, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, Set.range_comp,
     PreZeroHypercover.bind_f, Hom.comp_base, TopCat.hom_comp, ContinuousMap.coe_comp]
@@ -842,7 +842,7 @@ theorem affineBasisCover_is_basis
 
 中文:
 定理 affineBasisCover_is_basis
-  条件: (X : Scheme.{u})
+  条件: (X : 概形.{u})
   证明: by
   apply TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds
   · rintro _ ⟨a, rfl⟩

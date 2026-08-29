@@ -92,7 +92,7 @@ lemma iff_of_unique
 
 中文:
 引理 iff_of_unique
-  条件: [Unique ι]
+  条件: [唯一 ι]
   证明: by
   refine ⟨fun ⟨s, hs, V, hc, hcov⟩ => ?_, fun ⟨V, hc, h⟩ => ?_⟩
   · cases s.eq_empty_or_singleton_of_unique <;> aesop
@@ -124,7 +124,7 @@ lemma id_iff_isOpen_and_isCompact
 
 中文:
 引理 id_iff_isOpen_and_isCompact
-  条件: [TopologicalSpace S]
+  条件: [拓扑空间 S]
   证明: by
   rw [iff_of_unique]
   refine ⟨fun ⟨V, hV, heq⟩ => ?_, fun ⟨ho, hc⟩ => ⟨⟨U, ho⟩, hc, by simp⟩⟩
@@ -207,7 +207,7 @@ lemma of_iUnion_eq_of_finite
 
 中文:
 引理 of_iUnion_eq_of_finite
-  结论: {κ : 类型} [Finite κ] (s : κ -> Set S) (hs : ⋃ i, s i = U)
+  结论: {κ : 类型} [有限 κ] (s : κ -> 集合 S) (hs : ⋃ i, s i = U)
   证明: by
   rw [iff_isCompactOpenCovered_sigmaMk]; rw [iff_of_unique]
   have (i : κ) : exists (V : Opens (Σ i, X i)), IsCompact V.1 ∧ (f _ ·.snd) '' V.1 = s i := by
@@ -237,7 +237,7 @@ lemma of_biUnion_eq_of_finite
 
 中文:
 引理 of_biUnion_eq_of_finite
-  结论: (s : Set (Set S)) (hs : ⋃ t in s, t = U) (hf : s.Finite)
+  结论: (s : 集合 (集合 S)) (hs : ⋃ t in s, t = U) (hf : s.有限)
   证明: by
   have := hf.to_subtype
   exact of_iUnion_eq_of_finite (fun i : s => i.1) (by simpa) (by simpa)
@@ -264,7 +264,7 @@ lemma of_biUnion_eq_of_isCompact
 
 中文:
 引理 of_biUnion_eq_of_isCompact
-  结论: [TopologicalSpace S] {U : Set S} (hU : IsCompact U)
+  结论: [拓扑空间 S] {U : 集合 S} (hU : 是紧集 U)
   证明: by
   classical
   obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun V : s => V.1) (fun V => V.1.2) (by simp [← hs])
@@ -300,8 +300,8 @@ lemma of_isCompact_of_forall_exists_isCompactOpenCovered
   · grind
 
 中文:
-引理 of_isCompact_of_forall_exists_isCompactOpenCovered
-  结论: [TopologicalSpace S] {U : Set S}
+引理 of_isCompact_of_对任意_存在_isCompactOpenCovered
+  结论: [拓扑空间 S] {U : 集合 S}
   证明: by
   choose Us hU' hUx hUo hU'' using H
   refine of_biUnion_eq_of_isCompact hU { Us x h | (x : S) (h : x in U) } ?_ ?_
@@ -334,8 +334,8 @@ lemma image
   refine ⟨{i}, Set.finite_singleton i, fun j hj => hj ▸ V, by rintro i rfl; simpa, by simp⟩
 
 中文:
-引理 image
-  条件: {i : ι} (V : Opens (X i)) (hV : IsCompact (X := X i) V)
+引理 像
+  条件: {i : ι} (V : Opens (X i)) (hV : 是紧集 (X := X i) V)
   证明: by
   refine ⟨{i}, Set.finite_singleton i, fun j hj => hj ▸ V, by rintro i rfl; simpa, by simp⟩
 -/
@@ -353,7 +353,7 @@ lemma of_finite
 
 中文:
 引理 of_finite
-  结论: {U : Set S} {κ : 类型} [Finite κ] (a : κ -> ι) (V : 对任意 k, Opens (X (a k)))
+  结论: {U : 集合 S} {κ : 类型} [有限 κ] (a : κ -> ι) (V : 对任意 k, Opens (X (a k)))
   证明: of_iUnion_eq_of_finite _ hU (fun _ => .image _ (hV _))
 
 Depends on / 依赖: of_iUnion_eq_of_finite
@@ -378,8 +378,8 @@ lemma exists_mem_of_isBasis
     refine ⟨Fintype.card κ, a ∘ (Fint
 
 中文:
-引理 exists_mem_of_isBasis
-  结论: {B : 对任意 i, Set (Opens (X i))} (hB : 对任意 i, IsBasis (B i))
+引理 存在_mem_of_isBasis
+  结论: {B : 对任意 i, 集合 (Opens (X i))} (hB : 对任意 i, 是基 (B i))
   证明: by
   suffices h : exists (κ : Type _) (_ : Finite κ) (a : κ -> ι) (V : forall i, Opens (X (a i))),
       (forall i, V i in B (a i)) ∧ (forall i, IsCompact (V i).1) ∧ ⋃ i, f (a i) '' V i = U by
@@ -430,7 +430,7 @@ lemma of_finite_of_isSpectralMap
 
 中文:
 引理 of_finite_of_isSpectralMap
-  结论: [Finite ι] [TopologicalSpace S]
+  结论: [有限 ι] [拓扑空间 S]
   证明: by
   refine ⟨.univ, Set.finite_univ, fun i _ => ⟨f i ⁻¹' U, hU.preimage (hf i).1⟩,
     fun i _ => hc.preimage_of_isOpen (hf i) hU, subset_antisymm (by simp) fun x hx => ?_⟩
@@ -462,7 +462,7 @@ lemma of_isOpenMap
 
 中文:
 引理 of_isOpenMap
-  结论: [TopologicalSpace S] [对任意 i, PrespectralSpace (X i)]
+  结论: [拓扑空间 S] [对任意 i, Prespectral空间 (X i)]
   证明: by
   rw [iff_isCompactOpenCovered_sigmaMk]; rw [iff_of_unique]
   refine (isOpenMap_sigma.mpr h).exists_opens_image_eq_of_prespectralSpace
@@ -497,7 +497,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: [对任意 i, PrespectralSpace (X i)] [TopologicalSpace S]
+  结论: [对任意 i, Prespectral空间 (X i)] [拓扑空间 S]
   证明: by
   rw [iff_isCompactOpenCovered_sigmaMk]; rw [iff_of_unique] at hU ⊢
   let p : (Σ i, Y i) -> (Σ i, X i) := Sigma.map a t

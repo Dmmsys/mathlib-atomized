@@ -63,10 +63,10 @@ class Ring.DimensionLEOne
     - (maximalOfPrime : forall {p : Ideal R}, p != ⊥ -> p.IsPrime -> p.IsMaximal)
 
 中文:
-类 Ring.DimensionLEOne
+类 环.维数不超过一
   参数: : 命题 where
   公理与运算 (1 个):
-    - (maximalOfPrime : 对任意 {p : Ideal R}, p != ⊥ -> p.IsPrime -> p.IsMaximal)
+    - (maximalOfPrime : 对任意 {p : 理想 R}, p != ⊥ -> p.是素 -> p.是极大)
 -/
 class Ring.DimensionLEOne : Prop where
   (maximalOfPrime : forall {p : Ideal R}, p != ⊥ -> p.IsPrime -> p.IsMaximal)
@@ -82,8 +82,8 @@ theorem Ideal.IsPrime.isMaximal
   proof: DimensionLEOne.maximalOfPrime hp h
 
 中文:
-定理 Ideal.IsPrime.isMaximal
-  结论: {R : 类型} [CommRing R] [DimensionLEOne R]
+定理 理想.是素.isMaximal
+  结论: {R : 类型} [交换环 R] [维数不超过一 R]
   证明: DimensionLEOne.maximalOfPrime hp h
 
 Depends on / 依赖: DimensionLEOne, DimensionLEOne.maximalOfPrime, maximalOfPrime
@@ -105,7 +105,7 @@ instance principal_ideal_ring
 
 中文:
 实例 principal_ideal_ring
-  签名: [IsDomain A] [IsPrincipalIdealRing A]
+  签名: [是整环 A] [是主理想环 A]
   定义体: fun nonzero _ =>
     IsPrime.to_maximal_ideal nonzero
 
@@ -131,8 +131,8 @@ theorem of_isIntegral
 nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A
 
 中文:
-定理 of_isIntegral
-  结论: (B : 类型) [CommRing B] [IsDomain B] [Nontrivial R]
+定理 of_is整数egral
+  结论: (B : 类型) [交换环 B] [是整环 B] [非平凡 R]
   证明: fun {p} ne_bot _ =>
     IsIntegral.isMaximal_of_isMaximal_comap p
       (Ideal.IsPrime.isMaximal inferInstance (IsIntegral.comap_ne_bot R ne_bot))
@@ -167,7 +167,7 @@ theorem not_lt_lt
 
 中文:
 定理 not_lt_lt
-  结论: [Ring.DimensionLEOne R] (p₀ p₁ p₂ : Ideal R) [hp₁ : p₁.IsPrime]
+  结论: [环.维数不超过一 R] (p₀ p₁ p₂ : 理想 R) [hp₁ : p₁.是素]
 -/
 theorem not_lt_lt [Ring.DimensionLEOne R] (p₀ p₁ p₂ : Ideal R) [hp₁ : p₁.IsPrime]
     [hp₂ : p₂.IsPrime] : ¬(p₀ < p₁ ∧ p₁ < p₂)
@@ -183,7 +183,7 @@ theorem eq_bot_of_lt
 
 中文:
 定理 eq_bot_of_lt
-  条件: [Ring.DimensionLEOne R] (p P : Ideal R) [p.IsPrime] [P.IsPrime] (hpP : p < P)
+  条件: [环.维数不超过一 R] (p P : 理想 R) [p.是素] [P.是素] (hpP : p < P)
   证明: by_contra fun hp0 => not_lt_lt ⊥ p P ⟨Ne.bot_lt hp0, hpP⟩
 
 Depends on / 依赖: Ne.bot_lt, bot_lt, not_lt_lt
@@ -207,8 +207,8 @@ theorem of_ringEquiv
 
 中文:
 定理 of_ringEquiv
-  条件: [hA : Ring.DimensionLEOne A] (e : R ≃+* A)
-  结论: Ring.DimensionLEOne R where
+  条件: [hA : 环.维数不超过一 A] (e : R ≃+* A)
+  结论: 环.维数不超过一 R where
   证明: by
     rw [← Ideal.map_comap_eq_self_of_equiv e.symm P]; rw [Ideal.isMaximal_map_iff_of_bijective _ e.symm.bijective]
     apply Ring.DimensionLEOne.maximalOfPrime ?_ (P.comap_isPrime e.symm)
@@ -238,9 +238,9 @@ class IsDedekindRing
   (no additional axioms)
 
 中文:
-类 IsDedekindRing
+类 是Dedekind环
   参数: : 命题
-  继承: IsNoetherian A A, DimensionLEOne A, IsIntegralClosure A A (FractionRing A)
+  继承: 是Noether A A, 维数不超过一 A, 是整闭包 A A (FractionRing A)
   (无附加公理)
 -/
 class IsDedekindRing : Prop
@@ -258,7 +258,7 @@ theorem isDedekindRing_iff
 
 中文:
 定理 isDedekindRing_iff
-  条件: (K : 类型) [CommRing K] [Algebra A K] [IsFractionRing A K]
+  条件: (K : 类型) [交换环 K] [代数 A K] [IsFractionRing A K]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance,
              fun {_} => (isIntegrallyClosed_iff K).mp inferInstance⟩,
    fun ⟨hr, hd, hi⟩ => { hr, hd, (isIntegrallyClosed_iff K).mpr @hi with }⟩
@@ -283,9 +283,9 @@ class IsDedekindDomain
   (no additional axioms)
 
 中文:
-类 IsDedekindDomain
+类 是Dedekind整环
   参数: : 命题
-  继承: IsDomain A, IsDedekindRing A
+  继承: 是整环 A, 是Dedekind环 A
   (无附加公理)
 -/
 class IsDedekindDomain : Prop
@@ -301,8 +301,8 @@ instance [IsDomain
   signature: A] [IsDedekindRing A] : IsDedekindDomain A where
 
 中文:
-实例 [IsDomain
-  签名: A] [IsDedekindRing A] : IsDedekindDomain A where
+实例 [是整环
+  签名: A] [是Dedekind环 A] : 是Dedekind整环 A where
 -/
 instance [IsDomain A] [IsDedekindRing A] : IsDedekindDomain A where
 
@@ -318,7 +318,7 @@ theorem isDedekindDomain_iff
 
 中文:
 定理 isDedekindDomain_iff
-  条件: (K : 类型) [CommRing K] [Algebra A K] [IsFractionRing A K]
+  条件: (K : 类型) [交换环 K] [代数 A K] [IsFractionRing A K]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance, inferInstance,
              fun {_} => (isIntegrallyClosed_iff K).mp inferInstance⟩,
    fun ⟨hid, hr, hd, hi⟩ => { hid, hr, hd, (isIntegrallyClosed_iff K).mpr @hi with }⟩
@@ -355,8 +355,8 @@ theorem IsLocalRing.primesOver_eq
 · exact IsLocalRing.eq_maximalIdeal hP.1.isMaximal (Ide
 
 中文:
-定理 IsLocalRing.primesOver_eq
-  结论: [IsLocalRing A] [IsDedekindDomain A] [Algebra R A]
+定理 是局部环.primesOver_eq
+  结论: [是局部环 A] [是Dedekind整环 A] [代数 R A]
   证明: by
   have : IsDomain R := .of_faithfulSMul R A
   refine Set.eq_singleton_iff_nonempty_unique_mem.mpr ⟨?_, fun P hP => ?_⟩

@@ -74,8 +74,8 @@ theorem ae_eq_zero_of_forall_inner
   have h_closed : IsClosed {c : E | ⟪c, f x⟫_
 
 中文:
-定理 ae_eq_zero_of_forall_inner
-  结论: [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+定理 ae_eq_zero_of_对任意_inner
+  结论: [赋范交换加群 E] [内积空间 𝕜 E]
   证明: by
   let s := denseSeq E
   have hs : DenseRange s := denseRange_denseSeq E
@@ -117,8 +117,8 @@ theorem ae_eq_zero_of_forall_dual_of_isSeparable
   have A : forall a : E, a in t -> (forall x, ⟪a, s x⟫ = (0 : 𝕜)) -> a
 
 中文:
-定理 ae_eq_zero_of_forall_dual_of_isSeparable
-  结论: [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+定理 ae_eq_zero_of_对任意_dual_of_isSeparable
+  结论: [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: by
   rcases ht with ⟨d, d_count, hd⟩
   have : Encodable d := d_count.toEncodable
@@ -174,8 +174,8 @@ theorem ae_eq_zero_of_forall_dual
     (Eventually.of_forall fun _ => Set.mem_univ _)
 
 中文:
-定理 ae_eq_zero_of_forall_dual
-  结论: [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+定理 ae_eq_zero_of_对任意_dual
+  结论: [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: ae_eq_zero_of_forall_dual_of_isSeparable 𝕜 (.of_separableSpace Set.univ) hf
     (Eventually.of_forall fun _ => Set.mem_univ _)
 
@@ -214,8 +214,8 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg
   have h_i
 
 中文:
-定理 ae_nonneg_of_forall_setIntegral_nonneg
-  结论: (hf : 整数egrable f μ)
+定理 ae_nonneg_of_对任意_set整数egral_nonneg
+  结论: (hf : 可积 f μ)
   证明: by
   simp_rw [EventuallyLE, Pi.zero_apply]
   rw [ae_const_le_iff_forall_lt_measure_zero]
@@ -261,8 +261,8 @@ theorem ae_le_of_forall_setIntegral_le
   exact hf_le s hs
 
 中文:
-定理 ae_le_of_forall_setIntegral_le
-  结论: {f g : α -> 实数} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+定理 ae_le_of_对任意_set整数egral_le
+  结论: {f g : α -> 实数} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   rw [← eventually_sub_nonneg]
   refine ae_nonneg_of_forall_setIntegral_nonneg (hg.sub hf) fun s hs => ?_
@@ -292,8 +292,8 @@ theorem ae_nonneg_restrict_of_forall_setIntegral_nonneg_inter
   rwa [Measure.restrict_apply hs] at h's
 
 中文:
-定理 ae_nonneg_restrict_of_forall_setIntegral_nonneg_inter
-  结论: {f : α -> 实数} {t : Set α}
+定理 ae_nonneg_restrict_of_对任意_set整数egral_nonneg_inter
+  结论: {f : α -> 实数} {t : 集合 α}
   证明: by
   refine ae_nonneg_of_forall_setIntegral_nonneg hf fun s hs h's => ?_
   simp_rw [Measure.restrict_restrict hs]
@@ -327,8 +327,8 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite
       (lt_of_le_of_lt (measure_mono (Set.inter_subset_right)) t_
 
 中文:
-定理 ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite
-  结论: [SigmaFinite μ] {f : α -> 实数}
+定理 ae_nonneg_of_对任意_set整数egral_nonneg_of_sigmaFinite
+  结论: [σ有限 μ] {f : α -> 实数}
   证明: by
   apply ae_of_forall_measure_lt_top_ae_restrict
   intro t t_meas t_lt_top
@@ -366,7 +366,7 @@ theorem AEFinStronglyMeasurable.ae_nonneg_of_forall_setIntegral_nonneg
     ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite (fun s hs hμts => ?_) 
 
 中文:
-定理 AEFinStronglyMeasurable.ae_nonneg_of_forall_setIntegral_nonneg
+定理 AEFinStronglyMeasurable.ae_nonneg_of_对任意_set整数egral_nonneg
   结论: {f : α -> 实数}
   证明: by
   let t := hf.sigmaFiniteSet
@@ -409,7 +409,7 @@ theorem ae_nonneg_restrict_of_forall_setIntegral_nonneg
   exact (measure_mono Set.inter_subset_right).trans_lt (lt_top_iff_ne_top.mpr hμt)
 
 中文:
-定理 ae_nonneg_restrict_of_forall_setIntegral_nonneg
+定理 ae_nonneg_restrict_of_对任意_set整数egral_nonneg
   结论: {f : α -> 实数}
   证明: by
   refine
@@ -446,7 +446,7 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real
   suffices h_
 
 中文:
-定理 ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real
+定理 ae_eq_zero_restrict_of_对任意_set整数egral_eq_zero_real
   结论: {f : α -> 实数}
   证明: by
   suffices h_and : f <=ᵐ[μ.restrict t] 0 ∧ 0 <=ᵐ[μ.restrict t] f from
@@ -497,7 +497,7 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero
     exact Contin
 
 中文:
-定理 ae_eq_zero_restrict_of_forall_setIntegral_eq_zero
+定理 ae_eq_zero_restrict_of_对任意_set整数egral_eq_zero
   结论: {f : α -> E}
   证明: by
   rcases (hf_int_finite t ht hμt.lt_top).aestronglyMeasurable.isSeparable_ae_range with
@@ -538,7 +538,7 @@ theorem ae_eq_restrict_of_forall_setIntegral_eq
   have hfg_int : forall s, MeasurableS
 
 中文:
-定理 ae_eq_restrict_of_forall_setIntegral_eq
+定理 ae_eq_restrict_of_对任意_set整数egral_eq
   结论: {f g : α -> E}
   证明: by
   rw [← sub_ae_eq_zero]
@@ -578,8 +578,8 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite
   have h_meas_n : Measu
 
 中文:
-定理 ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite
-  结论: [SigmaFinite μ] {f : α -> E}
+定理 ae_eq_zero_of_对任意_set整数egral_eq_of_sigmaFinite
+  结论: [σ有限 μ] {f : α -> E}
   证明: by
   let S := spanningSets μ
   rw [← @Measure.restrict_univ _ _ μ]; rw [← iUnion_spanningSets μ]; rw [EventuallyEq]; rw [ae_iff]; rw [Measure.restrict_apply' (MeasurableSet.iUnion (measurableSet_spanningSets μ))]
@@ -615,8 +615,8 @@ theorem ae_eq_of_forall_setIntegral_eq_of_sigmaFinite
   have hfg_int : forall s, MeasurableSet s ->
 
 中文:
-定理 ae_eq_of_forall_setIntegral_eq_of_sigmaFinite
-  结论: [SigmaFinite μ] {f g : α -> E}
+定理 ae_eq_of_对任意_set整数egral_eq_of_sigmaFinite
+  结论: [σ有限 μ] {f g : α -> E}
   证明: by
   rw [← sub_ae_eq_zero]
   have hfg : forall s : Set α, MeasurableSet s -> μ s < ∞ -> (∫ x in s, (f - g) x ∂μ) = 0 := by
@@ -655,7 +655,7 @@ theorem AEFinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero
     rw [Integ
 
 中文:
-定理 AEFinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero
+定理 AEFinStronglyMeasurable.ae_eq_zero_of_对任意_set整数egral_eq_zero
   结论: {f : α -> E}
   证明: by
   let t := hf.sigmaFiniteSet
@@ -700,7 +700,7 @@ theorem AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq
   have hfg_int : forall s, MeasurableSet s ->
 
 中文:
-定理 AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq
+定理 AEFinStronglyMeasurable.ae_eq_of_对任意_set整数egral_eq
   结论: {f g : α -> E}
   证明: by
   rw [← sub_ae_eq_zero]
@@ -734,7 +734,7 @@ theorem Lp.ae_eq_zero_of_forall_setIntegral_eq_zero
     (Lp.finStronglyMeasurable _ hp_ne_zero hp_ne_top).aefinStronglyMeasurable
 
 中文:
-定理 Lp.ae_eq_zero_of_forall_setIntegral_eq_zero
+定理 Lp.ae_eq_zero_of_对任意_set整数egral_eq_zero
   结论: (f : Lp E p μ) (hp_ne_zero : p != 0)
   证明: AEFinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero hf_int_finite hf_zero
     (Lp.finStronglyMeasurable _ hp_ne_zero hp_ne_top).aefinStronglyMeasurable
@@ -758,7 +758,7 @@ theorem Lp.ae_eq_of_forall_setIntegral_eq
     (Lp.finStronglyMeasurable _ hp_ne_zero hp_ne_top).aefinStronglyMeasurable
 
 中文:
-定理 Lp.ae_eq_of_forall_setIntegral_eq
+定理 Lp.ae_eq_of_对任意_set整数egral_eq
   结论: (f g : Lp E p μ) (hp_ne_zero : p != 0) (hp_ne_top : p != ∞)
   证明: AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq hf_int_finite hg_int_finite hfg
     (Lp.finStronglyMeasurable _ hp_ne_zero hp_ne_top).aefinStronglyMeasurable
@@ -789,7 +789,7 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_finStronglyMeasurable_trim
     exact E
 
 中文:
-定理 ae_eq_zero_of_forall_setIntegral_eq_of_finStronglyMeasurable_trim
+定理 ae_eq_zero_of_对任意_set整数egral_eq_of_finStronglyMeasurable_trim
   结论: (hm : m <= m0) {f : α -> E}
   证明: by
   obtain ⟨t, ht_meas, htf_zero, htμ⟩ := hf.exists_set_sigmaFinite
@@ -836,8 +836,8 @@ theorem Integrable.ae_eq_zero_of_forall_setIntegral_eq_zero
     (fun _ _ _ => hf.integrableOn) hf_zero
 
 中文:
-定理 Integrable.ae_eq_zero_of_forall_setIntegral_eq_zero
-  结论: {f : α -> E} (hf : 整数egrable f μ)
+定理 可积.ae_eq_zero_of_对任意_set整数egral_eq_zero
+  结论: {f : α -> E} (hf : 可积 f μ)
   证明: hf.aefinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero
     (fun _ _ _ => hf.integrableOn) hf_zero
 
@@ -858,8 +858,8 @@ theorem Integrable.ae_eq_of_forall_setIntegral_eq
     (fun _ _ _ => hg.integrableOn) hfg hf.aefinStronglyMeasurable hg.aefinStronglyMeasurable
 
 中文:
-定理 Integrable.ae_eq_of_forall_setIntegral_eq
-  结论: (f g : α -> E) (hf : 整数egrable f μ)
+定理 可积.ae_eq_of_对任意_set整数egral_eq
+  结论: (f g : α -> E) (hf : 可积 f μ)
   证明: AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq (fun _ _ _ => hf.integrableOn)
     (fun _ _ _ => hg.integrableOn) hfg hf.aefinStronglyMeasurable hg.aefinStronglyMeasurable
 
@@ -889,8 +889,8 @@ lemma ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero
     have I : ∫ 
 
 中文:
-引理 ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero
-  结论: {μ : Measure β} {f : β -> E}
+引理 ae_eq_zero_of_对任意_set整数egral_isClosed_eq_zero
+  结论: {μ : 测度 β} {f : β -> E}
   证明: by
   suffices forall s, MeasurableSet s -> ∫ x in s, f x ∂μ = 0 from
     hf.ae_eq_zero_of_forall_setIntegral_eq_zero (fun s hs _ => this s hs)
@@ -930,7 +930,7 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
       fun n 
 
 中文:
-引理 ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
+引理 ae_eq_zero_of_对任意_set整数egral_isCompact_eq_zero
   证明: by
   apply ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero hf (fun s hs => ?_)
   let t : Nat -> Set β := fun n => closure (compactCovering β n) inter s
@@ -976,7 +976,7 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero'
     rw [Measure.restrict_restr
 
 中文:
-引理 ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero'
+引理 ae_eq_zero_of_对任意_set整数egral_isCompact_eq_zero'
   证明: by
   rw [← μ.restrict_univ]; rw [← iUnion_closure_compactCovering]
   apply (ae_restrict_iUnion_iff _ _).2 (fun n => ?_)

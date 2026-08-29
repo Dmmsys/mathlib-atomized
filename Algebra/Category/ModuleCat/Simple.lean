@@ -35,7 +35,7 @@ theorem simple_iff_isSimpleModule
 
 中文:
 定理 simple_iff_isSimpleModule
-  结论: Simple (of R M) ↔ IsSimpleModule R M
+  结论: 单 (of R M) ↔ 是单模 R M
   证明: by
   rw [simple_iff_subobject_isSimpleOrder]; rw [(subobjectModule (of R M)).isSimpleOrder_iff]; rw [isSimpleModule_iff]
 
@@ -55,8 +55,8 @@ theorem simple_iff_isSimpleModule'
 
 中文:
 定理 simple_iff_isSimpleModule'
-  条件: (M : ModuleCat R)
-  结论: Simple M ↔ IsSimpleModule R M
+  条件: (M : 模范畴 R)
+  结论: 单 M ↔ 是单模 R M
   证明: simple_iff_isSimpleModule
 
 Depends on / 依赖: simple_iff_isSimpleModule
@@ -74,7 +74,7 @@ instance simple_of_isSimpleModule
 
 中文:
 实例 simple_of_isSimpleModule
-  签名: [IsSimpleModule R M]
+  签名: [是单模 R M]
   定义体: simple_iff_isSimpleModule.mpr ‹_›
 
 Depends on / 依赖: simple_iff_isSimpleModule, simple_iff_isSimpleModule.mpr
@@ -92,7 +92,7 @@ instance isSimpleModule_of_simple
 
 中文:
 实例 isSimpleModule_of_simple
-  签名: (M : ModuleCat R) [Simple M]
+  签名: (M : 模范畴 R) [单 M]
   定义体: simple_iff_isSimpleModule.mp ‹_›
 
 Depends on / 依赖: simple_iff_isSimpleModule, simple_iff_isSimpleModule.mp
@@ -115,7 +115,7 @@ theorem simple_of_finrank_eq_one
 
 中文:
 定理 simple_of_finrank_eq_one
-  结论: {k : 类型} [Field k] [Algebra k R] {V : ModuleCat R}
+  结论: {k : 类型} [域 k] [代数 k R] {V : 模范畴 R}
   证明: (simple_iff_isSimpleModule' V).mpr (isSimpleModule_iff ..).mpr
     is_simple_module_of_finrank_eq_one h
 

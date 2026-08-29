@@ -209,7 +209,7 @@ definition exists_delab
     let dom ← SubExpr.wi
 
 中文:
-定义 exists_delab
+定义 存在_delab
   签名: : Delab
   定义体: whenPPOption Lean.getPPNotation do
   let #[ι, f] := (← SubExpr.getExpr).getAppArgs | failure

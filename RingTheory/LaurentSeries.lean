@@ -104,8 +104,8 @@ abbreviation LaurentSeries
   body: R⟦Int⟧
 
 中文:
-缩写 LaurentSeries
-  签名: (R : 类型u) [Zero R]
+缩写 Laurent级数
+  签名: (R : 类型u) [零 R]
   定义体: R⟦Int⟧
 -/
 abbrev LaurentSeries (R : Type u) [Zero R] := R⟦Int⟧
@@ -139,7 +139,7 @@ definition hasseDeriv
 
 中文:
 定义 hasseDeriv
-  签名: (R : 类型) {V : 类型} [AddCommGroup V] [Semiring R] [Module R V] (k : 自然数)
+  签名: (R : 类型) {V : 类型} [加法交换群 V] [半环 R] [模 R V] (k : 自然数)
   定义体: HahnSeries.ofSuppBddBelow (fun n => Ring.choose (n + k) k • f.coeff (n + k)) by
     refine ⟨f.order - k, fun x h => ?_⟩
     contrapose! h
@@ -178,7 +178,7 @@ theorem hasseDeriv_coeff
 
 中文:
 定理 hasseDeriv_coeff
-  条件: (k : 自然数) (f : LaurentSeries V) (n : 整数)
+  条件: (k : 自然数) (f : Laurent级数 V) (n : 整数)
   证明: rfl
 
 @[simp]
@@ -200,7 +200,7 @@ theorem hasseDeriv_zero
 
 中文:
 定理 hasseDeriv_zero
-  结论: hasseDeriv R 0 = LinearMap.id (M := LaurentSeries V)
+  结论: hasseDeriv R 0 = 线性映射.id (M := Laurent级数 V)
   证明: by
   ext f n
   simp
@@ -285,7 +285,7 @@ theorem hasseDeriv_comp_coeff
 
 中文:
 定理 hasseDeriv_comp_coeff
-  条件: (k l : 自然数) (f : LaurentSeries V) (n : 整数)
+  条件: (k l : 自然数) (f : Laurent级数 V) (n : 整数)
   证明: by
   rw [coeff_nsmul]
   simp only [hasseDeriv_coeff, Pi.smul_apply, Nat.cast_add]
@@ -315,7 +315,7 @@ theorem hasseDeriv_comp
 
 中文:
 定理 hasseDeriv_comp
-  条件: (k l : 自然数) (f : LaurentSeries V)
+  条件: (k l : 自然数) (f : Laurent级数 V)
   证明: by
   ext n
   simp [hasseDeriv_comp_coeff k l f n]
@@ -339,7 +339,7 @@ definition derivative
 
 中文:
 定义 derivative
-  签名: (R : 类型) {V : 类型} [AddCommGroup V] [Semiring R] [Module R V]
+  签名: (R : 类型) {V : 类型} [加法交换群 V] [半环 R] [模 R V]
   定义体: hasseDeriv R 1
 
 @[simp]
@@ -363,7 +363,7 @@ theorem derivative_apply
 
 中文:
 定理 derivative_apply
-  条件: (f : LaurentSeries V)
+  条件: (f : Laurent级数 V)
   结论: derivative R f = hasseDeriv R 1 f
   证明: by
   exact rfl
@@ -388,7 +388,7 @@ theorem derivative_iterate
 
 中文:
 定理 derivative_iterate
-  条件: (k : 自然数) (f : LaurentSeries V)
+  条件: (k : 自然数) (f : Laurent级数 V)
   证明: by
   ext n
   induction k generalizing f with
@@ -420,7 +420,7 @@ theorem derivative_iterate_coeff
 
 中文:
 定理 derivative_iterate_coeff
-  条件: (k : 自然数) (f : LaurentSeries V) (n : 整数)
+  条件: (k : 自然数) (f : Laurent级数 V) (n : 整数)
   证明: by
   rw [derivative_iterate]; rw [coeff_nsmul]; rw [Pi.smul_apply]; rw [hasseDeriv_coeff]; rw [Ring.descPochhammer_eq_factorial_smul_choose]; rw [smul_assoc]
 
@@ -707,8 +707,8 @@ instance [CommSemiring
 @[simp]
 
 中文:
-实例 [CommSemiring
-  签名: R] : Algebra R⟦X⟧ R⸨X⸩
+实例 [交换半环
+  签名: R] : 代数 R⟦X⟧ R⸨X⸩
   定义体: (HahnSeries.ofPowerSeries Int R).toAlgebra
 
 @[simp]
@@ -728,7 +728,7 @@ theorem coe_algebraMap
 
 中文:
 定理 coe_algebraMap
-  条件: [CommSemiring R]
+  条件: [交换半环 R]
   证明: rfl
 -/
 theorem coe_algebraMap [CommSemiring R] :
@@ -756,7 +756,7 @@ instance of_powerSeries_localization
 
 中文:
 实例 of_powerSeries_localization
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: by
     rintro ⟨_, n, rfl⟩
     refine ⟨⟨single (n : Int) 1, single (-n : Int) 1, ?_, ?_⟩, ?_⟩
@@ -988,7 +988,7 @@ theorem coe_C
 中文:
 定理 coe_C
   条件: (r : R)
-  结论: ((C r : R⟦X⟧) : R⸨X⸩) = HahnSeries.C r
+  结论: ((C r : R⟦X⟧) : R⸨X⸩) = Hahn级数.C r
   证明: ofPowerSeries_C _
 
 Depends on / 依赖: ofPowerSeries_C
@@ -1033,7 +1033,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: {S : 类型} [Semiring S] [Module R S] (r : R) (x : S⟦X⟧)
+  条件: {S : 类型} [半环 S] [模 R S] (r : R) (x : S⟦X⟧)
   证明: by
   ext
   simp [coeff_coe, coeff_smul, smul_ite]
@@ -1088,7 +1088,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul F[X] F⸨X⸩
+  签名: 忠实标量乘法 F[X] F⸨X⸩
   定义体: by
   refine (faithfulSMul_iff_algebraMap_injective F[X] F⸨X⸩).mpr ?_
   exact algebraMap_hahnSeries_injective Int
@@ -1109,7 +1109,7 @@ instance coeToLaurentSeries
 
 中文:
 实例 coeToLaurentSeries
-  签名: : Coe (RatFunc F) F⸨X⸩
+  签名: : Coe (有理函数 F) F⸨X⸩
   定义体: ⟨algebraMap (RatFunc F) F⸨X⸩⟩
 
 Depends on / 依赖: RatFunc, algebraMap
@@ -1129,8 +1129,8 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: (P : Polynomial F)
-  结论: ((P : F⟦X⟧) : F⸨X⸩) = (P : RatFunc F)
+  条件: (P : 多项式 F)
+  结论: ((P : F⟦X⟧) : F⸨X⸩) = (P : 有理函数 F)
   证明: by
   simp [coePolynomial, coe_def, ← IsScalarTower.algebraMap_apply]
 
@@ -1153,7 +1153,7 @@ theorem coe_X
 
 中文:
 定理 coe_X
-  结论: ((X : RatFunc F) : F⸨X⸩) = single 1 1
+  结论: ((X : 有理函数 F) : F⸨X⸩) = single 1 1
   证明: by
   simp [← algebraMap_X, ← IsScalarTower.algebraMap_apply F[X] (RatFunc F) F⸨X⸩]
 
@@ -1173,7 +1173,7 @@ theorem single_one_eq_pow
 
 中文:
 定理 single_one_eq_pow
-  条件: {R : 类型} [Semiring R] (n : 自然数)
+  条件: {R : 类型} [半环 R] (n : 自然数)
   证明: by
   simp
 -/
@@ -1253,7 +1253,7 @@ definition idealX
 
 中文:
 定义 idealX
-  签名: : IsDedekindDomain.HeightOneSpectrum K⟦X⟧ where
+  签名: : 是Dedekind整环.高一谱 K⟦X⟧ where
   定义体: Ideal.span {X}
   isPrime := PowerSeries.span_X_isPrime
   ne_bot := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact X_ne_zero
@@ -1360,7 +1360,7 @@ abbreviation polynomialValuationX
 
 中文:
 缩写 polynomialValuationX
-  签名: : Valuation K⟮X⟯ 整数ᵐ⁰
+  签名: : 赋值 K⟮X⟯ 整数ᵐ⁰
   定义体: (Polynomial.idealX K).valuation _
 
 Depends on / 依赖: Polynomial, Polynomial.idealX, idealX, valuation
@@ -1425,7 +1425,7 @@ instance valued
 
 中文:
 实例 valued
-  签名: : Valued K⸨X⸩ 整数ᵐ⁰
+  签名: : 赋值 K⸨X⸩ 整数ᵐ⁰
   定义体: Valued.mk' ((PowerSeries.idealX K).valuation _)
 
 Depends on / 依赖: PowerSeries, PowerSeries.idealX, Valued, Valued.mk, idealX, valuation
@@ -1442,7 +1442,7 @@ lemma valuation_def
 
 中文:
 引理 valuation_def
-  结论: (Valued.v : Valuation K⸨X⸩ 整数ᵐ⁰) = (PowerSeries.idealX K).valuation _
+  结论: (赋值.v : 赋值 K⸨X⸩ 整数ᵐ⁰) = (幂级数.idealX K).valuation _
   证明: rfl
 -/
 lemma valuation_def : (Valued.v : Valuation K⸨X⸩ Intᵐ⁰) = (PowerSeries.idealX K).valuation _ := rfl
@@ -1784,7 +1784,7 @@ theorem val_le_one_iff_eq_coe
 中文:
 定理 val_le_one_iff_eq_coe
   条件: (f : K⸨X⸩)
-  结论: Valued.v f <= (1 : 整数ᵐ⁰) ↔
+  结论: 赋值.v f <= (1 : 整数ᵐ⁰) ↔
   证明: by
   rw [valuation_le_iff_coeff_lt_log_eq_zero _ one_ne_zero]; rw [log_one]; rw [neg_zero]
   refine ⟨fun h => ⟨PowerSeries.mk fun n => f.coeff n, ?_⟩, ?_⟩
@@ -1838,7 +1838,7 @@ lemma valuation_surjective
 
 中文:
 引理 valuation_surjective
-  结论: Function.Surjective (Valued.v (R := K⸨X⸩))
+  结论: 函数.满射 (赋值.v (R := K⸨X⸩))
   证明: by
   intro n
   by_cases hn0 : n = 0
@@ -1871,7 +1871,7 @@ have : Value
 
 中文:
 定理 uniformContinuous_coeff
-  条件: {uK : UniformSpace K} (d : 整数)
+  条件: {uK : 一致空间 K} (d : 整数)
   证明: by
   refine uniformContinuous_iff_eventually.mpr fun S hS => eventually_iff_exists_mem.mpr ?_
   let γ : (Intᵐ⁰)ˣ := Units.mk0 (exp (-(d + 1))) coe_ne_zero
@@ -1910,7 +1910,7 @@ fun d => DiscreteUniformity.cauchyConst hℱ.map (uniformContinuous_coeff d)
 
 中文:
 定义 Cauchy.coeff
-  签名: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+  签名: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   定义体: let _ : UniformSpace K := ⊥
 fun d => DiscreteUniformity.cauchyConst hℱ.map (uniformContinuous_coeff d)
 
@@ -1932,7 +1932,7 @@ le_of_eq DiscreteUniformity.eq_pure_cauchyConst
 
 中文:
 定理 Cauchy.coeff_tendsto
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ) (D : 整数)
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ) (D : 整数)
   证明: let _ : UniformSpace K := ⊥
 le_of_eq DiscreteUniformity.eq_pure_cauchyConst
     (hℱ.map (uniformContinuous_coeff D)) ▸ (principal_singleton _).symm
@@ -1959,8 +1959,8 @@ obtain ⟨S, ⟨hS, ⟨T, ⟨hT, H⟩⟩⟩⟩ := mem_prod_iff.mp Filter.le_def.
  (
 
 中文:
-引理 Cauchy.exists_lb_eventual_support
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+引理 Cauchy.存在_lb_eventual_support
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   证明: by
   let entourage : Set (K⸨X⸩ × K⸨X⸩) := {P : K⸨X⸩ × K⸨X⸩ | Valued.v.restrict (P.snd - P.fst) < 1}
   let ζ : (MonoidWithZeroHom.ValueGroup₀ <| .ofClass (Valued.v (R := K⸨X⸩)))ˣ :=
@@ -2012,8 +2012,8 @@ theorem Cauchy.exists_lb_support
   apply Filter.mem_of_superset
 
 中文:
-定理 Cauchy.exists_lb_support
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+定理 Cauchy.存在_lb_support
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   证明: by
   let _ : UniformSpace K := ⊥
   obtain ⟨N, hN⟩ := exists_lb_eventual_support hℱ
@@ -2046,7 +2046,7 @@ theorem Cauchy.coeff_support_bddBelow
 
 中文:
 定理 Cauchy.coeff_support_bddBelow
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   证明: by
   refine ⟨(exists_lb_support hℱ).choose, fun d hd => ?_⟩
   by_contra hNd
@@ -2070,7 +2070,7 @@ definition Cauchy.limit
 
 中文:
 定义 Cauchy.limit
-  签名: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+  签名: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   定义体: HahnSeries.mk (coeff hℱ) Set.IsWF.isPWO (coeff_support_bddBelow _).wellFoundedOn_lt
 
 Depends on / 依赖: HahnSeries, HahnSeries.mk, Set.IsWF.isPWO, coeff_support_bddBelow, wellFoundedOn_lt
@@ -2090,8 +2090,8 @@ theorem Cauchy.exists_lb_coeff_ne
   rw [hf d (lt_of_lt_of_le hd (min_le_left _ _))]; rw [hN₂ d (lt_of_lt_of_le hd (min_le_right _ _))]
 
 中文:
-定理 Cauchy.exists_lb_coeff_ne
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+定理 Cauchy.存在_lb_coeff_ne
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   证明: by
   obtain ⟨⟨N₁, hN₁⟩, ⟨N₂, hN₂⟩⟩ := exists_lb_eventual_support hℱ, exists_lb_support hℱ
   refine ⟨min N₁ N₂, ℱ.3 hN₁ fun _ hf d hd => ?_⟩
@@ -2120,7 +2120,7 @@ theorem Cauchy.coeff_eventually_equal
 
 中文:
 定理 Cauchy.coeff_eventually_equal
-  条件: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ) {D : 整数}
+  条件: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ) {D : 整数}
   证明: by
   -- `φ` sends `d` to the set of Laurent Series having `d`th coefficient equal to `ℱ.coeff`.
   let φ : Int -> Set K⸨X⸩ := fun d => {f | coeff hℱ d = f.coeff d}
@@ -2181,7 +2181,7 @@ theorem Cauchy.eventually_mem_nhds
 
 中文:
 定理 Cauchy.eventually_mem_nhds
-  结论: {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ)
+  结论: {ℱ : 滤子 K⸨X⸩} (hℱ : Cauchy ℱ)
   证明: by
   obtain ⟨γ, hU₁⟩ := Valued.mem_nhds.mp hU
   suffices forallᶠ f in ℱ, f in {y : K⸨X⸩ | Valued.v (y - limit hℱ) < embedding γ.1} by
@@ -2219,7 +2219,7 @@ instance instLaurentSeriesComplete
 
 中文:
 实例 instLaurentSeriesComplete
-  签名: : CompleteSpace K⸨X⸩
+  签名: : 完备空间 K⸨X⸩
   定义体: ⟨fun hℱ => ⟨Cauchy.limit hℱ, fun _ hS => Cauchy.eventually_mem_nhds hℱ hS⟩⟩
 
 Depends on / 依赖: Cauchy, Cauchy.eventually_mem_nhds, Cauchy.limit, eventually_mem_nhds
@@ -2250,7 +2250,7 @@ theorem exists_Polynomial_intValuation_lt
     obtain ⟨d, hd⟩ := Int.exist
 
 中文:
-定理 exists_Polynomial_intValuation_lt
+定理 存在_Polynomial_intValuation_lt
   条件: (F : K⟦X⟧) (η : 整数ᵐ⁰ˣ)
   证明: by
   by_cases! h_neg : 1 < η
@@ -2301,7 +2301,7 @@ theorem exists_ratFunc_val_lt
     have F_mul := f.ofPowerSeries_powerSerie
 
 中文:
-定理 exists_ratFunc_val_lt
+定理 存在_ratFunc_val_lt
   条件: (f : K⸨X⸩) (γ : 整数ᵐ⁰ˣ)
   证明: by
   set F := f.powerSeriesPart with hF
@@ -2410,9 +2410,9 @@ lemma exists_ratFunc_eq_v
   simp [exp_log, hx]
 
 中文:
-引理 exists_ratFunc_eq_v
+引理 存在_ratFunc_eq_v
   条件: (x : K⸨X⸩)
-  结论: 存在 f : K⟮X⟯, Valued.v f = Valued.v x
+  结论: 存在 f : K⟮X⟯, 赋值.v f = 赋值.v x
   证明: by
   by_cases hx : Valued.v x = 0
   · use 0
@@ -2452,7 +2452,7 @@ theorem inducing_coe
 
 中文:
 定理 inducing_coe
-  结论: IsUniformInducing ((↑) : K⟮X⟯ -> K⸨X⸩)
+  结论: 是UniformInducing ((↑) : K⟮X⟯ -> K⸨X⸩)
   证明: by
   rw [isUniformInducing_iff]; rw [Filter.comap]
   ext S
@@ -2533,7 +2533,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : K⟮X⟯ -> K⸨X⸩)
+  结论: 连续 ((↑) : K⟮X⟯ -> K⸨X⸩)
   证明: (isUniformInducing_iff'.1 (inducing_coe)).1.continuous
 
 Depends on / 依赖: QuasiSober, R1Space, R1Space.quasiSober, continuous, inducing_coe, isUniformInducing_iff, quasiSober
@@ -2585,7 +2585,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (ratfuncAdicComplPkg (K := K).space)
+  签名: 域 (ratfuncAdicComplPkg (K := K).space)
   定义体: inferInstanceAs (Field ((polynomialValuationX K).Completion))
 -/
 instance : Field (ratfuncAdicComplPkg (K := K).space) :=
@@ -2601,7 +2601,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valued (ratfuncAdicComplPkg (K := K).space) (WithZero (Multiplicative 整数))
+  签名: 赋值 (ratfuncAdicComplPkg (K := K).space) (WithZero (Multiplicative 整数))
   定义体: inferInstanceAs (Valued ((polynomialValuationX K).Completion) (WithZero (Multiplicative Int)))
 
 Depends on / 依赖: Multiplicative, WithZero
@@ -2677,7 +2677,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (LaurentSeriesPkg K).space
+  签名: 拓扑空间 (LaurentSeriesPkg K).space
   定义体: (LaurentSeriesPkg K).uniformStruct.toTopologicalSpace
 
 @[simp]
@@ -2736,7 +2736,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (RatFuncAdicCompl K)
+  签名: 一致空间 (RatFuncAdicCompl K)
   定义体: inferInstance
 -/
 instance : UniformSpace (RatFuncAdicCompl K) := inferInstance
@@ -2750,7 +2750,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace K⸨X⸩
+  签名: 一致空间 K⸨X⸩
   定义体: inferInstance
 -/
 instance : UniformSpace K⸨X⸩ := inferInstance
@@ -2924,7 +2924,7 @@ theorem algebraMap_apply
 中文:
 定理 algebraMap_apply
   条件: (a : K)
-  结论: algebraMap K K⸨X⸩ a = HahnSeries.C a
+  结论: algebraMap K K⸨X⸩ a = Hahn级数.C a
   证明: by
   simp [RingHom.algebraMap_toAlgebra]
 
@@ -2943,7 +2943,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra K (RatFuncAdicCompl K)
+  签名: 代数 K (RatFuncAdicCompl K)
   定义体: RingHom.toAlgebra ((LaurentSeriesRingEquiv K).toRingHom.comp HahnSeries.C)
 
 Depends on / 依赖: HahnSeries, HahnSeries.C, LaurentSeriesRingEquiv, RingHom, RingHom.toAlgebra, toAlgebra, toRingHom, toRingHom.comp
@@ -3130,7 +3130,7 @@ abbreviation powerSeries_as_subring
 
 中文:
 缩写 powerSeries_as_subring
-  签名: : Subring K⸨X⸩
+  签名: : 子环 K⸨X⸩
   定义体: Subring.map (HahnSeries.ofPowerSeries Int K) ⊤
 
 Depends on / 依赖: HahnSeries, HahnSeries.ofPowerSeries, Subring, Subring.map, ofPowerSeries
@@ -3234,7 +3234,7 @@ theorem exists_powerSeries_of_memIntegers
   exact ⟨F, by rw [hF, h
 
 中文:
-定理 exists_powerSeries_of_memIntegers
+定理 存在_powerSeries_of_mem整数egers
   结论: {x : RatFuncAdicCompl K}
   证明: by
   set f := (ratfuncAdicComplRingEquiv K) x with hf
@@ -3372,7 +3372,7 @@ lemma algebraMap_C_mem_adicCompletionIntegers
   apply LaurentSeriesRingEquiv_mem_valuationSubring
 
 中文:
-引理 algebraMap_C_mem_adicCompletionIntegers
+引理 algebraMap_C_mem_adicCompletion整数egers
   条件: (x : K)
   证明: by
   have : HahnSeries.C x = ofPowerSeries Int K (PowerSeries.C x) := by
@@ -3402,7 +3402,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra K ((idealX K).adicCompletion整数egers K⟮X⟯)
+  签名: 代数 K ((idealX K).adicCompletion整数egers K⟮X⟯)
   定义体: RingHom.toAlgebra
     ((LaurentSeriesRingEquiv K).toRingHom.comp HahnSeries.C).codRestrict _
       (algebraMap_C_mem_adicCompletionIntegers K)

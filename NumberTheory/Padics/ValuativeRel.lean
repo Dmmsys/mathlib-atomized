@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valuation.Compatible (mulValuation (p := p))
+  签名: 赋值.余mpatible (mulValuation (p := p))
   定义体: .ofValuation _
 
 Depends on / 依赖: ofValuation
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNontrivial Rat_[p]
+  签名: 是非平凡 Rat_[p]
   定义体: ⟨ValuativeRel.valuation _ p, valuation_p_ne_zero _, (valuation_p_lt_one _).ne⟩
 
 Depends on / 依赖: ValuativeRel, ValuativeRel.valuation, valuation, valuation_p_lt_one, valuation_p_ne_zero
@@ -138,7 +138,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRankLeOne Rat_[p]
+  签名: 是秩不超过一 Rat_[p]
   定义体: .of_compatible_mulArchimedean mulValuation
 
 Depends on / 依赖: mulValuation, of_compatible_mulArchimedean

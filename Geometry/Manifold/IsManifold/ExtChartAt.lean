@@ -82,7 +82,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: : PartialEquiv M E
+  签名: : 部分等价 M E
   定义体: f.toPartialEquiv ≫ I.toPartialEquiv
 
 Depends on / 依赖: I.toPartialEquiv, f.toPartialEquiv, toPartialEquiv
@@ -156,7 +156,7 @@ theorem isOpen_extend_source
 
 中文:
 定理 isOpen_extend_source
-  结论: IsOpen (f.extend I).source
+  结论: 是开集 (f.extend I).source
   证明: by
   rw [extend_source]
   exact f.open_source
@@ -240,8 +240,8 @@ lemma isOpen_extend_target
 
 中文:
 引理 isOpen_extend_target
-  条件: [I.Boundaryless]
-  结论: IsOpen (f.extend I).target
+  条件: [I.无边界]
+  结论: 是开集 (f.extend I).target
   证明: by
   rw [extend_target]; rw [I.range_eq_univ]; rw [inter_univ]
   exact I.continuous_symm.isOpen_preimage _ f.open_target
@@ -459,7 +459,7 @@ theorem map_extend_nhds_of_boundaryless
 
 中文:
 定理 map_extend_nhds_of_boundaryless
-  条件: [I.Boundaryless] {x : M} (hx : x in f.source)
+  条件: [I.无边界] {x : M} (hx : x in f.source)
   证明: by
   rw [f.map_extend_nhds hx]; rw [I.range_eq_univ]; rw [nhdsWithin_univ]
 
@@ -529,7 +529,7 @@ theorem extend_image_nhds_mem_nhds_of_boundaryless
 
 中文:
 定理 extend_image_nhds_mem_nhds_of_boundaryless
-  结论: [I.Boundaryless] {x} (hx : x in f.source)
+  结论: [I.无边界] {x} (hx : x in f.source)
   证明: by
   rw [← f.map_extend_nhds_of_boundaryless hx]; rw [Filter.mem_map]
   filter_upwards [h] using subset_preimage_image (f.extend I) s
@@ -737,7 +737,7 @@ theorem extend_symm_continuousWithinAt_comp_right_iff
 
 中文:
 定理 extend_symm_continuousWithinAt_comp_right_iff
-  结论: {X} [TopologicalSpace X] {g : M -> X}
+  结论: {X} [拓扑空间 X] {g : M -> X}
   证明: by
   rw [← I.symm_continuousWithinAt_comp_right_iff]; rfl
 
@@ -759,7 +759,7 @@ theorem isOpen_extend_preimage'
 
 中文:
 定理 isOpen_extend_preimage'
-  条件: {s : Set E} (hs : IsOpen s)
+  条件: {s : 集合 E} (hs : 是开集 s)
   证明: (continuousOn_extend f).isOpen_inter_preimage (isOpen_extend_source _) hs
 
 Depends on / 依赖: continuousOn_extend, isOpen_extend_source, isOpen_inter_preimage
@@ -779,7 +779,7 @@ theorem isOpen_extend_preimage
 
 中文:
 定理 isOpen_extend_preimage
-  条件: {s : Set E} (hs : IsOpen s)
+  条件: {s : 集合 E} (hs : 是开集 s)
   证明: by
   rw [← extend_source f (I := I)]; exact isOpen_extend_preimage' f hs
 
@@ -938,7 +938,7 @@ theorem tendsto_extend_comp_iff
 
 中文:
 定理 tendsto_extend_comp_iff
-  结论: {α : 类型} {l : Filter α} {g : α -> M}
+  结论: {α : 类型} {l : 滤子 α} {g : α -> M}
   证明: by
   refine ⟨fun h u hu => mem_map.2 ?_, (continuousAt_extend _ hy).tendsto.comp⟩
   have := (f.continuousAt_extend_symm hy).tendsto.comp h
@@ -1037,7 +1037,7 @@ theorem extend_preimage_mem_nhds_of_mem_nhdsWithin
 
 中文:
 定理 extend_preimage_mem_nhds_of_mem_nhdsWithin
-  结论: {s : Set E} {x : M} (hx : x in f.source)
+  结论: {s : 集合 E} {x : M} (hx : x in f.source)
   证明: by
   rwa [← map_extend_nhds (I := I) f hx] at hs
 
@@ -1127,7 +1127,7 @@ theorem extend_symm_preimage_inter_range_eventuallyEq
 
 中文:
 定理 extend_symm_preimage_inter_range_eventuallyEq
-  结论: {s : Set M} {x : M} (hs : s subseteq f.source)
+  结论: {s : 集合 M} {x : M} (hs : s subseteq f.source)
   证明: by
   rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin _ hx]; rw [map_extend_nhdsWithin_eq_image_of_subset _ hx hs]
 
@@ -1649,7 +1649,7 @@ theorem isOpen_extChartAt_source
 中文:
 定理 isOpen_extChartAt_source
   条件: (x : M)
-  结论: IsOpen (extChartAt I x).source
+  结论: 是开集 (extChartAt I x).source
   证明: isOpen_extend_source _
 
 Depends on / 依赖: isOpen_extend_source
@@ -1990,7 +1990,7 @@ theorem map_extChartAt_nhds_of_boundaryless
 
 中文:
 定理 map_extChartAt_nhds_of_boundaryless
-  条件: [I.Boundaryless] (x : M)
+  条件: [I.无边界] (x : M)
   证明: by
   rw [extChartAt]
   exact map_extend_nhds_of_boundaryless (chartAt H x) (mem_chart_source H x)
@@ -2041,7 +2041,7 @@ theorem extChartAt_image_nhds_mem_nhds_of_boundaryless
 
 中文:
 定理 extChartAt_image_nhds_mem_nhds_of_boundaryless
-  结论: [I.Boundaryless]
+  结论: [I.无边界]
   证明: by
   rw [extChartAt]
   exact extend_image_nhds_mem_nhds_of_boundaryless _ (mem_chart_source H x) hx
@@ -2155,8 +2155,8 @@ theorem isOpen_extChartAt_target
 
 中文:
 定理 isOpen_extChartAt_target
-  条件: [I.Boundaryless] (x : M)
-  结论: IsOpen (extChartAt I x).target
+  条件: [I.无边界] (x : M)
+  结论: 是开集 (extChartAt I x).target
   证明: by
   simp_rw [extChartAt_target, I.range_eq_univ, inter_univ]
   exact (OpenPartialHomeomorph.open_target _).preimage I.continuous_symm
@@ -2179,7 +2179,7 @@ theorem extChartAt_target_mem_nhds
 
 中文:
 定理 extChartAt_target_mem_nhds
-  条件: [I.Boundaryless] (x : M)
+  条件: [I.无边界] (x : M)
   证明: by
   convert! extChartAt_target_mem_nhdsWithin x
   simp only [I.range_eq_univ, nhdsWithin_univ]
@@ -2201,7 +2201,7 @@ theorem extChartAt_target_mem_nhds'
 
 中文:
 定理 extChartAt_target_mem_nhds'
-  结论: [I.Boundaryless] {x : M} {y : E}
+  结论: [I.无边界] {x : M} {y : E}
   证明: (isOpen_extChartAt_target x).mem_nhds m
 
 Depends on / 依赖: isOpen_extChartAt_target, mem_nhds
@@ -2559,7 +2559,7 @@ theorem isOpen_extChartAt_preimage'
 
 中文:
 定理 isOpen_extChartAt_preimage'
-  条件: (x : M) {s : Set E} (hs : IsOpen s)
+  条件: (x : M) {s : 集合 E} (hs : 是开集 s)
   证明: isOpen_extend_preimage' _ hs
 
 Depends on / 依赖: isOpen_extend_preimage
@@ -2580,7 +2580,7 @@ theorem isOpen_extChartAt_preimage
 
 中文:
 定理 isOpen_extChartAt_preimage
-  条件: (x : M) {s : Set E} (hs : IsOpen s)
+  条件: (x : M) {s : 集合 E} (hs : 是开集 s)
   证明: by
   rw [← extChartAt_source I]
   exact isOpen_extChartAt_preimage' x hs
@@ -2758,7 +2758,7 @@ theorem extChartAt_preimage_mem_nhds_of_mem_nhdsWithin
 
 中文:
 定理 extChartAt_preimage_mem_nhds_of_mem_nhdsWithin
-  结论: {s : Set E} {x x' : M}
+  结论: {s : 集合 E} {x x' : M}
   证明: extend_preimage_mem_nhds_of_mem_nhdsWithin _ (by simpa using hx) hs
 
 Depends on / 依赖: extend_preimage_mem_nhds_of_mem_nhdsWithin
@@ -2958,7 +2958,7 @@ theorem contDiffOn_ext_coord_change
 
 中文:
 定理 contDiffOn_ext_coord_change
-  条件: [IsManifold I n M] (x x' : M)
+  条件: [是流形 I n M] (x x' : M)
   证明: I.contDiffOn_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x)
 
 Depends on / 依赖: I.contDiffOn_extendCoordChange, chart_mem_maximalAtlas, contDiffOn_extendCoordChange
@@ -2978,7 +2978,7 @@ theorem contDiffWithinAt_ext_coord_change
 
 中文:
 定理 contDiffWithinAt_ext_coord_change
-  结论: [IsManifold I n M] (x x' : M) {y : E}
+  结论: [是流形 I n M] (x x' : M) {y : E}
   证明: I.contDiffWithinAt_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x) hy
 
 Depends on / 依赖: I.contDiffWithinAt_extendCoordChange, chart_mem_maximalAtlas, contDiffWithinAt_extendCoordChange
@@ -3214,7 +3214,7 @@ theorem extChartAt_model_space_eq_id
 中文:
 定理 extChartAt_model_space_eq_id
   条件: (x : E)
-  结论: extChartAt 𝓘(𝕜, E) x = PartialEquiv.refl E
+  结论: extChartAt 𝓘(𝕜, E) x = 部分等价.refl E
   证明: by
   simp only [mfld_simps]
 
@@ -3277,7 +3277,7 @@ theorem extChartAt_comp
 
 中文:
 定理 extChartAt_comp
-  条件: [ChartedSpace H H'] (x : M')
+  条件: [Charted空间 H H'] (x : M')
   证明: PartialEquiv.trans_assoc ..
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.comp, extChartAt
@@ -3299,7 +3299,7 @@ theorem writtenInExtChartAt_chartAt_comp
 
 中文:
 定理 writtenInExtChartAt_chartAt_comp
-  结论: [ChartedSpace H H'] (x : M') {y}
+  结论: [Charted空间 H H'] (x : M') {y}
   证明: by
   let := ChartedSpace.comp H H' M'
   simp_all only [mfld_simps, chartAt_comp]
@@ -3324,7 +3324,7 @@ theorem writtenInExtChartAt_chartAt_symm_comp
 
 中文:
 定理 writtenInExtChartAt_chartAt_symm_comp
-  结论: [ChartedSpace H H'] (x : M') {y}
+  结论: [Charted空间 H H'] (x : M') {y}
   证明: by
   let := ChartedSpace.comp H H' M'
   simp_all only [mfld_simps, chartAt_comp]
@@ -3359,7 +3359,7 @@ lemma Manifold.locallyCompact_of_finiteDimensional
   exact ChartedSpace.locallyCompactSpace H M
 
 中文:
-引理 Manifold.locallyCompact_of_finiteDimensional
+引理 流形.locallyCompact_of_finiteDimensional
   证明: by
   have : ProperSpace E := FiniteDimensional.proper 𝕜 E
   have : LocallyCompactSpace H := I.locallyCompactSpace
@@ -3391,8 +3391,8 @@ lemma LocallyCompactSpace.of_locallyCompact_manifold
       ((isOpen_extChartAt_s
 
 中文:
-引理 LocallyCompactSpace.of_locallyCompact_manifold
-  结论: (I : ModelWithCorners 𝕜 E H)
+引理 局部紧空间.of_locallyCompact_manifold
+  结论: (I : 带角模型 𝕜 E H)
   证明: by
   rcases h with ⟨x⟩
   obtain ⟨y, hy⟩ := interior_extChartAt_target_nonempty I x
@@ -3431,7 +3431,7 @@ theorem FiniteDimensional.of_locallyCompact_manifold
   exact FiniteDimensional.of_locallyCompactSpace 𝕜
 
 中文:
-定理 FiniteDimensional.of_locallyCompact_manifold
+定理 有限维.of_locallyCompact_manifold
   证明: by
   have := LocallyCompactSpace.of_locallyCompact_manifold M I
   exact FiniteDimensional.of_locallyCompactSpace 𝕜

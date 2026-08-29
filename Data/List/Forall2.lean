@@ -92,8 +92,8 @@ theorem forall₂_same
   statement: forall {l : List α}, Forall₂ Rₐ l l ↔ forall x in l, Rₐ x x
 
 中文:
-定理 forall₂_same
-  结论: 对任意 {l : List α}, Forall₂ Rₐ l l ↔ 对任意 x in l, Rₐ x x
+定理 对任意₂_same
+  结论: 对任意 {l : 列表 α}, Forall₂ Rₐ l l ↔ 对任意 x in l, Rₐ x x
 -/
 theorem forall₂_same : forall {l : List α}, Forall₂ Rₐ l l ↔ forall x in l, Rₐ x x
   | [] => by simp
@@ -111,8 +111,8 @@ theorem forall₂_refl
 @[simp]
 
 中文:
-定理 forall₂_refl
-  条件: [Std.Refl Rₐ] (l : List α)
+定理 对任意₂_refl
+  条件: [Std.Refl Rₐ] (l : 列表 α)
   结论: Forall₂ Rₐ l l
   证明: forall₂_same.2 fun _ _ => refl _
 
@@ -141,8 +141,8 @@ theorem forall₂_eq_eq_eq
 @[simp]
 
 中文:
-定理 forall₂_eq_eq_eq
-  结论: Forall₂ ((· = ·) : α -> α -> 命题) = Eq
+定理 对任意₂_eq_eq_eq
+  结论: Forall₂ ((· = ·) : α -> α -> 命题) = 相等
   证明: by
   funext a b; apply propext
   constructor
@@ -180,7 +180,7 @@ theorem forall₂_nil_left_iff
 @[simp]
 
 中文:
-定理 forall₂_nil_left_iff
+定理 对任意₂_nil_left_iff
   条件: {l}
   结论: Forall₂ R nil l ↔ l = nil
   证明: ⟨fun H => by cases H; rfl, by rintro rfl; exact Forall₂.nil⟩
@@ -201,7 +201,7 @@ theorem forall₂_nil_right_iff
   proof: ⟨fun H => by cases H; rfl, by rintro rfl; exact Forall₂.nil⟩
 
 中文:
-定理 forall₂_nil_right_iff
+定理 对任意₂_nil_right_iff
   条件: {l}
   结论: Forall₂ R l nil ↔ l = nil
   证明: ⟨fun H => by cases H; rfl, by rintro rfl; exact Forall₂.nil⟩
@@ -224,7 +224,7 @@ theorem forall₂_cons_left_iff
     | _, ⟨_, _, h₁, h₂, rfl⟩ => Forall₂.cons h₁ h₂
 
 中文:
-定理 forall₂_cons_left_iff
+定理 对任意₂_cons_left_iff
   条件: {a l u}
   证明: Iff.intro
     (fun h =>
@@ -261,7 +261,7 @@ theorem forall₂_cons_right_iff
     | _, ⟨_, _, h₁, h₂, rfl⟩ => Forall₂.cons h₁ h₂
 
 中文:
-定理 forall₂_cons_right_iff
+定理 对任意₂_cons_right_iff
   条件: {b l u}
   证明: Iff.intro
     (fun h =>
@@ -291,7 +291,7 @@ theorem forall₂_and_left
   given: {p : α -> Prop}
 
 中文:
-定理 forall₂_and_left
+定理 对任意₂_and_left
   条件: {p : α -> 命题}
 -/
 theorem forall₂_and_left {p : α -> Prop} :
@@ -312,7 +312,7 @@ theorem forall₂_map_left_iff
   given: {f : γ -> α}
 
 中文:
-定理 forall₂_map_left_iff
+定理 对任意₂_map_left_iff
   条件: {f : γ -> α}
 -/
 theorem forall₂_map_left_iff {f : γ -> α} :
@@ -329,7 +329,7 @@ theorem forall₂_map_right_iff
   given: {f : γ -> β}
 
 中文:
-定理 forall₂_map_right_iff
+定理 对任意₂_map_right_iff
   条件: {f : γ -> β}
 -/
 theorem forall₂_map_right_iff {f : γ -> β} :
@@ -346,7 +346,7 @@ theorem left_unique_forall₂'
   statement: forall {a b c}, Forall₂ R a c -> Forall₂ R b c -> a = b
 
 中文:
-定理 left_unique_forall₂'
+定理 left_unique_对任意₂'
   条件: (hr : LeftUnique R)
   结论: 对任意 {a b c}, Forall₂ R a c -> Forall₂ R b c -> a = b
 -/
@@ -365,7 +365,7 @@ theorem _root_.Relator.LeftUnique.forall₂
   proof: @left_unique_forall₂' _ _ _ hr
 
 中文:
-定理 _root_.Relator.LeftUnique.forall₂
+定理 _root_.Relator.LeftUnique.对任意₂
   条件: (hr : LeftUnique R)
   结论: LeftUnique (Forall₂ R)
   证明: @left_unique_forall₂' _ _ _ hr
@@ -381,7 +381,7 @@ theorem right_unique_forall₂'
   given: (hr : RightUnique R)
 
 中文:
-定理 right_unique_forall₂'
+定理 right_unique_对任意₂'
   条件: (hr : RightUnique R)
 -/
 theorem right_unique_forall₂' (hr : RightUnique R) :
@@ -400,7 +400,7 @@ theorem _root_.Relator.RightUnique.forall₂
   proof: @right_unique_forall₂' _ _ _ hr
 
 中文:
-定理 _root_.Relator.RightUnique.forall₂
+定理 _root_.Relator.RightUnique.对任意₂
   条件: (hr : RightUnique R)
   结论: RightUnique (Forall₂ R)
   证明: @right_unique_forall₂' _ _ _ hr
@@ -418,7 +418,7 @@ theorem _root_.Relator.BiUnique.forall₂
   proof: ⟨hr.left.forall₂, hr.right.forall₂⟩
 
 中文:
-定理 _root_.Relator.BiUnique.forall₂
+定理 _root_.Relator.BiUnique.对任意₂
   条件: (hr : BiUnique R)
   结论: BiUnique (Forall₂ R)
   证明: ⟨hr.left.forall₂, hr.right.forall₂⟩
@@ -465,7 +465,7 @@ English:
 theorem forall₂_of_length_eq_of_get
 
 中文:
-定理 forall₂_of_length_eq_of_get
+定理 对任意₂_of_length_eq_of_get
 -/
 theorem forall₂_of_length_eq_of_get :
     forall {x : List α} {y : List β},
@@ -485,8 +485,8 @@ theorem forall₂_iff_get
   proof: ⟨fun h => ⟨h.length_eq, h.get⟩, fun h => forall₂_of_length_eq_of_get h.1 h.2⟩
 
 中文:
-定理 forall₂_iff_get
-  条件: {l₁ : List α} {l₂ : List β}
+定理 对任意₂_iff_get
+  条件: {l₁ : 列表 α} {l₂ : 列表 β}
   证明: ⟨fun h => ⟨h.length_eq, h.get⟩, fun h => forall₂_of_length_eq_of_get h.1 h.2⟩
 
 Depends on / 依赖: h.get, h.length_eq, length_eq
@@ -503,7 +503,7 @@ theorem forall₂_zip
   statement: forall {l₁ l₂}, Forall₂ R l₁ l₂ -> forall {a b}, (a, b) in zip l₁ l₂ -> R a b
 
 中文:
-定理 forall₂_zip
+定理 对任意₂_zip
   结论: 对任意 {l₁ l₂}, Forall₂ R l₁ l₂ -> 对任意 {a b}, (a, b) in zip l₁ l₂ -> R a b
 -/
 theorem forall₂_zip : forall {l₁ l₂}, Forall₂ R l₁ l₂ -> forall {a b}, (a, b) in zip l₁ l₂ -> R a b
@@ -531,7 +531,7 @@ theorem forall₂_iff_zip
       · simp only [l
 
 中文:
-定理 forall₂_iff_zip
+定理 对任意₂_iff_zip
   条件: {l₁ l₂}
   证明: ⟨fun h => ⟨Forall₂.length_eq h, @forall₂_zip _ _ _ _ _ h⟩, fun h => by
     obtain ⟨h₁, h₂⟩ := h
@@ -571,7 +571,7 @@ theorem forall₂_take
   statement: forall (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (take n l₁) (take n l₂)
 
 中文:
-定理 forall₂_take
+定理 对任意₂_take
   结论: 对任意 (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (take n l₁) (take n l₂)
 -/
 theorem forall₂_take : forall (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (take n l₁) (take n l₂)
@@ -587,7 +587,7 @@ theorem forall₂_drop
   statement: forall (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (drop n l₁) (drop n l₂)
 
 中文:
-定理 forall₂_drop
+定理 对任意₂_drop
   结论: 对任意 (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (drop n l₁) (drop n l₂)
 -/
 theorem forall₂_drop : forall (n) {l₁ l₂}, Forall₂ R l₁ l₂ -> Forall₂ R (drop n l₁) (drop n l₂)
@@ -607,8 +607,8 @@ theorem forall₂_take_append
   rwa [take_left] at h'
 
 中文:
-定理 forall₂_take_append
-  条件: (l : List α) (l₁ : List β) (l₂ : List β) (h : Forall₂ R l (l₁ ++ l₂))
+定理 对任意₂_take_append
+  条件: (l : 列表 α) (l₁ : 列表 β) (l₂ : 列表 β) (h : Forall₂ R l (l₁ ++ l₂))
   证明: by
   have h' : Forall₂ R (take (length l₁) l) (take (length l₁) (l₁ ++ l₂)) :=
     forall₂_take (length l₁) h
@@ -634,8 +634,8 @@ theorem forall₂_drop_append
   rwa [drop_left] at h'
 
 中文:
-定理 forall₂_drop_append
-  条件: (l : List α) (l₁ : List β) (l₂ : List β) (h : Forall₂ R l (l₁ ++ l₂))
+定理 对任意₂_drop_append
+  条件: (l : 列表 α) (l₁ : 列表 β) (l₂ : 列表 β) (h : Forall₂ R l (l₁ ++ l₂))
   证明: by
   have h' : Forall₂ R (drop (length l₁) l) (drop (length l₁) (l₁ ++ l₂)) :=
     forall₂_drop (length l₁) h
@@ -660,7 +660,7 @@ theorem rel_mem
 中文:
 定理 rel_mem
   条件: (hr : BiUnique R)
-  结论: (R ⇒ Forall₂ R ⇒ Iff) (· in ·) (· in ·)
+  结论: (R ⇒ Forall₂ R ⇒ 当且仅当) (· in ·) (· in ·)
 -/
 theorem rel_mem (hr : BiUnique R) : (R ⇒ Forall₂ R ⇒ Iff) (· in ·) (· in ·)
   | a, b, _, [], [], Forall₂.nil => by simp only [not_mem_nil]
@@ -730,7 +730,7 @@ theorem forall₂_reverse_iff
     fun h => rel_reverse h
 
 中文:
-定理 forall₂_reverse_iff
+定理 对任意₂_reverse_iff
   条件: {l₁ l₂}
   结论: Forall₂ R (reverse l₁) (reverse l₂) ↔ Forall₂ R l₁ l₂
   证明: Iff.intro
@@ -826,7 +826,7 @@ theorem rel_filter
 
 中文:
 定理 rel_filter
-  结论: {p : α -> 布尔} {q : β -> 布尔}
+  结论: {p : α -> 布尔值} {q : β -> 布尔值}
   证明: by rwa [← hpq h₁]
       simp only [filter_cons_of_pos h, filter_cons_of_pos this, forall₂_cons, h₁, true_and,
         rel_filter hpq h₂]
@@ -857,7 +857,7 @@ theorem rel_filterMap
 
 中文:
 定理 rel_filterMap
-  结论: ((R ⇒ Option.Rel P) ⇒ Forall₂ R ⇒ Forall₂ P) filterMap filterMap
+  结论: ((R ⇒ 选项类型.关系 P) ⇒ Forall₂ R ⇒ Forall₂ P) filterMap filterMap
 -/
 theorem rel_filterMap : ((R ⇒ Option.Rel P) ⇒ Forall₂ R ⇒ Forall₂ P) filterMap filterMap
   | _, _, _, _, _, Forall₂.nil => Forall₂.nil
@@ -911,7 +911,7 @@ theorem sublistForall₂_iff
 
 中文:
 定理 sublistForall₂_iff
-  条件: {l₁ : List α} {l₂ : List β}
+  条件: {l₁ : 列表 α} {l₂ : 列表 β}
   证明: by
   constructor <;> intro h
   · induction h with
@@ -990,7 +990,7 @@ instance SublistForall₂.is_trans
 
 中文:
 实例 SublistForall₂.is_trans
-  签名: [IsTrans α Rₐ]
+  签名: [是Trans α Rₐ]
   定义体: ⟨fun a b c => by
     revert a b
     induction c with
@@ -1036,8 +1036,8 @@ theorem Sublist.sublistForall₂
   proof: sublistForall₂_iff.2 ⟨l₁, forall₂_refl l₁, h⟩
 
 中文:
-定理 Sublist.sublistForall₂
-  条件: {l₁ l₂ : List α} (h : l₁ <+ l₂) [Std.Refl Rₐ]
+定理 子表.sublistForall₂
+  条件: {l₁ l₂ : 列表 α} (h : l₁ <+ l₂) [Std.Refl Rₐ]
   证明: sublistForall₂_iff.2 ⟨l₁, forall₂_refl l₁, h⟩
 -/
 theorem Sublist.sublistForall₂ {l₁ l₂ : List α} (h : l₁ <+ l₂) [Std.Refl Rₐ] :
@@ -1057,7 +1057,7 @@ theorem tail_sublistForall₂_self
 
 中文:
 定理 tail_sublistForall₂_self
-  条件: [Std.Refl Rₐ] (l : List α)
+  条件: [Std.Refl Rₐ] (l : 列表 α)
   结论: SublistForall₂ Rₐ l.tail l
   证明: l.tail_sublist.sublistForall₂
 
@@ -1082,7 +1082,7 @@ theorem sublistForall₂_map_left_iff
 
 中文:
 定理 sublistForall₂_map_left_iff
-  条件: {f : γ -> α} {l₁ : List γ} {l₂ : List β}
+  条件: {f : γ -> α} {l₁ : 列表 γ} {l₂ : 列表 β}
   证明: by
   simp [sublistForall₂_iff]
 
@@ -1112,7 +1112,7 @@ theorem sublistForall₂_map_right_iff
 
 中文:
 定理 sublistForall₂_map_right_iff
-  条件: {f : γ -> β} {l₁ : List α} {l₂ : List γ}
+  条件: {f : γ -> β} {l₁ : 列表 α} {l₂ : 列表 γ}
   证明: by
   simp only [sublistForall₂_iff]
   constructor

@@ -31,7 +31,7 @@ instance wellPowered_addCommGrp
 
 中文:
 实例 wellPowered_addCommGrp
-  签名: : WellPowered.{u} AddCommGrpCat.{u}
+  签名: : 良幂.{u} 加法交换群范畴.{u}
   定义体: wellPowered_of_equiv.{u} (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).asEquivalence
 
 Depends on / 依赖: AddCommGrpCat, ModuleCat, asEquivalence, wellPowered_of_equiv

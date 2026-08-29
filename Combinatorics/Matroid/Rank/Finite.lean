@@ -39,7 +39,7 @@ definition IsRkFinite
 
 中文:
 定义 IsRkFinite
-  签名: (M : Matroid α) (X : Set α)
+  签名: (M : 拟阵 α) (X : 集合 α)
   定义体: (M ↾ X).RankFinite
 
 Depends on / 依赖: RankFinite
@@ -75,7 +75,7 @@ lemma RankFinite.isRkFinite
 
 中文:
 引理 RankFinite.isRkFinite
-  条件: [RankFinite M] (X : Set α)
+  条件: [RankFinite M] (X : 集合 α)
   结论: M.IsRkFinite X
   证明: inferInstanceAs (M ↾ X).RankFinite
 -/
@@ -94,9 +94,9 @@ lemma IsBasis'.finite_iff_isRkFinite
 alias ⟨_, IsBasis'.finite_of_isRkFinite⟩ := IsBasis'.finite_iff_isRkFinite
 
 中文:
-引理 IsBasis'.finite_iff_isRkFinite
-  条件: (hI : M.IsBasis' I X)
-  结论: I.Finite ↔ M.IsRkFinite X
+引理 是基'.finite_iff_isRkFinite
+  条件: (hI : M.是基' I X)
+  结论: I.有限 ↔ M.IsRkFinite X
   证明: ⟨fun h => ⟨I, hI, h⟩, fun (_ : (M ↾ X).RankFinite) => hI.isBase_restrict.finite⟩
 
 alias ⟨_, IsBasis'.finite_of_isRkFinite⟩ := IsBasis'.finite_iff_isRkFinite
@@ -118,9 +118,9 @@ lemma IsBasis.finite_iff_isRkFinite
 alias ⟨_, IsBasis.finite_of_isRkFinite⟩ := IsBasis.finite_iff_isRkFinite
 
 中文:
-引理 IsBasis.finite_iff_isRkFinite
-  条件: (hI : M.IsBasis I X)
-  结论: I.Finite ↔ M.IsRkFinite X
+引理 是基.finite_iff_isRkFinite
+  条件: (hI : M.是基 I X)
+  结论: I.有限 ↔ M.IsRkFinite X
   证明: hI.isBasis'.finite_iff_isRkFinite
 
 alias ⟨_, IsBasis.finite_of_isRkFinite⟩ := IsBasis.finite_iff_isRkFinite
@@ -142,8 +142,8 @@ lemma IsBasis'.isRkFinite_of_finite
   proof: ⟨I, hI, hIfin⟩
 
 中文:
-引理 IsBasis'.isRkFinite_of_finite
-  条件: (hI : M.IsBasis' I X) (hIfin : I.Finite)
+引理 是基'.isRkFinite_of_finite
+  条件: (hI : M.是基' I X) (hIfin : I.有限)
   结论: M.IsRkFinite X
   证明: ⟨I, hI, hIfin⟩
 -/
@@ -160,8 +160,8 @@ lemma IsBasis.isRkFinite_of_finite
   proof: ⟨I, hI.isBasis', hIfin⟩
 
 中文:
-引理 IsBasis.isRkFinite_of_finite
-  条件: (hI : M.IsBasis I X) (hIfin : I.Finite)
+引理 是基.isRkFinite_of_finite
+  条件: (hI : M.是基 I X) (hIfin : I.有限)
   结论: M.IsRkFinite X
   证明: ⟨I, hI.isBasis', hIfin⟩
 
@@ -182,8 +182,8 @@ lemma IsRkFinite.finite_of_isBasis'
 
 中文:
 引理 IsRkFinite.finite_of_isBasis'
-  条件: (h : M.IsRkFinite X) (hI : M.IsBasis' I X)
-  结论: I.Finite
+  条件: (h : M.IsRkFinite X) (hI : M.是基' I X)
+  结论: I.有限
   证明: have := h.rankFinite
   (isBase_restrict_iff'.2 hI).finite
 
@@ -204,8 +204,8 @@ lemma IsRkFinite.finite_of_isBasis
 
 中文:
 引理 IsRkFinite.finite_of_isBasis
-  条件: (h : M.IsRkFinite X) (hI : M.IsBasis I X)
-  结论: I.Finite
+  条件: (h : M.IsRkFinite X) (hI : M.是基 I X)
+  结论: I.有限
   证明: h.finite_of_isBasis' hI.isBasis'
 
 Depends on / 依赖: finite_of_isBasis, h.finite_of_isBasis, hI.isBasis, isBasis
@@ -223,9 +223,9 @@ lemma IsRkFinite.exists_finite_isBasis'
   proof: h.exists_finite_isBase
 
 中文:
-引理 IsRkFinite.exists_finite_isBasis'
+引理 IsRkFinite.存在_finite_isBasis'
   条件: (h : M.IsRkFinite X)
-  结论: 存在 I, M.IsBasis' I X ∧ I.Finite
+  结论: 存在 I, M.是基' I X ∧ I.有限
   证明: h.exists_finite_isBase
 
 Depends on / 依赖: exists_finite_isBase, h.exists_finite_isBase
@@ -244,9 +244,9 @@ lemma IsRkFinite.exists_finset_isBasis'
   ⟨hIfin.toFinset, by simpa⟩
 
 中文:
-引理 IsRkFinite.exists_finset_isBasis'
+引理 IsRkFinite.存在_finset_isBasis'
   条件: (h : M.IsRkFinite X)
-  结论: 存在 (I : Finset α), M.IsBasis' I X
+  结论: 存在 (I : 有限集 α), M.是基' I X
   证明: let ⟨I, hI, hIfin⟩ := h.exists_finite_isBasis'
   ⟨hIfin.toFinset, by simpa⟩
 
@@ -265,8 +265,8 @@ lemma isRkFinite_iff_exists_isBasis'
   proof: ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ => hIX.isRkFinite_of_finite hI⟩
 
 中文:
-引理 isRkFinite_iff_exists_isBasis'
-  结论: M.IsRkFinite X ↔ 存在 I, M.IsBasis' I X ∧ I.Finite
+引理 isRkFinite_iff_存在_isBasis'
+  结论: M.IsRkFinite X ↔ 存在 I, M.是基' I X ∧ I.有限
   证明: ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ => hIX.isRkFinite_of_finite hI⟩
 
 Depends on / 依赖: IsRkFinite, IsRkFinite.exists_finite_isBasis, exists_finite_isBasis, hIX.isRkFinite_of_finite, isRkFinite_of_finite
@@ -388,7 +388,7 @@ alias ⟨Indep.finite_of_isRkFinite, _⟩ := Indep.isRkFinite_iff_finite
 中文:
 引理 Indep.isRkFinite_iff_finite
   条件: (hI : M.Indep I)
-  结论: M.IsRkFinite I ↔ I.Finite
+  结论: M.IsRkFinite I ↔ I.有限
   证明: hI.isBasis_self.finite_iff_isRkFinite.symm
 
 alias ⟨Indep.finite_of_isRkFinite, _⟩ := Indep.isRkFinite_iff_finite
@@ -415,7 +415,7 @@ lemma isRkFinite_of_finite
 
 中文:
 引理 isRkFinite_of_finite
-  条件: (M : Matroid α) (hX : X.Finite)
+  条件: (M : 拟阵 α) (hX : X.有限)
   结论: M.IsRkFinite X
   证明: let ⟨_, hI⟩ := M.exists_isBasis' X
   hI.isRkFinite_of_finite (hX.subset hI.subset)
@@ -493,7 +493,7 @@ lemma IsRkFinite.empty
 
 中文:
 引理 IsRkFinite.empty
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.IsRkFinite ∅
   证明: isRkFinite_of_finite M finite_empty
 
@@ -558,7 +558,7 @@ lemma isRkFinite_ground
 
 中文:
 引理 isRkFinite_ground
-  条件: (M : Matroid α) [RankFinite M]
+  条件: (M : 拟阵 α) [RankFinite M]
   结论: M.IsRkFinite M.E
   证明: by
   rwa [isRkFinite_ground_iff_rankFinite]
@@ -880,7 +880,7 @@ lemma isRkFinite_set
 
 中文:
 引理 isRkFinite_set
-  条件: (M : Matroid α) [RankFinite M] (X : Set α)
+  条件: (M : 拟阵 α) [RankFinite M] (X : 集合 α)
   结论: M.IsRkFinite X
   证明: let ⟨_, hI⟩ := M.exists_isBasis' X
   hI.isRkFinite_of_finite hI.indep.finite
@@ -906,7 +906,7 @@ exact fun i => (hIs i)
 
 中文:
 引理 IsRkFinite.iUnion
-  条件: {ι : 类型} [Finite ι] {Xs : ι -> Set α} (h : 对任意 i, M.IsRkFinite (Xs i))
+  条件: {ι : 类型} [有限 ι] {Xs : ι -> 集合 α} (h : 对任意 i, M.IsRkFinite (Xs i))
   证明: by
   choose Is hIs using fun i => M.exists_isBasis' (Xs i)
 have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)

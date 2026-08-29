@@ -63,8 +63,8 @@ definition Presheaf.truth
   body: ↾fun _ => (⊤ : Sieve X.unop)
 
 中文:
-定义 Presheaf.truth
-  签名: : (Functor.const _).obj PUnit ⟶ Functor.sieves C where
+定义 预层.truth
+  签名: : (函子.const _).obj 命题单元 ⟶ 函子.sieves C where
   定义体: ↾fun _ => (⊤ : Sieve X.unop)
 
 Depends on / 依赖: X.unop
@@ -94,7 +94,7 @@ definition Presheaf.χ
     simp [ha, NatTrans.naturality_apply]⟩
 
 中文:
-定义 Presheaf.χ
+定义 预层.χ
   签名: (m : F ⟶ G)
   定义体: ↾fun x => ⟨fun Y f => exists a, G.map f.op x = m.app (.op Y) a, by
     intro Y Z f ⟨a, ha⟩ g
@@ -123,9 +123,9 @@ lemma Presheaf.comp_χ_eq
   simp [← NatTrans.naturality_apply]
 
 中文:
-引理 Presheaf.comp_χ_eq
+引理 预层.comp_χ_eq
   条件: (m : F ⟶ G)
-  结论: m ≫ Presheaf.χ m =
+  结论: m ≫ 预层.χ m =
   证明: by
   ext
   apply Sieve.ext
@@ -156,8 +156,8 @@ lemma Presheaf.isPullback_χ_truth
       TypeCat
 
 中文:
-引理 Presheaf.isPullback_χ_truth
-  条件: (m : F ⟶ G) [Mono m]
+引理 预层.isPullback_χ_truth
+  条件: (m : F ⟶ G) [单态射 m]
   证明: by
   refine IsPullback.of_forall_isPullback_app fun X => ?_
   rw [Types.isPullback_iff]
@@ -197,8 +197,8 @@ lemma Presheaf.χ_unique
   obtain ⟨h₁, h₂
 
 中文:
-引理 Presheaf.χ_unique
-  结论: (m : F ⟶ G) (χ' : G ⟶ Functor.sieves C)
+引理 预层.χ_unique
+  结论: (m : F ⟶ G) (χ' : G ⟶ 函子.sieves C)
   证明: by
   ext X x
   simp only [IsPullback.iff_app, Functor.const_obj_obj, Functor.sieves_obj,
@@ -246,8 +246,8 @@ definition Presheaf.classifier
     (Presheaf.χ ·) Presheaf.isPullback_χ_truth (Presheaf.χ_unique ·)
 
 中文:
-定义 Presheaf.classifier
-  签名: : Subobject.Classifier (Cᵒᵖ ⥤ Type (max u v))
+定义 预层.classifier
+  签名: : Subobject.Classifier (Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: .mkOfTerminalΩ₀ ((Functor.const Cᵒᵖ).obj PUnit)
     (Functor.isTerminalConst _ (Types.isTerminalPUnit)) (Functor.sieves C) (Presheaf.truth C)
     (Presheaf.χ ·) Presheaf.isPullback_χ_truth (Presheaf.χ_unique ·)
@@ -270,7 +270,7 @@ instance [EssentiallySmall.{w}
 
 中文:
 实例 [EssentiallySmall.{w}
-  签名: C] : HasSubobjectClassifier (Cᵒᵖ ⥤ Type w) where
+  签名: C] : 有SubobjectClassifier (Cᵒᵖ ⥤ 类型 w) where
   定义体: ⟨(Presheaf.classifier (SmallModel C)).ofEquivalence
     (Equivalence.congrLeft (E := Type w) (equivSmallModel C).op).symm⟩
 
@@ -301,7 +301,7 @@ lemma GrothendieckTopology.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
     simp_rw
 
 中文:
-引理 GrothendieckTopology.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
+引理 Grothendieck拓扑.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
   证明: by
   intro Y f hf
   simp only [Presheaf.χ_app, Opposite.op_unop] at hf ⊢
@@ -347,7 +347,7 @@ definition Ω
 
 中文:
 定义 Ω
-  签名: (J : GrothendieckTopology C)
+  签名: (J : Grothendieck拓扑 C)
   定义体: (Functor.closedSieves J).toFunctor
   property := by
     rw [CategoryTheory.isSheaf_iff_isSheaf_of_type]
@@ -374,7 +374,7 @@ definition truth
 
 中文:
 定义 truth
-  签名: (J : GrothendieckTopology C)
+  签名: (J : Grothendieck拓扑 C)
   定义体: (Functor.closedSieves J).lift (Presheaf.truth C) fun {X} x => by cat_disch
 
 Depends on / 依赖: Functor, Functor.closedSieves, Presheaf, Presheaf.truth, cat_disch, closedSieves
@@ -404,7 +404,7 @@ definition χ
 
 中文:
 定义 χ
-  签名: (m : F ⟶ G) [Mono m]
+  签名: (m : F ⟶ G) [单态射 m]
   定义体: (closedSieves J).lift (Presheaf.χ m.hom) (by
     intro X
     simp only [Subfunctor.range_obj, closedSieves_obj, Set.range_subset_iff]
@@ -440,7 +440,7 @@ lemma isPullback_χ_truth
 
 中文:
 引理 isPullback_χ_truth
-  条件: (m : F ⟶ G) [Mono m]
+  条件: (m : F ⟶ G) [单态射 m]
   证明: by
   apply IsPullback.of_map (sheafToPresheaf J _)
   · ext : 1
@@ -483,7 +483,7 @@ have : IsPullback m.hom ?_ χ'.hom (truth J).ho
 
 中文:
 引理 χ_unique
-  结论: (m : F ⟶ G) [Mono m] (χ' : G ⟶ Sheaf.Ω J)
+  结论: (m : F ⟶ G) [单态射 m] (χ' : G ⟶ 层.Ω J)
   证明: by
   ext : 1
   rw [← cancel_mono (closedSieves J).ι]; rw [χ_hom]; rw [Subfunctor.lift_ι]
@@ -523,7 +523,7 @@ definition classifier
 
 中文:
 定义 classifier
-  签名: (J : GrothendieckTopology C)
+  签名: (J : Grothendieck拓扑 C)
   定义体: .mkOfTerminalΩ₀ (.terminal J Types.isTerminalPUnit) (isTerminalTerminal _ _) (Sheaf.Ω J)
     (Sheaf.truth J) Sheaf.χ Sheaf.isPullback_χ_truth Sheaf.χ_unique
 
@@ -544,7 +544,7 @@ instance [EssentiallySmall.{w}
 
 中文:
 实例 [EssentiallySmall.{w}
-  签名: C] : HasSubobjectClassifier (Sheaf J (Type w)) where
+  签名: C] : 有SubobjectClassifier (层 J (类型 w)) where
   定义体: ⟨Sheaf.classifier ((equivSmallModel C).inverse.inducedTopology J)
 .ofEquivalence (Equivalence.sheafCongr _ _ (equivSmallModel C) _).symm⟩
 

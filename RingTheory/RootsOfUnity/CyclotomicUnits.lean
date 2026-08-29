@@ -100,7 +100,7 @@ theorem associated_sub_one_pow_sub_one_of_coprime
 
 中文:
 定理 associated_sub_one_pow_sub_one_of_coprime
-  条件: (hζ : IsPrimitiveRoot ζ n) (hj : j.Coprime n)
+  条件: (hζ : 是PrimitiveRoot ζ n) (hj : j.Coprime n)
   证明: by
   refine associated_of_dvd_dvd ⟨∑ i in range j, ζ ^ i, (mul_geom_sum _ _).symm⟩ ?_
   match n with
@@ -137,7 +137,7 @@ theorem associated_pow_sub_one_pow_of_coprime
 
 中文:
 定理 associated_pow_sub_one_pow_of_coprime
-  结论: (hζ : IsPrimitiveRoot ζ n)
+  结论: (hζ : 是PrimitiveRoot ζ n)
   证明: by
   suffices forall {j}, j.Coprime n -> Associated (ζ - 1) (ζ ^ j - 1) by
     grind [Associated.trans, Associated.symm]
@@ -164,7 +164,7 @@ theorem associated_sub_one_map_sub_one
 
 中文:
 定理 associated_sub_one_map_sub_one
-  结论: {n : 自然数} [NeZero n] (hζ : IsPrimitiveRoot ζ n)
+  结论: {n : 自然数} [NeZero n] (hζ : 是PrimitiveRoot ζ n)
   证明: by
   rw [map_sub]; rw [map_one]; rw [← hζ.autToPow_spec R σ]
   apply hζ.associated_sub_one_pow_sub_one_of_coprime
@@ -191,7 +191,7 @@ theorem associated_map_sub_one_map_sub_one
 
 中文:
 定理 associated_map_sub_one_map_sub_one
-  结论: {n : 自然数} [NeZero n] (hζ : IsPrimitiveRoot ζ n)
+  结论: {n : 自然数} [NeZero n] (hζ : 是PrimitiveRoot ζ n)
   证明: by
   rw [map_sub]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [← hζ.autToPow_spec R σ]; rw [← hζ.autToPow_spec R τ]
   apply hζ.associated_pow_sub_one_pow_of_coprime <;>
@@ -219,7 +219,7 @@ theorem geom_sum_isUnit
 
 中文:
 定理 geom_sum_isUnit
-  条件: (hζ : IsPrimitiveRoot ζ n) (hn : 2 <= n) (hj : j.Coprime n)
+  条件: (hζ : 是PrimitiveRoot ζ n) (hn : 2 <= n) (hj : j.Coprime n)
   证明: by
   obtain ⟨u, hu⟩ := hζ.associated_pow_sub_one_pow_of_coprime hj (coprime_one_left n)
   convert! u.isUnit
@@ -249,7 +249,7 @@ theorem geom_sum_isUnit'
 
 中文:
 定理 geom_sum_isUnit'
-  条件: (hζ : IsPrimitiveRoot ζ n) (hj : j.Coprime n) (hj_Unit : IsUnit (j : A))
+  条件: (hζ : 是PrimitiveRoot ζ n) (hj : j.Coprime n) (hj_Unit : 是单位 (j : A))
   证明: by
   match n with
   | 0 => simp_all
@@ -276,7 +276,7 @@ theorem pow_sub_one_eq_geom_sum_mul_geom_sum_inv_mul_pow_sub_one
 
 中文:
 定理 pow_sub_one_eq_geom_sum_mul_geom_sum_inv_mul_pow_sub_one
-  结论: (hζ : IsPrimitiveRoot ζ n)
+  结论: (hζ : 是PrimitiveRoot ζ n)
   证明: by
   grind [IsUnit.mul_val_inv, pow_sub_one_mul_geom_sum_eq_pow_sub_one_mul_geom_sum, IsUnit.unit_spec]
 
@@ -302,7 +302,7 @@ theorem associated_pow_add_sub_sub_one
 
 中文:
 定理 associated_pow_add_sub_sub_one
-  结论: (hζ : IsPrimitiveRoot ζ n) (hn : 2 <= n) (i : 自然数)
+  结论: (hζ : 是PrimitiveRoot ζ n) (hn : 2 <= n) (i : 自然数)
   证明: by
   use (hζ.isUnit (by lia)).unit ^ i * (hζ.geom_sum_isUnit hn hjn).unit
   suffices (ζ - 1) * ζ ^ i * ∑ i in range j, ζ ^ i = (ζ ^ (i + j) - ζ ^ i) by
@@ -334,7 +334,7 @@ lemma nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
 
 中文:
 引理 nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
-  结论: (hζ : IsPrimitiveRoot ζ p)
+  结论: (hζ : 是PrimitiveRoot ζ p)
   证明: by
   intro η₁ hη₁ η₂ hη₂ e
   have : NeZero p := ⟨hp.ne_zero⟩
@@ -376,7 +376,7 @@ lemma sub_one_dvd_sub
 
 中文:
 引理 sub_one_dvd_sub
-  结论: (hζ : IsPrimitiveRoot ζ p) (hp : p.Prime)
+  结论: (hζ : 是PrimitiveRoot ζ p) (hp : p.素)
   证明: by
   rcases eq_or_ne η₁ η₂ with rfl | h
   · simp
@@ -403,7 +403,7 @@ theorem sub_one_dvd_natCast
 
 中文:
 定理 sub_one_dvd_natCast
-  条件: (hζ : IsPrimitiveRoot ζ n) (hn : 1 < n)
+  条件: (hζ : 是PrimitiveRoot ζ n) (hn : 1 < n)
   结论: ζ - 1 ∣ (n : A)
   证明: sub_one_dvd_natCast_of_pow_eq_one hζ.pow_eq_one (hζ.ne_one hn)
 

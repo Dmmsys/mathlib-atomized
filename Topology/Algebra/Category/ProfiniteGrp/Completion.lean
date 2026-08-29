@@ -38,7 +38,7 @@ definition toFiniteIndexNormalSubgroup
 
 中文:
 定义 toFiniteIndexNormalSubgroup
-  签名: [CompactSpace G] [ContinuousMul G]
+  签名: [紧空间 G] [连续乘法 G]
   定义体: letI : H.toSubgroup.FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
   FiniteIndexNormalSubgroup.ofSubgroup H.toSubgroup
 
@@ -64,7 +64,7 @@ theorem toFiniteIndexNormalSubgroup_mono
 
 中文:
 定理 toFiniteIndexNormalSubgroup_mono
-  结论: [CompactSpace G] [ContinuousMul G]
+  结论: [紧空间 G] [连续乘法 G]
   证明: fun _ hx => h hx
 
 @[to_additive]
@@ -88,7 +88,7 @@ theorem toFiniteIndexNormalSubgroup_injective
 
 中文:
 定理 toFiniteIndexNormalSubgroup_injective
-  条件: [CompactSpace G] [ContinuousMul G]
+  条件: [紧空间 G] [连续乘法 G]
   证明: by
   intro H K h
   apply toSubgroup_injective
@@ -129,7 +129,7 @@ map f := FiniteGrp.ofHom QuotientGroup.map _ _ (MonoidHom.id _) f.le
 
 中文:
 定义 finiteGrpDiagram
-  签名: : FiniteIndexNormalSubgroup G ⥤ FiniteGrp.{u} where
+  签名: : FiniteIndexNormal子群 G ⥤ FiniteGrp.{u} where
   定义体: FiniteGrp.of G ⧸ H.toSubgroup
 map f := FiniteGrp.ofHom QuotientGroup.map _ _ (MonoidHom.id _) f.le
   map_id H := by ext ⟨x⟩; rfl
@@ -155,7 +155,7 @@ definition diagram
 
 中文:
 定义 diagram
-  签名: : FiniteIndexNormalSubgroup G ⥤ ProfiniteGrp.{u}
+  签名: : FiniteIndexNormal子群 G ⥤ ProfiniteGrp.{u}
   定义体: finiteGrpDiagram _ ⋙ forget₂ _ _
 
 Depends on / 依赖: finiteGrpDiagram
@@ -217,7 +217,7 @@ definition eta
 
 中文:
 定义 eta
-  签名: : G ⟶ GrpCat.of (completion G)
+  签名: : G ⟶ 群范畴.of (completion G)
   定义体: GrpCat.ofHom {
   toFun := etaFn G
   map_one' := rfl
@@ -250,7 +250,7 @@ theorem mono_eta_iff_residuallyFinite
 
 中文:
 定理 mono_eta_iff_residuallyFinite
-  结论: Mono (eta G) ↔ Group.ResiduallyFinite G
+  结论: 单态射 (eta G) ↔ 群.ResiduallyFinite G
   证明: by
   rw [GrpCat.mono_iff_injective]; rw [injective_iff_map_eq_one]; rw [Group.residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
   refine forall_congr' fun g => imp_congr_left ?_
@@ -353,8 +353,8 @@ definition preimage
 @[to_additive]
 
 中文:
-定义 preimage
-  签名: (f : G ⟶ GrpCat.of P) (H : OpenNormalSubgroup P)
+定义 原像
+  签名: (f : G ⟶ 群范畴.of P) (H : OpenNormal子群 P)
   定义体: H.toFiniteIndexNormalSubgroup.comap f.hom
 
 @[to_additive]
@@ -375,7 +375,7 @@ lemma preimage_le
 
 中文:
 引理 preimage_le
-  结论: {f : G ⟶ GrpCat.of P} {H K : OpenNormalSubgroup P}
+  结论: {f : G ⟶ 群范畴.of P} {H K : OpenNormal子群 P}
   证明: FiniteIndexNormalSubgroup.comap_mono _ h
 
 Depends on / 依赖: FiniteIndexNormalSubgroup, FiniteIndexNormalSubgroup.comap_mono, comap_mono
@@ -396,7 +396,7 @@ definition quotientMap
 
 中文:
 定义 quotientMap
-  签名: (f : G ⟶ GrpCat.of P) (H : OpenNormalSubgroup P)
+  签名: (f : G ⟶ 群范畴.of P) (H : OpenNormal子群 P)
   定义体: FiniteGrp.ofHom QuotientGroup.map _ _ f.hom fun _ h => h
 
 Depends on / 依赖: FiniteGrp, FiniteGrp.ofHom, QuotientGroup, QuotientGroup.map, f.hom
@@ -423,7 +423,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (f : G ⟶ GrpCat.of P)
+  签名: (f : G ⟶ 群范畴.of P)
   定义体: P.isLimitCone.lift ⟨_, {
     app H := (limitCone (diagram G)).π.app _ ≫ (ofFiniteGrpHom <| quotientMap f H)
     naturality := by
@@ -473,7 +473,7 @@ lemma lift_eta
 
 中文:
 引理 lift_eta
-  条件: (f : G ⟶ GrpCat.of P)
+  条件: (f : G ⟶ 群范畴.of P)
   结论: eta G ≫ (forget₂ _ _).map (lift f) = f
   证明: by
   let e := isoLimittoFiniteQuotientFunctor P
@@ -549,7 +549,7 @@ map f := ProfiniteCompletion.lift f ≫ ProfiniteCompletion.eta _
 
 中文:
 定义 profiniteCompletion
-  签名: : GrpCat.{u} ⥤ ProfiniteGrp.{u} where
+  签名: : 群范畴.{u} ⥤ ProfiniteGrp.{u} where
   定义体: ProfiniteCompletion.completion G
 map f := ProfiniteCompletion.lift f ≫ ProfiniteCompletion.eta _
   map_id G := by
@@ -588,7 +588,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: (G : GrpCat.{u}) (P : ProfiniteGrp.{u})
+  签名: (G : 群范畴.{u}) (P : ProfiniteGrp.{u})
   定义体: eta G ≫ (forget₂ _ _).map f
   invFun f := lift f
   left_inv f := by apply lift_unique; simp

@@ -58,7 +58,7 @@ definition generatedBy
 
 中文:
 定义 generatedBy
-  签名: : TopologicalSpace Y
+  签名: : 拓扑空间 Y
   定义体: ⨆ (i : ι) (f : C(X i, Y)), coinduced f inferInstance
 
 Depends on / 依赖: coinduced
@@ -106,7 +106,7 @@ definition WithGeneratedByTopology
 
 中文:
 定义 WithGeneratedByTopology
-  签名: (X : ι -> 类型u) [对任意 i, TopologicalSpace (X i)]
+  签名: (X : ι -> 类型u) [对任意 i, 拓扑空间 (X i)]
   定义体: Y
 -/
 def WithGeneratedByTopology (X : ι -> Type u) [forall i, TopologicalSpace (X i)]
@@ -149,7 +149,7 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: {U : Set (WithGeneratedByTopology X Y)}
+  条件: {U : 集合 (WithGeneratedByTopology X Y)}
   证明: by
   simp [isOpen_iSup_iff, isOpen_coinduced, equiv, Equiv.refl]
 
@@ -171,7 +171,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  条件: {U : Set (WithGeneratedByTopology X Y)}
+  条件: {U : 集合 (WithGeneratedByTopology X Y)}
   证明: by
   simp [isClosed_iSup_iff, isClosed_coinduced, equiv, Equiv.refl]
 
@@ -229,7 +229,7 @@ lemma continuous_equiv
 
 中文:
 引理 continuous_equiv
-  结论: Continuous (equiv (X := X) (Y := Y))
+  结论: 连续 (equiv (X := X) (Y := Y))
   证明: by
   rw [continuous_def]
   intro U hU
@@ -262,7 +262,7 @@ lemma TopologicalSpace.generatedBy_le
 omit tY in
 
 中文:
-引理 TopologicalSpace.generatedBy_le
+引理 拓扑空间.generatedBy_le
   结论: generatedBy X <= tY
   证明: fun U hU => WithGeneratedByTopology.continuous_equiv.isOpen_preimage U hU
 
@@ -283,8 +283,8 @@ lemma TopologicalSpace.generatedBy_mono
   proof: iSup₂_le fun i f => le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
 
 中文:
-引理 TopologicalSpace.generatedBy_mono
-  条件: {t₁ t₂ : TopologicalSpace Y} (h : t₁ <= t₂)
+引理 拓扑空间.generatedBy_mono
+  条件: {t₁ t₂ : 拓扑空间 Y} (h : t₁ <= t₂)
   证明: iSup₂_le fun i f => le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
 
 Depends on / 依赖: continuous_le_rng, le_rfl
@@ -311,10 +311,10 @@ class IsGeneratedBy
     - continuous_equiv_symm : Continuous (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
 
 中文:
-类 IsGeneratedBy
+类 是GeneratedBy
   参数: : 命题 where
   公理与运算 (1 个):
-    - continuous_equiv_symm : Continuous (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
+    - continuous_equiv_symm : 连续 (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
 -/
 class IsGeneratedBy : Prop where
   continuous_equiv_symm : Continuous (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
@@ -338,7 +338,7 @@ lemma le_generatedBy
 
 中文:
 引理 le_generatedBy
-  条件: [IsGeneratedBy X Y]
+  条件: [是GeneratedBy X Y]
   结论: tY <= .generatedBy X
   证明: fun U hU => continuous_equiv_symm.isOpen_preimage U hU
 
@@ -358,7 +358,7 @@ lemma generatedBy_eq
 
 中文:
 引理 generatedBy_eq
-  条件: [IsGeneratedBy X Y]
+  条件: [是GeneratedBy X Y]
   结论: .generatedBy X = tY
   证明: le_antisymm TopologicalSpace.generatedBy_le le_generatedBy
 
@@ -470,7 +470,7 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: {U : Set Y}
+  条件: {U : 集合 Y}
   证明: by
   simp [← (homeomorph (X := X)).isQuotientMap.isOpen_preimage,
     WithGeneratedByTopology.isOpen_iff]
@@ -494,7 +494,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  条件: {U : Set Y}
+  条件: {U : 集合 Y}
   证明: by
   simp [← (homeomorph (X := X)).isQuotientMap.isClosed_preimage,
     WithGeneratedByTopology.isClosed_iff]
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGeneratedBy X (WithGeneratedByTopology X Y)
+  签名: 是GeneratedBy X (WithGeneratedByTopology X Y)
   定义体: by
     rw [continuous_def]
     intro U hU
@@ -637,7 +637,7 @@ omit [TopologicalSpace Z]
 
 中文:
 实例 :
-  签名: IsGeneratedBy X (PUnit.{v + 1})
+  签名: 是GeneratedBy X (命题单元.{v + 1})
   定义体: by
   rw [iff_le_generatedBy]
   exact Eq.le (by subsingleton)
@@ -664,7 +664,7 @@ lemma coinduced
 
 中文:
 引理 coinduced
-  条件: [IsGeneratedBy X Y] (f : Y -> Z)
+  条件: [是GeneratedBy X Y] (f : Y -> Z)
   证明: by
   let _ := tY.coinduced f
   refine iff_le_generatedBy.2 ?_
@@ -687,7 +687,7 @@ lemma iSup
 
 中文:
 引理 iSup
-  结论: {Y : 类型} {κ : Sort*} {t : κ -> TopologicalSpace Y}
+  结论: {Y : 类型} {κ : 类型层*} {t : κ -> 拓扑空间 Y}
   证明: iff_le_generatedBy.2 iSup_le_iff.2 fun k =>
 (h k).le_generatedBy.trans TopologicalSpace.generatedBy_mono le_iSup t k
 -/
@@ -707,8 +707,8 @@ lemma sup
 exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
 
 中文:
-引理 sup
-  结论: {Y : 类型} {t₁ t₂ : TopologicalSpace Y}
+引理 上确界
+  结论: {Y : 类型} {t₁ t₂ : 拓扑空间 Y}
   证明: by
   rw [sup_eq_iSup]
 exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
@@ -730,8 +730,8 @@ lemma IsQuotientMap.isGeneratedBy
   proof: hf.eq_coinduced ▸ IsGeneratedBy.coinduced f
 
 中文:
-引理 IsQuotientMap.isGeneratedBy
-  条件: {f : Y -> Z} (hf : IsQuotientMap f) [IsGeneratedBy X Y]
+引理 是商映射.isGeneratedBy
+  条件: {f : Y -> Z} (hf : 是商映射 f) [是GeneratedBy X Y]
   证明: hf.eq_coinduced ▸ IsGeneratedBy.coinduced f
 
 Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.coinduced, coinduced, eq_coinduced, hf.eq_coinduced
@@ -751,8 +751,8 @@ instance Quot.isGeneratedBy
   body: isQuotientMap_quot_mk.isGeneratedBy
 
 中文:
-实例 Quot.isGeneratedBy
-  签名: [IsGeneratedBy X Y] {r : Y -> Y -> 命题}
+实例 商.isGeneratedBy
+  签名: [是GeneratedBy X Y] {r : Y -> Y -> 命题}
   定义体: isQuotientMap_quot_mk.isGeneratedBy
 
 Depends on / 依赖: isGeneratedBy, isQuotientMap_quot_mk, isQuotientMap_quot_mk.isGeneratedBy
@@ -770,8 +770,8 @@ instance Quotient.isGeneratedBy
   body: isQuotientMap_quotient_mk'.isGeneratedBy
 
 中文:
-实例 Quotient.isGeneratedBy
-  签名: [IsGeneratedBy X Y] {s : Setoid Y}
+实例 商.isGeneratedBy
+  签名: [是GeneratedBy X Y] {s : 集合等价关系 Y}
   定义体: isQuotientMap_quotient_mk'.isGeneratedBy
 
 Depends on / 依赖: isGeneratedBy, isQuotientMap_quotient_mk
@@ -789,8 +789,8 @@ instance Sum.isGeneratedBy
   body: IsGeneratedBy.sup (.coinduced Sum.inl) (.coinduced Sum.inr)
 
 中文:
-实例 Sum.isGeneratedBy
-  签名: [IsGeneratedBy X Y] [IsGeneratedBy X Z]
+实例 和.isGeneratedBy
+  签名: [是GeneratedBy X Y] [是GeneratedBy X Z]
   定义体: IsGeneratedBy.sup (.coinduced Sum.inl) (.coinduced Sum.inr)
 
 Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.sup, Sum.inl, Sum.inr, coinduced
@@ -808,8 +808,8 @@ instance Sigma.isGeneratedBy
   body: .iSup fun _ => .coinduced _
 
 中文:
-实例 Sigma.isGeneratedBy
-  签名: {κ : 类型} {Y : κ -> 类型} [对任意 k, TopologicalSpace (Y k)]
+实例 依赖和类型.isGeneratedBy
+  签名: {κ : 类型} {Y : κ -> 类型} [对任意 k, 拓扑空间 (Y k)]
   定义体: .iSup fun _ => .coinduced _
 
 Depends on / 依赖: coinduced
@@ -827,8 +827,8 @@ lemma TopologicalSpace.generatedBy_generatedBy
   proof: IsGeneratedBy.generatedBy_eq (X := X) (Y := WithGeneratedByTopology X Y)
 
 中文:
-引理 TopologicalSpace.generatedBy_generatedBy
-  条件: (Y : 类型) [TopologicalSpace Y]
+引理 拓扑空间.generatedBy_generatedBy
+  条件: (Y : 类型) [拓扑空间 Y]
   证明: IsGeneratedBy.generatedBy_eq (X := X) (Y := WithGeneratedByTopology X Y)
 
 Depends on / 依赖: generatedBy

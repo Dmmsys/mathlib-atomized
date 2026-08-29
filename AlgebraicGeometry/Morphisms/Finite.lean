@@ -47,11 +47,11 @@ class IsFinite
     - finite_app((f) (U : Y.Opens) (hU : IsAffineOpen U)) : (f.app U).hom.Finite
 
 中文:
-类 IsFinite
-  参数: {X Y : Scheme} (f : X ⟶ Y)
-  继承: IsAffineHom f
+类 是有限
+  参数: {X Y : 概形} (f : X ⟶ Y)
+  继承: 是仿射态射 f
   公理与运算 (1 个):
-    - finite_app((f) (U : Y.Opens) (hU : IsAffineOpen U)) : (f.app U).hom.Finite
+    - finite_app((f) (U : Y.Opens) (hU : 是仿射开集 U)) : (f.app U).hom.有限
 
 Depends on / 依赖: IsFinite, IsFinite.finite_app, finite_app
 -/
@@ -77,7 +77,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAffine命题erty @IsFinite
+  签名: 有AffineProperty @是有限
   定义体: by
   change HasAffineProperty @IsFinite (affineAnd RingHom.Finite)
   rw [HasAffineProperty.affineAnd_iff _ RingHom.finite_respectsIso
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderComposition @IsFinite
+  签名: 是StableUnderComposition @是有限
   定义体: HasAffineProperty.affineAnd_isStableUnderComposition inferInstance
     RingHom.finite_stableUnderComposition
 
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @IsFinite
+  签名: 是StableUnderBaseChange @是有限
   定义体: HasAffineProperty.affineAnd_isStableUnderBaseChange inferInstance
     RingHom.finite_respectsIso RingHom.finite_isStableUnderBaseChange
 
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContainsIdentities @IsFinite
+  签名: 余ntainsIdentities @是有限
   定义体: HasAffineProperty.affineAnd_containsIdentities inferInstance
     RingHom.finite_respectsIso RingHom.finite_containsIdentities
 
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative @IsFinite
+  签名: 是Multiplicative @是有限
 -/
 instance : IsMultiplicative @IsFinite where
 
@@ -185,7 +185,7 @@ lemma SpecMap_iff
 
 中文:
 引理 SpecMap_iff
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: by
   rw [HasAffineProperty.iff_of_isAffine (P := @IsFinite)]; rw [and_iff_right (by infer_instance)]; rw [RingHom.finite_respectsIso.arrow_mk_iso_iff (arrowIsoΓSpecOfIsAffine f)]
 
@@ -230,7 +230,7 @@ lemma iff_isIntegralHom_and_locallyOfFiniteType
     simp_rw [this, for
 
 中文:
-引理 iff_isIntegralHom_and_locallyOfFiniteType
+引理 iff_is整数egralHom_and_locallyOfFiniteType
   证明: by
   wlog hY : IsAffine Y
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
@@ -290,7 +290,7 @@ lemma _root_.AlgebraicGeometry.IsClosedImmersion.iff_isFinite_and_mono
   
 
 中文:
-引理 _root_.AlgebraicGeometry.IsClosedImmersion.iff_isFinite_and_mono
+引理 _root_.AlgebraicGeometry.是闭浸入.iff_isFinite_and_mono
   证明: by
   wlog hY : IsAffine Y
   · rw [← monomorphisms.iff, IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
@@ -323,7 +323,7 @@ lemma _root_.AlgebraicGeometry.IsClosedImmersion.eq_isFinite_inf_mono
   ext; exact IsClosedImmersion.iff_isFinite_and_mono _
 
 中文:
-引理 _root_.AlgebraicGeometry.IsClosedImmersion.eq_isFinite_inf_mono
+引理 _root_.AlgebraicGeometry.是闭浸入.eq_isFinite_inf_mono
   证明: by
   ext; exact IsClosedImmersion.iff_isFinite_and_mono _
 
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @IsFinite @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @是有限 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsFinite _)
 
@@ -367,7 +367,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [IsFinite (f ≫ g)] [IsSeparated g]
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [是有限 (f ≫ g)] [是分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -385,7 +385,7 @@ lemma comp_iff
 
 中文:
 引理 comp_iff
-  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [IsFinite g]
+  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [是有限 g]
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -415,8 +415,8 @@ lemma Scheme.Hom.finite_appTop
   proof: (HasAffineProperty.iff_of_isAffine (P := @IsFinite).mp inferInstance).2
 
 中文:
-引理 Scheme.Hom.finite_appTop
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsAffine Y] [IsFinite f]
+引理 概形.态射.finite_appTop
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是仿射 Y] [是有限 f]
   证明: (HasAffineProperty.iff_of_isAffine (P := @IsFinite).mp inferInstance).2
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsFinite, iff_of_isAffine
@@ -492,7 +492,7 @@ lemma Scheme.Hom.closePoints_subset_preimage_closedPoints
     (X.fromSpecResidueField x ≫ f).isClos
 
 中文:
-引理 Scheme.Hom.closePoints_subset_preimage_closedPoints
+引理 概形.态射.closePoints_subset_preimage_closedPoints
   证明: by
   intro x hx
   have := isClosed_singleton_iff_isClosedImmersion.mp hx
@@ -530,7 +530,7 @@ lemma isClosed_singleton_iff_locallyOfFiniteType
 
 中文:
 引理 isClosed_singleton_iff_locallyOfFiniteType
-  条件: {X : Scheme.{u}} [JacobsonSpace X] {x : X}
+  条件: {X : 概形.{u}} [Jacobson空间 X] {x : X}
   证明: by
   constructor
   · exact fun H => have := isClosed_singleton_iff_isClosedImmersion.mp H; inferInstance

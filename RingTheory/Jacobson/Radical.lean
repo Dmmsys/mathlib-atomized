@@ -49,7 +49,7 @@ definition jacobson
 
 中文:
 定义 jacobson
-  签名: : Submodule R M
+  签名: : 子模 R M
   定义体: sInf { m : Submodule R M | IsCoatom m }
 
 Depends on / 依赖: IsCoatom, Submodule
@@ -120,7 +120,7 @@ theorem jacobson_eq_bot_of_injective
 
 中文:
 定理 jacobson_eq_bot_of_injective
-  条件: (inj : Function.Injective f) (h : jacobson R₂ M₂ = ⊥)
+  条件: (inj : 函数.单射 f) (h : jacobson R₂ M₂ = ⊥)
   证明: le_bot_iff.mp (le_comap_jacobson f).trans by
     simp_rw [h, comap_bot, (LinearMap.ker_eq_bot.mpr inj).le]
 
@@ -146,7 +146,7 @@ theorem map_jacobson_of_ker_le
 
 中文:
 定理 map_jacobson_of_ker_le
-  结论: (surj : Function.Surjective f)
+  结论: (surj : 函数.满射 f)
   证明: le_antisymm (map_jacobson_le f) by
     rw [jacobson]; rw [sInf_eq_iInf'] at le
     conv_rhs => rw [jacobson, sInf_eq_iInf', map_iInf_of_ker_le surj le]
@@ -173,7 +173,7 @@ theorem comap_jacobson_of_ker_le
 
 中文:
 定理 comap_jacobson_of_ker_le
-  结论: (surj : Function.Surjective f)
+  结论: (surj : 函数.满射 f)
   证明: by
   rw [← map_jacobson_of_ker_le surj le]; rw [comap_map_eq_self le]
 
@@ -194,7 +194,7 @@ theorem map_jacobson_of_bijective
 
 中文:
 定理 map_jacobson_of_bijective
-  条件: (hf : Function.Bijective f)
+  条件: (hf : 函数.双射 f)
   证明: map_jacobson_of_ker_le hf.2 by simp_rw [LinearMap.ker_eq_bot.mpr hf.1, bot_le]
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, bot_le, ker_eq_bot, map_jacobson_of_ker_le, simp_rw
@@ -213,7 +213,7 @@ theorem comap_jacobson_of_bijective
 
 中文:
 定理 comap_jacobson_of_bijective
-  条件: (hf : Function.Bijective f)
+  条件: (hf : 函数.双射 f)
   证明: comap_jacobson_of_ker_le hf.2 by simp_rw [LinearMap.ker_eq_bot.mpr hf.1, bot_le]
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, bot_le, comap_jacobson_of_ker_le, ker_eq_bot, simp_rw
@@ -232,7 +232,7 @@ theorem jacobson_quotient_of_le
 
 中文:
 定理 jacobson_quotient_of_le
-  条件: {N : Submodule R M} (le : N <= jacobson R M)
+  条件: {N : 子模 R M} (le : N <= jacobson R M)
   证明: (map_jacobson_of_ker_le N.mkQ_surjective <| by rwa [ker_mkQ]).symm
 
 Depends on / 依赖: N.mkQ_surjective, ker_mkQ, map_jacobson_of_ker_le, mkQ_surjective
@@ -252,7 +252,7 @@ theorem jacobson_le_of_eq_bot
 
 中文:
 定理 jacobson_le_of_eq_bot
-  条件: {N : Submodule R M} (h : jacobson R (M ⧸ N) = ⊥)
+  条件: {N : 子模 R M} (h : jacobson R (M ⧸ N) = ⊥)
   证明: by
   simp_rw [← N.ker_mkQ, ← comap_bot, ← h, le_comap_jacobson]
 
@@ -300,7 +300,7 @@ example [Nontrivial M] [Module.Finite R M] : jacobson R M < ⊤ := jacobson_lt_t
 
 中文:
 定理 jacobson_lt_top
-  条件: [Nontrivial M] [IsCoatomic (Submodule R M)]
+  条件: [非平凡 M] [是余原子的 (子模 R M)]
   结论: jacobson R M < ⊤
   证明: by
   obtain ⟨m, hm, -⟩ := (eq_top_or_exists_le_coatom (⊥ : Submodule R M)).resolve_left bot_ne_top
@@ -331,7 +331,7 @@ theorem jacobson_pi_le
 
 中文:
 定理 jacobson_pi_le
-  结论: jacobson R (Π i, M i) <= Submodule.pi Set.univ (jacobson R <| M ·)
+  结论: jacobson R (Π i, M i) <= 子模.pi 集合.univ (jacobson R <| M ·)
   证明: by
   simp_rw [← iInf_comap_proj, jacobson, sInf_eq_iInf', comap_iInf, le_iInf_iff]
   intro i m
@@ -384,7 +384,7 @@ abbreviation jacobson
 
 中文:
 缩写 jacobson
-  签名: : Ideal R
+  签名: : 理想 R
   定义体: Module.jacobson R R
 
 Depends on / 依赖: Module, Module.jacobson, jacobson
@@ -402,7 +402,7 @@ theorem jacobson_eq_sInf_isMaximal
 
 中文:
 定理 jacobson_eq_sInf_isMaximal
-  结论: jacobson R = sInf {I : Ideal R | I.IsMaximal}
+  结论: jacobson R = sInf {I : 理想 R | I.是极大}
   证明: by
   simp_rw [jacobson, Module.jacobson, Ideal.isMaximal_def]
 
@@ -421,7 +421,7 @@ instance :
 
 中文:
 实例 :
-  签名: (jacobson R).IsTwoSided
+  签名: (jacobson R).是TwoSided
   定义体: ⟨fun b ha => Module.le_comap_jacobson (f := LinearMap.toSpanSingleton R R b) ha⟩
 
 Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, Module, Module.le_comap_jacobson, le_comap_jacobson, toSpanSingleton
@@ -444,7 +444,7 @@ lemma jacobson_le_of_isMaximal
 
 中文:
 引理 jacobson_le_of_isMaximal
-  条件: (m : Ideal R) [m.IsMaximal]
+  条件: (m : 理想 R) [m.是极大]
   结论: jacobson R <= m
   证明: by
   rw [Ring.jacobson_eq_sInf_isMaximal]
@@ -466,7 +466,7 @@ theorem le_comap_jacobson
 
 中文:
 定理 le_comap_jacobson
-  结论: jacobson R <= Ideal.comap f (jacobson R₂)
+  结论: jacobson R <= 理想.comap f (jacobson R₂)
   证明: Module.le_comap_jacobson f.toSemilinearMap
 
 Depends on / 依赖: Module, Module.le_comap_jacobson, f.toSemilinearMap, le_comap_jacobson, toSemilinearMap
@@ -484,7 +484,7 @@ theorem map_jacobson_le
 
 中文:
 定理 map_jacobson_le
-  结论: Submodule.map f.toSemilinearMap (jacobson R) <= jacobson R₂
+  结论: 子模.map f.toSemilinearMap (jacobson R) <= jacobson R₂
   证明: Module.map_jacobson_le f.toSemilinearMap
 
 Depends on / 依赖: Module, Module.map_jacobson_le, f.toSemilinearMap, map_jacobson_le, toSemilinearMap
@@ -503,7 +503,7 @@ theorem map_jacobson_of_ker_le
 
 中文:
 定理 map_jacobson_of_ker_le
-  条件: (le : RingHom.ker f <= jacobson R)
+  条件: (le : 环态射.ker f <= jacobson R)
   证明: Module.map_jacobson_of_ker_le f.surjective le
 
 Depends on / 依赖: Module, Module.map_jacobson_of_ker_le, f.surjective, map_jacobson_of_ker_le, surjective
@@ -526,7 +526,7 @@ theorem coe_jacobson_quotient
 
 中文:
 定理 coe_jacobson_quotient
-  条件: (I : Ideal R) [I.IsTwoSided]
+  条件: (I : 理想 R) [I.是TwoSided]
   证明: by
   let f : R ⧸ I ->ₛₗ[Ideal.Quotient.mk I] R ⧸ I := ⟨AddHom.id _, fun _ _ => rfl⟩
   rw [jacobson]; rw [← Module.map_jacobson_of_ker_le (f := f) Function.surjective_id]
@@ -553,7 +553,7 @@ theorem jacobson_quotient_of_le
 
 中文:
 定理 jacobson_quotient_of_le
-  条件: {I : Ideal R} [I.IsTwoSided] (le : I <= jacobson R)
+  条件: {I : 理想 R} [I.是TwoSided] (le : I <= jacobson R)
   证明: .symm Module.map_jacobson_of_ker_le (by exact Ideal.Quotient.mk_surjective) by
     rwa [← I.ker_mkQ] at le
 
@@ -576,7 +576,7 @@ theorem jacobson_le_of_eq_bot
 
 中文:
 定理 jacobson_le_of_eq_bot
-  条件: {I : Ideal R} [I.IsTwoSided] (h : jacobson (R ⧸ I) = ⊥)
+  条件: {I : 理想 R} [I.是TwoSided] (h : jacobson (R ⧸ I) = ⊥)
   证明: Module.jacobson_le_of_eq_bot by
     rw [← le_bot_iff]; rw [← SetLike.coe_subset_coe] at h ⊢
     rwa [← coe_jacobson_quotient]
@@ -624,7 +624,7 @@ theorem jacobson_lt_top
 
 中文:
 定理 jacobson_lt_top
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: jacobson R < ⊤
   证明: Module.jacobson_lt_top R R
 
@@ -642,7 +642,7 @@ theorem jacobson_smul_top_le
 
 中文:
 定理 jacobson_smul_top_le
-  结论: jacobson R • (⊤ : Submodule R M) <= Module.jacobson R M
+  结论: jacobson R • (⊤ : 子模 R M) <= 模.jacobson R M
   证明: Submodule.smul_le.mpr fun _ hr m _ => Module.le_comap_jacobson (LinearMap.toSpanSingleton R M m) hr
 
 Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, Module, Module.le_comap_jacobson, Submodule, Submodule.smul_le.mpr, le_comap_jacobson, smul_le, toSpanSingleton
@@ -667,7 +667,7 @@ theorem jacobson_smul_lt_top
 
 中文:
 定理 jacobson_smul_lt_top
-  条件: [Nontrivial M] [IsCoatomic (Submodule R M)] (N : Submodule R M)
+  条件: [非平凡 M] [是余原子的 (子模 R M)] (N : 子模 R M)
   证明: ((smul_mono_right _ le_top).trans <| Ring.jacobson_smul_top_le R M).trans_lt
     (Module.jacobson_lt_top R M)
 
@@ -693,7 +693,7 @@ theorem FG.jacobson_smul_lt
 
 中文:
 定理 FG.jacobson_smul_lt
-  条件: {N : Submodule R M} (ne_bot : N != ⊥) (fg : N.FG)
+  条件: {N : 子模 R M} (ne_bot : N != ⊥) (fg : N.FG)
   证明: by
   rw [← Module.Finite.iff_fg] at fg
   rw [← nontrivial_iff_ne_bot] at ne_bot
@@ -722,7 +722,7 @@ theorem FG.eq_bot_of_le_jacobson_smul
 
 中文:
 定理 FG.eq_bot_of_le_jacobson_smul
-  结论: {N : Submodule R M} (fg : N.FG)
+  结论: {N : 子模 R M} (fg : N.FG)
   证明: by
   contrapose! le; exact (jacobson_smul_lt le fg).not_ge
 

@@ -184,7 +184,7 @@ instance monoidalClosed
 
 中文:
 实例 monoidalClosed
-  签名: : MonoidalClosed (D ⥤ C) where
+  签名: : 幺半群闭 (D ⥤ C) where
 -/
 instance monoidalClosed : MonoidalClosed (D ⥤ C) where
 

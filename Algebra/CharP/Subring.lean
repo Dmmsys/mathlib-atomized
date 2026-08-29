@@ -32,7 +32,7 @@ Iff.symm
 
 中文:
 实例 subsemiring
-  签名: (R : 类型u) [Semiring R] (p : 自然数) [CharP R p] (S : Subsemiring R)
+  签名: (R : 类型u) [半环 R] (p : 自然数) [特征p R p] (S : 子半环 R)
   定义体: ⟨fun x =>
 Iff.symm
       (CharP.cast_eq_zero_iff R p x).symm.trans
@@ -63,7 +63,7 @@ Iff.symm
 
 中文:
 实例 subring
-  签名: (R : 类型u) [Ring R] (p : 自然数) [CharP R p] (S : Subring R)
+  签名: (R : 类型u) [环 R] (p : 自然数) [特征p R p] (S : 子环 R)
   定义体: ⟨fun x =>
 Iff.symm
       (CharP.cast_eq_zero_iff R p x).symm.trans
@@ -89,7 +89,7 @@ instance subring'
 
 中文:
 实例 subring'
-  签名: (R : 类型u) [CommRing R] (p : 自然数) [CharP R p] (S : Subring R)
+  签名: (R : 类型u) [交换环 R] (p : 自然数) [特征p R p] (S : 子环 R)
   定义体: CharP.subring R p S
 
 Depends on / 依赖: CharP.subring, subring
@@ -107,7 +107,7 @@ theorem charP_center_iff
 
 中文:
 定理 charP_center_iff
-  条件: {R : 类型u} [Ring R] {p : 自然数}
+  条件: {R : 类型u} [环 R] {p : 自然数}
   证明: (algebraMap (Subring.center R) R).charP_iff Subtype.val_injective p
 
 Depends on / 依赖: Subring, Subring.center, Subtype, Subtype.val_injective, algebraMap, center, charP_iff, val_injective
@@ -130,7 +130,7 @@ theorem expChar_center_iff
 
 中文:
 定理 expChar_center_iff
-  条件: {R : 类型u} [Ring R] {p : 自然数}
+  条件: {R : 类型u} [环 R] {p : 自然数}
   证明: (algebraMap (Subring.center R) R).expChar_iff Subtype.val_injective p
 
 Depends on / 依赖: Subring, Subring.center, Subtype, Subtype.val_injective, algebraMap, center, expChar_iff, val_injective

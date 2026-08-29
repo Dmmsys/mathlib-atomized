@@ -32,9 +32,9 @@ structure BooleanSubalgebra
     - bot_mem' : ⊥ in carrier
 
 中文:
-结构 BooleanSubalgebra
-  参数: [布尔eanAlgebra α]
-  继承: Sublattice α
+结构 布尔ean子代数
+  参数: [布尔代数 α]
+  继承: 子格 α
   公理与运算 (2 个):
     - compl_mem'({a}) : a in carrier -> aᶜ in carrier
     - bot_mem' : ⊥ in carrier
@@ -61,7 +61,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (布尔eanSubalgebra α) α where
+  签名: : 集合状 (布尔ean子代数 α) α where
   定义体: L.carrier
   coe_injective L M h := by obtain ⟨⟨_, _⟩, _⟩ := L; congr
 
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (布尔eanSubalgebra α)
+  签名: 偏序 (布尔ean子代数 α)
   定义体: .ofSetLike (BooleanSubalgebra α) α
 
 Depends on / 依赖: BooleanSubalgebra, ofSetLike
@@ -98,7 +98,7 @@ lemma coe_inj
 
 中文:
 引理 coe_inj
-  结论: (L : Set α) = M ↔ L = M
+  结论: (L : 集合 α) = M ↔ L = M
   证明: SetLike.coe_set_eq
 
 Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
@@ -116,8 +116,8 @@ lemma supClosed
 
 中文:
 引理 supClosed
-  条件: (L : 布尔eanSubalgebra α)
-  结论: SupClosed (L : Set α)
+  条件: (L : 布尔ean子代数 α)
+  结论: SupClosed (L : 集合 α)
   证明: L.supClosed'
 -/
 @[simp] lemma supClosed (L : BooleanSubalgebra α) : SupClosed (L : Set α) := L.supClosed'
@@ -132,8 +132,8 @@ lemma infClosed
 
 中文:
 引理 infClosed
-  条件: (L : 布尔eanSubalgebra α)
-  结论: InfClosed (L : Set α)
+  条件: (L : 布尔ean子代数 α)
+  结论: InfClosed (L : 集合 α)
   证明: L.infClosed'
 -/
 @[simp] lemma infClosed (L : BooleanSubalgebra α) : InfClosed (L : Set α) := L.infClosed'
@@ -316,7 +316,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {L : Sublattice α} (h_compl h_bot)
+  条件: {L : 子格 α} (h_compl h_bot)
   结论: a in mk L h_compl h_bot ↔ a in L
   证明: .rfl
 -/
@@ -332,8 +332,8 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (L : Sublattice α) (h_compl h_bot)
-  结论: (mk L h_compl h_bot : Set α) = L
+  条件: (L : 子格 α) (h_compl h_bot)
+  结论: (mk L h_compl h_bot : 集合 α) = L
   证明: rfl
 -/
 @[simp] lemma coe_mk (L : Sublattice α) (h_compl h_bot) : (mk L h_compl h_bot : Set α) = L := rfl
@@ -347,7 +347,7 @@ lemma mk_le_mk
 
 中文:
 引理 mk_le_mk
-  条件: {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot)
+  条件: {L M : 子格 α} (hL_compl hL_bot hM_compl hM_bot)
   证明: .rfl
 -/
 @[simp] lemma mk_le_mk {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot) :
@@ -362,7 +362,7 @@ lemma mk_lt_mk
 
 中文:
 引理 mk_lt_mk
-  条件: {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot)
+  条件: {L M : 子格 α} (hL_compl hL_bot hM_compl hM_bot)
   证明: .rfl
 -/
 @[simp] lemma mk_lt_mk {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot) :
@@ -382,7 +382,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (L : 布尔eanSubalgebra α) (s : Set α) (hs : s = L)
+  签名: (L : 布尔ean子代数 α) (s : 集合 α) (hs : s = L)
   定义体: L.toSublattice.copy s by subst hs; rfl
   compl_mem' := by subst hs; exact L.compl_mem'
   bot_mem' := by subst hs; exact L.bot_mem'
@@ -406,7 +406,7 @@ lemma coe_copy
 
 中文:
 引理 coe_copy
-  条件: (L : 布尔eanSubalgebra α) (s : Set α) (hs)
+  条件: (L : 布尔ean子代数 α) (s : 集合 α) (hs)
   结论: L.copy s hs = s
   证明: rfl
 -/
@@ -423,7 +423,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: (L : 布尔eanSubalgebra α) (s : Set α) (hs)
+  条件: (L : 布尔ean子代数 α) (s : 集合 α) (hs)
   结论: L.copy s hs = L
   证明: SetLike.coe_injective hs
 
@@ -459,7 +459,7 @@ instance instBotCoe
 
 中文:
 实例 instBotCoe
-  签名: : Bot L where bot
+  签名: : 底元素 L where bot
   定义体: ⟨⊥, bot_mem⟩
 
 Depends on / 依赖: bot_mem
@@ -476,7 +476,7 @@ instance instTopCoe
 
 中文:
 实例 instTopCoe
-  签名: : Top L where top
+  签名: : 顶元素 L where top
   定义体: ⟨⊤, top_mem⟩
 
 Depends on / 依赖: top_mem
@@ -493,7 +493,7 @@ instance instSupCoe
 
 中文:
 实例 instSupCoe
-  签名: : Max L where max a b
+  签名: : 最大值 L where 最大值 a b
   定义体: ⟨a ⊔ b, L.supClosed a.2 b.2⟩
 
 Depends on / 依赖: L.supClosed, supClosed
@@ -510,7 +510,7 @@ instance instInfCoe
 
 中文:
 实例 instInfCoe
-  签名: : Min L where min a b
+  签名: : 最小值 L where 最小值 a b
   定义体: ⟨a ⊓ b, L.infClosed a.2 b.2⟩
 
 Depends on / 依赖: L.infClosed, infClosed
@@ -527,7 +527,7 @@ instance instComplCoe
 
 中文:
 实例 instComplCoe
-  签名: : Compl L where compl a
+  签名: : 补集 L where compl a
   定义体: ⟨aᶜ, compl_mem a.2⟩
 
 Depends on / 依赖: compl_mem
@@ -544,7 +544,7 @@ instance instSDiffCoe
 
 中文:
 实例 instSDiffCoe
-  签名: : SDiff L where sdiff a b
+  签名: : 对称差 L where sdiff a b
   定义体: ⟨a \ b, sdiff_mem a.2 b.2⟩
 
 Depends on / 依赖: sdiff_mem
@@ -803,8 +803,8 @@ instance instBooleanAlgebraCoe
     val_sdiff val_himp
 
 中文:
-实例 instBooleanAlgebraCoe
-  签名: (L : 布尔eanSubalgebra α)
+实例 inst布尔eanAlgebraCoe
+  签名: (L : 布尔ean子代数 α)
   定义体: Subtype.coe_injective.booleanAlgebra _ .rfl .rfl val_sup val_inf val_top val_bot val_compl
     val_sdiff val_himp
 
@@ -828,7 +828,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (L : 布尔eanSubalgebra α)
+  签名: (L : 布尔ean子代数 α)
   定义体: ((↑) : L -> α)
   map_bot' := L.val_bot
   map_top' := L.val_top
@@ -853,7 +853,7 @@ lemma coe_subtype
 
 中文:
 引理 coe_subtype
-  条件: (L : 布尔eanSubalgebra α)
+  条件: (L : 布尔ean子代数 α)
   结论: L.subtype = ((↑) : L -> α)
   证明: rfl
 -/
@@ -869,7 +869,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: (L : 布尔eanSubalgebra α) (a : L)
+  条件: (L : 布尔ean子代数 α) (a : L)
   结论: L.subtype a = a
   证明: rfl
 -/
@@ -886,8 +886,8 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (L : 布尔eanSubalgebra α)
-  结论: Injective subtype L
+  条件: (L : 布尔ean子代数 α)
+  结论: 单射 subtype L
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -936,7 +936,7 @@ lemma coe_inclusion
 中文:
 引理 coe_inclusion
   条件: (h : L <= M)
-  结论: inclusion h = Set.inclusion h
+  结论: inclusion h = 集合.inclusion h
   证明: rfl
 -/
 @[simp] lemma coe_inclusion (h : L <= M) : inclusion h = Set.inclusion h := rfl
@@ -952,7 +952,7 @@ lemma inclusion_apply
 中文:
 引理 inclusion_apply
   条件: (h : L <= M) (a : L)
-  结论: inclusion h a = Set.inclusion h a
+  结论: inclusion h a = 集合.inclusion h a
   证明: rfl
 -/
 lemma inclusion_apply (h : L <= M) (a : L) : inclusion h a = Set.inclusion h a := rfl
@@ -969,7 +969,7 @@ lemma inclusion_injective
 中文:
 引理 inclusion_injective
   条件: (h : L <= M)
-  结论: Injective inclusion h
+  结论: 单射 inclusion h
   证明: Set.inclusion_injective h
 
 Depends on / 依赖: Set.inclusion_injective, inclusion_injective
@@ -987,7 +987,7 @@ lemma inclusion_rfl
 
 中文:
 引理 inclusion_rfl
-  条件: (L : 布尔eanSubalgebra α)
+  条件: (L : 布尔ean子代数 α)
   结论: inclusion le_rfl = .id L
   证明: rfl
 -/
@@ -1023,7 +1023,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (布尔eanSubalgebra α) where
+  签名: : 顶元素 (布尔ean子代数 α) where
   定义体: univ
   top.bot_mem' := mem_univ _
   top.compl_mem' _ := mem_univ _
@@ -1051,7 +1051,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (布尔eanSubalgebra α) where
+  签名: : 底元素 (布尔ean子代数 α) where
   定义体: {⊥, ⊤}
   bot.bot_mem' := by simp
   bot.compl_mem' := by simp
@@ -1079,7 +1079,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (布尔eanSubalgebra α) where
+  签名: : 最小值 (布尔ean子代数 α) where
   定义体: { carrier := L inter M
                bot_mem' := ⟨bot_mem, bot_mem⟩
                compl_mem' := fun ha => ⟨compl_mem ha.1, compl_mem ha.2⟩
@@ -1110,7 +1110,7 @@ in
 
 中文:
 实例 instInfSet
-  签名: : InfSet (布尔eanSubalgebra α) where
+  签名: : 下确界集 (布尔ean子代数 α) where
   定义体: { carrier := ⋂ L in S, L
               bot_mem' := mem_iInter₂.2 fun _ _ => bot_mem
 compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
@@ -1139,7 +1139,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (布尔eanSubalgebra α)
+  签名: : 可居 (布尔ean子代数 α)
   定义体: ⟨⊥⟩
 -/
 instance instInhabited : Inhabited (BooleanSubalgebra α) := ⟨⊥⟩
@@ -1155,7 +1155,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : 布尔eanSubalgebra α) ≃o α where
+  签名: : (⊤ : 布尔ean子代数 α) ≃o α where
   定义体: Equiv.Set.univ _
   map_rel_iff' := .rfl
 
@@ -1175,7 +1175,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: (⊤ : 布尔eanSubalgebra α) = (univ : Set α)
+  结论: (⊤ : 布尔ean子代数 α) = (univ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : (⊤ : BooleanSubalgebra α) = (univ : Set α) := rfl
@@ -1189,7 +1189,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (⊥ : 布尔eanSubalgebra α) = ({⊥, ⊤} : Set α)
+  结论: (⊥ : 布尔ean子代数 α) = ({⊥, ⊤} : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : (⊥ : BooleanSubalgebra α) = ({⊥, ⊤} : Set α) := rfl
@@ -1206,8 +1206,8 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: (L M : 布尔eanSubalgebra α)
-  结论: L ⊓ M = (L : Set α) inter M
+  条件: (L M : 布尔ean子代数 α)
+  结论: L ⊓ M = (L : 集合 α) inter M
   证明: rfl
 
 @[simp, norm_cast]
@@ -1228,8 +1228,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (S : Set (布尔eanSubalgebra α))
-  结论: sInf S = ⋂ L in S, (L : Set α)
+  条件: (S : 集合 (布尔ean子代数 α))
+  结论: sInf S = ⋂ L in S, (L : 集合 α)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1248,8 +1248,8 @@ lemma coe_iInf
 
 中文:
 引理 coe_iInf
-  条件: (f : ι -> 布尔eanSubalgebra α)
-  结论: ⨅ i, f i = ⋂ i, (f i : Set α)
+  条件: (f : ι -> 布尔ean子代数 α)
+  结论: ⨅ i, f i = ⋂ i, (f i : 集合 α)
   证明: by simp [iInf]
 -/
 lemma coe_iInf (f : ι -> BooleanSubalgebra α) : ⨅ i, f i = ⋂ i, (f i : Set α) := by simp [iInf]
@@ -1264,7 +1264,7 @@ lemma coe_eq_univ
 
 中文:
 引理 coe_eq_univ
-  结论: L = (univ : Set α) ↔ L = ⊤
+  结论: L = (univ : 集合 α) ↔ L = ⊤
   证明: by rw [← coe_top, coe_inj]
 -/
 @[simp, norm_cast] lemma coe_eq_univ : L = (univ : Set α) ↔ L = ⊤ := by rw [← coe_top, coe_inj]
@@ -1279,7 +1279,7 @@ lemma mem_bot
 
 中文:
 引理 mem_bot
-  结论: a in (⊥ : 布尔eanSubalgebra α) ↔ a = ⊥ ∨ a = ⊤
+  结论: a in (⊥ : 布尔ean子代数 α) ↔ a = ⊥ ∨ a = ⊤
   证明: .rfl
 -/
 @[simp] lemma mem_bot : a in (⊥ : BooleanSubalgebra α) ↔ a = ⊥ ∨ a = ⊤ := .rfl
@@ -1293,7 +1293,7 @@ lemma mem_top
 
 中文:
 引理 mem_top
-  结论: a in (⊤ : 布尔eanSubalgebra α)
+  结论: a in (⊤ : 布尔ean子代数 α)
   证明: mem_univ _
 -/
 @[simp] lemma mem_top : a in (⊤ : BooleanSubalgebra α) := mem_univ _
@@ -1323,7 +1323,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: {S : Set (布尔eanSubalgebra α)}
+  条件: {S : 集合 (布尔ean子代数 α)}
   结论: a in sInf S ↔ 对任意 L in S, a in L
   证明: by
   rw [← SetLike.mem_coe]; simp
@@ -1342,7 +1342,7 @@ lemma mem_iInf
 
 中文:
 引理 mem_iInf
-  条件: {f : ι -> 布尔eanSubalgebra α}
+  条件: {f : ι -> 布尔ean子代数 α}
   结论: a in ⨅ i, f i ↔ 对任意 i, a in f i
   证明: by
   rw [← SetLike.mem_coe]; simp
@@ -1369,7 +1369,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (布尔eanSubalgebra α) where
+  签名: : 完备格 (布尔ean子代数 α) where
   定义体: ⊥
   bot_le _S _a := by aesop
   top := ⊤
@@ -1402,8 +1402,8 @@ instance [IsEmpty
   body: SetLike.coe_injective.subsingleton
 
 中文:
-实例 [IsEmpty
-  签名: α] : Subsingleton (布尔eanSubalgebra α)
+实例 [是空
+  签名: α] : 子单例 (布尔ean子代数 α)
   定义体: SetLike.coe_injective.subsingleton
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.subsingleton, coe_injective, subsingleton
@@ -1418,8 +1418,8 @@ instance [IsEmpty
   body: uniqueOfSubsingleton ⊤
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (布尔eanSubalgebra α)
+实例 [是空
+  签名: α] : 唯一 (布尔ean子代数 α)
   定义体: uniqueOfSubsingleton ⊤
 
 Depends on / 依赖: uniqueOfSubsingleton
@@ -1442,7 +1442,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : BoundedLatticeHom α β) (L : 布尔eanSubalgebra β)
+  签名: (f : 有界格态射 α β) (L : 布尔ean子代数 β)
   定义体: f ⁻¹' L
   bot_mem' := by simp
   compl_mem' := by simp [map_compl']
@@ -1470,7 +1470,7 @@ lemma coe_comap
 
 中文:
 引理 coe_comap
-  条件: (L : 布尔eanSubalgebra β) (f : BoundedLatticeHom α β)
+  条件: (L : 布尔ean子代数 β) (f : 有界格态射 α β)
   结论: L.comap f = f ⁻¹' L
   证明: rfl
 -/
@@ -1487,7 +1487,7 @@ lemma mem_comap
 
 中文:
 引理 mem_comap
-  条件: {L : 布尔eanSubalgebra β}
+  条件: {L : 布尔ean子代数 β}
   结论: a in L.comap f ↔ f a in L
   证明: .rfl
 -/
@@ -1503,7 +1503,7 @@ lemma comap_mono
 
 中文:
 引理 comap_mono
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: fun _ _ => preimage_mono
 
 Depends on / 依赖: preimage_mono
@@ -1521,8 +1521,8 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (L : 布尔eanSubalgebra α)
-  结论: L.comap (BoundedLatticeHom.id _) = L
+  条件: (L : 布尔ean子代数 α)
+  结论: L.comap (有界格态射.id _) = L
   证明: rfl
 -/
 @[simp] lemma comap_id (L : BooleanSubalgebra α) : L.comap (BoundedLatticeHom.id _) = L := rfl
@@ -1537,7 +1537,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  结论: (L : 布尔eanSubalgebra γ) (g : BoundedLatticeHom β γ)
+  结论: (L : 布尔ean子代数 γ) (g : 有界格态射 β γ)
   证明: rfl
 -/
 @[simp] lemma comap_comap (L : BooleanSubalgebra γ) (g : BoundedLatticeHom β γ)
@@ -1557,7 +1557,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : BoundedLatticeHom α β) (L : 布尔eanSubalgebra α)
+  签名: (f : 有界格态射 α β) (L : 布尔ean子代数 α)
   定义体: f '' L
   bot_mem' := ⟨⊥, by simp⟩
   compl_mem' := by rintro _ ⟨a, ha, rfl⟩; exact ⟨aᶜ, by simpa [map_compl']⟩
@@ -1581,7 +1581,7 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  条件: (f : BoundedLatticeHom α β) (L : 布尔eanSubalgebra α)
+  条件: (f : 有界格态射 α β) (L : 布尔ean子代数 α)
   证明: rfl
 
 Depends on / 依赖: Gaussian, Integrable, almost, condition, integrability, integrable_exp_mul, interesting, mgf_le, random, respect, results, stronger, variables, volume_tac, weaker
@@ -1619,7 +1619,7 @@ lemma mem_map_of_mem
 
 中文:
 引理 mem_map_of_mem
-  条件: (f : BoundedLatticeHom α β) {a : α}
+  条件: (f : 有界格态射 α β) {a : α}
   结论: a in L -> f a in L.map f
   证明: mem_image_of_mem f
 
@@ -1639,7 +1639,7 @@ lemma apply_coe_mem_map
 
 中文:
 引理 apply_coe_mem_map
-  条件: (f : BoundedLatticeHom α β) (a : L)
+  条件: (f : 有界格态射 α β) (a : L)
   结论: f a in L.map f
   证明: mem_map_of_mem f a.prop
 
@@ -1658,7 +1658,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: fun _ _ => image_mono
 
 Depends on / 依赖: image_mono
@@ -1690,7 +1690,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
+  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
   证明: SetLike.coe_injective image_image _ _ _
 -/
 @[simp] lemma map_map (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
@@ -1726,7 +1726,7 @@ lemma apply_mem_map_iff
 
 中文:
 引理 apply_mem_map_iff
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: f a in L.map f ↔ a in L
   证明: hf.mem_set_image
 
@@ -1744,7 +1744,7 @@ lemma map_equiv_eq_comap_symm
 
 中文:
 引理 map_equiv_eq_comap_symm
-  条件: (f : α ≃o β) (L : 布尔eanSubalgebra α)
+  条件: (f : α ≃o β) (L : 布尔ean子代数 α)
   证明: SetLike.coe_injective f.toEquiv.image_eq_preimage_symm L
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -1763,7 +1763,7 @@ lemma comap_equiv_eq_map_symm
 
 中文:
 引理 comap_equiv_eq_map_symm
-  条件: (f : β ≃o α) (L : 布尔eanSubalgebra α)
+  条件: (f : β ≃o α) (L : 布尔ean子代数 α)
   证明: (map_equiv_eq_comap_symm f.symm L).symm
 
 Depends on / 依赖: f.symm, map_equiv_eq_comap_symm
@@ -1782,7 +1782,7 @@ lemma map_symm_eq_iff_eq_map
 
 中文:
 引理 map_symm_eq_iff_eq_map
-  条件: {M : 布尔eanSubalgebra β} {e : β ≃o α}
+  条件: {M : 布尔ean子代数 β} {e : β ≃o α}
   证明: by
   simp_rw [← coe_inj]; exact (Equiv.eq_image_iff_symm_image_eq _ _ _).symm
 
@@ -1802,7 +1802,7 @@ lemma map_le_iff_le_comap
 
 中文:
 引理 map_le_iff_le_comap
-  条件: {f : BoundedLatticeHom α β} {M : 布尔eanSubalgebra β}
+  条件: {f : 有界格态射 α β} {M : 布尔ean子代数 β}
   证明: image_subset_iff
 
 Depends on / 依赖: image_subset_iff
@@ -1821,7 +1821,7 @@ lemma gc_map_comap
 
 中文:
 引理 gc_map_comap
-  条件: (f : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 α β)
   结论: GaloisConnection (map f) (comap f)
   证明: fun _ _ => map_le_iff_le_comap
 
@@ -1841,8 +1841,8 @@ lemma map_bot
 
 中文:
 引理 map_bot
-  条件: (f : BoundedLatticeHom α β)
-  结论: (⊥ : 布尔eanSubalgebra α).map f = ⊥
+  条件: (f : 有界格态射 α β)
+  结论: (⊥ : 布尔ean子代数 α).map f = ⊥
   证明: (gc_map_comap f).l_bot
 -/
 @[simp] lemma map_bot (f : BoundedLatticeHom α β) : (⊥ : BooleanSubalgebra α).map f = ⊥ :=
@@ -1858,7 +1858,7 @@ lemma map_sup
 
 中文:
 引理 map_sup
-  条件: (f : BoundedLatticeHom α β) (L M : 布尔eanSubalgebra α)
+  条件: (f : 有界格态射 α β) (L M : 布尔ean子代数 α)
   证明: (gc_map_comap f).l_sup
 
 Depends on / 依赖: gc_map_comap, l_sup
@@ -1876,7 +1876,7 @@ lemma map_iSup
 
 中文:
 引理 map_iSup
-  条件: (f : BoundedLatticeHom α β) (L : ι -> 布尔eanSubalgebra α)
+  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 α)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -1895,8 +1895,8 @@ lemma comap_top
 
 中文:
 引理 comap_top
-  条件: (f : BoundedLatticeHom α β)
-  结论: (⊤ : 布尔eanSubalgebra β).comap f = ⊤
+  条件: (f : 有界格态射 α β)
+  结论: (⊤ : 布尔ean子代数 β).comap f = ⊤
   证明: (gc_map_comap f).u_top
 -/
 @[simp] lemma comap_top (f : BoundedLatticeHom α β) : (⊤ : BooleanSubalgebra β).comap f = ⊤ :=
@@ -1912,7 +1912,7 @@ lemma comap_inf
 
 中文:
 引理 comap_inf
-  条件: (L M : 布尔eanSubalgebra β) (f : BoundedLatticeHom α β)
+  条件: (L M : 布尔ean子代数 β) (f : 有界格态射 α β)
   证明: (gc_map_comap f).u_inf
 
 Depends on / 依赖: gc_map_comap, u_inf
@@ -1930,7 +1930,7 @@ lemma comap_iInf
 
 中文:
 引理 comap_iInf
-  条件: (f : BoundedLatticeHom α β) (L : ι -> 布尔eanSubalgebra β)
+  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 β)
   证明: (gc_map_comap f).u_iInf
 
 Depends on / 依赖: gc_map_comap, u_iInf
@@ -1948,7 +1948,7 @@ lemma map_inf_le
 
 中文:
 引理 map_inf_le
-  条件: (L M : 布尔eanSubalgebra α) (f : BoundedLatticeHom α β)
+  条件: (L M : 布尔ean子代数 α) (f : 有界格态射 α β)
   证明: map_mono.map_inf_le _ _
 
 Depends on / 依赖: map_inf_le, map_mono, map_mono.map_inf_le
@@ -1966,7 +1966,7 @@ lemma le_comap_sup
 
 中文:
 引理 le_comap_sup
-  条件: (L M : 布尔eanSubalgebra β) (f : BoundedLatticeHom α β)
+  条件: (L M : 布尔ean子代数 β) (f : 有界格态射 α β)
   证明: comap_mono.le_map_sup _ _
 
 Depends on / 依赖: comap_mono, comap_mono.le_map_sup, le_map_sup
@@ -1984,7 +1984,7 @@ lemma le_comap_iSup
 
 中文:
 引理 le_comap_iSup
-  条件: (f : BoundedLatticeHom α β) (L : ι -> 布尔eanSubalgebra β)
+  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 β)
   证明: comap_mono.le_map_iSup
 
 Depends on / 依赖: comap_mono, comap_mono.le_map_iSup, le_map_iSup
@@ -2004,7 +2004,7 @@ lemma map_inf
 
 中文:
 引理 map_inf
-  条件: (L M : 布尔eanSubalgebra α) (f : BoundedLatticeHom α β) (hf : Injective f)
+  条件: (L M : 布尔ean子代数 α) (f : 有界格态射 α β) (hf : 单射 f)
   证明: by
   rw [← SetLike.coe_set_eq]
   simp [Set.image_inter hf]
@@ -2027,8 +2027,8 @@ lemma map_top
 
 中文:
 引理 map_top
-  条件: (f : BoundedLatticeHom α β) (h : Surjective f)
-  结论: 布尔eanSubalgebra.map f ⊤ = ⊤
+  条件: (f : 有界格态射 α β) (h : 满射 f)
+  结论: 布尔ean子代数.map f ⊤ = ⊤
   证明: SetLike.coe_injective by simp [h.range_eq]
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, h.range_eq, range_eq
@@ -2046,7 +2046,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: sInf {L | s subseteq L}
 
 Depends on / 依赖: subseteq
@@ -2069,7 +2069,7 @@ lemma mem_closure
 中文:
 引理 mem_closure
   条件: {x : α}
-  结论: x in closure s ↔ 对任意 ⦃L : 布尔eanSubalgebra α⦄, s subseteq L -> x in L
+  结论: x in closure s ↔ 对任意 ⦃L : 布尔ean子代数 α⦄, s subseteq L -> x in L
   证明: mem_sInf
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
@@ -2112,7 +2112,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set α} {x : α} (hx : x in s)
+  条件: {s : 集合 α} {x : α} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -2183,7 +2183,7 @@ lemma closure_latticeClosure
 
 中文:
 引理 closure_latticeClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: closure (latticeClosure s) = closure s
   证明: le_antisymm (closure_le.2 latticeClosure_subset_closure) (closure_mono subset_latticeClosure)
 -/
@@ -2338,7 +2338,7 @@ lemma iSup_mem
 
 中文:
 引理 iSup_mem
-  条件: [Finite ι] (hf : 对任意 i, f i in L)
+  条件: [有限 ι] (hf : 对任意 i, f i in L)
   结论: ⨆ i, f i in L
   证明: L.supClosed.iSup_mem bot_mem hf
 
@@ -2356,7 +2356,7 @@ lemma iInf_mem
 
 中文:
 引理 iInf_mem
-  条件: [Finite ι] (hf : 对任意 i, f i in L)
+  条件: [有限 ι] (hf : 对任意 i, f i in L)
   结论: ⨅ i, f i in L
   证明: L.infClosed.iInf_mem top_mem hf
 
@@ -2374,7 +2374,7 @@ lemma sSup_mem
 
 中文:
 引理 sSup_mem
-  条件: (hs : s.Finite) (hsL : s subseteq L)
+  条件: (hs : s.有限) (hsL : s subseteq L)
   结论: sSup s in L
   证明: L.supClosed.sSup_mem hs bot_mem hsL
 
@@ -2392,7 +2392,7 @@ lemma sInf_mem
 
 中文:
 引理 sInf_mem
-  条件: (hs : s.Finite) (hsL : s subseteq L)
+  条件: (hs : s.有限) (hsL : s subseteq L)
   结论: sInf s in L
   证明: L.infClosed.sInf_mem hs top_mem hsL
 
@@ -2410,7 +2410,7 @@ lemma biSup_mem
 
 中文:
 引理 biSup_mem
-  条件: {ι : 类型} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : 对任意 i in t, f i in L)
+  条件: {ι : 类型} {t : 集合 ι} {f : ι -> α} (ht : t.有限) (hf : 对任意 i in t, f i in L)
   证明: L.supClosed.biSup_mem ht bot_mem hf
 
 Depends on / 依赖: L.supClosed.biSup_mem, biSup_mem, bot_mem, supClosed
@@ -2428,7 +2428,7 @@ lemma biInf_mem
 
 中文:
 引理 biInf_mem
-  条件: {ι : 类型} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : 对任意 i in t, f i in L)
+  条件: {ι : 类型} {t : 集合 ι} {f : ι -> α} (ht : t.有限) (hf : 对任意 i in t, f i in L)
   证明: L.infClosed.biInf_mem ht top_mem hf
 
 Depends on / 依赖: L.infClosed.biInf_mem, biInf_mem, infClosed, top_mem

@@ -52,7 +52,7 @@ structure RelHom
     - map_rel' : forall {a b}, r a b -> s (toFun a) (toFun b)
 
 中文:
-结构 RelHom
+结构 关系态射
   参数: {α β : 类型} (r : α -> α -> 命题) (s : β -> β -> 命题)
   公理与运算 (2 个):
     - toFun : α -> β
@@ -80,7 +80,7 @@ class RelHomClass
     - map_rel : forall (f : F) {a b}, r a b -> s (f a) (f b)
 
 中文:
-类 RelHomClass
+类 关系态射类
   参数: (F : 类型) {α β : outParam 类型} (r : outParam <| α -> α -> 命题)
   公理与运算 (1 个):
     - map_rel : 对任意 (f : F) {a b}, r a b -> s (f a) (f b)
@@ -109,7 +109,7 @@ theorem irrefl
 
 中文:
 定理 irrefl
-  条件: [RelHomClass F r s] (f : F)
+  条件: [关系态射类 F r s] (f : F)
   结论: 对任意 [Std.Irrefl s], Std.Irrefl r
   证明: RelHomClass.irrefl
 -/
@@ -129,7 +129,7 @@ theorem asymm
 
 中文:
 定理 asymm
-  条件: [RelHomClass F r s] (f : F)
+  条件: [关系态射类 F r s] (f : F)
   结论: 对任意 [Std.Asymm s], Std.Asymm r
   证明: RelHomClass.asymm
 -/
@@ -154,7 +154,7 @@ theorem acc
 
 中文:
 定理 acc
-  条件: [RelHomClass F r s] (f : F) (a : α)
+  条件: [关系态射类 F r s] (f : F) (a : α)
   结论: Acc s (f a) -> Acc r a
   证明: by
   generalize h : f a = b
@@ -180,8 +180,8 @@ theorem wellFounded
 
 中文:
 定理 wellFounded
-  条件: [RelHomClass F r s] (f : F)
-  结论: WellFounded s -> WellFounded r
+  条件: [关系态射类 F r s] (f : F)
+  结论: 良基 s -> 良基 r
 -/
 protected theorem wellFounded [RelHomClass F r s] (f : F) : WellFounded s -> WellFounded r
   | ⟨H⟩ => ⟨fun _ => RelHomClass.acc f _ (H _)⟩
@@ -196,7 +196,7 @@ theorem isWellFounded
 
 中文:
 定理 isWellFounded
-  条件: [RelHomClass F r s] (f : F) [IsWellFounded β s]
+  条件: [关系态射类 F r s] (f : F) [是良基 β s]
   证明: ⟨RelHomClass.wellFounded f IsWellFounded.wf⟩
 -/
 protected theorem isWellFounded [RelHomClass F r s] (f : F) [IsWellFounded β s] :
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (r ->r s) α β
+  签名: 函数状 (r ->r s) α β
   定义体: o.toFun
   coe_injective f g h := by
     cases f
@@ -249,7 +249,7 @@ initialize_simps_projections RelHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: RelHomClass (r ->r s) r s
+  签名: 关系态射类 (r ->r s) r s
   定义体: map_rel'
 
 initialize_simps_projections RelHom (toFun -> apply)
@@ -336,7 +336,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: Injective fun (f : r ->r s) => (f : α -> β)
+  结论: 单射 fun (f : r ->r s) => (f : α -> β)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -438,7 +438,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : r ->r s)
-  结论: f.comp (RelHom.id r) = f
+  结论: f.comp (关系态射.id r) = f
   证明: rfl
 
 @[simp]
@@ -458,7 +458,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : r ->r s)
-  结论: (RelHom.id s).comp f = f
+  结论: (关系态射.id s).comp f = f
   证明: rfl
 -/
 theorem id_comp (f : r ->r s) : (RelHom.id s).comp f = f := rfl
@@ -492,7 +492,7 @@ definition preimage
   body: ⟨f, id⟩
 
 中文:
-定义 preimage
+定义 原像
   签名: (f : α -> β) (s : β -> β -> 命题)
   定义体: ⟨f, id⟩
 -/
@@ -522,7 +522,7 @@ theorem injective_of_increasing
 
 中文:
 定理 injective_of_increasing
-  结论: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.Trichotomous r]
+  结论: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.三歧 r]
   证明: by
   intro x y hxy
   rcases trichotomous_of r x y with (h | h | h)
@@ -561,8 +561,8 @@ theorem RelHom.injective_of_increasing
   proof: _root_.injective_of_increasing r s f f.map_rel
 
 中文:
-定理 RelHom.injective_of_increasing
-  条件: [Std.Trichotomous r] [Std.Irrefl s] (f : r ->r s)
+定理 关系态射.injective_of_increasing
+  条件: [Std.三歧 r] [Std.Irrefl s] (f : r ->r s)
   证明: _root_.injective_of_increasing r s f f.map_rel
 
 Depends on / 依赖: _root_, _root_.injective_of_increasing, f.map_rel, injective_of_increasing, map_rel
@@ -583,8 +583,8 @@ theorem Function.Surjective.wellFounded_iff
     (RelHomClass.wellFounded (⟨f, o.1⟩ : r ->r s))
 
 中文:
-定理 Function.Surjective.wellFounded_iff
-  结论: {f : α -> β} (hf : Surjective f)
+定理 函数.满射.wellFounded_iff
+  结论: {f : α -> β} (hf : 满射 f)
   证明: Iff.intro
     (RelHomClass.wellFounded (⟨surjInv hf,
       fun h => by simpa only [o, surjInv_eq hf] using h⟩ : s ->r r))
@@ -611,7 +611,7 @@ structure RelEmbedding
     - map_rel_iff' : forall {a b}, s (toEmbedding a) (toEmbedding b) ↔ r a b
 
 中文:
-结构 RelEmbedding
+结构 关系嵌入
   参数: {α β : 类型} (r : α -> α -> 命题) (s : β -> β -> 命题)
   继承: α ↪ β
   公理与运算 (1 个):
@@ -635,7 +635,7 @@ theorem preimage_equivalence
 
 中文:
 定理 preimage_equivalence
-  条件: {α β} (f : α -> β) {s : β -> β -> 命题} (hs : Equivalence s)
+  条件: {α β} (f : α -> β) {s : β -> β -> 命题} (hs : 等价 s)
   证明: ⟨fun _ => hs.1 _, fun h => hs.2 h, fun h₁ h₂ => hs.3 h₁ h₂⟩
 -/
 theorem preimage_equivalence {α β} (f : α -> β) {s : β -> β -> Prop} (hs : Equivalence s) :
@@ -699,7 +699,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (r ↪r s) α β
+  签名: 函数状 (r ↪r s) α β
   定义体: x.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨⟩⟩
@@ -727,7 +727,7 @@ initialize_simps_projections RelEmbedding (toFun -> apply)
 
 中文:
 实例 :
-  签名: RelHomClass (r ↪r s) r s
+  签名: 关系态射类 (r ↪r s) r s
   定义体: Iff.mpr (map_rel_iff' f)
 
 initialize_simps_projections RelEmbedding (toFun -> apply)
@@ -811,7 +811,7 @@ theorem toEmbedding_injective
 
 中文:
 定理 toEmbedding_injective
-  结论: Injective (toEmbedding : r ↪r s -> (α ↪ β))
+  结论: 单射 (toEmbedding : r ↪r s -> (α ↪ β))
   证明: by
   rintro ⟨f, -⟩ ⟨g, -⟩; simp
 
@@ -853,7 +853,7 @@ theorem injective
 中文:
 定理 injective
   条件: (f : r ↪r s)
-  结论: Injective f
+  结论: 单射 f
   证明: f.inj'
 
 Depends on / 依赖: f.inj
@@ -935,7 +935,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: Injective fun f : r ↪r s => (f : α -> β)
+  结论: 单射 fun f : r ↪r s => (f : α -> β)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -1157,7 +1157,7 @@ definition preimage
 @[simp]
 
 中文:
-定义 preimage
+定义 原像
   签名: (f : α ↪ β) (s : β -> β -> 命题)
   定义体: ⟨f, Iff.rfl⟩
 
@@ -1181,7 +1181,7 @@ theorem preimage_apply
 中文:
 定理 preimage_apply
   条件: (f : α ↪ β) (s : β -> β -> 命题) (a : α)
-  结论: preimage f s a = f a
+  结论: 原像 f s a = f a
   证明: rfl
 
 Depends on / 依赖: I.mul_mem_left, _spec, algebraMap, isUnit_iff_exists_inv, map_units, mul_assoc, mul_comm, mul_mem_left, mul_one
@@ -1321,7 +1321,7 @@ theorem antisymm
 
 中文:
 定理 antisymm
-  结论: 对任意 (_ : r ↪r s) [Std.Antisymm s], Std.Antisymm r
+  结论: 对任意 (_ : r ↪r s) [Std.反对称 s], Std.反对称 r
   证明: RelEmbedding.antisymm
 -/
 protected theorem antisymm : forall (_ : r ↪r s) [Std.Antisymm s], Std.Antisymm r
@@ -1338,7 +1338,7 @@ theorem isTrans
 
 中文:
 定理 isTrans
-  结论: 对任意 (_ : r ↪r s) [IsTrans β s], IsTrans α r
+  结论: 对任意 (_ : r ↪r s) [是Trans β s], 是Trans α r
 -/
 protected theorem isTrans : forall (_ : r ↪r s) [IsTrans β s], IsTrans α r
   | ⟨_, o⟩, ⟨H⟩ => ⟨fun _ _ _ h₁ h₂ => o.1 (H _ _ _ (o.2 h₁) (o.2 h₂))⟩
@@ -1353,7 +1353,7 @@ theorem total
 
 中文:
 定理 total
-  结论: 对任意 (_ : r ↪r s) [Std.Total s], Std.Total r
+  结论: 对任意 (_ : r ↪r s) [Std.全 s], Std.全 r
   证明: RelEmbedding.total
 -/
 protected theorem total : forall (_ : r ↪r s) [Std.Total s], Std.Total r
@@ -1370,7 +1370,7 @@ theorem isPreorder
 
 中文:
 定理 isPreorder
-  结论: 对任意 (_ : r ↪r s) [IsPreorder β s], IsPreorder α r
+  结论: 对任意 (_ : r ↪r s) [是预序 β s], 是预序 α r
 -/
 protected theorem isPreorder : forall (_ : r ↪r s) [IsPreorder β s], IsPreorder α r
   | f, _ => { f.stdRefl, f.isTrans with }
@@ -1384,7 +1384,7 @@ theorem isPartialOrder
 
 中文:
 定理 isPartialOrder
-  结论: 对任意 (_ : r ↪r s) [IsPartialOrder β s], IsPartialOrder α r
+  结论: 对任意 (_ : r ↪r s) [是偏序 β s], 是偏序 α r
 -/
 protected theorem isPartialOrder : forall (_ : r ↪r s) [IsPartialOrder β s], IsPartialOrder α r
   | f, _ => { f.isPreorder, f.antisymm with }
@@ -1398,7 +1398,7 @@ theorem isLinearOrder
 
 中文:
 定理 isLinearOrder
-  结论: 对任意 (_ : r ↪r s) [IsLinearOrder β s], IsLinearOrder α r
+  结论: 对任意 (_ : r ↪r s) [是线性序 β s], 是线性序 α r
 -/
 protected theorem isLinearOrder : forall (_ : r ↪r s) [IsLinearOrder β s], IsLinearOrder α r
   | f, _ => { f.isPartialOrder, f.total with }
@@ -1412,7 +1412,7 @@ theorem isStrictOrder
 
 中文:
 定理 isStrictOrder
-  结论: 对任意 (_ : r ↪r s) [IsStrictOrder β s], IsStrictOrder α r
+  结论: 对任意 (_ : r ↪r s) [是Strict序 β s], 是Strict序 α r
 -/
 protected theorem isStrictOrder : forall (_ : r ↪r s) [IsStrictOrder β s], IsStrictOrder α r
   | f, _ => { f.irrefl, f.isTrans with }
@@ -1427,7 +1427,7 @@ theorem trichotomous
 
 中文:
 定理 trichotomous
-  结论: 对任意 (_ : r ↪r s) [Std.Trichotomous s], Std.Trichotomous r
+  结论: 对任意 (_ : r ↪r s) [Std.三歧 s], Std.三歧 r
   证明: RelEmbedding.trichotomous
 -/
 protected theorem trichotomous : forall (_ : r ↪r s) [Std.Trichotomous s], Std.Trichotomous r
@@ -1444,7 +1444,7 @@ theorem isStrictTotalOrder
 
 中文:
 定理 isStrictTotalOrder
-  结论: 对任意 (_ : r ↪r s) [IsStrictTotalOrder β s],
+  结论: 对任意 (_ : r ↪r s) [是StrictTotal序 β s],
 -/
 protected theorem isStrictTotalOrder : forall (_ : r ↪r s) [IsStrictTotalOrder β s],
     IsStrictTotalOrder α r
@@ -1491,7 +1491,7 @@ theorem wellFounded
 
 中文:
 定理 wellFounded
-  结论: 对任意 (_ : r ↪r s) (_ : WellFounded s), WellFounded r
+  结论: 对任意 (_ : r ↪r s) (_ : 良基 s), 良基 r
 -/
 protected theorem wellFounded : forall (_ : r ↪r s) (_ : WellFounded s), WellFounded r
   | f, ⟨H⟩ => ⟨fun _ => f.acc _ (H _)⟩
@@ -1507,8 +1507,8 @@ theorem isWellFounded
 
 中文:
 定理 isWellFounded
-  条件: (f : r ↪r s) [IsWellFounded β s]
-  结论: IsWellFounded α r
+  条件: (f : r ↪r s) [是良基 β s]
+  结论: 是良基 α r
   证明: ⟨f.wellFounded IsWellFounded.wf⟩
 -/
 protected theorem isWellFounded (f : r ↪r s) [IsWellFounded β s] : IsWellFounded α r :=
@@ -1523,7 +1523,7 @@ theorem isWellOrder
 
 中文:
 定理 isWellOrder
-  结论: 对任意 (_ : r ↪r s) [IsWellOrder β s], IsWellOrder α r
+  结论: 对任意 (_ : r ↪r s) [是良序 β s], 是良序 α r
 -/
 protected theorem isWellOrder : forall (_ : r ↪r s) [IsWellOrder β s], IsWellOrder α r
   | f, H => { f.isStrictTotalOrder with wf := f.wellFounded H.wf }
@@ -1541,7 +1541,7 @@ definition Subtype.relEmbedding
   body: ⟨Embedding.subtype p, Iff.rfl⟩
 
 中文:
-定义 Subtype.relEmbedding
+定义 子类型.relEmbedding
   签名: {X : 类型} (r : X -> X -> 命题) (p : X -> 命题)
   定义体: ⟨Embedding.subtype p, Iff.rfl⟩
 
@@ -1560,7 +1560,7 @@ instance Subtype.wellFoundedLT
   body: (Subtype.relEmbedding (· < ·) p).isWellFounded
 
 中文:
-实例 Subtype.wellFoundedLT
+实例 子类型.wellFoundedLT
   签名: [LT α] [WellFoundedLT α] (p : α -> 命题)
   定义体: (Subtype.relEmbedding (· < ·) p).isWellFounded
 
@@ -1579,7 +1579,7 @@ instance Subtype.wellFoundedGT
   body: (Subtype.relEmbedding (· > ·) p).isWellFounded
 
 中文:
-实例 Subtype.wellFoundedGT
+实例 子类型.wellFoundedGT
   签名: [LT α] [WellFoundedGT α] (p : α -> 命题)
   定义体: (Subtype.relEmbedding (· > ·) p).isWellFounded
 
@@ -1600,8 +1600,8 @@ definition Quotient.mkRelHom
   body: ⟨Quotient.mk _, id⟩
 
 中文:
-定义 Quotient.mkRelHom
-  签名: {_ : Setoid α} {r : α -> α -> 命题}
+定义 商.mkRelHom
+  签名: {_ : 集合等价关系 α} {r : α -> α -> 命题}
   定义体: ⟨Quotient.mk _, id⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1625,8 +1625,8 @@ definition Quotient.outRelEmbedding
 @[simp]
 
 中文:
-定义 Quotient.outRelEmbedding
-  签名: {_ : Setoid α} {r : α -> α -> 命题}
+定义 商.outRelEmbedding
+  签名: {_ : 集合等价关系 α} {r : α -> α -> 命题}
   定义体: ⟨Embedding.quotientOut α, fun {x y} => by
     induction x, y using Quotient.inductionOn₂
     apply iff_iff_eq.2 (H _ _ _ _ _ _) <;> apply Quotient.mk_out⟩
@@ -1661,7 +1661,7 @@ theorem acc_lift₂_iff
 
 中文:
 定理 acc_lift₂_iff
-  结论: {_ : Setoid α} {r : α -> α -> 命题}
+  结论: {_ : 集合等价关系 α} {r : α -> α -> 命题}
   证明: by
   constructor
   · exact RelHomClass.acc (Quotient.mkRelHom H) a
@@ -1697,7 +1697,7 @@ theorem acc_liftOn₂'_iff
 
 中文:
 定理 acc_liftOn₂'_iff
-  条件: {s : Setoid α} {r : α -> α -> 命题} {H} {a}
+  条件: {s : 集合等价关系 α} {r : α -> α -> 命题} {H} {a}
   证明: acc_lift₂_iff (H := H)
 -/
 theorem acc_liftOn₂'_iff {s : Setoid α} {r : α -> α -> Prop} {H} {a} :
@@ -1725,7 +1725,7 @@ alias ⟨WellFounded.of_quotient_lift₂, WellFounded.quotient_lift₂⟩ := wel
 
 中文:
 定理 wellFounded_lift₂_iff
-  结论: {_ : Setoid α} {r : α -> α -> 命题}
+  结论: {_ : 集合等价关系 α} {r : α -> α -> 命题}
   证明: by
   constructor
   · exact RelHomClass.wellFounded (Quotient.mkRelHom H)
@@ -1763,7 +1763,7 @@ alias ⟨WellFounded.of_quotient_liftOn₂', WellFounded.quotient_liftOn₂'⟩ 
 
 中文:
 定理 wellFounded_liftOn₂'_iff
-  条件: {s : Setoid α} {r : α -> α -> 命题} {H}
+  条件: {s : 集合等价关系 α} {r : α -> α -> 命题} {H}
   证明: wellFounded_lift₂_iff (H := H)
 
 alias ⟨WellFounded.of_quotient_liftOn₂', WellFounded.quotient_liftOn₂'⟩ := wellFounded_liftOn₂'_iff
@@ -1790,7 +1790,7 @@ definition ofMapRelIff
 
 中文:
 定义 ofMapRelIff
-  签名: (f : α -> β) [Std.Antisymm r] [Std.Refl s] (hf : 对任意 a b, s (f a) (f b) ↔ r a b)
+  签名: (f : α -> β) [Std.反对称 r] [Std.Refl s] (hf : 对任意 a b, s (f a) (f b) ↔ r a b)
   定义体: f
   inj' _ _ h := antisymm ((hf _ _).1 (h ▸ refl _)) ((hf _ _).1 (h ▸ refl _))
   map_rel_iff' := hf _ _
@@ -1814,7 +1814,7 @@ theorem ofMapRelIff_coe
 
 中文:
 定理 ofMapRelIff_coe
-  结论: (f : α -> β) [Std.Antisymm r] [Std.Refl s]
+  结论: (f : α -> β) [Std.反对称 r] [Std.Refl s]
   证明: rfl
 -/
 theorem ofMapRelIff_coe (f : α -> β) [Std.Antisymm r] [Std.Refl s]
@@ -1837,7 +1837,7 @@ definition ofMonotone
 
 中文:
 定义 ofMonotone
-  签名: [Std.Trichotomous r] [Std.Asymm s] (f : α -> β) (H : 对任意 a b, r a b -> s (f a) (f b))
+  签名: [Std.三歧 r] [Std.Asymm s] (f : α -> β) (H : 对任意 a b, r a b -> s (f a) (f b))
   定义体: by
   haveI := @Std.Asymm.irrefl β s _
   refine ⟨⟨f, fun a b e => ?_⟩, @fun a b => ⟨fun h => ?_, H _ _⟩⟩
@@ -1868,7 +1868,7 @@ theorem ofMonotone_coe
 
 中文:
 定理 ofMonotone_coe
-  条件: [Std.Trichotomous r] [Std.Asymm s] (f : α -> β) (H)
+  条件: [Std.三歧 r] [Std.Asymm s] (f : α -> β) (H)
   证明: rfl
 -/
 theorem ofMonotone_coe [Std.Trichotomous r] [Std.Asymm s] (f : α -> β) (H) :
@@ -1885,7 +1885,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [IsEmpty α]
+  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [是空 α]
   定义体: ⟨Embedding.ofIsEmpty, @fun a => isEmptyElim a⟩
 
 Depends on / 依赖: Embedding, Embedding.ofIsEmpty, isEmptyElim, ofIsEmpty
@@ -2184,7 +2184,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Injective (toEquiv : r ≃r s -> α ≃ β)
+  结论: 单射 (toEquiv : r ≃r s -> α ≃ β)
 -/
 theorem toEquiv_injective : Injective (toEquiv : r ≃r s -> α ≃ β)
   | ⟨e₁, o₁⟩, ⟨e₂, _⟩, h => by congr
@@ -2218,7 +2218,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (r ≃r s) α β
+  签名: 函数状 (r ≃r s) α β
   定义体: x
   coe_injective := Equiv.coe_fn_injective.comp toEquiv_injective
 -/
@@ -2236,7 +2236,7 @@ instance :
 
 中文:
 实例 :
-  签名: RelHomClass (r ≃r s) r s
+  签名: 关系态射类 (r ≃r s) r s
   定义体: Iff.mpr (map_rel_iff' f)
 
 Depends on / 依赖: Iff.mpr, map_rel_iff
@@ -2258,7 +2258,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (r ≃r s) α β
+  签名: 等价状 (r ≃r s) α β
   定义体: f
   inv f := f.toEquiv.symm
   left_inv f := f.left_inv
@@ -2385,7 +2385,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: Injective fun f : r ≃r s => (f : α -> β)
+  结论: 单射 fun f : r ≃r s => (f : α -> β)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -2735,7 +2735,7 @@ lemma symm_bijective
 
 中文:
 引理 symm_bijective
-  结论: Bijective (.symm : (r ≃r s) -> s ≃r r)
+  结论: 双射 (.symm : (r ≃r s) -> s ≃r r)
   证明: bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: bijective_iff_has_inverse, bijective_iff_has_inverse.mpr, symm_symm
@@ -3032,7 +3032,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : r ≃r s)
-  结论: Bijective e
+  结论: 双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective (e : r ≃r s) : Bijective e :=
@@ -3050,7 +3050,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : r ≃r s)
-  结论: Injective e
+  结论: 单射 e
   证明: e.toEquiv.injective
 -/
 protected theorem injective (e : r ≃r s) : Injective e :=
@@ -3068,7 +3068,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : r ≃r s)
-  结论: Surjective e
+  结论: 满射 e
   证明: e.toEquiv.surjective
 -/
 protected theorem surjective (e : r ≃r s) : Surjective e :=
@@ -3173,7 +3173,7 @@ definition preimage
   body: ⟨f, Iff.rfl⟩
 
 中文:
-定义 preimage
+定义 原像
   签名: (f : α ≃ β) (s : β -> β -> 命题)
   定义体: ⟨f, Iff.rfl⟩
 -/
@@ -3196,7 +3196,7 @@ theorem preimage_apply
 中文:
 定理 preimage_apply
   条件: (f : α ≃ β) (s : β -> β -> 命题) (a : α)
-  结论: RelIso.preimage f s a = f a
+  结论: RelIso.原像 f s a = f a
   证明: rfl
 
 @[simp]
@@ -3231,8 +3231,8 @@ instance IsWellOrder.preimage
   body: @RelEmbedding.isWellOrder _ _ (f ⁻¹'o r) r (RelIso.preimage f r) _
 
 中文:
-实例 IsWellOrder.preimage
-  签名: {α : 类型u} (r : α -> α -> 命题) [IsWellOrder α r] (f : β ≃ α)
+实例 是良序.原像
+  签名: {α : 类型u} (r : α -> α -> 命题) [是良序 α r] (f : β ≃ α)
   定义体: @RelEmbedding.isWellOrder _ _ (f ⁻¹'o r) r (RelIso.preimage f r) _
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.isWellOrder, RelIso, RelIso.preimage, isWellOrder, preimage
@@ -3250,8 +3250,8 @@ instance IsWellOrder.ulift
   body: IsWellOrder.preimage r Equiv.ulift
 
 中文:
-实例 IsWellOrder.ulift
-  签名: {α : 类型u} (r : α -> α -> 命题) [IsWellOrder α r]
+实例 是良序.ulift
+  签名: {α : 类型u} (r : α -> α -> 命题) [是良序 α r]
   定义体: IsWellOrder.preimage r Equiv.ulift
 
 Depends on / 依赖: Equiv.ulift, IsWellOrder, IsWellOrder.preimage, preimage
@@ -3272,7 +3272,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: (f : r ↪r s) (H : Surjective f)
+  签名: (f : r ↪r s) (H : 满射 f)
   定义体: ⟨f.toEmbedding.equivOfSurjective H, f.map_rel_iff⟩
 
 Depends on / 依赖: equivOfSurjective, f.map_rel_iff, f.toEmbedding.equivOfSurjective, map_rel_iff, toEmbedding
@@ -3472,7 +3472,7 @@ definition relIsoOfIsEmpty
 
 中文:
 定义 relIsoOfIsEmpty
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [IsEmpty α] [IsEmpty β]
+  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [是空 α] [是空 β]
   定义体: ⟨Equiv.equivOfIsEmpty α β, @fun a => isEmptyElim a⟩
 
 Depends on / 依赖: Equiv.equivOfIsEmpty, equivOfIsEmpty, isEmptyElim
@@ -3492,7 +3492,7 @@ definition sumLexEmpty
 
 中文:
 定义 sumLexEmpty
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [IsEmpty β]
+  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [是空 β]
   定义体: ⟨Equiv.sumEmpty _ _, by simp⟩
 
 Depends on / 依赖: Equiv.sumEmpty, sumEmpty
@@ -3512,7 +3512,7 @@ definition emptySumLex
 
 中文:
 定义 emptySumLex
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [IsEmpty α]
+  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [是空 α]
   定义体: ⟨Equiv.emptySum _ _, by simp⟩
 
 Depends on / 依赖: AtPrime, Equiv.emptySum, FractionRing, IsFractionRing, IsFractionRing.isFractionRing_of_isDomain_of_isLocalization, Localization, Localization.AtPrime, emptySum, isFractionRing_of_isDomain_of_isLocalization, p.primeCompl, primeCompl
@@ -3575,7 +3575,7 @@ definition RelHom.toMap
 @[simp]
 
 中文:
-定义 RelHom.toMap
+定义 关系态射.toMap
   签名: (r : α -> α -> 命题) (f : α -> β)
   定义体: f
   map_rel' {a b} hr := ⟨a, b, hr, rfl, rfl⟩
@@ -3597,9 +3597,9 @@ theorem RelHom.coe_toMap
   proof: rfl
 
 中文:
-定理 RelHom.coe_toMap
+定理 关系态射.coe_toMap
   条件: (r : α -> α -> 命题) (f : α -> β)
-  结论: ⇑(RelHom.toMap r f) = f
+  结论: ⇑(关系态射.toMap r f) = f
   证明: rfl
 -/
 theorem RelHom.coe_toMap (r : α -> α -> Prop) (f : α -> β) : ⇑(RelHom.toMap r f) = f :=
@@ -3617,7 +3617,7 @@ definition RelEmbedding.toMap
 @[simp]
 
 中文:
-定义 RelEmbedding.toMap
+定义 关系嵌入.toMap
   签名: (r : α -> α -> 命题) (f : α ↪ β)
   定义体: f
   map_rel_iff' {a b} := by grind [Relation.onFun_map_eq_of_injective (r := r) f.injective]
@@ -3639,9 +3639,9 @@ theorem RelEmbedding.coe_toMap
   proof: rfl
 
 中文:
-定理 RelEmbedding.coe_toMap
+定理 关系嵌入.coe_toMap
   条件: (r : α -> α -> 命题) (f : α ↪ β)
-  结论: ⇑(RelEmbedding.toMap r f) = f
+  结论: ⇑(关系嵌入.toMap r f) = f
   证明: rfl
 -/
 theorem RelEmbedding.coe_toMap (r : α -> α -> Prop) (f : α ↪ β) : ⇑(RelEmbedding.toMap r f) = f :=
@@ -3769,7 +3769,7 @@ definition RelHom.ofOnFun
 @[simp]
 
 中文:
-定义 RelHom.ofOnFun
+定义 关系态射.ofOnFun
   签名: (r : β -> β -> 命题) (f : α -> β)
   定义体: f
   map_rel' := id
@@ -3791,9 +3791,9 @@ theorem RelHom.coe_ofOnFun
   proof: rfl
 
 中文:
-定理 RelHom.coe_ofOnFun
+定理 关系态射.coe_ofOnFun
   条件: (r : β -> β -> 命题) (f : α -> β)
-  结论: ⇑(RelHom.ofOnFun r f) = f
+  结论: ⇑(关系态射.ofOnFun r f) = f
   证明: rfl
 -/
 theorem RelHom.coe_ofOnFun (r : β -> β -> Prop) (f : α -> β) : ⇑(RelHom.ofOnFun r f) = f :=
@@ -3811,7 +3811,7 @@ definition RelEmbedding.ofOnFun
 @[simp]
 
 中文:
-定义 RelEmbedding.ofOnFun
+定义 关系嵌入.ofOnFun
   签名: (r : β -> β -> 命题) (f : α ↪ β)
   定义体: f
   map_rel_iff' := by rfl
@@ -3833,9 +3833,9 @@ theorem RelEmbedding.coe_ofOnFun
   proof: rfl
 
 中文:
-定理 RelEmbedding.coe_ofOnFun
+定理 关系嵌入.coe_ofOnFun
   条件: (r : β -> β -> 命题) (f : α ↪ β)
-  结论: ⇑(RelEmbedding.ofOnFun r f) = f
+  结论: ⇑(关系嵌入.ofOnFun r f) = f
   证明: rfl
 -/
 theorem RelEmbedding.coe_ofOnFun (r : β -> β -> Prop) (f : α ↪ β) : ⇑(RelEmbedding.ofOnFun r f) = f :=

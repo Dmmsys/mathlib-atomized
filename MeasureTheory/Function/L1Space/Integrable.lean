@@ -65,8 +65,8 @@ definition Integrable
   body: AEStronglyMeasurable f μ ∧ HasFiniteIntegral f μ
 
 中文:
-定义 Integrable
-  签名: {α} {_ : MeasurableSpace α} (f : α -> ε)
+定义 可积
+  签名: {α} {_ : 可测空间 α} (f : α -> ε)
   定义体: AEStronglyMeasurable f μ ∧ HasFiniteIntegral f μ
 
 Depends on / 依赖: AEStronglyMeasurable, HasFiniteIntegral, volume_tac
@@ -93,7 +93,7 @@ theorem memLp_one_iff_integrable
 中文:
 定理 memLp_one_iff_integrable
   条件: {f : α -> ε}
-  结论: MemLp f 1 μ ↔ 整数egrable f μ
+  结论: MemLp f 1 μ ↔ 可积 f μ
   证明: by
   simp_rw [Integrable, hasFiniteIntegral_iff_enorm, MemLp, eLpNorm_one_eq_lintegral_enorm]
 
@@ -116,8 +116,8 @@ theorem Integrable.aestronglyMeasurable
 @[fun_prop]
 
 中文:
-定理 Integrable.aestronglyMeasurable
-  条件: {f : α -> ε} (hf : 整数egrable f μ)
+定理 可积.aestronglyMeasurable
+  条件: {f : α -> ε} (hf : 可积 f μ)
   证明: hf.1
 
 @[fun_prop]
@@ -138,8 +138,8 @@ theorem Integrable.aemeasurable
 @[fun_prop]
 
 中文:
-定理 Integrable.aemeasurable
-  结论: [MeasurableSpace ε] [BorelSpace ε] [PseudoMetrizableSpace ε]
+定理 可积.aemeasurable
+  结论: [可测空间 ε] [Borel空间 ε] [PseudoMetrizable空间 ε]
   证明: hf.aestronglyMeasurable.aemeasurable
 
 @[fun_prop]
@@ -161,8 +161,8 @@ theorem Integrable.hasFiniteIntegral
   proof: hf.2
 
 中文:
-定理 Integrable.hasFiniteIntegral
-  条件: {f : α -> ε} (hf : 整数egrable f μ)
+定理 可积.hasFinite整数egral
+  条件: {f : α -> ε} (hf : 可积 f μ)
   结论: HasFinite整数egral f μ
   证明: hf.2
 -/
@@ -178,8 +178,8 @@ theorem Integrable.mono_enorm
   proof: ⟨hf, hg.hasFiniteIntegral.mono_enorm h⟩
 
 中文:
-定理 Integrable.mono_enorm
-  结论: {f : α -> ε} {g : α -> ε'} (hg : 整数egrable g μ)
+定理 可积.mono_enorm
+  结论: {f : α -> ε} {g : α -> ε'} (hg : 可积 g μ)
   证明: ⟨hf, hg.hasFiniteIntegral.mono_enorm h⟩
 
 Depends on / 依赖: hasFiniteIntegral, hg.hasFiniteIntegral.mono_enorm, mono_enorm
@@ -197,8 +197,8 @@ theorem Integrable.mono
   proof: ⟨hf, hg.hasFiniteIntegral.mono h⟩
 
 中文:
-定理 Integrable.mono
-  结论: {f : α -> β} {g : α -> γ} (hg : 整数egrable g μ)
+定理 可积.mono
+  结论: {f : α -> β} {g : α -> γ} (hg : 可积 g μ)
   证明: ⟨hf, hg.hasFiniteIntegral.mono h⟩
 -/
 theorem Integrable.mono {f : α -> β} {g : α -> γ} (hg : Integrable g μ)
@@ -214,8 +214,8 @@ theorem Integrable.mono_nonneg
   proof: ⟨hf, hg.hasFiniteIntegral.mono_nonneg hnonneg h⟩
 
 中文:
-定理 Integrable.mono_nonneg
-  结论: [Lattice β] [HasSolidNorm β] [AddLeftMono β] {f g : α -> β}
+定理 可积.mono_nonneg
+  结论: [格 β] [有Solid范数 β] [AddLeftMono β] {f g : α -> β}
   证明: ⟨hf, hg.hasFiniteIntegral.mono_nonneg hnonneg h⟩
 
 Depends on / 依赖: hasFiniteIntegral, hg.hasFiniteIntegral.mono_nonneg, hnonneg, mono_nonneg
@@ -235,8 +235,8 @@ theorem Integrable.mono'_enorm
   proof: ⟨hf, hg.hasFiniteIntegral.mono_enorm h⟩
 
 中文:
-定理 Integrable.mono'_enorm
-  结论: {f : α -> ε} {g : α -> 实数>=0∞} (hg : 整数egrable g μ)
+定理 可积.mono'_enorm
+  结论: {f : α -> ε} {g : α -> 实数>=0∞} (hg : 可积 g μ)
   证明: ⟨hf, hg.hasFiniteIntegral.mono_enorm h⟩
 
 Depends on / 依赖: hasFiniteIntegral, hg.hasFiniteIntegral.mono_enorm, mono_enorm
@@ -254,8 +254,8 @@ theorem Integrable.mono'
   proof: ⟨hf, hg.hasFiniteIntegral.mono' h⟩
 
 中文:
-定理 Integrable.mono'
-  结论: {f : α -> β} {g : α -> 实数} (hg : 整数egrable g μ)
+定理 可积.mono'
+  结论: {f : α -> β} {g : α -> 实数} (hg : 可积 g μ)
   证明: ⟨hf, hg.hasFiniteIntegral.mono' h⟩
 
 Depends on / 依赖: _term_iff, not_lt, not_lt.mpr, tsum_eq_zero_of_not_summable
@@ -273,8 +273,8 @@ theorem Integrable.congr'_enorm
   proof: ⟨hg, hf.hasFiniteIntegral.congr'_enorm h⟩
 
 中文:
-定理 Integrable.congr'_enorm
-  结论: {f : α -> ε} {g : α -> ε'} (hf : 整数egrable f μ)
+定理 可积.congr'_enorm
+  结论: {f : α -> ε} {g : α -> ε'} (hf : 可积 f μ)
   证明: ⟨hg, hf.hasFiniteIntegral.congr'_enorm h⟩
 
 Depends on / 依赖: _enorm, hasFiniteIntegral, hf.hasFiniteIntegral.congr
@@ -292,8 +292,8 @@ theorem Integrable.congr'
   proof: ⟨hg, hf.hasFiniteIntegral.congr' h⟩
 
 中文:
-定理 Integrable.congr'
-  结论: {f : α -> β} {g : α -> γ} (hf : 整数egrable f μ)
+定理 可积.congr'
+  结论: {f : α -> β} {g : α -> γ} (hf : 可积 f μ)
   证明: ⟨hg, hf.hasFiniteIntegral.congr' h⟩
 -/
 theorem Integrable.congr' {f : α -> β} {g : α -> γ} (hf : Integrable f μ)
@@ -348,9 +348,9 @@ theorem Integrable.congr
   proof: ⟨hf.1.congr h, hf.2.congr h⟩
 
 中文:
-定理 Integrable.congr
-  条件: {f g : α -> ε} (hf : 整数egrable f μ) (h : f =ᵐ[μ] g)
-  结论: 整数egrable g μ
+定理 可积.congr
+  条件: {f g : α -> ε} (hf : 可积 f μ) (h : f =ᵐ[μ] g)
+  结论: 可积 g μ
   证明: ⟨hf.1.congr h, hf.2.congr h⟩
 -/
 theorem Integrable.congr {f g : α -> ε} (hf : Integrable f μ) (h : f =ᵐ[μ] g) : Integrable g μ :=
@@ -368,7 +368,7 @@ theorem integrable_congr
 中文:
 定理 integrable_congr
   条件: {f g : α -> ε} (h : f =ᵐ[μ] g)
-  结论: 整数egrable f μ ↔ 整数egrable g μ
+  结论: 可积 f μ ↔ 可积 g μ
   证明: ⟨fun hf => hf.congr h, fun hg => hg.congr h.symm⟩
 
 Depends on / 依赖: h.symm, hf.congr, hg.congr
@@ -414,7 +414,7 @@ lemma integrable_const_iff
 中文:
 引理 integrable_const_iff
   条件: {c : β}
-  结论: 整数egrable (fun _ : α => c) μ ↔ c = 0 ∨ IsFiniteMeasure μ
+  结论: 可积 (fun _ : α => c) μ ↔ c = 0 ∨ 是有限测度 μ
   证明: by
   rw [integrable_const_iff_enorm enorm_ne_top]
   simp
@@ -476,8 +476,8 @@ theorem Integrable.of_mem_Icc_enorm
   proof: ⟨hX.aestronglyMeasurable, .of_mem_Icc_of_ne_top ha hb h⟩
 
 中文:
-定理 Integrable.of_mem_Icc_enorm
-  结论: [IsFiniteMeasure μ]
+定理 可积.of_mem_Icc_enorm
+  结论: [是有限测度 μ]
   证明: ⟨hX.aestronglyMeasurable, .of_mem_Icc_of_ne_top ha hb h⟩
 
 Depends on / 依赖: aestronglyMeasurable, hX.aestronglyMeasurable, of_mem_Icc_of_ne_top
@@ -499,8 +499,8 @@ theorem Integrable.of_mem_Icc
 @[simp, fun_prop]
 
 中文:
-定理 Integrable.of_mem_Icc
-  结论: [IsFiniteMeasure μ] (a b : 实数) {X : α -> 实数} (hX : AEMeasurable X μ)
+定理 可积.of_mem_Icc
+  结论: [是有限测度 μ] (a b : 实数) {X : α -> 实数} (hX : 几乎处处可测 X μ)
   证明: ⟨hX.aestronglyMeasurable, .of_mem_Icc a b h⟩
 
 @[simp, fun_prop]
@@ -525,7 +525,7 @@ theorem integrable_const_enorm
 
 中文:
 定理 integrable_const_enorm
-  条件: [IsFiniteMeasure μ] {c : ε} (hc : ‖c‖ₑ != ∞)
+  条件: [是有限测度 μ] {c : ε} (hc : ‖c‖ₑ != ∞)
   证明: (integrable_const_iff_enorm hc).2 .inr ‹_›
 
 @[fun_prop]
@@ -548,8 +548,8 @@ theorem integrable_const
 
 中文:
 定理 integrable_const
-  条件: [IsFiniteMeasure μ] (c : β)
-  结论: 整数egrable (fun _ : α => c) μ
+  条件: [是有限测度 μ] (c : β)
+  结论: 可积 (fun _ : α => c) μ
   证明: integrable_const_iff.2 .inr ‹_›
 
 Depends on / 依赖: Complex.exp_add, Int.cast_add, Int.cast_one, _term, _undef, add_sub_cancel_right, cast_add, cast_one, conv_rhs, exp_add, integrable_const_iff, le_or_gt, mul_add, mul_assoc, mul_comm, mul_one, mul_zero, simp_rw, sub_mul, sub_zero
@@ -568,8 +568,8 @@ lemma Integrable.of_finite
   proof: ⟨.of_discrete, .of_finite⟩
 
 中文:
-引理 Integrable.of_finite
-  条件: [Finite α] [MeasurableSingletonClass α] [IsFiniteMeasure μ] {f : α -> β}
+引理 可积.of_finite
+  条件: [有限 α] [MeasurableSingleton类 α] [是有限测度 μ] {f : α -> β}
   证明: ⟨.of_discrete, .of_finite⟩
 
 Depends on / 依赖: Equiv.neg, Equiv.neg_apply, _term, neg_apply, neg_mul, of_discrete, of_finite, ring_nf, tsum_eq, tsum_neg
@@ -587,9 +587,9 @@ lemma Integrable.of_isEmpty
   proof: .of_finite
 
 中文:
-引理 Integrable.of_isEmpty
-  条件: [IsEmpty α] {f : α -> β}
-  结论: 整数egrable f μ
+引理 可积.of_isEmpty
+  条件: [是空 α] {f : α -> β}
+  结论: 可积 f μ
   证明: .of_finite
 
 Depends on / 依赖: Complex.exp_conj, _neg_left, _term, conj_I, conj_ofReal, conj_tsum, exp_conj, map_add, map_mul, map_pow, neg_inj, ofReal_intCast, ofReal_ofNat, of_finite, ring_nf, simp_rw, tsum_neg
@@ -605,8 +605,8 @@ lemma Integrable.of_subsingleton
   proof: .of_finite
 
 中文:
-引理 Integrable.of_subsingleton
-  条件: [Subsingleton α] [IsFiniteMeasure μ] {f : α -> β}
+引理 可积.of_subsingleton
+  条件: [子单例 α] [是有限测度 μ] {f : α -> β}
   证明: .of_finite
 
 Depends on / 依赖: of_finite
@@ -678,7 +678,7 @@ theorem MemLp.integrable_enorm_rpow'
 
 中文:
 定理 MemLp.integrable_enorm_rpow'
-  条件: [IsFiniteMeasure μ] {f : α -> ε} {p : 实数>=0∞} (hf : MemLp f p μ)
+  条件: [是有限测度 μ] {f : α -> ε} {p : 实数>=0∞} (hf : MemLp f p μ)
   证明: by
   by_cases h_zero : p = 0
   · simp [h_zero]
@@ -711,7 +711,7 @@ theorem MemLp.integrable_norm_rpow'
 
 中文:
 定理 MemLp.integrable_norm_rpow'
-  条件: [IsFiniteMeasure μ] {f : α -> β} {p : 实数>=0∞} (hf : MemLp f p μ)
+  条件: [是有限测度 μ] {f : α -> β} {p : 实数>=0∞} (hf : MemLp f p μ)
   证明: by
   by_cases h_zero : p = 0
   · simp [h_zero]
@@ -781,7 +781,7 @@ lemma MemLp.integrable_enorm_pow'
 
 中文:
 引理 MemLp.integrable_enorm_pow'
-  条件: [IsFiniteMeasure μ] {f : α -> ε} {p : 自然数} (hf : MemLp f p μ)
+  条件: [是有限测度 μ] {f : α -> ε} {p : 自然数} (hf : MemLp f p μ)
   证明: by simpa using hf.integrable_enorm_rpow'
 
 Depends on / 依赖: hf.integrable_enorm_rpow, integrable_enorm_rpow
@@ -799,7 +799,7 @@ lemma MemLp.integrable_norm_pow'
 
 中文:
 引理 MemLp.integrable_norm_pow'
-  条件: [IsFiniteMeasure μ] {f : α -> β} {p : 自然数} (hf : MemLp f p μ)
+  条件: [是有限测度 μ] {f : α -> β} {p : 自然数} (hf : MemLp f p μ)
   证明: by simpa using hf.integrable_norm_rpow'
 
 Depends on / 依赖: hf.integrable_norm_rpow, integrable_norm_rpow
@@ -868,7 +868,7 @@ lemma integrable_norm_rpow_of_le
 
 中文:
 引理 integrable_norm_rpow_of_le
-  结论: [IsFiniteMeasure μ] {f : α -> β} (hf : AEStronglyMeasurable f μ)
+  结论: [是有限测度 μ] {f : α -> β} (hf : AEStronglyMeasurable f μ)
   证明: by
   rcases hp.eq_or_lt with (rfl | hp)
   · simp
@@ -903,7 +903,7 @@ lemma integrable_norm_pow_of_le
 
 中文:
 引理 integrable_norm_pow_of_le
-  结论: [IsFiniteMeasure μ] {f : α -> β} (hf : AEStronglyMeasurable f μ)
+  结论: [是有限测度 μ] {f : α -> β} (hf : AEStronglyMeasurable f μ)
   证明: by
   simp_rw [← Real.rpow_natCast] at *
   exact integrable_norm_rpow_of_le hf p.cast_nonneg q.cast_nonneg (by simpa) hint
@@ -926,9 +926,9 @@ theorem Integrable.mono_measure
   proof: ⟨h.aestronglyMeasurable.mono_measure hμ, h.hasFiniteIntegral.mono_measure hμ⟩
 
 中文:
-定理 Integrable.mono_measure
-  条件: {f : α -> ε} (h : 整数egrable f ν) (hμ : μ <= ν)
-  结论: 整数egrable f μ
+定理 可积.mono_measure
+  条件: {f : α -> ε} (h : 可积 f ν) (hμ : μ <= ν)
+  结论: 可积 f μ
   证明: ⟨h.aestronglyMeasurable.mono_measure hμ, h.hasFiniteIntegral.mono_measure hμ⟩
 
 Depends on / 依赖: aestronglyMeasurable, h.aestronglyMeasurable.mono_measure, h.hasFiniteIntegral.mono_measure, hasFiniteIntegral, mono_measure
@@ -949,8 +949,8 @@ theorem Integrable.of_measure_le_smul
 @[fun_prop]
 
 中文:
-定理 Integrable.of_measure_le_smul
-  结论: {ε} [TopologicalSpace ε] [ESeminormedAddMonoid ε]
+定理 可积.of_measure_le_smul
+  结论: {ε} [拓扑空间 ε] [ESeminormedAdd幺半群 ε]
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.of_measure_le_smul hc hμ'_le
@@ -979,8 +979,8 @@ theorem Integrable.add_measure
   exact ⟨hμ.eLpNorm_lt_top, hν.eLpNorm_lt_top⟩
 
 中文:
-定理 Integrable.add_measure
-  结论: [PseudoMetrizableSpace ε]
+定理 可积.add_measure
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   simp_rw [← memLp_one_iff_integrable] at hμ hν ⊢
   refine ⟨hμ.aestronglyMeasurable.add_measure hν.aestronglyMeasurable, ?_⟩
@@ -1009,9 +1009,9 @@ theorem Integrable.left_of_add_measure
   exact h.left_of_add_measure
 
 中文:
-定理 Integrable.left_of_add_measure
-  条件: {f : α -> ε} (h : 整数egrable f (μ + ν))
-  结论: 整数egrable f μ
+定理 可积.left_of_add_measure
+  条件: {f : α -> ε} (h : 可积 f (μ + ν))
+  结论: 可积 f μ
   证明: by
   rw [← memLp_one_iff_integrable] at h ⊢
   exact h.left_of_add_measure
@@ -1035,8 +1035,8 @@ theorem Integrable.right_of_add_measure
 @[simp]
 
 中文:
-定理 Integrable.right_of_add_measure
-  条件: {f : α -> ε} (h : 整数egrable f (μ + ν))
+定理 可积.right_of_add_measure
+  条件: {f : α -> ε} (h : 可积 f (μ + ν))
   证明: by
   rw [← memLp_one_iff_integrable] at h ⊢
   exact h.right_of_add_measure
@@ -1063,7 +1063,7 @@ theorem integrable_add_measure
 
 中文:
 定理 integrable_add_measure
-  条件: [PseudoMetrizableSpace ε] {f : α -> ε}
+  条件: [PseudoMetrizable空间 ε] {f : α -> ε}
   证明: ⟨fun h => ⟨h.left_of_add_measure, h.right_of_add_measure⟩, fun h => h.1.add_measure h.2⟩
 
 @[simp]
@@ -1088,7 +1088,7 @@ theorem integrable_zero_measure
 中文:
 定理 integrable_zero_measure
   条件: {f : α -> ε}
-  结论: 整数egrable f (0 : Measure α)
+  结论: 可积 f (0 : 测度 α)
   证明: by
   constructor <;> fun_prop
 
@@ -1112,7 +1112,7 @@ lemma integrable_dirac
 
 中文:
 引理 integrable_dirac
-  条件: [MeasurableSingletonClass α] {a : α} {f : α -> ε} (hfa : ‖f a‖ₑ < ∞)
+  条件: [MeasurableSingleton类 α] {a : α} {f : α -> ε} (hfa : ‖f a‖ₑ < ∞)
   证明: ⟨aestronglyMeasurable_dirac, by simpa [HasFiniteIntegral]⟩
 
 Depends on / 依赖: HasFiniteIntegral, aestronglyMeasurable_dirac
@@ -1159,7 +1159,7 @@ alias integrable_finset_sum_measure := integrable_finsetSum_measure
 
 中文:
 定理 integrable_finsetSum_measure
-  结论: [PseudoMetrizableSpace ε]
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   classical
   induction s using Finset.induction_on <;> simp [*]
@@ -1196,8 +1196,8 @@ theorem Integrable.smul_measure
 @[fun_prop]
 
 中文:
-定理 Integrable.smul_measure
-  条件: {f : α -> ε} (h : 整数egrable f μ) {c : 实数>=0∞} (hc : c != ∞)
+定理 可积.smul_measure
+  条件: {f : α -> ε} (h : 可积 f μ) {c : 实数>=0∞} (hc : c != ∞)
   证明: by
   rw [← memLp_one_iff_integrable] at h ⊢
   exact h.smul_measure hc
@@ -1223,8 +1223,8 @@ theorem Integrable.smul_measure_nnreal
   simp
 
 中文:
-定理 Integrable.smul_measure_nnreal
-  条件: {f : α -> ε} (h : 整数egrable f μ) {c : 实数>=0}
+定理 可积.smul_measure_nnreal
+  条件: {f : α -> ε} (h : 可积 f μ) {c : 实数>=0}
   证明: by
   apply h.smul_measure
   simp
@@ -1297,9 +1297,9 @@ theorem Integrable.to_average
     simpa
 
 中文:
-定理 Integrable.to_average
-  条件: {f : α -> ε} (h : 整数egrable f μ)
-  结论: 整数egrable f ((μ univ)⁻¹ • μ)
+定理 可积.to_average
+  条件: {f : α -> ε} (h : 可积 f μ)
+  结论: 可积 f ((μ univ)⁻¹ • μ)
   证明: by
   rcases eq_or_ne μ 0 with (rfl | hne)
   · rwa [smul_zero]
@@ -1328,7 +1328,7 @@ theorem integrable_average
 
 中文:
 定理 integrable_average
-  条件: [IsFiniteMeasure μ] {f : α -> ε}
+  条件: [是有限测度 μ] {f : α -> ε}
   证明: by
   classical
   exact (eq_or_ne μ 0).by_cases (fun h => by simp [h]) fun h =>
@@ -1384,7 +1384,7 @@ theorem Integrable.comp_aemeasurable
   proof: (integrable_map_measure hg.aestronglyMeasurable hf).mp hg
 
 中文:
-定理 Integrable.comp_aemeasurable
+定理 可积.comp_aemeasurable
   结论: {f : α -> α'} {g : α' -> ε}
   证明: (integrable_map_measure hg.aestronglyMeasurable hf).mp hg
 
@@ -1403,8 +1403,8 @@ theorem Integrable.comp_measurable
   proof: hg.comp_aemeasurable hf.aemeasurable
 
 中文:
-定理 Integrable.comp_measurable
-  结论: {f : α -> α'} {g : α' -> ε} (hg : 整数egrable g (Measure.map f μ))
+定理 可积.comp_measurable
+  结论: {f : α -> α'} {g : α' -> ε} (hg : 可积 g (测度.map f μ))
   证明: hg.comp_aemeasurable hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, comp_aemeasurable, hf.aemeasurable, hg.comp_aemeasurable
@@ -1426,8 +1426,8 @@ theorem _root_.MeasurableEmbedding.integrable_map_iff
   exact hf.memLp_map_measure_iff
 
 中文:
-定理 _root_.MeasurableEmbedding.integrable_map_iff
-  结论: {f : α -> δ} (hf : MeasurableEmbedding f)
+定理 _root_.可测嵌入.integrable_map_iff
+  结论: {f : α -> δ} (hf : 可测嵌入 f)
   证明: by
   simp_rw [← memLp_one_iff_integrable]
   exact hf.memLp_map_measure_iff
@@ -1474,8 +1474,8 @@ theorem MeasurePreserving.integrable_comp
   exact (integrable_map_measure hg hf.measurable.aemeasurable).symm
 
 中文:
-定理 MeasurePreserving.integrable_comp
-  结论: {ν : Measure δ} {g : δ -> ε} {f : α -> δ}
+定理 保测.integrable_comp
+  结论: {ν : 测度 δ} {g : δ -> ε} {f : α -> δ}
   证明: by
   rw [← hf.map_eq] at hg ⊢
   exact (integrable_map_measure hg hf.measurable.aemeasurable).symm
@@ -1497,8 +1497,8 @@ theorem MeasurePreserving.integrable_comp_of_integrable
   proof: .mpr hg hf.integrable_comp hg.aestronglyMeasurable
 
 中文:
-定理 MeasurePreserving.integrable_comp_of_integrable
-  结论: {ν : Measure δ} {g : δ -> ε} {f : α -> δ}
+定理 保测.integrable_comp_of_integrable
+  结论: {ν : 测度 δ} {g : δ -> ε} {f : α -> δ}
   证明: .mpr hg hf.integrable_comp hg.aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, hf.integrable_comp, hg.aestronglyMeasurable, integrable_comp
@@ -1517,8 +1517,8 @@ theorem MeasurePreserving.integrable_comp_emb
   proof: h₁.map_eq ▸ Iff.symm h₂.integrable_map_iff
 
 中文:
-定理 MeasurePreserving.integrable_comp_emb
-  结论: {f : α -> δ} {ν} (h₁ : MeasurePreserving f μ ν)
+定理 保测.integrable_comp_emb
+  结论: {f : α -> δ} {ν} (h₁ : 保测 f μ ν)
   证明: h₁.map_eq ▸ Iff.symm h₂.integrable_map_iff
 
 Depends on / 依赖: Iff.symm, integrable_map_iff, map_eq
@@ -1540,7 +1540,7 @@ theorem lintegral_edist_lt_top
 
 中文:
 定理 lintegral_edist_lt_top
-  条件: {f g : α -> β} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α -> β} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: lt_of_le_of_lt (lintegral_edist_triangle hf.aestronglyMeasurable aestronglyMeasurable_zero)
     (ENNReal.add_lt_top.2 <| by
       simp_rw [Pi.zero_apply, ← hasFiniteIntegral_iff_edist]
@@ -1573,8 +1573,8 @@ theorem integrable_zero
 
 中文:
 定理 integrable_zero
-  条件: (μ : Measure α)
-  结论: 整数egrable (0 : α -> ε') μ
+  条件: (μ : 测度 α)
+  结论: 可积 (0 : α -> ε') μ
   证明: by
   simp [Integrable, aestronglyMeasurable_zero]
 
@@ -1597,8 +1597,8 @@ theorem Integrable.add'
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 Integrable.add'
-  条件: {f g : α -> ε'} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+定理 可积.add'
+  条件: {f g : α -> ε'} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: calc
     ∫⁻ a, ‖f a + g a‖ₑ ∂μ <= ∫⁻ a, ‖f a‖ₑ + ‖g a‖ₑ ∂μ := lintegral_mono fun _ => enorm_add_le _ _
     _ = _ := lintegral_enorm_add_left hf.aestronglyMeasurable _
@@ -1629,8 +1629,8 @@ theorem Integrable.add
 @[simp]
 
 中文:
-定理 Integrable.add
-  结论: [ContinuousAdd ε']
+定理 可积.add
+  结论: [连续加法 ε']
   证明: ⟨hf.aestronglyMeasurable.add hg.aestronglyMeasurable, hf.add' hg⟩
 
 @[deprecated (since := "2026-03-19")] alias Integrable.add'' := Integrable.fun_add
@@ -1654,8 +1654,8 @@ lemma Integrable.of_subsingleton_codomain
   proof: .congr .of_forall fun _ => Subsingleton.elim _ _ integrable_zero _ _ _
 
 中文:
-引理 Integrable.of_subsingleton_codomain
-  条件: [Subsingleton ε'] {f : α -> ε'}
+引理 可积.of_subsingleton_codomain
+  条件: [子单例 ε'] {f : α -> ε'}
   证明: .congr .of_forall fun _ => Subsingleton.elim _ _ integrable_zero _ _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, integrable_zero, of_forall
@@ -1686,7 +1686,7 @@ theorem integrable_finsetSum'
 
 中文:
 定理 integrable_finsetSum'
-  结论: {ι} (s : Finset ι) {f : ι -> α -> ε'}
+  结论: {ι} (s : 有限集 ι) {f : ι -> α -> ε'}
   证明: Finset.sum_induction f (fun g => Integrable g μ) (fun _ _ => Integrable.add)
     (integrable_zero _ _ _) hf
 
@@ -1717,7 +1717,7 @@ theorem integrable_finsetSum
 
 中文:
 定理 integrable_finsetSum
-  结论: {ι} (s : Finset ι) {f : ι -> α -> ε'}
+  结论: {ι} (s : 有限集 ι) {f : ι -> α -> ε'}
   证明: by
   simpa only [← Finset.sum_apply] using integrable_finsetSum' s hf
 
@@ -1749,9 +1749,9 @@ theorem Integrable.neg
 @[simp]
 
 中文:
-定理 Integrable.neg
-  条件: {f : α -> β} (hf : 整数egrable f μ)
-  结论: 整数egrable (-f) μ
+定理 可积.neg
+  条件: {f : α -> β} (hf : 可积 f μ)
+  结论: 可积 (-f) μ
   证明: ⟨hf.aestronglyMeasurable.neg, by fun_prop⟩
 
 @[deprecated (since := "2026-03-19")] alias Integrable.neg' := Integrable.fun_neg
@@ -1778,7 +1778,7 @@ theorem integrable_neg_iff
 中文:
 定理 integrable_neg_iff
   条件: {f : α -> β}
-  结论: 整数egrable (-f) μ ↔ 整数egrable f μ
+  结论: 可积 (-f) μ ↔ 可积 f μ
   证明: ⟨fun h => neg_neg f ▸ h.neg, Integrable.neg⟩
 
 @[simp]
@@ -1801,7 +1801,7 @@ theorem integrable_fun_neg_iff
 中文:
 定理 integrable_fun_neg_iff
   条件: {f : α -> β}
-  结论: 整数egrable (fun x => -f x) μ ↔ 整数egrable f μ
+  结论: 可积 (fun x => -f x) μ ↔ 可积 f μ
   证明: integrable_neg_iff
 
 Depends on / 依赖: integrable_neg_iff
@@ -1824,7 +1824,7 @@ lemma integrable_add_iff_integrable_right
 
 中文:
 引理 integrable_add_iff_integrable_right
-  条件: {f g : α -> β} (hf : 整数egrable f μ)
+  条件: {f g : α -> β} (hf : 可积 f μ)
   证明: ⟨fun h => show g = f + g + (-f) by simp only [add_neg_cancel_comm] ▸ h.add hf.neg,
     fun h => hf.add h⟩
 
@@ -1849,7 +1849,7 @@ lemma integrable_add_iff_integrable_right'
 
 中文:
 引理 integrable_add_iff_integrable_right'
-  条件: {f g : α -> β} (hf : 整数egrable f μ)
+  条件: {f g : α -> β} (hf : 可积 f μ)
   证明: integrable_add_iff_integrable_right hf
 
 Depends on / 依赖: integrable_add_iff_integrable_right
@@ -1873,7 +1873,7 @@ lemma integrable_add_iff_integrable_left
 
 中文:
 引理 integrable_add_iff_integrable_left
-  条件: {f g : α -> β} (hf : 整数egrable f μ)
+  条件: {f g : α -> β} (hf : 可积 f μ)
   证明: by
   rw [add_comm]; rw [integrable_add_iff_integrable_right hf]
 
@@ -1897,7 +1897,7 @@ lemma integrable_add_iff_integrable_left'
 
 中文:
 引理 integrable_add_iff_integrable_left'
-  条件: {f g : α -> β} (hf : 整数egrable f μ)
+  条件: {f g : α -> β} (hf : 可积 f μ)
   证明: integrable_add_iff_integrable_left hf
 
 Depends on / 依赖: integrable_add_iff_integrable_left
@@ -2021,7 +2021,7 @@ lemma integrable_add_const_iff
 
 中文:
 引理 integrable_add_const_iff
-  条件: [IsFiniteMeasure μ] {f : α -> β} {c : β}
+  条件: [是有限测度 μ] {f : α -> β} {c : β}
   证明: integrable_add_iff_integrable_left (integrable_const _)
 
 Depends on / 依赖: integrable_add_iff_integrable_left, integrable_const
@@ -2040,7 +2040,7 @@ lemma integrable_const_add_iff
 
 中文:
 引理 integrable_const_add_iff
-  条件: [IsFiniteMeasure μ] {f : α -> β} {c : β}
+  条件: [是有限测度 μ] {f : α -> β} {c : β}
   证明: integrable_add_iff_integrable_right (integrable_const _)
 
 Depends on / 依赖: integrable_add_iff_integrable_right, integrable_const
@@ -2062,8 +2062,8 @@ theorem Integrable.sub
 @[fun_prop]
 
 中文:
-定理 Integrable.sub
-  条件: {f g : α -> β} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+定理 可积.sub
+  条件: {f g : α -> β} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 @[fun_prop]
@@ -2083,8 +2083,8 @@ theorem Integrable.sub'
 @[fun_prop]
 
 中文:
-定理 Integrable.sub'
-  条件: {f g : α -> β} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+定理 可积.sub'
+  条件: {f g : α -> β} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by simpa only [sub_eq_add_neg] using! hf.add hg.neg
 
 @[fun_prop]
@@ -2108,9 +2108,9 @@ theorem Integrable.enorm
 @[fun_prop]
 
 中文:
-定理 Integrable.enorm
-  条件: {f : α -> ε} (hf : 整数egrable f μ)
-  结论: 整数egrable (‖f ·‖ₑ) μ
+定理 可积.enorm
+  条件: {f : α -> ε} (hf : 可积 f μ)
+  结论: 可积 (‖f ·‖ₑ) μ
   证明: by
   constructor <;> fun_prop
 
@@ -2135,9 +2135,9 @@ theorem Integrable.norm
 @[fun_prop]
 
 中文:
-定理 Integrable.norm
-  条件: {f : α -> β} (hf : 整数egrable f μ)
-  结论: 整数egrable (fun a => ‖f a‖) μ
+定理 可积.norm
+  条件: {f : α -> β} (hf : 可积 f μ)
+  结论: 可积 (fun a => ‖f a‖) μ
   证明: by
   constructor <;> fun_prop
 
@@ -2162,7 +2162,7 @@ theorem Integrable.inf
 @[fun_prop]
 
 中文:
-定理 Integrable.inf
+定理 可积.下确界
   结论: {β}
   证明: by
   rw [← memLp_one_iff_integrable] at hf hg ⊢
@@ -2193,7 +2193,7 @@ theorem Integrable.sup
 @[fun_prop]
 
 中文:
-定理 Integrable.sup
+定理 可积.上确界
   结论: {β}
   证明: by
   rw [← memLp_one_iff_integrable] at hf hg ⊢
@@ -2222,7 +2222,7 @@ theorem Integrable.abs
   exact hf.abs
 
 中文:
-定理 Integrable.abs
+定理 可积.abs
   结论: {β}
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
@@ -2254,8 +2254,8 @@ theorem Integrable.essSup_smul
       simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm hf.1 g_aestronglyMeasurab
 
 中文:
-定理 Integrable.essSup_smul
-  结论: {R : 类型} [NormedRing R] [Module R β] [IsBoundedSMul R β]
+定理 可积.essSup_smul
+  结论: {R : 类型} [赋范环 R] [模 R β] [是BoundedSMul R β]
   证明: by
   rw [← memLp_one_iff_integrable] at *
   refine ⟨g_aestronglyMeasurable.smul hf.1, ?_⟩
@@ -2294,8 +2294,8 @@ theorem Integrable.smul_essSup
       simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm g_aestronglyMeasurable hf
 
 中文:
-定理 Integrable.smul_essSup
-  结论: {𝕜 : 类型} [NormedRing 𝕜] [MulActionWithZero 𝕜 β]
+定理 可积.smul_essSup
+  结论: {𝕜 : 类型} [赋范环 𝕜] [带零乘法作用 𝕜 β]
   证明: by
   rw [← memLp_one_iff_integrable] at *
   refine ⟨hf.1.smul g_aestronglyMeasurable, ?_⟩
@@ -2463,8 +2463,8 @@ theorem Integrable.prodMk
           _ <= ‖‖f x‖ + ‖g x‖‖ := le_abs_self _⟩
 
 中文:
-定理 Integrable.prodMk
-  条件: {f : α -> β} {g : α -> γ} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+定理 可积.prodMk
+  条件: {f : α -> β} {g : α -> γ} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: ⟨by fun_prop,
 (hf.norm.add' hg.norm).mono
       Eventually.of_forall fun x =>
@@ -2493,7 +2493,7 @@ theorem MemLp.integrable
 
 中文:
 定理 MemLp.integrable
-  结论: {q : 实数>=0∞} (hq1 : 1 <= q) {f : α -> ε} [IsFiniteMeasure μ]
+  结论: {q : 实数>=0∞} (hq1 : 1 <= q) {f : α -> ε} [是有限测度 μ]
   证明: memLp_one_iff_integrable.mp (hfq.mono_exponent hq1)
 
 Depends on / 依赖: hfq.mono_exponent, memLp_one_iff_integrable, memLp_one_iff_integrable.mp, mono_exponent
@@ -2517,8 +2517,8 @@ theorem Integrable.measure_enorm_ge_lt_top
   · simpa only [ENNReal.toReal_one, ENNReal.rpow_one]
 
 中文:
-定理 Integrable.measure_enorm_ge_lt_top
-  结论: {E : 类型} [TopologicalSpace E] [ContinuousENorm E]
+定理 可积.measure_enorm_ge_lt_top
+  结论: {E : 类型} [拓扑空间 E] [余ntinuousE范数 E]
   证明: by
   refine meas_ge_le_mul_pow_eLpNorm_enorm μ one_ne_zero one_ne_top hf.1 hε.ne' (by simp [hε'])
 .trans_lt ?_
@@ -2551,8 +2551,8 @@ theorem Integrable.measure_norm_ge_lt_top
   rw [← Real.enorm_of_nonneg hε.le]; rw [enorm_le_iff_norm_le]; rw [Real.norm_of_nonneg hε.le]
 
 中文:
-定理 Integrable.measure_norm_ge_lt_top
-  条件: {f : α -> β} (hf : 整数egrable f μ) {ε : 实数} (hε : 0 < ε)
+定理 可积.measure_norm_ge_lt_top
+  条件: {f : α -> β} (hf : 可积 f μ) {ε : 实数} (hε : 0 < ε)
   证明: by
   convert! Integrable.measure_enorm_ge_lt_top hf (ofReal_pos.mpr hε) ofReal_ne_top with x
   rw [← Real.enorm_of_nonneg hε.le]; rw [enorm_le_iff_norm_le]; rw [Real.norm_of_nonneg hε.le]
@@ -2577,8 +2577,8 @@ lemma Integrable.measure_norm_gt_lt_top_enorm
     (hf.measure_enorm_ge_lt_top hε hε')
 
 中文:
-引理 Integrable.measure_norm_gt_lt_top_enorm
-  结论: {E : 类型} [TopologicalSpace E] [ContinuousENorm E]
+引理 可积.measure_norm_gt_lt_top_enorm
+  结论: {E : 类型} [拓扑空间 E] [余ntinuousE范数 E]
   证明: by
   by_cases hε' : ε = ∞
   · simp [hε']
@@ -2604,8 +2604,8 @@ lemma Integrable.measure_norm_gt_lt_top
     (hf.measure_norm_ge_lt_top hε)
 
 中文:
-引理 Integrable.measure_norm_gt_lt_top
-  条件: {f : α -> β} (hf : 整数egrable f μ) {ε : 实数} (hε : 0 < ε)
+引理 可积.measure_norm_gt_lt_top
+  条件: {f : α -> β} (hf : 可积 f μ) {ε : 实数} (hε : 0 < ε)
   证明: lt_of_le_of_lt (measure_mono (fun _ h => (Set.mem_ofPred_eq ▸ h).le))
     (hf.measure_norm_ge_lt_top hε)
 
@@ -2627,8 +2627,8 @@ lemma Integrable.measure_ge_lt_top
     (hf.measure_norm_ge_lt_top (by positivity [ε_pos.ne']))
 
 中文:
-引理 Integrable.measure_ge_lt_top
-  结论: {f : α -> β} [Lattice β] [HasSolidNorm β] [AddLeftMono β]
+引理 可积.measure_ge_lt_top
+  结论: {f : α -> β} [格 β] [有Solid范数 β] [AddLeftMono β]
   证明: lt_of_le_of_lt (measure_mono fun x hx => norm_le_norm_of_abs_le_abs <|
     (abs_of_nonneg ε_pos.le).symm ▸ hx.trans (le_abs_self (f x)))
     (hf.measure_norm_ge_lt_top (by positivity [ε_pos.ne']))
@@ -2655,8 +2655,8 @@ lemma Integrable.measure_le_lt_top
 exact norm_le_norm_of_abs_le_abs abs_of_nonpos c_neg.le ▸ this.trans (neg_le_abs _)
 
 中文:
-引理 Integrable.measure_le_lt_top
-  结论: {f : α -> β} [Lattice β] [HasSolidNorm β] [AddLeftMono β]
+引理 可积.measure_le_lt_top
+  结论: {f : α -> β} [格 β] [有Solid范数 β] [AddLeftMono β]
   证明: by
   have : 0 < ‖c‖ := by positivity [c_neg.ne]
   refine lt_of_le_of_lt (measure_mono fun x hx => ?_) (hf.measure_norm_ge_lt_top this)
@@ -2683,8 +2683,8 @@ lemma Integrable.measure_gt_lt_top
     (Integrable.measure_ge_lt_top hf ε_pos)
 
 中文:
-引理 Integrable.measure_gt_lt_top
-  结论: {f : α -> β} [Lattice β] [HasSolidNorm β] [AddLeftMono β]
+引理 可积.measure_gt_lt_top
+  结论: {f : α -> β} [格 β] [有Solid范数 β] [AddLeftMono β]
   证明: lt_of_le_of_lt (measure_mono (fun _ hx => (Set.mem_ofPred_eq ▸ hx).le))
     (Integrable.measure_ge_lt_top hf ε_pos)
 
@@ -2706,8 +2706,8 @@ lemma Integrable.measure_lt_lt_top
     (Integrable.measure_le_lt_top hf c_neg)
 
 中文:
-引理 Integrable.measure_lt_lt_top
-  结论: {f : α -> β} [Lattice β] [HasSolidNorm β] [AddLeftMono β]
+引理 可积.measure_lt_lt_top
+  结论: {f : α -> β} [格 β] [有Solid范数 β] [AddLeftMono β]
   证明: lt_of_le_of_lt (measure_mono (fun _ hx => (Set.mem_ofPred_eq ▸ hx).le))
     (Integrable.measure_le_lt_top hf c_neg)
 
@@ -2761,8 +2761,8 @@ theorem Integrable.real_toNNReal
   simp [abs_le, le_abs_self]
 
 中文:
-定理 Integrable.real_toNNReal
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+定理 可积.real_toNN实数
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   refine ⟨by fun_prop, ?_⟩
   rw [hasFiniteIntegral_iff_norm]
@@ -2794,7 +2794,7 @@ theorem ofReal_toReal_ae_eq
   simp only [hx.ne, ofReal_toReal, Ne, not_false_iff]
 
 中文:
-定理 ofReal_toReal_ae_eq
+定理 of实数_to实数_ae_eq
   条件: {f : α -> 实数>=0∞} (hf : 对任意ᵐ x ∂μ, f x < ∞)
   证明: by
   filter_upwards [hf]
@@ -2821,7 +2821,7 @@ theorem coe_toNNReal_ae_eq
   simp only [hx.ne, Ne, not_false_iff, coe_toNNReal]
 
 中文:
-定理 coe_toNNReal_ae_eq
+定理 coe_toNN实数_ae_eq
   条件: {f : α -> 实数>=0∞} (hf : 对任意ᵐ x ∂μ, f x < ∞)
   证明: by
   filter_upwards [hf]
@@ -2901,7 +2901,7 @@ theorem integrable_withDensity_iff_integrable_coe_smul
 
 中文:
 定理 integrable_withDensity_iff_integrable_coe_smul
-  结论: {f : α -> 实数>=0} (hf : Measurable f)
+  结论: {f : α -> 实数>=0} (hf : 可测 f)
   证明: by
   by_cases H : AEStronglyMeasurable (fun x : α => (f x : Real) • g x) μ
   · simp only [Integrable, aestronglyMeasurable_withDensity_iff hf, hasFiniteIntegral_iff_enorm, H,
@@ -2933,7 +2933,7 @@ theorem integrable_withDensity_iff_integrable_smul
 
 中文:
 定理 integrable_withDensity_iff_integrable_smul
-  条件: {f : α -> 实数>=0} (hf : Measurable f) {g : α -> E}
+  条件: {f : α -> 实数>=0} (hf : 可测 f) {g : α -> E}
   证明: integrable_withDensity_iff_integrable_coe_smul hf
 
 Depends on / 依赖: integrable_withDensity_iff_integrable_coe_smul
@@ -2955,7 +2955,7 @@ theorem integrable_withDensity_iff_integrable_smul'
 
 中文:
 定理 integrable_withDensity_iff_integrable_smul'
-  结论: {f : α -> 实数>=0∞} (hf : Measurable f)
+  结论: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: by
   rw [← withDensity_congr_ae (coe_toNNReal_ae_eq hflt)]; rw [integrable_withDensity_iff_integrable_smul]
   · simp_rw [NNReal.smul_def, ENNReal.toReal]
@@ -2986,7 +2986,7 @@ theorem integrable_withDensity_iff_integrable_coe_smul₀
 
 中文:
 定理 integrable_withDensity_iff_integrable_coe_smul₀
-  结论: {f : α -> 实数>=0} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0} (hf : 几乎处处可测 f μ)
   证明: calc
     Integrable g (μ.withDensity fun x => f x) ↔
         Integrable g (μ.withDensity fun x => (hf.mk f x : Real>=0)) := by
@@ -3027,7 +3027,7 @@ theorem integrable_withDensity_iff_integrable_smul₀'
 
 中文:
 定理 integrable_withDensity_iff_integrable_smul₀'
-  结论: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   rw [← withDensity_congr_ae (coe_toNNReal_ae_eq hflt)]; rw [integrable_withDensity_iff_integrable_coe_smul₀]
   · congr!
@@ -3052,7 +3052,7 @@ theorem integrable_withDensity_iff_integrable_smul₀
 
 中文:
 定理 integrable_withDensity_iff_integrable_smul₀
-  结论: {f : α -> 实数>=0} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0} (hf : 几乎处处可测 f μ)
   证明: integrable_withDensity_iff_integrable_coe_smul₀ hf
 -/
 theorem integrable_withDensity_iff_integrable_smul₀ {f : α -> Real>=0} (hf : AEMeasurable f μ)
@@ -3074,7 +3074,7 @@ theorem integrable_withDensity_iff
 
 中文:
 定理 integrable_withDensity_iff
-  结论: {f : α -> 实数>=0∞} (hf : Measurable f) (hflt : 对任意ᵐ x ∂μ, f x < ∞)
+  结论: {f : α -> 实数>=0∞} (hf : 可测 f) (hflt : 对任意ᵐ x ∂μ, f x < ∞)
   证明: by
   have : (fun x => g x * (f x).toReal) = fun x => (f x).toReal • g x := by simp [mul_comm]
   rw [this]
@@ -3103,7 +3103,7 @@ theorem memL1_smul_of_L1_withDensity
 
 中文:
 定理 memL1_smul_of_L1_withDensity
-  结论: {f : α -> 实数>=0} (f_meas : Measurable f)
+  结论: {f : α -> 实数>=0} (f_meas : 可测 f)
   证明: memLp_one_iff_integrable.2
 (integrable_withDensity_iff_integrable_smul f_meas).1 memLp_one_iff_integrable.1 (Lp.memLp u)
 
@@ -3133,7 +3133,7 @@ definition withDensitySMulLI
 
 中文:
 定义 withDensitySMulLI
-  签名: {f : α -> 实数>=0} (f_meas : Measurable f)
+  签名: {f : α -> 实数>=0} (f_meas : 可测 f)
   定义体: (memL1_smul_of_L1_withDensity f_meas u).toLp _
   map_add' := by
     intro u v
@@ -3200,7 +3200,7 @@ theorem withDensitySMulLI_apply
 
 中文:
 定理 withDensitySMulLI_apply
-  结论: {f : α -> 实数>=0} (f_meas : Measurable f)
+  结论: {f : α -> 实数>=0} (f_meas : 可测 f)
   证明: rfl
 
 Depends on / 依赖: f_meas
@@ -3227,8 +3227,8 @@ theorem mem_L1_toReal_of_lintegral_ne_top
     hasFiniteIntegral_toReal_of_lintegral_ne_top hfi⟩
 
 中文:
-定理 mem_L1_toReal_of_lintegral_ne_top
-  结论: {f : α -> 实数>=0∞} (hfm : AEMeasurable f μ)
+定理 mem_L1_to实数_of_lintegral_ne_top
+  结论: {f : α -> 实数>=0∞} (hfm : 几乎处处可测 f μ)
   证明: by
   rw [MemLp]; rw [eLpNorm_one_eq_lintegral_enorm]
   exact ⟨(AEMeasurable.ennreal_toReal hfm).aestronglyMeasurable,
@@ -3251,8 +3251,8 @@ theorem integrable_toReal_of_lintegral_ne_top
   proof: memLp_one_iff_integrable.1 mem_L1_toReal_of_lintegral_ne_top hfm hfi
 
 中文:
-定理 integrable_toReal_of_lintegral_ne_top
-  结论: {f : α -> 实数>=0∞} (hfm : AEMeasurable f μ)
+定理 integrable_to实数_of_lintegral_ne_top
+  结论: {f : α -> 实数>=0∞} (hfm : 几乎处处可测 f μ)
   证明: memLp_one_iff_integrable.1 mem_L1_toReal_of_lintegral_ne_top hfm hfi
 
 Depends on / 依赖: memLp_one_iff_integrable, mem_L1_toReal_of_lintegral_ne_top
@@ -3272,8 +3272,8 @@ lemma integrable_toReal_iff
   simp only [hf.ennreal_toReal.aestronglyMeasurable, ne_eq, true_and]
 
 中文:
-引理 integrable_toReal_iff
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (hf_ne_top : 对任意ᵐ x ∂μ, f x != ∞)
+引理 integrable_to实数_iff
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (hf_ne_top : 对任意ᵐ x ∂μ, f x != ∞)
   证明: by
   rw [Integrable]; rw [hasFiniteIntegral_toReal_iff hf_ne_top]
   simp only [hf.ennreal_toReal.aestronglyMeasurable, ne_eq, true_and]
@@ -3296,7 +3296,7 @@ lemma lintegral_ofReal_ne_top_iff_integrable
   simp [hfm]
 
 中文:
-引理 lintegral_ofReal_ne_top_iff_integrable
+引理 lintegral_of实数_ne_top_iff_integrable
   结论: {f : α -> 实数}
   证明: by
   rw [Integrable]; rw [hasFiniteIntegral_iff_ofReal hf]
@@ -3330,8 +3330,8 @@ theorem Integrable.pos_part
 @[fun_prop]
 
 中文:
-定理 Integrable.pos_part
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+定理 可积.pos_part
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   constructor <;> fun_prop
 
@@ -3353,8 +3353,8 @@ theorem Integrable.neg_part
   proof: hf.neg.pos_part
 
 中文:
-定理 Integrable.neg_part
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+定理 可积.neg_part
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: hf.neg.pos_part
 
 Depends on / 依赖: hf.neg.pos_part, pos_part
@@ -3383,8 +3383,8 @@ theorem Integrable.smul
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 Integrable.smul
-  结论: [NormedAddCommGroup 𝕜] [SMulZeroClass 𝕜 β] [IsBoundedSMul 𝕜 β] (c : 𝕜)
+定理 可积.smul
+  结论: [赋范交换加群 𝕜] [SMulZero类 𝕜 β] [是BoundedSMul 𝕜 β] (c : 𝕜)
   证明: by
   constructor <;> fun_prop
 
@@ -3404,7 +3404,7 @@ theorem Integrable.smul_enorm
   constructor <;> fun_prop
 
 中文:
-定理 Integrable.smul_enorm
+定理 可积.smul_enorm
   证明: by
   constructor <;> fun_prop
 
@@ -3424,8 +3424,8 @@ theorem _root_.IsUnit.integrable_smul_iff
   proof: and_congr hc.aestronglyMeasurable_const_smul_iff (hasFiniteIntegral_smul_iff hc f)
 
 中文:
-定理 _root_.IsUnit.integrable_smul_iff
-  结论: [NormedRing 𝕜] [MulActionWithZero 𝕜 β]
+定理 _root_.是单位.integrable_smul_iff
+  结论: [赋范环 𝕜] [带零乘法作用 𝕜 β]
   证明: and_congr hc.aestronglyMeasurable_const_smul_iff (hasFiniteIntegral_smul_iff hc f)
 
 Depends on / 依赖: aestronglyMeasurable_const_smul_iff, and_congr, hasFiniteIntegral_smul_iff, hc.aestronglyMeasurable_const_smul_iff
@@ -3445,7 +3445,7 @@ theorem integrable_smul_iff
 
 中文:
 定理 integrable_smul_iff
-  结论: [NormedDivisionRing 𝕜] [MulActionWithZero 𝕜 β]
+  结论: [NormedDivision环 𝕜] [带零乘法作用 𝕜 β]
   证明: (IsUnit.mk0 _ hc).integrable_smul_iff f
 
 Depends on / 依赖: IsUnit, IsUnit.mk0, integrable_smul_iff
@@ -3465,7 +3465,7 @@ theorem integrable_fun_smul_iff
 
 中文:
 定理 integrable_fun_smul_iff
-  结论: [NormedDivisionRing 𝕜] [MulActionWithZero 𝕜 β] [IsBoundedSMul 𝕜 β]
+  结论: [NormedDivision环 𝕜] [带零乘法作用 𝕜 β] [是BoundedSMul 𝕜 β]
   证明: integrable_smul_iff hc f
 
 Depends on / 依赖: integrable_smul_iff
@@ -3488,8 +3488,8 @@ theorem Integrable.smul_of_top_right
   exact MemLp.smul hf hφ
 
 中文:
-定理 Integrable.smul_of_top_right
-  结论: {f : α -> β} {φ : α -> 𝕜} (hf : 整数egrable f μ)
+定理 可积.smul_of_top_right
+  结论: {f : α -> β} {φ : α -> 𝕜} (hf : 可积 f μ)
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact MemLp.smul hf hφ
@@ -3510,8 +3510,8 @@ theorem Integrable.bdd_smul
   proof: hf.smul_of_top_right (memLp_top_of_bound hφ1 C hφ2)
 
 中文:
-定理 Integrable.bdd_smul
-  结论: {f : α -> β} {φ : α -> 𝕜} (hf : 整数egrable f μ)
+定理 可积.bdd_smul
+  结论: {f : α -> β} {φ : α -> 𝕜} (hf : 可积 f μ)
   证明: hf.smul_of_top_right (memLp_top_of_bound hφ1 C hφ2)
 
 Depends on / 依赖: hf.smul_of_top_right, memLp_top_of_bound, smul_of_top_right
@@ -3532,8 +3532,8 @@ theorem Integrable.smul_of_top_left
   exact MemLp.smul hf hφ
 
 中文:
-定理 Integrable.smul_of_top_left
-  结论: {f : α -> β} {φ : α -> 𝕜} (hφ : 整数egrable φ μ)
+定理 可积.smul_of_top_left
+  结论: {f : α -> β} {φ : α -> 𝕜} (hφ : 可积 φ μ)
   证明: by
   rw [← memLp_one_iff_integrable] at hφ ⊢
   exact MemLp.smul hf hφ
@@ -3556,8 +3556,8 @@ theorem Integrable.smul_bdd
 @[fun_prop]
 
 中文:
-定理 Integrable.smul_bdd
-  结论: {f : α -> β} {φ : α -> 𝕜} (hφ : 整数egrable φ μ)
+定理 可积.smul_bdd
+  结论: {f : α -> β} {φ : α -> 𝕜} (hφ : 可积 φ μ)
   证明: hφ.smul_of_top_left (memLp_top_of_bound hf1 C hf2)
 
 @[fun_prop]
@@ -3579,8 +3579,8 @@ theorem Integrable.smul_const
   proof: hf.smul_of_top_left (memLp_top_const c)
 
 中文:
-定理 Integrable.smul_const
-  条件: {f : α -> 𝕜} (hf : 整数egrable f μ) (c : β)
+定理 可积.smul_const
+  条件: {f : α -> 𝕜} (hf : 可积 f μ) (c : β)
   证明: hf.smul_of_top_left (memLp_top_const c)
 
 Depends on / 依赖: hf.smul_of_top_left, memLp_top_const, smul_of_top_left
@@ -3647,8 +3647,8 @@ theorem Integrable.const_mul
 @[fun_prop]
 
 中文:
-定理 Integrable.const_mul
-  条件: {f : α -> 𝕜} (h : 整数egrable f μ) (c : 𝕜)
+定理 可积.const_mul
+  条件: {f : α -> 𝕜} (h : 可积 f μ) (c : 𝕜)
   证明: h.smul c
 
 @[fun_prop]
@@ -3671,8 +3671,8 @@ theorem Integrable.const_mul'
 @[fun_prop]
 
 中文:
-定理 Integrable.const_mul'
-  条件: {f : α -> 𝕜} (h : 整数egrable f μ) (c : 𝕜)
+定理 可积.const_mul'
+  条件: {f : α -> 𝕜} (h : 可积 f μ) (c : 𝕜)
   证明: Integrable.const_mul h c
 
 @[fun_prop]
@@ -3695,8 +3695,8 @@ theorem Integrable.mul_const
 @[fun_prop]
 
 中文:
-定理 Integrable.mul_const
-  条件: {f : α -> 𝕜} (h : 整数egrable f μ) (c : 𝕜)
+定理 可积.mul_const
+  条件: {f : α -> 𝕜} (h : 可积 f μ) (c : 𝕜)
   证明: h.smul (MulOpposite.op c)
 
 @[fun_prop]
@@ -3717,8 +3717,8 @@ theorem Integrable.mul_const'
   proof: Integrable.mul_const h c
 
 中文:
-定理 Integrable.mul_const'
-  条件: {f : α -> 𝕜} (h : 整数egrable f μ) (c : 𝕜)
+定理 可积.mul_const'
+  条件: {f : α -> 𝕜} (h : 可积 f μ) (c : 𝕜)
   证明: Integrable.mul_const h c
 
 Depends on / 依赖: Integrable, Integrable.mul_const, mul_const
@@ -3737,7 +3737,7 @@ theorem integrable_const_mul_iff
 
 中文:
 定理 integrable_const_mul_iff
-  条件: {c : 𝕜} (hc : IsUnit c) (f : α -> 𝕜)
+  条件: {c : 𝕜} (hc : 是单位 c) (f : α -> 𝕜)
   证明: hc.integrable_smul_iff f
 
 Depends on / 依赖: hc.integrable_smul_iff, integrable_smul_iff
@@ -3756,7 +3756,7 @@ theorem integrable_mul_const_iff
 
 中文:
 定理 integrable_mul_const_iff
-  条件: {c : 𝕜} (hc : IsUnit c) (f : α -> 𝕜)
+  条件: {c : 𝕜} (hc : 是单位 c) (f : α -> 𝕜)
   证明: hc.op.integrable_smul_iff f
 
 Depends on / 依赖: hc.op.integrable_smul_iff, integrable_smul_iff
@@ -3775,8 +3775,8 @@ theorem Integrable.bdd_mul
   proof: hg.bdd_smul c hf hf_bound
 
 中文:
-定理 Integrable.bdd_mul
-  结论: {f g : α -> 𝕜} {c : 实数} (hg : 整数egrable g μ)
+定理 可积.bdd_mul
+  结论: {f g : α -> 𝕜} {c : 实数} (hg : 可积 g μ)
   证明: hg.bdd_smul c hf hf_bound
 
 Depends on / 依赖: bdd_smul, hf_bound, hg.bdd_smul
@@ -3795,8 +3795,8 @@ theorem Integrable.mul_bdd
   proof: hf.smul_bdd c hg hg_bound
 
 中文:
-定理 Integrable.mul_bdd
-  结论: {f g : α -> 𝕜} {c : 实数} (hf : 整数egrable f μ)
+定理 可积.mul_bdd
+  结论: {f g : α -> 𝕜} {c : 实数} (hf : 可积 f μ)
   证明: hf.smul_bdd c hg hg_bound
 
 Depends on / 依赖: hf.smul_bdd, hg_bound, smul_bdd
@@ -3815,8 +3815,8 @@ theorem Integrable.mul_of_top_right
   proof: hf.smul_of_top_right hφ
 
 中文:
-定理 Integrable.mul_of_top_right
-  结论: {f : α -> 𝕜} {φ : α -> 𝕜} (hf : 整数egrable f μ)
+定理 可积.mul_of_top_right
+  结论: {f : α -> 𝕜} {φ : α -> 𝕜} (hf : 可积 f μ)
   证明: hf.smul_of_top_right hφ
 
 Depends on / 依赖: hf.smul_of_top_right, smul_of_top_right
@@ -3834,8 +3834,8 @@ theorem Integrable.mul_of_top_left
   proof: hφ.smul_of_top_left hf
 
 中文:
-定理 Integrable.mul_of_top_left
-  结论: {f : α -> 𝕜} {φ : α -> 𝕜} (hφ : 整数egrable φ μ)
+定理 可积.mul_of_top_left
+  结论: {f : α -> 𝕜} {φ : α -> 𝕜} (hφ : 可积 φ μ)
   证明: hφ.smul_of_top_left hf
 
 Depends on / 依赖: smul_of_top_left
@@ -3880,8 +3880,8 @@ theorem Integrable.div_const
   proof: by simp_rw [div_eq_mul_inv, h.mul_const]
 
 中文:
-定理 Integrable.div_const
-  条件: {f : α -> 𝕜} (h : 整数egrable f μ) (c : 𝕜)
+定理 可积.div_const
+  条件: {f : α -> 𝕜} (h : 可积 f μ) (c : 𝕜)
   证明: by simp_rw [div_eq_mul_inv, h.mul_const]
 
 Depends on / 依赖: div_eq_mul_inv, h.mul_const, mul_const, simp_rw
@@ -3907,8 +3907,8 @@ theorem Integrable.ofReal
   exact hf.ofReal
 
 中文:
-定理 Integrable.ofReal
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+定理 可积.of实数
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.ofReal
@@ -3932,7 +3932,7 @@ theorem Integrable.re_im_iff
 @[fun_prop]
 
 中文:
-定理 Integrable.re_im_iff
+定理 可积.re_im_iff
   证明: by
   simp_rw [← memLp_one_iff_integrable]
   exact memLp_re_im_iff
@@ -3962,9 +3962,9 @@ theorem Integrable.re
 @[fun_prop]
 
 中文:
-定理 Integrable.re
-  条件: (hf : 整数egrable f μ)
-  结论: 整数egrable (fun x => RCLike.re (f x)) μ
+定理 可积.re
+  条件: (hf : 可积 f μ)
+  结论: 可积 (fun x => RCLike.re (f x)) μ
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.re
@@ -3990,9 +3990,9 @@ theorem Integrable.im
   exact hf.im
 
 中文:
-定理 Integrable.im
-  条件: (hf : 整数egrable f μ)
-  结论: 整数egrable (fun x => RCLike.im (f x)) μ
+定理 可积.im
+  条件: (hf : 可积 f μ)
+  结论: 可积 (fun x => RCLike.im (f x)) μ
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.im
@@ -4022,8 +4022,8 @@ theorem Integrable.trim
   · fun_prop
 
 中文:
-定理 Integrable.trim
-  条件: (hm : m <= m0) (hf_int : 整数egrable f μ') (hf : StronglyMeasurable[m] f)
+定理 可积.trim
+  条件: (hm : m <= m0) (hf_int : 可积 f μ') (hf : StronglyMeasurable[m] f)
   证明: by
   refine ⟨hf.aestronglyMeasurable, ?_⟩
   rw [HasFiniteIntegral]; rw [lintegral_trim hm _]
@@ -4052,7 +4052,7 @@ theorem integrable_of_integrable_trim
 
 中文:
 定理 integrable_of_integrable_trim
-  条件: (hm : m <= m0) (hf_int : 整数egrable f (μ'.trim hm))
+  条件: (hm : m <= m0) (hf_int : 可积 f (μ'.trim hm))
   证明: by
   obtain ⟨hf_meas_ae, hf⟩ := hf_int
   refine ⟨aestronglyMeasurable_of_aestronglyMeasurable_trim hm hf_meas_ae, ?_⟩
@@ -4082,8 +4082,8 @@ theorem integrable_of_forall_fin_meas_le'
   proof: ⟨hf_meas, (lintegral_le_of_forall_fin_meas_trim_le hm C hf).trans_lt hC⟩
 
 中文:
-定理 integrable_of_forall_fin_meas_le'
-  结论: {μ : Measure α} (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+定理 integrable_of_对任意_fin_meas_le'
+  结论: {μ : 测度 α} (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: ⟨hf_meas, (lintegral_le_of_forall_fin_meas_trim_le hm C hf).trans_lt hC⟩
 
 Depends on / 依赖: hf_meas, lintegral_le_of_forall_fin_meas_trim_le, trans_lt
@@ -4103,8 +4103,8 @@ theorem integrable_of_forall_fin_meas_le
   integrable_of_forall_fin_meas_le' le_rfl C hC hf_meas hf
 
 中文:
-定理 integrable_of_forall_fin_meas_le
-  结论: [SigmaFinite μ] (C : 实数>=0∞) (hC : C < ∞) {f : α -> ε}
+定理 integrable_of_对任意_fin_meas_le
+  结论: [σ有限 μ] (C : 实数>=0∞) (hC : C < ∞) {f : α -> ε}
   证明: have : SigmaFinite (μ.trim le_rfl) := by rwa [@trim_eq_self _ m]
   integrable_of_forall_fin_meas_le' le_rfl C hC hf_meas hf
 
@@ -4133,9 +4133,9 @@ lemma Integrable.restrict
   proof: hf.mono_measure Measure.restrict_le_self
 
 中文:
-引理 Integrable.restrict
-  条件: (hf : 整数egrable f μ) {s : Set α}
-  结论: 整数egrable f (μ.restrict s)
+引理 可积.restrict
+  条件: (hf : 可积 f μ) {s : 集合 α}
+  结论: 可积 f (μ.restrict s)
   证明: hf.mono_measure Measure.restrict_le_self
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, hf.mono_measure, mono_measure, restrict_le_self
@@ -4172,8 +4172,8 @@ theorem ContinuousLinearMap.integrable_comp
 @[simp]
 
 中文:
-定理 ContinuousLinearMap.integrable_comp
-  条件: {φ : α -> H} (L : H ->SL[σ] E) (φ_int : 整数egrable φ μ)
+定理 连续线性映射.integrable_comp
+  条件: {φ : α -> H} (L : H ->SL[σ] E) (φ_int : 可积 φ μ)
   证明: ((Integrable.norm φ_int).const_mul ‖L‖).mono'
     (by fun_prop)
     (Eventually.of_forall fun a => L.le_opNorm (φ a))
@@ -4201,7 +4201,7 @@ theorem ContinuousLinearEquiv.integrable_comp_iff
 @[simp]
 
 中文:
-定理 ContinuousLinearEquiv.integrable_comp_iff
+定理 连续线性等价.integrable_comp_iff
   条件: {φ : α -> H} (L : H ≃SL[σ] E)
   证明: ⟨fun h => by simpa using ContinuousLinearMap.integrable_comp (L.symm : E ->SL[σ'] H) h,
   fun h => ContinuousLinearMap.integrable_comp (L : H ->SL[σ] E) h⟩
@@ -4225,7 +4225,7 @@ theorem LinearIsometryEquiv.integrable_comp_iff
   proof: ContinuousLinearEquiv.integrable_comp_iff (L : H ≃SL[σ] E)
 
 中文:
-定理 LinearIsometryEquiv.integrable_comp_iff
+定理 线性等距等价.integrable_comp_iff
   条件: {φ : α -> H} (L : H ≃ₛₗᵢ[σ] E)
   证明: ContinuousLinearEquiv.integrable_comp_iff (L : H ≃SL[σ] E)
 
@@ -4244,7 +4244,7 @@ theorem MeasureTheory.Integrable.apply_continuousLinearMap
   proof: (ContinuousLinearMap.apply' E σ v).integrable_comp φ_int
 
 中文:
-定理 MeasureTheory.Integrable.apply_continuousLinearMap
+定理 测度论.可积.apply_continuousLinearMap
   结论: {φ : α -> H ->SL[σ] E}
   证明: (ContinuousLinearMap.apply' E σ v).integrable_comp φ_int
 
@@ -4274,9 +4274,9 @@ lemma Integrable.fst
 @[fun_prop]
 
 中文:
-引理 Integrable.fst
-  条件: {f : α -> E × F} (hf : 整数egrable f μ)
-  结论: 整数egrable (fun x => (f x).1) μ
+引理 可积.fst
+  条件: {f : α -> E × F} (hf : 可积 f μ)
+  结论: 可积 (fun x => (f x).1) μ
   证明: (ContinuousLinearMap.fst Real E F).integrable_comp hf
 
 @[fun_prop]
@@ -4297,9 +4297,9 @@ lemma Integrable.snd
   proof: (ContinuousLinearMap.snd Real E F).integrable_comp hf
 
 中文:
-引理 Integrable.snd
-  条件: {f : α -> E × F} (hf : 整数egrable f μ)
-  结论: 整数egrable (fun x => (f x).2) μ
+引理 可积.snd
+  条件: {f : α -> E × F} (hf : 可积 f μ)
+  结论: 可积 (fun x => (f x).2) μ
   证明: (ContinuousLinearMap.snd Real E F).integrable_comp hf
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.snd, integrable_comp

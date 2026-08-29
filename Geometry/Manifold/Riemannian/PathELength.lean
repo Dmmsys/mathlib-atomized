@@ -165,7 +165,7 @@ lemma pathELength_congr_Ioo
 
 中文:
 引理 pathELength_congr_Ioo
-  条件: (h : EqOn γ γ' (Ioo a b))
+  条件: (h : EqOn γ γ' (开区间 a b))
   证明: by
   simp only [pathELength_eq_lintegral_mfderiv_Ioo]
   apply setLIntegral_congr_fun measurableSet_Ioo (fun t ht => ?_)
@@ -198,7 +198,7 @@ lemma pathELength_congr
 
 中文:
 引理 pathELength_congr
-  条件: (h : EqOn γ γ' (Icc a b))
+  条件: (h : EqOn γ γ' (闭区间 a b))
   结论: pathELength I γ a b = pathELength I γ' a b
   证明: pathELength_congr_Ioo (fun _ hx => h ⟨hx.1.le, hx.2.le⟩)
 
@@ -327,7 +327,7 @@ lemma pathELength_comp_of_monotoneOn
 
 中文:
 引理 pathELength_comp_of_monotoneOn
-  结论: {f : 实数 -> 实数} (h : a <= b) (hf : MonotoneOn f (Icc a b))
+  结论: {f : 实数 -> 实数} (h : a <= b) (hf : MonotoneOn f (闭区间 a b))
   证明: by
   rcases h.eq_or_lt with rfl | h
   · simp
@@ -383,7 +383,7 @@ lemma pathELength_comp_of_antitoneOn
 
 中文:
 引理 pathELength_comp_of_antitoneOn
-  结论: {f : 实数 -> 实数} (h : a <= b) (hf : AntitoneOn f (Icc a b))
+  结论: {f : 实数 -> 实数} (h : a <= b) (hf : AntitoneOn f (闭区间 a b))
   证明: by
   rcases h.eq_or_lt with rfl | h
   · simp
@@ -451,7 +451,7 @@ lemma riemannianEDist_le_pathELength
 
 中文:
 引理 riemannianEDist_le_pathELength
-  结论: {γ : 实数 -> M} (hγ : CMDiff[Icc a b] 1 γ)
+  结论: {γ : 实数 -> M} (hγ : CMDiff[闭区间 a b] 1 γ)
   证明: by
   let η : Real ->ᴬ[Real] Real := ContinuousAffineMap.lineMap a b
   have hη : CMDiff[Icc 0 1] 1 (γ ∘ η) := by
@@ -509,7 +509,7 @@ lemma exists_lt_of_riemannianEDist_lt
   rwa [← lintegral_norm_mfderiv_Icc_eq_pathELength_projIcc]
 
 中文:
-引理 exists_lt_of_riemannianEDist_lt
+引理 存在_lt_of_riemannianEDist_lt
   条件: (hr : riemannianEDist I x y < r)
   证明: by
   simp only [riemannianEDist, iInf_lt_iff, exists_prop] at hr
@@ -543,7 +543,7 @@ lemma exists_lt_locally_constant_of_riemannianEDist_lt
   Note that
 
 中文:
-引理 exists_lt_locally_constant_of_riemannianEDist_lt
+引理 存在_lt_locally_constant_of_riemannianEDist_lt
   证明: by
   /- We start from a path from `x` to `y` defined on `[0, 1]` with length `< r`. Then, we
   reparameterize it using a smooth monotone map `η` from `[a, b]` to `[0, 1]` which is moreover

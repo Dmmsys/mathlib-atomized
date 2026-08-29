@@ -40,8 +40,8 @@ lemma reflects_shortExact_of_faithful
 
 中文:
 引理 reflects_shortExact_of_faithful
-  条件: (hS : (S.map F).ShortExact)
-  结论: S.ShortExact where
+  条件: (hS : (S.map F).短正合)
+  结论: S.短正合 where
   证明: F.reflects_exact_of_faithful _ hS.1
   mono_f := ReflectsMonomorphisms.reflects _ hS.mono_f
   epi_g := ReflectsEpimorphisms.reflects _ hS.epi_g
@@ -63,7 +63,7 @@ lemma shortExact_map_iff
 
 中文:
 引理 shortExact_map_iff
-  条件: [PreservesFiniteColimits F] [PreservesFiniteLimits F]
+  条件: [保持FiniteColimits F] [保持FiniteLimits F]
   证明: ⟨reflects_shortExact_of_faithful F, fun h => ShortComplex.ShortExact.map_of_exact h F⟩
 
 Depends on / 依赖: ShortComplex, ShortComplex.ShortExact.map_of_exact, ShortExact, map_of_exact, reflects_shortExact_of_faithful

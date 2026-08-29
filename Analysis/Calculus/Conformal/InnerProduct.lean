@@ -60,7 +60,7 @@ theorem conformalAt_iff
 
 中文:
 定理 conformalAt_iff
-  条件: {f : E -> F} {x : E} {f' : E ->L[实数] F} (h : HasFDerivAt f f' x)
+  条件: {f : E -> F} {x : E} {f' : E ->L[实数] F} (h : 在点处Fréchet可导 f f' x)
   证明: by
   simp only [conformalAt_iff', h.fderiv]
 

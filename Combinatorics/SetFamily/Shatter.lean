@@ -44,7 +44,7 @@ definition Shatters
 
 中文:
 定义 Shatters
-  签名: (𝒜 : Finset (Finset α)) (s : Finset α)
+  签名: (𝒜 : 有限集 (有限集 α)) (s : 有限集 α)
   定义体: forall ⦃t⦄, t subseteq s -> exists u in 𝒜, s inter u = t
 
 Depends on / 依赖: subseteq
@@ -78,7 +78,7 @@ lemma Shatters.exists_inter_eq_singleton
   proof: hs singleton_subset_iff.2 ha
 
 中文:
-引理 Shatters.exists_inter_eq_singleton
+引理 Shatters.存在_inter_eq_singleton
   条件: (hs : Shatters 𝒜 s) (ha : a in s)
   结论: 存在 t in 𝒜, s inter t = {a}
   证明: hs singleton_subset_iff.2 ha
@@ -138,7 +138,7 @@ lemma Shatters.exists_superset
   proof: let ⟨t, ht, hst⟩ := h Subset.rfl; ⟨t, ht, inter_eq_left.1 hst⟩
 
 中文:
-引理 Shatters.exists_superset
+引理 Shatters.存在_superset
   条件: (h : 𝒜.Shatters s)
   结论: 存在 t in 𝒜, s subseteq t
   证明: let ⟨t, ht, hst⟩ := h Subset.rfl; ⟨t, ht, inter_eq_left.1 hst⟩
@@ -158,7 +158,7 @@ lemma shatters_of_forall_subset
   proof: fun t ht => ⟨t, h _ ht, inter_eq_right.2 ht⟩
 
 中文:
-引理 shatters_of_forall_subset
+引理 shatters_of_对任意_subset
   条件: (h : 对任意 t, t subseteq s -> t in 𝒜)
   结论: 𝒜.Shatters s
   证明: fun t ht => ⟨t, h _ ht, inter_eq_right.2 ht⟩
@@ -180,7 +180,7 @@ lemma Shatters.nonempty
 中文:
 引理 Shatters.nonempty
   条件: (h : 𝒜.Shatters s)
-  结论: 𝒜.Nonempty
+  结论: 𝒜.非空
   证明: let ⟨t, ht, _⟩ := h Subset.rfl; ⟨t, ht⟩
 -/
 protected lemma Shatters.nonempty (h : 𝒜.Shatters s) : 𝒜.Nonempty :=
@@ -196,7 +196,7 @@ lemma shatters_empty
 
 中文:
 引理 shatters_empty
-  结论: 𝒜.Shatters ∅ ↔ 𝒜.Nonempty
+  结论: 𝒜.Shatters ∅ ↔ 𝒜.非空
   证明: ⟨Shatters.nonempty, fun ⟨s, hs⟩ t ht => ⟨s, hs, by rwa [empty_inter, eq_comm, ← subset_empty]⟩⟩
 -/
 @[simp] lemma shatters_empty : 𝒜.Shatters ∅ ↔ 𝒜.Nonempty :=
@@ -231,7 +231,7 @@ lemma shatters_iff
 
 中文:
 引理 shatters_iff
-  结论: 𝒜.Shatters s ↔ 𝒜.image (fun t => s inter t) = s.powerset
+  结论: 𝒜.Shatters s ↔ 𝒜.像 (fun t => s inter t) = s.powerset
   证明: ⟨fun h => by ext t; rw [mem_image, mem_powerset, h.subset_iff],
     fun h t ht => by rwa [← mem_powerset, ← h, mem_image] at ht⟩
 
@@ -252,7 +252,7 @@ lemma univ_shatters
 
 中文:
 引理 univ_shatters
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: univ.Shatters s
   证明: shatters_of_forall_subset fun _ _ => mem_univ _
 
@@ -273,7 +273,7 @@ lemma shatters_univ
 
 中文:
 引理 shatters_univ
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: 𝒜.Shatters univ ↔ 𝒜 = univ
   证明: by
   rw [shatters_iff]; rw [powerset_univ]; simp_rw [univ_inter, image_id']
@@ -291,7 +291,7 @@ definition shatterer
 
 中文:
 定义 shatterer
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: {s in 𝒜.biUnion powerset | 𝒜.Shatters s}
 
 Depends on / 依赖: Shatters, biUnion, powerset
@@ -352,7 +352,7 @@ lemma subset_shatterer
 
 中文:
 引理 subset_shatterer
-  条件: (h : IsLowerSet (𝒜 : Set (Finset α)))
+  条件: (h : 是下集 (𝒜 : 集合 (有限集 α)))
   结论: 𝒜 subseteq 𝒜.shatterer
   证明: fun _s hs => mem_shatterer.2 fun t ht => ⟨t, h ht hs, inter_eq_right.2 ht⟩
 
@@ -371,7 +371,7 @@ lemma isLowerSet_shatterer
 
 中文:
 引理 isLowerSet_shatterer
-  条件: (𝒜 : Finset (Finset α))
+  条件: (𝒜 : 有限集 (有限集 α))
   证明: fun s t => by simpa using Shatters.mono_right
 -/
 @[simp] lemma isLowerSet_shatterer (𝒜 : Finset (Finset α)) :
@@ -392,7 +392,7 @@ refine ⟨fun h => ?_, fun h => Subset.antisymm (fun s hs => ?_) subset_shattere
 
 中文:
 引理 shatterer_eq
-  结论: 𝒜.shatterer = 𝒜 ↔ IsLowerSet (𝒜 : Set (Finset α))
+  结论: 𝒜.shatterer = 𝒜 ↔ 是下集 (𝒜 : 集合 (有限集 α))
   证明: by
 refine ⟨fun h => ?_, fun h => Subset.antisymm (fun s hs => ?_) subset_shatterer h⟩
   · rw [← h]
@@ -484,7 +484,7 @@ lemma card_le_card_shatterer
 
 中文:
 引理 card_le_card_shatterer
-  条件: (𝒜 : Finset (Finset α))
+  条件: (𝒜 : 有限集 (有限集 α))
   结论: #𝒜 <= #𝒜.shatterer
   证明: by
   refine memberFamily_induction_on 𝒜 ?_ ?_ ?_
@@ -612,7 +612,7 @@ lemma shatterer_compress_subset_shatterer
 
 中文:
 引理 shatterer_compress_subset_shatterer
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   证明: by
   simp only [subset_iff, mem_shatterer]; exact fun s hs => hs.of_compression
 
@@ -634,7 +634,7 @@ definition vcDim
 
 中文:
 定义 vcDim
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: 𝒜.shatterer.sup card
 
 Depends on / 依赖: shatterer, shatterer.sup
@@ -688,7 +688,7 @@ lemma vcDim_compress_le
 
 中文:
 引理 vcDim_compress_le
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   结论: (𝓓 a 𝒜).vcDim <= 𝒜.vcDim
   证明: sup_mono shatterer_compress_subset_shatterer _ _
 
@@ -710,7 +710,7 @@ lemma card_shatterer_le_sum_vcDim
 
 中文:
 引理 card_shatterer_le_sum_vcDim
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   simp_rw [← card_univ, ← card_powersetCard]
   refine (card_le_card fun s hs => mem_biUnion.2 ⟨#s, ?_⟩).trans card_biUnion_le

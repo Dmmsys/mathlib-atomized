@@ -91,7 +91,7 @@ scoped[LaurentPolynomial] notation:9000 R "[T;T⁻¹]" => LaurentPolynomial R
 
 中文:
 缩写 LaurentPolynomial
-  签名: (R : 类型) [Semiring R]
+  签名: (R : 类型) [半环 R]
   定义体: AddMonoidAlgebra R Int
 
 @[nolint docBlame]
@@ -118,7 +118,7 @@ theorem LaurentPolynomial.ext
 
 中文:
 定理 LaurentPolynomial.ext
-  条件: [Semiring R] {p q : R[T;T⁻¹]} (h : 对任意 a, p.coeff a = q.coeff a)
+  条件: [半环 R] {p q : R[T;T⁻¹]} (h : 对任意 a, p.coeff a = q.coeff a)
   证明: by ext; exact h _
 -/
 theorem LaurentPolynomial.ext [Semiring R] {p q : R[T;T⁻¹]} (h : forall a, p.coeff a = q.coeff a) :
@@ -133,8 +133,8 @@ definition Polynomial.toLaurent
   body: (mapDomainRingHom R Int.ofNatHom).comp (toFinsuppIso R).toRingHom
 
 中文:
-定义 Polynomial.toLaurent
-  签名: [Semiring R]
+定义 多项式.toLaurent
+  签名: [半环 R]
   定义体: (mapDomainRingHom R Int.ofNatHom).comp (toFinsuppIso R).toRingHom
 
 Depends on / 依赖: Int.ofNatHom, SetLike, SetLike.coe_injective, coe_injective, ha.symm, mapDomainRingHom, ofNatHom, toFinsuppIso, toRingHom
@@ -151,8 +151,8 @@ theorem Polynomial.toLaurent_apply
   proof: rfl
 
 中文:
-定理 Polynomial.toLaurent_apply
-  条件: [Semiring R] (p : R[X])
+定理 多项式.toLaurent_apply
+  条件: [半环 R] (p : R[X])
   证明: rfl
 -/
 theorem Polynomial.toLaurent_apply [Semiring R] (p : R[X]) :
@@ -168,8 +168,8 @@ definition Polynomial.toLaurentAlg
   body: (mapDomainAlgHom R R Int.ofNatHom).comp (toFinsuppIsoAlg R).toAlgHom
 
 中文:
-定义 Polynomial.toLaurentAlg
-  签名: [CommSemiring R]
+定义 多项式.toLaurentAlg
+  签名: [交换半环 R]
   定义体: (mapDomainAlgHom R R Int.ofNatHom).comp (toFinsuppIsoAlg R).toAlgHom
 
 Depends on / 依赖: Int.ofNatHom, mapDomainAlgHom, ofNatHom, toAlgHom, toFinsuppIsoAlg
@@ -186,8 +186,8 @@ lemma Polynomial.coe_toLaurentAlg
   proof: rfl
 
 中文:
-引理 Polynomial.coe_toLaurentAlg
-  条件: [CommSemiring R]
+引理 多项式.coe_toLaurentAlg
+  条件: [交换半环 R]
   证明: rfl
 -/
 @[simp] lemma Polynomial.coe_toLaurentAlg [CommSemiring R] :
@@ -204,8 +204,8 @@ theorem Polynomial.toLaurentAlg_apply
   proof: rfl
 
 中文:
-定理 Polynomial.toLaurentAlg_apply
-  条件: [CommSemiring R] (f : R[X])
+定理 多项式.toLaurentAlg_apply
+  条件: [交换半环 R] (f : R[X])
   结论: toLaurentAlg f = toLaurent f
   证明: rfl
 -/
@@ -263,7 +263,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A] (r : R)
+  条件: {R A : 类型} [交换半环 R] [半环 A] [代数 R A] (r : R)
   证明: rfl
 -/
 theorem algebraMap_apply {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] (r : R) :
@@ -281,7 +281,7 @@ theorem C_eq_algebraMap
 
 中文:
 定理 C_eq_algebraMap
-  条件: {R : 类型} [CommSemiring R] (r : R)
+  条件: {R : 类型} [交换半环 R] (r : R)
   结论: C r = algebraMap R R[T;T⁻¹] r
   证明: rfl
 -/
@@ -514,7 +514,7 @@ theorem _root_.Polynomial.toLaurent_C_mul_T
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_C_mul_T
+定理 _root_.多项式.toLaurent_C_mul_T
   条件: (n : 自然数) (r : R)
   证明: by simp [toLaurent]
 
@@ -540,9 +540,9 @@ theorem _root_.Polynomial.toLaurent_C
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_C
+定理 _root_.多项式.toLaurent_C
   条件: (r : R)
-  结论: toLaurent (Polynomial.C r) = C r
+  结论: toLaurent (多项式.C r) = C r
   证明: by
   convert! Polynomial.toLaurent_C_mul_T 0 r
   simp only [Int.ofNat_zero, T_zero, mul_one]
@@ -567,8 +567,8 @@ theorem _root_.Polynomial.toLaurent_comp_C
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_comp_C
-  结论: toLaurent (R := R) ∘ Polynomial.C = C
+定理 _root_.多项式.toLaurent_comp_C
+  结论: toLaurent (R := R) ∘ 多项式.C = C
   证明: funext Polynomial.toLaurent_C
 
 @[simp]
@@ -592,8 +592,8 @@ theorem _root_.Polynomial.toLaurent_X
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_X
-  结论: (toLaurent Polynomial.X : R[T;T⁻¹]) = T 1
+定理 _root_.多项式.toLaurent_X
+  结论: (toLaurent 多项式.X : R[T;T⁻¹]) = T 1
   证明: by
   have : (Polynomial.X : R[X]) = monomial 1 1 := by simp [← C_mul_X_pow_eq_monomial]
   simp [this, Polynomial.toLaurent_C_mul_T]
@@ -618,8 +618,8 @@ theorem _root_.Polynomial.toLaurent_one
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_one
-  结论: (Polynomial.toLaurent : R[X] -> R[T;T⁻¹]) 1 = 1
+定理 _root_.多项式.toLaurent_one
+  结论: (多项式.toLaurent : R[X] -> R[T;T⁻¹]) 1 = 1
   证明: map_one Polynomial.toLaurent
 
 @[simp]
@@ -642,7 +642,7 @@ theorem _root_.Polynomial.toLaurent_C_mul_eq
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_C_mul_eq
+定理 _root_.多项式.toLaurent_C_mul_eq
   条件: (r : R) (f : R[X])
   证明: by
   simp only [map_mul, Polynomial.toLaurent_C]
@@ -667,7 +667,7 @@ theorem _root_.Polynomial.toLaurent_X_pow
   simp only [map_pow, Polynomial.toLaurent_X, T_pow, mul_one]
 
 中文:
-定理 _root_.Polynomial.toLaurent_X_pow
+定理 _root_.多项式.toLaurent_X_pow
   条件: (n : 自然数)
   结论: toLaurent (X ^ n : R[X]) = T n
   证明: by
@@ -688,7 +688,7 @@ theorem _root_.Polynomial.toLaurent_C_mul_X_pow
   simp only [map_mul, Polynomial.toLaurent_C, Polynomial.toLaurent_X_pow]
 
 中文:
-定理 _root_.Polynomial.toLaurent_C_mul_X_pow
+定理 _root_.多项式.toLaurent_C_mul_X_pow
   条件: (n : 自然数) (r : R)
   证明: by
   simp only [map_mul, Polynomial.toLaurent_C, Polynomial.toLaurent_X_pow]
@@ -758,7 +758,7 @@ theorem isUnit_T
 中文:
 定理 isUnit_T
   条件: (n : 整数)
-  结论: IsUnit (T n : R[T;T⁻¹])
+  结论: 是单位 (T n : R[T;T⁻¹])
   证明: isUnit_of_invertible _
 
 @[elab_as_elim]
@@ -1059,7 +1059,7 @@ theorem _root_.Polynomial.trunc_toLaurent
   proof: leftInverse_trunc_toLaurent _
 
 中文:
-定理 _root_.Polynomial.trunc_toLaurent
+定理 _root_.多项式.trunc_toLaurent
   条件: (f : R[X])
   结论: trunc (toLaurent f) = f
   证明: leftInverse_trunc_toLaurent _
@@ -1079,7 +1079,7 @@ theorem _root_.Polynomial.toLaurent_injective
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_injective
+定理 _root_.多项式.toLaurent_injective
   证明: leftInverse_trunc_toLaurent.injective
 
 @[simp]
@@ -1101,7 +1101,7 @@ theorem _root_.Polynomial.toLaurent_inj
   proof: ⟨fun h => Polynomial.toLaurent_injective h, congr_arg _⟩
 
 中文:
-定理 _root_.Polynomial.toLaurent_inj
+定理 _root_.多项式.toLaurent_inj
   条件: (f g : R[X])
   结论: toLaurent f = toLaurent g ↔ f = g
   证明: ⟨fun h => Polynomial.toLaurent_injective h, congr_arg _⟩
@@ -1123,7 +1123,7 @@ theorem _root_.Polynomial.toLaurent_ne_zero
 @[simp]
 
 中文:
-定理 _root_.Polynomial.toLaurent_ne_zero
+定理 _root_.多项式.toLaurent_ne_zero
   条件: {f : R[X]}
   结论: toLaurent f != 0 ↔ f != 0
   证明: map_ne_zero_iff _ Polynomial.toLaurent_injective
@@ -1146,7 +1146,7 @@ theorem _root_.Polynomial.toLaurent_eq_zero
   proof: map_eq_zero_iff _ Polynomial.toLaurent_injective
 
 中文:
-定理 _root_.Polynomial.toLaurent_eq_zero
+定理 _root_.多项式.toLaurent_eq_zero
   条件: {f : R[X]}
   结论: toLaurent f = 0 ↔ f = 0
   证明: map_eq_zero_iff _ Polynomial.toLaurent_injective
@@ -1172,7 +1172,7 @@ theorem exists_T_pow
   · rcases n with n | 
 
 中文:
-定理 exists_T_pow
+定理 存在_T_pow
   条件: (f : R[T;T⁻¹])
   结论: 存在 (n : 自然数) (f' : R[X]), toLaurent f' = f * T n
   证明: by
@@ -1514,7 +1514,7 @@ theorem degree_T
 
 中文:
 定理 degree_T
-  条件: [Nontrivial R] (n : 整数)
+  条件: [非平凡 R] (n : 整数)
   结论: (T n : R[T;T⁻¹]).degree = n
   证明: by
   rw [← one_mul (T n)]; rw [← map_one C]
@@ -1659,7 +1659,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R[X] R[T;T⁻¹]
+  签名: 模 R[X] R[T;T⁻¹]
   定义体: Module.compHom _ Polynomial.toLaurent
 
 Depends on / 依赖: Module, Module.compHom, Polynomial, Polynomial.toLaurent, compHom, toLaurent
@@ -1688,7 +1688,7 @@ instance algebraPolynomial
 
 中文:
 实例 algebraPolynomial
-  签名: (R : 类型) [CommSemiring R]
+  签名: (R : 类型) [交换半环 R]
   定义体: Polynomial.toLaurent
   commutes' := fun f l => by simp [mul_comm]
   smul_def' := fun _ _ => rfl
@@ -1760,7 +1760,7 @@ instance isLocalization
 
 中文:
 实例 isLocalization
-  签名: : IsLocalization.Away (X : R[X]) R[T;T⁻¹]
+  签名: : 是Localization.Away (X : R[X]) R[T;T⁻¹]
   定义体: { map_units := fun ⟨t, ht⟩ => by
       obtain ⟨n, rfl⟩ := ht
       rw [algebraMap_eq_toLaurent]; rw [toLaurent_X_pow]
@@ -1922,7 +1922,7 @@ theorem eval₂_toLaurent
 中文:
 定理 eval₂_toLaurent
   条件: (p : R[X])
-  结论: eval₂ f x (toLaurent p) = Polynomial.eval₂ f x p
+  结论: eval₂ f x (toLaurent p) = 多项式.eval₂ f x p
   证明: by
   unfold eval₂
   rw [← algebraMap_eq_toLaurent]; rw [IsLocalization.lift_eq]; rw [coe_eval₂RingHom]
@@ -2221,7 +2221,7 @@ lemma involutive_invert
 
 中文:
 引理 involutive_invert
-  结论: Involutive (invert (R := R))
+  结论: 对合 (invert (R := R))
   证明: fun _ => by ext; simp
 -/
 lemma involutive_invert : Involutive (invert (R := R)) := fun _ => by ext; simp
@@ -2309,7 +2309,7 @@ theorem smeval_eq_sum
 
 中文:
 定理 smeval_eq_sum
-  结论: f.smeval x = f.coeff.sum fun n r => r • (x ^ n).val
+  结论: f.smeval x = f.coeff.求和 fun n r => r • (x ^ n).val
   证明: rfl
 -/
 theorem smeval_eq_sum : f.smeval x = f.coeff.sum fun n r => r • (x ^ n).val := rfl

@@ -55,7 +55,7 @@ theorem add_one_le_two_mul
 
 中文:
 定理 add_one_le_two_mul
-  结论: [LE R] [NonAssocSemiring R] [AddLeftMono R] {a : R}
+  结论: [LE R] [非结合半环 R] [AddLeftMono R] {a : R}
   证明: calc
     a + 1 <= a + a := by gcongr
     _ = 2 * a := (two_mul _).symm
@@ -85,7 +85,7 @@ gcongr; exact le_mul_of_one_le_left b0 one_le_two.trans a2
 
 中文:
 定理 add_le_mul_two_add
-  结论: [ZeroLEOneClass R] [MulPosMono R] [AddLeftMono R]
+  结论: [ZeroLEOne类 R] [乘正递增 R] [AddLeftMono R]
   证明: calc
     a + (2 + b) <= a + (a + a * b) := by
 gcongr; exact le_mul_of_one_le_left b0 one_le_two.trans a2
@@ -116,7 +116,7 @@ _ <= d * a := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
 
 中文:
 定理 mul_le_mul_of_nonpos_left
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: by
   obtain ⟨d, hcd⟩ := exists_add_of_le hc
   refine le_of_add_le_add_right (a := d * b + d * a) ?_
@@ -153,7 +153,7 @@ _ <= a * d := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
 
 中文:
 定理 mul_le_mul_of_nonpos_right
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   obtain ⟨d, hcd⟩ := exists_add_of_le hc
   refine le_of_add_le_add_right (a := b * d + a * d) ?_
@@ -185,7 +185,7 @@ theorem mul_nonneg_of_nonpos_of_nonpos
 
 中文:
 定理 mul_nonneg_of_nonpos_of_nonpos
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   simpa only [zero_mul] using mul_le_mul_of_nonpos_right ha hb
 
@@ -206,7 +206,7 @@ theorem mul_le_mul_of_nonneg_of_nonpos
 
 中文:
 定理 mul_le_mul_of_nonneg_of_nonpos
-  结论: [ExistsAddOfLE R] [MulPosMono R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R] [正乘递增 R]
   证明: (mul_le_mul_of_nonpos_right hca hb).trans by gcongr; assumption
 
 Depends on / 依赖: mul_le_mul_of_nonpos_right
@@ -226,7 +226,7 @@ theorem mul_le_mul_of_nonneg_of_nonpos'
 
 中文:
 定理 mul_le_mul_of_nonneg_of_nonpos'
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: (mul_le_mul_of_nonneg_left hbd ha).trans mul_le_mul_of_nonpos_right hca hd
 
 Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_le_mul_of_nonpos_right
@@ -246,7 +246,7 @@ theorem mul_le_mul_of_nonpos_of_nonneg
 
 中文:
 定理 mul_le_mul_of_nonpos_of_nonneg
-  结论: [ExistsAddOfLE R] [MulPosMono R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R] [正乘递增 R]
   证明: (mul_le_mul_of_nonneg_right hac hb).trans mul_le_mul_of_nonpos_left hdb hc
 
 Depends on / 依赖: mul_le_mul_of_nonneg_right, mul_le_mul_of_nonpos_left
@@ -266,7 +266,7 @@ theorem mul_le_mul_of_nonpos_of_nonneg'
 
 中文:
 定理 mul_le_mul_of_nonpos_of_nonneg'
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: (mul_le_mul_of_nonneg_left hbd ha).trans mul_le_mul_of_nonpos_right hca hd
 
 Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_le_mul_of_nonpos_right
@@ -286,7 +286,7 @@ theorem mul_le_mul_of_nonpos_of_nonpos
 
 中文:
 定理 mul_le_mul_of_nonpos_of_nonpos
-  结论: [ExistsAddOfLE R] [MulPosMono R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R] [正乘递增 R]
   证明: (mul_le_mul_of_nonpos_right hca hb).trans mul_le_mul_of_nonpos_left hdb hc
 
 Depends on / 依赖: mul_le_mul_of_nonpos_left, mul_le_mul_of_nonpos_right
@@ -306,7 +306,7 @@ theorem mul_le_mul_of_nonpos_of_nonpos'
 
 中文:
 定理 mul_le_mul_of_nonpos_of_nonpos'
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: (mul_le_mul_of_nonpos_left hdb ha).trans mul_le_mul_of_nonpos_right hca hd
 
 Depends on / 依赖: mul_le_mul_of_nonpos_left, mul_le_mul_of_nonpos_right
@@ -327,7 +327,7 @@ theorem le_mul_of_le_one_left
 
 中文:
 定理 le_mul_of_le_one_left
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   simpa only [one_mul] using mul_le_mul_of_nonpos_right h hb
 
@@ -349,7 +349,7 @@ theorem mul_le_of_one_le_left
 
 中文:
 定理 mul_le_of_one_le_left
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   simpa only [one_mul] using mul_le_mul_of_nonpos_right h hb
 
@@ -371,7 +371,7 @@ theorem le_mul_of_le_one_right
 
 中文:
 定理 le_mul_of_le_one_right
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: by
   simpa only [mul_one] using mul_le_mul_of_nonpos_left h ha
 
@@ -393,7 +393,7 @@ theorem mul_le_of_one_le_right
 
 中文:
 定理 mul_le_of_one_le_right
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: by
   simpa only [mul_one] using mul_le_mul_of_nonpos_left h ha
 
@@ -419,7 +419,7 @@ theorem antitone_mul_left
 
 中文:
 定理 antitone_mul_left
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: fun _ _ b_le_c =>
   mul_le_mul_of_nonpos_left b_le_c ha
 
@@ -441,7 +441,7 @@ theorem antitone_mul_right
 
 中文:
 定理 antitone_mul_right
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: fun _ _ b_le_c =>
   mul_le_mul_of_nonpos_right b_le_c ha
 
@@ -461,8 +461,8 @@ theorem Monotone.const_mul_of_nonpos
   proof: (antitone_mul_left ha).comp_monotone hf
 
 中文:
-定理 Monotone.const_mul_of_nonpos
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+定理 递增.const_mul_of_nonpos
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: (antitone_mul_left ha).comp_monotone hf
 
 Depends on / 依赖: antitone_mul_left, comp_monotone
@@ -481,8 +481,8 @@ theorem Monotone.mul_const_of_nonpos
   proof: (antitone_mul_right ha).comp_monotone hf
 
 中文:
-定理 Monotone.mul_const_of_nonpos
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+定理 递增.mul_const_of_nonpos
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: (antitone_mul_right ha).comp_monotone hf
 
 Depends on / 依赖: antitone_mul_right, comp_monotone
@@ -501,8 +501,8 @@ theorem Antitone.const_mul_of_nonpos
   proof: (antitone_mul_left ha).comp hf
 
 中文:
-定理 Antitone.const_mul_of_nonpos
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+定理 递减.const_mul_of_nonpos
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: (antitone_mul_left ha).comp hf
 
 Depends on / 依赖: antitone_mul_left
@@ -521,8 +521,8 @@ theorem Antitone.mul_const_of_nonpos
   proof: (antitone_mul_right ha).comp hf
 
 中文:
-定理 Antitone.mul_const_of_nonpos
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+定理 递减.mul_const_of_nonpos
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: (antitone_mul_right ha).comp hf
 
 Depends on / 依赖: antitone_mul_right
@@ -542,8 +542,8 @@ theorem Antitone.mul_monotone
   mul_le_mul_of_nonpos_of_nonneg (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 中文:
-定理 Antitone.mul_monotone
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+定理 递减.mul_monotone
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: fun _ _ h =>
   mul_le_mul_of_nonpos_of_nonneg (hf h) (hg h) (hf₀ _) (hg₀ _)
 -/
@@ -563,8 +563,8 @@ theorem Monotone.mul_antitone
   mul_le_mul_of_nonneg_of_nonpos (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 中文:
-定理 Monotone.mul_antitone
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+定理 递增.mul_antitone
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: fun _ _ h =>
   mul_le_mul_of_nonneg_of_nonpos (hf h) (hg h) (hf₀ _) (hg₀ _)
 -/
@@ -583,8 +583,8 @@ theorem Antitone.mul
   proof: fun _ _ h => mul_le_mul_of_nonpos_of_nonpos (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 中文:
-定理 Antitone.mul
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+定理 递减.mul
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: fun _ _ h => mul_le_mul_of_nonpos_of_nonpos (hf h) (hg h) (hf₀ _) (hg₀ _)
 
 Depends on / 依赖: mul_le_mul_of_nonpos_of_nonpos
@@ -613,7 +613,7 @@ theorem lt_two_mul_self
 
 中文:
 定理 lt_two_mul_self
-  结论: [ZeroLEOneClass R] [MulPosStrictMono R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [乘正严格递增 R] [NeZero (1 : R)]
   证明: lt_mul_of_one_lt_left ha one_lt_two
 
 Depends on / 依赖: lt_mul_of_one_lt_left, one_lt_two
@@ -638,7 +638,7 @@ _ < d * a := mul_lt_mul_of_pos_left h hcd.trans_lt add_lt_of_neg_left _ hc
 
 中文:
 定理 mul_lt_mul_of_neg_left
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: by
   obtain ⟨d, hcd⟩ := exists_add_of_le hc.le
   refine (add_lt_add_iff_right (d * b + d * a)).1 ?_
@@ -675,7 +675,7 @@ _ < a * d := mul_lt_mul_of_pos_right h hcd.trans_lt add_lt_of_neg_left _ hc
 
 中文:
 定理 mul_lt_mul_of_neg_right
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   obtain ⟨d, hcd⟩ := exists_add_of_le hc.le
   refine (add_lt_add_iff_right (b * d + a * d)).1 ?_
@@ -707,7 +707,7 @@ theorem mul_pos_of_neg_of_neg
 
 中文:
 定理 mul_pos_of_neg_of_neg
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   simpa only [zero_mul] using mul_lt_mul_of_neg_right ha hb
 
@@ -729,7 +729,7 @@ theorem lt_mul_of_lt_one_left
 
 中文:
 定理 lt_mul_of_lt_one_left
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   simpa only [one_mul] using mul_lt_mul_of_neg_right h hb
 
@@ -751,7 +751,7 @@ theorem mul_lt_of_one_lt_left
 
 中文:
 定理 mul_lt_of_one_lt_left
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   simpa only [one_mul] using mul_lt_mul_of_neg_right h hb
 
@@ -773,7 +773,7 @@ theorem lt_mul_of_lt_one_right
 
 中文:
 定理 lt_mul_of_lt_one_right
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: by
   simpa only [mul_one] using mul_lt_mul_of_neg_left h ha
 
@@ -795,7 +795,7 @@ theorem mul_lt_of_one_lt_right
 
 中文:
 定理 mul_lt_of_one_lt_right
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: by
   simpa only [mul_one] using mul_lt_mul_of_neg_left h ha
 
@@ -821,7 +821,7 @@ theorem strictAnti_mul_left
 
 中文:
 定理 strictAnti_mul_left
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: fun _ _ b_lt_c =>
   mul_lt_mul_of_neg_left b_lt_c ha
 
@@ -843,7 +843,7 @@ theorem strictAnti_mul_right
 
 中文:
 定理 strictAnti_mul_right
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: fun _ _ b_lt_c =>
   mul_lt_mul_of_neg_right b_lt_c ha
 
@@ -863,8 +863,8 @@ theorem StrictMono.const_mul_of_neg
   proof: (strictAnti_mul_left ha).comp_strictMono hf
 
 中文:
-定理 StrictMono.const_mul_of_neg
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+定理 严格递增.const_mul_of_neg
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: (strictAnti_mul_left ha).comp_strictMono hf
 
 Depends on / 依赖: comp_strictMono, strictAnti_mul_left
@@ -883,8 +883,8 @@ theorem StrictMono.mul_const_of_neg
   proof: (strictAnti_mul_right ha).comp_strictMono hf
 
 中文:
-定理 StrictMono.mul_const_of_neg
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+定理 严格递增.mul_const_of_neg
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: (strictAnti_mul_right ha).comp_strictMono hf
 
 Depends on / 依赖: comp_strictMono, strictAnti_mul_right
@@ -903,8 +903,8 @@ theorem StrictAnti.const_mul_of_neg
   proof: (strictAnti_mul_left ha).comp hf
 
 中文:
-定理 StrictAnti.const_mul_of_neg
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+定理 严格递减.const_mul_of_neg
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: (strictAnti_mul_left ha).comp hf
 
 Depends on / 依赖: strictAnti_mul_left
@@ -923,8 +923,8 @@ theorem StrictAnti.mul_const_of_neg
   proof: (strictAnti_mul_right ha).comp hf
 
 中文:
-定理 StrictAnti.mul_const_of_neg
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+定理 严格递减.mul_const_of_neg
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: (strictAnti_mul_right ha).comp hf
 
 Depends on / 依赖: strictAnti_mul_right
@@ -950,7 +950,7 @@ lemma mul_add_mul_le_mul_add_mul
 
 中文:
 引理 mul_add_mul_le_mul_add_mul
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   obtain ⟨d, hd, rfl⟩ := exists_nonneg_add_of_le hcd
   rw [mul_add]; rw [add_right_comm]; rw [mul_add]; rw [← add_assoc]
@@ -978,7 +978,7 @@ lemma mul_add_mul_le_mul_add_mul'
 
 中文:
 引理 mul_add_mul_le_mul_add_mul'
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   rw [add_comm (a * d)]; rw [add_comm (a * c)]; exact mul_add_mul_le_mul_add_mul hba hdc
 
@@ -1005,7 +1005,7 @@ lemma mul_add_mul_lt_mul_add_mul
 
 中文:
 引理 mul_add_mul_lt_mul_add_mul
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   obtain ⟨d, hd, rfl⟩ := exists_pos_add_of_lt' hcd
   rw [mul_add]; rw [add_right_comm]; rw [mul_add]; rw [← add_assoc]
@@ -1034,7 +1034,7 @@ lemma mul_add_mul_lt_mul_add_mul'
 
 中文:
 引理 mul_add_mul_lt_mul_add_mul'
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   rw [add_comm (a * d)]; rw [add_comm (a * c)]
   exact mul_add_mul_lt_mul_add_mul hba hdc
@@ -1098,7 +1098,7 @@ theorem nonneg_of_mul_nonneg_left
 
 中文:
 定理 nonneg_of_mul_nonneg_left
-  结论: [MulPosStrictMono R]
+  结论: [乘正严格递增 R]
   证明: le_of_not_gt fun ha => (mul_neg_of_neg_of_pos ha hb).not_ge h
 
 Depends on / 依赖: le_of_not_gt, mul_neg_of_neg_of_pos, not_ge
@@ -1117,7 +1117,7 @@ theorem nonneg_of_mul_nonneg_right
 
 中文:
 定理 nonneg_of_mul_nonneg_right
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: le_of_not_gt fun hb => (mul_neg_of_pos_of_neg ha hb).not_ge h
 
 Depends on / 依赖: le_of_not_gt, mul_neg_of_pos_of_neg, not_ge
@@ -1136,7 +1136,7 @@ theorem nonpos_of_mul_nonpos_left
 
 中文:
 定理 nonpos_of_mul_nonpos_left
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: le_of_not_gt fun ha : a > 0 => (mul_pos ha hb).not_ge h
 
 Depends on / 依赖: le_of_not_gt, mul_pos, not_ge
@@ -1157,7 +1157,7 @@ theorem nonpos_of_mul_nonpos_right
 
 中文:
 定理 nonpos_of_mul_nonpos_right
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: le_of_not_gt fun hb : b > 0 => (mul_pos ha hb).not_ge h
 
 @[simp]
@@ -1183,7 +1183,7 @@ theorem mul_nonneg_iff_of_pos_left
 
 中文:
 定理 mul_nonneg_iff_of_pos_left
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: by
   convert! mul_le_mul_iff_right₀ h
   simp
@@ -1209,7 +1209,7 @@ theorem mul_nonneg_iff_of_pos_right
 
 中文:
 定理 mul_nonneg_iff_of_pos_right
-  结论: [MulPosStrictMono R]
+  结论: [乘正严格递增 R]
   证明: by
   simpa using (mul_le_mul_iff_left₀ h : 0 * c <= b * c ↔ 0 <= b)
 -/
@@ -1235,7 +1235,7 @@ theorem add_le_mul_of_left_le_right
 
 中文:
 定理 add_le_mul_of_left_le_right
-  结论: [ZeroLEOneClass R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [NeZero (1 : R)]
   证明: have : 0 < b :=
     calc
       0 < 2 := zero_lt_two
@@ -1279,7 +1279,7 @@ theorem add_le_mul_of_right_le_left
 
 中文:
 定理 add_le_mul_of_right_le_left
-  结论: [ZeroLEOneClass R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [NeZero (1 : R)]
   证明: have : 0 < a :=
     calc 0
       _ < 2 := zero_lt_two
@@ -1316,7 +1316,7 @@ theorem add_le_mul
 
 中文:
 定理 add_le_mul
-  结论: [ZeroLEOneClass R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [NeZero (1 : R)]
   证明: if hab : a <= b then add_le_mul_of_left_le_right a2 hab
   else add_le_mul_of_right_le_left b2 (le_of_not_ge hab)
 
@@ -1338,7 +1338,7 @@ theorem add_le_mul'
 
 中文:
 定理 add_le_mul'
-  结论: [ZeroLEOneClass R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [NeZero (1 : R)]
   证明: (le_of_eq (add_comm _ _)).trans (add_le_mul b2 a2)
 
 Depends on / 依赖: add_comm, add_le_mul, le_of_eq
@@ -1358,7 +1358,7 @@ theorem mul_nonneg_iff_right_nonneg_of_pos
 
 中文:
 定理 mul_nonneg_iff_right_nonneg_of_pos
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: ⟨fun h => nonneg_of_mul_nonneg_right h ha, mul_nonneg ha.le⟩
 
 Depends on / 依赖: ha.le, mul_nonneg, nonneg_of_mul_nonneg_right
@@ -1377,7 +1377,7 @@ theorem mul_nonneg_iff_left_nonneg_of_pos
 
 中文:
 定理 mul_nonneg_iff_left_nonneg_of_pos
-  结论: [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [正乘严格递增 R] [乘正严格递增 R]
   证明: ⟨fun h => nonneg_of_mul_nonneg_left h hb, fun h => mul_nonneg h hb.le⟩
 
 Depends on / 依赖: hb.le, mul_nonneg, nonneg_of_mul_nonneg_left
@@ -1396,7 +1396,7 @@ theorem nonpos_of_mul_nonneg_left
 
 中文:
 定理 nonpos_of_mul_nonneg_left
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: le_of_not_gt fun ha => absurd h (mul_neg_of_pos_of_neg ha hb).not_ge
 
 Depends on / 依赖: absurd, le_of_not_gt, mul_neg_of_pos_of_neg, not_ge
@@ -1417,7 +1417,7 @@ theorem nonpos_of_mul_nonneg_right
 
 中文:
 定理 nonpos_of_mul_nonneg_right
-  结论: [MulPosStrictMono R]
+  结论: [乘正严格递增 R]
   证明: le_of_not_gt fun hb => absurd h (mul_neg_of_neg_of_pos ha hb).not_ge
 
 @[simp]
@@ -1441,7 +1441,7 @@ theorem Units.inv_pos
 @[simp]
 
 中文:
-定理 Units.inv_pos
+定理 单位群.inv_pos
   证明: have : forall {u : Rˣ}, (0 : R) < u -> (0 : R) < ↑u⁻¹ := @fun u h =>
 (mul_pos_iff_of_pos_left h).mp u.mul_inv.symm ▸ zero_lt_one
   ⟨this, this⟩
@@ -1468,7 +1468,7 @@ theorem Units.inv_neg
   ⟨this, this⟩
 
 中文:
-定理 Units.inv_neg
+定理 单位群.inv_neg
   证明: have : forall {u : Rˣ}, ↑u < (0 : R) -> ↑u⁻¹ < (0 : R) := @fun u h =>
     neg_of_mul_pos_right (u.mul_inv.symm ▸ zero_lt_one) h.le
   ⟨this, this⟩
@@ -1492,7 +1492,7 @@ theorem cmp_mul_pos_left
 
 中文:
 定理 cmp_mul_pos_left
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: (strictMono_mul_left_of_pos ha).cmp_map_eq b c
 
 Depends on / 依赖: cmp_map_eq, strictMono_mul_left_of_pos
@@ -1511,7 +1511,7 @@ theorem cmp_mul_pos_right
 
 中文:
 定理 cmp_mul_pos_right
-  结论: [MulPosStrictMono R]
+  结论: [乘正严格递增 R]
   证明: (strictMono_mul_right_of_pos ha).cmp_map_eq b c
 
 Depends on / 依赖: cmp_map_eq, strictMono_mul_right_of_pos
@@ -1530,7 +1530,7 @@ theorem mul_max_of_nonneg
 
 中文:
 定理 mul_max_of_nonneg
-  结论: [PosMulMono R]
+  结论: [正乘递增 R]
   证明: (monotone_mul_left_of_nonneg ha).map_max
 
 Depends on / 依赖: map_max, monotone_mul_left_of_nonneg
@@ -1549,7 +1549,7 @@ theorem mul_min_of_nonneg
 
 中文:
 定理 mul_min_of_nonneg
-  结论: [PosMulMono R]
+  结论: [正乘递增 R]
   证明: (monotone_mul_left_of_nonneg ha).map_min
 
 Depends on / 依赖: map_min, monotone_mul_left_of_nonneg
@@ -1568,7 +1568,7 @@ theorem max_mul_of_nonneg
 
 中文:
 定理 max_mul_of_nonneg
-  结论: [MulPosMono R]
+  结论: [乘正递增 R]
   证明: (monotone_mul_right_of_nonneg hc).map_max
 
 Depends on / 依赖: map_max, monotone_mul_right_of_nonneg
@@ -1587,7 +1587,7 @@ theorem min_mul_of_nonneg
 
 中文:
 定理 min_mul_of_nonneg
-  结论: [MulPosMono R]
+  结论: [乘正递增 R]
   证明: (monotone_mul_right_of_nonneg hc).map_min
 
 Depends on / 依赖: map_min, monotone_mul_right_of_nonneg
@@ -1624,7 +1624,7 @@ theorem nonneg_le_nonneg_of_sq_le_sq
 
 中文:
 定理 nonneg_le_nonneg_of_sq_le_sq
-  结论: [PosMulStrictMono R] [MulPosMono R]
+  结论: [正乘严格递增 R] [乘正递增 R]
   证明: le_of_not_gt fun hab => (mul_self_lt_mul_self hb hab).not_ge h
 
 Depends on / 依赖: le_of_not_gt, mul_self_lt_mul_self, not_ge
@@ -1643,7 +1643,7 @@ theorem mul_self_le_mul_self_iff
 
 中文:
 定理 mul_self_le_mul_self_iff
-  结论: [PosMulStrictMono R] [MulPosMono R]
+  结论: [正乘严格递增 R] [乘正递增 R]
   证明: ⟨mul_self_le_mul_self h1, nonneg_le_nonneg_of_sq_le_sq h2⟩
 
 Depends on / 依赖: mul_self_le_mul_self, nonneg_le_nonneg_of_sq_le_sq
@@ -1662,7 +1662,7 @@ theorem mul_self_lt_mul_self_iff
 
 中文:
 定理 mul_self_lt_mul_self_iff
-  结论: [PosMulStrictMono R] [MulPosMono R]
+  结论: [正乘严格递增 R] [乘正递增 R]
   证明: ((@strictMonoOn_mul_self R _).lt_iff_lt h1 h2).symm
 
 Depends on / 依赖: lt_iff_lt, strictMonoOn_mul_self
@@ -1681,7 +1681,7 @@ theorem mul_self_inj
 
 中文:
 定理 mul_self_inj
-  结论: [PosMulStrictMono R] [MulPosMono R]
+  结论: [正乘严格递增 R] [乘正递增 R]
   证明: (@strictMonoOn_mul_self R _).eq_iff_eq h1 h2
 
 Depends on / 依赖: eq_iff_eq, strictMonoOn_mul_self
@@ -1703,7 +1703,7 @@ lemma sign_cases_of_C_mul_pow_nonneg
 
 中文:
 引理 sign_cases_of_C_mul_pow_nonneg
-  结论: [PosMulStrictMono R]
+  结论: [正乘严格递增 R]
   证明: by
   have : 0 <= a := by simpa only [pow_zero, mul_one] using h 0
   refine this.eq_or_lt'.imp_right fun ha => ⟨ha, nonneg_of_mul_nonneg_right ?_ ha⟩
@@ -1728,7 +1728,7 @@ theorem mul_pos_iff
 
 中文:
 定理 mul_pos_iff
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R] [乘正严格递增 R]
   证明: ⟨pos_and_pos_or_neg_and_neg_of_mul_pos, fun h =>
     h.elim (and_imp.2 mul_pos) (and_imp.2 mul_pos_of_neg_of_neg)⟩
 
@@ -1751,7 +1751,7 @@ theorem mul_nonneg_iff
 
 中文:
 定理 mul_nonneg_iff
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R] [正乘严格递增 R]
   证明: ⟨nonneg_and_nonneg_or_nonpos_and_nonpos_of_mul_nonneg, fun h =>
     h.elim (and_imp.2 mul_nonneg) (and_imp.2 mul_nonneg_of_nonpos_of_nonpos)⟩
 
@@ -1778,7 +1778,7 @@ theorem mul_nonneg_of_three
 
 中文:
 定理 mul_nonneg_of_three
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R] [正乘严格递增 R]
   证明: by
   iterate 3 rw [mul_nonneg_iff]
   have or_a := le_total 0 a
@@ -1814,7 +1814,7 @@ lemma mul_nonneg_iff_pos_imp_nonneg
 
 中文:
 引理 mul_nonneg_iff_pos_imp_nonneg
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   refine mul_nonneg_iff.trans ?_
   simp_rw [← not_le, ← or_iff_not_imp_left]
@@ -1848,7 +1848,7 @@ theorem mul_le_mul_left_of_neg
 
 中文:
 定理 mul_le_mul_left_of_neg
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: (strictAnti_mul_left h).le_iff_ge
 
 @[simp]
@@ -1873,7 +1873,7 @@ theorem mul_le_mul_right_of_neg
 
 中文:
 定理 mul_le_mul_right_of_neg
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: (strictAnti_mul_right h).le_iff_ge
 
 @[simp]
@@ -1898,7 +1898,7 @@ theorem mul_lt_mul_left_of_neg
 
 中文:
 定理 mul_lt_mul_left_of_neg
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: (strictAnti_mul_left h).lt_iff_gt
 
 @[simp]
@@ -1921,7 +1921,7 @@ theorem mul_lt_mul_right_of_neg
 
 中文:
 定理 mul_lt_mul_right_of_neg
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: (strictAnti_mul_right h).lt_iff_gt
 
 Depends on / 依赖: lt_iff_gt, strictAnti_mul_right
@@ -1941,7 +1941,7 @@ theorem lt_of_mul_lt_mul_of_nonpos_left
 
 中文:
 定理 lt_of_mul_lt_mul_of_nonpos_left
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: (antitone_mul_left hc).reflect_lt h
 
 Depends on / 依赖: antitone_mul_left, reflect_lt
@@ -1961,7 +1961,7 @@ theorem lt_of_mul_lt_mul_of_nonpos_right
 
 中文:
 定理 lt_of_mul_lt_mul_of_nonpos_right
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: (antitone_mul_right hc).reflect_lt h
 
 Depends on / 依赖: antitone_mul_right, reflect_lt
@@ -1981,7 +1981,7 @@ theorem cmp_mul_neg_left
 
 中文:
 定理 cmp_mul_neg_left
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R]
   证明: (strictAnti_mul_left ha).cmp_map_eq b c
 
 Depends on / 依赖: cmp_map_eq, strictAnti_mul_left
@@ -2003,7 +2003,7 @@ theorem cmp_mul_neg_right
 
 中文:
 定理 cmp_mul_neg_right
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: (strictAnti_mul_right ha).cmp_map_eq b c
 
 @[simp]
@@ -2033,7 +2033,7 @@ theorem mul_self_pos
 
 中文:
 定理 mul_self_pos
-  结论: [ExistsAddOfLE R] [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   constructor
   · rintro h rfl
@@ -2066,7 +2066,7 @@ theorem nonneg_of_mul_nonpos_left
 
 中文:
 定理 nonneg_of_mul_nonpos_left
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: le_of_not_gt fun ha => absurd h (mul_pos_of_neg_of_neg ha hb).not_ge
 
 Depends on / 依赖: absurd, le_of_not_gt, mul_pos_of_neg_of_neg, not_ge
@@ -2086,7 +2086,7 @@ theorem nonneg_of_mul_nonpos_right
 
 中文:
 定理 nonneg_of_mul_nonpos_right
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: le_of_not_gt fun hb => absurd h (mul_pos_of_neg_of_neg ha hb).not_ge
 
 Depends on / 依赖: absurd, le_of_not_gt, mul_pos_of_neg_of_neg, not_ge
@@ -2106,7 +2106,7 @@ theorem pos_of_mul_neg_left
 
 中文:
 定理 pos_of_mul_neg_left
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: lt_of_not_ge fun ha => absurd h (mul_nonneg_of_nonpos_of_nonpos ha hb).not_gt
 
 Depends on / 依赖: absurd, lt_of_not_ge, mul_nonneg_of_nonpos_of_nonpos, not_gt
@@ -2126,7 +2126,7 @@ theorem pos_of_mul_neg_right
 
 中文:
 定理 pos_of_mul_neg_right
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: lt_of_not_ge fun hb => absurd h (mul_nonneg_of_nonpos_of_nonpos ha hb).not_gt
 
 Depends on / 依赖: absurd, lt_of_not_ge, mul_nonneg_of_nonpos_of_nonpos, not_gt
@@ -2146,7 +2146,7 @@ theorem neg_iff_pos_of_mul_neg
 
 中文:
 定理 neg_iff_pos_of_mul_neg
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: ⟨pos_of_mul_neg_right hab ∘ le_of_lt, neg_of_mul_neg_left hab ∘ le_of_lt⟩
 
 Depends on / 依赖: le_of_lt, neg_of_mul_neg_left, pos_of_mul_neg_right
@@ -2166,7 +2166,7 @@ theorem pos_iff_neg_of_mul_neg
 
 中文:
 定理 pos_iff_neg_of_mul_neg
-  结论: [ExistsAddOfLE R] [PosMulMono R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [乘正递增 R]
   证明: ⟨neg_of_mul_neg_right hab ∘ le_of_lt, pos_of_mul_neg_left hab ∘ le_of_lt⟩
 
 Depends on / 依赖: le_of_lt, neg_of_mul_neg_right, pos_of_mul_neg_left
@@ -2193,7 +2193,7 @@ lemma sq_nonneg
 
 中文:
 引理 sq_nonneg
-  结论: [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [AddLeftMono R]
   证明: by
   obtain ha | ha := le_or_gt 0 a
   · exact pow_succ_nonneg ha _
@@ -2262,7 +2262,7 @@ lemma mul_self_nonneg
 
 中文:
 引理 mul_self_nonneg
-  结论: [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R] [AddLeftMono R]
   证明: by simpa only [sq] using sq_nonneg a
 
 Depends on / 依赖: sq_nonneg
@@ -2286,7 +2286,7 @@ lemma mul_self_add_mul_self_eq_zero
 
 中文:
 引理 mul_self_add_mul_self_eq_zero
-  结论: [NoZeroDivisors R]
+  结论: [无零因子 R]
   证明: by
   rw [add_eq_zero_iff_of_nonneg]; rw [mul_self_eq_zero (M₀ := R)]; rw [mul_self_eq_zero (M₀ := R)] <;>
     apply mul_self_nonneg
@@ -2309,7 +2309,7 @@ lemma eq_zero_of_mul_self_add_mul_self_eq_zero
 
 中文:
 引理 eq_zero_of_mul_self_add_mul_self_eq_zero
-  结论: [NoZeroDivisors R]
+  结论: [无零因子 R]
   证明: (mul_self_add_mul_self_eq_zero.mp h).left
 
 Depends on / 依赖: mul_self_add_mul_self_eq_zero, mul_self_add_mul_self_eq_zero.mp
@@ -2332,7 +2332,7 @@ theorem pos_of_right_mul_lt_le
 
 中文:
 定理 pos_of_right_mul_lt_le
-  结论: [ExistsAddOfLE R] [PosMulMono R]
+  结论: [ExistsAddOfLE R] [正乘递增 R]
   证明: by
   by_cases! ha : 0 < a
   · exact ha
@@ -2361,7 +2361,7 @@ theorem pos_of_left_mul_lt_le
 
 中文:
 定理 pos_of_left_mul_lt_le
-  结论: [ExistsAddOfLE R] [MulPosMono R]
+  结论: [ExistsAddOfLE R] [乘正递增 R]
   证明: by
   by_cases! ha : 0 < a
   · exact ha
@@ -2398,7 +2398,7 @@ lemma max_mul_mul_le_max_mul_max
 
 中文:
 引理 max_mul_mul_le_max_mul_max
-  条件: [PosMulMono R] [MulPosMono R] (b c : R) (ha : 0 <= a) (hd : 0 <= d)
+  条件: [正乘递增 R] [乘正递增 R] (b c : R) (ha : 0 <= a) (hd : 0 <= d)
   证明: have ba : b * a <= max d b * max c a := by
     gcongr
     exacts [ha, hd.trans <| le_max_left d b, le_max_right d b, le_max_right c a]
@@ -2431,7 +2431,7 @@ alias two_mul_le_add_pow_two := two_mul_le_add_sq
 
 中文:
 引理 two_mul_le_add_sq
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   simpa [fn_min_add_fn_max (fun x => x * x), sq, two_mul, add_mul]
     using mul_add_mul_le_mul_add_mul (@min_le_max _ _ a b) (@min_le_max _ _ a b)
@@ -2465,7 +2465,7 @@ alia
 
 中文:
 引理 four_mul_le_sq_add
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R]
   证明: by
   calc 4 * a * b
     _ = 2 * a * b + 2 * a * b := by rw [mul_assoc, two_add_two_eq_four.symm, add_mul, mul_assoc]
@@ -2503,7 +2503,7 @@ lemma two_mul_le_add_of_sq_le_mul
 
 中文:
 引理 two_mul_le_add_of_sq_le_mul
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R] [正乘严格递增 R]
   证明: by
   apply nonneg_le_nonneg_of_sq_le_sq (Left.add_nonneg ha hb)
   rw [mul_mul_mul_comm]; rw [← pow_two r]; rw [two_mul]; rw [two_add_two_eq_four]
@@ -2531,7 +2531,7 @@ lemma two_mul_le_add_of_sq_eq_mul
 
 中文:
 引理 two_mul_le_add_of_sq_eq_mul
-  结论: [ExistsAddOfLE R] [MulPosStrictMono R] [PosMulStrictMono R]
+  结论: [ExistsAddOfLE R] [乘正严格递增 R] [正乘严格递增 R]
   证明: two_mul_le_add_of_sq_le_mul ha hb ht.le
 
 Depends on / 依赖: ht.le, two_mul_le_add_of_sq_le_mul
@@ -2561,7 +2561,7 @@ lemma mul_neg_iff
 
 中文:
 引理 mul_neg_iff
-  结论: [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   rw [← neg_pos]; rw [neg_mul_eq_mul_neg]; rw [mul_pos_iff (R := R)]; rw [neg_pos]; rw [neg_lt_zero]
 
@@ -2583,7 +2583,7 @@ lemma mul_nonpos_iff
 
 中文:
 引理 mul_nonpos_iff
-  结论: [MulPosStrictMono R] [PosMulStrictMono R]
+  结论: [乘正严格递增 R] [正乘严格递增 R]
   证明: by
   rw [← neg_nonneg]; rw [neg_mul_eq_mul_neg]; rw [mul_nonneg_iff (R := R)]; rw [neg_nonneg]; rw [neg_nonpos]
 
@@ -2605,7 +2605,7 @@ lemma mul_nonneg_iff_neg_imp_nonpos
 
 中文:
 引理 mul_nonneg_iff_neg_imp_nonpos
-  结论: [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   rw [← neg_mul_neg]; rw [mul_nonneg_iff_pos_imp_nonneg (R := R)]; simp only [neg_pos, neg_nonneg]
 
@@ -2628,7 +2628,7 @@ lemma mul_nonpos_iff_pos_imp_nonpos
 
 中文:
 引理 mul_nonpos_iff_pos_imp_nonpos
-  结论: [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   rw [← neg_nonneg]; rw [← mul_neg]; rw [mul_nonneg_iff_pos_imp_nonneg (R := R)]
   simp only [neg_pos, neg_nonneg]
@@ -2653,7 +2653,7 @@ lemma mul_nonpos_iff_neg_imp_nonneg
 
 中文:
 引理 mul_nonpos_iff_neg_imp_nonneg
-  结论: [PosMulStrictMono R] [MulPosStrictMono R]
+  结论: [正乘严格递增 R] [乘正严格递增 R]
   证明: by
   rw [← neg_nonneg]; rw [← neg_mul]; rw [mul_nonneg_iff_pos_imp_nonneg (R := R)]
   simp only [neg_pos, neg_nonneg]
@@ -2693,7 +2693,7 @@ lemma sub_one_lt
 
 中文:
 引理 sub_one_lt
-  结论: [ZeroLEOneClass R] [NeZero (1 : R)]
+  结论: [ZeroLEOne类 R] [NeZero (1 : R)]
   证明: sub_lt_iff_lt_add.2 lt_add_one a
 
 Depends on / 依赖: lt_add_one, sub_lt_iff_lt_add
@@ -2737,7 +2737,7 @@ lemma sub_mul_sub_nonneg_iff
 
 中文:
 引理 sub_mul_sub_nonneg_iff
-  结论: [MulPosStrictMono R] [PosMulStrictMono R] [AddLeftMono R]
+  结论: [乘正严格递增 R] [正乘严格递增 R] [AddLeftMono R]
   证明: by
   rw [mul_nonneg_iff]; rw [sub_nonneg]; rw [sub_nonneg]; rw [sub_nonpos]; rw [sub_nonpos]; rw [and_iff_right_of_imp h.trans]; rw [and_iff_left_of_imp h.trans']; rw [or_comm]
 
@@ -2759,7 +2759,7 @@ lemma sub_mul_sub_nonpos_iff
 
 中文:
 引理 sub_mul_sub_nonpos_iff
-  结论: [MulPosStrictMono R] [PosMulStrictMono R] [AddLeftMono R]
+  结论: [乘正严格递增 R] [正乘严格递增 R] [AddLeftMono R]
   证明: by
   rw [mul_nonpos_iff]; rw [sub_nonneg]; rw [sub_nonneg]; rw [sub_nonpos]; rw [sub_nonpos]; rw [or_iff_left_iff_imp]; rw [and_comm]
   exact And.imp h.trans h.trans'
@@ -2782,7 +2782,7 @@ lemma sub_mul_sub_pos_iff
 
 中文:
 引理 sub_mul_sub_pos_iff
-  结论: [MulPosStrictMono R] [PosMulStrictMono R] [AddLeftMono R]
+  结论: [乘正严格递增 R] [正乘严格递增 R] [AddLeftMono R]
   证明: by
   rw [mul_pos_iff]; rw [sub_pos]; rw [sub_pos]; rw [sub_neg]; rw [sub_neg]; rw [and_iff_right_of_imp h.trans_lt]; rw [and_iff_left_of_imp h.trans_lt']; rw [or_comm]
 
@@ -2804,7 +2804,7 @@ lemma sub_mul_sub_neg_iff
 
 中文:
 引理 sub_mul_sub_neg_iff
-  结论: [MulPosStrictMono R] [PosMulStrictMono R] [AddLeftMono R]
+  结论: [乘正严格递增 R] [正乘严格递增 R] [AddLeftMono R]
   证明: by
   rw [mul_neg_iff]; rw [sub_pos]; rw [sub_pos]; rw [sub_neg]; rw [sub_neg]; rw [or_iff_left_iff_imp]; rw [and_comm]
   exact And.imp h.trans_lt h.trans_lt'

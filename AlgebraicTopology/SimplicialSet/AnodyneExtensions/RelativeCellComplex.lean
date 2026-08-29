@@ -97,7 +97,7 @@ definition index
 
 中文:
 定义 index
-  签名: : Fin (c.dim + 2)
+  签名: : 有限集 (c.dim + 2)
   定义体: (P.isUniquelyCodimOneFace c.s).index rfl
 
 Depends on / 依赖: P.isUniquelyCodimOneFace, isUniquelyCodimOneFace
@@ -157,7 +157,7 @@ lemma range_map
 
 中文:
 引理 range_map
-  结论: Subcomplex.range c.map = (P.p c.s).val.subcomplex
+  结论: 子复形.range c.map = (P.p c.s).val.subcomplex
   证明: by
   rw [range_eq_ofSimplex]; rw [Equiv.apply_symm_apply]; rw [S.ofSimplex_eq_subcomplex_mk]; rw [← S.cast_eq_self _ (P.dim_p c.s)]
   dsimp [S.subcomplex]
@@ -203,7 +203,7 @@ lemma subcomplex_not_le_image_horn
 
 中文:
 引理 subcomplex_not_le_image_horn
-  结论: ¬ c.s.val.subcomplex <= c.horn.image c.map
+  结论: ¬ c.s.val.subcomplex <= c.horn.像 c.map
   证明: by
   intro h
   simp only [Subfunctor.ofSection_le_iff, image_obj, Set.mem_image] at h
@@ -240,7 +240,7 @@ lemma image_horn_lt_subcomplex
 
 中文:
 引理 image_horn_lt_subcomplex
-  结论: c.horn.image c.map < (P.p c.s).val.subcomplex
+  结论: c.horn.像 c.map < (P.p c.s).val.subcomplex
   证明: by
   rw [lt_iff_le_and_ne]
   exact ⟨by simpa using! image_le_range c.horn c.map,
@@ -408,7 +408,7 @@ lemma filtration_bot
 
 中文:
 引理 filtration_bot
-  条件: [OrderBot ι]
+  条件: [有底序 ι]
   结论: f.filtration ⊥ = A
   证明: by
   simp [filtration_def]
@@ -433,7 +433,7 @@ lemma filtration_monotone
 
 中文:
 引理 filtration_monotone
-  结论: Monotone f.filtration
+  结论: 递增 f.filtration
   证明: by
   intro i₁ i₂ h
   conv_lhs => rw [filtration_def]
@@ -467,7 +467,7 @@ lemma filtration_succ
 
 中文:
 引理 filtration_succ
-  条件: [SuccOrder ι] (i : ι) (hi : ¬ IsMax i)
+  条件: [Succ序 ι] (i : ι) (hi : ¬ IsMax i)
   证明: by
   apply le_antisymm
   · conv_lhs => rw [filtration_def]
@@ -512,7 +512,7 @@ lemma filtration_of_isSuccLimit
 
 中文:
 引理 filtration_of_isSuccLimit
-  条件: [OrderBot ι] [SuccOrder ι] (i : ι) (hi : Order.IsSuccLimit i)
+  条件: [有底序 ι] [Succ序 ι] (i : ι) (hi : Order.是SuccLimit i)
   证明: by
   apply le_antisymm
   · conv_lhs => rw [filtration_def]
@@ -559,7 +559,7 @@ lemma iSup_filtration_iio
 
 中文:
 引理 iSup_filtration_iio
-  条件: [OrderBot ι] [SuccOrder ι] (m : ι) (hm : Order.IsSuccLimit m)
+  条件: [有底序 ι] [Succ序 ι] (m : ι) (hm : Order.是SuccLimit m)
   证明: by
   apply le_antisymm
   · simp only [iSup_le_iff, Subtype.forall, Set.mem_Iio]
@@ -646,7 +646,7 @@ lemma iSup_filtration
 
 中文:
 引理 iSup_filtration
-  条件: [OrderBot ι] [SuccOrder ι] [NoMaxOrder ι]
+  条件: [有底序 ι] [Succ序 ι] [NoMax序 ι]
   证明: by
   refine le_antisymm (by simp) ?_
   rw [N.subcomplex_le_iff]
@@ -686,7 +686,7 @@ definition Cell.mapToSucc
 
 中文:
 定义 Cell.mapToSucc
-  签名: {j : ι} [SuccOrder ι] [NoMaxOrder ι] (c : f.Cell j)
+  签名: {j : ι} [Succ序 ι] [NoMax序 ι] (c : f.Cell j)
   定义体: Subcomplex.lift c.map (by simpa using f.subcomplex_le_filtration c (Order.lt_succ _))
 
 Depends on / 依赖: Order.lt_succ, Subcomplex, Subcomplex.lift, c.map, f.subcomplex_le_filtration, lt_succ, subcomplex_le_filtration
@@ -707,7 +707,7 @@ lemma Cell.mapToSucc_ι
 
 中文:
 引理 Cell.mapToSucc_ι
-  条件: {j : ι} [SuccOrder ι] [NoMaxOrder ι] (c : f.Cell j)
+  条件: {j : ι} [Succ序 ι] [NoMax序 ι] (c : f.Cell j)
   证明: rfl
 -/
 lemma Cell.mapToSucc_ι {j : ι} [SuccOrder ι] [NoMaxOrder ι] (c : f.Cell j) :
@@ -1215,8 +1215,8 @@ lemma exists_or_of_range_m_N
   obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjec
 
 中文:
-引理 exists_or_of_range_m_N
-  条件: {j : ι} (s : (Subcomplex.range (f.m j)).N)
+引理 存在_or_of_range_m_N
+  条件: {j : ι} (s : (子复形.range (f.m j)).N)
   证明: by
   obtain ⟨d, s, hs, hs', rfl⟩ := s.mk_surjective
   obtain ⟨x, s, rfl⟩ := f.ιSigmaStdSimplex_jointly_surjective s
@@ -1442,7 +1442,7 @@ definition mapN
 
 中文:
 定义 mapN
-  签名: {j : ι} (x : (Subcomplex.range (f.m j)).N)
+  签名: {j : ι} (x : (子复形.range (f.m j)).N)
   定义体: S.mk ((f.b j).app _ x.simplex).val
 
 Depends on / 依赖: S.mk, simplex, x.simplex
@@ -1531,7 +1531,7 @@ lemma isPushout_aux₁
 
 中文:
 引理 isPushout_aux₁
-  条件: {j : ι} (s : (Subcomplex.range (f.m j)).N)
+  条件: {j : ι} (s : (子复形.range (f.m j)).N)
   证明: by
   obtain ⟨c, rfl | rfl⟩ := f.exists_or_of_range_m_N s
   · rw [f.mapN_type₁]
@@ -1566,7 +1566,7 @@ lemma isPushout_aux₂
 中文:
 引理 isPushout_aux₂
   条件: {j : ι}
-  结论: Function.Injective (f.mapN (j := j))
+  结论: 函数.单射 (f.mapN (j := j))
   证明: by
   intro s t h
   obtain ⟨c, rfl | rfl⟩ := f.exists_or_of_range_m_N s <;>
@@ -1673,7 +1673,7 @@ instance :
 
 中文:
 实例 :
-  签名: f.filtration_monotone.functor.IsWellOrderContinuous
+  签名: f.filtration_monotone.functor.是WellOrderContinuous
   定义体: ⟨Preorder.isColimitOfIsLUB _ _ (by
     dsimp
     rw [← f.iSup_filtration_iio m hm]

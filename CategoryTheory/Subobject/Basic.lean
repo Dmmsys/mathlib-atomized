@@ -154,7 +154,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {X A : C} (f : A ⟶ X) [Mono f]
+  签名: {X A : C} (f : A ⟶ X) [单态射 f]
   定义体: (toThinSkeleton _).obj (MonoOver.mk f)
 
 Depends on / 依赖: MonoOver, MonoOver.mk, toThinSkeleton
@@ -228,7 +228,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {α : Sort*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [Mono f], α)
+  签名: {α : 类型层*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [单态射 f], α)
   定义体: fun P =>
   Quotient.liftOn' P (fun m => F m.arrow) fun m n ⟨i⟩ =>
     h m.arrow n.arrow ((MonoOver.forget X ⋙ Over.forget X).mapIso i) (Over.w i.hom.hom)
@@ -254,7 +254,7 @@ theorem lift_mk
 
 中文:
 定理 lift_mk
-  结论: {α : Sort*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [Mono f], α) {h A}
+  结论: {α : 类型层*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [单态射 f], α) {h A}
   证明: rfl
 -/
 protected theorem lift_mk {α : Sort*} {X : C} (F : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], α) {h A}
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: (representative (X := X)).IsEquivalence
+  签名: (representative (X := X)).是等价
   定义体: (equivMonoOver X).isEquivalence_functor
 
 Depends on / 依赖: IsEquivalence
@@ -403,7 +403,7 @@ definition underlyingIso
 
 中文:
 定义 underlyingIso
-  签名: {X Y : C} (f : X ⟶ Y) [Mono f]
+  签名: {X Y : C} (f : X ⟶ Y) [单态射 f]
   定义体: (MonoOver.forget _ ⋙ Over.forget _).mapIso (representativeIso (MonoOver.mk f))
 
 Depends on / 依赖: MonoOver, MonoOver.forget, MonoOver.mk, Over.forget, forget, mapIso, representativeIso
@@ -561,7 +561,7 @@ theorem underlyingIso_arrow
 
 中文:
 定理 underlyingIso_arrow
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: Over.w _
 
 @[reassoc (attr := simp)]
@@ -583,7 +583,7 @@ theorem underlyingIso_hom_comp_eq_mk
 
 中文:
 定理 underlyingIso_hom_comp_eq_mk
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: (Iso.eq_inv_comp _).1 (underlyingIso_arrow f).symm
 
 Depends on / 依赖: Iso.eq_inv_comp, eq_inv_comp, underlyingIso_arrow
@@ -626,7 +626,7 @@ theorem mk_le_mk_of_comm
 
 中文:
 定理 mk_le_mk_of_comm
-  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂)
+  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [单态射 f₁] [单态射 f₂] (g : A₁ ⟶ A₂)
   证明: ⟨MonoOver.homMk _ w⟩
 
 @[simp]
@@ -695,7 +695,7 @@ theorem le_mk_of_comm
 
 中文:
 定理 le_mk_of_comm
-  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : (X : C) ⟶ A)
+  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (g : (X : C) ⟶ A)
   证明: le_of_comm (g ≫ (underlyingIso f).inv) by simp [w]
 
 Depends on / 依赖: le_of_comm, underlyingIso
@@ -714,7 +714,7 @@ theorem mk_le_of_comm
 
 中文:
 定理 mk_le_of_comm
-  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : A ⟶ (X : C))
+  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (g : A ⟶ (X : C))
   证明: le_of_comm ((underlyingIso f).hom ≫ g) by simp [w]
 
 Depends on / 依赖: le_of_comm, underlyingIso
@@ -755,7 +755,7 @@ theorem eq_mk_of_comm
 
 中文:
 定理 eq_mk_of_comm
-  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : (X : C) ≅ A)
+  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [单态射 f] (i : (X : C) ≅ A)
   证明: eq_of_comm (i.trans (underlyingIso f).symm) by simp [w]
 
 Depends on / 依赖: eq_of_comm, i.trans, underlyingIso
@@ -774,7 +774,7 @@ theorem mk_eq_of_comm
 
 中文:
 定理 mk_eq_of_comm
-  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : A ≅ (X : C))
+  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [单态射 f] (i : A ≅ (X : C))
   证明: Eq.symm eq_mk_of_comm _ i.symm by rw [Iso.symm_hom, Iso.inv_comp_eq, w]
 
 Depends on / 依赖: Eq.symm, Iso.inv_comp_eq, Iso.symm_hom, eq_mk_of_comm, i.symm, inv_comp_eq, symm_hom
@@ -793,7 +793,7 @@ theorem mk_eq_mk_of_comm
 
 中文:
 定理 mk_eq_mk_of_comm
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂)
+  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (i : A₁ ≅ A₂)
   证明: eq_mk_of_comm _ ((underlyingIso f).trans i) by simp [w]
 
 Depends on / 依赖: eq_mk_of_comm, underlyingIso
@@ -886,7 +886,7 @@ theorem ofLE_mk_le_mk_of_comm
 
 中文:
 定理 ofLE_mk_le_mk_of_comm
-  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂]
+  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [单态射 f₁] [单态射 f₂]
   证明: by
   ext
   simp [w]
@@ -907,7 +907,7 @@ definition ofLEMk
 
 中文:
 定义 ofLEMk
-  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X <= mk f)
+  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (h : X <= mk f)
   定义体: ofLE X (mk f) h ≫ (underlyingIso f).hom
 
 Depends on / 依赖: underlyingIso
@@ -931,7 +931,7 @@ theorem ofLEMk_comp
 
 中文:
 定理 ofLEMk_comp
-  条件: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (h : X <= mk f)
+  条件: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (h : X <= mk f)
   证明: by simp [ofLEMk]
 
 Depends on / 依赖: ofLEMk
@@ -949,7 +949,7 @@ definition ofMkLE
 
 中文:
 定义 ofMkLE
-  签名: {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f <= X)
+  签名: {B A : C} (f : A ⟶ B) [单态射 f] (X : Subobject B) (h : mk f <= X)
   定义体: (underlyingIso f).inv ≫ ofLE (mk f) X h
 
 Depends on / 依赖: underlyingIso
@@ -973,7 +973,7 @@ theorem ofMkLE_arrow
 
 中文:
 定理 ofMkLE_arrow
-  条件: {B A : C} {f : A ⟶ B} [Mono f] {X : Subobject B} (h : mk f <= X)
+  条件: {B A : C} {f : A ⟶ B} [单态射 f] {X : Subobject B} (h : mk f <= X)
   证明: by simp [ofMkLE]
 
 Depends on / 依赖: ofMkLE
@@ -991,7 +991,7 @@ definition ofMkLEMk
 
 中文:
 定义 ofMkLEMk
-  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f <= mk g)
+  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (h : mk f <= mk g)
   定义体: (underlyingIso f).inv ≫ ofLE (mk f) (mk g) h ≫ (underlyingIso g).hom
 
 Depends on / 依赖: underlyingIso
@@ -1018,7 +1018,7 @@ theorem ofMkLEMk_comp
 
 中文:
 定理 ofMkLEMk_comp
-  条件: {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g)
+  条件: {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [单态射 f] [单态射 g] (h : mk f <= mk g)
   证明: by simp [ofMkLEMk]
 
 @[reassoc (attr := simp)]
@@ -1072,7 +1072,7 @@ theorem ofLE_comp_ofLEMk
 
 中文:
 定理 ofLE_comp_ofLEMk
-  结论: {B A : C} (X Y : Subobject B) (f : A ⟶ B) [Mono f] (h₁ : X <= Y)
+  结论: {B A : C} (X Y : Subobject B) (f : A ⟶ B) [单态射 f] (h₁ : X <= Y)
   证明: by
   simp only [ofLEMk, ofLE, ← Functor.map_comp_assoc underlying]
   congr 1
@@ -1101,7 +1101,7 @@ theorem ofLEMk_comp_ofMkLE
 
 中文:
 定理 ofLEMk_comp_ofMkLE
-  结论: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (Y : Subobject B)
+  结论: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (Y : Subobject B)
   证明: by
   simp only [ofMkLE, ofLEMk, ofLE, ← Functor.map_comp underlying, assoc, Iso.hom_inv_id_assoc]
   congr 1
@@ -1131,7 +1131,7 @@ theorem ofLEMk_comp_ofMkLEMk
 
 中文:
 定理 ofLEMk_comp_ofMkLEMk
-  结论: {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B)
+  结论: {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B)
   证明: by
   simp only [ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying,
     assoc, Iso.hom_inv_id_assoc]
@@ -1164,7 +1164,7 @@ theorem ofMkLE_comp_ofLE
 
 中文:
 定理 ofMkLE_comp_ofLE
-  结论: {B A₁ : C} (f : A₁ ⟶ B) [Mono f] (X Y : Subobject B) (h₁ : mk f <= X)
+  结论: {B A₁ : C} (f : A₁ ⟶ B) [单态射 f] (X Y : Subobject B) (h₁ : mk f <= X)
   证明: by
   simp only [ofMkLE, ofLE, ← Functor.map_comp underlying,
     assoc]
@@ -1195,7 +1195,7 @@ theorem ofMkLE_comp_ofLEMk
 
 中文:
 定理 ofMkLE_comp_ofLEMk
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (X : Subobject B) (g : A₂ ⟶ B)
+  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [单态射 f] (X : Subobject B) (g : A₂ ⟶ B)
   证明: by
   simp only [ofMkLE, ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc]
   congr 1
@@ -1226,7 +1226,7 @@ theorem ofMkLEMk_comp_ofMkLE
 
 中文:
 定理 ofMkLEMk_comp_ofMkLE
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
+  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B) [单态射 g]
   证明: by
   simp only [ofMkLE, ofLE, ofMkLEMk, ← Functor.map_comp underlying,
     assoc, Iso.hom_inv_id_assoc]
@@ -1259,7 +1259,7 @@ theorem ofMkLEMk_comp_ofMkLEMk
 
 中文:
 定理 ofMkLEMk_comp_ofMkLEMk
-  结论: {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
+  结论: {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B) [单态射 g]
   证明: by
   simp only [ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc,
     Iso.hom_inv_id_assoc]
@@ -1320,7 +1320,7 @@ theorem ofMkLEMk_refl
 
 中文:
 定理 ofMkLEMk_refl
-  条件: {B A₁ : C} (f : A₁ ⟶ B) [Mono f]
+  条件: {B A₁ : C} (f : A₁ ⟶ B) [单态射 f]
   结论: ofMkLEMk f f le_rfl = 𝟙 _
   证明: by
   apply (cancel_mono f).mp
@@ -1370,7 +1370,7 @@ definition isoOfEqMk
 
 中文:
 定义 isoOfEqMk
-  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X = mk f)
+  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (h : X = mk f)
   定义体: ofLEMk X f h.le
   inv := ofMkLE f X h.ge
 
@@ -1393,7 +1393,7 @@ definition isoOfMkEq
 
 中文:
 定义 isoOfMkEq
-  签名: {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f = X)
+  签名: {B A : C} (f : A ⟶ B) [单态射 f] (X : Subobject B) (h : mk f = X)
   定义体: ofMkLE f X h.le
   inv := ofLEMk X f h.ge
 
@@ -1416,7 +1416,7 @@ definition isoOfMkEqMk
 
 中文:
 定义 isoOfMkEqMk
-  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f = mk g)
+  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (h : mk f = mk g)
   定义体: ofMkLEMk f g h.le
   inv := ofMkLEMk g f h.ge
 
@@ -1443,7 +1443,7 @@ lemma mk_lt_mk_of_comm
 
 中文:
 引理 mk_lt_mk_of_comm
-  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
+  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [单态射 i₁] [单态射 i₂]
   证明: by
   obtain _ | h := (mk_le_mk_of_comm _ fac).lt_or_eq
   · assumption
@@ -1475,7 +1475,7 @@ lemma mk_lt_mk_iff_of_comm
 
 中文:
 引理 mk_lt_mk_iff_of_comm
-  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
+  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [单态射 i₁] [单态射 i₂]
   证明: ⟨fun h hf => by simp only [mk_eq_mk_of_comm i₁ i₂ (asIso f) fac, lt_self_iff_false] at h,
     mk_lt_mk_of_comm f fac⟩
 
@@ -1746,7 +1746,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: [HasLimitsOfShape J (Over X)]
+  签名: [有形状极限 J (Over X)]
   定义体: by
   apply hasLimitsOfShape_thinSkeleton
 
@@ -1766,7 +1766,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits (Over X)]
+  签名: [有有限极限 (Over X)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1784,7 +1784,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: [HasLimitsOfSize.{w, w'} (Over X)]
+  签名: [有LimitsOfSize.{w, w'} (Over X)]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1810,7 +1810,7 @@ instance hasColimitsOfSize
 
 中文:
 实例 hasColimitsOfSize
-  签名: : HasColimitsOfSize.{w, w'} (Subobject X)
+  签名: : 有余limitsOfSize.{w, w'} (Subobject X)
   定义体: by
   apply hasColimitsOfSize_thinSkeleton
 
@@ -1903,7 +1903,7 @@ theorem pullback_obj_mk
 
 中文:
 定理 pullback_obj_mk
-  结论: {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [Mono i]
+  结论: {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [单态射 i]
   证明: ((equivMonoOver Y).inverse.mapIso
     (MonoOver.pullbackObjIsoOfIsPullback _ _ _ _ h)).to_eq
 
@@ -2035,7 +2035,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: lower (MonoOver.map f)
 
 Depends on / 依赖: MonoOver, MonoOver.map
@@ -2053,7 +2053,7 @@ lemma map_mk
 
 中文:
 引理 map_mk
-  条件: {A X Y : C} (i : A ⟶ X) [Mono i] (f : X ⟶ Y) [Mono f]
+  条件: {A X Y : C} (i : A ⟶ X) [单态射 i] (f : X ⟶ Y) [单态射 f]
   证明: rfl
 -/
 lemma map_mk {A X Y : C} (i : A ⟶ X) [Mono i] (f : X ⟶ Y) [Mono f] :
@@ -2097,7 +2097,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [Mono f] [Mono g] (x : Subobject X)
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [单态射 f] [单态射 g] (x : Subobject X)
   证明: by
   induction x using Quotient.inductionOn' with | _ t
   exact Quotient.sound ⟨(MonoOver.mapComp _ _).app t⟩
@@ -2123,7 +2123,7 @@ lemma map_obj_injective
 
 中文:
 引理 map_obj_injective
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: fun X₁ X₂ h => by
   induction X₁ using Subobject.ind
   induction X₂ using Subobject.ind
@@ -2223,7 +2223,7 @@ definition mapPullbackAdj
 
 中文:
 定义 mapPullbackAdj
-  签名: [HasPullbacks C] (f : X ⟶ Y) [Mono f]
+  签名: [有Pullbacks C] (f : X ⟶ Y) [单态射 f]
   定义体: lowerAdjunction (MonoOver.mapPullbackAdj f)
 
 @[simp]
@@ -2246,7 +2246,7 @@ theorem pullback_map_self
 
 中文:
 定理 pullback_map_self
-  条件: [HasPullbacks C] (f : X ⟶ Y) [Mono f] (g : Subobject X)
+  条件: [有Pullbacks C] (f : X ⟶ Y) [单态射 f] (g : Subobject X)
   证明: by
   revert g
   exact Quotient.ind (fun g' => Quotient.sound ⟨(MonoOver.pullbackMapSelf f).app _⟩)
@@ -2277,7 +2277,7 @@ theorem map_pullback
 
 中文:
 定理 map_pullback
-  结论: [HasPullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y ⟶ W} {k : Z ⟶ W}
+  结论: [有Pullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y ⟶ W} {k : Z ⟶ W}
   证明: by
   revert p
   apply Quotient.ind'
@@ -2324,7 +2324,7 @@ definition «exists»
   body: lower (MonoOver.exists f)
 
 中文:
-定义 «exists»
+定义 «存在»
   签名: (f : X ⟶ Y)
   定义体: lower (MonoOver.exists f)
 -/
@@ -2341,8 +2341,8 @@ theorem exists_iso_map
   proof: lower_iso _ _ (MonoOver.existsIsoMap f)
 
 中文:
-定理 exists_iso_map
-  条件: (f : X ⟶ Y) [Mono f]
+定理 存在_iso_map
+  条件: (f : X ⟶ Y) [单态射 f]
   结论: «存在» f = map f
   证明: lower_iso _ _ (MonoOver.existsIsoMap f)
 
@@ -2360,8 +2360,8 @@ definition existsPullbackAdj
   body: lowerAdjunction (MonoOver.existsPullbackAdj f)
 
 中文:
-定义 existsPullbackAdj
-  签名: (f : X ⟶ Y) [HasPullbacks C]
+定义 存在PullbackAdj
+  签名: (f : X ⟶ Y) [有Pullbacks C]
   定义体: lowerAdjunction (MonoOver.existsPullbackAdj f)
 
 Depends on / 依赖: MonoOver, MonoOver.existsPullbackAdj, existsPullbackAdj, lowerAdjunction
@@ -2378,7 +2378,7 @@ definition existsCompRepresentativeIso
   body: lowerCompRepresentativeIso _
 
 中文:
-定义 existsCompRepresentativeIso
+定义 存在CompRepresentativeIso
   签名: (f : X ⟶ Y)
   定义体: lowerCompRepresentativeIso _
 
@@ -2399,7 +2399,7 @@ definition existsIsoImage
 #adaptation_note
 
 中文:
-定义 existsIsoImage
+定义 存在IsoImage
   签名: (f : X ⟶ Y) (x : Subobject X)
   定义体: (MonoOver.forget Y ⋙ Over.forget Y).mapIso (existsCompRepresentativeIso f).app x
 

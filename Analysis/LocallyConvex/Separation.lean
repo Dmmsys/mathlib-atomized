@@ -64,7 +64,7 @@ theorem separate_convex_open_set
 
 中文:
 定理 separate_convex_open_set
-  结论: [TopologicalSpace E] [AddCommGroup E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [加法交换群 E] [是拓扑加群 E]
   证明: by
   let f : E ->ₗ.[Real] Real := LinearPMap.mkSpanSingleton x₀ 1 (ne_of_mem_of_not_mem hs₀ hx₀).symm
   have := exists_extension_of_le_sublinear f (gauge s) (fun c hc => gauge_smul_of_nonneg hc.le)
@@ -129,7 +129,7 @@ theorem geometric_hahn_banach_open
 
 中文:
 定理 geometric_hahn_banach_open
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s) (ht : Convex 实数 t)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s) (ht : 凸 实数 t)
   证明: by
   obtain rfl | ⟨a₀, ha₀⟩ := s.eq_empty_or_nonempty
   · exact ⟨0, 0, by simp, fun b _hb => le_rfl⟩
@@ -184,7 +184,7 @@ theorem geometric_hahn_banach_open_point
 
 中文:
 定理 geometric_hahn_banach_open_point
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s) (disj : x ∉ s)
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s) (disj : x ∉ s)
   证明: let ⟨f, _s, hs, hx⟩ :=
     geometric_hahn_banach_open hs₁ hs₂ (convex_singleton x) (disjoint_singleton_right.2 disj)
   ⟨f, fun a ha => lt_of_lt_of_le (hs a ha) (hx x (mem_singleton _))⟩
@@ -208,7 +208,7 @@ theorem geometric_hahn_banach_point_open
 
 中文:
 定理 geometric_hahn_banach_point_open
-  条件: (ht₁ : Convex 实数 t) (ht₂ : IsOpen t) (disj : x ∉ t)
+  条件: (ht₁ : 凸 实数 t) (ht₂ : 是开集 t) (disj : x ∉ t)
   证明: let ⟨f, hf⟩ := geometric_hahn_banach_open_point ht₁ ht₂ disj
   ⟨-f, by simpa⟩
 
@@ -235,7 +235,7 @@ theorem geometric_hahn_banach_open_open
 
 中文:
 定理 geometric_hahn_banach_open_open
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s) (ht₁ : Convex 实数 t)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s) (ht₁ : 凸 实数 t)
   证明: by
   obtain rfl | ⟨a₀, ha₀⟩ := s.eq_empty_or_nonempty
   · exact ⟨0, -1, by simp, fun b _hb => by simp⟩
@@ -386,7 +386,7 @@ theorem geometric_hahn_banach_compact_closed
 
 中文:
 定理 geometric_hahn_banach_compact_closed
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsCompact s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是紧集 s)
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · exact ⟨0, -2, -1, by simp⟩
@@ -425,7 +425,7 @@ theorem geometric_hahn_banach_closed_compact
 
 中文:
 定理 geometric_hahn_banach_closed_compact
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: let ⟨f, s, t, hs, st, ht⟩ := geometric_hahn_banach_compact_closed ht₁ ht₂ hs₁ hs₂ disj.symm
   ⟨-f, -t, -s, by simpa using ht, by simpa using st, by simpa using hs⟩
 
@@ -450,7 +450,7 @@ theorem geometric_hahn_banach_point_closed
 
 中文:
 定理 geometric_hahn_banach_point_closed
-  条件: (ht₁ : Convex 实数 t) (ht₂ : IsClosed t) (disj : x ∉ t)
+  条件: (ht₁ : 凸 实数 t) (ht₂ : 是闭集 t) (disj : x ∉ t)
   证明: let ⟨f, _u, v, ha, hst, hb⟩ :=
     geometric_hahn_banach_compact_closed (convex_singleton x) isCompact_singleton ht₁ ht₂
       (disjoint_singleton_left.2 disj)
@@ -478,7 +478,7 @@ theorem geometric_hahn_banach_closed_point
 
 中文:
 定理 geometric_hahn_banach_closed_point
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s) (disj : x ∉ s)
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s) (disj : x ∉ s)
   证明: let ⟨f, s, _t, ha, hst, hb⟩ :=
     geometric_hahn_banach_closed_compact hs₁ hs₂ (convex_singleton x) isCompact_singleton
       (disjoint_singleton_right.2 disj)
@@ -507,7 +507,7 @@ theorem geometric_hahn_banach_point_point
 
 中文:
 定理 geometric_hahn_banach_point_point
-  条件: [T1Space E] (hxy : x != y)
+  条件: [T1空间 E] (hxy : x != y)
   证明: by
   obtain ⟨f, s, t, hs, st, ht⟩ :=
     geometric_hahn_banach_compact_closed (convex_singleton x) isCompact_singleton
@@ -538,8 +538,8 @@ theorem iInter_halfSpaces_eq
   exact ((hxy.trans_lt (hlA y hy)).trans hl).not_ge le_rfl
 
 中文:
-定理 iInter_halfSpaces_eq
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+定理 i整数er_halfSpaces_eq
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: by
   rw [Set.iInter_ofPred]
   refine Set.Subset.antisymm (fun x hx => ?_) fun x hx l => ⟨x, hx, le_rfl⟩
@@ -579,7 +579,7 @@ theorem separate_convex_open_set
 
 中文:
 定理 separate_convex_open_set
-  结论: {s : Set E}
+  结论: {s : 集合 E}
   证明: by
   have := IsScalarTower.continuousSMul (M := Real) (α := E) 𝕜
   obtain ⟨g, hg⟩ := _root_.separate_convex_open_set hs₀ hs₁ hs₂ hx₀
@@ -610,7 +610,7 @@ theorem geometric_hahn_banach_open
 
 中文:
 定理 geometric_hahn_banach_open
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s) (ht : Convex 实数 t)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s) (ht : 凸 实数 t)
   证明: by
   have := IsScalarTower.continuousSMul (M := Real) (α := E) 𝕜
   obtain ⟨f, u, h⟩ := _root_.geometric_hahn_banach_open hs₁ hs₂ ht disj
@@ -641,7 +641,7 @@ theorem geometric_hahn_banach_open_point
 
 中文:
 定理 geometric_hahn_banach_open_point
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s) (disj : x ∉ s)
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s) (disj : x ∉ s)
   证明: by
   have := IsScalarTower.continuousSMul (M := Real) (α := E) 𝕜
   obtain ⟨f, h⟩ := _root_.geometric_hahn_banach_open_point hs₁ hs₂ disj
@@ -668,7 +668,7 @@ theorem geometric_hahn_banach_point_open
 
 中文:
 定理 geometric_hahn_banach_point_open
-  条件: (ht₁ : Convex 实数 t) (ht₂ : IsOpen t) (disj : x ∉ t)
+  条件: (ht₁ : 凸 实数 t) (ht₂ : 是开集 t) (disj : x ∉ t)
   证明: let ⟨f, hf⟩ := geometric_hahn_banach_open_point ht₁ ht₂ disj
   ⟨-f, by simpa⟩
 
@@ -693,7 +693,7 @@ theorem geometric_hahn_banach_open_open
 
 中文:
 定理 geometric_hahn_banach_open_open
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsOpen s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是开集 s)
   证明: by
   have := IsScalarTower.continuousSMul (M := Real) (α := E) 𝕜
   obtain ⟨f, u, h⟩ := _root_.geometric_hahn_banach_open_open hs₁ hs₂ ht₁ ht₃ disj
@@ -833,7 +833,7 @@ theorem geometric_hahn_banach_compact_closed
 
 中文:
 定理 geometric_hahn_banach_compact_closed
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsCompact s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是紧集 s)
   证明: by
   have := IsScalarTower.continuousSMul (M := Real) (α := E) 𝕜
   obtain ⟨g, u, v, h1⟩ := _root_.geometric_hahn_banach_compact_closed hs₁ hs₂ ht₁ ht₂ disj
@@ -861,7 +861,7 @@ theorem geometric_hahn_banach_closed_compact
 
 中文:
 定理 geometric_hahn_banach_closed_compact
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: let ⟨f, s, t, hs, st, ht⟩ := geometric_hahn_banach_compact_closed ht₁ ht₂ hs₁ hs₂ disj.symm
   ⟨-f, -t, -s, by simpa using ht, by simpa using st, by simpa using hs⟩
 
@@ -886,7 +886,7 @@ theorem geometric_hahn_banach_point_closed
 
 中文:
 定理 geometric_hahn_banach_point_closed
-  结论: (ht₁ : Convex 实数 t) (ht₂ : IsClosed t)
+  结论: (ht₁ : 凸 实数 t) (ht₂ : 是闭集 t)
   证明: let ⟨f, _u, v, ha, hst, hb⟩ :=
     geometric_hahn_banach_compact_closed (convex_singleton x) isCompact_singleton ht₁ ht₂
       (disjoint_singleton_left.2 disj)
@@ -914,7 +914,7 @@ theorem geometric_hahn_banach_closed_point
 
 中文:
 定理 geometric_hahn_banach_closed_point
-  结论: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+  结论: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: let ⟨f, s, _t, ha, hst, hb⟩ :=
     geometric_hahn_banach_closed_compact hs₁ hs₂ (convex_singleton x) isCompact_singleton
       (disjoint_singleton_right.2 disj)
@@ -943,7 +943,7 @@ theorem geometric_hahn_banach_point_point
 
 中文:
 定理 geometric_hahn_banach_point_point
-  条件: [T1Space E] (hxy : x != y)
+  条件: [T1空间 E] (hxy : x != y)
   证明: by
   obtain ⟨f, s, t, hs, st, ht⟩ :=
     geometric_hahn_banach_compact_closed (𝕜 := 𝕜) (convex_singleton x) isCompact_singleton
@@ -974,8 +974,8 @@ theorem iInter_halfSpaces_eq
   exact ((hxy.trans_lt (hlA y hy)).trans hl).false
 
 中文:
-定理 iInter_halfSpaces_eq
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+定理 i整数er_halfSpaces_eq
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: by
   rw [Set.iInter_ofPred]
   refine Set.Subset.antisymm (fun x hx => ?_) fun x hx l => ⟨x, hx, le_rfl⟩
@@ -1009,8 +1009,8 @@ theorem iInter_halfSpaces_eq'
   exact (hl.trans_le (hx l c (fun y hy => (hls y hy).le))).false
 
 中文:
-定理 iInter_halfSpaces_eq'
-  条件: (hs₁ : Convex 实数 s) (hs₂ : IsClosed s)
+定理 i整数er_halfSpaces_eq'
+  条件: (hs₁ : 凸 实数 s) (hs₂ : 是闭集 s)
   证明: by
   simp_rw [Set.iInter_ofPred]
   refine Set.Subset.antisymm (fun x hx => ?_) fun x hx l c hc => hc x hx
@@ -1043,8 +1043,8 @@ theorem iInter_countable_halfSpaces_eq
 
 
 中文:
-定理 iInter_countable_halfSpaces_eq
-  结论: [HereditarilyLindelofSpace E]
+定理 i整数er_countable_halfSpaces_eq
+  结论: [HereditarilyLindelof空间 E]
   证明: by
   set ι := Σ (l : StrongDual 𝕜 E), { c : Real // forall y in s, re (l y) <= c }
   set l : ι -> StrongDual 𝕜 E := fun lc => lc.1

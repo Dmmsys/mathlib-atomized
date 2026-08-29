@@ -220,7 +220,7 @@ definition testBit
 
 中文:
 定义 testBit
-  签名: : PosNum -> 自然数 -> 布尔
+  签名: : PosNum -> 自然数 -> 布尔值
 -/
 def testBit : PosNum -> Nat -> Bool
   | 1, 0 => true
@@ -239,7 +239,7 @@ definition oneBits
 
 中文:
 定义 oneBits
-  签名: : PosNum -> 自然数 -> List 自然数
+  签名: : PosNum -> 自然数 -> 列表 自然数
 -/
 def oneBits : PosNum -> Nat -> List Nat
   | 1, d => [d]
@@ -640,7 +640,7 @@ definition testBit
 
 中文:
 定义 testBit
-  签名: : Num -> 自然数 -> 布尔
+  签名: : Num -> 自然数 -> 布尔值
 -/
 def testBit : Num -> Nat -> Bool
   | 0, _ => false
@@ -655,7 +655,7 @@ definition oneBits
 
 中文:
 定义 oneBits
-  签名: : Num -> List 自然数
+  签名: : Num -> 列表 自然数
 -/
 def oneBits : Num -> List Nat
   | 0 => []
@@ -675,10 +675,10 @@ inductive NzsNum
 
 中文:
 归纳类型 NzsNum
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
-    - msb: 布尔 -> NzsNum
-    - bit: 布尔 -> NzsNum -> NzsNum
+    - msb: 布尔值 -> NzsNum
+    - bit: 布尔值 -> NzsNum -> NzsNum
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.liftEquivRight, TensorProduct, liftEquivRight, of_equiv
 -/
@@ -700,9 +700,9 @@ inductive SNum
 
 中文:
 归纳类型 SNum
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
-    - zero: 布尔 -> SNum
+    - zero: 布尔值 -> SNum
     - nz: NzsNum -> SNum
 -/
 inductive SNum : Type
@@ -738,7 +738,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero SNum
+  签名: 零 SNum
   定义体: ⟨SNum.zero false⟩
 
 Depends on / 依赖: SNum.zero
@@ -756,7 +756,7 @@ instance :
 
 中文:
 实例 :
-  签名: One NzsNum
+  签名: 幺 NzsNum
   定义体: ⟨NzsNum.msb true⟩
 
 Depends on / 依赖: NzsNum, NzsNum.msb
@@ -774,7 +774,7 @@ instance :
 
 中文:
 实例 :
-  签名: One SNum
+  签名: 幺 SNum
   定义体: ⟨SNum.nz 1⟩
 
 Depends on / 依赖: SNum.nz
@@ -792,7 +792,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited NzsNum
+  签名: 可居 NzsNum
   定义体: ⟨1⟩
 -/
 instance : Inhabited NzsNum :=
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SNum
+  签名: 可居 SNum
   定义体: ⟨0⟩
 -/
 instance : Inhabited SNum :=
@@ -834,7 +834,7 @@ definition sign
 
 中文:
 定义 sign
-  签名: : NzsNum -> 布尔
+  签名: : NzsNum -> 布尔值
 
 Depends on / 依赖: Algebra, toSubalgebra
 -/
@@ -905,7 +905,7 @@ definition head
 
 中文:
 定义 head
-  签名: : NzsNum -> 布尔
+  签名: : NzsNum -> 布尔值
 -/
 def head : NzsNum -> Bool
   | msb b => b
@@ -941,7 +941,7 @@ definition sign
 
 中文:
 定义 sign
-  签名: : SNum -> 布尔
+  签名: : SNum -> 布尔值
 -/
 def sign : SNum -> Bool
   | zero z => z
@@ -979,7 +979,7 @@ definition bit
 
 中文:
 定义 bit
-  签名: : 布尔 -> SNum -> SNum
+  签名: : 布尔值 -> SNum -> SNum
 -/
 def bit : Bool -> SNum -> SNum
   | b, zero z => if b = z then zero b else msb b
@@ -1031,7 +1031,7 @@ theorem bit_zero
 
 中文:
 定理 bit_zero
-  条件: (b : 布尔)
+  条件: (b : 布尔值)
   结论: (b :: zero b) = zero b
   证明: by cases b <;> rfl
 -/
@@ -1048,8 +1048,8 @@ theorem bit_one
 
 中文:
 定理 bit_one
-  条件: (b : 布尔)
-  结论: (b :: zero (Not b)) = msb b
+  条件: (b : 布尔值)
+  结论: (b :: zero (非 b)) = msb b
   证明: by cases b <;> rfl
 -/
 theorem bit_one (b : Bool) : (b :: zero (Not b)) = msb b := by cases b <;> rfl
@@ -1069,7 +1069,7 @@ definition drec'
 
 中文:
 定义 drec'
-  签名: {C : SNum -> Sort*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
+  签名: {C : SNum -> 类型层*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
 -/
 def drec' {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p)) :
     forall p : NzsNum, C p
@@ -1091,7 +1091,7 @@ definition head
 
 中文:
 定义 head
-  签名: : SNum -> 布尔
+  签名: : SNum -> 布尔值
 -/
 def head : SNum -> Bool
   | zero z => z
@@ -1121,7 +1121,7 @@ definition drec'
 
 中文:
 定义 drec'
-  签名: {C : SNum -> Sort*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
+  签名: {C : SNum -> 类型层*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
 -/
 def drec' {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p)) : forall p, C p
   | zero b => z b
@@ -1137,7 +1137,7 @@ definition rec'
 
 中文:
 定义 rec'
-  签名: {α} (z : 布尔 -> α) (s : 布尔 -> SNum -> α -> α)
+  签名: {α} (z : 布尔值 -> α) (s : 布尔值 -> SNum -> α -> α)
   定义体: drec' z s
 -/
 def rec' {α} (z : Bool -> α) (s : Bool -> SNum -> α -> α) : SNum -> α :=
@@ -1152,7 +1152,7 @@ definition testBit
 
 中文:
 定义 testBit
-  签名: : 自然数 -> SNum -> 布尔
+  签名: : 自然数 -> SNum -> 布尔值
 -/
 def testBit : Nat -> SNum -> Bool
   | 0, p => head p
@@ -1216,7 +1216,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg SNum
+  签名: 取负 SNum
   定义体: ⟨SNum.neg⟩
 
 Depends on / 依赖: SNum.neg
@@ -1233,7 +1233,7 @@ definition czAdd
 
 中文:
 定义 czAdd
-  签名: : 布尔 -> 布尔 -> SNum -> SNum
+  签名: : 布尔值 -> 布尔值 -> SNum -> SNum
 -/
 def czAdd : Bool -> Bool -> SNum -> SNum
   | false, false, p => p
@@ -1254,7 +1254,7 @@ definition bits
 
 中文:
 定义 bits
-  签名: : SNum -> 对任意 n, List.Vector 布尔 n
+  签名: : SNum -> 对任意 n, 列表.Vector 布尔值 n
 -/
 def bits : SNum -> forall n, List.Vector Bool n
   | _, 0 => Vector.nil
@@ -1271,7 +1271,7 @@ definition cAdd
 
 中文:
 定义 cAdd
-  签名: : SNum -> SNum -> 布尔 -> SNum
+  签名: : SNum -> SNum -> 布尔值 -> SNum
   定义体: rec' (fun a p c => czAdd c a p) fun a p IH =>
     rec' (fun b c => czAdd c b (a :: p)) fun b q _ c => Bool.xor3 a b c :: IH q (Bool.carry a b c)
 
@@ -1307,7 +1307,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add SNum
+  签名: 加法 SNum
   定义体: ⟨SNum.add⟩
 
 Depends on / 依赖: SNum.add
@@ -1341,7 +1341,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub SNum
+  签名: 减法 SNum
   定义体: ⟨SNum.sub⟩
 
 Depends on / 依赖: SNum.sub
@@ -1375,7 +1375,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul SNum
+  签名: 乘法 SNum
   定义体: ⟨SNum.mul⟩
 
 Depends on / 依赖: SNum.mul

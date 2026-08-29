@@ -49,7 +49,7 @@ theorem hasIntegralIndicatorConst
   have A : μ (s inter Box.Icc I) != ∞
 
 中文:
-定理 hasIntegralIndicatorConst
+定理 has整数egralIndicatorConst
   结论: (l : 整数egrationParams) (hl : l.bRiemann = false)
   证明: by
   refine HasIntegral.of_mul ‖y‖ fun ε ε0 => ?_
@@ -136,7 +136,7 @@ theorem HasIntegral.of_aeEq_zero
   lift ε to Real>=0 using ε0.lt.le; rw [gt_iff_lt, NNReal
 
 中文:
-定理 HasIntegral.of_aeEq_zero
+定理 Has整数egral.of_aeEq_zero
   结论: {l : 整数egrationParams} {I : Box ι} {f : (ι -> 实数) -> E}
   证明: by
   /- Each set `{x | n < ‖f x‖ ≤ n + 1}`, `n : ℕ`, has measure zero. We cover it by an open set of
@@ -206,7 +206,7 @@ theorem HasIntegral.congr_ae
   simpa using hf.add (HasIntegral.of_aeEq_zero this hl)
 
 中文:
-定理 HasIntegral.congr_ae
+定理 Has整数egral.congr_ae
   结论: {l : 整数egrationParams} {I : Box ι} {y : E} {f g : (ι -> 实数) -> E}
   证明: by
   have : g - f =ᵐ[μ.restrict I] 0 := hfg.mono fun x hx => sub_eq_zero.2 hx.symm
@@ -243,8 +243,8 @@ theorem hasBoxIntegral
     exacts [hfi.add hgi, integrable_i
 
 中文:
-定理 hasBoxIntegral
-  结论: (f : SimpleFunc (ι -> 实数) E) (μ : Measure (ι -> 实数)) [IsLocallyFiniteMeasure μ]
+定理 hasBox整数egral
+  结论: (f : SimpleFunc (ι -> 实数) E) (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
   证明: by
   induction f using MeasureTheory.SimpleFunc.induction with
   | @const y s hs =>
@@ -278,7 +278,7 @@ theorem box_integral_eq_integral
 
 中文:
 定理 box_integral_eq_integral
-  结论: (f : SimpleFunc (ι -> 实数) E) (μ : Measure (ι -> 实数))
+  结论: (f : SimpleFunc (ι -> 实数) E) (μ : 测度 (ι -> 实数))
   证明: (f.hasBoxIntegral μ I l hl).integral_eq
 
 Depends on / 依赖: f.hasBoxIntegral, hasBoxIntegral, integral_eq
@@ -307,8 +307,8 @@ theorem IntegrableOn.hasBoxIntegral
   rw [integral_congr_ae hfg]; have hgi : IntegrableOn g I 
 
 中文:
-定理 IntegrableOn.hasBoxIntegral
-  结论: [CompleteSpace E] {f : (ι -> 实数) -> E} {μ : Measure (ι -> 实数)}
+定理 整数egrableOn.hasBox整数egral
+  结论: [完备空间 E] {f : (ι -> 实数) -> E} {μ : 测度 (ι -> 实数)}
   证明: by
   borelize E
   -- First we replace an `ae_strongly_measurable` function by a measurable one.
@@ -434,8 +434,8 @@ theorem ContinuousOn.hasBoxIntegral
   exact HasIntegral.unique (IntegrableOn.hasBoxIntegral this ⊥ rfl) (HasIntegral.mono hy bot_le)
 
 中文:
-定理 ContinuousOn.hasBoxIntegral
-  结论: [CompleteSpace E] {f : (ι -> 实数) -> E} (μ : Measure (ι -> 实数))
+定理 ContinuousOn.hasBox整数egral
+  结论: [完备空间 E] {f : (ι -> 实数) -> E} (μ : 测度 (ι -> 实数))
   证明: by
   obtain ⟨y, hy⟩ := BoxIntegral.integrable_of_continuousOn l hc μ
   convert! hy
@@ -471,8 +471,8 @@ theorem AEContinuous.hasBoxIntegral
  
 
 中文:
-定理 AEContinuous.hasBoxIntegral
-  结论: [CompleteSpace E] {f : (ι -> 实数) -> E} (μ : Measure (ι -> 实数))
+定理 AEContinuous.hasBox整数egral
+  结论: [完备空间 E] {f : (ι -> 实数) -> E} (μ : 测度 (ι -> 实数))
   证明: by
   obtain ⟨y, hy⟩ := integrable_of_bounded_and_ae_continuous l hb μ hc
   convert! hy

@@ -100,7 +100,7 @@ theorem exists_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
     obtain ⟨i, hi, mem⟩ :=
 
 中文:
-定理 exists_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
+定理 存在_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
   结论: {r : S}
   证明: by
   refine p.recOnHorner ?_ ?_ ?_
@@ -145,7 +145,7 @@ theorem injective_quotient_le_comap_map
 
 中文:
 定理 injective_quotient_le_comap_map
-  条件: (P : Ideal R[X])
+  条件: (P : 理想 R[X])
   证明: by
   refine quotientMap_injective' (le_of_eq ?_)
   rw [comap_map_of_surjective (mapRingHom (Ideal.Quotient.mk (P.comap (C : R ->+* R[X]))))
@@ -180,7 +180,7 @@ theorem quotient_mk_maps_eq
 
 中文:
 定理 quotient_mk_maps_eq
-  条件: (P : Ideal R[X])
+  条件: (P : 理想 R[X])
   证明: by
   ext
   simp
@@ -210,8 +210,8 @@ theorem exists_nonzero_mem_of_ne_bot
   
 
 中文:
-定理 exists_nonzero_mem_of_ne_bot
-  条件: {P : Ideal R[X]} (Pb : P != ⊥) (hP : 对任意 x : R, C x in P -> x = 0)
+定理 存在_nonzero_mem_of_ne_bot
+  条件: {P : 理想 R[X]} (Pb : P != ⊥) (hP : 对任意 x : R, C x in P -> x = 0)
   证明: by
   obtain ⟨m, hm⟩ := Submodule.nonzero_mem_of_bot_lt (bot_lt_iff_ne_bot.mpr Pb)
   refine ⟨m, Submodule.coe_mem m, fun pp0 => hm (Submodule.coe_eq_zero.mp ?_)⟩
@@ -252,8 +252,8 @@ theorem exists_coeff_ne_zero_mem_comap_of_root_mem
     (fun {_} h => Or.resolve_right (mul_eq_zero.mp h) r_ne_zero) hr
 
 中文:
-定理 exists_coeff_ne_zero_mem_comap_of_root_mem
-  结论: [IsDomain S] {r : S} (r_ne_zero : r != 0)
+定理 存在_coeff_ne_zero_mem_comap_of_root_mem
+  结论: [是整环 S] {r : S} (r_ne_zero : r != 0)
   证明: exists_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
     (fun {_} h => Or.resolve_right (mul_eq_zero.mp h) r_ne_zero) hr
 
@@ -279,8 +279,8 @@ theorem exists_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
     
 
 中文:
-定理 exists_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
-  结论: [IsPrime I] (hIJ : I <= J) {r : S}
+定理 存在_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
+  结论: [是素 I] (hIJ : I <= J) {r : S}
   证明: by
   obtain ⟨hrJ, hrI⟩ := hr
   have rbar_ne_zero : Ideal.Quotient.mk I r != 0 := mt (Quotient.mk_eq_zero I).mp hrI
@@ -322,7 +322,7 @@ theorem comap_lt_comap_of_root_mem_sdiff
 
 中文:
 定理 comap_lt_comap_of_root_mem_sdiff
-  结论: [I.IsPrime] (hIJ : I <= J) {r : S}
+  结论: [I.是素] (hIJ : I <= J) {r : S}
   证明: let ⟨i, hJ, hI⟩ := exists_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff hIJ hr p_ne_zero hp
   SetLike.lt_iff_le_and_exists.mpr ⟨comap_mono hIJ, p.coeff i, hJ, hI⟩
 
@@ -367,7 +367,7 @@ theorem comap_lt_comap_of_integral_mem_sdiff
 
 中文:
 定理 comap_lt_comap_of_integral_mem_sdiff
-  结论: [Algebra R S] [hI : I.IsPrime] (hIJ : I <= J) {x : S}
+  结论: [代数 R S] [hI : I.是素] (hIJ : I <= J) {x : S}
   证明: by
   obtain ⟨p, p_monic, hpx⟩ := integral
   refine comap_lt_comap_of_root_mem_sdiff hIJ mem (map_monic_ne_zero p_monic) ?_
@@ -394,7 +394,7 @@ theorem comap_ne_bot_of_root_mem
 
 中文:
 定理 comap_ne_bot_of_root_mem
-  结论: [IsDomain S] {r : S} (r_ne_zero : r != 0) (hr : r in I) {p : R[X]}
+  结论: [是整环 S] {r : S} (r_ne_zero : r != 0) (hr : r in I) {p : R[X]}
   证明: fun h =>
   let ⟨_, hi, mem⟩ := exists_coeff_ne_zero_mem_comap_of_root_mem r_ne_zero hr p_ne_zero hp
   absurd (mem_bot.mp (eq_bot_iff.mp h mem)) hi
@@ -417,8 +417,8 @@ comap_eq_top_iff.1
           (Algebra.IsIntegral.isIntegral x))⟩⟩
 
 中文:
-定理 isMaximal_of_isIntegral_of_isMaximal_comap
-  结论: [Algebra R S] [Algebra.Is整数egral R S]
+定理 isMaximal_of_is整数egral_of_isMaximal_comap
+  结论: [代数 R S] [代数.是整 R S]
   证明: ⟨⟨mt comap_eq_top_iff.mpr hI.1.1, fun _ I_lt_J =>
       let ⟨I_le_J, x, hxJ, hxI⟩ := SetLike.lt_iff_le_and_exists.mp I_lt_J
 comap_eq_top_iff.1
@@ -446,8 +446,8 @@ theorem isMaximal_of_isIntegral_of_isMaximal_comap'
   isMaximal_of_isIntegral_of_isMaximal_comap (R := R) (S := S) I hI
 
 中文:
-定理 isMaximal_of_isIntegral_of_isMaximal_comap'
-  结论: (f : R ->+* S) (hf : f.Is整数egral) (I : Ideal S)
+定理 isMaximal_of_is整数egral_of_isMaximal_comap'
+  结论: (f : R ->+* S) (hf : f.是整) (I : 理想 S)
   证明: let _ : Algebra R S := f.toAlgebra
   have : Algebra.IsIntegral R S := ⟨hf⟩
   isMaximal_of_isIntegral_of_isMaximal_comap (R := R) (S := S) I hI
@@ -473,7 +473,7 @@ theorem comap_ne_bot_of_algebraic_mem
 
 中文:
 定理 comap_ne_bot_of_algebraic_mem
-  结论: [IsDomain S] {x : S} (x_ne_zero : x != 0) (x_mem : x in I)
+  结论: [是整环 S] {x : S} (x_ne_zero : x != 0) (x_mem : x in I)
   证明: let ⟨_, p_ne_zero, hp⟩ := hx
   comap_ne_bot_of_root_mem x_ne_zero x_mem p_ne_zero hp
 
@@ -494,7 +494,7 @@ theorem comap_ne_bot_of_integral_mem
 
 中文:
 定理 comap_ne_bot_of_integral_mem
-  结论: [Nontrivial R] [IsDomain S] {x : S} (x_ne_zero : x != 0)
+  结论: [非平凡 R] [是整环 S] {x : S} (x_ne_zero : x != 0)
   证明: comap_ne_bot_of_algebraic_mem x_ne_zero x_mem hx.isAlgebraic
 
 Depends on / 依赖: comap_ne_bot_of_algebraic_mem, hx.isAlgebraic, isAlgebraic, x_mem, x_ne_zero
@@ -517,7 +517,7 @@ theorem eq_bot_of_comap_eq_bot
 
 中文:
 定理 eq_bot_of_comap_eq_bot
-  结论: [Nontrivial R] [IsDomain S] [Algebra.Is整数egral R S]
+  结论: [非平凡 R] [是整环 S] [代数.是整 R S]
   证明: by
   refine eq_bot_iff.2 fun x hx => ?_
   by_cases hx0 : x = 0
@@ -546,8 +546,8 @@ theorem isMaximal_comap_of_isIntegral_of_isMaximal
     algebraMap_quotient_injective (by rwa [← Quotient.maximal_ideal_iff_isField_quotient])
 
 中文:
-定理 isMaximal_comap_of_isIntegral_of_isMaximal
-  结论: [Algebra.Is整数egral R S] (I : Ideal S)
+定理 isMaximal_comap_of_is整数egral_of_isMaximal
+  结论: [代数.是整 R S] (I : 理想 S)
   证明: by
   refine Ideal.Quotient.maximal_of_isField _ ?_
   have : IsPrime (I.comap (algebraMap R S)) := comap_isPrime _ _
@@ -574,8 +574,8 @@ theorem isMaximal_comap_of_isIntegral_of_isMaximal'
   isMaximal_comap_of_isIntegral_of_isMaximal (R := R) (S := S) I
 
 中文:
-定理 isMaximal_comap_of_isIntegral_of_isMaximal'
-  结论: {R S : 类型} [CommRing R] [CommRing S]
+定理 isMaximal_comap_of_is整数egral_of_isMaximal'
+  结论: {R S : 类型} [交换环 R] [交换环 S]
   证明: let _ : Algebra R S := f.toAlgebra
   have : Algebra.IsIntegral R S := ⟨hf⟩
   isMaximal_comap_of_isIntegral_of_isMaximal (R := R) (S := S) I
@@ -605,8 +605,8 @@ theorem IsIntegral.comap_lt_comap
   IsIntegral.comap_lt_comap
 
 中文:
-定理 IsIntegral.comap_lt_comap
-  条件: {I J : Ideal A} [I.IsPrime] (I_lt_J : I < J)
+定理 是整.comap_lt_comap
+  条件: {I J : 理想 A} [I.是素] (I_lt_J : I < J)
   证明: let ⟨I_le_J, x, hxJ, hxI⟩ := SetLike.lt_iff_le_and_exists.mp I_lt_J
   comap_lt_comap_of_integral_mem_sdiff I_le_J ⟨hxJ, hxI⟩ (Algebra.IsIntegral.isIntegral x)
 
@@ -635,8 +635,8 @@ theorem IsIntegral.isMaximal_of_isMaximal_comap
   IsIntegral.isMaximal_of_isMaximal_comap
 
 中文:
-定理 IsIntegral.isMaximal_of_isMaximal_comap
-  结论: (I : Ideal A) [I.IsPrime]
+定理 是整.isMaximal_of_isMaximal_comap
+  结论: (I : 理想 A) [I.是素]
   证明: isMaximal_of_isIntegral_of_isMaximal_comap I hI
 
 @[deprecated (since := "2026-05-08")] alias IsIntegralClosure.isMaximal_of_isMaximal_comap :=
@@ -663,8 +663,8 @@ theorem IsIntegral.mem_minimalPrimes_map_under
   exact mt map_le_iff_le_comap.mp (not_le_of_gt (IsIntegral.comap_lt_comap (hrq.lt_of_not_ge hpr)))
 
 中文:
-定理 IsIntegral.mem_minimalPrimes_map_under
-  条件: (I : Ideal A) [I.IsPrime]
+定理 是整.mem_minimalPrimes_map_under
+  条件: (I : 理想 A) [I.是素]
   证明: by
   refine ⟨⟨inferInstance, map_comap_le⟩, fun r ⟨hr, hpr⟩ hrq => ?_⟩
   contrapose! hpr
@@ -694,8 +694,8 @@ theorem IsIntegral.comap_ne_bot
   IsIntegral.comap_ne_bot
 
 中文:
-定理 IsIntegral.comap_ne_bot
-  条件: [Nontrivial R] {I : Ideal A} (I_ne_bot : I != ⊥)
+定理 是整.comap_ne_bot
+  条件: [非平凡 R] {I : 理想 A} (I_ne_bot : I != ⊥)
   证明: let ⟨x, x_mem, x_ne_zero⟩ := I.ne_bot_iff.mp I_ne_bot
   comap_ne_bot_of_integral_mem x_ne_zero x_mem (Algebra.IsIntegral.isIntegral x)
 
@@ -727,8 +727,8 @@ theorem IsIntegral.eq_bot_of_comap_eq_bot
     IsIntegral.eq_bot_of_comap_eq_bot
 
 中文:
-定理 IsIntegral.eq_bot_of_comap_eq_bot
-  条件: [Nontrivial R] {I : Ideal A}
+定理 是整.eq_bot_of_comap_eq_bot
+  条件: [非平凡 R] {I : 理想 A}
   证明: by
   contrapose
   exact IsIntegral.comap_ne_bot R
@@ -778,8 +778,8 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isDomain
   let : IsDomain (Localization (Algebra.algebraMapSubmonoid S P.
 
 中文:
-定理 exists_ideal_over_prime_of_isIntegral_of_isDomain
-  结论: [Algebra.Is整数egral R S] (P : Ideal R)
+定理 存在_ideal_over_prime_of_is整数egral_of_isDomain
+  结论: [代数.是整 R S] (P : 理想 R)
   证明: by
   have hP0 : (0 : S) ∉ Algebra.algebraMapSubmonoid S P.primeCompl := by
     rintro ⟨x, ⟨hx, x0⟩⟩
@@ -826,7 +826,7 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isPrime
       (map_isPrime_of_surjective Quotient.mk_surjective 
 
 中文:
-定理 exists_ideal_over_prime_of_isIntegral_of_isPrime
+定理 存在_ideal_over_prime_of_is整数egral_of_isPrime
   证明: by
   obtain ⟨Q' : Ideal (S ⧸ I), ⟨Q'_prime, hQ'⟩⟩ :=
     @exists_ideal_over_prime_of_isIntegral_of_isDomain (R ⧸ I.comap (algebraMap R S)) _ (S ⧸ I) _
@@ -868,8 +868,8 @@ theorem exists_ideal_over_prime_of_isIntegral
   exact ⟨Q, hP.trans hQ, hQ', hQ''⟩
 
 中文:
-定理 exists_ideal_over_prime_of_isIntegral
-  结论: [Algebra.Is整数egral R S] (P : Ideal R) [IsPrime P]
+定理 存在_ideal_over_prime_of_is整数egral
+  结论: [代数.是整 R S] (P : 理想 R) [是素 P]
   证明: by
   have ⟨P', hP, hP', hP''⟩ := exists_ideal_comap_le_prime P I hIP
   obtain ⟨Q, hQ, hQ', hQ''⟩ := exists_ideal_over_prime_of_isIntegral_of_isPrime P P' hP''
@@ -897,7 +897,7 @@ instance nonempty_primesOver
 
 中文:
 实例 nonempty_primesOver
-  签名: [Algebra.Is整数egral R S] [FaithfulSMul R S] (P : Ideal R) [P.IsPrime]
+  签名: [代数.是整 R S] [忠实标量乘法 R S] (P : 理想 R) [P.是素]
   定义体: by
   obtain ⟨Q, _, hQ₁, hQ₂⟩ := exists_ideal_over_prime_of_isIntegral P (⊥ : Ideal S)
     (by simp [← RingHom.ker_eq_comap_bot])
@@ -922,8 +922,8 @@ theorem exists_ideal_over_maximal_of_isIntegral
   exact ⟨Q, isMaximal_of_isIntegral_of_isMaximal_comap _ (hQ.symm ▸ P_max), hQ⟩
 
 中文:
-定理 exists_ideal_over_maximal_of_isIntegral
-  结论: [Algebra.Is整数egral R S]
+定理 存在_ideal_over_maximal_of_is整数egral
+  结论: [代数.是整 R S]
   证明: by
   obtain ⟨Q, -, Q_prime, hQ⟩ := exists_ideal_over_prime_of_isIntegral P ⊥ hP
   exact ⟨Q, isMaximal_of_isIntegral_of_isMaximal_comap _ (hQ.symm ▸ P_max), hQ⟩
@@ -948,8 +948,8 @@ theorem exists_maximal_ideal_liesOver_of_isIntegral
     simp [(RingHom.injective_iff_ker_eq_bot _).mp (FaithfulSMul.algebraMap_injective R S)])
 
 中文:
-定理 exists_maximal_ideal_liesOver_of_isIntegral
-  结论: [Algebra.Is整数egral R S] [FaithfulSMul R S]
+定理 存在_maximal_ideal_liesOver_of_is整数egral
+  结论: [代数.是整 R S] [忠实标量乘法 R S]
   证明: by
   simp_rw [liesOver_iff, eq_comm (a := P)]
   exact exists_ideal_over_maximal_of_isIntegral P (by
@@ -983,7 +983,7 @@ lemma map_eq_top_iff_of_ker_le
 
 中文:
 引理 map_eq_top_iff_of_ker_le
-  结论: {R S} [CommRing R] [CommRing S]
+  结论: {R S} [交换环 R] [交换环 S]
   证明: by
   constructor; swap
   · rintro rfl; exact Ideal.map_top _
@@ -1021,7 +1021,7 @@ lemma map_eq_top_iff
 
 中文:
 引理 map_eq_top_iff
-  结论: {R S} [CommRing R] [CommRing S]
+  结论: {R S} [交换环 R] [交换环 S]
   证明: map_eq_top_iff_of_ker_le f (by simp [(RingHom.injective_iff_ker_eq_bot f).mp hf₁]) hf₂
 
 Depends on / 依赖: RingHom, RingHom.injective_iff_ker_eq_bot, _interior, _interior.ge_iff, _interior_le, ge_iff, h.lift, h.mem_of_mem, injective_iff_ker_eq_bot, interior_eq, l.lift, le_antisymm, map_eq_top_iff_of_ker_le, mem_of_mem
@@ -1045,7 +1045,7 @@ lemma exists_notMem_dvd_algebraMap_of_primesOver_eq_singleton
       Algebra.algebraMapSubmonoid, @forall_comm S
 
 中文:
-引理 exists_notMem_dvd_algebraMap_of_primesOver_eq_singleton
+引理 存在_notMem_dvd_algebraMap_of_primesOver_eq_singleton
   证明: by
   simp only [dvd_def, eq_comm, mul_comm x]
   by_contra!
@@ -1090,8 +1090,8 @@ instance IsMaximal.under
   body: isMaximal_comap_of_isIntegral_of_isMaximal P
 
 中文:
-实例 IsMaximal.under
-  签名: [P.IsMaximal]
+实例 是极大.under
+  签名: [P.是极大]
   定义体: isMaximal_comap_of_isIntegral_of_isMaximal P
 
 Depends on / 依赖: isMaximal_comap_of_isIntegral_of_isMaximal
@@ -1111,9 +1111,9 @@ theorem IsMaximal.of_liesOver_isMaximal
   exact isMaximal_of_isIntegral_of_isMaximal_comap P hpm
 
 中文:
-定理 IsMaximal.of_liesOver_isMaximal
-  条件: [hpm : p.IsMaximal] [P.IsPrime]
-  结论: P.IsMaximal
+定理 是极大.of_liesOver_isMaximal
+  条件: [hpm : p.是极大] [P.是素]
+  结论: P.是极大
   证明: by
   rw [P.over_def p] at hpm
   exact isMaximal_of_isIntegral_of_isMaximal_comap P hpm
@@ -1136,9 +1136,9 @@ theorem IsMaximal.of_isMaximal_liesOver
   exact isMaximal_comap_of_isIntegral_of_isMaximal P
 
 中文:
-定理 IsMaximal.of_isMaximal_liesOver
-  条件: [P.IsMaximal]
-  结论: p.IsMaximal
+定理 是极大.of_isMaximal_liesOver
+  条件: [P.是极大]
+  结论: p.是极大
   证明: by
   rw [P.over_def p]
   exact isMaximal_comap_of_isIntegral_of_isMaximal P
@@ -1160,7 +1160,7 @@ theorem eq_bot_of_liesOver_bot
 
 中文:
 定理 eq_bot_of_liesOver_bot
-  条件: [Nontrivial A] [IsDomain B] [h : P.LiesOver (⊥ : Ideal A)]
+  条件: [非平凡 A] [是整环 B] [h : P.LiesOver (⊥ : 理想 A)]
   证明: eq_bot_of_comap_eq_bot ((liesOver_iff _ _).mp h).symm
 
 Depends on / 依赖: eq_bot_of_comap_eq_bot, liesOver_iff
@@ -1181,7 +1181,7 @@ theorem under_ne_bot
 
 中文:
 定理 under_ne_bot
-  条件: [Nontrivial A] [IsDomain B] (hP : P != ⊥)
+  条件: [非平凡 A] [是整环 B] (hP : P != ⊥)
   结论: under A P != ⊥
   证明: fun h => hP eq_bot_of_comap_eq_bot h
 
@@ -1199,8 +1199,8 @@ instance Quotient.algebra_isIntegral_of_liesOver
   body: Algebra.IsIntegral.tower_top A
 
 中文:
-实例 Quotient.algebra_isIntegral_of_liesOver
-  签名: : Algebra.Is整数egral (A ⧸ p) (B ⧸ P)
+实例 商.algebra_is整数egral_of_liesOver
+  签名: : 代数.是整 (A ⧸ p) (B ⧸ P)
   定义体: Algebra.IsIntegral.tower_top A
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.tower_top, IsIntegral, Subset, Subset.antisymm, Subset.refl, antisymm, closure_minimal, subset_closure, tower_top
@@ -1225,7 +1225,7 @@ instance primesOver.isMaximal
 
 中文:
 实例 primesOver.isMaximal
-  签名: : Q.1.IsMaximal
+  签名: : Q.1.是极大
   定义体: Ideal.IsMaximal.of_liesOver_isMaximal Q.1 p
 
 Depends on / 依赖: Ideal.IsMaximal.of_liesOver_isMaximal, IsMaximal, of_liesOver_isMaximal
@@ -1244,8 +1244,8 @@ theorem isMaximal_of_mem_primesOver
 
 中文:
 定理 isMaximal_of_mem_primesOver
-  条件: {P : Ideal B} (hP : P in primesOver p B)
-  结论: P.IsMaximal
+  条件: {P : 理想 B} (hP : P in primesOver p B)
+  结论: P.是极大
   证明: primesOver.isMaximal ⟨P, hP⟩
 
 Depends on / 依赖: isMaximal, primesOver, primesOver.isMaximal
@@ -1268,7 +1268,7 @@ lemma primesOver_bot
 
 中文:
 引理 primesOver_bot
-  条件: [Module.IsTorsionFree A B] [IsDomain A] [IsDomain B]
+  条件: [模.是无挠 A B] [是整环 A] [是整环 B]
   证明: by
   ext p
   refine ⟨fun ⟨_, ⟨h⟩⟩ => p.eq_bot_of_comap_eq_bot h.symm, ?_⟩

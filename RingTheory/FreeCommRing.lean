@@ -115,7 +115,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: Function.Injective (of : α -> FreeCommRing α)
+  结论: 函数.单射 (of : α -> FreeCommRing α)
   证明: FreeAbelianGroup.of_injective.comp fun _ _ =>
     (Multiset.coe_eq_coe.trans List.singleton_perm_singleton).mp
 
@@ -238,7 +238,7 @@ lemma of_cons
 中文:
 引理 of_cons
   条件: (a : α) (m : Multiset α)
-  结论: (FreeAbelianGroup.of (Multiplicative.ofAdd (a ::ₘ m))) =
+  结论: (自由交换群.of (Multiplicative.ofAdd (a ::ₘ m))) =
   证明: by
   dsimp [FreeCommRing]
   rw [← Multiset.singleton_add]; rw [ofAdd_add]; rw [of]; rw [FreeAbelianGroup.of_mul_of]
@@ -495,8 +495,8 @@ definition IsSupported
   body: x in Subring.closure (of '' s)
 
 中文:
-定义 IsSupported
-  签名: (x : FreeCommRing α) (s : Set α)
+定义 是Supported
+  签名: (x : FreeCommRing α) (s : 集合 α)
   定义体: x in Subring.closure (of '' s)
 
 Depends on / 依赖: Subring, Subring.closure, closure
@@ -519,8 +519,8 @@ theorem isSupported_upwards
 
 中文:
 定理 isSupported_upwards
-  条件: (hs : IsSupported x s) (hst : s subseteq t)
-  结论: IsSupported x t
+  条件: (hs : 是Supported x s) (hst : s subseteq t)
+  结论: 是Supported x t
   证明: Subring.closure_mono (Set.monotone_image hst) hs
 
 Depends on / 依赖: Set.monotone_image, Subring, Subring.closure_mono, closure_mono, monotone_image
@@ -539,8 +539,8 @@ theorem isSupported_add
 
 中文:
 定理 isSupported_add
-  条件: (hxs : IsSupported x s) (hys : IsSupported y s)
-  结论: IsSupported (x + y) s
+  条件: (hxs : 是Supported x s) (hys : 是Supported y s)
+  结论: 是Supported (x + y) s
   证明: Subring.add_mem _ hxs hys
 
 Depends on / 依赖: Subring, Subring.add_mem, add_mem
@@ -559,8 +559,8 @@ theorem isSupported_neg
 
 中文:
 定理 isSupported_neg
-  条件: (hxs : IsSupported x s)
-  结论: IsSupported (-x) s
+  条件: (hxs : 是Supported x s)
+  结论: 是Supported (-x) s
   证明: Subring.neg_mem _ hxs
 
 Depends on / 依赖: Subring, Subring.neg_mem, neg_mem
@@ -579,8 +579,8 @@ theorem isSupported_sub
 
 中文:
 定理 isSupported_sub
-  条件: (hxs : IsSupported x s) (hys : IsSupported y s)
-  结论: IsSupported (x - y) s
+  条件: (hxs : 是Supported x s) (hys : 是Supported y s)
+  结论: 是Supported (x - y) s
   证明: Subring.sub_mem _ hxs hys
 
 Depends on / 依赖: Subring, Subring.sub_mem, sub_mem
@@ -599,8 +599,8 @@ theorem isSupported_mul
 
 中文:
 定理 isSupported_mul
-  条件: (hxs : IsSupported x s) (hys : IsSupported y s)
-  结论: IsSupported (x * y) s
+  条件: (hxs : 是Supported x s) (hys : 是Supported y s)
+  结论: 是Supported (x * y) s
   证明: Subring.mul_mem _ hxs hys
 
 Depends on / 依赖: Subring, Subring.mul_mem, mul_mem
@@ -618,7 +618,7 @@ theorem isSupported_zero
 
 中文:
 定理 isSupported_zero
-  结论: IsSupported 0 s
+  结论: 是Supported 0 s
   证明: Subring.zero_mem _
 
 Depends on / 依赖: Subring, Subring.zero_mem, zero_mem
@@ -636,7 +636,7 @@ theorem isSupported_one
 
 中文:
 定理 isSupported_one
-  结论: IsSupported 1 s
+  结论: 是Supported 1 s
   证明: Subring.one_mem _
 
 Depends on / 依赖: Subring, Subring.one_mem, one_mem
@@ -657,8 +657,8 @@ theorem isSupported_int
 
 中文:
 定理 isSupported_int
-  条件: {i : 整数} {s : Set α}
-  结论: IsSupported (↑i) s
+  条件: {i : 整数} {s : 集合 α}
+  结论: 是Supported (↑i) s
   证明: Int.induction_on i isSupported_zero
     (fun i hi => by rw [Int.cast_add, Int.cast_one]; exact isSupported_add hi isSupported_one)
     fun i hi => by rw [Int.cast_sub, Int.cast_one]; exact isSupported_sub hi isSupported_one
@@ -682,7 +682,7 @@ definition restriction
 
 中文:
 定义 restriction
-  签名: (s : Set α) [DecidablePred (· in s)]
+  签名: (s : 集合 α) [DecidablePred (· in s)]
   定义体: lift (fun a => if H : a in s then of ⟨a, H⟩ else 0)
 -/
 def restriction (s : Set α) [DecidablePred (· in s)] : FreeCommRing α ->+* FreeCommRing s :=
@@ -730,8 +730,8 @@ theorem isSupported_of
 
 中文:
 定理 isSupported_of
-  条件: {p} {s : Set α}
-  结论: IsSupported (of p) s ↔ p in s
+  条件: {p} {s : 集合 α}
+  结论: 是Supported (of p) s ↔ p in s
   证明: suffices IsSupported (of p) s -> p in s from ⟨this, fun hps => Subring.subset_closure ⟨p, hps, rfl⟩⟩
   fun hps : IsSupported (of p) s => by
   have := Classical.decPred (· in s)
@@ -791,7 +791,7 @@ theorem map_subtype_val_restriction
 
 中文:
 定理 map_subtype_val_restriction
-  结论: {x} (s : Set α) [DecidablePred (· in s)]
+  结论: {x} (s : 集合 α) [DecidablePred (· in s)]
   证明: by
   refine Subring.InClosure.recOn hxs ?_ ?_ ?_ ?_
   · rw [map_one]
@@ -831,9 +831,9 @@ theorem exists_finite_support
         isSupported_add (isSupported_upwards hxs Set.s
 
 中文:
-定理 exists_finite_support
+定理 存在_finite_support
   条件: (x : FreeCommRing α)
-  结论: 存在 s : Set α, Set.Finite s ∧ IsSupported x s
+  结论: 存在 s : 集合 α, 集合.有限 s ∧ 是Supported x s
   证明: FreeCommRing.induction_on x ⟨∅, Set.finite_empty, isSupported_neg isSupported_one⟩
     (fun p => ⟨{p}, Set.finite_singleton p, isSupported_of.2 <| Set.mem_singleton _⟩)
     (fun _ _ ⟨s, hfs, hxs⟩ ⟨t, hft, hxt⟩ =>
@@ -865,9 +865,9 @@ theorem exists_finset_support
   ⟨hfs.toFinset, by rwa [Set.Finite.coe_toFinset]⟩
 
 中文:
-定理 exists_finset_support
+定理 存在_finset_support
   条件: (x : FreeCommRing α)
-  结论: 存在 s : Finset α, IsSupported x ↑s
+  结论: 存在 s : 有限集 α, 是Supported x ↑s
   证明: let ⟨s, hfs, hxs⟩ := exists_finite_support x
   ⟨hfs.toFinset, by rwa [Set.Finite.coe_toFinset]⟩
 
@@ -1130,7 +1130,7 @@ theorem coe_surjective
 
 中文:
 定理 coe_surjective
-  结论: Surjective ((↑) : FreeRing α -> FreeCommRing α)
+  结论: 满射 ((↑) : FreeRing α -> FreeCommRing α)
   证明: fun x => by
   induction x with
   | neg_one => use -1; rfl
@@ -1214,7 +1214,7 @@ definition subsingletonEquivFreeCommRing
 
 中文:
 定义 subsingletonEquivFreeCommRing
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: RingEquiv.ofBijective (coeRingHom _) (by
     have : (coeRingHom _ : FreeRing α -> FreeCommRing α) =
         Functor.mapEquiv FreeAbelianGroup (Multiset.subsingletonEquiv α) :=
@@ -1244,7 +1244,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: { (inferInstance : Ring (FreeRing α)) with
     mul_comm := fun x y => by
       rw [← (subsingletonEquivFreeCommRing α).symm_apply_apply (y * x)]; rw [(subsingletonEquivFreeCommRing α).map_mul]; rw [mul_comm]; rw [← (subsingletonEquivFreeCommRing α).map_mul]; rw [(subsingletonEquivFreeCommRing α).sym
@@ -1269,8 +1269,8 @@ definition freeCommRingEquivMvPolynomialInt
     (by ext <;> simp) (by ext; simp)
 
 中文:
-定义 freeCommRingEquivMvPolynomialInt
-  签名: : FreeCommRing α ≃+* MvPolynomial α 整数
+定义 freeCommRingEquivMvPolynomial整数
+  签名: : FreeCommRing α ≃+* 多元多项式 α 整数
   定义体: RingEquiv.ofRingHom (FreeCommRing.lift <| (fun a => MvPolynomial.X a : α -> MvPolynomial α Int))
     (MvPolynomial.eval₂Hom (Int.castRingHom (FreeCommRing α)) FreeCommRing.of)
     (by ext <;> simp) (by ext; simp)
@@ -1294,8 +1294,8 @@ definition freeCommRingPEmptyEquivInt
 noncomputable alias freeCommRingPemptyEquivInt := freeCommRingPEmptyEquivInt
 
 中文:
-定义 freeCommRingPEmptyEquivInt
-  签名: : FreeCommRing PEmpty.{u + 1} ≃+* 整数
+定义 freeCommRingPEmptyEquiv整数
+  签名: : FreeCommRing 命题空.{u + 1} ≃+* 整数
   定义体: RingEquiv.trans (freeCommRingEquivMvPolynomialInt _) (MvPolynomial.isEmptyRingEquiv _ PEmpty)
 
 @[deprecated (since := "2026-02-08")]
@@ -1321,8 +1321,8 @@ definition freeCommRingPUnitEquivPolynomialInt
 noncomputable alias freeCommRingPunitEquivPolynomialInt := freeCommRingPUnitEquivPolynomialInt
 
 中文:
-定义 freeCommRingPUnitEquivPolynomialInt
-  签名: : FreeCommRing PUnit.{u + 1} ≃+* 整数[X]
+定义 freeCommRingPUnitEquivPolynomial整数
+  签名: : FreeCommRing 命题单元.{u + 1} ≃+* 整数[X]
   定义体: (freeCommRingEquivMvPolynomialInt _).trans (MvPolynomial.uniqueAlgEquiv Int PUnit).toRingEquiv
 
 @[deprecated (since := "2026-02-08")]
@@ -1350,8 +1350,8 @@ definition freeRingPEmptyEquivInt
 noncomputable alias freeRingPemptyEquivInt := freeRingPEmptyEquivInt
 
 中文:
-定义 freeRingPEmptyEquivInt
-  签名: : FreeRing PEmpty.{u + 1} ≃+* 整数
+定义 freeRingPEmptyEquiv整数
+  签名: : FreeRing 命题空.{u + 1} ≃+* 整数
   定义体: RingEquiv.trans (subsingletonEquivFreeCommRing _) freeCommRingPEmptyEquivInt
 
 @[deprecated (since := "2026-02-08")]
@@ -1377,8 +1377,8 @@ definition freeRingPUnitEquivPolynomialInt
 noncomputable alias freeRingPunitEquivPolynomialInt := freeRingPUnitEquivPolynomialInt
 
 中文:
-定义 freeRingPUnitEquivPolynomialInt
-  签名: : FreeRing PUnit.{u + 1} ≃+* 整数[X]
+定义 freeRingPUnitEquivPolynomial整数
+  签名: : FreeRing 命题单元.{u + 1} ≃+* 整数[X]
   定义体: RingEquiv.trans (subsingletonEquivFreeCommRing _) freeCommRingPUnitEquivPolynomialInt
 
 @[deprecated (since := "2026-02-08")]

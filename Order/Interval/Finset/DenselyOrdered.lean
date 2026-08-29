@@ -32,7 +32,7 @@ lemma LocallyFiniteOrder.denselyOrdered_iff_subsingleton
   exact not_lt_of_denselyOrdered_of_locallyFinite a b hab
 
 中文:
-引理 LocallyFiniteOrder.denselyOrdered_iff_subsingleton
+引理 局部有限序.denselyOrdered_iff_subsingleton
   证明: by
   refine ⟨fun H => ?_, fun h => h.instDenselyOrdered⟩
   rw [← not_nontrivial_iff_subsingleton]; rw [nontrivial_iff_lt]
@@ -60,7 +60,7 @@ lemma denselyOrdered_set_iff_subsingleton
 
 中文:
 引理 denselyOrdered_set_iff_subsingleton
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   classical
   simp [LocallyFiniteOrder.denselyOrdered_iff_subsingleton]
@@ -88,7 +88,7 @@ lemma WithBot.denselyOrdered_set_iff_subsingleton
 
 中文:
 引理 WithBot.denselyOrdered_set_iff_subsingleton
-  条件: {s : Set (WithBot X)}
+  条件: {s : 集合 (WithBot X)}
   证明: by
   refine ⟨fun H => ?_, fun h => h.denselyOrdered⟩
   rw [← Set.subsingleton_coe]; rw [← not_nontrivial_iff_subsingleton]; rw [nontrivial_iff_lt]
@@ -139,7 +139,7 @@ lemma WithTop.denselyOrdered_set_iff_subsingleton
 
 中文:
 引理 WithTop.denselyOrdered_set_iff_subsingleton
-  条件: {s : Set (WithTop X)}
+  条件: {s : 集合 (WithTop X)}
   证明: by
   have he : StrictAnti (WithTop.toDual.image s) :=
     WithTop.toDual.image_strictAnti _ (fun ⦃a b⦄ a => a)

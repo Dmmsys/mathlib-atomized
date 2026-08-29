@@ -40,7 +40,7 @@ definition sectionsEquiv
 
 中文:
 定义 sectionsEquiv
-  签名: {J : 类型} [Category* J] (K : J ⥤ 类型u)
+  签名: {J : 类型} [范畴* J] (K : J ⥤ 类型u)
   定义体: fun ⟨u, hu⟩ => ⟨fun j => ⟨u j⟩, fun f => by simp [hu f]⟩
   invFun := fun ⟨u, hu⟩ => ⟨fun j => (u j).down, @fun j j' f => by simp [← hu f]⟩
 -/
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u}
+  签名: 保持LimitsOfSize.{w', w} uliftFunctor.{v, u}
   定义体: {
     preservesLimit := fun {K} => {
       preserves := fun {c} hc => by
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u}
+  签名: 保持余limitsOfSize.{w', w} uliftFunctor.{v, u}
   定义体: { preservesColimit := fun {F} =>
     { preserves := fun {c} hc => by
         rw [isColimit_iff_coconeTypesIsColimit]

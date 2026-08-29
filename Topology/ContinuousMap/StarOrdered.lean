@@ -49,8 +49,8 @@ class ContinuousSqrt
     - sqrt_mul_sqrt((x : R × R)) : x.1 <= x.2 -> x.2 = x.1 + sqrt x * sqrt x
 
 中文:
-类 ContinuousSqrt
-  参数: (R : 类型) [LE R] [NonUnitalSemiring R] [TopologicalSpace R]
+类 余ntinuousSqrt
+  参数: (R : 类型) [LE R] [非幺半环 R] [拓扑空间 R]
   公理与运算 (4 个):
     - sqrt : R × R -> R
     - continuousOn_sqrt : ContinuousOn sqrt {x | x.1 <= x.2}

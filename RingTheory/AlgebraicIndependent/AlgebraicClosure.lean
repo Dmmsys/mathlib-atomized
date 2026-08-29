@@ -53,7 +53,7 @@ theorem extendScalars
 
 中文:
 定理 extendScalars
-  条件: [alg : Algebra.IsAlgebraic R S]
+  条件: [alg : 代数.是代数 R S]
   结论: AlgebraicIndependent S x
   证明: by
   refine algebraicIndependent_of_finite_type'
@@ -101,8 +101,8 @@ theorem extendScalars_of_isIntegral
   exact hx.extendScalars S
 
 中文:
-定理 extendScalars_of_isIntegral
-  条件: [Algebra.Is整数egral R S]
+定理 extendScalars_of_is整数egral
+  条件: [代数.是整 R S]
   结论: AlgebraicIndependent S x
   证明: by
   nontriviality S
@@ -126,7 +126,7 @@ theorem subalgebraAlgebraicClosure
 
 中文:
 定理 subalgebraAlgebraicClosure
-  条件: [IsDomain R] [NoZeroDivisors A]
+  条件: [是整环 R] [无零因子 A]
   证明: hx.extendScalars _
 
 Depends on / 依赖: extendScalars, hx.extendScalars
@@ -147,7 +147,7 @@ omit hx in
 
 中文:
 定理 integralClosure
-  条件: [NoZeroDivisors A]
+  条件: [无零因子 A]
   证明: hx.extendScalars_of_isIntegral _
 
 omit hx in
@@ -167,7 +167,7 @@ theorem algebraicClosure
 
 中文:
 定理 algebraicClosure
-  结论: {F E : 类型} [Field F] [Field E] [Algebra F E] {x : ι -> E}
+  结论: {F E : 类型} [域 F] [域 E] [代数 F E] {x : ι -> E}
   证明: hx.extendScalars _
 -/
 protected theorem algebraicClosure {F E : Type*} [Field F] [Field E] [Algebra F E] {x : ι -> E}
@@ -191,8 +191,8 @@ theorem IsIntegral.algebraicIndependent_iff
     (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 
 中文:
-定理 IsIntegral.algebraicIndependent_iff
-  条件: [Algebra.Is整数egral R S]
+定理 是整.algebraicIndependent_iff
+  条件: [代数.是整 R S]
   证明: ⟨(·.extendScalars_of_isIntegral _),
     (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 -/
@@ -211,8 +211,8 @@ theorem IsIntegral.isTranscendenceBasis_iff
   simp_rw [IsTranscendenceBasis, IsIntegral.algebraicIndependent_iff R S]
 
 中文:
-定理 IsIntegral.isTranscendenceBasis_iff
-  条件: [Algebra.Is整数egral R S]
+定理 是整.isTranscendenceBasis_iff
+  条件: [代数.是整 R S]
   证明: by
   simp_rw [IsTranscendenceBasis, IsIntegral.algebraicIndependent_iff R S]
 -/
@@ -229,8 +229,8 @@ theorem IsAlgebraic.algebraicIndependent_iff
   proof: ⟨(·.extendScalars _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 
 中文:
-定理 IsAlgebraic.algebraicIndependent_iff
-  条件: [Algebra.IsAlgebraic R S]
+定理 是代数.algebraicIndependent_iff
+  条件: [代数.是代数 R S]
   证明: ⟨(·.extendScalars _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 -/
 protected theorem IsAlgebraic.algebraicIndependent_iff [Algebra.IsAlgebraic R S] :
@@ -247,8 +247,8 @@ theorem IsAlgebraic.isTranscendenceBasis_iff
   simp_rw [IsTranscendenceBasis, IsAlgebraic.algebraicIndependent_iff R S]
 
 中文:
-定理 IsAlgebraic.isTranscendenceBasis_iff
-  条件: [Algebra.IsAlgebraic R S]
+定理 是代数.isTranscendenceBasis_iff
+  条件: [代数.是代数 R S]
   证明: by
   simp_rw [IsTranscendenceBasis, IsAlgebraic.algebraicIndependent_iff R S]
 -/

@@ -63,7 +63,7 @@ structure ContDiffPointwiseHolderAt
     - isBigO : (iteratedFDeriv Real k f · - iteratedFDeriv Real k f a) =O[𝓝 a] (‖· - a‖ ^ (α : Real))
 
 中文:
-结构 ContDiffPointwiseHolderAt
+结构 余ntDiffPointwiseHolderAt
   参数: (k : 自然数) (α : I) (f : E -> F) (a : E)
   公理与运算 (2 个):
     - contDiffAt : ContDiffAt 实数 k f a
@@ -122,7 +122,7 @@ theorem continuousAt
 
 中文:
 定理 continuousAt
-  条件: (h : ContDiffPointwiseHolderAt k α f a)
+  条件: (h : 余ntDiffPointwiseHolderAt k α f a)
   结论: ContinuousAt f a
   证明: h.contDiffAt.continuousAt
 
@@ -141,7 +141,7 @@ theorem differentiableAt
 
 中文:
 定理 differentiableAt
-  条件: (h : ContDiffPointwiseHolderAt k α f a) (hk : k != 0)
+  条件: (h : 余ntDiffPointwiseHolderAt k α f a) (hk : k != 0)
   证明: h.contDiffAt.differentiableAt mod_cast hk
 
 Depends on / 依赖: contDiffAt, differentiableAt, h.contDiffAt.differentiableAt, mod_cast
@@ -164,7 +164,7 @@ theorem zero_exponent_iff
 
 中文:
 定理 zero_exponent_iff
-  结论: ContDiffPointwiseHolderAt k 0 f a ↔ ContDiffAt 实数 k f a
+  结论: 余ntDiffPointwiseHolderAt k 0 f a ↔ ContDiffAt 实数 k f a
   证明: by
   refine ⟨contDiffAt, fun h => ⟨h, ?_⟩⟩
   simpa using ((h.continuousAt_iteratedFDeriv le_rfl).sub_const _).norm.isBoundedUnder_le
@@ -221,7 +221,7 @@ isBigO := hf.isBigO.trans by
 
 中文:
 定理 of_exponent_le
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hle : β <= α)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hle : β <= α)
   证明: hf.contDiffAt
 isBigO := hf.isBigO.trans by
     refine .comp_tendsto (.rpow_rpow_nhdsGE_zero_of_le_of_imp hle fun hα => ?_) ?_
@@ -248,7 +248,7 @@ theorem of_order_lt
 
 中文:
 定理 of_order_lt
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hlt : l < k)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hlt : l < k)
   证明: hf.contDiffAt.contDiffPointwiseHolderAt (mod_cast hlt) _
 
 Depends on / 依赖: contDiffAt, contDiffPointwiseHolderAt, hf.contDiffAt.contDiffPointwiseHolderAt, mod_cast
@@ -267,7 +267,7 @@ theorem of_toLex_le
 
 中文:
 定理 of_toLex_le
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hle : toLex (l, β) <= toLex (k, α))
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hle : toLex (l, β) <= toLex (k, α))
   证明: (Prod.Lex.le_iff.mp hle).elim hf.of_order_lt by rintro ⟨rfl, hle⟩; exact hf.of_exponent_le hle
 
 Depends on / 依赖: Prod.Lex.le_iff.mp, hf.of_exponent_le, hf.of_order_lt, le_iff, of_exponent_le, of_order_lt
@@ -286,7 +286,7 @@ theorem of_order_le
 
 中文:
 定理 of_order_le
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hl : l <= k)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hl : l <= k)
   证明: hf.of_toLex_le Prod.Lex.toLex_mono ⟨hl, le_rfl⟩
 
 Depends on / 依赖: Prod.Lex.toLex_mono, hf.of_toLex_le, le_rfl, of_toLex_le, toLex_mono
@@ -308,7 +308,7 @@ isBigO := .of_bound C mem_of_superset hs fun x hx => by
 
 中文:
 定理 of_contDiffOn_holderOnWith
-  结论: {s : Set E} {C : 实数>=0} (hf : ContDiffOn 实数 k f s) (hs : s in 𝓝 a)
+  结论: {s : 集合 E} {C : 实数>=0} (hf : ContDiffOn 实数 k f s) (hs : s in 𝓝 a)
   证明: hf.contDiffAt hs
 isBigO := .of_bound C mem_of_superset hs fun x hx => by
     simpa [Real.abs_rpow_of_nonneg, ← dist_eq_norm, dist_nonneg]
@@ -336,7 +336,7 @@ theorem fst
 中文:
 定理 fst
   条件: {a : E × F}
-  结论: ContDiffPointwiseHolderAt k α Prod.fst a
+  结论: 余ntDiffPointwiseHolderAt k α 积类型.fst a
   证明: contDiffAt_fst.contDiffPointwiseHolderAt (WithTop.coe_lt_top _) α
 
 Depends on / 依赖: WithTop, WithTop.coe_lt_top, coe_lt_top, contDiffAt_fst, contDiffAt_fst.contDiffPointwiseHolderAt, contDiffPointwiseHolderAt
@@ -356,7 +356,7 @@ theorem snd
 中文:
 定理 snd
   条件: {a : E × F}
-  结论: ContDiffPointwiseHolderAt k α Prod.snd a
+  结论: 余ntDiffPointwiseHolderAt k α 积类型.snd a
   证明: contDiffAt_snd.contDiffPointwiseHolderAt (WithTop.coe_lt_top _) α
 
 Depends on / 依赖: WithTop, WithTop.coe_lt_top, coe_lt_top, contDiffAt_snd, contDiffAt_snd.contDiffPointwiseHolderAt, contDiffPointwiseHolderAt
@@ -379,7 +379,7 @@ theorem prodMk
 
 中文:
 定理 prodMk
-  结论: {g : E -> G} (hf : ContDiffPointwiseHolderAt k α f a)
+  结论: {g : E -> G} (hf : 余ntDiffPointwiseHolderAt k α f a)
   证明: hf.contDiffAt.prodMk hg.contDiffAt
   isBigO := calc
     _ =ᶠ[𝓝 a] (fun x => (iteratedFDeriv Real k f x - iteratedFDeriv Real k f a).prod
@@ -422,7 +422,7 @@ theorem comp_of_differentiableAt
 
 中文:
 定理 comp_of_differentiableAt
-  结论: {g : F -> G} (hg : ContDiffPointwiseHolderAt k α g (f a))
+  结论: {g : F -> G} (hg : 余ntDiffPointwiseHolderAt k α g (f a))
   证明: hg.contDiffAt.comp a hf.contDiffAt
   isBigO := calc
     (iteratedFDeriv Real k (g ∘ f) · - iteratedFDeriv Real k (g ∘ f) a)
@@ -476,7 +476,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : F -> G} (hg : ContDiffPointwiseHolderAt k α g (f a))
+  结论: {g : F -> G} (hg : 余ntDiffPointwiseHolderAt k α g (f a))
   证明: hg.comp_of_differentiableAt a hf (.inl <| hg.differentiableAt hk)
 
 Depends on / 依赖: comp_of_differentiableAt, differentiableAt, hg.comp_of_differentiableAt, hg.differentiableAt
@@ -498,7 +498,7 @@ theorem comp₂_of_differentiableAt
 
 中文:
 定理 comp₂_of_differentiableAt
-  结论: {H : 类型} [NormedAddCommGroup H] [NormedSpace 实数 H]
+  结论: {H : 类型} [赋范交换加群 H] [赋范空间 实数 H]
   证明: hg.comp_of_differentiableAt a (hf₁.prodMk hf₂) hdiff.imp_right fun h =>
     h.left.prodMk h.right
 
@@ -522,7 +522,7 @@ theorem _root_.ContinuousLinearMap.contDiffPointwiseHolderAt
   proof: f.contDiff.contDiffAt.contDiffPointwiseHolderAt (WithTop.coe_lt_top _) _
 
 中文:
-定理 _root_.ContinuousLinearMap.contDiffPointwiseHolderAt
+定理 _root_.连续线性映射.contDiffPointwiseHolderAt
   条件: (f : E ->L[实数] F)
   证明: f.contDiff.contDiffAt.contDiffPointwiseHolderAt (WithTop.coe_lt_top _) _
 
@@ -541,7 +541,7 @@ theorem _root_.ContinuousLinearEquiv.contDiffPointwiseHolderAt
   proof: f.toContinuousLinearMap.contDiffPointwiseHolderAt
 
 中文:
-定理 _root_.ContinuousLinearEquiv.contDiffPointwiseHolderAt
+定理 _root_.连续线性等价.contDiffPointwiseHolderAt
   条件: (f : E ≃L[实数] F)
   证明: f.toContinuousLinearMap.contDiffPointwiseHolderAt
 
@@ -563,7 +563,7 @@ theorem continuousLinearMap_comp
 
 中文:
 定理 continuousLinearMap_comp
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (g : F ->L[实数] G)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (g : F ->L[实数] G)
   证明: g.contDiffPointwiseHolderAt.comp_of_differentiableAt a hf .inl g.differentiableAt
 
 @[simp]
@@ -587,7 +587,7 @@ theorem _root_.ContinuousLinearEquiv.contDiffPointwiseHolderAt_left_comp
 @[simp]
 
 中文:
-定理 _root_.ContinuousLinearEquiv.contDiffPointwiseHolderAt_left_comp
+定理 _root_.连续线性等价.contDiffPointwiseHolderAt_left_comp
   条件: (g : F ≃L[实数] G)
   证明: ⟨fun h => by simpa [Function.comp_def] using h.continuousLinearMap_comp (g.symm : G ->L[Real] F),
     fun h => h.continuousLinearMap_comp (g : F ->L[Real] G)⟩
@@ -611,7 +611,7 @@ theorem _root_.LinearIsometryEquiv.contDiffPointwiseHolderAt_left_comp
   proof: g.toContinuousLinearEquiv.contDiffPointwiseHolderAt_left_comp
 
 中文:
-定理 _root_.LinearIsometryEquiv.contDiffPointwiseHolderAt_left_comp
+定理 _root_.线性等距等价.contDiffPointwiseHolderAt_left_comp
   条件: (g : F ≃ₗᵢ[实数] G)
   证明: g.toContinuousLinearEquiv.contDiffPointwiseHolderAt_left_comp
 
@@ -631,7 +631,7 @@ theorem id
 
 中文:
 定理 id
-  结论: ContDiffPointwiseHolderAt k α id a
+  结论: 余ntDiffPointwiseHolderAt k α id a
   证明: .contDiffPointwiseHolderAt ContinuousLinearMap.id Real E
 -/
 protected theorem id : ContDiffPointwiseHolderAt k α id a :=
@@ -649,7 +649,7 @@ theorem const
 中文:
 定理 const
   条件: {b : F}
-  结论: ContDiffPointwiseHolderAt k α (Function.const E b) a
+  结论: 余ntDiffPointwiseHolderAt k α (函数.const E b) a
   证明: contDiffAt_const.contDiffPointwiseHolderAt (WithTop.coe_lt_top _) α
 -/
 protected theorem const {b : F} : ContDiffPointwiseHolderAt k α (Function.const E b) a :=
@@ -668,7 +668,7 @@ isBigO := .of_norm_left by
 
 中文:
 定理 fderiv
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hl : l < k)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hl : l < k)
   证明: hf.contDiffAt.fderiv_right (mod_cast hl)
 isBigO := .of_norm_left by
     simpa [iteratedFDeriv_succ_eq_comp_right, Function.comp_def, ← dist_eq_norm_sub]
@@ -697,7 +697,7 @@ theorem iteratedFDeriv
 
 中文:
 定理 iteratedFDeriv
-  条件: (hf : ContDiffPointwiseHolderAt k α f a) (hl : l + m <= k)
+  条件: (hf : 余ntDiffPointwiseHolderAt k α f a) (hl : l + m <= k)
   证明: by
   induction m generalizing l with
   | zero =>
@@ -729,7 +729,7 @@ theorem congr_of_eventuallyEq
 
 中文:
 定理 congr_of_eventuallyEq
-  结论: {g : E -> F} (hf : ContDiffPointwiseHolderAt k α f a)
+  结论: {g : E -> F} (hf : 余ntDiffPointwiseHolderAt k α f a)
   证明: hf.contDiffAt.congr_of_eventuallyEq hfg.symm
   isBigO := by
     refine EventuallyEq.trans_isBigO (.sub ?_ ?_) hf.isBigO
@@ -758,7 +758,7 @@ theorem clm_apply
 
 中文:
 定理 clm_apply
-  结论: {f : E -> F ->L[实数] G} {g : E -> F} (hf : ContDiffPointwiseHolderAt k α f a)
+  结论: {f : E -> F ->L[实数] G} {g : E -> F} (hf : 余ntDiffPointwiseHolderAt k α f a)
   证明: (contDiffAt_fst.clm_apply contDiffAt_snd).contDiffPointwiseHolderAt (WithTop.coe_lt_top _) _
 .comp₂_of_differentiableAt a hf hg .inl (by fun_prop)
 

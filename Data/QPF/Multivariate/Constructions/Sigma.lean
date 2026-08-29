@@ -33,7 +33,7 @@ definition Sigma
   body: Σ α : A, F α v
 
 中文:
-定义 Sigma
+定义 依赖和类型
   签名: (v : TypeVec.{u} n)
   定义体: Σ α : A, F α v
 -/
@@ -49,7 +49,7 @@ definition Pi
   body: forall α : A, F α v
 
 中文:
-定义 Pi
+定义 依赖函数类型
   签名: (v : TypeVec.{u} n)
   定义体: forall α : A, F α v
 -/
@@ -65,8 +65,8 @@ instance Sigma.inhabited
   body: ⟨⟨default, default⟩⟩
 
 中文:
-实例 Sigma.inhabited
-  签名: {α} [Inhabited A] [Inhabited (F default α)]
+实例 依赖和类型.inhabited
+  签名: {α} [可居 A] [可居 (F default α)]
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance Sigma.inhabited {α} [Inhabited A] [Inhabited (F default α)] : Inhabited (Sigma F α) :=
@@ -81,8 +81,8 @@ instance Pi.inhabited
   body: ⟨fun _a => default⟩
 
 中文:
-实例 Pi.inhabited
-  签名: {α} [对任意 a, Inhabited (F a α)]
+实例 依赖函数类型.inhabited
+  签名: {α} [对任意 a, 可居 (F a α)]
   定义体: ⟨fun _a => default⟩
 -/
 instance Pi.inhabited {α} [forall a, Inhabited (F a α)] : Inhabited (Pi F α) :=
@@ -99,8 +99,8 @@ instance [forall
   body: fun f ⟨a, x⟩ => ⟨a, f < > x⟩
 
 中文:
-实例 [forall
-  签名: α, MvFunctor <| F α] : MvFunctor (Sigma F) where
+实例 [对任意
+  签名: α, Mv函子 <| F α] : Mv函子 (依赖和类型 F) where
   定义体: fun f ⟨a, x⟩ => ⟨a, f < > x⟩
 -/
 instance [forall α, MvFunctor <| F α] : MvFunctor (Sigma F) where
@@ -119,7 +119,7 @@ definition P
 
 中文:
 定义 P
-  签名: : MvPFunctor n
+  签名: : MvP函子 n
   定义体: ⟨Σ a, (P (F a)).A, fun x => (P (F x.1)).B x.2⟩
 -/
 protected def P : MvPFunctor n :=
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: MvQPF (Sigma F)
+  签名: MvQPF (依赖和类型 F)
   定义体: Sigma.P F
   abs {α} := @Sigma.abs _ _ F _ α
   repr {α} := @Sigma.repr _ _ F _ α
@@ -206,8 +206,8 @@ instance [forall
   body: f < > x a
 
 中文:
-实例 [forall
-  签名: α, MvFunctor <| F α] : MvFunctor (Pi F) where map f x a
+实例 [对任意
+  签名: α, Mv函子 <| F α] : Mv函子 (依赖函数类型 F) where map f x a
   定义体: f < > x a
 -/
 instance [forall α, MvFunctor <| F α] : MvFunctor (Pi F) where map f x a := f < > x a
@@ -224,7 +224,7 @@ definition P
 
 中文:
 定义 P
-  签名: : MvPFunctor n
+  签名: : MvP函子 n
   定义体: ⟨forall a, (P (F a)).A, fun x i => Σ a, (P (F a)).B (x a) i⟩
 -/
 protected def P : MvPFunctor n :=
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: MvQPF (Pi F)
+  签名: MvQPF (依赖函数类型 F)
   定义体: Pi.P F
   abs := @Pi.abs _ _ F _
   repr := @Pi.repr _ _ F _

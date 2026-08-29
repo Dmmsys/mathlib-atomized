@@ -59,8 +59,8 @@ theorem continuous_algebraMap
 
 中文:
 定理 continuous_algebraMap
-  条件: [ContinuousSMul R A]
-  结论: Continuous (algebraMap R A)
+  条件: [连续标量乘法 R A]
+  结论: 连续 (algebraMap R A)
   证明: by
   rw [algebraMap_eq_smul_one']
   fun_prop
@@ -84,7 +84,7 @@ theorem continuous_algebraMap_iff_smul
 
 中文:
 定理 continuous_algebraMap_iff_smul
-  条件: [ContinuousMul A]
+  条件: [连续乘法 A]
   证明: by
   refine ⟨fun h => ?_, fun h => have : ContinuousSMul R A := ⟨h⟩; continuous_algebraMap _ _⟩
   simp only [Algebra.smul_def]
@@ -108,7 +108,7 @@ theorem continuousSMul_of_algebraMap
 
 中文:
 定理 continuousSMul_of_algebraMap
-  条件: [ContinuousMul A] (h : Continuous (algebraMap R A))
+  条件: [连续乘法 A] (h : 连续 (algebraMap R A))
   证明: ⟨(continuous_algebraMap_iff_smul R A).1 h⟩
 
 Depends on / 依赖: continuous_algebraMap_iff_smul
@@ -126,8 +126,8 @@ instance Subalgebra.continuousSMul
   body: Subsemiring.continuousSMul S.toSubsemiring X
 
 中文:
-实例 Subalgebra.continuousSMul
-  签名: (S : Subalgebra R A) (X) [TopologicalSpace X] [MulAction A X]
+实例 子代数.continuousSMul
+  签名: (S : 子代数 R A) (X) [拓扑空间 X] [乘法作用 A X]
   定义体: Subsemiring.continuousSMul S.toSubsemiring X
 
 Depends on / 依赖: S.toSubsemiring, Subsemiring, Subsemiring.continuousSMul, continuousSMul, toSubsemiring
@@ -145,8 +145,8 @@ instance [PartialOrder
   body: Topology.IsInducing.subtypeVal.continuousMul Icc.coeMonoidWithZeroHom
 
 中文:
-实例 [PartialOrder
-  签名: A] [IsOrderedRing A] [ContinuousMul A] :
+实例 [偏序
+  签名: A] [是Ordered环 A] [连续乘法 A] :
   定义体: Topology.IsInducing.subtypeVal.continuousMul Icc.coeMonoidWithZeroHom
 
 Depends on / 依赖: Icc.coeMonoidWithZeroHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMonoidWithZeroHom, continuousMul, subtypeVal
@@ -164,8 +164,8 @@ instance [PartialOrder
   body: Topology.IsInducing.subtypeVal.continuousMul Ico.coeMulHom
 
 中文:
-实例 [PartialOrder
-  签名: A] [IsOrderedRing A] [ContinuousMul A] :
+实例 [偏序
+  签名: A] [是Ordered环 A] [连续乘法 A] :
   定义体: Topology.IsInducing.subtypeVal.continuousMul Ico.coeMulHom
 
 Depends on / 依赖: Ico.coeMulHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMulHom, continuousMul, subtypeVal
@@ -183,8 +183,8 @@ instance [PartialOrder
   body: Topology.IsInducing.subtypeVal.continuousMul Ioc.coeMonoidHom
 
 中文:
-实例 [PartialOrder
-  签名: A] [IsStrictOrderedRing A] [ContinuousMul A] :
+实例 [偏序
+  签名: A] [是StrictOrdered环 A] [连续乘法 A] :
   定义体: Topology.IsInducing.subtypeVal.continuousMul Ioc.coeMonoidHom
 
 Depends on / 依赖: Ioc.coeMonoidHom, IsInducing, Sum.uniformity, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMonoidHom, continuousMul, infer_instance, subtypeVal, uniformity
@@ -202,8 +202,8 @@ instance [PartialOrder
   body: Topology.IsInducing.subtypeVal.continuousMul Ioo.coeMulHom
 
 中文:
-实例 [PartialOrder
-  签名: A] [IsStrictOrderedRing A] [ContinuousMul A] :
+实例 [偏序
+  签名: A] [是StrictOrdered环 A] [连续乘法 A] :
   定义体: Topology.IsInducing.subtypeVal.continuousMul Ioo.coeMulHom
 
 Depends on / 依赖: Ioo.coeMulHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMulHom, continuousMul, subtypeVal
@@ -264,7 +264,7 @@ theorem toLinearMap_algebraMapCLM
 
 中文:
 定理 toLinearMap_algebraMapCLM
-  结论: (algebraMapCLM R A).toLinearMap = Algebra.linearMap R A
+  结论: (algebraMapCLM R A).toLinearMap = 代数.linearMap R A
   证明: rfl
 
 Depends on / 依赖: ContinuousAt, tendsto_nhds_left
@@ -281,7 +281,7 @@ lemma ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM
   ext; simp
 
 中文:
-引理 ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM
+引理 连续线性映射.toSpanSingleton_one_eq_algebraMapCLM
   证明: by
   ext; simp
 
@@ -302,8 +302,8 @@ theorem DiscreteTopology.instContinuousSMul
   proof: continuousSMul_of_algebraMap _ _ continuous_of_discreteTopology
 
 中文:
-定理 DiscreteTopology.instContinuousSMul
-  条件: [IsTopologicalSemiring A] [DiscreteTopology R]
+定理 离散拓扑.instContinuousSMul
+  条件: [是TopologicalSemiring A] [离散拓扑 R]
   证明: continuousSMul_of_algebraMap _ _ continuous_of_discreteTopology
 
 Depends on / 依赖: continuousSMul_of_algebraMap, continuous_of_discreteTopology
@@ -331,11 +331,11 @@ structure ContinuousAlgHom
     - cont : Continuous toFun  [default: by fun_prop]
 
 中文:
-结构 ContinuousAlgHom
-  参数: (R : 类型) [CommSemiring R] (A : 类型) [Semiring A]
+结构 余ntinuousAlg态射
+  参数: (R : 类型) [交换半环 R] (A : 类型) [半环 A]
   继承: A ->ₐ[R] B
   公理与运算 (1 个):
-    - cont : Continuous toFun  [默认: by fun_prop]
+    - cont : 连续 toFun  [默认: by fun_prop]
 
 Depends on / 依赖: ContinuousWithinAt, fun_prop, tendsto_nhds_left
 -/
@@ -372,7 +372,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->A[R] B) A B
+  签名: 函数状 (A ->A[R] B) A B
   定义体: f.toAlgHom
   coe_injective f g h := by
     cases f; cases g
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlgHomClass (A ->A[R] B) R A B
+  签名: 代数态射类 (A ->A[R] B) R A B
   定义体: map_mul f.toAlgHom x y
   map_one f := map_one f.toAlgHom
   map_add f := map_add f.toAlgHom
@@ -562,7 +562,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass (A ->A[R] B) A B
+  签名: 连续映射类 (A ->A[R] B) A B
   定义体: f.2
 
 @[fun_prop]
@@ -583,7 +583,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : A ->A[R] B)
-  结论: Continuous f
+  结论: 连续 f
   证明: f.2
 -/
 protected theorem continuous (f : A ->A[R] B) : Continuous f := f.2
@@ -598,7 +598,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁] [UniformSpace E₂]
+  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
   证明: uniformContinuous_addMonoidHom_of_continuous f.continuous
 -/
 protected theorem uniformContinuous {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
@@ -795,7 +795,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {R S : 类型} [CommSemiring S] [SMul R A] [Algebra S A] [SMul R B]
+  结论: {R S : 类型} [交换半环 S] [标量乘法 R A] [代数 S A] [标量乘法 R B]
   证明: map_smul f c x
 
 Depends on / 依赖: map_smul
@@ -815,7 +815,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: {ι : 类型} (f : A ->A[R] B) (s : Finset ι) (g : ι -> A)
+  条件: {ι : 类型} (f : A ->A[R] B) (s : 有限集 ι) (g : ι -> A)
   证明: map_sum ..
 -/
 protected theorem map_sum {ι : Type*} (f : A ->A[R] B) (s : Finset ι) (g : ι -> A) :
@@ -835,7 +835,7 @@ theorem ext_ring
 
 中文:
 定理 ext_ring
-  条件: [TopologicalSpace R] {f g : R ->A[R] A}
+  条件: [拓扑空间 R] {f g : R ->A[R] A}
   结论: f = g
   证明: coe_inj.mp (ext_id _ _ _)
 
@@ -855,7 +855,7 @@ theorem ext_ring_iff
 
 中文:
 定理 ext_ring_iff
-  条件: [TopologicalSpace R] {f g : R ->A[R] A}
+  条件: [拓扑空间 R] {f g : R ->A[R] A}
   结论: f = g ↔ f 1 = g 1
   证明: ⟨fun h => h ▸ rfl, fun _ => ext_ring ⟩
 
@@ -874,7 +874,7 @@ theorem eqOn_closure_adjoin
 
 中文:
 定理 eqOn_closure_adjoin
-  条件: [T2Space B] {s : Set A} {f g : A ->A[R] B} (h : Set.EqOn f g s)
+  条件: [T2空间 B] {s : 集合 A} {f g : A ->A[R] B} (h : 集合.EqOn f g s)
   证明: Set.EqOn.closure (AlgHom.eqOn_adjoin_iff.mpr h) f.continuous g.continuous
 
 Depends on / 依赖: AlgHom, AlgHom.eqOn_adjoin_iff.mpr, Set.EqOn.closure, closure, continuous, eqOn_adjoin_iff, f.continuous, g.continuous
@@ -893,7 +893,7 @@ theorem ext_on
 
 中文:
 定理 ext_on
-  结论: [T2Space B] {s : Set A} (hs : Dense (Algebra.adjoin R s : Set A))
+  结论: [T2空间 B] {s : 集合 A} (hs : 稠密 (代数.adjoin R s : 集合 A))
   证明: ext fun x => eqOn_closure_adjoin h (hs x)
 
 Depends on / 依赖: eqOn_closure_adjoin
@@ -953,8 +953,8 @@ definition _root_.Subalgebra.topologicalClosure
     exact algebraMap_mem s r
 
 中文:
-定义 _root_.Subalgebra.topologicalClosure
-  签名: (s : Subalgebra R A)
+定义 _root_.子代数.topologicalClosure
+  签名: (s : 子代数 R A)
   定义体: s.toSubsemiring.topologicalClosure
   algebraMap_mem' r := by
     simp only [Subsemiring.coe_carrier_toSubmonoid, Subsemiring.topologicalClosure_coe,
@@ -980,7 +980,7 @@ theorem _root_.Subalgebra.map_topologicalClosure_le
   proof: image_closure_subset_closure_image f.continuous
 
 中文:
-定理 _root_.Subalgebra.map_topologicalClosure_le
+定理 _root_.子代数.map_topologicalClosure_le
   证明: image_closure_subset_closure_image f.continuous
 
 Depends on / 依赖: continuous, f.continuous, image_closure_subset_closure_image
@@ -999,8 +999,8 @@ lemma _root_.Subalgebra.topologicalClosure_map_le
   proof: hf.closure_image_subset _
 
 中文:
-引理 _root_.Subalgebra.topologicalClosure_map_le
-  结论: [IsSemitopologicalSemiring B]
+引理 _root_.子代数.topologicalClosure_map_le
+  结论: [是SemitopologicalSemiring B]
   证明: hf.closure_image_subset _
 
 Depends on / 依赖: closure_image_subset, hf.closure_image_subset
@@ -1021,8 +1021,8 @@ lemma _root_.Subalgebra.topologicalClosure_map
 @[simp]
 
 中文:
-引理 _root_.Subalgebra.topologicalClosure_map
-  结论: [IsSemitopologicalSemiring B]
+引理 _root_.子代数.topologicalClosure_map
+  结论: [是SemitopologicalSemiring B]
   证明: SetLike.coe_injective hf.closure_image_eq_of_continuous f.continuous _
 
 @[simp]
@@ -1044,8 +1044,8 @@ theorem _root_.Subalgebra.topologicalClosure_coe
   proof: rfl
 
 中文:
-定理 _root_.Subalgebra.topologicalClosure_coe
-  条件: (s : Subalgebra R A)
+定理 _root_.子代数.topologicalClosure_coe
+  条件: (s : 子代数 R A)
   证明: rfl
 -/
 theorem _root_.Subalgebra.topologicalClosure_coe (s : Subalgebra R A) :
@@ -1112,7 +1112,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (A ->A[R] A)
+  签名: 幺 (A ->A[R] A)
   定义体: ⟨ContinuousAlgHom.id R A⟩
 
 Depends on / 依赖: ContinuousAlgHom, ContinuousAlgHom.id
@@ -1129,7 +1129,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : A ->A[R] A) = ContinuousAlgHom.id R A
+  结论: (1 : A ->A[R] A) = 余ntinuousAlg态射.id R A
   证明: rfl
 -/
 theorem one_def : (1 : A ->A[R] A) = ContinuousAlgHom.id R A := rfl
@@ -1148,7 +1148,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : A)
-  结论: ContinuousAlgHom.id R A x = x
+  结论: 余ntinuousAlg态射.id R A x = x
   证明: rfl
 
 @[simp, norm_cast]
@@ -1168,7 +1168,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ((ContinuousAlgHom.id R A) : A ->ₐ[R] A) = AlgHom.id R A
+  结论: ((余ntinuousAlg态射.id R A) : A ->ₐ[R] A) = 代数态射.id R A
   证明: rfl
 
 @[simp, norm_cast]
@@ -1188,7 +1188,7 @@ theorem coe_id'
 
 中文:
 定理 coe_id'
-  结论: ⇑(ContinuousAlgHom.id R A) = _root_.id
+  结论: ⇑(余ntinuousAlg态射.id R A) = _root_.id
   证明: rfl
 
 @[simp, norm_cast]
@@ -1343,7 +1343,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : A ->A[R] B)
-  结论: f.comp (ContinuousAlgHom.id R A) = f
+  结论: f.comp (余ntinuousAlg态射.id R A) = f
   证明: ext fun _x => rfl
 
 @[simp]
@@ -1364,7 +1364,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : A ->A[R] B)
-  结论: (ContinuousAlgHom.id R B).comp f = f
+  结论: (余ntinuousAlg态射.id R B).comp f = f
   证明: ext fun _x => rfl
 -/
 theorem id_comp (f : A ->A[R] B) : (ContinuousAlgHom.id R B).comp f = f :=
@@ -1380,7 +1380,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {D : 类型} [Semiring D] [Algebra R D] [TopologicalSpace D] (h : C ->A[R] D)
+  结论: {D : 类型} [半环 D] [代数 R D] [拓扑空间 D] (h : C ->A[R] D)
   证明: rfl
 -/
 theorem comp_assoc {D : Type*} [Semiring D] [Algebra R D] [TopologicalSpace D] (h : C ->A[R] D)
@@ -1397,7 +1397,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (A ->A[R] A)
+  签名: 乘法 (A ->A[R] A)
   定义体: ⟨comp⟩
 -/
 instance : Mul (A ->A[R] A) := ⟨comp⟩
@@ -1470,7 +1470,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (A ->A[R] A)
+  签名: 幺半群 (A ->A[R] A)
   定义体: ext fun _ => rfl
   one_mul _ := ext fun _ => rfl
   mul_assoc _ _ _ := ext fun _ => rfl
@@ -1545,7 +1545,7 @@ definition prod
 @[simp, norm_cast]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C)
   定义体: ⟨(f₁ : A ->ₐ[R] B).prod f₂, f₁.2.prodMk f₂.2⟩
 
@@ -1660,7 +1660,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ↑(fst R A B) = AlgHom.fst R A B
+  结论: ↑(fst R A B) = 代数态射.fst R A B
   证明: rfl
 
 @[simp, norm_cast]
@@ -1681,7 +1681,7 @@ theorem coe_fst'
 
 中文:
 定理 coe_fst'
-  结论: ⇑(fst R A B) = Prod.fst
+  结论: ⇑(fst R A B) = 积类型.fst
   证明: rfl
 
 @[simp, norm_cast]
@@ -1702,7 +1702,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ↑(snd R A B) = AlgHom.snd R A B
+  结论: ↑(snd R A B) = 代数态射.snd R A B
   证明: rfl
 
 @[simp, norm_cast]
@@ -1723,7 +1723,7 @@ theorem coe_snd'
 
 中文:
 定理 coe_snd'
-  结论: ⇑(snd R A B) = Prod.snd
+  结论: ⇑(snd R A B) = 积类型.snd
   证明: rfl
 
 @[simp]
@@ -1744,7 +1744,7 @@ theorem fst_prod_snd
 
 中文:
 定理 fst_prod_snd
-  结论: (fst R A B).prod (snd R A B) = ContinuousAlgHom.id R (A × B)
+  结论: (fst R A B).乘积 (snd R A B) = 余ntinuousAlg态射.id R (A × B)
   证明: ext fun ⟨_x, _y⟩ => rfl
 
 @[simp]
@@ -1805,7 +1805,7 @@ definition prodMap
 
 中文:
 定义 prodMap
-  签名: {D : 类型} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
+  签名: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
   定义体: (f₁.comp (fst R A C)).prod (f₂.comp (snd R A C))
 
 
@@ -1829,7 +1829,7 @@ theorem coe_prodMap
 
 中文:
 定理 coe_prodMap
-  结论: {D : 类型} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
+  结论: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1850,7 +1850,7 @@ theorem coe_prodMap'
 
 中文:
 定理 coe_prodMap'
-  结论: {D : 类型} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
+  结论: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
   证明: rfl
 -/
 theorem coe_prodMap' {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
@@ -1901,7 +1901,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : A ->A[R] B) (p : Subalgebra R B) (h : 对任意 x, f x in p)
+  签名: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p)
   定义体: f.continuous.subtype_mk _
   toAlgHom := (f : A ->ₐ[R] B).codRestrict p h
 
@@ -1926,7 +1926,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : A ->A[R] B) (p : Subalgebra R B) (h : 对任意 x, f x in p)
+  条件: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p)
   证明: rfl
 
 @[simp]
@@ -1946,7 +1946,7 @@ theorem coe_codRestrict_apply
 
 中文:
 定理 coe_codRestrict_apply
-  条件: (f : A ->A[R] B) (p : Subalgebra R B) (h : 对任意 x, f x in p) (x)
+  条件: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p) (x)
   证明: rfl
 -/
 theorem coe_codRestrict_apply (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p) (x) :
@@ -2008,8 +2008,8 @@ definition _root_.Subalgebra.valA
 @[simp, norm_cast]
 
 中文:
-定义 _root_.Subalgebra.valA
-  签名: (p : Subalgebra R A)
+定义 _root_.子代数.valA
+  签名: (p : 子代数 R A)
   定义体: continuous_subtype_val
   toAlgHom := p.val
 
@@ -2034,8 +2034,8 @@ theorem _root_.Subalgebra.coe_valA
 @[simp]
 
 中文:
-定理 _root_.Subalgebra.coe_valA
-  条件: (p : Subalgebra R A)
+定理 _root_.子代数.coe_valA
+  条件: (p : 子代数 R A)
   结论: p.valA = p.subtype
   证明: rfl
 
@@ -2057,8 +2057,8 @@ theorem _root_.Subalgebra.coe_valA'
 @[simp]
 
 中文:
-定理 _root_.Subalgebra.coe_valA'
-  条件: (p : Subalgebra R A)
+定理 _root_.子代数.coe_valA'
+  条件: (p : 子代数 R A)
   结论: ⇑p.valA = p.subtype
   证明: rfl
 
@@ -2080,8 +2080,8 @@ theorem _root_.Subalgebra.valA_apply
 @[simp]
 
 中文:
-定理 _root_.Subalgebra.valA_apply
-  条件: (p : Subalgebra R A) (x : p)
+定理 _root_.子代数.valA_apply
+  条件: (p : 子代数 R A) (x : p)
   结论: p.valA x = x
   证明: rfl
 
@@ -2100,8 +2100,8 @@ theorem _root_.Submodule.range_valA
   proof: Subalgebra.range_val p
 
 中文:
-定理 _root_.Submodule.range_valA
-  条件: (p : Subalgebra R A)
+定理 _root_.子模.range_valA
+  条件: (p : 子代数 R A)
   证明: Subalgebra.range_val p
 
 Depends on / 依赖: Subalgebra, Subalgebra.range_val, range_val
@@ -2241,7 +2241,7 @@ instance [IsTopologicalSemiring
   body: s.toSubsemiring.topologicalSemiring
 
 中文:
-实例 [IsTopologicalSemiring
+实例 [是TopologicalSemiring
   签名: A] (s
   定义体: s.toSubsemiring.topologicalSemiring
 
@@ -2259,7 +2259,7 @@ instance [IsSemitopologicalSemiring
   body: s.toSubsemiring.semitopologicalSemiring
 
 中文:
-实例 [IsSemitopologicalSemiring
+实例 [是SemitopologicalSemiring
   签名: A] (s
   定义体: s.toSubsemiring.semitopologicalSemiring
 
@@ -2280,8 +2280,8 @@ theorem Subalgebra.le_topologicalClosure
   proof: subset_closure
 
 中文:
-定理 Subalgebra.le_topologicalClosure
-  条件: (s : Subalgebra R A)
+定理 子代数.le_topologicalClosure
+  条件: (s : 子代数 R A)
   结论: s <= s.topologicalClosure
   证明: subset_closure
 
@@ -2299,8 +2299,8 @@ theorem Subalgebra.isClosed_topologicalClosure
   proof: by convert! @isClosed_closure A _ s
 
 中文:
-定理 Subalgebra.isClosed_topologicalClosure
-  条件: (s : Subalgebra R A)
+定理 子代数.isClosed_topologicalClosure
+  条件: (s : 子代数 R A)
   证明: by convert! @isClosed_closure A _ s
 
 Depends on / 依赖: convert, isClosed_closure
@@ -2319,8 +2319,8 @@ theorem Subalgebra.topologicalClosure_minimal
 @[gcongr]
 
 中文:
-定理 Subalgebra.topologicalClosure_minimal
-  结论: {s t : Subalgebra R A} (h : s <= t)
+定理 子代数.topologicalClosure_minimal
+  结论: {s t : 子代数 R A} (h : s <= t)
   证明: closure_minimal h ht
 
 @[gcongr]
@@ -2341,8 +2341,8 @@ theorem Subalgebra.topologicalClosure_mono
   proof: closure_mono h
 
 中文:
-定理 Subalgebra.topologicalClosure_mono
-  条件: {s t : Subalgebra R A} (h : s <= t)
+定理 子代数.topologicalClosure_mono
+  条件: {s t : 子代数 R A} (h : s <= t)
   证明: closure_mono h
 
 Depends on / 依赖: closure_mono
@@ -2362,8 +2362,8 @@ lemma Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer
   proof: topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
 
 中文:
-引理 Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer
-  条件: [T2Space A] (s : Set A)
+引理 子代数.topologicalClosure_adjoin_le_centralizer_centralizer
+  条件: [T2空间 A] (s : 集合 A)
   证明: topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
 
 Depends on / 依赖: Set.isClosed_centralizer, adjoin_le_centralizer_centralizer, isClosed_centralizer, topologicalClosure_minimal
@@ -2381,8 +2381,8 @@ abbreviation Subalgebra.commSemiringTopologicalClosure
   body: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 中文:
-缩写 Subalgebra.commSemiringTopologicalClosure
-  签名: [T2Space A] (s : Subalgebra R A)
+缩写 子代数.commSemiringTopologicalClosure
+  签名: [T2空间 A] (s : 子代数 R A)
   定义体: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toSemiring, toSemiring, toSubmonoid, topologicalClosure
@@ -2405,8 +2405,8 @@ theorem Subalgebra.topologicalClosure_comap_homeomorph
   exact f'.preimage_closure _
 
 中文:
-定理 Subalgebra.topologicalClosure_comap_homeomorph
-  结论: (s : Subalgebra R A) {B : 类型}
+定理 子代数.topologicalClosure_comap_homeomorph
+  结论: (s : 子代数 R A) {B : 类型}
   证明: by
   apply SetLike.ext'
   simp only [Subalgebra.topologicalClosure_coe]
@@ -2439,7 +2439,7 @@ definition Algebra.elemental
   body: (Algebra.adjoin R ({x} : Set A)).topologicalClosure
 
 中文:
-定义 Algebra.elemental
+定义 代数.elemental
   签名: (x : A)
   定义体: (Algebra.adjoin R ({x} : Set A)).topologicalClosure
 
@@ -2482,7 +2482,7 @@ theorem le_of_mem
 
 中文:
 定理 le_of_mem
-  条件: {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) (hx : x in s)
+  条件: {x : A} {s : 子代数 R A} (hs : 是闭集 (s : 集合 A)) (hx : x in s)
   证明: topologicalClosure_minimal (adjoin_le <| by simpa using hx) hs
 
 Depends on / 依赖: adjoin_le, topologicalClosure_minimal
@@ -2502,7 +2502,7 @@ theorem le_iff_mem
 
 中文:
 定理 le_iff_mem
-  条件: {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A))
+  条件: {x : A} {s : 子代数 R A} (hs : 是闭集 (s : 集合 A))
   证明: ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
 
 Depends on / 依赖: le_of_mem, self_mem
@@ -2539,7 +2539,7 @@ instance [T2Space
   body: fast_instance% commSemiringTopologicalClosure _ mul_comm
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: A] {x
   定义体: fast_instance% commSemiringTopologicalClosure _ mul_comm
 
@@ -2567,7 +2567,7 @@ theorem isClosedEmbedding_coe
 中文:
 定理 isClosedEmbedding_coe
   条件: (x : A)
-  结论: IsClosedEmbedding ((↑) : elemental R x -> A) where
+  结论: 是闭嵌入 ((↑) : elemental R x -> A) where
   证明: rfl
   injective := Subtype.coe_injective
   isClosed_range := by simpa using isClosed R x
@@ -2587,7 +2587,7 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: [T2Space A] (x : A)
+  条件: [T2空间 A] (x : A)
   证明: topologicalClosure_adjoin_le_centralizer_centralizer ..
 
 Depends on / 依赖: topologicalClosure_adjoin_le_centralizer_centralizer
@@ -2616,8 +2616,8 @@ abbreviation Subalgebra.commRingTopologicalClosure
   body: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 中文:
-缩写 Subalgebra.commRingTopologicalClosure
-  签名: [T2Space A] (s : Subalgebra R A)
+缩写 子代数.commRingTopologicalClosure
+  签名: [T2空间 A] (s : 子代数 R A)
   定义体: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toRing, toRing, toSubmonoid, topologicalClosure
@@ -2635,7 +2635,7 @@ instance [T2Space
   body: mul_comm
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: A] {x
   定义体: mul_comm
 

@@ -64,8 +64,8 @@ instance [CharP
   body: by rw [← C_eq_coe_nat, ← C_0, C_inj, CharP.cast_eq_zero_iff R p]
 
 中文:
-实例 [CharP
-  签名: R p] : CharP (MvPolynomial σ R) p where
+实例 [特征p
+  签名: R p] : 特征p (多元多项式 σ R) p where
   定义体: by rw [← C_eq_coe_nat, ← C_0, C_inj, CharP.cast_eq_zero_iff R p]
 
 Depends on / 依赖: C_eq_coe_nat, C_inj, CharP.cast_eq_zero_iff, cast_eq_zero_iff
@@ -86,8 +86,8 @@ instance [CharZero
   body: by rwa [← C_eq_coe_nat, ← C_eq_coe_nat, C_inj, Nat.cast_inj] at hxy
 
 中文:
-实例 [CharZero
-  签名: R] : CharZero (MvPolynomial σ R) where
+实例 [特征零
+  签名: R] : 特征零 (多元多项式 σ R) where
   定义体: by rwa [← C_eq_coe_nat, ← C_eq_coe_nat, C_inj, Nat.cast_inj] at hxy
 
 Depends on / 依赖: C_eq_coe_nat, C_inj, Nat.cast_inj, cast_inj
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: ExpChar (MvPolynomial σ R) p
+  签名: ExpChar (多元多项式 σ R) p
   定义体: by
   cases ‹ExpChar R p›; exacts [ExpChar.zero, ExpChar.prime ‹_›]
 
@@ -137,7 +137,7 @@ theorem map_eq_map
 
 中文:
 定理 map_eq_map
-  结论: {R S : 类型} [CommSemiring R] [CommSemiring S] (p : MvPolynomial σ R)
+  结论: {R S : 类型} [交换半环 R] [交换半环 S] (p : 多元多项式 σ R)
   证明: rfl
 
 @[deprecated (since := "2026-06-18")] alias mapRange_eq_map := map_eq_map
@@ -163,7 +163,7 @@ definition restrictSupport
 
 中文:
 定义 restrictSupport
-  签名: (s : Set (σ ->₀ 自然数))
+  签名: (s : 集合 (σ ->₀ 自然数))
   定义体: AddMonoidAlgebra.supported R R s
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported, supported
@@ -181,7 +181,7 @@ definition basisRestrictSupport
 
 中文:
 定义 basisRestrictSupport
-  签名: (s : Set (σ ->₀ 自然数))
+  签名: (s : 集合 (σ ->₀ 自然数))
   定义体: AddMonoidAlgebra.supportedEquivFinsupp s
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supportedEquivFinsupp, supportedEquivFinsupp
@@ -199,7 +199,7 @@ theorem restrictSupport_mono
 
 中文:
 定理 restrictSupport_mono
-  条件: {s t : Set (σ ->₀ 自然数)} (h : s subseteq t)
+  条件: {s t : 集合 (σ ->₀ 自然数)} (h : s subseteq t)
   证明: AddMonoidAlgebra.supported_mono h
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported_mono, supported_mono
@@ -217,7 +217,7 @@ lemma restrictSupport_eq_span
 
 中文:
 引理 restrictSupport_eq_span
-  条件: (s : Set (σ ->₀ 自然数))
+  条件: (s : 集合 (σ ->₀ 自然数))
   证明: AddMonoidAlgebra.supported_eq_span_single ..
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported_eq_span_single, supported_eq_span_single
@@ -238,7 +238,7 @@ lemma mem_restrictSupport_iff
 
 中文:
 引理 mem_restrictSupport_iff
-  条件: {s : Set (σ ->₀ 自然数)} {r : MvPolynomial σ R}
+  条件: {s : 集合 (σ ->₀ 自然数)} {r : 多元多项式 σ R}
   证明: .rfl
 
 @[simp]
@@ -259,7 +259,7 @@ lemma monomial_mem_restrictSupport
 
 中文:
 引理 monomial_mem_restrictSupport
-  条件: {s : Set (σ ->₀ 自然数)} {m} {r : R}
+  条件: {s : 集合 (σ ->₀ 自然数)} {m} {r : R}
   证明: by
   classical
   by_cases r = 0 <;> simp [mem_restrictSupport_iff, support_monomial, *]
@@ -288,7 +288,7 @@ lemma restrictSupport_add
 
 中文:
 引理 restrictSupport_add
-  条件: (s t : Set (σ ->₀ 自然数))
+  条件: (s t : 集合 (σ ->₀ 自然数))
   证明: by
   apply le_antisymm
   · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff, Set.add_subset_iff]
@@ -327,7 +327,7 @@ lemma restrictSupport_zero
 
 中文:
 引理 restrictSupport_zero
-  结论: restrictSupport R (0 : Set (σ ->₀ 自然数)) = 1
+  结论: restrictSupport R (0 : 集合 (σ ->₀ 自然数)) = 1
   证明: by
   classical
   apply le_antisymm
@@ -359,7 +359,7 @@ lemma restrictSupport_univ
 
 中文:
 引理 restrictSupport_univ
-  结论: restrictSupport R (.univ : Set (σ ->₀ 自然数)) = ⊤
+  结论: restrictSupport R (.univ : 集合 (σ ->₀ 自然数)) = ⊤
   证明: by
   ext; simp [mem_restrictSupport_iff]
 
@@ -380,7 +380,7 @@ lemma restrictSupport_nsmul
 
 中文:
 引理 restrictSupport_nsmul
-  条件: (n : 自然数) (s : Set (σ ->₀ 自然数))
+  条件: (n : 自然数) (s : 集合 (σ ->₀ 自然数))
   证明: by
   induction n <;> simp [add_smul, restrictSupport_add, *, pow_succ]
 
@@ -405,7 +405,7 @@ definition restrictSupportIdeal
 
 中文:
 定义 restrictSupportIdeal
-  签名: (s : Set (σ ->₀ 自然数)) (hs : IsUpperSet s)
+  签名: (s : 集合 (σ ->₀ 自然数)) (hs : 是上集 s)
   定义体: restrictSupport R s
   smul_mem' x y hy m (hm : m in (x * y).support) := by
     classical
@@ -436,7 +436,7 @@ lemma restrictScalars_restrictSupportIdeal
 
 中文:
 引理 restrictScalars_restrictSupportIdeal
-  条件: (s : Set (σ ->₀ 自然数)) (hs)
+  条件: (s : 集合 (σ ->₀ 自然数)) (hs)
   证明: rfl
 
 Depends on / 依赖: restrictScalars, restrictSupport
@@ -497,7 +497,7 @@ theorem mem_restrictTotalDegree
 
 中文:
 定理 mem_restrictTotalDegree
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   rw [totalDegree]; rw [Finset.sup_le_iff]
   rfl
@@ -522,7 +522,7 @@ theorem mem_restrictDegree
 
 中文:
 定理 mem_restrictDegree
-  条件: (p : MvPolynomial σ R) (n : 自然数)
+  条件: (p : 多元多项式 σ R) (n : 自然数)
   证明: by
   rw [restrictDegree]; rw [restrictSupport]; rw [AddMonoidAlgebra.mem_supported]
   rfl
@@ -547,7 +547,7 @@ theorem mem_restrictDegree_iff_sup
 
 中文:
 定理 mem_restrictDegree_iff_sup
-  条件: [DecidableEq σ] (p : MvPolynomial σ R) (n : 自然数)
+  条件: [DecidableEq σ] (p : 多元多项式 σ R) (n : 自然数)
   证明: by
   simp only [mem_restrictDegree, degrees_def, Multiset.count_finset_sup, Finsupp.count_toMultiset,
     Finset.sup_le_iff]
@@ -597,7 +597,7 @@ definition basisMonomials
 
 中文:
 定义 basisMonomials
-  签名: : Basis (σ ->₀ 自然数) R (MvPolynomial σ R) where
+  签名: : 基 (σ ->₀ 自然数) R (多元多项式 σ R) where
   定义体: AddMonoidAlgebra.coeffLinearEquiv _
 
 @[simp]
@@ -633,7 +633,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R (MvPolynomial σ R)
+  签名: 模.自由 R (多元多项式 σ R)
   定义体: Module.Free.of_basis (MvPolynomial.basisMonomials σ R)
 
 Depends on / 依赖: Module, Module.Free.of_basis, MvPolynomial, MvPolynomial.basisMonomials, basisMonomials, of_basis
@@ -652,7 +652,7 @@ theorem linearIndependent_X
 
 中文:
 定理 linearIndependent_X
-  结论: LinearIndependent R (X : σ -> MvPolynomial σ R)
+  结论: LinearIndependent R (X : σ -> 多元多项式 σ R)
   证明: (basisMonomials σ R).linearIndependent.comp (fun s : σ => Finsupp.single s 1)
     (Finsupp.single_left_injective one_ne_zero)
 
@@ -672,7 +672,7 @@ lemma finite_setOfPred_bounded
 
 中文:
 引理 finite_setOfPred_bounded
-  条件: (α) [Finite α] (n : 自然数)
+  条件: (α) [有限 α] (n : 自然数)
   证明: ((Set.Finite.pi' fun _ => Set.finite_le_nat _).preimage DFunLike.coe_injective.injOn).to_subtype
 -/
 private lemma finite_setOfPred_bounded (α) [Finite α] (n : Nat) :
@@ -689,7 +689,7 @@ instance [Finite
   Module.Finite.of_basis (basisRestrictSupport R _)
 
 中文:
-实例 [Finite
+实例 [有限
   签名: σ] (N
   定义体: have := finite_setOfPred_bounded σ N
   Module.Finite.of_basis (basisRestrictSupport R _)
@@ -714,7 +714,7 @@ instance [Finite
         (Finset.single_le_sum (fun _ _ => Nat.zero_l
 
 中文:
-实例 [Finite
+实例 [有限
   签名: σ] (N
   定义体: have := finite_setOfPred_bounded σ N
   have : Finite {s : σ ->₀ Nat | s.sum (fun _ e => e) <= N} := by

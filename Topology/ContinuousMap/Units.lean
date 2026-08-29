@@ -141,7 +141,7 @@ theorem continuous_isUnit_unit
 
 中文:
 定理 continuous_isUnit_unit
-  条件: {f : C(X, R)} (h : 对任意 x, IsUnit (f x))
+  条件: {f : C(X, R)} (h : 对任意 x, 是单位 (f x))
   证明: by
   refine
     continuous_induced_rng.2
@@ -179,7 +179,7 @@ definition unitsOfForallIsUnit
 
 中文:
 定义 unitsOfForallIsUnit
-  签名: {f : C(X, R)} (h : 对任意 x, IsUnit (f x))
+  签名: {f : C(X, R)} (h : 对任意 x, 是单位 (f x))
   定义体: (h x).unit
   continuous_toFun := continuous_isUnit_unit h
 -/
@@ -218,9 +218,9 @@ theorem isUnit_iff_forall_isUnit
     ⟨ContinuousMap.unitsLift (unitsOfForallIsUnit h), by ext; rfl⟩
 
 中文:
-定理 isUnit_iff_forall_isUnit
+定理 isUnit_iff_对任意_isUnit
   条件: (f : C(X, R))
-  结论: IsUnit f ↔ 对任意 x, IsUnit (f x)
+  结论: 是单位 f ↔ 对任意 x, 是单位 (f x)
   证明: Iff.intro (fun h x => ⟨unitsLift.symm h.unit x, rfl⟩) fun h =>
     ⟨ContinuousMap.unitsLift (unitsOfForallIsUnit h), by ext; rfl⟩
 
@@ -247,9 +247,9 @@ theorem isUnit_iff_forall_ne_zero
   simp_rw [f.isUnit_iff_forall_isUnit, isUnit_iff_ne_zero]
 
 中文:
-定理 isUnit_iff_forall_ne_zero
+定理 isUnit_iff_对任意_ne_zero
   条件: (f : C(X, R))
-  结论: IsUnit f ↔ 对任意 x, f x != 0
+  结论: 是单位 f ↔ 对任意 x, f x != 0
   证明: by
   simp_rw [f.isUnit_iff_forall_isUnit, isUnit_iff_ne_zero]
 
@@ -304,8 +304,8 @@ theorem spectrum_eq_range
 
 中文:
 定理 spectrum_eq_range
-  条件: [CompleteSpace 𝕜] (f : C(X, 𝕜))
-  结论: spectrum 𝕜 f = Set.range f
+  条件: [完备空间 𝕜] (f : C(X, 𝕜))
+  结论: spectrum 𝕜 f = 集合.range f
   证明: by
   rw [spectrum_eq_preimage_range]; rw [Algebra.algebraMap_self]
   exact Set.preimage_id

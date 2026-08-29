@@ -62,9 +62,9 @@ inductive strictLimitsOfShape
 
 中文:
 归纳类型 strictLimitsOfShape
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (1 个):
-    - limit: (F : J ⥤ C) [HasLimit F] (hF : 对任意 j, P (F.obj j)) : strictLimitsOfShape (limit F)
+    - limit: (F : J ⥤ C) [有极限 F] (hF : 对任意 j, P (F.obj j)) : strictLimitsOfShape (limit F)
 
 Depends on / 依赖: Under.hasColimit_of_hasColimit_liftFromUnder, hasColimit_of_hasColimit_liftFromUnder
 -/
@@ -87,7 +87,7 @@ lemma strictLimitsOfShape_monotone
 
 中文:
 引理 strictLimitsOfShape_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: by
   rintro _ ⟨F, hF⟩
   exact ⟨F, fun j => h _ (hF j)⟩
@@ -113,7 +113,7 @@ lemma strictLimitsOfShape_bot
 
 中文:
 引理 strictLimitsOfShape_bot
-  条件: [Nonempty J]
+  条件: [非空 J]
   证明: by
   rw [eq_bot_iff]
   rintro _ ⟨_, h⟩
@@ -162,7 +162,7 @@ definition limit
 
 中文:
 定义 limit
-  签名: (F : J ⥤ C) [HasLimit F] (hF : 对任意 j, P (F.obj j))
+  签名: (F : J ⥤ C) [有极限 F] (hF : 对任意 j, P (F.obj j))
   定义体: .limit F
   prop_diag_obj := hF
 -/
@@ -210,7 +210,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: {X : C} (h : P.LimitOfShape J X) {Q : Object命题erty C} (hPQ : P <= Q)
+  签名: {X : C} (h : P.LimitOfShape J X) {Q : ObjectProperty C} (hPQ : P <= Q)
   定义体: h.toLimitPresentation
   prop_diag_obj j := hPQ _ (h.prop_diag_obj j)
 
@@ -234,7 +234,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: {X : C} (h : P.LimitOfShape J X) (G : J' ⥤ J) [G.Initial]
+  签名: {X : C} (h : P.LimitOfShape J X) (G : J' ⥤ J) [G.初始]
   定义体: h.toLimitPresentation.reindex G
   prop_diag_obj _ := h.prop_diag_obj _
 
@@ -286,7 +286,7 @@ definition limitsOfShape
 
 中文:
 定义 limitsOfShape
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => Nonempty (P.LimitOfShape J X)
 
 Depends on / 依赖: LimitOfShape, Nonempty, P.LimitOfShape
@@ -351,8 +351,8 @@ lemma limitsOfShape_bot
 
 中文:
 引理 limitsOfShape_bot
-  条件: [Nonempty J]
-  结论: limitsOfShape (⊥ : Object命题erty C) J = ⊥
+  条件: [非空 J]
+  结论: limitsOfShape (⊥ : ObjectProperty C) J = ⊥
   证明: by
   rw [eq_bot_iff]
   rintro X ⟨⟨_, h⟩⟩
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.limitsOfShape J).IsClosedUnderIsomorphisms
+  签名: (P.limitsOfShape J).在同构下封闭
   定义体: by rintro _ _ e ⟨h⟩; exact ⟨h.ofIso e⟩
 
 @[simp]
@@ -440,7 +440,7 @@ lemma limitsOfShape_monotone
 
 中文:
 引理 limitsOfShape_monotone
-  条件: {Q : Object命题erty C} (hPQ : P <= Q)
+  条件: {Q : ObjectProperty C} (hPQ : P <= Q)
   证明: by
   intro X ⟨h⟩
   exact ⟨h.ofLE hPQ⟩
@@ -559,8 +559,8 @@ class IsClosedUnderLimitsOfShape
     - limitsOfShape_le((P J)) : P.limitsOfShape J <= P
 
 中文:
-类 IsClosedUnderLimitsOfShape
-  参数: (P : Object命题erty C) (J : 类型u') [Category.{v'} J]
+类 是ClosedUnderLimitsOfShape
+  参数: (P : ObjectProperty C) (J : 类型u') [范畴.{v'} J]
   公理与运算 (1 个):
     - limitsOfShape_le((P J)) : P.limitsOfShape J <= P
 -/
@@ -580,8 +580,8 @@ lemma IsClosedUnderLimitsOfShape.mk'
     exact monotone_isoClosure h
 
 中文:
-引理 IsClosedUnderLimitsOfShape.mk'
-  结论: [P.IsClosedUnderIsomorphisms]
+引理 是ClosedUnderLimitsOfShape.mk'
+  结论: [P.在同构下封闭]
   证明: by
     conv_rhs => rw [← P.isoClosure_eq_self]
     rw [← isoClosure_strictLimitsOfShape]
@@ -606,8 +606,8 @@ instance [Nonempty
   body: by rw [limitsOfShape_bot]
 
 中文:
-实例 [Nonempty
-  签名: J] : IsClosedUnderLimitsOfShape (⊥
+实例 [非空
+  签名: J] : 是ClosedUnderLimitsOfShape (⊥
   定义体: by rw [limitsOfShape_bot]
 
 Depends on / 依赖: limitsOfShape_bot
@@ -625,7 +625,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderLimitsOfShape (⊤ : Object命题erty C) J
+  签名: 是ClosedUnderLimitsOfShape (⊤ : ObjectProperty C) J
   定义体: by trivial
 -/
 instance : IsClosedUnderLimitsOfShape (⊤ : ObjectProperty C) J where
@@ -668,7 +668,7 @@ lemma prop_of_isLimit
 
 中文:
 引理 prop_of_isLimit
-  结论: {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
+  结论: {F : J ⥤ C} {c : 锥 F} (hc : 是极限 c)
   证明: P.limitsOfShape_le J _ ⟨{ diag := _, π := _, isLimit := hc, prop_diag_obj := hF }⟩
 
 Depends on / 依赖: P.limitsOfShape_le, isLimit, limitsOfShape_le, prop_diag_obj
@@ -687,7 +687,7 @@ lemma prop_limit
 
 中文:
 引理 prop_limit
-  条件: (F : J ⥤ C) [HasLimit F] (hF : 对任意 (j : J), P (F.obj j))
+  条件: (F : J ⥤ C) [有极限 F] (hF : 对任意 (j : J), P (F.obj j))
   证明: P.prop_of_isLimit (limit.isLimit F) hF
 
 Depends on / 依赖: P.prop_of_isLimit, isLimit, limit.isLimit, prop_of_isLimit
@@ -708,7 +708,7 @@ lemma prop_pi
 
 中文:
 引理 prop_pi
-  结论: {J : 类型} [P.IsClosedUnderLimitsOfShape (Discrete J)] (X : J -> C)
+  结论: {J : 类型} [P.是ClosedUnderLimitsOfShape (离散 J)] (X : J -> C)
   证明: P.prop_of_isLimit (productIsProduct X) (fun _ => hF _)
 
 Depends on / 依赖: P.prop_of_isLimit, productIsProduct, prop_of_isLimit
@@ -729,7 +729,7 @@ lemma limitsOfShape_le_of_initial
 
 中文:
 引理 limitsOfShape_le_of_initial
-  条件: (G : J ⥤ J') [G.Initial]
+  条件: (G : J ⥤ J') [G.初始]
   证明: fun _h ⟨h⟩ => ⟨h.reindex G⟩
 
 Depends on / 依赖: h.reindex, reindex
@@ -795,7 +795,7 @@ lemma IsClosedUnderLimitsOfShape.of_equivalence
   rwa [← P.isClosedUnderLimitsOfShape_iff_of_equivalence e]
 
 中文:
-引理 IsClosedUnderLimitsOfShape.of_equivalence
+引理 是ClosedUnderLimitsOfShape.of_equivalence
   结论: (e : J ≌ J')
   证明: by
   rwa [← P.isClosedUnderLimitsOfShape_iff_of_equivalence e]
@@ -815,7 +815,7 @@ instance IsClosedUnderLimitsOfShape.inverseImage
   body: ⟨fun _ ⟨c, H⟩ => ObjectProperty.LimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
 
 中文:
-实例 IsClosedUnderLimitsOfShape.inverseImage
+实例 是ClosedUnderLimitsOfShape.inverseImage
   定义体: ⟨fun _ ⟨c, H⟩ => ObjectProperty.LimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
 
 Depends on / 依赖: LimitOfShape, ObjectProperty, ObjectProperty.LimitOfShape.prop, c.map
@@ -841,7 +841,7 @@ lemma isClosedUnderLimitsOfShape_inverseImage_iff
 
 中文:
 引理 isClosedUnderLimitsOfShape_inverseImage_iff
-  结论: (P : Object命题erty D)
+  结论: (P : ObjectProperty D)
   证明: by
   refine ⟨fun H => ?_, fun _ => inferInstance⟩
   convert!

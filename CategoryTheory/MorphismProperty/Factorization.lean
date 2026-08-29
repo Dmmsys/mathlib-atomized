@@ -138,7 +138,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {W₁ W₂ : Morphism命题erty Cᵒᵖ} {X Y : Cᵒᵖ} {f : X ⟶ Y}
+  签名: {W₁ W₂ : MorphismProperty Cᵒᵖ} {X Y : Cᵒᵖ} {f : X ⟶ Y}
   定义体: φ.Z.unop
   i := φ.p.unop
   p := φ.i.unop
@@ -169,7 +169,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: {W₁ W₂ : Morphism命题erty C} {X Y : C} {f : X ⟶ Y}
+  签名: {W₁ W₂ : MorphismProperty C} {X Y : C} {f : X ⟶ Y}
   定义体: φ.op
   invFun φ := φ.unop
 -/
@@ -205,10 +205,10 @@ class HasFactorization
     - nonempty_mapFactorizationData({X Y : C} (f : X ⟶ Y)) : Nonempty (MapFactorizationData W₁ W₂ f)
 
 中文:
-类 HasFactorization
+类 有分解
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_mapFactorizationData({X Y : C} (f : X ⟶ Y)) : Nonempty (MapFactorizationData W₁ W₂ f)
+    - nonempty_mapFactorizationData({X Y : C} (f : X ⟶ Y)) : 非空 (MapFactorizationData W₁ W₂ f)
 -/
 class HasFactorization : Prop where
   nonempty_mapFactorizationData {X Y : C} (f : X ⟶ Y) : Nonempty (MapFactorizationData W₁ W₂ f)
@@ -223,7 +223,7 @@ definition factorizationData
 
 中文:
 定义 factorizationData
-  签名: [HasFactorization W₁ W₂]
+  签名: [有分解 W₁ W₂]
   定义体: fun _ => Nonempty.some (HasFactorization.nonempty_mapFactorizationData _)
 
 Depends on / 依赖: HasFactorization, HasFactorization.nonempty_mapFactorizationData, Nonempty, Nonempty.some, nonempty_mapFactorizationData
@@ -240,8 +240,8 @@ instance [HasFactorization
   body: ⟨(factorizationData W₁ W₂ f.unop).op⟩
 
 中文:
-实例 [HasFactorization
-  签名: W₁ W₂] : HasFactorization W₂.op W₁.op where
+实例 [有分解
+  签名: W₁ W₂] : 有分解 W₂.op W₁.op where
   定义体: ⟨(factorizationData W₁ W₂ f.unop).op⟩
 
 Depends on / 依赖: f.unop, factorizationData
@@ -259,7 +259,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Nonempty (MapFactorizationData W₁ W₂ f)
 
 Depends on / 依赖: MapFactorizationData, Nonempty
@@ -285,7 +285,7 @@ lemma comp_eq_top_iff
 
 中文:
 引理 comp_eq_top_iff
-  结论: W₁.comp W₂ = ⊤ ↔ HasFactorization W₁ W₂
+  结论: W₁.comp W₂ = ⊤ ↔ 有分解 W₁ W₂
   证明: by
   constructor
   · intro h
@@ -328,12 +328,12 @@ structure FunctorialFactorizationData
 结构 FunctorialFactorizationData
   参数: where
   公理与运算 (6 个):
-    - Z : Arrow C ⥤ C
-    - i : Arrow.leftFunc ⟶ Z
-    - p : Z ⟶ Arrow.rightFunc
-    - fac : i ≫ p = Arrow.leftToRight  [默认: by cat_disch]
-    - hi((f : Arrow C)) : W₁ (i.app f)
-    - hp((f : Arrow C)) : W₂ (p.app f)
+    - Z : 箭头 C ⥤ C
+    - i : 箭头.leftFunc ⟶ Z
+    - p : Z ⟶ 箭头.rightFunc
+    - fac : i ≫ p = 箭头.leftToRight  [默认: by cat_disch]
+    - hi((f : 箭头 C)) : W₁ (i.app f)
+    - hp((f : 箭头 C)) : W₂ (p.app f)
 
 Depends on / 依赖: cat_disch, i.app, p.app
 -/
@@ -368,7 +368,7 @@ lemma fac_app
 
 中文:
 引理 fac_app
-  条件: {f : Arrow C}
+  条件: {f : 箭头 C}
   结论: data.i.app f ≫ data.p.app f = f.hom
   证明: by
   rw [← NatTrans.comp_app]; rw [fac]; rw [Arrow.leftToRight_app]
@@ -392,7 +392,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: {W₁' W₂' : Morphism命题erty C} (le₁ : W₁ <= W₁') (le₂ : W₂ <= W₂')
+  签名: {W₁' W₂' : MorphismProperty C} (le₁ : W₁ <= W₁') (le₂ : W₂ <= W₂')
   定义体: data.Z
   i := data.i
   p := data.p
@@ -525,7 +525,7 @@ lemma mapZ_id
 
 中文:
 引理 mapZ_id
-  结论: data.mapZ (𝟙 (Arrow.mk f)) = 𝟙 _
+  结论: data.mapZ (𝟙 (箭头.mk f)) = 𝟙 _
   证明: data.Z.map_id _
 
 @[reassoc, simp]
@@ -546,7 +546,7 @@ lemma mapZ_comp
 
 中文:
 引理 mapZ_comp
-  条件: {X'' Y'' : C} {h : X'' ⟶ Y''} (ψ : Arrow.mk g ⟶ Arrow.mk h)
+  条件: {X'' Y'' : C} {h : X'' ⟶ Y''} (ψ : 箭头.mk g ⟶ 箭头.mk h)
   证明: data.Z.map_comp _ _
 
 Depends on / 依赖: data.Z.map_comp, map_comp
@@ -584,7 +584,7 @@ definition functorCategory.Z
 
 中文:
 定义 functorCategory.Z
-  签名: : Arrow (J ⥤ C) ⥤ J ⥤ C where
+  签名: : 箭头 (J ⥤ C) ⥤ J ⥤ C where
   定义体: { obj j := (data.factorizationData (f.hom.app j)).Z
       map φ := data.mapZ (Arrow.homMk (f.left.map φ) (f.right.map φ))
       map_id j := by
@@ -673,10 +673,10 @@ class HasFunctorialFactorization
     - nonempty_functorialFactorizationData : Nonempty (FunctorialFactorizationData W₁ W₂)
 
 中文:
-类 HasFunctorialFactorization
+类 有FunctorialFactorization
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_functorialFactorizationData : Nonempty (FunctorialFactorizationData W₁ W₂)
+    - nonempty_functorialFactorizationData : 非空 (FunctorialFactorizationData W₁ W₂)
 
 Depends on / 依赖: Additive, F.Additive, F.IsHomological, IsHomological
 -/
@@ -693,7 +693,7 @@ definition functorialFactorizationData
 
 中文:
 定义 functorialFactorizationData
-  签名: [HasFunctorialFactorization W₁ W₂]
+  签名: [有FunctorialFactorization W₁ W₂]
   定义体: Nonempty.some (HasFunctorialFactorization.nonempty_functorialFactorizationData)
 
 Depends on / 依赖: HasFunctorialFactorization, HasFunctorialFactorization.nonempty_functorialFactorizationData, Nonempty, Nonempty.some, nonempty_functorialFactorizationData
@@ -711,8 +711,8 @@ instance [HasFunctorialFactorization
   body: ⟨(functorialFactorizationData W₁ W₂).factorizationData f⟩
 
 中文:
-实例 [HasFunctorialFactorization
-  签名: W₁ W₂] : HasFactorization W₁ W₂ where
+实例 [有FunctorialFactorization
+  签名: W₁ W₂] : 有分解 W₁ W₂ where
   定义体: ⟨(functorialFactorizationData W₁ W₂).factorizationData f⟩
 
 Depends on / 依赖: factorizationData, functorialFactorizationData
@@ -729,7 +729,7 @@ instance [HasFunctorialFactorization
   body: ⟨⟨(functorialFactorizationData W₁ W₂).functorCategory J⟩⟩
 
 中文:
-实例 [HasFunctorialFactorization
+实例 [有FunctorialFactorization
   签名: W₁ W₂] (J
   定义体: ⟨⟨(functorialFactorizationData W₁ W₂).functorCategory J⟩⟩
 

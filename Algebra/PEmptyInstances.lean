@@ -31,7 +31,7 @@ instance SemigroupPEmpty
 
 中文:
 实例 SemigroupPEmpty
-  签名: : Semigroup PEmpty.{u + 1} where
+  签名: : 半群 命题空.{u + 1} where
   定义体: by cases x
   mul_assoc x y z := by cases x
 

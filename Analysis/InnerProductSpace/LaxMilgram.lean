@@ -175,7 +175,7 @@ theorem isClosed_range
 中文:
 定理 isClosed_range
   条件: (coercive : IsCoercive B)
-  结论: IsClosed (B♯.range : Set V)
+  结论: 是闭集 (B♯.range : 集合 V)
   证明: by
   rcases coercive.antilipschitz with ⟨_, _, antilipschitz⟩
   exact antilipschitz.isClosed_range B♯.uniformContinuous

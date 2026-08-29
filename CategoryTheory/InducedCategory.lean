@@ -73,7 +73,7 @@ instance hasCoeToSort
 
 中文:
 实例 hasCoeToSort
-  签名: {α : Sort*} [CoeSort D α]
+  签名: {α : 类型层*} [CoeSort D α]
   定义体: ⟨fun c => F c⟩
 -/
 instance hasCoeToSort {α : Sort*} [CoeSort D α] :
@@ -95,7 +95,7 @@ structure Hom
     - hom : F X ⟶ F Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : InducedCategory D F)
   公理与运算 (1 个):
     - hom : F X ⟶ F Y
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{v} (InducedCategory D F)
+  签名: 范畴.{v} (InducedCategory D F)
   定义体: Hom X Y
   id X := { hom := 𝟙 _ }
   comp f g := { hom := f.hom ≫ g.hom }
@@ -243,7 +243,7 @@ definition fullyFaithfulInducedFunctor
 
 中文:
 定义 fullyFaithfulInducedFunctor
-  签名: : (inducedFunctor F).FullyFaithful where
+  签名: : (inducedFunctor F).满忠实 where
   定义体: InducedCategory.homMk f
 
 Depends on / 依赖: InducedCategory, InducedCategory.homMk
@@ -261,7 +261,7 @@ instance InducedCategory.full
 
 中文:
 实例 InducedCategory.full
-  签名: : (inducedFunctor F).Full
+  签名: : (inducedFunctor F).满
   定义体: (fullyFaithfulInducedFunctor F).full
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -279,7 +279,7 @@ instance InducedCategory.faithful
 
 中文:
 实例 InducedCategory.faithful
-  签名: : (inducedFunctor F).Faithful
+  签名: : (inducedFunctor F).忠实
   定义体: (fullyFaithfulInducedFunctor F).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulInducedFunctor

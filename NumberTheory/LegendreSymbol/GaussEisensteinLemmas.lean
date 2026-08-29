@@ -40,7 +40,7 @@ theorem Ico_map_valMinAbs_natAbs_eq_Ico_map_id
 
 中文:
 定理 Ico_map_valMinAbs_natAbs_eq_Ico_map_id
-  结论: (p : 自然数) [hp : Fact p.Prime] (a : ZMod p)
+  结论: (p : 自然数) [hp : Fact p.素] (a : ZMod p)
   证明: by
   have he : forall {x}, x in Ico 1 (p / 2).succ -> x != 0 ∧ x <= p / 2 := by grind
   have hep : forall {x}, x in Ico 1 (p / 2).succ -> x < p := fun hx =>
@@ -93,7 +93,7 @@ theorem gauss_lemma_aux₁
 
 中文:
 定理 gauss_lemma_aux₁
-  条件: (p : 自然数) [Fact p.Prime] {a : 整数} (hap : (a : ZMod p) != 0)
+  条件: (p : 自然数) [Fact p.素] {a : 整数} (hap : (a : ZMod p) != 0)
   证明: calc
     (a ^ (p / 2) * (p / 2)! : ZMod p) = ∏ x in Ico 1 (p / 2).succ, a * x := by
       rw [prod_mul_distrib]; rw [← prod_natCast]; rw [prod_Ico_id_eq_factorial]; rw [prod_const]; rw [card_Ico]; rw [Nat.add_one_sub_one]; simp
@@ -133,7 +133,7 @@ theorem gauss_lemma_aux
 
 中文:
 定理 gauss_lemma_aux
-  条件: (p : 自然数) [hp : Fact p.Prime] {a : 整数} (hap : (a : ZMod p) != 0)
+  条件: (p : 自然数) [hp : Fact p.素] {a : 整数} (hap : (a : ZMod p) != 0)
   证明: (mul_left_inj' (show ((p / 2)! : ZMod p) != 0 by
     rw [Ne]; rw [CharP.cast_eq_zero_iff (ZMod p) p]; rw [hp.1.dvd_factorial]; rw [not_le]
     exact Nat.div_lt_self hp.1.pos (by decide))).1 <| by
@@ -165,7 +165,7 @@ theorem gauss_lemma
 
 中文:
 定理 gauss_lemma
-  条件: {p : 自然数} [h : Fact p.Prime] {a : 整数} (hp : p != 2) (ha0 : (a : ZMod p) != 0)
+  条件: {p : 自然数} [h : Fact p.素] {a : 整数} (hp : p != 2) (ha0 : (a : ZMod p) != 0)
   证明: by
   replace hp : Odd p := h.out.odd_of_ne_two hp
   have : (legendreSym p a : ZMod p) =
@@ -201,7 +201,7 @@ theorem eisenstein_lemma_aux₁
 
 中文:
 定理 eisenstein_lemma_aux₁
-  结论: (p : 自然数) [Fact p.Prime] [hp2 : Fact (p % 2 = 1)] {a : 自然数}
+  结论: (p : 自然数) [Fact p.素] [hp2 : Fact (p % 2 = 1)] {a : 自然数}
   证明: have hp2 : (p : ZMod 2) = (1 : Nat) := (natCast_eq_natCast_iff _ _ _).2 hp2.1
   calc
     ((∑ x in Ico 1 (p / 2).succ, a * x : Nat) : ZMod 2) =
@@ -251,7 +251,7 @@ theorem eisenstein_lemma_aux
 
 中文:
 定理 eisenstein_lemma_aux
-  结论: (p : 自然数) [Fact p.Prime] [Fact (p % 2 = 1)] {a : 自然数} (ha2 : a % 2 = 1)
+  结论: (p : 自然数) [Fact p.素] [Fact (p % 2 = 1)] {a : 自然数} (ha2 : a % 2 = 1)
   证明: have ha2 : (a : ZMod 2) = (1 : Nat) := (natCast_eq_natCast_iff _ _ _).2 ha2
 (natCast_eq_natCast_iff _ _ 2).1 sub_eq_zero.1 by
     simpa [add_left_comm, sub_eq_add_neg, ← mul_sum, mul_comm, ha2, Nat.cast_sum,
@@ -362,7 +362,7 @@ theorem sum_mul_div_add_sum_mul_div_eq_mul
 
 中文:
 定理 sum_mul_div_add_sum_mul_div_eq_mul
-  条件: (p q : 自然数) [hp : Fact p.Prime] (hq0 : (q : ZMod p) != 0)
+  条件: (p q : 自然数) [hp : Fact p.素] (hq0 : (q : ZMod p) != 0)
   证明: by
   have hswap :
     #{x in Ico 1 (q / 2).succ ×ˢ Ico 1 (p / 2).succ | x.2 * q <= x.1 * p} =
@@ -419,7 +419,7 @@ theorem eisenstein_lemma
 
 中文:
 定理 eisenstein_lemma
-  结论: {p : 自然数} [Fact p.Prime] (hp : p != 2) {a : 自然数} (ha1 : a % 2 = 1)
+  结论: {p : 自然数} [Fact p.素] (hp : p != 2) {a : 自然数} (ha1 : a % 2 = 1)
   证明: by
   have hp' : Fact (p % 2 = 1) := ⟨(Nat.Prime.mod_two_eq_one_iff_ne_two Fact.out).mpr hp⟩
   have ha0' : ((a : Int) : ZMod p) != 0 := by norm_cast

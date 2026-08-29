@@ -92,7 +92,7 @@ Set.uIoc_of_le h ▸ Set.Ioc_subset_Icc_self.trans Set.Icc_subset_Icc h₁ h₂
 
 中文:
 定理 integralmulsum
-  结论: (hf_diff : 对任意 t in Set.Icc a b, DifferentiableAt 实数 f t)
+  结论: (hf_diff : 对任意 t in 集合.闭区间 a b, DifferentiableAt 实数 f t)
   证明: by
   have h_inc₁ : Ι t₁ t₂ subseteq Set.Icc n (n + 1) :=
 Set.uIoc_of_le h ▸ Set.Ioc_subset_Icc_self.trans Set.Icc_subset_Icc h₁ h₂
@@ -129,7 +129,7 @@ exact le_of_lt (Nat.floor_lt' (by lia)).mp this
 
 中文:
 定理 ineqofmemIco
-  条件: {k : 自然数} (hk : k in Set.Ico (⌊a⌋₊ + 1) ⌊b⌋₊)
+  条件: {k : 自然数} (hk : k in 集合.左闭右开区间 (⌊a⌋₊ + 1) ⌊b⌋₊)
   证明: by
   constructor
   · have := (Set.mem_Ico.mp hk).1
@@ -155,7 +155,7 @@ theorem ineqofmemIco'
 
 中文:
 定理 ineqofmemIco'
-  条件: {k : 自然数} (hk : k in Ico (⌊a⌋₊ + 1) ⌊b⌋₊)
+  条件: {k : 自然数} (hk : k in 左闭右开区间 (⌊a⌋₊ + 1) ⌊b⌋₊)
   证明: ineqofmemIco (by rwa [← Finset.coe_Ico])
 -/
 private theorem ineqofmemIco' {k : Nat} (hk : k in Ico (⌊a⌋₊ + 1) ⌊b⌋₊) :
@@ -520,7 +520,7 @@ theorem locallyIntegrableOn_mul_sum_Icc
     refine integrableOn_mul_sum_Icc _ (h
 
 中文:
-定理 locallyIntegrableOn_mul_sum_Icc
+定理 locally整数egrableOn_mul_sum_Icc
   结论: {m : 自然数} (ha : 0 <= a) {g : 实数 -> 𝕜}
   证明: by
   refine (locallyIntegrableOn_iff isLocallyClosed_Ici).mpr fun K hK₁ hK₂ => ?_

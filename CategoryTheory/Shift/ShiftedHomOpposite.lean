@@ -63,7 +63,7 @@ lemma opEquiv_symm_apply
 
 中文:
 引理 opEquiv_symm_apply
-  条件: {n : 整数} (f : ShiftedHom (Opposite.op Y) (Opposite.op X) n)
+  条件: {n : 整数} (f : ShiftedHom (对偶.op Y) (对偶.op X) n)
   证明: rfl
 -/
 lemma opEquiv_symm_apply {n : Int} (f : ShiftedHom (Opposite.op Y) (Opposite.op X) n) :
@@ -173,7 +173,7 @@ lemma opEquiv'_symm_apply
 
 中文:
 引理 opEquiv'_symm_apply
-  结论: {n a : 整数} (f : Opposite.op (Y⟦a⟧) ⟶ (Opposite.op X)⟦n⟧)
+  结论: {n a : 整数} (f : 对偶.op (Y⟦a⟧) ⟶ (对偶.op X)⟦n⟧)
   证明: rfl
 -/
 lemma opEquiv'_symm_apply {n a : Int} (f : Opposite.op (Y⟦a⟧) ⟶ (Opposite.op X)⟦n⟧)
@@ -250,7 +250,7 @@ lemma opEquiv'_symm_comp
 
 中文:
 引理 opEquiv'_symm_comp
-  结论: (f : Y ⟶ X) {n a : 整数} (x : Opposite.op (Z⟦a⟧) ⟶ (Opposite.op X⟦n⟧))
+  结论: (f : Y ⟶ X) {n a : 整数} (x : 对偶.op (Z⟦a⟧) ⟶ (对偶.op X⟦n⟧))
   证明: Quiver.Hom.op_inj (by simp [opEquiv'_symm_apply, opEquiv_symm_apply])
 -/
 lemma opEquiv'_symm_comp (f : Y ⟶ X) {n a : Int} (x : Opposite.op (Z⟦a⟧) ⟶ (Opposite.op X⟦n⟧))
@@ -271,7 +271,7 @@ lemma opEquiv'_zero_add_symm
 
 中文:
 引理 opEquiv'_zero_add_symm
-  条件: (a : 整数) (f : Opposite.op (Y⟦a⟧) ⟶ (Opposite.op X)⟦(0 : 整数)⟧)
+  条件: (a : 整数) (f : 对偶.op (Y⟦a⟧) ⟶ (对偶.op X)⟦(0 : 整数)⟧)
   证明: by
   simp [opEquiv'_symm_apply, opEquiv_symm_apply, shiftFunctorAdd'_add_zero,
     opShiftFunctorEquivalence_zero_unitIso_inv_app]
@@ -339,7 +339,7 @@ lemma opEquiv_symm_add
 
 中文:
 引理 opEquiv_symm_add
-  条件: {n : 整数} (x y : ShiftedHom (Opposite.op Y) (Opposite.op X) n)
+  条件: {n : 整数} (x y : ShiftedHom (对偶.op Y) (对偶.op X) n)
   证明: by
   dsimp [opEquiv_symm_apply]
   rw [← Preadditive.comp_add]; rw [← Functor.map_add]
@@ -365,7 +365,7 @@ lemma opEquiv'_symm_add
 
 中文:
 引理 opEquiv'_symm_add
-  结论: {n a : 整数} (x y : (Opposite.op (Y⟦a⟧) ⟶ (Opposite.op X)⟦n⟧))
+  结论: {n a : 整数} (x y : (对偶.op (Y⟦a⟧) ⟶ (对偶.op X)⟦n⟧))
   证明: by
   dsimp [opEquiv']
   rw [opEquiv_symm_add]; rw [Preadditive.add_comp]

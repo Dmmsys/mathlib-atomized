@@ -51,7 +51,7 @@ abbreviation Deterministic
   body: IsComonHom f
 
 中文:
-缩写 Deterministic
+缩写 确定性
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: IsComonHom f
 
@@ -74,7 +74,7 @@ lemma copy_natural
 
 中文:
 引理 copy_natural
-  条件: (f : X ⟶ Y) [Deterministic f]
+  条件: (f : X ⟶ Y) [确定性 f]
   结论: f ≫ Δ[Y] = Δ[X] ≫ (f otimesₘ f)
   证明: IsComonHom.hom_comul f
 
@@ -94,7 +94,7 @@ lemma discard_natural
 
 中文:
 引理 discard_natural
-  条件: (f : X ⟶ Y) [Deterministic f]
+  条件: (f : X ⟶ Y) [确定性 f]
   结论: f ≫ ε[Y] = ε[X]
   证明: IsComonHom.hom_counit f
 

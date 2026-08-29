@@ -226,7 +226,7 @@ definition mopEquiv
 
 中文:
 定义 mopEquiv
-  签名: : Mon C ≌ Mon Cᴹᵒᵖ where
+  签名: : 幺半群 C ≌ 幺半群 Cᴹᵒᵖ where
   定义体: { obj M := ⟨mop M.X⟩
       map f := ⟨f.hom.mop⟩ }
   inverse :=

@@ -40,8 +40,8 @@ abbreviation unitInterval
 scoped[unitInterval] notation "I" => unitInterval
 
 中文:
-缩写 unitInterval
-  签名: : Set 实数
+缩写 unit整数erval
+  签名: : 集合 实数
   定义体: Set.Icc 0 1
 
 @[inherit_doc]
@@ -163,7 +163,7 @@ lemma univ_eq_Icc
 
 中文:
 引理 univ_eq_Icc
-  结论: (univ : Set I) = Icc (0 : I) (1 : I)
+  结论: (univ : 集合 I) = 闭区间 (0 : I) (1 : I)
   证明: Icc_bot_top.symm
 
 Depends on / 依赖: Icc_bot_top, Icc_bot_top.symm
@@ -405,7 +405,7 @@ theorem symm_involutive
 
 中文:
 定理 symm_involutive
-  结论: Function.Involutive (symm : I -> I)
+  结论: 函数.对合 (symm : I -> I)
   证明: symm_symm
 
 Depends on / 依赖: symm_symm
@@ -424,7 +424,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : I -> I)
+  结论: 函数.双射 (symm : I -> I)
   证明: symm_involutive.bijective
 
 @[simp, grind =]
@@ -465,7 +465,7 @@ lemma image_coe_preimage_symm
 
 中文:
 引理 image_coe_preimage_symm
-  条件: {s : Set I}
+  条件: {s : 集合 I}
   证明: by
   simp [symm_involutive, ← Function.Involutive.image_eq_preimage_symm, image_image]
 
@@ -532,7 +532,7 @@ theorem continuous_symm
 
 中文:
 定理 continuous_symm
-  结论: Continuous σ
+  结论: 连续 σ
   证明: Continuous.subtype_mk (by fun_prop) _
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -580,7 +580,7 @@ theorem strictAnti_symm
 
 中文:
 定理 strictAnti_symm
-  结论: StrictAnti σ
+  结论: 严格递减 σ
   证明: fun _ _ h => sub_lt_sub_left (α := Real) h _
 
 
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConnectedSpace I
+  签名: 连通空间 I
   定义体: Subtype.connectedSpace ⟨nonempty_Icc.mpr zero_le_one, isPreconnected_Icc⟩
 
 Depends on / 依赖: Subtype, Subtype.connectedSpace, connectedSpace, isPreconnected_Icc, nonempty_Icc, nonempty_Icc.mpr, zero_le_one
@@ -1051,7 +1051,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial I
+  签名: 非平凡 I
   定义体: ⟨⟨1, 0, (one_ne_zero <| congrArg Subtype.val ·)⟩⟩
 
 Depends on / 依赖: Subtype, Subtype.val, one_ne_zero
@@ -1075,7 +1075,7 @@ theorem mul_pos_mem_iff
 中文:
 定理 mul_pos_mem_iff
   条件: {a t : 实数} (ha : 0 < a)
-  结论: a * t in I ↔ t in Set.Icc (0 : 实数) (1 / a)
+  结论: a * t in I ↔ t in 集合.闭区间 (0 : 实数) (1 / a)
   证明: by
   constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor
   · exact nonneg_of_mul_nonneg_right h₁ ha
@@ -1105,7 +1105,7 @@ theorem two_mul_sub_one_mem_iff
 中文:
 定理 two_mul_sub_one_mem_iff
   条件: {t : 实数}
-  结论: 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : 实数) 1
+  结论: 2 * t - 1 in I ↔ t in 集合.闭区间 (1 / 2 : 实数) 1
   证明: by
   constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor <;> linarith
 -/
@@ -1124,7 +1124,7 @@ definition submonoid
 
 中文:
 定义 submonoid
-  签名: : Submonoid 实数 where
+  签名: : 子幺半群 实数 where
   定义体: unitInterval
   one_mem' := unitInterval.one_mem
   mul_mem' := unitInterval.mul_mem
@@ -1145,7 +1145,7 @@ theorem coe_unitIntervalSubmonoid
   proof: rfl
 
 中文:
-定理 coe_unitIntervalSubmonoid
+定理 coe_unit整数ervalSubmonoid
   结论: submonoid = unit整数erval
   证明: rfl
 -/
@@ -1160,7 +1160,7 @@ theorem mem_unitIntervalSubmonoid
   proof: Iff.rfl
 
 中文:
-定理 mem_unitIntervalSubmonoid
+定理 mem_unit整数ervalSubmonoid
   条件: {x}
   结论: x in submonoid ↔ x in unit整数erval
   证明: Iff.rfl
@@ -1178,7 +1178,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {ι : 类型} {t : Finset ι} {f : ι -> 实数}
+  结论: {ι : 类型} {t : 有限集 ι} {f : ι -> 实数}
   证明: _root_.prod_mem (S := unitInterval.submonoid) h
 -/
 protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι -> Real}
@@ -1197,7 +1197,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedCommMonoidWithZero I
+  签名: 带零LinearOrderedComm幺半群 I
   定义体: x.2.1
   mul_lt_mul_of_pos_left i hi j k hjk := by
     simp only [← Subtype.coe_lt_coe, coe_mul]; gcongr
@@ -1221,7 +1221,7 @@ lemma subtype_Iic_eq_Icc
 中文:
 引理 subtype_Iic_eq_Icc
   条件: (x : I)
-  结论: Subtype.val ⁻¹' (Iic ↑x) = Icc 0 x
+  结论: 子类型.val ⁻¹' (左无界右闭区间 ↑x) = 闭区间 0 x
   证明: by
   rw [preimage_subtype_val_Iic]
   exact Icc_bot.symm
@@ -1246,7 +1246,7 @@ lemma subtype_Iio_eq_Ico
 中文:
 引理 subtype_Iio_eq_Ico
   条件: (x : I)
-  结论: Subtype.val ⁻¹' (Iio ↑x) = Ico 0 x
+  结论: 子类型.val ⁻¹' (左无界右开区间 ↑x) = 左闭右开区间 0 x
   证明: by
   rw [preimage_subtype_val_Iio]
   exact Ico_bot.symm
@@ -1271,7 +1271,7 @@ lemma subtype_Ici_eq_Icc
 中文:
 引理 subtype_Ici_eq_Icc
   条件: (x : I)
-  结论: Subtype.val ⁻¹' (Ici ↑x) = Icc x 1
+  结论: 子类型.val ⁻¹' (左闭右无界区间 ↑x) = 闭区间 x 1
   证明: by
   rw [preimage_subtype_val_Ici]
   exact Icc_top.symm
@@ -1296,7 +1296,7 @@ lemma subtype_Ioi_eq_Ioc
 中文:
 引理 subtype_Ioi_eq_Ioc
   条件: (x : I)
-  结论: Subtype.val ⁻¹' (Ioi ↑x) = Ioc x 1
+  结论: 子类型.val ⁻¹' (左开右无界区间 ↑x) = 左开右闭区间 x 1
   证明: by
   rw [preimage_subtype_val_Ioi]
   exact Ioc_top.symm
@@ -1331,7 +1331,7 @@ lemma _root_.Set.abs_projIcc_sub_projIcc
   refine (max_sub_max_le_max _ _ _ _).trans (max_le (b
 
 中文:
-引理 _root_.Set.abs_projIcc_sub_projIcc
+引理 _root_.集合.abs_projIcc_sub_projIcc
   结论: (|projIcc a b h c - projIcc a b h d| : α) <= |c - d|
   证明: by
   wlog hdc : d <= c generalizing c d
@@ -1408,7 +1408,7 @@ lemma addNSMul_eq_right
 
 中文:
 引理 addNSMul_eq_right
-  条件: [Archimedean α] (hδ : 0 < δ)
+  条件: [阿基米德 α] (hδ : 0 < δ)
   证明: by
   obtain ⟨m, hm⟩ := Archimedean.arch (b - a) hδ
   refine ⟨m, fun n hn => ?_⟩
@@ -1436,7 +1436,7 @@ lemma monotone_addNSMul
 中文:
 引理 monotone_addNSMul
   条件: (hδ : 0 <= δ)
-  结论: Monotone (addNSMul h δ)
+  结论: 递增 (addNSMul h δ)
   证明: fun _ _ hnm => monotone_projIcc h (add_le_add_iff_left _).mpr (nsmul_le_nsmul_left hδ hnm)
 
 Depends on / 依赖: add_le_add_iff_left, monotone_projIcc, nsmul_le_nsmul_left
@@ -1458,7 +1458,7 @@ lemma abs_sub_addNSMul_le
 
 中文:
 引理 abs_sub_addNSMul_le
-  结论: (hδ : 0 <= δ) {t : Icc a b} (n : 自然数)
+  结论: (hδ : 0 <= δ) {t : 闭区间 a b} (n : 自然数)
   证明: calc
 (|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
     _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
@@ -1494,7 +1494,7 @@ definition convexComb
 
 中文:
 定义 convexComb
-  签名: {a b : 实数} (x y : Icc a b) (t : unit整数erval)
+  签名: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
   定义体: ⟨(1 - t) * x + t * y, by
     constructor
     · nlinarith [x.2.1, y.2.1, t.2.1, t.2.2]
@@ -1521,7 +1521,7 @@ theorem coe_convexComb
 
 中文:
 定理 coe_convexComb
-  条件: {a b : 实数} (x y : Icc a b) (t : unit整数erval)
+  条件: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
   证明: rfl
 
 @[simp, grind =]
@@ -1544,7 +1544,7 @@ theorem convexComb_zero
 
 中文:
 定理 convexComb_zero
-  条件: {a b : 实数} (x y : Icc a b)
+  条件: {a b : 实数} (x y : 闭区间 a b)
   结论: convexComb x y 0 = x
   证明: by
   simp [convexComb]
@@ -1571,7 +1571,7 @@ theorem convexComb_one
 
 中文:
 定理 convexComb_one
-  条件: {a b : 实数} (x y : Icc a b)
+  条件: {a b : 实数} (x y : 闭区间 a b)
   结论: convexComb x y 1 = y
   证明: by
   simp [convexComb]
@@ -1625,7 +1625,7 @@ theorem convexComb_eq
 
 中文:
 定理 convexComb_eq
-  条件: {a b : 实数} (x : Icc a b) (t : unit整数erval)
+  条件: {a b : 实数} (x : 闭区间 a b) (t : unit整数erval)
   结论: convexComb x x t = x
   证明: by
   simp [convexComb, sub_mul]
@@ -1652,7 +1652,7 @@ theorem convexComb_symm
 
 中文:
 定理 convexComb_symm
-  条件: {a b : 实数} (x y : Icc a b) (t : unit整数erval)
+  条件: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
   证明: by
   simp [convexComb]
   abel
@@ -1682,7 +1682,7 @@ theorem le_convexComb
 
 中文:
 定理 le_convexComb
-  条件: {a b : 实数} {x y : Icc a b} (h : x <= y) (t : unit整数erval)
+  条件: {a b : 实数} {x y : 闭区间 a b} (h : x <= y) (t : unit整数erval)
   证明: by
   rw [← Subtype.coe_le_coe] at h ⊢
   simp
@@ -1714,7 +1714,7 @@ theorem convexComb_le
 
 中文:
 定理 convexComb_le
-  条件: {a b : 实数} {x y : Icc a b} (h : x <= y) (t : unit整数erval)
+  条件: {a b : 实数} {x y : 闭区间 a b} (h : x <= y) (t : unit整数erval)
   证明: by
   rw [← Subtype.coe_le_coe] at h ⊢
   simp
@@ -1746,8 +1746,8 @@ theorem continuous_convexComb
 
 中文:
 定理 continuous_convexComb
-  条件: {a b : 实数} (x y : Icc a b)
-  结论: Continuous (convexComb x y)
+  条件: {a b : 实数} (x y : 闭区间 a b)
+  结论: 连续 (convexComb x y)
   证明: by
   unfold Icc.convexComb
   fun_prop
@@ -1863,7 +1863,7 @@ theorem convexComb_assoc
 
 中文:
 定理 convexComb_assoc
-  条件: {a b : 实数} (x y z : Icc a b) (s t : unit整数erval)
+  条件: {a b : 实数} (x y z : 闭区间 a b) (s t : unit整数erval)
   证明: by
   simp only [convexComb, coe_mul, Subtype.mk.injEq]
   by_cases hs : (s : Real) = 1
@@ -1948,7 +1948,7 @@ theorem convexComb_assoc'
 
 中文:
 定理 convexComb_assoc'
-  条件: {a b : 实数} (x y z : Icc a b) (s t : unit整数erval)
+  条件: {a b : 实数} (x y z : 闭区间 a b) (s t : unit整数erval)
   证明: by
   rw [← convexComb_symm]; rw [← convexComb_symm y x]; rw [convexComb_assoc]; rw [← convexComb_symm x]; rw [← convexComb_symm z y]
   rw [convexComb_assoc_coeff₁']; rw [convexComb_assoc_coeff₂']; rw [unitInterval.symm_symm]
@@ -1978,7 +1978,7 @@ theorem eq_convexComb.zero_le
 
 中文:
 定理 eq_convexComb.zero_le
-  条件: {a b : 实数} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
+  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
   证明: by
   by_cases h : (z - x : Real) = 0
   · simp_all
@@ -2010,7 +2010,7 @@ theorem eq_convexComb.le_one
 
 中文:
 定理 eq_convexComb.le_one
-  条件: {a b : 实数} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
+  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
   证明: by
   by_cases h : (z - x : Real) = 0
   · simp_all
@@ -2047,7 +2047,7 @@ theorem eq_convexComb
 
 中文:
 定理 eq_convexComb
-  条件: {a b : 实数} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
+  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
   证明: by
   ext
   simp only [coe_convexComb]
@@ -2093,8 +2093,8 @@ lemma exists_monotone_Icc_subset_open_cover_Icc
 
 
 中文:
-引理 exists_monotone_Icc_subset_open_cover_Icc
-  结论: {ι} {a b : 实数} (h : a <= b) {c : ι -> Set (Icc a b)}
+引理 存在_monotone_Icc_subset_open_cover_Icc
+  结论: {ι} {a b : 实数} (h : a <= b) {c : ι -> 集合 (闭区间 a b)}
   证明: by
   obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
   have hδ := half_pos δ_pos
@@ -2126,8 +2126,8 @@ lemma exists_monotone_Icc_subset_open_cover_unitInterval
   exact exists_monotone_Icc_subset_open_cover_Icc zero_le_one hc₁ hc₂
 
 中文:
-引理 exists_monotone_Icc_subset_open_cover_unitInterval
-  结论: {ι} {c : ι -> Set I}
+引理 存在_monotone_Icc_subset_open_cover_unit整数erval
+  结论: {ι} {c : ι -> 集合 I}
   证明: by
   simp_rw [← Subtype.coe_inj]
   exact exists_monotone_Icc_subset_open_cover_Icc zero_le_one hc₁ hc₂
@@ -2155,8 +2155,8 @@ lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self
     monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m 
 
 中文:
-引理 exists_monotone_Icc_subset_open_cover_unitInterval_prod_self
-  结论: {ι} {c : ι -> Set (I × I)}
+引理 存在_monotone_Icc_subset_open_cover_unit整数erval_prod_self
+  结论: {ι} {c : ι -> 集合 (I × I)}
   证明: by
   obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
   have hδ := half_pos δ_pos
@@ -2319,7 +2319,7 @@ theorem iccHomeoI_apply_coe
 
 中文:
 定理 iccHomeoI_apply_coe
-  条件: (a b : 𝕜) (h : a < b) (x : Set.Icc a b)
+  条件: (a b : 𝕜) (h : a < b) (x : 集合.闭区间 a b)
   证明: rfl
 
 @[simp]
@@ -2339,7 +2339,7 @@ theorem iccHomeoI_symm_apply_coe
 
 中文:
 定理 iccHomeoI_symm_apply_coe
-  条件: (a b : 𝕜) (h : a < b) (x : Set.Icc (0 : 𝕜) (1 : 𝕜))
+  条件: (a b : 𝕜) (h : a < b) (x : 集合.闭区间 (0 : 𝕜) (1 : 𝕜))
   证明: rfl
 -/
 theorem iccHomeoI_symm_apply_coe (a b : 𝕜) (h : a < b) (x : Set.Icc (0 : 𝕜) (1 : 𝕜)) :
@@ -2361,7 +2361,7 @@ definition toNNReal
   body: fun i => ⟨i.1, i.2.1⟩
 
 中文:
-定义 toNNReal
+定义 toNN实数
   签名: : I -> 实数>=0
   定义体: fun i => ⟨i.1, i.2.1⟩
 -/
@@ -2376,7 +2376,7 @@ lemma toNNReal_zero
   proof: rfl
 
 中文:
-引理 toNNReal_zero
+引理 toNN实数_zero
   结论: toNN实数 0 = 0
   证明: rfl
 -/
@@ -2391,7 +2391,7 @@ lemma toNNReal_one
   proof: rfl
 
 中文:
-引理 toNNReal_one
+引理 toNN实数_one
   结论: toNN实数 1 = 1
   证明: rfl
 -/
@@ -2406,8 +2406,8 @@ lemma toNNReal_continuous
   proof: by delta toNNReal; fun_prop
 
 中文:
-引理 toNNReal_continuous
-  结论: Continuous toNN实数
+引理 toNN实数_continuous
+  结论: 连续 toNN实数
   证明: by delta toNNReal; fun_prop
 -/
 @[fun_prop] lemma toNNReal_continuous : Continuous toNNReal := by delta toNNReal; fun_prop
@@ -2422,7 +2422,7 @@ lemma coe_toNNReal
   proof: rfl
 
 中文:
-引理 coe_toNNReal
+引理 coe_toNN实数
   条件: (x : I)
   结论: ((toNN实数 x) : 实数) = x
   证明: rfl
@@ -2439,7 +2439,7 @@ lemma toNNReal_add_toNNReal_symm
   proof: by ext; simp
 
 中文:
-引理 toNNReal_add_toNNReal_symm
+引理 toNN实数_add_toNN实数_symm
   条件: (x : I)
   结论: toNN实数 x + toNN实数 (σ x) = 1
   证明: by ext; simp
@@ -2455,7 +2455,7 @@ lemma toNNReal_symm_add_toNNReal
   proof: by ext; simp
 
 中文:
-引理 toNNReal_symm_add_toNNReal
+引理 toNN实数_symm_add_toNN实数
   条件: (x : I)
   结论: toNN实数 (σ x) + toNN实数 x = 1
   证明: by ext; simp

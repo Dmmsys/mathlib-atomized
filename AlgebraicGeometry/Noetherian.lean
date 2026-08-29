@@ -63,10 +63,10 @@ class IsLocallyNoetherian
     - component_noetherian : forall (U : X.affineOpens), IsNoetherianRing Γ(X, U)  [default: by infer_instance]
 
 中文:
-类 IsLocallyNoetherian
-  参数: (X : Scheme)
+类 是LocallyNoetherian
+  参数: (X : 概形)
   公理与运算 (1 个):
-    - component_noetherian : 对任意 (U : X.affineOpens), IsNoetherianRing Γ(X, U)  [默认: by infer_instance]
+    - component_noetherian : 对任意 (U : X.affineOpens), 是Noether环 Γ(X, U)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -97,7 +97,7 @@ theorem isNoetherianRing_of_away
 
 中文:
 定理 isNoetherianRing_of_away
-  结论: IsNoetherianRing R
+  结论: 是Noether环 R
   证明: by
   apply monotone_stabilizes_iff_noetherian.mp
   intro I
@@ -226,7 +226,7 @@ theorem isLocallyNoetherian_iff_of_affine_openCover
 
 中文:
 定理 isLocallyNoetherian_iff_of_affine_openCover
-  结论: (𝒰 : Scheme.OpenCover.{v, u} X)
+  结论: (𝒰 : 概形.OpenCover.{v, u} X)
   证明: by
   constructor
   · intro h i
@@ -271,7 +271,7 @@ lemma isLocallyNoetherian_of_isOpenImmersion
 
 中文:
 引理 isLocallyNoetherian_of_isOpenImmersion
-  结论: {Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
+  结论: {Y : 概形} (f : X ⟶ Y) [是开浸入 f]
   证明: have : IsNoetherianRing ↑Γ(Y, f ''ᵁ ↑U) :=
       IsLocallyNoetherian.component_noetherian ⟨_, U.2.image_of_isOpenImmersion f⟩
     isNoetherianRing_of_surjective _ _ _ (f.appIso U).commRingCatIsoToRingEquiv.surjective
@@ -308,7 +308,7 @@ theorem isLocallyNoetherian_iff_openCover
 
 中文:
 定理 isLocallyNoetherian_iff_openCover
-  条件: (𝒰 : Scheme.OpenCover X)
+  条件: (𝒰 : 概形.OpenCover X)
   证明: by
   refine ⟨fun _ => inferInstance, ?_⟩
   · rw [isLocallyNoetherian_iff_of_affine_openCover (𝒰 := 𝒰.affineRefinement.openCover)]
@@ -343,7 +343,7 @@ lemma noetherianSpace_of_isAffine
 
 中文:
 引理 noetherianSpace_of_isAffine
-  条件: [IsAffine X] [IsNoetherianRing Γ(X, ⊤)]
+  条件: [是仿射 X] [是Noether环 Γ(X, ⊤)]
   证明: (noetherianSpace_iff_of_homeomorph X.isoSpec.inv.homeomorph).mp inferInstance
 
 Depends on / 依赖: X.isoSpec.inv.homeomorph, homeomorph, isoSpec, noetherianSpace_iff_of_homeomorph
@@ -365,7 +365,7 @@ lemma noetherianSpace_of_isAffineOpen
 
 中文:
 引理 noetherianSpace_of_isAffineOpen
-  结论: (U : X.Opens) (hU : IsAffineOpen U)
+  结论: (U : X.Opens) (hU : 是仿射开集 U)
   证明: by
   have : IsNoetherianRing Γ(U, ⊤) := isNoetherianRing_of_ringEquiv _
     (Scheme.restrictFunctorΓ.app (op U)).symm.commRingCatIsoToRingEquiv
@@ -397,7 +397,7 @@ theorem isLocallyNoetherian_Spec
 
 中文:
 定理 isLocallyNoetherian_Spec
-  条件: {R : CommRingCat}
+  条件: {R : 交换环范畴}
   证明: have := IsLocallyNoetherian.component_noetherian ⟨⊤, isAffineOpen_top (Spec R)⟩
     isNoetherianRing_of_ringEquiv _ (Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv
   mpr _ := inferInstance
@@ -459,7 +459,7 @@ theorem LocallyOfFiniteType.isLocallyNoetherian
   wlog hX : exist
 
 中文:
-定理 LocallyOfFiniteType.isLocallyNoetherian
+定理 局部有限型.isLocallyNoetherian
   证明: by
   change id (IsLocallyNoetherian X) -- avoid wlog hypotheses confusing the instance synthesizer
   wlog hY : exists R, Y = Spec R
@@ -513,8 +513,8 @@ lemma LocallyOfFinitePresentation.iff_locallyOfFiniteType
   proof: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 
 中文:
-引理 LocallyOfFinitePresentation.iff_locallyOfFiniteType
-  结论: {X Y : Scheme} {f : X ⟶ Y}
+引理 局部有限呈现.iff_locallyOfFiniteType
+  结论: {X Y : 概形} {f : X ⟶ Y}
   证明: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 -/
 lemma LocallyOfFinitePresentation.iff_locallyOfFiniteType {X Y : Scheme} {f : X ⟶ Y}
@@ -533,9 +533,9 @@ class IsNoetherian
   (no additional axioms)
 
 中文:
-类 IsNoetherian
-  参数: (X : Scheme)
-  继承: IsLocallyNoetherian X, CompactSpace X
+类 是Noether
+  参数: (X : 概形)
+  继承: 是LocallyNoetherian X, 紧空间 X
   (无附加公理)
 -/
 class IsNoetherian (X : Scheme) : Prop extends IsLocallyNoetherian X, CompactSpace X
@@ -560,7 +560,7 @@ theorem isNoetherian_iff_of_finite_iSup_eq_top
 
 中文:
 定理 isNoetherian_iff_of_finite_iSup_eq_top
-  结论: {ι} [Finite ι] {S : ι -> X.affineOpens}
+  结论: {ι} [有限 ι] {S : ι -> X.affineOpens}
   证明: by
   constructor
   · intro h i
@@ -613,7 +613,7 @@ theorem isNoetherian_iff_of_finite_affine_openCover
 
 中文:
 定理 isNoetherian_iff_of_finite_affine_openCover
-  结论: {𝒰 : Scheme.OpenCover.{v, u} X}
+  结论: {𝒰 : 概形.OpenCover.{v, u} X}
   证明: by
   constructor
   · intro h i
@@ -683,7 +683,7 @@ instance [IsLocallyNoetherian
         (X.presheaf.stalk x) _ (X.presh
 
 中文:
-实例 [IsLocallyNoetherian
+实例 [是LocallyNoetherian
   签名: X] {x
   定义体: by
   obtain ⟨U, hU, hU2, hU3⟩ := exists_isAffineOpen_mem_and_subset (U := ⊤) (x := x) (by simp)
@@ -713,7 +713,7 @@ theorem isNoetherian_Spec
 
 中文:
 定理 isNoetherian_Spec
-  条件: {R : CommRingCat}
+  条件: {R : 交换环范畴}
   证明: by
   simp [AlgebraicGeometry.isNoetherian_iff, (inferInstance : CompactSpace (Spec R))]
 
@@ -735,7 +735,7 @@ theorem finite_irreducibleComponents_of_isNoetherian
 
 中文:
 定理 finite_irreducibleComponents_of_isNoetherian
-  条件: [IsNoetherian X]
+  条件: [是Noether X]
   证明: NoetherianSpace.finite_irreducibleComponents
 
 Depends on / 依赖: NoetherianSpace, NoetherianSpace.finite_irreducibleComponents, finite_irreducibleComponents

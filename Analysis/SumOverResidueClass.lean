@@ -34,8 +34,8 @@ lemma Finset.sum_indicator_mod
     Finset.mem_univ, ↓reduceIte]
 
 中文:
-引理 Finset.sum_indicator_mod
-  条件: {R : 类型} [AddCommMonoid R] (m : 自然数) [NeZero m] (f : 自然数 -> R)
+引理 有限集.sum_indicator_mod
+  条件: {R : 类型} [加法交换幺半群 R] (m : 自然数) [NeZero m] (f : 自然数 -> R)
   证明: by
   ext n
   simp only [Finset.sum_apply, Set.indicator_apply, Set.mem_ofPred_eq, Finset.sum_ite_eq,
@@ -66,7 +66,7 @@ lemma summable_indicator_mod_iff_summable
 
 中文:
 引理 summable_indicator_mod_iff_summable
-  结论: {R : 类型} [AddCommGroup R] [TopologicalSpace R]
+  结论: {R : 类型} [加法交换群 R] [拓扑空间 R]
   证明: by
   trans Summable ({n : Nat | (n : ZMod m) = k ∧ k <= n}.indicator f)
   · rw [← (finite_lt_nat k).summable_compl_iff (f := {n : Nat | (n : ZMod m) = k}.indicator f)]
@@ -110,7 +110,7 @@ lemma not_summable_of_antitone_of_neg
 
 中文:
 引理 not_summable_of_antitone_of_neg
-  条件: {f : 自然数 -> 实数} (hf : Antitone f) {n : 自然数} (hn : f n < 0)
+  条件: {f : 自然数 -> 实数} (hf : 递减 f) {n : 自然数} (hn : f n < 0)
   证明: by
   intro hs
   have := hs.tendsto_atTop_zero
@@ -219,7 +219,7 @@ lemma summable_indicator_mod_iff
 
 中文:
 引理 summable_indicator_mod_iff
-  条件: {m : 自然数} [NeZero m] {f : 自然数 -> 实数} (hf : Antitone f) (k : ZMod m)
+  条件: {m : 自然数} [NeZero m] {f : 自然数 -> 实数} (hf : 递减 f) (k : ZMod m)
   证明: by
   refine ⟨fun H => ?_, fun H => Summable.indicator H _⟩
   rw [Finset.sum_indicator_mod m f]
@@ -253,8 +253,8 @@ lemma Nat.sumByResidueClasses
   exact hf.comp_injective (residueClassesEquiv N).symm.injective
 
 中文:
-引理 Nat.sumByResidueClasses
-  结论: {R : 类型} [AddCommGroup R] [UniformSpace R] [IsUniformAddGroup R]
+引理 自然数.sumByResidueClasses
+  结论: {R : 类型} [加法交换群 R] [一致空间 R] [是UniformAdd群 R]
   证明: by
   rw [← (residueClassesEquiv N).symm.tsum_eq f]; rw [Summable.tsum_prod]; rw [tsum_fintype]; rw [residueClassesEquiv]; rw [Equiv.coe_fn_symm_mk]
   exact hf.comp_injective (residueClassesEquiv N).symm.injective

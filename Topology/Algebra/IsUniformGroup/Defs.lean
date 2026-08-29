@@ -69,9 +69,9 @@ class IsRightUniformAddGroup
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.2 + (-x.1)) (𝓝 0)
 
 中文:
-类 IsRightUniformAddGroup
-  参数: (G : 类型) [UniformSpace G] [AddGroup G]
-  继承: IsTopologicalAddGroup G
+类 是RightUniformAdd群
+  参数: (G : 类型) [一致空间 G] [加法群 G]
+  继承: 是拓扑加群 G
   公理与运算 (1 个):
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.2 + (-x.1)) (𝓝 0)
 -/
@@ -98,9 +98,9 @@ class IsRightUniformGroup
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.2 * x.1⁻¹) (𝓝 1)
 
 中文:
-类 IsRightUniformGroup
-  参数: (G : 类型) [UniformSpace G] [Group G]
-  继承: IsTopologicalGroup G
+类 是RightUniform群
+  参数: (G : 类型) [一致空间 G] [群 G]
+  继承: 是拓扑群 G
   公理与运算 (1 个):
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.2 * x.1⁻¹) (𝓝 1)
 -/
@@ -120,9 +120,9 @@ class IsLeftUniformAddGroup
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => (-x.1) + x.2) (𝓝 0)
 
 中文:
-类 IsLeftUniformAddGroup
-  参数: (G : 类型) [UniformSpace G] [AddGroup G]
-  继承: IsTopologicalAddGroup G
+类 是LeftUniformAdd群
+  参数: (G : 类型) [一致空间 G] [加法群 G]
+  继承: 是拓扑加群 G
   公理与运算 (1 个):
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => (-x.1) + x.2) (𝓝 0)
 -/
@@ -149,9 +149,9 @@ class IsLeftUniformGroup
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.1⁻¹ * x.2) (𝓝 1)
 
 中文:
-类 IsLeftUniformGroup
-  参数: (G : 类型) [UniformSpace G] [Group G]
-  继承: IsTopologicalGroup G
+类 是LeftUniform群
+  参数: (G : 类型) [一致空间 G] [群 G]
+  继承: 是拓扑群 G
   公理与运算 (1 个):
     - uniformity_eq : 𝓤 G = comap (fun x : G × G => x.1⁻¹ * x.2) (𝓝 1)
 -/
@@ -340,10 +340,10 @@ class IsUniformGroup
     - uniformContinuous_div : UniformContinuous fun p : α × α => p.1 / p.2
 
 中文:
-类 IsUniformGroup
-  参数: (α : 类型) [UniformSpace α] [Group α]
+类 是一致群
+  参数: (α : 类型) [一致空间 α] [群 α]
   公理与运算 (1 个):
-    - uniformContinuous_div : UniformContinuous fun p : α × α => p.1 / p.2
+    - uniformContinuous_div : 一致连续 fun p : α × α => p.1 / p.2
 -/
 class IsUniformGroup (α : Type*) [UniformSpace α] [Group α] : Prop where
   uniformContinuous_div : UniformContinuous fun p : α × α => p.1 / p.2
@@ -358,10 +358,10 @@ class IsUniformAddGroup
     - uniformContinuous_sub : UniformContinuous fun p : α × α => p.1 - p.2
 
 中文:
-类 IsUniformAddGroup
-  参数: (α : 类型) [UniformSpace α] [AddGroup α]
+类 是UniformAdd群
+  参数: (α : 类型) [一致空间 α] [加法群 α]
   公理与运算 (1 个):
-    - uniformContinuous_sub : UniformContinuous fun p : α × α => p.1 - p.2
+    - uniformContinuous_sub : 一致连续 fun p : α × α => p.1 - p.2
 -/
 class IsUniformAddGroup (α : Type*) [UniformSpace α] [AddGroup α] : Prop where
   uniformContinuous_sub : UniformContinuous fun p : α × α => p.1 - p.2
@@ -379,8 +379,8 @@ theorem IsUniformGroup.mk'
     h₁.comp (uniformContinuous_fst.prodMk (h₂.comp uniformContinuous_snd))⟩
 
 中文:
-定理 IsUniformGroup.mk'
-  结论: {α} [UniformSpace α] [Group α]
+定理 是一致群.mk'
+  结论: {α} [一致空间 α] [群 α]
   证明: ⟨by simpa only [div_eq_mul_inv] using!
     h₁.comp (uniformContinuous_fst.prodMk (h₂.comp uniformContinuous_snd))⟩
 
@@ -407,7 +407,7 @@ theorem uniformContinuous_div
 
 中文:
 定理 uniformContinuous_div
-  结论: UniformContinuous fun p : α × α => p.1 / p.2
+  结论: 一致连续 fun p : α × α => p.1 / p.2
   证明: IsUniformGroup.uniformContinuous_div
 
 @[to_additive (attr := fun_prop)]
@@ -429,8 +429,8 @@ theorem UniformContinuous.div
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 UniformContinuous.div
-  结论: [UniformSpace β] {f : β -> α} {g : β -> α} (hf : UniformContinuous f)
+定理 一致连续.div
+  结论: [一致空间 β] {f : β -> α} {g : β -> α} (hf : 一致连续 f)
   证明: uniformContinuous_div.comp (hf.prodMk hg)
 
 @[to_additive (attr := fun_prop)]
@@ -455,8 +455,8 @@ theorem UniformContinuous.inv
 @[to_additive]
 
 中文:
-定理 UniformContinuous.inv
-  条件: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.inv
+  条件: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
   证明: by
   have : UniformContinuous fun x => 1 / f x := uniformContinuous_const.div hf
   simp_all
@@ -483,7 +483,7 @@ theorem uniformContinuous_inv
 
 中文:
 定理 uniformContinuous_inv
-  结论: UniformContinuous fun x : α => x⁻¹
+  结论: 一致连续 fun x : α => x⁻¹
   证明: uniformContinuous_id.inv
 
 @[to_additive (attr := fun_prop)]
@@ -507,8 +507,8 @@ theorem UniformContinuous.mul
 @[to_additive]
 
 中文:
-定理 UniformContinuous.mul
-  结论: [UniformSpace β] {f : β -> α} {g : β -> α} (hf : UniformContinuous f)
+定理 一致连续.mul
+  结论: [一致空间 β] {f : β -> α} {g : β -> α} (hf : 一致连续 f)
   证明: by
   have : UniformContinuous fun x => f x / (g x)⁻¹ := hf.div hg.inv
   simp_all
@@ -539,8 +539,8 @@ theorem Finset.uniformContinuous_prod
 @[to_additive]
 
 中文:
-定理 Finset.uniformContinuous_prod
-  结论: {α β ι : 类型} [UniformSpace α] [CommGroup α]
+定理 有限集.uniformContinuous_prod
+  结论: {α β ι : 类型} [一致空间 α] [交换群 α]
   证明: by
   induction s using Finset.cons_induction with
   | empty => simpa using uniformContinuous_const
@@ -575,7 +575,7 @@ theorem uniformContinuous_mul
 
 中文:
 定理 uniformContinuous_mul
-  结论: UniformContinuous fun p : α × α => p.1 * p.2
+  结论: 一致连续 fun p : α × α => p.1 * p.2
   证明: uniformContinuous_fst.mul uniformContinuous_snd
 
 @[to_additive]
@@ -597,8 +597,8 @@ theorem UniformContinuous.mul_const
 @[to_additive]
 
 中文:
-定理 UniformContinuous.mul_const
-  结论: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.mul_const
+  结论: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
   证明: hf.mul uniformContinuous_const
 
 @[to_additive]
@@ -621,8 +621,8 @@ theorem UniformContinuous.const_mul
 @[to_additive]
 
 中文:
-定理 UniformContinuous.const_mul
-  结论: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.const_mul
+  结论: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
   证明: uniformContinuous_const.mul hf
 
 @[to_additive]
@@ -648,7 +648,7 @@ theorem uniformContinuous_mul_left
 中文:
 定理 uniformContinuous_mul_left
   条件: (a : α)
-  结论: UniformContinuous fun b : α => a * b
+  结论: 一致连续 fun b : α => a * b
   证明: uniformContinuous_id.const_mul _
 
 @[to_additive]
@@ -673,7 +673,7 @@ theorem uniformContinuous_mul_right
 中文:
 定理 uniformContinuous_mul_right
   条件: (a : α)
-  结论: UniformContinuous fun b : α => b * a
+  结论: 一致连续 fun b : α => b * a
   证明: uniformContinuous_id.mul_const _
 
 @[to_additive]
@@ -695,8 +695,8 @@ theorem UniformContinuous.div_const
 @[to_additive]
 
 中文:
-定理 UniformContinuous.div_const
-  结论: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.div_const
+  结论: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
   证明: hf.div uniformContinuous_const
 
 @[to_additive]
@@ -722,7 +722,7 @@ theorem uniformContinuous_div_const
 中文:
 定理 uniformContinuous_div_const
   条件: (a : α)
-  结论: UniformContinuous fun b : α => b / a
+  结论: 一致连续 fun b : α => b / a
   证明: uniformContinuous_id.div_const _
 
 @[to_additive]
@@ -746,8 +746,8 @@ theorem Filter.Tendsto.uniformity_mul
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.uniformity_mul
-  结论: {ι : 类型} {f g : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_mul
+  结论: {ι : 类型} {f g : ι -> α × α} {l : 滤子 ι}
   证明: have : Tendsto (fun (p : (α × α) × (α × α)) => p.1 * p.2) (𝓤 α ×ˢ 𝓤 α) (𝓤 α) := by
     simpa [UniformContinuous, uniformity_prod_eq_prod] using! uniformContinuous_mul (α := α)
   this.comp (hf.prodMk hg)
@@ -776,8 +776,8 @@ theorem Filter.Tendsto.uniformity_inv
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.uniformity_inv
-  结论: {ι : 类型} {f : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_inv
+  结论: {ι : 类型} {f : ι -> α × α} {l : 滤子 ι}
   证明: have : Tendsto (· ⁻¹) (𝓤 α) (𝓤 α) := uniformContinuous_inv
   this.comp hf
 
@@ -803,8 +803,8 @@ theorem Filter.Tendsto.uniformity_inv_iff
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.uniformity_inv_iff
-  条件: {ι : 类型} {f : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_inv_iff
+  条件: {ι : 类型} {f : ι -> α × α} {l : 滤子 ι}
   证明: ⟨fun H => inv_inv f ▸ H.uniformity_inv, Filter.Tendsto.uniformity_inv⟩
 
 @[to_additive]
@@ -827,8 +827,8 @@ theorem Filter.Tendsto.uniformity_div
   exact hf.uniformity_mul hg.uniformity_inv
 
 中文:
-定理 Filter.Tendsto.uniformity_div
-  结论: {ι : 类型} {f g : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_div
+  结论: {ι : 类型} {f g : ι -> α × α} {l : 滤子 ι}
   证明: by
   rw [div_eq_mul_inv]
   exact hf.uniformity_mul hg.uniformity_inv
@@ -856,8 +856,8 @@ theorem Filter.Tendsto.uniformity_mul_iff_right
   proof: ⟨fun hfg => by simpa using hf.uniformity_inv.uniformity_mul hfg, hf.uniformity_mul⟩
 
 中文:
-定理 Filter.Tendsto.uniformity_mul_iff_right
-  结论: {ι : 类型} {f g : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_mul_iff_right
+  结论: {ι : 类型} {f g : ι -> α × α} {l : 滤子 ι}
   证明: ⟨fun hfg => by simpa using hf.uniformity_inv.uniformity_mul hfg, hf.uniformity_mul⟩
 
 Depends on / 依赖: hf.uniformity_inv.uniformity_mul, hf.uniformity_mul, uniformity_inv, uniformity_mul
@@ -884,8 +884,8 @@ theorem Filter.Tendsto.uniformity_mul_iff_left
 @[to_additive (attr := fun_prop) UniformContinuous.const_nsmul]
 
 中文:
-定理 Filter.Tendsto.uniformity_mul_iff_left
-  结论: {ι : 类型} {f g : ι -> α × α} {l : Filter ι}
+定理 滤子.收敛.uniformity_mul_iff_left
+  结论: {ι : 类型} {f g : ι -> α × α} {l : 滤子 ι}
   证明: ⟨fun hfg => by simpa using hfg.uniformity_mul hg.uniformity_inv, fun hf => hf.uniformity_mul hg⟩
 
 @[to_additive (attr := fun_prop) UniformContinuous.const_nsmul]
@@ -906,8 +906,8 @@ theorem UniformContinuous.pow_const
   given: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
 
 中文:
-定理 UniformContinuous.pow_const
-  条件: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.pow_const
+  条件: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
 -/
 theorem UniformContinuous.pow_const [UniformSpace β] {f : β -> α} (hf : UniformContinuous f) :
     forall n : Nat, UniformContinuous fun x => f x ^ n
@@ -933,7 +933,7 @@ theorem uniformContinuous_pow_const
 中文:
 定理 uniformContinuous_pow_const
   条件: (n : 自然数)
-  结论: UniformContinuous fun x : α => x ^ n
+  结论: 一致连续 fun x : α => x ^ n
   证明: uniformContinuous_id.pow_const n
 
 @[to_additive (attr := fun_prop) UniformContinuous.const_zsmul]
@@ -952,8 +952,8 @@ theorem UniformContinuous.zpow_const
   given: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
 
 中文:
-定理 UniformContinuous.zpow_const
-  条件: [UniformSpace β] {f : β -> α} (hf : UniformContinuous f)
+定理 一致连续.zpow_const
+  条件: [一致空间 β] {f : β -> α} (hf : 一致连续 f)
 -/
 theorem UniformContinuous.zpow_const [UniformSpace β] {f : β -> α} (hf : UniformContinuous f) :
     forall n : Int, UniformContinuous fun x => f x ^ n
@@ -979,7 +979,7 @@ theorem uniformContinuous_zpow_const
 中文:
 定理 uniformContinuous_zpow_const
   条件: (n : 整数)
-  结论: UniformContinuous fun x : α => x ^ n
+  结论: 一致连续 fun x : α => x ^ n
   证明: uniformContinuous_id.zpow_const n
 
 @[to_additive]
@@ -1046,7 +1046,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformGroup αᵐᵒᵖ
+  签名: 是一致群 αᵐᵒᵖ
   定义体: ⟨uniformContinuous_op.comp
       ((uniformContinuous_unop.comp uniformContinuous_snd).inv.mul <|
         uniformContinuous_unop.comp uniformContinuous_fst)⟩
@@ -1080,8 +1080,8 @@ instance IsUniformGroup.isRightUniformGroup
 @[to_additive]
 
 中文:
-实例 IsUniformGroup.isRightUniformGroup
-  签名: : IsRightUniformGroup α where
+实例 是一致群.isRightUniformGroup
+  签名: : 是RightUniform群 α where
   定义体: by
     refine eq_of_forall_le_iff fun 𝓕 => ?_
     rw [nhds_eq_comap_uniformity]; rw [comap_comap]; rw [← tendsto_iff_comap]; rw [← (tendsto_diag_uniformity Prod.fst 𝓕).uniformity_mul_iff_left]; rw [← tendsto_id']
@@ -1115,8 +1115,8 @@ instance IsUniformGroup.isLeftUniformGroup
 @[to_additive]
 
 中文:
-实例 IsUniformGroup.isLeftUniformGroup
-  签名: : IsLeftUniformGroup α where
+实例 是一致群.isLeftUniformGroup
+  签名: : 是LeftUniform群 α where
   定义体: by
     refine eq_of_forall_le_iff fun 𝓕 => ?_
     rw [nhds_eq_comap_uniformity]; rw [comap_comap]; rw [← tendsto_iff_comap]; rw [← (tendsto_diag_uniformity Prod.fst 𝓕).uniformity_mul_iff_right]; rw [← tendsto_id']
@@ -1147,8 +1147,8 @@ theorem IsUniformGroup.ext
 @[to_additive]
 
 中文:
-定理 IsUniformGroup.ext
-  结论: {G : 类型} [Group G] {u v : UniformSpace G} (hu : @IsUniformGroup G u _)
+定理 是一致群.ext
+  结论: {G : 类型} [群 G] {u v : 一致空间 G} (hu : @是一致群 G u _)
   证明: UniformSpace.ext by
     rw [(have := hu; uniformity_eq_comap_nhds_one)]; rw [(have := hv; uniformity_eq_comap_nhds_one)]; rw [h]
 
@@ -1172,8 +1172,8 @@ theorem IsUniformGroup.ext_iff
   proof: ⟨fun h => h ▸ rfl, hu.ext hv⟩
 
 中文:
-定理 IsUniformGroup.ext_iff
-  结论: {G : 类型} [Group G] {u v : UniformSpace G}
+定理 是一致群.ext_iff
+  结论: {G : 类型} [群 G] {u v : 一致空间 G}
   证明: ⟨fun h => h ▸ rfl, hu.ext hv⟩
 
 Depends on / 依赖: hu.ext
@@ -1197,8 +1197,8 @@ theorem IsUniformGroup.uniformity_countably_generated
   exact Filter.comap.isCountablyGenerated _ _
 
 中文:
-定理 IsUniformGroup.uniformity_countably_generated
-  条件: [(𝓝 (1 : α)).IsCountablyGenerated]
+定理 是一致群.uniformity_countably_generated
+  条件: [(𝓝 (1 : α)).是余untablyGenerated]
   证明: by
   rw [uniformity_eq_comap_nhds_one]
   exact Filter.comap.isCountablyGenerated _ _
@@ -1302,8 +1302,8 @@ theorem Filter.Tendsto.conj_nhds_one
   convert! tendsto_conj_nhds_one.comp this
 
 中文:
-定理 Filter.Tendsto.conj_nhds_one
-  结论: {ι : 类型} {l : Filter ι} {x : ι -> β}
+定理 滤子.收敛.conj_nhds_one
+  结论: {ι : 类型} {l : 滤子 ι} {x : ι -> β}
   证明: by
   have : Tendsto (fun i => (g i, x i)) l (comap Prod.snd (𝓝 1)) := by
     rwa [tendsto_comap_iff]
@@ -1334,8 +1334,8 @@ theorem IsUniformGroup.of_left_right
    
 
 中文:
-定理 IsUniformGroup.of_left_right
-  结论: IsUniformGroup β where
+定理 是一致群.of_left_right
+  结论: 是一致群 β where
   证明: by
     let φ : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => x₂ * y₂⁻¹ * y₁ * x₁⁻¹
     let ψ : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => (x₁⁻¹ * x₂) * (y₂⁻¹ * y₁)
@@ -1375,7 +1375,7 @@ theorem isUniformGroup_iff_left_right
 
 中文:
 定理 isUniformGroup_iff_left_right
-  条件: {γ : 类型} [Group γ] [UniformSpace γ]
+  条件: {γ : 类型} [群 γ] [一致空间 γ]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => .of_left_right⟩
 
 Depends on / 依赖: of_left_right
@@ -1394,7 +1394,7 @@ theorem eventually_forall_conj_nhds_one
   simpa using tendsto_conj_nhds_one.eventually hp
 
 中文:
-定理 eventually_forall_conj_nhds_one
+定理 eventually_对任意_conj_nhds_one
   结论: {p : α -> 命题}
   证明: by
   simpa using tendsto_conj_nhds_one.eventually hp
@@ -1422,8 +1422,8 @@ theorem Filter.HasBasis.uniformity_of_nhds_one
 @[to_additive]
 
 中文:
-定理 Filter.HasBasis.uniformity_of_nhds_one
-  结论: {ι} {p : ι -> 命题} {U : ι -> Set α}
+定理 滤子.有基.uniformity_of_nhds_one
+  结论: {ι} {p : ι -> 命题} {U : ι -> 集合 α}
   证明: by
   rw [uniformity_eq_comap_nhds_one]
   exact h.comap _
@@ -1452,8 +1452,8 @@ theorem Filter.HasBasis.uniformity_of_nhds_one_inv_mul
 @[to_additive]
 
 中文:
-定理 Filter.HasBasis.uniformity_of_nhds_one_inv_mul
-  结论: {ι} {p : ι -> 命题} {U : ι -> Set α}
+定理 滤子.有基.uniformity_of_nhds_one_inv_mul
+  结论: {ι} {p : ι -> 命题} {U : ι -> 集合 α}
   证明: by
   rw [uniformity_eq_comap_inv_mul_nhds_one]
   exact h.comap _
@@ -1482,8 +1482,8 @@ theorem Filter.HasBasis.uniformity_of_nhds_one_swapped
 @[to_additive]
 
 中文:
-定理 Filter.HasBasis.uniformity_of_nhds_one_swapped
-  结论: {ι} {p : ι -> 命题} {U : ι -> Set α}
+定理 滤子.有基.uniformity_of_nhds_one_swapped
+  结论: {ι} {p : ι -> 命题} {U : ι -> 集合 α}
   证明: by
   rw [uniformity_eq_comap_nhds_one_swapped]
   exact h.comap _
@@ -1512,8 +1512,8 @@ theorem Filter.HasBasis.uniformity_of_nhds_one_inv_mul_swapped
 @[to_additive]
 
 中文:
-定理 Filter.HasBasis.uniformity_of_nhds_one_inv_mul_swapped
-  结论: {ι} {p : ι -> 命题} {U : ι -> Set α}
+定理 滤子.有基.uniformity_of_nhds_one_inv_mul_swapped
+  结论: {ι} {p : ι -> 命题} {U : ι -> 集合 α}
   证明: by
   rw [uniformity_eq_comap_inv_mul_nhds_one_swapped]
   exact h.comap _
@@ -1543,7 +1543,7 @@ theorem uniformContinuous_of_tendsto_one
 
 中文:
 定理 uniformContinuous_of_tendsto_one
-  结论: {hom : 类型} [UniformSpace β] [Group β] [IsUniformGroup β]
+  结论: {hom : 类型} [一致空间 β] [群 β] [是一致群 β]
   证明: by
   have :
     ((fun x : β × β => x.2 / x.1) ∘ fun x : α × α => (f x.1, f x.2)) = fun x : α × α =>
@@ -1579,7 +1579,7 @@ theorem uniformContinuous_of_continuousAt_one
 
 中文:
 定理 uniformContinuous_of_continuousAt_one
-  结论: {hom : 类型} [UniformSpace β] [Group β]
+  结论: {hom : 类型} [一致空间 β] [群 β]
   证明: uniformContinuous_of_tendsto_one (by simpa using hf.tendsto)
 
 @[to_additive]
@@ -1602,8 +1602,8 @@ theorem MonoidHom.uniformContinuous_of_continuousAt_one
   proof: _root_.uniformContinuous_of_continuousAt_one f hf
 
 中文:
-定理 MonoidHom.uniformContinuous_of_continuousAt_one
-  结论: [UniformSpace β] [Group β]
+定理 幺半群态射.uniformContinuous_of_continuousAt_one
+  结论: [一致空间 β] [群 β]
   证明: _root_.uniformContinuous_of_continuousAt_one f hf
 
 Depends on / 依赖: _root_, _root_.uniformContinuous_of_continuousAt_one, uniformContinuous_of_continuousAt_one
@@ -1632,8 +1632,8 @@ theorem IsUniformGroup.uniformContinuous_iff_isOpen_ker
 @[to_additive]
 
 中文:
-定理 IsUniformGroup.uniformContinuous_iff_isOpen_ker
-  结论: {hom : 类型} [UniformSpace β]
+定理 是一致群.uniformContinuous_iff_isOpen_ker
+  结论: {hom : 类型} [一致空间 β]
   证明: by
   refine ⟨fun hf => ?_, fun hf => ?_⟩
   · apply (isOpen_discrete ({1} : Set β)).preimage hf.continuous
@@ -1670,7 +1670,7 @@ theorem uniformContinuous_monoidHom_of_continuous
 
 中文:
 定理 uniformContinuous_monoidHom_of_continuous
-  结论: {hom : 类型} [UniformSpace β] [Group β]
+  结论: {hom : 类型} [一致空间 β] [群 β]
   证明: uniformContinuous_of_tendsto_one
     suffices Tendsto f (𝓝 1) (𝓝 (f 1)) by rwa [map_one] at this
     h.tendsto 1
@@ -1699,8 +1699,8 @@ theorem MonoidHom.isUniformInducing_of_isInducing
 @[to_additive]
 
 中文:
-定理 MonoidHom.isUniformInducing_of_isInducing
-  结论: {Hom : 类型} [UniformSpace β] [Group β]
+定理 幺半群态射.isUniformInducing_of_isInducing
+  结论: {态射 : 类型} [一致空间 β] [群 β]
   证明: by
     simp [uniformity_eq_comap_nhds_one, comap_comap, Function.comp_def, h.nhds_eq_comap]
 
@@ -1725,8 +1725,8 @@ theorem MonoidHom.isUniformEmbedding_of_isEmbedding
   injective := h.injective
 
 中文:
-定理 MonoidHom.isUniformEmbedding_of_isEmbedding
-  结论: {Hom : 类型} [UniformSpace β] [Group β]
+定理 幺半群态射.isUniformEmbedding_of_isEmbedding
+  结论: {态射 : 类型} [一致空间 β] [群 β]
   证明: MonoidHom.isUniformInducing_of_isInducing h.isInducing
   injective := h.injective
 
@@ -1775,8 +1775,8 @@ definition IsTopologicalGroup.rightUniformSpace
     rcases exists_nhds_
 
 中文:
-定义 IsTopologicalGroup.rightUniformSpace
-  签名: : UniformSpace G where
+定义 是拓扑群.rightUniformSpace
+  签名: : 一致空间 G where
   定义体: comap (fun p : G × G => p.2 * p.1⁻¹) (𝓝 1)
   symm :=
     have : Tendsto (fun p : G × G => (p.2 * p.1⁻¹)⁻¹) (comap (fun p : G × G => p.2 * p.1⁻¹) (𝓝 1))
@@ -1856,8 +1856,8 @@ definition IsTopologicalGroup.leftUniformSpace
     rcases exists_nhds_
 
 中文:
-定义 IsTopologicalGroup.leftUniformSpace
-  签名: : UniformSpace G where
+定义 是拓扑群.leftUniformSpace
+  签名: : 一致空间 G where
   定义体: comap (fun p : G × G => p.1⁻¹ * p.2) (𝓝 1)
   symm :=
     have : Tendsto (fun p : G × G => (p.1⁻¹ * p.2)⁻¹) (comap (fun p : G × G => p.1⁻¹ * p.2) (𝓝 1))
@@ -1932,7 +1932,7 @@ theorem isUniformGroup_of_commGroup
 
 中文:
 定理 isUniformGroup_of_commGroup
-  结论: IsUniformGroup G
+  结论: 是一致群 G
   证明: by
   constructor
   have : (fun (x : (G × G) × (G × G)) => x.1.2 * x.2.2⁻¹ * (x.2.1 * x.1.1⁻¹)) =
@@ -1977,8 +1977,8 @@ theorem IsUniformGroup.rightUniformSpace_eq
   rw [uniformity_eq_comap_nhds_one' G]; rw [uniformity_eq_comap_mul_inv_nhds_one]
 
 中文:
-定理 IsUniformGroup.rightUniformSpace_eq
-  结论: {G : 类型} [u : UniformSpace G] [Group G]
+定理 是一致群.rightUniformSpace_eq
+  结论: {G : 类型} [u : 一致空间 G] [群 G]
   证明: by
   ext : 1
   rw [uniformity_eq_comap_nhds_one' G]; rw [uniformity_eq_comap_mul_inv_nhds_one]

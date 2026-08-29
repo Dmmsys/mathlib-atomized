@@ -234,7 +234,7 @@ abbreviation preservesLimitHomFamilyTgt
 
 中文:
 缩写 preservesLimitHomFamilyTgt
-  签名: (h : PLift (HasLimit F))
+  签名: (h : 命题层提升 (有极限 F))
   定义体: letI := h.down
   shrinkYoneda.obj (limit F).unop
 
@@ -255,7 +255,7 @@ abbreviation preservesLimitHomFamily
 
 中文:
 缩写 preservesLimitHomFamily
-  签名: (h : PLift (HasLimit F))
+  签名: (h : 命题层提升 (有极限 F))
   定义体: letI := h.down
   coconePtToShrinkYoneda (limit.cone F) (colimit.isColimit _)
 

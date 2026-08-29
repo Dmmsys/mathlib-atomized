@@ -58,7 +58,7 @@ theorem lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator
 
 中文:
 定理 lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator
-  结论: {Mf mΩ : MeasurableSpace Ω}
+  结论: {Mf mΩ : 可测空间 Ω}
   证明: by
   revert f
   have h_mul_indicator : forall g, Measurable g -> Measurable fun a => g a * T.indicator (fun _ => c) a :=
@@ -160,7 +160,7 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun
 
 中文:
 定理 lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun
-  结论: (h_meas_f : Measurable f)
+  结论: (h_meas_f : 可测 f)
   证明: lintegral_mul_eq_lintegral_mul_lintegral_of_independent_measurableSpace
     (measurable_iff_comap_le.1 h_meas_f) (measurable_iff_comap_le.1 h_meas_g) h_indep_fun
     (Measurable.of_comap_le le_rfl) (Measurable.of_comap_le le_rfl)
@@ -187,7 +187,7 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
 
 中文:
 定理 lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
-  结论: (h_meas_f : AEMeasurable f μ)
+  结论: (h_meas_f : 几乎处处可测 f μ)
   证明: by
   have fg_ae : f * g =ᵐ[μ] h_meas_f.mk _ * h_meas_g.mk _ := h_meas_f.ae_eq_mk.mul h_meas_g.ae_eq_mk
   rw [lintegral_congr_ae h_meas_f.ae_eq_mk]; rw [lintegral_congr_ae h_meas_g.ae_eq_mk]; rw [lintegral_congr_ae fg_ae]
@@ -214,7 +214,7 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun''
 
 中文:
 定理 lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun''
-  结论: (h_meas_f : AEMeasurable f μ)
+  结论: (h_meas_f : 几乎处处可测 f μ)
   证明: lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun' h_meas_f h_meas_g h_indep_fun
 
 Depends on / 依赖: h_indep_fun, h_meas_f, h_meas_g, lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun
@@ -868,7 +868,7 @@ theorem indepFun_iff_integral_comp_mul
 
 中文:
 定理 indepFun_iff_integral_comp_mul
-  结论: [IsFiniteMeasure μ] {β β' : 类型} {mβ : MeasurableSpace β}
+  结论: [是有限测度 μ] {β β' : 类型} {mβ : 可测空间 β}
   证明: by
   refine ⟨fun hfg _ _ hφ hψ _ _ => hfg.integral_comp_mul_comp
       hfm.aemeasurable hgm.aemeasurable hφ.aestronglyMeasurable hψ.aestronglyMeasurable, ?_⟩
@@ -1024,8 +1024,8 @@ lemma Indep.setIntegral_eq_smul
     rw [IndepFun.integral_fun_comp_smul_comp _ _ hX (by fun_p
 
 中文:
-引理 Indep.setIntegral_eq_smul
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+引理 Indep.set整数egral_eq_smul
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: calc ∫ ω in A, f (X ω) ∂P
     = ∫ ω, id (A.indicator (1 : Ω -> Real) ω) • f (X ω) ∂P := by
         rw [← integral_indicator (hm A hA2)]
@@ -1061,7 +1061,7 @@ lemma Indep.setIntegral_eq_mul
   proof: hA1.setIntegral_eq_smul hm hX hA hf
 
 中文:
-引理 Indep.setIntegral_eq_mul
+引理 Indep.set整数egral_eq_mul
   结论: (hm : m <= mΩ) {f : 𝓧 -> 实数} (hA1 : Indep m (m𝓧.comap X) P)
   证明: hA1.setIntegral_eq_smul hm hX hA hf
 

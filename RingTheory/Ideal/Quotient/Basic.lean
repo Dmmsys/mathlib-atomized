@@ -47,7 +47,7 @@ lemma mk_span_range
 
 中文:
 引理 mk_span_range
-  条件: (f : ι -> R) [(span (range f)).IsTwoSided] (i : ι)
+  条件: (f : ι -> R) [(span (range f)).是TwoSided] (i : ι)
   证明: by
   rw [Ideal.Quotient.eq_zero_iff_mem]
   exact Ideal.subset_span ⟨i, rfl⟩
@@ -107,7 +107,7 @@ lemma subsingleton_iff
 
 中文:
 引理 subsingleton_iff
-  结论: Subsingleton (R ⧸ I) ↔ I = ⊤
+  结论: 子单例 (R ⧸ I) ↔ I = ⊤
   证明: Submodule.Quotient.subsingleton_iff
 -/
 protected lemma subsingleton_iff : Subsingleton (R ⧸ I) ↔ I = ⊤ :=
@@ -123,7 +123,7 @@ lemma nontrivial_iff
 
 中文:
 引理 nontrivial_iff
-  结论: Nontrivial (R ⧸ I) ↔ I != ⊤
+  结论: 非平凡 (R ⧸ I) ↔ I != ⊤
   证明: Submodule.Quotient.nontrivial_iff
 -/
 protected lemma nontrivial_iff : Nontrivial (R ⧸ I) ↔ I != ⊤ :=
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (R ⧸ (⊤ : Ideal R))
+  签名: 唯一 (R ⧸ (⊤ : 理想 R))
   定义体: ⟨⟨0⟩, by rintro ⟨x⟩; exact Quotient.eq_zero_iff_mem.mpr Submodule.mem_top⟩
 
 Depends on / 依赖: Quotient, Quotient.eq_zero_iff_mem.mpr, Submodule, Submodule.mem_top, eq_zero_iff_mem, mem_top
@@ -164,7 +164,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: {α} [SMul α R] [IsScalarTower α R R] [SMulCommClass α R R]
+  签名: {α} [标量乘法 α R] [标量塔 α R R] [标量交换类 α R R]
   定义体: (Quotient.ringCon I).smulCommClass
 
 Depends on / 依赖: Quotient, Quotient.ringCon, ringCon, smulCommClass
@@ -183,7 +183,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: {α} [SMul α R] [IsScalarTower α R R] [SMulCommClass R α R]
+  签名: {α} [标量乘法 α R] [标量塔 α R R] [标量交换类 R α R]
   定义体: (Quotient.ringCon I).smulCommClass'
 
 Depends on / 依赖: Quotient, Quotient.ringCon, ringCon, smulCommClass
@@ -205,7 +205,7 @@ theorem eq_zero_iff_dvd
 
 中文:
 定理 eq_zero_iff_dvd
-  条件: {R} [CommRing R] (x y : R)
+  条件: {R} [交换环 R] (x y : R)
   证明: by
   rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_span_singleton]
 
@@ -229,8 +229,8 @@ lemma mk_singleton_self
 
 中文:
 引理 mk_singleton_self
-  条件: (x : R) [(Ideal.span {x}).IsTwoSided]
-  结论: mk (Ideal.span {x}) x = 0
+  条件: (x : R) [(理想.span {x}).是TwoSided]
+  结论: mk (理想.span {x}) x = 0
   证明: (Submodule.Quotient.mk_eq_zero _).mpr (mem_span_singleton_self _)
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk_eq_zero, mem_span_singleton_self, mk_eq_zero
@@ -252,7 +252,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: [hI : I.IsPrime]
+  签名: [hI : I.是素]
   定义体: Quotient.inductionOn₂' a b fun {_ _} hab =>
       (hI.mem_or_mem (eq_zero_iff_mem.1 hab)).elim (Or.inl ∘ eq_zero_iff_mem.2)
         (Or.inr ∘ eq_zero_iff_mem.2)
@@ -275,7 +275,7 @@ instance isDomain
 
 中文:
 实例 isDomain
-  签名: [hI : I.IsPrime]
+  签名: [hI : I.是素]
   定义体: let _ := Quotient.nontrivial_iff.mpr hI.1
   NoZeroDivisors.to_isDomain _
 
@@ -301,7 +301,7 @@ theorem isDomain_iff_prime
 
 中文:
 定理 isDomain_iff_prime
-  结论: IsDomain (R ⧸ I) ↔ I.IsPrime
+  结论: 是整环 (R ⧸ I) ↔ I.是素
   证明: by
   refine ⟨fun H => ⟨zero_ne_one_iff.1 ?_, fun {x y} h => ?_⟩, fun h => inferInstance⟩
   · have : Nontrivial (R ⧸ I) := ⟨H.2.1⟩
@@ -338,8 +338,8 @@ theorem exists_inv
   rwa [abc, ← neg_mem_iff (G := R) (H := I), neg_sub] at hc
 
 中文:
-定理 exists_inv
-  条件: [hI : I.IsMaximal]
+定理 存在_inv
+  条件: [hI : I.是极大]
   证明: by
   apply exists_right_inv_of_exists_left_inv
   rintro ⟨a⟩ h
@@ -377,7 +377,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev groupWithZero [hI : I.IsMaximal]
+  签名: abbrev groupWithZero [hI : I.是极大]
   定义体: fast_instance%
   { inv := fun a => if ha : a = 0 then 0 else Classical.choose (exists_inv ha)
     mul_inv_cancel := fun a (ha : a != 0) =>
@@ -409,7 +409,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev divisionRing [I.IsMaximal]
+  签名: abbrev divisionRing [I.是极大]
   定义体: fast_instance%
   { __ := ring _
     __ := Quotient.groupWithZero _
@@ -438,7 +438,7 @@ abbreviation noncomputable
 
 中文:
 缩写 noncomputable
-  签名: abbrev field {R} [CommRing R] (I : Ideal R) [I.IsMaximal]
+  签名: abbrev field {R} [交换环 R] (I : 理想 R) [I.是极大]
   定义体: fast_instance%
   { __ := commRing _
     __ := Quotient.divisionRing I }
@@ -466,7 +466,7 @@ theorem maximal_of_isField
 
 中文:
 定理 maximal_of_isField
-  条件: {R} [CommRing R] (I : Ideal R) (hqf : IsField (R ⧸ I))
+  条件: {R} [交换环 R] (I : 理想 R) (hqf : 是域 (R ⧸ I))
   证明: by
   apply Ideal.isMaximal_iff.2
   constructor
@@ -504,7 +504,7 @@ theorem maximal_ideal_iff_isField_quotient
 
 中文:
 定理 maximal_ideal_iff_isField_quotient
-  条件: {R} [CommRing R] (I : Ideal R)
+  条件: {R} [交换环 R] (I : 理想 R)
   证明: ⟨fun h =>
     let _i := @Quotient.field _ _ I h
     Field.toIsField _,
@@ -540,7 +540,7 @@ instance modulePi
 
 中文:
 实例 modulePi
-  签名: [I.IsTwoSided]
+  签名: [I.是TwoSided]
   定义体: Quotient.liftOn₂' c m (fun r m => Submodule.Quotient.mk <| r • m) by
       intro c₁ m₁ c₂ m₂ hc hm
       apply Ideal.Quotient.eq.2
@@ -583,7 +583,7 @@ definition piQuotEquiv
 
 中文:
 定义 piQuotEquiv
-  签名: [I.IsTwoSided]
+  签名: [I.是TwoSided]
   定义体: Quotient.liftOn' x (fun f i => Ideal.Quotient.mk I (f i)) fun _ _ hab =>
     funext fun i => (Submodule.Quotient.eq' _).2 (QuotientAddGroup.leftRel_apply.mp hab i)
   map_add' := by rintro ⟨_⟩ ⟨_⟩; rfl
@@ -620,7 +620,7 @@ theorem map_pi
 
 中文:
 定理 map_pi
-  结论: [I.IsTwoSided] [Finite ι] (x : ι -> R) (hi : 对任意 i, x i in I)
+  结论: [I.是TwoSided] [有限 ι] (x : ι -> R) (hi : 对任意 i, x i in I)
   证明: by
   classical
     cases nonempty_fintype ι
@@ -651,7 +651,7 @@ lemma univ_eq_iUnion_image_add
 
 中文:
 引理 univ_eq_iUnion_image_add
-  结论: (Set.univ (α := R)) = ⋃ x : R ⧸ I, x.out +ᵥ (I : Set R)
+  结论: (集合.univ (α := R)) = ⋃ x : R ⧸ I, x.out +ᵥ (I : 集合 R)
   证明: QuotientAddGroup.univ_eq_iUnion_vadd I.toAddSubgroup
 
 Depends on / 依赖: x.out
@@ -672,8 +672,8 @@ lemma finite_iff_ideal_quotient
 
 中文:
 引理 finite_iff_ideal_quotient
-  条件: (I : Ideal R)
-  结论: Finite R ↔ Finite I ∧ Finite (R ⧸ I)
+  条件: (I : 理想 R)
+  结论: 有限 R ↔ 有限 I ∧ 有限 (R ⧸ I)
   证明: finite_iff_addSubgroup_quotient I.toAddSubgroup
 
 Depends on / 依赖: I.toAddSubgroup, finite_iff_addSubgroup_quotient, toAddSubgroup
@@ -692,9 +692,9 @@ lemma Finite.of_ideal_quotient
   rw [finite_iff_ideal_quotient]; constructor <;> assumption
 
 中文:
-引理 Finite.of_ideal_quotient
-  条件: (I : Ideal R) [Finite I] [Finite (R ⧸ I)]
-  结论: Finite R
+引理 有限.of_ideal_quotient
+  条件: (I : 理想 R) [有限 I] [有限 (R ⧸ I)]
+  结论: 有限 R
   证明: by
   rw [finite_iff_ideal_quotient]; constructor <;> assumption
 

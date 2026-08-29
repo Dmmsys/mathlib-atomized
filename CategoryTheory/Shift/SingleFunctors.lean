@@ -55,7 +55,7 @@ structure SingleFunctors
     - functor((a : A)) : C ⥤ D
     - shiftIso((n a a' : A) (ha' : n + a = a')) : functor a' ⋙ shiftFunctor D n ≅ functor a
     - shiftIso_zero((a : A)) : shiftIso 0 a a (zero_add a) = isoWhiskerLeft _ (shiftFunctorZero D A)
-    - shiftIso_add((n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'')) : shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerLeft _ (shiftFunctorAdd D m n) ≪≫ (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight (shiftIso m a' a'' ha'') _ ≪≫ shiftIso n a a' ha'
+    - shiftIso_add((n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'')) : shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerLeft _ (shiftFunctorAdd D m n) ≪≫ (函子.associator _ _ _).symm ≪≫ isoWhiskerRight (shiftIso m a' a'' ha'') _ ≪≫ shiftIso n a a' ha'
 -/
 structure SingleFunctors where
   /-- a family of functors `C ⥤ D` indexed by the elements of the additive monoid `A` -/
@@ -271,7 +271,7 @@ structure Hom
     - comm((n a a' : A) (ha' : n + a = a')) : (F.shiftIso n a a' ha').hom ≫ hom a = whiskerRight (hom a') (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
     - hom((a : A)) : F.functor a ⟶ G.functor a
@@ -302,7 +302,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Hom F F where
+  签名: : 态射 F F where
   定义体: 𝟙 _
 -/
 def id : Hom F F where
@@ -322,7 +322,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (α : Hom F G) (β : Hom G H)
+  签名: (α : 态射 F G) (β : 态射 G H)
   定义体: α.hom a ≫ β.hom a
 -/
 def comp (α : Hom F G) (β : Hom G H) : Hom F H where
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SingleFunctors C D A)
+  签名: 范畴 (SingleFunctors C D A)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -369,7 +369,7 @@ lemma id_hom
 中文:
 引理 id_hom
   条件: (a : A)
-  结论: Hom.hom (𝟙 F) a = 𝟙 _
+  结论: 态射.hom (𝟙 F) a = 𝟙 _
   证明: rfl
 -/
 lemma id_hom (a : A) : Hom.hom (𝟙 F) a = 𝟙 _ := rfl
@@ -613,7 +613,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: (G : D ⥤ E) [G.CommShift A]
+  签名: (G : D ⥤ E) [G.交换Shift A]
   定义体: F.functor a ⋙ G
   shiftIso n a a' ha' :=
     Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (G.commShiftIso n).symm ≪≫
@@ -666,7 +666,7 @@ definition postcompFunctor
 
 中文:
 定义 postcompFunctor
-  签名: (G : D ⥤ E) [G.CommShift A]
+  签名: (G : D ⥤ E) [G.交换Shift A]
   定义体: F.postcomp G
   map {F₁ F₂} φ :=
     { hom := fun a => whiskerRight (φ.hom a) G
@@ -702,7 +702,7 @@ definition postcompPostcompIso
 
 中文:
 定义 postcompPostcompIso
-  签名: (G : D ⥤ E) (G' : E ⥤ E') [G.CommShift A] [G'.CommShift A]
+  签名: (G : D ⥤ E) (G' : E ⥤ E') [G.交换Shift A] [G'.交换Shift A]
   定义体: isoMk (fun _ => Functor.associator _ _ _) (fun n a a' ha' => by
     ext X
     simp [Functor.commShiftIso_comp_inv_app])
@@ -731,7 +731,7 @@ definition postcompIsoOfIso
 
 中文:
 定义 postcompIsoOfIso
-  签名: {G G' : D ⥤ E} (e : G ≅ G') [G.CommShift A] [G'.CommShift A]
+  签名: {G G' : D ⥤ E} (e : G ≅ G') [G.交换Shift A] [G'.交换Shift A]
   定义体: isoMk (fun a => isoWhiskerLeft (F.functor a) e) (fun n a a' ha' => by
     ext X
     simp [NatTrans.shift_app e.hom n])

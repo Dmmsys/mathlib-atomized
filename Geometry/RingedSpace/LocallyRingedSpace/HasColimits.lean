@@ -45,8 +45,8 @@ theorem isColimit_exists_rep
   proof: Concrete.isColimit_exists_rep (F ⋙ forget C) (isColimitOfPreserves (forget C) hc) x
 
 中文:
-定理 isColimit_exists_rep
-  条件: [HasLimitsOfShape Jᵒᵖ C] {c : Cocone F} (hc : IsColimit c) (x : c.pt)
+定理 isColimit_存在_rep
+  条件: [有形状极限 Jᵒᵖ C] {c : 余锥 F} (hc : 是余极限 c) (x : c.pt)
   证明: Concrete.isColimit_exists_rep (F ⋙ forget C) (isColimitOfPreserves (forget C) hc) x
 
 Depends on / 依赖: Concrete, Concrete.isColimit_exists_rep, forget, isColimitOfPreserves, isColimit_exists_rep
@@ -66,8 +66,8 @@ theorem colimit_exists_rep
     (isColimitOfPreserves (SheafedSpace.forget _) (colimit.isColimit F)) x
 
 中文:
-定理 colimit_exists_rep
-  条件: [HasLimitsOfShape Jᵒᵖ C] (x : colimit (C := SheafedSpace C) F)
+定理 colimit_存在_rep
+  条件: [有形状极限 Jᵒᵖ C] (x : colimit (C := Sheafed空间 C) F)
   证明: Concrete.isColimit_exists_rep (F ⋙ SheafedSpace.forget C)
     (isColimitOfPreserves (SheafedSpace.forget _) (colimit.isColimit F)) x
 
@@ -91,7 +91,7 @@ instance [HasLimits
   apply epi_comp
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] {X Y
   定义体: by
   rw [← show _ = (coequalizer.π f g).hom.base from
@@ -129,7 +129,7 @@ definition coproduct
 
 中文:
 定义 coproduct
-  签名: : LocallyRingedSpace where
+  签名: : LocallyRinged空间 where
   定义体: colimit (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
     (F ⋙ forgetToSheafedSpace)
   isLocalRing x := by
@@ -164,7 +164,7 @@ definition coproductCofan
 
 中文:
 定义 coproductCofan
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: coproduct F
   ι :=
     { app j := LocallyRingedSpace.homMk (colimit.ι (F ⋙ forgetToSheafedSpace) j)
@@ -195,7 +195,7 @@ definition coproductCofanIsColimit
 
 中文:
 定义 coproductCofanIsColimit
-  签名: : IsColimit (coproductCofan F) where
+  签名: : 是余极限 (coproductCofan F) where
   定义体: LocallyRingedSpace.homMk (colimit.desc
       (F ⋙ forgetToSheafedSpace) (forgetToSheafedSpace.mapCocone s)) (by
         intro x
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfShape (Discrete ι) LocallyRingedSpace.{u}
+  签名: 有形状余极限 (离散 ι) LocallyRinged空间.{u}
   定义体: ⟨fun F => ⟨⟨⟨_, coproductCofanIsColimit F⟩⟩⟩⟩
 
 Depends on / 依赖: coproductCofanIsColimit
@@ -261,7 +261,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape (Discrete.{v} ι) forgetToSheafedSpace.{u}
+  签名: 保持形状余极限 (离散.{v} ι) forgetToSheafedSpace.{u}
   定义体: ⟨fun {G} =>
     preservesColimit_of_preserves_colimit_cocone (coproductCofanIsColimit G)
       ((colimit.isColimit (C := SheafedSpace.{u+1, u, u} CommRingCat.{u}) _).ofIsoColimit
@@ -539,7 +539,7 @@ definition coequalizer
 
 中文:
 定义 coequalizer
-  签名: : LocallyRingedSpace where
+  签名: : LocallyRinged空间 where
   定义体: Limits.coequalizer f.toShHom g.toShHom
   isLocalRing x := by
     obtain ⟨y, rfl⟩ :=
@@ -569,7 +569,7 @@ definition coequalizerCofork
 
 中文:
 定义 coequalizerCofork
-  签名: : Cofork f g
+  签名: : 余叉 f g
   定义体: Cofork.ofπ (P := coequalizer f g)
     (homMk (coequalizer.π f.toShHom g.toShHom)
       -- Porting note: this used to be automatic
@@ -627,7 +627,7 @@ definition coequalizerCoforkIsColimit
 
 中文:
 定义 coequalizerCoforkIsColimit
-  签名: : IsColimit (coequalizerCofork f g)
+  签名: : 是余极限 (coequalizerCofork f g)
   定义体: by
   refine Cofork.IsColimit.mk' _ (fun s => ?_)
   have e : f.toShHom ≫ s.π.toShHom = g.toShHom ≫ s.π.toShHom := by
@@ -691,7 +691,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCoequalizers LocallyRingedSpace
+  签名: HasCoequalizers LocallyRinged空间
   定义体: hasCoequalizers_of_hasColimit_parallelPair _
 
 Depends on / 依赖: hasCoequalizers_of_hasColimit_parallelPair
@@ -745,7 +745,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits LocallyRingedSpace
+  签名: 有余极限 LocallyRinged空间
   定义体: has_colimits_of_hasCoequalizers_and_coproducts
 
 Depends on / 依赖: has_colimits_of_hasCoequalizers_and_coproducts

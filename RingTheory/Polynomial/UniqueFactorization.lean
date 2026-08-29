@@ -77,9 +77,9 @@ theorem exists_irreducible_of_degree_pos
 fun hf0 => not_lt_of_gt hf hf0.symm ▸ (@degree_zero R _).symm ▸ WithBot.bot_lt_coe _
 
 中文:
-定理 exists_irreducible_of_degree_pos
+定理 存在_irreducible_of_degree_pos
   条件: (hf : 0 < f.degree)
-  结论: 存在 g, Irreducible g ∧ g ∣ f
+  结论: 存在 g, 不可约 g ∧ g ∣ f
   证明: WfDvdMonoid.exists_irreducible_factor (fun huf => ne_of_gt hf <| degree_eq_zero_of_isUnit huf)
 fun hf0 => not_lt_of_gt hf hf0.symm ▸ (@degree_zero R _).symm ▸ WithBot.bot_lt_coe _
 
@@ -101,9 +101,9 @@ theorem exists_irreducible_of_natDegree_pos
     exact natDegree_le_of_degree_le hf
 
 中文:
-定理 exists_irreducible_of_natDegree_pos
+定理 存在_irreducible_of_natDegree_pos
   条件: (hf : 0 < f.natDegree)
-  结论: 存在 g, Irreducible g ∧ g ∣ f
+  结论: 存在 g, 不可约 g ∧ g ∣ f
   证明: exists_irreducible_of_degree_pos by
     contrapose! hf
     exact natDegree_le_of_degree_le hf
@@ -124,7 +124,7 @@ theorem exists_irreducible_of_natDegree_ne_zero
   proof: exists_irreducible_of_natDegree_pos Nat.pos_of_ne_zero hf
 
 中文:
-定理 exists_irreducible_of_natDegree_ne_zero
+定理 存在_irreducible_of_natDegree_ne_zero
   条件: (hf : f.natDegree != 0)
   证明: exists_irreducible_of_natDegree_pos Nat.pos_of_ne_zero hf
 
@@ -214,7 +214,7 @@ theorem uniqueFactorizationMonoid_of_fintype
 
 中文:
 定理 uniqueFactorizationMonoid_of_fintype
-  条件: [Finite σ]
+  条件: [有限 σ]
   证明: have := Fintype.ofFinite σ
 (renameEquiv D (Fintype.equivFin σ)).toMulEquiv.symm.uniqueFactorizationMonoid by
     induction Fintype.card σ with
@@ -269,8 +269,8 @@ have ha : Associated g (g * C g.leadingCoeff⁻¹) := associated_mul_unit_right 
   exact ⟨
 
 中文:
-定理 Polynomial.exists_monic_irreducible_factor
-  结论: {F : 类型} [Field F] (f : F[X])
+定理 多项式.存在_monic_irreducible_factor
+  结论: {F : 类型} [域 F] (f : F[X])
   证明: by
   by_cases hf : f = 0
   · exact ⟨X, monic_X, irreducible_X, hf ▸ dvd_zero X⟩

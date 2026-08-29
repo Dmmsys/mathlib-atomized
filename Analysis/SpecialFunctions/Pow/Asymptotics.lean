@@ -48,7 +48,7 @@ theorem tendsto_rpow_atTop
 中文:
 定理 tendsto_rpow_atTop
   条件: {y : 实数} (hy : 0 < y)
-  结论: Tendsto (fun x : 实数 => x ^ y) atTop atTop
+  结论: 收敛 (fun x : 实数 => x ^ y) atTop atTop
   证明: by
   rw [(atTop_basis' 0).tendsto_right_iff]
   intro b hb
@@ -100,7 +100,7 @@ theorem tendsto_rpow_neg_atTop
 中文:
 定理 tendsto_rpow_neg_atTop
   条件: {y : 实数} (hy : 0 < y)
-  结论: Tendsto (fun x : 实数 => x ^ (-y)) atTop (𝓝 0)
+  结论: 收敛 (fun x : 实数 => x ^ (-y)) atTop (𝓝 0)
   证明: Tendsto.congr' (eventuallyEq_of_mem (Ioi_mem_atTop 0) fun _ hx => (rpow_neg (le_of_lt hx) y).symm)
     (tendsto_rpow_atTop hy).inv_tendsto_atTop
 
@@ -307,7 +307,7 @@ theorem tendsto_rpow_div
 
 中文:
 定理 tendsto_rpow_div
-  结论: Tendsto (fun x => x ^ ((1 : 实数) / x)) atTop (𝓝 1)
+  结论: 收敛 (fun x => x ^ ((1 : 实数) / x)) atTop (𝓝 1)
   证明: by
   convert! tendsto_rpow_div_mul_add (1 : Real) _ (0 : Real) zero_ne_one
   ring
@@ -330,7 +330,7 @@ theorem tendsto_rpow_neg_div
 
 中文:
 定理 tendsto_rpow_neg_div
-  结论: Tendsto (fun x => x ^ (-(1 : 实数) / x)) atTop (𝓝 1)
+  结论: 收敛 (fun x => x ^ (-(1 : 实数) / x)) atTop (𝓝 1)
   证明: by
   convert! tendsto_rpow_div_mul_add (-(1 : Real)) _ (0 : Real) zero_ne_one
   ring
@@ -358,7 +358,7 @@ theorem tendsto_exp_div_rpow_atTop
 中文:
 定理 tendsto_exp_div_rpow_atTop
   条件: (s : 实数)
-  结论: Tendsto (fun x : 实数 => exp x / x ^ s) atTop atTop
+  结论: 收敛 (fun x : 实数 => exp x / x ^ s) atTop atTop
   证明: by
   obtain ⟨n, hn⟩ := archimedean_iff_nat_lt.1 Real.instArchimedean s
   refine tendsto_atTop_mono' _ ?_ (tendsto_exp_div_pow_atTop n)
@@ -462,7 +462,7 @@ theorem ENNReal.tendsto_rpow_at_top
   by_cases ha' 
 
 中文:
-定理 ENNReal.tendsto_rpow_at_top
+定理 广义非负实数.tendsto_rpow_at_top
   条件: {y : 实数} (hy : 0 < y)
   证明: by
   rw [ENNReal.tendsto_nhds_top_iff_nnreal]
@@ -627,7 +627,7 @@ theorem isTheta_cpow_const_rpow
 
 中文:
 定理 isTheta_cpow_const_rpow
-  条件: {b : Complex} (hl : b.re = 0 -> b != 0 -> 对任意ᶠ x in l, f x != 0)
+  条件: {b : 复形} (hl : b.re = 0 -> b != 0 -> 对任意ᶠ x in l, f x != 0)
   证明: isTheta_cpow_rpow isBoundedUnder_const by
     simpa only [eventually_imp_distrib_right, not_imp_not, Imp.swap (a := b.re = 0)] using hl
 
@@ -1351,7 +1351,7 @@ lemma tendsto_log_mul_self_nhdsLT_zero
 
 中文:
 引理 tendsto_log_mul_self_nhdsLT_zero
-  结论: Filter.Tendsto (fun x => log x * x) (𝓝[<] 0) (𝓝 0)
+  结论: 滤子.收敛 (fun x => log x * x) (𝓝[<] 0) (𝓝 0)
   证明: by
   have h := tendsto_log_mul_rpow_nhdsGT_zero zero_lt_one
   simp only [Real.rpow_one] at h

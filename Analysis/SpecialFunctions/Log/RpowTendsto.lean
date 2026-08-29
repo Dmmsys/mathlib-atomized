@@ -42,7 +42,7 @@ lemma Real.norm_inv_mul_rpow_sub_one_sub_log_le
           rw [mul_comm]; r
 
 中文:
-引理 Real.norm_inv_mul_rpow_sub_one_sub_log_le
+引理 实数.norm_inv_mul_rpow_sub_one_sub_log_le
   结论: {p x : 实数} (p_pos : 0 < p) (x_pos : 0 < x)
   证明: by
   have pinv_nonneg : 0 <= p⁻¹ := by grind [_root_.inv_nonneg]
@@ -88,7 +88,7 @@ lemma Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
 
 
 中文:
-引理 Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
+引理 实数.tendstoLocallyUniformlyOn_rpow_sub_one_log
   证明: by
   refine (tendstoLocallyUniformlyOn_iff_forall_isCompact isOpen_Ioi).mpr ?_
   intro s hs hs'

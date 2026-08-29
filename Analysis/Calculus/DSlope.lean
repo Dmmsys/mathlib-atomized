@@ -118,8 +118,8 @@ theorem ContinuousLinearMap.dslope_comp
   · simpa only [dslope_of_ne _ hne] using! f.toLinearMap.slope_comp g a b
 
 中文:
-定理 ContinuousLinearMap.dslope_comp
-  结论: {F : 类型} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+定理 连续线性映射.dslope_comp
+  结论: {F : 类型} [赋范交换加群 F] [赋范空间 𝕜 F]
   证明: by
   rcases eq_or_ne b a with (rfl | hne)
   · simp only [dslope_same]

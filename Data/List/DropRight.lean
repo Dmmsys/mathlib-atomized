@@ -55,7 +55,7 @@ definition rdrop
 
 中文:
 定义 rdrop
-  签名: : List α
+  签名: : 列表 α
   定义体: l.take (l.length - n)
 
 @[simp]
@@ -78,7 +78,7 @@ theorem rdrop_nil
 
 中文:
 定理 rdrop_nil
-  结论: rdrop ([] : List α) n = []
+  结论: rdrop ([] : 列表 α) n = []
   证明: by simp [rdrop]
 
 @[simp]
@@ -178,7 +178,7 @@ definition rtake
 
 中文:
 定义 rtake
-  签名: : List α
+  签名: : 列表 α
   定义体: l.drop (l.length - n)
 
 @[simp]
@@ -201,7 +201,7 @@ theorem rtake_nil
 
 中文:
 定理 rtake_nil
-  结论: rtake ([] : List α) n = []
+  结论: rtake ([] : 列表 α) n = []
   证明: by simp [rtake]
 
 @[simp]
@@ -301,7 +301,7 @@ definition rdropWhile
 
 中文:
 定义 rdropWhile
-  签名: : List α
+  签名: : 列表 α
   定义体: reverse (l.reverse.dropWhile p)
 
 @[simp]
@@ -322,7 +322,7 @@ theorem rdropWhile_nil
 
 中文:
 定理 rdropWhile_nil
-  结论: rdropWhile p ([] : List α) = []
+  结论: rdropWhile p ([] : 列表 α) = []
   证明: by simp [rdropWhile]
 
 Depends on / 依赖: rdropWhile
@@ -600,7 +600,7 @@ definition rtakeWhile
 
 中文:
 定义 rtakeWhile
-  签名: : List α
+  签名: : 列表 α
   定义体: reverse (l.reverse.takeWhile p)
 
 @[simp]
@@ -621,7 +621,7 @@ theorem rtakeWhile_nil
 
 中文:
 定理 rtakeWhile_nil
-  结论: rtakeWhile p ([] : List α) = []
+  结论: rtakeWhile p ([] : 列表 α) = []
   证明: by simp [rtakeWhile]
 
 Depends on / 依赖: rtakeWhile
@@ -808,7 +808,7 @@ theorem rtakeWhile_idempotent
 
 中文:
 定理 rtakeWhile_idempotent
-  条件: (p : α -> 布尔) (l : List α)
+  条件: (p : α -> 布尔值) (l : 列表 α)
   证明: rtakeWhile_eq_self_iff.mpr fun _ => mem_rtakeWhile_imp
 
 Depends on / 依赖: mem_rtakeWhile_imp, rtakeWhile_eq_self_iff, rtakeWhile_eq_self_iff.mpr
@@ -902,7 +902,7 @@ lemma rdrop_append_length
 
 中文:
 引理 rdrop_append_length
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   证明: by
   rw [rdrop_eq_reverse_drop_reverse]; rw [← length_reverse]; rw [reverse_append]; rw [drop_left]; rw [reverse_reverse]
 
@@ -927,7 +927,7 @@ lemma rdrop_append_of_le_length
 
 中文:
 引理 rdrop_append_of_le_length
-  条件: {l₁ l₂ : List α} (k : 自然数)
+  条件: {l₁ l₂ : 列表 α} (k : 自然数)
   证明: by
   intro hk
   rw [← length_reverse] at hk
@@ -955,7 +955,7 @@ lemma rdrop_append_length_add
 
 中文:
 引理 rdrop_append_length_add
-  条件: {l₁ l₂ : List α} (k : 自然数)
+  条件: {l₁ l₂ : 列表 α} (k : 自然数)
   证明: by
   rw [← rdrop_add]; rw [rdrop_append_length]
 

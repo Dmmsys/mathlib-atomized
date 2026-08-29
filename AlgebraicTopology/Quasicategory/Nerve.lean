@@ -37,7 +37,7 @@ instance quasicategory
 
 中文:
 实例 quasicategory
-  签名: {C : 类型u} [Category.{v} C]
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: inferInstance
 -/
 instance quasicategory {C : Type u} [Category.{v} C] : Quasicategory (nerve C) := inferInstance

@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: FloorSemiring Rat>=0
+  签名: FloorSemiring 有理数>=0
   定义体: ⌊q.val⌋₊
   ceil q := ⌈q.val⌉₊
   floor_of_neg h := by simpa using h.trans zero_lt_one
@@ -79,8 +79,8 @@ theorem floor_coe
 
 中文:
 定理 floor_coe
-  条件: (q : Rat>=0)
-  结论: ⌊(q : Rat)⌋₊ = ⌊q⌋₊
+  条件: (q : 有理数>=0)
+  结论: ⌊(q : 有理数)⌋₊ = ⌊q⌋₊
   证明: rfl
 
 @[simp, norm_cast]
@@ -101,8 +101,8 @@ theorem ceil_coe
 
 中文:
 定理 ceil_coe
-  条件: (q : Rat>=0)
-  结论: ⌈(q : Rat)⌉₊ = ⌈q⌉₊
+  条件: (q : 有理数>=0)
+  结论: ⌈(q : 有理数)⌉₊ = ⌈q⌉₊
   证明: rfl
 
 @[simp, norm_cast]
@@ -123,8 +123,8 @@ theorem coe_floor
 
 中文:
 定理 coe_floor
-  条件: (q : Rat>=0)
-  结论: ↑⌊q⌋₊ = ⌊(q : Rat)⌋
+  条件: (q : 有理数>=0)
+  结论: ↑⌊q⌋₊ = ⌊(q : 有理数)⌋
   证明: Int.natCast_floor_eq_floor q.coe_nonneg
 
 @[simp, norm_cast]
@@ -145,8 +145,8 @@ theorem coe_ceil
 
 中文:
 定理 coe_ceil
-  条件: (q : Rat>=0)
-  结论: ↑⌈q⌉₊ = ⌈(q : Rat)⌉
+  条件: (q : 有理数>=0)
+  结论: ↑⌈q⌉₊ = ⌈(q : 有理数)⌉
   证明: Int.natCast_ceil_eq_ceil q.coe_nonneg
 
 Depends on / 依赖: Int.natCast_ceil_eq_ceil, coe_nonneg, natCast_ceil_eq_ceil, q.coe_nonneg
@@ -165,7 +165,7 @@ theorem floor_def
 
 中文:
 定理 floor_def
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ⌊q⌋₊ = q.num / q.den
   证明: by
   rw [← Int.natCast_inj]; rw [NNRat.coe_floor]; rw [Rat.floor_def']; rw [Int.natCast_ediv]; rw [den_coe]; rw [num_coe]
@@ -191,7 +191,7 @@ theorem floor_cast
 
 中文:
 定理 floor_cast
-  条件: (x : Rat>=0)
+  条件: (x : 有理数>=0)
   结论: ⌊(x : K)⌋₊ = ⌊x⌋₊
   证明: (Nat.floor_eq_iff x.cast_nonneg).2 (mod_cast (Nat.floor_eq_iff x.cast_nonneg).1 (Eq.refl ⌊x⌋₊))
 
@@ -217,7 +217,7 @@ theorem ceil_cast
 
 中文:
 定理 ceil_cast
-  条件: (x : Rat>=0)
+  条件: (x : 有理数>=0)
   结论: ⌈(x : K)⌉₊ = ⌈x⌉₊
   证明: by
   obtain rfl | hx := eq_or_ne x 0
@@ -255,8 +255,8 @@ theorem intFloor_cast
 
 中文:
 定理 intFloor_cast
-  条件: (x : Rat>=0)
-  结论: ⌊(x : K)⌋ = ⌊(x : Rat)⌋
+  条件: (x : 有理数>=0)
+  结论: ⌊(x : K)⌋ = ⌊(x : 有理数)⌋
   证明: by
   rw [Int.floor_eq_iff]; rw [← coe_floor]
   norm_cast
@@ -290,8 +290,8 @@ theorem intCeil_cast
 
 中文:
 定理 intCeil_cast
-  条件: (x : Rat>=0)
-  结论: ⌈(x : K)⌉ = ⌈(x : Rat)⌉
+  条件: (x : 有理数>=0)
+  结论: ⌈(x : K)⌉ = ⌈(x : 有理数)⌉
   证明: by
   rw [Int.ceil_eq_iff]; rw [← coe_ceil]; rw [sub_lt_iff_lt_add]
   constructor
@@ -323,7 +323,7 @@ theorem floor_natCast_div_natCast
 中文:
 定理 floor_natCast_div_natCast
   条件: (n d : 自然数)
-  结论: ⌊(↑n / ↑d : Rat>=0)⌋₊ = n / d
+  结论: ⌊(↑n / ↑d : 有理数>=0)⌋₊ = n / d
   证明: Rat.natFloor_natCast_div_natCast n d
 
 Depends on / 依赖: Rat.natFloor_natCast_div_natCast, natFloor_natCast_div_natCast
@@ -349,8 +349,8 @@ theorem IsNat.natCeil
   exact ⟨by simp⟩
 
 中文:
-定理 IsNat.natCeil
-  结论: {R : 类型} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是自然数.natCeil
+  结论: {R : 类型} [半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rintro ⟨⟨⟩⟩
   exact ⟨by simp⟩
@@ -371,8 +371,8 @@ theorem IsInt.natCeil
   exact ⟨by simp⟩
 
 中文:
-定理 IsInt.natCeil
-  结论: {R : 类型} [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorSemiring R]
+定理 是整数.natCeil
+  结论: {R : 类型} [环 R] [线性序 R] [是StrictOrdered环 R] [FloorSemiring R]
   证明: by
   rintro ⟨⟨⟩⟩
   exact ⟨by simp⟩
@@ -394,8 +394,8 @@ theorem IsNNRat.natCeil
   simp
 
 中文:
-定理 IsNNRat.natCeil
-  结论: {R : 类型} [Semifield R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是NNRat.natCeil
+  结论: {R : 类型} [半域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   constructor
   rw [← hres]; rw [h.to_eq rfl rfl]; rw [← @NNRat.ceil_cast R]
@@ -421,8 +421,8 @@ theorem IsRat.natCeil
   simp [h.neg_to_eq, div_nonneg]
 
 中文:
-定理 IsRat.natCeil
-  结论: {R : 类型} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 是有理数.natCeil
+  结论: {R : 类型} [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   constructor
   simp [h.neg_to_eq, div_nonneg]

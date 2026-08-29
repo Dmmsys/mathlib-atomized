@@ -42,8 +42,8 @@ instance [NormedField
   body: norm_smul_le
 
 中文:
-实例 [NormedField
-  签名: 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] :
+实例 [赋范域
+  签名: 𝕜] [SeminormedAddComm群 E] [赋范空间 𝕜 E] :
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -72,7 +72,7 @@ definition toComplₗᵢ
 
 中文:
 定义 toComplₗᵢ
-  签名: : E ->ₗᵢ[𝕜] Completion E
+  签名: : E ->ₗᵢ[𝕜] 完备化 E
   定义体: { toCompl with
     toFun := (↑)
     map_smul' := coe_smul
@@ -99,7 +99,7 @@ theorem coe_toComplₗᵢ
 
 中文:
 定理 coe_toComplₗᵢ
-  结论: ⇑(toComplₗᵢ : E ->ₗᵢ[𝕜] Completion E) = ((↑) : E -> Completion E)
+  结论: ⇑(toComplₗᵢ : E ->ₗᵢ[𝕜] 完备化 E) = ((↑) : E -> 完备化 E)
   证明: rfl
 -/
 theorem coe_toComplₗᵢ : ⇑(toComplₗᵢ : E ->ₗᵢ[𝕜] Completion E) = ((↑) : E -> Completion E) :=
@@ -117,7 +117,7 @@ definition toComplL
 
 中文:
 定义 toComplL
-  签名: : E ->L[𝕜] Completion E
+  签名: : E ->L[𝕜] 完备化 E
   定义体: toComplₗᵢ.toContinuousLinearMap
 
 @[simp]
@@ -140,7 +140,7 @@ theorem coe_toComplL
 
 中文:
 定理 coe_toComplL
-  结论: ⇑(toComplL : E ->L[𝕜] Completion E) = ((↑) : E -> Completion E)
+  结论: ⇑(toComplL : E ->L[𝕜] 完备化 E) = ((↑) : E -> 完备化 E)
   证明: rfl
 
 @[simp]
@@ -159,7 +159,7 @@ theorem norm_toComplL
 
 中文:
 定理 norm_toComplL
-  结论: {𝕜 E : 类型} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
+  结论: {𝕜 E : 类型} [NontriviallyNormedField 𝕜] [赋范交换加群 E]
   证明: (toComplₗᵢ : E ->ₗᵢ[𝕜] Completion E).norm_toContinuousLinearMap
 
 Depends on / 依赖: Completion, norm_toContinuousLinearMap
@@ -188,8 +188,8 @@ instance [SeminormedRing
     | ih x y => simpa only [← coe_mul, norm_coe] using norm_mul_le x y
 
 中文:
-实例 [SeminormedRing
-  签名: A] : NormedRing (Completion A) where
+实例 [Seminormed环
+  签名: A] : 赋范环 (完备化 A) where
   定义体: inferInstance
   __ : Ring (Completion A) := inferInstance
   norm_mul_le x y := by
@@ -215,8 +215,8 @@ instance [SeminormedCommRing
   __ : NormedRing (Completion A) := inferInstance
 
 中文:
-实例 [SeminormedCommRing
-  签名: A] : NormedCommRing (Completion A) where
+实例 [SeminormedComm环
+  签名: A] : NormedComm环 (完备化 A) where
   定义体: inferInstance
   __ : NormedRing (Completion A) := inferInstance
 -/
@@ -233,8 +233,8 @@ instance [NormedField
   body: norm_smul_le
 
 中文:
-实例 [NormedField
-  签名: 𝕜] [SeminormedCommRing A] [NormedAlgebra 𝕜 A] :
+实例 [赋范域
+  签名: 𝕜] [SeminormedComm环 A] [赋范代数 𝕜 A] :
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -254,8 +254,8 @@ instance [NormedField
   norm_mul x y := induction_on₂ x y (isClosed_eq (by fun_prop) (by fun_prop)) (by simp [← coe_mul])
 
 中文:
-实例 [NormedField
-  签名: A] [CompletableTopField A] :
+实例 [赋范域
+  签名: A] [余mpletableTopField A] :
   定义体: inferInstance
   __ : Field (Completion A) := inferInstance
   norm_mul x y := induction_on₂ x y (isClosed_eq (by fun_prop) (by fun_prop)) (by simp [← coe_mul])

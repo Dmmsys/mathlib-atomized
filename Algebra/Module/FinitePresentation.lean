@@ -70,10 +70,10 @@ class Module.FinitePresentation
     - out : exists (s : Finset M), Submodule.span R (s : Set M) = ⊤ ∧ (LinearMap.ker (Finsupp.linearCombination R ((↑) : s -> M))).FG
 
 中文:
-类 Module.FinitePresentation
+类 模.有限呈现
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 存在 (s : Finset M), Submodule.span R (s : Set M) = ⊤ ∧ (LinearMap.ker (Finsupp.linearCombination R ((↑) : s -> M))).FG
+    - out : 存在 (s : 有限集 M), 子模.span R (s : 集合 M) = ⊤ ∧ (线性映射.ker (有限支撑.linearCombination R ((↑) : s -> M))).FG
 -/
 class Module.FinitePresentation : Prop where
   out : exists (s : Finset M), Submodule.span R (s : Set M) = ⊤ ∧
@@ -106,8 +106,8 @@ theorem Module.FinitePresentation.exists_fin
   · simpa [range_linearCombinatio
 
 中文:
-定理 Module.FinitePresentation.exists_fin
-  条件: [fp : Module.FinitePresentation R M]
+定理 模.有限呈现.存在_fin
+  条件: [fp : 模.有限呈现 R M]
   证明: by
   have ⟨ι, ⟨hι₁, hι₂⟩⟩ := fp
   refine ⟨_, LinearMap.ker (linearCombination R Subtype.val ∘ₗ
@@ -139,8 +139,8 @@ theorem Module.FinitePresentation.exists_fin'
     e.symm.injective.comp_exact_iff_exact.mpr (by simp [LinearMap.exact_iff, hg'])⟩
 
 中文:
-定理 Module.FinitePresentation.exists_fin'
-  条件: [fp : Module.FinitePresentation R M]
+定理 模.有限呈现.存在_fin'
+  条件: [fp : 模.有限呈现 R M]
   证明: by
   obtain ⟨n, K, e, h⟩ := exists_fin R M
   obtain ⟨m, g', hg'⟩ := K.fg_iff_exists_fin_linearMap.mp h
@@ -169,8 +169,8 @@ theorem Module.FinitePresentation.equiv_quotient
     .of_equiv (es ..).symm, .equiv (es ..).symm, fg.map (es ..).symm.toLinearMap⟩
 
 中文:
-定理 Module.FinitePresentation.equiv_quotient
-  条件: [Module.FinitePresentation R M] [Small.{v} R]
+定理 模.有限呈现.equiv_quotient
+  条件: [模.有限呈现 R M] [Small.{v} R]
   证明: have ⟨_n, _K, e, fg⟩ := Module.FinitePresentation.exists_fin R M
   let es := Shrink.linearEquiv
   ⟨_, inferInstance, inferInstance, _, e ≪≫ₗ Submodule.Quotient.equiv _ _ (es ..).symm rfl,
@@ -202,8 +202,8 @@ lemma Module.finitePresentation_of_finite
   exact ⟨s, hs, IsNoetherian.noetherian _⟩
 
 中文:
-引理 Module.finitePresentation_of_finite
-  条件: [IsNoetherianRing R] [h : Module.Finite R M]
+引理 模.finitePresentation_of_finite
+  条件: [是Noether环 R] [h : 模.有限 R M]
   证明: by
   obtain ⟨s, hs⟩ := h
   exact ⟨s, hs, IsNoetherian.noetherian _⟩
@@ -224,8 +224,8 @@ lemma Module.finitePresentation_iff_finite
   proof: ⟨fun _ => inferInstance, fun _ => finitePresentation_of_finite R M⟩
 
 中文:
-引理 Module.finitePresentation_iff_finite
-  条件: [IsNoetherianRing R]
+引理 模.finitePresentation_iff_finite
+  条件: [是Noether环 R]
   证明: ⟨fun _ => inferInstance, fun _ => finitePresentation_of_finite R M⟩
 
 Depends on / 依赖: finitePresentation_of_finite
@@ -252,8 +252,8 @@ lemma Module.finitePresentation_of_free_of_surjective
   choose σ hσ using t
 
 中文:
-引理 Module.finitePresentation_of_free_of_surjective
-  结论: [Module.Free R M] [Module.Finite R M]
+引理 模.finitePresentation_of_free_of_surjective
+  结论: [模.自由 R M] [模.有限 R M]
   证明: by
   let b := Module.Free.chooseBasis R M
   let π : Free.ChooseBasisIndex R M -> (Set.finite_range (l ∘ b)).toFinset :=
@@ -308,8 +308,8 @@ lemma Module.finitePresentation_of_projective
     (LinearMap.ker_eq_range_of_comp_eq_id hfg ▸ .of_finite)
 
 中文:
-引理 Module.finitePresentation_of_projective
-  条件: [Projective R M] [Module.Finite R M]
+引理 模.finitePresentation_of_projective
+  条件: [投射 R M] [模.有限 R M]
   证明: have ⟨_n, _f, _g, surj, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
   Module.finitePresentation_of_free_of_surjective _ surj
     (LinearMap.ker_eq_range_of_comp_eq_id hfg ▸ .of_finite)
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.FinitePresentation R R
+  签名: 模.有限呈现 R R
   定义体: Module.finitePresentation_of_projective _ _
 
 Depends on / 依赖: Module, Module.finitePresentation_of_projective, finitePresentation_of_projective
@@ -350,7 +350,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.FinitePresentation R (ι ->₀ R)
+  签名: 模.有限呈现 R (ι ->₀ R)
   定义体: Module.finitePresentation_of_projective _ _
 
 Depends on / 依赖: Module, Module.finitePresentation_of_projective, finitePresentation_of_projective
@@ -366,7 +366,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.FinitePresentation R (ι -> R)
+  签名: 模.有限呈现 R (ι -> R)
   定义体: Module.finitePresentation_of_projective _ _
 
 Depends on / 依赖: Module, Module.finitePresentation_of_projective, finitePresentation_of_projective
@@ -389,8 +389,8 @@ lemma Module.finitePresentation_of_surjective
   apply Module.finitePresentation_of_free_of_surjective (l ∘
 
 中文:
-引理 Module.finitePresentation_of_surjective
-  结论: [h : Module.FinitePresentation R M] (l : M ->ₗ[R] N)
+引理 模.finitePresentation_of_surjective
+  结论: [h : 模.有限呈现 R M] (l : M ->ₗ[R] N)
   证明: by
   classical
   obtain ⟨s, hs, hs'⟩ := h
@@ -433,8 +433,8 @@ lemma Module.FinitePresentation.fg_ker
   obtain ⟨f, hf⟩ : exists f : (s ->₀ R) ->ₗ[R] M, l ∘ₗ f = (Finsupp.linearCombination R Subtype.
 
 中文:
-引理 Module.FinitePresentation.fg_ker
-  结论: [Module.Finite R M]
+引理 模.有限呈现.fg_ker
+  结论: [模.有限 R M]
   证明: by
   obtain ⟨s, hs, hs'⟩ := h
   have H : Function.Surjective (Finsupp.linearCombination R ((↑) : s -> N)) :=
@@ -476,8 +476,8 @@ lemma Module.FinitePresentation.fg_ker_iff
   proof: ⟨finitePresentation_of_surjective l hl, fun _ => fg_ker l hl⟩
 
 中文:
-引理 Module.FinitePresentation.fg_ker_iff
-  结论: [Module.FinitePresentation R M]
+引理 模.有限呈现.fg_ker_iff
+  结论: [模.有限呈现 R M]
   证明: ⟨finitePresentation_of_surjective l hl, fun _ => fg_ker l hl⟩
 
 Depends on / 依赖: fg_ker, finitePresentation_of_surjective
@@ -502,8 +502,8 @@ lemma Module.finitePresentation_of_ker
   let π := Finsupp.linearComb
 
 中文:
-引理 Module.finitePresentation_of_ker
-  结论: [Module.FinitePresentation R N]
+引理 模.finitePresentation_of_ker
+  结论: [模.有限呈现 R N]
   证明: by
   obtain ⟨s, hs⟩ : (⊤ : Submodule R M).FG := by
     apply Submodule.fg_of_fg_map_of_fg_inf_ker l
@@ -553,7 +553,7 @@ lemma Module.finitePresentation_of_split_exact
   refine Module.finitePresentation_of_surjective (LinearMap.fst _ _
 
 中文:
-引理 Module.finitePresentation_of_split_exact
+引理 模.finitePresentation_of_split_exact
   证明: by
   have hg : Function.Surjective g := Function.LeftInverse.surjective (DFunLike.congr_fun hl)
   have := Module.Finite.of_surjective g hg
@@ -587,7 +587,7 @@ lemma Module.finitePresentation_of_projective_of_exact
   Module.finitePresentation_of_split_exact f g l hl hf H
 
 中文:
-引理 Module.finitePresentation_of_projective_of_exact
+引理 模.finitePresentation_of_projective_of_exact
   证明: have ⟨l, hl⟩ := Module.projective_lifting_property g .id hg
   Module.finitePresentation_of_split_exact f g l hl hf H
 
@@ -612,8 +612,8 @@ lemma Module.FinitePresentation.of_equiv
   simp [← Module.FinitePresentation.fg_ker_iff e.toLinearMap e.surjective, Submodule.fg_bot]
 
 中文:
-引理 Module.FinitePresentation.of_equiv
-  条件: (e : M ≃ₗ[R] N) [Module.FinitePresentation R M]
+引理 模.有限呈现.of_equiv
+  条件: (e : M ≃ₗ[R] N) [模.有限呈现 R M]
   证明: by
   simp [← Module.FinitePresentation.fg_ker_iff e.toLinearMap e.surjective, Submodule.fg_bot]
 
@@ -632,7 +632,7 @@ lemma LinearEquiv.finitePresentation_iff
   proof: ⟨fun _ => .of_equiv e, fun _ => .of_equiv e.symm⟩
 
 中文:
-引理 LinearEquiv.finitePresentation_iff
+引理 线性等价.finitePresentation_iff
   条件: (e : M ≃ₗ[R] N)
   证明: ⟨fun _ => .of_equiv e, fun _ => .of_equiv e.symm⟩
 
@@ -664,8 +664,8 @@ instance prod
   apply Module.finite
 
 中文:
-实例 prod
-  签名: [Module.FinitePresentation R M] [Module.FinitePresentation R N]
+实例 乘积
+  签名: [模.有限呈现 R M] [模.有限呈现 R N]
   定义体: by
   have hf : Function.Surjective (LinearMap.fst R M N) := LinearMap.fst_surjective
   have : FinitePresentation R ↥(LinearMap.ker (LinearMap.fst R M N)) := by
@@ -742,8 +742,8 @@ lemma Module.FinitePresentation.trans
   · have : Modu
 
 中文:
-引理 Module.FinitePresentation.trans
-  结论: (S : 类型) [CommRing S] [Algebra R S]
+引理 模.有限呈现.trans
+  结论: (S : 类型) [交换环 S] [代数 R S]
   证明: by
   obtain ⟨n, K, e, hK⟩ := Module.FinitePresentation.exists_fin S M
   let f : (Fin n -> S) ->ₗ[R] M := (e.symm ∘ₗ K.mkQ).restrictScalars R
@@ -793,7 +793,7 @@ lemma FinitePresentation.of_isBaseChange
     h.equiv.toLinearMap h.equiv.surjective (by simpa using Submodule.fg_bot)
 
 中文:
-引理 FinitePresentation.of_isBaseChange
+引理 有限呈现.of_isBaseChange
   证明: Module.finitePresentation_of_surjective
     h.equiv.toLinearMap h.equiv.surjective (by simpa using Submodule.fg_bot)
 
@@ -829,7 +829,7 @@ lemma Module.FinitePresentation.exists_lift_of_isLocalizedModule
    
 
 中文:
-引理 Module.FinitePresentation.exists_lift_of_isLocalizedModule
+引理 模.有限呈现.存在_lift_of_isLocalizedModule
   证明: by
   obtain ⟨σ, hσ, τ, hτ⟩ := h
   let π := Finsupp.linearCombination R ((↑) : σ -> M)
@@ -903,8 +903,8 @@ lemma Module.exists_localizedMap_surjective_of_surjective
   simpa only [
 
 中文:
-引理 Module.exists_localizedMap_surjective_of_surjective
-  结论: [Module.FinitePresentation R M]
+引理 模.存在_localizedMap_surjective_of_surjective
+  结论: [模.有限呈现 R M]
   证明: by
   obtain ⟨φ, s, hφ⟩ := FinitePresentation.exists_lift_of_isLocalizedModule S g (ϕ ∘ₗ f)
   have hmap : IsLocalizedModule.map S f g φ = s • ϕ := by
@@ -943,7 +943,7 @@ lemma Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule
   rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [← top_le_iff]; rw [← hσ
 
 中文:
-引理 Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule
+引理 模.有限.存在_smul_of_comp_eq_of_isLocalizedModule
   证明: by
   classical
   have : forall x, exists s : S, s • g₁ x = s • g₂ x := fun x =>
@@ -986,8 +986,8 @@ lemma exists_bijective_map_powers
     ext a; simpa [-EmbeddingLike.apply_eq_iff_eq, e] using congr(e
 
 中文:
-引理 exists_bijective_map_powers
-  结论: [Module.Finite R M] [Module.FinitePresentation R N]
+引理 存在_bijective_map_powers
+  结论: [模.有限 R M] [模.有限呈现 R N]
   证明: by
   let e : M' ≃ₗ[R] N' := LinearEquiv.ofBijective _ hf
   obtain ⟨l', s₀, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S f
@@ -1062,8 +1062,8 @@ lemma Module.FinitePresentation.exists_notMem_bijective
   exact ⟨g, hg, h g dvd_rfl⟩
 
 中文:
-引理 Module.FinitePresentation.exists_notMem_bijective
-  结论: [Module.Finite R M]
+引理 模.有限呈现.存在_notMem_bijective
+  结论: [模.有限 R M]
   证明: by
   obtain ⟨g, hg, h⟩ := exists_bijective_map_powers p.primeCompl fM fN f hf
   exact ⟨g, hg, h g dvd_rfl⟩
@@ -1093,7 +1093,7 @@ lemma Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule
       apply IsLocalizedModule.ext S f (IsLocalizedModule.map_
 
 中文:
-引理 Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule
+引理 模.有限呈现.存在_lift_equiv_of_isLocalizedModule
   证明: by
   obtain ⟨l', s, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S g (l ∘ₗ f)
   have : Function.Bijective (IsLocalizedModule.map S f g l') := by
@@ -1161,8 +1161,8 @@ instance Module.FinitePresentation.isLocalizedModule_map
       use ((IsLocalizedModule.map_u
 
 中文:
-实例 Module.FinitePresentation.isLocalizedModule_map
-  签名: [Module.FinitePresentation R M]
+实例 模.有限呈现.isLocalizedModule_map
+  签名: [模.有限呈现 R M]
   定义体: by
   constructor
   · intro s
@@ -1206,7 +1206,7 @@ instance Module.FinitePresentation.isLocalizedModule_mapExtendScalars
   body: IsLocalizedModule.of_linearEquiv _ _ _
 
 中文:
-实例 Module.FinitePresentation.isLocalizedModule_mapExtendScalars
+实例 模.有限呈现.isLocalizedModule_mapExtendScalars
   定义体: IsLocalizedModule.of_linearEquiv _ _ _
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.of_linearEquiv, of_linearEquiv
@@ -1227,7 +1227,7 @@ instance [Module.FinitePresentation
   body: Module.FinitePresentation.isLocalizedModule_mapExtendScalars _ _ _ _
 
 中文:
-实例 [Module.FinitePresentation
+实例 [模.有限呈现
   签名: R M] :
   定义体: Module.FinitePresentation.isLocalizedModule_mapExtendScalars _ _ _ _
 -/
@@ -1248,7 +1248,7 @@ f (.id (R := R) (M := M')) f by
     convert! show Function.Bijective LinearMap.id from Func
 
 中文:
-引理 IsLocalizedModule.exists_isLocalizedModule_powers_of_finitePresentation
+引理 是Localized模.存在_isLocalizedModule_powers_of_finitePresentation
   证明: by
   have : IsLocalizedModule S (.id (R := R) (M := M')) :=
     ⟨IsLocalizedModule.map_units f, fun y => ⟨⟨y, 1⟩, by simp⟩, by simpa using ⟨1, S.one_mem⟩⟩
@@ -1293,8 +1293,8 @@ definition Module.FinitePresentation.linearEquivMap
   (IsLocalizedModule.map S (LocalizedModule.mkLinearMap S M) (LocalizedModule.mkLinearMap S N))
 
 中文:
-定义 Module.FinitePresentation.linearEquivMap
-  签名: [Module.FinitePresentation R M]
+定义 模.有限呈现.linearEquivMap
+  签名: [模.有限呈现 R M]
   定义体: IsLocalizedModule.linearEquiv S (LocalizedModule.mkLinearMap S (M ->ₗ[R] N))
   (IsLocalizedModule.map S (LocalizedModule.mkLinearMap S M) (LocalizedModule.mkLinearMap S N))
 
@@ -1315,8 +1315,8 @@ lemma Module.FinitePresentation.linearEquivMap_apply
 @[simp]
 
 中文:
-引理 Module.FinitePresentation.linearEquivMap_apply
-  结论: [Module.FinitePresentation R M]
+引理 模.有限呈现.linearEquivMap_apply
+  结论: [模.有限呈现 R M]
   证明: IsLocalizedModule.linearEquiv_apply S _ _ f
 
 @[simp]
@@ -1339,8 +1339,8 @@ lemma Module.FinitePresentation.linearEquivMap_symm_apply
   proof: IsLocalizedModule.linearEquiv_symm_apply S _ _ f
 
 中文:
-引理 Module.FinitePresentation.linearEquivMap_symm_apply
-  结论: [Module.FinitePresentation R M]
+引理 模.有限呈现.linearEquivMap_symm_apply
+  结论: [模.有限呈现 R M]
   证明: IsLocalizedModule.linearEquiv_symm_apply S _ _ f
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.linearEquiv_symm_apply, linearEquiv_symm_apply
@@ -1361,7 +1361,7 @@ definition Module.FinitePresentation.linearEquivMapExtendScalars
     (LocalizedModule.mkLinearMap S N) (Localization S))
 
 中文:
-定义 Module.FinitePresentation.linearEquivMapExtendScalars
+定义 模.有限呈现.linearEquivMapExtendScalars
   定义体: IsLocalizedModule.linearEquiv S (LocalizedModule.mkLinearMap S (M ->ₗ[R] N))
   (IsLocalizedModule.mapExtendScalars S (LocalizedModule.mkLinearMap S M)
     (LocalizedModule.mkLinearMap S N) (Localization S))
@@ -1385,8 +1385,8 @@ lemma Module.FinitePresentation.linearEquivMapExtendScalars_apply
 @[simp]
 
 中文:
-引理 Module.FinitePresentation.linearEquivMapExtendScalars_apply
-  结论: [Module.FinitePresentation R M]
+引理 模.有限呈现.linearEquivMapExtendScalars_apply
+  结论: [模.有限呈现 R M]
   证明: IsLocalizedModule.linearEquiv_apply S _ _ f
 
 @[simp]
@@ -1408,7 +1408,7 @@ lemma Module.FinitePresentation.linearEquivMapExtendScalars_symm_apply
   proof: IsLocalizedModule.linearEquiv_symm_apply S _ _ f
 
 中文:
-引理 Module.FinitePresentation.linearEquivMapExtendScalars_symm_apply
+引理 模.有限呈现.linearEquivMapExtendScalars_symm_apply
   证明: IsLocalizedModule.linearEquiv_symm_apply S _ _ f
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.linearEquiv_symm_apply, linearEquiv_symm_apply
@@ -1439,8 +1439,8 @@ lemma Module.isBaseChange_map_of_finite_free
     (
 
 中文:
-引理 Module.isBaseChange_map_of_finite_free
-  条件: (S ι : 类型) [Finite ι] [CommRing S] [Algebra R S]
+引理 模.isBaseChange_map_of_finite_free
+  条件: (S ι : 类型) [有限 ι] [交换环 S] [代数 R S]
   证明: by
   classical
   have : Fintype ι := Fintype.ofFinite ι
@@ -1480,8 +1480,8 @@ theorem Module.FinitePresentation.isBaseChange_map
     (Module.isBaseChange_map_of_finite_free N S _) (Module.isBaseChan
 
 中文:
-定理 Module.FinitePresentation.isBaseChange_map
-  结论: (S : 类型) [CommRing S] [Algebra R S]
+定理 模.有限呈现.isBaseChange_map
+  结论: (S : 类型) [交换环 S] [代数 R S]
   证明: by
   obtain ⟨n, m, f, g, hf, hfg⟩ := Module.FinitePresentation.exists_fin' R M
   refine IsBaseChange.of_left_exact S (f' := (f.baseChange S).lcomp S (S otimes[R] N))

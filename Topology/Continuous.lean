@@ -40,7 +40,7 @@ theorem continuous_def
 
 中文:
 定理 continuous_def
-  条件: {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X -> Y}
+  条件: {_ : 拓扑空间 X} {_ : 拓扑空间 Y} {f : X -> Y}
   证明: ⟨fun hf => hf.1, fun h => ⟨h⟩⟩
 -/
 theorem continuous_def {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X -> Y} :
@@ -59,8 +59,8 @@ theorem IsOpen.preimage
   proof: hf.isOpen_preimage t h
 
 中文:
-定理 IsOpen.preimage
-  条件: (hf : Continuous f) {t : Set Y} (h : IsOpen t)
+定理 是开集.原像
+  条件: (hf : 连续 f) {t : 集合 Y} (h : 是开集 t)
   证明: hf.isOpen_preimage t h
 
 Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage
@@ -80,9 +80,9 @@ lemma Equiv.continuous_symm_iff
   simp_rw [continuous_def, ← Equiv.image_eq_preimage_symm, IsOpenMap]
 
 中文:
-引理 Equiv.continuous_symm_iff
+引理 等价.continuous_symm_iff
   条件: (e : X ≃ Y)
-  结论: Continuous e.symm ↔ IsOpenMap e
+  结论: 连续 e.symm ↔ 是开映射 e
   证明: by
   simp_rw [continuous_def, ← Equiv.image_eq_preimage_symm, IsOpenMap]
 
@@ -102,9 +102,9 @@ lemma Equiv.isOpenMap_symm_iff
   simp_rw [← Equiv.continuous_symm_iff, Equiv.symm_symm]
 
 中文:
-引理 Equiv.isOpenMap_symm_iff
+引理 等价.isOpenMap_symm_iff
   条件: (e : X ≃ Y)
-  结论: IsOpenMap e.symm ↔ Continuous e
+  结论: 是开映射 e.symm ↔ 连续 e
   证明: by
   simp_rw [← Equiv.continuous_symm_iff, Equiv.symm_symm]
 
@@ -142,9 +142,9 @@ theorem Continuous.congr
   proof: .mp h continuous_congr h'
 
 中文:
-定理 Continuous.congr
-  条件: {g : X -> Y} (h : Continuous f) (h' : 对任意 x, f x = g x)
-  结论: Continuous g
+定理 连续.congr
+  条件: {g : X -> Y} (h : 连续 f) (h' : 对任意 x, f x = g x)
+  结论: 连续 g
   证明: .mp h continuous_congr h'
 
 Depends on / 依赖: continuous_congr
@@ -237,7 +237,7 @@ theorem ContinuousAt.preimage_mem_nhds
 
 中文:
 定理 ContinuousAt.preimage_mem_nhds
-  结论: {t : Set Y} (h : ContinuousAt f x)
+  结论: {t : 集合 Y} (h : ContinuousAt f x)
   证明: h ht
 -/
 theorem ContinuousAt.preimage_mem_nhds {t : Set Y} (h : ContinuousAt f x)
@@ -254,7 +254,7 @@ theorem ContinuousAt.eventually_mem
 
 中文:
 定理 ContinuousAt.eventually_mem
-  结论: {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : Set Y}
+  结论: {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : 集合 Y}
   证明: hf hs
 -/
 theorem ContinuousAt.eventually_mem {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : Set Y}
@@ -272,7 +272,7 @@ lemma not_continuousAt_of_tendsto
 
 中文:
 引理 not_continuousAt_of_tendsto
-  结论: {f : X -> Y} {l₁ : Filter X} {l₂ : Filter Y} {x : X}
+  结论: {f : X -> Y} {l₁ : 滤子 X} {l₂ : 滤子 Y} {x : X}
   证明: fun cont =>
   (cont.mono_left hl₁).not_tendsto hl₂ hf
 -/
@@ -291,7 +291,7 @@ theorem ClusterPt.map
 
 中文:
 定理 ClusterPt.map
-  结论: {lx : Filter X} {ly : Filter Y} (H : ClusterPt x lx)
+  结论: {lx : 滤子 X} {ly : 滤子 Y} (H : ClusterPt x lx)
   证明: (NeBot.map H f).mono hfc.tendsto.inf hf
 
 Depends on / 依赖: NeBot.map, hfc.tendsto.inf, tendsto
@@ -310,7 +310,7 @@ theorem preimage_interior_subset_interior_preimage
 
 中文:
 定理 preimage_interior_subset_interior_preimage
-  条件: {t : Set Y} (hf : Continuous f)
+  条件: {t : 集合 Y} (hf : 连续 f)
   证明: interior_maximal (preimage_mono interior_subset) (isOpen_interior.preimage hf)
 
 Depends on / 依赖: interior_maximal, interior_subset, isOpen_interior, isOpen_interior.preimage, preimage, preimage_mono
@@ -354,7 +354,7 @@ theorem continuous_id
 
 中文:
 定理 continuous_id
-  结论: Continuous (id : X -> X)
+  结论: 连续 (id : X -> X)
   证明: continuous_def.2 fun _ => id
 -/
 theorem continuous_id : Continuous (id : X -> X) :=
@@ -372,7 +372,7 @@ theorem continuous_id'
 
 中文:
 定理 continuous_id'
-  结论: Continuous (fun (x : X) => x)
+  结论: 连续 (fun (x : X) => x)
   证明: continuous_id
 
 Depends on / 依赖: continuous_id
@@ -388,8 +388,8 @@ theorem Continuous.comp
   proof: continuous_def.2 fun _ h => (h.preimage hg).preimage hf
 
 中文:
-定理 Continuous.comp
-  条件: {g : Y -> Z} (hg : Continuous g) (hf : Continuous f)
+定理 连续.comp
+  条件: {g : Y -> Z} (hg : 连续 g) (hf : 连续 f)
   证明: continuous_def.2 fun _ h => (h.preimage hg).preimage hf
 
 Depends on / 依赖: continuous_def, h.preimage, preimage
@@ -411,8 +411,8 @@ theorem Continuous.comp'
 @[fun_prop]
 
 中文:
-定理 Continuous.comp'
-  条件: {g : Y -> Z} (hg : Continuous g) (hf : Continuous f)
+定理 连续.comp'
+  条件: {g : Y -> Z} (hg : 连续 g) (hf : 连续 f)
   证明: hg.comp hf
 
 @[fun_prop]
@@ -439,9 +439,9 @@ nonrec theorem ContinuousAt.comp {g : Y -> Z} (hg : ContinuousAt g (f x))
 @[fun_prop]
 
 中文:
-定理 Continuous.iterate
-  条件: {f : X -> X} (h : Continuous f) (n : 自然数)
-  结论: Continuous f^[n]
+定理 连续.iterate
+  条件: {f : X -> X} (h : 连续 f) (n : 自然数)
+  结论: 连续 f^[n]
   证明: Nat.recOn n continuous_id fun _ ihn => ihn.comp h
 
 nonrec theorem ContinuousAt.comp {g : Y -> Z} (hg : ContinuousAt g (f x))
@@ -507,9 +507,9 @@ theorem Continuous.tendsto
     ⟨f ⁻¹' t, ⟨hxt, ht.preimage hf⟩, Subset.rfl⟩
 
 中文:
-定理 Continuous.tendsto
-  条件: (hf : Continuous f) (x)
-  结论: Tendsto f (𝓝 x) (𝓝 (f x))
+定理 连续.tendsto
+  条件: (hf : 连续 f) (x)
+  结论: 收敛 f (𝓝 x) (𝓝 (f x))
   证明: ((nhds_basis_opens x).tendsto_iff <| nhds_basis_opens <| f x).2 fun t ⟨hxt, ht⟩ =>
     ⟨f ⁻¹' t, ⟨hxt, ht.preimage hf⟩, Subset.rfl⟩
 
@@ -530,8 +530,8 @@ theorem Continuous.tendsto'
 @[fun_prop]
 
 中文:
-定理 Continuous.tendsto'
-  条件: (hf : Continuous f) (x : X) (y : Y) (h : f x = y)
+定理 连续.tendsto'
+  条件: (hf : 连续 f) (x : X) (y : Y) (h : f x = y)
   证明: h ▸ hf.tendsto x
 
 @[fun_prop]
@@ -553,8 +553,8 @@ theorem Continuous.continuousAt
   proof: h.tendsto x
 
 中文:
-定理 Continuous.continuousAt
-  条件: (h : Continuous f)
+定理 连续.continuousAt
+  条件: (h : 连续 f)
   结论: ContinuousAt f x
   证明: h.tendsto x
 
@@ -576,7 +576,7 @@ hf x hU.mem_nhds hx⟩
 
 中文:
 定理 continuous_iff_continuousAt
-  结论: Continuous f ↔ 对任意 x, ContinuousAt f x
+  结论: 连续 f ↔ 对任意 x, ContinuousAt f x
   证明: ⟨Continuous.tendsto, fun hf => continuous_def.2 fun _U hU => isOpen_iff_mem_nhds.2 fun x hx =>
 hf x hU.mem_nhds hx⟩
 
@@ -622,7 +622,7 @@ theorem continuous_const
 
 中文:
 定理 continuous_const
-  结论: Continuous fun _ : X => y
+  结论: 连续 fun _ : X => y
   证明: continuous_iff_continuousAt.mpr fun _ => continuousAt_const
 -/
 theorem continuous_const : Continuous fun _ : X => y :=
@@ -637,7 +637,7 @@ theorem Filter.EventuallyEq.continuousAt
   proof: (continuousAt_congr h).2 tendsto_const_nhds
 
 中文:
-定理 Filter.EventuallyEq.continuousAt
+定理 滤子.EventuallyEq.continuousAt
   条件: (h : f =ᶠ[𝓝 x] fun _ => y)
   证明: (continuousAt_congr h).2 tendsto_const_nhds
 
@@ -660,7 +660,7 @@ Filter.EventuallyEq.continuousAt Eventually.of_forall fun y => h y x
 中文:
 定理 continuous_of_const
   条件: (h : 对任意 x y, f x = f y)
-  结论: Continuous f
+  结论: 连续 f
   证明: continuous_iff_continuousAt.mpr fun x =>
 Filter.EventuallyEq.continuousAt Eventually.of_forall fun y => h y x
 
@@ -742,7 +742,7 @@ theorem continuous_iff_isClosed
 
 中文:
 定理 continuous_iff_isClosed
-  结论: Continuous f ↔ 对任意 s, IsClosed s -> IsClosed (f ⁻¹' s)
+  结论: 连续 f ↔ 对任意 s, 是闭集 s -> 是闭集 (f ⁻¹' s)
   证明: continuous_def.trans compl_surjective.forall.trans by
     simp only [isOpen_compl_iff, preimage_compl]
 
@@ -761,8 +761,8 @@ theorem IsClosed.preimage
   proof: continuous_iff_isClosed.mp hf t h
 
 中文:
-定理 IsClosed.preimage
-  条件: (hf : Continuous f) {t : Set Y} (h : IsClosed t)
+定理 是闭集.原像
+  条件: (hf : 连续 f) {t : 集合 Y} (h : 是闭集 t)
   证明: continuous_iff_isClosed.mp hf t h
 
 Depends on / 依赖: continuous_iff_isClosed, continuous_iff_isClosed.mp
@@ -804,8 +804,8 @@ theorem Continuous.closure_preimage_subset
   exact closure_mono (preimage_mono subset_closure)
 
 中文:
-定理 Continuous.closure_preimage_subset
-  条件: (hf : Continuous f) (t : Set Y)
+定理 连续.closure_preimage_subset
+  条件: (hf : 连续 f) (t : 集合 Y)
   证明: by
   rw [← (isClosed_closure.preimage hf).closure_eq]
   exact closure_mono (preimage_mono subset_closure)
@@ -826,8 +826,8 @@ theorem Continuous.frontier_preimage_subset
   proof: sdiff_subset_sdiff (hf.closure_preimage_subset t) (preimage_interior_subset_interior_preimage hf)
 
 中文:
-定理 Continuous.frontier_preimage_subset
-  条件: (hf : Continuous f) (t : Set Y)
+定理 连续.frontier_preimage_subset
+  条件: (hf : 连续 f) (t : 集合 Y)
   证明: sdiff_subset_sdiff (hf.closure_preimage_subset t) (preimage_interior_subset_interior_preimage hf)
 
 Depends on / 依赖: closure_preimage_subset, hf.closure_preimage_subset, preimage_interior_subset_interior_preimage, sdiff_subset_sdiff
@@ -847,8 +847,8 @@ theorem Set.MapsTo.closure
   exact fun x hx => hx.map hc.continuousAt (tendsto_principal_principal.2 h)
 
 中文:
-定理 Set.MapsTo.closure
-  结论: {t : Set Y} (h : MapsTo f s t)
+定理 集合.映射到.closure
+  结论: {t : 集合 Y} (h : 映射到 f s t)
   证明: by
   simp only [MapsTo, mem_closure_iff_clusterPt]
   exact fun x hx => hx.map hc.continuousAt (tendsto_principal_principal.2 h)
@@ -868,7 +868,7 @@ theorem image_closure_subset_closure_image
 
 中文:
 定理 image_closure_subset_closure_image
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: ((mapsTo_image f s).closure h).image_subset
 
 Depends on / 依赖: closure, image_subset, mapsTo_image
@@ -889,7 +889,7 @@ theorem closure_image_closure
 
 中文:
 定理 closure_image_closure
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: Subset.antisymm
     (closure_minimal (image_closure_subset_closure_image h) isClosed_closure)
     (closure_mono <| image_mono subset_closure)
@@ -912,7 +912,7 @@ theorem closure_subset_preimage_closure_image
 
 中文:
 定理 closure_subset_preimage_closure_image
-  条件: (h : Continuous f)
+  条件: (h : 连续 f)
   证明: (mapsTo_image _ _).closure h
 
 Depends on / 依赖: closure, mapsTo_image
@@ -931,7 +931,7 @@ lemma nonempty_preimage_closure_image
 
 中文:
 引理 nonempty_preimage_closure_image
-  条件: (h : Continuous f) (t : Set X) (ht : t.Nonempty)
+  条件: (h : 连续 f) (t : 集合 X) (ht : t.非空)
   证明: (Nonempty.mono (closure_subset_preimage_closure_image h (s := t)) (closure_nonempty_iff.mpr ht))
 
 Depends on / 依赖: Nonempty, Nonempty.mono, closure_nonempty_iff, closure_nonempty_iff.mpr, closure_subset_preimage_closure_image
@@ -973,7 +973,7 @@ theorem map_mem_closure
 
 中文:
 定理 map_mem_closure
-  结论: {t : Set Y} (hf : Continuous f)
+  结论: {t : 集合 Y} (hf : 连续 f)
   证明: ht.closure hf hx
 
 Depends on / 依赖: closure, ht.closure
@@ -991,8 +991,8 @@ theorem Set.MapsTo.closure_left
   proof: ht.closure_eq ▸ h.closure hc
 
 中文:
-定理 Set.MapsTo.closure_left
-  结论: {t : Set Y} (h : MapsTo f s t)
+定理 集合.映射到.closure_left
+  结论: {t : 集合 Y} (h : 映射到 f s t)
   证明: ht.closure_eq ▸ h.closure hc
 
 Depends on / 依赖: closure, closure_eq, h.closure, ht.closure_eq
@@ -1011,8 +1011,8 @@ theorem Filter.Tendsto.lift'_closure
     filter_upwards [mem_lift' (h hs)] using (mapsTo_preimage _ _).closure hf
 
 中文:
-定理 Filter.Tendsto.lift'_closure
-  条件: (hf : Continuous f) {l l'} (h : Tendsto f l l')
+定理 滤子.收敛.lift'_closure
+  条件: (hf : 连续 f) {l l'} (h : 收敛 f l l')
   证明: tendsto_lift'.2 fun s hs => by
     filter_upwards [mem_lift' (h hs)] using (mapsTo_preimage _ _).closure hf
 
@@ -1033,7 +1033,7 @@ theorem tendsto_lift'_closure_nhds
 
 中文:
 定理 tendsto_lift'_closure_nhds
-  条件: (hf : Continuous f) (x : X)
+  条件: (hf : 连续 f) (x : X)
   证明: (hf.tendsto x).lift'_closure hf
 
 Depends on / 依赖: _closure, hf.tendsto, tendsto
@@ -1062,8 +1062,8 @@ theorem Function.Surjective.denseRange
   simp [hf.range_eq]
 
 中文:
-定理 Function.Surjective.denseRange
-  条件: (hf : Function.Surjective f)
+定理 函数.满射.denseRange
+  条件: (hf : 函数.满射 f)
   结论: DenseRange f
   证明: fun x => by
   simp [hf.range_eq]
@@ -1147,7 +1147,7 @@ lemma denseRange_subtype_val
 中文:
 引理 denseRange_subtype_val
   条件: {p : X -> 命题}
-  结论: DenseRange (@Subtype.val _ p) ↔ Dense {x | p x}
+  结论: DenseRange (@子类型.val _ p) ↔ 稠密 {x | p x}
   证明: by
   simp [DenseRange]
 
@@ -1166,8 +1166,8 @@ theorem Dense.denseRange_val
   proof: denseRange_subtype_val.2 h
 
 中文:
-定理 Dense.denseRange_val
-  条件: (h : Dense s)
+定理 稠密.denseRange_val
+  条件: (h : 稠密 s)
   结论: DenseRange ((↑) : s -> X)
   证明: denseRange_subtype_val.2 h
 
@@ -1187,8 +1187,8 @@ theorem Continuous.range_subset_closure_image_dense
   exact image_closure_subset_closure_image hf
 
 中文:
-定理 Continuous.range_subset_closure_image_dense
-  结论: {f : X -> Y} (hf : Continuous f)
+定理 连续.range_subset_closure_image_dense
+  结论: {f : X -> Y} (hf : 连续 f)
   证明: by
   rw [← image_univ]; rw [← hs.closure_eq]
   exact image_closure_subset_closure_image hf
@@ -1210,7 +1210,7 @@ theorem DenseRange.dense_image
 
 中文:
 定理 DenseRange.dense_image
-  结论: {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
+  结论: {f : X -> Y} (hf' : DenseRange f) (hf : 连续 f)
   证明: (hf'.mono <| hf.range_subset_closure_image_dense hs).of_closure
 
 Depends on / 依赖: hf.range_subset_closure_image_dense, of_closure, range_subset_closure_image_dense
@@ -1231,7 +1231,7 @@ theorem DenseRange.subset_closure_image_preimage_of_isOpen
 
 中文:
 定理 DenseRange.subset_closure_image_preimage_of_isOpen
-  条件: (hf : DenseRange f) (hs : IsOpen s)
+  条件: (hf : DenseRange f) (hs : 是开集 s)
   证明: by
   rw [image_preimage_eq_inter_range]
   exact hf.open_subset_closure_inter hs
@@ -1253,7 +1253,7 @@ theorem DenseRange.dense_of_mapsTo
 
 中文:
 定理 DenseRange.dense_of_mapsTo
-  结论: {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
+  结论: {f : X -> Y} (hf' : DenseRange f) (hf : 连续 f)
   证明: (hf'.dense_image hf hs).mono ht.image_subset
 
 Depends on / 依赖: dense_image, ht.image_subset, image_subset
@@ -1306,8 +1306,8 @@ theorem DenseRange.nonempty
 
 中文:
 定理 DenseRange.nonempty
-  条件: [h : Nonempty X] (hf : DenseRange f)
-  结论: Nonempty α
+  条件: [h : 非空 X] (hf : DenseRange f)
+  结论: 非空 α
   证明: hf.nonempty_iff.mpr h
 
 Depends on / 依赖: hf.nonempty_iff.mpr, nonempty_iff
@@ -1432,7 +1432,7 @@ definition strans
 
 中文:
 定义 strans
-  签名: {x : F} (γ γ' : Path x x) (t₀ : I)
+  签名: {x : F} (γ γ' : 道路 x x) (t₀ : I)
 -/
 def strans {x : F} (γ γ' : Path x x) (t₀ : I) : Path x x
 ```
@@ -1483,7 +1483,7 @@ lemma ContinuousOn.comp_fract
 
 中文:
 引理 ContinuousOn.comp_fract
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: -- hf.comp (continuousAt_id.prod continuousAt_id) -- type mismatch
   -- hf.comp_of_eq (continuousAt_id.prod continuousAt_id) rfl -- works
 ```

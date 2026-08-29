@@ -34,7 +34,7 @@ lemma BddAbove.range_comp_of_nonneg
 
 中文:
 引理 BddAbove.range_comp_of_nonneg
-  结论: {α β γ : 类型} [Nonempty α] [Preorder β] [Zero β] [Preorder γ]
+  结论: {α β γ : 类型} [非空 α] [预序 β] [零 β] [预序 γ]
   证明: by
   suffices hg' : BddAbove (g '' range f) by
     rwa [← Function.comp_def, Set.range_comp]
@@ -70,7 +70,7 @@ theorem bddAbove_range_mul
 
 中文:
 定理 bddAbove_range_mul
-  结论: {α β : 类型} [Nonempty α] {u v : α -> β} [Preorder β] [Zero β] [Mul β]
+  结论: {α β : 类型} [非空 α] {u v : α -> β} [预序 β] [零 β] [乘法 β]
   证明: letI : Zero (β × β) := ⟨(0, 0)⟩
   BddAbove.range_comp_of_nonneg (f := fun i => (u i, v i)) (g := fun x => x.1 * x.2)
     (bddAbove_range_prod.mpr ⟨hu, hv⟩) (fun x => ⟨hu0 x, hv0 x⟩) ((monotone_fst.monotoneOn _).mul

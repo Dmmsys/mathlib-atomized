@@ -30,8 +30,8 @@ unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β :
     if let some b := (← c
 
 中文:
-定义 injectIntoBaseIO
-  签名: {α : Type} (a : α)
+定义 inject整数oBaseIO
+  签名: {α : 类型} (a : α)
   定义体: pure a
 
 @[deprecated "deprecated without replacement" (since := "2026-01-24")]

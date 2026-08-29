@@ -146,7 +146,7 @@ scoped[Topology] notation "𝓝[" s "] " x:100 => nhdsWithin x s
 
 中文:
 定义 nhdsWithin
-  签名: (x : X) (s : Set X)
+  签名: (x : X) (s : 集合 X)
   定义体: 𝓝 x ⊓ 𝓟 s
 
 @[inherit_doc]
@@ -186,7 +186,7 @@ definition nhdsSet
 
 中文:
 定义 nhdsSet
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: sSup (nhds '' s)
 
 @[inherit_doc] scoped[Topology] notation "𝓝ˢ" => nhdsSet
@@ -208,7 +208,7 @@ definition nhdsSetWithin
 
 中文:
 定义 nhdsSetWithin
-  签名: (s t : Set X)
+  签名: (s t : 集合 X)
   定义体: 𝓝ˢ s ⊓ 𝓟 t
 
 @[inherit_doc] scoped[Topology] notation "𝓝ˢ[" t "] " s:100 => nhdsSetWithin s t
@@ -227,7 +227,7 @@ definition nhdsKer
 
 中文:
 定义 nhdsKer
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: (𝓝ˢ s).ker
 -/
 def nhdsKer (s : Set X) : Set X := (𝓝ˢ s).ker
@@ -266,7 +266,7 @@ definition ContinuousWithinAt
 
 中文:
 定义 ContinuousWithinAt
-  签名: (f : X -> Y) (s : Set X) (x : X)
+  签名: (f : X -> Y) (s : 集合 X) (x : X)
   定义体: Tendsto f (𝓝[s] x) (𝓝 (f x))
 
 Depends on / 依赖: Tendsto
@@ -287,7 +287,7 @@ definition ContinuousOn
 
 中文:
 定义 ContinuousOn
-  签名: (f : X -> Y) (s : Set X)
+  签名: (f : X -> Y) (s : 集合 X)
   定义体: forall x in s, ContinuousWithinAt f s x
 
 Depends on / 依赖: ContinuousWithinAt
@@ -328,7 +328,7 @@ definition Inseparable
   body: 𝓝 x = 𝓝 y
 
 中文:
-定义 Inseparable
+定义 不可分
   签名: (x y : X)
   定义体: 𝓝 x = 𝓝 y
 -/
@@ -351,7 +351,7 @@ definition specializationPreorder
 
 中文:
 定义 specializationPreorder
-  签名: : Preorder X
+  签名: : 预序 X
   定义体: { Preorder.lift (OrderDual.toDual ∘ 𝓝) with
     le := fun x y => y ⤳ x
     lt := fun x y => y ⤳ x ∧ ¬x ⤳ y }
@@ -375,7 +375,7 @@ definition inseparableSetoid
 
 中文:
 定义 inseparableSetoid
-  签名: : Setoid X
+  签名: : 集合等价关系 X
   定义体: { Setoid.comap 𝓝 ⊥ with r := Inseparable }
 
 Depends on / 依赖: Inseparable, Setoid, Setoid.comap
@@ -411,8 +411,8 @@ definition Filter.lim
   body: Classical.epsilon fun x => f <= 𝓝 x
 
 中文:
-定义 Filter.lim
-  签名: [Nonempty X] (f : Filter X)
+定义 滤子.lim
+  签名: [非空 X] (f : 滤子 X)
   定义体: Classical.epsilon fun x => f <= 𝓝 x
 
 Depends on / 依赖: Classical, Classical.epsilon, epsilon
@@ -429,8 +429,8 @@ definition Filter.limUnder
   body: lim (f.map g)
 
 中文:
-定义 Filter.limUnder
-  签名: {α : 类型} [Nonempty X] (f : Filter α) (g : α -> X)
+定义 滤子.limUnder
+  签名: {α : 类型} [非空 X] (f : 滤子 α) (g : α -> X)
   定义体: lim (f.map g)
 
 Depends on / 依赖: f.map
@@ -450,7 +450,7 @@ definition ClusterPt
 
 中文:
 定义 ClusterPt
-  签名: (x : X) (F : Filter X)
+  签名: (x : X) (F : 滤子 X)
   定义体: NeBot (𝓝 x ⊓ F)
 -/
 def ClusterPt (x : X) (F : Filter X) : Prop :=
@@ -466,7 +466,7 @@ definition MapClusterPt
 
 中文:
 定义 MapClusterPt
-  签名: {ι : 类型} (x : X) (F : Filter ι) (u : ι -> X)
+  签名: {ι : 类型} (x : X) (F : 滤子 ι) (u : ι -> X)
   定义体: ClusterPt x (map u F)
 
 Depends on / 依赖: ClusterPt
@@ -483,8 +483,8 @@ definition AccPt
   body: NeBot (𝓝[!=] x ⊓ F)
 
 中文:
-定义 AccPt
-  签名: (x : X) (F : Filter X)
+定义 聚点
+  签名: (x : X) (F : 滤子 X)
   定义体: NeBot (𝓝[!=] x ⊓ F)
 -/
 def AccPt (x : X) (F : Filter X) : Prop :=
@@ -499,8 +499,8 @@ definition IsCompact
   body: forall ⦃f⦄ [NeBot f], f <= 𝓟 s -> exists x in s, ClusterPt x f
 
 中文:
-定义 IsCompact
-  签名: (s : Set X)
+定义 是紧集
+  签名: (s : 集合 X)
   定义体: forall ⦃f⦄ [NeBot f], f <= 𝓟 s -> exists x in s, ClusterPt x f
 
 Depends on / 依赖: ClusterPt
@@ -522,10 +522,10 @@ class CompactSpace
     - isCompact_univ : IsCompact (Set.univ : Set X)
 
 中文:
-类 CompactSpace
+类 紧空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - isCompact_univ : IsCompact (Set.univ : Set X)
+    - isCompact_univ : 是紧集 (集合.univ : 集合 X)
 -/
 class CompactSpace : Prop where
   /-- In a compact space, `Set.univ` is a compact set. -/
@@ -542,10 +542,10 @@ class NoncompactSpace
     - noncompact_univ : ¬IsCompact (Set.univ : Set X)
 
 中文:
-类 NoncompactSpace
+类 Noncompact空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - noncompact_univ : ¬IsCompact (Set.univ : Set X)
+    - noncompact_univ : ¬是紧集 (集合.univ : 集合 X)
 -/
 class NoncompactSpace : Prop where
   /-- In a noncompact space, `Set.univ` is not a compact set. -/
@@ -561,10 +561,10 @@ class WeaklyLocallyCompactSpace
     - exists_compact_mem_nhds((x : X)) : exists s, IsCompact s ∧ s in 𝓝 x
 
 中文:
-类 WeaklyLocallyCompactSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 WeaklyLocallyCompact空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - exists_compact_mem_nhds((x : X)) : 存在 s, IsCompact s ∧ s in 𝓝 x
+    - exists_compact_mem_nhds((x : X)) : 存在 s, 是紧集 s ∧ s in 𝓝 x
 -/
 class WeaklyLocallyCompactSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- Every point of a weakly locally compact space admits a compact neighborhood. -/
@@ -582,10 +582,10 @@ class LocallyCompactSpace
     - local_compact_nhds : forall (x : X), forall n in 𝓝 x, exists s in 𝓝 x, s subseteq n ∧ IsCompact s
 
 中文:
-类 LocallyCompactSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 局部紧空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - local_compact_nhds : 对任意 (x : X), 对任意 n in 𝓝 x, 存在 s in 𝓝 x, s subseteq n ∧ IsCompact s
+    - local_compact_nhds : 对任意 (x : X), 对任意 n in 𝓝 x, 存在 s in 𝓝 x, s subseteq n ∧ 是紧集 s
 -/
 class LocallyCompactSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a locally compact space,
@@ -603,9 +603,9 @@ class LocallyCompactPair
 
 中文:
 类 LocallyCompactPair
-  参数: (X Y : 类型) [TopologicalSpace X] [TopologicalSpace Y]
+  参数: (X Y : 类型) [拓扑空间 X] [拓扑空间 Y]
   公理与运算 (1 个):
-    - exists_mem_nhds_isCompact_mapsTo : 对任意 {f : X -> Y} {x : X} {s : Set Y}, Continuous f -> s in 𝓝 (f x) -> 存在 K in 𝓝 x, IsCompact K ∧ Set.MapsTo f K s
+    - exists_mem_nhds_isCompact_mapsTo : 对任意 {f : X -> Y} {x : X} {s : 集合 Y}, 连续 f -> s in 𝓝 (f x) -> 存在 K in 𝓝 x, 是紧集 K ∧ 集合.映射到 f K s
 -/
 class LocallyCompactPair (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] : Prop where
   /-- If `f : X → Y` is a continuous map in a locally compact pair of topological spaces
@@ -626,8 +626,8 @@ definition Filter.cocompact
   body: ⨅ (s : Set X) (_ : IsCompact s), 𝓟 sᶜ
 
 中文:
-定义 Filter.cocompact
-  签名: : Filter X
+定义 滤子.cocompact
+  签名: : 滤子 X
   定义体: ⨅ (s : Set X) (_ : IsCompact s), 𝓟 sᶜ
 
 Depends on / 依赖: IsCompact
@@ -645,8 +645,8 @@ definition Filter.coclosedCompact
   body: ⨅ (s : Set X) (_ : IsClosed s) (_ : IsCompact s), 𝓟 sᶜ
 
 中文:
-定义 Filter.coclosedCompact
-  签名: : Filter X
+定义 滤子.coclosedCompact
+  签名: : 滤子 X
   定义体: ⨅ (s : Set X) (_ : IsClosed s) (_ : IsCompact s), 𝓟 sᶜ
 
 Depends on / 依赖: IsClosed, IsCompact

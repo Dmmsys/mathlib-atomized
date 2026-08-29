@@ -42,7 +42,7 @@ lemma Functor.reflects_precoherent
         ⟨i, fun b => F.preimage (F.eff
 
 中文:
-引理 Functor.reflects_precoherent
+引理 函子.reflects_precoherent
   结论: Precoherent C where
   证明: by
     obtain ⟨β, _, Y₂, τ₂, H, i, ι, hh⟩ := Precoherent.pullback (F.map f) _ _

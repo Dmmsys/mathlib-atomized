@@ -60,7 +60,7 @@ theorem realize_eqZero
 
 中文:
 定理 realize_eqZero
-  结论: [CommRing K] [CompatibleRing K] (n : 自然数)
+  结论: [交换环 K] [余mpatible环 K] (n : 自然数)
   证明: by
   simp [eqZero]
 -/
@@ -118,7 +118,7 @@ instance model_hasChar_of_charP
 
 中文:
 实例 model_hasChar_of_charP
-  签名: [Field K] [CompatibleRing K] [CharP K p]
+  签名: [域 K] [余mpatible环 K] [特征p K p]
   定义体: by
   refine Language.Theory.model_union_iff.2 ⟨inferInstance, ?_⟩
   cases CharP.char_is_prime_or_zero K p with
@@ -160,7 +160,7 @@ theorem charP_iff_model_fieldOfChar
 
 中文:
 定理 charP_iff_model_fieldOfChar
-  条件: [Field K] [CompatibleRing K]
+  条件: [域 K] [余mpatible环 K]
   证明: by
   simp only [Theory.fieldOfChar, Theory.model_union_iff,
     (show (Theory.field.Model K) by infer_instance), true_and]
@@ -198,7 +198,7 @@ instance model_fieldOfChar_of_charP
 
 中文:
 实例 model_fieldOfChar_of_charP
-  签名: [Field K] [CompatibleRing K]
+  签名: [域 K] [余mpatible环 K]
   定义体: charP_iff_model_fieldOfChar.2 inferInstance
 
 Depends on / 依赖: charP_iff_model_fieldOfChar
@@ -218,7 +218,7 @@ theorem charP_of_model_fieldOfChar
 
 中文:
 定理 charP_of_model_fieldOfChar
-  结论: [Field K] [CompatibleRing K]
+  结论: [域 K] [余mpatible环 K]
   证明: charP_iff_model_fieldOfChar.1 h
 
 Depends on / 依赖: charP_iff_model_fieldOfChar

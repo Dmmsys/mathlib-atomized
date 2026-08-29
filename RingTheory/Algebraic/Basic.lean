@@ -42,8 +42,8 @@ theorem is_transcendental_of_subsingleton
 
 中文:
 定理 is_transcendental_of_subsingleton
-  条件: [Subsingleton R] (x : A)
-  结论: Transcendental R x
+  条件: [子单例 R] (x : A)
+  结论: 超越 R x
   证明: fun ⟨p, h, _⟩ => h Subsingleton.elim p 0
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -65,9 +65,9 @@ theorem IsAlgebraic.nontrivial
   apply is_transcendental_of_subsingleton
 
 中文:
-定理 IsAlgebraic.nontrivial
-  条件: {a : A} (h : IsAlgebraic R a)
-  结论: Nontrivial R
+定理 是代数.nontrivial
+  条件: {a : A} (h : 是代数 R a)
+  结论: 非平凡 R
   证明: by
   contrapose! h
   apply is_transcendental_of_subsingleton
@@ -90,9 +90,9 @@ theorem Algebra.IsAlgebraic.nontrivial
   proof: (alg.1 0).nontrivial
 
 中文:
-定理 Algebra.IsAlgebraic.nontrivial
-  条件: [alg : Algebra.IsAlgebraic R A]
-  结论: Nontrivial R
+定理 代数.是代数.nontrivial
+  条件: [alg : 代数.是代数 R A]
+  结论: 非平凡 R
   证明: (alg.1 0).nontrivial
 
 Depends on / 依赖: nontrivial
@@ -114,8 +114,8 @@ theorem Polynomial.transcendental_X
   simp [transcendental_iff]
 
 中文:
-定理 Polynomial.transcendental_X
-  结论: Transcendental R (X (R := R))
+定理 多项式.transcendental_X
+  结论: 超越 R (X (R := R))
   证明: by
   simp [transcendental_iff]
 
@@ -141,7 +141,7 @@ have : (p.comp f).coeff (p.natDegree * f.natDegree) != 0 := fun h => h1 by
   exact ⟨p.comp f, fun h => this (by simp [h]), by rwa [
 
 中文:
-定理 IsAlgebraic.of_aeval
+定理 是代数.of_aeval
   结论: {r : A} (f : R[X]) (hf : f.natDegree != 0)
   证明: by
   obtain ⟨p, h1, h2⟩ := H
@@ -172,8 +172,8 @@ theorem Transcendental.aeval
   proof: fun h => H (h.of_aeval f hf hf')
 
 中文:
-定理 Transcendental.aeval
-  结论: {r : A} (H : Transcendental R r) (f : R[X]) (hf : f.natDegree != 0)
+定理 超越.aeval
+  结论: {r : A} (H : 超越 R r) (f : R[X]) (hf : f.natDegree != 0)
   证明: fun h => H (h.of_aeval f hf hf')
 
 Depends on / 依赖: h.of_aeval, of_aeval
@@ -194,8 +194,8 @@ theorem Transcendental.aeval_of_transcendental
   exact hf _ (H _ (by rwa [← aeval_comp, comp_eq_aeval] at hp))
 
 中文:
-定理 Transcendental.aeval_of_transcendental
-  结论: {r : A} (H : Transcendental R r)
+定理 超越.aeval_of_transcendental
+  结论: {r : A} (H : 超越 R r)
   证明: by
   rw [transcendental_iff] at H hf ⊢
   intro p hp
@@ -221,7 +221,7 @@ theorem Transcendental.of_aeval
   exact H p (by rw [← aeval_comp, comp_eq_aeval, hp, map_zero])
 
 中文:
-定理 Transcendental.of_aeval
+定理 超越.of_aeval
   结论: {r : A} {f : R[X]}
   证明: by
   rw [transcendental_iff] at H ⊢
@@ -247,7 +247,7 @@ theorem IsAlgebraic.of_aeval_of_transcendental
   exact Transcendental.aeval_of_transcendental H hf
 
 中文:
-定理 IsAlgebraic.of_aeval_of_transcendental
+定理 是代数.of_aeval_of_transcendental
   结论: {r : A} {f : R[X]}
   证明: by
   contrapose H
@@ -270,7 +270,7 @@ theorem Polynomial.transcendental
   simpa using (transcendental_X R).aeval f hf hf'
 
 中文:
-定理 Polynomial.transcendental
+定理 多项式.transcendental
   结论: (f : R[X]) (hf : f.natDegree != 0)
   证明: by
   simpa using (transcendental_X R).aeval f hf hf'
@@ -353,8 +353,8 @@ theorem Algebra.isAlgebraic_of_not_injective
 fun inj => h by convert! inj.comp C_injective; ext; simp
 
 中文:
-定理 Algebra.isAlgebraic_of_not_injective
-  条件: (h : ¬ Function.Injective (algebraMap R A))
+定理 代数.isAlgebraic_of_not_injective
+  条件: (h : ¬ 函数.单射 (algebraMap R A))
   证明: isAlgebraic_iff_not_injective.mpr
 fun inj => h by convert! inj.comp C_injective; ext; simp
 
@@ -377,8 +377,8 @@ theorem Algebra.injective_of_transcendental
   exact isAlgebraic_of_not_injective h
 
 中文:
-定理 Algebra.injective_of_transcendental
-  条件: [h : Algebra.Transcendental R A]
+定理 代数.injective_of_transcendental
+  条件: [h : 代数.超越 R A]
   证明: by
   rw [transcendental_iff_not_isAlgebraic] at h
   contrapose h
@@ -411,8 +411,8 @@ theorem isAlgebraic_zero
 
 中文:
 定理 isAlgebraic_zero
-  条件: [Nontrivial R]
-  结论: IsAlgebraic R (0 : A)
+  条件: [非平凡 R]
+  结论: 是代数 R (0 : A)
   证明: ⟨_, X_ne_zero, aeval_X 0⟩
 
 Depends on / 依赖: X_ne_zero, aeval_X
@@ -431,8 +431,8 @@ theorem isAlgebraic_algebraMap
 
 中文:
 定理 isAlgebraic_algebraMap
-  条件: [Nontrivial R] (x : R)
-  结论: IsAlgebraic R (algebraMap R A x)
+  条件: [非平凡 R] (x : R)
+  结论: 是代数 R (algebraMap R A x)
   证明: ⟨_, X_sub_C_ne_zero x, by rw [map_sub, aeval_X, aeval_C, sub_self]⟩
 
 Depends on / 依赖: X_sub_C_ne_zero, aeval_C, aeval_X, map_sub, sub_self
@@ -453,8 +453,8 @@ theorem isAlgebraic_one
 
 中文:
 定理 isAlgebraic_one
-  条件: [Nontrivial R]
-  结论: IsAlgebraic R (1 : A)
+  条件: [非平凡 R]
+  结论: 是代数 R (1 : A)
   证明: by
   rw [← map_one (algebraMap R A)]
   exact isAlgebraic_algebraMap 1
@@ -478,8 +478,8 @@ theorem isAlgebraic_natCast
 
 中文:
 定理 isAlgebraic_natCast
-  条件: [Nontrivial R] (n : 自然数)
-  结论: IsAlgebraic R (n : A)
+  条件: [非平凡 R] (n : 自然数)
+  结论: 是代数 R (n : A)
   证明: by
   rw [← map_natCast (_ : R ->+* A) n]
   exact isAlgebraic_algebraMap (Nat.cast n)
@@ -503,8 +503,8 @@ theorem isAlgebraic_intCast
 
 中文:
 定理 isAlgebraic_intCast
-  条件: [Nontrivial R] (n : 整数)
-  结论: IsAlgebraic R (n : A)
+  条件: [非平凡 R] (n : 整数)
+  结论: 是代数 R (n : A)
   证明: by
   rw [← map_intCast (algebraMap R A)]
   exact isAlgebraic_algebraMap (Int.cast n)
@@ -531,7 +531,7 @@ theorem isAlgebraic_ratCast
 
 中文:
 定理 isAlgebraic_ratCast
-  结论: (R : 类型u) {A : 类型v} [DivisionRing A] [Field R] [Algebra R A]
+  结论: (R : 类型u) {A : 类型v} [除环 A] [域 R] [代数 R A]
   证明: by
   rw [← map_ratCast (algebraMap R A)]
   exact isAlgebraic_algebraMap (Rat.cast n)
@@ -561,7 +561,7 @@ theorem isAlgebraic_of_mem_rootSet
 
 中文:
 定理 isAlgebraic_of_mem_rootSet
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Field A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [域 A] [代数 R A]
   证明: ⟨p, ne_zero_of_mem_rootSet hx, aeval_eq_zero_of_mem_rootSet hx⟩
 
 Depends on / 依赖: aeval_eq_zero_of_mem_rootSet, ne_zero_of_mem_rootSet
@@ -585,8 +585,8 @@ theorem IsLocalization.isAlgebraic
     rwa [← eq_mk'_iff_mul_eq, show r = 0 by simpa using congr(coeff $eq 0), mk'_zero] at h
 
 中文:
-定理 IsLocalization.isAlgebraic
-  条件: [Nontrivial R] (M : Submonoid R) [IsLocalization M S]
+定理 是Localization.isAlgebraic
+  条件: [非平凡 R] (M : 子幺半群 R) [是Localization M S]
   证明: by
     obtain rfl | hx := eq_or_ne x 0
     · exact isAlgebraic_zero
@@ -617,7 +617,7 @@ theorem IsAlgebraic.algebraMap
   ⟨f, hf₁, by rw [aeval_algebraMap_apply, hf₂, map_zero]⟩
 
 中文:
-定理 IsAlgebraic.algebraMap
+定理 是代数.algebraMap
   条件: {a : S}
   证明: fun ⟨f, hf₁, hf₂⟩ =>
   ⟨f, hf₁, by rw [aeval_algebraMap_apply, hf₂, map_zero]⟩
@@ -640,7 +640,7 @@ theorem IsAlgebraic.algHom
   ⟨p, hp, by rw [aeval_algHom, f.comp_apply, ha, map_zero]⟩
 
 中文:
-定理 IsAlgebraic.algHom
+定理 是代数.algHom
   结论: (f : A ->ₐ[R] B) {a : A}
   证明: let ⟨p, hp, ha⟩ := h
   ⟨p, hp, by rw [aeval_algHom, f.comp_apply, ha, map_zero]⟩
@@ -661,7 +661,7 @@ theorem isAlgebraic_algHom_iff
 
 中文:
 定理 isAlgebraic_algHom_iff
-  结论: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+  结论: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: ⟨fun ⟨p, hp0, hp⟩ => ⟨p, hp0, hf by rwa [map_zero, ← f.comp_apply, ← aeval_algHom]⟩,
     IsAlgebraic.algHom f⟩
 
@@ -695,8 +695,8 @@ theorem IsAlgebraic.ringHom_of_comp_eq
   rw [← map_aeval_eq_aeval_map h]; rw [h2]; rw [map_zero]
 
 中文:
-定理 IsAlgebraic.ringHom_of_comp_eq
-  结论: (halg : IsAlgebraic R a)
+定理 是代数.ringHom_of_comp_eq
+  结论: (halg : 是代数 R a)
   证明: by
   obtain ⟨p, h1, h2⟩ := halg
   refine ⟨p.map f, (Polynomial.map_ne_zero_iff hf).2 h1, ?_⟩
@@ -723,8 +723,8 @@ theorem Transcendental.of_ringHom_of_comp_eq
   proof: fun halg => H (halg.ringHom_of_comp_eq f g hf h)
 
 中文:
-定理 Transcendental.of_ringHom_of_comp_eq
-  结论: (H : Transcendental S (g a))
+定理 超越.of_ringHom_of_comp_eq
+  结论: (H : 超越 S (g a))
   证明: fun halg => H (halg.ringHom_of_comp_eq f g hf h)
 
 Depends on / 依赖: halg.ringHom_of_comp_eq, ringHom_of_comp_eq
@@ -746,8 +746,8 @@ theorem Algebra.IsAlgebraic.ringHom_of_comp_eq
   exact (Algebra.IsAlgebraic.isAlgebraic a).ringHom_of_comp_eq f g hf h
 
 中文:
-定理 Algebra.IsAlgebraic.ringHom_of_comp_eq
-  结论: [Algebra.IsAlgebraic R A]
+定理 代数.是代数.ringHom_of_comp_eq
+  结论: [代数.是代数 R A]
   证明: by
   refine ⟨fun b => ?_⟩
   obtain ⟨a, rfl⟩ := hg b
@@ -774,8 +774,8 @@ theorem Algebra.Transcendental.of_ringHom_of_comp_eq
   exact fun halg => H (halg.ringHom_of_comp_eq f g hf hg h)
 
 中文:
-定理 Algebra.Transcendental.of_ringHom_of_comp_eq
-  结论: [H : Algebra.Transcendental S B]
+定理 代数.超越.of_ringHom_of_comp_eq
+  结论: [H : 代数.超越 S B]
   证明: by
   rw [Algebra.transcendental_iff_not_isAlgebraic] at H ⊢
   exact fun halg => H (halg.ringHom_of_comp_eq f g hf hg h)
@@ -804,8 +804,8 @@ theorem IsAlgebraic.of_ringHom_of_comp_eq
   rw [map_zero]; rw [map_aeval_eq_aeval_map h]; rw [h2]
 
 中文:
-定理 IsAlgebraic.of_ringHom_of_comp_eq
-  结论: (halg : IsAlgebraic S (g a))
+定理 是代数.of_ringHom_of_comp_eq
+  结论: (halg : 是代数 S (g a))
   证明: by
   obtain ⟨p, h1, h2⟩ := halg
   obtain ⟨q, rfl⟩ := map_surjective (f : R ->+* S) hf p
@@ -836,8 +836,8 @@ theorem Transcendental.ringHom_of_comp_eq
   proof: fun halg => H (halg.of_ringHom_of_comp_eq f g hf hg h)
 
 中文:
-定理 Transcendental.ringHom_of_comp_eq
-  结论: (H : Transcendental R a)
+定理 超越.ringHom_of_comp_eq
+  结论: (H : 超越 R a)
   证明: fun halg => H (halg.of_ringHom_of_comp_eq f g hf hg h)
 
 Depends on / 依赖: halg.of_ringHom_of_comp_eq, of_ringHom_of_comp_eq
@@ -856,8 +856,8 @@ theorem Algebra.IsAlgebraic.of_ringHom_of_comp_eq
   proof: ⟨fun a => (Algebra.IsAlgebraic.isAlgebraic (g a)).of_ringHom_of_comp_eq f g hf hg h⟩
 
 中文:
-定理 Algebra.IsAlgebraic.of_ringHom_of_comp_eq
-  结论: [Algebra.IsAlgebraic S B]
+定理 代数.是代数.of_ringHom_of_comp_eq
+  结论: [代数.是代数 S B]
   证明: ⟨fun a => (Algebra.IsAlgebraic.isAlgebraic (g a)).of_ringHom_of_comp_eq f g hf hg h⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, isAlgebraic, of_ringHom_of_comp_eq
@@ -879,8 +879,8 @@ theorem Algebra.Transcendental.ringHom_of_comp_eq
   exact fun halg => H (halg.of_ringHom_of_comp_eq f g hf hg h)
 
 中文:
-定理 Algebra.Transcendental.ringHom_of_comp_eq
-  结论: [H : Algebra.Transcendental R A]
+定理 代数.超越.ringHom_of_comp_eq
+  结论: [H : 代数.超越 R A]
   证明: by
   rw [Algebra.transcendental_iff_not_isAlgebraic] at H ⊢
   exact fun halg => H (halg.of_ringHom_of_comp_eq f g hf hg h)
@@ -958,7 +958,7 @@ theorem Algebra.isAlgebraic_ringHom_iff_of_comp_eq
     fun H => H.ringHom_of_comp_eq f g (EquivLike.injective f) (EquivLike.surjective g) h⟩
 
 中文:
-定理 Algebra.isAlgebraic_ringHom_iff_of_comp_eq
+定理 代数.isAlgebraic_ringHom_iff_of_comp_eq
   证明: ⟨fun H => H.of_ringHom_of_comp_eq f g (EquivLike.surjective f) (EquivLike.injective g) h,
     fun H => H.ringHom_of_comp_eq f g (EquivLike.injective f) (EquivLike.surjective g) h⟩
 
@@ -980,7 +980,7 @@ theorem Algebra.transcendental_ringHom_iff_of_comp_eq
     Algebra.isAlgebraic_ringHom_iff_of_comp_eq f g h]
 
 中文:
-定理 Algebra.transcendental_ringHom_iff_of_comp_eq
+定理 代数.transcendental_ringHom_iff_of_comp_eq
   证明: by
   simp_rw [Algebra.transcendental_iff_not_isAlgebraic,
     Algebra.isAlgebraic_ringHom_iff_of_comp_eq f g h]
@@ -1006,8 +1006,8 @@ theorem Algebra.IsAlgebraic.of_injective
   proof: ⟨fun _ => (isAlgebraic_algHom_iff f hf).mp (Algebra.IsAlgebraic.isAlgebraic _)⟩
 
 中文:
-定理 Algebra.IsAlgebraic.of_injective
-  结论: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+定理 代数.是代数.of_injective
+  结论: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: ⟨fun _ => (isAlgebraic_algHom_iff f hf).mp (Algebra.IsAlgebraic.isAlgebraic _)⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, isAlgebraic, isAlgebraic_algHom_iff
@@ -1025,7 +1025,7 @@ theorem AlgEquiv.isAlgebraic
   proof: Algebra.IsAlgebraic.of_injective e.symm.toAlgHom e.symm.injective
 
 中文:
-定理 AlgEquiv.isAlgebraic
+定理 代数等价.isAlgebraic
   结论: (e : A ≃ₐ[R] B)
   证明: Algebra.IsAlgebraic.of_injective e.symm.toAlgHom e.symm.injective
 
@@ -1044,7 +1044,7 @@ theorem AlgEquiv.isAlgebraic_iff
   proof: ⟨fun _ => e.isAlgebraic, fun _ => e.symm.isAlgebraic⟩
 
 中文:
-定理 AlgEquiv.isAlgebraic_iff
+定理 代数等价.isAlgebraic_iff
   条件: (e : A ≃ₐ[R] B)
   证明: ⟨fun _ => e.isAlgebraic, fun _ => e.symm.isAlgebraic⟩
 
@@ -1066,7 +1066,7 @@ theorem isAlgebraic_algebraMap_iff
 
 中文:
 定理 isAlgebraic_algebraMap_iff
-  条件: {a : S} (h : Function.Injective (algebraMap S A))
+  条件: {a : S} (h : 函数.单射 (algebraMap S A))
   证明: isAlgebraic_algHom_iff (IsScalarTower.toAlgHom R S A) h
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, isAlgebraic_algHom_iff, toAlgHom
@@ -1086,7 +1086,7 @@ theorem transcendental_algebraMap_iff
 
 中文:
 定理 transcendental_algebraMap_iff
-  条件: {a : S} (h : Function.Injective (algebraMap S A))
+  条件: {a : S} (h : 函数.单射 (algebraMap S A))
   证明: by
   simp_rw [Transcendental, isAlgebraic_algebraMap_iff h]
 
@@ -1108,7 +1108,7 @@ theorem isAlgebraic_iff_isAlgebraic_val
 
 中文:
 定理 isAlgebraic_iff_isAlgebraic_val
-  条件: {S : Subalgebra R A} {x : S}
+  条件: {S : 子代数 R A} {x : S}
   证明: (isAlgebraic_algHom_iff S.val Subtype.val_injective).symm
 
 Depends on / 依赖: S.val, Subtype, Subtype.val_injective, isAlgebraic_algHom_iff, val_injective
@@ -1127,7 +1127,7 @@ theorem transcendental_iff_transcendental_val
 
 中文:
 定理 transcendental_iff_transcendental_val
-  条件: {S : Subalgebra R A} {x : S}
+  条件: {S : 子代数 R A} {x : S}
   证明: isAlgebraic_iff_isAlgebraic_val.not
 
 Depends on / 依赖: isAlgebraic_iff_isAlgebraic_val, isAlgebraic_iff_isAlgebraic_val.not
@@ -1147,7 +1147,7 @@ theorem isAlgebraic_of_isAlgebraic_bot
 
 中文:
 定理 isAlgebraic_of_isAlgebraic_bot
-  条件: {x : S} (halg : IsAlgebraic (⊥ : Subalgebra R S) x)
+  条件: {x : S} (halg : 是代数 (⊥ : 子代数 R S) x)
   证明: halg.of_ringHom_of_comp_eq (algebraMap R (⊥ : Subalgebra R S))
     (RingHom.id S) (by rintro ⟨_, r, rfl⟩; exact ⟨r, rfl⟩) Function.injective_id rfl
 
@@ -1169,7 +1169,7 @@ theorem isAlgebraic_bot_iff
 
 中文:
 定理 isAlgebraic_bot_iff
-  条件: (h : Function.Injective (algebraMap R S)) {x : S}
+  条件: (h : 函数.单射 (algebraMap R S)) {x : S}
   证明: isAlgebraic_ringHom_iff_of_comp_eq (Algebra.botEquivOfInjective h).symm (RingHom.id S)
     Function.injective_id rfl
 
@@ -1212,7 +1212,7 @@ theorem algebra_isAlgebraic_bot_left_iff
 
 中文:
 定理 algebra_isAlgebraic_bot_left_iff
-  条件: (h : Function.Injective (algebraMap R S))
+  条件: (h : 函数.单射 (algebraMap R S))
   证明: by
   simp_rw [Algebra.isAlgebraic_def, isAlgebraic_bot_iff h]
 
@@ -1232,7 +1232,7 @@ instance algebra_isAlgebraic_bot_right
 
 中文:
 实例 algebra_isAlgebraic_bot_right
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: ⟨by rintro ⟨_, x, rfl⟩; exact isAlgebraic_algebraMap _⟩
 
 Depends on / 依赖: isAlgebraic_algebraMap
@@ -1253,8 +1253,8 @@ theorem IsAlgebraic.of_pow
   ⟨_, by rwa [expand_ne_zero hn], by rwa [expand_aeval n p r]⟩
 
 中文:
-定理 IsAlgebraic.of_pow
-  条件: {r : A} {n : 自然数} (hn : 0 < n) (ht : IsAlgebraic R (r ^ n))
+定理 是代数.of_pow
+  条件: {r : A} {n : 自然数} (hn : 0 < n) (ht : 是代数 R (r ^ n))
   证明: have ⟨p, p_nonzero, hp⟩ := ht
   ⟨_, by rwa [expand_ne_zero hn], by rwa [expand_aeval n p r]⟩
 
@@ -1274,8 +1274,8 @@ theorem Transcendental.pow
   proof: fun ht' => ht ht'.of_pow hn
 
 中文:
-定理 Transcendental.pow
-  条件: {r : A} (ht : Transcendental R r) {n : 自然数} (hn : 0 < n)
+定理 超越.pow
+  条件: {r : A} (ht : 超越 R r) {n : 自然数} (hn : 0 < n)
   证明: fun ht' => ht ht'.of_pow hn
 
 Depends on / 依赖: of_pow
@@ -1296,9 +1296,9 @@ lemma IsAlgebraic.invOf
   rwa [Polynomial.aeval_def, Polynomial.eval₂_reverse_eq_zero_iff, ← Polynomial.aeval_def]
 
 中文:
-引理 IsAlgebraic.invOf
-  条件: {x : S} [Invertible x] (h : IsAlgebraic R x)
-  结论: IsAlgebraic R (⅟x)
+引理 是代数.invOf
+  条件: {x : S} [可逆 x] (h : 是代数 R x)
+  结论: 是代数 R (⅟x)
   证明: by
   obtain ⟨p, hp, hp'⟩ := h
   refine ⟨p.reverse, by simpa using hp, ?_⟩
@@ -1320,8 +1320,8 @@ lemma IsAlgebraic.invOf_iff
   proof: ⟨IsAlgebraic.invOf, IsAlgebraic.invOf⟩
 
 中文:
-引理 IsAlgebraic.invOf_iff
-  条件: {x : S} [Invertible x]
+引理 是代数.invOf_iff
+  条件: {x : S} [可逆 x]
   证明: ⟨IsAlgebraic.invOf, IsAlgebraic.invOf⟩
 
 Depends on / 依赖: IsAlgebraic, IsAlgebraic.invOf
@@ -1345,8 +1345,8 @@ lemma IsAlgebraic.inv_iff
 alias ⟨_, IsAlgebraic.inv⟩ := IsAlgebraic.inv_iff
 
 中文:
-引理 IsAlgebraic.inv_iff
-  条件: {K} [Field K] [Algebra R K] {x : K}
+引理 是代数.inv_iff
+  条件: {K} [域 K] [代数 R K] {x : K}
   证明: by
   by_cases hx : x = 0
   · simp [hx]
@@ -1390,8 +1390,8 @@ theorem IsAlgebraic.extendScalars
     rwa [Ne, ← degree_eq_bot, degree_map_eq_of_injective hinj, degree_eq_bot], by simpa⟩
 
 中文:
-定理 IsAlgebraic.extendScalars
-  结论: (hinj : Function.Injective (algebraMap R S)) {x : A}
+定理 是代数.extendScalars
+  结论: (hinj : 函数.单射 (algebraMap R S)) {x : A}
   证明: let ⟨p, hp₁, hp₂⟩ := A_alg
   ⟨p.map (algebraMap _ _), by
     rwa [Ne, ← degree_eq_bot, degree_map_eq_of_injective hinj, degree_eq_bot], by simpa⟩
@@ -1415,7 +1415,7 @@ theorem IsAlgebraic.tower_top_of_subalgebra_le
   exact h.extendScalars (Subalgebra.inclusion_injective hle)
 
 中文:
-定理 IsAlgebraic.tower_top_of_subalgebra_le
+定理 是代数.tower_top_of_subalgebra_le
   证明: by
   let : Algebra A B := (Subalgebra.inclusion hle).toAlgebra
   have : IsScalarTower A B S := .of_algebraMap_eq fun _ => rfl
@@ -1439,8 +1439,8 @@ theorem Transcendental.restrictScalars
   proof: fun H => h (H.extendScalars hinj)
 
 中文:
-定理 Transcendental.restrictScalars
-  结论: (hinj : Function.Injective (algebraMap R S)) {x : A}
+定理 超越.restrictScalars
+  结论: (hinj : 函数.单射 (algebraMap R S)) {x : A}
   证明: fun H => h (H.extendScalars hinj)
 
 Depends on / 依赖: H.extendScalars, extendScalars
@@ -1456,7 +1456,7 @@ theorem Transcendental.of_tower_top_of_subalgebra_le
   proof: fun H => h (H.tower_top_of_subalgebra_le hle)
 
 中文:
-定理 Transcendental.of_tower_top_of_subalgebra_le
+定理 超越.of_tower_top_of_subalgebra_le
   证明: fun H => h (H.tower_top_of_subalgebra_le hle)
 
 Depends on / 依赖: H.tower_top_of_subalgebra_le, tower_top_of_subalgebra_le
@@ -1475,8 +1475,8 @@ theorem Algebra.IsAlgebraic.extendScalars
   proof: ⟨fun _ => (Algebra.IsAlgebraic.isAlgebraic _).extendScalars hinj⟩
 
 中文:
-定理 Algebra.IsAlgebraic.extendScalars
-  结论: (hinj : Function.Injective (algebraMap R S))
+定理 代数.是代数.extendScalars
+  结论: (hinj : 函数.单射 (algebraMap R S))
   证明: ⟨fun _ => (Algebra.IsAlgebraic.isAlgebraic _).extendScalars hinj⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, extendScalars, isAlgebraic
@@ -1495,8 +1495,8 @@ theorem Algebra.IsAlgebraic.tower_bot_of_injective
     simpa [isAlgebraic_algebraMap_iff hinj] using isAlgebraic (R := R) (A := A) (algebraMap _ _ x)
 
 中文:
-定理 Algebra.IsAlgebraic.tower_bot_of_injective
-  结论: [Algebra.IsAlgebraic R A]
+定理 代数.是代数.tower_bot_of_injective
+  结论: [代数.是代数 R A]
   证明: by
     simpa [isAlgebraic_algebraMap_iff hinj] using isAlgebraic (R := R) (A := A) (algebraMap _ _ x)
 
@@ -1527,8 +1527,8 @@ theorem IsAlgebraic.tower_top
   proof: A_alg.extendScalars (algebraMap K L).injective
 
 中文:
-定理 IsAlgebraic.tower_top
-  条件: {x : A} (A_alg : IsAlgebraic K x)
+定理 是代数.tower_top
+  条件: {x : A} (A_alg : 是代数 K x)
   证明: A_alg.extendScalars (algebraMap K L).injective
 
 Depends on / 依赖: A_alg, A_alg.extendScalars, algebraMap, extendScalars, injective
@@ -1547,8 +1547,8 @@ theorem Transcendental.of_tower_top
   proof: fun H => h (H.tower_top L)
 
 中文:
-定理 Transcendental.of_tower_top
-  条件: {x : A} (h : Transcendental L x)
+定理 超越.of_tower_top
+  条件: {x : A} (h : 超越 L x)
   证明: fun H => h (H.tower_top L)
 
 Depends on / 依赖: H.tower_top, tower_top
@@ -1568,9 +1568,9 @@ theorem Algebra.IsAlgebraic.tower_top
   proof: Algebra.IsAlgebraic.extendScalars (algebraMap K L).injective
 
 中文:
-定理 Algebra.IsAlgebraic.tower_top
-  条件: [Algebra.IsAlgebraic K A]
-  结论: Algebra.IsAlgebraic L A
+定理 代数.是代数.tower_top
+  条件: [代数.是代数 K A]
+  结论: 代数.是代数 L A
   证明: Algebra.IsAlgebraic.extendScalars (algebraMap K L).injective
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.extendScalars, IsAlgebraic, algebraMap, extendScalars, injective
@@ -1589,8 +1589,8 @@ theorem Algebra.IsAlgebraic.tower_bot
   proof: tower_bot_of_injective (algebraMap L A).injective
 
 中文:
-定理 Algebra.IsAlgebraic.tower_bot
-  结论: (K L A : 类型) [CommRing K] [Field L] [Ring A]
+定理 代数.是代数.tower_bot
+  结论: (K L A : 类型) [交换环 K] [域 L] [环 A]
   证明: tower_bot_of_injective (algebraMap L A).injective
 
 Depends on / 依赖: algebraMap, injective, tower_bot_of_injective
@@ -1626,7 +1626,7 @@ fun _ _ h => Subtype.ext f.injective Subtype
 
 中文:
 定理 algHom_bijective
-  条件: [IsTorsionFree K L] [Algebra.IsAlgebraic K L] (f : L ->ₐ[K] L)
+  条件: [是无挠 K L] [代数.是代数 K L] (f : L ->ₐ[K] L)
   证明: by
   refine ⟨f.injective, fun b => ?_⟩
   obtain ⟨p, hp, he⟩ := Algebra.IsAlgebraic.isAlgebraic (R := K) b
@@ -1656,7 +1656,7 @@ theorem algHom_bijective₂
 
 中文:
 定理 algHom_bijective₂
-  结论: [IsTorsionFree K L] [DivisionRing R] [Algebra K R]
+  结论: [是无挠 K L] [除环 R] [代数 K R]
   证明: (g.injective.bijective₂_of_surjective f.injective (algHom_bijective <| g.comp f).2).symm
 
 Depends on / 依赖: algHom_bijective, f.injective, g.comp, g.injective.bijective, injective
@@ -1676,7 +1676,7 @@ theorem bijective_of_isScalarTower
 
 中文:
 定理 bijective_of_isScalarTower
-  结论: [IsTorsionFree K L] [Algebra.IsAlgebraic K L]
+  结论: [是无挠 K L] [代数.是代数 K L]
   证明: (algHom_bijective₂ (IsScalarTower.toAlgHom K L R) f).2
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, toAlgHom
@@ -1696,7 +1696,7 @@ theorem bijective_of_isScalarTower'
 
 中文:
 定理 bijective_of_isScalarTower'
-  结论: [Field R] [Algebra K R]
+  结论: [域 R] [代数 K R]
   证明: (algHom_bijective₂ f (IsScalarTower.toAlgHom K L R)).1
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, toAlgHom
@@ -1723,7 +1723,7 @@ definition algEquivEquivAlgHom
 
 中文:
 定义 algEquivEquivAlgHom
-  签名: [IsTorsionFree K L] [Algebra.IsAlgebraic K L]
+  签名: [是无挠 K L] [代数.是代数 K L]
   定义体: ϕ.toAlgHom
   invFun ϕ := AlgEquiv.ofBijective ϕ (algHom_bijective ϕ)
   map_mul' _ _ := rfl
@@ -1765,7 +1765,7 @@ theorem IsAlgebraic.exists_nonzero_coeff_and_aeval_eq_zero
   exact ⟨q, hq, (S⁰.pow_mem hs (rootMultiplicity 0 p)).2 (aeval s q) hp⟩
 
 中文:
-定理 IsAlgebraic.exists_nonzero_coeff_and_aeval_eq_zero
+定理 是代数.存在_nonzero_coeff_and_aeval_eq_zero
   证明: by
   obtain ⟨p, hp0, hp⟩ := hRs
   obtain ⟨q, hpq, hq⟩ := exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp0 0
@@ -1798,8 +1798,8 @@ theorem IsAlgebraic.exists_nonzero_eq_adjoin_mul
   rwa [map_sub, hq, zero_sub, map_mul, aeval_X, aeval_C, ← map_neg, eq_comm] at hp
 
 中文:
-定理 IsAlgebraic.exists_nonzero_eq_adjoin_mul
-  条件: {s : S} (hRs : IsAlgebraic R s) (hs : s in S⁰)
+定理 是代数.存在_nonzero_eq_adjoin_mul
+  条件: {s : S} (hRs : 是代数 R s) (hs : s in S⁰)
   证明: by
   have ⟨q, hq0, hq⟩ := hRs.exists_nonzero_coeff_and_aeval_eq_zero hs
   have ⟨p, hp⟩ := X_dvd_sub_C (p := q)
@@ -1830,8 +1830,8 @@ theorem IsAlgebraic.exists_nonzero_dvd
   exact ⟨q.coeff 0, hq0, key⟩
 
 中文:
-定理 IsAlgebraic.exists_nonzero_dvd
-  条件: {s : S} (hRs : IsAlgebraic R s) (hs : s in S⁰)
+定理 是代数.存在_nonzero_dvd
+  条件: {s : S} (hRs : 是代数 R s) (hs : s in S⁰)
   证明: by
   obtain ⟨q, hq0, hq⟩ := hRs.exists_nonzero_coeff_and_aeval_eq_zero hs
   have key := map_dvd (aeval s) (X_dvd_sub_C (p := q))
@@ -1856,7 +1856,7 @@ theorem IsAlgebraic.exists_smul_eq_mul
   ⟨s * a, r, hr, by rw [smul_def, h, mul_assoc]⟩
 
 中文:
-定理 IsAlgebraic.exists_smul_eq_mul
+定理 是代数.存在_smul_eq_mul
   证明: have ⟨r, hr, s, h⟩ := hRb.exists_nonzero_dvd hb
   ⟨s * a, r, hr, by rw [smul_def, h, mul_assoc]⟩
 
@@ -1879,8 +1879,8 @@ theorem Algebra.IsAlgebraic.exists_smul_eq_mul
   proof: (isAlgebraic b).exists_smul_eq_mul a (mem_nonZeroDivisors_of_ne_zero hb)
 
 中文:
-定理 Algebra.IsAlgebraic.exists_smul_eq_mul
-  结论: [NoZeroDivisors S] [Algebra.IsAlgebraic R S]
+定理 代数.是代数.存在_smul_eq_mul
+  结论: [无零因子 S] [代数.是代数 R S]
   证明: (isAlgebraic b).exists_smul_eq_mul a (mem_nonZeroDivisors_of_ne_zero hb)
 
 Depends on / 依赖: exists_smul_eq_mul, isAlgebraic, mem_nonZeroDivisors_of_ne_zero
@@ -1907,7 +1907,7 @@ definition algEquivOfTranscendental
 
 中文:
 定义 algEquivOfTranscendental
-  签名: (s : S) (h : Transcendental R s)
+  签名: (s : S) (h : 超越 R s)
   定义体: AlgEquiv.ofBijective (aeval ⟨s, self_mem_adjoin_singleton R s⟩) by
     refine ⟨transcendental_iff_injective.mp ?_, ?_⟩
     · rwa [Subalgebra.transcendental_iff_transcendental_val]
@@ -1940,7 +1940,7 @@ theorem algEquivOfTranscendental_coe
 
 中文:
 定理 algEquivOfTranscendental_coe
-  条件: (s : S) (h : Transcendental R s)
+  条件: (s : S) (h : 超越 R s)
   证明: rfl
 
 @[simp]
@@ -1962,7 +1962,7 @@ theorem algEquivOfTranscendental_apply
 
 中文:
 定理 algEquivOfTranscendental_apply
-  条件: (s : S) (h : Transcendental R s) (f : R[X])
+  条件: (s : S) (h : 超越 R s) (f : R[X])
   证明: rfl
 -/
 theorem algEquivOfTranscendental_apply (s : S) (h : Transcendental R s) (f : R[X]) :
@@ -1980,7 +1980,7 @@ lemma algEquivOfTranscendental_apply_X
 
 中文:
 引理 algEquivOfTranscendental_apply_X
-  条件: (s : S) (h : Transcendental R s)
+  条件: (s : S) (h : 超越 R s)
   证明: by simp
 
 @[simp]
@@ -2003,7 +2003,7 @@ theorem algEquivOfTranscendental_symm_aeval
 
 中文:
 定理 algEquivOfTranscendental_symm_aeval
-  条件: (s : S) (h : Transcendental R s) (f : R[X])
+  条件: (s : S) (h : 超越 R s) (f : R[X])
   证明: by
   apply (algEquivOfTranscendental R s h).toEquiv.injective
   simp
@@ -2031,7 +2031,7 @@ theorem algEquivOfTranscendental_symm_gen
 
 中文:
 定理 algEquivOfTranscendental_symm_gen
-  条件: (s : S) (h : Transcendental R s)
+  条件: (s : S) (h : 超越 R s)
   证明: by
   apply (algEquivOfTranscendental R s h).toEquiv.injective
   simp
@@ -2054,8 +2054,8 @@ theorem Transcendental.uniqueFactorizationMonoid_adjoin
   proof: (algEquivOfTranscendental R s h).toMulEquiv.uniqueFactorizationMonoid inferInstance
 
 中文:
-定理 Transcendental.uniqueFactorizationMonoid_adjoin
-  结论: [UniqueFactorizationMonoid R] {s : S}
+定理 超越.uniqueFactorizationMonoid_adjoin
+  结论: [唯一分解幺半群 R] {s : S}
   证明: (algEquivOfTranscendental R s h).toMulEquiv.uniqueFactorizationMonoid inferInstance
 
 Depends on / 依赖: algEquivOfTranscendental, toMulEquiv, toMulEquiv.uniqueFactorizationMonoid, uniqueFactorizationMonoid
@@ -2087,8 +2087,8 @@ theorem injective_tower_top
 
 中文:
 定理 injective_tower_top
-  条件: (inj : Injective (algebraMap R A))
-  结论: Injective (algebraMap S A)
+  条件: (inj : 单射 (algebraMap R A))
+  结论: 单射 (algebraMap S A)
   证明: by
   refine (injective_iff_map_eq_zero _).mpr fun s eq => of_not_not fun ne => ?_
   have ⟨r, ne, dvd⟩ := (alg.1 s).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero ne)
@@ -2118,8 +2118,8 @@ theorem faithfulSMul_tower_top
 
 中文:
 定理 faithfulSMul_tower_top
-  条件: [FaithfulSMul R A]
-  结论: FaithfulSMul S A
+  条件: [忠实标量乘法 R A]
+  结论: 忠实标量乘法 S A
   证明: by
   rw [faithfulSMul_iff_algebraMap_injective] at *
   exact injective_tower_top S ‹_›
@@ -2224,7 +2224,7 @@ theorem Subalgebra.inv_mem_of_root_of_coeff_zero_ne_zero
   rw [inv_eq_of_root_of_coeff_zero_ne_zero this coeff_zero_ne]; rw [div_eq_inv_mul]; rw [Algeb
 
 中文:
-定理 Subalgebra.inv_mem_of_root_of_coeff_zero_ne_zero
+定理 子代数.inv_mem_of_root_of_coeff_zero_ne_zero
   结论: {x : A} {p : K[X]}
   证明: by
   suffices (x⁻¹ : L) = (-p.coeff 0)⁻¹ • aeval x (divX p) by
@@ -2260,8 +2260,8 @@ theorem Subalgebra.inv_mem_of_algebraic
     refine A.inv_mem_of_root_of_coeff_zero_ne_zero aeval_eq 
 
 中文:
-定理 Subalgebra.inv_mem_of_algebraic
-  条件: {x : A} (hx : IsAlgebraic K (x : L))
+定理 子代数.inv_mem_of_algebraic
+  条件: {x : A} (hx : 是代数 K (x : L))
   证明: by
   obtain ⟨p, ne_zero, aeval_eq⟩ := hx
   rw [Subalgebra.aeval_coe]; rw [Subalgebra.coe_eq_zero] at aeval_eq
@@ -2307,9 +2307,9 @@ theorem Subalgebra.isField_of_algebraic
         Subtype.ext (mul_inv_cancel₀ (mt (Subalgebra.coe_eq_zero _).mp ha))⟩ }
 
 中文:
-定理 Subalgebra.isField_of_algebraic
-  条件: [Algebra.IsAlgebraic K L]
-  结论: IsField A
+定理 子代数.isField_of_algebraic
+  条件: [代数.是代数 K L]
+  结论: 是域 A
   证明: { show Nontrivial A by infer_instance, Subalgebra.toCommRing A with
     mul_inv_cancel := fun {a} ha =>
       ⟨⟨a⁻¹, A.inv_mem_of_algebraic (Algebra.IsAlgebraic.isAlgebraic (a : L))⟩,
@@ -2339,9 +2339,9 @@ theorem Transcendental.infinite
   proof: .of_injective _ (transcendental_iff_injective.mp hx)
 
 中文:
-定理 Transcendental.infinite
-  条件: {x : A} (hx : Transcendental R x)
-  结论: Infinite A
+定理 超越.infinite
+  条件: {x : A} (hx : 超越 R x)
+  结论: 无限 A
   证明: .of_injective _ (transcendental_iff_injective.mp hx)
 
 Depends on / 依赖: of_injective, transcendental_iff_injective, transcendental_iff_injective.mp
@@ -2361,9 +2361,9 @@ theorem Algebra.Transcendental.infinite
   hx.infinite
 
 中文:
-定理 Algebra.Transcendental.infinite
-  条件: [Algebra.Transcendental R A]
-  结论: Infinite A
+定理 代数.超越.infinite
+  条件: [代数.超越 R A]
+  结论: 无限 A
   证明: have ⟨x, hx⟩ := ‹Algebra.Transcendental R A›
   hx.infinite
 

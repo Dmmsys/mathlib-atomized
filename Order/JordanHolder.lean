@@ -76,13 +76,13 @@ class JordanHolderLattice
     - isMaximal_inf_left_of_isMaximal_sup : forall {x y}, IsMaximal x (x ⊔ y) -> IsMaximal y (x ⊔ y) -> IsMaximal (x ⊓ y) x
 
 中文:
-类 JordanHolderLattice
-  参数: (X : 类型u) [Lattice X]
+类 Jordan-Hölder格
+  参数: (X : 类型u) [格 X]
   公理与运算 (4 个):
     - IsMaximal : X -> X -> 命题
-    - lt_of_isMaximal : 对任意 {x y}, IsMaximal x y -> x < y
-    - sup_eq_of_isMaximal : 对任意 {x y z}, IsMaximal x z -> IsMaximal y z -> x != y -> x ⊔ y = z
-    - isMaximal_inf_left_of_isMaximal_sup : 对任意 {x y}, IsMaximal x (x ⊔ y) -> IsMaximal y (x ⊔ y) -> IsMaximal (x ⊓ y) x
+    - lt_of_isMaximal : 对任意 {x y}, 是极大 x y -> x < y
+    - sup_eq_of_isMaximal : 对任意 {x y z}, 是极大 x z -> 是极大 y z -> x != y -> x ⊔ y = z
+    - isMaximal_inf_left_of_isMaximal_sup : 对任意 {x y}, 是极大 x (x ⊔ y) -> 是极大 y (x ⊔ y) -> 是极大 (x ⊓ y) x
 -/
 class JordanHolderLattice (X : Type u) [Lattice X] where
   IsMaximal : X -> X -> Prop
@@ -111,7 +111,7 @@ definition Iso
   body: Relation.EqvGen fun (x, xsy) (xiy, y) => IsMaximal x xsy ∧ xsy = x ⊔ y ∧ xiy = x ⊓ y
 
 中文:
-定义 Iso
+定义 同构
   签名: : X × X -> X × X -> 命题
   定义体: Relation.EqvGen fun (x, xsy) (xiy, y) => IsMaximal x xsy ∧ xsy = x ⊔ y ∧ xiy = x ⊓ y
 
@@ -132,7 +132,7 @@ theorem iso_refl
 中文:
 定理 iso_refl
   条件: {x : X × X}
-  结论: Iso x x
+  结论: 同构 x x
   证明: Relation.EqvGen.refl x
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.refl
@@ -151,8 +151,8 @@ theorem iso_symm
 
 中文:
 定理 iso_symm
-  条件: {x y : X × X} (h : Iso x y)
-  结论: Iso y x
+  条件: {x y : X × X} (h : 同构 x y)
+  结论: 同构 y x
   证明: Relation.EqvGen.symm x y h
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.symm
@@ -171,8 +171,8 @@ theorem iso_trans
 
 中文:
 定理 iso_trans
-  条件: {x y z : X × X} (hxy : Iso x y) (hyz : Iso y z)
-  结论: Iso x z
+  条件: {x y z : X × X} (hxy : 同构 x y) (hyz : 同构 y z)
+  结论: 同构 x z
   证明: Relation.EqvGen.trans x y z hxy hyz
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.trans
@@ -191,8 +191,8 @@ theorem second_iso
 
 中文:
 定理 second_iso
-  条件: {x y : X} (h : IsMaximal x (x ⊔ y))
-  结论: Iso (x, x ⊔ y) (x ⊓ y, y)
+  条件: {x y : X} (h : 是极大 x (x ⊔ y))
+  结论: 同构 (x, x ⊔ y) (x ⊓ y, y)
   证明: Relation.EqvGen.rel (x, x ⊔ y) (x ⊓ y, y) ⟨h, rfl, rfl⟩
 
 Depends on / 依赖: EqvGen, Ideal.comap, IsTwoSided, Relation, Relation.EqvGen.rel
@@ -212,7 +212,7 @@ theorem Iso.rel
   exact h_rel h
 
 中文:
-定理 Iso.rel
+定理 同构.rel
   证明: by
   have : IsEquiv (X × X) e := { refl _ := h_refl, symm _ _ := h_symm, trans _ _ _ := h_trans }
   refine Relation.EqvGen.eqvGen_le ?_ _ _ h_iso
@@ -246,7 +246,7 @@ theorem isMaximal_inf_right_of_isMaximal_sup
 
 中文:
 定理 isMaximal_inf_right_of_isMaximal_sup
-  结论: {x y : X} (hxz : IsMaximal x (x ⊔ y))
+  结论: {x y : X} (hxz : 是极大 x (x ⊔ y))
   证明: by
   rw [inf_comm]
   rw [sup_comm] at hxz hyz
@@ -273,7 +273,7 @@ theorem isMaximal_of_eq_inf
 
 中文:
 定理 isMaximal_of_eq_inf
-  结论: (x b : X) {a y : X} (ha : x ⊓ y = a) (hxy : x != y) (hxb : IsMaximal x b)
+  结论: (x b : X) {a y : X} (ha : x ⊓ y = a) (hxy : x != y) (hxb : 是极大 x b)
   证明: by
   have hb : x ⊔ y = b := sup_eq_of_isMaximal hxb hyb hxy
   subst a b
@@ -299,7 +299,7 @@ theorem second_iso_of_eq
 
 中文:
 定理 second_iso_of_eq
-  条件: {x y a b : X} (hm : IsMaximal x a) (ha : x ⊔ y = a) (hb : x ⊓ y = b)
+  条件: {x y a b : X} (hm : 是极大 x a) (ha : x ⊔ y = a) (hb : x ⊓ y = b)
   证明: by subst a b; exact second_iso hm
 
 @[deprecated (since := "2026-07-11")] alias IsMaximal.iso_refl := iso_refl
@@ -328,8 +328,8 @@ abbreviation CompositionSeries
   body: RelSeries {(x, y) : X × X | IsMaximal x y}
 
 中文:
-缩写 CompositionSeries
-  签名: (X : 类型u) [Lattice X] [JordanHolderLattice X]
+缩写 合成列
+  签名: (X : 类型u) [格 X] [Jordan-Hölder格 X]
   定义体: RelSeries {(x, y) : X × X | IsMaximal x y}
 
 Depends on / 依赖: IsMaximal, RelSeries
@@ -351,7 +351,7 @@ theorem lt_succ
 
 中文:
 定理 lt_succ
-  条件: (s : CompositionSeries X) (i : Fin s.length)
+  条件: (s : 合成列 X) (i : 有限集 s.length)
   证明: lt_of_isMaximal (s.step _)
 
 Depends on / 依赖: lt_of_isMaximal, s.step
@@ -371,8 +371,8 @@ theorem strictMono
 
 中文:
 定理 strictMono
-  条件: (s : CompositionSeries X)
-  结论: StrictMono s
+  条件: (s : 合成列 X)
+  结论: 严格递增 s
   证明: Fin.strictMono_iff_lt_succ.2 s.lt_succ
 -/
 protected theorem strictMono (s : CompositionSeries X) : StrictMono s :=
@@ -391,8 +391,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: (s : CompositionSeries X)
-  结论: Function.Injective s
+  条件: (s : 合成列 X)
+  结论: 函数.单射 s
   证明: s.strictMono.injective
 
 @[simp]
@@ -412,7 +412,7 @@ theorem inj
 
 中文:
 定理 inj
-  条件: (s : CompositionSeries X) {i j : Fin s.length.succ}
+  条件: (s : 合成列 X) {i j : 有限集 s.length.succ}
   结论: s i = s j ↔ i = j
   证明: s.injective.eq_iff
 -/
@@ -434,7 +434,7 @@ theorem total
 
 中文:
 定理 total
-  条件: {s : CompositionSeries X} {x y : X} (hx : x in s) (hy : y in s)
+  条件: {s : 合成列 X} {x y : X} (hx : x in s) (hy : y in s)
   结论: x <= y ∨ y <= x
   证明: by
   rcases Set.mem_range.1 hx with ⟨i, rfl⟩
@@ -463,7 +463,7 @@ theorem toList_sorted
 
 中文:
 定理 toList_sorted
-  条件: (s : CompositionSeries X)
+  条件: (s : 合成列 X)
   结论: s.toList.SortedLT
   证明: List.IsChain.sortedLT by
     simp_rw [List.isChain_iff_getElem, s.toList_getElem]
@@ -487,7 +487,7 @@ theorem toList_nodup
 
 中文:
 定理 toList_nodup
-  条件: (s : CompositionSeries X)
+  条件: (s : 合成列 X)
   结论: s.toList.Nodup
   证明: s.toList_sorted.nodup
 
@@ -516,7 +516,7 @@ apply toList_injective
 
 中文:
 定理 ext
-  条件: {s₁ s₂ : CompositionSeries X} (h : 对任意 x, x in s₁ ↔ x in s₂)
+  条件: {s₁ s₂ : 合成列 X} (h : 对任意 x, x in s₁ ↔ x in s₂)
   结论: s₁ = s₂
   证明: by
   classical
@@ -548,7 +548,7 @@ theorem le_last
 
 中文:
 定理 le_last
-  条件: {s : CompositionSeries X} (i : Fin (s.length + 1))
+  条件: {s : 合成列 X} (i : 有限集 (s.length + 1))
   结论: s i <= s.last
   证明: s.strictMono.monotone (Fin.le_last _)
 
@@ -571,7 +571,7 @@ theorem le_last_of_mem
 
 中文:
 定理 le_last_of_mem
-  条件: {s : CompositionSeries X} {x : X} (hx : x in s)
+  条件: {s : 合成列 X} {x : X} (hx : x in s)
   结论: x <= s.last
   证明: let ⟨_i, hi⟩ := Set.mem_range.2 hx
   hi ▸ le_last _
@@ -596,7 +596,7 @@ theorem head_le
 
 中文:
 定理 head_le
-  条件: {s : CompositionSeries X} (i : Fin (s.length + 1))
+  条件: {s : 合成列 X} (i : 有限集 (s.length + 1))
   结论: s.head <= s i
   证明: s.strictMono.monotone (Fin.zero_le _)
 
@@ -617,7 +617,7 @@ theorem head_le_of_mem
 
 中文:
 定理 head_le_of_mem
-  条件: {s : CompositionSeries X} {x : X} (hx : x in s)
+  条件: {s : 合成列 X} {x : X} (hx : x in s)
   结论: s.head <= x
   证明: let ⟨_i, hi⟩ := Set.mem_range.2 hx
   hi ▸ head_le _
@@ -640,7 +640,7 @@ theorem last_eraseLast_le
 
 中文:
 定理 last_eraseLast_le
-  条件: (s : CompositionSeries X)
+  条件: (s : 合成列 X)
   结论: s.eraseLast.last <= s.last
   证明: by
   simp [eraseLast, last, s.strictMono.le_iff_le, Fin.le_iff_val_le_val]
@@ -667,7 +667,7 @@ theorem mem_eraseLast_of_ne_of_mem
 
 中文:
 定理 mem_eraseLast_of_ne_of_mem
-  结论: {s : CompositionSeries X} {x : X}
+  结论: {s : 合成列 X} {x : X}
   证明: by
   rcases hxs with ⟨i, rfl⟩
   have hi : (i : Nat) < (s.length - 1).succ := by
@@ -704,7 +704,7 @@ theorem mem_eraseLast
 
 中文:
 定理 mem_eraseLast
-  条件: {s : CompositionSeries X} {x : X} (h : 0 < s.length)
+  条件: {s : 合成列 X} {x : X} (h : 0 < s.length)
   证明: by
   simp only [RelSeries.mem_def, eraseLast]
   constructor
@@ -736,7 +736,7 @@ theorem lt_last_of_mem_eraseLast
 
 中文:
 定理 lt_last_of_mem_eraseLast
-  结论: {s : CompositionSeries X} {x : X} (h : 0 < s.length)
+  结论: {s : 合成列 X} {x : X} (h : 0 < s.length)
   证明: lt_of_le_of_ne (le_last_of_mem ((mem_eraseLast h).1 hx).2) ((mem_eraseLast h).1 hx).1
 
 Depends on / 依赖: le_last_of_mem, lt_of_le_of_ne, mem_eraseLast
@@ -760,7 +760,7 @@ theorem isMaximal_eraseLast_last
 
 中文:
 定理 isMaximal_eraseLast_last
-  条件: {s : CompositionSeries X} (h : 0 < s.length)
+  条件: {s : 合成列 X} (h : 0 < s.length)
   证明: by
   rw [last_eraseLast]; rw [last]
   have := s.step ⟨s.length - 1, by lia⟩
@@ -792,7 +792,7 @@ theorem eq_snoc_eraseLast
 
 中文:
 定理 eq_snoc_eraseLast
-  条件: {s : CompositionSeries X} (h : 0 < s.length)
+  条件: {s : 合成列 X} (h : 0 < s.length)
   证明: by
   ext x
   simp only [mem_snoc, mem_eraseLast h, ne_eq]
@@ -820,7 +820,7 @@ theorem snoc_eraseLast_last
 
 中文:
 定理 snoc_eraseLast_last
-  条件: {s : CompositionSeries X} (h : IsMaximal s.eraseLast.last s.last)
+  条件: {s : 合成列 X} (h : 是极大 s.eraseLast.last s.last)
   证明: have h : 0 < s.length :=
     Nat.pos_of_ne_zero (fun hs => ne_of_gt (lt_of_isMaximal h) <| by simp [last, Fin.ext_iff, hs])
   (eq_snoc_eraseLast h).symm
@@ -845,7 +845,7 @@ definition Equivalent
 
 中文:
 定义 Equivalent
-  签名: (s₁ s₂ : CompositionSeries X)
+  签名: (s₁ s₂ : 合成列 X)
   定义体: exists f : Fin s₁.length ≃ Fin s₂.length,
     forall i : Fin s₁.length, Iso (s₁ (Fin.castSucc i), s₁ i.succ)
       (s₂ (Fin.castSucc (f i)), s₂ (Fin.succ (f i)))
@@ -873,7 +873,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (s : CompositionSeries X)
+  条件: (s : 合成列 X)
   结论: Equivalent s s
   证明: ⟨Equiv.refl _, fun _ => iso_refl⟩
 
@@ -898,7 +898,7 @@ theorem symm
 
 中文:
 定理 symm
-  条件: {s₁ s₂ : CompositionSeries X} (h : Equivalent s₁ s₂)
+  条件: {s₁ s₂ : 合成列 X} (h : Equivalent s₁ s₂)
   结论: Equivalent s₂ s₁
   证明: ⟨h.choose.symm, fun i => iso_symm (by simpa using h.choose_spec (h.choose.symm i))⟩
 
@@ -921,7 +921,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: {s₁ s₂ s₃ : CompositionSeries X} (h₁ : Equivalent s₁ s₂) (h₂ : Equivalent s₂ s₃)
+  条件: {s₁ s₂ s₃ : 合成列 X} (h₁ : Equivalent s₁ s₂) (h₂ : Equivalent s₂ s₃)
   证明: ⟨h₁.choose.trans h₂.choose,
     fun i => iso_trans (h₁.choose_spec i) (h₂.choose_spec (h₁.choose i))⟩
 
@@ -948,7 +948,7 @@ theorem smash
 
 中文:
 定理 smash
-  结论: {s₁ s₂ t₁ t₂ : CompositionSeries X}
+  结论: {s₁ s₂ t₁ t₂ : 合成列 X}
   证明: let e : Fin (s₁.length + s₂.length) ≃ Fin (t₁.length + t₂.length) :=
     calc
       Fin (s₁.length + s₂.length) ≃ (Fin s₁.length) oplus (Fin s₂.length) := finSumFinEquiv.symm
@@ -1004,7 +1004,7 @@ theorem snoc
 
 中文:
 定理 snoc
-  结论: {s₁ s₂ : CompositionSeries X} {x₁ x₂ : X} {hsat₁ : IsMaximal s₁.last x₁}
+  结论: {s₁ s₂ : 合成列 X} {x₁ x₂ : X} {hsat₁ : 是极大 s₁.last x₁}
   证明: by
   let e : Fin s₁.length.succ ≃ Fin s₂.length.succ :=
     calc
@@ -1055,7 +1055,7 @@ theorem length_eq
 
 中文:
 定理 length_eq
-  条件: {s₁ s₂ : CompositionSeries X} (h : Equivalent s₁ s₂)
+  条件: {s₁ s₂ : 合成列 X} (h : Equivalent s₁ s₂)
   结论: s₁.length = s₂.length
   证明: by
   simpa using Fintype.card_congr h.choose
@@ -1079,7 +1079,7 @@ theorem snoc_snoc_swap
 
 中文:
 定理 snoc_snoc_swap
-  结论: {s : CompositionSeries X} {x₁ x₂ y₁ y₂ : X} {hsat₁ : IsMaximal s.last x₁}
+  结论: {s : 合成列 X} {x₁ x₂ y₁ y₂ : X} {hsat₁ : 是极大 s.last x₁}
   证明: let e : Fin (s.length + 1 + 1) ≃ Fin (s.length + 1 + 1) :=
     Equiv.swap (Fin.last _) (Fin.castSucc (Fin.last _))
   have h1 : forall {i : Fin s.length},
@@ -1158,7 +1158,7 @@ theorem length_pos_of_head_eq_head_of_last_eq_last_of_length_pos
 
 中文:
 定理 length_pos_of_head_eq_head_of_last_eq_last_of_length_pos
-  结论: {s₁ s₂ : CompositionSeries X}
+  结论: {s₁ s₂ : 合成列 X}
   证明: not_imp_not.1
     (by
       simpa only [pos_iff_ne_zero, ne_eq, Decidable.not_not] using
@@ -1189,7 +1189,7 @@ theorem eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero
 
 中文:
 定理 eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero
-  结论: {s₁ s₂ : CompositionSeries X}
+  结论: {s₁ s₂ : 合成列 X}
   证明: by
   have : forall x, x in s₁ ↔ x = s₁.last := fun x =>
     ⟨fun hx => subsingleton_of_length_eq_zero hs₁0 hx s₁.last_mem, fun hx => hx.symm ▸ s₁.last_mem⟩
@@ -1230,8 +1230,8 @@ theorem exists_last_eq_snoc_equivalent
     by_cases hetx : s.eraseLast.l
 
 中文:
-定理 exists_last_eq_snoc_equivalent
-  结论: (s : CompositionSeries X) (x : X) (hm : IsMaximal x s.last)
+定理 存在_last_eq_snoc_equivalent
+  结论: (s : 合成列 X) (x : X) (hm : 是极大 x s.last)
   证明: by
   induction hn : s.length generalizing s x with
   | zero =>
@@ -1295,7 +1295,7 @@ theorem jordan_holder
 
 中文:
 定理 jordan_holder
-  结论: (s₁ s₂ : CompositionSeries X)
+  结论: (s₁ s₂ : 合成列 X)
   证明: by
   induction hle : s₁.length generalizing s₁ s₂ with
   | zero => rw [eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero hb ht hle]

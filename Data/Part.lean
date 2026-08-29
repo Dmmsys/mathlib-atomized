@@ -89,7 +89,7 @@ definition toOption
 
 中文:
 定义 toOption
-  签名: (o : Part α) [Decidable o.Dom]
+  签名: (o : Part α) [可判定 o.Dom]
   定义体: if h : Dom o then some (o.get h) else none
 
 Depends on / 依赖: o.get
@@ -109,7 +109,7 @@ lemma toOption_isSome
 
 中文:
 引理 toOption_isSome
-  条件: (o : Part α) [Decidable o.Dom]
+  条件: (o : Part α) [可判定 o.Dom]
   结论: o.toOption.isSome ↔ o.Dom
   证明: by
   by_cases h : o.Dom <;> simp [h, toOption]
@@ -129,7 +129,7 @@ lemma toOption_eq_none
 
 中文:
 引理 toOption_eq_none
-  条件: (o : Part α) [Decidable o.Dom]
+  条件: (o : Part α) [可判定 o.Dom]
   结论: o.toOption = none ↔ ¬o.Dom
   证明: by
   by_cases h : o.Dom <;> simp [h, toOption]
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Part α)
+  签名: 可居 (Part α)
   定义体: ⟨none⟩
 
 @[simp]
@@ -505,7 +505,7 @@ theorem subsingleton
 中文:
 定理 subsingleton
   条件: (o : Part α)
-  结论: Set.Subsingleton { a | a in o }
+  结论: 集合.子单例 { a | a in o }
   证明: fun _ ha _ hb =>
   mem_unique ha hb
 
@@ -779,7 +779,7 @@ theorem some_injective
 
 中文:
 定理 some_injective
-  结论: Injective (@Part.some α)
+  结论: 单射 (@Part.some α)
   证明: fun _ _ h =>
   congr_fun (eq_of_heq (Part.mk.inj h).2) trivial
 
@@ -993,8 +993,8 @@ theorem none_toOption
 
 中文:
 定理 none_toOption
-  条件: [Decidable (@none α).Dom]
-  结论: (none : Part α).toOption = Option.none
+  条件: [可判定 (@none α).Dom]
+  结论: (none : Part α).toOption = 选项类型.none
   证明: dif_neg id
 
 @[simp]
@@ -1016,8 +1016,8 @@ theorem some_toOption
 
 中文:
 定理 some_toOption
-  条件: (a : α) [Decidable (some a).Dom]
-  结论: (some a).toOption = Option.some a
+  条件: (a : α) [可判定 (some a).Dom]
+  结论: (some a).toOption = 选项类型.some a
   证明: dif_pos trivial
 
 Depends on / 依赖: dif_pos
@@ -1035,7 +1035,7 @@ instance noneDecidable
 
 中文:
 实例 noneDecidable
-  签名: : Decidable (@none α).Dom
+  签名: : 可判定 (@none α).Dom
   定义体: instDecidableFalse
 
 Depends on / 依赖: instDecidableFalse
@@ -1071,7 +1071,7 @@ definition getOrElse
 
 中文:
 定义 getOrElse
-  签名: (a : Part α) [Decidable a.Dom] (d : α)
+  签名: (a : Part α) [可判定 a.Dom] (d : α)
   定义体: if ha : a.Dom then a.get ha else d
 
 Depends on / 依赖: a.Dom, a.get
@@ -1089,7 +1089,7 @@ theorem getOrElse_of_dom
 
 中文:
 定理 getOrElse_of_dom
-  条件: (a : Part α) (h : a.Dom) [Decidable a.Dom] (d : α)
+  条件: (a : Part α) (h : a.Dom) [可判定 a.Dom] (d : α)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -1110,7 +1110,7 @@ theorem getOrElse_of_not_dom
 
 中文:
 定理 getOrElse_of_not_dom
-  条件: (a : Part α) (h : ¬a.Dom) [Decidable a.Dom] (d : α)
+  条件: (a : Part α) (h : ¬a.Dom) [可判定 a.Dom] (d : α)
   证明: dif_neg h
 
 @[simp]
@@ -1135,7 +1135,7 @@ theorem getOrElse_none
 
 中文:
 定理 getOrElse_none
-  条件: (d : α) [Decidable (none : Part α).Dom]
+  条件: (d : α) [可判定 (none : Part α).Dom]
   结论: getOrElse none d = d
   证明: none.getOrElse_of_not_dom not_none_dom d
 
@@ -1158,7 +1158,7 @@ theorem getOrElse_some
 
 中文:
 定理 getOrElse_some
-  条件: (a : α) (d : α) [Decidable (some a).Dom]
+  条件: (a : α) (d : α) [可判定 (some a).Dom]
   结论: getOrElse (some a) d = a
   证明: (some a).getOrElse_of_dom (some_dom a) d
 
@@ -1186,7 +1186,7 @@ theorem mem_toOption
 
 中文:
 定理 mem_toOption
-  条件: {o : Part α} [Decidable o.Dom] {a : α}
+  条件: {o : Part α} [可判定 o.Dom] {a : α}
   结论: a in toOption o ↔ a in o
   证明: by
   unfold toOption
@@ -1218,7 +1218,7 @@ theorem toOption_eq_some_iff
 
 中文:
 定理 toOption_eq_some_iff
-  条件: {o : Part α} [Decidable o.Dom] {a : α}
+  条件: {o : Part α} [可判定 o.Dom] {a : α}
   证明: by
   rw [← Option.mem_def]; rw [mem_toOption]
 
@@ -1239,7 +1239,7 @@ theorem Dom.toOption
 
 中文:
 定理 Dom.toOption
-  条件: {o : Part α} [Decidable o.Dom] (h : o.Dom)
+  条件: {o : Part α} [可判定 o.Dom] (h : o.Dom)
   结论: o.toOption = o.get h
   证明: dif_pos h
 -/
@@ -1259,8 +1259,8 @@ theorem toOption_eq_none_iff
 
 中文:
 定理 toOption_eq_none_iff
-  条件: {a : Part α} [Decidable a.Dom]
-  结论: a.toOption = Option.none ↔ ¬a.Dom
+  条件: {a : Part α} [可判定 a.Dom]
+  结论: a.toOption = 选项类型.none ↔ ¬a.Dom
   证明: Ne.dite_eq_right_iff fun _ => Option.some_ne_none _
 
 @[simp]
@@ -1286,7 +1286,7 @@ theorem elim_toOption
 
 中文:
 定理 elim_toOption
-  条件: {α β : 类型} (a : Part α) [Decidable a.Dom] (b : β) (f : α -> β)
+  条件: {α β : 类型} (a : Part α) [可判定 a.Dom] (b : β) (f : α -> β)
   证明: by
   split_ifs with h
   · rw [h.toOption]
@@ -1315,7 +1315,7 @@ definition ofOption
 
 中文:
 定义 ofOption
-  签名: : Option α -> Part α
+  签名: : 选项类型 α -> Part α
 -/
 def ofOption : Option α -> Part α
   | Option.none => none
@@ -1333,7 +1333,7 @@ theorem mem_ofOption
 中文:
 定理 mem_ofOption
   条件: {a : α}
-  结论: 对任意 {o : Option α}, a in ofOption o ↔ a in o
+  结论: 对任意 {o : 选项类型 α}, a in ofOption o ↔ a in o
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, RatFunc, RatFunc.induction_on, RatFunc.mk, RingHom, RingHom.coe_mk, algebraMap, coe_mk, induction_on, map_add, map_mul, map_one, map_zero, mk_def_of_ne, mk_one, mk_smul, ofFractionRing_add
 -/
@@ -1353,7 +1353,7 @@ theorem ofOption_dom
 中文:
 定理 ofOption_dom
   条件: {α}
-  结论: 对任意 o : Option α, (ofOption o).Dom ↔ o.isSome
+  结论: 对任意 o : 选项类型 α, (ofOption o).Dom ↔ o.isSome
 -/
 theorem ofOption_dom {α} : forall o : Option α, (ofOption o).Dom ↔ o.isSome
   | Option.none => by simp [ofOption, none]
@@ -1373,8 +1373,8 @@ theorem ofOption_eq_get
 
 中文:
 定理 ofOption_eq_get
-  条件: {α} (o : Option α)
-  结论: ofOption o = ⟨_, @Option.get _ o⟩
+  条件: {α} (o : 选项类型 α)
+  结论: ofOption o = ⟨_, @选项类型.get _ o⟩
   证明: Part.ext' (ofOption_dom o) fun h₁ h₂ => by
     cases o
     · simp at h₂
@@ -1398,7 +1398,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Option α) (Part α)
+  签名: Coe (选项类型 α) (Part α)
   定义体: ⟨ofOption⟩
 
 Depends on / 依赖: ofOption
@@ -1419,7 +1419,7 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  条件: {a : α} {o : Option α}
+  条件: {a : α} {o : 选项类型 α}
   结论: a in (o : Part α) ↔ a in o
   证明: mem_ofOption
 
@@ -1443,7 +1443,7 @@ theorem coe_none
 
 中文:
 定理 coe_none
-  结论: (@Option.none α : Part α) = none
+  结论: (@选项类型.none α : Part α) = none
   证明: rfl
 
 @[simp]
@@ -1466,7 +1466,7 @@ theorem coe_some
 中文:
 定理 coe_some
   条件: (a : α)
-  结论: (Option.some a : Part α) = some a
+  结论: (选项类型.some a : Part α) = some a
   证明: rfl
 
 @[elab_as_elim]
@@ -1504,7 +1504,7 @@ instance ofOptionDecidable
 
 中文:
 实例 ofOptionDecidable
-  签名: : 对任意 o : Option α, Decidable (ofOption o).Dom
+  签名: : 对任意 o : 选项类型 α, 可判定 (ofOption o).Dom
 -/
 instance ofOptionDecidable : forall o : Option α, Decidable (ofOption o).Dom
   | Option.none => Part.noneDecidable
@@ -1524,7 +1524,7 @@ theorem to_ofOption
 
 中文:
 定理 to_ofOption
-  条件: (o : Option α)
+  条件: (o : 选项类型 α)
   结论: toOption (ofOption o) = o
   证明: by cases o <;> rfl
 
@@ -1544,7 +1544,7 @@ theorem of_toOption
 
 中文:
 定理 of_toOption
-  条件: (o : Part α) [Decidable o.Dom]
+  条件: (o : Part α) [可判定 o.Dom]
   结论: ofOption (toOption o) = o
   证明: ext fun _ => mem_ofOption.trans mem_toOption
 
@@ -1565,7 +1565,7 @@ definition equivOption
 
 中文:
 定义 equivOption
-  签名: : Part α ≃ Option α
+  签名: : Part α ≃ 选项类型 α
   定义体: haveI := Classical.dec
   ⟨fun o => toOption o, ofOption, fun o => of_toOption o, fun o =>
     Eq.trans (by dsimp; congr) (to_ofOption o)⟩
@@ -1590,7 +1590,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Part
+  签名: 偏序 (Part
   定义体: forall i, i in x -> i in y
   le_refl _ _ := id
   le_trans _ _ _ f g _ := g _ ∘ f _
@@ -1614,7 +1614,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Part α)
+  签名: 有底序 (Part α)
   定义体: none
   bot_le := by rintro x _ ⟨⟨_⟩, _⟩
 -/
@@ -2122,7 +2122,7 @@ theorem bind_toOption
 
 中文:
 定理 bind_toOption
-  结论: (f : α -> Part β) (o : Part α) [Decidable o.Dom] [对任意 a, Decidable (f a).Dom]
+  结论: (f : α -> Part β) (o : Part α) [可判定 o.Dom] [对任意 a, 可判定 (f a).Dom]
   证明: by
   by_cases h : o.Dom
   · simp_rw [h.toOption, h.bind]
@@ -2252,7 +2252,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad Part
+  签名: 单子 Part
   定义体: @some
   map := @map
   bind := @Part.bind
@@ -2281,7 +2281,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad
+  签名: 合法单子
   定义体: @bind_some_eq_map
   id_map f := by cases f; rfl
   pure_bind := @bind_some
@@ -2649,8 +2649,8 @@ instance [One
 @[to_additive]
 
 中文:
-实例 [One
-  签名: α] : One (Part α) where one
+实例 [幺
+  签名: α] : 幺 (Part α) where one
   定义体: pure 1
 
 @[to_additive]
@@ -2669,8 +2669,8 @@ instance [Mul
 @[to_additive]
 
 中文:
-实例 [Mul
-  签名: α] : Mul (Part α) where mul a b
+实例 [乘法
+  签名: α] : 乘法 (Part α) where mul a b
   定义体: (· * ·) < > a <*> b
 
 @[to_additive]
@@ -2689,8 +2689,8 @@ instance [Inv
 @[to_additive]
 
 中文:
-实例 [Inv
-  签名: α] : Inv (Part α) where inv
+实例 [取逆
+  签名: α] : 取逆 (Part α) where inv
   定义体: map Inv.inv
 
 @[to_additive]
@@ -2709,8 +2709,8 @@ instance [Div
   body: (· / ·) < > a <*> b
 
 中文:
-实例 [Div
-  签名: α] : Div (Part α) where div a b
+实例 [除法
+  签名: α] : 除法 (Part α) where div a b
   定义体: (· / ·) < > a <*> b
 -/
 instance [Div α] : Div (Part α) where div a b := (· / ·) < > a <*> b
@@ -2724,8 +2724,8 @@ instance [Mod
   body: (· % ·) < > a <*> b
 
 中文:
-实例 [Mod
-  签名: α] : Mod (Part α) where mod a b
+实例 [取模
+  签名: α] : 取模 (Part α) where mod a b
   定义体: (· % ·) < > a <*> b
 -/
 instance [Mod α] : Mod (Part α) where mod a b := (· % ·) < > a <*> b
@@ -2754,8 +2754,8 @@ instance [Inter
   body: (· inter ·) < > a <*> b
 
 中文:
-实例 [Inter
-  签名: α] : 整数er (Part α) where inter a b
+实例 [交集
+  签名: α] : 交集 (Part α) where inter a b
   定义体: (· inter ·) < > a <*> b
 -/
 instance [Inter α] : Inter (Part α) where inter a b := (· inter ·) < > a <*> b
@@ -2769,8 +2769,8 @@ instance [Union
   body: (· union ·) < > a <*> b
 
 中文:
-实例 [Union
-  签名: α] : Union (Part α) where union a b
+实例 [并集
+  签名: α] : 并集 (Part α) where union a b
   定义体: (· union ·) < > a <*> b
 -/
 instance [Union α] : Union (Part α) where union a b := (· union ·) < > a <*> b
@@ -2784,8 +2784,8 @@ instance [SDiff
   body: (· \ ·) < > a <*> b
 
 中文:
-实例 [SDiff
-  签名: α] : SDiff (Part α) where sdiff a b
+实例 [对称差
+  签名: α] : 对称差 (Part α) where sdiff a b
   定义体: (· \ ·) < > a <*> b
 -/
 instance [SDiff α] : SDiff (Part α) where sdiff a b := (· \ ·) < > a <*> b
@@ -2806,7 +2806,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: [Mul α] (a b : Part α)
+  条件: [乘法 α] (a b : Part α)
   结论: a * b = bind a fun y => map (y * ·) b
   证明: rfl
 
@@ -2828,7 +2828,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  条件: [One α]
+  条件: [幺 α]
   结论: (1 : Part α) = some 1
   证明: rfl
 
@@ -2850,7 +2850,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: [Inv α] (a : Part α)
+  条件: [取逆 α] (a : Part α)
   结论: a⁻¹ = Part.map (·⁻¹) a
   证明: rfl
 
@@ -2870,7 +2870,7 @@ theorem div_def
 
 中文:
 定理 div_def
-  条件: [Div α] (a b : Part α)
+  条件: [除法 α] (a b : Part α)
   结论: a / b = bind a fun y => map (y / ·) b
   证明: rfl
 -/
@@ -2887,7 +2887,7 @@ theorem mod_def
 
 中文:
 定理 mod_def
-  条件: [Mod α] (a b : Part α)
+  条件: [取模 α] (a b : Part α)
   结论: a % b = bind a fun y => map (y % ·) b
   证明: rfl
 -/
@@ -2919,7 +2919,7 @@ theorem inter_def
 
 中文:
 定理 inter_def
-  条件: [整数er α] (a b : Part α)
+  条件: [交集 α] (a b : Part α)
   结论: a inter b = bind a fun y => map (y inter ·) b
   证明: rfl
 -/
@@ -2935,7 +2935,7 @@ theorem union_def
 
 中文:
 定理 union_def
-  条件: [Union α] (a b : Part α)
+  条件: [并集 α] (a b : Part α)
   结论: a union b = bind a fun y => map (y union ·) b
   证明: rfl
 -/
@@ -2951,7 +2951,7 @@ theorem sdiff_def
 
 中文:
 定理 sdiff_def
-  条件: [SDiff α] (a b : Part α)
+  条件: [对称差 α] (a b : Part α)
   结论: a \ b = bind a fun y => map (y \ ·) b
   证明: rfl
 -/
@@ -2973,7 +2973,7 @@ theorem one_mem_one
 
 中文:
 定理 one_mem_one
-  条件: [One α]
+  条件: [幺 α]
   结论: (1 : α) in (1 : Part α)
   证明: ⟨trivial, rfl⟩
 
@@ -2995,7 +2995,7 @@ theorem mul_mem_mul
 
 中文:
 定理 mul_mem_mul
-  条件: [Mul α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [乘法 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: ⟨⟨ha.1, hb.1⟩, by simp only [← ha.2, ← hb.2]; rfl⟩
 
 @[to_additive]
@@ -3017,7 +3017,7 @@ theorem left_dom_of_mul_dom
 
 中文:
 定理 left_dom_of_mul_dom
-  条件: [Mul α] {a b : Part α} (hab : Dom (a * b))
+  条件: [乘法 α] {a b : Part α} (hab : Dom (a * b))
   结论: a.Dom
   证明: hab.1
 
@@ -3039,7 +3039,7 @@ theorem right_dom_of_mul_dom
 
 中文:
 定理 right_dom_of_mul_dom
-  条件: [Mul α] {a b : Part α} (hab : Dom (a * b))
+  条件: [乘法 α] {a b : Part α} (hab : Dom (a * b))
   结论: b.Dom
   证明: hab.2
 
@@ -3060,7 +3060,7 @@ theorem mul_get_eq
 
 中文:
 定理 mul_get_eq
-  条件: [Mul α] (a b : Part α) (hab : Dom (a * b))
+  条件: [乘法 α] (a b : Part α) (hab : Dom (a * b))
   证明: rfl
 
 @[to_additive]
@@ -3082,7 +3082,7 @@ theorem some_mul_some
 
 中文:
 定理 some_mul_some
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: some a * some b = some (a * b)
   证明: by simp [mul_def]
 
@@ -3107,7 +3107,7 @@ theorem inv_mem_inv
 
 中文:
 定理 inv_mem_inv
-  条件: [Inv α] (a : Part α) (ma : α) (ha : ma in a)
+  条件: [取逆 α] (a : Part α) (ma : α) (ha : ma in a)
   结论: ma⁻¹ in a⁻¹
   证明: by
   simp [inv_def]; aesop
@@ -3133,7 +3133,7 @@ theorem inv_some
 
 中文:
 定理 inv_some
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: (some a)⁻¹ = some a⁻¹
   证明: rfl
 
@@ -3155,7 +3155,7 @@ theorem div_mem_div
 
 中文:
 定理 div_mem_div
-  条件: [Div α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [除法 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: by simp [div_def]; aesop
 
 @[to_additive]
@@ -3179,7 +3179,7 @@ theorem left_dom_of_div_dom
 
 中文:
 定理 left_dom_of_div_dom
-  条件: [Div α] {a b : Part α} (hab : Dom (a / b))
+  条件: [除法 α] {a b : Part α} (hab : Dom (a / b))
   结论: a.Dom
   证明: hab.1
 
@@ -3201,7 +3201,7 @@ theorem right_dom_of_div_dom
 
 中文:
 定理 right_dom_of_div_dom
-  条件: [Div α] {a b : Part α} (hab : Dom (a / b))
+  条件: [除法 α] {a b : Part α} (hab : Dom (a / b))
   结论: b.Dom
   证明: hab.2
 
@@ -3223,7 +3223,7 @@ theorem div_get_eq
 
 中文:
 定理 div_get_eq
-  条件: [Div α] (a b : Part α) (hab : Dom (a / b))
+  条件: [除法 α] (a b : Part α) (hab : Dom (a / b))
   证明: by
   simp [div_def]; aesop
 
@@ -3247,7 +3247,7 @@ theorem some_div_some
 
 中文:
 定理 some_div_some
-  条件: [Div α] (a b : α)
+  条件: [除法 α] (a b : α)
   结论: some a / some b = some (a / b)
   证明: by simp [div_def]
 
@@ -3265,7 +3265,7 @@ theorem mod_mem_mod
 
 中文:
 定理 mod_mem_mod
-  条件: [Mod α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [取模 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: by simp [mod_def]; aesop
 
 Depends on / 依赖: mod_def
@@ -3284,7 +3284,7 @@ theorem left_dom_of_mod_dom
 
 中文:
 定理 left_dom_of_mod_dom
-  条件: [Mod α] {a b : Part α} (hab : Dom (a % b))
+  条件: [取模 α] {a b : Part α} (hab : Dom (a % b))
   结论: a.Dom
   证明: hab.1
 -/
@@ -3303,7 +3303,7 @@ theorem right_dom_of_mod_dom
 
 中文:
 定理 right_dom_of_mod_dom
-  条件: [Mod α] {a b : Part α} (hab : Dom (a % b))
+  条件: [取模 α] {a b : Part α} (hab : Dom (a % b))
   结论: b.Dom
   证明: hab.2
 
@@ -3323,7 +3323,7 @@ theorem mod_get_eq
 
 中文:
 定理 mod_get_eq
-  条件: [Mod α] (a b : Part α) (hab : Dom (a % b))
+  条件: [取模 α] (a b : Part α) (hab : Dom (a % b))
   证明: by
   simp [mod_def]; aesop
 
@@ -3344,7 +3344,7 @@ theorem some_mod_some
 
 中文:
 定理 some_mod_some
-  条件: [Mod α] (a b : α)
+  条件: [取模 α] (a b : α)
   结论: some a % some b = some (a % b)
   证明: by simp [mod_def]
 
@@ -3464,7 +3464,7 @@ theorem inter_mem_inter
 
 中文:
 定理 inter_mem_inter
-  条件: [整数er α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [交集 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: by simp [inter_def]; aesop
 
 Depends on / 依赖: inter_def
@@ -3483,7 +3483,7 @@ theorem left_dom_of_inter_dom
 
 中文:
 定理 left_dom_of_inter_dom
-  条件: [整数er α] {a b : Part α} (hab : Dom (a inter b))
+  条件: [交集 α] {a b : Part α} (hab : Dom (a inter b))
   结论: a.Dom
   证明: hab.1
 -/
@@ -3502,7 +3502,7 @@ theorem right_dom_of_inter_dom
 
 中文:
 定理 right_dom_of_inter_dom
-  条件: [整数er α] {a b : Part α} (hab : Dom (a inter b))
+  条件: [交集 α] {a b : Part α} (hab : Dom (a inter b))
   结论: b.Dom
   证明: hab.2
 
@@ -3524,7 +3524,7 @@ theorem inter_get_eq
 
 中文:
 定理 inter_get_eq
-  条件: [整数er α] (a b : Part α) (hab : Dom (a inter b))
+  条件: [交集 α] (a b : Part α) (hab : Dom (a inter b))
   证明: by
   simp [inter_def]; aesop
 
@@ -3546,7 +3546,7 @@ theorem some_inter_some
 
 中文:
 定理 some_inter_some
-  条件: [整数er α] (a b : α)
+  条件: [交集 α] (a b : α)
   结论: some a inter some b = some (a inter b)
   证明: by
   simp [inter_def]
@@ -3566,7 +3566,7 @@ theorem union_mem_union
 
 中文:
 定理 union_mem_union
-  条件: [Union α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [并集 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: by simp [union_def]; aesop
 
 Depends on / 依赖: union_def
@@ -3585,7 +3585,7 @@ theorem left_dom_of_union_dom
 
 中文:
 定理 left_dom_of_union_dom
-  条件: [Union α] {a b : Part α} (hab : Dom (a union b))
+  条件: [并集 α] {a b : Part α} (hab : Dom (a union b))
   结论: a.Dom
   证明: hab.1
 -/
@@ -3604,7 +3604,7 @@ theorem right_dom_of_union_dom
 
 中文:
 定理 right_dom_of_union_dom
-  条件: [Union α] {a b : Part α} (hab : Dom (a union b))
+  条件: [并集 α] {a b : Part α} (hab : Dom (a union b))
   结论: b.Dom
   证明: hab.2
 
@@ -3624,7 +3624,7 @@ theorem union_get_eq
 
 中文:
 定理 union_get_eq
-  条件: [Union α] (a b : Part α) (hab : Dom (a union b))
+  条件: [并集 α] (a b : Part α) (hab : Dom (a union b))
   证明: by
   simp [union_def]; aesop
 
@@ -3645,7 +3645,7 @@ theorem some_union_some
 
 中文:
 定理 some_union_some
-  条件: [Union α] (a b : α)
+  条件: [并集 α] (a b : α)
   结论: some a union some b = some (a union b)
   证明: by simp [union_def]
 
@@ -3663,7 +3663,7 @@ theorem sdiff_mem_sdiff
 
 中文:
 定理 sdiff_mem_sdiff
-  条件: [SDiff α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
+  条件: [对称差 α] (a b : Part α) (ma mb : α) (ha : ma in a) (hb : mb in b)
   证明: by simp [sdiff_def]; aesop
 
 Depends on / 依赖: sdiff_def
@@ -3682,7 +3682,7 @@ theorem left_dom_of_sdiff_dom
 
 中文:
 定理 left_dom_of_sdiff_dom
-  条件: [SDiff α] {a b : Part α} (hab : Dom (a \ b))
+  条件: [对称差 α] {a b : Part α} (hab : Dom (a \ b))
   结论: a.Dom
   证明: hab.1
 -/
@@ -3701,7 +3701,7 @@ theorem right_dom_of_sdiff_dom
 
 中文:
 定理 right_dom_of_sdiff_dom
-  条件: [SDiff α] {a b : Part α} (hab : Dom (a \ b))
+  条件: [对称差 α] {a b : Part α} (hab : Dom (a \ b))
   结论: b.Dom
   证明: hab.2
 
@@ -3721,7 +3721,7 @@ theorem sdiff_get_eq
 
 中文:
 定理 sdiff_get_eq
-  条件: [SDiff α] (a b : Part α) (hab : Dom (a \ b))
+  条件: [对称差 α] (a b : Part α) (hab : Dom (a \ b))
   证明: by
   simp [sdiff_def]; aesop
 
@@ -3742,7 +3742,7 @@ theorem some_sdiff_some
 
 中文:
 定理 some_sdiff_some
-  条件: [SDiff α] (a b : α)
+  条件: [对称差 α] (a b : α)
   结论: some a \ some b = some (a \ b)
   证明: by simp [sdiff_def]
 

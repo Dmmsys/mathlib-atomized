@@ -45,7 +45,7 @@ abbreviation locallyConstantPresheaf
 
 中文:
 缩写 locallyConstantPresheaf
-  签名: : Profinite.{u}ᵒᵖ ⥤ Type (u + 1)
+  签名: : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1)
   定义体: CompHausLike.LocallyConstant.functorToPresheaves.{u, u + 1}.obj X
 
 #adaptation_note
@@ -77,7 +77,7 @@ definition isColimitLocallyConstantPresheaf
 
 中文:
 定义 isColimitLocallyConstantPresheaf
-  签名: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
+  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
   定义体: by
   refine Types.FilteredColimit.isColimitOf _ _ ?_ ?_
   · intro (f : LocallyConstant c.pt X)
@@ -123,7 +123,7 @@ lemma isColimitLocallyConstantPresheaf_desc_apply
 
 中文:
 引理 isColimitLocallyConstantPresheaf_desc_apply
-  结论: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
+  结论: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
   证明: by
   change ((((locallyConstantPresheaf X).mapCocone c.op).ι.app ⟨i⟩) ≫
     (isColimitLocallyConstantPresheaf c X hc).desc s) _ = _
@@ -198,7 +198,7 @@ abbreviation lanPresheaf
 
 中文:
 缩写 lanPresheaf
-  签名: (F : Profinite.{u}ᵒᵖ ⥤ Type (u + 1))
+  签名: (F : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1))
   定义体: pointwiseLeftKanExtension toProfinite.op (toProfinite.op ⋙ F)
 
 Depends on / 依赖: pointwiseLeftKanExtension, toProfinite, toProfinite.op
@@ -217,7 +217,7 @@ definition lanPresheafExt
 
 中文:
 定义 lanPresheafExt
-  签名: {F G : Profinite.{u}ᵒᵖ ⥤ Type (u + 1)}
+  签名: {F G : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1)}
   定义体: leftKanExtensionUniqueOfIso _ (pointwiseLeftKanExtensionUnit _ _) i _
     (pointwiseLeftKanExtensionUnit _ _)
 
@@ -244,7 +244,7 @@ lemma lanPresheafExt_hom
 
 中文:
 引理 lanPresheafExt_hom
-  结论: {F G : Profinite.{u}ᵒᵖ ⥤ Type (u + 1)} (S : Profinite.{u}ᵒᵖ)
+  结论: {F G : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1)} (S : Profinite.{u}ᵒᵖ)
   证明: by
   simp only [lanPresheaf, lanPresheafExt,
     leftKanExtensionUniqueOfIso_hom, pointwiseLeftKanExtension_desc_app]
@@ -277,7 +277,7 @@ lemma lanPresheafExt_inv
 
 中文:
 引理 lanPresheafExt_inv
-  结论: {F G : Profinite.{u}ᵒᵖ ⥤ Type (u + 1)} (S : Profinite.{u}ᵒᵖ)
+  结论: {F G : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1)} (S : Profinite.{u}ᵒᵖ)
   证明: by
   simp only [lanPresheaf, lanPresheafExt,
     leftKanExtensionUniqueOfIso_inv, pointwiseLeftKanExtension_desc_app]
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: Final Profinite.Extend.functorOp S.asLimitCone
+  签名: 终 Profinite.Extend.functorOp S.asLimitCone
   定义体: Profinite.Extend.functorOp_final S.asLimitCone S.asLimit
 
 Depends on / 依赖: Extend, Profinite, Profinite.Extend.functorOp_final, S.asLimit, S.asLimitCone, asLimit, asLimitCone, functorOp_final
@@ -326,7 +326,7 @@ definition lanPresheafIso
 
 中文:
 定义 lanPresheafIso
-  签名: (hF : IsColimit <| F.mapCocone S.asLimitCone.op)
+  签名: (hF : 是余极限 <| F.mapCocone S.asLimitCone.op)
   定义体: (Functor.Final.colimitIso (Profinite.Extend.functorOp S.asLimitCone) _).symm ≪≫
     (colimit.isColimit _).coconePointUniqueUpToIso hF
 
@@ -351,7 +351,7 @@ lemma lanPresheafIso_hom
 
 中文:
 引理 lanPresheafIso_hom
-  条件: (hF : IsColimit <| F.mapCocone S.asLimitCone.op)
+  条件: (hF : 是余极限 <| F.mapCocone S.asLimitCone.op)
   证明: by
   simp [lanPresheafIso, Final.colimitIso]
   rfl
@@ -374,8 +374,8 @@ definition lanPresheafNatIso
     fun _ => (by simpa using colimit.hom_ext fun _ => (by simp))
 
 中文:
-定义 lanPresheafNatIso
-  签名: (hF : 对任意 S : Profinite, IsColimit <| F.mapCocone S.asLimitCone.op)
+定义 lanPresheaf自然数Iso
+  签名: (hF : 对任意 S : Profinite, 是余极限 <| F.mapCocone S.asLimitCone.op)
   定义体: NatIso.ofComponents (fun ⟨S⟩ => (lanPresheafIso (hF S)))
     fun _ => (by simpa using colimit.hom_ext fun _ => (by simp))
 
@@ -398,8 +398,8 @@ lemma lanPresheafNatIso_hom_app
   simp [lanPresheafNatIso]
 
 中文:
-引理 lanPresheafNatIso_hom_app
-  结论: (hF : 对任意 S : Profinite, IsColimit <| F.mapCocone S.asLimitCone.op)
+引理 lanPresheaf自然数Iso_hom_app
+  结论: (hF : 对任意 S : Profinite, 是余极限 <| F.mapCocone S.asLimitCone.op)
   证明: by
   simp [lanPresheafNatIso]
 
@@ -425,7 +425,7 @@ definition lanSheafProfinite
 
 中文:
 定义 lanSheafProfinite
-  签名: (X : Type (u + 1))
+  签名: (X : 类型 (u + 1))
   定义体: lanPresheaf (locallyConstantPresheaf X)
   property := by
     rw [Presheaf.isSheaf_of_iso_iff (lanPresheafNatIso
@@ -454,7 +454,7 @@ definition lanCondensedSet
 
 中文:
 定义 lanCondensedSet
-  签名: (X : Type (u + 1))
+  签名: (X : 类型 (u + 1))
   定义体: (ProfiniteCompHaus.equivalence _).functor.obj (lanSheafProfinite X)
 
 Depends on / 依赖: ProfiniteCompHaus, ProfiniteCompHaus.equivalence, equivalence, functor, functor.obj, lanSheafProfinite
@@ -480,7 +480,7 @@ definition finYoneda
 
 中文:
 定义 finYoneda
-  签名: : FintypeCat.{u}ᵒᵖ ⥤ Type (u + 1) where
+  签名: : FintypeCat.{u}ᵒᵖ ⥤ 类型 (u + 1) where
   定义体: X.unop -> F.obj (toProfinite.op.obj ⟨of <| PUnit.{u + 1}⟩)
   map f := ↾fun g => g ∘ f.unop
 
@@ -550,7 +550,7 @@ definition fintypeCatAsCofanIsColimit
 
 中文:
 定义 fintypeCatAsCofanIsColimit
-  签名: (X : Profinite) [Finite X]
+  签名: (X : Profinite) [有限 X]
   定义体: Cofan.IsColimit.mk _ (fun t => ConcreteCategory.ofHom ⟨fun x => t.inj x PUnit.unit,
     continuous_of_discreteTopology (α := X)⟩) (by aesop)
     (fun _ _ h => by ext x; exact CategoryTheory.congr_fun (h x) _)
@@ -586,7 +586,7 @@ definition isoFinYonedaComponents
 
 中文:
 定义 isoFinYonedaComponents
-  签名: (X : Profinite.{u}) [Finite X]
+  签名: (X : Profinite.{u}) [有限 X]
   定义体: (isLimitFanMkObjOfIsLimit F _ _
     (Cofan.IsColimit.op (fintypeCatAsCofanIsColimit X))).conePointUniqueUpToIso
       (Types.productLimitCone.{u, u + 1} fun _ => F.obj ⟨Profinite.of PUnit.{u + 1}⟩).2
@@ -612,7 +612,7 @@ lemma isoFinYonedaComponents_hom
 
 中文:
 引理 isoFinYonedaComponents_hom
-  条件: (X : Profinite.{u}) [Finite X]
+  条件: (X : Profinite.{u}) [有限 X]
   证明: rfl
 -/
 lemma isoFinYonedaComponents_hom (X : Profinite.{u}) [Finite X] :
@@ -630,7 +630,7 @@ lemma isoFinYonedaComponents_hom_apply
 
 中文:
 引理 isoFinYonedaComponents_hom_apply
-  条件: (X : Profinite.{u}) [Finite X] (y : F.obj ⟨X⟩) (x : X)
+  条件: (X : Profinite.{u}) [有限 X] (y : F.obj ⟨X⟩) (x : X)
   证明: rfl
 -/
 lemma isoFinYonedaComponents_hom_apply (X : Profinite.{u}) [Finite X] (y : F.obj ⟨X⟩) (x : X) :
@@ -654,7 +654,7 @@ lemma isoFinYonedaComponents_inv_comp
 
 中文:
 引理 isoFinYonedaComponents_inv_comp
-  结论: {X Y : Profinite.{u}} [Finite X] [Finite Y]
+  结论: {X Y : Profinite.{u}} [有限 X] [有限 Y]
   证明: by
   apply injective_of_mono (isoFinYonedaComponents F X).hom
   simp only [Iso.inv_hom_id_apply]
@@ -761,7 +761,7 @@ lemma isoLocallyConstantOfIsColimit_inv
 
 中文:
 引理 isoLocallyConstantOfIsColimit_inv
-  结论: (X : Profinite.{u}ᵒᵖ ⥤ Type (u + 1))
+  结论: (X : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1))
   证明: by
   dsimp [isoLocallyConstantOfIsColimit]
   simp only [Category.assoc]
@@ -855,7 +855,7 @@ definition isColimitLocallyConstantPresheaf
 
 中文:
 定义 isColimitLocallyConstantPresheaf
-  签名: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
+  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
   定义体: by
   refine Types.FilteredColimit.isColimitOf _ _ ?_ ?_
   · intro (f : LocallyConstant c.pt X)
@@ -902,7 +902,7 @@ lemma isColimitLocallyConstantPresheaf_desc_apply
 
 中文:
 引理 isColimitLocallyConstantPresheaf_desc_apply
-  结论: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
+  结论: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
   证明: by
   change ((((locallyConstantPresheaf X).mapCocone c.op).ι.app ⟨n⟩) ≫
     (isColimitLocallyConstantPresheaf c X hc).desc s) _ = _
@@ -1097,7 +1097,7 @@ instance :
 
 中文:
 实例 :
-  签名: Final LightProfinite.Extend.functorOp S.asLimitCone
+  签名: 终 LightProfinite.Extend.functorOp S.asLimitCone
   定义体: LightProfinite.Extend.functorOp_final S.asLimitCone S.asLimit
 
 Depends on / 依赖: Extend, LightProfinite, LightProfinite.Extend.functorOp_final, S.asLimit, S.asLimitCone, asLimit, asLimitCone, functorOp_final
@@ -1117,7 +1117,7 @@ definition lanPresheafIso
 
 中文:
 定义 lanPresheafIso
-  签名: (hF : IsColimit <| F.mapCocone (coconeRightOpOfCone S.asLimitCone))
+  签名: (hF : 是余极限 <| F.mapCocone (coconeRightOpOfCone S.asLimitCone))
   定义体: (Functor.Final.colimitIso (LightProfinite.Extend.functorOp S.asLimitCone) _).symm ≪≫
     (colimit.isColimit _).coconePointUniqueUpToIso hF
 
@@ -1142,7 +1142,7 @@ lemma lanPresheafIso_hom
 
 中文:
 引理 lanPresheafIso_hom
-  条件: (hF : IsColimit <| F.mapCocone (coconeRightOpOfCone S.asLimitCone))
+  条件: (hF : 是余极限 <| F.mapCocone (coconeRightOpOfCone S.asLimitCone))
   证明: by
   simp [lanPresheafIso, Final.colimitIso]
   rfl
@@ -1168,7 +1168,7 @@ definition lanPresheafNatIso
   exact colimit.hom_ext fun _ => (by simp)
 
 中文:
-定义 lanPresheafNatIso
+定义 lanPresheaf自然数Iso
   定义体: by
   refine NatIso.ofComponents
     (fun ⟨S⟩ => (lanPresheafIso (hF S))) fun _ => ?_
@@ -1198,7 +1198,7 @@ lemma lanPresheafNatIso_hom_app
   simp [lanPresheafNatIso]
 
 中文:
-引理 lanPresheafNatIso_hom_app
+引理 lanPresheaf自然数Iso_hom_app
   证明: by
   simp [lanPresheafNatIso]
 
@@ -1327,7 +1327,7 @@ definition fintypeCatAsCofanIsColimit
 
 中文:
 定义 fintypeCatAsCofanIsColimit
-  签名: (X : LightProfinite) [Finite X]
+  签名: (X : LightProfinite) [有限 X]
   定义体: Cofan.IsColimit.mk _ (fun t => ConcreteCategory.ofHom ⟨fun x => t.inj x PUnit.unit,
     continuous_of_discreteTopology (α := X)⟩) (by aesop)
     (fun _ _ h => by ext x; exact CategoryTheory.congr_fun (h x) _)
@@ -1362,7 +1362,7 @@ definition isoFinYonedaComponents
 
 中文:
 定义 isoFinYonedaComponents
-  签名: (X : LightProfinite.{u}) [Finite X]
+  签名: (X : LightProfinite.{u}) [有限 X]
   定义体: (isLimitFanMkObjOfIsLimit F _ _
     (Cofan.IsColimit.op (fintypeCatAsCofanIsColimit X))).conePointUniqueUpToIso
       (Types.productLimitCone.{u, u} fun _ => F.obj ⟨LightProfinite.of PUnit.{u + 1}⟩).2
@@ -1388,7 +1388,7 @@ lemma isoFinYonedaComponents_hom
 
 中文:
 引理 isoFinYonedaComponents_hom
-  条件: (X : LightProfinite.{u}) [Finite X]
+  条件: (X : LightProfinite.{u}) [有限 X]
   证明: rfl
 -/
 lemma isoFinYonedaComponents_hom (X : LightProfinite.{u}) [Finite X] :
@@ -1406,7 +1406,7 @@ lemma isoFinYonedaComponents_hom_apply
 
 中文:
 引理 isoFinYonedaComponents_hom_apply
-  结论: (X : LightProfinite.{u}) [Finite X] (y : F.obj ⟨X⟩)
+  结论: (X : LightProfinite.{u}) [有限 X] (y : F.obj ⟨X⟩)
   证明: rfl
 
 Depends on / 依赖: MyHom.toFun
@@ -1431,7 +1431,7 @@ lemma isoFinYonedaComponents_inv_comp
 
 中文:
 引理 isoFinYonedaComponents_inv_comp
-  结论: {X Y : LightProfinite.{u}} [Finite X] [Finite Y]
+  结论: {X Y : LightProfinite.{u}} [有限 X] [有限 Y]
   证明: by
   apply injective_of_mono (isoFinYonedaComponents F X).hom
   simp only [Iso.inv_hom_id_apply]
@@ -1505,7 +1505,7 @@ definition isoLocallyConstantOfIsColimit
 
 中文:
 定义 isoLocallyConstantOfIsColimit
-  签名: (hF : 对任意 S : LightProfinite, IsColimit <|
+  签名: (hF : 对任意 S : LightProfinite, 是余极限 <|
   定义体: (lanPresheafNatIso hF).symm ≪≫
     lanPresheafExt (isoFinYoneda F ≪≫ (locallyConstantIsoFinYoneda F).symm) ≪≫
       lanPresheafNatIso fun _ => isColimitLocallyConstantPresheafDiagram _ _

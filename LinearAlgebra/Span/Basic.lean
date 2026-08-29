@@ -59,8 +59,8 @@ lemma _root_.AddSubmonoid.toNatSubmodule_closure
     ((Submodule.span Nat s).toAddSubmonoid.closure_le.mpr Submodule.subset_span)
 
 中文:
-引理 _root_.AddSubmonoid.toNatSubmodule_closure
-  条件: (s : Set M)
+引理 _root_.加法子幺半群.to自然数Submodule_closure
+  条件: (s : 集合 M)
   证明: (Submodule.span_le.mpr AddSubmonoid.subset_closure).antisymm'
     ((Submodule.span Nat s).toAddSubmonoid.closure_le.mpr Submodule.subset_span)
 
@@ -85,7 +85,7 @@ include σ₁₂ in
 
 中文:
 定理 span_coe_eq_restrictScalars
-  条件: [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  条件: [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   证明: span_eq (p.restrictScalars S)
 
 include σ₁₂ in
@@ -109,7 +109,7 @@ include σ₁₂ in
 
 中文:
 定理 image_span_subset
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : Set M) (N : Submodule R₂ M₂)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : 集合 M) (N : 子模 R₂ M₂)
   证明: image_subset_iff.trans span_le (p := N.comap f)
 
 include σ₁₂ in
@@ -131,7 +131,7 @@ theorem image_span_subset_span
 
 中文:
 定理 image_span_subset_span
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : Set M)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : 集合 M)
   结论: f '' span R s subseteq span R₂ (f '' s)
   证明: (image_span_subset f s _).2 fun x hx => subset_span ⟨x, hx, rfl⟩
 
@@ -152,7 +152,7 @@ alias _root_.LinearMap.map_span := Submodule.map_span
 
 中文:
 定理 map_span
-  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (s : Set M)
+  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (s : 集合 M)
   证明: Eq.symm span_eq_of_le _ (Set.image_mono subset_span) (image_span_subset_span f s)
 
 alias _root_.LinearMap.map_span := Submodule.map_span
@@ -177,7 +177,7 @@ alias _root_.LinearMap.map_span_le := Submodule.map_span_le
 
 中文:
 定理 map_span_le
-  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (s : Set M) (N : Submodule R₂ M₂)
+  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (s : 集合 M) (N : 子模 R₂ M₂)
   证明: image_span_subset f s N
 
 alias _root_.LinearMap.map_span_le := Submodule.map_span_le
@@ -205,7 +205,7 @@ include σ₁₂ in
 
 中文:
 定理 span_preimage_le
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : Set M₂)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (s : 集合 M₂)
   证明: by
   rw [span_le]; rw [comap_coe]
   exact preimage_mono subset_span
@@ -236,7 +236,7 @@ alias _root_.Set.MapsTo.submoduleSpan := mapsTo_span
 
 中文:
 定理 mapsTo_span
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {s : Set M} {t : Set M₂} (h : MapsTo f s t)
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {s : 集合 M} {t : 集合 M₂} (h : 映射到 f s t)
   证明: (span_mono h).trans (span_preimage_le (σ₁₂ := σ₁₂) f t)
 
 alias _root_.Set.MapsTo.submoduleSpan := mapsTo_span
@@ -275,7 +275,7 @@ lemma linearMap_eq_iff_of_eq_span
 
 中文:
 引理 linearMap_eq_iff_of_eq_span
-  结论: {V : Submodule R M} (f g : V ->ₗ[R] N)
+  结论: {V : 子模 R M} (f g : V ->ₗ[R] N)
   证明: by
   constructor
   · rintro rfl _
@@ -391,7 +391,7 @@ lemma linearMap_eq_zero_iff_of_eq_span
 
 中文:
 引理 linearMap_eq_zero_iff_of_eq_span
-  结论: {V : Submodule R M} (f : V ->ₗ[R] N)
+  结论: {V : 子模 R M} (f : V ->ₗ[R] N)
   证明: linearMap_eq_iff_of_eq_span f 0 hV
 
 Depends on / 依赖: linearMap_eq_iff_of_eq_span
@@ -418,7 +418,7 @@ theorem span_smul_eq_of_isUnit
 
 中文:
 定理 span_smul_eq_of_isUnit
-  条件: (s : Set M) (r : R) (hr : IsUnit r)
+  条件: (s : 集合 M) (r : R) (hr : 是单位 r)
   结论: span R (r • s) = span R s
   证明: by
   apply le_antisymm
@@ -605,7 +605,7 @@ theorem span_eq_top_of_span_eq_top
 
 中文:
 定理 span_eq_top_of_span_eq_top
-  条件: (s : Set M) (hs : span R s = ⊤)
+  条件: (s : 集合 M) (hs : span R s = ⊤)
   结论: span S s = ⊤
   证明: le_top.antisymm (hs.ge.trans (span_le_restrictScalars R S s))
 
@@ -632,7 +632,7 @@ lemma span_range_inclusion_eq_top
 
 中文:
 引理 span_range_inclusion_eq_top
-  结论: (p : Submodule R M) (q : Submodule S M)
+  结论: (p : 子模 R M) (q : 子模 S M)
   证明: by
   suffices (span S (range (inclusion h₁))).map q.subtype = q by
     apply map_injective_of_injective q.injective_subtype
@@ -695,7 +695,7 @@ theorem span_singleton_eq_span_singleton
 
 中文:
 定理 span_singleton_eq_span_singleton
-  结论: {R M : 类型} [Ring R] [IsDomain R] [AddCommGroup M]
+  结论: {R M : 类型} [环 R] [是整环 R] [加法交换群 M]
   证明: by
   constructor
   · simp only [le_antisymm_iff, span_singleton_le_iff_mem, mem_span_singleton]
@@ -830,7 +830,7 @@ theorem map_subtype_span_singleton
 
 中文:
 定理 map_subtype_span_singleton
-  条件: {p : Submodule R M} (x : p)
+  条件: {p : 子模 R M} (x : p)
   证明: by simp [← span_image]
 
 Depends on / 依赖: span_image
@@ -872,7 +872,7 @@ theorem smul_span
 
 中文:
 定理 smul_span
-  条件: (a : α) (s : Set M)
+  条件: (a : α) (s : 集合 M)
   结论: a • span R s = span R (a • s)
   证明: map_span _ _
 
@@ -893,7 +893,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (a : α) (S : Submodule R M)
+  条件: (a : α) (S : 子模 R M)
   结论: a • S = span R (a • S)
   证明: by
   simp [← smul_span]
@@ -914,7 +914,7 @@ theorem span_smul
 
 中文:
 定理 span_smul
-  条件: (a : α) (s : Set M)
+  条件: (a : α) (s : 集合 M)
   结论: span R (a • s) = a • span R s
   证明: Eq.symm (span_image _).symm
 
@@ -934,7 +934,7 @@ theorem set_smul_span
 
 中文:
 定理 set_smul_span
-  条件: (s : Set α) (t : Set M)
+  条件: (s : 集合 α) (t : 集合 M)
   证明: by
   simp_rw [set_smul_eq_iSup, smul_span, iSup_span, Set.iUnion_smul_set]
 
@@ -954,7 +954,7 @@ theorem span_set_smul
 
 中文:
 定理 span_set_smul
-  条件: (s : Set α) (t : Set M)
+  条件: (s : 集合 α) (t : 集合 M)
   证明: (set_smul_span s t).symm
 
 Depends on / 依赖: set_smul_span
@@ -979,7 +979,7 @@ theorem iSup_toAddSubmonoid
 
 中文:
 定理 iSup_toAddSubmonoid
-  条件: {ι : Sort*} (p : ι -> Submodule R M)
+  条件: {ι : 类型层*} (p : ι -> 子模 R M)
   证明: by
   refine le_antisymm (fun x => ?_) (iSup_le fun i => toAddSubmonoid_mono <| le_iSup _ i)
   simp_rw [iSup_eq_span, AddSubmonoid.iSup_eq_closure, mem_toAddSubmonoid, coe_toAddSubmonoid]
@@ -1025,7 +1025,7 @@ theorem iSup_induction
 
 中文:
 定理 iSup_induction
-  结论: {ι : Sort*} (p : ι -> Submodule R M) {motive : M -> 命题} {x : M}
+  结论: {ι : 类型层*} (p : ι -> 子模 R M) {motive : M -> 命题} {x : M}
   证明: by
   rw [← mem_toAddSubmonoid]; rw [iSup_toAddSubmonoid] at hx
   exact AddSubmonoid.iSup_induction (x := x) _ hx mem zero add
@@ -1057,7 +1057,7 @@ theorem iSup_induction'
 
 中文:
 定理 iSup_induction'
-  结论: {ι : Sort*} (p : ι -> Submodule R M) {motive : 对任意 x, (x in ⨆ i, p i) -> 命题}
+  结论: {ι : 类型层*} (p : ι -> 子模 R M) {motive : 对任意 x, (x in ⨆ i, p i) -> 命题}
   证明: by
   refine Exists.elim ?_ fun (hx : x in ⨆ i, p i) (hc : motive x hx) => hc
   refine iSup_induction p (motive := fun x : M => exists (hx : x in ⨆ i, p i), motive x hx) hx
@@ -1129,7 +1129,7 @@ theorem finset_span_isCompactElement
 
 中文:
 定理 finset_span_isCompactElement
-  条件: (S : Finset M)
+  条件: (S : 有限集 M)
   证明: by
   rw [span_eq_iSup_of_singleton_spans]
   simp only [Finset.mem_coe]
@@ -1157,7 +1157,7 @@ theorem finite_span_isCompactElement
 
 中文:
 定理 finite_span_isCompactElement
-  条件: (S : Set M) (h : S.Finite)
+  条件: (S : 集合 M) (h : S.有限)
   证明: Finite.coe_toFinset h ▸ finset_span_isCompactElement h.toFinset
 
 Depends on / 依赖: Finite, Finite.coe_toFinset, coe_toFinset, finset_span_isCompactElement, h.toFinset, toFinset
@@ -1181,7 +1181,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCompactlyGenerated (Submodule R M)
+  签名: 是余mpactlyGenerated (子模 R M)
   定义体: ⟨fun s =>
     ⟨(fun x => span R {x}) '' s,
       ⟨fun t ht => by
@@ -1214,8 +1214,8 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
-  签名: : Submodule R (M × M')
+定义 乘积
+  签名: : 子模 R (M × M')
   定义体: { p.toAddSubmonoid.prod q₁.toAddSubmonoid with
     carrier := p ×ˢ q₁
     smul_mem' := by rintro a ⟨x, y⟩ ⟨hx, hy⟩; exact ⟨smul_mem _ a hx, smul_mem _ a hy⟩ }
@@ -1242,7 +1242,7 @@ theorem prod_coe
 
 中文:
 定理 prod_coe
-  结论: (prod p q₁ : Set (M × M')) = (p : Set M) ×ˢ (q₁ : Set M')
+  结论: (乘积 p q₁ : 集合 (M × M')) = (p : 集合 M) ×ˢ (q₁ : 集合 M')
   证明: rfl
 
 @[simp]
@@ -1261,7 +1261,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {p : Submodule R M} {q : Submodule R M'} {x : M × M'}
+  条件: {p : 子模 R M} {q : 子模 R M'} {x : M × M'}
   证明: Set.mem_prod
 
 Depends on / 依赖: Set.mem_prod, mem_prod
@@ -1283,8 +1283,8 @@ theorem span_prod_le
 
 中文:
 定理 span_prod_le
-  条件: (s : Set M) (t : Set M')
-  结论: span R (s ×ˢ t) <= prod (span R s) (span R t)
+  条件: (s : 集合 M) (t : 集合 M')
+  结论: span R (s ×ˢ t) <= 乘积 (span R s) (span R t)
   证明: span_le.2 Set.prod_mono subset_span subset_span
 
 @[simp]
@@ -1307,7 +1307,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: (prod ⊤ ⊤ : Submodule R (M × M')) = ⊤
+  结论: (乘积 ⊤ ⊤ : 子模 R (M × M')) = ⊤
   证明: by ext; simp
 
 @[simp]
@@ -1325,7 +1325,7 @@ theorem prod_bot
 
 中文:
 定理 prod_bot
-  结论: (prod ⊥ ⊥ : Submodule R (M × M')) = ⊥
+  结论: (乘积 ⊥ ⊥ : 子模 R (M × M')) = ⊥
   证明: by ext ⟨x, y⟩; simp
 -/
 theorem prod_bot : (prod ⊥ ⊥ : Submodule R (M × M')) = ⊥ := by ext ⟨x, y⟩; simp
@@ -1342,7 +1342,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {p p' : Submodule R M} {q q' : Submodule R M'}
+  条件: {p p' : 子模 R M} {q q' : 子模 R M'}
   证明: Set.prod_mono
 
 @[simp]
@@ -1366,7 +1366,7 @@ theorem prod_inf_prod
 
 中文:
 定理 prod_inf_prod
-  结论: prod p q₁ ⊓ prod p' q₁' = prod (p ⊓ p') (q₁ ⊓ q₁')
+  结论: 乘积 p q₁ ⊓ 乘积 p' q₁' = 乘积 (p ⊓ p') (q₁ ⊓ q₁')
   证明: SetLike.coe_injective Set.prod_inter_prod
 
 @[simp]
@@ -1393,7 +1393,7 @@ theorem prod_sup_prod
 
 中文:
 定理 prod_sup_prod
-  结论: prod p q₁ ⊔ prod p' q₁' = prod (p ⊔ p') (q₁ ⊔ q₁')
+  结论: 乘积 p q₁ ⊔ 乘积 p' q₁' = 乘积 (p ⊔ p') (q₁ ⊔ q₁')
   证明: by
   refine le_antisymm
     (sup_le (prod_mono le_sup_left le_sup_left) (prod_mono le_sup_right le_sup_right)) ?_
@@ -1428,8 +1428,8 @@ lemma _root_.LinearMap.BilinMap.apply_apply_mem_of_mem_span
  
 
 中文:
-引理 _root_.LinearMap.BilinMap.apply_apply_mem_of_mem_span
-  结论: {R M N P : 类型} [CommSemiring R]
+引理 _root_.线性映射.BilinMap.apply_apply_mem_of_mem_span
+  结论: {R M N P : 类型} [交换半环 R]
   证明: by
   induction hx, hy using span_induction₂ with
   | mem_mem u v hu hv => exact hB u hu v hv
@@ -1472,7 +1472,7 @@ lemma biSup_comap_subtype_eq_top
 
 中文:
 引理 biSup_comap_subtype_eq_top
-  条件: {ι : 类型} (s : Set ι) (p : ι -> Submodule R M)
+  条件: {ι : 类型} (s : 集合 ι) (p : ι -> 子模 R M)
   证明: by
   refine eq_top_iff.mpr fun ⟨x, hx⟩ _ => ?_
   suffices x in (⨆ i in s, (p i).comap (⨆ i in s, p i).subtype).map (⨆ i in s, (p i)).subtype by
@@ -1505,8 +1505,8 @@ theorem _root_.LinearMap.exists_ne_zero_of_sSup_eq
   ⟨m, hm, fun eq => ne (LinearMap.ext fun x => congr($eq ⟨x, x.2⟩))⟩
 
 中文:
-定理 _root_.LinearMap.exists_ne_zero_of_sSup_eq
-  结论: {N : Submodule R M} {f : N ->ₛₗ[σ₁₂] M₂}
+定理 _root_.线性映射.存在_ne_zero_of_sSup_eq
+  结论: {N : 子模 R M} {f : N ->ₛₗ[σ₁₂] M₂}
   证明: have ⟨_, ⟨m, hm, rfl⟩, ne⟩ := LinearMap.exists_ne_zero_of_sSup_eq_top h (comap N.subtype '' s)
     by rw [sSup_eq_iSup] at hs; rw [sSup_image, ← hs, biSup_comap_subtype_eq_top]
   ⟨m, hm, fun eq => ne (LinearMap.ext fun x => congr($eq ⟨x, x.2⟩))⟩
@@ -1531,7 +1531,7 @@ lemma span_val_image_eq_iff
 
 中文:
 引理 span_val_image_eq_iff
-  条件: (p : Submodule R M) (s : Set p)
+  条件: (p : 子模 R M) (s : 集合 p)
   证明: by
   simp [← (Submodule.map_injective_of_injective p.injective_subtype).eq_iff, Submodule.map_span]
 
@@ -1552,7 +1552,7 @@ lemma span_range_subtype_eq_top_iff
 
 中文:
 引理 span_range_subtype_eq_top_iff
-  结论: {ι : 类型} (p : Submodule R M) {s : ι -> M}
+  结论: {ι : 类型} (p : 子模 R M) {s : ι -> M}
   证明: by
   simp [← span_val_image_eq_iff, ← Set.range_comp, Function.comp_def]
 
@@ -1598,7 +1598,7 @@ lemma comap_sup_of_injective
 
 中文:
 引理 comap_sup_of_injective
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} [RingHomSurjective σ₁₂] {p q : Submodule R₂ M₂}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} [RingHomSurjective σ₁₂] {p q : 子模 R₂ M₂}
   证明: by
   apply map_injective_of_injective hf
   rw [map_sup]; rw [map_comap_eq_self]; rw [map_comap_eq_self hp]; rw [map_comap_eq_self hq]
@@ -1637,7 +1637,7 @@ lemma sup_inf_assoc_of_le_of_neg_le
 
 中文:
 引理 sup_inf_assoc_of_le_of_neg_le
-  结论: {s : Submodule R M} (t : Submodule R M)
+  结论: {s : 子模 R M} (t : 子模 R M)
   证明: by
   ext x; simp only [mem_sup, mem_inf]
   constructor
@@ -1674,7 +1674,7 @@ lemma inf_sup_assoc_of_le_of_neg_le
 
 中文:
 引理 inf_sup_assoc_of_le_of_neg_le
-  结论: {s : Submodule R M} (t : Submodule R M)
+  结论: {s : 子模 R M} (t : 子模 R M)
   证明: by
   rw [sup_comm]; rw [inf_comm]; rw [← sup_inf_assoc_of_le_of_neg_le t hps hnps]; rw [inf_comm]; rw [sup_comm]
 
@@ -1701,7 +1701,7 @@ theorem span_neg_eq_neg
 
 中文:
 定理 span_neg_eq_neg
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: span R (-s) = -span R s
   证明: by
   apply le_antisymm
@@ -1733,8 +1733,8 @@ lemma _root_.AddSubgroup.toIntSubmodule_closure
 @[simp]
 
 中文:
-引理 _root_.AddSubgroup.toIntSubmodule_closure
-  条件: (s : Set M)
+引理 _root_.加法子群.to整数Submodule_closure
+  条件: (s : 集合 M)
   证明: (Submodule.span_le.mpr AddSubgroup.subset_closure).antisymm'
     ((Submodule.span Int s).toAddSubgroup.closure_le.mpr Submodule.subset_span)
 
@@ -1759,7 +1759,7 @@ theorem span_neg
 
 中文:
 定理 span_neg
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: span R (-s) = span R s
   证明: by simp [span_neg_eq_neg]
 
@@ -1778,7 +1778,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsModularLattice (Submodule R M)
+  签名: 是Modular格 (子模 R M)
   定义体: ⟨
   fun _ _ hxy _ _ => by rwa [← sup_inf_assoc_of_le_of_neg_le _ hxy (by simpa)]⟩
 -/
@@ -1796,7 +1796,7 @@ lemma isCompl_comap_subtype_of_isCompl_of_le
 
 中文:
 引理 isCompl_comap_subtype_of_isCompl_of_le
-  结论: {p q r : Submodule R M}
+  结论: {p q r : 子模 R M}
   证明: by
   simpa [p.mapIic.isCompl_iff, Iic.isCompl_iff] using Iic.isCompl_inf_inf_of_isCompl_of_le h₁ h₂
 
@@ -1830,7 +1830,7 @@ theorem comap_map_eq
 
 中文:
 定理 comap_map_eq
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (p : Submodule R M)
+  条件: (f : M ->ₛₗ[τ₁₂] M₂) (p : 子模 R M)
   证明: by
   refine le_antisymm ?_ (sup_le (le_comap_map _ _) (comap_mono bot_le))
   rintro x ⟨y, hy, e⟩
@@ -1856,7 +1856,7 @@ theorem map_eq_range_iff
 
 中文:
 定理 map_eq_range_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M}
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M}
   证明: by
   simp_rw [le_antisymm_iff, LinearMap.map_le_range, true_and, ← map_top, map_le_iff_le_comap,
     comap_map_eq, codisjoint_iff_le_sup]
@@ -1880,7 +1880,7 @@ theorem map_lt_map_of_le_of_sup_lt_sup
 
 中文:
 定理 map_lt_map_of_le_of_sup_lt_sup
-  结论: {p p' : Submodule R M} {f : M ->ₛₗ[τ₁₂] M₂} (hab : p <= p')
+  结论: {p p' : 子模 R M} {f : M ->ₛₗ[τ₁₂] M₂} (hab : p <= p')
   证明: by
   simp_rw [← comap_map_eq] at h
   exact lt_of_le_of_ne (map_mono hab) (ne_of_apply_ne _ h.ne)
@@ -1902,7 +1902,7 @@ theorem comap_map_eq_self
 
 中文:
 定理 comap_map_eq_self
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M} (h : LinearMap.ker f <= p)
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M} (h : 线性映射.ker f <= p)
   证明: by rw [Submodule.comap_map_eq, sup_of_le_left h]
 
 Depends on / 依赖: Submodule, Submodule.comap_map_eq, comap_map_eq, sup_of_le_left
@@ -1924,7 +1924,7 @@ theorem comap_map_sup_of_comap_le
 
 中文:
 定理 comap_map_sup_of_comap_le
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: by
   refine le_antisymm (fun x h => ?_) (map_le_iff_le_comap.mp le_sup_left)
   obtain ⟨_, ⟨y, hy, rfl⟩, z, hz, eq⟩ := mem_sup.mp h
@@ -1952,7 +1952,7 @@ lemma disjoint_map_of_ker_le_right
 
 中文:
 引理 disjoint_map_of_ker_le_right
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p q : Submodule R M}
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p q : 子模 R M}
   证明: by
   rw [disjoint_iff]; rw [map_inf_eq_map_inf_comap]; rw [comap_map_eq]; rw [eq_bot_iff]; rw [map_le_iff_le_comap]; rw [comap_bot]; rw [sup_eq_left.mpr hker]; rw [hpq.eq_bot]
   exact bot_le
@@ -1974,7 +1974,7 @@ lemma disjoint_map_of_ker_le_left
 
 中文:
 引理 disjoint_map_of_ker_le_left
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p q : Submodule R M}
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} {p q : 子模 R M}
   证明: .symm disjoint_map_of_ker_le_right hpq.symm hker
 
 Depends on / 依赖: disjoint_map_of_ker_le_right, hpq.symm
@@ -1995,7 +1995,7 @@ theorem isCoatom_comap_or_eq_top
 
 中文:
 定理 isCoatom_comap_or_eq_top
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) {p : Submodule R₂ M₂} (hp : IsCoatom p)
+  条件: (f : M ->ₛₗ[τ₁₂] M₂) {p : 子模 R₂ M₂} (hp : IsCoatom p)
   证明: or_iff_not_imp_right.mpr fun h => ⟨h, fun q lt => by
     rw [← comap_map_sup_of_comap_le lt.le]; rw [hp.2 (map f q ⊔ p)]; rw [comap_top]
     simpa only [right_lt_sup, map_le_iff_le_comap] using lt.not_ge⟩
@@ -2023,7 +2023,7 @@ theorem isCoatom_comap_iff
 
 中文:
 定理 isCoatom_comap_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : Surjective f) {p : Submodule R₂ M₂}
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : 满射 f) {p : 子模 R₂ M₂}
   证明: by
   have := comap_injective_of_surjective hf
   rw [IsCoatom]; rw [IsCoatom]; rw [← comap_top f]; rw [this.ne_iff]
@@ -2051,7 +2051,7 @@ theorem isCoatom_map_of_ker_le
 
 中文:
 定理 isCoatom_map_of_ker_le
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : Surjective f) {p : Submodule R M}
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : 满射 f) {p : 子模 R M}
   证明: (isCoatom_comap_iff hf).mp by rwa [comap_map_eq_self le]
 
 Depends on / 依赖: comap_map_eq_self, isCoatom_comap_iff
@@ -2072,7 +2072,7 @@ theorem map_iInf_of_ker_le
 
 中文:
 定理 map_iInf_of_ker_le
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : Surjective f) {ι} {p : ι -> Submodule R M}
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : 满射 f) {ι} {p : ι -> 子模 R M}
   证明: by
   conv_rhs => rw [← map_comap_eq_of_surjective hf (⨅ _, _), comap_iInf]
   simp_rw [fun i => comap_map_eq_self (le_iInf_iff.mp h i)]
@@ -2099,7 +2099,7 @@ lemma comap_covBy_of_surjective
 
 中文:
 引理 comap_covBy_of_surjective
-  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : Surjective f)
+  结论: {f : M ->ₛₗ[τ₁₂] M₂} (hf : 满射 f)
   证明: by
   refine ⟨lt_of_le_of_ne (comap_mono h.1.le) ((comap_injective_of_surjective hf).ne h.1.ne), ?_⟩
   intro N h₁ h₂
@@ -2129,8 +2129,8 @@ lemma _root_.LinearMap.range_domRestrict_eq_range_iff
   simp [map_eq_range_iff]
 
 中文:
-引理 _root_.LinearMap.range_domRestrict_eq_range_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M}
+引理 _root_.线性映射.range_domRestrict_eq_range_iff
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} {S : 子模 R M}
   证明: by
   simp [map_eq_range_iff]
 
@@ -2150,7 +2150,7 @@ lemma _root_.LinearMap.surjective_domRestrict_iff
   rw [← hf]; rw [LinearMap.range_domRestrict]; rw [map_eq_range_iff]
 
 中文:
-引理 _root_.LinearMap.surjective_domRestrict_iff
+引理 _root_.线性映射.surjective_domRestrict_iff
   证明: by
   rw [← LinearMap.range_eq_top] at hf ⊢
   rw [← hf]; rw [LinearMap.range_domRestrict]; rw [map_eq_range_iff]
@@ -2176,7 +2176,7 @@ lemma biSup_comap_eq_top_of_surjective
 
 中文:
 引理 biSup_comap_eq_top_of_surjective
-  结论: {ι : 类型} (s : Set ι) (hs : s.Nonempty)
+  结论: {ι : 类型} (s : 集合 ι) (hs : s.非空)
   证明: by
   obtain ⟨k, hk⟩ := hs
   suffices (⨆ i in s, (p i).comap f) ⊔ LinearMap.ker f = ⊤ by
@@ -2269,7 +2269,7 @@ theorem _root_.LinearMap.ker_inf_lt_ker_inf_of_map_eq_of_lt
   proof: .resolve_left q.not_lt map_strict_mono_or_ker_sup_lt_ker_sup f hab
 
 中文:
-定理 _root_.LinearMap.ker_inf_lt_ker_inf_of_map_eq_of_lt
+定理 _root_.线性映射.ker_inf_lt_ker_inf_of_map_eq_of_lt
   结论: {f : M ->ₛₗ[τ₁₂] M₂}
   证明: .resolve_left q.not_lt map_strict_mono_or_ker_sup_lt_ker_sup f hab
 
@@ -2310,7 +2310,7 @@ lemma disjoint_span_singleton''
 
 中文:
 引理 disjoint_span_singleton''
-  条件: {s : Submodule R M} {x : M}
+  条件: {s : 子模 R M} {x : M}
   证明: by
   rw [disjoint_comm]; simp +contextual [disjoint_def, mem_span_singleton]
 
@@ -2343,7 +2343,7 @@ theorem wcovBy_span_singleton_sup
 
 中文:
 定理 wcovBy_span_singleton_sup
-  条件: (x : V) (s : Submodule K V)
+  条件: (x : V) (s : 子模 K V)
   结论: WCovBy s (K ∙ x ⊔ s)
   证明: by
   refine ⟨le_sup_right, fun q hpq hqp => hqp.not_ge ?_⟩
@@ -2377,7 +2377,7 @@ theorem covBy_span_singleton_sup
 
 中文:
 定理 covBy_span_singleton_sup
-  条件: {x : V} {s : Submodule K V} (h : x ∉ s)
+  条件: {x : V} {s : 子模 K V} (h : x ∉ s)
   结论: CovBy s (K ∙ x ⊔ s)
   证明: ⟨by simpa, (wcovBy_span_singleton_sup _ _).2⟩
 
@@ -2548,7 +2548,7 @@ theorem map_injective
 中文:
 定理 map_injective
   条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : ker f = ⊥)
-  结论: Injective (map f)
+  结论: 单射 (map f)
   证明: fun _ _ h =>
   le_antisymm ((map_le_map_iff' hf).1 (le_of_eq h)) ((map_le_map_iff' hf).1 (ge_of_eq h))
 -/
@@ -2566,7 +2566,7 @@ theorem map_eq_top_iff
 
 中文:
 定理 map_eq_top_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : range f = ⊤) {p : Submodule R M}
+  条件: {f : M ->ₛₗ[τ₁₂] M₂} (hf : range f = ⊤) {p : 子模 R M}
   证明: by
   simp_rw [← top_le_iff, ← hf, range_eq_map, LinearMap.map_le_map_iff]
 
@@ -2650,7 +2650,7 @@ theorem toSpanSingleton_injective
 
 中文:
 定理 toSpanSingleton_injective
-  结论: Function.Injective (toSpanSingleton R M)
+  结论: 函数.单射 (toSpanSingleton R M)
   证明: fun _ _ eq => by simpa using congr($eq 1)
 
 @[simp]
@@ -2734,7 +2734,7 @@ theorem toSpanSingleton_smul
 
 中文:
 定理 toSpanSingleton_smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M]
   证明: by
   ext; simp
 -/
@@ -2783,7 +2783,7 @@ theorem isIdempotentElem_map_one_iff
 
 中文:
 定理 isIdempotentElem_map_one_iff
-  条件: {f : Module.End R R}
+  条件: {f : 模.End R R}
   证明: by
   rw [IsIdempotentElem]; rw [← smul_eq_mul]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [IsIdempotentElem]; rw [LinearMap.ext_iff]
   simp_rw [Module.End.mul_apply]
@@ -2847,7 +2847,7 @@ theorem comp_toSpanSingleton
 
 中文:
 定理 comp_toSpanSingleton
-  条件: [AddCommMonoid M₂] [Module R M₂] (f : M ->ₗ[R] M₂) (x : M)
+  条件: [加法交换幺半群 M₂] [模 R M₂] (f : M ->ₗ[R] M₂) (x : M)
   证明: by
   ext; simp
 -/
@@ -2868,7 +2868,7 @@ theorem submoduleOf_span_singleton_of_mem
 
 中文:
 定理 submoduleOf_span_singleton_of_mem
-  条件: (N : Submodule R M) {x : M} (hx : x in N)
+  条件: (N : 子模 R M) {x : M} (hx : x in N)
   证明: by
   ext y
   simp_rw [submoduleOf, mem_comap, subtype_apply, mem_span_singleton]
@@ -2918,7 +2918,7 @@ theorem eqOn_span_iff
 
 中文:
 定理 eqOn_span_iff
-  条件: {s : Set M} {f g : M ->ₛₗ[σ₁₂] M₂}
+  条件: {s : 集合 M} {f g : M ->ₛₗ[σ₁₂] M₂}
   证明: by
   rw [← le_eqLocus]; rw [span_le]; rfl
 
@@ -2938,7 +2938,7 @@ theorem eqOn_span'
 
 中文:
 定理 eqOn_span'
-  条件: {s : Set M} {f g : M ->ₛₗ[σ₁₂] M₂} (H : Set.EqOn f g s)
+  条件: {s : 集合 M} {f g : M ->ₛₗ[σ₁₂] M₂} (H : 集合.EqOn f g s)
   证明: eqOn_span_iff.2 H
 
 Depends on / 依赖: eqOn_span_iff
@@ -2957,7 +2957,7 @@ theorem eqOn_span
 
 中文:
 定理 eqOn_span
-  条件: {s : Set M} {f g : M ->ₛₗ[σ₁₂] M₂} (H : Set.EqOn f g s) ⦃x⦄ (h : x in span R s)
+  条件: {s : 集合 M} {f g : M ->ₛₗ[σ₁₂] M₂} (H : 集合.EqOn f g s) ⦃x⦄ (h : x in span R s)
   证明: eqOn_span' H h
 
 Depends on / 依赖: eqOn_span
@@ -2977,7 +2977,7 @@ theorem ext_on
 
 中文:
 定理 ext_on
-  条件: {s : Set M} {f g : M ->ₛₗ[σ₁₂] M₂} (hv : span R s = ⊤) (h : Set.EqOn f g s)
+  条件: {s : 集合 M} {f g : M ->ₛₗ[σ₁₂] M₂} (hv : span R s = ⊤) (h : 集合.EqOn f g s)
   结论: f = g
   证明: DFunLike.ext _ _ fun _ => eqOn_span h (eq_top_iff'.1 hv _)
 
@@ -2996,7 +2996,7 @@ theorem ext_on_range
 
 中文:
 定理 ext_on_range
-  结论: {ι : Sort*} {v : ι -> M} {f g : M ->ₛₗ[σ₁₂] M₂} (hv : span R (Set.range v) = ⊤)
+  结论: {ι : 类型层*} {v : ι -> M} {f g : M ->ₛₗ[σ₁₂] M₂} (hv : span R (集合.range v) = ⊤)
   证明: ext_on hv (Set.forall_mem_range.2 h)
 
 Depends on / 依赖: Set.forall_mem_range, ext_on, forall_mem_range
@@ -3024,7 +3024,7 @@ theorem ker_toSpanSingleton
 中文:
 定理 ker_toSpanSingleton
   条件: {x : M} (h : x != 0)
-  结论: LinearMap.ker (toSpanSingleton R M x) = ⊥
+  结论: 线性映射.ker (toSpanSingleton R M x) = ⊥
   证明: SetLike.ext fun _ => smul_eq_zero.trans or_iff_left_of_imp fun h' => (h h').elim
 
 Depends on / 依赖: SetLike, SetLike.ext, or_iff_left_of_imp, smul_eq_zero, smul_eq_zero.trans
@@ -3199,7 +3199,7 @@ theorem coord_self
 
 中文:
 定理 coord_self
-  结论: (coord R M x h) (⟨x, Submodule.mem_span_singleton_self x⟩ : R ∙ x) = 1
+  结论: (coord R M x h) (⟨x, 子模.mem_span_singleton_self x⟩ : R ∙ x) = 1
   证明: by
   rw [← toSpanNonzeroSingleton_one R M x h]; rw [LinearEquiv.symm_apply_apply]
 
@@ -3219,7 +3219,7 @@ theorem coord_apply_smul
 
 中文:
 定理 coord_apply_smul
-  条件: (y : Submodule.span R ({x} : Set M))
+  条件: (y : 子模.span R ({x} : 集合 M))
   结论: coord R M x h y • x = y
   证明: Subtype.ext_iff.1 (toSpanNonzeroSingleton R M x h).apply_symm_apply _
 

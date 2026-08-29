@@ -79,7 +79,7 @@ theorem smeval_eq_sum
 
 中文:
 定理 smeval_eq_sum
-  结论: p.smeval x = p.sum (smul_pow x)
+  结论: p.smeval x = p.求和 (smul_pow x)
   证明: by rw [smeval_def]
 
 @[simp]
@@ -171,7 +171,7 @@ theorem eval₂_smulOneHom_eq_smeval
 
 中文:
 定理 eval₂_smulOneHom_eq_smeval
-  结论: (R : 类型) [Semiring R] {S : 类型} [Semiring S] [Module R S]
+  结论: (R : 类型) [半环 R] {S : 类型} [半环 S] [模 R S]
   证明: by
   rw [smeval_eq_sum]; rw [eval₂_eq_sum]
   congr 1 with e a
@@ -441,7 +441,7 @@ theorem leval_coe_eq_smeval
 
 中文:
 定理 leval_coe_eq_smeval
-  条件: {R : 类型} [Semiring R] (r : R)
+  条件: {R : 类型} [半环 R] (r : R)
   证明: by
   ext
   simpa using eval_eq_smeval _ _
@@ -466,7 +466,7 @@ theorem leval_eq_smeval.linearMap
 
 中文:
 定理 leval_eq_smeval.linearMap
-  条件: {R : 类型} [Semiring R] (r : R)
+  条件: {R : 类型} [半环 R] (r : R)
   证明: by
   refine LinearMap.ext ?_
   intro
@@ -546,7 +546,7 @@ theorem smeval_neg_nat
 
 中文:
 定理 smeval_neg_nat
-  结论: (S : 类型) [NonAssocRing S] [Pow S 自然数] [自然数PowAssoc S] (q : 自然数[X])
+  结论: (S : 类型) [非结合环 S] [幂 S 自然数] [自然数PowAssoc S] (q : 自然数[X])
   证明: by
   rw [smeval_eq_sum]; rw [smeval_eq_sum]
   simp only [Polynomial.smul_pow, sum_def]
@@ -1049,7 +1049,7 @@ theorem aeval_eq_smeval
 
 中文:
 定理 aeval_eq_smeval
-  结论: {R : 类型} [CommSemiring R] {S : 类型} [Semiring S] [Algebra R S]
+  结论: {R : 类型} [交换半环 R] {S : 类型} [半环 S] [代数 R S]
   证明: by
   rw [aeval_def]; rw [eval₂_def]; rw [Algebra.algebraMap_eq_smul_one']; rw [smeval_def]
   simp only [Algebra.smul_mul_assoc, one_mul]
@@ -1073,7 +1073,7 @@ theorem aeval_coe_eq_smeval
 
 中文:
 定理 aeval_coe_eq_smeval
-  结论: {R : 类型} [CommSemiring R] {S : 类型} [Semiring S] [Algebra R S]
+  结论: {R : 类型} [交换半环 R] {S : 类型} [半环 S] [代数 R S]
   证明: funext fun p => aeval_eq_smeval x p
 
 Depends on / 依赖: aeval_eq_smeval

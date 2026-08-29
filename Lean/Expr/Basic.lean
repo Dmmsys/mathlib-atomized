@@ -68,7 +68,7 @@ definition mapPrefix
 
 中文:
 定义 mapPrefix
-  签名: (f : Name -> Option Name) (n : Name)
+  签名: (f : Name -> 选项类型 Name) (n : Name)
   定义体: Id.run do
   if let some n' := f n then return n'
   match n with
@@ -97,7 +97,7 @@ definition fromComponents
 
 中文:
 定义 fromComponents
-  签名: : List Name -> Name
+  签名: : 列表 Name -> Name
   定义体: go .anonymous where
   /-- Auxiliary for `Name.fromComponents` -/
   go : Name -> List Name -> Name
@@ -218,7 +218,7 @@ pure declName.isInternalDetail
 
 中文:
 定义 isBlackListed
-  签名: {m} [Monad m] [MonadEnv m] (declName : Name)
+  签名: {m} [单子 m] [MonadEnv m] (declName : Name)
   定义体: do
   if declName == ``sorryAx then return true
   if declName matches .str _ "inj" then return true
@@ -252,7 +252,7 @@ definition isDef
 
 中文:
 定义 isDef
-  签名: : ConstantInfo -> 布尔
+  签名: : ConstantInfo -> 布尔值
 -/
 def isDef : ConstantInfo -> Bool
   | defnInfo _ => true
@@ -267,7 +267,7 @@ definition isThm
 
 中文:
 定义 isThm
-  签名: : ConstantInfo -> 布尔
+  签名: : ConstantInfo -> 布尔值
 -/
 def isThm : ConstantInfo -> Bool
   | thmInfo _ => true
@@ -340,7 +340,7 @@ definition updateLevelParams
 
 中文:
 定义 updateLevelParams
-  签名: (c : ConstantInfo) (levelParams : List Name)
+  签名: (c : ConstantInfo) (levelParams : 列表 Name)
   定义体: c.updateConstantVal {c.toConstantVal with levelParams}
 
 Depends on / 依赖: c.toConstantVal, c.updateConstantVal, levelParams, toConstantVal, updateConstantVal
@@ -358,7 +358,7 @@ definition updateAll
 
 中文:
 定义 updateAll
-  签名: : ConstantInfo -> List Name -> ConstantInfo
+  签名: : ConstantInfo -> 列表 Name -> ConstantInfo
 -/
 def updateAll : ConstantInfo -> List Name -> ConstantInfo
   | .defnInfo info, all => .defnInfo {info with all}
@@ -439,7 +439,7 @@ definition bvarIdx?
 
 中文:
 定义 bvarIdx?
-  签名: : Expr -> Option 自然数
+  签名: : Expr -> 选项类型 自然数
 -/
 def bvarIdx? : Expr -> Option Nat
   | bvar idx => some idx
@@ -454,7 +454,7 @@ definition getAppAppsAux
 
 中文:
 定义 getAppAppsAux
-  签名: : Expr -> Array Expr -> 自然数 -> Array Expr
+  签名: : Expr -> 数组 Expr -> 自然数 -> 数组 Expr
 -/
 private def getAppAppsAux : Expr -> Array Expr -> Nat -> Array Expr
   | .app f a, as, i => getAppAppsAux f (as.set! i (.app f a)) (i-1)
@@ -530,7 +530,7 @@ definition type?
 
 中文:
 定义 type?
-  签名: : Expr -> Option Level
+  签名: : Expr -> 选项类型 Level
 -/
 def type? : Expr -> Option Level
   | .sort u => u.dec
@@ -578,7 +578,7 @@ definition isAppOrForallOfConstP
 
 中文:
 定义 isAppOrForallOfConstP
-  签名: (p : Name -> 布尔) (type : Expr)
+  签名: (p : Name -> 布尔值) (type : Expr)
   定义体: match type.cleanupAnnotations.getAppFn' with
   | .const n _ => p n
   | .forallE _ _ body _ => isAppOrForallOfConstP p body
@@ -616,7 +616,7 @@ definition getUnusedForallInstanceBinderIdxsWhere
 
 中文:
 定义 getUnusedForallInstanceBinderIdxsWhere
-  签名: (p : Expr -> 布尔) (e : Expr)
+  签名: (p : Expr -> 布尔值) (e : Expr)
   定义体: go e 0 #[]
 -/
 partial def getUnusedForallInstanceBinderIdxsWhere (p : Expr -> Bool) (e : Expr) :
@@ -651,7 +651,7 @@ definition hasInstanceBinderOf
 
 中文:
 定义 hasInstanceBinderOf
-  签名: (p : Expr -> 布尔) (e : Expr)
+  签名: (p : Expr -> 布尔值) (e : Expr)
   定义体: match e.cleanupAnnotations with
   | .forallE _ type body bi => (bi.isInstImplicit && p type) || hasInstanceBinderOf p body
   | .letE _ _ _ body _ => hasInstanceBinderOf p body
@@ -715,7 +715,7 @@ definition ofNat
   mkAppOptM ``OfNat.ofNat #[α, mkRawNatLit n, none]
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: (α : Expr) (n : 自然数)
   定义体: do
   mkAppOptM ``OfNat.ofNat #[α, mkRawNatLit n, none]
@@ -731,7 +731,7 @@ definition ofInt
   signature: (α : Expr)
 
 中文:
-定义 ofInt
+定义 of整数
   签名: (α : Expr)
 -/
 def ofInt (α : Expr) : Int -> MetaM Expr
@@ -906,7 +906,7 @@ definition isSorryAx
 
 中文:
 定义 isSorryAx
-  签名: : Expr -> 布尔
+  签名: : Expr -> 布尔值
 -/
 def isSorryAx : Expr -> Bool
   | .app (.app f _ ) _ => f.isConstOf ``sorryAx
@@ -925,7 +925,7 @@ definition modifyAppArgM
 
 中文:
 定义 modifyAppArgM
-  签名: {M : Type -> 类型u} [Functor M] [Pure M]
+  签名: {M : 类型 -> 类型u} [函子 M] [Pure M]
 -/
 def modifyAppArgM {M : Type -> Type u} [Functor M] [Pure M]
     (modifier : Expr -> M Expr) : Expr -> M Expr
@@ -993,7 +993,7 @@ definition getRevArg?
 
 中文:
 定义 getRevArg?
-  签名: : Expr -> 自然数 -> Option Expr
+  签名: : Expr -> 自然数 -> 选项类型 Expr
 -/
 def getRevArg? : Expr -> Nat -> Option Expr
   | app _ a, 0 => a
@@ -1031,7 +1031,7 @@ definition modifyArgM
 
 中文:
 定义 modifyArgM
-  签名: {M : Type -> 类型u} [Monad M] (modifier : Expr -> M Expr)
+  签名: {M : 类型 -> 类型u} [单子 M] (modifier : Expr -> M Expr)
   定义体: do
   let some a := getArg? e i | return e
   let a ← modifier a
@@ -1245,7 +1245,7 @@ definition containsConst
 
 中文:
 定义 containsConst
-  签名: (e : Expr) (p : Name -> 布尔)
+  签名: (e : Expr) (p : Name -> 布尔值)
   定义体: Option.isSome e.find? fun | .const n _ => p n | _ => false
 
 Depends on / 依赖: Option.isSome, e.find, isSome
@@ -1264,7 +1264,7 @@ definition forallNot_of_notExists
   go lvl A p hNotEx
 
 中文:
-定义 forallNot_of_notExists
+定义 对任意Not_of_notExists
   签名: (ex hNotEx : Expr)
   定义体: do
   let .app (.app (.const ``Exists [lvl]) A) p := ex | failure

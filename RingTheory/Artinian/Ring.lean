@@ -61,7 +61,7 @@ theorem isNilpotent_jacobson_bot
 
 中文:
 定理 isNilpotent_jacobson_bot
-  条件: {R} [Ring R] [IsArtinianRing R]
+  条件: {R} [环 R] [是Artin环 R]
   证明: Ideal.jacobson_bot (R := R) ▸ IsSemiprimaryRing.isNilpotent
 
 Depends on / 依赖: Ideal.jacobson_bot, IsSemiprimaryRing, IsSemiprimaryRing.isNilpotent, isNilpotent, jacobson_bot
@@ -84,7 +84,7 @@ lemma jacobson_eq_radical
 
 中文:
 引理 jacobson_eq_radical
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: I.jacobson = I.radical
   证明: by
   simp_rw [Ideal.jacobson, Ideal.radical_eq_sInf, IsArtinianRing.isPrime_iff_isMaximal]
@@ -106,7 +106,7 @@ theorem isNilpotent_nilradical
 
 中文:
 定理 isNilpotent_nilradical
-  结论: IsNilpotent (nilradical R)
+  结论: 是幂零 (nilradical R)
   证明: by
   rw [nilradical]; rw [← jacobson_eq_radical]
   exact isNilpotent_jacobson_bot
@@ -130,8 +130,8 @@ theorem isField_of_isReduced_of_isLocalRing
 
 中文:
 定理 isField_of_isReduced_of_isLocalRing
-  条件: [IsReduced R] [IsLocalRing R]
-  结论: IsField R
+  条件: [是既约 R] [是局部环 R]
+  结论: 是域 R
   证明: .toMulEquiv.isField (IsArtinianRing.equivPi R).toRingEquiv.trans (RingEquiv.piUnique _)
     (Ideal.Quotient.field _).toIsField
 
@@ -161,7 +161,7 @@ theorem localization_surjective
 
 中文:
 定理 localization_surjective
-  结论: Function.Surjective (algebraMap R L)
+  结论: 函数.满射 (algebraMap R L)
   证明: by
   intro r'
   obtain ⟨r₁, s, rfl⟩ := IsLocalization.exists_mk'_eq S r'
@@ -193,7 +193,7 @@ theorem localization_artinian
 
 中文:
 定理 localization_artinian
-  结论: IsArtinianRing L
+  结论: 是Artin环 L
   证明: (localization_surjective S L).isArtinianRing
 
 Depends on / 依赖: isArtinianRing, localization_surjective
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsArtinianRing (Localization S)
+  签名: 是Artin环 (Localization S)
   定义体: localization_artinian S _
 
 Depends on / 依赖: localization_artinian

@@ -48,7 +48,7 @@ structure ImportState
 结构 ImportState
   参数: where
   公理与运算 (3 个):
-    - transClosure : Option (NameMap NameSet)  [默认: none]
+    - transClosure : 选项类型 (NameMap NameSet)  [默认: none]
     - minImports : NameSet  [默认: {}]
     - importSize : 自然数  [默认: 0]
 -/

@@ -43,8 +43,8 @@ definition prod
 @[simp, norm_cast]
 
 中文:
-定义 prod
-  签名: : Subalgebra R (A × B)
+定义 乘积
+  签名: : 子代数 R (A × B)
   定义体: { S.toSubsemiring.prod S₁.toSubsemiring with
     carrier := S ×ˢ S₁
     algebraMap_mem' := fun _ => ⟨algebraMap_mem _ _, algebraMap_mem _ _⟩ }
@@ -69,7 +69,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  结论: (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ (S₁ : Set B)
+  结论: (乘积 S S₁ : 集合 (A × B)) = (S : 集合 A) ×ˢ (S₁ : 集合 B)
   证明: rfl
 -/
 theorem coe_prod : (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ (S₁ : Set B) :=
@@ -88,7 +88,7 @@ theorem prod_toSubmodule
 
 中文:
 定理 prod_toSubmodule
-  结论: toSubmodule (S.prod S₁) = (toSubmodule S).prod (toSubmodule S₁)
+  结论: toSubmodule (S.乘积 S₁) = (toSubmodule S).乘积 (toSubmodule S₁)
   证明: rfl
 
 @[simp]
@@ -108,7 +108,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {S : Subalgebra R A} {S₁ : Subalgebra R B} {x : A × B}
+  条件: {S : 子代数 R A} {S₁ : 子代数 R B} {x : A × B}
   证明: Set.mem_prod
 
 @[simp]
@@ -129,7 +129,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: (prod ⊤ ⊤ : Subalgebra R (A × B)) = ⊤
+  结论: (乘积 ⊤ ⊤ : 子代数 R (A × B)) = ⊤
   证明: by ext; simp
 -/
 theorem prod_top : (prod ⊤ ⊤ : Subalgebra R (A × B)) = ⊤ := by ext; simp
@@ -146,7 +146,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B}
+  条件: {S T : 子代数 R A} {S₁ T₁ : 子代数 R B}
   证明: Set.prod_mono
 
 @[simp]
@@ -168,7 +168,7 @@ theorem prod_inf_prod
 
 中文:
 定理 prod_inf_prod
-  条件: {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B}
+  条件: {S T : 子代数 R A} {S₁ T₁ : 子代数 R B}
   证明: SetLike.coe_injective Set.prod_inter_prod
 
 Depends on / 依赖: Set.prod_inter_prod, SetLike, SetLike.coe_injective, coe_injective, prod_inter_prod
@@ -189,7 +189,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  结论: center R (A × B) = prod (center R A) (center R B)
+  结论: center R (A × B) = 乘积 (center R A) (center R B)
   证明: SetLike.coe_injective Set.center_prod
 
 @[simp]
@@ -207,7 +207,7 @@ theorem _root_.AlgHom.range_prodMap
   proof: SetLike.coe_injective Set.range_prodMap
 
 中文:
-定理 _root_.AlgHom.range_prodMap
+定理 _root_.代数态射.range_prodMap
   条件: (f : A ->ₐ[R] B) (g : C ->ₐ[R] D)
   证明: SetLike.coe_injective Set.range_prodMap
 

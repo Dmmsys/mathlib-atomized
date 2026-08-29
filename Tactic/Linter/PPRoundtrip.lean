@@ -124,7 +124,7 @@ definition posToShiftedPos
 
 中文:
 定义 posToShiftedPos
-  签名: (lths : Array 自然数) (diff : 自然数)
+  签名: (lths : 数组 自然数) (diff : 自然数)
   定义体: Id.run do
   let mut (ws, noWS) := (diff, 0)
   for con in [:lths.size / 2] do

@@ -64,7 +64,7 @@ definition J
 
 中文:
 定义 J
-  签名: : Matrix (l oplus l) (l oplus l) R
+  签名: : 矩阵 (l oplus l) (l oplus l) R
   定义体: Matrix.fromBlocks 0 (-1) 1 0
 
 Depends on / 依赖: Matrix, Matrix.fromBlocks, fromBlocks
@@ -87,7 +87,7 @@ theorem map_J
 
 中文:
 定理 map_J
-  结论: {F S : 类型} [CommRing S] [FunLike F R S]
+  结论: {F S : 类型} [交换环 S] [函数状 F R S]
   证明: by
   simp [J, fromBlocks_map, Matrix.map_neg]
 
@@ -214,7 +214,7 @@ theorem isUnit_det_J
 
 中文:
 定理 isUnit_det_J
-  结论: IsUnit (det (J l R))
+  结论: 是单位 (det (J l R))
   证明: isUnit_iff_exists_inv.mpr ⟨det (J l R), J_det_mul_J_det _ _⟩
 
 Depends on / 依赖: J_det_mul_J_det, isUnit_iff_exists_inv, isUnit_iff_exists_inv.mpr
@@ -243,7 +243,7 @@ definition symplecticGroup
 
 中文:
 定义 symplecticGroup
-  签名: : Submonoid (Matrix (l oplus l) (l oplus l) R) where
+  签名: : 子幺半群 (矩阵 (l oplus l) (l oplus l) R) where
   定义体: { A | A * J l R * Aᵀ = J l R }
   mul_mem' {a b} ha hb := by
     simp only [Set.mem_ofPred_eq, transpose_mul] at *
@@ -277,7 +277,7 @@ theorem mem_iff
 
 中文:
 定理 mem_iff
-  条件: {A : Matrix (l oplus l) (l oplus l) R}
+  条件: {A : 矩阵 (l oplus l) (l oplus l) R}
   证明: by simp [symplecticGroup]
 
 Depends on / 依赖: symplecticGroup
@@ -295,7 +295,7 @@ instance coeMatrix
 
 中文:
 实例 coeMatrix
-  签名: : Coe (symplecticGroup l R) (Matrix (l oplus l) (l oplus l) R)
+  签名: : Coe (symplecticGroup l R) (矩阵 (l oplus l) (l oplus l) R)
   定义体: ⟨Subtype.val⟩
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -416,7 +416,7 @@ theorem symplectic_det
 中文:
 定理 symplectic_det
   条件: (hA : A in symplecticGroup l R)
-  结论: IsUnit det A
+  结论: 是单位 det A
   证明: by
   rw [isUnit_iff_exists_inv]
   use A.det
@@ -452,7 +452,7 @@ theorem map_mem
 
 中文:
 定理 map_mem
-  结论: {F S : 类型} [CommRing S] [FunLike F R S] [RingHomClass F R S]
+  结论: {F S : 类型} [交换环 S] [函数状 F R S] [环态射类 F R S]
   证明: by
   simp_rw [mem_iff, ← transpose_map, ← map_J _ f, ← Matrix.map_mul, mem_iff.mp hA]
 
@@ -571,7 +571,7 @@ mul_mem (mul_mem (neg_mem <| J_mem _ _) <| transpose_mem A.2) J_mem _ _⟩
 
 中文:
 实例 hasInv
-  签名: : Inv (symplecticGroup l R) where
+  签名: : 取逆 (symplecticGroup l R) where
   定义体: ⟨(-J l R) * (A : Matrix (l oplus l) (l oplus l) R)ᵀ * J l R,
 mul_mem (mul_mem (neg_mem <| J_mem _ _) <| transpose_mem A.2) J_mem _ _⟩
 
@@ -593,7 +593,7 @@ theorem coe_inv
 中文:
 定理 coe_inv
   条件: (A : symplecticGroup l R)
-  结论: (↑A⁻¹ : Matrix _ _ _) = (-J l R) * (↑A)ᵀ * J l R
+  结论: (↑A⁻¹ : 矩阵 _ _ _) = (-J l R) * (↑A)ᵀ * J l R
   证明: rfl
 -/
 theorem coe_inv (A : symplecticGroup l R) : (↑A⁻¹ : Matrix _ _ _) = (-J l R) * (↑A)ᵀ * J l R := rfl
@@ -654,7 +654,7 @@ theorem coe_inv'
 中文:
 定理 coe_inv'
   条件: (A : symplecticGroup l R)
-  结论: (↑A⁻¹ : Matrix (l oplus l) (l oplus l) R) = (↑A)⁻¹
+  结论: (↑A⁻¹ : 矩阵 (l oplus l) (l oplus l) R) = (↑A)⁻¹
   证明: by
   refine (coe_inv A).trans (inv_eq_left_inv ?_).symm
   simp [inv_left_mul_aux]
@@ -675,7 +675,7 @@ theorem inv_eq_symplectic_inv
 
 中文:
 定理 inv_eq_symplectic_inv
-  条件: (A : Matrix (l oplus l) (l oplus l) R) (hA : A in symplecticGroup l R)
+  条件: (A : 矩阵 (l oplus l) (l oplus l) R) (hA : A in symplecticGroup l R)
   证明: inv_eq_left_inv (by simp only [Matrix.neg_mul, inv_left_mul_aux hA])
 
 Depends on / 依赖: Matrix, Matrix.neg_mul, inv_eq_left_inv, inv_left_mul_aux, neg_mul
@@ -698,7 +698,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (symplecticGroup l R)
+  签名: 群 (symplecticGroup l R)
   定义体: { SymplecticGroup.hasInv, Submonoid.toMonoid _ with
     inv_mul_cancel := fun A => by
       apply Subtype.ext
@@ -771,7 +771,7 @@ lemma det_one_if_fromBlocks_invertible
 
 中文:
 引理 det_one_if_fromBlocks_invertible
-  结论: [Invertible A]
+  结论: [可逆 A]
   证明: by
   have h_block := fromBlocks_mem_iff.1 hA
   rw [det_fromBlocks₁₁]; rw [invOf_eq_nonsing_inv]; rw [← A.det_transpose]; rw [← det_mul]; rw [mul_sub]; rw [← mul_assoc]; rw [← mul_assoc]; rw [h_block.1]; rw [mul_assoc Cᵀ]; rw [mul_inv_of_invertible]; rw [mul_one]; rw [h_block.2.2]; rw [det_one]
@@ -796,8 +796,8 @@ lemma exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
   have hf (x) :
 
 中文:
-引理 exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
-  结论: {R : 类型} [Field R]
+引理 存在_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
+  结论: {R : 类型} [域 R]
   证明: by
   -- `C` is transformed into `P = fromBlocks 1 0 0 0` by invertible matrices `V` and `U`.
   rcases exists_rank_normal_form C with ⟨V, U, s, hV, hU, heq⟩
@@ -880,8 +880,8 @@ lemma exists_symmetric_X_isUnit_det_add_mul_of_symplectic
   have 
 
 中文:
-引理 exists_symmetric_X_isUnit_det_add_mul_of_symplectic
-  结论: [IsLocalRing R]
+引理 存在_symmetric_X_isUnit_det_add_mul_of_symplectic
+  结论: [是局部环 R]
   证明: by
   -- We utilize the previous result on field by mapping the symplectic matrix to residue field.
   set k := IsLocalRing.ResidueField R; set f := IsLocalRing.residue R
@@ -936,7 +936,7 @@ obtain ⟨X, hX_symm, hA_isUnit⟩ := exists_symmetric_X_isUnit_det_add_mul_of_s
 
 中文:
 引理 det_eq_one_of_isLocalRing
-  结论: [IsLocalRing R] {M : Matrix (l oplus l) (l oplus l) R}
+  结论: [是局部环 R] {M : 矩阵 (l oplus l) (l oplus l) R}
   证明: by
   set A := M.toBlocks₁₁; set B := M.toBlocks₁₂
   set C := M.toBlocks₂₁; set D := M.toBlocks₂₂
@@ -977,7 +977,7 @@ refine sub_eq_zero.1 eq_zero_of_localization _ fun _ _ => ?_
 
 中文:
 定理 det_eq_one
-  条件: {M : Matrix (l oplus l) (l oplus l) R} (hM : M in symplecticGroup l R)
+  条件: {M : 矩阵 (l oplus l) (l oplus l) R} (hM : M in symplecticGroup l R)
   证明: by
 refine sub_eq_zero.1 eq_zero_of_localization _ fun _ _ => ?_
   simp [RingHom.map_det, RingHom.mapMatrix_apply, det_eq_one_of_isLocalRing <| map_mem hM _]

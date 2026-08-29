@@ -40,13 +40,13 @@ structure AlgCat
     - [isAlgebra : Algebra R carrier]
 
 中文:
-结构 AlgCat
+结构 Alg范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [isRing : Ring carrier]
-    - [isAlgebra : Algebra R carrier]
+    - [isRing : 环 carrier]
+    - [isAlgebra : 代数 R carrier]
 -/
 structure AlgCat where
   private mk ::
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (AlgCat R) (类型v)
+  签名: CoeSort (Alg范畴 R) (类型v)
   定义体: ⟨AlgCat.carrier⟩
 
 Depends on / 依赖: AlgCat, AlgCat.carrier, carrier
@@ -93,7 +93,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [Ring X] [Algebra R X]
+  签名: (X : 类型v) [环 X] [代数 R X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type v) [Ring X] [Algebra R X] : AlgCat.{v} R :=
@@ -110,7 +110,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [Ring X] [Algebra R X]
+  条件: (X : 类型v) [环 X] [代数 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -131,8 +131,8 @@ structure Hom
     - hom' : A ->ₐ[R] B
 
 中文:
-结构 Hom
-  参数: (A B : AlgCat.{v} R)
+结构 态射
+  参数: (A B : Alg范畴.{v} R)
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->ₐ[R] B
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (AlgCat.{v} R)
+  签名: 范畴 (Alg范畴.{v} R)
   定义体: Hom A B
   id A := ⟨AlgHom.id R A⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (AlgCat.{v} R) (· ->ₐ[R] ·)
+  签名: 余ncrete范畴 (Alg范畴.{v} R) (· ->ₐ[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -199,8 +199,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := AlgCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: {A B : AlgCat.{v} R} (f : Hom A B)
+缩写 态射.hom
+  签名: {A B : Alg范畴.{v} R} (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := AlgCat R) f
 -/
 abbrev Hom.hom {A B : AlgCat.{v} R} (f : Hom A B) :=
@@ -217,7 +217,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {A B : 类型v} [Ring A] [Ring B] [Algebra R A] [Algebra R B] (f : A ->ₐ[R] B)
+  签名: {A B : 类型v} [环 A] [环 B] [代数 R A] [代数 R B] (f : A ->ₐ[R] B)
   定义体: ConcreteCategory.ofHom (C := AlgCat R) f
 
 Depends on / 依赖: AlgCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -238,8 +238,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : AlgCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : Alg范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -265,8 +265,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {A : AlgCat.{v} R}
-  结论: (𝟙 A : A ⟶ A).hom = AlgHom.id R A
+  条件: {A : Alg范畴.{v} R}
+  结论: (𝟙 A : A ⟶ A).hom = 代数态射.id R A
   证明: rfl
 -/
 lemma hom_id {A : AlgCat.{v} R} : (𝟙 A : A ⟶ A).hom = AlgHom.id R A := rfl
@@ -283,7 +283,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (A : AlgCat.{v} R) (a : A)
+  条件: (A : Alg范畴.{v} R) (a : A)
   证明: by simp
 
 @[simp]
@@ -302,7 +302,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {A B C : AlgCat.{v} R} (f : A ⟶ B) (g : B ⟶ C)
+  条件: {A B C : Alg范畴.{v} R} (f : A ⟶ B) (g : B ⟶ C)
   证明: rfl
 -/
 lemma hom_comp {A B C : AlgCat.{v} R} (f : A ⟶ B) (g : B ⟶ C) :
@@ -320,7 +320,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {A B C : AlgCat.{v} R} (f : A ⟶ B) (g : B ⟶ C) (a : A)
+  条件: {A B C : Alg范畴.{v} R} (f : A ⟶ B) (g : B ⟶ C) (a : A)
   证明: by simp
 
 @[ext]
@@ -342,7 +342,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {A B : AlgCat.{v} R} {f g : A ⟶ B} (hf : f.hom = g.hom)
+  条件: {A B : Alg范畴.{v} R} {f g : A ⟶ B} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -366,7 +366,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {R : 类型u} [CommRing R] {X Y : 类型v} [Ring X] [Algebra R X] [Ring Y]
+  结论: {R : 类型u} [交换环 R] {X Y : 类型v} [环 X] [代数 R X] [环 Y]
   证明: rfl
 
 @[simp]
@@ -387,7 +387,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {A B : AlgCat.{v} R} (f : A ⟶ B)
+  条件: {A B : Alg范畴.{v} R} (f : A ⟶ B)
   证明: rfl
 
 @[simp]
@@ -409,8 +409,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型v} [Ring X] [Algebra R X]
-  结论: ofHom (AlgHom.id R X) = 𝟙 (of R X)
+  条件: {X : 类型v} [环 X] [代数 R X]
+  结论: ofHom (代数态射.id R X) = 𝟙 (of R X)
   证明: rfl
 
 @[simp]
@@ -428,7 +428,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型v} [Ring X] [Ring Y] [Ring Z] [Algebra R X] [Algebra R Y]
+  结论: {X Y Z : 类型v} [环 X] [环 Y] [环 Z] [代数 R X] [代数 R Y]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type v} [Ring X] [Ring Y] [Ring Z] [Algebra R X] [Algebra R Y]
@@ -446,7 +446,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {R : 类型u} [CommRing R] {X Y : 类型v} [Ring X] [Algebra R X] [Ring Y]
+  结论: {R : 类型u} [交换环 R] {X Y : 类型v} [环 X] [代数 R X] [环 Y]
   证明: rfl
 -/
 lemma ofHom_apply {R : Type u} [CommRing R] {X Y : Type v} [Ring X] [Algebra R X] [Ring Y]
@@ -464,7 +464,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {A B : AlgCat.{v} R} (e : A ≅ B) (x : A)
+  条件: {A B : Alg范畴.{v} R} (e : A ≅ B) (x : A)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -484,7 +484,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {A B : AlgCat.{v} R} (e : A ≅ B) (x : B)
+  条件: {A B : Alg范畴.{v} R} (e : A ≅ B) (x : B)
   结论: e.hom (e.inv x) = x
   证明: by
   simp
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AlgCat R)
+  签名: 可居 (Alg范畴 R)
   定义体: ⟨of R R⟩
 -/
 instance : Inhabited (AlgCat R) :=
@@ -521,8 +521,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: {A : AlgCat.{v} R}
-  结论: (forget (AlgCat.{v} R)).obj A = A
+  条件: {A : Alg范畴.{v} R}
+  结论: (forget (Alg范畴.{v} R)).obj A = A
   证明: rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-03")]
@@ -540,7 +540,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {A B : AlgCat.{v} R} (f : A ⟶ B)
+  条件: {A B : Alg范畴.{v} R} (f : A ⟶ B)
   证明: rfl
 -/
 lemma forget_map {A B : AlgCat.{v} R} (f : A ⟶ B) :
@@ -566,7 +566,7 @@ instance hasForgetToRing
 
 中文:
 实例 hasForgetToRing
-  签名: : HasForget₂ (AlgCat.{v} R) RingCat.{v} where
+  签名: : 有Forget₂ (Alg范畴.{v} R) 环范畴.{v} where
   定义体: { obj := fun A => RingCat.of A
       map := fun f => RingCat.ofHom f.hom.toRingHom }
 
@@ -592,7 +592,7 @@ lemma forget₂_ringCat_obj
 
 中文:
 引理 forget₂_ringCat_obj
-  条件: (X : AlgCat.{v} R)
+  条件: (X : Alg范畴.{v} R)
   证明: rfl
 
 @[simp]
@@ -612,7 +612,7 @@ lemma forget₂_ringCat_map
 
 中文:
 引理 forget₂_ringCat_map
-  条件: {X Y : AlgCat.{v} R} (f : X ⟶ Y)
+  条件: {X Y : Alg范畴.{v} R} (f : X ⟶ Y)
   证明: rfl
 -/
 lemma forget₂_ringCat_map {X Y : AlgCat.{v} R} (f : X ⟶ Y) :
@@ -635,7 +635,7 @@ instance hasForgetToModule
 
 中文:
 实例 hasForgetToModule
-  签名: : HasForget₂ (AlgCat.{v} R) (ModuleCat.{v} R) where
+  签名: : 有Forget₂ (Alg范畴.{v} R) (模范畴.{v} R) where
   定义体: { obj := fun M => ModuleCat.of R M
       map := fun f => ModuleCat.ofHom f.hom.toLinearMap }
 
@@ -661,7 +661,7 @@ lemma forget₂_module_obj
 
 中文:
 引理 forget₂_module_obj
-  条件: (X : AlgCat.{v} R)
+  条件: (X : Alg范畴.{v} R)
   证明: rfl
 
 @[simp]
@@ -681,7 +681,7 @@ lemma forget₂_module_map
 
 中文:
 引理 forget₂_module_map
-  条件: {X Y : AlgCat.{v} R} (f : X ⟶ Y)
+  条件: {X Y : Alg范畴.{v} R} (f : X ⟶ Y)
   证明: rfl
 -/
 lemma forget₂_module_map {X Y : AlgCat.{v} R} (f : X ⟶ Y) :
@@ -701,7 +701,7 @@ map f := ofHom FreeAlgebra.lift _ FreeAlgebra.ι _ ∘ f
 
 中文:
 定义 free
-  签名: : 类型u ⥤ AlgCat.{u} R where
+  签名: : 类型u ⥤ Alg范畴.{u} R where
   定义体: of R (FreeAlgebra R S)
 map f := ofHom FreeAlgebra.lift _ FreeAlgebra.ι _ ∘ f
 
@@ -728,7 +728,7 @@ invFun := fun f => ofHom (FreeAlgebra.lift _) f
 
 中文:
 定义 adj
-  签名: : free.{u} R ⊣ forget (AlgCat.{u} R)
+  签名: : free.{u} R ⊣ forget (Alg范畴.{u} R)
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun _ _ =>
         { toFun := fun f => ↾((FreeAlgebra.lift _).symm f.hom)
@@ -756,7 +756,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget (AlgCat.{u} R)).IsRightAdjoint
+  签名: (forget (Alg范畴.{u} R)).是右伴随
   定义体: (adj R).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint
@@ -780,8 +780,8 @@ definition AlgEquiv.toAlgebraIso
   inv := AlgCat.ofHom (e.symm : X₂ ->ₐ[R] X₁)
 
 中文:
-定义 AlgEquiv.toAlgebraIso
-  签名: {g₁ : Ring X₁} {g₂ : Ring X₂} {m₁ : Algebra R X₁} {m₂ : Algebra R X₂}
+定义 代数等价.toAlgebraIso
+  签名: {g₁ : 环 X₁} {g₂ : 环 X₂} {m₁ : 代数 R X₁} {m₂ : 代数 R X₂}
   定义体: AlgCat.ofHom (e : X₁ ->ₐ[R] X₂)
   inv := AlgCat.ofHom (e.symm : X₂ ->ₐ[R] X₁)
 
@@ -810,7 +810,7 @@ definition toAlgEquiv
 
 中文:
 定义 toAlgEquiv
-  签名: {X Y : AlgCat.{v} R} (i : X ≅ Y)
+  签名: {X Y : Alg范畴.{v} R} (i : X ≅ Y)
   定义体: { i.hom.hom with
     toFun := i.hom
     invFun := i.inv
@@ -842,7 +842,7 @@ definition algEquivIsoAlgebraIso
 
 中文:
 定义 algEquivIsoAlgebraIso
-  签名: {X Y : 类型v} [Ring X] [Ring Y] [Algebra R X] [Algebra R Y]
+  签名: {X Y : 类型v} [环 X] [环 Y] [代数 R X] [代数 R Y]
   定义体: ↾fun e => e.toAlgebraIso
   inv := ↾fun i => i.toAlgEquiv
 
@@ -865,8 +865,8 @@ instance AlgCat.forget_reflects_isos
     exact e.toAlgebraIso.isIso_hom
 
 中文:
-实例 AlgCat.forget_reflects_isos
-  签名: : (forget (AlgCat.{v} R)).ReflectsIsomorphisms where
+实例 Alg范畴.forget_reflects_isos
+  签名: : (forget (Alg范畴.{v} R)).反映同构 where
   定义体: by
     let i := asIso ((forget (AlgCat.{v} R)).map f)
     let e : X ≃ₐ[R] Y := { f.hom, i.toEquiv with }
@@ -902,7 +902,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: letI : Algebra R A := Algebra.compHom _ f
     AlgCat.of R A
   map {A B} g :=
@@ -944,7 +944,7 @@ fun A => AlgEquiv.toAlgebraIso
 
 中文:
 定义 restrictScalarsId'
-  签名: {R : 类型} [CommRing R] (f : R ->+* R) (hf : f = .id R)
+  签名: {R : 类型} [交换环 R] (f : R ->+* R) (hf : f = .id R)
   定义体: NatIso.ofComponents
 fun A => AlgEquiv.toAlgebraIso
       @AlgEquiv.ofRingEquiv (f := RingEquiv.refl _) _ _ _ _ _ _
@@ -979,7 +979,7 @@ fun A => AlgEquiv.toAlgebraIso
 
 中文:
 定义 restrictScalarsComp'
-  签名: {R S T : 类型} [CommRing R] [CommRing S] [CommRing T] (f : R ->+* S)
+  签名: {R S T : 类型} [交换环 R] [交换环 S] [交换环 T] (f : R ->+* S)
   定义体: NatIso.ofComponents
 fun A => AlgEquiv.toAlgebraIso
       @AlgEquiv.ofRingEquiv (f := RingEquiv.refl _) _ _ _ _ _ _
@@ -1017,7 +1017,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
 
 中文:
 定义 restrictScalarsEquivalenceOfRingEquiv
-  签名: {R S : 类型} [CommRing R] [CommRing S] (e : R ≃+* S)
+  签名: {R S : 类型} [交换环 R] [交换环 S] (e : R ≃+* S)
   定义体: restrictScalars e.toRingHom
   inverse := restrictScalars e.symm.toRingHom
   unitIso := (restrictScalarsId' _ rfl).symm ≪≫
@@ -1062,7 +1062,7 @@ definition intEquivalence
 
 中文:
 定义 intEquivalence
-  签名: : AlgCat.{u} 整数 ≌ RingCat.{u} where
+  签名: : Alg范畴.{u} 整数 ≌ 环范畴.{u} where
   定义体: forget₂ _ _
   inverse.obj A := AlgCat.of Int A
   inverse.map f := AlgCat.ofHom f.hom.toIntAlgHom
@@ -1090,7 +1090,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (AlgCat.{u} 整数) RingCat.{u}).IsEquivalence
+  签名: (forget₂ (Alg范畴.{u} 整数) 环范畴.{u}).是等价
   定义体: inferInstanceAs intEquivalence.functor.IsEquivalence
 
 Depends on / 依赖: IsEquivalence, functor, intEquivalence, intEquivalence.functor.IsEquivalence

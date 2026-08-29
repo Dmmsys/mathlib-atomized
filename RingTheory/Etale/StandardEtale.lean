@@ -58,7 +58,7 @@ structure StandardEtalePair
 
 中文:
 结构 StandardEtalePair
-  参数: : Type _ where
+  参数: : 类型 _ where
   公理与运算 (4 个):
     - f : R[X]
     - monic_f : f.Monic
@@ -86,7 +86,7 @@ definition StandardEtalePair.Ring
   deriving CommRing, Algebra R
 
 中文:
-定义 StandardEtalePair.Ring
+定义 StandardEtalePair.环
   定义体: R[X][Y] ⧸ Ideal.span {C P.f, Y * C P.g - 1}
   deriving CommRing, Algebra R
 -/
@@ -105,7 +105,7 @@ definition X
 
 中文:
 定义 X
-  签名: : P.Ring
+  签名: : P.环
   定义体: Ideal.Quotient.mk _ (C .X)
 -/
 protected def X : P.Ring := Ideal.Quotient.mk _ (C .X)
@@ -241,7 +241,7 @@ lemma aeval_X_g_mul_mk_X
 
 中文:
 引理 aeval_X_g_mul_mk_X
-  结论: aeval P.X P.g * Ideal.Quotient.mk _ .X = 1
+  结论: aeval P.X P.g * 理想.商.mk _ .X = 1
   证明: by
   have : aeval (R := R) P.X = (Ideal.Quotient.mkₐ _ _).comp Polynomial.CAlgHom := by
     ext; simp [StandardEtalePair.Ring, StandardEtalePair.X]
@@ -308,7 +308,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {f g : P.Ring ->ₐ[R] S} (H : f P.X = g P.X)
+  条件: {f g : P.环 ->ₐ[R] S} (H : f P.X = g P.X)
   结论: f = g
   证明: by
   have H : (f.comp (Ideal.Quotient.mkₐ R _)).comp CAlgHom =
@@ -384,7 +384,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: : (P.Ring ->ₐ[R] S) ≃ { x : S // P.HasMap x } where
+  签名: : (P.环 ->ₐ[R] S) ≃ { x : S // P.HasMap x } where
   定义体: ⟨f P.X, hasMap_X.map f⟩
   invFun x := P.lift x.1 x.2
   left_inv f := P.hom_ext (by simp)
@@ -412,7 +412,7 @@ lemma existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot
     (I
 
 中文:
-引理 existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot
+引理 存在Unique_hasMap_of_hasMap_quotient_of_sq_eq_bot
   证明: by
   have hf := Ideal.Quotient.eq_zero_iff_mem.mp
     ((aeval_algHom_apply (Ideal.Quotient.mkₐ R I) _ _).symm.trans hx.1)
@@ -468,7 +468,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.FormallyEtale R P.Ring
+  签名: 代数.形式平展 R P.环
   定义体: by
   refine Algebra.FormallyEtale.iff_comp_bijective.mpr fun S _ _ I hI => ?_
   rw [← P.homEquiv.symm.bijective.of_comp_iff]; rw [← P.homEquiv.bijective.of_comp_iff']
@@ -498,7 +498,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.Etale R P.Ring
+  签名: 代数.平展 R P.环
   定义体: .quotient (Submodule.fg_span (by simp))
 
 Depends on / 依赖: Submodule, Submodule.fg_span, fg_span, quotient
@@ -688,7 +688,7 @@ lemma HasMap.map_algebraMap
 
 中文:
 引理 HasMap.map_algebraMap
-  条件: [Algebra S T] [IsScalarTower R S T] {x : T} (H : P.HasMap x)
+  条件: [代数 S T] [标量塔 R S T] {x : T} (H : P.HasMap x)
   证明: by
   simpa [HasMap]
 
@@ -713,11 +713,11 @@ structure StandardEtalePresentation
 
 中文:
 结构 StandardEtalePresentation
-  参数: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+  参数: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   公理与运算 (3 个):
     - x : S
     - hasMap : P.HasMap x
-    - lift_bijective : Function.Bijective (P.lift x hasMap)
+    - lift_bijective : 函数.双射 (P.lift x hasMap)
 -/
 structure StandardEtalePresentation (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] extends
     P : StandardEtalePair R where
@@ -740,7 +740,7 @@ definition StandardEtalePresentation.equivRing
 
 中文:
 定义 StandardEtalePresentation.equivRing
-  签名: : S ≃ₐ[R] P.Ring
+  签名: : S ≃ₐ[R] P.环
   定义体: .symm .ofBijective _ P.lift_bijective
 
 @[simp]
@@ -809,7 +809,7 @@ definition StandardEtalePresentation.toPresentation
 
 中文:
 定义 StandardEtalePresentation.toPresentation
-  签名: : Algebra.Presentation R S (Fin 2) (Fin 2) where
+  签名: : 代数.呈现 R S (有限集 2) (有限集 2) where
   定义体: Algebra.Generators.ofAlgHom ((P.lift _ P.hasMap).comp
       (P.equivMvPolynomialQuotient.symm.toAlgHom.comp (Ideal.Quotient.mkₐ _ _)))
     (P.lift_bijective.surjective.comp
@@ -930,7 +930,7 @@ lemma StandardEtalePresentation.exists_mul_aeval_x_g_pow_eq_aeval_x
   simpa [← aeval_algHom_apply, Sta
 
 中文:
-引理 StandardEtalePresentation.exists_mul_aeval_x_g_pow_eq_aeval_x
+引理 StandardEtalePresentation.存在_mul_aeval_x_g_pow_eq_aeval_x
   条件: (x : S)
   证明: by
   obtain ⟨x, rfl⟩ := (P.equivRing.trans P.P.equivAwayAdjoinRoot).symm.surjective x
@@ -1073,10 +1073,10 @@ class IsStandardEtale
     - nonempty_standardEtalePresentation : Nonempty (StandardEtalePresentation R S)
 
 中文:
-类 IsStandardEtale
-  参数: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+类 是StandardEtale
+  参数: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   公理与运算 (1 个):
-    - nonempty_standardEtalePresentation : Nonempty (StandardEtalePresentation R S)
+    - nonempty_standardEtalePresentation : 非空 (StandardEtalePresentation R S)
 -/
 class IsStandardEtale (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] where
   nonempty_standardEtalePresentation : Nonempty (StandardEtalePresentation R S)
@@ -1099,9 +1099,9 @@ lemma IsStandardEtale.of_equiv
   proof: ⟨⟨IsStandardEtale.nonempty_standardEtalePresentation.some.mapEquiv e⟩⟩
 
 中文:
-引理 IsStandardEtale.of_equiv
-  条件: (e : S ≃ₐ[R] T) [IsStandardEtale R S]
-  结论: IsStandardEtale R T
+引理 是StandardEtale.of_equiv
+  条件: (e : S ≃ₐ[R] T) [是StandardEtale R S]
+  结论: 是StandardEtale R T
   证明: ⟨⟨IsStandardEtale.nonempty_standardEtalePresentation.some.mapEquiv e⟩⟩
 
 Depends on / 依赖: IsStandardEtale, IsStandardEtale.nonempty_standardEtalePresentation.some.mapEquiv, mapEquiv, nonempty_standardEtalePresentation
@@ -1122,7 +1122,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStandardEtale R R
+  签名: 是StandardEtale R R
   定义体: ⟨⟨⟨⟨.X, by simp, 1, 1, 0, 0, by simp⟩, 0, ⟨by simp, by simp⟩, by
     set P : StandardEtalePair R := ⟨.X, by simp, 1, 1, 0, 0, by simp⟩
     have : P.X = 0 := Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span (Set.mem_insert _ _))
@@ -1152,8 +1152,8 @@ lemma IsStandardEtale.of_isLocalizationAway
     ⟨p₁ * p ^ m, p₂ * p ^ m, m, by linear_c
 
 中文:
-引理 IsStandardEtale.of_isLocalizationAway
-  结论: [IsStandardEtale R S]
+引理 是StandardEtale.of_isLocalizationAway
+  结论: [是StandardEtale R S]
   证明: by
   have P : StandardEtalePresentation R S := IsStandardEtale.nonempty_standardEtalePresentation.some
   obtain ⟨p, n, hp⟩ := P.exists_mul_aeval_x_g_pow_eq_aeval_x s
@@ -1207,7 +1207,7 @@ lemma IsStandardEtale.of_surjective
       ((Algebra.FormallyEtale.iff_of_surjective hf).mp (.of_restrictScalars (R
 
 中文:
-引理 IsStandardEtale.of_surjective
+引理 是StandardEtale.of_surjective
   证明: by
   let := f.toAlgebra
   have : IsScalarTower R S T := .of_algebraMap_eq' f.comp_algebraMap.symm
@@ -1237,7 +1237,7 @@ instance [Algebra.IsStandardEtale
   body: ⟨⟨Algebra.IsStandardEtale.nonempty_standardEtalePresentation.some.baseChange⟩⟩
 
 中文:
-实例 [Algebra.IsStandardEtale
+实例 [代数.是StandardEtale
   签名: R S] :
   定义体: ⟨⟨Algebra.IsStandardEtale.nonempty_standardEtalePresentation.some.baseChange⟩⟩
 

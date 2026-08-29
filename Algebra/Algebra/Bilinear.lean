@@ -134,7 +134,7 @@ lemma restrictScalars_mul
 
 中文:
 引理 restrictScalars_mul
-  结论: {S : 类型} [CommSemiring S] [Module S A] [SMulCommClass S A A]
+  结论: {S : 类型} [交换半环 S] [模 S A] [标量交换类 S A A]
   证明: by
   ext x
   simp
@@ -196,7 +196,7 @@ definition _root_.NonUnitalAlgHom.lmul
 @[simp]
 
 中文:
-定义 _root_.NonUnitalAlgHom.lmul
+定义 _root_.非幺Alg态射.lmul
   签名: : A ->ₙₐ[R] End R A where
   定义体: mul R A
   map_mul' := mulLeft_mul _ _
@@ -219,8 +219,8 @@ theorem _root_.NonUnitalAlgHom.coe_lmul_eq_mul
   proof: rfl
 
 中文:
-定理 _root_.NonUnitalAlgHom.coe_lmul_eq_mul
-  结论: ⇑(NonUnitalAlgHom.lmul R A) = mul R A
+定理 _root_.非幺Alg态射.coe_lmul_eq_mul
+  结论: ⇑(非幺Alg态射.lmul R A) = mul R A
   证明: rfl
 -/
 theorem _root_.NonUnitalAlgHom.coe_lmul_eq_mul : ⇑(NonUnitalAlgHom.lmul R A) = mul R A :=
@@ -358,7 +358,7 @@ definition _root_.Algebra.lmul
   commutes' r := ext fun a => (Algebra.smul_def r a).symm
 
 中文:
-定义 _root_.Algebra.lmul
+定义 _root_.代数.lmul
   签名: : A ->ₐ[R] End R A where
   定义体: NonUnitalAlgHom.lmul R A
   map_one' := mulLeft_one _ _
@@ -383,8 +383,8 @@ theorem _root_.Algebra.coe_lmul_eq_mul
   proof: rfl
 
 中文:
-定理 _root_.Algebra.coe_lmul_eq_mul
-  结论: ⇑(Algebra.lmul R A) = mul R A
+定理 _root_.代数.coe_lmul_eq_mul
+  结论: ⇑(代数.lmul R A) = mul R A
   证明: rfl
 -/
 theorem _root_.Algebra.coe_lmul_eq_mul : ⇑(Algebra.lmul R A) = mul R A :=
@@ -399,8 +399,8 @@ theorem _root_.Algebra.lmul_injective
   proof: fun a₁ a₂ h => by simpa using DFunLike.congr_fun h 1
 
 中文:
-定理 _root_.Algebra.lmul_injective
-  结论: Function.Injective (Algebra.lmul R A)
+定理 _root_.代数.lmul_injective
+  结论: 函数.单射 (代数.lmul R A)
   证明: fun a₁ a₂ h => by simpa using DFunLike.congr_fun h 1
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
@@ -419,7 +419,7 @@ theorem _root_.Algebra.lmul_isUnit_iff
   exact IsUnit.isUnit_iff_mulLeft_bijective
 
 中文:
-定理 _root_.Algebra.lmul_isUnit_iff
+定理 _root_.代数.lmul_isUnit_iff
   条件: {x : A}
   证明: by
   rw [Module.End.isUnit_iff]; rw [Iff.comm]
@@ -501,7 +501,7 @@ lemma mul'_comp_comm
 
 中文:
 引理 mul'_comp_comm
-  结论: mul' R A ∘ₗ TensorProduct.comm R A A = mul' R A
+  结论: mul' R A ∘ₗ 张量积.comm R A A = mul' R A
   证明: by
   simp [mul', lift_comp_comm_eq]
 -/
@@ -520,7 +520,7 @@ lemma mul'_comm
 中文:
 引理 mul'_comm
   条件: (x : A otimes[R] A)
-  结论: mul' R A (TensorProduct.comm R A A x) = mul' R A x
+  结论: mul' R A (张量积.comm R A A x) = mul' R A x
   证明: congr($mul'_comp_comm _)
 -/
 lemma mul'_comm (x : A otimes[R] A) : mul' R A (TensorProduct.comm R A A x) = mul' R A x :=

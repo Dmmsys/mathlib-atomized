@@ -108,7 +108,7 @@ lemma toSignedMeasure_restrict_sub
 
 中文:
 引理 toSignedMeasure_restrict_sub
-  条件: (hs : IsHahnDecomposition μ ν s)
+  条件: (hs : 是HahnDecomposition μ ν s)
   证明: by
   have hmeas := hs.measurableSet
   rw [eq_sub_iff_add_eq]; rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hmeas]; rw [← toSignedMeasure_add]

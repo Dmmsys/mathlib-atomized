@@ -90,7 +90,7 @@ theorem continuousOn_univ
 中文:
 定理 continuousOn_univ
   条件: {f : α -> β}
-  结论: ContinuousOn f univ ↔ Continuous f
+  结论: ContinuousOn f univ ↔ 连续 f
   证明: by
   simp [continuous_iff_continuousAt, ContinuousOn, ContinuousAt, ContinuousWithinAt,
     nhdsWithin_univ]
@@ -114,7 +114,7 @@ theorem continuousWithinAt_iff_continuousAt_domRestrict
 
 中文:
 定理 continuousWithinAt_iff_continuousAt_domRestrict
-  结论: (f : α -> β) {x : α} {s : Set α}
+  结论: (f : α -> β) {x : α} {s : 集合 α}
   证明: tendsto_nhdsWithin_iff_subtype h f _
 
 @[deprecated (since := "2026-07-19")] alias continuousWithinAt_iff_continuousAt_restrict :=
@@ -139,7 +139,7 @@ theorem ContinuousWithinAt.tendsto_nhdsWithin
 
 中文:
 定理 ContinuousWithinAt.tendsto_nhdsWithin
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: tendsto_inf.2 ⟨h, tendsto_principal.2 mem_inf_of_right mem_principal.2 ht⟩
 
 Depends on / 依赖: mem_inf_of_right, mem_principal, tendsto_inf, tendsto_principal
@@ -197,7 +197,7 @@ theorem ContinuousWithinAt.preimage_mem_nhdsWithin
 
 中文:
 定理 ContinuousWithinAt.preimage_mem_nhdsWithin
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: h ht
 -/
 theorem ContinuousWithinAt.preimage_mem_nhdsWithin {t : Set β}
@@ -214,7 +214,7 @@ theorem ContinuousWithinAt.preimage_mem_nhdsWithin'
 
 中文:
 定理 ContinuousWithinAt.preimage_mem_nhdsWithin'
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: h.tendsto_nhdsWithin (mapsTo_image _ _) ht
 
 Depends on / 依赖: h.tendsto_nhdsWithin, mapsTo_image, tendsto_nhdsWithin
@@ -235,7 +235,7 @@ theorem ContinuousWithinAt.preimage_mem_nhdsWithin''
 
 中文:
 定理 ContinuousWithinAt.preimage_mem_nhdsWithin''
-  结论: {y : β} {s t : Set β}
+  结论: {y : β} {s t : 集合 β}
   证明: by
   rw [hxy] at ht
   exact h.preimage_mem_nhdsWithin' (nhdsWithin_mono _ (image_preimage_subset f s) ht)
@@ -365,7 +365,7 @@ theorem ContinuousOn.mapsToRestrict
 
 中文:
 定理 ContinuousOn.mapsToRestrict
-  条件: {t : Set β} (hf : ContinuousOn f s) (ht : MapsTo f s t)
+  条件: {t : 集合 β} (hf : ContinuousOn f s) (ht : 映射到 f s t)
   证明: hf.domRestrict.codRestrict _
 
 Depends on / 依赖: codRestrict, domRestrict, hf.domRestrict.codRestrict
@@ -421,7 +421,7 @@ theorem ContinuousOn.mono_dom
 
 中文:
 定理 ContinuousOn.mono_dom
-  结论: {α β : 类型} {t₁ t₂ : TopologicalSpace α} {t₃ : TopologicalSpace β}
+  结论: {α β : 类型} {t₁ t₂ : 拓扑空间 α} {t₃ : 拓扑空间 β}
   证明: fun x hx _u hu =>
   map_mono (inf_le_inf_right _ <| nhds_mono h₁) (h₂ x hx hu)
 -/
@@ -441,7 +441,7 @@ h₂ x hx nhds_mono h₁ hu
 
 中文:
 定理 ContinuousOn.mono_rng
-  结论: {α β : 类型} {t₁ : TopologicalSpace α} {t₂ t₃ : TopologicalSpace β}
+  结论: {α β : 类型} {t₁ : 拓扑空间 α} {t₂ t₃ : 拓扑空间 β}
   证明: fun x hx _u hu =>
 h₂ x hx nhds_mono h₁ hu
 -/
@@ -493,7 +493,7 @@ theorem continuous_of_cover_nhds
 
 中文:
 定理 continuous_of_cover_nhds
-  结论: {ι : Sort*} {s : ι -> Set α}
+  结论: {ι : 类型层*} {s : ι -> 集合 α}
   证明: continuous_iff_continuousAt.mpr fun x => let ⟨i, hi⟩ := hs x; by
     rw [ContinuousAt]; rw [← nhdsWithin_eq_nhds.2 hi]
     exact hf _ _ (mem_of_mem_nhds hi)
@@ -564,8 +564,8 @@ theorem Set.Subsingleton.continuousOn
   proof: hs.induction_on (continuousOn_empty f) (continuousOn_singleton f)
 
 中文:
-定理 Set.Subsingleton.continuousOn
-  条件: {s : Set α} (hs : s.Subsingleton) (f : α -> β)
+定理 集合.子单例.continuousOn
+  条件: {s : 集合 α} (hs : s.子单例) (f : α -> β)
   证明: hs.induction_on (continuousOn_empty f) (continuousOn_singleton f)
 
 Depends on / 依赖: continuousOn_empty, continuousOn_singleton, hs.induction_on, induction_on
@@ -593,7 +593,7 @@ theorem continuousOn_open_iff
 
 中文:
 定理 continuousOn_open_iff
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   rw [continuousOn_iff']
   constructor
@@ -629,7 +629,7 @@ theorem ContinuousOn.isOpen_inter_preimage
 
 中文:
 定理 ContinuousOn.isOpen_inter_preimage
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: (continuousOn_open_iff hs).1 hf t ht
 
 Depends on / 依赖: continuousOn_open_iff
@@ -650,7 +650,7 @@ theorem ContinuousOn.isOpen_preimage
 
 中文:
 定理 ContinuousOn.isOpen_preimage
-  结论: {t : Set β} (h : ContinuousOn f s)
+  结论: {t : 集合 β} (h : ContinuousOn f s)
   证明: by
   convert! (continuousOn_open_iff hs).mp h t ht
   rw [inter_comm]; rw [inter_eq_self_of_subset_left hp]
@@ -675,7 +675,7 @@ theorem ContinuousOn.preimage_isClosed_of_isClosed
 
 中文:
 定理 ContinuousOn.preimage_isClosed_of_isClosed
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: by
   rcases continuousOn_iff_isClosed.1 hf t ht with ⟨u, hu⟩
   rw [inter_comm]; rw [hu.2]
@@ -703,7 +703,7 @@ theorem ContinuousOn.preimage_interior_subset_interior_preimage
 
 中文:
 定理 ContinuousOn.preimage_interior_subset_interior_preimage
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: calc
     s inter f ⁻¹' interior t subseteq interior (s inter f ⁻¹' t) :=
       interior_maximal (inter_subset_inter (Subset.refl _) (preimage_mono interior_subset))
@@ -762,7 +762,7 @@ theorem continuousOn_to_generateFrom_iff
 
 中文:
 定理 continuousOn_to_generateFrom_iff
-  条件: {β : 类型} {T : Set (Set β)} {f : α -> β}
+  条件: {β : 类型} {T : 集合 (集合 β)} {f : α -> β}
   证明: forall₂_congr fun x _ => by
     delta ContinuousWithinAt
     simp only [TopologicalSpace.nhds_generateFrom, tendsto_iInf, tendsto_principal, mem_ofPred_eq,
@@ -790,7 +790,7 @@ theorem continuousOn_isOpen_of_generateFrom
 
 中文:
 定理 continuousOn_isOpen_of_generateFrom
-  结论: {β : 类型} {s : Set α} {T : Set (Set β)} {f : α -> β}
+  结论: {β : 类型} {s : 集合 α} {T : 集合 (集合 β)} {f : α -> β}
   证明: continuousOn_to_generateFrom_iff.2 fun _x hx t ht hxt => mem_nhdsWithin.2
     ⟨_, h t ht, ⟨hx, hxt⟩, fun _y hy => hy.1.2⟩
 
@@ -1080,7 +1080,7 @@ lemma continuousWithinAt_of_not_accPt
 
 中文:
 引理 continuousWithinAt_of_not_accPt
-  条件: (h : ¬AccPt x (𝓟 s))
+  条件: (h : ¬聚点 x (𝓟 s))
   结论: ContinuousWithinAt f s x
   证明: by
   rw [← continuousWithinAt_sdiff_self]
@@ -1127,7 +1127,7 @@ lemma continuousAt_of_not_accPt
 
 中文:
 引理 continuousAt_of_not_accPt
-  条件: (h : ¬AccPt x (𝓟 {x}ᶜ))
+  条件: (h : ¬聚点 x (𝓟 {x}ᶜ))
   结论: ContinuousAt f x
   证明: by
   rw [← continuousWithinAt_compl_self]
@@ -1150,7 +1150,7 @@ lemma continuousAt_of_not_accPt_top
 
 中文:
 引理 continuousAt_of_not_accPt_top
-  条件: (h : ¬AccPt x ⊤)
+  条件: (h : ¬聚点 x ⊤)
   结论: ContinuousAt f x
   证明: continuousAt_of_not_accPt fun hh => h AccPt.mono hh (by simp)
 
@@ -1190,7 +1190,7 @@ theorem antitone_continuousOn
 中文:
 定理 antitone_continuousOn
   条件: {f : α -> β}
-  结论: Antitone (ContinuousOn f)
+  结论: 递减 (ContinuousOn f)
   证明: fun _s _t hst hf =>
   hf.mono hst
 -/
@@ -1268,8 +1268,8 @@ theorem IsOpen.continuousOn_iff
   proof: forall₂_congr fun _ => continuousWithinAt_iff_continuousAt ∘ hs.mem_nhds
 
 中文:
-定理 IsOpen.continuousOn_iff
-  条件: (hs : IsOpen s)
+定理 是开集.continuousOn_iff
+  条件: (hs : 是开集 s)
   证明: forall₂_congr fun _ => continuousWithinAt_iff_continuousAt ∘ hs.mem_nhds
 
 Depends on / 依赖: continuousWithinAt_iff_continuousAt, hs.mem_nhds, mem_nhds
@@ -1308,7 +1308,7 @@ theorem continuousOn_of_forall_continuousAt
 @[fun_prop]
 
 中文:
-定理 continuousOn_of_forall_continuousAt
+定理 continuousOn_of_对任意_continuousAt
   条件: (hcont : 对任意 x in s, ContinuousAt f x)
   证明: fun x hx => (hcont x hx).continuousWithinAt
 
@@ -1334,8 +1334,8 @@ theorem Continuous.continuousOn
 @[fun_prop]
 
 中文:
-定理 Continuous.continuousOn
-  条件: (h : Continuous f)
+定理 连续.continuousOn
+  条件: (h : 连续 f)
   结论: ContinuousOn f s
   证明: by
   rw [← continuousOn_univ] at h
@@ -1359,8 +1359,8 @@ theorem Continuous.continuousWithinAt
   proof: h.continuousAt.continuousWithinAt
 
 中文:
-定理 Continuous.continuousWithinAt
-  条件: (h : Continuous f)
+定理 连续.continuousWithinAt
+  条件: (h : 连续 f)
   证明: h.continuousAt.continuousWithinAt
 
 Depends on / 依赖: continuousAt, continuousWithinAt, h.continuousAt.continuousWithinAt
@@ -1455,7 +1455,7 @@ theorem Filter.EventuallyEq.congr_continuousWithinAt
   rw [ContinuousWithinAt]; rw [hx]; rw [tendsto_congr' h]; rw [ContinuousWithinAt]
 
 中文:
-定理 Filter.EventuallyEq.congr_continuousWithinAt
+定理 滤子.EventuallyEq.congr_continuousWithinAt
   条件: (h : f =ᶠ[𝓝[s] x] g) (hx : f x = g x)
   证明: by
   rw [ContinuousWithinAt]; rw [hx]; rw [tendsto_congr' h]; rw [ContinuousWithinAt]
@@ -1512,7 +1512,7 @@ theorem Filter.EventuallyEq.congr_continuousWithinAt_of_mem
     fun h' => h'.congr_of_eventuallyEq_of_mem h hx⟩
 
 中文:
-定理 Filter.EventuallyEq.congr_continuousWithinAt_of_mem
+定理 滤子.EventuallyEq.congr_continuousWithinAt_of_mem
   条件: (h : f =ᶠ[𝓝[s] x] g) (hx : x in s)
   证明: ⟨fun h' => h'.congr_of_eventuallyEq_of_mem h.symm hx,
     fun h' => h'.congr_of_eventuallyEq_of_mem h hx⟩
@@ -1555,7 +1555,7 @@ theorem Filter.EventuallyEq.congr_continuousWithinAt_of_insert
     fun h' => h'.congr_of_eventuallyEq_insert h⟩
 
 中文:
-定理 Filter.EventuallyEq.congr_continuousWithinAt_of_insert
+定理 滤子.EventuallyEq.congr_continuousWithinAt_of_insert
   条件: (h : f =ᶠ[𝓝[insert x s] x] g)
   证明: ⟨fun h' => h'.congr_of_eventuallyEq_insert h.symm,
     fun h' => h'.congr_of_eventuallyEq_insert h⟩
@@ -1728,7 +1728,7 @@ theorem ContinuousWithinAt.comp
 
 中文:
 定理 ContinuousWithinAt.comp
-  结论: {g : β -> γ} {t : Set β}
+  结论: {g : β -> γ} {t : 集合 β}
   证明: hg.tendsto.comp (hf.tendsto_nhdsWithin h)
 
 Depends on / 依赖: hf.tendsto_nhdsWithin, hg.tendsto.comp, tendsto, tendsto_nhdsWithin
@@ -1749,7 +1749,7 @@ theorem ContinuousWithinAt.comp_of_eq
 
 中文:
 定理 ContinuousWithinAt.comp_of_eq
-  结论: {g : β -> γ} {t : Set β} {y : β}
+  结论: {g : β -> γ} {t : 集合 β} {y : β}
   证明: by
   subst hy; exact hg.comp hf h
 
@@ -1770,7 +1770,7 @@ theorem ContinuousWithinAt.comp_inter
 
 中文:
 定理 ContinuousWithinAt.comp_inter
-  结论: {g : β -> γ} {t : Set β}
+  结论: {g : β -> γ} {t : 集合 β}
   证明: hg.comp (hf.mono inter_subset_left) inter_subset_right
 
 Depends on / 依赖: hf.mono, hg.comp, inter_subset_left, inter_subset_right
@@ -1791,7 +1791,7 @@ theorem ContinuousWithinAt.comp_inter_of_eq
 
 中文:
 定理 ContinuousWithinAt.comp_inter_of_eq
-  结论: {g : β -> γ} {t : Set β} {y : β}
+  结论: {g : β -> γ} {t : 集合 β} {y : β}
   证明: by
   subst hy; exact hg.comp_inter hf
 
@@ -1812,7 +1812,7 @@ theorem ContinuousWithinAt.comp_of_preimage_mem_nhdsWithin
 
 中文:
 定理 ContinuousWithinAt.comp_of_preimage_mem_nhdsWithin
-  结论: {g : β -> γ} {t : Set β}
+  结论: {g : β -> γ} {t : 集合 β}
   证明: hg.tendsto.comp (tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within f hf h)
 
 Depends on / 依赖: hg.tendsto.comp, tendsto, tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
@@ -1833,7 +1833,7 @@ theorem ContinuousWithinAt.comp_of_preimage_mem_nhdsWithin_of_eq
 
 中文:
 定理 ContinuousWithinAt.comp_of_preimage_mem_nhdsWithin_of_eq
-  结论: {g : β -> γ} {t : Set β} {y : β}
+  结论: {g : β -> γ} {t : 集合 β} {y : β}
   证明: by
   subst hy; exact hg.comp_of_preimage_mem_nhdsWithin hf h
 
@@ -1855,7 +1855,7 @@ theorem ContinuousWithinAt.comp_of_mem_nhdsWithin_image
 
 中文:
 定理 ContinuousWithinAt.comp_of_mem_nhdsWithin_image
-  结论: {g : β -> γ} {t : Set β}
+  结论: {g : β -> γ} {t : 集合 β}
   证明: (hg.mono_of_mem_nhdsWithin hs).comp hf (mapsTo_image f s)
 
 Depends on / 依赖: hg.mono_of_mem_nhdsWithin, mapsTo_image, mono_of_mem_nhdsWithin
@@ -1876,7 +1876,7 @@ theorem ContinuousWithinAt.comp_of_mem_nhdsWithin_image_of_eq
 
 中文:
 定理 ContinuousWithinAt.comp_of_mem_nhdsWithin_image_of_eq
-  结论: {g : β -> γ} {t : Set β} {y : β}
+  结论: {g : β -> γ} {t : 集合 β} {y : β}
   证明: by
   subst hy; exact hg.comp_of_mem_nhdsWithin_image hf hs
 
@@ -1937,7 +1937,7 @@ theorem ContinuousOn.comp
 
 中文:
 定理 ContinuousOn.comp
-  结论: {g : β -> γ} {t : Set β} (hg : ContinuousOn g t)
+  结论: {g : β -> γ} {t : 集合 β} (hg : ContinuousOn g t)
   证明: fun x hx =>
   ContinuousWithinAt.comp (hg _ (h hx)) (hf x hx) h
 -/
@@ -1959,7 +1959,7 @@ theorem ContinuousOn.comp'
 
 中文:
 定理 ContinuousOn.comp'
-  结论: {g : β -> γ} {f : α -> β} {s : Set α} {t : Set β} (hg : ContinuousOn g t)
+  结论: {g : β -> γ} {f : α -> β} {s : 集合 α} {t : 集合 β} (hg : ContinuousOn g t)
   证明: ContinuousOn.comp hg hf h
 
 @[fun_prop]
@@ -1981,7 +1981,7 @@ theorem ContinuousOn.comp_inter
 
 中文:
 定理 ContinuousOn.comp_inter
-  结论: {g : β -> γ} {t : Set β} (hg : ContinuousOn g t)
+  结论: {g : β -> γ} {t : 集合 β} (hg : ContinuousOn g t)
   证明: hg.comp (hf.mono inter_subset_left) inter_subset_right
 
 Depends on / 依赖: hf.mono, hg.comp, inter_subset_left, inter_subset_right
@@ -1999,8 +1999,8 @@ theorem Continuous.comp_continuousOn
   proof: hg.continuousOn.comp hf (mapsTo_univ _ _)
 
 中文:
-定理 Continuous.comp_continuousOn
-  结论: {g : β -> γ} {f : α -> β} {s : Set α} (hg : Continuous g)
+定理 连续.comp_continuousOn
+  结论: {g : β -> γ} {f : α -> β} {s : 集合 α} (hg : 连续 g)
   证明: hg.continuousOn.comp hf (mapsTo_univ _ _)
 
 Depends on / 依赖: continuousOn, hg.continuousOn.comp, mapsTo_univ
@@ -2021,8 +2021,8 @@ theorem Continuous.comp_continuousOn'
   proof: hg.comp_continuousOn hf
 
 中文:
-定理 Continuous.comp_continuousOn'
-  结论: {g : β -> γ} {f : α -> β} {s : Set α} (hg : Continuous g)
+定理 连续.comp_continuousOn'
+  结论: {g : β -> γ} {f : α -> β} {s : 集合 α} (hg : 连续 g)
   证明: hg.comp_continuousOn hf
 
 Depends on / 依赖: comp_continuousOn, hg.comp_continuousOn
@@ -2043,7 +2043,7 @@ theorem ContinuousOn.comp_continuous
 
 中文:
 定理 ContinuousOn.comp_continuous
-  结论: {g : β -> γ} {f : α -> β} {s : Set β} (hg : ContinuousOn g s)
+  结论: {g : β -> γ} {f : α -> β} {s : 集合 β} (hg : ContinuousOn g s)
   证明: by
   rw [← continuousOn_univ] at *
   exact hg.comp hf fun x _ => hs x
@@ -2065,7 +2065,7 @@ theorem ContinuousOn.image_comp_continuous
 
 中文:
 定理 ContinuousOn.image_comp_continuous
-  结论: {g : β -> γ} {f : α -> β} {s : Set α}
+  结论: {g : β -> γ} {f : α -> β} {s : 集合 α}
   证明: hg.comp hf.continuousOn (s.mapsTo_image f)
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hg.comp, mapsTo_image, s.mapsTo_image
@@ -2152,7 +2152,7 @@ theorem ContinuousWithinAt.mem_closure
 
 中文:
 定理 ContinuousWithinAt.mem_closure
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: closure_mono (image_subset_iff.2 ht) (h.mem_closure_image hx)
 
 Depends on / 依赖: closure_mono, h.mem_closure_image, image_subset_iff, mem_closure_image
@@ -2170,8 +2170,8 @@ theorem Set.MapsTo.closure_of_continuousWithinAt
   proof: fun x hx => (hc x hx).mem_closure hx h
 
 中文:
-定理 Set.MapsTo.closure_of_continuousWithinAt
-  结论: {t : Set β}
+定理 集合.映射到.closure_of_continuousWithinAt
+  结论: {t : 集合 β}
   证明: fun x hx => (hc x hx).mem_closure hx h
 
 Depends on / 依赖: mem_closure
@@ -2189,8 +2189,8 @@ theorem Set.MapsTo.closure_of_continuousOn
   proof: h.closure_of_continuousWithinAt fun x hx => (hc x hx).mono subset_closure
 
 中文:
-定理 Set.MapsTo.closure_of_continuousOn
-  结论: {t : Set β} (h : MapsTo f s t)
+定理 集合.映射到.closure_of_continuousOn
+  结论: {t : 集合 β} (h : 映射到 f s t)
   证明: h.closure_of_continuousWithinAt fun x hx => (hc x hx).mono subset_closure
 
 Depends on / 依赖: closure_of_continuousWithinAt, h.closure_of_continuousWithinAt, subset_closure
@@ -2248,7 +2248,7 @@ theorem ContinuousWithinAt.prodMk
 
 中文:
 定理 ContinuousWithinAt.prodMk
-  结论: {f : α -> β} {g : α -> γ} {s : Set α} {x : α}
+  结论: {f : α -> β} {g : α -> γ} {s : 集合 α} {x : α}
   证明: hf.prodMk_nhds hg
 
 @[fun_prop]
@@ -2272,7 +2272,7 @@ theorem ContinuousOn.prodMk
 
 中文:
 定理 ContinuousOn.prodMk
-  结论: {f : α -> β} {g : α -> γ} {s : Set α} (hf : ContinuousOn f s)
+  结论: {f : α -> β} {g : α -> γ} {s : 集合 α} (hf : ContinuousOn f s)
   证明: fun x hx =>
   (hf x hx).prodMk (hg x hx)
 -/
@@ -2291,8 +2291,8 @@ theorem continuousOn_fst
 
 中文:
 定理 continuousOn_fst
-  条件: {s : Set (α × β)}
-  结论: ContinuousOn Prod.fst s
+  条件: {s : 集合 (α × β)}
+  结论: ContinuousOn 积类型.fst s
   证明: continuous_fst.continuousOn
 
 Depends on / 依赖: continuousOn, continuous_fst, continuous_fst.continuousOn
@@ -2313,8 +2313,8 @@ theorem continuousWithinAt_fst
 
 中文:
 定理 continuousWithinAt_fst
-  条件: {s : Set (α × β)} {p : α × β}
-  结论: ContinuousWithinAt Prod.fst s p
+  条件: {s : 集合 (α × β)} {p : α × β}
+  结论: ContinuousWithinAt 积类型.fst s p
   证明: continuous_fst.continuousWithinAt
 
 @[fun_prop]
@@ -2335,7 +2335,7 @@ theorem ContinuousOn.fst
 
 中文:
 定理 ContinuousOn.fst
-  条件: {f : α -> β × γ} {s : Set α} (hf : ContinuousOn f s)
+  条件: {f : α -> β × γ} {s : 集合 α} (hf : ContinuousOn f s)
   证明: continuous_fst.comp_continuousOn hf
 
 Depends on / 依赖: comp_continuousOn, continuous_fst, continuous_fst.comp_continuousOn
@@ -2354,7 +2354,7 @@ theorem ContinuousWithinAt.fst
 
 中文:
 定理 ContinuousWithinAt.fst
-  条件: {f : α -> β × γ} {s : Set α} {a : α} (h : ContinuousWithinAt f s a)
+  条件: {f : α -> β × γ} {s : 集合 α} {a : α} (h : ContinuousWithinAt f s a)
   证明: continuousAt_fst.comp_continuousWithinAt h
 
 Depends on / 依赖: comp_continuousWithinAt, continuousAt_fst, continuousAt_fst.comp_continuousWithinAt
@@ -2374,8 +2374,8 @@ theorem continuousOn_snd
 
 中文:
 定理 continuousOn_snd
-  条件: {s : Set (α × β)}
-  结论: ContinuousOn Prod.snd s
+  条件: {s : 集合 (α × β)}
+  结论: ContinuousOn 积类型.snd s
   证明: continuous_snd.continuousOn
 
 Depends on / 依赖: continuousOn, continuous_snd, continuous_snd.continuousOn
@@ -2396,8 +2396,8 @@ theorem continuousWithinAt_snd
 
 中文:
 定理 continuousWithinAt_snd
-  条件: {s : Set (α × β)} {p : α × β}
-  结论: ContinuousWithinAt Prod.snd s p
+  条件: {s : 集合 (α × β)} {p : α × β}
+  结论: ContinuousWithinAt 积类型.snd s p
   证明: continuous_snd.continuousWithinAt
 
 @[fun_prop]
@@ -2418,7 +2418,7 @@ theorem ContinuousOn.snd
 
 中文:
 定理 ContinuousOn.snd
-  条件: {f : α -> β × γ} {s : Set α} (hf : ContinuousOn f s)
+  条件: {f : α -> β × γ} {s : 集合 α} (hf : ContinuousOn f s)
   证明: continuous_snd.comp_continuousOn hf
 
 Depends on / 依赖: comp_continuousOn, continuous_snd, continuous_snd.comp_continuousOn
@@ -2437,7 +2437,7 @@ theorem ContinuousWithinAt.snd
 
 中文:
 定理 ContinuousWithinAt.snd
-  条件: {f : α -> β × γ} {s : Set α} {a : α} (h : ContinuousWithinAt f s a)
+  条件: {f : α -> β × γ} {s : 集合 α} {a : α} (h : ContinuousWithinAt f s a)
   证明: continuousAt_snd.comp_continuousWithinAt h
 
 Depends on / 依赖: comp_continuousWithinAt, continuousAt_snd, continuousAt_snd.comp_continuousWithinAt
@@ -2456,7 +2456,7 @@ theorem continuousWithinAt_prod_iff
 
 中文:
 定理 continuousWithinAt_prod_iff
-  条件: {f : α -> β × γ} {s : Set α} {x : α}
+  条件: {f : α -> β × γ} {s : 集合 α} {x : α}
   证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun ⟨h1, h2⟩ => h1.prodMk h2⟩
 
 Depends on / 依赖: h.fst, h.snd, h1.prodMk, prodMk
@@ -2477,7 +2477,7 @@ theorem ContinuousWithinAt.prodMap
 
 中文:
 定理 ContinuousWithinAt.prodMap
-  结论: {f : α -> γ} {g : β -> δ} {s : Set α} {t : Set β} {x : α} {y : β}
+  结论: {f : α -> γ} {g : β -> δ} {s : 集合 α} {t : 集合 β} {x : α} {y : β}
   证明: .prodMk (hf.comp continuousWithinAt_fst mapsTo_fst_prod)
     (hg.comp continuousWithinAt_snd mapsTo_snd_prod)
 
@@ -2500,7 +2500,7 @@ theorem ContinuousOn.prodMap
 
 中文:
 定理 ContinuousOn.prodMap
-  结论: {f : α -> γ} {g : β -> δ} {s : Set α} {t : Set β} (hf : ContinuousOn f s)
+  结论: {f : α -> γ} {g : β -> δ} {s : 集合 α} {t : 集合 β} (hf : ContinuousOn f s)
   证明: fun ⟨x, y⟩ ⟨hx, hy⟩ =>
   (hf x hx).prodMap (hg y hy)
 -/
@@ -2520,7 +2520,7 @@ theorem continuousWithinAt_prod_of_discrete_left
 
 中文:
 定理 continuousWithinAt_prod_of_discrete_left
-  结论: [DiscreteTopology α]
+  结论: [离散拓扑 α]
   证明: by
   rw [← x.eta]; simp_rw [ContinuousWithinAt, nhdsWithin, nhds_prod_eq, nhds_discrete, pure_prod,
     ← map_inf_principal_preimage]; rfl
@@ -2545,7 +2545,7 @@ theorem continuousWithinAt_prod_of_discrete_right
 
 中文:
 定理 continuousWithinAt_prod_of_discrete_right
-  结论: [DiscreteTopology β]
+  结论: [离散拓扑 β]
   证明: by
   rw [← x.eta]; simp_rw [ContinuousWithinAt, nhdsWithin, nhds_prod_eq, nhds_discrete, prod_pure,
     ← map_inf_principal_preimage]; rfl
@@ -2569,7 +2569,7 @@ theorem continuousAt_prod_of_discrete_left
 
 中文:
 定理 continuousAt_prod_of_discrete_left
-  条件: [DiscreteTopology α] {f : α × β -> γ} {x : α × β}
+  条件: [离散拓扑 α] {f : α × β -> γ} {x : α × β}
   证明: by
   simp_rw [← continuousWithinAt_univ]; exact continuousWithinAt_prod_of_discrete_left
 
@@ -2590,7 +2590,7 @@ theorem continuousAt_prod_of_discrete_right
 
 中文:
 定理 continuousAt_prod_of_discrete_right
-  条件: [DiscreteTopology β] {f : α × β -> γ} {x : α × β}
+  条件: [离散拓扑 β] {f : α × β -> γ} {x : α × β}
   证明: by
   simp_rw [← continuousWithinAt_univ]; exact continuousWithinAt_prod_of_discrete_right
 
@@ -2611,7 +2611,7 @@ theorem continuousOn_prod_of_discrete_left
 
 中文:
 定理 continuousOn_prod_of_discrete_left
-  条件: [DiscreteTopology α] {f : α × β -> γ} {s : Set (α × β)}
+  条件: [离散拓扑 α] {f : α × β -> γ} {s : 集合 (α × β)}
   证明: by
   simp_rw [ContinuousOn, Prod.forall, continuousWithinAt_prod_of_discrete_left]; rfl
 
@@ -2632,7 +2632,7 @@ theorem continuousOn_prod_of_discrete_right
 
 中文:
 定理 continuousOn_prod_of_discrete_right
-  条件: [DiscreteTopology β] {f : α × β -> γ} {s : Set (α × β)}
+  条件: [离散拓扑 β] {f : α × β -> γ} {s : 集合 (α × β)}
   证明: by
   simp_rw [ContinuousOn, Prod.forall, continuousWithinAt_prod_of_discrete_right]; apply forall_comm
 
@@ -2653,7 +2653,7 @@ theorem continuous_prod_of_discrete_left
 
 中文:
 定理 continuous_prod_of_discrete_left
-  条件: [DiscreteTopology α] {f : α × β -> γ}
+  条件: [离散拓扑 α] {f : α × β -> γ}
   证明: by
   simp_rw [← continuousOn_univ]; exact continuousOn_prod_of_discrete_left
 
@@ -2674,7 +2674,7 @@ theorem continuous_prod_of_discrete_right
 
 中文:
 定理 continuous_prod_of_discrete_right
-  条件: [DiscreteTopology β] {f : α × β -> γ}
+  条件: [离散拓扑 β] {f : α × β -> γ}
   证明: by
   simp_rw [← continuousOn_univ]; exact continuousOn_prod_of_discrete_right
 
@@ -2696,7 +2696,7 @@ theorem isOpenMap_prod_of_discrete_left
 
 中文:
 定理 isOpenMap_prod_of_discrete_left
-  条件: [DiscreteTopology α] {f : α × β -> γ}
+  条件: [离散拓扑 α] {f : α × β -> γ}
   证明: by
   simp_rw [isOpenMap_iff_nhds_le, Prod.forall, nhds_prod_eq, nhds_discrete, pure_prod, map_map]
   rfl
@@ -2720,7 +2720,7 @@ theorem isOpenMap_prod_of_discrete_right
 
 中文:
 定理 isOpenMap_prod_of_discrete_right
-  条件: [DiscreteTopology β] {f : α × β -> γ}
+  条件: [离散拓扑 β] {f : α × β -> γ}
   证明: by
   simp_rw [isOpenMap_iff_nhds_le, Prod.forall, forall_comm (α := α) (β := β), nhds_prod_eq,
     nhds_discrete, prod_pure, map_map]; rfl
@@ -2745,7 +2745,7 @@ theorem ContinuousOn.uncurry_left
 
 中文:
 定理 ContinuousOn.uncurry_left
-  结论: {f : α -> β -> γ} {sα : Set α} {sβ : Set β} (a : α) (ha : a in sα)
+  结论: {f : α -> β -> γ} {sα : 集合 α} {sβ : 集合 β} (a : α) (ha : a in sα)
   证明: by
   let g : β -> γ := f.uncurry ∘ (fun b => (a, b))
   refine ContinuousOn.congr (f := g) ?_ (fun y => by simp [g])
@@ -2772,7 +2772,7 @@ theorem ContinuousOn.uncurry_right
 
 中文:
 定理 ContinuousOn.uncurry_right
-  结论: {f : α -> β -> γ} {sα : Set α} {sβ : Set β} (b : β) (ha : b in sβ)
+  结论: {f : α -> β -> γ} {sα : 集合 α} {sβ : 集合 β} (b : β) (ha : b in sβ)
   证明: by
   let g : α -> γ := f.uncurry ∘ (fun a => (a, b))
   refine ContinuousOn.congr (f := g) ?_ (fun y => by simp [g])
@@ -2797,7 +2797,7 @@ theorem continuousWithinAt_pi
 
 中文:
 定理 continuousWithinAt_pi
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: tendsto_pi_nhds
 
 Depends on / 依赖: tendsto_pi_nhds
@@ -2819,7 +2819,7 @@ theorem continuousOn_pi
 
 中文:
 定理 continuousOn_pi
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: ⟨fun h i x hx => tendsto_pi_nhds.1 (h x hx) i, fun h x hx => tendsto_pi_nhds.2 fun i => h i x hx⟩
 
 @[fun_prop]
@@ -2843,7 +2843,7 @@ theorem continuousOn_pi'
 
 中文:
 定理 continuousOn_pi'
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: continuousOn_pi.2 hf
 
 @[fun_prop]
@@ -2866,7 +2866,7 @@ theorem continuousOn_apply
 
 中文:
 定理 continuousOn_apply
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: Continuous.continuousOn (continuous_apply i)
 
 Depends on / 依赖: Continuous, Continuous.continuousOn, continuousOn, continuous_apply
@@ -2894,7 +2894,7 @@ theorem continuousOn_const
 
 中文:
 定理 continuousOn_const
-  条件: {s : Set α} {c : β}
+  条件: {s : 集合 α} {c : β}
   结论: ContinuousOn (fun _ => c) s
   证明: continuous_const.continuousOn
 
@@ -2916,7 +2916,7 @@ theorem continuousWithinAt_const
 
 中文:
 定理 continuousWithinAt_const
-  条件: {b : β} {s : Set α} {x : α}
+  条件: {b : β} {s : 集合 α} {x : α}
   证明: continuous_const.continuousWithinAt
 
 Depends on / 依赖: continuousWithinAt, continuous_const, continuous_const.continuousWithinAt
@@ -2938,7 +2938,7 @@ theorem continuousOn_id
 
 中文:
 定理 continuousOn_id
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: ContinuousOn id s
   证明: continuous_id.continuousOn
 
@@ -2961,7 +2961,7 @@ theorem continuousOn_id'
 
 中文:
 定理 continuousOn_id'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ContinuousOn (fun x : α => x) s
   证明: continuousOn_id
 
@@ -2980,7 +2980,7 @@ theorem continuousWithinAt_id
 
 中文:
 定理 continuousWithinAt_id
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: ContinuousWithinAt id s x
   证明: continuous_id.continuousWithinAt
 
@@ -2998,7 +2998,7 @@ theorem ContinuousOn.iterate
 
 中文:
 定理 ContinuousOn.iterate
-  结论: {f : α -> α} {s : Set α} (hcont : ContinuousOn f s)
+  结论: {f : α -> α} {s : 集合 α} (hcont : ContinuousOn f s)
 -/
 protected theorem ContinuousOn.iterate {f : α -> α} {s : Set α} (hcont : ContinuousOn f s)
     (hmaps : MapsTo f s s) : forall n, ContinuousOn (f^[n]) s
@@ -3038,7 +3038,7 @@ theorem ContinuousOn.finCons
 
 中文:
 定理 ContinuousOn.finCons
-  结论: {f : α -> X 0} {s : Set α} {g : α -> 对任意 j : Fin n, X (Fin.succ j)}
+  结论: {f : α -> X 0} {s : 集合 α} {g : α -> 对任意 j : 有限集 n, X (有限集.succ j)}
   证明: fun a ha =>
   (hf a ha).finCons (hg a ha)
 -/
@@ -3057,7 +3057,7 @@ theorem ContinuousWithinAt.matrixVecCons
 
 中文:
 定理 ContinuousWithinAt.matrixVecCons
-  结论: {f : α -> β} {g : α -> Fin n -> β} {a : α} {s : Set α}
+  结论: {f : α -> β} {g : α -> 有限集 n -> β} {a : α} {s : 集合 α}
   证明: hf.tendsto.matrixVecCons hg
 
 Depends on / 依赖: hf.tendsto.matrixVecCons, matrixVecCons, tendsto
@@ -3078,7 +3078,7 @@ theorem ContinuousOn.matrixVecCons
 
 中文:
 定理 ContinuousOn.matrixVecCons
-  结论: {f : α -> β} {g : α -> Fin n -> β} {s : Set α}
+  结论: {f : α -> β} {g : α -> 有限集 n -> β} {s : 集合 α}
   证明: fun a ha =>
   (hf a ha).matrixVecCons (hg a ha)
 -/
@@ -3180,8 +3180,8 @@ theorem Set.LeftInvOn.map_nhdsWithin_eq
     simpa only [hx] using hf.tendsto_nhdsWithin (h.mapsTo (surjOn_image _
 
 中文:
-定理 Set.LeftInvOn.map_nhdsWithin_eq
-  结论: {f : α -> β} {g : β -> α} {x : β} {s : Set β}
+定理 集合.LeftInvOn.map_nhdsWithin_eq
+  结论: {f : α -> β} {g : β -> α} {x : β} {s : 集合 β}
   证明: by
   apply le_antisymm
   · exact hg.tendsto_nhdsWithin (mapsTo_image _ _)
@@ -3213,7 +3213,7 @@ theorem Function.LeftInverse.map_nhds_eq
     (h.leftInvOn univ).map_nhdsWithin_eq (h x) (by rwa [image_univ]) hg.continuousWithinAt
 
 中文:
-定理 Function.LeftInverse.map_nhds_eq
+定理 函数.左逆.map_nhds_eq
   结论: {f : α -> β} {g : β -> α} {x : β}
   证明: by
   simpa only [nhdsWithin_univ, image_univ] using
@@ -3237,8 +3237,8 @@ lemma Topology.IsInducing.continuousWithinAt_iff
   simp_rw [ContinuousWithinAt, hg.tendsto_nhds_iff]; rfl
 
 中文:
-引理 Topology.IsInducing.continuousWithinAt_iff
-  结论: {f : α -> β} {g : β -> γ} (hg : IsInducing g)
+引理 拓扑.是Inducing.continuousWithinAt_iff
+  结论: {f : α -> β} {g : β -> γ} (hg : 是Inducing g)
   证明: by
   simp_rw [ContinuousWithinAt, hg.tendsto_nhds_iff]; rfl
 
@@ -3258,8 +3258,8 @@ lemma Topology.IsInducing.continuousOn_iff
   simp_rw [ContinuousOn, hg.continuousWithinAt_iff]
 
 中文:
-引理 Topology.IsInducing.continuousOn_iff
-  结论: {f : α -> β} {g : β -> γ} (hg : IsInducing g)
+引理 拓扑.是Inducing.continuousOn_iff
+  结论: {f : α -> β} {g : β -> γ} (hg : 是Inducing g)
   证明: by
   simp_rw [ContinuousOn, hg.continuousWithinAt_iff]
 
@@ -3279,8 +3279,8 @@ lemma Topology.IsInducing.map_nhdsWithin_eq
   ext; simp +contextual [mem_nhdsWithin_iff_eventually, hf.nhds_eq_comap, forall_comm (α := _ in _)]
 
 中文:
-引理 Topology.IsInducing.map_nhdsWithin_eq
-  条件: {f : α -> β} (hf : IsInducing f) (s : Set α) (x : α)
+引理 拓扑.是Inducing.map_nhdsWithin_eq
+  条件: {f : α -> β} (hf : 是Inducing f) (s : 集合 α) (x : α)
   证明: by
   ext; simp +contextual [mem_nhdsWithin_iff_eventually, hf.nhds_eq_comap, forall_comm (α := _ in _)]
 
@@ -3300,8 +3300,8 @@ lemma Topology.IsInducing.continuousOn_image_iff
   simp [ContinuousOn, ContinuousWithinAt, ← hf.map_nhdsWithin_eq]
 
 中文:
-引理 Topology.IsInducing.continuousOn_image_iff
-  条件: {g : β -> γ} {s : Set α} (hf : IsInducing f)
+引理 拓扑.是Inducing.continuousOn_image_iff
+  条件: {g : β -> γ} {s : 集合 α} (hf : 是Inducing f)
   证明: by
   simp [ContinuousOn, ContinuousWithinAt, ← hf.map_nhdsWithin_eq]
 
@@ -3320,8 +3320,8 @@ lemma Topology.IsEmbedding.continuousOn_iff
   proof: hg.isInducing.continuousOn_iff
 
 中文:
-引理 Topology.IsEmbedding.continuousOn_iff
-  结论: {f : α -> β} {g : β -> γ} (hg : IsEmbedding g)
+引理 拓扑.是嵌入.continuousOn_iff
+  结论: {f : α -> β} {g : β -> γ} (hg : 是嵌入 g)
   证明: hg.isInducing.continuousOn_iff
 
 Depends on / 依赖: continuousOn_iff, hg.isInducing.continuousOn_iff, isInducing
@@ -3339,8 +3339,8 @@ lemma Topology.IsEmbedding.map_nhdsWithin_eq
   proof: hf.isInducing.map_nhdsWithin_eq s x
 
 中文:
-引理 Topology.IsEmbedding.map_nhdsWithin_eq
-  条件: {f : α -> β} (hf : IsEmbedding f) (s : Set α) (x : α)
+引理 拓扑.是嵌入.map_nhdsWithin_eq
+  条件: {f : α -> β} (hf : 是嵌入 f) (s : 集合 α) (x : α)
   证明: hf.isInducing.map_nhdsWithin_eq s x
 
 Depends on / 依赖: hf.isInducing.map_nhdsWithin_eq, isInducing, map_nhdsWithin_eq
@@ -3361,8 +3361,8 @@ theorem Topology.IsOpenEmbedding.map_nhdsWithin_preimage_eq
   rw [inter_assoc]; rw [inter_self]
 
 中文:
-定理 Topology.IsOpenEmbedding.map_nhdsWithin_preimage_eq
-  结论: {f : α -> β} (hf : IsOpenEmbedding f)
+定理 拓扑.是开嵌入.map_nhdsWithin_preimage_eq
+  结论: {f : α -> β} (hf : 是开嵌入 f)
   证明: by
   rw [hf.isEmbedding.map_nhdsWithin_eq]; rw [image_preimage_eq_inter_range]
   apply nhdsWithin_eq_nhdsWithin (mem_range_self _) hf.isOpen_range
@@ -3387,8 +3387,8 @@ theorem Topology.IsQuotientMap.continuousOn_isOpen_iff
   rfl
 
 中文:
-定理 Topology.IsQuotientMap.continuousOn_isOpen_iff
-  结论: {f : α -> β} {g : β -> γ} (h : IsQuotientMap f)
+定理 拓扑.是商映射.continuousOn_isOpen_iff
+  结论: {f : α -> β} {g : β -> γ} (h : 是商映射 f)
   证明: by
   simp only [continuousOn_iff_continuous_domRestrict, (h.restrictPreimage_isOpen hs).continuous_iff]
   rfl
@@ -3413,8 +3413,8 @@ theorem IsOpenMap.continuousOn_image_of_leftInvOn
   · rw [inter_eq_self_of_subset_left (image_mono inter_subset_right), hleft.image_inter']
 
 中文:
-定理 IsOpenMap.continuousOn_image_of_leftInvOn
-  结论: {f : α -> β} {s : Set α}
+定理 是开映射.continuousOn_image_of_leftInvOn
+  结论: {f : α -> β} {s : 集合 α}
   证明: by
   refine continuousOn_iff'.2 fun t ht => ⟨f '' (t inter s), ?_, ?_⟩
   · rw [← image_domRestrict]
@@ -3442,8 +3442,8 @@ theorem IsOpenMap.continuousOn_range_of_leftInverse
   exact (hf.domRestrict isOpen_univ).continuousOn_image_of_leftInvOn fun x _ => hleft x
 
 中文:
-定理 IsOpenMap.continuousOn_range_of_leftInverse
-  结论: {f : α -> β} (hf : IsOpenMap f) {finv : β -> α}
+定理 是开映射.continuousOn_range_of_leftInverse
+  结论: {f : α -> β} (hf : 是开映射 f) {finv : β -> α}
   证明: by
   rw [← image_univ]
   exact (hf.domRestrict isOpen_univ).continuousOn_image_of_leftInvOn fun x _ => hleft x
@@ -3467,7 +3467,7 @@ lemma ContinuousOn.union_continuousAt
 
 中文:
 引理 ContinuousOn.union_continuousAt
-  结论: {f : α -> β} (s_op : IsOpen s)
+  结论: {f : α -> β} (s_op : 是开集 s)
   证明: continuousOn_of_forall_continuousAt fun _ hx => hx.elim
   (fun h => ContinuousWithinAt.continuousAt (continuousWithinAt hs h) <| IsOpen.mem_nhds s_op h)
   (ht _)
@@ -3531,7 +3531,7 @@ alias continouousOn_union_iff_of_isClosed := continuousOn_union_iff_of_isClosed
 
 中文:
 定理 continuousOn_union_iff_of_isClosed
-  条件: {f : α -> β} (hs : IsClosed s) (ht : IsClosed t)
+  条件: {f : α -> β} (hs : 是闭集 s) (ht : 是闭集 t)
   证明: ⟨fun h => ⟨h.mono s.subset_union_left, h.mono s.subset_union_right⟩,
    fun h => h.left.union_of_isClosed h.right hs ht⟩
 
@@ -3581,7 +3581,7 @@ alias continouousOn_union_iff_of_isOpen := continuousOn_union_iff_of_isOpen
 
 中文:
 定理 continuousOn_union_iff_of_isOpen
-  条件: {f : α -> β} (hs : IsOpen s) (ht : IsOpen t)
+  条件: {f : α -> β} (hs : 是开集 s) (ht : 是开集 t)
   证明: ⟨fun h => ⟨h.mono s.subset_union_left, h.mono s.subset_union_right⟩,
    fun h => h.left.union_of_isOpen h.right hs ht⟩
 
@@ -3610,7 +3610,7 @@ lemma ContinuousOn.iUnion_of_isOpen
 
 中文:
 引理 ContinuousOn.iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set α}
+  结论: {ι : 类型} {s : ι -> 集合 α}
   证明: by
   rintro x ⟨si, ⟨i, rfl⟩, hxsi⟩
 .continuousWithinAt exact (hf i).continuousAt ((hs i).mem_nhds hxsi)
@@ -3634,7 +3634,7 @@ lemma continuousOn_iUnion_iff_of_isOpen
 
 中文:
 引理 continuousOn_iUnion_iff_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set α}
+  结论: {ι : 类型} {s : ι -> 集合 α}
   证明: ⟨fun h i => h.mono subset_iUnion_of_subset i fun _ a => a,
    fun h => ContinuousOn.iUnion_of_isOpen h hs⟩
 
@@ -3658,7 +3658,7 @@ lemma continuous_of_continuousOn_iUnion_of_isOpen
 
 中文:
 引理 continuous_of_continuousOn_iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set α}
+  结论: {ι : 类型} {s : ι -> 集合 α}
   证明: by
   rw [← continuousOn_univ]; rw [← hs']
   exact ContinuousOn.iUnion_of_isOpen hf hs
@@ -3688,7 +3688,7 @@ theorem ContinuousOn.tendsto_nhdsSet
 
 中文:
 定理 ContinuousOn.tendsto_nhdsSet
-  结论: {f : α -> β} {s s' : Set α} {t : Set β}
+  结论: {f : α -> β} {s s' : 集合 α} {t : 集合 β}
   证明: by
   obtain ⟨V, hV, hsV, hVs'⟩ := mem_nhdsSet_iff_exists.mp hs'
   refine ((hasBasis_nhdsSet s).tendsto_iff (hasBasis_nhdsSet t)).mpr fun U hU =>
@@ -3719,8 +3719,8 @@ theorem Continuous.tendsto_nhdsSet
   proof: hf.continuousOn.tendsto_nhdsSet univ_mem hst
 
 中文:
-定理 Continuous.tendsto_nhdsSet
-  结论: {f : α -> β} {t : Set β} (hf : Continuous f)
+定理 连续.tendsto_nhdsSet
+  结论: {f : α -> β} {t : 集合 β} (hf : 连续 f)
   证明: hf.continuousOn.tendsto_nhdsSet univ_mem hst
 
 Depends on / 依赖: continuousOn, hf.continuousOn.tendsto_nhdsSet, tendsto_nhdsSet, univ_mem
@@ -3739,7 +3739,7 @@ lemma Continuous.tendsto_nhdsSet_nhds
   exact h.tendsto_nhdsSet h'
 
 中文:
-引理 Continuous.tendsto_nhdsSet_nhds
+引理 连续.tendsto_nhdsSet_nhds
   证明: by
   rw [← nhdsSet_singleton]
   exact h.tendsto_nhdsSet h'
@@ -3768,7 +3768,7 @@ lemma ContinuousOn.preimage_mem_nhdsSetWithin
 
 中文:
 引理 ContinuousOn.preimage_mem_nhdsSetWithin
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: by
   have ⟨v, hv⟩ := mem_nhdsSetWithin.1 h
   have ⟨w, hw⟩ := continuousOn_iff'.1 hf v hv.1
@@ -3801,7 +3801,7 @@ lemma ContinuousOn.preimage_mem_nhdsSetWithin_of_mem_nhdsSet
 
 中文:
 引理 ContinuousOn.preimage_mem_nhdsSetWithin_of_mem_nhdsSet
-  结论: {f : α -> β} {s : Set α}
+  结论: {f : α -> β} {s : 集合 α}
   证明: by
   simpa [h] using ContinuousOn.preimage_mem_nhdsSetWithin hf (t := t) (u := u) (t' := univ)
 
@@ -3821,8 +3821,8 @@ lemma Continuous.preimage_mem_nhdsSetWithin
   simpa using (hf.continuousOn (s := univ)).preimage_mem_nhdsSetWithin h
 
 中文:
-引理 Continuous.preimage_mem_nhdsSetWithin
-  结论: {f : α -> β} (hf : Continuous f) {s u s' : Set β}
+引理 连续.preimage_mem_nhdsSetWithin
+  结论: {f : α -> β} (hf : 连续 f) {s u s' : 集合 β}
   证明: by
   simpa using (hf.continuousOn (s := univ)).preimage_mem_nhdsSetWithin h
 
@@ -3842,8 +3842,8 @@ lemma Continuous.preimage_mem_nhdsSet
   simpa [h] using hf.preimage_mem_nhdsSetWithin (s := s) (u := u) (s' := univ)
 
 中文:
-引理 Continuous.preimage_mem_nhdsSet
-  结论: {f : α -> β} (hf : Continuous f) {s u : Set β}
+引理 连续.preimage_mem_nhdsSet
+  结论: {f : α -> β} (hf : 连续 f) {s u : 集合 β}
   证明: by
   simpa [h] using hf.preimage_mem_nhdsSetWithin (s := s) (u := u) (s' := univ)
 

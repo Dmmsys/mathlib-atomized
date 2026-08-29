@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (shrinkYonedaMon.{max w v} (C := C))
+  签名: 保持形状极限 J (shrinkYonedaMon.{最大值 w v} (C := C))
   定义体: have : PreservesLimitsOfShape J (shrinkYonedaMon ⋙ (whiskeringRight _ _ _).obj (forget MonCat)) :=
     (inferInstance : PreservesLimitsOfShape J (Mon.forget C ⋙ shrinkYoneda.{max w v}))
   preservesLimitsOfShape_of_reflects_of_preserves _ ((whiskeringRight _ _ _).obj (forget MonCat))
@@ -62,8 +62,8 @@ letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
       (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCa
 
 中文:
-定义 Grp.limitAux
-  签名: (F : J ⥤ Grp C)
+定义 群.limitAux
+  签名: (F : J ⥤ 群 C)
   定义体: (limit (F ⋙ forget₂Mon C)).X
   grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
 letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimitsOfShape J (forget₂Mon C)
+  签名: 创造形状极限 J (forget₂Mon C)
   定义体: createsLimitOfFullyFaithfulOfIso (limitAux F) (.refl (limitAux F).toMon)
 
 Depends on / 依赖: createsLimitOfFullyFaithfulOfIso, limitAux
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimitsOfShape J (Grp.forget C)
+  签名: 创造形状极限 J (群.forget C)
   定义体: inferInstanceAs CreatesLimitsOfShape J (forget₂Mon C ⋙ Mon.forget C)
 
 Depends on / 依赖: CreatesLimitsOfShape, Mon.forget, forget
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfShape J (Grp C)
+  签名: 有形状极限 J (群 C)
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Grp.forget C)
 
 Depends on / 依赖: Grp.forget, forget, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape

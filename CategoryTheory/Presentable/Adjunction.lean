@@ -129,7 +129,7 @@ lemma hasCardinalFilteredGenerator
 
 中文:
 引理 hasCardinalFilteredGenerator
-  结论: [HasCardinalFilteredGenerator C κ]
+  结论: [有CardinalFilteredGenerator C κ]
   证明: locallySmall_of_faithful G
   exists_generator := by
     obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
@@ -157,7 +157,7 @@ lemma isCardinalLocallyPresentable
 
 中文:
 引理 isCardinalLocallyPresentable
-  结论: [IsCardinalLocallyPresentable C κ]
+  结论: [是CardinalLocallyPresentable C κ]
   证明: letI : Reflective G := ⟨_, adj⟩
     hasColimits_of_reflective G
   toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
@@ -186,7 +186,7 @@ lemma isCardinalAccessibleCategory
 
 中文:
 引理 isCardinalAccessibleCategory
-  结论: [IsCardinalAccessibleCategory C κ]
+  结论: [是CardinalAccessible范畴 C κ]
   证明: ⟨fun J _ _ =>
     let : Reflective G := ⟨_, adj⟩
     have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
@@ -224,7 +224,7 @@ lemma hasCardinalFilteredGenerator
 
 中文:
 引理 hasCardinalFilteredGenerator
-  条件: [HasCardinalFilteredGenerator C κ]
+  条件: [有CardinalFilteredGenerator C κ]
   证明: e.toAdjunction.hasCardinalFilteredGenerator κ
 
 Depends on / 依赖: e.toAdjunction.hasCardinalFilteredGenerator, hasCardinalFilteredGenerator, toAdjunction
@@ -243,7 +243,7 @@ lemma isCardinalLocallyPresentable
 
 中文:
 引理 isCardinalLocallyPresentable
-  条件: [IsCardinalLocallyPresentable C κ]
+  条件: [是CardinalLocallyPresentable C κ]
   证明: e.toAdjunction.isCardinalLocallyPresentable κ
 
 Depends on / 依赖: e.toAdjunction.isCardinalLocallyPresentable, isCardinalLocallyPresentable, toAdjunction
@@ -262,7 +262,7 @@ lemma isCardinalAccessibleCategory
 
 中文:
 引理 isCardinalAccessibleCategory
-  条件: [IsCardinalAccessibleCategory C κ]
+  条件: [是CardinalAccessible范畴 C κ]
   证明: e.toAdjunction.isCardinalAccessibleCategory κ
 
 Depends on / 依赖: e.toAdjunction.isCardinalAccessibleCategory, isCardinalAccessibleCategory, toAdjunction
@@ -285,7 +285,7 @@ lemma isLocallyPresentable
 
 中文:
 引理 isLocallyPresentable
-  条件: [IsLocallyPresentable.{w} C]
+  条件: [是LocallyPresentable.{w} C]
   证明: by
   obtain ⟨κ, _, _⟩ := IsLocallyPresentable.exists_cardinal.{w} C
   exact ⟨κ, inferInstance, e.isCardinalLocallyPresentable κ⟩
@@ -309,7 +309,7 @@ lemma isAccessibleCategory
 
 中文:
 引理 isAccessibleCategory
-  条件: [IsAccessibleCategory.{w} C]
+  条件: [是Accessible范畴.{w} C]
   证明: by
   obtain ⟨κ, _, _⟩ := IsAccessibleCategory.exists_cardinal.{w} C
   exact ⟨κ, inferInstance, e.isCardinalAccessibleCategory κ⟩

@@ -113,7 +113,7 @@ lemma extensiveTopology.surjective_of_isLocallySurjective_sheaf_of_types
 
 中文:
 引理 extensiveTopology.surjective_of_isLocallySurjective_sheaf_of_types
-  结论: [FinitaryPreExtensive C]
+  结论: [有限预广延 C]
   证明: by
   intro x
   replace h := h.1 x
@@ -168,7 +168,7 @@ lemma extensiveTopology.presheafIsLocallySurjective_iff
 
 中文:
 引理 extensiveTopology.presheafIsLocallySurjective_iff
-  结论: [FinitaryPreExtensive C] {F G : Cᵒᵖ ⥤ D}
+  结论: [有限预广延 C] {F G : Cᵒᵖ ⥤ D}
   证明: by
   constructor
   · rw [Presheaf.isLocallySurjective_iff_whisker_forget (J := extensiveTopology C)]
@@ -200,7 +200,7 @@ lemma extensiveTopology.isLocallySurjective_iff
 
 中文:
 引理 extensiveTopology.isLocallySurjective_iff
-  结论: [FinitaryExtensive C]
+  结论: [有限广延 C]
   证明: extensiveTopology.presheafIsLocallySurjective_iff _ f.hom
 
 Depends on / 依赖: extensiveTopology, extensiveTopology.presheafIsLocallySurjective_iff, f.hom, presheafIsLocallySurjective_iff
@@ -229,7 +229,7 @@ lemma regularTopology.isLocallySurjective_sheaf_of_types
 
 中文:
 引理 regularTopology.isLocallySurjective_sheaf_of_types
-  结论: [Preregular C] [FinitaryPreExtensive C]
+  结论: [Preregular C] [有限预广延 C]
   证明: by
     replace h := h.1 y
     rw [coherentTopology.mem_sieves_iff_hasEffectiveEpiFamily] at h
@@ -320,7 +320,7 @@ lemma coherentTopology.isLocallySurjective_iff
 
 中文:
 引理 coherentTopology.isLocallySurjective_iff
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: presheafIsLocallySurjective_iff _ f.hom
 
 Depends on / 依赖: f.hom, presheafIsLocallySurjective_iff

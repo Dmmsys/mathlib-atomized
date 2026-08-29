@@ -45,7 +45,7 @@ deriving Group
 
 中文:
 定义 PresentedGroup
-  签名: (rels : Set (FreeGroup α))
+  签名: (rels : 集合 (自由群 α))
   定义体: FreeGroup α ⧸ Subgroup.normalClosure rels
 deriving Group
 
@@ -67,7 +67,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (rels : Set (FreeGroup α))
+  签名: (rels : 集合 (自由群 α))
   定义体: ⟨⟨QuotientGroup.mk, rfl⟩, fun _ _ => rfl⟩
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk
@@ -86,8 +86,8 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  条件: (rels : Set (FreeGroup α))
-  结论: Function.Surjective mk rels
+  条件: (rels : 集合 (自由群 α))
+  结论: 函数.满射 mk rels
   证明: QuotientGroup.mk_surjective
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk_surjective, mk_surjective
@@ -105,7 +105,7 @@ definition of
 
 中文:
 定义 of
-  签名: {rels : Set (FreeGroup α)} (x : α)
+  签名: {rels : 集合 (自由群 α)} (x : α)
   定义体: mk rels (FreeGroup.of x)
 
 Depends on / 依赖: FreeGroup, FreeGroup.of
@@ -126,7 +126,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : FreeGroup α ->* FreeGroup β)
+  签名: (f : 自由群 α ->* 自由群 β)
   定义体: QuotientGroup.map _ _ f
     ((comap_normalClosure_image_ge s f).trans
     (comap_mono (normalClosure_mono hst.image_subset)))
@@ -148,7 +148,7 @@ lemma mk_eq_one_iff
 
 中文:
 引理 mk_eq_one_iff
-  条件: {rels : Set (FreeGroup α)} {x : FreeGroup α}
+  条件: {rels : 集合 (自由群 α)} {x : 自由群 α}
   证明: QuotientGroup.eq_one_iff _
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, eq_one_iff
@@ -167,7 +167,7 @@ lemma one_of_mem
 
 中文:
 引理 one_of_mem
-  条件: {rels : Set (FreeGroup α)} {x : FreeGroup α} (hx : x in rels)
+  条件: {rels : 集合 (自由群 α)} {x : 自由群 α} (hx : x in rels)
   证明: mk_eq_one_iff.mpr Subgroup.subset_normalClosure hx
 
 Depends on / 依赖: Subgroup, Subgroup.subset_normalClosure, mk_eq_one_iff, mk_eq_one_iff.mpr, subset_normalClosure
@@ -186,7 +186,7 @@ lemma mk_eq_mk_of_mul_inv_mem
 
 中文:
 引理 mk_eq_mk_of_mul_inv_mem
-  结论: {rels : Set (FreeGroup α)} {x y : FreeGroup α}
+  结论: {rels : 集合 (自由群 α)} {x y : 自由群 α}
   证明: eq_of_mul_inv_eq_one one_of_mem hx
 
 Depends on / 依赖: eq_of_mul_inv_eq_one, one_of_mem
@@ -205,7 +205,7 @@ lemma mk_eq_mk_of_inv_mul_mem
 
 中文:
 引理 mk_eq_mk_of_inv_mul_mem
-  结论: {rels : Set (FreeGroup α)} {x y : FreeGroup α}
+  结论: {rels : 集合 (自由群 α)} {x y : 自由群 α}
   证明: eq_of_inv_mul_eq_one one_of_mem hx
 
 Depends on / 依赖: eq_of_inv_mul_eq_one, one_of_mem
@@ -231,7 +231,7 @@ theorem closure_range_of
 
 中文:
 定理 closure_range_of
-  条件: (rels : Set (FreeGroup α))
+  条件: (rels : 集合 (自由群 α))
   证明: by
   have : (PresentedGroup.of : α -> PresentedGroup rels) = QuotientGroup.mk' _ ∘ FreeGroup.of := rfl
   rw [this]; rw [Set.range_comp]; rw [← MonoidHom.map_closure (QuotientGroup.mk' _)]; rw [FreeGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
@@ -256,7 +256,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {rels : Set (FreeGroup α)} {C : PresentedGroup rels -> 命题}
+  结论: {rels : 集合 (自由群 α)} {C : PresentedGroup rels -> 命题}
   证明: Quotient.inductionOn' x H
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -284,7 +284,7 @@ theorem generated_by
 
 中文:
 定理 generated_by
-  结论: (rels : Set (FreeGroup α)) (H : Subgroup (PresentedGroup rels))
+  结论: (rels : 集合 (自由群 α)) (H : 子群 (PresentedGroup rels))
   证明: by
   obtain ⟨z⟩ := x
   induction z
@@ -331,7 +331,7 @@ theorem closure_rels_subset_ker
 
 中文:
 定理 closure_rels_subset_ker
-  条件: (h : 对任意 r in rels, FreeGroup.lift f r = 1)
+  条件: (h : 对任意 r in rels, 自由群.lift f r = 1)
   证明: Subgroup.normalClosure_le_normal fun x w => MonoidHom.mem_ker.2 (h x w)
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, Subgroup, Subgroup.normalClosure_le_normal, mem_ker, normalClosure_le_normal
@@ -350,7 +350,7 @@ theorem to_group_eq_one_of_mem_closure
 
 中文:
 定理 to_group_eq_one_of_mem_closure
-  条件: (h : 对任意 r in rels, FreeGroup.lift f r = 1)
+  条件: (h : 对任意 r in rels, 自由群.lift f r = 1)
   证明: fun _ w => MonoidHom.mem_ker.1 closure_rels_subset_ker h w
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, closure_rels_subset_ker, mem_ker
@@ -371,7 +371,7 @@ definition toGroup
 
 中文:
 定义 toGroup
-  签名: (h : 对任意 r in rels, FreeGroup.lift f r = 1)
+  签名: (h : 对任意 r in rels, 自由群.lift f r = 1)
   定义体: QuotientGroup.lift (Subgroup.normalClosure rels) F (to_group_eq_one_of_mem_closure h)
 
 @[simp]
@@ -393,7 +393,7 @@ theorem toGroup.of
 
 中文:
 定理 toGroup.of
-  条件: (h : 对任意 r in rels, FreeGroup.lift f r = 1) {x : α}
+  条件: (h : 对任意 r in rels, 自由群.lift f r = 1) {x : α}
   结论: toGroup h (of x) = f x
   证明: FreeGroup.lift_apply_of
 
@@ -417,7 +417,7 @@ theorem toGroup.unique
 
 中文:
 定理 toGroup.unique
-  结论: (h : 对任意 r in rels, FreeGroup.lift f r = 1) (g : PresentedGroup rels ->* G)
+  结论: (h : 对任意 r in rels, 自由群.lift f r = 1) (g : PresentedGroup rels ->* G)
   证明: by
   intro x
   refine QuotientGroup.induction_on x ?_
@@ -475,7 +475,7 @@ definition equivPresentedGroup
 
 中文:
 定义 equivPresentedGroup
-  签名: (rels : Set (FreeGroup α)) (e : α ≃ β)
+  签名: (rels : 集合 (自由群 α)) (e : α ≃ β)
   定义体: QuotientGroup.congr (Subgroup.normalClosure rels)
     (Subgroup.normalClosure ((FreeGroup.freeGroupCongr e) '' rels)) (FreeGroup.freeGroupCongr e)
     (Subgroup.map_normalClosure rels (FreeGroup.freeGroupCongr e).toMonoidHom
@@ -500,7 +500,7 @@ theorem equivPresentedGroup_apply_of
 
 中文:
 定理 equivPresentedGroup_apply_of
-  条件: (x : α) (rels : Set (FreeGroup α)) (e : α ≃ β)
+  条件: (x : α) (rels : 集合 (自由群 α)) (e : α ≃ β)
   证明: rfl
 
 Depends on / 依赖: FreeGroup, FreeGroup.freeGroupCongr, freeGroupCongr
@@ -519,7 +519,7 @@ theorem equivPresentedGroup_symm_apply_of
 
 中文:
 定理 equivPresentedGroup_symm_apply_of
-  条件: (x : β) (rels : Set (FreeGroup α)) (e : α ≃ β)
+  条件: (x : β) (rels : 集合 (自由群 α)) (e : α ≃ β)
   证明: rfl
 
 Depends on / 依赖: e.symm
@@ -549,7 +549,7 @@ definition toCoprod
 
 中文:
 定义 toCoprod
-  签名: : α oplus β -> Monoid.Coprod (PresentedGroup rels₁) (PresentedGroup rels₂)
+  签名: : α oplus β -> 幺半群.Coprod (PresentedGroup rels₁) (PresentedGroup rels₂)
   定义体: Sum.elim (Monoid.Coprod.inl ∘ .of) (Monoid.Coprod.inr ∘ .of)
 
 @[simp]
@@ -572,7 +572,7 @@ lemma lift_toCoprod_inl_eq_inl_mk
 
 中文:
 引理 lift_toCoprod_inl_eq_inl_mk
-  结论: (FreeGroup.lift (toCoprod rels₁ rels₂)).comp
+  结论: (自由群.lift (toCoprod rels₁ rels₂)).comp
   证明: FreeGroup.ext_hom _ _ fun _ => rfl
 
 @[simp]
@@ -594,7 +594,7 @@ lemma lift_toCoprod_inr_eq_inr_mk
 
 中文:
 引理 lift_toCoprod_inr_eq_inr_mk
-  结论: (FreeGroup.lift (toCoprod rels₁ rels₂)).comp
+  结论: (自由群.lift (toCoprod rels₁ rels₂)).comp
   证明: FreeGroup.ext_hom _ _ fun _ => rfl
 
 Depends on / 依赖: FreeGroup, FreeGroup.ext_hom, ext_hom
@@ -614,7 +614,7 @@ lemma lift_toCoprod_eq_one
 
 中文:
 引理 lift_toCoprod_eq_one
-  结论: (r : FreeGroup (α oplus β))
+  结论: (r : 自由群 (α oplus β))
   证明: by
   obtain ⟨r, hr, rfl⟩ | ⟨r, hr, rfl⟩ := hr <;> simp [← MonoidHom.comp_apply, one_of_mem hr]
 

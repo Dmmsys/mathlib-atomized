@@ -676,7 +676,7 @@ theorem dist_eq_of_two_zsmul_oangle_eq
 
 中文:
 定理 dist_eq_of_two_zsmul_oangle_eq
-  结论: [Module.Oriented 实数 V (Fin 2)]
+  结论: [模.有向 实数 V (有限集 2)]
   证明: by
   convert!
     (Orientation.norm_eq_of_two_zsmul_oangle_sub_eq (x := p₃ -ᵥ p₁) (y := p₂ -ᵥ p₁) ?_ ?_ h0
@@ -771,7 +771,7 @@ theorem oangle_add_oangle_add_oangle_eq_pi
 
 中文:
 定理 oangle_add_oangle_add_oangle_eq_pi
-  结论: [Module.Oriented 实数 V (Fin 2)]
+  结论: [模.有向 实数 V (有限集 2)]
   证明: by
   simpa only [neg_vsub_eq_vsub_rev] using!
     positiveOrientation.oangle_add_cyc3_neg_left (vsub_ne_zero.mpr h21) (vsub_ne_zero.mpr h32)
@@ -1029,7 +1029,7 @@ theorem dist_lt_of_angle_lt
 
 中文:
 定理 dist_lt_of_angle_lt
-  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : Set P))
+  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : 集合 P))
   证明: by
   have hsin := law_sin c b a
   rw [dist_comm b a]; rw [angle_comm c b a] at hsin
@@ -1098,7 +1098,7 @@ theorem angle_lt_iff_dist_lt
 
 中文:
 定理 angle_lt_iff_dist_lt
-  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : Set P))
+  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : 集合 P))
   证明: by
   constructor
   case mp =>
@@ -1143,7 +1143,7 @@ theorem angle_le_iff_dist_le
 
 中文:
 定理 angle_le_iff_dist_le
-  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : Set P))
+  条件: {a b c : P} (h : ¬Collinear 实数 ({a, b, c} : 集合 P))
   证明: by
   rw [show ({a]; rw [b]; rw [c} : Set P) = {a]; rw [c]; rw [b} by grind] at h
   simpa using (angle_lt_iff_dist_lt h).not

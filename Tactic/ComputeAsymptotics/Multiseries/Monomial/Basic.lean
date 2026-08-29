@@ -49,7 +49,7 @@ structure Monomial
     - unit : UnitMonomial
 
 中文:
-结构 Monomial
+结构 单项式
   参数: where
   公理与运算 (2 个):
     - coef : 实数
@@ -73,7 +73,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: (m : UnitMonomial) (basis : Basis)
+  签名: (m : UnitMonomial) (basis : 基)
   定义体: fun x => (m.zipWith (fun exp b => (b x)^exp) basis).prod
 
 Depends on / 依赖: m.zipWith, zipWith
@@ -93,7 +93,7 @@ definition toLogFun
 
 中文:
 定义 toLogFun
-  签名: (m : UnitMonomial) (basis : Basis)
+  签名: (m : UnitMonomial) (basis : 基)
   定义体: fun x => (m.zipWith (fun exp b => exp * log (b x)) basis).sum
 
 @[simp]
@@ -119,7 +119,7 @@ theorem toFun_nil
 
 中文:
 定理 toFun_nil
-  条件: (basis : Basis)
+  条件: (basis : 基)
   结论: (UnitMonomial.toFun [] basis) = 1
   证明: by
   ext x
@@ -174,7 +174,7 @@ theorem toFun_cons
 
 中文:
 定理 toFun_cons
-  条件: (exp : 实数) (tl : UnitMonomial) (basis_hd : 实数 -> 实数) (basis_tl : Basis)
+  条件: (exp : 实数) (tl : UnitMonomial) (basis_hd : 实数 -> 实数) (basis_tl : 基)
   证明: by
   ext x
   simp [toFun]
@@ -203,7 +203,7 @@ theorem toLogFun_nil
 
 中文:
 定理 toLogFun_nil
-  条件: (basis : Basis)
+  条件: (basis : 基)
   结论: (UnitMonomial.toLogFun [] basis) = 0
   证明: by
   ext x
@@ -260,7 +260,7 @@ theorem toLogFun_cons
 
 中文:
 定理 toLogFun_cons
-  条件: (exp : 实数) (tl : UnitMonomial) (basis_hd : 实数 -> 实数) (basis_tl : Basis)
+  条件: (exp : 实数) (tl : UnitMonomial) (basis_hd : 实数 -> 实数) (basis_tl : 基)
   证明: by
   ext x
   simp [toLogFun]
@@ -374,7 +374,7 @@ theorem mul_toFun
 
 中文:
 定理 mul_toFun
-  结论: {m1 m2 : UnitMonomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  结论: {m1 m2 : UnitMonomial} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   apply h_basis.eventually_pos.mono
   intro x h_pos
@@ -435,7 +435,7 @@ theorem inv_toFun
 
 中文:
 定理 inv_toFun
-  条件: {m : UnitMonomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {m : UnitMonomial} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   eta_expand
   simp only [toFun, inv, Pi.inv_apply]
@@ -484,7 +484,7 @@ theorem majorized_tail_toFun_head
 
 中文:
 定理 majorized_tail_toFun_head
-  结论: {m : UnitMonomial} {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {m : UnitMonomial} {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   induction m generalizing basis_hd basis_tl with
   | nil =>
@@ -538,7 +538,7 @@ theorem toFun_pos
 
 中文:
 定理 toFun_pos
-  结论: {m : UnitMonomial} {basis : Basis}
+  结论: {m : UnitMonomial} {basis : 基}
   证明: by
   apply h_basis.eventually_pos.mono
   intro x hx
@@ -578,7 +578,7 @@ theorem toFun_ne_zero
 
 中文:
 定理 toFun_ne_zero
-  条件: {m : UnitMonomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {m : UnitMonomial} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: (toFun_pos h_basis).mono fun _ hx => hx.ne'
 
 Depends on / 依赖: h_basis, hx.ne, toFun_pos
@@ -600,7 +600,7 @@ theorem zeros_append_toFun
 
 中文:
 定理 zeros_append_toFun
-  条件: {m : UnitMonomial} {left right : Basis}
+  条件: {m : UnitMonomial} {left right : 基}
   证明: by
   induction left with
   | nil => rfl
@@ -634,7 +634,7 @@ theorem log_toFun_eq_toLogFun
 
 中文:
 定理 log_toFun_eq_toLogFun
-  条件: {m : UnitMonomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {m : UnitMonomial} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   apply h_basis.eventually_pos.mono
   intro x hx
@@ -831,7 +831,7 @@ theorem toFun_tendsto_top_of_firstNonzeroIsPos
 
 中文:
 定理 toFun_tendsto_top_of_firstNonzeroIsPos
-  结论: {m : UnitMonomial} {basis : Basis}
+  结论: {m : UnitMonomial} {basis : 基}
   证明: by
   cases m with
   | nil => simp at h_firstIsPos
@@ -883,7 +883,7 @@ theorem toFun_tendsto_zero_of_firstNonzeroIsNeg
 
 中文:
 定理 toFun_tendsto_zero_of_firstNonzeroIsNeg
-  结论: {m : UnitMonomial} {basis : Basis}
+  结论: {m : UnitMonomial} {basis : 基}
   证明: by
   cases m with
   | nil => simp at h_firstIsNeg
@@ -938,7 +938,7 @@ theorem toFun_tendsto_one_of_allZero
 
 中文:
 定理 toFun_tendsto_one_of_allZero
-  结论: {m : UnitMonomial} {basis : Basis}
+  结论: {m : UnitMonomial} {basis : 基}
   证明: by
   cases m with
   | nil =>
@@ -995,7 +995,7 @@ lemma isLittleO_of_lt
 
 中文:
 引理 isLittleO_of_lt
-  结论: {basis : Basis} {m1 m2 : UnitMonomial}
+  结论: {basis : 基} {m1 m2 : UnitMonomial}
   证明: by
   obtain _ | ⟨basis_hd, basis_tl⟩ := basis
   · simp only [List.length_nil, List.length_eq_zero_iff] at h1 h2
@@ -1061,7 +1061,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: (t : Monomial) (basis : Basis)
+  签名: (t : 单项式) (basis : 基)
   定义体: t.coef • t.unit.toFun basis
 
 @[simp]
@@ -1086,7 +1086,7 @@ theorem nil_toFun
 
 中文:
 定理 nil_toFun
-  条件: {coef : 实数} {basis : Basis}
+  条件: {coef : 实数} {basis : 基}
   证明: by
   ext x
   simp [toFun]
@@ -1112,7 +1112,7 @@ theorem cons_toFun
 
 中文:
 定理 cons_toFun
-  条件: {coef exp : 实数} {m : UnitMonomial} {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {coef exp : 实数} {m : UnitMonomial} {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   ext x
   simp [toFun]
@@ -1136,7 +1136,7 @@ theorem zero_coef_toFun
 
 中文:
 定理 zero_coef_toFun
-  条件: {t : Monomial} (basis : Basis) (h_coef : t.coef = 0)
+  条件: {t : 单项式} (basis : 基) (h_coef : t.coef = 0)
   证明: by
   simp [toFun, h_coef]
 
@@ -1156,7 +1156,7 @@ theorem zero_coef_toFun'
 
 中文:
 定理 zero_coef_toFun'
-  条件: (basis : Basis) (exps : UnitMonomial)
+  条件: (basis : 基) (exps : UnitMonomial)
   证明: zero_coef_toFun _ rfl
 
 Depends on / 依赖: zero_coef_toFun
@@ -1174,7 +1174,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: (t : Monomial)
+  签名: (t : 单项式)
   定义体: ⟨-t.coef, t.unit⟩
 
 Depends on / 依赖: t.coef, t.unit
@@ -1192,7 +1192,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: (t1 t2 : Monomial)
+  签名: (t1 t2 : 单项式)
   定义体: ⟨t1.coef * t2.coef, t1.unit.mul t2.unit⟩
 
 Depends on / 依赖: t1.coef, t1.unit.mul, t2.coef, t2.unit
@@ -1210,7 +1210,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: (t : Monomial) (c : 实数)
+  签名: (t : 单项式) (c : 实数)
   定义体: ⟨c * t.coef, t.unit⟩
 
 Depends on / 依赖: t.coef, t.unit
@@ -1228,7 +1228,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (t : Monomial)
+  签名: (t : 单项式)
   定义体: ⟨t.coef⁻¹, t.unit.inv⟩
 
 Depends on / 依赖: t.coef, t.unit.inv
@@ -1248,7 +1248,7 @@ theorem neg_toFun
 
 中文:
 定理 neg_toFun
-  条件: {t : Monomial} {basis : Basis}
+  条件: {t : 单项式} {basis : 基}
   证明: by
   ext x
   simp [neg, toFun]
@@ -1273,7 +1273,7 @@ theorem mul_toFun
 
 中文:
 定理 mul_toFun
-  结论: {t1 t2 : Monomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  结论: {t1 t2 : 单项式} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   simp only [toFun, mul, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
   grw [UnitMonomial.mul_toFun h_basis h_length]
@@ -1305,7 +1305,7 @@ theorem smul_toFun
 
 中文:
 定理 smul_toFun
-  条件: {t : Monomial} {basis : Basis} (c : 实数)
+  条件: {t : 单项式} {basis : 基} (c : 实数)
   证明: by
   ext x
   simp [smul, toFun]
@@ -1334,7 +1334,7 @@ theorem inv_toFun
 
 中文:
 定理 inv_toFun
-  条件: {t : Monomial} {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {t : 单项式} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   simp only [toFun, inv]
   grw [UnitMonomial.inv_toFun h_basis]
@@ -1366,7 +1366,7 @@ theorem inv_length
 
 中文:
 定理 inv_length
-  条件: (t : Monomial)
+  条件: (t : 单项式)
   证明: by
   simp [inv]
 -/
@@ -1389,7 +1389,7 @@ theorem toFun_pos
 
 中文:
 定理 toFun_pos
-  结论: {t : Monomial} {basis : Basis}
+  结论: {t : 单项式} {basis : 基}
   证明: by
   simp only [Monomial.toFun]
   apply (t.unit.toFun_pos h_basis).mono
@@ -1420,7 +1420,7 @@ theorem zeros_append_toFun
 
 中文:
 定理 zeros_append_toFun
-  条件: (coef : 实数) {exps : UnitMonomial} {left right : Basis}
+  条件: (coef : 实数) {exps : UnitMonomial} {left right : 基}
   证明: ⟨coef, List.replicate left.length 0 ++ exps⟩;
     t.toFun (left ++ right) = (mk coef exps).toFun right := by
   exact congrArg (coef • ·) UnitMonomial.zeros_append_toFun
@@ -1446,7 +1446,7 @@ theorem tendsto_zero_of_coef_zero
 
 中文:
 定理 tendsto_zero_of_coef_zero
-  结论: {coef : 实数} {exps : UnitMonomial} (basis : Basis)
+  结论: {coef : 实数} {exps : UnitMonomial} (basis : 基)
   证明: ⟨coef, exps⟩;
     Tendsto (t.toFun basis) atTop (𝓝 0) := by
   intro t
@@ -1478,7 +1478,7 @@ theorem toFun_tendsto_zero_of_firstNonzeroIsNeg
 
 中文:
 定理 toFun_tendsto_zero_of_firstNonzeroIsNeg
-  结论: {coef : 实数} {exps : UnitMonomial} {basis : Basis}
+  结论: {coef : 实数} {exps : UnitMonomial} {basis : 基}
   证明: ⟨coef, exps⟩
     Tendsto (t.toFun basis) atTop (𝓝 0) := by
   intro t
@@ -1517,7 +1517,7 @@ theorem toFun_tendsto_top_of_firstNonzeroIsPos
 
 中文:
 定理 toFun_tendsto_top_of_firstNonzeroIsPos
-  结论: {coef : 实数} {exps : UnitMonomial} {basis : Basis}
+  结论: {coef : 实数} {exps : UnitMonomial} {basis : 基}
   证明: ⟨coef, exps⟩
     Tendsto (t.toFun basis) atTop atTop := by
   intro t
@@ -1555,7 +1555,7 @@ theorem toFun_tendsto_bot_of_firstNonzeroIsPos
 
 中文:
 定理 toFun_tendsto_bot_of_firstNonzeroIsPos
-  结论: {coef : 实数} {exps : UnitMonomial} {basis : Basis}
+  结论: {coef : 实数} {exps : UnitMonomial} {basis : 基}
   证明: ⟨coef, exps⟩
     Tendsto (t.toFun basis) atTop atBot := by
   intro t
@@ -1593,7 +1593,7 @@ theorem toFun_tendsto_const_of_allZero
 
 中文:
 定理 toFun_tendsto_const_of_allZero
-  结论: {coef : 实数} {exps : UnitMonomial} {basis : Basis}
+  结论: {coef : 实数} {exps : UnitMonomial} {basis : 基}
   证明: ⟨coef, exps⟩
     Tendsto (t.toFun basis) atTop (𝓝 coef) := by
   intro t
@@ -1623,7 +1623,7 @@ theorem majorized_tail_toFun_head
 
 中文:
 定理 majorized_tail_toFun_head
-  结论: {t : Monomial} {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {t : 单项式} {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   exact Majorized.smul (UnitMonomial.majorized_tail_toFun_head h_length h_basis)
 
@@ -1652,7 +1652,7 @@ lemma isLittleO_of_lt_exps
 
 中文:
 引理 isLittleO_of_lt_exps
-  结论: {basis : Basis} {t1 t2 : Monomial}
+  结论: {basis : 基} {t1 t2 : 单项式}
   证明: by
   simp only [toFun]
   pull fun _ => _
@@ -1695,7 +1695,7 @@ theorem isLittleO_of_lt_exps_left
 
 中文:
 定理 isLittleO_of_lt_exps_left
-  结论: {left right : Basis} {t1 t2 : Monomial}
+  结论: {left right : 基} {t1 t2 : 单项式}
   证明: by
   obtain ⟨coef2, exps2⟩ := t2
   let t2' : Monomial := ⟨coef2, List.replicate left.length 0 ++ exps2⟩
@@ -1736,7 +1736,7 @@ theorem isLittleO_of_lt_exps_right
 
 中文:
 定理 isLittleO_of_lt_exps_right
-  结论: {left right : Basis} {t1 t2 : Monomial}
+  结论: {left right : 基} {t1 t2 : 单项式}
   证明: by
   obtain ⟨coef2, exps2⟩ := t2
   let t2' : Monomial := ⟨coef2, List.replicate left.length 0 ++ exps2⟩

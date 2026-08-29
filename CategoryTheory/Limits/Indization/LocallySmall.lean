@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallySmall.{v} (Object命题erty.FullSubcategory (IsIndObject (C := C)))
+  签名: LocallySmall.{v} (ObjectProperty.满子范畴 (是IndObject (C := C)))
   定义体: by
     obtain ⟨⟨P⟩⟩ := X.2
     obtain ⟨⟨Q⟩⟩ := Y.2

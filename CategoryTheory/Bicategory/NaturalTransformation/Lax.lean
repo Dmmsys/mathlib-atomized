@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LaxTrans F F)
+  签名: 可居 (LaxTrans F F)
   定义体: ⟨id F⟩
 -/
 instance : Inhabited (LaxTrans F F) :=
@@ -178,7 +178,7 @@ abbreviation vCompNaturality
     η.naturality f ▷ θ.app b ≫ (α_ _ _ _).hom
 
 中文:
-缩写 vCompNaturality
+缩写 vComp自然数urality
   签名: {a b : B} (f : a ⟶ b)
   定义体: (α_ _ _ _).hom ≫ η.app a ◁ θ.naturality f ≫ (α_ _ _ _).inv ≫
     η.naturality f ▷ θ.app b ≫ (α_ _ _ _).hom
@@ -452,7 +452,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OplaxTrans F F)
+  签名: 可居 (OplaxTrans F F)
   定义体: ⟨id F⟩
 
 Depends on / 依赖: Category, compCreatesLimit
@@ -485,7 +485,7 @@ abbreviation vCompNaturality
     η.app a ◁ θ.naturality f ≫ (α_ _ _ _).inv
 
 中文:
-缩写 vCompNaturality
+缩写 vComp自然数urality
   签名: {a b : B} (f : a ⟶ b)
   定义体: (α_ _ _ _).inv ≫ η.naturality f ▷ θ.app b ≫ (α_ _ _ _).hom ≫
     η.app a ◁ θ.naturality f ≫ (α_ _ _ _).inv
@@ -870,7 +870,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (StrongTrans F F)
+  签名: 可居 (StrongTrans F F)
   定义体: ⟨id F⟩
 -/
 instance : Inhabited (StrongTrans F F) :=

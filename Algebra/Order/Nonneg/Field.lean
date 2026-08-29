@@ -43,7 +43,7 @@ lemma NNRat.cast_nonneg
 
 中文:
 引理 NNRat.cast_nonneg
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: 0 <= (q : α)
   证明: by
   rw [cast_def]; exact div_nonneg q.num.cast_nonneg q.den.cast_nonneg
@@ -65,7 +65,7 @@ lemma nnqsmul_nonneg
 
 中文:
 引理 nnqsmul_nonneg
-  条件: (q : Rat>=0) (ha : 0 <= a)
+  条件: (q : 有理数>=0) (ha : 0 <= a)
   结论: 0 <= q • a
   证明: by
   rw [NNRat.smul_def]; exact mul_nonneg q.cast_nonneg ha
@@ -96,7 +96,7 @@ definition unitsEquivPos
 
 中文:
 定义 unitsEquivPos
-  签名: (R : 类型) [DivisionSemiring R] [PartialOrder R]
+  签名: (R : 类型) [除半环 R] [偏序 R]
   定义体: ⟨r, lt_of_le_of_ne r.1.2 (Subtype.val_injective.ne r.ne_zero.symm)⟩
   invFun r := ⟨⟨r.1, r.2.le⟩, ⟨r.1⁻¹, inv_nonneg.mpr r.2.le⟩,
     by ext; simp [r.2.ne'], by ext; simp [r.2.ne']⟩
@@ -132,7 +132,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: : Inv { x : α // 0 <= x }
+  签名: : 取逆 { x : α // 0 <= x }
   定义体: ⟨fun x => ⟨x⁻¹, inv_nonneg.2 x.2⟩⟩
 
 @[simp, norm_cast]
@@ -195,7 +195,7 @@ instance div
 
 中文:
 实例 div
-  签名: : Div { x : α // 0 <= x }
+  签名: : 除法 { x : α // 0 <= x }
   定义体: ⟨fun x y => ⟨x / y, div_nonneg x.2 y.2⟩⟩
 
 @[simp, norm_cast]
@@ -258,7 +258,7 @@ instance zpow
 
 中文:
 实例 zpow
-  签名: : Pow { x : α // 0 <= x } 整数
+  签名: : 幂 { x : α // 0 <= x } 整数
   定义体: ⟨fun a n => ⟨(a : α) ^ n, zpow_nonneg a.2 _⟩⟩
 
 @[simp, norm_cast]
@@ -318,7 +318,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast {x : α // 0 <= x}
+  签名: : 非负有理数嵌入 {x : α // 0 <= x}
   定义体: ⟨fun q => ⟨q, q.cast_nonneg⟩⟩
 
 Depends on / 依赖: cast_nonneg, q.cast_nonneg
@@ -334,7 +334,7 @@ instance instNNRatSMul
 
 中文:
 实例 instNNRatSMul
-  签名: : SMul Rat>=0 {x : α // 0 <= x} where
+  签名: : 标量乘法 有理数>=0 {x : α // 0 <= x} where
   定义体: ⟨q • a, by rw [NNRat.smul_def]; exact mul_nonneg q.cast_nonneg a.2⟩
 
 Depends on / 依赖: NNRat.smul_def, cast_nonneg, mul_nonneg, q.cast_nonneg, smul_def
@@ -353,7 +353,7 @@ lemma coe_nnratCast
 
 中文:
 引理 coe_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : {x : α // 0 <= x}) = (q : α)
   证明: rfl
 -/
@@ -369,7 +369,7 @@ lemma mk_nnratCast
 
 中文:
 引理 mk_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (⟨q, q.cast_nonneg⟩ : {x : α // 0 <= x}) = q
   证明: rfl
 -/
@@ -385,7 +385,7 @@ lemma coe_nnqsmul
 
 中文:
 引理 coe_nnqsmul
-  条件: (q : Rat>=0) (a : {x : α // 0 <= x})
+  条件: (q : 有理数>=0) (a : {x : α // 0 <= x})
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_nnqsmul (q : Rat>=0) (a : {x : α // 0 <= x}) :
@@ -400,7 +400,7 @@ lemma mk_nnqsmul
 
 中文:
 引理 mk_nnqsmul
-  条件: (q : Rat>=0) (a : α) (ha : 0 <= a)
+  条件: (q : 有理数>=0) (a : α) (ha : 0 <= a)
   证明: rfl
 -/
 @[simp] lemma mk_nnqsmul (q : Rat>=0) (a : α) (ha : 0 <= a) :
@@ -420,7 +420,7 @@ instance semifield
 
 中文:
 实例 semifield
-  签名: : Semifield { x : α // 0 <= x }
+  签名: : 半域 { x : α // 0 <= x }
   定义体: fast_instance%
   Subtype.coe_injective.semifield _ Nonneg.coe_zero Nonneg.coe_one Nonneg.coe_add
     Nonneg.coe_mul Nonneg.coe_inv Nonneg.coe_div (fun _ _ => rfl) coe_nnqsmul Nonneg.coe_pow
@@ -445,7 +445,7 @@ instance linearOrderedCommGroupWithZero
 
 中文:
 实例 linearOrderedCommGroupWithZero
-  签名: [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: [域 α] [线性序 α] [是StrictOrdered环 α]
   定义体: fast_instance% CanonicallyOrderedAdd.toLinearOrderedCommGroupWithZero
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toLinearOrderedCommGroupWithZero, fast_instance, toLinearOrderedCommGroupWithZero

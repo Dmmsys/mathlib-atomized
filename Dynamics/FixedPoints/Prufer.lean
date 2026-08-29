@@ -45,7 +45,7 @@ theorem smul_eq_self_of_preimage_zpow_eq_self
 
 中文:
 定理 smul_eq_self_of_preimage_zpow_eq_self
-  结论: {G : 类型} [CommGroup G] {n : 整数} {s : Set G}
+  结论: {G : 类型} [交换群 G] {n : 整数} {s : 集合 G}
   证明: by
   suffices forall {g' : G} (_ : g' ^ n ^ j = 1), g' • s subseteq s by
     refine le_antisymm (this hg) ?_
